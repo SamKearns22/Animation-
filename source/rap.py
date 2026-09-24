@@ -2226,8 +2226,9 @@ def overlay(frame, t):
             size = 118 if k % 2 else 126
             lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
             words = 'UNINTELLIGIBLE'
-            if flash[0] == 99.3 and t >= (flash[0] + flash[1]) / 2:  # ...or was it?
-                words = 'FROG IN A HOB?'
+            mid = (flash[0] + flash[1]) / 2
+            if flash[0] == 99.3 and mid <= t < mid + 0.375:  # one single flash of... what was that?
+                words = 'FROG IN THE HOB?'
             ImageDraw.Draw(lay).text((W / 2, H / 2), words, font=_font(size), fill=(220, 20, 20, 255),
                                      anchor='mm', stroke_width=7, stroke_fill=(255, 255, 255, 255))
             lay = lay.rotate(-4 if k % 2 else 3, resample=Image.BICUBIC, center=(W / 2, H / 2))
