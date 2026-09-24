@@ -13,8 +13,8 @@ import wave
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
-W, H = 1080, 1920
-FPS = 12
+W, H = int(os.environ.get("PENCIL_W", 1080)), int(os.environ.get("PENCIL_H", 1920))  # canvas size (portrait by default)
+FPS = int(os.environ.get("PENCIL_FPS", 12))  # drawings per second
 M = 120  # margin so the pencil grain can be shifted each drawing
 NG = 3   # number of pencil grain directions
 
