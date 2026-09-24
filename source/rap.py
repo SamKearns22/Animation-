@@ -118,8 +118,8 @@ SHOTS = [
     (32.5, 35.1, 'surgery'), (35.1, 38.6, 'reporter'), (38.6, 42.7, 'waxwork'), (42.7, 45.5, 'stage'),
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
     (60.6, 66.6, 'lost'), (66.6, 70.5, 'stage'), (70.5, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
-    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.8, 'noggin'), (99.8, 105.4, 'corn'),
-    (105.4, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 118.2, 'pillow'),
+    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 105.4, 'stage'),
+    (105.4, 107.2, 'corn'), (107.2, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 118.2, 'pillow'),
     (118.2, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
     (139.8, 141.9, 'wait'), (141.9, 147.4, 'firesale'), (147.4, 150.0, 'crake'), (150.0, 151.2, 'gasp'),
     (151.2, 162.54, 'crap'), (162.54, 166.2, 'blackeye'), (166.2, 168.9, 'factory'), (168.9, 171.9, 'gasp'),
@@ -1545,7 +1545,7 @@ def s_corn(c, t, u):
     wash(c, col(0.99, 0.95, 0.75))
     r, front = pigeon(c, 540, 810, 440, 1, arms=(95, 90), mood='grin', t=t)
     # a corn on the cob, typewriter-style: munch along the row, DING, back to the start
-    ph = (u * 4) % 1
+    ph = (u * 2) % 1
     x0 = lerp(700, 400, ph)
     L = 360
     cob = smooth([(x0, 340), (x0 + L * 0.5, 325), (x0 + L, 340), (x0 + L, 400), (x0 + L * 0.5, 412), (x0, 400)], 5)
@@ -1566,7 +1566,7 @@ def s_corn(c, t, u):
     for i in range(6):
         ph = (u * 5 + i * 0.17) % 1
         c.poly(E(700 + 200 * ph, 420 + 280 * ph * ph, 8, 6), fill=YELLOW, line=INK, lw=2)
-    text(c, 'DING!', 1050, 220, 44, RED) if (u * 4) % 1 < 0.15 else None
+    text(c, 'DING!', 1050, 220, 44, RED) if (u * 2) % 1 < 0.15 else None
 
 
 def s_pillow(c, t, u):
