@@ -90,15 +90,10 @@ def shot_at(t):
 # Extra characters and props
 # ---------------------------------------------------------------------------
 def host(c, x, y, s, t, face=1, react=None):
-    """The MC: a toucan in a grey waistcoat, all energy."""
-    react = react or ('cheer' if host_talking(t) else 'idle')
-    r = bird(c, x, y, s, 'toucan', react, t, face)
-    vest = [r.P(-0.22, 0.12), r.P(-0.28, 0.5), r.P(-0.12, 0.62), r.P(0.02, 0.3), r.P(0.16, 0.62), r.P(0.3, 0.45),
-            r.P(0.22, 0.1)]
-    c.poly(vest, fill=GREY, line=INK, lw=r.lw())
-    for v in (0.25, 0.35, 0.45):
-        c.poly(r.E(0.03, v, 0.012, 0.012), fill=INK)
-    return r
+    """The MC: a toucan in glasses, white shirt and grey waistcoat, never still for a second."""
+    if react is None and host_talking(t):
+        react = 'cheer' if int(t * 3) % 2 else 'gasp'
+    return R.audience(c, x, y, s, 'host', react, t, face)
 
 
 def rooster(c, x, y, s, face=1, plucked=0.0, mood='angry'):
@@ -196,8 +191,8 @@ def andy(c, t, x=950, eye=None, arms=None, lean=-3):
                    lean=lean + l2, beak=beak, eye=eye)
 
 
-def crowd(c, t, react_all=None):
-    R.crowd(c, t, react_all)
+def crowd(c, t, react_all=None, skip_host=False):
+    R.crowd(c, t, react_all, skip_host=skip_host)
 
 
 def stage(c, t, name):
@@ -224,7 +219,7 @@ def stage_cam(c, t, a, b):
 def s_intro(c, t, u):
     """The MC introduces them: Sam, meet Andy. Andy, meet Sam."""
     room(c, t)
-    crowd(c, t, 'idle' if t < 10 else 'cheer')
+    crowd(c, t, 'idle' if t < 10 else 'cheer', skip_host=True)
     k = sstep(11.2, 13.2, t)
     wide = t < 4
     host(c, 640, 640, 230, t)
@@ -247,7 +242,7 @@ def s_fest(c, t, u):
         x = 100 + i * 78
         c.poly([(x, 60), (x + 50, 60), (x + 25, 100)], fill=[RED, YELLOW, GREEN, JUMPER][i % 4], line=INK, lw=3)
     sign(c, 640, 170, 520, 110, 'RAP FEST', 80, RED, fill=col(1, 0.95, 0.8), rot=-2)
-    crowd(c, t, 'cheer' if t < 20 else None)
+    crowd(c, t, 'cheer' if t < 20 else None, skip_host=True)
     host(c, 640, 560, 140, t)
     # Sam paces, hand on his chin, getting ready
     x = 330 + 60 * math.sin(t * 0.9)
@@ -901,7 +896,7 @@ def s_joke(c, t, u):
 def s_finale(c, t, u):
     """Applause: the MC rolls on the floor laughing, and the two of them hug it out."""
     room(c, t)
-    crowd(c, t, 'cheer')
+    crowd(c, t, 'cheer', skip_host=True)
     v = t - 167.6
     # the MC, on his back, kicking with laughter
     host(c, 1120, 715, 170, t, react='laugh')

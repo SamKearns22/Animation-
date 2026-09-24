@@ -119,13 +119,13 @@ SHOTS = [
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 59.4, 'vomit'), (59.4, 60.6, 'stage'),
     (60.6, 66.6, 'lost'), (66.6, 70.5, 'stage'), (70.5, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
     (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.8, 'noggin'), (99.8, 105.4, 'corn'),
-    (105.4, 110.2, 'stage'), (110.2, 114.47, 'veal'), (114.47, 118.2, 'stage'), (118.2, 121.9, 'pillow'),
-    (121.9, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
+    (105.4, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 118.2, 'pillow'),
+    (118.2, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
     (139.8, 141.9, 'wait'), (141.9, 147.4, 'firesale'), (147.4, 150.0, 'crake'), (150.0, 151.2, 'gasp'),
     (151.2, 162.54, 'crap'), (162.54, 166.2, 'blackeye'), (166.2, 168.9, 'factory'), (168.9, 171.9, 'gasp'),
     (171.9, 175.9, 'practice'), (175.9, 185.9, 'collapse'), (185.9, 191.7, 'expectations'), (191.7, 195.6, 'integrity'),
-    (195.6, 197.7, 'dinner'), (197.7, 201.1, 'podium'), (201.1, 206.4, 'sunday'), (206.4, 212.4, 'hit'),
-    (212.4, 217.9, 'gasp'), (217.9, 221, 'spectacle'), (221, 224.5, 'rentafool'), (224.5, 227.9, 'miracles'),
+    (195.6, 197.7, 'dinner'), (197.7, 201.1, 'podium'), (201.1, 206.4, 'sunday'), (206.4, 211.6, 'hit'),
+    (211.6, 213.3, 'snap'), (213.3, 217.9, 'gasp'), (217.9, 221, 'spectacle'), (221, 224.5, 'rentafool'), (224.5, 227.9, 'miracles'),
     (227.9, DUR + 1, 'finale'),
 ]
 
@@ -469,8 +469,9 @@ BIRDS = {
 }
 
 
-def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0):
-    """A member of the crowd, sitting. react: idle, laugh, gasp, cover, cheer, sleep."""
+def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0, dress=None, top=None, bob_k=1.0):
+    """A member of the crowd, sitting. react: idle, laugh, gasp, cover, cheer, sleep.
+    dress(r, hv) draws clothes over the body; top(r, hv, react) draws hair, glasses and props over the head."""
     k = BIRDS[kind]
     bob = 0.0
     if react == 'laugh':
@@ -479,11 +480,13 @@ def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0):
         bob = 0.06 * abs(math.sin(t * 10 + seed))
     else:
         bob = 0.01 * math.sin(t * 2 + seed)
-    r = Rig(c, x, y - bob * s, s, face)
+    r = Rig(c, x, y - bob * bob_k * s, s, face)
     lw = r.lw()
+    hv = 0.85 if k.get('neck') else 0.72
     c.poly(r.E(0, 0.35, 0.3, 0.35), fill=k['body'], line=INK, lw=lw)
     c.poly(r.E(0.08, 0.3, 0.18, 0.25), fill=k['belly'], line=INK, lw=lw * 0.5)
-    hv = 0.85 if k.get('neck') else 0.72
+    if dress:
+        dress(c, r, hv)
     if k.get('neck'):
         c.line(r.pts([(0.05, 0.55), (0.12, 0.7), (0.06, hv)]), k['body'], lw=s * 0.08)
     c.poly(r.E(0.06, hv, 0.17, 0.16), fill=k['head'], line=INK, lw=lw)
@@ -527,8 +530,10 @@ def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0):
     else:
         c.poly(r.pts([(bu - 0.03, bv + 0.04), (bu + 0.08, bv - 0.01), (bu - 0.03, bv - 0.04 - 0.04 * op)]),
                fill=k['beak'], line=INK, lw=lw)
+    if top:
+        top(c, r, hv, react)
     # wings: at rest, over the eyes, up in a cheer, or to the cheeks in a gasp
-    wing_col = k['body']
+    wing_col = k.get('wing', k['body'])
     if react == 'cover':
         c.poly(r.E(0.12, ev, 0.12, 0.06, -10), fill=wing_col, line=INK, lw=lw)
     elif react == 'cheer':
@@ -544,8 +549,159 @@ def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0):
 # ---------------------------------------------------------------------------
 # The common room (the stage)
 # ---------------------------------------------------------------------------
-CROWD = [(70, 'owl'), (175, 'flamingo'), (275, 'duck'), (930, 'puffin'), (1030, 'parrot'), (1130, 'toucan'),
-         (1225, 'robin'), (475, 'heron')]
+# ---------------------------------------------------------------------------
+# The audience: each bird is dressed as one of the real people in the room
+# ---------------------------------------------------------------------------
+def _glasses(c, r, u, v, rr=0.055, two=False):
+    for du in ((-0.065, 0.065) if two else (0.0,)):
+        c.poly(r.E(u + du, v, rr, rr * 0.85, 0, 14), None, col(0.75, 0.75, 0.78), lw=r.lw(1.9))
+        c.poly(r.E(u + du, v, rr, rr * 0.85, 0, 14), None, INK, lw=r.lw(0.7))
+    if two:
+        c.line(r.pts([(u - 0.01, v), (u + 0.01, v)]), INK, lw=r.lw())
+    c.line(r.pts([(u - rr - (0.065 if two else 0), v + 0.01), (u - 0.16, v + 0.03)]), INK, lw=r.lw(0.8))
+
+
+def _long_hair(c, r, hv, colr, fringe=False, wavy=False):
+    w = 0.02 if wavy else 0.0
+    hair = smooth([(0.16, hv + 0.13), (0.02, hv + 0.2), (-0.14, hv + 0.14), (-0.2, hv - 0.05), (-0.22 - w, hv - 0.25),
+                   (-0.16, hv - 0.38), (-0.08 + w, hv - 0.3), (-0.06, hv - 0.1), (-0.02, hv + 0.06), (0.1, hv + 0.1)], 6)
+    c.poly(r.pts(hair), fill=colr, line=INK, lw=r.lw(0.8))
+    if wavy:
+        for k in range(3):
+            c.line(r.pts(smooth([(-0.17 + 0.04 * k, hv - 0.05), (-0.2 + 0.04 * k, hv - 0.15), (-0.16 + 0.04 * k,
+                                                                                           hv - 0.27)], 3, False)),
+                   INK, lw=r.lw(0.5))
+    if fringe:  # a shaggy fringe right down to the eyebrows
+        c.poly(r.pts([(0.0, hv + 0.17), (0.2, hv + 0.12), (0.2, hv + 0.06), (0.16, hv + 0.09), (0.12, hv + 0.05),
+                      (0.08, hv + 0.09), (0.03, hv + 0.06)]), fill=colr, line=INK, lw=r.lw(0.7))
+
+
+def _curls(c, r, hv, colr):
+    for k in range(8):
+        a = math.pi * (0.42 + 0.68 * k / 7)
+        c.poly(r.E(0.02 + 0.16 * math.cos(a), hv + 0.04 + 0.15 * math.sin(a), 0.055, 0.055), fill=colr, line=INK,
+               lw=r.lw(0.6))
+    for k in range(3):
+        c.poly(r.E(-0.14, hv - 0.08 - 0.08 * k, 0.06, 0.05), fill=colr, line=INK, lw=r.lw(0.6))
+
+
+def _top(c, r, colr, pattern=None, open_front=False):
+    body = [(u, v) for u, v in r_ell(0, 0.35, 0.31, 0.36) if v < 0.6]
+    if open_front:  # a cardigan or blazer, open over the chest
+        left = [(u, v) for u, v in body if u < 0.02] + [(0.02, 0.05)]
+        c.poly(r.pts(left), fill=colr, line=INK, lw=r.lw())
+        c.poly(r.pts([(0.02, 0.6), (0.2, 0.52), (0.26, 0.3), (0.18, 0.1), (0.1, 0.08), (0.12, 0.35)]), fill=colr,
+               line=INK, lw=r.lw())
+        return
+    c.poly(r.pts(body), fill=colr, line=INK, lw=r.lw())
+    if pattern == 'zigzag':
+        for v in (0.18, 0.32, 0.46):
+            c.line(r.pts([(-0.26 + 0.07 * k, v + (0.05 if k % 2 else 0)) for k in range(9)]), BLACK, lw=r.lw(1.6))
+
+
+def r_ell(cu, cv, ru, rv, n=30):
+    return [(cu + ru * math.cos(q), cv + rv * math.sin(q)) for q in np.linspace(0, 2 * math.pi, n, endpoint=False)]
+
+
+def _scarf(c, r, hv, colr, stripe, tassels=True):
+    c.poly(r.pts(smooth([(-0.18, hv - 0.12), (0.2, hv - 0.14), (0.24, hv - 0.24), (-0.16, hv - 0.24)], 4)), fill=colr,
+           line=INK, lw=r.lw())
+    end = [(0.12, hv - 0.2), (0.22, hv - 0.2), (0.24, hv - 0.5), (0.13, hv - 0.5)]
+    c.poly(r.pts(end), fill=colr, line=INK, lw=r.lw())
+    c.hatch(r.pts(end), stripe, spacing=r.s * 0.05, angle=0, lw=r.lw(0.6), opacity=0.8)
+    if tassels:
+        for k in range(4):
+            c.line(r.pts([(0.135 + 0.03 * k, hv - 0.5), (0.135 + 0.03 * k, hv - 0.58)]), colr, lw=r.lw(1.2))
+
+
+AUDIENCE = {
+    # the MC: glasses, a mop of dark hair, white shirt, grey waistcoat, and never, ever still
+    'host': dict(kind='toucan',
+                 dress=lambda c, r, hv: (c.poly(r.E(0.06, 0.32, 0.22, 0.27), fill=WHITE, line=INK, lw=r.lw(0.6)),
+                                         c.poly(r.pts([(-0.24, 0.1), (-0.28, 0.5), (-0.1, 0.62), (0.04, 0.32),
+                                                       (0.16, 0.62), (0.3, 0.45), (0.24, 0.1)]), fill=GREY, line=INK,
+                                                lw=r.lw()),
+                                         [c.poly(r.E(0.05, v, 0.014, 0.014), fill=INK) for v in (0.22, 0.32, 0.42)]),
+                 top=lambda c, r, hv, react: (_curls(c, r, hv, col(0.1, 0.08, 0.07)), _glasses(c, r, 0.11, hv + 0.03))),
+    # the bearded man in glasses and a dark jumper
+    'beard': dict(kind='owl',
+                  dress=lambda c, r, hv: _top(c, r, col(0.18, 0.19, 0.24)),
+                  top=lambda c, r, hv, react: (
+                      c.poly(r.pts(smooth([(-0.08, hv - 0.02), (0.2, hv - 0.06), (0.2, hv - 0.18), (0.06, hv - 0.24),
+                                           (-0.08, hv - 0.14)], 4)), fill=col(0.42, 0.28, 0.16), line=INK, lw=r.lw(0.7)),
+                      c.poly(r.pts(smooth([(-0.12, hv + 0.12), (0.04, hv + 0.2), (0.2, hv + 0.14), (0.1, hv + 0.1),
+                                           (-0.04, hv + 0.08)], 4)), fill=col(0.42, 0.28, 0.16), line=INK, lw=r.lw(0.7)),
+                      _glasses(c, r, 0.11, hv + 0.03, 0.058, two=True))),
+    # the blonde woman in the black-and-white dress, drink in hand
+    'blonde_dress': dict(kind='flamingo',
+                         dress=lambda c, r, hv: (_top(c, r, BLACK),
+                                                 c.poly(r.pts([(0.0, 0.58), (0.14, 0.55), (0.12, 0.1), (0.02, 0.1)]),
+                                                        fill=WHITE, line=INK, lw=r.lw(0.6))),
+                         top=lambda c, r, hv, react: (
+                             _long_hair(c, r, hv, col(0.93, 0.8, 0.5)),
+                             c.poly(r.pts([(0.26, 0.45), (0.36, 0.45), (0.31, 0.33)]), fill=col(0.9, 0.95, 1.0),
+                                    line=INK, lw=r.lw(0.6)),
+                             c.line(r.pts([(0.31, 0.33), (0.31, 0.24)]), INK, lw=r.lw(0.6)))),
+    # the woman with long wavy auburn hair and the big grey-and-white tasselled scarf
+    'auburn_scarf': dict(kind='robin',
+                         dress=lambda c, r, hv: _top(c, r, col(0.2, 0.2, 0.22)),
+                         top=lambda c, r, hv, react: (_long_hair(c, r, hv, col(0.7, 0.33, 0.15), wavy=True),
+                                                      _scarf(c, r, hv, col(0.88, 0.88, 0.86), GREY))),
+    # the woman with dark curly hair, glasses, red cardigan and patterned scarf
+    'curly_red': dict(kind='parrot',
+                      dress=lambda c, r, hv: _top(c, r, col(0.75, 0.12, 0.2), open_front=True),
+                      top=lambda c, r, hv, react: (_curls(c, r, hv, col(0.15, 0.1, 0.08)),
+                                                   _glasses(c, r, 0.11, hv + 0.03),
+                                                   _scarf(c, r, hv, col(0.7, 0.2, 0.25), col(0.85, 0.85, 0.85), False))),
+    # the woman with the shaggy fringe in the zigzag top, filming it all on her phone
+    'fringe_phone': dict(kind='duck',
+                         dress=lambda c, r, hv: _top(c, r, WHITE, pattern='zigzag'),
+                         top=lambda c, r, hv, react: (
+                             _long_hair(c, r, hv, col(0.62, 0.45, 0.28), fringe=True),
+                             c.poly(r.pts([(0.26, hv - 0.1), (0.38, hv - 0.1), (0.38, hv + 0.1), (0.26, hv + 0.1)]),
+                                    fill=BLACK, line=INK, lw=r.lw(0.7)),
+                             c.poly(r.E(0.24, hv - 0.18, 0.06, 0.12, -30), fill=col(0.96, 0.94, 0.88), line=INK,
+                                    lw=r.lw()))),
+    # the blonde woman in the green top
+    'blonde_green': dict(kind='puffin',
+                         dress=lambda c, r, hv: _top(c, r, col(0.15, 0.5, 0.38)),
+                         top=lambda c, r, hv, react: _long_hair(c, r, hv, col(0.95, 0.85, 0.55))),
+    # the man in the grey blazer, clapping along
+    'blazer': dict(kind='heron',
+                   dress=lambda c, r, hv: (_top(c, r, col(0.32, 0.33, 0.37), open_front=True),
+                                           c.poly(r.pts([(0.02, 0.58), (0.1, 0.4), (0.14, 0.58)]), fill=col(0.3, 0.3, 0.32),
+                                                  line=INK, lw=r.lw(0.6)))),
+}
+CROWD = [(70, 'blazer'), (175, 'blonde_dress'), (275, 'fringe_phone'), (475, 'host'), (930, 'curly_red'),
+         (1030, 'beard'), (1130, 'auburn_scarf'), (1225, 'blonde_green')]
+HOST_MOODS = ['cheer', 'laugh', 'cheer', 'gasp', 'laugh', 'cheer', 'cover', 'laugh']
+
+
+def host_react(t):
+    """The MC is never still: cheering, cackling, gasping, hiding his face, all in quick succession."""
+    return HOST_MOODS[int(t * 1.3) % len(HOST_MOODS)]
+
+
+def audience(c, x, y, s, who, react, t, face=1, seed=0):
+    a = AUDIENCE[who]
+    if who == 'host':
+        react = host_react(t) if react in (None, 'idle') else react
+    return bird(c, x, y, s, a['kind'], react, t, face, seed, dress=a.get('dress'), top=a.get('top'),
+                bob_k=2.2 if who == 'host' else 1.0)
+
+
+def crowd(c, t, react_all=None, seed=0, skip_host=False):
+    """The audience along the back bench. They laugh on big moments unless told otherwise."""
+    lv = max(loud(t - 0.1), loud(t - 0.2))
+    for i, (x, who) in enumerate(CROWD):
+        if skip_host and who == 'host':
+            continue
+        if react_all is not None:
+            react = react_all[i % len(react_all)] if isinstance(react_all, list) else react_all
+        else:
+            react = 'laugh' if (lv > 0.85 and (i + int(t * 2)) % 3 != 0) else 'idle'
+        audience(c, x, 560, 130 if who == 'host' else 115, who, None if who == 'host' else react, t,
+                 face=1 if x < 640 else -1, seed=i + seed)
 
 
 def room(c, t):
@@ -583,17 +739,6 @@ def room(c, t):
     c.hatch([(0, 470), (1280, 470), (1280, 560), (0, 560)], col(0.6, 0.18, 0.28), spacing=28, angle=90, lw=2,
             opacity=0.6)
     c.poly([(0, 560), (1280, 560), (1280, 720), (0, 720)], fill=CARPET, line=INK, lw=4)
-
-
-def crowd(c, t, react_all=None, seed=0):
-    """The bird crowd along the back bench. They laugh on big moments unless told otherwise."""
-    lv = max(loud(t - 0.1), loud(t - 0.2))
-    for i, (x, kind) in enumerate(CROWD):
-        if react_all is not None:
-            react = react_all[i % len(react_all)] if isinstance(react_all, list) else react_all
-        else:
-            react = 'laugh' if (lv > 0.85 and (i + int(t * 2)) % 3 != 0) else 'idle'
-        bird(c, x, 560, 115, kind, react, t, face=1 if x < 640 else -1, seed=i + seed)
 
 
 def penguin_x(t):
@@ -894,6 +1039,24 @@ def churchgoer(c, x, y, s, t):
     c.line([(x - 0.03 * s, hy + 0.07 * s), (x + 0.03 * s, hy + 0.07 * s)], col(0.7, 0.4, 0.35), lw=4)
 
 
+def sparkle(c, x, y, r, colr=YELLOW):
+    c.poly([(x, y - r), (x + r * 0.25, y - r * 0.25), (x + r, y), (x + r * 0.25, y + r * 0.25), (x, y + r),
+            (x - r * 0.25, y + r * 0.25), (x - r, y), (x - r * 0.25, y - r * 0.25)], fill=colr, line=INK, lw=2)
+
+
+def s_snap(c, t, u):
+    """The MC can't contain himself: OOOH SNAP!"""
+    wash(c, col(0.98, 0.85, 0.35))
+    for i in range(16):  # a burst of lines behind him
+        a = i * math.pi / 8 + t * 0.5
+        c.poly([(640, 360), (640 + 900 * math.cos(a), 360 + 900 * math.sin(a)),
+                (640 + 900 * math.cos(a + 0.12), 360 + 900 * math.sin(a + 0.12))], fill=col(1.0, 0.95, 0.6))
+    shake = 8 * math.sin(t * 45)
+    audience(c, 520 + shake, 1150, 1100, 'host', 'gasp', t, 1)
+    text(c, 'OOOH', 960 + shake, 150, 110, RED, rot=-8)
+    text(c, 'SNAP!', 1000 - shake, 290, 130, RED, rot=-6)
+
+
 def s_lullaby(c, t, u):
     wash(c, col(0.25, 0.28, 0.5))
     c.poly(E(1100, 130, 60, 60), fill=YELLOW, line=INK, lw=4)
@@ -934,47 +1097,58 @@ def s_nullified(c, t, u):
 
 
 def s_supervision(c, t, u):
-    """First look: the owl parents glare at the kid enjoying the forbidden rhymes. Second look: headphones confiscated."""
+    """First look: the owl parents glare at the kid enjoying the forbidden rhymes.
+    Second look: Mum steps in and swipes the headphones clean off; the kid bawls."""
     wash(c, col(0.9, 0.86, 0.8))
     c.poly([(300, 60), (980, 60), (980, 230), (300, 230)], fill=BLACK, line=INK, lw=6)
     c.poly([(310, 70), (970, 70), (970, 130), (310, 130)], fill=WHITE)
     text(c, 'PARENTAL', 640, 100, 44, BLACK)
     text(c, 'SUPERVISION', 640, 180, 58, WHITE)
     second = u > 0.5
-    ra = bird(c, 330, 690, 320, 'owl', 'idle', t, 1)
+    step = sstep(0.52, 0.58, u) if second else 0.0
+    swipe = sstep(0.58, 0.63, u) if second else 0.0
+    ox = lerp(330, 470, step)
+    ra = bird(c, ox, 690 - 25 * math.sin(math.pi * step), 320, 'owl', 'idle', t, 1)
     rb = bird(c, 950, 690, 320, 'owl', 'idle', t, -1, seed=3)
     owl_brows(c, ra)
     owl_brows(c, rb)
-    yank = sstep(0.55, 0.62, u) if second else 0.0
-    cry = second and u > 0.62
+    cry = second and u > 0.63
     kid = bird(c, 640, 700, 200, 'robin', 'laugh' if cry else 'idle', t, 1)
     hx, hy = kid.P(0.06, 0.72)
     if not second:
-        # bopping along happily to the music
-        for i in range(3):
+        for i in range(3):  # bopping along happily to the music
             ph = (u * 3 + i / 3) % 1
             text(c, '♪', hx + 60 + 30 * i, hy - 60 - 90 * ph, 40, INK, opacity=1 - ph)
-    if yank < 1:
-        dx, dy = hx, hy
-        if second:  # the left owl's wing reaches over and snatches them
-            c.poly([(420, 470), (dx - 40, dy - 50), (dx - 20, dy - 20), (430, 520)], fill=col(0.58, 0.44, 0.30), line=INK,
-                   lw=5)
+    if second:
+        # her wing, attached at the shoulder: raised, then swung hard across
+        sx, sy = ra.P(0.12, 0.48)
+        ang = math.radians(lerp(-115, 25, swipe))
+        L = 175
+        cx, cy = sx + math.cos(ang) * L / 2, sy + math.sin(ang) * L / 2
+        c.poly(E(cx, cy, L / 2, 30, math.degrees(ang)), fill=col(0.52, 0.39, 0.26), line=INK, lw=5)
+        tx, ty = sx + math.cos(ang) * L, sy + math.sin(ang) * L
+        for k in (-1, 0, 1):  # feather tips
+            a2 = ang + k * 0.25
+            c.line([(tx - math.cos(ang) * 30, ty - math.sin(ang) * 30), (tx + math.cos(a2) * 18, ty + math.sin(a2) * 18)],
+                   INK, lw=4)
+        if 0.6 < u < 0.66:
+            text(c, 'SWIPE!', sx + 120, sy - 150, 48, RED, rot=-8)
     # the headphones: on his head, then flying off across the room
-    fx = lerp(hx, 1350, sstep(0.62, 0.9, u)) if second else hx
-    fy = (hy - 280 * math.sin(math.pi * sstep(0.62, 0.9, u))) if second else hy
-    rot = 720 * sstep(0.62, 0.9, u) if second else 0
-    rr = math.radians(rot)
+    k = sstep(0.62, 0.9, u) if second else 0.0
+    fx = lerp(hx, 1350, k)
+    fy = hy - 280 * math.sin(math.pi * k)
+    rr = math.radians(720 * k)
     band = [(fx + 55 * math.cos(q + rr), fy - 12 + 50 * math.sin(q + rr)) for q in np.linspace(math.pi, 2 * math.pi, 10)]
     c.line(band, INK, lw=8)
     for sg in (-1, 1):
-        c.poly(E(fx + sg * 52 * math.cos(rr), fy + sg * 52 * math.sin(rr), 14, 20, rot), fill=INK)
+        c.poly(E(fx + sg * 52 * math.cos(rr), fy + sg * 52 * math.sin(rr), 14, 20, math.degrees(rr)), fill=INK)
     if cry:  # floods of tears
         for sg in (-1, 1):
             ex, ey = kid.P(0.11 + 0.03 * sg, 0.73)
-            for k in range(4):
-                ph = (t * 3 + k / 4) % 1
+            for j in range(4):
+                ph = (t * 3 + j / 4) % 1
                 c.poly(E(ex + sg * (20 + 60 * ph), ey + 90 * ph * ph, 7, 10), fill=col(0.55, 0.75, 1.0), line=INK, lw=2)
-        text(c, 'WAAAH', 640, 330, 50, RED, rot=-4 + 8 * (int(t * 6) % 2))
+        text(c, 'WAAAH', 760, 360, 50, RED, rot=-4 + 8 * (int(t * 6) % 2))
 
 
 def s_permission(c, t, u):
@@ -1388,17 +1562,45 @@ def s_pipe(c, t, u):
 
 
 def s_innate(c, t, u):
+    """It's entirely innate: the egg shakes, cracks, and out he bursts, shimmering and already rapping."""
     wash(c, col(0.95, 0.92, 0.85))
-    k = sstep(0.1, 0.5, u)
-    c.poly(E(640, 470, 170, 220), fill=col(0.95, 0.94, 0.88), line=INK, lw=6)
-    if k > 0:
-        c.line([(480, 440), (560, 400), (620, 460), (700, 390), (760, 450), (800, 420)], INK, lw=6)
-    if u > 0.45:
-        # born stylish: a chick bursts out already in a check shirt and sunglasses
-        penguin(c, 640, 560, 260, 1, arms=(160, 150), beak=0.3, eye='smug')
-        c.poly([(630, 280), (730, 275), (725, 305), (635, 310)], fill=INK)
-        c.poly(E(640, 520, 180, 60), fill=col(0.95, 0.94, 0.88), line=INK, lw=6)
-    text(c, 'INNATE.', 640, 90, 60, INK)
+    text(c, 'INNATE.', 640, 80, 60, INK)
+    burst = sstep(0.35, 0.5, u)
+    shell = col(0.97, 0.95, 0.88)
+    egg = smooth([(640, 250), (760, 330), (800, 480), (740, 640), (640, 670), (540, 640), (480, 480), (520, 330)], 8)
+    if burst <= 0:
+        wob = 8 * math.sin(t * 30) * sstep(0.05, 0.3, u)
+        c.poly([(x + wob, y) for x, y in egg], fill=shell, line=INK, lw=6)
+        crack = [(500, 440), (560, 410), (600, 460), (650, 400), (700, 455), (750, 420), (790, 440)]
+        n = 1 + int(6 * sstep(0.08, 0.32, u))
+        c.line([(x + wob, y) for x, y in crack[:n + 1]], INK, lw=6)
+        return
+    # the shell blows apart into jagged pieces
+    pieces = [([(520, 440), (560, 410), (600, 460), (650, 400), (650, 250), (560, 280)], -1.0, -1.2),
+              ([(650, 400), (700, 455), (750, 420), (790, 440), (770, 320), (650, 250)], 1.0, -1.1),
+              ([(480, 480), (500, 440), (560, 520), (540, 640)], -1.3, 0.3),
+              ([(800, 480), (790, 440), (730, 520), (740, 640)], 1.3, 0.4)]
+    for pts, dx, dy in pieces:
+        k = burst
+        ox, oy = dx * 420 * k, dy * 300 * k + 400 * k * k
+        rot = 200 * k * dx
+        cx = sum(p[0] for p in pts) / len(pts)
+        cy = sum(p[1] for p in pts) / len(pts)
+        ra = math.radians(rot)
+        moved = [(cx + ox + (x - cx) * math.cos(ra) - (y - cy) * math.sin(ra),
+                  cy + oy + (x - cx) * math.sin(ra) + (y - cy) * math.cos(ra)) for x, y in pts]
+        c.poly(moved, fill=shell, line=INK, lw=5)
+    # the jagged bottom of the shell he stands in
+    c.poly([(560, 700), (720, 700), (740, 640), (705, 600), (680, 630), (650, 590), (620, 630), (590, 600), (545, 640)],
+           fill=shell, line=INK, lw=5)
+    pop = 0.7 + 0.3 * sstep(0.35, 0.55, u)
+    c.glow(640, 420, 330, YELLOW, 0.55)
+    arms = (95, 20) if int(t * 2.2) % 2 else (125, 160)
+    penguin(c, 640, 680, 330 * pop, 1, arms=arms, lean=6, beak=talk(t), eye='smug')
+    for i in range(10):  # shimmering
+        a = i * 0.63 + t * 1.5
+        rr = 230 + 40 * math.sin(t * 5 + i)
+        sparkle(c, 640 + rr * math.cos(a), 430 + rr * 0.8 * math.sin(a), 12 + 8 * abs(math.sin(t * 7 + i)))
 
 
 def s_mistakes(c, t, u):
@@ -1720,7 +1922,7 @@ CUTAWAYS = {
     'pipe': s_pipe, 'innate': s_innate, 'mistakes': s_mistakes, 'wait': s_wait, 'firesale': s_firesale,
     'crake': s_crake, 'crap': s_crap, 'blackeye': s_blackeye, 'factory': s_factory, 'practice': s_practice,
     'expectations': s_expectations, 'integrity': s_integrity, 'dinner': s_dinner, 'podium': s_podium,
-    'sunday': s_sunday, 'veal': s_veal, 'spectacle': s_spectacle, 'rentafool': s_rentafool, 'miracles': s_miracles,
+    'sunday': s_sunday, 'veal': s_veal, 'snap': s_snap, 'spectacle': s_spectacle, 'rentafool': s_rentafool, 'miracles': s_miracles,
 }
 
 
