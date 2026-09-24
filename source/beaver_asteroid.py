@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Beaver vs Asteroid: a 42 second coloured-pencil animation.
+"""Beaver vs Asteroid: a 45 second coloured-pencil animation.
 
 Usage:
     python3 beaver_asteroid.py stills OUT_DIR T1 T2 ...   # save single frames at given seconds
@@ -16,31 +16,32 @@ from pencil import *  # noqa: F401,F403  (canvas, colours, helpers)
 from pencil import FIRE, Canvas, Track, blob, clamp01, col, ell, flame, lerp, noise, render_video, smoke_wisp, \
     sstep, stars, sweep, tt, decay, W, H, FPS
 
-DUR = 42.0
+DUR = 45.0
 
 # Story timeline (seconds)
 T_THREAT = 3.0     # light and rumble start to build
-T_LAUNCH = 13.0    # beaver rockets upwards
-T_MID = 13.8       # mid-range: shooting up through ordinary clouds
-T_CLOUDS = 15.8    # wide shot: bursting through the high cloud layer
-T_SPACE = 19.5     # silent majesty of the Earth
-T_REVEAL = 22.0    # camera pulls back to reveal the asteroid
-T_FACE = 25.5      # the unbothered face
-T_IMPACT = 27.5    # streak hits the asteroid
-T_INSIDE = 28.4    # smashing through the rock
-T_BURST = 29.4     # out the other side
-T_EXPLODE = 30.1   # asteroid explodes
-T_WHITE = 30.5     # white light fills the screen
-T_HOME = 31.4      # back to the forest
-T_DROP = 32.1      # beaver drops from the sky
-T_LAND = 32.4      # thud
-T_CHEW = 34.0      # starts eating
+T_LAUNCH = 16.0    # beaver rockets upwards
+T_MID = 16.8       # mid-range: shooting up through ordinary clouds
+T_CLOUDS = 18.8    # wide shot: bursting through the high cloud layer
+T_SPACE = 22.5     # silent majesty of the Earth
+T_REVEAL = 25.0    # camera pulls back to reveal the asteroid
+T_FACE = 28.5      # the unbothered face
+T_IMPACT = 30.5    # streak hits the asteroid
+T_INSIDE = 31.4    # smashing through the rock
+T_BURST = 32.4     # out the other side
+T_EXPLODE = 33.1   # asteroid explodes
+T_WHITE = 33.5     # white light fills the screen
+T_HOME = 34.4      # back to the forest
+T_DROP = 35.1      # beaver drops from the sky
+T_LAND = 35.4      # thud
+T_CHEW = 37.0      # starts eating
 
 # Little signs of life: nose twitches and blinks (start times, seconds)
-TWITCHES = [0.8, 2.4, 4.6, 6.9, 9.3, 12.5, 33.2, 35.9, 38.8, 41.2]
-BLINKS = [1.6, 5.4, 8.2, 10.3, 12.2, 33.7, 37.3, 40.1]
-FACE_BLINK = 26.4
-LOOK_UP = (T_LAUNCH - 2.0, T_LAUNCH - 1.1)   # one glance straight up at the sky
+TWITCHES = [0.8, 2.4, 4.6, 6.9, 9.3, 10.8, 13.8, 36.2, 38.9, 41.8, 44.2]
+BLINKS = [1.6, 5.4, 8.2, 10.3, 13.3, 14.4, 36.7, 40.3, 43.1]
+FACE_BLINK = 29.4
+# glances straight up at the sky: a long one, then a quick one just before launch
+LOOKS = [(T_LAUNCH - 4.0, T_LAUNCH - 3.1), (T_LAUNCH - 1.0, T_LAUNCH - 0.7)]
 
 # ---------------------------------------------------------------------------
 # Colours for this film
@@ -239,10 +240,10 @@ def beaver(c, P, lift=0.0, tx=0.0, eaten=0.0, chew=0.0, singe=0.0, t=0.0, fine=N
     if fine is None:
         fine = s * P.sy > 260
     # tail lying behind on the ground
-    tail = T(ell(1.02, -0.02, 0.62, 0.2, -8, 40))
-    c.poly(tail, fill=TAIL_C, line=col(0.12, 0.11, 0.11), lw=0.02 * s, pressure=1.0)
-    c.hatch(tail, TAIL_SCALE, spacing=0.075 * s, angle=35, lw=max(1.5, 0.008 * s), opacity=0.7)
-    c.hatch(tail, TAIL_SCALE, spacing=0.075 * s, angle=-35, lw=max(1.5, 0.008 * s), opacity=0.7)
+    draw_tail(c, T, s)
+    # hind feet come out from under the body, so they are drawn first and the fur falls over them
+    for sgn in (-1, 1):
+        draw_foot(c, T, s, sgn)
     # ears
     for sgn in (-1, 1):
         c.poly(T(ell(sgn * 0.64, -2.8, 0.1, 0.085, sgn * 25, 20)), fill=FUR[1], pressure=1.0)
@@ -388,17 +389,129 @@ def beaver(c, P, lift=0.0, tx=0.0, eaten=0.0, chew=0.0, singe=0.0, t=0.0, fine=N
                    lw=0.005 * s, pressure=1.1, jit=0.3)
             c.line(T([(fx, py + 0.04), (fx + 0.004, py + 0.075), (fx - 0.006, py + 0.095)]), CLAW, lw=0.011 * s,
                    jit=0.2)
-    # hind feet
-    for sgn in (-1, 1):
-        fx = sgn * 0.58
-        c.poly(T(ell(fx, -0.02, 0.33, 0.12, 0, 24)), fill=SKIN, line=col(0.1, 0.09, 0.09), lw=0.012 * s,
-               pressure=1.1, jit=0.5)
-        for k in range(5):
-            tx_ = fx + sgn * (-0.22 + k * 0.11)
-            c.poly(T(ell(tx_, 0.08, 0.05, 0.06, 0, 10)), fill=SKIN, pressure=1.1, jit=0.3)
-            c.line(T([(tx_, 0.12), (tx_ + sgn * 0.01, 0.17)]), CLAW, lw=0.012 * s, jit=0.2)
-        c.hatch(T(ell(fx, 0.04, 0.3, 0.07, 0, 20)), col(0.36, 0.33, 0.32), spacing=0.05 * s, angle=90,
-                lw=max(1, 0.006 * s), opacity=0.6)
+
+
+# tail: a flat, scaly paddle (local units, lying behind the beaver to its right)
+def _tail_geom():
+    us = np.linspace(0, 1, 24)
+    cx = 0.55 + 1.2 * us
+    cy = -0.03 + 0.05 * us
+    w = 0.12 + 0.16 * np.sin(np.pi * np.clip(us * 1.12, 0, 1)) ** 0.65
+    top = np.stack([cx, cy - w * 0.55], 1)
+    bot = np.stack([cx, cy + w * 0.45], 1)
+    outline = np.concatenate([top, bot[::-1]])
+    rr = np.random.default_rng(71)
+    scales, ticks = [], []
+    for row, u in enumerate(np.arange(0.12, 0.97, 0.055)):
+        wu = 0.12 + 0.16 * math.sin(math.pi * min(1.0, u * 1.12)) ** 0.65
+        x0, y0 = 0.55 + 1.2 * u, -0.03 + 0.05 * u
+        n = max(2, int(wu * 2 / 0.05))
+        for j in range(n):
+            v = -1 + (j + 0.5 + 0.5 * (row % 2)) * 2 / n
+            if abs(v) > 0.92:
+                continue
+            x = x0 + rr.uniform(-0.004, 0.004)
+            y = y0 + v * wu * (0.55 if v < 0 else 0.45)
+            hw, hh = 0.028, 0.02
+            scales.append([(x - hw, y), (x, y - hh), (x + hw, y), (x, y + hh), (x - hw, y)])
+            ticks.append([(x - hw * 0.6, y - hh * 0.35), (x - hw * 0.1, y - hh * 0.8), (x + hw * 0.3, y - hh * 0.55)])
+    return outline, np.array(scales), np.array(ticks)
+
+
+TAIL_OUTLINE, TAIL_SCALES, TAIL_TICKS = _tail_geom()
+
+
+def draw_tail(c, T, s):
+    out = T(TAIL_OUTLINE)
+    c.poly(out, fill=TAIL_C, line=col(0.09, 0.08, 0.08), lw=0.018 * s, pressure=1.15, jit=0.6)
+    c.poly(T(ell(1.2, -0.05, 0.42, 0.06, 2, 24)), fill=col(0.36, 0.34, 0.35), pressure=0.75, opacity=0.8, jit=0.5)
+    c.poly(T(np.concatenate([TAIL_OUTLINE[24:], TAIL_OUTLINE[:1]])), None, col(0.12, 0.11, 0.11), lw=0.03 * s,
+           opacity=0.6, closed=False)
+    c.strokes(T(TAIL_SCALES), col(0.12, 0.11, 0.11), 0.007, pressure=1.0, boil=0.2, clip=[out])
+    c.strokes(T(TAIL_TICKS), col(0.52, 0.5, 0.5), 0.006, pressure=0.9, boil=0.2, clip=[out], opacity=0.8)
+    rr = np.random.default_rng(72)
+    n = 120
+    px, py = rr.uniform(0.5, 0.78, n), rr.uniform(-0.16, 0.06, n)
+    ang = rr.normal(0.25, 0.3, n)
+    ln = rr.uniform(0.06, 0.12, n)
+    fur = np.stack([np.stack([px, py], 1), np.stack([px + np.cos(ang) * ln * 0.5, py + np.sin(ang) * ln * 0.5], 1),
+                    np.stack([px + np.cos(ang) * ln, py + np.sin(ang) * ln], 1)], 1)
+    tone = rr.integers(0, 3, n)
+    for k in range(3):
+        c.strokes(T(fur[tone == k]), FUR[k], 0.022, pressure=0.95, boil=0.3)
+
+
+# hind feet: big, dark, webbed, with jointed toes and curved claws
+FOOT_SKIN, FOOT_LIGHT, WEB = col(0.20, 0.17, 0.16), col(0.40, 0.36, 0.34), col(0.30, 0.26, 0.25)
+
+
+def _foot_geom(sgn):
+    heel = (sgn * 0.5, -0.1)
+    toes = []
+    for k in range(5):
+        a = math.radians(90 + sgn * 14 - (k - 2) * 13)
+        ln = [0.28, 0.34, 0.37, 0.35, 0.29][k]
+        bx, by = heel[0] + (k - 2) * 0.065, heel[1] + 0.06 - abs(k - 2) * 0.012
+        ux, uy = math.cos(a), math.sin(a) * 0.72  # foreshortened: the feet lie flat, pointing at us
+        toes.append((bx, by, ux, uy, ln))
+    return heel, toes
+
+
+def draw_foot(c, T, s, sgn):
+    heel, toes = _foot_geom(sgn)
+    tips = [(bx + ux * ln, by + uy * ln) for bx, by, ux, uy, ln in toes]
+    # webbing between the toes, with a scalloped edge
+    web = [(heel[0] - 0.13, heel[1] + 0.05)]
+    for i, (tx_, ty_) in enumerate(tips):
+        bx, by, ux, uy, ln = toes[i]
+        web.append((bx + ux * ln * 0.93, by + uy * ln * 0.93))
+        if i < 4:
+            nx_, ny_ = tips[i + 1]
+            web.append(((tx_ + nx_) / 2, (ty_ + ny_) / 2 - 0.03))
+    web.append((heel[0] + 0.13, heel[1] + 0.05))
+    c.poly(T(web), fill=WEB, line=col(0.1, 0.09, 0.09), lw=0.008 * s, pressure=1.1, jit=0.4)
+    c.strokes(T(np.array([[heel, ((heel[0] + t_[0]) / 2, (heel[1] + t_[1]) / 2 + 0.01), t_] for t_ in tips])),
+              col(0.36, 0.32, 0.31), 0.006, pressure=0.8, opacity=0.5, boil=0.2)
+    # the sole under the toes
+    c.poly(T(ell(heel[0], heel[1] + 0.06, 0.24, 0.11, 0, 20)), fill=FOOT_SKIN, pressure=1.1, jit=0.4)
+    for bx, by, ux, uy, ln in toes:
+        nx_, ny_ = -uy, ux
+        wd = 0.045
+        pts = []
+        for q in np.linspace(0, 1, 8):
+            w = wd * (1 - 0.35 * q)
+            pts.append((bx + ux * ln * q + nx_ * w, by + uy * ln * q + ny_ * w))
+        for q in np.linspace(1, 0, 8):
+            w = wd * (1 - 0.35 * q)
+            pts.append((bx + ux * ln * q - nx_ * w, by + uy * ln * q - ny_ * w))
+        c.poly(T(pts), fill=FOOT_SKIN, line=col(0.08, 0.07, 0.07), lw=0.006 * s, pressure=1.15, jit=0.3)
+        # knuckle creases and a soft highlight
+        for q in (0.35, 0.65):
+            cx_, cy_ = bx + ux * ln * q, by + uy * ln * q
+            c.line(T([(cx_ + nx_ * wd * 0.8, cy_ + ny_ * wd * 0.8), (cx_ + ux * 0.012, cy_ + uy * 0.012),
+                      (cx_ - nx_ * wd * 0.8, cy_ - ny_ * wd * 0.8)]), col(0.07, 0.06, 0.06), lw=0.005 * s,
+                   jit=0.2, opacity=0.8)
+        c.line(T([(bx + ux * ln * 0.1 - nx_ * wd * 0.35, by + uy * ln * 0.1 - ny_ * wd * 0.35),
+                  (bx + ux * ln * 0.85 - nx_ * wd * 0.3, by + uy * ln * 0.85 - ny_ * wd * 0.3)]), FOOT_LIGHT,
+               lw=0.008 * s, jit=0.2, opacity=0.7)
+        # curved claw
+        tx_, ty_ = bx + ux * ln, by + uy * ln
+        c.line(T([(tx_ - ux * 0.01, ty_ - uy * 0.01), (tx_ + ux * 0.035, ty_ + uy * 0.035 + 0.006),
+                  (tx_ + ux * 0.05 - nx_ * 0.01, ty_ + uy * 0.05 + 0.02)]), CLAW, lw=0.012 * s, jit=0.2)
+        c.line(T([(tx_ - ux * 0.008, ty_ - uy * 0.008), (tx_ + ux * 0.012, ty_ + uy * 0.012)]),
+               col(0.35, 0.32, 0.3), lw=0.012 * s, jit=0.1)
+    # fur spilling over the ankle
+    rr = np.random.default_rng(80 + sgn)
+    n = 90
+    px = heel[0] + rr.uniform(-0.2, 0.2, n)
+    py = heel[1] + rr.uniform(-0.08, 0.02, n)
+    ang = math.pi / 2 + rr.normal(sgn * 0.3, 0.3, n)
+    ln = rr.uniform(0.05, 0.1, n)
+    fur = np.stack([np.stack([px, py], 1), np.stack([px + np.cos(ang) * ln * 0.5, py + np.sin(ang) * ln * 0.5], 1),
+                    np.stack([px + np.cos(ang) * ln, py + np.sin(ang) * ln], 1)], 1)
+    tone = rr.integers(0, 4, n)
+    for k in range(4):
+        c.strokes(T(fur[tone == k]), FUR[k], 0.02, pressure=0.95, boil=0.3)
 
 
 def life(t):
@@ -435,8 +548,9 @@ for _ in range(64):
     y = _rf.uniform(dam_top(x) + 6, 1478)
     DAM_STICKS.append((x, y, _rf.uniform(60, 160), _rf.uniform(-22, 22), int(_rf.integers(0, 3)),
                        _rf.uniform(7, 11)))
-FALL_STICKS = [(7.5, 250, 1392, 130, 12, 215, 1585), (9.6, 800, 1385, 120, -10, 845, 1600),
-               (11.2, 390, 1372, 110, 6, 370, 1655), (12.3, 690, 1376, 100, 8, 715, 1700)]
+FALL_STICKS = [(7.5, 250, 1392, 130, 12, 215, 1585), (10.0, 800, 1385, 120, -10, 845, 1600),
+               (12.2, 390, 1372, 110, 6, 370, 1655), (14.0, 690, 1376, 100, 8, 715, 1700),
+               (15.2, 150, 1398, 95, -6, 120, 1760)]
 ROUND_TREES = [(165, 1235, 820, 185), (925, 1235, 850, 165)]
 PINES = [(40, 1245, 760), (1050, 1245, 700), (330, 1230, 430), (745, 1230, 400)]
 
@@ -445,15 +559,15 @@ for i in range(70):
     tx, _, cy, cr = ROUND_TREES[i % 2]
     ang = _rf.uniform(0, 6.28)
     rr_ = cr * math.sqrt(_rf.uniform(0, 0.8))
-    t0 = 4.2 + 8.6 * _rf.uniform(0, 1) ** 0.6
+    t0 = 4.2 + 11.6 * _rf.uniform(0, 1) ** 0.6
     LEAVES.append(dict(t0=t0, x=tx + rr_ * math.cos(ang), y=cy + rr_ * math.sin(ang), vy=_rf.uniform(160, 300),
                        sway=_rf.uniform(20, 45), ph=_rf.uniform(0, 6.3), land=_rf.uniform(1265, 1880),
                        c=[GREEN1, GREEN_L, GREEN2][i % 3]))
-SPLASHES = sorted([(5.8 + 7.1 * _rf.uniform(0, 1) ** 0.55, _rf.uniform(60, 1020),
-                    float(_rf.choice([_rf.uniform(1520, 1860), _rf.uniform(1265, 1320)])), i) for i in range(24)])
+SPLASHES = sorted([(5.8 + 10.1 * _rf.uniform(0, 1) ** 0.55, _rf.uniform(60, 1020),
+                    float(_rf.choice([_rf.uniform(1520, 1860), _rf.uniform(1265, 1320)])), i) for i in range(30)])
 EMBERS = []
 for i in range(46):
-    t0 = 32.6 + i * 0.19 + _rf.uniform(0, 0.12)
+    t0 = 35.6 + i * 0.19 + _rf.uniform(0, 0.12)
     x1 = _rf.uniform(30, 1050)
     if 330 < x1 < 750:
         x1 += 420 if x1 > 540 else -300
@@ -945,7 +1059,7 @@ def scene_threat(c, t):
     light_overlay(c, p ** 1.6)
     lift = -0.22 * sstep(0.6, 2.6, t)
     tw, bl = life(t)
-    look = sstep(LOOK_UP[0], LOOK_UP[0] + 0.1, t) * (1 - sstep(LOOK_UP[1], LOOK_UP[1] + 0.12, t))
+    look = max(sstep(a, a + 0.1, t) * (1 - sstep(b, b + 0.12, t)) for a, b in LOOKS)
     falling_leaves(c, t, behind=True)
     for (ts, x, y, i) in SPLASHES:
         if y < DAM_LINE:
@@ -1113,7 +1227,7 @@ def scene_burst(c, t):
         c.wash(WHITE, sstep(T_WHITE - 0.2, T_WHITE, t))
 
 
-BITES = [34.8, 35.6, 36.6, 37.4, 38.4, 39.2]
+BITES = [37.8, 38.6, 39.6, 40.4, 41.4, 42.2]
 
 
 def scene_home(c, t):
@@ -1171,7 +1285,7 @@ def scene_home(c, t):
                 px, py = P.pt(u_, v_)
                 smoke_wisp(c, px, py, t, k * 2.1, length=12, opacity=0.7)
     hx, hy = Pose(BEAVER_X, BEAVER_Y, BEAVER_S).pt(0.15, -3.0)
-    t_fall, t_hit = 39.5, 39.95
+    t_fall, t_hit = 42.5, 42.95
     if t_fall <= t < t_hit:
         u = (t - t_fall) / (t_hit - t_fall)
         ember(c, lerp(760, hx, u), lerp(-80, hy - 8, u), hx - 760, hy + 80, 11, t, 99)
@@ -1219,7 +1333,7 @@ def make_audio(path):
     # forest air, and birds that fall silent as the rumble grows
     for a, b in ((0.0, T_LAUNCH), (T_HOME, DUR)):
         add(a, 0.02 * noise(b - a, 400, 3000, int(a)) * np.clip(tt(b - a) / 0.4, 0, 1))
-    for tb in (0.4, 0.62, 1.5, 2.3, 2.5, 3.6, 40.6, 40.8):
+    for tb in (0.4, 0.62, 1.5, 2.3, 2.5, 3.6, 43.6, 43.8):
         add(tb, 0.06 * sweep(0.07, 3000, 4300) * np.hanning(int(0.07 * 44100)))
     # the rumble: something enormous is coming. Deep bass for big speakers, a growl phones can play,
     # distant thunder-like cracks and groaning wood, all pushed into gentle overdrive at the peak.
@@ -1231,12 +1345,12 @@ def make_audio(path):
     rumble = (0.9 * noise(d, 18, 90, 1) + 0.6 * noise(d, 70, 260, 2) * throb + 0.18 * drone
               + 0.25 * sweep(d, 40, 62) + 0.2 * noise(d, 250, 700, 21) * throb)
     rg = np.random.default_rng(3)
-    for tc in np.sort(rg.uniform(3.0, d, 20)):
+    for tc in np.sort(rg.uniform(3.0, d, 26)):
         if rg.random() < tc / d:
             i = int(tc * 44100)
             crack = 1.2 * noise(1.2, 60, 900, int(tc * 77)) * decay(1.2, 0.35)
             rumble[i:i + len(crack)] += crack[:len(rumble) - i]
-    for tg in (3.5, 5.8, 7.4, 8.8):
+    for tg in (3.5, 5.8, 7.4, 8.8, 10.4, 11.6):
         i = int(tg * 44100)
         groan = 0.5 * noise(1.5, 140, 420, int(tg * 31)) * np.sin(np.pi * tt(1.5) / 1.5) * (0.6 + 0.4 * np.sin(2 * np.pi * 9 * tt(1.5)))
         rumble[i:i + len(groan)] += groan[:len(rumble) - i]
@@ -1301,8 +1415,8 @@ def make_audio(path):
         if all(abs(tk - b) > 0.12 for b in BITES):
             add(tk, 0.1 * noise(0.05, 1000, 5000, int(tk * 100)) * decay(0.05, 0.015))
         tk += 1 / 3
-    add(39.95, 0.18 * noise(0.1, 100, 900, 19) * decay(0.1, 0.03))
-    add(39.95, 0.05 * noise(1.0, 3000, 9000, 20) * decay(1.0, 0.4))
+    add(42.95, 0.18 * noise(0.1, 100, 900, 19) * decay(0.1, 0.03))
+    add(42.95, 0.05 * noise(1.0, 3000, 9000, 20) * decay(1.0, 0.4))
     tr.save(path)
 
 
