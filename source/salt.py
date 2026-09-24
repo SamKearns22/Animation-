@@ -115,9 +115,9 @@ WIFE_SEAT = (-0.25, 0.48, 0.0)
 HUSB_SEAT = (15.65, LIP_Y - 0.25, 0.0)
 HOLE = (15.65, 0.36, 0.3)          # centre x, radius along x, radius across
 HIS_PLATE = (15.12, LIP_Y, 0.0)
-SHELF = (15.2, 16.1, HALF_W, 1.4)   # x0, x1, z0, z1: the little shelf the salt waits on
-BOULDER_R = 0.3
-BOULDER_START = (15.65, LIP_Y + BOULDER_R, 1.03)
+SHELF = (15.15, 16.15, HALF_W, 1.58)   # x0, x1, z0, z1: the little shelf the salt waits on
+BOULDER_R = 0.42
+BOULDER_START = (15.65, LIP_Y + BOULDER_R, 1.12)
 TABLE_CANDLES = [(x, 0.0) for x in np.arange(2.2, FLAT_END - 0.5, 2.2)]
 
 
@@ -668,8 +668,8 @@ def closed_eye(c, x, y, w, lw, lashes=True, flip=1):
 
 class Figure:
     """Draw a character in its own units (metres), mirrored or tilted if needed."""
-    def __init__(self, c, x, y, s, flip=1, lean=0.0, pivot=(0.0, 0.0)):
-        self.c, self.x, self.y, self.s, self.flip = c, x, y, s, flip
+    def __init__(self, c, x, y, s, flip=1, lean=0.0, pivot=(0.0, 0.0), vs=1.0):
+        self.c, self.x, self.y, self.s, self.flip, self.vs = c, x, y, s, flip, vs
         self.ca, self.sa = math.cos(math.radians(lean)), math.sin(math.radians(lean))
         self.pv = pivot
         self.lw = max(1.2, s * 0.011)
@@ -678,7 +678,7 @@ class Figure:
         u, v = u - self.pv[0], v - self.pv[1]
         u, v = u * self.ca - v * self.sa, u * self.sa + v * self.ca
         u, v = u + self.pv[0], v + self.pv[1]
-        return self.x + u * self.flip * self.s, self.y - v * self.s
+        return self.x + u * self.flip * self.s, self.y - v * self.s * self.vs
 
     def pts(self, lst):
         return [self.P(u, v) for u, v in lst]
@@ -732,7 +732,73 @@ def lady_arm(f, sh, el, wr, lw, glove_from=0.5):
                       (px - nx2 * 0.018, py - ny2 * 0.018)]), GLOVE_S, lw=lw * 0.6)
 
 
-def wife(c, x, y, s, t, mouth=0.0, arm=0.0, chew=0.0, swallow=0.0, view='front', lean=0.0, flip=-1):
+CHAIR_X = WIFE_SEAT[0]
+
+
+def chair_local():
+    """Her dining chair in its own coordinates (metres): x forward (towards the table), y up, z across."""
+    seat_y, hw = 0.46, 0.23
+    parts = {'front': [], 'back': []}
+    # front legs and the seat
+    for z in (-0.19, 0.19):
+        parts['front'].append(('leg', [(0.19, 0.0, z), (0.19, seat_y - 0.03, z)]))
+    parts['front'].append(('poly', [(-0.22, seat_y - 0.05, -hw), (0.23, seat_y - 0.05, -hw), (0.23, seat_y, -hw),
+                                    (-0.22, seat_y, -hw)], WOOD))
+    parts['front'].append(('poly', [(0.23, seat_y - 0.05, -hw), (0.23, seat_y - 0.05, hw), (0.23, seat_y, hw),
+                                    (0.23, seat_y, -hw)], WOOD))
+    parts['front'].append(('poly', [(-0.22, seat_y, -hw), (0.23, seat_y, -hw), (0.23, seat_y, hw), (-0.22, seat_y, hw)],
+                           col(0.38, 0.31, 0.36)))
+    # back legs, back posts, the upholstered back and a carved top rail
+    for z in (-0.19, 0.19):
+        parts['back'].append(('leg', [(-0.2, 0.0, z), (-0.2, seat_y - 0.03, z)]))
+    parts['back'].append(('poly', [(-0.21, 0.6, -0.17), (-0.21, 0.6, 0.17), (-0.23, 1.0, 0.17), (-0.23, 1.0, -0.17)],
+                          col(0.38, 0.31, 0.36)))
+    for z in (-0.2, 0.2):
+        parts['back'].append(('leg', [(-0.2, seat_y - 0.03, z), (-0.24, 1.12, z)]))
+    rail = [(-0.235, 1.0, -0.21), (-0.235, 1.0, 0.21), (-0.245, 1.1, 0.21)] + \
+           [(-0.245, 1.1 + 0.07 * math.sin(math.pi * k / 8), 0.21 - 0.42 * k / 8) for k in range(9)]
+    parts['back'].append(('poly', rail, WOOD))
+    parts['back'].append(('poly', [(-0.205, seat_y + 0.02, -0.2), (-0.205, seat_y + 0.02, 0.2), (-0.21, 0.6, 0.2),
+                                   (-0.21, 0.6, -0.2)], WOOD))
+    return parts
+
+
+CHAIR = chair_local()
+
+
+def chair_xf(t):
+    """Where her chair (and she) are: sitting still, or bowled over backwards by the salt."""
+    def still(p):
+        return (CHAIR_X + p[0], p[1], p[2])
+    if t < T_HIT:
+        return still, 0.0
+    u = t - T_HIT
+    phi = u * 7.5                       # tipping over backwards, legs in the air
+    px = -0.2                           # pivot on the back legs
+    vx, vy, vz = -3.2, 3.6, -0.6
+
+    def moved(p):
+        x, y, z = p
+        xr = px + (x - px) * math.cos(phi) - y * math.sin(phi)
+        yr = (x - px) * math.sin(phi) + y * math.cos(phi)
+        return (CHAIR_X + xr + vx * u, yr + vy * u - 4.9 * u * u + 0.3 * u, z + vz * u)
+    return moved, phi
+
+
+def chair3d(c, cam, xf, part):
+    for item in CHAIR[part]:
+        pts = [xf(p) for p in item[1]]
+        if item[0] == 'leg':
+            mid = np.mean(pts, axis=0)
+            if cam.depth(mid) > 0.2:
+                line3(c, cam, pts, INK, lw=max(3, cam.scale(mid) * 0.05))
+                line3(c, cam, pts, WOOD, lw=max(2, cam.scale(mid) * 0.035))
+        else:
+            poly3(c, cam, pts, fill=item[2], line=INK, lw=3)
+
+
+def wife(c, x, y, s, t, mouth=0.0, arm=0.0, chew=0.0, swallow=0.0, view='front', lean=0.0, flip=-1, chair=False,
+         vs=1.0):
     """The wife, seated. 'front' is a three-quarter view (drawn facing left; flip=-1 faces right).
     'back' shows her from behind, sitting in her chair."""
     f = Figure(c, x, y, s, flip, lean, (0.0, 0.5))
@@ -748,7 +814,12 @@ def wife(c, x, y, s, t, mouth=0.0, arm=0.0, chew=0.0, swallow=0.0, view='front',
 
     if view == 'back':
         # seen from behind and to her right, turned up the table towards him (her face just peeks out, left)
-        f2 = Figure(c, x, y, s, 1, lean, (0.0, 0.5))
+        f2 = Figure(c, x, y, s, 1, lean, (0.0, 0.5), vs)
+        # her skirt spills over both sides of the seat
+        f2.smooth([(-0.31, -0.04), (-0.3, 0.12), (-0.18, 0.2), (0.2, 0.2), (0.33, 0.12), (0.34, -0.04), (0.0, -0.08)],
+                  fill=GOWN, line=INK, lw=lw)
+        c.line(f2.pts([(-0.24, 0.0), (-0.22, 0.14)]), INK, lw=lw * 0.5, opacity=0.5)
+        c.line(f2.pts([(0.27, 0.0), (0.25, 0.14)]), INK, lw=lw * 0.5, opacity=0.5)
         lady_arm(f2, (0.24, 0.46), (0.3, 0.27), (0.14, 0.22), lw)  # her near arm, reaching forward to the table
         f2.smooth([(-0.18, 0.12), (-0.21, 0.36), (-0.16, 0.5), (0.0, 0.55), (0.2, 0.53), (0.27, 0.4), (0.25, 0.12)],
                   fill=GOWN, line=INK, lw=lw)
@@ -759,13 +830,6 @@ def wife(c, x, y, s, t, mouth=0.0, arm=0.0, chew=0.0, swallow=0.0, view='front',
         for (px, py) in ((-0.15, 0.48), (0.23, 0.47)):
             f2.smooth([(px - 0.055, py - 0.03), (px - 0.045, py + 0.025), (px, py + 0.04), (px + 0.05, py + 0.02),
                        (px + 0.055, py - 0.03), (px, py - 0.045)], fill=GOWN, line=INK, lw=lw * 0.8)
-        # her chair back, turned a little with her
-        c.poly(f2.pts([(-0.15, 0.0), (0.24, 0.0), (0.24, 0.6), (-0.15, 0.56)]), fill=WOOD, line=INK, lw=lw)
-        c.poly(f2.pts([(-0.1, 0.06), (0.19, 0.06), (0.19, 0.54), (-0.1, 0.51)]), fill=col(0.38, 0.31, 0.36),
-               line=INK, lw=lw * 0.6)
-        f2.smooth([(-0.15, 0.55), (0.05, 0.67), (0.24, 0.6), (0.05, 0.62)], fill=WOOD, line=INK, lw=lw * 0.8)
-        for u_ in (-0.15, 0.24):
-            c.poly(f2.ell(u_, 0.63, 0.03, 0.035, 0, 12), fill=WOOD_L, line=INK, lw=lw * 0.7)
         # nape, pearls, and the back of that magnificent hair
         c.poly(f2.pts([(-0.04, 0.53), (0.07, 0.53), (0.06, 0.64), (-0.04, 0.64)]), fill=SKIN, line=INK, lw=lw * 0.7)
         for i in range(5):
@@ -795,7 +859,8 @@ def wife(c, x, y, s, t, mouth=0.0, arm=0.0, chew=0.0, swallow=0.0, view='front',
                   line=INK, lw=lw * 0.6)
         return
 
-    chair_back()
+    if chair:
+        chair_back()
     # skirt spilling over the seat
     f.smooth([(-0.34, -0.02), (-0.2, 0.12), (0.2, 0.12), (0.3, -0.02), (0.36, -0.46), (-0.4, -0.46)], fill=GOWN,
              line=INK, lw=lw)
@@ -993,9 +1058,16 @@ def boulder_path(t):
         px, py = ramp_point(a)
         return (px - math.sin(a) * BOULDER_R, py + math.cos(a) * BOULDER_R, lerp(0.45, 0.2, f)), deck + arc * f
     u -= ROLL_CURVE
-    f = u / ROLL_FLAT
-    s = flat * (0.8 * f + 0.2 * f * f)
-    return (FLAT_END - s, TABLE_Y + BOULDER_R, lerp(0.2, 0.0, min(1.0, f))), deck + arc + s
+    if u <= ROLL_FLAT:
+        f = u / ROLL_FLAT
+        s = flat * (0.8 * f + 0.2 * f * f)
+        return (FLAT_END - s, TABLE_Y + BOULDER_R, lerp(0.2, 0.0, f)), deck + arc + s
+    # straight on through, like a bowling ball: no slowing down, falling once it leaves the table
+    v = flat * 1.2 / ROLL_FLAT
+    k = u - ROLL_FLAT
+    x = 0.1 - v * k
+    y = TABLE_Y + BOULDER_R - (4.9 * (k - 0.03) ** 2 if k > 0.03 else 0.0)
+    return (x, y, -0.4 * k), deck + arc + flat + v * k
 
 
 def visual_spin(t):
@@ -1025,7 +1097,7 @@ def salt_boulder(c, cam, t):
             px, py = cam.pt(pp)
             dx, dy = sx - px, sy - py
             dl = math.hypot(dx, dy)
-            if dl > r * 0.3:
+            if r * 0.3 < dl < r * 3 and r < 400:
                 nx, ny = -dy / dl, dx / dl
                 for k in (-0.7, -0.25, 0.25, 0.7):
                     c.line([(sx - dx / dl * r * 0.8 + nx * r * k, sy - dy / dl * r * 0.8 + ny * r * k),
@@ -1090,7 +1162,7 @@ def speaking(env, t0, t):
 # ---------------------------------------------------------------------------
 CAM_A = ((2.6, 1.35, 1.45), (0.02, 0.92, 0.02), 45)                                     # her one o'clock
 CAM_B = ((HUSB_SEAT[0] - 2.7, LIP_Y + 0.75, 0.0), (HUSB_SEAT[0], LIP_Y + 0.45, 0.0), 42)  # his twelve
-CAM_C = ((-2.9, 4.6, -2.0), (7.0, 0.8, 0.35), 70)                                       # the whole arrangement
+CAM_C = ((-3.05, 5.3, -1.6), (6.5, 0.2, 0.4), 74)                                       # the whole arrangement
 
 
 def camera(t):
@@ -1164,44 +1236,70 @@ def draw_world(c, cam, t):
             wife_flies(c, cam, t)
 
 
+def vertical_squash(cam, p):
+    """How much a metre of height shrinks on screen, seen from this camera (1 = seen straight on)."""
+    a, b = cam.pt(p), cam.pt((p[0], p[1] + 0.5, p[2]))
+    return min(1.0, math.hypot(b[0] - a[0], b[1] - a[1]) / (0.5 * cam.scale(p)))
+
+
 def wife_figure(c, cam, t):
-    sx, sy = cam.pt(WIFE_SEAT)
-    s = cam.scale(WIFE_SEAT)
+    xf, _ = chair_xf(t)
+    seat = xf((-0.04, 0.46, 0.0))
+    sx, sy = cam.pt(seat)
+    s = cam.scale(seat)
     chew = max(0.0, math.sin(t * 9)) if t < 1.3 else 0.0
     swallow = math.sin(math.pi * clamp01((t - 2.1) / 0.4))
-    view = 'front' if cam.pos[0] > WIFE_SEAT[0] else 'back'
-    wife(c, sx, sy, s, t, mouth=mouth_at(MOUTH_W, T_SPEAK_W, t), arm=speaking(MOUTH_W, T_SPEAK_W, t), chew=chew,
-         swallow=swallow, view=view)
+    kw = dict(mouth=mouth_at(MOUTH_W, T_SPEAK_W, t), arm=speaking(MOUTH_W, T_SPEAK_W, t), chew=chew, swallow=swallow)
+    if cam.pos[0] > CHAIR_X:
+        # seen from the front: the chair is behind her
+        chair3d(c, cam, xf, 'back')
+        chair3d(c, cam, xf, 'front')
+        wife(c, sx, sy, s, t, view='front', **kw)
+    else:
+        # seen from behind: seat and front legs, then her, then the back legs and chair back nearest to us
+        chair3d(c, cam, xf, 'front')
+        wife(c, sx, sy, s, t, view='back', vs=vertical_squash(cam, seat), **kw)
+        chair3d(c, cam, xf, 'back')
 
 
 def wife_flies(c, cam, t):
-    """The wife, her chair and her dinner fly back past the camera; china and glass everywhere."""
+    """The salt bowls straight through: she and her chair go over backwards together, dinner everywhere."""
     u = t - T_HIT
-    salt_boulder(c, cam, t)
-    for (vx, vy, vz, spin, kind) in [(-9, 5, -3, 400, 'wife'), (-8, 3, -1, -300, 'plate'), (-7, 6, 2, 500, 'glass'),
-                                     (-10, 4, -2, 200, 'candle')]:
-        p = (0.3 + vx * u, TABLE_Y + 0.4 + vy * u - 4.9 * u * u, vz * u)
+    xf, phi = chair_xf(t)
+    seat, up = xf((0.0, 0.46, 0.0)), xf((0.0, 1.46, 0.0))
+    if cam.depth(seat) > 0.3 and cam.depth(up) > 0.3:
+        (sx, sy), (ux, uy) = cam.pt(seat), cam.pt(up)
+        lean = math.degrees(math.atan2(ux - sx, -(uy - sy)))
+        chair3d(c, cam, xf, 'front')
+        wife(c, sx, sy, cam.scale(seat), t, view='back', lean=lean, mouth=0.8,
+             vs=max(0.6, vertical_squash(cam, seat)))
+        chair3d(c, cam, xf, 'back')
+    # plate, glass and candle go with her
+    for (vx, vy, vz, spin, kind) in [(-7, 4.5, 1.5, -300, 'plate'), (-6, 5.5, 2.5, 500, 'glass'),
+                                     (-8, 3.5, -2.5, 200, 'candle')]:
+        p = (0.4 + vx * u, TABLE_Y + 0.05 + vy * u - 4.9 * u * u, vz * u)
         if cam.depth(p) < 0.3:
             continue
         sx, sy = cam.pt(p)
         s = cam.scale(p)
-        if kind == 'wife':
-            wife(c, sx, sy, s, t, view='back', lean=spin * u)
-        elif kind == 'plate':
+        if kind == 'plate':
             c.poly(ell(sx, sy, 0.17 * s, 0.06 * s, spin * u, 20), fill=PLATE, line=INK, lw=3)
         elif kind == 'glass':
             c.poly(ell(sx, sy, 0.05 * s, 0.1 * s, spin * u, 12), fill=GLASS, line=INK, lw=2)
+            c.poly(ell(sx + 0.08 * s, sy + 0.05 * s, 0.07 * s, 0.03 * s, spin * u * 0.3, 12), fill=WINE, jit=0.3)
         else:
             candle(c, cam, p, t, 3, angle=math.radians(spin * u))
     r = np.random.default_rng(12)
     for i in range(80):
-        v = r.normal(0, 1, 3) * [3, 3, 3] + [-6, 3, 0]
-        p = (0.4 + v[0] * u, TABLE_Y + 0.3 + v[1] * u - 4.9 * u * u, v[2] * u)
+        v = r.normal(0, 1, 3) * [2.5, 2.5, 2.5] + [-6, 3, 0]
+        p = (0.4 + v[0] * u, TABLE_Y + 0.2 + v[1] * u - 4.9 * u * u, v[2] * u)
         if p[1] < 0 or cam.depth(p) < 0.3:
             continue
         sx, sy = cam.pt(p)
         colr = [PLATE, GLASS, PEA, CARROT, POTATO, WINE, SALT, SILVER][i % 8]
         c.poly(blob(sx, sy, max(3, 0.03 * cam.scale(p)), i, 6, 0.4), fill=colr, line=INK, lw=1.5)
+    # and the salt carries straight on, undeterred
+    salt_boulder(c, cam, t)
 
 
 def render(d):
