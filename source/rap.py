@@ -119,7 +119,7 @@ SHOTS = [
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
     (60.6, 66.6, 'lost'), (66.6, 72.9, 'stage'), (72.9, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
     (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 104.6, 'stage'),
-    (104.6, 106.0, 'corn'), (106.0, 109.0, 'stage'), (109.0, 111.3, 'veal'), (111.3, 116.6, 'keepreal'), (116.6, 122.8, 'pillow'),
+    (104.6, 106.0, 'corn'), (106.0, 109.0, 'stage'), (109.0, 113.6, 'veal'), (113.6, 116.6, 'keepreal'), (116.6, 122.8, 'pillow'),
     (122.8, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
     (139.8, 141.9, 'wait'), (141.9, 147.4, 'firesale'), (147.4, 150.0, 'crake'), (150.0, 151.2, 'gasp'),
     (151.2, 162.54, 'crap'), (162.54, 166.2, 'blackeye'), (166.2, 168.9, 'factory'), (168.9, 171.9, 'gasp'),
@@ -2225,7 +2225,10 @@ def overlay(frame, t):
         if k % 3 != 2:  # on, on, off: a flashing sign
             size = 118 if k % 2 else 126
             lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
-            ImageDraw.Draw(lay).text((W / 2, H / 2), 'UNINTELLIGIBLE', font=_font(size), fill=(220, 20, 20, 255),
+            words = 'UNINTELLIGIBLE'
+            if flash[0] == 99.3 and t >= (flash[0] + flash[1]) / 2:  # ...or was it?
+                words = 'FROG IN A HOB?'
+            ImageDraw.Draw(lay).text((W / 2, H / 2), words, font=_font(size), fill=(220, 20, 20, 255),
                                      anchor='mm', stroke_width=7, stroke_fill=(255, 255, 255, 255))
             lay = lay.rotate(-4 if k % 2 else 3, resample=Image.BICUBIC, center=(W / 2, H / 2))
             im.paste(lay, (0, 0), lay)
