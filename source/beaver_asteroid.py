@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Beaver vs Asteroid: a 40 second coloured-pencil animation.
+"""Beaver vs Asteroid: a 42 second coloured-pencil animation.
 
 Usage:
     python3 beaver_asteroid.py stills OUT_DIR T1 T2 ...   # save single frames at given seconds
@@ -16,30 +16,31 @@ from pencil import *  # noqa: F401,F403  (canvas, colours, helpers)
 from pencil import FIRE, Canvas, Track, blob, clamp01, col, ell, flame, lerp, noise, render_video, smoke_wisp, \
     sstep, stars, sweep, tt, decay, W, H, FPS
 
-DUR = 40.0
+DUR = 42.0
 
 # Story timeline (seconds)
 T_THREAT = 3.0     # light and rumble start to build
-T_LAUNCH = 11.0    # beaver rockets upwards
-T_MID = 11.8       # mid-range: shooting up through ordinary clouds
-T_CLOUDS = 13.8    # wide shot: bursting through the high cloud layer
-T_SPACE = 17.5     # silent majesty of the Earth
-T_REVEAL = 20.0    # camera pulls back to reveal the asteroid
-T_FACE = 23.5      # the unbothered face
-T_IMPACT = 25.5    # streak hits the asteroid
-T_INSIDE = 26.4    # smashing through the rock
-T_BURST = 27.4     # out the other side
-T_EXPLODE = 28.1   # asteroid explodes
-T_WHITE = 28.5     # white light fills the screen
-T_HOME = 29.4      # back to the forest
-T_DROP = 30.1      # beaver drops from the sky
-T_LAND = 30.4      # thud
-T_CHEW = 32.0      # starts eating
+T_LAUNCH = 13.0    # beaver rockets upwards
+T_MID = 13.8       # mid-range: shooting up through ordinary clouds
+T_CLOUDS = 15.8    # wide shot: bursting through the high cloud layer
+T_SPACE = 19.5     # silent majesty of the Earth
+T_REVEAL = 22.0    # camera pulls back to reveal the asteroid
+T_FACE = 25.5      # the unbothered face
+T_IMPACT = 27.5    # streak hits the asteroid
+T_INSIDE = 28.4    # smashing through the rock
+T_BURST = 29.4     # out the other side
+T_EXPLODE = 30.1   # asteroid explodes
+T_WHITE = 30.5     # white light fills the screen
+T_HOME = 31.4      # back to the forest
+T_DROP = 32.1      # beaver drops from the sky
+T_LAND = 32.4      # thud
+T_CHEW = 34.0      # starts eating
 
 # Little signs of life: nose twitches and blinks (start times, seconds)
-TWITCHES = [0.8, 2.4, 4.6, 6.9, 9.3, 31.2, 33.9, 36.8, 39.2]
-BLINKS = [1.6, 5.4, 8.2, 10.3, 31.7, 35.3, 38.1]
-FACE_BLINK = 24.4
+TWITCHES = [0.8, 2.4, 4.6, 6.9, 9.3, 12.5, 33.2, 35.9, 38.8, 41.2]
+BLINKS = [1.6, 5.4, 8.2, 10.3, 12.2, 33.7, 37.3, 40.1]
+FACE_BLINK = 26.4
+LOOK_UP = (T_LAUNCH - 2.0, T_LAUNCH - 1.1)   # one glance straight up at the sky
 
 # ---------------------------------------------------------------------------
 # Colours for this film
@@ -232,7 +233,7 @@ def aura(c, P, t, strength=1.0):
 
 
 def beaver(c, P, lift=0.0, tx=0.0, eaten=0.0, chew=0.0, singe=0.0, t=0.0, fine=None, twig=True, twitch=0.0,
-           blink=0.0):
+           blink=0.0, look=0.0):
     s = P.s
     T = P.T
     if fine is None:
@@ -311,8 +312,11 @@ def beaver(c, P, lift=0.0, tx=0.0, eaten=0.0, chew=0.0, singe=0.0, t=0.0, fine=N
     for sgn in (-1, 1):
         ex, ey = sgn * 0.40, -2.66
         c.poly(T(ell(ex, ey, 0.085, 0.07, 0, 16)), fill=FUR[0], pressure=1.0, opacity=0.8, jit=0.4)
-        c.poly(T(ell(ex, ey, 0.055, 0.05, 0, 16)), fill=col(0.03, 0.03, 0.03), pressure=1.2, jit=0.3)
-        c.poly(T(ell(ex - 0.018, ey - 0.02, 0.013, 0.011, 0, 8)), fill=WHITE, pressure=1.2, jit=0.1)
+        gy = -0.022 * look
+        if look > 0.02:
+            c.poly(T(ell(ex, ey + 0.022, 0.045, 0.03, 0, 16)), fill=col(0.72, 0.64, 0.56), pressure=1.1, jit=0.2)
+        c.poly(T(ell(ex, ey + gy, 0.056, 0.05, 0, 16)), fill=col(0.03, 0.03, 0.03), pressure=1.2, jit=0.3)
+        c.poly(T(ell(ex - 0.018, ey - 0.02 + gy, 0.013, 0.011, 0, 8)), fill=WHITE, pressure=1.2, jit=0.1)
         if blink > 0.02:
             r_ = 0.075
             cut = ey - r_ + 2 * r_ * blink
@@ -403,12 +407,12 @@ def life(t):
     for t0 in TWITCHES:
         u = t - t0
         if 0 <= u < 0.34:
-            twitch = [1.0, 0.2, 1.0, 0.3][int(u * FPS)]
+            twitch = [1.0, 0.2, 1.0, 0.3][min(3, int(u * FPS + 1e-6))]
     blink = 0.0
     for t0 in BLINKS:
         u = t - t0
         if 0 <= u < 0.25:
-            blink = [0.6, 1.0, 0.45][int(u * FPS)]
+            blink = [0.6, 1.0, 0.45][min(2, int(u * FPS + 1e-6))]
     return twitch, blink
 
 
@@ -431,8 +435,8 @@ for _ in range(64):
     y = _rf.uniform(dam_top(x) + 6, 1478)
     DAM_STICKS.append((x, y, _rf.uniform(60, 160), _rf.uniform(-22, 22), int(_rf.integers(0, 3)),
                        _rf.uniform(7, 11)))
-FALL_STICKS = [(7.5, 250, 1392, 130, 12, 215, 1585), (9.0, 800, 1385, 120, -10, 845, 1600),
-               (10.2, 390, 1372, 110, 6, 370, 1655)]
+FALL_STICKS = [(7.5, 250, 1392, 130, 12, 215, 1585), (9.6, 800, 1385, 120, -10, 845, 1600),
+               (11.2, 390, 1372, 110, 6, 370, 1655), (12.3, 690, 1376, 100, 8, 715, 1700)]
 ROUND_TREES = [(165, 1235, 820, 185), (925, 1235, 850, 165)]
 PINES = [(40, 1245, 760), (1050, 1245, 700), (330, 1230, 430), (745, 1230, 400)]
 
@@ -441,15 +445,15 @@ for i in range(70):
     tx, _, cy, cr = ROUND_TREES[i % 2]
     ang = _rf.uniform(0, 6.28)
     rr_ = cr * math.sqrt(_rf.uniform(0, 0.8))
-    t0 = 4.2 + 6.6 * _rf.uniform(0, 1) ** 0.6
+    t0 = 4.2 + 8.6 * _rf.uniform(0, 1) ** 0.6
     LEAVES.append(dict(t0=t0, x=tx + rr_ * math.cos(ang), y=cy + rr_ * math.sin(ang), vy=_rf.uniform(160, 300),
                        sway=_rf.uniform(20, 45), ph=_rf.uniform(0, 6.3), land=_rf.uniform(1265, 1880),
                        c=[GREEN1, GREEN_L, GREEN2][i % 3]))
-SPLASHES = sorted([(5.8 + 5.1 * _rf.uniform(0, 1) ** 0.55, _rf.uniform(60, 1020),
+SPLASHES = sorted([(5.8 + 7.1 * _rf.uniform(0, 1) ** 0.55, _rf.uniform(60, 1020),
                     float(_rf.choice([_rf.uniform(1520, 1860), _rf.uniform(1265, 1320)])), i) for i in range(24)])
 EMBERS = []
 for i in range(46):
-    t0 = 30.6 + i * 0.19 + _rf.uniform(0, 0.12)
+    t0 = 32.6 + i * 0.19 + _rf.uniform(0, 0.12)
     x1 = _rf.uniform(30, 1050)
     if 330 < x1 < 750:
         x1 += 420 if x1 > 540 else -300
@@ -941,11 +945,12 @@ def scene_threat(c, t):
     light_overlay(c, p ** 1.6)
     lift = -0.22 * sstep(0.6, 2.6, t)
     tw, bl = life(t)
+    look = sstep(LOOK_UP[0], LOOK_UP[0] + 0.1, t) * (1 - sstep(LOOK_UP[1], LOOK_UP[1] + 0.12, t))
     falling_leaves(c, t, behind=True)
     for (ts, x, y, i) in SPLASHES:
         if y < DAM_LINE:
             splash(c, x, y, t - ts, 0.9, seed=i)
-    beaver(c, Pose(BEAVER_X, BEAVER_Y, BEAVER_S), lift=lift, t=t, twitch=tw, blink=bl)
+    beaver(c, Pose(BEAVER_X, BEAVER_Y, BEAVER_S), lift=lift, t=t, twitch=tw, blink=bl, look=look)
     falling_leaves(c, t, behind=False)
     for (ts, x, y, i) in SPLASHES:
         if y >= DAM_LINE:
@@ -1015,7 +1020,7 @@ def scene_face(c, t):
     P = Pose(540, 2330, 560)
     aura(c, P, t)
     u = t - FACE_BLINK
-    blink = [0.5, 1.0, 1.0, 0.5][int(u * FPS)] if 0 <= u < 4 / FPS else 0.0
+    blink = [0.5, 1.0, 1.0, 0.5][min(3, int(u * FPS + 1e-6))] if 0 <= u < 4 / FPS else 0.0
     beaver(c, P, lift=-0.22, t=t, blink=blink)
     c.glow(540, 1150, 900, AURA[1], 0.12)
 
@@ -1108,7 +1113,7 @@ def scene_burst(c, t):
         c.wash(WHITE, sstep(T_WHITE - 0.2, T_WHITE, t))
 
 
-BITES = [32.8, 33.6, 34.6, 35.4, 36.4, 37.2]
+BITES = [34.8, 35.6, 36.6, 37.4, 38.4, 39.2]
 
 
 def scene_home(c, t):
@@ -1166,7 +1171,7 @@ def scene_home(c, t):
                 px, py = P.pt(u_, v_)
                 smoke_wisp(c, px, py, t, k * 2.1, length=12, opacity=0.7)
     hx, hy = Pose(BEAVER_X, BEAVER_Y, BEAVER_S).pt(0.15, -3.0)
-    t_fall, t_hit = 37.5, 37.95
+    t_fall, t_hit = 39.5, 39.95
     if t_fall <= t < t_hit:
         u = (t - t_fall) / (t_hit - t_fall)
         ember(c, lerp(760, hx, u), lerp(-80, hy - 8, u), hx - 760, hy + 80, 11, t, 99)
@@ -1214,7 +1219,7 @@ def make_audio(path):
     # forest air, and birds that fall silent as the rumble grows
     for a, b in ((0.0, T_LAUNCH), (T_HOME, DUR)):
         add(a, 0.02 * noise(b - a, 400, 3000, int(a)) * np.clip(tt(b - a) / 0.4, 0, 1))
-    for tb in (0.4, 0.62, 1.5, 2.3, 2.5, 3.6, 38.6, 38.8):
+    for tb in (0.4, 0.62, 1.5, 2.3, 2.5, 3.6, 40.6, 40.8):
         add(tb, 0.06 * sweep(0.07, 3000, 4300) * np.hanning(int(0.07 * 44100)))
     # the rumble: something enormous is coming. Deep bass for big speakers, a growl phones can play,
     # distant thunder-like cracks and groaning wood, all pushed into gentle overdrive at the peak.
@@ -1226,12 +1231,12 @@ def make_audio(path):
     rumble = (0.9 * noise(d, 18, 90, 1) + 0.6 * noise(d, 70, 260, 2) * throb + 0.18 * drone
               + 0.25 * sweep(d, 40, 62) + 0.2 * noise(d, 250, 700, 21) * throb)
     rg = np.random.default_rng(3)
-    for tc in np.sort(rg.uniform(3.0, d, 16) ** 1.0):
+    for tc in np.sort(rg.uniform(3.0, d, 20)):
         if rg.random() < tc / d:
             i = int(tc * 44100)
             crack = 1.2 * noise(1.2, 60, 900, int(tc * 77)) * decay(1.2, 0.35)
             rumble[i:i + len(crack)] += crack[:len(rumble) - i]
-    for tg in (3.5, 5.8, 7.4):
+    for tg in (3.5, 5.8, 7.4, 8.8):
         i = int(tg * 44100)
         groan = 0.5 * noise(1.5, 140, 420, int(tg * 31)) * np.sin(np.pi * tt(1.5) / 1.5) * (0.6 + 0.4 * np.sin(2 * np.pi * 9 * tt(1.5)))
         rumble[i:i + len(groan)] += groan[:len(rumble) - i]
@@ -1296,8 +1301,8 @@ def make_audio(path):
         if all(abs(tk - b) > 0.12 for b in BITES):
             add(tk, 0.1 * noise(0.05, 1000, 5000, int(tk * 100)) * decay(0.05, 0.015))
         tk += 1 / 3
-    add(37.95, 0.18 * noise(0.1, 100, 900, 19) * decay(0.1, 0.03))
-    add(37.95, 0.05 * noise(1.0, 3000, 9000, 20) * decay(1.0, 0.4))
+    add(39.95, 0.18 * noise(0.1, 100, 900, 19) * decay(0.1, 0.03))
+    add(39.95, 0.05 * noise(1.0, 3000, 9000, 20) * decay(1.0, 0.4))
     tr.save(path)
 
 
