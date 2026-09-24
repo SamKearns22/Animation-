@@ -553,6 +553,22 @@ FALL_STICKS = [(7.5, 250, 1392, 130, 12, 215, 1585), (10.0, 800, 1385, 120, -10,
                (15.2, 150, 1398, 95, -6, 120, 1760)]
 ROUND_TREES = [(165, 1235, 820, 185), (925, 1235, 850, 165)]
 PINES = [(40, 1245, 760), (1050, 1245, 700), (330, 1230, 430), (745, 1230, 400)]
+_rx = np.random.default_rng(4242)
+EDGE_FAR = [(x, _rx.uniform(170, 280)) for x in list(np.arange(-330, -20, 78)) + list(np.arange(1138, 1450, 78))]
+EDGE_PINES = [(-150, 1250, 690), (-300, 1240, 560), (1230, 1250, 720), (1380, 1240, 540)]
+EDGE_ROUND = [(-230, 1235, 900, 150), (1330, 1235, 880, 160)]
+EDGE_RIPPLES = [(_rx.uniform(-400, -60), _rx.uniform(1290, 2200), _rx.uniform(60, 180)) for _ in range(10)] + \
+               [(_rx.uniform(1040, 1450), _rx.uniform(1290, 2200), _rx.uniform(60, 180)) for _ in range(10)] + \
+               [(_rx.uniform(-300, 1300), _rx.uniform(1930, 2250), _rx.uniform(60, 180)) for _ in range(8)]
+
+# slow pull-back during the build-up: starts 2 s into the rumble, stops dead at launch
+PULL_START, PULL_END, PULL_ZOOM = T_THREAT + 2.0, T_LAUNCH, 0.85
+PULL_ANCHOR = (540.0, 1384.0)
+
+
+def pull_zoom(t):
+    u = clamp01((t - PULL_START) / (PULL_END - PULL_START))
+    return 1 - (1 - PULL_ZOOM) * u ** 1.3
 
 LEAVES = []
 for i in range(70):
@@ -601,9 +617,9 @@ def round_tree(c, x, base, cy, r):
     c.poly([(x - 16, base), (x + 16, base), (x + 11, cy), (x - 11, cy)], fill=TRUNK, line=BROWN_D, lw=5)
     parts = [(0, 0, 1.0), (-0.55, 0.25, 0.65), (0.55, 0.3, 0.62)]
     for px, py, pr in parts:
-        c.poly(blob(x + px * r, cy + py * r, pr * r, int(x + px * 100), 48, 0.3), None, GREEN2, lw=7)
+        c.poly(blob(x + px * r, cy + py * r, pr * r, abs(int(x + px * 100)), 48, 0.3), None, GREEN2, lw=7)
     for px, py, pr in parts:
-        c.poly(blob(x + px * r, cy + py * r, pr * r, int(x + px * 100), 48, 0.3), fill=GREEN1, pressure=0.95)
+        c.poly(blob(x + px * r, cy + py * r, pr * r, abs(int(x + px * 100)), 48, 0.3), fill=GREEN1, pressure=0.95)
     c.hatch(blob(x + 0.3 * r, cy + 0.2 * r, 0.6 * r, 3), GREEN2, spacing=15, angle=55, lw=3, opacity=0.6)
 
 
@@ -642,22 +658,28 @@ def puff(c, x, y, r, opacity=1.0, colr=PUFF, line=SMOKE, shaded=False):
                jit=r * 0.04)
 
 
-def forest(c, t, shake=0.0):
+def forest(c, t, shake=0.0, zoom=1.0):
     r = np.random.default_rng(c.d * 13 + 1)
-    c.cam = (1.0, float(r.normal() * shake), float(r.normal() * shake))
+    ax, ay = PULL_ANCHOR
+    c.cam = (zoom, ax * (1 - zoom) + float(r.normal() * shake), ay * (1 - zoom) + float(r.normal() * shake))
     c.fill_screen(SKY, 0.36)
-    for x, h in FAR_TREES:
+    for x, h in FAR_TREES + (EDGE_FAR if zoom < 1 else []):
         pine(c, x, 1190, h, GREEN_F, pressure=0.55, lined=False)
-    c.poly([(-60, 1135), (W + 60, 1135), (W + 60, 1300), (-60, 1300)], fill=GREEN_G, pressure=0.8)
+    c.poly([(-500, 1135), (W + 500, 1135), (W + 500, 1300), (-500, 1300)], fill=GREEN_G, pressure=0.8)
     for x, base, h in PINES[2:]:
         pine(c, x, base, h, GREEN2)
+    if zoom < 1:
+        for tr in EDGE_ROUND:
+            round_tree(c, *tr)
+        for x, base, h in EDGE_PINES:
+            pine(c, x, base, h, GREEN2)
     for tr in ROUND_TREES:
         round_tree(c, *tr)
     for x, base, h in PINES[:2]:
         pine(c, x, base, h, GREEN2)
-    c.poly([(-60, 1250), (W + 60, 1250), (W + 60, H + 60), (-60, H + 60)], fill=WATER, pressure=0.62)
-    c.line([(-60, 1252), (W + 60, 1252)], WATER_D, lw=5)
-    for x, y, ln in RIPPLES:
+    c.poly([(-500, 1250), (W + 500, 1250), (W + 500, H + 500), (-500, H + 500)], fill=WATER, pressure=0.62)
+    c.line([(-500, 1252), (W + 500, 1252)], WATER_D, lw=5)
+    for x, y, ln in RIPPLES + (EDGE_RIPPLES if zoom < 1 else []):
         c.line([(x, y), (x + ln, y + 3)], WATER_D, lw=4, pressure=0.7)
     for i, (tf, x, y, ln, ang, lx, ly) in enumerate(FALL_STICKS):
         if t >= tf:
@@ -1055,7 +1077,7 @@ def asteroid(c, cx, cy, r, t, cracks=0.0, hole=0.0, flames=True):
 # ---------------------------------------------------------------------------
 def scene_threat(c, t):
     p = clamp01((t - T_THREAT) / (T_LAUNCH - T_THREAT))
-    forest(c, t, shake=26 * p ** 2.2)
+    forest(c, t, shake=26 * p ** 2.2, zoom=pull_zoom(t))
     light_overlay(c, p ** 1.6)
     lift = -0.22 * sstep(0.6, 2.6, t)
     tw, bl = life(t)
@@ -1074,7 +1096,7 @@ def scene_threat(c, t):
 
 def scene_launch(c, t):
     u = t - T_LAUNCH
-    forest(c, t, shake=30 * max(0.0, 1 - u / 0.7))
+    forest(c, t, shake=30 * max(0.0, 1 - u / 0.7), zoom=PULL_ZOOM)
     light_overlay(c, 1.0)
     by = BEAVER_Y - 250 - 9000 * u
     ytop = max(by + 40, -300)
