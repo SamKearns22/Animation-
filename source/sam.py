@@ -44,8 +44,8 @@ def _load_audio():
 R.LOUD = _load_audio()
 _WD = json.load(open(os.path.join(HERE, 'data', 'sam_words.json')))
 R.WORDS, R.LINE_STARTS = _WD['words'], set(_WD['line_starts'])
-R.UNINTELLIGIBLE = []
-R.SUBS = R._subtitle_chunks()
+R.UNINTELLIGIBLE = [tuple(f) for f in _WD['flashes']]
+R.SUBS = R.line_subs(_WD)
 loud, beak_open = R.loud, R.beak_open
 
 TAN = col(0.85, 0.72, 0.5)
@@ -164,8 +164,8 @@ def speech(c, x, y, w, h, s, size=34, tail=None):
 # ---------------------------------------------------------------------------
 P_GEST = {
     # the front wing stays below his face; big raised gestures use the back wing, behind his head
-    'point': (95, 20), 'jab': (75, 40), 'wide': (100, 160), 'up': (60, 170), 'chest': (35, 15), 'shrug': (70, 130),
-    'down': (10, 10), 'both': (100, 105), 'palm': (85, 150), 'chin': (160, 10),
+    'point': (95, 20), 'jab': (75, 40), 'wide': (100, 130), 'up': (60, 140), 'chest': (35, 15), 'shrug': (70, 125),
+    'down': (10, 10), 'both': (100, 105), 'palm': (85, 125), 'chin': (60, 15),
 }
 P_POOL = ['point', 'wide', 'jab', 'chest', 'up', 'shrug', 'both', 'palm']
 
@@ -182,11 +182,18 @@ def pigeon_pose(t):
     return P_GEST[g], 4 + 12 * loud(t) + (10 if g in ('jab', 'point') else 0)
 
 
-def andy(c, t, x=950, eye=None, arms=(12, 8), lean=-3):
-    """Andy takes it: mostly amused, occasionally stung."""
+PENGUIN_EYE = {'neutral': 'normal', 'smirk': 'smug', 'laugh': 'closed', 'grin': 'smug', 'cross': 'angry',
+               'shock': 'wide'}
+
+
+def andy(c, t, x=950, eye=None, arms=None, lean=-3):
+    """Andy takes it: amused, stung, scowling, and now and then cracking up."""
+    mood, a2, l2, laughing = R.listener_react(t, seed=5)
     if eye is None:
-        eye = 'wide' if loud(t) > 0.8 else ('closed' if int(t * 1.3) % 7 == 0 else 'smug')
-    return penguin(c, x, 690, 300, -1, arms=arms, lean=lean + 2 * math.sin(t * 1.7), beak=0.0, eye=eye)
+        eye = PENGUIN_EYE[mood]
+    beak = (0.4 + 0.5 * abs(math.sin(t * 13))) if laughing else (0.25 if mood == 'shock' else 0.0)
+    return penguin(c, x, 690 - (8 * abs(math.sin(t * 13)) if laughing else 0), 300, -1, arms=arms or a2,
+                   lean=lean + l2, beak=beak, eye=eye)
 
 
 def crowd(c, t, react_all=None):
