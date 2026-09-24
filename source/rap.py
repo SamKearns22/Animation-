@@ -356,7 +356,7 @@ def penguin(c, x, y, s, face=-1, arms=(10, 10), lean=0.0, beak=0.0, eye='normal'
 
 
 def pigeon(c, x, y, s, face=1, arms=(15, 15), lean=0.0, mood='neutral', knees=0.0, t=0.0, jumper=True,
-           head_tilt=0.0):
+           head_tilt=0.0, beak=None):
     """The opponent: a plump pigeon in a blue jumper. mood: neutral, grin, sick, laugh, shock, hurt, dizzy, sleepy."""
     r = Rig(c, x, y, s, face, lean)
     lw = r.lw()
@@ -404,7 +404,7 @@ def pigeon(c, x, y, s, face=1, arms=(15, 15), lean=0.0, mood='neutral', knees=0.
     if mood == 'sick':
         c.poly(r.E(hu - 0.02, hv - 0.05, 0.06, 0.04), fill=col(0.5, 0.66, 0.22), opacity=0.7)
         c.poly(r.E(hu + 0.02, hv - 0.02, 0.05, 0.035), fill=col(0.5, 0.66, 0.22), opacity=0.7)
-    op = {'laugh': 0.6, 'shock': 0.7, 'sick': 0.35, 'grin': 0.2}.get(mood, 0.0)
+    op = {'laugh': 0.6, 'shock': 0.7, 'sick': 0.35, 'grin': 0.2}.get(mood, 0.0) if beak is None else 0.75 * beak
     bu, bv = hu + 0.14, hv - 0.02
     beakc = col(0.28, 0.28, 0.31)
     if op > 0:
@@ -506,6 +506,7 @@ def bird(c, x, y, s, kind, react='idle', t=0.0, face=1, seed=0):
         c.poly(r.E(0.2, hv - 0.1, 0.05, 0.12, -20), fill=wing_col, line=INK, lw=lw)
     else:
         c.poly(r.E(-0.05, 0.4, 0.12, 0.22, 10), fill=wing_col, line=INK, lw=lw)
+    return r
 
 
 # ---------------------------------------------------------------------------
