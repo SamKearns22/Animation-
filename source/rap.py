@@ -2194,7 +2194,7 @@ def render(d):
     u = clamp01((t - a) / max(0.1, b - a))
     if name in CUTAWAYS:
         # a quick snap back to the penguin mid-delivery on long cutaways, then back to the picture
-        if b - a > 4.5 and 0.42 < u < 0.52 and name not in ('crap', 'keepreal'):
+        if b - a > 4.5 and 0.42 < u < 0.52 and name not in ('crap', 'keepreal', 'veal'):
             stage_cam(c, t, 'stage', 1.2, 1.3)
             c.cam = (1.6, -penguin_x(t) * 1.6 + 640, -470 * 1.6 + 360)
             stage(c, t, 'stage')
