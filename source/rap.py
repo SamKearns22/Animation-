@@ -118,8 +118,8 @@ SHOTS = [
     (32.5, 35.1, 'surgery'), (35.1, 38.6, 'reporter'), (38.6, 42.7, 'waxwork'), (42.7, 45.5, 'stage'),
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
     (60.6, 66.6, 'lost'), (66.6, 72.9, 'stage'), (72.9, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
-    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 106.0, 'stage'),
-    (106.0, 107.2, 'corn'), (107.2, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 122.8, 'pillow'),
+    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 100.1, 'stage'),
+    (100.1, 101.6, 'corn'), (101.6, 104.4, 'veal'), (104.4, 112.9, 'keepreal'), (112.9, 122.8, 'pillow'),
     (122.8, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
     (139.8, 141.9, 'wait'), (141.9, 147.4, 'firesale'), (147.4, 150.0, 'crake'), (150.0, 151.2, 'gasp'),
     (151.2, 162.54, 'crap'), (162.54, 166.2, 'blackeye'), (166.2, 168.9, 'factory'), (168.9, 171.9, 'gasp'),
@@ -797,14 +797,14 @@ def penguin_pose(t, pool):
 
 
 REACTS = [  # (mood, arms): how the listener takes it, changing every second or so
-    ('neutral', (15, 15)), ('smirk', (40, 35)), ('laugh', (20, 60)), ('grin', (60, 15)), ('cross', (35, 35)),
-    ('smirk', (15, 15)), ('laugh', (95, 20)), ('shock', (20, 20)), ('neutral', (60, 60)), ('grin', (15, 45)),
+    ('neutral', (15, 15)), ('grin', (40, 35)), ('laugh', (20, 60)), ('grin', (60, 15)), ('neutral', (35, 35)),
+    ('shock', (15, 15)), ('laugh', (95, 20)), ('neutral', (20, 20)), ('grin', (60, 60)), ('neutral', (15, 45)),
 ]
 
 
 def listener_react(t, seed=0):
     """Pick the listener's current reaction: a new one roughly every 1.2 seconds, with little laughs."""
-    beat = int(t / 1.2)
+    beat = int(t / 2.2)
     rng = np.random.default_rng(beat * 97 + 11 + seed)
     mood, arms = REACTS[int(rng.integers(0, len(REACTS)))]
     if loud(t) > 0.85 and beat % 2:
@@ -869,6 +869,10 @@ def stage(c, t, name):
     elif name == 'hit':
         crowd(c, t, ['gasp', 'laugh', 'cheer', 'gasp', 'laugh', 'cover', 'cheer', 'gasp'])
         pigeon(c, 300, 690, 330, 1, lean=-14, mood='hurt', t=t, arms=(40, 30))
+    elif 66.6 <= t < SMILED[0]:  # stung... blank... a twitch at the corner of the beak...
+        crowd(c, t)
+        mood = 'hurt' if t < 67.8 else ('neutral' if t < 68.9 else 'smirk')
+        pigeon(c, 300, 690, 330, 1, arms=(15, 15), mood=mood, t=t)
     elif SMILED[0] <= t < SMILED[1]:
         crowd(c, t)
         pigeon(c, 300, 690, 330, 1, arms=(15, 15), mood='grin', t=t)  # ...and it did smile
@@ -1067,13 +1071,16 @@ def churchgoer(c, x, y, s, t):
     c.poly(smooth([(x - 0.12 * s, hy - 0.02 * s), (x - 0.11 * s, hy - 0.12 * s), (x, hy - 0.15 * s), (x + 0.11 * s, hy - 0.12 * s),
                    (x + 0.12 * s, hy - 0.02 * s), (x + 0.08 * s, hy - 0.1 * s), (x - 0.08 * s, hy - 0.1 * s)], 4),
            fill=col(0.08, 0.06, 0.05), line=INK, lw=2)  # close-cropped hair
-    c.poly(smooth([(x - 0.12 * s, hy), (x - 0.1 * s, hy + 0.1 * s), (x, hy + 0.15 * s), (x + 0.1 * s, hy + 0.1 * s),
-                   (x + 0.12 * s, hy), (x + 0.06 * s, hy + 0.07 * s), (x - 0.06 * s, hy + 0.07 * s)], 4),
-           fill=col(0.08, 0.06, 0.05), line=INK, lw=2)  # neat beard
-    for sg in (-1, 1):
-        c.poly(E(x + sg * 0.045 * s, hy - 0.02 * s, 0.015 * s, 0.012 * s), fill=INK)
-        c.line([(x + sg * 0.075 * s, hy - 0.055 * s), (x + sg * 0.02 * s, hy - 0.045 * s)], INK, lw=4)
-    c.line([(x - 0.03 * s, hy + 0.07 * s), (x + 0.03 * s, hy + 0.07 * s)], col(0.7, 0.4, 0.35), lw=4)
+    # clean-shaven, a serious little frown, and a pair of slatted shutter shades
+    c.poly([(x - 0.11 * s, hy - 0.05 * s), (x + 0.11 * s, hy - 0.05 * s), (x + 0.1 * s, hy + 0.01 * s),
+            (x - 0.1 * s, hy + 0.01 * s)], fill=WHITE, line=INK, lw=3)
+    for k in range(5):
+        yy = hy - 0.04 * s + k * 0.011 * s
+        c.line([(x - 0.1 * s, yy), (x + 0.1 * s, yy)], INK, lw=2)
+    c.line([(x - 0.07 * s, hy - 0.075 * s), (x - 0.02 * s, hy - 0.06 * s)], INK, lw=4)
+    c.line([(x + 0.07 * s, hy - 0.075 * s), (x + 0.02 * s, hy - 0.06 * s)], INK, lw=4)
+    c.line(smooth([(x - 0.035 * s, hy + 0.085 * s), (x, hy + 0.075 * s), (x + 0.035 * s, hy + 0.085 * s)], 3, False),
+           col(0.35, 0.18, 0.15), lw=4)
 
 
 def sparkle(c, x, y, r, colr=YELLOW):
@@ -1112,6 +1119,15 @@ def hannibal(c, x, y, s, t):
     """The good doctor, seated: slicked-back grey hair, unblinking pale eyes, thin polite smile, white jumpsuit."""
     skin = col(0.93, 0.8, 0.7)
     suit = col(0.94, 0.94, 0.9)
+    for sg in (-1, 1):  # seated: thighs forward, shins down to polished shoes
+        c.poly([(x + sg * 0.12 * s, y - 0.05 * s), (x + sg * 0.12 * s - 0.35 * s, y - 0.02 * s),
+                (x + sg * 0.12 * s - 0.35 * s, y + 0.1 * s), (x + sg * 0.12 * s, y + 0.1 * s)], fill=suit, line=INK, lw=4)
+        c.poly([(x + sg * 0.12 * s - 0.35 * s, y + 0.02 * s), (x + sg * 0.12 * s - 0.25 * s, y + 0.02 * s),
+                (x + sg * 0.12 * s - 0.26 * s, y + 0.28 * s), (x + sg * 0.12 * s - 0.35 * s, y + 0.28 * s)], fill=suit,
+               line=INK, lw=4)
+        c.poly(smooth([(x + sg * 0.12 * s - 0.44 * s, y + 0.33 * s), (x + sg * 0.12 * s - 0.44 * s, y + 0.27 * s),
+                       (x + sg * 0.12 * s - 0.25 * s, y + 0.27 * s), (x + sg * 0.12 * s - 0.25 * s, y + 0.33 * s)], 3),
+               fill=BLACK, line=INK, lw=3)
     c.poly(smooth([(x - 0.3 * s, y), (x - 0.32 * s, y - 0.55 * s), (x - 0.14 * s, y - 0.66 * s), (x + 0.14 * s, y - 0.66 * s),
                    (x + 0.32 * s, y - 0.55 * s), (x + 0.3 * s, y)], 4), fill=suit, line=INK, lw=5)
     c.line([(x, y - 0.64 * s), (x, y - 0.1 * s)], GREY, lw=3)
@@ -1141,6 +1157,45 @@ def chair(c, x, y, face):
            line=INK, lw=4)
     c.line([(x - 60, y), (x - 60, y - 120)], WOOD_D, lw=10)
     c.line([(x + 60, y), (x + 60, y - 120)], WOOD_D, lw=10)
+
+
+def s_keepreal(c, t, u):
+    """Listening to this dickhead, keeping it real, like: is he alright? Sam on a skateboard, shades on... then not."""
+    wash(c, col(0.92, 0.9, 0.86))
+    c.poly([(0, 620), (1280, 620), (1280, 720), (0, 720)], fill=col(0.62, 0.62, 0.64), line=INK, lw=4)
+    for x in range(0, 1300, 160):
+        c.line([(x, 660), (x + 70, 660)], WHITE, lw=5)
+    crash = sstep(0.62, 0.7, u)  # 'is he alright?'
+    x = lerp(150, 760, sstep(0.0, 0.62, u))
+    if crash < 1:
+        hop = 90 * max(0.0, math.sin(math.pi * (u - 0.5) / 0.12)) if 0.5 < u < 0.62 else 0
+        spin = 360 * sstep(0.5, 0.62, u)
+        # the board
+        bx, by = x, 612 - hop
+        ra = math.radians(spin)
+        c.poly([(bx - 110 * math.cos(ra), by - 10 * math.sin(ra) - 8), (bx + 110 * math.cos(ra), by + 10 * math.sin(ra) - 8),
+                (bx + 110 * math.cos(ra), by + 10 * math.sin(ra) + 6), (bx - 110 * math.cos(ra), by - 10 * math.sin(ra) + 6)],
+               fill=col(0.85, 0.3, 0.2), line=INK, lw=4)
+        for wx in (-70, 70):
+            c.poly(E(bx + wx * math.cos(ra), by + 16, 12, 12), fill=YELLOW, line=INK, lw=3)
+        r, front = pigeon(c, x, 600 - hop * 1.2, 300, 1, arms=(95, 60) if u < 0.5 else (150, 160), lean=-8 + 5 * math.sin(t * 3),
+                          mood='smirk', t=t)
+    else:  # sprawled on the tarmac, board rolling off on its own
+        r, front = pigeon(c, 800, 690, 300, 1, arms=(150, 30), lean=-80, mood='dizzy', t=t)
+        bx = lerp(820, 1350, sstep(0.7, 1.0, u))
+        c.poly([(bx - 110, 604), (bx + 110, 604), (bx + 110, 618), (bx - 110, 618)], fill=col(0.85, 0.3, 0.2), line=INK, lw=4)
+        for i in range(4):
+            q = t * 6 + i * 1.57
+            text(c, '*', 700 + 90 * math.cos(q), 520 + 25 * math.sin(q), 40, YELLOW)
+    # shades (and a backwards cap)
+    hx, hy = r.P(0.2, 1.13)
+    c.poly([(hx - 32, hy - 12), (hx + 44, hy - 12), (hx + 40, hy + 12), (hx - 28, hy + 12)], fill=BLACK)
+    c.poly(r.pts(smooth([(-0.05, 1.2), (0.12, 1.28), (0.28, 1.2), (0.1, 1.17)], 4)), fill=col(0.2, 0.4, 0.8), line=INK,
+           lw=r.lw())
+    c.poly(r.pts([(-0.05, 1.21), (-0.2, 1.17), (-0.03, 1.15)]), fill=col(0.2, 0.4, 0.8), line=INK, lw=r.lw())
+    # the crowd winces
+    for i, (cx, who) in enumerate(((1060, 'beard'), (1190, 'auburn_scarf'))):
+        audience(c, cx, 610, 170, who, 'cover' if crash > 0 else 'idle', t, -1, seed=i)
 
 
 def s_lullaby(c, t, u):
@@ -1390,7 +1445,7 @@ def s_vanity(c, t, u):
         c.poly(E(820 + 230 * math.cos(i / 7 * 2 * math.pi), 300 + 260 * math.sin(i / 7 * 2 * math.pi), 16, 16),
                fill=YELLOW, line=INK, lw=3)
     pigeon(c, 440, 720, 380, 1, arms=(150 + 15 * math.sin(t * 9), 20), mood='grin', t=t)
-    pigeon(c, 840, 560, 250, -1, arms=(150 + 15 * math.sin(t * 9), 20), mood='grin', t=t)  # the reflection
+    pigeon(c, 820, 480, 190, -1, arms=(150 + 15 * math.sin(t * 9), 20), mood='grin', t=t)  # the reflection, inside the glass
     c.poly(E(300, 120, 70, 70), fill=WHITE, line=INK, lw=5)  # clock racing round
     a = u * 2 * math.pi * 6
     c.line([(300, 120), (300 + 55 * math.sin(a), 120 - 55 * math.cos(a))], INK, lw=5)
@@ -1470,6 +1525,16 @@ def s_vomit(c, t, u):
     heave = sstep(0.12, 0.25, u)
     r, front = pigeon(c, 560, 700, 470, 1, arms=(-15 + 10 * math.sin(t * 20) * heave, 20), mood='sick', t=t,
                       lean=4 + 8 * heave + 2 * math.sin(t * 30) * heave, head_tilt=0.3 * heave)
+    sweat = col(0.6, 0.8, 1.0)  # still sweating from the last scene
+    c.poly(r.E(-0.1, 0.55, 0.07, 0.1), fill=JUMPER_D, opacity=0.5)
+    for k, (tx, ty) in enumerate((r.P(*front), r.P(-0.2, 0.3))):
+        for i in range(3):
+            ph = (t * 1.6 + i / 3 + k * 0.4) % 1
+            c.poly(E(tx, ty + 10 + 140 * ph * ph, 7, 11), fill=sweat, line=INK, lw=2, opacity=1 - ph)
+    for i in range(3):
+        ph = (t * 0.9 + i / 3) % 1
+        bx, by = r.P(0.02 + 0.05 * i, 1.2)
+        c.poly(E(bx, by + 40 * ph, 6, 9), fill=sweat, line=INK, lw=2, opacity=1 - ph)
     SICK_D = col(0.55, 0.6, 0.2)
     if u > 0.22:
         k = sstep(0.22, 0.34, u)
@@ -1547,15 +1612,14 @@ def s_eagle(c, t, u):
     c.poly(smooth([(120, 640), (180, 520), (420, 500), (520, 640)], 4), fill=GREY, line=INK, lw=5)  # his rock
     spread = 8 * math.sin(t * 2)
     penguin(c, 330, 560, 380, 1, arms=(60 + spread, 165 - spread), lean=-4, beak=talk(t), eye='angry', eagle=True)
-    # the pram, with Sam in a bonnet sucking a dummy
-    c.poly([(930, 480), (1070, 330), (1130, 480)], fill=col(0.45, 0.6, 0.88), line=INK, lw=5)  # the hood, behind him
-    pr, _ = pigeon(c, 900, 520, 170, -1, arms=(95, 150), mood='sleepy', t=t, lean=5 * math.sin(t * 3))
-    c.poly(pr.pts(smooth([(-0.1, 1.0), (-0.08, 1.28), (0.14, 1.32), (0.3, 1.18), (0.2, 1.02)], 5)), fill=col(1, 0.8, 0.85),
-           line=INK, lw=pr.lw())  # bonnet
-    c.poly(pr.E(0.28, 1.07, 0.05, 0.05), fill=col(0.4, 0.7, 1.0), line=INK, lw=pr.lw(0.6))  # dummy
-    c.poly([(760, 470), (1120, 470), (1090, 610), (790, 610)], fill=col(0.6, 0.75, 0.95), line=INK, lw=5)
-    for x in (820, 1060):
-        c.poly(E(x, 640, 32, 32), None, INK, lw=6)
+    # the child: Sam, child-sized, bib on, pacifier in, gazing up at the eagle
+    pr, _ = pigeon(c, 900, 640, 170, -1, arms=(20, 20), mood='neutral', t=t, head_tilt=-0.4)
+    c.poly(pr.pts(smooth([(-0.02, 0.84), (0.26, 0.82), (0.24, 0.52), (0.1, 0.44), (-0.02, 0.52)], 4)), fill=WHITE, line=INK,
+           lw=pr.lw())  # bib
+    c.poly(pr.E(0.11, 0.62, 0.05, 0.04), fill=col(1.0, 0.75, 0.8))
+    bx, by = pr.P(0.3, 1.08)
+    c.poly(E(bx, by, 14, 16), fill=col(0.4, 0.7, 1.0), line=INK, lw=3)  # pacifier
+    c.poly(E(bx - 10, by, 6, 20), fill=col(0.95, 0.9, 0.4), line=INK, lw=2)
 
 
 def s_defiled(c, t, u):
@@ -1618,20 +1682,28 @@ def s_chin(c, t, u):
 
 
 def s_yarn(c, t, u):
+    """Not spinning a yarn, tying a noose: the more he knits, the tighter his own knitting cinches round his neck."""
     wash(c, col(0.95, 0.88, 0.8))
-    # spinning a yarn: he is knitting, and the wool is winning, tying him up in knots
-    r, front = pigeon(c, 560, 700, 420, 1, arms=(100, 70), mood='shock', t=t)
+    k = sstep(0.1, 0.9, u)
+    r, front = pigeon(c, 560, 700, 420, 1, arms=(100, 70), mood='shock', t=t, head_tilt=0.3 * k)
     fx, fy = r.P(*front)
-    c.line([(fx - 60, fy - 60), (fx + 60, fy + 20)], SILVER, lw=6)
-    c.line([(fx - 40, fy + 20), (fx + 70, fy - 50)], SILVER, lw=6)
+    click = 8 * math.sin(t * 18)
+    c.line([(fx - 60, fy - 60 + click), (fx + 60, fy + 20)], SILVER, lw=6)  # knitting needles going
+    c.line([(fx - 40, fy + 20), (fx + 70, fy - 50 - click)], SILVER, lw=6)
     c.poly(E(980, 620, 70, 60), fill=RED, line=INK, lw=5)
-    for i in range(int(3 + 10 * u)):
+    # loose loops of wool that draw in towards his neck as he knits
+    nx, ny = r.P(0.1, 0.9)
+    for i in range(7):
         a0 = i * 0.9
-        pts = [(560 + 180 * math.cos(a0 + q) * (0.8 + 0.2 * math.sin(q * 3)), 420 + 140 * math.sin(a0 + q) * 0.9)
-               for q in np.linspace(0, 2.4, 12)]
+        rx, ry = lerp(210, 70, k) + 12 * i * (1 - k), lerp(160, 30, k) + 6 * i * (1 - k)
+        pts = [(nx + rx * math.cos(a0 + q), ny + ry * math.sin(a0 + q)) for q in np.linspace(0, 2 * math.pi, 16)]
         c.line(pts, RED, lw=6)
-    c.line([(980, 620), (820, 520), (700, 480)], RED, lw=6)
-    text(c, 'tied in knots', 640, 70, 44, INK)
+    c.line([(980, 620), (820, 520), (fx, fy)], RED, lw=6)
+    if k > 0.6:  # a snug knitted collar, eyes bulging, face going green
+        hx, hy = r.P(0.14, 1.12)
+        c.poly(E(hx, hy, 60, 55), fill=col(0.55, 0.75, 0.3), opacity=0.35 * (k - 0.6) / 0.4)
+        for sg in (-1, 1):
+            c.line([(hx + 45 + 10 * sg, hy - 50), (hx + 55 + 20 * sg, hy - 75)], INK, lw=3)
 
 
 def s_noggin(c, t, u):
@@ -1698,10 +1770,18 @@ def s_pipe(c, t, u):
     rr, pf, pb = penguin(c, 930, 700, 340, -1, arms=(60 + 25 * tap, 70), lean=4, beak=talk(t), eye='angry')
     px, py = rr.P(*pf)
     qx, qy = rr.P(*pb)
-    c.line([(px, py), (qx - 10, qy - 10)], SILVER, lw=22)
-    c.line([(px, py), (qx - 10, qy - 10)], INK, lw=2)
-    c.poly(E(qx - 10, qy - 10, 13, 13), fill=col(0.5, 0.5, 0.55), line=INK, lw=3)
-    c.line([(px + 4, py - 6), (qx - 6, qy - 16)], WHITE, lw=4)
+    dx, dy = qx - px, qy - py
+    L = math.hypot(dx, dy) or 1
+    ux, uy = dx / L, dy / L
+    ax, ay = px - ux * 170, py - uy * 170  # a long, heavy length of pipe, well past both flippers
+    bx2, by2 = qx + ux * 60, qy + uy * 60
+    nx, ny = -uy * 17, ux * 17
+    c.poly([(ax + nx, ay + ny), (bx2 + nx, by2 + ny), (bx2 - nx, by2 - ny), (ax - nx, ay - ny)], fill=SILVER, line=INK, lw=5)
+    c.line([(ax + nx * 0.4, ay + ny * 0.4), (bx2 + nx * 0.4, by2 + ny * 0.4)], WHITE, lw=5)
+    for (ex, ey) in ((ax, ay), (bx2, by2)):
+        c.poly(E(ex, ey, 19, 19), fill=col(0.35, 0.35, 0.38), line=INK, lw=4)
+        c.poly(E(ex, ey, 10, 10), fill=col(0.15, 0.15, 0.17))
+    sparkle(c, ax + ux * 60 + nx, ay + uy * 60 + ny - 10, 14 + 6 * abs(math.sin(t * 4)), WHITE)
 
 
 def s_innate(c, t, u):
@@ -1879,23 +1959,29 @@ def s_factory(c, t, u):
     for i in range(5):
         x = (i * 280 + u * 400) % 1400 - 100
         c.poly(E(x, 460, 50, 62), fill=col(0.95, 0.94, 0.9), line=INK, lw=5)
-        text(c, 'PGN', x, 460, 24, INK)
     c.poly([(560, 60), (720, 60), (720, 300), (560, 300)], fill=GREY, line=INK, lw=6)  # the stamping press
     y = 300 + 80 * max(0.0, math.sin(t * 6))
     c.poly([(580, 300), (700, 300), (700, y), (580, y)], fill=SILVER, line=INK, lw=5)
-    text(c, 'MADE IN FACTORY', 640, 660, 36, WHITE)
 
 
 def s_practice(c, t, u):
+    """Please, you need to keep practicing: rapping at the mirror, trying far too hard, one single tear."""
     wash(c, col(0.9, 0.9, 0.95))
     c.poly([(760, 100), (1100, 100), (1100, 640), (760, 640)], fill=col(0.85, 0.92, 0.95), line=WOOD, lw=14)
-    r, front = pigeon(c, 480, 700, 400, 1, arms=(140 + 20 * math.sin(t * 9), 30), mood='grin', t=t)
-    pigeon(c, 930, 600, 300, -1, arms=(140 + 20 * math.sin(t * 9), 30), mood='grin', t=t)
-    fx, fy = r.P(*front)
-    c.line([(fx, fy), (fx + 10, fy - 90)], WOOD_D, lw=12)
-    c.poly(E(fx + 12, fy - 110, 30, 38), fill=INK)
-    c.poly([(160, 150), (260, 150), (260, 250), (160, 250)], fill=WHITE, line=RED, lw=10)
-    text(c, 'L', 210, 200, 80, RED)
+    beat = int(t * 2.5) % 3
+    arms = [(95, 20), (100, 125), (60, 130)][beat]
+    wb = 0.9 if int(t * 6) % 2 else 0.1
+    r, front = pigeon(c, 480, 700, 400, 1, arms=arms, lean=8, mood='cross', t=t, beak=wb)
+    rr, _ = pigeon(c, 930, 600, 300, -1, arms=arms, lean=8, mood='cross', t=t, beak=wb)  # his reflection
+    for rig in (r, rr):  # a single tear rolling down his cheek
+        ex, ey = rig.P(0.16, 1.1)
+        ty = ey + 20 + 60 * ((t * 0.6) % 1)
+        c.poly([(ex + 3, ty - 14), (ex + 10, ty + 2), (ex + 3, ty + 8), (ex - 4, ty + 2)], fill=col(0.55, 0.78, 1.0),
+               line=INK, lw=2)
+    for i in range(3):
+        ph = (t * 2 + i / 3) % 1
+        bx, by = r.P(0.4, 1.3)
+        c.line([(bx + 30 * i, by - 10 - 40 * ph), (bx + 30 * i + 12, by - 30 - 40 * ph)], INK, lw=3, opacity=1 - ph)
 
 
 def s_expectations(c, t, u):
@@ -1922,7 +2008,6 @@ def s_expectations(c, t, u):
     c.poly([(px - 60, 200), (px - 30, 200), (px - 30, 260), (px - 60, 260)], fill=SILVER, line=INK, lw=3)
     c.poly([(px - 55, 260), (px - 35, 260), (px - 45, 300 + 20 * math.sin(t * 30))], fill=ORANGE, line=RED, lw=3)
     text(c, 'PTOO!', px + 90, 180, 34, INK, rot=-8)
-    text(c, 'separately.', 640, 70, 44, INK)
 
 
 def s_integrity(c, t, u):
@@ -1972,9 +2057,11 @@ def s_dinner(c, t, u):
     hy = hannibal(c, 990, 600, 330, t)
     # the table
     c.poly([(330, 480), (950, 480), (950, 510), (330, 510)], fill=WHITE, line=INK, lw=4)
-    c.poly([(330, 510), (950, 510), (930, 700), (350, 700)], fill=col(0.97, 0.96, 0.93), line=INK, lw=4)
+    c.poly([(330, 510), (950, 510), (945, 575), (335, 575)], fill=col(0.97, 0.96, 0.93), line=INK, lw=4)
     for x in (400, 640, 880):
-        c.line([(x, 515), (x - 5, 690)], col(0.85, 0.84, 0.8), lw=3)
+        c.line([(x, 515), (x - 2, 570)], col(0.85, 0.84, 0.8), lw=3)
+    for x in (370, 910):  # table legs
+        c.line([(x, 575), (x, 700)], WOOD_D, lw=14)
     for x in (480, 800):  # plates of rare steak with fava beans
         c.poly(E(x, 480, 95, 24), fill=WHITE, line=INK, lw=4)
         c.poly(E(x - 15, 474, 48, 16), fill=col(0.5, 0.22, 0.16), line=INK, lw=3)
@@ -2091,7 +2178,7 @@ CUTAWAYS = {
     'pipe': s_pipe, 'innate': s_innate, 'mistakes': s_mistakes, 'wait': s_wait, 'firesale': s_firesale,
     'crake': s_crake, 'crap': s_crap, 'blackeye': s_blackeye, 'factory': s_factory, 'practice': s_practice,
     'expectations': s_expectations, 'integrity': s_integrity, 'dinner': s_dinner, 'podium': s_podium,
-    'sunday': s_sunday, 'veal': s_veal, 'snap': s_snap, 'spectacle': s_spectacle, 'rentafool': s_rentafool, 'miracles': s_miracles,
+    'sunday': s_sunday, 'veal': s_veal, 'snap': s_snap, 'keepreal': s_keepreal, 'spectacle': s_spectacle, 'rentafool': s_rentafool, 'miracles': s_miracles,
 }
 
 
@@ -2102,7 +2189,7 @@ def render(d):
     u = clamp01((t - a) / max(0.1, b - a))
     if name in CUTAWAYS:
         # a quick snap back to the penguin mid-delivery on long cutaways, then back to the picture
-        if b - a > 4.5 and 0.42 < u < 0.52 and name not in ('crap',):
+        if b - a > 4.5 and 0.42 < u < 0.52 and name not in ('crap', 'keepreal'):
             stage_cam(c, t, 'stage', 1.2, 1.3)
             c.cam = (1.6, -penguin_x(t) * 1.6 + 640, -470 * 1.6 + 360)
             stage(c, t, 'stage')
