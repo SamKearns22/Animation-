@@ -118,8 +118,8 @@ SHOTS = [
     (32.5, 35.1, 'surgery'), (35.1, 38.6, 'reporter'), (38.6, 42.7, 'waxwork'), (42.7, 45.5, 'stage'),
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
     (60.6, 66.6, 'lost'), (66.6, 72.9, 'stage'), (72.9, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
-    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 105.6, 'stage'),
-    (105.6, 107.0, 'corn'), (107.0, 109.3, 'veal'), (109.3, 112.9, 'keepreal'), (112.9, 122.8, 'pillow'),
+    (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 103.6, 'stage'),
+    (103.6, 105.0, 'corn'), (105.0, 107.0, 'stage'), (107.0, 109.3, 'veal'), (109.3, 112.9, 'keepreal'), (112.9, 122.8, 'pillow'),
     (122.8, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
     (139.8, 141.9, 'wait'), (141.9, 147.4, 'firesale'), (147.4, 150.0, 'crake'), (150.0, 151.2, 'gasp'),
     (151.2, 162.54, 'crap'), (162.54, 166.2, 'blackeye'), (166.2, 168.9, 'factory'), (168.9, 171.9, 'gasp'),
@@ -439,6 +439,8 @@ def pigeon(c, x, y, s, face=1, arms=(15, 15), lean=0.0, mood='neutral', knees=0.
         c.line(r.pts([(eu - 0.06, ev + 0.075), (eu + 0.05, ev + 0.035)]), INK, lw=lw * 1.6)
     if mood == 'smirk':
         c.line(r.pts([(eu - 0.05, ev + 0.05), (eu + 0.05, ev + 0.06)]), INK, lw=lw * 1.2)
+    if mood == 'brow':  # one sceptical raised eyebrow
+        c.line(r.pts(smooth([(eu - 0.05, ev + 0.07), (eu, ev + 0.1), (eu + 0.05, ev + 0.08)], 3, False)), INK, lw=lw * 1.3)
     if mood in ('grin', 'laugh', 'smirk'):
         c.line(r.pts(smooth([(hu - 0.03, hv - 0.06), (hu + 0.05, hv - 0.1), (hu + 0.13, hv - 0.065)], 4, False)), INK,
                lw=lw)
@@ -869,6 +871,9 @@ def stage(c, t, name):
     elif name == 'hit':
         crowd(c, t, ['gasp', 'laugh', 'cheer', 'gasp', 'laugh', 'cover', 'cheer', 'gasp'])
         pigeon(c, 300, 690, 330, 1, lean=-14, mood='hurt', t=t, arms=(40, 30))
+    elif 8.2 <= t < 10.9:  # the apology: he just raises an eyebrow
+        crowd(c, t)
+        pigeon(c, 300, 690, 330, 1, arms=(15, 15), mood='neutral' if t < 8.9 else 'brow', t=t)
     elif 66.6 <= t < SMILED[0]:  # stung... blank... a twitch at the corner of the beak...
         crowd(c, t)
         mood = 'hurt' if t < 67.8 else ('neutral' if t < 68.9 else 'smirk')
@@ -1578,18 +1583,18 @@ def s_vomit(c, t, u):
         c.poly(E(x, 585, 30, 10), fill=RED, line=INK, lw=2)
         c.poly(E(x + 10, 578, 18, 6), fill=col(0.95, 0.7, 0.7), line=INK, lw=2)
     text(c, "MUM'S", 1030, 500, 34, INK)
-    if t > 59.4:  # ...with prosciutto and feta, piled on as he says it
+    if t > 59.4:  # ...with pesto and feta, piled on as he says it
         k = sstep(59.4, 60.2, t)
         for i, x in enumerate((945, 1035, 1125)):
-            if k > i / 3:
-                c.poly(smooth([(x - 38, 570), (x - 10, 555), (x + 20, 568), (x + 40, 556), (x + 30, 575), (x - 30, 580)], 3),
-                       fill=col(0.9, 0.5, 0.5), line=INK, lw=2)  # a ribbon of prosciutto
-                c.line([(x - 30, 568), (x + 30, 566)], col(0.98, 0.9, 0.88), lw=3)
+            if k > i / 3:  # a green drizzle of pesto
+                c.line(smooth([(x - 35, 572), (x - 15, 560), (x, 574), (x + 18, 560), (x + 35, 570)], 3, False),
+                       col(0.3, 0.55, 0.2), lw=7)
+                c.poly(E(x + 5, 566, 6, 4), fill=col(0.2, 0.4, 0.15))
         for j in range(int(6 * sstep(59.9, 60.5, t))):
             fx = 940 + j * 38
             c.poly([(fx, 548), (fx + 16, 548), (fx + 16, 564), (fx, 564)], fill=WHITE, line=INK, lw=2)  # feta cubes
         if k > 0:
-            text(c, '+ prosciutto & feta', 1030, 460, 26, INK)
+            text(c, '+ pesto & feta', 1030, 460, 26, INK)
 
 
 def s_lost(c, t, u):
