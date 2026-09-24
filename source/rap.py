@@ -174,7 +174,8 @@ def line_subs(wd):
         if t0 is None or not words:
             continue
         txt = ' '.join(words)
-        lines.append([t0, t0 + 3.5 + 0.6 * len(words), txt[0].upper() + txt[1:]])
+        shown = (wd.get('line_text') or [None] * len(wd['line_times']))[k]  # the script, with its punctuation
+        lines.append([t0, t0 + 3.5 + 0.6 * len(words), shown or txt[0].upper() + txt[1:]])
     for k in range(len(lines) - 1):
         lines[k][1] = min(lines[k][1], lines[k + 1][0])
     return [tuple(x) for x in lines]
