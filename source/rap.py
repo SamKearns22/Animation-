@@ -294,6 +294,7 @@ def penguin(c, x, y, s, face=-1, arms=(10, 10), lean=0.0, beak=0.0, eye='normal'
             prop=None, eagle=False):
     """The rapper: a penguin in a light blue check shirt, sleeves rolled. arms = (front, back) flipper angles.
     eagle=True makes him a bald-eagle penguin: brown body, white head, golden hooked beak, fierce brow."""
+    s *= 1.15  # tall and slim: stands as tall as the pigeon
     r = Rig(c, x, y, s, face, lean)
     lw = r.lw()
     body_c = EAGLE_BROWN if eagle else BLACK
@@ -719,7 +720,7 @@ def crowd(c, t, react_all=None, seed=0, skip_host=False):
             react = react_all[i % len(react_all)] if isinstance(react_all, list) else react_all
         else:
             react = 'laugh' if (lv > 0.85 and (i + int(t * 2)) % 3 != 0) else 'idle'
-        audience(c, x, 560, 130 if who == 'host' else 115, who, None if who == 'host' else react, t,
+        audience(c, x, 565, 160 if who == 'host' else 145, who, None if who == 'host' else react, t,
                  face=1 if x < 640 else -1, seed=i + seed)
 
 
@@ -1087,7 +1088,7 @@ def s_snap(c, t, u):
         c.poly([(640, 360), (640 + 900 * math.cos(a), 360 + 900 * math.sin(a)),
                 (640 + 900 * math.cos(a + 0.12), 360 + 900 * math.sin(a + 0.12))], fill=col(1.0, 0.95, 0.6))
     shake = 8 * math.sin(t * 45)
-    audience(c, 520 + shake, 1150, 1100, 'host', 'cheer', t, 1)
+    audience(c, 520 + shake, 1150, 1100, 'host', 'laugh', t, 1)
     text(c, 'OOOH', 960 + shake, 150, 110, RED, rot=-8)
     text(c, 'SNAP!', 1000 - shake, 290, 130, RED, rot=-6)
 
