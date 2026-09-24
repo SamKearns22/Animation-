@@ -117,7 +117,7 @@ SHOTS = [
     (17.7, 22.9, 'supervision'), (22.9, 25.2, 'permission'), (25.2, 27.7, 'dish'), (27.7, 32.5, 'scrub'),
     (32.5, 35.1, 'surgery'), (35.1, 38.6, 'reporter'), (38.6, 42.7, 'waxwork'), (42.7, 45.5, 'stage'),
     (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
-    (60.6, 66.6, 'lost'), (66.6, 70.5, 'stage'), (70.5, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
+    (60.6, 66.6, 'lost'), (66.6, 72.9, 'stage'), (72.9, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
     (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.3, 'noggin'), (99.3, 105.4, 'stage'),
     (105.4, 107.2, 'corn'), (107.2, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 118.2, 'pillow'),
     (118.2, 126.4, 'pipe'), (126.4, 129.1, 'innate'), (129.1, 132.2, 'mistakes'), (132.2, 139.8, 'gasp'),
@@ -174,7 +174,7 @@ def line_subs(wd):
         if t0 is None or not words:
             continue
         txt = ' '.join(words)
-        lines.append([t0, t0 + 1.5 + 0.45 * len(words), txt[0].upper() + txt[1:]])
+        lines.append([t0, t0 + 3.5 + 0.6 * len(words), txt[0].upper() + txt[1:]])
     for k in range(len(lines) - 1):
         lines[k][1] = min(lines[k][1], lines[k + 1][0])
     return [tuple(x) for x in lines]
@@ -210,8 +210,10 @@ class Rig:
     def __init__(self, c, x, y, s, face=1, lean=0.0):
         self.c, self.x, self.y, self.s, self.face = c, x, y, s, face
         self.ca, self.sa = math.cos(math.radians(lean)), math.sin(math.radians(lean))
+        self.ux = 1.0  # squeeze sideways (T is a slim chap)
 
     def P(self, u, v):
+        u = u * self.ux
         u, v = u * self.ca + v * self.sa, -u * self.sa + v * self.ca
         return self.x + u * self.face * self.s, self.y - v * self.s
 
@@ -296,8 +298,10 @@ def penguin(c, x, y, s, face=-1, arms=(10, 10), lean=0.0, beak=0.0, eye='normal'
     lw = r.lw()
     body_c = EAGLE_BROWN if eagle else BLACK
     feet_c = EAGLE_GOLD if eagle else ORANGE
-    back = limb(r, (-0.13, 0.7), arms[1], 0.44 * (1.25 if eagle else 1), 0.075, 0.07 * (1.4 if eagle else 1), body_c,
+    SLIM = 0.74
+    back = limb(r, (-0.13 * SLIM, 0.7), arms[1], 0.44 * (1.25 if eagle else 1), 0.075, 0.07 * (1.4 if eagle else 1), body_c,
                 PLAID if shirt else None, sleeve_d=PLAID_D)
+    r.ux = SLIM
     for du in (-0.1, 0.12):
         c.poly(r.pts(smooth([(du - 0.1, 0.0), (du + 0.13, 0.0), (du + 0.1, 0.05), (du - 0.08, 0.05)], 4)), fill=feet_c,
                line=INK, lw=lw)
@@ -330,6 +334,7 @@ def penguin(c, x, y, s, face=-1, arms=(10, 10), lean=0.0, beak=0.0, eye='normal'
             c.poly(r.E(0.125 + (0.6 - v) * 0.05, v, 0.013, 0.013, 0, 8), fill=WHITE, line=INK, lw=lw * 0.4)
         c.poly(r.pts([(-0.14, 0.62), (-0.03, 0.62), (-0.03, 0.52), (-0.14, 0.52)]), None, INK, lw=lw * 0.6)  # pocket
     # head, with the eye ring and a very expressive brow
+    r.ux = 0.88
     hu, hv = 0.04, 0.97
     if eagle:  # a proud white head with a ruff of feathers at the neck
         ruff = [(hu + 0.24 * math.cos(q), hv - 0.02 + 0.23 * math.sin(q) - (0.04 if k % 2 else 0) * (math.sin(q) < -0.3))
@@ -368,7 +373,8 @@ def penguin(c, x, y, s, face=-1, arms=(10, 10), lean=0.0, beak=0.0, eye='normal'
     if hat == 'nightcap':
         c.poly(r.pts([(hu - 0.2, hv + 0.08), (hu + 0.18, hv + 0.14), (hu - 0.35, hv + 0.35)]), fill=col(0.5, 0.6, 0.9),
                line=INK, lw=lw)
-    front = limb(r, (0.1, 0.7), arms[0], 0.44 * (1.25 if eagle else 1), 0.075, 0.07 * (1.4 if eagle else 1), body_c,
+    r.ux = 1.0
+    front = limb(r, (0.1 * SLIM, 0.7), arms[0], 0.44 * (1.25 if eagle else 1), 0.075, 0.07 * (1.4 if eagle else 1), body_c,
                  PLAID if shirt else None, sleeve_d=PLAID_D)
     return r, front, back
 
@@ -812,6 +818,9 @@ def pigeon_listens(c, t, x=300):
                   t=t, head_tilt=0.3 * math.sin(t * 0.7))
 
 
+SMILED = (70.3, 72.9)  # 'oh look, I think it smiled': he points at him
+
+
 def stage(c, t, name):
     room(c, t)
     px = penguin_x(t)
@@ -858,10 +867,15 @@ def stage(c, t, name):
     elif name == 'hit':
         crowd(c, t, ['gasp', 'laugh', 'cheer', 'gasp', 'laugh', 'cover', 'cheer', 'gasp'])
         pigeon(c, 300, 690, 330, 1, lean=-14, mood='hurt', t=t, arms=(40, 30))
+    elif SMILED[0] <= t < SMILED[1]:
+        crowd(c, t)
+        pigeon(c, 300, 690, 330, 1, arms=(15, 15), mood='grin', t=t)  # ...and it did smile
     else:
         crowd(c, t)
         pigeon_listens(c, t)
     arms, lean = penguin_pose(t, MOODS.get(name, MOODS['stage']))
+    if SMILED[0] <= t < SMILED[1]:
+        arms, lean = GESTURES['point'], 16
     penguin(c, px, 690, 300, -1, arms=arms, lean=lean, beak=beak_open(t), eye='angry' if loud(t) > 0.7 else 'smug')
 
 
