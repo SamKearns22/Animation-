@@ -579,8 +579,13 @@ def light_overlay(c, p):
     c.cam = cam
 
 
-def falling_leaves(c, t):
+DAM_LINE = 1400  # things further back than this are behind the dam and the beaver
+
+
+def falling_leaves(c, t, behind=None):
     for lf in LEAVES:
+        if behind is not None and (lf['land'] < DAM_LINE) != behind:
+            continue
         if t < lf['t0']:
             continue
         dt = t - lf['t0']
@@ -936,10 +941,15 @@ def scene_threat(c, t):
     light_overlay(c, p ** 1.6)
     lift = -0.22 * sstep(0.6, 2.6, t)
     tw, bl = life(t)
-    beaver(c, Pose(BEAVER_X, BEAVER_Y, BEAVER_S), lift=lift, t=t, twitch=tw, blink=bl)
-    falling_leaves(c, t)
+    falling_leaves(c, t, behind=True)
     for (ts, x, y, i) in SPLASHES:
-        splash(c, x, y, t - ts, 0.9, seed=i)
+        if y < DAM_LINE:
+            splash(c, x, y, t - ts, 0.9, seed=i)
+    beaver(c, Pose(BEAVER_X, BEAVER_Y, BEAVER_S), lift=lift, t=t, twitch=tw, blink=bl)
+    falling_leaves(c, t, behind=False)
+    for (ts, x, y, i) in SPLASHES:
+        if y >= DAM_LINE:
+            splash(c, x, y, t - ts, 0.9, seed=i)
     c.wash(LIGHT, 0.16 * p ** 1.6, textured=True)
 
 
