@@ -413,13 +413,23 @@ class Track:
         self.out = np.zeros(int(dur * SR))
 
     def add(self, t0, sig):
+        """Mix a sound in at t0, with a tiny fade in and out so it can never click."""
+        sig = np.array(sig, np.float64)
+        a, r = min(len(sig), int(0.003 * SR)), min(len(sig), int(0.01 * SR))
+        sig[:a] *= np.linspace(0, 1, a)
+        sig[len(sig) - r:] *= np.linspace(1, 0, r)
         i = int(t0 * SR)
         j = min(len(self.out), i + len(sig))
         if j > i:
             self.out[i:j] += sig[:j - i]
 
-    def silence(self, t0, t1):
-        self.out[int(t0 * SR):int(t1 * SR)] = 0.0
+    def silence(self, t0, t1, fade=0.03):
+        """Cut to silence between t0 and t1. A very quick fade keeps the cut sudden but click-free."""
+        i0, i1, n = int(t0 * SR), int(t1 * SR), int(fade * SR)
+        self.out[max(0, i0 - n):i0] *= np.linspace(1, 0, min(n, i0))
+        self.out[i0:i1] = 0.0
+        m = min(n, len(self.out) - i1)
+        self.out[i1:i1 + m] *= np.linspace(0, 1, m)
 
     def save(self, path):
         out = self.out.copy()

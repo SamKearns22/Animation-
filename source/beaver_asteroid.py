@@ -1370,7 +1370,7 @@ def make_audio(path):
     for tc in np.sort(rg.uniform(3.0, d, 26)):
         if rg.random() < tc / d:
             i = int(tc * 44100)
-            crack = 1.2 * noise(1.2, 60, 900, int(tc * 77)) * decay(1.2, 0.35)
+            crack = 1.2 * noise(1.2, 60, 900, int(tc * 77)) * decay(1.2, 0.35) * np.clip(tt(1.2) / 0.012, 0, 1)
             rumble[i:i + len(crack)] += crack[:len(rumble) - i]
     for tg in (3.5, 5.8, 7.4, 8.8, 10.4, 11.6):
         i = int(tg * 44100)
