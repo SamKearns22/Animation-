@@ -464,6 +464,8 @@ BIRDS = {
     'toucan': dict(body=BLACK, belly=col(0.98, 0.95, 0.7), head=BLACK, beak=col(0.99, 0.66, 0.15), bk='toucan'),
     'robin': dict(body=col(0.55, 0.42, 0.3), belly=col(0.93, 0.45, 0.25), head=col(0.55, 0.42, 0.3), beak=col(0.3, 0.25, 0.2),
                   bk='small'),
+    'host': dict(body=col(0.74, 0.54, 0.38), belly=col(0.86, 0.70, 0.54), head=col(0.76, 0.56, 0.40),
+                 wing=col(0.64, 0.46, 0.32), beak=col(0.3, 0.26, 0.24), bk='small'),
     'heron': dict(body=col(0.7, 0.72, 0.76), belly=col(0.9, 0.9, 0.92), head=col(0.85, 0.86, 0.9), beak=col(0.9, 0.75, 0.2),
                   bk='long', neck=True),
 }
@@ -576,6 +578,16 @@ def _long_hair(c, r, hv, colr, fringe=False, wavy=False):
                       (0.08, hv + 0.09), (0.03, hv + 0.06)]), fill=colr, line=INK, lw=r.lw(0.7))
 
 
+def _swept_hair(c, r, hv, colr):
+    """Thick black hair, swept over to one side."""
+    hair = smooth([(-0.17, hv - 0.02), (-0.2, hv + 0.1), (-0.08, hv + 0.2), (0.08, hv + 0.22), (0.2, hv + 0.17),
+                   (0.24, hv + 0.1), (0.16, hv + 0.11), (0.06, hv + 0.13), (-0.06, hv + 0.1), (-0.1, hv + 0.02)], 6)
+    c.poly(r.pts(hair), fill=colr, line=INK, lw=r.lw(0.8))
+    for k in range(3):
+        c.line(r.pts(smooth([(-0.1 + 0.07 * k, hv + 0.12), (0.02 + 0.07 * k, hv + 0.18), (0.12 + 0.06 * k, hv + 0.15)],
+                            3, False)), col(0.3, 0.28, 0.3), lw=r.lw(0.5))
+
+
 def _curls(c, r, hv, colr):
     for k in range(8):
         a = math.pi * (0.42 + 0.68 * k / 7)
@@ -615,14 +627,15 @@ def _scarf(c, r, hv, colr, stripe, tassels=True):
 
 
 AUDIENCE = {
-    # the MC: glasses, a mop of dark hair, white shirt, grey waistcoat, and never, ever still
-    'host': dict(kind='toucan',
+    # the MC: warm light-brown feathers, glasses, swept black hair, white shirt, grey waistcoat, never still
+    'host': dict(kind='host',
                  dress=lambda c, r, hv: (c.poly(r.E(0.06, 0.32, 0.22, 0.27), fill=WHITE, line=INK, lw=r.lw(0.6)),
                                          c.poly(r.pts([(-0.24, 0.1), (-0.28, 0.5), (-0.1, 0.62), (0.04, 0.32),
                                                        (0.16, 0.62), (0.3, 0.45), (0.24, 0.1)]), fill=GREY, line=INK,
                                                 lw=r.lw()),
                                          [c.poly(r.E(0.05, v, 0.014, 0.014), fill=INK) for v in (0.22, 0.32, 0.42)]),
-                 top=lambda c, r, hv, react: (_curls(c, r, hv, col(0.1, 0.08, 0.07)), _glasses(c, r, 0.11, hv + 0.03))),
+                 top=lambda c, r, hv, react: (_swept_hair(c, r, hv, col(0.08, 0.07, 0.07)),
+                                              _glasses(c, r, 0.12, hv + 0.03, 0.065))),
     # the bearded man in glasses and a dark jumper
     'beard': dict(kind='owl',
                   dress=lambda c, r, hv: _top(c, r, col(0.18, 0.19, 0.24)),
@@ -1052,7 +1065,7 @@ def s_snap(c, t, u):
         c.poly([(640, 360), (640 + 900 * math.cos(a), 360 + 900 * math.sin(a)),
                 (640 + 900 * math.cos(a + 0.12), 360 + 900 * math.sin(a + 0.12))], fill=col(1.0, 0.95, 0.6))
     shake = 8 * math.sin(t * 45)
-    audience(c, 520 + shake, 1150, 1100, 'host', 'gasp', t, 1)
+    audience(c, 520 + shake, 1150, 1100, 'host', 'cheer', t, 1)
     text(c, 'OOOH', 960 + shake, 150, 110, RED, rot=-8)
     text(c, 'SNAP!', 1000 - shake, 290, 130, RED, rot=-6)
 

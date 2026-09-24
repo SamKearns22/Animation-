@@ -90,7 +90,7 @@ def shot_at(t):
 # Extra characters and props
 # ---------------------------------------------------------------------------
 def host(c, x, y, s, t, face=1, react=None):
-    """The MC: a toucan in glasses, white shirt and grey waistcoat, never still for a second."""
+    """The MC: glasses, swept black hair, white shirt and grey waistcoat, never still for a second."""
     if react is None and host_talking(t):
         react = 'cheer' if int(t * 3) % 2 else 'gasp'
     return R.audience(c, x, y, s, 'host', react, t, face)
