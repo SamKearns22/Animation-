@@ -116,7 +116,7 @@ SHOTS = [
     (0, 8.2, 'examine'), (8.2, 10.9, 'stage'), (10.9, 13.3, 'lullaby'), (13.3, 17.7, 'nullified'),
     (17.7, 22.9, 'supervision'), (22.9, 25.2, 'permission'), (25.2, 27.7, 'dish'), (27.7, 32.5, 'scrub'),
     (32.5, 35.1, 'surgery'), (35.1, 38.6, 'reporter'), (38.6, 42.7, 'waxwork'), (42.7, 45.5, 'stage'),
-    (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 59.4, 'vomit'), (59.4, 60.6, 'stage'),
+    (45.5, 48.2, 'vanity'), (48.2, 52.1, 'yeti'), (52.1, 55.6, 'weak'), (55.6, 60.6, 'vomit'),
     (60.6, 66.6, 'lost'), (66.6, 70.5, 'stage'), (70.5, 75.93, 'eagle'), (75.93, 79.16, 'defiled'), (79.16, 85.8, 'chin'),
     (85.8, 89.6, 'yarn'), (89.6, 93.7, 'gasp'), (93.7, 97.5, 'stage'), (97.5, 99.8, 'noggin'), (99.8, 105.4, 'corn'),
     (105.4, 110.4, 'stage'), (110.4, 112.9, 'veal'), (112.9, 118.2, 'pillow'),
@@ -717,7 +717,7 @@ def crowd(c, t, react_all=None, seed=0, skip_host=False):
                  face=1 if x < 640 else -1, seed=i + seed)
 
 
-def room(c, t):
+def room(c, t, clock_speed=0.02):
     c.wash(WALL, 0.85, textured=True)
     # window with tartan curtains
     c.poly([(40, 90), (250, 90), (250, 400), (40, 400)], fill=NAVY, line=INK, lw=5)
@@ -743,6 +743,14 @@ def room(c, t):
         c.poly([(x + 10, y + 10), (x + w - 10, y + 10), (x + w - 10, y + h - 10), (x + 10, y + h - 10)],
                fill=col(0.8, 0.8, 0.78))
         c.poly([(x + 16, y + h - 14), (x + w / 2, y + 22), (x + w - 16, y + h - 14)], fill=col(0.55, 0.55, 0.55))
+    # the wall clock, always there (its hands race when someone is made to wait)
+    c.poly(E(975, 130, 42, 42), fill=WHITE, line=INK, lw=5)
+    for i in range(12):
+        q = i / 12 * 2 * math.pi
+        c.line([(975 + 34 * math.sin(q), 130 - 34 * math.cos(q)), (975 + 39 * math.sin(q), 130 - 39 * math.cos(q))], INK, lw=2)
+    a = t * clock_speed
+    c.line([(975, 130), (975 + 30 * math.sin(a), 130 - 30 * math.cos(a))], INK, lw=4)
+    c.line([(975, 130), (975 + 18 * math.sin(a / 12), 130 - 18 * math.cos(a / 12))], INK, lw=6)
     # the door and its notices
     c.poly([(1090, 60), (1250, 60), (1250, 520), (1090, 520)], fill=WOOD_D, line=INK, lw=5)
     c.poly([(1110, 150), (1160, 150), (1160, 215), (1110, 215)], fill=col(0.3, 0.45, 0.8), line=INK, lw=2)
@@ -1422,6 +1430,18 @@ def s_vomit(c, t, u):
         c.poly(E(x, 585, 30, 10), fill=RED, line=INK, lw=2)
         c.poly(E(x + 10, 578, 18, 6), fill=col(0.95, 0.7, 0.7), line=INK, lw=2)
     text(c, "MUM'S", 1030, 500, 34, INK)
+    if t > 59.4:  # ...with prosciutto and feta, piled on as he says it
+        k = sstep(59.4, 60.2, t)
+        for i, x in enumerate((945, 1035, 1125)):
+            if k > i / 3:
+                c.poly(smooth([(x - 38, 570), (x - 10, 555), (x + 20, 568), (x + 40, 556), (x + 30, 575), (x - 30, 580)], 3),
+                       fill=col(0.9, 0.5, 0.5), line=INK, lw=2)  # a ribbon of prosciutto
+                c.line([(x - 30, 568), (x + 30, 566)], col(0.98, 0.9, 0.88), lw=3)
+        for j in range(int(6 * sstep(59.9, 60.5, t))):
+            fx = 940 + j * 38
+            c.poly([(fx, 548), (fx + 16, 548), (fx + 16, 564), (fx, 564)], fill=WHITE, line=INK, lw=2)  # feta cubes
+        if k > 0:
+            text(c, '+ prosciutto & feta', 1030, 460, 26, INK)
 
 
 def s_lost(c, t, u):
@@ -1633,15 +1653,18 @@ def s_mistakes(c, t, u):
 
 
 def s_wait(c, t, u):
-    wash(c, col(0.93, 0.87, 0.71))
-    room(c, t)
-    crowd(c, t, 'idle')
-    pigeon(c, 300, 690, 330, 1, mood='neutral', t=t)
-    tap = abs(math.sin(t * 8))
-    r, f, b = penguin(c, penguin_x(t), 690, 300, -1, arms=(60, 60), lean=-4, beak=talk(t), eye='smug')
-    c.poly(E(640, 120, 60, 60), fill=WHITE, line=INK, lw=5)
-    c.line([(640, 120), (640 + 45 * math.sin(t * 3), 120 - 45 * math.cos(t * 3))], INK, lw=5)
-    text(c, 'tap', penguin_x(t) + 60, 700 - 40 * tap, 28, INK)
+    """Go ahead, I'll wait: same room, same moment; he folds his flippers and taps his foot while the clock races."""
+    t0 = 139.8
+    room(c, t, clock_speed=0.02 + 6 * sstep(t0 + 0.3, t0 + 0.8, t))
+    k = sstep(t0, t0 + 0.5, t)  # ease out of the previous shot rather than jumping
+    crowd(c, t, ['gasp', 'cover', 'gasp', 'laugh', 'cover', 'gasp', 'laugh', 'cover'] if k < 0.5 else None)
+    pigeon_listens(c, t)
+    (a0, b0), lean0 = penguin_pose(t0 - 0.01, MOODS['gasp'])
+    tap = abs(math.sin(t * 8)) * k
+    arms = (lerp(a0, 55, k), lerp(b0, 55, k))
+    penguin(c, penguin_x(t), 690 - 6 * tap, 300, -1, arms=arms, lean=lerp(lean0, -6, k), beak=talk(t), eye='smug')
+    if k > 0.6:
+        text(c, 'tap', penguin_x(t) + 60, 700 - 40 * tap, 28, INK)
 
 
 def s_firesale(c, t, u):
@@ -1766,21 +1789,29 @@ def s_practice(c, t, u):
 
 
 def s_expectations(c, t, u):
+    """I'll expectorate on each one of your expectations separately: he flies over, spitting on each box in turn."""
     wash(c, SKY)
     c.poly([(0, 600), (1280, 600), (1280, 720), (0, 720)], fill=GREEN, line=INK, lw=4)
     boxes = [(170, 'HOPES'), (440, 'DREAMS'), (710, 'PLANS'), (1030, 'EXPECTATIONS')]
+    px = lerp(60, 1200, u)
+    spit_c = col(0.85, 0.93, 0.97)
     for i, (x, lab) in enumerate(boxes):
         w = 110 if i < 3 else 150
         c.poly([(x - w, 470), (x + w, 470), (x + w, 600), (x - w, 600)], fill=col(0.85, 0.75, 0.55), line=INK, lw=5)
         text(c, lab, x, 540, 30 if i < 3 else 27, INK)
-        hit_t = 0.15 + i * 0.2
-        if u > hit_t:
-            c.poly(blob(x, 460, 40, 10 + i, 10, 0.3), fill=WHITE, line=INK, lw=4)
-            c.poly(blob(x - 10, 450, 20, 20 + i, 8, 0.3), fill=col(0.9, 0.9, 0.85), line=INK, lw=2)
-    px = lerp(60, 1200, u)
-    r, f, b = penguin(c, px, 260, 180, 1, arms=(170, 170), beak=talk(t), eye='smug')
+        # a gob of spit falls from his beak as he passes over each box, then splats on its lid
+        drop_x = x - 60
+        tu = (px - drop_x) / 1140.0
+        if 0 < tu < 0.08:
+            k = tu / 0.08
+            c.poly(E(drop_x + 40 + 30 * k, lerp(250, 460, k * k), 12, 16), fill=spit_c, line=INK, lw=3)
+        elif tu >= 0.08:
+            c.poly(blob(x, 468, 45, 7 + i, 12, 0.35), fill=spit_c, line=INK, lw=3, opacity=0.9)
+            c.poly(E(x + 25, 490, 8, 18), fill=spit_c, line=INK, lw=2)  # a drip down the side
+    r, f, b = penguin(c, px, 260, 180, 1, arms=(170, 170), beak=0.8 if int(t * 5) % 2 else 0.1, eye='angry')
     c.poly([(px - 60, 200), (px - 30, 200), (px - 30, 260), (px - 60, 260)], fill=SILVER, line=INK, lw=3)
     c.poly([(px - 55, 260), (px - 35, 260), (px - 45, 300 + 20 * math.sin(t * 30))], fill=ORANGE, line=RED, lw=3)
+    text(c, 'PTOO!', px + 90, 180, 34, INK, rot=-8)
     text(c, 'separately.', 640, 70, 44, INK)
 
 
