@@ -53,8 +53,8 @@ class Cam:
     """Slow push-in from the middle of the stadium towards his face."""
     def __init__(self, t):
         k = smooth(t / 60.0)
-        self.z = 1.0 + 0.6 * k
-        self.cx, self.cy = 640, 400 - 130 * k
+        self.z = 0.62 + 0.98 * k  # from his whole body and the stage around him, in to head and shoulders
+        self.cx, self.cy = 640, 440 - 170 * k
 
     def P(self, x, y):
         return ((x - self.cx) * self.z + W / 2) * SS, ((y - self.cy) * self.z + H / 2) * SS
@@ -99,8 +99,8 @@ def spotlight(img, cam):
     """A single cold spotlight falling from the rig above onto him."""
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
-    d.polygon([cam.P(600, -400), cam.P(680, -400), cam.P(860, 700), cam.P(420, 700)], fill=(200, 215, 255, 34))
-    d.polygon([cam.P(620, -400), cam.P(660, -400), cam.P(770, 700), cam.P(510, 700)], fill=(215, 225, 255, 26))
+    d.polygon([cam.P(600, -400), cam.P(680, -400), cam.P(900, 1000), cam.P(380, 1000)], fill=(200, 215, 255, 34))
+    d.polygon([cam.P(620, -400), cam.P(660, -400), cam.P(790, 1000), cam.P(490, 1000)], fill=(215, 225, 255, 26))
     lay = lay.filter(ImageFilter.GaussianBlur(cam.S(18)))
     img.alpha_composite(lay)
 
@@ -110,31 +110,31 @@ def stage(img, pen, cam, t):
     pen.poly([(-900, -500), (2200, -500), (2200, 420), (-900, 420)], (8, 8, 12), None)
     pen.poly([(-600, -300), (1880, -300), (1880, 330), (-600, 330)], (14, 12, 18), (70, 30, 60), lw=3)
     # the round, raised stage
-    pen.ell(640, 600, 760, 150, (32, 32, 40), (12, 12, 16), lw=4)
-    pen.poly([(-120, 600), (1400, 600), (1400, 640), (-120, 640)], (20, 20, 26), None)
-    pen.ell(640, 600, 760, 150, (38, 38, 48), None)
-    glow(img, cam, 640, 600, 330, (190, 205, 245), 0.33)
+    pen.ell(640, 900, 760, 150, (32, 32, 40), (12, 12, 16), lw=4)
+    pen.poly([(-120, 900), (1400, 900), (1400, 940), (-120, 940)], (20, 20, 26), None)
+    pen.ell(640, 900, 760, 150, (38, 38, 48), None)
+    glow(img, cam, 640, 900, 330, (190, 205, 245), 0.33)
     # a loop pedal at his feet, one tiny green light on
-    pen.poly([(700, 598), (770, 598), (772, 616), (698, 616)], (40, 40, 44), INK, 3)
-    pen.ell(716, 604, 4, 4, (90, 230, 120), None)
+    pen.poly([(720, 898), (790, 898), (792, 916), (718, 916)], (40, 40, 44), INK, 3)
+    pen.ell(736, 904, 4, 4, (90, 230, 120), None)
     # a mic stand behind him, unused (as in the photo)
-    pen.line([(820, 600), (822, 330)], (60, 60, 66), 5)
-    pen.line([(790, 600), (820, 585), (850, 600)], (60, 60, 66), 4)
+    pen.line([(860, 900), (862, 330)], (60, 60, 66), 5)
+    pen.line([(830, 900), (860, 885), (890, 900)], (60, 60, 66), 4)
 
 
 def audience(img, pen, cam, t):
     """Below the stage lip: a dark sea of heads, a few phone screens glowing."""
-    pen.poly([(-900, 640), (2200, 640), (2200, 1400), (-900, 1400)], (4, 4, 7), None)
+    pen.poly([(-900, 940), (2200, 940), (2200, 1700), (-900, 1700)], (4, 4, 7), None)
     rng = np.random.default_rng(7)
     for row in range(5):
-        y = 690 + row * 45
+        y = 990 + row * 45
         for i in range(40):
             x = -600 + i * 65 + (row % 2) * 30 + rng.uniform(-12, 12)
             pen.ell(x, y, 20, 24, (12, 12, 17), None)
             pen.poly([(x - 34, y + 20), (x + 34, y + 20), (x + 40, y + 70), (x - 40, y + 70)], (12, 12, 17), None)
     rng = np.random.default_rng(3)
     for i in range(14):
-        x, y = rng.uniform(-400, 1700), rng.uniform(660, 860)
+        x, y = rng.uniform(-400, 1700), rng.uniform(960, 1160)
         on = (int(t * 0.4 + i) % 5) != 0
         if on:
             pen.poly([(x - 6, y - 10), (x + 6, y - 10), (x + 6, y + 10), (x - 6, y + 10)], (190, 205, 235), None)
@@ -185,6 +185,11 @@ def ed(img, pen, cam, t):
     for k in range(3):
         pen.ell(x - 143, 116 + k * 14, 3.5, 3, (215, 215, 215), INK, 1.5)
         pen.ell(x - 111, 114 + k * 14, 3.5, 3, (215, 215, 215), INK, 1.5)
+    # legs in dark trousers, white trainers
+    for sgn in (-1, 1):
+        pen.poly([(x + sgn * 8, 630), (x + sgn * 96, 630), (x + sgn * 84, 884), (x + sgn * 22, 884)], TROUSER, INK, LW)
+        pen.poly(curve([(x + sgn * 16, 880), (x + sgn * 92, 880), (x + sgn * 112, 896), (x + sgn * 108, 906),
+                        (x + sgn * 14, 906)], 4), (238, 238, 236), INK, LW)
     # body: a baggy lilac tee over broad, sloping shoulders
     tee = [(x - 60, 268), (x - 128, 292), (x - 176, 330), (x - 196, 420), (x - 150, 436), (x - 140, 400),
            (x - 136, 640), (x + 136, 640), (x + 140, 400), (x + 150, 436), (x + 196, 420), (x + 176, 330),
