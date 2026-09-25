@@ -1064,12 +1064,14 @@ def churchgoer(c, x, y, s, t):
     c.poly([(x + 0.1 * s, y - 0.8 * s), (x + 0.17 * s, y - 0.8 * s), (x + 0.16 * s, y - 0.76 * s)], fill=WHITE, line=INK,
            lw=2)  # pocket square
     c.poly(E(x - 0.03 * s, y - 0.72 * s, 0.018 * s, 0.018 * s), fill=YELLOW, line=INK, lw=2)
-    for sg, ang in ((-1, 30 + 10 * math.sin(t * 6)), (1, 40 + 10 * math.sin(t * 6 + 1))):  # arms up in a guard
+    bob = 0.012 * s * math.sin(t * 5)
+    guard = []
+    for sg in (-1, 1):  # elbows tucked in, forearms up: a boxer's guard
         sx, sy = x + sg * 0.2 * s, y - 0.86 * s
-        ex, ey = sx + sg * 0.12 * s, sy + 0.2 * s
-        hx, hy = x + sg * 0.1 * s, y - 1.02 * s - 0.02 * s * math.sin(t * 6)
-        c.line([(sx, sy), (ex, ey), (hx, hy)], suit, lw=0.09 * s)
-        c.poly(E(hx, hy, 0.06 * s, 0.065 * s), fill=RED, line=INK, lw=4)  # boxing gloves
+        ex, ey = x + sg * 0.19 * s, y - 0.66 * s + bob
+        hx, hy = x + sg * 0.075 * s, y - 0.93 * s + bob
+        c.line([(sx, sy), (ex, ey)], suit, lw=0.09 * s)
+        guard.append((ex, ey, hx, hy))
     c.line([(x, y - 0.9 * s), (x, y - 0.95 * s)], skin, lw=0.08 * s)
     hy = y - 1.07 * s
     c.poly(E(x, hy, 0.12 * s, 0.14 * s), fill=skin, line=INK, lw=4)
@@ -1086,6 +1088,9 @@ def churchgoer(c, x, y, s, t):
     c.line([(x + 0.07 * s, hy - 0.075 * s), (x + 0.02 * s, hy - 0.06 * s)], INK, lw=4)
     c.line(smooth([(x - 0.035 * s, hy + 0.085 * s), (x, hy + 0.075 * s), (x + 0.035 * s, hy + 0.085 * s)], 3, False),
            col(0.35, 0.18, 0.15), lw=4)
+    for ex, ey, gx, gy in guard:  # forearms and gloves in front, protecting his chin
+        c.line([(ex, ey), (gx, gy)], suit, lw=0.085 * s)
+        c.poly(E(gx, gy, 0.06 * s, 0.065 * s), fill=RED, line=INK, lw=4)
 
 
 def sparkle(c, x, y, r, colr=YELLOW):
@@ -1387,7 +1392,6 @@ def s_surgery(c, t, u):
            line=INK, lw=3)
     if catch and u < 0.55:
         sparkle(c, sx + 30, sy - 70, 22, WHITE)
-    text(c, 'SCALPEL.', 330, 120, 50, INK)
 
 
 def s_reporter(c, t, u):
@@ -1582,7 +1586,6 @@ def s_vomit(c, t, u):
         c.poly([(x - 40, 590), (x + 40, 580), (x + 45, 610), (x - 35, 620)], fill=col(0.85, 0.65, 0.35), line=INK, lw=3)
         c.poly(E(x, 585, 30, 10), fill=RED, line=INK, lw=2)
         c.poly(E(x + 10, 578, 18, 6), fill=col(0.95, 0.7, 0.7), line=INK, lw=2)
-    text(c, "MUM'S", 1030, 500, 34, INK)
     if t > 59.4:  # ...with pesto and feta, piled on as he says it
         k = sstep(59.4, 60.2, t)
         for i, x in enumerate((945, 1035, 1125)):
@@ -1593,8 +1596,6 @@ def s_vomit(c, t, u):
         for j in range(int(6 * sstep(59.9, 60.5, t))):
             fx = 940 + j * 38
             c.poly([(fx, 548), (fx + 16, 548), (fx + 16, 564), (fx, 564)], fill=WHITE, line=INK, lw=2)  # feta cubes
-        if k > 0:
-            text(c, '+ pesto & feta', 1030, 460, 26, INK)
 
 
 def s_lost(c, t, u):
@@ -1673,17 +1674,15 @@ def s_chin(c, t, u):
     r, front = pigeon(c, 560, 1400, 1100, 1, mood='grin', t=t)
     # the magnifying glass on the crease of his chin
     k = sstep(0.2, 0.5, u)
-    mx, my = lerp(1100, 780, k), lerp(600, 330, k)
+    tx, ty = r.P(0.18, 0.97)
+    mx, my = lerp(1100, tx, k), lerp(600, ty, k)
     c.poly(E(mx, my, 120, 120), fill=col(0.85, 0.93, 1.0), line=INK, lw=10, opacity=0.6)
     c.line([(mx + 85, my + 85), (mx + 200, my + 200)], WOOD_D, lw=24)
-    if u > 0.45:
+    if u > 0.45:  # bits lodged in the crease under his beak, all stuck on
         for i in range(7):
-            c.poly(blob(mx - 40 + (i * 29) % 90, my - 20 + (i * 37) % 60, 10, i, 8, 0.3), fill=BROWN, line=INK, lw=2)
-        for i in range(3):
-            q = t * 8 + i * 2
-            fx, fy = mx + 90 * math.cos(q), my - 60 + 30 * math.sin(q * 1.3)
-            c.poly(E(fx, fy, 8, 6), fill=INK)
-            c.poly(E(fx - 5, fy - 8, 7, 4, 30), fill=WHITE, line=INK, lw=1.5)
+            q = i / 6
+            cx, cy = r.P(0.1 + 0.16 * q, 0.975 - 0.02 * math.sin(q * math.pi))
+            c.poly(blob(cx, cy, 9 + 3 * (i % 3), i, 8, 0.3), fill=BROWN, line=INK, lw=2)
 
 
 def s_yarn(c, t, u):
@@ -1762,7 +1761,6 @@ def s_pillow(c, t, u):
     for i in range(4):
         ph = (u * 2 + i * 0.25) % 1
         c.poly(E(fx + 40 + 150 * ph, fy - 60 - 100 * ph, 10, 5, 30 * i), fill=WHITE, line=INK, lw=2, opacity=1 - ph)
-    text(c, 'FIGHT NIGHT', 640, 90, 56, RED)
 
 
 def s_pipe(c, t, u):
@@ -1792,7 +1790,6 @@ def s_pipe(c, t, u):
 def s_innate(c, t, u):
     """It's entirely innate: the egg shakes, cracks, and out he bursts, shimmering and already rapping."""
     wash(c, col(0.95, 0.92, 0.85))
-    text(c, 'INNATE.', 640, 80, 60, INK)
     burst = sstep(0.35, 0.5, u)
     shell = col(0.97, 0.95, 0.88)
     egg = smooth([(640, 250), (760, 330), (800, 480), (740, 640), (640, 670), (540, 640), (480, 480), (520, 330)], 8)
@@ -1823,7 +1820,7 @@ def s_innate(c, t, u):
            fill=shell, line=INK, lw=5)
     pop = 0.7 + 0.3 * sstep(0.35, 0.55, u)
     c.glow(640, 420, 330, YELLOW, 0.55)
-    arms = (95, 20) if int(t * 2.2) % 2 else (125, 160)
+    arms = (40, 160) if int(t * 2.2) % 2 else (70, 20)
     penguin(c, 640, 680, 330 * pop, 1, arms=arms, lean=6, beak=talk(t), eye='smug')
     for i in range(10):  # shimmering
         a = i * 0.63 + t * 1.5
@@ -1952,7 +1949,6 @@ def s_blackeye(c, t, u):
             beak=talk(t), eye='angry')
     if 0.45 < u < 0.55:
         text(c, 'POW', 600, 300, 80, RED, rot=-10)
-    text(c, 'half a mind...', 950, 150, 40, INK)
 
 
 def s_factory(c, t, u):

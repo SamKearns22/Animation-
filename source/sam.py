@@ -275,7 +275,7 @@ def s_arrive(c, t, u):
     c.line(r.pts([(-0.02, 0.84), (0.14, 0.82), (0.26, 0.83)]), RED, lw=r.s * 0.07)
     c.line(r.pts([(0.25, 0.83), (0.3, 0.6)]), RED, lw=r.s * 0.06)
     if u > 0.6:
-        text(c, 'great expectations', 1000, 600, 32, INK, rot=-4)
+        pass
 
 
 def s_obnoxious(c, t, u):
@@ -299,11 +299,12 @@ def s_coarse(c, t, u):
     """Of course, on this course you'll meet people who are coarse."""
     wash(c, col(0.93, 0.9, 0.84))
     r, _, _ = penguin(c, 820, 690, 380, -1, arms=(20, 15), eye='smug')
+    r.ux = 0.74  # match his slim body for the sandpaper texture
     if u > 0.45:  # he turns out to be made of sandpaper
         pts = r.pts(smooth([(-0.32, 0.1), (-0.33, 0.6), (-0.15, 0.9), (0.15, 0.9), (0.33, 0.6), (0.32, 0.1)], 5))
         c.hatch(pts, BROWN, spacing=9, angle=35, lw=2, opacity=0.5)
         c.hatch(pts, BROWN, spacing=13, angle=-50, lw=2, opacity=0.4)
-        text(c, '40 GRIT', 820, 230, 40, BROWN, rot=4)
+        pass
     text(c, 'COURSE', 330, 200, 90, INK, rot=-3)
     if u > 0.45:
         c.line([(180, 205), (480, 195)], RED, lw=10)
@@ -332,9 +333,7 @@ def s_degenerate(c, t, u):
                        lw=3)  # a bottle
         text(c, lbl, x, 600, 36, INK)
     if u > 0.55:
-        c.line([(200, 55), (1150, 55)], RED, lw=8)
-        c.poly([(1150, 35), (1200, 55), (1150, 75)], fill=RED)
-        text(c, 'DE-GENERATE', 640, 30, 40, RED)
+        pass
 
 
 def s_illiterate(c, t, u):
@@ -378,7 +377,7 @@ def s_getout(c, t, u):
     sign(c, 900, 60, 200, 60, 'EXIT', 40, WHITE, fill=GREEN)
     pigeon(c, 300, 690, 330, 1, arms=(95, 20), mood='grin', t=t, beak=rap_beak(t))
     if u > 0.85:
-        text(c, 'SLAM', 900, 380, 80, RED, rot=-10)
+        pass
 
 
 def s_bring(c, t, u):
@@ -395,7 +394,7 @@ def s_bring(c, t, u):
     c.poly([(610, 440), (670, 438), (672, 452), (612, 454)], fill=col(0.9, 0.6, 0.2), line=INK, lw=3)
     penguin(c, 640, 720, 200, -1, arms=(60, 10), eye='closed')
     if u > 0.5:
-        text(c, '...', 740, 400, 50, INK)
+        pass
 
 
 def s_king(c, t, u):
@@ -413,7 +412,7 @@ def s_king(c, t, u):
     c.poly(rp.pts([(-0.3, 0.1), (-0.32, 0.65), (0.32, 0.65), (0.3, 0.1)]), fill=col(0.62, 0.5, 0.33), line=INK, lw=4,
            opacity=0.95)  # a sackcloth tunic
     if u > 0.5:
-        text(c, 'a potato.', 900, 180, 44, YELLOW, rot=-4)
+        pass
 
 
 def s_bothered(c, t, u):
@@ -426,9 +425,9 @@ def s_bothered(c, t, u):
     r, _ = pigeon(c, 560, 640, 300, 1, arms=(60, 60), mood='sleepy', t=t, lean=-18)
     hx, hy = r.P(0.2, 1.13)
     c.poly([(hx - 30, hy - 12), (hx + 50, hy - 12), (hx + 45, hy + 12), (hx - 25, hy + 12)], fill=BLACK)  # shades
-    text(c, 'BOTHERED?', 300, 200, 64, INK, rot=-4)
+    pass
     if u > 0.45:
-        sign(c, 900, 330, 360, 90, 'NOT AT ALL.', 52, RED, fill=col(1, 1, 0.9), rot=6)
+        pass
 
 
 def s_ring(c, t, u):
@@ -444,7 +443,7 @@ def s_ring(c, t, u):
     pr, f = pigeon(c, 330, 690, 330, 1, arms=(110 + 25 * math.sin(t * 25), 20), mood='grin', t=t, beak=rap_beak(t))
     for i in range(4):
         ph = (u * 4 + i / 4) % 1
-        text(c, 'RING!', nx + (i - 1.5) * 120, ny - 150 - 80 * ph, 34, RED, rot=(-1) ** i * 10, opacity=1 - ph)
+        pass
 
 
 def s_list(c, t, u):
@@ -483,8 +482,7 @@ def s_far(c, t, u):
         ph = (u * 3 + i / 4) % 1
         dx, dy = r.P(-0.2, 1.0)
         c.poly(E(dx - 40 * ph, dy + 80 * ph, 7, 11), fill=col(0.6, 0.8, 1.0), line=INK, lw=2)
-    text(c, 'VERY FAR', 250, 180, 60, INK, rot=-5)
-    c.line([(110, 190), (390, 170)], RED, lw=10)
+    pass
 
 
 def s_level(c, t, u):
@@ -507,7 +505,7 @@ def s_level(c, t, u):
     k = sstep(0.2, 0.8, u)
     c.line([(1100, 650), (1100, 60)], INK, lw=4)
     c.poly([(1080, 650 - 560 * k), (1120, 650 - 560 * k), (1100, 620 - 560 * k)], fill=RED)
-    text(c, 'so far above you', 1140, 360, 28, INK, rot=-90)
+    pass
 
 
 def s_wife(c, t, u):
@@ -584,7 +582,7 @@ def s_stork(c, t, u):
     c.poly(E(bx, by + 40, 40, 30), fill=col(0.97, 0.92, 0.95), line=INK, lw=3)  # the bundle
     c.line([(bx, by), (bx, by + 15)], INK, lw=3)
     if turn:
-        text(c, 'RETURN TO SENDER', bx - 40, by + 110, 26, RED, rot=4)
+        pass
 
 
 def s_phone(c, t, u):
@@ -633,7 +631,7 @@ def s_maggot(c, t, u):
     c.line([(wx, wy), (wx + 60, wy - 220)], SILVER, lw=12)
     for k in range(-2, 3):
         c.line([(wx, wy), (wx + 10 * k - 10, wy + 60), (wx + 5 * k, wy + 120)], SILVER, lw=4)
-    text(c, 'BEATING', 1080, 200, 50, RED, rot=-6)
+    pass
 
 
 def s_rooster(c, t, u):
@@ -649,13 +647,13 @@ def s_rooster(c, t, u):
     for i in range(3):  # a few feathers stuck to his beak
         c.line([(bx + i * 12, by), (bx + 20 + i * 14, by - 30)], col(0.12, 0.35, 0.3), lw=6)
     rooster(c, 950, 700, 320, -1, plucked=1.0)
-    text(c, '!!', 1010, 300, 60, RED)
+    pass
 
 
 def s_fish(c, t, u):
     """You are what you eat."""
     wash(c, col(0.8, 0.92, 0.96))
-    text(c, 'YOU ARE WHAT YOU EAT', 640, 80, 54, NAVY)
+    pass
     if u < 0.4:
         r, f, b = penguin(c, 640, 700, 380, -1, arms=(110, 20), eye='closed', beak=0.6)
         fx, fy = r.P(*f)
@@ -688,7 +686,7 @@ def s_hear(c, t, u):
     c.poly(E(hx + 420, hy - 20, 30, 100), fill=col(0.8, 0.6, 0.2), line=INK, lw=5)
     penguin(c, 1080, 700, 160, -1, arms=(95, 10), eye='angry', beak=beak_open(t * 1.3 + 1))
     if u > 0.4:
-        text(c, '(tiny squeak)', 1080, 420, 24, INK)
+        pass
 
 
 def s_syringe(c, t, u):
@@ -697,7 +695,7 @@ def s_syringe(c, t, u):
     c.line([(600, 620), (600, 710)], SILVER, lw=12)
     c.line([(1160, 620), (1160, 710)], SILVER, lw=12)
     penguin(c, 880, 560, 200, -1, arms=(40, 20), eye='wide')
-    bird(c, 280, 690, 330, 'heron', 'idle', t, 1)
+    R.standing_heron(c, 260, 700, 300, t, 1)
     k = sstep(0.1, 0.5, u)
     x0 = lerp(300, 560, k)
     c.poly([(x0, 330), (x0 + 260, 330), (x0 + 260, 400), (x0, 400)], fill=col(0.9, 0.95, 1.0), line=INK, lw=5)
@@ -729,7 +727,7 @@ def s_planb(c, t, u):
         text(c, 'PLAN B', 860, 200, 70, col(0.2, 0.4, 0.8))
         c.poly(E(860, 200, 190, 70), None, RED, lw=6)
     if u > 0.6:
-        text(c, 'if only...', 640, 420, 60, INK, rot=-4)
+        pass
     pigeon(c, 1180, 720, 200, -1, arms=(100, 20), mood='grin', t=t, beak=rap_beak(t))
 
 
@@ -740,7 +738,7 @@ def s_stairs(c, t, u):
         x0, y0 = 120 + i * 130, 260 + i * 50
         c.poly([(x0, y0), (x0 + 130, y0), (x0 + 130, 720), (x0, 720)], fill=WHITE, line=INK, lw=4)
         c.poly([(x0 + 85, y0), (x0 + 125, y0), (x0 + 125, y0 + 30), (x0 + 85, y0 + 30)], fill=INK)
-    text(c, 'LOW KEY', 1100, 150, 50, RED, rot=-5)
+    pass
     pigeon(c, 150, 260, 200, 1, arms=(95, 20), mood='grin', t=t, beak=rap_beak(t))
     k = sstep(0.15, 1.0, u)
     step = min(7, int(k * 8))
@@ -795,7 +793,7 @@ def s_minuscule(c, t, u):
                                (270, 600, 120, 40, RED)):
         c.poly([(x, y), (x + w, y), (x + w, y + h), (x, y + h)], fill=colr, line=INK, lw=4)  # a scrap pile
     c.poly(E(200, 650, 70, 30), None, DARK, lw=16)
-    text(c, 'TERRIBLE', 240, 420, 34, INK, rot=-5)
+    pass
     c.poly([(640, 700), (760, 700), (740, 620), (660, 620)], fill=DARK, line=INK, lw=5)  # microscope
     c.line([(700, 620), (700, 380)], DARK, lw=24)
     c.poly([(670, 400), (730, 400), (720, 330), (680, 330)], fill=DARK, line=INK, lw=4)
@@ -803,7 +801,7 @@ def s_minuscule(c, t, u):
     c.poly(E(1000, 300, 220, 220), fill=col(0.9, 0.97, 0.9), line=INK, lw=8)  # the view down the lens
     c.poly(E(1000, 300, 3, 3), fill=INK)
     c.line([(1010, 310), (1100, 400)], INK, lw=3)
-    text(c, 'his talent', 1120, 430, 28, INK)
+    pass
 
 
 def s_pinnacle(c, t, u):
@@ -840,7 +838,7 @@ def s_drunk(c, t, u):
     for i in range(3):
         ph = (u * 2 + i / 3) % 1
         c.poly(E(x + 40 + 20 * i, 250 - 120 * ph, 10 + 5 * i, 10 + 5 * i), None, WHITE, lw=4)
-    text(c, 'hic!', x + 100, 280, 40, WHITE, rot=10)
+    pass
 
 
 def s_dictionary(c, t, u):
@@ -875,7 +873,7 @@ def s_retreat(c, t, u):
     penguin(c, 380, 690, lerp(150, 260, stand), 1, arms=(100, 110) if u > 0.4 else (170, 170),
             lean=lerp(80, 0, stand), eye='angry', beak=beak_open(t) * (u > 0.4))
     pigeon(c, 1000, 690, 250, -1, arms=(50, 50), mood='sleepy', t=t)
-    text(c, 'Ommm', 760, 380, 36, INK)
+    pass
 
 
 def s_joke(c, t, u):
@@ -886,11 +884,11 @@ def s_joke(c, t, u):
     penguin(c, 640, 690, 330, -1, arms=(95, 20), eye='smug')
     c.line([(560, 480), (560, 690)], SILVER, lw=8)  # a mic stand
     c.poly(E(560, 470, 16, 24), fill=DARK, line=INK, lw=3)
-    sign(c, 640, 90, 520, 80, 'THE BIGGEST JOKE', 48, RED, fill=YELLOW)
+    pass
     for i, (x, kind) in enumerate(((120, 'owl'), (280, 'duck'), (1000, 'parrot'), (1160, 'robin'))):
         bird(c, x, 720, 170, kind, 'laugh', t, 1 if x < 640 else -1, seed=i)
     if u > 0.75:
-        text(c, 'son.', 1000, 300, 70, WHITE, rot=-5)
+        pass
 
 
 def s_finale(c, t, u):
@@ -917,7 +915,7 @@ def render(d):
     a, b, name = shot_at(t)
     u = clamp01((t - a) / max(0.1, b - a))
     if name in CUTAWAYS:
-        if b - a > 4.5 and 0.42 < u < 0.52 and name not in ('intro', 'fest', 'finale'):
+        if False:  # (no mid-picture cutbacks: they interrupt the gag)
             c.cam = (1.6, -pigeon_x(t) * 1.6 + 640, -470 * 1.6 + 360)
             stage(c, t, 'stage')
         else:
