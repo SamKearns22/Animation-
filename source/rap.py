@@ -1723,6 +1723,10 @@ def s_noggin(c, t, u):
     # a light bulb over the pigeon's head that will not come on
     c.poly(E(hx - 60, hy - 120, 45, 55), fill=col(0.85, 0.85, 0.8) if int(t * 4) % 3 else YELLOW, line=INK, lw=5)
     c.poly([(hx - 78, hy - 70), (hx - 42, hy - 70), (hx - 44, hy - 48), (hx - 76, hy - 48)], fill=GREY, line=INK, lw=4)
+    # SCROGGINS! shouted as he says it
+    k = sstep(0.0, 0.12, u)
+    if k > 0:
+        text(c, 'SCROGGINS!', 360, 110 + 30 * (1 - k), int(48 + 40 * k), RED, rot=-6)
 
 
 def s_corn(c, t, u):
