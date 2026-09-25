@@ -70,7 +70,8 @@ class Pen:
 
     def poly(self, pts, fill, line=INK, lw=4):
         q = [self.cam.P(*p) for p in pts]
-        self.d.polygon(q, fill=fill)
+        if fill is not None:
+            self.d.polygon(q, fill=fill)
         if line:
             self.d.line(q + [q[0]], fill=line, width=max(1, int(self.cam.S(lw) / 2)), joint='curve')
 
@@ -144,97 +145,151 @@ def mouth_shape(t):
     p = speaking(t)
     if p is None:
         return 0
-    return [2, 1, 2, 0, 1][int(p * 11) % 5]
+    return [2, 1, 3, 1, 2, 0][int(p * 11) % 6]
+
+
+def soft(img, cam, pts, colr, alpha, blur=6):
+    """A soft painted shadow or highlight."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).polygon([cam.P(*q) for q in pts], fill=colr + (int(255 * alpha),))
+    if blur:
+        lay = lay.filter(ImageFilter.GaussianBlur(cam.S(blur)))
+    img.alpha_composite(lay)
+
+
+def curve(pts, n=6):
+    """Catmull-Rom through the points (closed): soft, hand-drawn curves."""
+    p = np.asarray(pts, float)
+    out = []
+    for i in range(len(p)):
+        p0, p1, p2, p3 = p[i - 1], p[i], p[(i + 1) % len(p)], p[(i + 2) % len(p)]
+        for u in np.linspace(0, 1, n, endpoint=False):
+            out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
+                                    + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
+    return out
+
+
+def oval(cx, cy, rx, ry, n=48, a0=0.0, a1=2 * math.pi):
+    return [(cx + rx * math.cos(a), cy + ry * math.sin(a)) for a in np.linspace(a0, a1, n)]
 
 
 def ed(img, pen, cam, t):
-    x, base = 640, 600
-    sway = 2.5 * math.sin(t * 0.7)
-    x += sway
-    # legs and shoes
-    for dx in (-26, 26):
-        pen.poly([(x + dx - 22, base - 175), (x + dx + 22, base - 175), (x + dx + 20, base - 8), (x + dx - 20, base - 8)],
-                 TROUSER)
-        pen.poly([(x + dx - 26, base - 12), (x + dx + 30, base - 12), (x + dx + 32, base + 4), (x + dx - 28, base + 4)],
-                 (240, 240, 240))
-    # the guitar slung on his back: the neck and headstock poke up over his shoulder
-    pen.poly([(x - 48, 262), (x - 36, 258), (x - 92, 110), (x - 104, 114)], (120, 72, 40))
-    pen.poly([(x - 108, 70), (x - 88, 66), (x - 86, 116), (x - 106, 118)], (70, 42, 26))
+    """Drawn in the later deadpan style: real proportions, almond eyes with small pupils, fine lines, soft shading."""
+    LW = 2.6
+    x = 640 + 2.0 * math.sin(t * 0.7)
+    sp = speaking(t)
+    look_down = (int(t / 2.7) % 3 == 1) and sp is not None
+    # guitar slung on his back: the neck and headstock over his left shoulder
+    pen.poly([(x - 70, 300), (x - 58, 296), (x - 120, 150), (x - 132, 155)], (128, 78, 44), INK, LW)
+    pen.poly([(x - 140, 108), (x - 118, 104), (x - 114, 156), (x - 136, 158)], (72, 44, 28), INK, LW)
     for k in range(3):
-        pen.ell(x - 111, 78 + k * 13, 4, 3, (200, 200, 200), None)
-        pen.ell(x - 84, 76 + k * 13, 4, 3, (200, 200, 200), None)
-    # a baggy lilac t-shirt, boxy and a size too big
-    pen.poly([(x - 92, 250), (x + 92, 250), (x + 98, 432), (x - 98, 432)], LILAC)
-    pen.poly([(x - 92, 252), (x - 150, 290), (x - 132, 362), (x - 88, 344)], LILAC)  # sleeves
-    pen.poly([(x + 92, 252), (x + 150, 290), (x + 132, 362), (x + 88, 344)], LILAC)
-    pen.line([(x - 30, 250), (x, 268), (x + 30, 250)], LILAC_D, 5)  # neckline
-    pen.line([(x - 90, 262), (x + 70, 420)], (70, 50, 40), 7)  # the guitar strap
-    # tattooed forearms: the left hanging, the right up holding the mic
-    pen.poly([(x - 146, 350), (x - 116, 356), (x - 124, 470), (x - 150, 468)], SKIN)
+        pen.ell(x - 143, 116 + k * 14, 3.5, 3, (215, 215, 215), INK, 1.5)
+        pen.ell(x - 111, 114 + k * 14, 3.5, 3, (215, 215, 215), INK, 1.5)
+    # body: a baggy lilac tee over broad, sloping shoulders
+    tee = [(x - 60, 268), (x - 128, 292), (x - 176, 330), (x - 196, 420), (x - 150, 436), (x - 140, 400),
+           (x - 136, 640), (x + 136, 640), (x + 140, 400), (x + 150, 436), (x + 196, 420), (x + 176, 330),
+           (x + 128, 292), (x + 60, 268)]
+    pen.poly(tee, LILAC, INK, LW)
+    soft(img, cam, [(x + 60, 290), (x + 170, 330), (x + 190, 420), (x + 136, 640), (x + 70, 640), (x + 90, 400)],
+         (120, 100, 170), 0.28, 10)
+    pen.line([(x - 150, 436), (x - 140, 400), (x - 144, 360)], LILAC_D, 2)
+    pen.line([(x + 150, 436), (x + 140, 400), (x + 144, 360)], LILAC_D, 2)
+    pen.line([(x - 100, 300), (x + 110, 560)], (78, 54, 40), 6)  # guitar strap
+    # neck
+    pen.poly([(x - 34, 230), (x + 34, 230), (x + 38, 286), (x - 38, 286)], SKIN, INK, LW)
+    soft(img, cam, [(x - 34, 236), (x + 34, 236), (x + 30, 262), (x - 30, 262)], (170, 110, 90), 0.35, 4)
+    pen.line(oval(x, 262, 58, 24, 30, 0.15, math.pi - 0.15), INK, LW)  # crew neckline
+    # left arm hanging, tattooed from elbow to wrist
+    pen.poly([(x - 196, 420), (x - 150, 436), (x - 158, 560), (x - 190, 558)], SKIN, INK, LW)
     rng = np.random.default_rng(11)
-    for i in range(7):
-        pen.ell(x - 136 + rng.uniform(-6, 6), 368 + i * 14, 9, 6, TATS[i % 5], None, rot=rng.uniform(0, 3))
-    pen.ell(x - 138, 480, 16, 16, SKIN)
-
-    # head (big and round), ears with an in-ear monitor
-    hx, hy = x + 2, 170 + 1.5 * math.sin(t * 1.1)
-    pen.ell(hx - 94, hy + 8, 15, 22, SKIN)
-    pen.ell(hx + 94, hy + 8, 15, 22, SKIN)
-    pen.ell(hx + 96, hy + 10, 6, 7, INK, None)
-    pen.line([(hx + 98, hy + 16), (hx + 104, hy + 80)], INK, 2)
-    pen.ell(hx, hy, 96, 104, SKIN)
-    # short ginger hair and ginger stubble
-    pen.poly([(hx - 92, hy - 26), (hx - 78, hy - 82), (hx - 22, hy - 108), (hx + 44, hy - 106), (hx + 88, hy - 76),
-              (hx + 94, hy - 26), (hx + 66, hy - 64), (hx, hy - 76), (hx - 66, hy - 60)], GINGER)
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    jaw = [cam.P(hx + 92 * math.cos(q) * 0.97, hy + 10 + 100 * math.sin(q) * 0.86) for q in np.linspace(0.08, math.pi - 0.08, 30)]
-    jaw += [cam.P(hx - 50, hy + 40), cam.P(hx - 18, hy + 30), cam.P(hx + 18, hy + 30), cam.P(hx + 50, hy + 40)][::-1][::-1]
-    ImageDraw.Draw(lay).polygon(jaw, fill=GINGER + (70,))
-    img.alpha_composite(lay)
-    pen.ell(hx, hy, 96, 104, None)  # redraw the outline over the stubble
-    # the teleprompter glow from below
-    glow(img, cam, hx, hy + 70, 90, (170, 190, 240), 0.18)
-    # eyes: little dots, glancing down to the prompter every so often, blinking
-    look_down = (int(t / 2.7) % 3 == 1) and speaking(t) is not None
+    for i in range(9):
+        cx, cy = x - 174 + rng.uniform(-10, 10), 446 + i * 12
+        pen.ell(cx, cy, rng.uniform(6, 11), rng.uniform(4, 7), TATS[i % 5], None, rot=rng.uniform(0, 3))
+    pen.poly([(x - 192, 556), (x - 156, 556), (x - 154, 592), (x - 170, 604), (x - 190, 592)], SKIN, INK, LW)
+    # head: a proper oval with a squarer jaw, turned very slightly to his right
+    hx, hy = x + 4, 150 + 1.2 * math.sin(t * 1.1)
+    head = oval(hx, hy - 6, 74, 88, 40, math.pi, 2 * math.pi) + [
+        (hx + 74, hy + 10), (hx + 66, hy + 58), (hx + 40, hy + 92), (hx, hy + 102), (hx - 40, hy + 92),
+        (hx - 66, hy + 58), (hx - 74, hy + 10)]
+    for sgn in (-1, 1):  # ears, one with the in-ear monitor
+        pen.poly(oval(hx + sgn * 76, hy + 6, 13, 24), SKIN, INK, LW)
+    pen.ell(hx + 78, hy + 6, 5, 6, INK, None)
+    pen.line([(hx + 80, hy + 12), (hx + 86, hy + 80), (hx + 90, 260)], INK, 1.6)
+    pen.poly(head, SKIN, INK, LW)
+    soft(img, cam, [(hx + 30, hy - 60), (hx + 74, hy - 10), (hx + 66, hy + 58), (hx + 40, hy + 92), (hx + 30, hy + 30)],
+         (190, 120, 100), 0.32, 8)
+    # short ginger hair, swept a little to one side
+    hair = [(hx - 74, hy - 8), (hx - 76, hy - 50), (hx - 56, hy - 86), (hx - 10, hy - 102), (hx + 40, hy - 98),
+            (hx + 72, hy - 70), (hx + 76, hy - 14), (hx + 64, hy - 40), (hx + 34, hy - 62), (hx - 10, hy - 68),
+            (hx - 50, hy - 58), (hx - 66, hy - 34)]
+    pen.poly(curve(hair), GINGER, INK, LW)
+    for k in range(4):
+        pen.line([(hx - 40 + 26 * k, hy - 92 + 4 * k), (hx - 30 + 26 * k, hy - 70 + 3 * k)], GINGER_D, 2)
+    # forehead creases (sincere concern)
+    for k in range(2):
+        pen.line([(hx - 30, hy - 44 + 9 * k), (hx - 6, hy - 48 + 9 * k), (hx + 24, hy - 45 + 9 * k)], SKIN_D, 1.8)
+    # eyes: white almonds with small pupils and heavy lids
     blink = (t % 3.9) < 0.12
-    ey = hy - 6 + (7 if look_down else 0)
     for sgn in (-1, 1):
-        ex = hx + sgn * 30
+        ex, ey = hx - 8 + sgn * 30, hy - 8
         if blink:
-            pen.line([(ex - 9, hy - 4), (ex + 9, hy - 4)], INK, 4)
-        else:
-            pen.ell(ex, ey, 7.5, 8.5, INK, None)
-        # sad, sincere brows: tilted up at the inner ends
-        pen.line([(ex - sgn * 4, hy - 34), (ex + sgn * 16, hy - 26)], GINGER_D, 7)
-    # a small nose
-    pen.line([(hx - 4, hy + 6), (hx + 6, hy + 22), (hx - 6, hy + 26)], SKIN_D, 4)
+            pen.line([(ex - 16, ey), (ex, ey + 3), (ex + 16, ey)], INK, 2.4)
+            continue
+        almond = [(ex - 17, ey), (ex - 8, ey - 8), (ex + 8, ey - 8), (ex + 17, ey), (ex + 8, ey + 7), (ex - 8, ey + 7)]
+        pen.poly(almond, (250, 250, 248), INK, 2.0)
+        py = ey + (3 if look_down else -1)
+        pen.ell(ex - 3, py, 4.5, 4.5, INK, None)
+        lid = 3 if look_down else 0  # heavy, tired upper lids
+        pen.line([(ex - 17, ey - 1 + lid), (ex - 8, ey - 9 + lid), (ex + 8, ey - 9 + lid), (ex + 17, ey - 1 + lid)], INK, 2.6)
+        # thin worried brows, inner ends raised
+        pen.line([(ex - sgn * 4, ey - 24), (ex + sgn * 20, ey - 18)], GINGER_D, 3.2)
+    # nose: a single line down and round to the nostril
+    pen.line([(hx - 4, hy - 4), (hx - 12, hy + 26), (hx - 6, hy + 32), (hx + 6, hy + 30)], INK, 2.0)
+    pen.line([(hx - 16, hy + 30), (hx - 12, hy + 33)], INK, 1.6)
+    # fine ginger stubble dots on the jaw and lip
+    rng = np.random.default_rng(5)
+    for i in range(55):
+        a = rng.uniform(0.3, math.pi - 0.3)
+        r = rng.uniform(0.6, 0.95)
+        sx, sy = hx + 64 * r * math.cos(a), hy + 30 + 66 * r * math.sin(a)
+        if abs(sx - hx + 4) < 24 and hy + 48 < sy < hy + 84:
+            continue
+        pen.ell(sx, sy, 0.9, 0.9, (196, 128, 92), None)
     # the mouth, moving with every word
     m = mouth_shape(t)
-    my = hy + 48
+    mx, my = hx - 4, hy + 60
     if m == 0:
-        pen.line([(hx - 18, my), (hx, my + 2), (hx + 18, my)], INK, 4)
-    elif m == 1:
-        pen.ell(hx, my + 2, 13, 7, (90, 30, 34))
+        pen.line([(mx - 16, my + 2), (mx, my), (mx + 16, my + 3)], INK, 2.4)
     else:
-        pen.ell(hx, my + 4, 15, 13, (90, 30, 34))
-        pen.poly([(hx - 10, my - 4), (hx + 10, my - 4), (hx + 8, my + 1), (hx - 8, my + 1)], (250, 250, 250), None)
+        h = {1: 7, 2: 13, 3: 18}[m]
+        w = {1: 15, 2: 17, 3: 14}[m]
+        pen.poly([(mx - w, my - 2), (mx + w, my - 3), (mx + w * 0.7, my + h), (mx - w * 0.7, my + h)], (70, 26, 30), INK, 2.2)
+        if m >= 2:
+            pen.poly([(mx - w * 0.8, my - 1), (mx + w * 0.8, my - 2), (mx + w * 0.7, my + 3), (mx - w * 0.7, my + 3)],
+                     (245, 245, 240), None)
     # a single tear on the thank-yous
     if t > 54.4:
         k = min(1.0, (t - 54.4) / 5.0)
-        tx, ty = hx - 32, hy + 8 + 70 * k
-        pen.poly([(tx, ty - 12), (tx + 6, ty + 2), (tx, ty + 8), (tx - 6, ty + 2)], (190, 220, 255), INK, 2)
-    # the mic in his hand, on its stand in front of him
-    pen.line([(x + 40, 600), (x + 44, hy + 90)], (64, 64, 70), 6)
-    pen.line([(x + 10, 600), (x + 40, 586), (x + 70, 600)], (64, 64, 70), 5)
-    pen.poly([(x + 36, hy + 92), (x + 52, hy + 90), (x + 44, hy + 58), (x + 30, hy + 60)], (30, 30, 34))
-    pen.ell(x + 36, hy + 58, 12, 11, (60, 60, 66))
-    ex, ey = x + 128, 350  # elbow at the sleeve, forearm angled up to the mic
-    hx2, hy2 = x + 62, hy + 104
-    pen.poly([(ex - 14, ey + 6), (ex + 14, ey - 6), (hx2 + 14, hy2 - 8), (hx2 - 12, hy2 + 10)], SKIN)
-    for i in range(5):
-        q = (i + 0.5) / 5
-        pen.ell(ex + (hx2 - ex) * q, ey + (hy2 - ey) * q, 9, 6, TATS[(i + 2) % 5], None, rot=0.9)
-    pen.ell(hx2, hy2, 20, 18, SKIN)  # his hand around the mic
+        tx, ty = hx - 40, hy + 2 + 64 * k
+        pen.poly([(tx, ty - 10), (tx + 5, ty + 2), (tx, ty + 7), (tx - 5, ty + 2)], (200, 225, 255), INK, 1.5)
+    # the teleprompter glow from below
+    glow(img, cam, hx, hy + 90, 80, (170, 190, 240), 0.14)
+    # right arm up: elbow down at his side, hand holding the mic under his chin
+    ex2, ey2 = x + 236, 478  # elbow out past his side, forearm angled up and in to his mouth
+    hx2, hy2 = hx + 78, hy + 112
+    pen.poly([(x + 152, 432), (x + 196, 418), (ex2 + 18, ey2 - 4), (ex2 - 14, ey2 + 12)], SKIN, INK, LW)
+    pen.ell(ex2 + 2, ey2 + 4, 19, 17, SKIN, INK, LW)
+    pen.poly([(ex2 - 14, ey2 + 12), (ex2 + 18, ey2 - 6), (hx2 + 18, hy2 - 6), (hx2 - 12, hy2 + 14)], SKIN, INK, LW)
+    for i in range(6):
+        q = (i + 0.5) / 6
+        pen.ell(ex2 + (hx2 - ex2) * q + 2, ey2 + (hy2 - ey2) * q, 8, 5, TATS[(i + 2) % 5], None, rot=-0.9)
+    # the handheld mic, tilted up to his mouth
+    mx2, my2 = hx + 22, hy + 70
+    pen.poly([(hx2 - 6, hy2 + 16), (hx2 + 8, hy2 + 10), (mx2 + 8, my2 + 4), (mx2 - 6, my2 + 10)], (28, 28, 32), INK, 2)
+    pen.ell(mx2, my2 + 4, 11, 10, (70, 70, 76), INK, 2)
+    pen.poly([(hx2 - 18, hy2 - 8), (hx2 + 16, hy2 - 14), (hx2 + 22, hy2 + 12), (hx2 - 12, hy2 + 22)], SKIN, INK, LW)
+    for k in range(3):
+        pen.line([(hx2 - 14, hy2 - 2 + 7 * k), (hx2 + 16, hy2 - 7 + 7 * k)], SKIN_D, 1.4)
 
 
 def subtitle(img, t):
@@ -266,12 +321,13 @@ def render(frame):
     t = frame / FPS
     cam = Cam(t)
     img = Image.new('RGBA', (W * SS, H * SS), (0, 0, 0, 255))
-    pen = Pen(img, cam)
-    stage(img, pen, cam, t)
+    stage(img, Pen(img, cam), cam, t)
+    img = img.filter(ImageFilter.GaussianBlur(cam.S(5)))  # a soft, out-of-focus background
     spotlight(img, cam)
-    pen = Pen(img, cam)
-    ed(img, pen, cam, t)
-    audience(img, Pen(img, cam), cam, t)
+    ed(img, Pen(img, cam), cam, t)
+    front = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    audience(front, Pen(front, cam), cam, t)
+    img.alpha_composite(front.filter(ImageFilter.GaussianBlur(cam.S(4))))
     subtitle(img, t)
     out = img.convert('RGB').resize((W, H), Image.LANCZOS)
     a = np.asarray(out).astype(np.float32)
