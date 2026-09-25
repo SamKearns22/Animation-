@@ -352,10 +352,12 @@ def main():
                               '-crf', crf, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-t', str(DUR),
                               '-af', f'afade=t=out:st={DUR - 1.5}:d=1.5', '-movflags', '+faststart', out],
                              stdin=subprocess.PIPE)
-        for f in range(n):
-            p.stdin.write(render(f).tobytes())
-            if f % 60 == 0:
-                print(f'frame {f}/{n}', flush=True)
+        from multiprocessing import Pool
+        with Pool(os.cpu_count()) as pool:  # draw several frames at once, written out in order
+            for f, fr in enumerate(pool.imap(render, range(n), chunksize=4)):
+                p.stdin.write(fr.tobytes())
+                if f % 60 == 0:
+                    print(f'frame {f}/{n}', flush=True)
         p.stdin.close()
         p.wait()
         print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)')
