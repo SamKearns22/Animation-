@@ -187,9 +187,25 @@ def ed(img, pen, cam, t):
         pen.ell(x - 111, 114 + k * 14, 3.5, 3, (215, 215, 215), INK, 1.5)
     # legs in dark trousers, white trainers
     for sgn in (-1, 1):
-        pen.poly([(x + sgn * 8, 630), (x + sgn * 96, 630), (x + sgn * 84, 884), (x + sgn * 22, 884)], TROUSER, INK, LW)
-        pen.poly(curve([(x + sgn * 16, 880), (x + sgn * 92, 880), (x + sgn * 112, 896), (x + sgn * 108, 906),
-                        (x + sgn * 14, 906)], 4), (238, 238, 236), INK, LW)
+        leg = [(x + sgn * 6, 630), (x + sgn * 98, 630), (x + sgn * 96, 700), (x + sgn * 88, 780), (x + sgn * 82, 872),
+               (x + sgn * 30, 874), (x + sgn * 24, 780), (x + sgn * 14, 690)]
+        pen.poly(curve(leg, 5), TROUSER, INK, LW)
+        # soft shading down the outer side, a knee crease and a couple of folds at the ankle
+        soft(img, cam, [(x + sgn * 70, 640), (x + sgn * 96, 640), (x + sgn * 84, 868), (x + sgn * 66, 868)],
+             (0, 0, 0), 0.35, 6)
+        pen.line([(x + sgn * 40, 752), (x + sgn * 58, 760), (x + sgn * 76, 754)], (70, 70, 84), 1.6)
+        pen.line([(x + sgn * 34, 850), (x + sgn * 54, 858)], (70, 70, 84), 1.4)
+        pen.line([(x + sgn * 60, 846), (x + sgn * 80, 852)], (70, 70, 84), 1.4)
+        # white trainers pointing slightly outwards: a rounded toe, a grey sole, laces
+        shoe = [(x + sgn * 22, 872), (x + sgn * 84, 870), (x + sgn * 108, 880), (x + sgn * 118, 894),
+                (x + sgn * 112, 904), (x + sgn * 20, 906), (x + sgn * 16, 890)]
+        pen.poly(curve(shoe, 4), (244, 244, 242), INK, LW)
+        pen.line([(x + sgn * 18, 900), (x + sgn * 114, 899)], (170, 170, 176), 3)
+        for k in range(3):
+            lx = x + sgn * (50 + 12 * k)
+            pen.line([(lx - 5, 878), (lx + 5, 882)], (150, 150, 158), 1.6)
+        soft(img, cam, [(x + sgn * 20, 900), (x + sgn * 116, 900), (x + sgn * 112, 906), (x + sgn * 20, 906)],
+             (0, 0, 0), 0.25, 3)
     # body: a baggy lilac tee over broad, sloping shoulders
     tee = [(x - 60, 268), (x - 128, 292), (x - 176, 330), (x - 196, 420), (x - 150, 436), (x - 140, 400),
            (x - 136, 640), (x + 136, 640), (x + 140, 400), (x + 150, 436), (x + 196, 420), (x + 176, 330),
