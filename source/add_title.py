@@ -31,19 +31,19 @@ def size_of(path):
     raise SystemExit('could not read video size')
 
 
-def _line(text, font, out):
+def _line(text, font, out, colour=(255, 255, 255)):
     """One line of script on its own transparent layer: bold black outline, then the white letters."""
     l, t, r, b = font.getbbox(text, stroke_width=out)
     im = Image.new('RGBA', (r - l + 2 * out, b - t + 2 * out), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     pos = (out - l, out - t)
     d.text(pos, text, font=font, fill=(0, 0, 0, 255), stroke_width=out, stroke_fill=(0, 0, 0, 255))
-    d.text(pos, text, font=font, fill=(255, 255, 255, 255), stroke_width=max(1, int(font.size * 0.012)),
-           stroke_fill=(255, 255, 255, 255))
+    d.text(pos, text, font=font, fill=colour + (255,), stroke_width=max(1, int(font.size * 0.012)),
+           stroke_fill=colour + (255,))
     return im
 
 
-def title_card(w, h, lines, path, widen=1.3):
+def title_card(w, h, lines, path, widen=1.3, colour=(255, 255, 255)):
     """A transparent PNG the size of the video with the title drawn on it, letters widened for legibility."""
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     main = int(min(w * 0.22, h * 0.16))  # long lines shrink to fit below
@@ -52,7 +52,7 @@ def title_card(w, h, lines, path, widen=1.3):
         size = main if i == 0 else int(main * 0.62)
         while True:
             f = ImageFont.truetype(FONT, size)
-            lay = _line(line, f, max(3, int(size * 0.075)))
+            lay = _line(line, f, max(3, int(size * 0.075)), colour)
             lay = lay.resize((int(lay.width * widen), lay.height), Image.LANCZOS)  # wider, easier to read
             if lay.width <= w * 0.92:
                 break
