@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Horror trailer score (58.3 seconds), built from our Deck the Halls piano.
+"""Horror trailer score (about 57.6 seconds), built from our Deck the Halls piano.
 
     0     - 15    gentle Deck: the phrase twice, clean...
     15    - 18.05 ...until the tune sags, drags and goes wrong; it cuts off before its last note
@@ -8,14 +8,15 @@
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
     28    - 35    faster, more maddened; four of its notes are human screams (28.7, 30.6, 33.8, 37.75 s),
                   cut off dead, each from a different mouth and each more desperate than the last
-    35    - 42    the crescendo: 'being chased by a murderous clown' - still clearly the tune
-    42    - 42.5  a horror gasp cuts it all off
-    42.5  - 43.5  one second of silence
-    43.5  - 48.8  someone breathing in the dark
-    48.8  - 50.3  the ambush: something horrible, a sudden swarm of intense buzzing, cut dead
-    50.3  - 55.9  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
-    55.9  - 56.3  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
-    56.3  - 58.3  two seconds of silence for the post-trailer titles
+    35    - 41.3  the crescendo: 'being chased by a murderous clown' - still clearly the tune; its last loop
+                  plays right to the end
+    41.3  - 41.8  a horror gasp
+    41.8  - 42.8  one second of silence
+    42.8  - 48.1  someone breathing in the dark
+    48.1  - 49.6  the ambush: something horrible, a sudden swarm of intense buzzing, cut dead
+    49.6  - 55.2  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
+    55.2  - 55.6  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
+    55.6  - 57.6  two seconds of silence for the post-trailer titles
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -40,8 +41,25 @@ MUSIC_CUT = LEAD + (CLEAN_BEATS - 2) * 0.6  # 18.05 s: the last note never plays
 CHOP_AT = MUSIC_CUT                         # 18.05 s: the knife lands in place of the final "la"
 OMEN_FROM = LEAD + (CLEAN_BEATS - 7) * 0.6  # 15.05 s: the tune starts to go wrong just before the knife
 PAUSE = 4.0                           # the silence for "Why would she do that?"
-MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
-DECK_END = MUSIC_END + PAUSE          # 42 in the finished track
+RAMP_END = 38.0                       # the tempo keeps climbing until here (music time)
+
+
+def bpm_at(t):
+    return np.interp(t, [0, PAUSE_AT, 23.5, 28.5, 33.5, RAMP_END], [100, 100, 115, 150, 200, 280])
+
+
+_tg = np.arange(0, RAMP_END + 3, 0.001)
+_beats = np.concatenate([[0], np.cumsum(bpm_at(_tg[:-1]) / 60 * 0.001)])
+
+
+def b2t(b):
+    return float(np.interp(b, _beats, _tg)) + LEAD
+
+
+# the Deck ends exactly as its last complete loop finishes, final 'la' and all, and the gasp comes straight after
+LAST_BEAT = int(np.interp(RAMP_END - LEAD, _tg, _beats) // 16) * 16
+MUSIC_END = b2t(LAST_BEAT)            # length of the Deck music itself (music time), about 37.3 s
+DECK_END = MUSIC_END + PAUSE          # about 41.3 in the finished track
 GASP_END = DECK_END + 0.5
 BREATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'breathing.m4a')
 BREATH_SPAN = (0.30, 5.60)            # the breathing, trimmed from the recording
@@ -96,18 +114,6 @@ def additive(f, spectrum, fmax=9000):
 # ---------------------------------------------------------------------------
 # Deck the Halls, looping and accelerating (all in 'music time')
 # ---------------------------------------------------------------------------
-def bpm_at(t):
-    return np.interp(t, [0, PAUSE_AT, 23.5, 28.5, 33.5, MUSIC_END], [100, 100, 115, 150, 200, 280])
-
-
-_tg = np.arange(0, MUSIC_END + 3, 0.001)
-_beats = np.concatenate([[0], np.cumsum(bpm_at(_tg[:-1]) / 60 * 0.001)])
-
-
-def b2t(b):
-    return float(np.interp(b, _beats, _tg)) + LEAD
-
-
 def mad(t):
     """0 while the carol is innocent, rising to 1 at the gasp."""
     return np.clip((t - PAUSE_AT) / (MUSIC_END - PAUSE_AT), 0, 1)
