@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Horror trailer score (58.3 seconds), built from our Deck the Halls piano.
 
-    0     - 19.25 gentle Deck: the phrase twice, clean
-    19.25         the knife comes down: the music cuts dead on the impact
+    0     - 15    gentle Deck: the phrase twice, clean...
+    15    - 18.05 ...until the tune sags, drags and goes wrong; it cuts off before its last note
+    18.55 - 19.25 the SHING of falling steel
+    19.25         the knife comes down
     19.25 - 23.25 silence (four seconds); the girl asks "Why would she do that?", then a second of nothing
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
-    28    - 35    faster, more maddened; three of its notes are human screams (28.7, 33.8, 37.75 s),
+    28    - 35    faster, more maddened; four of its notes are human screams (28.7, 30.6, 33.8, 37.75 s),
                   cut off dead, each from a different mouth and each more desperate than the last
     35    - 42    the crescendo: 'being chased by a murderous clown' - still clearly the tune
     42    - 42.5  a horror gasp cuts it all off
@@ -35,6 +37,8 @@ rng = np.random.default_rng(13)
 LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: the knife comes down on the downbeat of the third loop
+MUSIC_CUT = LEAD + (CLEAN_BEATS - 2) * 0.6  # 18.05 s: the last note never plays - the music cuts off early
+OMEN_FROM = LEAD + (CLEAN_BEATS - 7) * 0.6  # 15.05 s: the tune starts to go wrong just before the knife
 PAUSE = 4.0                           # the silence for "Why would she do that?"
 MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
 DECK_END = MUSIC_END + PAUSE          # 42 in the finished track
@@ -149,7 +153,7 @@ MOUTHS = [
     ('everyone at once',  None, 0, 0, 0, 0, 0, 1.38),
 ]
 # who screams on each of the six chosen notes (None = that note stays an ordinary piano note)
-SCREAMERS = [MOUTHS[0], None, None, MOUTHS[4], None, MOUTHS[7]]
+SCREAMERS = [MOUTHS[0], MOUTHS[1], None, MOUTHS[4], None, MOUTHS[7]]
 
 
 def smooth_noise(n, width):
@@ -227,6 +231,9 @@ def deck():
         if t >= MUSIC_END:
             continue
         after = t >= PAUSE_AT - 0.001
+        if MUSIC_CUT - 0.001 <= t < PAUSE_AT - 0.001:
+            continue  # the final note of the second loop, and its chords, are gone
+        omen = float(np.clip((t - OMEN_FROM) / (MUSIC_CUT - OMEN_FROM), 0, 1)) if not after else 0.0
         L, R = bufs['B' if after else 'A']
         k = float(mad(t))
         dur = b2t(bb + nb * 0.94) - t
@@ -236,6 +243,14 @@ def deck():
         t += rng.normal(0, 0.003 + 0.006 * k)
         if after:
             t = max(t, PAUSE_AT)
+        if omen:  # the omen: the tune sags flat and drags, and one note goes wrong
+            m -= 0.7 * omen ** 1.3
+            t += 0.03 * omen
+            if kind == 'tune' and bb == CLEAN_BEATS - 3:
+                m -= 1
+                t += 0.07
+            if kind != 'tune' and omen > 0.5:
+                add_note(L, R, m + 1, t, dur, vel * 0.6)
         if kind == 'tune':
             if after and rng.random() < 0.05 + 0.1 * k:  # the occasional note off-key...
                 m += rng.choice([-1, 1]) * rng.choice([0.5, 1.0])
@@ -264,6 +279,8 @@ def deck():
     depth = 0.0012 * k ** 1.5 * SR  # a gently warped tape
     ph = np.cumsum(2 * np.pi * (0.4 + 2.5 * k ** 2) / SR)
     idx = np.arange(n) - depth * (1 + np.sin(ph))
+    omen = np.clip((tt - OMEN_FROM) / (MUSIC_CUT - OMEN_FROM), 0, 1) * (tt < PAUSE_AT)
+    idx -= np.cumsum(0.05 * omen ** 2) + 0.0025 * SR * omen * (1 + np.sin(2 * np.pi * 1.3 * tt))  # the tape slows and warps
     out = {}
     for key, (L, R) in bufs.items():
         L = np.interp(idx, np.arange(n), L)
@@ -318,7 +335,9 @@ def deck():
     res = []
     for c in (0, 1):
         a = out['A'][c][:cut].copy()
-        a[-f:] *= np.linspace(1, 0, f)
+        mc = int(MUSIC_CUT * SR)
+        a[mc - f:mc] *= np.linspace(1, 0, f)
+        a[mc:] = 0
         bpart = out['B'][c][cut:int(MUSIC_END * SR)].copy()
         if len(bpart) > f:
             bpart[-f:] *= np.linspace(1, 0, f)
@@ -329,6 +348,24 @@ def deck():
 # ---------------------------------------------------------------------------
 # The knife: through the fingers and into the chopping board
 # ---------------------------------------------------------------------------
+def shing(length=0.7):
+    """The SHING of falling steel: a bright metallic ring and a scrape, swelling and swooping down into the impact."""
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    u = t / length
+    out = np.zeros(n)
+    for f0, a in ((2637, 1.0), (3951, 0.8), (5274, 0.6), (6820, 0.45), (8890, 0.3), (1318, 0.4)):
+        f = f0 * (1.05 - 0.05 * u ** 2)  # the pitch drops as it rushes past
+        ph = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
+        out += a * np.sin(ph) * (1 + 0.25 * np.sin(2 * np.pi * rng.uniform(15, 30) * t))
+    ring = out * (0.55 * np.exp(-t / 0.18) + 0.9 * u ** 2.5)  # the 'shing' as it is let go, then rushing in
+    ring *= np.minimum(1, t / 0.004)
+    scrape = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 5500) / 2500) ** 2)) * (0.6 * np.exp(-t / 0.05) + u ** 3)
+    swoosh = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 900) / 700) ** 2)) * u ** 4
+    x = ring / np.abs(ring).max() + scrape / np.abs(scrape).max() * 0.5 + swoosh / np.abs(swoosh).max() * 0.6
+    return x / np.abs(x).max() * 0.6
+
+
 def chop():
     """A cleaver hitting meat and bone, hard, then burying itself in the board."""
     n = int(1.2 * SR)
@@ -687,9 +724,13 @@ def main():
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
-    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
+    for a, b in ((MUSIC_CUT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
-    c = chop()  # the knife lands exactly as the music cuts out
+    sh = shing()  # the blade falls...
+    i = int(PAUSE_AT * SR) - len(sh)
+    st[i:i + len(sh), 0] += sh * 1.05
+    st[i:i + len(sh), 1] += sh * 0.95
+    c = chop()  # ...and lands where the third loop would have started
     i = int(PAUSE_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
