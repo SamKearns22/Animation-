@@ -1198,8 +1198,15 @@ def s_keepreal(c, t, u):
             q = t * 6 + i * 1.57
             text(c, '*', 700 + 90 * math.cos(q), 520 + 25 * math.sin(q), 40, YELLOW)
     # shades (and a backwards cap)
-    hx, hy = r.P(0.2, 1.13)
-    c.poly([(hx - 32, hy - 12), (hx + 44, hy - 12), (hx + 40, hy + 12), (hx - 28, hy + 12)], fill=BLACK)
+    # proper sunglasses sitting on his face: a dark lens over the eye, the far lens peeking past the beak,
+    # a bridge between them and the arm running back over the side of his head
+    c.line(r.pts([(0.13, 1.155), (0.04, 1.165)]), INK, lw=r.lw(1.4))
+    c.poly(r.pts(smooth([(0.13, 1.16), (0.24, 1.165), (0.245, 1.115), (0.19, 1.09), (0.14, 1.105)], 4)),
+           fill=col(0.1, 0.1, 0.14), line=INK, lw=r.lw(1.2))
+    c.line(r.pts([(0.16, 1.15), (0.2, 1.155)]), col(0.55, 0.6, 0.75), lw=r.lw(1.0))  # a glint
+    c.line(r.pts([(0.245, 1.15), (0.28, 1.15)]), INK, lw=r.lw(1.2))  # bridge
+    c.poly(r.pts(smooth([(0.28, 1.16), (0.33, 1.16), (0.33, 1.12), (0.3, 1.105), (0.28, 1.12)], 3)),
+           fill=col(0.1, 0.1, 0.14), line=INK, lw=r.lw(1.0))
     c.poly(r.pts(smooth([(-0.05, 1.2), (0.12, 1.28), (0.28, 1.2), (0.1, 1.17)], 4)), fill=col(0.2, 0.4, 0.8), line=INK,
            lw=r.lw())
     c.poly(r.pts([(-0.05, 1.21), (-0.2, 1.17), (-0.03, 1.15)]), fill=col(0.2, 0.4, 0.8), line=INK, lw=r.lw())
@@ -1674,15 +1681,16 @@ def s_chin(c, t, u):
     r, front = pigeon(c, 560, 1400, 1100, 1, mood='grin', t=t)
     # the magnifying glass on the crease of his chin
     k = sstep(0.2, 0.5, u)
-    tx, ty = r.P(0.18, 0.97)
+    tx, ty = r.P(0.16, 1.015)
     mx, my = lerp(1100, tx, k), lerp(600, ty, k)
     c.poly(E(mx, my, 120, 120), fill=col(0.85, 0.93, 1.0), line=INK, lw=10, opacity=0.6)
     c.line([(mx + 85, my + 85), (mx + 200, my + 200)], WOOD_D, lw=24)
-    if u > 0.45:  # bits lodged in the crease under his beak, all stuck on
-        for i in range(7):
-            q = i / 6
-            cx, cy = r.P(0.1 + 0.16 * q, 0.975 - 0.02 * math.sin(q * math.pi))
-            c.poly(blob(cx, cy, 9 + 3 * (i % 3), i, 8, 0.3), fill=BROWN, line=INK, lw=2)
+    if u > 0.45:  # bits lodged in the crease under his beak, every one inside the outline of his head
+        spots = [(0.1, 1.01), (0.13, 1.0), (0.16, 1.005), (0.19, 1.015), (0.215, 1.03), (0.12, 1.025), (0.17, 1.03)]
+        for i, (su, sv) in enumerate(spots):
+            assert ((su - 0.12) / 0.15) ** 2 + ((sv - 1.1) / 0.14) ** 2 < 0.8
+            cx, cy = r.P(su, sv)
+            c.poly(blob(cx, cy, 8 + 3 * (i % 3), i, 8, 0.3), fill=BROWN, line=INK, lw=2)
 
 
 def s_yarn(c, t, u):
