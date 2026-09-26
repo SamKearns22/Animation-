@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """Horror trailer score, exactly 55 seconds, built from our Deck the Halls piano.
 
-    0    - 19.25 gentle Deck: the phrase twice, clean
-    19.25       the knife comes down: the music cuts dead on the impact
-    19.25- 22.25 silence (three seconds); in its back half the girl asks "Why would she do that?"
-    22.25- 28   the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
-    28   - 36   faster, more maddened; from 28 s some notes are human screams, cut off dead,
-                each from a different mouth and each more desperate than the last
-    36   - 43.5 the crescendo: 'being chased by a murderous clown' - still clearly the tune
-    43.5 - 44   a horror gasp cuts it all off
-    44   - 47   three seconds of silence
-    47   - 52.6 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
-                timpani, bass drum, cymbals, gong, bells
-    52.6 - 53   the orchestra is stripped away, leaving the diva alone, sliding down into nothing
-    53   - 55   two seconds of silence for the post-trailer titles
+    0     - 19.25 gentle Deck: the phrase twice, clean
+    19.25         the knife comes down: the music cuts dead on the impact
+    19.25 - 23.25 silence (four seconds); the girl asks "Why would she do that?", then a second of nothing
+    23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
+    28    - 35    faster, more maddened; from 28 s six of its notes are human screams, cut off dead,
+                  each from a different mouth and each more desperate than the last
+    35    - 42    the crescendo: 'being chased by a murderous clown' - still clearly the tune
+    42    - 42.5  a horror gasp cuts it all off
+    42.5  - 45.5  three seconds of silence
+    45.5  - 51.1  'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
+                  timpani, bass drum, cymbals, gong, bells
+    51.1  - 51.5  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
+    51.5  - 53.5  two seconds of silence for the post-trailer titles
+    53.5  - 55    the ambush: something horrible, a sudden swarm of intense buzzing, cut dead at the end
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -35,17 +36,19 @@ TOTAL = 55.0
 LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: the knife comes down on the downbeat of the third loop
-PAUSE = 3.0                           # the silence for "Why would she do that?"
-MUSIC_END = 40.5                      # length of the Deck music itself, not counting the pause
-DECK_END = MUSIC_END + PAUSE          # 43.5 in the finished track
+PAUSE = 4.0                           # the silence for "Why would she do that?"
+MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
+DECK_END = MUSIC_END + PAUSE          # 42 in the finished track
 GASP_END = DECK_END + 0.5
 HARK_START = GASP_END + 3.0
-DENUDE = 52.6
-HARK_END = 53.0
-SCREAM_WINDOW = (28.0, 42.8)
+DENUDE = HARK_START + 5.6
+HARK_END = DENUDE + 0.4
+AMBUSH = 1.5                          # the buzzing ambush at the very end, after the title silence
+AMBUSH_AT = TOTAL - AMBUSH
+SCREAM_WINDOW = (28.0, DECK_END - 0.7)
 DIALOGUE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'why-would-she-do-that.m4a')
 DIALOGUE_SPAN = (2.82, 4.10)          # where the words are in the recording
-DIALOGUE_AT = PAUSE_AT + PAUSE / 2 + 0.1  # in the back half of the silence after the chop  # in the finished track
+DIALOGUE_AT = PAUSE_AT + 1.6            # ends about 22.1 s, leaving a second of silence before the music
 
 
 def real(t):
@@ -87,7 +90,7 @@ def additive(f, spectrum, fmax=9000):
 # Deck the Halls, looping and accelerating (all in 'music time')
 # ---------------------------------------------------------------------------
 def bpm_at(t):
-    return np.interp(t, [0, PAUSE_AT, 24, 30, 35, MUSIC_END], [100, 100, 115, 150, 200, 280])
+    return np.interp(t, [0, PAUSE_AT, 23.5, 28.5, 33.5, MUSIC_END], [100, 100, 115, 150, 200, 280])
 
 
 _tg = np.arange(0, MUSIC_END + 3, 0.001)
@@ -142,6 +145,7 @@ MOUTHS = [
     ('older woman',       0, 0.94, 0.35, 0.85, 5.0, 2, 1.30),
     ('everyone at once',  None, 0, 0, 0, 0, 0, 1.38),
 ]
+SCREAMERS = [MOUTHS[i] for i in (0, 1, 2, 4, 5, 7)]  # the six that scream in turn
 
 
 def smooth_noise(n, width):
@@ -209,7 +213,7 @@ def deck():
     for e in cands:
         if not picks or b2t(e[0]) - b2t(picks[-1][0]) > 1.5:
             picks.append(e)
-    picks = picks[:len(MOUTHS)]
+    picks = picks[:len(SCREAMERS)]
     print('screams at', [round(real(b2t(e[0])), 2) for e in picks])
     screams = []
 
@@ -236,7 +240,7 @@ def deck():
             elif after and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
                 vel = min(1.05, vel * 1.5)
             if ev in picks:
-                screams.append((t, m, dur, MOUTHS[len(screams)]))
+                screams.append((t, m, dur, SCREAMERS[len(screams)]))
                 add_note(L, R, m, t, dur, vel * 0.35)
                 continue
             add_note(L, R, m, t, dur, vel)
@@ -613,6 +617,38 @@ def hark():
     return (L + alone)[:end], (R + alone)[:end]
 
 
+def ambush():
+    """Something horrible comes upon you: a whoosh, a hit, and a swarm of furious buzzing all around, cut dead."""
+    n = int(AMBUSH * SR)
+    t = np.arange(n) / SR
+    hit = 0.12  # a split-second rush of air, then it is on you
+    L, R = np.zeros(n), np.zeros(n)
+    for _ in range(70):  # the swarm: dozens of wings, each droning on its own pitch, swooping past
+        f0 = rng.uniform(110, 420)
+        swoop = np.convolve(rng.standard_normal(n + 4000), np.ones(4000) / 4000, 'same')[:n] * 40
+        f = f0 * (1 + 0.06 * swoop + 0.02 * np.sin(2 * np.pi * rng.uniform(3, 9) * t))
+        ph = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
+        wing = np.tanh(6 * np.sin(ph)) * (0.6 + 0.4 * np.sin(2 * np.pi * rng.uniform(5, 20) * t + rng.uniform(0, 6.3)))
+        pan = np.clip(rng.uniform(-1, 1) + 0.6 * np.sin(2 * np.pi * rng.uniform(0.5, 2) * t), -1, 1)
+        g = rng.uniform(0.4, 1.0)
+        L += wing * g * (0.5 - pan / 2)
+        R += wing * g * (0.5 + pan / 2)
+    hum = np.tanh(4 * np.sin(np.cumsum(2 * np.pi * (58 + 3 * np.sin(2 * np.pi * 0.7 * t)) / SR)))  # a dirty electric drone
+    env = np.clip((t - hit) / 0.02, 0, 1) * (0.85 + 0.15 * np.clip((t - hit) / (AMBUSH - hit), 0, 1))
+    whoosh = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 1800) / 1500) ** 2)) * np.clip(t / hit, 0, 1) ** 3 * (t < hit)
+    whoosh /= np.abs(whoosh).max()
+    boom = np.sin(np.cumsum(2 * np.pi * (40 + 120 * np.exp(-np.clip(t - hit, 0, None) / 0.03)) / SR)) \
+        * np.exp(-np.clip(t - hit, 0, None) / 0.3) * (t >= hit)
+    out = []
+    for ch in (L, R):
+        ch = shaped(ch, lambda f: np.clip((f - 90) / 60, 0, 1))
+        ch = ch / np.abs(ch).max() * env + hum * env * 0.35 + whoosh * 0.6 + boom * 0.9
+        ch = np.tanh(ch * 2.5) / np.tanh(2.5)
+        ch[-int(0.004 * SR):] *= np.linspace(1, 0, int(0.004 * SR))
+        out.append(ch * 0.65)
+    return out
+
+
 def main():
     out = sys.argv[1]
     n = int(TOTAL * SR)
@@ -642,7 +678,7 @@ def main():
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
-    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
+    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, AMBUSH_AT)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
     c = chop()  # the knife lands exactly as the music cuts out
     i = int(PAUSE_AT * SR)
@@ -652,6 +688,10 @@ def main():
     i = int(DIALOGUE_AT * SR)
     st[i:i + len(v), 0] += v
     st[i:i + len(v), 1] += v
+    al, ar = ambush()
+    i = int(AMBUSH_AT * SR)
+    st[i:i + len(al), 0] = al[:n - i]
+    st[i:i + len(ar), 1] = ar[:n - i]
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
         with wave.open(wav, 'wb') as w:
