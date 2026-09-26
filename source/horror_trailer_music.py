@@ -38,6 +38,7 @@ LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: where the third loop would begin; the music picks up from here after the pause
 MUSIC_CUT = LEAD + (CLEAN_BEATS - 2) * 0.6  # 18.05 s: the last note never plays - the music cuts off early
+SHOCK_GAP = 0.06                            # a sliver of dead air so the hit lands like a slap
 CHOP_AT = MUSIC_CUT                         # 18.05 s: the knife lands in place of the final "la"
 OMEN_FROM = LEAD + (CLEAN_BEATS - 7) * 0.6  # 15.05 s: the tune starts to go wrong just before the knife
 PAUSE = 4.0                           # the silence for "Why would she do that?"
@@ -341,7 +342,7 @@ def deck():
     res = []
     for c in (0, 1):
         a = out['A'][c][:cut].copy()
-        mc = int(MUSIC_CUT * SR)
+        mc = int((MUSIC_CUT - SHOCK_GAP) * SR)
         a[mc - f:mc] *= np.linspace(1, 0, f)
         a[mc:] = 0
         bpart = out['B'][c][cut:int(MUSIC_END * SR)].copy()
@@ -388,7 +389,7 @@ def chop():
     wet *= 0.6 + 0.4 * np.clip(np.convolve(rng.standard_normal(n), np.ones(150) / 150, 'same') * 8, -1, 1)
     wet /= np.abs(wet).max()
     x = 1.0 * smack + 1.1 * punch + 0.9 * boom + 0.55 * crack + 0.5 * chunk + 0.4 * wet
-    x = np.tanh(x * 2.2) / np.tanh(2.2)  # slammed hard
+    x = np.tanh(x * 1.2) / np.tanh(1.2)  # hard, but keeping the crack of the attack
     x = x * 0.85 + D.reverb(x)[:n] * 0.25
     x[-int(0.3 * SR):] *= np.linspace(1, 0, int(0.3 * SR))
     return x / np.abs(x).max() * 0.97
@@ -683,6 +684,30 @@ def ambush():
     return out
 
 
+def stinger(dur=1.8):
+    """The shock: a dissonant orchestral stab, shrieking violins, a huge boom and a crash, all at once."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    atk = np.minimum(1, t / 0.004)
+    env = atk * np.exp(-t / 0.28)
+    out = np.zeros(n)
+    for nm in ('C2', 'F#2', 'C3', 'Db3', 'G3', 'C4', 'Db4', 'F#4'):  # brass, every clashing note at once
+        f = np.full(n, hz(midi(nm))) * (1 + rng.normal(0, 0.002))
+        out += additive(f, brass_spectrum(env * 1.3)) * env
+    out /= np.abs(out).max()
+    scr = np.zeros(n)
+    trem = 0.6 + 0.4 * np.sin(2 * np.pi * 17 * t)
+    for nm in ('E6', 'F6', 'Bb6'):  # violins shrieking, Psycho-style
+        f = hz(midi(nm)) * (1 + 0.004 * np.sin(2 * np.pi * 6.5 * t) - 0.02 * t)
+        scr += additive(f, strings_spectrum)
+    scr = scr / np.abs(scr).max() * trem * atk * np.exp(-t / 0.6)
+    boom = np.sin(np.cumsum(2 * np.pi * (30 + 90 * np.exp(-t / 0.05)) / SR)) * np.exp(-t / 0.9) * atk
+    x = out * 0.9 + scr * 0.45 + boom * 1.0 + crash(dur) * 0.35 + np.pad(bass_drum(1.0), (0, n))[:n] * 0.8
+    x = hall(x)
+    x[-int(0.3 * SR):] *= np.linspace(1, 0, int(0.3 * SR))
+    return x / np.abs(x).max()
+
+
 def main():
     out = sys.argv[1]
     n = int(TOTAL * SR)
@@ -712,9 +737,11 @@ def main():
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
-    for a, b in ((MUSIC_CUT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
+    for a, b in ((MUSIC_CUT - SHOCK_GAP, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
-    c = chop()  # the knife comes down the instant the music dies
+    sg = stinger()
+    c = np.pad(chop(), (0, len(sg)))[:len(sg)] * 0.8 + sg * 0.9  # the knife comes down the instant the music dies: a jump-scare hit
+    c = np.tanh(c / np.abs(c).max() * 2.2) / np.tanh(2.2) * 0.99  # loud and heavy, with the crack still on top
     i = int(CHOP_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
