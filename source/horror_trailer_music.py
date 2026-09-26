@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Horror trailer score, exactly 55 seconds, built from our Deck the Halls piano.
 
-    0    - 14   gentle Deck (the opening phrase, looping)
-    14   - 24   increasingly off-putting Deck: the odd note off-key, late or too loud; tiny crackles
-    24   - 36   faster, more maddened Deck; from 28 s some of its notes are human screams, cut off dead,
+    0    - 19.25 gentle Deck: the phrase twice, clean
+    19.25       the knife comes down: the music cuts dead on the impact
+    19.25- 22.25 silence (three seconds) for "Why would she do that?"
+    22.25- 28   the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
+    28   - 36   faster, more maddened; from 28 s some notes are human screams, cut off dead,
                 each from a different mouth and each more desperate than the last
     36   - 43.5 the crescendo: 'being chased by a murderous clown' - still clearly the tune
     43.5 - 44   a horror gasp cuts it all off
@@ -30,15 +32,16 @@ from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 
 rng = np.random.default_rng(13)
 TOTAL = 55.0
-MUSIC_END = 43.5              # length of the Deck music itself, not counting any pause
-# an optional dead stop (switched off for now: set PAUSE_AT, PAUSE = 12.0, 2.0 and MUSIC_END = 41.5 to bring it back)
-PAUSE_AT, PAUSE = MUSIC_END + 10, 0.0
-DECK_END = MUSIC_END + PAUSE  # 43.5 in the finished track
+LEAD = 0.05
+CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
+PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: the knife comes down on the downbeat of the third loop
+PAUSE = 3.0                           # the silence for "Why would she do that?"
+MUSIC_END = 40.5                      # length of the Deck music itself, not counting the pause
+DECK_END = MUSIC_END + PAUSE          # 43.5 in the finished track
 GASP_END = DECK_END + 0.5
 HARK_START = GASP_END + 3.0
 DENUDE = 52.6
 HARK_END = 53.0
-LEAD = 0.05
 SCREAM_WINDOW = (28.0, 42.8)  # in the finished track
 
 
@@ -81,7 +84,7 @@ def additive(f, spectrum, fmax=9000):
 # Deck the Halls, looping and accelerating (all in 'music time')
 # ---------------------------------------------------------------------------
 def bpm_at(t):
-    return np.interp(t, [0, 12, 24, 36, 40, MUSIC_END], [100, 104, 128, 175, 215, 280])
+    return np.interp(t, [0, PAUSE_AT, 24, 30, 35, MUSIC_END], [100, 100, 115, 150, 200, 280])
 
 
 _tg = np.arange(0, MUSIC_END + 3, 0.001)
@@ -94,7 +97,7 @@ def b2t(b):
 
 def mad(t):
     """0 while the carol is innocent, rising to 1 at the gasp."""
-    return np.clip((t - 12) / (MUSIC_END - 12), 0, 1)
+    return np.clip((t - PAUSE_AT) / (MUSIC_END - PAUSE_AT), 0, 1)
 
 
 def add_note(L, R, m, t, dur, vel):
@@ -212,19 +215,22 @@ def deck():
         t = b2t(bb)
         if t >= MUSIC_END:
             continue
-        L, R = bufs['A' if t < PAUSE_AT else 'B']
+        after = t >= PAUSE_AT - 0.001
+        L, R = bufs['B' if after else 'A']
         k = float(mad(t))
         dur = b2t(bb + nb * 0.94) - t
         m = m0 + (-20 * k + rng.normal(0, 2 + 8 * k)) / 100  # a slight sag, a little honky-tonk
         base = {'tune': 0.78, 'bass': 0.5, 'chord': 0.3}[kind]
         vel = base * (1 + 0.4 * k) + rng.normal(0, 0.03)
         t += rng.normal(0, 0.003 + 0.006 * k)
+        if after:
+            t = max(t, PAUSE_AT)
         if kind == 'tune':
-            if t > 14 and rng.random() < 0.05 + 0.1 * k:  # the occasional note off-key...
+            if after and rng.random() < 0.05 + 0.1 * k:  # the occasional note off-key...
                 m += rng.choice([-1, 1]) * rng.choice([0.5, 1.0])
-            elif t > 13 and rng.random() < 0.05 + 0.1 * k:  # ...or late...
+            elif after and rng.random() < 0.05 + 0.1 * k:  # ...or late...
                 t += rng.uniform(0.04, 0.09 + 0.05 * k)
-            elif t > 13 and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
+            elif after and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
                 vel = min(1.05, vel * 1.5)
             if ev in picks:
                 screams.append((t, m, dur, MOUTHS[len(screams)]))
@@ -235,8 +241,8 @@ def deck():
                 add_note(L, R, m + 0.22, t, dur, vel * 0.45 * min(1, (k - 0.3) / 0.3))
             if k > 0.55:  # the tune in octaves, hammered
                 add_note(L, R, m - 12, t, dur, vel * 0.7 * min(1, (k - 0.55) / 0.2))
-            if t > 24:  # the fairground organ joins in
-                calliope(L, R, m + 12, t, dur, vel * 0.32 * min(1, (t - 24) / 12) ** 1.3)
+            if t > PAUSE_AT + 3:  # the fairground organ joins in
+                calliope(L, R, m + 12, t, dur, vel * 0.32 * min(1, (t - PAUSE_AT - 3) / 12) ** 1.3)
         else:
             add_note(L, R, m, t, dur, vel)
             if kind == 'bass' and k > 0.6 and rng.random() < 0.5:
@@ -264,18 +270,18 @@ def deck():
 
     # the bed: a low drone creeping in, tiny crackles and static, and a rising whine at the end
     bed = np.zeros(n)
-    amp = np.clip((tt - 14) / 20, 0, 1) ** 1.5 * 0.08 + np.clip((tt - 34) / 8.5, 0, 1) ** 2 * 0.08
+    amp = np.clip((tt - PAUSE_AT) / 16, 0, 1) ** 1.5 * 0.08 + np.clip((tt - (MUSIC_END - 8)) / 8, 0, 1) ** 2 * 0.08
     for f, a in ((87.31, 1), (92.5, 0.7), (174.6, 0.5), (185.0, 0.35)):
         bed += a * np.sin(2 * np.pi * f * tt * (1 + 0.004 * np.sin(0.4 * tt)))
     bed *= amp * P
-    rate = np.interp(tt, [0, 8, 20, 34, MUSIC_END], [0, 0.6, 3, 9, 25])  # crackles per second
+    rate = np.interp(tt, [0, PAUSE_AT - 0.01, PAUSE_AT, 25, 32, MUSIC_END], [0, 0, 0.6, 3, 9, 25])  # crackles per second
     hits = np.nonzero(rng.random(n) < rate / SR)[0]
     click = np.exp(-np.arange(60) / 8.0) * np.sign(rng.standard_normal(60))
     for i in hits:
         a = rng.uniform(0.03, 0.12) * P * (1 + 1.5 * k[i])
         seg = click[:n - i] * a
         bed[i:i + len(seg)] += seg
-    t_s = 9.0
+    t_s = PAUSE_AT + 1.0
     while t_s < MUSIC_END - 0.3:
         kk = float(mad(t_s))
         ln = rng.uniform(0.03, 0.12 + 0.1 * kk)
@@ -286,12 +292,12 @@ def deck():
         burst *= np.hanning(m_) * (rng.random(m_) < 0.6) * P * rng.uniform(0.05, 0.12) * (1 + kk)
         bed[i:i + m_] += burst / (np.abs(burst).max() + 1e-9) * P * 0.07 * (1 + kk)
         t_s += rng.exponential(2.5 - 1.8 * kk)
-    u = np.clip((tt - 36) / (MUSIC_END - 36), 0, 1)
+    u = np.clip((tt - (MUSIC_END - 6.5)) / 6.5, 0, 1)
     for det in (-0.02, 0.0, 0.021):
         f = 220 * 2 ** (3.0 * u + det)
         bed += additive(f, lambda fk, kk: 1.0 / kk) * (u ** 2.5) * 0.03 * P
 
-    gain = np.interp(tt, [0, 10, 22, 34, MUSIC_END], [1.0, 1.0, 1.05, 1.12, 1.5])
+    gain = np.interp(tt, [0, PAUSE_AT, 25, 32, MUSIC_END], [1.0, 1.0, 1.05, 1.12, 1.5])
     for key in out:
         out[key] = [ch * gain + bed for ch in out[key]]
 
@@ -307,6 +313,30 @@ def deck():
             bpart[-f:] *= np.linspace(1, 0, f)
         res.append(np.concatenate([a, np.zeros(int(PAUSE * SR)), bpart]))
     return res
+
+
+# ---------------------------------------------------------------------------
+# The knife: through the fingers and into the chopping board
+# ---------------------------------------------------------------------------
+def chop():
+    n = int(0.9 * SR)
+    t = np.arange(n) / SR
+    board = np.sin(np.cumsum(2 * np.pi * (95 + 110 * np.exp(-t / 0.02)) / SR)) * np.exp(-t / 0.07)
+    board += 0.5 * np.sin(2 * np.pi * 62 * t) * np.exp(-t / 0.12)
+    tock = np.sin(2 * np.pi * 1350 * t) * np.exp(-t / 0.025) * 0.25  # the blade biting the wood
+    crack = np.zeros(n)
+    for c in (0.0, 0.004, 0.011, 0.019, 0.03):  # bone giving way
+        i = int(c * SR)
+        k = int(0.004 * SR)
+        crack[i:i + k] += rng.standard_normal(k) * np.exp(-np.arange(k) / (0.0008 * SR)) * rng.uniform(0.4, 1)
+    crack = shaped(crack, lambda f: np.clip((f - 1500) / 3000, 0, 1))
+    wet = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 700) / 500) ** 2))
+    wet *= np.exp(-t / 0.06) * (0.6 + 0.4 * np.clip(np.convolve(rng.standard_normal(n), np.ones(200) / 200, 'same') * 8, -1, 1))
+    x = board / np.abs(board).max() + tock + crack / np.abs(crack).max() * 0.7 + wet / np.abs(wet).max() * 0.45
+    x *= np.minimum(1, t / 0.0005)
+    x = D.reverb(x)[:n]
+    x[-int(0.2 * SR):] *= np.linspace(1, 0, int(0.2 * SR))
+    return x / np.abs(x).max() * 0.85
 
 
 # ---------------------------------------------------------------------------
@@ -571,6 +601,10 @@ def main():
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
     for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
+    c = chop()  # the knife lands exactly as the music cuts out
+    i = int(PAUSE_AT * SR)
+    st[i:i + len(c), 0] += c * 0.97
+    st[i:i + len(c), 1] += c
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
         with wave.open(wav, 'wb') as w:
