@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Horror trailer score (about 60 seconds), built from our Deck the Halls piano.
+"""Horror trailer score (58.3 seconds), built from our Deck the Halls piano.
 
     0     - 19.25 gentle Deck: the phrase twice, clean
     19.25         the knife comes down: the music cuts dead on the impact
@@ -15,7 +15,6 @@
     50.3  - 55.9  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
     55.9  - 56.3  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
     56.3  - 58.3  two seconds of silence for the post-trailer titles
-    58.3  - 59.8  the ambush once more
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -48,8 +47,7 @@ AMBUSH1_AT = BREATH_AT + BREATH_SPAN[1] - BREATH_SPAN[0]  # it falls on the brea
 HARK_START = AMBUSH1_AT + AMBUSH      # and the Hark comes straight in after it
 DENUDE = HARK_START + 5.6
 HARK_END = DENUDE + 0.4
-AMBUSH_AT = HARK_END + 2.0            # after two seconds of silence for the titles, the ambush once more
-TOTAL = AMBUSH_AT + AMBUSH
+TOTAL = HARK_END + 2.0                # ends on two seconds of silence for the titles
 SCREAM_WINDOW = (28.0, DECK_END - 0.7)
 DIALOGUE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'why-would-she-do-that.m4a')
 DIALOGUE_SPAN = (2.82, 4.10)          # where the words are in the recording
@@ -688,7 +686,7 @@ def main():
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
-    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, AMBUSH_AT)):
+    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
     c = chop()  # the knife lands exactly as the music cuts out
     i = int(PAUSE_AT * SR)
@@ -702,7 +700,7 @@ def main():
     i = int(BREATH_AT * SR)
     st[i:i + len(v), 0] += v
     st[i:i + len(v), 1] += v
-    for at in (AMBUSH1_AT, AMBUSH_AT):  # ...then it is upon them
+    for at in (AMBUSH1_AT,):  # ...then it is upon them
         al, ar = ambush()
         i = int(at * SR)
         st[i:i + len(al), 0] = al[:n - i]
