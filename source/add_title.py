@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Stamp a title card onto a finished video: Victorian quill-style script (Pinyon Script), white with a
-bold black outline, centred a third of the way down. It is on screen from the start, holds for three
+"""Stamp a title card onto a finished video: bold Impact-style capitals (Anton, a free Impact twin) in
+cranberry red, widened 20%, with a bold black outline, centred a third of the way down. It is on screen from the start, holds for three
 seconds, then gently fades. The picture and sound are otherwise untouched.
 
 Usage:
@@ -15,7 +15,8 @@ import imageio_ffmpeg
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FONT = os.path.join(HERE, 'fonts', 'PinyonScript-Regular.ttf')
+FONT = os.path.join(HERE, 'fonts', 'Anton-Regular.ttf')
+CRANBERRY = (178, 24, 52)
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 HOLD, FADE = 3.0, 1.0
 
@@ -43,7 +44,7 @@ def _line(text, font, out, colour=(255, 255, 255)):
     return im
 
 
-def title_card(w, h, lines, path, widen=1.3, colour=(255, 255, 255)):
+def title_card(w, h, lines, path, widen=1.2, colour=CRANBERRY):
     """A transparent PNG the size of the video with the title drawn on it, letters widened for legibility."""
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     main = int(min(w * 0.22, h * 0.16))  # long lines shrink to fit below
@@ -82,7 +83,7 @@ def main():
         i = args.index('--audio')
         audio = args[i + 1]
         del args[i:i + 2]
-    src, dst, lines = args[0], args[1], args[2:]
+    src, dst, lines = args[0], args[1], [l.upper() for l in args[2:]]
     w, h = size_of(src)
     with tempfile.TemporaryDirectory() as tmp:
         card = os.path.join(tmp, 'title.png')

@@ -1,6 +1,6 @@
 # Animations
 
-Every video opens with its title in white copperplate script (Pinyon Script) for three seconds, then fades.
+Every video opens with its title in bold cranberry-red Impact-style capitals (Anton), widened 20%, for three seconds, then fades.
 Titles are added by `source/add_title.py`.
 
 | File | Title on screen | Status | Made by |
