@@ -8,7 +8,8 @@ Key of F major, about 108 beats per minute.
 Usage:
     python3 deck_the_halls.py OUT_DIR
 Writes deck-the-halls-piano.wav (two verses with an ending) and deck-the-halls-piano-loop.wav
-(one verse that loops seamlessly).
+(one verse that loops seamlessly) and deck-the-halls-piano-phrase-loop.wav (just the opening
+phrase, looped).
 """
 import math
 import os
@@ -204,7 +205,17 @@ def main():
         tail = ch[n:n + 3 * SR].copy()
         ch[:len(tail)] += tail
     write(os.path.join(out, 'deck-the-halls-piano-loop.wav'), L[:n], R[:n])
-    print(f'verse {vlen:.1f}s, full piece {(end + 4.0):.1f}s')
+    # the opening phrase alone ('Deck the halls with boughs of holly, fa la la la la, la la la la'), looped
+    plen = sum(b for _, b in A_TUNE) * BEAT
+    roll = Roll(plen + 6)
+    perform(A_TUNE, A_HARM, roll, 0.0)
+    L, R = reverb(roll.L), reverb(roll.R)
+    n = int(plen * SR)
+    for ch in (L, R):
+        tail = ch[n:n + 3 * SR].copy()
+        ch[:len(tail)] += tail
+    write(os.path.join(out, 'deck-the-halls-piano-phrase-loop.wav'), L[:n], R[:n])
+    print(f'verse {vlen:.1f}s, full piece {(end + 4.0):.1f}s, phrase {plen:.1f}s')
 
 
 if __name__ == '__main__':
