@@ -3,7 +3,7 @@
 
     0     - 15    gentle Deck: the phrase twice, clean...
     15    - 18.05 ...until the tune sags, drags and goes wrong; it cuts off before its last note
-    18.6          the knife comes down
+    18.05         the knife comes down, in place of the final "la"
     18.05 - 23.25 silence, broken only by the knife; the girl asks "Why would she do that?", then a second of nothing
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
     28    - 35    faster, more maddened; four of its notes are human screams (28.7, 30.6, 33.8, 37.75 s),
@@ -37,7 +37,7 @@ LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: where the third loop would begin; the music picks up from here after the pause
 MUSIC_CUT = LEAD + (CLEAN_BEATS - 2) * 0.6  # 18.05 s: the last note never plays - the music cuts off early
-CHOP_AT = MUSIC_CUT + 0.55                  # 18.6 s
+CHOP_AT = MUSIC_CUT                         # 18.05 s: the knife lands in place of the final "la"
 OMEN_FROM = LEAD + (CLEAN_BEATS - 7) * 0.6  # 15.05 s: the tune starts to go wrong just before the knife
 PAUSE = 4.0                           # the silence for "Why would she do that?"
 MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
@@ -708,7 +708,7 @@ def main():
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
     for a, b in ((MUSIC_CUT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
-    c = chop()  # the knife comes down, half a beat after the music dies
+    c = chop()  # the knife comes down the instant the music dies
     i = int(CHOP_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
