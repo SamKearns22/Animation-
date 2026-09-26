@@ -5,8 +5,8 @@
     19.25         the knife comes down: the music cuts dead on the impact
     19.25 - 23.25 silence (four seconds); the girl asks "Why would she do that?", then a second of nothing
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
-    28    - 35    faster, more maddened; from 28 s six of its notes are human screams, cut off dead,
-                  each from a different mouth and each more desperate than the last
+    28    - 35    faster, more maddened; three of its notes are human screams (28.7, 33.8, 37.75 s),
+                  cut off dead, each from a different mouth and each more desperate than the last
     35    - 42    the crescendo: 'being chased by a murderous clown' - still clearly the tune
     42    - 42.5  a horror gasp cuts it all off
     42.5  - 43.5  one second of silence
@@ -148,7 +148,8 @@ MOUTHS = [
     ('older woman',       0, 0.94, 0.35, 0.85, 5.0, 2, 1.30),
     ('everyone at once',  None, 0, 0, 0, 0, 0, 1.38),
 ]
-SCREAMERS = [MOUTHS[i] for i in (0, 1, 2, 4, 5, 7)]  # the six that scream in turn
+# who screams on each of the six chosen notes (None = that note stays an ordinary piano note)
+SCREAMERS = [MOUTHS[0], None, None, MOUTHS[4], None, MOUTHS[7]]
 
 
 def smooth_noise(n, width):
@@ -217,7 +218,7 @@ def deck():
         if not picks or b2t(e[0]) - b2t(picks[-1][0]) > 1.5:
             picks.append(e)
     picks = picks[:len(SCREAMERS)]
-    print('screams at', [round(real(b2t(e[0])), 2) for e in picks])
+    print('screams at', [round(real(b2t(e[0])), 2) for e, who in zip(picks, SCREAMERS) if who])
     screams = []
 
     for ev in events:
@@ -242,8 +243,8 @@ def deck():
                 t += rng.uniform(0.04, 0.09 + 0.05 * k)
             elif after and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
                 vel = min(1.05, vel * 1.5)
-            if ev in picks:
-                screams.append((t, m, dur, SCREAMERS[len(screams)]))
+            if ev in picks and SCREAMERS[picks.index(ev)]:
+                screams.append((t, m, dur, SCREAMERS[picks.index(ev)]))
                 add_note(L, R, m, t, dur, vel * 0.35)
                 continue
             add_note(L, R, m, t, dur, vel)
