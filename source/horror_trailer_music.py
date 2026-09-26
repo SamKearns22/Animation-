@@ -513,7 +513,7 @@ def crash(dur=3.0):
     return x * np.exp(-t / 1.3) / np.abs(x).max()
 
 
-def hall(x, secs=3.5, tau=0.9):
+def hall(x, secs=2.0, tau=0.45):
     L = int(secs * SR)
     tt = np.arange(L) / SR
     ir = rng.standard_normal(L) * np.exp(-tt / tau) * (tt > 0.025)
@@ -521,7 +521,7 @@ def hall(x, secs=3.5, tau=0.9):
     ir /= np.sqrt((ir ** 2).sum())
     n = len(x) + L
     wet = np.fft.irfft(np.fft.rfft(x, n) * np.fft.rfft(ir, n), n)[:len(x)]
-    return x * 0.8 + wet * 0.45
+    return x * 0.9 + wet * 0.18  # kept fairly dry, so it hits as directly as the Deck
 
 
 def place(buf, s, t, gain=1.0):
@@ -567,7 +567,7 @@ def hark():
     for i, (nm, st) in enumerate(zip(MEL, STARTS)):
         d = (BEATS[i] or 2) * HB
         for sh in (0, -12, -24):
-            s = piano_note(midi(nm) + sh, 1.0, d) * 0.12
+            s = piano_note(midi(nm) + sh, 1.0, d) * 0.3  # our piano, up front
             place(L, s, st, 0.9)
             place(R, s, st, 1.1)
     # percussion: a timpani and bass-drum blow on every syllable, cymbals and bells on the big ones
@@ -628,9 +628,16 @@ def main():
     place(R, gr, DECK_END)
 
     hl, hr = hark()
+    # level the Hark to match the Deck's climax: trim the sub-rumble, squash the drum peaks so the body of
+    # the sound comes forward, then match its loudness to the last few seconds of the Deck
+    hl, hr = (shaped(x, lambda f: np.clip((f - 35) / 45, 0, 1)) for x in (hl, hr))
     hpk = max(np.abs(hl).max(), np.abs(hr).max())
-    place(L, hl / hpk, HARK_START)
-    place(R, hr / hpk, HARK_START)
+    hl, hr = (np.tanh(x / hpk * 3.0) for x in (hl, hr))
+    rms = lambda a: np.sqrt((a ** 2).mean())
+    ref = rms(L[int((DECK_END - 4) * SR):int(DECK_END * SR)])
+    g = ref / rms(hl[:int((CUT - 0.1) * SR)])
+    place(L, hl * g, HARK_START)
+    place(R, hr * g, HARK_START)
 
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
