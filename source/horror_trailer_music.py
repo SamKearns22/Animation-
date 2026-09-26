@@ -388,7 +388,11 @@ def chop():
     wet = burst(0.004, 0.25, 250, 1800, 0.05)
     wet *= 0.6 + 0.4 * np.clip(np.convolve(rng.standard_normal(n), np.ones(150) / 150, 'same') * 8, -1, 1)
     wet /= np.abs(wet).max()
-    x = 1.0 * smack + 1.1 * punch + 0.9 * boom + 0.55 * crack + 0.5 * chunk + 0.4 * wet
+    snap = burst(0.0, 0.006, 150, 12000, 0.0012)  # the instant of contact
+    snap /= np.abs(snap).max()
+    body = shaped(burst(0.0, 0.12, 60, 400, 0.03), lambda f: 1.0)  # the dead weight of the blow
+    body /= np.abs(body).max()
+    x = 1.2 * snap + 1.0 * smack + 1.2 * punch + 0.35 * boom + 0.6 * body + 0.6 * crack + 0.7 * chunk + 0.4 * wet
     x = np.tanh(x * 1.2) / np.tanh(1.2)  # hard, but keeping the crack of the attack
     x = x * 0.85 + D.reverb(x)[:n] * 0.25
     x[-int(0.3 * SR):] *= np.linspace(1, 0, int(0.3 * SR))
@@ -684,28 +688,16 @@ def ambush():
     return out
 
 
-def stinger(dur=1.8):
-    """The shock: a dissonant orchestral stab, shrieking violins, a huge boom and a crash, all at once."""
-    n = int(dur * SR)
+def swoop(length=0.28):
+    """The blade sweeping down: a rush of air that climbs and tightens into the moment of impact."""
+    n = int(length * SR)
     t = np.arange(n) / SR
-    atk = np.minimum(1, t / 0.004)
-    env = atk * np.exp(-t / 0.28)
-    out = np.zeros(n)
-    for nm in ('C2', 'F#2', 'C3', 'Db3', 'G3', 'C4', 'Db4', 'F#4'):  # brass, every clashing note at once
-        f = np.full(n, hz(midi(nm))) * (1 + rng.normal(0, 0.002))
-        out += additive(f, brass_spectrum(env * 1.3)) * env
-    out /= np.abs(out).max()
-    scr = np.zeros(n)
-    trem = 0.6 + 0.4 * np.sin(2 * np.pi * 17 * t)
-    for nm in ('E6', 'F6', 'Bb6'):  # violins shrieking, Psycho-style
-        f = hz(midi(nm)) * (1 + 0.004 * np.sin(2 * np.pi * 6.5 * t) - 0.02 * t)
-        scr += additive(f, strings_spectrum)
-    scr = scr / np.abs(scr).max() * trem * atk * np.exp(-t / 0.6)
-    boom = np.sin(np.cumsum(2 * np.pi * (30 + 90 * np.exp(-t / 0.05)) / SR)) * np.exp(-t / 0.9) * atk
-    x = out * 0.9 + scr * 0.45 + boom * 1.0 + crash(dur) * 0.35 + np.pad(bass_drum(1.0), (0, n))[:n] * 0.8
-    x = hall(x)
-    x[-int(0.3 * SR):] *= np.linspace(1, 0, int(0.3 * SR))
-    return x / np.abs(x).max()
+    u = t / length
+    noise = rng.standard_normal(n)
+    bands = [shaped(noise, lambda f, c=c: np.exp(-((f - c) / (0.5 * c)) ** 2)) for c in (350, 900, 2200)]
+    bands = [b / np.abs(b).max() for b in bands]
+    x = bands[0] * np.clip(1 - 2 * u, 0, 1) + bands[1] * (1 - np.abs(2 * u - 1)) + bands[2] * np.clip(2 * u - 1, 0, 1)
+    return x * u ** 2.5
 
 
 def main():
@@ -739,8 +731,11 @@ def main():
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
     for a, b in ((MUSIC_CUT - SHOCK_GAP, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
-    sg = stinger()
-    c = np.pad(chop(), (0, len(sg)))[:len(sg)] * 0.8 + sg * 0.9  # the knife comes down the instant the music dies: a jump-scare hit
+    w = swoop()  # the axe sweeps down...
+    i = int(CHOP_AT * SR) - len(w)
+    st[i:i + len(w), 0] += w * 0.45
+    st[i:i + len(w), 1] += w * 0.45
+    c = chop()  # ...and bites  # the knife comes down the instant the music dies: a jump-scare hit
     c = np.tanh(c / np.abs(c).max() * 2.2) / np.tanh(2.2) * 0.99  # loud and heavy, with the crack still on top
     i = int(CHOP_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
