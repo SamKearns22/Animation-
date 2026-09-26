@@ -34,6 +34,14 @@ import deck_the_halls as D
 from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 
 rng = np.random.default_rng(13)
+
+
+def reseed(*key):
+    """Give each part of the score its own fixed dice, so changing one part never reshuffles another."""
+    global rng
+    seed = [13] + [int(round(k * 1000)) % (2 ** 32) for k in key]
+    rng = np.random.default_rng(seed)
+    D.rng = np.random.default_rng(seed + [1])
 LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: where the third loop would begin; the music picks up from here after the pause
@@ -235,6 +243,7 @@ def deck():
 
     for ev in events:
         bb, m0, nb, kind = ev
+        reseed(1, bb, m0, {'tune': 1, 'bass': 2, 'chord': 3}[kind])
         t = b2t(bb)
         if t >= MUSIC_END:
             continue
@@ -291,6 +300,7 @@ def deck():
     idx -= np.cumsum(0.05 * omen ** 2) + 0.0025 * SR * omen * (1 + np.sin(2 * np.pi * 1.3 * tt))  # the tape slows and warps
     out = {}
     for key, (L, R) in bufs.items():
+        reseed(9, ord(key))
         L = np.interp(idx, np.arange(n), L)
         R = np.interp(idx, np.arange(n), R)
         out[key] = [D.reverb(L), D.reverb(R)]
@@ -298,12 +308,14 @@ def deck():
     P = max(np.abs(whole[:int(22 * SR)]).max(), np.abs(whole[int(22 * SR):]).max() / 1.5)
 
     # the screams go on dry and cut off dead
-    for st, m, dur, mouth in screams:
+    for si, (st, m, dur, mouth) in enumerate(screams):
+        reseed(2, round(st, 2))
         s = scream(m, dur, mouth) * P * mouth[-1]
         i = int(st * SR)
         out['B'][0][i:i + len(s)] += s * 0.95
         out['B'][1][i:i + len(s)] += s * 1.05
 
+    reseed(3)
     # the bed: a low drone creeping in, tiny crackles and static, and a rising whine at the end
     bed = np.zeros(n)
     amp = np.clip((tt - PAUSE_AT) / 16, 0, 1) ** 1.5 * 0.08 + np.clip((tt - (MUSIC_END - 8)) / 8, 0, 1) ** 2 * 0.08
@@ -358,6 +370,7 @@ def deck():
 # ---------------------------------------------------------------------------
 def chop():
     """A cleaver hitting meat and bone, hard, then burying itself in the board."""
+    reseed(6)
     n = int(1.2 * SR)
     t = np.arange(n) / SR
 
@@ -400,29 +413,86 @@ def chop():
     return x / np.abs(x).max() * 0.97
 
 
-def recording(path, span, level):
-    """A voice recording, trimmed, low rumble removed, level set."""
+def denoise(x, noise, frame=2048, hop=512, strength=2.0, floor=0.08):
+    """Take the phone's background hiss out: learn what the hiss sounds like from a stretch with nobody
+    speaking, then turn down that sound everywhere, frame by frame."""
+    win = np.hanning(frame)
+    pad = np.concatenate([np.zeros(frame), x, np.zeros(frame)])
+    starts = np.arange(0, len(pad) - frame, hop)
+    X = np.array([np.fft.rfft(pad[i:i + frame] * win) for i in starts])
+    nz = np.concatenate([np.zeros(frame), noise, np.zeros(frame)])
+    N = np.median(np.abs(np.array([np.fft.rfft(nz[i:i + frame] * win)
+                                   for i in range(frame, len(nz) - 2 * frame, hop)])), axis=0)
+    mag = np.abs(X) + 1e-12
+    g = np.clip(1 - strength * N / mag, floor, 1)
+    g = np.convolve(np.pad(g, ((1, 1), (0, 0)), mode='edge').ravel(), [1], 'same').reshape(len(g) + 2, -1)
+    g = (g[:-2] + g[1:-1] + g[2:]) / 3  # smooth over time so it doesn't warble
+    out = np.zeros(len(pad))
+    norm = np.zeros(len(pad))
+    for k, i in enumerate(starts):
+        out[i:i + frame] += np.fft.irfft(X[k] * g[k], frame) * win
+        norm[i:i + frame] += win ** 2
+    return (out / np.maximum(norm, 1e-6))[frame:frame + len(x)]
+
+
+def recording(path, span, level, noise=None, tone=None):
+    """A voice recording: hiss removed, trimmed, low rumble removed, tone shaped, level set."""
     raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-i', path, '-f', 's16le', '-ac', '1', '-ar', str(SR), '-'],
                          capture_output=True, check=True).stdout
     x = np.frombuffer(raw, np.int16) / 32768
+    if noise:
+        x = denoise(x, x[int(noise[0] * SR):int(noise[1] * SR)])
     a, b = (int(v * SR) for v in span)
     x = x[a:b].copy()
-    x = shaped(x, lambda f: np.clip((f - 60) / 60, 0, 1))
+    x = shaped(x, lambda f: np.clip((f - 60) / 60, 0, 1) * (tone(f) if tone else 1))
     k = int(0.03 * SR)
     x[:k] *= np.linspace(0, 1, k)
     x[-k:] *= np.linspace(1, 0, k)
     return x / np.abs(x).max() * level
 
 
+def warm(f, db=2.5, at=250, width=180):
+    return 10 ** (db * np.exp(-((f - at) / width) ** 2) / 20)
+
+
 def dialogue():
-    """'Why would she do that?'"""
-    return recording(DIALOGUE, DIALOGUE_SPAN, 0.7)
+    """'Why would she do that?' - cleaned, warmed, and put outdoors on a snowy bench."""
+    v = recording(DIALOGUE, DIALOGUE_SPAN, 0.7, noise=(0.3, 2.6),
+                  tone=lambda f: warm(f) / (1 + (f / 9000) ** 2))  # a touch fuller, a touch softer on top
+    # outdoors: no room, just a faint far-off slap of sound off the hospital wall
+    echo = np.zeros(len(v) + int(0.09 * SR))
+    echo[int(0.09 * SR):] = shaped(v, lambda f: 1 / (1 + (f / 2500) ** 2)) * 0.07
+    echo[:len(v)] += v
+    return echo
+
+
+def snow_air(length):
+    """The hush of snowy open air: soft, muffled, barely there."""
+    reseed(10)
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    air = shaped(rng.standard_normal(n), lambda f: (f > 40) / (1 + (f / 500) ** 2))
+    air = air / np.abs(air).max() * (0.8 + 0.2 * np.sin(2 * np.pi * 0.3 * t))
+    fade = int(0.35 * SR)
+    air[:fade] *= np.linspace(0, 1, fade)
+    air[-fade:] *= np.linspace(1, 0, fade)
+    return air * 0.012
+
+
+def breathing():
+    """Someone breathing in the dark - cleaned, and brought in close: fuller low end, a cramped little space."""
+    v = recording(BREATH, BREATH_SPAN, 0.55, noise=(1.7, 2.0), tone=lambda f: warm(f, 3.5, 200, 150))
+    close = np.zeros(len(v) + int(0.012 * SR))
+    close[:len(v)] += v
+    close[int(0.009 * SR):int(0.009 * SR) + len(v)] += shaped(v, lambda f: 1 / (1 + (f / 3000) ** 2)) * 0.22
+    return close / np.abs(close).max() * 0.55
 
 
 # ---------------------------------------------------------------------------
 # The gasp
 # ---------------------------------------------------------------------------
 def gasp():
+    reseed(4)
     dur = GASP_END - DECK_END
     n = int(dur * SR)
     t = np.arange(n) / SR
@@ -575,6 +645,7 @@ def place(buf, s, t, gain=1.0):
 
 
 def hark():
+    reseed(5)
     L, R = np.zeros(HN), np.zeros(HN)
     env = hits_env()
     soft = hits_env(attack=0.05, dip=0.5)
@@ -659,6 +730,7 @@ def hark():
 
 def ambush():
     """Something horrible comes upon you: a whoosh, a hit, and a swarm of furious buzzing all around, cut dead."""
+    reseed(8)
     n = int(AMBUSH * SR)
     t = np.arange(n) / SR
     hit = 0.12  # a split-second rush of air, then it is on you
@@ -691,6 +763,7 @@ def ambush():
 
 def swoop(length=0.28):
     """The blade sweeping down: a rush of air that climbs and tightens into the moment of impact."""
+    reseed(7)
     n = int(length * SR)
     t = np.arange(n) / SR
     u = t / length
@@ -699,6 +772,76 @@ def swoop(length=0.28):
     bands = [b / np.abs(b).max() for b in bands]
     x = bands[0] * np.clip(1 - 2 * u, 0, 1) + bands[1] * (1 - np.abs(2 * u - 1)) + bands[2] * np.clip(2 * u - 1, 0, 1)
     return x * u ** 2.5
+
+
+# ---------------------------------------------------------------------------
+# Mastering
+# ---------------------------------------------------------------------------
+def widen(L, R, amount=0.6):
+    """Spread things around the listener on headphones; keep the deep bass in the middle, where it hits hardest."""
+    M, S = (L + R) / 2, (L - R) / 2
+    S = shaped(S, lambda f: np.clip((f - 120) / 180, 0, 1) * (1 + amount * np.clip((f - 300) / 300, 0, 1)))
+    return M + S, M - S
+
+
+def phone_bass(L, R, mix=0.6):
+    """Let a phone speaker 'hear' the deep bass: add the bass's higher echoes (harmonics), which a small speaker
+    can play and the ear fills back in as the missing low note."""
+    M = (L + R) / 2
+    low = shaped(M, lambda f: 1 / (1 + (f / 110) ** 4))
+    pk = np.abs(low).max() + 1e-9
+    h = np.abs(low / pk) + 0.5 * np.tanh(3 * low / pk)  # even and odd harmonics
+    h = shaped(h, lambda f: np.clip((f - 110) / 60, 0, 1) / (1 + (f / 450) ** 4))
+    h *= np.sqrt((low ** 2).mean()) / (np.sqrt((h ** 2).mean()) + 1e-12) * mix
+    return L + h, R + h
+
+
+def loudness(st):
+    """Integrated loudness in LUFS, measured the way TikTok, Instagram and YouTube measure it."""
+    with tempfile.TemporaryDirectory() as tmp:
+        wav = os.path.join(tmp, 'm.wav')
+        write_wav(wav, st * 0.25)
+        err = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-hide_banner', '-i', wav, '-af', 'ebur128',
+                              '-f', 'null', '-'], capture_output=True, text=True).stderr
+    line = [l for l in err.split('Summary:')[1].splitlines() if l.strip().startswith('I:')][0]
+    return float(line.split()[1]) + 20 * np.log10(4)
+
+
+def true_peak_limit(st, ceiling_db=-1.5):
+    """Hold every peak, including the ones hiding between samples, under the ceiling, easing the volume down
+    smoothly around each one."""
+    thr = 10 ** (ceiling_db / 20)
+    n = len(st)
+    up = 4
+    peak = np.zeros(n)
+    for c in range(2):
+        X = np.fft.rfft(st[:, c])
+        Y = np.zeros(n * up // 2 + 1, complex)
+        Y[:len(X)] = X
+        y = np.fft.irfft(Y, n * up) * up
+        peak = np.maximum(peak, np.abs(y[:n * up]).reshape(n, up).max(1))
+    need = np.minimum(1, thr / np.maximum(peak, 1e-12))
+    g = need.copy()
+    s = 1
+    while s < int(0.004 * SR):  # spread each dip 4 ms either side (a look-ahead)
+        g = np.minimum(g, np.minimum(np.roll(g, s), np.roll(g, -s)))
+        s *= 2
+    k = int(0.002 * SR)
+    c = np.cumsum(np.concatenate([[0], g]))
+    sm = (c[k:] - c[:-k]) / k
+    g = np.minimum(g, np.concatenate([np.full(k // 2, sm[0]), sm, np.full(n - len(sm) - k // 2, sm[-1])]))
+    return st * g[:, None]
+
+
+def write_wav(path, st):
+    with wave.open(path, 'wb') as w:
+        w.setnchannels(2)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes((np.clip(st, -1, 1) * 32767).astype(np.int16).tobytes())
+
+
+TARGET_LUFS = -14.0  # the level the big video apps play everything at
 
 
 def main():
@@ -741,28 +884,38 @@ def main():
     i = int(CHOP_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
-    v = dialogue()
-    i = int(DIALOGUE_AT * SR)
-    st[i:i + len(v), 0] += v
-    st[i:i + len(v), 1] += v
-    v = recording(BREATH, BREATH_SPAN, 0.55)  # someone breathing in the dark...
-    i = int(BREATH_AT * SR)
-    st[i:i + len(v), 0] += v
-    st[i:i + len(v), 1] += v
     for at in (AMBUSH1_AT,):  # ...then it is upon them
         al, ar = ambush()
         i = int(at * SR)
         st[i:i + len(al), 0] = al[:n - i]
         st[i:i + len(ar), 1] = ar[:n - i]
+    # the music and effects: spread wider, bass made audible on phone speakers
+    L, R = widen(st[:, 0], st[:, 1])
+    L, R = phone_bass(L, R)
+    st = np.stack([L, R], 1)
+    # the voices, cleaned and placed
+    v = dialogue()
+    i = int(DIALOGUE_AT * SR)
+    st[i:i + len(v), 0] += v
+    st[i:i + len(v), 1] += v
+    air = snow_air(len(v) / SR + 0.7)
+    i = int((DIALOGUE_AT - 0.35) * SR)
+    st[i:i + len(air), 0] += air
+    st[i:i + len(air), 1] += air[::-1]  # a slightly different hush in each ear
+    v = breathing()  # someone breathing in the dark...
+    i = int(BREATH_AT * SR)
+    st[i:i + len(v), 0] += v
+    st[i:i + len(v), 1] += v
+    # master to the video apps' standard loudness, with every peak held safely under -1.5 dB
+    for _ in range(3):
+        st *= 10 ** ((TARGET_LUFS - loudness(st)) / 20)
+        st = true_peak_limit(st)
+    print(f'loudness {loudness(st):.1f} LUFS')
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
-        with wave.open(wav, 'wb') as w:
-            w.setnchannels(2)
-            w.setsampwidth(2)
-            w.setframerate(SR)
-            w.writeframes((st * 32767).astype(np.int16).tobytes())
+        write_wav(wav, st)
         subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', wav,
-                        '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out], check=True)
+                        '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', out], check=True)
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB')
 
 
