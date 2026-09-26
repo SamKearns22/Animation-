@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Horror trailer score, exactly 55 seconds, built from our Deck the Halls piano.
+"""Horror trailer score (about 60 seconds), built from our Deck the Halls piano.
 
     0     - 19.25 gentle Deck: the phrase twice, clean
     19.25         the knife comes down: the music cuts dead on the impact
@@ -9,12 +9,13 @@
                   each from a different mouth and each more desperate than the last
     35    - 42    the crescendo: 'being chased by a murderous clown' - still clearly the tune
     42    - 42.5  a horror gasp cuts it all off
-    42.5  - 45.5  three seconds of silence
-    45.5  - 51.1  'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
-                  timpani, bass drum, cymbals, gong, bells
-    51.1  - 51.5  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
-    51.5  - 53.5  two seconds of silence for the post-trailer titles
-    53.5  - 55    the ambush: something horrible, a sudden swarm of intense buzzing, cut dead at the end
+    42.5  - 43.5  one second of silence
+    43.5  - 48.8  someone breathing in the dark
+    48.8  - 50.3  the ambush: something horrible, a sudden swarm of intense buzzing, cut dead
+    50.3  - 55.9  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
+    55.9  - 56.3  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
+    56.3  - 58.3  two seconds of silence for the post-trailer titles
+    58.3  - 59.8  the ambush once more
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -32,7 +33,6 @@ import deck_the_halls as D
 from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 
 rng = np.random.default_rng(13)
-TOTAL = 55.0
 LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
 PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: the knife comes down on the downbeat of the third loop
@@ -40,11 +40,16 @@ PAUSE = 4.0                           # the silence for "Why would she do that?"
 MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
 DECK_END = MUSIC_END + PAUSE          # 42 in the finished track
 GASP_END = DECK_END + 0.5
-HARK_START = GASP_END + 3.0
+BREATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'breathing.m4a')
+BREATH_SPAN = (0.30, 5.60)            # the breathing, trimmed from the recording
+BREATH_AT = GASP_END + 1.0            # one second of silence after the gasp, then the breathing
+AMBUSH = 1.5                          # the discordant buzzing ambush
+AMBUSH1_AT = BREATH_AT + BREATH_SPAN[1] - BREATH_SPAN[0]  # it falls on the breather as the breathing ends
+HARK_START = AMBUSH1_AT + AMBUSH      # and the Hark comes straight in after it
 DENUDE = HARK_START + 5.6
 HARK_END = DENUDE + 0.4
-AMBUSH = 1.5                          # the buzzing ambush at the very end, after the title silence
-AMBUSH_AT = TOTAL - AMBUSH
+AMBUSH_AT = HARK_END + 2.0            # after two seconds of silence for the titles, the ambush once more
+TOTAL = AMBUSH_AT + AMBUSH
 SCREAM_WINDOW = (28.0, DECK_END - 0.7)
 DIALOGUE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'why-would-she-do-that.m4a')
 DIALOGUE_SPAN = (2.82, 4.10)          # where the words are in the recording
@@ -365,18 +370,23 @@ def chop():
     return x / np.abs(x).max() * 0.97
 
 
-def dialogue():
-    """'Why would she do that?' - trimmed from the recording, low rumble removed, level set."""
-    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-i', DIALOGUE, '-f', 's16le', '-ac', '1', '-ar', str(SR), '-'],
+def recording(path, span, level):
+    """A voice recording, trimmed, low rumble removed, level set."""
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-i', path, '-f', 's16le', '-ac', '1', '-ar', str(SR), '-'],
                          capture_output=True, check=True).stdout
     x = np.frombuffer(raw, np.int16) / 32768
-    a, b = (int(v * SR) for v in DIALOGUE_SPAN)
+    a, b = (int(v * SR) for v in span)
     x = x[a:b].copy()
     x = shaped(x, lambda f: np.clip((f - 60) / 60, 0, 1))
     k = int(0.03 * SR)
     x[:k] *= np.linspace(0, 1, k)
     x[-k:] *= np.linspace(1, 0, k)
-    return x / np.abs(x).max() * 0.7
+    return x / np.abs(x).max() * level
+
+
+def dialogue():
+    """'Why would she do that?'"""
+    return recording(DIALOGUE, DIALOGUE_SPAN, 0.7)
 
 
 # ---------------------------------------------------------------------------
@@ -688,10 +698,15 @@ def main():
     i = int(DIALOGUE_AT * SR)
     st[i:i + len(v), 0] += v
     st[i:i + len(v), 1] += v
-    al, ar = ambush()
-    i = int(AMBUSH_AT * SR)
-    st[i:i + len(al), 0] = al[:n - i]
-    st[i:i + len(ar), 1] = ar[:n - i]
+    v = recording(BREATH, BREATH_SPAN, 0.55)  # someone breathing in the dark...
+    i = int(BREATH_AT * SR)
+    st[i:i + len(v), 0] += v
+    st[i:i + len(v), 1] += v
+    for at in (AMBUSH1_AT, AMBUSH_AT):  # ...then it is upon them
+        al, ar = ambush()
+        i = int(at * SR)
+        st[i:i + len(al), 0] = al[:n - i]
+        st[i:i + len(ar), 1] = ar[:n - i]
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
         with wave.open(wav, 'wb') as w:
