@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """Horror trailer score, exactly 55 seconds, built from our Deck the Halls piano.
 
-    0.0 - 10  gentle Deck (the opening phrase, looping)
-    10  - 22  increasingly off-putting Deck: the piano sags flat, notes go wrong, a low drone creeps in
-    22  - 34  faster, more maddened Deck: stutters, clusters, the tape wobbles, a second piano a tritone down
-    34  - 42.5 horrifying crescendo: faster and faster, a third shrieking piano, a rising screech
-    42.5 - 43 a horror gasp cuts it all off
-    43  - 48  five seconds of silence
-    48  - 52.6 'Hark! the herald angels sing, glory to the new-born King!': choir, diva, organ, timpani,
-               bells, cymbals, far too fast
-    52.6 - 53 the music is stripped away, leaving the diva alone, sliding down into nothing
-    53  - 55  two seconds of silence for the post-trailer titles
+    0    - 12   gentle Deck (the opening phrase, looping)
+    12   - 14   the music stops dead: two seconds of silence
+    14   - 24   increasingly off-putting Deck: the odd note off-key, late or too loud; tiny crackles
+    24   - 36   faster, more maddened Deck; two of its notes (between 28 and 33 s) are screams, cut off
+    36   - 44.5 the crescendo: 'being chased by a murderous clown' - still clearly the tune
+    44.5 - 45   a horror gasp cuts it all off
+    45   - 48   three seconds of silence
+    48   - 52.6 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
+                timpani, cymbals, bells
+    52.6 - 53   the orchestra is stripped away, leaving the diva alone, sliding down into nothing
+    53   - 55   two seconds of silence for the post-trailer titles
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -19,6 +20,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import wave
 
 import imageio_ffmpeg
 import numpy as np
@@ -28,133 +30,24 @@ from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 
 rng = np.random.default_rng(13)
 TOTAL = 55.0
-DECK_END = 42.5
-GASP_END = 43.0
+PAUSE_AT, PAUSE = 12.0, 2.0  # the first dead stop
+MUSIC_END = 42.5              # length of the Deck music itself, not counting the pause
+DECK_END = MUSIC_END + PAUSE  # 44.5 in the finished track
+GASP_END = 45.0
 HARK_START = 48.0
 DENUDE = 52.6
 HARK_END = 53.0
 LEAD = 0.05
+SCREAM_WINDOW = (28.0, 33.0)  # in the finished track
+
+
+def real(t):
+    """Music time -> time in the finished track (the pause pushes everything after it back)."""
+    return t if t < PAUSE_AT else t + PAUSE
 
 
 # ---------------------------------------------------------------------------
-# Deck the Halls, looping and accelerating
-# ---------------------------------------------------------------------------
-def bpm_at(t):
-    return np.interp(t, [0, 10, 22, 34, 38, 42.5], [100, 104, 128, 185, 240, 330])
-
-
-_tg = np.arange(0, DECK_END + 3, 0.001)
-_beats = np.concatenate([[0], np.cumsum(bpm_at(_tg[:-1]) / 60 * 0.001)])
-
-
-def b2t(b):
-    return float(np.interp(b, _beats, _tg)) + LEAD
-
-
-def mad(t):
-    """0 while the carol is innocent, rising to 1 at the gasp."""
-    return np.clip((t - 9) / (DECK_END - 9), 0, 1)
-
-
-def add_note(L, R, m, t, dur, vel):
-    if t < 0 or dur <= 0:
-        return
-    s = piano_note(m, min(vel, 1.05), dur)
-    i = int(t * SR)
-    s = s[:max(0, len(L) - i)]
-    pan = np.clip((m - 60) / 40, -0.45, 0.45)
-    L[i:i + len(s)] += s * (0.5 - pan / 2) * 1.4
-    R[i:i + len(s)] += s * (0.5 + pan / 2) * 1.4
-
-
-def deck():
-    n = int((DECK_END + 1) * SR)
-    L, R = np.zeros(n), np.zeros(n)
-    events = []
-    b = 0.0
-    while b2t(b) < DECK_END:
-        pos = b
-        for name, nb in A_TUNE:
-            events.append((pos, midi(name), nb, 'tune'))
-            pos += nb
-        for j, ch in enumerate(A_HARM):
-            root, tones = CHORDS[ch]
-            events.append((b + 2 * j, midi(root), 1.9, 'bass'))
-            for tone in tones:
-                events.append((b + 2 * j + 1, midi(tone), 0.9, 'chord'))
-        b += 16
-    for bb, m0, nb, kind in events:
-        t = b2t(bb)
-        if t >= DECK_END:
-            continue
-        k = float(mad(t))
-        dur = b2t(bb + nb * 0.94) - t
-        m = m0 + (-40 * k ** 1.2 + rng.normal(0, 3 + 28 * k)) / 100  # the whole piano sags out of tune
-        base = {'tune': 0.78, 'bass': 0.5, 'chord': 0.3}[kind]
-        vel = base * (1 + 0.45 * k) + rng.normal(0, 0.03)
-        t += rng.normal(0, 0.004 + 0.018 * k)
-        if kind == 'tune':
-            if rng.random() < 0.38 * k ** 1.5:
-                m += rng.choice([-1, 1])  # a wrong note
-            if rng.random() < 0.2 * k ** 2:
-                m += rng.choice([-12, 12])  # in the wrong octave
-            add_note(L, R, m, t, dur, vel)
-            if k > 0.5 and rng.random() < (k - 0.5) * 1.2:  # stutters
-                for r in (1, 2):
-                    add_note(L, R, m + rng.normal(0, 0.3), t + dur * r / 3, dur / 3, vel * 0.9)
-            if t >= 26:  # a second piano, a tritone down, a bar behind
-                t2 = b2t(bb + 2)
-                if t2 < DECK_END:
-                    add_note(L, R, m - 6, t2, dur, vel * 0.75 * min(1, (t - 26) / 8))
-            if t >= 34:  # a third, shrieking an octave and a semitone up
-                t3 = b2t(bb + 1)
-                if t3 < DECK_END:
-                    add_note(L, R, m + 13, t3, dur, vel * 0.7 * min(1, (t - 34) / 4))
-        else:
-            add_note(L, R, m, t, dur, vel)
-            if rng.random() < k * 0.9:  # clusters
-                add_note(L, R, m + 1, t, dur, vel * 0.8)
-            if kind == 'bass' and k > 0.45:
-                add_note(L, R, m + 6, t, dur, vel * 0.7)
-
-    # the tape starts to wobble: seasick at first, then lurching
-    tt = np.arange(n) / SR
-    k = mad(tt)
-    depth = 0.004 * k ** 1.4 * SR
-    ph = np.cumsum(2 * np.pi * (0.5 + 5 * k ** 2) / SR)
-    idx = np.arange(n) - depth * (1 + np.sin(ph))
-    L = np.interp(idx, np.arange(n), L)
-    R = np.interp(idx, np.arange(n), R)
-    L, R = D.reverb(L), D.reverb(R)
-
-    # a low beating drone creeping in, then a rising screech for the crescendo
-    amp = np.clip((tt - 11) / 23, 0, 1) ** 1.5 * 0.22 + np.clip((tt - 34) / 8.5, 0, 1) ** 2 * 0.25
-    dr = np.zeros(n)
-    for f, a in ((87.31, 1), (92.5, 0.8), (174.6, 0.5), (185.0, 0.4), (123.5, 0.35)):
-        dr += a * np.sin(2 * np.pi * f * tt * (1 + 0.004 * np.sin(0.4 * tt)))
-    dr *= amp
-    u = np.clip((tt - 34) / (DECK_END - 34), 0, 1)
-    sc = np.zeros(n)
-    for det in (-0.02, -0.007, 0.0, 0.009, 0.021):
-        f = 200 * 2 ** (3.3 * u + det)
-        p = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
-        for h in range(1, 9):
-            sc += np.sin(h * p) / h
-    sc *= (u ** 2) * 0.09 * (1 + 0.3 * np.sin(2 * np.pi * 11 * tt))
-
-    gain = np.interp(tt, [0, 10, 22, 34, 42.5], [1.0, 1.0, 1.05, 1.12, 1.5])
-    L = L * gain + dr + sc
-    R = R * gain + dr * 0.95 + sc * 1.05
-    cut = int(DECK_END * SR)
-    f = int(0.008 * SR)
-    for ch in (L, R):
-        ch[cut - f:cut] *= np.linspace(1, 0, f)
-        ch[cut:] = 0
-    return L[:cut], R[:cut]
-
-
-# ---------------------------------------------------------------------------
-# The gasp
+# Shared sound-shaping helpers
 # ---------------------------------------------------------------------------
 def shaped(x, fn):
     X = np.fft.rfft(x)
@@ -169,6 +62,216 @@ def formant_gain(f, forms):
     return g
 
 
+FEMALE = [(800, 90, 1.0), (1150, 100, 0.5), (2900, 150, 0.3), (3900, 180, 0.2), (4950, 200, 0.1)]
+MALE = [(650, 90, 1.0), (1080, 100, 0.45), (2650, 150, 0.35), (2900, 150, 0.35), (3250, 180, 0.15)]
+SHRIEK = [(1000, 250, 1.0), (2800, 350, 0.9), (3500, 300, 0.7), (4500, 500, 0.35)]
+
+
+def additive(f, spectrum, fmax=9000):
+    """A tone following the frequency curve f, its harmonics weighted by spectrum(fk, k)."""
+    ph = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
+    out = np.zeros(len(f))
+    for k in range(1, min(90, int(fmax / f.min())) + 1):
+        fk = k * f
+        out += spectrum(fk, k) * (fk < fmax) * np.sin(k * ph)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Deck the Halls, looping and accelerating (all in 'music time')
+# ---------------------------------------------------------------------------
+def bpm_at(t):
+    return np.interp(t, [0, 10, 22, 34, 38, MUSIC_END], [100, 104, 128, 175, 215, 280])
+
+
+_tg = np.arange(0, MUSIC_END + 3, 0.001)
+_beats = np.concatenate([[0], np.cumsum(bpm_at(_tg[:-1]) / 60 * 0.001)])
+
+
+def b2t(b):
+    return float(np.interp(b, _beats, _tg)) + LEAD
+
+
+def mad(t):
+    """0 while the carol is innocent, rising to 1 at the gasp."""
+    return np.clip((t - 10) / (MUSIC_END - 10), 0, 1)
+
+
+def add_note(L, R, m, t, dur, vel):
+    if t < 0 or dur <= 0:
+        return
+    s = piano_note(m, min(vel, 1.05), dur)
+    i = int(t * SR)
+    s = s[:max(0, len(L) - i)]
+    pan = np.clip((m - 60) / 40, -0.45, 0.45)
+    L[i:i + len(s)] += s * (0.5 - pan / 2) * 1.4
+    R[i:i + len(s)] += s * (0.5 + pan / 2) * 1.4
+
+
+def calliope(L, R, m, t, dur, vel):
+    """A wheezy, out-of-tune fairground organ doubling the tune."""
+    n = int((dur + 0.05) * SR)
+    tt = np.arange(n) / SR
+    f = hz(m + rng.normal(0, 0.15)) * (1 + 0.006 * np.sin(2 * np.pi * 7 * tt))
+    s = additive(f, lambda fk, k: [0, 1, 0.45, 0.3, 0.12, 0.08, 0.05][k] if k < 7 else 0.0)
+    s += shaped(rng.standard_normal(n), lambda fr: np.exp(-((fr - hz(m) * 2) / 600) ** 2)) * 0.04
+    env = np.minimum(1, tt / 0.012) * np.clip((dur + 0.05 - tt) / 0.05, 0, 1)
+    s *= env * vel * (1 + 0.25 * np.sin(2 * np.pi * 7 * tt))
+    i = int(t * SR)
+    s = s[:max(0, len(L) - i)]
+    L[i:i + len(s)] += s * 0.55
+    R[i:i + len(s)] += s * 0.45
+
+
+def scream(m, dur, kind):
+    """A human scream on the note's pitch, cut off dead at the end of the note."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    base = m + (12 if kind == 'shriek' else 0)
+    jitter = np.convolve(rng.standard_normal(n), np.ones(300) / 300, 'same') * 3.0
+    lm = base - 3 * np.exp(-t / 0.04) + 0.35 * np.sin(2 * np.pi * 9.5 * t) + jitter
+    f = 440 * 2 ** ((lm - 69) / 12)
+    forms = SHRIEK if kind == 'shriek' else MALE
+    s = additive(f, lambda fk, k: formant_gain(fk, forms) / k ** 0.7)
+    s += additive(f / 2, lambda fk, k: formant_gain(fk, forms) / k ** 0.7) * 0.35  # rasp
+    s /= np.abs(s).max()
+    s += shaped(rng.standard_normal(n), lambda fr: formant_gain(fr, forms)) * 0.004
+    env = np.minimum(1, t / 0.012) * (0.85 + 0.15 * t / dur)
+    env[-int(0.003 * SR):] *= np.linspace(1, 0, int(0.003 * SR))
+    return s * env / np.abs(s * env).max()
+
+
+def deck():
+    n = int((MUSIC_END + 1) * SR)
+    bufs = {'A': (np.zeros(n), np.zeros(n)), 'B': (np.zeros(n), np.zeros(n))}  # before / after the stop
+    events = []
+    b = 0.0
+    while b2t(b) < MUSIC_END:
+        pos = b
+        for name, nb in A_TUNE:
+            events.append((pos, midi(name), nb, 'tune'))
+            pos += nb
+        for j, ch in enumerate(A_HARM):
+            root, tones = CHORDS[ch]
+            events.append((b + 2 * j, midi(root), 1.9, 'bass'))
+            for tone in tones:
+                events.append((b + 2 * j + 1, midi(tone), 0.9, 'chord'))
+        b += 16
+
+    # choose the two notes that become screams: long ones, well apart
+    lo, hi = SCREAM_WINDOW
+    cands = [e for e in events if e[3] == 'tune' and e[2] >= 1.0 and lo <= real(b2t(e[0])) < hi - 0.5]
+    picks = []
+    for e in cands:
+        if not picks or b2t(e[0]) - b2t(picks[-1][0]) > 1.5:
+            picks.append(e)
+    picks = picks[:2]
+    print('screams at', [round(real(b2t(e[0])), 2) for e in picks])
+    screams = []
+
+    for ev in events:
+        bb, m0, nb, kind = ev
+        t = b2t(bb)
+        if t >= MUSIC_END:
+            continue
+        L, R = bufs['A' if t < PAUSE_AT else 'B']
+        k = float(mad(t))
+        dur = b2t(bb + nb * 0.94) - t
+        m = m0 + (-20 * k + rng.normal(0, 2 + 8 * k)) / 100  # a slight sag, a little honky-tonk
+        base = {'tune': 0.78, 'bass': 0.5, 'chord': 0.3}[kind]
+        vel = base * (1 + 0.4 * k) + rng.normal(0, 0.03)
+        t += rng.normal(0, 0.003 + 0.006 * k)
+        if kind == 'tune':
+            if t > 14 and rng.random() < 0.05 + 0.1 * k:  # the occasional note off-key...
+                m += rng.choice([-1, 1]) * rng.choice([0.5, 1.0])
+            elif t > 13 and rng.random() < 0.05 + 0.1 * k:  # ...or late...
+                t += rng.uniform(0.04, 0.09 + 0.05 * k)
+            elif t > 13 and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
+                vel = min(1.05, vel * 1.5)
+            if ev in picks:
+                screams.append((t, m, dur, 'shriek' if len(screams) == 0 else 'yell'))
+                add_note(L, R, m, t, dur, vel * 0.35)
+                continue
+            add_note(L, R, m, t, dur, vel)
+            if k > 0.3:  # honky-tonk: a second string badly out of tune
+                add_note(L, R, m + 0.22, t, dur, vel * 0.45 * min(1, (k - 0.3) / 0.3))
+            if k > 0.55:  # the tune in octaves, hammered
+                add_note(L, R, m - 12, t, dur, vel * 0.7 * min(1, (k - 0.55) / 0.2))
+            if t > 24:  # the fairground organ joins in
+                calliope(L, R, m + 12, t, dur, vel * 0.32 * min(1, (t - 24) / 12) ** 1.3)
+        else:
+            add_note(L, R, m, t, dur, vel)
+            if kind == 'bass' and k > 0.6 and rng.random() < 0.5:
+                add_note(L, R, m + 1, t, dur, vel * 0.5)
+
+    tt = np.arange(n) / SR
+    k = mad(tt)
+    depth = 0.0012 * k ** 1.5 * SR  # a gently warped tape
+    ph = np.cumsum(2 * np.pi * (0.4 + 2.5 * k ** 2) / SR)
+    idx = np.arange(n) - depth * (1 + np.sin(ph))
+    out = {}
+    for key, (L, R) in bufs.items():
+        L = np.interp(idx, np.arange(n), L)
+        R = np.interp(idx, np.arange(n), R)
+        out[key] = [D.reverb(L), D.reverb(R)]
+    P = max(np.abs(out['A'][0]).max(), np.abs(out['B'][0][int(20 * SR):]).max() / 1.5)
+
+    # the screams go on dry and cut off dead
+    for st, m, dur, kind in screams:
+        s = scream(m, dur, kind) * P * (1.05 if kind == 'shriek' else 1.0)
+        i = int(st * SR)
+        out['B'][0][i:i + len(s)] += s * 0.95
+        out['B'][1][i:i + len(s)] += s * 1.05
+
+    # the bed: a low drone creeping in, tiny crackles and static, and a rising whine at the end
+    bed = np.zeros(n)
+    amp = np.clip((tt - 14) / 20, 0, 1) ** 1.5 * 0.08 + np.clip((tt - 34) / 8.5, 0, 1) ** 2 * 0.08
+    for f, a in ((87.31, 1), (92.5, 0.7), (174.6, 0.5), (185.0, 0.35)):
+        bed += a * np.sin(2 * np.pi * f * tt * (1 + 0.004 * np.sin(0.4 * tt)))
+    bed *= amp * P
+    rate = np.interp(tt, [0, 8, 20, 34, MUSIC_END], [0, 0.6, 3, 9, 25])  # crackles per second
+    hits = np.nonzero(rng.random(n) < rate / SR)[0]
+    click = np.exp(-np.arange(60) / 8.0) * np.sign(rng.standard_normal(60))
+    for i in hits:
+        a = rng.uniform(0.03, 0.12) * P * (1 + 1.5 * k[i])
+        seg = click[:n - i] * a
+        bed[i:i + len(seg)] += seg
+    t_s = 9.0
+    while t_s < MUSIC_END - 0.3:
+        kk = float(mad(t_s))
+        ln = rng.uniform(0.03, 0.12 + 0.1 * kk)
+        m_ = int(ln * SR)
+        i = int(t_s * SR)
+        c = rng.uniform(1500, 6000)
+        burst = shaped(rng.standard_normal(m_), lambda fr: np.exp(-((fr - c) / 1500) ** 2))
+        burst *= np.hanning(m_) * (rng.random(m_) < 0.6) * P * rng.uniform(0.05, 0.12) * (1 + kk)
+        bed[i:i + m_] += burst / (np.abs(burst).max() + 1e-9) * P * 0.07 * (1 + kk)
+        t_s += rng.exponential(2.5 - 1.8 * kk)
+    u = np.clip((tt - 36) / (MUSIC_END - 36), 0, 1)
+    for det in (-0.02, 0.0, 0.021):
+        f = 220 * 2 ** (3.0 * u + det)
+        bed += additive(f, lambda fk, kk: 1.0 / kk) * (u ** 2.5) * 0.03 * P
+
+    gain = np.interp(tt, [0, 10, 22, 34, MUSIC_END], [1.0, 1.0, 1.05, 1.12, 1.5])
+    for key in out:
+        out[key] = [ch * gain + bed for ch in out[key]]
+
+    # stitch: stop dead at 12 s, two seconds of nothing, then carry on
+    cut = int(PAUSE_AT * SR)
+    f = int(0.006 * SR)
+    res = []
+    for c in (0, 1):
+        a = out['A'][c][:cut].copy()
+        a[-f:] *= np.linspace(1, 0, f)
+        bpart = out['B'][c][cut:int(MUSIC_END * SR)].copy()
+        bpart[-f:] *= np.linspace(1, 0, f)
+        res.append(np.concatenate([a, np.zeros(int(PAUSE * SR)), bpart]))
+    return res
+
+
+# ---------------------------------------------------------------------------
+# The gasp
+# ---------------------------------------------------------------------------
 def gasp():
     dur = GASP_END - DECK_END
     n = int(dur * SR)
@@ -187,56 +290,73 @@ def gasp():
 
 
 # ---------------------------------------------------------------------------
-# Hark! the herald angels sing
+# HARK! THE HE-RALD AN-GELS SING! - an orchestral climax
 # ---------------------------------------------------------------------------
-HB = 60 / 208
-BEATS = [1, 1, 1.5, 0.5, 1, 1, 1, 1, 1, 1, 1.5, 0.5, 1, 1, None]
-MEL = ['C5', 'F5', 'F5', 'E5', 'F5', 'A5', 'A5', 'G5', 'C6', 'C6', 'C6', 'Bb5', 'A5', 'G5', 'A5']
-ALTO = ['A4', 'A4', 'A4', 'G4', 'A4', 'C5', 'C5', 'C5', 'A5', 'A5', 'A5', 'G5', 'F5', 'E5', 'F5']
-TENOR = ['F4', 'C4', 'C4', 'C4', 'C4', 'F4', 'F4', 'E4', 'C5', 'C5', 'C5', 'C5', 'C5', 'C5', 'C5']
-BASS = ['F3', 'F3', 'F3', 'C3', 'F3', 'F3', 'F3', 'C3', 'F3', 'F3', 'F3', 'C3', 'F3', 'C3', 'F3']
-HARM = ['F', 'F', 'F', 'C', 'F', 'F', 'F', 'C', 'F', 'F', 'F', 'C7', 'F', 'C', 'F']
+HB = 60 / 108
+#        Hark   the   he-   rald  an-   gels  SING
+BEATS = [1.0, 1.0, 2.0, 0.5, 0.5, 1.15, None]  # DAH DAH DAHHH, DA DA DAH DAHHH
+MEL = ['C5', 'F5', 'F5', 'E5', 'F5', 'A5', 'A5']
+ALTO = ['A4', 'A4', 'A4', 'G4', 'A4', 'C5', 'C5']
+TENOR = ['F4', 'C4', 'C4', 'C4', 'C4', 'F4', 'F4']
+BASS = ['F3', 'F3', 'F3', 'C3', 'F3', 'F3', 'F3']
+LOW = ['F2', 'F2', 'F2', 'C2', 'F2', 'F2', 'F2']
+HARM = ['F', 'F', 'F', 'C', 'F', 'F', 'F']
 DIVA = MEL[:-1] + ['F6']
-FEMALE = [(800, 90, 1.0), (1150, 100, 0.5), (2900, 150, 0.3), (3900, 180, 0.2), (4950, 200, 0.1)]
-MALE = [(650, 90, 1.0), (1080, 100, 0.45), (2650, 150, 0.35), (2900, 150, 0.35), (3250, 180, 0.15)]
 HN = int((HARK_END - HARK_START + 0.5) * SR)
 _starts = [0.02]
 for _b in BEATS[:-1]:
     _starts.append(_starts[-1] + _b * HB)
 STARTS = np.array(_starts)  # seconds after HARK_START
 CUT = DENUDE - HARK_START
+HT = np.arange(HN) / SR
+_IDX = np.clip(np.searchsorted(STARTS, HT, side='right') - 1, 0, len(MEL) - 1)
 
 
-def voice(names, forms, vib_cents, detune, dive=False):
-    """One operatic singer on 'ah', following the notes, with a wide wobbling vibrato."""
-    t = np.arange(HN) / SR
-    idx = np.clip(np.searchsorted(STARTS, t, side='right') - 1, 0, len(names) - 1)
-    lm = np.array([midi(nm) for nm in names], float)[idx]
-    w = int(0.03 * SR)
-    lm = np.convolve(np.pad(lm, (w, w), mode='edge'), np.ones(w) / w, 'same')[w:-w]  # glide between notes
-    rate = 6.3 + rng.normal(0, 0.3)
-    vib = vib_cents / 100 * np.sin(2 * np.pi * rate * t + rng.uniform(0, 6.3)) * np.minimum(1, t / 0.15)
-    lm = lm + vib + detune / 100
-    if dive:  # after the music is stripped away, the voice slides down into nothing
-        u = np.clip((t - CUT) / (HARK_END - DENUDE), 0, 1)
-        lm = lm - 40 * u ** 1.6
-    f = 440 * 2 ** ((lm - 69) / 12)
-    ph = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
-    out = np.zeros(HN)
-    K = min(80, int(7000 / f.min()))
-    for k in range(1, K + 1):
-        fk = k * f
-        a = formant_gain(fk, forms) / k * (fk < 9000)
-        out += a * np.sin(k * ph)
-    # a small dip between syllables
-    env = np.ones(HN)
-    for s in STARTS[1:]:
-        i = int(s * SR)
-        d = int(0.035 * SR)
-        env[i - d:i + d] *= 1 - 0.55 * np.hanning(2 * d)
-    env *= np.minimum(1, t / 0.03)
-    out *= env
-    return out / (np.sqrt((out ** 2).mean()) + 1e-9)
+def pitch_curve(names, vib_cents, rate, detune, glide=0.03):
+    lm = np.array([midi(nm) for nm in names], float)[_IDX]
+    w = int(glide * SR)
+    lm = np.convolve(np.pad(lm, (w, w), mode='edge'), np.ones(w) / w, 'same')[w:-w]
+    vib = vib_cents / 100 * np.sin(2 * np.pi * rate * HT + rng.uniform(0, 6.3)) * np.minimum(1, HT / 0.15)
+    return lm + vib + detune / 100
+
+
+def hits_env(attack=0.02, dip=0.7, swell_last=True):
+    """Every syllable struck like a conductor's downbeat: a punch, a slight settle, a gap before the next."""
+    env = np.zeros(HN)
+    for i, s in enumerate(STARTS):
+        e = STARTS[i + 1] if i + 1 < len(STARTS) else CUT + 0.3
+        a, b_ = int(s * SR), int(e * SR)
+        tt = np.arange(b_ - a) / SR
+        seg = np.minimum(1, tt / attack) * (0.8 + 0.2 * np.exp(-tt / 0.12))
+        if i == len(STARTS) - 1 and swell_last:
+            seg *= 1 + 0.4 * np.clip(tt / 1.0, 0, 1)  # the final note swells
+        gap = int(0.04 * SR)
+        if i + 1 < len(STARTS):
+            seg[-gap:] *= 1 - dip * np.linspace(0, 1, gap)
+        env[a:b_] = seg[:len(env[a:b_])]
+    return env
+
+
+def section(names, count, spectrum, vib, rate, spread, env, pan):
+    L, R = np.zeros(HN), np.zeros(HN)
+    for _ in range(count):
+        lm = pitch_curve(names, vib, rate + rng.normal(0, 0.3), rng.normal(0, spread))
+        f = 440 * 2 ** ((lm - 69) / 12)
+        s = additive(f, spectrum)
+        s = s / (np.sqrt((s ** 2).mean()) + 1e-9) * env / count ** 0.5
+        p = np.clip(pan + rng.normal(0, 0.12), -0.9, 0.9)
+        L += s * (0.5 - p / 2)
+        R += s * (0.5 + p / 2)
+    return L, R
+
+
+def brass_spectrum(env):
+    cut = 1200 + 3000 * np.clip(env, 0, 1.4)  # louder = brighter, the brass 'blaze'
+    return lambda fk, k: (1.0 / k ** 0.6) / (1 + (fk / cut) ** 4)
+
+
+def strings_spectrum(fk, k):
+    return formant_gain(fk, [(500, 250, 0.6), (1400, 500, 0.5), (3000, 900, 0.3)]) / k ** 0.9
 
 
 def bell(m, dur=2.5):
@@ -251,28 +371,35 @@ def bell(m, dur=2.5):
 
 
 def timp(m, vel):
-    n = int(1.6 * SR)
+    n = int(2.0 * SR)
     t = np.arange(n) / SR
     f = hz(m) * (1 + 0.1 * np.exp(-t / 0.03))
     ph = np.cumsum(2 * np.pi * f / SR)
-    out = np.exp(-t / 0.7) * np.sin(ph) + 0.5 * np.exp(-t / 0.4) * np.sin(1.5 * ph) \
-        + 0.3 * np.exp(-t / 0.3) * np.sin(1.99 * ph)
-    k = int(0.02 * SR)
-    out[:k] += rng.standard_normal(k) * np.exp(-np.arange(k) / (0.004 * SR)) * 0.6
+    out = np.exp(-t / 0.9) * np.sin(ph) + 0.5 * np.exp(-t / 0.5) * np.sin(1.5 * ph) \
+        + 0.3 * np.exp(-t / 0.35) * np.sin(1.99 * ph)
+    k = int(0.025 * SR)
+    out[:k] += rng.standard_normal(k) * np.exp(-np.arange(k) / (0.005 * SR)) * 0.8
     return out * vel
+
+
+def bass_drum(vel):
+    n = int(1.5 * SR)
+    t = np.arange(n) / SR
+    f = 45 * (1 + 1.2 * np.exp(-t / 0.04))
+    return np.exp(-t / 0.5) * np.sin(np.cumsum(2 * np.pi * f / SR)) * vel
 
 
 def crash(dur=3.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
     x = shaped(rng.standard_normal(n), lambda f: np.clip((f - 2500) / 4000, 0, 1) ** 0.7)
-    return x * np.exp(-t / 1.1) / np.abs(x).max()
+    return x * np.exp(-t / 1.3) / np.abs(x).max()
 
 
-def hall(x, secs=3.0, tau=0.75):
+def hall(x, secs=3.5, tau=0.9):
     L = int(secs * SR)
     tt = np.arange(L) / SR
-    ir = rng.standard_normal(L) * np.exp(-tt / tau) * (tt > 0.02)
+    ir = rng.standard_normal(L) * np.exp(-tt / tau) * (tt > 0.025)
     ir = np.convolve(ir, np.ones(8) / 8, 'same')
     ir /= np.sqrt((ir ** 2).sum())
     n = len(x) + L
@@ -288,83 +415,79 @@ def place(buf, s, t, gain=1.0):
 
 def hark():
     L, R = np.zeros(HN), np.zeros(HN)
-    # choir: four sopranos, three altos, three tenors, three basses, slightly out of tune with each other
-    parts = [(MEL, FEMALE, 4, 1.0, 0.35), (ALTO, FEMALE, 3, 0.7, -0.2), (TENOR, MALE, 3, 0.7, 0.15),
-             (BASS, MALE, 3, 0.9, -0.35)]
-    for names, forms, count, g, pan in parts:
-        for c in range(count):
-            v = voice(names, forms, 70, rng.normal(0, 12)) * g / count ** 0.5
-            p = pan + rng.normal(0, 0.15)
-            L += v * (0.5 - p / 2)
-            R += v * (0.5 + p / 2)
-    L *= 0.09
-    R *= 0.09
-    # organ: the chords with a deep pedal
-    t = np.arange(HN) / SR
-    idx = np.clip(np.searchsorted(STARTS, t, side='right') - 1, 0, len(HARM) - 1)
+    env = hits_env()
+    soft = hits_env(attack=0.05, dip=0.5)
+
+    def mix(pair, g):
+        L[:] += pair[0] * g
+        R[:] += pair[1] * g
+
+    # brass: trumpets on the tune, horns in the middle, trombones and tuba underneath
+    mix(section(MEL, 3, brass_spectrum(env), 12, 5.5, 5, env, 0.2), 0.22)
+    mix(section([nm[:-1] + str(int(nm[-1]) - 1) for nm in MEL], 2, brass_spectrum(env), 8, 5.0, 5, env, 0.1), 0.12)
+    mix(section(ALTO, 4, brass_spectrum(env * 0.8), 8, 5.0, 6, env, -0.3), 0.13)
+    mix(section(TENOR, 3, brass_spectrum(env * 0.8), 6, 5.0, 6, env, -0.4), 0.12)
+    mix(section(BASS, 3, brass_spectrum(env), 0, 5.0, 5, env, 0.35), 0.16)
+    mix(section(LOW, 2, brass_spectrum(env * 0.7), 0, 5.0, 4, env, 0.0), 0.14)
+    # strings: violins up high, sawing away, cellos and basses on the bottom
+    mix(section([nm[:-1] + str(int(nm[-1]) + 1) for nm in MEL], 8, strings_spectrum, 25, 6.0, 8, soft, -0.35), 0.09)
+    mix(section(MEL, 6, strings_spectrum, 22, 6.0, 8, soft, -0.2), 0.08)
+    mix(section(LOW, 4, strings_spectrum, 15, 5.5, 6, soft, 0.3), 0.1)
+    # choir on 'ah', with operatic vibrato
+    for names, forms, count, g, pan in ((MEL, FEMALE, 5, 0.1, 0.3), (ALTO, FEMALE, 4, 0.07, -0.2),
+                                        (TENOR, MALE, 4, 0.07, 0.15), (BASS, MALE, 4, 0.08, -0.35)):
+        mix(section(names, count, lambda fk, k, fo=forms: formant_gain(fk, fo) / k, 60, 6.0, 12, soft, pan), g)
+    # organ pedal and chords
     org = np.zeros(HN)
-    for ch in set(HARM):
-        root, tones = CHORDS[ch]
-        mask = np.array([h == ch for h in HARM])[idx].astype(float)
-        mask = np.convolve(mask, np.ones(400) / 400, 'same')
-        s = np.zeros(HN)
-        for nm in [root] + tones:
-            f0 = hz(midi(nm))
-            for r, a in ((0.5, 0.6), (1, 1), (2, 0.5), (4, 0.2)):
-                s += a * np.sin(2 * np.pi * f0 * r * t)
-        org += s * mask
-    org *= 0.035 * np.minimum(1, t / 0.05)
+    for nm in ('F1', 'F2', 'C3', 'F3', 'A3', 'C4'):
+        f0 = hz(midi(nm))
+        for r, a in ((1, 1), (2, 0.5), (4, 0.2)):
+            org += a * np.sin(2 * np.pi * f0 * r * HT)
+    org *= 0.02 * np.minimum(1, HT / 0.05) * np.clip((CUT - HT) / 0.01, 0, 1)
     L += org
     R += org
-    # piano hammering the tune in octaves, with chords on every beat
+    # piano hammering the tune in octaves
     for i, (nm, st) in enumerate(zip(MEL, STARTS)):
         d = (BEATS[i] or 2) * HB
-        for sh in (0, -12):
-            s = piano_note(midi(nm) + sh, 1.0, d) * 0.35
+        for sh in (0, -12, -24):
+            s = piano_note(midi(nm) + sh, 1.0, d) * 0.12
             place(L, s, st, 0.9)
             place(R, s, st, 1.1)
-    nbeats = int(sum(BEATS[:-1])) + 2
-    for b in range(nbeats):
-        st = 0.02 + b * HB
-        if st > CUT:
-            break
-        ch = HARM[min(np.searchsorted(STARTS, st + 0.001, side='right') - 1, len(HARM) - 1)]
-        root, tones = CHORDS[ch]
-        for nm in tones:
-            s = piano_note(midi(nm), 0.8, HB * 0.8) * 0.2
-            place(L, s, st, 1.0)
-            place(R, s, st, 1.0)
-        # bells pealing on every beat
-        bl = bell(midi(['F5', 'C6', 'A5', 'F6', 'C5'][b % 5])) * 0.08
-        place(L, bl, st, 1.2 if b % 2 else 0.8)
-        place(R, bl, st, 0.8 if b % 2 else 1.2)
-        # timpani on every other beat
-        if b % 2 == 0 and b < 14:
-            tp = timp(midi('F2') if b % 4 == 0 else midi('C2'), 0.5 if b % 8 == 0 else 0.35)
-            place(L, tp, st)
-            place(R, tp, st)
-    # timpani roll on 'King'
-    rt = STARTS[-1]
+    # percussion: a timpani and bass-drum blow on every syllable, cymbals and bells on the big ones
+    for i, st in enumerate(STARTS):
+        big = i in (0, 2, 6)
+        tp = timp(midi('F2') if HARM[i] == 'F' else midi('C2'), 0.5 if big else 0.35)
+        bd = bass_drum(0.6 if big else 0.35)
+        for buf in (L, R):
+            place(buf, tp, st)
+            place(buf, bd, st)
+        bl = bell(midi(['F5', 'C6', 'A5', 'F5', 'C6', 'A5', 'F6'][i])) * 0.05
+        place(L, bl, st, 1.2 if i % 2 else 0.8)
+        place(R, bl, st, 0.8 if i % 2 else 1.2)
+        if big:
+            c = crash() * (0.3 if i < 6 else 0.4)
+            place(L, c, st)
+            place(R, c, st + 0.004)
+    rt = STARTS[-1] + 0.1  # a thundering timpani roll under the final note
     while rt < CUT:
-        tp = timp(midi('F2'), 0.12 + 0.25 * (rt - STARTS[-1]) / (CUT - STARTS[-1]))
+        tp = timp(midi('F2'), 0.1 + 0.3 * (rt - STARTS[-1]) / (CUT - STARTS[-1]))
         place(L, tp, rt)
-        place(R, tp, rt)
-        rt += 0.055
-    for st, g in ((STARTS[0], 0.35), (STARTS[8], 0.3), (STARTS[-1], 0.35)):
-        c = crash() * g
-        place(L, c, st)
-        place(R, c, st + 0.004)
-    # the diva, above everything
-    diva = voice(DIVA, FEMALE, 110, 0, dive=True) * 0.1
-    before = np.clip((CUT - t) / 0.006, 0, 1)
+        place(R, tp, rt + 0.01)
+        rt += 0.05
+    # the diva, above everything, leaping to a top F on SING
+    lm = pitch_curve(DIVA, 110, 6.3, 0, glide=0.05)
+    u = np.clip((HT - CUT) / (HARK_END - DENUDE), 0, 1)
+    lm = lm - 40 * u ** 1.6  # after the orchestra is stripped away, she slides down into nothing
+    diva = additive(440 * 2 ** ((lm - 69) / 12), lambda fk, k: formant_gain(fk, FEMALE) / k)
+    diva = diva / np.sqrt((diva ** 2).mean()) * soft * 0.1
+    before = np.clip((CUT - HT) / 0.006, 0, 1)
     L += diva * before * 0.9
     R += diva * before * 1.1
     L, R = hall(L), hall(R)
-    # stripped bare: everything goes, except the diva sliding away on her own
     L *= before
     R *= before
     alone = diva * (1 - before) * 1.4
-    alone *= np.clip((HARK_END - HARK_START - t) / 0.03, 0, 1)
+    alone *= np.clip((HARK_END - HARK_START - HT) / 0.03, 0, 1)
     end = int((HARK_END - HARK_START) * SR)
     return (L + alone)[:end], (R + alone)[:end]
 
@@ -391,11 +514,10 @@ def main():
     # a gentle limiter so the loud parts are loud without crackling
     st = np.stack([L, R], 1)
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
-    st[int(GASP_END * SR):int(HARK_START * SR)] = 0
-    st[int(HARK_END * SR):] = 0
+    for a, b in ((PAUSE_AT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
+        st[int(a * SR):int(b * SR)] = 0  # true silence
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
-        import wave
         with wave.open(wav, 'wb') as w:
             w.setnchannels(2)
             w.setsampwidth(2)
