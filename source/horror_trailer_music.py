@@ -319,24 +319,43 @@ def deck():
 # The knife: through the fingers and into the chopping board
 # ---------------------------------------------------------------------------
 def chop():
-    n = int(0.9 * SR)
+    """A cleaver hitting meat and bone, hard, then burying itself in the board."""
+    n = int(1.2 * SR)
     t = np.arange(n) / SR
-    board = np.sin(np.cumsum(2 * np.pi * (95 + 110 * np.exp(-t / 0.02)) / SR)) * np.exp(-t / 0.07)
-    board += 0.5 * np.sin(2 * np.pi * 62 * t) * np.exp(-t / 0.12)
-    tock = np.sin(2 * np.pi * 1350 * t) * np.exp(-t / 0.025) * 0.25  # the blade biting the wood
+
+    def burst(t0, length, lo, hi, decay):
+        x = np.zeros(n)
+        i0, k = int(t0 * SR), int(length * SR)
+        seg = rng.standard_normal(k) * np.exp(-np.arange(k) / (decay * SR))
+        x[i0:i0 + k] = seg
+        return shaped(x, lambda f: ((f > lo) & (f < hi)) * 1.0)
+
+    # the smack of the blade into flesh: a hard, bright slap
+    smack = burst(0.0, 0.05, 700, 6000, 0.008)
+    smack /= np.abs(smack).max()
+    # a heavy punch in the gut, pitch dropping like a kick drum, and a cinematic sub-boom under it
+    punch = np.sin(np.cumsum(2 * np.pi * (55 + 180 * np.exp(-t / 0.018)) / SR)) * np.exp(-t / 0.11)
+    boom = np.sin(np.cumsum(2 * np.pi * (38 + 25 * np.exp(-t / 0.06)) / SR)) * np.exp(-t / 0.45)
+    # bone splintering
     crack = np.zeros(n)
-    for c in (0.0, 0.004, 0.011, 0.019, 0.03):  # bone giving way
-        i = int(c * SR)
-        k = int(0.004 * SR)
-        crack[i:i + k] += rng.standard_normal(k) * np.exp(-np.arange(k) / (0.0008 * SR)) * rng.uniform(0.4, 1)
-    crack = shaped(crack, lambda f: np.clip((f - 1500) / 3000, 0, 1))
-    wet = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 700) / 500) ** 2))
-    wet *= np.exp(-t / 0.06) * (0.6 + 0.4 * np.clip(np.convolve(rng.standard_normal(n), np.ones(200) / 200, 'same') * 8, -1, 1))
-    x = board / np.abs(board).max() + tock + crack / np.abs(crack).max() * 0.7 + wet / np.abs(wet).max() * 0.45
-    x *= np.minimum(1, t / 0.0005)
-    x = D.reverb(x)[:n]
-    x[-int(0.2 * SR):] *= np.linspace(1, 0, int(0.2 * SR))
-    return x / np.abs(x).max() * 0.85
+    for c in (0.006, 0.009, 0.014, 0.022, 0.035):
+        crack += burst(c, 0.005, 2500, 12000, 0.0007) * rng.uniform(0.5, 1)
+    crack /= np.abs(crack).max()
+    # the blade burying into the wooden board a split second later: a dead, woody 'chunk' and a short metal ring
+    chunk = np.zeros(n)
+    i0 = int(0.012 * SR)
+    tt = t[:n - i0]
+    chunk[i0:] = (np.sin(2 * np.pi * 180 * tt) * np.exp(-tt / 0.03) + 0.6 * np.sin(2 * np.pi * 420 * tt) * np.exp(-tt / 0.02)
+                  + 0.2 * sum(np.sin(2 * np.pi * f * tt) * np.exp(-tt / 0.07) for f in (2750, 4130, 5870)))
+    # a wet squelch
+    wet = burst(0.004, 0.25, 250, 1800, 0.05)
+    wet *= 0.6 + 0.4 * np.clip(np.convolve(rng.standard_normal(n), np.ones(150) / 150, 'same') * 8, -1, 1)
+    wet /= np.abs(wet).max()
+    x = 1.0 * smack + 1.1 * punch + 0.9 * boom + 0.55 * crack + 0.5 * chunk + 0.4 * wet
+    x = np.tanh(x * 2.2) / np.tanh(2.2)  # slammed hard
+    x = x * 0.85 + D.reverb(x)[:n] * 0.25
+    x[-int(0.3 * SR):] *= np.linspace(1, 0, int(0.3 * SR))
+    return x / np.abs(x).max() * 0.97
 
 
 # ---------------------------------------------------------------------------
