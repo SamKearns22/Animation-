@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Horror trailer score (about 57.6 seconds), built from our Deck the Halls piano.
+"""Horror trailer score (about 60.9 seconds), built from our Deck the Halls piano.
 
     0     - 15    gentle Deck: the phrase twice, clean...
     15    - 18.05 ...until the tune sags, drags and goes wrong; it cuts off before its last note
@@ -8,15 +8,15 @@
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
     28    - 35    faster, more maddened; four of its notes are human screams (28.7, 30.6, 33.8, 37.75 s),
                   cut off dead, each from a different mouth and each more desperate than the last
-    35    - 41.3  the crescendo: 'being chased by a murderous clown' - still clearly the tune; its last loop
+    35    - 44.6  the crescendo: 'being chased by a murderous clown' - still clearly the tune; its last loop
                   plays right to the end
-    41.3  - 41.8  a horror gasp
-    41.8  - 42.8  one second of silence
-    42.8  - 48.1  someone breathing in the dark
-    48.1  - 49.6  the ambush: something horrible, a sudden swarm of intense buzzing, cut dead
-    49.6  - 55.2  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
-    55.2  - 55.6  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
-    55.6  - 57.6  two seconds of silence for the post-trailer titles
+    44.6  - 45.1  a horror gasp
+    45.1  - 46.1  one second of silence
+    46.1  - 51.4  someone breathing in the dark
+    51.4  - 52.9  the ambush: something horrible, a sudden swarm of intense buzzing, cut dead
+    52.9  - 58.5  straight into 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax
+    58.5  - 58.9  the orchestra is stripped away, leaving the diva alone, sliding down into nothing
+    58.9  - 60.9  two seconds of silence for the post-trailer titles
 
 Usage:
     python3 horror_trailer_music.py OUT.m4a
@@ -46,10 +46,11 @@ RAMP_END = 38.0                       # the tempo keeps climbing until here (mus
 
 
 def bpm_at(t):
-    return np.interp(t, [0, PAUSE_AT, 23.5, 28.5, 33.5, RAMP_END], [100, 100, 115, 150, 200, 280])
+    return np.interp(t, [0, PAUSE_AT, 23.5, 28.5, 33.5, RAMP_END, RAMP_END + 3.5],
+                     [100, 100, 115, 150, 200, 280, 330])  # and on, faster still, for the extra loop
 
 
-_tg = np.arange(0, RAMP_END + 3, 0.001)
+_tg = np.arange(0, RAMP_END + 8, 0.001)
 _beats = np.concatenate([[0], np.cumsum(bpm_at(_tg[:-1]) / 60 * 0.001)])
 
 
@@ -58,9 +59,9 @@ def b2t(b):
 
 
 # the Deck ends exactly as its last complete loop finishes, final 'la' and all, and the gasp comes straight after
-LAST_BEAT = int(np.interp(RAMP_END - LEAD, _tg, _beats) // 16) * 16
-MUSIC_END = b2t(LAST_BEAT)            # length of the Deck music itself (music time), about 37.3 s
-DECK_END = MUSIC_END + PAUSE          # about 41.3 in the finished track
+LAST_BEAT = int(np.interp(RAMP_END - LEAD, _tg, _beats) // 16) * 16 + 16  # plus one more full loop
+MUSIC_END = b2t(LAST_BEAT)            # length of the Deck music itself (music time), about 40.3 s
+DECK_END = MUSIC_END + PAUSE          # about 44.3 in the finished track
 GASP_END = DECK_END + 0.5
 BREATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'breathing.m4a')
 BREATH_SPAN = (0.30, 5.60)            # the breathing, trimmed from the recording
