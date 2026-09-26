@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Horror trailer score, exactly 55 seconds, built from our Deck the Halls piano.
 
-    0    - 12   gentle Deck (the opening phrase, looping)
-    12   - 14   the music stops dead: two seconds of silence
+    0    - 14   gentle Deck (the opening phrase, looping)
     14   - 24   increasingly off-putting Deck: the odd note off-key, late or too loud; tiny crackles
-    24   - 36   faster, more maddened Deck; two of its notes (between 28 and 33 s) are screams, cut off
-    36   - 44.5 the crescendo: 'being chased by a murderous clown' - still clearly the tune
-    44.5 - 45   a horror gasp cuts it all off
-    45   - 48   three seconds of silence
-    48   - 52.6 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
-                timpani, cymbals, bells
+    24   - 36   faster, more maddened Deck; from 28 s some of its notes are human screams, cut off dead,
+                each from a different mouth and each more desperate than the last
+    36   - 43.5 the crescendo: 'being chased by a murderous clown' - still clearly the tune
+    43.5 - 44   a horror gasp cuts it all off
+    44   - 47   three seconds of silence
+    47   - 52.6 'HARK! THE HE-RALD AN-GELS SING!' as an orchestral climax: brass, strings, choir, organ,
+                timpani, bass drum, cymbals, gong, bells
     52.6 - 53   the orchestra is stripped away, leaving the diva alone, sliding down into nothing
     53   - 55   two seconds of silence for the post-trailer titles
 
@@ -30,15 +30,16 @@ from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 
 rng = np.random.default_rng(13)
 TOTAL = 55.0
-PAUSE_AT, PAUSE = 12.0, 2.0  # the first dead stop
-MUSIC_END = 42.5              # length of the Deck music itself, not counting the pause
-DECK_END = MUSIC_END + PAUSE  # 44.5 in the finished track
-GASP_END = 45.0
-HARK_START = 48.0
+MUSIC_END = 43.5              # length of the Deck music itself, not counting any pause
+# an optional dead stop (switched off for now: set PAUSE_AT, PAUSE = 12.0, 2.0 and MUSIC_END = 41.5 to bring it back)
+PAUSE_AT, PAUSE = MUSIC_END + 10, 0.0
+DECK_END = MUSIC_END + PAUSE  # 43.5 in the finished track
+GASP_END = DECK_END + 0.5
+HARK_START = GASP_END + 3.0
 DENUDE = 52.6
 HARK_END = 53.0
 LEAD = 0.05
-SCREAM_WINDOW = (28.0, 33.0)  # in the finished track
+SCREAM_WINDOW = (28.0, 42.8)  # in the finished track
 
 
 def real(t):
@@ -64,7 +65,6 @@ def formant_gain(f, forms):
 
 FEMALE = [(800, 90, 1.0), (1150, 100, 0.5), (2900, 150, 0.3), (3900, 180, 0.2), (4950, 200, 0.1)]
 MALE = [(650, 90, 1.0), (1080, 100, 0.45), (2650, 150, 0.35), (2900, 150, 0.35), (3250, 180, 0.15)]
-SHRIEK = [(1000, 250, 1.0), (2800, 350, 0.9), (3500, 300, 0.7), (4500, 500, 0.35)]
 
 
 def additive(f, spectrum, fmax=9000):
@@ -81,7 +81,7 @@ def additive(f, spectrum, fmax=9000):
 # Deck the Halls, looping and accelerating (all in 'music time')
 # ---------------------------------------------------------------------------
 def bpm_at(t):
-    return np.interp(t, [0, 10, 22, 34, 38, MUSIC_END], [100, 104, 128, 175, 215, 280])
+    return np.interp(t, [0, 12, 24, 36, 40, MUSIC_END], [100, 104, 128, 175, 215, 280])
 
 
 _tg = np.arange(0, MUSIC_END + 3, 0.001)
@@ -94,7 +94,7 @@ def b2t(b):
 
 def mad(t):
     """0 while the carol is innocent, rising to 1 at the gasp."""
-    return np.clip((t - 10) / (MUSIC_END - 10), 0, 1)
+    return np.clip((t - 12) / (MUSIC_END - 12), 0, 1)
 
 
 def add_note(L, R, m, t, dur, vel):
@@ -123,22 +123,60 @@ def calliope(L, R, m, t, dur, vel):
     R[i:i + len(s)] += s * 0.45
 
 
-def scream(m, dur, kind):
+# the open 'AAAH' of a scream; each mouth scales it by the size of its vocal tract
+SCREAM_AH = [(1000, 180, 1.0), (1650, 220, 0.75), (2900, 300, 0.6), (3900, 380, 0.35), (5000, 600, 0.15)]
+# (who, octave shift, tract size, breathiness, roughness, strain, voice cracks, loudness)
+MOUTHS = [
+    ('woman',            12, 1.00, 0.10, 0.15, 1.5, 0, 1.00),
+    ('man',               0, 0.84, 0.14, 0.30, 2.0, 0, 1.00),
+    ('young woman',      12, 1.08, 0.12, 0.30, 2.5, 1, 1.08),
+    ('big man',           0, 0.78, 0.20, 0.55, 3.0, 0, 1.12),
+    ('hoarse woman',     12, 0.95, 0.30, 0.55, 3.5, 1, 1.18),
+    ('man, high, in pain', 12, 0.86, 0.22, 0.65, 4.0, 2, 1.24),
+    ('older woman',       0, 0.94, 0.35, 0.85, 5.0, 2, 1.30),
+    ('everyone at once',  None, 0, 0, 0, 0, 0, 1.38),
+]
+
+
+def smooth_noise(n, width):
+    w = max(1, int(width * SR))
+    x = np.convolve(rng.standard_normal(n + w), np.ones(w) / w, 'same')[:n]
+    return x / (x.std() + 1e-9)
+
+
+def scream(m, dur, mouth):
     """A human scream on the note's pitch, cut off dead at the end of the note."""
+    who, octv, tract, breath, rough, strain, cracks, _ = mouth
+    if octv is None:  # the last one: several of them together
+        s = sum(scream(m, dur, mo) * g for mo, g in ((MOUTHS[2], 1), (MOUTHS[3], 0.8), (MOUTHS[5], 0.9), (MOUTHS[6], 0.8)))
+        return s / np.abs(s).max()
     n = int(dur * SR)
     t = np.arange(n) / SR
-    base = m + (12 if kind == 'shriek' else 0)
-    jitter = np.convolve(rng.standard_normal(n), np.ones(300) / 300, 'same') * 3.0
-    lm = base - 3 * np.exp(-t / 0.04) + 0.35 * np.sin(2 * np.pi * 9.5 * t) + jitter
+    base = m + octv
+    while 440 * 2 ** ((base - 69) / 12) > 1150:
+        base -= 12
+    # the pitch hauls itself up into the note, wanders a little, never a regular wobble
+    lm = base - 4 * np.exp(-t / 0.05) + 0.25 * smooth_noise(n, 0.08) + 0.12 * smooth_noise(n, 0.012) * (1 + rough)
+    for _ in range(cracks):  # the voice cracks upward for a moment
+        c0 = rng.uniform(0.25, 0.75) * dur
+        lm += rng.choice([4, 5, 7]) * np.exp(-((t - c0) / 0.035) ** 2)
     f = 440 * 2 ** ((lm - 69) / 12)
-    forms = SHRIEK if kind == 'shriek' else MALE
-    s = additive(f, lambda fk, k: formant_gain(fk, forms) / k ** 0.7)
-    s += additive(f / 2, lambda fk, k: formant_gain(fk, forms) / k ** 0.7) * 0.35  # rasp
+    forms = [(F * tract, bw * tract, a) for F, bw, a in SCREAM_AH]
+    spec = lambda fk, k: formant_gain(fk, forms) / k ** 0.5
+    s = additive(f, spec)
     s /= np.abs(s).max()
-    s += shaped(rng.standard_normal(n), lambda fr: formant_gain(fr, forms)) * 0.004
-    env = np.minimum(1, t / 0.012) * (0.85 + 0.15 * t / dur)
-    env[-int(0.003 * SR):] *= np.linspace(1, 0, int(0.003 * SR))
-    return s * env / np.abs(s * env).max()
+    if rough:  # a torn, rattling edge on the voice
+        sub = additive(f / 2, spec)
+        s += sub / np.abs(sub).max() * rough * 0.35 * (0.5 + 0.5 * np.clip(smooth_noise(n, 0.02), -1, 1))
+    s *= 1 + rough * 0.35 * smooth_noise(n, 0.006)  # uneven, shuddering loudness
+    s = np.tanh(s * strain) / np.tanh(strain)  # the throat straining
+    air = shaped(rng.standard_normal(n), lambda fr: formant_gain(fr, forms) * (fr > 400))
+    s += air / np.abs(air).max() * breath
+    env = np.minimum(1, t / 0.02) * (0.9 + 0.1 * t / dur)
+    k = int(0.003 * SR)
+    env[-k:] *= np.linspace(1, 0, k)
+    s *= env
+    return s / np.abs(s).max()
 
 
 def deck():
@@ -160,12 +198,12 @@ def deck():
 
     # choose the two notes that become screams: long ones, well apart
     lo, hi = SCREAM_WINDOW
-    cands = [e for e in events if e[3] == 'tune' and e[2] >= 1.0 and lo <= real(b2t(e[0])) < hi - 0.5]
+    cands = [e for e in events if e[3] == 'tune' and e[2] >= 1.0 and lo <= real(b2t(e[0])) < hi]
     picks = []
     for e in cands:
         if not picks or b2t(e[0]) - b2t(picks[-1][0]) > 1.5:
             picks.append(e)
-    picks = picks[:2]
+    picks = picks[:len(MOUTHS)]
     print('screams at', [round(real(b2t(e[0])), 2) for e in picks])
     screams = []
 
@@ -189,7 +227,7 @@ def deck():
             elif t > 13 and rng.random() < 0.06 + 0.1 * k:  # ...or too loud
                 vel = min(1.05, vel * 1.5)
             if ev in picks:
-                screams.append((t, m, dur, 'shriek' if len(screams) == 0 else 'yell'))
+                screams.append((t, m, dur, MOUTHS[len(screams)]))
                 add_note(L, R, m, t, dur, vel * 0.35)
                 continue
             add_note(L, R, m, t, dur, vel)
@@ -214,11 +252,12 @@ def deck():
         L = np.interp(idx, np.arange(n), L)
         R = np.interp(idx, np.arange(n), R)
         out[key] = [D.reverb(L), D.reverb(R)]
-    P = max(np.abs(out['A'][0]).max(), np.abs(out['B'][0][int(20 * SR):]).max() / 1.5)
+    whole = out['A'][0] + out['B'][0]
+    P = max(np.abs(whole[:int(22 * SR)]).max(), np.abs(whole[int(22 * SR):]).max() / 1.5)
 
     # the screams go on dry and cut off dead
-    for st, m, dur, kind in screams:
-        s = scream(m, dur, kind) * P * (1.05 if kind == 'shriek' else 1.0)
+    for st, m, dur, mouth in screams:
+        s = scream(m, dur, mouth) * P * mouth[-1]
         i = int(st * SR)
         out['B'][0][i:i + len(s)] += s * 0.95
         out['B'][1][i:i + len(s)] += s * 1.05
@@ -264,7 +303,8 @@ def deck():
         a = out['A'][c][:cut].copy()
         a[-f:] *= np.linspace(1, 0, f)
         bpart = out['B'][c][cut:int(MUSIC_END * SR)].copy()
-        bpart[-f:] *= np.linspace(1, 0, f)
+        if len(bpart) > f:
+            bpart[-f:] *= np.linspace(1, 0, f)
         res.append(np.concatenate([a, np.zeros(int(PAUSE * SR)), bpart]))
     return res
 
@@ -292,7 +332,7 @@ def gasp():
 # ---------------------------------------------------------------------------
 # HARK! THE HE-RALD AN-GELS SING! - an orchestral climax
 # ---------------------------------------------------------------------------
-HB = 60 / 108
+HB = 60 / 90
 #        Hark   the   he-   rald  an-   gels  SING
 BEATS = [1.0, 1.0, 2.0, 0.5, 0.5, 1.15, None]  # DAH DAH DAHHH, DA DA DAH DAHHH
 MEL = ['C5', 'F5', 'F5', 'E5', 'F5', 'A5', 'A5']
@@ -389,6 +429,17 @@ def bass_drum(vel):
     return np.exp(-t / 0.5) * np.sin(np.cumsum(2 * np.pi * f / SR)) * vel
 
 
+def tam_tam(dur=4.0):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    out = np.zeros(n)
+    for f0 in rng.uniform(60, 900, 40):
+        out += np.sin(2 * np.pi * f0 * t + rng.uniform(0, 6.3)) / (1 + f0 / 200)
+    swell = np.minimum(1, t / 0.25)
+    out = out * swell * np.exp(-t / 1.8) + shaped(rng.standard_normal(n), lambda f: (f > 300) * np.exp(-f / 5000)) * np.exp(-t / 0.6) * 0.15
+    return out / np.abs(out).max()
+
+
 def crash(dur=3.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
@@ -423,12 +474,12 @@ def hark():
         R[:] += pair[1] * g
 
     # brass: trumpets on the tune, horns in the middle, trombones and tuba underneath
-    mix(section(MEL, 3, brass_spectrum(env), 12, 5.5, 5, env, 0.2), 0.22)
+    mix(section(MEL, 5, lambda fk, k: brass_spectrum(env * 1.2)(fk, k), 12, 5.5, 5, env, 0.2), 0.27)
     mix(section([nm[:-1] + str(int(nm[-1]) - 1) for nm in MEL], 2, brass_spectrum(env), 8, 5.0, 5, env, 0.1), 0.12)
     mix(section(ALTO, 4, brass_spectrum(env * 0.8), 8, 5.0, 6, env, -0.3), 0.13)
     mix(section(TENOR, 3, brass_spectrum(env * 0.8), 6, 5.0, 6, env, -0.4), 0.12)
-    mix(section(BASS, 3, brass_spectrum(env), 0, 5.0, 5, env, 0.35), 0.16)
-    mix(section(LOW, 2, brass_spectrum(env * 0.7), 0, 5.0, 4, env, 0.0), 0.14)
+    mix(section(BASS, 4, brass_spectrum(env), 0, 5.0, 5, env, 0.35), 0.21)
+    mix(section(LOW, 3, brass_spectrum(env * 0.8), 0, 5.0, 4, env, 0.0), 0.2)
     # strings: violins up high, sawing away, cellos and basses on the bottom
     mix(section([nm[:-1] + str(int(nm[-1]) + 1) for nm in MEL], 8, strings_spectrum, 25, 6.0, 8, soft, -0.35), 0.09)
     mix(section(MEL, 6, strings_spectrum, 22, 6.0, 8, soft, -0.2), 0.08)
@@ -456,18 +507,22 @@ def hark():
     # percussion: a timpani and bass-drum blow on every syllable, cymbals and bells on the big ones
     for i, st in enumerate(STARTS):
         big = i in (0, 2, 6)
-        tp = timp(midi('F2') if HARM[i] == 'F' else midi('C2'), 0.5 if big else 0.35)
-        bd = bass_drum(0.6 if big else 0.35)
+        tp = timp(midi('F2') if HARM[i] == 'F' else midi('C2'), 0.7 if big else 0.5)
+        tp += timp(midi('C2') if HARM[i] == 'F' else midi('G1'), 0.35)  # a second pair of timpani
+        bd = bass_drum(0.9 if big else 0.55)
         for buf in (L, R):
             place(buf, tp, st)
             place(buf, bd, st)
         bl = bell(midi(['F5', 'C6', 'A5', 'F5', 'C6', 'A5', 'F6'][i])) * 0.05
         place(L, bl, st, 1.2 if i % 2 else 0.8)
         place(R, bl, st, 0.8 if i % 2 else 1.2)
-        if big:
-            c = crash() * (0.3 if i < 6 else 0.4)
+        if big or i == 5:
+            c = crash() * (0.35 if i < 6 else 0.45)
             place(L, c, st)
             place(R, c, st + 0.004)
+    gong = tam_tam() * 0.5  # a great gong under SING
+    place(L, gong, STARTS[-1])
+    place(R, gong, STARTS[-1] + 0.006)
     rt = STARTS[-1] + 0.1  # a thundering timpani roll under the final note
     while rt < CUT:
         tp = timp(midi('F2'), 0.1 + 0.3 * (rt - STARTS[-1]) / (CUT - STARTS[-1]))
