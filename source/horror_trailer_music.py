@@ -3,9 +3,8 @@
 
     0     - 15    gentle Deck: the phrase twice, clean...
     15    - 18.05 ...until the tune sags, drags and goes wrong; it cuts off before its last note
-    18.55 - 19.25 the SHING of falling steel
-    19.25         the knife comes down
-    19.25 - 23.25 silence (four seconds); the girl asks "Why would she do that?", then a second of nothing
+    18.6          the knife comes down
+    18.05 - 23.25 silence, broken only by the knife; the girl asks "Why would she do that?", then a second of nothing
     23.25 - 28    the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
     28    - 35    faster, more maddened; four of its notes are human screams (28.7, 30.6, 33.8, 37.75 s),
                   cut off dead, each from a different mouth and each more desperate than the last
@@ -36,8 +35,9 @@ from deck_the_halls import SR, A_HARM, A_TUNE, CHORDS, midi, hz, piano_note
 rng = np.random.default_rng(13)
 LEAD = 0.05
 CLEAN_BEATS = 32                      # two gentle loops of the phrase at a steady 100 bpm
-PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: the knife comes down on the downbeat of the third loop
+PAUSE_AT = LEAD + CLEAN_BEATS * 0.6   # 19.25 s: where the third loop would begin; the music picks up from here after the pause
 MUSIC_CUT = LEAD + (CLEAN_BEATS - 2) * 0.6  # 18.05 s: the last note never plays - the music cuts off early
+CHOP_AT = MUSIC_CUT + 0.55                  # 18.6 s
 OMEN_FROM = LEAD + (CLEAN_BEATS - 7) * 0.6  # 15.05 s: the tune starts to go wrong just before the knife
 PAUSE = 4.0                           # the silence for "Why would she do that?"
 MUSIC_END = 38.0                      # length of the Deck music itself, not counting the pause
@@ -348,24 +348,6 @@ def deck():
 # ---------------------------------------------------------------------------
 # The knife: through the fingers and into the chopping board
 # ---------------------------------------------------------------------------
-def shing(length=0.7):
-    """The SHING of falling steel: a bright metallic ring and a scrape, swelling and swooping down into the impact."""
-    n = int(length * SR)
-    t = np.arange(n) / SR
-    u = t / length
-    out = np.zeros(n)
-    for f0, a in ((2637, 1.0), (3951, 0.8), (5274, 0.6), (6820, 0.45), (8890, 0.3), (1318, 0.4)):
-        f = f0 * (1.05 - 0.05 * u ** 2)  # the pitch drops as it rushes past
-        ph = np.cumsum(2 * np.pi * f / SR) + rng.uniform(0, 6.3)
-        out += a * np.sin(ph) * (1 + 0.25 * np.sin(2 * np.pi * rng.uniform(15, 30) * t))
-    ring = out * (0.55 * np.exp(-t / 0.18) + 0.9 * u ** 2.5)  # the 'shing' as it is let go, then rushing in
-    ring *= np.minimum(1, t / 0.004)
-    scrape = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 5500) / 2500) ** 2)) * (0.6 * np.exp(-t / 0.05) + u ** 3)
-    swoosh = shaped(rng.standard_normal(n), lambda f: np.exp(-((f - 900) / 700) ** 2)) * u ** 4
-    x = ring / np.abs(ring).max() + scrape / np.abs(scrape).max() * 0.5 + swoosh / np.abs(swoosh).max() * 0.6
-    return x / np.abs(x).max() * 0.6
-
-
 def chop():
     """A cleaver hitting meat and bone, hard, then burying itself in the board."""
     n = int(1.2 * SR)
@@ -726,12 +708,8 @@ def main():
     st = np.tanh(st * 1.6) / np.tanh(1.6) * 0.95
     for a, b in ((MUSIC_CUT, PAUSE_AT + PAUSE), (GASP_END, HARK_START), (HARK_END, TOTAL)):
         st[int(a * SR):int(b * SR)] = 0  # true silence
-    sh = shing()  # the blade falls...
-    i = int(PAUSE_AT * SR) - len(sh)
-    st[i:i + len(sh), 0] += sh * 1.05
-    st[i:i + len(sh), 1] += sh * 0.95
-    c = chop()  # ...and lands where the third loop would have started
-    i = int(PAUSE_AT * SR)
+    c = chop()  # the knife comes down, half a beat after the music dies
+    i = int(CHOP_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
     v = dialogue()
