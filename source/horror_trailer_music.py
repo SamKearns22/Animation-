@@ -3,7 +3,7 @@
 
     0    - 19.25 gentle Deck: the phrase twice, clean
     19.25       the knife comes down: the music cuts dead on the impact
-    19.25- 22.25 silence (three seconds) for "Why would she do that?"
+    19.25- 22.25 silence (three seconds); in its back half the girl asks "Why would she do that?"
     22.25- 28   the distortion starts: the odd note off-key, late or too loud; tiny crackles and static
     28   - 36   faster, more maddened; from 28 s some notes are human screams, cut off dead,
                 each from a different mouth and each more desperate than the last
@@ -42,7 +42,10 @@ GASP_END = DECK_END + 0.5
 HARK_START = GASP_END + 3.0
 DENUDE = 52.6
 HARK_END = 53.0
-SCREAM_WINDOW = (28.0, 42.8)  # in the finished track
+SCREAM_WINDOW = (28.0, 42.8)
+DIALOGUE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'why-would-she-do-that.m4a')
+DIALOGUE_SPAN = (2.82, 4.10)          # where the words are in the recording
+DIALOGUE_AT = PAUSE_AT + PAUSE / 2 + 0.1  # in the back half of the silence after the chop  # in the finished track
 
 
 def real(t):
@@ -358,6 +361,20 @@ def chop():
     return x / np.abs(x).max() * 0.97
 
 
+def dialogue():
+    """'Why would she do that?' - trimmed from the recording, low rumble removed, level set."""
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-i', DIALOGUE, '-f', 's16le', '-ac', '1', '-ar', str(SR), '-'],
+                         capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, np.int16) / 32768
+    a, b = (int(v * SR) for v in DIALOGUE_SPAN)
+    x = x[a:b].copy()
+    x = shaped(x, lambda f: np.clip((f - 60) / 60, 0, 1))
+    k = int(0.03 * SR)
+    x[:k] *= np.linspace(0, 1, k)
+    x[-k:] *= np.linspace(1, 0, k)
+    return x / np.abs(x).max() * 0.7
+
+
 # ---------------------------------------------------------------------------
 # The gasp
 # ---------------------------------------------------------------------------
@@ -624,6 +641,10 @@ def main():
     i = int(PAUSE_AT * SR)
     st[i:i + len(c), 0] += c * 0.97
     st[i:i + len(c), 1] += c
+    v = dialogue()
+    i = int(DIALOGUE_AT * SR)
+    st[i:i + len(v), 0] += v
+    st[i:i + len(v), 1] += v
     with tempfile.TemporaryDirectory() as tmp:
         wav = os.path.join(tmp, 'score.wav')
         with wave.open(wav, 'wb') as w:
