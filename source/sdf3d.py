@@ -733,12 +733,34 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
         grain = 0.5 + 0.5 * math.sin(w * 900.0 + 6.0 * fbm3(u * 6.0, py * 60.0, w * 40.0, 3))
         k = 0.86 + 0.14 * grain
         r, g, b = r * k, g * k, b * k
-    elif tex == 8:  # glazed meat: sticky glaze, charred edges from the grill
-        ch = fbm3(px * 60.0, py * 60.0, pz * 60.0, 4)
-        char = smoothstep(0.55, 0.72, ch)
-        k = 1.0 - 0.75 * char
-        r, g, b = r * k, g * k, b * k
-        spec_mul = 1.0 - 0.6 * char
+    elif tex == 8:  # glazed ham: scored in diamonds, a clove in each, glaze pooled darker in the cuts
+        ox, oy, oz = px - SP[115], py - SP[116], pz - SP[117]
+        u = ox * SP[118] + oz * SP[120]                      # along the ham
+        w = ox * SP[121] + oz * SP[123]                      # across it
+        ang = math.atan2(w, oy) * 0.07                       # round it, as a distance
+        a1 = (u + ang) / 0.024
+        a2 = (u - ang) / 0.024
+        f1 = a1 - math.floor(a1)
+        f2 = a2 - math.floor(a2)
+        cut = max(1.0 - smoothstep(0.0, 0.07, min(f1, 1.0 - f1)), 1.0 - smoothstep(0.0, 0.07, min(f2, 1.0 - f2)))
+        clove = 1.0 - smoothstep(0.05, 0.11, math.sqrt((f1 - 0.5) ** 2 + (f2 - 0.5) ** 2))
+        caramel = 0.5 + 0.5 * fbm3(px * 40.0, py * 40.0, pz * 40.0, 3)
+        k = (0.78 + 0.35 * caramel) * (1.0 - 0.45 * cut)
+        r, g, b = r * k, g * k * (1.0 - 0.1 * cut), b * k
+        if clove > 0.0:
+            r = r + (0.16 - r) * clove
+            g = g + (0.08 - g) * clove
+            b = b + (0.05 - b) * clove
+        spec_mul = 1.0 - 0.5 * clove
+        if SP[124] != 0.0 and u < SP[124] + 0.0012:  # the cut face: pink ham, fine grain, a rind of glaze
+            depth = min(math.sqrt(oy * oy + w * w) / 0.07, 1.0)
+            grain = 0.5 + 0.5 * vnoise1(oy * 900.0 + w * 300.0)
+            k = 0.92 + 0.08 * grain
+            m = 1.0 - smoothstep(0.86, 0.93, depth)
+            r = r + (0.86 * k - r) * m
+            g = g + (0.52 * k - g) * m
+            b = b + (0.47 * k - b) * m
+            spec_mul = 0.5
     elif tex == 9:  # brushed steel: fine streaks along the blade
         s = vnoise1((py * 3000.0 + px * 40.0)) * 0.5 + vnoise1(py * 700.0 + 3.1) * 0.5
         k = 0.9 + 0.15 * s

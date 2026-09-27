@@ -93,7 +93,11 @@ HAIR = material((0.060, 0.043, 0.034), spec=0.15, shin=50, tex=S.T_HAIR)
 KNIT = material((0.80, 0.71, 0.58), wrap=0.25, tex=S.T_KNIT)
 NAIL = material((0.84, 0.66, 0.60), spec=0.35, shin=40, wrap=0.2)
 WOOD = material((0.66, 0.48, 0.31), spec=0.05, shin=12, tex=S.T_WOODGRAIN)
-MEAT = material((0.36, 0.15, 0.07), spec=0.55, shin=55, refl=0.04, tex=S.T_MEAT)
+MEAT = material((0.60, 0.29, 0.08), spec=0.65, shin=70, refl=0.05, tex=S.T_MEAT)   # honey-mustard glaze
+HAMPINK = material((0.86, 0.52, 0.47), spec=0.25, shin=30, wrap=0.2)
+PINEAPPLE = material((0.96, 0.78, 0.24), spec=0.45, shin=40, wrap=0.2)
+CHERRY = material((0.62, 0.02, 0.06), spec=0.9, shin=120, refl=0.05)
+PAPER = material((0.96, 0.95, 0.92), spec=0.02, shin=8, wrap=0.3)
 BONE = material((0.80, 0.74, 0.62), spec=0.1, shin=20, wrap=0.1)
 STEEL = material((0.30, 0.31, 0.33), spec=0.9, shin=90, refl=0.05, tex=S.T_STEEL)
 HANDLE = material((0.10, 0.065, 0.045), spec=0.4, shin=50)
@@ -110,6 +114,7 @@ NEEDLES = material((0.06, 0.11, 0.07), spec=0.1, shin=15, tex=S.T_NEEDLES)
 TRAY = material((0.55, 0.50, 0.44), spec=0.05, shin=10, tex=S.T_TRAY)
 GOLD = material((0.78, 0.62, 0.30), spec=0.9, shin=80, refl=0.2)
 IVORY = material((0.92, 0.90, 0.86), spec=0.5, shin=60)
+BAUBLE_RED = material((0.62, 0.04, 0.06), spec=0.9, shin=90, refl=0.15)
 FAIRY = material((1.0, 0.86, 0.55), emit=3.5)
 CEILING = material((0.93, 0.925, 0.91), spec=0.0, shin=5)
 DOWNLIGHT = material((1.0, 0.95, 0.86), emit=3.5)
@@ -394,11 +399,17 @@ def head_rotation():
 HEAD_POS = NECK_BASE - head_rotation() @ np.array([0.0, -0.205, -0.052])
 
 # the cleaver, the meat and the board (see build_props); the hands are placed from these
-RACK_ANGLE = 20.0                                                           # the rack runs nearly left-right
+RACK_ANGLE = -30.0  # the blade points forward and a little to her left, as a right-handed cook's does; this is
+                    # the angle at which her arm falls naturally (elbow at her side, wrist bent ~35 degrees)
 RACK_A = np.array([np.cos(np.radians(RACK_ANGLE)), 0.0, np.sin(np.radians(RACK_ANGLE))])   # along the rack
 BLADE_B = np.array([-np.sin(np.radians(RACK_ANGLE)), 0.0, np.cos(np.radians(RACK_ANGLE))])  # blade, to its tip
 CUT_C = np.array([-0.110, 0.985, -0.360])                                  # where the blade rests in the meat
 RACK_C = CUT_C + 0.12 * RACK_A
+# a glazed Christmas ham on the bone lies across the board; the blade has cut into its end, a slice already off
+HAM_R = np.array([0.100, 0.064, 0.074])                                    # half length, height, width
+HAM_C = CUT_C + 0.072 * RACK_A + np.array([0, 0.96 + 0.058 - CUT_C[1], 0])
+HAM_ACROSS = np.cross(RACK_A, [0, 1.0, 0])                                 # the ham's side facing us
+HAM_CUT = 0.015                                                            # its cut end, just past the blade
 HEEL = CUT_C - 0.07 * BLADE_B + np.array([0, 0.075, 0])                    # back top corner of the blade
 BUTT = HEEL - 0.12 * BLADE_B                                               # end of the handle
 
@@ -407,7 +418,9 @@ BUTT = HEEL - 0.12 * BLADE_B                                               # end
 # points back to where her elbow naturally sits, and the sleeves then follow the real forearms.
 R_SHOULDER = np.array([-0.160, 1.392, body_cz(1.392)])
 L_SHOULDER = np.array([0.160, 1.392, body_cz(1.392)])
-L_PALM = RACK_C + 0.040 * RACK_A + np.array([0, 0.037, 0])
+L_PALM = HAM_C + 0.035 * RACK_A + np.array([0, HAM_R[1] * np.sqrt(1 - (0.035 / HAM_R[0]) ** 2), 0])
+L_SLOPE = 0.035 * HAM_R[1] / (HAM_R[0] ** 2 * np.sqrt(1 - (0.035 / HAM_R[0]) ** 2))  # the ham falls away
+                                                                           # towards the blade under her fingers
 ELBOW_GUIDES = (np.array([-0.255, 1.100, -0.690]), np.array([0.175, 1.105, -0.575]))
 FOREARM = 0.25                       # wrist to elbow, metres
 
@@ -437,8 +450,10 @@ def place_hands():
                 best = (score, w, f)
         return best
 
-    # right: frame x along the handle towards the blade, y towards the knuckles; roll about the handle
-    (_, wr, fore, wx, wz) = parts[0]
+    # right: frame x along the handle towards the blade, y towards the knuckles; roll about the handle.
+    # An overhand grip, as for any chopping blade: the hand comes over the top of the handle, the back of the
+    # hand faces up and the fingers curl round underneath.
+    (_, wr, fore, wx, wz, back) = parts[0]
     u = _unit(BLADE_B)
     origin = HEEL - u * 0.038
     k0 = _unit(np.cross([0, 1.0, 0], u))
@@ -447,6 +462,7 @@ def place_hands():
         k = k0 * np.cos(th) + np.cross(u, k0) * np.sin(th)
         R = np.stack([u, k, np.cross(u, k)], 1)
         sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[0])
+        sc += 1.5 * ((R @ back)[1] > 0.75) + 0.5 * (R @ back)[1]
         if best is None or sc > best[0]:
             best = (sc, R, w, f)
     out.append((origin, best[1], best[2], best[3]))
@@ -455,9 +471,10 @@ def place_hands():
     (_, wr, fore, wx, wz) = parts[1]
     origin = L_PALM
     best = None
+    n = _unit(np.array([0, 1.0, 0]) - L_SLOPE * RACK_A)  # the ham's surface under her palm
     for th in np.radians(np.arange(0, 360, 3)):
-        x = np.array([np.cos(th), 0, np.sin(th)])
-        R = np.stack([x, [0, 1.0, 0], np.cross(x, [0, 1.0, 0])], 1)
+        x = _unit(np.array([np.cos(th), 0, np.sin(th)]) - n * (n @ np.array([np.cos(th), 0, np.sin(th)])))
+        R = np.stack([x, n, np.cross(x, n)], 1)
         sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[1])
         sc += 0.8 * (x @ -RACK_A)
         if best is None or sc > best[0]:
@@ -792,7 +809,8 @@ def body_grid(voxel=0.0025):
         fore = (wr - el) / np.linalg.norm(wr - el)
         cuff = wr - fore * 0.050
         a = smin(np_cone(X, Y, Z, sh, el, 0.052, 0.045), np_cone(X, Y, Z, el, cuff, 0.045, 0.039), 0.02)
-        a = smin(a, np_cone(X, Y, Z, cuff, wr + fore * 0.004, 0.039, 0.034), 0.012)
+        # a ribbed cuff hugs the wrist and ends in a rounded fold just over the heel of the hand
+        a = smin(a, np_cone(X, Y, Z, cuff, wr + fore * 0.014, 0.037, 0.027), 0.012)
         arm_d.append(a.astype(np.float32))
         d = smin(d, a, 0.035)
     part = np.zeros(d.shape, np.float32)
@@ -824,18 +842,42 @@ def build_props(b):
     b.set_frame((0, 0, 0), None)
     b.group('board', margin=0.01)
     b.box((-0.03, 0.940, -0.330), (0.285, 0.020, 0.190), WOOD, op=UNION, r=0.006, R=rot(yaw=-RACK_ANGLE))
-    # the rack of ribs, the bones standing proud on the side facing us
-    b.group('ribs', margin=0.01)
-    Rr = np.stack([RACK_A, [0, 1.0, 0], np.cross(RACK_A, [0, 1.0, 0])], 1)
-    across = np.cross(RACK_A, [0, 1.0, 0])  # towards the camera side
-    b.box(RACK_C, (0.170, 0.021, 0.064), MEAT, op=UNION, r=0.018, R=Rr)
-    for i in range(10):
-        t = -0.155 + i * 0.0345
-        c = RACK_C + RACK_A * t
-        b.ellipsoid(c + [0, 0.012, 0], (0.016, 0.014, 0.062), MEAT, k=0.012, R=Rr)
-        wob = 0.0012 * np.sin(i * 2.3)  # no two bones quite alike
-        b.capsule(c + across * 0.030 + [0, -0.006 + wob, 0], c + across * (0.063 + 0.4 * abs(wob)) + [0, -0.007 + wob, 0],
-                  0.0048 + 0.4 * wob, BONE, k=0.005)
+    # the ham: glazed, scored in diamonds and studded with cloves (see the MEAT texture), sitting a little
+    # flattened on the board, the shank bone at the far end dressed in a paper frill
+    b.group('ham', margin=0.02)
+    Rh_ = np.stack([RACK_A, [0, 1.0, 0], HAM_ACROSS], 1)
+    b.ellipsoid(HAM_C, HAM_R, MEAT, op=UNION, R=Rh_)
+    b.halfspace(np.array([HAM_C[0], 0.962, HAM_C[2]]), np.eye(3), MEAT, op=SUB)  # its flat underside
+    # its cut end, where the last slice came off, and the blade's cut
+    b.halfspace(CUT_C - HAM_CUT * RACK_A, np.stack([np.cross([0, 1.0, 0], RACK_A), RACK_A, [0, 1.0, 0]], 1),
+                MEAT, op=SUB)
+    shank_a = HAM_C + RACK_A * (HAM_R[0] - 0.02) + np.array([0, 0.004, 0])
+    shank_b = shank_a + RACK_A * 0.042 + np.array([0, 0.010, 0])
+    b.capsule(shank_a, shank_b, 0.0095, BONE, op=SUNION, k=0.010)
+    fr = shank_a + (shank_b - shank_a) * 0.62
+    b.group('frill', margin=0.01)
+    Rf = np.stack([HAM_ACROSS, _unit(shank_b - shank_a), np.cross(HAM_ACROSS, _unit(shank_b - shank_a))], 1)
+    b.cone(fr, fr + _unit(shank_b - shank_a) * 0.020, 0.0125, 0.017, PAPER, op=UNION)
+    b.cylinder(fr + _unit(shank_b - shank_a) * 0.011, 0.011, 0.0100, PAPER, op=SUB, R=Rf)
+    # pineapple rings pinned on with glace cherries, on the side and top facing us
+    b.group('garnish', margin=0.01)
+    for s_, phi in ((-0.42, 0.95), (0.05, 1.00), (0.50, 0.90)):
+        rr = np.sqrt(1 - s_ ** 2)
+        loc = np.array([s_ * HAM_R[0], HAM_R[1] * rr * np.cos(phi), HAM_R[2] * rr * np.sin(phi)])
+        nrm = _unit(loc / HAM_R ** 2)
+        p = HAM_C + Rh_ @ loc
+        n_ = _unit(Rh_ @ nrm)
+        Rn = np.stack([_unit(np.cross(n_, [0, 0, 1.0])), n_, np.cross(_unit(np.cross(n_, [0, 0, 1.0])), n_)], 1)
+        b.cylinder(p - n_ * 0.001, 0.0042, 0.021, PINEAPPLE, op=UNION, R=Rn, rr=0.002)
+        b.cylinder(p, 0.010, 0.0075, PINEAPPLE, op=SUB, R=Rn)
+        b.sphere(p + n_ * 0.003, 0.0072, CHERRY, op=UNION)
+    # a slice already cut, lying on the board towards us
+    b.group('slice', margin=0.01)
+    sc_ = CUT_C - 0.075 * RACK_A + HAM_ACROSS * 0.075
+    sc_[1] = 0.96 + 0.0035
+    Rs = rot(yaw=-RACK_ANGLE + 25)
+    b.cylinder(sc_, 0.0034, 0.058, MEAT, op=UNION, R=Rs, rr=0.002)
+    b.cylinder(sc_ + np.array([0, 0.0006, 0]), 0.0034, 0.051, HAMPINK, op=UNION, R=Rs, rr=0.002)
     # the cleaver: a heavy square blade, its edge resting in the meat; dark wooden handle, steel rivets
     b.group('cleaver', margin=0.01)
     Rb = np.stack([BLADE_B, [0, 1.0, 0], RACK_A], 1)
@@ -992,9 +1034,11 @@ def build_environment(b, SP):
         a = rng.uniform(-1.6, 1.6)
         p = tree + [rr * np.sin(a), y, rr * np.cos(a)]
         b.sphere(p, 0.006, FAIRY, op=UNION)
-    for a, y in ((0.3, 0.14), (-0.8, 0.19), (1.1, 0.25), (-0.2, 0.30)):
+    for i, (a, y) in enumerate(((0.3, 0.14), (-0.8, 0.19), (1.1, 0.25), (-0.2, 0.30), (-1.2, 0.12),
+                                 (0.9, 0.17), (-0.5, 0.24), (0.5, 0.34))):
         rr = 0.10 * (1 - (y - 0.08) / 0.36) + 0.004
-        b.sphere(tree + [rr * np.sin(a), y, rr * np.cos(a)], 0.014, GOLD if a > 0 else IVORY, op=UNION)
+        b.sphere(tree + [rr * np.sin(a), y, rr * np.cos(a)], 0.012 + 0.002 * (i % 2), (GOLD, BAUBLE_RED)[i % 2],
+                 op=UNION)
     b.sphere(tree + [0, 0.415, 0], 0.011, GOLD, op=UNION)
     candles = [((0.10, 0.06), 0.045, 0.21), ((0.16, -0.05), 0.040, 0.14), ((0.03, 0.08), 0.036, 0.10),
                ((-0.15, 0.08), 0.034, 0.08), ((0.19, 0.07), 0.034, 0.07)]
@@ -1222,6 +1266,8 @@ def build_character(smile=1.0, cache=None):
     SP = new_params()
     fill_head_params(SP, HEAD_POS, Rh, GAZE, smile)
     SP[114] = 1.0  # the face's lids and lashes are real geometry now: don't paint the old ones on
+    SP[115:118], SP[118:121], SP[121:124] = HAM_C, RACK_A, HAM_ACROSS
+    SP[124] = (CUT_C - HAM_CUT * RACK_A - HAM_C) @ RACK_A  # where the pink cut face is, along the ham
     # lip colour, fitted to her measured mouth (corners 22 mm out, lips from 52 to 73.5 mm below the eyes)
     SP[100:106] = [0.022, -0.0590, -0.0525, 0.0010, -0.0632, -0.0735]
     board_x = rot(yaw=-RACK_ANGLE) @ np.array([1.0, 0, 0])

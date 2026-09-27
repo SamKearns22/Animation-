@@ -193,7 +193,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'grip':
         v, g = H.load_base()
         H.apply_macros(v, H.macro_values(**YOUNG_WOMAN))
-        local, c, d, err = H.solve_grip(H.Skeleton(v), 'R', 0.125)
+        local, c, d, err = H.solve_grip(H.Skeleton(v), 'R', 0.125, knife=True)
         print('grip error', err)
         hand_test(sys.argv[2], local, 'R', (c, d, 0.125))
     if sys.argv[1] == 'mother':

@@ -19,7 +19,7 @@ import sdf3d as S
 # which materials belong to what
 CHAR_SKIN = {MS.SKIN, MS.LIPS, MS.LID, MS.NOSTRIL, MS.NAIL}
 CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.KNIT}
-PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE}
+PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER}
 
 
 # ---------------------------------------------------------------------------
@@ -166,6 +166,35 @@ def knit_dirs(pos, mask):
 # ---------------------------------------------------------------------------
 # the drawing
 # ---------------------------------------------------------------------------
+# Things that keep their colour in the drawing: the food, fruit, the tree and the decorations, laid in with
+# coloured pencil over a graphite world - warmth now, and later, blood against grey.
+def colour_mats():
+    """Pencil colour for each coloured material (what an illustrator would pick from the tin)."""
+    return {MS.MEAT: (0.80, 0.45, 0.14), MS.HAMPINK: (0.93, 0.58, 0.55), MS.PINEAPPLE: (0.98, 0.84, 0.25),
+            MS.CHERRY: (0.85, 0.08, 0.10), MS.CLEMENTINE: (0.98, 0.55, 0.12), MS.NEEDLES: (0.18, 0.48, 0.26),
+            MS.GOLD: (0.90, 0.70, 0.22), MS.BAUBLE_RED: (0.85, 0.10, 0.12), MS.FAIRY: (1.0, 0.85, 0.40),
+            MS.FLAME: (1.0, 0.72, 0.28)}
+
+
+def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
+    """Lay coloured pencil over the colour things: each its own pencil colour, carried by the drawing's own
+    light and shade and broken by the stroke texture, the graphite lifted where colour replaces it."""
+    cols = colour_mats()
+    mask = np.zeros(mat.shape, np.float32)
+    hue = np.ones(mat.shape + (3,), np.float32)
+    for m, c in cols.items():
+        sel = mat == m
+        mask[sel] = 1.0
+        hue[sel] = c
+    mask = blur(mask, 0.7 * px)  # a soft pencil edge, not a cut-out
+    for k in range(3):
+        hue[..., k] = blur(hue[..., k], 0.7 * px)
+    amount = np.clip(0.85 + 0.2 * strokes, 0.6, 1.0)
+    lifted = 1 - (1 - grey) * 0.55                                  # much less graphite under the colour
+    col = lifted[..., None] * (1 - amount[..., None] * (1 - hue))
+    return rgbo * (1 - mask[..., None]) + col * mask[..., None]
+
+
 def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     Z = np.load(npz_path)
     rgb, depth, normal, mat, pos, glass, cam = (Z['rgb'], Z['depth'], Z['normal'], Z['mat'], Z['pos'],
@@ -298,7 +327,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     matedge = np.zeros((H, W), bool)
     for s in (1, -1):
         for a in (0, 1):
-            matedge |= np.roll(mat, s, a) != mat
+            other = np.roll(mat, s, a)
+            # where hair meets skin there is no line: the hairline is drawn only by the strokes of the hair
+            soft = ((other == MS.HAIR) & skin) | ((mat == MS.HAIR) & np.isin(other, list(CHAR_SKIN)))
+            matedge |= (other != mat) & ~soft
     crease_bg = smoothstep(0.25, 0.6, 1 - nd) * ok  # only the sharper corners in the background
     crease = np.where(subject, crease, crease_bg)
     crease = crease * ~(knit | hair)  # the knit's ribs and the hair's strands come through as tone, not lines
@@ -335,7 +367,8 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     out = out + tooth * np.where(skin, 0.5, 1.2) * smoothstep(0.1, 0.5, ink) * (1 - smoothstep(0.6, 0.9, ink))
     out = np.clip(out, 0, 1)
     rgbo = np.stack([out, out * 0.988, out * 0.965], -1)
-    img = Image.fromarray((rgbo * 255).astype(np.uint8))
+    rgbo = colour_pencil(rgbo, out, rgb, mat, s1, px)
+    img = Image.fromarray((np.clip(rgbo, 0, 1) * 255).astype(np.uint8))
     if scale != 1.0:
         img = img.resize((int(W * scale), int(H * scale)), Image.LANCZOS)
     img.save(out_path, optimize=True)

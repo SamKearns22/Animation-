@@ -94,7 +94,7 @@ def right_hand():
     axis level with the middle finger. Returns ((lo, d, voxel), wrist position, forearm direction), all in that
     frame (metres)."""
     v, g, sk = base_body()
-    local, c, d, err = H.solve_grip(sk, 'R', HANDLE_R * 10)
+    local, c, d, err = H.solve_grip(sk, 'R', HANDLE_R * 10, knife=True)
     M = sk.pose_matrices(local)
     v2 = sk.skin(v, local)
     k_mid = H.bone_ends(sk, M, 'finger3-1.R')[0]
@@ -112,10 +112,15 @@ def right_hand():
     wr = (sk.rest['wrist.R'][:3, 3] - o) @ R * 0.1
     fore = (sk.rest['lowerarm02.R'][:3, 3] - sk.rest['wrist.R'][:3, 3]) @ R
     wx, _, wz = (a @ R for a in sk.axes('wrist.R'))
+    # the back of the hand: from the handle towards the middle of the palm's bones (the palm lies on the
+    # handle, so its bones sit on the far side of it from where the fingers curl)
+    mc = np.mean([sum(H.bone_ends(sk, M, 'metacarpal%d.R' % m)) / 2 for m in (2, 3, 4)], 0)
+    back = (mc - o) - d * ((mc - o) @ d)
+    back = (back / np.linalg.norm(back)) @ R
     faces = _hand_faces(g, sk, v, 'R')
     pts = V[np.unique(np.concatenate([np.array(f) for f in faces]))]
     lo, hi = pts.min(0) - 0.012, pts.max(0) + 0.012
-    return _grid_of(V, faces, lo, hi, 0.0007), wr, fore / np.linalg.norm(fore), wx, wz
+    return _grid_of(V, faces, lo, hi, 0.0007), wr, fore / np.linalg.norm(fore), wx, wz, back
 
 
 def left_hand():

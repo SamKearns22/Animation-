@@ -315,7 +315,7 @@ def bone_ends(sk, M, b):
     return (M[b] @ np.append(h, 1))[:3], (M[b] @ np.append(t, 1))[:3]
 
 
-def solve_grip(sk, side, handle_r, finger_r=0.078, thumb_over=True):
+def solve_grip(sk, side, handle_r, finger_r=0.078, thumb_over=True, knife=False):
     """Find finger and thumb bends and a handle axis such that the palm and fingers wrap a cylinder of radius
     handle_r (decimetres). Returns (local rotations, axis point, axis direction)."""
     from scipy.optimize import minimize
@@ -345,17 +345,24 @@ def solve_grip(sk, side, handle_r, finger_r=0.078, thumb_over=True):
         for j in (2, 3):
             h, t = bone_ends(sk, M, 'finger1-%d.%s' % (j, side))
             tpts += [h + (t - h) * s for s in np.linspace(0.3, 1, 3)]
-        for m in (2, 3, 4):
+        # the palm's contact with the handle: straight across for a bar; for a knife, a diagonal line from the
+        # base of the index finger to the heel of the hand
+        for m, ss in (((2, (0.85, 0.95)), (3, (0.55, 0.65)), (4, (0.2, 0.3))) if knife else
+                      ((2, (0.5, 0.9)), (3, (0.5, 0.9)), (4, (0.5, 0.9)))):
             h, t = bone_ends(sk, M, 'metacarpal%d.%s' % (m, side))
-            palm += [h + (t - h) * s for s in (0.5, 0.9)]
+            palm += [h + (t - h) * s for s in ss]
         return np.array(fpts), np.array(tpts), np.array(palm)
+
+    fore = sk.rest['wrist.' + side][:3, 3] - sk.rest['lowerarm02.' + side][:3, 3]
+    fore /= np.linalg.norm(fore)
 
     def dist_axis(p, c, d):
         q = p - c
         return np.linalg.norm(q - np.outer(q @ d, d), axis=1)
 
     # start: a loose fist, axis across the palm below the knuckles
-    x0 = np.array([45, 70] * 4 + [20, 30, 20, 0], float)
+    x0 = np.array([35, 55, 45, 65, 55, 70, 65, 75] if knife else [45, 70] * 4, float)
+    x0 = np.concatenate([x0, [20, 30, 20, 0]])
     f0, t0_, p0 = samples(x0)
     c0 = (f0.mean(0) + p0.mean(0)) / 2
     d0 = f0[-1] - f0[0]
@@ -367,6 +374,8 @@ def solve_grip(sk, side, handle_r, finger_r=0.078, thumb_over=True):
         fp, tp, pp = samples(x)
         e = ((dist_axis(fp, c, d) - R) ** 2).sum() + 2 * ((dist_axis(pp, c, d) - (handle_r + 0.10)) ** 2).sum()
         e += ((dist_axis(tp, c, d) - R) ** 2).sum() * (1 if thumb_over else 0)
+        if knife:  # the handle then runs on from the forearm, about 35 degrees off its line
+            e += 0.3 * (abs(d @ fore) - np.cos(np.radians(35))) ** 2
         # the thumb lies against the fingers, never through them (fingers ~1.6 cm thick)
         gap = np.linalg.norm(tp[:, None, :] - fp[None, :, :], axis=2).min(1)
         e += 20 * (np.maximum(0, 0.16 - gap) ** 2).sum()
