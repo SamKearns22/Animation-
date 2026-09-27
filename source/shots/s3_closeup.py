@@ -64,9 +64,9 @@ def frame(t):
     fr['blade_in_meat'] = False
     # the camera: close on her face, then following her gaze down to her hands and the blade above them
     s = S1.between(n, *TRACK)
-    end = FINGERS + np.array([0, 0.09, 0])
+    end = FINGERS + np.array([0, 0.04, 0])            # her fingers on the ham, the blade above them
     target = FACE + (end - FACE) * s
-    pos = target + np.array([0.16, 0.04 + 0.20 * s, 0.78 - 0.08 * s])
+    pos = target + np.array([0.16 - 0.04 * s, 0.04 + 0.34 * s, 0.78 - 0.20 * s])   # ending looking down on them
     fr['camera'] = dict(pos=tuple(pos), target=tuple(target), vfov=21.0)
     fr['focus'] = [FACE, FINGERS, cleaver.o + np.array([0, 0.05, 0])]
     return fr
