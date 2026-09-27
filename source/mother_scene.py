@@ -495,8 +495,17 @@ def place_hands():
     lift, R = settled
     origin = L_PALM + n * lift
     sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[1])
-    out.append((origin, R, w + n * lift, f))
+    out.append((origin, R, w, f))  # w already includes the lift (best_forearm places it from origin)
+    check_joins(out, parts)
     return out
+
+
+def check_joins(placed, parts):
+    """Every hand must meet its sleeve: the wrist the sleeve ends at has to be the hand's own wrist."""
+    for (origin, R, w, f), part, name in zip(placed, parts, ('right', 'left')):
+        gap = np.linalg.norm(origin + R @ part[1] - w)
+        if gap > 0.003:
+            raise RuntimeError(f'{name} hand is {gap * 1000:.0f} mm away from the end of its sleeve')
 
 
 def _surface_points(grid, step=3):

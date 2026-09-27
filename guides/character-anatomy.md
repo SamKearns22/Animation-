@@ -137,6 +137,10 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
   the object's and lift/tilt the hand until it just touches (skin pressing in ~1 mm), never trust a guessed
   height. The left hand on the ham had sunk 4 cm in before this check existed.
 
+- **A fix must not break the rest.** Moving a hand moved its wrist twice and left the hand floating
+  below the sleeve. Now the scene refuses to build if any hand is more than 3 mm from the end of its
+  sleeve, and after every change the *whole* picture is reviewed, not just the part that was fixed.
+
 ## 7. Checklist before showing any character shot
 - [ ] Built on the MakeHuman body (or another measured, licensed human), not hand-placed blobs
 - [ ] Face asymmetry added; smile involves cheeks and eyes
@@ -144,4 +148,5 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 - [ ] Proportions checked against section 2 from the front and side
 - [ ] Every hand–object contact measured in 3D; no gaps or overlaps
 - [ ] Thumb opposes the fingers; wrist straight
-- [ ] Looked at it at full size *and* phone size
+- [ ] Looked at the whole picture (not just the part changed) at full size *and* phone size
+- [ ] Every hand joins its arm (checked automatically)
