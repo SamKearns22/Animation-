@@ -23,4 +23,5 @@ I don't know how to code. Please:
 - Before animating anything, read `guides/movement.md` (timing of eyes, blinks, smiles, hair and body).
 - Before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes).
 - The story and the director's decisions for the animation test are in `story/animation-test.md`.
+- The film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer).
 - The trailer should evoke the style and quality of an A24 horror film (the craft, never the brand): read `guides/tone.md` before planning or changing any shot.
