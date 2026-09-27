@@ -321,6 +321,24 @@ def build(b, state, pov=False):
         b.group('head', margin=0.01)
         (lo, d, vox), eyes = head_parts(state['smile'], state.get('blink', 0.0))
         b.grid(lo, d, vox, SKIN, op=UNION)
+        # the head is one rigid piece with some neck; trim it at the base of her neck (always inside the roll
+        # collar), or when she bows her head the bottom of the neck swings back out through her jumper
+        # - and trim off the shoulders the piece carries (behind and to each side of the neck), or they rise
+        # above the jumper's shoulders when she bows her head
+        b.set_frame((0, 0, 0), None)
+        up = unit(J['neck01'] - J['spine02'])
+        lat = J['shoulder.L'] - J['shoulder.R']
+        lat = unit(lat - up * (lat @ up))
+        fwd = np.cross(lat, up)
+        fwd = fwd if fwd @ (Hc - J['neck02']) > 0 else -fwd
+        planes = [(J['neck01'] - 0.01 * up, up)]
+        for side in (1, -1):
+            n = unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)
+            planes.append((J['neck02'] + 0.05 * side * lat, n))
+        for c, n in planes:
+            x = unit(np.cross(n, fwd if abs(n @ fwd) < 0.9 else lat))
+            b.halfspace(c, np.stack([x, n, np.cross(x, n)], 1), SKIN, op=S.SUB)
+        b.set_frame(Hc, Rh)
         for c, r in eyes:
             b.sphere(c, r, EYE, op=UNION)
         # hair
