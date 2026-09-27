@@ -149,4 +149,15 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 - [ ] Every hand–object contact measured in 3D; no gaps or overlaps
 - [ ] Thumb opposes the fingers; wrist straight
 - [ ] Looked at the whole picture (not just the part changed) at full size *and* phone size
-- [ ] Every hand joins its arm (checked automatically)
+- [ ] `source/checks.py` passes (it runs automatically before every render)
+
+## 8. The automatic whole-body checks (`source/checks.py`)
+Run before every render, and on **every frame** once she moves; a failure stops the render and says what is
+wrong in millimetres. Add a new check whenever a new kind of mistake is found, so it can never come back.
+- Each hand joins the end of its sleeve (gap under 3 mm).
+- The resting hand touches the food without sinking in; the chopping hand stays clear of it.
+- Upper arm and forearm lengths are human (26-36 cm and 22-30 cm).
+- Forearms stay clear of her body (no arm melting into the jumper).
+- The jumper's front has no dents or holes. (The tummy dip came from the roll-neck's hole being cut down
+  through her whole body; the hole is now limited to the neck.)
+- The chopping board lies flat, fully on the worktop; the food sits on the board.

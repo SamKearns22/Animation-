@@ -399,6 +399,7 @@ def head_rotation():
 HEAD_POS = NECK_BASE - head_rotation() @ np.array([0.0, -0.205, -0.052])
 
 # the cleaver, the meat and the board (see build_props); the hands are placed from these
+BOARD_C, BOARD_HALF = np.array([-0.03, 0.940, -0.330]), np.array([0.285, 0.020, 0.190])  # lies square on the island
 RACK_ANGLE = -30.0  # the blade points forward and a little to her left, as a right-handed cook's does; this is
                     # the angle at which her arm falls naturally (elbow at her side, wrist bent ~35 degrees)
 RACK_A = np.array([np.cos(np.radians(RACK_ANGLE)), 0.0, np.sin(np.radians(RACK_ANGLE))])   # along the rack
@@ -844,18 +845,26 @@ def body_grid(voxel=0.0025):
     for y, R0, r in ((1.458, 0.080, 0.021), (1.484, 0.075, 0.019), (1.505, 0.067, 0.016)):
         q = np.sqrt(X ** 2 + (Z - nz) ** 2) - R0
         d = smin(d, (np.sqrt(q ** 2 + (Y - y) ** 2) - r).astype(np.float32), 0.012)
-    d = ssub(d, (np.sqrt(X ** 2 + (Z - nz) ** 2) - 0.052).astype(np.float32) * np.ones_like(Y), 0.004)
+    # the opening of the roll neck - only through the collar, not down through her whole body
+    hole = np.sqrt(X ** 2 + (Z - nz) ** 2) - 0.052
+    hole = np.maximum(hole, 1.43 - Y)
+    d = ssub(d, hole.astype(np.float32), 0.004)
     # sleeves; remember which part is nearest everywhere, so the knit can run the right way
     torso = d.copy()
     arm_d = []
     for sh, el, wr in ((R_SHOULDER, R_ELBOW, R_WRIST), (L_SHOULDER, L_ELBOW, L_WRIST)):
         fore = (wr - el) / np.linalg.norm(wr - el)
         cuff = wr - fore * 0.050
-        a = smin(np_cone(X, Y, Z, sh, el, 0.052, 0.045), np_cone(X, Y, Z, el, cuff, 0.045, 0.039), 0.02)
+        upper = np_cone(X, Y, Z, sh, el, 0.052, 0.045)
+        lower = np_cone(X, Y, Z, el, cuff, 0.045, 0.039)
         # a ribbed cuff hugs the wrist and ends in a rounded fold just over the heel of the hand
-        a = smin(a, np_cone(X, Y, Z, cuff, wr + fore * 0.014, 0.037, 0.027), 0.012)
+        lower = smin(lower, np_cone(X, Y, Z, cuff, wr + fore * 0.014, 0.037, 0.027), 0.012)
+        a = smin(upper, lower, 0.02)
         arm_d.append(a.astype(np.float32))
-        d = smin(d, a, 0.035)
+        # only the upper arm melts into the jumper (at the shoulder seam); a forearm resting across her front
+        # stays a separate sleeve, never webbed to her tummy
+        d = smin(d, upper, 0.035)
+        d = np.minimum(d, lower)
     part = np.zeros(d.shape, np.float32)
     part[(arm_d[0] < torso) & (arm_d[0] <= arm_d[1])] = 1
     part[(arm_d[1] < torso) & (arm_d[1] < arm_d[0])] = 2
@@ -884,7 +893,7 @@ def build_body(b, grid=None):
 def build_props(b):
     b.set_frame((0, 0, 0), None)
     b.group('board', margin=0.01)
-    b.box((-0.03, 0.940, -0.330), (0.285, 0.020, 0.190), WOOD, op=UNION, r=0.006, R=rot(yaw=-RACK_ANGLE))
+    b.box(BOARD_C, BOARD_HALF, WOOD, op=UNION, r=0.006)  # square to the island's edges
     # the ham: glazed, scored in diamonds and studded with cloves (see the MEAT texture), sitting a little
     # flattened on the board, the shank bone at the far end dressed in a paper frill
     b.group('ham', margin=0.02)
@@ -1313,7 +1322,7 @@ def build_character(smile=1.0, cache=None):
     SP[124] = (CUT_C - HAM_CUT * RACK_A - HAM_C) @ RACK_A  # where the pink cut face is, along the ham
     # lip colour, fitted to her measured mouth (corners 22 mm out, lips from 52 to 73.5 mm below the eyes)
     SP[100:106] = [0.022, -0.0590, -0.0525, 0.0010, -0.0632, -0.0735]
-    board_x = rot(yaw=-RACK_ANGLE) @ np.array([1.0, 0, 0])
+    board_x = np.array([1.0, 0, 0])
     SP[46:49] = board_x
     return b, SP, cache
 
@@ -1374,6 +1383,8 @@ def render_shot(out_dir, W=1280, H=720, crop=None):
     from PIL import Image
     os.makedirs(out_dir, exist_ok=True)
     t0 = time.time()
+    import checks
+    checks.run()  # stops here, with a reason, if anything is visibly wrong
     b, SP, cache = build_character()
     flames = build_environment(b, SP)
     P, G = b.build()

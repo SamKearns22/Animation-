@@ -278,7 +278,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     vx = np.where(skin, fx / fl, vx).astype(np.float32)
     vy = np.where(skin, fy / fl, vy).astype(np.float32)
     # the board along its grain, the blade along its length
-    bdx, bdy = project_dirs(np.broadcast_to(MS.rot(yaw=-MS.RACK_ANGLE) @ np.array([1.0, 0, 0]), pos.shape), pos, cam, W, H)
+    bdx, bdy = project_dirs(np.broadcast_to(np.array([1.0, 0, 0]), pos.shape), pos, cam, W, H)
     wood = mat == MS.WOOD
     vx = np.where(wood, bdx, vx)
     vy = np.where(wood, bdy, vy)
