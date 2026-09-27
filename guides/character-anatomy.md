@@ -133,6 +133,10 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 - Features that are colour, not shape (lip colour, brows) must be re-fitted to the new head by *measuring*
   it (e.g. the mouth's depth profile gave lip heights and corners), never carried over from an old head.
 
+- Hands that *rest* on something need the same care as hands that grip: measure the hand's surface against
+  the object's and lift/tilt the hand until it just touches (skin pressing in ~1 mm), never trust a guessed
+  height. The left hand on the ham had sunk 4 cm in before this check existed.
+
 ## 7. Checklist before showing any character shot
 - [ ] Built on the MakeHuman body (or another measured, licensed human), not hand-placed blobs
 - [ ] Face asymmetry added; smile involves cheeks and eyes

@@ -479,8 +479,42 @@ def place_hands():
         sc += 0.8 * (x @ -RACK_A)
         if best is None or sc > best[0]:
             best = (sc, R, w, f)
-    out.append((origin, best[1], best[2], best[3]))
+    # let the hand settle onto the ham: tilt it a little either way and lift it just enough that it rests on
+    # the curved surface, the skin pressing in about a millimetre, never sinking in
+    lgrid = parts[1][0]
+    pts = _surface_points(lgrid)
+    R0 = best[1]
+    settled = None
+    for ax in np.radians(np.arange(-15, 16, 3)):
+        for az in np.radians(np.arange(-15, 16, 3)):
+            R = MH.axis_angle(R0[:, 0], np.degrees(ax)) @ MH.axis_angle(R0[:, 2], np.degrees(az)) @ R0
+            dmin = ham_distance(L_PALM + pts @ R.T).min()
+            lift = -dmin - 0.001
+            if settled is None or lift < settled[0]:
+                settled = (lift, R)
+    lift, R = settled
+    origin = L_PALM + n * lift
+    sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[1])
+    out.append((origin, R, w + n * lift, f))
     return out
+
+
+def _surface_points(grid, step=3):
+    """Points on a grid shape's surface (in its own frame), thinned out."""
+    lo, d, voxel = grid
+    idx = np.argwhere(np.abs(d[::step, ::step, ::step]) < 0.6 * voxel * step)
+    return lo + idx * voxel * step
+
+
+def ham_distance(p):
+    """Approximate distance from points to the ham's surface (negative inside)."""
+    Rh_ = np.stack([RACK_A, [0, 1.0, 0], HAM_ACROSS], 1)
+    q = (p - HAM_C) @ Rh_
+    k0 = np.linalg.norm(q / HAM_R, axis=1)
+    k1 = np.linalg.norm(q / HAM_R ** 2, axis=1)
+    d = k0 * (k0 - 1) / np.maximum(k1, 1e-9)
+    d = np.maximum(d, 0.962 - p[:, 1])
+    return np.maximum(d, -((p - (CUT_C - HAM_CUT * RACK_A)) @ RACK_A))
 
 
 HANDS = place_hands()
