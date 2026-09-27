@@ -139,6 +139,7 @@ class Skeleton:
             order.append(b)
             queue += sorted(c for c, x in self.bones.items() if x['parent'] == b)
         self.order = order
+        self._verts = verts
         self.set_rest(verts)
         w = json.load(open(os.path.join(d, 'rigs', 'default_weights.mhw')))['weights']
         self.weights = {b: (np.array([i for i, _ in w[b]], int), np.array([x for _, x in w[b]]))
@@ -302,3 +303,83 @@ def rot_power(R, w):
         return np.eye(3)
     axis = np.array([R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]]) / (2 * np.sin(ang))
     return axis_angle(axis, np.degrees(ang * w))
+
+
+# ---------------------------------------------------------------------------
+# Gripping: curl the fingers round a handle so they actually touch it
+# ---------------------------------------------------------------------------
+def bone_ends(sk, M, b):
+    """Head and tail of bone b after the pose M (from pose_matrices)."""
+    h = sk.rest[b][:3, 3]
+    t = h + sk.rest[b][:3, 1] * np.linalg.norm(sk.joint(sk.bones[b]['tail'], sk._verts) - h)
+    return (M[b] @ np.append(h, 1))[:3], (M[b] @ np.append(t, 1))[:3]
+
+
+def solve_grip(sk, side, handle_r, finger_r=0.078, thumb_over=True):
+    """Find finger and thumb bends and a handle axis such that the palm and fingers wrap a cylinder of radius
+    handle_r (decimetres). Returns (local rotations, axis point, axis direction)."""
+    from scipy.optimize import minimize
+    R = handle_r + finger_r
+    fingers = [2, 3, 4, 5]
+
+    def pose(x):
+        local = {}
+        for i, f in enumerate(fingers):
+            k, m = x[2 * i], x[2 * i + 1]
+            for j, a in enumerate((k, m, 0.75 * m)):
+                local['finger%d-%d.%s' % (f, j + 1, side)] = axis_angle([1, 0, 0], a)
+        t0, t1, t2, t3 = x[8:12]
+        local['finger1-1.%s' % side] = axis_angle([1, 0, 0], t0) @ axis_angle([0, 0, 1], t3)
+        local['finger1-2.%s' % side] = axis_angle([1, 0, 0], t1)
+        local['finger1-3.%s' % side] = axis_angle([1, 0, 0], t2)
+        return local
+
+    def samples(x):
+        M = sk.pose_matrices(pose(x))
+        fpts, tpts, palm = [], [], []
+        for f in fingers:
+            for j in (1, 2, 3):
+                h, t = bone_ends(sk, M, 'finger%d-%d.%s' % (f, j, side))
+                w0 = 0.5 if j == 1 else 0.0
+                fpts += [h + (t - h) * s for s in np.linspace(w0, 1, 3)]
+        for j in (2, 3):
+            h, t = bone_ends(sk, M, 'finger1-%d.%s' % (j, side))
+            tpts += [h + (t - h) * s for s in np.linspace(0.3, 1, 3)]
+        for m in (2, 3, 4):
+            h, t = bone_ends(sk, M, 'metacarpal%d.%s' % (m, side))
+            palm += [h + (t - h) * s for s in (0.5, 0.9)]
+        return np.array(fpts), np.array(tpts), np.array(palm)
+
+    def dist_axis(p, c, d):
+        q = p - c
+        return np.linalg.norm(q - np.outer(q @ d, d), axis=1)
+
+    # start: a loose fist, axis across the palm below the knuckles
+    x0 = np.array([45, 70] * 4 + [20, 30, 20, 0], float)
+    f0, t0_, p0 = samples(x0)
+    c0 = (f0.mean(0) + p0.mean(0)) / 2
+    d0 = f0[-1] - f0[0]
+    y0 = np.concatenate([x0, c0, d0 / np.linalg.norm(d0)])
+
+    def cost(y):
+        x, c, d = y[:12], y[12:15], y[15:18]
+        d = d / np.linalg.norm(d)
+        fp, tp, pp = samples(x)
+        e = ((dist_axis(fp, c, d) - R) ** 2).sum() + 2 * ((dist_axis(pp, c, d) - (handle_r + 0.10)) ** 2).sum()
+        e += ((dist_axis(tp, c, d) - R) ** 2).sum() * (1 if thumb_over else 0)
+        # the thumb lies against the fingers, never through them (fingers ~1.6 cm thick)
+        gap = np.linalg.norm(tp[:, None, :] - fp[None, :, :], axis=2).min(1)
+        e += 20 * (np.maximum(0, 0.16 - gap) ** 2).sum()
+        # joints stay within their natural range
+        e += 1e-4 * (np.maximum(0, x[:8] - 95) ** 2).sum() + 1e-4 * (np.maximum(0, -x[:8]) ** 2).sum()
+        e += 1e-5 * ((x[:8] - 60) ** 2).sum()
+        # the thumb's joints are stiffer: base about 0-50 degrees, middle 0-60, tip 0-70
+        e += 1e-3 * sum(np.maximum(0, x[8 + i] - hi) ** 2 + np.maximum(0, lo_ - x[8 + i]) ** 2
+                        for i, (lo_, hi) in enumerate(((-10, 50), (0, 60), (0, 70), (-40, 40))))
+        return e
+
+    res = minimize(cost, y0, method='Powell', options={'maxiter': 12000, 'xtol': 1e-3, 'ftol': 1e-8})
+    y = res.x
+    d = y[15:18] / np.linalg.norm(y[15:18])
+    print('grip angles', np.round(y[:12], 1))
+    return pose(y[:12]), y[12:15], d, res.fun

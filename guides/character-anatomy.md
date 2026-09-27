@@ -117,7 +117,23 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
   frame gives local rotations for face bones; blending = slerp each from rest by its weight, then multiply.
 - Eyes: `data/eyes/high-poly` is a separate eye mesh fitted to the head.
 
-## 6. Checklist before showing any character shot
+## 6. Lessons from building her (so they aren't learned twice)
+- MakeHuman's pose files give rotations along the **world** axes; convert each to the bone's own axes
+  (R_local = R_rest^T · R · R_rest) before skinning, or expressions come out as grotesque pouts.
+- Its face units file is **z-up**: a Y rotation becomes a negated Z one and Z becomes Y.
+- Don't guess finger angles. `mhuman.solve_grip` curls the fingers and thumb until they wrap a cylinder the
+  size of the real handle (touching all round), keeps joints in their natural range and stops the thumb
+  passing through the fingers. Then the prop is placed to fit the hand, not the other way round.
+- Don't force the handle's angle in the palm to line up the arm: keep the good grip and let the **wrist** bend
+  within its range (flexion ±50°, sideways ±25°) so the forearm heads back to a natural elbow. Forcing the
+  angle wrecked the grip; an unbent wrist put the elbow out like a chicken wing.
+- Linear-blend skinning loses volume at big bends: keep finger joints under ~90°.
+- A smile at full strength squints the eyes at a downward three-quarter view: keep the lower-lid raise gentle
+  (~0.2) and the upper lids open.
+- Features that are colour, not shape (lip colour, brows) must be re-fitted to the new head by *measuring*
+  it (e.g. the mouth's depth profile gave lip heights and corners), never carried over from an old head.
+
+## 7. Checklist before showing any character shot
 - [ ] Built on the MakeHuman body (or another measured, licensed human), not hand-placed blobs
 - [ ] Face asymmetry added; smile involves cheeks and eyes
 - [ ] Eyes converge on what she is looking at

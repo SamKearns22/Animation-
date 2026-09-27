@@ -609,7 +609,7 @@ def lip_curves(u, SP):
 @njit(fastmath=True, cache=True)
 def lip_mask(lx, ly, lz, SP):
     W = SP[100]
-    if W <= 0.0 or lz < 0.005 or abs(lx) > W + 0.001 or ly > -0.052 or ly < -0.082:
+    if W <= 0.0 or lz < 0.005 or abs(lx) > W + 0.001 or ly > SP[102] + 0.003 or ly < SP[105] - 0.004:
         return 0.0, 0.0
     u = min(abs(lx) / W, 1.0)
     top, stom, bot = lip_curves(u, SP)
@@ -655,6 +655,8 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
         if part > 0.0:
             k = 1.0 - 0.8 * part
             r, g, b = r * k, g * k, b * k
+        if SP[114] > 0.0:  # a modelled face (MakeHuman): its lids and lashes are geometry, not paint
+            return r, g, b, spec_mul
         # eyes: the dark line of the upper lashes, softer lower lashes, the shadowed rims
         for sx in (-1.0, 1.0):
             ex = (lx - sx * SP[29]) * sx  # across the eye, positive towards the outer corner

@@ -13,7 +13,7 @@ from PIL import Image
 import mesh_sdf
 import mhuman as H
 import sdf3d as S
-from mother_scene import mat_table, new_params, SKIN, EYE
+from mother_scene import mat_table, new_params, SKIN, EYE, HANDLE
 
 
 def build_mesh(shape=None, details=None, local=None):
@@ -121,10 +121,80 @@ GENTLE_SMILE = {'LeftCheekUp': 0.55, 'RightCheekUp': 0.45, 'LeftLowerLidUp': 0.3
                 # relaxed upper lids: resting just over the top of the iris, not staring
                 'LeftUpperLidClosed': 0.10, 'RightUpperLidClosed': 0.10}
 
+
+
+
+# ---------------------------------------------------------------------------
+# Hands
+# ---------------------------------------------------------------------------
+def finger_pose(sk, side, bends, thumb=None):
+    """Local rotations curling each finger: bends = {finger number 2..5: (knuckle, middle, tip) degrees},
+    thumb = (base, middle, tip) degrees. Bending is about each bone's own x axis (its hinge)."""
+    local = {}
+    for f, angs in bends.items():
+        for k, a in enumerate(angs):
+            local['finger%d-%d.%s' % (f, k + 1, side)] = H.axis_angle([1, 0, 0], a)
+    if thumb:
+        for k, a in enumerate(thumb):
+            local['finger1-%d.%s' % (k + 1, side)] = H.axis_angle([1, 0, 0], a)
+    return local
+
+
+def hand_test(out, local, side='R', handle=None):
+    t0 = time.time()
+    v, g = H.load_base()
+    H.apply_macros(v, H.macro_values(**YOUNG_WOMAN))
+    sk = H.Skeleton(v)
+    v = sk.skin(v, local)
+    V = v * 0.1
+    w = sk.rest['wrist.' + side][:3, 3] * 0.1
+    lo, hi = w - 0.13, w + 0.13
+    keep = [f for f in g['body'] if np.all(np.abs(V[f] - w).max(1) < 0.14)]
+    V2, q2 = mesh_sdf.catmull_clark(V, keep)
+    V2, q2 = mesh_sdf.catmull_clark(V2, q2)
+    grid = mesh_sdf.mesh_to_sdf(V2, mesh_sdf.triangulate(q2), lo, hi, 0.0007)
+    print(f'sdf {time.time() - t0:.0f}s', flush=True)
+    c = w + sk.axes('wrist.' + side)[1] * 0.07
+    b = S.Builder()
+    b.set_frame((0, 0, 0), None)
+    b.group('hand', margin=0.01)
+    b.grid(grid[0], grid[1], grid[2], SKIN, op=S.UNION)
+    if handle is not None:  # (point, direction, radius) in decimetres
+        hc, hd, hr = handle
+        b.group('handle', margin=0.01)
+        b.capsule(hc * 0.1 - hd * 0.06, hc * 0.1 + hd * 0.06, hr * 0.1, HANDLE, op=S.UNION)
+    P, G = b.build()
+    GB = b.grid_buffer()
+    SP = new_params()
+    SP[0:3] = (100.0, 100.0, 100.0)
+    SP[3:12] = np.eye(3).reshape(-1)
+    M = mat_table()
+    key = np.array([0.3, 0.8, 0.5])
+    key /= np.linalg.norm(key)
+    Lt = np.array([[0, *key, 1.30, 1.26, 1.20, 0, 0, 0, 0, 0],
+                   [0, -0.6, 0.3, -0.7, 0.45, 0.48, 0.55, 0, 0, 0, 0, 0]], dtype=np.float64)
+    tiles = []
+    for dv in ([0, 0, 1], [-1, 0, 0.2], [0, -1, 0.3], [1, 0.3, 0.3]):
+        dv = np.array(dv, float) / np.linalg.norm(dv)
+        cam = S.camera(tuple(c + dv * 0.8), tuple(c), 13, 1.0)
+        res = S.render_image(480, 480, cam, P, G, M, Lt, SP, GB, None, None, bands=2, verbose=False)
+        tiles.append((S.tonemap(res['rgb'], 1.05) * 255).astype(np.uint8))
+    Image.fromarray(np.concatenate([np.concatenate(tiles[:2], 1), np.concatenate(tiles[2:], 1)], 0)).save(out)
+    print('saved', out, f'{time.time() - t0:.0f}s')
+
+
 if __name__ == '__main__':
     if sys.argv[1] == 'head':
         head_test(sys.argv[2], YOUNG_WOMAN)
     if sys.argv[1] == 'smile':
         head_test(sys.argv[2], YOUNG_WOMAN, local=H.blend_units(H.face_units(), GENTLE_SMILE))
+    if sys.argv[1] == 'handsign':  # which way do fingers bend?
+        hand_test(sys.argv[2], finger_pose(None, 'R', {2: (60, 60, 40), 3: (0, 0, 0), 4: (-60, -60, -40)}))
+    if sys.argv[1] == 'grip':
+        v, g = H.load_base()
+        H.apply_macros(v, H.macro_values(**YOUNG_WOMAN))
+        local, c, d, err = H.solve_grip(H.Skeleton(v), 'R', 0.125)
+        print('grip error', err)
+        hand_test(sys.argv[2], local, 'R', (c, d, 0.125))
     if sys.argv[1] == 'mother':
         head_test(sys.argv[2], YOUNG_WOMAN, MOTHER_FACE, local=H.blend_units(H.face_units(), GENTLE_SMILE))

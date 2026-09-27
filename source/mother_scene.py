@@ -24,6 +24,55 @@ import numpy as np
 import sdf3d as S
 from sdf3d import Builder, rot, UNION, SUNION, SSUB, SUB
 
+CACHE_DIR = os.environ.get('SCENE_CACHE', os.path.join(tempfile.gettempdir(), 'mother_scene_cache'))
+
+
+def cached(name, fn, deps, *args):
+    """Sculpted grids take minutes; keep them on disk, keyed by the code and numbers they depend on."""
+    import hashlib
+    import inspect
+    import pickle
+    h = hashlib.sha1()
+    for d in deps:
+        h.update((inspect.getsource(d) if callable(d) else repr(d)).encode())
+    h.update(repr(args).encode())
+    path = os.path.join(CACHE_DIR, f'{name}_{h.hexdigest()[:12]}.pkl')
+    if os.path.exists(path):
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+    res = fn(*args)
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    with open(path, 'wb') as f:
+        pickle.dump(res, f, protocol=4)
+    return res
+
+
+def _mh_deps():
+    import character as C
+    import mesh_sdf
+    import mhuman as MH
+    return [C.base_body, C._grid_of, C._hand_faces, C.head_grid, C.right_hand, C.left_hand, C.FACE, C.SMILE,
+            C.SHAPE, C.HANDLE_R, MH.Skeleton, MH.skin if hasattr(MH, 'skin') else MH.bone_matrix, MH.solve_grip,
+            MH.face_units, MH.blend_units, MH.macro_values, MH.apply_macros, mesh_sdf.catmull_clark,
+            mesh_sdf.mesh_to_sdf, mesh_sdf._band]
+
+
+def get_mh_head():
+    """Her head and neck from MakeHuman, smiling, in head coordinates: ((lo, d, voxel), eyes)."""
+    import character as C
+    return cached('mhhead', C.head_grid, _mh_deps(), 0.001)
+
+
+def get_head_grid(smile=1.0):
+    return get_mh_head()[0]
+
+
+def get_mh_hands():
+    import character as C
+    return cached('mhhands', C.hands, _mh_deps())
+
+
+
 # ---------------------------------------------------------------------------
 # Materials: colour, shine, mirror, glow, soft light wrap (skin), surface pattern
 # ---------------------------------------------------------------------------
@@ -77,7 +126,7 @@ def mat_table():
 # The head, in its own coordinates: x across (her left is +x), y up, z out of the face.
 # Origin midway between the centres of the eyeballs. Metres.
 # ---------------------------------------------------------------------------
-EYE_X, EYE_R = 0.031, 0.0120
+EYE_X, EYE_R = 0.0305, 0.0168     # MakeHuman's eyeballs (centres 61 mm apart), sized to fit its lids
 
 
 def lid_planes(side, open_up=0.0048, open_low=-0.0052, tilt_deg=5.0, smile=1.0):
@@ -353,14 +402,83 @@ RACK_C = CUT_C + 0.12 * RACK_A
 HEEL = CUT_C - 0.07 * BLADE_B + np.array([0, 0.075, 0])                    # back top corner of the blade
 BUTT = HEEL - 0.12 * BLADE_B                                               # end of the handle
 
-# arms: shoulder, elbow, wrist
+# arms: shoulder, elbow, wrist. The hands are MakeHuman's (character.py): the right one closed round the
+# handle, the left one lying on the meat; each is turned about the handle (or the vertical) until its forearm
+# points back to where her elbow naturally sits, and the sleeves then follow the real forearms.
 R_SHOULDER = np.array([-0.160, 1.392, body_cz(1.392)])
-R_ELBOW = np.array([-0.255, 1.100, -0.690])
-R_WRIST = np.array([-0.110, 1.070, -0.560])
 L_SHOULDER = np.array([0.160, 1.392, body_cz(1.392)])
-L_ELBOW = np.array([0.175, 1.105, -0.575])
 L_PALM = RACK_C + 0.040 * RACK_A + np.array([0, 0.037, 0])
-L_WRIST = L_PALM + 0.050 * RACK_A + np.array([0, 0.012, 0])
+ELBOW_GUIDES = (np.array([-0.255, 1.100, -0.690]), np.array([0.175, 1.105, -0.575]))
+FOREARM = 0.25                       # wrist to elbow, metres
+
+
+def _unit(v):
+    v = np.asarray(v, float)
+    return v / np.linalg.norm(v)
+
+
+def place_hands():
+    """Where the two MakeHuman hands go: [(origin, rotation, wrist, forearm direction)] right then left.
+    Each hand is turned about the handle (or, the left, about the vertical), and its wrist bent within a
+    natural range (flexion up to 50 degrees, sideways up to 25), so the forearm heads back towards the elbow."""
+    import mhuman as MH
+    parts = get_mh_hands()
+    out = []
+    bends = [(fl, dv) for fl in range(-50, 51, 5) for dv in range(-25, 26, 5)]
+
+    def best_forearm(R, wr, fore, wx, wz, guide):
+        w = origin + R @ wr
+        want = _unit(guide - w)
+        best = None
+        for fl, dv in bends:
+            f = R @ (MH.axis_angle(wz, dv) @ MH.axis_angle(wx, fl) @ fore)
+            score = f @ want - 0.002 * (abs(fl) + abs(dv))  # the least bent wrist that does the job
+            if best is None or score > best[0]:
+                best = (score, w, f)
+        return best
+
+    # right: frame x along the handle towards the blade, y towards the knuckles; roll about the handle
+    (_, wr, fore, wx, wz) = parts[0]
+    u = _unit(BLADE_B)
+    origin = HEEL - u * 0.038
+    k0 = _unit(np.cross([0, 1.0, 0], u))
+    best = None
+    for th in np.radians(np.arange(0, 360, 3)):
+        k = k0 * np.cos(th) + np.cross(u, k0) * np.sin(th)
+        R = np.stack([u, k, np.cross(u, k)], 1)
+        sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[0])
+        if best is None or sc > best[0]:
+            best = (sc, R, w, f)
+    out.append((origin, best[1], best[2], best[3]))
+    # left: palm down on the meat, fingers lying along it towards the blade (where they shouldn't be);
+    # turn about the vertical
+    (_, wr, fore, wx, wz) = parts[1]
+    origin = L_PALM
+    best = None
+    for th in np.radians(np.arange(0, 360, 3)):
+        x = np.array([np.cos(th), 0, np.sin(th)])
+        R = np.stack([x, [0, 1.0, 0], np.cross(x, [0, 1.0, 0])], 1)
+        sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[1])
+        sc += 0.8 * (x @ -RACK_A)
+        if best is None or sc > best[0]:
+            best = (sc, R, w, f)
+    out.append((origin, best[1], best[2], best[3]))
+    return out
+
+
+HANDS = place_hands()
+R_WRIST, L_WRIST = HANDS[0][2], HANDS[1][2]
+R_ELBOW = R_WRIST + HANDS[0][3] * FOREARM
+L_ELBOW = L_WRIST + HANDS[1][3] * FOREARM
+
+
+def build_mh_hands(b):
+    rgrid, lgrid = get_mh_hands()[0][0], get_mh_hands()[1][0]
+    for name, (origin, R, _, _), grid in (('right_hand', HANDS[0], rgrid), ('left_hand', HANDS[1], lgrid)):
+        b.set_frame(origin, R)
+        b.group(name, margin=0.01)
+        b.grid(grid[0], grid[1], grid[2], SKIN, op=UNION)
+    b.set_frame((0, 0, 0), None)
 
 
 def body_colliders():
@@ -700,123 +818,6 @@ def build_body(b, grid=None):
 
 
 # ---------------------------------------------------------------------------
-# Hands, joint by joint. Hand coordinates (left hand): origin at the wrist, +y towards the fingers,
-# +z the back of the hand, thumb at +x. A right hand is the mirror image.
-# ---------------------------------------------------------------------------
-FINGERS = {  # knuckle position, bone lengths, radii
-    'index': ((0.025, 0.086, 0.000), (0.040, 0.024, 0.019), (0.0090, 0.0080, 0.0071)),
-    'middle': ((0.007, 0.089, 0.001), (0.044, 0.027, 0.020), (0.0092, 0.0082, 0.0073)),
-    'ring': ((-0.011, 0.086, 0.000), (0.041, 0.026, 0.019), (0.0088, 0.0078, 0.0070)),
-    'little': ((-0.027, 0.079, -0.002), (0.033, 0.020, 0.017), (0.0079, 0.0071, 0.0064)),
-}
-
-
-def _rotz(deg):
-    a = np.radians(deg)
-    return np.array([[np.cos(a), -np.sin(a), 0], [np.sin(a), np.cos(a), 0], [0, 0, 1]])
-
-
-def build_hand(b, name, wrist, Rw, mirror, pose, nails=True):
-    """pose: {finger: (spread, knuckle bend, middle bend, tip bend)} in degrees, plus 'thumb'."""
-    b.set_frame((0, 0, 0), None)
-    b.group(name, margin=0.01)
-    M = np.diag([float(mirror), 1.0, 1.0])
-    T = Rw @ M
-
-    def W(p):
-        return np.asarray(wrist, float) + T @ np.asarray(p, float)
-
-    b.box(W((0, 0.046, 0)), (0.036, 0.043, 0.0115), SKIN, op=UNION, r=0.0095, R=T)
-    b.ellipsoid(W((0.004, 0.004, -0.001)), (0.026, 0.020, 0.017), SKIN, k=0.012, R=T)  # the wrist
-    b.ellipsoid(W((0.016, 0.030, -0.009)), (0.016, 0.022, 0.010), SKIN, k=0.010, R=T)  # ball of the thumb
-    for fname, (base, lens, radii) in FINGERS.items():
-        spread, f1, f2, f3 = pose[fname]
-        dvec = _rotz(-spread) @ np.array([0, 1.0, 0])
-        up = np.array([0, 0, 1.0])
-        p = np.array(base, float)
-        joints = [p.copy()]
-        ups, dirs = [], []
-        for L, ang in zip(lens, (f1, f2, f3)):
-            a = np.radians(ang)
-            dvec, up = dvec * np.cos(a) - up * np.sin(a), up * np.cos(a) + dvec * np.sin(a)
-            p = p + dvec * L
-            joints.append(p.copy())
-            ups.append(up.copy())
-            dirs.append(dvec.copy())
-        rr = list(radii) + [radii[-1] * 0.92]
-        for i in range(3):
-            b.cone(W(joints[i]), W(joints[i + 1] - dirs[i] * (0.0 if i < 2 else rr[i + 1] * 0.6)),
-                   rr[i], rr[i + 1], SKIN, k=0.0045 if i == 0 else 0.002)
-        if nails:
-            tip, dv, uv = joints[3], dirs[2], ups[2]
-            c = tip - dv * (lens[2] * 0.42) + uv * (rr[3] * 0.55)
-            xv = np.cross(dv, uv)
-            Rn = T @ np.stack([xv, dv, uv], 1)
-            b.ellipsoid(W(c), (rr[3] * 0.80, lens[2] * 0.34, rr[3] * 0.40), NAIL, k=0.0012, R=Rn)
-    # thumb
-    spread, f1, f2, f3 = pose['thumb']
-    base = np.array([0.026, 0.020, -0.010])
-    dvec = _rotz(-spread) @ (np.array([0.60, 0.62, -0.42]) / np.linalg.norm([0.60, 0.62, -0.42]))
-    up = np.array([0.45, -0.25, 0.86])
-    up = up - dvec * (up @ dvec)
-    up /= np.linalg.norm(up)
-    p = base.copy()
-    joints = [p.copy()]
-    for L, ang in zip((0.034, 0.028, 0.023), (f1, f2, f3)):
-        a = np.radians(ang)
-        dvec, up = dvec * np.cos(a) - up * np.sin(a), up * np.cos(a) + dvec * np.sin(a)
-        p = p + dvec * L
-        joints.append(p.copy())
-    for i, (r0, r1) in enumerate(((0.0115, 0.0098), (0.0098, 0.0088), (0.0088, 0.0080))):
-        b.cone(W(joints[i]), W(joints[i + 1] - (dvec * 0.005 if i == 2 else 0)), r0, r1, SKIN, k=0.006)
-    if nails:
-        c = joints[3] - dvec * 0.009 + up * 0.0045
-        xv = np.cross(dvec, up)
-        b.ellipsoid(W(c), (0.0068, 0.0080, 0.0032), NAIL, k=0.0012, R=T @ np.stack([xv, dvec, up], 1))
-
-
-def right_hand_frame():
-    """The right hand closed round the cleaver handle. The handle lies diagonally across the palm, from the
-    heel of the hand to the base of the index finger, fingers wrapped round it, blade beyond the index finger;
-    the forearm runs back from the wrist. Returns wrist position and hand rotation (for a mirrored hand)."""
-    u = BLADE_B / np.linalg.norm(BLADE_B)
-    A = np.array([-0.032, 0.030, -0.021])   # handle against the heel of the palm (hand coordinates)
-    Bp = np.array([0.024, 0.092, -0.026])   # and inside the curled index finger
-    dh = (Bp - A) / np.linalg.norm(Bp - A)
-    fore = (R_WRIST - R_ELBOW) / np.linalg.norm(R_WRIST - R_ELBOW)
-    w = fore - u * (fore @ u)
-    w /= np.linalg.norm(w)
-    cy = dh[1]
-    ycol = cy * u + np.sqrt(1 - cy * cy) * w
-    xcol = (u - dh[1] * ycol - dh[2] * 0) / dh[0]
-    xcol /= np.linalg.norm(xcol)
-    zcol = -np.cross(xcol, ycol)  # mirrored hand
-    T = np.stack([xcol, ycol, zcol], 1)
-    Rw = T @ np.diag([-1.0, 1, 1])
-    wrist = (HEEL - 0.016 * u + np.array([0, -0.002, 0])) - T @ Bp
-    return wrist, Rw
-
-
-def left_hand_frame():
-    y = -RACK_A + np.array([0, -0.08, 0])
-    y /= np.linalg.norm(y)
-    z = np.array([0, 1.0, 0.0])
-    z = z - y * (z @ y)
-    z /= np.linalg.norm(z)
-    x = np.cross(y, z)
-    return L_WRIST, np.stack([x, y, z], 1)
-
-
-R_WRIST, R_HAND_ROT = right_hand_frame()  # the forearm ends where the hand holds the handle
-
-
-LEFT_POSE = {'index': (7, 10, 16, 10), 'middle': (1, 9, 14, 9), 'ring': (-5, 10, 16, 10),
-             'little': (-12, 14, 18, 12), 'thumb': (0, 8, 10, 8)}
-RIGHT_POSE = {'index': (-4, 62, 84, 40), 'middle': (0, 70, 90, 44), 'ring': (3, 76, 94, 44),
-              'little': (7, 82, 98, 44), 'thumb': (10, 90, 75, 38)}  # thumb wrapped over the fingers
-
-
-# ---------------------------------------------------------------------------
 # The board, the glazed rack of ribs, the cleaver
 # ---------------------------------------------------------------------------
 def build_props(b):
@@ -1020,6 +1021,20 @@ def build_environment(b, SP):
 
 
 def build_head(b, smile=1.0, grid=None):
+    """The MakeHuman head (its own nostrils, lids and lips) with eyeballs set in its sockets."""
+    b.group('head', margin=0.01)
+    lo, d, voxel = grid if grid is not None else get_head_grid()
+    b.grid(lo, d, voxel, SKIN, op=UNION)
+    for c, r in get_mh_eyes():
+        b.sphere(c, r, EYE, op=UNION)
+
+
+def get_mh_eyes():
+    return get_mh_head()[1]
+
+
+def build_head_sculpted(b, smile=1.0, grid=None):
+    """The earlier hand-sculpted head (kept for comparison; see guides/character-anatomy.md for why not)."""
     b.group('head', margin=0.01)
     lo, d, voxel = grid if grid is not None else head_grid(smile=smile)
     b.grid(lo, d, voxel, SKIN, op=UNION)
@@ -1170,43 +1185,15 @@ def facelab(out, voxel=0.0010, gaze=None, hair=True, flags=(0, 0)):
     print('saved', out, f'{time.time() - t0:.0f}s')
 
 
-CACHE_DIR = os.environ.get('SCENE_CACHE', os.path.join(tempfile.gettempdir(), 'mother_scene_cache'))
-
-
-def cached(name, fn, deps, *args):
-    """Sculpted grids take minutes; keep them on disk, keyed by the code and numbers they depend on."""
-    import hashlib
-    import inspect
-    import pickle
-    h = hashlib.sha1()
-    for d in deps:
-        h.update((inspect.getsource(d) if callable(d) else repr(d)).encode())
-    h.update(repr(args).encode())
-    path = os.path.join(CACHE_DIR, f'{name}_{h.hexdigest()[:12]}.pkl')
-    if os.path.exists(path):
-        with open(path, 'rb') as f:
-            return pickle.load(f)
-    res = fn(*args)
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    with open(path, 'wb') as f:
-        pickle.dump(res, f, protocol=4)
-    return res
-
-
 def _arms():
     return (R_SHOULDER.tolist(), R_ELBOW.tolist(), R_WRIST.tolist(), L_SHOULDER.tolist(), L_ELBOW.tolist(),
             L_WRIST.tolist())
 
 
-def get_head_grid(smile=1.0):
-    return cached('head', head_grid, [head_grid, robust_distance, eye_opening, lip_params, lip_curves_np,
-                                      HEAD_PROFILE.tolist(), HEAD_BOX], 0.0010, smile)
-
-
 def get_hair_grid():
     return cached('hair', hair_grid, [hair_grid, hair_locks, scalp_point, body_colliders, robust_distance,
-                                      HEAD_POS.tolist(), HEAD_YAW, HEAD_PITCH, HEAD_ROLL, _arms(), HAIR_BOX_W, PART, HAIRLINE,
-                                      head_grid, HEAD_PROFILE.tolist(), HEAD_BOX])
+                                      HEAD_POS.tolist(), HEAD_YAW, HEAD_PITCH, HEAD_ROLL, _arms(), HAIR_BOX_W, PART, HAIRLINE]
+                  + _mh_deps())
 
 
 def get_body_grid():
@@ -1230,13 +1217,13 @@ def build_character(smile=1.0, cache=None):
     build_head(b, smile, cache['head'])
     build_hair(b, cache['hair'])
     build_body(b, cache['body'])
-    wr, Rw = right_hand_frame()
-    build_hand(b, 'right_hand', wr, Rw, -1, RIGHT_POSE)
-    wl, Rl = left_hand_frame()
-    build_hand(b, 'left_hand', wl, Rl, 1, LEFT_POSE)
+    build_mh_hands(b)
     build_props(b)
     SP = new_params()
     fill_head_params(SP, HEAD_POS, Rh, GAZE, smile)
+    SP[114] = 1.0  # the face's lids and lashes are real geometry now: don't paint the old ones on
+    # lip colour, fitted to her measured mouth (corners 22 mm out, lips from 52 to 73.5 mm below the eyes)
+    SP[100:106] = [0.022, -0.0590, -0.0525, 0.0010, -0.0632, -0.0735]
     board_x = rot(yaw=-RACK_ANGLE) @ np.array([1.0, 0, 0])
     SP[46:49] = board_x
     return b, SP, cache
@@ -1266,33 +1253,6 @@ def chartest(out):
     canvas[:, 900:] = tiles[1]
     Image.fromarray(canvas).save(out)
     print('saved', out, f'{time.time() - t0:.0f}s')
-
-
-def handtest(out):
-    from PIL import Image
-    b = Builder()
-    wr, Rw = right_hand_frame()
-    build_hand(b, 'right_hand', wr, Rw, -1, RIGHT_POSE)
-    wl, Rl = left_hand_frame()
-    build_hand(b, 'left_hand', wl, Rl, 1, LEFT_POSE)
-    build_props(b)
-    P, G = b.build()
-    GB = b.grid_buffer()
-    SP = new_params()
-    SP[46:49] = rot(yaw=-8) @ np.array([1.0, 0, 0])
-    M = mat_table()
-    Lt = default_lights((0.75, 0.45, 0.50))
-    sm = S.ShadowMaps()
-    sm.add(P, G, GB, Lt[0, 1:4], (0, 1.0, -0.3), 0.8, 1500, np.tan(np.radians(8)))
-    SM, SMP = sm.arrays()
-    tiles = []
-    for pos, tgt in (((0.30, 1.30, 0.35), (-0.03, 1.02, -0.32)), ((-0.55, 1.25, -0.05), (-0.08, 1.04, -0.33)),
-                     ((0.05, 1.45, -0.05), (-0.03, 1.02, -0.32))):
-        cam = S.camera(pos, tgt, 30, 1.0)
-        res = S.render_image(500, 500, cam, P, G, M, Lt, SP, GB, SM, SMP, bands=2, verbose=False)
-        tiles.append((S.tonemap(res['rgb'], 1.1) * 255).astype(np.uint8))
-    Image.fromarray(np.concatenate(tiles, 1)).save(out)
-    print('saved', out)
 
 
 CAMERA = dict(pos=(0.85, 1.60, 2.30), target=(0.36, 1.37, -0.55), vfov=19.0)
@@ -1354,8 +1314,6 @@ if __name__ == '__main__':
                 flags=tuple(int(v) for v in sys.argv[5].split(',')) if len(sys.argv) > 5 else (0, 0))
     if sys.argv[1] == 'face':  # just her face, at full size
         render_shot(sys.argv[2], 2560, 1440, crop=(560, 60, 1260, 700))
-    if sys.argv[1] == 'handtest':
-        handtest(sys.argv[2])
     if sys.argv[1] == 'chartest':
         chartest(sys.argv[2])
     if sys.argv[1] == 'headtest':
