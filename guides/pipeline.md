@@ -28,15 +28,19 @@ Keep continuity in the recipes: the ham's cut position and the slices lying abou
 ## Making drawings
 - One frame: `python3 shot.py still shots/s1_chop.py OUT_DIR` (1920x1080 by default).
 - A whole shot: `python3 shot.py sequence shots/s1_chop.py OUT_DIR`. It draws on twos (12 drawings a
-  second). The first drawing is made whole. After that only the window of the picture the moving things
-  (and their shadows) can reach is rendered and redrawn, and pasted over the first. A redrawn window comes
+  second). The first drawing is made whole. After that a quick quarter-size render finds exactly where the
+  picture changed (the moving things, their shadows, their reflections), and only those patches are
+  rendered and redrawn, and pasted over the first. A redrawn window comes
   out stroke for stroke identical to the whole drawing, so there are no seams. The set's shadows are made
   once per shot.
 
 ## Costs (4-core machine, 1920x1080)
-- Head and hands: once, a few minutes, cached.
-- Per new pose: jumper about 35 s; hair about 70 s (to be replaced by the hair simulation).
-- Per drawing: shadows of the moving things, the render of the window, the pencil drawing of the window.
+- Head and hands: once, a few minutes, cached. The set's shadows: once, cached.
+- First drawing of a shot: about 3-5 minutes (rendered and drawn whole).
+- Each later drawing: about 100 s - the jumper for the new pose (~35 s), the moving things' shadows
+  (~27 s), a quick quarter-size render to find what changed, then only the changed patches rendered
+  (~10-15% of the picture) and redrawn. Checked against drawing the whole frame: identical to the eye.
+- Hair: rebuilt only when her head, neck or shoulders move (~70 s; to be replaced by the hair simulation).
 
 ## Rules
 - Never hand-place a limb: say where the hand goes and let the arm solve, within natural joint ranges.

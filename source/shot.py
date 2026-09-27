@@ -145,20 +145,22 @@ def moving_corners(scene):
 
 
 def merge_spans(spans, rows=32):
-    """Group row spans into bands of about `rows` rows (fewer, larger calls to the renderer)."""
-    out = []
-    for y0, y1, x0, x1 in spans:
-        if out and y0 <= out[-1][1] and y1 - out[-1][0] <= rows:
-            a = out[-1]
-            out[-1] = (a[0], max(a[1], y1), min(a[2], x0), max(a[3], x1))
+    """Join row pieces into rectangles (fewer, larger calls to the renderer): a piece joins the rectangle
+    above it when their columns overlap and the rectangle is not yet `rows` tall."""
+    rects = []
+    for y0, y1, x0, x1 in sorted(spans):
+        for i, (a0, a1, b0, b1) in enumerate(rects):
+            if a1 >= y0 and x0 <= b1 and x1 >= b0 and y1 - a0 <= rows:
+                rects[i] = (a0, max(a1, y1), min(b0, x0), max(b1, x1))
+                break
         else:
-            out.append((y0, y1, x0, x1))
-    return out
+            rects.append((y0, y1, x0, x1))
+    return rects
 
 
-def changed_rows(lo_now, lo_ref, W, H, thresh=0.004, grow=3):
-    """Where a quick quarter-size render differs from the shot's first frame: for each band of rows (one
-    quarter-size row = 4 full rows) the span of columns to redo, or None. Grown a little all round."""
+def changed_rows(lo_now, lo_ref, W, H, thresh=0.01, grow=3):
+    """Where a quick quarter-size render differs from the shot's first frame (by more than would show in
+    pencil): for each quarter-size row, the runs of columns to redo. Grown a little all round."""
     from scipy import ndimage
     d = np.abs(lo_now - lo_ref).max(-1) > thresh
     d = ndimage.binary_dilation(d, iterations=grow)
@@ -166,9 +168,10 @@ def changed_rows(lo_now, lo_ref, W, H, thresh=0.004, grow=3):
     sx, sy = W / w, H / h
     spans = []
     for j in range(h):
-        xs = np.nonzero(d[j])[0]
-        if len(xs):
-            spans.append((int(j * sy), int(min(H, (j + 1) * sy)), int(xs.min() * sx), int(min(W, (xs.max() + 1) * sx))))
+        row = np.concatenate([[False], d[j], [False]])
+        edges = np.nonzero(np.diff(row.astype(np.int8)))[0]
+        for a, b in zip(edges[::2], edges[1::2]):
+            spans.append((int(j * sy), int(min(H, (j + 1) * sy)), int(a * sx), int(min(W, b * sx))))
     return spans
 
 
