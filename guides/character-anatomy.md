@@ -39,9 +39,14 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 3. **Surface detail.** Skin isn't smooth: faint pores, the fold of the upper eyelid, the tear duct, a slightly
    wet lower lid rim, lip creases running vertically, a nasolabial fold that deepens when smiling, fine hair at
    the hairline. In pencil these become a few light marks, not a smooth gradient.
-4. **The smile is the whole face.** A real (Duchenne) smile: cheeks lift, lower eyelids rise and bunch, crow's
-   feet at the outer eye corners, nasolabial folds deepen, lips thin and stretch. A mouth-only smile on a still
-   face is exactly the "Barbie" look.
+4. **The smile is the whole face.** A real (Duchenne) smile needs two muscles at once: zygomaticus major (pulls
+   the mouth corners up and back) and orbicularis oculi (the ring round the eye). Paul Ekman's markers: the
+   cheeks are pulled up; the skin below the eye bags or bulges; the lower eyelid moves up; crow's feet appear
+   at the outer corners; the skin between brow and upper lid is pulled slightly down; the brows drop very
+   slightly. Nasolabial folds deepen. A mouth-only smile on a still face is exactly the "Barbie" look.
+   In MakeHuman these are face pose units: LeftCheekUp/RightCheekUp, LeftLowerLidUp/RightLowerLidUp, the
+   mouth-corner units, NasolabialDeepener and a touch of BrowDown. Use them together, slightly unequal on the
+   two sides.
 5. **Eyes.** Both eyes converge on the *same point* (her daughter), not parallel. Upper lid covers the top
    1–2 mm of the iris; lower lid touches the bottom. Eyelids have thickness and cast a shadow on the eyeball.
    Catchlight in both eyes in the same place.
@@ -61,7 +66,13 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 ## 3. Hands: the most-noticed part after faces
 
 - Palm is roughly square; fingers are about as long as the palm. Middle finger longest; ring ≈ index;
-  little finger ends at the last knuckle of the ring finger.
+  little finger ends at the last knuckle of the ring finger. The whole hand is about 2/3 of the forearm.
+- Each finger's first bone is about as long as the other two together; bones get smaller towards the tip.
+- Fingers start at the knuckles seen on the *back* of the hand; on the palm side the skin creases sit further
+  out, so fingers look shorter from the palm side.
+- The thumb has two visible joints and is rotated: its nail faces sideways when the other nails face up. It
+  spreads much further than the fingers.
+- A relaxed hand tilts slightly towards the little-finger side; tilting towards the thumb reads as effort.
 - Knuckles form an arc, not a straight line. Fingers taper and each joint bends only one way (hinge).
 - Thumb starts near the wrist, not at the side of the palm, and swings round in front of the palm to oppose
   the fingers. It is the most common thing to get wrong (in shot 1 it stuck up in the air).
@@ -82,7 +93,31 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
   resting too flat and too close to the blade, which is the point, but the hand must still look relaxed and
   weighted: fingers slightly curved, pads pressing into the meat (make a dent), wrist resting.
 
-## 4. Checklist before showing any character shot
+## 4. Faces: female structure
+- The forehead's shape comes almost entirely from the frontal bone (Anatomy for Sculptors): female foreheads are
+  rounder and more upright with little brow ridge; the hairline is rounded.
+- Softer, smaller jaw angle and chin; cheekbones carry the width; fuller lips; eyebrows sit on (not below) the
+  brow bone and arch towards the outer third.
+
+## 5. How MakeHuman works (learned from its own code)
+- Units: 1 unit = 1 decimetre (its height in cm is 10 × the bounding box). Y up, face towards +Z.
+- `base.obj` holds helper geometry too (tights, joint markers); use only the `body` group for skin.
+- Shape "targets" are text files: `vertex_index dx dy dz`. Macro targets are mixed by multiplying the values
+  in their names, e.g. weight of `universal-female-young-averagemuscle-averageweight` =
+  female × young × averagemuscle × averageweight, where gender 0..1 gives female = 1 − gender; age 0.5 = 25
+  years (young = 1 − old, old = 2·age − 1 above 0.5); muscle/weight 0.5 = all "average". Ethnic targets
+  (`caucasian-female-young` etc.) are weighted by ethnic mix × gender × age.
+- Skeleton (`default.mhskel`, 163 bones incl. face and every finger joint): each joint = the average of a
+  listed set of vertices; each bone's X axis comes from the normal of a named plane of three joints; Y runs
+  head→tail; Z = X × Y.
+- Posing: each bone gets a local rotation; global = parent_global · rest_relative · pose; each vertex moves by
+  the weighted sum of (global · rest_global⁻¹) over its bones (weights in `default_weights.mhw`). This is
+  standard linear-blend skinning.
+- Expressions: `face-poseunits.bvh` has one frame per named unit (list in `face-poseunits.json`). A unit's
+  frame gives local rotations for face bones; blending = slerp each from rest by its weight, then multiply.
+- Eyes: `data/eyes/high-poly` is a separate eye mesh fitted to the head.
+
+## 6. Checklist before showing any character shot
 - [ ] Built on the MakeHuman body (or another measured, licensed human), not hand-placed blobs
 - [ ] Face asymmetry added; smile involves cheeks and eyes
 - [ ] Eyes converge on what she is looking at
