@@ -304,8 +304,12 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
     t_all = time.time()
     base = static = stats = lo_ref = first = None
     M = mat_table()
+    import cache
+    t_prev = time.time()
     for n, t in enumerate(times):
         t0 = time.time()
+        cache.prune(t_prev)          # keep only what the last drawing used (a still head reuses its hair)
+        t_prev = t0
         scene = build(rec.frame(float(t)))
         checks.run(scene, verbose=False)
         if static is None:

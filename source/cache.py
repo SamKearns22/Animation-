@@ -20,6 +20,7 @@ def key_of(deps, args=()):
 def cached(name, fn, deps, *args):
     path = os.path.join(CACHE_DIR, f'{name}_{key_of(deps, args)}.pkl')
     if os.path.exists(path):
+        os.utime(path)                      # marks it as still in use (see prune)
         with open(path, 'rb') as f:
             return pickle.load(f)
     res = fn(*args)
@@ -29,3 +30,18 @@ def cached(name, fn, deps, *args):
         pickle.dump(res, f, protocol=4)
     os.replace(tmp, path)
     return res
+
+
+PER_POSE = ('jumper_', 'trousers_', 'hair_', 'girltop_', 'girlhair_', 'girlbottoms_')
+
+
+def prune(older_than):
+    """Delete the per-pose pieces (clothes and hair made for one pose, ~0.1-0.5 GB each) not used since
+    `older_than` (a time.time()): an animation makes one for nearly every drawing, and they would fill the
+    disk. Heads, hands and the set's shadows are kept."""
+    if not os.path.isdir(CACHE_DIR):
+        return
+    for n in os.listdir(CACHE_DIR):
+        p = os.path.join(CACHE_DIR, n)
+        if n.startswith(PER_POSE) and os.path.getmtime(p) < older_than:
+            os.remove(p)
