@@ -6,7 +6,7 @@ by a distance transform. A Catmull-Clark subdivision step first smooths MakeHuma
 has no facets.
 """
 import numpy as np
-from numba import njit
+from numba import njit, prange
 
 
 def catmull_clark(verts, faces):
@@ -149,16 +149,105 @@ def _band(V, N, T, lo, voxel, shape, band, dist, sgn):
                         sgn[i, j, k] = 1.0 if (p - q) @ n >= 0 else -1.0
 
 
-def mesh_to_sdf(V, T, lo, hi, voxel, band_vox=4):
-    """Signed distance grid (inside negative) of the mesh over the box lo..hi."""
+@njit(cache=True, fastmath=True)
+def _bary(px, py, pz, ax, ay, az, bx, by, bz, cx, cy, cz):
+    """Barycentric weights of the point on triangle abc closest to p (the same method as _closest_on_tri, in
+    plain numbers so it allocates nothing)."""
+    abx, aby, abz = bx - ax, by - ay, bz - az
+    acx, acy, acz = cx - ax, cy - ay, cz - az
+    apx, apy, apz = px - ax, py - ay, pz - az
+    d1 = abx * apx + aby * apy + abz * apz
+    d2 = acx * apx + acy * apy + acz * apz
+    if d1 <= 0 and d2 <= 0:
+        return 1.0, 0.0, 0.0
+    bpx, bpy, bpz = px - bx, py - by, pz - bz
+    d3 = abx * bpx + aby * bpy + abz * bpz
+    d4 = acx * bpx + acy * bpy + acz * bpz
+    if d3 >= 0 and d4 <= d3:
+        return 0.0, 1.0, 0.0
+    vc = d1 * d4 - d3 * d2
+    if vc <= 0 and d1 >= 0 and d3 <= 0:
+        v = d1 / (d1 - d3)
+        return 1 - v, v, 0.0
+    cpx, cpy, cpz = px - cx, py - cy, pz - cz
+    d5 = abx * cpx + aby * cpy + abz * cpz
+    d6 = acx * cpx + acy * cpy + acz * cpz
+    if d6 >= 0 and d5 <= d6:
+        return 0.0, 0.0, 1.0
+    vb = d5 * d2 - d1 * d6
+    if vb <= 0 and d2 >= 0 and d6 <= 0:
+        w = d2 / (d2 - d6)
+        return 1 - w, 0.0, w
+    va = d3 * d6 - d5 * d4
+    if va <= 0 and (d4 - d3) >= 0 and (d5 - d6) >= 0:
+        w = (d4 - d3) / ((d4 - d3) + (d5 - d6))
+        return 0.0, 1 - w, w
+    denom = 1.0 / (va + vb + vc)
+    v = vb * denom
+    w = vc * denom
+    return 1 - v - w, v, w
+
+
+@njit(parallel=True, cache=True, fastmath=True)
+def _band_parallel(V, N, T, lo, voxel, shape, band, dist, sgn):
+    """_band, run on all cores: the grid is cut into slabs along z and each slab takes the triangles that
+    reach it, so no two cores ever write the same cell."""
+    nt = T.shape[0]
+    kmin = np.empty(nt, np.int64)
+    kmax = np.empty(nt, np.int64)
+    for t in range(nt):
+        z0 = min(V[T[t, 0], 2], min(V[T[t, 1], 2], V[T[t, 2], 2])) - band
+        z1 = max(V[T[t, 0], 2], max(V[T[t, 1], 2], V[T[t, 2], 2])) + band
+        kmin[t] = max(int((z0 - lo[2]) / voxel), 0)
+        kmax[t] = min(int((z1 - lo[2]) / voxel) + 1, shape[2] - 1)
+    slab = 4
+    nslab = (shape[2] + slab - 1) // slab
+    for sl in prange(nslab):
+        s0 = sl * slab
+        s1 = min(s0 + slab, shape[2]) - 1
+        for t in range(nt):
+            if kmax[t] < s0 or kmin[t] > s1:
+                continue
+            a0, b0, c0 = T[t, 0], T[t, 1], T[t, 2]
+            ax, ay, az = V[a0, 0], V[a0, 1], V[a0, 2]
+            bx, by, bz = V[b0, 0], V[b0, 1], V[b0, 2]
+            cx, cy, cz = V[c0, 0], V[c0, 1], V[c0, 2]
+            i0 = max(int((min(ax, min(bx, cx)) - band - lo[0]) / voxel), 0)
+            j0 = max(int((min(ay, min(by, cy)) - band - lo[1]) / voxel), 0)
+            i1 = min(int((max(ax, max(bx, cx)) + band - lo[0]) / voxel) + 1, shape[0] - 1)
+            j1 = min(int((max(ay, max(by, cy)) + band - lo[1]) / voxel) + 1, shape[1] - 1)
+            for i in range(i0, i1 + 1):
+                px = lo[0] + i * voxel
+                for j in range(j0, j1 + 1):
+                    py = lo[1] + j * voxel
+                    for k in range(max(kmin[t], s0), min(kmax[t], s1) + 1):
+                        pz = lo[2] + k * voxel
+                        u, v, w = _bary(px, py, pz, ax, ay, az, bx, by, bz, cx, cy, cz)
+                        qx = u * ax + v * bx + w * cx
+                        qy = u * ay + v * by + w * cy
+                        qz = u * az + v * bz + w * cz
+                        d = np.sqrt((px - qx) ** 2 + (py - qy) ** 2 + (pz - qz) ** 2)
+                        if d < dist[i, j, k]:
+                            dist[i, j, k] = d
+                            nx = u * N[a0, 0] + v * N[b0, 0] + w * N[c0, 0]
+                            ny = u * N[a0, 1] + v * N[b0, 1] + w * N[c0, 1]
+                            nz = u * N[a0, 2] + v * N[b0, 2] + w * N[c0, 2]
+                            sgn[i, j, k] = 1.0 if (px - qx) * nx + (py - qy) * ny + (pz - qz) * nz >= 0 else -1.0
+
+
+def mesh_to_sdf(V, T, lo, hi, voxel, band_vox=4, vote=False):
+    """Signed distance grid (inside negative) of the mesh over the box lo..hi.
+    vote: decide inside/outside region by region (each connected pocket of space between surfaces takes the
+    majority sign of its cells near the surface) instead of cell by cell - robust where the surface folds
+    sharply (a bent elbow, an armpit), where single cells can get the wrong sign and spread it."""
     from scipy import ndimage
     lo = np.asarray(lo, float)
     shape = tuple(np.round((np.asarray(hi) - lo) / voxel).astype(int) + 1)
     N = vertex_normals(V, T)
     dist = np.full(shape, 1e9)
     sgn = np.ones(shape)
-    _band(np.ascontiguousarray(V, float), N, np.ascontiguousarray(T), lo, float(voxel), np.array(shape),
-          band_vox * voxel, dist, sgn)
+    _band_parallel(np.ascontiguousarray(V, float), N, np.ascontiguousarray(T), lo, float(voxel),
+                   np.array(shape), band_vox * voxel, dist, sgn)
     inband = dist < band_vox * voxel
     # beyond the band: sign of the nearest band voxel, distance through the band
     d_out, idx = ndimage.distance_transform_edt(~inband, return_indices=True)
@@ -166,4 +255,11 @@ def mesh_to_sdf(V, T, lo, hi, voxel, band_vox=4):
     near_s = sgn[idx[0], idx[1], idx[2]]
     far = near_s * (near_d + d_out * voxel)
     d = np.where(inband, sgn * dist, far).astype(np.float32)
+    if vote:
+        free = np.abs(d) > 0.75 * voxel
+        lab, n = ndimage.label(free)
+        votes = ndimage.sum(np.where(inband, sgn, 0.0), lab, index=np.arange(1, n + 1))
+        side = np.concatenate([[1.0], np.where(votes < 0, -1.0, 1.0)])
+        s_ = side[lab]
+        d = np.where(free, np.abs(d) * s_, d).astype(np.float32)
     return lo, d, voxel

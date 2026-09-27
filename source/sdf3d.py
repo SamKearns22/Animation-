@@ -1127,7 +1127,9 @@ class ShadowMaps:
         self.rows = []
         self.length = 0
 
-    def add(self, P, G, GB, light_dir, centre, extent, res, tan_light, bias=0.0004, back=6.0):
+    def add(self, P, G, GB, light_dir, centre, extent, res, tan_light, bias=0.0004, back=6.0, base=None):
+        """base: a map already made of the things that don't move (same light, centre, extent and size);
+        only G's objects are then drawn into it - for animation, where the set's shadows never change."""
         L = np.asarray(light_dir, float)
         L = L / np.linalg.norm(L)
         Wd = -L
@@ -1139,6 +1141,8 @@ class ShadowMaps:
         nu = nv = int(res)
         out = np.zeros(nu * nv, np.float32)
         depth_map(nu, nv, o, U, V, Wd, extent, extent, P, G, GB, out)
+        if base is not None:
+            out = np.minimum(out, base)
         row = np.zeros(19)
         row[0], row[1], row[2] = self.length, nu, nv
         row[3:6], row[6:9], row[9:12], row[12:15] = o, U, V, Wd

@@ -13,12 +13,12 @@ import numpy as np
 from numba import njit, prange
 from PIL import Image
 
-import mother_scene as MS
+import materials as MS
 import sdf3d as S
 
 # which materials belong to what
 CHAR_SKIN = {MS.SKIN, MS.LIPS, MS.LID, MS.NOSTRIL, MS.NAIL}
-CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.KNIT}
+CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.KNIT, MS.TROUSERS}
 PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER}
 
 
@@ -119,51 +119,6 @@ def angle_field(deg, shape):
 
 
 # ---------------------------------------------------------------------------
-# direction fields from the 3D scene
-# ---------------------------------------------------------------------------
-def hair_flow(pos, mask):
-    """Direction the hair runs, looked up in the sculpt's own lock directions."""
-    lo, d, voxel, flow = MS.get_hair_grid()
-    out = np.zeros(pos.shape, np.float32)
-    out[..., 1] = -1
-    idx = np.round((pos[mask] - lo) / voxel).astype(int)
-    idx = np.clip(idx, 0, np.array(flow.shape[:3]) - 1)
-    # search a little way in for a lock direction (the surface voxel may sit just outside the locks)
-    f = flow[idx[:, 0], idx[:, 1], idx[:, 2]]
-    for off in ((0, -1, 0), (1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, 1, 0)):
-        missing = np.linalg.norm(f, axis=1) < 0.5
-        if not missing.any():
-            break
-        j = np.clip(idx + off, 0, np.array(flow.shape[:3]) - 1)
-        f[missing] = flow[j[missing, 0], j[missing, 1], j[missing, 2]]
-    missing = np.linalg.norm(f, axis=1) < 0.5
-    f[missing] = (0, -1, 0)
-    out[mask] = f
-    return out
-
-
-def knit_dirs(pos, mask):
-    """Ribs of the knit: up the body, along the sleeves (which part is which comes from the sculpt)."""
-    lo, dd, voxel, part = MS.get_body_grid()
-    d = np.zeros(pos.shape, np.float32)
-    d[..., 1] = 1
-    idx = np.clip(np.round((pos[mask] - lo) / voxel).astype(int), 0, np.array(part.shape) - 1)
-    pid = np.zeros(pos.shape[:2], np.int32)
-    pid[mask] = part[idx[:, 0], idx[:, 1], idx[:, 2]].round().astype(int)
-    for k, segs in ((1, ((MS.R_SHOULDER, MS.R_ELBOW), (MS.R_ELBOW, MS.R_WRIST))),
-                    (2, ((MS.L_SHOULDER, MS.L_ELBOW), (MS.L_ELBOW, MS.L_WRIST)))):
-        best = np.full(pos.shape[:2], 1e9, np.float32)
-        for a, b in segs:
-            ba = b - a
-            h = np.clip(((pos - a) @ ba) / (ba @ ba), 0, 1)
-            dist = np.linalg.norm(pos - (a + h[..., None] * ba), axis=-1)
-            sel = (pid == k) & (dist < best)
-            d[sel] = ba / np.linalg.norm(ba)
-            best = np.where(sel, dist, best)
-    return d
-
-
-# ---------------------------------------------------------------------------
 # the drawing
 # ---------------------------------------------------------------------------
 # Things that keep their colour in the drawing: the food, fruit, the tree and the decorations, laid in with
@@ -197,13 +152,14 @@ def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
     return rgbo * (1 - mask[..., None]) + col * mask[..., None]
 
 
-def focus_map(cam, W, H, fx, fy):
-    """Where the drawing wants the eye: her face, the raised blade and the hand under it. 1 there, falling to
-    0 away from them. An illustrator spends the detail and the darkest lines here and lets the rest go."""
+def focus_map(cam, W, H, fx, fy, points):
+    """Where the drawing wants the eye (the shot says: her face, the raised blade and the hand under it). 1
+    there, falling to 0 away from them. An illustrator spends the detail and the darkest lines here and lets
+    the rest go."""
     o, f, r, u = cam[0:3], cam[3:6], cam[6:9], cam[9:12]
     th, aspect = cam[12], cam[13]
     out = np.zeros(fx.shape, np.float32)
-    for p, rad in ((MS.HEAD_POS, 0.16), (MS.BLADE_O + np.array([0, 0.04, 0]), 0.14), (MS.HANDS[1][0], 0.12)):
+    for p, rad in zip(points, (0.16, 0.14, 0.12, 0.12, 0.12)):
         d = p - o
         z = d @ f
         x = ((d @ r) / (z * th * aspect) + 1) * 0.5
@@ -213,22 +169,36 @@ def focus_map(cam, W, H, fx, fy):
     return out
 
 
-def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
+def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
+    """Draw the whole frame, or (crop) just a window of it - for animation, where only the part that moved is
+    redrawn. A window comes out stroke for stroke the same as that part of the whole drawing (the paper grain
+    and stroke noise are made for the whole frame; `stats` from the whole drawing keep the tones the same), so
+    it can be pasted in without a seam. Returns the stats."""
     Z = np.load(npz_path)
     rgb, depth, normal, mat, pos, glass, cam = (Z['rgb'], Z['depth'], Z['normal'], Z['mat'], Z['pos'],
                                                 Z['glass'], Z['cam'])
     H0, W0 = depth.shape
     fy, fx = np.mgrid[0:H0, 0:W0].astype(np.float32)
     fx, fy = fx / W0, fy / H0  # where each pixel sits in the whole frame, 0..1
-    foc = focus_map(Z['cam'], W0, H0, fx, fy)
+    foc = focus_map(Z['cam'], W0, H0, fx, fy, Z['focus'])
+    char0 = np.isin(mat, list(CHAR))
+    near_d = np.median(depth[char0]) if char0.any() else 3.0      # (from the whole frame)
+    px = W0 / 2560 if px is None else px  # stroke sizes are designed at 2560 wide
+    win = (slice(crop[1], crop[3]), slice(crop[0], crop[2])) if crop is not None else (slice(None), slice(None))
+    rngs = np.random.SeedSequence(seed).spawn(6)
+
+    def noise(k, sigma, normal=False):
+        """The k-th paper/stroke noise, made for the whole frame, then cut to the window."""
+        g = np.random.default_rng(rngs[k])
+        a = g.standard_normal((H0, W0)) if normal else g.random((H0, W0))
+        return blur(a, sigma)[win].astype(np.float32)
     if crop is not None:  # a window of the frame, for quick trials (x0, y0, x1, y1)
         x0, y0, x1, y1 = crop
         rgb, depth, normal, mat, pos, glass, fx, fy, foc = (a[y0:y1, x0:x1] for a in
                                                             (rgb, depth, normal, mat, pos, glass, fx, fy, foc))
     fx0, fy0 = fx, fy
+    sl = (slice(crop[1], crop[3]), slice(crop[0], crop[2])) if crop is not None else (slice(None), slice(None))
     H, W = depth.shape
-    rng = np.random.default_rng(seed)
-    px = W / 2560 if px is None else px  # stroke sizes are designed at 2560 wide
 
     tone = S.tonemap(rgb, 1.05) @ np.array([0.30, 0.59, 0.11])
     char = np.isin(mat, list(CHAR))
@@ -240,7 +210,6 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     hair = mat == MS.HAIR
     knit = mat == MS.KNIT
     eye = mat == MS.EYE
-    near_d = np.median(depth[char]) if char.any() else 3.0
     bg = ~subject
     # how far behind her each thing is, 0 near her .. 1 at the back wall
     recede = np.clip((depth - near_d - 0.3) / 2.0, 0, 1) * bg
@@ -279,12 +248,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     # --- direction fields
     vx, vy = angle_field(-58.0, (H, W))  # the natural slant of a right-handed artist's hatching
     ok = depth > 0
-    hf = hair_flow(pos, hair & ok)
-    hx, hy = project_dirs(hf, pos, cam, W, H)
+    hx, hy = project_dirs(Z['hairdir'].astype(np.float32)[sl], pos, cam, W0, H0)
     vx = np.where(hair, hx, vx)
     vy = np.where(hair, hy, vy)
-    kd = knit_dirs(pos, knit & ok)
-    kx, ky = project_dirs(kd, pos, cam, W, H)
+    kx, ky = project_dirs(Z['knitdir'].astype(np.float32)[sl], pos, cam, W0, H0)
     vx = np.where(knit, kx, vx)
     vy = np.where(knit, ky, vy)
     # skin: follow the form - along the lines of equal light, blended with the slant
@@ -300,11 +267,11 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     vx = np.where(skin, fx / fl, vx).astype(np.float32)
     vy = np.where(skin, fy / fl, vy).astype(np.float32)
     # the board along its grain, the blade along its length
-    bdx, bdy = project_dirs(np.broadcast_to(np.array([1.0, 0, 0]), pos.shape), pos, cam, W, H)
+    bdx, bdy = project_dirs(np.broadcast_to(np.array([1.0, 0, 0]), pos.shape), pos, cam, W0, H0)
     wood = mat == MS.WOOD
     vx = np.where(wood, bdx, vx)
     vy = np.where(wood, bdy, vy)
-    blx, bly = project_dirs(np.broadcast_to(MS.BLADE_B, pos.shape), pos, cam, W, H)
+    blx, bly = project_dirs(np.broadcast_to(Z['bladedir'], pos.shape), pos, cam, W0, H0)
     steel = mat == MS.STEEL
     vx = np.where(steel, blx, vx)
     vy = np.where(steel, bly, vy)
@@ -313,19 +280,24 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
 
     # --- strokes
     L = max(4, int(13 * px))
-    grain = blur(rng.random((H, W)), 0.7 * px).astype(np.float32)
+    grain = noise(0, 0.7 * px)
     s1 = lic(grain, vx, vy, L, region)
-    grain2 = blur(rng.random((H, W)), 0.7 * px).astype(np.float32)
+    grain2 = noise(1, 0.7 * px)
     c, s_ = np.cos(np.radians(62)), np.sin(np.radians(62))
     s2 = lic(grain2, (vx * c - vy * s_).astype(np.float32), (vx * s_ + vy * c).astype(np.float32), L, region)
     hl = max(6, int(34 * px))  # long strands in the hair
-    grain3 = blur(rng.random((H, W)), 0.5 * px).astype(np.float32)
+    grain3 = noise(2, 0.5 * px)
     s3 = lic(grain3, vx, vy, hl, region)
 
-    def nrm(z):
-        return (z - z.mean()) / (z.std() + 1e-9)
+    new_stats = {} if stats is None else stats
 
-    s1, s2, s3 = nrm(s1), nrm(s2), nrm(s3)
+    def nrm(z, key):
+        if key not in new_stats:
+            new_stats[key] = (float(z.mean()), float(z.std()) + 1e-9)
+        m, sd = new_stats[key]
+        return (z - m) / sd
+
+    s1, s2, s3 = nrm(s1, 's1'), nrm(s2, 's2'), nrm(s3, 's3')
 
     # graphite rubbed smooth for soft gradations; hatching laid over it as tone deepens; cross-hatching in
     # the deepest shadows; long dark strands in the hair
@@ -369,7 +341,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     wt = wt * (0.72 + 0.40 * foc)
     lines = blur(lines, 0.6 * px) * wt
     # pressure varies along the line
-    press = 0.75 + 0.35 * nrm(blur(rng.random((H, W)), 6 * px))
+    press = 0.75 + 0.35 * nrm(noise(3, 6 * px), 'press')
     line_dark = np.clip(lines * 1.6 * press, 0, 1)
     # a thicker line along her outer silhouette
     sil = blur(occl * subject, 1.2 * px)
@@ -386,7 +358,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     bright = smoothstep(0.93, 1.0, tone)
 
     # --- put it together on the paper
-    tooth = blur(rng.standard_normal((H, W)), 0.6 * px) * 0.022
+    tooth = noise(4, 0.6 * px, normal=True) * 0.022
     paper = 0.968 + tooth
     ink = 1 - (1 - marks * 0.93) * (1 - line_dark * 0.92) * (1 - detail * 0.5)
     ink = ink * (1 - 0.85 * bright)
@@ -402,10 +374,11 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
         img = img.resize((int(W * scale), int(H * scale)), Image.LANCZOS)
     img.save(out_path, optimize=True)
     print('saved', out_path)
+    return new_stats
 
 
 if __name__ == '__main__':
     args = sys.argv[1:]
     scale = float(args[args.index('--scale') + 1]) if '--scale' in args else 1.0
     crop = tuple(int(v) for v in args[args.index('--crop') + 1].split(',')) if '--crop' in args else None
-    draw(args[0], args[1], scale, crop=crop, px=1.0 if crop else None)
+    draw(args[0], args[1], scale, crop=crop)

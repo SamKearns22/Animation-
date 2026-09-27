@@ -74,10 +74,10 @@ realistic characters:
 - Joints move within their ranges; elbows and knees never bend backwards; wrists flex up to ~60–70°.
 
 ## 6. The look of movement in our style
-- Waltz with Bashir was done largely in **Flash cut-out** animation over a filmed reference, with classic
-  hand animation where needed; its director said **slow movement was the hardest thing** to make look good in
-  that technique - fast action hides a lot. Our 3D-then-drawn pipeline handles slow, subtle movement well,
-  which suits this film (smiles, glances, breathing).
+- Our look is our own: a coherent 3D world redrawn in graphite, with coloured pencil only on food, plants,
+  decorations (and later blood). It is fine for it to read as 3D-based; what it must never show is an AI tell.
+- Slow, subtle movement is the hardest to make convincing (fast action hides a lot). Building in 3D and then
+  drawing handles it well, which suits this film (smiles, glances, breathing).
 - Hand-drawn animation is often shot **"on twos"** (12 new drawings per second at 24 fps). It suits a pencil
   look, halves render time, and fast actions can go "on ones" (every frame).
 - Pencil "boil": if the stroke texture changes randomly every frame the drawing flickers. Keep the stroke
@@ -107,4 +107,3 @@ realistic characters:
 - Eye–head coordination: Freedman & Sparks (1997); McCluskey & Cullen (2007): eye, head, body move in sequence;
   the head contributes beyond ~20°.
 - Selle, Lentine & Fedkiw, "A Mass Spring Model for Hair Simulation" (SIGGRAPH 2008).
-- Joe Strike, "Waltz with Bashir: Animation and Memory", AWN (2008), interview with Ari Folman.

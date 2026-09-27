@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Concept still: the mother at her kitchen island at Christmas, in a Waltz With Bashir-like style
-(flat, realistic shapes with bold black outlines, hard shadow shapes, a warm/cold lighting split).
+"""Early concept still (superseded by shot.py and shots/): the mother at her kitchen island at Christmas, in
+flat, realistic shapes with bold black outlines, hard shadow shapes, a warm/cold lighting split.
 
 Usage:
     python3 concept_mother.py OUT.png

@@ -51,7 +51,7 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
    1–2 mm of the iris; lower lid touches the bottom. Eyelids have thickness and cast a shadow on the eyeball.
    Catchlight in both eyes in the same place.
 6. **Don't over-render.** A pencil drawing *suggests*. Stylised line + shading hides small errors better than
-   smooth realistic shading, which exposes them (this is why Waltz With Bashir works: bold lines, flat tone).
+   smooth realistic shading, which exposes them (bold lines and simple tone forgive a lot).
 
 ### Proportions (adult woman, head-on)
 - Eyes sit halfway down the head (top of skull to chin). One eye-width between the eyes.

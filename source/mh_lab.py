@@ -13,7 +13,7 @@ from PIL import Image
 import mesh_sdf
 import mhuman as H
 import sdf3d as S
-from mother_scene import mat_table, new_params, SKIN, EYE, HANDLE
+from materials import mat_table, new_params, SKIN, EYE, HANDLE
 
 
 def build_mesh(shape=None, details=None, local=None):
