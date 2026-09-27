@@ -44,10 +44,27 @@ def mh_deps():
             MH.macro_values, MH.apply_macros, mesh_sdf.catmull_clark, mesh_sdf.mesh_to_sdf, mesh_sdf._band]
 
 
-def head_parts():
-    """Her head and neck, smiling, in head coordinates (origin between the eyes, rest axes):
-    ((lo, d, voxel), eyes)."""
-    return cached('mhhead', C.head_grid, mh_deps(), 0.001)
+def expression(smile=1.0, blink=0.0):
+    """Her face units: the smile (0 none .. 1 full, every part of it in proportion) and a blink (0 open ..
+    1 shut; the upper lids close, the lower rise a touch)."""
+    units = {k: v * smile for k, v in C.SMILE.items()}
+    for side in ('Left', 'Right'):
+        k = side + 'UpperLidClosed'
+        units[k] = units.get(k, 0.0) * (1 - blink) + blink
+        k = side + 'LowerLidUp'
+        units[k] = units.get(k, 0.0) + 0.15 * blink
+    return units
+
+
+def head_parts(smile=1.0, blink=0.0):
+    """Her head and neck with an expression, in head coordinates (origin between the eyes, rest axes):
+    ((lo, d, voxel), eyes). Each expression is made once (a minute) and kept; the amounts are rounded to
+    steps small enough not to show (a tenth of the smile, a quarter of a blink)."""
+    s, b = round(smile * 10) / 10, round(blink * 4) / 4
+    if s == 1.0 and b == 0.0:
+        return cached('mhhead', C.head_grid, mh_deps(), 0.001)
+    return cached('mhhead_x', lambda s_, b_: C.head_grid(0.001, None, None, expression(s_, b_)),
+                  mh_deps() + [expression], s, b)
 
 
 def hand_parts():
@@ -171,7 +188,7 @@ def solve(spec):
     lean = spec.get('lean', 0.0)
     for bone in ('spine04', 'spine03', 'spine02'):
         pose.rot[bone] = MH.axis_angle([1, 0, 0], lean / 3)
-    look = spec.get('look_at')
+    look = spec.get('head_look', spec.get('look_at'))
     if look is not None:
         # the head turns most of the way towards what she looks at; the eyes do the rest
         pose.aim_head(np.eye(3))
@@ -201,10 +218,11 @@ def solve(spec):
     mid = eyes_mid_rest()
     Hc = pose.point(M, 'head', mid)
     Rh = M['head'][:3, :3]
-    if look is not None:
-        spec = dict(spec, gaze=tuple(Rh.T @ unit(np.asarray(look) - Hc)))
+    eye_look = spec.get('eye_look', spec.get('look_at'))    # the eyes may lead the head (see movement.md)
+    if eye_look is not None:
+        spec = dict(spec, gaze=tuple(Rh.T @ unit(np.asarray(eye_look) - Hc)))
     return dict(spec=spec, pose=pose, M=M, joints=J, hands=hands, bends=bends, grip_roll=roll,
-                short=(short_r, short_l), head=(Hc, Rh), smile=spec.get('smile', 1.0))
+                short=(short_r, short_l), head=(Hc, Rh), smile=spec.get('smile', 1.0), blink=spec.get('blink', 0.0))
 
 
 def pose_key(state):
@@ -301,7 +319,7 @@ def build(b, state, pov=False):
         # her head (with its own lids, nostrils and lips) and eyeballs, in head coordinates
         b.set_frame(Hc, Rh)
         b.group('head', margin=0.01)
-        (lo, d, vox), eyes = head_parts()
+        (lo, d, vox), eyes = head_parts(state['smile'], state.get('blink', 0.0))
         b.grid(lo, d, vox, SKIN, op=UNION)
         for c, r in eyes:
             b.sphere(c, r, EYE, op=UNION)
@@ -350,8 +368,12 @@ def fill_params(SP, state):
     SP[23:29] = [0.0017857, -0.0177143, 0.0239017, -0.0019560, 0.0204516, 0.0252633]  # (lids: geometry now)
     SP[29] = EYE_X
     SP[40:46] = [0.011, 0.056, 0.0168, 0.0050, 0.012, 0.0034]    # eyebrows
-    # lip colour, fitted to her measured mouth (corners 22 mm out, lips from 52 to 73.5 mm below the eyes)
-    SP[100:106] = [0.022, -0.0590, -0.0525, 0.0010, -0.0632, -0.0735]
+    # lip colour, fitted to her measured mouth (corners 22 mm out, lips from 52 to 73.5 mm below the eyes) when
+    # smiling; as the smile relaxes the mouth line drops ~2 mm and the lower lip ~4 mm (measured on MakeHuman's
+    # lip bones), so the colour follows
+    rel = 1.0 - state.get('smile', 1.0)
+    SP[100:106] = np.array([0.022, -0.0590, -0.0525, 0.0010, -0.0632, -0.0735]) + \
+        rel * np.array([0.0005, -0.0021, 0.0, 0.0, -0.0021, -0.0042])
     SP[107:110] = (0.66, 0.38, 0.36)
     SP[110:114] = HAIRLINE
     SP[114] = 1.0  # the face's lids and lashes are real geometry: don't paint the old ones on
@@ -360,7 +382,8 @@ def fill_params(SP, state):
 def pieces(state, pov=False):
     """Every grid of her in the scene, as (grid, origin, rotation) - origin/rotation None for world grids."""
     Hc, Rh = state['head']
-    out = [] if pov else [(head_parts()[0], Hc, Rh), (state['hair'][:3], None, None)]
+    out = [] if pov else [(head_parts(state['smile'], state.get('blink', 0.0))[0], Hc, Rh),
+                          (state['hair'][:3], None, None)]
     out += [(state['jumper'][:3], None, None), (state['trousers'], None, None)]
     for (o, R, _), part in zip(state['hands'], hand_parts()):
         out.append((part[0], o, R))
