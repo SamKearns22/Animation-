@@ -37,13 +37,14 @@ class Ham:
 
     R = np.array([0.100, 0.064, 0.074])                      # half length, height, width
 
-    def __init__(self, centre, angle, cut, slices=()):
+    def __init__(self, centre, angle, cut, slices=(), falling=()):
         self.c = np.asarray(centre, float)
         self.angle = angle
         self.a = np.array([np.cos(np.radians(angle)), 0.0, np.sin(np.radians(angle))])  # along the ham
         self.across = np.cross(self.a, [0, 1.0, 0])          # its side facing us
         self.cut = cut
         self.slices = list(slices)                          # (centre, rotation) of slices lying about
+        self.falling = list(falling)                        # freshly cut slices tipping over (see falling_slice)
         self.base_y = self.c[1] - 0.058                      # its flat underside, on the board
 
     def frame(self):
@@ -98,10 +99,38 @@ class Ham:
             b.cylinder(p - n_ * 0.001, 0.0042, 0.021, PINEAPPLE, op=UNION, R=Rn, rr=0.002)
             b.cylinder(p, 0.010, 0.0075, PINEAPPLE, op=SUB, R=Rn)
             b.sphere(p + n_ * 0.003, 0.0072, CHERRY, op=UNION)
+        for i, piece in enumerate(self.falling):
+            b.group('slicef%d' % i, margin=0.01)
+            self.build_falling(b, *piece)
         for i, (sc, Rs) in enumerate(self.slices):
             b.group('slice%d' % i, margin=0.01)
             b.cylinder(sc, 0.0034, 0.058, MEAT, op=UNION, R=Rs, rr=0.002)
             b.cylinder(sc + Rs @ np.array([0, 0.0006, 0]), 0.0034, 0.051, HAMPINK, op=UNION, R=Rs, rr=0.002)
+
+    def falling_slice(self, a0, a1, tip, rest_y, drop):
+        """A slice just cut from the ham (between a0 and a1 along it), tipping over away from the ham on the
+        bottom edge of its outer face: `tip` degrees over (90 = lying flat on that face), its hinge lowered
+        by `drop` (0..1) of the way from where it was cut to `rest_y` (the board, or a slice already there).
+        Returns a function taking ham-frame points (as world points of the uncut ham) to where they are now."""
+        ylow = max(-self.R[1] * np.sqrt(max(0.0, 1 - (a1 / self.R[0]) ** 2)), self.base_y + 0.002 - self.c[1])
+        H0 = self.c + a0 * self.a + np.array([0, ylow, 0])
+        H = H0 + np.array([0, (rest_y - H0[1]) * drop, 0])
+        k, th = self.across, np.radians(tip)
+        K = np.array([[0, -k[2], k[1]], [k[2], 0, -k[0]], [-k[1], k[0], 0]])
+        Q = np.eye(3) + np.sin(th) * K + (1 - np.cos(th)) * K @ K      # turns up (y) towards -a as it tips
+        return lambda p: H + (np.asarray(p) - H0) @ Q.T, Q
+
+    def build_falling(self, b, a0, a1, tip, rest_y, drop):
+        move, Q = self.falling_slice(a0, a1, tip, rest_y, drop)
+        Rh = self.frame()
+        Rc = np.stack([np.cross([0, 1.0, 0], self.a), self.a, [0, 1.0, 0]], 1)
+        flip = np.diag([1.0, -1.0, -1.0])
+        for mat, grow, shrink in ((MEAT, 0.0, 0.0), (HAMPINK, 0.0006, 0.0045)):
+            # the glazed rind all round; the pink meat inside showing on both cut faces
+            b.ellipsoid(move(self.c), self.R - shrink, mat, op=UNION, R=Q @ Rh)
+            b.halfspace(move(np.array([self.c[0], self.base_y + 0.002 + shrink, self.c[2]])), Q, mat, op=SUB)
+            b.halfspace(move(self.c + (a0 - grow) * self.a), Q @ Rc, mat, op=SUB)
+            b.halfspace(move(self.c + (a1 + grow) * self.a), Q @ Rc @ flip, mat, op=SUB)
 
     def fill_params(self, SP):
         """The meat's surface pattern needs the ham's frame, and where its pink cut face is."""

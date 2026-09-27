@@ -297,7 +297,9 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
     os.makedirs(out_dir, exist_ok=True)
     rec = load_recipe(recipe_path)
     if times is None:
-        times = np.arange(0, rec.DURATION - 1e-9, every / fps)
+        times = getattr(rec, 'TIMES', None)          # a recipe may choose its drawings (fast action on ones)
+        if times is None:
+            times = np.arange(0, rec.DURATION - 1e-9, every / fps)
     log = []
     t_all = time.time()
     base = static = stats = lo_ref = first = None
