@@ -41,7 +41,7 @@ def raised_cleaver(h):
     down, it squares up again to land flat across her fingers."""
     import mhuman as MH
     from props import Cleaver
-    c = S1.cleaver_at(h, S2.END_ALONG)
+    c = S1.cleaver_at(h, S2.END_ALONG, S2.END_SLIDE)
     a = S1.ease((h - S2.END_H) / (TOP - S2.END_H))
     R = MH.axis_angle(c.R[:, 2], -12.0 * a) @ c.R
     R = MH.axis_angle(R[:, 0], -40.0 * a) @ R

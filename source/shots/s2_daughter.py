@@ -21,6 +21,7 @@ GIRL = np.array([0.30, 0.08, 0.50])
 
 FPS = 24
 END_H, END_ALONG = 0.20, -0.035        # where the cleaver is at the end of this shot (shot 3 carries on from it)
+END_SLIDE = 0.035                      # (slid along its length, away from her: her hand clear of her body)
 TIMES = np.arange(0, 36, 2) / FPS      # on twos
 BLINK = {14: 1.0, 16: 0.5}             # (drawings) a quick close, a slower opening
 
@@ -31,15 +32,15 @@ def cleaver_path(f):
     h0, a0, _ = S1.cleaver_path(47)
     s = S1.between(f, 0, 35)
     h = h0 + (END_H - h0) * s
-    along = a0 + (END_ALONG - a0) * S1.ease((h - 0.12) / 0.08)     # moves along once clear of the meat
-    return h, along
+    k = S1.ease((h - 0.12) / 0.08)                                  # moves along once clear of the meat
+    return h, a0 + (END_ALONG - a0) * k, END_SLIDE * k
 
 
 def frame(t):
     f = S1.frame(47 / S1.FPS)              # the kitchen, the props and the mother as at the end of shot 1
     n = t * FPS
-    h, along = cleaver_path(n)
-    cleaver = S1.cleaver_at(h, along)
+    h, along, slide = cleaver_path(n)
+    cleaver = S1.cleaver_at(h, along, slide)
     f['mother'] = dict(f['mother'], cleaver=cleaver, poles=S1.elbow_poles(h))
     f['cleaver'] = cleaver
     f['blade_in_meat'] = h < 0.115

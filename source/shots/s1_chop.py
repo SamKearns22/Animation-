@@ -93,9 +93,10 @@ def ham_at(f):
     return Ham(HAM_C, ANGLE, cut=cut, slices=[slice_lying(first_slice, -ANGLE + 25)], falling=falling)
 
 
-def cleaver_at(h, along):
-    """The cleaver with its edge h above the board, over the point `along` the ham."""
-    edge = HAM_C + along * A
+def cleaver_at(h, along, slide=0.0):
+    """The cleaver with its edge h above the board, over the point `along` the ham (and slid `slide` along
+    its own length, away from her)."""
+    edge = HAM_C + along * A + slide * BLADE
     edge[1] = BOARD.top + 0.001 + h
     edge[2] -= 0.10 * min(h, TOP)                    # the lift swings back towards her a little (an arc)
     th = np.radians(12.0 * min(h, TOP) / TOP)        # the wrist cocks the blade's tip up as it rises
