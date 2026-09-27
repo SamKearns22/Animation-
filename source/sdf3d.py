@@ -420,13 +420,18 @@ def displace(dt, px, py, pz, mat, G, g, P, GB):
         rib = 0.5 + 0.5 * math.cos(6.2831853 * u)
         folds = fbm3(px * 9.0, py * 5.0, pz * 9.0, 3) - 0.5
         return -depth * rib * cuff + 0.0018 * folds
-    if dt == 5:  # fir branches: a ragged, layered outline instead of a smooth cone
-        amp, freq = G[g, 7], G[g, 8]
+    if dt == 5:  # fir branches: tiers of drooping boughs whose tips make a scalloped edge, as an illustrator
+        amp, freq = G[g, 7], G[g, 8]  # draws a fir (not random noise, which reads as torn paper)
         if mat < 0 or mat != G[g, 9]:
             return 0.0
-        n = fbm3(px * freq, py * freq * 1.3, pz * freq, 4) - 0.5
-        tiers = abs(math.sin(py * freq * 2.2)) - 0.5
-        return amp * (n * 1.4 + 0.35 * tiers)
+        th = math.atan2(px - G[g, 10], pz - G[g, 12])
+        tier = py * freq * 0.9
+        ti = math.floor(tier)
+        f = tier - ti                                   # 0 at the drooping lower edge of a tier .. 1 at its top
+        lobes = abs(math.cos(th * 5.0 + ti * 1.7)) ** 0.6   # branch tips round the tree, offset tier to tier
+        out = (1.0 - f) ** 2 * min(f / 0.08, 1.0) * lobes   # boughs widest at their lower edge
+        n = fbm3(px * freq * 2.0, py * freq * 2.0, pz * freq * 2.0, 2) - 0.5
+        return amp * (0.35 - 0.9 * out + 0.25 * n)
     if dt == 2:  # hair: fine strands - grooves across the direction the hair falls
         hx, hy, hz, R0 = G[g, 7], G[g, 8], G[g, 9], G[g, 10]
         th = math.atan2(px - hx, pz - hz)

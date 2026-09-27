@@ -150,12 +150,30 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 - [ ] Thumb opposes the fingers; wrist straight
 - [ ] Looked at the whole picture (not just the part changed) at full size *and* phone size
 - [ ] `source/checks.py` passes (it runs automatically before every render)
+- [ ] Fresh-eyes review: look at it as a stranger would and ask "what looks fake, pasted on or AI-made?"
+- [ ] Every contact shows visible proof (a dent, a cut, a shadow, fingers wrapping); nothing meant to be apart
+      looks touching on screen (avoid near-touching outlines)
+- [ ] Coloured things are drawn like everything else: pencil outline and shading under the colour
 
-## 8. The automatic whole-body checks (`source/checks.py`)
+## 8. Lessons from an outside review ("is this AI?")
+A second opinion judged the picture a filtered render. What gave it away, and the rules that follow:
+- **Contact without proof.** A blade "in" the meat with no cut, no parting and no shadow looks pasted on. Show
+  the physical evidence of every touch, judged from the camera, not only measured in 3D.
+- **Mixed techniques.** Coloured trees had no pencil outline and a ragged, noisy edge ("torn paper") while
+  everything else was drawn. One hand draws everything: the colour is laid over the graphite, not instead of
+  it, and shapes are built the way an illustrator draws them (a fir as tiers of drooping boughs), not noise.
+- **Even detail everywhere.** A filter treats every surface the same; an artist spends detail and dark lines
+  where the eye should go (her face, the blade, the hand under it) and leaves the rest lighter, looser, fading
+  towards the edges of the frame (`graphite.focus_map`).
+- **Keep the strength:** the coherent 3D room (straight lines, consistent perspective) is what AI images lack.
+
+## 9. The automatic whole-body checks (`source/checks.py`)
 Run before every render, and on **every frame** once she moves; a failure stops the render and says what is
 wrong in millimetres. Add a new check whenever a new kind of mistake is found, so it can never come back.
 - Each hand joins the end of its sleeve (gap under 3 mm).
-- The resting hand touches the food without sinking in; the chopping hand stays clear of it.
+- The steadying hand presses 2-7 mm into the food (and the food is dented round it); the chopping hand
+  stays clear of it.
+- A raised cleaver hovers 2-9 cm over the food and stays clear of the other hand's fingers.
 - Upper arm and forearm lengths are human (26-36 cm and 22-30 cm).
 - Forearms stay clear of her body (no arm melting into the jumper).
 - The jumper's front has no dents or holes. (The tummy dip came from the roll-neck's hole being cut down

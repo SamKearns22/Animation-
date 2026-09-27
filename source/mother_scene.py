@@ -411,7 +411,11 @@ HAM_R = np.array([0.100, 0.064, 0.074])                                    # hal
 HAM_C = CUT_C + 0.072 * RACK_A + np.array([0, 0.96 + 0.058 - CUT_C[1], 0])
 HAM_ACROSS = np.cross(RACK_A, [0, 1.0, 0])                                 # the ham's side facing us
 HAM_CUT = 0.015                                                            # its cut end, just past the blade
-HEEL = CUT_C - 0.07 * BLADE_B + np.array([0, 0.075, 0])                    # back top corner of the blade
+# the moment before a chop: the cleaver held up, its edge hovering a few centimetres over the meat, level with
+# the fingers of her other hand
+HOVER = 0.165                                                              # how far the blade is raised
+BLADE_O = CUT_C + np.array([0, HOVER, 0]) - 0.008 * RACK_A  # middle of its edge, before lifting
+HEEL = BLADE_O - 0.07 * BLADE_B + np.array([0, 0.075, 0])                  # back top corner of the blade
 BUTT = HEEL - 0.12 * BLADE_B                                               # end of the handle
 
 # arms: shoulder, elbow, wrist. The hands are MakeHuman's (character.py): the right one closed round the
@@ -419,11 +423,14 @@ BUTT = HEEL - 0.12 * BLADE_B                                               # end
 # points back to where her elbow naturally sits, and the sleeves then follow the real forearms.
 R_SHOULDER = np.array([-0.160, 1.392, body_cz(1.392)])
 L_SHOULDER = np.array([0.160, 1.392, body_cz(1.392)])
-L_PALM = HAM_C + 0.035 * RACK_A + np.array([0, HAM_R[1] * np.sqrt(1 - (0.035 / HAM_R[0]) ** 2), 0])
-L_SLOPE = 0.035 * HAM_R[1] / (HAM_R[0] ** 2 * np.sqrt(1 - (0.035 / HAM_R[0]) ** 2))  # the ham falls away
+L_ALONG = 0.045                      # her palm, along the ham from its middle: fingertips a hair's breadth
+                                     # from where the blade will fall, but clearly apart from it on screen
+L_PALM = HAM_C + L_ALONG * RACK_A + np.array([0, HAM_R[1] * np.sqrt(1 - (L_ALONG / HAM_R[0]) ** 2), 0])
+L_SLOPE = L_ALONG * HAM_R[1] / (HAM_R[0] ** 2 * np.sqrt(1 - (L_ALONG / HAM_R[0]) ** 2))  # the ham falls away
                                                                            # towards the blade under her fingers
-ELBOW_GUIDES = (np.array([-0.255, 1.100, -0.690]), np.array([0.175, 1.105, -0.575]))
+ELBOW_GUIDES = (np.array([-0.265, 1.120, -0.690]), np.array([0.175, 1.105, -0.575]))
 FOREARM = 0.25                       # wrist to elbow, metres
+PRESS = 0.004                        # how deep her left hand presses into the meat to hold it steady
 
 
 def _unit(v):
@@ -480,8 +487,8 @@ def place_hands():
         sc += 0.8 * (x @ -RACK_A)
         if best is None or sc > best[0]:
             best = (sc, R, w, f)
-    # let the hand settle onto the ham: tilt it a little either way and lift it just enough that it rests on
-    # the curved surface, the skin pressing in about a millimetre, never sinking in
+    # let the hand settle onto the ham: tilt it a little either way, then press it down so it holds the meat
+    # steady - its deepest point PRESS into the surface; the meat is dented round it (build_props)
     lgrid = parts[1][0]
     pts = _surface_points(lgrid)
     R0 = best[1]
@@ -490,11 +497,14 @@ def place_hands():
         for az in np.radians(np.arange(-15, 16, 3)):
             R = MH.axis_angle(R0[:, 0], np.degrees(ax)) @ MH.axis_angle(R0[:, 2], np.degrees(az)) @ R0
             dmin = ham_distance(L_PALM + pts @ R.T).min()
-            lift = -dmin - 0.001
+            lift = -dmin - PRESS
             if settled is None or lift < settled[0]:
                 settled = (lift, R)
     lift, R = settled
     origin = L_PALM + n * lift
+    for _ in range(6):  # the distance to the ham is approximate: measure again and correct until the press is right
+        dmin = ham_distance(origin + pts @ R.T).min()
+        origin = origin + np.array([0, 1.0, 0]) * (-dmin - PRESS)
     sc, w, f = best_forearm(R, wr, fore, wx, wz, ELBOW_GUIDES[1])
     out.append((origin, R, w, f))  # w already includes the lift (best_forearm places it from origin)
     check_joins(out, parts)
@@ -903,6 +913,11 @@ def build_props(b):
     # its cut end, where the last slice came off, and the blade's cut
     b.halfspace(CUT_C - HAM_CUT * RACK_A, np.stack([np.cross([0, 1.0, 0], RACK_A), RACK_A, [0, 1.0, 0]], 1),
                 MEAT, op=SUB)
+    # the dent her left hand presses into it: the meat gives way round the palm and fingers
+    lgrid = get_mh_hands()[1][0]
+    b.set_frame(HANDS[1][0], HANDS[1][1])
+    b.grid(lgrid[0], lgrid[1], lgrid[2], MEAT, op=SSUB, k=0.004)
+    b.set_frame((0, 0, 0), None)
     shank_a = HAM_C + RACK_A * (HAM_R[0] - 0.02) + np.array([0, 0.004, 0])
     shank_b = shank_a + RACK_A * 0.042 + np.array([0, 0.010, 0])
     b.capsule(shank_a, shank_b, 0.0095, BONE, op=SUNION, k=0.010)
@@ -930,13 +945,13 @@ def build_props(b):
     Rs = rot(yaw=-RACK_ANGLE + 25)
     b.cylinder(sc_, 0.0034, 0.058, MEAT, op=UNION, R=Rs, rr=0.002)
     b.cylinder(sc_ + np.array([0, 0.0006, 0]), 0.0034, 0.051, HAMPINK, op=UNION, R=Rs, rr=0.002)
-    # the cleaver: a heavy square blade, its edge resting in the meat; dark wooden handle, steel rivets
+    # the cleaver: a heavy square blade, held up over the meat; dark wooden handle, steel rivets
     b.group('cleaver', margin=0.01)
     Rb = np.stack([BLADE_B, [0, 1.0, 0], RACK_A], 1)
-    centre = CUT_C + BLADE_B * 0.030 + np.array([0, 0.040, 0])
+    centre = BLADE_O + BLADE_B * 0.030 + np.array([0, 0.040, 0])
     b.box(centre, (0.100, 0.049, 0.0016), STEEL, op=UNION, r=0.0012, R=Rb)
     b.box(centre + [0, 0.042, 0], (0.100, 0.009, 0.0026), STEEL, k=0.002, r=0.0015, R=Rb)
-    b.cylinder(CUT_C + BLADE_B * 0.110 + np.array([0, 0.070, 0]), 0.01, 0.0085, STEEL, op=SUB,
+    b.cylinder(BLADE_O + BLADE_B * 0.110 + np.array([0, 0.070, 0]), 0.01, 0.0085, STEEL, op=SUB,
                R=np.stack([BLADE_B, RACK_A, [0, 1.0, 0]], 1))
     b.box(HEEL + BLADE_B * 0.004 + np.array([0, -0.004, 0]), (0.006, 0.010, 0.0060), STEEL, k=0.002, r=0.002,
           R=Rb)
@@ -1014,8 +1029,8 @@ def build_environment(b, SP):
     b.box((1.4, -0.05, BACK_Z - 1.5), (1.0, 0.05, 1.5), FLOOR, op=UNION)
     b.box((1.4, 1.35, BACK_Z - 2.6), (1.2, 1.40, 0.05), WARMWALL, op=UNION)
     b.box((0.7, 1.35, BACK_Z - 1.5), (0.05, 1.40, 1.5), WARMWALL, op=UNION)
-    b.group('big_tree', disp=S.D_TREE, dparams=[0.05, 9.0, NEEDLES], margin=0.08)
     tc = np.array([1.85, 0.0, BACK_Z - 1.7])
+    b.group('big_tree', disp=S.D_TREE, dparams=[0.05, 4.0, NEEDLES, *tc], margin=0.08)
     for i, (y0, y1, r0) in enumerate(((0.25, 0.95, 0.48), (0.75, 1.40, 0.37), (1.20, 1.80, 0.25), (1.60, 2.05, 0.13))):
         b.cone(tc + [0, y0, 0], tc + [0, y1, 0], r0, 0.02, NEEDLES, op=SUNION if i else UNION, k=0.06)
     b.cylinder(tc + [0, 0.12, 0], 0.12, 0.05, TRAY, op=SUNION, k=0.02)
@@ -1074,8 +1089,8 @@ def build_environment(b, SP):
     b.box(T0 + [0, 0.028, 0], (0.25, 0.028, 0.16), TRAY, op=UNION, r=0.004)
     b.box(T0 + [0, 0.040, 0], (0.232, 0.03, 0.142), TRAY, op=SUB)
     b.box(T0 + [0, 0.012, 0], (0.232, 0.004, 0.142), TRAY, op=UNION)
-    b.group('little_tree', disp=S.D_TREE, dparams=[0.014, 38.0, NEEDLES], margin=0.03)
     tree = T0 + np.array([-0.08, 0.02, -0.04])
+    b.group('little_tree', disp=S.D_TREE, dparams=[0.012, 18.0, NEEDLES, *tree], margin=0.03)
     b.cylinder(tree + [0, 0.045, 0], 0.045, 0.055, CERAMIC, op=UNION, rr=0.008)
     for i, (y0, y1, r0) in enumerate(((0.08, 0.22, 0.10), (0.17, 0.31, 0.080), (0.26, 0.40, 0.055))):
         b.cone(tree + [0, y0, 0], tree + [0, y1, 0], r0, 0.005, NEEDLES, op=SUNION, k=0.025)

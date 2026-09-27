@@ -41,10 +41,21 @@ def run(MS=None, verbose=True):
     # 2. the resting hand touches the food without sinking into it; the chopping hand stays clear of it
     pts = [origin + MS._surface_points(part[0]) @ R.T for (origin, R, _, _), part in zip(MS.HANDS, parts)]
     dl = MS.ham_distance(pts[1])
-    check(dl.min() > -0.003, 'left hand does not sink into the ham', f'deepest {-dl.min() * 1000:.1f} mm in')
-    check(dl.min() < 0.003, 'left hand actually rests on the ham', f'closest {dl.min() * 1000:.1f} mm')
+    check(0.002 < -dl.min() < 0.007, 'left hand presses into the ham (2-7 mm, the meat dented round it)',
+          f'{-dl.min() * 1000:.1f} mm deep')
     dr = MS.ham_distance(pts[0])
-    check(dr.min() > 0, 'right hand clear of the ham', f'{dr.min() * 1000:.1f} mm')
+    check(dr.min() > 0.01, 'right hand clear of the ham', f'{dr.min() * 1000:.1f} mm')
+    # 2b. the cleaver hovers before the chop: its edge clearly above the meat (a visible gap), not touching the
+    # fingers of her other hand
+    Rb = np.stack([MS.BLADE_B, [0, 1.0, 0], MS.RACK_A], 1)
+    centre = MS.BLADE_O + MS.BLADE_B * 0.030 + np.array([0, 0.040, 0])
+    u, v, w = np.meshgrid(np.linspace(-1, 1, 41), np.linspace(-1, 1, 21), (-1, 1), indexing='ij')
+    blade = centre + np.stack([u.ravel() * 0.100, v.ravel() * 0.049, w.ravel() * 0.0016], 1) @ Rb.T
+    edge = blade[blade[:, 1] < blade[:, 1].min() + 1e-6]
+    gap = MS.ham_distance(edge).min()
+    check(0.02 < gap < 0.09, 'cleaver hovers over the meat (2-9 cm gap)', f'{gap * 100:.1f} cm')
+    near = np.linalg.norm(pts[1][:, None, :] - blade[None, ::7, :], axis=2).min()
+    check(near > 0.005, 'blade clear of her left hand', f'{near * 1000:.0f} mm')
     # 3. arms: sensible lengths, forearms not pushing into her body
     for sh, el, wr, nm in ((MS.R_SHOULDER, MS.R_ELBOW, MS.R_WRIST, 'right'), (MS.L_SHOULDER, MS.L_ELBOW, MS.L_WRIST,
                                                                            'left')):

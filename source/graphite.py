@@ -189,10 +189,28 @@ def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
     mask = blur(mask, 0.7 * px)  # a soft pencil edge, not a cut-out
     for k in range(3):
         hue[..., k] = blur(hue[..., k], 0.7 * px)
-    amount = np.clip(0.85 + 0.2 * strokes, 0.6, 1.0)
-    lifted = 1 - (1 - grey) * 0.55                                  # much less graphite under the colour
+    amount = np.clip(0.80 + 0.2 * strokes, 0.55, 1.0)
+    # colour laid over the finished graphite drawing, not instead of it: its outlines, shading and hatching
+    # show through, so the coloured things are drawn by the same hand as everything else
+    lifted = 1 - (1 - grey) * 0.80
     col = lifted[..., None] * (1 - amount[..., None] * (1 - hue))
     return rgbo * (1 - mask[..., None]) + col * mask[..., None]
+
+
+def focus_map(cam, W, H, fx, fy):
+    """Where the drawing wants the eye: her face, the raised blade and the hand under it. 1 there, falling to
+    0 away from them. An illustrator spends the detail and the darkest lines here and lets the rest go."""
+    o, f, r, u = cam[0:3], cam[3:6], cam[6:9], cam[9:12]
+    th, aspect = cam[12], cam[13]
+    out = np.zeros(fx.shape, np.float32)
+    for p, rad in ((MS.HEAD_POS, 0.16), (MS.BLADE_O + np.array([0, 0.04, 0]), 0.14), (MS.HANDS[1][0], 0.12)):
+        d = p - o
+        z = d @ f
+        x = ((d @ r) / (z * th * aspect) + 1) * 0.5
+        y = (1 - (d @ u) / (z * th)) * 0.5
+        dist = np.sqrt(((fx - x) * aspect) ** 2 + (fy - y) ** 2)
+        out = np.maximum(out, np.exp(-(dist / rad) ** 2))
+    return out
 
 
 def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
@@ -202,10 +220,12 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     H0, W0 = depth.shape
     fy, fx = np.mgrid[0:H0, 0:W0].astype(np.float32)
     fx, fy = fx / W0, fy / H0  # where each pixel sits in the whole frame, 0..1
+    foc = focus_map(Z['cam'], W0, H0, fx, fy)
     if crop is not None:  # a window of the frame, for quick trials (x0, y0, x1, y1)
         x0, y0, x1, y1 = crop
-        rgb, depth, normal, mat, pos, glass, fx, fy = (a[y0:y1, x0:x1] for a in
-                                                       (rgb, depth, normal, mat, pos, glass, fx, fy))
+        rgb, depth, normal, mat, pos, glass, fx, fy, foc = (a[y0:y1, x0:x1] for a in
+                                                            (rgb, depth, normal, mat, pos, glass, fx, fy, foc))
+    fx0, fy0 = fx, fy
     H, W = depth.shape
     rng = np.random.default_rng(seed)
     px = W / 2560 if px is None else px  # stroke sizes are designed at 2560 wide
@@ -214,6 +234,8 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     char = np.isin(mat, list(CHAR))
     props = np.isin(mat, list(PROPS))
     subject = char | props
+    coloured = np.isin(mat, list(colour_mats()))
+    drawn = subject | coloured  # given a firm pencil outline
     skin = np.isin(mat, list(CHAR_SKIN))
     hair = mat == MS.HAIR
     knit = mat == MS.KNIT
@@ -318,6 +340,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     m2 = m2 * np.clip((dark - 0.40) * 4.0, 0, 1)  # cross-hatching only where it is really dark
     strands = np.clip((dark * 1.9 - 0.55 - s3 * 0.75) * 1.6, 0, 1) * hair
     marks = 1 - (1 - smudge) * (1 - m1 * 0.62) * (1 - m2 * 0.6) * (1 - strands * 0.8)
+    # away from the focus the shading is left lighter and looser, fading out towards the frame's edges the
+    # way a drawing is left unfinished at its margins
+    margin = smoothstep(0.30, 0.52, np.maximum(np.abs(fx0 - 0.5), np.abs(fy0 - 0.5) * 0.9))
+    marks = marks * np.where(bg, 0.78 + 0.22 * foc, 0.86 + 0.14 * foc) * (1 - 0.35 * margin * bg)
 
     # --- outlines from the geometry
     dz = np.maximum.reduce([np.abs(np.roll(depth, s, a) - depth) for s in (1, -1) for a in (0, 1)])
@@ -335,9 +361,12 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None):
     crease = np.where(subject, crease, crease_bg)
     crease = crease * ~(knit | hair)  # the knit's ribs and the hair's strands come through as tone, not lines
     lines = np.maximum(occl, np.where(skin, 0.25, 0.5) * crease)
-    lines = np.maximum(lines, 0.45 * matedge * (subject | np.roll(subject, 1, 0) | np.roll(subject, 1, 1)))
-    # the subject drawn with a firmer line; background lines finer and paler
-    wt = np.where(subject | np.roll(subject, 2, 1) | np.roll(subject, -2, 1), 0.85, 0.42 * (1 - 0.55 * recede))
+    lines = np.maximum(lines, 0.45 * matedge * (drawn | np.roll(drawn, 1, 0) | np.roll(drawn, 1, 1)))
+    # the subject drawn with a firmer line, the coloured things with a clear one; the rest finer and paler
+    wt = np.where(subject | np.roll(subject, 2, 1) | np.roll(subject, -2, 1), 0.85,
+                  np.where(drawn | np.roll(drawn, 2, 1) | np.roll(drawn, -2, 1), 0.65, 0.42 * (1 - 0.55 * recede)))
+    # more line where the eye should go, less far from it
+    wt = wt * (0.72 + 0.40 * foc)
     lines = blur(lines, 0.6 * px) * wt
     # pressure varies along the line
     press = 0.75 + 0.35 * nrm(blur(rng.random((H, W)), 6 * px))
