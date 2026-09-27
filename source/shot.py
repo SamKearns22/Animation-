@@ -46,26 +46,42 @@ def load_recipe(path):
 
 def build(frame):
     """The whole scene for one frame. Returns a dict with the renderer's inputs and what the checks and the
-    drawing need to know."""
+    drawing need to know. A frame may have the mother, the daughter or both; with pov=True the camera is the
+    mother's eyes (her head and hair are left out)."""
     t0 = time.time()
-    state = mother.prepare(mother.solve(frame['mother']))
     b = S.Builder()
-    mother.build(b, state)
-    hand = mother.hand_parts()[1][0]
-    o, R, _ = state['hands'][1]
-    frame['ham'].build(b, press=(hand, o, R))
+    chars = {}
+    if 'mother' in frame:
+        st = mother.prepare(mother.solve(frame['mother']))
+        mother.build(b, st, pov=frame.get('pov', False))
+        chars['mother'] = st
+    if 'daughter' in frame:
+        import daughter
+        sd = daughter.prepare(daughter.solve(frame['daughter']))
+        daughter.build(b, sd)
+        chars['daughter'] = sd
+    press = None
+    if 'mother' in chars:
+        o, R, _ = chars['mother']['hands'][1]
+        press = (mother.hand_parts()[1][0], o, R)
+    frame['ham'].build(b, press=press)
     frame['cleaver'].build(b)
     n_moving = len(b.groups)
     frame['board'].build(b)                  # the board stays put: part of the set
     SP = new_params()
-    mother.fill_params(SP, state)
+    face = frame.get('face', 'mother')
+    if face == 'daughter':
+        import daughter
+        daughter.fill_params(SP, chars['daughter'])
+    elif 'mother' in chars:
+        mother.fill_params(SP, chars['mother'])
     frame['ham'].fill_params(SP)
     SP[46:49] = (1.0, 0.0, 0.0)          # the board's grain runs along x
     flames = kitchen.build_environment(b, SP)
     P, G = b.build()
     GB = b.grid_buffer()
     print(f'  built in {time.time() - t0:.0f}s: {len(P)} shapes in {len(G)} objects', flush=True)
-    return dict(frame=frame, state=state, P=P, G=G, GB=GB, SP=SP, flames=flames,
+    return dict(frame=frame, state=chars.get('mother'), chars=chars, P=P, G=G, GB=GB, SP=SP, flames=flames,
                 group_names=[g['name'] for g in b.groups],
                 moving=np.arange(n_moving), static=np.arange(n_moving, len(G)))
 
@@ -134,12 +150,31 @@ def project(cam, W, H, p):
     return np.stack([(x + 1) * 0.5 * W, (1 - y) * 0.5 * H], 1)
 
 
+def solid_box(grid, o=None, R=None, pad=0.01):
+    """A tight world box round the solid part of a grid (optionally in a frame o, R)."""
+    lo, d, vox = grid[0], grid[1], grid[2]
+    idx = np.argwhere(d[::2, ::2, ::2] < 0)
+    if not len(idx):
+        return None
+    a, b = lo + idx.min(0) * 2 * vox - pad, lo + idx.max(0) * 2 * vox + pad
+    if R is None:
+        return a, b
+    corners = np.array([[x, y, z] for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])])
+    w = corners @ np.asarray(R).T + o
+    return w.min(0), w.max(0)
+
+
 def moving_corners(scene):
-    """Corners of tight boxes round everything that moves: her pieces and the props."""
-    boxes = list(mother.solid_boxes(scene['state']))
-    her = {'head', 'hair', 'body', 'trousers', 'right_hand', 'left_hand'}
+    """Corners of tight boxes round everything that moves: the characters' pieces and the props."""
+    boxes = []
+    for name, st in scene['chars'].items():
+        mod = mother if name == 'mother' else __import__('daughter')
+        boxes += [bx for bx in (solid_box(*pc) for pc in mod.pieces(st, pov=scene['frame'].get('pov', False)
+                                                                    and name == 'mother')) if bx is not None]
     names, G = scene['group_names'], scene['G']
-    boxes += [(G[i, 0:3] - G[i, 3], G[i, 0:3] + G[i, 3]) for i in scene['moving'] if names[i] not in her]
+    for i in scene['moving']:
+        if names[i] in ('ham', 'frill', 'garnish', 'cleaver') or names[i].startswith('slice'):
+            boxes.append((G[i, 0:3] - G[i, 3], G[i, 0:3] + G[i, 3]))
     return np.array([[x, y, z] for a, b_ in boxes for x in (a[0], b_[0]) for y in (a[1], b_[1])
                      for z in (a[2], b_[2])])
 
@@ -178,15 +213,16 @@ def changed_rows(lo_now, lo_ref, W, H, thresh=0.01, grow=3):
 def drawing_passes(scene, res, cam, W, H):
     """What the pencil needs besides the render: which way the hair runs and the knit's ribs run at each
     pixel (3D directions), where the eye should go, and the blade's direction."""
-    st = scene['state']
-    pos, mat = res['pos'], res['mat']
     import materials as MT
-    hair = mat == MT.HAIR
-    knit = mat == MT.KNIT
+    pos, mat = res['pos'], res['mat']
     hairdir = np.zeros(pos.shape, np.float16)
     hairdir[..., 1] = -1
-    lo, d, vox, flow = st['hair']
-    if hair.any():
+    for name, st in scene['chars'].items():
+        hm = MT.HAIR if name == 'mother' else MT.STRAW_HAIR
+        hair = mat == hm
+        if not hair.any():
+            continue
+        lo, d, vox, flow = st['hair']
         idx = np.clip(np.round((pos[hair] - lo) / vox).astype(int), 0, np.array(flow.shape[:3]) - 1)
         f = flow[idx[:, 0], idx[:, 1], idx[:, 2]]
         for off in ((0, -1, 0), (1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, 1, 0)):
@@ -200,9 +236,11 @@ def drawing_passes(scene, res, cam, W, H):
     # the knit: up the body; along the sleeves (which part is which comes from the jumper's own part map)
     knitdir = np.zeros(pos.shape, np.float16)
     knitdir[..., 1] = 1
-    lo, d, vox, part = st['jumper']
-    J = st['joints']
-    if knit.any():
+    knit = mat == MT.KNIT
+    st = scene['chars'].get('mother')
+    if st is not None and knit.any():
+        lo, d, vox, part = st['jumper']
+        J = st['joints']
         idx = np.clip(np.round((pos[knit] - lo) / vox).astype(int), 0, np.array(part.shape) - 1)
         pid = part[idx[:, 0], idx[:, 1], idx[:, 2]].round().astype(int)
         p = pos[knit]
@@ -220,7 +258,10 @@ def drawing_passes(scene, res, cam, W, H):
         knitdir[knit] = dirs
     fr = scene['frame']
     cl = fr['cleaver']
-    focus = fr.get('focus', [st['head'][0], cl.o + cl.R @ np.array([0.03, 0.04, 0]), st['hands'][1][0]])
+    if 'focus' in fr:
+        focus = fr['focus']
+    else:
+        focus = [st['head'][0], cl.o + cl.R @ np.array([0.03, 0.04, 0]), st['hands'][1][0]]
     return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float), bladedir=unit(cl.x))
 
 

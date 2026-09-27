@@ -18,7 +18,7 @@ import sdf3d as S
 
 # which materials belong to what
 CHAR_SKIN = {MS.SKIN, MS.LIPS, MS.LID, MS.NOSTRIL, MS.NAIL}
-CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.KNIT, MS.TROUSERS}
+CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.STRAW_HAIR, MS.KNIT, MS.TROUSERS, MS.COTTON, MS.FELT, MS.FUR}
 PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER}
 
 
@@ -128,7 +128,7 @@ def colour_mats():
     return {MS.MEAT: (0.80, 0.45, 0.14), MS.HAMPINK: (0.93, 0.58, 0.55), MS.PINEAPPLE: (0.98, 0.84, 0.25),
             MS.CHERRY: (0.85, 0.08, 0.10), MS.CLEMENTINE: (0.98, 0.55, 0.12), MS.NEEDLES: (0.18, 0.48, 0.26),
             MS.GOLD: (0.90, 0.70, 0.22), MS.BAUBLE_RED: (0.85, 0.10, 0.12), MS.FAIRY: (1.0, 0.85, 0.40),
-            MS.FLAME: (1.0, 0.72, 0.28)}
+            MS.FLAME: (1.0, 0.72, 0.28), MS.FELT: (0.82, 0.12, 0.14)}
 
 
 def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
@@ -207,7 +207,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     coloured = np.isin(mat, list(colour_mats()))
     drawn = subject | coloured  # given a firm pencil outline
     skin = np.isin(mat, list(CHAR_SKIN))
-    hair = mat == MS.HAIR
+    hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR])
     knit = mat == MS.KNIT
     eye = mat == MS.EYE
     bg = ~subject
@@ -327,7 +327,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
         for a in (0, 1):
             other = np.roll(mat, s, a)
             # where hair meets skin there is no line: the hairline is drawn only by the strokes of the hair
-            soft = ((other == MS.HAIR) & skin) | ((mat == MS.HAIR) & np.isin(other, list(CHAR_SKIN)))
+            soft = (np.isin(other, [MS.HAIR, MS.STRAW_HAIR]) & skin) | (np.isin(mat, [MS.HAIR, MS.STRAW_HAIR]) & np.isin(other, list(CHAR_SKIN)))
             matedge |= (other != mat) & ~soft
     crease_bg = smoothstep(0.25, 0.6, 1 - nd) * ok  # only the sharper corners in the background
     crease = np.where(subject, crease, crease_bg)

@@ -19,7 +19,8 @@ import mhuman as MH
 import rig
 import sdf3d as S
 from cache import cached
-from materials import SKIN, EYE, HAIR, KNIT, TROUSERS
+from materials import SKIN, EYE, KNIT, TROUSERS
+import materials
 from rig import unit
 from sdf3d import rot, UNION
 
@@ -191,13 +192,7 @@ def solve(spec):
     e_r, short_r = pose.arm_ik('R', w_r, spec['poles'][0])
     e_l, short_l = pose.arm_ik('L', w_l, spec['poles'][1])
     M = pose.matrices()
-    J = {}
-    for s in ('R', 'L'):
-        J['shoulder.' + s] = pose.joint_world(M, 'upperarm01.' + s)
-        J['elbow.' + s] = pose.joint_world(M, 'lowerarm01.' + s)
-        J['wrist.' + s] = pose.joint_world(M, 'wrist.' + s)
-    for bn in ('neck01', 'neck02', 'neck03', 'head', 'spine02', 'spine04', 'spine05'):
-        J[bn] = pose.joint_world(M, bn)
+    J = pose.joints(M)
     bends = []
     for (oo, RR), part, s in (((o, R), hp[0], 'R'), ((ol, Rl), hp[1], 'L')):
         w = oo + RR @ part[1]
@@ -223,118 +218,23 @@ def pose_key(state):
 # The jumper and trousers, made over the bent body
 # ---------------------------------------------------------------------------
 JUMPER = dict(thick=0.012, drape=0.35, bridge=0.03, smooth=0.015, hem=0.085, cuff=0.014, voxel=0.0025,
-              rolls=((0.004, 0.080, 0.021), (0.030, 0.075, 0.019), (0.051, 0.067, 0.016)))
+              collar=('roll', ((0.004, 0.080, 0.021), (0.030, 0.075, 0.019), (0.051, 0.067, 0.016))))
 TORSO_PIECES = {'hips', 'chest', 'head', 'thigh.L', 'thigh.R'}
 
 
 def jumper_grid(state):
-    J = state['joints']
-    b = body()
-    Vw = b.skin(state['pose'])
-    vox = JUMPER['voxel']
-    hem = J['spine05'][1] - JUMPER['hem']
-    names = TORSO_PIECES | {'upperarm.R', 'forearm.R', 'upperarm.L', 'forearm.L'}
-    sel = np.isin(b.label, [b.piece_names.index(n) for n in names if n in b.piece_names])
-    sel[:] &= np.isin(np.arange(len(Vw)), b.skin_idx) & (Vw[:, 1] > hem - 0.02) & (Vw[:, 1] < J['neck02'][1] + 0.04)
-    lo = Vw[sel].min(0) - 0.05
-    hi = Vw[sel].max(0) + 0.05
-    for s in ('R', 'L'):  # the cuffs reach a little past the wrists
-        lo = np.minimum(lo, J['wrist.' + s] - 0.06)
-        hi = np.maximum(hi, J['wrist.' + s] + 0.06)
-    n = np.round((hi - lo) / vox).astype(int) + 1
-    d = b.surface(Vw, lo, lo + (n - 1) * vox, vox)
-    part = b.part_map(Vw, lo, d.shape, vox, [TORSO_PIECES, {'upperarm.R', 'forearm.R'}, {'upperarm.L', 'forearm.L'},
-                                                  {'hand.R'}, {'hand.L'}, {'head'}])
-
-    @functools.lru_cache(maxsize=None)
-    def region_cached(ids):
-        return region(list(ids))
-
-    def region(ids):
-        """Smooth signed distance to where the body is made of these parts (negative inside); measured at
-        half resolution, which is plenty for cutting cloth."""
-        from scipy import ndimage
-        m = np.isin(part[::2, ::2, ::2], ids)
-        r = (ndimage.distance_transform_edt(~m) - ndimage.distance_transform_edt(m)) * 2 * vox
-        return ndimage.zoom(r.astype(np.float32), np.array(part.shape) / np.array(m.shape), order=1)[
-            :part.shape[0], :part.shape[1], :part.shape[2]]
-    f = d - JUMPER['thick']
-    del d
-    # the body of the jumper is loose: it bridges hollows (between the breasts, the small of the back) rather
-    # than following the skin into them (the shape closed up by a 3 cm ball), hides small bumps (thick knit
-    # over a bra: rounded off by a 1.5 cm ball), and hangs straight down from the bust and shoulder blades.
-    # The sleeves keep closer to the arm (and don't drape into bat wings).
-    # (these broad shapes are worked out at half resolution, then brought back to the full grid)
-    from scipy import ndimage
-    reg = region_cached((0,))
-    torso = np.maximum(f, reg)[::2, ::2, ::2]   # the body of the jumper alone (a smooth cut, no jumps)
-    v2 = 2 * vox
-    r = JUMPER['bridge']
-    torso = rig.robust_distance(rig.robust_distance(torso - r, v2) + r, v2)
-    r = JUMPER['smooth']
-    torso = rig.robust_distance(rig.robust_distance(torso + r, v2) - r, v2)
-    torso = rig.drape(torso, v2, JUMPER['drape'])
-    torso = ndimage.zoom(torso, np.array(f.shape) / np.array(torso.shape), order=1)[
-        :f.shape[0], :f.shape[1], :f.shape[2]]
-    w = np.clip(-reg / 0.02, 0, 1)
-    f = w * torso + (1 - w) * np.minimum(f, torso)
-    del torso, w
-    axes = [lo[q] + np.arange(n[q]) * vox for q in range(3)]
-
-    def window(c, r):
-        """The part of the grid within r of c: its slices and coordinates (broadcastable)."""
-        i0 = [max(int((c[q] - r - lo[q]) / vox), 0) for q in range(3)]
-        i1 = [min(int((c[q] + r - lo[q]) / vox) + 1, n[q]) for q in range(3)]
-        sl = tuple(slice(i0[q], i1[q]) for q in range(3))
-        return sl, (axes[0][sl[0]][:, None, None], axes[1][sl[1]][None, :, None], axes[2][sl[2]][None, None, :])
-
-    # cuffs: the sleeve ends just past the wrist, over the heel of the hand (cut only where the body is hand)
-    for s, hid in (('R', 3), ('L', 4)):
-        wr, el = J['wrist.' + s], J['elbow.' + s]
-        fd = unit(wr - el)
-        c = wr + fd * JUMPER['cuff']
-        sl, (X, Y, Z) = window(wr, 0.25)
-        beyond = -((X - c[0]) * fd[0] + (Y - c[1]) * fd[1] + (Z - c[2]) * fd[2])
-        f[sl] = rig.smax(f[sl], -np.maximum(beyond, region_cached((hid,))[sl] - 0.03), 0.004)
-    sl, _ = window(J['head'], 0.25)
-    f[sl] = rig.smax(f[sl], -(region_cached((5,))[sl] - 0.02), 0.004)            # nothing on her head
-    # the hem, round her hips
-    j1 = min(int((hem + 0.02 - lo[1]) / vox) + 1, n[1])
-    f[:, :j1] = rig.smax(f[:, :j1], hem - axes[1][:j1][None, :, None], 0.006)
-    # the collar: take the jumper off her neck and head, then the soft roll neck, three rolls round the neck
-    nb, na = J['neck01'], unit(J['neck03'] - J['neck01'])
-    sl, (X, Y, Z) = window(nb, 0.30)
-    g = f[sl]
-    ax = (X - nb[0]) * na[0] + (Y - nb[1]) * na[1] + (Z - nb[2]) * na[2]
-    rad = np.sqrt(np.maximum((X - nb[0]) ** 2 + (Y - nb[1]) ** 2 + (Z - nb[2]) ** 2 - ax ** 2, 0))
-    g = rig.smax(g, -np.maximum(-(ax + 0.005), rad - 0.11), 0.006)   # her neck
-    for h, R0, r in JUMPER['rolls']:
-        g = rig.smin(g, np.sqrt((rad - R0) ** 2 + (ax - h) ** 2) - r, 0.012)
-    f[sl] = rig.smax(g, -np.maximum(rad - 0.052, -ax), 0.004)  # the opening the neck comes out of
-    f = f.astype(np.float32)
-    knit_part = np.array([0, 1, 2, 1, 2, 0], np.float32)[np.maximum(part, 0)]  # hands count as their sleeves
-    return lo, f, vox, knit_part
+    import clothes
+    return clothes.top(body(), state['pose'], state['joints'], JUMPER)
 
 
 def trousers_grid(state):
-    """Dark, slim trousers from the hem of the jumper down (below the worktop, rarely seen)."""
-    J = state['joints']
-    b = body()
-    Vw = b.skin(state['pose'])
-    vox = 0.004
-    top = J['spine05'][1] - JUMPER['hem'] + 0.04
-    sel = np.isin(np.arange(len(Vw)), b.skin_idx) & (Vw[:, 1] < top + 0.02) & (Vw[:, 1] > 0.55)
-    sel &= np.isin(b.label, [b.piece_names.index(n) for n in ('hips', 'thigh.L', 'thigh.R', 'shin.L', 'shin.R')])
-    lo, hi = Vw[sel].min(0) - 0.03, Vw[sel].max(0) + 0.03
-    n = np.round((hi - lo) / vox).astype(int) + 1
-    d = b.surface(Vw, lo, lo + (n - 1) * vox, vox) - 0.004
-    Y = (lo[1] + np.arange(n[1]) * vox)[None, :, None]
-    d = rig.smax(d, Y - top, 0.004)
-    return lo, rig.robust_distance(d.astype(np.float32), vox), vox
+    import clothes
+    return clothes.bottoms(body(), state['pose'], state['joints'], JUMPER)
 
 
 def get_jumper(state):
-    return cached('jumper', jumper_grid_for, [jumper_grid, JUMPER, TORSO_PIECES, rig.Body.skin, rig.Body.surface,
+    import clothes
+    return cached('jumper', jumper_grid_for, [clothes.top, JUMPER, clothes.TORSO, rig.Body.skin, rig.Body.surface,
                                               rig.Body.part_map, rig.drape, rig.robust_distance] + mh_deps(),
                   pose_key(state))
 
@@ -344,8 +244,9 @@ def jumper_grid_for(key):
 
 
 def get_trousers(state):
+    import clothes
     return cached('trousers', lambda key: trousers_grid(_STATE[0]),
-                  [trousers_grid, JUMPER, rig.Body.skin, rig.Body.surface] + mh_deps(), pose_key(state))
+                  [clothes.bottoms, JUMPER, rig.Body.skin, rig.Body.surface] + mh_deps(), pose_key(state))
 
 
 _STATE = [None]
@@ -353,258 +254,22 @@ _STATE = [None]
 
 # ---------------------------------------------------------------------------
 # Hair: long, dark, parted a little to her right, lifted at the crown, falling in soft waves past the
-# shoulders - on her right side forward over the shoulder, on her left behind it. Built from locks combed from
-# the parting and let fall under gravity over her head, jumper and shoulders.
+# shoulders - on her right side forward over the shoulder, on her left behind it (hair.py does the work).
 # ---------------------------------------------------------------------------
-SCALP_C, SCALP_R = np.array([0.0, 0.026, -0.064]), np.array([0.0725, 0.0970, 0.0960])
-PART = np.radians(-17.0)             # the parting, round from the front of the head
 HAIRLINE = (0.066, 0.019, 0.047, 0.057)  # height at the middle, drop to 5 cm out, height and drop at the temple
-HAIR_BOX = (np.array([-0.28, -0.52, -0.32]), np.array([0.28, 0.18, 0.26]))  # round the head position
-
-
-def _push_out_ellipsoid(p, c, r, margin):
-    q = (p - c) / (r + margin)
-    k = np.linalg.norm(q)
-    if k < 1.0:
-        return c + (p - c) / max(k, 1e-6)
-    return p
-
-
-def scalp_point(theta, elev, layer=0.0):
-    """Point on the scalp (head coordinates): theta round from the front (+ towards her left), elev up from the
-    widest line of the head."""
-    q = np.array([np.cos(elev) * np.sin(theta), np.sin(elev), np.cos(elev) * np.cos(theta)])
-    return SCALP_C + q * (SCALP_R + layer)
-
-
-def grid_sampler(grid):
-    """Distance and outward direction at a point, read from a distance grid (lo, d, voxel, ...)."""
-    lo, d, vox = grid[0], grid[1], grid[2]
-
-    def at(p):
-        g = (p - lo) / vox
-        i = np.floor(g).astype(int)
-        if np.any(i < 1) or np.any(i >= np.array(d.shape) - 2):
-            return 1.0, np.zeros(3)
-        f = g - i
-
-        def tri(o):
-            c = d[i[0] + o[0]:i[0] + o[0] + 2, i[1] + o[1]:i[1] + o[1] + 2, i[2] + o[2]:i[2] + o[2] + 2]
-            c = c[0] * (1 - f[0]) + c[1] * f[0]
-            c = c[0] * (1 - f[1]) + c[1] * f[1]
-            return c[0] * (1 - f[2]) + c[1] * f[2]
-        n = np.array([tri((1, 0, 0)) - tri((-1, 0, 0)), tri((0, 1, 0)) - tri((0, -1, 0)),
-                      tri((0, 0, 1)) - tri((0, 0, -1))])
-        return float(tri((0, 0, 0))), n / max(np.linalg.norm(n), 1e-9)
-    return at
-
-
-def hair_locks(H, Rh, jumper, seed=2):
-    """Paths of the locks (world coordinates) with their radii. Each lock is combed over the scalp from its
-    root to a point at the side or back of the head, then falls under gravity over the shoulders."""
-    rng = np.random.default_rng(seed)
-    locks = []
-    head_at = grid_sampler(head_parts()[0])
-    body_at = grid_sampler(jumper)
-
-    def off_skin(p, margin):
-        """Keep a point at least `margin` off her skin (the real head, not just the scalp's egg shape)."""
-        pl = Rh.T @ (p - H)
-        for _ in range(3):
-            dv, n = head_at(pl)
-            if dv >= margin:
-                break
-            pl = pl + n * (margin - dv)
-        return H + Rh @ pl
-
-    def collide(p, layer):
-        pl = Rh.T @ (p - H)
-        pl = _push_out_ellipsoid(pl, SCALP_C, SCALP_R, layer)
-        p = off_skin(H + Rh @ pl, 0.004 + layer)
-        for _ in range(3):                       # and off her jumper: shoulders, roll neck, chest, arms
-            dv, n = body_at(p)
-            if dv >= 0.003 + layer:
-                break
-            p = p + n * (0.003 + layer - dv)
-        return p
-
-    def lock(th0, e0, thf, side, forward, length, r_flat, r_fall, layer, lift=0.0):
-        pts = []
-        for t in np.linspace(0, 1, 9):            # 1. over the scalp, from the root to where it starts to fall
-            th = th0 + (thf - th0) * np.sqrt(t)
-            el = e0 + (np.radians(4) - e0) * t * t
-            q = H + Rh @ scalp_point(th, el, layer + lift * (1 - (1 - t) ** 2))
-            pts.append(off_skin(q, r_flat + 0.0035 + layer))
-        on_scalp = len(pts)
-        p = pts[-1]                                # 2. falling
-        d = pts[-1] - pts[-2]
-        d /= np.linalg.norm(d)
-        travelled, step = 0.0, 0.008
-        wob = rng.uniform(0, 6.28)
-        phase = rng.uniform(-0.5, 0.5)
-        shoulder_y = H[1] - 0.10
-        while travelled < length:
-            force = np.array([0, -1.0, 0])
-            pl = Rh.T @ (p - H)
-            force += Rh @ np.array([np.sign(pl[0]) * 0.25, 0, 0]) * (pl[1] > -0.12)  # a little fullness
-            # soft waves, in step from lock to lock (by height) so they read across the whole fall of hair
-            wv = np.sin(2 * np.pi * p[1] / 0.105 + phase) * min(1.0, travelled / 0.06)
-            force += Rh @ np.array([np.sign(pl[0]) * 0.34 * wv, 0, 0.14 * wv])
-            if p[1] < shoulder_y:
-                fwd = Rh @ np.array([0, 0, 1.0])
-                fwd[1] = 0
-                fwd = unit(fwd)
-                sidev = np.cross([0, 1.0, 0], fwd)
-                force += (side * -0.10 * sidev + (0.55 if forward else -0.40) * fwd) * \
-                    min(1, (shoulder_y - p[1]) / 0.08)
-            force += 0.03 * np.array([np.sin(travelled * 8 + wob), 0, np.cos(travelled * 6 + wob)])
-            d = d * 0.75 + 0.25 * force
-            d /= np.linalg.norm(d)
-            p = collide(p + d * step, layer)
-            travelled += step
-            pts.append(p.copy())
-        pts = np.array(pts)
-        keep = list(range(on_scalp)) + list(range(on_scalp + 2, len(pts), 2))
-        pts = pts[keep]
-        t = np.linspace(0, 1, len(pts))
-        grow = np.clip((np.arange(len(pts)) - on_scalp + 3) / 6.0, 0, 1)
-        radii = (r_flat + (r_fall - r_flat) * grow) * np.clip((1 - t) / 0.35, 0.10, 1) ** 0.8
-        locks.append((pts, radii))
-
-    # the top layer, combed out from the parting to both sides (more of it to her left, the parting being off
-    # to her right)
-    for side in (-1, 1):
-        n = 30 if side < 0 else 40
-        for i in range(n):
-            s = (i + rng.uniform(-0.3, 0.3)) / (n - 1)
-            s = min(max(s, 0), 1)
-            if s < 0.6:  # front half of the parting: forehead up to the top of the head
-                th0, e0 = PART, np.radians(38 + (90 - 38) * s / 0.6)
-            else:  # back half: over the top to the crown
-                th0, e0 = np.pi * side, np.radians(90 - 35 * (s - 0.6) / 0.4)
-            thf = side * np.radians(72 + 95 * s)  # front locks fall in front of the ear, back ones behind
-            forward = side < 0 and s < 0.55
-            lift = 0.0065 * np.clip(s / 0.35, 0, 1) ** 2 * (1 - 0.5 * np.clip((s - 0.7) / 0.3, 0, 1))  # crown
-            lock(th0 + side * 0.03, e0, thf, side, forward, rng.uniform(0.26, 0.38), 0.0038, 0.0105,
-                 0.0020 + 0.0030 * rng.random(), lift)
-    # an under layer round the back and sides
-    for k in range(44):
-        side = -1 if k % 2 == 0 else 1
-        th = side * np.radians(68 + 110 * (k // 2) / 21) + rng.uniform(-0.03, 0.03)  # ear, round the back
-        e0 = np.radians(rng.uniform(8, 30))
-        forward = side < 0 and abs(np.degrees(th)) < 110
-        lock(th, e0, th, side, forward, rng.uniform(0.27, 0.32), 0.0060, 0.0110, 0.0010 + 0.0015 * rng.random())
-    return locks
-
-
-def hair_grid(H, Rh, jumper, voxel=0.0018, seed=2):
-    """The hair as a grid of distances in world coordinates, plus the direction the hair runs in each cell.
-    Each lock is a chain of tapered tubes; neighbouring locks are blended, then small gaps closed up so the
-    hair falls as a continuous sheet with the locks still showing in it."""
-    from scipy import ndimage
-    locks = hair_locks(H, Rh, jumper, seed)
-    lo, hi = H + HAIR_BOX[0], H + HAIR_BOX[1]
-    nn = np.round((hi - lo) / voxel).astype(int) + 1
-    d = np.full(nn, 0.05, np.float32)
-    flow = np.zeros(tuple(nn) + (3,), np.float32)
-    k = 0.008
-    for pts, radii in locks:
-        m = radii.max() + k + 0.01
-        L0 = np.maximum(np.floor((pts.min(0) - m - lo) / voxel).astype(int), 0)
-        L1 = np.minimum(np.ceil((pts.max(0) + m - lo) / voxel).astype(int) + 1, nn)
-        if np.any(L1 <= L0):
-            continue
-        tmp = np.full(tuple(L1 - L0), 0.05, np.float32)
-        ftmp = np.zeros(tuple(L1 - L0) + (3,), np.float32)
-        for a, b_, ra, rb in zip(pts[:-1], pts[1:], radii[:-1], radii[1:]):
-            mm = max(ra, rb) + k + 0.008
-            i0 = np.maximum(np.floor((np.minimum(a, b_) - mm - lo) / voxel).astype(int), L0)
-            i1 = np.minimum(np.ceil((np.maximum(a, b_) + mm - lo) / voxel).astype(int) + 1, L1)
-            if np.any(i1 <= i0):
-                continue
-            xs = (lo[0] + np.arange(i0[0], i1[0]) * voxel)[:, None, None]
-            ys = (lo[1] + np.arange(i0[1], i1[1]) * voxel)[None, :, None]
-            zs = (lo[2] + np.arange(i0[2], i1[2]) * voxel)[None, None, :]
-            dc = np_cone(xs, ys, zs, a, b_, ra, rb).astype(np.float32)
-            sl = tuple(slice(i0[q] - L0[q], i1[q] - L0[q]) for q in range(3))
-            blk = tmp[sl]
-            closer = dc < blk
-            fb = ftmp[sl]
-            fb[closer] = (b_ - a) / max(np.linalg.norm(b_ - a), 1e-9)
-            tmp[sl] = np.minimum(blk, dc)
-        gs = tuple(slice(L0[q], L1[q]) for q in range(3))
-        g = d[gs]
-        closer = tmp < g
-        fl = flow[gs]
-        fl[closer] = ftmp[closer]
-        d[gs] = rig.smin(g, tmp, k)
-    # the hair lying on the head: the head's own surface lifted by 7-9 mm, everywhere above the hairline -
-    # a soft curve 5 cm above the brows, dipping at the temples and in front of the ears
-    hlo, hd, hvox = head_parts()[0]
-    hhi = hlo + (np.array(hd.shape) - 1) * hvox
-    xs = (lo[0] + np.arange(nn[0]) * voxel).astype(np.float32)
-    ys = (lo[1] + np.arange(nn[1]) * voxel).astype(np.float32)
-    zs = (lo[2] + np.arange(nn[2]) * voxel).astype(np.float32)
-    base = np.full(nn, 0.05, np.float32)
-    for i in range(nn[0]):  # a slab at a time, to keep memory modest
-        X, Y, Z = np.meshgrid(xs[i:i + 1] - H[0], ys - H[1], zs - H[2], indexing='ij')
-        lx = Rh[0, 0] * X + Rh[1, 0] * Y + Rh[2, 0] * Z
-        ly = Rh[0, 1] * X + Rh[1, 1] * Y + Rh[2, 1] * Z
-        lz = Rh[0, 2] * X + Rh[1, 2] * Y + Rh[2, 2] * Z
-        coords = np.stack([(lx - hlo[0]) / hvox, (ly - hlo[1]) / hvox, (lz - hlo[2]) / hvox])
-        hv = ndimage.map_coordinates(hd, coords.reshape(3, -1), order=1, mode='nearest').reshape(lx.shape)
-        out = sum(np.maximum(np.maximum(hlo[q] - l, l - hhi[q]), 0) ** 2 for q, l in enumerate((lx, ly, lz)))
-        hv = hv + np.sqrt(out)  # outside the head's box: keep counting the distance
-        ax = np.abs(lx)
-        y_hair = np.where(ax < 0.05, HAIRLINE[0] - HAIRLINE[1] * (ax / 0.05) ** 2,
-                          HAIRLINE[2] - HAIRLINE[3] * np.clip((ax - 0.05) / 0.025, 0, 1))  # the hairline
-        front = np.clip((lz + 0.035) / 0.02, 0, 1)
-        edge = np.clip((ly - y_hair) / 0.014, 0, 1)
-        edge = edge * edge * (3 - 2 * edge)
-        thick = (0.0065 + 0.0065 * np.clip((ly - 0.03) / 0.08, 0, 1)) * (1 - front * 0.42 * (1 - edge))
-        b_ = hv - thick
-        # edges rounded off (a sharp edge would ripple when stored on the grid)
-        b_ = -rig.smin(-b_, -(y_hair - ly) * front, 0.003)           # not over the face
-        b_ = -rig.smin(-b_, -(-(ly + 0.03)), 0.004)                  # not down the neck
-        # the parting: a fine line along the meridian at PART, from the hairline to the top of the head
-        across = np.abs(lx * np.cos(PART) - (lz - SCALP_C[2]) * np.sin(PART))
-        part = np.where((ly > 0.04) & (lz > SCALP_C[2]), 0.0022 - across, -0.02)
-        b_ = -rig.smin(-b_, -part, 0.0025)
-        base[i:i + 1] = np.where(np.isfinite(b_), b_, 0.05)
-    d = rig.smin(d, base.astype(np.float32), 0.004)
-    # close small gaps between locks: grow by 3.5 mm, re-measure, shrink back
-    grow = 0.0035
-    d = rig.robust_distance((d - grow).astype(np.float32), voxel) + grow
-    d = rig.robust_distance(d.astype(np.float32), voxel)
-    return lo, d, voxel, flow
-
-
-def np_cone(X, Y, Z, a, b, r1, r2):
-    """Rounded cone from a (radius r1) to b (radius r2), on a grid."""
-    a, b = np.asarray(a, float), np.asarray(b, float)
-    ba = b - a
-    l2 = ba @ ba
-    rr = r1 - r2
-    a2 = l2 - rr * rr
-    il2 = 1.0 / l2
-    pax, pay, paz = X - a[0], Y - a[1], Z - a[2]
-    y = pax * ba[0] + pay * ba[1] + paz * ba[2]
-    z = y - l2
-    xx = (pax * l2 - ba[0] * y) ** 2 + (pay * l2 - ba[1] * y) ** 2 + (paz * l2 - ba[2] * y) ** 2
-    y2 = y * y * l2
-    z2 = z * z * l2
-    k = np.sign(rr) * rr * rr * xx
-    return np.where(np.sign(z) * a2 * z2 > k, np.sqrt(xx + z2) * il2 - r2,
-                    np.where(np.sign(y) * a2 * y2 < k, np.sqrt(xx + y2) * il2 - r1,
-                             (np.sqrt(xx * a2 * il2) + y * rr) * il2 - r1))
+HAIR = dict(scalp_c=(0.0, 0.026, -0.064), scalp_r=(0.0725, 0.0970, 0.0960), part=np.radians(-17.0),
+            hairline=HAIRLINE, top=(30, 40), under=44, length_top=(0.26, 0.38), length_under=(0.27, 0.32),
+            r_top=(0.0038, 0.0105), r_under=(0.0060, 0.0110), wave=(0.105, 0.34, 0.14), fullness=0.25,
+            forward='right', crown_lift=0.0065, flyaways=(0, 0.0, 0.0), base=(0.0065, 0.013),
+            box=((-0.28, -0.52, -0.32), (0.28, 0.18, 0.26)), voxel=0.0018, seed=2)
 
 
 def get_hair(state, jumper):
+    import hair
     H, Rh = state['head']
-    return cached('hair', lambda key: hair_grid(H, Rh, jumper),
-                  [hair_grid, hair_locks, scalp_point, grid_sampler, np_cone, rig.smin, rig.robust_distance, PART,
-                   HAIRLINE, SCALP_C.tolist(), SCALP_R.tolist(), HAIR_BOX[0].tolist(), HAIR_BOX[1].tolist()]
-                  + mh_deps(), (np.round(H, 5).tolist(), np.round(Rh, 5).tolist(), torso_key(state)))
+    return cached('hair', lambda key: hair.grid(HAIR, H, Rh, head_parts()[0], (jumper,)),
+                  hair.DEPS + [HAIR, rig.smin, rig.robust_distance] + mh_deps(),
+                  (np.round(H, 5).tolist(), np.round(Rh, 5).tolist(), torso_key(state)))
 
 
 def torso_key(state):
@@ -628,21 +293,24 @@ def prepare(state):
     return state
 
 
-def build(b, state):
+def build(b, state, pov=False):
+    """Put her in the scene. pov: the camera is her eyes - leave out her head and hair."""
     J = state['joints']
     Hc, Rh = state['head']
-    # her head (with its own lids, nostrils and lips) and eyeballs, in head coordinates
-    b.set_frame(Hc, Rh)
-    b.group('head', margin=0.01)
-    (lo, d, vox), eyes = head_parts()
-    b.grid(lo, d, vox, SKIN, op=UNION)
-    for c, r in eyes:
-        b.sphere(c, r, EYE, op=UNION)
-    # hair
-    lo, d, vox, flow = state['hair']
+    if not pov:
+        # her head (with its own lids, nostrils and lips) and eyeballs, in head coordinates
+        b.set_frame(Hc, Rh)
+        b.group('head', margin=0.01)
+        (lo, d, vox), eyes = head_parts()
+        b.grid(lo, d, vox, SKIN, op=UNION)
+        for c, r in eyes:
+            b.sphere(c, r, EYE, op=UNION)
+        # hair
+        lo, d, vox, flow = state['hair']
+        b.set_frame((0, 0, 0), None)
+        b.group('hair', disp=S.D_HAIR, dparams=[Hc[0], Hc[1], Hc[2], 0.09, 0.075, 0.0004], margin=0.01)
+        b.grid(lo, d, vox, materials.HAIR, op=UNION)
     b.set_frame((0, 0, 0), None)
-    b.group('hair', disp=S.D_HAIR, dparams=[Hc[0], Hc[1], Hc[2], 0.09, 0.075, 0.0004], margin=0.01)
-    b.grid(lo, d, vox, HAIR, op=UNION)
     # the jumper, its ribs running up the body and along the sleeves
     lo, d, vox, part = state['jumper']
     arms = []
@@ -689,25 +357,14 @@ def fill_params(SP, state):
     SP[114] = 1.0  # the face's lids and lashes are real geometry: don't paint the old ones on
 
 
-def solid_boxes(state, pad=0.01):
-    """Tight world boxes round each solid piece of her (for working out which part of the picture she can
-    change): [(lo, hi), ...]."""
-    def solid(grid, o=None, R=None):
-        lo, d, vox = grid[0], grid[1], grid[2]
-        idx = np.argwhere(d[::2, ::2, ::2] < 0)
-        if not len(idx):
-            return None
-        a, b = lo + idx.min(0) * 2 * vox - pad, lo + idx.max(0) * 2 * vox + pad
-        if R is None:
-            return a, b
-        corners = np.array([[x, y, z] for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])])
-        w = corners @ R.T + o
-        return w.min(0), w.max(0)
+def pieces(state, pov=False):
+    """Every grid of her in the scene, as (grid, origin, rotation) - origin/rotation None for world grids."""
     Hc, Rh = state['head']
-    out = [solid(head_parts()[0], Hc, Rh), solid(state['hair']), solid(state['jumper']), solid(state['trousers'])]
+    out = [] if pov else [(head_parts()[0], Hc, Rh), (state['hair'][:3], None, None)]
+    out += [(state['jumper'][:3], None, None), (state['trousers'], None, None)]
     for (o, R, _), part in zip(state['hands'], hand_parts()):
-        out.append(solid(part[0], o, R))
-    return [x for x in out if x is not None]
+        out.append((part[0], o, R))
+    return out
 
 
 def colliders(state):

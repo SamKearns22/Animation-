@@ -647,10 +647,11 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
                 r, g, b = r * k * (1.0 - 0.10 * fine), g * k * (1.0 - 0.14 * fine), b * k * (1.0 - 0.16 * fine)
         bm = brow_mask(lx, ly, lz, SP)
         if bm > 0.0:
-            k = 1.0 - 0.80 * bm
+            k = 1.0 - (SP[128] if SP[128] > 0.0 else 0.80) * bm      # how dark the brows are (fair ones: light)
             r, g, b = r * k * 0.80, g * k * 0.72, b * k * 0.68
         cheek = math.exp(-((abs(lx) - 0.040) ** 2 + (ly + 0.030) ** 2) / (2 * 0.016 ** 2)) * (lz > 0.0)
-        r, g, b = r * (1 + 0.05 * cheek), g * (1 - 0.05 * cheek), b * (1 - 0.05 * cheek)
+        flush = SP[129] if SP[129] > 0.0 else 0.05                      # colour in the cheeks
+        r, g, b = r * (1 + flush * cheek), g * (1 - flush * cheek), b * (1 - flush * cheek)
         lm, part = lip_mask(lx, ly, lz, SP)
         if lm > 0.0:
             r = r + (SP[107] - r) * lm
@@ -708,7 +709,9 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
                     fz = wz - c * dist * SP[20]
                     th = math.atan2(fy, fx + fz * 0.7)
                     fib = vnoise1(th * 18.0) * 0.5 + vnoise1(th * 43.0 + 3.0) * 0.5
-                    base_r, base_g, base_b = 0.30, 0.20, 0.11  # warm hazel-brown
+                    base_r, base_g, base_b = 0.30, 0.20, 0.11  # warm hazel-brown, unless the shot says
+                    if SP[125] + SP[126] + SP[127] > 0.0:       # otherwise (SP[125:128])
+                        base_r, base_g, base_b = SP[125], SP[126], SP[127]
                     k = (0.55 + 0.45 * fib) * (0.75 + 0.35 * u)
                     ring = smoothstep(0.78, 1.0, u)
                     k *= 1.0 - 0.75 * ring

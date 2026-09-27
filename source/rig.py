@@ -236,6 +236,19 @@ class Pose:
     def joint_world(self, M, bone, end=0):
         return self.point(M, bone, self.body.joint(bone, end))
 
+    def joints(self, M=None):
+        """World positions of the joints clothes and checks need: shoulders, elbows, wrists, neck, head,
+        spine."""
+        M = self.matrices() if M is None else M
+        J = {}
+        for s in ('R', 'L'):
+            J['shoulder.' + s] = self.joint_world(M, 'upperarm01.' + s)
+            J['elbow.' + s] = self.joint_world(M, 'lowerarm01.' + s)
+            J['wrist.' + s] = self.joint_world(M, 'wrist.' + s)
+        for bn in ('neck01', 'neck02', 'neck03', 'head', 'spine02', 'spine04', 'spine05'):
+            J[bn] = self.joint_world(M, bn)
+        return J
+
     # --- building a pose -------------------------------------------------------------------------------------
     def set_share(self, bones, R_total):
         """Spread a rotation over a chain of bones (e.g. the neck and head turning together)."""

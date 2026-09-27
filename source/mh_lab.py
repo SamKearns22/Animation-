@@ -41,7 +41,7 @@ def head_sdf(V, quads, voxel=0.001, box=None):
     return mesh_sdf.mesh_to_sdf(V2, T, lo, hi, voxel)
 
 
-def render_views(grid, eyes, out, centre, size=0.30):
+def render_views(grid, eyes, out, centre, size=0.30, iris=None, radii=(0.0059, 0.0020)):
     b = S.Builder()
     b.set_frame((0, 0, 0), None)
     b.group('head', margin=0.01)
@@ -57,8 +57,10 @@ def render_views(grid, eyes, out, centre, size=0.30):
     for e, (ec, er) in enumerate(eyes):
         SP[12 + 3 * e:15 + 3 * e] = ec
     SP[18:21] = (0.0, -0.05, 1.0) / np.linalg.norm((0.0, -0.05, 1.0))
-    SP[21] = np.arcsin(min(0.0059 / eyes[0][1], 0.99))
-    SP[22] = np.arcsin(min(0.0020 / eyes[0][1], 0.99))
+    SP[21] = np.arcsin(min(radii[0] / eyes[0][1], 0.99))
+    SP[22] = np.arcsin(min(radii[1] / eyes[0][1], 0.99))
+    if iris is not None:
+        SP[125:128] = iris
     M = mat_table()
     key = np.array([0.55, 0.55, 0.65])
     key /= np.linalg.norm(key)

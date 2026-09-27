@@ -45,10 +45,11 @@ HANDLE_R = 0.0125           # cleaver handle radius, metres
 HAND_BONES = ('wrist', 'metacarpal', 'finger')
 
 
-def base_body():
+def base_body(shape=None, face=None):
+    """The shaped MakeHuman body (the mother's unless another character's shape and face are given)."""
     v, g = H.load_base()
-    H.apply_macros(v, H.macro_values(**SHAPE))
-    H.apply_details(v, FACE)
+    H.apply_macros(v, H.macro_values(**(SHAPE if shape is None else shape)))
+    H.apply_details(v, FACE if face is None else face)
     return v, g, H.Skeleton(v)
 
 
@@ -58,11 +59,12 @@ def _grid_of(V, quads, lo, hi, voxel):
     return mesh_sdf.mesh_to_sdf(V2, mesh_sdf.triangulate(q2), lo, hi, voxel)
 
 
-def head_grid(voxel=0.001):
-    """Head and neck, smiling, in head coordinates (metres). Returns ((lo, d, voxel), eyes) with eyes as a list
-    of (centre, radius) in head coordinates, her right eye first."""
-    v, g, sk = base_body()
-    v = sk.skin(v, sk.localize(H.blend_units(H.face_units(), SMILE)))
+def head_grid(voxel=0.001, shape=None, face=None, expression=None):
+    """Head and neck with an expression (the mother smiling, unless another character is given), in head
+    coordinates (metres). Returns ((lo, d, voxel), eyes) with eyes as a list of (centre, radius) in head
+    coordinates, the right eye first."""
+    v, g, sk = base_body(shape, face)
+    v = sk.skin(v, sk.localize(H.blend_units(H.face_units(), SMILE if expression is None else expression)))
     eyes = []
     for side in ('r', 'l'):
         idx = np.unique(np.concatenate([np.array(f) for f in g['helper-%s-eye' % side]]))
@@ -123,43 +125,45 @@ def right_hand():
     return _grid_of(V, faces, lo, hi, 0.0007), wr, fore / np.linalg.norm(fore), wx, wz, back
 
 
-def left_hand():
-    """Left hand lying relaxed on the meat, fingers gently curved. Grid in the palm frame: x along the middle
-    finger, y out of the back of the hand, z = x cross y; origin at the centre of the palm's skin. Returns
-    ((lo, d, voxel), wrist position, forearm direction) in that frame (metres)."""
-    v, g, sk = base_body()
-    bends = {2: (10, 14, 8), 3: (12, 16, 9), 4: (14, 18, 10), 5: (16, 20, 12)}
+def left_hand(shape=None, face=None, side='L', bends=None, thumb=8):
+    """A hand lying relaxed (the mother's left on the meat, unless another character or side is given),
+    fingers gently curved. Grid in the palm frame: x along the middle finger, y out of the back of the hand,
+    z = x cross y; origin at the centre of the palm's skin. Returns ((lo, d, voxel), wrist position, forearm
+    direction, wrist x axis, wrist z axis) in that frame (metres)."""
+    v, g, sk = base_body(shape, face)
+    if bends is None:
+        bends = {2: (10, 14, 8), 3: (12, 16, 9), 4: (14, 18, 10), 5: (16, 20, 12)}
     local = {}
     for f, angs in bends.items():
         for k, a in enumerate(angs):
-            local['finger%d-%d.L' % (f, k + 1)] = H.axis_angle([1, 0, 0], a)
-    local['finger1-2.L'] = H.axis_angle([1, 0, 0], 8)
+            local['finger%d-%d.%s' % (f, k + 1, side)] = H.axis_angle([1, 0, 0], a)
+    local['finger1-2.' + side] = H.axis_angle([1, 0, 0], thumb)
     M = sk.pose_matrices(local)
     v2 = sk.skin(v, local)
-    h3, t3 = H.bone_ends(sk, M, 'metacarpal3.L')
-    h2, _ = H.bone_ends(sk, M, 'metacarpal2.L')
-    h4, _ = H.bone_ends(sk, M, 'metacarpal4.L')
+    h3, t3 = H.bone_ends(sk, M, 'metacarpal3.' + side)
+    h2, _ = H.bone_ends(sk, M, 'metacarpal2.' + side)
+    h4, _ = H.bone_ends(sk, M, 'metacarpal4.' + side)
     x = t3 - h3
     x /= np.linalg.norm(x)
     across = h2 - h4
     y = np.cross(across, x)                  # back of the hand, for a left hand
-    tip = H.bone_ends(sk, M, 'finger3-3.L')[1]
+    tip = H.bone_ends(sk, M, 'finger3-3.' + side)[1]
     if (tip - t3) @ y > 0:                   # flexion curls towards the palm, so the back is the other side
         y = -y
     y -= x * (y @ x)
     y /= np.linalg.norm(y)
     z = np.cross(x, y)
     R = np.stack([x, y, z], 1)
-    faces = _hand_faces(g, sk, v, 'L')
+    faces = _hand_faces(g, sk, v, side)
     idx = np.unique(np.concatenate([np.array(f) for f in faces]))
     centre = (h3 + t3) / 2
     # the palm's skin: the lowest hand point below the centre, measured along -y
     below = v2[idx][np.linalg.norm(np.cross(v2[idx] - centre, y), axis=1) < 0.12]
     o = centre + y * ((below - centre) @ y).min()
     V = (v2 - o) @ R * 0.1
-    wr = (sk.rest['wrist.L'][:3, 3] - o) @ R * 0.1
-    fore = (sk.rest['lowerarm02.L'][:3, 3] - sk.rest['wrist.L'][:3, 3]) @ R
-    wx, _, wz = (a @ R for a in sk.axes('wrist.L'))
+    wr = (sk.rest['wrist.' + side][:3, 3] - o) @ R * 0.1
+    fore = (sk.rest['lowerarm02.' + side][:3, 3] - sk.rest['wrist.' + side][:3, 3]) @ R
+    wx, _, wz = (a @ R for a in sk.axes('wrist.' + side))
     pts = V[idx]
     lo, hi = pts.min(0) - 0.012, pts.max(0) + 0.012
     return _grid_of(V, faces, lo, hi, 0.0007), wr, fore / np.linalg.norm(fore), wx, wz

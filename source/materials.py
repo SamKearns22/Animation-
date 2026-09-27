@@ -61,11 +61,12 @@ def mat_table():
 TROUSERS = material((0.10, 0.10, 0.12), spec=0.08, shin=12, wrap=0.2)
 FELT = material((0.70, 0.06, 0.08), spec=0.02, shin=6, wrap=0.35)            # the daughter's Santa hat
 FUR = material((0.95, 0.94, 0.90), spec=0.02, shin=5, wrap=0.4)
+COTTON = material((0.84, 0.86, 0.90), spec=0.03, shin=8, wrap=0.3)          # her pale long-sleeved top
 STRAW_HAIR = material((0.62, 0.50, 0.30), spec=0.15, shin=40, tex=S.T_HAIR)   # her straw-coloured hair
 
 
 def new_params():
-    SP = np.zeros(128)
+    SP = np.zeros(160)
     SP[60], SP[61] = 0.28, 0.08  # sky fill, flat fill
     SP[62:65] = (1.0, 0.98, 0.96)
     SP[46:49] = (1.0, 0.0, 0.0)

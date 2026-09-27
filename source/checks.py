@@ -22,6 +22,32 @@ def run(scene, verbose=True):
             problems.append(what + ': ' + detail)
 
     fr, st = scene['frame'], scene['state']
+    if st is not None:
+        check_mother(scene, check)
+    if 'daughter' in scene['chars']:
+        check_daughter(scene, check)
+    ham = fr['ham']
+    # 5. the board lies flat and fully on the island; the food is on the board
+    I, board = kitchen.ISLAND, fr['board']
+    c, h = board.c, board.half
+    corners = [c + np.array([sx * h[0], 0, sz * h[2]]) for sx in (-1, 1) for sz in (-1, 1)]
+    inside = all(I['x0'] < q[0] < I['x1'] and I['z0'] < q[2] < I['z1'] for q in corners)
+    check(inside, 'board fully on the island', 'all corners on the worktop' if inside else 'a corner overhangs')
+    check(abs(c[1] - h[1] - I['top']) < 0.002, 'board sits on the worktop', f'{(c[1] - h[1] - I["top"]) * 1000:.1f} mm')
+    rim = [ham.c + ham.frame() @ np.array([ham.R[0] * np.cos(t), 0, ham.R[2] * np.sin(t)])
+           for t in np.linspace(0, 2 * np.pi, 24)]
+    on = all(abs(q[0] - c[0]) < h[0] and abs(q[2] - c[2]) < h[2] for q in rim)
+    check(on, 'ham on the board', 'within the board' if on else 'hangs over the edge')
+    if verbose:
+        print('\n'.join(report), flush=True)
+    if problems:
+        raise RuntimeError('scene checks failed:\n  ' + '\n  '.join(problems))
+    return report
+
+
+def check_mother(scene, check):
+    import mother
+    fr, st = scene['frame'], scene['state']
     spec = fr['mother']
     parts = mother.hand_parts()
     names = ('right', 'left')
@@ -87,22 +113,26 @@ def run(scene, verbose=True):
         if np.isfinite(steps).any():
             worst = max(worst, np.nanmax(steps))
     check(worst < 0.02, 'jumper front has no dents', f'largest step {worst * 100:.1f} cm between neighbours 1 cm apart')
-    # 5. the board lies flat and fully on the island; the food is on the board
-    I, board = kitchen.ISLAND, fr['board']
-    c, h = board.c, board.half
-    corners = [c + np.array([sx * h[0], 0, sz * h[2]]) for sx in (-1, 1) for sz in (-1, 1)]
-    inside = all(I['x0'] < q[0] < I['x1'] and I['z0'] < q[2] < I['z1'] for q in corners)
-    check(inside, 'board fully on the island', 'all corners on the worktop' if inside else 'a corner overhangs')
-    check(abs(c[1] - h[1] - I['top']) < 0.002, 'board sits on the worktop', f'{(c[1] - h[1] - I["top"]) * 1000:.1f} mm')
-    rim = [ham.c + ham.frame() @ np.array([ham.R[0] * np.cos(t), 0, ham.R[2] * np.sin(t)])
-           for t in np.linspace(0, 2 * np.pi, 24)]
-    on = all(abs(q[0] - c[0]) < h[0] and abs(q[2] - c[2]) < h[2] for q in rim)
-    check(on, 'ham on the board', 'within the board' if on else 'hangs over the edge')
-    if verbose:
-        print('\n'.join(report), flush=True)
-    if problems:
-        raise RuntimeError('scene checks failed:\n  ' + '\n  '.join(problems))
-    return report
+
+
+def check_daughter(scene, check):
+    """The girl: arms reach, hands on the ends of her arms, wrists bent naturally, hands resting on the worktop
+    (touching, not sinking in), her forearms not passing into her body."""
+    import daughter
+    from mother import surface_points
+    st = scene['chars']['daughter']
+    spec = st['spec']
+    for i, nm in enumerate(('her right', 'her left')):
+        s = 'RL'[i]
+        check(st['short'][i] < 0.002, 'girl: ' + nm + ' arm reaches', f'{st["short"][i] * 1000:.0f} mm short')
+        o, R, w = st['hands'][i]
+        gap = np.linalg.norm(w - st['joints']['wrist.' + s]) * 1000
+        check(gap < 3, 'girl: ' + nm + ' hand joins its arm', f'{gap:.1f} mm gap')
+        fl, dv, err = st['bends'][i]
+        check(abs(fl) <= 50 and abs(dv) <= 25 and err < 10, 'girl: ' + nm + ' wrist bends naturally',
+              f'{fl:+.0f} up/down, {dv:+.0f} sideways, {err:.0f} deg left over')
+        low = (o + surface_points(daughter.hand_parts()[i][0]) @ R.T)[:, 1].min() - spec['rest_on']
+        check(-0.002 < low < 0.003, 'girl: ' + nm + ' hand rests on the worktop', f'{low * 1000:+.1f} mm')
 
 
 if __name__ == '__main__':
