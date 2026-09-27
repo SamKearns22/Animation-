@@ -311,6 +311,20 @@ def prepare(state):
     return state
 
 
+def head_trim(J, Hc):
+    """Planes (point, normal, a direction in the plane) trimming the rigid head piece: everything on the far
+    side of a normal is cut away - below the base of the neck, and the shoulders behind and to each side."""
+    up = unit(J['neck01'] - J['spine02'])
+    lat = J['shoulder.L'] - J['shoulder.R']
+    lat = unit(lat - up * (lat @ up))
+    fwd = np.cross(lat, up)
+    fwd = fwd if fwd @ (Hc - J['neck02']) > 0 else -fwd
+    planes = [(J['neck01'] - 0.01 * up, up)]
+    for side in (1, -1):
+        planes.append((J['neck02'] + 0.05 * side * lat, unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)))
+    return [(c, n, unit(np.cross(n, fwd if abs(n @ fwd) < 0.9 else lat))) for c, n in planes]
+
+
 def build(b, state, pov=False):
     """Put her in the scene. pov: the camera is her eyes - leave out her head and hair."""
     J = state['joints']
@@ -326,17 +340,7 @@ def build(b, state, pov=False):
         # - and trim off the shoulders the piece carries (behind and to each side of the neck), or they rise
         # above the jumper's shoulders when she bows her head
         b.set_frame((0, 0, 0), None)
-        up = unit(J['neck01'] - J['spine02'])
-        lat = J['shoulder.L'] - J['shoulder.R']
-        lat = unit(lat - up * (lat @ up))
-        fwd = np.cross(lat, up)
-        fwd = fwd if fwd @ (Hc - J['neck02']) > 0 else -fwd
-        planes = [(J['neck01'] - 0.01 * up, up)]
-        for side in (1, -1):
-            n = unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)
-            planes.append((J['neck02'] + 0.05 * side * lat, n))
-        for c, n in planes:
-            x = unit(np.cross(n, fwd if abs(n @ fwd) < 0.9 else lat))
+        for c, n, x in head_trim(J, Hc):
             b.halfspace(c, np.stack([x, n, np.cross(x, n)], 1), SKIN, op=S.SUB)
         b.set_frame(Hc, Rh)
         for c, r in eyes:
