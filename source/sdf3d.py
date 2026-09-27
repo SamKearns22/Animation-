@@ -609,7 +609,7 @@ def lip_curves(u, SP):
 @njit(fastmath=True, cache=True)
 def lip_mask(lx, ly, lz, SP):
     W = SP[100]
-    if lz < 0.005 or abs(lx) > W + 0.001 or ly > -0.052 or ly < -0.082:
+    if W <= 0.0 or lz < 0.005 or abs(lx) > W + 0.001 or ly > -0.052 or ly < -0.082:
         return 0.0, 0.0
     u = min(abs(lx) / W, 1.0)
     top, stom, bot = lip_curves(u, SP)
