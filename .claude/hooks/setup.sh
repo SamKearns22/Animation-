@@ -3,5 +3,5 @@
 if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
   exit 0
 fi
-pip install -q pillow numpy imageio imageio-ffmpeg >/dev/null 2>&1
+pip install -q pillow numpy imageio imageio-ffmpeg numba scipy >/dev/null 2>&1
 exit 0
