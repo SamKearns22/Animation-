@@ -93,18 +93,28 @@ def ham_at(f):
     return Ham(HAM_C, ANGLE, cut=cut, slices=[slice_lying(first_slice, -ANGLE + 25)], falling=falling)
 
 
+def cleaver_at(h, along):
+    """The cleaver with its edge h above the board, over the point `along` the ham."""
+    edge = HAM_C + along * A
+    edge[1] = BOARD.top + 0.001 + h
+    edge[2] -= 0.10 * min(h, TOP)                    # the lift swings back towards her a little (an arc)
+    th = np.radians(12.0 * min(h, TOP) / TOP)        # the wrist cocks the blade's tip up as it rises
+    x = BLADE * np.cos(th) + np.array([0, 1.0, 0]) * np.sin(th)
+    y = -BLADE * np.sin(th) + np.array([0, 1.0, 0]) * np.cos(th)
+    return Cleaver(edge, np.stack([x, y, A], 1))
+
+
+def elbow_poles(h):
+    return (np.array([-0.265, 1.120, -0.690 - 0.05 * (1 - min(h, TOP) / TOP)]),  # the elbow drops back as the
+            np.array([0.175, 1.105, -0.575]))                                  # blade comes down
+
+
 def frame(t):
     f = t * FPS
     board = BOARD
     ham = ham_at(f)
     h, along, in_meat = cleaver_path(f)
-    edge = HAM_C + along * A
-    edge[1] = board.top + 0.001 + h
-    edge[2] -= 0.10 * h                              # the lift swings back towards her a little (an arc)
-    th = np.radians(12.0 * h / TOP)                  # the wrist cocks the blade's tip up as it rises
-    x = BLADE * np.cos(th) + np.array([0, 1.0, 0]) * np.sin(th)
-    y = -BLADE * np.sin(th) + np.array([0, 1.0, 0]) * np.cos(th)
-    cleaver = Cleaver(edge, np.stack([x, y, A], 1))
+    cleaver = cleaver_at(h, along)
     # where she looks: the ham, until her eyes jump to her daughter; the head follows a moment later
     on_ham = HAM_C + (FIRST_CUT + 1.5 * SLICE) * A + np.array([0, 0.04, 0])
     eye = on_ham if f < GLANCE else DAUGHTER_EYES
@@ -113,8 +123,7 @@ def frame(t):
     smile = 0.1 + 0.9 * between(f, *SMILE)
     mom = dict(position=(0.0, 0.0, -0.79), yaw=0.0, lean=6.0, head_look=head, eye_look=eye, smile=smile,
                blink=blink, cleaver=cleaver, ham=ham, press_along=0.045, press=0.004, grip_roll=GRIP_ROLL,
-               poles=(np.array([-0.265, 1.120, -0.690 - 0.05 * (1 - h / TOP)]),  # the elbow drops back as
-                      np.array([0.175, 1.105, -0.575])))                           # the blade comes down
+               poles=elbow_poles(h))
     # a plate of cherry tartlets with iced mistletoe, cooling on the worktop by where her daughter stands
     plate = PastryPlate((-0.05, 0.92, 0.22))
     return dict(t=t, camera=CAMERA, mother=mom, board=board, ham=ham, cleaver=cleaver, extras=[plate],

@@ -85,10 +85,18 @@ def deps():
     return mother.mh_deps() + [SHAPE, FACE, CURIOUS]
 
 
-def head_parts():
-    """Her head and neck with her expression, in head coordinates: ((lo, d, voxel), eyes)."""
+def head_parts(blink=0.0):
+    """Her head and neck with her expression, in head coordinates: ((lo, d, voxel), eyes). blink: 0..1, how
+    far her eyelids are closed (in quarters)."""
     # (a child's neck is short: keep only down to the collar, or the skin of her chest would show through her top)
-    return cached('girlhead', lambda: C.head_grid(0.001, SHAPE, FACE, CURIOUS, below=0.125), deps())
+    b = round(blink * 4) / 4
+    if b == 0.0:
+        return cached('girlhead', lambda: C.head_grid(0.001, SHAPE, FACE, CURIOUS, below=0.125), deps())
+    units = dict(CURIOUS)
+    for side in ('Left', 'Right'):
+        k = side + 'UpperLidClosed'; units[k] = units.get(k, 0.0) * (1 - b) + b
+        k = side + 'LowerLidUp'; units[k] = units.get(k, 0.0) + 0.15 * b
+    return cached('girlhead_b', lambda b_: C.head_grid(0.001, SHAPE, FACE, units, below=0.125), deps(), b)
 
 
 def hand_parts():
@@ -131,10 +139,11 @@ def solve(spec):
     lean = spec.get('lean', 0.0)
     for bone in ('spine04', 'spine03', 'spine02'):
         pose.rot[bone] = MH.axis_angle([1, 0, 0], lean / 3)
-    look = np.asarray(spec['look_at'], float)
+    look = np.asarray(spec['look_at'], float)                     # where her eyes look
+    head_look = np.asarray(spec.get('head_look', look), float)     # (her head may be turned elsewhere)
     pose.aim_head(np.eye(3))
     M0 = pose.matrices()
-    d = pose.world_R().T @ unit(look - pose.point(M0, 'head', eyes_mid_rest()))
+    d = pose.world_R().T @ unit(head_look - pose.point(M0, 'head', eyes_mid_rest()))
     share = spec.get('head_share', 0.7)
     pose.aim_head(rot(np.degrees(np.arctan2(d[0], d[2])) * share, np.degrees(np.arcsin(-d[1])) * share,
                       spec.get('head_roll', 0.0)))
@@ -162,7 +171,7 @@ def solve(spec):
     Rh = M['head'][:3, :3]
     gaze = tuple(Rh.T @ unit(look - Hc))
     return dict(spec=dict(spec, gaze=gaze), pose=pose, M=M, joints=J, hands=hands, bends=bends, short=tuple(short),
-                head=(Hc, Rh))
+                head=(Hc, Rh), blink=spec.get('blink', 0.0))
 
 
 def prepare(state):
@@ -193,7 +202,7 @@ def build(b, state):
     Hc, Rh = state['head']
     b.set_frame(Hc, Rh)
     b.group('girl_head', margin=0.01)
-    (lo, d, vox), eyes = head_parts()
+    (lo, d, vox), eyes = head_parts(state.get('blink', 0.0))
     b.grid(lo, d, vox, SKIN, op=S.UNION)
     for c, r in eyes:
         b.sphere(c, r, EYE, op=S.UNION)
@@ -220,7 +229,7 @@ def pieces(state, pov=False):
     """Every grid of her in the scene, as (grid, origin, rotation)."""
     Hc, Rh = state['head']
     ht = state['hat']
-    out = [(head_parts()[0], Hc, Rh), (ht['felt'], Hc, Rh), (ht['fur'], Hc, Rh), (state['hair'][:3], None, None),
+    out = [(head_parts(state.get('blink', 0.0))[0], Hc, Rh), (ht['felt'], Hc, Rh), (ht['fur'], Hc, Rh), (state['hair'][:3], None, None),
            (state['top'][:3], None, None)]
     for (o, R, _), part in zip(state['hands'], hand_parts()):
         out.append((part[0], o, R))
