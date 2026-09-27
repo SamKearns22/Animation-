@@ -139,9 +139,15 @@ def check_daughter(scene, check):
     import kitchen
     I = kitchen.ISLAND
     b = daughter.body()
-    V = b.skin(st['pose'])[b.skin_idx]
-    inside = np.minimum.reduce([V[:, 0] - I['x0'], I['x1'] - V[:, 0], V[:, 2] - I['z0'], I['z1'] - V[:, 2],
-                                I['top'] - V[:, 1]])
+    V = b.skin(st['pose'])
+    shown = np.isin(np.arange(len(V)), b.skin_idx) & ~np.isin(
+        b.label, [b.piece_names.index(n) for n in ('hand.L', 'hand.R', 'head')])  # (hands, head: finer pieces)
+    V = V[shown]
+    # the island's real shape: the worktop slab overhangs; the cupboards are set back 3 cm, the toe-kick 8 cm
+    y = V[:, 1]
+    inset = np.where(y > I['top'] - 0.03, 0.0, np.where(y > 0.10, 0.03, 0.08))
+    inside = np.minimum.reduce([V[:, 0] - I['x0'] - inset, I['x1'] - inset - V[:, 0], V[:, 2] - I['z0'] - inset,
+                                I['z1'] - inset - V[:, 2], I['top'] - y])
     deepest = inside.max()
     check(deepest < 0.003, 'girl: her body stays out of the island', f'{max(deepest, 0) * 1000:.0f} mm into it')
     for i, nm in enumerate(('her right', 'her left')):

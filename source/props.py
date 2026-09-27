@@ -211,3 +211,18 @@ class PastryPlate:
             for k in range(3):
                 q = p + [0.004 * np.cos(a + 1.6 + k * 1.1), 0.0235, 0.004 * np.sin(a + 1.6 + k * 1.1)]
                 b.sphere(q, 0.0028, ICING, op=UNION)
+
+
+class StepStool:
+    """A child's wooden step stool (she stands on it to reach the worktop)."""
+
+    def __init__(self, centre, half=(0.18, 0.04, 0.12)):
+        self.c, self.half = np.asarray(centre, float), np.asarray(half, float)
+
+    def build(self, b):
+        b.set_frame((0, 0, 0), None)
+        b.group('stool', margin=0.01)
+        c, h = self.c, self.half
+        b.box(c + [0, h[1] - 0.009, 0], (h[0], 0.009, h[2]), WOOD, op=UNION, r=0.004)
+        for sx in (-1, 1):
+            b.box(c + [sx * (h[0] - 0.012), 0, 0], (0.010, h[1], h[2] - 0.01), WOOD, op=UNION, r=0.003)

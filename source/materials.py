@@ -35,7 +35,7 @@ STEEL = material((0.30, 0.31, 0.33), spec=0.9, shin=90, refl=0.05, tex=S.T_STEEL
 HANDLE = material((0.10, 0.065, 0.045), spec=0.4, shin=50)
 PAINT = material((0.88, 0.875, 0.855), spec=0.10, shin=30)
 BLACKMETAL = material((0.035, 0.035, 0.035), spec=0.6, shin=60, refl=0.08)
-MARBLE = material((0.93, 0.93, 0.915), spec=0.45, shin=110, refl=0.14, tex=S.T_MARBLE)
+MARBLE = material((0.93, 0.93, 0.915), spec=0.30, shin=60, refl=0.04, tex=S.T_MARBLE)   # honed: no mirror
 WALL = material((0.90, 0.885, 0.865), spec=0.02, shin=8)
 FLOOR = material((0.60, 0.47, 0.34), spec=0.25, shin=40, refl=0.05, tex=S.T_WOODGRAIN)
 OUTSIDE = material((1.0, 1.0, 1.0), emit=1.55, tex=S.T_WINDOW)

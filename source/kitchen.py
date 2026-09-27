@@ -46,8 +46,8 @@ def shaker_panel(b, c, half, R, depth_axis=2, handle=None):
         b.sphere(p, 0.013, BLACKMETAL, op=UNION)
 
 
-FRONT_Z = 1.55                      # the wall on the daughter's side of the island (a 'wild wall': only built for
-RADIATOR_X = (-0.40, 0.20)          # shots that face it, as on a film set - shot 1's camera stands beyond it)
+FRONT_Z = 2.50                      # the wall on the daughter's side of the island (a 'wild wall': only built for
+RADIATOR_X = (-1.10, -0.50)         # shots that face it, as on a film set - shot 1's camera stands beyond it)
 
 
 def front_wall(b):
