@@ -51,27 +51,58 @@ RADIATOR_X = (-1.10, -0.50)         # shots that face it, as on a film set - sho
 
 
 def front_wall(b):
-    """The wall behind the daughter: plain paint over a skirting board, and a slim modern column radiator
-    (the hot-water kind a contemporary remodel would fit), white, standing on short legs."""
+    """The wall behind the daughter: plain paint over a skirting board, and an ornate cast iron radiator."""
     b.group('front_wall', margin=0.05)
     b.box((0, 1.35, FRONT_Z + 0.05), (4.0, 1.40, 0.05), WALL, op=UNION)
     b.box((0, 0.06, FRONT_Z - 0.008), (4.0, 0.06, 0.010), PAINT, op=UNION, r=0.003)     # skirting board
-    b.group('radiator', margin=0.02)
-    x0, x1 = RADIATOR_X
-    zc = FRONT_Z - 0.075
-    ylo, yhi = 0.16, 0.70
-    n = int((x1 - x0) / 0.046)
-    for i in range(n + 1):
-        x = x0 + i * (x1 - x0) / n
-        for dz in (-0.018, 0.018):          # two columns deep, like a classic column radiator
-            b.capsule((x, ylo, zc + dz), (x, yhi, zc + dz), 0.0115, RADIATOR, op=SUNION, k=0.006)
-    for y in (ylo, yhi):                    # the manifolds joining the columns top and bottom
-        b.box(((x0 + x1) / 2, y, zc), ((x1 - x0) / 2 + 0.012, 0.014, 0.030), RADIATOR, op=SUNION, k=0.008, r=0.010)
-    for x in (x0 + 0.02, x1 - 0.02):        # legs
-        b.box((x, ylo / 2, zc), (0.012, ylo / 2, 0.022), RADIATOR, op=UNION, r=0.004)
-    b.capsule((x1 + 0.02, ylo, zc), (x1 + 0.06, ylo, zc), 0.009, STEEL, op=UNION)      # valve and pipe
-    b.cylinder((x1 + 0.075, ylo + 0.004, zc), 0.018, 0.012, STEEL, op=UNION, rr=0.003)
-    b.capsule((x1 + 0.075, ylo, zc), (x1 + 0.075, 0.0, zc), 0.0075, STEEL, op=UNION)
+    cast_iron_radiator(b, RADIATOR_X[0], RADIATOR_X[1], FRONT_Z - 0.12)
+
+
+def cast_iron_radiator(b, x0, x1, zc, height=0.78, depth=0.19, pitch=0.050):
+    """An ornate Gilded Age cast iron radiator, like the American Radiator Company's decorative models (the
+    house is old and grand, and kept its original hot-water heating): a row of bolted-together sections, each
+    with an arched top and a raised leaf-and-bead pattern up its front, joined top and bottom, standing on legs
+    with flared feet, painted in the silvery 'radiator bronze' of the period. Its front faces the room (-z)."""
+    b.group('radiator', margin=0.03)
+    foot = 0.11                                # the sections stand this far off the floor
+    n = int(round((x1 - x0) / pitch))
+    front = zc - depth / 2
+    top = foot + height
+    first = True
+    for i in range(n):
+        x = x0 + (i + 0.5) * pitch
+        op = UNION if first else SUNION
+        first = False
+        # the section: a rounded slab with an arched top, with gaps between neighbours
+        b.box((x, foot + (height - depth / 2) / 2, zc), (pitch * 0.40, (height - depth / 2) / 2, depth / 2),
+              RADIATOR, op=op, k=0.004, r=0.008)
+        b.cylinder((x, top - depth / 2, zc), pitch * 0.40, depth / 2, RADIATOR, op=SUNION, k=0.004, rr=0.008,
+                   R=rot(roll=90))
+        # the raised pattern up its front: leaves and beads, and a scroll under the arch
+        y = foot + 0.08
+        k = 0
+        while y < top - depth / 2 - 0.02:
+            if k % 2 == 0:
+                b.ellipsoid((x, y, front - 0.002), (pitch * 0.26, 0.026, 0.009), RADIATOR, op=SUNION, k=0.004)
+            else:
+                b.sphere((x, y, front - 0.001), pitch * 0.16, RADIATOR, op=SUNION, k=0.003)
+            y += 0.052
+            k += 1
+        b.torus((x, top - depth / 2 + 0.01, front + 0.004), 0.018, 0.0045, RADIATOR, op=SUNION, k=0.003,
+                R=rot(pitch=90))
+    # the hubs joining the sections, top and bottom
+    for y in (foot + 0.05, top - depth / 2 - 0.02):
+        b.capsule((x0 + 0.01, y, zc), (x1 - 0.01, y, zc), 0.026, RADIATOR, op=SUNION, k=0.006)
+    # legs with flared feet at each end
+    for x in (x0 + pitch * 0.5, x1 - pitch * 0.5):
+        b.box((x, foot / 2 + 0.01, zc), (pitch * 0.35, foot / 2, depth * 0.30), RADIATOR, op=SUNION, k=0.008, r=0.006)
+        b.cone((x, 0.0, zc), (x, 0.035, zc), 0.045, 0.028, RADIATOR, op=SUNION, k=0.006)
+    # the valve and its pipe down through the floor, at the right-hand end
+    b.group('radiator_valve', margin=0.02)
+    b.capsule((x1, foot + 0.05, zc), (x1 + 0.05, foot + 0.05, zc), 0.011, STEEL, op=UNION)
+    b.cylinder((x1 + 0.065, foot + 0.07, zc), 0.025, 0.014, STEEL, op=UNION, rr=0.004)
+    b.sphere((x1 + 0.065, foot + 0.105, zc), 0.022, STEEL, op=UNION)          # the wheel handle
+    b.capsule((x1 + 0.065, foot + 0.05, zc), (x1 + 0.065, 0.0, zc), 0.010, STEEL, op=UNION)
 
 
 def build_environment(b, SP, front=False):
