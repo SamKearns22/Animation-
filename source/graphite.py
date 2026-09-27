@@ -130,7 +130,8 @@ def colour_mats():
             MS.CHERRY: (0.85, 0.08, 0.10), MS.CLEMENTINE: (0.98, 0.55, 0.12), MS.NEEDLES: (0.18, 0.48, 0.26),
             MS.GOLD: (0.90, 0.70, 0.22), MS.BAUBLE_RED: (0.85, 0.10, 0.12), MS.FAIRY: (1.0, 0.85, 0.40),
             MS.FLAME: (1.0, 0.72, 0.28), MS.FELT: (0.82, 0.12, 0.14),
-            MS.CHERRY_FILL: (0.72, 0.05, 0.10), MS.ICING_GREEN: (0.32, 0.62, 0.28)}
+            MS.CHERRY_FILL: (0.72, 0.05, 0.10), MS.ICING_GREEN: (0.32, 0.62, 0.28),
+            MS.COTTON: (0.64, 0.82, 0.96)}      # the daughter's top: light sky blue
 
 
 def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
