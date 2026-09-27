@@ -51,12 +51,12 @@ def build(frame):
     state = mother.prepare(mother.solve(frame['mother']))
     b = S.Builder()
     mother.build(b, state)
-    frame['board'].build(b)
     hand = mother.hand_parts()[1][0]
     o, R, _ = state['hands'][1]
     frame['ham'].build(b, press=(hand, o, R))
     frame['cleaver'].build(b)
     n_moving = len(b.groups)
+    frame['board'].build(b)                  # the board stays put: part of the set
     SP = new_params()
     mother.fill_params(SP, state)
     frame['ham'].fill_params(SP)
@@ -66,6 +66,7 @@ def build(frame):
     GB = b.grid_buffer()
     print(f'  built in {time.time() - t0:.0f}s: {len(P)} shapes in {len(G)} objects', flush=True)
     return dict(frame=frame, state=state, P=P, G=G, GB=GB, SP=SP, flames=flames,
+                group_names=[g['name'] for g in b.groups],
                 moving=np.arange(n_moving), static=np.arange(n_moving, len(G)))
 
 
@@ -79,7 +80,8 @@ def shadows(scene, static_maps=None):
         if static_maps is None:
             sm.add(P, G, GB, L, c, ext, res, tan, bias=bias)
         else:
-            sm.add(P, G[scene['moving']], GB, L, c, ext, res, tan, bias=bias, base=static_maps[i])
+            sm.add(P, G[scene['moving']], GB, L, c, ext, res, tan, bias=bias, base=static_maps[i],
+                   within=moving_corners(scene))
     return sm
 
 
@@ -132,28 +134,42 @@ def project(cam, W, H, p):
     return np.stack([(x + 1) * 0.5 * W, (1 - y) * 0.5 * H], 1)
 
 
-def moving_box(scene, cam, W, H, margin=40):
-    """The part of the picture the moving things can change: what they cover (their bounding spheres), where
-    their shadows fall (followed from each thing along the sun and the back light down to the worktop), plus
-    a margin for soft edges. (x0, y0, x1, y1)."""
-    G = scene['G'][scene['moving']]
-    pts = []
-    top = kitchen.ISLAND['top']
-    for c, r in zip(G[:, 0:3], G[:, 3]):
-        centres = [c]
-        I = kitchen.ISLAND
-        for L in (kitchen.KEY, kitchen.RIM):
-            if L[1] > 0 and c[1] > top:
-                q = c - L * (c[1] - top) / L[1]          # where its shadow meets the worktop
-                if I['x0'] - r < q[0] < I['x1'] + r and I['z0'] - r < q[2] < I['z1'] + r:
-                    centres.append(q)
-        for cc in centres:
-            for dv in np.vstack([np.eye(3), -np.eye(3)]):
-                pts.append(cc + dv * r)
-    xy = project(cam, W, H, np.array(pts))
-    x0, y0 = np.floor(xy.min(0)).astype(int) - margin
-    x1, y1 = np.ceil(xy.max(0)).astype(int) + margin
-    return max(0, x0), max(0, y0), min(W, x1), min(H, y1)
+def moving_corners(scene):
+    """Corners of tight boxes round everything that moves: her pieces and the props."""
+    boxes = list(mother.solid_boxes(scene['state']))
+    her = {'head', 'hair', 'body', 'trousers', 'right_hand', 'left_hand'}
+    names, G = scene['group_names'], scene['G']
+    boxes += [(G[i, 0:3] - G[i, 3], G[i, 0:3] + G[i, 3]) for i in scene['moving'] if names[i] not in her]
+    return np.array([[x, y, z] for a, b_ in boxes for x in (a[0], b_[0]) for y in (a[1], b_[1])
+                     for z in (a[2], b_[2])])
+
+
+def merge_spans(spans, rows=32):
+    """Group row spans into bands of about `rows` rows (fewer, larger calls to the renderer)."""
+    out = []
+    for y0, y1, x0, x1 in spans:
+        if out and y0 <= out[-1][1] and y1 - out[-1][0] <= rows:
+            a = out[-1]
+            out[-1] = (a[0], max(a[1], y1), min(a[2], x0), max(a[3], x1))
+        else:
+            out.append((y0, y1, x0, x1))
+    return out
+
+
+def changed_rows(lo_now, lo_ref, W, H, thresh=0.004, grow=3):
+    """Where a quick quarter-size render differs from the shot's first frame: for each band of rows (one
+    quarter-size row = 4 full rows) the span of columns to redo, or None. Grown a little all round."""
+    from scipy import ndimage
+    d = np.abs(lo_now - lo_ref).max(-1) > thresh
+    d = ndimage.binary_dilation(d, iterations=grow)
+    h, w = d.shape
+    sx, sy = W / w, H / h
+    spans = []
+    for j in range(h):
+        xs = np.nonzero(d[j])[0]
+        if len(xs):
+            spans.append((int(j * sy), int(min(H, (j + 1) * sy)), int(xs.min() * sx), int(min(W, (xs.max() + 1) * sx))))
+    return spans
 
 
 def drawing_passes(scene, res, cam, W, H):
@@ -238,7 +254,8 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         times = np.arange(0, rec.DURATION - 1e-9, every / fps)
     log = []
     t_all = time.time()
-    base = static = stats = box0 = None
+    base = static = stats = lo_ref = first = None
+    M = mat_table()
     for n, t in enumerate(times):
         t0 = time.time()
         scene = build(rec.frame(float(t)))
@@ -248,31 +265,39 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
             print(f'  shadows of the set {time.time() - t0:.0f}s', flush=True)
         t1 = time.time()
         sm = shadows(scene, static)
+        SM, SMP = sm.arrays()
+        Lt = kitchen.light_rows(scene['flames'])
         print(f'  shadows {time.time() - t1:.0f}s', flush=True)
         cam = camera(scene['frame'], W, H)
-        box = moving_box(scene, cam, W, H)
-        if box0 is None:
-            box0, crop = box, None
-        else:
-            crop = (min(box[0], box0[0]), min(box[1], box0[1]), max(box[2], box0[2]), max(box[3], box0[3]))
-        res, cam = render(scene, W, H, sm, crop=crop, verbose=False)
+        # a quick quarter-size render first: where does this frame differ from the first?
+        t1 = time.time()
+        lo = S.render_image(W // 4, H // 4, camera(scene['frame'], W // 4, H // 4), scene['P'], scene['G'], M, Lt,
+                            scene['SP'], scene['GB'], SM, SMP, bands=4, verbose=False)['rgb']
         if base is None:
-            base = res
+            lo_ref = lo
+            res, cam = render(scene, W, H, sm, verbose=False)
+            base, spans = res, None
         else:
-            x0, y0, x1, y1 = crop
-            full = {k: v.copy() for k, v in base.items()}
-            for k in full:
-                full[k][y0:y1, x0:x1] = res[k][y0:y1, x0:x1]
-            res = full
+            spans = changed_rows(lo, lo_ref, W, H)
+            res = {k: v.copy() for k, v in base.items()}
+            for y0, y1, x0, x1 in merge_spans(spans):
+                S.render(W, H, cam, scene['P'], scene['G'], scene['GB'], M, Lt, scene['SP'], SM, SMP, res['rgb'],
+                         res['depth'], res['normal'], res['mat'], res['pos'], res['glass'], y0, y1, x0, x1)
+        print(f'  rendered {time.time() - t1:.0f}s', flush=True)
         passes = os.path.join(out_dir, f'passes_{n:04d}.npz')
         save_passes(passes, res, cam, scene, W, H)
         out = os.path.join(out_dir, f'draw_{n:04d}.png')
-        if crop is None:
+        box = None
+        if spans is None:
             stats = graphite.draw(passes, out)
             first = np.asarray(Image.open(out))
+        elif not spans:
+            Image.fromarray(first).save(out, optimize=True)      # nothing moved
         else:
             m = 64                                       # redraw a little beyond, paste the inside
-            x0, y0, x1, y1 = crop
+            y0, y1 = min(sp[0] for sp in spans), max(sp[1] for sp in spans)
+            x0, x1 = min(sp[2] for sp in spans), max(sp[3] for sp in spans)
+            box = (x0, y0, x1, y1)
             wx0, wy0, wx1, wy1 = max(0, x0 - m), max(0, y0 - m), min(W, x1 + m), min(H, y1 + m)
             patch = os.path.join(out_dir, 'patch.png')
             graphite.draw(passes, patch, crop=(wx0, wy0, wx1, wy1), stats=stats)
@@ -281,8 +306,10 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
             Image.fromarray(img).save(out, optimize=True)
             os.remove(patch)
         dt = time.time() - t0
-        log.append(dict(n=n, t=float(t), seconds=round(dt, 1), crop=crop))
-        print(f'drawing {n} (t={t:.3f}s) done in {dt:.0f}s, window {crop}', flush=True)
+        area = 0 if spans is None else sum((y1 - y0) * (x1 - x0) for y0, y1, x0, x1 in spans) / (W * H)
+        log.append(dict(n=n, t=float(t), seconds=round(dt, 1), redrawn=round(area, 3), box=box))
+        print(f'drawing {n} (t={t:.3f}s) done in {dt:.0f}s, {area * 100:.0f}% of the picture re-rendered',
+              flush=True)
     with open(os.path.join(out_dir, 'log.json'), 'w') as f:
         json.dump(log, f, indent=1)
     print(f'{len(times)} drawings in {time.time() - t_all:.0f}s', flush=True)

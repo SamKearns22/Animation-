@@ -689,6 +689,27 @@ def fill_params(SP, state):
     SP[114] = 1.0  # the face's lids and lashes are real geometry: don't paint the old ones on
 
 
+def solid_boxes(state, pad=0.01):
+    """Tight world boxes round each solid piece of her (for working out which part of the picture she can
+    change): [(lo, hi), ...]."""
+    def solid(grid, o=None, R=None):
+        lo, d, vox = grid[0], grid[1], grid[2]
+        idx = np.argwhere(d[::2, ::2, ::2] < 0)
+        if not len(idx):
+            return None
+        a, b = lo + idx.min(0) * 2 * vox - pad, lo + idx.max(0) * 2 * vox + pad
+        if R is None:
+            return a, b
+        corners = np.array([[x, y, z] for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])])
+        w = corners @ R.T + o
+        return w.min(0), w.max(0)
+    Hc, Rh = state['head']
+    out = [solid(head_parts()[0], Hc, Rh), solid(state['hair']), solid(state['jumper']), solid(state['trousers'])]
+    for (o, R, _), part in zip(state['hands'], hand_parts()):
+        out.append(solid(part[0], o, R))
+    return [x for x in out if x is not None]
+
+
 def colliders(state):
     """For the checks: her hands' surfaces in the world."""
     out = []

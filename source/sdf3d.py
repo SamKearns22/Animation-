@@ -1106,10 +1106,15 @@ def tonemap(rgb, exposure=1.0):
 
 
 @njit(parallel=True, fastmath=True, cache=True)
-def depth_map(nu, nv, o, U, V, Wd, eu, ev, P, G, GB, out):
+def depth_map(nu, nv, o, U, V, Wd, eu, ev, P, G, GB, out, i0=0, i1=-1, j0=0, j1=-1):
+    """Depth from the light for each texel (or only texels i0..i1, j0..j1 - the rest are left as they are)."""
     tu = eu / nu
-    for j in prange(nv):
-        for i in range(nu):
+    if i1 < 0:
+        i1 = nu
+    if j1 < 0:
+        j1 = nv
+    for j in prange(j0, j1):
+        for i in range(i0, i1):
             u = -0.5 * eu + (i + 0.5) * tu
             v = -0.5 * ev + (j + 0.5) * tu
             sx = o[0] + U[0] * u + V[0] * v
@@ -1127,9 +1132,11 @@ class ShadowMaps:
         self.rows = []
         self.length = 0
 
-    def add(self, P, G, GB, light_dir, centre, extent, res, tan_light, bias=0.0004, back=6.0, base=None):
+    def add(self, P, G, GB, light_dir, centre, extent, res, tan_light, bias=0.0004, back=6.0, base=None,
+            within=None):
         """base: a map already made of the things that don't move (same light, centre, extent and size);
-        only G's objects are then drawn into it - for animation, where the set's shadows never change."""
+        only G's objects are then drawn into it - for animation, where the set's shadows never change.
+        within: points bounding those objects - only the part of the map they cover is drawn."""
         L = np.asarray(light_dir, float)
         L = L / np.linalg.norm(L)
         Wd = -L
@@ -1139,8 +1146,17 @@ class ShadowMaps:
         V = np.cross(Wd, U)
         o = np.asarray(centre, float) + L * back
         nu = nv = int(res)
-        out = np.zeros(nu * nv, np.float32)
-        depth_map(nu, nv, o, U, V, Wd, extent, extent, P, G, GB, out)
+        out = np.full(nu * nv, 1e9, np.float32)
+        rect = (0, nu, 0, nv)
+        if within is not None:
+            q = np.asarray(within, float) - o
+            tu = extent / nu
+            iu = (q @ U + 0.5 * extent) / tu
+            iv = (q @ V + 0.5 * extent) / tu
+            rect = (max(int(iu.min()) - 2, 0), min(int(iu.max()) + 3, nu), max(int(iv.min()) - 2, 0),
+                    min(int(iv.max()) + 3, nv))
+        if rect[1] > rect[0] and rect[3] > rect[2]:
+            depth_map(nu, nv, o, U, V, Wd, extent, extent, P, G, GB, out, *rect)
         if base is not None:
             out = np.minimum(out, base)
         row = np.zeros(19)
