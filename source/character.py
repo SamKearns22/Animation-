@@ -59,7 +59,7 @@ def _grid_of(V, quads, lo, hi, voxel):
     return mesh_sdf.mesh_to_sdf(V2, mesh_sdf.triangulate(q2), lo, hi, voxel)
 
 
-def head_grid(voxel=0.001, shape=None, face=None, expression=None):
+def head_grid(voxel=0.001, shape=None, face=None, expression=None, below=0.215):
     """Head and neck with an expression (the mother smiling, unless another character is given), in head
     coordinates (metres). Returns ((lo, d, voxel), eyes) with eyes as a list of (centre, radius) in head
     coordinates, the right eye first."""
@@ -73,7 +73,7 @@ def head_grid(voxel=0.001, shape=None, face=None, expression=None):
     mid = (eyes[0][0] + eyes[1][0]) / 2
     V = (v - mid) * 0.1
     eyes = [((c - mid) * 0.1, r * 0.1) for c, r in eyes]
-    lo, hi = np.array([-0.100, -0.215, -0.135]), np.array([0.100, 0.140, 0.125])
+    lo, hi = np.array([-0.100, -below, -0.135]), np.array([0.100, 0.140, 0.125])  # below: how much neck to keep
     keep = [f for f in g['body'] if np.all(V[f][:, 1] > lo[1] - 0.03) and np.all(np.abs(V[f][:, 0]) < 0.2)]
     return _grid_of(V, keep, lo, hi, voxel), eyes
 

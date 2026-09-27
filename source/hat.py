@@ -101,7 +101,7 @@ def make(head, side=1.0, band_front=0.050, band_back=-0.005, clearance=0.009, vo
     th = np.arctan2(X, Z - cz)
     band_y = band_front + (band_back - band_front) * (1 - np.cos(th)) / 2
     crown = hd_here - (clearance + 0.004)
-    crown = rig.smax(crown, band_y + 0.005 - Y, 0.004)     # (its edge tucked inside the fur)
+    crown = rig.smax(crown, band_y + 0.010 - Y, 0.003)     # (its edge tucked inside the fur)
     # the tip: rising a little above the crown, then flopping over to one side and hanging down beside the
     # head (a curve through control points), tapering to the pompom
     s = float(side)

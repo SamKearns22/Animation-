@@ -139,7 +139,9 @@ def locks(style, H, Rh, head, bodies=(), hides=None):
                 force += (side * -0.10 * sidev + (0.55 if forward else -0.40) * fwd) * \
                     min(1, (shoulder_y - p[1]) / 0.08)
             force += 0.03 * np.array([np.sin(travelled * 8 + wob), 0, np.cos(travelled * 6 + wob)])
-            force += stray * min(1.0, travelled / 0.05)  # a stray strand wanders off the fall
+            # a stray strand wanders off the fall, curling a little (never a straight wire)
+            force += (stray + wild * 0.6 * np.array([np.sin(travelled * 23 + wob), 0.0, np.cos(travelled * 19 + wob)])) \
+                * min(1.0, travelled / 0.05)
             d = d * 0.75 + 0.25 * force
             d /= np.linalg.norm(d)
             q = p + d * step
@@ -190,8 +192,8 @@ def locks(style, H, Rh, head, bodies=(), hides=None):
         th0 = part if s < 0.6 else np.pi * side
         e0 = np.radians(rng.uniform(40, 85))
         thf = side * np.radians(70 + 100 * s)
-        lock(th0 + side * 0.03, e0, thf, side, falls_forward(side, s < 0.5), rng.uniform(*lt) * rng.uniform(0.5, 1.0),
-             rf, rf, 0.004 + 0.010 * rng.random(), 0.0, wild)
+        lock(th0 + side * 0.03, e0, thf, side, falls_forward(side, s < 0.5), rng.uniform(*lt) * rng.uniform(0.3, 0.8),
+             rf, rf, 0.002 + 0.006 * rng.random(), 0.0, wild)
     return out
 
 

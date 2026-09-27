@@ -48,7 +48,7 @@ IRIS = (0.28, 0.36, 0.42)   # pale blue-grey
 # blank and mildly curious: brows lifted a touch (more on one side), eyes a little wider, mouth relaxed and
 # closed with the barest hint at one corner - not a smile
 CURIOUS = {'LeftInnerBrowUp': 0.15, 'RightInnerBrowUp': 0.11, 'LeftOuterBrowUp': 0.06, 'RightOuterBrowUp': 0.10,
-           'LeftUpperLidClosed': 0.28, 'RightUpperLidClosed': 0.25, 'LeftLowerLidUp': 0.40, 'RightLowerLidUp': 0.45,
+           'LeftUpperLidClosed': 0.12, 'RightUpperLidClosed': 0.10, 'LeftLowerLidUp': 0.30, 'RightLowerLidUp': 0.34,
            'MouthLeftPullUp': 0.05}
 IRIS_RADIUS, PUPIL_RADIUS = 0.0060, 0.0016   # a child's iris is nearly adult-sized; a small daylight pupil
 
@@ -63,12 +63,12 @@ HAIRLINE = (0.056, 0.014, 0.040, 0.048)
 HAIR = dict(scalp_c=(0.0, 0.020, -0.052), scalp_r=(0.066, 0.086, 0.086), part=np.radians(-4.0),
             hairline=HAIRLINE, top=(34, 36), under=40, length_top=(0.26, 0.36), length_under=(0.25, 0.32),
             r_top=(0.0030, 0.0080), r_under=(0.0045, 0.0085), wave=(0.14, 0.12, 0.05), fullness=0.15,
-            forward='both', crown_lift=0.003, flyaways=(60, 0.0011, 0.25), base=(0.005, 0.009),
+            forward='both', crown_lift=0.003, flyaways=(45, 0.0009, 0.07), base=(0.005, 0.009),
             box=((-0.24, -0.46, -0.26), (0.26, 0.16, 0.22)), voxel=0.0014, seed=5, close=0.0025,
             shoulder_drop=0.09)
 
 # her hands resting on the worktop, fingers loosely curled
-BENDS = {2: (14, 20, 10), 3: (16, 22, 11), 4: (18, 24, 12), 5: (20, 26, 14)}
+BENDS = {2: (6, 10, 6), 3: (7, 11, 6), 4: (8, 12, 7), 5: (10, 14, 8)}
 
 _BODY = []
 
@@ -87,7 +87,8 @@ def deps():
 
 def head_parts():
     """Her head and neck with her expression, in head coordinates: ((lo, d, voxel), eyes)."""
-    return cached('girlhead', lambda: C.head_grid(0.001, SHAPE, FACE, CURIOUS), deps())
+    # (a child's neck is short: keep only down to the collar, or the skin of her chest would show through her top)
+    return cached('girlhead', lambda: C.head_grid(0.001, SHAPE, FACE, CURIOUS, below=0.125), deps())
 
 
 def hand_parts():
@@ -229,7 +230,7 @@ def pieces(state, pov=False):
 # her painted details: lips mapped from her mother's measured mouth by the lip bones; fine, light brows; rosy
 # cheeks
 LIPS = [0.017, -0.0435, -0.0377, 0.0008, -0.0473, -0.0566]
-BROWS = [0.009, 0.045, 0.0140, 0.0030, 0.008, 0.0028]
+BROWS = [0.010, 0.044, 0.0150, 0.0025, 0.007, 0.0019]
 
 
 def fill_params(SP, state):
@@ -250,7 +251,7 @@ def fill_params(SP, state):
     SP[110:114] = HAIRLINE
     SP[114] = 1.0
     SP[125:128] = IRIS
-    SP[128] = 0.35      # light brows
+    SP[128] = 0.22      # light, fine brows
     SP[129] = 0.12      # rosy cheeks
 
 

@@ -94,7 +94,9 @@ def top(b, pose, J, spec):
     j1 = min(int((hem + 0.02 - lo[1]) / vox) + 1, n[1])
     f[:, :j1] = rig.smax(f[:, :j1], hem - axes[1][:j1][None, :, None], 0.006)
     # the collar: take the cloth off her neck and head, then the collar itself
-    nb, na = J['neck01'], unit(J['neck03'] - J['neck01'])
+    # (the collar follows the upper body, not the neck: looking down tips the neck forward, and the cut would
+    # then take away arms folded in front)
+    nb, na = J['neck01'], unit(J['neck01'] - J['spine02'])
     sl, (X, Y, Z) = window(nb, 0.30)
     g = f[sl]
     ax = (X - nb[0]) * na[0] + (Y - nb[1]) * na[1] + (Z - nb[2]) * na[2]
@@ -108,7 +110,7 @@ def top(b, pose, J, spec):
     else:                   # a crew neck: a round opening at the base of the neck, edged with a soft band
         _, R0, r = spec['collar']
         g = rig.smax(g, -np.maximum(-(ax + 0.012), rad - 0.11), 0.004)
-        g = rig.smax(g, -np.maximum(R0 - 0.004 - rad, -(ax + 0.03)), 0.003)
+        g = rig.smax(g, -np.maximum(rad - (R0 - 0.004), -(ax + 0.03)), 0.003)   # the opening itself
         ring = np.sqrt((rad - R0) ** 2 + (ax + 0.012) ** 2) - r
         g = rig.smin(g, ring, 0.004)
     f[sl] = g

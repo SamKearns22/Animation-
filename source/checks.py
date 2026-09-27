@@ -22,6 +22,19 @@ def run(scene, verbose=True):
             problems.append(what + ': ' + detail)
 
     fr, st = scene['frame'], scene['state']
+    # every character's sleeves cover their forearms (a cut in the clothes can't take a sleeve away unseen)
+    for name, cs in scene['chars'].items():
+        top = cs.get('jumper', cs.get('top'))
+        lo, d, vox = top[0], top[1], top[2]
+        for s in 'RL':
+            el, wr = cs['joints']['elbow.' + s], cs['joints']['wrist.' + s]
+            covered = []
+            for t in (0.25, 0.5, 0.75):
+                i = np.round((el + (wr - el) * t - lo) / vox).astype(int)
+                ok_i = np.all(i >= 0) and np.all(i < np.array(d.shape))
+                covered.append(ok_i and d[tuple(i)] < 0)
+            check(all(covered), f'{name}: {"right" if s == "R" else "left"} sleeve covers the forearm',
+                  'covered' if all(covered) else 'bare in places')
     if st is not None:
         check_mother(scene, check)
     if 'daughter' in scene['chars']:
