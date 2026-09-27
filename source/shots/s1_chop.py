@@ -3,7 +3,7 @@ the meat steady. She chops two slices; her eyes find her daughter across the isl
 (See story/animation-test.md.) For now: its first frame, the approved still."""
 import numpy as np
 
-from props import Board, Ham, Cleaver, slice_lying
+from props import Board, Ham, Cleaver, PastryPlate, slice_lying
 from rig import unit
 
 DURATION = 2.0
@@ -28,4 +28,6 @@ def frame(t):
     mom = dict(position=(0.0, 0.0, -0.79), yaw=0.0, lean=6.0, look_at=DAUGHTER_EYES, smile=1.0,
                cleaver=cleaver, ham=ham, press_along=0.045, press=0.004,
                poles=(np.array([-0.265, 1.120, -0.690]), np.array([0.175, 1.105, -0.575])))
-    return dict(t=t, camera=CAMERA, mother=mom, board=board, ham=ham, cleaver=cleaver)
+    # a plate of cherry tartlets with iced mistletoe, cooling on the worktop by where her daughter stands
+    plate = PastryPlate((-0.05, 0.92, 0.22))
+    return dict(t=t, camera=CAMERA, mother=mom, board=board, ham=ham, cleaver=cleaver, extras=[plate])

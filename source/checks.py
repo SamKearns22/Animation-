@@ -135,6 +135,15 @@ def check_daughter(scene, check):
     from mother import surface_points
     st = scene['chars']['daughter']
     spec = st['spec']
+    # nothing of her passes into the island (her chest may lean over the worktop, never through its edge)
+    import kitchen
+    I = kitchen.ISLAND
+    b = daughter.body()
+    V = b.skin(st['pose'])[b.skin_idx]
+    inside = np.minimum.reduce([V[:, 0] - I['x0'], I['x1'] - V[:, 0], V[:, 2] - I['z0'], I['z1'] - V[:, 2],
+                                I['top'] - V[:, 1]])
+    deepest = inside.max()
+    check(deepest < 0.003, 'girl: her body stays out of the island', f'{max(deepest, 0) * 1000:.0f} mm into it')
     for i, nm in enumerate(('her right', 'her left')):
         s = 'RL'[i]
         check(st['short'][i] < 0.002, 'girl: ' + nm + ' arm reaches', f'{st["short"][i] * 1000:.0f} mm short')

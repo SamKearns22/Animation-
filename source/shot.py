@@ -68,6 +68,8 @@ def build(frame):
     frame['cleaver'].build(b)
     n_moving = len(b.groups)
     frame['board'].build(b)                  # the board stays put: part of the set
+    for extra in frame.get('extras', ()):     # other things on the set (the plate of tartlets...)
+        extra.build(b)
     SP = new_params()
     face = frame.get('face', 'mother')
     if face == 'daughter':
@@ -77,7 +79,7 @@ def build(frame):
         mother.fill_params(SP, chars['mother'])
     frame['ham'].fill_params(SP)
     SP[46:49] = (1.0, 0.0, 0.0)          # the board's grain runs along x
-    flames = kitchen.build_environment(b, SP)
+    flames = kitchen.build_environment(b, SP, front=frame.get('front_wall', False))
     P, G = b.build()
     GB = b.grid_buffer()
     print(f'  built in {time.time() - t0:.0f}s: {len(P)} shapes in {len(G)} objects', flush=True)

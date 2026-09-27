@@ -6,7 +6,8 @@ World coordinates: metres, y up.
 """
 import numpy as np
 
-from materials import (WOOD, MEAT, HAMPINK, PINEAPPLE, CHERRY, PAPER, BONE, STEEL, HANDLE)
+from materials import (WOOD, MEAT, HAMPINK, PINEAPPLE, CHERRY, PAPER, BONE, STEEL, HANDLE, CERAMIC, PASTRY,
+                       CHERRY_FILL, ICING, ICING_GREEN)
 from sdf3d import rot, UNION, SUNION, SSUB, SUB
 
 
@@ -160,3 +161,53 @@ class Cleaver:
 def slice_lying(centre, yaw):
     """A slice lying flat on the board."""
     return np.asarray(centre, float), rot(yaw=yaw)
+
+
+class PastryPlate:
+    """A white plate of little cherry tartlets cooling on the worktop: crimped golden pastry cases, glossy
+    cherry filling with a few cherry halves, each topped with an iced mistletoe sprig - two green leaves and
+    white berries."""
+
+    def __init__(self, centre, n=7, seed=3, radius=0.115):
+        self.c = np.asarray(centre, float)      # centre of the plate's base, on the worktop
+        self.n, self.seed, self.radius = n, seed, radius
+
+    def tartlets(self):
+        rng = np.random.default_rng(self.seed)
+        out = [(0.0, 0.0)]
+        for k in range(self.n - 1):
+            a = 2 * np.pi * k / (self.n - 1) + rng.uniform(-0.15, 0.15)
+            out.append((0.064 * np.cos(a), 0.064 * np.sin(a)))
+        return out, rng
+
+    def build(self, b):
+        b.set_frame((0, 0, 0), None)
+        c, R0 = self.c, self.radius
+        b.group('plate', margin=0.01)
+        b.cylinder(c + np.array([0, 0.006, 0]), 0.006, R0, CERAMIC, op=UNION, rr=0.004)
+        b.cylinder(c + np.array([0, 0.012, 0]), 0.004, R0 - 0.020, CERAMIC, op=SUB)      # the well
+        top = c[1] + 0.009
+        spots, rng = self.tartlets()
+        b.group('tartlets', margin=0.01)
+        for dx, dz in spots:
+            p = np.array([c[0] + dx, top, c[2] + dz])
+            r = 0.027
+            # the pastry case with a crimped rim
+            b.cylinder(p + [0, 0.008, 0], 0.008, r, PASTRY, op=UNION, rr=0.004)
+            for k in range(14):
+                a = 2 * np.pi * k / 14
+                b.sphere(p + [r * np.cos(a), 0.015, r * np.sin(a)], 0.0045, PASTRY, op=SUNION, k=0.002)
+            # glossy cherry filling, a little domed, and cherry halves
+            b.cylinder(p + [0, 0.014, 0], 0.0025, r - 0.004, CHERRY_FILL, op=UNION, rr=0.002)
+            for k in range(3):
+                a = rng.uniform(0, 2 * np.pi)
+                q = p + [0.011 * np.cos(a), 0.017, 0.011 * np.sin(a)]
+                b.ellipsoid(q, (0.0065, 0.004, 0.0065), CHERRY_FILL, op=UNION)
+            # an iced mistletoe sprig on top: two leaves and three white berries
+            a = rng.uniform(0, np.pi)
+            for sgn in (-1, 1):
+                q = p + [sgn * 0.0085 * np.cos(a), 0.0205, sgn * 0.0085 * np.sin(a)]
+                b.ellipsoid(q, (0.010, 0.0022, 0.0045), ICING_GREEN, op=UNION, R=rot(yaw=-np.degrees(a) + sgn * 20))
+            for k in range(3):
+                q = p + [0.004 * np.cos(a + 1.6 + k * 1.1), 0.0235, 0.004 * np.sin(a + 1.6 + k * 1.1)]
+                b.sphere(q, 0.0028, ICING, op=UNION)

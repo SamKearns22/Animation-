@@ -562,7 +562,7 @@ def ambient_occlusion(px, py, pz, nx, ny, nz, P, G, GB, scale):
 MA_R, MA_G, MA_B, MA_SPEC, MA_SHIN, MA_REFL, MA_EMIT, MA_WRAP, MA_TEX = range(9)
 # texture ids (MA_TEX) - how the surface pattern is worked out
 T_NONE, T_SKIN, T_LID, T_EYE, T_HAIR, T_KNIT, T_MARBLE, T_WOODGRAIN, T_MEAT, T_STEEL, T_WINDOW, T_TRAY, \
-    T_NEEDLES, T_WAX, T_BONE = range(15)
+    T_NEEDLES, T_WAX, T_BONE, T_TILE = range(16)
 
 
 @njit(fastmath=True, cache=True)
@@ -806,6 +806,19 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
         r, g, b = r * k, g * k, b * k
     elif tex == 13:  # wax: glows warmer near the flame
         pass
+    elif tex == 15:  # contemporary cement floor tiles, 20 cm: charcoal quarter-circle arcs from each corner,
+        ts = 0.20    # meeting across neighbouring tiles as rings; thin grout lines
+        u, v = px / ts, pz / ts
+        fu, fv = u - math.floor(u), v - math.floor(v)
+        dark = 0.0
+        for cu in (0.0, 1.0):
+            for cv in (0.0, 1.0):
+                rr = math.sqrt((fu - cu) ** 2 + (fv - cv) ** 2)
+                band = min(abs(rr - 0.50), abs(rr - 0.30)) - 0.045
+                dark = max(dark, 1.0 - smoothstep(0.0, 0.012, band))
+        grout = 1.0 - smoothstep(0.004, 0.010, min(min(fu, 1.0 - fu), min(fv, 1.0 - fv)))
+        k = (1.0 - 0.62 * dark) * (1.0 - 0.25 * grout)
+        r, g, b = r * k, g * k * 0.99, b * k * 0.97
     return r, g, b, spec_mul
 
 

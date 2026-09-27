@@ -61,6 +61,12 @@ def mat_table():
 TROUSERS = material((0.10, 0.10, 0.12), spec=0.08, shin=12, wrap=0.2)
 FELT = material((0.70, 0.06, 0.08), spec=0.02, shin=6, wrap=0.35)            # the daughter's Santa hat
 FUR = material((0.95, 0.94, 0.90), spec=0.02, shin=5, wrap=0.4)
+PASTRY = material((0.86, 0.64, 0.34), spec=0.15, shin=20, wrap=0.2)         # golden shortcrust
+CHERRY_FILL = material((0.55, 0.03, 0.08), spec=0.85, shin=90, refl=0.04)    # glossy cherry filling
+ICING = material((0.96, 0.95, 0.92), spec=0.30, shin=40, wrap=0.3)           # white icing (mistletoe berries)
+ICING_GREEN = material((0.36, 0.62, 0.30), spec=0.25, shin=30, wrap=0.3)     # iced mistletoe leaves
+RADIATOR = material((0.90, 0.90, 0.88), spec=0.35, shin=45, refl=0.02)       # white enamelled steel
+TILE = material((0.90, 0.88, 0.84), spec=0.20, shin=40, refl=0.03, tex=S.T_TILE)   # patterned cement tiles
 COTTON = material((0.66, 0.72, 0.82), spec=0.03, shin=8, wrap=0.3)          # her pale blue-grey long-sleeved top
 STRAW_HAIR = material((0.62, 0.50, 0.30), spec=0.15, shin=40, tex=S.T_HAIR)   # her straw-coloured hair
 

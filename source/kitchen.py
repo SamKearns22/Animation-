@@ -46,12 +46,43 @@ def shaker_panel(b, c, half, R, depth_axis=2, handle=None):
         b.sphere(p, 0.013, BLACKMETAL, op=UNION)
 
 
-def build_environment(b, SP):
+FRONT_Z = 1.55                      # the wall on the daughter's side of the island (a 'wild wall': only built for
+RADIATOR_X = (-0.40, 0.20)          # shots that face it, as on a film set - shot 1's camera stands beyond it)
+
+
+def front_wall(b):
+    """The wall behind the daughter: plain paint over a skirting board, and a slim modern column radiator
+    (the hot-water kind a contemporary remodel would fit), white, standing on short legs."""
+    b.group('front_wall', margin=0.05)
+    b.box((0, 1.35, FRONT_Z + 0.05), (4.0, 1.40, 0.05), WALL, op=UNION)
+    b.box((0, 0.06, FRONT_Z - 0.008), (4.0, 0.06, 0.010), PAINT, op=UNION, r=0.003)     # skirting board
+    b.group('radiator', margin=0.02)
+    x0, x1 = RADIATOR_X
+    zc = FRONT_Z - 0.075
+    ylo, yhi = 0.16, 0.70
+    n = int((x1 - x0) / 0.046)
+    for i in range(n + 1):
+        x = x0 + i * (x1 - x0) / n
+        for dz in (-0.018, 0.018):          # two columns deep, like a classic column radiator
+            b.capsule((x, ylo, zc + dz), (x, yhi, zc + dz), 0.0115, RADIATOR, op=SUNION, k=0.006)
+    for y in (ylo, yhi):                    # the manifolds joining the columns top and bottom
+        b.box(((x0 + x1) / 2, y, zc), ((x1 - x0) / 2 + 0.012, 0.014, 0.030), RADIATOR, op=SUNION, k=0.008, r=0.010)
+    for x in (x0 + 0.02, x1 - 0.02):        # legs
+        b.box((x, ylo / 2, zc), (0.012, ylo / 2, 0.022), RADIATOR, op=UNION, r=0.004)
+    b.capsule((x1 + 0.02, ylo, zc), (x1 + 0.06, ylo, zc), 0.009, STEEL, op=UNION)      # valve and pipe
+    b.cylinder((x1 + 0.075, ylo + 0.004, zc), 0.018, 0.012, STEEL, op=UNION, rr=0.003)
+    b.capsule((x1 + 0.075, ylo, zc), (x1 + 0.075, 0.0, zc), 0.0075, STEEL, op=UNION)
+
+
+def build_environment(b, SP, front=False):
+    """The set. front: also build the wall behind the daughter (for shots looking her way)."""
     b.set_frame((0, 0, 0), None)
     I = ISLAND
-    # --- floor, walls, ceiling
+    if front:
+        front_wall(b)
+    # --- floor (patterned cement tiles), walls, ceiling
     b.group('room', margin=0.05)
-    b.box((0, -0.05, -1.0), (4.0, 0.05, 4.5), FLOOR, op=UNION)
+    b.box((0, -0.05, -1.0), (4.0, 0.05, 4.5), TILE, op=UNION)
     b.box((0, 2.75, -1.0), (4.0, 0.05, 4.5), CEILING, op=UNION)
     b.box((0, 1.35, BACK_Z - 0.05), (4.0, 1.40, 0.05), WALL, op=UNION)
     b.box((-2.9, 1.35, -1.0), (0.05, 1.40, 4.5), WALL, op=UNION)

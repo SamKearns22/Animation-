@@ -19,7 +19,8 @@ import sdf3d as S
 # which materials belong to what
 CHAR_SKIN = {MS.SKIN, MS.LIPS, MS.LID, MS.NOSTRIL, MS.NAIL}
 CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.STRAW_HAIR, MS.KNIT, MS.TROUSERS, MS.COTTON, MS.FELT, MS.FUR}
-PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER}
+PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER,
+         MS.PASTRY, MS.CHERRY_FILL, MS.ICING, MS.ICING_GREEN}
 
 
 # ---------------------------------------------------------------------------
@@ -128,7 +129,8 @@ def colour_mats():
     return {MS.MEAT: (0.80, 0.45, 0.14), MS.HAMPINK: (0.93, 0.58, 0.55), MS.PINEAPPLE: (0.98, 0.84, 0.25),
             MS.CHERRY: (0.85, 0.08, 0.10), MS.CLEMENTINE: (0.98, 0.55, 0.12), MS.NEEDLES: (0.18, 0.48, 0.26),
             MS.GOLD: (0.90, 0.70, 0.22), MS.BAUBLE_RED: (0.85, 0.10, 0.12), MS.FAIRY: (1.0, 0.85, 0.40),
-            MS.FLAME: (1.0, 0.72, 0.28), MS.FELT: (0.82, 0.12, 0.14)}
+            MS.FLAME: (1.0, 0.72, 0.28), MS.FELT: (0.82, 0.12, 0.14), MS.PASTRY: (0.90, 0.66, 0.32),
+            MS.CHERRY_FILL: (0.72, 0.05, 0.10), MS.ICING_GREEN: (0.32, 0.62, 0.28)}
 
 
 def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
