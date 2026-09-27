@@ -61,10 +61,10 @@ TOP = dict(thick=0.005, drape=0.6, bridge=0.015, smooth=0.008, hem=0.06, cuff=0.
 # shoulders, with stray strands catching the light (it comes out from under the hat's fur band)
 HAIRLINE = (0.056, 0.014, 0.040, 0.048)
 HAIR = dict(scalp_c=(0.0, 0.020, -0.052), scalp_r=(0.066, 0.086, 0.086), part=np.radians(-4.0),
-            hairline=HAIRLINE, top=(34, 36), under=40, length_top=(0.26, 0.36), length_under=(0.25, 0.32),
-            r_top=(0.0030, 0.0080), r_under=(0.0045, 0.0085), wave=(0.14, 0.12, 0.05), fullness=0.15,
-            forward='both', crown_lift=0.003, flyaways=(45, 0.0009, 0.07), base=(0.005, 0.009),
-            box=((-0.24, -0.46, -0.26), (0.26, 0.16, 0.22)), voxel=0.0014, seed=5, close=0.0025,
+            hairline=HAIRLINE, top=(34, 36), under=40, length_top=(0.20, 0.38), length_under=(0.22, 0.35),
+            r_top=(0.0030, 0.0080), r_under=(0.0045, 0.0085), wave=(0.12, 0.22, 0.10), fullness=0.24,
+            forward='both', crown_lift=0.003, flyaways=(25, 0.0009, 0.06), base=(0.005, 0.009),
+            box=((-0.26, -0.48, -0.26), (0.28, 0.16, 0.22)), voxel=0.0014, seed=5, close=0.0015,
             shoulder_drop=0.09)
 
 # her hands resting on the worktop, fingers loosely curled

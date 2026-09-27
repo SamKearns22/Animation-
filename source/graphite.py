@@ -211,6 +211,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     drawn = subject | coloured  # given a firm pencil outline
     skin = np.isin(mat, list(CHAR_SKIN))
     hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR])
+    fair = mat == MS.STRAW_HAIR          # fair hair: drawn lightly, a few fine strands, bright where it shines
     knit = mat == MS.KNIT
     eye = mat == MS.EYE
     bg = ~subject
@@ -226,7 +227,8 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     fall = np.clip(((fx - 0.42) / 0.62) ** 2 + ((fy - 0.55) / 0.75) ** 2, 0, 1.5)
     T = np.where(bg, T * (1 - 0.16 * fall), T)
     T = np.where(skin, 0.10 + 0.90 * np.clip(T, 0, 1) ** 1.15, T)  # skin: light, smoothly modelled
-    T = np.where(hair, 0.10 + 0.90 * np.clip(T, 0, 1) ** 0.6, T)
+    T = np.where(hair & ~fair, 0.10 + 0.90 * np.clip(T, 0, 1) ** 0.6, T)
+    T = np.where(fair, 0.38 + 0.62 * np.clip(T, 0, 1), T)
     # hollows (eye sockets, under the nose, corners of the mouth, under the jaw) a touch darker, as an artist
     # would press into them: where the surface bends away (the normals converge on screen)
     ncx = normal @ cam[6:9]
@@ -304,7 +306,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
 
     # graphite rubbed smooth for soft gradations; hatching laid over it as tone deepens; cross-hatching in
     # the deepest shadows; long dark strands in the hair
-    smudge_amt = np.where(skin, 0.72, np.where(hair, 0.45, np.where(bg, 0.40, 0.55)))
+    smudge_amt = np.where(skin, 0.72, np.where(fair, 0.28, np.where(hair, 0.45, np.where(bg, 0.40, 0.55))))
     grain_mod = np.where(skin, 0.97 + 0.03 * s1, 0.85 + 0.15 * s1)  # skin blended smooth with a stump
     smudge = np.clip(np.where(skin, blur(dark, 3.5 * px), blur(dark, 2.2 * px)), 0, 1) ** 1.1 * smudge_amt * \
         np.clip(grain_mod, 0.5, 1.2)
@@ -313,7 +315,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     m1 = m1 * np.where(skin, 0.55, 1.0)  # skin is blended more than hatched
     m2 = np.clip((dark * 2.3 - 1.65 - s2 * 0.45) * 2.0, 0, 1) * (1 - 0.6 * skin) * (1 - 0.75 * knit)
     m2 = m2 * np.clip((dark - 0.40) * 4.0, 0, 1)  # cross-hatching only where it is really dark
-    strands = np.clip((dark * 1.9 - 0.55 - s3 * 0.75) * 1.6, 0, 1) * hair
+    strands = np.clip((dark * 1.9 - 0.55 - s3 * 0.75) * 1.6, 0, 1) * (hair & ~fair)
+    # fair hair: fewer, finer, lighter strands, and none where the light catches it
+    sheen = smoothstep(0.62, 0.85, tone)
+    strands = strands + np.clip((dark * 1.9 - 0.62 - s3 * 0.9) * 1.3, 0, 1) * 0.55 * (1 - sheen) * fair
     marks = 1 - (1 - smudge) * (1 - m1 * 0.62) * (1 - m2 * 0.6) * (1 - strands * 0.8)
     # away from the focus the shading is left lighter and looser, fading out towards the frame's edges the
     # way a drawing is left unfinished at its margins

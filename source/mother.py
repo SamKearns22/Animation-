@@ -258,7 +258,7 @@ _STATE = [None]
 # ---------------------------------------------------------------------------
 HAIRLINE = (0.066, 0.019, 0.047, 0.057)  # height at the middle, drop to 5 cm out, height and drop at the temple
 HAIR = dict(scalp_c=(0.0, 0.026, -0.064), scalp_r=(0.0725, 0.0970, 0.0960), part=np.radians(-17.0),
-            hairline=HAIRLINE, top=(30, 40), under=44, length_top=(0.26, 0.38), length_under=(0.27, 0.32),
+            hairline=HAIRLINE, top=(30, 40), under=44, length_top=(0.24, 0.40), length_under=(0.24, 0.34),
             r_top=(0.0038, 0.0105), r_under=(0.0060, 0.0110), wave=(0.105, 0.34, 0.14), fullness=0.25,
             forward='right', crown_lift=0.0065, flyaways=(0, 0.0, 0.0), base=(0.0065, 0.013),
             box=((-0.28, -0.52, -0.32), (0.28, 0.18, 0.26)), voxel=0.0018, seed=2)
