@@ -27,3 +27,14 @@ mother's smile, the cleaver, her own fingers).
   carefully and respectfully.
 - **Clues without telling:** small, easily missed hints can be planted early (a detail in the kitchen, a
   sound under the carol, a date) so the reveal feels inevitable on a second viewing.
+
+## Title cards (director's decision)
+Three cards appear during the trailer, at points still to be decided:
+
+> THE FIRST GIFT
+> EVER GIVEN
+> WAS BLOOD
+
+- Each line is its own card, so the sentence builds across the trailer, the last card landing late.
+- Style (see guides/tone.md): plain, clean capitals on black, sparse and quiet - no effects - held just long
+  enough to read. The words stay ambiguous: they hint at a sacrifice without revealing the backstory.
