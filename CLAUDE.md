@@ -15,3 +15,8 @@ I don't know how to code. Please:
 - Put finished animations in the `animations/` folder with a clear name.
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
 - The tools (Python with Pillow, NumPy, imageio and a bundled ffmpeg) are installed automatically at the start of each session by `.claude/hooks/setup.sh`.
+
+# Drawing people
+
+- Before building or changing any character, read `guides/character-anatomy.md` and follow its checklist.
+  Build people on the free MakeHuman human model (CC0) rather than sculpting bodies from scratch.
