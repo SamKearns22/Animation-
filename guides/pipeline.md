@@ -47,3 +47,17 @@ Keep continuity in the recipes: the ham's cut position and the slices lying abou
 - Every contact needs visible proof (a dent, a cut, fingers wrapping); nothing meant to be apart may look
   touching from the camera.
 - Run a fresh-eyes review of the whole picture after any change, not just the part changed.
+
+## Working efficiently (lessons from the animation test)
+- **Animatic first.** Before the full pencil render of any shot, render the whole shot small and plain
+  (quarter size, no drawing pass) - minutes, not hours - and check timing, framing and any faults. Only
+  then render it properly. Faults found in a full render cost hours; in an animatic, minutes.
+- **Let the checks catch it.** When a fault gets through to a render, add a check for that kind of fault to
+  `checks.py` so it can never get through again.
+- **Redo only what is broken.** If a fault affects only some drawings of a shot, re-render just those (the
+  rest are unchanged), not the whole shot.
+- **Parallel machines for long renders.** For the full trailer, shots can be rendered at the same time in
+  separate cloud sessions (each on its own machine), each sending back its finished shot as a small video.
+  Uses more of the plan's allowance; worth it when renders run to tens of hours.
+- **Queues:** a render queue must wait on something that cannot match itself (a finished-file marker or
+  a log line), never on a search of running commands.
