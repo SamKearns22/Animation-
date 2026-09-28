@@ -19,9 +19,9 @@ def dress(b, chars):
 
 def frame(t):
     return dict(set='spare_room',
-                # from the dark landing, a metre back from the doorway, level at head height; a 35 mm-like lens
+                # from the dark landing, just back from the doorway (only the edge of its opening shows), level at head height; a 35 mm-like lens
                 # shifted down (walls stay upright) so the floor shows; the dark doorcase frames the room
-                camera=dict(pos=(0.0, 1.62, 1.45), target=(0.0, 1.62, -5.2), vfov=40.0, shift=-0.30),
+                camera=dict(pos=(0.0, 1.62, 1.10), target=(0.0, 1.62, -5.2), vfov=40.0, shift=-0.30),
                 man=MAN, dressing=[dress],
                 # the eye goes to the present first, then along the writing to the man at the last r
                 focus=[(-1.65, 0.85, -2.87), (-0.95, 0.85, -2.87), (-0.9, 1.3, -5.15), (0.2, 1.3, -5.15),
