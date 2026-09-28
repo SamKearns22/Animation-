@@ -93,7 +93,7 @@ def default_lights(key_dir=(0.55, 0.45, 0.70)):
 T_BOARDS, T_RUG, T_GIFTWRAP, T_BLOOD = 16, 17, 18, 19
 MAN_SKIN = material((0.78, 0.60, 0.52), spec=0.10, shin=14, wrap=0.35)
 SHIRT = material((0.42, 0.48, 0.58), spec=0.02, shin=8, wrap=0.3)             # his plain pale blue shirt
-MAN_HAIR = material((0.30, 0.29, 0.28), spec=0.15, shin=40, tex=S.T_HAIR)      # short, greying
+MAN_HAIR = material((0.16, 0.155, 0.15), spec=0.10, shin=30, tex=S.T_HAIR)    # short, salt and pepper
 BLOOD = material((0.55, 0.02, 0.03), spec=0.75, shin=90, refl=0.03, tex=T_BLOOD)    # fresh, wet, bright
 GORE = material((0.20, 0.03, 0.03), spec=0.80, shin=90, refl=0.04, tex=T_BLOOD)     # dark, thick, wet
 GIFTWRAP = material((0.10, 0.38, 0.20), spec=0.25, shin=30, wrap=0.2, tex=T_GIFTWRAP)  # green, gold stars

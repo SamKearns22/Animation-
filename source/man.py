@@ -21,7 +21,7 @@ SHAPE = dict(gender=1.0, age=0.71, muscle=0.5, weight=0.58, height=0.55, proport
 FACE = {'head/head-square': 0.3, 'neck/neck-scale-horiz-incr': 0.2}
 
 # a plain, pale cotton shirt with a band collar, tucked in; dark blue trousers
-SHIRT = dict(thick=0.010, drape=0.3, bridge=0.10, smooth=0.040, hem=-0.02, cuff=0.012, voxel=0.004,
+SHIRT = dict(thick=0.014, drape=0.3, bridge=0.10, smooth=0.040, hem=-0.02, cuff=0.012, voxel=0.004,
              collar=('crew', 0.058, 0.007))
 
 _BODY = []
@@ -198,8 +198,10 @@ def hair(state, skin, voxel=0.003):
     cut = np.where(z > 0.02, front, np.where(z > -0.06, np.minimum(np.maximum(front, -(z - 0.02) * 2), side), nape))
     # the ears stay bare
     ear = np.sqrt((np.abs(x) - 0.072) ** 2 + (y + 0.02) ** 2 + (z + 0.035) ** 2) - 0.035
-    d = rig.smax(d, -cut, 0.004)
-    d = rig.smax(d, -ear, 0.004)
+    # thinning out towards the hairline rather than stopping at a hard edge
+    d = d + 0.006 * (1 - np.clip(cut / 0.025, 0, 1))
+    d = rig.smax(d, -cut, 0.012)
+    d = rig.smax(d, -ear, 0.006)
     return lo, rig.robust_distance(d.astype(np.float32), voxel), voxel
 
 
