@@ -88,3 +88,27 @@ def default_lights(key_dir=(0.55, 0.45, 0.70)):
                      [0, -0.6, 0.3, -0.5, 0.30, 0.30, 0.32, 0, 6.0, 0, 0, 0]], dtype=np.float64)
 
 
+
+# --- the spare room ('Merry Chr' shot) -------------------------------------------------------------------
+T_BOARDS, T_RUG, T_GIFTWRAP, T_BLOOD = 16, 17, 18, 19
+MAN_SKIN = material((0.78, 0.60, 0.52), spec=0.10, shin=14, wrap=0.35)
+SHIRT = material((0.86, 0.86, 0.84), spec=0.02, shin=8, wrap=0.3)             # his plain pale shirt
+MAN_HAIR = material((0.30, 0.29, 0.28), spec=0.15, shin=40, tex=S.T_HAIR)      # short, greying
+BLOOD = material((0.55, 0.02, 0.03), spec=0.75, shin=90, refl=0.03, tex=T_BLOOD)    # fresh, wet, bright
+GORE = material((0.20, 0.03, 0.03), spec=0.80, shin=90, refl=0.04, tex=T_BLOOD)     # dark, thick, wet
+GIFTWRAP = material((0.10, 0.38, 0.20), spec=0.25, shin=30, wrap=0.2, tex=T_GIFTWRAP)  # green, gold stars
+RIBBON = material((0.80, 0.62, 0.22), spec=0.8, shin=60, refl=0.08)              # gold satin ribbon
+GIFT_RED = material((0.70, 0.06, 0.08), spec=0.25, shin=30, wrap=0.2)             # the small presents
+XMAS_JUMPER = material((0.72, 0.08, 0.10), wrap=0.25, tex=S.T_KNIT)              # a red Christmas jumper
+LINEN = material((0.93, 0.92, 0.89), spec=0.02, shin=6, wrap=0.35)               # sheets, pillows
+BOARDS = material((0.52, 0.36, 0.22), spec=0.35, shin=70, refl=0.04, tex=T_BOARDS)   # varnished oak boards
+RUG = material((0.62, 0.55, 0.48), spec=0.02, shin=5, wrap=0.2, tex=T_RUG)
+DARKWOOD = material((0.30, 0.20, 0.13), spec=0.35, shin=45, refl=0.03, tex=S.T_WOODGRAIN)   # antique mahogany
+BEAM = material((0.45, 0.34, 0.24), spec=0.05, shin=10, tex=S.T_TRAY)            # old hand-hewn oak
+GLASS = material((0.80, 0.84, 0.86), spec=1.0, shin=200, refl=0.35)             # broken glass
+LEATHER = material((0.22, 0.17, 0.13), spec=0.3, shin=30)                         # the holdall
+SHELL = material((0.55, 0.56, 0.58), spec=0.5, shin=50, refl=0.03)               # the hard suitcase
+SOCK = material((0.20, 0.20, 0.22), wrap=0.3)
+BRASS = material((0.72, 0.58, 0.32), spec=0.8, shin=60, refl=0.1)
+SKY = material((1.0, 1.0, 1.0), emit=1.5)                                          # a white winter sky
+TILE_W = material((0.95, 0.95, 0.94), spec=0.5, shin=80, refl=0.06)             # the en-suite's glazed tiles

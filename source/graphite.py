@@ -18,9 +18,13 @@ import sdf3d as S
 
 # which materials belong to what
 CHAR_SKIN = {MS.SKIN, MS.LIPS, MS.LID, MS.NOSTRIL, MS.NAIL}
-CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.STRAW_HAIR, MS.KNIT, MS.TROUSERS, MS.COTTON, MS.FELT, MS.FUR}
+CHAR_SKIN = CHAR_SKIN | {MS.MAN_SKIN}
+CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.STRAW_HAIR, MS.KNIT, MS.TROUSERS, MS.COTTON, MS.FELT, MS.FUR,
+                    MS.SHIRT, MS.MAN_HAIR, MS.SOCK}
 PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER,
-         MS.PASTRY, MS.CHERRY_FILL, MS.ICING, MS.ICING_GREEN}
+         MS.PASTRY, MS.CHERRY_FILL, MS.ICING, MS.ICING_GREEN,
+         MS.GIFTWRAP, MS.RIBBON, MS.GORE, MS.BLOOD, MS.GIFT_RED, MS.XMAS_JUMPER, MS.LINEN, MS.GLASS, MS.SHELL,
+         MS.LEATHER}
 
 
 # ---------------------------------------------------------------------------
@@ -131,7 +135,11 @@ def colour_mats():
             MS.GOLD: (0.90, 0.70, 0.22), MS.BAUBLE_RED: (0.85, 0.10, 0.12), MS.FAIRY: (1.0, 0.85, 0.40),
             MS.FLAME: (1.0, 0.72, 0.28), MS.FELT: (0.82, 0.12, 0.14),
             MS.CHERRY_FILL: (0.72, 0.05, 0.10), MS.ICING_GREEN: (0.32, 0.62, 0.28),
-            MS.COTTON: (0.64, 0.82, 0.96)}      # the daughter's top: light sky blue
+            MS.COTTON: (0.64, 0.82, 0.96),      # the daughter's top: light sky blue
+            # the spare room: the present's paper and ribbon, the Christmas clothes and presents, and blood -
+            # bright where it is fresh on the wall, nearly black-red where it seeps from the present
+            MS.GIFTWRAP: (0.20, 0.52, 0.30), MS.RIBBON: (0.90, 0.70, 0.22), MS.GIFT_RED: (0.84, 0.12, 0.14),
+            MS.XMAS_JUMPER: (0.82, 0.12, 0.14), MS.BLOOD: (0.86, 0.04, 0.06), MS.GORE: (0.40, 0.03, 0.05)}
 
 
 def colour_pencil(rgbo, grey, rgb, mat, strokes, px):
@@ -210,7 +218,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     coloured = np.isin(mat, list(colour_mats()))
     drawn = subject | coloured  # given a firm pencil outline
     skin = np.isin(mat, list(CHAR_SKIN))
-    hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR])
+    hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR, MS.MAN_HAIR])
     fair = mat == MS.STRAW_HAIR          # fair hair: drawn lightly, a few fine strands, bright where it shines
     knit = mat == MS.KNIT
     eye = mat == MS.EYE

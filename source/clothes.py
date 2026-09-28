@@ -92,7 +92,8 @@ def top(b, pose, J, spec):
     f[sl] = rig.smax(f[sl], -(region_cached((5,))[sl] - 0.02), 0.004)            # nothing on her head
     # the hem, round her hips
     j1 = min(int((hem + 0.02 - lo[1]) / vox) + 1, n[1])
-    f[:, :j1] = rig.smax(f[:, :j1], hem - axes[1][:j1][None, :, None], 0.006)
+    # (only the body of the top: arms hanging down past the hips keep their sleeves)
+    f[:, :j1] = np.where(part[:, :j1] == 0, rig.smax(f[:, :j1], hem - axes[1][:j1][None, :, None], 0.006), f[:, :j1])
     # the collar: take the cloth off her neck and head, then the collar itself
     # (the collar follows the upper body, not the neck: looking down tips the neck forward, and the cut would
     # then take away arms folded in front)

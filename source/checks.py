@@ -35,6 +35,13 @@ def run(scene, verbose=True):
                 covered.append(ok_i and d[tuple(i)] < 0)
             check(all(covered), f'{name}: {"right" if s == "R" else "left"} sleeve covers the forearm',
                   'covered' if all(covered) else 'bare in places')
+    if 'set' in fr:
+        check_set(scene, check)
+        if verbose:
+            print('\n'.join(report), flush=True)
+        if problems:
+            raise RuntimeError('scene checks failed:\n  ' + '\n  '.join(problems))
+        return report
     if st is not None:
         check_mother(scene, check)
     if 'daughter' in scene['chars']:
@@ -168,3 +175,24 @@ if __name__ == '__main__':
     import shot
     fr = shot.load_recipe(sys.argv[1]).frame(float(sys.argv[2]) if len(sys.argv) > 2 else 0.0)
     run(shot.build(fr))
+
+
+def check_set(scene, check):
+    """Checks for shots on other sets: the kneeling man's knees rest on the floor and, when his forehead is
+    meant to be against a wall, it touches it (not in it, not short of it)."""
+    ms = scene['chars'].get('man')
+    if ms is None:
+        return
+    import man
+    b = man.body()
+    V = ms['verts']
+    legs = [b.piece_names.index(n) for n in ('shin.L', 'shin.R', 'foot.L', 'foot.R')]
+    low = V[np.isin(np.arange(len(V)), b.skin_idx) & np.isin(b.label, legs), 1].min()
+    check(0.0 < low < 0.008, 'man: knees and shins rest on the floor', f'lowest skin {low * 1000:.1f} mm up')
+    wz = scene['frame']['man'].get('wall_z')
+    if wz is not None:
+        f = man.forehead(ms)
+        gap = f[2] - wz
+        check(0.0 < gap < 0.006, 'man: forehead meets the wall', f'{gap * 1000:.1f} mm from it')
+        up = man.forehead_rest_height(ms)
+        check(up > 0.0, 'man: it is his forehead that meets the wall', f'{up * 1000:.0f} mm above his eyes')

@@ -819,6 +819,56 @@ def texture(tex, px, py, pz, nx, ny, nz, mat, M, SP):
         grout = 1.0 - smoothstep(0.004, 0.010, min(min(fu, 1.0 - fu), min(fv, 1.0 - fv)))
         k = (1.0 - 0.62 * dark) * (1.0 - 0.25 * grout)
         r, g, b = r * k, g * k * 0.99, b * k * 0.97
+    elif tex == 16:  # varnished oak floorboards running away from the door (along z): 14 cm boards, staggered
+        bw = 0.14    # butt joints, each board its own shade, grain along its length
+        u = px / bw
+        i = math.floor(u)
+        fu = u - i
+        off = hash1(i * 7.13) * 2.3
+        v = (pz + off) / 2.3
+        j = math.floor(v)
+        fv = v - j
+        tone = 0.86 + 0.22 * hash1(i * 3.1 + j * 11.7)
+        grain = 0.5 + 0.5 * math.sin(fu * 60.0 + 5.0 * fbm3(px * 5.0, 0.0, pz * 1.5, 3))
+        seam = 1.0 - smoothstep(0.004, 0.02, min(fu, 1.0 - fu))
+        butt = 1.0 - smoothstep(0.0015, 0.004, min(fv, 1.0 - fv) * 2.3)
+        k = tone * (0.88 + 0.12 * grain) * (1.0 - 0.45 * max(seam, butt))
+        r, g, b = r * k, g * k, b * k
+    elif tex == 17:  # an old Persian rug (centre SP[140], SP[141], half sizes SP[142], SP[143]): a dark border
+        ux = (px - SP[140]) / SP[142]      # of bands, a field of small lozenges, a medallion in the middle
+        uz = (pz - SP[141]) / SP[143]
+        e = max(abs(ux), abs(uz) * SP[143] / SP[142])
+        edge = min(1.0 - abs(ux), 1.0 - abs(uz)) * SP[143]
+        k = 1.0
+        if edge < 0.22:
+            band = math.sin(edge * 90.0)
+            k = 0.55 + 0.25 * band + 0.15 * vnoise1(px * 60.0 + pz * 60.0)
+        else:
+            m = abs(ux) * 1.3 + abs(uz) * 1.6
+            if m < 0.55:
+                k = 0.45 + 0.4 * (0.5 + 0.5 * math.sin(m * 40.0))
+            else:
+                a1 = (px + pz) / 0.09
+                a2 = (px - pz) / 0.09
+                f1, f2 = a1 - math.floor(a1), a2 - math.floor(a2)
+                loz = 1.0 - smoothstep(0.08, 0.14, min(min(f1, 1.0 - f1), min(f2, 1.0 - f2)))
+                k = 0.78 - 0.25 * loz
+        k *= 0.92 + 0.12 * vnoise3(px * 300.0, 0.0, pz * 300.0)
+        r, g, b = r * k, g * k, b * k
+    elif tex == 18:  # wrapping paper: little gold stars on green (a lattice of dots in space)
+        s = 0.065
+        cx = (math.floor(px / s) + 0.5) * s
+        cy = (math.floor(py / s) + 0.5) * s
+        cz = (math.floor(pz / s) + 0.5) * s
+        dd = math.sqrt((px - cx) ** 2 + (py - cy) ** 2 + (pz - cz) ** 2)
+        dot = 1.0 - smoothstep(0.009, 0.013, dd)
+        r = r + (0.85 - r) * dot
+        g = g + (0.70 - g) * dot
+        b = b + (0.30 - b) * dot
+    elif tex == 19:  # blood: wet, a little darker where it pools
+        s = fbm3(px * 60.0, py * 60.0, pz * 60.0, 3)
+        k = 0.8 + 0.4 * s
+        r, g, b = r * k, g * k, b * k
     return r, g, b, spec_mul
 
 

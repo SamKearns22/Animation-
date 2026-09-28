@@ -47,7 +47,10 @@ def load_recipe(path):
 def build(frame):
     """The whole scene for one frame. Returns a dict with the renderer's inputs and what the checks and the
     drawing need to know. A frame may have the mother, the daughter or both; with pov=True the camera is the
-    mother's eyes (her head and hair are left out)."""
+    mother's eyes (her head and hair are left out). A frame naming another `set` (e.g. 'spare_room') is built
+    by build_set."""
+    if 'set' in frame:
+        return build_set(frame)
     t0 = time.time()
     b = S.Builder()
     chars = {}
@@ -88,13 +91,49 @@ def build(frame):
                 moving=np.arange(n_moving), static=np.arange(n_moving, len(G)))
 
 
+def build_set(frame):
+    """A frame on another set than the kitchen: the set module (its build_environment, shadow_maps and
+    light_rows), the characters in it (the man: man.py) and the recipe's dressing - functions f(b, chars)
+    that add what happened there."""
+    import importlib
+    t0 = time.time()
+    setmod = importlib.import_module(frame['set'])
+    b = S.Builder()
+    chars = {}
+    if 'man' in frame:
+        import man
+        sm = man.prepare(man.solve(frame['man']))
+        sm['top'] = sm['shirt']
+        man.build(b, sm)
+        chars['man'] = sm
+    n_moving = len(b.groups)
+    for dress in frame.get('dressing', ()):
+        dress(b, chars)
+    SP = new_params()
+    lamps = setmod.build_environment(b, SP)
+    P, G = b.build()
+    GB = b.grid_buffer()
+    print(f'  built in {time.time() - t0:.0f}s: {len(P)} shapes in {len(G)} objects', flush=True)
+    return dict(frame=frame, state=None, chars=chars, P=P, G=G, GB=GB, SP=SP, flames=lamps, setmod=setmod,
+                group_names=[g['name'] for g in b.groups],
+                moving=np.arange(n_moving), static=np.arange(n_moving, len(G)))
+
+
+def set_of(scene):
+    return scene.get('setmod', kitchen)
+
+
+def shadow_list(scene):
+    fr = scene['frame']
+    return set_of(scene).shadow_maps(fr['shadow_focus']) if 'shadow_focus' in fr else set_of(scene).shadow_maps()
+
+
 def shadows(scene, static_maps=None):
     """Shadow maps for a frame. static_maps: the set's own maps (made once per shot with shadows(..., None)
     on the static objects only); the moving objects are then drawn into them."""
     P, G, GB = scene['P'], scene['G'], scene['GB']
-    focus = scene['frame'].get('shadow_focus', (0.0, 1.25, -0.55))
     sm = S.ShadowMaps()
-    for i, (L, c, ext, res, tan, bias) in enumerate(kitchen.shadow_maps(focus)):
+    for i, (L, c, ext, res, tan, bias) in enumerate(shadow_list(scene)):
         if static_maps is None:
             sm.add(P, G, GB, L, c, ext, res, tan, bias=bias)
         else:
@@ -112,8 +151,7 @@ def static_shadows(scene):
     P, G, GB = scene['P'], scene['G'], scene['GB']
     st = scene['static']
     rows = np.concatenate([P[int(G[i, 4]):int(G[i, 5])].ravel() for i in st])
-    h = hashlib.sha1(rows.tobytes() + G[st].tobytes() + repr(kitchen.shadow_maps(
-        scene['frame'].get('shadow_focus', (0.0, 1.25, -0.55)))).encode()).hexdigest()[:12]
+    h = hashlib.sha1(rows.tobytes() + G[st].tobytes() + repr(shadow_list(scene)).encode()).hexdigest()[:12]
     path = os.path.join(CACHE_DIR, f'setshadows_{h}.pkl')
     if os.path.exists(path):
         with open(path, 'rb') as f:
@@ -127,9 +165,8 @@ def static_shadows(scene):
 
 def _static_shadows(scene):
     P, G, GB = scene['P'], scene['G'], scene['GB']
-    focus = scene['frame'].get('shadow_focus', (0.0, 1.25, -0.55))
     maps = []
-    for (L, c, ext, res, tan, bias) in kitchen.shadow_maps(focus):
+    for (L, c, ext, res, tan, bias) in shadow_list(scene):
         sm = S.ShadowMaps()
         sm.add(P, G[scene['static']], GB, L, c, ext, res, tan, bias=bias)
         maps.append(sm.maps[0])
@@ -220,6 +257,8 @@ def drawing_passes(scene, res, cam, W, H):
     hairdir = np.zeros(pos.shape, np.float16)
     hairdir[..., 1] = -1
     for name, st in scene['chars'].items():
+        if name not in ('mother', 'daughter'):
+            continue
         hm = MT.HAIR if name == 'mother' else MT.STRAW_HAIR
         hair = mat == hm
         if not hair.any():
@@ -259,12 +298,13 @@ def drawing_passes(scene, res, cam, W, H):
                 best = np.where(sel, dist, best)
         knitdir[knit] = dirs
     fr = scene['frame']
-    cl = fr['cleaver']
+    cl = fr.get('cleaver')
     if 'focus' in fr:
         focus = fr['focus']
     else:
         focus = [st['head'][0], cl.o + cl.R @ np.array([0.03, 0.04, 0]), st['hands'][1][0]]
-    return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float), bladedir=unit(cl.x))
+    return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float),
+                bladedir=unit(cl.x) if cl is not None else np.array([1.0, 0, 0]))
 
 
 def render(scene, W, H, sm=None, crop=None, verbose=True):
@@ -273,7 +313,7 @@ def render(scene, W, H, sm=None, crop=None, verbose=True):
         sm = shadows(scene)
         print(f'  shadows {time.time() - t0:.0f}s', flush=True)
     SM, SMP = sm.arrays()
-    Lt = kitchen.light_rows(scene['flames'])
+    Lt = set_of(scene).light_rows(scene['flames'])
     cam = camera(scene['frame'], W, H)
     res = S.render_image(W, H, cam, scene['P'], scene['G'], mat_table(), Lt, scene['SP'], scene['GB'], SM, SMP,
                          bands=8, crop=crop, verbose=verbose)
@@ -318,7 +358,7 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         t1 = time.time()
         sm = shadows(scene, static)
         SM, SMP = sm.arrays()
-        Lt = kitchen.light_rows(scene['flames'])
+        Lt = set_of(scene).light_rows(scene['flames'])
         print(f'  shadows {time.time() - t1:.0f}s', flush=True)
         cam = camera(scene['frame'], W, H)
         # a quick quarter-size render first: where does this frame differ from the first?
@@ -370,7 +410,7 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
     print(f'{len(times)} drawings in {time.time() - t_all:.0f}s', flush=True)
 
 
-def still(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, t=0.0):
+def still(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, t=0.0, draw=True):
     import checks
     from PIL import Image
     import graphite
@@ -383,7 +423,8 @@ def still(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, t=0.0):
     passes = os.path.join(out_dir, 'passes.npz')
     save_passes(passes, res, cam, scene, W, H)
     Image.fromarray((S.tonemap(res['rgb'], 1.05) * 255).astype(np.uint8)).save(os.path.join(out_dir, 'render.png'))
-    graphite.draw(passes, os.path.join(out_dir, 'draw.png'))
+    if draw:
+        graphite.draw(passes, os.path.join(out_dir, 'draw.png'))
     print(f'done in {time.time() - t0:.0f}s', flush=True)
 
 
@@ -393,3 +434,5 @@ if __name__ == '__main__':
         sequence(a[1], a[2], *(int(v) for v in a[3:5]))
     if a[0] == 'still':
         still(a[1], a[2], *(int(v) for v in a[3:5]), *(float(v) for v in a[5:6]))
+    if a[0] == 'animatic':      # a quick look: quarter size, render only (no pencil drawing)
+        still(a[1], a[2], W_VIDEO // 4, H_VIDEO // 4, *(float(v) for v in a[3:4]), draw=False)
