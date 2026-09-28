@@ -20,7 +20,7 @@ import spare_room as R
 from cache import cached
 from materials import (BLOOD, GORE, GIFTWRAP, RIBBON, GIFT_RED, XMAS_JUMPER, LINEN, GLASS, LEATHER, SHELL,
                        BRASS, FAIRY, BLACKMETAL, PAPER, FELT, FUR, DARKWOOD, COAT, CLOTH_LIGHT, CLOTH_MID, DENIM,
-                       PLASTIC, SCREEN, XMAS_GREEN_KNIT, GOLD, WOOD, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, LIGHT_YELLOW,
+                       PLASTIC, SCREEN, XMAS_GREEN_KNIT, DIRTY_LINEN, GOLD, WOOD, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, LIGHT_YELLOW,
                        LIGHT_ORANGE, DEAD_RED, DEAD_GREEN, DEAD_BLUE, DEAD_YELLOW, DEAD_ORANGE)
 from rig import smin, smax, robust_distance
 from numba import njit
@@ -417,21 +417,17 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.group('bow', margin=0.03)
     yt = top_of(paper, 0.46, 0.04)
     bc = np.array([PRESENT_O[0] + 0.46, yt - 0.004, PRESENT_O[2] + 0.04])
-    bow(b, bc, 3.2, 12, RIBBON, squash=0.3)
+    bow(b, bc, 3.0, 12, RIBBON, squash=1.0)
     for off in ((0.03, 0.05, 0.02), (-0.05, 0.03, 0.04), (0.0, 0.04, -0.03)):
         b.ellipsoid(bc + np.array(off), (0.012, 0.008, 0.014), GORE, op=UNION)
-    # a Christmas card in its red envelope, propped against the present's side on the sheet
+    # a Christmas card in its envelope, propped against the present's side on the sheet
     b.group('card', margin=0.02)
     u = 0.72
     w = side_of(paper, u, 0.08)
     base = np.array([PRESENT_O[0] + u, R.BED['top'] + 0.004, PRESENT_O[2] + w + 0.035])
     Rc = rot(-8) @ rot(0, -18, 0)                        # leaning back against the paper
-    b.box(base + Rc @ np.array([0, 0.058, 0]), (0.085, 0.058, 0.0025), GIFT_RED, op=UNION, r=0.001, R=Rc)
-    flap = base + Rc @ np.array([0, 0.116, -0.003])
-    for sg in (-1, 1):                                  # the flap's edges
-        b.capsule(flap + Rc @ np.array([sg * 0.085, 0, 0]), flap + Rc @ np.array([0, -0.045, 0]), 0.0012, DEAD_RED, op=UNION)
-    b.box(base + Rc @ np.array([0.01, 0.05, 0.003]), (0.045, 0.018, 0.0008), PAPER, op=UNION, R=Rc)    # an address label
-    b.ellipsoid(base + Rc @ np.array([-0.07, 0.01, 0.003]), (0.02, 0.012, 0.002), GORE, op=UNION, R=Rc)  # soaked corner
+    # plain, white and clean - as if set down gently, afterwards
+    b.box(base + Rc @ np.array([0, 0.058, 0]), (0.085, 0.058, 0.0025), PAPER, op=UNION, r=0.001, R=Rc)
     b.group('tape', margin=0.01)
     ty = top_of(paper, 1.45, 0.0)
     b.box((PRESENT_O[0] + 1.45, ty - 0.004, PRESENT_O[2]), (0.02, 0.003, 0.16), PAPER, op=UNION, R=rot(12, 0, 0))
@@ -453,7 +449,7 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*cached('wallblood', wall_blood, deps(), tuple(np.round(r_centre, 4)), tuple(np.round(contact, 4))),
            BLOOD, op=UNION)
     b.group('sheet_heap', margin=0.03)
-    b.grid(*cached('sheetheap', sheet_heap, deps()), LINEN, op=UNION)
+    b.grid(*cached('sheetheap', sheet_heap, deps()), DIRTY_LINEN, op=UNION)
 
     def fixed(sb):
         import man
@@ -586,7 +582,7 @@ class Floor:
             _occupied(P, G, GB, self.X0, self.Z0, self.CELL, i0, i1, k0, k1, self.HEIGHTS, out)
         return out
 
-    def place(self, b, name, make, x, z, reach=0.7):
+    def place(self, b, name, make, x, z, reach=0.9):
         """Put make(builder, x, z) down at (x, z), or as near as it fits. Returns where, or None."""
         grown = ndimage.binary_dilation(self.occ, iterations=1)       # and not touching, either
         tries = [(0.0, 0.0)] + [(r * np.cos(a), r * np.sin(a)) for r in np.arange(0.05, reach, 0.05)
@@ -623,7 +619,7 @@ def wreckage(b, fixed):
                  suitcase(sb, np.random.default_rng(seed), (x, 0.0, z), yaw, state, mat=mat), x, z)
     # the chest's drawers torn out and thrown down, one upside down
     b.group('drawers', margin=0.03)
-    for (x, z), yaw, roll in (((1.20, -1.75), 35, 0), ((0.75, -3.65), -20, 180), ((1.45, -3.40), 70, 12)):
+    for (x, z), yaw, roll in (((1.20, -1.75), 35, 0), ((1.45, -3.40), 70, 180)):
         def drawer(sb, x, z, yaw=yaw, roll=roll):
             Rd = rot(yaw, 0, roll)
             c = np.array([x, 0.10, z])
@@ -639,7 +635,7 @@ def wreckage(b, fixed):
         sb.torus(hc + [0, 0.12, 0.02], 0.10, 0.012, LEATHER, op=UNION, R=rot(-17, 0, 0) @ rot(0, 90, 0))
     fl.place(b, 'holdall', holdall, 1.35, -4.10)
     b.group('pillow', margin=0.02)
-    fl.place(b, 'pillow', lambda sb, x, z: sb.ellipsoid((x, 0.07 + floor_y((x, 0, z)), z), (0.36, 0.07, 0.22), LINEN,
+    fl.place(b, 'pillow', lambda sb, x, z: sb.ellipsoid((x, 0.07 + floor_y((x, 0, z)), z), (0.36, 0.07, 0.22), DIRTY_LINEN,
                                                          op=UNION, R=rot(25)), -0.15, -3.2)
     b.group('lamp', margin=0.02)
 
@@ -674,7 +670,7 @@ def wreckage(b, fixed):
         rs = np.random.default_rng(100 + n)
         size, yaw = rs.uniform(0.8, 1.0), rs.uniform(0, 360)
         fl.place(b, kind, lambda sb, x, z, kind=kind, mat=mat, n=n, size=size, yaw=yaw:
-                 garment(sb, np.random.default_rng(200 + n), (x, 0, z), kind, mat, yaw=yaw, size=size), x, z, reach=0.5)
+                 garment(sb, np.random.default_rng(200 + n), (x, 0, z), kind, mat, yaw=yaw, size=size), x, z, reach=1.0)
     # a Santa hat, knocked across the floor
 
     def santa_hat(sb, x, z):
@@ -709,7 +705,7 @@ def wreckage(b, fixed):
             if not fl.free(c[0], c[2], L / 2 + 0.02):
                 break
             c[1] = floor_y(c) + 0.004 + 0.006 * rng.random()
-            b.box(c, (L / 2 + 0.01, 0.0025, wdt / 2), LINEN, op=UNION, r=0.002, R=rot(-yaw, rng.normal(0, 3), rng.normal(0, 3)))
+            b.box(c, (L / 2 + 0.01, 0.0025, wdt / 2), DIRTY_LINEN, op=UNION, r=0.002, R=rot(-yaw, rng.normal(0, 3), rng.normal(0, 3)))
             p = p + dirv * L
     # --- broken glass: shards everywhere there is bare floor, thickest under the smashed mirror
     b.group('glass', margin=0.02)

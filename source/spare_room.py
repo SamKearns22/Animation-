@@ -21,10 +21,11 @@ HALF_W = 2.4                 # the side walls at x = -2.4 and 2.4
 BACK_Z = -5.2
 EAVES, RIDGE = 2.45, 3.90    # the walls rise to the eaves; the ceiling slopes up to the ridge
 DADO = 0.86
+DOOR = (1.30, 2.15)          # the doorway we look in through (width, height): a wide 18th century doorcase
 BED = dict(x0=-2.36, x1=-0.30, z0=-3.65, z1=-2.05, top=0.66)      # the mattress
 ENSUITE = (1.25, 2.15)       # the doorway to the en-suite, in the back wall (x from, to)
-WINDOW = dict(z=-3.55, w=1.00, y0=0.80, y1=2.20)                  # in the right-hand wall
-DRESSER_Z = -2.25          # the chest of drawers, on the right wall nearer the door than the window
+WINDOW = dict(z=-4.20, w=1.00, y0=0.80, y1=2.20)                  # in the right-hand wall
+DRESSER_Z = -2.90          # the chest of drawers, on the right wall nearer the door than the window
 RUG_AREA = dict(cx=0.30, cz=-2.75, hx=1.35, hz=0.95)
 
 
@@ -54,6 +55,7 @@ def wainscot(b, axis, fixed, a0, a1, face, skip=()):
 
 def build_environment(b, SP):
     b.set_frame((0, 0, 0), None)
+    SP[60], SP[61] = 0.12, 0.035          # low light: little fill, the room lit mostly by the window's last sun
     W = HALF_W
     # --- floor, walls, the sloping ceiling
     b.group('floor', margin=0.03)
@@ -64,7 +66,17 @@ def build_environment(b, SP):
         b.box((sx * (W + 0.06), 1.6, zc), (0.06, 1.6, zh), WALL, op=UNION)
     b.box((0, 2.0, BACK_Z - 0.06), (W + 0.12, 2.0, 0.06), WALL, op=UNION)       # the gable end, bare
     b.box((0, 2.0, 0.08), (W + 0.12, 2.0, 0.08), WALL, op=UNION)                # the front, with the doorway
-    b.box((0, 1.07, 0.08), (0.52, 1.07, 0.2), WALL, op=SUB)
+    b.box((0, DOOR[1] / 2, 0.08), (DOOR[0] / 2, DOOR[1] / 2, 0.2), WALL, op=SUB)
+    # the landing we look in from: unlit, its floor, the walls either side and the ceiling
+    b.group('landing', margin=0.05)
+    b.box((0, -0.05, 1.6), (1.6, 0.05, 1.45), BOARDS, op=UNION)
+    b.box((0, 2.55, 1.6), (1.6, 0.05, 1.45), CEILING, op=UNION)
+    for sx in (-1, 1):
+        b.box((sx * 1.65, 1.3, 1.6), (0.05, 1.3, 1.45), WALL, op=UNION)
+    # the doorcase on the landing side: a moulded architrave round the opening
+    for sx in (-1, 1):
+        b.box((sx * (DOOR[0] / 2 + 0.06), DOOR[1] / 2, 0.175), (0.07, DOOR[1] / 2 + 0.07, 0.018), PAINT, op=UNION, r=0.006)
+    b.box((0, DOOR[1] + 0.07, 0.175), (DOOR[0] / 2 + 0.13, 0.07, 0.018), PAINT, op=UNION, r=0.006)
     b.box((sum(ENSUITE) / 2, 1.07, BACK_Z - 0.06), ((ENSUITE[1] - ENSUITE[0]) / 2, 1.07, 0.2), WALL, op=SUB)
     b.box((W + 0.06, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']),
           (0.3, (WINDOW['y1'] - WINDOW['y0']) / 2, WINDOW['w'] / 2), WALL, op=SUB)
@@ -107,17 +119,7 @@ def build_environment(b, SP):
     b.group('rug', margin=0.02)
     b.box((RUG_AREA['cx'], 0.006, RUG_AREA['cz']), (RUG_AREA['hx'], 0.006, RUG_AREA['hz']), RUG, op=UNION, r=0.004)
     SP[140:144] = (RUG_AREA['cx'], RUG_AREA['cz'], RUG_AREA['hx'], RUG_AREA['hz'])
-    # the lantern hanging from the ridge beam, lit
-    b.group('lantern', margin=0.03)
-    lc = np.array([0.0, 2.55, -2.65])
-    b.capsule(lc + [0, 0.18, 0], (0, RIDGE - 0.2, -2.65), 0.005, BLACKMETAL, op=UNION)
-    for dx, dz in ((-1, -1), (-1, 1), (1, -1), (1, 1)):
-        b.capsule(lc + [0.11 * dx, -0.16, 0.11 * dz], lc + [0.11 * dx, 0.14, 0.11 * dz], 0.008, BLACKMETAL,
-                  op=UNION)
-    b.cone(lc + [0, 0.14, 0], lc + [0, 0.22, 0], 0.17, 0.03, BLACKMETAL, op=UNION)
-    b.box(lc + [0, -0.17, 0], (0.13, 0.012, 0.13), BLACKMETAL, op=UNION)
-    b.sphere(lc, 0.04, BULB, op=UNION)
-    return [lc]
+    return []
 
 
 
@@ -254,7 +256,7 @@ def desk(b):
         b.capsule(c + [0.28, 0.03, dz], c + [0.72, 0.05, dz], 0.017, DARKWOOD, op=UNION)
 
 
-KEY = np.array([0.80, 0.52, 0.10]) / np.linalg.norm([0.80, 0.52, 0.10])    # grey daylight through the window
+KEY = np.array([0.92, 0.30, -0.25]) / np.linalg.norm([0.92, 0.30, -0.25])  # low winter sun through the window, on the bed
 FILL = np.array([-0.25, 0.35, -0.90]) / np.linalg.norm([-0.25, 0.35, -0.90])  # from the bright en-suite
 
 
@@ -266,10 +268,15 @@ def shadow_maps(focus=(-0.4, 0.9, -3.2)):
 
 
 def light_rows(lamps):
-    rows = [[0, *KEY, 1.10, 1.12, 1.18, 2, 0, 0, 0, 2],
-            [0, *FILL, 0.25, 0.26, 0.28, 2, 0, 0, 2, 2]]
+    """Low light: the last of the winter sun through the window, falling across the bed; a dim cold fill;
+    the bright en-suite; the glow of the fairy lights along the top of the back wall."""
+    rows = [[0, *KEY, 1.25, 1.12, 0.98, 2, 0, 0, 0, 2],
+            [0, *FILL, 0.10, 0.11, 0.14, 2, 0, 0, 2, 2]]
     for p in lamps:
         rows.append([1, *p, 0.55, 0.45, 0.32, 0, 0, 4.0, 0, 0])
     e = sum(ENSUITE) / 2
-    rows.append([1, e, 2.0, BACK_Z - 1.0, 0.9, 0.9, 0.92, 0, 0, 3.0, 0, 0])
+    rows.append([1, e, 2.0, BACK_Z - 1.0, 1.0, 1.0, 1.02, 0, 0, 3.0, 0, 0])
+    for x, c in ((-1.4, (0.10, 0.05, 0.04)), (-0.2, (0.05, 0.09, 0.05)), (1.0, (0.05, 0.06, 0.11)),
+                 (2.2, (0.10, 0.08, 0.03)), (-2.0, (0.09, 0.05, 0.03))):
+        rows.append([1, x, EAVES - 0.3, BACK_Z + 0.25, *c, 0, 0, 1.2, 0, 0])
     return np.array(rows, dtype=np.float64)

@@ -1101,10 +1101,11 @@ def render(W, H, cam, P, G, GB, M, Lt, SP, SM, SMP, rgb, depth, normal, matid, p
     rx, ry, rz = cam[6], cam[7], cam[8]
     ux, uy, uz = cam[9], cam[10], cam[11]
     th, aspect = cam[12], cam[13]
+    sh = cam[14] if cam.shape[0] > 14 else 0.0
     for j in prange(rows0, rows1):
         for i in range(cols0, cols1):
             sx = (2.0 * (i + 0.5) / W - 1.0) * th * aspect
-            sy = (1.0 - 2.0 * (j + 0.5) / H) * th
+            sy = (1.0 - 2.0 * (j + 0.5) / H) * th + sh
             dx = fx + sx * rx + sy * ux
             dy = fy + sx * ry + sy * uy
             dz = fz + sx * rz + sy * uz
@@ -1130,7 +1131,9 @@ def render(W, H, cam, P, G, GB, M, Lt, SP, SM, SMP, rgb, depth, normal, matid, p
             glass[j, i] = seen
 
 
-def camera(pos, target, vfov_deg, aspect, roll=0.0):
+def camera(pos, target, vfov_deg, aspect, roll=0.0, shift=0.0):
+    """shift: a shift lens - the frame moved up (+) or down (-) by that fraction of its half height, the
+    camera still pointing at the target (so verticals stay straight when it is level)."""
     pos, target = np.asarray(pos, float), np.asarray(target, float)
     f = target - pos
     f /= np.linalg.norm(f)
@@ -1140,7 +1143,8 @@ def camera(pos, target, vfov_deg, aspect, roll=0.0):
     if roll:
         c, s = np.cos(np.radians(roll)), np.sin(np.radians(roll))
         r, u = r * c + u * s, u * c - r * s
-    return np.concatenate([pos, f, r, u, [np.tan(np.radians(vfov_deg) / 2), aspect]])
+    th = np.tan(np.radians(vfov_deg) / 2)
+    return np.concatenate([pos, f, r, u, [th, aspect, shift * th]])
 
 
 def render_image(W, H, cam, P, G, M, Lt, SP, GB=None, SM=None, SMP=None, bands=8, verbose=True, crop=None):

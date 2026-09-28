@@ -176,7 +176,7 @@ def _static_shadows(scene):
 
 def camera(frame, W, H):
     c = frame['camera']
-    return S.camera(tuple(c['pos']), tuple(c['target']), c['vfov'], W / H)
+    return S.camera(tuple(c['pos']), tuple(c['target']), c['vfov'], W / H, shift=c.get('shift', 0.0))
 
 
 def project(cam, W, H, p):
@@ -186,7 +186,7 @@ def project(cam, W, H, p):
     d = np.atleast_2d(p) - o
     z = d @ f
     x = (d @ r) / (z * th * aspect)
-    y = (d @ u) / (z * th)
+    y = ((d @ u) / z - (cam[14] if len(cam) > 14 else 0.0)) / th
     return np.stack([(x + 1) * 0.5 * W, (1 - y) * 0.5 * H], 1)
 
 
@@ -304,7 +304,7 @@ def drawing_passes(scene, res, cam, W, H):
         focus = fr['focus']
     else:
         focus = [st['head'][0], cl.o + cl.R @ np.array([0.03, 0.04, 0]), st['hands'][1][0]]
-    return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float),
+    return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float), budget=fr.get('contrast_budget', 0.0),
                 bladedir=unit(cl.x) if cl is not None else np.array([1.0, 0, 0]))
 
 

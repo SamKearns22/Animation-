@@ -25,7 +25,7 @@ PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPL
          MS.PASTRY, MS.CHERRY_FILL, MS.ICING, MS.ICING_GREEN,
          MS.GIFTWRAP, MS.RIBBON, MS.GORE, MS.BLOOD, MS.GIFT_RED, MS.XMAS_JUMPER, MS.LINEN, MS.GLASS, MS.SHELL,
          MS.LEATHER, MS.COAT, MS.CLOTH_LIGHT, MS.CLOTH_MID, MS.DENIM, MS.PLASTIC, MS.SCREEN,
-         MS.XMAS_GREEN_KNIT}
+         MS.XMAS_GREEN_KNIT, MS.DIRTY_LINEN}
 
 
 # ---------------------------------------------------------------------------
@@ -109,7 +109,7 @@ def project_dirs(dir3, pos, cam, W, H):
         d = p - o
         z = d @ f
         x = (d @ r) / (z * th * aspect)
-        y = (d @ u) / (z * th)
+        y = ((d @ u) / z - (cam[14] if len(cam) > 14 else 0.0)) / th
         return (x + 1) * 0.5 * W, (1 - y) * 0.5 * H
 
     x0, y0 = proj(pos)
@@ -180,7 +180,7 @@ def focus_map(cam, W, H, fx, fy, points):
         d = p - o
         z = d @ f
         x = ((d @ r) / (z * th * aspect) + 1) * 0.5
-        y = (1 - (d @ u) / (z * th)) * 0.5
+        y = (1 - ((d @ u) / z - (cam[14] if len(cam) > 14 else 0.0)) / th) * 0.5
         dist = np.sqrt(((fx - x) * aspect) ** 2 + (fy - y) ** 2)
         out = np.maximum(out, np.exp(-(dist / rad) ** 2))
     return out
@@ -253,6 +253,11 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     T = T - 0.14 * cav * skin - 0.22 * cav * (char & ~skin) - 0.10 * cav * props
     # local contrast: bring out the modelling of forms
     T = np.clip(T + 0.45 * (T - blur(T, 18 * px)) * (subject + 0.4 * bg), 0, 1)
+    # a contrast budget (a shot may ask for it): the full range, bare-paper whites and the darkest darks only
+    # where the eye should go; everything else held in the middle greys, darker and quieter
+    budget = float(Z['budget']) if 'budget' in Z.files else 0.0
+    quiet = budget * (1 - foc) * ~coloured
+    T = T + (0.40 + (T - 0.40) * 0.45 - T) * quiet
     dark = 1 - T
 
     # --- region labels (strokes stop at these edges)
@@ -360,7 +365,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     wt = np.where(subject | np.roll(subject, 2, 1) | np.roll(subject, -2, 1), 0.85,
                   np.where(drawn | np.roll(drawn, 2, 1) | np.roll(drawn, -2, 1), 0.65, 0.42 * (1 - 0.55 * recede)))
     # more line where the eye should go, less far from it
-    wt = wt * (0.72 + 0.40 * foc)
+    wt = wt * (0.72 + 0.40 * foc) * (1 - 0.45 * quiet)
     lines = blur(lines, 0.6 * px) * wt
     # pressure varies along the line
     press = 0.75 + 0.35 * nrm(noise(3, 6 * px), 'press')
@@ -377,7 +382,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     detail = dodge * (0.8 * subject + 0.18 * bg)
 
     # --- highlights stay paper: candle flames, bulbs, the glint on the blade, catchlights
-    bright = smoothstep(0.93, 1.0, tone)
+    bright = smoothstep(0.93, 1.0, tone) * (1 - 0.8 * quiet)
 
     # --- put it together on the paper
     tooth = noise(4, 0.6 * px, normal=True) * 0.022

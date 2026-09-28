@@ -107,14 +107,14 @@ DARKWOOD = material((0.30, 0.20, 0.13), spec=0.35, shin=45, refl=0.03, tex=S.T_W
 BEAM = material((0.45, 0.34, 0.24), spec=0.05, shin=10, tex=S.T_TRAY)            # old hand-hewn oak
 GLASS = material((0.80, 0.84, 0.86), spec=1.0, shin=200, refl=0.35)             # broken glass
 LEATHER = material((0.22, 0.17, 0.13), spec=0.3, shin=30)                         # the holdall
-SHELL = material((0.55, 0.56, 0.58), spec=0.5, shin=50, refl=0.03)               # the hard suitcase
+SHELL = material((0.22, 0.22, 0.24), spec=0.5, shin=50, refl=0.03)               # the hard suitcase
 SOCK = material((0.20, 0.20, 0.22), wrap=0.3)
 BRASS = material((0.72, 0.58, 0.32), spec=0.8, shin=60, refl=0.1)
 SKY = material((1.0, 1.0, 1.0), emit=1.5)                                          # a white winter sky
 TILE_W = material((0.95, 0.95, 0.94), spec=0.5, shin=80, refl=0.06)             # the en-suite's glazed tiles
 COAT = material((0.16, 0.16, 0.18), wrap=0.3, tex=S.T_KNIT)                       # a dark wool coat, flung down
 # clothes thrown from the suitcases (graphite), the things on the dresser
-CLOTH_LIGHT = material((0.78, 0.76, 0.72), wrap=0.35, tex=S.T_KNIT)
+CLOTH_LIGHT = material((0.52, 0.50, 0.47), wrap=0.35, tex=S.T_KNIT)
 CLOTH_MID = material((0.50, 0.50, 0.52), wrap=0.3, tex=S.T_KNIT)
 DENIM = material((0.30, 0.34, 0.42), wrap=0.3, tex=S.T_KNIT)
 PLASTIC = material((0.85, 0.85, 0.84), spec=0.5, shin=60)
@@ -131,3 +131,4 @@ DEAD_GREEN = material((0.12, 0.35, 0.15), spec=0.8, shin=90)
 DEAD_BLUE = material((0.12, 0.18, 0.40), spec=0.8, shin=90)
 DEAD_YELLOW = material((0.45, 0.38, 0.12), spec=0.8, shin=90)
 DEAD_ORANGE = material((0.45, 0.25, 0.08), spec=0.8, shin=90)
+DIRTY_LINEN = material((0.56, 0.54, 0.50), spec=0.02, shin=6, wrap=0.35)          # sheets and pillows on the floor
