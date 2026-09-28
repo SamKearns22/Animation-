@@ -33,7 +33,7 @@ def OPENINGS():
     """The middle of each opening in the walls, which must stay open (see checks.py)."""
     return [('the doorway', (0.0, DOOR[1] / 2, 0.08)),
             ('the en-suite doorway', (sum(ENSUITE) / 2, 1.0, BACK_Z - 0.06)),
-            ('the window', (HALF_W + 0.06, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']))]
+            ('the window', (HALF_W + 0.03, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']))]    # (in its reveal)
 
 
 def wainscot(b, axis, fixed, a0, a1, face, skip=()):

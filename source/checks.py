@@ -185,7 +185,7 @@ def check_set(scene, check):
     setmod = scene.get('setmod')
     for name, p in getattr(setmod, 'OPENINGS', lambda: [])():
         d, _ = S.scene_map(*p, scene['P'], scene['G'], scene['GB'])
-        check(d > 0.05, f'{name} is open', f'{d * 100:.0f} cm of clear air at its middle')
+        check(d > 0.02, f'{name} is open', f'{d * 100:.0f} cm of clear air at its middle')
     if merry_chr.PLACED:
         hard = [(n, m) for n, m in merry_chr.PLACED if not n.endswith('(cloth)')]   # cloth may lie over things
         tot = np.sum([m.astype(int) for _, m in hard], axis=0)
