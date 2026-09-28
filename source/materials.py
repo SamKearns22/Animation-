@@ -132,3 +132,4 @@ DEAD_BLUE = material((0.12, 0.18, 0.40), spec=0.8, shin=90)
 DEAD_YELLOW = material((0.45, 0.38, 0.12), spec=0.8, shin=90)
 DEAD_ORANGE = material((0.45, 0.25, 0.08), spec=0.8, shin=90)
 DIRTY_LINEN = material((0.56, 0.54, 0.50), spec=0.02, shin=6, wrap=0.35)          # sheets and pillows on the floor
+STONE_DARK = material((0.22, 0.22, 0.23), spec=0.25, shin=40, refl=0.03)          # the en-suite's honed stone wall

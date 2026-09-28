@@ -176,6 +176,17 @@ def ensuite(b):
     for y in np.arange(0.45, 1.3, 0.09):
         b.capsule((xr, y, z1 + 0.35), (xr, y, z1 + 1.0), 0.010, STEEL, op=UNION)
     b.box((xr + 0.02, 1.02, z1 + 0.68), (0.018, 0.28, 0.24), LINEN, op=UNION, r=0.015)
+    # straight ahead through the doorway: a wall of dark honed stone, a floating walnut vanity with a white
+    # basin and a black tap, a large round mirror in a thin black frame, a folded towel
+    ec = (e0 + e1) / 2
+    b.box((ec, 1.3, z1 - 0.03), (0.75, 1.3, 0.03), STONE_DARK, op=UNION)
+    b.box((ec, 0.72, z1 + 0.24), (0.45, 0.10, 0.24), DARKWOOD, op=UNION, r=0.01)
+    b.box((ec, 0.845, z1 + 0.26), (0.20, 0.025, 0.17), CERAMIC, op=UNION, r=0.02)
+    b.capsule((ec, 0.87, z1 + 0.06), (ec, 1.02, z1 + 0.06), 0.012, BLACKMETAL, op=UNION)
+    b.capsule((ec, 1.02, z1 + 0.06), (ec, 1.02, z1 + 0.16), 0.010, BLACKMETAL, op=UNION)
+    b.cylinder((ec, 1.55, z1 + 0.02), 0.012, 0.34, BLACKMETAL, op=UNION, R=rot(0, 90, 0))
+    b.cylinder((ec, 1.55, z1 + 0.035), 0.004, 0.325, GLASS, op=UNION, R=rot(0, 90, 0))
+    b.box((ec + 0.33, 0.84, z1 + 0.30), (0.10, 0.03, 0.14), LINEN, op=UNION, r=0.015)
     # the shower's glass screen (just its polished edge and fixing) and a rain head
     b.box((e1 + 0.2, 1.05, z1 + 0.9), (0.006, 1.0, 0.004), STEEL, op=UNION)
     b.cylinder((e1 + 0.5, 2.2, z1 + 0.35), 0.006, 0.12, STEEL, op=UNION)

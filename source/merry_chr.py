@@ -189,9 +189,14 @@ def bed_grids(vox=0.006):
         (1 + 0.5 * (z < -2.4)) - np.maximum(-2.5 - z, 0)
     tongue2 = 0.02 + 0.015 * noise2(x, z, 0.05, 15) - np.abs(x + 0.78) - np.maximum(-2.5 - z, 0)
     front = z > B['z1'] - 0.02
-    runs = np.full(x.shape, -1.0, np.float32)
-    for xr, y0, wd in ((-1.24, 0.47, 0.014), (-1.31, 0.58, 0.008)):
-        runs = np.maximum(runs, (wd * (0.6 + 0.4 * np.clip((y - y0) / 0.1, 0, 1)) - np.abs(x - xr)) * (y > y0))
+    # over the front edge it has soaked down into the side of the mattress in a ragged tide mark, and one
+    # trickle has wandered on down
+    edge = (B['top'] - 0.04 - 0.035 * (1 + noise2(x, y, 0.04, 16)) * (np.abs(x + 1.2) < 0.25)) - y
+    edge = np.where(np.abs(x + 1.2) < 0.28 + 0.05 * noise2(x, y, 0.05, 17), -edge, -1.0)
+    tx = -1.16 + 0.012 * np.sin(y * 60) + 0.008 * noise2(x * 0, y, 0.03, 18)
+    trickle = (0.005 * (1 + 0.6 * np.clip((B['top'] - 0.05 - y) / 0.1, 0, 1) * 0) - np.abs(x - tx)) * (y > 0.50)
+    bead = 0.009 - np.hypot(x - tx, y - 0.505)
+    runs = np.maximum(trickle, bead)
     stain = np.maximum(np.maximum(top, tongue), tongue2)
     stain = np.where(front & (y < B['top'] - 0.03), runs, stain)
     gore = smax(sheet - 0.0022, -stain, 0.001)
@@ -214,7 +219,7 @@ LETTERS = {
     ' ': ([], 0.45),
 }
 TEXT = 'Merry Chr'
-WALL_LO, WALL_HI, WALL_PX = (-2.35, 0.0), (1.20, 1.95), 0.003
+WALL_LO, WALL_HI, WALL_PX = (-2.40, 0.0), (1.20, 1.95), 0.003
 
 
 def smooth_path(pts, step):
@@ -244,17 +249,22 @@ def layout(r_centre):
     for i, ch in enumerate(TEXT):
         strokes, wdt = LETTERS[ch]
         late = i >= 6
-        cap = (0.44 if not late else 0.40 + 0.03 * (i == 8)) * rng.uniform(0.88, 1.15)
-        base = 0.05 * np.sin(i * 1.7) + rng.normal(0, 0.02) - (0.03 * (i - 5) if late else 0.0)
-        tilt = np.radians(rng.normal(0, 8 if not late else 12))
+        cap = (0.44 if not late else 0.40 + 0.03 * (i == 8)) * rng.uniform(0.90, 1.12)
+        base = 0.06 * np.sin(i * 1.7) + rng.normal(0, 0.02) - (0.03 * (i - 5) if late else 0.0)
+        tilt = np.radians(rng.normal(0, 8 if not late else 11))
         Rt = np.array([[np.cos(tilt), -np.sin(tilt)], [np.sin(tilt), np.cos(tilt)]])
         for s in strokes:
             p = np.array(s, float) * cap
-            p = p + rng.normal(0, 0.018 if not late else 0.026, p.shape)
+            p = p + rng.normal(0, 0.016 if not late else 0.024, p.shape)
             # the forehead overshoots the end of a stroke as it is dragged off
-            p = np.vstack([p, p[-1] + (p[-1] - p[-2]) * rng.uniform(0.03, 0.12)])
+            p = np.vstack([p, p[-1] + (p[-1] - p[-2]) * rng.uniform(0.05, 0.25)])
             p = p @ Rt.T + np.array([x, base])
             items.append((i, p, late))
+            if rng.random() < 0.55 and len(p) > 2:
+                # gone over again, not quite in the same place, only part of the way
+                n2 = max(2, int(len(p) * rng.uniform(0.4, 0.9)))
+                q = p[:n2] + rng.normal(0, 0.014, 2) + rng.normal(0, 0.006, (n2, 2))
+                items.append((i, q, late))
         x += wdt * cap + (0.055 if i != 7 else 0.09)
     # the last r's middle
     last = [p for i, p, _ in items if i == len(TEXT) - 1]
@@ -305,12 +315,18 @@ def wall_blood(r_centre, contact):
         s = np.concatenate([[0], np.cumsum(np.linalg.norm(seg, axis=1))])
         tang = np.vstack([seg, seg[-1:]])
         tang /= np.linalg.norm(tang, axis=1, keepdims=True) + 1e-9
-        width0 = (0.062 if not late else 0.052) * (1 + 0.12 * rng.normal())
+        width0 = (0.066 if not late else 0.058) * (1 + 0.2 * rng.normal())
+        # where the forehead first pressed on: a blot, smeared the way it then dragged
+        blot = path[0] - tang[0] * 0.01
+        for q in range(4):
+            stamp(blot + tang[0] * q * 0.008 + rng.normal(0, 0.005, 2), width0 * rng.uniform(0.32, 0.48), h=0.0024)
         for c, sc, t in zip(path, s, tang):
-            load = np.exp(-sc / (0.8 if not late else 0.5))       # the blood runs out along a stroke
-            wdt = width0 * (0.55 + 0.45 * load) * (1 + 0.22 * noise1(sc * 12 + k * 17, k))
+            load = np.exp(-sc / (0.7 if not late else 0.4))       # the blood runs out along a stroke
+            # uneven pressure: the head rocks as it drags, pressing wide, then skidding thin
+            press = 1 + 0.40 * noise1(sc * 7 + k * 17, k) + 0.15 * noise1(sc * 30 + k * 5, 50 + k)
+            wdt = width0 * (0.45 + 0.55 * load) * max(press, 0.35)
             nrm = np.array([-t[1], t[0]])
-            dry = 0.40 * (1 - load) + 0.02
+            dry = 0.55 * (1 - load) + 0.05
 
             def keep(dx, dy, nrm=nrm, k=k, dry=dry, sc=sc):
                 o = (dx * nrm[0] + dy * nrm[1]) / wdt
@@ -318,8 +334,26 @@ def wall_blood(r_centre, contact):
                 streak = noise1(o * 26 + k * 31, 100 + k) * 0.5 + 0.5
                 return streak > dry * (0.7 + 0.3 * noise1(sc * 25 + k, 200 + k))
             stamp(c, wdt / 2, keep=keep, h=0.0010 + 0.0008 * load)
-            if rng.random() < 0.035 * (0.3 + load) and t[0] ** 2 > 0.1:
+            if rng.random() < 0.06 * (0.3 + load) and t[0] ** 2 > 0.05:
                 drips.append((c + np.array([0, -wdt * 0.35]), load))
+    # smudges where his face slid across the wall between letters: pale, broad, streaky wipes
+    for i in range(len(TEXT) - 1):
+        own = [p for j, p, _ in items if j == i]
+        if not own:
+            continue
+        pts_i = np.vstack(own)
+        c0 = pts_i.mean(0) + rng.normal(0, 0.05, 2)
+        a = rng.uniform(-0.5, 0.5)
+        L = rng.uniform(0.10, 0.25)
+        for q in np.linspace(0, 1, 30):
+            c = c0 + np.array([np.cos(a), np.sin(a)]) * L * q
+            nrm = np.array([-np.sin(a), np.cos(a)])
+
+            def keep(dx, dy, nrm=nrm, i=i):
+                o = (dx * nrm[0] + dy * nrm[1]) / 0.08
+                return noise1(o * 30 + i * 9, 500 + i) > 0.35 + 0.5 * q
+            if rng.random() < 0.7:
+                stamp(c, 0.04, keep=keep, h=0.0008)
     # drips run down from the heavy parts
     for c, load in drips:
         L = (0.03 + 0.30 * load * rng.random()) * (1.3 if c[0] > r_centre[0] - 0.8 else 1.0)
@@ -439,7 +473,7 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*sheet_gore, GORE, op=UNION)
     # drips down the bed rail, and pools on the floor
     b.group('rail_gore', margin=0.01)
-    for x, y0, y1, r in ((-1.24, 0.47, 0.25, 0.006), (-1.17, 0.47, 0.33, 0.004), (-0.78, 0.47, 0.30, 0.004)):
+    for x, y0, y1, r in ((-1.24, 0.47, 0.40, 0.005),):
         b.capsule((x, y0, R.BED['z1'] + 0.035), (x + 0.003, y1, R.BED['z1'] + 0.035), r, GORE, op=UNION)
         b.sphere((x + 0.003, y1, R.BED['z1'] + 0.036), r * 1.4, GORE, op=UNION)
     b.group('floor_gore', margin=0.01)
@@ -479,6 +513,45 @@ def flat_limb(b, a, e, width, thick, mat, op=SUNION, k=0.04):
     d = e - a
     yaw = np.degrees(np.arctan2(-d[2], d[0]))
     b.ellipsoid((a + e) / 2, (np.linalg.norm(d) / 2 + width * 0.5, thick, width), mat, op=op, k=k, R=rot(yaw))
+
+
+def cloth_shape(rng, x, z, kind, yaw, s):
+    """The flat outline of a thrown piece of clothing, as ellipses (cx, cz, rx, rz, yaw, thickness)."""
+    Rg = rot(yaw)
+    out = []
+
+    def limb(a, e, w, t):
+        d = e - a
+        out.append(((a[0] + e[0]) / 2, (a[2] + e[2]) / 2, np.linalg.norm(d) / 2 + w / 2, w,
+                    np.degrees(np.arctan2(-d[2], d[0])), t))
+    c = np.array([x, 0, z])
+    if kind == 'top':
+        out.append((x, z, 0.24 * s, 0.30 * s, yaw, 0.035 * s))
+        for sg in (-1, 1):
+            a = c + Rg @ np.array([sg * 0.20 * s, 0, -0.18 * s])
+            e = a + Rg @ np.array([sg * rng.uniform(0.15, 0.32) * s, 0, rng.uniform(-0.25, 0.2) * s])
+            limb(a, e, 0.07 * s, 0.028 * s)
+    elif kind == 'trousers':
+        for sg in (-1, 1):
+            a = c + Rg @ np.array([sg * 0.07 * s, 0, -0.20 * s])
+            e = a + Rg @ np.array([sg * rng.uniform(0.02, 0.15) * s, 0, rng.uniform(0.55, 0.72) * s])
+            limb(a, e, 0.09 * s, 0.03 * s)
+        out.append((x, z - 0.0, 0.18 * s, 0.12 * s, yaw, 0.035 * s))
+    elif kind == 'ball':
+        out.append((x, z, 0.16 * s, 0.13 * s, yaw, 0.09 * s))
+        p = c + Rg @ np.array([0.1 * s, 0, 0.08 * s])
+        out.append((p[0], p[2], 0.11 * s, 0.09 * s, yaw + 40, 0.08 * s))
+    elif kind == 'pillow':
+        out.append((x, z, 0.36, 0.22, 25, 0.13))
+    else:
+        p = c.copy()
+        ang = np.radians(yaw)
+        for k in range(8):
+            ang += rng.normal(0, 0.45)
+            q = p + np.array([np.cos(ang), 0, np.sin(ang)]) * 0.10 * s
+            limb(p, q, 0.055 * s, 0.018 * s)
+            p = q
+    return out
 
 
 def garment(b, rng, c, kind, mat, yaw=None, size=1.0):
@@ -552,6 +625,21 @@ def _occupied(P, G, GB, x0, z0, cell, i0, i1, k0, k1, heights, out):
                     break
 
 
+@njit(cache=True)
+def _heights(P, G, GB, x0, z0, cell, i0, i1, k0, k1, ys, out):
+    """The top of whatever stands in each floor cell (ys from high to low); out keeps the highest."""
+    for i in range(i0, i1):
+        for k in range(k0, k1):
+            x, z = x0 + (i + 0.5) * cell, z0 + (k + 0.5) * cell
+            for y in ys:
+                if y <= out[i, k]:
+                    break
+                d, m = S.scene_map(x, y, z, P, G, GB)
+                if d < 0.0:
+                    out[i, k] = y
+                    break
+
+
 class Floor:
     """What already stands on the floor, as a map of 2 cm cells, so that thrown things land beside each other
     and never inside each other (or inside the furniture, the walls or the man). Each thing is tried where it
@@ -560,11 +648,101 @@ class Floor:
     NX, NZ = 245, 270
     HEIGHTS = np.array([0.02, 0.05, 0.10, 0.18, 0.28, 0.40, 0.55])
 
+    HC = 0.01            # the height map (what cloth lies on) is finer: 1 cm cells
+    HN = (490, 540)
+
     def __init__(self, scratch_build):
         self.occ = np.zeros((self.NX, self.NZ), bool)
         self.placed = []
         self.occ |= self.mask(scratch_build)
         self.base = self.occ.copy()
+        hx = self.X0 + (np.arange(self.HN[0]) + 0.5) * self.HC
+        hz = self.Z0 + (np.arange(self.HN[1]) + 0.5) * self.HC
+        A = R.RUG_AREA
+        self.H = np.where((np.abs(hx[:, None] - A['cx']) < A['hx']) & (np.abs(hz[None, :] - A['cz']) < A['hz']),
+                          0.012, 0.0).astype(np.float64)
+
+    def raise_heights(self, make):
+        """Add a new thing's top to the height map."""
+        sb = S.Builder()
+        sb.group('probe', margin=0.0)
+        make(sb)
+        sb.groups = [g for g in sb.groups if g['bounds']]
+        P, G = sb.build()
+        GB = sb.grid_buffer()
+        lo = (G[:, 0:3] - G[:, 3:4]).min(0)
+        hi = (G[:, 0:3] + G[:, 3:4]).max(0)
+        i0, i1 = max(int((lo[0] - self.X0) / self.HC), 0), min(int((hi[0] - self.X0) / self.HC) + 1, self.HN[0])
+        k0, k1 = max(int((lo[2] - self.Z0) / self.HC), 0), min(int((hi[2] - self.Z0) / self.HC) + 1, self.HN[1])
+        ys = np.arange(min(hi[1], 0.8), 0.0, -0.004)
+        if i1 > i0 and k1 > k0:
+            _heights(P, G, GB, self.X0, self.Z0, self.HC, i0, i1, k0, k1, ys, self.H)
+
+    def height_at(self, X, Z):
+        """The height map sampled (bilinear) at world points."""
+        q = np.stack([(np.asarray(X) - self.X0) / self.HC - 0.5, (np.asarray(Z) - self.Z0) / self.HC - 0.5])
+        return ndimage.map_coordinates(self.H, q.reshape(2, -1), order=1, mode='nearest').reshape(q.shape[1:])
+
+    def drape(self, b, name, mat, shapes, x, z, reach=0.9, seed=0):
+        """Throw a piece of cloth down near (x, z): shapes(x, z) gives its flat outline as ellipses
+        (cx, cz, rx, rz, yaw, thickness). It settles over whatever is already there - floor, cases, other
+        clothes - resting on the tops, slumping over edges, never passing through them."""
+        tries = [(0.0, 0.0)] + [(r * np.cos(a), r * np.sin(a)) for r in np.arange(0.05, reach, 0.05)
+                                for a in np.linspace(0, 2 * np.pi, int(8 + r * 40), endpoint=False)]
+        vox = 0.006
+        base_grown = ndimage.binary_dilation(self.base, iterations=1)
+        for dx, dz in tries:
+            ells = shapes(x + dx, z + dz)
+            ext = max(max(e[2], e[3]) for e in ells) + 0.03
+            lo2 = np.array([min(e[0] for e in ells) - ext, min(e[1] for e in ells) - ext])
+            hi2 = np.array([max(e[0] for e in ells) + ext, max(e[1] for e in ells) + ext])
+            nx, nz = ((hi2 - lo2) / vox).astype(int) + 1
+            X = lo2[0] + np.arange(nx) * vox
+            Z = lo2[1] + np.arange(nz) * vox
+            XX, ZZ = np.meshgrid(X, Z, indexing='ij')
+            th = np.zeros(XX.shape)
+            for cx, cz, rx, rz, yaw, t in ells:
+                c, s_ = np.cos(np.radians(yaw)), np.sin(np.radians(yaw))
+                u = ((XX - cx) * c - (ZZ - cz) * s_) / rx
+                v = ((XX - cx) * s_ + (ZZ - cz) * c) / rz
+                th = np.maximum(th, t * np.sqrt(np.clip(1 - u * u - v * v, 0, 1)))
+            th *= 1 + 0.15 * noise2(XX, ZZ, 0.08, seed)            # rucked and creased
+            mask = th > 0.003
+            # (on the coarse map: off the furniture, walls and the man)
+            ci = ((XX[mask] - self.X0) / self.CELL).astype(int)
+            ck = ((ZZ[mask] - self.Z0) / self.CELL).astype(int)
+            if (ci < 0).any() or (ck < 0).any() or (ci >= self.NX).any() or (ck >= self.NZ).any():
+                continue
+            if base_grown[ci, ck].any():
+                continue
+            Hn = self.height_at(XX, ZZ)
+            if Hn[mask].max() > 0.32:
+                continue
+            # cloth bridges small gaps and slumps over edges: never below what is under it
+            # (spanning openings and thin walls like fabric: the highest point within 5 cm, softened)
+            span = ndimage.gaussian_filter(ndimage.maximum_filter(Hn, size=17), 4.0)
+            Bm = np.maximum(Hn, np.minimum(span, Hn + 0.05)) + 0.002
+            T = Bm + th
+            y0, y1 = Bm[mask].min() - 0.012, T[mask].max() + 0.012
+            Y = y0 + np.arange(int((y1 - y0) / vox) + 1) * vox
+            d2 = sdf2(mask, vox)
+            d = np.maximum(np.maximum(Bm[:, None, :] - Y[None, :, None], Y[None, :, None] - T[:, None, :]),
+                           d2[:, None, :])
+            d = robust_distance(d.astype(np.float32), vox)
+            b.grid(np.array([X[0], Y[0], Z[0]]), d, vox, mat, op=UNION)
+            # what it now covers, for everything thrown after it
+            hi_ = np.zeros(self.H.shape)
+            ii = ((XX[mask] - self.X0) / self.HC).astype(int)
+            kk = ((ZZ[mask] - self.Z0) / self.HC).astype(int)
+            ok = (ii >= 0) & (kk >= 0) & (ii < self.HN[0]) & (kk < self.HN[1])
+            np.maximum.at(self.H, (ii[ok], kk[ok]), T[mask][ok])
+            m = np.zeros(self.occ.shape, bool)
+            m[ci, ck] = True
+            self.occ |= m
+            self.placed.append((name + ' (cloth)', m))
+            return x + dx, z + dz
+        print(f'  (no room on the floor for {name} near {x:.2f}, {z:.2f}: left out)', flush=True)
+        return None
 
     def mask(self, make):
         sb = S.Builder()
@@ -593,6 +771,7 @@ class Floor:
                 self.occ |= m
                 self.placed.append((name, m))
                 make(b, x + dx, z + dz)
+                self.raise_heights(lambda sb: make(sb, x + dx, z + dz))
                 return x + dx, z + dz
         print(f'  (no room on the floor for {name} near {x:.2f}, {z:.2f}: left out)', flush=True)
         return None
@@ -634,9 +813,6 @@ def wreckage(b, fixed):
         sb.capsule(hc + [-0.25, 0, 0.08], hc + [0.25, 0, -0.08], 0.16, LEATHER, op=UNION)
         sb.torus(hc + [0, 0.12, 0.02], 0.10, 0.012, LEATHER, op=UNION, R=rot(-17, 0, 0) @ rot(0, 90, 0))
     fl.place(b, 'holdall', holdall, 1.35, -4.10)
-    b.group('pillow', margin=0.02)
-    fl.place(b, 'pillow', lambda sb, x, z: sb.ellipsoid((x, 0.07 + floor_y((x, 0, z)), z), (0.36, 0.07, 0.22), DIRTY_LINEN,
-                                                         op=UNION, R=rot(25)), -0.15, -3.2)
     b.group('lamp', margin=0.02)
 
     def lamp(sb, x, z):
@@ -658,19 +834,21 @@ def wreckage(b, fixed):
              ((0.02, -3.65), 'box', (0.11, 0.045, 0.06), 80, GIFT_RED, False, 'crushed')]
     for g in gifts:
         fl.place(b, 'present', lambda sb, x, z, g=g: small_present(sb, (x, z), *g[1:6], crushed=len(g) > 6), *g[0])
-    # everything that was in the cases, flung across the room: ordinary clothes, and Christmas ones
-    b.group('clothes', margin=0.03)
+    # everything that was in the cases, flung across the room, landing on top of each other and over the
+    # cases: ordinary clothes, and Christmas ones
     kinds = [((0.55, -2.15), 'top', CLOTH_LIGHT), ((0.05, -2.9), 'trousers', DENIM), ((1.15, -2.55), 'ball', CLOTH_MID),
              ((0.70, -3.20), 'top', XMAS_JUMPER), ((1.85, -2.35), 'ball', CLOTH_LIGHT), ((-0.15, -3.45), 'top', COAT),
              ((1.25, -3.55), 'trousers', CLOTH_MID), ((0.35, -3.70), 'long', XMAS_GREEN_KNIT), ((1.10, -1.85), 'top', DENIM),
              ((1.95, -3.95), 'ball', XMAS_JUMPER), ((0.30, -4.30), 'ball', CLOTH_LIGHT), ((0.60, -2.65), 'long', CLOTH_MID),
              ((-0.20, -2.25), 'ball', COAT), ((1.45, -2.10), 'long', LEATHER), ((0.95, -3.95), 'top', CLOTH_LIGHT),
-             ((1.75, -3.45), 'top', CLOTH_MID), ((0.15, -3.10), 'ball', XMAS_JUMPER), ((0.85, -2.95), 'trousers', COAT)]
+             ((1.75, -3.45), 'top', CLOTH_MID), ((0.15, -3.10), 'ball', XMAS_JUMPER), ((0.85, -2.95), 'trousers', COAT),
+             ((0.30, -2.95), 'top', DIRTY_LINEN), ((-0.10, -3.20), 'pillow', DIRTY_LINEN)]
     for n, ((x, z), kind, mat) in enumerate(kinds):
         rs = np.random.default_rng(100 + n)
         size, yaw = rs.uniform(0.8, 1.0), rs.uniform(0, 360)
-        fl.place(b, kind, lambda sb, x, z, kind=kind, mat=mat, n=n, size=size, yaw=yaw:
-                 garment(sb, np.random.default_rng(200 + n), (x, 0, z), kind, mat, yaw=yaw, size=size), x, z, reach=1.0)
+        b.group('cloth_%d' % n, margin=0.02)
+        fl.drape(b, kind, mat, lambda x, z, kind=kind, n=n, size=size, yaw=yaw:
+                 cloth_shape(np.random.default_rng(200 + n), x, z, kind, yaw, size), x, z, reach=1.0, seed=300 + n)
     # a Santa hat, knocked across the floor
 
     def santa_hat(sb, x, z):

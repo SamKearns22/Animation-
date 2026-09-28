@@ -182,8 +182,9 @@ def check_set(scene, check):
     meant to be against a wall, it touches it (not in it, not short of it)."""
     import merry_chr
     if merry_chr.PLACED:
-        tot = np.sum([m.astype(int) for _, m in merry_chr.PLACED], axis=0)
-        clash = [n for n, m in merry_chr.PLACED if (tot[m] > 1).any()]
+        hard = [(n, m) for n, m in merry_chr.PLACED if not n.endswith('(cloth)')]   # cloth may lie over things
+        tot = np.sum([m.astype(int) for _, m in hard], axis=0)
+        clash = [n for n, m in hard if (tot[m] > 1).any()]
         check(not clash, 'things on the floor lie apart (none inside another)',
               'all apart' if not clash else 'overlapping: ' + ', '.join(clash))
     ms = scene['chars'].get('man')
