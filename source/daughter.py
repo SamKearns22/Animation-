@@ -208,7 +208,7 @@ def build(b, state):
     # shoulder skin swings out through her top and hair
     from mother import head_trim
     b.set_frame((0, 0, 0), None)
-    for c, n, x in head_trim(state['joints'], Hc, out=0.035):
+    for c, n, x in head_trim(state['joints'], Hc, out=0.045, collar=(0.02, 0.6)):
         b.halfspace(c, np.stack([x, n, np.cross(x, n)], 1), SKIN, op=S.SUB)
     b.set_frame(Hc, Rh)
     for c, r in eyes:

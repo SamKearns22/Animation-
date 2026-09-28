@@ -341,16 +341,21 @@ def prepare(state):
     return state
 
 
-def head_trim(J, Hc, out=0.05):
+def head_trim(J, Hc, out=0.05, collar=None):
     """Planes (point, normal, a direction in the plane) trimming the rigid head piece: everything on the far
     side of a normal is cut away - below the base of the neck, and the shoulders behind and to each side
-    (from `out` metres either side of the neck: less for a child's slim neck)."""
+    (from `out` metres either side of the neck). collar: (drop, tilt) for a lower neckline than her roll neck -
+    the base cut lowered by `drop` and tilted to sit lower at the front than the back, like a crew neck."""
     up = unit(J['neck01'] - J['spine02'])
     lat = J['shoulder.L'] - J['shoulder.R']
     lat = unit(lat - up * (lat @ up))
     fwd = np.cross(lat, up)
     fwd = fwd if fwd @ (Hc - J['neck02']) > 0 else -fwd
-    planes = [(J['neck01'] - 0.01 * up, up)]
+    if collar is None:
+        planes = [(J['neck01'] - 0.01 * up, up)]
+    else:
+        drop, tilt = collar
+        planes = [(J['neck01'] - drop * up, unit(up + tilt * fwd))]
     for side in (1, -1):
         planes.append((J['neck02'] + out * side * lat, unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)))
     return [(c, n, unit(np.cross(n, fwd if abs(n @ fwd) < 0.9 else lat))) for c, n in planes]
