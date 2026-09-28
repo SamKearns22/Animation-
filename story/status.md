@@ -9,7 +9,7 @@ Read this first in any new session, after CLAUDE.md.
   Finished video: `animations/yuletide-animation-test.mp4`.
 - **Look book** (`lookbook/`), **tone guide** (`guides/tone.md`), **premise and title cards**
   (`story/yuletide.md`).
-- **Horror still 'Merry Chr' (spare room)** - approved mock-up, reframed from the dark landing (level
+- **Horror still 'Merry Chr' (spare room)** - latest mock-up (director's final verdict pending), reframed from the dark landing (level
   shift lens, doorcase border, low winter light, contrast kept for the present and the wall). Floor things are
   placed so none sits inside another; clothes drape over what is under them; checks cover this and the
   wall openings. Brief and

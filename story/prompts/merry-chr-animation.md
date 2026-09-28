@@ -2,10 +2,10 @@
 
 Continue the Yuletide project on this branch. Read `CLAUDE.md`, then `story/status.md`, then
 `story/horror-merry-chr.md`, and the guides it names (`guides/tone.md`, `guides/movement.md`,
-`guides/pipeline.md`, `guides/character-anatomy.md`). The approved still is
+`guides/pipeline.md`, `guides/character-anatomy.md`). The latest still is
 `animations/yuletide-merry-chr-still.jpg`; the recipe is `source/shots/h1_merry_chr.py`.
 
-Animate the 'Merry Chr' horror shot. The camera, room and everything in it stay exactly as in the approved
+Animate the 'Merry Chr' horror shot. The camera, room and everything in it stay exactly as in the
 still: the camera never moves; nothing in the room moves except what is listed here.
 
 **Length:** 3 seconds at 24 frames a second (enough to test the loop; in the trailer it will be cut to about
