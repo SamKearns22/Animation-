@@ -35,14 +35,19 @@ def cleaver_h(f):
     return TOP - (TOP - fingers) * PASS[int(round(f))]
 
 
-def raised_cleaver(h):
+# as it falls the blade keeps some of that tilt, in line with her forearm (a chop lands heel-first; squared
+# up flat under a high arm her wrist would have to bend sharply) - it would level out only at impact
+FALL_TILT = {57: 0.85, 58: 0.7, 59: 0.55}
+
+
+def raised_cleaver(h, f=None):
     """Above the height it had at the end of shot 2 the blade is not simply lifted: her wrist cocks and her
     forearm turns, so the blade tips its spine back and turns (as anyone lifting a heavy blade high); coming
     down, it squares up again to land flat across her fingers."""
     import mhuman as MH
     from props import Cleaver
     c = S1.cleaver_at(h, S2.END_ALONG, S2.END_SLIDE)
-    a = S1.ease((h - S2.END_H) / (TOP - S2.END_H))
+    a = max(S1.ease((h - S2.END_H) / (TOP - S2.END_H)), FALL_TILT.get(None if f is None else int(round(f)), 0.0))
     R = MH.axis_angle(c.R[:, 2], -12.0 * a) @ c.R
     R = MH.axis_angle(R[:, 0], -40.0 * a) @ R
     R = MH.axis_angle([0, 1.0, 0], 30.0 * a) @ R
@@ -53,7 +58,7 @@ def frame(t):
     fr = S1.frame(47 / S1.FPS)
     n = t * FPS
     h = cleaver_h(n)
-    cleaver = raised_cleaver(h)
+    cleaver = raised_cleaver(h, n)
     look_down = FINGERS + np.array([0, 0.01, 0])
     eye = S1.DAUGHTER_EYES if n < GLANCE else look_down
     head = S1.DAUGHTER_EYES + (look_down - S1.DAUGHTER_EYES) * S1.between(n, *HEAD)
