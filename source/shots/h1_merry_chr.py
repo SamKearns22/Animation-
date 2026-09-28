@@ -15,7 +15,9 @@ DURATION = 3.0
 MAN = dict(position=(0.87, -4.85), yaw=180.0, lean=14.0, nod=30.0, head_roll=-3.0, wall_z=R.BACK_Z)
 # his forehead meets the wall on these frames (0.9 s apart: 21.6 frames, so 22 and 21 in turn)
 IMPACTS = (10, 32, 53)
-PULL = dict(upper=-6.0, nod=-11.0)       # fully pulled back (~6 cm): his upper back and neck straighten
+# fully pulled back (~6 cm): his back and neck straighten a little. (Taken more from the upper back, a fold opened
+# in the back of his shirt; spread like this the shirt hangs clean.)
+PULL = dict(lean=-3.0, upper=-2.0, nod=-10.0)
 STRIKE = 3                                # frames the strike takes
 
 
@@ -47,7 +49,7 @@ def man_spec(f):
     jolt = 2.5 * np.exp(-since / 1.5) if since < 6 else 0.0
     # the dead arms: carried back with his shoulders on the pull, a small late swing after each impact
     sw = 0.012 * np.exp(-since / 8) * np.sin(since / 24 * 2 * np.pi * 1.1)
-    return dict(MAN_ANIM(), upper=PULL['upper'] * p, nod=MAN['nod'] + PULL['nod'] * p, jolt=jolt,
+    return dict(MAN_ANIM(), lean=MAN['lean'] + PULL['lean'] * p, upper=PULL['upper'] * p, nod=MAN['nod'] + PULL['nod'] * p, jolt=jolt,
                 swing=(sw, 0.8 * sw * np.cos(0.3)), wall=R.BACK_Z, impact=abs(since) < 1e-6)
 
 
