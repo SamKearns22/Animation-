@@ -16,6 +16,10 @@ I don't know how to code. Please:
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
 - The tools (Python with Pillow, NumPy, imageio and a bundled ffmpeg) are installed automatically at the start of each session by `.claude/hooks/setup.sh`.
 
+# Where things stand
+
+- Read `story/status.md` at the start of every session: what is done, what is open, and how to work within the budget.
+
 # Drawing people
 
 - Before building or changing any character, read `guides/character-anatomy.md` and follow its checklist.
