@@ -143,7 +143,12 @@ class Body:
         V = self.verts_m()
         acc = np.zeros((len(V), 3, 4))
         wsum = np.zeros(len(V))
+        # the chest and hips follow the spine only: MakeHuman ties some chest skin to the shoulder and upper
+        # arm, which drags a dent into the chest when the arm is raised in front (as when chopping)
+        torso = np.isin(self.label, [self.piece_names.index(n) for n in ('chest', 'hips')])
         for bn, (vi, w) in self.sk.weights.items():
+            if bn.startswith(('shoulder', 'upperarm', 'lowerarm', 'wrist')):
+                w = np.where(torso[vi], 0.0, w)
             acc[vi] += w[:, None, None] * M[bn][None, :3, :4]
             wsum[vi] += w
         free = wsum < 1e-6

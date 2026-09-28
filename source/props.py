@@ -107,7 +107,7 @@ class Ham:
             b.cylinder(sc, 0.0034, 0.058, MEAT, op=UNION, R=Rs, rr=0.002)
             b.cylinder(sc + Rs @ np.array([0, 0.0006, 0]), 0.0034, 0.051, HAMPINK, op=UNION, R=Rs, rr=0.002)
 
-    def falling_slice(self, a0, a1, tip, rest_y, drop):
+    def falling_slice(self, a0, a1, tip, rest_y, drop, yaw=0.0):
         """A slice just cut from the ham (between a0 and a1 along it), tipping over away from the ham on the
         bottom edge of its outer face: `tip` degrees over (90 = lying flat on that face), its hinge lowered
         by `drop` (0..1) of the way from where it was cut to `rest_y` (the board, or a slice already there).
@@ -118,10 +118,13 @@ class Ham:
         k, th = self.across, np.radians(tip)
         K = np.array([[0, -k[2], k[1]], [k[2], 0, -k[0]], [-k[1], k[0], 0]])
         Q = np.eye(3) + np.sin(th) * K + (1 - np.cos(th)) * K @ K      # turns up (y) towards -a as it tips
+        g = np.radians(yaw * drop)                                    # and twists a little as it falls
+        Y = np.array([[np.cos(g), 0, np.sin(g)], [0, 1.0, 0], [-np.sin(g), 0, np.cos(g)]])
+        Q = Y @ Q
         return lambda p: H + (np.asarray(p) - H0) @ Q.T, Q
 
-    def build_falling(self, b, a0, a1, tip, rest_y, drop):
-        move, Q = self.falling_slice(a0, a1, tip, rest_y, drop)
+    def build_falling(self, b, a0, a1, tip, rest_y, drop, yaw=0.0):
+        move, Q = self.falling_slice(a0, a1, tip, rest_y, drop, yaw)
         Rh = self.frame()
         Rc = np.stack([np.cross([0, 1.0, 0], self.a), self.a, [0, 1.0, 0]], 1)
         flip = np.diag([1.0, -1.0, -1.0])

@@ -83,11 +83,13 @@ def ham_at(f):
             break
         a0 = FIRST_CUT + k * SLICE
         cut = a0 + SLICE
-        s = np.clip((f - fc - 1) / 5.0, 0.0, 1.0)
-        tip = 90.0 * s * s
-        if f - fc == 7:
-            tip = 84.0                                            # a small bounce as it lands
-        falling.append((a0, a0 + SLICE, tip, BOARD.top + 0.0005 + 0.010 * k, s * s))
+        # no two slices fall alike: the first twists one way and lands flat with a little bounce; the second
+        # falls a touch slower, twists the other way and settles askew on top of the first
+        dur, yaw, rest_tip, lift, bounce = ((5.0, 14.0, 90.0, 0.0, {7: 84.0}) if k == 0 else
+                                            (6.0, -12.0, 90.0, 0.0105, {8: 86.0}))
+        s = np.clip((f - fc - 1) / dur, 0.0, 1.0)
+        tip = bounce.get(int(round(f - fc)), rest_tip * s * s)
+        falling.append((a0, a0 + SLICE, tip, BOARD.top + 0.0005 + lift, s * s, yaw))
     first_slice = HAM_C - 0.147 * A + np.cross(A, [0, 1.0, 0]) * 0.115
     first_slice[1] = BOARD.top + 0.0035
     return Ham(HAM_C, ANGLE, cut=cut, slices=[slice_lying(first_slice, -ANGLE + 25)], falling=falling)
