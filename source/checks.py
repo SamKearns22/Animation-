@@ -72,7 +72,10 @@ def check_mother(scene, check):
         gap = np.linalg.norm(w - st['joints']['wrist.' + s]) * 1000
         check(gap < 3, nm + ' hand joins its arm', f'{gap:.1f} mm gap')
         fl, dv, err = st['bends'][i]
-        check(abs(fl) <= 50 and abs(dv) <= 25 and err < 8, nm + ' wrist bends within its natural range',
+        # the chopping hand is held firm: a strong chop keeps the wrist near straight (the director caught
+        # 40-50 degree bends that the old anatomical limits let through)
+        lim_fl, lim_dv = (30, 15) if i == 0 else (50, 25)
+        check(abs(fl) <= lim_fl and abs(dv) <= lim_dv and err < 8, nm + ' wrist bends within its natural range',
               f'{fl:+.0f} deg up/down, {dv:+.0f} sideways, {err:.0f} deg left over')
         # the elbow bends the right way (never backwards) and not closed up
         sh, el = st['joints']['shoulder.' + s], st['joints']['elbow.' + s]

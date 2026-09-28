@@ -40,7 +40,7 @@ def frame(t):
     f = S1.frame(47 / S1.FPS)              # the kitchen, the props and the mother as at the end of shot 1
     n = t * FPS
     h, along, slide = cleaver_path(n)
-    cleaver = S1.cleaver_at(h, along, slide)
+    cleaver = S1.natural_cleaver(h, along, slide)
     f['mother'] = dict(f['mother'], cleaver=cleaver, poles=S1.elbow_poles(h))
     f['cleaver'] = cleaver
     f['blade_in_meat'] = h < 0.115

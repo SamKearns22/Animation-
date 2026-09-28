@@ -24,7 +24,8 @@ FIRST_CUT = -0.087                              # the ham's cut face at the star
 SLICE = 0.010                                    # each chop takes a 1 cm slice
 HOVER = 0.189                                   # the blade's edge held this far above the board at the start
 TOP = 0.27                                      # ...and lifted to here before each chop
-GRIP_ROLL = 112                                  # the hand's turn about the handle (found in the first frame)
+GRIP_ROLL = 110                                  # the hand's turn about the handle: one grip for every shot, the
+                                                 # one that keeps her wrist near straight throughout (a search)
 
 # the timeline, in frames (24 a second)
 CHOPS = (12, 28)                                # frames where the blade meets the board
@@ -107,6 +108,28 @@ def cleaver_at(h, along, slide=0.0):
     return Cleaver(edge, np.stack([x, y, A], 1))
 
 
+def blade_turn(h):
+    """How the blade is turned in her hand at a height h above the board: (pitch, tilt about its edge, turn
+    about the vertical), degrees. Her grip on the handle never changes, so the blade follows her forearm and
+    her wrist stays near straight (a search over every stage of every chop): the higher she lifts it, the
+    more it tips its spine back and turns; near the board it comes upright, square across the ham, to cut."""
+    impact = np.array([10.0, 8.0, 8.0])
+    mid = np.array([0.0, np.interp(h, [0.12, 0.19, 0.27], [0.0, 0.0, -40.0]),
+                    np.interp(h, [0.12, 0.19, 0.27], [15.0, 15.0, 30.0])])
+    return impact + (mid - impact) * ease(h / 0.12)
+
+
+def natural_cleaver(h, along, slide=0.0):
+    """The cleaver as she really holds it at this height (see blade_turn)."""
+    import mhuman as MH
+    c = cleaver_at(h, along, slide)
+    pitch, tilt, turn = blade_turn(h)
+    R = MH.axis_angle(c.R[:, 2], pitch) @ c.R
+    R = MH.axis_angle(R[:, 0], tilt) @ R
+    R = MH.axis_angle([0, 1.0, 0], turn) @ R
+    return Cleaver(c.o, R)
+
+
 def elbow_poles(h):
     return (np.array([-0.265, 1.120, -0.690 - 0.05 * (1 - min(h, TOP) / TOP)]),  # the elbow drops back as the
             np.array([0.175, 1.105, -0.575]))                                  # blade comes down
@@ -117,7 +140,7 @@ def frame(t):
     board = BOARD
     ham = ham_at(f)
     h, along, in_meat = cleaver_path(f)
-    cleaver = cleaver_at(h, along)
+    cleaver = natural_cleaver(h, along)
     # where she looks: the ham, until her eyes jump to her daughter; the head follows a moment later
     on_ham = HAM_C + (FIRST_CUT + 1.5 * SLICE) * A + np.array([0, 0.04, 0])
     eye = on_ham if f < GLANCE else DAUGHTER_EYES
