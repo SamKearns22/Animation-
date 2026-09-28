@@ -26,9 +26,8 @@ every time.
 **The fairy lights:** both strings (the back wall and the right-hand wall) flash in a broken, stuttering way,
 each bulb from `merry_chr.bulb_lit(i, t)`; a few stay dead. Their glow on the wall flickers with them.
 
-**Sound:** the THUD of each strike exactly on the impact frame, dull and close, over the trailer score at
-its most distorted (`music/horror-trailer-score.m4a` - pick the most insane passage). The THUDs are the
-loudest thing.
+**Sound:** (changed by the director) no THUDs - just the trailer score at its most distorted
+(`music/horror-trailer-score.m4a`, the most insane passage). Seeing him do it is chilling enough.
 
 **How to work (budget):**
 - Only the man, the blood at the r and the lights change, so use the partial redraw in `shot.py sequence`

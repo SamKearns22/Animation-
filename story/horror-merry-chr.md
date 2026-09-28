@@ -50,4 +50,6 @@
   against this wall - there is no more blood to give. The wall stays exactly as in the still; he strikes the
   same wet spot (the middle of the blotch at the r) every time. A drained man: the small end of the
   pull-back, a dull recoil.
+- **Director's decision:** no THUDs on the strikes. Seeing him do it is chilling enough; the score (at its
+  most distorted) does the work alone.
 - Hold length: the brief says the viewer has only a moment - probably 0.75-1.5 s in the cut.
