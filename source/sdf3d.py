@@ -985,7 +985,10 @@ def shade(px, py, pz, nx, ny, nz, vx, vy, vz, mat, P, G, GB, M, Lt, SP, SM, SMP)
         # mirror bounce (marble, steel, glaze)
         d = vx * nx + vy * ny + vz * nz
         rx, ry, rz = 2.0 * d * nx - vx, 2.0 * d * ny - vy, 2.0 * d * nz - vz
-        fres = refl + (1.0 - refl) * (1.0 - max(d, 0.0)) ** 5 * 0.6
+        graze = 0.6
+        if int(M[mi, MA_TEX]) == T_STEEL:
+            graze = 0.12          # brushed steel: no bright mirror at glancing angles
+        fres = refl + (1.0 - refl) * (1.0 - max(d, 0.0)) ** 5 * graze
         t, m2 = march(px + nx * 0.002, py + ny * 0.002, pz + nz * 0.002, rx, ry, rz, 0.002, 8.0, P, G, GB,
                       110, 0.0004, 0.001)
         if t > 0:

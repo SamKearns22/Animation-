@@ -170,6 +170,9 @@ def place_left(pose, ham, along, press, pole):
     return origin, R
 
 
+MAX_EYE_TURN = 25.0          # degrees the eyes turn from straight ahead in the head before the iris starts to hide
+
+
 def solve(spec):
     """Everything about her pose, from a shot's description of it. spec keys:
       position, yaw          where she stands (the middle of her feet on the floor) and which way she faces
@@ -219,10 +222,21 @@ def solve(spec):
     Hc = pose.point(M, 'head', mid)
     Rh = M['head'][:3, :3]
     eye_look = spec.get('eye_look', spec.get('look_at'))    # the eyes may lead the head (see movement.md)
+    blink = spec.get('blink', 0.0)
     if eye_look is not None:
-        spec = dict(spec, gaze=tuple(Rh.T @ unit(np.asarray(eye_look) - Hc)))
+        g = Rh.T @ unit(np.asarray(eye_look) - Hc)
+        # the eyes turn only so far in the head (beyond that the head must turn), and the upper lids follow
+        # the eyes down (or the iris vanishes under the lower lid and the eyes look white)
+        ang = np.degrees(np.arccos(np.clip(g[2], -1, 1)))
+        if ang > MAX_EYE_TURN:
+            side = unit(np.array([g[0], g[1], 0.0]))
+            t = np.radians(MAX_EYE_TURN)
+            g = np.array([side[0] * np.sin(t), side[1] * np.sin(t), np.cos(t)])
+        down = np.degrees(np.arcsin(np.clip(-g[1], -1, 1)))
+        blink = max(blink, float(np.clip((down - 12.0) / 30.0, 0.0, 0.5)))
+        spec = dict(spec, gaze=tuple(g))
     return dict(spec=spec, pose=pose, M=M, joints=J, hands=hands, bends=bends, grip_roll=roll,
-                short=(short_r, short_l), head=(Hc, Rh), smile=spec.get('smile', 1.0), blink=spec.get('blink', 0.0))
+                short=(short_r, short_l), head=(Hc, Rh), smile=spec.get('smile', 1.0), blink=blink)
 
 
 def pose_key(state):
