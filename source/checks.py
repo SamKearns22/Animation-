@@ -108,6 +108,11 @@ def check_mother(scene, check):
     near = np.linalg.norm(pts[1][:, None, :] - blade[None, ::7, :], axis=2).min()
     check(near > 0.004, 'blade clear of her left hand', f'{near * 1000:.0f} mm')
     gap = ham.distance(cleaver.edge_points()).min()
+    # in (or touching) the meat, the blade lies in the plane of its cut: a blade skewed in the cut would pass
+    # through the ham's cut face (the director caught one)
+    if gap < 0.01:
+        skew = np.degrees(np.arccos(min(1.0, abs(cleaver.R[:, 2] @ ham.a))))
+        check(skew < 3, 'blade square in its cut', f'{skew:.1f} deg off the plane of the cut')
     if fr.get('blade_in_meat'):
         check(gap > -0.10, 'blade no deeper than the meat', f'{-gap * 100:.1f} cm in')
     else:

@@ -72,7 +72,7 @@ def cleaver_path(f):
     elif f <= c2 + 3:
         h, along = jolt(f, c2), a2
     else:
-        h, along = 0.001 + 0.06 * between(f, c2 + 4, 44), a2    # rests, then eases up a little
+        h, along = 0.001 + 0.16 * between(f, c2 + 4, 40), a2    # then lifts it clear of the meat again
     return h, along, h < 0.115
 
 
@@ -113,10 +113,12 @@ def blade_turn(h):
     about the vertical), degrees. Her grip on the handle never changes, so the blade follows her forearm and
     her wrist stays near straight (a search over every stage of every chop): the higher she lifts it, the
     more it tips its spine back and turns; near the board it comes upright, square across the ham, to cut."""
-    impact = np.array([10.0, 8.0, 8.0])
+    # down in the meat (and resting in the cut) the blade stays exactly in the plane of the cut - only its
+    # edge may tip; it turns with her forearm only once it is clear of the ham
+    impact = np.array([10.0, 0.0, 0.0])
     mid = np.array([0.0, np.interp(h, [0.12, 0.19, 0.27], [0.0, 0.0, -40.0]),
                     np.interp(h, [0.12, 0.19, 0.27], [15.0, 15.0, 30.0])])
-    return impact + (mid - impact) * ease(h / 0.12)
+    return impact + (mid - impact) * ease((h - 0.12) / 0.06)
 
 
 def natural_cleaver(h, along, slide=0.0):
@@ -131,7 +133,8 @@ def natural_cleaver(h, along, slide=0.0):
 
 
 def elbow_poles(h):
-    return (np.array([-0.265, 1.120, -0.690 - 0.05 * (1 - min(h, TOP) / TOP)]),  # the elbow drops back as the
+    tuck = 0.07 * (1 - ease((h - 0.12) / 0.06))      # down in the cut, her elbow comes in closer to her side
+    return (np.array([-0.265 + tuck, 1.120, -0.690 - 0.05 * (1 - min(h, TOP) / TOP)]),  # the elbow drops back as the
             np.array([0.175, 1.105, -0.575]))                                  # blade comes down
 
 
