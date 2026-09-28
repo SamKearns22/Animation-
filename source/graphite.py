@@ -24,7 +24,8 @@ CHAR = CHAR_SKIN | {MS.EYE, MS.HAIR, MS.STRAW_HAIR, MS.KNIT, MS.TROUSERS, MS.COT
 PROPS = {MS.WOOD, MS.MEAT, MS.BONE, MS.STEEL, MS.HANDLE, MS.HAMPINK, MS.PINEAPPLE, MS.CHERRY, MS.PAPER,
          MS.PASTRY, MS.CHERRY_FILL, MS.ICING, MS.ICING_GREEN,
          MS.GIFTWRAP, MS.RIBBON, MS.GORE, MS.BLOOD, MS.GIFT_RED, MS.XMAS_JUMPER, MS.LINEN, MS.GLASS, MS.SHELL,
-         MS.LEATHER, MS.COAT}
+         MS.LEATHER, MS.COAT, MS.CLOTH_LIGHT, MS.CLOTH_MID, MS.DENIM, MS.PLASTIC, MS.SCREEN,
+         MS.XMAS_GREEN_KNIT}
 
 
 # ---------------------------------------------------------------------------
@@ -139,7 +140,12 @@ def colour_mats():
             # the spare room: the present's paper and ribbon, the Christmas clothes and presents, and blood -
             # bright where it is fresh on the wall, nearly black-red where it seeps from the present
             MS.GIFTWRAP: (0.20, 0.52, 0.30), MS.RIBBON: (0.90, 0.70, 0.22), MS.GIFT_RED: (0.84, 0.12, 0.14),
-            MS.XMAS_JUMPER: (0.82, 0.12, 0.14), MS.BLOOD: (0.86, 0.04, 0.06), MS.GORE: (0.40, 0.03, 0.05)}
+            MS.XMAS_JUMPER: (0.82, 0.12, 0.14), MS.BLOOD: (0.86, 0.04, 0.06), MS.GORE: (0.40, 0.03, 0.05),
+            MS.XMAS_GREEN_KNIT: (0.22, 0.55, 0.30),
+            MS.LIGHT_RED: (1.0, 0.30, 0.25), MS.LIGHT_GREEN: (0.40, 0.95, 0.45), MS.LIGHT_BLUE: (0.40, 0.60, 1.0),
+            MS.LIGHT_YELLOW: (1.0, 0.88, 0.35), MS.LIGHT_ORANGE: (1.0, 0.60, 0.25),
+            MS.DEAD_RED: (0.70, 0.20, 0.20), MS.DEAD_GREEN: (0.25, 0.50, 0.30), MS.DEAD_BLUE: (0.25, 0.35, 0.65),
+            MS.DEAD_YELLOW: (0.75, 0.65, 0.30), MS.DEAD_ORANGE: (0.75, 0.45, 0.20)}
 
 
 def colour_pencil(rgbo, grey, rgb, mat, strokes, px):

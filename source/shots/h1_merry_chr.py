@@ -14,12 +14,12 @@ def dress(b, chars):
     import merry_chr
     f = man.forehead(chars['man'])
     contact = (float(f[0]), float(f[1]))
-    merry_chr.build(b, contact=contact, r_centre=(contact[0] - 0.02, contact[1] - 0.02))
+    merry_chr.build(b, contact=contact, r_centre=(contact[0] - 0.02, contact[1] - 0.02), t=chars.get('t', 0.0))
 
 
 def frame(t):
     return dict(set='spare_room',
-                camera=dict(pos=(0.0, 1.62, 0.35), target=(0.0, 1.22, -5.2), vfov=50.0),
+                camera=dict(pos=(0.0, 1.62, 0.35), target=(0.0, 0.85, -5.2), vfov=60.0),
                 man=MAN, dressing=[dress],
                 # the eye goes to the present first, then the writing and the man at the last r
                 focus=[(-1.25, 0.85, -2.45), (0.85, 1.2, -5.1), (-0.6, 1.3, -5.15)],

@@ -92,7 +92,7 @@ def default_lights(key_dir=(0.55, 0.45, 0.70)):
 # --- the spare room ('Merry Chr' shot) -------------------------------------------------------------------
 T_BOARDS, T_RUG, T_GIFTWRAP, T_BLOOD = 16, 17, 18, 19
 MAN_SKIN = material((0.78, 0.60, 0.52), spec=0.10, shin=14, wrap=0.35)
-SHIRT = material((0.60, 0.66, 0.74), spec=0.02, shin=8, wrap=0.3)             # his plain pale blue shirt
+SHIRT = material((0.42, 0.48, 0.58), spec=0.02, shin=8, wrap=0.3)             # his plain pale blue shirt
 MAN_HAIR = material((0.30, 0.29, 0.28), spec=0.15, shin=40, tex=S.T_HAIR)      # short, greying
 BLOOD = material((0.55, 0.02, 0.03), spec=0.75, shin=90, refl=0.03, tex=T_BLOOD)    # fresh, wet, bright
 GORE = material((0.20, 0.03, 0.03), spec=0.80, shin=90, refl=0.04, tex=T_BLOOD)     # dark, thick, wet
@@ -113,3 +113,21 @@ BRASS = material((0.72, 0.58, 0.32), spec=0.8, shin=60, refl=0.1)
 SKY = material((1.0, 1.0, 1.0), emit=1.5)                                          # a white winter sky
 TILE_W = material((0.95, 0.95, 0.94), spec=0.5, shin=80, refl=0.06)             # the en-suite's glazed tiles
 COAT = material((0.16, 0.16, 0.18), wrap=0.3, tex=S.T_KNIT)                       # a dark wool coat, flung down
+# clothes thrown from the suitcases (graphite), the things on the dresser
+CLOTH_LIGHT = material((0.78, 0.76, 0.72), wrap=0.35, tex=S.T_KNIT)
+CLOTH_MID = material((0.50, 0.50, 0.52), wrap=0.3, tex=S.T_KNIT)
+DENIM = material((0.30, 0.34, 0.42), wrap=0.3, tex=S.T_KNIT)
+PLASTIC = material((0.85, 0.85, 0.84), spec=0.5, shin=60)
+SCREEN = material((0.05, 0.05, 0.06), spec=0.9, shin=150, refl=0.15)
+XMAS_GREEN_KNIT = material((0.12, 0.40, 0.20), wrap=0.25, tex=S.T_KNIT)       # a green Christmas scarf
+# coloured fairy lights along the top of the back wall: lit bulbs glow, dead ones are dull glass
+LIGHT_RED = material((1.0, 0.25, 0.20), emit=3.0)
+LIGHT_GREEN = material((0.35, 1.0, 0.40), emit=3.0)
+LIGHT_BLUE = material((0.35, 0.55, 1.0), emit=3.0)
+LIGHT_YELLOW = material((1.0, 0.85, 0.30), emit=3.0)
+LIGHT_ORANGE = material((1.0, 0.55, 0.20), emit=3.0)
+DEAD_RED = material((0.45, 0.10, 0.10), spec=0.8, shin=90)
+DEAD_GREEN = material((0.12, 0.35, 0.15), spec=0.8, shin=90)
+DEAD_BLUE = material((0.12, 0.18, 0.40), spec=0.8, shin=90)
+DEAD_YELLOW = material((0.45, 0.38, 0.12), spec=0.8, shin=90)
+DEAD_ORANGE = material((0.45, 0.25, 0.08), spec=0.8, shin=90)

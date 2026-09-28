@@ -23,7 +23,8 @@ EAVES, RIDGE = 2.45, 3.90    # the walls rise to the eaves; the ceiling slopes u
 DADO = 0.86
 BED = dict(x0=-2.36, x1=-0.30, z0=-3.65, z1=-2.05, top=0.66)      # the mattress
 ENSUITE = (1.25, 2.15)       # the doorway to the en-suite, in the back wall (x from, to)
-WINDOW = dict(z=-2.75, w=1.00, y0=0.80, y1=2.20)                  # in the right-hand wall
+WINDOW = dict(z=-3.55, w=1.00, y0=0.80, y1=2.20)                  # in the right-hand wall
+DRESSER_Z = -2.25          # the chest of drawers, on the right wall nearer the door than the window
 RUG_AREA = dict(cx=0.30, cz=-2.75, hx=1.35, hz=0.95)
 
 
@@ -208,7 +209,7 @@ def dresser(b):
     """A mahogany chest of drawers on the right wall, a gilt mirror over it (smashed: the frame hangs empty
     but for a few shards)."""
     x = HALF_W - 0.26
-    z = -1.05
+    z = DRESSER_Z
     b.group('dresser', margin=0.03)
     b.box((x, 0.47, z), (0.25, 0.40, 0.55), DARKWOOD, op=UNION, r=0.01)
     b.box((x - 0.01, 0.885, z), (0.27, 0.018, 0.58), DARKWOOD, op=UNION, r=0.008)
@@ -235,7 +236,7 @@ def dresser(b):
 
 def desk(b):
     """A small writing desk under the window's far side, its chair knocked over."""
-    z = -3.95
+    z = WINDOW['z']
     x = HALF_W - 0.33
     b.group('desk', margin=0.03)
     b.box((x, 0.755, z), (0.30, 0.02, 0.55), DARKWOOD, op=UNION, r=0.006)
