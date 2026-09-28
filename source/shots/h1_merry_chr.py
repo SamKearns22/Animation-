@@ -42,9 +42,15 @@ def pull_back(f):
     return 1.0, since                                  # the short hold
 
 
+# between these two the back of his shirt folds into a crease (a fault of how the shirt is made over his body
+# in that pose, measured with a sweep of close renders); no drawing is allowed to land there
+FOLD = (0.85, 0.985)
+
+
 def man_spec(f):
-    import man
     p, since = pull_back(f)
+    if FOLD[0] < p < FOLD[1]:
+        p = FOLD[0] if p - FOLD[0] < FOLD[1] - p else 1.0
     # the impact thrown through his shoulders: forward and down on the frame of impact, gone in a few frames
     jolt = 2.5 * np.exp(-since / 1.5) if since < 6 else 0.0
     # the dead arms: carried back with his shoulders on the pull, a small late swing after each impact
