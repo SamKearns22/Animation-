@@ -211,8 +211,8 @@ def bed_grids(vox=0.006):
         runs = np.maximum(runs, (wdt - np.abs(x - tx)) * (y > low) - 1.0 * (y <= low))
         runs = np.maximum(runs, 0.008 - np.hypot(x - xr, y - low - 0.004))          # the bead at its end
     # a wider tide mark soaked along the top of the side under the stain
-    tide = np.where(np.abs(x + 1.15) < 0.55 + 0.08 * noise2(x, y, 0.05, 20),
-                    y - (B['top'] - 0.07 - 0.05 * (1 + noise2(x, y, 0.05, 21))), -1.0)
+    tide = np.where(np.abs(x + 1.15) < 0.42 + 0.10 * noise2(x, y, 0.05, 20),
+                    y - (B['top'] - 0.05 - 0.035 * (1 + noise2(x, y * 0, 0.03, 21))), -1.0)
     runs = np.maximum(runs, tide)
     # spatter flung across the side of the mattress
     for _ in range(90):
