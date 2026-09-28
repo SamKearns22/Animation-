@@ -29,6 +29,13 @@ DRESSER_Z = -2.90          # the chest of drawers, on the right wall nearer the 
 RUG_AREA = dict(cx=0.30, cz=-2.75, hx=1.35, hz=0.95)
 
 
+def OPENINGS():
+    """The middle of each opening in the walls, which must stay open (see checks.py)."""
+    return [('the doorway', (0.0, DOOR[1] / 2, 0.08)),
+            ('the en-suite doorway', (sum(ENSUITE) / 2, 1.0, BACK_Z - 0.06)),
+            ('the window', (HALF_W + 0.06, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']))]
+
+
 def wainscot(b, axis, fixed, a0, a1, face, skip=()):
     """Panelled walls to dado height along a wall: skirting, raised panels, a dado rail.
     axis: 'x' (a wall running along x at z = fixed) or 'z' (along z at x = fixed); face: +1/-1, which way the
@@ -67,6 +74,9 @@ def build_environment(b, SP):
     b.box((0, 2.0, BACK_Z - 0.06), (W + 0.12, 2.0, 0.06), WALL, op=UNION)       # the gable end, bare
     b.box((0, 2.0, 0.08), (W + 0.12, 2.0, 0.08), WALL, op=UNION)                # the front, with the doorway
     b.box((0, DOOR[1] / 2, 0.08), (DOOR[0] / 2, DOOR[1] / 2, 0.2), WALL, op=SUB)
+    b.box((sum(ENSUITE) / 2, 1.07, BACK_Z - 0.06), ((ENSUITE[1] - ENSUITE[0]) / 2, 1.07, 0.2), WALL, op=SUB)
+    b.box((W + 0.06, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']),
+          (0.3, (WINDOW['y1'] - WINDOW['y0']) / 2, WINDOW['w'] / 2), WALL, op=SUB)
     # the landing we look in from: unlit, its floor, the walls either side and the ceiling
     b.group('landing', margin=0.05)
     b.box((0, -0.05, 1.6), (1.6, 0.05, 1.45), BOARDS, op=UNION)
@@ -77,9 +87,6 @@ def build_environment(b, SP):
     for sx in (-1, 1):
         b.box((sx * (DOOR[0] / 2 + 0.06), DOOR[1] / 2, 0.175), (0.07, DOOR[1] / 2 + 0.07, 0.018), PAINT, op=UNION, r=0.006)
     b.box((0, DOOR[1] + 0.07, 0.175), (DOOR[0] / 2 + 0.13, 0.07, 0.018), PAINT, op=UNION, r=0.006)
-    b.box((sum(ENSUITE) / 2, 1.07, BACK_Z - 0.06), ((ENSUITE[1] - ENSUITE[0]) / 2, 1.07, 0.2), WALL, op=SUB)
-    b.box((W + 0.06, (WINDOW['y0'] + WINDOW['y1']) / 2, WINDOW['z']),
-          (0.3, (WINDOW['y1'] - WINDOW['y0']) / 2, WINDOW['w'] / 2), WALL, op=SUB)
     b.group('ceiling', margin=0.05)
     ang = np.degrees(np.arctan2(RIDGE - EAVES, W))
     L = np.hypot(W, RIDGE - EAVES)

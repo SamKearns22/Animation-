@@ -181,6 +181,11 @@ def check_set(scene, check):
     """Checks for shots on other sets: the kneeling man's knees rest on the floor and, when his forehead is
     meant to be against a wall, it touches it (not in it, not short of it)."""
     import merry_chr
+    import sdf3d as S
+    setmod = scene.get('setmod')
+    for name, p in getattr(setmod, 'OPENINGS', lambda: [])():
+        d, _ = S.scene_map(*p, scene['P'], scene['G'], scene['GB'])
+        check(d > 0.05, f'{name} is open', f'{d * 100:.0f} cm of clear air at its middle')
     if merry_chr.PLACED:
         hard = [(n, m) for n, m in merry_chr.PLACED if not n.endswith('(cloth)')]   # cloth may lie over things
         tot = np.sum([m.astype(int) for _, m in hard], axis=0)

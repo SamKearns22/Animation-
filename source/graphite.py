@@ -225,7 +225,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     coloured = np.isin(mat, list(colour_mats()))
     drawn = subject | coloured  # given a firm pencil outline
     skin = np.isin(mat, list(CHAR_SKIN))
-    hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR, MS.MAN_HAIR])
+    hair = np.isin(mat, [MS.HAIR, MS.STRAW_HAIR])          # (his short hair is drawn like any other surface)
     fair = mat == MS.STRAW_HAIR          # fair hair: drawn lightly, a few fine strands, bright where it shines
     knit = mat == MS.KNIT
     eye = mat == MS.EYE
