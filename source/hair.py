@@ -64,7 +64,7 @@ def scalp_point(style, theta, elev, layer=0.0):
     return np.asarray(style['scalp_c']) + q * (np.asarray(style['scalp_r']) + layer)
 
 
-def locks(style, H, Rh, head, bodies=(), hides=None):
+def locks(style, H, Rh, head, bodies=(), hides=None, with_collide=False):
     """Paths of the locks (world coordinates) with their radii. head: the head's distance grid (head coords);
     bodies: distance grids the falling hair rests on - world grids (clothes), or (grid, origin, rotation) for
     one fixed to the head (a hat); hides(p): True where a point of hair (world) is hidden (under a hat) and
@@ -154,7 +154,7 @@ def locks(style, H, Rh, head, bodies=(), hides=None):
         t = np.linspace(0, 1, len(pts))
         grow = np.clip((np.arange(len(pts)) - on_scalp + 3) / 6.0, 0, 1)
         radii = (r_flat + (r_fall - r_flat) * grow) * np.clip((1 - t) / 0.35, 0.10, 1) ** 0.8
-        out.append((pts, radii))
+        out.append((pts, radii, layer, on_scalp))
 
     def falls_forward(side, front):
         f = style['forward']
@@ -194,6 +194,8 @@ def locks(style, H, Rh, head, bodies=(), hides=None):
         thf = side * np.radians(70 + 100 * s)
         lock(th0 + side * 0.03, e0, thf, side, falls_forward(side, s < 0.5), rng.uniform(*lt) * rng.uniform(0.3, 0.8),
              rf, rf, 0.002 + 0.006 * rng.random(), 0.0, wild)
+    if with_collide:     # (for the simulation: the same pushing-out, skipping hair hidden under a hat)
+        return out, (lambda p, layer: p if (hides is not None and hides(p)) else collide(p, layer))
     return out
 
 
@@ -217,19 +219,19 @@ def np_cone(X, Y, Z, a, b, r1, r2):
                              (np.sqrt(xx * a2 * il2) + y * rr) * il2 - r1))
 
 
-def grid(style, H, Rh, head, bodies=(), hides=None):
+def grid(style, H, Rh, head, bodies=(), hides=None, lks=None):
     """The hair as a grid of distances in world coordinates, plus the direction the hair runs in each cell.
     Each lock is a chain of tapered tubes; neighbouring locks are blended, then small gaps closed up so the
     hair falls as a continuous sheet with the locks still showing in it."""
     from scipy import ndimage
     voxel = style.get('voxel', 0.0018)
-    lks = locks(style, H, Rh, head, bodies, hides)
+    lks = locks(style, H, Rh, head, bodies, hides) if lks is None else lks
     lo, hi = H + np.asarray(style['box'][0]), H + np.asarray(style['box'][1])
     nn = np.round((hi - lo) / voxel).astype(int) + 1
     d = np.full(nn, 0.05, np.float32)
     flow = np.zeros(tuple(nn) + (3,), np.float32)
     k = 0.008
-    for pts, radii in lks:
+    for pts, radii, *_ in lks:
         kk = k if radii.max() > 0.002 else 0.002        # stray strands stay apart from the mass
         m = radii.max() + kk + 0.01
         L0 = np.maximum(np.floor((pts.min(0) - m - lo) / voxel).astype(int), 0)
@@ -304,6 +306,57 @@ def grid(style, H, Rh, head, bodies=(), hides=None):
     d = rig.robust_distance((d - grow).astype(np.float32), voxel) + grow
     d = rig.robust_distance(d.astype(np.float32), voxel)
     return lo, d, voxel, flow
+
+
+class Sim:
+    """Hair in motion (see guides/movement.md, section 4): each lock is a chain of points. Its roots, lying on
+    the scalp, move with the head at once; the hanging part is pulled towards where it would rest in this
+    pose by springs that are stiff near the scalp and loose at the ends, and damped - so when the head moves,
+    the ends lag, swing past and settle within a swing or two. Each lock keeps its length. Then every point is
+    pushed back out of the head and body, like the hair at rest.
+
+    Call step(t, rest, collide) for each drawing in order: rest is locks() for this pose, collide(p, layer)
+    pushes a point out of the head and body. Returns the locks as they are now, and how far (metres) the hair
+    is from resting."""
+
+    FREQ_ROOT, FREQ_END, DAMP, DT = 6.0, 1.1, 0.35, 1 / 240
+
+    def __init__(self):
+        self.t, self.prev, self.x, self.v = None, None, None, None
+
+    def step(self, t, rest, collide):
+        tgt = [r[0] for r in rest]
+        if self.x is None or len(self.x) != len(tgt) or any(a.shape != b.shape for a, b in zip(self.x, tgt)) \
+                or t <= self.t or t - self.t > 0.5:
+            self.t, self.prev = t, tgt
+            self.x = [a.copy() for a in tgt]
+            self.v = [np.zeros_like(a) for a in tgt]
+            return rest, 0.0
+        n_sub = max(1, int(np.ceil((t - self.t) / self.DT)))
+        dt = (t - self.t) / n_sub
+        for k, (x, v, a, b) in enumerate(zip(self.x, self.v, self.prev, tgt)):
+            root = rest[k][3]
+            u = np.clip((np.arange(len(x)) - root + 1) / max(len(x) - root, 1), 0, 1)[:, None]
+            w = 2 * np.pi * (self.FREQ_ROOT * (1 - u) ** 2 + self.FREQ_END * (1 - (1 - u) ** 2))
+            seg = np.linalg.norm(np.diff(b, axis=0), axis=1)
+            for j in range(1, n_sub + 1):
+                g = a + (b - a) * (j / n_sub)           # where the lock would rest at this moment
+                v += dt * (w * w * (g - x) - 2 * self.DAMP * w * v)
+                x += dt * v
+                x[:root] = g[:root]                     # the roots move with the head
+                v[:root] = 0.0
+                for i in range(root, len(x)):           # each lock keeps its length
+                    d = x[i] - x[i - 1]
+                    x[i] = x[i - 1] + d * (seg[i - 1] / max(np.linalg.norm(d), 1e-9))
+        out, off = [], 0.0
+        for k, (x, r) in enumerate(zip(self.x, rest)):
+            layer, root = r[2], r[3]
+            for i in range(root, len(x)):               # never through the head, the body or the clothes
+                x[i] = collide(x[i], layer)
+            off = max(off, float(np.abs(x - tgt[k]).max()))
+            out.append((x.copy(), r[1], layer, root))
+        self.t, self.prev = t, tgt
+        return out, off
 
 
 DEPS = [grid_sampler, _push_out_ellipsoid, scalp_point, locks, np_cone, grid]

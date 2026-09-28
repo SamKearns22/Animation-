@@ -296,12 +296,28 @@ HAIR = dict(scalp_c=(0.0, 0.026, -0.064), scalp_r=(0.0725, 0.0970, 0.0960), part
             box=((-0.28, -0.52, -0.32), (0.28, 0.18, 0.26)), voxel=0.0018, seed=2)
 
 
+_HAIR_SIM = []
+
+
 def get_hair(state, jumper):
+    """Her hair for this pose. With spec 'hair_t' (the time in the shot, drawings made in order) the hair
+    moves: it lags behind her head and swings and settles (hair.Sim); once it has settled it is the same as
+    at rest, and the resting hair is kept in the cache."""
     import hair
     H, Rh = state['head']
-    return cached('hair', lambda key: hair.grid(HAIR, H, Rh, head_parts()[0], (jumper,)),
-                  hair.DEPS + [HAIR, rig.smin, rig.robust_distance] + mh_deps(),
-                  (np.round(H, 5).tolist(), np.round(Rh, 5).tolist(), torso_key(state)))
+    rest_grid = lambda: cached('hair', lambda key: hair.grid(HAIR, H, Rh, head_parts()[0], (jumper,)),
+                               hair.DEPS + [HAIR, rig.smin, rig.robust_distance] + mh_deps(),
+                               (np.round(H, 5).tolist(), np.round(Rh, 5).tolist(), torso_key(state)))
+    t = state['spec'].get('hair_t')
+    if t is None:
+        return rest_grid()
+    if not _HAIR_SIM:
+        _HAIR_SIM.append(hair.Sim())
+    rest, collide = hair.locks(HAIR, H, Rh, head_parts()[0], (jumper,), with_collide=True)
+    moving, off = _HAIR_SIM[0].step(t, rest, collide)
+    if off < 0.0015:                        # settled: the resting hair (cached)
+        return rest_grid()
+    return hair.grid(HAIR, H, Rh, head_parts()[0], (jumper,), lks=moving)
 
 
 def torso_key(state):
