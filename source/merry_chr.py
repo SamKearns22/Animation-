@@ -141,6 +141,16 @@ def present_grids(vox=0.004):
         (lo, robust_distance(gore.astype(np.float32), vox), vox)
 
 
+def side_of(grid, u, v):
+    """How far the present's paper reaches towards the room (+w) at u along it, v above the sheet."""
+    lo, d, vox = grid
+    p = PRESENT_O + np.array([u, v, 0])
+    i, j = int((p[0] - lo[0]) / vox), int((p[1] - lo[1]) / vox)
+    row = d[i, j, :]
+    k = np.nonzero(row < 0)[0].max()
+    return lo[2] + (k + 0.5) * vox - PRESENT_O[2]
+
+
 def top_of(grid, u, w):
     """Height of the top of a world grid above a point in the present's frame (for the bow)."""
     lo, d, vox = grid
@@ -402,14 +412,25 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*ribbon, RIBBON, op=UNION)
     b.group('present_gore', margin=0.01)
     b.grid(*gore, GORE, op=UNION)
-    # a crushed, lopsided bow on top of the first band, and a strip of tape at the foot
-    b.group('bow', margin=0.02)
-    yt = top_of(paper, 0.44, 0.02)
-    bc = np.array([PRESENT_O[0] + 0.44, yt + 0.012, PRESENT_O[2] + 0.02])
-    b.torus(bc + [-0.035, 0.012, 0.01], 0.038, 0.007, RIBBON, op=UNION, R=rot(20, 70, 25))
-    b.torus(bc + [0.04, 0.004, -0.02], 0.034, 0.007, RIBBON, op=UNION, R=rot(-30, 20, -15))     # squashed flat
-    b.sphere(bc, 0.016, RIBBON, op=UNION)
-    b.box(bc + [0.03, -0.006, 0.07], (0.012, 0.002, 0.07), RIBBON, op=UNION, R=rot(-35, 0, 8))
+    # a big gold bow on top of the first band, lopsided and spotted with what has soaked through
+    b.group('bow', margin=0.03)
+    yt = top_of(paper, 0.46, 0.04)
+    bc = np.array([PRESENT_O[0] + 0.46, yt - 0.004, PRESENT_O[2] + 0.04])
+    bow(b, bc, 3.2, 12, RIBBON, squash=0.3)
+    for off in ((0.03, 0.05, 0.02), (-0.05, 0.03, 0.04), (0.0, 0.04, -0.03)):
+        b.ellipsoid(bc + np.array(off), (0.012, 0.008, 0.014), GORE, op=UNION)
+    # a Christmas card in its red envelope, propped against the present's side on the sheet
+    b.group('card', margin=0.02)
+    u = 0.72
+    w = side_of(paper, u, 0.08)
+    base = np.array([PRESENT_O[0] + u, R.BED['top'] + 0.004, PRESENT_O[2] + w + 0.035])
+    Rc = rot(-8) @ rot(0, -18, 0)                        # leaning back against the paper
+    b.box(base + Rc @ np.array([0, 0.058, 0]), (0.085, 0.058, 0.0025), GIFT_RED, op=UNION, r=0.001, R=Rc)
+    flap = base + Rc @ np.array([0, 0.116, -0.003])
+    for sg in (-1, 1):                                  # the flap's edges
+        b.capsule(flap + Rc @ np.array([sg * 0.085, 0, 0]), flap + Rc @ np.array([0, -0.045, 0]), 0.0012, DEAD_RED, op=UNION)
+    b.box(base + Rc @ np.array([0.01, 0.05, 0.003]), (0.045, 0.018, 0.0008), PAPER, op=UNION, R=Rc)    # an address label
+    b.ellipsoid(base + Rc @ np.array([-0.07, 0.01, 0.003]), (0.02, 0.012, 0.002), GORE, op=UNION, R=Rc)  # soaked corner
     b.group('tape', margin=0.01)
     ty = top_of(paper, 1.45, 0.0)
     b.box((PRESENT_O[0] + 1.45, ty - 0.004, PRESENT_O[2]), (0.02, 0.003, 0.16), PAPER, op=UNION, R=rot(12, 0, 0))
@@ -575,18 +596,38 @@ def wreckage(b):
         b.capsule(c + [0, r, 0] - d, c + [0, r, 0] + d, r, (PLASTIC, CLOTH_MID, SHELL)[k % 3], op=UNION)
     # small presents, one crushed, one torn open
     b.group('small_presents', margin=0.02)
-    for c, half, yaw, m in (((1.20, 0, -2.75), (0.09, 0.06, 0.07), 30, GIFT_RED),
-                            ((0.55, 0, -3.45), (0.07, 0.07, 0.07), -15, 'wrap'),
-                            ((1.95, 0, -3.10), (0.14, 0.035, 0.10), 55, GIFT_RED),
-                            ((-0.15, 0, -2.60), (0.06, 0.045, 0.11), 70, 'wrap'),
-                            ((0.25, 0, -1.95), (0.10, 0.05, 0.08), 12, GIFT_RED)):
-        c = np.array(c, float)
-        c[1] = half[1] + floor_y(c)
-        Rg = rot(yaw, 0, 0)
-        mat = GIFTWRAP if m == 'wrap' else m
-        b.box(c, half, mat, op=UNION, r=0.004, R=Rg)
-        b.box(c, (half[0] + 0.002, half[1] + 0.002, 0.009), RIBBON, op=UNION, R=Rg)
-        b.box(c, (0.009, half[1] + 0.002, half[2] + 0.002), RIBBON, op=UNION, R=Rg)
+    # (centre x, z), kind, size (half extents, or radius and half length for a tube), yaw, paper, bow?
+    gifts = [((1.20, -2.75), 'box', (0.09, 0.06, 0.07), 30, GIFT_RED, True),
+             ((0.55, -3.45), 'cube', (0.075, 0.075, 0.075), -15, GIFTWRAP, True),
+             ((1.95, -3.10), 'flat', (0.16, 0.025, 0.11), 55, GIFT_RED, False),
+             ((-0.15, -2.60), 'tube', (0.035, 0.16), 70, GIFTWRAP, False),
+             ((0.25, -1.95), 'big', (0.17, 0.12, 0.13), 12, GIFT_RED, True),
+             ((1.55, -2.25), 'tall', (0.05, 0.14, 0.05), 5, GIFTWRAP, True),
+             ((0.95, -3.35), 'tube', (0.05, 0.11), -35, GIFT_RED, True),
+             ((0.02, -3.65), 'box', (0.11, 0.045, 0.06), 80, GIFT_RED, False, 'crushed')]
+    for g in gifts:
+        (x, z), kind, size, yaw, mat, has_bow = g[:6]
+        crushed = len(g) > 6
+        c = np.array([x, floor_y((x, 0, z)), z])
+        if kind == 'tube':                       # a tube lying on its side: a bottle, a poster
+            r, h = size
+            d = np.array([np.cos(np.radians(yaw)), 0, -np.sin(np.radians(yaw))]) * h
+            c[1] += r
+            b.capsule(c - d, c + d, r, mat, op=UNION)
+            for t in (-0.55, 0.55):              # ribbon tied round it
+                b.torus(c + d * t, r + 0.001, 0.004, RIBBON, op=UNION, R=S.frame_from_axis(c - d, c + d))
+            top = c + [0, r, 0]
+        else:
+            half = np.array(size)
+            Rg = rot(yaw, 0, 0) @ (rot(0, 8, -14) if crushed else np.eye(3))
+            c[1] += half[1] * (0.7 if crushed else 1.0)
+            h2 = half * (np.array([1, 0.7, 1]) if crushed else 1)
+            b.box(c, h2, mat, op=UNION, r=0.004, R=Rg)
+            b.box(c, (h2[0] + 0.002, h2[1] + 0.002, 0.009), RIBBON, op=UNION, R=Rg)
+            b.box(c, (0.009, h2[1] + 0.002, h2[2] + 0.002), RIBBON, op=UNION, R=Rg)
+            top = c + Rg @ np.array([0, h2[1], 0])
+        if has_bow:
+            bow(b, top, 0.6 + 2.2 * min(size[0], 0.12), yaw + 30, RIBBON)
     # the chest's drawers torn out and thrown down, one upside down
     b.group('drawers', margin=0.03)
     for c, yaw, roll in (((1.20, 0.10, -1.75), 35, 0), ((0.75, 0.10, -3.65), -20, 180), ((1.45, 0.11, -3.40), 70, 12)):
@@ -611,6 +652,30 @@ def wreckage(b):
     b.cone(lc + [-0.32, 0.12, 0.12], lc + [-0.50, 0.12, 0.20], 0.11, 0.07, LINEN, op=SUB)
 
 
+def draped_jumper(vox=0.003):
+    """A jumper dragged half off the chest of drawers: lying crumpled on the top, the rest falling down the
+    front in soft folds to a ragged hem, one sleeve hanging lower."""
+    x1 = R.HALF_W - 0.26 - 0.27                 # the front edge of the top (the chest faces -x)
+    top, z0 = 0.903, R.DRESSER_Z - 0.03
+    lo, hi = np.array([x1 - 0.06, top - 0.50, z0 - 0.26]), np.array([x1 + 0.28, top + 0.07, z0 + 0.26])
+    P, n = grid_points(lo, hi, vox)
+    x, y, z = P[..., 0], P[..., 1], P[..., 2]
+    # distance to the chest's top-front corner region (the surface the cloth lies on and hangs over)
+    chest = sd_box(P, (x1 + 0.27, top - 0.45, z0), (0.27, 0.45, 0.6), 0.012)
+    # folds: ripples across the hanging part (running down it) and crumples on top
+    fold = 0.010 * np.sin(z * 55 + 3 * noise3(P, 0.08, 61)) * (y < top - 0.02) + 0.012 * noise3(P, 0.05, 62) * (y > top - 0.02)
+    bulk = 0.010 + 0.012 * (y > top - 0.01) * np.clip(1 - (x - x1) / 0.25, 0, 1)
+    d = np.abs(chest - bulk - fold) - 0.006
+    # its outline: on the top it reaches 25 cm back; down the front to a ragged hem; a sleeve hangs lower
+    width = 0.20 + 0.03 * noise3(P, 0.06, 63)
+    hem = top - 0.26 + 0.04 * noise3(P * np.array([0, 0, 1]), 0.05, 64)
+    sleeve = np.hypot(z - (z0 + 0.14), 0) - 0.045
+    region = np.maximum(np.abs(z - z0) - width, np.maximum(hem - y, x - (x1 + 0.25)))
+    region = np.minimum(region, np.maximum(sleeve, np.maximum(top - 0.44 - y, x - (x1 + 0.04))))
+    d = smax(d, region, 0.01)
+    return lo, robust_distance(d.astype(np.float32), vox), vox
+
+
 def sheet_heap(vox=0.008):
     """The top sheet, dragged off the foot of the bed: a crumpled heap on the boards, one end still over the
     mattress edge."""
@@ -623,6 +688,19 @@ def sheet_heap(vox=0.008):
     d = d + 0.018 * noise3(P, 0.07, 51) + 0.007 * noise3(P, 0.025, 52)
     d = smax(d, -P[..., 1], 0.01)
     return lo, robust_distance(d.astype(np.float32), vox), vox
+
+
+def bow(b, top, size, yaw, mat, squash=0.0):
+    """A ribbon bow sitting on a present: two loops, a knot and two tails. size 1 = loops 4 cm across."""
+    Rb = rot(yaw)
+    k = size
+    for sg in (-1, 1):
+        lc = top + Rb @ np.array([sg * 0.030 * k, 0.018 * k * (1 - squash), 0])
+        b.torus(lc, 0.024 * k, 0.0065 * k, mat, op=UNION, R=Rb @ rot(0, 0, -sg * (55 + 20 * squash)) @ rot(0, 90, 0))
+        tail = top + Rb @ np.array([sg * 0.02 * k, 0.002, 0.05 * k])
+        b.box((top + tail) / 2 + [0, 0.002, 0], (0.009 * k, 0.0015, 0.03 * k), mat, op=UNION,
+              R=Rb @ rot(sg * 25, 0, 0))
+    b.sphere(top + [0, 0.012 * k, 0], 0.012 * k, mat, op=UNION)
 
 
 def dresser_top(b):
@@ -655,12 +733,8 @@ def dresser_top(b):
         p = np.array([c[0], top + r, c[1]])
         b.capsule(p - d, p + d, r, m, op=UNION)
     # a jumper dragged half off, hanging down the front
-    fx = R.HALF_W - 0.26 - 0.27                    # the front edge of the top
-    jc = np.array([fx + 0.12, top + 0.012, z0 - 0.02])
-    b.box(jc, (0.12, 0.010, 0.17), CLOTH_LIGHT, op=UNION, r=0.008, R=rot(8))
-    b.box((fx - 0.012, top - 0.16, z0 - 0.05), (0.010, 0.17, 0.15), CLOTH_LIGHT, op=SUNION, k=0.03,
-          R=rot(0, 0, -4) @ rot(0, 6, 0))
-    b.capsule((fx - 0.01, top - 0.02, z0 + 0.12), (fx - 0.03, top - 0.42, z0 + 0.16), 0.03, CLOTH_LIGHT, op=SUNION, k=0.03)
+    b.group('dresser_jumper', margin=0.02)
+    b.grid(*cached('draped', draped_jumper, deps()), CLOTH_LIGHT, op=UNION)
     # glass from the mirror
     for k in range(10):
         c = np.array([x0 + rng.normal(0, 0.08), top + 0.0015, z0 + rng.normal(0, 0.3)])
@@ -683,33 +757,55 @@ def bulb_lit(i, t):
     return h(run, beat, 3.0) > 0.35 and h(i, beat, 4.0) > 0.12
 
 
+def light_string(b, pts, t, first=0, spacing=0.11):
+    """A string of coloured bulbs hanging from a wire along the points; returns how many bulbs."""
+    pts = np.array(pts)
+    for p, q in zip(pts[:-1], pts[1:]):
+        b.capsule(p, q, 0.0025, BLACKMETAL, op=UNION)
+    seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+    s_all = np.concatenate([[0], np.cumsum(seg)])
+    n = 0
+    for i, s in enumerate(np.arange(0.05, s_all[-1], spacing), start=first):
+        p = np.array([np.interp(s, s_all, pts[:, k]) for k in range(3)])
+        col = (i * 3 + int(i * 0.37)) % 5
+        b.cylinder(p + [0, -0.008, 0], 0.006, 0.005, BLACKMETAL, op=UNION)
+        b.ellipsoid(p + [0, -0.026, 0], (0.0075, 0.014, 0.0075), (LIT if bulb_lit(i, t) else DEAD)[col], op=UNION)
+        n += 1
+    return n
+
+
+def swags(a, b_, hooks, sag=0.12, per=12):
+    """Points of a string hung in swags between hooks (fractions 0..1 of the way from a to b_)."""
+    a, b_ = np.asarray(a, float), np.asarray(b_, float)
+    pts = []
+    for h0, h1 in zip(hooks[:-1], hooks[1:]):
+        for s in np.linspace(0, 1, per, endpoint=False):
+            f = h0 + (h1 - h0) * s
+            pts.append(a + (b_ - a) * f - np.array([0, sag * 4 * s * (1 - s), 0]))
+    pts.append(a + (b_ - a) * hooks[-1])
+    return pts
+
+
 def wall_lights(b, t=0.0):
-    """Coloured fairy lights strung in swags along the top of the back wall, under the cornice; the left end
-    torn from its hook and hanging down."""
+    """Coloured fairy lights strung in swags along the top of the back wall, under the cornice - the left end
+    torn from its hook and hanging down - and the same along the top of the right-hand wall, from the back
+    corner towards the door."""
     b.group('wall_lights', margin=0.02)
     z = R.BACK_Z + 0.035
     y = R.EAVES - 0.16
     hooks = np.linspace(-2.25, 2.25, 8)
     pts = []
-    # the left end has come away from its hook: it hangs down from the second hook
-    a = np.array([hooks[1], y, z])
+    a = np.array([hooks[1], y, z])                    # the torn end hangs from the second hook
     for s in np.linspace(1, 0, 14):
         pts.append(a + np.array([-0.35 * (1 - s) ** 1.5, -0.95 * (1 - s), 0.02 * (1 - s)]))
-    pts = pts[::-1]
-    for h0, h1 in zip(hooks[1:-1], hooks[2:]):
-        for s in np.linspace(0, 1, 12, endpoint=False):
-            pts.append(np.array([h0 + (h1 - h0) * s, y - 0.12 * 4 * s * (1 - s), z]))
-    pts.append(np.array([hooks[-1], y, z]))
-    pts = np.array(pts)
-    for p, q in zip(pts[:-1], pts[1:]):
-        b.capsule(p, q, 0.0025, BLACKMETAL, op=UNION)
+    pts = pts[::-1] + swags((-2.25, y, z), (2.25, y, z), (hooks[1:] + 2.25) / 4.5)[1:]
     for h in hooks[1:]:
         b.sphere((h, y + 0.005, z - 0.01), 0.008, BLACKMETAL, op=UNION)
-    # bulbs every 11 cm along it, hanging from the wire
-    seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
-    s_all = np.concatenate([[0], np.cumsum(seg)])
-    for i, s in enumerate(np.arange(0.05, s_all[-1], 0.11)):
-        p = np.array([np.interp(s, s_all, pts[:, k]) for k in range(3)])
-        col = (i * 3 + int(i * 0.37)) % 5
-        b.cylinder(p + [0, -0.008, 0], 0.006, 0.005, BLACKMETAL, op=UNION)
-        b.ellipsoid(p + [0, -0.026, 0.002], (0.0075, 0.014, 0.0075), (LIT if bulb_lit(i, t) else DEAD)[col], op=UNION)
+    n = light_string(b, pts, t)
+    b.group('side_lights', margin=0.02)
+    x = R.HALF_W - 0.035
+    za, zb = R.BACK_Z + 0.12, -0.35
+    hk = np.linspace(0, 1, 8)
+    for f in hk:
+        b.sphere((x - 0.01, y + 0.005, za + (zb - za) * f), 0.008, BLACKMETAL, op=UNION)
+    light_string(b, swags((x, y, za), (x, y, zb), hk), t, first=n)
