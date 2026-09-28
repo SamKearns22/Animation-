@@ -302,7 +302,7 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
             times = np.arange(0, rec.DURATION - 1e-9, every / fps)
     log = []
     t_all = time.time()
-    base = static = stats = lo_ref = first = None
+    base = static = stats = lo_ref = first = base_cam = None
     M = mat_table()
     import cache
     t_prev = time.time()
@@ -325,8 +325,10 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         t1 = time.time()
         lo = S.render_image(W // 4, H // 4, camera(scene['frame'], W // 4, H // 4), scene['P'], scene['G'], M, Lt,
                             scene['SP'], scene['GB'], SM, SMP, bands=4, verbose=False)['rgb']
-        if base is None:
-            lo_ref = lo
+        if base is None or not np.allclose(cam, base_cam):
+            # the first drawing, or the camera has moved: render the whole picture (patches from another
+            # camera position would leave stale pieces), and make it the reference for what follows
+            lo_ref, base_cam = lo, cam
             res, cam = render(scene, W, H, sm, verbose=False)
             base, spans = res, None
         else:
@@ -341,7 +343,8 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         out = os.path.join(out_dir, f'draw_{n:04d}.png')
         box = None
         if spans is None:
-            stats = graphite.draw(passes, out)
+            st = graphite.draw(passes, out, stats=stats)     # (tones kept to the shot's first drawing)
+            stats = st if stats is None else stats
             first = np.asarray(Image.open(out))
         elif not spans:
             Image.fromarray(first).save(out, optimize=True)      # nothing moved
