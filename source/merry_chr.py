@@ -19,7 +19,7 @@ import sdf3d as S
 import spare_room as R
 from cache import cached
 from materials import (BLOOD, GORE, GIFTWRAP, RIBBON, GIFT_RED, XMAS_JUMPER, LINEN, GLASS, LEATHER, SHELL,
-                       BRASS, FAIRY, BLACKMETAL, PAPER, FELT, FUR)
+                       BRASS, FAIRY, BLACKMETAL, PAPER, FELT, FUR, DARKWOOD, COAT)
 from rig import smin, smax, robust_distance
 from sdf3d import rot, UNION, SUNION, SUB
 
@@ -177,7 +177,7 @@ def bed_grids(vox=0.006):
     tongue2 = 0.02 + 0.015 * noise2(x, z, 0.05, 15) - np.abs(x + 0.78) - np.maximum(-2.5 - z, 0)
     front = z > B['z1'] - 0.02
     runs = np.full(x.shape, -1.0, np.float32)
-    for xr, y0, wd in ((-1.24, 0.43, 0.035), (-1.17, 0.52, 0.018), (-0.78, 0.55, 0.020), (-1.31, 0.58, 0.012)):
+    for xr, y0, wd in ((-1.24, 0.47, 0.014), (-1.31, 0.58, 0.008)):
         runs = np.maximum(runs, (wd * (0.6 + 0.4 * np.clip((y - y0) / 0.1, 0, 1)) - np.abs(x - xr)) * (y > y0))
     stain = np.maximum(np.maximum(top, tongue), tongue2)
     stain = np.where(front & (y < B['top'] - 0.03), runs, stain)
@@ -446,23 +446,23 @@ def wreckage(b):
             c = p + dirv * L / 2 + [0, 0.004 + 0.012 * rng.random(), 0]
             b.box(c, (L / 2 + 0.01, 0.0025, wdt / 2), LINEN, op=UNION, r=0.002, R=rot(-yaw, rng.normal(0, 8), rng.normal(0, 6)))
             p = p + dirv * L
-    for x in (-1.55, -1.02, -0.62):                                   # strips hanging over the front of the bed
-        top = np.array([x, R.BED['top'] - 0.01, R.BED['z1'] + 0.02])
-        for s in range(6):
-            nxt = top + np.array([rng.normal(0, 0.03), -0.09, 0.012 + 0.02 * (s > 3)])
-            if nxt[1] < 0.005:
-                nxt[1] = 0.005
-            b.capsule(top, nxt, 0.006, LINEN, op=UNION)
-            b.box((top + nxt) / 2, (0.03, 0.05, 0.004), LINEN, op=SUNION, k=0.01)
-            top = nxt
+    # the torn top sheet dragged half off the bed, heaped on the boards at its foot
+    b.group('sheet_heap', margin=0.03)
+    z1 = R.BED['z1']
+    for c, rr, yaw in (((-0.95, 0.52, z1 + 0.06), (0.30, 0.14, 0.05), 10), ((-0.85, 0.25, z1 + 0.16), (0.26, 0.20, 0.07), -5),
+                       ((-0.80, 0.07, z1 + 0.40), (0.38, 0.07, 0.30), 25), ((-0.35, 0.05, z1 + 0.55), (0.25, 0.05, 0.20), -30),
+                       ((-1.20, 0.06, z1 + 0.30), (0.22, 0.06, 0.22), 40)):
+        b.ellipsoid(c, rr, LINEN, op=SUNION, k=0.06, R=rot(yaw, rng.normal(0, 8), rng.normal(0, 8)))
     # --- broken glass: shards everywhere, thickest under the mirror, some on the rug
     b.group('glass', margin=0.02)
-    for k in range(130):
-        if k < 70:
+    for k in range(170):
+        if k >= 130:
+            c = np.array([rng.uniform(-0.7, 1.2), 0.0, rng.uniform(-1.5, -0.4)])
+        elif k < 70:
             c = np.array([R.HALF_W - 0.4 - 1.2 * rng.random() ** 1.5, 0.0, -1.05 + rng.normal(0, 0.45)])
         else:
             c = np.array([rng.uniform(-0.9, 1.9), 0.0, rng.uniform(-4.4, -0.5)])
-        s = 0.006 + 0.04 * rng.random() ** 2.5
+        s = 0.008 + 0.05 * rng.random() ** 2.0
         c[1] = 0.0025 + (0.012 if (abs(c[0] - R.RUG_AREA['cx']) < R.RUG_AREA['hx'] and abs(c[2] - R.RUG_AREA['cz']) < R.RUG_AREA['hz']) else 0)
         Rr = rot(rng.uniform(0, 360), rng.normal(0, 6), rng.normal(0, 6))
         b.box(c, (s, 0.0015, s * rng.uniform(0.4, 1.0)), GLASS, op=UNION, R=Rr)
@@ -506,6 +506,19 @@ def wreckage(b):
         b.box(c, half, mat, op=UNION, r=0.004, R=Rg)
         b.box(c, (half[0] + 0.002, half[1] + 0.002, 0.009), RIBBON, op=UNION, R=Rg)
         b.box(c, (0.009, half[1] + 0.002, half[2] + 0.002), RIBBON, op=UNION, R=Rg)
+    # --- the chest's drawers torn out and thrown down, one upside down; a dark coat flung across the floor
+    b.group('drawers', margin=0.03)
+    for c, yaw, roll in (((1.55, 0.10, -1.95), 35, 0), ((0.35, 0.10, -0.95), -20, 180), ((1.85, 0.11, -0.45), 70, 12)):
+        Rd = rot(yaw, 0, roll)
+        c = np.array(c)
+        b.box(c, (0.24, 0.09, 0.45), DARKWOOD, op=UNION, r=0.006, R=Rd)
+        b.box(c + Rd @ [0, 0.02, 0], (0.22, 0.09, 0.43), DARKWOOD, op=SUB, R=Rd)
+    b.group('coat', margin=0.03)
+    cc = np.array([-0.35, 0.03, -1.55])
+    b.ellipsoid(cc, (0.40, 0.035, 0.26), COAT, op=UNION, R=rot(-25))
+    b.capsule(cc + [0.25, 0.0, 0.1], cc + [0.55, 0.0, 0.42], 0.045, COAT, op=SUNION, k=0.04)
+    b.capsule(cc + [-0.3, 0.0, 0.0], cc + [-0.62, 0.0, -0.3], 0.045, COAT, op=SUNION, k=0.04)
+    b.ellipsoid(cc + [0.1, 0.04, 0.05], (0.22, 0.04, 0.18), COAT, op=SUNION, k=0.05, R=rot(40))
     # --- a leather holdall on its side by the desk, a pillow flung on the floor
     b.group('holdall', margin=0.03)
     hc = np.array([1.35, 0.17, -3.55])

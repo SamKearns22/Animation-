@@ -213,9 +213,12 @@ def dresser(b):
     b.box((x, 0.47, z), (0.25, 0.40, 0.55), DARKWOOD, op=UNION, r=0.01)
     b.box((x - 0.01, 0.885, z), (0.27, 0.018, 0.58), DARKWOOD, op=UNION, r=0.008)
     for i, y in enumerate((0.22, 0.47, 0.72)):
-        b.box((x - 0.25, y, z), (0.012, 0.10, 0.50), DARKWOOD, op=SUNION, k=0.004, r=0.006)
-        for dz in (-0.28, 0.28):
-            b.sphere((x - 0.27, y, z + dz), 0.016, BRASS, op=UNION)
+        if i == 1:                    # the bottom and top drawers are gone: dark empty holes
+            b.box((x - 0.25, y, z), (0.012, 0.10, 0.50), DARKWOOD, op=SUNION, k=0.004, r=0.006)
+            for dz in (-0.28, 0.28):
+                b.sphere((x - 0.27, y, z + dz), 0.016, BRASS, op=UNION)
+        else:
+            b.box((x - 0.2, y, z), (0.1, 0.095, 0.48), DARKWOOD, op=SUB)
     for dz in (-0.5, 0.5):
         b.box((x - 0.2, 0.04, z + dz), (0.05, 0.04, 0.05), DARKWOOD, op=UNION, r=0.01)
     b.group('mirror', margin=0.02)

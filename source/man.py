@@ -21,7 +21,7 @@ SHAPE = dict(gender=1.0, age=0.71, muscle=0.5, weight=0.58, height=0.55, proport
 FACE = {'head/head-square': 0.3, 'neck/neck-scale-horiz-incr': 0.2}
 
 # a plain, pale cotton shirt with a band collar, tucked in; dark blue trousers
-SHIRT = dict(thick=0.005, drape=0.5, bridge=0.03, smooth=0.010, hem=-0.02, cuff=0.012, voxel=0.004,
+SHIRT = dict(thick=0.008, drape=0.4, bridge=0.06, smooth=0.022, hem=-0.02, cuff=0.012, voxel=0.004,
              collar=('crew', 0.058, 0.007))
 
 _BODY = []
@@ -163,8 +163,10 @@ def socks(state, skin):
     sub = d[i0[0]:i1[0], i0[1]:i1[1], i0[2]:i1[2]]
     lo2 = lo + i0 * vox
     part = b.part_map(Vw, lo2, sub.shape, vox, [{'foot.L', 'foot.R'}])
-    f = np.where(part == 0, sub - 0.002, np.maximum(sub, 0.004) + 0.01)
-    return lo2, rig.robust_distance(f.astype(np.float32), vox), vox
+    f = np.where(part == 0, sub - 0.004, np.maximum(sub, 0.004) + 0.01)
+    f = rig.robust_distance(f.astype(np.float32), vox)
+    f = rig.robust_distance(rig.robust_distance(f - 0.012, vox) + 0.012, vox)      # a sock: no toes
+    return lo2, f, vox
 
 
 def hair(state, skin, voxel=0.003):
