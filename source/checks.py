@@ -180,6 +180,12 @@ if __name__ == '__main__':
 def check_set(scene, check):
     """Checks for shots on other sets: the kneeling man's knees rest on the floor and, when his forehead is
     meant to be against a wall, it touches it (not in it, not short of it)."""
+    import merry_chr
+    if merry_chr.PLACED:
+        tot = np.sum([m.astype(int) for _, m in merry_chr.PLACED], axis=0)
+        clash = [n for n, m in merry_chr.PLACED if (tot[m] > 1).any()]
+        check(not clash, 'things on the floor lie apart (none inside another)',
+              'all apart' if not clash else 'overlapping: ' + ', '.join(clash))
     ms = scene['chars'].get('man')
     if ms is None:
         return

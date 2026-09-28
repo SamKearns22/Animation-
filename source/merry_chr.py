@@ -23,6 +23,7 @@ from materials import (BLOOD, GORE, GIFTWRAP, RIBBON, GIFT_RED, XMAS_JUMPER, LIN
                        PLASTIC, SCREEN, XMAS_GREEN_KNIT, GOLD, WOOD, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, LIGHT_YELLOW,
                        LIGHT_ORANGE, DEAD_RED, DEAD_GREEN, DEAD_BLUE, DEAD_YELLOW, DEAD_ORANGE)
 from rig import smin, smax, robust_distance
+from numba import njit
 from sdf3d import rot, UNION, SUNION, SUB
 
 PRESENT_O = np.array([-2.07, 0.672, -2.87])      # its head end, on the sheet; it runs along +x
@@ -451,7 +452,18 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.group('writing', margin=0.01)
     b.grid(*cached('wallblood', wall_blood, deps(), tuple(np.round(r_centre, 4)), tuple(np.round(contact, 4))),
            BLOOD, op=UNION)
-    wreckage(b)
+    b.group('sheet_heap', margin=0.03)
+    b.grid(*cached('sheetheap', sheet_heap, deps()), LINEN, op=UNION)
+
+    def fixed(sb):
+        import man
+        from materials import new_params
+        R.build_environment(sb, new_params())
+        sb.group('heap', margin=0.01)
+        sb.grid(*cached('sheetheap', sheet_heap, deps()), LINEN, op=UNION)
+        if man_state is not None:
+            man.build(sb, man_state)
+    wreckage(b, fixed)
     dresser_top(b)
     wall_lights(b, t)
 
@@ -523,8 +535,7 @@ def suitcase(b, rng, c, yaw, state, mat=SHELL):
         b.box(c + [0, 0.24, 0] + Rside @ np.array([0, 0.04, 0]), (0.335, 0.11, 0.215), mat, op=SUB, r=0.02, R=Rside)
         b.capsule(c + Rs @ np.array([-0.1, 0.49, 0]), c + Rs @ np.array([0.1, 0.49, 0]), 0.012, BLACKMETAL, op=UNION)
     elif state == 'upturned':
-        b.box(c + [0, 0.10, 0], (0.34, 0.10, 0.23), mat, op=UNION, r=0.03, R=Rs @ rot(0, 4, -6))
-        b.box(c + [0, 0.23, 0], (0.28, 0.06, 0.18), mat, op=SUB, r=0.03, R=Rs @ rot(0, -12, 8))   # stamped in
+        b.box(c + [0, 0.10, 0], (0.34, 0.10, 0.23), mat, op=UNION, r=0.03, R=Rs @ rot(0, 4, -3))
         for sg in (-1, 1):
             b.cylinder(c + Rs @ np.array([sg * 0.28, 0.21, 0.18]), 0.02, 0.025, BLACKMETAL, op=UNION, R=rot(0, 90, 0))
     else:
@@ -532,9 +543,159 @@ def suitcase(b, rng, c, yaw, state, mat=SHELL):
         b.box(c + [0, 0.05, 0], (0.335, 0.03, 0.215), mat, op=SUB, r=0.015, R=Rs @ rot(0, 0, 3))
 
 
-def wreckage(b):
+@njit(cache=True)
+def _occupied(P, G, GB, x0, z0, cell, i0, i1, k0, k1, heights, out):
+    """Mark the floor cells (i, k) in the window whose column holds anything solid at these heights."""
+    for i in range(i0, i1):
+        for k in range(k0, k1):
+            x, z = x0 + (i + 0.5) * cell, z0 + (k + 0.5) * cell
+            for y in heights:
+                d, m = S.scene_map(x, y, z, P, G, GB)
+                if d < 0.0:
+                    out[i, k] = True
+                    break
+
+
+class Floor:
+    """What already stands on the floor, as a map of 2 cm cells, so that thrown things land beside each other
+    and never inside each other (or inside the furniture, the walls or the man). Each thing is tried where it
+    is meant to go and, if that is taken, nudged outwards until it fits."""
+    X0, Z0, CELL = -2.45, -5.25, 0.02
+    NX, NZ = 245, 270
+    HEIGHTS = np.array([0.02, 0.05, 0.10, 0.18, 0.28, 0.40, 0.55])
+
+    def __init__(self, scratch_build):
+        self.occ = np.zeros((self.NX, self.NZ), bool)
+        self.placed = []
+        self.occ |= self.mask(scratch_build)
+        self.base = self.occ.copy()
+
+    def mask(self, make):
+        sb = S.Builder()
+        sb.group('probe', margin=0.0)
+        make(sb)
+        sb.groups = [g for g in sb.groups if g['bounds']]
+        P, G = sb.build()
+        GB = sb.grid_buffer()
+        out = np.zeros((self.NX, self.NZ), bool)
+        lo = (G[:, 0:3] - G[:, 3:4]).min(0)
+        hi = (G[:, 0:3] + G[:, 3:4]).max(0)
+        i0, i1 = max(int((lo[0] - self.X0) / self.CELL), 0), min(int((hi[0] - self.X0) / self.CELL) + 1, self.NX)
+        k0, k1 = max(int((lo[2] - self.Z0) / self.CELL), 0), min(int((hi[2] - self.Z0) / self.CELL) + 1, self.NZ)
+        if i1 > i0 and k1 > k0:
+            _occupied(P, G, GB, self.X0, self.Z0, self.CELL, i0, i1, k0, k1, self.HEIGHTS, out)
+        return out
+
+    def place(self, b, name, make, x, z, reach=0.7):
+        """Put make(builder, x, z) down at (x, z), or as near as it fits. Returns where, or None."""
+        grown = ndimage.binary_dilation(self.occ, iterations=1)       # and not touching, either
+        tries = [(0.0, 0.0)] + [(r * np.cos(a), r * np.sin(a)) for r in np.arange(0.05, reach, 0.05)
+                                for a in np.linspace(0, 2 * np.pi, int(8 + r * 40), endpoint=False)]
+        for dx, dz in tries:
+            m = self.mask(lambda sb: make(sb, x + dx, z + dz))
+            if m.any() and not (m & grown).any():
+                self.occ |= m
+                self.placed.append((name, m))
+                make(b, x + dx, z + dz)
+                return x + dx, z + dz
+        print(f'  (no room on the floor for {name} near {x:.2f}, {z:.2f}: left out)', flush=True)
+        return None
+
+    def free(self, x, z, r=0.0):
+        i, k = int((x - self.X0) / self.CELL), int((z - self.Z0) / self.CELL)
+        n = int(np.ceil(r / self.CELL))
+        return not self.occ[max(i - n, 0):i + n + 1, max(k - n, 0):k + n + 1].any()
+
+
+PLACED = []          # (name, footprint) of everything laid on the floor in the last build, for checks.py
+
+
+def wreckage(b, fixed):
+    """fixed(builder): adds everything that was already standing on the floor (the room, the man)."""
+    fl = Floor(fixed)
+    # --- the luggage of someone coming home for Christmas: five cases thrown about and burst open
+    b.group('suitcases', margin=0.03)
+    for name, (x, z), yaw, state, mat, seed in (
+            ('burst case', (0.20, -2.95), -18, 'burst', SHELL, 1), ('leather case', (1.55, -2.95), 64, 'side', LEATHER, 2),
+            ('fabric case', (-0.05, -4.00), 25, 'upturned', CLOTH_MID, 3), ('torn lid', (1.60, -4.45), -40, 'lid', SHELL, 4),
+            ('flung case', (0.95, -1.95), 8, 'upturned', SHELL, 5)):
+        fl.place(b, name, lambda sb, x, z, yaw=yaw, state=state, mat=mat, seed=seed:
+                 suitcase(sb, np.random.default_rng(seed), (x, 0.0, z), yaw, state, mat=mat), x, z)
+    # the chest's drawers torn out and thrown down, one upside down
+    b.group('drawers', margin=0.03)
+    for (x, z), yaw, roll in (((1.20, -1.75), 35, 0), ((0.75, -3.65), -20, 180), ((1.45, -3.40), 70, 12)):
+        def drawer(sb, x, z, yaw=yaw, roll=roll):
+            Rd = rot(yaw, 0, roll)
+            c = np.array([x, 0.10, z])
+            sb.box(c, (0.24, 0.09, 0.45), DARKWOOD, op=UNION, r=0.006, R=Rd)
+            sb.box(c + Rd @ [0, 0.02, 0], (0.22, 0.09, 0.43), DARKWOOD, op=SUB, R=Rd)
+        fl.place(b, 'drawer', drawer, x, z)
+    # a leather holdall, a pillow flung on the floor, the smashed desk lamp
+    b.group('holdall', margin=0.03)
+
+    def holdall(sb, x, z):
+        hc = np.array([x, 0.17, z])
+        sb.capsule(hc + [-0.25, 0, 0.08], hc + [0.25, 0, -0.08], 0.16, LEATHER, op=UNION)
+        sb.torus(hc + [0, 0.12, 0.02], 0.10, 0.012, LEATHER, op=UNION, R=rot(-17, 0, 0) @ rot(0, 90, 0))
+    fl.place(b, 'holdall', holdall, 1.35, -4.10)
+    b.group('pillow', margin=0.02)
+    fl.place(b, 'pillow', lambda sb, x, z: sb.ellipsoid((x, 0.07 + floor_y((x, 0, z)), z), (0.36, 0.07, 0.22), LINEN,
+                                                         op=UNION, R=rot(25)), -0.15, -3.2)
+    b.group('lamp', margin=0.02)
+
+    def lamp(sb, x, z):
+        lc = np.array([x, 0.0, z])
+        sb.cylinder(lc + [0, 0.012, 0], 0.012, 0.08, BRASS, op=UNION)
+        sb.capsule(lc + [0, 0.02, 0], lc + [-0.32, 0.035, 0.12], 0.012, BRASS, op=UNION)
+        sb.cone(lc + [-0.32, 0.12, 0.12], lc + [-0.50, 0.12, 0.20], 0.12, 0.08, LINEN, op=UNION)
+        sb.cone(lc + [-0.32, 0.12, 0.12], lc + [-0.50, 0.12, 0.20], 0.11, 0.07, LINEN, op=SUB)
+    fl.place(b, 'lamp', lamp, 2.05, -4.55)
+    # small presents of every shape, some with bows
+    b.group('small_presents', margin=0.02)
+    gifts = [((1.20, -2.75), 'box', (0.09, 0.06, 0.07), 30, GIFT_RED, True),
+             ((0.55, -3.45), 'cube', (0.075, 0.075, 0.075), -15, GIFTWRAP, True),
+             ((1.95, -3.10), 'flat', (0.16, 0.025, 0.11), 55, GIFT_RED, False),
+             ((-0.15, -2.60), 'tube', (0.035, 0.16), 70, GIFTWRAP, False),
+             ((0.25, -1.95), 'big', (0.17, 0.12, 0.13), 12, GIFT_RED, True),
+             ((1.55, -2.25), 'tall', (0.05, 0.14, 0.05), 5, GIFTWRAP, True),
+             ((0.95, -3.35), 'tube', (0.05, 0.11), -35, GIFT_RED, True),
+             ((0.02, -3.65), 'box', (0.11, 0.045, 0.06), 80, GIFT_RED, False, 'crushed')]
+    for g in gifts:
+        fl.place(b, 'present', lambda sb, x, z, g=g: small_present(sb, (x, z), *g[1:6], crushed=len(g) > 6), *g[0])
+    # everything that was in the cases, flung across the room: ordinary clothes, and Christmas ones
+    b.group('clothes', margin=0.03)
+    kinds = [((0.55, -2.15), 'top', CLOTH_LIGHT), ((0.05, -2.9), 'trousers', DENIM), ((1.15, -2.55), 'ball', CLOTH_MID),
+             ((0.70, -3.20), 'top', XMAS_JUMPER), ((1.85, -2.35), 'ball', CLOTH_LIGHT), ((-0.15, -3.45), 'top', COAT),
+             ((1.25, -3.55), 'trousers', CLOTH_MID), ((0.35, -3.70), 'long', XMAS_GREEN_KNIT), ((1.10, -1.85), 'top', DENIM),
+             ((1.95, -3.95), 'ball', XMAS_JUMPER), ((0.30, -4.30), 'ball', CLOTH_LIGHT), ((0.60, -2.65), 'long', CLOTH_MID),
+             ((-0.20, -2.25), 'ball', COAT), ((1.45, -2.10), 'long', LEATHER), ((0.95, -3.95), 'top', CLOTH_LIGHT),
+             ((1.75, -3.45), 'top', CLOTH_MID), ((0.15, -3.10), 'ball', XMAS_JUMPER), ((0.85, -2.95), 'trousers', COAT)]
+    for n, ((x, z), kind, mat) in enumerate(kinds):
+        rs = np.random.default_rng(100 + n)
+        size, yaw = rs.uniform(0.8, 1.0), rs.uniform(0, 360)
+        fl.place(b, kind, lambda sb, x, z, kind=kind, mat=mat, n=n, size=size, yaw=yaw:
+                 garment(sb, np.random.default_rng(200 + n), (x, 0, z), kind, mat, yaw=yaw, size=size), x, z, reach=0.5)
+    # a Santa hat, knocked across the floor
+
+    def santa_hat(sb, x, z):
+        hc = np.array([x, floor_y((x, 0, z)), z])
+        sb.cone(hc + [0, 0.02, 0], hc + [0.18, 0.06, 0.08], 0.09, 0.015, FELT, op=UNION)
+        sb.torus(hc + [0, 0.03, 0], 0.085, 0.025, FUR, op=UNION, R=rot(0, 0, 70) @ rot(90, 0, 0))
+        sb.sphere(hc + [0.20, 0.04, 0.10], 0.028, FUR, op=UNION)
+    fl.place(b, 'Santa hat', santa_hat, 1.30, -2.30)
+    # toiletries spilled out of a wash bag
+    b.group('toiletries', margin=0.02)
     rng = np.random.default_rng(7)
-    # --- shredded sheets: torn strips trailing across the floor from the bed
+    for k in range(10):
+        x, z = 0.4 + rng.normal(0, 0.3), -2.75 + rng.normal(0, 0.25)
+        L, r, a = rng.uniform(0.06, 0.16), rng.uniform(0.012, 0.03), rng.uniform(0, 2 * np.pi)
+
+        def bottle(sb, x, z, L=L, r=r, a=a, k=k):
+            c = np.array([x, floor_y((x, 0, z)) + r, z])
+            d = np.array([np.cos(a), 0, np.sin(a)]) * L / 2
+            sb.capsule(c - d, c + d, r, (PLASTIC, CLOTH_MID, SHELL)[k % 3], op=UNION)
+        fl.place(b, 'toiletry', bottle, x, z, reach=0.3)
+    # --- shredded sheets: torn strips trailing across the floor, stopping where they meet something
     b.group('shreds', margin=0.02)
     for k in range(12):
         p = np.array([rng.uniform(-0.3, 1.7), 0.0, rng.uniform(-3.6, -1.8)])
@@ -545,111 +706,52 @@ def wreckage(b):
             L = rng.uniform(0.07, 0.13)
             dirv = np.array([np.cos(np.radians(yaw)), 0, np.sin(np.radians(yaw))])
             c = p + dirv * L / 2
-            c[1] = floor_y(c) + 0.004 + 0.012 * rng.random()
-            b.box(c, (L / 2 + 0.01, 0.0025, wdt / 2), LINEN, op=UNION, r=0.002, R=rot(-yaw, rng.normal(0, 8), rng.normal(0, 6)))
+            if not fl.free(c[0], c[2], L / 2 + 0.02):
+                break
+            c[1] = floor_y(c) + 0.004 + 0.006 * rng.random()
+            b.box(c, (L / 2 + 0.01, 0.0025, wdt / 2), LINEN, op=UNION, r=0.002, R=rot(-yaw, rng.normal(0, 3), rng.normal(0, 3)))
             p = p + dirv * L
-    # the torn top sheet dragged off the bed and heaped at its foot, crumpled
-    b.group('sheet_heap', margin=0.03)
-    b.grid(*cached('sheetheap', sheet_heap, deps()), LINEN, op=UNION)
-    # --- broken glass: shards everywhere, thickest under the smashed mirror
+    # --- broken glass: shards everywhere there is bare floor, thickest under the smashed mirror
     b.group('glass', margin=0.02)
-    for k in range(190):
-        if k < 80:
+    for k in range(260):
+        if k < 110:
             c = np.array([R.HALF_W - 0.45 - 1.3 * rng.random() ** 1.5, 0.0, R.DRESSER_Z + rng.normal(0, 0.5)])
         else:
-            c = np.array([rng.uniform(-0.3, 2.0), 0.0, rng.uniform(-4.2, -1.8)])
+            c = np.array([rng.uniform(-0.3, 2.0), 0.0, rng.uniform(-4.2, -1.5)])
         s = 0.01 + 0.05 * rng.random() ** 2.0
+        yaw = rng.uniform(0, 360)
+        if not fl.free(c[0], c[2], s + 0.02):
+            continue
         c[1] = 0.0025 + floor_y(c)
-        Rr = rot(rng.uniform(0, 360), rng.normal(0, 6), rng.normal(0, 6))
+        Rr = rot(yaw, rng.normal(0, 3), rng.normal(0, 3))
         b.box(c, (s, 0.0015, s * rng.uniform(0.4, 1.0)), GLASS, op=UNION, R=Rr)
         b.halfspace(c, Rr @ rot(0, 0, 90) @ rot(rng.uniform(-50, 50), 0, 0), GLASS, op=SUB)
-    # --- the luggage of someone coming home for Christmas: four cases thrown about and burst open
-    b.group('suitcases', margin=0.03)
-    suitcase(b, rng, (0.20, 0.012, -2.95), -18, 'burst')
-    suitcase(b, rng, (1.55, 0.0, -2.95), 64, 'side', mat=LEATHER)
-    suitcase(b, rng, (-0.05, 0.0, -4.00), 25, 'upturned', mat=CLOTH_MID)
-    suitcase(b, rng, (1.60, 0.0, -4.45), -40, 'lid')
-    suitcase(b, rng, (0.95, 0.0, -1.95), 8, 'upturned')
-    # everything that was in them, flung across the room: ordinary clothes, and Christmas ones
-    b.group('clothes', margin=0.03)
-    kinds = [((0.55, -2.15), 'top', CLOTH_LIGHT), ((0.05, -2.9), 'trousers', DENIM), ((1.15, -2.55), 'ball', CLOTH_MID),
-             ((0.70, -3.20), 'top', XMAS_JUMPER), ((1.85, -2.35), 'ball', CLOTH_LIGHT), ((-0.15, -3.45), 'top', COAT),
-             ((1.25, -3.55), 'trousers', CLOTH_MID), ((0.35, -3.70), 'long', XMAS_GREEN_KNIT), ((1.10, -1.85), 'top', DENIM),
-             ((1.95, -3.95), 'ball', XMAS_JUMPER), ((0.30, -4.30), 'ball', CLOTH_LIGHT), ((0.60, -2.65), 'long', CLOTH_MID),
-             ((-0.20, -2.25), 'ball', COAT), ((1.45, -2.10), 'long', LEATHER), ((0.95, -3.95), 'top', CLOTH_LIGHT),
-             ((1.75, -3.45), 'top', CLOTH_MID), ((0.15, -3.10), 'ball', XMAS_JUMPER), ((0.85, -2.95), 'trousers', COAT)]
-    for (x, z), kind, mat in kinds:
-        garment(b, rng, (x, 0, z), kind, mat, size=rng.uniform(0.85, 1.1))
-    # a Santa hat, knocked across the floor
-    hc = np.array([1.30, 0.0, -2.30])
-    b.cone(hc + [0, 0.02, 0], hc + [0.18, 0.06, 0.08], 0.09, 0.015, FELT, op=UNION)
-    b.torus(hc + [0, 0.03, 0], 0.085, 0.025, FUR, op=UNION, R=rot(0, 0, 70) @ rot(90, 0, 0))
-    b.sphere(hc + [0.20, 0.04, 0.10], 0.028, FUR, op=UNION)
-    # toiletries spilled out of a wash bag
-    b.group('toiletries', margin=0.02)
-    for k in range(10):
-        c = np.array([0.4 + rng.normal(0, 0.3), 0, -2.75 + rng.normal(0, 0.25)])
-        c[1] = floor_y(c)
-        L, r = rng.uniform(0.06, 0.16), rng.uniform(0.012, 0.03)
-        a = rng.uniform(0, 2 * np.pi)
-        d = np.array([np.cos(a), 0, np.sin(a)]) * L / 2
-        b.capsule(c + [0, r, 0] - d, c + [0, r, 0] + d, r, (PLASTIC, CLOTH_MID, SHELL)[k % 3], op=UNION)
-    # small presents, one crushed, one torn open
-    b.group('small_presents', margin=0.02)
-    # (centre x, z), kind, size (half extents, or radius and half length for a tube), yaw, paper, bow?
-    gifts = [((1.20, -2.75), 'box', (0.09, 0.06, 0.07), 30, GIFT_RED, True),
-             ((0.55, -3.45), 'cube', (0.075, 0.075, 0.075), -15, GIFTWRAP, True),
-             ((1.95, -3.10), 'flat', (0.16, 0.025, 0.11), 55, GIFT_RED, False),
-             ((-0.15, -2.60), 'tube', (0.035, 0.16), 70, GIFTWRAP, False),
-             ((0.25, -1.95), 'big', (0.17, 0.12, 0.13), 12, GIFT_RED, True),
-             ((1.55, -2.25), 'tall', (0.05, 0.14, 0.05), 5, GIFTWRAP, True),
-             ((0.95, -3.35), 'tube', (0.05, 0.11), -35, GIFT_RED, True),
-             ((0.02, -3.65), 'box', (0.11, 0.045, 0.06), 80, GIFT_RED, False, 'crushed')]
-    for g in gifts:
-        (x, z), kind, size, yaw, mat, has_bow = g[:6]
-        crushed = len(g) > 6
-        c = np.array([x, floor_y((x, 0, z)), z])
-        if kind == 'tube':                       # a tube lying on its side: a bottle, a poster
-            r, h = size
-            d = np.array([np.cos(np.radians(yaw)), 0, -np.sin(np.radians(yaw))]) * h
-            c[1] += r
-            b.capsule(c - d, c + d, r, mat, op=UNION)
-            for t in (-0.55, 0.55):              # ribbon tied round it
-                b.torus(c + d * t, r + 0.001, 0.004, RIBBON, op=UNION, R=S.frame_from_axis(c - d, c + d))
-            top = c + [0, r, 0]
-        else:
-            half = np.array(size)
-            Rg = rot(yaw, 0, 0) @ (rot(0, 8, -14) if crushed else np.eye(3))
-            c[1] += half[1] * (0.7 if crushed else 1.0)
-            h2 = half * (np.array([1, 0.7, 1]) if crushed else 1)
-            b.box(c, h2, mat, op=UNION, r=0.004, R=Rg)
-            b.box(c, (h2[0] + 0.002, h2[1] + 0.002, 0.009), RIBBON, op=UNION, R=Rg)
-            b.box(c, (0.009, h2[1] + 0.002, h2[2] + 0.002), RIBBON, op=UNION, R=Rg)
-            top = c + Rg @ np.array([0, h2[1], 0])
-        if has_bow:
-            bow(b, top, 0.6 + 2.2 * min(size[0], 0.12), yaw + 30, RIBBON)
-    # the chest's drawers torn out and thrown down, one upside down
-    b.group('drawers', margin=0.03)
-    for c, yaw, roll in (((1.20, 0.10, -1.75), 35, 0), ((0.75, 0.10, -3.65), -20, 180), ((1.45, 0.11, -3.40), 70, 12)):
-        Rd = rot(yaw, 0, roll)
-        c = np.array(c)
-        b.box(c, (0.24, 0.09, 0.45), DARKWOOD, op=UNION, r=0.006, R=Rd)
-        b.box(c + Rd @ [0, 0.02, 0], (0.22, 0.09, 0.43), DARKWOOD, op=SUB, R=Rd)
-    # a leather holdall slashed open, a pillow flung on the floor
-    b.group('holdall', margin=0.03)
-    hc = np.array([1.35, 0.17, -4.10])
-    b.capsule(hc + [-0.25, 0, 0.08], hc + [0.25, 0, -0.08], 0.16, LEATHER, op=UNION)
-    b.torus(hc + [0, 0.12, 0.02], 0.10, 0.012, LEATHER, op=UNION, R=rot(-17, 0, 0) @ rot(0, 90, 0))
-    b.group('pillow', margin=0.02)
-    b.ellipsoid((-0.15, 0.08, -3.2), (0.36, 0.07, 0.22), LINEN, op=UNION, R=rot(25))
-    b.ellipsoid((-2.18, 0.80, -3.35), (0.10, 0.20, 0.30), LINEN, op=UNION, R=rot(0, 0, -18))
-    # the desk lamp, smashed on the floor
-    b.group('lamp', margin=0.02)
-    lc = np.array([2.05, 0.0, -4.55])
-    b.cylinder(lc + [0, 0.012, 0], 0.012, 0.08, BRASS, op=UNION)
-    b.capsule(lc + [0, 0.02, 0], lc + [-0.32, 0.035, 0.12], 0.012, BRASS, op=UNION)
-    b.cone(lc + [-0.32, 0.12, 0.12], lc + [-0.50, 0.12, 0.20], 0.12, 0.08, LINEN, op=UNION)
-    b.cone(lc + [-0.32, 0.12, 0.12], lc + [-0.50, 0.12, 0.20], 0.11, 0.07, LINEN, op=SUB)
+    PLACED[:] = fl.placed
+    return fl
+
+
+def small_present(b, xz, kind, size, yaw, mat, has_bow, crushed=False):
+    x, z = xz
+    c = np.array([x, floor_y((x, 0, z)), z])
+    if kind == 'tube':                       # a tube lying on its side: a bottle, a poster
+        r, h = size
+        d = np.array([np.cos(np.radians(yaw)), 0, -np.sin(np.radians(yaw))]) * h
+        c[1] += r
+        b.capsule(c - d, c + d, r, mat, op=UNION)
+        for t in (-0.55, 0.55):              # ribbon tied round it
+            b.torus(c + d * t, r + 0.001, 0.004, RIBBON, op=UNION, R=S.frame_from_axis(c - d, c + d))
+        top = c + [0, r, 0]
+    else:
+        half = np.array(size)
+        Rg = rot(yaw, 0, 0) @ (rot(0, 8, -14) if crushed else np.eye(3))
+        h2 = half * (np.array([1, 0.7, 1]) if crushed else 1)
+        c[1] += h2[1] + (0.015 if crushed else 0.0)
+        b.box(c, h2, mat, op=UNION, r=0.004, R=Rg)
+        b.box(c, (h2[0] + 0.002, h2[1] + 0.002, 0.009), RIBBON, op=UNION, R=Rg)
+        b.box(c, (0.009, h2[1] + 0.002, h2[2] + 0.002), RIBBON, op=UNION, R=Rg)
+        top = c + Rg @ np.array([0, h2[1], 0])
+    if has_bow:
+        bow(b, top, 0.6 + 2.2 * min(size[0], 0.12), yaw + 30, RIBBON)
 
 
 def draped_jumper(vox=0.003):
@@ -660,13 +762,10 @@ def draped_jumper(vox=0.003):
     lo, hi = np.array([x1 - 0.06, top - 0.50, z0 - 0.26]), np.array([x1 + 0.28, top + 0.07, z0 + 0.26])
     P, n = grid_points(lo, hi, vox)
     x, y, z = P[..., 0], P[..., 1], P[..., 2]
-    # distance to the chest's top-front corner region (the surface the cloth lies on and hangs over)
     chest = sd_box(P, (x1 + 0.27, top - 0.45, z0), (0.27, 0.45, 0.6), 0.012)
-    # folds: ripples across the hanging part (running down it) and crumples on top
     fold = 0.010 * np.sin(z * 55 + 3 * noise3(P, 0.08, 61)) * (y < top - 0.02) + 0.012 * noise3(P, 0.05, 62) * (y > top - 0.02)
     bulk = 0.010 + 0.012 * (y > top - 0.01) * np.clip(1 - (x - x1) / 0.25, 0, 1)
     d = np.abs(chest - bulk - fold) - 0.006
-    # its outline: on the top it reaches 25 cm back; down the front to a ragged hem; a sleeve hangs lower
     width = 0.20 + 0.03 * noise3(P, 0.06, 63)
     hem = top - 0.26 + 0.04 * noise3(P * np.array([0, 0, 1]), 0.05, 64)
     sleeve = np.hypot(z - (z0 + 0.14), 0) - 0.045

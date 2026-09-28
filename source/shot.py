@@ -111,6 +111,7 @@ def build_set(frame):
         dress(b, chars)
     SP = new_params()
     lamps = setmod.build_environment(b, SP)
+    b.groups = [g for g in b.groups if g['bounds']]          # (a group whose things were all left out)
     P, G = b.build()
     GB = b.grid_buffer()
     print(f'  built in {time.time() - t0:.0f}s: {len(P)} shapes in {len(G)} objects', flush=True)

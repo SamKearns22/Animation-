@@ -14,7 +14,7 @@ def dress(b, chars):
     import merry_chr
     f = man.forehead(chars['man'])
     contact = (float(f[0]), float(f[1]))
-    merry_chr.build(b, contact=contact, r_centre=(contact[0] - 0.02, contact[1] - 0.02), t=chars.get('t', 0.0))
+    merry_chr.build(b, man_state=chars['man'], contact=contact, r_centre=(contact[0] - 0.02, contact[1] - 0.02), t=chars.get('t', 0.0))
 
 
 def frame(t):
