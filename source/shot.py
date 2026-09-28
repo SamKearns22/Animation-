@@ -362,8 +362,17 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
     M = mat_table()
     import cache
     t_prev = time.time()
+    # resuming after an interruption: drawings already made are kept (the first one's render is reloaded)
+    p0, d0 = os.path.join(out_dir, 'passes_0000.npz'), os.path.join(out_dir, 'draw_0000.png')
+    resumed = os.path.exists(p0) and os.path.exists(d0)
+    done_log = {}
+    if os.path.exists(os.path.join(out_dir, 'log_partial.json')):
+        done_log = {e['n']: e for e in json.load(open(os.path.join(out_dir, 'log_partial.json')))}
     for n, t in enumerate(times):
         t0 = time.time()
+        if resumed and n > 0 and os.path.exists(os.path.join(out_dir, f'draw_{n:04d}.png')):
+            log.append(done_log.get(n, dict(n=n, t=float(t))))
+            continue
         cache.prune(t_prev)          # keep only what the last drawing used (a still head reuses its hair)
         t_prev = t0
         scene = build(rec.frame(float(t)))
@@ -381,6 +390,16 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         t1 = time.time()
         lo = S.render_image(W // 4, H // 4, camera(scene['frame'], W // 4, H // 4), scene['P'], scene['G'], M, Lt,
                             scene['SP'], scene['GB'], SM, SMP, bands=4, verbose=False)['rgb']
+        if resumed and n == 0:
+            z = np.load(p0)
+            base = {k: z[k] for k in ('rgb', 'depth', 'normal', 'mat', 'pos', 'glass')}
+            lo_ref, base_cam = lo, cam
+            stats = graphite.draw(p0, os.path.join(out_dir, 'restats.png'))
+            os.remove(os.path.join(out_dir, 'restats.png'))
+            first = np.asarray(Image.open(d0))
+            log.append(done_log.get(0, dict(n=0, t=float(t))))
+            print('  resumed: the first drawing reloaded', flush=True)
+            continue
         if base is None or not np.allclose(cam, base_cam):
             # the first drawing, or the camera has moved: render the whole picture (patches from another
             # camera position would leave stale pieces), and make it the reference for what follows
@@ -419,6 +438,8 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         dt = time.time() - t0
         area = 0 if spans is None else sum((y1 - y0) * (x1 - x0) for y0, y1, x0, x1 in spans) / (W * H)
         log.append(dict(n=n, t=float(t), seconds=round(dt, 1), redrawn=round(area, 3), box=box))
+        with open(os.path.join(out_dir, 'log_partial.json'), 'w') as f:
+            json.dump(log, f)
         print(f'drawing {n} (t={t:.3f}s) done in {dt:.0f}s, {area * 100:.0f}% of the picture re-rendered',
               flush=True)
     with open(os.path.join(out_dir, 'log.json'), 'w') as f:
