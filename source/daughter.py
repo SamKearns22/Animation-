@@ -204,6 +204,13 @@ def build(b, state):
     b.group('girl_head', margin=0.01)
     (lo, d, vox), eyes = head_parts(state.get('blink', 0.0))
     b.grid(lo, d, vox, SKIN, op=S.UNION)
+    # the head piece carries some neck and shoulder: trim it (as her mother's), or with her head turned the
+    # shoulder skin swings out through her top and hair
+    from mother import head_trim
+    b.set_frame((0, 0, 0), None)
+    for c, n, x in head_trim(state['joints'], Hc, out=0.035):
+        b.halfspace(c, np.stack([x, n, np.cross(x, n)], 1), SKIN, op=S.SUB)
+    b.set_frame(Hc, Rh)
     for c, r in eyes:
         b.sphere(c, r, EYE, op=S.UNION)
     ht = state['hat']

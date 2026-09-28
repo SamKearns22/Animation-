@@ -319,7 +319,7 @@ class Sim:
     pushes a point out of the head and body. Returns the locks as they are now, and how far (metres) the hair
     is from resting."""
 
-    FREQ_ROOT, FREQ_END, DAMP, DT = 6.0, 1.1, 0.35, 1 / 240
+    FREQ_ROOT, FREQ_END, DAMP, DT = 6.0, 1.1, 0.5, 1 / 240    # (heavily damped: settles in a swing or two)
 
     def __init__(self):
         self.t, self.prev, self.x, self.v = None, None, None, None

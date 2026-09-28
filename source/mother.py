@@ -341,9 +341,10 @@ def prepare(state):
     return state
 
 
-def head_trim(J, Hc):
+def head_trim(J, Hc, out=0.05):
     """Planes (point, normal, a direction in the plane) trimming the rigid head piece: everything on the far
-    side of a normal is cut away - below the base of the neck, and the shoulders behind and to each side."""
+    side of a normal is cut away - below the base of the neck, and the shoulders behind and to each side
+    (from `out` metres either side of the neck: less for a child's slim neck)."""
     up = unit(J['neck01'] - J['spine02'])
     lat = J['shoulder.L'] - J['shoulder.R']
     lat = unit(lat - up * (lat @ up))
@@ -351,7 +352,7 @@ def head_trim(J, Hc):
     fwd = fwd if fwd @ (Hc - J['neck02']) > 0 else -fwd
     planes = [(J['neck01'] - 0.01 * up, up)]
     for side in (1, -1):
-        planes.append((J['neck02'] + 0.05 * side * lat, unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)))
+        planes.append((J['neck02'] + out * side * lat, unit(-0.6 * side * lat + 0.6 * up + 0.5 * fwd)))
     return [(c, n, unit(np.cross(n, fwd if abs(n @ fwd) < 0.9 else lat))) for c, n in planes]
 
 
