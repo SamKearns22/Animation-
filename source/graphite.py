@@ -244,6 +244,11 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     T = np.where(skin, 0.10 + 0.90 * np.clip(T, 0, 1) ** 1.15, T)  # skin: light, smoothly modelled
     T = np.where(hair & ~fair, 0.10 + 0.90 * np.clip(T, 0, 1) ** 0.6, T)
     T = np.where(fair, 0.38 + 0.62 * np.clip(T, 0, 1), T)
+    # short greying hair (the man's): mid-dark whatever the light, flecked light and dark - salt and pepper
+    short = mat == MS.MAN_HAIR
+    if short.any():
+        fleck = noise(5, 0.8 * px, normal=True)
+        T = np.where(short, np.clip(0.30 + 0.30 * np.clip(T, 0, 1) + 0.12 * fleck, 0.08, 0.75), T)
     # hollows (eye sockets, under the nose, corners of the mouth, under the jaw) a touch darker, as an artist
     # would press into them: where the surface bends away (the normals converge on screen)
     ncx = normal @ cam[6:9]

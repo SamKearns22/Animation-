@@ -39,7 +39,6 @@ loudest thing.
 - Finish with an MP4 under a few MB in `animations/`, sent to me in the chat.
 
 **Small faults to fix on the way (from the still):**
-- His short grey hair still draws as a pale patch; it should read as a dark, close-cropped head of hair.
 - A few toiletries and one torn suitcase lid don't fit on the floor and are left out - fine unless there is an
   easy place for them.
 
