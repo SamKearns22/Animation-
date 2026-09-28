@@ -9,6 +9,11 @@ Read this first in any new session, after CLAUDE.md.
   Finished video: `animations/yuletide-animation-test.mp4`.
 - **Look book** (`lookbook/`), **tone guide** (`guides/tone.md`), **premise and title cards**
   (`story/yuletide.md`).
+- **Horror still 'Merry Chr' (spare room)** - mock-up drawn, awaiting the director's verdict. Brief and
+  notes: `story/horror-merry-chr.md`. Recipe `source/shots/h1_merry_chr.py`; set `source/spare_room.py`;
+  present, blood writing, wreckage, dresser things and the broken fairy lights `source/merry_chr.py`; the
+  kneeling man `source/man.py`. Still: `animations/yuletide-merry-chr-still.png`. The shot tool now builds
+  frames on other sets (`set=` in a recipe) and has a quick `animatic` mode.
 - **Hair simulation** (`hair.Sim`, switched on by `hair_t` in the mother's spec): works, not yet used in a
   finished shot.
 
@@ -20,6 +25,8 @@ Read this first in any new session, after CLAUDE.md.
 - Speeding up the hair grid build (~90 s per drawing).
 - The parting at the mother's crown reads as a squared-off patch, and a faint bright line runs along her
   hairline, when the camera looks down on her hair.
+- 'Merry Chr' next: animate it - the head strikes on the THUDs (the blotch growing with each), the fairy
+  lights flashing brokenly (`merry_chr.bulb_lit(i, t)` already gives each bulb's state at time t).
 - Next (director): lock a full trailer shot list timed to the finished score
   (`music/horror-trailer-score.m4a`) before building more.
 

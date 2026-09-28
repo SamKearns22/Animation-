@@ -224,8 +224,8 @@ def dresser(b):
         b.box((x - 0.2, 0.04, z + dz), (0.05, 0.04, 0.05), DARKWOOD, op=UNION, r=0.01)
     b.group('mirror', margin=0.02)
     mx, my = HALF_W - 0.03, 1.55
-    b.box((mx, my, z), (0.02, 0.45, 0.36), GOLD, op=UNION, r=0.01)
-    b.box((mx - 0.02, my, z), (0.03, 0.39, 0.30), GOLD, op=SUB)
+    b.box((mx, my, z), (0.02, 0.45, 0.36), BRASS, op=UNION, r=0.01)
+    b.box((mx - 0.02, my, z), (0.03, 0.39, 0.30), BRASS, op=SUB)
     b.box((mx + 0.005, my, z), (0.004, 0.39, 0.30), WALL, op=UNION)
     # what is left of the glass: jagged pieces still held in the corners of the frame
     for cy, cz, s in ((0.30, -0.24, 1), (-0.31, 0.22, -1), (0.28, 0.20, 1)):

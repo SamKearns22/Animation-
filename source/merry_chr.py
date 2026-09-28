@@ -444,6 +444,14 @@ def floor_y(p):
     return 0.012 if on_rug(p) else 0.0
 
 
+def flat_limb(b, a, e, width, thick, mat, op=SUNION, k=0.04):
+    """A sleeve or trouser leg lying flat on the floor: a flattened ellipsoid from a to e."""
+    a, e = np.asarray(a, float), np.asarray(e, float)
+    d = e - a
+    yaw = np.degrees(np.arctan2(-d[2], d[0]))
+    b.ellipsoid((a + e) / 2, (np.linalg.norm(d) / 2 + width * 0.5, thick, width), mat, op=op, k=k, R=rot(yaw))
+
+
 def garment(b, rng, c, kind, mat, yaw=None, size=1.0):
     """A piece of clothing thrown on the floor: 'top' (body and two sleeves flung out), 'trousers', 'ball'
     (balled up), 'long' (a scarf or a belt trailing)."""
@@ -457,12 +465,12 @@ def garment(b, rng, c, kind, mat, yaw=None, size=1.0):
         for sg in (-1, 1):
             a = c + Rg @ np.array([sg * 0.20 * s, 0.02 * s, -0.18 * s])
             e = a + Rg @ np.array([sg * rng.uniform(0.15, 0.35) * s, 0, rng.uniform(-0.3, 0.25) * s])
-            b.capsule(a, e, 0.045 * s, mat, op=SUNION, k=0.04)
+            flat_limb(b, a, e, 0.065 * s, 0.018 * s, mat)
     elif kind == 'trousers':
         for sg in (-1, 1):
             a = c + Rg @ np.array([sg * 0.07 * s, 0.03 * s, -0.20 * s])
             e = a + Rg @ np.array([sg * rng.uniform(0.02, 0.18) * s, 0, rng.uniform(0.55, 0.75) * s])
-            b.capsule(a, e, 0.055 * s, mat, op=UNION if sg < 0 else SUNION, k=0.04)
+            flat_limb(b, a, e, 0.08 * s, 0.022 * s, mat, op=UNION if sg < 0 else SUNION)
         b.ellipsoid(c + Rg @ np.array([0, 0.035 * s, -0.22 * s]), (0.18 * s, 0.035 * s, 0.10 * s), mat, op=SUNION, k=0.04, R=Rg)
     elif kind == 'ball':
         b.ellipsoid(c + [0, 0.07 * s, 0], (0.16 * s, 0.07 * s, 0.13 * s), mat, op=UNION, R=Rg)
@@ -473,7 +481,7 @@ def garment(b, rng, c, kind, mat, yaw=None, size=1.0):
         for k in range(8):
             ang += rng.normal(0, 0.5)
             q = p + np.array([np.cos(ang), 0, np.sin(ang)]) * 0.10 * s
-            b.capsule(p, q, 0.022 * s, mat, op=UNION if k == 0 else SUNION, k=0.01)
+            flat_limb(b, p, q, 0.05 * s, 0.012 * s, mat, op=UNION if k == 0 else SUNION, k=0.015)
             p = q
 
 
@@ -628,20 +636,20 @@ def dresser_top(b):
     # survivors
     fp = np.array([x0 + 0.12, top, z0 - 0.38])                                  # a framed photo, standing
     Rf = rot(-90 + 25) @ rot(0, -12, 0)
-    b.box(fp + Rf @ [0, 0.11, 0], (0.08, 0.11, 0.012), GOLD, op=UNION, r=0.004, R=Rf)
+    b.box(fp + Rf @ [0, 0.11, 0], (0.08, 0.11, 0.012), BRASS, op=UNION, r=0.004, R=Rf)
     b.box(fp + Rf @ [0, 0.11, 0.012], (0.06, 0.09, 0.003), PAPER, op=UNION, R=Rf)
     sg = np.array([x0 - 0.02, top, z0 - 0.12])                                  # a snow globe
     b.cylinder(sg + [0, 0.02, 0], 0.02, 0.05, DARKWOOD, op=UNION, rr=0.005)
     b.sphere(sg + [0, 0.085, 0], 0.052, GLASS, op=UNION)
     pb = np.array([x0 - 0.10, top, z0 + 0.12])                                  # a perfume bottle
     b.box(pb + [0, 0.045, 0], (0.028, 0.045, 0.018), GLASS, op=UNION, r=0.006)
-    b.cylinder(pb + [0, 0.10, 0], 0.012, 0.012, GOLD, op=UNION)
+    b.cylinder(pb + [0, 0.10, 0], 0.012, 0.012, BRASS, op=UNION)
     lp = np.array([x0 + 0.04, top, z0 + 0.34])                                  # a closed laptop, askew, a phone on it
     b.box(lp + [0, 0.009, 0], (0.16, 0.009, 0.22), SHELL, op=UNION, r=0.004, R=rot(14))
     b.box(lp + [0.02, 0.022, -0.03], (0.038, 0.004, 0.075), SCREEN, op=UNION, r=0.004, R=rot(-8))
     # knocked flat: a deodorant can, a hairbrush, a toppled bottle, a lipstick, a watch
     for c, L, r, m in (((x0 - 0.05, z0 - 0.30), 0.14, 0.024, PLASTIC), ((x0 + 0.05, z0 + 0.05), 0.20, 0.018, DARKWOOD),
-                       ((x0 - 0.12, z0 - 0.02), 0.16, 0.03, GLASS), ((x0 + 0.10, z0 - 0.08), 0.06, 0.009, GOLD)):
+                       ((x0 - 0.12, z0 - 0.02), 0.16, 0.03, GLASS), ((x0 + 0.10, z0 - 0.08), 0.06, 0.009, BRASS)):
         a = rng.uniform(0, np.pi)
         d = np.array([np.cos(a), 0, np.sin(a)]) * L / 2
         p = np.array([c[0], top + r, c[1]])
