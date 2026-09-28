@@ -13,6 +13,18 @@ Read this first in any new session, after CLAUDE.md.
   finished shot.
 
 ## Open
+- **FIRST: the mother's right wrist is bent unnaturally in almost every chop** (director's note). Measured
+  over every drawing: Shot 1 bends 30-45 deg up/down all the time and sits at the 25 deg sideways limit in
+  14 of 32 drawings (every impact and the rest after); Shot 2 35-50 deg; Shot 3 50 deg at the start, fine
+  (10 deg) only in the raised hold, where the blade was allowed to tip and turn with her arm
+  (`raised_cleaver` in `s3_closeup.py`). A natural chop keeps the wrist within about 20 deg (more only when
+  cocked back at the top of a lift) and never at its sideways limit.
+  Cause: every recipe fixes the cleaver's angle and the hand's grip on the handle, so the wrist takes up
+  all the difference. Fix: in every frame, turn the cleaver (tilt about its edge, pitch, turn about the
+  vertical) to suit her forearm so the wrist stays near straight, keeping the edge square across the ham at
+  each impact so the slices stay clean; tighten `checks.py` to about 30 deg up/down and 15 deg sideways for
+  the chopping hand. Then re-render Shots 1-3 (animatic first) and rebuild
+  `animations/yuletide-animation-test.mp4`.
 - The girl's neckline reads as a square neck (after trimming her head piece so her shoulder skin no longer
   shows through her top and hair); a round crew collar band would be nicer.
 - A check in `checks.py` for skin poking through clothes (a first attempt could not tell it from the
