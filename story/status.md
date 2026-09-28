@@ -6,15 +6,15 @@ Read this first in any new session, after CLAUDE.md.
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
   with the trailer score (THUD on the cut to black). Recipes: `source/shots/s1_chop.py`, `s2_daughter.py`,
   `s3_closeup.py`. Sound: `source/animation_test_audio.py`. Joining drawings into video: `source/assemble.py`.
-  The finished MP4 goes into `animations/` once the director approves it.
+  Finished video: `animations/yuletide-animation-test.mp4`.
 - **Look book** (`lookbook/`), **tone guide** (`guides/tone.md`), **premise and title cards**
   (`story/yuletide.md`).
 - **Hair simulation** (`hair.Sim`, switched on by `hair_t` in the mother's spec): works, not yet used in a
   finished shot.
 
 ## Open
-- Shot 2 re-rendered after trimming the girl's head piece (her shoulder skin showed through her top and
-  hair). Her neckline now reads as a square neck; a round crew collar band would be nicer.
+- The girl's neckline reads as a square neck (after trimming her head piece so her shoulder skin no longer
+  shows through her top and hair); a round crew collar band would be nicer.
 - A check in `checks.py` for skin poking through clothes (a first attempt could not tell it from the
   throat above a collar).
 - Speeding up the hair grid build (~90 s per drawing).
