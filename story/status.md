@@ -12,7 +12,7 @@ Read this first in any new session, after CLAUDE.md.
 - **Horror still 'Merry Chr' (spare room)** - mock-up drawn, awaiting the director's verdict. Brief and
   notes: `story/horror-merry-chr.md`. Recipe `source/shots/h1_merry_chr.py`; set `source/spare_room.py`;
   present, blood writing, wreckage, dresser things and the broken fairy lights `source/merry_chr.py`; the
-  kneeling man `source/man.py`. Still: `animations/yuletide-merry-chr-still.png`. The shot tool now builds
+  kneeling man `source/man.py`. Still: `animations/yuletide-merry-chr-still.jpg`. The shot tool now builds
   frames on other sets (`set=` in a recipe) and has a quick `animatic` mode.
 - **Hair simulation** (`hair.Sim`, switched on by `hair_t` in the mother's spec): works, not yet used in a
   finished shot.
