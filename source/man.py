@@ -21,7 +21,7 @@ SHAPE = dict(gender=1.0, age=0.71, muscle=0.5, weight=0.58, height=0.55, proport
 FACE = {'head/head-square': 0.3, 'neck/neck-scale-horiz-incr': 0.2}
 
 # a plain, pale cotton shirt with a band collar, tucked in; dark blue trousers
-SHIRT = dict(thick=0.014, drape=0.3, bridge=0.10, smooth=0.040, hem=-0.02, cuff=0.012, voxel=0.004,
+SHIRT = dict(thick=0.014, drape=0.3, bridge=0.10, smooth=0.040, hem=-0.02, cuff=0.012, voxel=0.004, room=0.12,
              collar=('crew', 0.058, 0.007))
 
 _BODY = []

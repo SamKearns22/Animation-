@@ -2,9 +2,10 @@
 doorway at head height, as if transfixed. The present on the bed; 'Merry Chr' in blood on the bare back wall;
 the man kneeling at the last r, slamming his forehead into it.
 
-Animated: the camera and the room never move. Only he moves - pulled back ~6 cm from his neck and upper back,
-a short hold, then a fast strike (3 frames, on ones) into the same wet spot, a dull recoil and settle, every
-0.9 s like a machine - and the fairy lights flash brokenly (their glow on the walls with them). The blood
+Animated: the camera and the room never move. Only he moves - pulled back ~8 cm, mostly from his back, a short
+hold, then a hard, fast strike (2 frames, on ones) into the same wet spot: his back crumples into it on the
+impact, his shoulders are thrown forward, his head bounces back off the wall and settles - every 0.9 s like a
+machine - and the fairy lights flash brokenly (their glow on the walls with them). The blood
 does not grow (the director: he is drained, there is no more blood to give); the wall stays as in the still."""
 import numpy as np
 
@@ -15,10 +16,11 @@ DURATION = 3.0
 MAN = dict(position=(0.87, -4.85), yaw=180.0, lean=14.0, nod=30.0, head_roll=-3.0, wall_z=R.BACK_Z)
 # his forehead meets the wall on these frames (0.9 s apart: 21.6 frames, so 22 and 21 in turn)
 IMPACTS = (10, 32, 53)
-# fully pulled back (~6 cm): his back and neck straighten a little. (Taken more from the upper back, a fold opened
-# in the back of his shirt; spread like this the shirt hangs clean.)
-PULL = dict(lean=-3.0, upper=-2.0, nod=-10.0)
-STRIKE = 3                                # frames the strike takes
+# fully pulled back (~8 cm, his shoulders ~5 cm): the pull is mostly his back unbending, a little his neck
+PULL = dict(lean=-6.0, upper=-2.0, nod=-8.0)
+STRIKE = 2                                # frames the strike takes: fast, the force in it
+CRUMPLE = 2.0                             # degrees his upper back keeps coming on the impact (his neck gives)
+BOUNCE = 0.38                             # how far (of the full pull) his head bounces back off the wall
 
 
 def pull_back(f):
@@ -32,31 +34,48 @@ def pull_back(f):
     if to <= STRIKE:                                   # the strike: accelerating all the way in, no easing
         u = 1 - to / STRIKE
         return 1 - u * u, since
-    if since < 1.0:                                    # the impact, and the dull recoil a frame later
-        return 0.22 * since, since
+    if since < 1.0:                                    # the impact, and the bounce back a frame later
+        return BOUNCE * since, since
     if since < 5.0:                                    # settling, a few millimetres off the wall
-        return 0.22 - 0.14 * (since - 1) / 4, since
+        return BOUNCE - (BOUNCE - 0.08) * (since - 1) / 4, since
     if since < 13.0:                                   # drawn back, slow out of the settle and into the hold
         u = (since - 5) / 8
         return 0.08 + 0.92 * u * u * (3 - 2 * u), since
     return 1.0, since                                  # the short hold
 
 
-# between these two the back of his shirt folds into a crease (a fault of how the shirt is made over his body
-# in that pose, measured with a sweep of close renders); no drawing is allowed to land there
-FOLD = (0.85, 0.985)
-
-
 def man_spec(f):
     p, since = pull_back(f)
-    if FOLD[0] < p < FOLD[1]:
-        p = FOLD[0] if p - FOLD[0] < FOLD[1] - p else 1.0
     # the impact thrown through his shoulders: forward and down on the frame of impact, gone in a few frames
-    jolt = 2.5 * np.exp(-since / 1.5) if since < 6 else 0.0
-    # the dead arms: carried back with his shoulders on the pull, a small late swing after each impact
-    sw = 0.012 * np.exp(-since / 8) * np.sin(since / 24 * 2 * np.pi * 1.1)
-    return dict(MAN_ANIM(), lean=MAN['lean'] + PULL['lean'] * p, upper=PULL['upper'] * p, nod=MAN['nod'] + PULL['nod'] * p, jolt=jolt,
-                swing=(sw, 0.8 * sw * np.cos(0.3)), wall=R.BACK_Z, impact=abs(since) < 1e-6)
+    jolt = 5.0 * np.exp(-since / 1.5) if since < 6 else 0.0
+    # the dead arms: carried with his shoulders, swung forward by each impact and back, dying away
+    sw = 0.03 * np.exp(-since / 7) * np.sin(since / 24 * 2 * np.pi * 1.1)
+    spec = dict(MAN_ANIM(), lean=MAN['lean'] + PULL['lean'] * p, upper=PULL['upper'] * p,
+                nod=MAN['nod'] + PULL['nod'] * p, jolt=jolt, swing=(sw, 0.8 * sw * np.cos(0.3)), wall=R.BACK_Z,
+                impact=abs(since) < 1e-6)
+    if spec['impact']:          # his back crumples into the blow; his neck gives so his forehead stays on the wall
+        spec['upper'] = CRUMPLE
+        spec['nod'] = crumple_nod()
+    return spec
+
+
+def crumple_nod():
+    """How far his head is bowed on the impact, with his back crumpled into it: so that his forehead is just
+    on the wall (2 mm off it), as in the still."""
+    if 'crumple_nod' not in _REST:
+        import man
+        spec = dict(MAN_ANIM(), upper=CRUMPLE, jolt=5.0)
+        gap = lambda nod: (lambda st: (st.__setitem__('verts', man.body().skin(st['pose'])),
+                                       man.forehead(st)[2] - R.BACK_Z)[1])(man.solve(dict(spec, nod=nod)))
+        lo, hi = MAN['nod'], MAN['nod'] - 25.0        # (less bowed: the head comes back off the wall)
+        for _ in range(18):
+            mid = (lo + hi) / 2
+            if gap(mid) < 0.002:
+                lo = mid
+            else:
+                hi = mid
+        _REST['crumple_nod'] = (lo + hi) / 2
+    return _REST['crumple_nod']
 
 
 _REST = {}

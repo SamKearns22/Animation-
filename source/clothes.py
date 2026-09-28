@@ -20,6 +20,7 @@ def top(b, pose, J, spec):
       drape     how steeply it tucks back in under an overhang (the bust); None: no drape
       hem       how far below the hips' joint it ends; cuff: how far past the wrist the sleeves end
       collar    ('roll', [(height, ring radius, tube radius), ...]) or ('crew', opening radius, band radius)
+      room      space left round the body for the cloth (default 5 cm)
       voxel
     Returns (lo, d, voxel, part) with part 0 body, 1 right sleeve, 2 left sleeve."""
     Vw = b.skin(pose)
@@ -28,8 +29,10 @@ def top(b, pose, J, spec):
     names = TORSO | {'upperarm.R', 'forearm.R', 'upperarm.L', 'forearm.L'}
     sel = np.isin(b.label, [b.piece_names.index(n) for n in names if n in b.piece_names])
     sel[:] &= np.isin(np.arange(len(Vw)), b.skin_idx) & (Vw[:, 1] > hem - 0.02) & (Vw[:, 1] < J['neck02'][1] + 0.04)
-    lo = Vw[sel].min(0) - 0.05
-    hi = Vw[sel].max(0) + 0.05
+    # room round the body for the cloth (the loose cloth bridging a bent back can stand well off it; if it
+    # reached the edge of the grid it would be cut off flat there, showing as a hole)
+    lo = Vw[sel].min(0) - spec.get('room', 0.05)
+    hi = Vw[sel].max(0) + spec.get('room', 0.05)
     for s in ('R', 'L'):  # the cuffs reach a little past the wrists
         lo = np.minimum(lo, J['wrist.' + s] - 0.06)
         hi = np.maximum(hi, J['wrist.' + s] + 0.06)
@@ -65,7 +68,8 @@ def top(b, pose, J, spec):
     torso = rig.robust_distance(rig.robust_distance(torso - r, v2) + r, v2)
     r = spec['smooth']
     torso = rig.robust_distance(rig.robust_distance(torso + r, v2) - r, v2)
-    torso = rig.drape(torso, v2, spec['drape'])
+    if spec['drape'] is not None:
+        torso = rig.drape(torso, v2, spec['drape'])
     torso = ndimage.zoom(torso, np.array(f.shape) / np.array(torso.shape), order=1)[
         :f.shape[0], :f.shape[1], :f.shape[2]]
     w = np.clip(-reg / 0.02, 0, 1)

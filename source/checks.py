@@ -208,6 +208,11 @@ def check_set(scene, check):
         check(0.0 < gap < 0.006, 'man: forehead meets the wall', f'{gap * 1000:.1f} mm from it')
         up = man.forehead_rest_height(ms)
         check(up > 0.0, 'man: it is his forehead that meets the wall', f'{up * 1000:.0f} mm above his eyes')
+    # clothes never reach the edge of their grid (there they would be cut off flat, showing as a hole)
+    for part in ('shirt', 'trousers'):
+        d = ms[part][1]
+        edge = min(d[[0, -1]].min(), d[:, [0, -1]].min(), d[:, :, [0, -1]].min())
+        check(edge > 0.0, f'man: his {part} lies inside its grid', f'{edge * 1000:.0f} mm clear at the edge')
     wall = scene['frame']['man'].get('wall')          # animated: striking a wall, placed from his pose at contact
     if wall is not None:
         f = man.forehead(ms)

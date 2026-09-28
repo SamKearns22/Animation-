@@ -21,13 +21,14 @@ from cache import cached
 from materials import (BLOOD, GORE, GIFTWRAP, RIBBON, GIFT_RED, XMAS_JUMPER, LINEN, GLASS, LEATHER, SHELL,
                        BRASS, FAIRY, BLACKMETAL, PAPER, FELT, FUR, DARKWOOD, COAT, CLOTH_LIGHT, CLOTH_MID, DENIM,
                        PLASTIC, SCREEN, XMAS_GREEN_KNIT, DIRTY_LINEN, GOLD, WOOD, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE, LIGHT_YELLOW,
-                       LIGHT_ORANGE, DEAD_RED, DEAD_GREEN, DEAD_BLUE, DEAD_YELLOW, DEAD_ORANGE)
+                       LIGHT_ORANGE, DEAD_RED, DEAD_GREEN, DEAD_BLUE, DEAD_YELLOW, DEAD_ORANGE, CARD_INK)
 from rig import smin, smax, robust_distance
 from numba import njit
 from sdf3d import rot, UNION, SUNION, SUB
 
 PRESENT_O = np.array([-2.07, 0.672, -2.87])      # its head end, on the sheet; it runs along +x
 PRESENT_LEN = 1.62
+BOW_U, BOW_W = 0.81, 0.0          # where the ribbon crosses and the bow sits: the middle of its top
 
 
 # ---------------------------------------------------------------------------
@@ -120,9 +121,10 @@ def present_grids(vox=0.004):
     d = d + 0.005 * noise3(Q, 0.06, 1) + 0.0025 * noise3(Q, 0.022, 2) + 0.016 * ends * noise3(Q, 0.035, 3)
     d = smax(d, -(v + 0.012), 0.02)          # resting on the bed, sunk a little into it
     paper = robust_distance(d.astype(np.float32), vox)
-    # the ribbon: two crooked bands round it (one slipped) and a strip of tape at the foot
+    # the ribbon: tied round it both ways, crossing in the middle (under the bow) - round its girth, and along
+    # its length over the top and the ends - pulled a little crooked by the shapes under the paper
     band = np.full(u.shape, 1.0, np.float32)
-    for c, nrm, half in (((0.44, 0, 0), (1.0, 0.05, 0.28), 0.020), ((1.13, 0, 0), (1.0, -0.12, -0.34), 0.020)):
+    for c, nrm, half in (((BOW_U, 0, 0), (1.0, 0.04, 0.10), 0.024), ((0, 0, BOW_W), (0.03, 0.0, 1.0), 0.022)):
         nn = np.asarray(nrm) / np.linalg.norm(nrm)
         band = np.minimum(band, np.abs((Q - c) @ nn) - half)
     ribbon = smax(paper - 0.0025, band, 0.002)
@@ -165,6 +167,12 @@ def top_of(grid, u, w):
 # ---------------------------------------------------------------------------
 # the bed: mattress and sheets, sodden under the present
 # ---------------------------------------------------------------------------
+# (x, where it ends) of the runs down the side of the mattress that faces the door; the lowest carry on down
+# the bed's rail (rail_gore)
+SIDE_RUNS = [(-1.72, 0.55), (-1.55, 0.50), (-1.40, 0.45), (-1.29, 0.45), (-1.16, 0.45), (-1.02, 0.47),
+             (-0.90, 0.45), (-0.74, 0.52), (-0.60, 0.58)]
+
+
 def bed_grids(vox=0.006):
     """The made-up mattress (lumpy, torn sheets) and the dark stain soaked into it, draining over the front
     edge. Returns (sheet, stain), world grids."""
@@ -193,10 +201,23 @@ def bed_grids(vox=0.006):
     # trickle has wandered on down
     edge = (B['top'] - 0.04 - 0.035 * (1 + noise2(x, y, 0.04, 16)) * (np.abs(x + 1.2) < 0.25)) - y
     edge = np.where(np.abs(x + 1.2) < 0.28 + 0.05 * noise2(x, y, 0.05, 17), -edge, -1.0)
-    tx = -1.16 + 0.012 * np.sin(y * 60) + 0.008 * noise2(x * 0, y, 0.03, 18)
-    trickle = (0.005 * (1 + 0.6 * np.clip((B['top'] - 0.05 - y) / 0.1, 0, 1) * 0) - np.abs(x - tx)) * (y > 0.50)
-    bead = 0.009 - np.hypot(x - tx, y - 0.505)
-    runs = np.maximum(trickle, bead)
+    # runs down the side of the mattress, where it poured over the edge: many, of different lengths, some
+    # right down to the rail
+    runs = np.full(x.shape, -1.0)
+    rng = np.random.default_rng(19)
+    for xr, low in SIDE_RUNS:
+        tx = xr + 0.010 * np.sin(y * 50 + xr * 7) + 0.006 * noise2(x * 0, y, 0.03, 18)
+        wdt = 0.004 + 0.003 * rng.random() + 0.004 * np.clip((y - low) / 0.15, 0, 1)
+        runs = np.maximum(runs, (wdt - np.abs(x - tx)) * (y > low) - 1.0 * (y <= low))
+        runs = np.maximum(runs, 0.008 - np.hypot(x - xr, y - low - 0.004))          # the bead at its end
+    # a wider tide mark soaked along the top of the side under the stain
+    tide = np.where(np.abs(x + 1.15) < 0.55 + 0.08 * noise2(x, y, 0.05, 20),
+                    y - (B['top'] - 0.07 - 0.05 * (1 + noise2(x, y, 0.05, 21))), -1.0)
+    runs = np.maximum(runs, tide)
+    # spatter flung across the side of the mattress
+    for _ in range(90):
+        cx_, cy_ = rng.uniform(-1.95, -0.45), rng.uniform(0.46, B['top'] - 0.02)
+        runs = np.maximum(runs, 0.002 + 0.006 * rng.random() ** 2 - np.hypot(x - cx_, y - cy_))
     stain = np.maximum(np.maximum(top, tongue), tongue2)
     stain = np.where(front & (y < B['top'] - 0.03), runs, stain)
     gore = smax(sheet - 0.0022, -stain, 0.001)
@@ -219,7 +240,32 @@ LETTERS = {
     ' ': ([], 0.45),
 }
 TEXT = 'Merry Chr'
+LAST_R_SCALE = 1.45
 WALL_LO, WALL_HI, WALL_PX = (-2.40, 0.0), (1.20, 1.95), 0.003
+
+
+CARD_TEXT = 'To Mum x'
+# a quick hand: strokes in units of the letter height, each glyph with its width
+HAND = {
+    'T': ([[(0.0, 1.0), (0.62, 1.03)], [(0.30, 1.02), (0.28, 0.0)]], 0.62),
+    'o': ([[(0.30, 0.58), (0.08, 0.45), (0.06, 0.12), (0.28, 0.0), (0.48, 0.14), (0.47, 0.46), (0.30, 0.58)]], 0.55),
+    'M': ([[(0.0, 0.0), (0.08, 1.0), (0.40, 0.35), (0.72, 1.0), (0.80, 0.0)]], 0.85),
+    'u': ([[(0.02, 0.60), (0.04, 0.12), (0.24, 0.0), (0.44, 0.15), (0.46, 0.60)], [(0.46, 0.60), (0.49, 0.0)]], 0.56),
+    'm': ([[(0.0, 0.0), (0.0, 0.58)], [(0.0, 0.42), (0.16, 0.60), (0.30, 0.45), (0.30, 0.0)],
+           [(0.30, 0.42), (0.46, 0.60), (0.60, 0.45), (0.60, 0.0)]], 0.68),
+    'x': ([[(0.0, 0.02), (0.36, 0.56)], [(0.0, 0.56), (0.36, 0.02)]], 0.4),
+    ' ': ([], 0.3),
+}
+
+
+def handwriting(text, height):
+    """Pen strokes (lists of (x, y) in metres, from the start of the line) writing text."""
+    out, x = [], 0.0
+    for ch in text:
+        strokes, w = HAND[ch]
+        out += [[(x + a * height, b_ * height) for a, b_ in st] for st in strokes]
+        x += (w + 0.12) * height
+    return out
 
 
 def smooth_path(pts, step):
@@ -250,6 +296,8 @@ def layout(r_centre):
         strokes, wdt = LETTERS[ch]
         late = i >= 6
         cap = (0.44 if not late else 0.40 + 0.03 * (i == 8)) * rng.uniform(0.90, 1.12)
+        if i == len(TEXT) - 1:
+            cap *= LAST_R_SCALE      # the last r: big enough to read round his head from the doorway
         base = 0.06 * np.sin(i * 1.7) + rng.normal(0, 0.02) - (0.03 * (i - 5) if late else 0.0)
         tilt = np.radians(rng.normal(0, 8 if not late else 11))
         Rt = np.array([[np.cos(tilt), -np.sin(tilt)], [np.sin(tilt), np.cos(tilt)]])
@@ -316,12 +364,15 @@ def wall_blood(r_centre, contact):
         tang = np.vstack([seg, seg[-1:]])
         tang /= np.linalg.norm(tang, axis=1, keepdims=True) + 1e-9
         width0 = (0.066 if not late else 0.058) * (1 + 0.2 * rng.normal())
+        last = i == len(TEXT) - 1
+        if last:
+            width0 *= 1.25           # pressed hard: the r is bold
         # where the forehead first pressed on: a blot, smeared the way it then dragged
         blot = path[0] - tang[0] * 0.01
         for q in range(4):
             stamp(blot + tang[0] * q * 0.008 + rng.normal(0, 0.005, 2), width0 * rng.uniform(0.32, 0.48), h=0.0024)
         for c, sc, t in zip(path, s, tang):
-            load = np.exp(-sc / (0.7 if not late else 0.4))       # the blood runs out along a stroke
+            load = np.exp(-sc / (0.7 if not late else (0.9 if last else 0.4)))   # the blood runs out along a stroke
             # uneven pressure: the head rocks as it drags, pressing wide, then skidding thin
             press = 1 + 0.40 * noise1(sc * 7 + k * 17, k) + 0.15 * noise1(sc * 30 + k * 5, 50 + k)
             wdt = width0 * (0.45 + 0.55 * load) * max(press, 0.35)
@@ -368,19 +419,21 @@ def wall_blood(r_centre, contact):
     sel = (np.abs(X[:, None] - contact[0]) < 0.25) & (np.abs(Y[None, :] - contact[1]) < 0.25)
     dx, dy = X[:, None] - contact[0], Y[None, :] - contact[1]
     a = np.arctan2(dy, dx / 1.1)
-    rad = 0.062 * (1 + 0.35 * noise1(a * 3 + 20, 300) + 0.15 * noise1(a * 11 + 50, 301))
+    rad = 0.085 * (1 + 0.35 * noise1(a * 3 + 20, 300) + 0.15 * noise1(a * 11 + 50, 301))
     inb = sel & (np.hypot(dx / 1.1, dy) < rad)
     mask |= inb
     thick[inb] = 0.0026
-    for _ in range(260):
+    # the circle of spatter his strikes have thrown out, again and again, all round the one spot: dense close
+    # in, thinning outwards, each drop with a tail flying away from the middle
+    for _ in range(700):
         a = rng.uniform(0, 2 * np.pi)
-        dist = 0.10 + 0.40 * rng.random() ** 2.2
-        c = contact + dist * np.array([np.cos(a), np.sin(a) * 0.8])
-        r0 = max(0.0012, 0.006 * (1 - dist / 0.55) * rng.random())
-        stamp(c, r0, h=0.0012)
-        if rng.random() < 0.5:                                       # the tail each drop leaves, flying outward
+        dist = 0.09 + 0.36 * rng.random() ** 1.6
+        c = contact + dist * np.array([np.cos(a), np.sin(a) * 0.85])
+        r0 = max(0.0015, 0.009 * (1 - dist / 0.5) * rng.random() ** 0.8)
+        stamp(c, r0, h=0.0014)
+        if rng.random() < 0.6:
             for q in range(1, 4):
-                stamp(c + q * r0 * 1.2 * np.array([np.cos(a), np.sin(a) * 0.8]), r0 * (1 - q * 0.22), h=0.001)
+                stamp(c + q * r0 * 1.2 * np.array([np.cos(a), np.sin(a) * 0.85]), r0 * (1 - q * 0.22), h=0.001)
     for xr in contact[0] + np.array([-0.075, -0.03, 0.02, 0.06, 0.09]) + rng.normal(0, 0.01, 5):
         # heavy runs from the blotch, all the way down to the rail, and on down the panels to the floor
         ys = np.arange(contact[1] - 0.05, 0.0, -0.003)
@@ -391,6 +444,15 @@ def wall_blood(r_centre, contact):
     # the pool along the top of the dado rail, where the runs meet it
     for x_ in np.arange(contact[0] - 0.14, contact[0] + 0.16, 0.003):
         stamp((x_, R.DADO + 0.024), 0.005 + 0.003 * (noise1(x_ * 80, 400) + 1), h=0.003)
+    # a little spatter low on the wall beside the en-suite doorway, carried in from there (dropped and flicked
+    # from something dripping), a few with short runs
+    for _ in range(45):
+        c = np.array([rng.uniform(0.98, 1.18), 0.03 + 0.45 * rng.random() ** 1.5])
+        r0 = 0.0015 + 0.004 * rng.random() ** 2
+        stamp(c, r0, h=0.0012)
+        if rng.random() < 0.15:
+            for y_ in np.arange(c[1], max(c[1] - rng.uniform(0.02, 0.08), 0.005), -0.003):
+                stamp((c[0], y_), r0 * 0.6, h=0.0012)
     thick = ndimage.gaussian_filter(thick, 1.0)
     d2 = sdf2(mask, px)
     # into 3D: a thin skin of blood standing proud of the wall's surface (which steps out at the panels, the
@@ -447,12 +509,13 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*ribbon, RIBBON, op=UNION)
     b.group('present_gore', margin=0.01)
     b.grid(*gore, GORE, op=UNION)
-    # a big gold bow on top of the first band, lopsided and spotted with what has soaked through
+    # a big gold bow in the middle, where the ribbon crosses: a little lopsided, spotted with what has soaked
+    # through
     b.group('bow', margin=0.03)
-    yt = top_of(paper, 0.46, 0.04)
-    bc = np.array([PRESENT_O[0] + 0.46, yt - 0.004, PRESENT_O[2] + 0.04])
-    bow(b, bc, 3.0, 12, RIBBON, squash=1.0)
-    for off in ((0.03, 0.05, 0.02), (-0.05, 0.03, 0.04), (0.0, 0.04, -0.03)):
+    yt = top_of(paper, BOW_U, BOW_W)
+    bc = np.array([PRESENT_O[0] + BOW_U, yt - 0.004, PRESENT_O[2] + BOW_W])
+    bow(b, bc, 4.2, 8, RIBBON, squash=0.35)
+    for off in ((0.05, 0.07, 0.03), (-0.07, 0.05, 0.05)):
         b.ellipsoid(bc + np.array(off), (0.012, 0.008, 0.014), GORE, op=UNION)
     # a Christmas card in its envelope, propped against the present's side on the sheet
     b.group('card', margin=0.02)
@@ -462,6 +525,12 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     Rc = rot(-8) @ rot(0, -18, 0)                        # leaning back against the paper
     # plain, white and clean - as if set down gently, afterwards
     b.box(base + Rc @ np.array([0, 0.058, 0]), (0.085, 0.058, 0.0025), PAPER, op=UNION, r=0.001, R=Rc)
+    # written on it, small and faint in pen: 'To Mum x' (too far from the doorway to read)
+    b.group('card_writing', margin=0.01)
+    for stroke in handwriting(CARD_TEXT, 0.015):
+        pts = [base + Rc @ np.array([x - 0.040, y + 0.052, 0.0026]) for x, y in stroke]
+        for p, q in zip(pts[:-1], pts[1:]):
+            b.capsule(p, q, 0.0007, CARD_INK, op=UNION)
     b.group('tape', margin=0.01)
     ty = top_of(paper, 1.45, 0.0)
     b.box((PRESENT_O[0] + 1.45, ty - 0.004, PRESENT_O[2]), (0.02, 0.003, 0.16), PAPER, op=UNION, R=rot(12, 0, 0))
@@ -473,9 +542,53 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*sheet_gore, GORE, op=UNION)
     # drips down the bed rail, and pools on the floor
     b.group('rail_gore', margin=0.01)
-    for x, y0, y1, r in ((-1.24, 0.47, 0.40, 0.005),):
-        b.capsule((x, y0, R.BED['z1'] + 0.035), (x + 0.003, y1, R.BED['z1'] + 0.035), r, GORE, op=UNION)
-        b.sphere((x + 0.003, y1, R.BED['z1'] + 0.036), r * 1.4, GORE, op=UNION)
+    rng = np.random.default_rng(23)
+    zr = R.BED['z1'] + 0.032                     # the front face of the rail
+    for xr, low in SIDE_RUNS:
+        if low > 0.46:
+            continue
+        # carried on down the rail's face, wandering, thinning; a bead at the end or a drip to the floor
+        end = rng.uniform(0.25, 0.40)
+        ys = np.arange(0.48, end, -0.012)
+        xs = xr + 0.004 * np.cumsum(rng.normal(0, 0.4, len(ys)))
+        for (x0, y0), (x1_, y1) in zip(zip(xs[:-1], ys[:-1]), zip(xs[1:], ys[1:])):
+            b.capsule((x0, y0, zr), (x1_, y1, zr), 0.0035, GORE, op=UNION)
+        b.sphere((xs[-1], ys[-1], zr + 0.001), 0.0055, GORE, op=UNION)
+    for _ in range(40):                          # spatter on the rail
+        b.ellipsoid((rng.uniform(-1.9, -0.5), rng.uniform(0.26, 0.47), zr), np.array((0.004, 0.004, 0.0015))
+                    * rng.uniform(0.5, 1.6), GORE, op=UNION)
+    # blood on the en-suite's round mirror: a smear dragged down and across it, spatter round it, two runs
+    b.group('mirror_blood', margin=0.01)
+    ec, zm = sum(R.ENSUITE) / 2, R.BACK_Z - 2.2 + 0.0405       # the mirror's face
+    rng = np.random.default_rng(31)
+    for q in np.linspace(0, 1, 40):                             # the smear, thinning and breaking as it drags
+        if rng.random() < 0.25 * q:
+            continue
+        c = np.array([ec - 0.08 + 0.13 * q, 1.66 - 0.20 * q ** 1.3]) + rng.normal(0, 0.004, 2)
+        r0 = 0.022 * (1 - 0.6 * q) * rng.uniform(0.7, 1.0)
+        b.ellipsoid((c[0], c[1], zm), (r0, r0 * 0.8, 0.0008), BLOOD, op=UNION)
+    for _ in range(45):                                         # spatter
+        a, dist = rng.uniform(0, 2 * np.pi), 0.05 + 0.20 * rng.random()
+        c = np.array([ec - 0.04 + dist * np.cos(a), 1.58 + dist * np.sin(a)])
+        if np.hypot(c[0] - ec, c[1] - 1.55) > 0.31:           # only on the glass
+            continue
+        r0 = 0.0015 + 0.004 * rng.random() ** 2
+        b.ellipsoid((c[0], c[1], zm), (r0, r0, 0.0006), BLOOD, op=UNION)
+    for xr, y0, L in ((ec - 0.02, 1.50, 0.16), (ec + 0.04, 1.47, 0.10)):   # runs from the smear
+        b.capsule((xr, y0, zm), (xr + 0.004, y0 - L, zm), 0.0025, BLOOD, op=UNION)
+        b.sphere((xr + 0.004, y0 - L, zm), 0.004, BLOOD, op=UNION)
+    # a sparse trail of drops on the boards, carried in from the en-suite towards where he kneels
+    b.group('floor_drops', margin=0.01)
+    rng = np.random.default_rng(29)
+    for q in np.linspace(0, 1, 34):
+        c = np.array([1.62, -5.12]) + q * np.array([-0.60, 0.40]) + np.array([0.06 * np.sin(q * 9), 0]) \
+            + rng.normal(0, 0.035, 2)
+        r0 = 0.003 + 0.006 * rng.random() ** 2
+        b.ellipsoid((c[0], 0.0006, c[1]), (r0, 0.0012, r0 * rng.uniform(0.7, 1.0)), BLOOD, op=UNION)
+        if rng.random() < 0.3:              # a satellite drop thrown off it
+            a = rng.uniform(0, 2 * np.pi)
+            b.ellipsoid((c[0] + 0.02 * np.cos(a), 0.0005, c[1] + 0.02 * np.sin(a)), (0.0018, 0.001, 0.0015),
+                        BLOOD, op=UNION)
     b.group('floor_gore', margin=0.01)
     b.grid(*cached('floorpools', floor_pools, deps()), GORE, op=UNION)
     # the writing on the wall
