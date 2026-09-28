@@ -27,6 +27,8 @@ Keep continuity in the recipes: the ham's cut position and the slices lying abou
 
 ## Making drawings
 - One frame: `python3 shot.py still shots/s1_chop.py OUT_DIR` (1920x1080 by default).
+- A quick animatic of a whole shot (quarter size, no pencil, checks on every drawing):
+  `python3 shot.py animatic_sequence shots/h1_merry_chr.py OUT_DIR`, then `assemble.py` makes it a video.
 - A whole shot: `python3 shot.py sequence shots/s1_chop.py OUT_DIR`. It draws on twos (12 drawings a
   second). The first drawing is made whole. After that a quick quarter-size render finds exactly where the
   picture changed (the moving things, their shadows, their reflections), and only those patches are

@@ -285,16 +285,24 @@ def shadow_maps(focus=(-0.4, 0.9, -3.2)):
             (FILL, (0.0, 1.6, -2.6), 9.0, 1800, np.tan(np.radians(12)), 0.002)]
 
 
-def light_rows(lamps):
+SIDE_GLOW_Z = (-4.3, -2.8, -1.3)       # glow lights along the right-hand wall's string (animated shots only)
+
+
+def light_rows(lamps, glow=None):
     """Low light: the last of the winter sun through the window, falling across the bed; a dim cold fill;
-    the bright en-suite; the glow of the fairy lights along the top of the back wall."""
+    the bright en-suite; the glow of the fairy lights along the top of the back wall. glow: when the bulbs
+    flash, how strongly each glow light shines now (merry_chr.glow): the back wall's five, then the
+    right-hand wall's (SIDE_GLOW_Z)."""
     rows = [[0, *KEY, 1.25, 1.12, 0.98, 2, 0, 0, 0, 2],
             [0, *FILL, 0.10, 0.11, 0.14, 2, 0, 0, 2, 2]]
     for p in lamps:
         rows.append([1, *p, 0.55, 0.45, 0.32, 0, 0, 4.0, 0, 0])
     e = sum(ENSUITE) / 2
     rows.append([1, e, 2.0, BACK_Z - 1.0, 0.42, 0.42, 0.44, 0, 0, 3.0, 0, 0])
-    for x, c in ((-1.4, (0.10, 0.05, 0.04)), (-0.2, (0.05, 0.09, 0.05)), (1.0, (0.05, 0.06, 0.11)),
-                 (2.2, (0.10, 0.08, 0.03)), (-2.0, (0.09, 0.05, 0.03))):
-        rows.append([1, x, EAVES - 0.3, BACK_Z + 0.25, *c, 0, 0, 1.2, 0, 0])
+    g = list(glow) if glow is not None else [1.0] * 5
+    for k, (x, c) in enumerate(((-1.4, (0.10, 0.05, 0.04)), (-0.2, (0.05, 0.09, 0.05)), (1.0, (0.05, 0.06, 0.11)),
+                                (2.2, (0.10, 0.08, 0.03)), (-2.0, (0.09, 0.05, 0.03)))):
+        rows.append([1, x, EAVES - 0.3, BACK_Z + 0.25, *(np.array(c) * g[k]), 0, 0, 1.2, 0, 0])
+    for z, w, c in zip(SIDE_GLOW_Z, g[5:], ((0.07, 0.05, 0.04), (0.04, 0.07, 0.05), (0.06, 0.05, 0.07))):
+        rows.append([1, HALF_W - 0.25, EAVES - 0.3, z, *(np.array(c) * w), 0, 0, 1.2, 0, 0])
     return np.array(rows, dtype=np.float64)

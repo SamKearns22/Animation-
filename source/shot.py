@@ -20,6 +20,7 @@ can reach; the rest comes from the shot's first frame.
 Usage:
     python3 shot.py still shots/s1_chop.py OUT_DIR [W H [T]]     one frame: passes + render + drawing
     python3 shot.py sequence shots/s1_chop.py OUT_DIR [W H]     the whole shot, drawn on twos
+    python3 shot.py animatic_sequence shots/x.py OUT_DIR         the whole shot small and plain (a quick check)
 """
 import importlib.util
 import os
@@ -124,6 +125,15 @@ def set_of(scene):
     return scene.get('setmod', kitchen)
 
 
+def light_rows(scene):
+    """The lights of a frame. A set frame may say how strongly each of its flickering lights shines now
+    (`glow`, e.g. the fairy lights' glow on the spare room's walls)."""
+    glow = scene['frame'].get('glow')
+    if glow is None:
+        return set_of(scene).light_rows(scene['flames'])
+    return set_of(scene).light_rows(scene['flames'], glow=glow)
+
+
 def shadow_list(scene):
     fr = scene['frame']
     return set_of(scene).shadow_maps(fr['shadow_focus']) if 'shadow_focus' in fr else set_of(scene).shadow_maps()
@@ -208,9 +218,13 @@ def moving_corners(scene):
     """Corners of tight boxes round everything that moves: the characters' pieces and the props."""
     boxes = []
     for name, st in scene['chars'].items():
-        mod = mother if name == 'mother' else __import__('daughter')
-        boxes += [bx for bx in (solid_box(*pc) for pc in mod.pieces(st, pov=scene['frame'].get('pov', False)
-                                                                    and name == 'mother')) if bx is not None]
+        if name == 'man':
+            import man
+            pcs = man.pieces(st)
+        else:
+            mod = mother if name == 'mother' else __import__('daughter')
+            pcs = mod.pieces(st, pov=scene['frame'].get('pov', False) and name == 'mother')
+        boxes += [bx for bx in (solid_box(*pc) for pc in pcs) if bx is not None]
     names, G = scene['group_names'], scene['G']
     for i in scene['moving']:
         if names[i] in ('ham', 'frill', 'garnish', 'cleaver') or names[i].startswith('slice'):
@@ -315,7 +329,7 @@ def render(scene, W, H, sm=None, crop=None, verbose=True):
         sm = shadows(scene)
         print(f'  shadows {time.time() - t0:.0f}s', flush=True)
     SM, SMP = sm.arrays()
-    Lt = set_of(scene).light_rows(scene['flames'])
+    Lt = light_rows(scene)
     cam = camera(scene['frame'], W, H)
     res = S.render_image(W, H, cam, scene['P'], scene['G'], mat_table(), Lt, scene['SP'], scene['GB'], SM, SMP,
                          bands=8, crop=crop, verbose=verbose)
@@ -360,7 +374,7 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
         t1 = time.time()
         sm = shadows(scene, static)
         SM, SMP = sm.arrays()
-        Lt = set_of(scene).light_rows(scene['flames'])
+        Lt = light_rows(scene)
         print(f'  shadows {time.time() - t1:.0f}s', flush=True)
         cam = camera(scene['frame'], W, H)
         # a quick quarter-size render first: where does this frame differ from the first?
@@ -409,7 +423,43 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
               flush=True)
     with open(os.path.join(out_dir, 'log.json'), 'w') as f:
         json.dump(log, f, indent=1)
+    with open(os.path.join(out_dir, 'duration.txt'), 'w') as f:
+        f.write(str(rec.DURATION))
     print(f'{len(times)} drawings in {time.time() - t_all:.0f}s', flush=True)
+
+
+def animatic(recipe_path, out_dir, W=W_VIDEO // 4, H=H_VIDEO // 4):
+    """A quick look at a whole shot: every drawing's moment, checked and rendered small and plain (no pencil),
+    to check timing and contact before the full render. Saves draw_NNNN.png and log.json like sequence, so
+    assemble.py can make a video of it."""
+    import json
+    import checks
+    from PIL import Image
+    os.makedirs(out_dir, exist_ok=True)
+    rec = load_recipe(recipe_path)
+    times = getattr(rec, 'TIMES', None)
+    if times is None:
+        times = np.arange(0, rec.DURATION - 1e-9, 2 / 24)
+    static = None
+    log = []
+    for n, t in enumerate(times):
+        t0 = time.time()
+        scene = build(rec.frame(float(t)))
+        checks.run(scene, verbose=False)
+        if static is None:
+            static = static_shadows(scene)
+        sm = shadows(scene, static)
+        SM, SMP = sm.arrays()
+        res = S.render_image(W, H, camera(scene['frame'], W, H), scene['P'], scene['G'], mat_table(),
+                             light_rows(scene), scene['SP'], scene['GB'], SM, SMP, bands=4, verbose=False)
+        Image.fromarray((S.tonemap(res['rgb'], scene['frame'].get('exposure', 1.05)) * 255).astype(np.uint8)).save(
+            os.path.join(out_dir, f'draw_{n:04d}.png'))
+        log.append(dict(n=n, t=float(t)))
+        print(f'animatic {n} (t={t:.3f}s) {time.time() - t0:.0f}s', flush=True)
+    with open(os.path.join(out_dir, 'log.json'), 'w') as f:
+        json.dump(log, f, indent=1)
+    with open(os.path.join(out_dir, 'duration.txt'), 'w') as f:
+        f.write(str(rec.DURATION))
 
 
 def still(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, t=0.0, draw=True):
@@ -438,3 +488,5 @@ if __name__ == '__main__':
         still(a[1], a[2], *(int(v) for v in a[3:5]), *(float(v) for v in a[5:6]))
     if a[0] == 'animatic':      # a quick look: quarter size, render only (no pencil drawing)
         still(a[1], a[2], W_VIDEO // 4, H_VIDEO // 4, *(float(v) for v in a[3:4]), draw=False)
+    if a[0] == 'animatic_sequence':      # the same for a whole shot, every drawing
+        animatic(a[1], a[2])

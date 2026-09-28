@@ -19,9 +19,9 @@ still: the camera never moves; nothing in the room moves except what is listed h
   breathing show, no looking round. Checks: his forehead meets the wall at contact, never passes into it.
 - Follow `guides/movement.md` for easing (slow out of the hold, no easing into the impact).
 
-**The blood at the r:** grows a little with every strike - the blotch spreads, a fresh ring of spatter flies
-out, one or two new drips start down the wall and lengthen over the next frames. Everything else on the wall
-is dry and still.
+**The blood at the r:** (changed by the director) does NOT grow - he is weak, mostly dead, with no more
+blood to give. The wall stays exactly as in the still; he strikes the same spot, the middle of the blotch,
+every time.
 
 **The fairy lights:** both strings (the back wall and the right-hand wall) flash in a broken, stuttering way,
 each bulb from `merry_chr.bulb_lit(i, t)`; a few stay dead. Their glow on the wall flickers with them.

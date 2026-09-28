@@ -46,6 +46,12 @@ def solve(spec):
       nod        degrees his head is bowed forward on his neck (his forehead to the wall)
       head_roll  degrees his head is tipped to one side
       hands      'hang': his arms hang limp at his sides
+    For animation (the head strikes):
+      root       his body's exact placement (pose.position, from the pose at contact), so his knees stay
+                 put while he moves; replaces the placement on the floor and against the wall
+      upper      extra degrees his upper back (and neck) bend forward (negative: pulled back)
+      jolt       degrees his shoulders are thrown forward and down (the impact running through them)
+      swing      (left, right) metres his dead hands have swung forward of where they hang
     """
     import mhuman as MH
     b = body()
@@ -59,8 +65,15 @@ def solve(spec):
         pose.rot['lowerleg01.' + s] = X(88.0 - hip)
         pose.rot['foot.' + s] = X(spec.get('ankle', 55.0))
     lean = spec.get('lean', 0.0)
+    upper = spec.get('upper', 0.0)
     for bone in ('spine05', 'spine04', 'spine03', 'spine02'):
-        pose.rot[bone] = X(lean / 4)
+        pose.rot[bone] = X(lean / 4 + (upper / 2 if bone in ('spine03', 'spine02') else 0.0))
+    jolt = spec.get('jolt', 0.0)
+    if jolt:
+        Y = lambda deg: MH.axis_angle([0, 1, 0], deg)
+        Z = lambda deg: MH.axis_angle([0, 0, 1], deg)
+        pose.rot['clavicle.L'] = Y(-jolt) @ Z(-jolt * 0.6)
+        pose.rot['clavicle.R'] = Y(jolt * 0.85) @ Z(jolt * 0.5)      # (never quite twins)
     pose.aim_head(X(spec.get('nod', 0.0)) @ MH.axis_angle([0, 0, 1], spec.get('head_roll', 0.0)), neck_share=0.5)
     # stand him on his knees: find where the bent body reaches the floor, and put that on y = 0
     Vw = b.skin(pose)
@@ -70,21 +83,29 @@ def solve(spec):
     knees = (pose.joint_world(M, 'lowerleg01.L') + pose.joint_world(M, 'lowerleg01.R')) / 2
     x, z = spec['position']
     pose.position = np.array([x - knees[0], -Vw[legs, 1].min() + 0.004, z - knees[2]])
-    if 'wall_z' in spec:          # slide him on his knees until his forehead just meets the wall (in -z)
+    if 'root' in spec:
+        pose.position = np.array(spec['root'], float)
+    elif 'wall_z' in spec:          # slide him on his knees until his forehead just meets the wall (in -z)
         pose.position[2] += spec['wall_z'] + 0.002 - forehead(dict(verts=b.skin(pose), yaw=spec.get('yaw', 180.0)))[2]
     M = pose.matrices()
     J = pose.joints(M)
     # arms hang limp at his sides, a little forward of his hips, the elbows soft
     Rw = pose.world_R()
     fwd, side = Rw @ np.array([0, 0, 1.0]), Rw @ np.array([1.0, 0, 0])
+    swing = dict(zip('LR', spec.get('swing', (0.0, 0.0))))
     for s, sg in (('R', -1), ('L', 1)):
         sh = J['shoulder.' + s]
-        w = sh + np.array([0, -0.50, 0]) + fwd * 0.10 + side * sg * 0.05
+        w = sh + np.array([0, -0.50, 0]) + fwd * (0.10 + swing[s]) + side * sg * 0.05
         pose.arm_ik(s, w, sh + np.array([0, -0.3, 0]) - fwd * 0.4 + side * sg * 0.1)
     M = pose.matrices()
     J = pose.joints(M)
     head = M['head'][:3, :3], pose.joint_world(M, 'head')
     return dict(spec=spec, pose=pose, M=M, joints=J, head=head, yaw=spec.get('yaw', 180.0))
+
+
+def pieces(state):
+    """Every grid of him in the scene, as (grid, origin, rotation) like mother.pieces (all world grids)."""
+    return [(state[k][:3], None, None) for k in ('skin', 'hair', 'socks', 'shirt', 'trousers')]
 
 
 def forehead(state):

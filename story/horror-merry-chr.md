@@ -44,6 +44,10 @@
   and it touches it (0-6 mm), his sleeves cover his forearms.
 
 ## Still open (for the animated version)
-- The head strikes: pull back ~6-8 cm and strike, on a slow, mechanical rhythm locked to the THUDs; the
-  blotch grows a little with each strike; a tiny recoil in the shoulders; nothing else in the room moves.
+- The head strikes: pull back ~6 cm and strike, on a slow, mechanical rhythm locked to the THUDs; a tiny
+  recoil in the shoulders; nothing else in the room moves.
+- **Director's decision (animation session):** the blood does NOT grow. He is weak, mostly dead, drained
+  against this wall - there is no more blood to give. The wall stays exactly as in the still; he strikes the
+  same wet spot (the middle of the blotch at the r) every time. A drained man: the small end of the
+  pull-back, a dull recoil.
 - Hold length: the brief says the viewer has only a moment - probably 0.75-1.5 s in the cut.

@@ -1030,21 +1030,26 @@ def bulb_lit(i, t):
     return h(run, beat, 3.0) > 0.35 and h(i, beat, 4.0) > 0.12
 
 
+def bulb_spots(pts, first=0, spacing=0.11):
+    """Where the bulbs hang along a string: (index, point on the wire)."""
+    pts = np.array(pts)
+    seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+    s_all = np.concatenate([[0], np.cumsum(seg)])
+    return [(i, np.array([np.interp(s, s_all, pts[:, k]) for k in range(3)]))
+            for i, s in enumerate(np.arange(0.05, s_all[-1], spacing), start=first)]
+
+
 def light_string(b, pts, t, first=0, spacing=0.11):
     """A string of coloured bulbs hanging from a wire along the points; returns how many bulbs."""
     pts = np.array(pts)
     for p, q in zip(pts[:-1], pts[1:]):
         b.capsule(p, q, 0.0025, BLACKMETAL, op=UNION)
-    seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
-    s_all = np.concatenate([[0], np.cumsum(seg)])
-    n = 0
-    for i, s in enumerate(np.arange(0.05, s_all[-1], spacing), start=first):
-        p = np.array([np.interp(s, s_all, pts[:, k]) for k in range(3)])
+    spots = bulb_spots(pts, first, spacing)
+    for i, p in spots:
         col = (i * 3 + int(i * 0.37)) % 5
         b.cylinder(p + [0, -0.008, 0], 0.006, 0.005, BLACKMETAL, op=UNION)
         b.ellipsoid(p + [0, -0.026, 0], (0.0075, 0.014, 0.0075), (LIT if bulb_lit(i, t) else DEAD)[col], op=UNION)
-        n += 1
-    return n
+    return len(spots)
 
 
 def swags(a, b_, hooks, sag=0.12, per=12):
@@ -1059,11 +1064,9 @@ def swags(a, b_, hooks, sag=0.12, per=12):
     return pts
 
 
-def wall_lights(b, t=0.0):
-    """Coloured fairy lights strung in swags along the top of the back wall, under the cornice - the left end
-    torn from its hook and hanging down - and the same along the top of the right-hand wall, from the back
-    corner towards the door."""
-    b.group('wall_lights', margin=0.02)
+def strings():
+    """The two strings of lights: along the top of the back wall (the left end torn from its hook and
+    hanging down), with their hooks; and along the top of the right-hand wall, with its hooks."""
     z = R.BACK_Z + 0.035
     y = R.EAVES - 0.16
     hooks = np.linspace(-2.25, 2.25, 8)
@@ -1072,13 +1075,42 @@ def wall_lights(b, t=0.0):
     for s in np.linspace(1, 0, 14):
         pts.append(a + np.array([-0.35 * (1 - s) ** 1.5, -0.95 * (1 - s), 0.02 * (1 - s)]))
     pts = pts[::-1] + swags((-2.25, y, z), (2.25, y, z), (hooks[1:] + 2.25) / 4.5)[1:]
-    for h in hooks[1:]:
-        b.sphere((h, y + 0.005, z - 0.01), 0.008, BLACKMETAL, op=UNION)
-    n = light_string(b, pts, t)
-    b.group('side_lights', margin=0.02)
+    back_hooks = [(h, y + 0.005, z - 0.01) for h in hooks[1:]]
     x = R.HALF_W - 0.035
     za, zb = R.BACK_Z + 0.12, -0.35
     hk = np.linspace(0, 1, 8)
-    for f in hk:
-        b.sphere((x - 0.01, y + 0.005, za + (zb - za) * f), 0.008, BLACKMETAL, op=UNION)
-    light_string(b, swags((x, y, za), (x, y, zb), hk), t, first=n)
+    side_hooks = [(x - 0.01, y + 0.005, za + (zb - za) * f) for f in hk]
+    return (pts, back_hooks), (swags((x, y, za), (x, y, zb), hk), side_hooks)
+
+
+def wall_lights(b, t=0.0):
+    """Coloured fairy lights strung in swags along the top of the back wall, under the cornice, and the same
+    along the top of the right-hand wall, from the back corner towards the door."""
+    (back, back_hooks), (side, side_hooks) = strings()
+    b.group('wall_lights', margin=0.02)
+    for h in back_hooks:
+        b.sphere(h, 0.008, BLACKMETAL, op=UNION)
+    n = light_string(b, back, t)
+    b.group('side_lights', margin=0.02)
+    for h in side_hooks:
+        b.sphere(h, 0.008, BLACKMETAL, op=UNION)
+    light_string(b, side, t, first=n)
+
+
+def glow(t, back_x=(-1.4, -0.2, 1.0, 2.2, -2.0), side_z=None):
+    """How strongly the lights' glow on the walls shines at time t (1 = as in the still, when about half the
+    bulbs are lit): for each of the glow lights along the back wall (at x = back_x) the share of the bulbs
+    near it that are lit now; then the same for the right-hand wall's (at z = side_z)."""
+    (back, _), (side, _) = strings()
+    b_spots = bulb_spots(back)
+    s_spots = bulb_spots(side, first=len(b_spots))
+    avg = 0.5
+
+    def share(spots, where, axis):
+        w = np.array([np.exp(-((p[axis] - where) / 0.6) ** 2) for _, p in spots])
+        lit = np.array([bulb_lit(i, t) for i, _ in spots], float)
+        return float((w * lit).sum() / (w.sum() + 1e-9)) / avg
+    out = [share(b_spots, x, 0) for x in back_x]
+    if side_z is not None:
+        out += [share(s_spots, z, 2) for z in side_z]
+    return out

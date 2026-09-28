@@ -208,3 +208,12 @@ def check_set(scene, check):
         check(0.0 < gap < 0.006, 'man: forehead meets the wall', f'{gap * 1000:.1f} mm from it')
         up = man.forehead_rest_height(ms)
         check(up > 0.0, 'man: it is his forehead that meets the wall', f'{up * 1000:.0f} mm above his eyes')
+    wall = scene['frame']['man'].get('wall')          # animated: striking a wall, placed from his pose at contact
+    if wall is not None:
+        f = man.forehead(ms)
+        gap = f[2] - wall
+        check(gap > 0.0, 'man: his head never passes into the wall', f'{gap * 1000:.1f} mm from it')
+        if scene['frame']['man'].get('impact'):
+            check(gap < 0.006, 'man: on the impact his forehead meets the wall', f'{gap * 1000:.1f} mm from it')
+            up = man.forehead_rest_height(ms)
+            check(up > 0.0, 'man: it is his forehead that strikes', f'{up * 1000:.0f} mm above his eyes')
