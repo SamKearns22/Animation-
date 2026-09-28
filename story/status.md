@@ -17,6 +17,12 @@ Read this first in any new session, after CLAUDE.md.
   present, blood writing, wreckage, dresser things and the broken fairy lights `source/merry_chr.py`; the
   kneeling man `source/man.py`. Still: `animations/yuletide-merry-chr-still.jpg`. The shot tool now builds
   frames on other sets (`set=` in a recipe) and has a quick `animatic` mode.
+- **'Merry Chr' animated (3 s):** `animations/yuletide-merry-chr.mp4` (1.5 MB). He slams his forehead into
+  the r every 0.9 s like a machine (pull back ~6 cm, short hold, 3-frame strike on ones, dull recoil); the
+  fairy lights on both walls flash brokenly, their glow flickering with them; nothing else moves. Director's
+  decisions: the blood does NOT grow (he is drained - he strikes the same wet spot), and no THUDs (the score
+  alone: `source/merry_chr_audio.py`, 41.3-44.3 s of the score). The first drawing matches the approved still.
+  Tools added: `shot.py animatic_sequence` (quick whole-shot animatic) and resumable `shot.py sequence`.
 - **Hair simulation** (`hair.Sim`, switched on by `hair_t` in the mother's spec): works, not yet used in a
   finished shot.
 
@@ -28,8 +34,9 @@ Read this first in any new session, after CLAUDE.md.
 - Speeding up the hair grid build (~90 s per drawing).
 - The parting at the mother's crown reads as a squared-off patch, and a faint bright line runs along her
   hairline, when the camera looks down on her hair.
-- 'Merry Chr' next: animate it - the prompt for that session is `story/prompts/merry-chr-animation.md` - the head strikes on the THUDs (the blotch growing with each), the fairy
-  lights flashing brokenly (`merry_chr.bulb_lit(i, t)` already gives each bulb's state at time t).
+- His shirt folds into a crease on the back when he is 85-98% pulled back (a fault in `clothes.top` for that
+  pose, not found yet); the recipe keeps every drawing out of that band (`FOLD` in `shots/h1_merry_chr.py`).
+- The container can restart during long renders: `shot.py sequence` now resumes (just run it again).
 - Next (director): lock a full trailer shot list timed to the finished score
   (`music/horror-trailer-score.m4a`) before building more.
 
