@@ -217,7 +217,8 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     sl = (slice(crop[1], crop[3]), slice(crop[0], crop[2])) if crop is not None else (slice(None), slice(None))
     H, W = depth.shape
 
-    tone = S.tonemap(rgb, 1.05) @ np.array([0.30, 0.59, 0.11])
+    exposure = float(Z['exposure']) if 'exposure' in Z.files else 1.05
+    tone = S.tonemap(rgb, exposure) @ np.array([0.30, 0.59, 0.11])
     char = np.isin(mat, list(CHAR))
     props = np.isin(mat, list(PROPS))
     subject = char | props
@@ -256,7 +257,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     # a contrast budget (a shot may ask for it): the full range, bare-paper whites and the darkest darks only
     # where the eye should go; everything else held in the middle greys, darker and quieter
     budget = float(Z['budget']) if 'budget' in Z.files else 0.0
-    quiet = budget * (1 - foc) * ~coloured
+    quiet = budget * (1 - foc) * (subject & ~coloured)     # the clutter, not the room
+    # what is nearer than frame_depth (the doorcase we look through) is laid in as one smooth dark border
+    fd = float(Z['frame_depth']) if 'frame_depth' in Z.files else 0.0
+    border = (depth > 0) & (depth < fd)
     T = T + (0.40 + (T - 0.40) * 0.45 - T) * quiet
     dark = 1 - T
 
@@ -343,6 +347,10 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     # way a drawing is left unfinished at its margins
     margin = smoothstep(0.30, 0.52, np.maximum(np.abs(fx0 - 0.5), np.abs(fy0 - 0.5) * 0.9))
     marks = marks * np.where(bg, 0.78 + 0.22 * foc, 0.86 + 0.14 * foc) * (1 - 0.35 * margin * bg)
+    if fd > 0:
+        b_soft = blur(border.astype(np.float32), 1.0 * px)
+        smooth = np.clip(0.42 + 0.40 * blur(dark, 2 * px) + 0.04 * s1, 0, 1)
+        marks = marks * (1 - b_soft) + smooth * b_soft
 
     # --- outlines from the geometry
     dz = np.maximum.reduce([np.abs(np.roll(depth, s, a) - depth) for s in (1, -1) for a in (0, 1)])
@@ -359,7 +367,7 @@ def draw(npz_path, out_path, scale=1.0, seed=3, crop=None, px=None, stats=None):
     crease_bg = smoothstep(0.25, 0.6, 1 - nd) * ok  # only the sharper corners in the background
     crease = np.where(subject, crease, crease_bg)
     crease = crease * ~(knit | hair)  # the knit's ribs and the hair's strands come through as tone, not lines
-    lines = np.maximum(occl, np.where(skin, 0.25, 0.5) * crease)
+    lines = np.maximum(occl, np.where(skin, 0.25, 0.5) * crease * ~border)
     lines = np.maximum(lines, 0.45 * matedge * (drawn | np.roll(drawn, 1, 0) | np.roll(drawn, 1, 1)))
     # the subject drawn with a firmer line, the coloured things with a clear one; the rest finer and paler
     wt = np.where(subject | np.roll(subject, 2, 1) | np.roll(subject, -2, 1), 0.85,

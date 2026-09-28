@@ -26,5 +26,5 @@ def frame(t):
                 # the eye goes to the present first, then along the writing to the man at the last r
                 focus=[(-1.65, 0.85, -2.87), (-0.95, 0.85, -2.87), (-0.9, 1.3, -5.15), (0.2, 1.3, -5.15),
                        (0.87, 1.2, -5.1)],
-                contrast_budget=1.0,
+                contrast_budget=1.0, exposure=1.7, frame_depth=1.75,
                 shadow_focus=(-0.6, 0.9, -3.6))

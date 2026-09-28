@@ -305,6 +305,7 @@ def drawing_passes(scene, res, cam, W, H):
     else:
         focus = [st['head'][0], cl.o + cl.R @ np.array([0.03, 0.04, 0]), st['hands'][1][0]]
     return dict(hairdir=hairdir, knitdir=knitdir, focus=np.array(focus, float), budget=fr.get('contrast_budget', 0.0),
+                exposure=fr.get('exposure', 1.05), frame_depth=fr.get('frame_depth', 0.0),
                 bladedir=unit(cl.x) if cl is not None else np.array([1.0, 0, 0]))
 
 
