@@ -509,14 +509,14 @@ def build(b, man_state=None, contact=None, r_centre=None, t=0.0):
     b.grid(*ribbon, RIBBON, op=UNION)
     b.group('present_gore', margin=0.01)
     b.grid(*gore, GORE, op=UNION)
-    # a big gold bow in the middle, where the ribbon crosses: a little lopsided, spotted with what has soaked
+    # a gold satin bow in the middle, where the ribbon crosses, spotted with what has soaked
     # through
     b.group('bow', margin=0.03)
     yt = top_of(paper, BOW_U, BOW_W)
     bc = np.array([PRESENT_O[0] + BOW_U, yt - 0.004, PRESENT_O[2] + BOW_W])
-    bow(b, bc, 4.2, 8, RIBBON, squash=0.35)
-    for off in ((0.05, 0.07, 0.03), (-0.07, 0.05, 0.05)):
-        b.ellipsoid(bc + np.array(off), (0.012, 0.008, 0.014), GORE, op=UNION)
+    satin_bow(b, bc, 8, RIBBON)
+    for off in ((0.03, 0.02, 0.012), (-0.04, 0.012, -0.01)):
+        b.ellipsoid(bc + np.array(off), (0.006, 0.004, 0.007), GORE, op=UNION)
     # a Christmas card in its envelope, propped against the present's side on the sheet
     b.group('card', margin=0.02)
     u = 0.72
@@ -1074,6 +1074,61 @@ def sheet_heap(vox=0.008):
     d = d + 0.018 * noise3(P, 0.07, 51) + 0.007 * noise3(P, 0.025, 52)
     d = smax(d, -P[..., 1], 0.01)
     return lo, robust_distance(d.astype(np.float32), vox), vox
+
+
+def ribbon_strip(b, pts, ups, width, mat, thick=0.0012):
+    """A flat satin ribbon along a path: at each point its width runs along `ups` (a direction across the
+    ribbon), laid as short thin boxes. width may be a number or one per point."""
+    pts = np.asarray(pts, float)
+    wid = np.broadcast_to(np.asarray(width, float), (len(pts),))
+    for i in range(len(pts) - 1):
+        p, q = pts[i], pts[i + 1]
+        t = q - p
+        L = np.linalg.norm(t)
+        if L < 1e-6:
+            continue
+        t /= L
+        w = np.asarray(ups[i], float)
+        w = w - t * (w @ t)
+        w /= np.linalg.norm(w)
+        n = np.cross(t, w)
+        b.box((p + q) / 2, (L / 2 + 0.0008, thick, (wid[i] + wid[i + 1]) / 4), mat, op=UNION, r=0.0006,
+              R=np.column_stack([t, n, w]))
+
+
+def satin_bow(b, top, yaw, mat, size=1.0):
+    """A shop-bought satin bow, as on any present (about 15 cm across): two big loops standing out to the
+    sides, two smaller ones in front, each a flat ribbon curving round and pinched in at a wrapped knot, and
+    two short tails lying on the paper. top: where it sits; yaw: which way its loops spread."""
+    Rb = rot(yaw)
+    up = np.array([0, 1.0, 0])
+    width = 0.028 * size
+    # (direction round the knot in degrees, how steeply it rises, length, how open the loop is, a lean)
+    for az, el, L, H, lean in ((8, 30, 0.080, 0.032, 10), (172, 32, 0.076, 0.031, -12),
+                               (-38, 50, 0.060, 0.026, 6), (-142, 48, 0.058, 0.026, -8)):
+        a = Rb @ np.array([np.cos(np.radians(az)) * np.cos(np.radians(el)), np.sin(np.radians(el)),
+                           np.sin(np.radians(az)) * np.cos(np.radians(el))])
+        n = up - a * (up @ a)
+        n /= np.linalg.norm(n)
+        side = np.cross(a, n)
+        n = n * np.cos(np.radians(lean)) + side * np.sin(np.radians(lean))
+        side = np.cross(a, n)
+        s = np.linspace(0, 2 * np.pi, 44)
+        # a loop: out along a and back, opening to H across; fullest at its far end, pinched at the knot
+        pts = [top + [0, 0.010 * size, 0] + size * (L / 2 * (1 - np.cos(u)) * a + H * np.sin(u) * n
+                                                   * (0.6 + 0.4 * np.sin(u / 2))) for u in s]
+        wid = width * (0.45 + 0.55 * np.sin(s / 2) ** 0.7)
+        # the ribbon twists a little as it comes round, so each loop catches the light differently
+        ups = [side * np.cos(0.25 * np.sin(u)) + n * np.sin(0.25 * np.sin(u)) for u in s]
+        ribbon_strip(b, pts, ups, wid, mat)
+    # the knot: a short length of ribbon wrapped round the middle
+    b.box(top + [0, 0.013 * size, 0], (0.015 * size, 0.012 * size, 0.014 * size), mat, op=UNION,
+          r=0.008 * size, R=Rb)
+    # two tails from under the knot, lying on the paper, their ends cut in a V
+    for sg, ang in ((1, 118), (-1, -60)):
+        d = Rb @ np.array([np.cos(np.radians(ang)), 0, np.sin(np.radians(ang))])
+        pts = [top + d * r_ + [0, 0.004 - 0.02 * r_ * r_, 0] for r_ in np.linspace(0.005, 0.085 * size, 12)]
+        ribbon_strip(b, pts, [np.cross(d, up)] * 12, width * 0.9, mat)
 
 
 def bow(b, top, size, yaw, mat, squash=0.0):
