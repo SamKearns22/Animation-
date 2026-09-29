@@ -21,7 +21,7 @@ Read this first in any new session, after CLAUDE.md.
   forehead into the r every 0.9 s like a machine, with force: pulled back ~8 cm mostly from his back, a
   2-frame strike on ones, his back crumpling into it on impact (his head snaps back against the wall), his
   shoulders thrown forward, a 3 cm bounce, dead arms swinging. The r is 45% bigger and bolder in a dense ring of
-  spatter; runs and spatter down the side of the mattress and the bed rail; the bow big and centred, the
+  spatter; runs and spatter down the side of the mattress and the bed rail; a normal-sized satin bow (two big loops, two small, a knot, tails) centred, the
   ribbon tied round both ways; 'To Mum x' faint on the card; drops on the floor and low on the wall from the
   en-suite, and blood on its mirror; the fairy lights on both walls flash brokenly, their glow with them.
   Director's decisions: the blood does NOT grow (he strikes the same spot), no THUD sounds (the score alone:
