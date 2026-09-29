@@ -121,10 +121,10 @@ def present_grids(vox=0.004):
     d = d + 0.005 * noise3(Q, 0.06, 1) + 0.0025 * noise3(Q, 0.022, 2) + 0.016 * ends * noise3(Q, 0.035, 3)
     d = smax(d, -(v + 0.012), 0.02)          # resting on the bed, sunk a little into it
     paper = robust_distance(d.astype(np.float32), vox)
-    # the ribbon: tied round it both ways, crossing in the middle (under the bow) - round its girth, and along
-    # its length over the top and the ends - pulled a little crooked by the shapes under the paper
+    # the ribbon: tied round its middle, under the bow, pulled a little crooked by the shapes under the paper
+    # (a second one along its length spread into wide gold wedges over the humps: left off)
     band = np.full(u.shape, 1.0, np.float32)
-    for c, nrm, half in (((BOW_U, 0, 0), (1.0, 0.04, 0.10), 0.024), ((0, 0, BOW_W), (0.03, 0.0, 1.0), 0.022)):
+    for c, nrm, half in (((BOW_U, 0, 0), (1.0, 0.04, 0.10), 0.024),):
         nn = np.asarray(nrm) / np.linalg.norm(nrm)
         band = np.minimum(band, np.abs((Q - c) @ nn) - half)
     ribbon = smax(paper - 0.0025, band, 0.002)
@@ -132,9 +132,12 @@ def present_grids(vox=0.004):
     # hips and the knee, running down the side
     soak = (0.05 + 0.035 * noise3(Q, 0.07, 4) + 0.03 * np.clip(w / 0.2, 0, 1)) - v
     blot = -1.0
-    for c, r in (((0.14, 0.12, 0.08), 0.13), ((0.90, 0.10, 0.10), 0.17), ((1.25, 0.26, -0.05), 0.10),
-                 ((0.55, 0.30, 0.12), 0.07), ((0.40, 0.10, 0.20), 0.10)):
-        blot = np.maximum(blot, r * (1 + 0.45 * noise3(Q, 0.04, 5)) - np.linalg.norm(Q - c, axis=-1))
+    # (soaked through from inside where the shapes press on the paper, low on their sides rather than capping
+    # their tops; ragged, broken edges - never neat circles)
+    for c, r in (((0.14, 0.07, 0.13), 0.10), ((0.90, 0.08, 0.12), 0.15), ((1.22, 0.18, 0.04), 0.06),
+                 ((0.55, 0.27, 0.12), 0.045), ((0.40, 0.10, 0.20), 0.10)):
+        rr = r * (1 + 0.55 * noise3(Q, 0.05, 5) + 0.22 * noise3(Q, 0.02, 8))
+        blot = np.maximum(blot, rr - np.linalg.norm((Q - c) * np.array([0.8, 1.2, 1.0]), axis=-1))
     runs = (0.012 - np.abs(((u * 7.3 + 0.3 * noise3(Q, 0.1, 6)) % 1.0) - 0.5) * 0.12) * (v < 0.22) * (w > 0.05) \
         * (noise3(Q * np.array([1, 0.1, 1]), 0.08, 7) > 0.1)
     stain = np.maximum(np.maximum(soak, blot), runs - 0.0001 * (runs == 0))
