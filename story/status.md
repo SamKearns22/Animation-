@@ -20,11 +20,13 @@ Read this first in any new session, after CLAUDE.md.
   the king is royal (crown, dark fur, gold chain, gilded breastplate); title centred on the frame.
 - Later notes: mouths follow each voice; no bobbing fists or sword sounds; natural clapping; chant carries on
   under the close-up; lanyards on every audience member; two great bee banners in the turned hall.
-- DONE 30 Sep 2026: `animations/king-in-the-north-vertical.mp4` (43 s, 4.7 MB, 1080 x 1920, 12 fps), checked
-  against the safe-area guides (title narrowed to 720 px, centred). Full render about 38 min on 2 cores.
-  `animations/king-in-the-north-vertical.mp4` (under 25 MB), safe-area check, post text.
-
-## Done
+- DONE 30 Sep 2026: `animations/king-in-the-north-vertical.mp4` (38 s, 4.3 MB, 1080 x 1920, 12 fps), checked
+  against the safe-area guides. Recut to the new TikTok opening rules: small title gone by 2.5 s, speech from
+  the first frame, pauses tightened (`PIECES` in burnham_film.py), first knight at 15.6 s. The king grows
+  harrowed (rings, bags, heavy lids) through the final push-in. Full render about 32 min on 2 cores.
+- To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text; post text "Hope Again. A perfectly
+  normal conference speech." #AndyBurnham #LabourConference #satire #parody #animation (no Game of Thrones
+  tags: they spoil the turn); pinned question "Honestly, which one of them did it best?"
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
   with the trailer score (THUD on the cut to black). Recipes: `source/shots/s1_chop.py`, `s2_daughter.py`,
   `s3_closeup.py`. Sound: `source/animation_test_audio.py`. Joining drawings into video: `source/assemble.py`.
