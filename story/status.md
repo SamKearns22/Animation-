@@ -2,6 +2,20 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
+- Conference speech that turns into the "King in the North" scene, 11 shots, 43 s, Listening & Learning look,
+  made vertical. Pictures: `source/burnham.py` (cast, armour, shots, storyboard sheet). Timeline, sound and
+  render: `source/burnham_film.py` (`animatic OUT.mp4` about 8 min at half size; `final OUT.mp4`).
+- Sam's recordings: `source/audio/burnham-line.m4a` (the speech), `source/audio/king-shouts.m4a` (four shouts:
+  1st lowest = old knight, 2nd highest = young woman, 3rd = Miliband, 4th = Sikh knight). Crowd, swords,
+  drums and horn are made in code; no show music.
+- Director's decisions: title HOPE AGAIN; the only emblem is Manchester's bee; knights keep conference
+  lanyards; standing ovation in waves (one, a few, all); Miliband stays seated then stands and bellows;
+  all five ministers (Streeting, Rayner, Miliband, Mahmood, Healey) in varied armour in the front-on sword shot;
+  ends on a slow push-in on Burnham's face with war drums, hard cut to black. Captions must be accurate.
+- Status: storyboard approved; animatic sent 30 Sep 2026, awaiting notes. Then: final render,
+  `animations/king-in-the-north-vertical.mp4` (under 25 MB), safe-area check, post text.
+
 ## Done
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
   with the trailer score (THUD on the cut to black). Recipes: `source/shots/s1_chop.py`, `s2_daughter.py`,

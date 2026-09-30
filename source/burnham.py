@@ -836,14 +836,15 @@ def heads_from_behind(img, cam, rows, seed, furs=False, hands_up=0.35, t=0.0, di
             skin = tuple(int(v * dim) for v in skin)
             up = rng.random() < hands_up
             up = up and st > 0.85
+            ph_off, side, bald = rng.uniform(0, 6), rng.random() < 0.5, rng.random() < 0.2
             if up and not furs:  # both hands up, clapping over their heads
-                ph = t * 9 + rng.uniform(0, 6)
+                ph = t * 9 + ph_off
                 g = 16 + 14 * (0.5 + 0.5 * math.cos(ph))
                 for sgn in (-1, 1):
                     p.poly([(sgn * 90, 40), (sgn * 120, 30), (sgn * (g + 30), -250), (sgn * (g + 4), -250)], jc, INK, 3)
                     p.ell(sgn * g, -272, 18, 30, skin, INK, 3)
             if furs and up:  # a sword held up
-                sgn = 1 if rng.random() < 0.5 else -1
+                sgn = 1 if side else -1
                 ang = -1.57 + sgn * 0.25 + 0.06 * math.sin(t * 7 + x)
                 hx, hy = sgn * 70, -300
                 p.poly([(sgn * 90, 40), (sgn * 124, 30), (hx + 18, hy), (hx - 10, hy)], jc, INK, 3)
@@ -858,7 +859,7 @@ def heads_from_behind(img, cam, rows, seed, furs=False, hands_up=0.35, t=0.0, di
             for sgn in (-1, 1):
                 p.ell(sgn * 70, -60, 12, 20, skin, INK, 3)
             p.ell(0, -80, 70, 84, hc, INK, 3)
-            if rng.random() < 0.2 and not furs:
+            if bald and not furs:
                 p.ell(0, -40, 60, 50, skin, None)  # a bald crown
                 p.ell(0, -80, 70, 84, None, INK, 3)
 
@@ -974,7 +975,7 @@ def shout(img, s, bottom=1470):
                stroke_width=int(size * 0.07) * SS, stroke_fill=(0, 0, 0))
 
 
-def title(img, s='HOPE AGAIN'):
+def title(img, s='HOPE AGAIN', alpha=1.0):
     """The cranberry-red title card, drawn fresh at full size, top edge at 330 px, within 840 px."""
     size = 200
     while True:
@@ -989,6 +990,8 @@ def title(img, s='HOPE AGAIN'):
     d.text((out - l, out - t), s, font=f, fill=(0, 0, 0), stroke_width=out, stroke_fill=(0, 0, 0))
     d.text((out - l, out - t), s, font=f, fill=CRANBERRY, stroke_width=max(1, int(f.size * 0.012)), stroke_fill=CRANBERRY)
     lay = lay.resize((int(lay.width * 1.2), lay.height), Image.LANCZOS)
+    if alpha < 1:
+        lay.putalpha(lay.getchannel('A').point(lambda v: int(v * alpha)))
     img.alpha_composite(lay, (int(480 * SS - lay.width / 2), 330 * SS))
 
 
@@ -998,15 +1001,17 @@ LINE = ("The British Right talk about 'taking back control'. Never let them forg
         "gave it away in the first place.")
 
 
-def shot_stage(t, with_title=True, cap=None):
+def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=False):
     img = canvas()
-    cam = Cam()
+    k = smooth(push) if push is not None else 0.0  # a very slow push-in over the whole speech
+    cam = Cam(1 + 0.15 * k, 540 + 60 * k, 960 - 140 * k)
     backdrop(img, cam)
     p = Pen(img, cam)
     p.poly([(-20, 1340), (1100, 1340), (1100, 1420), (-20, 1420)], (44, 16, 36), INK, 3)
     glow(img, cam, 560, 1344, 260, (255, 150, 210), 0.35)
     lectern(img, cam, 930, 1340)
-    person(img, cam, 600, 1340 - 918 * 0.7, 0.7, dict(BURNHAM, full=True, pose='out', mouth='talk', bottom=470), t)
+    person(img, cam, 600, 1340 - 918 * 0.7, 0.7, dict(BURNHAM, full=True, pose='out', mouth=mouth, bottom=470,
+                                                     blink=blink), t)
     front = Image.new('RGBA', img.size, (0, 0, 0, 0))
     rng = np.random.default_rng(4)
     fp = Pen(front, cam)
@@ -1027,10 +1032,10 @@ WAVES_HALL = (0.3, 1.1, 1.9)   # shot 2: one person stands, then a few, then eve
 STAND_ROW = {'Streeting': 0.2, 'Rayner': 0.8, 'Healey': 0.8, 'Mahmood': 1.4}  # shot 3; Miliband stays seated
 
 
-def shot_hall(t, furs=False):
+def shot_hall(t, furs=False, chant=True):
     img = canvas()
     hall(img, Cam(), t, furs, waves=None if furs else WAVES_HALL)
-    if furs:
+    if furs and chant:
         shout(img, 'THE KING IN THE NORTH!')
     return img
 
@@ -1086,7 +1091,7 @@ def stage_lip(img, cam, y=1440):
     p.poly([(400, y + 44), (680, y + 44), (706, y + 126), (374, y + 126)], (20, 20, 24), None)
 
 
-def shot_miliband(t):
+def shot_miliband(t, window=(0.85, 99)):
     """The front row again: Miliband, in plate, gets to his feet and bellows. His neighbours clap on in suits."""
     img = canvas((14, 10, 18))
     cam = Cam()
@@ -1096,7 +1101,7 @@ def shot_miliband(t):
     for i, x in ((1, 100), (3, 870)):  # Rayner and Mahmood either side, still in suits, still clapping
         person(img, cam, x, 960, 0.95, dict(MINISTERS[i], pose='clap', clap=t * 9 + i, clap_y=170), t)
     up = rise(t, 0.35)
-    shouting = t > 0.85
+    shouting = window[0] <= t <= window[1]
     sp = armoured(2, sit=1 - up, pose='fist' if shouting else 'side', mouth='shout' if shouting else 'line',
                   brows='fierce' if shouting else None)
     person(img, cam, 480, 930, 1.08, sp, t)
@@ -1106,7 +1111,7 @@ def shot_miliband(t):
     return img
 
 
-def shot_front_swords(t):
+def shot_front_swords(t, chant=True):
     """From the stage: the whole hall in furs and plate, swords up, the front row in their own armour."""
     img = canvas((10, 12, 22))
     cam = Cam()
@@ -1121,11 +1126,12 @@ def shot_front_swords(t):
         person(img, cam, 110 + i * 185, 1010, 0.76, sp, t, flip=-1 if i == 0 else 1)
     stage_lip(img, cam, 1440)
     shade(img, 0.1, (10, 20, 60))
-    shout(img, 'THE KING IN THE NORTH!')
+    if chant:
+        shout(img, 'THE KING IN THE NORTH!')
     return img
 
 
-def shot_knight(t, k):
+def shot_knight(t, k, window=None):
     img = canvas((14, 10, 18))
     cam = Cam()
     gradient(img, cam, (0, 0, 1080, 1920), (110, 24, 58), (14, 10, 18), (540, 500), 1000, 0.9)
@@ -1138,12 +1144,17 @@ def shot_knight(t, k):
         person(back, cam, x, y, s, sp, t)
     img.alpha_composite(back.filter(ImageFilter.GaussianBlur(cam.S(5))))
     shade(img, 0.18)
-    person(img, cam, 470, 900, 1.2, dict(KNIGHTS[k], bottom=700), t)
-    shout(img, 'THE KING IN THE NORTH!')
+    on = window is None or window[0] <= t <= window[1]
+    sp = dict(KNIGHTS[k], bottom=700)
+    if not on:
+        sp.update(mouth='line', brows=None, lid=0)
+    person(img, cam, 470, 900, 1.2, sp, t)
+    if on:
+        shout(img, 'THE KING IN THE NORTH!')
     return img
 
 
-def shot_king(t, zoom=0.0):
+def shot_king(t, zoom=0.0, blink=False):
     """Burnham in furs on the stage, lit from one side; zoom 0 = chest up, 1 = the final close-up."""
     k = smooth(zoom)
     z = 1.0 + 1.0 * k
@@ -1153,7 +1164,7 @@ def shot_king(t, zoom=0.0):
     shade(img, 0.35, (10, 20, 50))
     img = img.filter(ImageFilter.GaussianBlur(SS * (3 + 8 * k)))
     turn = sp_turn(t) if zoom == 0 else 0.0
-    person(img, cam, 480, 1010, 1.7, dict(KING, turn=turn, look=turn, bottom=800), t)
+    person(img, cam, 480, 1010, 1.7, dict(KING, turn=turn, look=turn, bottom=800, blink=blink), t)
     # a hard side light from our right: the other half of his face and body falls into shadow
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     hx = 480 + turn * 1.7 * 72 * 0.22
