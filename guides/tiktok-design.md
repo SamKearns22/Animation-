@@ -68,7 +68,10 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
 
 ## Working (for Claude)
 - **Say how long each render will take before starting it, and report how long it took.**
-- **Send a push notification to the director's phone when each render finishes**, with what is ready
-  and its size.
+- **Send a push notification to the director's phone whenever a render or any other long process
+  finishes** - full renders, animatics, storyboard or mock-up sheets, sound builds, uploads to GitHub,
+  research: anything that takes more than a couple of minutes, since the director is often away from the
+  chat. Say what is ready, its size or result, and how long it took. Also send one if a long process fails
+  or stops to wait for a decision, saying what is needed.
 - Send finished videos in the chat so they can be saved to Photos; save finished versions in
   `animations/` with `-vertical` in the name for TikTok versions.
