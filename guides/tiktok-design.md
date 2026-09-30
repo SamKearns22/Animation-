@@ -36,8 +36,17 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
 ## The title card
 - Bold Impact-style capitals (Anton), **cranberry red (178, 24, 52)**, letters widened 20%, thick black
   outline (`source/add_title.py`).
-- On screen from the first frame, held 3 seconds, fading out over 1 second.
-- **Large**: as big as fits within 90% of the width. A long title goes on two lines of equal size.
+- **Never a held title card on TikTok.** Our first two posts (Sept 30) lost most viewers in the first 3
+  seconds - average watch 3.6-4.6 s - while the title sat over a still scene; the retention graph fell off a
+  cliff there. So:
+  - **the first frame moves, with sound from the start** (the story begins at once - still never the
+    punchline);
+  - the title is on screen **at most 1 second**, or sits **small** (about 40% of the width, high in the safe
+    area) while the action plays underneath, fading after 2 seconds;
+  - the full-size title lives on the **cover** (chosen when posting) and in the post text instead.
+- **Tight set-ups:** TikTok viewers give a video seconds, not minutes. Cut the set-up to the shortest version
+  that still lands the joke (aim for 15-30 s in all; the first payoff or turn within about 8-10 s).
+- On the cover: as big as fits within the safe width. A long title goes on two lines of equal size.
 - **Placed in empty space inside the safe area**, never over a face and never in the top 16% (TikTok's
   tabs cover it - a posted title sat under them): in a converted widescreen film, just above the picture,
   its top edge no higher than 330 px; in a film made vertical, a third of the way down, over background.

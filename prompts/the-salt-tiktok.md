@@ -8,6 +8,10 @@ notification when each render finishes; send finished files in the chat).
 17.4 s, 720 x 1280, 12 fps, with the title "THE SALT"), polished to the standard of the rest of the account,
 ready to post.
 
+**0. The opening rule.** Follow the opening rules in guides/tiktok-design.md: no held title card; the first
+frame moves with sound; the title at most 1 second or small over the action. Suggest where the set-up can be
+tightened without losing the joke, and ask me before cutting.
+
 **1. Get it rendering again.** salt.py no longer runs: it imports Canvas, W, H, FPS, SR and more from
 source/pencil.py, which has since been changed. Find the version of pencil.py that The Salt was last
 rendered with in the git history (around 26 September), and make salt.py use it without changing what other

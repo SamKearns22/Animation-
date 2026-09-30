@@ -9,6 +9,10 @@ pictures and videos in the chat.
 grouped, with your recommended answer for each so I can just say yes. I will supply the recorded dialogue
 later; plan around placeholders until then.
 
+## First, the opening rule
+Follow the opening rules in guides/tiktok-design.md: no held title card; the first frame moves with sound; the
+title at most 1 second or small over the action; tight set-up.
+
 ## The idea
 A parody of the Labour Party conference that slowly and absurdly turns into the famous "King in the North"
 scene from Game of Thrones.
