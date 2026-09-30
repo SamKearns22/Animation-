@@ -13,6 +13,7 @@ I don't know how to code. Please:
 - Only upload the **finished version** of an animation. Keep drafts and test renders off GitHub.
 - Default to an **MP4 video** (small and plays everywhere). Only make a GIF if I ask for one, and keep GIFs short and small.
 - Put finished animations in the `animations/` folder with a clear name.
+- For TikTok versions, follow `guides/tiktok-design.md` (size, title, safe areas, posting). Say how long each render will take, report how long it took, and send a push notification when it finishes.
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
 - The tools (Python with Pillow, NumPy, imageio and a bundled ffmpeg) are installed automatically at the start of each session by `.claude/hooks/setup.sh`.
 
