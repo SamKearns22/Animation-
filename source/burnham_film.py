@@ -282,98 +282,93 @@ def resonate(x, f, q):
     return lfilter(b, a, x)
 
 
-def battle_horn(dur, f0, scoop=True):
-    """A war horn: a brassy note that scoops up to pitch and grows brighter as it swells."""
+def ensemble(freqs, dur, voices=5, detune=0.008, bright=12, lp=2200):
+    """A section of bowed or blown voices: each note doubled by slightly out-of-tune players."""
     n = int(dur * SR)
     t = np.arange(n) / SR
-    env = np.clip(t / 0.25, 0, 1) * np.clip((dur - t) / 0.3, 0, 1)
-    f = f0 * (1 - (0.06 * np.exp(-t * 9) if scoop else 0)) * (1 + 0.005 * np.sin(2 * np.pi * 5.5 * t))
-    ph = 2 * np.pi * np.cumsum(f) / SR
-    bright = 0.5 + 0.8 * env
-    y = sum(np.sin(k * ph) * (1 / k) ** (1.6 - 0.9 * bright) for k in range(1, 18))
-    y = resonate(y, 520, 1.2) + 0.6 * resonate(y, 1150, 1.5) + 0.3 * y
-    y += bandnoise(n, 400, 3000) * 0.04
-    return normal(np.tanh(1.8 * normal(y)) * env)
+    y = np.zeros(n)
+    for f0 in freqs:
+        for v in range(voices):
+            f = f0 * (1 + detune * rng.uniform(-1, 1)) * (1 + 0.003 * np.sin(2 * np.pi * rng.uniform(4.5, 6) * t + v))
+            ph = 2 * np.pi * np.cumsum(f) / SR + rng.uniform(0, 6)
+            y += sum(np.sin(k * ph) / k for k in range(1, bright))
+    return onepole_lp(onepole_lp(y, lp), lp * 1.4)
 
 
-def hooves(dur, horses=30, approach=True):
-    """A cavalry charge: many horses at the gallop, thudding into mud, coming closer."""
-    n = int(dur * SR)
-    out = np.zeros(n + SR)
-    fall_n = int(0.12 * SR)
-    ft = np.arange(fall_n) / SR
-    for h in range(horses):
-        stride = rng.uniform(0.40, 0.48)
-        t = rng.uniform(0, stride)
-        loud = rng.uniform(0.4, 1.0)
-        while t < dur:
-            for off in (0.0, 0.09, 0.2):
-                f = rng.uniform(70, 110)
-                thud = np.sin(2 * np.pi * f * ft) * np.exp(-ft * 38) + bandnoise(fall_n, 100, 700) * np.exp(-ft * 55) * 0.6
-                thud += bandnoise(fall_n, 800, 3500) * np.exp(-ft * 120) * 0.25  # the mud
-                g = loud * ((0.35 + 0.65 * (t / dur)) if approach else 1.0)
-                place(out, thud, t + off, g)
-            t += stride
-    rumble = bandnoise(n, 25, 180) * np.linspace(0.3, 1.0, n)
-    return normal(out[:n] + rumble * 0.6)
-
-
-def arrows(n_arrows=40, spread=0.35):
-    """A volley: each arrow a falling whistle, then the thunk of it landing."""
-    L = int(2.0 * SR)
-    out = np.zeros(L)
-    for _ in range(n_arrows):
-        d = rng.uniform(0.5, 0.8)
-        m = int(d * SR)
-        t = np.arange(m) / SR
-        f = 3200 - 1600 * (t / d) + rng.uniform(-300, 300)
-        carrier = np.sin(2 * np.pi * np.cumsum(f) / SR)
-        noise = onepole_lp(rng.standard_normal(m), 500)
-        env = np.sin(np.pi * np.clip(t / d, 0, 1)) ** 2
-        w = normal(noise * carrier * env)
-        start = rng.uniform(0, spread)
-        place(out, w, start, rng.uniform(0.3, 0.8))
-        k = int(0.05 * SR)
-        tk = np.arange(k) / SR
-        thunk = np.sin(2 * np.pi * rng.uniform(250, 420) * tk) * np.exp(-tk * 90) + bandnoise(k, 1000, 5000) * np.exp(-tk * 200) * 0.4
-        place(out, thunk, start + d, rng.uniform(0.3, 0.7))
-    return normal(out)
-
-
-def yell(dur):
-    """A man screaming in the fight: a strained voice through the formants of 'aah', rough at the edges."""
+def choir(freqs, dur, vowel=(600, 1040, 2250)):
+    """Low men's voices on a long 'aah'."""
     n = int(dur * SR)
     t = np.arange(n) / SR
-    f0 = rng.uniform(170, 290)
-    contour = f0 * (1 + 0.25 * np.sin(np.pi * np.clip(t / dur, 0, 1)) - 0.15 * (t / dur))
-    contour *= 1 + 0.02 * np.sin(2 * np.pi * rng.uniform(5, 8) * t) + 0.01 * onepole_lp(rng.standard_normal(n), 30) * 10
-    ph = 2 * np.pi * np.cumsum(contour) / SR
-    src = sum(np.sin(k * ph) / k for k in range(1, 30)) + 0.25 * rng.standard_normal(n)
-    v = rng.choice([(750, 1200, 2600), (650, 1080, 2500), (800, 1300, 2700), (550, 1700, 2600)])
-    y = resonate(src, v[0], 3) + 0.7 * resonate(src, v[1], 4) + 0.35 * resonate(src, v[2], 5)
-    env = np.clip(t / 0.06, 0, 1) * np.clip((dur - t) / 0.25, 0, 1)
-    return normal(np.tanh(3 * normal(y)) * env)
+    src = np.zeros(n)
+    for f0 in freqs:
+        for v in range(4):
+            f = f0 * (1 + 0.006 * rng.uniform(-1, 1)) * (1 + 0.006 * np.sin(2 * np.pi * rng.uniform(4.8, 5.6) * t + v))
+            ph = 2 * np.pi * np.cumsum(f) / SR
+            src += sum(np.sin(k * ph) / k ** 1.3 for k in range(1, 24))
+    src += 0.05 * rng.standard_normal(n)
+    return resonate(src, vowel[0], 2.5) + 0.6 * resonate(src, vowel[1], 3) + 0.25 * resonate(src, vowel[2], 4)
 
 
-def battle(dur):
-    """The war beneath the close-up: horns, the charge, arrows, steel and men screaming in the mud."""
-    n = int(dur * SR)
-    bus = np.zeros(n + 3 * SR)
-    place(bus, battle_horn(2.2, 146.8), 0.0, 0.55)
-    place(bus, battle_horn(1.4, 220.0), 0.15, 0.3)
-    place(bus, battle_horn(1.9, 196.0), 2.0, 0.5)
-    place(bus, battle_horn(1.9, 293.7), 2.1, 0.3)
-    place(bus, hooves(dur, 34), 0.0, 0.55)
-    place(bus, arrows(45), 0.9, 0.35)
-    for k in range(26):
-        at = rng.uniform(0.2, dur - 0.3) * (0.5 + 0.5 * rng.random())
-        place(bus, yell(rng.uniform(0.6, 1.4)), at, rng.uniform(0.12, 0.3))
-    for k in range(18):
-        place(bus, clink(low=rng.random() < 0.6), rng.uniform(0.3, dur), rng.uniform(0.25, 0.5))
-    for j, beat in enumerate([0.0, 0.85, 1.7, 2.1, 2.55, 3.0, 3.4, 3.8]):
-        place(bus, drum(56 if j % 3 else 50), beat, 0.5 + 0.06 * j)
-    bus = reverb(bus[:n], 1.2, 0.2)[:n]
-    return normal(bus)
+def timpani(f0=73.4, amp=1.0):
+    n = int(2.0 * SR)
+    t = np.arange(n) / SR
+    y = sum(np.sin(2 * np.pi * f0 * r * t) * np.exp(-t * d) * a
+            for r, d, a in ((1, 2.2, 1), (1.5, 3.5, 0.5), (1.98, 4.5, 0.35), (2.44, 6, 0.2)))
+    y += bandnoise(n, 80, 1200) * np.exp(-t * 40) * 0.4
+    return y * amp
+
+
+def swell(n, a=0.0, b=1.0, curve=1.6):
+    return a + (b - a) * np.linspace(0, 1, n) ** curve
+
+
+def regal(dur, lead=1.6):
+    """Original music for the close-up: ominous and royal, something huge and dangerous on its way.
+    D minor: low strings trembling on D, then B-flat, then an unresolved A major that swells to the cut.
+    Brass and a men's choir on the chords, a timpani roll building underneath, one deep boom at the start."""
+    total = dur + lead
+    n = int(total * SR)
+    out = np.zeros(n + 3 * SR)
+    D1, A1, Bb1, D2, E2, F2, G2, A2, Bb2, Cs3, D3, E3, F3, A3 = (36.7, 55.0, 58.3, 73.4, 82.4, 87.3, 98.0, 110.0, 116.5,
+                                                                 138.6, 146.8, 164.8, 174.6, 220.0)
+    # lead-in under the swords: a low D in the strings, trembling, creeping up
+    m = int(lead * SR)
+    lo = ensemble([D2, D3], lead + 0.3, bright=12, lp=2200)
+    trem = 0.75 + 0.25 * np.sin(2 * np.pi * 7 * np.arange(len(lo)) / SR)
+    place(out, normal(lo * trem) * swell(len(lo), 0.0, 1.0, 2.0), 0.0, 0.35)
+    # the chords under the close-up
+    chords = [(0.0, 1.9, [D2, A2, D3, F3], [D1, D2]), (1.9, 1.3, [Bb1, F2, Bb2, D3], [Bb1]),
+              (3.2, dur - 3.2 + 0.2, [A1, E2, A2, Cs3, E3], [A1])]
+    for i, (at, d, notes, bass) in enumerate(chords):
+        notes = [f * 2 for f in notes]  # up an octave, where a phone speaker can play it
+        k = int((d + 0.35) * SR)
+        env = np.clip(np.arange(k) / (0.12 * SR), 0, 1) * np.clip((k - np.arange(k)) / (0.3 * SR), 0, 1)
+        grow = swell(k, 0.7 + 0.1 * i, 1.0 + 0.25 * i)
+        strings = normal(ensemble(notes, d + 0.35, bright=14, lp=3800)) * env * grow
+        low = normal(ensemble(bass, d + 0.35, bright=8, lp=700)) * env
+        brass = normal(np.tanh(2.2 * normal(ensemble(notes[1:], d + 0.35, voices=3, detune=0.004, bright=20, lp=3200))))
+        brass *= env * swell(k, 0.3 + 0.2 * i, 0.9 + 0.2 * i, 1.2)
+        voices = normal(choir([f for f in notes if f < 360], d + 0.35, vowel=(700, 1150, 2500))) * env * grow
+        place(out, strings, lead + at, 0.42)
+        place(out, low, lead + at, 0.14)
+        place(out, brass, lead + at, 0.30)
+        place(out, voices, lead + at, 0.22)
+    # a high thin line of tension over it all: E above the D minor, rubbing
+    hi = ensemble([659.3], dur, voices=4, bright=6, lp=3000)
+    place(out, normal(hi) * swell(len(hi), 0.0, 1.0, 2.5), lead, 0.08)
+    # one deep boom as the close-up begins, and a timpani roll building to the cut
+    boom = timpani(D1 * 1.2, 1.0)
+    boom[:int(1.2 * SR)] += drum(38) * 0.8
+    place(out, normal(boom), lead, 0.6)
+    t = 1.2
+    while t < dur - 0.05:
+        g = 0.08 + 0.4 * ((t - 1.2) / (dur - 1.2)) ** 1.5
+        place(out, timpani(A1 if t > 3.2 else D2, 1.0), lead + t, g)
+        t += 0.075 if t > 2.2 else 0.12
+    y = reverb(out[:n], 2.4, 0.35)[:n]
+    from scipy.signal import butter, sosfilt
+    y = sosfilt(butter(2, 90, 'high', fs=SR, output='sos'), y)  # nothing a phone cannot play
+    return normal(y), lead
 
 
 def normal(x, peak=1.0):
@@ -416,8 +411,9 @@ def soundtrack():
     # swords through both sword shots
     for k in range(40):
         place(mix, clink(), STARTS[8] + rng.uniform(0, STARTS[10] - STARTS[8]), rng.uniform(0.08, 0.2))
-    # the close-up: the battle, hard cut at the end
-    place(mix, battle(DUR - STARTS[10]), STARTS[10], 0.8)
+    # the close-up: ominous, regal music, fading in under the swords; hard cut at the end
+    music, lead = regal(DUR - STARTS[10])
+    place(mix, music, STARTS[10] - lead, 1.0)
     mix = mix[:int(DUR * SR)]
     mix[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
     pk = np.abs(mix).max()

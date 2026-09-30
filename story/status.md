@@ -15,7 +15,7 @@ Read this first in any new session, after CLAUDE.md.
   ends on a slow push-in on Burnham's face with war drums, hard cut to black. Captions must be accurate.
 - Notes applied after animatic 1: voices play exactly as recorded (gain only, no echo, no pitch change);
   captions follow Sam's actual words ("they were the ones who gave it away...", "KING OF THE NORTH!");
-  clapping only (no crowd murmur); battle at the end made in code (horns, cavalry, arrows, yells, steel);
+  clapping only (no crowd murmur); ending music made in code (original, ominous and regal: D minor strings, brass, low choir, timpani; replaced the battle sounds);
   Andy gestures (points, air quotes, wagging finger, hand on hip); knights each salute differently;
   the king is royal (crown, dark fur, gold chain, gilded breastplate); title centred on the frame.
 - Status: animatic 2 sent 30 Sep 2026, awaiting notes. Then: final render,
