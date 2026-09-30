@@ -18,7 +18,10 @@ Read this first in any new session, after CLAUDE.md.
   clapping only (no crowd murmur); ending music made in code (original, ominous and regal: D minor strings, brass, low choir, timpani; replaced the battle sounds);
   Andy gestures (points, air quotes, wagging finger, hand on hip); knights each salute differently;
   the king is royal (crown, dark fur, gold chain, gilded breastplate); title centred on the frame.
-- Status: animatic 2 sent 30 Sep 2026, awaiting notes. Then: final render,
+- Later notes: mouths follow each voice; no bobbing fists or sword sounds; natural clapping; chant carries on
+  under the close-up; lanyards on every audience member; two great bee banners in the turned hall.
+- DONE 30 Sep 2026: `animations/king-in-the-north-vertical.mp4` (43 s, 4.7 MB, 1080 x 1920, 12 fps), checked
+  against the safe-area guides (title narrowed to 720 px, centred). Full render about 38 min on 2 cores.
   `animations/king-in-the-north-vertical.mp4` (under 25 MB), safe-area check, post text.
 
 ## Done

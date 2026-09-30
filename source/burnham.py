@@ -1121,13 +1121,13 @@ def shout(img, s, bottom=1470):
 
 
 def title(img, s='HOPE AGAIN', alpha=1.0):
-    """The cranberry-red title card, drawn fresh at full size, top edge at 330 px, within 840 px."""
+    """The cranberry-red title card, drawn fresh at full size, centred, top edge at 330 px, 720 px wide at most."""
     size = 200
     while True:
         f = ImageFont.truetype(ANTON, size * SS)
         out = max(3, int(size * 0.075)) * SS
         l, t, r, b = f.getbbox(s, stroke_width=out)
-        if (r - l) * 1.2 <= 840 * SS:
+        if (r - l + 2 * out) * 1.2 <= 720 * SS:  # centred on the frame yet inside the safe area (x 180-900)
             break
         size -= 4
     lay = Image.new('RGBA', (r - l + 2 * out, b - t + 2 * out), (0, 0, 0, 0))
