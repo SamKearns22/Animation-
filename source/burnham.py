@@ -448,7 +448,7 @@ def face(img, p, sp, t, hx, hy, hw, hh):
     for k in range(sp.get('creases', 0)):
         p.line([(fx - 30, hy - 44 + 9 * k), (fx - 6, hy - 48 + 9 * k), (fx + 24, hy - 45 + 9 * k)], skin_d, 1.8)
     blink = sp.get('blink', False)
-    lid = sp.get('lid', 0)
+    lid = sp.get('lid', 0) + 3 * sp.get('harrow', 0.0)
     bc = sp.get('brow_c', tuple(int(v * 0.8) for v in sp.get('hair_c', (60, 44, 34))))
     for sgn in (-1, 1):
         ex, ey = fx - 4 + sgn * 30, hy - 8
@@ -458,6 +458,9 @@ def face(img, p, sp, t, hx, hy, hw, hh):
             almond = [(ex - 17, ey), (ex - 8, ey - 8), (ex + 8, ey - 8), (ex + 17, ey), (ex + 8, ey + 7), (ex - 8, ey + 7)]
             p.poly(almond, (250, 250, 248), INK, 2.0)
             p.ell(ex + look * 7, ey + 1, 4.5, 4.5, INK, None)
+            if lid > 0:  # a heavy lid drooping over the top of the eye
+                p.poly([(ex - 18, ey - 2), (ex - 8, ey - 10), (ex + 8, ey - 10), (ex + 18, ey - 2), (ex + 17, ey - 1 + lid),
+                        (ex + 8, ey - 9 + lid), (ex - 8, ey - 9 + lid), (ex - 17, ey - 1 + lid)], dk(skin, 0.84), None)
             p.line([(ex - 17, ey - 1 + lid), (ex - 8, ey - 9 + lid), (ex + 8, ey - 9 + lid), (ex + 17, ey - 1 + lid)],
                    INK, 2.6)
         raise_ = sp.get('brow_raise', 0)
@@ -471,6 +474,16 @@ def face(img, p, sp, t, hx, hy, hw, hh):
                 p.line([(ex - 15, ey + 7), (ex, ey + 3), (ex + 15, ey + 7)], INK, 2.0)
         else:
             p.line([(ex - sgn * 4 - sgn * 2, ey - 22 - raise_), (ex + sgn * 20, ey - 20 - raise_ * 0.3)], bc, bw)
+    h = sp.get('harrow', 0.0)
+    if h > 0:  # the weight of the world: dark rings under the eyes, bags, heavier lids
+        for sgn in (-1, 1):
+            ex, ey = fx - 4 + sgn * 30, hy - 8
+            soft(img, p.cam, [(ex - 20, ey + 5), (ex - 8, ey + 16), (ex + 8, ey + 16), (ex + 20, ey + 5), (ex + 8, ey + 10),
+                              (ex - 8, ey + 10)], (96, 52, 84), 0.5 * h, 3)
+            if h > 0.2:
+                p.line([(ex - 16, ey + 9), (ex - 6, ey + 14), (ex + 6, ey + 14), (ex + 16, ey + 9)], dk(skin, 0.72), 2.0)
+            if h > 0.55:
+                p.line([(ex - 12, ey + 20), (ex, ey + 24), (ex + 12, ey + 20)], dk(skin, 0.78), 1.8)
     if sp.get('glasses'):  # dark rectangular frames
         gc = sp.get('glasses_c', (30, 28, 34))
         for sgn in (-1, 1):
@@ -1120,14 +1133,14 @@ def shout(img, s, bottom=1470):
                stroke_width=int(size * 0.07) * SS, stroke_fill=(0, 0, 0))
 
 
-def title(img, s='HOPE AGAIN', alpha=1.0):
+def title(img, s='HOPE AGAIN', alpha=1.0, maxw=720):
     """The cranberry-red title card, drawn fresh at full size, centred, top edge at 330 px, 720 px wide at most."""
     size = 200
     while True:
         f = ImageFont.truetype(ANTON, size * SS)
         out = max(3, int(size * 0.075)) * SS
         l, t, r, b = f.getbbox(s, stroke_width=out)
-        if (r - l + 2 * out) * 1.2 <= 720 * SS:  # centred on the frame yet inside the safe area (x 180-900)
+        if (r - l + 2 * out) * 1.2 <= maxw * SS:  # centred on the frame, inside the safe area
             break
         size -= 4
     lay = Image.new('RGBA', (r - l + 2 * out, b - t + 2 * out), (0, 0, 0, 0))
@@ -1174,8 +1187,8 @@ def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=Fals
     return img
 
 
-WAVES_HALL = (0.3, 1.1, 1.9)   # shot 2: one person stands, then a few, then everyone
-STAND_ROW = {'Streeting': 0.2, 'Rayner': 0.8, 'Healey': 0.8, 'Mahmood': 1.4}  # shot 3; Miliband stays seated
+WAVES_HALL = (0.15, 0.65, 1.15)   # shot 2: one person stands, then a few, then everyone
+STAND_ROW = {'Streeting': 0.1, 'Rayner': 0.45, 'Healey': 0.45, 'Mahmood': 0.85}  # shot 3; Miliband stays seated
 
 
 def shot_hall(t, furs=False, chant=True):
@@ -1196,7 +1209,7 @@ def shot_front_row(t):
     for row, (y, s) in enumerate(((700, 0.36), (800, 0.46))):
         for i in range(8 - row):
             sp = attendee(rng)
-            up = rise(t, 0.8 if rng.random() < 0.3 else 1.4)
+            up = rise(t, 0.45 if rng.random() < 0.3 else 0.85)
             sp.update(clap=t * 19 + i, sit=1 - up, pose='clap' if up > 0.8 else 'side')
             person(back, cam, 60 + i * (140 + 20 * row) + rng.uniform(-20, 20), y, s, sp, t)
     img.alpha_composite(back.filter(ImageFilter.GaussianBlur(cam.S(4))))
@@ -1312,7 +1325,7 @@ def shot_knight(t, k, window=None, arms=None, level=None):
     return img
 
 
-def shot_king(t, zoom=0.0, blink=False):
+def shot_king(t, zoom=0.0, blink=False, harrow=0.0):
     """Burnham in furs on the stage, lit from one side; zoom 0 = chest up, 1 = the final close-up."""
     k = smooth(zoom)
     z = 1.0 + 1.0 * k
@@ -1322,7 +1335,7 @@ def shot_king(t, zoom=0.0, blink=False):
     shade(img, 0.35, (10, 20, 50))
     img = img.filter(ImageFilter.GaussianBlur(SS * (3 + 8 * k)))
     turn = sp_turn(t) if zoom == 0 else 0.0
-    person(img, cam, 480, 1010, 1.7, dict(KING, turn=turn, look=turn, bottom=800, blink=blink), t)
+    person(img, cam, 480, 1010, 1.7, dict(KING, turn=turn, look=turn, bottom=800, blink=blink, harrow=harrow), t)
     # a hard side light from our right: the other half of his face and body falls into shadow
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     hx = 480 + turn * 1.7 * 72 * 0.22
@@ -1334,9 +1347,9 @@ def shot_king(t, zoom=0.0, blink=False):
 
 def sp_turn(t):
     """A slow look to his left, a hold, then a slow look to his right."""
-    if t < 1.6:
-        return -0.9 * smooth(t / 1.2)
-    return -0.9 + 1.8 * smooth((t - 2.0) / 1.6)
+    if t < 1.3:
+        return -0.9 * smooth(t / 1.0)
+    return -0.9 + 1.8 * smooth((t - 1.6) / 1.5)
 
 
 # The storyboard: shot number, name, time on screen, what the still shows.

@@ -30,19 +30,22 @@ LINE_FILE = os.path.join(HERE, 'audio', 'burnham-line.m4a')
 SHOUT_FILE = os.path.join(HERE, 'audio', 'king-shouts.m4a')
 SHOUTS = {  # recorded order -> who says it (the highest voice is the young woman)
     'elder': (1.17, 3.05), 'young': (4.89, 6.35), 'miliband': (7.84, 9.91), 'sikh': (11.28, 13.54)}
+# The speech is tightened: it starts on his first word and the pauses between phrases are shortened.
+# Each piece is (start, end) in the recording; the pieces play back to back, untouched.
+PIECES = [(0.70, 2.30), (2.62, 6.12), (6.88, 8.78), (9.10, 13.90)]
 CAPTIONS = [  # the speech, split at his own pauses (seconds from the start of the film)
-    (0.81, 6.10, "The British Right talk about 'taking back control'."),
-    (6.98, 8.90, "Never let them forget,"),
-    (9.25, 14.0, "they were the ones who gave it away in the first place."),
+    (0.11, 5.15, "The British Right talk about 'taking back control'."),
+    (5.2, 7.05, "Never let them forget,"),
+    (7.15, 11.9, "they were the ones who gave it away in the first place."),
 ]
 
 # The shots: (name, length in seconds). The first shot's length is set by the speech.
-SHOTS = [('stage', 14.2), ('hall', 3.0), ('frontrow', 2.5), ('elder', 2.3), ('sikh', 2.6), ('young', 1.9),
-         ('miliband', 3.2), ('king', 4.0), ('swords_back', 2.5), ('swords_front', 3.0), ('closeup', 4.0)]
+SHOTS = [('stage', 11.9), ('hall', 2.0), ('frontrow', 1.7), ('elder', 2.3), ('sikh', 2.6), ('young', 1.9),
+         ('miliband', 3.2), ('king', 3.4), ('swords_back', 2.5), ('swords_front', 2.6), ('closeup', 4.0)]
 SHOUT_AT = {'elder': 0.2, 'sikh': 0.2, 'young': 0.2, 'miliband': 1.0}  # when each shout starts in its shot
 STARTS = np.cumsum([0] + [d for _, d in SHOTS])
 DUR = float(STARTS[-1])
-CHANT_AT = [STARTS[8] + 0.2, STARTS[9] + 0.5]  # the hall chants twice
+CHANT_AT = [STARTS[8] + 0.2, STARTS[9] + 0.3]  # the hall chants twice
 BG_CHANT = [STARTS[10] + 0.2, STARTS[10] + 2.2]  # and carries on, further off, under the close-up
 
 
@@ -59,10 +62,23 @@ def load(path):
     return np.frombuffer(raw, np.float32).astype(np.float64)
 
 
+def speech():
+    """His line as the film plays it: the recording's pieces back to back, each untouched."""
+    a = load(LINE_FILE)
+    out = []
+    for s0, s1 in PIECES:
+        seg = a[int(s0 * SR):int(s1 * SR)].copy()
+        k = int(0.01 * SR)
+        seg[:k] *= np.linspace(0, 1, k)
+        seg[-k:] *= np.linspace(1, 0, k)
+        out.append(seg)
+    return np.concatenate(out)
+
+
 def level_track():
     """How loud his voice is at each frame (0-1), to move his mouth."""
-    a = load(LINE_FILE)
-    n = int(14.2 * FPS)
+    a = speech()
+    n = int(SHOTS[0][1] * FPS)
     lv = np.array([np.sqrt(np.mean(a[int(i / FPS * SR):int((i + 1) / FPS * SR)] ** 2) + 1e-12) for i in range(n)])
     return np.clip(lv / np.percentile(lv, 97), 0, 1)
 
@@ -87,15 +103,15 @@ def mouth_for(i):
 HIP_R = ((250, 230), (150, 420), 'fist')
 ANDY = [  # (time in the shot, arms): accusing, sarcastic, confident
     (0.0, {'L': ((-160, 270), (-150, 470), 'fist'), 'R': ((160, 270), (150, 470), 'fist')}),
-    (0.75, {'L': ((-343, 24), (-536, -28), 'point'), 'R': HIP_R}),                     # "The British Right"
-    (2.75, {'L': ((-300, 200), (-470, 240), 'palm'), 'R': HIP_R}),                     # "talk about"
-    (3.9, {'L': ((-320, -40), (-250, -230), 'quote'), 'R': ((320, -40), (250, -230), 'quote')}),  # air quotes
-    (6.95, {'L': ((-310, 150), (-300, -50), 'point_up'), 'R': HIP_R}),                 # "Never let them forget"
-    (9.2, {'L': ((-340, 110), (-535, 70), 'point'), 'R': HIP_R}),                      # "they were the ones..."
-    (12.0, {'L': ((-335, 20), (-520, -60), 'point'), 'R': HIP_R}),
-    (13.6, {'L': ((-280, 220), (-470, 260), 'palm'), 'R': ((280, 220), (470, 260), 'palm')}),  # arms open
+    (0.3, {'L': ((-343, 24), (-536, -28), 'point'), 'R': HIP_R}),                     # "The British Right"
+    (1.72, {'L': ((-300, 200), (-470, 240), 'palm'), 'R': HIP_R}),                     # "talk about"
+    (2.93, {'L': ((-320, -40), (-250, -230), 'quote'), 'R': ((320, -40), (250, -230), 'quote')}),  # air quotes
+    (5.2, {'L': ((-310, 150), (-300, -50), 'point_up'), 'R': HIP_R}),                 # "Never let them forget"
+    (7.15, {'L': ((-340, 110), (-535, 70), 'point'), 'R': HIP_R}),                      # "they were the ones..."
+    (9.9, {'L': ((-335, 20), (-520, -60), 'point'), 'R': HIP_R}),
+    (11.5, {'L': ((-280, 220), (-470, 260), 'palm'), 'R': ((280, 220), (470, 260), 'palm')}),  # arms open
 ]
-ANDY_LOOK = [(0.0, 0.0), (0.75, -0.6), (3.9, 0.0), (6.95, -0.4), (9.2, -0.7), (13.6, 0.0)]
+ANDY_LOOK = [(0.0, 0.0), (0.3, -0.6), (2.93, 0.0), (5.2, -0.4), (7.15, -0.7), (11.5, 0.0)]
 
 REST = {'L': ((-160, 270), (-150, 470), 'fist'), 'R': ((160, 270), (150, 470), 'fist')}
 SALUTES = {  # each knight's own gesture of allegiance
@@ -134,7 +150,7 @@ def keyed(keys, t, blend=0.3):
 
 def andy_arms(u):
     arms = keyed(ANDY, u, 0.28)
-    if 6.95 <= u < 9.0:  # the raised finger wags
+    if 5.2 <= u < 7.0:  # the raised finger wags
         el, wr, sh = arms['L'][:3]
         arms = dict(arms, L=(el, (wr[0] + 14 * math.sin(u * 10), wr[1]), sh))
     return arms
@@ -182,8 +198,8 @@ def frame_image(i):
         for a, b, text in CAPTIONS:
             if a <= u < b:
                 B.caption(img, text)
-        if u < 4.0:
-            B.title(img, alpha=1.0 if u < 3.0 else 1.0 - (u - 3.0))
+        if u < 2.5:  # small and high while the speech starts, gone by 2.5 s (the full title is on the cover)
+            B.title(img, alpha=1.0 if u < 2.0 else 1.0 - (u - 2.0) / 0.5, maxw=430)
     elif name == 'hall':
         img = B.shot_hall(u)
     elif name == 'frontrow':
@@ -203,7 +219,7 @@ def frame_image(i):
         img = (B.shot_hall(u, furs=True, chant=chanting) if name == 'swords_back'
                else B.shot_front_swords(u, chant=chanting, level=chant_level(t)))
     else:
-        img = B.shot_king(u, zoom=u / dur)
+        img = B.shot_king(u, zoom=u / dur, harrow=0.25 + 0.75 * B.smooth(u / dur))
     return img
 
 
@@ -401,7 +417,7 @@ def soundtrack():
     """Voices exactly as recorded (only turned up or down); clapping; swords; the battle at the end."""
     n = int((DUR + 0.5) * SR)
     mix = np.zeros(n + 4 * SR)
-    line = load(LINE_FILE)[:int(14.2 * SR)]
+    line = speech()
     voice_gain = 0.85 / np.abs(line).max()
     place(mix, line, 0.0, voice_gain)
     # the ovation: one person, then a few, then everyone; clapping on under the knights and the king
