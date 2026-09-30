@@ -901,6 +901,47 @@ def backdrop(img, cam, dim=1.0, big=True):
         text(img, cam, 70, 750, 'AGAIN', 170, c, widen=0.95)
 
 
+def heraldic_bee(p, x, y, r):
+    """Manchester's worker bee, as a banner charge: gold and black, wings spread."""
+    for sgn in (-1, 1):
+        p.ell(x + sgn * r * 0.62, y - r * 0.42, r * 0.62, r * 0.34, (246, 238, 214), INK, 2.6, rot=sgn * 0.45)
+        p.ell(x + sgn * r * 0.5, y - r * 0.02, r * 0.44, r * 0.24, (236, 226, 200), INK, 2.4, rot=sgn * 0.2)
+        for k in range(3):  # legs
+            p.line([(x + sgn * r * 0.12, y - r * 0.1 + k * r * 0.16), (x + sgn * r * 0.42, y + k * r * 0.2),
+                    (x + sgn * r * 0.46, y + r * 0.1 + k * r * 0.22)], INK, 2.4)
+        p.line([(x + sgn * r * 0.06, y - r * 0.7), (x + sgn * r * 0.2, y - r * 0.98), (x + sgn * r * 0.3, y - r * 1.02)],
+               INK, 2.4)
+    body = oval(x, y + r * 0.42, r * 0.3, r * 0.55, 28)
+    p.poly(body, (240, 190, 40), INK, 2.8)
+    for k in range(3):
+        yy = y + r * (0.2 + 0.22 * k)
+        w = r * 0.3 * math.sqrt(max(0.0, 1 - ((yy - y - r * 0.42) / (r * 0.55)) ** 2))
+        p.poly([(x - w, yy - r * 0.05), (x + w, yy - r * 0.05), (x + w * 0.96, yy + r * 0.06), (x - w * 0.96, yy + r * 0.06)],
+               INK, None)
+    p.ell(x, y - r * 0.18, r * 0.24, r * 0.22, (30, 26, 24), INK, 2.4)
+    p.ell(x, y - r * 0.5, r * 0.16, r * 0.14, (30, 26, 24), INK, 2.4)
+
+
+def great_banner(img, p, cam, x0, x1, top, bottom, t):
+    """A long cloth banner on a pole: deep crimson, a gold border, a swallowtail end, the bee in the middle."""
+    sway = 4 * math.sin(t * 1.3 + x0)
+    mid = (x0 + x1) / 2
+    cut = bottom - 90
+    cloth = [(x0, top), (x1, top), (x1 + sway, cut), (mid + sway, bottom - 150), (x0 + sway, cut)]
+    p.poly([(x0, top), (x1, top), (x1 + sway, bottom), (mid + sway, cut), (x0 + sway, bottom)], (120, 14, 34), INK, 3)
+    inset = [(x0 + 16, top + 16), (x1 - 16, top + 16), (x1 - 16 + sway, bottom - 34), (mid + sway, cut - 30),
+             (x0 + 16 + sway, bottom - 34)]
+    p.poly(inset, None, GOLD, 5)
+    soft(img, cam, [(x0 + (x1 - x0) * 0.62, top), (x1, top), (x1 + sway, bottom), (x0 + (x1 - x0) * 0.62 + sway, cut)],
+         (0, 0, 0), 0.25, 10)
+    p.line([(x0 - 24, top - 4), (x1 + 24, top - 4)], (90, 64, 40), 10)  # the pole
+    for x in (x0 - 24, x1 + 24):
+        p.ell(x, top - 4, 9, 9, GOLD, INK, 2)
+    for x in (x0 + 30, x1 - 30):  # cords up to the rig
+        p.line([(x, top - 4), (mid, top - 110)], (60, 50, 40), 3)
+    heraldic_bee(p, mid + sway * 0.5, top + (bottom - top) * 0.42, (x1 - x0) * 0.3)
+
+
 def lectern(img, cam, x, y):
     p = Pen(img, cam)
     p.poly([(x - 48, y - 250), (x + 48, y - 250), (x + 44, y), (x - 44, y)], (206, 204, 210), INK, 3)
@@ -1007,10 +1048,10 @@ def hall(img, cam, t, furs=False, waves=None):
         p.poly([(x0, 760), (x0 + 140, 760), (x0 + 140, 1090), (x0, 1090)], tuple(int(v * dim) for v in (206, 22, 52)), INK, 3)
         text(img, cam, x0 + 70, 800, 'HOPE', 52, tuple(int(v * dim) for v in OFFWHITE), anchor='ma')
         text(img, cam, x0 + 70, 860, 'AGAIN', 52, tuple(int(v * dim) for v in OFFWHITE), anchor='ma')
-        if furs:  # a bee pennant hung beside each banner
-            q = [(x0 + 20, 1110), (x0 + 120, 1110), (x0 + 120, 1230), (x0 + 70, 1270), (x0 + 20, 1230)]
-            p.poly(q, (70, 30, 30), INK, 3)
-            bee(p, x0 + 70, 1180, 34)
+
+    if furs:  # two great medieval banners hung either side of the hall, each with the worker bee
+        for x0, x1 in ((6, 262), (818, 1074)):
+            great_banner(img, p, cam, x0, x1, 400, 1170, t)
     # the far stage and the tiny speaker
     gradient(img, cam, (300, 780, 780, 1060), (236, 52, 150), (150, 10, 44), (540, 1040), 300, 0.8, dim)
     p.poly([(300, 780), (780, 780), (780, 1060), (300, 1060)], None, INK, 3)
@@ -1164,7 +1205,7 @@ def shot_front_row(t):
     for i in order:
         up = rise(t, STAND_ROW.get(MINISTERS[i]['name'], 99))
         sp = dict(MINISTERS[i], pose='clap' if up > 0.8 else 'side', clap=t * 19 + i * 1.3, clap_y=170,
-                  lanyard=False, sit=1 - up)
+                  lanyard=True, sit=1 - up)
         if MINISTERS[i]['name'] == 'Miliband':
             sp['mouth'] = 'line'
         person(img, cam, 110 + i * 185, 1010, 0.76, sp, t)
@@ -1206,7 +1247,7 @@ def shot_miliband(t, window=(0.85, 99), arms=None, level=None):
     front_row_bg(img, cam, t)
     shade(img, 0.15)
     for i, x in ((1, 100), (3, 870)):  # Rayner and Mahmood either side, still in suits, still clapping
-        person(img, cam, x, 960, 0.95, dict(MINISTERS[i], pose='clap', clap=t * 19 + i, clap_y=170), t)
+        person(img, cam, x, 960, 0.95, dict(MINISTERS[i], pose='clap', clap=t * 19 + i, clap_y=170, lanyard=True), t)
     up = rise(t, 0.35)
     shouting = window[0] <= t <= window[1]
     sp = armoured(2, sit=1 - up, pose='fist' if shouting else 'side', mouth='shout' if shouting else 'line',
