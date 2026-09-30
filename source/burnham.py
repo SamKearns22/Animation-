@@ -390,6 +390,17 @@ def beard(p, sp, hx, hy, hw, hh, fx):
             p.ell(sx, sy, 0.9, 0.9, sp.get('beard_c', (90, 70, 60)), None)
 
 
+def mouth_by_level(base, lv, i=0):
+    """Pick a mouth shape from how loud the voice is right now: shut, then opening, then the full shout."""
+    if lv < 0.1:
+        return 'line'
+    if lv < 0.3:
+        return 'small'
+    if lv < 0.6:
+        return ['mid', 'open'][i % 2]
+    return base
+
+
 def mouth(p, sp, t, fx, my):
     m = sp.get('mouth', 'line')
     if m == 'talk':
@@ -770,14 +781,14 @@ def pose_arms(img, p, sp, t, pose, skin, sleeve, sw, arm):
         hx, hy = sw + sp.get('reach', 50), -300
         arm(p, (sw - 14, 50), (hx + 20, -110), (hx, hy + 20), sleeve)
         if pose == 'sword':
-            sword(p, hx, hy - 10, ang=-1.62 + 0.08 * math.sin(t * 7 + sp.get('seed', 0)))
+            sword(p, hx, hy - 10, ang=-1.62 + 0.1 * math.sin(t * 2.4 + sp.get('seed', 0)))
         p.ell(hx, hy, 26, 24, skin, INK, 2.6)
         for k in range(3):
             p.line([(hx - 16, hy - 8 + 9 * k), (hx + 8, hy - 10 + 9 * k)], dk(skin, 0.7), 1.8)
     elif pose == 'swordboth':  # two-handed, straight up
         for sgn in (-1, 1):  # elbows wide so the face stays clear, hands together above the head
             arm(p, (sgn * (sw - 14), 50), (sgn * (sw + 5), -150), (sgn * 26, -380), sleeve)
-        sword(p, 0, -400, ang=-1.57 + 0.05 * math.sin(t * 6 + sp.get('seed', 0)))
+        sword(p, 0, -400, ang=-1.57 + 0.08 * math.sin(t * 2.2 + sp.get('seed', 0)))
         p.ell(0, -382, 32, 28, skin, INK, 2.6)
 
 
@@ -931,14 +942,14 @@ def heads_from_behind(img, cam, rows, seed, furs=False, hands_up=0.35, t=0.0, di
             up = up and st > 0.85
             ph_off, side, bald = rng.uniform(0, 6), rng.random() < 0.5, rng.random() < 0.2
             if up and not furs:  # both hands up, clapping over their heads
-                ph = t * 9 + ph_off
+                ph = t * 19 + ph_off
                 g = 16 + 14 * (0.5 + 0.5 * math.cos(ph))
                 for sgn in (-1, 1):
                     p.poly([(sgn * 90, 40), (sgn * 120, 30), (sgn * (g + 30), -250), (sgn * (g + 4), -250)], jc, INK, 3)
                     p.ell(sgn * g, -272, 18, 30, skin, INK, 3)
             if furs and up:  # a sword held up
                 sgn = 1 if side else -1
-                ang = -1.57 + sgn * 0.25 + 0.06 * math.sin(t * 7 + x)
+                ang = -1.57 + sgn * 0.25 + 0.08 * math.sin(t * 2.3 + x)
                 hx, hy = sgn * 70, -300
                 p.poly([(sgn * 90, 40), (sgn * 124, 30), (hx + 18, hy), (hx - 10, hy)], jc, INK, 3)
                 sword(p, hx, hy - 10, ang=ang, length=420)
@@ -986,7 +997,7 @@ def hall(img, cam, t, furs=False, waves=None):
         p.poly([(x0, 486), (x0 + 320, 486), (x0 + 320, 674), (x0, 674)], None, INK, 2)
         gradient(img, cam, (x0, 486, x0 + 320, 674), (220, 60, 150), (150, 20, 60), (x0 + 160, 640), 260, 0.8, dim)
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-        person(lay, cam, x0 + 160, 640, 0.42, dict(KING if furs else BURNHAM, mouth='set' if furs else 'talk',
+        person(lay, cam, x0 + 160, 640, 0.42, dict(KING if furs else BURNHAM, mouth='set' if furs else 'smile',
                                                      pose='none', bottom=200), t)
         clip(img, lay, cam, (x0, 486, x0 + 320, 674))
     text(img, cam, 540, 540, 'HOPE', 58, tuple(int(v * dim) for v in OFFWHITE), anchor='ma')
@@ -1021,7 +1032,7 @@ def hall(img, cam, t, furs=False, waves=None):
         p2 = Pen(front, cam)
         for (x, y) in ((200, 1180), (860, 1220), (480, 1150)):
             p2.line([(x, y + 120), (x, y - 10)], LEATHER, 10)
-            flame = [(x - 22, y - 10), (x, y - 90 - 10 * math.sin(t * 9 + x)), (x + 22, y - 10), (x, y + 6)]
+            flame = [(x - 22, y - 10), (x, y - 90 - 10 * math.sin(t * 19 + x)), (x + 22, y - 10), (x, y + 6)]
             p2.poly(curve(flame, 4), (255, 170, 60), INK, 3)
             p2.poly(curve([(x - 10, y - 12), (x, y - 50), (x + 10, y - 12)], 3), (255, 236, 150), None)
     img.alpha_composite(front)
@@ -1145,14 +1156,14 @@ def shot_front_row(t):
         for i in range(8 - row):
             sp = attendee(rng)
             up = rise(t, 0.8 if rng.random() < 0.3 else 1.4)
-            sp.update(clap=t * 9 + i, sit=1 - up, pose='clap' if up > 0.8 else 'side')
+            sp.update(clap=t * 19 + i, sit=1 - up, pose='clap' if up > 0.8 else 'side')
             person(back, cam, 60 + i * (140 + 20 * row) + rng.uniform(-20, 20), y, s, sp, t)
     img.alpha_composite(back.filter(ImageFilter.GaussianBlur(cam.S(4))))
     shade(img, 0.15)
     order = [0, 4, 1, 3, 2]
     for i in order:
         up = rise(t, STAND_ROW.get(MINISTERS[i]['name'], 99))
-        sp = dict(MINISTERS[i], pose='clap' if up > 0.8 else 'side', clap=t * 9 + i * 1.3, clap_y=170,
+        sp = dict(MINISTERS[i], pose='clap' if up > 0.8 else 'side', clap=t * 19 + i * 1.3, clap_y=170,
                   lanyard=False, sit=1 - up)
         if MINISTERS[i]['name'] == 'Miliband':
             sp['mouth'] = 'line'
@@ -1165,14 +1176,16 @@ def shot_front_row(t):
     return img
 
 
-def front_row_bg(img, cam, t, furs=False):
+def front_row_bg(img, cam, t, furs=False, level=None):
     """The hall behind the front row, softly out of focus: suits clapping, or later furs and swords."""
     back = Image.new('RGBA', img.size, (0, 0, 0, 0))
     rng = np.random.default_rng(21)
     for row, (y, s) in enumerate(((700, 0.36), (800, 0.46))):
         for i in range(8 - row):
             sp = attendee(rng, furs=furs)
-            sp['clap'] = t * 9 + i
+            sp['clap'] = t * 19 + i
+            if furs and level is not None:
+                sp['mouth'] = mouth_by_level(sp['mouth'], level, i + int(t * 12))
             person(back, cam, 60 + i * (140 + 20 * row) + rng.uniform(-20, 20), y, s, sp, t)
     img.alpha_composite(back.filter(ImageFilter.GaussianBlur(cam.S(4))))
 
@@ -1185,7 +1198,7 @@ def stage_lip(img, cam, y=1440):
     p.poly([(400, y + 44), (680, y + 44), (706, y + 126), (374, y + 126)], (20, 20, 24), None)
 
 
-def shot_miliband(t, window=(0.85, 99), arms=None):
+def shot_miliband(t, window=(0.85, 99), arms=None, level=None):
     """The front row again: Miliband, in plate, gets to his feet and bellows. His neighbours clap on in suits."""
     img = canvas((14, 10, 18))
     cam = Cam()
@@ -1193,13 +1206,15 @@ def shot_miliband(t, window=(0.85, 99), arms=None):
     front_row_bg(img, cam, t)
     shade(img, 0.15)
     for i, x in ((1, 100), (3, 870)):  # Rayner and Mahmood either side, still in suits, still clapping
-        person(img, cam, x, 960, 0.95, dict(MINISTERS[i], pose='clap', clap=t * 9 + i, clap_y=170), t)
+        person(img, cam, x, 960, 0.95, dict(MINISTERS[i], pose='clap', clap=t * 19 + i, clap_y=170), t)
     up = rise(t, 0.35)
     shouting = window[0] <= t <= window[1]
     sp = armoured(2, sit=1 - up, pose='fist' if shouting else 'side', mouth='shout' if shouting else 'line',
                   brows='fierce' if shouting else None)
     if arms:
         sp.update(pose='custom', arms=arms)
+    if shouting and level is not None:
+        sp['mouth'] = mouth_by_level('shout', level, int(t * 12))
     person(img, cam, 480, 930, 1.08, sp, t)
     stage_lip(img, cam, 1450)
     if shouting:
@@ -1207,18 +1222,20 @@ def shot_miliband(t, window=(0.85, 99), arms=None):
     return img
 
 
-def shot_front_swords(t, chant=True):
+def shot_front_swords(t, chant=True, level=None):
     """From the stage: the whole hall in furs and plate, swords up, the front row in their own armour."""
     img = canvas((10, 12, 22))
     cam = Cam()
     gradient(img, cam, (0, 0, 1080, 1100), (40, 44, 80), (8, 10, 20), (540, 260), 900, 0.8)
     for (x, y) in ((150, 620), (930, 640), (540, 560)):  # torches at the back
         glow(img, cam, x, y, 180, (255, 160, 60), 0.3)
-    front_row_bg(img, cam, t, furs=True)
+    front_row_bg(img, cam, t, furs=True, level=level)
     shade(img, 0.12, (10, 20, 50))
     poses = ['sword', 'swordboth', 'sword', 'swordboth', 'sword']
     for i in [0, 4, 1, 3, 2]:
         sp = armoured(i, pose=poses[i], reach=-30)
+        if level is not None:
+            sp['mouth'] = mouth_by_level(sp['mouth'], level, i + int(t * 12))
         person(img, cam, 110 + i * 185, 1010, 0.76, sp, t, flip=-1 if i == 0 else 1)
     stage_lip(img, cam, 1440)
     shade(img, 0.1, (10, 20, 60))
@@ -1227,7 +1244,7 @@ def shot_front_swords(t, chant=True):
     return img
 
 
-def shot_knight(t, k, window=None, arms=None):
+def shot_knight(t, k, window=None, arms=None, level=None):
     img = canvas((14, 10, 18))
     cam = Cam()
     gradient(img, cam, (0, 0, 1080, 1920), (110, 24, 58), (14, 10, 18), (540, 500), 1000, 0.9)
@@ -1236,7 +1253,7 @@ def shot_knight(t, k, window=None, arms=None):
     for i, (x, y, s) in enumerate(((40, 660, 0.46), (300, 650, 0.46), (700, 655, 0.46), (1000, 660, 0.46),
                                    (130, 900, 0.78), (880, 905, 0.8))):
         sp = attendee(rng)
-        sp['clap'] = t * 9 + i * 2
+        sp['clap'] = t * 19 + i * 2
         person(back, cam, x, y, s, sp, t)
     img.alpha_composite(back.filter(ImageFilter.GaussianBlur(cam.S(5))))
     shade(img, 0.18)
@@ -1246,6 +1263,8 @@ def shot_knight(t, k, window=None, arms=None):
         sp.update(pose='custom', arms=arms)
     if not on:
         sp.update(mouth='line', brows=None, lid=0)
+    elif level is not None:
+        sp['mouth'] = mouth_by_level(KNIGHTS[k]['mouth'], level, int(t * 12))
     person(img, cam, 470, 900, 1.2, sp, t)
     if on:
         shout(img, 'KING OF THE NORTH!')

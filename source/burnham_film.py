@@ -43,6 +43,7 @@ SHOUT_AT = {'elder': 0.2, 'sikh': 0.2, 'young': 0.2, 'miliband': 1.0}  # when ea
 STARTS = np.cumsum([0] + [d for _, d in SHOTS])
 DUR = float(STARTS[-1])
 CHANT_AT = [STARTS[8] + 0.2, STARTS[9] + 0.5]  # the hall chants twice
+BG_CHANT = [STARTS[10] + 0.2, STARTS[10] + 2.2]  # and carries on, further off, under the close-up
 
 
 def shout_len(who):
@@ -142,11 +143,30 @@ def andy_arms(u):
 def salute(name, u, start):
     """At rest until the shout, then up into their salute, pumping while they shout."""
     arms = keyed([(0.0, REST), (start, SALUTES[name])], u, 0.3)
-    if u > start:
-        pump = -16 * abs(math.sin((u - start) * 5.5))
-        el, wr = arms['R'][0], arms['R'][1]
-        arms = dict(arms, R=(el, (wr[0], wr[1] + pump)) + tuple(arms['R'][2:]))
     return arms
+
+
+SHOUT_LV = None
+
+
+def shout_level(who, u):
+    """How loud a shout is, u seconds after it starts (0-1), for the mouth."""
+    global SHOUT_LV
+    if SHOUT_LV is None:
+        a = load(SHOUT_FILE)
+        SHOUT_LV = {}
+        for w, (s0, s1) in SHOUTS.items():
+            seg = a[int(s0 * SR):int(s1 * SR)]
+            hop = SR // FPS
+            lv = np.array([np.sqrt(np.mean(seg[k:k + hop] ** 2)) for k in range(0, len(seg) - hop, hop)])
+            SHOUT_LV[w] = lv / np.percentile(lv, 90)
+    lv = SHOUT_LV[who]
+    k = int(u * FPS)
+    return float(np.clip(lv[k], 0, 1)) if 0 <= k < len(lv) else 0.0
+
+
+def chant_level(t):
+    return max(max(shout_level(w, t - c) for w in SHOUTS) for c in CHANT_AT)
 
 
 def frame_image(i):
@@ -171,15 +191,17 @@ def frame_image(i):
     elif name in ('elder', 'sikh', 'young'):
         a = SHOUT_AT[name]
         img = B.shot_knight(u, ['elder', 'sikh', 'young'].index(name), window=(a - 0.05, a + shout_len(name)),
-                            arms=salute(name, u, a))
+                            arms=salute(name, u, a), level=shout_level(name, u - a))
     elif name == 'miliband':
         a = SHOUT_AT[name]
-        img = B.shot_miliband(u, window=(a - 0.05, a + shout_len(name) + 0.2), arms=salute(name, u, a))
+        img = B.shot_miliband(u, window=(a - 0.05, a + shout_len(name) + 0.2), arms=salute(name, u, a),
+                              level=shout_level(name, u - a))
     elif name == 'king':
         img = B.shot_king(u, blink=blink)
     elif name in ('swords_back', 'swords_front'):
         chanting = any(c - 0.05 <= t <= c + 2.3 for c in CHANT_AT)
-        img = B.shot_hall(u, furs=True, chant=chanting) if name == 'swords_back' else B.shot_front_swords(u, chant=chanting)
+        img = (B.shot_hall(u, furs=True, chant=chanting) if name == 'swords_back'
+               else B.shot_front_swords(u, chant=chanting, level=chant_level(t)))
     else:
         img = B.shot_king(u, zoom=u / dur)
     return img
@@ -408,9 +430,12 @@ def soundtrack():
             s = shouts[int((a - 0.03) * SR):int((b + 0.05) * SR)]
             place(mix, s, c + rng.uniform(0, 0.08), sg * 0.55)
             place(mix, s, c + rng.uniform(0.15, 0.28), sg * 0.35)
-    # swords through both sword shots
-    for k in range(40):
-        place(mix, clink(), STARTS[8] + rng.uniform(0, STARTS[10] - STARTS[8]), rng.uniform(0.08, 0.2))
+    for c in BG_CHANT:  # still chanting behind the close-up, a little further off
+        for who in SHOUTS:
+            a, b = SHOUTS[who]
+            s = shouts[int((a - 0.03) * SR):int((b + 0.05) * SR)]
+            place(mix, s, c + rng.uniform(0, 0.08), sg * 0.3)
+            place(mix, s, c + rng.uniform(0.15, 0.28), sg * 0.2)
     # the close-up: ominous, regal music, fading in under the swords; hard cut at the end
     music, lead = regal(DUR - STARTS[10])
     place(mix, music, STARTS[10] - lead, 1.0)
