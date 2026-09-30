@@ -1174,14 +1174,14 @@ def sp_turn(t):
 BOARD = [
     ('1', 'The stage', '0-14.2 s', lambda: shot_stage(1.2, cap="The British Right talk about 'taking back control'.")),
     ('2', 'Ovation: one, a few, all', '14.2-17.2 s', lambda: shot_hall(1.8)),
-    ('3', 'Front row stands in waves', '17.2-19.7 s', lambda: shot_front_row(1.25)),
+    ('3', 'Front row, waves', '17.2-19.7 s', lambda: shot_front_row(1.25)),
     ('4', 'Knight one (serious)', '19.7-22 s', lambda: shot_knight(0.3, 0)),
     ('5', 'Knight two (jubilant)', '22-24.6 s', lambda: shot_knight(0.3, 1)),
     ('6', 'Knight three (jubilant)', '24.6-26.5 s', lambda: shot_knight(0.3, 2)),
     ('7', 'Miliband stands, bellows', '26.5-29.7 s', lambda: shot_miliband(1.5)),
     ('8', 'King looks left, right', '29.7-33.7 s', lambda: shot_king(1.4)),
-    ('9', 'Swords up (from behind)', '33.7-36.2 s', lambda: shot_hall(0.4, furs=True)),
-    ('10', 'Swords up (from the front)', '36.2-39.2 s', lambda: shot_front_swords(0.4)),
+    ('9', 'Swords (behind)', '33.7-36.2 s', lambda: shot_hall(0.4, furs=True)),
+    ('10', 'Swords (front)', '36.2-39.2 s', lambda: shot_front_swords(0.4)),
     ('11', 'Slow push in on his face', '39.2-43.2 s', lambda: shot_king(0, zoom=1.0)),
 ]
 
