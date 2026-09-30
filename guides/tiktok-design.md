@@ -20,17 +20,30 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   - above and below: a soft glow made from a heavily blurred copy of the picture's own top and bottom
     edges, fading into the scene's background colour (no hard bars, no stretched streaks, no blurred
     zoomed copy of the picture).
-- **Keep clear of TikTok's buttons and text:** nothing important in the right-hand 15% of the frame or in
-  the bottom 20% (caption and username), or in the top 8%. The middle is always safe.
-- **Captions** for any speech, burned in, readable on a phone.
+- **Keep clear of TikTok's own overlays** (measured on a real post, 1080 x 1920 frame):
+  - **top 16% (0-310 px):** the LIVE / Following / Friends / For You tabs and the "Story" button;
+  - **right-hand 16% (x > 900 px), from about 45% down:** the profile picture, like, comment, save and share
+    buttons;
+  - **bottom 22% (y > 1500 px):** the username, post text, promotion button and progress bar.
+  - So the **safe area is x 60-900, y 310-1500**. Titles, captions and faces must stay inside it.
+- **Captions** for any speech, burned in, readable on a phone, **every line inside the safe area**:
+  - never trust captions burned into a widescreen original when enlarging it - measure the widest line
+    from the script text itself (every line, not sampled frames: sampling missed the longest line and it
+    ran off both edges of a posted video);
+  - best: draw the captions fresh onto the vertical frame, wrapped to at most 800 px wide, centred on
+    x = 480 (the middle of the safe area), just below the picture.
 
 ## The title card
 - Bold Impact-style capitals (Anton), **cranberry red (178, 24, 52)**, letters widened 20%, thick black
   outline (`source/add_title.py`).
 - On screen from the first frame, held 3 seconds, fading out over 1 second.
 - **Large**: as big as fits within 90% of the width. A long title goes on two lines of equal size.
-- **Placed in empty space**, never over a face: in a converted widescreen film, centred in the space
-  above the picture; in a film made vertical, a third of the way down, over background.
+- **Placed in empty space inside the safe area**, never over a face and never in the top 16% (TikTok's
+  tabs cover it - a posted title sat under them): in a converted widescreen film, just above the picture,
+  its top edge no higher than 330 px; in a film made vertical, a third of the way down, over background.
+  Fit it within the safe width (840 px), so it may be a little smaller than the full frame width.
+- **Check before posting:** overlay the safe-area guides on a frame from the title, the widest caption and
+  the busiest moment, and look at it.
 - Always drawn fresh at 1080 × 1920 (never an enlarged copy of a smaller title), onto an untitled render.
 
 ## Cover
