@@ -58,8 +58,8 @@ otherwise ordinary conference.
 3. Make a quick **animatic** (the whole film, small and rough, timed to placeholder or real audio) and
    send it. Wait for my OK.
 4. Render the final film, send it, save it as animations/king-in-the-north-vertical.mp4 (under 25 MB),
-   check it against the safe-area guides, update story/status.md, and suggest post text, hashtags, a
-   cover frame and a pinned question (no spoilers).
+   check it against the safe-area guides, update story/status.md, and suggest a cover frame
+   (no spoilers). Do not suggest post text or a pinned question - I write those.
 
 ## Questions to ask me (with your recommendation for each)
 - The show's chant is "The King in the North!" - use that exact wording, or "King of the North"?

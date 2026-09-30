@@ -37,5 +37,5 @@ and review them closely at full size, like a picky art director. Fix anything sl
 
 **4. Deliver:** animations/the-salt-vertical.mp4, 1080 x 1920, under 25 MB (use a target bitrate if the
 pencil texture makes it large), checked against the safe-area guides on the title frame and the busiest
-frame. Send it in the chat, save it on GitHub, update story/status.md, and suggest the post text, three or
-four hashtags, a cover frame and a pinned question - following the no-spoiler rule.
+frame. Send it in the chat, save it on GitHub, update story/status.md, and suggest a cover frame -
+following the no-spoiler rule. Do not suggest post text or a pinned question - I write those.

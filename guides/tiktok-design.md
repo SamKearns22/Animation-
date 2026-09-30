@@ -63,6 +63,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
 - UK evenings: post around 6-7pm, ahead of the 6-10pm peak.
 - Post text: short and dry, with the title, a few specific hashtags (the people or topic being parodied,
   #animation, #parody or #satire), and a question that invites replies. Pin that question as a comment.
+- **The director writes the post text and the pinned question himself. Claude never suggests lines or wording
+  for them** (it can still suggest a cover frame and point out if a hashtag would spoil the joke).
 - Reply to comments in the first hour. Keep the next video ready within 24-48 hours.
 - X gets the original widescreen version.
 

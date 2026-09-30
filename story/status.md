@@ -24,9 +24,8 @@ Read this first in any new session, after CLAUDE.md.
   against the safe-area guides. Recut to the new TikTok opening rules: small title gone by 2.5 s, speech from
   the first frame, pauses tightened (`PIECES` in burnham_film.py), first knight at 15.6 s. The king grows
   harrowed (rings, bags, heavy lids) through the final push-in. Full render about 32 min on 2 cores.
-- To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text; post text "Hope Again. A perfectly
-  normal conference speech." #AndyBurnham #LabourConference #satire #parody #animation (no Game of Thrones
-  tags: they spoil the turn); pinned question "Honestly, which one of them did it best?"
+- To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text. Avoid Game of Thrones hashtags:
+  they spoil the turn. Sam writes the post text and pinned question himself.
 
 ## Done
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
