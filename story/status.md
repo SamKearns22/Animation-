@@ -27,6 +27,8 @@ Read this first in any new session, after CLAUDE.md.
 - To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text; post text "Hope Again. A perfectly
   normal conference speech." #AndyBurnham #LabourConference #satire #parody #animation (no Game of Thrones
   tags: they spoil the turn); pinned question "Honestly, which one of them did it best?"
+
+## Done
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
   with the trailer score (THUD on the cut to black). Recipes: `source/shots/s1_chop.py`, `s2_daughter.py`,
   `s3_closeup.py`. Sound: `source/animation_test_audio.py`. Joining drawings into video: `source/assemble.py`.
