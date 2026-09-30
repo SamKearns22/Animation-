@@ -206,6 +206,30 @@ def helmet(p, sp, hx, hy, hw, hh):
         p.line([(hx, hy - hh * 1.24), (hx, hy - hh * 0.72)], dk(c), 2.2)
 
 
+def crown(p, hx, hy, hw, hh):
+    """Our own crown: a bronze-gold circlet with upright points and a garnet at the front."""
+    g, gd = (214, 166, 70), (150, 108, 40)
+    top, bot = hy - hh * 0.86, hy - hh * 0.6
+    w = hw * 1.06
+    band = oval(hx, top, w, 12, 20, 0, math.pi) + oval(hx, bot, w, 14, 20, math.pi, 0)[::-1][::-1]
+    pts = [(hx - w, bot), (hx - w, top)]
+    n = 7
+    for i in range(n):
+        x0 = hx - w + 2 * w * i / n
+        x1 = hx - w + 2 * w * (i + 1) / n
+        h = 34 if i == n // 2 else 24
+        pts += [(x0 + (x1 - x0) * 0.2, top - 2), ((x0 + x1) / 2, top - h), (x0 + (x1 - x0) * 0.8, top - 2)]
+    pts += [(hx + w, top), (hx + w, bot)]
+    pts += [(hx + w * 0.5, bot + 8), (hx, bot + 10), (hx - w * 0.5, bot + 8)]
+    p.poly(pts, g, INK, 2.6)
+    p.line([(hx - w, (top + bot) / 2), (hx - w * 0.5, (top + bot) / 2 + 6), (hx, (top + bot) / 2 + 7),
+            (hx + w * 0.5, (top + bot) / 2 + 6), (hx + w, (top + bot) / 2)], gd, 2.0)
+    for i in range(n):
+        x = hx - w + 2 * w * (i + 0.5) / n
+        p.ell(x, top - 6, 3, 3, (250, 230, 160), None)
+    p.ell(hx, (top + bot) / 2 + 2, 9, 11, (150, 20, 40), INK, 2.0)
+
+
 def gorget(p, c):
     """A steel collar of three overlapping lames round the neck."""
     for k in range(3):
@@ -472,6 +496,8 @@ def head(img, p, sp, t, hx, hy):
     hair_front(p, sp, hx, hy, hw, hh, fx)
     if sp.get('arm', {}).get('helmet'):
         helmet(p, sp, hx, hy, hw, hh)
+    if sp.get('crown'):
+        crown(p, hx, hy, hw, hh)
     if sp.get('earring'):
         p.ell(hx - hw - 2, hy + 30, 4, 4, GOLD, INK, 1.2)
 
@@ -603,15 +629,26 @@ def torso(img, p, sp, t):
                 p.line([(0, 250), (0, pb - 20)], dk(c), 2.0)
             p.poly([(-sw * 0.84, pb - 20), (sw * 0.84, pb - 20), (sw * 0.84, pb + 12), (-sw * 0.84, pb + 12)], LEATHER, INK, 2.2)
             p.ell(0, pb - 4, 16, 14, (190, 160, 90), INK, 2)
-        else:  # the king: a dark leather doublet, laced
-            p.poly(body, (40, 32, 30), INK, 2.6)
-            for k in range(5):
-                p.line([(-14, 100 + 40 * k), (14, 120 + 40 * k)], (90, 70, 56), 2.0)
-                p.line([(14, 100 + 40 * k), (-14, 120 + 40 * k)], (90, 70, 56), 2.0)
-        if out == 'king' or a['mantle']:
+        else:  # the king: black leather studded in silver under a dark steel breastplate edged in gold
+            p.poly(body, (26, 24, 28), INK, 2.6)
+            plate = curve([(-sw * 0.74, 90), (0, 70), (sw * 0.74, 90), (sw * 0.8, 300), (sw * 0.56, 470),
+                           (-sw * 0.56, 470), (-sw * 0.8, 300)], 5)
+            p.poly(plate, (60, 62, 74), GOLD, 3.4)
+            p.line([(0, 90), (0, 460)], (40, 42, 52), 2.4)
+            soft(img, p.cam, [(-sw * 0.5, 110), (-sw * 0.2, 100), (-sw * 0.3, 320), (-sw * 0.6, 280)], (255, 255, 255), 0.18, 8)
+            for sgn in (-1, 1):
+                for k in range(6):
+                    p.ell(sgn * sw * 0.9, 130 + 60 * k, 4, 4, (200, 204, 212), INK, 1.2)
+        if out == 'king':  # a great dark fur over both shoulders, a gold chain and the bee medallion
+            fur_mantle(p, 0, 16, sw + 50, 176, c=(66, 58, 54), cd=(34, 30, 30), cl=(150, 138, 124), seed=7)
+            links = [(sw * 0.66 * math.cos(u), 60 + 150 * math.sin(u)) for u in np.linspace(0.15, math.pi - 0.15, 22)]
+            for (x, y) in links:
+                p.ell(x, y, 9, 6, GOLD, INK, 1.4)
+            bee(p, 0, 226, 32)
+        elif a['mantle']:
             if a['gorget'] and out == 'armour':
                 gorget(p, c)
-            fur_mantle(p, 0, 24, sw + 24, 120 if out == 'armour' else 150, seed=sp.get('seed', 1))
+            fur_mantle(p, 0, 24, sw + 24, 120, seed=sp.get('seed', 1))
             bee(p, 0, 80, 20)
         else:
             if a['gorget']:
@@ -656,7 +693,60 @@ def arms(img, p, sp, t, front):
             hand(p, sgn * (sw - 4), 526, skin)
 
 
+def finger(p, a, d, length, skin, w=9):
+    """One finger from point a in direction d."""
+    nx, ny = -d[1], d[0]
+    b = (a[0] + d[0] * length, a[1] + d[1] * length)
+    p.poly([(a[0] + nx * w, a[1] + ny * w), (b[0] + nx * w, b[1] + ny * w), (b[0] - nx * w, b[1] - ny * w),
+            (a[0] - nx * w, a[1] - ny * w)], skin, INK, 2.2)
+    p.ell(b[0], b[1], w, w, skin, None)
+    p.line(oval(b[0], b[1], w, w, 12, math.atan2(d[1], d[0]) - 1.6, math.atan2(d[1], d[0]) + 1.6), INK, 2.2)
+
+
+def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+    """Hands that talk: a fist, an open palm, an accusing finger, a raised finger, air quotes, or a sword."""
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1
+    d = (dx / n, dy / n)
+    c = (wr[0] + d[0] * 14, wr[1] + d[1] * 14)
+    shade_ = dk(skin, 0.8)
+    if shape == 'palm':  # open, fingers together, the palm turned up
+        nx, ny = -d[1], d[0]
+        if ny > 0:
+            nx, ny = -nx, -ny
+        pts = [(c[0] - nx * 4 - d[0] * 14, c[1] - ny * 4 - d[1] * 14), (c[0] + d[0] * 40 - nx * 6, c[1] + d[1] * 40 - ny * 6),
+               (c[0] + d[0] * 52 + nx * 6, c[1] + d[1] * 52 + ny * 6), (c[0] + d[0] * 36 + nx * 22, c[1] + d[1] * 36 + ny * 22),
+               (c[0] + nx * 22, c[1] + ny * 22)]
+        p.poly(curve(pts, 4), skin, INK, 2.4)
+        p.line([(c[0] + d[0] * 6 + nx * 8, c[1] + d[1] * 6 + ny * 8), (c[0] + d[0] * 36 + nx * 8, c[1] + d[1] * 36 + ny * 8)],
+               shade_, 1.6)
+        return
+    if shape == 'sword':
+        sword(p, c[0], c[1] - 10, ang=extra if extra is not None else -1.57)
+    if shape == 'point':
+        finger(p, (c[0] + d[0] * 8, c[1] + d[1] * 8), d, 44, skin)
+    if shape == 'point_up':
+        finger(p, (c[0], c[1] - 10), (0.12, -1), 44, skin)
+    if shape == 'quote':  # two fingers up, bending on the beat
+        bend = 0.5 + 0.5 * math.sin(t * 12)
+        for k in (-1, 1):
+            base = (c[0] + k * 9, c[1] - 12)
+            finger(p, base, (0, -1), 22, skin, 7)
+            finger(p, (base[0], base[1] - 22), (0.8 * bend * (1 if wr[0] > 0 else -1), -1 + 0.6 * bend), 16, skin, 7)
+    p.ell(c[0], c[1], 25, 23, skin, INK, 2.6)
+    for k in range(3):
+        p.line([(c[0] - 14, c[1] - 8 + 8 * k), (c[0] + 10, c[1] - 10 + 8 * k)], shade_, 1.8)
+
+
 def pose_arms(img, p, sp, t, pose, skin, sleeve, sw, arm):
+    if pose == 'custom':  # arm positions given by the film, frame by frame
+        for side, sgn in (('L', -1), ('R', 1)):
+            g = sp['arms'].get(side)
+            if g:
+                el, wr, shape = g[0], g[1], g[2]
+                arm(p, (sgn * (sw - 14), 60), el, wr, sleeve)
+                gesture_hand(p, el, wr, shape, skin, g[3] if len(g) > 3 else None, t)
+        return
     if pose == 'side':  # drawn behind the body, in arms()
         return
     elif pose == 'out':  # both arms open, palms up (the conference-stage gesture)
@@ -693,11 +783,14 @@ def pose_arms(img, p, sp, t, pose, skin, sleeve, sw, arm):
 
 def legs(img, p, sp):
     tc = sp.get('trousers', sp.get('jacket', NAVY))
+    o = sp.get('stance', 0)
     for sgn in (-1, 1):
-        leg = [(sgn * 6, 440), (sgn * 104, 440), (sgn * 100, 700), (sgn * 90, 900), (sgn * 30, 902), (sgn * 18, 700)]
+        leg = [(sgn * 6, 440), (sgn * 104, 440), (sgn * (100 + o * 0.6), 700), (sgn * (90 + o), 900), (sgn * (30 + o), 902),
+               (sgn * (18 + o * 0.6), 700)]
         p.poly(leg, tc, INK, 2.6)
-        soft(img, p.cam, [(sgn * 70, 450), (sgn * 100, 450), (sgn * 88, 896), (sgn * 66, 896)], (0, 0, 0), 0.3, 6)
-        p.poly(curve([(sgn * 24, 896), (sgn * 94, 894), (sgn * 128, 910), (sgn * 124, 928), (sgn * 20, 928)], 4),
+        soft(img, p.cam, [(sgn * 70, 450), (sgn * 100, 450), (sgn * (88 + o), 896), (sgn * (66 + o), 896)], (0, 0, 0), 0.3, 6)
+        p.poly(curve([(sgn * (24 + o), 896), (sgn * (94 + o), 894), (sgn * (128 + o), 910), (sgn * (124 + o), 928),
+                      (sgn * (20 + o), 928)], 4),
                (22, 20, 22), INK, 2.4)
 
 
@@ -762,7 +855,7 @@ def armoured(i, **kw):
     return d
 
 
-KING = dict(BURNHAM, outfit='king', mouth='set', shoulders=160)
+KING = dict(BURNHAM, outfit='king', mouth='set', shoulders=160, crown=True)
 
 
 def attendee(rng, furs=False):
@@ -992,7 +1085,7 @@ def title(img, s='HOPE AGAIN', alpha=1.0):
     lay = lay.resize((int(lay.width * 1.2), lay.height), Image.LANCZOS)
     if alpha < 1:
         lay.putalpha(lay.getchannel('A').point(lambda v: int(v * alpha)))
-    img.alpha_composite(lay, (int(480 * SS - lay.width / 2), 330 * SS))
+    img.alpha_composite(lay, (int(540 * SS - lay.width / 2), 330 * SS))
 
 
 # ------------------------------------------------------------------------------------------------ shots
@@ -1001,7 +1094,7 @@ LINE = ("The British Right talk about 'taking back control'. Never let them forg
         "gave it away in the first place.")
 
 
-def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=False):
+def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=False, arms=None, look=0.0):
     img = canvas()
     k = smooth(push) if push is not None else 0.0  # a very slow push-in over the whole speech
     cam = Cam(1 + 0.15 * k, 540 + 60 * k, 960 - 140 * k)
@@ -1010,8 +1103,9 @@ def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=Fals
     p.poly([(-20, 1340), (1100, 1340), (1100, 1420), (-20, 1420)], (44, 16, 36), INK, 3)
     glow(img, cam, 560, 1344, 260, (255, 150, 210), 0.35)
     lectern(img, cam, 930, 1340)
-    person(img, cam, 600, 1340 - 918 * 0.7, 0.7, dict(BURNHAM, full=True, pose='out', mouth=mouth, bottom=470,
-                                                     blink=blink), t)
+    person(img, cam, 600, 1340 - 918 * 0.7, 0.7, dict(BURNHAM, full=True, pose='custom' if arms else 'out', arms=arms,
+                                                     mouth=mouth, bottom=470, blink=blink, stance=26, head_dy=-4,
+                                                     look=look, turn=look * 0.3), t)
     front = Image.new('RGBA', img.size, (0, 0, 0, 0))
     rng = np.random.default_rng(4)
     fp = Pen(front, cam)
@@ -1036,7 +1130,7 @@ def shot_hall(t, furs=False, chant=True):
     img = canvas()
     hall(img, Cam(), t, furs, waves=None if furs else WAVES_HALL)
     if furs and chant:
-        shout(img, 'THE KING IN THE NORTH!')
+        shout(img, 'KING OF THE NORTH!')
     return img
 
 
@@ -1091,7 +1185,7 @@ def stage_lip(img, cam, y=1440):
     p.poly([(400, y + 44), (680, y + 44), (706, y + 126), (374, y + 126)], (20, 20, 24), None)
 
 
-def shot_miliband(t, window=(0.85, 99)):
+def shot_miliband(t, window=(0.85, 99), arms=None):
     """The front row again: Miliband, in plate, gets to his feet and bellows. His neighbours clap on in suits."""
     img = canvas((14, 10, 18))
     cam = Cam()
@@ -1104,10 +1198,12 @@ def shot_miliband(t, window=(0.85, 99)):
     shouting = window[0] <= t <= window[1]
     sp = armoured(2, sit=1 - up, pose='fist' if shouting else 'side', mouth='shout' if shouting else 'line',
                   brows='fierce' if shouting else None)
+    if arms:
+        sp.update(pose='custom', arms=arms)
     person(img, cam, 480, 930, 1.08, sp, t)
     stage_lip(img, cam, 1450)
     if shouting:
-        shout(img, 'THE KING IN THE NORTH!')
+        shout(img, 'KING OF THE NORTH!')
     return img
 
 
@@ -1127,18 +1223,18 @@ def shot_front_swords(t, chant=True):
     stage_lip(img, cam, 1440)
     shade(img, 0.1, (10, 20, 60))
     if chant:
-        shout(img, 'THE KING IN THE NORTH!')
+        shout(img, 'KING OF THE NORTH!')
     return img
 
 
-def shot_knight(t, k, window=None):
+def shot_knight(t, k, window=None, arms=None):
     img = canvas((14, 10, 18))
     cam = Cam()
     gradient(img, cam, (0, 0, 1080, 1920), (110, 24, 58), (14, 10, 18), (540, 500), 1000, 0.9)
     back = Image.new('RGBA', img.size, (0, 0, 0, 0))
     rng = np.random.default_rng(40 + k)
-    for i, (x, y, s) in enumerate(((140, 880, 0.78), (860, 900, 0.8), (500, 700, 0.5), (60, 640, 0.45),
-                                   (980, 660, 0.46))):
+    for i, (x, y, s) in enumerate(((40, 660, 0.46), (300, 650, 0.46), (700, 655, 0.46), (1000, 660, 0.46),
+                                   (130, 900, 0.78), (880, 905, 0.8))):
         sp = attendee(rng)
         sp['clap'] = t * 9 + i * 2
         person(back, cam, x, y, s, sp, t)
@@ -1146,11 +1242,13 @@ def shot_knight(t, k, window=None):
     shade(img, 0.18)
     on = window is None or window[0] <= t <= window[1]
     sp = dict(KNIGHTS[k], bottom=700)
+    if arms:
+        sp.update(pose='custom', arms=arms)
     if not on:
         sp.update(mouth='line', brows=None, lid=0)
     person(img, cam, 470, 900, 1.2, sp, t)
     if on:
-        shout(img, 'THE KING IN THE NORTH!')
+        shout(img, 'KING OF THE NORTH!')
     return img
 
 

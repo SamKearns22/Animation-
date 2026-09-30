@@ -13,7 +13,12 @@ Read this first in any new session, after CLAUDE.md.
   lanyards; standing ovation in waves (one, a few, all); Miliband stays seated then stands and bellows;
   all five ministers (Streeting, Rayner, Miliband, Mahmood, Healey) in varied armour in the front-on sword shot;
   ends on a slow push-in on Burnham's face with war drums, hard cut to black. Captions must be accurate.
-- Status: storyboard approved; animatic sent 30 Sep 2026, awaiting notes. Then: final render,
+- Notes applied after animatic 1: voices play exactly as recorded (gain only, no echo, no pitch change);
+  captions follow Sam's actual words ("they were the ones who gave it away...", "KING OF THE NORTH!");
+  clapping only (no crowd murmur); battle at the end made in code (horns, cavalry, arrows, yells, steel);
+  Andy gestures (points, air quotes, wagging finger, hand on hip); knights each salute differently;
+  the king is royal (crown, dark fur, gold chain, gilded breastplate); title centred on the frame.
+- Status: animatic 2 sent 30 Sep 2026, awaiting notes. Then: final render,
   `animations/king-in-the-north-vertical.mp4` (under 25 MB), safe-area check, post text.
 
 ## Done
