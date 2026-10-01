@@ -28,6 +28,17 @@ Read this first in any new session, after CLAUDE.md.
   they spoil the turn. Sam writes the post text and pinned question himself.
 
 ## Done
+- **The Salt for TikTok** (1 Oct 2026): `animations/the-salt-vertical.mp4` (11.6 s, 6.7 MB, 1080 x 1920, 12 fps,
+  drawn natively at full size; render about 1 minute on 4 cores: `python3 source/salt.py vertical OUT.mp4`).
+  salt.py now uses `source/pencil_cartoon.py` (the 24 Sep version of pencil.py, restored under its own name;
+  beaver_asteroid.py and rap.py still import the old names from pencil.py and would need the same switch).
+  Tightened timeline: her line from 0.32 s, cut to him 3.4 s, "Of course!" 3.8 s, 1.1 s deadpan, whip 6.05 s,
+  slap 8.9 s, crash 11.0 s (pats, wind-up and slap keep their old rhythm). Small title gone by 2 s; captions
+  wrapped and balanced inside the safe area. Fixes: coat of arms redrawn (pewter shield, crossed pickaxes,
+  salt cube, coronet, ribbon), candle flames sit on wicks, wrought-iron chandelier, shelf brackets, no seams
+  in floor/ceiling/ramp, rug/curtains/window toned down, wide shot reframed so the crash is inside the safe
+  area. Cover: her mid-line at about 0:01.6 with the full-size title. Director skipped the stills and
+  animatic sign-offs for this one.
 - **Animation test (6 s + 1.5 s black):** Shots 1-3 of `story/animation-test.md`, rendered and assembled
   with the trailer score (THUD on the cut to black). Recipes: `source/shots/s1_chop.py`, `s2_daughter.py`,
   `s3_closeup.py`. Sound: `source/animation_test_audio.py`. Joining drawings into video: `source/assemble.py`.

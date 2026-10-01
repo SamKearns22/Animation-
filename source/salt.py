@@ -6,7 +6,9 @@ He obliges, from the top of the half-pipe his end of the table curls into.
 
 Usage:
     python3 salt.py stills OUT_DIR T1 T2 ...   # save single frames at given seconds
-    python3 salt.py render OUT.mp4 [CRF]       # render the full video with sound
+    python3 salt.py render OUT.mp4 [CRF]       # render the full video with sound (720 x 1280)
+    python3 salt.py vertical OUT.mp4 [BITRATE] # TikTok version: native 1080 x 1920, small title, captions
+    python3 salt.py vertical-stills DIR T1 ... # TikTok frames with title and captions, for checking
 """
 import math
 import os
@@ -15,7 +17,7 @@ import sys
 import numpy as np
 from PIL import Image
 
-from pencil import Canvas, Track, blob, clamp01, col, ell, lerp, noise, render_video, sstep, tt, decay, \
+from pencil_cartoon import Canvas, Track, blob, clamp01, col, ell, lerp, noise, render_video, sstep, tt, decay, \
     W, H, FPS, SR
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +31,7 @@ WALL_D = col(0.47, 0.48, 0.44)
 CEILING = col(0.44, 0.44, 0.41)
 WAINSCOT = col(0.36, 0.33, 0.30)
 FLOOR = col(0.33, 0.30, 0.27)
-RUG = col(0.42, 0.28, 0.28)
+RUG = col(0.38, 0.30, 0.29)
 WOOD = col(0.30, 0.25, 0.21)
 WOOD_L = col(0.45, 0.39, 0.33)
 PLY = col(0.62, 0.56, 0.46)
@@ -39,8 +41,8 @@ CLOTH = col(0.86, 0.85, 0.80)
 CLOTH_S = col(0.70, 0.70, 0.66)
 FRAME = col(0.50, 0.44, 0.33)
 CANVAS_D = col(0.30, 0.31, 0.29)
-DRAPE = col(0.40, 0.27, 0.29)
-NIGHT_GLASS = col(0.36, 0.42, 0.50)
+DRAPE = col(0.37, 0.30, 0.31)
+NIGHT_GLASS = col(0.37, 0.41, 0.46)
 SKIN = col(0.86, 0.79, 0.72)
 SKIN_S = col(0.74, 0.66, 0.60)
 ROUGE = col(0.80, 0.60, 0.58)
@@ -82,16 +84,19 @@ class SharpCanvas(Canvas):
 # ---------------------------------------------------------------------------
 # Timeline (seconds)
 # ---------------------------------------------------------------------------
-T_SPEAK_W = 3.2      # "Darling, would you pass the salt?"
-T_CUT_H = 7.6        # cut to the husband
-T_SPEAK_H = 8.0      # "Of course!"
-T_WHIP = 11.9        # camera jerks back and away
-T_WHIP_END = 12.35
-T_TURN = 12.9        # he sets down his cutlery and turns to the salt
-T_PAT1 = 13.55       # pat
-T_PAT2 = 13.95       # pat
-T_WIND = 14.25       # wind-up
-T_SLAP = 14.75       # SLAP
+# Tightened for TikTok: her words begin at 0.32 s (the recording has 0.42 s of air before them), the cut
+# comes 0.6 s after she finishes, "Of course!" straight after the cut, then a 1.1 s deadpan beat before the
+# whip. From the whip on, the rhythm of turn, pats, wind-up and slap is exactly as before.
+T_SPEAK_W = -0.1     # "Darling, would you pass the salt?" (words 0.32 - 2.82 s)
+T_CUT_H = 3.4        # cut to the husband
+T_SPEAK_H = 2.7      # "Of course!" (the recording has 1.08 s of air first: words 3.78 - 4.95 s)
+T_WHIP = 6.05        # camera jerks back and away
+T_WHIP_END = T_WHIP + 0.45
+T_TURN = T_WHIP + 1.0    # he sets down his cutlery and turns to the salt
+T_PAT1 = T_WHIP + 1.65   # pat
+T_PAT2 = T_WHIP + 2.05   # pat
+T_WIND = T_WHIP + 2.35   # wind-up
+T_SLAP = T_WHIP + 2.85   # SLAP
 ROLL_DECK, ROLL_CURVE, ROLL_FLAT = 0.45, 0.5, 1.15
 T_HIT = T_SLAP + ROLL_DECK + ROLL_CURVE + ROLL_FLAT   # the salt arrives
 DUR = round(T_HIT + 0.6, 2)                          # and we end sharply on the crash
@@ -247,19 +252,19 @@ def room(c, cam, t):
     c.fill_screen(WALL, 1.2)
     # floor, boards running the length of the hall, and a long rug under the table
     for x0 in np.arange(-4, 19, 1.0):
-        poly3(c, cam, [(x0, 0, -8), (x0 + 1, 0, -8), (x0 + 1, 0, WALL_Z), (x0, 0, WALL_Z)], fill=FLOOR, jit=0.3)
+        poly3(c, cam, [(x0, 0, -8), (x0 + 1.04, 0, -8), (x0 + 1.04, 0, WALL_Z), (x0, 0, WALL_Z)], fill=FLOOR, jit=0.3)
     for z0 in np.arange(-8, WALL_Z, 0.25):
         for x0 in np.arange(-4, 19, 3.0):
             line3(c, cam, [(x0, 0.001, z0), (x0 + 3, 0.001, z0)], col(0.26, 0.23, 0.21), lw=2, opacity=0.5)
     for x0 in np.arange(-2.5, 17.5, 1.0):
-        poly3(c, cam, [(x0, 0.002, -1.3), (x0 + 1, 0.002, -1.3), (x0 + 1, 0.002, 1.3), (x0, 0.002, 1.3)],
+        poly3(c, cam, [(x0, 0.002, -1.3), (x0 + 1.04, 0.002, -1.3), (x0 + 1.04, 0.002, 1.3), (x0, 0.002, 1.3)],
               fill=RUG, jit=0.3)
     for zz in (-1.15, 1.15):
-        line3(c, cam, [(-2.5, 0.003, zz), (17.5, 0.003, zz)], col(0.62, 0.52, 0.40), lw=3)
+        line3(c, cam, [(-2.5, 0.003, zz), (17.5, 0.003, zz)], col(0.58, 0.53, 0.47), lw=3)
     # ceiling with beams
     if cam.pos[1] < CEIL:
         for x0 in np.arange(-4, 19, 1.0):
-            poly3(c, cam, [(x0, CEIL, -8), (x0 + 1, CEIL, -8), (x0 + 1, CEIL, WALL_Z), (x0, CEIL, WALL_Z)],
+            poly3(c, cam, [(x0, CEIL, -8), (x0 + 1.04, CEIL, -8), (x0 + 1.04, CEIL, WALL_Z), (x0, CEIL, WALL_Z)],
                   fill=CEILING, jit=0.3)
         for x0 in np.arange(-3, 18.2, 2.0):
             poly3(c, cam, [(x0, CEIL - 0.001, -8), (x0 + 0.25, CEIL - 0.001, -8), (x0 + 0.25, CEIL - 0.001, WALL_Z),
@@ -348,40 +353,104 @@ def grand_window(c, cam, t):
     poly3(c, cam, wall_x(xw - 0.05, swag), fill=DRAPE, line=INK, lw=3)
 
 
+CREST_C, CREST_K = (0.0, 5.08), 0.82   # centre of the arms on the end wall, and their overall scale
+
+
+def crest_x(xw, pts):
+    """Points on the coat of arms, scaled about its centre and placed on the end wall."""
+    zc, yc = CREST_C
+    return wall_x(xw, [(zc + (z - zc) * CREST_K, yc + (y - yc) * CREST_K) for z, y in pts])
+
+
+def _lw(cam, w):
+    """Line weight for the arms: full in close-up, thinning as they recede so they never clot into a blob."""
+    p = (END_WALL_H, CREST_C[1], CREST_C[0])
+    return max(1.2, w * min(1.0, cam.scale(p) / 650)) if cam.depth(p) > 0.2 else w
+
+
+def _pickaxe(c, cam, xw, foot, top):
+    """One pickaxe on the wall: a straight ash handle from foot to top, a curved iron head across its end."""
+    (fz, fy), (tz, ty) = foot, top
+    L = math.hypot(tz - fz, ty - fy)
+    dz, dy = (tz - fz) / L, (ty - fy) / L          # along the handle
+    nz, ny = -dy, dz                              # across it
+    hw = 0.024
+    handle = [(fz + nz * hw, fy + ny * hw), (tz + nz * hw, ty + ny * hw), (tz - nz * hw, ty - ny * hw),
+              (fz - nz * hw, fy - ny * hw)] + \
+             [(fz + nz * hw * math.cos(q) - dz * hw * math.sin(q), fy + ny * hw * math.cos(q) - dy * hw * math.sin(q))
+              for q in np.linspace(math.pi, 2 * math.pi, 7)[1:-1]]
+    poly3(c, cam, crest_x(xw, handle), fill=WOOD_L, line=INK, lw=_lw(cam, 3))
+    # the head: a gentle crescent, thick at the eye, tapering to two sharp points that curve down
+    cz, cy = tz - dz * 0.035, ty - dy * 0.035
+    top_e, bot_e = [], []
+    for u in np.linspace(-1, 1, 21):
+        mz = cz + nz * 0.2 * u - dz * 0.07 * u * u
+        my = cy + ny * 0.2 * u - dy * 0.07 * u * u
+        th = 0.004 + 0.034 * (1 - u * u) ** 0.7
+        top_e.append((mz + dz * th, my + dy * th))
+        bot_e.append((mz - dz * th, my - dy * th))
+    poly3(c, cam, crest_x(xw - 0.004, top_e + bot_e[::-1]), fill=SILVER, line=INK, lw=_lw(cam, 3))
+    # the iron collar where head meets handle
+    cw, ch = 0.036, 0.05
+    collar = [(cz + nz * cw + dz * ch, cy + ny * cw + dy * ch), (cz - nz * cw + dz * ch, cy - ny * cw + dy * ch),
+              (cz - nz * cw - dz * ch, cy - ny * cw - dy * ch), (cz + nz * cw - dz * ch, cy + ny * cw - dy * ch)]
+    poly3(c, cam, crest_x(xw - 0.006, collar), fill=STONE_D, line=INK, lw=_lw(cam, 3))
+
+
 def crest(c, cam):
-    """The family arms: crossed pickaxes over a block of salt, for a fortune made in salt mines."""
+    """The family arms: crossed pickaxes behind a shield bearing a block of salt, for a fortune made in salt
+    mines. Pewter and stone, so the only bright thing on it is the salt."""
     xw = END_WALL_H - 0.03
-    zc, yc, sw, sh = 0.0, 5.2, 0.38, 0.4
+    zc, yc = CREST_C
+    PEWTER = col(0.50, 0.51, 0.53)
+    PEWTER_L = col(0.60, 0.61, 0.63)
+    # the pickaxes, crossed symmetrically behind the shield
     for sgn in (-1, 1):
-        for k in range(3):
-            pts = [(zc + sgn * (0.26 + 0.13 * k) + 0.1 * math.cos(q), yc + 0.15 - 0.18 * k + 0.09 * math.sin(q))
-                   for q in np.linspace(0, 2 * math.pi, 10, endpoint=False)]
-            poly3(c, cam, wall_x(xw, pts), fill=col(0.55, 0.55, 0.52), line=INK, lw=2)
-    shield = [(zc - sw, yc + sh * 0.6), (zc + sw, yc + sh * 0.6)] + \
-             [(zc + sw * math.cos(q), yc + sh * 0.6 - sh * 1.1 * math.sin(q) ** 1.3) for q in np.linspace(0, math.pi, 16)]
-    poly3(c, cam, wall_x(xw - 0.01, shield), fill=col(0.42, 0.45, 0.52), line=INK, lw=3)
-    poly3(c, cam, wall_x(xw - 0.012, [(zc - sw, yc + sh * 0.6), (zc + sw, yc + sh * 0.6), (zc + sw, yc + sh * 0.3),
-                                      (zc - sw, yc + sh * 0.3)]), fill=col(0.62, 0.55, 0.36), line=INK, lw=2)
-    # crossed pickaxes
+        _pickaxe(c, cam, xw - 0.004, (zc + sgn * 0.40, yc - 0.40), (zc - sgn * 0.33, yc + 0.33))
+    # the shield: flat top, straight sides, curving to a point
+    sw, top, mid, pt = 0.25, yc + 0.27, yc + 0.0, yc - 0.33
+    curve_r = [(zc + sw * (1 - k) ** 0.75, mid - (mid - pt) * (1 - (1 - k) ** 1.6)) for k in np.linspace(0, 1, 12)]
+    shield = [(zc - sw, top), (zc + sw, top)] + curve_r + [(2 * zc - z, y) for z, y in curve_r[::-1]][1:]
+    poly3(c, cam, crest_x(xw - 0.012, shield), fill=PEWTER, line=INK, lw=_lw(cam, 5))
+    inner = [(zc + (z - zc) * 0.86, yc + (y - yc) * 0.86 + 0.005) for z, y in shield]
+    poly3(c, cam, crest_x(xw - 0.014, inner), None, PEWTER_L, lw=_lw(cam, 3))
+    # the block of salt: a clean cube of crystal, top lit, with a gleam
+    bz, by, e, d = zc - 0.01, yc - 0.03, 0.11, 0.06
+    front = [(bz - e, by - e), (bz + e - d * 0.3, by - e), (bz + e - d * 0.3, by + e - d * 0.4), (bz - e, by + e - d * 0.4)]
+    topf = [(bz - e, by + e - d * 0.4), (bz + e - d * 0.3, by + e - d * 0.4), (bz + e + d * 0.5, by + e + d * 0.4),
+            (bz - e + d * 0.8, by + e + d * 0.4)]
+    sidef = [(bz + e - d * 0.3, by - e), (bz + e + d * 0.5, by - e + d * 0.8), (bz + e + d * 0.5, by + e + d * 0.4),
+             (bz + e - d * 0.3, by + e - d * 0.4)]
+    poly3(c, cam, crest_x(xw - 0.02, front), fill=SALT, line=INK, lw=_lw(cam, 3))
+    poly3(c, cam, crest_x(xw - 0.02, topf), fill=WHITE, line=INK, lw=_lw(cam, 3))
+    poly3(c, cam, crest_x(xw - 0.02, sidef), fill=SALT_S, line=INK, lw=_lw(cam, 3))
+    for (z0, y0), (z1, y1) in [((bz - e * 0.55, by - e * 0.2), (bz - e * 0.1, by + e * 0.3)),
+                               ((bz - e * 0.3, by - e * 0.6), (bz + e * 0.35, by - e * 0.05))]:
+        line3(c, cam, crest_x(xw - 0.022, [(z0, y0), (z1, y1)]), SALT_S, lw=_lw(cam, 2))
+    gz, gy = bz - e * 0.55, by + e * 0.45
+    for (a0, a1) in [((gz - 0.03, gy), (gz + 0.03, gy)), ((gz, gy - 0.03), (gz, gy + 0.03))]:
+        line3(c, cam, crest_x(xw - 0.024, [a0, a1]), WHITE, lw=_lw(cam, 2))
+    # a coronet on top: a band with three balled points
+    band = [(zc - 0.19, top + 0.02), (zc + 0.19, top + 0.02), (zc + 0.19, top + 0.08), (zc - 0.19, top + 0.08)]
+    peaks = [(zc - 0.19, top + 0.08)]
+    for k, zz in enumerate(np.linspace(-0.19, 0.19, 5)):
+        peaks.append((zc + zz, top + (0.2 if k % 2 == 0 else 0.11)))
+    peaks += [(zc + 0.19, top + 0.08)]
+    poly3(c, cam, crest_x(xw - 0.012, peaks), fill=STONE, line=INK, lw=_lw(cam, 3))
+    poly3(c, cam, crest_x(xw - 0.013, band), fill=STONE_D, line=INK, lw=_lw(cam, 3))
+    for zz in (-0.19, 0.0, 0.19):
+        poly3(c, cam, crest_x(xw - 0.014, [(zc + zz + 0.025 * math.cos(q), top + 0.215 + 0.025 * math.sin(q))
+                                          for q in np.linspace(0, 2 * math.pi, 12, endpoint=False)]),
+              fill=STONE, line=INK, lw=_lw(cam, 2))
+    # the motto ribbon beneath, its ends folded back
+    ry = pt - 0.06
     for sgn in (-1, 1):
-        line3(c, cam, wall_x(xw - 0.02, [(zc - sgn * 0.28, yc - 0.26), (zc + sgn * 0.28, yc + 0.2)]), WOOD_L, lw=5)
-        hz, hy = zc + sgn * 0.28, yc + 0.2
-        line3(c, cam, wall_x(xw - 0.025, [(hz - 0.1, hy + 0.05), (hz, hy), (hz + 0.07, hy - 0.09)]), SILVER, lw=5)
-    # the block of salt, gleaming
-    poly3(c, cam, wall_x(xw - 0.03, [(zc - 0.1, yc - 0.09), (zc + 0.1, yc - 0.09), (zc + 0.1, yc + 0.09),
-                                     (zc - 0.1, yc + 0.09)]), fill=SALT, line=INK, lw=2)
-    poly3(c, cam, wall_x(xw - 0.031, [(zc - 0.1, yc + 0.09), (zc - 0.04, yc + 0.14), (zc + 0.15, yc + 0.14),
-                                      (zc + 0.1, yc + 0.09)]), fill=SALT_S, line=INK, lw=2)
-    # coronet and a motto scroll
-    cor = [(zc - 0.2, yc + sh * 0.62), (zc + 0.2, yc + sh * 0.62), (zc + 0.22, yc + sh * 0.85), (zc + 0.11, yc + sh * 0.75),
-           (zc, yc + sh * 0.9), (zc - 0.11, yc + sh * 0.75), (zc - 0.22, yc + sh * 0.85)]
-    poly3(c, cam, wall_x(xw - 0.01, cor), fill=col(0.62, 0.55, 0.36), line=INK, lw=2)
-    scroll = [(zc - 0.42, yc - 0.28), (zc + 0.42, yc - 0.28), (zc + 0.48, yc - 0.39), (zc + 0.38, yc - 0.36),
-              (zc + 0.34, yc - 0.42), (zc - 0.34, yc - 0.42), (zc - 0.38, yc - 0.36), (zc - 0.48, yc - 0.39)]
-    poly3(c, cam, wall_x(xw - 0.01, scroll), fill=col(0.84, 0.82, 0.76), line=INK, lw=2)
-    for k in range(6):
-        z0 = zc - 0.3 + k * 0.1
-        line3(c, cam, wall_x(xw - 0.015, [(z0, yc - 0.36), (z0 + 0.04, yc - 0.34), (z0 + 0.07, yc - 0.37)]), INK, lw=2)
+        tail = [(zc + sgn * 0.30, ry + 0.03), (zc + sgn * 0.46, ry + 0.05), (zc + sgn * 0.40, ry - 0.025),
+                (zc + sgn * 0.46, ry - 0.10), (zc + sgn * 0.30, ry - 0.08)]
+        poly3(c, cam, crest_x(xw - 0.012, tail), fill=CLOTH_S, line=INK, lw=_lw(cam, 3))
+    ribbon = [(zc - 0.34, ry + 0.045), (zc, ry + 0.075), (zc + 0.34, ry + 0.045), (zc + 0.34, ry - 0.065),
+              (zc, ry - 0.035), (zc - 0.34, ry - 0.065)]
+    poly3(c, cam, crest_x(xw - 0.016, ribbon), fill=CLOTH, line=INK, lw=_lw(cam, 3))
 
 
 def fireplace(c, cam, t):
@@ -415,16 +484,22 @@ def fireplace(c, cam, t):
 
 def chandelier(c, cam, t, pos=(6.5, 4.3, 0.0)):
     x, y, z = pos
-    line3(c, cam, [(x, CEIL, z), (x, y + 0.5, z)], INK, lw=2)
-    for k in range(3):
-        s, zc = cam.proj(circle3((x, y - 0.15 * k, z), 0.9 - 0.25 * k, 24))
+    IRON = col(0.27, 0.25, 0.23)
+    line3(c, cam, [(x, CEIL, z), (x, y + 0.45, z)], INK, lw=2)
+    line3(c, cam, [(x, y + 0.45, z), (x, y - 0.4, z)], IRON, lw=6)
+    for k in range(8):
+        a = k / 8 * 2 * math.pi
+        bx, bz = x + 0.9 * math.cos(a), z + 0.9 * math.sin(a)
+        line3(c, cam, [(x, y + 0.3, z), (x + 0.6 * math.cos(a), y + 0.08, z + 0.6 * math.sin(a)), (bx, y, bz)], IRON, lw=3)
+    for k in range(2):
+        s, zc = cam.proj(circle3((x, y - 0.3 * k, z), 0.9 - 0.6 * k, 32))
         if (zc > 0.2).all():
-            c.poly(s, None, col(0.55, 0.52, 0.46), lw=3)
+            c.poly(s, None, IRON, lw=4)
     for k in range(8):
         a = k / 8 * 2 * math.pi
         bx, bz = x + 0.9 * math.cos(a), z + 0.9 * math.sin(a)
         line3(c, cam, [(bx, y, bz), (bx, y + 0.18, bz)], PLATE, lw=5)
-        flame_at(c, cam, (bx, y + 0.24, bz), t, k, size=0.05)
+        flame_at(c, cam, (bx, y + 0.205, bz), t, k, size=0.05)
     if cam.depth((x, y, z)) > 0.3:
         gx, gy = cam.pt((x, y, z))
         c.glow(gx, gy, cam.scale((x, y, z)) * 2.5, GLOW, 0.22)
@@ -472,7 +547,7 @@ def table(c, cam, t):
     poly3(c, cam, [(0.25, TABLE_Y, -HALF_W), (FLAT_END, TABLE_Y, -HALF_W), (FLAT_END, TABLE_Y, HALF_W),
                    (0.25, TABLE_Y, HALF_W)], fill=CLOTH, line=INK, lw=3, jit=0.5)
     for i in range(len(angs) - 1):
-        (x0, y0), (x1, y1) = curve[i], curve[i + 1]
+        (x0, y0), (x1, y1) = curve[i], curve[min(i + 2, len(curve) - 1)]
         shade = CLOTH * (1 - 0.18 * i / len(angs)) + CLOTH_S * (0.18 * i / len(angs))
         poly3(c, cam, [(x0, y0, -HALF_W), (x1, y1, -HALF_W), (x1, y1, HALF_W), (x0, y0, HALF_W)], fill=shade, jit=0.3)
     line3(c, cam, [(x, y, -HALF_W) for x, y in curve], INK, lw=3)
@@ -499,6 +574,12 @@ def table(c, cam, t):
     poly3(c, cam, [(x0, LIP_Y, z0), (x1, LIP_Y, z0), (x1, LIP_Y, z1), (x0, LIP_Y, z1)], fill=CLOTH, line=INK, lw=3)
     poly3(c, cam, [(x0, LIP_Y, z1), (x1, LIP_Y, z1), (x1, LIP_Y - 0.12, z1), (x0, LIP_Y - 0.12, z1)], fill=WOOD,
           line=INK, lw=2)
+    for xe in (x0, x1):  # its end faces, and two stout brackets so it reads as a shelf from afar
+        poly3(c, cam, [(xe, LIP_Y, z0), (xe, LIP_Y, z1), (xe, LIP_Y - 0.12, z1), (xe, LIP_Y - 0.12, z0)], fill=WOOD,
+              line=INK, lw=2)
+    for xb in (x0 + 0.18, x1 - 0.18):
+        poly3(c, cam, [(xb, LIP_Y - 0.12, z0), (xb, LIP_Y - 0.12, z1 - 0.12), (xb, LIP_Y - 0.2, z1 - 0.12),
+                       (xb, LIP_Y - 0.75, z0)], fill=WOOD, line=INK, lw=2)
     hx, hrx, hrz = HOLE
     poly3(c, cam, circle3((hx, LIP_Y + 0.002, 0.0), hrx, 30, rz=hrz), fill=col(0.1, 0.09, 0.09), line=INK, lw=3)
     line3(c, cam, [(LIP_X, LIP_Y + 0.01, -HALF_W), (LIP_X, LIP_Y + 0.01, HALF_W)], SILVER, lw=5)
@@ -536,7 +617,8 @@ def candle(c, cam, base, t, seed, h=0.22, angle=0.0, lit=True):
     c.poly([R(-w * 0.7, -0.1 * sc), R(w * 0.7, -0.1 * sc), R(w * 0.7, -h * sc), R(-w * 0.7, -h * sc)],
            fill=col(0.93, 0.91, 0.85), line=INK, lw=2, jit=0.3)
     if lit:
-        tx, ty = R(0, -(h + 0.03) * sc)
+        c.line([R(0, -h * sc), R(0, -(h + 0.016) * sc)], INK, lw=max(1.5, 0.004 * sc))
+        tx, ty = R(0, -(h + 0.012) * sc)
         s = sc * 0.03
         flick = 1 + 0.18 * math.sin(t * 13 + seed * 1.7)
         c.glow(tx, ty, s * 6, GLOW, 0.35)
@@ -1162,7 +1244,7 @@ def speaking(env, t0, t):
 # ---------------------------------------------------------------------------
 CAM_A = ((2.6, 1.35, 1.45), (0.02, 0.92, 0.02), 45)                                     # her one o'clock
 CAM_B = ((HUSB_SEAT[0] - 2.7, LIP_Y + 0.75, 0.0), (HUSB_SEAT[0], LIP_Y + 0.45, 0.0), 42)  # his twelve
-CAM_C = ((-3.05, 5.3, -1.6), (6.5, 0.2, 0.4), 74)                                       # the whole arrangement
+CAM_C = ((-3.1, 5.4, -1.4), (6.5, -1.0, 0.8), 90)   # the whole arrangement, framed inside TikTok's safe area
 
 
 def camera(t):
@@ -1247,8 +1329,8 @@ def wife_figure(c, cam, t):
     seat = xf((-0.04, 0.46, 0.0))
     sx, sy = cam.pt(seat)
     s = cam.scale(seat)
-    chew = max(0.0, math.sin(t * 9)) if t < 1.3 else 0.0
-    swallow = math.sin(math.pi * clamp01((t - 2.1) / 0.4))
+    chew = 0.0     # (the old opening had her chew and swallow first; now she speaks at once)
+    swallow = 0.0
     kw = dict(mouth=mouth_at(MOUTH_W, T_SPEAK_W, t), arm=speaking(MOUTH_W, T_SPEAK_W, t), chew=chew, swallow=swallow)
     if cam.pos[0] > CHAIR_X:
         # seen from the front: the chair is behind her
@@ -1330,7 +1412,8 @@ def make_audio(path):
     add(0.0, 0.012 * noise(DUR, 150, 1500, 1))
     for tc in rg.uniform(0, DUR, 40):
         add(tc, 0.02 * noise(0.03, 1000, 5000, int(tc * 100)) * decay(0.03, 0.006))
-    add(T_SPEAK_W, 0.85 * hall(VOICE_W / (np.abs(VOICE_W).max() + 1e-9)))
+    vw = VOICE_W[int(max(0.0, -T_SPEAK_W) * SR):]          # trim air before her words if she starts early
+    add(max(0.0, T_SPEAK_W), 0.85 * hall(vw / (np.abs(VOICE_W).max() + 1e-9)))
     add(T_SPEAK_H, 0.85 * hall(VOICE_H / (np.abs(VOICE_H).max() + 1e-9)))
     add(T_WHIP, 0.25 * noise(0.45, 400, 5000, 3) * np.hanning(int(0.45 * SR)))
     for tp in (T_PAT1, T_PAT2):
@@ -1362,6 +1445,108 @@ def make_audio(path):
     tr.save(path)
 
 
+# ---------------------------------------------------------------------------
+# TikTok version: drawn natively at 1080 x 1920, small title and captions drawn fresh at full size
+# ---------------------------------------------------------------------------
+FONT_ANTON = os.path.join(HERE, 'fonts', 'Anton-Regular.ttf')
+FONT_SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
+CRANBERRY = (178, 24, 52)
+TITLE_END = 2.0                   # the small title fades out by here
+TITLE_W, TITLE_CX, TITLE_TOP = 430, 672, 330   # about 40% of the width, over bare wall to the right of her feather
+CAPTIONS = [(0.25, T_CUT_H - 0.05, 'Darling, would you pass the salt?'),
+            (T_SPEAK_H + 1.05, T_SPEAK_H + 2.75, 'Of course!')]
+
+
+def _wrap(s, font, maxw):
+    rows, cur = [], ''
+    for w in s.split():
+        trial = (cur + ' ' + w).strip()
+        if font.getlength(trial) <= maxw or not cur:
+            cur = trial
+        else:
+            rows.append(cur)
+            cur = w
+    return rows + [cur]
+
+
+def _caption(img, s, bottom=1480):
+    """Speech: bold white letters with a black outline, wrapped to 800 px, centred on x = 480."""
+    from PIL import ImageDraw, ImageFont
+    f = ImageFont.truetype(FONT_SANS, 50)
+    rows = _wrap(s, f, 800)
+    while len(rows) > 1:   # balance the lines so no word is left on its own
+        narrower = _wrap(s, f, max(f.getlength(r) for r in rows) - 10)
+        if len(narrower) != len(rows):
+            break
+        rows = narrower
+    d = ImageDraw.Draw(img)
+    for i, row in enumerate(rows):
+        d.text((480, bottom - 34 - 64 * (len(rows) - 1 - i)), row, font=f, fill=(255, 255, 255), anchor='mm',
+               stroke_width=5, stroke_fill=(0, 0, 0))
+    return [(480 - (f.getlength(r) + 10) / 2, 480 + (f.getlength(r) + 10) / 2) for r in rows]
+
+
+def _title_layer(s='THE SALT', maxw=TITLE_W):
+    """The cranberry-red title, Anton capitals widened 20% with a thick black outline, at most maxw wide."""
+    from PIL import ImageDraw, ImageFont
+    size = 200
+    while True:
+        f = ImageFont.truetype(FONT_ANTON, size)
+        out = max(3, int(size * 0.075))
+        l, t, r, b = f.getbbox(s, stroke_width=out)
+        if (r - l + 2 * out) * 1.2 <= maxw:
+            break
+        size -= 2
+    lay = Image.new('RGBA', (r - l + 2 * out, b - t + 2 * out), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.text((out - l, out - t), s, font=f, fill=(0, 0, 0), stroke_width=out, stroke_fill=(0, 0, 0))
+    d.text((out - l, out - t), s, font=f, fill=CRANBERRY, stroke_width=max(1, int(size * 0.012)),
+           stroke_fill=CRANBERRY)
+    return lay.resize((int(lay.width * 1.2), lay.height), Image.LANCZOS)
+
+
+def vertical_frame(d):
+    t = d / FPS
+    img = Image.fromarray(render(d)).convert('RGBA')
+    if t < TITLE_END:
+        lay = _title_layer()
+        alpha = 1.0 if t < TITLE_END - 0.5 else (TITLE_END - t) / 0.5
+        if alpha < 1:
+            lay.putalpha(lay.getchannel('A').point(lambda v: int(v * alpha)))
+        img.alpha_composite(lay, (int(TITLE_CX - lay.width / 2), TITLE_TOP))
+    for a, b, text in CAPTIONS:
+        if a <= t < b:
+            _caption(img, text)
+    return np.asarray(img.convert('RGB'))
+
+
+def render_vertical(path, bitrate='4500k', n=None):
+    """Draw every frame at 1080 x 1920 in parallel, encode at a target bitrate and add the sound."""
+    import subprocess
+    import imageio.v2 as imageio
+    import imageio_ffmpeg
+    from multiprocessing import Pool
+    assert (W, H) == (1080, 1920), 'render natively at 1080 x 1920'
+    n = n or int(round(DUR * FPS))
+    tmp_v, tmp_a = path + '.video.mp4', path + '.audio.wav'
+    wr = imageio.get_writer(tmp_v, fps=FPS, codec='libx264', quality=None, pixelformat='yuv420p', macro_block_size=8,
+                            ffmpeg_params=['-b:v', bitrate, '-maxrate', '6M', '-bufsize', '9M', '-preset', 'slow',
+                                           '-profile:v', 'high', '-tune', 'film'])
+    with Pool(os.cpu_count()) as pool:
+        for i, frame in enumerate(pool.imap(vertical_frame, range(n), chunksize=2)):
+            wr.append_data(frame)
+            if i % 24 == 0:
+                print(f'frame {i}/{n}', flush=True)
+    wr.close()
+    make_audio(tmp_a)
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', tmp_v, '-i', tmp_a,
+                    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', '-shortest', path],
+                   check=True)
+    os.remove(tmp_v)
+    os.remove(tmp_a)
+    print(f'done: {path} ({os.path.getsize(path) / 1e6:.1f} MB)')
+
+
 if __name__ == '__main__':
     mode = sys.argv[1]
     if mode == 'stills':
@@ -1372,3 +1557,10 @@ if __name__ == '__main__':
             print('saved', ts)
     elif mode == 'render':
         render_video(sys.argv[2], render, int(DUR * FPS), make_audio, crf=int(sys.argv[3]) if len(sys.argv) > 3 else 27)
+    elif mode == 'vertical-stills':   # TikTok frames with title and captions, for checking
+        out = sys.argv[2]
+        os.makedirs(out, exist_ok=True)
+        for ts in sys.argv[3:]:
+            Image.fromarray(vertical_frame(int(round(float(ts) * FPS)))).save(os.path.join(out, f'v_{float(ts):05.2f}s.png'))
+    elif mode == 'vertical':          # python3 salt.py vertical OUT.mp4 [BITRATE]
+        render_vertical(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else '4500k')
