@@ -93,7 +93,7 @@ JERK = ((320, 140), (345, -50), 'thumb', -0.45)
 MIC = ((-190, 230), (-10, 60), 'fist')            # pretending to hold a microphone
 FLAP = ((250, 150), (300, 30), 'flap')
 TEMPLE = ((240, 40), (118, -118), 'point_up')     # "I think": tapping his temple
-JAB = ((-300, 180), (-470, 160), 'point')
+JAB = ((-280, 20), (-400, -20), 'point')
 PRO_ARMS = [
     (0.0, {'L': HIP_L, 'R': THUMB}), (0.62, {'L': HIP_L, 'R': JERK}), (0.86, {'L': HIP_L, 'R': THUMB}),
     (1.7, {'L': HIP_L, 'R': JERK}), (1.94, {'L': HIP_L, 'R': THUMB}),
@@ -128,7 +128,7 @@ def pro_state(t):
         a = st['arms']
         el, wr, sh = a['L'][:3]
         jab = sum(math.exp(-((t - j) / 0.07) ** 2) for j in JABS)
-        st['arms'] = dict(a, L=((el[0] - 25 * jab, el[1]), (wr[0] - 45 * jab, wr[1] + 6 * jab), sh))
+        st['arms'] = dict(a, L=((el[0] - 25 * jab, el[1]), (wr[0] - 25 * jab, wr[1] + 4 * jab), sh))
     if st['arms']['R'][2] == 'flap':
         st['flap'] = 0.5 * math.sin(2 * math.pi * 3.1 * t)
     st['blink'] = any(b <= t < b + 0.12 for b in (1.2, 13.0, 15.8))
@@ -301,6 +301,14 @@ def protester(img, cam, x, y, s, st, t=0.0, doodle=True, pole=None):
     p = B.Pen(img, L)
     puff, shr = st.get('puff', 0.0), -26 * st.get('shrug', 0.0)
     sw = 172 * (1 + 0.05 * puff)
+    if st.get('arm_only'):  # just one arm, redrawn on top of someone in front of him
+        side = st['arm_only']
+        g = st['arms'][side]
+        sh = ((-1 if side == 'L' else 1) * (sw - 16), 60 + shr)
+        B.arm(p, sh, g[0], g[1], SLEEVE, w=36)
+        patch(img, p, sh, g[0], 'doodle' if (side == 'L' and doodle) else 'PP')
+        hand(img, p, g[0], g[1], g[2], EYE_SKIN, g[3] if len(g) > 3 else None, t, st.get('flap', 0.0))
+        return
     B.legs(img, p, dict(trousers=COMBAT, stance=36))
     for sgn in (-1, 1):  # cargo pockets
         p.poly([(sgn * 36, 600), (sgn * 100, 600), (sgn * 98, 700), (sgn * 40, 700)], B.dk(COMBAT, 0.86), INK, 2.0)
@@ -626,9 +634,12 @@ def frame_image(t):
     mates(img, cam, g, t, MATES[1:])
     (_, fy), s = g.feet(0, 1.0)
     sp, target = rep_state(t, view)
-    protester(img, cam, 670, fy - 928 * s, s, pro_state(t), t)
+    pst = pro_state(t)
+    protester(img, cam, 670, fy - 928 * s, s, pst, t)
     B.person(img, cam, 220, fy - 928 * s, s, sp, t)  # her arm in front of his, mic and all
     mic(img, B.Local(cam, 220, fy - 928 * s, s), sp['arms']['R'][1], sp['arms']['R'][0], target)
+    if pst['arms']['L'][2] == 'point':  # his accusing finger, in front of her so we see it
+        protester(img, cam, 670, fy - 928 * s, s, dict(pst, arm_only='L'), t)
     for w, a, b, text, italic, _ in LINES:
         if a - 0.05 <= t < b + 0.25 and not any(a2 - 0.05 <= t for _, a2, _, _, _, _ in LINES if a2 > a):
             caption(img, text, italic)
