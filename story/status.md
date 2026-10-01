@@ -36,19 +36,20 @@ Read this first in any new session, after CLAUDE.md.
 - Later notes: mouths follow each voice; no bobbing fists or sword sounds; natural clapping; chant carries on
   under the close-up; lanyards on every audience member; two great bee banners in the turned hall.
 - DONE 30 Sep 2026: `animations/king-in-the-north-vertical.mp4` (38 s, 4.3 MB, 1080 x 1920, 12 fps), checked
-  against the safe-area guides. Recut to the new TikTok opening rules: small title gone by 2.5 s, speech from
+  against the safe-area guides. Recut to the new TikTok opening rules: title at the standard size (as Dam and Listening & Learning) on the
+  opening frame, gone by 1 s, over a tilt down from the backdrop to Andy; speech from
   the first frame, pauses tightened (`PIECES` in burnham_film.py), first knight at 15.6 s. The king grows
   harrowed (rings, bags, heavy lids) through the final push-in. Full render about 32 min on 2 cores.
 - To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text. Avoid Game of Thrones hashtags:
   they spoil the turn. Sam writes the post text and pinned question himself.
 
 ## Done
-- **The Salt for TikTok** (1 Oct 2026): `animations/the-salt-vertical.mp4` (11.6 s, 6.6 MB, 1080 x 1920, 12 fps,
+- **The Salt for TikTok** (1 Oct 2026): `animations/the-salt-vertical.mp4` (11.6 s, 6.7 MB, 1080 x 1920, 12 fps,
   drawn natively at full size; render about 1 minute on 4 cores: `python3 source/salt.py vertical OUT.mp4`).
   salt.py now uses `source/pencil_cartoon.py` (the 24 Sep version of pencil.py, restored under its own name;
   beaver_asteroid.py and rap.py still import the old names from pencil.py and would need the same switch).
   Tightened timeline: her line from 0.32 s, cut to him 3.4 s, "Of course!" 3.8 s, 1.1 s deadpan, whip 6.05 s,
-  slap 8.9 s, crash 11.0 s (pats, wind-up and slap keep their old rhythm). Small title gone by 2 s; captions
+  slap 8.9 s, crash 11.0 s (pats, wind-up and slap keep their old rhythm). Full-size title (letters ~200 px tall, the same as Dam, at Sam's request) on screen for the first second only; captions
   wrapped and balanced inside the safe area. Fixes: coat of arms redrawn (pewter shield, crossed pickaxes,
   salt cube, coronet, ribbon), candle flames sit on wicks, wrought-iron chandelier, shelf brackets, no seams
   in floor/ceiling/ramp, rug/curtains/window toned down, wide shot reframed so the crash is inside the safe

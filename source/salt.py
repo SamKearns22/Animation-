@@ -1451,8 +1451,8 @@ def make_audio(path):
 FONT_ANTON = os.path.join(HERE, 'fonts', 'Anton-Regular.ttf')
 FONT_SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 CRANBERRY = (178, 24, 52)
-TITLE_END = 2.0                   # the small title fades out by here
-TITLE_W, TITLE_CX, TITLE_TOP = 430, 672, 330   # about 40% of the width, over bare wall to the right of her feather
+TITLE_END = 1.0                   # full-size title: on screen at most a second (fades out from 0.75 s)
+TITLE_W, TITLE_CX, TITLE_TOP = 960, 540, 330   # letters ~200 px tall, the same size as Dam's title; over wall and hair
 CAPTIONS = [(0.25, T_CUT_H - 0.05, 'Darling, would you pass the salt?'),
             (T_SPEAK_H + 1.05, T_SPEAK_H + 2.75, 'Of course!')]
 
@@ -1510,7 +1510,7 @@ def vertical_frame(d):
     img = Image.fromarray(render(d)).convert('RGBA')
     if t < TITLE_END:
         lay = _title_layer()
-        alpha = 1.0 if t < TITLE_END - 0.5 else (TITLE_END - t) / 0.5
+        alpha = 1.0 if t < TITLE_END - 0.25 else (TITLE_END - t) / 0.25
         if alpha < 1:
             lay.putalpha(lay.getchannel('A').point(lambda v: int(v * alpha)))
         img.alpha_composite(lay, (int(TITLE_CX - lay.width / 2), TITLE_TOP))
