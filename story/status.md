@@ -13,6 +13,9 @@ Read this first in any new session, after CLAUDE.md.
   with a yellow stream; officer relaxed (hands clasped), clear of the protester; one small brown wheelie case with a
   front pocket (the left case removed); big title like Dam / L&L (720 px, gone by 1.6 s); reporter given lipstick,
   lashes and blush. Sam's recordings: `audio/pp-protester-1.m4a`, `pp-protester-2.m4a`, `pp-reporter.m4a`.
+- Continuity fix (1 Oct): one shared set for both cameras; the reporter's single is the two-shot camera zoomed in
+  (`CAMS` in peepee.py), so the officer, reporter, family and case, protester and mates keep the same order in every
+  shot; the officer stands with his arms at his sides so his lettering never crosses them. Re-render 21 min.
 - DONE 1 Oct 2026: `animations/pee-pee-vertical.mp4` (19.2 s, 1080 x 1920, 12 fps). Final render 16.5 min on 4
   cores. Captions use the script words; check against the recordings if Sam changed any. Cover: around 0:00.5
   (him mid-line, thumb out) with THE PATRIOTS as cover text.
