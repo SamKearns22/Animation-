@@ -191,15 +191,15 @@ def frame_image(i):
     k = min(k, len(SHOTS) - 1)
     name, dur = SHOTS[k]
     u = t - STARTS[k]
-    blink = (t % 3.7) < 0.12
+    blink = (t % 3.7) < 0.12 and t > 1.0  # never on the opening frame (it may become the cover)
     if name == 'stage':
         img = B.shot_stage(u, with_title=False, cap=None, mouth=mouth_for(i), push=u / dur, blink=blink,
-                           arms=andy_arms(u), look=keyed(ANDY_LOOK, u, 0.3))
+                           arms=andy_arms(u), look=keyed(ANDY_LOOK, u, 0.3), tilt=320 * (1 - B.smooth(u / 1.6)))
         for a, b, text in CAPTIONS:
             if a <= u < b:
                 B.caption(img, text)
-        if u < 2.5:  # small and high while the speech starts, gone by 2.5 s (the full title is on the cover)
-            B.title(img, alpha=1.0 if u < 2.0 else 1.0 - (u - 2.0) / 0.5, maxw=430)
+        if u < 1.0:  # full size (as Dam and Listening & Learning) but on screen 1 s at most, over the moving tilt
+            B.title_lines(img, alpha=1.0 if u < 0.75 else 1.0 - (u - 0.75) / 0.25)
     elif name == 'hall':
         img = B.shot_hall(u)
     elif name == 'frontrow':

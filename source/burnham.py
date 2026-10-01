@@ -907,7 +907,7 @@ def attendee(rng, furs=False):
 
 def backdrop(img, cam, dim=1.0, big=True):
     """The stage wall: a magenta glow into deep red, HOPE AGAIN in big off-white capitals."""
-    gradient(img, cam, (-400, -200, 1480, 1340), (236, 52, 150), (140, 10, 40), (620, 1180), 900, 0.9, dim)
+    gradient(img, cam, (-400, -700, 1480, 1340), (236, 52, 150), (140, 10, 40), (620, 1180), 900, 0.9, dim)
     if big:
         c = tuple(int(v * dim) for v in OFFWHITE)
         text(img, cam, 70, 560, 'HOPE', 170, c, widen=0.95)
@@ -1133,6 +1133,29 @@ def shout(img, s, bottom=1470):
                stroke_width=int(size * 0.07) * SS, stroke_fill=(0, 0, 0))
 
 
+def title_lines(img, lines=('HOPE', 'AGAIN'), cap=148, top=330, alpha=1.0):
+    """The title at the account's standard size: each line's capitals `cap` px tall (Listening & Learning's
+    size), Anton widened 20%, cranberry red, thick black outline, centred on the frame, top edge at `top`."""
+    probe = ImageFont.truetype(ANTON, 1000)
+    l, t, r, b = probe.getbbox('H')
+    size = int(round(cap * 1000 / (b - t)))
+    f = ImageFont.truetype(ANTON, size * SS)
+    out = max(3, int(size * 0.075)) * SS
+    y = top * SS
+    for s in lines:
+        l, t, r, b = f.getbbox(s, stroke_width=out)
+        lay = Image.new('RGBA', (r - l + 2 * out, b - t + 2 * out), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.text((out - l, out - t), s, font=f, fill=(0, 0, 0), stroke_width=out, stroke_fill=(0, 0, 0))
+        d.text((out - l, out - t), s, font=f, fill=CRANBERRY, stroke_width=max(1, int(f.size * 0.012)),
+               stroke_fill=CRANBERRY)
+        lay = lay.resize((int(lay.width * 1.2), lay.height), Image.LANCZOS)
+        if alpha < 1:
+            lay.putalpha(lay.getchannel('A').point(lambda v: int(v * alpha)))
+        img.alpha_composite(lay, (int(540 * SS - lay.width / 2), int(y)))
+        y += lay.height - 2 * out + out * 0.6
+
+
 def title(img, s='HOPE AGAIN', alpha=1.0, maxw=720):
     """The cranberry-red title card, drawn fresh at full size, centred, top edge at 330 px, 720 px wide at most."""
     size = 200
@@ -1159,10 +1182,10 @@ LINE = ("The British Right talk about 'taking back control'. Never let them forg
         "gave it away in the first place.")
 
 
-def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=False, arms=None, look=0.0):
+def shot_stage(t, with_title=True, cap=None, mouth='talk', push=None, blink=False, arms=None, look=0.0, tilt=0.0):
     img = canvas()
     k = smooth(push) if push is not None else 0.0  # a very slow push-in over the whole speech
-    cam = Cam(1 + 0.15 * k, 540 + 60 * k, 960 - 140 * k)
+    cam = Cam(1 + 0.15 * k, 540 + 60 * k, 960 - 140 * k - tilt)
     backdrop(img, cam)
     p = Pen(img, cam)
     p.poly([(-20, 1340), (1100, 1340), (1100, 1420), (-20, 1420)], (44, 16, 36), INK, 3)

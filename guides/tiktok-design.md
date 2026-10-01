@@ -49,6 +49,10 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
 - **Tight set-ups:** TikTok viewers give a video seconds, not minutes. Cut the set-up to the shortest version
   that still lands the joke (aim for 15-30 s in all; the first payoff or turn within about 8-10 s).
 - On the cover: as big as fits within the safe width. A long title goes on two lines of equal size.
+- **Standard title size** (so the profile grid matches): capitals about 148 px tall per line, as in
+  Listening & Learning (`title_lines` in `source/burnham.py`); two words go on two lines. On TikTok it is
+  shown at this size on the opening frame for 1 second at most, over moving picture, so that frame can be
+  picked as the cover; never over a face (open on background and move to the character as it fades).
 - **Placed in empty space inside the safe area**, never over a face and never in the top 16% (TikTok's
   tabs cover it - a posted title sat under them): in a converted widescreen film, just above the picture,
   its top edge no higher than 330 px; in a film made vertical, a third of the way down, over background.

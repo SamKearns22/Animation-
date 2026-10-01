@@ -31,7 +31,8 @@ Read this first in any new session, after CLAUDE.md.
 - Later notes: mouths follow each voice; no bobbing fists or sword sounds; natural clapping; chant carries on
   under the close-up; lanyards on every audience member; two great bee banners in the turned hall.
 - DONE 30 Sep 2026: `animations/king-in-the-north-vertical.mp4` (38 s, 4.3 MB, 1080 x 1920, 12 fps), checked
-  against the safe-area guides. Recut to the new TikTok opening rules: small title gone by 2.5 s, speech from
+  against the safe-area guides. Recut to the new TikTok opening rules: title at the standard size (as Dam and Listening & Learning) on the
+  opening frame, gone by 1 s, over a tilt down from the backdrop to Andy; speech from
   the first frame, pauses tightened (`PIECES` in burnham_film.py), first knight at 15.6 s. The king grows
   harrowed (rings, bags, heavy lids) through the final push-in. Full render about 32 min on 2 cores.
 - To post: cover around 0:09 (Andy pointing) with HOPE AGAIN as cover text. Avoid Game of Thrones hashtags:
