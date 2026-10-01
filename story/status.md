@@ -2,6 +2,16 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: "The Patriots" (TikTok, file name pee-pee)
+- TV street interview at a Dover border blockade; masked protester, reporter with a BBQ mic flag; his arm badges
+  "PP" and a felt-tip doodle (the other PP). Hope Again look, vertical. All code in `source/peepee.py`
+  (`animatic OUT.mp4` about 3 min; `final OUT.mp4`). Timeline and captions: `LINES` / `SHOTS` at the top.
+- Director's decisions: title THE PATRIOTS (small, gone by 2 s); mic flag BBQ (like BBC); protester thick-set with a
+  belly, same height as the reporter; the childish line captioned in plain italics; no blurred version needed;
+  storyboard skipped (low on usage). Ends on the two-shot hold (her slow blink, a distant horn), hard cut to black.
+- 1 Oct 2026: first animatic sent with silent placeholder timing. Waiting for Sam's OK and his recordings
+  (one Voice Memo per character); then set each line's `recording` in `LINES` and retime the keys to it.
+
 ## In progress: "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
 - Conference speech that turns into the "King in the North" scene, 11 shots, 43 s, Listening & Learning look,
   made vertical. Pictures: `source/burnham.py` (cast, armour, shots, storyboard sheet). Timeline, sound and
