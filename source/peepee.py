@@ -90,10 +90,10 @@ HIP_L = ((-300, 230), (-180, 390), 'fist')
 HIP_R = ((300, 230), (180, 390), 'fist')
 THUMB = ((300, 180), (280, -10), 'thumb', -0.55)
 JERK = ((320, 140), (345, -50), 'thumb', -0.45)
-MIC = ((-250, 190), (-95, 10), 'fist')            # pretending to hold a microphone
+MIC = ((-190, 230), (-10, 60), 'fist')            # pretending to hold a microphone
 FLAP = ((250, 150), (300, 30), 'flap')
 TEMPLE = ((240, 40), (118, -118), 'point_up')     # "I think": tapping his temple
-JAB = ((-330, 60), (-520, 15), 'point')
+JAB = ((-300, 180), (-470, 160), 'point')
 PRO_ARMS = [
     (0.0, {'L': HIP_L, 'R': THUMB}), (0.62, {'L': HIP_L, 'R': JERK}), (0.86, {'L': HIP_L, 'R': THUMB}),
     (1.7, {'L': HIP_L, 'R': JERK}), (1.94, {'L': HIP_L, 'R': THUMB}),
@@ -140,8 +140,8 @@ def rep_state(t, view):
     m = 'line' if lv < 0.12 else 'small' if lv < 0.35 else ['mid', 'open'][int(t * 12) % 2]
     blink = any(b <= t < b + 0.14 for b in (1.9, 6.0, 9.4, 14.4)) or 17.95 <= t < 18.25  # one slow blink in the hold
     if view == 'two':
-        arms = {'L': ((-140, 290), (-128, 480), 'fist'), 'R': ((270, 150), (390, 90), 'fist')}
-        return dict(REPORTER, arms=arms, mouth=m, blink=blink, turn=0.55, look=0.9), (520, -10)
+        arms = {'L': ((-140, 290), (-128, 480), 'fist'), 'R': ((265, 120), (380, 20), 'fist')}
+        return dict(REPORTER, arms=arms, mouth=m, blink=blink, turn=0.55, look=0.9), (510, 5)
     arms = {'L': ((-140, 290), (-128, 480), 'fist'), 'R': ((190, 250), (92, 80), 'fist')}
     look = 0.85 if t > 3.9 else 0.6
     return dict(REPORTER, arms=arms, mouth=m, blink=blink, turn=0.45, look=look), (36, -40)
@@ -626,8 +626,8 @@ def frame_image(t):
     mates(img, cam, g, t, MATES[1:])
     (_, fy), s = g.feet(0, 1.0)
     sp, target = rep_state(t, view)
-    B.person(img, cam, 220, fy - 928 * s, s, sp, t)
     protester(img, cam, 670, fy - 928 * s, s, pro_state(t), t)
+    B.person(img, cam, 220, fy - 928 * s, s, sp, t)  # her arm in front of his, mic and all
     mic(img, B.Local(cam, 220, fy - 928 * s, s), sp['arms']['R'][1], sp['arms']['R'][0], target)
     for w, a, b, text, italic, _ in LINES:
         if a - 0.05 <= t < b + 0.25 and not any(a2 - 0.05 <= t for _, a2, _, _, _, _ in LINES if a2 > a):
