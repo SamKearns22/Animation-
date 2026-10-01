@@ -43,6 +43,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
     punchline);
   - the title is on screen **at most 1 second**, or sits **small** (about 40% of the width, high in the safe
     area) while the action plays underneath, fading after 2 seconds;
+  - the director prefers the **same title size on every film** (letters about 200 px tall, as on Dam), so the
+    in-video title is full size and on screen for the first second only (holds to 0.75 s, gone by 1 s);
   - the full-size title lives on the **cover** (chosen when posting) and in the post text instead.
 - **Tight set-ups:** TikTok viewers give a video seconds, not minutes. Cut the set-up to the shortest version
   that still lands the joke (aim for 15-30 s in all; the first payoff or turn within about 8-10 s).

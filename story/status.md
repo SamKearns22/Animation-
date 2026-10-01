@@ -28,12 +28,12 @@ Read this first in any new session, after CLAUDE.md.
   they spoil the turn. Sam writes the post text and pinned question himself.
 
 ## Done
-- **The Salt for TikTok** (1 Oct 2026): `animations/the-salt-vertical.mp4` (11.6 s, 6.6 MB, 1080 x 1920, 12 fps,
+- **The Salt for TikTok** (1 Oct 2026): `animations/the-salt-vertical.mp4` (11.6 s, 6.7 MB, 1080 x 1920, 12 fps,
   drawn natively at full size; render about 1 minute on 4 cores: `python3 source/salt.py vertical OUT.mp4`).
   salt.py now uses `source/pencil_cartoon.py` (the 24 Sep version of pencil.py, restored under its own name;
   beaver_asteroid.py and rap.py still import the old names from pencil.py and would need the same switch).
   Tightened timeline: her line from 0.32 s, cut to him 3.4 s, "Of course!" 3.8 s, 1.1 s deadpan, whip 6.05 s,
-  slap 8.9 s, crash 11.0 s (pats, wind-up and slap keep their old rhythm). Small title gone by 2 s; captions
+  slap 8.9 s, crash 11.0 s (pats, wind-up and slap keep their old rhythm). Full-size title (letters ~200 px tall, the same as Dam, at Sam's request) on screen for the first second only; captions
   wrapped and balanced inside the safe area. Fixes: coat of arms redrawn (pewter shield, crossed pickaxes,
   salt cube, coronet, ribbon), candle flames sit on wicks, wrought-iron chandelier, shelf brackets, no seams
   in floor/ceiling/ramp, rug/curtains/window toned down, wide shot reframed so the crash is inside the safe
