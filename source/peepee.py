@@ -44,27 +44,42 @@ RED = (196, 30, 44)
 # ------------------------------------------------------------------------------------------- timeline
 # (who, start, end, caption, italic, recording) - placeholders until Sam's recordings arrive:
 # recording is (file, from, to) in that file, or None for a silent placeholder.
-LINES = [
-    ('pro', 0.05, 2.75, "We're here to stop an invasion on our borders, love!", False, None),
-    ('rep', 3.25, 6.15, "And you're doing that by blocking citizens from accessing the UK side of the border",
-     False, None),
-    ('rep', 6.15, 9.05, "and preventing UK immigration officers from doing their jobs?", False, None),
-    ('pro', 9.55, 13.2, "Oooooh, I'm a reporter, I think through what I do and say.", True, None),
-    ('pro', 13.45, 14.7, "You're a traitor, love!", False, None),
+LINES = [  # Sam's recordings, each played exactly as recorded (volume only)
+    ('pro', 0.05, 3.07, "We're here to stop an invasion on our borders, love!", False, ('pp-protester-1.m4a', 0.43, 3.45)),
+    ('rep', 3.55, 8.2, "And you're doing that by blocking citizens from accessing the UK side of the border",
+     False, ('pp-reporter.m4a', 0.85, 5.5)),
+    ('rep', 8.2, 11.65, "and preventing UK immigration officers from doing their jobs?", False,
+     ('pp-reporter.m4a', 5.5, 8.95)),
+    ('pro', 12.15, 16.2, "Oooooh, I'm a reporter, I think through what I do and say.", True,
+     ('pp-protester-2.m4a', 0.38, 4.43)),
+    ('pro', 16.62, 17.55, "You're a traitor, love!", False, ('pp-protester-2.m4a', 4.85, 5.78)),
 ]
-SHOTS = [('two', 0.0, 3.0), ('rep', 3.0, 9.4), ('two', 9.4, 15.9)]
-BLACK_AT = 15.9
-DUR = 16.4
+SHOTS = [('two', 0.0, 3.35), ('rep', 3.35, 11.95), ('two', 11.95, 18.7)]
+BLACK_AT = 18.7
+DUR = 19.2
 TITLE = 'THE PATRIOTS'
 
 
+ENV = {}
+
+
+def envelope(f, s0, s1):
+    """The loudness of a stretch of recording, 100 times a second, 0-1."""
+    if (f, s0, s1) not in ENV:
+        a = load(os.path.join(HERE, 'audio', f))[int(s0 * SR):int(s1 * SR)]
+        hop = SR // 100
+        lv = np.array([np.sqrt(np.mean(a[i:i + hop] ** 2)) for i in range(0, len(a) - hop, hop)])
+        ENV[(f, s0, s1)] = np.clip(lv / (np.percentile(lv, 95) + 1e-9), 0, 1)
+    return ENV[(f, s0, s1)]
+
+
 def level(who, t):
-    """How loud this person's voice is now (0-1). Placeholder: a steady syllable rhythm."""
+    """How loud this person's voice is now (0-1), from the recording."""
     for w, a, b, _, _, rec in LINES:
         if w == who and a <= t < b:
-            u = t - a
-            v = abs(math.sin(math.pi * 4.6 * u)) * (1.0 if math.sin(2 * math.pi * 0.85 * u + 1) > -0.7 else 0.15)
-            return min(1.0, v * min(1.0, u / 0.08) * min(1.0, (b - t) / 0.08))
+            lv = envelope(*rec)
+            k = int((t - a) * 100)
+            return float(lv[min(k, len(lv) - 1)])
     return 0.0
 
 
@@ -80,13 +95,13 @@ FLAP = ((250, 150), (300, 30), 'flap')
 TEMPLE = ((240, 40), (118, -118), 'point_up')     # "I think": tapping his temple
 JAB = ((-330, 60), (-520, 15), 'point')
 PRO_ARMS = [
-    (0.0, {'L': HIP_L, 'R': THUMB}), (0.55, {'L': HIP_L, 'R': JERK}), (0.78, {'L': HIP_L, 'R': THUMB}),
-    (1.55, {'L': HIP_L, 'R': JERK}), (1.78, {'L': HIP_L, 'R': THUMB}),
+    (0.0, {'L': HIP_L, 'R': THUMB}), (0.62, {'L': HIP_L, 'R': JERK}), (0.86, {'L': HIP_L, 'R': THUMB}),
+    (1.7, {'L': HIP_L, 'R': JERK}), (1.94, {'L': HIP_L, 'R': THUMB}),
     (2.2, {'L': HIP_L, 'R': ((260, 230), (380, 250), 'palm')}),
-    (9.4, REST), (9.6, {'L': MIC, 'R': FLAP}), (11.5, {'L': MIC, 'R': TEMPLE}), (12.25, {'L': MIC, 'R': FLAP}),
-    (13.35, {'L': JAB, 'R': HIP_R}),
+    (11.95, REST), (12.2, {'L': MIC, 'R': FLAP}), (14.33, {'L': MIC, 'R': TEMPLE}), (15.17, {'L': MIC, 'R': FLAP}),
+    (16.5, {'L': JAB, 'R': HIP_R}),
 ]
-JABS = [13.45, 13.78, 14.12, 14.45]
+JABS = [16.66, 16.9, 17.14, 17.4]
 
 
 def pro_state(t):
@@ -94,20 +109,20 @@ def pro_state(t):
     lv = level('pro', t)
     st = dict(arms=arms, turn=-0.3, look=-0.7, lid=3, brows='flat', puff=0.0, shrug=0.0, tilt=0.0,
               head_dx=0.0, head_dy=-5 * lv, lv=lv)
-    if t < 3.0:                                    # boorish, puffing up, chin out
+    if t < 3.35:                                    # boorish, puffing up, chin out
         st.update(puff=smooth(t / 0.6), head_dy=-8 * smooth(t / 0.6) - 6 * lv, brows='flat', lid=4)
         if t > 2.15:                               # "love!": head jutting at her
             k = smooth((t - 2.15) / 0.2)
             st.update(head_dx=-14 * k, tilt=0.07 * k, look=-1.0)
-    elif t < 13.3:                                 # the mimicry: wobbling head, prissy little flaps
-        k = smooth((t - 9.5) / 0.25)
+    elif t < 16.45:                                 # the mimicry: wobbling head, prissy little flaps
+        k = smooth((t - 12.1) / 0.25)
         w = math.sin(2 * math.pi * 2.3 * t)
         st.update(tilt=0.13 * w * k, head_dx=10 * w * k, shrug=(0.25 + 0.2 * math.sin(2 * math.pi * 2.3 * t + 1)) * k,
                   brows='raised', lid=5, look=0.4, puff=0.0)
-        if 11.5 <= t < 12.25:  # tap, tap
+        if 14.33 <= t < 15.17:  # tap, tap
             a = st['arms']
             el, wr, sh = a['R'][:3]
-            st['arms'] = dict(a, R=(el, (wr[0] + 6 * abs(math.sin(math.pi * 5 * (t - 11.5))), wr[1]), sh))
+            st['arms'] = dict(a, R=(el, (wr[0] + 6 * abs(math.sin(math.pi * 5 * (t - 14.33))), wr[1]), sh))
     else:                                          # "You're a traitor, love!" and the hold
         st.update(brows='cross', lid=0, look=-1.0, puff=1.0, head_dx=-16, head_dy=-4 * lv)
         a = st['arms']
@@ -116,28 +131,58 @@ def pro_state(t):
         st['arms'] = dict(a, L=((el[0] - 25 * jab, el[1]), (wr[0] - 45 * jab, wr[1] + 6 * jab), sh))
     if st['arms']['R'][2] == 'flap':
         st['flap'] = 0.5 * math.sin(2 * math.pi * 3.1 * t)
-    st['blink'] = any(b <= t < b + 0.12 for b in (1.2, 10.3, 12.9))
+    st['blink'] = any(b <= t < b + 0.12 for b in (1.2, 13.0, 15.8))
     return st
 
 
 def rep_state(t, view):
     lv = level('rep', t)
     m = 'line' if lv < 0.12 else 'small' if lv < 0.35 else ['mid', 'open'][int(t * 12) % 2]
-    blink = any(b <= t < b + 0.14 for b in (1.9, 5.6, 8.2, 11.7)) or 15.05 <= t < 15.35  # one slow blink in the hold
+    blink = any(b <= t < b + 0.14 for b in (1.9, 6.0, 9.4, 14.4)) or 17.95 <= t < 18.25  # one slow blink in the hold
     if view == 'two':
         arms = {'L': ((-140, 290), (-128, 480), 'fist'), 'R': ((270, 150), (390, 90), 'fist')}
         return dict(REPORTER, arms=arms, mouth=m, blink=blink, turn=0.55, look=0.9), (520, -10)
     arms = {'L': ((-140, 290), (-128, 480), 'fist'), 'R': ((190, 250), (92, 80), 'fist')}
-    look = 0.85 if t > 3.6 else 0.6
+    look = 0.85 if t > 3.9 else 0.6
     return dict(REPORTER, arms=arms, mouth=m, blink=blink, turn=0.45, look=look), (36, -40)
 
 
 REPORTER = dict(skin=B.PINK, hw=64, hh=88, jaw='soft', hair='bob', hair_c=AUBURN, brow_c=(118, 50, 32), brow_w=2.8,
                 outfit='blouse', jacket=CAMEL, shirt=SCARF, trousers=(46, 46, 54), full=True, shoulders=128,
-                bottom=620, age=True, earring=True, pose='custom', stance=8)
+                bottom=620, age=True, earring=True, pose='custom', stance=8, lips=True, lashes=True,
+                blush=True)
 
 
 # ------------------------------------------------------------------------------------------ drawing
+
+LIP = (178, 64, 78)
+_mouth, _face = B.mouth, B.face
+
+
+def mouth_lips(p, sp, t, fx, my):
+    _mouth(p, sp, t, fx, my)
+    if sp.get('lips'):
+        m = sp.get('mouth', 'line')
+        h = {'small': 7, 'mid': 13, 'open': 18}.get(m, 3)
+        p.line([(fx - 17, my + 1), (fx - 7, my - 4), (fx, my - 2), (fx + 7, my - 4), (fx + 17, my + 2)], LIP, 3.4)
+        p.line([(fx - 12, my + h + 2), (fx, my + h + 6), (fx + 12, my + h + 2)], LIP, 4.0)
+        if m == 'line':
+            p.line([(fx - 16, my + 2), (fx, my + 1), (fx + 16, my + 3)], INK, 1.8)
+
+
+def face_lashes(img, p, sp, t, hx, hy, hw, hh):
+    fx = _face(img, p, sp, t, hx, hy, hw, hh)
+    if sp.get('lashes') and not sp.get('blink'):
+        lid = sp.get('lid', 0)
+        for sgn in (-1, 1):
+            ex, ey = fx - 4 + sgn * 30, hy - 8
+            for k in range(3):
+                bx, by = ex + sgn * (9 + 4 * k), ey - 8 + lid + 2.5 * k
+                p.line([(bx, by), (bx + sgn * (5 + k), by - 6 + k)], INK, 1.8)
+    return fx
+
+
+B.mouth, B.face = mouth_lips, face_lashes
 
 class Rot:
     """A person's local frame, turned about a pivot (to tilt the head)."""
@@ -174,17 +219,38 @@ def patch(img, p, sh, el, kind):
         p.ell(mx, my, r * 0.8, r * 0.8, (246, 244, 238), None)
         ctext(img, p.cam, mx, my + 1, 'PP', 25, RED)
         return
-    # his own felt-tip doodle on a blank patch: crude, wobbly, a child's drawing
+    # his own felt-tip doodle on a blank patch: crude, wobbly, coloured in with a Union Jack
     p.ell(mx, my, r, r, (232, 228, 212), (110, 106, 96), 1.6)
     q = lambda pts: [(mx + x * r / 30, my + y * r / 30) for x, y in pts]
     felt = (24, 24, 30)
-    p.line(q([(-9, 2), (0, -9), (5, -15), (9, -16), (12, -13), (11, -9), (3, -2), (-3, 6)]), felt, 1.5)
-    p.line(q([(-15, 8), (-17, 13), (-13, 18), (-8, 17), (-6, 12), (-9, 6), (-13, 5), (-15, 8)]), felt, 1.5)
-    p.line(q([(-6, 12), (-3, 18), (2, 19), (5, 14), (2, 8), (-3, 6)]), felt, 1.5)
-    p.line(q([(9, -15), (11, -13)]), felt, 1.2)
-    for k in range(5):  # the stream, in yellow felt tip
-        a, b = k / 5, (k + 0.6) / 5
-        p.line(q([(13 + 14 * a, -15 + 30 * a * a), (13 + 14 * b, -15 + 30 * b * b)]), (232, 192, 30), 2.0)
+    shaft = q([(-10, 3), (-1, -9), (4, -15), (9, -17), (13, -14), (12, -9), (4, -1), (-3, 7)])
+    balls = [q(oval(-12, 12, 7, 6.5, 16)), q(oval(-1, 14, 7, 6.5, 16))]
+    pts = [p.cam.P(*a) for a in shaft + balls[0] + balls[1]]
+    x0, y0 = int(min(a for a, _ in pts)) - 2, int(min(b for _, b in pts)) - 2
+    x1, y1 = int(max(a for a, _ in pts)) + 3, int(max(b for _, b in pts)) + 3
+    w, h = max(4, x1 - x0), max(4, y1 - y0)
+    jack = Image.new('RGBA', (w, h), (1, 33, 105, 255))
+    d = ImageDraw.Draw(jack)
+    u = max(1, int(min(w, h) * 0.07))
+    for a, b in (((0, 0), (w, h)), ((0, h), (w, 0))):
+        d.line([a, b], fill=(255, 255, 255), width=3 * u)
+        d.line([a, b], fill=(200, 16, 46), width=u)
+    d.line([(w / 2, 0), (w / 2, h)], fill=(255, 255, 255), width=int(2.6 * u))
+    d.line([(0, h / 2), (w, h / 2)], fill=(255, 255, 255), width=int(2.6 * u))
+    d.line([(w / 2, 0), (w / 2, h)], fill=(200, 16, 46), width=int(1.4 * u))
+    d.line([(0, h / 2), (w, h / 2)], fill=(200, 16, 46), width=int(1.4 * u))
+    mask = Image.new('L', (w, h), 0)
+    md = ImageDraw.Draw(mask)
+    for shape in [shaft] + balls:
+        md.polygon([(a - x0, b - y0) for a, b in (p.cam.P(*c) for c in shape)], fill=255)
+    jack.putalpha(mask)
+    img.alpha_composite(jack, (x0, y0))
+    for shape in [shaft] + balls:
+        p.line(shape + shape[:1], felt, 1.5)
+    p.line(q([(10, -16), (12, -14)]), felt, 1.2)
+    for k in range(6):  # the stream, shooting out in yellow felt tip
+        a, b = k / 6, (k + 0.65) / 6
+        p.line(q([(14 + 16 * a, -17 + 4 * a + 26 * a * a), (14 + 16 * b, -17 + 4 * b + 26 * b * b)]), (240, 196, 20), 2.4)
 
 
 def hand(img, p, el, wr, shape, skin, extra=None, t=0.0, flap=0.0):
@@ -467,18 +533,22 @@ def stuck(img, g, t, where):
         if kid:
             s *= 0.62
         B.person(img, cam, fx, fy - 928 * s, s, sp, t)
-    for X, z, colr in where['cases']:
+    for X, z in where['cases']:  # a small brown wheelie case with a front pocket
         k = g.S0 / z
         P = lambda dx, Y: g.P(X + dx, z, Y)
-        p.poly([P(-190, 30), P(190, 30), P(190, 600), P(-190, 600)], colr, INK, max(0.8, 8 * k))
-        p.line([P(-100, 600), P(-100, 900), P(100, 900), P(100, 600)], (40, 40, 44), max(1, 14 * k))
+        lw = max(0.8, 8 * k)
+        p.line([P(-70, 430), P(-70, 640), P(70, 640), P(70, 430)], (40, 40, 44), max(1, 12 * k))
+        p.poly(curve([P(-140, 40), P(140, 40), P(140, 440), P(-140, 440)], 3), (124, 80, 46), INK, lw)
+        p.poly([P(-105, 90), P(105, 90), P(105, 300), P(-105, 300)], (104, 66, 38), INK, lw * 0.8)
+        p.line([P(-90, 270), P(90, 270)], (210, 196, 170), lw * 0.7)
+        p.line([P(-140, 380), P(140, 380)], (86, 54, 30), lw * 0.7)
         for sgn in (-1, 1):
-            p.ell(*P(sgn * 130, 20), 30 * k, 30 * k, (20, 20, 22), None)
+            p.ell(*P(sgn * 100, 25), 26 * k, 26 * k, (20, 20, 22), None)
     X, z = where['officer']
     (ox, oy), s = g.feet(X, z)
     sp = dict(skin=B.OLIVE, hw=70, hh=88, jaw='square', hair='crop', hair_c=(40, 32, 28), outfit='jumper', jacket=HIVIS,
               trousers=(30, 32, 40), full=True, pose='custom', mouth='set', look=-0.4,
-              arms={'L': ((-210, 260), (-250, 400), 'palm'), 'R': ((210, 260), (250, 400), 'palm')})
+              arms={'L': ((-150, 300), (-40, 420), 'fist'), 'R': ((150, 300), (40, 420), 'fist')})
     B.person(img, cam, ox, oy - 928 * s, s, sp, t)
     L = B.Local(cam, ox, oy - 928 * s, s)
     q = B.Pen(img, L)
@@ -525,23 +595,23 @@ def gulls(img, t):
 # ------------------------------------------------------------------------------------------- the shots
 
 WHERE_TWO = dict(family=[(250, 4.4, FAMILY_SP[0], False), (520, 4.4, FAMILY_SP[1], False), (380, 4.2, FAMILY_SP[2], True)],
-                 cases=[(700, 4.3, (60, 90, 150)), (-60, 4.3, (180, 60, 60))], officer=(-200, 3.8))
+                 cases=[(700, 4.3)], officer=(-200, 3.8))
 MATES_TWO = [(-1150, 2.4, 0.4), (1250, 2.5, -0.6), (1900, 2.7, -0.2)]
 WHERE_REP = dict(family=[(-980, 2.7, FAMILY_SP[0], False), (-660, 2.7, FAMILY_SP[1], False),
                          (-830, 2.5, FAMILY_SP[2], True), (-1150, 2.5, FAMILY_SP[3], True)],
-                 cases=[(-560, 2.6, (60, 90, 150)), (-1350, 2.6, (180, 60, 60))], officer=(470, 2.4))
-MATES_REP = [(1150, 3.3, -0.5)]
+                 cases=[(-745, 2.45)], officer=(430, 2.4))
+MATES_REP = [(1400, 3.3, -0.5)]
 
 
 def caption(img, s, italic=False, bottom=1480):
     S = B.SS
     f = ImageFont.truetype(B.SANS, 50 * S)
-    rows = B.wrap(s, f, 780 * S)
+    rows = B.wrap(s, f, 700 * S)
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
     for i, row in enumerate(rows):
         y = (bottom - 34 - 64 * (len(rows) - 1 - i)) * S
-        d.text((480 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=5 * S, stroke_fill=(0, 0, 0))
+        d.text((540 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=5 * S, stroke_fill=(0, 0, 0))
     if italic:  # lean the letters: simple italics
         k, yc = 0.2, (bottom - 34) * S
         lay = lay.transform(lay.size, Image.AFFINE, (1, k, -k * yc, 0, 1, 0), Image.BICUBIC)
@@ -573,8 +643,8 @@ def frame_image(t):
     for w, a, b, text, italic, _ in LINES:
         if a - 0.05 <= t < b + 0.25 and not any(a2 - 0.05 <= t for _, a2, _, _, _, _ in LINES if a2 > a):
             caption(img, text, italic)
-    if t < 2.0:  # small and high over the action, gone by 2 s (the full-size title is on the cover)
-        B.title(img, TITLE, alpha=1.0 if t < 1.6 else 1.0 - (t - 1.6) / 0.4, maxw=430)
+    if t < 1.6:  # big, over the moving action, gone by 1.6 s
+        B.title(img, TITLE, alpha=1.0 if t < 1.2 else 1.0 - (t - 1.2) / 0.4, maxw=720)
     return img
 
 
@@ -639,9 +709,9 @@ def soundtrack():
     amb = 0.32 * wind(end) + 0.22 * engines(end)
     mix[:end] += amb
     call = gull_call()
-    for at, g in ((0.6, 0.10), (4.9, 0.07), (10.8, 0.08), (14.9, 0.05)):
+    for at, g in ((0.6, 0.10), (5.3, 0.07), (13.3, 0.08), (17.7, 0.05)):
         place(mix, call, at, g)
-    place(mix, horn(), 15.0, 0.12)   # a lorry in the queue, far off, during the hold
+    place(mix, horn(), 17.9, 0.12)   # a lorry in the queue, far off, during the hold
     for w, a, b, _, _, rec in LINES:  # the voices, exactly as recorded (volume only)
         if rec:
             f, s0, s1 = rec

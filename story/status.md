@@ -9,8 +9,13 @@ Read this first in any new session, after CLAUDE.md.
 - Director's decisions: title THE PATRIOTS (small, gone by 2 s); mic flag BBQ (like BBC); protester thick-set with a
   belly, same height as the reporter; the childish line captioned in plain italics; no blurred version needed;
   storyboard skipped (low on usage). Ends on the two-shot hold (her slow blink, a distant horn), hard cut to black.
-- 1 Oct 2026: first animatic sent with silent placeholder timing. Waiting for Sam's OK and his recordings
-  (one Voice Memo per character); then set each line's `recording` in `LINES` and retime the keys to it.
+- Notes after the animatic (all done): captions centred on the frame (700 px wide); doodle filled with a Union Jack
+  with a yellow stream; officer relaxed (hands clasped), clear of the protester; one small brown wheelie case with a
+  front pocket (the left case removed); big title like Dam / L&L (720 px, gone by 1.6 s); reporter given lipstick,
+  lashes and blush. Sam's recordings: `audio/pp-protester-1.m4a`, `pp-protester-2.m4a`, `pp-reporter.m4a`.
+- DONE 1 Oct 2026: `animations/pee-pee-vertical.mp4` (19.2 s, 1080 x 1920, 12 fps). Final render about 15 min on 4
+  cores. Captions use the script words; check against the recordings if Sam changed any. Cover: around 0:00.5
+  (him mid-line, thumb out) with THE PATRIOTS as cover text.
 
 ## In progress: "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
 - Conference speech that turns into the "King in the North" scene, 11 shots, 43 s, Listening & Learning look,
