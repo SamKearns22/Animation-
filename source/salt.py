@@ -1244,7 +1244,7 @@ def speaking(env, t0, t):
 # ---------------------------------------------------------------------------
 CAM_A = ((2.6, 1.35, 1.45), (0.02, 0.92, 0.02), 45)                                     # her one o'clock
 CAM_B = ((HUSB_SEAT[0] - 2.7, LIP_Y + 0.75, 0.0), (HUSB_SEAT[0], LIP_Y + 0.45, 0.0), 42)  # his twelve
-CAM_C = ((-3.1, 5.4, -1.4), (6.5, -1.0, 0.8), 90)   # the whole arrangement, framed inside TikTok's safe area
+CAM_C = ((-3.1, 5.0, -1.4), (6.5, -0.2, 0.8), 78)   # the whole arrangement: close to the original framing, crash inside the safe area
 
 
 def camera(t):
