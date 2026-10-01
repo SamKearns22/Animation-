@@ -97,7 +97,7 @@ JAB = ((-330, 60), (-520, 15), 'point')
 PRO_ARMS = [
     (0.0, {'L': HIP_L, 'R': THUMB}), (0.62, {'L': HIP_L, 'R': JERK}), (0.86, {'L': HIP_L, 'R': THUMB}),
     (1.7, {'L': HIP_L, 'R': JERK}), (1.94, {'L': HIP_L, 'R': THUMB}),
-    (2.2, {'L': HIP_L, 'R': ((260, 230), (380, 250), 'palm')}),
+    (2.2, {'L': HIP_L, 'R': ((260, 230), (380, 250), 'palm')}), (3.6, REST),
     (11.95, REST), (12.2, {'L': MIC, 'R': FLAP}), (14.33, {'L': MIC, 'R': TEMPLE}), (15.17, {'L': MIC, 'R': FLAP}),
     (16.5, {'L': JAB, 'R': HIP_R}),
 ]
@@ -433,13 +433,13 @@ class Ground:
         return self.P(X, z), self.S0 / z
 
 
-def sky(img, v):
+def sky(img, VY):
     S = B.SS
     h = img.height
     y = np.arange(h)[:, None] / S
     top, hor, grd = np.array((150, 160, 170.0)), np.array((208, 211, 211.0)), np.array((150, 150, 146.0))
-    k = np.clip(y / v['VY'], 0, 1) ** 1.4
-    col = np.where(y < v['VY'], top * (1 - k) + hor * k, grd)
+    k = np.clip(y / VY, 0, 1) ** 1.4
+    col = np.where(y < VY, top * (1 - k) + hor * k, grd)
     a = np.broadcast_to(col[:, None, :], (h, img.width, 3)).astype(np.uint8)
     img.paste(Image.fromarray(np.ascontiguousarray(a), 'RGB'))
 
@@ -466,12 +466,11 @@ def car(p, g, X, z, colr, lorry=False):
         p.ell(*P(sgn * 430, 560), 80 * k, 50 * k, (250, 246, 220), None)
 
 
-def background(img, view, t):
-    v = VIEWS[view]
+def background(img, cam, t):
+    v = VIEWS['two']
     g = Ground(v)
-    cam = B.Cam()
     p = B.Pen(img, cam)
-    sky(img, v)
+    sky(img, (v['VY'] - cam.cy) * cam.z + B.H / 2)
     VY = v['VY']
     for i, (cx, cy, rx, ry) in enumerate([(160, 420, 300, 70), (700, 520, 380, 60), (420, 640, 420, 40), (950, 380, 260, 60)]):
         soft(img, cam, oval(cx + t * (6 + 2 * i), cy, rx, ry, 30), (228, 230, 232), 0.45, 30)
@@ -524,9 +523,8 @@ def background(img, view, t):
     return g
 
 
-def stuck(img, g, t, where):
+def stuck(img, cam, g, t, where):
     """The Border Force officer and a family with suitcases, stuck behind the blockade."""
-    cam = B.Cam()
     p = B.Pen(img, cam)
     for X, z, sp, kid in where['family']:
         (fx, fy), s = g.feet(X, z)
@@ -547,13 +545,12 @@ def stuck(img, g, t, where):
     X, z = where['officer']
     (ox, oy), s = g.feet(X, z)
     sp = dict(skin=B.OLIVE, hw=70, hh=88, jaw='square', hair='crop', hair_c=(40, 32, 28), outfit='jumper', jacket=HIVIS,
-              trousers=(30, 32, 40), full=True, pose='custom', mouth='set', look=-0.4,
-              arms={'L': ((-150, 300), (-40, 420), 'fist'), 'R': ((150, 300), (40, 420), 'fist')})
+              trousers=(30, 32, 40), full=True, pose='side', mouth='set', look=0.4)
     B.person(img, cam, ox, oy - 928 * s, s, sp, t)
     L = B.Local(cam, ox, oy - 928 * s, s)
     q = B.Pen(img, L)
     for yb in (300, 370):
-        q.poly([(-150, yb), (150, yb), (150, yb + 26), (-150, yb + 26)], (196, 200, 206), None)
+        q.poly([(-128, yb), (128, yb), (128, yb + 26), (-128, yb + 26)], (196, 200, 206), None)
     ctext(img, L, -60, 130, 'BORDER', 30, (20, 20, 24))
     ctext(img, L, -60, 168, 'FORCE', 30, (20, 20, 24))
 
@@ -572,16 +569,14 @@ MATE = dict(arms={'L': ((-205, 280), (-195, 480), 'fist'), 'R': ((240, 150), (20
             look=-0.3, lid=3, brows='flat')
 
 
-def mates(img, g, t, where):
-    cam = B.Cam()
+def mates(img, cam, g, t, where):
     for i, (X, z, look) in enumerate(where):
         (fx, fy), s = g.feet(X, z)
         st = dict(MATE, look=look, blink=(t + i * 1.3) % 4.1 < 0.12)
         protester(img, cam, fx, fy - 928 * s, s, st, t, doodle=False, pole=1.7 * i)
 
 
-def gulls(img, t):
-    cam = B.Cam()
+def gulls(img, cam, t):
     p = B.Pen(img, cam)
     for i, (x0, y0, sp, ph) in enumerate([(120, 470, 22, 0.0), (760, 400, 16, 2.0), (980, 560, 30, 4.0)]):
         x = (x0 + sp * t) % 1200 - 60
@@ -594,13 +589,13 @@ def gulls(img, t):
 
 # ------------------------------------------------------------------------------------------- the shots
 
-WHERE_TWO = dict(family=[(250, 4.4, FAMILY_SP[0], False), (520, 4.4, FAMILY_SP[1], False), (380, 4.2, FAMILY_SP[2], True)],
-                 cases=[(700, 4.3)], officer=(-200, 3.8))
-MATES_TWO = [(-1150, 2.4, 0.4), (1250, 2.5, -0.6), (1900, 2.7, -0.2)]
-WHERE_REP = dict(family=[(-980, 2.7, FAMILY_SP[0], False), (-660, 2.7, FAMILY_SP[1], False),
-                         (-830, 2.5, FAMILY_SP[2], True), (-1150, 2.5, FAMILY_SP[3], True)],
-                 cases=[(-745, 2.45)], officer=(430, 2.4))
-MATES_REP = [(1400, 3.3, -0.5)]
+# One set, seen by both cameras: the reporter's single is the two-shot camera zoomed in on her, so everyone
+# stays where they are. Left to right: the officer, the reporter, the family and their case, the protester, his mates.
+WHERE = dict(family=[(-427, 3.6, FAMILY_SP[0], False), (-68, 3.6, FAMILY_SP[1], False),
+                     (-585, 3.6, FAMILY_SP[3], True), (-248, 3.6, FAMILY_SP[2], True)],
+             cases=[(88, 3.5)], officer=(-1560, 3.2))
+MATES = [(687, 4.4, -0.3), (1281, 2.5, -0.6), (1820, 2.6, -0.2)]
+CAMS = {'two': (1.0, 540, 960), 'rep': (1.375, 300, 901)}
 
 
 def caption(img, s, italic=False, bottom=1480):
@@ -623,23 +618,17 @@ def frame_image(t):
         return B.canvas((0, 0, 0))
     view = next(v for v, a, b in SHOTS if a <= t < b)
     img = B.canvas()
-    g = background(img, view, t)
-    gulls(img, t)
-    cam = B.Cam()
-    if view == 'two':
-        stuck(img, g, t, WHERE_TWO)
-        mates(img, g, t, MATES_TWO)
-        (_, fy), s = g.feet(0, 1.0)
-        sp, target = rep_state(t, view)
-        B.person(img, cam, 220, fy - 928 * s, s, sp, t)
-        protester(img, cam, 670, fy - 928 * s, s, pro_state(t), t)
-        mic(img, B.Local(cam, 220, fy - 928 * s, s), sp['arms']['R'][1], sp['arms']['R'][0], target)
-    else:
-        stuck(img, g, t, WHERE_REP)
-        mates(img, g, t, MATES_REP)
-        (_, fy), s = g.feet(0, 1.0)
-        sp, target = rep_state(t, view)
-        reporter(img, cam, 430, fy - 928 * s, s, sp, target, t)
+    cam = B.Cam(*CAMS[view])
+    g = background(img, cam, t)
+    gulls(img, cam, t)
+    mates(img, cam, g, t, MATES[:1])
+    stuck(img, cam, g, t, WHERE)
+    mates(img, cam, g, t, MATES[1:])
+    (_, fy), s = g.feet(0, 1.0)
+    sp, target = rep_state(t, view)
+    B.person(img, cam, 220, fy - 928 * s, s, sp, t)
+    protester(img, cam, 670, fy - 928 * s, s, pro_state(t), t)
+    mic(img, B.Local(cam, 220, fy - 928 * s, s), sp['arms']['R'][1], sp['arms']['R'][0], target)
     for w, a, b, text, italic, _ in LINES:
         if a - 0.05 <= t < b + 0.25 and not any(a2 - 0.05 <= t for _, a2, _, _, _, _ in LINES if a2 > a):
             caption(img, text, italic)
