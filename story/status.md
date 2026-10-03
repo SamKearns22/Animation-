@@ -2,6 +2,26 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## Done: "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
+- DONE 3 Oct 2026: `animations/mossad-vertical.mp4` (30.1 s, 2.2 MB, 1080 x 1920, 12 fps; final render 14 min on 4
+  cores, animatic 3 min). Checked against the safe-area guides (title, widest caption, the bang).
+- All code in `source/mossad.py` (`stills`, `sheet`, `animatic`, `final`, and `resound SRC OUT` to put a new
+  soundtrack on an existing render in seconds). Cleaning and levelling of Sam's lines: `source/mossad_audio.py`
+  (hum and hiss reduced by at most 10 dB, every line at the same loudness, nothing else). Timeline, captions and
+  cuts: `LINES` / `SHOTS` at the top of mossad.py. Recordings: `source/audio/mossad-*.m4a`.
+- Captions follow Sam's words: "can I please order a latte with caramel syrup", "Of course you can",
+  "Errm... excuse me?", "actually doing a promotion at the moment with Mossad", "my drink is ready".
+- Director's decisions: October 7th and 9/11 written plainly; explosion a real shock in the flat style, not Looney
+  Tunes (flash, ragged fireball, dark smoke, plastic bits, a jolt; cut three-quarters through with the sound);
+  customer 2 neutral, glancing about; the pager is a small upright café pager ("17"); Coffee Queens on the apron and
+  menu board; patron 2 sips just before the bang; no flags in the customer's shots, only behind the cashier;
+  12 oz cups stacked wide end down; everyone has legs; camera on the customer right at the counter; no café
+  murmur or street rumble at all (only clinks, typing, machine, steam, one car, buzzer, bang); the cashier acts with
+  her face (serious on "defend itself", wide-eyed on "did you know", hand on heart for "my opinion"); the barista
+  pours milk in shot 2, steams frantically in shot 4.
+- To post: cover around 0:04.5 (the cashier mid-smile, flag cups behind her). Avoid #oct7, #october7, #911,
+  #pagerattack, #pagers and #explosion: they give away the ending and draw the strictest moderation.
+
 ## In progress: TikTok versions of the rap battles (SAM and ANDY)
 - Director's decision (2 Oct): TikTok versions of `animations/sam.mp4` (title SAM) and `animations/andrew.mp4`
   (title ANDY), with the same title and look as the other TikTok films.

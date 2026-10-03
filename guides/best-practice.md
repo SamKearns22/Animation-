@@ -171,6 +171,17 @@ this series. Full details in `tiktok-design.md`.
   - lettering and badges stay clear of arms (The Patriots).
 - **Props and costume on everyone, in every shot:** lanyards on the whole audience (Hope Again).
 
+- **Background sound (Mossad):** no constant noise beds. A café murmur or street rumble made from filtered noise
+  sounds like wind on the microphone and irritates from the first second; use only distinct, motivated sounds (clinks,
+  typing, a machine, a passing car).
+- **Every background person has a clear, readable action** (the barista pouring milk), never vague arm-waving.
+- **Even a deadpan character acts with the face, beat by beat** (the cashier: serious, wide-eyed, hand on heart), while
+  the camera stays still.
+- **Everyone has legs and feet,** including people seated or standing behind counters (draw them; let the set hide them).
+- **Props at real size and used the real way:** a 12 oz takeaway cup is about half a head tall; stacks sit wide end
+  down; an order pager is a small upright block, not a disc.
+- **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
+
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
 - Native 1080 x 1920; the safe area is x 60-900, y 310-1500, measured on a real post.
 - **The opening:**
