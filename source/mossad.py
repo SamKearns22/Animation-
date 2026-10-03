@@ -1043,14 +1043,35 @@ def band(x, lo, hi):
 
 
 def murmur(n):
-    """A café's soft murmur: several far-off voices, made from filtered noise shaped like syllables."""
+    """A café's soft murmur: a few people chatting at other tables, far off. Each voice is made like speech (a
+    voiced buzz at its own pitch, shaped by changing vowel resonances into syllables and phrases), so it reads as
+    distant talk, not as hiss."""
+    from scipy.signal import butter, sosfilt
+    vowels = [(730, 1090), (530, 1840), (270, 2290), (570, 840), (300, 870), (660, 1720), (490, 1350)]
     out = np.zeros(n)
-    tt = np.arange(n) / SR
-    for k in range(6):
-        syl = np.clip(np.sin(2 * np.pi * rng.uniform(3.2, 4.8) * tt + rng.uniform(0, 6)), 0, 1) ** 2
-        phrase = np.clip(np.sin(2 * np.pi * rng.uniform(0.12, 0.25) * tt + rng.uniform(0, 6)) + 0.3, 0, 1)
-        out += band(rng.standard_normal(n), rng.uniform(250, 400), rng.uniform(1500, 2600)) * syl * phrase
-    return normal(onepole_lp(out, 2400))
+    for v in range(5):
+        f0 = rng.uniform(105, 135) if v % 2 == 0 else rng.uniform(185, 225)
+        t = rng.uniform(0, 1.5)
+        voice = np.zeros(n)
+        while t < n / SR - 0.5:
+            phrase_end = t + rng.uniform(1.0, 3.2)
+            while t < phrase_end and t < n / SR - 0.4:
+                d = rng.uniform(0.11, 0.24)
+                m = int(d * SR)
+                tt = np.arange(m) / SR
+                pitch = f0 * (1 + 0.08 * math.sin(t * 1.7 + v) + 0.04 * rng.uniform(-1, 1)) * (1 - 0.05 * tt / d)
+                ph = 2 * np.pi * np.cumsum(pitch) / SR
+                buzz = sum(np.sin(h * ph) / h for h in range(1, int(3000 / pitch[0])))
+                f1, f2 = vowels[rng.integers(len(vowels))]
+                syl = sosfilt(butter(2, [f1 * 0.8, f1 * 1.2], 'band', fs=SR, output='sos'), buzz) \
+                    + 0.5 * sosfilt(butter(2, [f2 * 0.85, f2 * 1.15], 'band', fs=SR, output='sos'), buzz)
+                syl *= np.sin(np.pi * tt / d) ** 1.5 * rng.uniform(0.5, 1.0)
+                place(voice, syl, t)
+                t += d + rng.uniform(0.0, 0.05)
+            t += rng.uniform(0.6, 2.4)   # a pause, the other person talking, a sip
+        out += normal(voice) * rng.uniform(0.6, 1.0)
+    out = onepole_lp(out, 1800)          # far off: the top end softened
+    return normal(out)
 
 
 def clink():
@@ -1148,8 +1169,7 @@ def soundtrack():
     n = int(DUR * SR)
     mix = np.zeros(n)
     end = int(BLACK_AT * SR)
-    room = 0.10 * murmur(end) + 0.05 * street_hum(end)
-    mix[:end] += room
+    mix[:end] += 0.035 * murmur(end)
     mix[:end] += 0.05 * keys(end)
     for at in (1.4, 6.3, 9.8, 15.2, 19.7, 24.1, 28.4):
         place(mix, clink(), at, 0.05)
@@ -1253,6 +1273,17 @@ def sheet(dst):
 
 def main():
     mode = sys.argv[1]
+    if mode == 'resound':  # put a fresh soundtrack on an existing render (pictures unchanged)
+        import imageio_ffmpeg
+        src, out = sys.argv[2], sys.argv[3]
+        mix = soundtrack()
+        print(f'sound: {MA.lufs(mix):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
+        MA.write_wav(out + '.wav', mix)
+        subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', src, '-i', out + '.wav', '-map', '0:v',
+                        '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', out],
+                       check=True)
+        os.remove(out + '.wav')
+        return
     if mode == 'stills':
         out = sys.argv[2]
         os.makedirs(out, exist_ok=True)
