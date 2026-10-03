@@ -1203,7 +1203,7 @@ def soundtrack():
     # master: about -14 LUFS, peaks no higher than -1 dBTP
     for _ in range(3):
         mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
-        mix = limiter(mix, -1.5)
+        mix = limiter(mix, -2.0)
     return mix
 
 
