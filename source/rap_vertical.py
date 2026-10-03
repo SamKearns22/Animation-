@@ -129,7 +129,7 @@ def caption(img, s, bottom=1495):
     while True:
         f = font(SANS, size)
         rows = wrap(s, f, 700)
-        if len(rows) <= 3 or size <= 34:
+        if len(rows) <= 3 or size <= 30:
             break
         size -= 2
     d = ImageDraw.Draw(img)

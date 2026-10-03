@@ -2,6 +2,14 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: TikTok versions of the rap battles (SAM and ANDY)
+- Director's decision (2 Oct): TikTok versions of `animations/sam.mp4` (title SAM) and `animations/andrew.mp4`
+  (title ANDY), with the same title and look as the other TikTok films.
+- `source/rap_vertical.py andy|sam stills OUT_DIR T...` or `render OUT.mp4`: draws the widescreen picture clean
+  (no old subtitles), enlarges it by a third into 1080 x 1920 with edge-glow pads, and draws the standard title
+  (first second), captions (700 px, centred) and UNINTELLIGIBLE flashes fresh. Every caption checked to fit.
+  Next: look at stills, then render both (about 0.7 s a drawing: roughly 25 min for ANDY, 18 min for SAM).
+
 ## In progress: "The Patriots" (TikTok, file name pee-pee)
 - TV street interview at a Dover border blockade; masked protester, reporter with a BBQ mic flag; his arm badges
   "PP" and a felt-tip doodle (the other PP). Hope Again look, vertical. All code in `source/peepee.py`
