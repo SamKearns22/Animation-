@@ -20,6 +20,8 @@ I don't know how to code. Please:
 
 # Where things stand
 
+- **Read `guides/best-practice.md` (the master file) before starting or changing any film.** It collects every lesson so far on voice and sound, posture and movement, scene consistency and layering, style, subtitles and titles. Add each new lesson to it as soon as it is learned.
+
 - Read `story/status.md` at the start of every session: what is done, what is open, and how to work within the budget.
 
 # Drawing people

@@ -1,5 +1,8 @@
 # TikTok design rules (CranbriJoos)
 
+The lessons from every film are collected in `guides/best-practice.md` (the master file); this guide holds
+the TikTok details.
+
 Use these for every video made for TikTok, in any chat. They can be pasted into a prompt as they are.
 
 ## Account
@@ -30,8 +33,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   - never trust captions burned into a widescreen original when enlarging it - measure the widest line
     from the script text itself (every line, not sampled frames: sampling missed the longest line and it
     ran off both edges of a posted video);
-  - best: draw the captions fresh onto the vertical frame, wrapped to at most 800 px wide, centred on
-    x = 480 (the middle of the safe area), just below the picture.
+  - best: draw the captions fresh onto the vertical frame, wrapped to at most 700 px wide (balanced rows),
+    centred on the frame (x = 540), just below the picture or the faces (director's choice on The Patriots).
 
 ## The title card
 - Bold Impact-style capitals (Anton), **cranberry red (178, 24, 52)**, letters widened 20%, thick black
@@ -43,8 +46,9 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
     punchline);
   - the title is on screen **at most 1 second**, or sits **small** (about 40% of the width, high in the safe
     area) while the action plays underneath, fading after 2 seconds;
-  - the director prefers the **same title size on every film** (letters about 200 px tall, as on Dam), so the
-    in-video title is full size and on screen for the first second only (holds to 0.75 s, gone by 1 s);
+  - the director prefers the **same title size on every film** (Anton at about 200, which makes capitals
+    about 148 px tall, as on Dam and Listening & Learning), so the in-video title is full size and on screen
+    for about the first second only (gone by 1 s, 1.6 s at most);
   - the full-size title lives on the **cover** (chosen when posting) and in the post text instead.
 - **Tight set-ups:** TikTok viewers give a video seconds, not minutes. Cut the set-up to the shortest version
   that still lands the joke (aim for 15-30 s in all; the first payoff or turn within about 8-10 s).

@@ -124,9 +124,13 @@ realistic-shaped face with a too-smooth surface, or realistic skin on wrong prop
 - Don't guess finger angles. `mhuman.solve_grip` curls the fingers and thumb until they wrap a cylinder the
   size of the real handle (touching all round), keeps joints in their natural range and stops the thumb
   passing through the fingers. Then the prop is placed to fit the hand, not the other way round.
-- Don't force the handle's angle in the palm to line up the arm: keep the good grip and let the **wrist** bend
-  within its range (flexion ±50°, sideways ±25°) so the forearm heads back to a natural elbow. Forcing the
-  angle wrecked the grip; an unbent wrist put the elbow out like a chicken wing.
+- Don't force the handle's angle in the palm to line up the arm, and don't let the wrist take up the
+  difference either: keep one good grip and **turn the tool** (tilt, pitch, turn) to suit the forearm, so
+  the wrist stays within about 20° (more only when cocked back at the top of a lift) and never at its
+  sideways limit. The edge comes square to its target only at the moment of contact. (First attempts forced
+  the angle and wrecked the grip, then let the wrist bend 30-50°, which the director rightly called
+  unnatural; `checks.py` now limits the chopping wrist to 30° up/down and 15° sideways.)
+- The chest and hips follow the spine only, never the arm bones, or lifting an arm dents the chest.
 - Linear-blend skinning loses volume at big bends: keep finger joints under ~90°.
 - A smile at full strength squints the eyes at a downward three-quarter view: keep the lower-lid raise gentle
   (~0.2) and the upper lids open.
