@@ -133,7 +133,7 @@ _face, _mouth, _beard, _hair_back, _hair_front, _torso = B.face, B.mouth, B.bear
 
 def face(img, p, sp, t, hx, hy, hw, hh):
     br = sp.get('brows')
-    mine = br in ('alarm', 'confused', 'outrage', 'weary')
+    mine = br in ('alarm', 'confused', 'outrage', 'weary', 'serious', 'wow', 'sincere')
     q = dict(sp, brows=None, brow_c=sp['skin']) if mine else sp
     fx = _face(img, p, q, t, hx, hy, hw, hh)
     bc = sp.get('brow_c', (60, 44, 34))
@@ -148,6 +148,12 @@ def face(img, p, sp, t, hx, hy, hw, hh):
                 p.line([(ex - sgn * 7, ey - 32), (ex + sgn * 6, ey - 31), (ex + sgn * 21, ey - 23)], bc, bw)
             elif br == 'outrage':    # both raised high, inner ends highest: offended disbelief
                 p.line([(ex - sgn * 7, ey - 38), (ex + sgn * 6, ey - 37), (ex + sgn * 22, ey - 29)], bc, bw)
+            elif br == 'serious':    # level and a touch lowered: earnest
+                p.line([(ex - sgn * 6, ey - 16), (ex + sgn * 8, ey - 19), (ex + sgn * 21, ey - 19)], bc, bw * 1.15)
+            elif br == 'wow':        # right up and arched: wide-eyed, can-you-believe-it
+                p.line([(ex - sgn * 8, ey - 34), (ex + sgn * 6, ey - 44), (ex + sgn * 21, ey - 37)], bc, bw)
+            elif br == 'sincere':    # inner ends lifted softly: heartfelt
+                p.line([(ex - sgn * 6, ey - 29), (ex + sgn * 6, ey - 28), (ex + sgn * 21, ey - 21)], bc, bw)
             elif br == 'confused':   # one brow up, the other down
                 up = sgn > 0
                 if up:
@@ -308,7 +314,24 @@ def torso(img, p, sp, t):
         p.line(oval(0, -2, 46, 20, 24, 0.2, math.pi - 0.2), INK, 2.4)
 
 
-B.face, B.mouth, B.beard, B.hair_back, B.hair_front, B.torso = face, mouth, beard, hair_back, hair_front, torso
+_head = B.head
+
+
+def tilted(fn):
+    """Draw a head part turned about the neck by sp['tilt'] (radians), so heads can tilt and sway."""
+    def draw(*args):
+        sp = next(a for a in args if isinstance(a, dict))
+        if not sp.get('tilt'):
+            return fn(*args)
+        args = list(args)
+        k = next(i for i, a in enumerate(args) if isinstance(a, B.Pen))
+        args[k] = B.Pen(args[k].img, PP.Rot(args[k].cam, sp['tilt'], pivot=(0, -60)))
+        return fn(*args)
+    return draw
+
+
+B.face, B.mouth, B.beard, B.hair_front, B.torso = face, mouth, beard, hair_front, torso
+B.head, B.hair_back = tilted(_head), tilted(hair_back)
 
 
 def crown_mark(p, x, y, r, colr):
@@ -585,21 +608,45 @@ def customer(img, cam, x, y, s, t, view):
 
 
 def cashier(img, cam, x, y, s, t, view):
+    """Bright customer service throughout, with the acting in her face: serious for the right to defend itself (then
+    straight back to the smile), wide-eyed and bobbing for "did you know", a hand on her heart for her opinion."""
     lv = level('cash', t)
     sp = dict(CASHIER, turn=0.38, look=0.85, mouth=talk_mouth(lv, t, smile=True))
-    sp['blink'] = blinking(t, (4.6, 7.7, 13.4, 18.9, 23.6, 26.6))
-    # customer-service hands: tapping the tablet; presenting the offer; a raised finger; a little shrug
-    if t < 10.95:
+    sp['blink'] = blinking(t, (4.6, 13.4, 18.9, 26.6)) or 22.3 <= t < 22.62  # a slow, sincere blink
+    rest = {'L': ((-120, 300), (20, 380), 'fist'), 'R': ((140, 300), (20, 372), 'fist')}
+    if t < 5.9:      # "Of course you can": tapping the order in
         tap = 6 * abs(math.sin(t * 7)) if 3.3 < t < 5.2 else 0
         arms = {'L': ((-120, 300), (40, 360), 'fist'), 'R': ((200, 200), (150, 150 + tap), 'point')}
-    elif t < 12.8:
-        arms = {'L': ((-120, 300), (20, 380), 'fist'), 'R': ((140, 300), (20, 372), 'fist')}
-    elif t < 15.9:   # presenting the "promotion": open palm
+    elif t < 8.18:   # "Israel has the right to defend itself": the smile drops, level and serious
+        arms = rest
+        k = smooth((t - 5.9) / 0.2)
+        sp.update(brows='serious', lid=2, look=0.9, head_dy=4 * k, lips=True,
+                  mouth=talk_mouth(lv, t) if lv > 0.1 else 'set')
+    elif t < 10.95:  # straight back to the bright smile
+        arms = rest
+    elif t < 12.8:   # "Nothing to worry about, sir": a small reassuring nod
+        arms = rest
+        sp['head_dy'] = 6 * math.sin(max(0.0, t - 11.1) * 2 * math.pi * 1.4) * (t < 12.5)
+    elif t < 15.9:   # presenting the "promotion": open palm, head tilted, pleased
         arms = {'L': ((-120, 300), (20, 380), 'fist'), 'R': ((210, 270), (330, 250), 'palm')}
-    elif t < 20.9:   # "Did you know...": a raised finger
+        sp['tilt'] = 0.07 * smooth((t - 12.8) / 0.3)
+    elif t < 21.0:   # "Did you know...?": brows right up, leaning in, finger raised; bobbing on the punchline
         arms = {'L': ((-120, 300), (20, 380), 'fist'), 'R': ((190, 250), (210, 110), 'point_up')}
-    else:            # "just my opinion": palms up, a small shrug
+        k = smooth((t - 15.95) / 0.25)
+        sp.update(brows='wow', lid=-1, head_dx=10 * k, head_dy=-6 * k)
+        if t > 17.2:   # "October 7th was like...": tilting, eyebrows working
+            sp['tilt'] = -0.06 * smooth((t - 17.2) / 0.3)
+        if t > 19.3:   # "...eleven 9/11s": emphatic little nods
+            sp['head_dy'] = -6 + 9 * abs(math.sin((t - 19.3) * 2 * math.pi * 1.6))
+            sp['tilt'] = -0.06 + 0.05 * math.sin((t - 19.3) * 2 * math.pi * 0.8)
+    elif t < 25.1:   # "And it's just my opinion, but if you start a war,": hand on her heart, head swaying, sincere
+        arms = {'L': ((-120, 300), (20, 380), 'fist'), 'R': ((170, 270), (40, 150), 'palm')}
+        sway = smooth((t - 21.0) / 0.4)
+        sp.update(brows='sincere', lid=5, look=0.8, tilt=0.08 * sway * math.sin((t - 21.0) * 2 * math.pi * 0.45 + 1.2),
+                  head_dx=8 * sway * math.sin((t - 21.0) * 2 * math.pi * 0.45 + 1.2))
+    else:            # "you shouldn't complain when you can't finish it": a little shrug, palms up
         arms = {'L': ((-190, 270), (-300, 250), 'palm'), 'R': ((190, 270), (300, 250), 'palm')}
+        sp.update(tilt=0.05, brows='joy')
     sp['arms'] = arms
     B.person(img, cam, x, y, s, sp, t)
 
@@ -612,11 +659,28 @@ def barista(img, cam, x, y, s, t, frantic):
         j = 16 * math.sin(t * 2 * math.pi * 6.0)
         sp['arms'] = {'L': ((-60, 270), (150, 230 + j), 'fist'), 'R': ((240, 250), (300, 200 + j), 'fist')}
         sp['brows'] = 'fierce'
-    else:  # tamping, knocking out, reaching: a slow working loop
-        ph = (t * 0.8) % 1.0
-        sp['arms'] = {'L': ((-40, 280), (150 + 40 * math.sin(ph * 6.28), 260), 'fist'),
-                      'R': ((250, 240), (310, 180 + 30 * math.sin(ph * 6.28 + 1)), 'fist')}
+    else:  # pouring steamed milk from a jug into a cup, wiggling it for the latte art
+        w = 6 * math.sin(t * 2 * math.pi * 2.2)
+        sp['arms'] = {'L': ((40, 300), (150, 300), 'fist'), 'R': ((260, 230), (250 + w, 200), 'fist')}
+        sp['look'], sp['lid'] = 0.4, 6   # eyes down on the cup
     B.person(img, cam, x, y, s, sp, t)
+    if not frantic:
+        L = B.Local(cam, x, y, s)
+        p = B.Pen(img, L)
+        w = 6 * math.sin(t * 2 * math.pi * 2.2)
+        cx, cy = 168, 300                       # the cup in her left hand
+        p.poly([(cx - 30, cy - 66), (cx + 30, cy - 66), (cx + 23, cy + 6), (cx - 23, cy + 6)], WHITE, INK, 2.0)
+        p.ell(cx, cy - 66, 30, 7, (196, 150, 110), INK, 1.6)
+        flag(img, L, cx, cy - 30, 26, 19)
+        p.ell(150 + 4, 300 + 6, 22, 20, sp['skin'], INK, 2.2)
+        jx, jy, a = 262 + w, 150, -0.75 + 0.06 * math.sin(t * 2 * math.pi * 2.2)   # the jug, tipped to pour
+        ca, sa = math.cos(a), math.sin(a)
+        R = lambda px, py: (jx + px * ca - py * sa, jy + px * sa + py * ca)
+        p.poly([R(-34, -46), R(30, -46), R(36, 44), R(-38, 44)], CHROME, INK, 2.0)
+        p.poly([R(-34, -46), R(-52, -54), R(-30, -36)], CHROME, INK, 1.6)
+        sx, sy = R(-50, -52)
+        p.line([(sx, sy), (cx + 4 + w * 0.3, cy - 66)], (250, 246, 236), 5)   # the stream of milk
+        p.ell(250 + w + 8, 200 + 16, 22, 20, sp['skin'], INK, 2.2)
     if frantic:
         L = B.Local(cam, x, y, s)
         p = B.Pen(img, L)
