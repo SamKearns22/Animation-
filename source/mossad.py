@@ -1169,7 +1169,6 @@ def soundtrack():
     n = int(DUR * SR)
     mix = np.zeros(n)
     end = int(BLACK_AT * SR)
-    mix[:end] += 0.035 * murmur(end)
     mix[:end] += 0.05 * keys(end)
     for at in (1.4, 6.3, 9.8, 15.2, 19.7, 24.1, 28.4):
         place(mix, clink(), at, 0.05)
