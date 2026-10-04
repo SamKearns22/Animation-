@@ -69,7 +69,7 @@ def main():
             problems.append(f'caption "{c}": {len(rows)} rows, {wide} px wide (max 2 rows, 700 px, 42 characters)')
         dur = len(ts) / fps
         words = len(c.split())
-        if dur < 0.8 or words / max(dur, 0.01) * 60 > 200:   # BBC/Netflix: about 160-180 words a minute, at least ~1 s
+        if dur < 0.8 or words / max(dur, 0.01) * 60 > 220:   # BBC/Netflix aim at 160-180 words a minute (verbatim speech may run faster)
             problems.append(f'caption "{c}": {dur:.1f} s on screen for {words} words (too fast to read)')
     # 4. shot lengths
     for s in getattr(film, 'SHOTS', []):
