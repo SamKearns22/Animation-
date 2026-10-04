@@ -2,6 +2,22 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
+- DONE 4 Oct 2026: `animations/the-patriots-2-vertical.mp4` (60.7 s, 1080 x 1920, 12 fps). Animatic about 4 min,
+  final render about 20 min on 4 cores.
+- All code in `source/patriots2.py` (`stills`, `sheet`, `animatic`, `final`, `times` prints the timeline). Shots: his
+  room (one unbroken push-in, title over the dark room), lifeboat, dinghy, his room from the screen (collapse), ambulance,
+  rushed through the A&E doors, pushed fast into the ward ("heart attack, Doctor"), the doctor's speech (the ward camera
+  moved in: one shared ward set, `WARD_TX` / `WARD_DOC`), alone on the trolley (same ward), hard cut to black.
+- Sam's recordings: `source/audio/patriots2-*.m4a` (protester-1 Dear RNLI, -2 courage, -3 people I don't like, -4
+  traitors, -gurgle; paramedic-1 taxi, -2 heart attack; doctor-1 the whole speech, doctor-2 a spare take of "This man is
+  clearly in serious danger"). Cleaned and levelled with `mossad_audio.line`; `REC` in patriots2.py says which stretch
+  plays and where each caption piece starts (on Sam's pauses). The strangled noise is still made in code.
+- Director's decisions: no keyboard insert (the push-in runs through); legs on everyone always; urgent rush through the
+  doors into the ward before the deadpan; the doctor redesigned so he doesn't resemble Andy Burnham (cropped sandy hair,
+  short beard, round face, thin dark glasses); doctor's line "This man is clearly in serious danger".
+- Could be shortened by tightening Sam's longest pauses (about 3-4 s) if the retention graph asks for it.
+
 ## Done: "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
 - DONE 3 Oct 2026: `animations/mossad-vertical.mp4` (30.1 s, 2.2 MB, 1080 x 1920, 12 fps; final render 14 min on 4
   cores, animatic 3 min). Checked against the safe-area guides (title, widest caption, the bang).
