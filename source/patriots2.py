@@ -79,6 +79,59 @@ REC = {
                                              ('Shall we go get lunch?', 9.95)]),
 }
 GURGLE = ('patriots2-protester-gurgle', 0.20, 2.60)
+
+# Tightening: silences between Sam's phrases are shortened to at most PAUSE_CAP seconds (the words are untouched);
+# BEATS_IN adds a held beat of silence at a moment in a recording (after the doctor's "Unfortunately,").
+PAUSE_CAP = 0.30
+BEATS_IN = {'patriots2-doctor-1': [(8.075, 0.40)]}
+TIGHTEN = {'patriots2-protester-1', 'patriots2-protester-2', 'patriots2-protester-3', 'patriots2-protester-4',
+           'patriots2-doctor-1'}
+VBUF = {}
+
+
+def voice_buf(rec):
+    """(audio, map) for a recorded line: the cleaned stretch with its long pauses shortened and any beats added;
+    map(t) turns a time in the recording into seconds from the start of the edited line."""
+    if rec in VBUF:
+        return VBUF[rec]
+    f, s0, s1 = rec
+    x = MA.line(f)
+    cuts = []   # (recording time where the cut starts, seconds removed (+) or added (-))
+    if f in TIGHTEN:
+        ps = [(a, b) for a, b in MA.pauses(x, 0.1) if b > s0 and a < s1]
+        for (a0, e), (b, _) in zip(ps, ps[1:]):
+            g = b - e
+            if g > PAUSE_CAP:
+                cuts.append((e + PAUSE_CAP / 2, g - PAUSE_CAP))
+    for at, d in BEATS_IN.get(f, []):
+        cuts.append((at, -d))
+    cuts.sort()
+    out, t, k = [], s0, int(0.01 * SR)
+    for at, d in cuts:
+        seg = x[int(t * SR):int(at * SR)].copy()
+        if len(seg) > 2 * k:
+            seg[-k:] *= np.linspace(1, 0, k)
+            if out:
+                seg[:k] *= np.linspace(0, 1, k)
+        out.append(seg)
+        if d > 0:
+            t = at + d
+        else:
+            out.append(np.zeros(int(-d * SR)))
+            t = at
+    seg = x[int(t * SR):int(s1 * SR)].copy()
+    if out and len(seg) > k:
+        seg[:k] *= np.linspace(0, 1, k)
+    out.append(seg)
+
+    def tmap(u):
+        v = u - s0
+        for at, d in cuts:
+            if u > at:
+                v -= min(d, u - at) if d > 0 else d
+        return v
+    VBUF[rec] = (np.concatenate(out), tmap)
+    return VBUF[rec]
 CHOKE = ('patriots2-protester-choke', 0.30, 2.70)   # his strangled noise as his eyes cross
 
 
@@ -112,10 +165,12 @@ def build_timeline():
         who, _, wps, pieces = LINE_DEFS[i]
         if i in REC:
             f, s0, s1, pcs = REC[i]
-            starts = [at + pt - s0 for _, pt in pcs] + [at + s1 - s0]
+            buf, tmap = voice_buf((f, s0, s1))
+            dur = len(buf) / SR
+            starts = [at + tmap(pt) for _, pt in pcs] + [at + dur]
             w = [(txt, starts[k], starts[k + 1], k) for k, (txt, _) in enumerate(pcs)]
-            LINES.append((who, at, at + s1 - s0, [txt for txt, _ in pcs], w, (f, s0, s1)))
-            return at + s1 - s0
+            LINES.append((who, at, at + dur, [txt for txt, _ in pcs], w, (f, s0, s1)))
+            return at + dur
         w = word_times(at, wps, pieces, short=(who == 'doc'))
         LINES.append((who, at, w[-1][2], pieces, w, None))
         return w[-1][2]
@@ -145,7 +200,7 @@ def build_timeline():
     end7 = line(6, T['s6b'] + 0.3)
     T['agree'] = end7 + 0.15                   #     everyone nods
     T['leave'] = end7 + 0.7                    #     and they all walk off together, chatting
-    T['s7'] = end7 + 2.1                       # 7. alone in the bay
+    T['s7'] = end7 + 1.9                       # 7. alone in the bay
     T['gurgle'] = T['s7'] + 0.55
     T['black'] = T['gurgle'] + (GURGLE[2] - GURGLE[1]) + 0.2   # hard cut to black, just after the gurgle
     T['dur'] = T['black'] + 0.35
@@ -166,8 +221,7 @@ ENVS = {}
 def envelope(rec):
     """Loudness of a stretch of a cleaned recording, 100 times a second, 0-1."""
     if rec not in ENVS:
-        f, s0, s1 = rec
-        a = MA.line(f)[int(s0 * SR):int(s1 * SR)]
+        a = voice_buf(rec)[0]
         hop = SR // 100
         lv = np.array([np.sqrt(np.mean(a[i:i + hop] ** 2)) for i in range(0, len(a) - hop, hop)])
         ENVS[rec] = np.clip(lv / (np.percentile(lv, 95) + 1e-9), 0, 1)
@@ -715,7 +769,7 @@ def spray(img, cam, x, y, t, n=18, seed=1, size=1.0):
 
 def shot_lifeboat(t):
     """2. The lifeboat skims the rough grey Channel under a low sky, spray off the bow; the crew stare ahead."""
-    cam = B.Cam(1.25, 480, 960)
+    cam = B.Cam(1.55, 520, 900)
     img = B.canvas()
     sky_sea(img, cam, t, horizon=640, drift=-260 * t)
     bob = 10 * math.sin(t * 3.1)
@@ -855,7 +909,7 @@ def shot_dinghy(t):
     dinghy(img, cam, x, y, 760, 'near', t)
     # the lifeboat's side at the right, a crew member leaning out with a hand held out
     p = B.Pen(img, cam)
-    bx = 905 + 6 * math.sin(t * 1.9)
+    bx = 850 + 6 * math.sin(t * 1.9)
     p.poly([(bx - 40, 1000), (1200, 990), (1200, 1700), (bx + 10, 1700)], HULL, INK, 2.8)
     p.poly([(bx - 50, 980), (1200, 970), (1200, 1030), (bx - 46, 1036)], LIFE_ORANGE, INK, 2.4)
     k = smooth((u - 0.3) / 0.45)
@@ -1597,7 +1651,11 @@ def soundtrack():
         place(mix, seg, at, 1.0)
     for who, a, b, _, words, rec in LINES:
         if rec:
-            voice(*rec, a)
+            seg = voice_buf(rec)[0].copy()
+            k = int(0.02 * SR)
+            seg[:k] *= np.linspace(0, 1, k)
+            seg[-k:] *= np.linspace(1, 0, k)
+            place(mix, seg, a, 1.0)
     voice(*GURGLE, T['gurgle'])
     voice(*CHOKE, T['cross'] - 0.05)
     mix[end - k:end] *= np.linspace(1, 0, k)
