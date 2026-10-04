@@ -54,7 +54,7 @@ LINE_DEFS = [
                         'of a lengthy campaign of harassment', 'in which I shall-']),
     ('para', None, 3.6, ["He's treating us like a bloody taxi service."]),
     ('para', None, 3.6, ["We believe it's a heart attack, Doctor."]),
-    ('doc', None, 3.3, ['This is an urgent situation.', 'This man is clearly in serious danger.', 'Unfortunately,',
+    ('doc', None, 3.3, ['This is an urgent situation.', "This man's life is clearly in serious danger.", 'Unfortunately,',
                         "I just don't like him personally.", 'Shall we go get lunch?']),
 ]
 
@@ -74,7 +74,7 @@ REC = {
                                                ('in which I shall-', 7.60)]),
     4: ('patriots2-paramedic-1', 0.90, 3.80, [("He's treating us like a bloody taxi service.", 1.04)]),
     5: ('patriots2-paramedic-2', 0.90, 3.30, [("We believe it's a heart attack, Doctor.", 1.02)]),
-    6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ('This man is clearly in serious danger.', 4.27),
+    6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ("This man's life is clearly in serious danger.", 4.27),
                                              ('Unfortunately,', 7.30), ("I just don't like him personally.", 8.20),
                                              ('Shall we go get lunch?', 9.95)]),
 }

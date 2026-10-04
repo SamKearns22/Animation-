@@ -16,7 +16,7 @@ Read this first in any new session, after CLAUDE.md.
   plays and where each caption piece starts (on Sam's pauses). Every sound of a voice is Sam's own.
 - Director's decisions: no keyboard insert (the push-in runs through); legs on everyone always; urgent rush through the
   doors into the ward before the deadpan; the doctor redesigned so he doesn't resemble Andy Burnham (cropped sandy hair,
-  short beard, round face, thin dark glasses); doctor's line "This man is clearly in serious danger".
+  short beard, round face, thin dark glasses); doctor's line "This man's life is clearly in serious danger".
 - Could be shortened by tightening Sam's longest pauses (about 3-4 s) if the retention graph asks for it.
 
 ## Done: "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
