@@ -63,14 +63,15 @@ LINE_DEFS = [
 
 # Sam's recordings (source/audio/patriots2-*.m4a), cleaned and levelled by mossad_audio.line, otherwise exactly as
 # recorded. Line index -> (file, from, to, caption pieces with their start in the recording). Captions follow Sam's
-# words; piece starts sit on his own pauses. Line 3 (the letter's "traitors" line) has no recording yet: placeholder.
+# words; piece starts sit on his own pauses. Line 2 ("people I personally don't like") has no recording yet: placeholder.
 REC = {
     0: ('patriots2-protester-1', 0.40, 11.90, [('Dear RNLI.', 0.49), ('As a British patriot, I have the deepest respect', 3.10),
                                                ('for your work saving lives at sea.', 6.60), ('However, I have some concerns.', 9.38)]),
     1: ('patriots2-protester-2', 0.40, 5.90, [('I recognise the courage', 0.50), ('and resilience your people require', 2.27),
                                                ('to do what they do.', 4.64)]),
-    2: ('patriots2-protester-3', 0.62, 8.90, [("What you've failed to consider", 0.77), ("is that some of the so-called 'people'", 2.07),
-                                               ('you go to rescue', 4.32), ("are those who I personally don't like.", 5.30)]),
+    3: ('patriots2-protester-4', 0.62, 8.80, [('The lot of you are, on reflection, traitors.', 0.77),
+                                               ('Consider this the start', 4.32), ('of a lengthy campaign of harassment', 5.45),
+                                               ('in which I shall-', 7.60)]),
     4: ('patriots2-paramedic-1', 0.90, 3.80, [("He's treating us like a bloody taxi service.", 1.04)]),
     5: ('patriots2-paramedic-2', 0.28, 2.70, [("We believe it's a heart attack, Doctor.", 0.40)]),
     6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ('This man is clearly in serious danger.', 4.27),
