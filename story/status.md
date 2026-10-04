@@ -19,6 +19,10 @@ Read this first in any new session, after CLAUDE.md.
   murmur or street rumble at all (only clinks, typing, machine, steam, one car, buzzer, bang); the cashier acts with
   her face (serious on "defend itself", wide-eyed on "did you know", hand on heart for "my opinion"); the barista
   pours milk in shot 2, steams frantically in shot 4.
+- Posted 4 Oct 2026, 9:02am. After 6 hours: 6,906 views, average watch 17.1 s of 30 (57%), 37.3% watched to the end,
+  272 likes (~4%), 7 comments, 19 shares, 17 saves, 9 new followers. The opening rules work (first posts: 3.6-4.6 s).
+  Weak spots: few shares and comments; many leave mid-film, probably in the 16 s single shot on the cashier
+  (0:11-0:27). Check the retention graph to confirm.
 - To post: cover around 0:04.5 (the cashier mid-smile, flag cups behind her). Avoid #oct7, #october7, #911,
   #pagerattack, #pagers and #explosion: they give away the ending and draw the strictest moderation.
 

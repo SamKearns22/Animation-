@@ -180,6 +180,10 @@ this series. Full details in `tiktok-design.md`.
 - **Everyone has legs and feet,** including people seated or standing behind counters (draw them; let the set hide them).
 - **Props at real size and used the real way:** a 12 oz takeaway cup is about half a head tall; stacks sit wide end
   down; an order pager is a small upright block, not a disc.
+- **Analytics (Mossad, 4 Oct):** with movement and the first line from frame one and the title gone by 1 s, average
+  watch time rose to 17.1 s of 30 (first posts: 3.6-4.6 s) and 37% watched to the end. Likely next gain: no single
+  shot longer than about 6-8 s; break a long speech with a cut to the listener's reaction (to be confirmed on the
+  retention graph).
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
