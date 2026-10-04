@@ -316,6 +316,19 @@ def world_of(cam, X, Y):
     return ((X / B.SS - B.W / 2) / cam.z + cam.cx, (Y / B.SS - B.H / 2) / cam.z + cam.cy)
 
 
+def check_apart(where, items):
+    """Stop the render if any two set pieces that must stay separate overlap (a monitor through a curtain, a
+    dispenser through a cupboard). items: {name: (x0, y0, x1, y1)} in world units."""
+    names = list(items)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            A, Bb = items[a], items[b]
+            w = min(A[2], Bb[2]) - max(A[0], Bb[0])
+            h = min(A[3], Bb[3]) - max(A[1], Bb[1])
+            if w > 2 and h > 2:
+                raise ValueError(f'check: in {where}, the {a} overlaps the {b} by {w:.0f} x {h:.0f}')
+
+
 def with_legs(fn, legs_fn):
     """Run a drawing call with burnham's legs swapped (seated, walking or hidden)."""
     keep = B.legs
@@ -560,6 +573,7 @@ def seated_protester(img, cam, x, y, s, st, t):
 # ----------------------------------------------------------------------------------- shot 1: his room
 
 ROOM_LIGHT = (330, 900)
+ROOM_DESK_Y = 1060      # the desk's far edge in shot 1 (him at (650, 860), scale 0.8)
 
 
 def room_set(img, cam, t):
@@ -588,24 +602,93 @@ def room_set(img, cam, t):
     can(img, cam, 320, 640, 64, CAN_GOLD, crushed=True, seed=3)
 
 
-def desk_front(img, cam, t, knock=0.0):
-    """The desk between us and him, with the debris of the evening."""
+# One desk, one plan. Every item has a single place on the desk, measured from him: u = left/right in his own units
+# (his centre is 0, our right is +), d = how far across the desk from his edge (0) to the far edge (DESK_DEPTH).
+# Every camera draws the desk from this plan, so nothing moves between shots (and the plan is checked for overlaps).
+DESK_DEPTH, DESK_FY = 300, 0.7          # FY: how much the desk's depth is squashed on screen
+DESK_ITEMS = [   # (name, kind, u, d, size): d is the item's nearest-to-camera edge
+    ('monitor', 'monitor', -450, 46, 0),
+    ('green can', 'can', -360, 80, (115, CAN_GREEN)),
+    ('gold can', 'can', 500, 70, (120, CAN_GOLD)),
+    ('mouse', 'mouse', 300, 125, 1.0),
+    ('tub', 'tub', 600, 140, 130),
+    ('keyboard', 'keyboard', -40, 150, (525, 75)),
+    ('crushed gold can', 'crushed', -600, 170, (120, CAN_GOLD)),
+    ('foil tray', 'tray', 400, 215, 230),
+    ('falling can', 'can', 200, 225, (120, CAN_GOLD)),
+    ('second tub', 'tub', -440, 230, 120),
+    ('crushed green can', 'crushed', 660, 245, (120, CAN_GREEN)),
+]
+
+
+def desk_footprint(kind, u, d, size):
+    if kind == 'keyboard':
+        return (u - size[0] / 2, d - size[1], u + size[0] / 2, d)
+    if kind in ('can', 'crushed'):
+        return (u - 0.3 * size[0], d - 30, u + 0.3 * size[0], d)
+    if kind == 'tray':
+        return (u - size / 2, d - 70, u + size / 2, d)
+    if kind == 'tub':
+        return (u - size / 2, d - 50, u + size / 2, d)
+    if kind == 'mouse':
+        return (u - 35, d - 25, u + 35, d + 5)
+    return (u - 50, d - 26, u + 50, d + 14)   # the monitor's foot
+
+
+check_apart('the desk', {n: desk_footprint(k, u, d, z) for n, k, u, d, z in DESK_ITEMS})
+
+
+def desk(img, cam, X0, YF, s, t, arms=None, monitor=False, fall=None):
+    """The desk between us and him, drawn from the plan. X0: his x; YF: the desk's far edge (his side) on screen;
+    s: his scale. arms() draws his forearms over the keyboard (after the items behind them, before those in front).
+    fall: seconds since the falling can was knocked (it rolls to the edge and drops)."""
     p = B.Pen(img, cam)
-    p.poly([(-300, 1080), (1400, 1080), (1400, 1150), (-300, 1150)], DESK, INK, 2.6)
-    p.poly([(-300, 1150), (1400, 1150), (1400, 1185), (-300, 1185)], DESK_D, INK, 2.4)
-    p.poly([(-300, 1185), (1400, 1185), (1400, 1700), (-300, 1700)], (40, 32, 30), None)   # under the desk: darkness
-    for X in (-120, 1250):
-        p.poly([(X, 1185), (X + 40, 1185), (X + 40, 1700), (X, 1700)], DESK_D, INK, 2.0)
+    front = YF + s * DESK_FY * DESK_DEPTH
+    p.poly([(-400, YF), (1500, YF), (1500, front), (-400, front)], DESK, INK, 2.6)
+    p.poly([(-400, front), (1500, front), (1500, front + 40 * s), (-400, front + 40 * s)], DESK_D, INK, 2.4)
+    p.poly([(-400, front + 40 * s), (1500, front + 40 * s), (1500, 2400), (-400, 2400)], (40, 32, 30), None)
+
+    def at(u, d):
+        return X0 + s * u, YF + s * DESK_FY * d
+    kb = None
+    drawn_arms = False
+    for name, kind, u, d, size in sorted(DESK_ITEMS, key=lambda it: it[3]):
+        if arms and not drawn_arms and d > 150:
+            arms()
+            drawn_arms = True
+        x, y = at(u, d)
+        if kind == 'monitor':
+            if monitor:
+                monitor_back(img, cam, t)
+        elif kind == 'keyboard':
+            keyboard(img, cam, x, y, size[0] * s, size[1] * s * DESK_FY)
+            kb = (x, y, size[0] * s, size[1] * s * DESK_FY)
+        elif kind == 'mouse':
+            mouse(img, cam, x, y, s * 1.2)
+        elif kind == 'tub':
+            tub(img, cam, x, y, size * s, lid=1.0 if u > 0 else -0.8)
+        elif kind == 'tray':
+            foil_tray(img, cam, x, y, size * s, lid_off=0.6)
+        elif kind == 'crushed':
+            can(img, cam, x, y, size[0] * s, size[1], crushed=True, seed=int(abs(u)) % 7)
+        elif kind == 'can':
+            if name == 'falling can' and fall is not None and fall > 0:
+                r = min(fall, 0.6) / 0.6                       # rolls to the front edge...
+                x, y = at(u + 260 * r, d + (DESK_DEPTH - d) * r)
+                if fall > 0.6:                                  # ...and drops off it
+                    y += 1600 * (fall - 0.6) ** 2
+                can(img, cam, x, y, size[0] * s, size[1], lying=1.57 + fall * 9)
+            else:
+                can(img, cam, x, y, size[0] * s, size[1])
+    if arms and not drawn_arms:
+        arms()
+    return kb
 
 
-def room_props(img, cam, t, knock=0.0):
-    foil_tray(img, cam, 760, 1128, 190, lid_off=0.6)
-    tub(img, cam, 975, 1120, 110, lid=1.0)
-    tub(img, cam, 180, 1140, 96, lid=-0.8)
-    can(img, cam, 900, 1146, 96, CAN_GOLD)
-    can(img, cam, 1010, 1150, 96, CAN_GREEN, crushed=True, seed=1)
-    can(img, cam, 60, 1150, 96, CAN_GOLD, crushed=True, seed=4)
-    can(img, cam, 700, 1104, 90, CAN_GREEN, lying=knock)
+def keyboard_box(X0, YF, s):
+    """Where the keyboard is on screen, for the fingertip check: (x of middle, front edge y, width, depth)."""
+    _, _, u, d, size = next(it for it in DESK_ITEMS if it[0] == 'keyboard')
+    return (X0 + s * u, YF + s * DESK_FY * d, size[0] * s, size[1] * s * DESK_FY)
 
 
 def monitor_back(img, cam, t):
@@ -636,16 +719,14 @@ def shot_room(t):
     st = pro_st(t, turn=-0.55, look=-1.0, lid=3, head_dx=-14, tilt=-0.04)
     tp = tap(t)
     tp2 = tap(t, 0.06)
-    st['arms'] = typing_arms({'L': (-250, 300), 'R': (-60, 298)}, {'L': (-230, 140), 'R': (130, 150)}, {'L': tp, 'R': tp2})
-    check_on_keys(x, y, s, st['arms'], (520, 1140, 420, 46))
+    st['arms'] = typing_arms({'L': (-190, 325), 'R': (60, 322)}, {'L': (-230, 140), 'R': (130, 150)}, {'L': tp, 'R': tp2})
+    check_on_keys(x, y, s, st['arms'], keyboard_box(x, ROOM_DESK_Y, s))
     seated_protester(img, cam, x, y, s, st, t)
-    desk_front(img, cam, t)
-    keyboard(img, cam, 520, 1140, 420, 46)
-    for side in ('L', 'R'):  # his forearms resting over the desk, hands on the keys
-        PP.protester(img, cam, x, y, s, dict(st, arm_only=side), t)
-    mouse(img, cam, 820, 1150, 1.0)
-    room_props(img, cam, t)
-    monitor_back(img, cam, t)
+
+    def forearms():  # his forearms resting over the desk, hands on the keys
+        for side in ('L', 'R'):
+            PP.protester(img, cam, x, y, s, dict(st, arm_only=side), t)
+    desk(img, cam, x, ROOM_DESK_Y, s, t, arms=forearms, monitor=True)
     light_pass(img, cam, [(ROOM_LIGHT[0] + 270, 860, 250, (0.72, 0.9, 1.15), 1.35), (540, 1120, 260, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
     room_emissive(img, cam, t)
@@ -825,7 +906,7 @@ MIGRANTS = [  # back row on the far tube, left to right: (skin, hair, beard, jac
     (B.BROWN, 'crop', 'full', (90, 70, 60), True, 0.8, False),
     ((150, 100, 70), 'hijab', None, (88, 60, 92), True, 0.7, True),
     (B.OLIVE, 'crop', 'trim', (60, 66, 70), False, 1.0, False),
-    (B.DEEP, 'afro', None, (110, 50, 46), True, 0.5, False),
+    (B.DEEP, 'natural', None, (110, 50, 46), True, 0.5, False),
     ((166, 112, 80), 'shawl', None, (64, 74, 60), True, 0.9, True),
     (B.BROWN, 'bald', 'full', (50, 54, 70), True, 0.7, False),
 ]
@@ -833,7 +914,7 @@ FRONT = [  # nearer, seated on the near tube
     ((140, 92, 64), 'crop', 'trim', (80, 70, 60), True, 0.9, False),
     (B.DEEP, 'crop', None, (60, 60, 70), True, 0.6, False),
     (B.OLIVE, 'side', 'full', (96, 84, 70), False, 1.0, False),
-    ((120, 80, 56), 'afro', 'stubble', (70, 90, 110), True, 0.8, False),
+    ((120, 80, 56), 'natural', 'stubble', (70, 90, 110), True, 0.8, False),
     (B.BROWN, 'crop', 'stubble', (60, 76, 66), True, 1.0, False),
 ]
 
@@ -964,6 +1045,9 @@ def shot_dinghy(t):
 
 # ------------------------------------------------------------------------------- shot 4: from the screen
 
+SCREEN_DESK_Y = 1300    # the desk's far edge in shot 4 (him at (540, 830), scale 1)
+
+
 def shot_screen(t):
     """4. From where the monitor is, straight at his lit face, pushing in closer; then the heart attack."""
     tt = t + T['s4']
@@ -985,10 +1069,10 @@ def shot_screen(t):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     tp, tp2 = tap(tt), tap(tt, 0.06)
     st = pro_st(tt, turn=0.0, look=0.0, lid=2 if tt < T['cut_off'] - 3.5 else 4, brows='flat' if tt < T['s4'] + 2 else 'cross')
-    st['arms'] = typing_arms({'L': (-70, 486), 'R': (70, 486)}, {'L': (-205, 330), 'R': (205, 330)}, {'L': tp, 'R': tp2})
+    st['arms'] = typing_arms({'L': (-150, 548), 'R': (60, 548)}, {'L': (-205, 330), 'R': (205, 330)}, {'L': tp, 'R': tp2})
     typing = a_clutch <= 0
     if typing:
-        check_on_keys(x, y, s, st['arms'], (540, 1340, 420, 40))
+        check_on_keys(x, y, s, st['arms'], keyboard_box(x, SCREEN_DESK_Y, s))
     if a_cross > 0:
         st.update(brows='raised', lid=0, head_dy=-10 * a_cross, puff=0.0)
     if a_clutch > 0:
@@ -1005,23 +1089,13 @@ def shot_screen(t):
     img.alpha_composite(lay)
     office_chair(img, cam, x + 30 * math.sin(max(0, tt - T['topple']) * 14) * math.exp(-max(0, tt - T['topple']) * 3),
                  y + 330 * s, s, back=False)
-    # the desk in front, seen from the screen's side: keyboard's far edge, tubs, cans
-    p = B.Pen(img, cam)
-    p.poly([(-300, 1300), (1400, 1300), (1400, 1500), (-300, 1500)], DESK, INK, 2.6)
-    p.poly([(-300, 1500), (1400, 1500), (1400, 1560), (-300, 1560)], DESK_D, INK, 2.4)
-    keyboard(img, cam, 540, 1340, 420, 40, far=True)
-    if typing:  # his forearms over the desk, hands on the keys, fingers jabbing
-        for side in ('L', 'R'):
-            PP.protester(img, cam, x, y, s, dict(st, arm_only=side), tt)
-    foil_tray(img, cam, 150, 1380, 200, lid_off=-0.5)
-    tub(img, cam, 900, 1380, 120, lid=-1)
-    can(img, cam, 260, 1300, 100, CAN_GREEN, crushed=True, seed=2)
-    can(img, cam, 820, 1310, 104, CAN_GOLD)
-    # the knocked can rolls along the edge and drops off
-    rc = max(0.0, tt - T['can'])
-    cx = 700 + 260 * min(rc, 0.7) / 0.7
-    cy = 1420 + (0 if rc < 0.7 else 1600 * (rc - 0.7) ** 2)
-    can(img, cam, cx, cy, 100, CAN_GOLD, lying=(0 if rc <= 0 else 1.57 + rc * 9))
+    # the same desk, from the plan
+
+    def forearms():
+        if typing:  # his forearms over the desk, hands on the keys, fingers jabbing
+            for side in ('L', 'R'):
+                PP.protester(img, cam, x, y, s, dict(st, arm_only=side), tt)
+    desk(img, cam, x, SCREEN_DESK_Y, s, tt, arms=forearms, fall=tt - T['can'])
     light_pass(img, cam, [(540, 800, 380, (0.75, 0.92, 1.18), 1.2), (540, 1380, 460, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
     return img
@@ -1039,10 +1113,39 @@ DOCTOR = dict(skin=B.PALE, hw=72, hh=90, jaw='round', hair='crop', hair_c=(176, 
               outfit='jumper',
               jacket=SCRUBS, trousers=SCRUBS, shoulders=144, bottom=600, pose='custom', age=True, brow_c=(100, 78, 60),
               brows='sincere', lid=2, full=True, glasses=True, glasses_c=(40, 40, 48), mouth='smile', kit='doc')
-NURSE = dict(skin=B.DEEP, hw=64, hh=86, jaw='round', hair='afro', hair_c=(36, 30, 28), outfit='jumper', jacket=SCRUBS_L,
+NURSE = dict(skin=B.DEEP, hw=64, hh=86, jaw='round', hair='natural', hair_c=(36, 30, 28), outfit='jumper', jacket=SCRUBS_L,
              trousers=SCRUBS_L, shoulders=132, bottom=600, pose='custom', brow_c=(30, 24, 22), full=True, lashes=True, kit='nurse')
 NURSE2 = dict(skin=B.OLIVE, hw=66, hh=88, jaw='square', hair='slick', hair_c=(30, 26, 26), outfit='jumper', jacket=SCRUBS_L,
               trousers=SCRUBS_L, shoulders=140, bottom=600, pose='custom', brow_c=(30, 26, 26), full=True, kit='nurse')
+
+
+_prev_hair_front, _prev_hair_back = B.hair_front, B.hair_back
+
+
+def natural_front(p, sp, hx, hy, hw, hh, fx):
+    """Short natural hair, close to the head, with a soft texture of small dark curls (no grey)."""
+    if sp.get('hair') != 'natural':
+        return _prev_hair_front(p, sp, hx, hy, hw, hh, fx)
+    c = sp.get('hair_c', (36, 30, 28))
+    top = curve([(hx - hw - 6, hy - 20), (hx - hw - 8, hy - hh * 0.8), (hx - hw * 0.5, hy - hh * 1.18), (hx, hy - hh * 1.24),
+                 (hx + hw * 0.5, hy - hh * 1.18), (hx + hw + 8, hy - hh * 0.8), (hx + hw + 6, hy - 20),
+                 (hx + hw * 0.8, hy - hh * 0.62), (hx, hy - hh * 0.76), (hx - hw * 0.8, hy - hh * 0.62)], 4)
+    p.poly(top, c, INK, 2.4)
+    rng = np.random.default_rng(int(hw * 7 + hh))
+    for _ in range(22):
+        a = rng.uniform(math.pi * 1.08, math.pi * 1.92)
+        r = rng.uniform(0.72, 1.08)
+        x, y = hx + hw * r * math.cos(a), hy - hh * 0.36 + hh * 0.86 * r * math.sin(a)
+        p.line(oval(x, y, 4, 3, 8, 0, math.pi * 1.3), B.lt(c, 1.7), 1.2)
+
+
+def natural_back(p, sp, hx, hy, hw, hh):
+    if sp.get('hair') != 'natural':
+        return _prev_hair_back(p, sp, hx, hy, hw, hh)
+    p.poly(curve(oval(hx, hy - 30, hw + 14, hh + 18, 18), 3), sp.get('hair_c', (36, 30, 28)), INK, 2.4)
+
+
+B.hair_front, B.hair_back = natural_front, M.tilted(natural_back)
 
 
 _KIT = {'band': None}
@@ -1099,6 +1202,56 @@ B.torso, B.arm = kit_torso, kit_arm
 def uniform_bits(img, cam, x, y, s, sp, kind):
     """(Uniform details are now part of the jacket: see kit_torso.)"""
     return
+
+
+def on_his_back(img, cam, hx, by, s, t, look=(0.0, -1.0), blink=False, brows='flat', lid=2, gurgle=0.0):
+    """The protester lying on his back on the mattress, seen side-on, face up: balaclava on, the oxygen mask over his
+    mouth, one arm along his side (the PP badge showing), a blanket over his legs. hx: the middle of his head;
+    by: the mattress surface he lies on; s: his scale. Returns where the monitor leads come out of his collar."""
+    L = B.Local(cam, hx, by, s)
+    p = B.Pen(img, L)
+    # his body: shoulders, chest and belly rising from the mattress (feet to our right)
+    p.poly(curve([(110, 0), (120, -120), (200, -170), (330, -178), (430, -196), (520, -170), (560, -90), (560, 0)], 4),
+           PP.JACKET, INK, 2.6)
+    soft(img, L, [(200, -165), (430, -190), (500, -160), (300, -140)], (150, 150, 165), 0.18, 8)
+    p.line([(160, -150), (520, -150)], (96, 96, 104), 1.8)                 # the zip
+    # the blanket over his legs, his toes making a bump at the end
+    p.poly(curve([(500, 0), (520, -150), (700, -120), (900, -105), (1010, -112), (1040, -175), (1080, -150), (1090, 0)], 4),
+           (150, 190, 214), INK, 2.6)
+    for k in range(6):
+        p.line([(560 + 90 * k, -120 + 4 * k), (560 + 90 * k, -6)], (128, 168, 196), 1.6)
+    # his near arm along his side, hand resting on his hip
+    B.arm(p, (190, -110), (350, -84), (500, -92), PP.SLEEVE, w=32)
+    PP.patch(img, p, (190, -110), (350, -84), 'PP')
+    p.ell(530, -94, 24, 20, PP.EYE_SKIN, INK, 2.2)
+    # neck and head: balaclava, the eye opening on top, looking up
+    p.poly([(70, -140), (140, -150), (150, -10), (80, -4)], PP.BALA, INK, 2.4)
+    p.poly(curve(oval(0, -86, 96, 82, 24), 2), PP.BALA, INK, 2.6)
+    for k in range(-3, 4):
+        p.line([(k * 24, -10), (k * 22, -160)], (50, 50, 57), 1.4)
+    p.poly(curve([(-46, -150), (40, -156), (46, -126), (-44, -120)], 4), PP.EYE_SKIN, INK, 2.2)
+    ex, ey = -4, -140
+    if blink:
+        p.line([(ex - 15, ey), (ex, ey - 3), (ex + 15, ey)], INK, 2.4)
+    else:
+        p.poly([(ex - 16, ey), (ex - 7, ey - 7), (ex + 7, ey - 7), (ex + 16, ey), (ex + 7, ey + 6), (ex - 7, ey + 6)],
+               (250, 250, 248), INK, 2.0)
+        p.ell(ex + 6 * look[0], ey + 3 * look[1], 4, 4, INK, None)
+        if lid > 0:
+            p.line([(ex - 16, ey - 1 + lid * 0.6), (ex, ey - 8 + lid * 0.6), (ex + 16, ey - 1 + lid * 0.6)], INK, 2.4)
+    bc = (104, 74, 54)
+    if brows == 'raised':
+        p.line([(ex - 18, ey - 18), (ex, ey - 22), (ex + 18, ey - 18)], bc, 3.2)
+    else:
+        p.line([(ex - 18, ey - 13), (ex + 18, ey - 14)], bc, 3.2)
+    # the oxygen mask over his mouth and nose, its strap round his head, the tube
+    puff = 1 + 0.15 * gurgle
+    p.line(oval(10, -86, 98, 86, 20, -2.6, -0.5), (230, 230, 220), 3)
+    p.poly(curve([(36, -158), (90, -160), (96, -180 - 10 * puff), (64, -196 * puff + 0), (34, -182)], 4),
+           (190, 222, 206), (110, 150, 130), 2.4)
+    soft(img, L, oval(60, -176, 12, 7, 10), (255, 255, 255), 0.5, 2)
+    p.line([(92, -170), (160, -120), (240, -60), (300, -10)], (190, 222, 206), 6)
+    return L.P(150, -150)
 
 
 def lying_protester(img, cam, x, y, s, t, look=(0.0, 0.0), blink=False, brows='flat', lid=2, gurgle=0.0):
@@ -1176,19 +1329,6 @@ def heart_monitor(img, cam, x, y, w, t, beat_times):
 
 
 BEATS = list(np.arange(0.2, 80, 0.83))
-
-
-def check_apart(where, items):
-    """Stop the render if any two set pieces that must stay separate overlap (a monitor through a curtain, a
-    dispenser through a cupboard). items: {name: (x0, y0, x1, y1)} in world units."""
-    names = list(items)
-    for i, a in enumerate(names):
-        for b in names[i + 1:]:
-            A, Bb = items[a], items[b]
-            w = min(A[2], Bb[2]) - max(A[0], Bb[0])
-            h = min(A[3], Bb[3]) - max(A[1], Bb[1])
-            if w > 2 and h > 2:
-                raise ValueError(f'check: in {where}, the {a} overlaps the {b} by {w:.0f} x {h:.0f}')
 
 
 AMB_ITEMS = {'cupboard 1': (40, 300, 270, 560), 'cupboard 2': (290, 300, 520, 560), 'cupboard 3': (540, 300, 770, 560),
@@ -1277,11 +1417,12 @@ def shot_ambulance(t):
     # the stretcher across the front, him on it
     sy = 730 + 430 * 0.62 + 72 + sway * 0.5          # mattress top at the paramedics' waists
     stretcher(img, cam, 540, sy, 940, 'base', legs=True, s=0.8, floor=730 + 928 * 0.62)
-    lying_protester(img, cam, 360, sy - 10, 0.66, tt, look=(0.4, -0.5), lid=3, blink=M.blinking(tt, (T['s5'] + 1.6,)))
+    lead = on_his_back(img, cam, 230, sy - 30 * 0.8, 0.62, tt, look=(0.4, -1.0), lid=3,
+                       blink=M.blinking(tt, (T['s5'] + 1.6,)))
     stretcher(img, cam, 540, sy, 940, 'rails', s=0.8)
     p = B.Pen(img, cam)
     for k, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):  # leads up to the monitor
-        p.line([(460, sy - 10 + 8 * k), (500, sy - 250), (505 + 20 * k, 730)], c, 2.0)
+        p.line([world_of(cam, *lead), (500, sy - 250), (505 + 20 * k, 730)], c, 2.0)
     p.line([(640, 380), (650, 700), (600, 960), (540, sy + 20)], (220, 230, 236), 2.0)   # the drip line
     if fa or fb:  # the blue light washing the ceiling and cupboards through the windows
         glow_spot(img, cam, 905 if fa else 760, 360, 300, 160, (90, 140, 255), 0.35)
@@ -1376,7 +1517,7 @@ def trolley_team(img, cam, tx, ty, k, tt, ph, moving, staff=None):
         person(img, cam, X, Y, ps, sp, tt, legs=legs)
         uniform_bits(img, cam, X, Y, ps, sp, kind)
     stretcher(img, cam, tx, my, 1170 * k, 'base', legs=True, s=k, floor=fl)
-    lying_protester(img, cam, tx - 330 * k, my - 14 * k, 0.83 * k, tt, look=(0.0, -0.8), lid=3)
+    on_his_back(img, cam, tx - 585 * k + 100 * 0.85 * k, my - 30 * k, 0.85 * k, tt, look=(0.0, -1.0), lid=3)
     stretcher(img, cam, tx, my, 1170 * k, 'rails', s=k)
 
 
@@ -1548,16 +1689,16 @@ def shot_alone(t):
     img = B.canvas()
     ward_set(img, cam, tt)
     g = smooth((tt - T['gurgle']) / 0.15) * (1 - smooth((tt - T['gurgle'] - 0.7) / 0.2))
-    look = (-0.6 + 1.2 * smooth((tt - T['s7'] - 0.2) / 0.3), -0.6) if tt < T['gurgle'] else (0.9 * math.sin((tt - T['gurgle']) * 3), 0.6)
+    look = (-0.6 + 1.2 * smooth((tt - T['s7'] - 0.2) / 0.3), -0.9) if tt < T['gurgle'] else (0.9 * math.sin((tt - T['gurgle']) * 3), -0.6)
     tx, ty, k = WARD_TX, WARD_TY, WARD_K
     _, _, my, fl = trolley_y(ty, k)
     stretcher(img, cam, tx, my, 1170 * k, 'base', legs=True, s=k, floor=fl)
-    lying_protester(img, cam, tx - 330 * k, my - 14 * k, 0.83 * k, tt, look=look, lid=1 if g > 0.2 else 3,
+    lead = on_his_back(img, cam, tx - 585 * k + 100 * 0.85 * k, my - 30 * k, 0.85 * k, tt, look=look, lid=1 if g > 0.2 else 3,
                     brows='raised' if g > 0.2 else 'flat', gurgle=g)
     stretcher(img, cam, tx, my, 1170 * k, 'rails', s=k)
     p = B.Pen(img, cam)
     for j, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):   # leads up to the monitor on the wall
-        p.line([(tx - 200 * k, my - 20 + 6 * j), (220, 880), (WARD_MON[0] - 20 + 15 * j, WARD_MON[1] + 50)], c, 2.0)
+        p.line([world_of(cam, *lead), (220, 880), (WARD_MON[0] - 20 + 15 * j, WARD_MON[1] + 50)], c, 2.0)
     return img
 
 
