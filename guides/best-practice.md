@@ -275,6 +275,11 @@ Specific lessons recorded there include:
 
 # Part 5. How we work and deliver (every project)
 1. **Brief:** ask all questions in one message, with a recommended answer for each.
+   - **Set dressing goes in the brief.** For every location in the script, list the everyday items such a place
+     usually has, so the place reads as real (a business meeting: laptops, pens and paper, glasses of water, a
+     digital whiteboard, cabinets; an ambulance: oxygen cylinder, labelled drawers, kit bags, sharps bin). Keep it
+     generic (no logos or brands) and say where each item would sit. Sam accepts or rejects them with the other
+     answers, so they are decided before the storyboard and never added in later editorial renders.
 2. **Stills or a storyboard,** then an **animatic** (a quick rough version with sound) before the final
    render. Sam may skip steps to save usage.
 3. **Final render,** checked against the safe-area guides on the title, the widest caption and the busiest
