@@ -890,9 +890,10 @@ PARA_F = dict(skin=B.PALE, hw=62, hh=86, jaw='soft', hair='bob', hair_c=(120, 86
 PARA_M = dict(skin=B.PINK, hw=70, hh=90, jaw='square', hair='crop', hair_c=(60, 48, 40), outfit='jumper', jacket=PARA_GREEN,
               trousers=PARA_GREEN, shoulders=146, bottom=600, pose='custom', beard='trim', beard_c=(80, 64, 54), full=True,
               brow_c=(60, 48, 40), lid=3)
-DOCTOR = dict(skin=B.PALE, hw=68, hh=92, jaw='long', hair='side', hair_c=(112, 88, 66), grey=(176, 170, 164), outfit='jumper',
+DOCTOR = dict(skin=B.PALE, hw=72, hh=90, jaw='round', hair='crop', hair_c=(176, 136, 90), beard='trim', beard_c=(176, 146, 110),
+              outfit='jumper',
               jacket=SCRUBS, trousers=SCRUBS, shoulders=144, bottom=600, pose='custom', age=True, brow_c=(100, 78, 60),
-              brows='sincere', lid=2, full=True, glasses=True, glasses_c=(80, 60, 44), mouth='smile')
+              brows='sincere', lid=2, full=True, glasses=True, glasses_c=(40, 40, 48), mouth='smile')
 NURSE = dict(skin=B.DEEP, hw=64, hh=86, jaw='round', hair='afro', hair_c=(36, 30, 28), outfit='jumper', jacket=SCRUBS_L,
              trousers=SCRUBS_L, shoulders=132, bottom=600, pose='custom', brow_c=(30, 24, 22), full=True, lashes=True)
 NURSE2 = dict(skin=B.OLIVE, hw=66, hh=88, jaw='square', hair='slick', hair_c=(30, 26, 26), outfit='jumper', jacket=SCRUBS_L,
