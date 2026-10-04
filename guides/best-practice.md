@@ -178,6 +178,10 @@ this series. Full details in `tiktok-design.md`.
 - **Even a deadpan character acts with the face, beat by beat** (the cashier: serious, wide-eyed, hand on heart), while
   the camera stays still.
 - **Everyone has legs and feet,** including people seated or standing behind counters (draw them; let the set hide them).
+  Never switch legs off to save drawing, even where something "should" hide them: in The Patriots 2 the people at the
+  edges of a close-up ended at the waist. `person()` in patriots2.py now always draws legs (standing, seated or walking).
+- **Urgency before the deadpan (The Patriots 2):** a sudden decision to do nothing is funnier straight after urgent
+  movement (doors banging open, staff running the trolley into the ward), so build the rush, then stop dead.
 - **Props at real size and used the real way:** a 12 oz takeaway cup is about half a head tall; stacks sit wide end
   down; an order pager is a small upright block, not a disc.
 - **Analytics (Mossad, 4 Oct):** with movement and the first line from frame one and the title gone by 1 s, average
