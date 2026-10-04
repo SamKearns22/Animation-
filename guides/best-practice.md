@@ -19,6 +19,8 @@ The detailed guides hold the numbers and the code:
 - `tiktok-design.md`: TikTok format, safe area, titles, posting
 - `character-anatomy.md` and `movement.md`: people and motion
 - `pipeline.md`: the 3D pencil shots
+- `figure-rig.md`: bodies and movement in the flat cartoon films (`source/figure.py`)
+- `preflight.md`: the checklist that catches problems before the first render
 - `tone.md`: the horror trailer
 - `perfect-prompt.md`: how to brief a film
 
@@ -54,6 +56,11 @@ and the research in `movement.md`.
   a cartoon pushes them.
 - **Poses read first as a silhouette, with a clear line of action and believable weight and balance.**
   A character standing naturally puts its weight on one leg (contrapposto). Weight shifts before a reach.
+- **Limbs keep one length per character, and are solved from where the hand or foot needs to be** (inverse
+  kinematics), never typed in as separate points per shot. A hand that can't reach its target means the body or
+  the prop moves, never that the arm stretches. Foreshortening only ever shortens. (Classic canon: elbows at the
+  waist, wrists at the crotch, fingertips mid-thigh.) For the flat cartoon films this is built in
+  `source/figure.py` and explained in `figure-rig.md`.
 - **Joints move within natural ranges,** and limbs are posed from where the hand or foot needs to be.
   Example: a hand holding a tool keeps a near-neutral wrist, so the tool turns to suit the arm ("bend the
   tool, not the wrist", a basic rule of ergonomics). That example is about realistic, comfortable
@@ -203,6 +210,27 @@ this series. Full details in `tiktok-design.md`.
   our flat cartoons with Sam's own voices are not that.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
+**Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
+- **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
+  guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
+  back, face up, with a face profile; people pushing a trolley lean into it; a heard letter is not spoken (no mouth
+  movement while typing).
+- **Sets:** one plan per location and per desk or table, drawn by every camera; set pieces that must stay apart are
+  listed and checked; uniform details are part of the garment, drawn before the arms; props at real size and
+  working height (a trolley's mattress at the staff's waist, a keyboard under the fingertips).
+- **Detail that sells a place:** generic set dressing proposed in the brief (the ambulance's oxygen cylinder,
+  labelled drawers, kit bags, sharps bin, drip bag, blue lights through a frosted window; the ward's whiteboard,
+  dispensers, oxygen and suction outlets, clinical waste bin); an urgent rush (doors banging open, staff running)
+  before a deadpan stop makes the stop funnier.
+- **People from real groups:** check sources before drawing (small-boat arrivals: about 13% adult women, mostly
+  from countries where women cover their hair: draw headscarves); design each person's hair and clothes
+  deliberately (a greying man's hair on young men read as beads).
+- **Caricature by accident:** compare a new invented character with the series' real-person caricatures (the
+  doctor first resembled our Andy Burnham).
+- **Recordings:** files named by script line number; `voices.py` catches duplicates (two names, one take) at once;
+  shortening the silences between phrases (never the words) tightened the film by 2 s.
+- **No unexplained movement:** a prop that moves needs a visible cause (the wobbling can).
+
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
 - Native 1080 x 1920; the safe area is x 60-900, y 310-1500, measured on a real post.
 - **The opening:**
@@ -280,8 +308,10 @@ Specific lessons recorded there include:
      digital whiteboard, cabinets; an ambulance: oxygen cylinder, labelled drawers, kit bags, sharps bin). Keep it
      generic (no logos or brands) and say where each item would sit. Sam accepts or rejects them with the other
      answers, so they are decided before the storyboard and never added in later editorial renders.
-2. **Stills or a storyboard,** then an **animatic** (a quick rough version with sound) before the final
-   render. Sam may skip steps to save usage.
+2. **Stills or a storyboard** (with a model sheet of each new character), then **pre-flight**
+   (`python3 source/preflight.py FILM OUT_DIR`: bodies, contacts, sets, captions and shot lengths checked on every
+   third frame, plus a contact sheet with the safe area drawn on), then an **animatic** (a quick rough version with
+   sound) before the final render. Sam may skip steps to save usage. Full checklist: `preflight.md`.
 3. **Final render,** checked against the safe-area guides on the title, the widest caption and the busiest
    frame.
 4. **Deliver:**

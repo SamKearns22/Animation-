@@ -29,6 +29,9 @@ I don't know how to code. Please:
 - Before building or changing any character, read `guides/character-anatomy.md` and follow its checklist.
   Build people on the free MakeHuman human model (CC0) rather than sculpting bodies from scratch.
 - Before animating anything, read `guides/movement.md` (timing of eyes, blinks, smiles, hair and body).
+- For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any
+  person, and follow `guides/preflight.md` from the first brief: run `python3 source/preflight.py FILM OUT_DIR`
+  before every animatic, and `python3 source/voices.py FILES` as soon as recordings arrive.
 - Before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes).
 - The story and the director's decisions for the animation test are in `story/animation-test.md`.
 - The film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer).
