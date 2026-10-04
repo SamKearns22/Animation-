@@ -355,10 +355,13 @@ def person(img, cam, x, y, s, sp, t, legs=None, flip=1):
     """Everyone has legs and feet, always (the set may hide them; nothing here can leave them out).
     legs: standing (None), seated_legs or walking_legs(...)."""
     sp = dict(sp, full=True)
-    if legs is None:
-        return B.person(img, cam, x, y, s, sp, t, flip)
-    assert legs in (seated_legs,) or legs.__name__ == 'legs', 'legs must be drawn'
-    return with_legs(lambda: B.person(img, cam, x, y, s, sp, t, flip), legs)
+    try:
+        if legs is None:
+            return B.person(img, cam, x, y, s, sp, t, flip)
+        assert legs in (seated_legs,) or legs.__name__ == 'legs', 'legs must be drawn'
+        return with_legs(lambda: B.person(img, cam, x, y, s, sp, t, flip), legs)
+    finally:
+        _KIT['band'] = None
 
 
 def eyes_over(img, cam, x, y, s, sp, dx=0.0, dy=0.0, cross=0.0, lid=None, bala=False):
@@ -517,11 +520,37 @@ def office_chair(img, cam, x, y, s, back=True):
 # -------------------------------------------------------------------------------------- the protester
 
 def pro_st(t, **kw):
-    lv = level('pro', t)
+    # The letter is heard, not spoken: he types in silence, so nothing moves under the balaclava.
     st = dict(arms=PP.REST, turn=0.0, look=0.0, lid=3, brows='flat', puff=0.3, shrug=0.0, tilt=0.0, head_dx=0.0,
-              head_dy=-4 * lv, lv=lv, blink=M.blinking(t, (2.6, 6.9, 11.0, 23.4, 26.0)))
+              head_dy=0.0, lv=0.0, blink=M.blinking(t, (2.6, 6.9, 11.0, 23.4, 26.0)))
     st.update(kw)
     return st
+
+
+FINGER = 66   # from the wrist to the tip of the pointing finger (burnham.gesture_hand 'point')
+
+
+def typing_arms(tips, elbows, taps):
+    """Arms whose index fingertips land on the given points (his own units), pressing down 16 units on each click."""
+    arms = {}
+    for side in ('L', 'R'):
+        (tx, ty), el, tp = tips[side], elbows[side], taps[side]
+        ty += 16 * tp
+        dx, dy = tx - el[0], ty - el[1]
+        n = math.hypot(dx, dy)
+        arms[side] = (el, (tx - dx / n * FINGER, ty - dy / n * FINGER), 'point')
+    return arms
+
+
+def check_on_keys(x, y, s, arms, kb):
+    """Stop the render if a typing fingertip is not on the keyboard. kb: (x of middle, front edge y, width, depth)."""
+    kx, ky, kw, kd = kb
+    for side, (el, wr, _) in arms.items():
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy)
+        tx, ty = x + s * (wr[0] + dx / n * FINGER), y + s * (wr[1] + dy / n * FINGER)
+        if not (ky - kd - 2 <= ty <= ky - 3 and abs(tx - kx) <= kw / 2 - 12):
+            raise ValueError(f'check: his {side} fingertip ({tx:.0f}, {ty:.0f}) is off the keyboard {kb}')
 
 
 def seated_protester(img, cam, x, y, s, st, t):
@@ -607,16 +636,15 @@ def shot_room(t):
     st = pro_st(t, turn=-0.55, look=-1.0, lid=3, head_dx=-14, tilt=-0.04)
     tp = tap(t)
     tp2 = tap(t, 0.06)
-    st['arms'] = {'L': ((-235, 230), (-252, 300 + 24 * tp), 'point'),
-                  'R': ((125, 240), (-55, 300 + 24 * tp2), 'point')}
+    st['arms'] = typing_arms({'L': (-250, 300), 'R': (-60, 298)}, {'L': (-230, 140), 'R': (130, 150)}, {'L': tp, 'R': tp2})
+    check_on_keys(x, y, s, st['arms'], (520, 1140, 420, 46))
     seated_protester(img, cam, x, y, s, st, t)
     desk_front(img, cam, t)
     keyboard(img, cam, 520, 1140, 420, 46)
     for side in ('L', 'R'):  # his forearms resting over the desk, hands on the keys
         PP.protester(img, cam, x, y, s, dict(st, arm_only=side), t)
     mouse(img, cam, 820, 1150, 1.0)
-    kn = t - T['knock']
-    room_props(img, cam, t, knock=0.18 * math.sin(kn * 22) * math.exp(-kn * 5) if kn > 0 else 0.0)
+    room_props(img, cam, t)
     monitor_back(img, cam, t)
     light_pass(img, cam, [(ROOM_LIGHT[0] + 270, 860, 250, (0.72, 0.9, 1.15), 1.35), (540, 1120, 260, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
@@ -714,11 +742,11 @@ def helmet(p, hx, hy, hw, hh, colr=(236, 236, 232)):
 
 CREW = [
     dict(skin=B.PALE, hw=68, hh=88, jaw='square', hair='crop', hair_c=(90, 70, 50), outfit='jumper', jacket=CREW_YELLOW,
-         shoulders=150, bottom=560, pose='custom', brows='serious', mouth='set', beard='stubble', beard_c=(110, 90, 70)),
+         shoulders=150, bottom=560, pose='custom', brows='serious', mouth='set', beard='stubble', beard_c=(110, 90, 70), kit='crew'),
     dict(skin=B.PINK, hw=64, hh=86, jaw='soft', hair='bob', hair_c=(176, 130, 76), outfit='jumper', jacket=CREW_YELLOW,
-         shoulders=136, bottom=560, pose='custom', brows='serious', mouth='line'),
+         shoulders=136, bottom=560, pose='custom', brows='serious', mouth='line', kit='crew'),
     dict(skin=B.OLIVE, hw=68, hh=90, jaw='round', hair='crop', hair_c=(40, 32, 28), outfit='jumper', jacket=CREW_YELLOW,
-         shoulders=148, bottom=560, pose='custom', brows='weary', mouth='set', beard='trim', beard_c=(50, 42, 36)),
+         shoulders=148, bottom=560, pose='custom', brows='weary', mouth='set', beard='trim', beard_c=(50, 42, 36), kit='crew'),
 ]
 
 
@@ -727,9 +755,6 @@ def crew_member(img, cam, x, y, s, sp, t, arms):
     person(img, cam, x, y, s, sp, t)
     L = B.Local(cam, x, y, s)
     p = B.Pen(img, L)
-    for k in (0, 1):  # reflective bands on the jacket
-        p.poly([(-sp['shoulders'] + 6, 330 + 60 * k), (sp['shoulders'] - 6, 330 + 60 * k), (sp['shoulders'] - 6, 350 + 60 * k),
-                (-sp['shoulders'] + 6, 350 + 60 * k)], (220, 222, 216), None)
     helmet(B.Pen(img, PP.Rot(L, sp.get('tilt', 0.0))), sp.get('head_dx', 0), -150 + sp.get('head_dy', 0), sp['hw'], sp['hh'])
 
 
@@ -798,10 +823,10 @@ def shot_lifeboat(t):
 MIGRANTS = [  # back row on the far tube, left to right: (skin, hair, beard, jacket colour, life jacket, look, woman)
     (B.DEEP, 'crop', 'stubble', (70, 80, 96), True, 0.6, False),
     (B.BROWN, 'crop', 'full', (90, 70, 60), True, 0.8, False),
-    ((150, 100, 70), 'scarf', None, (88, 60, 92), True, 0.7, True),
+    ((150, 100, 70), 'hijab', None, (88, 60, 92), True, 0.7, True),
     (B.OLIVE, 'crop', 'trim', (60, 66, 70), False, 1.0, False),
     (B.DEEP, 'afro', None, (110, 50, 46), True, 0.5, False),
-    ((160, 108, 76), 'side', 'stubble', (64, 74, 60), True, 0.9, False),
+    ((166, 112, 80), 'shawl', None, (64, 74, 60), True, 0.9, True),
     (B.BROWN, 'bald', 'full', (50, 54, 70), True, 0.7, False),
 ]
 FRONT = [  # nearer, seated on the near tube
@@ -831,38 +856,53 @@ def scarf(img, L, hx, hy, hw, hh, colr):
            colr, INK, 2.6)
 
 
-def scarf_front(img, L, hx, hy, hw, hh, colr):
+def headscarf(img, L, hx, hy, hw, hh, fx, colr, loose=False):
+    """A headscarf over the head and ears, round the face and down over the shoulders, the face left open.
+    loose: a shawl worn further back, a little hair showing at the front."""
     p = B.Pen(img, L)
-    p.poly(curve([(hx - hw - 4, hy + 50), (hx - hw - 6, hy - 30), (hx - hw * 0.4, hy - hh * 1.02), (hx + hw * 0.4, hy - hh * 1.02),
-                  (hx + hw + 6, hy - 30), (hx + hw + 4, hy + 50), (hx + hw * 0.75, hy - 10), (hx + hw * 0.5, hy - hh * 0.7),
-                  (hx - hw * 0.5, hy - hh * 0.7), (hx - hw * 0.75, hy - 10)], 4), colr, INK, 2.4)
+    out = curve([(hx - hw - 14, hy + 40), (hx - hw - 18, hy - 50), (hx - hw * 0.5, hy - hh - 18), (hx + hw * 0.5, hy - hh - 18),
+                 (hx + hw + 18, hy - 50), (hx + hw + 14, hy + 40), (hx + hw * 0.95, hy + hh * 1.2), (hx + 112, hy + 200),
+                 (hx - 112, hy + 200), (hx - hw * 0.95, hy + hh * 1.2)], 5)
+    cy, rx, ry = (hy + 18, hw * 0.9, hh * 1.06) if loose else (hy + 24, hw * 0.8, hh * 0.98)
+    hole = oval(fx, cy, rx, ry, 40)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.polygon([L.P(*q) for q in out], fill=colr + (255,))
+    d.polygon([L.P(*q) for q in hole], fill=(0, 0, 0, 0))
+    img.alpha_composite(lay)
+    if loose:  # a little dark hair at the front, under the shawl
+        p.poly(curve([(fx - rx * 0.8, cy - ry * 0.55), (fx, cy - ry * 0.98), (fx + rx * 0.8, cy - ry * 0.55), (fx, cy - ry * 0.72)], 4),
+               (30, 24, 22), None)
+    p.line(out + out[:1], INK, 2.4)
+    p.line(hole + hole[:1], INK, 2.0)
+    for k in (-1, 1):  # folds in the cloth
+        p.line([(fx + k * rx * 1.05, cy + ry * 0.3), (fx + k * rx * 1.2, cy + ry * 0.95), (hx + k * 80, hy + 190)], B.dk(colr, 0.75), 1.8)
 
 
 def migrant(img, cam, x, y, s, spec, t, i, reach=0.0):
     skin, hair, beard, jc, jacket, look, woman = spec
     wet = B.dk(jc, 0.8)
     sp = dict(skin=skin, hw=64 if woman else 68, hh=86 if woman else 90, jaw='soft' if woman else ['square', 'round', 'long'][i % 3],
-              hair=None if hair == 'scarf' else hair, hair_c=(26, 22, 22), outfit='jumper', jacket=wet, shoulders=130 if woman else 146,
+              hair=None if hair in ('hijab', 'shawl') else hair, hair_c=(26, 22, 22), outfit='jumper', jacket=wet, shoulders=130 if woman else 146,
               bottom=560, pose='custom', beard=beard, beard_c=(30, 26, 24), brows='weary' if i % 3 else 'sincere',
               brow_c=(30, 24, 22), lid=3 + (i % 3), mouth='set' if i % 2 else 'line', look=look, turn=0.25 * look,
               blink=M.blinking(t, (0.7 + i * 0.53, 3.9 + i * 0.37, 6.4 + i * 0.29)),
-              head_dy=2 * math.sin(t * 2.0 + i), tilt=0.04 * math.sin(i * 1.7))
+              head_dy=2 * math.sin(t * 2.0 + i), tilt=0.0 if woman else 0.04 * math.sin(i * 1.7))
     if i in (2, 9):
         sp['age'] = True
     ra = ((150, 260), (150 + 140 * reach, 140 - 40 * reach), 'palm') if reach else ((160, 290), (110, 440), 'fist')
     sp['arms'] = {'L': ((-160, 290), (-110, 440), 'fist'), 'R': ra}
     L = B.Local(cam, x, y, s)
-    if hair == 'scarf':
-        scarf(img, L, 0, -150, sp['hw'], sp['hh'], (60, 40, 70))
     person(img, cam, x, y, s, sp, t, legs=seated_legs)
+    if hair in ('hijab', 'shawl'):   # worn over the head and shoulders, under the life jacket
+        headscarf(img, L, 0, -150 + sp['head_dy'], sp['hw'], sp['hh'], sp['turn'] * sp['hw'] * 0.22,
+                  (44, 44, 66) if hair == 'hijab' else (112, 44, 54), loose=(hair == 'shawl'))
     if jacket:
         life_jacket(img, L)
         if reach:  # the reaching arm in front of the jacket
             B.Pen(img, L)
             B.arm(B.Pen(img, L), (132, 60), ra[0], ra[1], wet)
             B.gesture_hand(B.Pen(img, L), ra[0], ra[1], ra[2], skin)
-    if hair == 'scarf':
-        scarf_front(img, L, 0, -150 + sp['head_dy'], sp['hw'], sp['hh'], (60, 40, 70))
     p = B.Pen(img, L)
     for k in range(3):  # soaked: water dripping from hair and chin
         dx = -30 + 30 * k + 6 * i
@@ -932,17 +972,11 @@ def shot_screen(t):
     cam = B.Cam(1.3 + 0.35 * k, 540, 860 - 70 * k)
     img = B.canvas()
     p = B.Pen(img, cam)
-    p.poly([(-400, -200), (1500, -200), (1500, 1500), (-400, 1500)], NIGHT_WALL, None)
-    # behind him: the door, a poster of a bulldog, the bed's corner
-    p.poly([(60, 260), (330, 260), (330, 1240), (60, 1240)], (120, 100, 84), INK, 2.4)
-    p.ell(296, 760, 12, 12, (200, 180, 120), INK, 1.6)
-    p.poly([(690, 380), (970, 380), (970, 640), (690, 640)], (90, 70, 50), INK, 2.4)   # a framed print of the white cliffs
-    p.poly([(706, 396), (954, 396), (954, 624), (706, 624)], (170, 200, 220), None)
-    p.poly([(706, 540), (954, 540), (954, 624), (706, 624)], (80, 120, 140), None)
-    p.poly([(706, 470), (790, 450), (880, 470), (954, 460), (954, 548), (706, 548)], (240, 240, 232), INK, 1.6)
-    p.poly([(706, 450), (790, 432), (880, 452), (954, 444), (954, 466), (880, 474), (790, 454), (706, 472)], (110, 150, 80), None)
-    p.poly([(-400, 1240), (1500, 1240), (1500, 2400), (-400, 2400)], CARPET, None)
     x, y, s = 540, 830, 1.0
+    # One room: the wall behind him is the same set as in shot 1 (window, curtains, dartboard, shelf), drawn by a camera
+    # that puts him where he is in this shot (his place in shot 1: (650, 860) at scale 0.8).
+    zw = cam.z / 0.8
+    room_set(img, B.Cam(zw, 650 + (cam.cx - x) / zw * cam.z, 860 - (y - cam.cy) * cam.z / zw), t)
     # the collapse: eyes cross, he clutches his chest, then topples sideways out of frame to our left
     a_cross = smooth((tt - T['cross']) / 0.12)
     a_clutch = smooth((tt - T['clutch']) / 0.18)
@@ -951,9 +985,10 @@ def shot_screen(t):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     tp, tp2 = tap(tt), tap(tt, 0.06)
     st = pro_st(tt, turn=0.0, look=0.0, lid=2 if tt < T['cut_off'] - 3.5 else 4, brows='flat' if tt < T['s4'] + 2 else 'cross')
-    st['arms'] = {'L': ((-205, 330), (-75, 455 + 24 * tp), 'point'),
-                  'R': ((205, 330), (75, 455 + 24 * tp2), 'point')}
+    st['arms'] = typing_arms({'L': (-70, 486), 'R': (70, 486)}, {'L': (-205, 330), 'R': (205, 330)}, {'L': tp, 'R': tp2})
     typing = a_clutch <= 0
+    if typing:
+        check_on_keys(x, y, s, st['arms'], (540, 1340, 420, 40))
     if a_cross > 0:
         st.update(brows='raised', lid=0, head_dy=-10 * a_cross, puff=0.0)
     if a_clutch > 0:
@@ -996,34 +1031,43 @@ def shot_screen(t):
 
 PARA_F = dict(skin=B.PALE, hw=62, hh=86, jaw='soft', hair='bob', hair_c=(120, 86, 56), outfit='jumper', jacket=PARA_GREEN,
               trousers=PARA_GREEN, shoulders=126, bottom=600, pose='custom', brow_c=(90, 64, 44), lashes=True, full=True,
-              brows='weary', lid=2)
+              brows='weary', lid=2, kit='para')
 PARA_M = dict(skin=B.PINK, hw=70, hh=90, jaw='square', hair='crop', hair_c=(60, 48, 40), outfit='jumper', jacket=PARA_GREEN,
               trousers=PARA_GREEN, shoulders=146, bottom=600, pose='custom', beard='trim', beard_c=(80, 64, 54), full=True,
-              brow_c=(60, 48, 40), lid=3)
+              brow_c=(60, 48, 40), lid=3, kit='para')
 DOCTOR = dict(skin=B.PALE, hw=72, hh=90, jaw='round', hair='crop', hair_c=(176, 136, 90), beard='trim', beard_c=(176, 146, 110),
               outfit='jumper',
               jacket=SCRUBS, trousers=SCRUBS, shoulders=144, bottom=600, pose='custom', age=True, brow_c=(100, 78, 60),
-              brows='sincere', lid=2, full=True, glasses=True, glasses_c=(40, 40, 48), mouth='smile')
+              brows='sincere', lid=2, full=True, glasses=True, glasses_c=(40, 40, 48), mouth='smile', kit='doc')
 NURSE = dict(skin=B.DEEP, hw=64, hh=86, jaw='round', hair='afro', hair_c=(36, 30, 28), outfit='jumper', jacket=SCRUBS_L,
-             trousers=SCRUBS_L, shoulders=132, bottom=600, pose='custom', brow_c=(30, 24, 22), full=True, lashes=True)
+             trousers=SCRUBS_L, shoulders=132, bottom=600, pose='custom', brow_c=(30, 24, 22), full=True, lashes=True, kit='nurse')
 NURSE2 = dict(skin=B.OLIVE, hw=66, hh=88, jaw='square', hair='slick', hair_c=(30, 26, 26), outfit='jumper', jacket=SCRUBS_L,
-              trousers=SCRUBS_L, shoulders=140, bottom=600, pose='custom', brow_c=(30, 26, 26), full=True)
+              trousers=SCRUBS_L, shoulders=140, bottom=600, pose='custom', brow_c=(30, 26, 26), full=True, kit='nurse')
 
 
-def uniform_bits(img, cam, x, y, s, sp, kind):
-    """Reflective strips and epaulettes for paramedics; a stethoscope and lanyard for the doctor."""
-    L = B.Local(cam, x, y, s)
-    p = B.Pen(img, L)
-    sw = sp['shoulders']
-    if kind == 'para':
-        for yb in (360,):
-            p.poly([(-sw + 4, yb), (sw - 4, yb), (sw - 2, yb + 22), (-sw + 2, yb + 22)], (210, 214, 210), None)
-        for sgn in (-1, 1):
-            p.poly([(sgn * 50, 4), (sgn * (sw - 10), 34), (sgn * (sw - 14), 56), (sgn * 50, 26)], (30, 50, 40), None)
-        p.poly([(-sw * 0.6, 120), (-sw * 0.2, 120), (-sw * 0.2, 150), (-sw * 0.6, 150)], (236, 236, 230), None)
+_KIT = {'band': None}
+_prev_torso, _prev_arm = B.torso, B.arm
+BAND = (214, 218, 212)
+
+
+def kit_torso(img, p, sp, t):
+    """The jacket, then its uniform details, all before the arms are drawn, so arms always pass in front of them."""
+    _prev_torso(img, p, sp, t)
+    kind = sp.get('kit')
+    _KIT['band'] = None
+    sw = sp.get('shoulders', 150)
+    if kind in ('para', 'crew'):
+        ys = (360,) if kind == 'para' else (330, 390)
+        for yb in ys:  # reflective bands across the jacket, inside its outline
+            p.poly([(-sw + 10, yb), (sw - 10, yb), (sw - 8, yb + 22), (-sw + 8, yb + 22)], BAND, None)
+        _KIT['band'] = sp.get('jacket')
+        if kind == 'para':
+            for sgn in (-1, 1):
+                p.poly([(sgn * 50, 4), (sgn * (sw - 16), 30), (sgn * (sw - 20), 52), (sgn * 50, 26)], (30, 50, 40), None)
+            p.poly([(-sw * 0.6, 120), (-sw * 0.2, 120), (-sw * 0.2, 150), (-sw * 0.6, 150)], (236, 236, 230), None)
     elif kind == 'doc':
-        p.line([(-56, 0), (-70, 120), (-30, 220), (0, 240)], (40, 40, 44), 4)
-        p.line([(56, 0), (70, 120), (30, 220), (0, 240)], (40, 40, 44), 4)
+        p.line([(-56, 0), (-62, 120), (-30, 220), (0, 240)], (40, 40, 44), 4)
+        p.line([(56, 0), (62, 120), (30, 220), (0, 240)], (40, 40, 44), 4)
         p.ell(0, 252, 16, 16, (190, 196, 204), INK, 2.0)
         p.line([(-30, 0), (-14, 170)], (40, 90, 160), 5)
         p.line([(30, 0), (14, 170)], (40, 90, 160), 5)
@@ -1033,6 +1077,28 @@ def uniform_bits(img, cam, x, y, s, sp, kind):
         p.line([(-40, 0), (-20, 180)], (200, 60, 70), 5)
         p.line([(40, 0), (20, 180)], (200, 60, 70), 5)
         p.poly([(-26, 176), (26, 176), (26, 236), (-26, 236)], (248, 248, 248), INK, 1.8)
+
+
+def kit_arm(p, sh, el, wr, sleeve, w=30):
+    """An arm; on a paramedic's or lifeboat crew's sleeve, a reflective band round the forearm."""
+    _prev_arm(p, sh, el, wr, sleeve, w)
+    if _KIT['band'] is not None and sleeve == _KIT['band']:
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1
+        ux, uy, nx, ny = dx / n, dy / n, -dy / n, dx / n
+        for u0 in (0.45,):
+            c = (el[0] + dx * u0, el[1] + dy * u0)
+            ww = w * 0.8
+            p.poly([(c[0] + nx * ww, c[1] + ny * ww), (c[0] + nx * ww + ux * 16, c[1] + ny * ww + uy * 16),
+                    (c[0] - nx * ww + ux * 16, c[1] - ny * ww + uy * 16), (c[0] - nx * ww, c[1] - ny * ww)], BAND, None)
+
+
+B.torso, B.arm = kit_torso, kit_arm
+
+
+def uniform_bits(img, cam, x, y, s, sp, kind):
+    """(Uniform details are now part of the jacket: see kit_torso.)"""
+    return
 
 
 def lying_protester(img, cam, x, y, s, t, look=(0.0, 0.0), blink=False, brows='flat', lid=2, gurgle=0.0):
@@ -1063,17 +1129,20 @@ def lying_protester(img, cam, x, y, s, t, look=(0.0, 0.0), blink=False, brows='f
     img.alpha_composite(lay.rotate(90, Image.BICUBIC, center=(X, Y)))
 
 
-def stretcher(img, cam, x, y, length, part, legs=True, s=1.0):
-    """A wheeled stretcher seen from slightly above: x, y the middle of the mattress top; part 'base' or 'rails'."""
+def stretcher(img, cam, x, y, length, part, legs=True, s=1.0, floor=None):
+    """A wheeled stretcher seen from slightly above: x, y the middle of the mattress top; part 'base' or 'rails'.
+    floor: where its wheels touch the ground (default: a low trolley)."""
     p = B.Pen(img, cam)
     l = length / 2
+    fy = floor if floor is not None else y + 374 * s
     if part == 'base':
         if legs:
             for X in (x - l + 60 * s, x + l - 60 * s):
-                p.line([(X, y + 70 * s), (X, y + 330 * s)], (150, 156, 164), max(2, 14 * s))
-                p.ell(X - 30 * s, y + 350 * s, 24 * s, 24 * s, (30, 30, 34), INK, 1.6)
-                p.ell(X + 30 * s, y + 350 * s, 24 * s, 24 * s, (30, 30, 34), INK, 1.6)
-            p.line([(x - l + 60 * s, y + 220 * s), (x + l - 60 * s, y + 220 * s)], (150, 156, 164), max(2, 12 * s))
+                p.line([(X, y + 70 * s), (X, fy - 44 * s)], (150, 156, 164), max(2, 14 * s))
+                p.line([(X - 34 * s, fy - 34 * s), (X + 34 * s, fy - 34 * s)], (150, 156, 164), max(2, 10 * s))
+                p.ell(X - 30 * s, fy - 24 * s, 24 * s, 24 * s, (30, 30, 34), INK, 1.6)
+                p.ell(X + 30 * s, fy - 24 * s, 24 * s, 24 * s, (30, 30, 34), INK, 1.6)
+            p.line([(x - l + 60 * s, fy - 130 * s), (x + l - 60 * s, fy - 130 * s)], (150, 156, 164), max(2, 12 * s))
         p.poly([(x - l, y - 90 * s), (x + l, y - 90 * s), (x + l + 10 * s, y + 60 * s), (x - l - 10 * s, y + 60 * s)],
                (236, 240, 242), INK, 2.6)
         p.poly([(x - l - 10 * s, y + 60 * s), (x + l + 10 * s, y + 60 * s), (x + l + 10 * s, y + 90 * s), (x - l - 10 * s, y + 90 * s)],
@@ -1109,6 +1178,34 @@ def heart_monitor(img, cam, x, y, w, t, beat_times):
 BEATS = list(np.arange(0.2, 80, 0.83))
 
 
+def check_apart(where, items):
+    """Stop the render if any two set pieces that must stay separate overlap (a monitor through a curtain, a
+    dispenser through a cupboard). items: {name: (x0, y0, x1, y1)} in world units."""
+    names = list(items)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            A, Bb = items[a], items[b]
+            w = min(A[2], Bb[2]) - max(A[0], Bb[0])
+            h = min(A[3], Bb[3]) - max(A[1], Bb[1])
+            if w > 2 and h > 2:
+                raise ValueError(f'check: in {where}, the {a} overlaps the {b} by {w:.0f} x {h:.0f}')
+
+
+AMB_ITEMS = {'cupboard 1': (40, 300, 270, 560), 'cupboard 2': (290, 300, 520, 560), 'cupboard 3': (540, 300, 770, 560),
+             'rear window': (800, 300, 1010, 440), 'cupboard 4': (790, 450, 1020, 560), 'monitor': (415, 573, 635, 727),
+             'oxygen cylinder': (150, 610, 215, 1010), 'glove dispenser': (830, 580, 920, 640),
+             'suction unit': (836, 656, 912, 760), 'sharps bin': (846, 780, 916, 860)}
+check_apart('the ambulance', AMB_ITEMS)
+
+
+def amb_flash(t):
+    """UK ambulance blue lights: quick double flashes, alternating sides (0-1 for each side)."""
+    u = (t * 2.2) % 1.0
+    a = 1.0 if (u < 0.08 or 0.14 < u < 0.22) else 0.0
+    b = 1.0 if (0.5 < u < 0.58 or 0.64 < u < 0.72) else 0.0
+    return a, b
+
+
 def shot_ambulance(t):
     """5. Inside the ambulance: he lies on the stretcher; two paramedics tend to him calmly."""
     tt = t + T['s5']
@@ -1121,23 +1218,55 @@ def shot_ambulance(t):
     for X in (200, 540, 880):
         p.poly([(X - 90, 150), (X + 90, 150), (X + 90, 190), (X - 90, 190)], (252, 252, 236), None)
     p.line([(40, 270), (1040, 270)], (170, 176, 184), 8)
-    for k in range(4):
+    for k, label in enumerate(('AIRWAY', 'DRESSINGS', 'CANNULATION')):   # cupboards with labelled drawers
         x0 = 40 + k * 250
         p.poly([(x0, 300), (x0 + 230, 300), (x0 + 230, 560), (x0, 560)], (240, 242, 244), INK, 2.2)
         p.poly([(x0 + 10, 310), (x0 + 220, 310), (x0 + 220, 400), (x0 + 10, 400)], (196, 214, 226), None)
+        p.poly([(x0 + 30, 440), (x0 + 200, 440), (x0 + 200, 480), (x0 + 30, 480)], (250, 250, 250), INK, 1.4)
+        PP.ctext(img, cam, x0 + 115, 460, label, 22, (40, 60, 90))
         p.line([(x0 + 100, 520), (x0 + 130, 520)], INK, 3)
+    fa, fb = amb_flash(tt)
+    # the frosted rear window, blue light flashing through it, and a small cupboard under it
+    p.poly([(800, 300), (1010, 300), (1010, 440), (800, 440)], (200, 212, 222), INK, 2.4)
+    if fa or fb:
+        p.poly([(806, 306), (1004, 306), (1004, 434), (806, 434)], (120, 170, 255) if fa else (150, 190, 255), None)
+    p.line([(905, 300), (905, 440)], INK, 2.0)
+    p.poly([(790, 450), (1020, 450), (1020, 560), (790, 560)], (240, 242, 244), INK, 2.2)
+    # the oxygen cylinder in its wall bracket
+    p.poly(curve([(150, 640), (180, 610), (215, 640), (215, 1000), (150, 1000)], 3), (244, 244, 240), INK, 2.4)
+    p.poly([(170, 590), (196, 590), (196, 612), (170, 612)], (60, 60, 66), INK, 1.8)
+    for yb in (700, 920):
+        p.poly([(144, yb), (221, yb), (221, yb + 16), (144, yb + 16)], (110, 116, 124), INK, 1.4)
+    # a glove dispenser (blue gloves), the suction unit and a yellow sharps bin
+    p.poly([(830, 580), (920, 580), (920, 640), (830, 640)], (236, 236, 236), INK, 1.8)
+    p.ell(875, 600, 22, 7, (70, 120, 220), None)
+    p.poly([(836, 700), (912, 700), (912, 760), (836, 760)], (90, 96, 104), INK, 1.8)
+    p.poly(curve([(850, 700), (850, 660), (898, 660), (898, 700)], 3), (220, 236, 240), INK, 1.6)
+    p.poly([(846, 790), (916, 790), (910, 860), (852, 860)], (246, 214, 40), INK, 2.0)
+    p.poly([(842, 780), (920, 780), (920, 794), (842, 794)], (200, 40, 40), INK, 1.6)
     p.poly([(-20, 1240), (1100, 1240), (1100, 2000), (-20, 2000)], (120, 130, 136), None)
     for k in range(10):
         p.line([(-20 + 120 * k, 1240), (-60 + 140 * k, 2000)], (110, 118, 124), 2)
-    heart_monitor(img, cam, 525, 560, 220, tt, BEATS)
+    # kit bags on the floor: green and red grab bags, the defibrillator in its case
+    p.poly(curve([(560, 1215), (690, 1215), (700, 1300), (550, 1300)], 3), (40, 120, 70), INK, 2.2)
+    p.line([(590, 1215), (610, 1190), (640, 1190), (660, 1215)], (30, 30, 30), 3)
+    p.poly(curve([(720, 1225), (830, 1225), (840, 1302), (710, 1302)], 3), (196, 40, 46), INK, 2.2)
+    p.poly([(860, 1200), (960, 1200), (960, 1300), (860, 1300)], (60, 140, 80), INK, 2.2)
+    p.poly([(876, 1216), (944, 1216), (944, 1256), (876, 1256)], (20, 30, 34), None)
+    p.line([(884, 1240), (900, 1240), (906, 1226), (912, 1250), (918, 1240), (936, 1240)], (90, 240, 120), 1.6)
+    # the drip bag hanging from the ceiling rail
+    p.line([(640, 270), (640, 290)], (150, 156, 164), 3)
+    p.poly(curve([(616, 290), (664, 290), (668, 380), (612, 380)], 3), (226, 236, 240), INK, 2.0)
+    p.poly([(620, 340), (660, 340), (662, 376), (618, 376)], (200, 220, 236), None)
+    heart_monitor(img, cam, 525, 650, 220, tt, BEATS)
     # the paramedics behind the stretcher
     lv = level('para', tt)
     roll = smooth((tt - T['eyeroll']) / 0.2) * (1 - smooth((tt - T['eyeroll'] - 0.7) / 0.2))
     m_sp = dict(PARA_M, turn=0.45, look=0.8, head_dy=sway * 0.3, mouth='set',
-                arms={'L': ((-150, 300), (-80, 520), 'fist'), 'R': ((150, 290), (120, 530), 'fist')},
+                arms=RAIL,
                 blink=M.blinking(tt, (T['s5'] + 1.0,)), brows='weary' if roll > 0.3 else None)
     f_sp = dict(PARA_F, turn=-0.5, look=-0.6, head_dy=sway * 0.3, mouth=M.talk_mouth(lv, tt),
-                arms={'L': ((-160, 300), (-210, 540), 'fist'), 'R': ((140, 300), (130, 540), 'fist')},
+                arms={'L': ((-150, 250), (-60, 410), 'fist'), 'R': ((150, 250), (100, 410), 'fist')},
                 blink=M.blinking(tt, (T['s5'] + 2.0,)), brows='weary')
     person(img, cam, 330, 730, 0.62, m_sp, tt)
     uniform_bits(img, cam, 330, 730, 0.62, m_sp, 'para')
@@ -1146,13 +1275,17 @@ def shot_ambulance(t):
     person(img, cam, 720, 740, 0.6, f_sp, tt)
     uniform_bits(img, cam, 720, 740, 0.6, f_sp, 'para')
     # the stretcher across the front, him on it
-    sy = 1180 + sway * 0.5
-    stretcher(img, cam, 540, sy, 940, 'base', legs=True, s=0.8)
+    sy = 730 + 430 * 0.62 + 72 + sway * 0.5          # mattress top at the paramedics' waists
+    stretcher(img, cam, 540, sy, 940, 'base', legs=True, s=0.8, floor=730 + 928 * 0.62)
     lying_protester(img, cam, 360, sy - 10, 0.66, tt, look=(0.4, -0.5), lid=3, blink=M.blinking(tt, (T['s5'] + 1.6,)))
     stretcher(img, cam, 540, sy, 940, 'rails', s=0.8)
     p = B.Pen(img, cam)
     for k, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):  # leads up to the monitor
-        p.line([(460, sy - 10 + 8 * k), (500, sy - 250), (505 + 20 * k, 640)], c, 2.0)
+        p.line([(460, sy - 10 + 8 * k), (500, sy - 250), (505 + 20 * k, 730)], c, 2.0)
+    p.line([(640, 380), (650, 700), (600, 960), (540, sy + 20)], (220, 230, 236), 2.0)   # the drip line
+    if fa or fb:  # the blue light washing the ceiling and cupboards through the windows
+        glow_spot(img, cam, 905 if fa else 760, 360, 300, 160, (90, 140, 255), 0.35)
+        img.alpha_composite(Image.new('RGBA', img.size, (60, 110, 255, 18)))
     # the hand on him: hers on his shoulder
     return img
 
@@ -1208,14 +1341,24 @@ def ae_room(img, cam, t, doors=0.0):
     B.text(img, cam, 860, 344, 'A&E', 84, (255, 255, 255), font=B.SANS, anchor='ma')
 
 
-RAIL = {'L': ((-150, 300), (-110, 560), 'fist'), 'R': ((150, 300), (70, 560), 'fist')}
+# Medical staff's arms: natural length (fingertips about mid-thigh); on the trolley the hands rest on the mattress
+# edge at waist height.
+SIDE = {'L': ((-150, 250), (-138, 405), 'fist'), 'R': ((150, 250), (138, 405), 'fist')}
+RAIL = {'L': ((-150, 250), (-100, 410), 'fist'), 'R': ((150, 250), (60, 410), 'fist')}
+
+
+def trolley_y(ty, k):
+    """For the staff standing behind a trolley at scale k: their neck height and scale, the mattress-top line
+    (the stretcher's y, its top edge at their waist), and the floor under the wheels (their feet)."""
+    ps = 0.6 * k / 0.7
+    ny = ty - 440 * k / 0.7
+    return ny, ps, ny + 430 * ps + 90 * k, ny + 928 * ps
 
 
 def trolley_team(img, cam, tx, ty, k, tt, ph, moving, staff=None):
     """The trolley with him on it, and three staff behind it, hands on its rail, running while it moves."""
     lv = level('para', tt)
-    ps = 0.6 * k / 0.7
-    ny = ty - 440 * k / 0.7
+    ny, ps, my, fl = trolley_y(ty, k)
     team = [(PARA_M, -250, 0.0, 'para', dict(mouth='set', brows='serious')),
             (NURSE, 30, 1.7, 'nurse', dict(brows='serious')),
             (PARA_F, 240, 3.0, 'para', dict(mouth=M.talk_mouth(lv, tt), brows='alarm' if lv > 0 else 'serious'))]
@@ -1232,9 +1375,9 @@ def trolley_team(img, cam, tx, ty, k, tt, ph, moving, staff=None):
         legs = ov.get('legs', walking_legs(ph + phase, 64, 28) if moving else None)
         person(img, cam, X, Y, ps, sp, tt, legs=legs)
         uniform_bits(img, cam, X, Y, ps, sp, kind)
-    stretcher(img, cam, tx, ty, 1170 * k, 'base', legs=True, s=k)
-    lying_protester(img, cam, tx - 330 * k, ty - 14 * k, 0.83 * k, tt, look=(0.0, -0.8), lid=3)
-    stretcher(img, cam, tx, ty, 1170 * k, 'rails', s=k)
+    stretcher(img, cam, tx, my, 1170 * k, 'base', legs=True, s=k, floor=fl)
+    lying_protester(img, cam, tx - 330 * k, my - 14 * k, 0.83 * k, tt, look=(0.0, -0.8), lid=3)
+    stretcher(img, cam, tx, my, 1170 * k, 'rails', s=k)
 
 
 def speed_lines(img, cam, tx, ty, k, amount):
@@ -1287,8 +1430,48 @@ def ward_set(img, cam, t, clock=True, monitor=True):
             p.line([(820 + 48 * math.sin(a), 420 - 48 * math.cos(a)), (820 + 55 * math.sin(a), 420 - 55 * math.cos(a))], INK, 2.2)
         p.line([(820, 420), (820 - 26 * math.sin(0.1), 420 - 29 * math.cos(0.1))], INK, 4)
         p.line([(820, 420), (820 - 44 * math.sin(0.1), 420 - 44 * math.cos(0.1))], INK, 2.6)
+    # the things on a UK A&E bay's walls (generic: no logos)
+    p.poly([(170, 300), (310, 300), (310, 400), (170, 400)], (250, 250, 250), (150, 156, 164), 3)   # the bay whiteboard
+    p.poly([(170, 300), (310, 300), (310, 322), (170, 322)], (40, 90, 160), None)
+    PP.ctext(img, cam, 240, 311, 'BAY 4', 16, (255, 255, 255))
+    for k in range(3):
+        p.line([(184, 340 + 18 * k), (280 - 30 * (k % 2), 340 + 18 * k)], (60, 60, 160), 2.0)
+    p.poly([(680, 520), (770, 520), (770, 590), (680, 590)], (236, 236, 236), INK, 1.8)   # glove dispenser
+    for k in range(3):
+        p.poly([(688 + 28 * k, 530), (710 + 28 * k, 530), (710 + 28 * k, 580), (688 + 28 * k, 580)],
+               [(70, 120, 220), (150, 80, 180), (70, 120, 220)][k], None)
+    p.poly(curve([(800, 540), (840, 540), (840, 620), (800, 620)], 3), (246, 246, 246), INK, 1.8)   # hand gel
+    p.poly([(812, 600), (828, 600), (828, 612), (812, 612)], (60, 60, 66), None)
+    p.poly([(870, 560), (930, 560), (930, 650), (870, 650)], (210, 214, 220), INK, 1.8)   # blood-pressure cuff unit
+    p.ell(900, 590, 20, 20, (250, 250, 250), INK, 1.6)
+    p.line([(900, 590), (910, 580)], INK, 1.6)
+    p.line([(900, 650), (895, 700), (905, 760), (900, 818)], (40, 40, 44), 2.4)
+    p.poly([(690, 750), (730, 750), (730, 818), (690, 818)], (230, 236, 232), INK, 1.8)   # oxygen flowmeter
+    p.poly([(700, 760), (720, 760), (720, 800), (700, 800)], (200, 236, 210), INK, 1.2)
+    p.ell(710, 742, 10, 10, (40, 150, 80), INK, 1.4)
+    p.poly([(750, 730), (800, 730), (800, 818), (750, 818)], (220, 234, 240), INK, 1.8)   # suction canister
+    p.poly([(754, 770), (796, 770), (796, 814), (754, 814)], (200, 214, 222), None)
+    p.ell(380, 850, 12, 12, (220, 60, 50), INK, 1.4)                                        # nurse call button
+    p.poly([(360, 700), (420, 700), (414, 780), (366, 780)], (246, 214, 40), INK, 2.0)   # sharps bin on its bracket
+    p.poly([(356, 692), (424, 692), (424, 706), (356, 706)], (200, 40, 40), INK, 1.4)
+    p.line([(330, 1300), (330, 690)], (170, 176, 184), 6)                                   # drip stand
+    for k in (-1, 1):
+        p.line([(330, 1300), (330 + 40 * k, 1316)], (170, 176, 184), 6)
+    p.line([(304, 690), (356, 690)], (170, 176, 184), 4)
+    p.poly([(880, 1190), (940, 1190), (936, 1290), (884, 1290)], (246, 214, 40), INK, 2.0)   # clinical waste pedal bin
+    p.poly([(876, 1180), (944, 1180), (944, 1194), (876, 1194)], (230, 196, 30), INK, 1.6)
     if monitor:
-        heart_monitor(img, cam, 160, 660, 150, t, BEATS)
+        heart_monitor(img, cam, WARD_MON[0], WARD_MON[1], 150, t, BEATS)
+
+
+# Every set piece on the ward's walls, kept apart from each other and from the curtains (checked once, at start-up).
+WARD_MON = (240, 660)
+WARD_ITEMS = {'left curtain': (-120, 205, 136, 1270), 'right curtain': (950, 205, 1206, 1270), 'window': (330, 300, 650, 640),
+              'clock': (760, 360, 880, 480), 'monitor': (165, 608, 315, 712), 'whiteboard': (170, 300, 310, 400),
+              'glove dispenser': (680, 520, 770, 590), 'hand gel': (800, 540, 840, 620), 'blood-pressure unit': (870, 560, 930, 650),
+              'oxygen flowmeter': (690, 732, 730, 818), 'suction canister': (750, 730, 800, 818),
+              'sharps bin': (356, 692, 424, 780), 'clinical waste bin': (876, 1180, 944, 1290)}
+check_apart('the ward', WARD_ITEMS)
 
 
 # One ward, seen by two cameras: the wide (6b, 7) and the doctor's close-up, which is the wide camera moved in on him,
@@ -1315,7 +1498,7 @@ def shot_ward(t):
     # the doctor, already in the bay, turning to meet them; one nod at the end
     nod = math.sin(min(1.0, max(0.0, (tt - T['nod']) / 0.4)) * math.pi)
     d_sp = dict(DOCTOR, turn=-0.5, look=-0.9, head_dy=10 * nod, mouth='line', brows='serious' if tt < T['nod'] else 'sincere',
-                arms={'L': ((-140, 300), (-120, 480), 'fist'), 'R': ((140, 300), (120, 480), 'fist')},
+                arms=SIDE,
                 blink=M.blinking(tt, (T['nod'] + 0.1,)))
     person(img, cam, *WARD_DOC, d_sp, tt)
     uniform_bits(img, cam, *WARD_DOC, d_sp, 'doc')
@@ -1337,7 +1520,7 @@ def shot_doctor(t):
     # the doctor: speaks, nods, then turns and strolls off to the right with the others
     d_walk = max(0.0, walk - 0.25)
     d_sp = dict(DOCTOR, turn=-0.3 + 0.8 * smooth(walk / 0.3), look=-0.6 if not chat else 0.8, head_dy=8 * agree,
-                arms={'L': ((-140, 300), (-120, 480), 'fist'), 'R': ((140, 300), (120, 480), 'fist')},
+                arms=SIDE,
                 mouth=M.talk_mouth(lv, tt) if lv > 0 else ('smile' if chat else 'line'),
                 blink=M.blinking(tt, (T['s6b'] + 1.9, T['s6b'] + 4.3, T['s6b'] + 7.2)), brows='sincere')
     dx = x + 190 * d_walk ** 1.3
@@ -1350,8 +1533,7 @@ def shot_doctor(t):
         w = max(0.0, walk - 0.1 * i)
         staff.append(dict(dx=230 * w ** 1.3, dy=5 * abs(math.sin(w * 8 + ph0)) * (w > 0),
                           legs=walking_legs(w * 8 + ph0) if w > 0 else None,
-                          sp=dict(turn=0.5, look=0.9, head_dy=8 * agree, arms={'L': ((-140, 300), (-60, 470), 'fist'),
-                                                                              'R': ((140, 300), (60, 470), 'fist')},
+                          sp=dict(turn=0.5, look=0.9, head_dy=8 * agree, arms=SIDE,
                                   mouth=['small', 'line', 'mid', 'line'][int(tt * (5 + i)) % 4] if chat else 'line',
                                   brows='sincere' if chat else None,
                                   blink=M.blinking(tt, (T['s6b'] + 1.3 + i, T['s6b'] + 4.8 + i)))))
@@ -1368,13 +1550,14 @@ def shot_alone(t):
     g = smooth((tt - T['gurgle']) / 0.15) * (1 - smooth((tt - T['gurgle'] - 0.7) / 0.2))
     look = (-0.6 + 1.2 * smooth((tt - T['s7'] - 0.2) / 0.3), -0.6) if tt < T['gurgle'] else (0.9 * math.sin((tt - T['gurgle']) * 3), 0.6)
     tx, ty, k = WARD_TX, WARD_TY, WARD_K
-    stretcher(img, cam, tx, ty, 1170 * k, 'base', legs=True, s=k)
-    lying_protester(img, cam, tx - 330 * k, ty - 14 * k, 0.83 * k, tt, look=look, lid=1 if g > 0.2 else 3,
+    _, _, my, fl = trolley_y(ty, k)
+    stretcher(img, cam, tx, my, 1170 * k, 'base', legs=True, s=k, floor=fl)
+    lying_protester(img, cam, tx - 330 * k, my - 14 * k, 0.83 * k, tt, look=look, lid=1 if g > 0.2 else 3,
                     brows='raised' if g > 0.2 else 'flat', gurgle=g)
-    stretcher(img, cam, tx, ty, 1170 * k, 'rails', s=k)
+    stretcher(img, cam, tx, my, 1170 * k, 'rails', s=k)
     p = B.Pen(img, cam)
     for j, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):   # leads up to the monitor on the wall
-        p.line([(tx - 200 * k, ty - 20 + 6 * j), (200, 900), (150 + 15 * j, 715)], c, 2.0)
+        p.line([(tx - 200 * k, my - 20 + 6 * j), (220, 880), (WARD_MON[0] - 20 + 15 * j, WARD_MON[1] + 50)], c, 2.0)
     return img
 
 
@@ -1601,7 +1784,6 @@ def soundtrack():
     click = key_click()
     for c in CLICKS:  # the keyboard, in step with his words
         place(mix, click * rng.uniform(0.6, 1.0), c, 0.1)
-    place(mix, can_clink(), T['knock'], 0.14)                      # his hand nudges a can
     # the sea
     a, b = T['s2'], T['s4']
     place(mix, faded(engine(int((b - a) * SR)), 0.01, 0.01) * np.linspace(1.0, 0.6, int((b - a) * SR)), a, 0.10)

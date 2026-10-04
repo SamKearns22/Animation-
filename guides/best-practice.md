@@ -77,6 +77,10 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Continuity:**
   - one world, seen from different cameras: build the set once and keep people, props and costumes in
     the same places and states from shot to shot;
+  - **every location is built once as one set, and every shot of it is that same set from a different camera:**
+    backgrounds, furniture and props never change between shots of the same place unless the script changes them
+    (The Patriots 2: the reverse shot of his room first showed a door and a picture that did not exist in the
+    opening shot);
   - respect the 180-degree rule, so screen direction stays consistent across cuts;
   - a close-up should match its wide shot.
 - **Layering (draw order):**
@@ -282,6 +286,10 @@ Specific lessons recorded there include:
   - apply every note;
   - check that a fix hasn't broken anything else;
   - where possible, add an automatic check so a fault can't return.
+- **Automatic clip checks (The Patriots 2):** every set piece that must stay separate (a wall monitor and a curtain, a
+  dispenser and a cupboard) is listed with its outline, and the render stops if any two overlap; a typing fingertip
+  must land on the keyboard. Uniform details (reflective bands, badges) are drawn as part of the jacket, before the
+  arms, so arms always pass in front of them. The checks only know what they are told: keep the fresh-eyes review too.
 - **Record every new lesson here, in the right part:** general only if it is truly general and backed by a
   good source; otherwise under its project.
 
