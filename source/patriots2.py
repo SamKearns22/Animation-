@@ -522,7 +522,7 @@ def room_props(img, cam, t, knock=0.0):
     can(img, cam, 900, 1146, 96, CAN_GOLD)
     can(img, cam, 1010, 1150, 96, CAN_GREEN, crushed=True, seed=1)
     can(img, cam, 60, 1150, 96, CAN_GOLD, crushed=True, seed=4)
-    can(img, cam, 640, 1100, 90, CAN_GREEN, lying=knock)
+    can(img, cam, 700, 1104, 90, CAN_GREEN, lying=knock)
 
 
 def monitor_back(img, cam, t):
@@ -545,7 +545,7 @@ def room_emissive(img, cam, t):
 def shot_room(t):
     """1. The dark box room, a slow push-in from the upper left towards his lit face, moving from frame one."""
     k = smooth(t / T['s2'])
-    cam = B.Cam(1.22 + 0.6 * k, 560 + 70 * k, 840 - 90 * k)
+    cam = B.Cam(1.22 + 0.6 * k, 560 + 70 * k, 960 - 110 * k)
     img = B.canvas()
     room_set(img, cam, t)
     x, y, s = 650, 860, 0.8
@@ -553,11 +553,13 @@ def shot_room(t):
     st = pro_st(t, turn=-0.55, look=-1.0, lid=3, head_dx=-14, tilt=-0.04)
     tp = tap(t)
     tp2 = tap(t, 0.06)
-    st['arms'] = {'L': ((-190, 290), (-300 - 4 * tp, 420 + 16 * tp), 'point'),
-                  'R': ((150, 320), (-10, 450 + 16 * tp2), 'point')}
+    st['arms'] = {'L': ((-235, 230), (-252, 300 + 24 * tp), 'point'),
+                  'R': ((125, 240), (-55, 300 + 24 * tp2), 'point')}
     seated_protester(img, cam, x, y, s, st, t)
     desk_front(img, cam, t)
     keyboard(img, cam, 520, 1140, 420, 46)
+    for side in ('L', 'R'):  # his forearms resting over the desk, hands on the keys
+        PP.protester(img, cam, x, y, s, dict(st, arm_only=side), t)
     mouse(img, cam, 820, 1150, 1.0)
     kn = t - T['knock']
     room_props(img, cam, t, knock=0.18 * math.sin(kn * 22) * math.exp(-kn * 5) if kn > 0 else 0.0)
@@ -895,8 +897,9 @@ def shot_screen(t):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     tp, tp2 = tap(tt), tap(tt, 0.06)
     st = pro_st(tt, turn=0.0, look=0.0, lid=2 if tt < T['cut_off'] - 3.5 else 4, brows='flat' if tt < T['s4'] + 2 else 'cross')
-    st['arms'] = {'L': ((-215, 300), (-120 - 6 * tp, 430 + 18 * tp), 'point'),
-                  'R': ((215, 300), (110 + 6 * tp2, 430 + 18 * tp2), 'point')}
+    st['arms'] = {'L': ((-205, 330), (-75, 455 + 24 * tp), 'point'),
+                  'R': ((205, 330), (75, 455 + 24 * tp2), 'point')}
+    typing = a_clutch <= 0
     if a_cross > 0:
         st.update(brows='raised', lid=0, head_dy=-10 * a_cross, puff=0.0)
     if a_clutch > 0:
@@ -918,6 +921,9 @@ def shot_screen(t):
     p.poly([(-300, 1300), (1400, 1300), (1400, 1500), (-300, 1500)], DESK, INK, 2.6)
     p.poly([(-300, 1500), (1400, 1500), (1400, 1560), (-300, 1560)], DESK_D, INK, 2.4)
     keyboard(img, cam, 540, 1340, 420, 40, far=True)
+    if typing:  # his forearms over the desk, hands on the keys, fingers jabbing
+        for side in ('L', 'R'):
+            PP.protester(img, cam, x, y, s, dict(st, arm_only=side), tt)
     foil_tray(img, cam, 150, 1380, 200, lid_off=-0.5)
     tub(img, cam, 900, 1380, 120, lid=-1)
     can(img, cam, 260, 1300, 100, CAN_GREEN, crushed=True, seed=2)
@@ -1540,7 +1546,7 @@ def soundtrack():
     mix = np.zeros(n)
     click = key_click()
     for c in CLICKS:  # the keyboard, in step with his words
-        place(mix, click * rng.uniform(0.6, 1.0), c, 0.07)
+        place(mix, click * rng.uniform(0.6, 1.0), c, 0.1)
     place(mix, can_clink(), T['knock'], 0.14)                      # his hand nudges a can
     # the sea
     a, b = T['s2'], T['s4']
