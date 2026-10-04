@@ -49,8 +49,8 @@ and everyone goes for lunch.
   - **his first line starts within about half a second**;
   - the title **THE PATRIOTS 2** in our standard treatment, gone by about 1 second, over the dark room and
     never over his face.
-- **No single shot longer than about 6-8 seconds** (the lesson from Mossad). Long speeches get a cut to an
-  insert or a reaction.
+- **No single shot longer than about 6-8 seconds** (the lesson from Mossad), with one exception: the doctor's
+  speech stays on the doctor, unbroken, because the deadpan delivery is the punchline.
 - **The ending:** a hard cut to black after his unhappy gurgle, with picture and sound cutting together
   (a few-millisecond fade so it doesn't click), then nothing.
 
@@ -123,9 +123,9 @@ Timings are rough until the recordings arrive.
    - The doctor nods.
    - **Doctor:** *"This is an urgent situation. This man's life is in serious danger. Unfortunately, I just
      don't like him personally. Shall we go get lunch?"*
-   - Cut to a reaction on "I just don't like him personally": a close-up of the protester's eyes going wide
-     over the mask.
-   - Back on the doctor, everyone nods agreeably and they all walk off together, chatting.
+   - **Stay on the doctor for the whole speech:** a steady medium close-up, no cutaways. He delivers it in one
+     calm, deadpan breath, with the same even tone for "serious danger" as for "lunch". The deadpan is the joke.
+   - Then, still on the doctor, everyone nods agreeably and they all walk off together, chatting.
 7. **The ending (about 36-38 s).**
    - The protester alone on the trolley in the empty bay; the monitor beeps steadily.
    - He lets out an unhappy gurgle.
@@ -208,8 +208,6 @@ Timings are rough until the recordings arrive.
   dark room.
 - **The balaclava:** recommend he keeps it on throughout, in the ambulance and in A&E too, with the oxygen mask
   over the mouth hole.
-- **The doctor's line:** recommend a quick cut to the protester's widening eyes on "I just don't like him
-  personally", then back to the doctor for "Shall we go get lunch?".
 - **The ending:** recommend holding about 1.5 seconds on him alone (steady beep, the gurgle), then a hard cut
   to black.
 - **The dinghy:** recommend about a dozen people, mostly men, orange life jackets on most, drawn with dignity.
