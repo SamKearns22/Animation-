@@ -93,7 +93,7 @@ def build_timeline():
         LINES.append((who, at, w[-1][2], pieces, w))
         return w[-1][2]
     end1 = line(0, 0.35)                       # 1. his room: the letter begins at once
-    T['insert'] = (3.15, 4.25)                 #    his fingers jabbing the keys, by a can
+    T['knock'] = 3.7                           #    his hand nudges a can (it wobbles and clinks)
     T['s2'] = end1 + 0.25                      # 2. the lifeboat
     end2 = line(1, T['s2'] + 0.2)
     T['s3'] = end2 + 0.25                      # 3. the dinghy
@@ -125,7 +125,7 @@ def build_timeline():
 
 
 build_timeline()
-SHOTS = [('room', 0.0, T['insert'][0]), ('insert', *T['insert']), ('room', T['insert'][1], T['s2']),
+SHOTS = [('room', 0.0, T['s2']),
          ('lifeboat', T['s2'], T['s3']), ('dinghy', T['s3'], T['s4']), ('screen', T['s4'], T['s5']),
          ('ambulance', T['s5'], T['s6']), ('ae', T['s6'], T['s6w']), ('ward', T['s6w'], T['s6b']),
          ('doctor', T['s6b'], T['s7']),
@@ -509,7 +509,8 @@ def shot_room(t):
     desk_front(img, cam, t)
     keyboard(img, cam, 520, 1140, 420, 46)
     mouse(img, cam, 820, 1150, 1.0)
-    room_props(img, cam, t)
+    kn = t - T['knock']
+    room_props(img, cam, t, knock=0.18 * math.sin(kn * 22) * math.exp(-kn * 5) if kn > 0 else 0.0)
     monitor_back(img, cam, t)
     light_pass(img, cam, [(ROOM_LIGHT[0] + 270, 860, 250, (0.72, 0.9, 1.15), 1.35), (540, 1120, 260, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
@@ -802,13 +803,13 @@ def shot_dinghy(t):
     dinghy(img, cam, x, y, 760, 'near', t)
     # the lifeboat's side at the right, a crew member leaning out with a hand held out
     p = B.Pen(img, cam)
-    bx = 985 + 6 * math.sin(t * 1.9)
+    bx = 905 + 6 * math.sin(t * 1.9)
     p.poly([(bx - 40, 1000), (1200, 990), (1200, 1700), (bx + 10, 1700)], HULL, INK, 2.8)
     p.poly([(bx - 50, 980), (1200, 970), (1200, 1030), (bx - 46, 1036)], LIFE_ORANGE, INK, 2.4)
     k = smooth((u - 0.3) / 0.45)
     sp = dict(CREW[2], turn=-0.6, look=-1.0, head_dx=-10, tilt=-0.12, blink=M.blinking(t, (2.2, 5.6)))
-    arms = {'L': ((-190 - 40 * k, 280), (-250 - 190 * k, 360 + 20 * k), 'palm'), 'R': ((140, 300), (60, 420), 'fist')}
-    crew_member(img, cam, bx - 5, 760, 0.52, sp, t, arms)
+    arms = {'L': ((-200 - 40 * k, 280), (-280 - 200 * k, 360 + 20 * k), 'palm'), 'R': ((140, 300), (60, 420), 'fist')}
+    crew_member(img, cam, bx + 85, 760, 0.52, sp, t, arms)
     p.poly([(bx - 40, 1000), (1200, 990), (1200, 1700), (bx + 10, 1700)], HULL, INK, 2.8)
     p.poly([(bx - 50, 980), (1200, 970), (1200, 1030), (bx - 46, 1036)], LIFE_ORANGE, INK, 2.4)
     spray(img, cam, bx - 40, 1060, t, n=10, seed=4, size=0.7)
@@ -1134,15 +1135,14 @@ def shot_ae(t):
     dur = T['s6w'] - T['s6']
     doors = 1.0 * smooth(t / 0.07) if t < 0.45 else abs(math.exp(-(t - 0.45) * 2.2) * math.cos((t - 0.45) * 8.0))
     u = t / dur
-    k = 0.4 + 0.45 * u
-    tx = 300 + 640 * u ** 1.3
-    ty = 1050 + 270 * u
+    k = 0.62 + 0.3 * u
+    tx = 430 + 640 * u ** 1.3
+    ty = 1270 + 110 * u
     shake = 7 * math.sin(t * 90) * (1 - t / 0.25) if t < 0.25 else 0.0
     cam = B.Cam(1.0, 540 + shake, 960 + shake * 0.6)
     img = B.canvas()
     ae_room(img, cam, tt, doors=doors)
     trolley_team(img, cam, tx, ty, k, tt, t * 15.0, True)
-    speed_lines(img, cam, tx, ty, k, 1.0)
     return img
 
 
@@ -1199,8 +1199,6 @@ def shot_ward(t):
     person(img, cam, 880, 700, 0.72, d_sp, tt)
     uniform_bits(img, cam, 880, 700, 0.72, d_sp, 'doc')
     trolley_team(img, cam, tx, ty, k, tt, t * 15.0, moving)
-    if moving:
-        speed_lines(img, cam, tx, ty, k, 1 - u)
     return img
 
 
@@ -1210,18 +1208,7 @@ def shot_doctor(t):
     cam = B.Cam(1.0, 540, 960)
     img = B.canvas()
     p = B.Pen(img, cam)
-    p.poly([(-20, -20), (1100, -20), (1100, 2000), (-20, 2000)], HOSP_WALL, None)
-    for k in range(14):  # the bay curtain behind him
-        x0 = -40 + k * 84
-        p.poly([(x0, 160), (x0 + 84, 160), (x0 + 84, 2000), (x0, 2000)], CURTAIN if k % 2 else B.dk(CURTAIN, 0.92), None)
-    p.line([(-20, 150), (1100, 150)], (170, 176, 184), 10)
-    # a clock on the wall, just before one
-    p.ell(860, 420, 70, 70, (250, 250, 248), INK, 3)
-    for k in range(12):
-        a = k / 12 * 2 * math.pi
-        p.line([(860 + 56 * math.sin(a), 420 - 56 * math.cos(a)), (860 + 64 * math.sin(a), 420 - 64 * math.cos(a))], INK, 2.4)
-    p.line([(860, 420), (860 - 30 * math.sin(0.1), 420 - 34 * math.cos(0.1))], INK, 5)
-    p.line([(860, 420), (860 - 52 * math.sin(0.1 + 0.02 * t), 420 - 52 * math.cos(0.1 + 0.02 * t))], INK, 3)
+    ward_set(img, B.Cam(1.7, 632, 738), tt, monitor=False)   # the same ward as 6b and 7, seen closer
     lv = level('doc', tt)
     agree = math.sin(min(1.0, max(0.0, (tt - T['agree']) / 0.45)) * math.pi * 2) * (tt > T['agree'])
     walk = max(0.0, tt - T['leave'])
@@ -1503,7 +1490,7 @@ def soundtrack():
     click = key_click()
     for c in CLICKS:  # the keyboard, in step with his words
         place(mix, click * rng.uniform(0.6, 1.0), c, 0.16)
-    place(mix, can_clink(), T['insert'][0] + 0.55, 0.14)          # his hand knocks the can in the insert
+    place(mix, can_clink(), T['knock'], 0.14)                      # his hand nudges a can
     # the sea
     a, b = T['s2'], T['s4']
     place(mix, faded(engine(int((b - a) * SR)), 0.01, 0.01) * np.linspace(1.0, 0.6, int((b - a) * SR)), a, 0.10)
@@ -1599,7 +1586,7 @@ def closeup(t, z, cx, cy):
 
 def sheet(dst):
     cw, ch, lab = 360, 640, 70
-    stills = [('1. His room (title)', frame_image(0.5)), ('1b. Fingers on the keys', frame_image(T['insert'][0] + 0.4)),
+    stills = [('1. His room (title)', frame_image(0.5)),
               ('1. Push-in continues', frame_image(T['s2'] - 0.6)),
               ('2. The lifeboat', frame_image(T['s2'] + 1.6)), ('3. The dinghy', frame_image(T['s4'] - 1.0)),
               ('4. From the screen', frame_image(T['s4'] + 2.0)), ('4. "...I shall-"', frame_image(T['clutch'] + 0.2)),
@@ -1608,7 +1595,7 @@ def sheet(dst):
               ('6b. Into the ward', frame_image(T['s6w'] + 0.5)), ('6b. "Heart attack, Doctor"', frame_image(T['nod'] - 0.6)),
               ('6c. The doctor', frame_image(T['s6b'] + 5.5)), ('6c. They walk off', frame_image(T['leave'] + 0.9)),
               ('7. Alone; gurgle', frame_image(T['gurgle'] + 0.3)),
-              ('Close-up: the desk', closeup(T['insert'][1] + 0.3, 2.0, 780, 1090)),
+              ('Close-up: the desk', closeup(4.5, 2.0, 780, 1090)),
               ('Close-up: the crew', closeup(T['s2'] + 1.6, 2.4, 610, 830)),
               ('Close-up: the dinghy', closeup(T['s4'] - 1.0, 1.7, 470, 760))]
     cols = 6
