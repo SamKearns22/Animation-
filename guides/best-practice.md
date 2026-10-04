@@ -184,6 +184,10 @@ this series. Full details in `tiktok-design.md`.
   watch time rose to 17.1 s of 30 (first posts: 3.6-4.6 s) and 37% watched to the end. Likely next gain: no single
   shot longer than about 6-8 s; break a long speech with a cut to the listener's reaction (to be confirmed on the
   retention graph).
+- **Plain captions on a sensitive topic did not block distribution (Mossad):** "October 7th" and "9/11" were written
+  plainly and the video still reached 6.9K views in 6 hours. Don't disguise words in captions (it costs readability,
+  breaks accuracy, and TikTok transcribes the audio anyway). TikTok's AI label is required for realistic AI content;
+  our flat cartoons with Sam's own voices are not that.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
