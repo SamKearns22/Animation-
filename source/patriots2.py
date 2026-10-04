@@ -109,11 +109,12 @@ def build_timeline():
     T['s5'] = end4 + 1.75                      # 5. the ambulance
     end5 = line(4, T['s5'] + 0.45)
     T['eyeroll'] = end5 - 0.15
-    T['s6'] = end5 + 0.7                       # 6a. A&E: wheeled in
-    T['stop'] = T['s6'] + 1.6                  #     the trolley comes to rest
-    end6 = line(5, T['stop'] + 0.1)
+    T['s6'] = end5 + 0.7                       # 6a. A&E: the doors bang open, the trolley rushed through
+    T['s6w'] = T['s6'] + 1.5                   # 6b. pushed fast into the ward
+    T['stop'] = T['s6w'] + 0.95                #     skids to a halt in the bay, by the doctor
+    end6 = line(5, T['s6w'] + 0.75)            #     "We believe it's a heart attack, Doctor."
     T['nod'] = end6 + 0.05
-    T['s6b'] = end6 + 0.45                     # 6b. the doctor, unbroken
+    T['s6b'] = end6 + 0.45                     # 6c. the doctor, unbroken
     end7 = line(6, T['s6b'] + 0.3)
     T['agree'] = end7 + 0.15                   #     everyone nods
     T['leave'] = end7 + 0.7                    #     and they all walk off together, chatting
@@ -126,7 +127,8 @@ def build_timeline():
 build_timeline()
 SHOTS = [('room', 0.0, T['insert'][0]), ('insert', *T['insert']), ('room', T['insert'][1], T['s2']),
          ('lifeboat', T['s2'], T['s3']), ('dinghy', T['s3'], T['s4']), ('screen', T['s4'], T['s5']),
-         ('ambulance', T['s5'], T['s6']), ('ae', T['s6'], T['s6b']), ('doctor', T['s6b'], T['s7']),
+         ('ambulance', T['s5'], T['s6']), ('ae', T['s6'], T['s6w']), ('ward', T['s6w'], T['s6b']),
+         ('doctor', T['s6b'], T['s7']),
          ('alone', T['s7'], T['black'])]
 BLACK_AT, DUR = T['black'], T['dur']
 
@@ -220,10 +222,6 @@ def with_legs(fn, legs_fn):
         B.legs = keep
 
 
-def no_legs(img, p, sp):
-    return
-
-
 def seated_legs(img, p, sp):
     """Sitting: thighs coming forward to the knees, shins down to the feet (mostly hidden by the desk)."""
     tc = sp.get('trousers', PP.COMBAT)
@@ -234,12 +232,12 @@ def seated_legs(img, p, sp):
                (22, 20, 22), INK, 2.4)
 
 
-def walking_legs(phase):
+def walking_legs(phase, stride=46, lift_h=18):
     def legs(img, p, sp):
         tc = sp.get('trousers', (40, 40, 46))
         for k, sgn in enumerate((-1, 1)):
-            sw = 46 * math.sin(phase + k * math.pi)
-            lift = max(0.0, 18 * math.sin(phase + k * math.pi + 1.2))
+            sw = stride * math.sin(phase + k * math.pi)
+            lift = max(0.0, lift_h * math.sin(phase + k * math.pi + 1.2))
             leg = [(sgn * 6, 440), (sgn * 104, 440), (sgn * 100 + sw * 0.5, 700), (sgn * 90 + sw, 900 - lift),
                    (sgn * 30 + sw, 902 - lift), (sgn * 18 + sw * 0.5, 700)]
             p.poly(leg, tc, INK, 2.6)
@@ -250,8 +248,12 @@ def walking_legs(phase):
 
 
 def person(img, cam, x, y, s, sp, t, legs=None, flip=1):
+    """Everyone has legs and feet, always (the set may hide them; nothing here can leave them out).
+    legs: standing (None), seated_legs or walking_legs(...)."""
+    sp = dict(sp, full=True)
     if legs is None:
         return B.person(img, cam, x, y, s, sp, t, flip)
+    assert legs in (seated_legs,) or legs.__name__ == 'legs', 'legs must be drawn'
     return with_legs(lambda: B.person(img, cam, x, y, s, sp, t, flip), legs)
 
 
@@ -615,7 +617,7 @@ CREW = [
 
 def crew_member(img, cam, x, y, s, sp, t, arms):
     sp = dict(sp, arms=arms)
-    person(img, cam, x, y, s, sp, t, legs=no_legs)
+    person(img, cam, x, y, s, sp, t)
     L = B.Local(cam, x, y, s)
     p = B.Pen(img, L)
     for k in (0, 1):  # reflective bands on the jacket
@@ -745,7 +747,7 @@ def migrant(img, cam, x, y, s, spec, t, i, reach=0.0):
     L = B.Local(cam, x, y, s)
     if hair == 'scarf':
         scarf(img, L, 0, -150, sp['hw'], sp['hh'], (60, 40, 70))
-    person(img, cam, x, y, s, sp, t, legs=no_legs)
+    person(img, cam, x, y, s, sp, t, legs=seated_legs)
     if jacket:
         life_jacket(img, L)
         if reach:  # the reaching arm in front of the jacket
@@ -1094,41 +1096,111 @@ def ae_room(img, cam, t, doors=0.0):
     B.text(img, cam, 860, 344, 'A&E', 84, (255, 255, 255), font=B.SANS, anchor='ma')
 
 
-def shot_ae(t):
-    """6a. He is wheeled through the doors of A&E on a trolley, staff round him; the paramedic tells the doctor."""
-    tt = t + T['s6']
-    cam = B.Cam(1.0, 540, 960)
-    img = B.canvas()
-    sw = math.exp(-t * 2.2) * math.cos(t * 7.0)
-    ae_room(img, cam, tt, doors=max(0.0, 0.9 * sw))
-    u = smooth(t / (T['stop'] - T['s6']))
-    tx = 110 + 360 * u
-    sy = 1200
-    moving = t < T['stop'] - T['s6']
-    ph = t * 9.0 if moving else 0.0
-    # the doctor waiting on the right, nodding once at the end
-    nod = math.sin(min(1.0, max(0.0, (tt - T['nod']) / 0.4)) * math.pi)
-    d_sp = dict(DOCTOR, turn=-0.4, look=-0.8, head_dy=10 * nod, arms={'L': ((-140, 300), (-120, 480), 'fist'),
-                                                                        'R': ((140, 300), (120, 480), 'fist')},
-                blink=M.blinking(tt, (T['s6'] + 0.8,)), mouth='line')
-    person(img, cam, 860, 690, 0.64, d_sp, tt)
-    uniform_bits(img, cam, 860, 690, 0.64, d_sp, 'doc')
-    # staff walking behind the trolley
+RAIL = {'L': ((-150, 300), (-110, 560), 'fist'), 'R': ((150, 300), (70, 560), 'fist')}
+
+
+def trolley_team(img, cam, tx, ty, k, tt, ph, moving, talk_to=None):
+    """The trolley with him on it, and three staff behind it, hands on its rail, running while it moves."""
     lv = level('para', tt)
-    rail = {'L': ((-150, 310), (-90, 560), 'fist'), 'R': ((150, 310), (90, 560), 'fist')}
-    talking = lv > 0 or (T['stop'] <= tt < T['nod'])
-    f_sp = dict(PARA_F, turn=0.5 if talking else 0.3, look=0.9, mouth=M.talk_mouth(lv, tt), arms=rail)
-    m_sp = dict(PARA_M, turn=0.3, look=0.6, arms=rail, mouth='set')
-    n_sp = dict(NURSE, turn=0.3, look=0.5, arms=rail)
-    person(img, cam, tx - 250, 760, 0.6, m_sp, tt, legs=walking_legs(ph))
-    uniform_bits(img, cam, tx - 250, 760, 0.6, m_sp, 'para')
-    person(img, cam, tx + 40, 750, 0.58, n_sp, tt, legs=walking_legs(ph + 1.7))
-    uniform_bits(img, cam, tx + 40, 750, 0.58, n_sp, 'nurse')
-    person(img, cam, tx + 240, 760, 0.6, f_sp, tt, legs=walking_legs(ph + 3.0))
-    uniform_bits(img, cam, tx + 240, 760, 0.6, f_sp, 'para')
-    stretcher(img, cam, tx, sy, 820, 'base', legs=True, s=0.7)
-    lying_protester(img, cam, tx - 230, sy - 10, 0.58, tt, look=(0.0, -0.8), lid=3)
-    stretcher(img, cam, tx, sy, 820, 'rails', s=0.7)
+    ps = 0.6 * k / 0.7
+    ny = ty - 440 * k / 0.7
+    team = [(PARA_M, -250, 0.0, 'para', dict(mouth='set', brows='serious')),
+            (NURSE, 30, 1.7, 'nurse', dict(brows='serious')),
+            (PARA_F, 240, 3.0, 'para', dict(mouth=M.talk_mouth(lv, tt), brows='alarm' if lv > 0 else 'serious'))]
+    for sp0, off, phase, kind, extra in team:
+        bob = 7 * abs(math.sin(ph + phase)) if moving else 0.0
+        sp = dict(sp0, turn=0.45, look=0.9, arms=RAIL, head_dx=18 if moving else 0, head_dy=bob * 0.5 + (6 if moving else 0),
+                  tilt=0.08 if moving else 0.0, **extra)
+        if sp0 is PARA_F:
+            sp.update(turn=0.6, look=1.0)
+        X = tx + off * k / 0.7
+        person(img, cam, X, ny + bob, ps, sp, tt, legs=walking_legs(ph + phase, 64, 28) if moving else None)
+        uniform_bits(img, cam, X, ny + bob, ps, sp, kind)
+    stretcher(img, cam, tx, ty, 1170 * k, 'base', legs=True, s=k)
+    lying_protester(img, cam, tx - 330 * k, ty - 14 * k, 0.83 * k, tt, look=(0.0, -0.8), lid=3)
+    stretcher(img, cam, tx, ty, 1170 * k, 'rails', s=k)
+
+
+def speed_lines(img, cam, tx, ty, k, amount):
+    p = B.Pen(img, cam)
+    for j in range(4):
+        yy = ty - 60 * k + j * 60 * k
+        p.line([(tx - 600 * k - 40 * j, yy), (tx - 600 * k - 40 * j - 140 * amount, yy)], (150, 156, 164), 3)
+
+
+def shot_ae(t):
+    """6a. Urgent: the A&E doors bang open and the trolley is rushed through, staff running with it, straight past us."""
+    tt = t + T['s6']
+    dur = T['s6w'] - T['s6']
+    doors = 1.0 * smooth(t / 0.07) if t < 0.45 else abs(math.exp(-(t - 0.45) * 2.2) * math.cos((t - 0.45) * 8.0))
+    u = t / dur
+    k = 0.4 + 0.45 * u
+    tx = 300 + 640 * u ** 1.3
+    ty = 1050 + 270 * u
+    shake = 7 * math.sin(t * 90) * (1 - t / 0.25) if t < 0.25 else 0.0
+    cam = B.Cam(1.0, 540 + shake, 960 + shake * 0.6)
+    img = B.canvas()
+    ae_room(img, cam, tt, doors=doors)
+    trolley_team(img, cam, tx, ty, k, tt, t * 15.0, True)
+    speed_lines(img, cam, tx, ty, k, 1.0)
+    return img
+
+
+def ward_set(img, cam, t, clock=True, monitor=True):
+    """The ward: a bay with its curtains pulled back, the wall's oxygen panel, a clock just before one."""
+    p = B.Pen(img, cam)
+    p.poly([(-400, -200), (1500, -200), (1500, 1280), (-400, 1280)], HOSP_WALL, None)
+    p.poly([(-400, 1280), (1500, 1280), (1500, 2400), (-400, 2400)], HOSP_FLOOR, None)
+    for k in range(12):
+        p.line([(-400 + 180 * k, 1280), (-900 + 300 * k, 2400)], B.dk(HOSP_FLOOR, 0.94), 2)
+    p.poly([(-400, 820), (1500, 820), (1500, 880), (-400, 880)], (196, 214, 222), INK, 2.0)   # the bed-head trunking
+    for X in (300, 700):
+        p.ell(X, 850, 14, 14, (240, 240, 240), INK, 1.6)
+    p.line([(-400, 200), (1500, 200)], (170, 176, 184), 10)
+    for side, (x0, x1) in enumerate(((-120, 130), (950, 1200))):   # the curtains, bunched back at each side
+        for k in range(5):
+            a = x0 + (x1 - x0) * k / 5
+            b_ = x0 + (x1 - x0) * (k + 1) / 5
+            p.poly([(a, 205), (b_, 205), (b_ + 6, 1270), (a + 6, 1270)], CURTAIN if k % 2 else B.dk(CURTAIN, 0.9), INK, 1.6)
+    p.poly([(330, 300), (650, 300), (650, 640), (330, 640)], (160, 190, 214), INK, 2.4)   # a window onto the car park
+    p.line([(490, 300), (490, 640)], INK, 2.2)
+    p.poly([(330, 560), (650, 560), (650, 640), (330, 640)], (140, 150, 150), None)
+    if clock:
+        p.ell(820, 420, 60, 60, (250, 250, 248), INK, 3)
+        for k in range(12):
+            a = k / 12 * 2 * math.pi
+            p.line([(820 + 48 * math.sin(a), 420 - 48 * math.cos(a)), (820 + 55 * math.sin(a), 420 - 55 * math.cos(a))], INK, 2.2)
+        p.line([(820, 420), (820 - 26 * math.sin(0.1), 420 - 29 * math.cos(0.1))], INK, 4)
+        p.line([(820, 420), (820 - 44 * math.sin(0.1), 420 - 44 * math.cos(0.1))], INK, 2.6)
+    if monitor:
+        heart_monitor(img, cam, 160, 660, 150, t, BEATS)
+
+
+def shot_ward(t):
+    """6b. Pushed fast into the ward; it skids to a halt in the bay by the doctor; the paramedic tells him; he nods."""
+    tt = t + T['s6w']
+    run = T['stop'] - T['s6w']
+    u = min(1.0, t / run)
+    d = 1 - (1 - u) ** 2.2
+    jolt = 16 * math.exp(-(t - run) * 9) * math.sin((t - run) * 30) if t > run else 0.0
+    k = 0.72
+    tx = -600 + 1140 * d + jolt
+    ty = 1280
+    shake = 6 * math.sin((t - run) * 80) * math.exp(-(t - run) * 10) if t > run else 0.0
+    cam = B.Cam(1.0, 540 + shake, 960)
+    img = B.canvas()
+    ward_set(img, cam, tt)
+    moving = t < run
+    # the doctor, already in the bay, turning to meet them; one nod at the end
+    nod = math.sin(min(1.0, max(0.0, (tt - T['nod']) / 0.4)) * math.pi)
+    d_sp = dict(DOCTOR, turn=-0.5, look=-0.9, head_dy=10 * nod, mouth='line', brows='serious' if tt < T['nod'] else 'sincere',
+                arms={'L': ((-140, 300), (-120, 480), 'fist'), 'R': ((140, 300), (120, 480), 'fist')},
+                blink=M.blinking(tt, (T['nod'] + 0.1,)))
+    person(img, cam, 880, 700, 0.72, d_sp, tt)
+    uniform_bits(img, cam, 880, 700, 0.72, d_sp, 'doc')
+    trolley_team(img, cam, tx, ty, k, tt, t * 15.0, moving)
+    if moving:
+        speed_lines(img, cam, tx, ty, k, 1 - u)
     return img
 
 
@@ -1165,9 +1237,11 @@ def shot_doctor(t):
                 blink=M.blinking(tt, (T['s6b'] + 1.3, T['s6b'] + 4.8)))
     # they turn and walk off to the right (screen right), chatting, the doctor last
     off = 260 * walk ** 1.3
-    person(img, cam, 40 + off * 1.1, 820 + 6 * abs(math.sin(walk * 8)) * (walk > 0), 0.95, f_sp, tt, legs=no_legs)
+    person(img, cam, 40 + off * 1.1, 820 + 6 * abs(math.sin(walk * 8)) * (walk > 0), 0.95, f_sp, tt,
+           legs=walking_legs(walk * 8) if walk > 0 else None)
     uniform_bits(img, cam, 40 + off * 1.1, 820, 0.95, f_sp, 'para')
-    person(img, cam, 1060 + off, 830 + 6 * abs(math.sin(walk * 8 + 1)) * (walk > 0), 0.95, n_sp, tt, legs=no_legs)
+    person(img, cam, 1060 + off, 830 + 6 * abs(math.sin(walk * 8 + 1)) * (walk > 0), 0.95, n_sp, tt,
+           legs=walking_legs(walk * 8 + 1.5) if walk > 0 else None)
     uniform_bits(img, cam, 1060 + off, 830, 0.95, n_sp, 'nurse')
     d_off = 240 * max(0.0, walk - 0.25) ** 1.3
     talking = lv > 0.0
@@ -1177,7 +1251,7 @@ def shot_doctor(t):
                 blink=M.blinking(tt, (T['s6b'] + 1.9, T['s6b'] + 4.3, T['s6b'] + 7.2)), brows='sincere')
     dx = 540 + d_off
     dy = 760 + 6 * abs(math.sin(walk * 8 + 2)) * (walk > 0.25)
-    person(img, cam, dx, dy, 1.25, d_sp, tt, legs=no_legs)
+    person(img, cam, dx, dy, 1.25, d_sp, tt, legs=walking_legs(walk * 8) if walk > 0.25 else None)
     uniform_bits(img, cam, dx, dy, 1.25, d_sp, 'doc')
     return img
 
@@ -1187,13 +1261,8 @@ def shot_alone(t):
     tt = t + T['s7']
     cam = B.Cam(1.3, 560, 1000)
     img = B.canvas()
+    ward_set(img, cam, tt, monitor=False)
     p = B.Pen(img, cam)
-    p.poly([(-20, -20), (1100, -20), (1100, 2000), (-20, 2000)], HOSP_WALL, None)
-    for k in range(14):
-        x0 = -40 + k * 84
-        p.poly([(x0, 200), (x0 + 84, 200), (x0 + 84, 1280), (x0, 1280)], CURTAIN if k % 2 else B.dk(CURTAIN, 0.92), None)
-    p.line([(-20, 190), (1100, 190)], (170, 176, 184), 10)
-    p.poly([(-20, 1280), (1100, 1280), (1100, 2000), (-20, 2000)], HOSP_FLOOR, None)
     # the monitor on its stand
     p.line([(830, 760), (830, 1340)], (150, 156, 164), 12)
     for k in (-1, 0, 1):
@@ -1214,7 +1283,7 @@ def shot_alone(t):
 # --------------------------------------------------------------------------------------------- frames
 
 SHOT_FN = dict(room=shot_room, insert=shot_insert, lifeboat=shot_lifeboat, dinghy=shot_dinghy, screen=shot_screen,
-               ambulance=shot_ambulance, ae=shot_ae, doctor=shot_doctor, alone=shot_alone)
+               ambulance=shot_ambulance, ae=shot_ae, ward=shot_ward, doctor=shot_doctor, alone=shot_alone)
 
 
 def caption_at(t):
@@ -1453,10 +1522,13 @@ def soundtrack():
         if T['s5'] <= bt < T['s6'] - 0.12:
             place(mix, beep(), bt, 0.05)
     # A&E
-    place(mix, door_swing(), T['s6'], 0.2)
-    place(mix, wheels(T['stop'] - T['s6']), T['s6'], 0.12)
-    for k in range(int((T['stop'] - T['s6']) / 0.28)):
-        place(mix, footstep(), T['s6'] + 0.1 + 0.28 * k, 0.08)
+    place(mix, door_swing(), T['s6'], 0.32)
+    place(mix, thud(80, 0.4, 0.8), T['s6'] + 0.02, 0.25)        # the doors banging open
+    place(mix, wheels(T['stop'] - T['s6'] + 0.2), T['s6'], 0.2)
+    place(mix, door_swing(), T['s6w'] + 0.1, 0.12)                 # the ward's doors, further off
+    for k in range(int((T['stop'] - T['s6']) / 0.16)):            # running feet
+        place(mix, footstep(), T['s6'] + 0.05 + 0.16 * k + 0.03 * (k % 2), 0.11)
+    place(mix, rattle(0.4), T['stop'], 0.12)                       # the trolley jolting to a stop
     walk_end = T['s7']
     k = 0
     while T['leave'] + 0.3 * k < walk_end:
@@ -1529,9 +1601,9 @@ def sheet(dst):
               ('2. The lifeboat', frame_image(T['s2'] + 1.6)), ('3. The dinghy', frame_image(T['s4'] - 1.0)),
               ('4. From the screen', frame_image(T['s4'] + 2.0)), ('4. "...I shall-"', frame_image(T['clutch'] + 0.2)),
               ('4. Topples out', frame_image(T['topple'] + 0.3)),
-              ('5. Ambulance', frame_image(T['s5'] + 1.2)), ('6a. A&E doors', frame_image(T['s6'] + 0.5)),
-              ('6a. "Heart attack, Doctor"', frame_image(T['nod'] - 0.6)),
-              ('6b. The doctor', frame_image(T['s6b'] + 5.5)), ('6b. They walk off', frame_image(T['leave'] + 0.9)),
+              ('5. Ambulance', frame_image(T['s5'] + 1.2)), ('6a. Rushed through A&E', frame_image(T['s6'] + 0.6)),
+              ('6b. Into the ward', frame_image(T['s6w'] + 0.5)), ('6b. "Heart attack, Doctor"', frame_image(T['nod'] - 0.6)),
+              ('6c. The doctor', frame_image(T['s6b'] + 5.5)), ('6c. They walk off', frame_image(T['leave'] + 0.9)),
               ('7. Alone; gurgle', frame_image(T['gurgle'] + 0.3)),
               ('Close-up: the desk', closeup(T['insert'][1] + 0.3, 2.0, 780, 1090)),
               ('Close-up: the crew', closeup(T['s2'] + 1.6, 2.4, 610, 830)),
