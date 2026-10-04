@@ -73,12 +73,12 @@ REC = {
                                                ('Consider this the start', 4.32), ('of a lengthy campaign of harassment', 5.45),
                                                ('in which I shall-', 7.60)]),
     4: ('patriots2-paramedic-1', 0.90, 3.80, [("He's treating us like a bloody taxi service.", 1.04)]),
-    5: ('patriots2-paramedic-2', 0.28, 2.70, [("We believe it's a heart attack, Doctor.", 0.40)]),
     6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ('This man is clearly in serious danger.', 4.27),
                                              ('Unfortunately,', 7.30), ("I just don't like him personally.", 8.20),
                                              ('Shall we go get lunch?', 9.95)]),
 }
 GURGLE = ('patriots2-protester-gurgle', 0.20, 2.60)
+CHOKE = ('patriots2-protester-choke', 0.30, 2.70)   # his strangled noise as his eyes cross
 
 
 def word_times(start, wps, pieces, short=False):
@@ -129,10 +129,10 @@ def build_timeline():
     T['cut_off'] = end4                        #    "in which I shall-"
     T['cross'] = end4 + 0.05                   #    his eyes cross, a strangled sound
     T['clutch'] = end4 + 0.25                  #    he clutches his chest
-    T['topple'] = end4 + 0.75                  #    and topples sideways out of frame
-    T['crash'] = end4 + 1.15
-    T['can'] = end4 + 1.05                     #    a can rolls off the desk
-    T['s5'] = end4 + 1.75                      # 5. the ambulance
+    T['topple'] = end4 + 1.55                  #    and topples sideways out of frame, on the second choke
+    T['crash'] = end4 + 1.95
+    T['can'] = end4 + 1.85                     #    a can rolls off the desk
+    T['s5'] = end4 + 2.65                      # 5. the ambulance (after his choke has ended)
     end5 = line(4, T['s5'] + 0.45)
     T['eyeroll'] = end5 - 0.15
     T['s6'] = end5 + 0.7                       # 6a. A&E: the doors bang open, the trolley rushed through
@@ -1551,7 +1551,6 @@ def soundtrack():
     place(mix, wave_slap(), T['s3'] + 3.6, 0.1)
     place(mix, M.reverb(PP.gull_call(), 1.0, 0.2) if hasattr(M, 'reverb') else PP.gull_call(), T['s2'] + 1.3, 0.07)
     # the heart attack
-    place(mix, strangled(), T['cross'], 0.25)
     place(mix, chair_crash(), T['crash'], 0.45)
     place(mix, can_roll(0.7), T['can'], 0.12)
     place(mix, can_clink(), T['can'] + 0.85, 0.16)
@@ -1593,6 +1592,7 @@ def soundtrack():
         if rec:
             voice(*rec, a)
     voice(*GURGLE, T['gurgle'])
+    voice(*CHOKE, T['cross'] - 0.05)
     mix[end - k:end] *= np.linspace(1, 0, k)
     mix[end:] = 0
     # master: about -14 LUFS, peaks no higher than -1 dBTP
