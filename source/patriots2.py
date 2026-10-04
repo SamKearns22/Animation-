@@ -56,9 +56,28 @@ LINE_DEFS = [
                         'of a lengthy campaign of harassment', 'in which I shall-']),
     ('para', None, 3.6, ["He's treating us like a bloody taxi service."]),
     ('para', None, 3.6, ["We believe it's a heart attack, Doctor."]),
-    ('doc', None, 3.3, ['This is an urgent situation.', "This man's life is in serious danger.", 'Unfortunately,',
+    ('doc', None, 3.3, ['This is an urgent situation.', 'This man is clearly in serious danger.', 'Unfortunately,',
                         "I just don't like him personally.", 'Shall we go get lunch?']),
 ]
+
+
+# Sam's recordings (source/audio/patriots2-*.m4a), cleaned and levelled by mossad_audio.line, otherwise exactly as
+# recorded. Line index -> (file, from, to, caption pieces with their start in the recording). Captions follow Sam's
+# words; piece starts sit on his own pauses. Line 3 (the letter's "traitors" line) has no recording yet: placeholder.
+REC = {
+    0: ('patriots2-protester-1', 0.40, 11.90, [('Dear RNLI.', 0.49), ('As a British patriot, I have the deepest respect', 3.10),
+                                               ('for your work saving lives at sea.', 6.60), ('However, I have some concerns.', 9.38)]),
+    1: ('patriots2-protester-2', 0.40, 5.90, [('I recognise the courage', 0.50), ('and resilience your people require', 2.27),
+                                               ('to do what they do.', 4.64)]),
+    2: ('patriots2-protester-3', 0.62, 8.90, [("What you've failed to consider", 0.77), ("is that some of the so-called 'people'", 2.07),
+                                               ('you go to rescue', 4.32), ("are those who I personally don't like.", 5.30)]),
+    4: ('patriots2-paramedic-1', 0.90, 3.80, [("He's treating us like a bloody taxi service.", 1.04)]),
+    5: ('patriots2-paramedic-2', 0.28, 2.70, [("We believe it's a heart attack, Doctor.", 0.40)]),
+    6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ('This man is clearly in serious danger.', 4.27),
+                                             ('Unfortunately,', 7.30), ("I just don't like him personally.", 8.20),
+                                             ('Shall we go get lunch?', 9.95)]),
+}
+GURGLE = ('patriots2-protester-gurgle', 0.20, 2.60)
 
 
 def word_times(start, wps, pieces, short=False):
@@ -89,10 +108,16 @@ def build_timeline():
 
     def line(i, at):
         who, _, wps, pieces = LINE_DEFS[i]
+        if i in REC:
+            f, s0, s1, pcs = REC[i]
+            starts = [at + pt - s0 for _, pt in pcs] + [at + s1 - s0]
+            w = [(txt, starts[k], starts[k + 1], k) for k, (txt, _) in enumerate(pcs)]
+            LINES.append((who, at, at + s1 - s0, [txt for txt, _ in pcs], w, (f, s0, s1)))
+            return at + s1 - s0
         w = word_times(at, wps, pieces, short=(who == 'doc'))
-        LINES.append((who, at, w[-1][2], pieces, w))
+        LINES.append((who, at, w[-1][2], pieces, w, None))
         return w[-1][2]
-    end1 = line(0, 0.35)                       # 1. his room: the letter begins at once
+    end1 = line(0, 0.30)                       # 1. his room: the letter begins at once
     T['knock'] = 3.7                           #    his hand nudges a can (it wobbles and clinks)
     T['s2'] = end1 + 0.25                      # 2. the lifeboat
     end2 = line(1, T['s2'] + 0.2)
@@ -120,7 +145,7 @@ def build_timeline():
     T['leave'] = end7 + 0.7                    #     and they all walk off together, chatting
     T['s7'] = end7 + 2.1                       # 7. alone in the bay
     T['gurgle'] = T['s7'] + 0.55
-    T['black'] = T['s7'] + 1.6                 #     hard cut to black
+    T['black'] = T['gurgle'] + (GURGLE[2] - GURGLE[1]) + 0.2   # hard cut to black, just after the gurgle
     T['dur'] = T['black'] + 0.35
 
 
@@ -133,12 +158,29 @@ SHOTS = [('room', 0.0, T['s2']),
 BLACK_AT, DUR = T['black'], T['dur']
 
 
+ENVS = {}
+
+
+def envelope(rec):
+    """Loudness of a stretch of a cleaned recording, 100 times a second, 0-1."""
+    if rec not in ENVS:
+        f, s0, s1 = rec
+        a = MA.line(f)[int(s0 * SR):int(s1 * SR)]
+        hop = SR // 100
+        lv = np.array([np.sqrt(np.mean(a[i:i + hop] ** 2)) for i in range(0, len(a) - hop, hop)])
+        ENVS[rec] = np.clip(lv / (np.percentile(lv, 95) + 1e-9), 0, 1)
+    return ENVS[rec]
+
+
 def level(who, t):
-    """A simple talking rhythm (0-1) while this person's line is playing: one pulse a syllable, shut between words."""
+    """How loud this person's voice is now (0-1): from the recording, or a simple talking rhythm for a placeholder."""
     t += 1.0 / FPS  # the mouth leads the sound by a frame
-    for w_, a, b, _, words in LINES:
+    for w_, a, b, _, words, rec in LINES:
         if w_ != who or not (a <= t < b):
             continue
+        if rec:
+            lv = envelope(rec)
+            return float(lv[min(int((t - a) * 100), len(lv) - 1)])
         for w, s, e, _ in words:
             if s <= t < e:
                 n = max(1, round(len(re.sub(r'\W', '', w)) / 3))
@@ -149,9 +191,15 @@ def level(who, t):
 
 
 def syllables():
-    """(time, who) of every syllable, for the keyboard clicks."""
+    """(time, who) of every syllable, for the keyboard clicks: the peaks of the recorded voice, or the placeholder pace."""
+    from scipy.signal import find_peaks
     out = []
-    for who, a, b, _, words in LINES:
+    for who, a, b, _, words, rec in LINES:
+        if rec:
+            lv = np.convolve(envelope(rec), np.hanning(7) / np.hanning(7).sum(), 'same')
+            pk, _ = find_peaks(lv, distance=12, prominence=0.12, height=0.15)
+            out += [(a + k / 100, who) for k in pk]
+            continue
         for w, s, e, _ in words:
             n = max(1, round(len(re.sub(r'\W', '', w)) / 3))
             out += [(s + (e - s) * k / n, who) for k in range(n)]
@@ -1275,7 +1323,7 @@ SHOT_FN = dict(room=shot_room, insert=shot_insert, lifeboat=shot_lifeboat, dingh
 
 
 def caption_at(t):
-    for idx, (who, a, b, pieces, words) in enumerate(LINES):
+    for idx, (who, a, b, pieces, words, rec) in enumerate(LINES):
         starts = [next(s for w, s, e, i in words if i == k) for k in range(len(pieces))]
         nxt_line = LINES[idx + 1][1] if idx + 1 < len(LINES) else 1e9
         for k, piece in enumerate(pieces):
@@ -1490,7 +1538,7 @@ def soundtrack():
     mix = np.zeros(n)
     click = key_click()
     for c in CLICKS:  # the keyboard, in step with his words
-        place(mix, click * rng.uniform(0.6, 1.0), c, 0.16)
+        place(mix, click * rng.uniform(0.6, 1.0), c, 0.07)
     place(mix, can_clink(), T['knock'], 0.14)                      # his hand nudges a can
     # the sea
     a, b = T['s2'], T['s4']
@@ -1529,15 +1577,27 @@ def soundtrack():
     for bt in BEATS:
         if T['s7'] <= bt < BLACK_AT - 0.12:
             place(mix, beep(), bt, 0.06)
-    place(mix, gurgle(), T['gurgle'], 0.28)
     end = int(BLACK_AT * SR)
     k = int(0.005 * SR)
     mix[end - k:end] *= np.linspace(1, 0, k)   # hard cut to black: a few-millisecond fade, then nothing
     mix[end:] = 0
-    # Until the voices arrive the effects are mastered to sit where they will under -14 LUFS speech.
-    peak = np.abs(mix).max()
-    if peak > 0:
-        mix *= 10 ** (-3 / 20) / peak
+    # the voices: cleaned and levelled, otherwise exactly as recorded (volume only)
+    def voice(f, s0, s1, at):
+        seg = MA.line(f)[int(s0 * SR):int(s1 * SR)].copy()
+        k = int(0.02 * SR)
+        seg[:k] *= np.linspace(0, 1, k)
+        seg[-k:] *= np.linspace(1, 0, k)
+        place(mix, seg, at, 1.0)
+    for who, a, b, _, words, rec in LINES:
+        if rec:
+            voice(*rec, a)
+    voice(*GURGLE, T['gurgle'])
+    mix[end - k:end] *= np.linspace(1, 0, k)
+    mix[end:] = 0
+    # master: about -14 LUFS, peaks no higher than -1 dBTP
+    for _ in range(3):
+        mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
+        mix = M.limiter(mix, -2.6)
     return mix
 
 
@@ -1554,6 +1614,7 @@ def render(out, size, crf, ss):
     from multiprocessing import Pool
     wav = out + '.wav'
     mix = soundtrack()
+    print(f'sound: {MA.lufs(mix):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
     MA.write_wav(wav, mix)
     n = int(round(DUR * FPS))
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
