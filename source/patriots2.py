@@ -1224,33 +1224,39 @@ def on_his_back(img, cam, hx, by, s, t, look=(0.0, -1.0), blink=False, brows='fl
     B.arm(p, (190, -110), (350, -84), (500, -92), PP.SLEEVE, w=32)
     PP.patch(img, p, (190, -110), (350, -84), 'PP')
     p.ell(530, -94, 24, 20, PP.EYE_SKIN, INK, 2.2)
-    # neck and head: balaclava, the eye opening on top, looking up
-    p.poly([(70, -140), (140, -150), (150, -10), (80, -4)], PP.BALA, INK, 2.4)
-    p.poly(curve(oval(0, -86, 96, 82, 24), 2), PP.BALA, INK, 2.6)
-    for k in range(-3, 4):
-        p.line([(k * 24, -10), (k * 22, -160)], (50, 50, 57), 1.4)
-    p.poly(curve([(-46, -150), (40, -156), (46, -126), (-44, -120)], 4), PP.EYE_SKIN, INK, 2.2)
-    ex, ey = -4, -140
+    # neck and head in profile, face up (balaclava on): crown to our left, the profile along the top
+    p.poly([(88, -122), (150, -150), (150, -5), (88, -2)], PP.BALA, INK, 2.4)
+    head = curve([(-60, -150), (-92, -118), (-102, -68), (-86, -20), (-50, 0), (20, 0), (100, -6), (116, -96), (98, -148),
+                  (86, -166), (64, -170), (56, -178), (46, -173), (40, -180), (33, -183), (24, -214), (8, -172), (-4, -161),
+                  (-20, -169), (-44, -161)], 3)
+    p.poly(head, PP.BALA, INK, 2.6)
+    for k in range(5):  # the knit's ribs, following the skull
+        p.line([(-80 + 30 * k, -14), (-70 + 26 * k, -150 + 4 * k)], (50, 50, 57), 1.3)
+    p.line(oval(-32, -84, 18, 24, 14), (52, 52, 60), 1.6)                    # the ear under the knit
+    soft(img, L, [(-60, -146), (10, -160), (40, -150), (-40, -120)], (160, 160, 175), 0.18, 6)
+    # the eye opening between brow and the bridge of the nose; the eye seen side-on, looking up
+    p.poly(curve([(-34, -165), (-20, -170), (-6, -162), (9, -172), (15, -150), (-30, -144)], 3), PP.EYE_SKIN, INK, 2.0)
+    ex, ey = -8, -156
     if blink:
-        p.line([(ex - 15, ey), (ex, ey - 3), (ex + 15, ey)], INK, 2.4)
+        p.line([(ex - 10, ey + 2), (ex + 2, ey - 3), (ex + 10, ey - 1)], INK, 2.2)
     else:
-        p.poly([(ex - 16, ey), (ex - 7, ey - 7), (ex + 7, ey - 7), (ex + 16, ey), (ex + 7, ey + 6), (ex - 7, ey + 6)],
-               (250, 250, 248), INK, 2.0)
-        p.ell(ex + 6 * look[0], ey + 3 * look[1], 4, 4, INK, None)
+        p.poly([(ex - 11, ey + 3), (ex - 2, ey - 6), (ex + 9, ey - 4), (ex + 3, ey + 5)], (250, 250, 248), INK, 1.8)
+        p.ell(ex + 2 + 3 * look[0], ey - 2 + 2 * look[1], 3.2, 3.2, INK, None)
         if lid > 0:
-            p.line([(ex - 16, ey - 1 + lid * 0.6), (ex, ey - 8 + lid * 0.6), (ex + 16, ey - 1 + lid * 0.6)], INK, 2.4)
+            p.line([(ex - 11, ey + 3 - lid * 0.4), (ex - 2, ey - 6 + lid * 0.4), (ex + 9, ey - 4 + lid * 0.4)], INK, 2.2)
     bc = (104, 74, 54)
     if brows == 'raised':
-        p.line([(ex - 18, ey - 18), (ex, ey - 22), (ex + 18, ey - 18)], bc, 3.2)
+        p.line([(ex - 20, ey - 14), (ex - 6, ey - 18), (ex + 4, ey - 15)], bc, 3.0)
     else:
-        p.line([(ex - 18, ey - 13), (ex + 18, ey - 14)], bc, 3.2)
-    # the oxygen mask over his mouth and nose, its strap round his head, the tube
+        p.line([(ex - 20, ey - 10), (ex + 4, ey - 12)], bc, 3.0)
+    # the oxygen mask fitted over his nose and mouth, its strap round his head, the tube
     puff = 1 + 0.15 * gurgle
-    p.line(oval(10, -86, 98, 86, 20, -2.6, -0.5), (230, 230, 220), 3)
-    p.poly(curve([(36, -158), (90, -160), (96, -180 - 10 * puff), (64, -196 * puff + 0), (34, -182)], 4),
-           (190, 222, 206), (110, 150, 130), 2.4)
-    soft(img, L, oval(60, -176, 12, 7, 10), (255, 255, 255), 0.5, 2)
-    p.line([(92, -170), (160, -120), (240, -60), (300, -10)], (190, 222, 206), 6)
+    p.line([(14, -176), (-30, -150), (-90, -96)], (230, 230, 220), 3)
+    mask = curve([(10, -170), (16, -205 - 6 * puff), (46, -210 - 6 * puff), (72, -182), (62, -168)], 4)
+    soft(img, L, mask, (200, 236, 220), 0.4, 0)                  # clear plastic: his nose shows through
+    p.line(mask + mask[:1], (110, 160, 140), 2.2)
+    soft(img, L, oval(28, -198, 6, 4, 10), (255, 255, 255), 0.6, 1)
+    p.line([(46, -208), (110, -196), (200, -150), (300, -60)], (190, 222, 206), 6)
     return L.P(150, -150)
 
 
