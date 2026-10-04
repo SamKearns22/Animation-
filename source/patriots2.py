@@ -1100,7 +1100,7 @@ def ae_room(img, cam, t, doors=0.0):
 RAIL = {'L': ((-150, 300), (-110, 560), 'fist'), 'R': ((150, 300), (70, 560), 'fist')}
 
 
-def trolley_team(img, cam, tx, ty, k, tt, ph, moving, talk_to=None):
+def trolley_team(img, cam, tx, ty, k, tt, ph, moving, staff=None):
     """The trolley with him on it, and three staff behind it, hands on its rail, running while it moves."""
     lv = level('para', tt)
     ps = 0.6 * k / 0.7
@@ -1108,15 +1108,19 @@ def trolley_team(img, cam, tx, ty, k, tt, ph, moving, talk_to=None):
     team = [(PARA_M, -250, 0.0, 'para', dict(mouth='set', brows='serious')),
             (NURSE, 30, 1.7, 'nurse', dict(brows='serious')),
             (PARA_F, 240, 3.0, 'para', dict(mouth=M.talk_mouth(lv, tt), brows='alarm' if lv > 0 else 'serious'))]
-    for sp0, off, phase, kind, extra in team:
+    for i, (sp0, off, phase, kind, extra) in enumerate(team):
+        ov = (staff or [{}] * 3)[i]
         bob = 7 * abs(math.sin(ph + phase)) if moving else 0.0
         sp = dict(sp0, turn=0.45, look=0.9, arms=RAIL, head_dx=18 if moving else 0, head_dy=bob * 0.5 + (6 if moving else 0),
                   tilt=0.08 if moving else 0.0, **extra)
         if sp0 is PARA_F:
             sp.update(turn=0.6, look=1.0)
-        X = tx + off * k / 0.7
-        person(img, cam, X, ny + bob, ps, sp, tt, legs=walking_legs(ph + phase, 64, 28) if moving else None)
-        uniform_bits(img, cam, X, ny + bob, ps, sp, kind)
+        sp.update(ov.get('sp', {}))
+        X = tx + off * k / 0.7 + ov.get('dx', 0.0)
+        Y = ny + bob + ov.get('dy', 0.0)
+        legs = ov.get('legs', walking_legs(ph + phase, 64, 28) if moving else None)
+        person(img, cam, X, Y, ps, sp, tt, legs=legs)
+        uniform_bits(img, cam, X, Y, ps, sp, kind)
     stretcher(img, cam, tx, ty, 1170 * k, 'base', legs=True, s=k)
     lying_protester(img, cam, tx - 330 * k, ty - 14 * k, 0.83 * k, tt, look=(0.0, -0.8), lid=3)
     stretcher(img, cam, tx, ty, 1170 * k, 'rails', s=k)
@@ -1176,6 +1180,12 @@ def ward_set(img, cam, t, clock=True, monitor=True):
         heart_monitor(img, cam, 160, 660, 150, t, BEATS)
 
 
+# One ward, seen by two cameras: the wide (6b, 7) and the doctor's close-up, which is the wide camera moved in on him,
+# so everyone and everything stays exactly where it is.
+WARD_TX, WARD_TY, WARD_K = 430, 1280, 0.72     # where the trolley comes to rest
+WARD_DOC = (840, 700, 0.72)                     # where the doctor stands
+
+
 def shot_ward(t):
     """6b. Pushed fast into the ward; it skids to a halt in the bay by the doctor; the paramedic tells him; he nods."""
     tt = t + T['s6w']
@@ -1184,7 +1194,7 @@ def shot_ward(t):
     d = 1 - (1 - u) ** 2.2
     jolt = 16 * math.exp(-(t - run) * 9) * math.sin((t - run) * 30) if t > run else 0.0
     k = 0.72
-    tx = -600 + 1140 * d + jolt
+    tx = -600 + (WARD_TX + 600) * d + jolt
     ty = 1280
     shake = 6 * math.sin((t - run) * 80) * math.exp(-(t - run) * 10) if t > run else 0.0
     cam = B.Cam(1.0, 540 + shake, 960)
@@ -1196,74 +1206,64 @@ def shot_ward(t):
     d_sp = dict(DOCTOR, turn=-0.5, look=-0.9, head_dy=10 * nod, mouth='line', brows='serious' if tt < T['nod'] else 'sincere',
                 arms={'L': ((-140, 300), (-120, 480), 'fist'), 'R': ((140, 300), (120, 480), 'fist')},
                 blink=M.blinking(tt, (T['nod'] + 0.1,)))
-    person(img, cam, 880, 700, 0.72, d_sp, tt)
-    uniform_bits(img, cam, 880, 700, 0.72, d_sp, 'doc')
+    person(img, cam, *WARD_DOC, d_sp, tt)
+    uniform_bits(img, cam, *WARD_DOC, d_sp, 'doc')
     trolley_team(img, cam, tx, ty, k, tt, t * 15.0, moving)
     return img
 
 
 def shot_doctor(t):
-    """6b. The doctor, a steady medium close-up, one calm breath; everyone nods; they all walk off, chatting."""
+    """6c. The same ward, the camera moved in on the doctor: one calm breath; everyone nods; they all walk off, chatting."""
     tt = t + T['s6b']
-    cam = B.Cam(1.0, 540, 960)
+    x, y, s_ = WARD_DOC
+    cam = B.Cam(1.6, x, y - 150 * s_ - (600 - 960) / 1.6)
     img = B.canvas()
-    p = B.Pen(img, cam)
-    ward_set(img, B.Cam(1.7, 632, 738), tt, monitor=False)   # the same ward as 6b and 7, seen closer
+    ward_set(img, cam, tt)
     lv = level('doc', tt)
     agree = math.sin(min(1.0, max(0.0, (tt - T['agree']) / 0.45)) * math.pi * 2) * (tt > T['agree'])
     walk = max(0.0, tt - T['leave'])
     chat = walk > 0.1
-    # the paramedic (left edge) and the nurse (right edge), half in frame
-    f_sp = dict(PARA_F, turn=0.5, look=0.9, head_dy=8 * agree, arms={'L': ((-140, 300), (-60, 470), 'fist'),
-                                                                     'R': ((140, 300), (60, 470), 'fist')},
-                mouth=['small', 'line', 'mid', 'line'][int(tt * 6) % 4] if chat else 'line',
-                blink=M.blinking(tt, (T['s6b'] + 2.4, T['s6b'] + 6.1)))
-    n_sp = dict(NURSE2, turn=-0.5, look=-0.9, head_dy=8 * agree, arms={'L': ((-140, 300), (-60, 470), 'fist'),
-                                                                       'R': ((140, 300), (60, 470), 'fist')},
-                mouth=['line', 'small', 'line', 'mid'][int(tt * 5) % 4] if chat else 'line',
-                blink=M.blinking(tt, (T['s6b'] + 1.3, T['s6b'] + 4.8)))
-    # they turn and walk off to the right (screen right), chatting, the doctor last
-    off = 260 * walk ** 1.3
-    person(img, cam, 40 + off * 1.1, 820 + 6 * abs(math.sin(walk * 8)) * (walk > 0), 0.95, f_sp, tt,
-           legs=walking_legs(walk * 8) if walk > 0 else None)
-    uniform_bits(img, cam, 40 + off * 1.1, 820, 0.95, f_sp, 'para')
-    person(img, cam, 1060 + off, 830 + 6 * abs(math.sin(walk * 8 + 1)) * (walk > 0), 0.95, n_sp, tt,
-           legs=walking_legs(walk * 8 + 1.5) if walk > 0 else None)
-    uniform_bits(img, cam, 1060 + off, 830, 0.95, n_sp, 'nurse')
-    d_off = 240 * max(0.0, walk - 0.25) ** 1.3
-    talking = lv > 0.0
-    d_sp = dict(DOCTOR, turn=-0.15 + 0.6 * smooth(walk / 0.3), look=-0.4 if not chat else 0.8, head_dy=8 * agree,
-                arms={'L': ((-150, 310), (-120, 490), 'fist'), 'R': ((150, 310), (120, 490), 'fist')},
-                mouth=M.talk_mouth(lv, tt) if talking else ('smile' if chat else 'line'),
+    # the doctor: speaks, nods, then turns and strolls off to the right with the others
+    d_walk = max(0.0, walk - 0.25)
+    d_sp = dict(DOCTOR, turn=-0.3 + 0.8 * smooth(walk / 0.3), look=-0.6 if not chat else 0.8, head_dy=8 * agree,
+                arms={'L': ((-140, 300), (-120, 480), 'fist'), 'R': ((140, 300), (120, 480), 'fist')},
+                mouth=M.talk_mouth(lv, tt) if lv > 0 else ('smile' if chat else 'line'),
                 blink=M.blinking(tt, (T['s6b'] + 1.9, T['s6b'] + 4.3, T['s6b'] + 7.2)), brows='sincere')
-    dx = 540 + d_off
-    dy = 760 + 6 * abs(math.sin(walk * 8 + 2)) * (walk > 0.25)
-    person(img, cam, dx, dy, 1.25, d_sp, tt, legs=walking_legs(walk * 8) if walk > 0.25 else None)
-    uniform_bits(img, cam, dx, dy, 1.25, d_sp, 'doc')
+    dx = x + 190 * d_walk ** 1.3
+    person(img, cam, dx, y + 5 * abs(math.sin(d_walk * 8)) * (d_walk > 0), s_, d_sp, tt,
+           legs=walking_legs(d_walk * 8) if d_walk > 0 else None)
+    uniform_bits(img, cam, dx, y, s_, d_sp, 'doc')
+    # the staff behind the trolley: they glance at the doctor, nod, then walk off after him, chatting
+    staff = []
+    for i, ph0 in enumerate((0.0, 1.5, 3.0)):
+        w = max(0.0, walk - 0.1 * i)
+        staff.append(dict(dx=230 * w ** 1.3, dy=5 * abs(math.sin(w * 8 + ph0)) * (w > 0),
+                          legs=walking_legs(w * 8 + ph0) if w > 0 else None,
+                          sp=dict(turn=0.5, look=0.9, head_dy=8 * agree, arms={'L': ((-140, 300), (-60, 470), 'fist'),
+                                                                              'R': ((140, 300), (60, 470), 'fist')},
+                                  mouth=['small', 'line', 'mid', 'line'][int(tt * (5 + i)) % 4] if chat else 'line',
+                                  brows='sincere' if chat else None,
+                                  blink=M.blinking(tt, (T['s6b'] + 1.3 + i, T['s6b'] + 4.8 + i)))))
+    trolley_team(img, cam, WARD_TX, WARD_TY, WARD_K, tt, 0.0, False, staff=staff)
     return img
 
 
 def shot_alone(t):
-    """7. The protester alone on the trolley in the empty bay; the monitor beeps steadily; an unhappy gurgle."""
+    """7. The same ward, everyone gone: him alone on the trolley where it stopped; the monitor beeps; an unhappy gurgle."""
     tt = t + T['s7']
-    cam = B.Cam(1.3, 560, 1000)
+    cam = B.Cam(1.35, 400, 1060)
     img = B.canvas()
-    ward_set(img, cam, tt, monitor=False)
-    p = B.Pen(img, cam)
-    # the monitor on its stand
-    p.line([(830, 760), (830, 1340)], (150, 156, 164), 12)
-    for k in (-1, 0, 1):
-        p.line([(830, 1340), (830 + 80 * k, 1380)], (150, 156, 164), 10)
-    heart_monitor(img, cam, 800, 660, 240, tt, BEATS)
+    ward_set(img, cam, tt)
     g = smooth((tt - T['gurgle']) / 0.15) * (1 - smooth((tt - T['gurgle'] - 0.7) / 0.2))
     look = (-0.6 + 1.2 * smooth((tt - T['s7'] - 0.2) / 0.3), -0.6) if tt < T['gurgle'] else (0.9 * math.sin((tt - T['gurgle']) * 3), 0.6)
-    stretcher(img, cam, 600, 1160, 860, 'base', legs=True, s=0.75)
-    lying_protester(img, cam, 380, 1150, 0.62, tt, look=look, lid=1 if g > 0.2 else 3, brows='raised' if g > 0.2 else 'flat',
-                    gurgle=g)
-    stretcher(img, cam, 600, 1160, 860, 'rails', s=0.75)
+    tx, ty, k = WARD_TX, WARD_TY, WARD_K
+    stretcher(img, cam, tx, ty, 1170 * k, 'base', legs=True, s=k)
+    lying_protester(img, cam, tx - 330 * k, ty - 14 * k, 0.83 * k, tt, look=look, lid=1 if g > 0.2 else 3,
+                    brows='raised' if g > 0.2 else 'flat', gurgle=g)
+    stretcher(img, cam, tx, ty, 1170 * k, 'rails', s=k)
     p = B.Pen(img, cam)
-    for k, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):
-        p.line([(500, 1150 + 8 * k), (680, 980), (780 + 30 * k, 744)], c, 2.0)
+    for j, c in enumerate(((220, 60, 50), (240, 230, 60), (60, 160, 70))):   # leads up to the monitor on the wall
+        p.line([(tx - 200 * k, ty - 20 + 6 * j), (200, 900), (150 + 15 * j, 715)], c, 2.0)
     return img
 
 
