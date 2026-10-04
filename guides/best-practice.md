@@ -81,6 +81,11 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
     backgrounds, furniture and props never change between shots of the same place unless the script changes them
     (The Patriots 2: the reverse shot of his room first showed a door and a picture that did not exist in the
     opening shot);
+  - **props are part of the set:** everything on a table, desk, shelf or floor has one place in one written plan (its
+    position measured from a fixed point, such as the character or the table's edge), and every camera draws from
+    that plan, never from positions typed in separately for each shot. The plan is checked so no two items overlap
+    (The Patriots 2: after the walls were shared, each shot still placed its own cans and tubs, so the desk changed
+    between shots);
   - respect the 180-degree rule, so screen direction stays consistent across cuts;
   - a close-up should match its wide shot.
 - **Layering (draw order):**
