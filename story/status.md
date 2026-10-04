@@ -3,8 +3,8 @@
 Read this first in any new session, after CLAUDE.md.
 
 ## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
-- DONE 4 Oct 2026: `animations/the-patriots-2-vertical.mp4` (60.7 s, 8.4 MB, 1080 x 1920, 12 fps). Animatic about 4 min,
-  final render 19.8 min on 4 cores. Checked against the safe-area guides (title, widest caption, busiest frames).
+- DONE 4 Oct 2026: `animations/the-patriots-2-vertical.mp4` (61.6 s, 8.6 MB, 1080 x 1920, 12 fps). Animatic about 4 min,
+  final render 20 min on 4 cores. Checked against the safe-area guides (title, widest caption, busiest frames).
 - To post: cover around 0:05 (him lit by the screen, mid-letter, title gone). Avoid #heartattack and #NHS (they give
   away the turn) and #smallboats, #migrants, #illegalimmigration (strictest moderation, limited reach).
 - All code in `source/patriots2.py` (`stills`, `sheet`, `animatic`, `final`, `times` prints the timeline). Shots: his
