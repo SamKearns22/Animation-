@@ -73,6 +73,7 @@ REC = {
                                                ('Consider this the start', 4.32), ('of a lengthy campaign of harassment', 5.45),
                                                ('in which I shall-', 7.60)]),
     4: ('patriots2-paramedic-1', 0.90, 3.80, [("He's treating us like a bloody taxi service.", 1.04)]),
+    5: ('patriots2-paramedic-2', 0.90, 3.30, [("We believe it's a heart attack, Doctor.", 1.02)]),
     6: ('patriots2-doctor-1', 2.20, 11.05, [('This is an urgent situation.', 2.34), ('This man is clearly in serious danger.', 4.27),
                                              ('Unfortunately,', 7.30), ("I just don't like him personally.", 8.20),
                                              ('Shall we go get lunch?', 9.95)]),

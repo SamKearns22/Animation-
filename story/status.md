@@ -12,9 +12,8 @@ Read this first in any new session, after CLAUDE.md.
   rushed through the A&E doors, pushed fast into the ward ("heart attack, Doctor"), the doctor's speech (the ward camera
   moved in: one shared ward set, `WARD_TX` / `WARD_DOC`), alone on the trolley (same ward), hard cut to black.
 - Sam's recordings: `source/audio/patriots2-*.m4a` (protester-1 Dear RNLI, -2 courage, -3 people I don't like, -4
-  traitors, -gurgle; paramedic-1 taxi, -2 heart attack; doctor-1 the whole speech, doctor-2 a spare take of "This man is
-  clearly in serious danger"). Cleaned and levelled with `mossad_audio.line`; `REC` in patriots2.py says which stretch
-  plays and where each caption piece starts (on Sam's pauses). The strangled noise is still made in code.
+  traitors, -gurgle; paramedic-1 taxi, -2 heart attack; doctor-1 the whole speech; protester-choke his strangled noise as his eyes cross). Cleaned and levelled with `mossad_audio.line`; `REC` in patriots2.py says which stretch
+  plays and where each caption piece starts (on Sam's pauses). Every sound of a voice is Sam's own.
 - Director's decisions: no keyboard insert (the push-in runs through); legs on everyone always; urgent rush through the
   doors into the ward before the deadpan; the doctor redesigned so he doesn't resemble Andy Burnham (cropped sandy hair,
   short beard, round face, thin dark glasses); doctor's line "This man is clearly in serious danger".
