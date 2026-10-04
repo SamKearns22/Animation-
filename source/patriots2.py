@@ -1355,7 +1355,9 @@ def chair_crash():
     place(out, thud(60, 0.6, 0.6), 0.0, 1.0)            # him hitting the floor
     place(out, thud(110, 0.3, 0.9), 0.12, 0.6)          # the chair's base clattering
     for k in range(5):                                   # the castors rattling to a stop
-        place(out, M.clink() * 0.3 + thud(300, 0.08, 1.0) * 0.4, 0.25 + 0.09 * k + 0.02 * k * k, 0.5 * (0.7 ** k))
+        at = 0.25 + 0.09 * k + 0.02 * k * k
+        place(out, M.clink() * 0.3, at, 0.5 * (0.7 ** k))
+        place(out, thud(300, 0.08, 1.0) * 0.4, at, 0.5 * (0.7 ** k))
     return normal(out)
 
 
@@ -1401,7 +1403,8 @@ def wave_slap():
     n = int(0.7 * SR)
     tt = np.arange(n) / SR
     x = band(rng.standard_normal(n), 200, 3000) * np.exp(-tt * 7) * np.minimum(1, tt / 0.015)
-    x += 0.6 * thud(55, 0.5, 0.0)[:n] * 0.6
+    th = thud(55, 0.5, 0.0)
+    x[:len(th)] += 0.36 * th
     return normal(x)
 
 
