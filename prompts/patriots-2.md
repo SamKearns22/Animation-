@@ -18,6 +18,14 @@ The working rules:
 **Before you make anything, ask me every question you need** (see the list at the end). Ask them in one
 message, grouped, with your recommended answer for each, so I can just say yes.
 
+**On this occasion the audio comes later.** I will record the dialogue after the pictures are built. Model the
+whole film first without my recordings:
+- time every line from a natural speaking pace (about 2.7 words a second for the letter, a little quicker for
+  the paramedic and doctor), with silent placeholders where the voices will go;
+- mouths move to a simple talking rhythm, and the captions use the script words, timed to those placeholders;
+- the sound effects can go in already.
+When my recordings arrive, retime the cuts, mouths and captions to what I actually recorded.
+
 ## The joke
 The protester from The Patriots writes the RNLI a letter: he respects them, but some of the "people" they
 rescue are people he personally doesn't like, so they are traitors. Then he has a heart attack, and the NHS
@@ -33,7 +41,8 @@ and everyone goes for lunch.
 
 ## The format
 - **TikTok, native 1080 x 1920.** Everything that matters stays inside the safe area (x 60-900, y 310-1500).
-- **Length:** the script as written runs about 45 seconds. Aim for 35-40 (see the questions).
+- **Length:** about 38 seconds (the opening line has been tightened so the first laugh lands by about
+  12 seconds).
 - **The opening:**
   - no held title card;
   - the first frame already moves (the slow push-in has begun), with typing sound from the start;
@@ -66,7 +75,7 @@ and everyone goes for lunch.
 ## The places and shots
 Timings are rough until the recordings arrive.
 
-1. **His room, at night (about 0-9 s).**
+1. **His room, at night (about 0-6 s).**
    - A dark box room. The only light is the computer screen: a cool blue glow on his balaclava, hands and
      the desk, with everything else in near-black blue shadow.
    - On the desk:
@@ -77,16 +86,16 @@ Timings are rough until the recordings arrive.
      frame.
    - He types, and we hear what he types in his own voice. The keyboard clicks follow the rhythm of his
      words.
-   - **Patriot:** *"Dear RNLI. As a British Patriot, I have nothing but the deepest respect for the work you
-     do saving lives at sea. However, I am writing to register some recent concerns I have had."*
-   - To keep the shot under about 8 seconds, cut once to an insert of his fingers jabbing the keys beside a
-     lager can (see the questions).
-2. **The lifeboat (about 9-14 s).**
+   - **Patriot:** *"Dear RNLI. As a British patriot, I have the deepest respect for your work saving lives at
+     sea. However, I have some concerns."*
+   - Partway through, cut once to an insert of his fingers jabbing the keys beside a lager can, then back to
+     the push-in (see the questions).
+2. **The lifeboat (about 6-10 s).**
    - The lifeboat skims the rough, grey English Channel under a low sky, spray off the bow.
    - The volunteer crew stare ahead, concerned and serious.
    - **Patriot (voice over):** *"I recognise the courage and resilience your people require to do what they
      do."*
-3. **The dinghy (about 14-21 s).**
+3. **The dinghy (about 10-17 s).**
    - The lifeboat draws alongside an overloaded grey inflatable: about a dozen people, mostly working-age
      men, Iraqi, Somali, Moroccan and other Middle Eastern and African people.
    - Draw them with dignity and individual faces: no caricature, orange life jackets on most, soaked, cold
@@ -94,7 +103,7 @@ Timings are rough until the recordings arrive.
    - A crew member reaches out a hand.
    - **Patriot (voice over):** *"What you've failed to consider is that some of the so-called 'people' you go
      to rescue are those who I personally don't like."*
-4. **His room again, from the screen's side (about 21-28 s).**
+4. **His room again, from the screen's side (about 17-24 s).**
    - The camera sits where the monitor is, looking straight at his lit face, and keeps pushing in slowly,
      closer now.
    - **Patriot:** *"The lot of you are, on reflection, traitors. Consider this the start of a lengthy
@@ -102,12 +111,12 @@ Timings are rough until the recordings arrive.
    - **Then, in the same shot:** his eyes cross; a strangled sound; he clutches his chest and topples
      sideways off his chair, out of frame.
    - A can rolls off the desk.
-5. **The ambulance (about 28-31 s).**
+5. **The ambulance (about 24-27 s).**
    - Inside the ambulance. He lies on the stretcher, balaclava still on, with an oxygen mask over the mouth
      hole and monitor leads attached.
    - A male and a female paramedic tend to him calmly. She has the line; he rolls his eyes in agreement.
    - **Female paramedic:** *"He's treating us like a bloody taxi service."*
-6. **A&E (about 31-42 s).**
+6. **A&E (about 27-36 s).**
    - He is wheeled through the doors of A&E on a trolley, with medical staff around him.
    - They gather round the bed. One is a white British doctor: forties, calm, kind-looking.
    - **Female paramedic:** *"We believe it's a heart attack, Doctor."*
@@ -117,16 +126,16 @@ Timings are rough until the recordings arrive.
    - Cut to a reaction on "I just don't like him personally": a close-up of the protester's eyes going wide
      over the mask.
    - Back on the doctor, everyone nods agreeably and they all walk off together, chatting.
-7. **The ending (about 42-44 s).**
+7. **The ending (about 36-38 s).**
    - The protester alone on the trolley in the empty bay; the monitor beeps steadily.
    - He lets out an unhappy gurgle.
    - **Hard cut to black.**
 
 ## The sound
-- **Sam's recordings:** I attach the audio files in the chat together with this prompt.
-  - Save them to `source/audio/` as `patriots2-<who>-<n>.m4a`, listen to each one, and work out which line is
+- **Sam's recordings (they come later, after the animatic):** when I send them,
+  - save them to `source/audio/` as `patriots2-<who>-<n>.m4a`, listen to each one, and work out which line is
     which from what is said. Ask me only if a file is unclear.
-  - Clean each one gently (hum and hiss down, never underwater), and level every line to the same loudness.
+  - clean each one gently (hum and hiss down, never underwater), and level every line to the same loudness.
   - Master the film to about -14 LUFS, peaks no higher than -1 dBTP.
   - Otherwise play the voices exactly as recorded: volume only, no echo, no pitch change.
   - **Match the words to the recording, not to this script.** If I said something different, the captions
@@ -173,12 +182,14 @@ Timings are rough until the recordings arrive.
 
 ## How to work
 1. Ask your questions (below) and wait for my answers.
-2. **Clean and level the audio,** and send me a short note of where my words differ from the script.
-3. Make a **storyboard sheet**:
+2. Make a **storyboard sheet**:
    - one still per shot at phone size;
    - close-ups of the desk, the lifeboat crew and the dinghy.
    Send it and wait for my OK.
-4. Make a quick **animatic** of the whole film, small and rough, with the real audio. Send it and wait for my OK.
+3. Make a quick **animatic** of the whole film, small and rough, timed to the placeholder pace, with the sound
+   effects but no voices. Send it and wait for my OK.
+4. **When my recordings arrive:** clean and level them, send me a short note of where my words differ from the
+   script, retime the film to them, and send a second quick animatic with the real voices.
 5. **Render the final film:**
    - send it in the chat;
    - save it as `animations/the-patriots-2-vertical.mp4` (under 25 MB);
@@ -189,14 +200,8 @@ Timings are rough until the recordings arrive.
    the joke or are likely to limit reach.
 
 ## Questions to ask me (with your recommendation for each)
-- **Audio:** confirm which attached file is which line and who voices whom (say what you heard in each file).
-- **Length:**
-  - The script runs about 45 seconds, and the first laugh ("people I personally don't like") lands at about
-    17 seconds.
-  - Recommend tightening the opening line, for example *"Dear RNLI. As a British patriot, I have the deepest
-    respect for your work saving lives at sea. However, I have some concerns."*, so the first laugh comes by
-    about 12 seconds and the film runs about 38.
-  - Otherwise, keep my wording and accept about 45 seconds.
+- **Placeholder timing:** recommend timing the film from a natural speaking pace (about 38 seconds) until my
+  recordings arrive, then retiming everything to them.
 - **The opening shot:** recommend one quick insert of his fingers on the keys (by the lager cans) to break up
   the long push-in.
 - **The title:** recommend **THE PATRIOTS 2** on one line, at the standard size, gone by 1 second, over the
