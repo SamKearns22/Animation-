@@ -13,7 +13,12 @@ Read this first in any new session, after CLAUDE.md.
   fills, outlines, linen weave), `source/bayeux_weapons.py` (erase masks and the four new weapons; `build` stitches
   every scene into `source/data/bayeux/`, not on GitHub, ~1 min), `source/bayeux.py` (`stills`, `animatic`, `final`).
   Fonts: Cinzel Decorative Black and Cinzel (OFL) in `source/fonts/`.
-- Next: Sam's notes on the concept; then the longer film (more content, visitors in the room, his voice).
+- Concept v3 sent 5 Oct (18.9 s, 14.5 MB, render 92 s): the room rebuilt as the London 2026 exhibit (Sam's
+  `london-2026-exhibit-*.jpg`: tapestry lying almost flat in long low glass cases, black wall with glowing blue line
+  drawings and captions, warm floor light strip); title held 2 s longer (`D` in bayeux.py); after the stapler's reveal
+  the glory fades (`STAPLER_FADE`) and it fires one staple into the messenger's forearm (`STAPLER_CLICK`, `STAPLE_HIT`).
+- Next: NEW SKINS. Wait for Sam's references; replace each figure's clothing (not the figure) with the new skin, in
+  stitch, the same way as the weapons.
 
 ## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
 - Posted Mon 5 Oct 2026 at 1pm, the day of another RNLI/small-boat protest (Gosport). Cover around 0:05. Check the

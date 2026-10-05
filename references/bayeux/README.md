@@ -2,7 +2,8 @@
 
 | File | What it shows | Used for |
 |---|---|---|
-| `tapestry-room-reference.jpg` | Long dark gallery, curved timber roof, tapestry in a lit case along the left wall | Shot 1 camera and the one room plan |
+| `london-2026-exhibit-1.jpg` ... `-5.jpg` | **The London 2026 exhibit (the right room):** the tapestry lying almost flat in long low glass cases at waist height, black metal frames, a tall black wall behind with glowing blue line drawings of the scenes and white captions, a warm light strip along the floor, visitors leaning over | Shot 1 and the end title: the one room plan |
+| `old-wrong-exhibit-room.jpg` | A different exhibit (sent by mistake) | Not used |
 | `panning-along-tapestry.jpg` | The curved lit case seen straight on; Normans carrying arms to the ships (scene 37-38) | Shot 2 pan: camera, stitch style, colours, borders |
 | `weapon-1-plasma-longshot-rifle.jpg` | Four Norman archers | The top-middle archer (navy tunic, ochre legs): bow and arrow become the rifle |
 | `weapon-2-ice-claw.jpg`, `weapon-2-ice-claw-wider.jpg` (wider, with both borders: the main one to draw from) | Norman horsemen charging (ANGLORUM EXERCITUS, the English army) | The middle rider on the red-brown horse: his weapon becomes the claw |

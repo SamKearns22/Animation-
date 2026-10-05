@@ -32,16 +32,19 @@ T_INTRO = 0.15                # INTRODUCING
 T_BAYEUX, T_TAPESTRY = 0.95, 1.20
 ARROWS_AT = [1.48, 1.62, 1.80, 1.94]      # the four flaming arrows land (two per Y)
 T_SEASON = 2.25               # SEASON PASS wipes in, in fire
-CUT_TAPESTRY = 3.95           # glitch cut to the tapestry
-T_NEW = 4.10                  # NEW WEAPONS
-SWAPS = {'rifle': 5.35, 'claw': 7.20, 'ghost': 9.00, 'stapler': 12.10}
+D = 2.0                       # the title lingers this much longer while SEASON PASS roars
+CUT_TAPESTRY = 3.95 + D       # glitch cut to the tapestry
+T_NEW = 4.10 + D              # NEW WEAPONS
+SWAPS = {'rifle': 5.35 + D, 'claw': 7.20 + D, 'ghost': 9.00 + D, 'stapler': 12.10 + D}
 NAMES = {'rifle': 'PLASMA LONGSHOT RIFLE', 'claw': 'ICE CLAW', 'ghost': 'GHOST PISTOL', 'stapler': 'STAPLER'}
-NAME_OUT = {'rifle': 6.90, 'claw': 8.70, 'ghost': 10.90, 'stapler': 13.55}
-GHOST_FLY = (9.30, 9.85)      # the ghost streams out of the pistol
-STAPLER_CLICK = 12.75         # after the build-up, one small flat click
-CUT_END_TITLE = 13.60         # the title slams back
-BLACK_AT = 15.00              # hard cut to black
-DUR = 15.30
+STAPLER_FADE = 15.30          # all the stapler's glory fades away...
+NAME_OUT = {'rifle': 6.90 + D, 'claw': 8.70 + D, 'ghost': 10.90 + D, 'stapler': STAPLER_FADE + 0.45}
+GHOST_FLY = (9.30 + D, 9.85 + D)   # the ghost streams out of the pistol
+STAPLER_CLICK = 16.00         # ...and it fires one single staple: click
+STAPLE_HIT = 16.20            # the staple reaches the messenger
+CUT_END_TITLE = 17.20         # the title slams back
+BLACK_AT = 18.60              # hard cut to black
+DUR = 18.90
 
 
 def ease(x):
@@ -284,91 +287,146 @@ def homography(src, dst):
     return np.linalg.solve(np.array(A, float), np.array(b, float))
 
 
-GALLERY_CAM = (0.35, 1.40, -0.2, math.radians(-20), math.radians(-6), 640)
-CASE = dict(x=-1.55, y0=0.92, y1=1.42, z0=-0.6, z1=34.0)    # the tapestry's band on the left wall, behind glass
+GALLERY_CAM = (0.42, 1.55, -1.3, math.radians(-15), math.radians(-27), 1000)
+# The London 2026 exhibit (Sam's references): the tapestry lies almost flat, tilted a little towards the visitor,
+# in a long low glass case at waist height; a tall black wall behind it with glowing blue line drawings of the
+# scenes and white captions; black metal frames over the glass; a warm light strip along the floor.
+CASE = dict(xn=0.0, yn=0.90, xf=-0.50, yf=1.00, z0=-1.2, z1=60.0)   # the tapestry's near and far edges
+WALL_X = -1.05
+PANEL_STEP = 2.4                                                     # glass frames every 2.4 m
+
+
+def line_art(strip, h_px):
+    """The wall's glowing drawings: the tapestry's own outlines, traced as thin cyan light."""
+    full = strip.window(0, strip.width, {})
+    lum = full.mean(2)
+    lin = np.array(BS.WOOL['linen'], np.float32).mean()
+    ink = ndi.binary_opening(lum < lin * 0.45, iterations=1).astype(np.float32)
+    edge = np.clip(ink - ndi.binary_erosion(ink > 0.5, iterations=2), 0, 1)
+    im = Image.fromarray((edge * 255).astype(np.uint8))
+    w = int(im.width * h_px / im.height)
+    e = np.asarray(im.resize((w, h_px), Image.LANCZOS), np.float32) / 255
+    return e
 
 
 def gallery(strip):
-    """The long, dim exhibition gallery (flat cartoon style), from Sam's reference: the tapestry in its lit
-    case along the left wall, curved timber ribs overhead, the walkway on the right. Drawn at design size."""
+    """The exhibition room (flat cartoon style), after Sam's London 2026 references. Drawn at design size."""
     cam = GALLERY_CAM
-    S2 = 2   # drawn at twice size, then reduced: smooth edges
-    img = Image.new('RGB', (W0 * S2, H0 * S2), (18, 15, 14))
+    S2 = 2
+    img = Image.new('RGB', (W0 * S2, H0 * S2), (6, 7, 10))
     d = ImageDraw.Draw(img)
 
     def P(p):
         (x, y), z = project(cam, p)
         return (x * S2, y * S2)
 
-    zf = 60.0
-    # end of the gallery: a soft lit opening
-    d.polygon([P((-1.8, 0, zf)), P((2.6, 0, zf)), P((2.6, 3.0, zf)), P((-1.8, 3.0, zf))], fill=(70, 60, 52))
-    # floor: dark, with the paler walkway along the right
-    d.polygon([P((-1.8, 0, -1.0)), P((2.6, 0, -1.0)), P((2.6, 0, zf)), P((-1.8, 0, zf))], fill=(30, 26, 24))
-    d.polygon([P((0.6, 0, -1.0)), P((2.4, 0, -1.0)), P((2.4, 0, zf)), P((0.6, 0, zf))], fill=(66, 60, 56))
-    # right wall
-    d.polygon([P((2.6, 0, -1.0)), P((2.6, 3.0, -1.0)), P((2.6, 3.0, zf)), P((2.6, 0, zf))], fill=(26, 22, 22))
-    # left wall
-    d.polygon([P((-1.8, 0, -1.0)), P((-1.8, 3.0, -1.0)), P((-1.8, 3.0, zf)), P((-1.8, 0, zf))], fill=(22, 18, 17))
-    # ceiling vault: dark timber between ribs, with lit coves
-    for i in range(80):
-        z0, z1 = -1.0 + i * 0.75, -1.0 + (i + 1) * 0.75
-        if z0 > zf:
-            break
-        for j in range(16):
-            a0, a1 = math.pi * j / 16, math.pi * (j + 1) / 16
-            def V(a, z):
-                return P((0.4 + 2.2 * math.cos(math.pi - a), 3.0 + 1.5 * math.sin(a), z))
-            cove = j < 4                       # the light coves low on the right of the vault
-            if cove and i % 2 == 1:
-                c = (150, 140, 124) if j == 1 else (104, 92, 80)
-            else:
-                lit = 0.7 + 0.3 * math.sin(a0)
-                c = tuple(int(v * lit) for v in (46, 34, 26))
-            d.polygon([V(a0, z0), V(a1, z0), V(a1, z1), V(a0, z1)], fill=c)
-    # timber ribs
-    for i in range(0, 80, 2):
-        z = -1.0 + i * 0.75
-        if z > zf:
-            break
-        pts = [P((0.4 + 2.2 * math.cos(math.pi - a), 3.0 + 1.5 * math.sin(a), z)) for a in np.linspace(0, math.pi, 30)]
-        (_, _), zz = project(cam, (0, 3, z))
-        d.line(pts, fill=(70, 48, 32), width=max(2, int(60 * S2 / zz)))
-    # the case: dark wooden plinth, a lit top fascia, the glass front
-    x, y0, y1, z0, z1 = CASE['x'], CASE['y0'], CASE['y1'], CASE['z0'], CASE['z1']
-    d.polygon([P((x - 0.25, 0, z0)), P((x + 0.35, 0, z0)), P((x + 0.35, y0 - 0.06, z0)), P((x - 0.25, y0 - 0.06, z0))],
-              fill=(34, 24, 18))
-    d.polygon([P((x + 0.35, 0, z0)), P((x + 0.35, 0, z1)), P((x + 0.35, y0 - 0.06, z1)), P((x + 0.35, y0 - 0.06, z0))],
-              fill=(44, 31, 22))
-    d.polygon([P((x + 0.35, y0 - 0.06, z0)), P((x + 0.35, y0 - 0.06, z1)), P((x, y0 - 0.02, z1)), P((x, y0 - 0.02, z0))],
-              fill=(120, 96, 70))
-    d.polygon([P((x, y1 + 0.03, z0)), P((x, y1 + 0.03, z1)), P((x + 0.3, y1 + 0.16, z1)), P((x + 0.3, y1 + 0.16, z0))],
-              fill=(52, 38, 28))
-    d.line([P((x + 0.3, y1 + 0.15, z0)), P((x + 0.3, y1 + 0.15, z1))], fill=(255, 236, 196), width=5 * S2)
-    # the rail in front
-    d.line([P((x + 0.62, 0.95, z0)), P((x + 0.62, 0.95, z1))], fill=(70, 56, 44), width=9 * S2)
+    zf = 70.0
+    c = CASE
+    # floor: dark, glossy
+    d.polygon([P((WALL_X, 0, -2)), P((3.0, 0, -2)), P((3.0, 0, zf)), P((WALL_X, 0, zf))], fill=(14, 15, 18))
+    # the black wall behind
+    d.polygon([P((WALL_X, 0, -2)), P((WALL_X, 4.0, -2)), P((WALL_X, 4.0, zf)), P((WALL_X, 0, zf))], fill=(7, 8, 12))
+    # the case body: black, front face towards the visitor, with the warm light strip at its foot
+    d.polygon([P((c['xn'] + 0.08, 0, c['z0'])), P((c['xn'] + 0.08, 0, zf)), P((c['xn'] + 0.08, c['yn'] - 0.05, zf)),
+               P((c['xn'] + 0.08, c['yn'] - 0.05, c['z0']))], fill=(30, 30, 35))
+    d.polygon([P((c['xn'] + 0.08, c['yn'] - 0.05, c['z0'])), P((c['xn'] + 0.08, c['yn'] - 0.05, zf)),
+               P((c['xn'], c['yn'], zf)), P((c['xn'], c['yn'], c['z0']))], fill=(30, 30, 34))
+    d.polygon([P((c['xn'] + 0.08, 0.0, c['z0'])), P((c['xn'] + 0.08, 0.0, zf)), P((c['xn'] + 0.11, 0.0, zf)),
+               P((c['xn'] + 0.11, 0.0, c['z0']))], fill=(255, 210, 150))
+    for k, col in enumerate(((60, 44, 30), (34, 26, 20))):
+        e = 0.11 + 0.10 * (k + 1)
+        d.polygon([P((c['xn'] + 0.11, 0.0, c['z0'])), P((c['xn'] + 0.11, 0.0, zf)), P((c['xn'] + e, 0.0, zf)),
+                   P((c['xn'] + e, 0.0, c['z0']))], fill=col) if False else None
+    # the case's back wall between the tapestry and the black wall
+    d.polygon([P((c['xf'], c['yf'], c['z0'])), P((c['xf'], c['yf'], zf)), P((WALL_X, 1.25, zf)), P((WALL_X, 1.25, c['z0']))],
+              fill=(12, 13, 16))
     img = img.resize((W0, H0), Image.LANCZOS)
-    # the tapestry itself, mapped on to the back of the case in perspective
-    tap_w_design = 1.0 / ((y1 - y0) / HB)          # design px per metre along the band
-    length = (z1 - z0) * tap_w_design
-    win = strip.window(0, min(strip.width, length), {})
-    tap = Image.fromarray(np.clip(win, 0, 255).astype(np.uint8))
-    tw, th = tap.size
-    q = [P((x, y1, z0)), P((x, y1, z1)), P((x, y0, z1)), P((x, y0, z0))]
-    q = [(u / S2, v / S2) for u, v in q]
-    coef = homography(q, [(0, 0), (tw, 0), (tw, th), (0, th)])
-    warped = tap.transform((W0, H0), Image.PERSPECTIVE, tuple(coef), Image.BICUBIC, fillcolor=(0, 0, 0))
-    m = Image.new('L', (W0, H0), 0)
-    ImageDraw.Draw(m).polygon(q, fill=255)
     a = np.asarray(img, np.float32)
-    wv = np.asarray(warped, np.float32)
-    mm = np.asarray(m.filter(ImageFilter.GaussianBlur(0.8)), np.float32)[..., None] / 255
-    # lit softly from above: brighter at the top of the band, falling off down it and into the distance
-    yy = np.arange(H0, dtype=np.float32)[:, None, None]
-    a = a * (1 - mm) + wv * mm * 0.92
-    glow = Image.fromarray((mm[..., 0] * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(40))
-    a += np.asarray(glow, np.float32)[..., None] / 255 * np.array([60, 48, 30], np.float32) * 0.5
-    # reflections on the glass: a few long soft streaks
+
+    def quad(za, zb, near, far):
+        q = [P((far[0], far[1], za)), P((far[0], far[1], zb)), P((near[0], near[1], zb)), P((near[0], near[1], za))]
+        return [(u / S2, v / S2) for u, v in q]
+
+    def paste(src, q, frac=1.0):
+        nonlocal a
+        tw, th = src.size
+        coef = homography(q, [(0, 0), (tw * frac, 0), (tw * frac, th), (0, th)])
+        warped = np.asarray(src.transform((W0, H0), Image.PERSPECTIVE, tuple(coef), Image.BICUBIC), np.float32)
+        m = Image.new('L', (W0, H0), 0)
+        ImageDraw.Draw(m).polygon(q, fill=255)
+        mm = np.asarray(m, np.float32)[..., None] / 255
+        return warped, mm
+
+    # the white mount the tapestry lies on (a margin on the near side), then the tapestry, tiled at true shape
+    mount = quad(c['z0'], 40, (c['xn'] - 0.02, c['yn'] + 0.004), (c['xf'] - 0.02, c['yf'] + 0.004))
+    m = Image.new('L', (W0, H0), 0)
+    ImageDraw.Draw(m).polygon(mount, fill=255)
+    mm = np.asarray(m, np.float32)[..., None] / 255
+    a = a * (1 - mm) + np.array([218, 218, 212], np.float32) * mm
+    full = strip.window(0, strip.width, {})
+    tap = Image.fromarray(np.clip(full, 0, 255).astype(np.uint8))
+    depth = math.hypot(c['xf'] - c['xn'], c['yf'] - c['yn']) * 0.86
+    metres = strip.width * depth / HB
+    near = (c['xn'] - 0.07, c['yn'] + 0.014)
+    far = (near[0] + (c['xf'] - c['xn']) * 0.86, near[1] + (c['yf'] - c['yn']) * 0.86)
+    zc = c['z0']
+    while zc < 40:
+        zb = zc + metres
+        w, mm = paste(tap, quad(zc, zb, near, far))
+        a = a * (1 - mm) + w * mm * np.array([1.0, 0.98, 0.93])
+        zc = zb
+    # the black wall's glowing line drawings and captions
+    art = line_art(strip, 300)
+    artim = Image.fromarray((art * 255).astype(np.uint8))
+    yb, yt = 1.55, 2.55
+    zc = 0.5
+    while zc < 45:
+        seg_m = (yt - yb) * art.shape[1] / art.shape[0]
+        piece = min(seg_m, 2.2)
+        frac = piece / seg_m
+        q = [P((WALL_X + 0.01, yt, zc)), P((WALL_X + 0.01, yt, zc + piece)), P((WALL_X + 0.01, yb, zc + piece)),
+             P((WALL_X + 0.01, yb, zc))]
+        q = [(u / S2, v / S2) for u, v in q]
+        x0 = int((zc * 300) % max(1, art.shape[1] - int(art.shape[1] * frac)))
+        crop = artim.crop((x0, 0, x0 + int(art.shape[1] * frac), art.shape[0]))
+        coef = homography(q, [(0, 0), (crop.width, 0), (crop.width, crop.height), (0, crop.height)])
+        g = np.asarray(crop.transform((W0, H0), Image.PERSPECTIVE, tuple(coef), Image.BILINEAR), np.float32) / 255
+        glow = ndi.gaussian_filter(g, 3)
+        a += (g[..., None] * np.array([110, 190, 255]) * 0.8 + glow[..., None] * np.array([30, 90, 255]) * 0.9)
+        # a small caption block beside each drawing: lines of white text
+        for k in range(4):
+            yy = yt + 0.12 - k * 0.07
+            L = 0.9 - (0.3 if k == 3 else 0.0)
+            pa, pb = P((WALL_X + 0.01, yy, zc - 1.25)), P((WALL_X + 0.01, yy, zc - 1.25 + L))
+            dd = Image.new('L', (W0, H0), 0)
+            ImageDraw.Draw(dd).line([(pa[0] / S2, pa[1] / S2), (pb[0] / S2, pb[1] / S2)], fill=200,
+                                     width=max(1, int(26 / max(1.0, project(cam, (0, 0, zc))[1]))))
+            a += np.asarray(dd, np.float32)[..., None] / 255 * np.array([170, 180, 190])
+        zc += piece + 2.6
+    # the glass: black metal frames over the case, every few metres, and a long top rail
+    fr = Image.new('L', (W0, H0), 0)
+    df = ImageDraw.Draw(fr)
+    gh = 0.22
+    for i in range(30):
+        z = c['z0'] + 1.0 + i * PANEL_STEP
+        zz = project(cam, (0, 0, z))[1]
+        wd = max(1, int(26 / zz * 1.0))
+        p1, p2 = P((c['xn'], c['yn'] + gh, z)), P((c['xf'] - 0.05, c['yf'] + gh, z))
+        p3, p4 = P((c['xn'], c['yn'], z)), P((c['xf'] - 0.05, c['yf'], z))
+        for u, v in ((p1, p2), (p1, p3), (p2, p4)):
+            df.line([(u[0] / S2, u[1] / S2), (v[0] / S2, v[1] / S2)], fill=255, width=wd)
+    for yy, xx in ((c['yn'] + gh, c['xn']), (c['yf'] + gh, c['xf'] - 0.05)):
+        u, v = P((xx, yy, c['z0'])), P((xx, yy, zf))
+        df.line([(u[0] / S2, u[1] / S2), (v[0] / S2, v[1] / S2)], fill=255, width=6)
+    frm = np.asarray(fr, np.float32)[..., None] / 255
+    a = a * (1 - frm) + np.array([14, 14, 16], np.float32) * frm
+    # light: the tapestry glows softly; a faint sheen on the glass; the floor strip glows on the floor
+    lit = ndi.gaussian_filter(np.clip(a.mean(2) - 120, 0, 255) / 135, 26)
+    a += lit[..., None] * np.array([40, 36, 30])
+    yy = np.arange(H0, dtype=np.float32)[:, None]
+    xx = np.arange(W0, dtype=np.float32)[None, :]
+    sheen = np.exp(-(((xx - yy * 0.9) - (-350)) / 90) ** 2) * (yy > 900)
+    a += sheen[..., None] * 18
     return np.clip(a, 0, 255)
 
 
@@ -653,15 +711,15 @@ def blend(dst, src):
 
 # ------------------------------------------------------------------------------------------- slam text
 def slam(a, text, t, t0, t1, cy, size, colour=(255, 255, 255), glow=(255, 255, 255), fontname='Anton-Regular.ttf',
-         maxw=840, spacing=0):
+         maxw=840, spacing=0, fade=0.10):
     """Trailer text: punches in big and settles, holds, then glitches out."""
     if t < t0 or t > t1:
         return
     p = (t - t0) / 0.14
     sc = 1.0 + 0.55 * (1 - ease(p)) if p < 1 else 1.0 + 0.02 * (t - t0 - 0.14)
     alpha = min(1.0, p * 1.5)
-    if t1 - t < 0.10:
-        alpha *= (t1 - t) / 0.10
+    if t1 - t < fade:
+        alpha *= (t1 - t) / fade
     f = font(fontname, size * R)
     lines = wrap(text, f, maxw * R)
     while len(lines) > 2 or max(f.getlength(l) for l in lines) > maxw * R:
@@ -761,12 +819,15 @@ def cam_at(t):
             (7.06, cx, cy + 40, 1.22), (8.66, cx + 40, cy + 40, 1.28),
             (8.86, gx - 120, gy + 160, 1.0), (9.30, gx - 100, gy + 160, 1.0), (9.95, gx + 40, gy + 150, 1.02),
             (10.86, gx + 70, gy + 150, 1.04),
-            (11.06, sx - 140, sy + 120, 1.0), (12.06, sx - 40, sy + 60, 1.16), (12.14, sx + 10, sy - 20, 1.9),
-            (13.6, sx + 30, sy - 20, 2.0)]
+            (11.06, sx - 140, sy + 120, 1.0), (12.06, sx - 40, sy + 60, 1.16), (12.14, sx + 10, sy - 20, 1.9)]
+    keys = [(k[0] + D,) + k[1:] if k[0] > CUT_TAPESTRY - D + 0.01 else k for k in keys]
+    keys[0] = (CUT_TAPESTRY,) + keys[0][1:]
+    mx, my = s.ref_to_design('stapler', 345, 175)
+    keys += [(STAPLER_FADE, sx + 30, sy - 20, 2.0), (STAPLER_CLICK - 0.1, mx, my, 1.55), (CUT_END_TITLE, mx + 10, my, 1.57)]
     return keyed(t, [(k[0],) + tuple(k[1:]) for k in keys])
 
 
-WHIPS = [(6.86, 7.06), (8.66, 8.86), (10.86, 11.06)]
+WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D)]
 
 
 def tapestry_frame(t, fi):
@@ -869,13 +930,39 @@ def effects(a, t, x, y, z, top):
         if gp > 0:
             px, py = to_screen('ghost', 255 + 300 * gp, 80)
             glow_blob(a, px, py, 260 * R * z, 120 * R * z, (220, 240, 255), 0.35 * gp)
+    if t >= SWAPS['stapler']:
+        staple(a, t, to_screen, z)
     if t >= SWAPS['stapler'] and t < NAME_OUT['stapler'] + 0.2:
         px, py = to_screen('stapler', 284, 158)
         dt = t - SWAPS['stapler']
-        rays(a, px, py, t, 0.9 * min(1, dt / 0.15) * (0.7 + 0.3 * math.exp(-dt * 3)))
-        glow_blob(a, px, py, 180 * R * z, 90 * R * z, (255, 210, 120), 0.55)
+        fade = 1 - ease((t - STAPLER_FADE) / 0.45)
+        if fade > 0:
+            rays(a, px, py, t, 0.9 * fade * min(1, dt / 0.15) * (0.7 + 0.3 * math.exp(-dt * 3)))
+            glow_blob(a, px, py, 180 * R * z, 90 * R * z, (255, 210, 120), 0.55 * fade)
         if dt < 0.35:
             glow_blob(a, px, py, 900 * R, 900 * R, (255, 240, 200), 1.6 * (1 - dt / 0.35))
+
+
+def staple(a, t, to_screen, z):
+    """One single staple, fired flat across at the messenger, where it stays."""
+    if t < STAPLER_CLICK:
+        return
+    p = min(1.0, (t - STAPLER_CLICK) / (STAPLE_HIT - STAPLER_CLICK))
+    x0, y0 = 318, 158            # the stapler's mouth (reference pixels)
+    x1, y1 = 362, 165            # the messenger's forearm, just behind his pointing hand
+    x, y = to_screen('stapler', x0 + (x1 - x0) * p, y0 + (y1 - y0) * p)
+    s = 13.0 * z * R             # a staple, flying legs-first: about 6 reference pixels across
+    im = Image.new('RGBA', (a.shape[1], a.shape[0]), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    leg = s * 0.9 if p < 1 else s * 0.25     # stuck in: the legs bitten into his arm, only the crown shows
+    pts = [(x + leg, y - s * 0.55), (x, y - s * 0.55), (x, y + s * 0.55), (x + leg, y + s * 0.55)]
+    if p < 1:                    # a faint streak behind it in flight
+        d.line([(x - s * 6, y - s * 0.4), (x - s * 1.5, y - s * 0.4)], fill=(120, 120, 126, 110), width=max(1, int(z * R)))
+    d.line(pts, fill=(20, 20, 24, 255), width=max(3, int(4.5 * z * R)))
+    d.line(pts, fill=(196, 200, 206, 255), width=max(1, int(2.2 * z * R)))
+    m = np.asarray(im, np.float32)
+    al = m[..., 3:4] / 255
+    a[:] = a * (1 - al) + m[..., :3] * al
 
 
 def glow_blob(a, cx, cy, rx, ry, col, amt, ang=0.0):
@@ -952,7 +1039,8 @@ def frame(t, fi=0):
         slam(a, 'NEW WEAPONS', t, T_NEW, SWAPS['rifle'] - 0.12, 800, 190, glow=(255, 230, 170))
         for name, ts in SWAPS.items():
             col = {'rifle': (120, 255, 100), 'claw': (170, 225, 255), 'ghost': (235, 240, 255), 'stapler': (255, 214, 120)}[name]
-            slam(a, NAMES[name], t, ts + 0.06, NAME_OUT[name] - 0.02, 1370, 118, glow=col)
+            slam(a, NAMES[name], t, ts + 0.06, NAME_OUT[name] - 0.02, 1370, 118, glow=col,
+                 fade=0.45 if name == 'stapler' else 0.10)
         if abs(t - SWAPS['stapler']) < 0.1:
             shake = (math.sin(t * 210) * 14 * R, math.cos(t * 180) * 10 * R)
     else:
@@ -1091,6 +1179,13 @@ def click():
     return x
 
 
+def tink():
+    """The staple landing: a tiny, high, thin tick."""
+    n = int(0.08 * SR)
+    t = np.arange(n) / SR
+    return np.sin(2 * np.pi * 5200 * t) * np.exp(-t * 120) + 0.3 * np.sin(2 * np.pi * 7900 * t) * np.exp(-t * 200)
+
+
 def glitch_snd(d=0.18, seed=2):
     n = int(d * SR)
     rng = np.random.default_rng(seed)
@@ -1120,7 +1215,7 @@ def soundtrack():
     # the drone under everything, swelling into the title and again into the stapler
     dr = drone(end)
     tt = np.arange(end) / SR
-    env = 0.35 + 0.4 * np.clip(tt / 2.0, 0, 1) - 0.2 * ((tt > 12.3) & (tt < 13.6))
+    env = 0.35 + 0.4 * np.clip(tt / 2.0, 0, 1)
     mix[:end] += 0.16 * dr * env
     place(mix, boom(0.7), T_INTRO - 0.01, 0.55)
     place(mix, whoosh(0.5, True, 1), T_BAYEUX - 0.30, 0.35)
@@ -1147,15 +1242,16 @@ def soundtrack():
     for wa, wb in WHIPS:
         place(mix, whoosh(wb - wa + 0.1, True, 40), wa - 0.05, 0.4)
     place(mix, ghost_wooo(1.2), GHOST_FLY[0] + 0.05, 0.12)
-    place(mix, riser(SWAPS['stapler'] - 11.0), 11.0, 0.35)
+    place(mix, riser(SWAPS['stapler'] - 11.0 - D), 11.0 + D, 0.35)
     # after the stapler's huge reveal everything drops out for one small flat click
-    a, b = int((STAPLER_CLICK - 0.35) * SR), int((CUT_END_TITLE - 0.02) * SR)
-    k = int(0.05 * SR)
+    a, b = int(STAPLER_FADE * SR), int((CUT_END_TITLE - 0.02) * SR)
+    k = int(0.45 * SR)
     fade = np.ones(b - a)
     fade[:k] = np.linspace(1, 0, k)
     fade[k:] = 0
     mix[a:b] *= fade
     place(mix, click(), STAPLER_CLICK, 0.5)
+    place(mix, tink(), STAPLE_HIT, 0.18)
     place(mix, boom(1.3), CUT_END_TITLE, 0.95)
     place(mix, roar(BLACK_AT - CUT_END_TITLE, 6), CUT_END_TITLE, 0.2)
     k = int(0.005 * SR)
@@ -1163,7 +1259,7 @@ def soundtrack():
     mix[end:] = 0
     for _ in range(3):
         mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
-        mix = limiter(mix, -2.2)
+        mix = limiter(mix, -2.8)
     return mix
 
 
