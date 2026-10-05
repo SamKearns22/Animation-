@@ -2,6 +2,19 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: "The Bayeux Tapestry Season Pass" (TikTok, `prompts/bayeux-season-pass.md`)
+- Sam's references in `references/bayeux/` (list and the swap rule in its README: each original weapon deleted
+  completely, the new one stitched in the same hand and place).
+- Proof-of-concept animatic sent 5 Oct 2026 (15.3 s, 1080 x 1920, 24 fps, 11.3 MB; render 70 s on 4 cores, not saved
+  in `animations/`): gallery and title (gold BAYEUX / TAPESTRY, each Y two flaming arrows, SEASON PASS in fire),
+  NEW WEAPONS, then the pan along the tapestry: rifle, ice claw, ghost pistol (ghost + WOOOOOO!!), stapler (riser,
+  huge reveal, one flat click), title slam, hard cut. No voice yet (Sam to record); text slams carry the words.
+- Code: `source/bayeux_stitch.py` (traces a reference into the tapestry's wools and re-stitches it: laid-and-couched
+  fills, outlines, linen weave), `source/bayeux_weapons.py` (erase masks and the four new weapons; `build` stitches
+  every scene into `source/data/bayeux/`, not on GitHub, ~1 min), `source/bayeux.py` (`stills`, `animatic`, `final`).
+  Fonts: Cinzel Decorative Black and Cinzel (OFL) in `source/fonts/`.
+- Next: Sam's notes on the concept; then the longer film (more content, visitors in the room, his voice).
+
 ## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
 - Posted Mon 5 Oct 2026 at 1pm, the day of another RNLI/small-boat protest (Gosport). Cover around 0:05. Check the
   retention graph next day (watch the 12 s opening shot and the doctor's speech).

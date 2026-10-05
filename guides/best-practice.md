@@ -261,6 +261,13 @@ this series. Full details in `tiktok-design.md`.
   - big Anton capitals for shouts, plain italics for a childish aside (The Patriots).
 - **Endings:** a hard cut to black.
 
+**Redrawing a real artwork from photos (The Bayeux Tapestry Season Pass, 5 Oct)**
+- Trace the photo into the artwork's own small palette, then re-render every area in code (stitches, weave); no
+  photo pixel reaches the film. Enlarge and sharpen the photo *before* sorting colours, and clean gently: a strong
+  clean-up at the photo's own size wiped out thin outlines and mail rings, and whole soldiers vanished.
+- Erasing an object (a weapon) by borrowing colour from its neighbours leaves streaks unless the object's own
+  outline colours are excluded from the borrowing; cover the whole object (fill shapes, not just their outlines).
+
 ---
 
 # Part 3. The coloured-pencil comedy shorts
