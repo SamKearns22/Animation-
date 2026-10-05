@@ -127,7 +127,10 @@ class Rig:
     # the arm: two-bone inverse kinematics --------------------------------------------------------------
     def arm(self, side, target, shape='fist', bend='out', depth=0.0, extra=None, strict=True):
         """(elbow, wrist, shape[, extra]) for burnham's 'custom' arms, with the hand's contact point on `target`.
-        bend: which way the elbow points: 'out' (away from the body, the default), 'in', 'down' or 'up'.
+        bend: which way the elbow points: 'out' (away from the body, the default), 'in', 'down' or 'up';
+        'depth' = seen from the front, the elbow bends back into the picture (a relaxed or resting arm, hands in front
+        of the body): the elbow stays on the line from shoulder to hand and the arm is drawn foreshortened. Use it for
+        every relaxed pose; sideways elbows only for hands on hips, typing, gestures and grabbing the chest.
         depth: 0 = the arm lies in the picture plane; up to 0.6 = reaching towards or away from the camera, which
         shortens it on screen (foreshortening). A target out of reach is an error (move the body or the prop)."""
         sh = self.shoulder(side)
@@ -140,6 +143,15 @@ class Rig:
                 fail(f'{self.name}: {side} hand cannot reach {tuple(round(v) for v in target)} '
                      f'(needs {d:.0f}, arm reaches {U + Fh:.0f}): move the body or the prop, never stretch the arm')
             d = U + Fh
+        if bend == 'depth':
+            kk = min(1.0, d / (U + Fh))
+            if kk < 0.55:
+                fail(f'{self.name}: {side} hand at {tuple(round(v) for v in target)} is too close to the shoulder for a '
+                     f'front-view bend (the arm would look squashed): choose a sideways bend or move the target')
+            u = _norm((dx, dy))
+            el = (sh[0] + u[0] * U * kk, sh[1] + u[1] * U * kk)
+            wr = (el[0] + u[0] * self.fore * k * kk, el[1] + u[1] * self.fore * k * kk)
+            return (el, wr, shape) if extra is None else (el, wr, shape, extra)
         d = max(d, abs(U - Fh) + 1e-3)
         a = math.acos(max(-1.0, min(1.0, (U * U + d * d - Fh * Fh) / (2 * U * d))))
         base = math.atan2(dy, dx)
@@ -159,16 +171,20 @@ class Rig:
     # the standard poses ----------------------------------------------------------------------------------
     def pose(self, name, **kw):
         """Named poses built from targets (all solved by the rig, so the arms always keep their length)."""
-        if name == 'sides':        # hanging relaxed: wrists at the crotch, elbows at the waist
-            return {s: self.arm(s, self.at('hip', s, dx=(6 if s == 'R' else -6), dy=40), 'fist', 'down') for s in 'LR'}
+        if name == 'sides':        # hanging relaxed: nearly straight, wrists at the crotch, hands by the thighs
+            out = {}
+            for s in 'LR':
+                sh, sgn, r = self.shoulder(s), (-1 if s == 'L' else 1), 0.97 * self.reach('fist')
+                out[s] = self.arm(s, (sh[0] + sgn * 16, sh[1] + math.sqrt(r * r - 16 * 16)), 'fist', 'depth')
+            return out
         if name == 'hips':         # hands on hips, elbows out
             return {s: self.arm(s, self.at('hip', s, dy=-40), 'fist', 'out') for s in 'LR'}
         if name == 'clasped':      # hands together in front, below the belly
-            return {'L': self.arm('L', (-14, CROTCH_Y - 30), 'fist', 'down'), 'R': self.arm('R', (14, CROTCH_Y - 26), 'fist', 'down')}
+            return {'L': self.arm('L', (-14, CROTCH_Y - 30), 'fist', 'depth'), 'R': self.arm('R', (14, CROTCH_Y - 26), 'fist', 'depth')}
         if name == 'rail':         # both hands resting on a rail or mattress edge at height y (default: the waist)
             y = kw.get('y', WAIST_Y + 150)
             xs = kw.get('xs', (-0.75 * self.sw, 0.5 * self.sw))
-            return {'L': self.arm('L', (xs[0], y), 'fist', 'down'), 'R': self.arm('R', (xs[1], y), 'fist', 'down')}
+            return {'L': self.arm('L', (xs[0], y), 'fist', 'depth'), 'R': self.arm('R', (xs[1], y), 'fist', 'depth')}
         if name == 'clutch':       # hand pressed to the heart, the other grabbing at the chest
             return {'L': self.arm('L', self.at('heart', 'L', dx=-60, dy=10), 'fist', 'down'),
                     'R': self.arm('R', self.at('heart', 'R'), 'fist', 'down')}

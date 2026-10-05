@@ -1018,8 +1018,8 @@ def migrant(img, cam, x, y, s, spec, t, i, reach=0.0):
         tgt = (110 + 220 * reach, 440 - 330 * reach)
         ra = r.arm('R', r._toward('R', tgt, 'palm'), 'palm', 'down')
     else:
-        ra = r.arm('R', (110, 440), 'fist', 'down')
-    sp['arms'] = {'L': r.arm('L', (-110, 440), 'fist', 'down'), 'R': ra}
+        ra = r.arm('R', (110, 440), 'fist', 'depth')
+    sp['arms'] = {'L': r.arm('L', (-110, 440), 'fist', 'depth'), 'R': ra}
     L = B.Local(cam, x, y, s)
     person(img, cam, x, y, s, sp, t, legs=seated_legs)
     if hair in ('hijab', 'shawl'):   # worn over the head and shoulders, under the life jacket

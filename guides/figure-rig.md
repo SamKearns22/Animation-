@@ -46,8 +46,11 @@ hangs past the hands; that is the garment, not long arms.
   shape, bend='out')` returns burnham's `(elbow, wrist, shape)`. The arm always keeps its length.
 - **A target the arm can't reach is an error.** Move the body (step closer, lean) or the prop (raise the trolley),
   never stretch the arm. (`fail(... move the body or the prop, never stretch the arm)`.)
-- **The elbow bends the natural way:** outwards from the body by default (`bend='out'`); `'in'` only when the hand
-  crosses the body (clutching the chest), `'down'` for hanging arms.
+- **The elbow bends the natural way.** A relaxed or resting arm seen from the front (hanging at the sides, hands on
+  a rail or trolley, clasped, in the lap) bends back into the picture: `bend='depth'` keeps the elbow on the line
+  from shoulder to hand and draws the arm a little shorter. Never let a relaxed elbow wing out sideways with the
+  hands folding in to the body: nobody stands like that (The Patriots 2's first rig did exactly this). Sideways
+  elbows (`'out'`) are for hands on hips, typing, gestures; `'in'` when a hand crosses the body (clutching the chest).
 - **Foreshortening only shortens.** An arm reaching towards or away from the camera (typing towards the screen) is
   given `depth` (0-0.6) and is drawn shorter; nothing is ever drawn longer than the rig.
 - **The guard measures every arm drawn anywhere** (`figure.guard(B)`), including hand-typed ones and other people's
