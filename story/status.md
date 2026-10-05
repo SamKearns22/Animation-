@@ -5,6 +5,10 @@ Read this first in any new session, after CLAUDE.md.
 ## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
 - Posted Mon 5 Oct 2026 at 1pm, the day of another RNLI/small-boat protest (Gosport). Cover around 0:05. Check the
   retention graph next day (watch the 12 s opening shot and the doctor's speech).
+- After ~1.5 h: 255 views, average watch 14.8 s of 60 (25%), 14% to the end, 15 likes (~6%), 6 comments, 0 shares.
+  Likely causes: #Smallboats (sensitive topic, limits reach; was on the avoid list), the 60 s length with the first
+  laugh at ~23 s (TikTok rule: 15-30 s, first payoff by 8-10 s). Advice: no re-post; remove #Smallboats if editing is
+  offered; check the retention graph next day; a 30-35 s cut is possible for a later post.
 - DONE 4 Oct 2026: `animations/the-patriots-2-vertical.mp4` (59.5 s, 8.3 MB, 1080 x 1920, 12 fps). Animatic about 4 min,
   final render 20 min on 4 cores. Checked against the safe-area guides (title, widest caption, busiest frames).
 - To post: cover around 0:05 (him lit by the screen, mid-letter, title gone). Avoid #heartattack and #NHS (they give
