@@ -61,6 +61,11 @@ and the research in `movement.md`.
   the prop moves, never that the arm stretches. Foreshortening only ever shortens. (Classic canon: elbows at the
   waist, wrists at the crotch, fingertips mid-thigh.) For the flat cartoon films this is built in
   `source/figure.py` and explained in `figure-rig.md`.
+- **Holding something in front:** the upper arm hangs by the side and the forearm comes forward towards the
+  viewer, so it looks shorter; the elbow is not lifted out sideways. Things that touch the ground get a soft
+  contact shadow; anything hanging off a body (lanyard, scarf, ponytail) follows a beat behind each move, swings
+  past and settles; mouths take the standard cartoon shapes from the words, timed to the recording, closed in
+  the pauses. (Built for the flat films in `source/kit.py` and `source/mouths.py`.)
 - **Joints move within natural ranges,** and limbs are posed from where the hand or foot needs to be.
   Example: a hand holding a tool keeps a near-neutral wrist, so the tool turns to suit the arm ("bend the
   tool, not the wrist", a basic rule of ergonomics). That example is about realistic, comfortable

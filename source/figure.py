@@ -196,6 +196,15 @@ class Rig:
         if name == 'reach':        # reaching out a hand (palm) towards a target, as far as the arm allows
             side = kw.get('side', 'R')
             return {side: self.arm(side, self._toward(side, kw['target'], 'palm'), 'palm', 'down', strict=False)}
+        if name == 'hold':         # holding something in front (cup, phone, pen, paper): the upper arm hangs by the
+            # side, the forearm comes forward towards the viewer (drawn shorter); lift 0 = hand at the waist, 1 = at the chest
+            side, shape, lift = kw.get('side', 'R'), kw.get('shape', 'fist'), kw.get('lift', 0.5)
+            sh, sgn = self.shoulder(side), (-1 if side == 'L' else 1)
+            el = (sh[0] + sgn * 18, sh[1] + self.upper * 0.97)
+            a = math.radians(-100 - 50 * lift)          # pointing up and in, from straight up-ish
+            n = self.fore * (0.5 - 0.05 * lift)         # foreshortened: the forearm points towards the camera
+            wr = (el[0] - sgn * abs(math.cos(a)) * n * 0.9, el[1] + math.sin(a) * n)
+            return {side: (el, wr, shape)}
         if name == 'typing':       # index fingertips on two points of a keyboard (his units)
             tips = kw['tips']
             depth = kw.get('depth', 0.0)

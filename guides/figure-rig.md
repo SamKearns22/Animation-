@@ -84,6 +84,18 @@ hangs past the hands; that is the garment, not long arms.
 - Uniform details (reflective bands, badges, lanyards) are part of the garment, drawn before the arms, so arms
   always pass in front of them.
 
+## 5b. Polish: shadows and hands (`source/kit.py`, test sheet `python3 kit.py sheet OUT.png`)
+- **Contact shadows:** everything that touches the ground gets a soft flat shadow where it touches: people's feet
+  (`kit.feet_shadow`), chair castors, bins, bags, boxes, a trolley's wheels (`kit.contact_shadow`). Draw it before
+  the thing itself. Nothing floats.
+- **Hands library** (after `kit.install(B)`; each shape's contact offset is in `figure.HAND`): relaxed, flat
+  (resting on a surface), cup (a takeaway cup, the cup drawn with it), phone, pen, wave, thumbs, grip (round a rail,
+  rope or handle) plus burnham's own fist, point and palm. Props held in a hand are drawn with the hand at one size
+  against the person, like any recurring object.
+- **Holding something** (`rig.pose('hold', side, shape, lift)`): the upper arm hangs by the side and the forearm
+  comes forward towards the viewer, drawn shorter. This is how people hold a cup, a phone or a pen; never an elbow
+  lifted out to the side to bring the hand in front of the chest.
+
 ## 6. Movement and timing (numbers from movement.md, at our 12 drawings a second)
 - **Slow in, slow out** (`ease`), **anticipation** before a big move (`anticipate`: a small opposite move first),
   **follow-through** (`overshoot`: arrive a touch past the pose and settle).
@@ -95,8 +107,19 @@ hangs past the hands; that is the garment, not long arms.
   (`walk`); a run is about three steps a second. People pushing a trolley lean into it.
 - **No twins:** left and right, and people side by side, never move identically at the same moment: offset their
   phases.
-- **Mouths:** follow the recording (loudness now; see section 9 for proper mouth shapes). A character who is
-  typing or thinking a letter we hear does not move his mouth.
+- **Mouths: proper mouth shapes** (`source/mouths.py`, test sheet `python3 mouths.py sheet OUT.png`). The ten
+  standard cartoon shapes (Preston Blair): rest, M/B/P (lips shut), etc (most consonants, teeth nearly together),
+  E (wide), A/I (wide open), O (round), U (small round), W/Q (pucker), F/V (teeth on lip), L (tongue up).
+  `mouths.track(script_line, stretches, envelope)` spreads the line's words over the recording's own stretches of
+  speech by syllables, turns each word's spelling into shapes, closes the mouth wherever the recording is quiet,
+  and shows each shape a twelfth of a second before its sound (that reads as in sync). Then
+  `sp['mouth'] = 'v:' + mouths.at(track, t)` after `mouths.install(B)`. The stretches come from
+  `mossad_audio.pauses`, so the words line up with Sam's real pauses. A character who is typing or thinking a
+  letter we hear does not move their mouth.
+- **Secondary motion** (`source/kit.py`): anything hanging off a body (lanyards, headscarf tails, ponytails, ropes,
+  a dangling sign) follows a beat behind: `kit.follow(t, keys)` gives the lag, the swing past and the settle (a
+  damped spring) after each move of the body; `kit.idle_sway` keeps it drifting gently in a held pose;
+  `kit.dangle(...)` draws the strap with its badge or weight.
 - **Deadpan:** stillness is a choice; even a deadpan character acts beat by beat with the face (brows, a blink, a
   glance), while the camera stays still.
 
@@ -129,16 +152,11 @@ contact sheet with the safe area drawn on, before the first animatic.
 1. **A cast model sheet per character, before the storyboard:** front, three-quarter, profile, back, seated and
    lying views, at the same proportions. We invented the lying profile late; a turnaround up front would have
    caught it.
-2. **Proper mouth shapes (visemes):** the standard cartoon set (Preston Blair's ten: A/I, E, O, U, consonants,
-   F/V, L, M/B/P, W/Q, rest) chosen from the recording, not just its loudness. Without speech recognition here this
-   would come from Sam's script plus the recording's timing; worth building once.
-3. **A hands library:** relaxed, fist, point, palm, grip (cup, phone, rail, pen), resting flat; with each grip
-   sized to its prop.
-4. **Contact shadows** under feet and props, so nobody floats.
-5. **Back and three-quarter-back views** of the person (people walking away; the over-the-shoulder shot).
-6. **Secondary motion:** lanyards, headscarves and hair swaying a beat behind the head and body (the damped chain
-   from movement.md, in 2D).
-7. **A ground plane for every set** (the camera-and-floor model in peepee.py) so that people's sizes follow
+2. ~~Proper mouth shapes~~, ~~a hands library~~, ~~contact shadows~~ and ~~secondary motion~~: built (October
+   2026, `mouths.py` and `kit.py`; sections 5b and 6). First used in the next film; check them on its animatic.
+3. **Mouth shapes for profile and three-quarter faces** (the set is drawn for the front view).
+4. **Back and three-quarter-back views** of the person (people walking away; the over-the-shoulder shot).
+5. **A ground plane for every set** (the camera-and-floor model in peepee.py) so that people's sizes follow
    their distance automatically and feet always meet the floor.
-8. **People-against-props overlap checks** (an arm through a can, a body through a trolley), extending
+6. **People-against-props overlap checks** (an arm through a can, a body through a trolley), extending
    `check_apart` from set pieces to people's outlines.

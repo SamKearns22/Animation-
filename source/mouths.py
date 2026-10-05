@@ -208,7 +208,7 @@ def sheet(out):
     for i, s in enumerate(SHAPES):
         c = B.canvas((246, 244, 240))
         B.person(c, B.Cam(2.2, 540, 820), 540, 960, 1.0, dict(base, mouth='v:' + s), 0.0)
-        tile = c.convert('RGB').crop((240, 380, 840, 1090)).resize((tw, th))
+        tile = c.convert('RGB').crop((290, 700, 790, 1290)).resize((tw, th))
         img.paste(tile, ((i % 5) * tw, (i // 5) * th))
         ImageDraw.Draw(img).text(((i % 5) * tw + 8, (i // 5) * th + 6), s, font=f, fill=(20, 20, 20))
     trk = track("This is an urgent situation.", [(0.0, 1.6)])
