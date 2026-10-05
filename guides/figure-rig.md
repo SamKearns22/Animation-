@@ -148,6 +148,11 @@ hangs past the hands; that is the garment, not long arms.
 `python3 preflight.py FILM OUT_DIR` runs all of them on every third frame (a couple of minutes) and makes a
 contact sheet with the safe area drawn on, before the first animatic.
 
+## 8b. The series file
+`source/series.py` holds what every film in the series shares (person with legs always, seated legs at the rig's
+own lengths, boots, rolled sleeves, the `Room` and `Turned` cameras, profile heads, placeholder timing, sheets and
+the render). Add to it rather than copying from the last film; never change a posted film's file.
+
 ## 9. What is still missing (next steps, in order of value)
 1. **A cast model sheet per character, before the storyboard:** front, three-quarter, profile, back, seated and
    lying views, at the same proportions. We invented the lying profile late; a turnaround up front would have
@@ -156,7 +161,7 @@ contact sheet with the safe area drawn on, before the first animatic.
    2026, `mouths.py` and `kit.py`; sections 5b and 6). First used in the next film; check them on its animatic.
 3. **Mouth shapes for profile and three-quarter faces** (the set is drawn for the front view).
 4. **Back and three-quarter-back views** of the person (people walking away; the over-the-shoulder shot).
-5. **A ground plane for every set** (the camera-and-floor model in peepee.py) so that people's sizes follow
-   their distance automatically and feet always meet the floor.
+5. ~~A ground plane for every set~~: built as `series.Room` (October 2026, A Professional): a set's plan in
+   metres, projected by each camera (front or reverse), so sizes follow distance and feet meet the floor.
 6. **People-against-props overlap checks** (an arm through a can, a body through a trolley), extending
    `check_apart` from set pieces to people's outlines.

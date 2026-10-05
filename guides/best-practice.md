@@ -241,6 +241,17 @@ this series. Full details in `tiktok-design.md`.
   shortening the silences between phrases (never the words) tightened the film by 2 s.
 - **No unexplained movement:** a prop that moves needs a visible cause (the wobbling can).
 
+**Lessons from A Professional (stage 2, 5 Oct)**
+- **Props at the cartoon body's heights, not real-world metres:** our figure is about 6 heads tall, so its elbow is
+  0.41 m below the neck. A lectern at a real 1.12 m reached the spokesperson's chest and her hands tangled across it;
+  at her elbow height (1.0 m) the forearms rest on it naturally. Take working heights from the rig's landmarks.
+- **Seated people must show their laps:** with the jacket reaching mid-thigh as when standing, seated journalists read
+  as short people standing. End the clothes at the lap and let the seat's edge show either side.
+- **One set, one plan, a real camera:** `series.Room` projects the press room's plan (metres) for every camera, so the
+  reverse angle shows the same room and sizes follow distance; anything at or behind the camera is skipped.
+- **Name who is wrong:** `series.person` tells the arm guard whose arm failed (it caught a TV operator's, a phone
+  holder's and a sipping arm whose path passed too close to the shoulder before anything was rendered).
+
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
 - Native 1080 x 1920; the safe area is x 60-900, y 310-1500, measured on a real post.
 - **The opening:**
