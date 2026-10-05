@@ -5,7 +5,7 @@
 | `tapestry-room-reference.jpg` | Long dark gallery, curved timber roof, tapestry in a lit case along the left wall | Shot 1 camera and the one room plan |
 | `panning-along-tapestry.jpg` | The curved lit case seen straight on; Normans carrying arms to the ships (scene 37-38) | Shot 2 pan: camera, stitch style, colours, borders |
 | `weapon-1-plasma-longshot-rifle.jpg` | Four Norman archers | The top-middle archer (navy tunic, ochre legs): bow and arrow become the rifle |
-| `weapon-2-ice-claw.jpg` | Norman horsemen charging (...ORUM EXERCITUS) | The middle rider on the red-brown horse: his weapon becomes the claw |
+| `weapon-2-ice-claw.jpg`, `weapon-2-ice-claw-wider.jpg` (wider, with both borders: the main one to draw from) | Norman horsemen charging (ANGLORUM EXERCITUS, the English army) | The middle rider on the red-brown horse: his weapon becomes the claw |
 | `weapon-3-ghost-pistol.jpg` | Rider on a red horse with a spear raised, a horse tumbling behind | That rider: the spear becomes the pistol, ghost streams to the right |
 | `weapon-4-stapler.jpg` | Guy of Ponthieu with his axe (VBI NVNTII WILLELMI) | Guy: the axe becomes the stapler |
 
