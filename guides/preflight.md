@@ -10,6 +10,8 @@ film, with `guides/figure-rig.md` (bodies and movement) and `guides/best-practic
 - **Locations and set dressing:** for every place, the everyday items it would have, generic, with where they sit
   (business meeting: laptops, pens and paper, water glasses, a digital whiteboard, cabinets; ambulance: oxygen
   cylinder, labelled drawers, kit bags, sharps bin, drip bag, blue lights through a frosted window).
+- **Recurring objects:** list anything seen in more than one shot (a vehicle, a chair) and its size against its
+  people, so it is drawn once and never resized.
 - **One plan per location:** the room's layout (walls, window, door, furniture) and a plan of every table or desk,
   so all cameras show the same place. Say which shots are reverse angles.
 - **Cast list:** every person, with age, build, skin, hair, clothes, and what they are doing in each shot (every
@@ -70,4 +72,6 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 | Doctor resembling a real politician | model sheet: compared with the series' existing caricatures |
 | Mislabelled and duplicate recordings | stage 4: naming rule and voices.py |
 | A caption on three rows | stage 3 caption check |
+| Lifeboat a different size in the next scene | brief: recurring objects listed; one drawing at a fixed size relative to its people |
+| Chair seat floating, stand too thin | figure-rig: seated hips on the seat; under-desk knee space drawn |
 | Film much longer than briefed | brief: honest length estimate from the pace |

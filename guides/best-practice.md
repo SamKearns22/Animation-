@@ -88,6 +88,11 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
     backgrounds, furniture and props never change between shots of the same place unless the script changes them
     (The Patriots 2: the reverse shot of his room first showed a door and a picture that did not exist in the
     opening shot);
+  - **a recurring object is one drawing at one size:** a vehicle, piece of furniture or prop that appears in more
+    than one shot (even in different locations) is drawn by the same code everywhere, at a fixed size relative to
+    the people who use it (`CREW_TO_BOAT` in patriots2.py: the crew are always 0.36 of the lifeboat's scale), never
+    redrawn freehand for a new shot (The Patriots 2: the lifeboat alongside the dinghy was a separate navy block,
+    far taller than the boat in the shot before);
   - **props are part of the set:** everything on a table, desk, shelf or floor has one place in one written plan (its
     position measured from a fixed point, such as the character or the table's edge), and every camera draws from
     that plan, never from positions typed in separately for each shot. The plan is checked so no two items overlap

@@ -72,6 +72,10 @@ hangs past the hands; that is the garment, not long arms.
 - Every location is built once and every shot is that set from another camera; props are part of the set, with
   one place each in a written plan (`DESK_ITEMS` in patriots2.py: left/right from the character, depth across the
   desk). Every camera draws from the plan.
+- A recurring object (a vehicle, a chair, a prop seen in several shots) is one drawing at one size relative to
+  its people: its scale comes from the person's scale through a fixed ratio, so it can't change between shots.
+- Seated people's hips are on the seat; behind a desk seen from the front, their legs and the chair's stand show in
+  the knee space under it.
 - Set pieces that must stay apart are listed with their outlines and checked (`check_apart`): monitor and
   curtain, dispenser and cupboard, items on a desk.
 - Uniform details (reflective bands, badges, lanyards) are part of the garment, drawn before the arms, so arms
