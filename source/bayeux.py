@@ -48,9 +48,14 @@ SKIN_NAMES = {'william': ('WILLIAM THE CONQUEROR', 'PARTY SUIT'), 'harold': ('HA
               'edward': ('EDWARD THE CONFESSOR', 'ELECTRIC MOUSE')}
 SKIN_OUT = {'william': 19.95, 'harold': 22.15, 'edward': 24.45}
 SKIN_GLOW = {'william': (210, 120, 255), 'harold': (120, 190, 255), 'edward': (255, 230, 80)}
-CUT_END_TITLE = 24.55         # the title slams back
-BLACK_AT = 25.95              # hard cut to black
-DUR = 26.25
+T_CHAPTER = 24.55             # NEW STORY CHAPTER
+T_CH_LOGO = 25.75             # BAYEUX: ENDLESS CONQUEST
+CH_SCENES = {'ch1': 27.45, 'ch2': 30.45, 'ch3': 33.45}
+CH_TEXT = {'ch1': ('1066', 'THE CORONATION'), 'ch2': ('1069', 'DURHAM BURNS'), 'ch3': ('1086', 'DOMESDAY')}
+CUT_END_TITLE = 36.85         # the title slams back
+BLACK_AT = 38.25              # hard cut to black
+DUR = 38.55
+START = 0.85                  # the film opens here: straight into the flaming title (no INTRODUCING)
 MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
 
 
@@ -156,8 +161,9 @@ def over(base, rgba, x0, y0, alpha=1.0):
 HB = 900                      # the tapestry band's height on screen at zoom 1 (design pixels)
 BAND_Y = 800                  # where the band's middle sits on screen
 MARGIN, DIV = 320, 210
-PANELS = ['rifle', 'claw', 'ghost', 'stapler', 'william', 'harold', 'edward']
-REF_H = {'rifle': 711, 'claw': 330, 'ghost': 330, 'stapler': 350, 'william': 452, 'harold': 435, 'edward': 417}
+PANELS = ['rifle', 'claw', 'ghost', 'stapler', 'william', 'harold', 'edward', 'ch1', 'ch2', 'ch3']
+REF_H = {'rifle': 711, 'claw': 330, 'ghost': 330, 'stapler': 350, 'william': 452, 'harold': 435, 'edward': 417,
+         'ch1': 330, 'ch2': 330, 'ch3': 330}
 
 
 class Strip:
@@ -708,6 +714,41 @@ class Title:
         add_light(a, np.dstack([np.broadcast_to(np.array([255, 120, 20], np.float32), src.shape + (3,)), glow * 0.5]), x0, y0)
 
 
+class ChapterLogo:
+    """BAYEUX: / ENDLESS CONQUEST in the same gold game-logo lettering as the main title."""
+
+    def __init__(self):
+        self.layers = []
+        for i, (text, size, y) in enumerate((('BAYEUX:', 150, 640), ('ENDLESS CONQUEST', 104, 820))):
+            f = font('CinzelDecorative-Black.ttf', size * R)
+            tw = f.getlength(text)
+            if tw > 900 * R:
+                f = font('CinzelDecorative-Black.ttf', size * R * 900 * R / tw)
+                tw = f.getlength(text)
+            hh = int(size * R * 1.6)
+            m = Image.new('L', (int(W0 * R), hh), 0)
+            ImageDraw.Draw(m).text(((W0 * R - tw) / 2, hh * 0.8), text, font=f, fill=255, anchor='ls')
+            cap = f.getbbox('E', anchor='ls')
+            rgba = gold(np.asarray(m, np.float32) / 255, hh * 0.8 + cap[1], hh * 0.8 + cap[3], 6 * R)
+            self.layers.append((rgba, int(y * R - hh * 0.8), (W0 * R - tw) / 2, (W0 * R + tw) / 2))
+
+    def draw(self, a, t, t0):
+        a *= 0.55
+        for i, (rgba, top, xa, xb) in enumerate(self.layers):
+            p = ease((t - t0 - i * 0.18) / 0.3)
+            if p <= 0:
+                continue
+            sub = rgba.copy()
+            cols = np.arange(sub.shape[1], dtype=np.float32)
+            front = xa + (xb - xa + 40 * R) * p
+            sub[..., 3] *= np.clip((front - cols) / (24 * R), 0, 1)[None, :]
+            over(a, sub, 0, top)
+            if p < 1:
+                edge = np.exp(-((cols - front) / (26 * R)) ** 2)[None, :] * (rgba[..., 3] > 0)
+                add_light(a, np.dstack([np.broadcast_to(np.array([255, 240, 200], np.float32), sub.shape[:2] + (3,)),
+                                        edge * 0.9]), 0, top)
+
+
 def blend(dst, src):
     a = src[..., 3:4]
     out = dst.copy()
@@ -780,15 +821,17 @@ def wrap(text, f, maxw):
 
 # ------------------------------------------------------------------------------------------- the shots
 STRIP = None
+CHLOGO = None
 TITLE = None
 ROOM = None
 
 
 def setup():
-    global STRIP, TITLE, ROOM
+    global STRIP, TITLE, ROOM, CHLOGO
     if STRIP is None:
         STRIP = Strip(R * 1.45)
         TITLE = Title()
+        CHLOGO = ChapterLogo()
         room = gallery(Strip(0.5))
         im = Image.fromarray(room.astype(np.uint8))
         ROOM = np.asarray(im.resize((int(W0 * R * 1.12), int(H0 * R * 1.12)), Image.LANCZOS), np.float32)
@@ -836,11 +879,21 @@ def cam_at(t):
         ts = SKIN_SWAPS[name]
         start = T_SKINS if name == 'william' else ts - 0.4
         keys += [(start + 0.2, px - 60, py, 1.15), (ts, px - 20, py, 1.2), (SKIN_OUT[name], px + 20, py, 1.26)]
+    # the chapter: a whip to its start, held under the titles, then a steady pan along each scene
+    import bayeux_story as ST
+    x1, _ = s.ref_to_design('ch1', 120, 0)
+    keys += [(T_CHAPTER + 0.2, x1, 470, 0.80), (CH_SCENES['ch1'] - 0.05, x1 + 40, 470, 0.82)]
+    for name, ts in CH_SCENES.items():
+        a_, _ = s.ref_to_design(name, 260, 0)
+        b_, _ = s.ref_to_design(name, ST.W_REF[name] - 260, 0)
+        te = ts + 2.85
+        keys += [(ts + 0.10, a_, 470, 0.82), (te, b_, 470, 0.86)]
+    keys += [(CUT_END_TITLE, b_ + 30, 470, 0.87)]
     return keyed(t, [(k[0],) + tuple(k[1:]) for k in keys])
 
 
 WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D), (16.75, 17.15), (19.95, 20.15),
-         (22.15, 22.35)]
+         (22.15, 22.35), (24.45, 24.75), (30.30, 30.55), (33.30, 33.55)]
 
 
 def tapestry_frame(t, fi):
@@ -945,6 +998,19 @@ def effects(a, t, x, y, z, top):
             glow_blob(a, px, py, 260 * R * z, 120 * R * z, (220, 240, 255), 0.35 * gp)
     if t >= SWAPS['stapler']:
         staple(a, t, to_screen, z)
+    if t >= T_CHAPTER:
+        for name, pts in CH_FIRE.items():
+            for k, (fx, fy) in enumerate(pts):
+                px, py = to_screen(name, fx, fy)
+                if -200 * R < px < (W0 + 200) * R:
+                    live_flame(a, px, py, 34 * z * R * STRIP.ref_scale[name] / 2.73, t, k)
+        for k, (mx_, my_) in enumerate(CH_MOUTHS):
+            for j in range(3):
+                ph = ((t * 1.6 + k * 0.33 + j * 0.33) % 1.0)
+                fx, fy = mx_ + ph * (1080 - mx_), my_ + 30 * math.sin(ph * 3 + k + j) - 10
+                px, py = to_screen('ch3', fx, fy)
+                if 0 < px < W0 * R:
+                    flying_staple(a, px, py, 5.0 * z * R * STRIP.ref_scale['ch3'] / 2.73 * 2.73)
     for name, ts in SKIN_SWAPS.items():
         if ts <= t < SKIN_OUT[name] + 0.2:
             cx_, cy_ = {'william': (270, 170), 'harold': (245, 230), 'edward': (420, 220)}[name]
@@ -981,6 +1047,36 @@ def staple(a, t, to_screen, z):
         d.line([(x - s * 6, y - s * 0.4), (x - s * 1.5, y - s * 0.4)], fill=(120, 120, 126, 110), width=max(1, int(z * R)))
     d.line(pts, fill=(20, 20, 24, 255), width=max(3, int(4.5 * z * R)))
     d.line(pts, fill=(196, 200, 206, 255), width=max(1, int(2.2 * z * R)))
+    m = np.asarray(im, np.float32)
+    al = m[..., 3:4] / 255
+    a[:] = a * (1 - al) + m[..., :3] * al
+
+
+CH_FIRE = {'ch1': [(847, 208), (932, 206), (1011, 196)],
+           'ch2': [(520, 196), (590, 196), (660, 196), (730, 196), (610, 145)]}
+CH_MOUTHS = [(354, 210), (464, 216), (574, 210)]
+
+
+def live_flame(a, cx, cy, r, t, k):
+    """Trailer fire licking up over a stitched flame."""
+    r = max(4.0, r)
+    w, h = int(r * 3), int(r * 5)
+    src = np.zeros((h, w), np.float32)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    src[((xx - w / 2) / (r * 1.1)) ** 2 + ((yy - h * 0.85) / (r * 0.45)) ** 2 < 1] = 0.9
+    fl = fire(src, t, r * 1.2, seed=20 + k, lick=0.7)
+    fl[..., 3] *= 0.75
+    add_light(a, fl, int(cx - w / 2), int(cy - h * 0.85))
+    glow_blob(a, cx, cy - r, r * 3, r * 2.5, (255, 140, 40), 0.25 + 0.1 * math.sin(t * 23 + k))
+
+
+def flying_staple(a, x, y, s):
+    im = Image.new('RGBA', (a.shape[1], a.shape[0]), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    pts = [(x + s * 0.8, y - s * 0.55), (x, y - s * 0.55), (x, y + s * 0.55), (x + s * 0.8, y + s * 0.55)]
+    d.line([(x - s * 4, y), (x - s * 1.2, y)], fill=(160, 160, 166, 90), width=max(1, int(s * 0.2)))
+    d.line(pts, fill=(20, 20, 24, 255), width=max(2, int(s * 0.38)))
+    d.line(pts, fill=(196, 200, 206, 255), width=max(1, int(s * 0.18)))
     m = np.asarray(im, np.float32)
     al = m[..., 3:4] / 255
     a[:] = a * (1 - al) + m[..., :3] * al
@@ -1068,8 +1164,6 @@ def frame(t, fi=0):
     if t < CUT_TAPESTRY:
         a = room_frame(t)
         # INTRODUCING, then the logo
-        slam(a, 'INTRODUCING', t, T_INTRO, T_BAYEUX + 0.05, 520, 66, colour=(236, 228, 210), glow=(255, 220, 160),
-             fontname='Cinzel-Variable.ttf')
         TITLE.draw(a, t)
         for tl in ARROWS_AT:
             if 0 <= t - tl < 0.12:
@@ -1086,9 +1180,16 @@ def frame(t, fi=0):
         slam(a, 'NEW SKINS', t, T_SKINS, SKIN_SWAPS['william'] - 0.12, 800, 190, glow=(255, 230, 170))
         for name, ts in SKIN_SWAPS.items():
             who, what = SKIN_NAMES[name]
-            slam(a, who, t, ts + 0.10, SKIN_OUT[name] - 0.02, 1262, 50, colour=(240, 214, 150),
-                 glow=(255, 210, 120), fontname='Cinzel-Variable.ttf')
+            slam(a, who, t, ts + 0.10, SKIN_OUT[name] - 0.02, 1258, 76, colour=(255, 214, 120),
+                 glow=(255, 190, 80))
             slam(a, what, t, ts + 0.06, SKIN_OUT[name] - 0.02, 1385, 118, glow=SKIN_GLOW[name])
+        slam(a, 'NEW STORY CHAPTER', t, T_CHAPTER + 0.05, T_CH_LOGO - 0.08, 800, 170, glow=(255, 230, 170))
+        if T_CH_LOGO <= t < CH_SCENES['ch1'] + 0.1:
+            CHLOGO.draw(a, t, T_CH_LOGO)
+        for name, ts in CH_SCENES.items():
+            year, what = CH_TEXT[name]
+            slam(a, year, t, ts + 0.08, ts + 2.95, 1262, 90, colour=(255, 214, 120), glow=(255, 190, 80))
+            slam(a, what, t, ts + 0.14, ts + 2.95, 1385, 104, glow=(255, 150, 70))
     else:
         a = room_frame(CUT_TAPESTRY, dark=0.45)
         p = ease((t - CUT_END_TITLE) / 0.12)
@@ -1098,7 +1199,7 @@ def frame(t, fi=0):
             shake = (math.sin(t * 200) * 12 * R, 0.0)
     # glitches on the cuts and the swaps
     for tg, dur in ([(CUT_TAPESTRY, 0.16), (CUT_END_TITLE, 0.10)] + [(ts, 0.14) for ts in SWAPS.values()]
-                    + [(ts, 0.14) for ts in SKIN_SWAPS.values()]):
+                    + [(ts, 0.14) for ts in SKIN_SWAPS.values()] + [(T_CHAPTER, 0.16), (T_CH_LOGO, 0.12)]):
         if tg - dur * 0.5 <= t < tg + dur * 0.5:
             a = glitch(a, fi, max(0.0, 1 - abs(t - tg) / (dur * 0.5)))
             if abs(t - tg) < 1.0 / FPS:
@@ -1284,7 +1385,6 @@ def soundtrack():
     env = 0.35 + 0.4 * np.clip(tt / 2.0, 0, 1)
     dr[int(T_SEASON * SR):] *= np.exp(-np.arange(end - int(T_SEASON * SR)) / (0.4 * SR))   # the track takes over
     mix[:end] += 0.16 * dr * env
-    place(mix, boom(0.7), T_INTRO - 0.01, 0.55)
     place(mix, whoosh(0.5, True, 1), T_BAYEUX - 0.30, 0.35)
     place(mix, boom(), T_BAYEUX, 0.7)
     place(mix, boom(0.8), T_TAPESTRY, 0.6)
@@ -1325,6 +1425,20 @@ def soundtrack():
         place(mix, boom(1.0), ts, 0.8)
     for wa, wb in WHIPS[3:]:
         place(mix, whoosh(wb - wa + 0.1, True, 41), wa - 0.05, 0.4)
+    place(mix, glitch_snd(0.2, 3), T_CHAPTER - 0.08, 0.3)
+    place(mix, boom(1.2), T_CHAPTER, 0.85)
+    place(mix, whoosh(0.5, True, 70), T_CH_LOGO - 0.4, 0.4)
+    place(mix, boom(1.3), T_CH_LOGO, 0.9)
+    for name, ts in CH_SCENES.items():
+        place(mix, boom(1.0), ts, 0.75)
+        if name in ('ch1', 'ch2'):
+            r2 = roar(2.9, 30 + len(name))
+            r2[:int(0.2 * SR)] *= np.linspace(0, 1, int(0.2 * SR))
+            r2[-int(0.2 * SR):] *= np.linspace(1, 0, int(0.2 * SR))
+            place(mix, r2, ts + 0.05, 0.25)
+    rng = np.random.default_rng(31)
+    for tt_ in np.arange(CH_SCENES['ch3'] + 0.2, CH_SCENES['ch3'] + 3.0, 0.19):   # staple after staple
+        place(mix, click(), tt_ + rng.uniform(-0.04, 0.04), 0.3)
     place(mix, click(), STAPLER_CLICK, 0.5)
     place(mix, tink(), STAPLE_HIT, 0.18)
     place(mix, boom(1.3), CUT_END_TITLE, 0.95)
@@ -1340,7 +1454,7 @@ def soundtrack():
 
 # --------------------------------------------------------------------------------------------- rendering
 def _render(i):
-    return frame(i / FPS, i).tobytes()
+    return frame(START + i / FPS, i).tobytes()
 
 
 def render(out):
@@ -1353,8 +1467,11 @@ def render(out):
     wav = out + '.wav'
     mix = soundtrack()
     print(f'sound: {MA.lufs(mix[:int(BLACK_AT * SR)]):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
+    k0 = int(START * SR)
+    mix = mix[k0:]
+    mix[:int(0.004 * SR)] *= np.linspace(0, 1, int(0.004 * SR))
     MA.write_wav(wav, mix)
-    n = int(round(DUR * FPS))
+    n = int(round((DUR - START) * FPS))
     w, h = int(W0 * R), int(H0 * R)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt',
                           'rgb24', '-s', f'{w}x{h}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',

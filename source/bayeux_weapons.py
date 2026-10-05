@@ -303,6 +303,7 @@ def harold_skin(L):
     L.poly([(168, 150), (196, 138), (206, 300), (184, 384), (162, 398), (170, 300)], 'buff', v, 'shark')    # belly
     for y in range(160, 380, 22):                                                                   # belly ridges
         L.line([(170, y), (200, y + 4)], 'shark', 1.0)
+    L.poly([(150, 380), (210, 380), (220, 432), (146, 432)], 'shark', v, 'navy', 1.6)            # costume feet
     L.poly([(298, 110), (344, 72), (336, 134)], 'shark', 0.6, 'navy', 1.6)                         # dorsal fin
     L.poly([(292, 372), (334, 396), (352, 432), (318, 428), (284, 404)], 'shark', 0.8, 'navy', 1.6)  # tail
     L.ellipse(250, 82, 44, 40, 'shark', v, 'navy', 1.6)                                          # hood
@@ -316,6 +317,16 @@ def harold_skin(L):
         x = 226 + i * 6.5
         L.poly([(x, 104), (x + 6, 104), (x + 3, 96)], 'frost', 0.0)
         L.poly([(x, 54), (x + 6, 54), (x + 3, 61)], 'frost', 0.0)
+    # his kite shield, stitched clean on top of the costume: pale with spots, an ochre rim and a boss
+    shield = [(266, 160), (300, 166), (314, 200), (312, 250), (298, 310), (272, 366), (252, 366), (232, 310),
+              (218, 250), (220, 196), (236, 168)]
+    L.poly(shield, 'mail', v, 'ochre', 2.6)
+    L.line([(266, 166), (266, 356)], 'bluegreen', 1.6)
+    L.line([(226, 236), (306, 236)], 'bluegreen', 1.6)
+    L.ellipse(266, 236, 9, 9, 'ochre', 0.0, 'madder', 1.2)
+    rng = np.random.default_rng(8)
+    for _ in range(14):
+        L.ellipse(rng.uniform(232, 300), rng.uniform(180, 330), 2.2, 2.2, rng.choice(['madder', 'bluegreen']))
     # the arrow he clutches, redrawn over the costume
     L.line([(172, 80), (354, 18)], 'madder', 1.6)
     L.poly([(354, 18), (346, 14), (348, 24)], 'black', 0.0)
@@ -331,12 +342,12 @@ def edward_skin(L):
             (344, 330), (328, 290), (318, 240), (334, 204)], 'yellow', v, 'madder', 1.6)          # onesie
     for x in (366, 394):                                                                          # foot paws
         L.ellipse(x, 338, 14, 8, 'yellow', 0.0, 'madder', 1.2)
-    L.ellipse(386, 150, 36, 40, 'yellow', v, 'madder', 1.6)                                       # hood
+    L.ellipse(386, 152, 42, 46, 'yellow', v, 'madder', 1.6)                                       # hood
     L.poly([(362, 122), (338, 46), (354, 50), (378, 118)], 'yellow', 1.9, 'madder', 1.4)          # ears
     L.poly([(338, 46), (343, 66), (352, 64), (354, 50)], 'black', 1.9)
     L.poly([(396, 118), (412, 44), (426, 48), (410, 124)], 'yellow', 1.4, 'madder', 1.4)
     L.poly([(412, 44), (426, 48), (422, 64), (410, 62)], 'black', 1.4)
-    for cx in (359, 413):                                                                         # cheek patches
+    for cx in (352, 420):                                                                         # cheek patches
         L.ellipse(cx, 166, 6.5, 6.5, 'terracotta', 0.0, 'madder', 1.0)
     # his sceptre, redrawn in front of the costume
     L.line([(392, 236), (466, 150)], 'ochre', 3.2)
@@ -351,11 +362,9 @@ SKINS = {
                           [(264, 114), (286, 114), (286, 132), (264, 132)]]),            # club hand
     'harold': dict(erase=[], keep=[], over=[], draw=harold_skin,
                    show=[[(228, 60), (266, 60), (268, 98), (232, 100)],                   # face
-                         [(162, 58), (206, 58), (206, 102), (166, 102)],                  # raised hand
-                         [(232, 168), (268, 158), (306, 168), (314, 230), (302, 300), (272, 362), (248, 362),
-                          (232, 300), (216, 230)]]),                                     # shield
+                         [(162, 58), (206, 58), (206, 102), (166, 102)]]),                # raised hand
     'edward': dict(erase=[], keep=[], over=[], draw=edward_skin,
-                   show=[[(368, 140), (404, 140), (406, 188), (370, 190)],                # face and beard
+                   show=[[(361, 130), (411, 130), (414, 194), (362, 196)],                # his whole face and beard
                          [(383, 220), (400, 220), (400, 240), (383, 240)]]),             # sceptre hand
 }
 SCENES.update(SKINS)

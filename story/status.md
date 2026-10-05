@@ -22,6 +22,14 @@ Read this first in any new session, after CLAUDE.md.
   back over the new costume ('show'), club/arrow/sceptre redrawn in front). Sam's rock track
   (`source/audio/bayeux-rock.mp3`, a Pixabay-style download Sam supplied: confirm its licence before posting) plays
   from the moment SEASON PASS ignites, drops out for the stapler's silence and returns for NEW SKINS.
+- Concept v5 sent 5 Oct (37.7 s, 30.6 MB draft, render 162 s): opens straight on the title (`START` trims the
+  first 0.85 s; INTRODUCING removed); bigger gold names on the skins; Edward's whole face shows through the hood;
+  the shark costume solid to the feet with his shield stitched on top. NEW STORY CHAPTER / BAYEUX: ENDLESS CONQUEST:
+  three new stitched scenes (`source/bayeux_story.py`, `build` ~40 s): 1066 coronation (William in his party suit
+  with a crown, guards with rifle and ghost pistol, Saxon houses burning), 1069 Durham (claw and ghost riders storm
+  the gate, the bishop's palace burns over sleeping Normans, two run away), 1086 Domesday (William, the book, three
+  tax collectors with staplers, staples everywhere, villagers, sheep, ox). Sam's chapter message was cut off at
+  "You must render the fll": ask what the rest said.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 
