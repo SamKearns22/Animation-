@@ -14,6 +14,7 @@
 | File | What it shows | Used for |
 |---|---|---|
 | `skin-1-william-party-suit.jpg` | HIC WILLELM DUX: Duke William in mail and a pointed helmet on a red-brown horse, club over his shoulder, pointing ahead | His mail coat and helmet become the PARTY SUIT: purple suit, feather boa, wide cuffs, rhinestone boots, big purple cowboy hat |
+| `skin-2-harold-shark-warrior.jpg` | HAROLD REX INTERFECTUS EST: Harold standing at the horse's rear, hand raised to the arrow at his eye, behind his big pale shield | His helmet, mail and leggings become a huge hammerhead-shark Halloween costume showing only his face; hand, arrow and shield kept |
 
 ## Director's rule for every swap (5 Oct 2026)
 - **Delete the original weapon completely** (bow, arrow, bowstring, spear, axe head and shaft): no trace of it is
