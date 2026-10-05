@@ -535,7 +535,7 @@ class Title:
         if t > tl:
             wob = 0.06 * math.exp(-(t - tl) * 9) * math.sin((t - tl) * 70)
         c, s = math.cos(wob), math.sin(wob)
-        ext = 0.28 * L                              # shaft runs on past the letter: fletching outside it
+        ext = 0.50 * L                              # shaft runs on past the letter: fletching outside it
         th = arr['th']
 
         def pt(u, v):  # u along from the tip backwards, v across
@@ -547,26 +547,38 @@ class Title:
         im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
         Ls = L + ext
-        # the burning shaft, dark wood with gold bands
-        d.polygon([pt(th * 1.2, -th * 0.42), pt(Ls, -th * 0.42), pt(Ls, th * 0.42), pt(th * 1.2, th * 0.42)],
-                  fill=(92, 50, 24, 255), outline=(22, 10, 4, 255))
-        d.polygon([pt(th * 1.2, -th * 0.42), pt(Ls, -th * 0.42), pt(Ls, -th * 0.1), pt(th * 1.2, -th * 0.1)],
-                  fill=(140, 82, 40, 255))
-        for u in (0.35, 0.62):
-            d.polygon([pt(L * u, -th * 0.5), pt(L * u + th * 0.4, -th * 0.5), pt(L * u + th * 0.4, th * 0.5),
-                       pt(L * u, th * 0.5)], fill=(240, 190, 90, 255), outline=(60, 30, 8, 255))
-        # the head: gold steel, bitten into the letter's foot
-        d.polygon([pt(-th * 0.15, 0), pt(th * 1.5, -th * 0.8), pt(th * 1.25, 0), pt(th * 1.5, th * 0.8)],
-                  fill=(250, 214, 120, 255), outline=(60, 30, 8, 255))
-        # crimson fletching
-        for sgn in (-1, 1):
-            d.polygon([pt(Ls - th * 2.6, 0), pt(Ls - th * 0.2, sgn * th * 0.95), pt(Ls + th * 0.3, sgn * th * 0.9),
-                       pt(Ls - th * 0.4, 0)], fill=(176, 26, 40, 255), outline=(40, 6, 8, 255))
+        # a medieval war arrow: a plain ash shaft, a forged iron broadhead, grey goose flights, and a bundle of
+        # pitch-soaked tow bound behind the head (the fire arrow)
+        sw = th * 0.30
+        d.polygon([pt(th * 1.3, -sw), pt(Ls, -sw), pt(Ls, sw), pt(th * 1.3, sw)],
+                  fill=(178, 136, 88, 255), outline=(40, 24, 12, 255))
+        d.polygon([pt(th * 1.3, -sw), pt(Ls, -sw), pt(Ls, -sw * 0.2), pt(th * 1.3, -sw * 0.2)], fill=(206, 168, 116, 255))
+        # the iron broadhead: a long socket, then two barbed blades
+        d.polygon([pt(th * 1.0, -sw * 1.1), pt(th * 1.9, -sw * 1.05), pt(th * 1.9, sw * 1.05), pt(th * 1.0, sw * 1.1)],
+                  fill=(62, 60, 60, 255), outline=(18, 16, 16, 255))
+        d.polygon([pt(-th * 0.2, 0), pt(th * 0.85, -th * 0.55), pt(th * 1.15, -th * 0.62), pt(th * 1.0, -sw),
+                   pt(th * 1.0, sw), pt(th * 1.15, th * 0.62), pt(th * 0.85, th * 0.55)],
+                  fill=(84, 84, 88, 255), outline=(18, 16, 16, 255))
+        d.line([pt(-th * 0.15, 0), pt(th * 0.9, 0)], fill=(150, 150, 156, 255), width=max(1, int(th * 0.08)))
+        # the burning tow, bound on behind the head
+        d.polygon([pt(th * 1.9, -sw * 1.8), pt(th * 3.0, -sw * 1.6), pt(th * 3.0, sw * 1.6), pt(th * 1.9, sw * 1.8)],
+                  fill=(46, 30, 20, 255), outline=(16, 10, 6, 255))
+        for u in (2.2, 2.6):
+            d.line([pt(th * u, -sw * 1.9), pt(th * u + th * 0.15, sw * 1.9)], fill=(110, 70, 30, 255),
+                   width=max(1, int(th * 0.07)))
+        # three grey goose flights (two seen edge-on above and below), bound with thread
+        for sgn, col in ((-1, (150, 146, 140, 255)), (1, (196, 192, 184, 255))):
+            d.polygon([pt(Ls - th * 2.4, sgn * sw), pt(Ls - th * 0.8, sgn * th * 0.5), pt(Ls - th * 0.15, sgn * th * 0.48),
+                       pt(Ls - th * 0.3, sgn * sw)], fill=col, outline=(70, 66, 62, 255))
+        for u in (Ls - th * 2.5, Ls - th * 0.2):
+            d.line([pt(u, -sw * 1.1), pt(u, sw * 1.1)], fill=(120, 30, 24, 255), width=max(1, int(th * 0.12)))
+        d.polygon([pt(Ls, -sw), pt(Ls + th * 0.15, -sw * 0.6), pt(Ls + th * 0.15, sw * 0.6), pt(Ls, sw)],
+                  fill=(150, 112, 70, 255))
         # its fire: along the shaft, licking upwards
         src = Image.new('L', (w, h), 0)
         ds = ImageDraw.Draw(src)
-        ds.line([pt(th * 1.4, 0), pt(th * 4.0, 0)], fill=255, width=max(2, int(th * 1.3)))
-        ds.line([pt(th * 4.0, 0), pt(L * 0.75, 0)], fill=90, width=max(2, int(th * 0.6)))
+        ds.line([pt(th * 1.9, 0), pt(th * 3.0, 0)], fill=255, width=max(2, int(th * 1.2)))
+        ds.line([pt(th * 3.0, 0), pt(L * 0.55, 0)], fill=60, width=max(2, int(th * 0.4)))
         bx0 = int(max(0, min(pt(0, 0)[0], pt(Ls, 0)[0]) - 60 * R))
         bx1 = int(min(w, max(pt(0, 0)[0], pt(Ls, 0)[0]) + 60 * R))
         by0 = int(max(0, min(pt(0, 0)[1], pt(Ls, 0)[1]) - 150 * R))
