@@ -26,7 +26,7 @@ real problem. Then go straight to stage 2: the model sheet and storyboard, sent 
 **The audio comes later.** I will record every voice after the pictures are built. Model the whole film first:
 - time every line from my natural pace (about 3.3 words a second), with silent placeholders;
 - captions use the script words, timed to those placeholders; the sound effects can go in already;
-- when my recordings arrive (named 01 to 08 by line, extra takes 03b, see preflight.md stage 4), run
+- when my recordings arrive (named 01 to 10 by line, extra takes 03b, see preflight.md stage 4), run
   `python3 source/voices.py FILES --script ...` at once, then retime the cuts, mouths and captions to what I
   actually recorded.
 
@@ -44,49 +44,81 @@ because "Steve is a professional", while we cut to Steve earnestly presenting th
 2. The real show's name ("Expedition") stays off screen; no real logos.
 3. Steve is an affectionate caricature: dark swept hair, broad toothy grin, wiry and athletic, rolled sleeves,
    outdoor shirt and trousers, boots, a helmet with a head torch, a chest camera.
-4. The spokesperson (Amelia Chin in the article), the journalist and the science editor are invented people.
-5. I record all the voices; files named 01-08 by script line.
+4. The spokesperson (Amelia Chin in the article), the newsreader, the journalist and the science editor are
+   invented people.
+5. I record all the voices; files named 01-10 by script line.
 6. Ending: Steve tiny in the vast blue haze, still giving a thumbs-up as he drifts down towards the glow; hard cut
    to black. No death.
 7. I write the post text and hashtags myself; avoid #SteveBackshall (suggested: #satire #UKcomedy #space #Neptune
    #explorer #animation).
 
 ## Length and words
-About 38 s. 84 spoken words (about 25 s of speech at my pace, plus action). First laugh: "He will kayak to safety"
-over Steve paddling a kayak on Neptune, at about 9 s. Say plainly at the animatic if it runs past 45 s.
+About 80 s (Sam's choice: longer, so every joke is set up). About 235 spoken words (about 70 s of speech at my
+pace, plus action). The script keeps the article's own wording, which is where the jokes are. Hooks: the first
+frame is Steve already falling through Neptune's blue clouds, beaming, while the premise is read; first laugh at
+about 15 s ("a supercritical strata of hydrogen sulfide and ammonia"), then "kayak to safety" at about 25 s.
 
 ## Script
-1. SPOKESPERSON (at the lectern): "We would encourage fans not to panic. Steve is a professional."
-2. SPOKESPERSON (voice over, Steve paddling on Neptune): "He has survived perils on ice and on water. Neptune is an
-   inseparable mix of both. He will kayak to safety."
-3. JOURNALIST: "What about the thirteen-hundred-mile-an-hour winds?"
-4. SPOKESPERSON (a contemptuous huff): "Steve is a professional. Some combination of rope-work will keep him safe."
-5. SPOKESPERSON (voice over, almost dreamy): "And when the diamonds rain down, he'll say things like..."
-6. STEVE (to camera, sweaty, beaming, diamonds pinging off his helmet): "Wow! This is why exploration is so important!"
-7. SCIENCE EDITOR: "No suit could survive the pressure of Neptune's core."
-8. SPOKESPERSON (slowly): "Steve is a professional. A professional."
+1. NEWSREADER (voice over; Steve tumbling through blue clouds, beaming, thumbs up): "The producers of Steve
+   Backshall's TV series have confirmed that the explorer is stranded on the planet Neptune: the ice giant, eighth
+   planet from the sun."
+2. SPOKESPERSON (at the lectern): "We would encourage fans not to panic or speculate. Steve is a professional. He
+   would have the training and know-how to survive a supercritical strata of hydrogen sulfide and ammonia."
+3. SPOKESPERSON (voice over, Steve paddling on Neptune): "Steve has survived perils on ice and on water. And luckily
+   for him, Neptune is an inseparable mix of both. Make no mistake: he will be able to kayak to safety."
+4. JOURNALIST: "How is he supposed to handle winds of thirteen hundred miles an hour, as he plummets through clouds
+   of methane?"
+5. SPOKESPERSON (a contemptuous huff): "Steve is a professional. He has abseiled down cliffs in Oman and navigated
+   deep jungle in Suriname. Some combination of rope-work will keep him from being violently tossed about, as he
+   searches for the best place to camp."
+6. SPOKESPERSON (voice over, almost dreamy): "Eventually he will reach a layer so pressurised and hot that methane
+   molecules break apart. Imagine his wonder, when the carbon crystallises into diamonds that rain down towards the
+   planet's core. He'll say things like..."
+7. STEVE (to camera, shouting over the wind, diamonds pinging off his helmet): "Wow! This is why exploration is so
+   important!"
+8. SPOKESPERSON (voice over, Steve beaming): "His shirt will be tousled, his hair sweat-sodden. His earnest smile will
+   inspire a new generation of maniacs."
+9. SCIENCE EDITOR: "No suit in existence could withstand the molten, crushing pressure of Neptune's core."
+10. SPOKESPERSON (slowly, as if explaining something obvious to a dim child): "Steve is a professional. A
+    professional."
 
-## Shots (no shot over about 7 s)
-1. Press room (0-6 s): the push-in on the spokesperson has begun on frame one; title over the backdrop, gone by 1 s.
-2. Neptune (6-11 s): a deep blue storm world; Steve in a red sea kayak paddling earnestly across a churning cyan
-   sea, lightning in the methane clouds, the kayak turning in circles.
-3. Press room, the journalists (11-16 s), the reverse angle of the same room: notepads and raised phones; one asks
-   about the winds; back on the spokesperson's huff.
-4. Neptune (16-22 s): Steve horizontal in a 1,300 mph gale, roped to his team of experts, all flapping like bunting,
-   Steve giving a thumbs-up.
-5. Neptune, deeper (22-29 s): diamonds raining, shirt torn and soaked, hair plastered, earnest grin: "Wow!"
-6. Press room (29-35 s): the science editor in the front row; the spokesperson, slowly: "A professional."
-7. Ending (35-38 s): Steve tiny in the vast blue haze, thumbs-up, drifting down towards the glow; hard cut to black.
+## The fall, explained on screen
+The audience must follow Steve's descent, or the diamonds won't land. A **cutaway diagram of Neptune** on the press
+room screen behind the lectern (layers drawn as rings: blue methane clouds; a hot, crushing layer; diamond rain; the
+core) has a small **"STEVE"** marker that sits a little deeper every time we cut back to the press room. Each
+Neptune shot matches the layer he has reached, and its colour deepens from bright cyan to dark indigo to a hot
+orange glow near the core.
+
+## Shots (no shot over about 8 s; one idea per shot)
+1. Neptune, cold open (0-8 s): Steve tumbling through bright cyan methane clouds, beaming, thumbs up. The title over
+   the clouds, gone by 1 s; the premise read over it.
+2. Press room (8-20 s): slow push-in on the spokesperson; the cutaway diagram behind her, STEVE marker in the clouds.
+3. Neptune, the sea (20-28 s): Steve in a red sea kayak paddling earnestly across a churning cyan sea, lightning, the
+   kayak turning in circles.
+4. Press room, the journalists (28-33 s), the reverse angle of the same room: notepads and raised phones; one asks
+   about the winds.
+5. Press room (33-36 s): the spokesperson's huff; then her list.
+6. Neptune, the gale (36-46 s): Steve horizontal in a 1,300 mph wind, roped to his team of experts, all flapping like
+   bunting; Steve hammers a tent peg into nothing ("the best place to camp").
+7. Press room, the diagram (46-50 s): the marker deeper, in the hot layer.
+8. Neptune, deeper (50-58 s): dark indigo turning to orange heat; diamonds start to glitter and rain past him.
+9. Neptune, Steve to camera (58-62 s): sweaty, beaming: "Wow!"
+10. Neptune (62-68 s): slow push on his earnest grin, shirt tousled, hair plastered.
+11. Press room, front row (68-73 s): the science editor, glasses, a magazine under her arm.
+12. Press room (73-78 s): the spokesperson, slowly: "A professional." The marker on the diagram now at the core.
+13. Ending (78-81 s): Steve tiny in the vast glowing haze, still giving a thumbs-up as he drifts down towards the
+    core; hard cut to black.
 
 ## Places, cast and objects
-- **Press room** (one set and one written plan; the journalists' shot is its reverse angle): lectern with a cluster
+- **Press room** (one set and one written plan; the journalists' shot is its reverse angle): the cutaway diagram
+  screen behind the lectern (above), a lectern with a cluster
   of microphones, a glass and jug of water, a backdrop board (plain mountain silhouette and lettering, no real logo),
   rows of journalists with notepads and phones, a TV camera on a tripod, a boom mic, press lanyards, takeaway coffee
   cups.
 - **Neptune:** deep blue and cyan sky with white streaks of methane cloud, a dark storm spot, faint rings, lightning,
   a churning sea, glowing diamonds, the moon Triton faint in the distance.
-- **Cast:** Steve (above); the spokesperson (composed, blazer, lanyard, polite contempt); four or five journalists,
-  each with a clear action, including the science editor (glasses, a magazine under her arm); a team of two or three
+- **Cast:** Steve (above); the newsreader (voice only); the spokesperson (composed, blazer, lanyard, polite contempt); four or five journalists,
+  each with a clear action, including the science editor (Jane Hiropolis in the article, invented; glasses, a magazine under her arm); a team of two or three
   experts in matching expedition jackets.
 - **Recurring objects** (drawn once, one size against Steve): the red kayak and paddle, the rope.
 - **Postures:** the spokesperson stands; journalists sit (legs under their chairs); Steve sits in the kayak, then
@@ -106,6 +138,7 @@ over Steve paddling a kayak on Neptune, at about 9 s. Say plainly at the animati
 
 ## Sound
 - Press room: camera shutter clicks, a chair creak, one cough; no murmur bed.
+- Opening: a calm news sting under the newsreader (original, made in code).
 - Neptune: howling wind (motivated, not a constant bed), thunder cracks, paddle splashes, diamonds tinkling on the
   helmet; Steve's line shouted over the wind.
 - A short, uplifting nature-documentary string swell made in code under "This is why exploration is so important"
