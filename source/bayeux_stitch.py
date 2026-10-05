@@ -38,6 +38,12 @@ WOOL = {
     'steel': (112, 118, 124),
     'pistol': (24, 24, 28),
     'ghost': (240, 238, 228),
+    # the new skins
+    'purple': (96, 44, 92),
+    'lilac': (152, 92, 152),
+    'boa': (204, 122, 184),
+    'shark': (104, 122, 134),
+    'yellow': (228, 190, 56),
 }
 NAMES = list(WOOL)
 IDX = {n: i for i, n in enumerate(NAMES)}
@@ -63,7 +69,22 @@ PROTO = {
                 'terracotta': [(154, 92, 89), (169, 126, 114)], 'ochre': [(200, 151, 132), (231, 193, 162)]},
 }
 FILES = {'rifle': 'weapon-1-plasma-longshot-rifle.jpg', 'claw': 'weapon-2-ice-claw-wider.jpg',
-         'ghost': 'weapon-3-ghost-pistol.jpg', 'stapler': 'weapon-4-stapler.jpg'}
+         'ghost': 'weapon-3-ghost-pistol.jpg', 'stapler': 'weapon-4-stapler.jpg',
+         'william': 'skin-1-william-party-suit.jpg', 'harold': 'skin-2-harold-shark-warrior.jpg',
+         'edward': 'skin-3-edward-electric-mouse.jpg'}
+PRESCALE = {'william': 630 / 1260, 'harold': 845 / 2560}   # big photos brought to about the others' size
+PROTO.update({
+    'william': {'linen': [(247, 238, 215), (237, 227, 203), (254, 250, 229), (202, 195, 177)],
+                'madder': [(142, 80, 80), (114, 56, 58)], 'terracotta': [(173, 108, 103)], 'buff': [(187, 154, 125)],
+                'ochre': [(220, 179, 151)], 'navy': [(72, 79, 86)], 'sage': [(110, 113, 115), (137, 147, 155)]},
+    'harold': {'linen': [(238, 235, 215), (247, 246, 232), (222, 219, 198)], 'buff': [(196, 185, 157), (247, 234, 160)],
+               'madder': [(110, 48, 29)], 'terracotta': [(167, 115, 63)], 'ochre': [(209, 159, 86), (244, 203, 105)],
+               'black': [(43, 34, 35)], 'navy': [(106, 92, 82)], 'bluegreen': [(148, 141, 131)]},
+    'edward': {'linen': [(251, 235, 210), (254, 247, 227), (239, 218, 194)], 'buff': [(218, 185, 155)],
+               'madder': [(91, 55, 40), (79, 22, 10)], 'black': [(35, 25, 17)], 'navy': [(115, 88, 69)],
+               'terracotta': [(163, 63, 51)], 'sage': [(153, 114, 91)], 'ochre': [(201, 158, 118)],
+               'bluegreen': [(154, 148, 139)]},
+})
 
 
 def find_mail(lab, ring_area=40, density=0.16):
@@ -89,7 +110,10 @@ def find_mail(lab, ring_area=40, density=0.16):
 def trace(name, s=2.5):
     """The reference traced into wools at s times its size. Enlarged smoothly and sharpened first, so the
     thin outlines and the small mail rings survive; then only a gentle clean."""
-    a = flatten_light(load_ref(FILES[name]))
+    raw = Image.open(os.path.join(REF, FILES[name])).convert('RGB')
+    if name in PRESCALE:
+        raw = raw.resize((round(raw.width * PRESCALE[name]), round(raw.height * PRESCALE[name])), Image.LANCZOS)
+    a = flatten_light(np.asarray(raw, np.float32))
     im = Image.fromarray(a.astype(np.uint8))
     im = im.resize((int(round(im.width * s)), int(round(im.height * s))), Image.BICUBIC)
     im = im.filter(ImageFilter.UnsharpMask(radius=s * 1.2, percent=160, threshold=2))

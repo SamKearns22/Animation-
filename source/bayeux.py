@@ -42,9 +42,16 @@ NAME_OUT = {'rifle': 6.90 + D, 'claw': 8.70 + D, 'ghost': 10.90 + D, 'stapler': 
 GHOST_FLY = (9.30 + D, 9.85 + D)   # the ghost streams out of the pistol
 STAPLER_CLICK = 16.00         # ...and it fires one single staple: click
 STAPLE_HIT = 16.20            # the staple reaches the messenger
-CUT_END_TITLE = 17.20         # the title slams back
-BLACK_AT = 18.60              # hard cut to black
-DUR = 18.90
+T_SKINS = 16.95               # NEW SKINS
+SKIN_SWAPS = {'william': 18.15, 'harold': 20.35, 'edward': 22.55}
+SKIN_NAMES = {'william': ('WILLIAM THE CONQUEROR', 'PARTY SUIT'), 'harold': ('HAROLD GODWINSON', 'SHARK WARRIOR'),
+              'edward': ('EDWARD THE CONFESSOR', 'ELECTRIC MOUSE')}
+SKIN_OUT = {'william': 19.95, 'harold': 22.15, 'edward': 24.45}
+SKIN_GLOW = {'william': (210, 120, 255), 'harold': (120, 190, 255), 'edward': (255, 230, 80)}
+CUT_END_TITLE = 24.55         # the title slams back
+BLACK_AT = 25.95              # hard cut to black
+DUR = 26.25
+MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
 
 
 def ease(x):
@@ -149,8 +156,8 @@ def over(base, rgba, x0, y0, alpha=1.0):
 HB = 900                      # the tapestry band's height on screen at zoom 1 (design pixels)
 BAND_Y = 800                  # where the band's middle sits on screen
 MARGIN, DIV = 320, 210
-PANELS = ['rifle', 'claw', 'ghost', 'stapler']
-REF_H = {'rifle': 711, 'claw': 330, 'ghost': 330, 'stapler': 350}
+PANELS = ['rifle', 'claw', 'ghost', 'stapler', 'william', 'harold', 'edward']
+REF_H = {'rifle': 711, 'claw': 330, 'ghost': 330, 'stapler': 350, 'william': 452, 'harold': 435, 'edward': 417}
 
 
 class Strip:
@@ -823,11 +830,17 @@ def cam_at(t):
     keys = [(k[0] + D,) + k[1:] if k[0] > CUT_TAPESTRY - D + 0.01 else k for k in keys]
     keys[0] = (CUT_TAPESTRY,) + keys[0][1:]
     mx, my = s.ref_to_design('stapler', 345, 175)
-    keys += [(STAPLER_FADE, sx + 30, sy - 20, 2.0), (STAPLER_CLICK - 0.1, mx, my, 1.55), (CUT_END_TITLE, mx + 10, my, 1.57)]
+    keys += [(STAPLER_FADE, sx + 30, sy - 20, 2.0), (STAPLER_CLICK - 0.1, mx, my, 1.55), (16.75, mx + 10, my, 1.57)]
+    for name, (rx_, ry_) in (('william', (290, 170)), ('harold', (245, 220)), ('edward', (420, 220))):
+        px, py = s.ref_to_design(name, rx_, ry_)
+        ts = SKIN_SWAPS[name]
+        start = T_SKINS if name == 'william' else ts - 0.4
+        keys += [(start + 0.2, px - 60, py, 1.15), (ts, px - 20, py, 1.2), (SKIN_OUT[name], px + 20, py, 1.26)]
     return keyed(t, [(k[0],) + tuple(k[1:]) for k in keys])
 
 
-WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D)]
+WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D), (16.75, 17.15), (19.95, 20.15),
+         (22.15, 22.35)]
 
 
 def tapestry_frame(t, fi):
@@ -835,7 +848,7 @@ def tapestry_frame(t, fi):
     x, y, z = cam_at(t)
     w, h = int(W0 * R), int(H0 * R)
     states = {}
-    for name, ts in SWAPS.items():
+    for name, ts in list(SWAPS.items()) + list(SKIN_SWAPS.items()):
         if t >= ts:
             states[name] = 'after'
     if t >= SWAPS['ghost']:
@@ -932,6 +945,14 @@ def effects(a, t, x, y, z, top):
             glow_blob(a, px, py, 260 * R * z, 120 * R * z, (220, 240, 255), 0.35 * gp)
     if t >= SWAPS['stapler']:
         staple(a, t, to_screen, z)
+    for name, ts in SKIN_SWAPS.items():
+        if ts <= t < SKIN_OUT[name] + 0.2:
+            cx_, cy_ = {'william': (270, 170), 'harold': (245, 230), 'edward': (420, 220)}[name]
+            px, py = to_screen(name, cx_, cy_)
+            dt = t - ts
+            glow_blob(a, px, py, 260 * R * z, 330 * R * z, SKIN_GLOW[name], 0.32 + 0.5 * math.exp(-dt * 4))
+            if name == 'edward':
+                sparks_electric(a, px, py, t, z)
     if t >= SWAPS['stapler'] and t < NAME_OUT['stapler'] + 0.2:
         px, py = to_screen('stapler', 284, 158)
         dt = t - SWAPS['stapler']
@@ -963,6 +984,25 @@ def staple(a, t, to_screen, z):
     m = np.asarray(im, np.float32)
     al = m[..., 3:4] / 255
     a[:] = a * (1 - al) + m[..., :3] * al
+
+
+def sparks_electric(a, cx, cy, t, z):
+    """Little crackles of electricity round the mouse costume."""
+    rng = np.random.default_rng(int(t * 12))
+    im = Image.new('L', (a.shape[1], a.shape[0]), 0)
+    d = ImageDraw.Draw(im)
+    for _ in range(5):
+        ang = rng.uniform(0, 2 * math.pi)
+        r = rng.uniform(150, 260) * z * R
+        x, y = cx + r * math.cos(ang), cy + r * 0.9 * math.sin(ang)
+        pts = [(x, y)]
+        for k in range(4):
+            x += rng.uniform(-14, 14) * R * z
+            y += rng.uniform(-14, 14) * R * z
+            pts.append((x, y))
+        d.line(pts, fill=255, width=max(1, int(3 * R)))
+    g = np.asarray(im.filter(ImageFilter.GaussianBlur(1.2 * R)), np.float32)[..., None] / 255
+    a += g * np.array([255, 240, 120]) * 1.4
 
 
 def glow_blob(a, cx, cy, rx, ry, col, amt, ang=0.0):
@@ -1043,6 +1083,12 @@ def frame(t, fi=0):
                  fade=0.45 if name == 'stapler' else 0.10)
         if abs(t - SWAPS['stapler']) < 0.1:
             shake = (math.sin(t * 210) * 14 * R, math.cos(t * 180) * 10 * R)
+        slam(a, 'NEW SKINS', t, T_SKINS, SKIN_SWAPS['william'] - 0.12, 800, 190, glow=(255, 230, 170))
+        for name, ts in SKIN_SWAPS.items():
+            who, what = SKIN_NAMES[name]
+            slam(a, who, t, ts + 0.10, SKIN_OUT[name] - 0.02, 1262, 50, colour=(240, 214, 150),
+                 glow=(255, 210, 120), fontname='Cinzel-Variable.ttf')
+            slam(a, what, t, ts + 0.06, SKIN_OUT[name] - 0.02, 1385, 118, glow=SKIN_GLOW[name])
     else:
         a = room_frame(CUT_TAPESTRY, dark=0.45)
         p = ease((t - CUT_END_TITLE) / 0.12)
@@ -1051,9 +1097,10 @@ def frame(t, fi=0):
             a += (1 - (t - CUT_END_TITLE) / 0.18) * 160
             shake = (math.sin(t * 200) * 12 * R, 0.0)
     # glitches on the cuts and the swaps
-    for tg, dur in [(CUT_TAPESTRY, 0.16), (CUT_END_TITLE, 0.10)] + [(ts, 0.14) for ts in SWAPS.values()]:
+    for tg, dur in ([(CUT_TAPESTRY, 0.16), (CUT_END_TITLE, 0.10)] + [(ts, 0.14) for ts in SWAPS.values()]
+                    + [(ts, 0.14) for ts in SKIN_SWAPS.values()]):
         if tg - dur * 0.5 <= t < tg + dur * 0.5:
-            a = glitch(a, fi, 1 - abs(t - tg) / (dur * 0.5))
+            a = glitch(a, fi, max(0.0, 1 - abs(t - tg) / (dur * 0.5)))
             if abs(t - tg) < 1.0 / FPS:
                 a += 70
     if shake != (0.0, 0.0):
@@ -1199,6 +1246,25 @@ def glitch_snd(d=0.18, seed=2):
     return x
 
 
+def rock_track(n):
+    """Sam's rock track, starting the moment SEASON PASS ignites, a little under the hits; it drops out with the
+    stapler's glory and comes back, where it would have been, for NEW SKINS."""
+    from burnham_film import load
+    x = load(MUSIC)
+    lead = int(np.argmax(np.abs(x) > 0.01))              # skip the track's silent start
+    x = x[lead:]
+    out = np.zeros(n)
+    i = int(T_SEASON * SR)
+    k = min(n - i, len(x))
+    out[i:i + k] = x[:k] * 0.55
+    a, b = int(STAPLER_FADE * SR), int((T_SKINS - 0.02) * SR)
+    f = int(0.45 * SR)
+    out[a:a + f] *= np.linspace(1, 0, f)
+    out[a + f:b] = 0
+    out[b:b + int(0.01 * SR)] *= np.linspace(0, 1, int(0.01 * SR))
+    return out
+
+
 def place(mix, s, at, g):
     i = int(at * SR)
     j = min(len(mix), i + len(s))
@@ -1216,6 +1282,7 @@ def soundtrack():
     dr = drone(end)
     tt = np.arange(end) / SR
     env = 0.35 + 0.4 * np.clip(tt / 2.0, 0, 1)
+    dr[int(T_SEASON * SR):] *= np.exp(-np.arange(end - int(T_SEASON * SR)) / (0.4 * SR))   # the track takes over
     mix[:end] += 0.16 * dr * env
     place(mix, boom(0.7), T_INTRO - 0.01, 0.55)
     place(mix, whoosh(0.5, True, 1), T_BAYEUX - 0.30, 0.35)
@@ -1232,9 +1299,6 @@ def soundtrack():
     place(mix, r, T_SEASON, 0.22)
     place(mix, glitch_snd(0.2, 1), CUT_TAPESTRY - 0.08, 0.3)
     place(mix, boom(1.0), T_NEW, 0.8)
-    # a driving pulse under the weapons
-    for b in np.arange(T_NEW + 0.5, SWAPS['stapler'] - 1.2, 0.5):
-        place(mix, boom(0.35)[:int(0.4 * SR)] * np.linspace(1, 0, int(0.4 * SR)), b, 0.35)
     for name, ts in SWAPS.items():
         place(mix, whoosh(0.35, True, 20 + len(name)), ts - 0.33, 0.3)
         place(mix, glitch_snd(0.14, len(name)), ts - 0.07, 0.25)
@@ -1242,14 +1306,25 @@ def soundtrack():
     for wa, wb in WHIPS:
         place(mix, whoosh(wb - wa + 0.1, True, 40), wa - 0.05, 0.4)
     place(mix, ghost_wooo(1.2), GHOST_FLY[0] + 0.05, 0.12)
-    place(mix, riser(SWAPS['stapler'] - 11.0 - D), 11.0 + D, 0.35)
+    place(mix, riser(SWAPS['stapler'] - 11.0 - D), 11.0 + D, 0.25)
     # after the stapler's huge reveal everything drops out for one small flat click
-    a, b = int(STAPLER_FADE * SR), int((CUT_END_TITLE - 0.02) * SR)
+    a, b = int(STAPLER_FADE * SR), int((T_SKINS - 0.02) * SR)
+    mix[:end] += rock_track(end)
     k = int(0.45 * SR)
     fade = np.ones(b - a)
     fade[:k] = np.linspace(1, 0, k)
     fade[k:] = 0
     mix[a:b] *= fade
+    # NEW SKINS: back in with a hit, a whoosh and a glitch for each
+    k2 = int(0.02 * SR)
+    mix[b - k2:b] *= np.linspace(1, 0, k2)
+    place(mix, boom(1.1), T_SKINS, 0.8)
+    for name, ts in SKIN_SWAPS.items():
+        place(mix, whoosh(0.35, True, 60 + len(name)), ts - 0.33, 0.3)
+        place(mix, glitch_snd(0.14, 7 + len(name)), ts - 0.07, 0.25)
+        place(mix, boom(1.0), ts, 0.8)
+    for wa, wb in WHIPS[3:]:
+        place(mix, whoosh(wb - wa + 0.1, True, 41), wa - 0.05, 0.4)
     place(mix, click(), STAPLER_CLICK, 0.5)
     place(mix, tink(), STAPLE_HIT, 0.18)
     place(mix, boom(1.3), CUT_END_TITLE, 0.95)

@@ -256,6 +256,111 @@ def stroke_masks(name, shape):
     return out
 
 
+# ------------------------------------------------------------------------------------------- the new skins
+# Each figure keeps his face, hands and whatever he holds ('show': copied back on top, linen and all); only his
+# clothing is replaced. Coordinates are in the (pre-scaled) reference's pixels.
+
+def william_skin(L):
+    """PARTY SUIT: purple suit, wide flared cuffs, feather boa, rhinestone boots, big purple cowboy hat."""
+    v = math.pi / 2
+    L.poly([(232, 172), (300, 172), (305, 240), (307, 332), (276, 334), (262, 252), (238, 200)], 'purple', v, 'black')
+    L.line([(282, 176), (290, 330)], 'lilac', 1.4)                                                 # trouser crease
+    L.poly([(270, 328), (310, 328), (318, 350), (304, 362), (268, 360)], 'frost', 0.0, 'navy')       # boots
+    rng = np.random.default_rng(5)
+    for _ in range(14):                                                                          # rhinestones
+        L.ellipse(272 + rng.uniform(0, 40), 332 + rng.uniform(0, 26), 1.6, 1.6, rng.choice(['ice', 'lilac', 'plasmapale']))
+    L.poly([(212, 88), (300, 86), (306, 122), (301, 180), (230, 182), (212, 140)], 'purple', v, 'black')  # jacket
+    L.line([(258, 90), (250, 130), (258, 178)], 'lilac', 1.6)                                    # lapel edge
+    L.line([(272, 90), (266, 130)], 'lilac', 1.6)
+    for y in (140, 156):
+        L.ellipse(262, y, 2.2, 2.2, 'ochre')                                                    # buttons
+    L.poly([(286, 86), (322, 88), (322, 114), (292, 120)], 'purple', 0.1, 'black')               # pointing sleeve
+    L.poly([(318, 82), (342, 72), (346, 120), (318, 116)], 'lilac', v, 'purple')                 # wide cuff
+    L.poly([(238, 94), (262, 92), (288, 116), (272, 132), (248, 120)], 'purple', 0.8, 'black')   # club arm
+    L.poly([(260, 108), (278, 104), (282, 126), (266, 128)], 'lilac', 0.8, 'purple')             # its cuff
+    # the boa: fluffy loops round his neck, trailing down his back
+    pts = [(222, 86), (240, 92), (258, 94), (276, 92), (292, 86)] + [(210, 96), (202, 112), (198, 130), (200, 150),
+                                                                       (206, 168), (204, 186)]
+    for i, (x, y) in enumerate(pts):
+        L.ellipse(x, y, 9, 7, 'boa', i * 0.7, 'lilac', 1.0)
+        L.ellipse(x + 3, y - 2, 3, 2, 'lilac', 0.0)
+    # the hat: big purple cowboy hat with a band
+    L.poly([(212, 48), (230, 40), (290, 40), (308, 46), (300, 54), (260, 50), (220, 54)], 'purple', 0.0, 'black')
+    L.poly([(238, 42), (240, 18), (252, 12), (258, 18), (266, 12), (278, 18), (280, 42)], 'purple', v, 'black')
+    L.poly([(239, 34), (279, 34), (280, 41), (238, 41)], 'lilac', 0.0)
+    # his club, redrawn in front of the suit as it was in front of his mail
+    a = math.atan2(140 - 50, 336 - 188)
+    f = local((188, 50), a)
+    L.poly(f([(0, -7), (60, -5), (172, -3), (172, 3), (60, 5), (0, 7)]), 'ochre', a, 'madder', 1.2)
+
+
+def harold_skin(L):
+    """SHARK WARRIOR: a huge hammerhead-shark Halloween costume, only his face showing."""
+    v = math.pi / 2
+    body = [(176, 108), (215, 98), (270, 98), (304, 112), (318, 160), (320, 230), (316, 310), (298, 380), (262, 422),
+            (190, 430), (152, 410), (156, 340), (176, 270), (168, 200), (164, 150)]
+    L.poly(body, 'shark', v, 'navy', 1.8)
+    L.poly([(168, 150), (196, 138), (206, 300), (184, 384), (162, 398), (170, 300)], 'buff', v, 'shark')    # belly
+    for y in range(160, 380, 22):                                                                   # belly ridges
+        L.line([(170, y), (200, y + 4)], 'shark', 1.0)
+    L.poly([(298, 110), (344, 72), (336, 134)], 'shark', 0.6, 'navy', 1.6)                         # dorsal fin
+    L.poly([(292, 372), (334, 396), (352, 432), (318, 428), (284, 404)], 'shark', 0.8, 'navy', 1.6)  # tail
+    L.ellipse(250, 82, 44, 40, 'shark', v, 'navy', 1.6)                                          # hood
+    L.poly([(186, 38), (250, 40), (318, 28), (318, 54), (250, 60), (186, 60)], 'shark', 0.0, 'navy', 1.8)  # hammer
+    L.ellipse(186, 49, 12, 11, 'shark', 0.0, 'navy', 1.6)
+    L.ellipse(320, 41, 12, 13, 'shark', 0.0, 'navy', 1.6)
+    for ex, ey in ((186, 48), (322, 38)):
+        L.ellipse(ex, ey, 6, 6, 'black')
+        L.ellipse(ex + 1.5, ey - 1.5, 1.8, 1.8, 'frost')
+    for i in range(7):                                                                            # teeth round the face
+        x = 226 + i * 6.5
+        L.poly([(x, 104), (x + 6, 104), (x + 3, 96)], 'frost', 0.0)
+        L.poly([(x, 54), (x + 6, 54), (x + 3, 61)], 'frost', 0.0)
+    # the arrow he clutches, redrawn over the costume
+    L.line([(172, 80), (354, 18)], 'madder', 1.6)
+    L.poly([(354, 18), (346, 14), (348, 24)], 'black', 0.0)
+
+
+def edward_skin(L):
+    """ELECTRIC MOUSE: a yellow hooded onesie, long dark-tipped ears, red cheek patches, a lightning-bolt tail."""
+    v = math.pi / 2
+    L.poly([(495, 300), (520, 268), (508, 262), (540, 224), (528, 218), (566, 178), (578, 186), (550, 228),
+            (562, 236), (530, 276), (542, 284), (508, 314)], 'yellow', 0.9, 'madder', 1.6)        # tail
+    L.poly([(496, 300), (510, 284), (522, 292), (508, 314)], 'ochre', 0.9)                        # its root
+    L.poly([(345, 178), (420, 162), (456, 186), (472, 216), (502, 262), (506, 326), (460, 334), (404, 336),
+            (344, 330), (328, 290), (318, 240), (334, 204)], 'yellow', v, 'madder', 1.6)          # onesie
+    for x in (366, 394):                                                                          # foot paws
+        L.ellipse(x, 338, 14, 8, 'yellow', 0.0, 'madder', 1.2)
+    L.ellipse(386, 150, 36, 40, 'yellow', v, 'madder', 1.6)                                       # hood
+    L.poly([(362, 122), (338, 46), (354, 50), (378, 118)], 'yellow', 1.9, 'madder', 1.4)          # ears
+    L.poly([(338, 46), (343, 66), (352, 64), (354, 50)], 'black', 1.9)
+    L.poly([(396, 118), (412, 44), (426, 48), (410, 124)], 'yellow', 1.4, 'madder', 1.4)
+    L.poly([(412, 44), (426, 48), (422, 64), (410, 62)], 'black', 1.4)
+    for cx in (359, 413):                                                                         # cheek patches
+        L.ellipse(cx, 166, 6.5, 6.5, 'terracotta', 0.0, 'madder', 1.0)
+    # his sceptre, redrawn in front of the costume
+    L.line([(392, 236), (466, 150)], 'ochre', 3.2)
+    for dx, dy in ((0, -8), (-7, -2), (7, -2)):
+        L.ellipse(468 + dx, 146 + dy, 3.5, 3.5, 'buff', 0.0, 'madder', 1.0)
+
+
+SKINS = {
+    'william': dict(erase=[], keep=[], over=[], draw=william_skin,
+                    show=[[(248, 50), (282, 50), (286, 86), (252, 90)],                   # face
+                          [(340, 52), (374, 50), (374, 98), (344, 98)],                   # pointing hand
+                          [(264, 114), (286, 114), (286, 132), (264, 132)]]),            # club hand
+    'harold': dict(erase=[], keep=[], over=[], draw=harold_skin,
+                   show=[[(228, 60), (266, 60), (268, 98), (232, 100)],                   # face
+                         [(162, 58), (206, 58), (206, 102), (166, 102)],                  # raised hand
+                         [(232, 168), (268, 158), (306, 168), (314, 230), (302, 300), (272, 362), (248, 362),
+                          (232, 300), (216, 230)]]),                                     # shield
+    'edward': dict(erase=[], keep=[], over=[], draw=edward_skin,
+                   show=[[(368, 140), (404, 140), (406, 188), (370, 190)],                # face and beard
+                         [(383, 220), (400, 220), (400, 240), (383, 240)]]),             # sceptre hand
+}
+SCENES.update(SKINS)
+
+
 def masks(name, shape):
     sc = SCENES[name]
     er = np.zeros(shape, bool)
@@ -287,6 +392,15 @@ def scene_labels(name, after=True, **kw):
     out[on] = wl[on]
     hand = ov & (clean != BS.IDX['linen'])
     out[hand] = clean[hand]
+    show = np.zeros(lab.shape, bool)
+    if SCENES[name].get('show'):
+        im = Image.new('L', (lab.shape[1], lab.shape[0]), 0)
+        dd = ImageDraw.Draw(im)
+        for poly in SCENES[name]['show']:
+            dd.polygon([(x * S, y * S) for x, y in poly], fill=255)
+        show = np.asarray(im) > 0
+        out[show] = clean[show]
+    hand |= show
     forced = np.where(on & ~hand, wa, np.nan).astype(np.float32)
     return out, forced
 

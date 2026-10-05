@@ -17,8 +17,13 @@ Read this first in any new session, after CLAUDE.md.
   `london-2026-exhibit-*.jpg`: tapestry lying almost flat in long low glass cases, black wall with glowing blue line
   drawings and captions, warm floor light strip); title held 2 s longer (`D` in bayeux.py); after the stapler's reveal
   the glory fades (`STAPLER_FADE`) and it fires one staple into the messenger's forearm (`STAPLER_CLICK`, `STAPLE_HIT`).
-- Next: NEW SKINS. Wait for Sam's references; replace each figure's clothing (not the figure) with the new skin, in
-  stitch, the same way as the weapons.
+- Concept v4 sent 5 Oct (26.3 s, 23 MB, render 121 s): NEW SKINS added after the staple (William: PARTY SUIT,
+  Harold: SHARK WARRIOR, Edward: ELECTRIC MOUSE; `SKINS` in bayeux_weapons.py: each figure's face and hands copied
+  back over the new costume ('show'), club/arrow/sceptre redrawn in front). Sam's rock track
+  (`source/audio/bayeux-rock.mp3`, a Pixabay-style download Sam supplied: confirm its licence before posting) plays
+  from the moment SEASON PASS ignites, drops out for the stapler's silence and returns for NEW SKINS.
+- Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
+  deliberately not stored in the project.
 
 ## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
 - Posted Mon 5 Oct 2026 at 1pm, the day of another RNLI/small-boat protest (Gosport). Cover around 0:05. Check the
