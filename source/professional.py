@@ -308,7 +308,7 @@ LINE_DEFS = [
                      'Some combination of rope-work', 'will keep him from being', 'violently tossed about,', 'as he searches for',
                      'the best place to camp.']),
     ('spokes', 3.0, ['Eventually he will reach a layer', 'so pressurised and hot', 'that methane molecules break apart.',
-                     'Imagine his wonder,', 'when the carbon crystallises into diamonds', "that rain down towards the planet's core.",
+                     'Imagine his wonder,', 'when the carbon crystallises', 'into diamonds that rain down', "towards the planet's core.",
                      "He'll say things like..."]),
     ('steve', 2.8, ['WOW!', 'THIS IS WHY EXPLORATION', 'IS SO IMPORTANT!']),
     ('spokes', 3.2, ['His shirt will be tousled,', 'his hair sweat-sodden.', 'His earnest smile will inspire',
@@ -353,7 +353,7 @@ def build_timeline():
     w = line(5, T['s7'] + 0.3)
     T['s8'] = piece_start(w, 3) - 0.12                  # 8. Neptune, deeper: diamonds
     T['s9'] = w[-1][2] + 0.25                           # 9. Steve to camera: "Wow!"
-    w = line(6, T['s9'] + 0.25, stop=0.45)
+    w = line(6, T['s9'] + 0.25, stop=0.75)       # (a beat after the WOW!)
     T['s10'] = w[-1][2] + 0.3                           # 10. slow push on his grin
     w = line(7, T['s10'] + 0.3)
     T['s11'] = w[-1][2] + 0.3                           # 11. the science editor
@@ -1099,7 +1099,7 @@ def shot_journalists(t):
     def asker(sp, r, t_):
         up = F.overshoot((t_ - T['hand']) / 0.35)
         if t_ > T['hand']:
-            sp['arms'] = dict(sp['arms'], R=r.arm('R', (150 + 60 * up, 400 - 600 * up), 'pen', 'down'))
+            sp['arms'] = dict(sp['arms'], R=r.arm('R', (150 + 60 * up + 140 * math.sin(math.pi * min(1.0, up)), 400 - 600 * up), 'pen', 'down'))
             sp['look'], sp['head_dy'] = 0.1, 0
         sp['mouth'] = mouth_of('asker', t_)
         sp['brows'] = 'serious' if line_of('asker', t_) else None
