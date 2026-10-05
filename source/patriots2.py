@@ -32,6 +32,7 @@ import burnham as B
 import peepee as PP          # the protester, his badges, ctext, Rot, the series' caption
 import mossad as M           # brows, mouths, hair styles and head tilt (patched into burnham on import)
 import mossad_audio as MA
+import figure as F
 from burnham_film import onepole_lp, normal, reverb
 from ed import INK, curve, oval, smooth, soft
 
@@ -45,7 +46,7 @@ TITLE = 'THE PATRIOTS 2'
 # Each line: (who, start, words a second, caption pieces). Word times are worked out from the pace, with short
 # pauses at commas and full stops; each caption piece shows from its first word to the next piece.
 LINE_DEFS = [
-    ('pro', 0.35, 3.4, ['Dear RNLI.', 'As a British patriot, I have the deepest respect', 'for your work saving lives at sea.',
+    ('pro', 0.35, 3.4, ['Dear RNLI.', 'As a British patriot,', 'I have the deepest respect', 'for your work saving lives at sea.',
                         'However, I have some concerns.']),
     ('pro', None, 3.4, ['I recognise the courage and resilience', 'your people require to do what they do.']),
     ('pro', None, 3.4, ["What you've failed to consider", "is that some of the so-called 'people'", 'you go to rescue',
@@ -63,7 +64,7 @@ LINE_DEFS = [
 # recorded. Line index -> (file, from, to, caption pieces with their start in the recording). Captions follow Sam's
 # words; piece starts sit on his own pauses.
 REC = {
-    0: ('patriots2-protester-1', 0.40, 11.90, [('Dear RNLI.', 0.49), ('As a British patriot, I have the deepest respect', 3.10),
+    0: ('patriots2-protester-1', 0.40, 11.90, [('Dear RNLI.', 0.49), ('As a British patriot,', 3.10), ('I have the deepest respect', 4.77),
                                                ('for your work saving lives at sea.', 6.60), ('However, I have some concerns.', 9.38)]),
     1: ('patriots2-protester-2', 0.40, 5.90, [('I recognise the courage', 0.50), ('and resilience your people require', 2.27),
                                                ('to do what they do.', 4.64)]),
@@ -515,6 +516,26 @@ def mouse(img, cam, x, y, s):
     p.line([(x - 6 * s, y - 14 * s), (x - 4 * s, y - 2 * s)], (90, 92, 100), 1.4)
 
 
+def under_desk(img, cam, x, y, s, YF, rock=0.0, legs=True):
+    """What shows in the dark knee space under the desk (seen from the front): his lower legs and the chair's stand,
+    castors on the floor. x, y: him (neck base), s: his scale; YF: the desk's far edge (the knee space starts under
+    the desk's front face). His hips sit on the seat (figure-rig: seated contact)."""
+    seat = y + F.CROTCH_Y * s
+    clip_y = YF + s * DESK_FY * DESK_DEPTH + 40 * s
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    office_chair(lay, cam, x + rock, seat, s, back=False)
+    if legs:
+        L = B.Local(cam, x, y, s)
+        seated_legs(lay, B.Pen(lay, L), dict(trousers=PP.COMBAT))
+    _, Y = cam.P(0, clip_y)
+    if Y >= img.size[1]:
+        return                      # the knee space is below the frame
+    mask = Image.new('L', img.size, 0)
+    ImageDraw.Draw(mask).rectangle([0, int(Y), img.size[0], img.size[1]], fill=255)
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(mask))))
+    img.alpha_composite(lay)
+
+
 def office_chair(img, cam, x, y, s, back=True):
     """An office chair: x, y the middle of the seat; back drawn behind the sitter."""
     p = B.Pen(img, cam)
@@ -524,10 +545,25 @@ def office_chair(img, cam, x, y, s, back=True):
         return
     p.poly([(x - 170 * s, y - 20 * s), (x + 170 * s, y - 20 * s), (x + 160 * s, y + 30 * s), (x - 160 * s, y + 30 * s)],
            (34, 34, 40), INK, 2.4)
-    p.line([(x, y + 30 * s), (x, y + 250 * s)], (90, 92, 98), max(2, 22 * s))
-    for k in range(-2, 3):
-        p.line([(x, y + 250 * s), (x + k * 110 * s, y + 300 * s)], (40, 40, 46), max(2, 16 * s))
-        p.ell(x + k * 110 * s, y + 310 * s, 16 * s, 12 * s, (24, 24, 28), INK, 1.4)
+    # a solid gas-lift column, its cover, and a five-star base on castors, all outlined so they read in the dark
+    metal, metal_l = (150, 154, 164), (196, 200, 210)
+    p.poly([(x - 34 * s, y + 30 * s), (x + 34 * s, y + 30 * s), (x + 30 * s, y + 70 * s), (x - 30 * s, y + 70 * s)],
+           (40, 40, 46), INK, 2.2)                                            # the mechanism under the seat
+    p.poly([(x - 20 * s, y + 70 * s), (x + 20 * s, y + 70 * s), (x + 20 * s, y + 160 * s), (x - 20 * s, y + 160 * s)],
+           metal, INK, 2.2)                                                   # the chrome gas lift
+    p.line([(x - 8 * s, y + 76 * s), (x - 8 * s, y + 154 * s)], metal_l, max(2, 6 * s))
+    p.poly([(x - 28 * s, y + 160 * s), (x + 28 * s, y + 160 * s), (x + 30 * s, y + 250 * s), (x - 30 * s, y + 250 * s)],
+           (40, 40, 46), INK, 2.2)                                            # its plastic cover
+    for k in (-2, -1, 1, 2, 0):
+        ex, ey = x + k * 120 * s, y + 296 * s - (14 * s if k == 0 else 0)
+        nx = -(ey - (y + 250 * s))
+        ny = ex - x
+        n = math.hypot(nx, ny) or 1
+        w = 15 * s
+        p.poly([(x + nx / n * w, y + 250 * s + ny / n * w), (ex + nx / n * w * 0.7, ey + ny / n * w * 0.7),
+                (ex - nx / n * w * 0.7, ey - ny / n * w * 0.7), (x - nx / n * w, y + 250 * s - ny / n * w)],
+               (52, 52, 60), INK, 2.0)                                        # a leg of the star base
+        p.ell(ex, ey + 16 * s, 20 * s, 16 * s, (24, 24, 28), INK, 1.6)        # its castor
 
 
 # -------------------------------------------------------------------------------------- the protester
@@ -715,7 +751,7 @@ def shot_room(t):
     img = B.canvas()
     room_set(img, cam, t)
     x, y, s = 650, 860, 0.8
-    office_chair(img, cam, x, y + 330 * s, s, back=True)
+    office_chair(img, cam, x, y + F.CROTCH_Y * s, s, back=True)
     st = pro_st(t, turn=-0.55, look=-1.0, lid=3, head_dx=-14, tilt=-0.04)
     tp = tap(t)
     tp2 = tap(t, 0.06)
@@ -727,6 +763,7 @@ def shot_room(t):
         for side in ('L', 'R'):
             PP.protester(img, cam, x, y, s, dict(st, arm_only=side), t)
     desk(img, cam, x, ROOM_DESK_Y, s, t, arms=forearms, monitor=True)
+    under_desk(img, cam, x, y, s, ROOM_DESK_Y)
     light_pass(img, cam, [(ROOM_LIGHT[0] + 270, 860, 250, (0.72, 0.9, 1.15), 1.35), (540, 1120, 260, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
     room_emissive(img, cam, t)
@@ -839,10 +876,14 @@ def crew_member(img, cam, x, y, s, sp, t, arms):
     helmet(B.Pen(img, PP.Rot(L, sp.get('tilt', 0.0))), sp.get('head_dx', 0), -150 + sp.get('head_dy', 0), sp['hw'], sp['hh'])
 
 
-def lifeboat(img, cam, x, y, s, t, crew_fn=None):
-    """An inshore lifeboat side-on, bow to the left: a navy hull, an orange top (tubes and console), the crew standing
-    in the open boat behind a low windscreen. (x, y): waterline at mid-ship."""
-    L = B.Local(cam, x, y, s)
+CREW_TO_BOAT = 0.36      # one lifeboat, one size: a crew member is drawn at 0.36 x the boat's scale in every shot
+
+
+def lifeboat(img, cam, x, y, s, t, crew_fn=None, flip=1):
+    """An inshore lifeboat side-on, bow to the left (flip=-1: bow to the right): a navy hull, an orange top (tubes and
+    console), the crew standing in the open boat behind a low windscreen. (x, y): waterline at mid-ship. The same
+    drawing in every shot; its crew is drawn at CREW_TO_BOAT x s, so the boat and its crew always match."""
+    L = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, L)
     hull = [(-520, -40), (-470, -140), (430, -150), (470, -120), (480, 20), (-300, 30)]
     p.line([(250, -150), (262, -520)], (60, 60, 66), 6)          # the A-frame mast behind the crew
@@ -885,7 +926,8 @@ def shot_lifeboat(t):
 
     def crew(L):
         for i, (dx, dy, sp, hs) in enumerate(((-110, -330, CREW[0], 0.36), (60, -325, CREW[1], 0.34), (210, -332, CREW[2], 0.36))):
-            arms = {'L': ((-130, 280), (-230, 330), 'fist'), 'R': ((130, 290), (40, 360), 'fist')}
+            r = F.Rig(sp)
+            arms = r.arms(((-240, 345), 'fist', 'out'), ((45, 375), 'fist', 'out'))
             st = dict(sp, turn=-0.55, look=-1.0, blink=M.blinking(t, (1.1 + i * 0.7, 3.4 + i * 0.4)),
                       head_dy=3 * math.sin(t * 3.1 + i))
             X, Y = L.P(dx, dy)
@@ -971,8 +1013,13 @@ def migrant(img, cam, x, y, s, spec, t, i, reach=0.0):
               head_dy=2 * math.sin(t * 2.0 + i), tilt=0.0 if woman else 0.04 * math.sin(i * 1.7))
     if i in (2, 9):
         sp['age'] = True
-    ra = ((150, 260), (150 + 140 * reach, 140 - 40 * reach), 'palm') if reach else ((160, 290), (110, 440), 'fist')
-    sp['arms'] = {'L': ((-160, 290), (-110, 440), 'fist'), 'R': ra}
+    r = F.Rig(sp)
+    if reach:
+        tgt = (110 + 220 * reach, 440 - 330 * reach)
+        ra = r.arm('R', r._toward('R', tgt, 'palm'), 'palm', 'down')
+    else:
+        ra = r.arm('R', (110, 440), 'fist', 'down')
+    sp['arms'] = {'L': r.arm('L', (-110, 440), 'fist', 'down'), 'R': ra}
     L = B.Local(cam, x, y, s)
     person(img, cam, x, y, s, sp, t, legs=seated_legs)
     if hair in ('hijab', 'shawl'):   # worn over the head and shoulders, under the life jacket
@@ -982,7 +1029,7 @@ def migrant(img, cam, x, y, s, spec, t, i, reach=0.0):
         life_jacket(img, L)
         if reach:  # the reaching arm in front of the jacket
             B.Pen(img, L)
-            B.arm(B.Pen(img, L), (132, 60), ra[0], ra[1], wet)
+            B.arm(B.Pen(img, L), r.shoulder('R'), ra[0], ra[1], wet)
             B.gesture_hand(B.Pen(img, L), ra[0], ra[1], ra[2], skin)
     p = B.Pen(img, L)
     for k in range(3):  # soaked: water dripping from hair and chin
@@ -1028,24 +1075,33 @@ def shot_dinghy(t):
         reach = smooth((u - 0.45) / 0.35) if i == 4 else 0.0
         migrant(img, cam, mx, y - 420 + 8 * math.cos(i * 1.3), 0.5, spec, t, i + 7, reach)
     dinghy(img, cam, x, y, 760, 'near', t)
-    # the lifeboat's side at the right, a crew member leaning out with a hand held out
-    p = B.Pen(img, cam)
-    bx = 850 + 6 * math.sin(t * 1.9)
-    p.poly([(bx - 40, 1000), (1200, 990), (1200, 1700), (bx + 10, 1700)], HULL, INK, 2.8)
-    p.poly([(bx - 50, 980), (1200, 970), (1200, 1030), (bx - 46, 1036)], LIFE_ORANGE, INK, 2.4)
+    # the lifeboat alongside on the right: the same boat as shot 2, its stern towards us (bow off to the right), drawn at
+    # the scale its crew member implies; he stands at the stern and leans out with a hand held out
     k = smooth((u - 0.3) / 0.45)
+    cs = 0.52
+    bs = cs / CREW_TO_BOAT
+    by = 760 + 330 * bs + 5 * math.sin(t * 1.9)        # waterline: his neck is 330 units (boat scale) above it
+    bx = 935 + 400 * bs
     sp = dict(CREW[2], turn=-0.6, look=-1.0, head_dx=-10, tilt=-0.12, blink=M.blinking(t, (2.2, 5.6)))
-    arms = {'L': ((-200 - 40 * k, 280), (-280 - 200 * k, 360 + 20 * k), 'palm'), 'R': ((140, 300), (60, 420), 'fist')}
-    crew_member(img, cam, bx + 85, 760, 0.52, sp, t, arms)
-    p.poly([(bx - 40, 1000), (1200, 990), (1200, 1700), (bx + 10, 1700)], HULL, INK, 2.8)
-    p.poly([(bx - 50, 980), (1200, 970), (1200, 1030), (bx - 46, 1036)], LIFE_ORANGE, INK, 2.4)
-    spray(img, cam, bx - 40, 1060, t, n=10, seed=4, size=0.7)
+    crig = F.Rig(CREW[2])
+    arms = {'L': crig.pose('reach', side='L', target=(-300 - 260 * k, 330 + 60 * k))['L'],
+            'R': crig.arm('R', crig.at('hip', 'R', dy=-30), 'fist', 'out')}
+
+    def crew_at_stern(L):
+        X, Y = L.P(400, -330)
+        crew_member(img, cam, *world_of(cam, X, Y), cs, sp, t, arms)
+    lifeboat(img, cam, bx, by, bs, t, crew_at_stern, flip=-1)
+    p = B.Pen(img, cam)
+    for j in range(4):   # foam where the hull meets the water
+        p.ell(bx - 470 * bs + 120 * j + 20 * math.sin(t * 5 + j), by + 30 * bs, 80, 12, (226, 232, 232), None)
+    spray(img, cam, bx - 470 * bs, by - 20, t, n=8, seed=4, size=0.6)
     return img
 
 
 # ------------------------------------------------------------------------------- shot 4: from the screen
 
-SCREEN_DESK_Y = 1300    # the desk's far edge in shot 4 (him at (540, 830), scale 1)
+SCREEN_DESK_Y = 1190    # the desk's far edge in shot 4 (him at (540, 830), scale 1): at his working height
+PRO_RIG = F.Rig(dict(shoulders=172.6), name='the protester')   # his shoulders sit at sw - 16 in peepee.protester
 
 
 def shot_screen(t):
@@ -1065,20 +1121,25 @@ def shot_screen(t):
     a_cross = smooth((tt - T['cross']) / 0.12)
     a_clutch = smooth((tt - T['clutch']) / 0.18)
     a_fall = smooth((tt - T['topple']) / 0.45) if tt >= T['topple'] else 0.0
-    office_chair(img, cam, x, y + 330 * s, s, back=True)
+    office_chair(img, cam, x, y + F.CROTCH_Y * s, s, back=True)
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     tp, tp2 = tap(tt), tap(tt, 0.06)
     st = pro_st(tt, turn=0.0, look=0.0, lid=2 if tt < T['cut_off'] - 3.5 else 4, brows='flat' if tt < T['s4'] + 2 else 'cross')
-    st['arms'] = typing_arms({'L': (-150, 548), 'R': (60, 548)}, {'L': (-205, 330), 'R': (205, 330)}, {'L': tp, 'R': tp2})
+    tipL, tipR = (-150, 440 + 16 * tp), (60, 440 + 16 * tp2)
+    st['arms'] = PRO_RIG.pose('typing', tips={'L': tipL, 'R': tipR})
     typing = a_clutch <= 0
     if typing:
         check_on_keys(x, y, s, st['arms'], keyboard_box(x, SCREEN_DESK_Y, s))
     if a_cross > 0:
         st.update(brows='raised', lid=0, head_dy=-10 * a_cross, puff=0.0)
     if a_clutch > 0:
-        st['arms'] = {'L': ((-230 + 20 * a_clutch, 300 - 40 * a_clutch), (-120 + 130 * a_clutch, 430 - 230 * a_clutch), 'fist'),
-                      'R': ((215 + 20 * a_clutch, 300 - 20 * a_clutch), (110 - 10 * a_clutch, 430 - 150 * a_clutch), 'fist')}
+        lerp = lambda a, b: (a[0] + (b[0] - a[0]) * a_clutch, a[1] + (b[1] - a[1]) * a_clutch)
         st['shrug'] = 0.6 * a_clutch
+        # his shoulders hunch (peepee.protester: at sw - 16, lifted 26 x shrug): the rig follows them
+        sw = 172 * (1 + 0.05 * st.get('puff', 0.0))
+        r = F.Rig(dict(shoulders=sw - 2, shoulder_dy=-26 * st['shrug']), name='the protester')
+        st['arms'] = {'L': r.arm('L', lerp(tipL, (-30, 180)), 'fist', 'down'),    # grabbing at his chest...
+                      'R': r.arm('R', lerp(tipR, (40, 160)), 'fist', 'down')}     # ...a fist pressed to his heart
         st['tilt'] = -0.08 * a_clutch
     seated_protester(lay, cam, x, y, s, st, tt)
     if a_cross > 0:
@@ -1087,8 +1148,6 @@ def shot_screen(t):
         X, Y = cam.P(x - 60, y + 450)
         lay = lay.rotate(85 * a_fall, Image.BICUBIC, center=(X, Y), translate=(-cam.S(900) * a_fall ** 2, cam.S(120) * a_fall))
     img.alpha_composite(lay)
-    office_chair(img, cam, x + 30 * math.sin(max(0, tt - T['topple']) * 14) * math.exp(-max(0, tt - T['topple']) * 3),
-                 y + 330 * s, s, back=False)
     # the same desk, from the plan
 
     def forearms():
@@ -1096,6 +1155,8 @@ def shot_screen(t):
             for side in ('L', 'R'):
                 PP.protester(img, cam, x, y, s, dict(st, arm_only=side), tt)
     desk(img, cam, x, SCREEN_DESK_Y, s, tt, arms=forearms, fall=tt - T['can'])
+    rock = 30 * math.sin(max(0, tt - T['topple']) * 14) * math.exp(-max(0, tt - T['topple']) * 3)
+    under_desk(img, cam, x, y, s, SCREEN_DESK_Y, rock=rock, legs=a_fall <= 0)
     light_pass(img, cam, [(540, 800, 380, (0.75, 0.92, 1.18), 1.2), (540, 1380, 460, (0.45, 0.58, 0.8), 0.45)],
                ambient=(0.07, 0.08, 0.16))
     return img
@@ -1412,7 +1473,7 @@ def shot_ambulance(t):
                 arms=RAIL,
                 blink=M.blinking(tt, (T['s5'] + 1.0,)), brows='weary' if roll > 0.3 else None)
     f_sp = dict(PARA_F, turn=-0.5, look=-0.6, head_dy=sway * 0.3, mouth=M.talk_mouth(lv, tt),
-                arms={'L': ((-150, 250), (-60, 410), 'fist'), 'R': ((150, 250), (100, 410), 'fist')},
+                arms=MED_RIG.pose('rail', y=410, xs=(-60, 100)),
                 blink=M.blinking(tt, (T['s5'] + 2.0,)), brows='weary')
     person(img, cam, 330, 730, 0.62, m_sp, tt)
     uniform_bits(img, cam, 330, 730, 0.62, m_sp, 'para')
@@ -1490,8 +1551,9 @@ def ae_room(img, cam, t, doors=0.0):
 
 # Medical staff's arms: natural length (fingertips about mid-thigh); on the trolley the hands rest on the mattress
 # edge at waist height.
-SIDE = {'L': ((-150, 250), (-138, 405), 'fist'), 'R': ((150, 250), (138, 405), 'fist')}
-RAIL = {'L': ((-150, 250), (-100, 410), 'fist'), 'R': ((150, 250), (60, 410), 'fist')}
+MED_RIG = F.Rig(dict(shoulders=136), name='medical staff')
+SIDE = MED_RIG.pose('sides')
+RAIL = MED_RIG.pose('rail', y=410, xs=(-100, 60))
 
 
 def trolley_y(ty, k):
@@ -2085,6 +2147,9 @@ def main():
     elif mode == 'final':
         render(sys.argv[2], (1080, 1920), 20, 2)
 
+
+
+F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render (guides/figure-rig.md)
 
 if __name__ == '__main__':
     main()

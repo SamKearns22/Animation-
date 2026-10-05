@@ -104,10 +104,11 @@ class Rig:
         self.sw = sp.get('shoulders', 150)
         self.hh = sp.get('hh', 90)
         self.upper, self.fore = upper, fore
+        self.sy = SHOULDER_Y + sp.get('shoulder_dy', 0.0)   # a shrug or hunch lifts the shoulders (negative = up)
 
     # landmarks -------------------------------------------------------------------------------------
     def shoulder(self, side):
-        return ((-1 if side == 'L' else 1) * (self.sw - 14), SHOULDER_Y)
+        return ((-1 if side == 'L' else 1) * (self.sw - 14), self.sy)
 
     def at(self, where, side='L', dx=0.0, dy=0.0):
         """A body landmark (for hand targets): hip, thigh, waist, chest, heart, chin, mouth, temple, brow, crown."""
