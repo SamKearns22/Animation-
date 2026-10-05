@@ -10,6 +10,11 @@
 | `weapon-3-ghost-pistol.jpg` | Rider on a red horse with a spear raised, a horse tumbling behind | That rider: the spear becomes the pistol, ghost streams to the right |
 | `weapon-4-stapler.jpg` | Guy of Ponthieu with his axe (VBI NVNTII WILLELMI) | Guy: the axe becomes the stapler |
 
+## NEW SKINS (clothing replaced, the figure kept)
+| File | What it shows | Used for |
+|---|---|---|
+| `skin-1-william-party-suit.jpg` | HIC WILLELM DUX: Duke William in mail and a pointed helmet on a red-brown horse, club over his shoulder, pointing ahead | His mail coat and helmet become the PARTY SUIT: purple suit, feather boa, wide cuffs, rhinestone boots, big purple cowboy hat |
+
 ## Director's rule for every swap (5 Oct 2026)
 - **Delete the original weapon completely** (bow, arrow, bowstring, spear, axe head and shaft): no trace of it is
   left. Where it crossed the linen, stitch plain linen back; where it crossed the soldier, his horse or his shield,
