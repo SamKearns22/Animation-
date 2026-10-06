@@ -60,8 +60,9 @@ T_QUIET = T_CARD + 3.4               # hard cut back to the silent gallery...
 T_TINK = T_QUIET + 0.55              # ...where one staple pings off the glass
 BLACK_AT = T_QUIET + 1.45            # hard cut to black
 DUR = BLACK_AT + 0.3
-START = 0.15                  # the film opens here: DLC (the series title) over the quiet gallery, then the logo
-T_DLC_OUT = 0.93              # the series title goes as the gold logo crashes in
+START = 0.85                  # the film proper opens here: straight into the flaming title
+COVER_T = 0.40                # frame 0 only: DLC over the quiet gallery, for TikTok's cover (one frame, 1/24 s)
+T_DLC_OUT = -1.0              # the series title is never on screen in the film itself
 MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
 
 
@@ -1774,8 +1775,20 @@ def soundtrack():
 
 
 # --------------------------------------------------------------------------------------------- rendering
+def cover_frame():
+    """The cover: the quiet gallery with DLC in the series' cranberry title, nothing else."""
+    a = room_frame(COVER_T)
+    series_title(a)
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]].astype(np.float32)
+    h, w = a.shape[:2]
+    a *= (1 - 0.28 * (((xx - w / 2) / (w * 0.75)) ** 2 + ((yy - h / 2) / (h * 0.62)) ** 2))[..., None]
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
 def _render(i):
-    return frame(START + i / FPS, i).tobytes()
+    if i == 0:
+        return cover_frame().tobytes()
+    return frame(START + (i - 1) / FPS, i).tobytes()
 
 
 def render(out):
@@ -1788,11 +1801,11 @@ def render(out):
     wav = out + '.wav'
     mix = soundtrack()
     print(f'sound: {MA.lufs(mix[:int(BLACK_AT * SR)]):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
-    k0 = int(START * SR)
+    k0 = int((START - 1.0 / FPS) * SR)                 # frame 0 is the cover; frame 1 is START
     mix = mix[k0:]
     mix[:int(0.004 * SR)] *= np.linspace(0, 1, int(0.004 * SR))
     MA.write_wav(wav, mix)
-    n = int(round((DUR - START) * FPS))
+    n = int(round((DUR - START) * FPS)) + 1
     w, h = int(W0 * R), int(H0 * R)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt',
                           'rgb24', '-s', f'{w}x{h}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',

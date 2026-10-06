@@ -55,6 +55,8 @@ Read this first in any new session, after CLAUDE.md.
 - Real tree 6 Oct (51.0 s, 25.0 MB): the invented flower-tree replaced by Sam's real tapestry tree
   (`references/bayeux/tapestry-trees.jpg`, traced and stitched, 72% of the band, never squashed; scene gap DIV 330).
   Sam: no more Discord copies unless asked.
+- Cover frame 6 Oct (24.7 MB): DLC now appears on frame 0 only (`cover_frame`, 1/24 s) so the film still opens
+  straight into the logo; choose the very first frame as the TikTok cover.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 
