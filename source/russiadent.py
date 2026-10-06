@@ -1027,25 +1027,26 @@ def crowd_person(img, cam, pc, who, t):
 
 
 # ------------------------------------------------------------------------------------------- shot 3 and 4 (stills)
-def phone_screen(img, box, t=0.0, typed=1.0):
+def phone_screen(img, box, t=0.0, typed=1.0, scale=1.0):
     """The ministry's page on her phone: a generic blue bar with a plain Russian header (no emblem), the report."""
     x0, y0, x1, y1 = [v * B.SS for v in box]
+    I = lambda v: int(round(v))
     d = ImageDraw.Draw(img)
-    S = B.SS
+    S = B.SS * scale
     d.rectangle([x0, y0, x1, y1], fill=(250, 250, 250))
     d.rectangle([x0, y0, x1, y0 + 120 * S], fill=(236, 238, 242))     # the address bar
-    d.rounded_rectangle([x0 + 30 * S, y0 + 40 * S, x1 - 30 * S, y0 + 96 * S], 26 * S, fill=(255, 255, 255),
-                        outline=(200, 202, 210), width=2 * S)
-    f = ImageFont.truetype(B.SANS, 24 * S)
+    d.rounded_rectangle([x0 + 30 * S, y0 + 40 * S, x1 - 30 * S, y0 + 96 * S], I(26 * S), fill=(255, 255, 255),
+                        outline=(200, 202, 210), width=I(2 * S))
+    f = ImageFont.truetype(B.SANS, I(24 * S))
     d.text((x0 + 60 * S, y0 + 68 * S), 'health.gov.ru', font=f, fill=(110, 110, 120), anchor='lm')
     d.rectangle([x0, y0 + 120 * S, x1, y0 + 290 * S], fill=(22, 62, 150))
-    fh = ImageFont.truetype(B.SANS, 36 * S)
+    fh = ImageFont.truetype(B.SANS, I(36 * S))
     d.text(((x0 + x1) / 2, y0 + 180 * S), 'МИНИСТЕРСТВО', font=fh, fill=(255, 255, 255), anchor='mm')
     d.text(((x0 + x1) / 2, y0 + 232 * S), 'ЗДРАВООХРАНЕНИЯ', font=fh, fill=(255, 255, 255), anchor='mm')
-    fs = ImageFont.truetype(B.SANS, 26 * S)
+    fs = ImageFont.truetype(B.SANS, I(26 * S))
     d.text((x0 + 50 * S, y0 + 350 * S), 'ОФИЦИАЛЬНОЕ СООБЩЕНИЕ', font=fs, fill=(196, 30, 44), anchor='lm')
     d.text((x0 + 50 * S, y0 + 392 * S), '06.10.2026', font=fs, fill=(130, 130, 140), anchor='lm')
-    fb = ImageFont.truetype(B.SANS, 66 * S)
+    fb = ImageFont.truetype(B.SANS, I(66 * S))
     rows = ['Everything', 'fine.', 'Stop asking', 'questions.']
     for i, r in enumerate(rows):
         d.text((x0 + 50 * S, y0 + (480 + 84 * i) * S), r, font=fb, fill=(20, 20, 26), anchor='lm')
@@ -1054,32 +1055,144 @@ def phone_screen(img, box, t=0.0, typed=1.0):
                     fill=(214, 214, 220))
 
 
-def shot_phone(t=0.0):
-    img = B.canvas((40, 36, 40))
+class Turned:
+    """A local frame turned by `ang` (radians, clockwise on screen) about (cx, cy) in world pixels: the phone's own
+    frame, so the phone and the hands holding it tilt together."""
+    def __init__(self, cam, cx, cy, ang):
+        self.cam, self.cx, self.cy, self.c, self.sn, self.s = cam, cx, cy, math.cos(ang), math.sin(ang), cam.s
+
+    def P(self, u, v):
+        return self.cam.P(self.cx + u * self.c - v * self.sn, self.cy + u * self.sn + v * self.c)
+
+    def S(self, v):
+        return self.cam.S(v)
+
+
+def limb(p, cl, ws, colr, tip_round=True, lw=2.6):
+    """A tapering finger or thumb along a centre line `cl` with widths `ws` (half-widths), rounded at the tip.
+    Returns the tip point and direction (for the nail)."""
+    L, R = [], []
+    for i, (x, y) in enumerate(cl):
+        a = cl[max(0, i - 1)]
+        b = cl[min(len(cl) - 1, i + 1)]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(dx, dy) or 1
+        nx, ny = -dy / n, dx / n
+        L.append((x + nx * ws[i], y + ny * ws[i]))
+        R.append((x - nx * ws[i], y - ny * ws[i]))
+    (x1, y1), (x0, y0) = cl[-1], cl[-2]
+    d = math.atan2(y1 - y0, x1 - x0)
+    w = ws[-1]
+    cap = [(x1 + w * math.cos(d + a), y1 + w * math.sin(d + a)) for a in np.linspace(math.pi / 2, -math.pi / 2, 7)]
+    p.poly(curve(L + cap[1:-1] + R[::-1], 3), colr, INK, lw)
+    return (x1, y1), d
+
+
+def thumb(p, base, knuckle, tip, skin, w=(46, 38, 30)):
+    """A thumb seen from above: broad where it leaves the palm, a bend at the knuckle, a flat nail at the tip."""
+    mid = ((base[0] + knuckle[0]) / 2, (base[1] + knuckle[1]) / 2)
+    end, d = limb(p, [base, mid, knuckle, tip], [w[0], w[0] * 0.92, w[1], w[2]], skin)
+    sd = B.dk(skin, 0.8)
+    nx, ny = -math.sin(d), math.cos(d)
+    p.line([(knuckle[0] + nx * w[1] * 0.7, knuckle[1] + ny * w[1] * 0.7), (knuckle[0] - nx * w[1] * 0.2, knuckle[1] - ny * w[1] * 0.2)],
+           sd, 2.0)                                                        # the crease at the knuckle
+    nc = (end[0] - math.cos(d) * w[2] * 0.45, end[1] - math.sin(d) * w[2] * 0.45)
+    p.ell(nc[0], nc[1], w[2] * 0.8, w[2] * 0.62, B.lt(skin, 1.06), B.dk(skin, 0.72), 1.8, rot=d)   # the nail
+    p.ell(nc[0] + math.cos(d) * w[2] * 0.42, nc[1] + math.sin(d) * w[2] * 0.42, w[2] * 0.3, w[2] * 0.5,
+          (252, 246, 244), None, rot=d)
+
+
+def finger(p, pts, w, skin, nail=True):
+    """A curled finger (back of the finger towards us): knuckle creases and a nail at the tip."""
+    end, d = limb(p, pts, [w, w * 0.96, w * 0.9, w * 0.82][:len(pts)], skin, lw=2.4)
+    sd = B.dk(skin, 0.78)
+    for k in range(1, len(pts) - 1):   # creases over the joints
+        x, y = pts[k]
+        a, b = pts[k - 1], pts[k + 1]
+        dd = math.atan2(b[1] - a[1], b[0] - a[0])
+        nx, ny = -math.sin(dd), math.cos(dd)
+        p.line([(x + nx * w * 0.5, y + ny * w * 0.5), (x - nx * w * 0.5, y - ny * w * 0.5)], sd, 1.6)
+    if nail:
+        nc = (end[0] - math.cos(d) * w * 0.35, end[1] - math.sin(d) * w * 0.35)
+        p.ell(nc[0], nc[1], w * 0.62, w * 0.5, B.lt(skin, 1.06), B.dk(skin, 0.72), 1.6, rot=d)
+
+
+PHONE_W, PHONE_H, SCREEN_W, SCREEN_H = 590, 1110, 540, 1040
+PHONE_AT, PHONE_ANG = (540, 770), -0.07
+
+
+def shot_phone(t=0.0, tap=None):
+    """Shot 4: over her hands, her phone held in both palms, the room behind out of focus; her right thumb types."""
+    from PIL import ImageFilter
+    img = B.canvas((96, 70, 50))
     cam = B.Cam(1.0, 540, 960)
-    p = B.Pen(img, cam)
-    # her hands round the phone (blood-splattered), the phone filling the frame
-    p.poly([(150, 260), (930, 260), (930, 1700), (150, 1700)], (24, 24, 28), INK, 4)
-    phone_screen(img, (180, 300, 900, 1660), t)
-    skin = (238, 228, 222)
-    for (x, sgn, ty) in ((150, -1, 1180), (930, 1, 1120)):   # palms cupping the sides, fingers curling behind
-        p.poly(curve([(x + sgn * 10, 1000), (x + sgn * 70, 980), (x + sgn * 120, 1150), (x + sgn * 110, 1500),
-                      (x + sgn * 40, 1760), (x - sgn * 60, 1800), (x - sgn * 30, 1500), (x - sgn * 20, 1200)], 4), skin, INK, 3)
-        for k in range(3):   # fingertips showing round the edge
-            p.ell(x + sgn * 62, 1020 + 70 * k, 30, 26, skin, INK, 2.4)
-        tip = (x - sgn * (150 + 30 * math.sin(t * 20 + sgn)), ty - 20 * abs(math.sin(t * 20 + sgn)))
-        for a, b, w in (((x - sgn * 10, 1440), (x - sgn * 70, ty + 120), 50), ((x - sgn * 70, ty + 120), tip, 42)):
-            d = (b[0] - a[0], b[1] - a[1])          # thumb over the screen, tapping
-            n = math.hypot(*d)
-            nx, ny = -d[1] / n * w, d[0] / n * w
-            p.poly([(a[0] + nx, a[1] + ny), (b[0] + nx * 0.9, b[1] + ny * 0.9), (b[0] - nx * 0.9, b[1] - ny * 0.9),
-                    (a[0] - nx, a[1] - ny)], skin, INK, 2.6)
-            p.ell(b[0], b[1], w * 0.9, w * 0.9, skin, None)
-        p.ell(tip[0], tip[1], 40, 42, skin, INK, 2.4)
-        p.ell(tip[0] - sgn * 4, tip[1] - 12, 20, 18, (250, 236, 232), None)
-    splat(p, 120, 1560, 26, 41)
-    splat(p, 980, 1300, 20, 42)
-    splat(p, 300, 1500, 14, 43, drops=3)
+    # the room behind, out of focus: floor, chair legs, a fallen chair, blood
+    bg = B.canvas((126, 90, 60))
+    q = B.Pen(bg, cam)
+    q.poly([(-100, -100), (1200, -100), (1200, 520), (-100, 620)], (196, 186, 166), None)
+    for x in (60, 300, 760, 1000):
+        q.poly([(x, 380), (x + 150, 380), (x + 150, 560), (x, 560)], CHAIR, None)
+        q.line([(x + 10, 560), (x + 4, 900)], CHAIR_FRAME, 10)
+        q.line([(x + 140, 560), (x + 146, 900)], CHAIR_FRAME, 10)
+    q.poly([(820, 1500), (1100, 1380), (1150, 1600), (880, 1720)], CHAIR, None)
+    splat(q, 220, 1700, 90, 44)
+    bg = bg.filter(ImageFilter.GaussianBlur(26 * B.SS))
+    img.alpha_composite(bg)
+    B.shade(img, 0.18)
+    T = Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG)
+    p = B.Pen(img, T)
+    skin, sd = (240, 228, 220), (214, 194, 186)
+    hw, hh = PHONE_W / 2, PHONE_H / 2
+
+    def rrect(w2, h2, r):
+        pts = []
+        for cx, cy, a0 in ((w2 - r, -h2 + r, -90), (w2 - r, h2 - r, 0), (-w2 + r, h2 - r, 90), (-w2 + r, -h2 + r, 180)):
+            pts += [(cx + r * math.cos(math.radians(a0 + k * 15)), cy + r * math.sin(math.radians(a0 + k * 15))) for k in range(7)]
+        return pts
+    # behind the phone: the back of each palm and the wrist, coming in from the bottom corners
+    for sgn in (-1, 1):
+        p.poly(curve([(sgn * (hw - 120), hh - 220), (sgn * (hw + 70), hh - 300), (sgn * (hw + 130), hh - 60),
+                      (sgn * (hw + 120), hh + 200), (sgn * (hw + 84), hh + 420), (sgn * (hw - 100), hh + 420),
+                      (sgn * (hw - 160), hh + 200)], 4), sd, INK, 2.6)
+    p.poly(rrect(hw, hh, 70), (22, 22, 26), INK, 3.0)
+    p.poly(rrect(hw - 4, hh - 4, 66), (44, 44, 52), None)
+    # the screen, drawn flat and turned with the phone
+    S = B.SS
+    scr = Image.new('RGBA', (SCREEN_W * S, SCREEN_H * S), (0, 0, 0, 0))
+    phone_screen(scr, (0, 0, SCREEN_W, SCREEN_H), t, scale=SCREEN_W / 720)
+    mask = Image.new('L', scr.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, scr.width - 1, scr.height - 1], 52 * S, fill=255)
+    scr.putalpha(mask)
+    scr = scr.rotate(-math.degrees(PHONE_ANG), Image.BICUBIC, expand=True)
+    cx, cy = cam.P(*PHONE_AT)
+    img.alpha_composite(scr, (int(cx - scr.width / 2), int(cy - scr.height / 2)))
+    p.ell(0, -hh + 34, 46, 12, (14, 14, 16), None)            # the camera notch
+    # each hand: two fingers curled round the side edge (backs of the fingers towards us), then the ball of the
+    # thumb over the phone's lower corner and the thumb on the screen; the right thumb types
+    k = 0.0 if tap is None else tap
+    for sgn in (-1, 1):
+        for j, v in enumerate((hh - 330, hh - 220)):
+            finger(p, [(sgn * (hw + 70), v + 70), (sgn * (hw + 52), v), (sgn * (hw + 10), v - 34), (sgn * (hw - 14), v - 40)],
+                   28 - 2 * j, skin)
+        p.poly(curve([(sgn * (hw + 104), hh - 120), (sgn * (hw + 40), hh - 170), (sgn * (hw - 70), hh - 150),
+                      (sgn * (hw - 150), hh - 40), (sgn * (hw - 170), hh + 150), (sgn * (hw - 120), hh + 330),
+                      (sgn * (hw - 100), hh + 700), (sgn * (hw + 90), hh + 700), (sgn * (hw + 84), hh + 330),
+                      (sgn * (hw + 120), hh + 120)], 4), skin, INK, 2.8)
+        p.line([(sgn * (hw + 70), hh + 40), (sgn * (hw + 60), hh + 250)], sd, 2.2)          # the side of the palm
+        cuff = [(sgn * (hw - 128), hh + 400), (sgn * (hw + 102), hh + 400), (sgn * (hw + 130), hh + 760),
+                (sgn * (hw - 160), hh + 760)]
+        p.poly(cuff, REPORTER['jacket'], INK, 2.6)                                            # her blouse cuffs
+        p.line([(sgn * (hw - 128), hh + 430), (sgn * (hw + 104), hh + 430)], B.dk(REPORTER['jacket'], 0.85), 2.0)
+        p.line([(sgn * (hw - 110), hh - 30), (sgn * (hw - 40), hh + 120), (sgn * (hw - 30), hh + 260)], sd, 1.8)   # palm crease
+        if sgn < 0:   # the left thumb resting on the screen
+            thumb(p, (-hw + 90, hh - 110), (-hw + 150, hh - 260), (-hw + 210, hh - 360), skin)
+        else:         # the right thumb typing: lifting and pressing, moving along the keys
+            tx, ty = 20 + 40 * math.sin(t * 9), hh - 380 + 14 * k
+            thumb(p, (hw - 90, hh - 110), (hw - 150, hh - 270), (tx + 120, ty), skin, w=(46 + 2 * k, 38, 30 + 2 * k))
+    # blood on her hands
+    splat(p, -hw + 20, hh + 160, 22, 41)
+    splat(p, hw + 50, hh + 40, 16, 42)
+    splat(p, -hw + 120, hh - 200, 9, 43, drops=3)
     return img
 
 
