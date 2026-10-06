@@ -1112,9 +1112,9 @@ def recoil(scene, k, t):
 
 
 def dance(t):
-    """William's dance: a bounce on the beat, a sway and a little shuffle."""
+    """William's dance, hooves planted: a sway from side to side and a dip on every beat (no hopping)."""
     beat = 2 * math.pi * 1.7 * t
-    return 4 * math.sin(beat / 2), -7 * abs(math.sin(beat)), 7 * math.sin(beat / 2)
+    return 2.5 * math.sin(beat / 2), abs(math.sin(beat)), 5 * math.sin(beat / 2)
 
 
 SPRITES = {}
@@ -1125,8 +1125,9 @@ def draw_sprites(a, t, x, z, top):
     for scene, d in ANCH.items():
         for sp in d.get('sprites', []):
             dxr, dyr, ang = 0.0, 0.0, 0.0
+            dip = 0.0
             if sp['tag'] == 'william':
-                dxr, dyr, ang = dance(t)
+                dxr, dip, ang = dance(t)
             elif sp['tag'].startswith('collector'):
                 dxr = -recoil(scene, int(sp['tag'][-1]), t)
             elif sp['tag'] == 'clawarm':                 # the Ice Claw swings back and forth from his shoulder
@@ -1140,8 +1141,16 @@ def draw_sprites(a, t, x, z, top):
             if key not in SPRITES:
                 SPRITES[key] = Image.open(os.path.join(BW.CACHE, f"{scene}-{sp['tag']}.png")).convert('RGBA')
             im = SPRITES[key].resize((w, h), Image.BILINEAR)
+            if dip:                                          # the dip: squashed a little from the hooves up
+                pad = 14 * k
+                h2 = int(h - (h - pad) * 0.045 * dip)
+                full = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+                full.paste(im.resize((w, h2), Image.BILINEAR), (0, h - h2))
+                im = full
             if ang:
-                if 'pivot' in sp:
+                if sp['tag'] == 'william':                   # the sway turns about his hooves
+                    cx, cy = w / 2, h - 14 * k
+                elif 'pivot' in sp:
                     cx = (sp['pivot'][0] - sp['x']) / sp['w'] * w
                     cy = (sp['pivot'][1] - sp['y']) / sp['h'] * h
                 else:

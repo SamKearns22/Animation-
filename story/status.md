@@ -2,7 +2,7 @@
 
 Read this first in any new session, after CLAUDE.md.
 
-## In progress: "The Bayeux Tapestry Season Pass" (TikTok, `prompts/bayeux-season-pass.md`)
+## Done: "DLC" (The Bayeux Tapestry Season Pass) (TikTok, `prompts/bayeux-season-pass.md`)
 - Sam's references in `references/bayeux/` (list and the swap rule in its README: each original weapon deleted
   completely, the new one stitched in the same hand and place).
 - Proof-of-concept animatic sent 5 Oct 2026 (15.3 s, 1080 x 1920, 24 fps, 11.3 MB; render 70 s on 4 cores, not saved
@@ -63,6 +63,14 @@ Read this first in any new session, after CLAUDE.md.
 - TikTok version 6 Oct (49.3 s, 24.4 MB, 3.3 min): rendered with a 1 s shorter title hold: `BX_HOLD=1.0 python3 source/bayeux.py
   final OUT.mp4` (default 2.0 is the full version; every later time moves with it, `E` in bayeux.py). Simply
   cutting a second out of the finished film made the picture jump (camera drift and flames skip), so never do that.
+- FINAL 6 Oct: `animations/bayeux-season-pass-vertical.mp4` (TikTok version, 49.3 s, 1080 x 1920, 24 fps,
+  10.0 MB two-pass copy of a 24.3 MB render; render 3.2 min: `BX_HOLD=1.0 python3 source/bayeux.py final OUT.mp4`).
+  Last pass of fixes: both hand-stitched riders redrawn the tapestry's way (`sleeve`, `profile_head`, `clear` in
+  bayeux_weapons.py); skins redrawn (William's tapered leg, flared jacket, cowboy boot, fluffy `boa`; Edward seated
+  with paws and a round hood opening; Harold's round toothed mouth and rounded feet); mail rings irregular; the 1066
+  horse given its back half (tail, haunch, hind leg); William grounded (sways and dips about his hooves); 1069 rider
+  restyled. Cover: the very first frame (DLC). Hashtags discussed: #bayeuxtapestry #historytok #gamingmemes
+  #animation #parody. Check the rock track's licence before posting.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

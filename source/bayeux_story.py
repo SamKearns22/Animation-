@@ -124,10 +124,12 @@ class Scene:
             L, M, F = L[:, ::-1], M[:, ::-1], np.pi - F[:, ::-1]
         return L, M, F, ox, oy, nw, nh
 
-    def sprite(self, scene, tag, key, x, y, k, extra=None):
+    def sprite(self, scene, tag, key, x, y, k, extra=None, ground=None):
         """A figure that moves in the film (William dancing, a collector's recoil): stitched on its own with a
         see-through background, not into the scene. Its place is recorded in ANCHORS."""
         L, M, F, ox, oy, nw, nh = self.scaled(key, k)
+        if ground is not None:                              # stand him on the ground line: lowest stitch on it
+            y = ground - (np.nonzero(M.any(1))[0].max() + 1) / S
         pad = int(14 * S)
         lab = np.full((nh + 2 * pad, nw + 2 * pad), LIN, np.int16)
         frc = np.full(lab.shape, np.nan, np.float32)
@@ -420,11 +422,13 @@ def charging_claw_rider(L, x, y, s):
     P = horse(L, x, y, s, 'terracotta', gallop=True)
     L.poly([P(-0.16, -0.95), P(-0.02, -1.0), P(0.02, -0.80), P(-0.06, -0.66), P(-0.16, -0.74)], 'ochre', 1.4,
            'madder', 1.2)                                                                       # shield on his back
-    L.line([P(0.0, -0.72), P(0.12, -0.58), P(0.08, -0.40)], 'navy', s * 0.04)                  # leg
-    L.poly([P(-0.06, -0.74), P(0.10, -0.74), P(0.18, -1.02), P(0.04, -1.08)], 'mail', 1.6, 'madder', 1.2)
-    L.ellipse(*P(0.13, -1.13), s * 0.05, s * 0.06, 'linen', 0.0, 'madder', 1.1)                # face
-    L.ellipse(*P(0.155, -1.14), 0.9, 0.9, 'black')
-    L.poly([P(0.075, -1.14), P(0.19, -1.15), P(0.13, -1.30)], 'sage', 1.5, 'black', 1.1)        # helmet
+    L.poly([P(0.0, -0.74), P(0.08, -0.72), P(0.16, -0.56), P(0.14, -0.40), P(0.22, -0.37), P(0.21, -0.33),
+            P(0.08, -0.34), P(0.08, -0.54)], 'navy', 1.2, 'black', 1.1)                           # leg, foot in stirrup
+    L.poly([P(0.02, -1.08), P(0.16, -1.04), P(0.20, -0.86), P(0.24, -0.66), P(0.08, -0.62), P(-0.12, -0.66),
+            P(-0.06, -0.84)], 'mail', 1.5, 'madder', 1.3)                                       # mail coat, leaning on
+    L.line([P(-0.10, -0.68), P(0.06, -0.66), P(0.22, -0.68)], 'madder', 1.0)
+    hx, hy = P(0.12, -1.15)
+    BW.profile_head(L, hx, hy, s * 0.05, facing=1, helmet='sage')
     return P
 
 
@@ -527,11 +531,20 @@ def ch1():
     def crowned(L, sh, to_scene):
         hx, hy = sh(*to_scene(258, 14))
         crown(L, hx, hy + 2, 22)
-    sc.sprite('ch1', 'william', 'william', 262, 96, 0.40, crowned)
+    sc.sprite('ch1', 'william', 'william', 262, 96, 0.40, crowned, ground=282)
     a = sc.put('archer', 418, 102, 0.40)
     g = sc.put('ghostrider', 560, 112, 0.62)
-    sc.draw(lambda L: L.poly([g(246, 140), g(232, 150), g(225, 172), g(230, 198), g(246, 212), g(268, 205),
-                              g(262, 150)], 'terracotta', 0.0, 'madder', 1.3))      # the horse's rump, whole
+    def hindquarters(L):
+        # the horse's back half, which the tumbling horse hid in the original: tail, haunch, a hind leg reaching back
+        L.line([g(236, 150), g(220, 158), g(206, 176), g(200, 198), g(204, 214)], 'madder', 4.0)
+        L.line([g(230, 156), g(214, 172), g(210, 194)], 'bluegreen', 2.2)
+        L.poly([g(280, 142), g(256, 136), g(238, 142), g(228, 158), g(228, 180), g(240, 200), g(262, 210),
+                g(290, 206), g(300, 176), g(296, 150)], 'terracotta', 0.0, 'madder', 1.3)
+        L.line([g(266, 170), g(248, 182)], 'madder', 1.0)                                    # the haunch's curve
+        L.poly([g(242, 192), g(258, 202), g(242, 224), g(222, 246), g(206, 258), g(198, 252), g(214, 236),
+                g(232, 214)], 'terracotta', 2.3, 'madder', 1.2)                              # hind leg, galloping back
+        L.ellipse(*g(200, 256), 6 * 0.62, 4 * 0.62, 'black')
+    sc.draw(hindquarters)
     ANCHORS['ch1'].update(rifle=[a(577, 68)], pistol=[g(254, 43)])
     sc.draw(lambda L: [house(L, 812, 280, 70, 112, seed=1), house(L, 902, 280, 60, 96, roof='bluegreen', seed=2),
                        house(L, 980, 280, 62, 116, wall='buff', seed=3)])
@@ -569,7 +582,7 @@ def ch2():
 def ch3():
     """1086: the Domesday survey. William points; the tax collectors fire staple after staple at everyone."""
     sc = Scene(W_REF['ch3'])
-    sc.sprite('ch3', 'william', 'william', 10, 96, 0.40)
+    sc.sprite('ch3', 'william', 'william', 10, 96, 0.40, ground=282)
     sc.draw(lambda L: book(L, 245, 280, 70))
     mouths = []
     for i, xx in enumerate((300, 410, 520)):
