@@ -36,6 +36,13 @@ Read this first in any new session, after CLAUDE.md.
   ghosts fired from the pistols (`SHOTS`, `chapter_action`), each with its sound. Stitching repaired by hand on the
   ghost-pistol and ice-claw riders (`REPAIRS` in bayeux_weapons.py). White flash at the start fixed: the shake wrapped
   the picture's bright left edge round to the right (`shove` now repeats the edge instead).
+- Concept v7 sent 6 Oct (45.3 s, 23.5 MB; plus a Discord copy 720 x 1280, 9.4 MB, two-pass, for Discord's 10 MB
+  limit): chapter figures cut out by their own shape (`cut` in bayeux_story.py: seed points, joined stitching
+  only, small gaps kept), no slicing and no leftovers; the Ice Claw rider redrawn whole, charging right with the
+  claw thrust forward (`charging_claw_rider`); Domesday crowded with the country's resources (two fields of
+  people, pigs, goats, sheep, oxen, a cow, a horse, hives, a cart, barrels, a mill, a plough), staples on all of
+  it; border repeats joined at their plainest columns. Still open: Sam may send a real tapestry tree to replace
+  the invented divider tree (`tree_image` in bayeux.py).
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

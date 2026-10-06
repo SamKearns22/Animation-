@@ -27,21 +27,26 @@ FONT = os.path.join(BS.HERE, 'fonts', 'Cinzel-Variable.ttf')
 # --------------------------------------------------------------------------------------- figures to reuse
 # (reference scene, polygon round the figure in that reference's pixels, after its swap?)
 CUTS = {
-    'archer':  ('rifle', [(255, 40), (612, 40), (612, 140), (470, 190), (480, 300), (535, 330), (545, 412), (470, 412),
-                          (430, 330), (372, 300), (322, 405), (248, 412), (262, 170)], True),
-    'ghostrider': ('ghost', [(180, 30), (525, 30), (525, 110), (470, 140), (470, 285), (300, 290), (252, 180),
-                             (170, 120)], True),
-    'clawrider': ('claw', [(205, 85), (345, 85), (360, 140), (345, 282), (225, 282), (210, 200)], True),
-    'collector': ('stapler', [(100, 70), (330, 70), (330, 200), (300, 200), (305, 345), (100, 345)], True),
-    'william': ('william', [(176, 40), (212, 6), (312, 6), (314, 58), (390, 58), (460, 100), (460, 170), (420, 180),
-                            (410, 450), (70, 450), (60, 200), (118, 70)], True),
-    'messenger': ('stapler', [(375, 80), (488, 80), (500, 345), (375, 345)], True),
+    'archer':  ('rifle', [(250, 30), (585, 30), (600, 75), (620, 150), (480, 200), (520, 300), (520, 332), (335, 332),
+                          (322, 425), (240, 425), (255, 170)], True, [(375, 140), (420, 260), (470, 100)]),
+    'ghostrider': ('ghost', [(212, 20), (535, 20), (535, 130), (480, 160), (480, 268), (300, 280), (262, 200),
+                             (230, 110)], True,
+                   [(310, 130), (380, 200), (240, 50), (420, 60), (470, 160)]),
+    'collector': ('stapler', [(95, 65), (335, 65), (335, 200), (310, 205), (310, 350), (95, 350)], True,
+                  [(200, 200), (290, 155), (160, 100)]),
+    'william': ('william', [(176, 30), (212, 2), (312, 2), (314, 58), (390, 58), (470, 100), (470, 180), (430, 190),
+                            (420, 438), (58, 438), (58, 200), (118, 70)], True,
+                [(270, 200), (300, 280), (420, 130), (150, 330)]),
 }
 _SCENE_CACHE = {}
 
 
 def cut(key):
-    name, poly, after = CUTS[key]
+    """A figure cut out of its scene by its own shape: inside a generous outline, only the stitching joined (through
+    gaps of a pixel or two) to the figure's seed points is kept, so nothing of him is sliced off and nothing of his
+    neighbours comes with him."""
+    from scipy import ndimage as ndi
+    name, poly, after, seeds = CUTS[key]
     if (name, after) not in _SCENE_CACHE:
         _SCENE_CACHE[(name, after)] = BW.scene_labels(name, after=after)
     lab, forced = _SCENE_CACHE[(name, after)]
@@ -49,7 +54,27 @@ def cut(key):
         forced = np.full(lab.shape, np.nan, np.float32)
     m = Image.new('L', (lab.shape[1], lab.shape[0]), 0)
     ImageDraw.Draw(m).polygon([(x * S, y * S) for x, y in poly], fill=255)
-    mask = (np.asarray(m) > 0) & (lab != LIN)
+    inside = np.asarray(m) > 0
+    ink = inside & (lab != LIN)
+    comp, n = ndi.label(ndi.binary_dilation(ink, iterations=3))
+    keep = np.zeros(n + 1, bool)
+    for sx, sy in seeds:
+        yy, xx = int(sy * S), int(sx * S)
+        win = comp[max(0, yy - 8):yy + 8, max(0, xx - 8):xx + 8]
+        keep[np.unique(win[win > 0])] = True
+    whole = keep[comp]
+    holes = ndi.binary_fill_holes(whole) & ~whole          # small holes (faces, gaps between his limbs) stay his;
+    hl, nh = ndi.label(holes)                              # big ones (between bow and string, under a horse) do not
+    if nh:
+        area = ndi.sum(np.ones_like(hl), hl, np.arange(1, nh + 1))
+        whole |= np.concatenate([[False], area < (26 * S) ** 2])[hl]
+    whole &= inside
+    if key == 'william':                                   # above his hat brim, only the hat itself (no old caption)
+        top = np.zeros_like(whole)
+        top[:int(46 * S)] = True
+        hat = np.isin(lab, [I['purple'], I['lilac'], I['black'], I['boa']])
+        whole &= ~(top & ~hat)
+    mask = whole & (ink | ndi.binary_erosion(whole, iterations=3))
     ys, xs = np.nonzero(mask)
     y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
     return lab[y0:y1, x0:x1], forced[y0:y1, x0:x1], mask[y0:y1, x0:x1], (x0 / S, y0 / S)
@@ -68,6 +93,12 @@ class Scene:
         src = BS.trace('claw', S)
         top, bot = src[:int(72 * S)], src[int(283 * S):int(H_REF * S)]
         for band, y in ((top, 0), (bot, int(283 * S))):
+            quiet = (band == LIN).mean(0)                  # repeat the band between its two plainest columns,
+            n = band.shape[1]                              # so the join falls in a gap between motifs
+            q = np.convolve(quiet, np.ones(9) / 9, 'same')
+            xa = int(np.argmax(q[:n // 3]))
+            xb = int(n * 2 // 3 + np.argmax(q[n * 2 // 3:]))
+            band = band[:, xa:xb]
             bw = band.shape[1]
             for x in range(0, self.w, bw):
                 k = min(bw, self.w - x)
@@ -332,6 +363,126 @@ def crown(L, x, y, w):
         L.ellipse(x + dx * w, y - w * 0.12, w * 0.06, w * 0.06, 'terracotta')
 
 
+def horse(L, x, y, s, coat='terracotta', gallop=True):
+    """A tapestry horse facing right: feet on y, about s long, flat colour with stitched mane and harness."""
+    def P(u, v):
+        return (x + u * s, y + v * s)
+    legs = ([((0.30, -0.42), (0.50, -0.26), (0.66, -0.16)), ((0.24, -0.42), (0.36, -0.20), (0.36, 0.0)),
+             ((-0.30, -0.42), (-0.46, -0.22), (-0.64, -0.10)), ((-0.24, -0.42), (-0.30, -0.20), (-0.22, 0.0))]
+            if gallop else
+            [((0.28, -0.42), (0.30, -0.2), (0.30, 0.0)), ((0.20, -0.42), (0.20, -0.2), (0.18, 0.0)),
+             ((-0.28, -0.42), (-0.32, -0.2), (-0.30, 0.0)), ((-0.20, -0.42), (-0.22, -0.2), (-0.20, 0.0))])
+    for i, leg in enumerate(legs):
+        L.line([P(*q) for q in leg], 'madder' if i % 2 else coat, s * 0.055)
+        L.ellipse(*P(*leg[-1]), s * 0.035, s * 0.025, 'black')
+    L.line([P(-0.40, -0.62), P(-0.58, -0.58), P(-0.66, -0.40)], 'bluegreen', s * 0.05)          # tail
+    body = [P(-0.44, -0.62), P(-0.30, -0.70), P(0.20, -0.70), P(0.34, -0.66), P(0.40, -0.52), P(0.30, -0.40),
+            P(-0.30, -0.40), P(-0.44, -0.48)]
+    L.poly(body, coat, 0.0, 'madder', 1.3)
+    L.poly([P(0.24, -0.68), P(0.36, -0.94), P(0.46, -0.96), P(0.42, -0.56)], coat, -1.2, 'madder', 1.3)  # neck
+    L.poly([P(0.36, -0.95), P(0.48, -0.98), P(0.66, -0.80), P(0.62, -0.74), P(0.44, -0.84)], coat, 0.6, 'madder', 1.3)
+    for k in range(4):                                                                          # mane
+        L.line([P(0.27 + k * 0.045, -0.70 - k * 0.06), P(0.22 + k * 0.045, -0.64 - k * 0.06)], 'ochre', s * 0.02)
+    L.ellipse(*P(0.50, -0.90), s * 0.012, s * 0.012, 'black')
+    L.line([P(0.46, -0.86), P(0.62, -0.78)], 'black', 1.0)                                       # bridle
+    L.line([P(0.40, -0.84), P(0.08, -0.80)], 'black', 1.0)                                       # rein
+    L.poly([P(-0.10, -0.70), P(0.08, -0.70), P(0.06, -0.58), P(-0.08, -0.58)], 'ochre', 0.0, 'madder', 1.0)  # saddle
+    return P
+
+
+def charging_claw_rider(L, x, y, s):
+    """A Norman at full gallop to the right, the Ice Claw thrust out ahead of him (drawn whole, in the tapestry's way)."""
+    P = horse(L, x, y, s, 'terracotta', gallop=True)
+    L.poly([P(-0.16, -0.95), P(-0.02, -1.0), P(0.02, -0.80), P(-0.06, -0.66), P(-0.16, -0.74)], 'ochre', 1.4,
+           'madder', 1.2)                                                                       # shield on his back
+    L.line([P(0.0, -0.72), P(0.12, -0.58), P(0.08, -0.40)], 'navy', s * 0.04)                  # leg
+    L.poly([P(-0.06, -0.74), P(0.10, -0.74), P(0.18, -1.02), P(0.04, -1.08)], 'mail', 1.6, 'madder', 1.2)
+    L.line([P(0.12, -1.0), P(0.30, -1.0)], 'mail', s * 0.05)                                    # arm, outstretched
+    L.ellipse(*P(0.13, -1.13), s * 0.05, s * 0.06, 'linen', 0.0, 'madder', 1.1)                # face
+    L.ellipse(*P(0.155, -1.14), 0.9, 0.9, 'black')
+    L.poly([P(0.075, -1.14), P(0.19, -1.15), P(0.13, -1.30)], 'sage', 1.5, 'black', 1.1)        # helmet
+    hx, hy = P(0.30, -1.0)
+    BW.claw_at(L, (hx, hy), math.radians(8), s / 150 * 0.82, frost=14)
+
+
+def pig(L, x, y, s):
+    L.ellipse(x, y - s * 0.32, s * 0.42, s * 0.2, 'buff', 0.0, 'madder', 1.1)
+    L.poly([(x + s * 0.38, y - s * 0.38), (x + s * 0.56, y - s * 0.30), (x + s * 0.38, y - s * 0.22)], 'buff', 0.0, 'madder', 1.0)
+    L.ellipse(x + s * 0.32, y - s * 0.38, 1.1, 1.1, 'black')
+    for dx in (-0.25, -0.12, 0.18, 0.28):
+        L.line([(x + dx * s, y - s * 0.18), (x + dx * s, y)], 'madder', 1.4)
+    L.line([(x - s * 0.42, y - s * 0.36), (x - s * 0.5, y - s * 0.42), (x - s * 0.46, y - s * 0.48)], 'madder', 0.9)
+
+
+def goat(L, x, y, s):
+    L.ellipse(x, y - s * 0.45, s * 0.32, s * 0.15, 'sage', 0.0, 'madder', 1.1)
+    L.poly([(x + s * 0.26, y - s * 0.5), (x + s * 0.42, y - s * 0.78), (x + s * 0.52, y - s * 0.66), (x + s * 0.34, y - s * 0.44)],
+           'sage', 0.0, 'madder', 1.0)
+    L.line([(x + s * 0.44, y - s * 0.76), (x + s * 0.38, y - s * 0.95)], 'black', 1.1)
+    L.line([(x + s * 0.48, y - s * 0.62), (x + s * 0.50, y - s * 0.52)], 'buff', 1.0)
+    for dx in (-0.22, -0.1, 0.14, 0.24):
+        L.line([(x + dx * s, y - s * 0.32), (x + dx * s, y)], 'black', 1.1)
+
+
+def bird(L, x, y, s, body='linen', neck=0.4):
+    L.ellipse(x, y - s * 0.3, s * 0.28, s * 0.18, body, 0.0, 'madder', 1.0)
+    L.line([(x + s * 0.2, y - s * 0.38), (x + s * 0.3, y - s * (0.4 + neck))], body, s * 0.08)
+    L.ellipse(x + s * 0.32, y - s * (0.45 + neck), s * 0.07, s * 0.06, body, 0.0, 'madder', 0.9)
+    L.poly([(x + s * 0.38, y - s * (0.47 + neck)), (x + s * 0.48, y - s * (0.44 + neck)), (x + s * 0.38, y - s * (0.41 + neck))],
+           'ochre', 0.0)
+    L.line([(x, y - s * 0.12), (x, y)], 'ochre', 1.0)
+
+
+def beehive(L, x, y, s):
+    L.ellipse(x, y - s * 0.32, s * 0.28, s * 0.34, 'ochre', V, 'madder', 1.2)
+    L.poly([(x - s * 0.32, y), (x + s * 0.32, y), (x + s * 0.32, y - s * 0.12), (x - s * 0.32, y - s * 0.12)], 'ochre', 0.0, 'madder', 1.0)
+    for k in (0.2, 0.36, 0.5):
+        L.line([(x - s * 0.26, y - s * k), (x + s * 0.26, y - s * k)], 'madder', 0.9)
+    L.ellipse(x, y - s * 0.06, s * 0.06, s * 0.05, 'black')
+
+
+def cart(L, x, y, s):
+    L.poly([(x - s * 0.5, y - s * 0.32), (x + s * 0.4, y - s * 0.32), (x + s * 0.44, y - s * 0.62), (x - s * 0.54, y - s * 0.62)],
+           'terracotta', 0.0, 'madder', 1.2)
+    for k in range(6):                                                                          # sheaves of grain
+        L.poly([(x - s * 0.44 + k * s * 0.15, y - s * 0.62), (x - s * 0.36 + k * s * 0.15, y - s * 0.62),
+                (x - s * 0.40 + k * s * 0.15, y - s * 0.86)], 'ochre', V, 'madder', 0.8)
+    for wx in (-0.3, 0.22):
+        L.ellipse(x + s * wx, y - s * 0.18, s * 0.18, s * 0.18, 'buff', 0.0, 'madder', 1.2)
+        L.line([(x + s * wx - s * 0.16, y - s * 0.18), (x + s * wx + s * 0.16, y - s * 0.18)], 'madder', 0.9)
+        L.line([(x + s * wx, y - s * 0.34), (x + s * wx, y - s * 0.02)], 'madder', 0.9)
+    L.line([(x + s * 0.42, y - s * 0.42), (x + s * 0.8, y - s * 0.3)], 'madder', 1.4)
+
+
+def barrel(L, x, y, s):
+    L.poly([(x - s * 0.16, y), (x + s * 0.16, y), (x + s * 0.2, y - s * 0.22), (x + s * 0.16, y - s * 0.44),
+            (x - s * 0.16, y - s * 0.44), (x - s * 0.2, y - s * 0.22)], 'madder', V, 'black', 1.0)
+    for k in (0.1, 0.34):
+        L.line([(x - s * 0.18, y - s * k), (x + s * 0.18, y - s * k)], 'buff', 1.0)
+
+
+def mill(L, x, y, s):
+    L.poly([(x - s * 0.3, y), (x + s * 0.3, y), (x + s * 0.3, y - s * 0.6), (x - s * 0.3, y - s * 0.6)], 'buff', V, 'madder', 1.2)
+    L.poly([(x - s * 0.38, y - s * 0.6), (x + s * 0.38, y - s * 0.6), (x, y - s * 0.95)], 'terracotta', 0.0, 'madder', 1.2)
+    L.ellipse(x + s * 0.42, y - s * 0.3, s * 0.26, s * 0.26, 'ochre', 0.0, 'madder', 1.2)
+    for q in range(4):
+        a_ = q * math.pi / 4
+        L.line([(x + s * 0.42 - s * 0.26 * math.cos(a_), y - s * 0.3 - s * 0.26 * math.sin(a_)),
+                (x + s * 0.42 + s * 0.26 * math.cos(a_), y - s * 0.3 + s * 0.26 * math.sin(a_))], 'madder', 1.0)
+    L.line([(x + s * 0.2, y), (x + s * 0.9, y)], 'bluegreen', 2.2)
+
+
+def plough(L, x, y, s):
+    L.line([(x, y - s * 0.4), (x + s * 0.5, y - s * 0.12), (x + s * 0.7, y - s * 0.02)], 'madder', 1.6)
+    L.line([(x + s * 0.5, y - s * 0.12), (x + s * 1.1, y - s * 0.36)], 'madder', 1.4)
+    L.poly([(x + s * 0.62, y), (x + s * 0.82, y), (x + s * 0.7, y - s * 0.1)], 'steel', 0.0, 'black', 0.8)
+
+
+def ground(L, x0, x1, y):
+    pts = [(x, y + 1.6 * math.sin(x / 9.0)) for x in np.linspace(x0, x1, int((x1 - x0) / 4))]
+    L.line(pts, 'sage', 1.3)
+
+
 # -------------------------------------------------------------------------------------------- the scenes
 W_REF = {'ch1': 1060, 'ch2': 920, 'ch3': 1090}
 ANCHORS = {}            # per scene: moving sprites, gun muzzles, stapler mouths, fire (saved with the build)
@@ -362,9 +513,9 @@ def ch1():
 def ch2():
     """1069: rebels storm Durham; the bishop's palace burns with the Normans asleep in their beds; two escape."""
     sc = Scene(W_REF['ch2'])
-    sc.put('clawrider', 20, 96, 1.0)
-    sc.draw(lambda L: gate(L, 190, 280, 80, 150))
-    g = sc.put('ghostrider', 250, 118, 0.58)
+    sc.draw(lambda L: charging_claw_rider(L, 92, 281, 150))
+    sc.draw(lambda L: gate(L, 228, 280, 80, 150))
+    g = sc.put('ghostrider', 300, 118, 0.52)
     ANCHORS['ch2'] = dict(pistol=[g(254, 43)], rifle=[])
     sc.draw(lambda L: palace(L, 470, 280, 280, 162))
     sc.draw(lambda L: [person(L, 830, 281, 46, 'navy', 'ochre', helmet='navy', pose='run'),
@@ -383,15 +534,36 @@ def ch3():
     for i, xx in enumerate((300, 410, 520)):
         f = sc.sprite('ch3', f'collector{i}', 'collector', xx, 98 + (i % 2) * 6, 0.66)
         mouths.append(f(318, 158))
-    sc.put('messenger', 712, 98, 0.66)
-    sc.draw(lambda L: [person(L, 850, 281, 72, 'bluegreen', 'terracotta', facing=-1, arms='up'),
-                       person(L, 1060, 281, 66, 'ochre', 'navy', facing=-1, arms='up'),
-                       sheep(L, 920, 281, 60), ox(L, 990, 281, 74)])
+    def country(L):
+        ground(L, 640, 1088, 180)
+        # the upper field (ground line at 178): hives, birds, a woman with eggs, pigs, goats, a shepherd and his flock, a mill
+        beehive(L, 652, 178, 30), beehive(L, 676, 178, 26)
+        bird(L, 702, 178, 26, 'linen', 0.25), bird(L, 724, 178, 22, 'terracotta', 0.2)
+        person(L, 752, 178, 54, 'terracotta', 'navy', facing=-1, arms='up')
+        L.ellipse(770, 140, 6, 4, 'ochre', 0.0, 'madder', 0.9)
+        pig(L, 790, 178, 40), pig(L, 830, 178, 36)
+        goat(L, 870, 178, 40)
+        person(L, 905, 178, 56, 'sage', 'terracotta', facing=-1, arms='up')
+        L.line([(915, 178), (918, 126), (912, 120)], 'madder', 1.3)
+        sheep(L, 936, 178, 34), sheep(L, 966, 176, 32), sheep(L, 996, 178, 34)
+        mill(L, 1040, 178, 50)
+        # the lower field (ground line at 281): peasants, a cart of grain and barrels, the ploughman and his ox,
+        # a cow, a horse, children running
+        person(L, 650, 281, 70, 'bluegreen', 'terracotta', facing=-1, arms='up')
+        cart(L, 712, 281, 60), barrel(L, 752, 281, 30), barrel(L, 768, 281, 26)
+        ox(L, 812, 281, 66)
+        plough(L, 844, 281, 46)
+        person(L, 900, 281, 62, 'ochre', 'navy', facing=-1, arms='up')
+        ox(L, 950, 281, 58)
+        horse(L, 1010, 281, 70, 'navy', gallop=False)
+        person(L, 1052, 281, 40, 'terracotta', 'bluegreen', pose='run')
+        person(L, 1074, 281, 36, 'bluegreen', 'ochre', pose='run')
+    sc.draw(country)
     rng = np.random.default_rng(12)
 
     def staples(L):
-        for _ in range(46):                                    # staples everywhere: in the air, stuck in everything
-            staple(L, rng.uniform(640, 1080), rng.uniform(100, 270), rng.uniform(5, 8), rng.uniform(-0.3, 0.3))
+        for _ in range(110):                                   # staples on everything: people, beasts, hives, barrels
+            staple(L, rng.uniform(640, 1086), rng.uniform(100, 272), rng.uniform(4.5, 7), rng.uniform(-0.3, 0.3))
     sc.draw(staples)
     sc.caption('HIC REX TOTAM ANGLIAM DESCRIBIT', 300, 74, 19)
     STAPLE_MOUTHS[:] = mouths

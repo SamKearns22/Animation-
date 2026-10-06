@@ -102,17 +102,18 @@ def rifle_weapon(L):
 
 def claw_weapon(L):
     """Ice Claw: a mechanised gauntlet the size of half the rider, three fingers of bladed ice, frost."""
-    hand = (304, 111)
-    ang = math.atan2(24, -45)                    # out to the left and down, over the next horse's neck
-    K = 0.82
+    claw_at(L, (304, 111), math.atan2(24, -45), 0.82)    # out to the left and down, over the next horse's neck
+
+
+def claw_at(L, hand, ang, K, frost=16):
     f = local(hand, ang, K)
     a = ang
     L.poly(f([(-22, -15), (8, -18), (18, -12), (18, 12), (8, 18), (-22, 15)]), 'navy', a, 'black')        # cuff
     L.poly(f([(-18, -9), (12, -11), (12, -6), (-18, -4)]), 'ice', a)                                       # frost light
     L.poly(f([(10, -22), (34, -24), (42, -10), (42, 12), (34, 24), (10, 22)]), 'black', a, 'black')        # palm housing
-    L.ellipse(*f([(26, 0)])[0], 6, 6, 'ice', a, 'navy')                                                    # core
+    L.ellipse(*f([(26, 0)])[0], 6 * K / 0.82, 6 * K / 0.82, 'ice', a, 'navy')                              # core
     # three ice fingers, each in two jointed pieces, curving like talons
-    for sp, cv in ((-0.55, 1), (0.0, 1), (0.55, 1)):
+    for sp in (-0.55, 0.0, 0.55):
         base = (40, sp * 30)
         g = local(f([base])[0], a + sp * 0.9, K)
         L.poly(g(rect(0, 18, -5, 5)), 'black', a + sp * 0.9, 'black')
@@ -122,7 +123,7 @@ def claw_weapon(L):
     # stitched frost around it: short pale lines and stars
     cx, cy = f([(50, 0)])[0]
     rng = np.random.default_rng(3)
-    for i in range(16):
+    for i in range(frost):
         r = (48 + rng.uniform(0, 26)) * K
         t = rng.uniform(0, 2 * math.pi)
         x, y = cx + r * math.cos(t), cy + r * 0.8 * math.sin(t)
