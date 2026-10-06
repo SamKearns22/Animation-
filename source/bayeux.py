@@ -1829,6 +1829,25 @@ def render(out):
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB) in {time.time() - t0:.0f}s', flush=True)
 
 
+TIKTOK_SKIP = (3.40, 4.40)    # the TikTok cut drops this second of the title hold (film time), after the glint
+
+
+def tiktok_cut(src, out):
+    """The TikTok version: the finished film with one second of the title hold taken out (a hard cut inside the
+    hold; the sound crossfades over 40 ms so nothing clicks). Frame-aligned; no re-render needed."""
+    import imageio_ffmpeg
+    a = round((TIKTOK_SKIP[0] - START + 1.0 / FPS) * FPS) / FPS     # output time (frame 0 is the cover)
+    b = a + (TIKTOK_SKIP[1] - TIKTOK_SKIP[0])
+    fc = (f'[0:v]trim=0:{a:.4f},setpts=PTS-STARTPTS[v0];[0:v]trim={b:.4f},setpts=PTS-STARTPTS[v1];'
+          f'[v0][v1]concat=n=2:v=1:a=0[v];'
+          f'[0:a]atrim=0:{a + 0.02:.4f},asetpts=PTS-STARTPTS[a0];[0:a]atrim={b - 0.02:.4f},asetpts=PTS-STARTPTS[a1];'
+          f'[a0][a1]acrossfade=d=0.04[a]')
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', src, '-filter_complex', fc,
+                    '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '23', '-preset', 'slow', '-pix_fmt',
+                    'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
+    print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)')
+
+
 def main():
     global R
     cmd = sys.argv[1]
@@ -1848,6 +1867,8 @@ def main():
     elif cmd == 'final':
         R = 1.0
         render(sys.argv[2])
+    elif cmd == 'tiktok':
+        tiktok_cut(sys.argv[2], sys.argv[3])
 
 
 if __name__ == '__main__':
