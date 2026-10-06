@@ -2,6 +2,22 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
+- Peskov calmly denies the Irkutsk plague-lab death; behind the camera a zombie outbreak tears through his press
+  conference. Code: `source/russiadent.py` (`sheet`, `stills OUT_DIR T...`, `times`, `animatic`, `final`). One plan
+  for the press room drawn by perspective cameras in the plan (`PCam`): shot 2's 180 is the same room. Placeholder
+  timing at Sam's pace (`LINE1`, `LINE2`, `T`); all sounds made in code (screams, roars, crunch, splats, slap).
+- Director's decisions: no hint before the 180 except the hand slapping onto the podium edge (~5 s); English website
+  line under a Russian "Ministry of Health" header (no emblem, `health.gov.ru`); the severed arm holds a microphone;
+  a 0.6 s beat after "Any more questions?"; title RUSSIADENT / EVIL on two lines (no slash), gone by 1 s; real terror
+  on the reporters' faces (wide eyes, pinprick pupils, screams with the corners pulled down, drained skin); more
+  zombies: packed several deep at every window, back and side doors burst open; Peskov's reference photo (press
+  agency) used but not stored in the project.
+- **Hands:** close-up hands are built on MakeHuman's real hand and drawn flat (`source/hands3d.py`; see figure-rig
+  5c): the phone grip (shot 4), the hand on the podium (shot 1), the fist round the microphone (shot 5).
+- Next: Sam's notes on the animatic; his recordings `01 peskov.m4a`, `02 any more.m4a` (run voices.py), then the
+  final render as `animations/russiadent-evil-vertical.mp4`.
+
 ## Done: "DLC" (The Bayeux Tapestry Season Pass) (TikTok, `prompts/bayeux-season-pass.md`)
 - Sam's references in `references/bayeux/` (list and the swap rule in its README: each original weapon deleted
   completely, the new one stitched in the same hand and place).
