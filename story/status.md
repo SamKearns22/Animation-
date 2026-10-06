@@ -57,6 +57,9 @@ Read this first in any new session, after CLAUDE.md.
   Sam: no more Discord copies unless asked.
 - Cover frame 6 Oct (24.7 MB): DLC now appears on frame 0 only (`cover_frame`, 1/24 s) so the film still opens
   straight into the logo; choose the very first frame as the TikTok cover.
+- 6 Oct: the Ice Claw arm in 1069 swings back and forth from the shoulder (`claw_arm` drawn as its own sprite,
+  `drawn_sprite` with a pivot); 1066 archer and ghost-pistol rider cut out whole (wider outlines, `nots` to drop
+  the old bowstring and spear, the horse's rump closed by hand).
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

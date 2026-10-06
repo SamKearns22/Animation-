@@ -1127,6 +1127,8 @@ def draw_sprites(a, t, x, z, top):
                 dxr, dyr, ang = dance(t)
             elif sp['tag'].startswith('collector'):
                 dxr = -recoil(scene, int(sp['tag'][-1]), t)
+            elif sp['tag'] == 'clawarm':                 # the Ice Claw swings back and forth from his shoulder
+                ang = 22 * math.sin(2 * math.pi * 1.1 * t)
             px, py = screen_pt(scene, sp['x'] + dxr, sp['y'] + dyr, x, z, top)
             k = s.ref_scale[scene] * z * R
             w, h = int(sp['w'] * k), int(sp['h'] * k)
@@ -1137,7 +1139,12 @@ def draw_sprites(a, t, x, z, top):
                 SPRITES[key] = Image.open(os.path.join(BW.CACHE, f"{scene}-{sp['tag']}.png")).convert('RGBA')
             im = SPRITES[key].resize((w, h), Image.BILINEAR)
             if ang:
-                im = im.rotate(ang, resample=Image.BICUBIC, center=(w / 2, h * 0.9))
+                if 'pivot' in sp:
+                    cx = (sp['pivot'][0] - sp['x']) / sp['w'] * w
+                    cy = (sp['pivot'][1] - sp['y']) / sp['h'] * h
+                else:
+                    cx, cy = w / 2, h * 0.9
+                im = im.rotate(ang, resample=Image.BICUBIC, center=(cx, cy))
             m = np.asarray(im, np.float32)
             yy = np.linspace(0, 1, h, dtype=np.float32)[:, None, None]
             m[..., :3] *= 1.04 - 0.16 * np.clip((py + yy[..., 0] * h - top) / (HB * z * R), 0, 1)[..., None]

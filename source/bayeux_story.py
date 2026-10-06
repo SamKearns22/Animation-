@@ -27,11 +27,15 @@ FONT = os.path.join(BS.HERE, 'fonts', 'Cinzel-Variable.ttf')
 # --------------------------------------------------------------------------------------- figures to reuse
 # (reference scene, polygon round the figure in that reference's pixels, after its swap?)
 CUTS = {
-    'archer':  ('rifle', [(250, 30), (585, 30), (600, 75), (620, 150), (480, 200), (520, 300), (520, 332), (335, 332),
-                          (322, 425), (240, 425), (255, 170)], True, [(375, 140), (420, 260), (470, 100)]),
-    'ghostrider': ('ghost', [(212, 20), (535, 20), (535, 130), (480, 160), (480, 268), (300, 280), (262, 200),
-                             (230, 110)], True,
-                   [(310, 130), (380, 200), (240, 50), (420, 60), (470, 160)]),
+    'archer':  ('rifle', [(255, 43), (600, 43), (625, 150), (495, 205), (470, 240), (500, 275), (578, 322), (580, 364),
+                          (505, 360), (455, 302), (402, 270), (348, 330), (334, 422), (244, 422), (256, 330),
+                          (300, 262), (290, 200), (250, 170)], True, [(375, 140), (420, 260), (470, 100), (300, 400),
+                                                                      (550, 345)],
+                [[(388, 43), (475, 43), (472, 84), (430, 93), (392, 82)], [(530, 43), (608, 43), (608, 53), (536, 60)]]),
+    'ghostrider': ('ghost', [(192, 25), (540, 25), (540, 120), (500, 150), (505, 215), (470, 282), (300, 286),
+                             (275, 215), (238, 200), (238, 135), (214, 110), (190, 62)], True,
+                   [(310, 130), (380, 200), (240, 50), (420, 60), (470, 160)],
+                   [[(170, 25), (213, 25), (213, 82), (170, 82)]]),
     'collector': ('stapler', [(95, 65), (335, 65), (335, 200), (310, 205), (310, 350), (95, 350)], True,
                   [(200, 200), (290, 155), (160, 100)]),
     'william': ('william', [(176, 30), (212, 2), (312, 2), (314, 58), (390, 58), (470, 100), (470, 180), (430, 190),
@@ -46,7 +50,8 @@ def cut(key):
     gaps of a pixel or two) to the figure's seed points is kept, so nothing of him is sliced off and nothing of his
     neighbours comes with him."""
     from scipy import ndimage as ndi
-    name, poly, after, seeds = CUTS[key]
+    name, poly, after, seeds = CUTS[key][:4]
+    nots = CUTS[key][4] if len(CUTS[key]) > 4 else []
     if (name, after) not in _SCENE_CACHE:
         _SCENE_CACHE[(name, after)] = BW.scene_labels(name, after=after)
     lab, forced = _SCENE_CACHE[(name, after)]
@@ -54,6 +59,9 @@ def cut(key):
         forced = np.full(lab.shape, np.nan, np.float32)
     m = Image.new('L', (lab.shape[1], lab.shape[0]), 0)
     ImageDraw.Draw(m).polygon([(x * S, y * S) for x, y in poly], fill=255)
+    dm = ImageDraw.Draw(m)
+    for q in nots:                                         # leftovers of the old scene (an erased bow's string)
+        dm.polygon([(x * S, y * S) for x, y in q], fill=0)
     inside = np.asarray(m) > 0
     ink = inside & (lab != LIN)
     comp, n = ndi.label(ndi.binary_dilation(ink, iterations=3))
@@ -145,6 +153,23 @@ class Scene:
         ANCHORS.setdefault(scene, {}).setdefault('sprites', []).append(
             dict(tag=tag, x=x0, y=y0, w=lab.shape[1] / S, h=lab.shape[0] / S))
         return to_scene
+
+    def drawn_sprite(self, scene, tag, fn, box, pivot):
+        """Something drawn in code that moves on its own (the swinging claw): fn(L, shift) draws it in scene
+        coordinates; box is its area (x0, y0, x1, y1); pivot the point it turns about."""
+        from scipy import ndimage as ndi
+        x0, y0, x1, y1 = box
+        Ly = BW.Layer(int((x1 - x0) * S), int((y1 - y0) * S))
+        fn(Ly, lambda px, py: (px - x0, py - y0))
+        wl, wa = Ly.arrays()
+        msk = wl != BW.NONE
+        lab = np.where(msk, wl, LIN).astype(np.int16)
+        rgb = BS.stitch(lab, 3.0, np.where(msk, wa, np.nan).astype(np.float32), seed=34)
+        al = ndi.gaussian_filter(ndi.binary_dilation(msk, iterations=1).astype(np.float32), 0.8)
+        Image.fromarray(np.dstack([rgb, (np.clip(al, 0, 1) * 255).astype(np.uint8)])).save(
+            os.path.join(BW.CACHE, f'{scene}-{tag}.png'))
+        ANCHORS.setdefault(scene, {}).setdefault('sprites', []).append(
+            dict(tag=tag, x=x0, y=y0, w=x1 - x0, h=y1 - y0, pivot=list(pivot)))
 
     def put(self, key, x, y, k, flip=False):
         """A cut-out figure, scaled by k, its top-left at (x, y) in this scene's reference pixels. Returns a function
@@ -397,10 +422,15 @@ def charging_claw_rider(L, x, y, s):
            'madder', 1.2)                                                                       # shield on his back
     L.line([P(0.0, -0.72), P(0.12, -0.58), P(0.08, -0.40)], 'navy', s * 0.04)                  # leg
     L.poly([P(-0.06, -0.74), P(0.10, -0.74), P(0.18, -1.02), P(0.04, -1.08)], 'mail', 1.6, 'madder', 1.2)
-    L.line([P(0.12, -1.0), P(0.30, -1.0)], 'mail', s * 0.05)                                    # arm, outstretched
     L.ellipse(*P(0.13, -1.13), s * 0.05, s * 0.06, 'linen', 0.0, 'madder', 1.1)                # face
     L.ellipse(*P(0.155, -1.14), 0.9, 0.9, 'black')
     L.poly([P(0.075, -1.14), P(0.19, -1.15), P(0.13, -1.30)], 'sage', 1.5, 'black', 1.1)        # helmet
+    return P
+
+
+def claw_arm(L, P, s):
+    """The rider's arm and the Ice Claw, drawn on their own so they can swing from his shoulder."""
+    L.line([P(0.12, -1.0), P(0.30, -1.0)], 'mail', s * 0.05)                                    # arm, outstretched
     hx, hy = P(0.30, -1.0)
     BW.claw_at(L, (hx, hy), math.radians(8), s / 150 * 0.82, frost=14)
 
@@ -500,6 +530,8 @@ def ch1():
     sc.sprite('ch1', 'william', 'william', 262, 96, 0.40, crowned)
     a = sc.put('archer', 418, 102, 0.40)
     g = sc.put('ghostrider', 560, 112, 0.62)
+    sc.draw(lambda L: L.poly([g(246, 140), g(232, 150), g(225, 172), g(230, 198), g(246, 212), g(268, 205),
+                              g(262, 150)], 'terracotta', 0.0, 'madder', 1.3))      # the horse's rump, whole
     ANCHORS['ch1'].update(rifle=[a(577, 68)], pistol=[g(254, 43)])
     sc.draw(lambda L: [house(L, 812, 280, 70, 112, seed=1), house(L, 902, 280, 60, 96, roof='bluegreen', seed=2),
                        house(L, 980, 280, 62, 116, wall='buff', seed=3)])
@@ -513,10 +545,19 @@ def ch1():
 def ch2():
     """1069: rebels storm Durham; the bishop's palace burns with the Normans asleep in their beds; two escape."""
     sc = Scene(W_REF['ch2'])
-    sc.draw(lambda L: charging_claw_rider(L, 92, 281, 150))
+    holder = {}
+    sc.draw(lambda L: holder.update(P=charging_claw_rider(L, 92, 281, 150)))
+    P = holder['P']
+    sh = P(0.12, -1.0)
+
+    def arm(L, shift):
+        def Ps(u, v):
+            return shift(*P(u, v))
+        claw_arm(L, Ps, 150)
+    sc.drawn_sprite('ch2', 'clawarm', arm, (sh[0] - 20, sh[1] - 80, sh[0] + 190, sh[1] + 80), sh)
     sc.draw(lambda L: gate(L, 228, 280, 80, 150))
     g = sc.put('ghostrider', 300, 118, 0.52)
-    ANCHORS['ch2'] = dict(pistol=[g(254, 43)], rifle=[])
+    ANCHORS.setdefault('ch2', {}).update(pistol=[g(254, 43)], rifle=[])
     sc.draw(lambda L: palace(L, 470, 280, 280, 162))
     sc.draw(lambda L: [person(L, 830, 281, 46, 'navy', 'ochre', helmet='navy', pose='run'),
                        person(L, 890, 281, 46, 'terracotta', 'bluegreen', helmet='navy', pose='run')])
