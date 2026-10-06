@@ -69,6 +69,10 @@ Read this first in any new session, after CLAUDE.md.
   1066 horse's back half, the Ice Claw rider's torso redrawn (face kept), and the new party suit (tapered leg,
   flared jacket, cowboy boot, fluffy boa). Everything else as in the version before. Cover: the very first frame (DLC). Hashtags discussed: #bayeuxtapestry #historytok #gamingmemes
   #animation #parody. Check the rock track's licence before posting.
+- Posted 6 Oct 2026, 5:35pm. After ~2.5 h: 175 views, average watch 7.3 s of 49 (15%), 3.8% to the end, 8 likes,
+  8 comments (all from one person), 0 shares, 1 save, 0 new followers. People Sam showed it to personally rated it
+  his best film. Likely cause: the first ~5 s are a convincing game-logo sequence (reads as an advert, swiped
+  before the first swap at ~5.5 s; stapler payoff at ~13 s). Sam decided to move on rather than re-cut it.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

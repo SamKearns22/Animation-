@@ -218,6 +218,9 @@ this series. Full details in `tiktok-design.md`.
   plainly and the video still reached 6.9K views in 6 hours. Don't disguise words in captions (it costs readability,
   breaks accuracy, and TikTok transcribes the audio anyway). TikTok's AI label is required for realistic AI content;
   our flat cartoons with Sam's own voices are not that.
+- **A parody of an advert must not open like an advert (DLC, 6 Oct):** a faithful game-trailer logo sequence was
+  swiped as a real ad (average watch 7.3 s; the first joke came at ~5.5 s). Something visibly wrong or funny must
+  be on screen in the first second, even when the format being parodied starts with a title.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
