@@ -49,6 +49,9 @@ Read this first in any new session, after CLAUDE.md.
   the glass (`final_staple`, tink), then black. Everything drawn now looks hand-sewn (`wobble` in
   bayeux_weapons.py: edges nudged, thread width varies). Sam: no voice, keep the length; he will send a real
   tapestry tree for the divider.
+- Series title added 6 Oct (51.0 s, 25.0 MB; Discord copy 9.4 MB): DLC in the standard cranberry title
+  (`series_title`, burnham.title_lines, capitals 148 px, top 395) over the quiet gallery for the first 0.8 s, then
+  the gold logo crashes in (`START` 0.15, `T_DLC_OUT`). Cover: about 0:00.4 (DLC over the gallery).
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

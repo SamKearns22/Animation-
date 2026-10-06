@@ -60,7 +60,8 @@ T_QUIET = T_CARD + 3.4               # hard cut back to the silent gallery...
 T_TINK = T_QUIET + 0.55              # ...where one staple pings off the glass
 BLACK_AT = T_QUIET + 1.45            # hard cut to black
 DUR = BLACK_AT + 0.3
-START = 0.85                  # the film opens here: straight into the flaming title (no INTRODUCING)
+START = 0.15                  # the film opens here: DLC (the series title) over the quiet gallery, then the logo
+T_DLC_OUT = 0.93              # the series title goes as the gold logo crashes in
 MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
 
 
@@ -1305,6 +1306,21 @@ def rays(a, cx, cy, t, amt):
 
 
 RATING = {}
+SERIES = {}
+
+
+def series_title(a):
+    """DLC in the account's standard title (cranberry Anton, widened, thick black outline, capitals 148 px), a third
+    of the way down, over the quiet gallery: the same title as every film in the series, and the cover frame."""
+    if 'lay' not in SERIES:
+        import burnham as BU
+        BU.SS = 1
+        img = Image.new('RGBA', (W0, H0), (0, 0, 0, 0))
+        BU.title_lines(img, ('DLC',), cap=148, top=395)
+        img = img.resize((int(W0 * R), int(H0 * R)), Image.LANCZOS)
+        m = np.asarray(img, np.float32)
+        SERIES['lay'] = np.dstack([m[..., :3], m[..., 3] / 255])
+    over(a, SERIES['lay'], 0, 0)
 
 
 def rating_box():
@@ -1429,6 +1445,8 @@ def frame(t, fi=0):
     if t < CUT_TAPESTRY:
         a = room_frame(t)
         # INTRODUCING, then the logo
+        if t < T_DLC_OUT:
+            series_title(a)
         TITLE.draw(a, t)
         for tl in ARROWS_AT:
             if 0 <= t - tl < 0.12:
