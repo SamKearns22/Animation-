@@ -368,7 +368,83 @@ def phone_hands(size, to_px, tap_key=0, skin=SKIN, sleeve=(240, 230, 206), outli
     return render(meshes, size, to_px, outline=outline)   # the phone's own pixels stay transparent
 
 
+def slab_mesh(x0, x1, y0, y1, z0, z1):
+    """A plain box from corner to corner (a podium's top, a table edge), for hiding what is behind it."""
+    V = np.array([[x, y, z] for z in (z0, z1) for y in (y0, y1) for x in (x0, x1)], float)
+    q = [(0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)]
+    tris = np.array([t for a, b, c, d in q for t in ((a, b, c), (a, c, d))])
+    return V, tris, np.zeros(len(V), int)
+
+
+def edge_grab(size, k, skin=SKIN, sleeve=(240, 230, 206), outline=3.0, side='R'):
+    """A hand slapped flat on the front of a panel (a podium), the fingers hooked over its top edge, seen from the
+    front: the back of the hand towards us. The panel's front is Z = 0, its top edge Y = 0. Returns (layer, origin
+    pixel) where the layer is `size` and the top edge's centre is at the origin pixel; k pixels a metre."""
+    x = np.array([5, 70] * 4 + [10, 10, 10, -10], float)       # fingers straight to the knuckles, hooked over the top
+    palm_x, palm_back, origin = (0.12 if side == 'R' else -0.12, 1.0, 0.0), (0, 0, 1.0), (0.0, -0.075, 0.012)
+    V, tris, kind = hand_mesh(side, x, palm_x, palm_back, origin)
+    ox, oy = size[0] / 2, size[1] * 0.3
+    meshes = [mesh_entry(*slab_mesh(-1, 1, -2, 0, -0.6, 0), (skin, skin), 9),
+              mesh_entry(V, tris, kind, (skin, sleeve), 1)]
+    for j, (Vn, tn) in enumerate(nail_meshes(side, x, palm_x, palm_back, origin)):
+        nc = tuple(min(255, int(c * 1.04 + 6)) for c in skin)
+        meshes.append(mesh_entry(Vn, tn, np.zeros(len(Vn), int), (nc, nc), 20 + j))
+    return render(meshes, size, lambda X, Y: (ox + X * k, oy - Y * k), outline=outline), (ox, oy)
+
+
+def mic_fist(size, k, skin=SKIN, sleeve=(70, 72, 84), outline=3.0, cut=0.11):
+    """A hand closed round a hand microphone, the forearm ending in a clean cartoon cut `cut` metres from the
+    wrist (the severed-arm gag). Drawn with the microphone pointing up the layer and the back of the hand towards
+    us. Returns (layer, mic head pixel, cut-end pixel)."""
+    v, g, sk = body()
+    local, c, d, err = H.solve_grip(sk, 'R', 0.13)
+    M = sk.pose_matrices(local)
+    v2 = sk.skin(v, local)
+    R0, o0 = palm_frame(sk, M, 'R')
+    back = R0[:, 1] - d * (R0[:, 1] @ d)
+    back /= np.linalg.norm(back)
+    tip = H.bone_ends(sk, M, 'finger3-1.R')[0]
+    if (tip - c) @ d < 0:
+        d = -d                                  # the mic head on the index finger's side
+    Rm = np.stack([np.cross(d, back), d, back], 1)        # MH -> (X across, Y along the mic, Z out of the back)
+    faces, _ = part_faces(g, sk, v, 'R', ARM_BONES)
+    V = (v2 - c) @ Rm * 0.1
+    wr = (sk.rest['wrist.R'][:3, 3] - c) @ Rm * 0.1
+    fore = (sk.rest['lowerarm02.R'][:3, 3] - c) @ Rm * 0.1
+    fd = (fore - wr) / np.linalg.norm(fore - wr)
+    keep = [f for f in faces if (((V[f] - wr) @ fd) < cut).all()]
+    V2, q2 = mesh_sdf.catmull_clark(V, keep)
+    tris = np.array(mesh_sdf.triangulate(q2))
+    kind = (((V2 - wr) @ fd) > 0.035).astype(int)
+    # the microphone: a black handle through the fist, a grey mesh head on top
+    n = 14
+    ring = lambda y, r: [(r * math.cos(2 * math.pi * i / n), y, r * math.sin(2 * math.pi * i / n)) for i in range(n)]
+    Vm = np.array(ring(-0.09, 0.013) + ring(0.06, 0.015) + ring(0.07, 0.026) + ring(0.115, 0.026) + [(0, 0.125, 0)], float)
+    tm = []
+    for r0 in range(3):
+        for i in range(n):
+            a, b = r0 * n + i, r0 * n + (i + 1) % n
+            tm += [(a, b, b + n), (a, b + n, a + n)]
+    tm += [(3 * n + i, 3 * n + (i + 1) % n, 4 * n) for i in range(n)]
+    tm = np.array(tm)
+    km = np.array([0] * (2 * n) + [1] * (2 * n) + [1])
+    ox, oy = size[0] * 0.5, size[1] * 0.55
+    to_px = lambda X, Y: (ox + X * k, oy - Y * k)
+    meshes = [mesh_entry(Vm, tm, km, ((30, 30, 34), (120, 124, 130)), 3),
+              mesh_entry(V2, tris, kind, (skin, sleeve), 1)]
+    lay = render(meshes, size, to_px, outline=outline)
+    end = wr + fd * cut
+    return lay, to_px(0, 0.11), to_px(end[0], end[1]), math.atan2(-fd[1], fd[0])
+
+
 if __name__ == '__main__':
+    if sys.argv[1] == 'tests':
+        a, _ = edge_grab((800, 800), 2600)
+        b, *_ = mic_fist((800, 800), 2600)
+        out = Image.new('RGBA', (1600, 800), (90, 70, 56, 255))
+        out.alpha_composite(a, (0, 0))
+        out.alpha_composite(b, (800, 0))
+        out.convert('RGB').save(sys.argv[2])
     if sys.argv[1] == 'phone':
         W_, H_ = 1080, 1920
         k = 7000.0

@@ -782,8 +782,8 @@ def cam_front(t, zoom=None):
     return pc, B.Cam(z, 540, 905 + 25 * (z - 1))
 
 
-def peskov_spec(t, mouth='set', blink=False, look=0.0):
-    sp = dict(PESKOV, mouth=mouth, blink=blink, look=look)
+def peskov_spec(t, mouth='set', blink=False, look=0.0, breath=0.0):
+    sp = dict(PESKOV, mouth=mouth, blink=blink, look=look, head_dy=breath)
     # resting on the podium: the upper arms hang by his sides, the forearms come forward (towards us, so drawn
     # shorter) to the hands flat on the podium's top (figure-rig 5b: how people hold things in front)
     sw = sp['shoulders']
@@ -800,13 +800,17 @@ def draw_peskov(img, cam, pc, t, **kw):
     return nx, ny, s, sp
 
 
-def shot_front(t, **kw):
-    pc, cam = cam_front(t)
+def shot_front(t, zoom=None, behind=None, front=None, **kw):
+    pc, cam = cam_front(t, zoom)
     img = B.canvas(WALL)
     room(img, cam, pc, t)
     flag(img, cam, pc, t)
+    if behind:
+        behind(img, cam, pc)
     nx, ny, s, sp = draw_peskov(img, cam, pc, t, **kw)
     podium(img, cam, pc)
+    if front:
+        front(img, cam, pc)
     p = B.Pen(img, B.Local(cam, nx, ny, s))
     for side in 'LR':   # his hands rest on the podium's top, in front of its back edge
         el, wr, shape = sp['arms'][side][:3]
@@ -856,7 +860,9 @@ def shot_reverse(t, people=True):
         floor_splat(img, cam, pc, X, Z, r, seed)
     draw_items(img, cam, pc, chaos_items(pc), t)
     p = B.Pen(img, cam)
-    for X, Y, Z, r, seed in AIR_DROPS:   # blood flying from the tackle
+    for X, Y, Z, r, seed in AIR_DROPS:   # blood flying from the tackle (thrown out, falling)
+        u = (t * 1.3 + seed * 0.37) % 1.0
+        X, Y = X + (X - 0.4) * 1.5 * u, Y + 1.2 * u - 3.0 * u * u
         x, y = pc.P(X, Y, Z)
         splat(p, x, y, r * pc.f / pc.depth(Z, X), seed, drops=1)
     return img
@@ -911,26 +917,26 @@ CROWD = [
     dict(kind='zombie', k=1, x=0.5, z=8.55, act='door'),
     dict(kind='zombie', k=9, x=-0.2, z=7.95, act='lunge'),        # already through the back doors
     dict(kind='zombie', k=10, x=0.75, z=8.1, act='lunge_l'),
-    dict(kind='zombie', k=11, x=-5.0, z=7.7, act='lunge_l'),      # pouring in through the side door
-    dict(kind='zombie', k=12, x=-4.7, z=8.3, act='lunge_l'),
+    dict(kind='zombie', k=11, x=-5.0, z=7.7, act='lunge_l', v=(0.5, -0.2)),      # pouring in through the side door
+    dict(kind='zombie', k=12, x=-4.7, z=8.3, act='lunge_l', v=(0.4, -0.3)),
     dict(kind='zombie', k=15, x=-4.3, z=7.7, act='lunge'),
     dict(kind='person', k=8, x=-4.2, z=7.05, act='door_pull'),    # trying to shove the side door shut (too late)
     dict(kind='person', k=1, x=-2.0, z=7.9, act='tripod'),        # beating a zombie off with a tripod, on the riser
     dict(kind='zombie', k=4, x=-1.55, z=7.75, act='lunge_r'),
     dict(kind='zombie', k=14, x=3.0, z=7.2, act='lunge_r'),
-    dict(kind='person', k=0, x=0.7, z=6.4, act='run_away'),       # running for the back doors (straight into them)
+    dict(kind='person', k=0, x=0.7, z=6.4, act='run_away', v=(0.0, 0.8)),       # running for the back doors (straight into them)
     dict(kind='zombie', k=13, x=-3.0, z=6.3, act='lunge'),
     dict(kind='zombie', k=8, x=-3.6, z=5.2, act='lunge_l'),
     dict(kind='person', k=3, x=-2.5, z=4.9, act='phone'),         # filming it all on a phone
     dict(kind='zombie', k=16, x=-1.3, z=6.0, act='lunge_r'),
     dict(kind='person', k=2, x=2.1, z=5.3, act='chair'),          # swinging a chair at a zombie
     dict(kind='zombie', k=5, x=2.75, z=5.6, act='lunge_r'),
-    dict(kind='zombie', k=7, x=0.35, z=5.0, act='lunge'),         # lurching down the aisle after...
-    dict(kind='person', k=5, x=0.05, z=4.2, act='run'),           # ...a reporter fleeing towards us
+    dict(kind='zombie', k=7, x=0.35, z=5.0, act='lunge', v=(0.05, -0.7)),         # lurching down the aisle after...
+    dict(kind='person', k=5, x=0.05, z=4.2, act='run', v=(0.1, -1.0)),           # ...a reporter fleeing towards us
     dict(kind='zombie', k=17, x=-3.9, z=3.4, act='lunge'),
     dict(kind='person', k=6, x=-1.7, z=3.45, act='hide'),         # hiding under a chair (seat 1.2)
-    dict(kind='heroine', k=0, x=-0.72, z=3.15, act='crawl'),      # our reporter, crawling (shot 3 follows her)
-    dict(kind='person', k=7, x=-1.75, z=2.6, act='run'),          # fleeing past the front row
+    dict(kind='heroine', k=0, x=-0.72, z=3.15, act='crawl', v=(0.12, 0.0)),      # our reporter, crawling (shot 3 follows her)
+    dict(kind='person', k=7, x=-1.75, z=2.6, act='run', v=(-0.4, -0.3)),          # fleeing past the front row
     dict(kind='person', k=4, x=0.5, z=2.0, act='tackled'),        # grabbed, in the foreground
     dict(kind='zombie', k=6, x=0.12, z=2.2, act='tackle'),
 ]
@@ -942,6 +948,10 @@ AIR_DROPS = [(0.45, 1.75, 1.95, 0.026, 71), (0.25, 1.95, 2.0, 0.02, 72), (0.7, 1
 
 def crowd_person(img, cam, pc, who, t):
     k, act, X, z = who['k'], who['act'], who['x'], who['z']
+    vx, vz = who.get('v', (0.0, 0.0))        # some are on the move through the shot
+    X, z = X + vx * t, z + vz * t             # t: seconds since the 180 (the same clock in shots 2 and 3)
+    if pc.depth(z, X) < 0.6:
+        return
     y0 = 0.3 if 7.6 <= z <= 8.6 and any(a <= X <= b for a, b in RISERS) else 0.0
     s = pc.scale(z, X)
     nx, ny = pc.P(X, y0 + F.SOLE_Y / UPM, z)
@@ -949,7 +959,7 @@ def crowd_person(img, cam, pc, who, t):
     ph = t * 9 + k
     if who['kind'] == 'heroine':
         x, y = pc.P(X, 0.0, z)
-        reporter_crawl(img, cam, x, y, s, t, step=t * 7)
+        reporter_crawl(img, cam, x, y, s, t, step=t * 7, grab=GRAB[0])
         return
     if who['kind'] == 'zombie':
         sp = zombie_base(k)
@@ -1238,8 +1248,9 @@ def reporter_crawl(img, cam, x, y, s, t, grab=0.0, step=0.0, flip=1):
         splat(p, hx + fx, hy + 150 + fy, r, seed, drops=2)
 
 
-HEROINE_S3 = (-0.45, 2.85)      # where she has crawled to by shot 3 (down the aisle, towards the podium)
-PHONE_S3 = (-0.25, 2.6)         # her phone, dropped on the floor ahead of her
+GRAB = [0.0]                    # how far her hand has reached for the phone (shot 3)
+HEROINE_S3 = (-0.45, 3.25)      # where she has crawled to by shot 3 (down the aisle, towards the podium)
+PHONE_S3 = (-0.2, 2.95)         # her phone, dropped on the floor ahead of her
 
 
 def floor_phone(img, cam, pc, X, Z, lit=True):
@@ -1251,7 +1262,7 @@ def floor_phone(img, cam, pc, X, Z, lit=True):
     quad(p, pc, scr, (190, 214, 240) if lit else (40, 40, 46), None)
 
 
-def shot_crawl(t=0.0):
+def shot_crawl(t=0.0, grab=0.0):
     """Shot 3 (still): low in the aisle, looking towards the back doors, she crawls towards us."""
     pc = PCam(-0.45, 0.42, 1.85, 1, 950.0, oy=880.0)
     cam = B.Cam(1.0, 540, 960)
@@ -1260,12 +1271,23 @@ def shot_crawl(t=0.0):
     risers(img, cam, pc)
     for X, Z, r, seed in FLOOR_SPLATS:
         floor_splat(img, cam, pc, X, Z, r, seed)
-    floor_phone(img, cam, pc, *PHONE_S3)
-    items = [(HEROINE_S3[1] - 0.05, HEROINE_S3[0], k, dict(a, x=HEROINE_S3[0], z=HEROINE_S3[1]))
+    GRAB[0] = grab
+    if grab < 0.6:
+        floor_phone(img, cam, pc, *PHONE_S3)
+    items = [(HEROINE_S3[1] - 0.05, HEROINE_S3[0], k, dict(a, x=HEROINE_S3[0], z=HEROINE_S3[1], v=(0.0, 0.0)))
              if k == 'person' and a['kind'] == 'heroine' else (z, x, k, a) for z, x, k, a in chaos_items(pc)]
-    items = sorted([i for i in items if pc.depth(i[0], i[1]) > 0.8 and not (i[2] == 'person' and i[3]['z'] < 2.7
-                                                                            and i[3]['kind'] != 'heroine')],
-                   key=lambda i: -pc.depth(i[0], i[1]))
+    def keep(i):
+        if i[2] != 'person':
+            return pc.depth(i[0], i[1]) > 1.1
+        w = i[3]
+        if w['kind'] == 'heroine':
+            return True
+        vx, vz = w.get('v', (0.0, 0.0))
+        X, z = w['x'] + vx * t, w['z'] + vz * t          # where they are now
+        if pc.depth(z, X) < 1.1 or w['z'] < 2.7:
+            return False
+        return -60 < pc.P(X, 1.4, z)[0] < 1140            # nobody cut off by the frame's edge
+    items = sorted([i for i in items if keep(i)], key=lambda i: -pc.depth(i[0], i[1]))
     draw_items(img, cam, pc, items, t)
     return img
 
@@ -1334,6 +1356,474 @@ def title_frame(img, t):
     return img
 
 
+# ============================================================================================ the film
+import mouths
+import mossad_audio as MA
+from burnham_film import onepole_lp, normal
+
+mouths.install(B)
+
+# Placeholder timing from Sam's usual pace (3.0-3.6 words a second) until his recordings arrive; then REC replaces
+# it (cleaned and levelled by mossad_audio.line; pauses may be shortened, never the words).
+LINE1 = ['The researcher in question', 'died from a common pneumonia.', 'All is well.', 'We ask anyone concerned',
+         'to pay attention to bulletins', 'from the Ministry of Health.']
+LINE2 = ['Any more questions?']
+WPS = 3.4
+
+
+def syl(w):
+    return max(1, len(re.findall(r'[aeiouy]+', w.lower().strip('.,?'))))
+
+
+def word_times(start, pieces, wps=WPS):
+    """[(piece index, start, end)] for each word, at the pace, with short pauses at commas and full stops."""
+    out, t = [], start
+    for i, piece in enumerate(pieces):
+        for w in piece.split():
+            d = (0.55 + 0.45 * min(2.0, syl(w) / 1.6)) / wps
+            out.append((i, t, t + d, w))
+            t += d
+            if w[-1] in '.?':
+                t += 0.32
+    return out
+
+
+import re   # noqa: E402
+
+T = {}
+W1 = word_times(0.30, LINE1)
+T['line1_end'] = W1[-1][2]
+T['s2'] = T['line1_end'] + 0.35                 # the 180: hard cut into the outbreak
+T['slap'] = 5.2                                 # shot 1: a hand slaps onto the podium's edge (no reaction)
+T['s3'] = T['s2'] + 3.0                         # she crawls
+T['grab'] = T['s3'] + 1.05                      # she dives for her phone
+T['s3b'] = T['s3'] + 1.5                        # her face as she types
+T['s4'] = T['s3'] + 3.0                         # her phone
+T['roar'] = T['s4'] + 1.3                       # a zombie roars right behind her
+T['crunch'] = T['s4'] + 2.05                    # a crunch, and blood bursts across the screen
+T['s5'] = T['s4'] + 3.0                         # back to Peskov
+T['arm_throw'] = T['s5'] + 0.2                  # a severed arm (still holding a microphone) flies up...
+T['arm_hit'] = T['s5'] + 0.55                   # ...and slaps the backdrop behind him
+W2 = word_times(T['s5'] + 1.25, LINE2)
+T['line2_end'] = W2[-1][2]
+T['black'] = T['line2_end'] + 0.6               # a short silent beat (the screams go on), then hard cut to black
+T['dur'] = T['black'] + 0.35
+SHOTS = [('front', 0.0, T['s2']), ('reverse', T['s2'], T['s3']), ('crawl', T['s3'], T['s3b']),
+         ('face', T['s3b'], T['s4']), ('phone', T['s4'], T['s5']), ('front_end', T['s5'], T['black'])]
+BLINKS = [1.9, 4.6, 7.4, T['s5'] + 0.95]        # his slow blinks: he never looks round, never flinches
+
+
+def track_of(words):
+    """Mouth shapes for a placeholder line: the words placed at their times."""
+    out = []
+    for i, a, b, w in words:
+        shapes = mouths._letters_to_shapes(w)
+        step = (b - a) / len(shapes)
+        out += [(a + n * step - 1 / 12, a + (n + 1) * step - 1 / 12, sh) for n, sh in enumerate(shapes)]
+    return out
+
+
+TRACK = track_of(W1) + track_of(W2)
+
+
+def caption_at(t):
+    for words, end in ((W1, T['line1_end']), (W2, T['line2_end'])):
+        if words[0][1] - 0.05 <= t < end + 0.3:
+            pieces = LINE1 if words is W1 else LINE2
+            cur = [i for i, a, b, w in words if a - 0.05 <= t]
+            return pieces[max(cur) if cur else 0]
+    return None
+
+
+def shot_at(t):
+    for v, a, b in SHOTS:
+        if a <= t < b:
+            return v, t - a
+    return 'black', 0.0
+
+
+def peskov_kw(t):
+    blink = any(b <= t < b + 0.18 for b in BLINKS)       # a slow, heavy blink (about two drawings)
+    m = mouths.at(TRACK, t)
+    return dict(mouth='set' if m == 'rest' else 'v:' + m, blink=blink, breath=1.5 * math.sin(2 * math.pi * t / 4.2))
+
+
+@functools.lru_cache(maxsize=2)
+def podium_hand():
+    import hands3d
+    pc, cam = cam_front(0.0, 1.0)
+    k = pc.f / pc.depth(PODIUM_BOX['z1']) * B.SS                 # canvas pixels a metre at the podium's front
+    n = int(0.5 * k)
+    return hands3d.edge_grab((n, n), k, skin=(236, 226, 220), sleeve=(70, 90, 70), outline=2.5 * B.SS)
+
+
+@functools.lru_cache(maxsize=2)
+def mic_arm():
+    import hands3d
+    pc, cam = cam_front(0.0, 1.0)
+    k = pc.f / pc.depth(-1.18) * B.SS
+    n = int(0.6 * k)
+    return hands3d.mic_fist((n, n), k, skin=(232, 222, 214), sleeve=(80, 84, 96), outline=2.5 * B.SS)
+
+
+def paste_sprite(img, lay, at, origin, scale, angle=0.0):
+    """Paste a hands3d layer so its `origin` pixel lands on canvas point `at`, scaled and turned (degrees)."""
+    w, h = lay.size
+    lay = lay.resize((max(1, int(w * scale)), max(1, int(h * scale))), Image.BICUBIC)
+    ox, oy = origin[0] * scale, origin[1] * scale
+    if angle:
+        cx, cy = lay.width / 2, lay.height / 2
+        lay2 = lay.rotate(angle, Image.BICUBIC, expand=True)
+        a = math.radians(angle)
+        dx, dy = ox - cx, oy - cy
+        ox = lay2.width / 2 + dx * math.cos(a) + dy * math.sin(a)
+        oy = lay2.height / 2 - dx * math.sin(a) + dy * math.cos(a)
+        lay = lay2
+    img.alpha_composite(lay, (int(at[0] - ox), int(at[1] - oy)))
+
+
+def film_front(t):
+    """Shot 1: the slow zoom while he speaks. At T['slap'] a bloodied hand slaps onto the podium's front edge from
+    below, clings, and slides off leaving a smear. He does not react."""
+    def front(img, cam, pc):
+        u = t - T['slap']
+        if u < 0:
+            return
+        X = -0.22
+        top = cam.P(*pc.P(X, STAGE_BOX['h'] + PODIUM_BOX['h'], PODIUM_BOX['z1']))
+        k = pc.f / pc.depth(PODIUM_BOX['z1']) * cam.z * B.SS
+        drop = 0.0 if u < 0.3 else min(1.2, (u - 0.3) ** 1.6 * 1.4)      # clings, then slides down and away
+        d = ImageDraw.Draw(img)
+        if drop > 0:   # the smear it leaves down the podium's front
+            sm = 0.05 * k
+            d.polygon([(top[0] - sm, top[1] + 0.03 * k), (top[0] + sm, top[1] + 0.03 * k),
+                       (top[0] + sm * 0.8, top[1] + drop * k), (top[0] - sm * 0.9, top[1] + drop * k)], fill=BLOOD_D + (255,))
+        if drop < 1.0:
+            lay, origin = podium_hand()
+            paste_sprite(img, lay, (top[0], top[1] + drop * k), origin, cam.z)
+    return shot_front(t, front=front, **peskov_kw(t))
+
+
+ARM_FROM, ARM_AT = (-0.95, 1.2), (-0.34, 2.3)          # (X, Y) on the backdrop's plane: thrown in, hits here
+
+
+def film_front_end(t_local):
+    """Shot 5: back on him, the camera where the zoom ended. The arm flies in behind him and slaps the backdrop,
+    leaving a red splat; it drops away behind his shoulder. "Any more questions?" """
+    t = T['s5'] + t_local
+    zb = ROOM['z0'] + 0.03
+
+    def behind(img, cam, pc):
+        u = t - T['arm_throw']
+        hit = T['arm_hit'] - T['arm_throw']
+        p = B.Pen(img, cam)
+        if t >= T['arm_hit']:   # the splat stays on the backdrop, a drip running down
+            cx, cy = pc.P(ARM_AT[0], ARM_AT[1], zb)
+            r = pc.f / pc.depth(zb) * 0.11
+            run = min(1.0, (t - T['arm_hit']) / 1.2)
+            p.poly([(cx - r * 0.12, cy), (cx + r * 0.12, cy), (cx + r * 0.06, cy + r * 2.4 * run), (cx - r * 0.08, cy + r * 2.4 * run)],
+                   BLOOD, None)
+            splat(p, cx, cy, r, 77, drops=6)
+        if u < 0:
+            return
+        lay, head, cut, fdir = mic_arm()
+        if u < hit:            # in flight: an arc in from the left, tumbling
+            w = u / hit
+            X = ARM_FROM[0] + (ARM_AT[0] - ARM_FROM[0]) * w
+            Y = ARM_FROM[1] + (ARM_AT[1] - ARM_FROM[1]) * w + 0.5 * w * (1 - w)
+            ang = 200 - 560 * w
+        else:                  # after the slap: drops away behind his shoulder
+            w = (u - hit) / 0.5
+            if w > 1:
+                return
+            X, Y, ang = ARM_AT[0] + 0.2 * w, ARM_AT[1] - 1.1 * w * w, -360 + 25 * w
+        at = cam.P(*pc.P(X, Y, zb))
+        cx, cy = lay.size[0] / 2, lay.size[1] / 2
+        paste_sprite(img, lay, at, (cx, cy), cam.z, ang)
+        # the cut end: a flat red cap with a pale bone in it (cartoon, no anatomy)
+    return shot_front(t, zoom=1.32, behind=behind, **peskov_kw(t))
+
+
+def film_face(t_local):
+    """Shot 3, second half: in close on her face as she types frantically (the phone just below the frame, its cold
+    light on her face), the hall a blur behind her."""
+    from PIL import ImageFilter
+    pc = PCam(-0.45, 0.95, 1.2, 1, 900.0, oy=900.0)
+    cam = B.Cam(1.0, 540, 960)
+    bg = B.canvas(WALL)
+    since = T['s3b'] - T['s2'] + t_local
+    room(bg, cam, pc, since, chaos=True)
+    draw_items(bg, cam, pc, [i for i in chaos_items(pc) if not (i[2] == 'person' and i[3]['kind'] == 'heroine')], since)
+    img = bg.filter(ImageFilter.GaussianBlur(14 * B.SS))
+    z = 2.9 + 0.6 * F.ease(min(1.0, t_local / 1.5))               # zoom in on her face
+    zc = B.Cam(z, 540, 790)
+    sp = dict(REPORTER, wide=True, brows='terror', mouth='gasp' if int(t_local * 6) % 3 else 'scream',
+              skin=(240, 234, 232), face_splats=[(-38, -110, 8, 7), (44, -60, 6, 8)],
+              splats=[(-50, 140, 18, 5)], look=0.5 * math.sin(t_local * 11), seed=3)
+    rig = F.Rig(sp)
+    sp['arms'] = {sd: rig.pose('hold', side=sd, shape='phone', lift=0.6)[sd] for sd in 'LR'}
+    jig = 4 * math.sin(t_local * 40)                            # her shoulders jitter with the typing
+    person(img, zc, 540 + jig * 0.3, 960, 1.0, sp, t_local, legs='kneel')
+    soft(img, zc, [(380, 800), (700, 800), (720, 1000), (360, 1000)], (150, 200, 255), 0.18, 30)   # the phone's glow
+    return img
+
+
+def film_crawl(t_local):
+    """Shot 3, first half: low in the aisle; she crawls to her phone and grabs it."""
+    global HEROINE_S3
+    keep = HEROINE_S3
+    x = keep[0] - 0.35 + 0.3 * min(1.0, t_local / 1.05)
+    HEROINE_S3 = (x, keep[1])
+    try:
+        img = shot_crawl(T['s3'] - T['s2'] + t_local, grab=max(0.0, min(1.0, (t_local - 1.05) / 0.2)))
+    finally:
+        HEROINE_S3 = keep
+    return img
+
+
+def film_phone(t_local):
+    """Shot 4: her phone. She types (the thumb lifting and pressing); a roar right behind her (a shadow falls
+    over the phone, her hands shake); a crunch - and blood bursts across the glass."""
+    t = T['s4'] + t_local
+    tap = int(t_local * 9) % 2 if t < T['crunch'] else 0
+    img = shot_phone(t_local, tap=tap)
+    if t >= T['roar']:
+        u = min(1.0, (t - T['roar']) / 0.5)
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        g = np.linspace(0.55 * u, 0.0, img.size[1])[:, None] * np.ones((1, img.size[0]))
+        a = np.clip(g * 255, 0, 255).astype(np.uint8)
+        lay.putalpha(Image.fromarray(a))
+        img.alpha_composite(lay)
+        sh = 6 * B.SS * u * math.sin(t * 70)                       # her hands shaking
+        img = img.transform(img.size, Image.AFFINE, (1, 0, sh, 0, 1, sh * 0.5), Image.BICUBIC)
+    if t >= T['crunch']:   # the blood hits the glass: big splats growing over three drawings, then running
+        u = min(1.0, (t - T['crunch']) / 0.25)
+        p = B.Pen(img, B.Cam(1.0, 540, 960))
+        for (x, y, r, seed) in ((420, 700, 260, 91), (760, 1020, 200, 92), (300, 1250, 170, 93), (640, 420, 150, 94),
+                                (880, 600, 110, 95), (180, 900, 130, 96)):
+            splat(p, x, y, r * u, seed, drops=6)
+            run = max(0.0, t - T['crunch'] - 0.25) * 260
+            if run:
+                p.poly([(x - r * 0.1, y), (x + r * 0.1, y), (x + r * 0.07, y + r * 0.6 + run), (x - r * 0.06, y + r * 0.6 + run)],
+                       BLOOD, None)
+    return img
+
+
+SHOT_FN = {'front': film_front, 'reverse': lambda tl: shot_reverse(tl), 'crawl': film_crawl, 'face': film_face,
+           'phone': film_phone, 'front_end': film_front_end}
+
+
+def frame_image(t, captions=True, title=True):
+    if t >= T['black']:
+        return B.canvas((0, 0, 0))
+    view, local = shot_at(t)
+    img = film_front(t) if view == 'front' else SHOT_FN[view](local)
+    if captions:
+        c = caption_at(t)
+        if c:
+            PP.caption(img, c)
+    if title and t < 1.0:   # the standard title over the backdrop, gone by 1 s
+        title_frame(img, t)
+    return img
+
+
+# ----------------------------------------------------------------------------------------------- sound
+rng = np.random.default_rng(66)
+place, band = M.place, M.band
+
+
+def scream(dur, f0, vowel, seed):
+    """A human scream: a strained voice gliding up, wavering, rough, through vowel resonances."""
+    r = np.random.default_rng(seed)
+    n = int(dur * SR)
+    tt = np.arange(n) / SR
+    wob = np.cumsum(r.standard_normal(n)) / SR * 3
+    f = f0 * (1 + 0.3 * np.minimum(1, tt / 0.18)) * (1 + 0.025 * np.sin(2 * np.pi * r.uniform(5, 7) * tt)) * (1 + 0.02 * wob)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    src = sum(np.sin(h * ph + r.uniform(0, 6)) / h ** 0.8 for h in range(1, 18))
+    src += 0.35 * r.standard_normal(n) * (0.7 + 0.3 * np.sin(ph))
+    F = {'a': ((850, 1.0), (1300, 0.7), (2800, 0.4)), 'e': ((550, 1.0), (2000, 0.6), (2800, 0.4)),
+         'i': ((380, 0.8), (2500, 0.8), (3300, 0.5))}[vowel]
+    y = sum(g * band(src, fc * 0.82, min(fc * 1.2, SR / 2 - 100)) for fc, g in F)
+    env = np.minimum(1, tt / 0.05) * np.minimum(1, (dur - tt) / 0.2) * (0.8 + 0.2 * np.sin(2 * np.pi * r.uniform(2, 4) * tt))
+    return normal(y * env)
+
+
+def roar(dur, seed, low=1.0):
+    """A zombie's roar: a low, rasping, gurgling voice."""
+    r = np.random.default_rng(seed)
+    n = int(dur * SR)
+    tt = np.arange(n) / SR
+    f = (95 * low) * (1 + 0.15 * np.sin(np.pi * tt / dur)) * (1 + 0.05 * r.standard_normal(n).cumsum() / np.sqrt(np.arange(1, n + 1)))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    src = sum(np.sin(h * ph) / h ** 0.6 for h in range(1, 40)) + 0.5 * np.sin(0.5 * ph)
+    src *= 0.55 + 0.45 * np.sin(2 * np.pi * 27 * tt)                       # the rattle in the throat
+    src += 0.8 * r.standard_normal(n)
+    y = band(src, 300, 900) + 0.7 * band(src, 900, 1600) + 0.3 * band(src, 2000, 3500) + 0.4 * onepole_lp(src, 250)
+    env = np.minimum(1, tt / 0.08) * np.minimum(1, (dur - tt) / 0.25)
+    return normal(y * env)
+
+
+def thud(f0=70, dur=0.5, crack=0.4):
+    n = int(dur * SR)
+    tt = np.arange(n) / SR
+    f = f0 + 80 * np.exp(-tt * 20)
+    body_ = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 9)
+    cr = band(rng.standard_normal(n), 600, 5000) * np.exp(-tt * 40)
+    return normal(body_ + crack * normal(cr))
+
+
+def crash():
+    """Chairs going over: a thud and metal legs clattering."""
+    out = np.zeros(int(0.9 * SR))
+    place(out, thud(90, 0.4, 0.8), 0.0)
+    for k in range(5):
+        at = 0.06 + 0.07 * k + 0.02 * k * k
+        place(out, M.clink() * 0.4, at, 0.6 * 0.7 ** k)
+        place(out, thud(260, 0.08, 1.0) * 0.5, at, 0.6 * 0.7 ** k)
+    return normal(out)
+
+
+def splat_snd(size=1.0):
+    """A wet splat: a soft, low burst of noise with a few droplets."""
+    n = int(0.35 * SR)
+    tt = np.arange(n) / SR
+    x = onepole_lp(rng.standard_normal(n), 1400 * size ** -0.5) * np.exp(-tt * 18) * np.minimum(1, tt / 0.004)
+    for k in range(4):
+        place(x, band(rng.standard_normal(int(0.02 * SR)), 1500, 5000) * 0.3, 0.04 + 0.05 * k + rng.uniform(0, 0.03))
+    return normal(x)
+
+
+def crunch():
+    """Bone breaking: a quick run of sharp cracks over a dull thud."""
+    out = np.zeros(int(0.5 * SR))
+    place(out, thud(60, 0.4, 0.3), 0.0, 0.8)
+    for k in range(7):
+        n = int(0.012 * SR)
+        c = band(rng.standard_normal(n), 1200, 7000) * np.exp(-np.arange(n) / SR * 400)
+        place(out, normal(c), 0.01 + 0.018 * k + rng.uniform(0, 0.008), 0.9 * 0.85 ** k)
+    return normal(out)
+
+
+def slap():
+    n = int(0.25 * SR)
+    tt = np.arange(n) / SR
+    x = band(rng.standard_normal(n), 700, 6000) * np.exp(-tt * 60) + 0.6 * thud(140, 0.25, 0.0)[:n]
+    return normal(x)
+
+
+def shutter():
+    out = np.zeros(int(0.12 * SR))
+    for at in (0.0, 0.06):
+        n = int(0.01 * SR)
+        place(out, band(rng.standard_normal(n), 2000, 8000) * np.exp(-np.arange(n) / SR * 600), at)
+    return normal(out)
+
+
+def tap_snd():
+    n = int(0.03 * SR)
+    tt = np.arange(n) / SR
+    return normal(band(rng.standard_normal(n), 1500, 5000) * np.exp(-tt * 300))
+
+
+def chaos_bed(t0, t1, seed=5):
+    """The outbreak heard: screams overlapping (men and women), roars, chairs going over, splats, banging on the
+    glass. A dense wall from the first frame of the 180."""
+    r = np.random.default_rng(seed)
+    n = int((t1 - t0) * SR)
+    out = np.zeros(n)
+    t = 0.0
+    k = 0
+    while t < t1 - t0:
+        f0 = r.choice([r.uniform(650, 1100), r.uniform(330, 560)])
+        place(out, scream(r.uniform(0.6, 1.6), f0, r.choice(['a', 'e', 'i']), seed * 100 + k), t, r.uniform(0.35, 0.8))
+        t += r.uniform(0.08, 0.28) if t > 0 else 0.0
+        k += 1
+    for a in np.arange(0.3, t1 - t0, 0.7):
+        place(out, roar(r.uniform(0.7, 1.3), seed * 200 + int(a * 10), r.uniform(0.8, 1.2)), a + r.uniform(0, 0.3), r.uniform(0.3, 0.55))
+    for a in np.arange(0.1, t1 - t0, 0.9):
+        place(out, crash(), a + r.uniform(0, 0.4), r.uniform(0.25, 0.45))
+    for a in np.arange(0.2, t1 - t0, 0.55):
+        place(out, splat_snd(r.uniform(0.7, 1.4)), a + r.uniform(0, 0.3), r.uniform(0.3, 0.5))
+    for a in np.arange(0.4, t1 - t0, 0.8):   # fists on the windows
+        place(out, thud(110, 0.2, 0.6), a + r.uniform(0, 0.3), 0.18)
+    for k in range(3):                        # the wall hits at once on the cut
+        place(out, scream(1.4, 700 + 180 * k, 'a', 999 + k), 0.0, 0.8)
+    return out
+
+
+def soundtrack():
+    n = int(T['dur'] * SR)
+    mix = np.zeros(n)
+    # shot 1: the quiet press room: only the photographers' shutters, now and then; the hand's wet slap
+    for at in (0.9, 2.6, 2.75, 4.1, 6.3, 7.0):
+        place(mix, shutter(), at, 0.06)
+    place(mix, slap(), T['slap'], 0.35)
+    # from the 180: the outbreak, shot by shot
+    bed = chaos_bed(T['s2'], T['black'])
+    tt = np.arange(len(bed)) / SR + T['s2']
+    g = np.ones(len(bed))
+    g[(tt >= T['s3'])] = 0.75                                    # behind her, a touch quieter
+    g[(tt >= T['s5'])] = 0.7                                     # under his line
+    muff = (tt >= T['s4']) & (tt < T['s5'])
+    lp = onepole_lp(onepole_lp(bed, 700), 700)
+    bed = np.where(muff, lp * 1.6 * 0.7, bed)                     # muffled while we look at the phone
+    k = int(0.01 * SR)
+    for edge in (T['s4'], T['s5']):
+        i = int((edge - T['s2']) * SR)
+        bed[i - k:i + k] *= np.linspace(1, 1, 2 * k)
+    place(mix, bed * g, T['s2'])
+    # shot 3b and 4: frantic taps on the phone
+    for a in np.arange(T['s3b'] + 0.1, T['crunch'], 0.11):
+        place(mix, tap_snd(), a + rng.uniform(-0.02, 0.02), 0.12 if a < T['s4'] else 0.2)
+    place(mix, roar(1.1, 4242, 0.85), T['roar'], 1.0)            # right behind her, not muffled
+    place(mix, crunch(), T['crunch'], 1.0)
+    place(mix, splat_snd(1.6), T['crunch'] + 0.03, 0.9)
+    # shot 5: the arm slaps the wall
+    place(mix, slap(), T['arm_hit'], 0.8)
+    place(mix, splat_snd(1.0), T['arm_hit'] + 0.01, 0.5)
+    end = int(T['black'] * SR)
+    k = int(0.005 * SR)
+    # master: about -14 LUFS, peaks no higher than -1 dBTP (measured on the film up to the cut)
+    for _ in range(3):
+        mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
+        mix = M.limiter(mix, -2.6)
+    mix[end - k:end] *= np.linspace(1, 0, k)                     # hard cut to black: picture and sound together
+    mix[end:] = 0
+    return mix
+
+
+# ------------------------------------------------------------------------------------------- render
+def render_frame(args):
+    i, size, ss = args
+    B.SS = ss
+    return np.asarray(frame_image(i / FPS).convert('RGB').resize(size, Image.LANCZOS)).tobytes()
+
+
+def render(out, size, crf, ss):
+    import subprocess
+    import imageio_ffmpeg
+    from multiprocessing import Pool
+    wav = out + '.wav'
+    mix = soundtrack()
+    print(f'sound: {MA.lufs(mix):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
+    MA.write_wav(wav, mix)
+    n = int(round(T['dur'] * FPS))
+    p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
+                          '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
+                          '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                          '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
+    with Pool(os.cpu_count()) as pool:
+        for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss) for i in range(n)], chunksize=2)):
+            p.stdin.write(fr)
+            if k % 24 == 0:
+                print(f'frame {k}/{n}', flush=True)
+    p.stdin.close()
+    p.wait()
+    os.remove(wav)
+    print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)', flush=True)
+
+
 def main():
     mode = sys.argv[1]
     if mode == 'sheet':
@@ -1347,6 +1837,19 @@ def main():
         fn = {'front': lambda: title_frame(shot_front(0.3), 0.3), 'front_end': lambda: shot_front(6.8),
               'reverse': lambda: shot_reverse(0.0), 'crawl': lambda: shot_crawl(0.0), 'phone': shot_phone}[sys.argv[2]]
         fn().convert('RGB').resize((B.W // 2, B.H // 2), Image.LANCZOS).save(sys.argv[3])
+    elif mode == 'times':
+        for k, v in T.items():
+            print(f'{k:10s} {v:.2f}')
+    elif mode == 'stills':
+        out = sys.argv[2]
+        os.makedirs(out, exist_ok=True)
+        B.SS = 1
+        for a in sys.argv[3:]:
+            frame_image(float(a)).convert('RGB').save(os.path.join(out, f't{a}.jpg'), quality=88)
+    elif mode == 'animatic':
+        render(sys.argv[2], (540, 960), 26, 1)
+    elif mode == 'final':
+        render(sys.argv[2], (1080, 1920), 20, 2)
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render (guides/figure-rig.md)
