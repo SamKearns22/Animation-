@@ -20,6 +20,7 @@ Usage:
     python3 russiadent.py stills OUT_DIR T1 T2 ...   frames at those times (seconds), full size
     python3 russiadent.py sheet OUT.jpg              the approval sheet (cast, both angles, the phone)
 """
+import functools
 import math
 import os
 import sys
@@ -1117,12 +1118,23 @@ def finger(p, pts, w, skin, nail=True):
         p.ell(nc[0], nc[1], w * 0.62, w * 0.5, B.lt(skin, 1.06), B.dk(skin, 0.72), 1.6, rot=d)
 
 
-PHONE_W, PHONE_H, SCREEN_W, SCREEN_H = 590, 1110, 540, 1040
-PHONE_AT, PHONE_ANG = (540, 770), -0.07
+PHONE_W, PHONE_H, SCREEN_W, SCREEN_H = 560, 1150, 516, 1106
+PHONE_AT, PHONE_ANG = (540, 790), -0.06
+
+
+@functools.lru_cache(maxsize=4)
+def phone_hands_layer(tap_key):
+    """Both hands on the phone, rendered once per thumb position, matched to the drawn phone (same size and tilt)."""
+    import hands3d
+    k = (PHONE_W / 2) / hands3d.PHONE[0]                 # world pixels per metre
+    cam = B.Cam(1.0, 540, 960)
+    T = Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG)
+    return hands3d.phone_hands((B.W * B.SS, B.H * B.SS), lambda X, Y: T.P(X * k, -Y * k), tap_key,
+                               skin=(240, 228, 220), sleeve=REPORTER['jacket'], outline=6.0)
 
 
 def shot_phone(t=0.0, tap=None):
-    """Shot 4: over her hands, her phone held in both palms, the room behind out of focus; her right thumb types."""
+    """Shot 4: a straight insert of her phone's screen filling the frame, the room just visible round it, out of focus."""
     from PIL import ImageFilter
     img = B.canvas((96, 70, 50))
     cam = B.Cam(1.0, 540, 960)
@@ -1149,11 +1161,6 @@ def shot_phone(t=0.0, tap=None):
         for cx, cy, a0 in ((w2 - r, -h2 + r, -90), (w2 - r, h2 - r, 0), (-w2 + r, h2 - r, 90), (-w2 + r, -h2 + r, 180)):
             pts += [(cx + r * math.cos(math.radians(a0 + k * 15)), cy + r * math.sin(math.radians(a0 + k * 15))) for k in range(7)]
         return pts
-    # behind the phone: the back of each palm and the wrist, coming in from the bottom corners
-    for sgn in (-1, 1):
-        p.poly(curve([(sgn * (hw - 120), hh - 220), (sgn * (hw + 70), hh - 300), (sgn * (hw + 130), hh - 60),
-                      (sgn * (hw + 120), hh + 200), (sgn * (hw + 84), hh + 420), (sgn * (hw - 100), hh + 420),
-                      (sgn * (hw - 160), hh + 200)], 4), sd, INK, 2.6)
     p.poly(rrect(hw, hh, 70), (22, 22, 26), INK, 3.0)
     p.poly(rrect(hw - 4, hh - 4, 66), (44, 44, 52), None)
     # the screen, drawn flat and turned with the phone
@@ -1167,32 +1174,13 @@ def shot_phone(t=0.0, tap=None):
     cx, cy = cam.P(*PHONE_AT)
     img.alpha_composite(scr, (int(cx - scr.width / 2), int(cy - scr.height / 2)))
     p.ell(0, -hh + 34, 46, 12, (14, 14, 16), None)            # the camera notch
-    # each hand: two fingers curled round the side edge (backs of the fingers towards us), then the ball of the
-    # thumb over the phone's lower corner and the thumb on the screen; the right thumb types
-    k = 0.0 if tap is None else tap
-    for sgn in (-1, 1):
-        for j, v in enumerate((hh - 330, hh - 220)):
-            finger(p, [(sgn * (hw + 70), v + 70), (sgn * (hw + 52), v), (sgn * (hw + 10), v - 34), (sgn * (hw - 14), v - 40)],
-                   28 - 2 * j, skin)
-        p.poly(curve([(sgn * (hw + 104), hh - 120), (sgn * (hw + 40), hh - 170), (sgn * (hw - 70), hh - 150),
-                      (sgn * (hw - 150), hh - 40), (sgn * (hw - 170), hh + 150), (sgn * (hw - 120), hh + 330),
-                      (sgn * (hw - 100), hh + 700), (sgn * (hw + 90), hh + 700), (sgn * (hw + 84), hh + 330),
-                      (sgn * (hw + 120), hh + 120)], 4), skin, INK, 2.8)
-        p.line([(sgn * (hw + 70), hh + 40), (sgn * (hw + 60), hh + 250)], sd, 2.2)          # the side of the palm
-        cuff = [(sgn * (hw - 128), hh + 400), (sgn * (hw + 102), hh + 400), (sgn * (hw + 130), hh + 760),
-                (sgn * (hw - 160), hh + 760)]
-        p.poly(cuff, REPORTER['jacket'], INK, 2.6)                                            # her blouse cuffs
-        p.line([(sgn * (hw - 128), hh + 430), (sgn * (hw + 104), hh + 430)], B.dk(REPORTER['jacket'], 0.85), 2.0)
-        p.line([(sgn * (hw - 110), hh - 30), (sgn * (hw - 40), hh + 120), (sgn * (hw - 30), hh + 260)], sd, 1.8)   # palm crease
-        if sgn < 0:   # the left thumb resting on the screen
-            thumb(p, (-hw + 90, hh - 110), (-hw + 150, hh - 260), (-hw + 210, hh - 360), skin)
-        else:         # the right thumb typing: lifting and pressing, moving along the keys
-            tx, ty = 20 + 40 * math.sin(t * 9), hh - 380 + 14 * k
-            thumb(p, (hw - 90, hh - 110), (hw - 150, hh - 270), (tx + 120, ty), skin, w=(46 + 2 * k, 38, 30 + 2 * k))
-    # blood on her hands
-    splat(p, -hw + 20, hh + 160, 22, 41)
-    splat(p, hw + 50, hh + 40, 16, 42)
-    splat(p, -hw + 120, hh - 200, 9, 43, drops=3)
+    # her hands: MakeHuman's real hands posed round the phone and drawn flat (hands3d.py); the right thumb types
+    img.alpha_composite(phone_hands_layer(0 if tap is None else int(tap) % 2))
+    for (u, v, r, seed) in ((-hw - 70, hh + 230, 20, 41), (hw + 120, hh + 120, 14, 42), (-hw + 150, hh + 40, 9, 43)):
+        splat(p, u, v, r, seed, drops=3)
+    for (u, v, r, seed) in ((hw - 70, -250, 10, 45), (hw - 110, 160, 8, 46)):   # drops on the glass
+        splat(p, u, v, r, seed, drops=2)
+        p.ell(u - r * 0.3, v - r * 0.35, r * 0.25, r * 0.18, (255, 210, 210), None)
     return img
 
 
