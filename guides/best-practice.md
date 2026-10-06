@@ -218,9 +218,11 @@ this series. Full details in `tiktok-design.md`.
   plainly and the video still reached 6.9K views in 6 hours. Don't disguise words in captions (it costs readability,
   breaks accuracy, and TikTok transcribes the audio anyway). TikTok's AI label is required for realistic AI content;
   our flat cartoons with Sam's own voices are not that.
-- **A parody of an advert must not open like an advert (DLC, 6 Oct):** a faithful game-trailer logo sequence was
-  swiped as a real ad (average watch 7.3 s; the first joke came at ~5.5 s). Something visibly wrong or funny must
-  be on screen in the first second, even when the format being parodied starts with a title.
+- **The opening needs a hook, not a joke (DLC, 6 Oct):** comedy can take 10-20 s to build its first laugh (The
+  Patriots 2 held 14.8 s average with its first laugh at ~23 s; Mossad 17.1 s), but the first seconds must give a
+  reason to stay: a person, a situation, a question. DLC opened on a faithful game-logo sequence with no person or
+  situation, which reads as a real advert; average watch 7.3 s. One small first batch (175 views), so luck plays a
+  part too.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
