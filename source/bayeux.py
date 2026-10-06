@@ -1138,6 +1138,14 @@ def rays(a, cx, cy, t, amt):
     a += (beams * fall * amt)[..., None] * np.array([255, 222, 150], np.float32) * 0.6
 
 
+def shove(a, dx, dy):
+    """Camera shake: move the picture, repeating its edge into the gap (never wrapping the far side round)."""
+    h, w = a.shape[:2]
+    p = max(abs(dx), abs(dy)) + 1
+    big = np.pad(a, ((p, p), (p, p), (0, 0)), mode='edge')
+    return big[p - dy:p - dy + h, p - dx:p - dx + w].copy()
+
+
 def glitch(a, fi, amt):
     """A digital glitch: slices shoved sideways, colours split, a flash of noise."""
     h, w = a.shape[:2]
@@ -1205,7 +1213,7 @@ def frame(t, fi=0):
             if abs(t - tg) < 1.0 / FPS:
                 a += 70
     if shake != (0.0, 0.0):
-        a = np.roll(np.roll(a, int(shake[1]), 0), int(shake[0]), 1)
+        a = shove(a, int(shake[0]), int(shake[1]))
     # a filmic finish: slight vignette
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     v = 1 - 0.28 * (((xx - w / 2) / (w * 0.75)) ** 2 + ((yy - h / 2) / (h * 0.62)) ** 2)

@@ -7,6 +7,7 @@ and animals; then a Latin caption stitched above, and the whole stitched like ev
     python3 bayeux_story.py build        stitch the three scenes into the cache (data/bayeux/ch1..ch3)
     python3 bayeux_story.py check DIR    flat wool maps for checking
 """
+import json
 import math
 import os
 import sys
@@ -72,9 +73,8 @@ class Scene:
                 k = min(bw, self.w - x)
                 self.lab[y:y + band.shape[0], x:x + k] = band[:, :k]
 
-    def put(self, key, x, y, k, flip=False):
-        """A cut-out figure, scaled by k, its top-left at (x, y) in this scene's reference pixels. Returns a function
-        mapping the figure's own reference pixels to this scene's (to place extra details on it)."""
+    @staticmethod
+    def scaled(key, k, flip=False):
         lab, forced, mask, (ox, oy) = cut(key)
         h, w = lab.shape
         nh, nw = max(1, int(h * k)), max(1, int(w * k))
@@ -83,6 +83,42 @@ class Scene:
         F = np.asarray(Image.fromarray(forced).resize((nw, nh), Image.NEAREST))
         if flip:
             L, M, F = L[:, ::-1], M[:, ::-1], np.pi - F[:, ::-1]
+        return L, M, F, ox, oy, nw, nh
+
+    def sprite(self, scene, tag, key, x, y, k, extra=None):
+        """A figure that moves in the film (William dancing, a collector's recoil): stitched on its own with a
+        see-through background, not into the scene. Its place is recorded in ANCHORS."""
+        L, M, F, ox, oy, nw, nh = self.scaled(key, k)
+        pad = int(14 * S)
+        lab = np.full((nh + 2 * pad, nw + 2 * pad), LIN, np.int16)
+        frc = np.full(lab.shape, np.nan, np.float32)
+        lab[pad:pad + nh, pad:pad + nw][M] = L[M]
+        frc[pad:pad + nh, pad:pad + nw][M] = F[M]
+        msk = np.zeros(lab.shape, bool)
+        msk[pad:pad + nh, pad:pad + nw] = M
+        x0, y0 = x - pad / S, y - pad / S
+
+        def to_scene(px, py):
+            return x + (px - ox) * k, y + (py - oy) * k
+        if extra:
+            Ly = BW.Layer(lab.shape[1], lab.shape[0])
+            extra(Ly, lambda px, py: (px - x0, py - y0), to_scene)
+            wl, wa = Ly.arrays()
+            on = wl != BW.NONE
+            lab[on], frc[on], msk[on] = wl[on], wa[on], True
+        rgb = BS.stitch(lab, 3.0, frc, seed=33)
+        from scipy import ndimage as ndi
+        al = ndi.gaussian_filter(ndi.binary_dilation(msk, iterations=1).astype(np.float32), 0.8)
+        Image.fromarray(np.dstack([rgb, (np.clip(al, 0, 1) * 255).astype(np.uint8)])).save(
+            os.path.join(BW.CACHE, f'{scene}-{tag}.png'))
+        ANCHORS.setdefault(scene, {}).setdefault('sprites', []).append(
+            dict(tag=tag, x=x0, y=y0, w=lab.shape[1] / S, h=lab.shape[0] / S))
+        return to_scene
+
+    def put(self, key, x, y, k, flip=False):
+        """A cut-out figure, scaled by k, its top-left at (x, y) in this scene's reference pixels. Returns a function
+        mapping the figure's own reference pixels to this scene's (to place extra details on it)."""
+        L, M, F, ox, oy, nw, nh = self.scaled(key, k, flip)
         X, Y = int(x * S), int(y * S)
         ya, yb, xa, xb = max(0, Y), min(self.h, Y + nh), max(0, X), min(self.w, X + nw)
         sub = M[ya - Y:yb - Y, xa - X:xb - X]
@@ -298,6 +334,7 @@ def crown(L, x, y, w):
 
 # -------------------------------------------------------------------------------------------- the scenes
 W_REF = {'ch1': 1060, 'ch2': 920, 'ch3': 1090}
+ANCHORS = {}            # per scene: moving sprites, gun muzzles, stapler mouths, fire (saved with the build)
 FIRE_POINTS = {}        # where the trailer adds live flame over the stitched fire (reference pixels of each scene)
 STAPLE_MOUTHS = []      # where the tax collectors' staplers point (ch3), for the flying staples
 
@@ -306,17 +343,19 @@ def ch1():
     """1066: William crowned at the abbey on Christmas Day; his guards set the Saxon houses alight."""
     sc = Scene(W_REF['ch1'])
     sc.draw(lambda L: abbey(L, 30, 280, 270, 180))
-    w = sc.put('william', 262, 96, 0.40)
-    hx, hy = w(258, 14)
-    sc.draw(lambda L: crown(L, hx, hy + 2, 22))
-    sc.put('archer', 418, 102, 0.40)
-    sc.put('ghostrider', 560, 112, 0.62)
+    def crowned(L, sh, to_scene):
+        hx, hy = sh(*to_scene(258, 14))
+        crown(L, hx, hy + 2, 22)
+    sc.sprite('ch1', 'william', 'william', 262, 96, 0.40, crowned)
+    a = sc.put('archer', 418, 102, 0.40)
+    g = sc.put('ghostrider', 560, 112, 0.62)
+    ANCHORS['ch1'].update(rifle=[a(577, 68)], pistol=[g(254, 43)])
     sc.draw(lambda L: [house(L, 812, 280, 70, 112, seed=1), house(L, 902, 280, 60, 96, roof='bluegreen', seed=2),
                        house(L, 980, 280, 62, 116, wall='buff', seed=3)])
     sc.draw(lambda L: [person(L, 1046, 281, 62, 'bluegreen', 'terracotta', arms='up'),
                        person(L, 790, 281, 56, 'terracotta', 'navy', facing=-1, arms='up')])
     sc.caption('HIC WILLELM REX CORONATVS EST: ET DOMVS ARDENT', 300, 74, 19)
-    FIRE_POINTS['ch1'] = [(847, 208), (932, 206), (1011, 196)]
+    FIRE_POINTS['ch1'] = ANCHORS['ch1']['fire'] = [(847, 208), (932, 206), (1011, 196)]
     return sc
 
 
@@ -325,23 +364,24 @@ def ch2():
     sc = Scene(W_REF['ch2'])
     sc.put('clawrider', 20, 96, 1.0)
     sc.draw(lambda L: gate(L, 190, 280, 80, 150))
-    sc.put('ghostrider', 250, 118, 0.58)
+    g = sc.put('ghostrider', 250, 118, 0.58)
+    ANCHORS['ch2'] = dict(pistol=[g(254, 43)], rifle=[])
     sc.draw(lambda L: palace(L, 470, 280, 280, 162))
     sc.draw(lambda L: [person(L, 830, 281, 46, 'navy', 'ochre', helmet='navy', pose='run'),
                        person(L, 890, 281, 46, 'terracotta', 'bluegreen', helmet='navy', pose='run')])
     sc.caption('VBI DVNELMVM ARDET: DVO SOLI EVASERVNT', 150, 74, 19)
-    FIRE_POINTS['ch2'] = [(520, 196), (590, 196), (660, 196), (730, 196), (610, 145)]
+    FIRE_POINTS['ch2'] = ANCHORS['ch2']['fire'] = [(520, 196), (590, 196), (660, 196), (730, 196), (610, 145)]
     return sc
 
 
 def ch3():
     """1086: the Domesday survey. William points; the tax collectors fire staple after staple at everyone."""
     sc = Scene(W_REF['ch3'])
-    sc.put('william', 10, 96, 0.40)
+    sc.sprite('ch3', 'william', 'william', 10, 96, 0.40)
     sc.draw(lambda L: book(L, 245, 280, 70))
     mouths = []
     for i, xx in enumerate((300, 410, 520)):
-        f = sc.put('collector', xx, 98 + (i % 2) * 6, 0.66)
+        f = sc.sprite('ch3', f'collector{i}', 'collector', xx, 98 + (i % 2) * 6, 0.66)
         mouths.append(f(318, 158))
     sc.put('messenger', 712, 98, 0.66)
     sc.draw(lambda L: [person(L, 850, 281, 72, 'bluegreen', 'terracotta', facing=-1, arms='up'),
@@ -355,6 +395,7 @@ def ch3():
     sc.draw(staples)
     sc.caption('HIC REX TOTAM ANGLIAM DESCRIBIT', 300, 74, 19)
     STAPLE_MOUTHS[:] = mouths
+    ANCHORS['ch3'].update(mouths=mouths, rifle=[], pistol=[], fire=[])
     return sc
 
 
@@ -369,6 +410,10 @@ def build(names=None):
         img.save(os.path.join(BW.CACHE, f'{name}-before.png'))
         img.save(os.path.join(BW.CACHE, f'{name}-after.png'))
         print('built', name, sc.lab.shape, flush=True)
+    path = os.path.join(BW.CACHE, 'story-anchors.json')
+    old = json.load(open(path)) if os.path.exists(path) else {}
+    old.update({k: v for k, v in ANCHORS.items() if k in (names or BUILDERS)})
+    json.dump(old, open(path, 'w'), indent=1)
 
 
 if __name__ == '__main__':

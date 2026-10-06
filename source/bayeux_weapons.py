@@ -382,9 +382,46 @@ def masks(name, shape):
     return er, np.asarray(ov) > 0
 
 
+def ghost_repair(L):
+    """The tracing lost the pistol rider's face and helmet and broke up his mail: stitch them back by hand, from
+    the reference (nasal helmet, face in profile, mail coat and sleeves, coloured cuffs)."""
+    v = math.pi / 2
+    L.poly([(286, 90), (318, 86), (334, 96), (330, 122), (334, 150), (344, 184), (326, 192), (306, 172), (294, 146),
+            (288, 118)], 'mail', v, 'madder', 1.4)                                           # mail coat
+    L.poly([(288, 90), (262, 80), (244, 74), (238, 86), (258, 98), (290, 112)], 'mail', 2.8, 'madder', 1.2)  # raised arm
+    L.poly([(244, 72), (226, 64), (222, 76), (238, 88)], 'madder', 2.8, 'black', 1.0)          # its cuff
+    L.poly([(318, 88), (360, 92), (362, 104), (322, 106)], 'mail', 0.0, 'madder', 1.2)         # rein arm
+    L.poly([(358, 91), (380, 92), (380, 103), (360, 104)], 'madder', 0.0, 'black', 1.0)        # its cuff
+    L.ellipse(304, 80, 9, 11, 'linen', v, 'madder', 1.2)                                       # face
+    L.line([(311, 78), (315, 82), (311, 84)], 'madder', 0.9)                                   # nose
+    L.ellipse(308, 76, 1.2, 1.2, 'black')                                                      # eye
+    L.poly([(292, 72), (314, 72), (302, 46)], 'madder', v, 'black', 1.2)                        # helmet
+    L.line([(306, 72), (308, 84)], 'black', 1.4)                                               # nasal
+
+
+def claw_repair(L):
+    """The Ice Claw rider: his mail coat, arms, face and helmet stitched back cleanly (the small photo broke them up)."""
+    v = math.pi / 2
+    L.poly([(328, 106), (354, 106), (352, 150), (348, 200), (333, 200), (330, 150)], 'mail', v, 'madder', 1.3)
+    L.poly([(300, 103), (386, 104), (386, 119), (300, 119)], 'mail', 0.0, 'madder', 1.2)
+    L.ellipse(342, 99, 7, 8, 'linen', v, 'madder', 1.1)
+    L.ellipse(346, 97, 1.0, 1.0, 'black')
+    L.poly([(331, 93), (353, 93), (341, 72)], 'sage', v, 'black', 1.2)
+    L.line([(345, 93), (346, 102)], 'black', 1.2)
+
+
+REPAIRS = {'ghost': ghost_repair, 'claw': claw_repair}
+
+
 def scene_labels(name, after=True, **kw):
     """(wool map, forced thread angles) for a scene, before or after its swap."""
     lab = BS.trace(name, S)
+    if name in REPAIRS:
+        L0 = Layer(lab.shape[1], lab.shape[0])
+        REPAIRS[name](L0)
+        wl, _ = L0.arrays()
+        lab = lab.copy()
+        lab[wl != NONE] = wl[wl != NONE]
     if not after:
         return lab, None
     er, ov = masks(name, lab.shape)
