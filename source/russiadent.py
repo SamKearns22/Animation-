@@ -1737,7 +1737,7 @@ def chaos_bed(t0, t1, seed=5):
     while t < t1 - t0:
         f0 = r.choice([r.uniform(650, 1100), r.uniform(330, 560)])
         place(out, scream(r.uniform(0.6, 1.6), f0, r.choice(['a', 'e', 'i']), seed * 100 + k), t, r.uniform(0.35, 0.8))
-        t += r.uniform(0.08, 0.28) if t > 0 else 0.0
+        t += r.uniform(0.08, 0.28)
         k += 1
     for a in np.arange(0.3, t1 - t0, 0.7):
         place(out, roar(r.uniform(0.7, 1.3), seed * 200 + int(a * 10), r.uniform(0.8, 1.2)), a + r.uniform(0, 0.3), r.uniform(0.3, 0.55))
