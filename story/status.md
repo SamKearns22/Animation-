@@ -43,6 +43,12 @@ Read this first in any new session, after CLAUDE.md.
   people, pigs, goats, sheep, oxen, a cow, a horse, hives, a cart, barrels, a mill, a plough), staples on all of
   it; border repeats joined at their plainest columns. Still open: Sam may send a real tapestry tree to replace
   the invented divider tree (`tree_image` in bayeux.py).
+- Concept v8 sent 6 Oct (50.3 s, 24.7 MB; Discord copy 9.4 MB): new ending after the title slam (`end_card`):
+  AVAILABLE NOW, 1,066 CROWNS, a stitched "M / MEDIEVAL" rating box with "Mild Pillaging / Fantasy Ghosts /
+  Excessive Stapling", TAPESTRY SOLD SEPARATELY; then a hard cut to the silent gallery where one staple pings off
+  the glass (`final_staple`, tink), then black. Everything drawn now looks hand-sewn (`wobble` in
+  bayeux_weapons.py: edges nudged, thread width varies). Sam: no voice, keep the length; he will send a real
+  tapestry tree for the divider.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

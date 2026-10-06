@@ -31,19 +31,23 @@ class Layer:
         self.dl, self.da = ImageDraw.Draw(self.lab), ImageDraw.Draw(self.ang)
 
     def poly(self, pts, wool, ang, outline=None, ow=1.4):
+        pts = wobble(list(pts) + [pts[0]])[:-1]          # hand-sewn: never a ruler-straight edge
         p = [(x * S, y * S) for x, y in pts]
         self.dl.polygon(p, fill=BS.IDX[wool])
         self.da.polygon(p, fill=float(ang))
         if outline:
-            self.line(list(pts) + [pts[0]], outline, ow, ang)
+            self.line(list(pts) + [pts[0]], outline, ow, ang, raw=True)
 
-    def line(self, pts, wool, w, ang=None):
+    def line(self, pts, wool, w, ang=None, raw=False):
+        if not raw:
+            pts = wobble(list(pts))
         p = [(x * S, y * S) for x, y in pts]
-        for (x0, y0), (x1, y1) in zip(p, p[1:]):
+        for i, ((x0, y0), (x1, y1)) in enumerate(zip(p, p[1:])):
             a = math.atan2(y1 - y0, x1 - x0) if ang is None else ang
-            self.dl.line([(x0, y0), (x1, y1)], fill=BS.IDX[wool], width=max(1, int(round(w * S))))
-            self.da.line([(x0, y0), (x1, y1)], fill=float(a), width=max(1, int(round(w * S))))
-            r = w * S / 2
+            ww = w * (0.85 + 0.3 * _n1(x0 * 0.07 + y0 * 0.05))   # the thread thickens and thins a little
+            self.dl.line([(x0, y0), (x1, y1)], fill=BS.IDX[wool], width=max(1, int(round(ww * S))))
+            self.da.line([(x0, y0), (x1, y1)], fill=float(a), width=max(1, int(round(ww * S))))
+            r = ww * S / 2
             for (x, y) in ((x0, y0), (x1, y1)):
                 self.dl.ellipse([x - r, y - r, x + r, y + r], fill=BS.IDX[wool])
                 self.da.ellipse([x - r, y - r, x + r, y + r], fill=float(a))
@@ -55,6 +59,28 @@ class Layer:
 
     def arrays(self):
         return np.asarray(self.lab, np.int16), np.asarray(self.ang, np.float32)
+
+
+def _n1(u):
+    """Smooth, repeatable wobble (-1..1) from a position: the same shape always wobbles the same way."""
+    return (math.sin(u * 1.7 + 0.3) * 0.5 + math.sin(u * 3.1 + 1.9) * 0.3 + math.sin(u * 5.3 + 4.1) * 0.2)
+
+
+def wobble(pts, amp=0.55, step=2.5):
+    """A path made hand-sewn: split into short pieces and nudged gently sideways, so edges are never ruler-straight
+    and curves are never perfect, like the rest of the tapestry (amp and step in reference pixels)."""
+    out = []
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        L = math.hypot(x1 - x0, y1 - y0)
+        n = max(1, int(L / step))
+        nx, ny = (-(y1 - y0) / L, (x1 - x0) / L) if L > 1e-6 else (0.0, 0.0)
+        for i in range(n):
+            t = i / n
+            x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+            d = amp * _n1(x * 0.21 + y * 0.17)
+            out.append((x + nx * d, y + ny * d))
+    out.append(pts[-1])
+    return out
 
 
 def local(origin, ang, k=1.0):

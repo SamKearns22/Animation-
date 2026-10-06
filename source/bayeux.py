@@ -55,7 +55,10 @@ CH_LEN = 5.4                  # each chapter scene: slow enough to take in, with
 CH_SCENES = {'ch1': 28.30, 'ch2': 28.30 + CH_LEN, 'ch3': 28.30 + 2 * CH_LEN}
 CH_TEXT = {'ch1': ('1066', 'THE CORONATION'), 'ch2': ('1069', 'DURHAM BURNS'), 'ch3': ('1086', 'DOMESDAY')}
 CUT_END_TITLE = 28.30 + 3 * CH_LEN   # the title slams back
-BLACK_AT = CUT_END_TITLE + 1.4       # hard cut to black
+T_CARD = CUT_END_TITLE + 1.5        # the end card: AVAILABLE NOW, the price, the rating, the small print
+T_QUIET = T_CARD + 3.4               # hard cut back to the silent gallery...
+T_TINK = T_QUIET + 0.55              # ...where one staple pings off the glass
+BLACK_AT = T_QUIET + 1.45            # hard cut to black
 DUR = BLACK_AT + 0.3
 START = 0.85                  # the film opens here: straight into the flaming title (no INTRODUCING)
 MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
@@ -1301,6 +1304,97 @@ def rays(a, cx, cy, t, amt):
     a += (beams * fall * amt)[..., None] * np.array([255, 222, 150], np.float32) * 0.6
 
 
+RATING = {}
+
+
+def rating_box():
+    """The age rating, stitched like the tapestry: a box with a big M and MEDIEVAL beneath."""
+    if 'img' not in RATING:
+        w, h = 120, 150                                   # reference pixels
+        L = BW.Layer(int(w * BW.S), int(h * BW.S))
+        L.poly([(4, 4), (w - 4, 4), (w - 4, h - 4), (4, h - 4)], 'linen', math.pi / 2, 'navy', 3.0)
+        L.poly([(10, h - 40), (w - 10, h - 40), (w - 10, h - 10), (10, h - 10)], 'navy', 0.0)
+        lab, ang = L.arrays()
+        lab = np.where(lab == BW.NONE, BS.IDX['linen'], lab).astype(np.int16)
+        for text, size, y, wool in (('M', 92, 6, 'terracotta'), ('MEDIEVAL', 19, h - 37, 'linen')):
+            f = font('Cinzel-Variable.ttf', size * BW.S, 900)
+            m = Image.new('L', (lab.shape[1], lab.shape[0]), 0)
+            ImageDraw.Draw(m).text((lab.shape[1] / 2, y * BW.S), text, font=f, fill=255, anchor='mt')
+            on = np.asarray(m) > 110
+            lab[on] = BS.IDX[wool]
+        ang = np.where(np.isnan(ang), np.nan, ang)
+        RATING['img'] = Image.fromarray(BS.stitch(lab, 3.0, ang, seed=5))
+    return RATING['img']
+
+
+def end_card(t):
+    """AVAILABLE NOW, the price, the rating and the small print, slammed in one after another over the dark."""
+    w, h = int(W0 * R), int(H0 * R)
+    a = room_frame(CUT_TAPESTRY, dark=0.82)
+    dt = t - T_CARD
+    rng = np.random.default_rng(int(t * 24))
+    for i in range(18):                                   # embers drifting up
+        ex = (i * 97 % W0 + 20 * math.sin(t + i)) * R
+        ey = (H0 - ((t * (60 + i * 7) + i * 211) % H0)) * R
+        glow_blob(a, ex, ey, 6 * R, 6 * R, (255, 140, 40), 0.6 + 0.4 * rng.random())
+    slam(a, 'AVAILABLE NOW', t, T_CARD, T_QUIET, 560, 150, colour=(255, 255, 255), glow=(255, 200, 120))
+    if dt > 0.55:
+        slam(a, '1,066 CROWNS', t, T_CARD + 0.55, T_QUIET, 760, 112, colour=(255, 212, 110), glow=(255, 170, 60),
+             fontname='Cinzel-Variable.ttf')
+    if dt > 1.15:
+        p = ease((dt - 1.15) / 0.18)
+        box = rating_box()
+        bw = int(250 * R * (1 + 0.4 * (1 - p)))
+        bh = int(bw * box.height / box.width)
+        im = np.asarray(box.resize((bw, bh), Image.LANCZOS), np.float32)
+        x0, y0 = int(250 * R - bw / 2 + 20 * R), int(1040 * R - bh / 2)
+        over(a, np.dstack([im, np.full(im.shape[:2], p, np.float32)]), x0, y0)
+        f = font('Anton-Regular.ttf', 44 * R)
+        im2 = Image.new('L', (w, h), 0)
+        d = ImageDraw.Draw(im2)
+        for k, line in enumerate(('Mild Pillaging', 'Fantasy Ghosts', 'Excessive Stapling')):
+            d.text((420 * R, 960 * R + k * 62 * R), line, font=f, fill=255)
+        m = np.asarray(im2, np.float32)[..., None] / 255 * p
+        a[:] = a * (1 - m) + np.array([236, 228, 210], np.float32) * m
+    if dt > 1.9:
+        p = ease((dt - 1.9) / 0.25)
+        f = font('Anton-Regular.ttf', 40 * R)
+        im3 = Image.new('L', (w, h), 0)
+        ImageDraw.Draw(im3).text((w / 2, 1330 * R), 'TAPESTRY SOLD SEPARATELY', font=f, fill=255, anchor='mm')
+        m = np.asarray(im3, np.float32)[..., None] / 255 * p * 0.85
+        a[:] = a * (1 - m) + np.array([200, 196, 186], np.float32) * m
+    return a
+
+
+def final_staple(a, t):
+    """The last joke: in the silent gallery, one staple flies in and pings off the glass over the tapestry."""
+    ht = T_TINK
+    hx, hy = 300 * R, 960 * R                            # where it hits the glass, over the tapestry
+    if t < ht - 0.30:
+        return
+    if t < ht:
+        p = (t - (ht - 0.30)) / 0.30
+        x, y, ang = (W0 + 60) * R + (hx - (W0 + 60) * R) * p, 820 * R + (hy - 820 * R) * p, 0.4
+    else:
+        u = t - ht                                       # bounces off, tumbling, and drops out of sight
+        x, y, ang = hx + 260 * R * u, hy - 380 * R * u + 1500 * R * u * u, 0.4 + u * 18
+        if u < 0.12:
+            glow_blob(a, hx, hy, 70 * R, 70 * R, (255, 255, 240), 1.6 * (1 - u / 0.12))
+    s = 28 * R
+    if t < ht:                                           # a faint streak behind it in flight
+        glow_blob(a, x + 40 * R, y - 25 * R, 60 * R, 6 * R, (200, 205, 215), 0.35, ang=-0.55)
+    c, si = math.cos(ang), math.sin(ang)
+    pts = [(s * 0.8, -s * 0.5), (0, -s * 0.5), (0, s * 0.5), (s * 0.8, s * 0.5)]
+    pts = [(x + px * c - py * si, y + px * si + py * c) for px, py in pts]
+    im = Image.new('RGBA', (a.shape[1], a.shape[0]), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.line(pts, fill=(20, 20, 24, 255), width=max(2, int(7 * R)))
+    d.line(pts, fill=(215, 218, 224, 255), width=max(1, int(3 * R)))
+    m = np.asarray(im, np.float32)
+    al = m[..., 3:4] / 255
+    a[:] = a * (1 - al) + m[..., :3] * al
+
+
 def shove(a, dx, dy):
     """Camera shake: move the picture, repeating its edge into the gap (never wrapping the far side round)."""
     h, w = a.shape[:2]
@@ -1361,6 +1455,13 @@ def frame(t, fi=0):
             year, what = CH_TEXT[name]
             slam(a, year, t, ts + 0.08, ts + CH_LEN - 0.12, 1262, 90, colour=(255, 214, 120), glow=(255, 190, 80))
             slam(a, what, t, ts + 0.14, ts + CH_LEN - 0.12, 1385, 104, glow=(255, 150, 70))
+    elif t >= T_QUIET:
+        a = room_frame(CUT_TAPESTRY)                     # the gallery, silent and still
+        final_staple(a, t)
+    elif t >= T_CARD:
+        a = end_card(t)
+        if t - T_CARD < 0.12:
+            shake = (math.sin(t * 200) * 10 * R, 0.0)
     else:
         a = room_frame(CUT_TAPESTRY, dark=0.45)
         p = ease((t - CUT_END_TITLE) / 0.12)
@@ -1369,7 +1470,7 @@ def frame(t, fi=0):
             a += (1 - (t - CUT_END_TITLE) / 0.18) * 160
             shake = (math.sin(t * 200) * 12 * R, 0.0)
     # glitches on the cuts and the swaps
-    for tg, dur in ([(CUT_TAPESTRY, 0.16), (CUT_END_TITLE, 0.10)] + [(ts, 0.14) for ts in SWAPS.values()]
+    for tg, dur in ([(CUT_TAPESTRY, 0.16), (CUT_END_TITLE, 0.10), (T_CARD, 0.12)] + [(ts, 0.14) for ts in SWAPS.values()]
                     + [(ts, 0.14) for ts in SKIN_SWAPS.values()] + [(T_CHAPTER, 0.16), (T_CH_LOGO, 0.12)]):
         if tg - dur * 0.5 <= t < tg + dur * 0.5:
             a = glitch(a, fi, max(0.0, 1 - abs(t - tg) / (dur * 0.5)))
@@ -1538,8 +1639,16 @@ def rock_track(n):
     x = x[lead:]
     out = np.zeros(n)
     i = int(T_SEASON * SR)
+    while len(x) < n - i:                                # if the track runs out, carry on from its middle
+        back = x[int(len(x) * 0.45):]
+        xf = int(0.5 * SR)
+        joined = x[-xf:] * np.linspace(1, 0, xf) + back[:xf] * np.linspace(0, 1, xf)
+        x = np.concatenate([x[:-xf], joined, back[xf:]])
     k = min(n - i, len(x))
     out[i:i + k] = x[:k] * 0.55
+    q = int(T_QUIET * SR)                                # stops dead at the cut to the silent gallery
+    out[q - int(0.01 * SR):q] *= np.linspace(1, 0, int(0.01 * SR))
+    out[q:] = 0
     a, b = int(STAPLER_FADE * SR), int((T_SKINS - 0.02) * SR)
     f = int(0.45 * SR)
     out[a:a + f] *= np.linspace(1, 0, f)
@@ -1628,12 +1737,25 @@ def soundtrack():
     place(mix, click(), STAPLER_CLICK, 0.5)
     place(mix, tink(), STAPLE_HIT, 0.18)
     place(mix, boom(1.3), CUT_END_TITLE, 0.95)
-    place(mix, roar(BLACK_AT - CUT_END_TITLE, 6), CUT_END_TITLE, 0.2)
+    r3 = roar(T_QUIET - CUT_END_TITLE, 6)
+    r3[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
+    place(mix, r3, CUT_END_TITLE, 0.2)
+    place(mix, glitch_snd(0.16, 5), T_CARD - 0.06, 0.3)
+    place(mix, boom(1.3), T_CARD, 0.9)
+    place(mix, boom(0.9), T_CARD + 0.55, 0.7)
+    place(mix, boom(0.8), T_CARD + 1.15, 0.6)
+    place(mix, whoosh(0.3, True, 90), T_QUIET - 0.3, 0.0)
+    q = int(T_QUIET * SR)                                # everything stops at the cut: the gallery is silent
+    mix[q - int(0.01 * SR):q] *= np.linspace(1, 0, int(0.01 * SR))
+    mix[q:] = 0
+    place(mix, whoosh(0.3, False, 91), T_TINK - 0.3, 0.05)
+    place(mix, tink(), T_TINK, 0.35)
+    place(mix, click() * 0.4, T_TINK + 0.45, 0.12)        # it lands somewhere on the floor
     k = int(0.005 * SR)
     mix[end - k:end] *= np.linspace(1, 0, k)
     mix[end:] = 0
     for _ in range(3):
-        mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
+        mix *= 10 ** ((-14.0 - MA.lufs(mix[:int(T_QUIET * SR)])) / 20)
         mix = limiter(mix, -2.8)
     return mix
 
