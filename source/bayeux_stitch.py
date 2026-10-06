@@ -71,9 +71,13 @@ PROTO = {
 FILES = {'rifle': 'weapon-1-plasma-longshot-rifle.jpg', 'claw': 'weapon-2-ice-claw-wider.jpg',
          'ghost': 'weapon-3-ghost-pistol.jpg', 'stapler': 'weapon-4-stapler.jpg',
          'william': 'skin-1-william-party-suit.jpg', 'harold': 'skin-2-harold-shark-warrior.jpg',
-         'edward': 'skin-3-edward-electric-mouse.jpg'}
+         'edward': 'skin-3-edward-electric-mouse.jpg', 'tree': 'tapestry-trees.jpg'}
 PRESCALE = {'william': 630 / 1260, 'harold': 845 / 2560}   # big photos brought to about the others' size
 PROTO.update({
+    'tree': {'linen': [(237, 231, 236), (234, 225, 220), (227, 209, 187)], 'madder': [(94, 44, 28)],
+             'terracotta': [(150, 66, 52), (127, 57, 36), (140, 60, 46)], 'sage': [(144, 123, 76), (146, 113, 81)],
+             'ochre': [(194, 166, 129), (171, 140, 103)], 'buff': [(214, 184, 139), (217, 190, 152)],
+             'bluegreen': [(89, 73, 65), (110, 85, 60)]},
     'william': {'linen': [(247, 238, 215), (237, 227, 203), (254, 250, 229), (202, 195, 177)],
                 'madder': [(142, 80, 80), (114, 56, 58)], 'terracotta': [(173, 108, 103)], 'buff': [(187, 154, 125)],
                 'ochre': [(220, 179, 151)], 'navy': [(72, 79, 86)], 'sage': [(110, 113, 115), (137, 147, 155)]},

@@ -166,7 +166,7 @@ def over(base, rgba, x0, y0, alpha=1.0):
 # ------------------------------------------------------------------------------------------- the strip
 HB = 900                      # the tapestry band's height on screen at zoom 1 (design pixels)
 BAND_Y = 800                  # where the band's middle sits on screen
-MARGIN, DIV = 320, 210
+MARGIN, DIV = 320, 330
 PANELS = ['rifle', 'claw', 'ghost', 'stapler', 'william', 'harold', 'edward', 'ch1', 'ch2', 'ch3']
 REF_H = {'rifle': 711, 'claw': 330, 'ghost': 330, 'stapler': 350, 'william': 452, 'harold': 435, 'edward': 417,
          'ch1': 330, 'ch2': 330, 'ch3': 330}
@@ -237,51 +237,46 @@ class Strip:
 
 
 def tree_image():
-    """A Bayeux tree to divide the scenes: a stem with interlaced tendrils and a fan of leaves, stitched."""
-    h, w = 825, 230
-    L = BW.Layer(w, h)
-    s = BW.S
-    L.lab = Image.new('L', (w, h), BS.IDX['linen'])
-    L.ang = Image.new('F', (w, h), float('nan'))
-    L.dl, L.da = ImageDraw.Draw(L.lab), ImageDraw.Draw(L.ang)
-    cx = w / 2 / s
-    top, bot = 70 / s * 2.5, h / s
-    # stem
-    L.poly([(cx - 5, bot), (cx + 5, bot), (cx + 4, top + 40), (cx - 4, top + 40)], 'ochre', math.pi / 2, 'madder', 1.6)
-    # two tendrils winding round the stem, crossing over and under
-    for ph, wool in ((0.0, 'bluegreen'), (math.pi, 'terracotta')):
-        pts = [(cx + 22 * math.sin(ph + (bot - y) / 26.0), y) for y in np.linspace(bot - 10, top + 50, 60)]
-        L.line(pts, wool, 3.2)
-    # the fan of leaves on top
-    for i, ang in enumerate(np.linspace(-2.5, -0.64, 5)):
-        lx, ly = cx + 26 * math.cos(ang), top + 46 + 30 * math.sin(ang)
-        wool = ['sage', 'terracotta', 'ochre', 'terracotta', 'sage'][i]
-        pts = []
-        for j in range(24):
-            q = 2 * math.pi * j / 24
-            r1, r2 = 24, 9
-            u, v = r1 * math.cos(q), r2 * math.sin(q)
-            pts.append((lx + u * math.cos(ang) - v * math.sin(ang), ly + u * math.sin(ang) + v * math.cos(ang)))
-        L.poly(pts, wool, ang, 'madder', 1.3)
-    # curling side shoots
-    for side in (-1, 1):
-        for y0 in (bot - 150, bot - 260):
-            pts = [(cx + side * (6 + 30 * math.sin(q) * (q / 3)), y0 - 26 * (1 - math.cos(q)) * 0.6)
-                   for q in np.linspace(0, 3.0, 20)]
-            L.line(pts, 'sage', 2.6)
-            L.ellipse(pts[-1][0], pts[-1][1], 6, 4, 'terracotta', 0.0, 'madder', 1.0)
-    lab, ang = L.arrays()
-    forced = np.where(np.isnan(ang), np.nan, ang)
-    rgb = BS.stitch(lab.astype(np.int16), 3.0, forced, seed=11)
-    alpha = (lab != BS.IDX['linen']).astype(np.float32)
-    alpha = ndi.gaussian_filter(alpha, 1.0)
-    return np.dstack([rgb.astype(np.float32), np.clip(alpha * 1.4, 0, 1)])
+    """The divider between scenes: a real Bayeux tree, traced from Sam's reference (the tall tree whose red and green
+    trunk widens into a cup of curling leaves, with the small sapling beside it) and stitched like everything else."""
+    lab = BS.trace('tree', BW.S)
+    S_ = BW.S
+    x0, y0, x1, y1 = int(208 * S_), int(18 * S_), int(398 * S_), int(416 * S_)
+    lab = lab[y0:y1, x0:x1]
+    ink = lab != BS.IDX['linen']
+    comp, n = ndi.label(ndi.binary_dilation(ink, iterations=1))
+    keep = np.zeros(n + 1, bool)
+    for sx, sy in ((282, 300), (262, 360), (300, 110), (330, 90), (372, 330), (366, 380), (250, 100), (360, 230)):
+        yy, xx = int((sy - 18) * S_), int((sx - 208) * S_)
+        win = comp[max(0, yy - 6):yy + 6, max(0, xx - 6):xx + 6]
+        keep[np.unique(win[win > 0])] = True
+    m = keep[comp] & ink
+    yy_, xx_ = np.mgrid[0:m.shape[0], 0:m.shape[1]]
+    m &= ~((xx_ < (242 - 208) * S_) & (yy_ > (300 - 18) * S_))   # not the hill's outline running into the trunk's foot
+    holes = ndi.binary_fill_holes(m) & ~m                  # the linen inside the trunk's stripes stays the tree's
+    hl, nh = ndi.label(holes)
+    if nh:
+        area = ndi.sum(np.ones_like(hl), hl, np.arange(1, nh + 1))
+        m |= np.concatenate([[False], area < (14 * S_) ** 2])[hl]
+    lab = np.where(m, lab, BS.IDX['linen']).astype(np.int16)
+    rgb = BS.stitch(lab, 3.0, None, seed=11)
+    alpha = ndi.gaussian_filter(ndi.binary_dilation(m, iterations=2).astype(np.float32), 1.0)
+    return np.dstack([rgb.astype(np.float32), np.clip(alpha, 0, 1)])
 
 
 def tree_strip(tree, hs, ws):
-    rgb = Image.fromarray(tree[..., :3].astype(np.uint8)).resize((ws, hs), Image.LANCZOS)
-    a = Image.fromarray((tree[..., 3] * 255).astype(np.uint8)).resize((ws, hs), Image.LANCZOS)
-    return np.dstack([np.asarray(rgb, np.float32), np.asarray(a, np.float32)[..., None] / 255.0])
+    """The tree on a see-through strip as tall as the band: standing in the main zone between the borders, at its
+    own shape (never squashed), centred in the gap."""
+    th = int(hs * 0.72)
+    tw = int(tree.shape[1] * th / tree.shape[0])
+    rgb = Image.fromarray(tree[..., :3].astype(np.uint8)).resize((tw, th), Image.LANCZOS)
+    a = Image.fromarray((tree[..., 3] * 255).astype(np.uint8)).resize((tw, th), Image.LANCZOS)
+    out = np.zeros((hs, max(ws, tw), 4), np.float32)
+    x = (out.shape[1] - tw) // 2
+    y = int(hs * 0.88) - th
+    out[y:y + th, x:x + tw, :3] = np.asarray(rgb, np.float32)
+    out[y:y + th, x:x + tw, 3] = np.asarray(a, np.float32) / 255
+    return out
 
 
 # ------------------------------------------------------------------------------------------- the gallery

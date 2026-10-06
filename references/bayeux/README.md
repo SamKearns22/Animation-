@@ -10,6 +10,8 @@
 | `weapon-3-ghost-pistol.jpg` | Rider on a red horse with a spear raised, a horse tumbling behind | That rider: the spear becomes the pistol, ghost streams to the right |
 | `weapon-4-stapler.jpg` | Guy of Ponthieu with his axe (VBI NVNTII WILLELMI) | Guy: the axe becomes the stapler |
 
+| `tapestry-trees.jpg` | Real Bayeux trees (bayeux-broderie.com photo of a replica section) | The divider between scenes: the tall cup-topped tree with its sapling, traced and stitched (`tree_image` in bayeux.py) |
+
 ## NEW SKINS (clothing replaced, the figure kept)
 | File | What it shows | Used for |
 |---|---|---|

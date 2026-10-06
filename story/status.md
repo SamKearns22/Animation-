@@ -52,6 +52,9 @@ Read this first in any new session, after CLAUDE.md.
 - Series title added 6 Oct (51.0 s, 25.0 MB; Discord copy 9.4 MB): DLC in the standard cranberry title
   (`series_title`, burnham.title_lines, capitals 148 px, top 395) over the quiet gallery for the first 0.8 s, then
   the gold logo crashes in (`START` 0.15, `T_DLC_OUT`). Cover: about 0:00.4 (DLC over the gallery).
+- Real tree 6 Oct (51.0 s, 25.0 MB): the invented flower-tree replaced by Sam's real tapestry tree
+  (`references/bayeux/tapestry-trees.jpg`, traced and stitched, 72% of the band, never squashed; scene gap DIV 330).
+  Sam: no more Discord copies unless asked.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 
