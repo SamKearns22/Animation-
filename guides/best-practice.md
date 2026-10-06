@@ -272,6 +272,8 @@ this series. Full details in `tiktok-design.md`.
 - Camera shake must never wrap the picture round (np.roll did: a white sliver flashed on the right); move the frame
   and repeat its edge instead.
 - Action timed to a camera pan must happen while it is on screen: work out when each gun enters the view first.
+- To shorten a moment, re-render it shorter; never cut frames out of a finished render. Anything still moving (a
+  camera drift, flickering flames) jumps at the cut (DLC's title hold).
 
 ---
 

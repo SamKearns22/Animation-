@@ -33,28 +33,30 @@ T_INTRO = 0.15                # INTRODUCING
 T_BAYEUX, T_TAPESTRY = 0.95, 1.20
 ARROWS_AT = [1.48, 1.62, 1.80, 1.94]      # the four flaming arrows land (two per Y)
 T_SEASON = 2.25               # SEASON PASS wipes in, in fire
-D = 2.0                       # the title lingers this much longer while SEASON PASS roars
+D = float(os.environ.get('BX_HOLD', '2.0'))   # the title lingers this much longer while SEASON PASS roars
+E = D - 2.0                   # everything after the title moves with it (the times below were set with D = 2)
 CUT_TAPESTRY = 3.95 + D       # glitch cut to the tapestry
 T_NEW = 4.10 + D              # NEW WEAPONS
 SWAPS = {'rifle': 5.35 + D, 'claw': 7.20 + D, 'ghost': 9.00 + D, 'stapler': 12.10 + D}
 NAMES = {'rifle': 'PLASMA LONGSHOT RIFLE', 'claw': 'ICE CLAW', 'ghost': 'GHOST PISTOL', 'stapler': 'STAPLER'}
-STAPLER_FADE = 15.30          # all the stapler's glory fades away...
+STAPLER_FADE = 15.30 + E          # all the stapler's glory fades away...
 NAME_OUT = {'rifle': 6.90 + D, 'claw': 8.70 + D, 'ghost': 10.90 + D, 'stapler': STAPLER_FADE + 0.45}
 GHOST_FLY = (9.30 + D, 9.85 + D)   # the ghost streams out of the pistol
-STAPLER_CLICK = 16.00         # ...and it fires one single staple: click
-STAPLE_HIT = 16.20            # the staple reaches the messenger
-T_SKINS = 16.95               # NEW SKINS
-SKIN_SWAPS = {'william': 18.15, 'harold': 20.35, 'edward': 22.55}
+STAPLER_CLICK = 16.00 + E         # ...and it fires one single staple: click
+STAPLE_HIT = 16.20 + E            # the staple reaches the messenger
+T_SKINS = 16.95 + E               # NEW SKINS
+SKIN_SWAPS = {'william': 18.15 + E, 'harold': 20.35 + E, 'edward': 22.55 + E}
 SKIN_NAMES = {'william': ('WILLIAM THE CONQUEROR', 'PARTY SUIT'), 'harold': ('HAROLD GODWINSON', 'SHARK WARRIOR'),
               'edward': ('EDWARD THE CONFESSOR', 'ELECTRIC MOUSE')}
-SKIN_OUT = {'william': 19.95, 'harold': 22.15, 'edward': 24.45}
+SKIN_OUT = {'william': 19.95 + E, 'harold': 22.15 + E, 'edward': 24.45 + E}
 SKIN_GLOW = {'william': (210, 120, 255), 'harold': (120, 190, 255), 'edward': (255, 230, 80)}
-T_CHAPTER = 24.55             # NEW STORY CHAPTER
-T_CH_LOGO = 25.75             # BAYEUX: ENDLESS CONQUEST (held while it roars)
+T_CHAPTER = 24.55 + E             # NEW STORY CHAPTER
+T_CH_LOGO = 25.75 + E             # BAYEUX: ENDLESS CONQUEST (held while it roars)
 CH_LEN = 5.4                  # each chapter scene: slow enough to take in, with things happening all the time
-CH_SCENES = {'ch1': 28.30, 'ch2': 28.30 + CH_LEN, 'ch3': 28.30 + 2 * CH_LEN}
+T_CH1 = 28.30 + E
+CH_SCENES = {'ch1': T_CH1, 'ch2': T_CH1 + CH_LEN, 'ch3': T_CH1 + 2 * CH_LEN}
 CH_TEXT = {'ch1': ('1066', 'THE CORONATION'), 'ch2': ('1069', 'DURHAM BURNS'), 'ch3': ('1086', 'DOMESDAY')}
-CUT_END_TITLE = 28.30 + 3 * CH_LEN   # the title slams back
+CUT_END_TITLE = T_CH1 + 3 * CH_LEN   # the title slams back
 T_CARD = CUT_END_TITLE + 1.5        # the end card: AVAILABLE NOW, the price, the rating, the small print
 T_QUIET = T_CARD + 3.4               # hard cut back to the silent gallery...
 T_TINK = T_QUIET + 0.55              # ...where one staple pings off the glass
@@ -901,7 +903,7 @@ def cam_at(t):
     keys = [(k[0] + D,) + k[1:] if k[0] > CUT_TAPESTRY - D + 0.01 else k for k in keys]
     keys[0] = (CUT_TAPESTRY,) + keys[0][1:]
     mx, my = s.ref_to_design('stapler', 345, 175)
-    keys += [(STAPLER_FADE, sx + 30, sy - 20, 2.0), (STAPLER_CLICK - 0.1, mx, my, 1.55), (16.75, mx + 10, my, 1.57)]
+    keys += [(STAPLER_FADE, sx + 30, sy - 20, 2.0), (STAPLER_CLICK - 0.1, mx, my, 1.55), (16.75 + E, mx + 10, my, 1.57)]
     for name, (rx_, ry_) in (('william', (290, 170)), ('harold', (245, 220)), ('edward', (420, 220))):
         px, py = s.ref_to_design(name, rx_, ry_)
         ts = SKIN_SWAPS[name]
@@ -920,9 +922,9 @@ def cam_at(t):
     return keyed(t, [(k[0],) + tuple(k[1:]) for k in keys])
 
 
-WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D), (16.75, 17.15), (19.95, 20.15),
-         (22.15, 22.35), (24.45, 24.75), (28.30 + CH_LEN - 0.15, 28.30 + CH_LEN + 0.1),
-         (28.30 + 2 * CH_LEN - 0.15, 28.30 + 2 * CH_LEN + 0.1)]
+WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D), (16.75 + E, 17.15 + E),
+         (19.95 + E, 20.15 + E), (22.15 + E, 22.35 + E), (24.45 + E, 24.75 + E),
+         (T_CH1 + CH_LEN - 0.15, T_CH1 + CH_LEN + 0.1), (T_CH1 + 2 * CH_LEN - 0.15, T_CH1 + 2 * CH_LEN + 0.1)]
 
 
 def tapestry_frame(t, fi):
@@ -1829,25 +1831,6 @@ def render(out):
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB) in {time.time() - t0:.0f}s', flush=True)
 
 
-TIKTOK_SKIP = (3.40, 4.40)    # the TikTok cut drops this second of the title hold (film time), after the glint
-
-
-def tiktok_cut(src, out):
-    """The TikTok version: the finished film with one second of the title hold taken out (a hard cut inside the
-    hold; the sound crossfades over 40 ms so nothing clicks). Frame-aligned; no re-render needed."""
-    import imageio_ffmpeg
-    a = round((TIKTOK_SKIP[0] - START + 1.0 / FPS) * FPS) / FPS     # output time (frame 0 is the cover)
-    b = a + (TIKTOK_SKIP[1] - TIKTOK_SKIP[0])
-    fc = (f'[0:v]trim=0:{a:.4f},setpts=PTS-STARTPTS[v0];[0:v]trim={b:.4f},setpts=PTS-STARTPTS[v1];'
-          f'[v0][v1]concat=n=2:v=1:a=0[v];'
-          f'[0:a]atrim=0:{a + 0.02:.4f},asetpts=PTS-STARTPTS[a0];[0:a]atrim={b - 0.02:.4f},asetpts=PTS-STARTPTS[a1];'
-          f'[a0][a1]acrossfade=d=0.04[a]')
-    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', src, '-filter_complex', fc,
-                    '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '23', '-preset', 'slow', '-pix_fmt',
-                    'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
-    print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)')
-
-
 def main():
     global R
     cmd = sys.argv[1]
@@ -1867,8 +1850,6 @@ def main():
     elif cmd == 'final':
         R = 1.0
         render(sys.argv[2])
-    elif cmd == 'tiktok':
-        tiktok_cut(sys.argv[2], sys.argv[3])
 
 
 if __name__ == '__main__':
