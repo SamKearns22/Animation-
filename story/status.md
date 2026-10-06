@@ -30,6 +30,12 @@ Read this first in any new session, after CLAUDE.md.
   the gate, the bishop's palace burns over sleeping Normans, two run away), 1086 Domesday (William, the book, three
   tax collectors with staplers, staples everywhere, villagers, sheep, ox). Sam's chapter message was cut off at
   "You must render the fll": ask what the rest said.
+- Concept v6 sent 6 Oct (45.3 s, 23.6 MB draft, render 3 min): chapter slowed (`CH_LEN` 5.4 s a scene, the logo held
+  2.5 s); ENDLESS CONQUEST in fire like SEASON PASS (`burn_text`); movement: William dances (a separate stitched sprite,
+  `draw_sprites`/`dance`), tax collectors jolt with each shot and staples fly and land, plasma bolts into the houses,
+  ghosts fired from the pistols (`SHOTS`, `chapter_action`), each with its sound. Stitching repaired by hand on the
+  ghost-pistol and ice-claw riders (`REPAIRS` in bayeux_weapons.py). White flash at the start fixed: the shake wrapped
+  the picture's bright left edge round to the right (`shove` now repeats the edge instead).
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

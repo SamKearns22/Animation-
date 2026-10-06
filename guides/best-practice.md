@@ -267,6 +267,11 @@ this series. Full details in `tiktok-design.md`.
   clean-up at the photo's own size wiped out thin outlines and mail rings, and whole soldiers vanished.
 - Erasing an object (a weapon) by borrowing colour from its neighbours leaves streaks unless the object's own
   outline colours are excluded from the borrowing; cover the whole object (fill shapes, not just their outlines).
+- Small or busy photos lose faces and helmets in tracing: compare every figure with its photo at full size and
+  re-stitch lost parts by hand (`REPAIRS`), rather than hoping the tracer gets them.
+- Camera shake must never wrap the picture round (np.roll did: a white sliver flashed on the right); move the frame
+  and repeat its edge instead.
+- Action timed to a camera pan must happen while it is on screen: work out when each gun enters the view first.
 
 ---
 

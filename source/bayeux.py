@@ -9,6 +9,7 @@ the top. Sam will record the trailer voice; until then the words slam on screen 
     python3 bayeux.py final OUT.mp4              full size (1080 x 1920)
     python3 bayeux.py times                      the timeline
 """
+import json
 import math
 import os
 import subprocess
@@ -49,12 +50,13 @@ SKIN_NAMES = {'william': ('WILLIAM THE CONQUEROR', 'PARTY SUIT'), 'harold': ('HA
 SKIN_OUT = {'william': 19.95, 'harold': 22.15, 'edward': 24.45}
 SKIN_GLOW = {'william': (210, 120, 255), 'harold': (120, 190, 255), 'edward': (255, 230, 80)}
 T_CHAPTER = 24.55             # NEW STORY CHAPTER
-T_CH_LOGO = 25.75             # BAYEUX: ENDLESS CONQUEST
-CH_SCENES = {'ch1': 27.45, 'ch2': 30.45, 'ch3': 33.45}
+T_CH_LOGO = 25.75             # BAYEUX: ENDLESS CONQUEST (held while it roars)
+CH_LEN = 5.4                  # each chapter scene: slow enough to take in, with things happening all the time
+CH_SCENES = {'ch1': 28.30, 'ch2': 28.30 + CH_LEN, 'ch3': 28.30 + 2 * CH_LEN}
 CH_TEXT = {'ch1': ('1066', 'THE CORONATION'), 'ch2': ('1069', 'DURHAM BURNS'), 'ch3': ('1086', 'DOMESDAY')}
-CUT_END_TITLE = 36.85         # the title slams back
-BLACK_AT = 38.25              # hard cut to black
-DUR = 38.55
+CUT_END_TITLE = 28.30 + 3 * CH_LEN   # the title slams back
+BLACK_AT = CUT_END_TITLE + 1.4       # hard cut to black
+DUR = BLACK_AT + 0.3
 START = 0.85                  # the film opens here: straight into the flaming title (no INTRODUCING)
 MUSIC = os.path.join(HERE, 'audio', 'bayeux-rock.mp3')   # Sam's rock track, from the moment SEASON PASS ignites
 
@@ -694,50 +696,64 @@ class Title:
             src = np.maximum(src, burst * 1.0)
         else:
             src = m
-        # a dark backing so the burning letters read against anything
-        dark = ndi.gaussian_filter(src, 7 * R)
-        a[y0:y1, x0:x1] *= (1 - 0.75 * np.clip(dark * 1.8, 0, 1))[..., None]
-        # flames licking up off the letters (kept out of the letters themselves, so each letter stays clear)
-        fl = fire(src, t, 55 * R, seed=9, lick=1.2)
-        inside = ndi.gaussian_filter(ndi.binary_dilation(src > 0.4, iterations=max(1, int(3 * R))).astype(np.float32), R)
-        fl[..., 3] *= 1 - inside
-        add_light(a, fl, x0, y0)
-        # the letters: made of fire, orange at the edges, yellow-white at the heart, flickering
-        hh, ww = src.shape
-        yy, xx = np.mgrid[0:hh, 0:ww].astype(np.float32)
-        n = noise(2, xx / R / 5 + t * 40, yy / R / 7 + t * 140)
-        depth = np.clip(ndi.distance_transform_edt(src > 0.5) / (6 * R), 0, 1)
-        col = fire_colour(0.50 + 0.30 * depth + 0.22 * n)
-        rgba = np.dstack([col[..., :3], np.clip(src * 1.2, 0, 1)])
-        over(a, rgba, x0, y0)
-        glow = ndi.gaussian_filter(src, 10 * R)
-        add_light(a, np.dstack([np.broadcast_to(np.array([255, 120, 20], np.float32), src.shape + (3,)), glow * 0.5]), x0, y0)
+        burn_text(a, t, src, x0, y0, 9)
+
+
+def burn_text(a, t, src, x0, y0, seed):
+    """Letters made of roaring fire (src: the letters' shape, 0..1), at (x0, y0) on the frame."""
+    y1, x1 = y0 + src.shape[0], x0 + src.shape[1]
+    # a dark backing so the burning letters read against anything
+    dark = ndi.gaussian_filter(src, 7 * R)
+    a[y0:y1, x0:x1] *= (1 - 0.75 * np.clip(dark * 1.8, 0, 1))[..., None]
+    # flames licking up off the letters (kept out of the letters themselves, so each letter stays clear)
+    fl = fire(src, t, 55 * R, seed=seed, lick=1.2)
+    inside = ndi.gaussian_filter(ndi.binary_dilation(src > 0.4, iterations=max(1, int(3 * R))).astype(np.float32), R)
+    fl[..., 3] *= 1 - inside
+    add_light(a, fl, x0, y0)
+    # the letters: made of fire, orange at the edges, yellow-white at the heart, flickering
+    hh, ww = src.shape
+    yy, xx = np.mgrid[0:hh, 0:ww].astype(np.float32)
+    n = noise(2, xx / R / 5 + t * 40, yy / R / 7 + t * 140)
+    depth = np.clip(ndi.distance_transform_edt(src > 0.5) / (6 * R), 0, 1)
+    col = fire_colour(0.50 + 0.30 * depth + 0.22 * n)
+    rgba = np.dstack([col[..., :3], np.clip(src * 1.2, 0, 1)])
+    over(a, rgba, x0, y0)
+    glow = ndi.gaussian_filter(src, 10 * R)
+    add_light(a, np.dstack([np.broadcast_to(np.array([255, 120, 20], np.float32), src.shape + (3,)), glow * 0.5]), x0, y0)
 
 
 class ChapterLogo:
-    """BAYEUX: / ENDLESS CONQUEST in the same gold game-logo lettering as the main title."""
+    """BAYEUX: in the main title's gold lettering; ENDLESS CONQUEST beneath it written in roaring fire, like
+    SEASON PASS."""
 
     def __init__(self):
-        self.layers = []
-        for i, (text, size, y) in enumerate((('BAYEUX:', 150, 640), ('ENDLESS CONQUEST', 104, 820))):
-            f = font('CinzelDecorative-Black.ttf', size * R)
-            tw = f.getlength(text)
-            if tw > 900 * R:
-                f = font('CinzelDecorative-Black.ttf', size * R * 900 * R / tw)
-                tw = f.getlength(text)
-            hh = int(size * R * 1.6)
-            m = Image.new('L', (int(W0 * R), hh), 0)
-            ImageDraw.Draw(m).text(((W0 * R - tw) / 2, hh * 0.8), text, font=f, fill=255, anchor='ls')
-            cap = f.getbbox('E', anchor='ls')
-            rgba = gold(np.asarray(m, np.float32) / 255, hh * 0.8 + cap[1], hh * 0.8 + cap[3], 6 * R)
-            self.layers.append((rgba, int(y * R - hh * 0.8), (W0 * R - tw) / 2, (W0 * R + tw) / 2))
+        f = font('CinzelDecorative-Black.ttf', 150 * R)
+        text = 'BAYEUX:'
+        tw = f.getlength(text)
+        hh = int(150 * R * 1.6)
+        m = Image.new('L', (int(W0 * R), hh), 0)
+        ImageDraw.Draw(m).text(((W0 * R - tw) / 2, hh * 0.8), text, font=f, fill=255, anchor='ls')
+        cap = f.getbbox('E', anchor='ls')
+        rgba = gold(np.asarray(m, np.float32) / 255, hh * 0.8 + cap[1], hh * 0.8 + cap[3], 6 * R)
+        self.gold = (rgba, int(640 * R - hh * 0.8), (W0 * R - tw) / 2, (W0 * R + tw) / 2)
+        f2 = font('Cinzel-Variable.ttf', 96 * R, 900)
+        text = 'ENDLESS CONQUEST'
+        tw = f2.getlength(text)
+        if tw > 900 * R:
+            f2 = font('Cinzel-Variable.ttf', 96 * R * 900 * R / tw, 900)
+            tw = f2.getlength(text)
+        self.fx = (int((W0 * R - tw) / 2 - 30 * R), int(690 * R))
+        bw, bh = int(tw + 60 * R), int(230 * R)
+        m = Image.new('L', (bw, bh), 0)
+        ImageDraw.Draw(m).text((30 * R, bh - 40 * R), text, font=f2, fill=255, anchor='ls')
+        self.mask = np.asarray(m.filter(ImageFilter.GaussianBlur(0.6 * R)), np.float32) / 255
+        self.span = (30 * R, 30 * R + tw)
 
     def draw(self, a, t, t0):
         a *= 0.55
-        for i, (rgba, top, xa, xb) in enumerate(self.layers):
-            p = ease((t - t0 - i * 0.18) / 0.3)
-            if p <= 0:
-                continue
+        rgba, top, xa, xb = self.gold
+        p = ease((t - t0) / 0.3)
+        if p > 0:
             sub = rgba.copy()
             cols = np.arange(sub.shape[1], dtype=np.float32)
             front = xa + (xb - xa + 40 * R) * p
@@ -747,6 +763,16 @@ class ChapterLogo:
                 edge = np.exp(-((cols - front) / (26 * R)) ** 2)[None, :] * (rgba[..., 3] > 0)
                 add_light(a, np.dstack([np.broadcast_to(np.array([255, 240, 200], np.float32), sub.shape[:2] + (3,)),
                                         edge * 0.9]), 0, top)
+        p = ease((t - t0 - 0.35) / 0.45)            # ENDLESS CONQUEST bursts into flame, left to right
+        if p <= 0:
+            return
+        m = self.mask
+        cols = np.arange(m.shape[1], dtype=np.float32)
+        front = self.span[0] - 60 * R + (self.span[1] - self.span[0] + 120 * R) * p
+        src = m * np.clip((front - cols) / (40 * R), 0, 1)[None, :]
+        if p < 1:
+            src = np.maximum(src, np.exp(-((cols - front) / (30 * R)) ** 2)[None, :] * (m > 0.2))
+        burn_text(a, t, src, self.fx[0], self.fx[1], 13)
 
 
 def blend(dst, src):
@@ -820,6 +846,7 @@ def wrap(text, f, maxw):
 
 
 # ------------------------------------------------------------------------------------------- the shots
+ANCH = {}
 STRIP = None
 CHLOGO = None
 TITLE = None
@@ -832,6 +859,7 @@ def setup():
         STRIP = Strip(R * 1.45)
         TITLE = Title()
         CHLOGO = ChapterLogo()
+        ANCH.update(json.load(open(os.path.join(BW.CACHE, 'story-anchors.json'))))
         room = gallery(Strip(0.5))
         im = Image.fromarray(room.astype(np.uint8))
         ROOM = np.asarray(im.resize((int(W0 * R * 1.12), int(H0 * R * 1.12)), Image.LANCZOS), np.float32)
@@ -884,16 +912,17 @@ def cam_at(t):
     x1, _ = s.ref_to_design('ch1', 120, 0)
     keys += [(T_CHAPTER + 0.2, x1, 470, 0.80), (CH_SCENES['ch1'] - 0.05, x1 + 40, 470, 0.82)]
     for name, ts in CH_SCENES.items():
-        a_, _ = s.ref_to_design(name, 260, 0)
+        a_, _ = s.ref_to_design(name, 330 if name == 'ch3' else 260, 0)
         b_, _ = s.ref_to_design(name, ST.W_REF[name] - 260, 0)
-        te = ts + 2.85
-        keys += [(ts + 0.10, a_, 470, 0.82), (te, b_, 470, 0.86)]
+        te = ts + CH_LEN - 0.15
+        keys += [(ts + 0.10, a_, 470, 0.84), (te, b_, 470, 0.88)]
     keys += [(CUT_END_TITLE, b_ + 30, 470, 0.87)]
     return keyed(t, [(k[0],) + tuple(k[1:]) for k in keys])
 
 
 WHIPS = [(6.86 + D, 7.06 + D), (8.66 + D, 8.86 + D), (10.86 + D, 11.06 + D), (16.75, 17.15), (19.95, 20.15),
-         (22.15, 22.35), (24.45, 24.75), (30.30, 30.55), (33.30, 33.55)]
+         (22.15, 22.35), (24.45, 24.75), (28.30 + CH_LEN - 0.15, 28.30 + CH_LEN + 0.1),
+         (28.30 + 2 * CH_LEN - 0.15, 28.30 + 2 * CH_LEN + 0.1)]
 
 
 def tapestry_frame(t, fi):
@@ -932,6 +961,8 @@ def tapestry_frame(t, fi):
     ya, yb = max(0, t0), min(h, t0 + b.shape[0])
     if yb > ya:
         a[ya:yb] = b[ya - t0:yb - t0]
+    if t >= T_CHAPTER:
+        draw_sprites(a, t, x, z, top)
     # glows that belong to the trailer, over the wool
     effects(a, t, x, y, z, top)
     # glass: a long soft reflection drifting across
@@ -1004,13 +1035,7 @@ def effects(a, t, x, y, z, top):
                 px, py = to_screen(name, fx, fy)
                 if -200 * R < px < (W0 + 200) * R:
                     live_flame(a, px, py, 34 * z * R * STRIP.ref_scale[name] / 2.73, t, k)
-        for k, (mx_, my_) in enumerate(CH_MOUTHS):
-            for j in range(3):
-                ph = ((t * 1.6 + k * 0.33 + j * 0.33) % 1.0)
-                fx, fy = mx_ + ph * (1080 - mx_), my_ + 30 * math.sin(ph * 3 + k + j) - 10
-                px, py = to_screen('ch3', fx, fy)
-                if 0 < px < W0 * R:
-                    flying_staple(a, px, py, 5.0 * z * R * STRIP.ref_scale['ch3'] / 2.73 * 2.73)
+        chapter_action(a, t, to_screen, z)
     for name, ts in SKIN_SWAPS.items():
         if ts <= t < SKIN_OUT[name] + 0.2:
             cx_, cy_ = {'william': (270, 170), 'harold': (245, 230), 'edward': (420, 220)}[name]
@@ -1055,6 +1080,144 @@ def staple(a, t, to_screen, z):
 CH_FIRE = {'ch1': [(847, 208), (932, 206), (1011, 196)],
            'ch2': [(520, 196), (590, 196), (660, 196), (730, 196), (610, 145)]}
 CH_MOUTHS = [(354, 210), (464, 216), (574, 210)]
+
+
+def ch_shots():
+    """Every shot fired in the chapter: (kind, scene, gun index, time it is fired)."""
+    out = []
+    t1, t2, t3 = CH_SCENES['ch1'], CH_SCENES['ch2'], CH_SCENES['ch3']
+    for n in np.arange(t1 + 1.0, t1 + CH_LEN - 0.3, 0.9):           # once the rifle is in view
+        out.append(('plasma', 'ch1', 0, float(n)))
+    for sc_, t_, e_ in (('ch1', t1 + 1.7, t1 + CH_LEN - 0.9), ('ch2', t2 + 0.5, t2 + CH_LEN - 1.2)):
+        for n in np.arange(t_, e_, 1.3):
+            out.append(('ghost', sc_, 0, float(n)))
+    for k in range(3):
+        for n in np.arange(t3 + 0.5 + k * 0.17, t3 + CH_LEN - 0.8, 0.5):
+            out.append(('staple', 'ch3', k, float(n)))
+    return out
+
+
+SHOTS = ch_shots()
+
+
+def recoil(scene, k, t):
+    """How far (reference pixels, backwards) a collector is jolted by his latest shot."""
+    best = 0.0
+    for kind, sc_, kk, ts in SHOTS:
+        if kind == 'staple' and kk == k and 0 <= t - ts < 0.3:
+            best = max(best, 7 * math.exp(-(t - ts) * 14))
+    return best
+
+
+def dance(t):
+    """William's dance: a bounce on the beat, a sway and a little shuffle."""
+    beat = 2 * math.pi * 1.7 * t
+    return 4 * math.sin(beat / 2), -7 * abs(math.sin(beat)), 7 * math.sin(beat / 2)
+
+
+SPRITES = {}
+
+
+def draw_sprites(a, t, x, z, top):
+    s = STRIP
+    for scene, d in ANCH.items():
+        for sp in d.get('sprites', []):
+            dxr, dyr, ang = 0.0, 0.0, 0.0
+            if sp['tag'] == 'william':
+                dxr, dyr, ang = dance(t)
+            elif sp['tag'].startswith('collector'):
+                dxr = -recoil(scene, int(sp['tag'][-1]), t)
+            px, py = screen_pt(scene, sp['x'] + dxr, sp['y'] + dyr, x, z, top)
+            k = s.ref_scale[scene] * z * R
+            w, h = int(sp['w'] * k), int(sp['h'] * k)
+            if px > W0 * R or px + w < 0 or w < 2:
+                continue
+            key = (scene, sp['tag'])
+            if key not in SPRITES:
+                SPRITES[key] = Image.open(os.path.join(BW.CACHE, f"{scene}-{sp['tag']}.png")).convert('RGBA')
+            im = SPRITES[key].resize((w, h), Image.BILINEAR)
+            if ang:
+                im = im.rotate(ang, resample=Image.BICUBIC, center=(w / 2, h * 0.9))
+            m = np.asarray(im, np.float32)
+            yy = np.linspace(0, 1, h, dtype=np.float32)[:, None, None]
+            m[..., :3] *= 1.04 - 0.16 * np.clip((py + yy[..., 0] * h - top) / (HB * z * R), 0, 1)[..., None]
+            over(a, np.dstack([m[..., :3], m[..., 3] / 255]), int(px), int(py))
+
+
+def screen_pt(name, rx, ry, x, z, top):
+    dx, dy = STRIP.ref_to_design(name, rx, ry)
+    return (W0 / 2 + (dx - x) * z) * R, top + dy * z * R
+
+
+def chapter_action(a, t, to_screen, z):
+    """The chapter comes alive: plasma bolts, ghosts fired from the pistols, staples from every stapler, and
+    sparkles round the dancing king."""
+    kpx = z * R * 2.73                                  # screen pixels per reference pixel in the chapter
+    for kind, sc_, k, ts in SHOTS:
+        dt = t - ts
+        if kind == 'plasma' and -0.02 < dt < 0.45:
+            mx_, my_ = ANCH['ch1']['rifle'][0]
+            p = max(0.0, dt) / 0.32
+            tx, ty = 850 + 80 * ((ts * 7) % 1), 190 + 20 * ((ts * 3) % 1)     # into the burning houses
+            slope = (ty - my_) / (tx - mx_)
+            if dt < 0.09:
+                px, py = to_screen('ch1', mx_, my_)
+                glow_blob(a, px, py, 34 * kpx, 34 * kpx, (150, 255, 120), 1.6 * (1 - dt / 0.09))
+            if p <= 1:
+                plasma_bolt(a, *to_screen('ch1', mx_ + (tx - mx_) * p, my_ + (ty - my_) * p), 30 * kpx, slope)
+            else:
+                glow_blob(a, *to_screen('ch1', tx, ty), 40 * kpx, 30 * kpx, (120, 255, 100), 0.9 * (1 - (dt - 0.32) / 0.13))
+        elif kind == 'ghost' and 0 <= dt < 1.3:
+            mx_, my_ = ANCH[sc_]['pistol'][0]
+            p = dt / 1.3
+            gx, gy = mx_ + 10 + p * 230, my_ + 4 + 22 * p + 10 * math.sin(p * 9)
+            px, py = to_screen(sc_, gx, gy)
+            fly_ghost(a, px, py, (10 + 16 * min(1, p * 3)) * kpx, 1 - max(0, (p - 0.75) / 0.25), t)
+        elif kind == 'staple' and 0 <= dt < 0.9:
+            mx_, my_ = ANCH['ch3']['mouths'][k]
+            p = dt / 0.9
+            rng = np.random.default_rng(int(ts * 100) + k)
+            tx, ty = rng.uniform(760, 1080), rng.uniform(110, 260)
+            fx, fy = mx_ + (tx - mx_) * p, my_ + (ty - my_) * p - 20 * math.sin(p * math.pi)
+            flying_staple(a, *to_screen('ch3', fx, fy), 8 * kpx)
+            if dt < 0.06:
+                glow_blob(a, *to_screen('ch3', mx_, my_), 14 * kpx, 10 * kpx, (255, 240, 200), 0.9)
+    for sc_ in ('ch1', 'ch3'):                          # the king's disco sparkle
+        sp = ANCH[sc_]['sprites'][0]
+        cx, cy = sp['x'] + sp['w'] * 0.55, sp['y'] + sp['h'] * 0.35
+        for j in range(6):
+            ph = (t * 1.3 + j / 6) % 1.0
+            ang = j * 1.05 + t * 0.7
+            sx, sy = cx + 70 * math.cos(ang), cy + 55 * math.sin(ang)
+            px, py = to_screen(sc_, sx, sy)
+            if -50 < px < W0 * R + 50:
+                tw = math.sin(math.pi * ph) ** 2
+                glow_blob(a, px, py, 5 * kpx, 5 * kpx, (255, 200, 255) if j % 2 else (200, 230, 255), 1.5 * tw)
+
+
+def plasma_bolt(a, x, y, length, slope):
+    ang = math.atan(slope)
+    glow_blob(a, x, y, length, length * 0.18, (90, 255, 80), 1.1, ang=ang)
+    glow_blob(a, x, y, length * 0.6, length * 0.06, (230, 255, 220), 1.6, ang=ang)
+
+
+def fly_ghost(a, x, y, r, alpha, t):
+    """A little ghost fired from the pistol: a white sheet with a wavy tail and two dark eyes."""
+    if alpha <= 0 or r < 2:
+        return
+    s = int(r * 4)
+    im = Image.new('RGBA', (s * 2, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    cx, cy = s * 1.5, s * 0.45
+    tail = [(cx - r * (0.6 + 2.6 * u), cy + r * 0.2 + r * 0.35 * math.sin(u * 9 + t * 12)) for u in np.linspace(0, 1, 14)]
+    d.polygon([(cx + r * math.cos(q), cy + r * 0.9 * math.sin(q)) for q in np.linspace(-math.pi * 0.5, math.pi * 0.6, 12)]
+              + tail[::-1][:1] + tail[::-1] + [(cx - r * 0.4, cy - r * 0.8)], fill=(248, 248, 240, 235))
+    for ex in (0.15, 0.55):
+        d.ellipse([cx + r * ex - r * 0.13, cy - r * 0.35, cx + r * ex + r * 0.13, cy + r * 0.05], fill=(20, 20, 30, 255))
+    d.ellipse([cx + r * 0.3, cy + r * 0.2, cx + r * 0.55, cy + r * 0.55], fill=(20, 20, 30, 255))
+    m = np.asarray(im, np.float32)
+    glow_blob(a, x, y, r * 2.4, r * 1.6, (200, 230, 255), 0.35 * alpha)
+    over(a, np.dstack([m[..., :3], m[..., 3] / 255 * alpha]), int(x - cx), int(y - cy))
 
 
 def live_flame(a, cx, cy, r, t, k):
@@ -1196,8 +1359,8 @@ def frame(t, fi=0):
             CHLOGO.draw(a, t, T_CH_LOGO)
         for name, ts in CH_SCENES.items():
             year, what = CH_TEXT[name]
-            slam(a, year, t, ts + 0.08, ts + 2.95, 1262, 90, colour=(255, 214, 120), glow=(255, 190, 80))
-            slam(a, what, t, ts + 0.14, ts + 2.95, 1385, 104, glow=(255, 150, 70))
+            slam(a, year, t, ts + 0.08, ts + CH_LEN - 0.12, 1262, 90, colour=(255, 214, 120), glow=(255, 190, 80))
+            slam(a, what, t, ts + 0.14, ts + CH_LEN - 0.12, 1385, 104, glow=(255, 150, 70))
     else:
         a = room_frame(CUT_TAPESTRY, dark=0.45)
         p = ease((t - CUT_END_TITLE) / 0.12)
@@ -1335,6 +1498,17 @@ def click():
     return x
 
 
+def zap():
+    """A plasma shot: a bright falling tone with a fizz."""
+    n = int(0.3 * SR)
+    t = np.arange(n) / SR
+    f = 1800 * np.exp(-t * 12) + 180
+    x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * 0.4 + np.sin(2 * np.pi * np.cumsum(f * 0.5) / SR)
+    rng = np.random.default_rng(4)
+    x += 0.3 * rng.standard_normal(n) * np.exp(-t * 30)
+    return x * np.exp(-t * 9)
+
+
 def tink():
     """The staple landing: a tiny, high, thin tick."""
     n = int(0.08 * SR)
@@ -1440,13 +1614,17 @@ def soundtrack():
     for name, ts in CH_SCENES.items():
         place(mix, boom(1.0), ts, 0.75)
         if name in ('ch1', 'ch2'):
-            r2 = roar(2.9, 30 + len(name))
+            r2 = roar(CH_LEN, 30 + len(name))
             r2[:int(0.2 * SR)] *= np.linspace(0, 1, int(0.2 * SR))
             r2[-int(0.2 * SR):] *= np.linspace(1, 0, int(0.2 * SR))
             place(mix, r2, ts + 0.05, 0.25)
-    rng = np.random.default_rng(31)
-    for tt_ in np.arange(CH_SCENES['ch3'] + 0.2, CH_SCENES['ch3'] + 3.0, 0.19):   # staple after staple
-        place(mix, click(), tt_ + rng.uniform(-0.04, 0.04), 0.3)
+    for kind, sc_, k, ts in SHOTS:
+        if kind == 'plasma':
+            place(mix, zap(), ts, 0.35)
+        elif kind == 'ghost':
+            place(mix, ghost_wooo(1.0), ts + 0.05, 0.10)
+        else:
+            place(mix, click(), ts, 0.32)
     place(mix, click(), STAPLER_CLICK, 0.5)
     place(mix, tink(), STAPLE_HIT, 0.18)
     place(mix, boom(1.3), CUT_END_TITLE, 0.95)
@@ -1483,7 +1661,7 @@ def render(out):
     w, h = int(W0 * R), int(H0 * R)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt',
                           'rgb24', '-s', f'{w}x{h}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
-                          '-c:v', 'libx264', '-crf', '20', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                          '-c:v', 'libx264', '-crf', '23', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:
         for f, fr in enumerate(pool.imap(_render, range(n), chunksize=2)):
