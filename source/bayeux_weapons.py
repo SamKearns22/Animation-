@@ -363,8 +363,7 @@ def harold_skin(L):
     L.poly([(168, 150), (196, 138), (206, 300), (184, 384), (162, 398), (170, 300)], 'buff', v, 'shark')    # belly
     for y in range(160, 380, 22):                                                                   # belly ridges
         L.line([(170, y), (200, y + 4)], 'shark', 1.0)
-    L.ellipse(170, 422, 26, 12, 'shark', 0.0, 'navy', 1.6)                                      # costume feet
-    L.ellipse(208, 426, 24, 11, 'shark', 0.0, 'navy', 1.6)
+    L.poly([(150, 380), (210, 380), (220, 432), (146, 432)], 'shark', v, 'navy', 1.6)            # costume feet
     L.poly([(298, 110), (344, 72), (336, 134)], 'shark', 0.6, 'navy', 1.6)                         # dorsal fin
     L.poly([(292, 372), (334, 396), (352, 432), (318, 428), (284, 404)], 'shark', 0.8, 'navy', 1.6)  # tail
     L.ellipse(250, 82, 44, 40, 'shark', v, 'navy', 1.6)                                          # hood
@@ -374,13 +373,10 @@ def harold_skin(L):
     for ex, ey in ((186, 48), (322, 38)):
         L.ellipse(ex, ey, 6, 6, 'black')
         L.ellipse(ex + 1.5, ey - 1.5, 1.8, 1.8, 'frost')
-    ring_line(L, 249, 80, 20, 23, 'navy', 1.6)                                                  # the round mouth...
-    for i in range(14):                                                                           # ...ringed with teeth
-        q = 2 * math.pi * i / 14
-        bx, by = 249 + 21 * math.cos(q), 80 + 24 * math.sin(q)
-        tx, ty = 249 + 15 * math.cos(q), 80 + 17 * math.sin(q)
-        nx, ny = -math.sin(q) * 3, math.cos(q) * 3
-        L.poly([(bx - nx, by - ny), (bx + nx, by + ny), (tx, ty)], 'frost', 0.0)
+    for i in range(7):                                                                            # teeth round the face
+        x = 226 + i * 6.5
+        L.poly([(x, 104), (x + 6, 104), (x + 3, 96)], 'frost', 0.0)
+        L.poly([(x, 54), (x + 6, 54), (x + 3, 61)], 'frost', 0.0)
     # his kite shield, stitched clean on top of the costume: pale with spots, an ochre rim and a boss
     shield = [(266, 160), (300, 166), (314, 200), (312, 250), (298, 310), (272, 366), (252, 366), (232, 310),
               (218, 250), (220, 196), (236, 168)]
@@ -402,28 +398,17 @@ def edward_skin(L):
     L.poly([(495, 300), (520, 268), (508, 262), (540, 224), (528, 218), (566, 178), (578, 186), (550, 228),
             (562, 236), (530, 276), (542, 284), (508, 314)], 'yellow', 0.9, 'madder', 1.6)        # tail
     L.poly([(496, 300), (510, 284), (522, 292), (508, 314)], 'ochre', 0.9)                        # its root
-    # the onesie, seated: shoulders, a round tummy, his lap out to the knees, shins down to big paw feet
-    L.poly([(350, 192), (372, 182), (404, 180), (442, 184), (470, 200), (478, 236), (490, 266), (488, 300),
-            (470, 314), (444, 318), (438, 334), (360, 336), (350, 300), (338, 262), (336, 226)], 'yellow', v,
-           'madder', 1.6)
-    L.line([(448, 252), (480, 262)], 'ochre', 1.4)                                              # the fold at his knee
-    L.line([(366, 300), (440, 304)], 'ochre', 1.2)
-    for x in (378, 418):                                                                          # foot paws
-        L.ellipse(x, 338, 16, 8, 'yellow', 0.0, 'madder', 1.2)
-        for d in (-6, 0, 6):
-            L.line([(x + d, 334), (x + d, 343)], 'madder', 0.8)
-    L.poly([(352, 196), (338, 230), (346, 252), (356, 248), (350, 228), (366, 202)], 'yellow', 1.2, 'madder', 1.3)
-    L.ellipse(352, 252, 8, 7, 'yellow', 0.0, 'madder', 1.1)                                       # resting paw
-    L.poly([(420, 192), (430, 218), (402, 238), (394, 228), (414, 212)], 'yellow', 2.4, 'madder', 1.3)
-    L.ellipse(394, 234, 8, 7, 'yellow', 0.0, 'madder', 1.1)                                       # sceptre paw
-    L.ellipse(386, 156, 40, 46, 'yellow', v, 'madder', 1.6)                                       # hood
-    ring_line(L, 386, 160, 24, 31, 'ochre', 2.2)                                                  # its round opening
+    L.poly([(345, 178), (420, 162), (456, 186), (472, 216), (502, 262), (506, 326), (460, 334), (404, 336),
+            (344, 330), (328, 290), (318, 240), (334, 204)], 'yellow', v, 'madder', 1.6)          # onesie
+    for x in (366, 394):                                                                          # foot paws
+        L.ellipse(x, 338, 14, 8, 'yellow', 0.0, 'madder', 1.2)
+    L.ellipse(386, 152, 42, 46, 'yellow', v, 'madder', 1.6)                                       # hood
     L.poly([(362, 122), (338, 46), (354, 50), (378, 118)], 'yellow', 1.9, 'madder', 1.4)          # ears
     L.poly([(338, 46), (343, 66), (352, 64), (354, 50)], 'black', 1.9)
     L.poly([(396, 118), (412, 44), (426, 48), (410, 124)], 'yellow', 1.4, 'madder', 1.4)
     L.poly([(412, 44), (426, 48), (422, 64), (410, 62)], 'black', 1.4)
     for cx in (352, 420):                                                                         # cheek patches
-        L.ellipse(cx, 168, 6.5, 6.5, 'terracotta', 0.0, 'madder', 1.0)
+        L.ellipse(cx, 166, 6.5, 6.5, 'terracotta', 0.0, 'madder', 1.0)
     # his sceptre, redrawn in front of the costume
     L.line([(392, 236), (466, 150)], 'ochre', 3.2)
     for dx, dy in ((0, -8), (-7, -2), (7, -2)):
@@ -436,10 +421,11 @@ SKINS = {
                           [(340, 52), (374, 50), (374, 98), (344, 98)],                   # pointing hand
                           [(264, 114), (286, 114), (286, 132), (264, 132)]]),            # club hand
     'harold': dict(erase=[], keep=[], over=[], draw=harold_skin,
-                   show=[oval(249, 80, 15, 18),                                            # face
+                   show=[[(228, 60), (266, 60), (268, 98), (232, 100)],                   # face
                          [(162, 58), (206, 58), (206, 102), (166, 102)]]),                # raised hand
     'edward': dict(erase=[], keep=[], over=[], draw=edward_skin,
-                   show=[oval(386, 160, 22, 29)]),                                        # his whole face and beard
+                   show=[[(361, 130), (411, 130), (414, 194), (362, 196)],                # his whole face and beard
+                         [(383, 220), (400, 220), (400, 240), (383, 240)]]),             # sceptre hand
 }
 SCENES.update(SKINS)
 
@@ -487,30 +473,25 @@ def profile_head(L, cx, cy, r, facing=1, helmet='madder'):
 
 
 def ghost_repair(L):
-    """The pistol rider, re-stitched whole from the reference: leaning in the saddle, his mail coat flaring over the
-    horse, one arm raised (the pistol), one reaching forward to the reins, his leg down the horse's side."""
-    clear(L, [(250, 36), (335, 36), (398, 84), (398, 108), (346, 116), (352, 140), (300, 142), (288, 118),
-              (252, 98)])
-    clear(L, [(216, 52), (252, 52), (252, 96), (232, 92)])
+    """The tracing lost the pistol rider's face and helmet and broke up his mail: stitch them back by hand, from
+    the reference (nasal helmet, face in profile, mail coat and sleeves, coloured cuffs)."""
     v = math.pi / 2
-    L.poly([(334, 196), (350, 208), (356, 232), (372, 256), (388, 262), (384, 268), (364, 266), (346, 238),
-            (334, 214)], 'navy', 1.0, 'black', 1.1)                                              # leg and foot
-    L.line([(352, 250), (380, 250)], 'black', 1.0)                                             # stirrup strap
-    L.poly([(288, 98), (304, 92), (322, 96), (334, 118), (340, 150), (350, 182), (358, 210), (340, 216),
-            (318, 214), (306, 194), (300, 162), (294, 132)], 'mail', v, 'madder', 1.4)       # mail coat, flaring
-    L.line([(304, 190), (330, 196), (356, 206)], 'madder', 1.0)                                # its hem fold
-    sleeve(L, (292, 100), (298, 114), (238, 70), (244, 82), 'madder')                         # raised arm
-    L.ellipse(229, 63, 6, 7, 'linen', 0.0, 'madder', 1.0)                                      # fist
-    sleeve(L, (318, 98), (324, 110), (374, 90), (376, 102), 'madder')                          # rein arm
-    L.ellipse(384, 96, 6, 5, 'linen', 0.0, 'madder', 1.0)
-    L.line([(386, 98), (394, 120), (398, 140)], 'black', 0.9)                                  # rein
-    L.line([(304, 92), (306, 84)], 'linen', 4.0)                                               # neck
-    profile_head(L, 304, 76, 10, facing=1, helmet='madder')
+    L.poly([(286, 90), (318, 86), (334, 96), (330, 122), (334, 150), (344, 184), (326, 192), (306, 172), (294, 146),
+            (288, 118)], 'mail', v, 'madder', 1.4)                                           # mail coat
+    L.poly([(288, 90), (262, 80), (244, 74), (238, 86), (258, 98), (290, 112)], 'mail', 2.8, 'madder', 1.2)  # raised arm
+    L.poly([(244, 72), (226, 64), (222, 76), (238, 88)], 'madder', 2.8, 'black', 1.0)          # its cuff
+    L.poly([(318, 88), (360, 92), (362, 104), (322, 106)], 'mail', 0.0, 'madder', 1.2)         # rein arm
+    L.poly([(358, 91), (380, 92), (380, 103), (360, 104)], 'madder', 0.0, 'black', 1.0)        # its cuff
+    L.ellipse(304, 80, 9, 11, 'linen', v, 'madder', 1.2)                                       # face
+    L.line([(311, 78), (315, 82), (311, 84)], 'madder', 0.9)                                   # nose
+    L.ellipse(308, 76, 1.2, 1.2, 'black')                                                      # eye
+    L.poly([(292, 72), (314, 72), (302, 46)], 'madder', v, 'black', 1.2)                        # helmet
+    L.line([(306, 72), (308, 84)], 'black', 1.4)                                               # nasal
 
 
 def claw_repair(L):
     """The Ice Claw rider, re-stitched whole: arms flung out, his mail coat hanging down the horse's side, his leg
-    below it, a profile face looking back along his claw."""
+    below it; his face and helmet as before."""
     clear(L, [(300, 68), (366, 68), (366, 126), (360, 148), (362, 206), (326, 206), (326, 150), (300, 124)])
     v = math.pi / 2
     L.poly([(340, 196), (352, 198), (354, 228), (366, 240), (362, 246), (344, 244), (342, 222)], 'navy', v, 'black', 1.1)
@@ -520,8 +501,10 @@ def claw_repair(L):
     sleeve(L, (336, 106), (334, 120), (306, 104), (306, 116), 'madder', 0.0)                   # under the claw's cuff
     sleeve(L, (350, 106), (354, 120), (380, 104), (380, 116), 'madder')
     L.ellipse(386, 110, 5, 6, 'linen', 0.0, 'madder', 1.0)
-    L.line([(343, 106), (343, 98)], 'linen', 4.0)
-    profile_head(L, 342, 90, 9, facing=-1, helmet='sage')
+    L.ellipse(342, 99, 7, 8, 'linen', v, 'madder', 1.1)
+    L.ellipse(346, 97, 1.0, 1.0, 'black')
+    L.poly([(331, 93), (353, 93), (341, 72)], 'sage', v, 'black', 1.2)
+    L.line([(345, 93), (346, 102)], 'black', 1.2)
 
 
 REPAIRS = {'ghost': ghost_repair, 'claw': claw_repair}

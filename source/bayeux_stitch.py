@@ -312,17 +312,10 @@ def stitch(lab, scale=3.0, forced=None, seed=0):
         rh = cell * 0.866
         row = np.floor(yy / rh)
         off = (row % 2) * cell * 0.5
-        col_i = np.floor((xx - off) / cell)
-        cx = (col_i + 0.5) * cell + off
+        cx = (np.floor((xx - off) / cell) + 0.5) * cell + off
         cy = (row + 0.5) * rh
-        # hand-sewn rings: each a little off its place and a little bigger or smaller than its neighbours
-        jx = _hash(col_i.astype(np.int64), row.astype(np.int64), np.full(col_i.shape, 7, np.int64)) - 0.5
-        jy = _hash(col_i.astype(np.int64), row.astype(np.int64), np.full(col_i.shape, 11, np.int64)) - 0.5
-        jr = _hash(col_i.astype(np.int64), row.astype(np.int64), np.full(col_i.shape, 13, np.int64)) - 0.5
-        cx = cx + jx * cell * 0.16
-        cy = cy + jy * cell * 0.16
-        dist = np.hypot((xx - cx) * (1 + 0.12 * jy), yy - cy)
-        ring = np.exp(-((dist - cell * (0.31 + 0.07 * jr)) / (scale * (0.55 + 0.15 * jx))) ** 2)
+        dist = np.hypot(xx - cx, yy - cy)
+        ring = np.exp(-((dist - cell * 0.32) / (scale * 0.55)) ** 2)
         ringcol = np.array(RING, np.float32) * (0.85 + 0.25 * np.sin(np.arctan2(yy - cy, xx - cx) * 3))[..., None]
         out = np.where(mail[..., None], out * (1 - ring[..., None]) + ringcol * ring[..., None], out)
     out = np.where(on_line[..., None], dark * rope[..., None], out)

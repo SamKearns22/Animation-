@@ -65,11 +65,9 @@ Read this first in any new session, after CLAUDE.md.
   cutting a second out of the finished film made the picture jump (camera drift and flames skip), so never do that.
 - FINAL 6 Oct: `animations/bayeux-season-pass-vertical.mp4` (TikTok version, 49.3 s, 1080 x 1920, 24 fps,
   10.0 MB two-pass copy of a 24.3 MB render; render 3.2 min: `BX_HOLD=1.0 python3 source/bayeux.py final OUT.mp4`).
-  Last pass of fixes: both hand-stitched riders redrawn the tapestry's way (`sleeve`, `profile_head`, `clear` in
-  bayeux_weapons.py); skins redrawn (William's tapered leg, flared jacket, cowboy boot, fluffy `boa`; Edward seated
-  with paws and a round hood opening; Harold's round toothed mouth and rounded feet); mail rings irregular; the 1066
-  horse given its back half (tail, haunch, hind leg); William grounded (sways and dips about his hooves); 1069 rider
-  restyled. Cover: the very first frame (DLC). Hashtags discussed: #bayeuxtapestry #historytok #gamingmemes
+  Sam reverted my wider pass of fixes and kept only four: William grounded (sways and dips about his hooves), the
+  1066 horse's back half, the Ice Claw rider's torso redrawn (face kept), and the new party suit (tapered leg,
+  flared jacket, cowboy boot, fluffy boa). Everything else as in the version before. Cover: the very first frame (DLC). Hashtags discussed: #bayeuxtapestry #historytok #gamingmemes
   #animation #parody. Check the rock track's licence before posting.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.

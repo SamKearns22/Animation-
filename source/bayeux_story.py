@@ -422,13 +422,11 @@ def charging_claw_rider(L, x, y, s):
     P = horse(L, x, y, s, 'terracotta', gallop=True)
     L.poly([P(-0.16, -0.95), P(-0.02, -1.0), P(0.02, -0.80), P(-0.06, -0.66), P(-0.16, -0.74)], 'ochre', 1.4,
            'madder', 1.2)                                                                       # shield on his back
-    L.poly([P(0.0, -0.74), P(0.08, -0.72), P(0.16, -0.56), P(0.14, -0.40), P(0.22, -0.37), P(0.21, -0.33),
-            P(0.08, -0.34), P(0.08, -0.54)], 'navy', 1.2, 'black', 1.1)                           # leg, foot in stirrup
-    L.poly([P(0.02, -1.08), P(0.16, -1.04), P(0.20, -0.86), P(0.24, -0.66), P(0.08, -0.62), P(-0.12, -0.66),
-            P(-0.06, -0.84)], 'mail', 1.5, 'madder', 1.3)                                       # mail coat, leaning on
-    L.line([P(-0.10, -0.68), P(0.06, -0.66), P(0.22, -0.68)], 'madder', 1.0)
-    hx, hy = P(0.12, -1.15)
-    BW.profile_head(L, hx, hy, s * 0.05, facing=1, helmet='sage')
+    L.line([P(0.0, -0.72), P(0.12, -0.58), P(0.08, -0.40)], 'navy', s * 0.04)                  # leg
+    L.poly([P(-0.06, -0.74), P(0.10, -0.74), P(0.18, -1.02), P(0.04, -1.08)], 'mail', 1.6, 'madder', 1.2)
+    L.ellipse(*P(0.13, -1.13), s * 0.05, s * 0.06, 'linen', 0.0, 'madder', 1.1)                # face
+    L.ellipse(*P(0.155, -1.14), 0.9, 0.9, 'black')
+    L.poly([P(0.075, -1.14), P(0.19, -1.15), P(0.13, -1.30)], 'sage', 1.5, 'black', 1.1)        # helmet
     return P
 
 
