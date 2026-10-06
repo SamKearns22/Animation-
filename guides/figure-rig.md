@@ -96,6 +96,13 @@ hangs past the hands; that is the garment, not long arms.
   comes forward towards the viewer, drawn shorter. This is how people hold a cup, a phone or a pen; never an elbow
   lifted out to the side to bring the hand in front of the chest.
 
+## 5c. Close-up hands: built on MakeHuman, drawn flat (`source/hands3d.py`)
+For any hand seen big (holding a phone, a cup, a pen in close-up), never draw it freehand: pose MakeHuman's real hand
+round the prop with `hands3d.solve` (finger bends and thumb angles found by an optimiser: fingers resting on the prop,
+never through it; the thumb's tip on its target; the thumbnail facing us), add the nails (`nail_meshes`), and render it
+flat (`render`: skin and one shadow tone, black outlines). `hands3d.phone_hands` is the two-thumbed phone grip;
+solved poses are cached in `source/data/hands3d_cache.json`. Run `python3 source/hands3d.py phone OUT.png` to see it.
+
 ## 6. Movement and timing (numbers from movement.md, at our 12 drawings a second)
 - **Slow in, slow out** (`ease`), **anticipation** before a big move (`anticipate`: a small opposite move first),
   **follow-through** (`overshoot`: arrive a touch past the pose and settle).

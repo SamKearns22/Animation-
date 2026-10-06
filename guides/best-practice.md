@@ -225,6 +225,16 @@ this series. Full details in `tiktok-design.md`.
   part too.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
+**Hands (Russiadent Evil, 6 Oct)**
+- **Never invent a close-up hand from circles and sausages.** Three freehand attempts at hands holding a phone came out
+  as claws, mittens and "penile" thumbs, and dots for fingers. Any hand bigger than a fist-sized blob is built on
+  MakeHuman's real hand with `source/hands3d.py`: a solver bends the real finger bones round the prop (resting on it,
+  never through it; the thumb on its target with its **nail facing the viewer**), nails are added (MakeHuman's mesh has
+  none) on the back of each fingertip, and it is drawn flat in our style (one skin tone, one shadow tone, black
+  outlines from the silhouette, overlaps and creases). The prop is in the render too, so whatever is behind it is
+  hidden. Check the solve by eye: a failed solve pushes a finger through the prop (drop that pose).
+- Work from photo references of the real grip (two palms round the phone, thumbs over the screen).
+
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
   guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
