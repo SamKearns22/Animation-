@@ -60,7 +60,7 @@ Read this first in any new session, after CLAUDE.md.
 - 6 Oct: the Ice Claw arm in 1069 swings back and forth from the shoulder (`claw_arm` drawn as its own sprite,
   `drawn_sprite` with a pivot); 1066 archer and ghost-pistol rider cut out whole (wider outlines, `nots` to drop
   the old bowstring and spear, the horse's rump closed by hand).
-- TikTok version 6 Oct (50.0 s): rendered with a 1 s shorter title hold: `BX_HOLD=1.0 python3 source/bayeux.py
+- TikTok version 6 Oct (49.3 s, 24.4 MB, 3.3 min): rendered with a 1 s shorter title hold: `BX_HOLD=1.0 python3 source/bayeux.py
   final OUT.mp4` (default 2.0 is the full version; every later time moves with it, `E` in bayeux.py). Simply
   cutting a second out of the finished film made the picture jump (camera drift and flames skip), so never do that.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
