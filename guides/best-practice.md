@@ -113,6 +113,27 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Objects must belong:** things rest on something, attach where they should, and cast shadows. There are
   no seams, floating pieces or gaps between parts.
 
+- **Compose the frame, not just the floor plan.** Placing each action correctly in the room is not enough: look at
+  the frame as a picture (foreground, middle, back; left, centre, right) and give each action its own area. Use the
+  empty spaces; never pile the busiest actions into one corner (Russiadent Evil: the attack, a runner and a fallen
+  man all in the front left, the front right empty).
+- **Every action reads in one glance.** Write each figure's action as one sentence ("a zombie has him from behind and
+  is biting his neck; he strains to escape"); then show the contacts that prove it: the gripping hands visible on his
+  chest, the mouth on the neck. If the sentence can't be seen in the drawing, the action isn't readable.
+- **Bend, don't tilt.** A person leans by bending at the waist and knees with their feet planted. Never rotate a
+  whole figure like a plank (feet leave the floor and it reads as sliding or falling), unless they are falling, and
+  then show the fall.
+- **People never pass through each other.** Every person has a footprint on the floor plan and a planned path; no two
+  footprints overlap at any moment, unless they are a pair meant to touch (an attacker and their victim).
+- **Never resize a person to fit a prop or a space;** change the pose (a crouched adult is still adult-sized).
+- **Close-ups and inserts are cameras in the same plan,** placed relative to the character's real position, so the
+  background behind them is what is really behind them.
+- **Effects land on surfaces.** Blood, mud, light and shadow attach to the physical thing they hit (the glass, the
+  hands), are cut to its outline and move with it; what misses flies on out of frame. An effect over the whole frame
+  floats in the air.
+- **Show the consequence.** After an impact, something follows through (bitten, her hands go limp and the phone drops
+  out of frame).
+
 ## 1.4 Sound
 Sources: EBU R 128 and streaming-platform loudness practice; standard audio-editing practice. On sound
 design as storytelling: Walter Murch and the film-sound literature.
@@ -244,6 +265,9 @@ this series. Full details in `tiktok-design.md`.
   flight with spikes thrown ahead and a short tail behind; then they run. A splash that swells from the centre looks
   like a slide transition.
 - Keep the joke's words readable through the effect (the big splats round the edges of the page).
+- **Actions continue through a pickup:** she grabs the phone mid-crawl and keeps fleeing; stopping the action to perform
+  a mechanical pick-up looked robotic.
+- **Repeating actions vary:** strikes, thrashing and clawing each have their own rhythm and phase, never in step.
 
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the

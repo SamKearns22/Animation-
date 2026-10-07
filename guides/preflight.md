@@ -30,6 +30,10 @@ film, with `guides/figure-rig.md` (bodies and movement) and `guides/best-practic
 - Look at the sheet for: legs and feet on everyone; hands on things (keys, rails); faces readable at phone size;
   lettering and badges clear of arms.
 
+- **An action list for every figure:** one sentence each ("hiding under a chair, head under the seat, shaking"), with
+  where they are in the frame. Sam reads it with the storyboard; anything he can't picture is redrawn before animating.
+- **A composition check per shot:** the busiest actions spread across the frame, none piled in one corner.
+
 ## Stage 3: before the first animatic (automatic)
 `python3 preflight.py FILM OUT_DIR` runs everything below on every third frame and makes a contact sheet with the
 safe area drawn on; fix whatever it reports, then render the animatic.
@@ -38,6 +42,10 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 - Sets: listed set pieces never overlap; desk items from one plan.
 - Captions: at most 2 rows of 42 characters within 700 px; readable speed.
 - Shots over 8 s are flagged (keep only the chosen ones, such as an unbroken speech).
+- People: footprints never overlap along their paths (except named pairs); feet on the floor even when leaning; nobody
+  scaled away from the cast's size.
+- **Then review the motion yourself before sending:** a strip of frames across every shot, looking at every corner (a
+  frozen figure, a clip, an empty or crowded corner shows only in motion, never in one still).
 
 ## Stage 4: recordings
 - **Naming:** Sam names each file with its script line number first (`03 people.m4a`, `04 traitors.m4a`; extra
