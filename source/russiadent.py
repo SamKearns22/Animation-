@@ -1772,8 +1772,9 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
         if reach > 0 and phone is not None:
             hand = lerp2(hand, (phone[0] + 20, phone[1] - 4), F.ease(reach))
         if near and raise_ph > 0:  # stopped: the phone comes up to her eyeline, in front of her face
-            hand = lerp2(hand, (-305, -440 + bob), F.ease(raise_ph))
-        el, wr = ik2(sh, (hand[0] + 6, hand[1] - 22), 150, 140, bend=1)
+            hand = lerp2(hand, (-345, -430 + bob), F.ease(raise_ph))
+        # raised: the elbow drops low and forward, the forearm goes straight up in front of her, clear of her head
+        el, wr = ik2(sh, (hand[0] + 6, hand[1] - 22), 150, 140, bend=-1 if (near and raise_ph > 0.5) else 1)
         taper(p, sh, el, 30, 26, colr)
         taper(p, el, wr, 26, 20, colr)
         c = B.dk(skin, 0.95) if dx else skin
