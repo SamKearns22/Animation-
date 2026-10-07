@@ -97,3 +97,29 @@
 - **Pacing:** how fast or slow the story moves.
 - **Deadpan:** comedy delivered with a completely straight face.
 - **Hook:** whatever grabs the viewer in the first 1–2 seconds.
+
+## Lessons from The Patriots 2 (the TikTok parody series)
+
+What made this film take many rounds, and how a prompt can prevent it. Claude handles the drawing rules
+(`figure-rig.md`, `preflight.md`); the prompt only needs to settle the things below.
+
+1. **Budget the words.** Sam speaks at about 3.3 words a second. A 30-second film with a little action holds about
+   **70-80 spoken words**; The Patriots 2's script had about 140, so it ran to 60 s however the timing was set.
+   Write to the word budget, or say "cut the script to fit 30 s" and let Claude propose the cuts.
+2. **Say which wins when numbers clash.** "38 seconds" and "2.7 words a second" could not both be true. Say
+   whether the length or the full script comes first.
+3. **Put the first laugh in the first 8-10 seconds.** Name the line that is the turn and place it early; TikTok
+   viewers left our 60 s film at about 15 s, before its first laugh at 23 s.
+4. **List the places and who is where, including posture.** Who sits, stands, walks or lies down in each shot,
+   and which shots look at the same place from another side (a reverse angle). Lying, seated and walking people
+   need designing up front.
+5. **Name anything that appears in more than one shot** (a vehicle, a chair, a prop), so it is drawn once.
+6. **Say what you know about real people, groups and places**, and attach any reference photos. Claude checks
+   sources too, but your pictures settle questions (headscarves, uniforms) before they become renders.
+7. **Recordings:** name each file with its script line number first (`03 people.m4a`), one take per file, and list
+   any non-speech sounds you will record (a choke, a gurgle). Send them together if you can.
+8. **Put the hashtags you plan in the prompt**, so they are checked against the avoid list before posting.
+9. **Batch notes.** Each round of notes costs a render (about 20 minutes and plan usage); one message with every
+   note from a viewing saves several rounds. Notes with the reason ("nobody stands like that") work best.
+10. **You don't need to describe** set dressing, body mechanics or continuity: Claude proposes them in the brief
+    for you to accept or cut.

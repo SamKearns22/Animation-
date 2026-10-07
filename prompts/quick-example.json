@@ -1,0 +1,18 @@
+{
+ "_help": "characters A (left) and B (right): skin pale|pink|olive|brown|deep, hair crop|side|bald|bob|long|swept|wisps|blonde, hair_c/jacket/trousers as #rrggbb, outfit suit|jumper|dress|blouse, jaw round|square|soft|long, glasses true|false. line: who A|B, text (exact words), audio, start (s), optional gesture rest|talk|point|shrug|hips|wave|clasped, face neutral|angry|happy|shock, react (the listener's face), shout true (big capitals). shot: cam two|A|B, start, end ('end' for the last), optional zoom 2.0, push 0.08 (slow zoom-in). sfx: at, type thud|ding|whoosh|bang, gain.",
+ "title": "THE LATTE",
+ "background": "cafe",
+ "characters": {
+  "A": {"skin": "olive", "hair": "bob", "hair_c": "#2a1a12", "jacket": "#2e7d5b", "outfit": "blouse", "jaw": "soft"},
+  "B": {"skin": "pale", "hair": "side", "hair_c": "#6b4a2b", "jacket": "#3a4f7a", "outfit": "suit", "glasses": true}
+ },
+ "lines": [
+  {"who": "B", "text": "Can I please order a latte?", "audio": "source/audio/mossad-customer-1.m4a", "start": 0.2, "gesture": "talk"},
+  {"who": "A", "text": "Of course you can.", "audio": "source/audio/of-course.m4a", "start": 4.3, "gesture": "shrug", "face": "happy"}
+ ],
+ "shots": [
+  {"cam": "two", "start": 0, "end": 4.1},
+  {"cam": "A", "start": 4.1, "end": "end", "push": 0.08}
+ ],
+ "sfx": [{"at": 6.9, "type": "ding"}]
+}

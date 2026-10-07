@@ -19,6 +19,8 @@ The detailed guides hold the numbers and the code:
 - `tiktok-design.md`: TikTok format, safe area, titles, posting
 - `character-anatomy.md` and `movement.md`: people and motion
 - `pipeline.md`: the 3D pencil shots
+- `figure-rig.md`: bodies and movement in the flat cartoon films (`source/figure.py`)
+- `preflight.md`: the checklist that catches problems before the first render
 - `tone.md`: the horror trailer
 - `perfect-prompt.md`: how to brief a film
 
@@ -54,6 +56,16 @@ and the research in `movement.md`.
   a cartoon pushes them.
 - **Poses read first as a silhouette, with a clear line of action and believable weight and balance.**
   A character standing naturally puts its weight on one leg (contrapposto). Weight shifts before a reach.
+- **Limbs keep one length per character, and are solved from where the hand or foot needs to be** (inverse
+  kinematics), never typed in as separate points per shot. A hand that can't reach its target means the body or
+  the prop moves, never that the arm stretches. Foreshortening only ever shortens. (Classic canon: elbows at the
+  waist, wrists at the crotch, fingertips mid-thigh.) For the flat cartoon films this is built in
+  `source/figure.py` and explained in `figure-rig.md`.
+- **Holding something in front:** the upper arm hangs by the side and the forearm comes forward towards the
+  viewer, so it looks shorter; the elbow is not lifted out sideways. Things that touch the ground get a soft
+  contact shadow; anything hanging off a body (lanyard, scarf, ponytail) follows a beat behind each move, swings
+  past and settles; mouths take the standard cartoon shapes from the words, timed to the recording, closed in
+  the pauses. (Built for the flat films in `source/kit.py` and `source/mouths.py`.)
 - **Joints move within natural ranges,** and limbs are posed from where the hand or foot needs to be.
   Example: a hand holding a tool keeps a near-neutral wrist, so the tool turns to suit the arm ("bend the
   tool, not the wrist", a basic rule of ergonomics). That example is about realistic, comfortable
@@ -77,6 +89,20 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Continuity:**
   - one world, seen from different cameras: build the set once and keep people, props and costumes in
     the same places and states from shot to shot;
+  - **every location is built once as one set, and every shot of it is that same set from a different camera:**
+    backgrounds, furniture and props never change between shots of the same place unless the script changes them
+    (The Patriots 2: the reverse shot of his room first showed a door and a picture that did not exist in the
+    opening shot);
+  - **a recurring object is one drawing at one size:** a vehicle, piece of furniture or prop that appears in more
+    than one shot (even in different locations) is drawn by the same code everywhere, at a fixed size relative to
+    the people who use it (`CREW_TO_BOAT` in patriots2.py: the crew are always 0.36 of the lifeboat's scale), never
+    redrawn freehand for a new shot (The Patriots 2: the lifeboat alongside the dinghy was a separate navy block,
+    far taller than the boat in the shot before);
+  - **props are part of the set:** everything on a table, desk, shelf or floor has one place in one written plan (its
+    position measured from a fixed point, such as the character or the table's edge), and every camera draws from
+    that plan, never from positions typed in separately for each shot. The plan is checked so no two items overlap
+    (The Patriots 2: after the walls were shared, each shot still placed its own cans and tubs, so the desk changed
+    between shots);
   - respect the 180-degree rule, so screen direction stays consistent across cuts;
   - a close-up should match its wide shot.
 - **Layering (draw order):**
@@ -86,6 +112,31 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
   - writing, badges and signs the audience must read are never covered.
 - **Objects must belong:** things rest on something, attach where they should, and cast shadows. There are
   no seams, floating pieces or gaps between parts.
+
+- **Compose the frame, not just the floor plan.** Placing each action correctly in the room is not enough: look at
+  the frame as a picture (foreground, middle, back; left, centre, right) and give each action its own area. Use the
+  empty spaces; never pile the busiest actions into one corner (Russiadent Evil: the attack, a runner and a fallen
+  man all in the front left, the front right empty).
+- **Every action reads in one glance.** Write each figure's action as one sentence ("a zombie has him from behind and
+  is biting his neck; he strains to escape"); then show the contacts that prove it: the gripping hands visible on his
+  chest, the mouth on the neck. If the sentence can't be seen in the drawing, the action isn't readable.
+- **Bend, don't tilt.** A person leans by bending at the waist and knees with their feet planted. Never rotate a
+  whole figure like a plank (feet leave the floor and it reads as sliding or falling), unless they are falling, and
+  then show the fall.
+- **People never pass through each other.** Every person has a footprint on the floor plan and a planned path; no two
+  footprints overlap at any moment, unless they are a pair meant to touch (an attacker and their victim).
+- **Never resize a person to fit a prop or a space;** change the pose (a crouched adult is still adult-sized).
+- **Close-ups and inserts are cameras in the same plan,** placed relative to the character's real position, so the
+  background behind them is what is really behind them.
+- **Effects land on surfaces.** Blood, mud, light and shadow attach to the physical thing they hit (the glass, the
+  hands), are cut to its outline and move with it; what misses flies on out of frame. An effect over the whole frame
+  floats in the air.
+- **Never slice a drawing of a body to animate it,** and redraw whatever a moving object uncovers. When the phone
+  fell, the hands were cut down the middle and slid apart as flat pieces: a straight cut edge through a hand, and
+  holes where fingers had been hidden behind the phone. Each hand must be its own whole drawing, redrawn (here from
+  the 3D hand) in its new pose once nothing hides it.
+- **Show the consequence.** After an impact, something follows through (bitten, her hands go limp and the phone drops
+  out of frame).
 
 ## 1.4 Sound
 Sources: EBU R 128 and streaming-platform loudness practice; standard audio-editing practice. On sound
@@ -178,6 +229,10 @@ this series. Full details in `tiktok-design.md`.
 - **Even a deadpan character acts with the face, beat by beat** (the cashier: serious, wide-eyed, hand on heart), while
   the camera stays still.
 - **Everyone has legs and feet,** including people seated or standing behind counters (draw them; let the set hide them).
+  Never switch legs off to save drawing, even where something "should" hide them: in The Patriots 2 the people at the
+  edges of a close-up ended at the waist. `person()` in patriots2.py now always draws legs (standing, seated or walking).
+- **Urgency before the deadpan (The Patriots 2):** a sudden decision to do nothing is funnier straight after urgent
+  movement (doors banging open, staff running the trolley into the ward), so build the rush, then stop dead.
 - **Props at real size and used the real way:** a 12 oz takeaway cup is about half a head tall; stacks sit wide end
   down; an order pager is a small upright block, not a disc.
 - **Analytics (Mossad, 4 Oct):** with movement and the first line from frame one and the title gone by 1 s, average
@@ -188,7 +243,66 @@ this series. Full details in `tiktok-design.md`.
   plainly and the video still reached 6.9K views in 6 hours. Don't disguise words in captions (it costs readability,
   breaks accuracy, and TikTok transcribes the audio anyway). TikTok's AI label is required for realistic AI content;
   our flat cartoons with Sam's own voices are not that.
+- **The opening needs a hook, not a joke (DLC, 6 Oct):** comedy can take 10-20 s to build its first laugh (The
+  Patriots 2 held 14.8 s average with its first laugh at ~23 s; Mossad 17.1 s), but the first seconds must give a
+  reason to stay: a person, a situation, a question. DLC opened on a faithful game-logo sequence with no person or
+  situation, which reads as a real advert; average watch 7.3 s. One small first batch (175 views), so luck plays a
+  part too.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
+
+**Hands (Russiadent Evil, 7 Oct; replaces the MakeHuman close-up hands)**
+- **Every hand is a plain circle at the end of the arm** (South Park: Butters, the hunters with rifles). No fingers,
+  no nails, at any size. To hold something, lay the prop over the circle so it reads as a grip; to pick it up, the
+  circle touches it and it moves with the circle. (Code: `chand`, `phone_prop`, `gesture_hand` in russiadent.py.)
+- Why: three rounds of freehand fingers failed and the 3D hand (`hands3d.py`) cost many renders; the circle reads
+  instantly, fits the style and costs nothing. Reach for the simplest device the style references use first.
+
+**Fights and set pieces (Russiadent Evil, 7 Oct)**
+- **Fighters look at each other and act on each other:** a victim's eyes and free hand go to the attacker (shoving its
+  face), never staring ahead.
+- **One clear blow beats repeated swinging:** guard, wind-up, one fast hit, then the consequence (it flies, lands,
+  bounces, lies there), and the hitter stays in the pose that shows what he did.
+- **Plan the space for big moves in the floor plan before animating:** a body lying down is 1.8 m long (it filled half
+  the frame and landed behind someone's legs); fold its knees or move the landing. A set-piece (a window bursting)
+  goes where nothing in that shot hides it: check its screen position first.
+- **Check the whole body in every review still, not only what was changed:** a phone moved into frame was approved
+  while the arm holding it passed behind her head. A raised arm goes in front of the body: elbow low and forward,
+  forearm up to the hand.
+- **Paired characters need contrasting colours** (a zombie in green beside a man in green read as one blob).
+- **Pick the simplest staging that tells the beat:** she raises the phone from the crawl rather than a new sitting
+  pose. Each new pose or rig is a cost: use it only when the story needs it.
+
+**Chaos scenes (Russiadent Evil, 7 Oct)**
+- **Nobody holds a pose in a chaos shot.** A figure frozen mid-action (a tackle, a raised chair) reads as a cut-out and
+  stops the eye; every person gets a repeating action (a strike that comes down fast and lifts slowly, thrashing,
+  clawing, trembling, backing away) and the attackers keep advancing. Check a strip of frames, not one still.
+- **A prop picked up travels with the hand:** the hand goes to it, closes, lifts it; it never just disappears.
+- **Blood is thrown, not grown:** drops fly in along a path and hit at full size in one drawing, stretched along their
+  flight with spikes thrown ahead and a short tail behind; then they run. A splash that swells from the centre looks
+  like a slide transition.
+- Keep the joke's words readable through the effect (the big splats round the edges of the page).
+- **Repeating actions vary:** strikes, thrashing and clawing each have their own rhythm and phase, never in step.
+
+**Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
+- **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
+  guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
+  back, face up, with a face profile; people pushing a trolley lean into it; a heard letter is not spoken (no mouth
+  movement while typing).
+- **Sets:** one plan per location and per desk or table, drawn by every camera; set pieces that must stay apart are
+  listed and checked; uniform details are part of the garment, drawn before the arms; props at real size and
+  working height (a trolley's mattress at the staff's waist, a keyboard under the fingertips).
+- **Detail that sells a place:** generic set dressing proposed in the brief (the ambulance's oxygen cylinder,
+  labelled drawers, kit bags, sharps bin, drip bag, blue lights through a frosted window; the ward's whiteboard,
+  dispensers, oxygen and suction outlets, clinical waste bin); an urgent rush (doors banging open, staff running)
+  before a deadpan stop makes the stop funnier.
+- **People from real groups:** check sources before drawing (small-boat arrivals: about 13% adult women, mostly
+  from countries where women cover their hair: draw headscarves); design each person's hair and clothes
+  deliberately (a greying man's hair on young men read as beads).
+- **Caricature by accident:** compare a new invented character with the series' real-person caricatures (the
+  doctor first resembled our Andy Burnham).
+- **Recordings:** files named by script line number; `voices.py` catches duplicates (two names, one take) at once;
+  shortening the silences between phrases (never the words) tightened the film by 2 s.
+- **No unexplained movement:** a prop that moves needs a visible cause (the wobbling can).
 
 **TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
 - Native 1080 x 1920; the safe area is x 60-900, y 310-1500, measured on a real post.
@@ -209,6 +323,20 @@ this series. Full details in `tiktok-design.md`.
   - just below the faces;
   - big Anton capitals for shouts, plain italics for a childish aside (The Patriots).
 - **Endings:** a hard cut to black.
+
+**Redrawing a real artwork from photos (The Bayeux Tapestry Season Pass, 5 Oct)**
+- Trace the photo into the artwork's own small palette, then re-render every area in code (stitches, weave); no
+  photo pixel reaches the film. Enlarge and sharpen the photo *before* sorting colours, and clean gently: a strong
+  clean-up at the photo's own size wiped out thin outlines and mail rings, and whole soldiers vanished.
+- Erasing an object (a weapon) by borrowing colour from its neighbours leaves streaks unless the object's own
+  outline colours are excluded from the borrowing; cover the whole object (fill shapes, not just their outlines).
+- Small or busy photos lose faces and helmets in tracing: compare every figure with its photo at full size and
+  re-stitch lost parts by hand (`REPAIRS`), rather than hoping the tracer gets them.
+- Camera shake must never wrap the picture round (np.roll did: a white sliver flashed on the right); move the frame
+  and repeat its edge instead.
+- Action timed to a camera pan must happen while it is on screen: work out when each gun enters the view first.
+- To shorten a moment, re-render it shorter; never cut frames out of a finished render. Anything still moving (a
+  camera drift, flickering flames) jumps at the cut (DLC's title hold).
 
 ---
 
@@ -262,8 +390,15 @@ Specific lessons recorded there include:
 
 # Part 5. How we work and deliver (every project)
 1. **Brief:** ask all questions in one message, with a recommended answer for each.
-2. **Stills or a storyboard,** then an **animatic** (a quick rough version with sound) before the final
-   render. Sam may skip steps to save usage.
+   - **Set dressing goes in the brief.** For every location in the script, list the everyday items such a place
+     usually has, so the place reads as real (a business meeting: laptops, pens and paper, glasses of water, a
+     digital whiteboard, cabinets; an ambulance: oxygen cylinder, labelled drawers, kit bags, sharps bin). Keep it
+     generic (no logos or brands) and say where each item would sit. Sam accepts or rejects them with the other
+     answers, so they are decided before the storyboard and never added in later editorial renders.
+2. **Stills or a storyboard** (with a model sheet of each new character), then **pre-flight**
+   (`python3 source/preflight.py FILM OUT_DIR`: bodies, contacts, sets, captions and shot lengths checked on every
+   third frame, plus a contact sheet with the safe area drawn on), then an **animatic** (a quick rough version with
+   sound) before the final render. Sam may skip steps to save usage. Full checklist: `preflight.md`.
 3. **Final render,** checked against the safe-area guides on the title, the widest caption and the busiest
    frame.
 4. **Deliver:**
@@ -274,10 +409,19 @@ Specific lessons recorded there include:
    Sam writes the post text and the pinned question himself.
 - **Timing and notifications:** say how long each render will take, report how long it took, and send a
   push notification when anything long finishes, fails or needs a decision.
+- **Rules are not optional.** Never skip a step because a tool doesn't fit the film yet: fix the tool, or say so
+  before going on. (Russiadent Evil: preflight was skipped, then silently checked zero frames because the film had no
+  `BLACK_AT`; it now refuses such a film and runs the film's own `checks()`.)
+- **Budget:** one round of notes, one animatic, one final where possible; check stills of the changed moments
+  before any full render; never build heavy tech when a simpler device in the style references will do.
 - **Fixes:**
   - apply every note;
   - check that a fix hasn't broken anything else;
   - where possible, add an automatic check so a fault can't return.
+- **Automatic clip checks (The Patriots 2):** every set piece that must stay separate (a wall monitor and a curtain, a
+  dispenser and a cupboard) is listed with its outline, and the render stops if any two overlap; a typing fingertip
+  must land on the keyboard. Uniform details (reflective bands, badges) are drawn as part of the jacket, before the
+  arms, so arms always pass in front of them. The checks only know what they are told: keep the fresh-eyes review too.
 - **Record every new lesson here, in the right part:** general only if it is truly general and backed by a
   good source; otherwise under its project.
 

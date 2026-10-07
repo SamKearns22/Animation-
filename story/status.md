@@ -2,6 +2,125 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## Quick videos (about 5% of a week)
+- `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
+  `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
+
+## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
+- **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
+  `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.
+- Peskov calmly denies the Irkutsk plague-lab death; behind the camera a zombie outbreak tears through his press
+  conference. Code: `source/russiadent.py` (`sheet`, `stills OUT_DIR T...`, `times`, `animatic`, `final`). One plan
+  for the press room drawn by perspective cameras in the plan (`PCam`): shot 2's 180 is the same room. Placeholder
+  timing at Sam's pace (`LINE1`, `LINE2`, `T`); all sounds made in code (screams, roars, crunch, splats, slap).
+- Director's decisions: no hint before the 180 except the hand slapping onto the podium edge (~5 s); English website
+  line under a Russian "Ministry of Health" header (no emblem, `health.gov.ru`); the severed arm holds a microphone;
+  a 0.6 s beat after "Any more questions?"; title RUSSIADENT / EVIL on two lines (no slash), gone by 1 s; real terror
+  on the reporters' faces (wide eyes, pinprick pupils, screams with the corners pulled down, drained skin); more
+  zombies: packed several deep at every window, back and side doors burst open; Peskov's reference photo (press
+  agency) used but not stored in the project.
+- **Hands:** close-up hands are built on MakeHuman's real hand and drawn flat (`source/hands3d.py`; see figure-rig
+  5c): the phone grip (shot 4), the hand on the podium (shot 1), the fist round the microphone (shot 5).
+- Next: Sam's notes on the animatic; his recordings `01 peskov.m4a`, `02 any more.m4a` (run voices.py), then the
+  final render as `animations/russiadent-evil-vertical.mp4`.
+
+## Done: "DLC" (The Bayeux Tapestry Season Pass) (TikTok, `prompts/bayeux-season-pass.md`)
+- Sam's references in `references/bayeux/` (list and the swap rule in its README: each original weapon deleted
+  completely, the new one stitched in the same hand and place).
+- Proof-of-concept animatic sent 5 Oct 2026 (15.3 s, 1080 x 1920, 24 fps, 11.3 MB; render 70 s on 4 cores, not saved
+  in `animations/`): gallery and title (gold BAYEUX / TAPESTRY, each Y two flaming arrows, SEASON PASS in fire),
+  NEW WEAPONS, then the pan along the tapestry: rifle, ice claw, ghost pistol (ghost + WOOOOOO!!), stapler (riser,
+  huge reveal, one flat click), title slam, hard cut. No voice yet (Sam to record); text slams carry the words.
+- Code: `source/bayeux_stitch.py` (traces a reference into the tapestry's wools and re-stitches it: laid-and-couched
+  fills, outlines, linen weave), `source/bayeux_weapons.py` (erase masks and the four new weapons; `build` stitches
+  every scene into `source/data/bayeux/`, not on GitHub, ~1 min), `source/bayeux.py` (`stills`, `animatic`, `final`).
+  Fonts: Cinzel Decorative Black and Cinzel (OFL) in `source/fonts/`.
+- Concept v3 sent 5 Oct (18.9 s, 14.5 MB, render 92 s): the room rebuilt as the London 2026 exhibit (Sam's
+  `london-2026-exhibit-*.jpg`: tapestry lying almost flat in long low glass cases, black wall with glowing blue line
+  drawings and captions, warm floor light strip); title held 2 s longer (`D` in bayeux.py); after the stapler's reveal
+  the glory fades (`STAPLER_FADE`) and it fires one staple into the messenger's forearm (`STAPLER_CLICK`, `STAPLE_HIT`).
+- Concept v4 sent 5 Oct (26.3 s, 23 MB, render 121 s): NEW SKINS added after the staple (William: PARTY SUIT,
+  Harold: SHARK WARRIOR, Edward: ELECTRIC MOUSE; `SKINS` in bayeux_weapons.py: each figure's face and hands copied
+  back over the new costume ('show'), club/arrow/sceptre redrawn in front). Sam's rock track
+  (`source/audio/bayeux-rock.mp3`, a Pixabay-style download Sam supplied: confirm its licence before posting) plays
+  from the moment SEASON PASS ignites, drops out for the stapler's silence and returns for NEW SKINS.
+- Concept v5 sent 5 Oct (37.7 s, 30.6 MB draft, render 162 s): opens straight on the title (`START` trims the
+  first 0.85 s; INTRODUCING removed); bigger gold names on the skins; Edward's whole face shows through the hood;
+  the shark costume solid to the feet with his shield stitched on top. NEW STORY CHAPTER / BAYEUX: ENDLESS CONQUEST:
+  three new stitched scenes (`source/bayeux_story.py`, `build` ~40 s): 1066 coronation (William in his party suit
+  with a crown, guards with rifle and ghost pistol, Saxon houses burning), 1069 Durham (claw and ghost riders storm
+  the gate, the bishop's palace burns over sleeping Normans, two run away), 1086 Domesday (William, the book, three
+  tax collectors with staplers, staples everywhere, villagers, sheep, ox). Sam's chapter message was cut off at
+  "You must render the fll": ask what the rest said.
+- Concept v6 sent 6 Oct (45.3 s, 23.6 MB draft, render 3 min): chapter slowed (`CH_LEN` 5.4 s a scene, the logo held
+  2.5 s); ENDLESS CONQUEST in fire like SEASON PASS (`burn_text`); movement: William dances (a separate stitched sprite,
+  `draw_sprites`/`dance`), tax collectors jolt with each shot and staples fly and land, plasma bolts into the houses,
+  ghosts fired from the pistols (`SHOTS`, `chapter_action`), each with its sound. Stitching repaired by hand on the
+  ghost-pistol and ice-claw riders (`REPAIRS` in bayeux_weapons.py). White flash at the start fixed: the shake wrapped
+  the picture's bright left edge round to the right (`shove` now repeats the edge instead).
+- Concept v7 sent 6 Oct (45.3 s, 23.5 MB; plus a Discord copy 720 x 1280, 9.4 MB, two-pass, for Discord's 10 MB
+  limit): chapter figures cut out by their own shape (`cut` in bayeux_story.py: seed points, joined stitching
+  only, small gaps kept), no slicing and no leftovers; the Ice Claw rider redrawn whole, charging right with the
+  claw thrust forward (`charging_claw_rider`); Domesday crowded with the country's resources (two fields of
+  people, pigs, goats, sheep, oxen, a cow, a horse, hives, a cart, barrels, a mill, a plough), staples on all of
+  it; border repeats joined at their plainest columns. Still open: Sam may send a real tapestry tree to replace
+  the invented divider tree (`tree_image` in bayeux.py).
+- Concept v8 sent 6 Oct (50.3 s, 24.7 MB; Discord copy 9.4 MB): new ending after the title slam (`end_card`):
+  AVAILABLE NOW, 1,066 CROWNS, a stitched "M / MEDIEVAL" rating box with "Mild Pillaging / Fantasy Ghosts /
+  Excessive Stapling", TAPESTRY SOLD SEPARATELY; then a hard cut to the silent gallery where one staple pings off
+  the glass (`final_staple`, tink), then black. Everything drawn now looks hand-sewn (`wobble` in
+  bayeux_weapons.py: edges nudged, thread width varies). Sam: no voice, keep the length; he will send a real
+  tapestry tree for the divider.
+- Series title added 6 Oct (51.0 s, 25.0 MB; Discord copy 9.4 MB): DLC in the standard cranberry title
+  (`series_title`, burnham.title_lines, capitals 148 px, top 395) over the quiet gallery for the first 0.8 s, then
+  the gold logo crashes in (`START` 0.15, `T_DLC_OUT`). Cover: about 0:00.4 (DLC over the gallery).
+- Real tree 6 Oct (51.0 s, 25.0 MB): the invented flower-tree replaced by Sam's real tapestry tree
+  (`references/bayeux/tapestry-trees.jpg`, traced and stitched, 72% of the band, never squashed; scene gap DIV 330).
+  Sam: no more Discord copies unless asked.
+- Cover frame 6 Oct (24.7 MB): DLC now appears on frame 0 only (`cover_frame`, 1/24 s) so the film still opens
+  straight into the logo; choose the very first frame as the TikTok cover.
+- 6 Oct: the Ice Claw arm in 1069 swings back and forth from the shoulder (`claw_arm` drawn as its own sprite,
+  `drawn_sprite` with a pivot); 1066 archer and ghost-pistol rider cut out whole (wider outlines, `nots` to drop
+  the old bowstring and spear, the horse's rump closed by hand).
+- TikTok version 6 Oct (49.3 s, 24.4 MB, 3.3 min): rendered with a 1 s shorter title hold: `BX_HOLD=1.0 python3 source/bayeux.py
+  final OUT.mp4` (default 2.0 is the full version; every later time moves with it, `E` in bayeux.py). Simply
+  cutting a second out of the finished film made the picture jump (camera drift and flames skip), so never do that.
+- FINAL 6 Oct: `animations/bayeux-season-pass-vertical.mp4` (TikTok version, 49.3 s, 1080 x 1920, 24 fps,
+  10.0 MB two-pass copy of a 24.3 MB render; render 3.2 min: `BX_HOLD=1.0 python3 source/bayeux.py final OUT.mp4`).
+  Sam reverted my wider pass of fixes and kept only four: William grounded (sways and dips about his hooves), the
+  1066 horse's back half, the Ice Claw rider's torso redrawn (face kept), and the new party suit (tapered leg,
+  flared jacket, cowboy boot, fluffy boa). Everything else as in the version before. Cover: the very first frame (DLC). Hashtags discussed: #bayeuxtapestry #historytok #gamingmemes
+  #animation #parody. Check the rock track's licence before posting.
+- Posted 6 Oct 2026, 5:35pm. After ~2.5 h: 175 views, average watch 7.3 s of 49 (15%), 3.8% to the end, 8 likes,
+  8 comments (all from one person), 0 shares, 1 save, 0 new followers. People Sam showed it to personally rated it
+  his best film. Likely cause: the first ~5 s are a convincing game-logo sequence (reads as an advert, swiped
+  before the first swap at ~5.5 s; stapler payoff at ~13 s). Sam decided to move on rather than re-cut it.
+- Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
+  deliberately not stored in the project.
+
+## Done: "The Patriots 2" (TikTok, the letter to the RNLI, `prompts/patriots-2.md`)
+- Posted Mon 5 Oct 2026 at 1pm, the day of another RNLI/small-boat protest (Gosport). Cover around 0:05. Check the
+  retention graph next day (watch the 12 s opening shot and the doctor's speech).
+- After ~1.5 h: 255 views, average watch 14.8 s of 60 (25%), 14% to the end, 15 likes (~6%), 6 comments, 0 shares.
+  Likely causes: #Smallboats (sensitive topic, limits reach; was on the avoid list), the 60 s length with the first
+  laugh at ~23 s (TikTok rule: 15-30 s, first payoff by 8-10 s). Advice: no re-post; remove #Smallboats if editing is
+  offered; check the retention graph next day; a 30-35 s cut is possible for a later post.
+- DONE 4 Oct 2026: `animations/the-patriots-2-vertical.mp4` (59.5 s, 8.3 MB, 1080 x 1920, 12 fps). Animatic about 4 min,
+  final render 20 min on 4 cores. Checked against the safe-area guides (title, widest caption, busiest frames).
+- To post: cover around 0:05 (him lit by the screen, mid-letter, title gone). Avoid #heartattack and #NHS (they give
+  away the turn) and #smallboats, #migrants, #illegalimmigration (strictest moderation, limited reach).
+- All code in `source/patriots2.py` (`stills`, `sheet`, `animatic`, `final`, `times` prints the timeline). Shots: his
+  room (one unbroken push-in, title over the dark room), lifeboat, dinghy, his room from the screen (collapse), ambulance,
+  rushed through the A&E doors, pushed fast into the ward ("heart attack, Doctor"), the doctor's speech (the ward camera
+  moved in: one shared ward set, `WARD_TX` / `WARD_DOC`), alone on the trolley (same ward), hard cut to black.
+- Sam's recordings: `source/audio/patriots2-*.m4a` (protester-1 Dear RNLI, -2 courage, -3 people I don't like, -4
+  traitors, -gurgle; paramedic-1 taxi, -2 heart attack; doctor-1 the whole speech; protester-choke his strangled noise as his eyes cross). Cleaned and levelled with `mossad_audio.line`; `REC` in patriots2.py says which stretch
+  plays and where each caption piece starts (on Sam's pauses). Every sound of a voice is Sam's own.
+- Director's decisions: no keyboard insert (the push-in runs through); legs on everyone always; urgent rush through the
+  doors into the ward before the deadpan; the doctor redesigned so he doesn't resemble Andy Burnham (cropped sandy hair,
+  short beard, round face, thin dark glasses); doctor's line "This man's life is clearly in serious danger".
+- Could be shortened by tightening Sam's longest pauses (about 3-4 s) if the retention graph asks for it.
+
 ## Done: "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
 - DONE 3 Oct 2026: `animations/mossad-vertical.mp4` (30.1 s, 2.2 MB, 1080 x 1920, 12 fps; final render 14 min on 4
   cores, animatic 3 min). Checked against the safe-area guides (title, widest caption, the bang).
