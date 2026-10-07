@@ -131,6 +131,10 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Effects land on surfaces.** Blood, mud, light and shadow attach to the physical thing they hit (the glass, the
   hands), are cut to its outline and move with it; what misses flies on out of frame. An effect over the whole frame
   floats in the air.
+- **Never slice a drawing of a body to animate it,** and redraw whatever a moving object uncovers. When the phone
+  fell, the hands were cut down the middle and slid apart as flat pieces: a straight cut edge through a hand, and
+  holes where fingers had been hidden behind the phone. Each hand must be its own whole drawing, redrawn (here from
+  the 3D hand) in its new pose once nothing hides it.
 - **Show the consequence.** After an impact, something follows through (bitten, her hands go limp and the phone drops
   out of frame).
 
