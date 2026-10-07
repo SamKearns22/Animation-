@@ -1327,6 +1327,17 @@ PHONE_W, PHONE_H, SCREEN_W, SCREEN_H = 560, 1150, 516, 1106
 PHONE_AT, PHONE_ANG = (540, 790), -0.06
 
 
+@functools.lru_cache(maxsize=12)
+def phone_hand_layer(side, tap_key=0, relax=0.0, phone=True):
+    """One of her hands on the phone, whole, on its own layer (so it can move on its own when the phone drops)."""
+    import hands3d
+    k = (PHONE_W / 2) / hands3d.PHONE[0]
+    cam = B.Cam(1.0, 540, 960)
+    T = Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG)
+    return hands3d.phone_hand((B.W * B.SS, B.H * B.SS), lambda X, Y: T.P(X * k, -Y * k), side, tap_key, relax, phone,
+                              skin=(240, 228, 220), sleeve=REPORTER['jacket'], outline=6.0)
+
+
 @functools.lru_cache(maxsize=4)
 def phone_hands_layer(tap_key):
     """Both hands on the phone, rendered once per thumb position, matched to the drawn phone (same size and tilt)."""
@@ -1866,12 +1877,11 @@ def phone_parts(t_local, tap):
     p.ell(0, -hh + 34, 46, 12, (14, 14, 16), None)            # the camera notch
     for (u, v, r, seed) in ((hw - 70, -250, 10, 45), (hw - 110, 160, 8, 46)):   # drops already on the glass
         splat(p, u, v, r, seed, drops=2)
-    hands = phone_hands_layer(tap).copy()
-    hp = B.Pen(hands, T_)
+    old_blood = Image.new('RGBA', bg.size, (0, 0, 0, 0))     # the blood already on her hands from the crawl
+    bp = B.Pen(old_blood, T_)
     for (u, v, r, seed) in ((-hw - 70, hh + 230, 20, 41), (hw + 120, hh + 120, 14, 42), (-hw + 150, hh + 40, 9, 43)):
-        splat(hp, u, v, r, seed, drops=3)
-    hands.putalpha(phone_hands_layer(tap).getchannel('A'))     # her blood stays on her skin
-    return bg, ph, hands
+        splat(bp, u, v, r, seed, drops=3)
+    return bg, ph, old_blood
 
 
 def clip_to(lay, mask):
@@ -1894,20 +1904,22 @@ def moved(lay, dx, dy, ang=0.0, about=None):
 def film_phone(t_local):
     """Shot 4: her phone. She types (the thumb lifting and pressing); a roar right behind her (a shadow falls,
     her hands shake); a crunch: blood thrown from above lands on the phone and her hands (only on them: what misses
-    flies past); her hands go limp, the phone drops out of her grasp and out of the frame, her hands slump away."""
+    flies past); her grip goes: the phone tips out of her hands and falls out of frame, her hands go limp and sink
+    away. Each hand is its own whole drawing, so it moves as one piece with its blood."""
     t = T['s4'] + t_local
     tap = int(t_local * 9) % 2 if t < T['crunch'] else 0
-    bg, ph, hands = phone_parts(t_local, tap)
+    bg, ph, blood = phone_parts(t_local, tap)
     W_, H_ = bg.size
     S = B.SS
-    if t >= T['crunch'] - 0.12:        # the spray: drops in flight, then splats cut to the phone and the hands
-        blood = Image.new('RGBA', bg.size, (0, 0, 0, 0))
-        air = Image.new('RGBA', bg.size, (0, 0, 0, 0))
+    hand = {sd: phone_hand_layer(sd, tap) for sd in 'LR'}
+    masks = {sd: np.asarray(hand[sd].getchannel('A')) for sd in 'LR'}
+    air = Image.new('RGBA', bg.size, (0, 0, 0, 0))
+    if t >= T['crunch'] - 0.12:        # the spray: drops in flight, then splats on the phone and the hands only
         bp, ap = B.Pen(blood, B.Cam(1.0, 540, 960)), B.Pen(air, B.Cam(1.0, 540, 960))
-        hit_mask = np.maximum(np.asarray(ph.getchannel('A')), np.asarray(hands.getchannel('A')))
+        hit = np.maximum(np.asarray(ph.getchannel('A')), np.maximum(masks['L'], masks['R']))
         for (x, y, r, ang, dt, seed) in SPRAY:
             ti = T['crunch'] + dt
-            on = hit_mask[min(H_ - 1, int(y * S)), min(W_ - 1, int(x * S))] > 128
+            on = hit[min(H_ - 1, int(y * S)), min(W_ - 1, int(x * S))] > 128
             if t < ti or not on:           # still flying (or it missed, and flies on past and out of frame)
                 u = (t - (ti - 0.12)) / 0.12
                 if u < 0 or (not on and u > 4):
@@ -1918,34 +1930,33 @@ def film_phone(t_local):
                          (fx + math.sin(ang) * rr, fy - math.cos(ang) * rr), (fx + math.cos(ang) * rr, fy + math.sin(ang) * rr),
                          (fx - math.sin(ang) * rr, fy + math.cos(ang) * rr)], BLOOD, None)
                 continue
-            run = max(0.0, t - ti - 0.15) * (240 if r > 60 else 90)
-            dsplat(bp, x, y, r, ang, seed, run)
-        hand_a = hands.getchannel('A')
-        on_hands = clip_to(blood, hand_a)
-        on_phone = clip_to(blood, Image.fromarray(np.minimum(np.asarray(ph.getchannel('A')),
-                                                               255 - np.asarray(hand_a)).astype(np.uint8)))
-        ph.alpha_composite(on_phone)
-        hands.alpha_composite(on_hands)
-    else:
-        air = None
-    img = bg.copy()
+            dsplat(bp, x, y, r, ang, seed, max(0.0, t - ti - 0.15) * (240 if r > 60 else 90))
+    # the blood belongs to whatever it landed on: each hand, or the phone where no hand covers it
+    on_hand = {sd: clip_to(blood, Image.fromarray(masks[sd])) for sd in 'LR'}
+    covered = np.maximum(masks['L'], masks['R'])
+    ph.alpha_composite(clip_to(blood, Image.fromarray(np.minimum(np.asarray(ph.getchannel('A')), 255 - covered).astype(np.uint8))))
     drop = t - (T['crunch'] + 0.45)
-    if drop > 0:                       # her grip goes: the phone tips and falls out of frame; her hands slump away
-        fall = 0.5 * 9000 * S * drop * drop
+    img = bg.copy()
+    if drop <= 0:
+        img.alpha_composite(ph)
+        for sd in 'LR':
+            img.alpha_composite(hand[sd])
+            img.alpha_composite(on_hand[sd])
+    else:                              # her grip opens: the hands turn out from the wrists and sink; the phone falls
         cx, cy = PHONE_AT[0] * S, PHONE_AT[1] * S
-        ph = moved(ph, 30 * S * drop, fall, ang=-140 * drop, about=(cx, cy + 300 * S))
-        hs = max(0.0, drop - 0.1)      # a beat later her hands drop open and slump away, out of the bottom of frame
-        if hs:
-            L = hands.crop((0, 0, W_ // 2, H_)).rotate(-8 * hs, Image.BICUBIC, center=(0, H_))
-            R = hands.crop((W_ // 2, 0, W_, H_)).rotate(8 * hs, Image.BICUBIC, center=(W_ // 2, H_))
-            dy = int(1400 * S * hs * hs)
-            hands = Image.new('RGBA', bg.size, (0, 0, 0, 0))
-            hands.paste(L, (int(-260 * S * hs), dy), L)
-            hands.paste(R, (W_ // 2 + int(260 * S * hs), dy), R)
-    img.alpha_composite(ph)
-    img.alpha_composite(hands)
-    if air is not None:
-        img.alpha_composite(air)
+        relax = 0.5 if drop < 0.12 else 1.0
+        o = F.ease(min(1.0, drop / 0.3))                          # opening outwards, fast
+        sink = max(0.0, drop - 0.15)
+        for sd, sgn in (('L', -1), ('R', 1)):
+            limp = phone_hand_layer(sd, 0, relax, False)              # whole again: nothing hides any finger now
+            mine = clip_to(on_hand[sd], limp.getchannel('A'))
+            ang = -sgn * 28 * o
+            dx, dy = sgn * 200 * S * o, 1600 * S * sink * sink
+            about = (cx + sgn * 260 * S, cy + 700 * S)              # roughly her wrist
+            img.alpha_composite(moved(limp, dx, dy, ang=ang, about=about))
+            img.alpha_composite(moved(mine, dx, dy, ang=ang, about=about))
+        img.alpha_composite(moved(ph, 30 * S * drop, 0.5 * 9000 * S * drop * drop, ang=-140 * drop, about=(cx, cy + 300 * S)))
+    img.alpha_composite(air)
     if t >= T['roar']:
         u = min(1.0, (t - T['roar']) / 0.5)
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))

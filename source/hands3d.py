@@ -368,6 +368,23 @@ def phone_hands(size, to_px, tap_key=0, skin=SKIN, sleeve=(240, 230, 206), outli
     return render(meshes, size, to_px, outline=outline)   # the phone's own pixels stay transparent
 
 
+RELAXED = np.array([8, 12] * 4 + [0, 6, 6, 0], float)        # a hand gone limp: fingers loose, thumb resting
+
+
+def phone_hand(size, to_px, side, tap_key=0, relax=0.0, phone=True, skin=SKIN, sleeve=(240, 230, 206), outline=3.0):
+    """One hand of the phone grip, drawn whole on its own layer. relax (0-1): the grip letting go (fingers and
+    thumb loosening towards a limp hand); phone=False when the phone has gone, so nothing hides any finger."""
+    x, (px, pb, o), _ = phone_grip(side, tap_key if side == 'R' else 0)
+    x = (1 - relax) * np.array(x) + relax * RELAXED
+    meshes = [mesh_entry(*box_mesh(*PHONE), (skin, skin), 9)] if phone else []
+    V, tris, kind = hand_mesh(side, x, px, pb, o)
+    meshes.append(mesh_entry(V, tris, kind, (skin, sleeve), 1))
+    nc = tuple(min(255, int(c * 1.04 + 6)) for c in skin)
+    for j, (Vn, tn) in enumerate(nail_meshes(side, x, px, pb, o)):
+        meshes.append(mesh_entry(Vn, tn, np.zeros(len(Vn), int), (nc, nc), 10 + j))
+    return render(meshes, size, to_px, outline=outline)
+
+
 def slab_mesh(x0, x1, y0, y1, z0, z1):
     """A plain box from corner to corner (a podium's top, a table edge), for hiding what is behind it."""
     V = np.array([[x, y, z] for z in (z0, z1) for y in (y0, y1) for x in (x0, x1)], float)
