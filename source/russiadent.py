@@ -1507,8 +1507,10 @@ def crowd_person(img, cam, pc, who, t):
         if t < H - 0.5:        # backing off, the chair held up between them, shaking
             L_, R_, deg, tl = guard_L, guard_R, 4 * w1, -0.06 + 0.03 * w2
         elif t < H - 0.1:      # the wind-up: high over his head, leaning back
-            u = F.ease((t - (H - 0.5)) / 0.4)
-            L_, R_, deg, tl = lerp2(guard_L, up_L, u), lerp2(guard_R, up_R, u), -14 * u, -0.06 - 0.12 * u
+            u = F.ease((t - (H - 0.5)) / 0.4)       # swung out wide and up (a straight lift folds the elbows)
+            via = lambda a, m, b: lerp2(a, m, u * 2) if u < 0.5 else lerp2(m, b, u * 2 - 1)
+            L_, R_ = via(guard_L, (-330, 140), up_L), via(guard_R, (320, 60), up_R)
+            deg, tl = -14 * u, -0.06 - 0.12 * u
         elif t < H:            # the strike: very fast
             u = ((t - (H - 0.1)) / 0.1) ** 2
             L_, R_, deg, tl = lerp2(up_L, hit_L, u), lerp2(up_R, hit_R, u), -14 + 114 * u, -0.18 + 0.48 * u
