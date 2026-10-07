@@ -927,13 +927,16 @@ CROWD = [
     dict(kind='person', k=0, x=0.7, z=6.4, act='run_away', v=(0.0, 0.8)),       # running for the back doors (straight into them)
     dict(kind='zombie', k=13, x=-3.0, z=6.3, act='lunge'),
     dict(kind='zombie', k=8, x=-3.6, z=5.2, act='lunge_l'),
-    dict(kind='person', k=3, x=-2.5, z=4.9, act='phone'),         # filming it all on a phone
+    dict(kind='person', k=3, x=-2.5, z=4.9, act='phone', v=(0.25, 0.1)),         # filming it all on a phone
     dict(kind='zombie', k=16, x=-1.3, z=6.0, act='lunge_r'),
     dict(kind='person', k=2, x=2.1, z=5.3, act='chair'),          # swinging a chair at a zombie
     dict(kind='zombie', k=5, x=2.75, z=5.6, act='lunge_r'),
     dict(kind='zombie', k=7, x=0.35, z=5.0, act='lunge', v=(0.05, -0.7)),         # lurching down the aisle after...
     dict(kind='person', k=5, x=0.05, z=4.2, act='run', v=(0.1, -1.0)),           # ...a reporter fleeing towards us
     dict(kind='zombie', k=17, x=-3.9, z=3.4, act='lunge'),
+    dict(kind='zombie', k=18, x=-2.33, z=4.3, act='stalk', v=(0.35, 0.0), dir=-1),  # lurching after our reporter
+    dict(kind='person', k=9, x=1.0, z=5.9, act='tackled'),        # a second reporter grabbed, mid-hall
+    dict(kind='zombie', k=19, x=0.62, z=6.05, act='tackle'),
     dict(kind='person', k=6, x=-1.7, z=3.45, act='hide'),         # hiding under a chair (seat 1.2)
     dict(kind='heroine', k=0, x=-0.72, z=3.15, act='crawl', v=(0.12, 0.0)),      # our reporter, crawling (shot 3 follows her)
     dict(kind='person', k=7, x=-1.75, z=2.6, act='run', v=(-0.4, -0.3)),          # fleeing past the front row
@@ -946,9 +949,33 @@ FLOOR_SPLATS = [(0.3, 1.75, 0.1, 61), (-0.6, 3.9, 0.12, 62), (0.3, 6.2, 0.14, 63
 AIR_DROPS = [(0.45, 1.75, 1.95, 0.026, 71), (0.25, 1.95, 2.0, 0.02, 72), (0.7, 1.55, 1.9, 0.018, 73), (0.15, 1.6, 1.9, 0.016, 74)]
 
 
+def ik2(sh, target, l1, l2, bend=1):
+    """Two-bone arm from shoulder to target (lengths l1, l2): the elbow on the `bend` side. Returns (elbow, hand),
+    the hand pulled back onto the arm's reach if the target is too far."""
+    dx, dy = target[0] - sh[0], target[1] - sh[1]
+    d = max(1e-6, math.hypot(dx, dy))
+    if d > l1 + l2 - 1:
+        dx, dy, d = dx * (l1 + l2 - 1) / d, dy * (l1 + l2 - 1) / d, l1 + l2 - 1
+    a = math.acos(max(-1.0, min(1.0, (l1 * l1 + d * d - l2 * l2) / (2 * l1 * d))))
+    base = math.atan2(dy, dx) + bend * a
+    el = (sh[0] + l1 * math.cos(base), sh[1] + l1 * math.sin(base))
+    return el, (sh[0] + dx, sh[1] + dy)
+
+
+def swing(t, period=1.1, phase=0.0):
+    """A strike, over and over: a fast blow down (the first quarter) and a slower lift back up (0 = raised, 1 = struck)."""
+    u = (t / period + phase) % 1.0
+    return F.ease(u / 0.25) if u < 0.25 else 1.0 - F.ease((u - 0.25) / 0.75)
+
+
+def lerp2(a, b, u):
+    return (a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u)
+
+
 def crowd_person(img, cam, pc, who, t):
+    """Everyone in the outbreak, each with one clear action, and always moving (never a frozen pose)."""
     k, act, X, z = who['k'], who['act'], who['x'], who['z']
-    vx, vz = who.get('v', (0.0, 0.0))        # some are on the move through the shot
+    vx, vz = who.get('v', (0.0, -0.25) if act.startswith('lunge') else (0.0, 0.0))   # zombies keep coming
     X, z = X + vx * t, z + vz * t             # t: seconds since the 180 (the same clock in shots 2 and 3)
     if pc.depth(z, X) < 0.6:
         return
@@ -957,32 +984,36 @@ def crowd_person(img, cam, pc, who, t):
     nx, ny = pc.P(X, y0 + F.SOLE_Y / UPM, z)
     fy = pc.P(X, y0, z)[1]
     ph = t * 9 + k
+    w1, w2 = math.sin(t * 7.3 + k * 1.7), math.sin(t * 11.1 + k * 2.3)     # two unrelated wobbles per person
     if who['kind'] == 'heroine':
         x, y = pc.P(X, 0.0, z)
-        reporter_crawl(img, cam, x, y, s, t, step=t * 7, grab=GRAB[0])
+        wx, wy = pc.P(PHONE_S3[0], 0.0, PHONE_S3[1])
+        st = min(t, T['grab'] - T['s2']) * 7            # she stops crawling to grab the phone
+        reporter_crawl(img, cam, x, y, s, t, step=st, grab=GRAB[0], phone=((wx - x) / s, (wy - y) / s))
         return
     if who['kind'] == 'zombie':
         sp = zombie_base(k)
         rig = F.Rig(sp)
         kit.contact_shadow(img, cam, nx, fy, 300 * s)
-        if act == 'door':
-            sp['arms'] = {'L': rig.arm('L', (-260, -40 + 20 * math.sin(ph)), 'palm', 'out', strict=False),
-                          'R': rig.arm('R', (250, -10 + 20 * math.cos(ph)), 'palm', 'out', strict=False)}
-            person(img, cam, nx, ny, s, sp, t, tilt=0.06 * math.sin(ph * 0.5))
-        elif act in ('lunge_r', 'lunge_l', 'lunge'):
+        if act == 'door':     # clawing forward out of the doorway
+            sp['arms'] = {'L': rig.arm('L', (-330 + 40 * w1, -40 + 60 * w2), 'palm', 'out', strict=False),
+                          'R': rig.arm('R', (330 - 40 * w2, -20 + 60 * w1), 'palm', 'out', strict=False)}
+            person(img, cam, nx, ny, s, sp, t, tilt=0.1 * w1)
+        elif act in ('lunge_r', 'lunge_l', 'lunge', 'stalk'):
             d = 1 if act == 'lunge_r' else -1 if act == 'lunge_l' else (1 if k % 2 else -1)   # always sideways: reads best
-            if d:
-                near, far = ('L', 'R') if d > 0 else ('R', 'L')   # the arm on the far side crosses the body
-                sp['arms'] = {far: rig.arm(far, (d * 380, -10), 'palm', 'out', strict=False),
-                              near: rig.arm(near, (d * 150, 30), 'palm', 'down')}
-            else:
-                sp['arms'], sp['reach_cam'] = zombie_reach(rig), True
-            person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=ph, tilt=0.22 * d)
-        elif act == 'tackle':   # grabbing the reporter from behind and biting at his shoulder
-            sp['arms'] = {'L': rig.arm('L', (-300, 80), 'palm', 'out', strict=False),
-                          'R': rig.arm('R', (-120, 200), 'palm', 'down')}
+            if act == 'stalk':
+                d = who.get('dir', 1)
+            near, far = ('L', 'R') if d > 0 else ('R', 'L')   # the arm on the far side crosses the body
+            grab_ = 0.5 + 0.5 * math.sin(t * 6 + k)            # clawing: reaching out and pulling back
+            sp['arms'] = {far: rig.arm(far, (d * (300 + 90 * grab_), -10 - 50 * w2), 'palm', 'out', strict=False),
+                          near: rig.arm(near, (d * (110 + 60 * grab_), 30 + 30 * w1), 'palm', 'down', strict=False)}
+            person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=ph, tilt=0.22 * d + 0.07 * w1)
+        elif act == 'tackle':   # grabbing the reporter from behind, biting at his shoulder again and again
+            bite = 0.5 + 0.5 * math.sin(t * 12)
+            sp['arms'] = {'L': rig.arm('L', (-300 + 30 * w1, 80 + 30 * w2), 'palm', 'out', strict=False),
+                          'R': rig.arm('R', (-130, 200 + 20 * w1), 'palm', 'down', strict=False)}
             sp['face_splats'] = [(10, 70, 12, 81), (-30, 40, 8, 82)]
-            person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=1.0, tilt=0.32)
+            person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=1.0, tilt=0.3 + 0.1 * bite + 0.12 * min(1.0, t / 2.5))
         return
     sp = reporter_base(k)
     rig = F.Rig(sp)
@@ -994,47 +1025,57 @@ def crowd_person(img, cam, pc, who, t):
         sp['splats'] = [(30, 120, 18, k)]
         person(img, cam, nx, ny, s, sp, t, legs='run', phase=ph, tilt=0.08 * math.sin(ph))
     elif act == 'run_away':
-        sp['arms'] = {'L': rig.arm('L', (-230, -150), 'palm', 'out', strict=False),
-                      'R': rig.arm('R', (220, -170), 'palm', 'out', strict=False)}
+        sp['arms'] = {'L': rig.arm('L', (-230, -150 + 60 * math.sin(ph)), 'palm', 'out', strict=False),
+                      'R': rig.arm('R', (220, -170 - 60 * math.sin(ph)), 'palm', 'out', strict=False)}
         person_back(img, cam, nx, ny, s, sp, t, legs='run', phase=ph)
-    elif act == 'door_pull':  # both hands on the handle, leaning back
-        sp['arms'] = {'L': rig.arm('L', (-50, 250), 'grip', 'out'), 'R': rig.arm('R', (50, 240), 'grip', 'out')}
-        person_back(img, cam, nx, ny, s, sp, t, legs='lunge', phase=0.4, tilt=-0.12)
-    elif act == 'tripod':
-        sp['arms'] = {'L': rig.arm('L', (40, -230), 'grip', 'out'), 'R': rig.arm('R', (170, -190), 'grip', 'out')}
-        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=0.5, tilt=-0.1)
-        for end in ((-420, -360), (-400, -280), (-440, -320)):   # the tripod's legs, swung over his head
-            p.line([(40, -240), end], (40, 40, 44), 9)
-        p.poly([(40, -270), (130, -270), (130, -200), (40, -200)], (34, 34, 38), INK, 2.0)
-    elif act == 'chair':
-        sp['arms'] = {'L': rig.arm('L', (-130, -260), 'grip', 'out'), 'R': rig.arm('R', (40, -280), 'grip', 'out')}
-        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=0.15)
-        p.poly([(-250, -440), (110, -450), (100, -300), (-240, -290)], CHAIR, INK, 2.4)   # the chair raised overhead
-        p.line([(-240, -290), (-280, -120)], CHAIR_FRAME, 6)
-        p.line([(100, -300), (130, -130)], CHAIR_FRAME, 6)
-    elif act == 'phone':
-        sp['arms'] = rig.pose('hold', side='R', shape='phone', lift=1.0)
-        sp['arms']['L'] = rig.pose('sides')['L']
+    elif act == 'door_pull':  # shoving the door shut against them: heaving again and again
+        heave = abs(math.sin(t * 5 + k))
+        sp['arms'] = {'L': rig.arm('L', (-50, 250 - 30 * heave), 'grip', 'out'), 'R': rig.arm('R', (50, 240 - 30 * heave), 'grip', 'out')}
+        person_back(img, cam, nx, ny, s, sp, t, legs='lunge', phase=0.4, tilt=-0.08 - 0.12 * heave)
+    elif act == 'tripod':      # swinging the tripod down on the zombie, lifting it, swinging again
+        u = swing(t, 1.0, k * 0.13)
+        th = math.radians(-70 - 125 * u)            # the hands sweep a wide arc: overhead, over to our left and down
+        c_ = (20 + 330 * math.cos(th), 40 + 330 * math.sin(th))
+        tg = (-math.sin(th), math.cos(th))
+        L_, R_ = (c_[0] - 40 * tg[0], c_[1] - 40 * tg[1]), (c_[0] + 40 * tg[0], c_[1] + 40 * tg[1])
+        sp['arms'] = {'L': rig.arm('L', L_, 'grip', 'out', strict=False), 'R': rig.arm('R', R_, 'grip', 'down', strict=False)}
+        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=0.5, tilt=-0.1 + 0.25 * u)
+        ang = math.radians(-160 + 120 * u)          # the tripod's legs point the way it is swung
+        hx, hy = (L_[0] + R_[0]) / 2, (L_[1] + R_[1]) / 2
+        for da in (-0.12, 0.0, 0.12):
+            p.line([(hx, hy), (hx + 460 * math.cos(ang + da), hy + 460 * math.sin(ang + da))], (40, 40, 44), 9)
+        p.poly([(hx - 45, hy - 35), (hx + 45, hy - 35), (hx + 45, hy + 35), (hx - 45, hy + 35)], (34, 34, 38), INK, 2.0)
+    elif act == 'chair':       # bringing a chair down on a zombie, again and again
+        u = swing(t, 1.1, k * 0.21)
+        L_, R_ = lerp2((-130, -260), (110, 80), u), lerp2((40, -280), (250, 40), u)
+        sp['arms'] = {'L': rig.arm('L', L_, 'grip', 'down', strict=False), 'R': rig.arm('R', R_, 'grip', 'out', strict=False)}
+        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=0.1 + 0.2 * u)
+        hx, hy = (L_[0] + R_[0]) / 2, (L_[1] + R_[1]) / 2
+        a = math.radians(-10 + 110 * u)            # the chair turns as it comes down
+        ca, sa = math.cos(a), math.sin(a)
+        R2 = lambda x, y: (hx + x * ca - y * sa, hy + x * sa + y * ca)
+        p.poly([R2(-180, -170), R2(180, -180), R2(170, -30), R2(-170, -20)], CHAIR, INK, 2.4)
+        p.line([R2(-170, -20), R2(-210, 150)], CHAIR_FRAME, 6)
+        p.line([R2(170, -30), R2(200, 140)], CHAIR_FRAME, 6)
+    elif act == 'phone':       # filming it all, shaking, backing away
+        sp['arms'] = rig.pose('hold', side='R', shape='phone', lift=0.9 + 0.1 * w2)
+        sp['arms']['L'] = rig.arm('L', (-270 + 30 * w1, 210), 'palm', 'out', strict=False)
         sp['mouth'] = 'scream'
-        person(img, cam, nx, ny, s, sp, t)
-    elif act == 'tackled':   # knocked sideways, arms flung up
-        sp['arms'] = {'L': rig.arm('L', (-200, -260), 'palm', 'out', strict=False),
-                      'R': rig.arm('R', (230, -240), 'palm', 'out', strict=False)}
+        person(img, cam, nx + 6 * s * w2, ny, s, sp, t, legs='lunge', phase=t * 6, tilt=0.05 * w1)
+    elif act == 'tackled':     # grabbed from behind: thrashing, arms flailing, dragged down
+        sp['arms'] = {'L': rig.arm('L', (-200 + 80 * w1, -260 + 120 * w2), 'palm', 'out', strict=False),
+                      'R': rig.arm('R', (230 - 80 * w2, -240 + 120 * w1), 'palm', 'out', strict=False)}
         sp['splats'] = [(-20, 140, 26, 9), (60, 60, 14, 10)]
         sp['face_splats'] = [(30, -120, 9, 11)]
-        person(img, cam, nx, ny, s, sp, t, legs='run', phase=0.6, tilt=0.3)
-    elif act == 'hide':  # crouched on the floor, arms over the head, under the chair
+        person(img, cam, nx, ny, s, sp, t, legs='run', phase=t * 10, tilt=0.3 + 0.08 * w1 + 0.15 * min(1.0, t / 2.5))
+    elif act == 'hide':  # crouched on the floor, arms over the head, under the chair, shaking
         sp['arms'] = {'L': rig.arm('L', (30, -280), 'palm', 'out'), 'R': rig.arm('R', (-20, -270), 'palm', 'out')}
         sp['mouth'] = 'line'
         kit.contact_shadow(img, cam, nx, fy, 340 * s * 0.72)
-        person(img, cam, nx, fy - 740 * s * 0.72, s * 0.72, sp, t, legs='kneel', tilt=0.25)
+        person(img, cam, nx + 3 * s * math.sin(t * 40), fy - 740 * s * 0.72, s * 0.72, sp, t, legs='kneel',
+               tilt=0.25 + 0.03 * math.sin(t * 33))
         zi, xi = HIDE_SEAT
         chair(img, cam, pc, SEATS_X[xi], ROWS_Z[zi])
-    elif act == 'climb':   # one foot up on the seat, a hand on the chair back
-        sp['arms'] = {'L': rig.arm('L', (-240, 300), 'flat', 'out'), 'R': rig.arm('R', (250, 120), 'palm', 'out', strict=False)}
-        sp['splats'] = [(-60, 200, 20, 33)]
-        kit.contact_shadow(img, cam, nx, fy, 300 * s)
-        person(img, cam, nx, ny - 0.3 * pc.f / pc.depth(z, X), s, sp, t, legs='run', phase=0.3, tilt=-0.2)
 
 
 # ------------------------------------------------------------------------------------------- shot 3 and 4 (stills)
@@ -1194,7 +1235,7 @@ def shot_phone(t=0.0, tap=None):
     return img
 
 
-def reporter_crawl(img, cam, x, y, s, t, grab=0.0, step=0.0, flip=1):
+def reporter_crawl(img, cam, x, y, s, t, grab=0.0, step=0.0, flip=1, phone=None):
     """Shots 2 and 3: crawling on hands and knees across the floor, seen from the side (heading to our left when
     flip=1), her face turned to us in terror (the cartoon convention: body in profile, head to camera). (x, y) is the
     point on the floor under her middle. step: the crawl cycle (radians); grab (0-1): her front hand reaching for
@@ -1210,9 +1251,24 @@ def reporter_crawl(img, cam, x, y, s, t, grab=0.0, step=0.0, flip=1):
 
     def limb_arm(dx, colr, ph, reach=0.0):
         sh = (-150 + dx, -300)
-        hand = (-210 + dx + 30 * ph - 90 * reach, -6 - lift(ph) - 10 * reach)
-        el = ((sh[0] + hand[0]) / 2 - 18, (sh[1] + hand[1]) / 2)
-        B.arm(p, sh, el, (hand[0], hand[1] - 18), colr, w=26)
+        hand = (-210 + dx + 30 * ph, -6 - lift(ph))
+        held = False
+        if reach > 0 and phone is not None:   # the pickup: hand to the phone, closes on it, lifts it to her face
+            if reach < 0.4:
+                hand = lerp2(hand, (phone[0], phone[1] - 8), F.ease(reach / 0.4))
+            else:
+                hand = lerp2((phone[0], phone[1] - 8), (-330, -400), F.ease((reach - 0.4) / 0.6))
+                held = True
+        el, wr = ik2(sh, (hand[0], hand[1] - 18), 150, 150, bend=1)
+        hand = (wr[0], wr[1] + 18)
+        B.arm(p, sh, el, wr, colr, w=26)
+        if held:   # the phone in her fist
+            p.poly([(hand[0] - 38, hand[1] - 60), (hand[0] + 6, hand[1] - 66), (hand[0] + 14, hand[1] + 12),
+                    (hand[0] - 30, hand[1] + 18)], (26, 26, 30), INK, 2.0)
+            p.ell(hand[0] - 6, hand[1] - 6, 26, 24, B.dk(skin, 0.95) if dx else skin, INK, 2.2)
+            for kk in range(3):
+                p.line([(hand[0] - 22, hand[1] - 14 + 8 * kk), (hand[0] + 8, hand[1] - 16 + 8 * kk)], B.dk(skin, 0.8), 1.6)
+            return
         p.poly(curve([(hand[0] + 26, hand[1] - 22), (hand[0] - 30, hand[1] - 16), (hand[0] - 52, hand[1] - 4),
                       (hand[0] - 40, hand[1] + 4), (hand[0] + 24, hand[1] + 2)], 3), B.dk(skin, 0.95) if dx else skin, INK, 2.2)
 
@@ -1250,7 +1306,7 @@ def reporter_crawl(img, cam, x, y, s, t, grab=0.0, step=0.0, flip=1):
 
 GRAB = [0.0]                    # how far her hand has reached for the phone (shot 3)
 HEROINE_S3 = (-0.45, 3.25)      # where she has crawled to by shot 3 (down the aisle, towards the podium)
-PHONE_S3 = (-0.2, 2.95)         # her phone, dropped on the floor ahead of her
+PHONE_S3 = (-0.08, 3.25)        # her phone, dropped on the floor just ahead of where she stops
 
 
 def floor_phone(img, cam, pc, X, Z, lit=True):
@@ -1264,7 +1320,7 @@ def floor_phone(img, cam, pc, X, Z, lit=True):
 
 def shot_crawl(t=0.0, grab=0.0):
     """Shot 3 (still): low in the aisle, looking towards the back doors, she crawls towards us."""
-    pc = PCam(-0.45, 0.42, 1.85, 1, 950.0, oy=880.0)
+    pc = PCam(-0.45, 0.42, 1.85, 1, 1150.0, oy=1180.0)
     cam = B.Cam(1.0, 540, 960)
     img = B.canvas(WALL)
     room(img, cam, pc, t, chaos=True)
@@ -1272,7 +1328,7 @@ def shot_crawl(t=0.0, grab=0.0):
     for X, Z, r, seed in FLOOR_SPLATS:
         floor_splat(img, cam, pc, X, Z, r, seed)
     GRAB[0] = grab
-    if grab < 0.6:
+    if grab < 0.4:
         floor_phone(img, cam, pc, *PHONE_S3)
     items = [(HEROINE_S3[1] - 0.05, HEROINE_S3[0], k, dict(a, x=HEROINE_S3[0], z=HEROINE_S3[1], v=(0.0, 0.0)))
              if k == 'person' and a['kind'] == 'heroine' else (z, x, k, a) for z, x, k, a in chaos_items(pc)]
@@ -1396,7 +1452,7 @@ T['line1_end'] = W1[-1][2]
 T['s2'] = T['line1_end'] + 0.35                 # the 180: hard cut into the outbreak
 T['slap'] = 5.2                                 # shot 1: a hand slaps onto the podium's edge (no reaction)
 T['s3'] = T['s2'] + 3.0                         # she crawls
-T['grab'] = T['s3'] + 1.05                      # she dives for her phone
+T['grab'] = T['s3'] + 0.85                      # she reaches for her phone, picks it up
 T['s3b'] = T['s3'] + 1.5                        # her face as she types
 T['s4'] = T['s3'] + 3.0                         # her phone
 T['roar'] = T['s4'] + 1.3                       # a zombie roars right behind her
@@ -1572,10 +1628,11 @@ def film_crawl(t_local):
     """Shot 3, first half: low in the aisle; she crawls to her phone and grabs it."""
     global HEROINE_S3
     keep = HEROINE_S3
-    x = keep[0] - 0.35 + 0.3 * min(1.0, t_local / 1.05)
+    g0 = T['grab'] - T['s3']
+    x = keep[0] - 0.35 + 0.3 * min(1.0, t_local / g0)
     HEROINE_S3 = (x, keep[1])
     try:
-        img = shot_crawl(T['s3'] - T['s2'] + t_local, grab=max(0.0, min(1.0, (t_local - 1.05) / 0.2)))
+        img = shot_crawl(T['s3'] - T['s2'] + t_local, grab=max(0.0, min(1.0, (t_local - g0) / 0.55)))
     finally:
         HEROINE_S3 = keep
     return img
@@ -1595,18 +1652,80 @@ def film_phone(t_local):
         lay.putalpha(Image.fromarray(a))
         img.alpha_composite(lay)
         sh = 6 * B.SS * u * math.sin(t * 70)                       # her hands shaking
-        img = img.transform(img.size, Image.AFFINE, (1, 0, sh, 0, 1, sh * 0.5), Image.BICUBIC)
-    if t >= T['crunch']:   # the blood hits the glass: big splats growing over three drawings, then running
-        u = min(1.0, (t - T['crunch']) / 0.25)
+        if T['crunch'] <= t < T['crunch'] + 0.2:                   # the jolt as she is bitten
+            sh += 26 * B.SS * (1 - (t - T['crunch']) / 0.2)
+        k_ = 1.04                                                  # zoomed a touch, so the shake never shows an edge
+        cx_, cy_ = img.size[0] / 2, img.size[1] / 2
+        img = img.transform(img.size, Image.AFFINE, (1 / k_, 0, cx_ - cx_ / k_ + sh, 0, 1 / k_, cy_ - cy_ / k_ + sh * 0.5),
+                            Image.BICUBIC)
+    if t >= T['crunch'] - 0.1:   # the bite: blood thrown forward from above (her head) hits the glass
         p = B.Pen(img, B.Cam(1.0, 540, 960))
-        for (x, y, r, seed) in ((420, 700, 260, 91), (760, 1020, 200, 92), (300, 1250, 170, 93), (640, 420, 150, 94),
-                                (880, 600, 110, 95), (180, 900, 130, 96)):
-            splat(p, x, y, r * u, seed, drops=6)
-            run = max(0.0, t - T['crunch'] - 0.25) * 260
-            if run:
-                p.poly([(x - r * 0.1, y), (x + r * 0.1, y), (x + r * 0.07, y + r * 0.6 + run), (x - r * 0.06, y + r * 0.6 + run)],
-                       BLOOD, None)
+        for j, (x, y, r, ang, dt, seed) in enumerate(SPRAY):
+            ti = T['crunch'] + dt
+            if t < ti - 0.12:
+                continue
+            if t < ti:                     # in flight: coming at us from above, growing as it nears the glass
+                u = 1 - (ti - t) / 0.12
+                fx, fy = x - math.cos(ang) * 700 * (1 - u), y - math.sin(ang) * 700 * (1 - u)
+                rr = r * (0.15 + 0.35 * u)
+                p.poly([(fx - math.cos(ang) * rr * 4, fy - math.sin(ang) * rr * 4),
+                        (fx + math.sin(ang) * rr, fy - math.cos(ang) * rr), (fx + math.cos(ang) * rr, fy + math.sin(ang) * rr),
+                        (fx - math.sin(ang) * rr, fy + math.cos(ang) * rr)], BLOOD, None)
+                continue
+            run = max(0.0, t - ti - 0.15) * (240 if r > 60 else 90)     # then it runs down the glass
+            dsplat(p, x, y, r, ang, seed, run)
     return img
+
+
+# the spray from the bite: (x, y, size, direction it was flying, when it lands after the crunch, seed). It comes
+# from above and behind the phone (where her head is), thrown down and towards us.
+# Placed by hand: the big ones round the edges and over her thumbs, small drops across the page, so the words
+# "Everything fine. Stop asking questions." stay readable through the blood (that irony is the joke).
+SPRAY = sorted([
+    (300, 300, 120, 75, 0.00, 11), (860, 520, 130, 100, 0.02, 12), (470, 1180, 150, 85, 0.03, 13),
+    (210, 820, 95, 70, 0.05, 14), (760, 1000, 90, 95, 0.04, 15), (930, 1260, 80, 110, 0.07, 16),
+    (640, 330, 55, 90, 0.01, 17), (560, 640, 18, 80, 0.06, 18), (380, 520, 14, 72, 0.08, 19), (700, 560, 16, 96, 0.03, 20),
+    (300, 1450, 70, 80, 0.06, 21), (820, 1550, 60, 100, 0.09, 22), (150, 520, 40, 65, 0.05, 23), (500, 880, 30, 88, 0.07, 24),
+    (640, 780, 22, 92, 0.02, 25), (980, 820, 34, 115, 0.08, 26), (420, 980, 26, 78, 0.09, 27), (760, 220, 30, 104, 0.04, 28),
+], key=lambda q: q[4])
+SPRAY = [(float(x), float(y), float(r), math.radians(a), dt, sd) for x, y, r, a, dt, sd in SPRAY]
+
+
+def dsplat(p, x, y, r, ang, seed, run=0.0, colr=BLOOD):
+    """A drop that hit the glass while flying in direction `ang`: a blob stretched along its flight, spikes and
+    droplets thrown on ahead of it, a short tail behind; `run` (pixels) drips running down from it."""
+    rng = np.random.default_rng(seed)
+    ca, sa = math.cos(ang), math.sin(ang)
+    T_ = lambda u, v: (x + u * ca - v * sa, y + u * sa + v * ca)       # u along the flight, v across it
+    n = 16
+    pts = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        rr = r * rng.uniform(0.82, 1.08)
+        pts.append(T_(rr * 1.35 * math.cos(a), rr * 0.85 * math.sin(a)))
+    p.poly(curve(pts, 3), colr, B.dk(colr, 0.62), 1.4)
+    for _ in range(4 + int(r / 25)):        # spikes thrown forward, each ending in a droplet
+        a = rng.uniform(-0.55, 0.55)
+        L = r * rng.uniform(1.4, 2.6)
+        w = r * rng.uniform(0.1, 0.2)
+        base = (r * 1.1 * math.cos(a), r * 0.75 * math.sin(a))
+        tip = (base[0] + L * math.cos(a), base[1] + L * math.sin(a))
+        p.poly([T_(base[0], base[1] - w), T_(tip[0], tip[1]), T_(base[0], base[1] + w)], colr, None)
+        p.ell(*T_(tip[0] + w * 0.6, tip[1]), w * 0.9, w * 0.9, colr, None)
+    for _ in range(5 + int(r / 18)):        # loose droplets scattered ahead
+        a = rng.uniform(-0.8, 0.8)
+        d = r * rng.uniform(1.8, 3.4)
+        rd = r * rng.uniform(0.05, 0.14)
+        p.ell(*T_(d * math.cos(a), d * math.sin(a)), rd * 1.3, rd, colr, None, rot=ang)
+    p.poly([T_(-r * 1.2, -r * 0.25), T_(-r * 2.0, 0), T_(-r * 1.2, r * 0.25)], colr, None)     # the short tail
+    if run > 0 and r > 15:                  # drips running straight down the glass
+        for k in range(1 + int(r / 50)):
+            dx = rng.uniform(-0.6, 0.6) * r
+            ln = run * rng.uniform(0.6, 1.0)
+            w = max(3.0, r * 0.09)
+            p.poly([(x + dx - w, y), (x + dx + w, y), (x + dx + w * 0.8, y + r * 0.4 + ln), (x + dx - w * 0.8, y + r * 0.4 + ln)],
+                   colr, None)
+            p.ell(x + dx, y + r * 0.4 + ln, w * 1.25, w * 1.4, colr, None)
 
 
 SHOT_FN = {'front': film_front, 'reverse': lambda tl: shot_reverse(tl), 'crawl': film_crawl, 'face': film_face,
