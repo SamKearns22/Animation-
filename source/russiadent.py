@@ -2975,7 +2975,7 @@ def soundtrack():
     g[(tt >= W2[0][1] - 0.2)] = 0.45                             # down further under his last line
     place(mix, bed * g * 0.8, T['s2'])                         # the hall 20% down (Sam)
     place(mix, rec_lines()[0][0], 0.30)                          # Sam as Peskov
-    place(mix, rec_lines()[1][0], W2[0][1])
+    place(mix, rec_lines()[1][0], W2[0][1], 1.2)                  # 'Any more questions?' 20% up (Sam)
     # shot 2's big moments, over the din: the window bursting in; the chair; the body hitting the floor and bouncing
     place(mix, glass_snd(), T['s2'] + WIN_BURST, 0.7)
     place(mix, thud(80, 0.4, 0.3), T['s2'] + WIN_BURST + 0.45, 0.4)
