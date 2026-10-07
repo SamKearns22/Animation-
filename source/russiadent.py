@@ -1502,7 +1502,7 @@ def crowd_person(img, cam, pc, who, t):
         H = CHAIR_HIT
         guard_L, guard_R = (-110 + 20 * w1, 220), (210, 200 + 20 * w2)    # held across his front, face clear
         up_L, up_R = (-170, -290), (10, -320)
-        hit_L, hit_R = (110, 80), (250, 40)
+        hit_L, hit_R = (100, 0), (290, -50)          # brought down on its head, at his side
         low_L, low_R = (60, 200), (200, 180)
         if t < H - 0.5:        # backing off, the chair held up between them, shaking
             L_, R_, deg, tl = guard_L, guard_R, 4 * w1, -0.06 + 0.03 * w2
@@ -1521,6 +1521,7 @@ def crowd_person(img, cam, pc, who, t):
             L_, R_ = lerp2(hit_L, low_L, u), lerp2(hit_R, low_R, u)
             deg, tl = 100 + 12 * u, 0.3 - 0.2 * u + 0.035 * math.sin(t * 9)
         sp['mouth'] = 'grimace' if t < H + 0.25 else 'wail'
+        sp['look'] = 1.0                           # his eyes on the zombie at his side, the whole time
         sp['arms'] = {'L': rig.arm('L', L_, 'grip', 'down', strict=False), 'R': rig.arm('R', R_, 'grip', 'out', strict=False)}
         p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=tl)
         hx, hy = (L_[0] + R_[0]) / 2, (L_[1] + R_[1]) / 2
@@ -2192,7 +2193,7 @@ def sheet(dst):
 
 
 def title_frame(img, t):
-    B.title_lines(img, TITLE, alpha=1.0 if t < 0.75 else max(0.0, 1.0 - (t - 0.75) / 0.25))
+    B.title_lines(img, TITLE, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))   # on for 2 s (Sam)
     return img
 
 
@@ -2207,7 +2208,7 @@ mouths.install(B)
 # it (cleaned and levelled by mossad_audio.line; pauses may be shortened, never the words).
 LINE1 = ['The researcher in question', 'died from a common pneumonia.', 'All is well.', 'We ask anyone concerned',
          'to pay attention to bulletins', 'from the Ministry of Health.']
-LINE2 = ['Any more questions?']
+LINE2 = ['Any other questions?']
 WPS = 3.4
 
 
@@ -2440,7 +2441,7 @@ ARM_FROM, ARM_AT = (-0.95, 1.2), (-0.34, 2.3)          # (X, Y) on the backdrop'
 
 def film_front_end(t_local):
     """Shot 5: back on him, the camera where the zoom ended. The arm flies in behind him and slaps the backdrop,
-    leaving a red splat; it drops away behind his shoulder. "Any more questions?" """
+    leaving a red splat; it drops away behind his shoulder. "Any other questions?" """
     t = T['s5'] + t_local
     zb = ROOM['z0'] + 0.03
 
@@ -2711,7 +2712,7 @@ def frame_image(t, captions=True, title=True):
         c = caption_at(t)
         if c:
             PP.caption(img, c)
-    if title and t < 1.0:   # the standard title over the backdrop, gone by 1 s
+    if title and t < 2.0:   # the standard title over the backdrop, gone by 2 s (Sam)
         title_frame(img, t)
     return img
 
