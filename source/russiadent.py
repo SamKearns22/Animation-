@@ -187,6 +187,15 @@ def face(img, p, sp, t, hx, hy, hw, hh):
             p.poly(eye, (253, 253, 252), INK, 2.4)
             jx, jy = 1.2 * math.sin(t * 31 + sgn), 1.2 * math.cos(t * 27)
             p.ell(ex + sp.get('look', 0) * 7 + jx, ey - 1 + jy, 2.6, 2.6, INK, None)
+    if sp.get('socket') and not sp.get('blink'):   # one eye gone: a dark, bloody socket
+        sx_ = fx - 4 + (30 if sp['socket'] == 'R' else -30)
+        p.ell(sx_, hy - 8, 20, 15, (44, 10, 16), (150, 40, 44), 2.2)
+        p.line([(sx_ - 4, hy + 6), (sx_ - 6, hy + 40)], BLOOD, 4)
+    if sp.get('scalp'):   # a flap of scalp torn back: a flat red patch with a pale edge of skull
+        p.poly(curve([(hx - hw * 0.6, hy - hh * 0.9), (hx - hw * 0.05, hy - hh * 1.12), (hx + hw * 0.3, hy - hh * 0.92),
+                      (hx - hw * 0.2, hy - hh * 0.62)], 3), BLOOD, INK, 2.0)
+        p.poly(curve([(hx - hw * 0.4, hy - hh * 0.92), (hx - hw * 0.1, hy - hh * 1.02), (hx + hw * 0.1, hy - hh * 0.9),
+                      (hx - hw * 0.2, hy - hh * 0.8)], 3), (232, 222, 200), None)
     if br == 'terror':  # the forehead creased hard, a crease between the brows, sweat at the temples
         sd = B.dk(sp['skin'], 0.8)
         for k in range(3):
@@ -218,7 +227,16 @@ def hair_back(p, sp, hx, hy, hw, hh):
         p.line([(hx + hw * 0.7, hy - hh * 0.9), (hx + hw + 22 + sw * 0.5, hy - 10), (tip[0] - 14, tip[1] - 30)],
                B.dk(c, 0.8), 1.6)
         return
-    if st in ('peskov', 'zombie'):
+    if st in ('peskov', 'zombie', 'buzz', 'combover', 'updo', 'curly'):
+        return
+    if st in ('matted', 'braid'):   # long hair falling behind the shoulders (a braid down one side)
+        if st == 'braid':
+            for kk in range(6):
+                p.ell(hx + hw * 0.7 + 6 * (kk % 2), hy + 10 + 34 * kk, 18, 22, c, INK, 1.8)
+            return
+        p.poly(curve([(hx - hw - 16, hy - 40), (hx - hw - 24, hy + 120), (hx - hw - 4, hy + 210), (hx - hw * 0.2, hy + 170),
+                      (hx + hw * 0.3, hy + 220), (hx + hw + 20, hy + 150), (hx + hw + 16, hy - 40), (hx, hy - hh - 10)], 4),
+               c, INK, 2.4)
         return
     return _hair_back(p, sp, hx, hy, hw, hh)
 
@@ -240,7 +258,7 @@ def hair_front(p, sp, hx, hy, hw, hh, fx):
         for sgn in (-1, 1):  # the sides brushed back over the ears
             p.line([(hx + sgn * (hw - 4), hy - 10), (hx + sgn * (hw + 8), hy - 50), (hx + sgn * hw * 0.86, hy - hh * 0.9)], cd, 1.6)
         return
-    if st == 'ponytail':  # pulled tight back from the face, no fringe, a few loose strands (shaken loose)
+    if st in ('ponytail', 'braid'):  # pulled tight back from the face, no fringe, a few loose strands (shaken loose)
         hair = [(hx - hw - 4, hy - 6), (hx - hw - 6, hy - 52), (hx - hw * 0.72, hy - hh * 1.04), (hx, hy - hh * 1.18),
                 (hx + hw * 0.72, hy - hh * 1.04), (hx + hw + 6, hy - 52), (hx + hw + 4, hy - 6), (hx + hw * 0.9, hy - 44),
                 (hx + hw * 0.5, hy - hh * 0.8), (fx, hy - hh * 0.86), (hx - hw * 0.5, hy - hh * 0.8), (hx - hw * 0.9, hy - 44)]
@@ -252,6 +270,48 @@ def hair_front(p, sp, hx, hy, hw, hh, fx):
             p.line([(fx - 22, hy - hh * 0.86), (fx - 34, hy - hh * 0.4), (fx - 28, hy - 6)], c, 2.6)
             p.line([(fx + 30, hy - hh * 0.84), (fx + 44, hy - hh * 0.5)], c, 2.4)
         return
+    if st == 'buzz':  # cropped to stubble: a flat cap of short hair, the scalp showing through
+        hair = [(hx - hw, hy - 26), (hx - hw * 0.92, hy - hh * 0.74), (hx - hw * 0.45, hy - hh * 1.04), (hx + hw * 0.45, hy - hh * 1.04),
+                (hx + hw * 0.92, hy - hh * 0.74), (hx + hw, hy - 26), (hx + hw * 0.86, hy - 44), (hx, hy - hh * 0.84),
+                (hx - hw * 0.86, hy - 44)]
+        p.poly(curve(hair, 4), B.lt(c, 1.25), INK, 2.2)
+        rng = np.random.default_rng(sp.get('seed', 1))
+        for _ in range(40):
+            a, r = rng.uniform(math.pi * 1.08, math.pi * 1.92), rng.uniform(0.6, 0.98)
+            p.ell(hx + hw * 0.95 * r * math.cos(a), hy - 24 + hh * 0.95 * r * math.sin(a), 1.6, 1.6, B.dk(c, 0.9), None)
+        return
+    if st == 'combover':  # thin hair combed across a bald crown, the sides grown thick
+        for sgn in (-1, 1):
+            p.poly(curve([(hx + sgn * hw, hy + 10), (hx + sgn * (hw + 8), hy - 44), (hx + sgn * hw * 0.82, hy - hh * 0.72),
+                          (hx + sgn * (hw - 14), hy - 30), (hx + sgn * (hw - 10), hy + 6)], 4), c, INK, 2.2)
+        for kk in range(5):   # the strands laid across
+            y0 = hy - hh * (0.62 + 0.09 * kk)
+            p.line([(hx - hw * 0.86, y0 + 10), (hx, y0 - 6), (hx + hw * 0.8, y0 + 4)], c, 3.0)
+        return
+    if st == 'updo':  # pinned up in a tight bun on top, smooth at the sides
+        hair = [(hx - hw - 4, hy - 4), (hx - hw - 6, hy - 50), (hx - hw * 0.72, hy - hh * 1.04), (hx, hy - hh * 1.16),
+                (hx + hw * 0.72, hy - hh * 1.04), (hx + hw + 6, hy - 50), (hx + hw + 4, hy - 4), (hx + hw * 0.88, hy - 46),
+                (hx + hw * 0.4, hy - hh * 0.78), (hx - hw * 0.4, hy - hh * 0.78), (hx - hw * 0.88, hy - 46)]
+        p.poly(curve(hair, 5), c, INK, 2.4)
+        p.ell(hx + 6, hy - hh * 1.32, hw * 0.42, hh * 0.24, c, INK, 2.4)
+        p.line([(hx - hw * 0.2, hy - hh * 1.3), (hx + hw * 0.3, hy - hh * 1.36)], cd, 1.8)
+        return
+    if st == 'curly':  # short tight curls, sitting on top of the head (clear of the eyes and brows)
+        p.poly(curve(oval(hx, hy - hh * 0.8, hw + 8, hh * 0.42, 18), 3), c, INK, 2.4)
+        rng = np.random.default_rng(sp.get('seed', 2))
+        for _ in range(22):
+            a, r = rng.uniform(math.pi * 1.05, math.pi * 1.95), rng.uniform(0.55, 1.0)
+            p.ell(hx + (hw + 4) * r * math.cos(a), hy - hh * 0.8 + hh * 0.4 * r * math.sin(a), 6, 6, cl, cd, 1.2)
+        return
+    if st == 'matted':  # a zombie woman's long hair, matted into clumps
+        hair = [(hx - hw - 10, hy + 30), (hx - hw - 14, hy - 40), (hx - hw * 0.7, hy - hh * 1.04), (hx, hy - hh * 1.12),
+                (hx + hw * 0.7, hy - hh * 1.04), (hx + hw + 14, hy - 40), (hx + hw + 10, hy + 30), (hx + hw * 0.84, hy - 10),
+                (hx + hw * 0.4, hy - hh * 0.7), (hx - hw * 0.3, hy - hh * 0.6), (hx - hw * 0.84, hy - 10)]
+        p.poly(curve(hair, 4), c, INK, 2.4)
+        for kk in range(5):
+            x0 = hx - hw * 0.7 + kk * hw * 0.35
+            p.line([(x0, hy - hh * 0.9), (x0 + 8, hy - hh * 0.5)], cd, 2.4)
+        return
     if st == 'zombie':  # thin, matted, patchy hair
         for k in range(7):
             x0 = hx - hw * 0.8 + k * hw * 0.27
@@ -262,7 +322,18 @@ def hair_front(p, sp, hx, hy, hw, hh, fx):
 
 
 def beard(p, sp, hx, hy, hw, hh, fx):
-    if sp.get('beard') != 'moustache':
+    b = sp.get('beard')
+    c = sp.get('beard_c', (90, 70, 56))
+    my = hy + sp.get('mouth_y', 60)
+    if b == 'walrus':   # a heavy moustache drooping past the corners of the mouth
+        p.poly(curve([(fx - 44, my + 16), (fx - 38, my - 10), (fx - 10, my - 20), (fx + 10, my - 20), (fx + 38, my - 10),
+                      (fx + 44, my + 16), (fx + 28, my + 2), (fx, my - 4), (fx - 28, my + 2)], 4), c, INK, 2.0)
+        return
+    if b == 'goatee':   # a short beard on the chin and a thin moustache
+        p.poly(curve([(fx - 22, my + 24), (fx + 22, my + 24), (fx + 14, my + 54), (fx - 14, my + 54)], 3), c, INK, 1.8)
+        p.poly(curve([(fx - 26, my - 4), (fx, my - 14), (fx + 26, my - 4), (fx, my - 8)], 3), c, INK, 1.6)
+        return
+    if b != 'moustache':
         return _beard(p, sp, hx, hy, hw, hh, fx)
     c = sp.get('beard_c', (168, 162, 156))
     my = hy + sp.get('mouth_y', 60)
@@ -305,6 +376,29 @@ def torso(img, p, sp, t):
         p.line([(2 + sx, 224), (24 + sx, 224)], (150, 150, 160), 2.4)
         p.line([(2 + sx, 236), (18 + sx, 236)], (150, 150, 160), 2.4)
         p.ell(sx, 264, 6, 6, (80, 80, 90), None)
+    if sp.get('belly'):  # a heavy man's belly straining the jacket's buttons
+        bl = sp['belly']
+        jc = sp.get('jacket', B.NAVY)
+        p.poly(curve([(-sw * 0.9, 250), (0, 230), (sw * 0.9, 250), (sw * (0.95 + 0.25 * bl), 420), (0, bottom + 40 * bl),
+                      (-sw * (0.95 + 0.25 * bl), 420)], 5), jc, INK, 2.4)
+        if sp.get('tie'):
+            p.poly([(-12, 230), (12, 230), (14, 330), (0, 350), (-14, 330)], sp['tie'], INK, 1.8)
+        p.line([(0, 340), (0, bottom + 30 * bl)], B.dk(jc, 0.75), 2.0)
+        for yy in (380, 440):
+            p.ell(0, yy, 6, 6, B.dk(jc, 0.7), None)
+    for side in sp.get('stump', ()):   # an arm torn away at the shoulder: a ragged sleeve, a flat red end
+        sgn = -1 if side == 'L' else 1
+        x0 = sgn * (sw - 6)
+        p.poly(curve([(x0 - sgn * 10, 40), (x0 + sgn * 40, 50), (x0 + sgn * 50, 110), (x0 + sgn * 6, 120)], 3),
+               sp.get('jacket', B.NAVY), INK, 2.2)
+        p.ell(x0 + sgn * 34, 118, 26, 14, BLOOD, B.dk(BLOOD, 0.6), 1.6, rot=sgn * 0.4)
+        p.ell(x0 + sgn * 34, 116, 9, 6, (236, 226, 210), None)
+        p.line([(x0 + sgn * 30, 130), (x0 + sgn * 28, 170)], BLOOD, 5)
+    if sp.get('gash'):   # a torn-open shirt, a flat red wound beneath (cartoon: no anatomy)
+        gx, gy = sp['gash']
+        p.poly(curve([(gx - 40, gy - 30), (gx + 30, gy - 40), (gx + 46, gy + 20), (gx - 10, gy + 44), (gx - 44, gy + 10)], 3),
+               (150, 24, 34), INK, 2.0)
+        p.poly(curve([(gx - 24, gy - 14), (gx + 16, gy - 20), (gx + 26, gy + 10), (gx - 6, gy + 22)], 3), BLOOD, None)
     for (x, y, r, seed) in sp.get('splats', ()):  # blood on the clothes
         splat(p, x, y, r, seed)
 
@@ -322,6 +416,32 @@ def mouth(p, sp, t, fx, my):
         p.poly([(fx - 16, my - 6), (fx + 16, my - 6), (fx + 18, my + 2), (fx - 18, my + 2)], (246, 244, 238), None)
         p.poly([(fx - 15, my + 40 * k), (fx + 15, my + 40 * k), (fx + 14, my + 45 * k), (fx - 14, my + 45 * k)], (236, 232, 222), None)
         p.ell(fx, my + 34 * k, 11, 6, (184, 80, 88), None)
+        return
+    if m == 'wail':  # a howl: an arch on top, corners dragged far down (never a grin), lower teeth, strain lines
+        k = 1.0 + 0.06 * math.sin(t * 19 + sp.get('seed', 0))
+        pts = curve([(fx - 32, my + 26), (fx - 20, my - 4), (fx, my - 10), (fx + 20, my - 4), (fx + 32, my + 26),
+                     (fx + 22, my + 50 * k), (fx - 22, my + 50 * k)], 4)
+        p.poly(pts, (62, 16, 24), INK, 2.6)
+        p.poly(curve([(fx - 16, my - 1), (fx, my - 6), (fx + 16, my - 1), (fx + 14, my + 5), (fx - 14, my + 5)], 2),
+               (246, 244, 238), None)
+        p.ell(fx, my + 40 * k, 13, 7, (184, 80, 88), None)
+        for sgn in (-1, 1):
+            p.line([(fx + sgn * 34, my + 30), (fx + sgn * 40, my + 52)], B.dk(sp['skin'], 0.7), 2.0)
+        return
+    if m == 'grimace':  # clenched in horror: teeth bared and gritted, the corners dragged down hard
+        p.poly([(fx - 34, my + 10), (fx - 20, my - 2), (fx + 20, my - 2), (fx + 34, my + 10), (fx + 22, my + 22), (fx - 22, my + 22)],
+               (246, 244, 238), INK, 2.6)
+        p.line([(fx - 30, my + 10), (fx + 30, my + 10)], INK, 2.0)
+        for kk in range(-2, 3):
+            p.line([(fx + kk * 11, my), (fx + kk * 11, my + 20)], (170, 166, 156), 1.4)
+        for sgn in (-1, 1):
+            p.line([(fx + sgn * 34, my + 10), (fx + sgn * 40, my + 30)], INK, 2.2)
+        return
+    if m == 'jaw':  # a zombie whose jaw hangs loose: the mouth gaping down to the chin, dark inside
+        p.poly(curve([(fx - 24, my - 4), (fx + 24, my - 4), (fx + 30, my + 40), (fx + 8, my + 60), (fx - 20, my + 54)], 3),
+               (52, 12, 18), INK, 2.6)
+        p.poly([(fx - 20, my - 2), (fx + 20, my - 2), (fx + 18, my + 6), (fx - 18, my + 6)], (214, 208, 180), None)
+        p.poly([(fx - 4, my + 50), (fx + 20, my + 52), (fx + 18, my + 58), (fx - 2, my + 56)], (214, 208, 180), None)
         return
     if m == 'gasp':  # a frozen, open gasp
         p.poly(curve([(fx - 14, my), (fx, my - 6), (fx + 14, my), (fx + 12, my + 26), (fx, my + 32), (fx - 12, my + 26)], 4),
@@ -409,7 +529,15 @@ def person(img, cam, x, y, s, sp, t=0.0, legs='stand', phase=0.0, tilt=0.0, flip
     return _person(img, cam, x, y, s, sp, t, legs, phase, tilt, flip)
 
 
+def no_stump_arms(sp):
+    """A zombie missing an arm: that arm is simply not drawn (the torso draws the torn sleeve)."""
+    if sp.get('stump') and sp.get('arms'):
+        return dict(sp, arms={k: v for k, v in sp['arms'].items() if k not in sp['stump']})
+    return sp
+
+
 def _person(img, cam, x, y, s, sp, t=0.0, legs='stand', phase=0.0, tilt=0.0, flip=1):
+    sp = no_stump_arms(sp)
     L = B.Local(cam, x, y, s, flip)
     R = PP.Rot(L, tilt, pivot=(0, 440)) if tilt else L       # a lean bends at the waist: the legs stay planted
     p = B.Pen(img, R)
@@ -430,6 +558,7 @@ def _person(img, cam, x, y, s, sp, t=0.0, legs='stand', phase=0.0, tilt=0.0, fli
 
 def person_back(img, cam, x, y, s, sp, t=0.0, legs='stand', phase=0.0, tilt=0.0):
     """The same person seen from behind (running away, pulling at a door): no face, the hair covering the head."""
+    sp = no_stump_arms(sp)
     L = B.Local(cam, x, y, s)
     R = PP.Rot(L, tilt, pivot=(0, 440)) if tilt else L       # bends at the waist: the legs stay planted
     p = B.Pen(img, R)
@@ -570,15 +699,45 @@ def room(img, cam, pc, t=0.0, chaos=False):
             for i, zw in enumerate(WINDOWS_Z):
                 pane = [(X, 0.55, zw - 0.7), (X, 0.55, zw + 0.7), (X, 3.1, zw + 0.7), (X, 3.1, zw - 0.7)]
                 quad(p, pc, pane, (206, 226, 236), INK, 2.4)
-                if chaos:   # the tide outside, several deep, pressed against the glass
-                    outside(img, cam, pc, pane, through(pc, X, zw, 1.4, 40 + 9 * i), t)
-                    glass_hands(img, cam, pc, X, zw, 60 + i, t)
+                burst = chaos and zw == WIN_Z
+                broken = burst and t >= WIN_BURST
+                if chaos:   # the tide outside, several deep, pressed against the glass (the burst window's front
+                    #         row are cast members, drawn with everyone else)
+                    crowd = through(pc, X, zw, 1.4, 40 + 9 * i)
+                    outside(img, cam, pc, pane, crowd[3:] if burst else crowd, t, glass_x=None if burst else X)
+                for (ya, yb) in ((0.55, 2.2), (2.2, 2.7)):         # a glint on each light of glass that is still there
+                    if broken and ya < 2.2:
+                        continue
+                    for zz in (zw - 0.45, zw + 0.25):
+                        soft(img, cam, [pc.P(X, ya + 0.15, zz), pc.P(X, ya + 0.15, zz + 0.12), pc.P(X, yb - 0.1, zz + 0.32),
+                                        pc.P(X, yb - 0.1, zz + 0.2)], (255, 255, 255), 0.18, 3)
+                if burst and not broken:      # struck from outside: the cracks spreading
+                    cracks(p, pc, X, zw - 0.2, 1.45, t / WIN_BURST, 5)
+                if broken:                    # the lower lights gone: jagged teeth of glass left in the frame
+                    cracks(p, pc, X, zw + 0.3, 2.5, 1.0, 6, reach=0.3)
+                    rng_ = np.random.default_rng(12)
+                    for a_, b_ in ((zw - 0.7, zw), (zw, zw + 0.7)):
+                        for q_ in range(4):
+                            z_a, z_b = a_ + (b_ - a_) * q_ / 4, a_ + (b_ - a_) * (q_ + 1) / 4
+                            zm = (z_a + z_b) / 2 + rng_.uniform(-0.05, 0.05)
+                            quad(p, pc, [(X, 0.55, z_a), (X, 0.55, z_b), (X, 0.55 + rng_.uniform(0.05, 0.22), zm)], (226, 240, 248),
+                                 INK, 1.4)
+                            quad(p, pc, [(X, 2.2, z_a), (X, 2.2, z_b), (X, 2.2 - rng_.uniform(0.05, 0.3), zm)], (226, 240, 248),
+                                 INK, 1.4)
+                    for z_ in (zw - 0.7, zw + 0.7):
+                        sg = 1 if z_ < zw else -1
+                        for q_ in range(4):
+                            y_a, y_b = 0.55 + 1.65 * q_ / 4, 0.55 + 1.65 * (q_ + 1) / 4
+                            quad(p, pc, [(X, y_a, z_), (X, y_b, z_), (X, (y_a + y_b) / 2, z_ + sg * rng_.uniform(0.04, 0.18))],
+                                 (226, 240, 248), INK, 1.4)
                 quad(p, pc, [(X, 2.7, zw - 0.7), (X, 2.7, zw + 0.7), (X, 3.1, zw + 0.7), (X, 3.1, zw - 0.7)], NET, INK, 1.6)
                 for k in range(1, 6):  # net-curtain folds
                     seg(p, pc, (X, 2.7, zw - 0.7 + k * 0.233), (X, 3.1, zw - 0.7 + k * 0.233), (214, 212, 204), 1.6)
                 quad(p, pc, pane, None, INK, 2.4)
-                seg(p, pc, (X, 3.1, zw), (X, 0.55, zw), INK, 2.0)
+                seg(p, pc, (X, 3.1, zw), (X, 2.2 if broken else 0.55, zw), INK, 2.0)
                 seg(p, pc, (X, 2.2, zw - 0.7), (X, 2.2, zw + 0.7), INK, 2.0)
+                if broken:
+                    shards(img, cam, pc, X, zw, t)
     # the stage (a low platform at the front)
     st = STAGE_BOX
     quad(p, pc, [(st['x0'], st['h'], st['z0']), (st['x1'], st['h'], st['z0']), (st['x1'], st['h'], st['z1']),
@@ -587,26 +746,36 @@ def room(img, cam, pc, t=0.0, chaos=False):
          B.dk(STAGE, 0.8), INK, 2.0)
 
 
-def outside(img, cam, pc, opening, crowd, t):
+def outside(img, cam, pc, opening, crowd, t, glass_x=None, sp_for=None):
     """Zombies beyond an opening (a window, a doorway), seen only through it: drawn on their own layer and masked
-    by the opening. crowd: [(X, Z, seed)] in the plan, beyond the wall."""
+    by the opening. crowd: [(X, Z, seed)] in the plan, beyond the wall. glass_x: the opening is glazed, at this X:
+    the front row's hands are pressed to it and leave smeared prints exactly where they touch."""
     q = clipz(pc, opening)
     if len(q) < 3:
         return
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    hands = []
     for X, Z, seed in sorted(crowd, key=lambda c: -pc.depth(c[1], c[0])):
-        sp = zombie_base(seed, press=(seed % 2 == 0))
+        sp = dict((sp_for or {}).get(seed) or zombie_base(seed, press=(seed % 2 == 0)))
         rig = F.Rig(sp)
         sway = 20 * math.sin(t * 5 + seed)
-        sp['arms'] = {'L': rig.arm('L', (-190, -170 + sway), 'palm', 'out', strict=False),
-                      'R': rig.arm('R', (200, -150 - sway), 'palm', 'out', strict=False)}
+        tg = {'L': (-190, -170 + sway), 'R': (200, -150 - sway)}
+        sp['arms'] = {side: rig.arm(side, tg[side], 'palm', 'out', strict=False) for side in tg}
         sc = pc.scale(Z, X)
         nx, ny = pc.P(X, F.SOLE_Y / UPM, Z)
-        person(lay, cam, nx, ny, sc, sp, t, tilt=0.05 * math.sin(t * 3 + seed))
+        tilt = 0.05 * math.sin(t * 3 + seed)
+        person(lay, cam, nx, ny, sc, sp, t, tilt=tilt)
+        if glass_x is not None and abs(X - glass_x) < 0.45:    # the front row: palms flat on the glass
+            Rr = PP.Rot(B.Local(cam, nx, ny, sc), tilt, pivot=(0, 440))
+            for side, (hx, hy) in tg.items():
+                if side not in sp.get('stump', ()):
+                    px, py = Rr.P(hx, hy - 20)
+                    hands.append((px, py, Rr.S(30), seed * 7 + len(hands)))
     mask = Image.new('L', img.size, 0)
     ImageDraw.Draw(mask).polygon([cam.P(*pt) for pt in q], fill=255)
-    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(mask))))
-    img.alpha_composite(lay)
+    _masked(img, lay, mask)
+    if hands:
+        _masked(img, glass_prints(img, hands, t), mask)
 
 
 def through(pc, X, zc, width, seed, n=9):
@@ -621,25 +790,6 @@ def through(pc, X, zc, width, seed, n=9):
         Xb = X - dx if X < 0 else X + dx
         out.append((Xb, zo + k * (Xb - X), seed + j))
     return out
-
-
-def glass_hands(img, cam, pc, X, zw, seed, t):
-    """Grey-green hands pressed flat on a window pane (palms and spread fingers), smearing it."""
-    rng = np.random.default_rng(seed)
-    p = B.Pen(img, cam)
-    for _ in range(7):
-        Z, Y = zw + rng.uniform(-0.6, 0.6), rng.uniform(0.9, 2.1) + 0.02 * math.sin(t * 6 + seed)
-        cx, cy = pc.P(X + 0.01, Y, Z)
-        k = pc.f / pc.depth(Z, X) * 0.05
-        sq = 0.55     # seen at an angle on the side wall
-        colr = [ZSKIN, (148, 166, 140), (162, 172, 132)][rng.integers(3)]
-        for j in range(4):
-            a = -2.2 + 0.35 * j
-            p.line([(cx, cy), (cx + math.cos(a) * 1.6 * k * sq, cy + math.sin(a) * 1.6 * k)], INK, 7.0)
-            p.line([(cx, cy), (cx + math.cos(a) * 1.6 * k * sq, cy + math.sin(a) * 1.6 * k)], colr, 4.6)
-        p.ell(cx, cy, k * sq, k * 0.9, colr, INK, 1.6)
-        if rng.random() < 0.5:
-            p.line([(cx, cy + k), (cx + rng.uniform(-2, 2), cy + 2.4 * k)], B.dk(BLOOD, 0.9), 2.2)
 
 
 def floor_splat(img, cam, pc, X, Z, r, seed):
@@ -924,32 +1074,114 @@ SKINS = [B.PALE, B.PINK, (232, 196, 170), (214, 172, 140), B.OLIVE]
 PRESS_C = [(46, 150, 120), (40, 120, 200), (206, 120, 40), (150, 60, 160), (196, 40, 60)]
 
 
+# The press corps, each designed on purpose (best-practice: no two people alike): build, face, hair, clothes and
+# their own kind of terror. Muted Russian office palette: greys, browns, olive, burgundy; wide ties; dyed hair.
+CAST = {
+    0: dict(sex='m', build=(150, 0.0), jaw='square', hair='buzz', hair_c=(90, 80, 70), jacket=(72, 74, 80), tie=(110, 40, 40),
+            fear='scream', note='running for the back doors'),
+    1: dict(sex='m', build=(176, 0.7), jaw='round', hair='combover', hair_c=(120, 110, 100), beard='walrus', beard_c=(110, 96, 84),
+            jacket=(104, 84, 64), tie=(60, 70, 50), fear='wail', glasses=True, note='beating a zombie off with a tripod'),
+    2: dict(sex='m', build=(158, 0.0), jaw='long', hair='side', hair_c=(60, 48, 40), grey=(150, 146, 140), jacket=(66, 86, 66),
+            tie=(150, 120, 60), fear='grimace', note='the chair: one hard hit'),
+    3: dict(sex='f', build=(132, 0.0), jaw='soft', hair='bob', hair_c=(150, 56, 40), jacket=(96, 70, 110), skirt=(60, 60, 70),
+            fear='scream', note='filming it all on her phone'),
+    4: dict(sex='m', build=(156, 0.0), jaw='square', hair='crop', hair_c=(40, 34, 30), beard='goatee', beard_c=(44, 36, 32),
+            jacket=(132, 108, 80), tie=None, fear='scream', note='grabbed and bitten, front right'),
+    5: dict(sex='m', build=(144, 0.0), jaw='long', hair='bald', hair_c=(110, 96, 90), jacket=(54, 60, 84), tie=(70, 90, 140),
+            fear='wail', glasses=True, note='fleeing down the centre'),
+    6: dict(sex='f', build=(134, 0.0), jaw='soft', hair='updo', hair_c=(214, 200, 150), jacket=(176, 44, 52), trousers=(196, 172, 132),
+            fear='grimace', note='hiding: head under a chair'),
+    8: dict(sex='m', build=(166, 0.4), jaw='round', hair='curly', hair_c=(80, 60, 44), beard='moustache', beard_c=(70, 52, 40),
+            jacket=(84, 84, 90), tie=(90, 30, 60), fear='grimace', note='shoving the side door shut'),
+    9: dict(sex='f', build=(136, 0.0), jaw='soft', hair='braid', hair_c=(52, 40, 34), jacket=(70, 100, 120), skirt=(90, 60, 50),
+            fear='wail', note='grabbed mid-hall, the one our reporter crawls past'),
+}
+
+
 def reporter_base(k, **kw):
-    hair = [('side', (70, 52, 40)), ('bob', (40, 34, 32)), ('crop', (120, 100, 80)), ('long', (90, 60, 40)),
-            ('slick', (34, 30, 30)), ('bald', (110, 96, 90)), ('wavy', (150, 110, 70))][k % 7]
-    women = hair[0] in ('bob', 'long', 'wavy')
-    pale = tuple(int(0.55 * c + 0.45 * w) for c, w in zip(SKINS[k % len(SKINS)], (232, 230, 228)))   # drained of colour
-    sp = dict(name=f'reporter {k}', skin=pale, hw=66 if women else 70, hh=86 if women else 90,
-              jaw='soft' if women else ['square', 'round'][k % 2], hair=hair[0], hair_c=hair[1],
-              outfit=['suit', 'jumper', 'blouse', 'suit', 'jumper'][k % 5],
-              jacket=[(60, 64, 80), (120, 60, 60), (70, 90, 70), (90, 80, 110), (150, 120, 90)][k % 5],
-              shirt=(236, 236, 240), tie=(90, 40, 50) if k % 3 == 0 else None, trousers=(56, 58, 66),
-              shoulders=136 if women else 150, full=True, pose='custom', press=True, lanyard_c=PRESS_C[k % 5],
-              wide=True, brows='terror', mouth='scream', lashes=women, seed=k)
-    if women:
-        sp.update(skirt=(70, 72, 84) if k % 2 else None, tights=(200, 180, 170))
-        if not sp['skirt']:
-            sp.pop('skirt')
+    c = CAST[k]
+    women = c['sex'] == 'f'
+    sk = SKINS[k % len(SKINS)]
+    pale = tuple(int(0.55 * v + 0.45 * w) for v, w in zip(sk, (232, 230, 228)))   # drained of colour
+    sw, belly = c['build']
+    sp = dict(name=f"reporter {k} ({c['note']})", skin=pale, hw=(64 if women else 70) + 0.08 * (sw - 150),
+              hh=86 if women else 90 + (4 if c['jaw'] == 'long' else 0), jaw=c['jaw'], hair=c['hair'], hair_c=c['hair_c'],
+              grey=c.get('grey'), outfit='blouse' if women else 'suit', jacket=c['jacket'],
+              shirt=(236, 236, 240) if not women else (230, 222, 214), tie=c.get('tie'),
+              trousers=c.get('trousers', B.dk(c['jacket'], 0.8)), shoulders=sw, belly=belly, full=True, pose='custom',
+              press=True, lanyard_c=PRESS_C[k % 5], wide=True, brows='terror', mouth=c['fear'], lashes=women, seed=k,
+              beard=c.get('beard'), beard_c=c.get('beard_c'), glasses=c.get('glasses', False), age=k in (1, 2, 8),
+              nose='long' if k in (2, 5, 8) else 'line')
+    if c.get('skirt'):
+        sp.update(skirt=c['skirt'], tights=(200, 180, 170))
     sp.update(kw)
     return sp
+
+
+# The zombies: men and women, in different states of falling apart (flat cartoon damage only: no anatomy).
+ZCAST = {
+    0: dict(sex='m', hair='zombie', jacket=(80, 84, 96), dmg=dict(scalp=True)),
+    1: dict(sex='f', hair='matted', hair_c=(120, 96, 60), jacket=(110, 80, 90), skirt=(70, 60, 64), dmg=dict(socket='L')),
+    4: dict(sex='m', hair='zombie', jacket=(96, 86, 70), dmg=dict(stump=('L',))),
+    5: dict(sex='m', hair='zombie', jacket=(96, 92, 112), dmg=dict(mouth='jaw', gash=(40, 300))),   # the chair's zombie
+    6: dict(sex='m', hair='zombie', jacket=(64, 70, 84), dmg=dict(scalp=True)),                    # the front-right biter
+    8: dict(sex='f', hair='matted', hair_c=(60, 50, 44), jacket=(120, 100, 80), skirt=(80, 70, 60), dmg=dict(gash=(-30, 260))),
+    9: dict(sex='m', hair='zombie', jacket=(90, 90, 96), dmg=dict(mouth='jaw')),
+    10: dict(sex='f', hair='matted', hair_c=(170, 140, 90), jacket=(80, 96, 110), skirt=(60, 64, 80), dmg=dict()),
+    11: dict(sex='m', hair='zombie', jacket=(100, 70, 64), dmg=dict(stump=('R',))),
+    12: dict(sex='f', hair='matted', hair_c=(90, 50, 40), jacket=(96, 96, 80), skirt=(70, 70, 60), dmg=dict(socket='R')),
+    13: dict(sex='m', hair='zombie', jacket=(76, 66, 60), dmg=dict(gash=(20, 220))),
+    14: dict(sex='m', hair='zombie', jacket=(60, 76, 70), dmg=dict(mouth='jaw')),
+    15: dict(sex='f', hair='matted', hair_c=(40, 34, 30), jacket=(110, 110, 120), skirt=(50, 54, 60), dmg=dict(scalp=True)),
+    16: dict(sex='m', hair='zombie', jacket=(86, 76, 90), dmg=dict(stump=('L',))),
+    17: dict(sex='f', hair='matted', hair_c=(150, 120, 70), jacket=(100, 84, 70), skirt=(64, 60, 56), dmg=dict(gash=(0, 280))),
+    18: dict(sex='m', hair='zombie', jacket=(70, 70, 76), dmg=dict(socket='L', scalp=True)),       # the one after her
+    20: dict(sex='f', hair='matted', hair_c=(196, 170, 120), jacket=(122, 92, 60), skirt=(70, 56, 50), dmg=dict(socket='R')),
+    21: dict(sex='m', hair='zombie', jacket=(56, 64, 60), dmg=dict(mouth='jaw', stump=('R',))),
+    19: dict(sex='f', hair='matted', hair_c=(70, 56, 44), jacket=(90, 70, 70), skirt=(60, 56, 60), dmg=dict()),  # the mid biter
+}
 
 
 def zombie_base(k, **kw):
-    sp = dict(ZOMBIE, name=f'zombie {k}', seed=k + 10, hw=70 - 3 * (k % 3), jacket=[(80, 84, 96), (110, 96, 80), (70, 80, 70),
-              (96, 70, 70)][k % 4], press=(k % 3 != 2), lanyard_c=PRESS_C[(k + 2) % 5],
-              skin=[ZSKIN, (148, 166, 140), (162, 172, 132)][k % 3])
+    """A zombie: from the cast list if it has a part, otherwise one of the crowd at the windows and doors (varied
+    by its number: men and women, different damage)."""
+    c = ZCAST.get(k)
+    if c is None:
+        r = np.random.default_rng(k)
+        f = r.random() < 0.45
+        c = dict(sex='f' if f else 'm', hair='matted' if f else 'zombie',
+                 hair_c=tuple(int(v) for v in r.integers(40, 160, 3)), jacket=tuple(int(v) for v in r.integers(60, 120, 3)),
+                 skirt=(70, 64, 60) if f else None,
+                 dmg=[dict(), dict(scalp=True), dict(socket='L'), dict(mouth='jaw'), dict(gash=(0, 260))][k % 5])
+    women = c['sex'] == 'f'
+    sp = dict(ZOMBIE, name=f'zombie {k}', seed=k + 10, hw=(64 if women else 70) - 2 * (k % 3), hh=86 if women else 90,
+              jaw='soft' if women else ['square', 'round', 'long'][k % 3], hair=c['hair'],
+              hair_c=c.get('hair_c', (70, 66, 60)), jacket=c['jacket'], outfit='blouse' if women else 'suit',
+              shoulders=136 if women else 150 + 8 * (k % 3), press=(k % 3 != 2), lanyard_c=PRESS_C[(k + 2) % 5],
+              skin=[ZSKIN, (148, 166, 140), (162, 172, 132), (170, 176, 150)][k % 4], lashes=women)
+    if c.get('skirt'):
+        sp.update(skirt=c['skirt'], tights=(120, 130, 110))
+    d = c['dmg']
+    if 'mouth' in d:
+        sp['mouth'] = d['mouth']
+    for key in ('scalp', 'socket', 'gash'):
+        if key in d:
+            sp[key] = d[key]
+    if 'stump' in d:
+        sp['stump'] = d['stump']
     sp.update(kw)
     return sp
+
+
+def check_outfits():
+    """No two people in the hall look alike (best-practice 1.3): each person's look is unique."""
+    seen = {}
+    for w in CROWD:
+        sp = reporter_base(w['k']) if w['kind'] == 'person' else zombie_base(w['k']) if w['kind'] == 'zombie' else REPORTER
+        key = (w['kind'], sp.get('hair'), sp.get('hair_c'), sp.get('jacket'), sp.get('beard'), sp.get('glasses'))
+        if key in seen:
+            raise ValueError(f"check: {w['kind']} {w['k']} is dressed exactly like {seen[key]}")
+        seen[key] = f"{w['kind']} {w['k']}"
 
 
 # who is where in shot 2, and what each is doing (every background person has one clear action). Plan units.
@@ -970,7 +1202,7 @@ CROWD = [
     dict(kind='zombie', k=4, x=-1.55, z=7.75, act='lunge_r', v=(0.0, 0.0), pair='riser'),
     dict(kind='zombie', k=14, x=3.0, z=7.2, act='lunge_r'),
     dict(kind='zombie', k=13, x=-3.0, z=6.3, act='lunge'),
-    dict(kind='zombie', k=16, x=-1.3, z=6.0, act='lunge_r'),
+    dict(kind='zombie', k=16, x=-1.3, z=6.0, act='lunge_r', v=(-0.1, -0.25), until=3.5),
     # middle: filming it all, backing away from a zombie
     dict(kind='person', k=3, x=-2.45, z=4.85, act='phone', v=(0.0, 0.0)),
     dict(kind='zombie', k=8, x=-3.6, z=5.2, act='lunge_l'),
@@ -978,8 +1210,8 @@ CROWD = [
     # a reporter fleeing towards us down the centre, stopping short of the front row
     dict(kind='person', k=5, x=-0.1, z=6.4, act='run', v=(0.0, -1.0), until=1.6),
     # a second attack, on our reporter's path (she crawls past it in shot 3)
-    dict(kind='person', k=9, x=0.95, z=4.45, act='tackled', pair='mid'),
-    dict(kind='zombie', k=19, x=0.72, z=4.68, act='tackle', pair='mid'),
+    dict(kind='person', k=9, x=-0.6, z=4.7, act='tackled', pair='mid'),     # seen in shots 2 and 3 and the close-up
+    dict(kind='zombie', k=19, x=-0.83, z=4.93, act='tackle', pair='mid'),
     # the zombie lurching after our reporter
     dict(kind='zombie', k=18, x=-3.0, z=3.9, act='stalk', v=(0.35, 0.0), dir=-1, until=7.0, z2=None),
     # hiding: head under a chair, the rest of her very much not hidden (seat 1.2)
@@ -987,8 +1219,15 @@ CROWD = [
     # our reporter, crawling (shot 3 follows her)
     dict(kind='heroine', k=0, x=-1.85, z=3.25, act='crawl', v=(0.35, 0.0)),
     # the front left corner: bringing a chair down on a zombie
-    dict(kind='person', k=2, x=0.38, z=2.25, act='chair', pair='front_l'),
-    dict(kind='zombie', k=5, x=0.02, z=2.55, act='lunge_l', v=(0.0, 0.0), pair='front_l'),
+    # (it comes round from behind him; one hard hit at CHAIR_HIT sends it flying onto its back)
+    dict(kind='person', k=2, x=0.17, z=2.1, act='chair', pair='front_l'),
+    dict(kind='zombie', k=5, x=0.12, z=2.6, act='chair_z', pair='front_l',
+         path=[(0.0, 0.12, 2.6), (1.0, -0.25, 2.3), (1.5, -0.25, 2.3), (1.9, -0.25, 2.75)]),
+    # the window nearest the back bursts in at WIN_BURST: one topples over the sill into a heap and drags itself
+    # up; another climbs in after it, a knee on the sill
+    dict(kind='zombie', k=20, x=-5.0, z=5.85, act='window_fall', path=[(0.0, -5.0, 5.85), (1.8, -5.0, 5.85), (3.0, -4.8, 5.85),
+                                                                      (8.0, -3.9, 5.75)]),
+    dict(kind='zombie', k=21, x=-5.55, z=6.4, act='window_climb', path=[(0.0, -5.55, 6.4), (3.0, -5.3, 6.4)]),
     # the front right: a zombie has a reporter from behind, biting into his neck; he strains to escape
     dict(kind='person', k=4, x=-1.1, z=1.95, act='tackled', v=(-0.04, 0.1), until=3.0, pair='front_r'),
     dict(kind='zombie', k=6, x=-1.3, z=2.2, act='tackle', v=(-0.04, 0.1), until=3.0, pair='front_r'),
@@ -997,7 +1236,17 @@ PEOPLE_R = 0.24                 # each person's footprint on the floor plan (met
 
 
 def where(who, t):
-    """A person's place on the plan at t seconds after the 180."""
+    """A person's place on the plan at t seconds after the 180: a steady walk (v, until), or keyframes
+    (path: [(t, X, Z), ...], eased between keys)."""
+    if 'path' in who:
+        ks = who['path']
+        if t <= ks[0][0]:
+            return ks[0][1], ks[0][2]
+        for (t0, x0, z0), (t1, x1, z1) in zip(ks, ks[1:]):
+            if t <= t1:
+                u = F.ease((t - t0) / (t1 - t0)) if t1 > t0 else 1.0
+                return x0 + (x1 - x0) * u, z0 + (z1 - z0) * u
+        return ks[-1][1], ks[-1][2]
     vx, vz = who.get('v', (0.0, -0.25) if who['act'].startswith('lunge') else (0.0, 0.0))   # zombies keep coming
     tm = min(t, who.get('until', 99.0))
     return who['x'] + vx * tm, who['z'] + vz * tm
@@ -1168,6 +1417,29 @@ def crowd_person(img, cam, pc, who, t):
             sp['arms'] = {far: rig.arm(far, (d * (300 + 90 * grab_), -10 - 50 * w2), 'palm', 'out', strict=False),
                           near: rig.arm(near, (d * (110 + 60 * grab_), 30 + 30 * w1), 'palm', 'down', strict=False)}
             person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=ph, tilt=0.22 * d + 0.07 * w1)
+        elif act == 'chair_z':  # comes round from behind the man with the chair; takes the hit; flies onto its back
+            H = CHAIR_HIT
+            if t < H:
+                grab_ = 0.5 + 0.5 * math.sin(t * 6 + k)
+                sp['arms'] = {'L': rig.arm('L', (-(300 + 90 * grab_), -10 - 50 * w2), 'palm', 'out', strict=False),
+                              'R': rig.arm('R', (-(110 + 60 * grab_), 30 + 30 * w1), 'palm', 'down', strict=False)}
+                person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=ph if t < 1.0 else 1.0, tilt=-0.2 + 0.07 * w1)
+            else:
+                u = t - H
+                x, y = pc.P(X, 0.0, z)
+                if u < 0.4:            # airborne: thrown back, turning from upright to flat, head first
+                    w = u / 0.4
+                    ang, lift = -1.3 * (1 - F.ease(w)), 0.55 * UPM * math.sin(math.pi * w) * (1 - 0.4 * w)
+                elif u < 0.55:         # hits the floor and bounces once
+                    ang, lift = 0.0, 0.07 * UPM * math.sin(math.pi * (u - 0.4) / 0.15)
+                else:
+                    ang, lift = 0.0, 0.0
+                twitch = max(0.0, math.sin((u - 0.7) * 20)) if any(a_ < u < a_ + 0.16 for a_ in (0.8, 1.6, 2.7)) else 0.0
+                zombie_down(img, cam, x, y, s, sp, t, ang=ang, lift=lift, twitch=twitch, hit=u, flip=1)
+        elif act == 'window_fall':
+            window_fall(img, cam, pc, sp, t, X, z)
+        elif act == 'window_climb':
+            window_climb(img, cam, pc, sp, rig, t, X, z, w1, w2)
         elif act == 'tackle':   # it has him from behind: its body first, its arms and biting head after him
             sp.update(nohead=True, pose='none')
             person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=1.0, tilt=0.12 + 0.05 * w1)
@@ -1203,18 +1475,41 @@ def crowd_person(img, cam, pc, who, t):
         for da in (-0.12, 0.0, 0.12):
             p.line([(hx, hy), (hx + 460 * math.cos(ang + da), hy + 460 * math.sin(ang + da))], (40, 40, 44), 9)
         p.poly([(hx - 45, hy - 35), (hx + 45, hy - 35), (hx + 45, hy + 35), (hx - 45, hy + 35)], (34, 34, 38), INK, 2.0)
-    elif act == 'chair':       # bringing a chair down on a zombie, again and again
-        u = swing(t, 1.1, k * 0.21)
-        L_, R_ = lerp2((-130, -260), (110, 80), u), lerp2((40, -280), (250, 40), u)
+    elif act == 'chair':       # guard, wind-up, ONE hard hit, then standing over it, panting (best-practice 1.3)
+        H = CHAIR_HIT
+        guard_L, guard_R = (-110 + 20 * w1, 220), (210, 200 + 20 * w2)    # held across his front, face clear
+        up_L, up_R = (-170, -290), (10, -320)
+        hit_L, hit_R = (110, 80), (250, 40)
+        low_L, low_R = (60, 200), (200, 180)
+        if t < H - 0.5:        # backing off, the chair held up between them, shaking
+            L_, R_, deg, tl = guard_L, guard_R, 4 * w1, -0.06 + 0.03 * w2
+        elif t < H - 0.1:      # the wind-up: high over his head, leaning back
+            u = F.ease((t - (H - 0.5)) / 0.4)
+            L_, R_, deg, tl = lerp2(guard_L, up_L, u), lerp2(guard_R, up_R, u), -14 * u, -0.06 - 0.12 * u
+        elif t < H:            # the strike: very fast
+            u = ((t - (H - 0.1)) / 0.1) ** 2
+            L_, R_, deg, tl = lerp2(up_L, hit_L, u), lerp2(up_R, hit_R, u), -14 + 114 * u, -0.18 + 0.48 * u
+        elif t < H + 0.25:     # follow-through
+            L_, R_, deg, tl = hit_L, hit_R, 100, 0.3
+        else:                  # straightening up over it, the bent chair hanging from his hands, panting
+            u = F.ease(min(1.0, (t - H - 0.25) / 0.4))
+            L_, R_ = lerp2(hit_L, low_L, u), lerp2(hit_R, low_R, u)
+            deg, tl = 100 + 12 * u, 0.3 - 0.2 * u + 0.035 * math.sin(t * 9)
+        sp['mouth'] = 'grimace' if t < H + 0.25 else 'wail'
         sp['arms'] = {'L': rig.arm('L', L_, 'grip', 'down', strict=False), 'R': rig.arm('R', R_, 'grip', 'out', strict=False)}
-        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=0.1 + 0.2 * u)
+        p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=tl)
         hx, hy = (L_[0] + R_[0]) / 2, (L_[1] + R_[1]) / 2
-        a = math.radians(-10 + 110 * u)            # the chair turns as it comes down
+        a = math.radians(deg)                      # the chair turns as it comes down
         ca, sa = math.cos(a), math.sin(a)
         R2 = lambda x, y: (hx + x * ca - y * sa, hy + x * sa + y * ca)
-        p.poly([R2(-180, -170), R2(180, -180), R2(170, -30), R2(-170, -20)], CHAIR, INK, 2.4)
-        p.line([R2(-170, -20), R2(-210, 150)], CHAIR_FRAME, 6)
-        p.line([R2(170, -30), R2(200, 140)], CHAIR_FRAME, 6)
+        if t < H:
+            p.poly([R2(-180, -170), R2(180, -180), R2(170, -30), R2(-170, -20)], CHAIR, INK, 2.4)
+            p.line([R2(-170, -20), R2(-210, 150)], CHAIR_FRAME, 6)
+            p.line([R2(170, -30), R2(200, 140)], CHAIR_FRAME, 6)
+        else:                  # buckled by the blow: the back dented in, the legs bent out of true
+            p.poly([R2(-180, -170), R2(-10, -120), R2(180, -190), R2(170, -30), R2(10, -60), R2(-170, -20)], CHAIR, INK, 2.4)
+            p.line([R2(-170, -20), R2(-200, 60), R2(-130, 140)], CHAIR_FRAME, 6)
+            p.line([R2(170, -30), R2(230, 50), R2(260, 110)], CHAIR_FRAME, 6)
     elif act == 'phone':       # filming it all, shaking, backing away
         sp['arms'] = rig.pose('hold', side='R', shape='phone', lift=0.9 + 0.1 * w2)
         sp['arms']['L'] = rig.arm('L', (-270 + 30 * w1, 210), 'palm', 'out', strict=False)
@@ -1427,7 +1722,7 @@ def crawl_hand(step, near=True):
     return (-210 + (0 if near else 30) + 30 * ph, -6 - max(0.0, ph) * 18)
 
 
-def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0):
+def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0, who_sp=None):
     """Crawling on hands and knees across the floor, seen from the side (heading to our left when flip=1), her face
     turned to us in terror (the cartoon convention: body in profile, head to camera). (x, y): the floor under her
     middle. step: the crawl cycle (radians). The pickup, without stopping: `pick` (0-1) carries her leading hand
@@ -1436,6 +1731,10 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
     p = B.Pen(img, L)
     sp = dict(REPORTER, wide=True, brows='terror', mouth='gasp', skin=(240, 234, 232), look=look,
               face_splats=[(-38, -110, 8, 7), (44, -60, 6, 8)], tail_swing=40 + 20 * math.sin(step))
+    if who_sp:     # someone else on hands and knees (a zombie dragging itself along): their own look and face
+        sp.update({k_: v_ for k_, v_ in who_sp.items() if k_ not in ('arms', 'pose')})
+        sp.setdefault('tights', sp.get('trousers', (60, 62, 72)))
+        sp['skirt'] = sp.get('skirt') or sp.get('jacket')
     jc, skin, tights = sp['jacket'], sp['skin'], sp['tights']
     kit.contact_shadow(img, cam, x, y, 640 * s, alpha=0.25)
     lift = lambda v: max(0.0, v) * 18
@@ -1473,8 +1772,15 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
     leg(-30, B.dk(tights, 0.86), b_)                   # the far side first, a shade darker
     arm(30, B.dk(jc, 0.86), False)
     # the body: a curved back from the shoulders to the hips, the skirt over the hips
-    p.poly(curve([(-215, -320 + bob), (-170, -378 + bob), (-30, -398 + bob), (100, -388 + bob), (175, -350 + bob),
-                  (182, -290 + bob), (100, -262 + bob), (-40, -268 + bob), (-170, -282 + bob)], 6), jc, INK, 2.6)
+    # the neck grows out of the top of her shoulders, curving up and forward to under her chin (drawn first: the
+    # jacket's collar covers its base, so it can never look stuck on)
+    neck = curve([(-226, -404 + bob), (-188, -410 + bob), (-166, -378 + bob), (-140, -336 + bob), (-186, -322 + bob),
+                  (-206, -360 + bob)], 3)
+    p.poly(neck, B.dk(skin, 0.93), INK, 2.4)
+    body = curve([(-215, -320 + bob), (-170, -378 + bob), (-30, -398 + bob), (100, -388 + bob), (175, -350 + bob),
+                  (182, -290 + bob), (100, -262 + bob), (-40, -268 + bob), (-170, -282 + bob)], 6)
+    check_neck(neck, body)
+    p.poly(body, jc, INK, 2.6)
     p.poly(curve([(70, -390 + bob), (160, -376 + bob), (205, -330 + bob), (196, -262 + bob), (130, -236 + bob),
                   (70, -248 + bob)], 5), sp['skirt'], INK, 2.4)
     soft(img, L, [(-150, -370 + bob), (40, -388 + bob), (170, -360 + bob), (40, -350 + bob)], (255, 255, 255), 0.2, 6)
@@ -1482,16 +1788,248 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
     splat(p, 30, -290 + bob, 12, 6, drops=2)
     leg(0, tights, a_)
     # the lanyard hangs from her neck under her chest, swinging with each stroke
-    kit.dangle(p, (-196, -312 + bob), 150, 0.25 * math.sin(step * 2), sp['lanyard_c'], 5, tag=(26, 34, (236, 236, 232)))
+    kit.dangle(p, (-180, -330 + bob), 150, 0.25 * math.sin(step * 2), sp['lanyard_c'], 5, tag=(26, 34, (236, 236, 232)))
     arm(0, jc, True, reach=pick)
-    # the neck, and her head turned to us
-    p.poly([(-268, -380 + bob), (-232, -380 + bob), (-224, -330 + bob), (-262, -326 + bob)], B.dk(skin, 0.95), INK, 2.4)
-    # (the neck: slim, under her chin, in the head's shadow)
-    hx, hy = -250, -470 + bob
+    # her head, turned to us, sitting on the top of the neck
+    hx, hy = -208, -468 + bob
     B.hair_back(p, sp, hx, hy, sp['hw'], sp['hh'])
     B.head(img, p, sp, t, hx, hy)
     for (fx, fy, r, seed) in sp['face_splats']:
         splat(p, hx + fx, hy + 150 + fy, r, seed, drops=2)
+
+
+def inside(pt, poly):
+    """Is the point inside the polygon (even-odd rule)?"""
+    x, y = pt
+    n, c = len(poly), False
+    for i in range(n):
+        (x1, y1), (x2, y2) = poly[i], poly[(i + 1) % n]
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            c = not c
+    return c
+
+
+def check_neck(neck, body):
+    """Best-practice 1.3: a neck grows out of the body. The two base corners of the neck must lie inside the body
+    outline (so no gap can ever open between them), or the render stops."""
+    base = [pt for pt in neck if pt[1] > max(q[1] for q in neck) - 30]
+    if not all(inside(pt, body) for pt in base):
+        raise ValueError(f'check: her neck base {base[:2]} is outside her body: the head would float')
+
+
+CHAIR_HIT = 1.5                 # shot 2: the chair lands, this many seconds after the 180
+WIN_BURST = 0.6                 # shot 2: the window nearest the back bursts in
+WIN_Z = 6.2
+
+
+class _Place:
+    """A frame placed inside another at (ox, oy), turned by a (a head on a neck that lies along the floor)."""
+    def __init__(self, parent, ox, oy, a):
+        self.parent, self.ox, self.oy, self.c, self.sn = parent, ox, oy, math.cos(a), math.sin(a)
+        self.s, self.cam = parent.s, getattr(parent, 'cam', None)
+
+    def P(self, x, y):
+        return self.parent.P(self.ox + x * self.c - y * self.sn, self.oy + x * self.sn + y * self.c)
+
+    def S(self, v):
+        return self.parent.S(v)
+
+
+def zombie_down(img, cam, x, y, s, sp, t, ang=0.0, lift=0.0, twitch=0.0, hit=9.0, flip=1):
+    """A zombie flat on its back on the floor, seen side-on: feet at one end, the head lolling at the other (head
+    towards local +x). (x, y): the floor under its hips (world px). ang turns the whole body about the hips (in
+    flight: -1.3 is nearly upright); lift raises it off the floor (its own units); twitch (0-1) jerks a knee and the
+    far arm; hit: seconds since the blow (blood on the floor under its head spreads from the landing)."""
+    sp = dict(sp)
+    L0 = B.Local(cam, x, y - lift * s, s, flip)
+    L = PP.Rot(L0, ang, pivot=(0, -70)) if ang else L0
+    p = B.Pen(img, L)
+    jc, skin = sp.get('jacket', B.NAVY), sp['skin']
+    tc = sp['tights'] if sp.get('skirt') else sp.get('trousers', (60, 62, 72))
+    shoe = sp.get('shoe', (22, 20, 22))
+    if ang == 0.0 and lift < 1:
+        kit.contact_shadow(img, cam, x + 80 * s * flip, y, 1000 * s, alpha=0.3)
+        if hit > 0.45:     # a pool spreading under its head
+            r = min(1.0, (hit - 0.45) / 1.5)
+            p.ell(520, -4, 60 + 110 * r, 14 + 22 * r, BLOOD_D, None)
+            p.ell(520, -6, 44 + 90 * r, 10 + 16 * r, BLOOD, None)
+    stump = sp.get('stump', ())
+    # the far arm (behind the body): flung up when it twitches, lying behind it otherwise
+    if 'R' not in stump:
+        el = lerp2((250, -40), (360, -230), twitch)
+        hd = lerp2((150, -30), (430, -300), twitch)
+        taper(p, (300, -120), el, 30, 26, B.dk(jc, 0.85))
+        taper(p, el, hd, 26, 20, B.dk(jc, 0.85))
+        p.ell(hd[0], hd[1], 26, 22, B.dk(skin, 0.9), INK, 2.0)
+    # the legs: the far one a shade darker; a knee jerks up on a twitch
+    for dx, dy, colr, tw in ((25, -12, B.dk(tc, 0.85), twitch), (0, 0, tc, 0.0)):
+        hip, knee, foot = (-50 + dx, -60 + dy), (-230 + dx, -250 + dy - 90 * tw), (-400 + dx * 0.5, -30 + dy)   # knees up
+        taper(p, hip, knee, 56, 40, colr)
+        taper(p, knee, foot, 40, 26, colr)
+        p.poly(curve([(foot[0] + 20, foot[1] - 34), (foot[0] - 50, foot[1] - 26), (foot[0] - 70, foot[1] + 10),
+                      (foot[0] + 24, foot[1] + 14)], 3), shoe, INK, 2.2)          # flat on the floor, toes out
+    # the body on its back: chest up, the jacket rumpled, its shirt and lanyard
+    body = curve([(-130, -8), (-140, -110), (40, -150), (300, -160), (370, -120), (380, -10), (120, 0)], 5)
+    p.poly(body, jc, INK, 2.6)
+    p.poly([(250, -158), (330, -150), (300, -115)], sp.get('shirt', (206, 204, 190)), INK, 1.8)
+    if sp.get('skirt'):
+        p.poly(curve([(-150, -10), (-160, -110), (-10, -146), (40, -140), (30, -6)], 3), sp['skirt'], INK, 2.4)
+    if sp.get('gash'):
+        p.poly(curve([(90, -150), (170, -158), (190, -120), (110, -112)], 3), BLOOD, INK, 1.8)
+    splat(p, 200, -120, 20, 7)
+    # the near arm, flopped on the floor beside it
+    if 'L' not in stump:
+        taper(p, (330, -100), (420, -30), 30, 26, jc)
+        taper(p, (420, -30), (530, -22), 26, 20, jc)
+        p.ell(552, -22, 26, 20, skin, INK, 2.0)
+    else:
+        p.ell(340, -100, 30, 18, BLOOD, B.dk(BLOOD, 0.6), 1.6)
+    # the neck and the head, lolling back, its face to us
+    taper(p, (360, -95), (430, -95), 34, 30, B.dk(skin, 0.92))
+    hl = _Place(L, 420, -100, math.pi / 2 - 0.3)
+    hp = B.Pen(img, hl)
+    sp.update(mouth=sp.get('mouth', 'snarl') if hit > 0.1 else 'scream', tilt=0.0,
+              face_splats=[(20, -110, 9, 5), (-30, -60, 7, 6)] if hit < 9 else sp.get('face_splats', []))
+    B.hair_back(hp, sp, 0, -150, sp.get('hw', 70), sp.get('hh', 90))
+    B.head(img, hp, sp, t, 0, -150)
+    for (fx, fy, r, seed) in sp['face_splats']:
+        splat(hp, fx, -150 + 150 + fy, r, seed, drops=2)
+    if hit < 0.3:          # the blow: blood thrown off its head the way it is flying
+        for j in range(6):
+            u = hit / 0.3
+            a = math.radians(-60 + 20 * j)
+            hp.ell(60 * j * u + 80 * u, -150 + 40 * math.sin(a) * u * 4, 10 * (1 - 0.5 * u), 10 * (1 - 0.5 * u), BLOOD, None)
+        splat(hp, 40, -150, 30, 9, drops=4)
+
+
+def _wall_mask(img, cam, pc, X, z0, z1, y_top):
+    """A mask that is clear everywhere except over the wall below y_top between z0 and z1 (what hides the legs of
+    someone climbing in through a window)."""
+    m = Image.new('L', img.size, 255)
+    q = clipz(pc, [(X, 0.0, z0), (X, 0.0, z1), (X, y_top, z1), (X, y_top, z0)])
+    if len(q) >= 3:
+        ImageDraw.Draw(m).polygon([cam.P(*pt) for pt in q], fill=0)
+    return m
+
+
+def _masked(img, lay, mask):
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(mask))))
+    img.alpha_composite(lay)
+
+
+def window_fall(img, cam, pc, sp, t, X, z):
+    """The front one at the window: pressed to the glass; when it bursts it topples over the sill head first into a
+    heap on the floor below, lies there twitching, then drags itself up onto its hands and knees and comes on."""
+    W = ROOM['x0']
+    if t < WIN_BURST:      # pressed to the glass, outside (seen through it)
+        outside(img, cam, pc, window_pane(W, WIN_Z), [(W - 0.3, z, 20)], t, glass_x=W, sp_for={20: sp})
+        return
+    u = t - WIN_BURST
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    if u < 0.45:           # toppling over the sill: pivoting on its hips at the sill, then dropping inside
+        w = u / 0.45
+        hipX = lerp2((W - 0.15, 0.0), (X, 0.0), F.ease(w))[0]
+        hipY = 0.75 * (1 - w * w)
+        x, y = pc.P(hipX, hipY, z)
+        s = pc.scale(z, hipX)
+        zombie_down(lay, cam, x, y, s, sp, t, ang=-1.45 * (1 - F.ease(w)), hit=9.0, flip=-1)
+        _masked(img, lay, _wall_mask(img, cam, pc, W - 0.001, WIN_Z - 1.2, WIN_Z + 1.2, 0.55))
+        return
+    if u < 1.2:            # in a heap, a bounce, twitching
+        x, y = pc.P(X, 0.0, z)
+        lift = 0.05 * UPM * max(0.0, math.sin(math.pi * (u - 0.45) / 0.12)) if u < 0.57 else 0.0
+        zombie_down(img, cam, x, y, pc.scale(z, X), sp, t, lift=lift, twitch=max(0.0, math.sin(u * 30)) if u > 0.8 else 0.0,
+                    hit=9.0, flip=-1)
+        return
+    x, y = pc.P(X, 0.0, z)  # dragging itself up and on, slowly, on hands and knees
+    reporter_crawl(img, cam, x, y, pc.scale(z, X), t, step=(u - 1.2) * 4, flip=1, who_sp=sp)
+
+
+def window_climb(img, cam, pc, sp, rig, t, X, z, w1, w2):
+    """The second one: when the glass goes it steps up, a knee on the sill, and climbs in, clawing at the room."""
+    W = ROOM['x0']
+    if t < WIN_BURST:
+        outside(img, cam, pc, window_pane(W, WIN_Z), [(X, z, 21)], t, glass_x=W, sp_for={21: sp})
+        return
+    u = min(1.0, (t - WIN_BURST) / 0.8)
+    rise = 0.42 * F.ease(u)                                  # up onto the sill
+    grab_ = 0.5 + 0.5 * math.sin(t * 6)
+    sp['arms'] = {'L': rig.arm('L', (300 + 80 * grab_, -60 - 40 * w2), 'palm', 'out', strict=False),
+                  'R': rig.arm('R', (160 + 60 * grab_, 10 + 30 * w1), 'palm', 'out', strict=False)}
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    s = pc.scale(z, X)
+    nx, ny = pc.P(X, rise + F.SOLE_Y / UPM, z)
+    person(lay, cam, nx, ny, s, sp, t, legs='kneel' if u > 0.5 else 'lunge', phase=1.0, tilt=-0.25 - 0.08 * w1, flip=-1)
+    _masked(img, lay, _wall_mask(img, cam, pc, W - 0.001, WIN_Z - 1.2, WIN_Z + 1.2, 0.55))
+
+
+def window_pane(X, zw):
+    return [(X, 0.55, zw - 0.7), (X, 0.55, zw + 0.7), (X, 3.1, zw + 0.7), (X, 3.1, zw - 0.7)]
+
+
+def cracks(p, pc, X, zc, yc, grow, seed, reach=0.75):
+    """Cracks spreading through a pane from where it is struck: jagged white lines, growing (0-1)."""
+    rng = np.random.default_rng(seed)
+    for j in range(11):
+        a = 2 * math.pi * j / 11 + rng.uniform(-0.2, 0.2)
+        pts, (zz, yy) = [], (zc, yc)
+        n = 5
+        for kk in range(n + 1):
+            if kk / n > grow:
+                break
+            pts.append(pc.P(X + 0.002, yy, zz))
+            step = reach * rng.uniform(0.6, 1.1) / n
+            a += rng.uniform(-0.35, 0.35)
+            zz, yy = zz + math.cos(a) * step, yy + math.sin(a) * step
+            yy = min(3.08, max(0.57, yy))
+            zz = min(WIN_Z + 0.68, max(WIN_Z - 0.68, zz)) if abs(zc - WIN_Z) < 1 else zz
+        if len(pts) > 1:
+            p.line(pts, (90, 110, 120), 3.2)
+            p.line(pts, (250, 252, 255), 1.8)
+    for r in (0.06, 0.13):     # rings round the point of impact
+        ring = [pc.P(X + 0.002, yc + r * math.sin(2 * math.pi * q / 10), zc + r * math.cos(2 * math.pi * q / 10)) for q in range(11)]
+        if grow > r * 4:
+            p.line(ring, (250, 252, 255), 1.6)
+
+
+def shards(img, cam, pc, X, zw, t, seed=3):
+    """The burst: glass thrown into the room, falling, then lying glinting on the floor."""
+    if t < WIN_BURST:
+        return
+    p = B.Pen(img, cam)
+    rng = np.random.default_rng(seed)
+    u = t - WIN_BURST
+    for j in range(16):
+        z0, y0 = zw + rng.uniform(-0.6, 0.6), rng.uniform(0.7, 2.1)
+        vx, vy, vz = rng.uniform(1.5, 3.5), rng.uniform(-0.2, 1.4), rng.uniform(-0.6, 0.6)
+        tl = (vy + math.sqrt(vy * vy + 2 * 9.8 * y0)) / 9.8      # when it lands
+        tu = min(u, tl)
+        Xs, Ys, Zs = X + vx * tu, y0 + vy * tu - 4.9 * tu * tu, z0 + vz * tu
+        sz = rng.uniform(0.05, 0.11) * (0.6 if u >= tl else 1.0)
+        spin = rng.uniform(0, 6) + (u * 9 if u < tl else 0)
+        pts = []
+        for q in range(3):
+            a = spin + q * 2.1 + rng.uniform(-0.3, 0.3)
+            if u < tl:
+                pts.append(pc.P(Xs + math.cos(a) * sz * 0.5, Ys + math.sin(a) * sz, Zs + math.cos(a) * sz))
+            else:   # flat on the floor
+                pts.append(pc.P(Xs + math.cos(a) * sz, 0.003, Zs + math.sin(a) * sz))
+        p.poly(pts, (226, 240, 248), (110, 130, 140), 1.6)
+
+
+def glass_prints(img, hands, t):
+    """Where a zombie's own hand is pressed to the glass: a smeared grimy, bloody print round it, streaks dragged
+    down below (best-practice 1.3: effects land on surfaces). hands: canvas points of hands on the glass."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for (hx, hy, r, seed) in hands:
+        rng = np.random.default_rng(seed)
+        d.ellipse([hx - r * 1.2, hy - r * 1.1, hx + r * 1.2, hy + r * 1.3], fill=(110, 30, 34, 170))
+        for kk in range(4):
+            x0 = hx - r * 0.8 + kk * r * 0.55
+            ln = r * (1.5 + 2.5 * rng.random()) * min(1.0, 0.4 + 0.3 * t)
+            d.line([(x0, hy + r), (x0 + rng.uniform(-2, 2), hy + r + ln)], fill=(130, 24, 30, 200), width=max(2, int(r * 0.32)))
+    return lay
 
 
 HEROINE = {}                    # her crawl in shots 3 and 3b: the phone's place, the pickup, the hold
@@ -1754,6 +2292,75 @@ def paste_sprite(img, lay, at, origin, scale, angle=0.0):
     img.alpha_composite(lay, (int(at[0] - ox), int(at[1] - oy)))
 
 
+def ragged(pts, rng, amt):
+    """Roughen an outline: every point nudged a little (seeded, so it is the same each frame)."""
+    return [(x + rng.uniform(-amt, amt), y + rng.uniform(-amt, amt)) for x, y in pts]
+
+
+def hand_smear(img, cam, pc, X, drop, u):
+    """What a bloody hand leaves when it clings to the podium's front edge and slides down: a palm print where it
+    held, four finger streaks dragged down below it along the hand's path (thinning, breaking up as the blood runs
+    out), ragged darker edges, drips running on from the print. Drawn on the podium's front face, in metres (X across,
+    Y up), and kept inside it. drop: how far the hand has slid (m); u: seconds since it began to slide."""
+    p = B.Pen(img, cam)
+    z = PODIUM_BOX['z1']
+    y1 = STAGE_BOX['h'] + PODIUM_BOX['h'] - 0.06                       # just under the top rail
+    floor_ = STAGE_BOX['h'] + 0.09                                      # the bottom of the front panel
+    P = lambda x, y: pc.P(x, max(floor_, y), z)
+    drift = lambda d_: 0.02 * d_ + 0.008 * math.sin(d_ * 9)            # the hand drifts a little as it slides
+    rng = np.random.default_rng(91)
+    FING = [(-0.024, 0.008, 0.040), (-0.008, 0.0085, 0.048), (0.008, 0.008, 0.046), (0.023, 0.007, 0.036)]   # x, half-width, length
+
+    def blot(pts, rim=0.0035, inner=0.0025):
+        """A wet print: a ragged dark rim, the brighter blood inside."""
+        p.poly([P(*q) for q in ragged(curve(pts, 3), rng, rim)], BLOOD_D, None)
+        cx = sum(q[0] for q in pts) / len(pts)
+        cy = sum(q[1] for q in pts) / len(pts)
+        p.poly([P(*q) for q in ragged(curve([(cx + (x - cx) * 0.72, cy + (y - cy) * 0.72) for x, y in pts], 3), rng, inner)],
+               BLOOD, None)
+    # the four finger streaks, dragged from the bottom of the print down the hand's path, each its own length
+    run = min(drop, y1 - floor_ - 0.12)
+    top = y1 - 0.105
+    for i, (fx, w0, _) in enumerate(FING):
+        length = max(0.0, run * (1.0 - 0.15 * abs(i - 1.3)))
+        if length < 0.01:
+            continue
+        cut = sorted(float(c) for c in rng.uniform(0.35, 0.95, 1 + i % 2))   # where the blood runs out for a moment
+        pieces, a0 = [], 0.0
+        for c_ in cut + [1.0]:
+            pieces.append((a0, c_ - 0.04 if c_ < 1.0 else 1.0))
+            a0 = c_ + 0.03
+        for pa, pb in pieces:
+            if pb <= pa:
+                continue
+            n = 8
+            ts = [pa + (pb - pa) * j / n for j in range(n + 1)]
+            ys = [top - tt * length for tt in ts]
+            ws = [w0 * (1 - 0.75 * tt) for tt in ts]
+            xs = [X + fx + drift(tt * length) for tt in ts]
+            left = [(x - w, y) for x, w, y in zip(xs, ws, ys)]
+            right = [(x + w, y) for x, w, y in zip(xs, ws, ys)][::-1]
+            blot(left + right, rim=0.002, inner=0.001)
+    # the palm print where it clung: the heel of the hand, the thumb to one side, the fingers up to the edge
+    blot([(X - 0.032, top + 0.03), (X + 0.03, top + 0.03), (X + 0.036, top - 0.005), (X + 0.02, top - 0.03),
+          (X - 0.02, top - 0.03), (X - 0.036, top - 0.005)])
+    blot([(X - 0.036, top + 0.0), (X - 0.05, top + 0.02), (X - 0.054, top + 0.042), (X - 0.044, top + 0.046),
+          (X - 0.032, top + 0.024)], rim=0.002, inner=0.0015)
+    for fx, w, ln in FING:
+        y0_ = top + 0.03
+        blot([(X + fx - w, y0_), (X + fx - w * 0.9, y0_ + ln * 0.8), (X + fx, y0_ + ln), (X + fx + w * 0.9, y0_ + ln * 0.8),
+              (X + fx + w, y0_)], rim=0.002, inner=0.0015)
+    # drips running on down from the print, still creeping after the hand has gone
+    for dx, sp_, dl in ((-0.026, 0.12, 0.0), (0.02, 0.09, 0.3), (-0.004, 0.07, 0.6)):
+        ln = min(0.35, sp_ * max(0.0, u - dl))
+        if ln > 0:
+            xs, ys = X + dx, top - 0.02
+            p.poly([P(xs - 0.004, ys), P(xs + 0.004, ys), P(xs + 0.0025, ys - ln), P(xs - 0.0025, ys - ln)], BLOOD_D, None)
+            bx, by = P(xs, ys - ln)
+            r = 0.0065 * pc.f / pc.depth(z)
+            p.ell(bx, by, r, r * 1.3, BLOOD_D, None)
+
+
 def film_front(t):
     """Shot 1: the slow zoom while he speaks. At T['slap'] a bloodied hand slaps onto the podium's front edge from
     below, clings, and slides off leaving a smear. He does not react."""
@@ -1765,11 +2372,8 @@ def film_front(t):
         top = cam.P(*pc.P(X, STAGE_BOX['h'] + PODIUM_BOX['h'], PODIUM_BOX['z1']))
         k = pc.f / pc.depth(PODIUM_BOX['z1']) * cam.z * B.SS
         drop = 0.0 if u < 0.3 else min(1.2, (u - 0.3) ** 1.6 * 1.4)      # clings, then slides down and away
-        d = ImageDraw.Draw(img)
         if drop > 0:   # the smear it leaves down the podium's front
-            sm = 0.05 * k
-            d.polygon([(top[0] - sm, top[1] + 0.03 * k), (top[0] + sm, top[1] + 0.03 * k),
-                       (top[0] + sm * 0.8, top[1] + drop * k), (top[0] - sm * 0.9, top[1] + drop * k)], fill=BLOOD_D + (255,))
+            hand_smear(img, cam, pc, X, drop, u - 0.3)
         if drop < 1.0:
             lay, origin = podium_hand()
             paste_sprite(img, lay, (top[0], top[1] + drop * k), origin, cam.z)
@@ -2109,6 +2713,30 @@ def crash():
     return normal(out)
 
 
+def glass_snd():
+    """A window bursting in: a hard crack, a bright spray of breaking glass, then shards tinkling down."""
+    out = np.zeros(int(1.4 * SR))
+    n = int(0.5 * SR)
+    tt = np.arange(n) / SR
+    place(out, normal(band(rng.standard_normal(n), 2500, 9000) * np.exp(-tt * 9)), 0.0, 0.9)
+    place(out, thud(120, 0.2, 1.0), 0.0, 0.6)
+    for k in range(22):
+        at = 0.05 + rng.uniform(0, 1.0) ** 1.6
+        place(out, M.clink() * 0.5, at, 0.5 * (1 - at / 1.2))
+    return normal(out)
+
+
+def chair_hit():
+    """A metal chair smashed into someone: a wet smack and the frame clanging as it buckles."""
+    out = np.zeros(int(0.7 * SR))
+    place(out, splat_snd(1.2), 0.0, 0.8)
+    place(out, thud(110, 0.3, 0.9), 0.0, 0.9)
+    for k in range(3):
+        place(out, M.clink() * 0.6, 0.01 + 0.05 * k, 0.6 * 0.6 ** k)
+        place(out, thud(300 + 40 * k, 0.1, 1.0), 0.01 + 0.05 * k, 0.4 * 0.6 ** k)
+    return normal(out)
+
+
 def splat_snd(size=1.0):
     """A wet splat: a soft, low burst of noise with a few droplets."""
     n = int(0.35 * SR)
@@ -2198,6 +2826,12 @@ def soundtrack():
         i = int((edge - T['s2']) * SR)
         bed[i - k:i + k] *= np.linspace(1, 1, 2 * k)
     place(mix, bed * g, T['s2'])
+    # shot 2's big moments, over the din: the window bursting in; the chair; the body hitting the floor and bouncing
+    place(mix, glass_snd(), T['s2'] + WIN_BURST, 0.7)
+    place(mix, thud(80, 0.4, 0.3), T['s2'] + WIN_BURST + 0.45, 0.4)
+    place(mix, chair_hit(), T['s2'] + CHAIR_HIT, 1.0)
+    place(mix, thud(65, 0.5, 0.5), T['s2'] + CHAIR_HIT + 0.4, 0.9)
+    place(mix, thud(75, 0.25, 0.3), T['s2'] + CHAIR_HIT + 0.55, 0.45)
     # shot 3b and 4: frantic taps on the phone
     for a in np.arange(T['s3b'] + 0.1, T['crunch'], 0.11):
         place(mix, tap_snd(), a + rng.uniform(-0.02, 0.02), 0.12 if a < T['s4'] else 0.2)
@@ -2249,8 +2883,16 @@ def render(out, size, crf, ss):
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)', flush=True)
 
 
+def checks():
+    """Every check that stops a bad render before it starts (best-practice 1.3, guides/preflight.md)."""
+    check_crowd()
+    check_outfits()
+
+
 def main():
     mode = sys.argv[1]
+    if mode in ('stills', 'animatic', 'final'):
+        checks()
     if mode == 'sheet':
         stills = sheet(sys.argv[2])
         if len(sys.argv) > 3:

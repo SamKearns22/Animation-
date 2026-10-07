@@ -385,6 +385,29 @@ def phone_hand(size, to_px, side, tap_key=0, relax=0.0, phone=True, skin=SKIN, s
     return render(meshes, size, to_px, outline=outline)
 
 
+def phone_hand_back(size, to_px, side, skin=SKIN, sleeve=(240, 230, 206), outline=3.0):
+    """One hand of the same phone grip as phone_hand, seen from the other side: from in front of the person, looking
+    at the phone's back (turned half a turn about the vertical). The fingers spread over the phone's back face us;
+    the thumb is hidden on the screen side. Returns (layer, cuff, wrist): the layer (the phone's own pixels stay
+    transparent: draw the phone's back first), and the layer pixels of the sleeve's open end and of the wrist, to
+    join a drawn forearm to it."""
+    turn = np.array([-1.0, 1.0, -1.0])                    # half a turn about Y: a rotation, so faces keep their winding
+    x, (px, pb, o), _ = phone_grip(side, 0)
+    x = np.array(x)
+    Vp, tp, kp = box_mesh(*PHONE)
+    meshes = [mesh_entry(Vp * turn, tp, kp, (skin, skin), 9)]
+    V, tris, kind = hand_mesh(side, x, px, pb, o)
+    meshes.append(mesh_entry(V * turn, tris, kind, (skin, sleeve), 1))
+    nc = tuple(min(255, int(c * 1.04 + 6)) for c in skin)
+    for j, (Vn, tn) in enumerate(nail_meshes(side, x, px, pb, o)):
+        meshes.append(mesh_entry(Vn * turn, tn, np.zeros(len(Vn), int), (nc, nc), 10 + j))
+    Vt = V * turn
+    sl = Vt[kind == 1]
+    far = sl[np.argsort(np.linalg.norm(sl - Vt[kind == 0].mean(axis=0), axis=1))[-max(1, len(sl) // 10):]].mean(axis=0)
+    near = sl[np.argsort(np.linalg.norm(sl - Vt[kind == 0].mean(axis=0), axis=1))[:max(1, len(sl) // 10)]].mean(axis=0)
+    return render(meshes, size, to_px, outline=outline), to_px(far[0], far[1]), to_px(near[0], near[1])
+
+
 def slab_mesh(x0, x1, y0, y1, z0, z1):
     """A plain box from corner to corner (a podium's top, a table edge), for hiding what is behind it."""
     V = np.array([[x, y, z] for z in (z0, z1) for y in (y0, y1) for x in (x0, x1)], float)
@@ -476,3 +499,19 @@ if __name__ == '__main__':
         bg.convert('RGB').save(sys.argv[2])
         for side in 'LR':
             print(side, np.round(phone_grip(side)[0], 1), 'error', phone_grip(side)[2])
+    if sys.argv[1] == 'back':   # the same grip from the other side: the phone's back towards us
+        W_, H_ = 1600, 1400
+        k = 5000.0
+        out = Image.new('RGBA', (W_, H_), (90, 70, 56, 255))
+        from PIL import ImageDraw
+        for i, side in enumerate('RL'):
+            cx = 400 + 800 * i
+            d = ImageDraw.Draw(out)
+            hw, hh = PHONE[0] * k, PHONE[1] * k
+            d.rounded_rectangle([cx - hw, 700 - hh, cx + hw, 700 + hh], 45, fill=(36, 36, 44), outline=(0, 0, 0), width=3)
+            lay, cuff, wrist = phone_hand_back((W_, H_), lambda X, Y, cx=cx: (cx + X * k, 700 - Y * k), side)
+            out.alpha_composite(lay)
+            d = ImageDraw.Draw(out)
+            d.ellipse([cuff[0] - 8, cuff[1] - 8, cuff[0] + 8, cuff[1] + 8], fill=(0, 200, 0))
+            d.ellipse([wrist[0] - 8, wrist[1] - 8, wrist[0] + 8, wrist[1] + 8], fill=(200, 0, 200))
+        out.convert('RGB').save(sys.argv[2])
