@@ -873,6 +873,15 @@ def chaos_items(pc, chaos=True, people=True, zmin=-99.0):
 
 
 def draw_items(img, cam, pc, items, t):
+    # a grabbing zombie's head and arms are drawn with its victim; if the victim isn't in this shot, it lunges alone
+    shown = set()
+    for z, x, kind, a in items:
+        if kind == 'person' and a['act'] == 'tackled':
+            X, Z = where(a, t)
+            if pc.depth(Z, X) >= 0.6:
+                shown.add(a.get('pair'))
+    items = [(z, x, kind, dict(a, act='lunge_l') if kind == 'person' and a['act'] == 'tackle' and a.get('pair') not in shown
+              else a) for z, x, kind, a in items]
     for z, x, kind, a in items:
         if kind == 'chair':
             chair(img, cam, pc, a[0], a[1], over=a[2])
@@ -1473,10 +1482,11 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
     splat(p, 30, -290 + bob, 12, 6, drops=2)
     leg(0, tights, a_)
     # the lanyard hangs from her neck under her chest, swinging with each stroke
-    kit.dangle(p, (-190, -318 + bob), 120, 0.25 * math.sin(step * 2), sp['lanyard_c'], 5, tag=(40, 50, (248, 248, 246)))
+    kit.dangle(p, (-196, -312 + bob), 150, 0.25 * math.sin(step * 2), sp['lanyard_c'], 5, tag=(26, 34, (236, 236, 232)))
     arm(0, jc, True, reach=pick)
     # the neck, and her head turned to us
-    p.poly([(-226, -350 + bob), (-184, -374 + bob), (-164, -320 + bob), (-210, -300 + bob)], skin, INK, 2.4)
+    p.poly([(-268, -380 + bob), (-232, -380 + bob), (-224, -330 + bob), (-262, -326 + bob)], B.dk(skin, 0.95), INK, 2.4)
+    # (the neck: slim, under her chin, in the head's shadow)
     hx, hy = -250, -470 + bob
     B.hair_back(p, sp, hx, hy, sp['hw'], sp['hh'])
     B.head(img, p, sp, t, hx, hy)
@@ -1814,11 +1824,11 @@ def film_face(t_local):
     tl = (T['s3b'] - T['s3']) + t_local                          # her clock from the start of shot 3
     since = T['s3'] - T['s2'] + tl
     X = heroine_x(tl)
-    pc = PCam(X + 0.12, 0.5, CRAWL_Z - 0.9, 1, 1500.0, oy=960.0)
+    pc = PCam(X + 0.12, 0.5, CRAWL_Z - 0.9, 1, 2300.0, oy=960.0)
     x, y = pc.P(X, 0.0, CRAWL_Z)
     s = pc.scale(CRAWL_Z, X)
     head = (x - 250 * s, y - 470 * s)
-    cam = B.Cam(1.0, head[0] + 70 * s, head[1] + 230 * s)       # her face high in the frame, her shoulder and fist below
+    cam = B.Cam(1.0, head[0] + 40 * s, head[1] + 90 * s)        # in close: her face fills the upper frame
     bg = B.canvas(WALL)
     room(bg, cam, pc, since, chaos=True)
     draw_items(bg, cam, pc, [i for i in chaos_items(pc) if not (i[2] == 'person' and i[3]['kind'] == 'heroine')
