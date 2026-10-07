@@ -2,6 +2,10 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## Quick videos (about 5% of a week)
+- `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
+  `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
+
 ## In progress: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - Peskov calmly denies the Irkutsk plague-lab death; behind the camera a zombie outbreak tears through his press
   conference. Code: `source/russiadent.py` (`sheet`, `stills OUT_DIR T...`, `times`, `animatic`, `final`). One plan
