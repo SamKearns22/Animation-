@@ -26,13 +26,15 @@ Read this first in any new session, after CLAUDE.md.
 - To post: cover around 0:04.5 (the cashier mid-smile, flag cups behind her). Avoid #oct7, #october7, #911,
   #pagerattack, #pagers and #explosion: they give away the ending and draw the strictest moderation.
 
-## In progress: TikTok versions of the rap battles (SAM and ANDY)
-- Director's decision (2 Oct): TikTok versions of `animations/sam.mp4` (title SAM) and `animations/andrew.mp4`
-  (title ANDY), with the same title and look as the other TikTok films.
+## In progress: TikTok versions of the rap battles
+- **Andy film (`animations/andrew.mp4`, 239 s):** to be split into three TikTok parts titled OXFORD UNI RAP BATTLE -
+  PART 1 / 2 / 3, cut at 8.1-85.9 s, 86.6-162.5 s and 162.5-240.4 s (the intro line is dropped; each part opens
+  on a line almost at once). Prompt: `prompts/oxford-rap-battle-tiktok.md`.
+- **Sam film (`animations/sam.mp4`):** later, own title SAM.
 - `source/rap_vertical.py andy|sam stills OUT_DIR T...` or `render OUT.mp4`: draws the widescreen picture clean
   (no old subtitles), enlarges it by a third into 1080 x 1920 with edge-glow pads, and draws the standard title
-  (first second), captions (700 px, centred) and UNINTELLIGIBLE flashes fresh. Every caption checked to fit.
-  Next: look at stills, then render both (about 0.7 s a drawing: roughly 25 min for ANDY, 18 min for SAM).
+  (first second), captions (700 px, centred) and UNINTELLIGIBLE flashes fresh. Still needs: a start/end time range,
+  part titles, 24 fps output and per-part audio.
 
 ## In progress: "The Patriots" (TikTok, file name pee-pee)
 - TV street interview at a Dover border blockade; masked protester, reporter with a BBQ mic flag; his arm badges
