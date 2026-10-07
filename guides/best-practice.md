@@ -265,6 +265,9 @@ this series. Full details in `tiktok-design.md`.
 - **Plan the space for big moves in the floor plan before animating:** a body lying down is 1.8 m long (it filled half
   the frame and landed behind someone's legs); fold its knees or move the landing. A set-piece (a window bursting)
   goes where nothing in that shot hides it: check its screen position first.
+- **Check the whole body in every review still, not only what was changed:** a phone moved into frame was approved
+  while the arm holding it passed behind her head. A raised arm goes in front of the body: elbow low and forward,
+  forearm up to the hand.
 - **Paired characters need contrasting colours** (a zombie in green beside a man in green read as one blob).
 - **Pick the simplest staging that tells the beat:** she raises the phone from the crawl rather than a new sitting
   pose. Each new pose or rig is a cost: use it only when the story needs it.
