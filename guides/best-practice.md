@@ -265,8 +265,6 @@ this series. Full details in `tiktok-design.md`.
   flight with spikes thrown ahead and a short tail behind; then they run. A splash that swells from the centre looks
   like a slide transition.
 - Keep the joke's words readable through the effect (the big splats round the edges of the page).
-- **Actions continue through a pickup:** she grabs the phone mid-crawl and keeps fleeing; stopping the action to perform
-  a mechanical pick-up looked robotic.
 - **Repeating actions vary:** strikes, thrashing and clawing each have their own rhythm and phase, never in step.
 
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
