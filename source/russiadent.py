@@ -1772,7 +1772,7 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
         if reach > 0 and phone is not None:
             hand = lerp2(hand, (phone[0] + 20, phone[1] - 4), F.ease(reach))
         if near and raise_ph > 0:  # stopped: the phone comes up to her eyeline, in front of her face
-            hand = lerp2(hand, (-372, -455 + bob), F.ease(raise_ph))
+            hand = lerp2(hand, (-305, -440 + bob), F.ease(raise_ph))
         el, wr = ik2(sh, (hand[0] + 6, hand[1] - 22), 150, 140, bend=1)
         taper(p, sh, el, 30, 26, colr)
         taper(p, el, wr, 26, 20, colr)
@@ -2488,7 +2488,7 @@ def film_face(t_local):
     stop = CRAWL_STOP - (T['s3b'] - T['s3'])                   # she stops here and lifts the phone to her eyeline
     raise_ph = max(0.0, min(1.0, (t_local - stop) / 0.5))
     head = (x - 208 * s, y - 468 * s)
-    cam = B.Cam(1.0, head[0] + 40 * s - 60 * s * F.ease(raise_ph), head[1] + 90 * s)   # eases over to take in the phone
+    cam = B.Cam(1.0, head[0] + 40 * s - 100 * s * F.ease(raise_ph), head[1] + 90 * s)   # eases over to take in the phone
     bg = B.canvas(WALL)
     room(bg, cam, pc, since, chaos=True)
     draw_items(bg, cam, pc, [i for i in chaos_items(pc) if not (i[2] == 'person' and i[3]['kind'] == 'heroine')
