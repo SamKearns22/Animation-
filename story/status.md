@@ -2,7 +2,9 @@
 
 Read this first in any new session, after CLAUDE.md.
 
-## In progress: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
+## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
+- **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
+  `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.
 - Peskov calmly denies the Irkutsk plague-lab death; behind the camera a zombie outbreak tears through his press
   conference. Code: `source/russiadent.py` (`sheet`, `stills OUT_DIR T...`, `times`, `animatic`, `final`). One plan
   for the press room drawn by perspective cameras in the plan (`PCam`): shot 2's 180 is the same room. Placeholder
