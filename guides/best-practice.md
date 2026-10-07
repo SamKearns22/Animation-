@@ -313,6 +313,9 @@ this series. Full details in `tiktok-design.md`.
   - the standard title shows for about 1 second (1.6 at most) over moving picture, and that frame doubles
     as the cover.
 - **Set-ups:** 15-30 seconds in all, with the first payoff within about 8-10 seconds.
+  - **Re-check the payoff time when the real recordings arrive** (Russiadent Evil: Sam's slower, deadpan delivery
+    pushed the 180 from 9 s to 13.8 s; the film got 7% full views). If the voice runs long, cut words from the script
+    rather than let the payoff slip. Note the payoff time in every brief and every delivery message.
 - **The title:**
   - Anton capitals, letters widened 20%, cranberry red (178, 24, 52) with a thick black outline;
   - capitals about 148 pixels tall, top edge at about 330 pixels;
