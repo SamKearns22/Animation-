@@ -235,6 +235,16 @@ this series. Full details in `tiktok-design.md`.
   hidden. Check the solve by eye: a failed solve pushes a finger through the prop (drop that pose).
 - Work from photo references of the real grip (two palms round the phone, thumbs over the screen).
 
+**Chaos scenes (Russiadent Evil, 7 Oct)**
+- **Nobody holds a pose in a chaos shot.** A figure frozen mid-action (a tackle, a raised chair) reads as a cut-out and
+  stops the eye; every person gets a repeating action (a strike that comes down fast and lifts slowly, thrashing,
+  clawing, trembling, backing away) and the attackers keep advancing. Check a strip of frames, not one still.
+- **A prop picked up travels with the hand:** the hand goes to it, closes, lifts it; it never just disappears.
+- **Blood is thrown, not grown:** drops fly in along a path and hit at full size in one drawing, stretched along their
+  flight with spikes thrown ahead and a short tail behind; then they run. A splash that swells from the centre looks
+  like a slide transition.
+- Keep the joke's words readable through the effect (the big splats round the edges of the page).
+
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
   guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
