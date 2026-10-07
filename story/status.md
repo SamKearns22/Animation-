@@ -77,6 +77,9 @@ Read this first in any new session, after CLAUDE.md.
   on NEW WEAPONS (the joke in the first seconds), then the title (the rock track now starts as SEASON PASS ignites
   there), then NEW SKINS onwards as before. No DLC cover frame. `BX_HOLD=1.0 python3 source/bayeux.py reorder OUT.mp4`
   (`reorder_segments` in bayeux.py).
+- 7 Oct: Sam's rock track now plays from the very first frame of the re-cut (under NEW WEAPONS), fades with the
+  stapler's glory, stays out for the single staple, and returns with the title (`reorder_sound` in bayeux.py). Sound
+  only: the picture is the same render, so the new soundtrack was muxed onto it in seconds. 10 MB copy saved.
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

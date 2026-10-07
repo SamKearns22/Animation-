@@ -1869,12 +1869,10 @@ def reorder_sound():
     import mossad_audio as MA
     from mossad import limiter
     segs = reorder_segments()
-    fx_drone = soundtrack(music=False, keep_drone=True, master=False)
     fx = soundtrack(music=False, keep_drone=False, master=False)
     pieces = []
-    for i, (a, b) in enumerate(segs):
-        src = fx_drone if i == 0 else fx
-        p = src[int(a * SR):int(b * SR)].copy()
+    for a, b in segs:
+        p = fx[int(a * SR):int(b * SR)].copy()
         k = int(0.012 * SR)
         p[:k] *= np.linspace(0, 1, k)
         p[-k:] *= np.linspace(1, 0, k)
@@ -1891,14 +1889,20 @@ def reorder_sound():
     from burnham_film import load
     x = load(MUSIC)
     x = x[int(np.argmax(np.abs(x) > 0.01)):]
-    i0, q = int(new_time(T_SEASON) * SR), int(new_time(T_QUIET) * SR)
-    while len(x) < q - i0:
+    q = int(new_time(T_QUIET) * SR)
+    while len(x) < q:                                  # if the track runs out, carry on from its middle
         back = x[int(len(x) * 0.45):]
         xf = int(0.5 * SR)
         x = np.concatenate([x[:-xf], x[-xf:] * np.linspace(1, 0, xf) + back[:xf] * np.linspace(0, 1, xf), back[xf:]])
-    m = x[:q - i0] * 0.55
+    m = x[:q] * 0.55                                   # Sam's rock track from the very first frame
+    f = int(0.45 * SR)
+    a_ = int(new_time(STAPLER_FADE) * SR)              # it fades with the stapler's glory...
+    b_ = int((segs[0][1] - segs[0][0]) * SR)            # where the title begins
+    m[a_:a_ + f] *= np.linspace(1, 0, f)
+    m[a_ + f:b_] = 0                                   # ...stays out for the single staple...
+    m[b_:b_ + int(0.01 * SR)] *= np.linspace(0, 1, int(0.01 * SR))   # ...and returns with the title
     m[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
-    mix[i0:q] += m
+    mix[:q] += m
     for _ in range(3):
         mix *= 10 ** ((-14.0 - MA.lufs(mix[:q])) / 20)
         mix = limiter(mix, -2.8)
