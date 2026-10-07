@@ -20,21 +20,29 @@ I don't know how to code. Please:
 
 # Where things stand
 
-- **Read `guides/best-practice.md` (the master file) before starting or changing any film.** Part 1 holds general animation principles from recognised references; the later parts hold rules for one kind of project only (the TikTok parody series, the coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part as soon as it is learned.
+- **Short two-person film ("quick video"): read only `guides/quick-video.md` and nothing else below.** Don't open other
+  guides or the big source files. Use Sonnet at medium effort, and ask me for all my notes in one batch after the one
+  stills sheet.
+- **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
+  animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the
+  coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part
+  as soon as it is learned.
+- Read only the section of `story/status.md` for the film in hand (list the sections with `grep -n '^## ' story/status.md`),
+  not the whole file.
 
-- Read `story/status.md` at the start of every session: what is done, what is open, and how to work within the budget.
+# Drawing people (not for quick videos)
 
-# Drawing people
-
-- Before building or changing any character, read `guides/character-anatomy.md` and follow its checklist.
-  Build people on the free MakeHuman human model (CC0) rather than sculpting bodies from scratch.
-  Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
-- Before animating anything, read `guides/movement.md` (timing of eyes, blinks, smiles, hair and body).
+- Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
 - For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any
   person, and follow `guides/preflight.md` from the first brief: run `python3 source/preflight.py FILM OUT_DIR`
   before every animatic, and `python3 source/voices.py FILES` as soon as recordings arrive.
-- Before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes).
-- The story and the director's decisions for the animation test are in `story/animation-test.md`.
-- The film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer).
-- Compare every new shot against the approved frames in `lookbook/` so the look stays consistent.
-- The trailer should evoke the style and quality of an A24 horror film (the craft, never the brand): read `guides/tone.md` before planning or changing any shot.
+- **Yuletide horror trailer only** (skip these for the TikTok films):
+  - before building or changing any character, read `guides/character-anatomy.md` and follow its checklist; build people on
+    the free MakeHuman human model (CC0) rather than sculpting bodies from scratch;
+  - before animating anything, read `guides/movement.md` (timing of eyes, blinks, smiles, hair and body);
+  - before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes);
+  - the story and the director's decisions for the animation test are in `story/animation-test.md`;
+  - the film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer);
+  - compare every new shot against the approved frames in `lookbook/` so the look stays consistent;
+  - the trailer should evoke the style and quality of an A24 horror film (the craft, never the brand): read
+    `guides/tone.md` before planning or changing any shot.
