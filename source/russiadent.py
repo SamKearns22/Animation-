@@ -186,7 +186,7 @@ def face(img, p, sp, t, hx, hy, hw, hh):
                          (ex - 10, ey + 14)], 3)
             p.poly(eye, (253, 253, 252), INK, 2.4)
             jx, jy = 1.2 * math.sin(t * 31 + sgn), 1.2 * math.cos(t * 27)
-            p.ell(ex + sp.get('look', 0) * 7 + jx, ey - 1 + jy, 2.6, 2.6, INK, None)
+            p.ell(ex + sp.get('look', 0) * 7 + jx, ey - 1 + sp.get('look_y', 0) * 7 + jy, 2.6, 2.6, INK, None)
     if sp.get('socket') and not sp.get('blink'):   # one eye gone: a dark, bloody socket
         sx_ = fx - 4 + (30 if sp['socket'] == 'R' else -30)
         p.ell(sx_, hy - 8, 20, 15, (44, 10, 16), (150, 40, 44), 2.2)
@@ -1421,7 +1421,8 @@ def crowd_person(img, cam, pc, who, t):
             wx, wy = pc.P(ph[0], 0.0, ph[1])
             loc = ((wx - x) / s, (wy - y) / s)
         reporter_crawl(img, cam, x, y, s, t, step=st, phone=loc, pick=HEROINE.get('pick', 0.0),
-                       hold=HEROINE.get('hold', False), look=HEROINE.get('look', 0.0), raise_ph=HEROINE.get('raise_ph', 0.0))
+                       hold=HEROINE.get('hold', False), look=HEROINE.get('look', 0.0), raise_ph=HEROINE.get('raise_ph', 0.0),
+                       look_y=HEROINE.get('look_y', 0.0))
         return
     if who['kind'] == 'zombie':
         sp = zombie_base(k)
@@ -1748,14 +1749,14 @@ def crawl_hand(step, near=True):
     return (-210 + (0 if near else 30) + 30 * ph, -6 - max(0.0, ph) * 18)
 
 
-def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0, who_sp=None, raise_ph=0.0):
+def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0, who_sp=None, raise_ph=0.0, look_y=0.0):
     """Crawling on hands and knees across the floor, seen from the side (heading to our left when flip=1), her face
     turned to us in terror (the cartoon convention: body in profile, head to camera). (x, y): the floor under her
     middle. step: the crawl cycle (radians). The pickup, without stopping: `pick` (0-1) carries her leading hand
     onto the phone (at `phone`, her units) on its stroke; `hold`: she crawls on with it clutched in that fist."""
     L = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, L)
-    sp = dict(REPORTER, wide=True, brows='terror', mouth='gasp', skin=(240, 234, 232), look=look,
+    sp = dict(REPORTER, wide=True, brows='terror', mouth='gasp', skin=(240, 234, 232), look=look, look_y=look_y,
               face_splats=[(-38, -110, 8, 7), (44, -60, 6, 8)], tail_swing=40 + 20 * math.sin(step))
     if who_sp:     # someone else on hands and knees (a zombie dragging itself along): their own look and face
         sp.update({k_: v_ for k_, v_ in who_sp.items() if k_ not in ('arms', 'pose')})
@@ -2207,8 +2208,73 @@ mouths.install(B)
 # Placeholder timing from Sam's usual pace (3.0-3.6 words a second) until his recordings arrive; then REC replaces
 # it (cleaned and levelled by mossad_audio.line; pauses may be shortened, never the words).
 LINE1 = ['The researcher in question', 'died from a common pneumonia.', 'All is well.', 'We ask anyone concerned',
-         'to pay attention to bulletins', 'from the Ministry of Health.']
-LINE2 = ['Any other questions?']
+         'to pay attention to bulletins from', 'the Ministry of Health.']
+LINE2 = ['Any more questions?']
+REC_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'russiadent-peskov.m4a')
+REC_CUTS = [(4.45, 19.05), (24.18, 26.45)]       # Sam's take (recorded outdoors): line 1, line 2
+
+
+@functools.lru_cache(maxsize=1)
+def rec_lines():
+    """Sam's two lines, cleaned (hum, rumble and hiss off; the outdoor noise taken down hard and gated out of the
+    pauses), long pauses shortened to 0.3 s (never the words), each line set to the shared line loudness.
+    Returns [(voice, speech stretches in seconds from the line's start)] for line 1 and line 2."""
+    from scipy.signal import butter, sosfiltfilt
+    from burnham_film import load
+    import mossad_audio as MA_
+    MA_.MAX_CUT_DB = 20.0
+    x = load(REC_FILE)
+    y = sosfiltfilt(butter(4, [90, 8000], 'band', fs=SR, output='sos'), MA_.dehum(x))
+    y = MA_.denoise(MA_.denoise(y))
+    out = []
+    for a, b in REC_CUTS:
+        seg = y[int(a * SR):int(b * SR)]
+        ps = MA_.pauses(seg, 0.12)
+        lv = [20 * np.log10(np.sqrt(np.mean(seg[int(p0 * SR):int(p1 * SR)] ** 2)) + 1e-9) for p0, p1 in ps]
+        ps = [p for p, l in zip(ps, lv) if l > max(lv) - 14]       # quiet blips are noise, not words
+        parts, stretches, t, prev = [], [], 0.0, None
+        f_ = int(0.01 * SR)
+        for p0, p1 in ps:
+            if prev is not None:
+                gap = max(0.0, min(0.3, p0 - prev) - 0.08)
+                parts.append(np.zeros(int(gap * SR)))
+                t += gap
+            s_ = seg[max(0, int((p0 - 0.03) * SR)):int((p1 + 0.05) * SR)].copy()
+            s_[:f_] *= np.linspace(0, 1, f_)
+            s_[-f_:] *= np.linspace(1, 0, f_)
+            parts.append(s_)
+            stretches.append((t + 0.03, t + 0.03 + (p1 - p0)))
+            t += len(s_) / SR
+            prev = p1
+        v = np.concatenate(parts)
+        out.append((v * 10 ** ((MA_.LINE_LUFS - MA.lufs(v)) / 20), stretches))
+    return out
+
+
+REC_PIECES = [[0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 5], [0, 0]]   # which caption piece each speech stretch says (by ear-timing)
+
+
+def rec_word_times(start, pieces, stretches, owner):
+    """Each caption piece's words spread over its own speech stretches, by syllables."""
+    out = []
+    for i, pc in enumerate(pieces):
+        mine = [st for st, o in zip(stretches, owner) if o == i]
+        ws = pc.split()
+        total = sum(syl(w) for w in ws)
+        span = sum(b - a for a, b in mine)
+        k, acc = 0, 0.0
+        for w in ws:
+            d = syl(w) / total * span
+            # walk acc (speech seconds into this piece) onto the stretches
+            def at(u):
+                for a, b in mine:
+                    if u <= b - a:
+                        return a + u
+                    u -= b - a
+                return mine[-1][1]
+            out.append((i, start + at(acc), start + at(acc + d), w))
+            acc += d
+    return out
 WPS = 3.4
 
 
@@ -2232,7 +2298,7 @@ def word_times(start, pieces, wps=WPS):
 import re   # noqa: E402
 
 T = {}
-W1 = word_times(0.30, LINE1)
+W1 = rec_word_times(0.30, LINE1, rec_lines()[0][1], REC_PIECES[0])
 T['line1_end'] = W1[-1][2]
 T['s2'] = T['line1_end'] + 0.35                 # the 180: hard cut into the outbreak
 T['slap'] = 5.2                                 # shot 1: a hand slaps onto the podium's edge (no reaction)
@@ -2245,7 +2311,7 @@ T['crunch'] = T['s4'] + 2.05                    # a crunch, and blood bursts acr
 T['s5'] = T['s4'] + 3.4                         # back to Peskov (after the phone drops out of frame)
 T['arm_throw'] = T['s5'] + 0.2                  # a severed arm (still holding a microphone) flies up...
 T['arm_hit'] = T['s5'] + 0.55                   # ...and slaps the backdrop behind him
-W2 = word_times(T['s5'] + 1.25, LINE2)
+W2 = rec_word_times(T['s5'] + 1.25, LINE2, rec_lines()[1][1], REC_PIECES[1])
 T['line2_end'] = W2[-1][2]
 T['black'] = T['line2_end'] + 0.6               # a short silent beat (the screams go on), then hard cut to black
 T['dur'] = T['black'] + 0.35
@@ -2265,7 +2331,8 @@ def track_of(words):
     return out
 
 
-TRACK = track_of(W1) + track_of(W2)
+TRACK = ([(a + 0.30, b + 0.30, sh) for a, b, sh in mouths.track(' '.join(LINE1), rec_lines()[0][1])] +
+         [(a + W2[0][1], b + W2[0][1], sh) for a, b, sh in mouths.track(' '.join(LINE2), rec_lines()[1][1])])
 
 
 def caption_at(t):
@@ -2441,7 +2508,7 @@ ARM_FROM, ARM_AT = (-0.95, 1.2), (-0.34, 2.3)          # (X, Y) on the backdrop'
 
 def film_front_end(t_local):
     """Shot 5: back on him, the camera where the zoom ended. The arm flies in behind him and slaps the backdrop,
-    leaving a red splat; it drops away behind his shoulder. "Any other questions?" """
+    leaving a red splat; it drops away behind his shoulder. "Any more questions?" """
     t = T['s5'] + t_local
     zb = ROOM['z0'] + 0.03
 
@@ -2498,8 +2565,10 @@ def film_face(t_local):
     img = bg.filter(ImageFilter.GaussianBlur(9 * B.SS))
     st, _ = heroine_state(min(tl, CRAWL_STOP))                 # stopped: the crawl frozen where she stopped
     st['raise_ph'] = raise_ph
-    if raise_ph > 0:
-        st['look'] = 0.6                                         # staring at the screen
+    if raise_ph > 0:           # her eyes dart about, then lock on the screen (up and to her front, our left)
+        u = t_local - stop
+        darts = [(0.0, 0.8, 0.3), (0.1, -1.1, -0.5), (0.2, 0.4, 0.2), (0.3, -0.6, 0.4), (0.4, -1.7, -0.4)]
+        st['look'], st['look_y'] = [d[1:] for d in darts if d[0] <= u][-1]
     HEROINE.clear()
     HEROINE.update(st)
     crowd_person(img, cam, pc, dict(kind='heroine', k=0, x=X, z=CRAWL_Z, act='crawl'), since)
@@ -2886,7 +2955,10 @@ def soundtrack():
     for edge in (T['s4'], T['s5']):
         i = int((edge - T['s2']) * SR)
         bed[i - k:i + k] *= np.linspace(1, 1, 2 * k)
+    g[(tt >= W2[0][1] - 0.2)] = 0.45                             # down further under his last line
     place(mix, bed * g, T['s2'])
+    place(mix, rec_lines()[0][0], 0.30)                          # Sam as Peskov
+    place(mix, rec_lines()[1][0], W2[0][1])
     # shot 2's big moments, over the din: the window bursting in; the chair; the body hitting the floor and bouncing
     place(mix, glass_snd(), T['s2'] + WIN_BURST, 0.7)
     place(mix, thud(80, 0.4, 0.3), T['s2'] + WIN_BURST + 0.45, 0.4)
