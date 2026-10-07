@@ -2,6 +2,10 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## Quick videos (about 5% of a week)
+- `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
+  `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
+
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
   `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.
