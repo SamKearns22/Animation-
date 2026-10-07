@@ -250,15 +250,24 @@ this series. Full details in `tiktok-design.md`.
   part too.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
-**Hands (Russiadent Evil, 6 Oct)**
-- **Never invent a close-up hand from circles and sausages.** Three freehand attempts at hands holding a phone came out
-  as claws, mittens and "penile" thumbs, and dots for fingers. Any hand bigger than a fist-sized blob is built on
-  MakeHuman's real hand with `source/hands3d.py`: a solver bends the real finger bones round the prop (resting on it,
-  never through it; the thumb on its target with its **nail facing the viewer**), nails are added (MakeHuman's mesh has
-  none) on the back of each fingertip, and it is drawn flat in our style (one skin tone, one shadow tone, black
-  outlines from the silhouette, overlaps and creases). The prop is in the render too, so whatever is behind it is
-  hidden. Check the solve by eye: a failed solve pushes a finger through the prop (drop that pose).
-- Work from photo references of the real grip (two palms round the phone, thumbs over the screen).
+**Hands (Russiadent Evil, 7 Oct; replaces the MakeHuman close-up hands)**
+- **Every hand is a plain circle at the end of the arm** (South Park: Butters, the hunters with rifles). No fingers,
+  no nails, at any size. To hold something, lay the prop over the circle so it reads as a grip; to pick it up, the
+  circle touches it and it moves with the circle. (Code: `chand`, `phone_prop`, `gesture_hand` in russiadent.py.)
+- Why: three rounds of freehand fingers failed and the 3D hand (`hands3d.py`) cost many renders; the circle reads
+  instantly, fits the style and costs nothing. Reach for the simplest device the style references use first.
+
+**Fights and set pieces (Russiadent Evil, 7 Oct)**
+- **Fighters look at each other and act on each other:** a victim's eyes and free hand go to the attacker (shoving its
+  face), never staring ahead.
+- **One clear blow beats repeated swinging:** guard, wind-up, one fast hit, then the consequence (it flies, lands,
+  bounces, lies there), and the hitter stays in the pose that shows what he did.
+- **Plan the space for big moves in the floor plan before animating:** a body lying down is 1.8 m long (it filled half
+  the frame and landed behind someone's legs); fold its knees or move the landing. A set-piece (a window bursting)
+  goes where nothing in that shot hides it: check its screen position first.
+- **Paired characters need contrasting colours** (a zombie in green beside a man in green read as one blob).
+- **Pick the simplest staging that tells the beat:** she raises the phone from the crawl rather than a new sitting
+  pose. Each new pose or rig is a cost: use it only when the story needs it.
 
 **Chaos scenes (Russiadent Evil, 7 Oct)**
 - **Nobody holds a pose in a chaos shot.** A figure frozen mid-action (a tackle, a raised chair) reads as a cut-out and
@@ -397,6 +406,11 @@ Specific lessons recorded there include:
    Sam writes the post text and the pinned question himself.
 - **Timing and notifications:** say how long each render will take, report how long it took, and send a
   push notification when anything long finishes, fails or needs a decision.
+- **Rules are not optional.** Never skip a step because a tool doesn't fit the film yet: fix the tool, or say so
+  before going on. (Russiadent Evil: preflight was skipped, then silently checked zero frames because the film had no
+  `BLACK_AT`; it now refuses such a film and runs the film's own `checks()`.)
+- **Budget:** one round of notes, one animatic, one final where possible; check stills of the changed moments
+  before any full render; never build heavy tech when a simpler device in the style references will do.
 - **Fixes:**
   - apply every note;
   - check that a fix hasn't broken anything else;

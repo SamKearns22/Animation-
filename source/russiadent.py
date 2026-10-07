@@ -529,6 +529,33 @@ def person(img, cam, x, y, s, sp, t=0.0, legs='stand', phase=0.0, tilt=0.0, flip
     return _person(img, cam, x, y, s, sp, t, legs, phase, tilt, flip)
 
 
+HAND_R = 26                     # every hand is a plain circle at the end of the arm (props laid over it)
+
+
+def chand(p, x, y, skin, r=HAND_R):
+    p.ell(x, y, r, r, skin, INK, 2.4)
+
+
+def phone_prop(p, x, y, w=26, h=50, ang=0.0, lit=False):
+    """A phone held in a circle hand: a dark slab standing up from (x, y), its back to us."""
+    c, s_ = math.cos(ang), math.sin(ang)
+    R = lambda u, v: (x + u * c - v * s_, y + u * s_ + v * c)
+    p.poly([R(-w, -2 * h), R(w, -2 * h), R(w, 0), R(-w, 0)], (52, 58, 72), INK, 2.2)
+    p.ell(*R(w * 0.45, -1.75 * h), w * 0.22, w * 0.22, (16, 16, 20), None)
+
+
+def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+    d = (wr[0] - el[0], wr[1] - el[1])
+    n = math.hypot(*d) or 1.0
+    cx, cy = wr[0] + d[0] / n * 12, wr[1] + d[1] / n * 12
+    if shape == 'phone':
+        phone_prop(p, cx, cy + 10)
+    chand(p, cx, cy, skin)
+
+
+B.gesture_hand = gesture_hand
+
+
 def no_stump_arms(sp):
     """A zombie missing an arm: that arm is simply not drawn (the torso draws the torn sleeve)."""
     if sp.get('stump') and sp.get('arms'):
@@ -1217,7 +1244,7 @@ CROWD = [
     # hiding: head under a chair, the rest of her very much not hidden (seat 1.2)
     dict(kind='person', k=6, x=-3.1, z=3.32, act='hide'),
     # our reporter, crawling (shot 3 follows her)
-    dict(kind='heroine', k=0, x=-1.85, z=3.25, act='crawl', v=(0.35, 0.0)),
+    dict(kind='heroine', k=0, x=-1.85, z=3.25, act='crawl', v=(0.35, 0.0), until=5.1),   # until: 3 + 1.5 + 0.6 s
     # the front left corner: bringing a chair down on a zombie
     # (it comes round from behind him; one hard hit at CHAIR_HIT sends it flying onto its back)
     dict(kind='person', k=2, x=0.17, z=2.1, act='chair', pair='front_l'),
@@ -1295,11 +1322,7 @@ def grip_and_bite(img, Rv, zsp, t, seed):
     # forearms come round his sides (elbows just outside his body) to hands clamped on his chest
     for el, wr, rot in (((-170, 250), (-30, 200), 0.3), ((175, 120), (60, 150), -0.4)):
         grab_and_draw_forearm(p, el, wr, jc)
-        p.ell(wr[0] + (12 if el[0] < 0 else -12), wr[1], 30, 24, zsp['skin'], INK, 2.4, rot=rot)
-        for kk in range(4):     # the fingers dug in
-            fx = wr[0] + (30 if el[0] < 0 else -30)
-            p.line([(fx, wr[1] - 18 + 12 * kk), (fx + (16 if el[0] < 0 else -16), wr[1] - 16 + 12 * kk)], INK, 7)
-            p.line([(fx, wr[1] - 18 + 12 * kk), (fx + (16 if el[0] < 0 else -16), wr[1] - 16 + 12 * kk)], zsp['skin'], 4)
+        chand(p, wr[0] + (12 if el[0] < 0 else -12), wr[1], zsp['skin'], 30)
     # its head, mouth on the right side of his neck, jerking as it bites
     bite = 0.5 + 0.5 * math.sin(t * 12)
     hp = B.Pen(img, PP.Rot(Rv, 0.0, pivot=(0, 0)))
@@ -1398,7 +1421,7 @@ def crowd_person(img, cam, pc, who, t):
             wx, wy = pc.P(ph[0], 0.0, ph[1])
             loc = ((wx - x) / s, (wy - y) / s)
         reporter_crawl(img, cam, x, y, s, t, step=st, phone=loc, pick=HEROINE.get('pick', 0.0),
-                       hold=HEROINE.get('hold', False), look=HEROINE.get('look', 0.0))
+                       hold=HEROINE.get('hold', False), look=HEROINE.get('look', 0.0), raise_ph=HEROINE.get('raise_ph', 0.0))
         return
     if who['kind'] == 'zombie':
         sp = zombie_base(k)
@@ -1517,9 +1540,10 @@ def crowd_person(img, cam, pc, who, t):
         person(img, cam, nx + 6 * s * w2, ny, s, sp, t, legs='lunge', phase=t * 6, tilt=0.05 * w1)
     elif act == 'tackled':     # held from behind: straining away, one arm reaching for help, the other tearing at its grip
         strain = 0.28 + 0.06 * w1 - 0.18 * min(1.0, t / 3.0)        # he strains away; it hauls him back upright
-        reach = (-330 + 40 * w2, -120 + 80 * w1)
-        sp['arms'] = {'L': rig.arm('L', reach, 'palm', 'out', strict=False),
-                      'R': rig.arm('R', (40, 230 + 20 * w2), 'grip', 'down', strict=False)}
+        reach = (-330 + 40 * w2, -120 + 80 * w1)          # one arm flung out for help, the other shoving its face away;
+        sp['arms'] = {'L': rig.arm('L', reach, 'palm', 'out', strict=False),       # eyes on his attacker, head turned from it
+                      'R': rig.arm('R', (200 + 15 * w1, -60 + 15 * w2), 'palm', 'out', strict=False)}
+        sp.update(look=-1.0, tilt=-0.22)
         sp['splats'] = [(60, 60, 22, 9), (90, 140, 14, 10)]
         sp['face_splats'] = [(30, -120, 9, 11)]
         L = B.Local(cam, nx, ny, s)
@@ -1632,25 +1656,24 @@ PHONE_AT, PHONE_ANG = (540, 790), -0.06
 
 
 @functools.lru_cache(maxsize=12)
-def phone_hand_layer(side, tap_key=0, relax=0.0, phone=True):
-    """One of her hands on the phone, whole, on its own layer (so it can move on its own when the phone drops)."""
-    import hands3d
-    k = (PHONE_W / 2) / hands3d.PHONE[0]
-    cam = B.Cam(1.0, 540, 960)
-    T = Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG)
-    return hands3d.phone_hand((B.W * B.SS, B.H * B.SS), lambda X, Y: T.P(X * k, -Y * k), side, tap_key, relax, phone,
-                              skin=(240, 228, 220), sleeve=REPORTER['jacket'], outline=6.0)
-
-
 @functools.lru_cache(maxsize=4)
-def phone_hands_layer(tap_key):
-    """Both hands on the phone, rendered once per thumb position, matched to the drawn phone (same size and tilt)."""
-    import hands3d
-    k = (PHONE_W / 2) / hands3d.PHONE[0]                 # world pixels per metre
+def phone_hand_layer(side, tap_key=0, relax=0.0, phone=True):
+    """Her hand holding the phone up (shot 4), on its own layer so it can move on its own when the phone drops: the
+    sleeve coming up from below and a plain circle hand over the phone's lower corner (the same hand that lifted it
+    in the close-up). One hand only: side 'R' is empty."""
+    lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+    if side == 'R':
+        return lay
     cam = B.Cam(1.0, 540, 960)
-    T = Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG)
-    return hands3d.phone_hands((B.W * B.SS, B.H * B.SS), lambda X, Y: T.P(X * k, -Y * k), tap_key,
-                               skin=(240, 228, 220), sleeve=REPORTER['jacket'], outline=6.0)
+    p = B.Pen(lay, Turned(cam, PHONE_AT[0], PHONE_AT[1], PHONE_ANG))
+    hx, hy = -PHONE_W / 2 + 40, PHONE_H / 2 - 30
+    taper(p, (hx - 330, hy + 1100), (hx, hy), 150, 130, REPORTER['jacket'], lw=5.0)
+    p.ell(hx, hy, 165, 165, (240, 228, 220), INK, 5.0)
+    return lay
+
+
+def phone_hands_layer(tap_key=0):
+    return phone_hand_layer('L')
 
 
 def shot_phone(t=0.0, tap=None):
@@ -1722,7 +1745,7 @@ def crawl_hand(step, near=True):
     return (-210 + (0 if near else 30) + 30 * ph, -6 - max(0.0, ph) * 18)
 
 
-def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0, who_sp=None):
+def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0, hold=False, look=0.0, who_sp=None, raise_ph=0.0):
     """Crawling on hands and knees across the floor, seen from the side (heading to our left when flip=1), her face
     turned to us in terror (the cartoon convention: body in profile, head to camera). (x, y): the floor under her
     middle. step: the crawl cycle (radians). The pickup, without stopping: `pick` (0-1) carries her leading hand
@@ -1746,20 +1769,18 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
         hand = (hand[0] + dx, hand[1])
         if reach > 0 and phone is not None:
             hand = lerp2(hand, (phone[0] + 20, phone[1] - 4), F.ease(reach))
+        if near and raise_ph > 0:  # stopped: the phone comes up to her eyeline, in front of her face
+            hand = lerp2(hand, (-372, -455 + bob), F.ease(raise_ph))
         el, wr = ik2(sh, (hand[0] + 6, hand[1] - 22), 150, 140, bend=1)
         taper(p, sh, el, 30, 26, colr)
         taper(p, el, wr, 26, 20, colr)
         c = B.dk(skin, 0.95) if dx else skin
-        if hold and near:          # a fist round the phone, knuckles down, the phone's edge showing
-            p.poly([(wr[0] - 40, wr[1] + 2), (wr[0] + 10, wr[1] - 6), (wr[0] + 12, wr[1] + 6), (wr[0] - 38, wr[1] + 14)],
-                   (24, 24, 28), INK, 1.8)
-            p.poly(curve([(wr[0] - 26, wr[1] - 10), (wr[0] + 14, wr[1] - 16), (wr[0] + 22, wr[1] + 4), (wr[0] + 4, wr[1] + 22),
-                          (wr[0] - 22, wr[1] + 16)], 3), c, INK, 2.2)
-            for kk in range(3):
-                p.line([(wr[0] - 14 + 10 * kk, wr[1] - 12), (wr[0] - 12 + 10 * kk, wr[1] + 2)], B.dk(skin, 0.78), 1.6)
-            return
-        p.poly(curve([(wr[0] + 24, wr[1] - 6), (wr[0] - 30, wr[1] + 2), (wr[0] - 52, wr[1] + 14), (wr[0] - 40, wr[1] + 22),
-                      (wr[0] + 22, wr[1] + 18)], 3), c, INK, 2.2)
+        d_ = (wr[0] - el[0], wr[1] - el[1])
+        n_ = math.hypot(*d_) or 1.0
+        hx, hy = wr[0] + d_[0] / n_ * 12, wr[1] + d_[1] / n_ * 12
+        if hold and near:          # the phone laid over the circle hand: flat along the floor, then up at her eyeline
+            phone_prop(p, hx, hy + 10, ang=-1.5 * (1 - F.ease(raise_ph)))
+        chand(p, hx, hy, c)
 
     def leg(dx, colr, ph):
         hip, knee = (120 + dx, -290 + bob), (150 + dx + 26 * ph, -28 - lift(ph))
@@ -1796,6 +1817,9 @@ def reporter_crawl(img, cam, x, y, s, t, step=0.0, flip=1, phone=None, pick=0.0,
     B.head(img, p, sp, t, hx, hy)
     for (fx, fy, r, seed) in sp['face_splats']:
         splat(p, hx + fx, hy + 150 + fy, r, seed, drops=2)
+    if raise_ph > 0.5:  # the screen's cold light on her face
+        soft(img, L, [(hx - 75, hy - 30), (hx + 40, hy - 30), (hx + 40, hy + 80), (hx - 75, hy + 80)], (214, 232, 255),
+             0.5 * (raise_ph - 0.5), 4)
 
 
 def inside(pt, poly):
@@ -2049,9 +2073,12 @@ def floor_phone(img, cam, pc, X, Z, lit=True):
 CRAWL_Z, CRAWL_X0, CRAWL_V = 3.25, -0.8, 0.35           # her line across the hall in shots 3 and 3b (plan, m/s)
 
 
+CRAWL_STOP = 2.1               # she stops crawling this long into shot 3 (0.6 s into the close-up) and sits back
+
+
 def heroine_x(tl):
-    """Where she is along her line, tl seconds into shot 3 (she never stops)."""
-    return CRAWL_X0 + CRAWL_V * tl
+    """Where she is along her line, tl seconds into shot 3 (crawling until CRAWL_STOP, then still)."""
+    return CRAWL_X0 + CRAWL_V * min(tl, CRAWL_STOP)
 
 
 def heroine_state(tl):
@@ -2218,6 +2245,7 @@ W2 = word_times(T['s5'] + 1.25, LINE2)
 T['line2_end'] = W2[-1][2]
 T['black'] = T['line2_end'] + 0.6               # a short silent beat (the screams go on), then hard cut to black
 T['dur'] = T['black'] + 0.35
+BLACK_AT, DUR = T['black'], T['dur']            # for preflight.py
 SHOTS = [('front', 0.0, T['s2']), ('reverse', T['s2'], T['s3']), ('crawl', T['s3'], T['s3b']),
          ('face', T['s3b'], T['s4']), ('phone', T['s4'], T['s5']), ('front_end', T['s5'], T['black'])]
 BLINKS = [1.9, 4.6, 7.4, T['s5'] + 0.95]        # his slow blinks: he never looks round, never flinches
@@ -2259,21 +2287,45 @@ def peskov_kw(t):
 
 
 @functools.lru_cache(maxsize=2)
+def _sprite_pen(n, k):
+    lay = Image.new('RGBA', (n, n), (0, 0, 0, 0))
+    return lay, ImageDraw.Draw(lay), max(2, int(2.5 * B.SS))
+
+
+@functools.lru_cache(maxsize=2)
 def podium_hand():
-    import hands3d
+    """The hand slapped on the podium's front edge: a sleeve from below and a circle hand clamped over the edge.
+    Returns (layer, origin) with the edge's centre at the origin pixel."""
     pc, cam = cam_front(0.0, 1.0)
     k = pc.f / pc.depth(PODIUM_BOX['z1']) * B.SS                 # canvas pixels a metre at the podium's front
     n = int(0.5 * k)
-    return hands3d.edge_grab((n, n), k, skin=(236, 226, 220), sleeve=(70, 90, 70), outline=2.5 * B.SS)
+    lay, d, lw = _sprite_pen(n, k)
+    ox, oy = n / 2, n * 0.3
+    d.polygon([(ox - 0.04 * k, oy + 0.02 * k), (ox + 0.04 * k, oy + 0.02 * k), (ox + 0.05 * k, n), (ox - 0.05 * k, n)],
+              fill=(70, 90, 70, 255), outline=(0, 0, 0, 255), width=lw)
+    r = 0.05 * k
+    d.ellipse([ox - r, oy - r * 0.7, ox + r, oy + r * 1.3], fill=(236, 226, 220, 255), outline=(0, 0, 0, 255), width=lw)
+    return lay, (ox, oy)
 
 
 @functools.lru_cache(maxsize=2)
 def mic_arm():
-    import hands3d
+    """The severed arm still holding its microphone: circle hand round the mic's handle, the forearm ending in a flat
+    red cut with a pale bone. Returns (layer, mic head, cut end, forearm direction) in layer pixels; centre = hand."""
     pc, cam = cam_front(0.0, 1.0)
     k = pc.f / pc.depth(-1.18) * B.SS
     n = int(0.6 * k)
-    return hands3d.mic_fist((n, n), k, skin=(232, 222, 214), sleeve=(80, 84, 96), outline=2.5 * B.SS)
+    lay, d, lw = _sprite_pen(n, k)
+    c = n / 2
+    d.polygon([(c - 0.035 * k, c), (c + 0.035 * k, c), (c + 0.04 * k, c + 0.26 * k), (c - 0.04 * k, c + 0.26 * k)],
+              fill=(80, 84, 96, 255), outline=(0, 0, 0, 255), width=lw)
+    d.ellipse([c - 0.042 * k, c + 0.24 * k, c + 0.042 * k, c + 0.28 * k], fill=BLOOD + (255,), outline=(90, 0, 10, 255), width=lw)
+    d.ellipse([c - 0.012 * k, c + 0.25 * k, c + 0.012 * k, c + 0.27 * k], fill=(236, 226, 210, 255))
+    d.rectangle([c - 0.012 * k, c - 0.17 * k, c + 0.012 * k, c + 0.02 * k], fill=(30, 30, 34, 255), outline=(0, 0, 0, 255), width=lw)
+    d.ellipse([c - 0.03 * k, c - 0.23 * k, c + 0.03 * k, c - 0.16 * k], fill=(70, 70, 76, 255), outline=(0, 0, 0, 255), width=lw)
+    r = 0.045 * k
+    d.ellipse([c - r, c - r, c + r, c + r], fill=(232, 222, 214, 255), outline=(0, 0, 0, 255), width=lw)
+    return lay, (c, c - 0.2 * k), (c, c + 0.26 * k), (0.0, 1.0)
 
 
 def paste_sprite(img, lay, at, origin, scale, angle=0.0):
@@ -2431,14 +2483,19 @@ def film_face(t_local):
     pc = PCam(X + 0.12, 0.5, CRAWL_Z - 0.9, 1, 2300.0, oy=960.0)
     x, y = pc.P(X, 0.0, CRAWL_Z)
     s = pc.scale(CRAWL_Z, X)
-    head = (x - 250 * s, y - 470 * s)
-    cam = B.Cam(1.0, head[0] + 40 * s, head[1] + 90 * s)        # in close: her face fills the upper frame
+    stop = CRAWL_STOP - (T['s3b'] - T['s3'])                   # she stops here and lifts the phone to her eyeline
+    raise_ph = max(0.0, min(1.0, (t_local - stop) / 0.5))
+    head = (x - 208 * s, y - 468 * s)
+    cam = B.Cam(1.0, head[0] + 40 * s - 60 * s * F.ease(raise_ph), head[1] + 90 * s)   # eases over to take in the phone
     bg = B.canvas(WALL)
     room(bg, cam, pc, since, chaos=True)
     draw_items(bg, cam, pc, [i for i in chaos_items(pc) if not (i[2] == 'person' and i[3]['kind'] == 'heroine')
                              and pc.depth(*i[:2][::1]) > 0.6], since)
     img = bg.filter(ImageFilter.GaussianBlur(9 * B.SS))
-    st, _ = heroine_state(tl)
+    st, _ = heroine_state(min(tl, CRAWL_STOP))                 # stopped: the crawl frozen where she stopped
+    st['raise_ph'] = raise_ph
+    if raise_ph > 0:
+        st['look'] = 0.6                                         # staring at the screen
     HEROINE.clear()
     HEROINE.update(st)
     crowd_person(img, cam, pc, dict(kind='heroine', k=0, x=X, z=CRAWL_Z, act='crawl'), since)
@@ -2516,12 +2573,12 @@ def moved(lay, dx, dy, ang=0.0, about=None):
 
 
 def film_phone(t_local):
-    """Shot 4: her phone. She types (the thumb lifting and pressing); a roar right behind her (a shadow falls,
+    """Shot 4: her phone, held up in her one circle hand (no typing); a roar right behind her (a shadow falls,
     her hands shake); a crunch: blood thrown from above lands on the phone and her hands (only on them: what misses
     flies past); her grip goes: the phone tips out of her hands and falls out of frame, her hands go limp and sink
     away. Each hand is its own whole drawing, so it moves as one piece with its blood."""
     t = T['s4'] + t_local
-    tap = int(t_local * 9) % 2 if t < T['crunch'] else 0
+    tap = 0                            # she only holds it up: no typing
     bg, ph, blood = phone_parts(t_local, tap)
     W_, H_ = bg.size
     S = B.SS
@@ -2832,9 +2889,6 @@ def soundtrack():
     place(mix, chair_hit(), T['s2'] + CHAIR_HIT, 1.0)
     place(mix, thud(65, 0.5, 0.5), T['s2'] + CHAIR_HIT + 0.4, 0.9)
     place(mix, thud(75, 0.25, 0.3), T['s2'] + CHAIR_HIT + 0.55, 0.45)
-    # shot 3b and 4: frantic taps on the phone
-    for a in np.arange(T['s3b'] + 0.1, T['crunch'], 0.11):
-        place(mix, tap_snd(), a + rng.uniform(-0.02, 0.02), 0.12 if a < T['s4'] else 0.2)
     place(mix, roar(1.1, 4242, 0.85), T['roar'], 1.0)            # right behind her, not muffled
     place(mix, crunch(), T['crunch'], 1.0)
     place(mix, splat_snd(1.6), T['crunch'] + 0.03, 0.9)

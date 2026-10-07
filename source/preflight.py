@@ -38,7 +38,11 @@ def main():
         F._ALLOW.append('audit of a finished film')
     film = importlib.import_module(name)        # module-level checks (set plans, overlaps) run on import
     F.guard(B)
+    if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
+        film.checks()
     end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
+    if not end:                                 # a film without an end time would pass having checked nothing
+        sys.exit('preflight: the film module needs BLACK_AT or DUR (its length in seconds)')
     fps = getattr(film, 'FPS', 12)
     problems = []
     B.SS = 1

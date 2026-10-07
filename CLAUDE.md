@@ -28,6 +28,7 @@ I don't know how to code. Please:
 
 - Before building or changing any character, read `guides/character-anatomy.md` and follow its checklist.
   Build people on the free MakeHuman human model (CC0) rather than sculpting bodies from scratch.
+  Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
 - Before animating anything, read `guides/movement.md` (timing of eyes, blinks, smiles, hair and body).
 - For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any
   person, and follow `guides/preflight.md` from the first brief: run `python3 source/preflight.py FILM OUT_DIR`
