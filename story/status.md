@@ -73,6 +73,10 @@ Read this first in any new session, after CLAUDE.md.
   8 comments (all from one person), 0 shares, 1 save, 0 new followers. People Sam showed it to personally rated it
   his best film. Likely cause: the first ~5 s are a convincing game-logo sequence (reads as an advert, swiped
   before the first swap at ~5.5 s; stapler payoff at ~13 s). Sam decided to move on rather than re-cut it.
+- Re-cut 7 Oct for a second post (49.2 s, 24.3 MB render in 3.8 min; 10 MB copy now in animations/): opens straight
+  on NEW WEAPONS (the joke in the first seconds), then the title (the rock track now starts as SEASON PASS ignites
+  there), then NEW SKINS onwards as before. No DLC cover frame. `BX_HOLD=1.0 python3 source/bayeux.py reorder OUT.mp4`
+  (`reorder_segments` in bayeux.py).
 - Electric mouse: kept generic (Edward's own face, our wools, no name or copied artwork); Sam's character picture
   deliberately not stored in the project.
 

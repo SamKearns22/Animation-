@@ -1696,7 +1696,7 @@ def place(mix, s, at, g):
         mix[i:j] += s[:j - i] * g
 
 
-def soundtrack():
+def soundtrack(music=True, keep_drone=False, master=True):
     import mossad_audio as MA
     from mossad import limiter
     n = int(DUR * SR)
@@ -1706,7 +1706,8 @@ def soundtrack():
     dr = drone(end)
     tt = np.arange(end) / SR
     env = 0.35 + 0.4 * np.clip(tt / 2.0, 0, 1)
-    dr[int(T_SEASON * SR):] *= np.exp(-np.arange(end - int(T_SEASON * SR)) / (0.4 * SR))   # the track takes over
+    if not keep_drone:
+        dr[int(T_SEASON * SR):] *= np.exp(-np.arange(end - int(T_SEASON * SR)) / (0.4 * SR))   # the track takes over
     mix[:end] += 0.16 * dr * env
     place(mix, whoosh(0.5, True, 1), T_BAYEUX - 0.30, 0.35)
     place(mix, boom(), T_BAYEUX, 0.7)
@@ -1732,7 +1733,8 @@ def soundtrack():
     place(mix, riser(SWAPS['stapler'] - 11.0 - D), 11.0 + D, 0.25)
     # after the stapler's huge reveal everything drops out for one small flat click
     a, b = int(STAPLER_FADE * SR), int((T_SKINS - 0.02) * SR)
-    mix[:end] += rock_track(end)
+    if music:
+        mix[:end] += rock_track(end)
     k = int(0.45 * SR)
     fade = np.ones(b - a)
     fade[:k] = np.linspace(1, 0, k)
@@ -1786,6 +1788,8 @@ def soundtrack():
     k = int(0.005 * SR)
     mix[end - k:end] *= np.linspace(1, 0, k)
     mix[end:] = 0
+    if not master:
+        return mix
     for _ in range(3):
         mix *= 10 ** ((-14.0 - MA.lufs(mix[:int(T_QUIET * SR)])) / 20)
         mix = limiter(mix, -2.8)
@@ -1840,6 +1844,93 @@ def render(out):
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB) in {time.time() - t0:.0f}s', flush=True)
 
 
+# ------------------------------------------------------------------------------ the reordered cut (NEW WEAPONS first)
+def reorder_segments():
+    """(film start, film end) of each piece, in playing order: the weapons (from just after the glitch into the
+    tapestry, up to the whip into NEW SKINS), then the title, then everything from NEW SKINS on."""
+    return [(CUT_TAPESTRY + 0.09, WHIPS[3][0]), (START, CUT_TAPESTRY), (WHIPS[3][0], DUR)]
+
+
+def reorder_time(u):
+    for a, b in reorder_segments():
+        if u < b - a:
+            return a + u
+        u -= b - a
+    return DUR
+
+
+def _render_reorder(i):
+    return frame(reorder_time(i / FPS), i).tobytes()
+
+
+def reorder_sound():
+    """The effects, cut into the new order (the drone kept under the weapons, which now come first); Sam's rock
+    track laid fresh from the moment SEASON PASS ignites in its new place, running on to the silent gallery."""
+    import mossad_audio as MA
+    from mossad import limiter
+    segs = reorder_segments()
+    fx_drone = soundtrack(music=False, keep_drone=True, master=False)
+    fx = soundtrack(music=False, keep_drone=False, master=False)
+    pieces = []
+    for i, (a, b) in enumerate(segs):
+        src = fx_drone if i == 0 else fx
+        p = src[int(a * SR):int(b * SR)].copy()
+        k = int(0.012 * SR)
+        p[:k] *= np.linspace(0, 1, k)
+        p[-k:] *= np.linspace(1, 0, k)
+        pieces.append(p)
+    mix = np.concatenate(pieces)
+
+    def new_time(t):                                   # where a film moment lands in the new order
+        u = 0.0
+        for a, b in segs:
+            if a <= t < b:
+                return u + t - a
+            u += b - a
+        return u
+    from burnham_film import load
+    x = load(MUSIC)
+    x = x[int(np.argmax(np.abs(x) > 0.01)):]
+    i0, q = int(new_time(T_SEASON) * SR), int(new_time(T_QUIET) * SR)
+    while len(x) < q - i0:
+        back = x[int(len(x) * 0.45):]
+        xf = int(0.5 * SR)
+        x = np.concatenate([x[:-xf], x[-xf:] * np.linspace(1, 0, xf) + back[:xf] * np.linspace(0, 1, xf), back[xf:]])
+    m = x[:q - i0] * 0.55
+    m[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
+    mix[i0:q] += m
+    for _ in range(3):
+        mix *= 10 ** ((-14.0 - MA.lufs(mix[:q])) / 20)
+        mix = limiter(mix, -2.8)
+    return mix
+
+
+def render_reorder(out):
+    import imageio_ffmpeg
+    import time
+    from multiprocessing import Pool
+    import mossad_audio as MA
+    t0 = time.time()
+    setup()
+    wav = out + '.wav'
+    mix = reorder_sound()
+    print(f'sound: {MA.lufs(mix):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
+    MA.write_wav(wav, mix)
+    n = int(round(sum(b - a for a, b in reorder_segments()) * FPS))
+    w, h = int(W0 * R), int(H0 * R)
+    p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt',
+                          'rgb24', '-s', f'{w}x{h}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
+                          '-c:v', 'libx264', '-crf', '23', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                          '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
+    with Pool(os.cpu_count()) as pool:
+        for f, fr in enumerate(pool.imap(_render_reorder, range(n), chunksize=2)):
+            p.stdin.write(fr)
+    p.stdin.close()
+    p.wait()
+    os.remove(wav)
+    print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB) in {time.time() - t0:.0f}s', flush=True)
+
+
 def main():
     global R
     cmd = sys.argv[1]
@@ -1859,6 +1950,9 @@ def main():
     elif cmd == 'final':
         R = 1.0
         render(sys.argv[2])
+    elif cmd == 'reorder':                             # NEW WEAPONS first, then the title, then the rest
+        R = 1.0
+        render_reorder(sys.argv[2])
 
 
 if __name__ == '__main__':
