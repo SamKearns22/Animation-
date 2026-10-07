@@ -2208,7 +2208,7 @@ mouths.install(B)
 # Placeholder timing from Sam's usual pace (3.0-3.6 words a second) until his recordings arrive; then REC replaces
 # it (cleaned and levelled by mossad_audio.line; pauses may be shortened, never the words).
 LINE1 = ['The researcher in question', 'died from a common pneumonia.', 'All is well.', 'We ask anyone concerned',
-         'to pay attention to bulletins from', 'the Ministry of Health.']
+         'to pay attention to the bulletins from', 'the Ministry of Health.']
 LINE2 = ['Any more questions?']
 REC_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audio', 'russiadent-peskov.m4a')
 REC_CUTS = [(4.45, 19.05), (24.18, 26.45)]       # Sam's take (recorded outdoors): line 1, line 2
@@ -2331,8 +2331,23 @@ def track_of(words):
     return out
 
 
-TRACK = ([(a + 0.30, b + 0.30, sh) for a, b, sh in mouths.track(' '.join(LINE1), rec_lines()[0][1])] +
-         [(a + W2[0][1], b + W2[0][1], sh) for a, b, sh in mouths.track(' '.join(LINE2), rec_lines()[1][1])])
+def rec_track(start, pieces, stretches, owner):
+    """Mouth shapes piece by piece, each over its own speech stretches (so every phrase moves his mouth)."""
+    out = []
+    for i, pc in enumerate(pieces):
+        mine = []
+        for st in [st for st, o in zip(stretches, owner) if o == i]:   # bits split by a breath count as one
+            if mine and st[0] - mine[-1][1] < 0.25:
+                mine[-1] = (mine[-1][0], st[1])
+            else:
+                mine.append(st)
+        t0 = mine[0][0]
+        out += [(a + start + t0, b + start + t0, sh) for a, b, sh in mouths.track(pc, [(a - t0, b - t0) for a, b in mine])]
+    return out
+
+
+TRACK = (rec_track(0.30, LINE1, rec_lines()[0][1], REC_PIECES[0]) +
+         rec_track(W2[0][1], LINE2, rec_lines()[1][1], REC_PIECES[1]))
 
 
 def caption_at(t):
@@ -2540,7 +2555,9 @@ def film_front_end(t_local):
         cx, cy = lay.size[0] / 2, lay.size[1] / 2
         paste_sprite(img, lay, at, (cx, cy), cam.z, ang)
         # the cut end: a flat red cap with a pale bone in it (cartoon, no anatomy)
-    return shot_front(t, zoom=1.32, behind=behind, **peskov_kw(t))
+    def front(img, cam, pc):   # the smear the hand left on the podium in shot 1 is still there
+        hand_smear(img, cam, pc, -0.22, 1.2, 9.0)
+    return shot_front(t, zoom=1.32, behind=behind, front=front, **peskov_kw(t))
 
 
 def film_face(t_local):
@@ -2956,7 +2973,7 @@ def soundtrack():
         i = int((edge - T['s2']) * SR)
         bed[i - k:i + k] *= np.linspace(1, 1, 2 * k)
     g[(tt >= W2[0][1] - 0.2)] = 0.45                             # down further under his last line
-    place(mix, bed * g, T['s2'])
+    place(mix, bed * g * 0.8, T['s2'])                         # the hall 20% down (Sam)
     place(mix, rec_lines()[0][0], 0.30)                          # Sam as Peskov
     place(mix, rec_lines()[1][0], W2[0][1])
     # shot 2's big moments, over the din: the window bursting in; the chair; the body hitting the floor and bouncing
