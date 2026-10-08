@@ -12,6 +12,11 @@ wrong place). These look at the RESULT instead, so they catch faults nobody thou
   visible_spots      which floor spots are on screen in all of several cameras (to place action seen in two shots).
   eyeline / check_eyelines   everyone looks at whoever they fight or talk to.
   voice_balance      the voice sits clearly above crowd, music and effects wherever someone speaks.
+  title_clear        the title never covers a character (face, body or clothes).
+  sound_questions    things in the sound that are usually mistakes but may be meant (deep wind rumble, dead silence,
+                     a jump in volume at a cut): asked, never fixed without Sam.
+  onset / place      a sound effect is placed by the moment its sound really starts, not by the start of its file.
+  shifts / glance    idle life as held poses with quick shifts (never a looping sway); eyes that jump, never glide.
 Used by preflight.py through a film's own audits() and checks(). See guides/preflight.md.
 """
 import math
@@ -45,7 +50,8 @@ def silhouette_audit(actors, fps=12, allow=None, still_ok=(), min_piece=0.03, po
       'pops'       the shape overlaps the previous frame by less than `pop` (a limb flips or teleports);
       'stretches'  the solid area changes by more than area_jump between frames (a limb grows or shrinks);
       'frozen'     the shape does not change at all for frozen_s seconds (a frozen pose), unless named in still_ok.
-    allow: [(name, t0, t1, why)] windows where a fast move is on purpose (a body thrown across the room)."""
+    allow: [(name, t0, t1, why)] windows where it is on purpose: a fast move (a body thrown across the room) or a
+    deliberate dead-still hold (a stunned stare). Never cure 'frozen' with a looping sway or tremble."""
     allow = allow or []
     faults = []
     for name, (times, draw) in actors.items():
@@ -79,7 +85,7 @@ def silhouette_audit(actors, fps=12, allow=None, still_ok=(), min_piece=0.03, po
                     faults.append(f'{name} at {t:.2f} s: stretches or squashes (area changed {da:.0%} in one frame)')
                     flagged.add('area')
                 frozen_run = frozen_run + 1 / fps if iou > 0.9995 else 0.0
-                if frozen_run >= frozen_s and name not in still_ok and 'frozen' not in flagged:
+                if frozen_run >= frozen_s and name not in still_ok and 'frozen' not in flagged and not ok():
                     faults.append(f'{name} at {t:.2f} s: frozen for {frozen_s:.1f} s (no movement at all)')
                     flagged.add('frozen')
             prev = m
@@ -166,7 +172,10 @@ def check_joints(joints, rules):
       ('angle', a, b, c, lo, hi)      the angle at joint b stays between lo and hi degrees (elbow, knee, neck, waist);
       ('length', a, b, want, tol)     the bone a-b keeps its length (no stretching);
       ('inside', point, polygon_name) an attachment point (neck base, shoulder) lies inside the body shape it joins;
-      ('apart', a, b, min_dist)       two points stay apart (a hand does not pass through the head).
+      ('apart', a, b, min_dist)       two points stay apart (a hand does not pass through the head);
+      ('side', joint, ref, centre_x)  a joint stays on ref's side of the body's centre line, clear of the middle (an elbow on its
+                                      shoulder's side: an arm swung across the chest is usually a wrong bend; if the
+                                      action really crosses, folded arms or a reach across, list it, and ask Sam if unsure).
     Returns a list of faults."""
     out = []
     for r in rules:
@@ -189,6 +198,11 @@ def check_joints(joints, rules):
             _, a, b, d = r
             if math.dist(joints[a], joints[b]) < d:
                 out.append(f'{a} is within {d:.0f} of {b} (passing through it)')
+        elif k == 'side':
+            _, p, ref, cx = r
+            near = abs(joints[p][0] - cx) < 0.3 * abs(joints[ref][0] - cx)          # in front of the chest's middle
+            if (joints[p][0] - cx) * (joints[ref][0] - cx) < 0 or near:
+                out.append(f'{p} has crossed the middle of the body (an arm across the chest?)')
     return out
 
 
@@ -235,6 +249,103 @@ def voice_balance(voice, rest, sr, windows, min_db=6.0, label='voice'):
         if m < min_db:
             out.append(f'{label} at {a:.2f}-{b:.2f} s is only {m:.1f} dB above the rest of the sound (needs {min_db:.0f})')
     return out
+
+
+def title_clear(title_layer, people_layers, margin=12):
+    """The title must not cover any character. title_layer: the title alone on a transparent RGBA picture;
+    people_layers: {name: that character alone on a transparent RGBA picture of the same size}, from a frame where the
+    title shows. Returns faults."""
+    t = np.array(title_layer)[:, :, 3] > 40
+    t = ndimage.binary_dilation(t, iterations=margin)
+    out = []
+    for name, lay in people_layers.items():
+        hit = int((t & (np.array(lay)[:, :, 3] > 40)).sum())
+        if hit:
+            out.append(f'the title covers {name} ({hit} pixels): raise it, shorten it to one line, or make it smaller')
+    return out
+
+
+def _rms_db(x):
+    return 20 * math.log10(float(np.sqrt(np.mean(x ** 2))) + 1e-12)
+
+
+def sound_questions(stems, sr, cuts=(), start=0.0, end=None):
+    """Things in the sound that are usually mistakes but may be meant, as QUESTIONS for Sam (never fixed without him):
+      deep rumble   a sound whose energy is mostly below 100 Hz (wind in an outdoor recording);
+      dead silence  0.3 s or more of total digital silence inside the film;
+      jumps         the volume leaps or drops by 12 dB or more across a cut.
+    stems: {name: samples} (each sound, and 'mix' for the whole); cuts: the cut times in seconds."""
+    from scipy.signal import butter, sosfilt
+    out = []
+    lo = butter(4, 100, 'low', fs=sr, output='sos')
+    for name, x in stems.items():
+        if name == 'mix' or not np.any(x):
+            continue
+        share = float(np.sum(sosfilt(lo, x) ** 2) / (np.sum(x ** 2) + 1e-12))
+        if share > 0.3:
+            out.append(f'{name}: {share:.0%} of it is deep rumble below 100 Hz (wind?). Cut it, or keep it if meant?')
+    mix = stems.get('mix')
+    if mix is not None:
+        e = int((end if end is not None else len(mix) / sr) * sr)
+        win = int(0.05 * sr)
+        run = 0
+        for i in range(int(start * sr), e - win, win):
+            run = run + 1 if np.max(np.abs(mix[i:i + win])) < 1e-4 else 0
+            if run * 0.05 >= 0.3:
+                out.append(f'dead silence at {i / sr - 0.25:.2f} s. A faint bed of room sound under it, or is it meant?')
+                break
+        for c in cuts:
+            a, b = int((c - 0.15) * sr), int((c + 0.15) * sr)
+            if a < 0 or b > len(mix):
+                continue
+            before, after = _rms_db(mix[a:int(c * sr)]), _rms_db(mix[int(c * sr):b])
+            if abs(after - before) >= 12:
+                if min(before, after) < -90:
+                    way = 'leaps up from total silence' if after > before else 'drops to total silence'
+                else:
+                    way = ('leaps up ' if after > before else 'drops ') + f'{abs(after - before):.0f} dB'
+                out.append(f'the sound {way} at the cut at {c:.2f} s. Ease it, or is it meant?')
+    return out
+
+
+def shifts(t, seed=0, amount=0.05, hold=(1.4, 2.6), move=0.25):
+    """Idle life without a looping wobble: holds a small pose (a head tilt, a lean), then every 1.4-2.6 s moves quickly
+    (in `move` seconds, eased) to a new one, like a person shifting their weight. Never a sine sway or tremble."""
+    rnd = np.random.default_rng(seed)
+    at, prev, val = 0.0, 0.0, float(rnd.uniform(-amount, amount))
+    while True:
+        nxt = at + float(rnd.uniform(*hold))
+        if t < nxt:
+            u = min(1.0, (t - at) / move)
+            return prev + (val - prev) * u * u * (3 - 2 * u)
+        at, prev, val = nxt, val, float(rnd.uniform(-amount, amount))
+
+
+def glance(t, plan):
+    """Where someone looks, from a plan [(time, target), ...]: the eyes JUMP to each new target on one frame (and the head
+    turns on the same frame); only following something that moves is smooth. Eased eye moves look woozy, not alert."""
+    out = plan[0][1]
+    for at, target in plan:
+        if t >= at:
+            out = target
+    return out
+
+
+def onset(x, sr, frac=0.25, win_s=0.02):
+    """When a sound effect really starts: the first moment its loudness reaches frac of its loudest (in seconds)."""
+    w = max(1, int(win_s * sr))
+    r = np.sqrt(np.convolve(x ** 2, np.ones(w) / w, mode='same'))
+    i = int(np.argmax(r >= frac * r.max()))
+    return i / sr
+
+
+def place(track, clip, at, sr, gain=1.0):
+    """Add a sound effect so that its real start (onset) lands exactly at `at` seconds."""
+    i = int((at - onset(clip, sr)) * sr)
+    a, b = max(0, i), min(len(track), i + len(clip))
+    if b > a:
+        track[a:b] += clip[a - i:b - i] * gain
+    return track
 
 
 # ----------------------------------------------------------------------------------------- permanent marks

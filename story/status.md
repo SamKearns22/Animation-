@@ -6,6 +6,10 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
+## Done: "The Park" (TikTok, rebuilt in Satire style 8 Oct, `source/thepark.py`)
+- Final: `animations/the-park-vertical.mp4`, 17.1 s, 1.76 MB; posted 8 Oct. Shock level 2; eye-dart sting at the end.
+- Lessons became rules and checks in `guides/satire.md` (see best-practice Part 2, "Lessons from The Park").
+
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
   `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.

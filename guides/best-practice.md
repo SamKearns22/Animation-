@@ -375,6 +375,15 @@ this series. Full details in `tiktok-design.md`.
 
 ---
 
+### Lessons from "The Park" (8 Oct; now rules in `guides/satire.md`, most of them checked)
+- Every one of Sam's notes traced back to a missing rule or check. Each became one: the title clear of everyone; sound
+  questions (wind rumble, dead silence, a jump at a cut), asked and never fixed without Sam; effects placed by their real
+  start; elbows on their own side; eyes that jump; held poses instead of wobble loops; background characters behaving
+  normally; every view on the cast sheet; a strength sheet for the key reaction; one of each facial feature; remakes
+  keep the original's cameras and start from the template; thrown things land and stay.
+- The new checks, run on The Park's old faults, caught all of them, and two more in the template itself (its title over
+  both heads, its example arm bent across the chest).
+
 # Part 3. The coloured-pencil comedy shorts
 For Dam, The Salt and the Oxford rap battles (Andy and Sam).
 - **The look:** coloured pencil on off-white paper, with visible strokes and paper texture, and simple

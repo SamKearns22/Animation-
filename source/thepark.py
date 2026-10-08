@@ -562,7 +562,8 @@ def audits():
     def arm_rule(target):
         el, wr = rig.arm('R', target, 'palm', 'out', strict=False)[:2]
         return filmkit.check_joints({'sh': rig.shoulder('R'), 'el': el, 'wr': wr, 'head': (0, -150)},
-                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90)])
+                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90),
+                                     ('side', 'el', 'sh', 0)])
     return faults + TOSS.audit(arm_rule, label='seed toss')
 
 

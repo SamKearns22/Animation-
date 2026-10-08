@@ -35,7 +35,8 @@ FPS, SR = 12, MA.SR
 
 # =============================================== STORY (change this) ===============================================
 NAME = 'satire-template'
-TITLE = ('THE', 'TEMPLATE')                       # Cranberry Title style, on for 2 s
+TITLE = ('THE TEMPLATE',)                         # Cranberry Title style, on for 2 s; one line sits highest
+TITLE_AT = dict(cap=116, top=310)                 # its size and height: checked never to cover anyone
 CAST = {   # look and build per person (skin, hair, clothes, face); the cast sheet shows them side by side
     'A': dict(skin=B.PALE, hair='side', hair_c=(70, 56, 44), jacket=(60, 70, 90), trousers=(40, 42, 50), outfit='suit',
               jaw='square', hw=70, hh=90),
@@ -86,13 +87,13 @@ def state(who, t):
     rig = F.Rig(sp)
     sp['arms'] = rig.pose('sides')
     if who == 'A' and THUMP.b[0][0] <= t <= THUMP.b[-1][0]:
-        sp['arms']['R'] = rig.arm('R', THUMP.at(t), 'grip', 'down', strict=False)
+        sp['arms']['R'] = rig.arm('R', THUMP.at(t), 'grip', 'out', strict=False)
     shape = mouths.at(TRACK[who], t)
     sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
     sp['blink'] = F.blinking(t, BLINKS[who])
     sp['look'] = F.look_at(XS[who], XS[LOOKS_AT[who]])
     sp['breath'] = F.breath(t, 4.0, 1.5, 0.0 if who == 'A' else 0.4)
-    sp['tilt'] = 0.05 * math.sin(t * 1.7 + (0 if who == 'A' else 2))   # never frozen: a small sway while listening
+    sp['tilt'] = filmkit.shifts(t, seed=1 if who == 'A' else 2)   # never frozen: held poses, small quick shifts (no sway)
     eye = (XS[who], NECK_Y - 150 * S)
     filmkit.eyeline(who, t, eye, (sp['look'], 0.0), (XS[LOOKS_AT[who]], eye[1]))
     return sp
@@ -139,7 +140,7 @@ def overlay(img, t):
         if c:
             PP.caption(img, c)
         if t < 2.0:
-            B.title_lines(img, TITLE, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
+            B.title_lines(img, TITLE, **TITLE_AT, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
     return img
 
 
@@ -155,6 +156,9 @@ def soundtrack(stems=False):
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
+    # Sound effects go in by the moment they really start, not the start of their file, e.g.
+    #   filmkit.place(rest, load('source/audio/NAME-slam.mp3'), at=1.6, sr=SR)   (lands the slam on the contact frame)
+    # Outdoor recordings and ambience: cut wind rumble (sound_questions asks about it).
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:
@@ -172,8 +176,27 @@ def checks():
     if any(ln['_voice'] is not None for ln in LINES):
         _, voice, rest = soundtrack(stems=True)
         faults += filmkit.voice_balance(voice, rest, SR, windows)
+    faults += title_check()
+    mix, voice, rest = soundtrack(stems=True)
+    for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
+                                     cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
+        print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
+
+
+def title_check():
+    """The title must not cover anyone: the title and each person alone, on a frame where the title shows."""
+    t = 1.0
+    title = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+    B.title_lines(title, TITLE, **TITLE_AT)
+    people = {}
+    for who in 'AB':
+        if visible(who, cam_for(t)):
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
+            people[who] = lay
+    return filmkit.title_clear(title, people)
 
 
 def audits():
@@ -197,14 +220,17 @@ def audits():
     rig = F.Rig(dict(CAST['A'], full=True, pose='custom'))
 
     def arm_rule(target):
-        el, wr = rig.arm('R', target, 'grip', 'down', strict=False)[:2]
+        el, wr = rig.arm('R', target, 'grip', 'out', strict=False)[:2]
         return filmkit.check_joints({'sh': rig.shoulder('R'), 'el': el, 'wr': wr, 'head': (0, -150)},
-                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90)])
+                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90),
+                                     ('side', 'el', 'sh', 0)])
     faults += THUMP.audit(arm_rule, label='A thumps the table')
     return faults
 
 
 def cast_sheet(out):
+    """Everyone side by side. Add every OTHER view each character appears in (from above, a close-up, mid-action),
+    and for the film's key reaction a numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
     img = Image.new('RGBA', (1080, 1080), (230, 226, 220, 255))
     for i, who in enumerate('AB'):
         sp = dict(CAST[who], full=True, pose='custom')
