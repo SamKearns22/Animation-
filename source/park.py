@@ -11,20 +11,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 VOICE = os.path.join(HERE, "audio", "park-1.m4a")
 LINE = "Nobody will believe you."
 
-# ---- timing (seconds). Voice length is read from the recording when it exists.
-def voice_len():
-    if not os.path.exists(VOICE):
-        return 1.5
-    r = subprocess.run([FF, "-i", VOICE], capture_output=True, text=True).stderr
-    for l in r.splitlines():
-        if "Duration" in l:
-            h, m, s = l.split("Duration:")[1].split(",")[0].split(":")
-            return float(h) * 3600 + float(m) * 60 + float(s)
-    return 1.5
-VL = voice_len()
-T1 = 5.0                      # shot 2 starts (close-up)
-SAY = T1 + 0.5                # pigeon starts speaking
-T2 = SAY + VL + 0.7           # shot 3 starts (man shocked)
+# ---- timing (seconds). Sam's recording: speech runs 1.49-3.57 s, so we use 1.45-3.75 s of it.
+VOICE_FROM, VOICE_TO = 1.45, 3.75
+VL = (VOICE_TO - VOICE_FROM) if os.path.exists(VOICE) else 2.1
+SPEECH = VL - 0.2             # how long the beak moves
+T1 = 5.0                      # shot 2 starts (looking down at the pigeon)
+SAY = T1 + 1.1                # pigeon starts speaking (the birdsong has faded out by now)
+T2 = SAY + VL + 0.7           # shot 3 starts (man shocked), birdsong back at full volume
 FLY = T2 + 1.3                # pigeon takes off
 END = FLY + 2.6
 
@@ -307,7 +300,7 @@ def pov(X, t):
     hx, hy = cx, 1010 + 60 * (1 - up)
     X.ell(hx, hy, 118, 110, GREY_P)
     lt = t - SAY
-    talk = 0 < lt < VL
+    talk = 0 < lt < SPEECH
     beak = (0.5 + 0.5 * math.sin(lt * 17)) if talk else 0
     blink = (t % 2.6) < 0.1 and not (up >= 1 and t < T2)
     for ex in (-66, 66):
@@ -350,7 +343,7 @@ def render(t, cam_mode, ss):
     if t < T2:
         if cam_mode == "close":
             lt = t - SAY
-            talk = 0 < lt < VL
+            talk = 0 < lt < SPEECH
             beak = (0.5 + 0.5 * math.sin(lt * 17)) if talk else 0
             pigeon(X, bx, by - 46, bs, -1, head_dy=-26, tilt=-1.2, beak=beak)
         else:
@@ -397,32 +390,23 @@ def mode(t):
     return "close" if T1 <= t < T2 else "wide"
 
 # ---- sound: park ambience + birds + wing flaps + the voice
+AMB = os.path.join(HERE, "audio", "park-ambient-clip.mp3")
+
 def make_audio(path):
+    """Wing flaps only (the park birdsong is Sam's own file, mixed in by ffmpeg)."""
     sr = 44100
     n = int(END * sr)
     rnd = np.random.RandomState(1)
     a = np.zeros(n)
-    wind = np.convolve(rnd.randn(n), np.ones(900) / 900, "same") * 0.9
-    a += wind * (0.5 + 0.5 * np.sin(np.arange(n) / sr * 0.5))
-    for k in range(14):                       # little bird chirps
-        s0 = int(rnd.uniform(0, END - 0.4) * sr)
-        base = rnd.uniform(2600, 4200)
-        for j in range(3):
-            tt = np.arange(int(0.07 * sr)) / sr
-            env = np.sin(np.pi * tt / 0.07) ** 2
-            seg = np.sin(2 * np.pi * (base + 500 * j + 900 * tt / 0.07) * tt) * env * 0.05
-            o = s0 + int(j * 0.1 * sr)
-            a[o:o + len(seg)] += seg[: n - o]
-    for k in range(12):                       # wing flaps at take-off
+    for k in range(12):
         o = int((FLY + k * 0.085) * sr)
         ln = int(0.06 * sr)
         if o + ln < n:
-            nz = rnd.randn(ln) * np.exp(-np.arange(ln) / (0.02 * sr)) * 0.35
-            a[o:o + ln] += nz
-    a = a / max(1e-6, np.abs(a).max()) * 0.5
-    pcm = (a * 32767).astype("<i2")
+            a[o:o + ln] += rnd.randn(ln) * np.exp(-np.arange(ln) / (0.02 * sr)) * 0.35
+    a = a / max(1e-6, np.abs(a).max()) * 0.35
     with wave.open(path, "wb") as w:
-        w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes(pcm.tobytes())
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
+        w.writeframes((a * 32767).astype("<i2").tobytes())
 
 def main():
     args = sys.argv[1:]
@@ -442,13 +426,18 @@ def main():
     tmpa = outp + ".amb.wav"
     make_audio(tmpa)
     ow, oh = int(W * scale) // 2 * 2, int(H * scale) // 2 * 2
-    cmd = [FF, "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{ow}x{oh}", "-r", str(FPS), "-i", "-", "-i", tmpa]
+    cmd = [FF, "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{ow}x{oh}", "-r", str(FPS), "-i", "-",
+           "-i", tmpa, "-stream_loop", "-1", "-i", AMB]
+    A, B = T1, T1 + 1.0       # birdsong fades out over the first second of shot 2, silent for the line
+    fade = f"volume='if(lt(t,{A}),1,if(lt(t,{B}),({B}-t)/({B}-{A}),if(lt(t,{T2}),0,1)))':eval=frame"
+    fc = f"[2:a]aformat=channel_layouts=mono,volume=1.0,{fade}[amb];[1:a][amb]amix=inputs=2:duration=first:normalize=0[m]"
     if os.path.exists(VOICE):
-        cmd += ["-i", VOICE,
-                "-filter_complex", f"[2:a]adelay={int(SAY*1000)}|{int(SAY*1000)},volume=1.6[v];[1:a][v]amix=inputs=2:duration=first:normalize=0[a]",
-                "-map", "0:v", "-map", "[a]"]
+        cmd += ["-i", VOICE]
+        fc = (f"[3:a]atrim={VOICE_FROM}:{VOICE_TO},asetpts=PTS-STARTPTS,adelay={int(SAY*1000)}|{int(SAY*1000)},volume=1.6[v];"
+              + fc + ";[m][v]amix=inputs=2:duration=first:normalize=0[a]")
     else:
-        cmd += ["-map", "0:v", "-map", "1:a"]
+        fc += ";[m]anull[a]"
+    cmd += ["-filter_complex", fc, "-map", "0:v", "-map", "[a]"]
     cmd += ["-t", f"{secs:.2f}", "-c:v", "libx264", "-preset", "medium", "-crf", "24", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", outp]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.DEVNULL)
