@@ -15,6 +15,17 @@ I don't know how to code. Please:
 - Put finished animations in the `animations/` folder with a clear name.
 - **Before any full render, offer me an animatic** (a quick, lower-quality version of the whole film) and wait for my
   Y or N. Never assume either way.
+- **Switching models to save money.** Each film moves through stages, and each stage has a model:
+  - planning (reading the brief, staging the shots, questions for me): Opus, high effort;
+  - building anything new (a new character, creature, set or tool): Opus, high effort;
+  - reading my notes and deciding the fixes: Opus, medium effort;
+  - building from a clear plan (drawing to a brief, applying my notes, sound): Opus, medium effort;
+  - routine work (filing recordings, sheets, checks, renders, sending, saving): Sonnet.
+
+  When the next stage needs a different model, stop before starting it, send me a push notification (for example
+  "Time to switch to Sonnet: type /model") and wait for me to say I've switched. Never carry on into a stage that needs
+  a stronger model without it. Group the work so there are usually only 3 or 4 switches per film. Quick videos keep
+  their own rule (Sonnet, medium effort).
 - For TikTok versions, follow `guides/tiktok-design.md` (size, title, safe areas, posting). Say how long each render will take, report how long it took, and send a push notification when it finishes.
 - **Push notifications for anything long:** whenever a render or any other long process (animatic, storyboard, sound build, upload, research) finishes, fails, or stops to wait for my decision, send a push notification to my phone saying what is ready or what is needed (details in `guides/tiktok-design.md`, "Working").
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
