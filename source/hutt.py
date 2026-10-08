@@ -672,12 +672,7 @@ PR_BLINKS = F.blinks(5, 0.4, DUR, talking=True)
 def pr_state(t):
     sp = dict(PR)
     rig = F.Rig(sp)
-    speaking = any(ln['who'] == 'PR' and ln['start'] - 0.1 <= t < ln['end'] + 0.2 for ln in LINES)
     arms = dict(rig.pose('sides'), **rig.pose('hold', side='L', lift=0.7))       # the folder held to his chest
-    if speaking and t < PAN0:                                                  # small beats with the free hand
-        w = math.sin(2 * math.pi * 1.0 * t)
-        sh = rig.shoulder('R')
-        arms['R'] = rig.arm('R', (sh[0] + 46 + 12 * w, sh[1] + 330 - 12 * w), 'palm', 'depth')   # a small beat by his side
     sp['arms'] = arms
     shape = mouths.at(TRACK['PR'], t)
     sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
