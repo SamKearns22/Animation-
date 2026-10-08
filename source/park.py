@@ -19,7 +19,7 @@ T1 = 5.0                      # shot 2 starts (looking down at the pigeon)
 SAY = T1 + 1.1                # pigeon starts speaking (the birdsong has faded out by now)
 T2 = SAY + VL + 0.7           # shot 3 starts (man shocked), birdsong back at full volume
 FLY = T2 + 1.3                # pigeon takes off
-END = FLY + 2.6
+END = FLY + 3.6
 
 # ---- palette
 OUT = (20, 16, 16)
@@ -138,7 +138,7 @@ def man(X, t, shock, arm_t, glance=0.0, pv=(1.0, 0.0)):
     X.ell(x0 - 100, 1040, 32, 32, SKIN)
     # right arm scatters seed
     if shock:
-        hx, hy = x0 + 130, 1110 + 6 * math.sin(t * 3)    # limp, hand drops
+        hx, hy = x0 + 104, 1040 + 4 * math.sin(t * 3)    # limp, hand drops
     else:
         sw = math.sin(arm_t * 2 * math.pi / 1.4)
         hx, hy = x0 + 175 + 20 * sw, 960 - 40 * max(0, sw) + 20
