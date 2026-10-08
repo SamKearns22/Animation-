@@ -286,19 +286,21 @@ def pov(X, t):
         X.seg((cx - 150 + k * 6, 620 + k * 60), (cx - 100 + k * 6, 640 + k * 60), 4, (70, 76, 90))
         X.seg((cx + 150 - k * 6, 620 + k * 60), (cx + 100 - k * 6, 640 + k * 60), 4, (70, 76, 90))
     # head tipped back, looking up at the camera
-    hx, hy = cx, 1010
+    up = max(0.0, min(1.0, (t - (T1 + 0.15)) / 0.3))     # head snaps up to stare into the lens
+    hx, hy = cx, 1010 + 60 * (1 - up)
     X.ell(hx, hy, 118, 110, GREY_P)
     lt = t - SAY
     talk = 0 < lt < VL
     beak = (0.5 + 0.5 * math.sin(lt * 17)) if talk else 0
-    blink = (t % 2.6) < 0.1
+    blink = (t % 2.6) < 0.1 and not (up >= 1 and t < T2)
     for ex in (-66, 66):
         X.ell(hx + ex, hy - 14, 30, 30, (240, 150, 40))
         if blink:
             X.seg((hx + ex - 26, hy - 14), (hx + ex + 26, hy - 14), 7)
         else:
-            X.ell(hx + ex, hy - 6, 13, 14, OUT, line=False)
-            X.ell(hx + ex - 5, hy - 12, 4, 4, (255, 255, 255), line=False)
+            r = 13 + 4 * up
+            X.ell(hx + ex, hy - 14 + 8 * (1 - up), r, r + 1, OUT, line=False)   # staring dead at the camera
+            X.ell(hx + ex - 5, hy - 20 + 8 * (1 - up), 4, 4, (255, 255, 255), line=False)
     # beak points down at us, foreshortened; opens while speaking
     X.poly([(hx - 38, hy + 36), (hx + 38, hy + 36), (hx + 20, hy + 88 + 14 * beak), (hx - 20, hy + 88 + 14 * beak)], (240, 200, 150))
     if beak > 0:
@@ -412,7 +414,7 @@ def main():
     secs = float(args[args.index("--secs") + 1]) if "--secs" in args else END
     ss = 1.5
     if "--sheet" in args:
-        times = [1.0, T1 - 0.3, T1 + 1.0, SAY + 0.5, T2 + 0.3, FLY + 0.6]
+        times = [1.0, T1 + 0.05, T1 + 1.0, SAY + 0.5, T2 + 0.3, FLY + 0.6]
         ims = [render(t, mode(t), 1.0).resize((360, 640)) for t in times]
         sheet = Image.new("RGB", (360 * 3, 640 * 2))
         for i, im in enumerate(ims):
