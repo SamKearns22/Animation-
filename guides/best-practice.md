@@ -250,6 +250,17 @@ this series. Full details in `tiktok-design.md`.
   part too.
 - **Keep the joke's give-away out of the opening shot** (no flags until the camera turns to the cashier).
 
+**Big creatures and tableaux (Andrew the Hutt, 8 Oct)**
+- **Copy the reference's pose, not just its parts:** a slug-king drawn as an upright mound read as a sofa; Sam's
+  reference (the Hutt reclining, tail out to one side, upper body propped up, head leant over) fixed it. Ask for or
+  find a pose reference for any non-human body before the stills.
+- **Raise a big body above the people in front of it:** in a 9:16 frame a row of standing people hides anything lying
+  low behind them. Put the creature on a tall platform so its whole silhouette (the tail) clears their heads.
+- **Chains, leads and ropes to people never cross a face:** let the slack hang down through a gap between two people
+  and loop up to the collar, as a real chain would.
+- **A swing (whip pan) is one camera turning in one set:** build the room as a strip of walls and slide the camera
+  along it with motion blur (9 drawings averaged per frame), so both ends are the same room.
+
 **Hands (Russiadent Evil, 7 Oct; replaces the MakeHuman close-up hands)**
 - **Every hand is a plain circle at the end of the arm** (South Park: Butters, the hunters with rifles). No fingers,
   no nails, at any size. To hold something, lay the prop over the circle so it reads as a grip; to pick it up, the

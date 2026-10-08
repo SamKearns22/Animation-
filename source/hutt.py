@@ -242,7 +242,7 @@ class Squash:
     """A camera wrapper that lets his whole mass breathe, bounce and settle about the base of the body."""
     def __init__(self, cam, base_x, base_y, sy=1.0, dy=0.0, dx=0.0):
         self.cam, self.bx, self.by, self.sy, self.dy, self.dx = cam, base_x, base_y, sy, dy, dx
-        self.s, self.z = cam.s, cam.z
+        self.s, self.z = cam.s, getattr(cam, 'z', cam.s)
 
     def P(self, x, y):
         return self.cam.P(self.bx + (x - self.bx) * (2 - self.sy) ** 0.5 + self.dx, self.by + (y - self.by) * self.sy + self.dy)
@@ -306,62 +306,87 @@ def pizza_slice(p, hx, hy, ang):
         p.ell(*R(x, y), 10, 10, (190, 50, 40), INK, 1.4)
 
 
+class Tilt:
+    """The head group: drawn in its own upright coordinates, then leant over to one side and moved onto the body."""
+    def __init__(self, cam, a, pivot, off):
+        self.cam, self.a, self.pv, self.off = cam, a, pivot, off
+        self.s, self.z = cam.s, getattr(cam, 'z', cam.s)
+
+    def W(self, x, y):
+        dx, dy = x - self.pv[0], y - self.pv[1]
+        ca, sa = math.cos(self.a), math.sin(self.a)
+        return self.pv[0] + self.off[0] + dx * ca - dy * sa, self.pv[1] + self.off[1] + dx * sa + dy * ca
+
+    def P(self, x, y):
+        return self.cam.P(*self.W(x, y))
+
+    def S(self, v):
+        return self.cam.S(v)
+
+
+TAIL_TOP = ([24, 60, 160, 300, 400, 450], [1236, 1214, 1186, 1130, 1040, 920])
+HK = 0.9                                      # he and his hookah sit on the high platform, a little smaller
+HUTT_AT = (540 - HK * 540, 1150 - HK * 1338)   # local (540, 1338), the base of his body, lands at (540, 1150)
+
+
 def hutt(img, cam, t):
-    """The slug-king on his dais. Wall-B coordinates; he is about 820 tall against the models' 525."""
+    """The slug-king reclining on his dais like the throne-room Hutt: the tail stretched out to the left, the upper
+    body propped up on the right, the head leant over towards the hookah. Wall-B coordinates."""
     st = hutt_state(t)
-    J = Squash(cam, 540, 1338, st['sy'], st['bounce'])
+    J = Squash(cam, 640, 1338, st['sy'], st['bounce'])
     p = B.Pen(img, J)
-    # the tail, curling round the front of the dais to the left
-    tail = curve([(160, 1338), (60, 1318), (-10, 1290), (-30, 1250), (10, 1240), (40, 1270), (100, 1286), (200, 1300)], 6)
-    p.poly(tail, SLUG, INK, 3)
-    # the body
-    body = curve([(90, 1338), (66, 1180), (118, 1010), (214, 880), (262, 760), (300, 640), (370, 556), (470, 516),
-                  (610, 516), (710, 556), (780, 640), (818, 760), (866, 880), (962, 1010), (1012, 1180), (990, 1338)], 7)
+    # the body: one long tapering mass, the tail tip lifting off the dais
+    body = curve([(24, 1236), (60, 1214), (160, 1186), (300, 1130), (400, 1040), (450, 920), (480, 800), (580, 730),
+                  (760, 722), (900, 790), (966, 950), (996, 1140), (980, 1338), (500, 1340),
+                  (200, 1338), (90, 1318), (40, 1286)], 7)
     p.poly(body, SLUG, INK, 3.4)
-    soft(img, J, [(820, 640), (900, 880), (1000, 1100), (990, 1330), (860, 1330), (780, 900)], (90, 50, 30), 0.25, 30)
+    soft(img, J, [(860, 800), (940, 960), (980, 1150), (960, 1330), (860, 1330), (840, 900)], (90, 50, 30), 0.25, 30)
+    soft(img, J, [(40, 1290), (300, 1300), (480, 1320), (480, 1338), (60, 1330)], (90, 50, 30), 0.2, 14)
     rng = np.random.default_rng(4)
-    for _ in range(26):                                                        # mottling on the hide
-        x, y = rng.uniform(140, 940), rng.uniform(900, 1320)
-        if abs(x - 540) < 300 and 950 < y < 1320:
-            continue
-        p.ell(x, y, rng.uniform(8, 20), rng.uniform(6, 12), SLUG_D, None)
-    p.poly(curve([(540, 908), (820, 990), (880, 1180), (800, 1330), (280, 1330), (200, 1180), (260, 990)], 6),
-           SLUG_L, INK, 2.4)                                                   # the pale belly with its rings
+    for _ in range(30):                                                        # mottling along the back and tail
+        x = rng.uniform(90, 520)
+        top = float(np.interp(x, *TAIL_TOP))
+        y = rng.uniform(top + 22, 1310)
+        p.ell(x, y, rng.uniform(7, 16), rng.uniform(5, 10), SLUG_D, None)
+    for x in range(70, 430, 40):                                               # the ridges across the tail
+        top = float(np.interp(x, *TAIL_TOP))
+        p.line([(x, top + 6), (x - 6, (top + 1334) / 2), (x + 4, 1332)], (176, 136, 100), 2.4)
+    p.poly(curve([(560, 940), (780, 900), (900, 1000), (940, 1180), (900, 1330), (600, 1336), (500, 1220),
+                  (510, 1040)], 6), SLUG_L, INK, 2.4)                          # the pale belly with its rings
     for k in range(6):
-        y = 1000 + 55 * k
-        w = 250 + 30 * math.sin(k * 0.6 + 0.5) + 20 * k
-        p.line([(540 - w, y), (540, y + 18), (540 + w, y)], (206, 176, 136), 2.6)
-    # shirt collar and a funeral-black tie on the vast chest
-    p.poly([(492, 872), (540, 904), (518, 930)], (246, 246, 246), INK, 2.2)
-    p.poly([(588, 872), (540, 904), (562, 930)], (246, 246, 246), INK, 2.2)
-    p.poly([(530, 900), (550, 900), (556, 924), (524, 924)], (24, 24, 28), INK, 2)
-    p.poly([(526, 924), (554, 924), (562, 1040), (540, 1062), (518, 1040)], (24, 24, 28), INK, 2)
-    p.ell(540, 990, 4, 6, (200, 200, 210), INK, 1)
-    # the head: Andrew's face on the front of the slug
+        y = 1010 + 52 * k
+        w = 170 + 26 * math.sin(k * 0.7 + 0.4) + 14 * k
+        p.line([(722 - w, y + 10), (722, y + 24), (722 + w, y)], (206, 176, 136), 2.6)
+    # the head group, leant over towards the hookah (more when he laughs, settling as he breathes)
+    lean = 0.16 + 0.012 * math.sin(2 * math.pi * t / 5.0) - 0.05 * st['laugh']
+    H = Tilt(J, lean, (540, 900), (135, -12))
+    hp = B.Pen(img, H)
     hx, hy = 540, 690
-    p.poly(curve([(306, 700), (330, 590), (420, 530), (540, 512), (660, 530), (750, 590), (774, 700), (740, 800),
-                  (660, 856), (540, 878), (420, 856), (340, 800)], 7), FACE_SKIN, INK, 3)
-    soft(img, J, [(640, 560), (760, 640), (760, 790), (640, 850)], (160, 90, 80), 0.22, 18)
+    hp.poly([(492, 872), (540, 904), (518, 930)], (246, 246, 246), INK, 2.2)  # shirt collar and a funeral-black tie
+    hp.poly([(588, 872), (540, 904), (562, 930)], (246, 246, 246), INK, 2.2)
+    hp.poly([(530, 900), (550, 900), (556, 924), (524, 924)], (24, 24, 28), INK, 2)
+    hp.poly([(526, 924), (554, 924), (562, 1040), (540, 1062), (518, 1040)], (24, 24, 28), INK, 2)
+    hp.ell(540, 990, 4, 6, (200, 200, 210), INK, 1)
+    hp.poly(curve([(306, 700), (330, 590), (420, 530), (540, 512), (660, 530), (750, 590), (774, 700), (740, 800),
+                   (660, 856), (540, 878), (420, 856), (340, 800)], 7), FACE_SKIN, INK, 3)
+    soft(img, H, [(640, 560), (760, 640), (760, 790), (640, 850)], (160, 90, 80), 0.22, 18)
     for k, y in enumerate((852, 878, 900)):                                    # chins
         w = 150 - 26 * k
-        p.line([(540 - w, y - 20), (540 - w * 0.4, y), (540 + w * 0.4, y), (540 + w, y - 20)], (190, 138, 116), 2.6)
+        hp.line([(540 - w, y - 20), (540 - w * 0.4, y), (540 + w * 0.4, y), (540 + w, y - 20)], (190, 138, 116), 2.6)
     for sgn in (-1, 1):                                                        # jowls
-        p.line([(hx + sgn * 62, 742), (hx + sgn * 112, 790), (hx + sgn * 150, 840)], (190, 138, 116), 2.6)
-        p.poly(curve([(hx + sgn * 150, 720), (hx + sgn * 214, 760), (hx + sgn * 200, 830), (hx + sgn * 150, 800)], 4),
-               FACE_SKIN, None)
-    # the eyes, brows and nose (the series' face, scaled up), tilted back a touch when he laughs
-    L = B.Local(J, hx, hy - 4, 2.15)
-    fp = B.Pen(img, L)
+        hp.line([(hx + sgn * 62, 742), (hx + sgn * 112, 790), (hx + sgn * 150, 840)], (190, 138, 116), 2.6)
+        hp.poly(curve([(hx + sgn * 150, 720), (hx + sgn * 214, 760), (hx + sgn * 200, 830), (hx + sgn * 150, 800)], 4),
+                FACE_SKIN, None)
+    L = B.Local(H, hx, hy - 4, 2.15)                                           # the series' face, scaled up
     sp = dict(skin=FACE_SKIN, hair_c=(196, 196, 192), brow_c=(206, 204, 198), brow_w=5.2, look=st['look'],
               blink=st['blink'], lid=3, harrow=0.85, age=True, creases=3,
               brows='joy' if st['laugh'] > 0.3 else ('fierce' if TUG <= t < TUG + 1.2 else None))
-    B.face(img, fp, sp, t, 0, 0, 68, 88)
-    # the hair: white, swept back from a side parting, over the top of the head
-    p.poly(curve([(350, 610), (380, 556), (450, 518), (540, 506), (640, 516), (716, 556), (736, 610), (700, 588),
-                  (630, 566), (560, 560), (470, 568), (400, 590)], 6), HAIR_W, INK, 2.6)
+    B.face(img, B.Pen(img, L), sp, t, 0, 0, 68, 88)
+    hp.poly(curve([(350, 610), (380, 556), (450, 518), (540, 506), (640, 516), (716, 556), (736, 610), (700, 588),
+                   (630, 566), (560, 560), (470, 568), (400, 590)], 6), HAIR_W, INK, 2.6)   # white, swept back
     for k in range(5):
         x = 440 + 50 * k
-        p.line([(x, 572 - 6 * (2 - abs(k - 2))), (x + 50, 530)], (196, 196, 196), 2.2)
+        hp.line([(x, 572 - 6 * (2 - abs(k - 2))), (x + 50, 530)], (196, 196, 196), 2.2)
     # the mouth: very wide, corners down, opening on the words
     o = st['open']
     my = 784
@@ -370,41 +395,42 @@ def hutt(img, cam, t):
     top = [(hx - corners, my + 16 - smile), (hx - 80, my - 4), (hx, my - 8 - 18 * o), (hx + 80, my - 4), (hx + corners, my + 16 - smile)]
     bot = [(hx + corners, my + 16 - smile), (hx + 90, my + 8 + 46 * o), (hx, my + 10 + 64 * o), (hx - 90, my + 8 + 46 * o)]
     if o > 0.05:
-        p.poly(curve(top + bot, 5), (44, 10, 16), INK, 3.6)
-        p.poly(curve([(hx - 70, my + 8 + 46 * o), (hx, my + 14 + 30 * o), (hx + 70, my + 8 + 46 * o), (hx, my + 6 + 62 * o)], 4),
-               (176, 70, 80), None)
-        p.line(top, (200, 140, 120), 6)                                          # the thick upper lip
-        p.line(top, INK, 2.4)                                           # the tongue
+        hp.poly(curve(top + bot, 5), (44, 10, 16), INK, 3.6)
+        hp.poly(curve([(hx - 70, my + 8 + 46 * o), (hx, my + 14 + 30 * o), (hx + 70, my + 8 + 46 * o), (hx, my + 6 + 62 * o)], 4),
+                (176, 70, 80), None)                                           # the tongue
+        hp.line(top, (200, 140, 120), 6)                                       # the thick upper lip
+        hp.line(top, INK, 2.4)
     else:
-        p.line(top, INK, 3.4)
-    p.line([(hx - 70, my + 22 + 74 * o), (hx, my + 26 + 76 * o), (hx + 70, my + 22 + 74 * o)], (206, 150, 126), 2.4)  # wet lower lip
-    # drool from both corners: a strand that stretches, snaps and drops onto the belly
+        hp.line(top, INK, 3.4)
+    hp.line([(hx - 70, my + 22 + 74 * o), (hx, my + 26 + 76 * o), (hx + 70, my + 22 + 74 * o)], (206, 150, 126), 2.4)  # wet lip
+    # drool from both corners, hanging straight down whatever the lean: it stretches, snaps and drops
     for sgn, ph, sway in ((-1, 0.0, 1.0), (1, 0.45, -0.7)):
-        cx, cy = hx + sgn * (corners - 8), my + 18 - smile
+        cx, cy = H.W(hx + sgn * (corners - 8), my + 18 - smile)
         u = (t * 0.42 + ph) % 1.0
         ln = 30 + 140 * u
         tip = (cx + sway * 8 * math.sin(t * 2.2 + ph * 6), cy + ln)
-        p.line([(cx, cy), ((cx + tip[0]) / 2 + sgn * 4, (cy + tip[1]) / 2), tip], INK, 9)
-        p.line([(cx, cy), ((cx + tip[0]) / 2 + sgn * 4, (cy + tip[1]) / 2), tip], (214, 230, 200), 6)
+        mid = ((cx + tip[0]) / 2 + sgn * 4, (cy + tip[1]) / 2)
+        p.line([(cx, cy), mid, tip], INK, 9)
+        p.line([(cx, cy), mid, tip], (214, 230, 200), 6)
         p.ell(tip[0], tip[1] + 6, 9, 12, (214, 230, 200), INK, 1.8)
         if u < 0.25:                                                           # the last drop, falling
             fy = cy + 170 + 600 * u
-            if fy < 1000:
+            if fy < 1040:
                 p.ell(tip[0] + sgn * 2, fy, 8, 13, (214, 230, 200), INK, 1.6)
     # the stubby arms with their circle hands: left on the chain, right with a slice of pizza
-    lh = (250 - 18 * st['tug'], 958 - 26 * st['tug'])
-    p.poly(curve([(250, 860), (330, 900), (300, 960), (lh[0] + 30, lh[1] + 20), (lh[0] - 10, lh[1] - 20)], 4), SLUG, INK, 3)
+    lh = (575 - 14 * st['tug'], 1000 - 22 * st['tug'])
+    p.poly(curve([(600, 900), (660, 950), (620, 1010), (lh[0] + 20, lh[1] + 26), (lh[0] - 12, lh[1] - 22)], 4), SLUG, INK, 3)
     Q.chand(p, lh[0], lh[1], SLUG, 36)
-    rh = (868, 958 + 6 * math.sin(t * 1.3))
-    p.poly(curve([(830, 860), (760, 900), (800, 960), (rh[0] - 30, rh[1] + 20), (rh[0] + 12, rh[1] - 24)], 4), SLUG, INK, 3)
+    rh = (888, 968 + 6 * math.sin(t * 1.3))
+    p.poly(curve([(850, 880), (800, 930), (830, 980), (rh[0] - 26, rh[1] + 22), (rh[0] + 14, rh[1] - 22)], 4), SLUG, INK, 3)
     pizza_slice(p, rh[0], rh[1] - 4, -0.35)
     Q.chand(p, rh[0], rh[1] + 10, SLUG, 36)
     return J.P(*lh)                                                            # where the chain starts (pixels)
 
 
 # ------------------------------------------------------------------------------------------------ the models
-MODEL_FEET = 1540
-MS = 0.45
+MODEL_FEET = 1600
+MS = 0.42
 MODELS = [  # x, hair, colour, skin, what she is doing (one sentence each)
     dict(x=130, hair='blonde', hair_c=(232, 202, 128), skin=B.PALE, act='phone'),     # scrolling her phone, head down
     dict(x=305, hair='bob', hair_c=(74, 48, 34), skin=B.PINK, act='hips'),           # hands on hips, glaring at him
@@ -505,17 +531,21 @@ def models(img, cam, t, chain_start):
             phone(lp, hx, hy - 18, back=m['act'] == 'selfie', ang=0.3 if m['act'] == 'selfie' else 0.0)
             Q.chand(lp, hx, hy, sp['skin'])
         collars.append(L.P(0, -6))
-    # the chain: from his hand to the first collar, then collar to collar, sagging between
-    pts = [chain_start] + collars
+    # the chain: from his hand down to the middle model's collar, and collar to collar along the line
     d = ImageDraw.Draw(img)
     lw = max(2, int(cam.S(3)))
-    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
-        n = max(6, int(math.hypot(x1 - x0, y1 - y0) / cam.S(13)))
-        sag = 0.16 * math.hypot(x1 - x0, y1 - y0)
+    gap = cam.P((MODELS[2]['x'] + MODELS[3]['x']) / 2, MODEL_FEET - 200)       # the slack hangs between two models
+    for j, ((x0, y0), (x1, y1)) in enumerate([(chain_start, collars[2])] + list(zip(collars, collars[1:]))):
+        if j == 0:   # from his hand the chain drops through the gap, below the collars, and loops up to hers
+            ctl = (gap[0] - cam.S(10), gap[1])
+        else:
+            ctl = ((x0 + x1) / 2, (y0 + y1) / 2 + 0.32 * math.hypot(x1 - x0, y1 - y0))
+        ln = math.hypot(ctl[0] - x0, ctl[1] - y0) + math.hypot(x1 - ctl[0], y1 - ctl[1])
+        n = max(6, int(ln / cam.S(13)))
         for k in range(n):
             u = (k + 0.5) / n
-            x = x0 + (x1 - x0) * u
-            y = y0 + (y1 - y0) * u + sag * 4 * u * (1 - u)
+            x = (1 - u) ** 2 * x0 + 2 * u * (1 - u) * ctl[0] + u * u * x1
+            y = (1 - u) ** 2 * y0 + 2 * u * (1 - u) * ctl[1] + u * u * y1
             r = cam.S(6.5 if k % 2 == 0 else 2.5)
             d.ellipse([x - cam.S(6.5), y - r, x + cam.S(6.5), y + r], fill=(176, 176, 184), outline=(24, 22, 26), width=lw)
 
@@ -528,16 +558,20 @@ def wall_b(img, cam, t):
     drape(p, -40, 110, 60, FY - 10, 1)
     drape(p, 1120, 970, 60, FY - 10, -1)
     chandelier(p, 540, 110, 1.3)
-    box(p, -610, 1300, 1690, 1340, (176, 40, 52), 3)                          # the dais: velvet top, gilt edge
-    box(p, -610, 1340, 1690, FY + 30, (140, 26, 40), 3)
-    p.line([(-610, 1346), (1690, 1346)], GILT, 5)
+    box(p, -610, 1112, 1690, 1152, (176, 40, 52), 3)                          # the dais: velvet top, gilt edge
+    box(p, -610, 1152, 1690, FY + 30, (140, 26, 40), 3)
+    p.line([(-610, 1158), (1690, 1158)], GILT, 5)
+    for x in range(-500, 1690, 250):                                          # panels with brass ring pulls
+        box(p, x, 1190, x + 220, FY - 4, None, 2.4, (110, 18, 30))
+        p.ell(x + 110, 1290, 20, 20, None, GILT_D, 4)
     box(p, -100, 1460, 1180, 2700, (120, 36, 44), 3)                          # a Persian rug in front
     box(p, -60, 1490, 1140, 2700, (150, 56, 54), 0)
     for x in range(-40, 1140, 70):
         p.poly([(x, 1475), (x + 14, 1468), (x + 28, 1475), (x + 14, 1482)], GILT, None)
-    soft(img, cam, oval(540, 1338, 470, 26), (0, 0, 0), 0.35, 10)
-    hookah(img, p, cam, t)
-    start = hutt(img, cam, t)
+    H = B.Local(cam, HUTT_AT[0], HUTT_AT[1], HK)
+    soft(img, H, oval(520, 1338, 500, 26), (0, 0, 0), 0.35, 10)
+    start = hutt(img, H, t)
+    hookah(img, B.Pen(img, H), H, t)
     models(img, cam, t, start)
 
 
@@ -632,7 +666,7 @@ def checks():
             heads.append(('PR man', cam.P(540, PR_NECK - 150 * PR_S), 75 * PR_S * cam.z))
         else:
             c = wall_cam(cam, 'B')
-            heads.append(('Andrew', c.P(540, 690), 240 * cam.z))
+            heads.append(('Andrew', c.P(HUTT_AT[0] + HK * 670, HUTT_AT[1] + HK * 700), 190 * cam.z))
             for i, m in enumerate(MODELS):
                 heads.append((f'model {i + 1}', c.P(m['x'], MODEL_FEET - F.SOLE_Y * MS - 150 * MS), 62 * MS * cam.z))
         for name, (x, y), r in heads:
