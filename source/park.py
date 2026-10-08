@@ -125,7 +125,7 @@ def bench(X):
     X.ell(560, 1315, 340, 18, (150, 132, 100), line=False)
 
 # ---- the man
-def man(X, t, shock, arm_t, glance=0.0):
+def man(X, t, shock, arm_t, glance=0.0, pv=(1.0, 0.0)):
     x0 = 470
     # shadow
     X.ell(x0, 1296, 140, 14, (150, 132, 100), line=False)
@@ -159,34 +159,37 @@ def man(X, t, shock, arm_t, glance=0.0):
                 X.ell(hx + 60 * f + k * 18, hy + 20 + 330 * f * f + k * 12 * f, 5, 5, (232, 200, 90), line=False)
     # head
     hy0 = 650 + (math.sin(t * 2.0) * 4 if not shock else -8)
+    turn = 1.0 if shock else 0.0         # shot 3: head turned toward the pigeon
+    fx = x0 + 12 * turn
+    fe = x0 + 28 * turn
     X.rect(x0 - 24, hy0 + 60, x0 + 24, 780, SKIN, line=False)
-    X.ell(x0, hy0, 96, 108, SKIN)
-    X.ell(x0 - 96, hy0 + 8, 18, 28, SKIN); X.ell(x0 + 96, hy0 + 8, 18, 28, SKIN)   # ears
+    X.ell(fx, hy0, 96, 108, SKIN)
+    X.ell(fx - 96, hy0 + 8, 18, 28, SKIN); X.ell(fx + 96, hy0 + 8, 18, 28, SKIN)   # ears
     # grey hair at the sides, bald top
-    X.ell(x0 - 88, hy0 - 22, 14, 38, (170, 170, 172), line=False)
-    X.ell(x0 + 88, hy0 - 22, 14, 38, (170, 170, 172), line=False)
+    X.ell(fx - 88, hy0 - 22, 14, 38, (170, 170, 172), line=False)
+    X.ell(fx + 88, hy0 - 22, 14, 38, (170, 170, 172), line=False)
     # eyes
     blink = (t % 3.4) < 0.12 and not shock
     for ex in (-36, 36):
         if shock:
-            X.ell(x0 + ex, hy0 - 18, 24, 28, (255, 255, 255))
-            X.ell(x0 + ex, hy0 - 18, 6, 6, OUT, line=False)
-            X.seg((x0 + ex - 26, hy0 - 62), (x0 + ex + 26, hy0 - 66), 7)
+            X.ell(fe + ex, hy0 - 18, 24, 28, (255, 255, 255))
+            X.ell(fe + ex + 12 * pv[0], hy0 - 18 + 12 * pv[1], 7, 7, OUT, line=False)
+            X.seg((fe + ex - 26, hy0 - 62), (fe + ex + 26, hy0 - 66), 7)
         elif blink:
-            X.seg((x0 + ex - 15, hy0 - 16), (x0 + ex + 15, hy0 - 16), 6)
+            X.seg((fe + ex - 15, hy0 - 16), (fe + ex + 15, hy0 - 16), 6)
         else:
-            X.ell(x0 + ex, hy0 - 16, 14, 16, (255, 255, 255))
-            X.ell(x0 + ex - 4 + 11 * glance, hy0 - 14 + 2 * glance, 6, 6, OUT, line=False)
-            X.seg((x0 + ex - 22, hy0 - 44), (x0 + ex + 20, hy0 - 40), 6)
+            X.ell(fe + ex, hy0 - 16, 14, 16, (255, 255, 255))
+            X.ell(fe + ex - 4 + 11 * glance, hy0 - 14 + 2 * glance, 6, 6, OUT, line=False)
+            X.seg((fe + ex - 22, hy0 - 44), (fe + ex + 20, hy0 - 40), 6)
     # nose + moustache
-    X.ell(x0, hy0 + 14, 22, 18, (96, 56, 34))
-    X.ell(x0 - 20, hy0 + 40, 26, 11, (182, 182, 186))
-    X.ell(x0 + 20, hy0 + 40, 26, 11, (182, 182, 186))
+    X.ell(fe, hy0 + 14, 22, 18, (96, 56, 34))
+    X.ell(fe - 20, hy0 + 40, 26, 11, (182, 182, 186))
+    X.ell(fe + 20, hy0 + 40, 26, 11, (182, 182, 186))
     # mouth
     if shock:
-        X.ell(x0, hy0 + 78, 28, 36, (60, 18, 22))
+        X.ell(fe, hy0 + 78, 28, 36, (60, 18, 22))
     else:
-        X.poly([(x0 - 34, hy0 + 66), (x0, hy0 + 86), (x0 + 34, hy0 + 66), (x0, hy0 + 76)], (60, 18, 22))
+        X.poly([(fe - 34, hy0 + 66), (fe, hy0 + 86), (fe + 34, hy0 + 66), (fe, hy0 + 76)], (60, 18, 22))
 
 # ---- pigeons (side view; face = -1 faces left, +1 faces right)
 def pigeon(X, x, y, s, face, head_dy=0.0, tilt=0.0, beak=0.0, wing=0.0, legs=True, ol=5):
@@ -254,6 +257,19 @@ def bench_pigeon_state(t, talking_t=None):
     tilt = r.choice([-1.6, 0, 1.6, 0.6, -0.8])
     dy = r.choice([-8, 0, 6, -4])
     return tilt, dy
+
+def ppos(t):
+    """Where the bench pigeon is in the wide shot."""
+    u = t - FLY
+    if u < 0:
+        return 790, 959
+    return 790 + 360 * u - 60 * u * u, 959 - 300 * u
+
+def eyedir(t):
+    px, py = ppos(t)
+    dx, dy = px - 500, py - 632
+    n = math.hypot(dx, dy) or 1
+    return dx / n, dy / n
 
 def glance(t):
     g = (t - (T1 - 1.4)) / 0.3          # eyes swing round during the last 1.4 s of shot 1
@@ -325,7 +341,7 @@ def render(t, cam_mode, ss):
         return finish(out, t)
     bg(X, t)
     bench(X)
-    man(X, t, shock=(t >= T2), arm_t=t, glance=glance(t))
+    man(X, t, shock=(t >= T2), arm_t=t, glance=glance(t), pv=eyedir(t))
     floor_pigeons(X, t)
     # the bench pigeon
     bx, by, bs = 790, 1005, 1.0
@@ -414,7 +430,7 @@ def main():
     secs = float(args[args.index("--secs") + 1]) if "--secs" in args else END
     ss = 1.5
     if "--sheet" in args:
-        times = [1.0, T1 + 0.05, T1 + 1.0, SAY + 0.5, T2 + 0.3, FLY + 0.6]
+        times = [T1 - 0.3, T2 + 0.3, FLY + 0.4, FLY + 0.9, FLY + 1.2, FLY + 2.0]
         ims = [render(t, mode(t), 1.0).resize((360, 640)) for t in times]
         sheet = Image.new("RGB", (360 * 3, 640 * 2))
         for i, im in enumerate(ims):
