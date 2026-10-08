@@ -247,9 +247,9 @@ CAMS = {
     'half': ((2.6, AX - 520 / 2.6, 918), (0.62, MAN_X + 250 / 0.62, -440)),
     'close': ((4.4, AX, 905), (0.7, -1700, -931)),
     'further': ((1.6, AX, 1060), (0.26, -1650, -1468)),
-    'wide': ((0.42, AX + 240, 599), (0.13, -400, -3545)),
+    'wide': ((0.42, AX + 240, 599), (0.13, -400, -2698)),
     'eyes': ((16.0, AX - 4, 886), (2.3, -1650, -1000)),
-    'lady': ((1.3, AX - 110, 1170), (0.39, 1500, -560)),
+    'lady': ((1.15, AX - 40, 1190), (0.36, 1480, -560)),
     'bigwolf': (None, (1.05, 430, -470)),
     'maul': (None, (1.35, MAN_X + 40, -260)),
 }
@@ -285,13 +285,6 @@ BASE, STOREY = -160, 1880                     # where the shop fronts meet the p
 
 def box(X, x0, y0, x1, y1, fill, sd=0, amt=6, line=True):
     X.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], amt, sd), fill, line=line)
-
-
-TAGS = [('KRAK', 0.12, 560, 150, (230, 60, 160), 0.12), ('OI!', 0.42, 640, 190, (60, 170, 230), -0.1),
-        ('ZEB', 0.7, 520, 170, (120, 220, 80), 0.08), ('MANC', 0.56, 1180, 150, (250, 200, 40), -0.06),
-        ('DZR', 0.85, 1250, 160, (240, 120, 40), 0.15), ('LOL', 0.25, 1380, 130, (160, 90, 220), -0.12),
-        ('BEEF', 0.9, 820, 120, (236, 236, 236), 0.05), ('2SAD', 0.33, 120, 110, (40, 200, 200), 0.04),
-        ('YIKES', 0.68, 1550, 110, (230, 50, 60), -0.05)]
 
 
 def sign_text(img, cam, x, y, s, size, fill, font=B.ANTON, stroke=0, angle=0.0):
@@ -389,12 +382,7 @@ def shop(img, cam, x0, x1, kind_):
         box(X, x0 + 300, BASE - STOREY + 700, x0 + 1000, BASE - STOREY + 1050, (236, 236, 228), 110, 8)     # TO LET, torn
         sign_text(img, cam, x0 + 650, BASE - STOREY + 875, 'TO LET', 130, (200, 30, 40))
         X.poly([(x0 + 900, BASE - STOREY + 1050), (x0 + 1000, BASE - STOREY + 960), (x0 + 1000, BASE - STOREY + 1050)], (184, 146, 94))
-        for k in range(9):                                                   # graffiti scrawls
-            gx, gy = x0 + 150 + rnd.uniform(0, x1 - x0 - 900), BASE - 1100 + rnd.uniform(0, 900)
-            X.d.line([cam_pt(cam, gx + 60 * q, gy + 40 * math.sin(q * 1.9 + k)) for q in range(8)],
-                     fill=[(40, 120, 200), (30, 30, 30), (200, 60, 160), (60, 160, 80)][k % 4], width=max(1, int(cam.S(16))))
-        for txt, fx, fy, size, col, ang in TAGS:                             # tags, sprayed over boards and fascia
-            sign_text(img, cam, x0 + fx * (x1 - x0), BASE - STOREY + fy, txt, size, col, stroke=4, angle=ang)
+        graffiti(img, cam, x0, x1)
     else:                                      # the outer shops of the wide shot: Cash 4 Gold, Nails & Vapes
         col, label, tc = ((40, 40, 46), 'CASH 4 GOLD', (236, 196, 60)) if kind_ == 'gold' else ((236, 170, 200), 'NAILS & VAPES', (40, 30, 60))
         box(X, x0, top + 160, x1, BASE - STOREY, (196, 170, 140) if kind_ == 'gold' else (168, 150, 140), 120 + len(kind_))
@@ -403,6 +391,98 @@ def shop(img, cam, x0, x1, kind_):
         box(X, x0, BASE - STOREY, x1, BASE, col, 125)
         sign_text(img, cam, (x0 + x1) / 2, BASE - STOREY + 220, label, 200, tc)
         window(X, x0 + 120, BASE - STOREY + 500, x1 - 120, BASE - 380, 126, (230, 230, 226), (90, 100, 110), (3, 1))
+
+
+def graffiti(img, cam, x0, x1):
+    """Graffiti on the boarded-up shop, drawn by hand in the show's lines: scrawled marker tags with drips, two
+    bubble-letter pieces, and crude doodles. All of it sits on the boards and fascia, a little faded."""
+    d = ImageDraw.Draw(img)
+    w = lambda v: max(1, int(cam.S(v)))
+    rnd = random.Random(23)
+    top, base = BASE - STOREY + 60, BASE - 60
+    # 1. scrawled tags: loopy one-stroke signatures in one colour, a few drips running down
+    for k in range(8):
+        col = [(40, 40, 46), (40, 110, 190), (190, 50, 140), (50, 140, 70), (220, 120, 40)][k % 5]
+        gx, gy = x0 + 120 + rnd.uniform(0, x1 - x0 - 700), rnd.uniform(top + 380, base - 200)
+        ph, n, h = rnd.uniform(0, 6), rnd.randint(9, 15), rnd.uniform(50, 90)
+        pts = [(gx + 30 * q + 26 * math.cos(q * 2.3 + ph), gy - h * (0.5 + 0.5 * math.sin(q * 1.7 + ph)) * (1 + 0.25 * math.sin(q * 0.6)))
+               for q in [i / 6 for i in range(n * 6)]]                             # smooth loops, like joined-up writing
+        pts.append((pts[-1][0] + 40, gy + 20))
+        pts.append((gx - 20, gy + 34))                                             # the underline swoosh back
+        d.line([cam.P(*p) for p in pts], fill=col, width=w(11), joint='curve')
+        for i in rnd.sample(range(len(pts) - 2), 2):                               # drips
+            px, py = pts[i]
+            ln = rnd.uniform(40, 120)
+            d.line([cam.P(px, py), cam.P(px + 2, py + ln)], fill=col, width=w(7))
+            X0, Y0 = cam.P(px + 2, py + ln)
+            r = cam.S(9)
+            d.ellipse([X0 - r, Y0 - r, X0 + r, Y0 + r], fill=col)
+    # 2. two bubble-letter pieces: fat rounded letters, black outline, a colour fill, a white shine; each letter tipped
+    for word, cx, cy, size, fill, sd in (('OI', x0 + 0.52 * (x1 - x0), top + 520, 300, (70, 170, 230), 1),
+                                         ('ZEB', x0 + 0.78 * (x1 - x0), base - 520, 250, (130, 220, 90), 2)):
+        rr = random.Random(sd)
+        px = cam.S(size)
+        if px < 6:
+            continue
+        f = ImageFont.truetype(CAP_FONT, int(px))
+        adv = 0.0
+        widths = [f.getlength(c) * 1.05 + px * 0.1 for c in word]
+        start = cx - cam.S(0) - sum(widths) / 2 / max(cam.z * B.SS, 1e-6) * 0
+        lx = cam.P(cx, cy)[0] - sum(widths) / 2
+        for c, cw in zip(word, widths):
+            o = int(px * 0.06)
+            lay = Image.new('RGBA', (int(px * 1.6), int(px * 1.8)), (0, 0, 0, 0))
+            ld = ImageDraw.Draw(lay)
+            pos = (lay.width / 2, lay.height / 2)
+            ld.text(pos, c, font=f, anchor='mm', fill=INK, stroke_width=o + max(2, int(px * 0.035)), stroke_fill=INK)
+            ld.text(pos, c, font=f, anchor='mm', fill=fill, stroke_width=o, stroke_fill=fill)
+            ld.ellipse([pos[0] - px * 0.2, pos[1] - px * 0.32, pos[0] - px * 0.08, pos[1] - px * 0.22], fill=(255, 255, 255))
+            lay = lay.rotate(rr.uniform(-12, 12), Image.BICUBIC, expand=False)
+            ly = cam.P(cx, cy)[1] + rr.uniform(-0.08, 0.08) * px
+            img.alpha_composite(lay, (int(lx + cw / 2 - lay.width / 2), int(ly - lay.height / 2)))
+            lx += cw
+    # 5. crude doodles in marker: a smiley, a heart with initials, a badly drawn wolf, DAZZA WOZ ERE
+    ink = (30, 30, 36)
+    sx, sy = x0 + 0.2 * (x1 - x0), top + 760                                       # the smiley
+    r = cam.S(90)
+    X, Y = cam.P(sx, sy)
+    d.ellipse([X - r, Y - r, X + r, Y + r], outline=ink, width=w(9))
+    for k in (-1, 1):
+        d.ellipse([X + k * r * 0.35 - r * 0.1, Y - r * 0.35, X + k * r * 0.35 + r * 0.1, Y - r * 0.12], fill=ink)
+    d.arc([X - r * 0.55, Y - r * 0.5, X + r * 0.55, Y + r * 0.55], 20, 160, fill=ink, width=w(9))
+    hx, hy = x0 + 0.36 * (x1 - x0), base - 330                                     # a heart, initials inside
+    heart = [(hx + 110 * 16 * math.sin(a) ** 3 / 17, hy - 110 * (13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a)
+              - math.cos(4 * a)) / 17) for a in [2 * math.pi * i / 40 for i in range(41)]]
+    d.line([cam.P(*p) for p in heart], fill=(200, 40, 60), width=w(9), joint='curve')
+    scrawl(img, cam, hx, hy - 10, 'D+K', 70, (200, 40, 60), 4)
+    wx, wy = x0 + 0.88 * (x1 - x0), top + 760                                      # a badly drawn wolf head
+    wolf_pts = [(-80, 0), (-60, -110), (-30, -40), (30, -40), (60, -110), (80, 0), (50, 70), (-50, 70), (-80, 0)]
+    d.line([cam.P(wx + a, wy + b) for a, b in wolf_pts], fill=ink, width=w(8), joint='curve')
+    d.line([cam.P(wx - 40 + 16 * i, wy + 40 + (12 if i % 2 else -6)) for i in range(6)], fill=ink, width=w(6))
+    for k in (-1, 1):
+        d.line([cam.P(wx + k * 22 - 10, wy - 10), cam.P(wx + k * 22 + 10, wy)], fill=ink, width=w(7))
+    scrawl(img, cam, x0 + 0.62 * (x1 - x0), base - 150, 'DAZZA WOZ ERE', 60, (40, 90, 170), 9)
+
+
+def scrawl(img, cam, x, y, text, size, col, seed):
+    """Words written by hand in marker: each letter its own slight tilt, size and height (never a straight typed line)."""
+    px = cam.S(size)
+    if px < 5:
+        return
+    rr = random.Random(seed)
+    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(px))
+    total = sum(f.getlength(c) for c in text)
+    X, Y = cam.P(x, y)
+    lx = X - total / 2
+    for c in text:
+        cw = f.getlength(c)
+        if c != ' ':
+            lay = Image.new('RGBA', (int(px * 1.6), int(px * 1.6)), (0, 0, 0, 0))
+            ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), c, font=ImageFont.truetype(
+                os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(px * rr.uniform(0.85, 1.15))), anchor='mm', fill=col)
+            lay = lay.rotate(rr.uniform(-14, 14), Image.BICUBIC)
+            img.alpha_composite(lay, (int(lx + cw / 2 - lay.width / 2), int(Y + rr.uniform(-0.12, 0.12) * px - lay.height / 2)))
+        lx += cw
 
 
 def cam_pt(cam, x, y):
@@ -524,70 +604,68 @@ def _shoppers():
 SHOPPERS = _shoppers()
 
 
+def _shopper_looks():
+    """Each shopper's look: Hope Again's conference-goers from the same people library, changed up (no lanyards, everyday
+    coats and colours, different hair), so the street matches the show's usual people."""
+    rng = np.random.default_rng(31)
+    out = []
+    coats = [(120, 40, 50), (60, 90, 140), (150, 120, 90), (90, 90, 96), (176, 88, 140), (50, 120, 110), (200, 160, 60)]
+    for k in range(len(SHOPPERS)):
+        sp = B.attendee(rng)
+        sp.update(lanyard=False, pose='custom', full=False, mouth='line', name=f'shopper {k + 1}',
+                  jacket=coats[k % len(coats)], dress=coats[k % len(coats)],
+                  trousers=[(40, 42, 50), (70, 60, 50), (30, 30, 34), (90, 80, 70)][k % 4])
+        out.append(sp)
+    return out
+
+
+SHOPPER_LOOKS = _shopper_looks()
+
+
 def shoppers(img, cam, t, back):
+    """People going about their day along the pavement, front-on as the show draws everyone, heads turned the way they
+    walk; now and then eyes and head snap to the wolves or the Prime Minister, then back."""
     X = X_(img, cam)
-    for t0, x0, d, lane, size, pal, sd, g in SHOPPERS:
+    for k, (t0, x0, d, lane, size, pal, sd, g) in enumerate(SHOPPERS):
         if (lane < 0) != back or t < t0:
             continue
         x = x0 + d * 640 * (t - t0)
-        if not -7500 < x < 7500:
+        sx = cam.P(x, lane)[0] / B.SS
+        if not -300 < sx < 1380:
             continue
         look = next((w for a, b, w in g if a <= t < b), None)
-        head = 'front' if look == 'pm' else (1 if MAN_X > x else -1) if look == 'wolves' else d
-        walker(X, x, lane, S * size * 1.2, d, ((t - t0) * 0.95 + sd * 0.37) % 1.0, head, SHOPPER_PALS[pal], bag=sd % 3 != 0)
-
-
-def walker(X, x, y, s, face, ph, head, pal, bag=True):
-    """A shopper side-on, walking, Satire style. head: +1/-1 = the way the face points; 'front' = turned to us."""
-    coat, trousers, skin, bagc = pal
-    hair = (60, 44, 34) if skin[0] > 200 else (30, 26, 24)
-    P = lambda dx, dy: (x + face * dx * s, y + dy * s)
-    w = 2 * math.pi * ph
-    bob = 10 * abs(math.sin(w))
-
-    def leg(a, col):
-        bend = 0.6 * max(0.0, -math.cos(w + (0 if col is trousers else math.pi)))
-        hip = P(0, -450 - bob)
-        knee = P(230 * math.sin(a), -450 - bob + 230 * math.cos(a))
-        ank = (knee[0] + face * 220 * s * math.sin(a - bend), knee[1] + 220 * s * math.cos(a - bend))
-        limb(X, hip, knee, 70 * s, col)
-        limb(X, knee, ank, 60 * s, col)
-        X.ell(ank[0] + face * 30 * s, ank[1] + 6 * s, 52 * s, 22 * s, (40, 34, 32))
-    leg(-0.42 * math.sin(w), B.dk(trousers, 0.8))                       # far leg
-    sw = 0.45 * math.sin(w)
-    sh = P(0, -770 - bob)
-    far_hand = P(-170 * math.sin(-sw) * 1.0 + 10, -770 - bob + 300)
-    limb(X, sh, (sh[0] + face * 300 * s * math.sin(sw), sh[1] + 300 * s * math.cos(sw)), 52 * s, B.dk(coat, 0.8))
-    leg(0.42 * math.sin(w), trousers)                                   # near leg
-    X.poly([P(-60, -800 - bob), P(62, -800 - bob), P(84, -600 - bob), P(92, -420 - bob), P(-74, -420 - bob), P(-80, -600 - bob)], coat)
-    hand = (sh[0] + face * 300 * s * math.sin(-sw), sh[1] + 300 * s * math.cos(-sw))
-    limb(X, sh, hand, 56 * s, coat)
-    X.ell(hand[0], hand[1], 24 * s, 24 * s, skin)
-    if bag:                                                             # a shopping bag swinging from the near hand
-        X.seg(hand, (hand[0] - face * 20 * s, hand[1] + 60 * s), 5 * s)
-        X.poly(rough([(hand[0] - 70 * s, hand[1] + 50 * s), (hand[0] + 70 * s, hand[1] + 50 * s),
-                      (hand[0] + 80 * s, hand[1] + 200 * s), (hand[0] - 80 * s, hand[1] + 200 * s)], 4, 5), bagc)
-    hx, hy = P(6, -900 - bob)
-    X.ell(hx, hy + 70 * s, 26 * s, 30 * s, skin, line=False)
-    if head == 'front':                                                 # turned to look at the Prime Minister
-        X.ell(hx, hy, 66 * s, 78 * s, skin)
-        X.poly([(hx - 66 * s, hy - 20 * s), (hx - 50 * s, hy - 74 * s), (hx + 50 * s, hy - 74 * s), (hx + 66 * s, hy - 20 * s),
-                (hx + 40 * s, hy - 50 * s), (hx - 40 * s, hy - 50 * s)], hair)
-        for k in (-1, 1):
-            X.ell(hx + k * 24 * s, hy - 6 * s, 9 * s, 9 * s, (250, 250, 248))
-            X.ell(hx + k * 24 * s, hy - 6 * s, 4 * s, 4 * s, OUT, line=False)
-        X.seg((hx - 16 * s, hy + 36 * s), (hx + 16 * s, hy + 36 * s), 3 * s)
-        return
-    f = head
-    X.ell(hx, hy, 64 * s, 78 * s, skin)
-    X.poly([(hx + f * 66 * s, hy - 6 * s), (hx + f * 90 * s, hy + 18 * s), (hx + f * 62 * s, hy + 26 * s)], skin)   # nose
-    X.poly([(hx - f * 68 * s, hy + 20 * s), (hx - f * 64 * s, hy - 50 * s), (hx - f * 20 * s, hy - 82 * s), (hx + f * 50 * s, hy - 70 * s),
-            (hx + f * 40 * s, hy - 42 * s), (hx - f * 30 * s, hy - 40 * s)], hair)
-    X.ell(hx - f * 12 * s, hy + 6 * s, 12 * s, 18 * s, skin)                                                          # ear
-    X.ell(hx + f * 36 * s, hy - 8 * s, 9 * s, 9 * s, (250, 250, 248))
-    X.ell(hx + f * 40 * s, hy - 8 * s, 4 * s, 4 * s, OUT, line=False)
-    X.seg((hx + f * 30 * s, hy + 44 * s), (hx + f * 56 * s, hy + 42 * s), 3 * s)
-
+        sp = dict(SHOPPER_LOOKS[k])
+        sc = S * size
+        rig = F.Rig(sp)
+        ph = ((t - t0) * 0.95 + sd * 0.37) % 1.0
+        sw = math.sin(2 * math.pi * ph)
+        sp['arms'] = {side: rig.arm(side, (sg * 165, 425 + 40 * sg * sw), 'fist', 'depth', strict=False)
+                      for side, sg in (('L', -1), ('R', 1))}
+        if look == 'pm':
+            sp['turn'], sp['look'] = 0.0, 0.0                       # a glance straight at him
+        elif look == 'wolves':
+            sp['turn'] = 0.45 if MAN_X > x else -0.45
+            sp['look'] = 0.9 if MAN_X > x else -0.9
+        else:
+            sp['turn'], sp['look'] = 0.45 * d, 0.8 * d             # facing the way they walk
+        sp['blink'] = ((t + sd) % 3.7) < 0.12
+        bob = 10 * abs(sw)
+        neck = lane - (F.SOLE_Y + bob) * sc
+        for side in (-1, 1):                                        # walking legs: one foot lifting, then the other
+            up = max(0.0, sw * side)
+            hip = (x + side * 52 * sc, neck + 450 * sc)
+            knee = (x + side * 60 * sc, neck + (690 - 60 * up) * sc)
+            foot = (x + side * 58 * sc, neck + (F.SOLE_Y + bob - 10 - 70 * up) * sc)
+            limb(X, hip, knee, 74 * sc, sp['trousers'])
+            limb(X, knee, foot, 60 * sc, sp['trousers'])
+            X.ell(foot[0], foot[1] + 4 * sc, 54 * sc, 24 * sc, (36, 32, 30))
+        B.person(img, cam, x, neck, sc, sp, t)
+        if sd % 3 != 0:                                             # a shopping bag from one hand
+            el, wr = sp['arms']['R'][:2]
+            hx, hy = x + wr[0] * sc, neck + (wr[1] + 30) * sc
+            X.seg((hx, hy), (hx, hy + 50 * sc), 5 * sc)
+            X.poly(rough([(hx - 60 * sc, hy + 45 * sc), (hx + 60 * sc, hy + 45 * sc), (hx + 70 * sc, hy + 190 * sc),
+                          (hx - 70 * sc, hy + 190 * sc)], 4, sd), SHOPPER_PALS[pal][3])
 
 # ------------------------------------------------------------------------------------------------- the kill
 PACK = [   # (offset from the man, depth (+ = nearer), facing, palette, phase of its feeding): shot 2's five wolves
@@ -664,10 +742,12 @@ def kill(img, cam, t, alone=None):
                 W.meat(X, land[0], land[1] - sz * 0.4, sz, sd)
         if not downed:
             the_man(img, cam, t)
-        else:
-            man_under(X)
     order = sorted(range(5), key=lambda i: PACK[i][1])
+    laid = False
     for i in order:
+        if alone is None and downed and not laid and PACK[i][1] > -45:   # he lies between the back wolves and the front two
+            man_down(img, cam, t)
+            laid = True
         if alone is not None and i != alone:
             continue
         st = wolf_kill_state(i, t)
@@ -687,15 +767,24 @@ def kill(img, cam, t, alone=None):
                 W.meat(X, x, y, sz, sd + int(u * 12))
 
 
-def man_under(X):
-    """All that shows of the man under the pack: his legs in black trackies, his white trainers, a scrap of sky blue."""
-    for k, (dx, ang) in enumerate(((0, 0.12), (60, -0.1))):
-        a = (MAN_X + 250 + dx, -30 + 10 * k)
-        b = (a[0] + 380 * math.cos(ang), a[1] + 380 * math.sin(ang) - 20)
-        limb(X, a, b, 90, MAN['trousers'])
-        X.rell(b[0] + 60, b[1] - 10, 78, 44, ang - 0.4, (250, 250, 248))           # white trainers, toes up
-        X.seg((b[0] + 30, b[1] - 40), (b[0] + 90, b[1] + 10), 10, (210, 210, 214))
-    blob(X, [(MAN_X + 40, -60, 220, 90, 0.05)], MAN['jacket'], ol=4)
+def man_down(img, cam, t):
+    """The man after the attack: the same character, flat on his back on the pavement under the pack, head towards the
+    pub door, an arm flung up, eyes shut, mouth open. Drawn standing on a layer, then laid down (turned a quarter turn)."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    hip = (MAN_X + 80, -125)                                      # where his hips rest (half a body's depth off the ground)
+    neck = hip[1] - 440 * S
+    sp = dict(MAN)
+    rig = F.Rig(sp)
+    sp['arms'] = {'L': rig.arm('L', (-300, 120), 'fist', 'out', strict=False),
+                  'R': rig.arm('R', (230, 330), 'fist', 'depth', strict=False)}
+    sp.update(blink=True, mouth='v:O', brows='alarm', look=0.0, tilt=0.0)
+    B.person(lay, cam, hip[0], neck, S, sp, t)
+    X = X_(lay, cam)
+    for k in (-1, 1):                                              # his white trainers, toes up
+        X.rell(hip[0] + k * 70 * S, neck + 918 * S, 62 * S, 22 * S, 0, (250, 250, 248))
+    X.ell(hip[0] - 60 * S, neck + 120 * S, 18 * S, 20 * S, (30, 50, 100))
+    px, py = cam.P(*hip)
+    img.alpha_composite(lay.rotate(90, Image.BICUBIC, center=(px, py)))
 
 
 def the_man(img, cam, t):
@@ -731,7 +820,7 @@ GEST = {
                  (3.8, 'down', (190, 330), 'fast'), (5.0, 'settle', (170, 320), 'slow'))),
     3: dict(R=B_(3, (0.0, 'set-up', (150, 330)), (0.8, 'offer', (230, 260)), (2.2, 'turn', (200, 300)),
                  (3.2, 'offer', (240, 250)), (4.6, 'settle', (160, 330), 'slow'))),
-    6: dict(L=B_(6, (-0.2, 'set-up', (-200, 300)), (0.2, 'thumb', (-330, 150), 'fast'), (6.0, 'hold', (-325, 156)))),
+    6: dict(L=B_(6, (-0.2, 'set-up', (-200, 300)), (0.2, 'thumb', (-310, 215), 'fast'), (6.0, 'hold', (-305, 220)))),
     8: dict(L=B_(8, (-0.1, 'set-up', (-60, 260)), (0.3, 'together', (-30, 190)), (0.9, 'press', (-30, 220)),
                  (1.4, 'together', (-30, 180)), (3.0, 'hold', (-30, 200))),
             R=B_(8, (-0.1, 'set-up', (60, 260)), (0.3, 'together', (30, 190)), (0.9, 'press', (30, 220)),
@@ -802,10 +891,16 @@ def line_of_t(t):
     return LINES[shot_at(t)[3]]['n']
 
 
+WIDE_X = -1200                                # shot 12: he stands on the street itself, among the shoppers, at their size
+
+
 def andy(img, cam, t, x=AX):
     n = line_of_t(t)
     sp = andy_sp(t, n)
-    B.person(img, cam, x, NECK, S, sp, t)
+    neck = NECK
+    if kind(t) == 'wide':
+        cam, x, neck = cams(t)[1], WIDE_X, 200 - F.SOLE_Y * S
+    B.person(img, cam, x, neck, S, sp, t)
     if n == 15:                                    # the face-palm: forearm and hand come in front of his face
         p = B.Pen(img, B.Local(cam, x, NECK, S))
         el, wr = sp['arms']['R'][:2]
@@ -857,15 +952,25 @@ def stressed_eyes(img, cam, x, sp, t, lv):
 
 # ------------------------------------------------------------------------------------------------- the old lady
 LADY_X = AX - 60                             # shot 6: she stands to his right (our left)
-ANDY6_X = AX + 240
+ANDY6_X = AX + 300
 LADY_NECK = FY - F.SOLE_Y * LADY_S
+
+
+ARM_OUT = filmkit.Beats([(0.0, 'set-up', (-190, 380)), (0.35, 'offered', (-480, 75), 'slow')])
+BITE = 0.5                                    # seconds after the armour: the wolf lunges in and clamps on
+
+
+def lady_arm(rig, t):
+    """Her left arm: hanging by her side; once armoured, she holds it straight out for the wolf, unbothered."""
+    if t < ARMOUR:
+        return rig.arm('L', (-150, 400), 'fist', 'depth', strict=False)
+    return rig.arm('L', ARM_OUT.at(t - ARMOUR), 'fist', 'down', strict=False)
 
 
 def lady_sp(t):
     sp = dict(LADY)
     rig = F.Rig(sp)
-    sp['arms'] = {'L': rig.arm('L', (-150, 400), 'fist', 'depth', strict=False),
-                  'R': rig.arm('R', (120, 380), 'fist', 'depth', strict=False)}
+    sp['arms'] = {'L': lady_arm(rig, t), 'R': rig.arm('R', (120, 380), 'fist', 'depth', strict=False)}
     sp['look'] = -0.55                                 # far away: somewhere over our left shoulder
     sp['brows'], sp['lid'] = None, 5
     sp['mouth'] = 'line'
@@ -946,23 +1051,27 @@ def wolfproof(img, p, sp):
 
 
 def biter(img, cam, t, alone=False):
-    """The wolf hanging off her left forearm guard, biting uselessly: rearing, jaws clamped, tugging now and then."""
+    """One of the government's smaller wolves (60%, shot 4's), reared up on its hind legs, jaws clamped on her outstretched
+    Kevlar sleeve, gnawing uselessly and tugging now and then."""
+    if t < ARMOUR + BITE - 0.15:
+        return
     rig = F.Rig(LADY)
-    el, wr, _ = rig.arm('L', (-150, 400), 'fist', 'depth', strict=False)
+    el, wr, _ = lady_arm(rig, t)
     tx, ty = LADY_X + (el[0] + 0.6 * (wr[0] - el[0])) * LADY_S, LADY_NECK + (el[1] + 0.6 * (wr[1] - el[1])) * LADY_S
     tug = filmkit.shifts(t, seed=33, amount=1.0, hold=(0.35, 0.7), move=0.1)
     probe = Image.new('RGBA', (2, 2))
     best = None                                   # stood on all fours on the pavement, tipped until its jaws meet her arm
-    for k in range(-30, 31):
+    for k in range(-60, 31):
         a = k * 0.02
-        jaw = W.side(X_(probe, cam), 0, 0, WOLF_S, 1, 0, ang=a, jaw=0.1)
+        jaw = W.side(X_(probe, cam), 0, 0, WOLF_S * 0.6, 1, 0, ang=a, jaw=0.1)
         err = abs(FY + jaw[1] - ty)
         if best is None or err < best[0]:
             best = (err, a, jaw)
     _, a, jaw = best
     X = X_(img, cam)
     chew = 0.08 + 0.32 * abs(math.sin((t - ARMOUR) * 2 * math.pi * 1.6))   # jaws working away at the sleeve
-    j = W.side(X, tx - jaw[0] - 6 * tug, FY, WOLF_S, 1, 0, ang=a + 0.02 * tug, jaw=chew, snarl=1.0, seed=7)
+    lunge = max(0.0, 1.0 - (t - (ARMOUR + BITE - 0.15)) / 0.15) * 700     # it springs in from the left
+    j = W.side(X, tx - jaw[0] - 6 * tug - lunge, FY, WOLF_S * 0.6, 1, 0, ang=a + 0.02 * tug, jaw=chew, snarl=1.0, seed=7)
     if chew < 0.14:                                                 # teeth skid off the Kevlar: two little scrape marks
         for k in (-1, 1):
             X.seg((tx + 18 * k - 8, ty - 30), (tx + 18 * k + 8, ty - 52), 4, (250, 250, 250))
@@ -995,18 +1104,21 @@ ALLEY_VP = (540, 760)
 NET_D, NET_Y0, NET_Y1, ALLEY_W = 7.0, 1.15, 2.75, 1.4
 
 
+NET_BAR = 3.2                                 # the rolled-up net hangs on a bar this high (metres): he runs under it
+NET_FALL = 0.32                               # seconds from release to landing on the wolf
+
+
+def first_tangle():
+    """The moment (seconds into shot 5) the net lands on the wolf: as it reaches the spot under the bar."""
+    return (19.5 - NET_D - 0.05) / 6.6
+
+
 def alley_run(t):
-    """(the man's depth, duck 0-1; the wolf's depth, leap 0-1, tangled) at time t (shot 5)."""
+    """(the man's depth, duck (none now); the wolf's depth, leap (none), pinned under the net) at time t (shot 5)."""
     u = t - SHOTS[4][1]
     man_d = 17.0 - 6.2 * u
-    duck = max(0.0, 1.0 - abs(man_d - NET_D) / 1.6)
-    wolf_d = 19.5 - 6.6 * u
-    leap = None
-    tangled = wolf_d <= NET_D + 0.05
-    if wolf_d < NET_D + 3.0:
-        leap = min(1.0, (NET_D + 3.0 - wolf_d) / 2.0)
-    wolf_d = max(wolf_d, NET_D + 0.05)
-    return man_d, duck, wolf_d, leap, tangled, u
+    wolf_d = max(19.5 - 6.6 * u, NET_D + 0.05)
+    return man_d, 0.0, wolf_d, None, u >= first_tangle(), u
 
 
 def alley(img, t, only=None):
@@ -1050,7 +1162,7 @@ def alley_wolf(X, wolf_d, leap, tangled, u):
         s = WOLF_S * k
         if tangled:
             struggle = u
-            W.front(X, gx, gy - 220 * s * 0.2, s, 3, net=True, struggle=struggle, jaw=0.7 + 0.3 * math.sin(u * 9), seed=3)
+            W.front(X, gx, gy, s * 0.92, 3, net=True, struggle=struggle, jaw=0.7 + 0.3 * math.sin(u * 9), seed=3)
         else:
             lift = 0.0 if leap is None else 330 * s * math.sin(min(1.0, leap) * math.pi * 0.5)
             W.front(X, gx, gy - lift, s, 3, run=(u * 2.6) % 1.0 if leap is None else None, leap=leap, seed=3)
@@ -1071,64 +1183,71 @@ def alley_man(img, X, d, duck, u):
     rig = F.Rig(sp)
     ph = (u * 3.0) % 1.0                                           # three strides a second, arms pumping
     sw = math.sin(2 * math.pi * ph)
-    sp['arms'] = {'L': rig.arm('L', (-190, 240 - 110 * sw), 'fist', 'down', strict=False),
-                  'R': rig.arm('R', (190, 240 + 110 * sw), 'fist', 'down', strict=False)}
+    def pump(side):                                                # elbows bent at his sides, hands pumping in turn:
+        f = 0.5 + 0.5 * side * sw                                  # forward = fist up in front of his stomach,
+        return (side * (175 - 115 * f), 360 - 210 * f)            # back = fist down by his hip
+    sp['arms'] = {'L': rig.arm('L', pump(-1), 'fist', 'out', strict=False),
+                  'R': rig.arm('R', pump(1), 'fist', 'out', strict=False)}
     sp['full'] = False
-    sp.update(brows='alarm', lid=-2, mouth='v:A', look=0.0, tilt=0.12 * duck)
-    drop = 260 * duck                                              # ducking: knees bend, the body drops
-    neck = gy - (F.SOLE_Y - drop) * sc
+    sp.update(brows='alarm', lid=-2, mouth='v:AI', look=0.0, tilt=0.0)
+    bob = 18 * abs(sw)                                             # up on each stride
+    neck = gy - (F.SOLE_Y + bob) * sc
     cam = B.Cam(1.0, 540, 960)
     Xp = Ctx(ImageDraw.Draw(img), SCam(540, 960, 1.0, B.SS), ol=4)
-    for side in (-1, 1):                                           # running legs, front-on: one knee up at a time
-        up = max(0.0, sw * side)
-        hip = (gx + side * 55 * sc, neck + 440 * sc)
-        knee = (gx + side * 70 * sc, neck + (700 - 160 * up - drop * 0.5) * sc)
-        foot = (gx + side * 66 * sc, gy - (130 * up + 10) * sc)
-        limb(Xp, hip, knee, 96 * sc, MAN['trousers'])
-        limb(Xp, knee, foot, 80 * sc, MAN['trousers'])
-        Xp.ell(foot[0], foot[1] + 6 * sc, 60 * sc, 28 * sc, (250, 250, 248))
+    for side in (-1, 1):                                           # front-on stride: the lifted knee comes up and at us,
+        up = max(0.0, -sw * side)                                  # its foot tucked under; the other leg drives down
+        hip = (gx + side * 52 * sc, neck + 450 * sc)
+        knee = (gx + side * 62 * sc, neck + (690 - 190 * up) * sc)
+        foot = (gx + side * 58 * sc, neck + (F.SOLE_Y + bob - 10 - 230 * up) * sc)
+        limb(Xp, hip, knee, 74 * sc, MAN['trousers'])
+        limb(Xp, knee, foot, 58 * sc, MAN['trousers'])
+        Xp.ell(foot[0], foot[1] + 4 * sc, 52 * sc, 24 * sc, (250, 250, 248))
     B.person(img, cam, gx, neck, sc, sp, u)
 
 
 def net(img, X, t, tangled, u):
-    """The wolf net hung across the alley on a bar; it bulges where the wolf hits it, then sags round it and stays."""
+    """The council wolf net: rolled up on a bar high across the alley; as the wolf comes under it, it unrolls, drops over
+    the wolf and pins it to the ground, where it stays draped over it as the wolf thrashes."""
     vp = ALLEY_VP
     P = lambda x, y: proj(x, y, NET_D, vp)
-    a, b = P(-ALLEY_W, NET_Y1 + 0.05), P(ALLEY_W, NET_Y1 + 0.05)
-    X.seg(a, b, 16, (90, 90, 96))
-    wolf_c = P(0.1, 1.2)
-    hit = 0.0 if not tangled else min(1.0, (u - first_tangle()) / 0.15)
-    pts = {}
-    nx, ny = 16, 10
-    for i in range(nx + 1):
-        for j in range(ny + 1):
-            xx = -ALLEY_W + 2 * ALLEY_W * i / nx
-            yy = NET_Y1 - (NET_Y1 - NET_Y0) * j / ny
-            sag = 0.0
-            if tangled:                                            # sags down round the wolf (and stays)
-                sag = 0.9 * hit * (j / ny) * math.exp(-((xx - 0.1) / 0.9) ** 2)
-            px, py = P(xx, yy - sag)
-            dx, dy = px - wolf_c[0], py - wolf_c[1]
-            r = math.hypot(dx, dy)
-            bul = 1.0 + 0.18 * hit * math.exp(-(r / 300) ** 2)        # bulging at us where the wolf hit
-            pts[i, j] = (wolf_c[0] + dx * bul, wolf_c[1] + dy * bul)
+    a, b = P(-ALLEY_W, NET_BAR + 0.08), P(ALLEY_W, NET_BAR + 0.08)
+    X.seg(a, b, 14, (90, 90, 96))                                              # the bar
+    rel = first_tangle() - NET_FALL
     col = (226, 214, 180)
-    for i in range(nx + 1):
-        for j in range(ny):
+    if u < rel:                                                                # rolled up, waiting
+        ra, rb = P(-ALLEY_W + 0.05, NET_BAR - 0.08), P(ALLEY_W - 0.05, NET_BAR - 0.08)
+        X.seg(ra, rb, 34, OUT)
+        X.seg(ra, rb, 28, col)
+        for k in range(1, 9):
+            q = (ra[0] + (rb[0] - ra[0]) * k / 9, ra[1] + (rb[1] - ra[1]) * k / 9)
+            X.seg((q[0] - 6, q[1] - 12), (q[0] + 6, q[1] + 12), 3, (170, 160, 130))
+        return
+    nx, ny = 16, 10
+    s_ = WOLF_S * FOC / NET_D
+    gx, gy = proj(0.1, 0.0, NET_D + 0.05, vp)
+    R, H = 255 * s_, 480 * s_                                                  # the dome it makes over the wolf
+    f = min(1.0, (u - rel) / NET_FALL)                                         # falling and unrolling
+    m = min(1.0, max(0.0, (u - first_tangle()) / 0.15))                        # settling into a drape
+    m = m * m * (3 - 2 * m)
+    wob = 0.0 if m < 1 else 8 * math.sin(u * 7.0)                              # tugged about as the wolf thrashes
+    pts = {}
+    for i_ in range(nx + 1):
+        for j_ in range(ny + 1):
+            uu, vv = -1 + 2 * i_ / nx, j_ / ny
+            top_y = NET_BAR - (NET_BAR - 0.0) * f * f                          # the sheet: hanging from where it fell
+            sx, sy = P(uu * ALLEY_W * 0.9, top_y - vv * min(NET_BAR, 2.6) * f * 0.9)
+            dome_top = gy - H * math.sqrt(max(0.0, 1 - uu * uu))
+            dx = gx + uu * R * (1 + 0.45 * vv) + wob * (1 - vv)
+            dy = dome_top * (1 - vv) + (gy + 6) * vv
+            pts[i_, j_] = (sx + (dx - sx) * m, sy + (dy - sy) * m)
+    for i_ in range(nx + 1):
+        for j_ in range(ny):
             for di in (-1, 1):
-                if 0 <= i + di <= nx:
-                    X.seg(pts[i, j], pts[i + di, j + 1], 4, col)
-    if tangled:                                                    # a paw and the snout poke through the mesh
-        k = FOC / NET_D
-        s = WOLF_S * k
-        gx, gy = proj(0.1, 0.0, NET_D + 0.05, vp)
+                if 0 <= i_ + di <= nx:
+                    X.seg(pts[i_, j_], pts[i_ + di, j_ + 1], 4, col)
+    if tangled and m >= 1:                                                     # a paw shoved through the mesh
         w = math.sin(u * 7 - 1)
-        X.ell(gx - (120 + 12 * w) * s, gy - 44 * s - (110 - 40 * w) * s * 0.2 - 66 * s, 26 * s, 18 * s, W.PALS[3][0])
-
-
-def first_tangle():
-    """The moment (seconds into shot 5) the wolf hits the net."""
-    return (19.5 - NET_D - 0.05) / 6.6
+        X.ell(gx - (120 + 12 * w) * s_, gy - 120 * s_ - 30 * w * s_, 26 * s_, 18 * s_, W.PALS[3][0])
 
 
 # ---- shot 20: running for it, filming himself over his shoulder
@@ -1190,7 +1309,7 @@ def run_andy(img, t):
     sp['tilt'] = -0.08 + (0.08 if back else 0.0)
     sp['lid'] = -3
     if sp['mouth'] == 'v:rest':
-        sp['mouth'] = 'v:A'                                         # panting
+        sp['mouth'] = 'v:AI'                                         # panting
     B.person(img, cam, AX, NECK, S, sp, t)
 
 
@@ -1216,10 +1335,8 @@ def picture(t):
     if k == 'maul':
         return img
     if k == 'lady':
-        biting = t >= ARMOUR
-        if biting:
-            biter(img, ac, t)
         the_lady(img, ac, t)
+        biter(img, ac, t)                                  # in front of her arm: its jaws round the sleeve
         andy(img, ac, t, ANDY6_X)
         return img
     andy(img, ac, t)
