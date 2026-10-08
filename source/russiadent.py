@@ -3000,13 +3000,37 @@ def soundtrack():
 
 
 # ------------------------------------------------------------------------------------------- render
+def overlays(img, t):
+    """Captions and the title go on LAST, on the finished picture, so a wording or timing note never needs the
+    picture re-rendered (same order and same code as frame_image)."""
+    if t < T['black']:
+        c = caption_at(t)
+        if c:
+            PP.caption(img, c)
+        if t < 2.0:
+            title_frame(img, t)
+    return img
+
+
 def render_frame(args):
-    i, size, ss = args
+    i, size, ss, cache, reuse = args
     B.SS = ss
-    return np.asarray(frame_image(i / FPS).convert('RGB').resize(size, Image.LANCZOS)).tobytes()
+    t = i / FPS
+    path = os.path.join(cache, f'{i:04d}.png') if cache else None
+    if path and reuse and os.path.exists(path):
+        pic = Image.open(path)
+        pic.load()
+    else:
+        pic = frame_image(t, captions=False, title=False)
+        if path:
+            pic.save(path, compress_level=1)
+    return np.asarray(overlays(pic, t).convert('RGB').resize(size, Image.LANCZOS)).tobytes()
 
 
-def render(out, size, crf, ss):
+def render(out, size, crf, ss, reuse=False, redo=()):
+    """Frames are cached (pictures only). reuse=True with redo=('reverse', ...) re-renders only those shots and takes
+    every other frame from the cache of the last full render at this size (the cache lives in $FILM_CACHE or
+    ~/.cache/filmcache and is only trusted when asked for: it cannot know what code changed)."""
     import subprocess
     import imageio_ffmpeg
     from multiprocessing import Pool
@@ -3015,12 +3039,17 @@ def render(out, size, crf, ss):
     print(f'sound: {MA.lufs(mix):.1f} LUFS, peak {MA.true_peak_db(mix):.1f} dBTP', flush=True)
     MA.write_wav(wav, mix)
     n = int(round(T['dur'] * FPS))
+    cache = os.path.join(os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache')),
+                         f'russiadent-{size[0]}x{size[1]}-ss{ss}')
+    os.makedirs(cache, exist_ok=True)
+    redo_set = {i for i in range(n) if shot_at(i / FPS)[0] in redo}
+    print(f'picture cache: {cache}' + (f' (re-rendering shots {sorted(redo)}, reusing the rest)' if reuse else ''), flush=True)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
                           '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
                           '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss) for i in range(n)], chunksize=2)):
+        for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss, cache, reuse and i not in redo_set) for i in range(n)], chunksize=2)):
             p.stdin.write(fr)
             if k % 24 == 0:
                 print(f'frame {k}/{n}', flush=True)
@@ -3030,10 +3059,196 @@ def render(out, size, crf, ss):
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.1f} MB)', flush=True)
 
 
+def check_mouths():
+    """Every stretch of speech must move his mouth (once, "Ministry of Health" got through with a still mouth)."""
+    for start, (v, stretches) in ((0.30, rec_lines()[0]), (W2[0][1], rec_lines()[1])):
+        for a, b in stretches:
+            if b - a < 0.25:
+                continue
+            moving = sum(max(0.0, min(b, y1 - start) - max(a, y0 - start)) for y0, y1, sh in TRACK if sh != 'rest')
+            if moving < 0.5 * (b - a):
+                raise ValueError(f'check: no mouth movement for the speech at {start + a:.2f}-{start + b:.2f} s')
+
+
+def print_subtitles():
+    """The subtitles as plain text with their times, to proofread before a render (not after)."""
+    rows, last = [], None
+    for i in range(int(T['black'] * FPS) + 1):
+        c = caption_at(i / FPS)
+        if c != last:
+            rows.append((i / FPS, c))
+            last = c
+    print('subtitles:')
+    for (t, c), nxt in zip(rows, rows[1:] + [(T['black'], None)]):
+        if c:
+            print(f'  {t:6.2f}-{nxt[0]:6.2f} s  {c}')
+
+
+def _in_frame(pc, cam, X, Z, pad=60):
+    if pc.depth(Z, X) < 0.6:
+        return False
+    sx, sy = pc.P(X, 1.2, Z)
+    return abs(sx - cam.cx) * cam.z < 540 + pad and abs(sy - cam.cy) * cam.z < 960 + pad
+
+
+def check_closeups_seen_in_wides():
+    """Anyone in the close-up's background must already have been seen in shot 2 or 3 (Sam's rule)."""
+    pc2, cam2 = cam_reverse()
+    pc3, cam3 = PCam(-0.45, 0.42, 1.85, 1, 1150.0, oy=1180.0), B.Cam(1.0, 540, 960)
+    s2s3 = [(pc2, cam2, i / 12) for i in range(int((T['s3'] - T['s2']) * 12))] + \
+           [(pc3, cam3, (T['s3'] - T['s2']) + i / 12) for i in range(int((T['s3b'] - T['s3']) * 12))]
+    for w in CROWD:
+        if w['kind'] == 'heroine':
+            continue
+        seen = any(_in_frame(pc, cam, *where(w, t)) for pc, cam, t in s2s3)
+        for j in range(int((T['s4'] - T['s3b']) * 4)):
+            tl = (T['s3b'] - T['s3']) + j / 4
+            X = heroine_x(tl)
+            pcf = PCam(X + 0.12, 0.5, CRAWL_Z - 0.9, 1, 2300.0, oy=960.0)
+            x, y = pcf.P(X, 0.0, CRAWL_Z)
+            sc = pcf.scale(CRAWL_Z, X)
+            camf = B.Cam(1.0, x - 208 * sc + 40 * sc, y - 468 * sc + 90 * sc)
+            since = (T['s3'] - T['s2']) + tl
+            if w['z'] >= 2.7 and _in_frame(pcf, camf, *where(w, since)) and not seen:
+                raise ValueError(f"check: {w['kind']} {w['k']} is in the close-up at {T['s3'] + tl:.1f} s but never "
+                                 f"seen in shot 2 or 3")
+
+
+MARKS = [dict(name='podium smear (shot 1)', box=(0, 1450, 760, 1920), colour=BLOOD_D, tol=70, min=150,
+              times=[T['slap'] + 1.6, 11.0]),
+         dict(name='podium smear (last shot)', box=(0, 1450, 760, 1920), colour=BLOOD_D, tol=70, min=150,
+              times=[T['s5'] + 0.3, T['s5'] + 2.0])]
+
+
 def checks():
     """Every check that stops a bad render before it starts (best-practice 1.3, guides/preflight.md)."""
     check_crowd()
     check_outfits()
+    check_mouths()
+    check_closeups_seen_in_wides()
+    print_subtitles()
+
+
+FAST_OK = {('zombie', 5): (1.5, 4.0, 'thrown by the chair; the blood pool under its head is a separate shape'), ('zombie', 20): (0.55, 1.35, 'topples through the window'),
+           ('zombie', 21): (0.55, 1.7, 'climbs in')}
+
+
+def _views():
+    pc2, cam2 = cam_reverse()
+    pc3, cam3 = PCam(-0.45, 0.42, 1.85, 1, 1150.0, oy=1180.0), B.Cam(1.0, 540, 960)
+    return (('shot 2', pc2, cam2, (0.0, T['s3'] - T['s2'])), ('shot 3', pc3, cam3, (T['s3'] - T['s2'], T['s3b'] - T['s2'])))
+
+
+def _audit_draw(vi, members, hero):
+    label, pc, cam, win = _views()[vi]
+
+    def draw(t):
+        lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+        PENDING.clear()
+        HEROINE.clear()
+        tl = t - (T['s3'] - T['s2'])
+        if hero:
+            st, _ = heroine_state(tl)
+            HEROINE.update(st)
+        for i in members:
+            w = CROWD[i]
+            if hero:
+                w = dict(w, x=heroine_x(tl), z=CRAWL_Z, v=(0.0, 0.0))
+            crowd_person(lay, cam, pc, w, t)
+        HEROINE.clear()
+        return lay
+    return draw
+
+
+def _audit_one(spec):
+    import filmkit
+    name, vi, members, times, hero, allow = spec
+    return filmkit.silhouette_audit({name: (times, _audit_draw(vi, members, hero))}, fps=12, allow=allow)
+
+
+def audit_specs():
+    """Every character (an attacker with their victim as one) alone, in every shot that shows them, as runs of
+    consecutive frames. Nothing here is specific to arms, necks or legs: it tests the drawn result."""
+    groups = {}
+    for i, w in enumerate(CROWD):      # only a biter and its victim are one body (the biter's head is drawn by the victim)
+        if w['kind'] != 'heroine':
+            bite = w['act'] in ('tackle', 'tackled')
+            groups.setdefault(w['pair'] if bite else f'solo{i}', []).append(i)
+    for key in groups:      # a biting zombie is drawn first (its victim draws its head)
+        groups[key].sort(key=lambda i: CROWD[i]['act'] != 'tackle')
+    specs = []
+    for vi, (label, pc, cam, (t0, t1)) in enumerate(_views()):
+        frames = [t0 + j / 12 for j in range(int((t1 - t0) * 12))]
+        units = [(f'{" + ".join(CROWD[i]["kind"] + " " + str(CROWD[i]["k"]) for i in m)} [{label}]', m, False)
+                 for m in groups.values()]
+        if vi == 1:
+            units.append(('heroine [shot 3]', [next(i for i, w in enumerate(CROWD) if w['kind'] == 'heroine')], True))
+        for name, m, hero in units:
+            on = []
+            for t in frames:
+                if hero:
+                    on.append(True)
+                    continue
+                vis = []
+                for i in m:
+                    X, Z = where(CROWD[i], t)
+                    ok = pc.depth(Z, X) >= 1.1 and -40 < pc.P(X, 1.0, Z)[0] < 1120 and (vi == 0 or CROWD[i]['z'] >= 2.7)
+                    vis.append(ok)
+                on.append(any(vis))
+            runs, cur = [], []
+            for t, o in zip(frames, on):
+                if o:
+                    cur.append(t)
+                elif cur:
+                    runs.append(cur)
+                    cur = []
+            if cur:
+                runs.append(cur)
+            for n, run in enumerate(runs):
+                if len(run) < 3:
+                    continue
+                allow = [(f'{name}#{n}', a, b, why) for (kind, k), (a, b, why) in FAST_OK.items()
+                         if any(CROWD[i]['kind'] == kind and CROWD[i]['k'] == k for i in m)]
+                specs.append((f'{name}#{n}', vi, m, run, hero, allow))
+    return specs
+
+
+def audits():
+    """The general audit (guides/preflight.md): the body, the movement and the permanent marks, over the whole film."""
+    import filmkit
+    from multiprocessing import Pool
+    B.SS = 1                           # quick and small: the audit looks at shapes, not finish
+    faults = []
+    specs = audit_specs()
+    with Pool(os.cpu_count()) as pool:
+        for r in pool.imap_unordered(_audit_one, specs):
+            faults += r
+    faults += filmkit.probe_marks(lambda t: frame_image(t, captions=False, title=False), MARKS)
+    print(f'audit: {len(specs)} runs of characters checked')
+    return sorted(faults)
+
+
+def cast_sheet(out):
+    """Every reporter and zombie on one sheet, to approve the cast BEFORE any animation (one cheap render)."""
+    class C:
+        s = 1.0
+
+        def P(self, x, y):
+            return (x, y)
+
+        def S(self, v):
+            return v
+    img = Image.new('RGBA', (2400, 1800), (230, 226, 220, 255))
+    for i, k in enumerate(sorted(CAST)):
+        sp = reporter_base(k)
+        sp['arms'] = F.Rig(sp).pose('sides')
+        person(img, C(), 130 + i * 260, 330, 0.36, sp, 0.3)
+    for i, k in enumerate(sorted(ZCAST)):
+        sp = zombie_base(k)
+        rig = F.Rig(sp)
+        sp['arms'] = {'L': rig.arm('L', (-190, -170), 'palm', 'out', strict=False), 'R': rig.arm('R', (200, -150), 'palm', 'out', strict=False)}
+        person(img, C(), 110 + (i % 10) * 230, 900 + (i // 10) * 520, 0.32, sp, 0.3)
+    img.convert('RGB').save(out)
 
 
 def main():
@@ -3060,10 +3275,13 @@ def main():
         B.SS = 1
         for a in sys.argv[3:]:
             frame_image(float(a)).convert('RGB').save(os.path.join(out, f't{a}.jpg'), quality=88)
-    elif mode == 'animatic':
-        render(sys.argv[2], (540, 960), 26, 1)
-    elif mode == 'final':
-        render(sys.argv[2], (1080, 1920), 20, 2)
+    elif mode in ('animatic', 'final'):
+        redo = tuple(sys.argv[sys.argv.index('--redo') + 1].split(',')) if '--redo' in sys.argv else ()
+        reuse = '--reuse' in sys.argv
+        render(sys.argv[2], (540, 960) if mode == 'animatic' else (1080, 1920), 26 if mode == 'animatic' else 20,
+               1 if mode == 'animatic' else 2, reuse, redo)
+    elif mode == 'cast':
+        cast_sheet(sys.argv[2])
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render (guides/figure-rig.md)
