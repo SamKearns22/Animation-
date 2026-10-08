@@ -47,10 +47,9 @@ CAP_FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')   # his captions'
 # =============================================== STORY ==============================================================
 NAME = 'cryminister'
 TITLE = ('CRY', 'MINISTER')
-TITLE_AT = dict(cap=116, top=310)                 # Cranberry Title style, two lines; checked never to cover anyone
+TITLE_AT = dict(cap=92, top=430)                  # Cranberry Title style, two lines, under the search bar; checked
 TITLE_HOLD = 2.5                                  # Sam: held 2.5 s (fading over its last quarter second)
 HANDLE = '@TheTikTokPM'                           # the parody handle (never his real account name)
-STICKER = ('Tough on wolves.', 2, 3)             # his one on-screen caption (text, from shot, to shot): Sam's call
 # Each line is one shot (hard cuts). audio: (file in source/audio, from s, to s); a file holding several lines is
 # cut where Sam paused or, if he ran them together, at the quietest moment between the words.
 LINES = [
@@ -176,8 +175,8 @@ for i, ln in enumerate(LINES):
     ln['_stretches'] = MA.pauses(v, 0.12) or [(0.0, len(v) / SR)]
     SHOTS.append((f"{ln['n']}-{ln['shot']}", T, ln['end'] + post, i))
     T = ln['end'] + post
-DUR = T
-BLACK_AT = DUR
+BLACK_AT = T                                  # hard cut to black...
+DUR = T + 0.5                                 # ...held half a second
 TRACK = [(a + ln['start'], b + ln['start'], sh) for ln in LINES
          for a, b, sh in mouths.track(ln['text'], ln['_stretches'])]
 BLINKS = F.blinks(7, 0.4, DUR, talking=True)
@@ -244,14 +243,14 @@ def u_in(t):
 # Each shot: Andy's camera (front plane: zoom, x, y at the frame's centre) and the street's (the shops and the wolves,
 # further back). Between shots the camera moves (hard cuts), so the street is framed for each shot on its own.
 CAMS = {
-    'mid': ((2.6, AX, 918), (0.74, -250, -880)),
+    'mid': ((2.6, AX, 895), (0.42, -1600, -1089)),
     'half': ((2.6, AX - 520 / 2.6, 918), (0.62, MAN_X + 250 / 0.62, -440)),
-    'close': ((4.4, AX, 905), (1.3, -330, -760)),
-    'further': ((1.6, AX, 1060), (0.46, -250, -760)),
-    'wide': ((0.42, AX + 240, 160), (0.13, -400, -1250)),
-    'eyes': ((16.0, AX - 4, 886), (4.8, -330, -900)),
+    'close': ((4.4, AX, 905), (0.7, -1700, -931)),
+    'further': ((1.6, AX, 1060), (0.26, -1650, -1468)),
+    'wide': ((0.42, AX + 240, 599), (0.13, -400, -3545)),
+    'eyes': ((16.0, AX - 4, 886), (2.3, -1650, -1000)),
     'lady': ((1.3, AX - 110, 1170), (0.39, 1500, -560)),
-    'bigwolf': (None, (1.05, 2350, -470)),
+    'bigwolf': (None, (1.05, 430, -470)),
     'maul': (None, (1.35, MAN_X + 40, -260)),
 }
 
@@ -288,8 +287,15 @@ def box(X, x0, y0, x1, y1, fill, sd=0, amt=6, line=True):
     X.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], amt, sd), fill, line=line)
 
 
-def sign_text(img, cam, x, y, s, size, fill, font=B.ANTON, stroke=0):
-    """Lettering on the street plane (shop signs), centred on (x, y)."""
+TAGS = [('KRAK', 0.12, 560, 150, (230, 60, 160), 0.12), ('OI!', 0.42, 640, 190, (60, 170, 230), -0.1),
+        ('ZEB', 0.7, 520, 170, (120, 220, 80), 0.08), ('MANC', 0.56, 1180, 150, (250, 200, 40), -0.06),
+        ('DZR', 0.85, 1250, 160, (240, 120, 40), 0.15), ('LOL', 0.25, 1380, 130, (160, 90, 220), -0.12),
+        ('BEEF', 0.9, 820, 120, (236, 236, 236), 0.05), ('2SAD', 0.33, 120, 110, (40, 200, 200), 0.04),
+        ('YIKES', 0.68, 1550, 110, (230, 50, 60), -0.05)]
+
+
+def sign_text(img, cam, x, y, s, size, fill, font=B.ANTON, stroke=0, angle=0.0):
+    """Lettering on the street plane (shop signs, graffiti tags), centred on (x, y)."""
     px = cam.S(size)
     if px < 5:
         return
@@ -297,6 +303,8 @@ def sign_text(img, cam, x, y, s, size, fill, font=B.ANTON, stroke=0):
     l, t_, r, b = f.getbbox(s, stroke_width=int(stroke * px / 40))
     lay = Image.new('RGBA', (r - l + 8, b - t_ + 8), (0, 0, 0, 0))
     ImageDraw.Draw(lay).text((4 - l, 4 - t_), s, font=f, fill=fill, stroke_width=int(stroke * px / 40), stroke_fill=INK)
+    if angle:
+        lay = lay.rotate(math.degrees(angle), Image.BICUBIC, expand=True)
     X0, Y0 = cam.P(x, y)
     img.alpha_composite(lay, (int(X0 - lay.width / 2), int(Y0 - lay.height / 2)))
 
@@ -381,10 +389,12 @@ def shop(img, cam, x0, x1, kind_):
         box(X, x0 + 300, BASE - STOREY + 700, x0 + 1000, BASE - STOREY + 1050, (236, 236, 228), 110, 8)     # TO LET, torn
         sign_text(img, cam, x0 + 650, BASE - STOREY + 875, 'TO LET', 130, (200, 30, 40))
         X.poly([(x0 + 900, BASE - STOREY + 1050), (x0 + 1000, BASE - STOREY + 960), (x0 + 1000, BASE - STOREY + 1050)], (184, 146, 94))
-        for k in range(4):                                                   # graffiti scrawls
-            gx, gy = x0 + 1300 + rnd.uniform(0, 800), BASE - 700 + rnd.uniform(0, 400)
+        for k in range(9):                                                   # graffiti scrawls
+            gx, gy = x0 + 150 + rnd.uniform(0, x1 - x0 - 900), BASE - 1100 + rnd.uniform(0, 900)
             X.d.line([cam_pt(cam, gx + 60 * q, gy + 40 * math.sin(q * 1.9 + k)) for q in range(8)],
-                     fill=[(40, 120, 200), (30, 30, 30), (200, 60, 160), (60, 160, 80)][k], width=max(1, int(cam.S(16))))
+                     fill=[(40, 120, 200), (30, 30, 30), (200, 60, 160), (60, 160, 80)][k % 4], width=max(1, int(cam.S(16))))
+        for txt, fx, fy, size, col, ang in TAGS:                             # tags, sprayed over boards and fascia
+            sign_text(img, cam, x0 + fx * (x1 - x0), BASE - STOREY + fy, txt, size, col, stroke=4, angle=ang)
     else:                                      # the outer shops of the wide shot: Cash 4 Gold, Nails & Vapes
         col, label, tc = ((40, 40, 46), 'CASH 4 GOLD', (236, 196, 60)) if kind_ == 'gold' else ((236, 170, 200), 'NAILS & VAPES', (40, 30, 60))
         box(X, x0, top + 160, x1, BASE - STOREY, (196, 170, 140) if kind_ == 'gold' else (168, 150, 140), 120 + len(kind_))
@@ -403,6 +413,7 @@ def street(img, cam, t, wide=False):
     """The high street (street plane): sky, the shop fronts, the pavement; then the wolves' kill in front of the pub."""
     X = X_(img, cam)
     box(X, -12000, -12000, 12000, BASE - 2 * STOREY - 200, (188, 200, 210), 1, 0, line=False)           # a grey British sky
+    skyline(img, cam, X)
     for x0, x1, k in SHOPS:
         shop(img, cam, x0, x1, k)
     box(X, -12000, BASE, 12000, 20000, (176, 174, 168), 2, 0, line=False)                              # the pavement
@@ -416,7 +427,166 @@ def street(img, cam, t, wide=False):
         X.rect(lx - 26, BASE - 2 * STOREY - 100, lx + 220, BASE - 2 * STOREY - 50, (40, 46, 50))
         X.ell(lx + 210, BASE - 2 * STOREY - 30, 50, 34, (250, 240, 200))
     X.rect(-1250, BASE - 430, -950, BASE + 100, (36, 60, 44), r=30)
+    busy = kind(t) not in ('bigwolf', 'maul')
+    if busy:
+        shoppers(img, cam, t, back=True)
+    drunk(X, t)
     kill(img, cam, t)
+    if busy:
+        shoppers(img, cam, t, back=False)
+
+
+def skyline(img, cam, X):
+    """Behind the shops: a charming old church spire over the pub, and a drab concrete office block on the right."""
+    roof = BASE - 2 * STOREY - 260
+    stone, stone_d = (204, 192, 168), (164, 152, 130)
+    tx0, tx1 = -3650, -2950                                              # the tower
+    box(X, tx0, roof - 2300, tx1, roof + 200, stone, 201, 8)
+    for k in range(6):
+        X.seg((tx0 + 10, roof - 2300 + 380 * k), (tx1 - 10, roof - 2300 + 380 * k), 6, stone_d)
+    X.poly(rough([(tx0 + 230, roof - 1950), (tx1 - 230, roof - 1950), (tx1 - 230, roof - 1500), (tx0 + 230, roof - 1500)], 6, 202), (70, 64, 60))
+    X.poly([(tx0 + 230, roof - 1950), ((tx0 + tx1) / 2, roof - 2130), (tx1 - 230, roof - 1950)], (70, 64, 60))
+    for k in range(4):
+        X.seg((tx0 + 250, roof - 1900 + 100 * k), (tx1 - 250, roof - 1900 + 100 * k), 14, stone_d)   # belfry louvres
+    X.ell((tx0 + tx1) / 2, roof - 1050, 170, 170, (236, 232, 220))                                 # the clock
+    X.seg(((tx0 + tx1) / 2, roof - 1050), ((tx0 + tx1) / 2, roof - 1180), 18)
+    X.seg(((tx0 + tx1) / 2, roof - 1050), ((tx0 + tx1) / 2 + 90, roof - 1010), 18)
+    for sgn in (-1, 1):                                                  # little corner pinnacles
+        cx = tx0 + 40 if sgn < 0 else tx1 - 40
+        X.poly([(cx - 60, roof - 2300), (cx, roof - 2650), (cx + 60, roof - 2300)], stone)
+    X.poly(rough([(tx0 + 60, roof - 2300), ((tx0 + tx1) / 2, roof - 5200), (tx1 - 60, roof - 2300)], 10, 203), (150, 156, 150))  # the spire
+    for k in range(1, 6):
+        u = k / 6
+        hw_ = (tx1 - tx0 - 120) / 2 * (1 - u)
+        X.seg(((tx0 + tx1) / 2 - hw_, roof - 2300 - 2900 * u), ((tx0 + tx1) / 2 + hw_, roof - 2300 - 2900 * u), 5, (120, 126, 122))
+    cx = (tx0 + tx1) / 2                                                 # the weathercock on its rod
+    X.seg((cx, roof - 5200), (cx, roof - 5600), 14)
+    X.seg((cx - 90, roof - 5420), (cx + 90, roof - 5420), 10)
+    blob(X, [(cx + 10, roof - 5640, 110, 55, 0.0), (cx + 100, roof - 5700, 40, 40, 0.0)], (210, 170, 70), ol=4)
+    X.poly([(cx - 90, roof - 5650), (cx - 170, roof - 5740), (cx - 150, roof - 5600)], (210, 170, 70))
+    ox0, ox1, top = 1500, 7000, roof - 4300                              # the office block: grey, gridded, unloved
+    box(X, ox0, top, ox1, roof + 200, (150, 152, 148), 211, 6)
+    for r in range(9):
+        y = top + 260 + r * 420
+        box(X, ox0 + 120, y, ox1 - 120, y + 220, (96, 108, 116), 212 + r, 4)
+        for c in range(1, 18):
+            x = ox0 + 120 + (ox1 - ox0 - 240) * c / 18
+            X.seg((x, y), (x, y + 220), 6, (130, 132, 128))
+    box(X, ox0 + 600, top - 420, ox0 + 1700, top, (136, 138, 134), 230, 6)        # plant room on the roof
+    for k in range(5):
+        X.seg((ox0 + 700 + 200 * k, top - 380), (ox0 + 700 + 200 * k, top - 40), 8, (110, 112, 108))
+    X.rect(ox1 - 900, top - 700, ox1 - 860, top, (90, 92, 90))                      # an aerial mast
+
+
+def drunk(X, t):
+    """A drunk lying face down in a puddle on the pavement outside the boarded-up shop, breathing; a can beside him."""
+    x, y = 2250, 210
+    b = 6 * max(0.0, math.sin(t * 2 * math.pi / 4.2))                   # slow breaths lift his back
+    X.ell(x - 330, y + 40, 330, 58, (120, 136, 150), line=False)         # the puddle
+    X.ell(x - 360, y + 34, 200, 26, (150, 166, 180), line=False)
+    for k, dy in enumerate((0, 30)):                                     # legs in jeans, trainers up
+        limb(X, (x + 230, y - 40 + dy), (x + 640, y - 10 + dy), 92, (60, 84, 130))
+        X.rell(x + 700, y - 30 + dy, 40, 56, 0.3, (236, 236, 232))
+    blob(X, [(x + 30, y - 70 - b, 250, 92 + b, 0.03), (x - 150, y - 60 - b, 130, 84 + b, 0.0)], (70, 110, 76), ol=4)   # hoodie
+    limb(X, (x - 140, y - 40), (x - 470, y + 20), 70, (70, 110, 76))     # an arm flopped out into the puddle
+    X.ell(x - 490, y + 22, 30, 26, B.PALE)
+    X.ell(x - 330, y - 30, 92, 78, (118, 84, 60))                        # the back of his head, face in the water
+    X.ell(x - 300, y - 40, 22, 30, B.PALE)                               # an ear
+    X.rect(x + 820, y - 70, x + 880, y + 40, (190, 30, 40), r=10)        # his can
+    X.seg((x + 820, y - 30), (x + 880, y - 30), 6, (236, 236, 232))
+
+
+# ---- shoppers: going about their day, glancing (eyes and head jump together) at the wolves or the Prime Minister
+SHOPPER_PALS = [((120, 40, 50), (60, 50, 44), (230, 200, 180), (240, 140, 60)), ((60, 90, 140), (200, 170, 110), (200, 150, 120), (60, 150, 90)),
+                ((150, 120, 90), (40, 36, 34), (240, 214, 196), (200, 40, 60)), ((90, 90, 96), (180, 180, 186), (160, 110, 80), (240, 220, 60)),
+                ((176, 88, 140), (120, 70, 40), (236, 206, 186), (80, 120, 200)), ((50, 120, 110), (30, 30, 34), (120, 80, 56), (236, 236, 236))]
+
+
+def _shoppers():
+    """Each shopper: (enters at, starting x, direction, lane y, size, palette, stride seed, glances [(from, to, at)])."""
+    out, rnd = [], random.Random(77)
+    for k in range(15):
+        d = 1 if k % 2 == 0 else -1
+        t0 = -4.0 + 4.6 * k + rnd.uniform(-0.8, 0.8)
+        x0 = -5600 if d > 0 else 2600
+        lane = -80 if k % 3 else 300
+        size = rnd.uniform(0.86, 1.04)
+        # when each one passes the kill: a quick glance at the wolves; some also glance at the PM
+        tk = t0 + abs(MAN_X - x0) / 640 - 0.5
+        g = [(tk, tk + rnd.uniform(0.6, 1.0), 'wolves')]
+        if k % 2 == 1:
+            tp = t0 + abs(-1500 - x0) / 640
+            g.append((tp, tp + 0.7, 'pm'))
+        out.append((t0, x0, d, lane, size, k % len(SHOPPER_PALS), k, g))
+    return out
+
+
+SHOPPERS = _shoppers()
+
+
+def shoppers(img, cam, t, back):
+    X = X_(img, cam)
+    for t0, x0, d, lane, size, pal, sd, g in SHOPPERS:
+        if (lane < 0) != back or t < t0:
+            continue
+        x = x0 + d * 640 * (t - t0)
+        if not -7500 < x < 7500:
+            continue
+        look = next((w for a, b, w in g if a <= t < b), None)
+        head = 'front' if look == 'pm' else (1 if MAN_X > x else -1) if look == 'wolves' else d
+        walker(X, x, lane, S * size * 1.2, d, ((t - t0) * 0.95 + sd * 0.37) % 1.0, head, SHOPPER_PALS[pal], bag=sd % 3 != 0)
+
+
+def walker(X, x, y, s, face, ph, head, pal, bag=True):
+    """A shopper side-on, walking, Satire style. head: +1/-1 = the way the face points; 'front' = turned to us."""
+    coat, trousers, skin, bagc = pal
+    hair = (60, 44, 34) if skin[0] > 200 else (30, 26, 24)
+    P = lambda dx, dy: (x + face * dx * s, y + dy * s)
+    w = 2 * math.pi * ph
+    bob = 10 * abs(math.sin(w))
+
+    def leg(a, col):
+        bend = 0.6 * max(0.0, -math.cos(w + (0 if col is trousers else math.pi)))
+        hip = P(0, -450 - bob)
+        knee = P(230 * math.sin(a), -450 - bob + 230 * math.cos(a))
+        ank = (knee[0] + face * 220 * s * math.sin(a - bend), knee[1] + 220 * s * math.cos(a - bend))
+        limb(X, hip, knee, 70 * s, col)
+        limb(X, knee, ank, 60 * s, col)
+        X.ell(ank[0] + face * 30 * s, ank[1] + 6 * s, 52 * s, 22 * s, (40, 34, 32))
+    leg(-0.42 * math.sin(w), B.dk(trousers, 0.8))                       # far leg
+    sw = 0.45 * math.sin(w)
+    sh = P(0, -770 - bob)
+    far_hand = P(-170 * math.sin(-sw) * 1.0 + 10, -770 - bob + 300)
+    limb(X, sh, (sh[0] + face * 300 * s * math.sin(sw), sh[1] + 300 * s * math.cos(sw)), 52 * s, B.dk(coat, 0.8))
+    leg(0.42 * math.sin(w), trousers)                                   # near leg
+    X.poly([P(-60, -800 - bob), P(62, -800 - bob), P(84, -600 - bob), P(92, -420 - bob), P(-74, -420 - bob), P(-80, -600 - bob)], coat)
+    hand = (sh[0] + face * 300 * s * math.sin(-sw), sh[1] + 300 * s * math.cos(-sw))
+    limb(X, sh, hand, 56 * s, coat)
+    X.ell(hand[0], hand[1], 24 * s, 24 * s, skin)
+    if bag:                                                             # a shopping bag swinging from the near hand
+        X.seg(hand, (hand[0] - face * 20 * s, hand[1] + 60 * s), 5 * s)
+        X.poly(rough([(hand[0] - 70 * s, hand[1] + 50 * s), (hand[0] + 70 * s, hand[1] + 50 * s),
+                      (hand[0] + 80 * s, hand[1] + 200 * s), (hand[0] - 80 * s, hand[1] + 200 * s)], 4, 5), bagc)
+    hx, hy = P(6, -900 - bob)
+    X.ell(hx, hy + 70 * s, 26 * s, 30 * s, skin, line=False)
+    if head == 'front':                                                 # turned to look at the Prime Minister
+        X.ell(hx, hy, 66 * s, 78 * s, skin)
+        X.poly([(hx - 66 * s, hy - 20 * s), (hx - 50 * s, hy - 74 * s), (hx + 50 * s, hy - 74 * s), (hx + 66 * s, hy - 20 * s),
+                (hx + 40 * s, hy - 50 * s), (hx - 40 * s, hy - 50 * s)], hair)
+        for k in (-1, 1):
+            X.ell(hx + k * 24 * s, hy - 6 * s, 9 * s, 9 * s, (250, 250, 248))
+            X.ell(hx + k * 24 * s, hy - 6 * s, 4 * s, 4 * s, OUT, line=False)
+        X.seg((hx - 16 * s, hy + 36 * s), (hx + 16 * s, hy + 36 * s), 3 * s)
+        return
+    f = head
+    X.ell(hx, hy, 64 * s, 78 * s, skin)
+    X.poly([(hx + f * 66 * s, hy - 6 * s), (hx + f * 90 * s, hy + 18 * s), (hx + f * 62 * s, hy + 26 * s)], skin)   # nose
+    X.poly([(hx - f * 68 * s, hy + 20 * s), (hx - f * 64 * s, hy - 50 * s), (hx - f * 20 * s, hy - 82 * s), (hx + f * 50 * s, hy - 70 * s),
+            (hx + f * 40 * s, hy - 42 * s), (hx - f * 30 * s, hy - 40 * s)], hair)
+    X.ell(hx - f * 12 * s, hy + 6 * s, 12 * s, 18 * s, skin)                                                          # ear
+    X.ell(hx + f * 36 * s, hy - 8 * s, 9 * s, 9 * s, (250, 250, 248))
+    X.ell(hx + f * 40 * s, hy - 8 * s, 4 * s, 4 * s, OUT, line=False)
+    X.seg((hx + f * 30 * s, hy + 44 * s), (hx + f * 56 * s, hy + 42 * s), 3 * s)
 
 
 # ------------------------------------------------------------------------------------------------- the kill
@@ -761,14 +931,18 @@ def wolfproof(img, p, sp):
         p.poly([(-110, 120 + 100 * k), (110, 120 + 100 * k), (110, 200 + 100 * k), (-110, 200 + 100 * k)], (70, 76, 66), B.INK, 2.0)
     p.poly([(-118, 64), (118, 64), (118, 112), (-118, 112)], (236, 236, 228), B.INK, 2.0)
     PP.ctext(img, p.cam, 0, 88, 'WOLFPROOF', 30, (30, 30, 34), font=B.ANTON)
-    for side in 'LR':
+    rig = F.Rig(LADY)
+    for side in 'LR':                          # Kevlar the whole length of both arms: ribbed sleeves, shoulder to wrist
         el, wr = sp['arms'][side][:2]
-        for k in range(4):
-            u0, u1 = 0.1 + 0.2 * k, 0.28 + 0.2 * k
-            a = (el[0] + u0 * (wr[0] - el[0]), el[1] + u0 * (wr[1] - el[1]))
-            b = (el[0] + u1 * (wr[0] - el[0]), el[1] + u1 * (wr[1] - el[1]))
-            p.line([a, b], B.INK, 40)
-            p.line([a, b], (60, 64, 58), 34)
+        sh = rig.shoulder(side)
+        for a0, b0, n in ((sh, el, 4), (el, wr, 4)):
+            for k in range(n):
+                u0, u1 = k / n + 0.02, (k + 1) / n - 0.02
+                a = (a0[0] + u0 * (b0[0] - a0[0]), a0[1] + u0 * (b0[1] - a0[1]))
+                b = (a0[0] + u1 * (b0[0] - a0[0]), a0[1] + u1 * (b0[1] - a0[1]))
+                p.line([a, b], B.INK, 48)
+                p.line([a, b], (60, 64, 58), 42)
+        p.ell(sh[0], sh[1] + 6, 40, 34, (52, 56, 50), B.INK, 2.6)       # shoulder pad
 
 
 def biter(img, cam, t, alone=False):
@@ -787,7 +961,11 @@ def biter(img, cam, t, alone=False):
             best = (err, a, jaw)
     _, a, jaw = best
     X = X_(img, cam)
-    W.side(X, tx - jaw[0] - 6 * tug, FY, WOLF_S, 1, 0, ang=a + 0.02 * tug, jaw=0.1, snarl=1.0, seed=7)
+    chew = 0.08 + 0.32 * abs(math.sin((t - ARMOUR) * 2 * math.pi * 1.6))   # jaws working away at the sleeve
+    j = W.side(X, tx - jaw[0] - 6 * tug, FY, WOLF_S, 1, 0, ang=a + 0.02 * tug, jaw=chew, snarl=1.0, seed=7)
+    if chew < 0.14:                                                 # teeth skid off the Kevlar: two little scrape marks
+        for k in (-1, 1):
+            X.seg((tx + 18 * k - 8, ty - 30), (tx + 18 * k + 8, ty - 52), 4, (250, 250, 250))
 
 
 # ------------------------------------------------------------------------------------------------- perspective sets
@@ -1052,33 +1230,40 @@ def big_wolf(img, cam, t, alone=False):
     """Shot 4: a big dire wolf snarling on the pavement; on "smaller" it pops to 60% of its size, still snarling."""
     X = X_(img, cam)
     if not alone:
-        X.rect(1820, -260, 1900, 40, (40, 44, 48), r=10)                 # a bollard, for its size
-        X.ell(1860, -260, 40, 18, (40, 44, 48))
+        X.rect(-40, -260, 40, 40, (40, 44, 48), r=10)                    # a bollard, for its size
+        X.ell(0, -260, 40, 18, (40, 44, 48))
     s = WOLF_S * 1.15 * (0.6 if t >= POP else 1.0)
     jaw = 0.55 + 0.3 * max(0.0, filmkit.shifts(t, seed=41, amount=1.0, hold=(0.3, 0.6), move=0.08))
-    W.side(X, 2420, 40, s, -1, 1, jaw=jaw, snarl=1.0, seed=5, blink=(t % 2.9) < 0.1)
+    W.side(X, 560, 40, s, -1, 1, jaw=jaw, snarl=1.0, seed=5, blink=(t % 2.9) < 0.1)
 
 
 # ------------------------------------------------------------------------------------------------- overlay
 def chunks(ln):
-    """His caption style: a couple of words at a time (at most 3 words or about 18 letters), each shown as it is said."""
+    """His caption style: a couple of words at a time, each chunk shown as it is said. A chunk closes at a comma or full
+    stop, or once it has been on screen about 0.75 s (at most 4 words or 22 letters); a stray last word joins the one
+    before, so nothing flashes by too fast to read."""
     words = ln['text'].split()
     wt = word_times(ln)
-    out, cur, t0 = [], [], None
+    out, cur = [], []
     for w, (a, b) in zip(words, wt):
-        if cur and (len(cur) >= 3 or len(' '.join(cur + [w])) > 18 or cur[-1][-1] in ',.'):
-            out.append((t0, ' '.join(cur)))
-            cur = []
-        if not cur:
-            t0 = a
-        cur.append(w)
+        if cur:
+            full = len(cur) >= 4 or len(' '.join([x[0] for x in cur] + [w])) > 22
+            long_enough = a - cur[0][1] >= 0.75 and (len(cur) >= 2 or a - cur[0][1] >= 0.9)
+            stop = cur[-1][0][-1] == '.' or (cur[-1][0][-1] == ',' and (len(cur) >= 2 or a - cur[0][1] >= 0.5))
+            if full or stop or long_enough:
+                out.append(cur)
+                cur = []
+        cur.append((w, a))
     if cur:
-        out.append((t0, ' '.join(cur)))
-    return out
+        if out and ln['end'] - cur[0][1] < 0.6 and len(' '.join(x[0] for x in out[-1] + cur)) <= 26:
+            out[-1] += cur
+        else:
+            out.append(cur)
+    return [(c[0][1], ' '.join(x[0] for x in c)) for c in out]
 
 
-CAP_Y = {'mid': 1150, 'close': 1300, 'eyes': 1300, 'wide': 1000, 'lady': 1000, 'further': 1060, 'half': 1150,
-         'bigwolf': 900, 'maul': 1300, 'alley': 1320, 'run': 1250}
+CAP_Y = {'mid': 1170, 'close': 1250, 'eyes': 1250, 'wide': 1000, 'lady': 1000, 'further': 1060, 'half': 1150,
+         'bigwolf': 900, 'maul': 1250, 'alley': 1250, 'run': 1220}
 
 
 def caption_at(t):
@@ -1098,45 +1283,129 @@ def his_caption(img, s, y):
     """Andy's own caption look: TikTok Sans Bold, white, a soft dark shadow, centred."""
     SS = img.width // 1080
     f = ImageFont.truetype(CAP_FONT, 74 * SS)
-    while f.getlength(s) > 820 * SS:
+    while f.getlength(s) > 640 * SS:
         f = ImageFont.truetype(CAP_FONT, int(f.size * 0.92))
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
-    d.text((540 * SS, (y + 4) * SS), s, font=f, fill=(0, 0, 0, 200), anchor='mm')
+    d.text((470 * SS, (y + 4) * SS), s, font=f, fill=(0, 0, 0, 200), anchor='mm')
     lay = lay.filter(ImageFilter.GaussianBlur(6 * SS))
     d = ImageDraw.Draw(lay)
-    d.text((540 * SS, y * SS), s, font=f, fill=(255, 255, 255, 255), anchor='mm', stroke_width=max(1, SS),
+    d.text((470 * SS, y * SS), s, font=f, fill=(255, 255, 255, 255), anchor='mm', stroke_width=max(1, SS),
            stroke_fill=(30, 30, 30, 90))
     img.alpha_composite(lay)
 
 
-def tiktok_hints(img, t):
-    """The parody handle, drifting corner to corner like a saved TikTok's watermark, and his one on-screen caption."""
+UI_FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Medium.woff')
+DESCRIPTION = 'Tough on wolves. Tough on the causes of wolves.'
+COUNTS = ('94.2K', '4,817', '6,102', '11.9K')        # likes, comments, saves, shares (made up, like his real posts)
+
+
+def _icon_heart(d, cx, cy, r, fill):
+    pts = []
+    for k in range(60):
+        a = 2 * math.pi * k / 60
+        x = 16 * math.sin(a) ** 3
+        y = -(13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a))
+        pts.append((cx + x * r / 17, cy + y * r / 17))
+    d.polygon(pts, fill=fill)
+
+
+def _icon_bubble(d, cx, cy, r, fill, dot):
+    d.ellipse([cx - r, cy - r * 0.86, cx + r, cy + r * 0.86], fill=fill)
+    d.polygon([(cx + r * 0.3, cy + r * 0.6), (cx + r * 0.85, cy + r * 1.05), (cx + r * 0.75, cy + r * 0.4)], fill=fill)
+    for k in (-1, 0, 1):
+        d.ellipse([cx + k * r * 0.42 - r * 0.12, cy - r * 0.12, cx + k * r * 0.42 + r * 0.12, cy + r * 0.12], fill=dot)
+
+
+def _icon_bookmark(d, cx, cy, r, fill):
+    d.polygon([(cx - r * 0.72, cy - r), (cx + r * 0.72, cy - r), (cx + r * 0.72, cy + r), (cx, cy + r * 0.5),
+               (cx - r * 0.72, cy + r)], fill=fill)
+
+
+def _icon_share(d, cx, cy, r, fill):
+    d.polygon([(cx + r, cy - r * 0.05), (cx + r * 0.05, cy - r * 0.95), (cx + r * 0.05, cy - r * 0.45), (cx - r * 0.3, cy - r * 0.4),
+               (cx - r * 0.85, cy + r * 0.1), (cx - r * 0.95, cy + r * 0.9), (cx - r * 0.5, cy + r * 0.35),
+               (cx + r * 0.05, cy + r * 0.3), (cx + r * 0.05, cy + r * 0.85)], fill=fill)
+
+
+_AVATAR = {}
+
+
+def _avatar(size):
+    """His account picture: the cartoon Andy, head and shoulders, in a white ring."""
+    if size not in _AVATAR:
+        keep = B.SS
+        B.SS = 1
+        im = B.canvas((108, 150, 96))
+        sp = dict(ANDY, mouth='smile', look=0.0, brows='sincere', lid=2)
+        sp['arms'] = F.Rig(sp).pose('sides')
+        B.person(im, B.Cam(4.2, AX, NECK - 80), AX, NECK, S, sp, 0.0)
+        B.SS = keep
+        im = im.crop((540 - 300, 960 - 300, 540 + 300, 960 + 300)).resize((size, size), Image.LANCZOS)
+        m = Image.new('L', (size, size), 0)
+        ImageDraw.Draw(m).ellipse([0, 0, size - 1, size - 1], fill=255)
+        im.putalpha(m)
+        _AVATAR[size] = im
+    return _AVATAR[size]
+
+
+def tiktok_ui(img, t):
+    """A TikTok screen over the film, always on, so there is no doubt it is his TikTok. Every piece sits just inside
+    where the real app draws its own (search bar under the top tabs, buttons left of the real column, name and
+    description above the real ones), so the viewer's own TikTok never covers ours completely."""
     SS = img.width // 1080
-    f = ImageFont.truetype(CAP_FONT, 34 * SS)
+    F_ = lambda size, bold=True: ImageFont.truetype(CAP_FONT if bold else UI_FONT, int(size * SS))
+    sh = Image.new('RGBA', img.size, (0, 0, 0, 0))                  # soft shadows first
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    for layer, col, off in ((sh, (0, 0, 0, 110), 2), (lay, (255, 255, 255, 255), 0)):
+        d = ImageDraw.Draw(layer)
+        o = off * SS
+        # the search bar
+        d.line([(62 * SS + o, 366 * SS + o), (84 * SS + o, 344 * SS + o)], fill=col, width=5 * SS)
+        d.line([(62 * SS + o, 366 * SS + o), (84 * SS + o, 388 * SS + o)], fill=col, width=5 * SS)
+        d.rounded_rectangle([118 * SS + o, 326 * SS + o, 1010 * SS + o, 406 * SS + o], radius=20 * SS, outline=col, width=3 * SS)
+        d.ellipse([150 * SS + o, 348 * SS + o, 180 * SS + o, 378 * SS + o], outline=col, width=4 * SS)
+        d.line([(176 * SS + o, 374 * SS + o), (190 * SS + o, 388 * SS + o)], fill=col, width=4 * SS)
+        d.text((206 * SS + o, 366 * SS + o), 'Find related content', font=F_(38, False), fill=col, anchor='lm')
+        d.line([(830 * SS + o, 342 * SS + o), (830 * SS + o, 390 * SS + o)], fill=col, width=2 * SS)
+        d.text((990 * SS + o, 366 * SS + o), 'Search', font=F_(38), fill=col, anchor='rm')
+        # the button column
+        cx = 836 * SS + o
+        _icon_heart(d, cx, 900 * SS + o, 40 * SS, col)
+        _icon_bubble(d, cx, 1032 * SS + o, 38 * SS, col, (0, 0, 0, 0) if layer is sh else (150, 150, 150, 255))
+        _icon_bookmark(d, cx, 1162 * SS + o, 34 * SS, col)
+        _icon_share(d, cx, 1290 * SS + o, 38 * SS, col)
+        for y, txt in zip((962, 1092, 1222, 1352), COUNTS):
+            d.text((cx, y * SS + o), txt, font=F_(30), fill=col, anchor='mm')
+        # his name, the tick, how long ago; the description; the progress bar
+        name = HANDLE.lstrip('@')
+        d.text((60 * SS + o, 1398 * SS + o), name, font=F_(42), fill=col, anchor='ls')
+        nx = 60 * SS + d.textlength(name, font=F_(42)) + 14 * SS
+        if layer is lay:
+            d.ellipse([nx, 1366 * SS, nx + 30 * SS, 1396 * SS], fill=(32, 213, 236, 255))
+            d.line([(nx + 8 * SS, 1381 * SS), (nx + 13 * SS, 1387 * SS), (nx + 23 * SS, 1374 * SS)], fill=(255, 255, 255), width=4 * SS)
+        d.text((nx + 42 * SS + o, 1398 * SS + o), '· 1d ago', font=F_(36, False), fill=col if layer is sh else (210, 210, 210, 255), anchor='ls')
+        d.text((60 * SS + o, 1452 * SS + o), DESCRIPTION, font=F_(34, False), fill=col, anchor='ls')
+        d.text((60 * SS + o + d.textlength(DESCRIPTION + '  ', font=F_(34, False)), 1452 * SS + o), 'more', font=F_(34), fill=col, anchor='ls')
     d = ImageDraw.Draw(lay)
-    first = t < SHOTS[9][1]
-    xy, anc = ((80 * SS, 1440 * SS), 'ls') if first else ((880 * SS, 360 * SS), 'rs')
-    if t < TITLE_HOLD:
-        xy, anc = (80 * SS, 1440 * SS), 'ls'
-    d.text((xy[0], xy[1] + 2 * SS), HANDLE, font=f, fill=(0, 0, 0, 120), anchor=anc)
-    lay = lay.filter(ImageFilter.GaussianBlur(3 * SS))
-    d = ImageDraw.Draw(lay)
-    d.text(xy, HANDLE, font=f, fill=(255, 255, 255, 190), anchor=anc)
-    txt, a, b = STICKER
-    if SHOTS[a - 1][1] + 0.3 <= t < SHOTS[b - 1][2]:          # his caption, TikTok's white-box text style
-        g = ImageFont.truetype(CAP_FONT, 46 * SS)
-        w = g.getlength(txt)
-        x0, y0 = 540 * SS - w / 2 - 22 * SS, 352 * SS
-        d.rounded_rectangle([x0, y0, x0 + w + 44 * SS, y0 + 76 * SS], radius=16 * SS, fill=(255, 255, 255, 240))
-        d.text((540 * SS, y0 + 38 * SS), txt, font=g, fill=(20, 20, 20), anchor='mm')
+    u = min(1.0, t / BLACK_AT)
+    d.rounded_rectangle([60 * SS, 1478 * SS, 1020 * SS, 1483 * SS], radius=3 * SS, fill=(255, 255, 255, 90))
+    d.rounded_rectangle([60 * SS, 1478 * SS, (60 + 960 * u) * SS, 1483 * SS], radius=3 * SS, fill=(255, 255, 255, 230))
+    d.ellipse([(60 + 960 * u - 7) * SS, 1473 * SS, (60 + 960 * u + 7) * SS, 1487 * SS], fill=(255, 255, 255, 255))
+    av = _avatar(100 * SS)                                         # his account picture, with the red follow button
+    ImageDraw.Draw(sh).ellipse([786 * SS, 718 * SS, 890 * SS, 822 * SS], fill=(0, 0, 0, 110))
+    lay.alpha_composite(av, (786 * SS, 716 * SS))
+    d.ellipse([786 * SS, 716 * SS, 886 * SS, 816 * SS], outline=(255, 255, 255), width=4 * SS)
+    d.ellipse([815 * SS, 796 * SS, 857 * SS, 838 * SS], fill=(234, 40, 78))
+    d.line([(826 * SS, 817 * SS), (846 * SS, 817 * SS)], fill=(255, 255, 255), width=5 * SS)
+    d.line([(836 * SS, 807 * SS), (836 * SS, 827 * SS)], fill=(255, 255, 255), width=5 * SS)
+    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(4 * SS)))
     img.alpha_composite(lay)
 
 
 def overlay(img, t):
     if t < BLACK_AT:
-        tiktok_hints(img, t)
+        tiktok_ui(img, t)
         c = caption_at(t)
         if c:
             his_caption(img, c, CAP_Y.get(kind(t), 1100))
@@ -1150,18 +1419,209 @@ def frame_image(t):
 
 
 # ------------------------------------------------------------------------------------------------- sound
+_R = np.random.default_rng(5)
+
+
+def _bp(x, lo, hi):
+    from scipy.signal import butter, sosfilt
+    return sosfilt(butter(2, [lo, hi], 'band', fs=SR, output='sos'), x)
+
+
+def _env(n, att, dec):
+    t = np.arange(n) / SR
+    return np.minimum(1.0, t / max(att, 1e-4)) * np.exp(-t / dec)
+
+
+def _add(track, at, clip, gain=1.0):
+    i = int(at * SR)
+    if i >= len(track) or i + len(clip) <= 0:
+        return
+    a = max(0, -i)
+    j = min(len(track), i + len(clip))
+    track[max(0, i):j] += clip[a:a + j - max(0, i)] * gain
+
+
+def crunch(size=1.0):
+    """A wet crunch: a short bright crack of gristle and bone over a squelch."""
+    n = int(0.09 * SR)
+    c = _bp(_R.standard_normal(n), 1200, 5000) * _env(n, 0.002, 0.018)
+    sq = _bp(_R.standard_normal(n), 180, 700) * _env(n, 0.006, 0.04) * 1.6
+    return (c * 0.7 + sq) * size
+
+
+def tear():
+    """A hunk ripped away: a rising wet tearing sweep."""
+    n = int(0.35 * SR)
+    x = _R.standard_normal(n)
+    lo = _bp(x, 300, 900) * np.linspace(1, 0.3, n)
+    hi = _bp(x, 1500, 4000) * np.linspace(0.2, 1.0, n)
+    return (lo + hi * 0.6) * _env(n, 0.03, 0.12) * 1.8
+
+
+def growl(dur, f0=110.0, rough=1.0):
+    """A wolf's growl: a buzzing low voice, rattling, with breath through it."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    f = f0 * (1 + 0.06 * np.sin(2 * np.pi * 3.1 * t) + 0.03 * _R.standard_normal(n).cumsum() / np.sqrt(np.arange(1, n + 1)))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    v = sum(np.sin(k * ph) / k ** 0.9 for k in range(1, 14))
+    am = 0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 28 * t)) * rough
+    br = _bp(_R.standard_normal(n), 400, 2500) * 0.5
+    e = np.minimum(1, t / 0.08) * np.minimum(1, (dur - t) / 0.12)
+    return _bp(v * am + br, 90, 4000) * e * 0.35
+
+
+def paw(heavy=1.0):
+    """A big paw striking the pavement: a soft thump with a scrape of claws."""
+    n = int(0.12 * SR)
+    th = _bp(_R.standard_normal(n), 100, 400) * _env(n, 0.002, 0.03) * 2.0
+    cl = _bp(_R.standard_normal(n), 3000, 7000) * _env(n, 0.001, 0.01) * 0.4
+    return (th + cl) * heavy
+
+
+def shoe():
+    n = int(0.1 * SR)
+    return _bp(_R.standard_normal(n), 250, 2500) * _env(n, 0.001, 0.02) * 1.4
+
+
+def whoosh(dur=0.35):
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    x = _bp(_R.standard_normal(n), 500, 2500) * np.sin(np.pi * t / dur) ** 2
+    return x * 0.5
+
+
+def yelp():
+    n = int(0.3 * SR)
+    t = np.arange(n) / SR
+    f = 950 - 500 * t / 0.3
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    return (np.sin(ph) + 0.4 * np.sin(2 * ph) + 0.2 * np.sin(3 * ph)) * _env(n, 0.01, 0.12) * 0.5
+
+
+def rustle(dur=0.6):
+    n = int(dur * SR)
+    x = _bp(_R.standard_normal(n), 2000, 7000)
+    gates = (_R.random(n // 400 + 1) < 0.5).repeat(400)[:n]
+    return x * gates * _env(n, 0.005, dur / 2.5) * 0.6
+
+
+FEED_GAIN = {'half': 0.75, 'maul': 0.95, 'mid': 0.32, 'close': 0.3, 'further': 0.3, 'eyes': 0.25, 'wide': 0.3,
+             'lady': 0.08, 'bigwolf': 0.1}
+
+
+def effects(n):
+    """Every wolf sound, placed by when it really starts."""
+    fx = np.zeros(n)
+    feed = np.zeros(n)
+    rnd = random.Random(9)
+    t = ATTACK + 0.2                                                   # the pack feeding: crunching, worrying, tearing
+    while t < BLACK_AT:
+        _add(feed, t, crunch(rnd.uniform(0.5, 1.1)))
+        t += rnd.uniform(0.06, 0.2)
+    for i in range(5):
+        dx, dz, face, pal, ph = PACK[i]
+        t_land = ATTACK - 0.45 + 0.2 * i + 0.45
+        k = 0
+        while True:
+            rel = t_land + (k + (0.8 - ph) % 1.0) * RIP
+            if rel > BLACK_AT:
+                break
+            _add(feed, rel - 0.15, tear(), rnd.uniform(0.6, 1.0))
+            if k % 3 == 0:
+                _add(feed, rel + 0.3, growl(0.7, 130 + 15 * i, 0.8), 0.5)
+            k += 1
+    g = np.zeros(n)                                                    # how loud the feeding is: by what the shot shows
+    for key, a, b, i in SHOTS:
+        g[int(a * SR):int(b * SR)] = FEED_GAIN.get(LINES[i]['shot'], 0.0)
+    k = int(0.06 * SR)
+    g = np.convolve(g, np.ones(k) / k, mode='same')                    # no clicks at the cuts
+    g[int(BLACK_AT * SR):] = 0
+    fx += feed * g
+    for i in range(5):                                                 # shot 2: the pack bounds in and leaps
+        t_leap = ATTACK - 0.45 + 0.2 * i
+        for q in range(4):
+            _add(fx, t_leap - 0.9 + q * 0.21, paw(0.8))
+        _add(fx, t_leap, whoosh(0.4), 0.9)
+        _add(fx, t_leap + 0.45, paw(1.6))
+    _add(fx, ATTACK - 0.3, growl(0.9, 150, 1.0), 1.0)                   # the snarl as the first hits his throat
+    s4 = SHOTS[3]                                                      # shot 4: a big growl, then a silly yappy one
+    _add(fx, s4[1] + 0.05, growl(POP - s4[1] - 0.05, 100, 1.0), 1.1)
+    _add(fx, POP, growl(s4[2] - POP, 230, 0.6), 0.7)
+    s5 = SHOTS[4]                                                      # shot 5: feet and paws down the alley, the net
+    for q in range(40):
+        tq = s5[1] + q / 6.0
+        if alley_run(tq)[0] > 1.3:
+            _add(fx, tq, shoe(), 0.9 * min(1.0, 6.0 / alley_run(tq)[0]))
+    hit = s5[1] + first_tangle()
+    tq = s5[1]
+    while tq < hit:
+        d = alley_run(tq)[2]
+        for o in (0.0, 0.07, 0.19, 0.26):
+            _add(fx, tq + o, paw(1.2 * min(1.0, 7.0 / d)))
+        tq += 1 / 2.6
+    _add(fx, hit, paw(3.0))
+    _add(fx, hit, rustle(1.4), 1.6)
+    _add(fx, hit + 0.05, yelp(), 1.2)
+    _add(fx, hit + 0.4, growl(s5[2] - hit - 0.5, 160, 1.0), 0.9)
+    for q in range(6):
+        _add(fx, hit + 0.5 + q * 0.37, rustle(0.3), 0.8)
+    s6 = SHOTS[5]                                                      # shot 6: gnawing at the Kevlar, getting nowhere
+    tq = ARMOUR
+    while tq < s6[2]:
+        _add(fx, tq, crunch(0.6), 0.5)
+        n2 = int(0.07 * SR)
+        _add(fx, tq + 0.02, np.sin(2 * np.pi * 2600 * np.arange(n2) / SR) * _env(n2, 0.005, 0.02) * 0.08)   # teeth skid
+        tq += 1 / 3.2
+    _add(fx, ARMOUR, growl(s6[2] - ARMOUR, 140, 0.8), 0.45)
+    s20 = SHOTS[19]                                                    # shot 20: running for it, the pack gaining
+    tq = s20[1]
+    while tq < BLACK_AT:
+        u = tq - s20[1]
+        _add(fx, tq, shoe(), 0.9)
+        tq += 1 / 3.0
+    for i in range(5):
+        tq = s20[1] + 0.05 * i
+        while tq < BLACK_AT:
+            u = tq - s20[1]
+            d = 15.5 - 3.4 * u + [0.0, 2.5, 4.0, 1.4, 5.5][i]
+            for o in (0.0, 0.07, 0.19, 0.26):
+                _add(fx, tq + o, paw(1.4 * min(1.0, 4.0 / max(d, 1.5))))
+            tq += 1 / 2.4
+    _add(fx, s20[1] + 0.8, growl(BLACK_AT - s20[1] - 0.8, 150, 1.0), 0.8)
+    _add(fx, BLACK_AT - 0.5, whoosh(0.5), 1.4)
+    _add(fx, BLACK_AT - 0.45, growl(0.45, 170, 1.0), 1.6)
+    fx[int(BLACK_AT * SR):] = 0                                        # the hard cut: everything stops
+    return fx
+
+
+def street_bed(n):
+    """A faint British high street under it all: distant traffic and air, never dead silence."""
+    from scipy.signal import butter, sosfilt
+    x = sosfilt(butter(2, [150, 1800], 'band', fs=SR, output='sos'), np.random.default_rng(1).standard_normal(n))
+    return x * 0.012
+
+
 def soundtrack(stems=False):
-    """Sam's voice over a quiet street bed. (Wolf sounds: chewing and biting over the kill, paws on the run: to come.)"""
+    """Sam's voice; the wolves; a faint street. Effects dip under every line so the voice stays clear."""
     n = int((DUR + 0.3) * SR)
     voice = np.zeros(n)
-    rest = np.random.default_rng(1).standard_normal(n) * 0.002                  # a faint bed of outdoor air
     for ln in LINES:
-        s = int(ln['start'] * SR)
-        seg = ln['_voice'][:max(0, n - s)]
-        voice[s:s + len(seg)] += seg
+        s_ = int(ln['start'] * SR)
+        seg = ln['_voice'][:max(0, n - s_)]
+        voice[s_:s_ + len(seg)] += seg
+    rest = effects(n) * 0.5 + street_bed(n)
+    rest[int(BLACK_AT * SR):] = 0
+    duck = np.ones(n)                                                  # under each stretch of speech: 9 dB down
+    for ln in LINES:
+        for a, b in ln['_stretches']:
+            duck[int((ln['start'] + a - 0.05) * SR):int((ln['start'] + b + 0.05) * SR)] = 0.3
+    k = int(0.08 * SR)
+    duck = np.convolve(duck, np.ones(k) / k, mode='same')
+    rest = rest * duck
     mix = voice + rest
     end = int(BLACK_AT * SR)
-    g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)                                 # master: about -14 LUFS
+    g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)                     # master: about -14 LUFS
     mix, voice, rest = M.limiter(mix * g, -2.6), voice * g, rest * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
