@@ -9,8 +9,8 @@
 - **Creator Rewards** (open in the UK) pays per 1,000 "qualified" views. You need **10,000 followers**, **100,000 views in
   the last 30 days**, to be 18+, and only videos **at least 1 minute long** earn. The pay is low: commonly well under £1
   per 1,000 views. £10,000 from this alone would take something like 10-25 million qualified views.
-- So the plan uses several sources: Creator Rewards, brand deals, paid commissions and the same films on YouTube and
-  Instagram.
+- So most of the money will come from Creator Rewards and the same films on YouTube and Instagram, with brand deals a
+  later bonus. Getting to 10,000 followers is the whole game.
 
 ## Stage 1: find the format that spreads (now to about 3 months; goal 10,000 followers)
 - Post 4-5 films a week, never two in one day, in the slots that have worked (`story/metrics.md`). Send me the
@@ -28,19 +28,21 @@
 - Join Creator Rewards in TikTok Studio. Keep short films for growth, and add one-minute-plus films that are worth
   watching to the end (for example a two-part story in one film) to earn from.
 - Make a one-page **media kit** (views, audience age and country from TikTok Studio, three best films). I can make it.
-- **Brand deals:** list the account in TikTok's creator marketplace and reply to brand emails. Small UK accounts are
-  commonly paid a few hundred pounds per sponsored film (sponsored films do not earn Creator Rewards).
+- **Brand deals (a bonus, later):** brands pay for an audience that watches and trusts you, not for who drew it. The
+  bigger obstacle is politics: many brands avoid political satire. Expect fewer, later deals, mostly from brands that
+  like edgy comedy, and mix in non-political films (The Park, The Salt) that a brand could sit next to. Always use
+  TikTok's AI-generated label, and tell a brand how the films are made before it asks.
 - See which other paid tools TikTok Studio offers you (subscriptions, LIVE gifts, paid series). The thresholds change.
 - YouTube pays for Shorts once the channel meets its own Partner Programme threshold (much higher than TikTok's).
 
-## Start now, with no followers needed: commissions
-- Offer custom Satire-style cartoons (a 20-second birthday roast, a leaving-do, a small business advert) for roughly
-  £150-£500 each, with a link in your bio. Our pipeline makes these quickly, so this is the most realistic early
-  money. Same rules as our films: parody only, no real logos, nothing defamatory.
+## Optional small test: commissions
+- Sam's point (8 Oct): buyers may not pay much for something made with AI in a few hours, and each piece uses the
+  same weekly Claude budget as our own films. So this is only a test: offer one or two custom cartoons at a low price,
+  worded honestly ("written, voiced and directed by me, animated with AI tools"). Drop it if nobody bites.
 
 ## Stage 3: reaching £10,000 (a realistic year, not a forecast)
-- An example mix: Creator Rewards about £3,000, 6-10 brand deals about £3,000, 10-15 commissions about £3,000,
-  YouTube and others about £1,000.
+- An example mix: Creator Rewards about £6,000 (roughly 10 million qualified views of minute-long films), YouTube and
+  Instagram about £1,500, a few brand deals about £2,500. Commissions only if the test works.
 - Log income each month next to the views in `story/metrics.md`.
 
 ## Housekeeping
