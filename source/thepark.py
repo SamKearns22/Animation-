@@ -288,8 +288,8 @@ DARTS = [(1.8, 1), (2.3, 6), (2.8, 3), (3.3, 4), (3.8, 2), (4.3, 5), (4.7, 0)]  
 
 
 def head_turn(t):
-    """Stunned, his head holds dead still, then snaps to each new pigeon a frame after his eyes do: paranoid, not woozy."""
-    gx, gy = gaze(t - 1.0 / FPS)
+    """Stunned, his head holds dead still, then snaps to each new pigeon on the same frame as his eyes: paranoid, not woozy."""
+    gx, gy = gaze(t)
     return -0.02 - 0.10 * max(-1.0, min(1.0, (gx - X0) / 450))
 
 
@@ -307,8 +307,7 @@ def gaze(t):
         nxt = DARTS[k + 1][0] if k + 1 < len(DARTS) else 1e9
         if at <= u < nxt:
             tgt = (FLOCK[i][0], FLOCK[i][1] - 60 * FLOCK[i][2])
-            f = min(1.0, (u - at) / (2.0 / FPS))
-            return prev[0] + (tgt[0] - prev[0]) * f, prev[1] + (tgt[1] - prev[1]) * f
+            return tgt                                                      # a jump, not a glide
         prev = (FLOCK[i][0], FLOCK[i][1] - 60 * FLOCK[i][2])
     return prev
 
@@ -481,9 +480,18 @@ def frame_image(t):
 
 
 # ------------------------------------------------------------------------------------------------- sound
+def _rumble_cut(x, hz):
+    """Cut the wind rumble: everything below hz (birdsong and the voice sit well above it)."""
+    from scipy.signal import butter, sosfiltfilt
+    return sosfiltfilt(butter(4, hz, 'high', fs=SR, output='sos'), x)
+
+
 def _voice():
-    v = load(os.path.join(HERE, 'audio', VOICE + '.m4a'))[int(VOICE_FROM * SR):int(VOICE_TO * SR)]
-    return v * VOICE_GAIN
+    raw = load(os.path.join(HERE, 'audio', VOICE + '.m4a'))
+    a, b = int(VOICE_FROM * SR), int(VOICE_TO * SR)
+    v = MA.denoise(_rumble_cut(raw, 90))[a:b]                       # outdoor recording: wind rumble and hiss out
+    v = v * 10 ** ((MA.lufs(raw[a:b]) - MA.lufs(v)) / 20)           # same loudness as before cleaning
+    return MA.edges(v) * VOICE_GAIN
 
 
 STRETCHES = MA.pauses(_voice(), 0.12)
@@ -495,7 +503,7 @@ def soundtrack(stems=False):
     v = _voice()
     s = int(SAY * SR)
     voice[s:s + len(v)] = v[:max(0, n - s)]
-    b = load(BIRDS)
+    b = _rumble_cut(load(BIRDS), 220) * 2.5                                       # the birdsong without its wind, raised
     birds = np.resize(b, n)
     tt = np.arange(n) / SR
     lo = 0.08                                   # never dead silence: a faint bed of birdsong stays under the line
@@ -503,8 +511,8 @@ def soundtrack(stems=False):
     up = np.clip((tt - (T2 - 0.25)) / 0.8, 0.0, 1.0)                                  # eased back up across the cut
     env = np.where(tt >= T2 - 0.25, lo + (1 - lo) * up * up * (3 - 2 * up), env)
     rest = birds * env
-    w = load(os.path.join(HERE, 'audio', 'park-takeoff.mp3')) * 1.33               # Sam's wing-flap clip: its first
-    a = int((FLY - 0.3) * SR)                                                       # flap lands as it leaves the bench
+    w = load(os.path.join(HERE, 'audio', 'park-takeoff.mp3')) * 0.665              # Sam's wing-flap clip, its flapping
+    a = int((FLY - 0.05) * SR)                                                      # starting just as it leaves the bench
     rest[a:a + len(w)] += w[:max(0, n - a)]
     mix = voice + rest
     end = int(BLACK_AT * SR)
