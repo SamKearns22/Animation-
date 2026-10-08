@@ -48,7 +48,7 @@ CAP_FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')   # his captions'
 NAME = 'cryminister'
 TITLE = ('CRY', 'MINISTER')
 TITLE_AT = dict(cap=92, top=430)                  # Cranberry Title style, two lines, under the search bar; checked
-TITLE_HOLD = 2.5                                  # Sam: held 2.5 s (fading over its last quarter second)
+TITLE_HOLD = 0.0                                  # Sam (8 Oct): no title in the video; the Cranberry title lives on the cover
 HANDLE = '@TheTikTokPM'                           # the parody handle (never his real account name)
 # Each line is one shot (hard cuts). audio: (file in source/audio, from s, to s); a file holding several lines is
 # cut where Sam paused or, if he ran them together, at the quietest moment between the words.

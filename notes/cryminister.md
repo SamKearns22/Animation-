@@ -23,6 +23,14 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 18 | all | - | Remove every sound made in code. Film is voice only. | done |
 | 19 | shoppers | - | Drawn in the show's usual people style (conference-goer models, changed up). | done |
 | 20 | man | - | Man City shirt from Sam's reference photo. | done |
+| 21 | 1 | - | Shopper in the nearer lane looked child-sized: nearer lane drawn bigger. | done |
+| 22 | all | - | Walkers faced forward while moving sideways: new three-quarter walk (walker.py). | done |
+| 23 | 2 | 4.4 s | A wolf overshot the man: the right-hand wolves sweep in from the right. | done |
+| 24 | 2 | 7 s | The man at the back stops, frowns and shakes his head. | done |
+| 25 | 5 | - | The falling net dipped below the floor: its hem now stops at the ground. | done |
+| 26 | 20 | - | Chasers a mix of full and smaller wolves; Andy angry / terrified / panicked, no red eyes (red eyes only in 13-14). | done |
+| 27 | 15 | - | More despairing on "I CAN'T stop every wolf attack". | done |
+| 28 | all | - | No in-video title (tested on TikTok; title on the cover). | done |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).

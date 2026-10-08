@@ -7,9 +7,9 @@ Read this first in any new session, after CLAUDE.md.
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
 ## Done: "Cry Minister" (TikTok, Satire style, `prompts/cry-minister.md`)
-- Final (v2, 8 Oct, after Sam's notes): `animations/cry-minister-vertical.mp4`, 63.3 s, 7.7 MB, 1080 x 1920, 12 fps; full render
-  18.5 min on 4 cores (then re-encoded smaller). Not yet posted. Voice only (no sounds made in code): Sam may send real
-  sound effects / a street recording to place under it. Man City shirt from Sam's reference (made-up crest and sponsor).
+- Final (v3, 8 Oct): `animations/cry-minister-vertical.mp4`, 63.3 s, 7.7 MB, 1080 x 1920, 12 fps; full render 18 min on 4 cores,
+  title removed with --reuse in 3 min, re-encoded smaller. Not yet posted. Voice only. No in-video title (Sam, 8 Oct: test
+  posting without it; the Cranberry title goes on the cover). Shoppers use the new three-quarter walk (`source/walker.py`).
 - Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves: side-on lope, leap, feeding; coming at us, leaping
   at the lens, tangled in a net; flat red gore). Notes, Sam's decisions and all notes applied: `notes/cryminister.md`.
 - Sam's 20 lines (16 files, `source/audio/cry-*.m4a`; two files hold three lines each), cleaned, matched in tone, levelled.
