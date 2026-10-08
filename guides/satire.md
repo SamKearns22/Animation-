@@ -10,6 +10,9 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
 2. Read Sam's brief (`prompts/_brief-skeleton.md` is the shape; `prompts/russiadent-evil-template.md` a finished one).
    Ask all questions in ONE message, each with a recommended answer. Notes go in `notes/NAME.md` (`notes/_template.md`).
+   Remind Sam: leave about a second of silence after each line before stopping the recording, and turn off the
+   iPhone's Voice Isolation mic mode (takes stopped mid-hiss, chopped by the phone's clean-up, crackled in Cry Minister).
+   In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
 3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows **every view**
    each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key
    reaction, a **numbered strength sheet** (1 = slight, 6 = huge) for Sam to pick a number from.
@@ -19,6 +22,8 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 Flat colour, one outline weight, no gradients or glows; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
 or ruler-straight boxes; every copy different (colours, sizes, facing); circle hands with props laid over them; deadpan
 faces; hard cuts; a close-up for the reaction that matters; Cranberry Title style for the title, on 2 s.
+No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
+flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
 
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
@@ -30,7 +35,13 @@ faces; hard cuts; a close-up for the reaction that matters; Cranberry Title styl
 - Background people and animals behave normally (pecking, chatting, walking) with relaxed, friendly faces. Nobody looks
   at the camera or reacts unless the script says so.
 - One of each facial feature: when a face part is drawn over the library's face (a shocked mouth, raised brows),
-  switch the library's own off (`mouth`, `brows`), or the face shows two.
+  switch the library's own off (`mouth`, `brows`), or the face shows two. A drawn mouth (gritted teeth, a grimace) goes
+  on only when the library mouth is 'hidden': call `satire_style.own_mouth(sp)` first (it stops with an error otherwise).
+- Selfie shots: the arm holding the phone runs out of the frame towards the lens, raised for an over-the-shoulder view
+  and never under the on-screen text; we never see a phone in that hand. When the threat is behind him, he glances back
+  over his shoulder towards its side of the screen.
+- A small or distant person reacting to the story uses the whole body (stops dead, hands on hips, a big slow head shake,
+  then holds), placed where nothing in front hides them. A face-only reaction is for close shots.
 - Every action as beats: set-up, action, contact, follow-through, settle, with a pace ('fast' into a hit, 'slow' out)
   (`filmkit.Beats`; every frame of the path is tested with `filmkit.check_joints`: joint limits, bone lengths, a hand
   never through a head).
@@ -43,6 +54,18 @@ faces; hard cuts; a close-up for the reaction that matters; Cranberry Title styl
   (`TITLE_AT` in the template).
 - Sound effects are placed by when they really start (`filmkit.place`), not by the start of their file.
 - Anyone in a close-up must be seen in a wide shot.
+
+## Sound (all in `source/mossad_audio.py`)
+- Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
+  300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
+  their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.
+- Every line's tail is cleaned (`MA.smooth_tail`, built into `MA.line`): the real "s", "z" or "k" is kept, then the hiss
+  only fades. The phone's clean-up chops final hisses into bursts and thumps, which the extra volume makes obvious.
+- Lines recorded in one go and played back to back with no gap stay ONE unbroken piece of sound, split only for the
+  mouths (as in `cryminister._voices`); never fade, treat separately or space out pieces cut mid-sound.
+- When Sam reports a bad sound, first make a short clip of the original recording and the film's version of that moment
+  at the same volume, to learn whether the fault is in the recording or our processing. Send each sound fix as a
+  sound-check file (the soundtrack over one still) before any render.
 
 ## Before every render
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit

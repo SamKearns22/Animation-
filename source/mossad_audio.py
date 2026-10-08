@@ -12,6 +12,7 @@ Usage:
     python3 mossad_audio.py report        loudness, noise and pauses of each file, before and after
     python3 mossad_audio.py wavs OUT_DIR  cleaned, levelled copies to listen to
 """
+import math
 import os
 import sys
 import wave
@@ -88,6 +89,123 @@ def edges(x):
     x[-k:] *= np.linspace(1, 0, k)
     return x
 
+# ------------------------------------------------------------------------------------------------- mastering (Cry Minister, 8 Oct)
+# Phone recordings are quiet with sharp peaks (about 20 dB above their average). Turning them up to -14 LUFS and then
+# limiting every loud word by up to 8 dB within milliseconds sounded like crackle on a phone (Cry Minister, note 32).
+# So: even the loud stretches out gently, master at -16 LUFS, and never limit more than 3 dB.
+MASTER_LUFS = -16.0
+MAX_LIMIT_DB = 3.0
+
+
+def gentle_level(x, ratio=3.0, above=4.0):
+    """Even out loud and soft words the way a studio does: the volume eases down only on stretches more than `above` dB
+    louder than the line's average (by half the excess), easing in over 30 ms and back over 300 ms, so it follows
+    syllables, never the voice's own waves. The film's sound used to be turned up 7 dB and then squashed by up to 8 dB
+    within milliseconds on every loud word: on a phone that is crackle (Sam's note 32, twice)."""
+    blk = int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
+    from scipy.ndimage import uniform_filter1d
+    lv = 10 * np.log10(uniform_filter1d(p, 30) + 1e-12)              # level over 30 ms, in dB
+    ref = 10 * np.log10(np.mean(p[lv > lv.max() - 40]) + 1e-12)       # the speech's average level
+    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)     # gain wanted, dB
+    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 30), 1 - math.exp(-1 / 300)
+    for i in range(1, nb):
+        k = att if want[i] < g[i - 1] else rel
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * k
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
+    return x * gs
+
+
+
+
+def smooth_limit(x, ceiling_db):
+    """A last guard on the few bursts left over (at most 3 dB of them): the volume eases down over 10 ms just ahead of
+    a peak and recovers over about 150 ms."""
+    from scipy.ndimage import minimum_filter1d, uniform_filter1d
+    c, blk = 10 ** (ceiling_db / 20), int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    a = np.abs(np.pad(x, (0, nb * blk - len(x)))).reshape(nb, blk).max(1)
+    need = minimum_filter1d(np.minimum(1.0, c / np.maximum(a, 1e-9)), 21)    # 10 ms either side
+    g, rel = need.copy(), 1 - math.exp(-1 / 150)
+    for i in range(1, nb):
+        g[i] = min(need[i], g[i - 1] + (1 - g[i - 1]) * rel)
+    g = np.minimum(need, uniform_filter1d(g, 5))
+    g = np.minimum(g, uniform_filter1d(g, 5))
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, g)
+    return np.clip(x * gs, -c, c)
+
+
+
+
+def master(mix, end=None, lufs_target=MASTER_LUFS):
+    """The whole film's sound: levelled gently, set to -16 LUFS (or quieter if the loudest burst would need more than
+    3 dB of limiting), then the few bursts left eased under -1 dB. Returns (mastered, the gain applied before limiting)."""
+    end = len(mix) if end is None else end
+    x = gentle_level(mix)
+    if np.abs(x).max() < 1e-9:
+        return x, 1.0
+    g = min(10 ** ((lufs_target - lufs(x[:end])) / 20), 10 ** ((MAX_LIMIT_DB - 1.0) / 20) / np.abs(x).max())
+    return smooth_limit(x * g, -1.0), g
+
+
+def limit_check(mix, end=None):
+    """Faults for the plan checks: limiting deeper than 3 dB anywhere (it sounds like crackle on a phone)."""
+    x = gentle_level(mix)
+    out, g = master(mix, end)
+    d = limit_db(x * g, out)
+    return [f'the sound is limited by {d:.1f} dB somewhere (most allowed {MAX_LIMIT_DB:.0f}): master quieter'] \
+        if d > MAX_LIMIT_DB + 0.3 else []
+
+
+def limit_db(before, after):
+    """How hard the limiting pressed anywhere (dB): the most that `after` sits below `before` over 10 ms."""
+    w = int(0.01 * SR)
+    n = min(len(before), len(after)) // w
+    a = np.sqrt((before[:n * w].reshape(n, w) ** 2).mean(1)) + 1e-9
+    b = np.sqrt((after[:n * w].reshape(n, w) ** 2).mean(1)) + 1e-9
+    loud = a > a.max() * 0.05
+    return float(np.max(20 * np.log10(a[loud] / b[loud]))) if loud.any() else 0.0
+
+
+def smooth_tail(y):
+    """After the last voiced sound of a piece, the hiss of its final "s" or "k" only ever dies away: in several takes
+    (Cry Minister lines 1, 12, 13, 15) the phone's own voice clean-up chopped that hiss into bursts about 12 a second, which the
+    film's extra volume turned into crackle (Sam's note 38; they are in the recordings too). After the brightest moment
+    of the tail (the real consonant) the bursts and thumps are pressed down to a falling envelope; nothing is ever
+    turned up."""
+    w = int(0.01 * SR)
+    n = len(y) // w
+    if n < 4:
+        return y
+    fr = y[:n * w].reshape(n, w)
+    lv = 20 * np.log10(np.sqrt((fr ** 2).mean(1)) + 1e-9)
+    zc = np.abs(np.diff(np.sign(fr), axis=1)).mean(1) / 2 * SR
+    v = (zc < 3500) & (lv > lv.max() - 25)
+    run = np.convolve(v.astype(int), np.ones(5, int), 'valid') == 5          # real voice: 50 ms of it in a row
+    voiced = np.where(run)[0]                                                 # (a thump is shorter)
+    if not len(voiced):
+        return y
+    t0 = (voiced[-1] + 5) * w                                          # the unvoiced tail starts here
+    if len(y) - t0 < 2 * w:
+        return y
+    from scipy.ndimage import uniform_filter1d
+    tail = y[t0:]
+    env = np.sqrt(uniform_filter1d(tail ** 2, int(0.005 * SR)) + 1e-12)     # 5 ms: shows the bursts
+    slow = np.sqrt(uniform_filter1d(tail ** 2, int(0.02 * SR)) + 1e-12)     # 20 ms
+    from scipy.signal import butter, sosfilt
+    hiss = sosfilt(butter(4, 3000, 'high', fs=SR, output='sos'), tail)
+    hs = uniform_filter1d(hiss ** 2, int(0.02 * SR))
+    first = hs[:int(0.2 * SR)]
+    pk = int(np.argmax(first >= 0.7 * first.max()))                        # the real "s", "z" or "k" (its first strong
+                                                                             # moment) is kept whole,
+    fall = np.concatenate([env[:pk], np.minimum.accumulate(slow[pk:])])     # then the hiss never rises again
+    g = np.minimum(1.0, fall / env)
+    g = uniform_filter1d(g, int(0.003 * SR))                                 # no clicks from the gain itself
+    out = y.copy()
+    out[t0:] = tail * g
+    return out
+
 
 CACHE = {}
 
@@ -96,7 +214,7 @@ def line(name):
     """A recording, cleaned and set to the shared line loudness."""
     if name not in CACHE:
         x = load(os.path.join(HERE, 'audio', name + '.m4a'))
-        x = edges(denoise(dehum(x)))
+        x = edges(smooth_tail(denoise(dehum(x))))
         CACHE[name] = x * 10 ** ((LINE_LUFS - lufs(x)) / 20)
     return CACHE[name]
 

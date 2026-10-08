@@ -166,7 +166,9 @@ design as storytelling: Walter Murch and the film-sound literature.
   - mix for where the film is heard; most of ours are heard on phone speakers, which can't play deep
     bass, so add upper harmonics (a higher layer of the same sound) a phone can play;
   - streaming services turn tracks down to about -14 LUFS (a measure of how loud a track sounds overall),
-    so master near that, with peaks no higher than about -1 dBTP (the loudest moment), and keep the
+    but voice-only films made from phone recordings are mastered at about -16 LUFS, with peaks no higher
+    than about -1 dBTP (the loudest moment), the loudness evened out gently and never more than 3 dB of
+    limiting: squashing the voice harder to reach -14 sounded like crackle (Cry Minister). Keep the
     loudness even across sections.
 - **Reproducible:** any sound built from random noise uses a fixed seed (the starting number for the
   randomness), so a re-render sounds the same.
@@ -386,6 +388,10 @@ this series. Full details in `tiktok-design.md`.
 
 ### Lesson from "Cry Minister" (8 Oct, approved by Sam)
 - A mouth seen from the side is see-through between the jaws; only a mouth seen from the front shows the dark throat.
+- (8 Oct, later) Every crackle Sam heard came from the voice: hard limiting to reach -14 LUFS, then the phone's own
+  chopped hiss at line ends, then lines cut apart mid-sound. Now rules in `guides/satire.md` ("Sound"), with the tools
+  in `source/mossad_audio.py`. Also new there: selfie arms, whole-body background reactions, no blank surfaces, one
+  mouth at a time, lines looked up by number.
 
 # Part 3. The coloured-pencil comedy shorts
 For Dam, The Salt and the Oxford rap battles (Andy and Sam).

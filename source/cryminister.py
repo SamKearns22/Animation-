@@ -35,7 +35,7 @@ import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
 import wolf as W                 # noqa: E402  the dire wolves
 from burnham_film import load    # noqa: E402
-from satire_style import Cam as SCam, Ctx, blob, limb, rough, install_circle_hands, OUT   # noqa: E402
+from satire_style import Cam as SCam, Ctx, blob, limb, rough, install_circle_hands, own_mouth, OUT   # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
@@ -174,52 +174,13 @@ def _voices():
     g = {k: 10 ** ((VOICE_LUFS - MA.lufs(np.concatenate(v))) / 20) for k, v in gains.items()}
     out = [None] * len(LINES)
     for (run, _, inner), y in zip(pieces, toned):
-        y = smooth_tail(y * g[LINES[run[0]]['audio'][0]])
+        y = MA.smooth_tail(y * g[LINES[run[0]]['audio'][0]])
         k_in, k_out = int(0.01 * SR), int(0.1 * SR)
         y[:k_in] *= np.linspace(0, 1, k_in)
         y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))     # a soft 100 ms fade at the very end
         cuts = [0] + inner + [len(y)]
         for k, idx in enumerate(run):
             out[idx] = y[cuts[k]:cuts[k + 1]]
-    return out
-
-
-def smooth_tail(y):
-    """After the last voiced sound of a piece, the hiss of its final "s" or "k" only ever dies away: in several takes
-    (lines 1, 12, 13, 15) the phone's own voice clean-up chopped that hiss into bursts about 12 a second, which the
-    film's extra volume turned into crackle (Sam's note 38; they are in the recordings too). After the brightest moment
-    of the tail (the real consonant) the bursts and thumps are pressed down to a falling envelope; nothing is ever
-    turned up."""
-    w = int(0.01 * SR)
-    n = len(y) // w
-    if n < 4:
-        return y
-    fr = y[:n * w].reshape(n, w)
-    lv = 20 * np.log10(np.sqrt((fr ** 2).mean(1)) + 1e-9)
-    zc = np.abs(np.diff(np.sign(fr), axis=1)).mean(1) / 2 * SR
-    v = (zc < 3500) & (lv > lv.max() - 25)
-    run = np.convolve(v.astype(int), np.ones(5, int), 'valid') == 5          # real voice: 50 ms of it in a row
-    voiced = np.where(run)[0]                                                 # (a thump is shorter)
-    if not len(voiced):
-        return y
-    t0 = (voiced[-1] + 5) * w                                          # the unvoiced tail starts here
-    if len(y) - t0 < 2 * w:
-        return y
-    from scipy.ndimage import uniform_filter1d
-    tail = y[t0:]
-    env = np.sqrt(uniform_filter1d(tail ** 2, int(0.005 * SR)) + 1e-12)     # 5 ms: shows the bursts
-    slow = np.sqrt(uniform_filter1d(tail ** 2, int(0.02 * SR)) + 1e-12)     # 20 ms
-    from scipy.signal import butter, sosfilt
-    hiss = sosfilt(butter(4, 3000, 'high', fs=SR, output='sos'), tail)
-    hs = uniform_filter1d(hiss ** 2, int(0.02 * SR))
-    first = hs[:int(0.2 * SR)]
-    pk = int(np.argmax(first >= 0.7 * first.max()))                        # the real "s", "z" or "k" (its first strong
-                                                                             # moment) is kept whole,
-    fall = np.concatenate([env[:pk], np.minimum.accumulate(slow[pk:])])     # then the hiss never rises again
-    g = np.minimum(1.0, fall / env)
-    g = uniform_filter1d(g, int(0.003 * SR))                                 # no clicks from the gain itself
-    out = y.copy()
-    out[t0:] = tail * g
     return out
 
 
@@ -1456,6 +1417,7 @@ def run_andy(img, t):
     my = -150 + 60
     if True:
         if sp['mouth'] == 'hidden':                                # the grimace only when his talking mouth is off (note 35)
+            own_mouth(sp)
             p.poly([(-30, my + 6), (-14, my - 2), (14, my - 2), (30, my + 6), (24, my + 16), (-24, my + 16)], (250, 250, 246), B.INK, 2.4)
             p.line([(-28, my + 7), (28, my + 7)], B.INK, 1.6)              # clenched teeth, top and bottom
             for k in (-14, 0, 14):
@@ -1699,49 +1661,10 @@ def soundtrack(stems=False):
         voice[s_:s_ + len(seg)] += seg
     rest = np.zeros(n)
     end = int(BLACK_AT * SR)
-    mix = gentle_level(voice)
-    g = min(10 ** ((-16.0 - MA.lufs(mix[:end])) / 20),                # master: -16 LUFS, or quieter if the loudest
-            10 ** (2.0 / 20) / np.abs(mix).max())                     # burst would need more than 3 dB of limiting
-    mix, voice = smooth_limit(mix * g, -1.0), voice * g
+    mix, g = MA.master(voice, end)                                    # -16 LUFS, levelled gently, never squashed
+    voice = voice * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
-
-
-def gentle_level(x, ratio=3.0, above=4.0):
-    """Even out loud and soft words the way a studio does: the volume eases down only on stretches more than `above` dB
-    louder than the line's average (by half the excess), easing in over 30 ms and back over 300 ms, so it follows
-    syllables, never the voice's own waves. The film's sound used to be turned up 7 dB and then squashed by up to 8 dB
-    within milliseconds on every loud word: on a phone that is crackle (Sam's note 32, twice)."""
-    blk = int(0.001 * SR)
-    nb = -(-len(x) // blk)
-    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
-    from scipy.ndimage import uniform_filter1d
-    lv = 10 * np.log10(uniform_filter1d(p, 30) + 1e-12)              # level over 30 ms, in dB
-    ref = 10 * np.log10(np.mean(p[lv > lv.max() - 40]) + 1e-12)       # the speech's average level
-    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)     # gain wanted, dB
-    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 30), 1 - math.exp(-1 / 300)
-    for i in range(1, nb):
-        k = att if want[i] < g[i - 1] else rel
-        g[i] = g[i - 1] + (want[i] - g[i - 1]) * k
-    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
-    return x * gs
-
-
-def smooth_limit(x, ceiling_db):
-    """A last guard on the few bursts left over (at most 3 dB of them): the volume eases down over 10 ms just ahead of
-    a peak and recovers over about 150 ms."""
-    from scipy.ndimage import minimum_filter1d, uniform_filter1d
-    c, blk = 10 ** (ceiling_db / 20), int(0.001 * SR)
-    nb = -(-len(x) // blk)
-    a = np.abs(np.pad(x, (0, nb * blk - len(x)))).reshape(nb, blk).max(1)
-    need = minimum_filter1d(np.minimum(1.0, c / np.maximum(a, 1e-9)), 21)    # 10 ms either side
-    g, rel = need.copy(), 1 - math.exp(-1 / 150)
-    for i in range(1, nb):
-        g[i] = min(need[i], g[i - 1] + (1 - g[i - 1]) * rel)
-    g = np.minimum(need, uniform_filter1d(g, 5))
-    g = np.minimum(g, uniform_filter1d(g, 5))
-    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, g)
-    return np.clip(x * gs, -c, c)
 
 
 def voices_reel(out):
@@ -1770,6 +1693,11 @@ def checks():
     faults = E.check_mouths(on_screen, [w for w in windows if kind(sum(w) / 2) not in ('maul', 'bigwolf', 'alley')])
     mix, voice, rest = soundtrack(stems=True)
     faults += filmkit.voice_balance(voice, rest, SR, windows)
+    raw = np.zeros(len(mix))
+    for ln in LINES:
+        s_ = int(ln['start'] * SR)
+        raw[s_:s_ + len(ln['_voice'])] += ln['_voice'][:len(raw) - s_]
+    faults += MA.limit_check(raw, int(BLACK_AT * SR))
     faults += title_check()
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[s[1] for s in SHOTS[1:]], end=BLACK_AT):

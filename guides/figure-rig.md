@@ -110,6 +110,8 @@ for these films: too costly in rounds and renders.
   over ~0.3 s (`saccade`, `eyes_then_head`). Eyes point at the person spoken to (`look_at`).
 - **Walks:** about two steps a second (6 drawings a step); the stride matches the speed so feet never slide
   (`walk`); a run is about three steps a second. People pushing a trolley lean into it.
+  People walking ACROSS the frame use the three-quarter walk (`source/walker.py`), drawn at no less than 90% of their
+  front-on width (`kx`, default 0.9), legs as thick as standing people's: at 78% they looked oddly thin (Cry Minister).
 - **No twins:** left and right, and people side by side, never move identically at the same moment: offset their
   phases.
 - **Mouths: proper mouth shapes** (`source/mouths.py`, test sheet `python3 mouths.py sheet OUT.png`). The ten

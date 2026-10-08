@@ -161,9 +161,9 @@ def soundtrack(stems=False):
     # Outdoor recordings and ambience: cut wind rumble (sound_questions asks about it).
     mix = voice + rest
     end = int(BLACK_AT * SR)
-    if np.abs(voice).max() > 1e-6:
-        g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)             # master: about -14 LUFS
-        mix, voice, rest = M.limiter(mix * g, -2.6), voice * g, rest * g
+    if np.abs(voice).max() > 1e-6:                              # -16 LUFS, levelled gently, never squashed by more
+        mix, g = MA.master(mix, end)                             # than 3 dB (hard limiting crackles on a phone)
+        voice, rest = voice * g, rest * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
 
@@ -176,6 +176,13 @@ def checks():
     if any(ln['_voice'] is not None for ln in LINES):
         _, voice, rest = soundtrack(stems=True)
         faults += filmkit.voice_balance(voice, rest, SR, windows)
+        n = int((DUR + 0.3) * SR)
+        raw = np.zeros(n)
+        for ln in LINES:
+            if ln['_voice'] is not None:
+                s = int(ln['start'] * SR)
+                raw[s:s + len(ln['_voice'])] += ln['_voice'][:n - s]
+        faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     faults += title_check()
     mix, voice, rest = soundtrack(stems=True)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,

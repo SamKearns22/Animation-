@@ -77,6 +77,14 @@ def rough(pts, amount=6, seed=0):
     return [(x + r.uniform(-amount, amount), y + r.uniform(-amount, amount)) for x, y in pts]
 
 
+def own_mouth(sp):
+    """Call before drawing a mouth of your own over a face (gritted teeth, a grimace): the library's mouth must be off
+    (sp['mouth'] = 'hidden'), or the face shows two mouths at once (Cry Minister, note 35)."""
+    if sp.get('mouth') != 'hidden':
+        raise ValueError(f"{sp.get('name', 'someone')}: a drawn mouth over the library's '{sp.get('mouth')}' mouth: "
+                         "set sp['mouth'] = 'hidden' first (one mouth at a time)")
+
+
 def install_circle_hands(B, r=26):
     """Make every arm drawn by burnham.py end in a plain circle hand; a 'phone' hand gets a phone laid over it."""
     def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
