@@ -169,7 +169,7 @@ def painting(p, x0, y0, x1, y1, subject='horse'):
 
 def palace_painting(img, p, cam, x0, y0, x1, y1):
     """A big bright oil of a British royal palace: a long pale-stone front with a pillared centre and its balcony,
-    the royal standard flying, black and gold railings, scarlet guardsmen, a blue summer sky (generic, no likeness
+    the Union flag flying, black and gold railings, scarlet guardsmen, a blue summer sky (generic, no likeness
     of any one building)."""
     box(p, x0 - 26, y0 - 26, x1 + 26, y1 + 26, (238, 192, 76), 3)
     box(p, x0 - 10, y0 - 10, x1 + 10, y1 + 10, (190, 140, 40), 2)
@@ -207,10 +207,16 @@ def palace_painting(img, p, cam, x0, y0, x1, y1):
     p.poly([(X(0.44), Y(0.56)), (X(0.56), Y(0.56)), (X(0.55), Y(0.6)), (X(0.45), Y(0.6))], (196, 20, 40), INK, 1.4)
     for k in range(3):
         box(p, X(0.455 + 0.035 * k), Y(0.44), X(0.48 + 0.035 * k), Y(0.53), (60, 84, 120), 1.2)
-    p.line([(X(0.5), Y(0.2)), (X(0.5), Y(0.04))], (60, 60, 60), 2)            # flagpole and the royal standard
-    fx, fy, fw, fh = X(0.5), Y(0.04), w * 0.09, h * 0.09
-    for (a, b, c) in (((0, 0), (220, 30, 40), 0), ((1, 0), (250, 200, 40), 0), ((0, 1), (30, 70, 170), 0), ((1, 1), (220, 30, 40), 0)):
-        box(p, fx + a[0] * fw / 2, fy + a[1] * fh / 2, fx + (a[0] + 1) * fw / 2, fy + (a[1] + 1) * fh / 2, b, 0)
+    p.line([(X(0.5), Y(0.2)), (X(0.5), Y(0.04))], (60, 60, 60), 2)            # flagpole
+    fx, fy, fw, fh = X(0.5), Y(0.04), w * 0.11, h * 0.09                    # the Union flag
+    box(p, fx, fy, fx + fw, fy + fh, (20, 50, 130), 0)
+    for (ax, ay, bx, by) in ((fx, fy, fx + fw, fy + fh), (fx, fy + fh, fx + fw, fy)):
+        p.line([(ax, ay), (bx, by)], (250, 250, 250), 5)
+        p.line([(ax, ay), (bx, by)], (210, 20, 40), 1.6)
+    box(p, fx + fw * 0.4, fy, fx + fw * 0.6, fy + fh, (250, 250, 250), 0)
+    box(p, fx, fy + fh * 0.36, fx + fw, fy + fh * 0.64, (250, 250, 250), 0)
+    box(p, fx + fw * 0.45, fy, fx + fw * 0.55, fy + fh, (210, 20, 40), 0)
+    box(p, fx, fy + fh * 0.42, fx + fw, fy + fh * 0.58, (210, 20, 40), 0)
     box(p, fx, fy, fx + fw, fy + fh, None, 1.6)
     p.line([(x0, Y(0.86)), (x1, Y(0.86))], (24, 24, 28), 2.4)                # black railings with gilded gates
     for k in range(70):
