@@ -614,50 +614,58 @@ def _shopper_looks():
 SHOPPER_LOOKS = _shopper_looks()
 
 
+TUTTER, TUT = 1, (6.0, 9.9)                  # the man at the back in shot 2: slows, frowns, shakes his head at it all
+SHOPPERS[TUTTER] = (TUT[0] - (SHOPPERS[TUTTER][1] + 2250) / 640,) + tuple(SHOPPERS[TUTTER][1:])   # behind the pack as he stops
+
+
+def shopper_x(k, t):
+    """Where shopper k is: walking at 640 a second, except the tutter, who slows to a quarter speed while he looks."""
+    t0, x0, d = SHOPPERS[k][0], SHOPPERS[k][1], SHOPPERS[k][2]
+    tau = t - t0
+    if k == TUTTER:
+        tau -= 0.75 * max(0.0, min(t, TUT[1]) - TUT[0])
+    return x0 + d * 640 * tau, tau
+
+
 def shoppers(img, cam, t, back):
-    """People going about their day along the pavement, front-on as the show draws everyone, heads turned the way they
-    walk; now and then eyes and head snap to the wolves or the Prime Minister, then back."""
+    """People going about their day along the pavement: the show's usual people, walking in a three-quarter view
+    (walker.py) so we see faces and clothes while their legs stride the way they go. The nearer lane is drawn bigger.
+    Now and then eyes and head snap to the wolves or the Prime Minister, then back."""
+    import walker
     X = X_(img, cam)
     for k, (t0, x0, d, lane, size, pal, sd, g) in enumerate(SHOPPERS):
         if (lane < 0) != back or t < t0:
             continue
-        x = x0 + d * 640 * (t - t0)
+        x, tau = shopper_x(k, t)
         sx = cam.P(x, lane)[0] / B.SS
         if not -300 < sx < 1380:
             continue
-        look = next((w for a, b, w in g if a <= t < b), None)
+        sc = S * size * (1 + lane / 2000)                         # nearer us, bigger
         sp = dict(SHOPPER_LOOKS[k])
-        sc = S * size
-        rig = F.Rig(sp)
-        ph = ((t - t0) * 0.95 + sd * 0.37) % 1.0
-        sw = math.sin(2 * math.pi * ph)
-        sp['arms'] = {side: rig.arm(side, (sg * 165, 425 + 40 * sg * sw), 'fist', 'depth', strict=False)
-                      for side, sg in (('L', -1), ('R', 1))}
-        if look == 'pm':
-            sp['turn'], sp['look'] = 0.0, 0.0                       # a glance straight at him
+        look = next((w for a, b, w in g if a <= t < b), None)
+        turn = None
+        speed = 640
+        if k == TUTTER and TUT[0] <= t < TUT[1]:                   # weary, irritated: a slow shake of the head
+            speed = 160
+            u = t - TUT[0] - 0.4
+            shake = [-0.75, -0.2, -0.75, -0.2, -0.75, -0.2][int(u / 0.24)] if 0 <= u < 1.44 else -0.7
+            turn, sp['look'] = shake, -0.9
+            sp.update(brows='alarm', lid=5, mouth='set')
+        elif look == 'pm':
+            turn, sp['look'] = 0.0, 0.0                            # a glance straight at him
         elif look == 'wolves':
-            sp['turn'] = 0.45 if MAN_X > x else -0.45
+            turn = 0.5 if MAN_X > x else -0.5
             sp['look'] = 0.9 if MAN_X > x else -0.9
-        else:
-            sp['turn'], sp['look'] = 0.45 * d, 0.8 * d             # facing the way they walk
         sp['blink'] = ((t + sd) % 3.7) < 0.12
-        bob = 10 * abs(sw)
-        neck = lane - (F.SOLE_Y + bob) * sc
-        for side in (-1, 1):                                        # walking legs: one foot lifting, then the other
-            up = max(0.0, sw * side)
-            hip = (x + side * 52 * sc, neck + 450 * sc)
-            knee = (x + side * 60 * sc, neck + (690 - 60 * up) * sc)
-            foot = (x + side * 58 * sc, neck + (F.SOLE_Y + bob - 10 - 70 * up) * sc)
-            limb(X, hip, knee, 74 * sc, sp['trousers'])
-            limb(X, knee, foot, 60 * sc, sp['trousers'])
-            X.ell(foot[0], foot[1] + 4 * sc, 54 * sc, 24 * sc, (36, 32, 30))
-        B.person(img, cam, x, neck, sc, sp, t)
-        if sd % 3 != 0:                                             # a shopping bag from one hand
-            el, wr = sp['arms']['R'][:2]
-            hx, hy = x + wr[0] * sc, neck + (wr[1] + 30) * sc
+        ph = (tau * 0.95 + sd * 0.37) % 1.0
+        drawn = walker.walk(img, cam, B, F, x, lane, sc, sp, t, d, ph, speed, turn=turn, limb=limb)
+        if sd % 3 != 0:                                            # a shopping bag from one hand
+            el, wr = drawn['arms']['R'][:2]
+            neck = lane - F.SOLE_Y * sc
+            hx, hy = x + wr[0] * sc * 0.78, neck + (wr[1] + 30) * sc
             X.seg((hx, hy), (hx, hy + 50 * sc), 5 * sc)
-            X.poly(rough([(hx - 60 * sc, hy + 45 * sc), (hx + 60 * sc, hy + 45 * sc), (hx + 70 * sc, hy + 190 * sc),
-                          (hx - 70 * sc, hy + 190 * sc)], 4, sd), SHOPPER_PALS[pal][3])
+            X.poly(rough([(hx - 55 * sc, hy + 45 * sc), (hx + 55 * sc, hy + 45 * sc), (hx + 64 * sc, hy + 190 * sc),
+                          (hx - 64 * sc, hy + 190 * sc)], 4, sd), SHOPPER_PALS[pal][3])
 
 # ------------------------------------------------------------------------------------------------- the kill
 PACK = [   # (offset from the man, depth (+ = nearer), facing, palette, phase of its feeding): shot 2's five wolves
@@ -679,16 +687,18 @@ def wolf_kill_state(i, t):
     gx, gy = MAN_X + dx, dz
     if t < t_leap - 0.9:
         return None
-    if t < t_leap:                                                 # bounding in from the left, out of shot
+    side = 1 if face > 0 else -1                                    # the left-hand wolves come from the left, the
+    run_in = 600 if side > 0 else 500                              # right-hand ones sweep in from the right (behind
+    if t < t_leap:                                                 # Andy), so none overshoots the man
         k = (t_leap - t) / 0.9
-        x = gx - 2600 * k - 600 if face > 0 else gx - 2600 * k - 300
-        return dict(x=x, y=gy, face=1, pal=pal, run=(t * 2.4 + i * 0.3) % 1.0)
-    if t < t_land:                                                 # airborne at the throat (the first) or the pile
+        x = gx - side * (2600 * k + run_in)
+        return dict(x=x, y=gy, face=side, pal=pal, run=(t * 2.4 + i * 0.3) % 1.0)
+    if t < t_land:                                                 # a short leap onto him: jaws first, landing on him
         u = (t - t_leap) / 0.45
-        sx = gx - 600 if face > 0 else gx - 300
+        sx = gx - side * run_in
         x = sx + (gx - sx) * u
-        lift = 260 * 4 * u * (1 - u) + 120 * (1 - u) * (i == 0)
-        return dict(x=x, y=gy, face=1 if x < gx or face > 0 else face, pal=pal, leap=min(1.0, u * 1.6), lift=lift, jaw=1.0)
+        lift = (260 if side > 0 else 180) * 4 * u * (1 - u) + 120 * (1 - u) * (i == 0)
+        return dict(x=x, y=gy, face=side, pal=pal, leap=min(1.0, u * 1.6), lift=lift, jaw=1.0)
     c = ((t - t_land) / RIP + ph) % 1.0                           # feeding: down (0-0.55), worry, rip up (0.7-0.8), hold
     feed = 0.0 if c < 0.6 else (min(1.0, (c - 0.6) / 0.12) if c < 0.85 else max(0.0, 1.0 - (c - 0.85) / 0.15))
     blood = min(1.0, (t - t_land) / 3.0 + 0.2)
@@ -871,7 +881,7 @@ FACE = {   # brows, lids, harrow (the weight of it: rings under the eyes), what 
     8: dict(brows='alarm', lid=0, harrow=0.3), 9: dict(brows='sincere', lid=1, harrow=0.35),
     10: dict(brows='alarm', lid=-1, harrow=0.4), 11: dict(brows='outrage', lid=-1, harrow=0.45),
     12: dict(brows='alarm', lid=0, harrow=0.5), 13: dict(brows='alarm', stress=True), 14: dict(brows='alarm', stress=True),
-    15: dict(brows='alarm', lid=0, harrow=0.6), 16: dict(brows='fierce', lid=2, harrow=0.6),
+    15: dict(brows='alarm', lid=7, harrow=0.45, rest='set'), 16: dict(brows='fierce', lid=2, harrow=0.6),
     18: dict(brows='alarm', lid=-2, harrow=0.65), 19: dict(brows='sincere', lid=2, harrow=0.3),
     20: dict(brows='alarm', lid=-2, harrow=0.4)}
 LEVELS = [   # Andy's stress (shots 13-14), 1 = slight, 6 = huge: rings, red rims, eye size, pupil, lid twitch, sweat, hair
@@ -901,13 +911,15 @@ def andy_sp(t, n=None):
     shape = mouths.at(TRACK, t)
     talking = any(ln['start'] - 0.1 <= t <= ln['end'] for ln in LINES)
     sp['mouth'] = 'v:' + shape if shape != 'rest' else ('v:rest' if fc.get('rest') is None or talking else fc['rest'])
+    if n == 15 and shape == 'E':                     # despairing: a grimace, never the wide 'E' that reads as a smile
+        sp['mouth'] = 'v:etc'
     sp['blink'] = F.blinking(t, BLINKS) or bool(fc.get('stress'))
     sp['look'] = 0.0                                   # into the lens: he is talking to us
     sp['tilt'] = filmkit.shifts(t, seed=11, amount=0.035)
     if n == 6:
         sp['tilt'] = 0.06 + filmkit.shifts(t, seed=12, amount=0.02)
-    if n == 15:
-        sp['tilt'] = -0.1                                # head dipped into the palm
+    if n == 15:                                      # head sinking further into the palm as he despairs
+        sp['tilt'] = -0.1 - 0.06 * min(1.0, max(0.0, (t - line_of(15)['start']) / 2.0))
     filmkit.eyeline('Andy', t, (AX, NECK - 150 * S), (sp['look'], 0.0), (AX, NECK - 150 * S))
     return sp
 
@@ -1251,6 +1263,7 @@ def net(img, X, t, tangled, u):
     nx, ny = 16, 10
     s_ = WOLF_S * FOC / NET_D
     gx, gy = proj(0.1, 0.0, NET_D + 0.05, vp)
+    kk = PXM * FOC / NET_D                                                     # pixels per metre at the net
     R, H = 255 * s_, 480 * s_                                                  # the dome it makes over the wolf
     f = min(1.0, (u - rel) / NET_FALL)                                         # falling and unrolling
     m = min(1.0, max(0.0, (u - first_tangle()) / 0.15))                        # settling into a drape
@@ -1260,8 +1273,8 @@ def net(img, X, t, tangled, u):
     for i_ in range(nx + 1):
         for j_ in range(ny + 1):
             uu, vv = -1 + 2 * i_ / nx, j_ / ny
-            top_y = NET_BAR - (NET_BAR - 0.0) * f * f                          # the sheet: hanging from where it fell
-            sx, sy = P(uu * ALLEY_W * 0.9, top_y - vv * min(NET_BAR, 2.6) * f * 0.9)
+            top_y = NET_BAR - (NET_BAR - H / kk) * f * f                       # the sheet's top falls to the wolf's back;
+            sx, sy = P(uu * ALLEY_W * 0.9, max(0.0, top_y - vv * 2.6 * f))     # its hem stops on the ground (bunching)
             dome_top = gy - H * math.sqrt(max(0.0, 1 - uu * uu))
             dx = gx + uu * R * (1 + 0.45 * vv) + wob * (1 - vv)
             dy = dome_top * (1 - vv) + (gy + 6) * vv
@@ -1278,6 +1291,7 @@ def net(img, X, t, tangled, u):
 
 # ---- shot 20: running for it, filming himself over his shoulder
 RUN_VP = (330, 820)
+SMALL_CHASERS = (2, 4)
 
 
 def run_scene(img, t, only=None):
@@ -1319,7 +1333,10 @@ def run_scene(img, t, only=None):
             gx, gy = proj(x, 0.0, d, vp)
             last = SHOTS[19][2] - t
             leap = None if not (i == 0 and last < 0.5) else 1.0 - last / 0.5
-            W.front(X, gx, gy, WOLF_S * k * (1 + (leap or 0) * 0.8), i, run=(u * 2.4 + 0.27 * i) % 1.0 if leap is None else None,
+            small = i in SMALL_CHASERS                                 # two of the government's smaller wolves, scrambling
+            size = WOLF_S * (0.6 if small else 1.0)                    # along on quicker, shorter strides
+            rate = 3.6 if small else 2.4
+            W.front(X, gx, gy, size * k * (1 + (leap or 0) * 0.8), i, run=(u * rate + 0.27 * i) % 1.0 if leap is None else None,
                     leap=leap, blood=0.7, seed=i * 13)
 
 
@@ -1330,13 +1347,38 @@ def run_andy(img, t):
     sp = andy_sp(t, 20)
     rig = F.Rig(sp)
     sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-340, 260), 'phone', 'down', 0.5, strict=False))
-    back = (u % 1.4) > 0.75                                        # glances back over his shoulder, then at the lens
-    sp['look'], sp['turn'] = (0.95, 0.3) if back else (0.0, 0.0)
-    sp['tilt'] = -0.08 + (0.08 if back else 0.0)
-    sp['lid'] = -3
-    if sp['mouth'] == 'v:rest':
-        sp['mouth'] = 'v:AI'                                         # panting
+    wt = word_times(line_of(20))
+    talking = sp['mouth'] != 'v:rest'
+    if t < wt[1][1] + 0.1:                                         # "Aw fook": pissed off - brows driven down, teeth bared
+        mode = 'angry'
+    elif t < wt[3][1] or (t > line_of(20)['end'] and (u % 1.4) > 0.75):
+        mode = 'terrified'                                         # "here come", and each glance back: terrified
+    else:
+        mode = 'stressed'                                          # to the lens between: haunted, sweating, grimacing
+    shape = sp['mouth'][2:]
+    opened = shape in ('AI', 'O', 'U', 'WQ', 'E', 'L')
+    if mode == 'angry':                                            # shouting it, teeth bared (never a pucker or grin)
+        sp.update(brows='fierce', lid=4, look=0.0, turn=0.0, tilt=-0.06)
+        sp['mouth'] = 'shout' if talking and opened else 'v:etc'
+    elif mode == 'terrified':                                      # gaping, the corners pulled down
+        sp.update(brows='outrage', lid=-4, look=0.95, turn=0.3, tilt=0.02)
+        sp['mouth'] = 'agape'                                      # never closes into a calm line
+    else:                                                          # panicked: brows shot up, eyes wide, gritted teeth
+        sp.update(brows='outrage', lid=-2, look=0.0, turn=0.0, tilt=-0.08, harrow=0.0)
+        if not talking or shape == 'E':
+            sp['mouth'] = 'hidden'                                 # the grimace is drawn below instead
     B.person(img, cam, AX, NECK, S, sp, t)
+    if mode in ('stressed', 'terrified'):
+        import peepee as PP
+        p = B.Pen(img, PP.Rot(B.Local(cam, AX, NECK, S), sp.get('tilt', 0.0), pivot=(0, -60)))
+        my = -150 + 60
+        if mode == 'stressed':
+            p.poly([(-30, my + 6), (-14, my - 2), (14, my - 2), (30, my + 6), (24, my + 16), (-24, my + 16)], (250, 250, 246), B.INK, 2.4)
+            p.line([(-28, my + 7), (28, my + 7)], B.INK, 1.6)              # clenched teeth, top and bottom
+            for k in (-14, 0, 14):
+                p.line([(k, my), (k, my + 14)], B.INK, 1.2)
+        for j_, (sx, sy) in enumerate(((ANDY['hw'] * 0.82, -195), (ANDY['hw'] * 0.9, -160))):   # sweat at his temple
+            p.poly([(sx, sy - 14), (sx + 7, sy), (sx, sy + 6), (sx - 7, sy)], (170, 214, 236), B.INK, 1.8)
 
 
 # ------------------------------------------------------------------------------------------------- frames
