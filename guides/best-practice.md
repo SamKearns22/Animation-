@@ -384,20 +384,6 @@ this series. Full details in `tiktok-design.md`.
 - The new checks, run on The Park's old faults, caught all of them, and two more in the template itself (its title over
   both heads, its example arm bent across the chest).
 
-### Lessons from "Cry Minister" (8 Oct)
-- A film that parodies someone's TikToks carries a made-up TikTok screen on every frame (search bar, button column with
-  counts and account picture, name with tick and "1d ago", description, progress bar), each piece placed just INSIDE
-  where the real app draws its own (search bar under the top tabs, buttons left of the real column, name above the real
-  one), so the viewer's own TikTok never hides ours completely. Parody name only, never the real account.
-- Copy the person's own caption style when it is part of the joke (Andy: TikTok Sans Bold, white, soft shadow, two or
-  three words at a time). Chunk by time as well as words, so no chunk flashes by in under about 0.75 s.
-- What happens behind the speaker is part of the joke: frame the background so the action (the wolves feeding) stays in
-  view behind him in most shots, and keep the space between the speaker and the backdrop filled (no empty pavement).
-- Sam sometimes records several lines in one file, run together: split them at word times from a speech recogniser
-  (PocketSphinx, which installs with its English model), cutting at the quietest moment between the words.
-- A side-on open mouth is see-through between the jaws (Sam); only a mouth seen head-on shows the dark throat.
-- Background people pass by and glance (eyes and head snap together) at the action or the speaker, then carry on.
-
 # Part 3. The coloured-pencil comedy shorts
 For Dam, The Salt and the Oxford rap battles (Andy and Sam).
 - **The look:** coloured pencil on off-white paper, with visible strokes and paper texture, and simple
