@@ -9,7 +9,7 @@ purpose:
   on purpose is fine. Doing it by accident is not.
 - **Parts 2-4, project rules.** These are what we have learned for one kind of film. They apply only to
   that kind of film, never to everything:
-  - **Part 2:** the TikTok parody series in the flat, FilmCow-influenced cartoon look. This series is
+  - **Part 2:** the TikTok parody series in the flat, Satire style, FilmCow-influenced cartoon look. This series is
     ongoing.
   - **Part 3:** the coloured-pencil comedy shorts.
   - **Part 4:** the Yuletide horror trailer.
@@ -82,6 +82,11 @@ and the research in `movement.md`.
 - **Contact needs proof:** when things touch, show it (a dent, a shadow, fingers wrapping, a splash).
   Things meant to be apart must not look touching.
 
+- **Write every action as beats with a pace word** (any action: a hit, a jump, a door shove, a sit, a bite): set-up,
+  action, contact, follow-through, settle. "Slow" into it, "fast" through the contact, "slow" out. Code it as
+  `filmkit.Beats`, which also tests every frame of the path, not just the key poses. A new action should read in
+  one look: who does what to whom, and the result stays visible.
+
 ## 1.3 Staging, continuity and layering
 Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuity editing).
 - **Staging:** each shot shows one idea clearly, with the eye led to it by framing, contrast and detail.
@@ -138,6 +143,14 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Show the consequence.** After an impact, something follows through (bitten, her hands go limp and the phone drops
   out of frame).
 
+- **Check the result, not the cause.** A check written for one fault (a folded elbow) misses the next (a detached neck,
+  a leg in the wrong place). Draw each character alone and test the PICTURE over time (`filmkit.silhouette_audit`):
+  in pieces, popping, stretching, frozen. Plus `filmkit.check_joints` for any pose given as joints (angle limits,
+  bone lengths, attachment points inside the body shape), and `filmkit.probe_marks` for things that must stay changed
+  (a smear, a broken window). Shapes cut by the edge of the frame are exempt; a stain on the floor is listed as allowed.
+- **Place action by sightlines before animating:** `filmkit.visible_spots` lists floor spots seen in every chosen
+  camera, so an attack seen in two shots is placed once, correctly.
+
 ## 1.4 Sound
 Sources: EBU R 128 and streaming-platform loudness practice; standard audio-editing practice. On sound
 design as storytelling: Walter Murch and the film-sound literature.
@@ -187,7 +200,7 @@ Sources: BBC Subtitle Guidelines; Netflix Timed Text Style Guide.
 
 ---
 
-# Part 2. The TikTok parody series (flat, FilmCow-influenced cartoon)
+# Part 2. The TikTok parody series (flat, Satire style, FilmCow-influenced cartoon)
 For Listening & Learning, Hope Again, The Patriots and future topical parodies. These rules apply only to
 this series. Full details in `tiktok-design.md`.
 
@@ -324,6 +337,28 @@ this series. Full details in `tiktok-design.md`.
   - big Anton capitals for shouts, plain italics for a childish aside (The Patriots).
 - **Endings:** a hard cut to black.
 
+**Efficiency and quality kit (Russiadent Evil and The Park, 8 Oct)** (general tools in `source/filmkit.py`, look in `source/satire_style.py`)
+- **Start every film from the style kit** (`satire_style.py`: flat colour, one outline weight, lumpy `blob` shapes, rounded `limb`,
+  circle hands). Never "draw clean, then fix the style": The Park had to be redrawn. Vary every copy (palettes, sizes,
+  facing). Deadpan faces: heavy lids, one brow up, flat mouth. Hard cuts and a close-up for the reaction that matters.
+- **Cast sheet first** (`python3 source/FILM.py cast OUT.png`, one cheap render): approve faces, builds and outfits
+  before any animation.
+- **Pictures are cached; captions and the title go on last.** `final OUT` renders and caches the pictures. A wording
+  or timing note: `final OUT --reuse --redo none` (about a minute). A note on one shot: `--reuse --redo reverse`
+  re-renders only that shot. The cache is only trusted when asked for, because it cannot know what code changed.
+- **Sound is separate from the picture:** a sound note means rebuilding the sound and attaching it, never a re-render.
+- **Run every check before any render** (pre-flight, all cores): plan checks (overlaps, unique outfits, close-up people
+  seen in the wides, every speech stretch has mouth movement) and the general body/movement audit. It also prints the
+  subtitles as text with times: proofread them there, not in a render.
+- **After any edit to an action, run the audit (about 2 minutes), not an animatic.** An animatic only when the movement
+  of a shot changed; review a changed shot with a stills strip first.
+- **Map before you search:** `python3 source/codemap.py FILE.py` lists every function with its line number
+  (`guides/russiadent-map.md` is the map of the biggest film).
+- **Notes go in one batch, numbered, each with shot and time** ("shot 2, 10.3 s, left"): see `notes/_template.md`.
+  Lock subtitle wording and sound-mix levels in the brief (`prompts/_brief-skeleton.md`).
+- Known limit: a speech-to-text model cannot be downloaded on this machine (the network blocks it), so word timing from a
+  recording is still set by hand; ask for one recording per script line to make that easy.
+
 **Redrawing a real artwork from photos (The Bayeux Tapestry Season Pass, 5 Oct)**
 - Trace the photo into the artwork's own small palette, then re-render every area in code (stitches, weave); no
   photo pixel reaches the film. Enlarge and sharpen the photo *before* sorting colours, and clean gently: a strong
@@ -339,6 +374,15 @@ this series. Full details in `tiktok-design.md`.
   camera drift, flickering flames) jumps at the cut (DLC's title hold).
 
 ---
+
+### Lessons from "The Park" (8 Oct; now rules in `guides/satire.md`, most of them checked)
+- Every one of Sam's notes traced back to a missing rule or check. Each became one: the title clear of everyone; sound
+  questions (wind rumble, dead silence, a jump at a cut), asked and never fixed without Sam; effects placed by their real
+  start; elbows on their own side; eyes that jump; held poses instead of wobble loops; background characters behaving
+  normally; every view on the cast sheet; a strength sheet for the key reaction; one of each facial feature; remakes
+  keep the original's cameras and start from the template; thrown things land and stay.
+- The new checks, run on The Park's old faults, caught all of them, and two more in the template itself (its title over
+  both heads, its example arm bent across the chest).
 
 # Part 3. The coloured-pencil comedy shorts
 For Dam, The Salt and the Oxford rap battles (Andy and Sam).
@@ -385,6 +429,11 @@ Specific lessons recorded there include:
 - eyes clamped with lids following the gaze;
 - slices that fall differently;
 - a full redraw whenever the camera moves.
+
+**Checks and speed (horror trailer, 8 Oct)** (details: `guides/pipeline.md`, last section)
+- Run `horror_preflight.py` before every render: the whole skeleton over every frame in about a minute. Fix every fault first.
+- Render with `--reuse`; check every new drawing against the lookbook with `lookbook_check.py`; keep title cards last.
+- The Satire rules (circle hands, flat colour, the Satire style kit) never apply here: the trailer keeps its own look.
 
 ---
 

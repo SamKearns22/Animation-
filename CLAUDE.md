@@ -23,6 +23,8 @@ I don't know how to code. Please:
 - **Short two-person film ("quick video"): read only `guides/quick-video.md` and nothing else below.** Don't open other
   guides or the big source files. Use Sonnet at medium effort, and ask me for all my notes in one batch after the one
   stills sheet.
+- **Satire-style film (the TikTok parody series, beyond two people talking): read `guides/satire.md` (one page) first**,
+  start from `source/satire_template.py`, and open `guides/best-practice.md` Part 2 only for a scene that page doesn't cover.
 - **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
   animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the
   coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part
@@ -33,6 +35,8 @@ I don't know how to code. Please:
 # Drawing people (not for quick videos)
 
 - Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
+- Satire-style films: everything (style kit, cast sheet, checks, audit, picture cache) is in `guides/satire.md`. Big film file?
+  read its code map first (`python3 source/codemap.py FILE.py`; `guides/russiadent-map.md` is the biggest film's).
 - For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any
   person, and follow `guides/preflight.md` from the first brief: run `python3 source/preflight.py FILM OUT_DIR`
   before every animatic, and `python3 source/voices.py FILES` as soon as recordings arrive.
@@ -43,6 +47,7 @@ I don't know how to code. Please:
   - before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes);
   - the story and the director's decisions for the animation test are in `story/animation-test.md`;
   - the film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer);
-  - compare every new shot against the approved frames in `lookbook/` so the look stays consistent;
+  - before rendering, run `python3 source/horror_preflight.py` (every pose of every frame, about a minute); render with
+    `shot.py sequence ... --reuse`; check every new drawing with `python3 source/lookbook_check.py OUT_DIR` against `lookbook/`;
   - the trailer should evoke the style and quality of an A24 horror film (the craft, never the brand): read
     `guides/tone.md` before planning or changing any shot.
