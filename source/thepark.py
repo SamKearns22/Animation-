@@ -47,10 +47,10 @@ VOICE, VOICE_FROM, VOICE_TO, VOICE_GAIN = 'park-1', 1.45, 3.75, 1.6        # Sam
 BIRDS = os.path.join(HERE, 'audio', 'park-ambient-clip.mp3')            # his birdsong
 VL = VOICE_TO - VOICE_FROM
 T1 = 5.0                    # cut to the bench pigeon, close: it looks up at him
-SAY = T1 + 1.1              # it speaks
+SAY = T1 + 1.9              # it speaks, after a slow push in on its stare (Sam: tension first)
 T2 = SAY + VL + 0.7         # back to the wide: he is stunned
-FLY = T2 + 1.3              # it takes off
-DUR = FLY + 4.4             # the sting: his eyes flick from pigeon to pigeon
+FLY = T2 + 2.0              # it takes off, after a long beat of the two staring at each other
+DUR = FLY + 5.2             # he stares after it, then the sting: his eyes flick from pigeon to pigeon
 SHOTS = [('wide', 0.0, T1 - 1.0), ('glance', T1 - 1.0, T1), ('talk', T1, T2), ('end', T2, DUR)]
 MAN = dict(skin=B.DEEP, hair='bald', hair_c=(150, 150, 154), jacket=(176, 122, 72), shirt=(60, 62, 70), tie=None,
            trousers=(70, 64, 58), outfit='suit', jaw='round', hw=74, hh=90, age=True, full=False, pose='custom',
@@ -274,7 +274,7 @@ def man_state(t):
     sp['arms'] = arms
     look = 0.25 if t < T1 - 1.0 else (0.25 + 0.75 * min(1.0, (t - (T1 - 0.8)) / 0.3) if t < T2 else 0.9)
     sp['look'] = look
-    sp['tilt'] = 0.04 * math.sin(t * 1.3) if not stunned else -0.06 + 0.02 * math.sin(t * 9)   # stunned: a small tremble
+    sp['tilt'] = 0.04 * math.sin(t * 1.3) if not stunned else head_turn(t)   # stunned: still, turning only to look
     sp['mouth'] = 'set'
     if stunned:                                   # his own brows hidden: the shock draws raised grey ones
         sp['brows'], sp['brow_c'] = 'wow', MAN['skin']
@@ -284,7 +284,17 @@ def man_state(t):
     return sp
 
 
-DARTS = [(1.0, 1), (1.5, 6), (2.0, 3), (2.5, 4), (3.0, 2), (3.5, 5), (3.9, 0)]   # (seconds after take-off, which pigeon)
+DARTS = [(1.8, 1), (2.3, 6), (2.8, 3), (3.3, 4), (3.8, 2), (4.3, 5), (4.7, 0)]   # (seconds after take-off, which pigeon)
+
+
+def head_turn(t):
+    """Stunned, his head holds still and turns now and then towards what his eyes are on, following a beat behind."""
+    ex = X0
+    acc = 0.0
+    for k in range(6):                                                # where his eyes were over the last half second
+        gx, gy = gaze(t - 0.1 * k)
+        acc += max(-1.0, min(1.0, (gx - ex) / 450))
+    return -0.02 - 0.07 * acc / 6
 
 
 def gaze(t):
@@ -492,9 +502,12 @@ def soundtrack(stems=False):
     b = load(BIRDS)
     birds = np.resize(b, n)
     tt = np.arange(n) / SR
-    env = np.where(tt < T1, 1.0, np.where(tt < T1 + 1.0, (T1 + 1.0 - tt), np.where(tt < T2, 0.0, 1.0)))
+    lo = 0.08                                   # never dead silence: a faint bed of birdsong stays under the line
+    env = np.where(tt < T1, 1.0, np.where(tt < T1 + 1.0, 1.0 - (1 - lo) * (tt - T1), lo))
+    up = np.clip((tt - (T2 - 0.25)) / 0.8, 0.0, 1.0)                                  # eased back up across the cut
+    env = np.where(tt >= T2 - 0.25, lo + (1 - lo) * up * up * (3 - 2 * up), env)
     rest = birds * env
-    w = load(os.path.join(HERE, 'audio', 'park-takeoff.mp3')) * 2.0                # Sam's wing-flap clip: its first
+    w = load(os.path.join(HERE, 'audio', 'park-takeoff.mp3')) * 1.33               # Sam's wing-flap clip: its first
     a = int((FLY - 0.3) * SR)                                                       # flap lands as it leaves the bench
     rest[a:a + len(w)] += w[:max(0, n - a)]
     mix = voice + rest
