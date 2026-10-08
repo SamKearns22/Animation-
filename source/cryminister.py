@@ -1361,8 +1361,9 @@ def run_andy(img, t):
     cam = B.Cam(2.8, AX - 230 / 2.8, 900 - (40 - bob) / 2.8)
     sp = andy_sp(t, 20)
     rig = F.Rig(sp)
-    # his phone arm reaches out to the lens and leaves the frame bottom left: the phone is the camera (note 29)
-    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-330, 400), 'fist', 'out', 0.0, strict=False))
+    # his phone arm reaches up and out to the lens, leaving the frame on the left above his shoulder: he holds the
+    # phone high for the over-the-shoulder view (notes 29, 36)
+    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-460, -150), 'fist', 'down', 0.0, strict=False))
     wt = word_times(line_of(20))
     talking = sp['mouth'] != 'v:rest'
     if t < wt[1][1] + 0.1:                                         # "Aw fook": pissed off - brows driven down, teeth bared
@@ -1375,7 +1376,7 @@ def run_andy(img, t):
     opened = shape in ('AI', 'O', 'U', 'WQ', 'E', 'L')
     if mode == 'angry':                                            # shouting it, teeth bared (never a pucker or grin)
         sp.update(brows='fierce', lid=4, look=0.0, turn=0.0, tilt=-0.06)
-        sp['mouth'] = 'shout' if talking and opened else 'v:etc'
+        sp['mouth'] = 'shout' if talking and opened else 'hidden'   # between shouts: gritted teeth, never a smirk
     elif mode == 'terrified':                                      # gaping, the corners pulled down
         sp.update(brows='outrage', lid=-4, look=-0.95, turn=-0.3, tilt=0.02)   # back over his shoulder at them (note 30)
         sp['mouth'] = 'agape'                                      # never closes into a calm line
@@ -1384,16 +1385,18 @@ def run_andy(img, t):
         if not talking or shape == 'E':
             sp['mouth'] = 'hidden'                                 # the grimace is drawn below instead
     B.person(img, cam, AX, NECK, S, sp, t)
-    if mode in ('stressed', 'terrified'):
-        import peepee as PP
-        p = B.Pen(img, PP.Rot(B.Local(cam, AX, NECK, S), sp.get('tilt', 0.0), pivot=(0, -60)))
-        my = -150 + 60
-        if mode == 'stressed':
+    import peepee as PP
+    p = B.Pen(img, PP.Rot(B.Local(cam, AX, NECK, S), sp.get('tilt', 0.0), pivot=(0, -60)))
+    my = -150 + 60
+    if True:
+        if sp['mouth'] == 'hidden':                                # the grimace only when his talking mouth is off (note 35)
             p.poly([(-30, my + 6), (-14, my - 2), (14, my - 2), (30, my + 6), (24, my + 16), (-24, my + 16)], (250, 250, 246), B.INK, 2.4)
             p.line([(-28, my + 7), (28, my + 7)], B.INK, 1.6)              # clenched teeth, top and bottom
             for k in (-14, 0, 14):
                 p.line([(k, my), (k, my + 14)], B.INK, 1.2)
         for j_, (sx, sy) in enumerate(((ANDY['hw'] * 0.82, -195), (ANDY['hw'] * 0.9, -160))):   # sweat at his temple
+            if mode == 'angry':
+                break
             p.poly([(sx, sy - 14), (sx + 7, sy), (sx, sy + 6), (sx - 7, sy)], (170, 214, 236), B.INK, 1.8)
 
 
@@ -1621,7 +1624,7 @@ def frame_image(t):
 
 # ------------------------------------------------------------------------------------------------- sound
 def soundtrack(stems=False):
-    """Sam's voice only (every sound made in code was removed at his request)."""
+    """Sam's voice only (every sound made in code was removed at his request). Levelled gently, never squashed (note 32)."""
     n = int((DUR + 0.3) * SR)
     voice = np.zeros(n)
     for ln in LINES:
@@ -1629,18 +1632,38 @@ def soundtrack(stems=False):
         seg = ln['_voice'][:max(0, n - s_)]
         voice[s_:s_ + len(seg)] += seg
     rest = np.zeros(n)
-    mix = voice.copy()
     end = int(BLACK_AT * SR)
-    g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)                     # master: about -14 LUFS
-    mix, voice = smooth_limit(mix * g, -2.6), voice * g
+    mix = gentle_level(voice)
+    g = min(10 ** ((-16.0 - MA.lufs(mix[:end])) / 20),                # master: -16 LUFS, or quieter if the loudest
+            10 ** (2.0 / 20) / np.abs(mix).max())                     # burst would need more than 3 dB of limiting
+    mix, voice = smooth_limit(mix * g, -1.0), voice * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
 
 
+def gentle_level(x, ratio=3.0, above=4.0):
+    """Even out loud and soft words the way a studio does: the volume eases down only on stretches more than `above` dB
+    louder than the line's average (by half the excess), easing in over 30 ms and back over 300 ms, so it follows
+    syllables, never the voice's own waves. The film's sound used to be turned up 7 dB and then squashed by up to 8 dB
+    within milliseconds on every loud word: on a phone that is crackle (Sam's note 32, twice)."""
+    blk = int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
+    from scipy.ndimage import uniform_filter1d
+    lv = 10 * np.log10(uniform_filter1d(p, 30) + 1e-12)              # level over 30 ms, in dB
+    ref = 10 * np.log10(np.mean(p[lv > lv.max() - 40]) + 1e-12)       # the speech's average level
+    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)     # gain wanted, dB
+    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 30), 1 - math.exp(-1 / 300)
+    for i in range(1, nb):
+        k = att if want[i] < g[i - 1] else rel
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * k
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
+    return x * gs
+
+
 def smooth_limit(x, ceiling_db):
-    """Keep the peaks under the ceiling without crackle (note 32): the old limiter changed the volume within 4 ms, riding
-    the voice's own waves on every loud word. Here the volume eases down over 10 ms just ahead of a peak and recovers
-    over about 150 ms."""
+    """A last guard on the few bursts left over (at most 3 dB of them): the volume eases down over 10 ms just ahead of
+    a peak and recovers over about 150 ms."""
     from scipy.ndimage import minimum_filter1d, uniform_filter1d
     c, blk = 10 ** (ceiling_db / 20), int(0.001 * SR)
     nb = -(-len(x) // blk)

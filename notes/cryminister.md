@@ -34,9 +34,12 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 29 | 20 | - | His selfie arm ended in a dark block (read as a second phone): the arm now reaches to the lens and leaves the frame bottom left. | done (in code; not yet rendered) |
 | 30 | 20 | "here come" | He looked away from the wolves: now glances back over his shoulder at them, then back to us. | done (in code; not yet rendered) |
 | 31 | 20 | - | Blank red buildings on the right: now shop fronts, fascia boards, doors, sash windows, drainpipes. | done (in code; not yet rendered) |
-| 32 | all | - | Crackles: the master limiter changed the volume within 4 ms on every loud word. Now a smooth one (eases over 10 ms, recovers over 150 ms). | done (in code; not yet rendered) |
+| 32 | all | - | Crackles (Sam heard them still after the first fix): the film was turned up 7 dB over the recordings and every loud word squashed by up to 8 dB in milliseconds. Now the loud stretches are eased down gently (over 30 ms, back over 300 ms), at most 3 dB of soft limiting on a few bursts, mastered at -16.8 LUFS (was -14). | done (in code; not yet rendered) |
 | 33 | 2 | 6-9.9 s | The man in blue barely reacted: now stops dead, hands on hips, a hard frown at the pack, three slow big head shakes, then walks on. | done (in code; not yet rendered) |
 | 34 | shoppers | - | Walkers looked too thin: body squeezed less (0.78 to 0.9), legs thicker. | done (in code; not yet rendered) |
+| 35 | 20 | - | Two mouths at once: the gritted teeth were drawn over his talking mouth. Now only when the talking mouth is off; between "Aw fook" shouts, gritted teeth instead of a lopsided smirk. | done (in code; not yet rendered) |
+| 36 | 20 | - | Arm higher, holding the phone up for the over-the-shoulder view: it now rises out of the frame on the left above the name and description. | done (in code; not yet rendered) |
+| 37 | ZapBets | - | Ideas for the gambling shop's advertising window. | ideas sent, waiting for Sam's pick |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).
