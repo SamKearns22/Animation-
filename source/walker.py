@@ -55,10 +55,14 @@ def stride(ph, step):
     return step * (-0.5 + u), 70 * math.sin(math.pi * u)
 
 
-def walk(img, cam, B, F, x, ground, s, sp, t, d, ph, speed, turn=None, kx=0.78, limb=None, shoe=(36, 32, 30)):
+def walk(img, cam, B, F, x, ground, s, sp, t, d, ph, speed, turn=None, kx=0.9, limb=None, shoe=(36, 32, 30),
+         arms=None, blend=0.0):
     """One person walking across the frame at `speed` (world units a second) in direction d (+1 right, -1 left).
     ph: the stride phase (0-1, one full cycle = two steps); the stride length follows the speed so feet never slide.
-    turn: where the face points (-1..1); default the way they walk. Returns the person spec as drawn."""
+    turn: where the face points (-1..1); default the way they walk.
+    arms: a pose's arms ({'L': .., 'R': ..}, e.g. rig.pose('hips')) eased in over the swing by blend (0-1), for someone
+    stopping to react. kx: how much narrower the turned body is drawn (0.78 looked too thin: Sam, 8 Oct).
+    Returns the person spec as drawn."""
     cycle = 0.95                                              # strides a second
     step = speed * 0.5 / cycle / s                            # foot travel in person units over a stance (half a stride)
     sp = dict(sp)
@@ -70,6 +74,10 @@ def walk(img, cam, B, F, x, ground, s, sp, t, d, ph, speed, turn=None, kx=0.78, 
     for side, sg in (('L', -1), ('R', 1)):                    # arms swing against the legs on their side
         swing = math.sin(w + (0 if side == 'L' else math.pi)) * d
         sp['arms'][side] = rig.arm(side, (sg * 135 + 55 * swing, 428 - 28 * max(0.0, swing * d)), 'fist', 'out', strict=False)
+        if arms is not None and blend > 0:
+            a, b = sp['arms'][side], arms[side]
+            mix = lambda p, q: (p[0] + (q[0] - p[0]) * blend, p[1] + (q[1] - p[1]) * blend)
+            sp['arms'][side] = (mix(a[0], b[0]), mix(a[1], b[1]), b[2] if blend >= 0.5 else a[2])
     sp['turn'] = 0.55 * d if turn is None else turn
     sp.setdefault('look', 0.8 * d)
     sp['full'] = False
@@ -83,8 +91,8 @@ def walk(img, cam, B, F, x, ground, s, sp, t, d, ph, speed, turn=None, kx=0.78, 
         foot = (hip[0] + d * fo, F.SOLE_Y - 18 - lift - bob)
         knee = _leg(hip, foot, d)
         P = lambda q: (x + q[0] * s, neck + q[1] * s)
-        limb(X, P(hip), P(knee), 76 * s, col)
-        limb(X, P(knee), P(foot), 62 * s, col)
+        limb(X, P(hip), P(knee), 88 * s, col)
+        limb(X, P(knee), P(foot), 72 * s, col)
         toe = (foot[0] + d * 34, foot[1] + 10)
         X.rell(*P(((foot[0] + toe[0]) / 2, foot[1] + 8)), 50 * s, 20 * s, 0.0, shoe)
     B.person(img, Squash(cam, x, kx), x, neck, s, sp, t)

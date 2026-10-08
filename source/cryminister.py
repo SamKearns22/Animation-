@@ -614,16 +614,17 @@ def _shopper_looks():
 SHOPPER_LOOKS = _shopper_looks()
 
 
-TUTTER, TUT = 1, (6.0, 9.9)                  # the man at the back in shot 2: slows, frowns, shakes his head at it all
-SHOPPERS[TUTTER] = (TUT[0] - (SHOPPERS[TUTTER][1] + 2250) / 640,) + tuple(SHOPPERS[TUTTER][1:])   # behind the pack as he stops
+TUTTER, TUT = 1, (6.0, 9.9)                  # the man at the back in shot 2: stops dead, hands on hips, glares, shakes his head
+_tau = ((math.ceil(0.95 * 8.0 + SHOPPERS[TUTTER][6] * 0.37) - SHOPPERS[TUTTER][6] * 0.37) / 0.95)   # a whole stride: both feet down
+SHOPPERS[TUTTER] = (TUT[0] - _tau, -2250 + 640 * _tau) + tuple(SHOPPERS[TUTTER][2:])                  # behind the pack as he stops
 
 
 def shopper_x(k, t):
-    """Where shopper k is: walking at 640 a second, except the tutter, who slows to a quarter speed while he looks."""
+    """Where shopper k is: walking at 640 a second, except the tutter, who stops dead while he reacts (note 33)."""
     t0, x0, d = SHOPPERS[k][0], SHOPPERS[k][1], SHOPPERS[k][2]
     tau = t - t0
     if k == TUTTER:
-        tau -= 0.75 * max(0.0, min(t, TUT[1]) - TUT[0])
+        tau -= max(0.0, min(t, TUT[1]) - TUT[0])
     return x0 + d * 640 * tau, tau
 
 
@@ -645,12 +646,14 @@ def shoppers(img, cam, t, back):
         look = next((w for a, b, w in g if a <= t < b), None)
         turn = None
         speed = 640
-        if k == TUTTER and TUT[0] <= t < TUT[1]:                   # weary, irritated: a slow shake of the head
-            speed = 160
-            u = t - TUT[0] - 0.4
-            shake = [-0.75, -0.2, -0.75, -0.2, -0.75, -0.2][int(u / 0.24)] if 0 <= u < 1.44 else -0.7
+        hips, blend = None, 0.0
+        if k == TUTTER and TUT[0] <= t < TUT[1]:                   # stops dead, hands on hips, glares at the pack,
+            u = t - TUT[0]                                         # three slow big shakes of the head, glares, walks on
+            hips = F.Rig(sp).pose('hips')
+            blend = min(1.0, u / 0.25, (TUT[1] - t) / 0.3)
+            shake = -0.55 + 0.45 * math.sin(2 * math.pi * (u - 0.9) / 0.6) if 0.9 <= u < 2.7 else -0.55
             turn, sp['look'] = shake, -0.9
-            sp.update(brows='alarm', lid=5, mouth='set')
+            sp.update(brows='fierce', lid=3, mouth='set')
         elif look == 'pm':
             turn, sp['look'] = 0.0, 0.0                            # a glance straight at him
         elif look == 'wolves':
@@ -658,7 +661,7 @@ def shoppers(img, cam, t, back):
             sp['look'] = 0.9 if MAN_X > x else -0.9
         sp['blink'] = ((t + sd) % 3.7) < 0.12
         ph = (tau * 0.95 + sd * 0.37) % 1.0
-        drawn = walker.walk(img, cam, B, F, x, lane, sc, sp, t, d, ph, speed, turn=turn, limb=limb)
+        drawn = walker.walk(img, cam, B, F, x, lane, sc, sp, t, d, ph, speed, turn=turn, limb=limb, arms=hips, blend=blend)
         if sd % 3 != 0:                                            # a shopping bag from one hand
             el, wr = drawn['arms']['R'][:2]
             neck = lane - F.SOLE_Y * sc
@@ -1316,9 +1319,21 @@ def run_scene(img, t, only=None):
                 for j in range(5):
                     dd = d0 + 0.6 + j * 1.15
                     X.d.line([P(-3.5, 3.6, dd), P(-3.5, 8.6, dd)], fill=(40, 32, 30), width=max(1, int(18 * B.SS * 4 / dd)))
-        for k in range(10):                                        # the far side of the road: brick terraces
+        fronts = [(46, 92, 70), (176, 52, 48), (40, 56, 96), (210, 170, 60), (96, 60, 110)]
+        for k in reversed(range(10)):                              # the far side of the road: brick terraces, lived in (note 31)
             d0 = 4.0 + k * 9.0 + shift
-            quad(X, [P(9.0, 0, d0), P(9.0, 0, d0 + 8.6), P(9.0, 8, d0 + 8.6), P(9.0, 8, d0)], (150, 78, 60) if k % 2 else (140, 72, 56))
+            brick = (150, 78, 60) if k % 2 else (140, 72, 56)
+            Q = lambda a, b, y0, y1, c, ln=True: quad(X, [P(9.0, y0, d0 + a), P(9.0, y0, d0 + b), P(9.0, y1, d0 + b),
+                                                          P(9.0, y1, d0 + a)], c, ln)
+            Q(0, 8.6, 0, 8, brick)
+            fr = fronts[(k * 3) % len(fronts)]
+            Q(0.3, 8.3, 2.7, 3.4, fr)                              # the shop's fascia board
+            Q(0.6, 5.6, 0.5, 2.5, (150, 176, 190))                 # its window
+            Q(6.2, 7.6, 0.0, 2.4, B.dk(fr, 0.75))                  # its door
+            for a in (0.9, 3.7, 6.5):                              # sash windows upstairs, white frames
+                Q(a, a + 1.4, 4.3, 6.2, (236, 232, 222))
+                Q(a + 0.15, a + 1.25, 4.45, 6.05, (70, 80, 92) if (k + int(a)) % 3 else (150, 170, 184))
+            Q(8.45, 8.6, 0.0, 8.0, (60, 60, 64), False)            # a drainpipe between houses
     # the five wolves, bounding after him, gaining; the leader leaps at the lens at the end
     if only in (None, 'wolves'):
         order = []
@@ -1346,7 +1361,8 @@ def run_andy(img, t):
     cam = B.Cam(2.8, AX - 230 / 2.8, 900 - (40 - bob) / 2.8)
     sp = andy_sp(t, 20)
     rig = F.Rig(sp)
-    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-340, 260), 'phone', 'down', 0.5, strict=False))
+    # his phone arm reaches out to the lens and leaves the frame bottom left: the phone is the camera (note 29)
+    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-330, 400), 'fist', 'out', 0.0, strict=False))
     wt = word_times(line_of(20))
     talking = sp['mouth'] != 'v:rest'
     if t < wt[1][1] + 0.1:                                         # "Aw fook": pissed off - brows driven down, teeth bared
@@ -1361,7 +1377,7 @@ def run_andy(img, t):
         sp.update(brows='fierce', lid=4, look=0.0, turn=0.0, tilt=-0.06)
         sp['mouth'] = 'shout' if talking and opened else 'v:etc'
     elif mode == 'terrified':                                      # gaping, the corners pulled down
-        sp.update(brows='outrage', lid=-4, look=0.95, turn=0.3, tilt=0.02)
+        sp.update(brows='outrage', lid=-4, look=-0.95, turn=-0.3, tilt=0.02)   # back over his shoulder at them (note 30)
         sp['mouth'] = 'agape'                                      # never closes into a calm line
     else:                                                          # panicked: brows shot up, eyes wide, gritted teeth
         sp.update(brows='outrage', lid=-2, look=0.0, turn=0.0, tilt=-0.08, harrow=0.0)
@@ -1616,9 +1632,27 @@ def soundtrack(stems=False):
     mix = voice.copy()
     end = int(BLACK_AT * SR)
     g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)                     # master: about -14 LUFS
-    mix, voice = M.limiter(mix * g, -2.6), voice * g
+    mix, voice = smooth_limit(mix * g, -2.6), voice * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
+
+
+def smooth_limit(x, ceiling_db):
+    """Keep the peaks under the ceiling without crackle (note 32): the old limiter changed the volume within 4 ms, riding
+    the voice's own waves on every loud word. Here the volume eases down over 10 ms just ahead of a peak and recovers
+    over about 150 ms."""
+    from scipy.ndimage import minimum_filter1d, uniform_filter1d
+    c, blk = 10 ** (ceiling_db / 20), int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    a = np.abs(np.pad(x, (0, nb * blk - len(x)))).reshape(nb, blk).max(1)
+    need = minimum_filter1d(np.minimum(1.0, c / np.maximum(a, 1e-9)), 21)    # 10 ms either side
+    g, rel = need.copy(), 1 - math.exp(-1 / 150)
+    for i in range(1, nb):
+        g[i] = min(need[i], g[i - 1] + (1 - g[i - 1]) * rel)
+    g = np.minimum(need, uniform_filter1d(g, 5))
+    g = np.minimum(g, uniform_filter1d(g, 5))
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, g)
+    return np.clip(x * gs, -c, c)
 
 
 def voices_reel(out):

@@ -31,6 +31,12 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 26 | 20 | - | Chasers a mix of full and smaller wolves; Andy angry / terrified / panicked, no red eyes (red eyes only in 13-14). | done |
 | 27 | 15 | - | More despairing on "I CAN'T stop every wolf attack". | done |
 | 28 | all | - | No in-video title (tested on TikTok; title on the cover). | done |
+| 29 | 20 | - | His selfie arm ended in a dark block (read as a second phone): the arm now reaches to the lens and leaves the frame bottom left. | done (in code; not yet rendered) |
+| 30 | 20 | "here come" | He looked away from the wolves: now glances back over his shoulder at them, then back to us. | done (in code; not yet rendered) |
+| 31 | 20 | - | Blank red buildings on the right: now shop fronts, fascia boards, doors, sash windows, drainpipes. | done (in code; not yet rendered) |
+| 32 | all | - | Crackles: the master limiter changed the volume within 4 ms on every loud word. Now a smooth one (eases over 10 ms, recovers over 150 ms). | done (in code; not yet rendered) |
+| 33 | 2 | 6-9.9 s | The man in blue barely reacted: now stops dead, hands on hips, a hard frown at the pack, three slow big head shakes, then walks on. | done (in code; not yet rendered) |
+| 34 | shoppers | - | Walkers looked too thin: body squeezed less (0.78 to 0.9), legs thicker. | done (in code; not yet rendered) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).
