@@ -82,7 +82,7 @@ PADS = {1: (0.35, 0.25), 2: (0.25, 0.55), 3: (0.15, 0.25), 4: (0.75, 0.5), 5: (0
 STRESS = 4                                    # Andy's stress in shots 13-14, 1-6 (Sam picks from the cast sheet)
 ANDY = dict(B.BURNHAM, full=True, pose='custom', name='Andy')
 MAN = dict(skin=B.PALE, hw=66, hh=86, jaw='round', hair='crop', hair_c=(150, 112, 74), outfit='jumper',
-           jacket=(108, 172, 222), trousers=(28, 28, 32), full=True, pose='custom', name='the man')
+           jacket=(108, 172, 222), trousers=(28, 28, 32), bottom=470, full=True, pose='custom', name='the man')
 LADY = dict(skin=(244, 214, 200), hw=62, hh=80, jaw='soft', hair=None, outfit='dress', dress=(238, 150, 184),
             shoulders=120, bottom=600, full=True, pose='custom', name='the old lady', age=True)
 WOLF_S = 2.2                                  # dire wolves: shoulder about half a man's height (people at 0.8)
@@ -759,6 +759,39 @@ def kill(img, cam, t, alone=None):
                 W.meat(X, x, y, sz, sd + int(u * 12))
 
 
+CITY_PALE = (206, 228, 246)                    # the shirt's pale trim (collar, cuffs)
+
+
+def city_shirt(img, cam, x, neck, sc, sp, tilt=0.0):
+    """Over the man's sky-blue top, Sam's reference Man City home shirt in the show's flat style: a pale crew collar,
+    short sleeves with pale cuffs (bare forearms), a made-up round crest and a made-up sponsor across the chest.
+    No real badge, maker's logo or sponsor."""
+    import peepee as PP
+    L = B.Local(cam, x, neck, sc)
+    p = B.Pen(img, L)
+    p.line(B.oval(0, -2, 46, 22, 24, 0.15, math.pi - 0.15), CITY_PALE, 9)                     # collar
+    p.line(B.oval(0, -2, 52, 27, 24, 0.15, math.pi - 0.15), B.INK, 1.6)
+    PP.ctext(img, L, 0, 196, 'SKYHAD', 46, (255, 255, 255), font=CAP_FONT)                      # sponsor (made up)
+    PP.ctext(img, L, 0, 236, 'AIRWAYS', 22, (255, 255, 255), font=CAP_FONT)
+    p.ell(64, 92, 20, 22, (72, 132, 196), CITY_PALE, 3.0)                                      # crest (made up)
+    p.ell(64, 92, 9, 10, CITY_PALE, None)
+    rig = F.Rig(sp)
+    for side in 'LR':                                                                          # short sleeves: bare forearms
+        el, wr = sp['arms'][side][:2]
+        shape = sp['arms'][side][2]
+        cuff = (el[0] + 0.2 * (wr[0] - el[0]), el[1] + 0.2 * (wr[1] - el[1]))
+
+        def band(a, b, wa, wb, col):
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            n = math.hypot(dx, dy) or 1.0
+            nx, ny = -dy / n, dx / n
+            p.poly([(a[0] + nx * wa, a[1] + ny * wa), (b[0] + nx * wb, b[1] + ny * wb),
+                    (b[0] - nx * wb, b[1] - ny * wb), (a[0] - nx * wa, a[1] - ny * wa)], col, B.INK, 2.2)
+        band(el, wr, 19, 15, sp['skin'])                                               # bare forearm over the sleeve
+        band(el, cuff, 22, 21, CITY_PALE)                                              # the short sleeve's pale cuff
+        B.gesture_hand(p, el, wr, shape, sp['skin'])
+
+
 def man_down(img, cam, t):
     """The man after the attack: the same character, flat on his back on the pavement under the pack, head towards the
     pub door, an arm flung up, eyes shut, mouth open. Drawn standing on a layer, then laid down (turned a quarter turn)."""
@@ -771,10 +804,10 @@ def man_down(img, cam, t):
                   'R': rig.arm('R', (230, 330), 'fist', 'depth', strict=False)}
     sp.update(blink=True, mouth='v:O', brows='alarm', look=0.0, tilt=0.0)
     B.person(lay, cam, hip[0], neck, S, sp, t)
+    city_shirt(lay, cam, hip[0], neck, S, sp)
     X = X_(lay, cam)
     for k in (-1, 1):                                              # his white trainers, toes up
         X.rell(hip[0] + k * 70 * S, neck + 918 * S, 62 * S, 22 * S, 0, (250, 250, 248))
-    X.ell(hip[0] - 60 * S, neck + 120 * S, 18 * S, 20 * S, (30, 50, 100))
     px, py = cam.P(*hip)
     img.alpha_composite(lay.rotate(90, Image.BICUBIC, center=(px, py)))
 
@@ -791,10 +824,10 @@ def the_man(img, cam, t):
         sp['look'], sp['lid'], sp['brows'], sp['tilt'] = -0.9, -2, 'alarm', 0.0
     neck = -F.SOLE_Y * S + 20
     B.person(img, cam, MAN_X, neck, S, sp, t)
+    city_shirt(img, cam, MAN_X, neck, S, sp)
     X = X_(img, cam)
     for k in (-1, 1):                                              # white trainers over his shoes
         X.rell(MAN_X + k * 70 * S, neck + 918 * S, 62 * S, 22 * S, 0, (250, 250, 248))
-    X.ell(MAN_X - 60 * S, neck + 120 * S, 18 * S, 20 * S, (30, 50, 100))     # a small round crest (no real logo)
 
 
 # ------------------------------------------------------------------------------------------------- Andy
@@ -1195,6 +1228,7 @@ def alley_man(img, X, d, duck, u):
         limb(Xp, knee, foot, 58 * sc, MAN['trousers'])
         Xp.ell(foot[0], foot[1] + 4 * sc, 52 * sc, 24 * sc, (250, 250, 248))
     B.person(img, cam, gx, neck, sc, sp, u)
+    city_shirt(img, cam, gx, neck, sc, sp)
 
 
 def net(img, X, t, tangled, u):
