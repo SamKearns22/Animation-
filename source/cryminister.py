@@ -174,13 +174,51 @@ def _voices():
     g = {k: 10 ** ((VOICE_LUFS - MA.lufs(np.concatenate(v))) / 20) for k, v in gains.items()}
     out = [None] * len(LINES)
     for (run, _, inner), y in zip(pieces, toned):
-        y = y * g[LINES[run[0]]['audio'][0]]
+        y = smooth_tail(y * g[LINES[run[0]]['audio'][0]])
         k_in, k_out = int(0.01 * SR), int(0.1 * SR)
         y[:k_in] *= np.linspace(0, 1, k_in)
         y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))     # a soft 100 ms fade at the very end
         cuts = [0] + inner + [len(y)]
         for k, idx in enumerate(run):
             out[idx] = y[cuts[k]:cuts[k + 1]]
+    return out
+
+
+def smooth_tail(y):
+    """After the last voiced sound of a piece, the hiss of its final "s" or "k" only ever dies away: in several takes
+    (lines 1, 12, 13, 15) the phone's own voice clean-up chopped that hiss into bursts about 12 a second, which the
+    film's extra volume turned into crackle (Sam's note 38; they are in the recordings too). After the brightest moment
+    of the tail (the real consonant) the bursts and thumps are pressed down to a falling envelope; nothing is ever
+    turned up."""
+    w = int(0.01 * SR)
+    n = len(y) // w
+    if n < 4:
+        return y
+    fr = y[:n * w].reshape(n, w)
+    lv = 20 * np.log10(np.sqrt((fr ** 2).mean(1)) + 1e-9)
+    zc = np.abs(np.diff(np.sign(fr), axis=1)).mean(1) / 2 * SR
+    v = (zc < 3500) & (lv > lv.max() - 25)
+    run = np.convolve(v.astype(int), np.ones(5, int), 'valid') == 5          # real voice: 50 ms of it in a row
+    voiced = np.where(run)[0]                                                 # (a thump is shorter)
+    if not len(voiced):
+        return y
+    t0 = (voiced[-1] + 5) * w                                          # the unvoiced tail starts here
+    if len(y) - t0 < 2 * w:
+        return y
+    from scipy.ndimage import uniform_filter1d
+    tail = y[t0:]
+    env = np.sqrt(uniform_filter1d(tail ** 2, int(0.005 * SR)) + 1e-12)     # 5 ms: shows the bursts
+    slow = np.sqrt(uniform_filter1d(tail ** 2, int(0.02 * SR)) + 1e-12)     # 20 ms
+    from scipy.signal import butter, sosfilt
+    hiss = sosfilt(butter(4, 3000, 'high', fs=SR, output='sos'), tail)
+    hs = uniform_filter1d(hiss ** 2, int(0.02 * SR))
+    pk = int(np.argmax(hs[:int(0.2 * SR)]))                                # the real "s", "z" or "k" (the brightest
+                                                                             # moment) is kept whole,
+    fall = np.concatenate([env[:pk], np.minimum.accumulate(slow[pk:])])     # then the hiss never rises again
+    g = np.minimum(1.0, fall / env)
+    g = uniform_filter1d(g, int(0.003 * SR))                                 # no clicks from the gain itself
+    out = y.copy()
+    out[t0:] = tail * g
     return out
 
 
