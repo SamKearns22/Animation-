@@ -55,6 +55,14 @@ MAN = dict(skin=B.DEEP, hair='bald', hair_c=(150, 150, 154), jacket=(176, 122, 7
            trousers=(70, 64, 58), outfit='suit', jaw='round', hw=74, hh=90, age=True, full=False, pose='custom',
            beard='full', beard_c=(170, 168, 166), beard_grey=(214, 212, 210))
 CAP, CAP_D = (126, 58, 46), (92, 40, 32)      # his flat cap
+SHOCK = 4                                     # how shocked he is, 1-6 (Sam picks from the shock sheet)
+SHOCKS = [   # eye (w, h), pupil, brow lift and arch, forehead lines, open mouth (w, h), cap jump, sweat drops, tremble
+    dict(name='1 Puzzled', eye=(15, 15), pupil=6.0, brow=4, arch=4, one_brow=True, lines=0, mouth=None, pop=12, sweat=0, tremble=False),
+    dict(name='2 Taken aback', eye=(16, 18), pupil=5.5, brow=6, arch=6, lines=1, mouth=(6, 7), pop=18, sweat=0, tremble=False),
+    dict(name='3 Alarmed', eye=(18, 21), pupil=4.5, brow=9, arch=9, lines=2, mouth=(10, 12), pop=30, sweat=0, tremble=False),
+    dict(name='4 Shocked', eye=(19, 23), pupil=4.0, brow=12, arch=11, lines=3, mouth=(12, 17), pop=42, sweat=0, tremble=False),
+    dict(name='5 Aghast', eye=(22, 26), pupil=3.0, brow=16, arch=13, lines=3, mouth=(15, 25), pop=58, sweat=1, tremble=False),
+    dict(name='6 Frozen rigid', eye=(25, 30), pupil=2.0, brow=20, arch=15, lines=4, mouth=(16, 36), pop=90, sweat=2, tremble=True)]
 X0, S = 470, 0.66                             # where he sits, his scale (seated: head about 1.35 m off the ground)
 NECK = 1046 - 560 * S                         # his neck, so his coat's hem sits on the seat
 BENCH_P = (800, 1040)                        # the talking pigeon's feet, on the seat
@@ -236,7 +244,9 @@ def man_state(t):
     look = 0.25 if t < T1 - 1.0 else (0.25 + 0.75 * min(1.0, (t - (T1 - 0.8)) / 0.3) if t < T2 else 0.9)
     sp['look'] = look
     sp['tilt'] = 0.04 * math.sin(t * 1.3) if not stunned else -0.06 + 0.02 * math.sin(t * 9)   # stunned: a small tremble
-    sp['mouth'] = 'v:O' if stunned else 'set'
+    sp['mouth'] = 'set'
+    if stunned:                                   # his own brows hidden: the shock draws raised grey ones
+        sp['brows'], sp['brow_c'] = 'wow', MAN['skin']
     sp['blink'] = ((t % 3.4) < 0.12 and not stunned) or stunned       # stunned: his own eyes are drawn wide over the top
     return sp
 
@@ -255,17 +265,35 @@ def man(img, cam, t):
     import peepee
     p = B.Pen(img, peepee.Rot(L, sp['tilt'], pivot=(0, -60)))                      # his head, as tilted
     hx, hy, hw, hh = 0, -150, MAN['hw'], MAN['hh']
-    if stunned:                                                                     # shock: wide eyes, brows up, forehead lines
+    lv = SHOCKS[SHOCK - 1]
+    if stunned:                     # shock, at the chosen level: eyes, pupils, brows, forehead, mouth, cap, sweat, tremble
         for sgn in (-1, 1):
             ex, ey = -4 + sgn * 30, hy - 8
-            p.ell(ex, ey, 18, 21, (252, 252, 248), INK, 2.4)
-            p.ell(ex + 5 * sgn * 0 + 6, ey, 4.5, 4.5, INK, None)
-            p.line([(ex - 18, ey - 34), (ex, ey - 42), (ex + 18, ey - 36)], INK, 3.0)
-        for k in range(3):
-            p.line([(-34, hy - 54 - 8 * k), (-4, hy - 58 - 8 * k), (28, hy - 54 - 8 * k)], B.dk(MAN['skin'], 0.7), 1.8)
-        p.ell(-4, hy + 46, 12, 16, (60, 24, 30), INK, 2.2)                             # mouth dropped open, through the beard
-    pop = 0.0 if not stunned else 34 * min(1.0, (t - T2) / 0.12) - 12 * max(0.0, min(1.0, (t - T2 - 0.12) / 0.3))
-    hy -= pop                                                                       # shock: the cap jumps off his head
+            p.ell(ex, ey, lv['eye'][0], lv['eye'][1], (252, 252, 248), INK, 2.4)
+            p.ell(ex + 4, ey, lv['pupil'], lv['pupil'], INK, None)
+            other = lv.get('one_brow') and sgn == -1                                 # puzzled: one brow stays down
+            by = ey - lv['eye'][1] - 7 - (0 if other else lv['brow'])
+            arch = 1 if other else lv['arch']
+            pts = [(ex + u, by + 6 - arch * math.cos(u / 22 * math.pi / 2) + (0 if other else 4 * sgn * u / 22))
+                   for u in range(-22, 23, 4)]                                       # a rounded arch, inner end lifted
+            p.line(pts, INK, 8.0)
+            p.line(pts, (214, 212, 210), 5.0)
+        for k in range(lv['lines']):
+            y = hy - 8 - lv['eye'][1] - 7 - lv['brow'] - 16 - 9 * k
+            p.line([(-36, y + 4), (-4, y), (30, y + 4)], B.dk(MAN['skin'], 0.7), 2.0)
+        if lv['mouth']:
+            p.ell(-4, hy + 46 + lv['mouth'][1] * 0.3, lv['mouth'][0], lv['mouth'][1], (60, 24, 30), INK, 2.2)
+        for k in range(lv['sweat']):                                                 # sweat drops at his temple
+            sx, sy = hw * 0.78 + 4 * k, hy - 30 + 34 * k
+            p.poly([(sx, sy - 16), (sx + 8, sy), (sx, sy + 7), (sx - 8, sy)], (170, 214, 236), INK, 2.0)
+        if lv['tremble']:                                                            # tremble marks beside his head
+            for sgn in (-1, 1):
+                for k in range(2):
+                    x = sgn * (hw + 22 + 14 * k)
+                    p.line([(x, hy - 24 + 6 * k), (x + sgn * 6, hy - 6), (x, hy + 12 - 6 * k)], INK, 2.6)
+    up = min(1.0, (t - T2) / 0.12) if stunned else 0.0                               # the cap jumps, then settles a little
+    pop = lv['pop'] * (1.3 * up - 0.3 * max(0.0, min(1.0, (t - T2 - 0.12) / 0.3))) if stunned else 0.0
+    hy -= pop
     # the flat cap: a soft crown and a short peak across the brow
     p.poly([(hx - hw - 6, hy - hh * 0.40), (hx - hw * 0.9, hy - hh * 0.85), (hx - hw * 0.2, hy - hh * 1.08), (hx + hw * 0.7, hy - hh * 1.0),
             (hx + hw + 8, hy - hh * 0.55), (hx + hw + 6, hy - hh * 0.40)], CAP, INK, 2.6)
@@ -476,6 +504,22 @@ def main():
         os.makedirs(a[1], exist_ok=True)
         for x in a[2:]:
             frame_image(float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=88)
+    elif a[0] == 'shocks':             # his six levels of shock side by side, numbered, to choose from
+        global SHOCK
+        from PIL import ImageDraw, ImageFont
+        B.SS = 1
+        out = Image.new('RGB', (3 * 540, 2 * 640), (255, 255, 255))
+        for i in range(6):
+            SHOCK = i + 1
+            img = B.canvas()
+            cam = B.Cam(2.2, X0 + 16, NECK - 158 * S + 40)
+            park(img, cam, T2 + 1.0)
+            man(img, cam, T2 + 1.0)
+            tile = img.convert('RGB').crop((0, 380, 1080, 1580)).resize((540, 600))
+            out.paste(tile, ((i % 3) * 540, (i // 3) * 640 + 40))
+            ImageDraw.Draw(out).text(((i % 3) * 540 + 16, (i // 3) * 640 + 2), SHOCKS[i]['name'], fill=(0, 0, 0),
+                                     font=ImageFont.load_default(size=34))
+        out.save(a[1], quality=88)
     elif a[0] == 'check':
         B.SS = 1
         checks()
