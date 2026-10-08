@@ -26,6 +26,8 @@ I don't know how to code. Please:
   "Time to switch to Sonnet: type /model") and wait for me to say I've switched. Never carry on into a stage that needs
   a stronger model without it. Group the work so there are usually only 3 or 4 switches per film. Quick videos keep
   their own rule (Sonnet, medium effort).
+  **If I start a task on the wrong model, refuse and tell me it is on the wrong setting.** Then either let me change it,
+  or offer me the option to override the advice.
 - For TikTok versions, follow `guides/tiktok-design.md` (size, title, safe areas, posting). Say how long each render will take, report how long it took, and send a push notification when it finishes.
 - **Push notifications for anything long:** whenever a render or any other long process (animatic, storyboard, sound build, upload, research) finishes, fails, or stops to wait for my decision, send a push notification to my phone saying what is ready or what is needed (details in `guides/tiktok-design.md`, "Working").
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
