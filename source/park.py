@@ -118,14 +118,14 @@ def bg(X, t):
 def bench(X):
     wood, dark = (150, 96, 54), (110, 70, 40)
     for y in (820, 880, 940):
-        X.rect(230, y, 760, y + 44, wood, r=8)
-    X.rect(230, 800, 262, 1130, dark, r=6); X.rect(728, 800, 760, 1130, dark, r=6)
-    X.rect(220, 1020, 770, 1066, wood, r=10)          # seat
-    X.rect(250, 1066, 280, 1300, (70, 70, 80), r=6); X.rect(710, 1066, 740, 1300, (70, 70, 80), r=6)
-    X.ell(500, 1315, 280, 18, (150, 132, 100), line=False)
+        X.rect(220, y, 900, y + 44, wood, r=8)
+    X.rect(220, 800, 252, 1130, dark, r=6); X.rect(868, 800, 900, 1130, dark, r=6)
+    X.rect(210, 1020, 910, 1066, wood, r=10)          # seat
+    X.rect(240, 1066, 270, 1300, (70, 70, 80), r=6); X.rect(850, 1066, 880, 1300, (70, 70, 80), r=6)
+    X.ell(560, 1315, 340, 18, (150, 132, 100), line=False)
 
 # ---- the man
-def man(X, t, shock, arm_t):
+def man(X, t, shock, arm_t, glance=0.0):
     x0 = 470
     # shadow
     X.ell(x0, 1296, 140, 14, (150, 132, 100), line=False)
@@ -147,7 +147,7 @@ def man(X, t, shock, arm_t):
         hx, hy = x0 + 130, 1110 + 6 * math.sin(t * 3)    # limp, hand drops
     else:
         sw = math.sin(arm_t * 2 * math.pi / 1.4)
-        hx, hy = x0 + 205 + 20 * sw, 960 - 40 * max(0, sw) + 20
+        hx, hy = x0 + 175 + 20 * sw, 960 - 40 * max(0, sw) + 20
     X.seg((x0 + 105, 830), (hx, hy), 78, OUT)
     X.seg((x0 + 105, 830), (hx, hy), 66, COAT)
     X.ell(hx, hy, 32, 32, SKIN)
@@ -176,7 +176,7 @@ def man(X, t, shock, arm_t):
             X.seg((x0 + ex - 15, hy0 - 16), (x0 + ex + 15, hy0 - 16), 6)
         else:
             X.ell(x0 + ex, hy0 - 16, 14, 16, (255, 255, 255))
-            X.ell(x0 + ex - 4, hy0 - 14, 6, 6, OUT, line=False)
+            X.ell(x0 + ex - 4 + 11 * glance, hy0 - 14 + 2 * glance, 6, 6, OUT, line=False)
             X.seg((x0 + ex - 22, hy0 - 44), (x0 + ex + 20, hy0 - 40), 6)
     # nose + moustache
     X.ell(x0, hy0 + 14, 22, 18, (96, 56, 34))
@@ -241,8 +241,8 @@ def pecks(t, seed, rate=1.3):
     return 46 * (1 - abs(ph * 2 - 1)) ** 2 if ph < 0.5 else 0
 
 def floor_pigeons(X, t):
-    spec = [(250, 1330, 0.9, +1, 0.1), (360, 1400, 1.0, -1, 0.5), (600, 1360, 0.95, +1, 0.8),
-            (700, 1420, 1.05, -1, 0.3), (520, 1470, 1.05, +1, 0.65), (160, 1440, 1.0, +1, 0.2)]
+    spec = [(190, 1320, 0.9, +1, 0.1), (430, 1370, 1.0, -1, 0.5), (680, 1320, 0.95, +1, 0.8),
+            (850, 1400, 1.0, -1, 0.3), (300, 1450, 1.0, +1, 0.65), (600, 1455, 1.0, -1, 0.2)]
     for i, (x, y, s, f, sd) in enumerate(spec):
         X.ell(x, y + 90 * s, 70 * s, 12 * s, (176, 156, 120), line=False)
         pigeon(X, x + 8 * math.sin(t * 0.8 + i), y, s, f, head_dy=pecks(t, sd, 1.1 + 0.2 * (i % 3)), wing=0)
@@ -255,21 +255,78 @@ def bench_pigeon_state(t, talking_t=None):
     dy = r.choice([-8, 0, 6, -4])
     return tilt, dy
 
+def glance(t):
+    g = (t - (T1 - 1.4)) / 0.3          # eyes swing round during the last 1.4 s of shot 1
+    return max(0.0, min(1.0, g)) if t < T1 else 0.0
+
+def pov(X, t):
+    """Shot 2: looking straight down at the bench pigeon, through the man's eyes."""
+    # bench seat planks seen from above
+    X.rect(-100, -100, 1200, 2100, (150, 96, 54), line=False)
+    for y in range(-60, 2000, 330):
+        X.rect(-100, y, 1200, y + 18, (80, 50, 30), line=False)
+        X.rect(-100, y + 18, 1200, y + 26, (176, 120, 72), line=False)
+    for y in range(120, 2000, 330):
+        X.seg((60, y), (500, y + 14), 3, (124, 78, 44)); X.seg((600, y + 90), (1000, y + 80), 3, (124, 78, 44))
+    sw = 6 * math.sin(t * 1.3)
+    cx = 540 + sw
+    X.ell(cx, 830, 250, 330, (110, 70, 40), line=False)                 # shadow
+    # feet
+    for fx in (-70, 70):
+        X.seg((cx + fx, 1000), (cx + fx * 1.2, 1060), 9)
+        for tx in (-22, 0, 22):
+            X.seg((cx + fx * 1.2, 1060), (cx + fx * 1.2 + tx, 1090), 7)
+    # tail + body + wings
+    X.poly([(cx - 70, 560), (cx - 120, 330), (cx, 300), (cx + 120, 330), (cx + 70, 560)], GREY_D)
+    X.ell(cx, 740, 195, 270, GREY_P)
+    X.ell(cx, 930, 120, 70, SHEEN, line=False)
+    X.rell(cx - 120, 700, 80, 235, 0.14, GREY_D)
+    X.rell(cx + 120, 700, 80, 235, -0.14, GREY_D)
+    for k in range(4):
+        X.seg((cx - 150 + k * 6, 620 + k * 60), (cx - 100 + k * 6, 640 + k * 60), 4, (70, 76, 90))
+        X.seg((cx + 150 - k * 6, 620 + k * 60), (cx + 100 - k * 6, 640 + k * 60), 4, (70, 76, 90))
+    # head tipped back, looking up at the camera
+    hx, hy = cx, 1010
+    X.ell(hx, hy, 118, 110, GREY_P)
+    lt = t - SAY
+    talk = 0 < lt < VL
+    beak = (0.5 + 0.5 * math.sin(lt * 17)) if talk else 0
+    blink = (t % 2.6) < 0.1
+    for ex in (-66, 66):
+        X.ell(hx + ex, hy - 14, 30, 30, (240, 150, 40))
+        if blink:
+            X.seg((hx + ex - 26, hy - 14), (hx + ex + 26, hy - 14), 7)
+        else:
+            X.ell(hx + ex, hy - 6, 13, 14, OUT, line=False)
+            X.ell(hx + ex - 5, hy - 12, 4, 4, (255, 255, 255), line=False)
+    # beak points down at us, foreshortened; opens while speaking
+    X.poly([(hx - 38, hy + 36), (hx + 38, hy + 36), (hx + 20, hy + 88 + 14 * beak), (hx - 20, hy + 88 + 14 * beak)], (240, 200, 150))
+    if beak > 0:
+        X.ell(hx, hy + 70 + 10 * beak, 22, 8 + 14 * beak, (150, 40, 50))
+    X.seg((hx, hy + 38), (hx, hy + 68), 4)
+    # the man's own lap and hand at the edge of the picture
+    X.rect(-200, 1560, 330, 2100, COAT, r=80)
+    X.rect(760, 1600, 1300, 2100, (60, 66, 90), r=60)
+
 def render(t, cam_mode, ss):
     # camera
     if cam_mode == "wide":
         cam = Cam(500, 1000, 1.0, ss)
     elif cam_mode == "close":
         push = min(1, (t - T1) / 3.0) * 0.25
-        cam = Cam(615, 960, 3.0 + push, ss)
+        cam = Cam(540, 900, 1.35, ss)
     img = Image.new("RGB", (int(W * ss), int(H * ss)), (255, 255, 255))
     X = Ctx(ImageDraw.Draw(img), cam)
+    if cam_mode == "close":
+        pov(X, t)
+        out = img.resize((W, H), Image.LANCZOS) if ss != 1 else img
+        return finish(out, t)
     bg(X, t)
     bench(X)
-    man(X, t, shock=(t >= T2), arm_t=(1.05 if cam_mode == "close" else t))
+    man(X, t, shock=(t >= T2), arm_t=t, glance=glance(t))
     floor_pigeons(X, t)
     # the bench pigeon
-    bx, by, bs = 640, 1005, 1.0
+    bx, by, bs = 790, 1005, 1.0
     gone = False
     if t < T2:
         if cam_mode == "close":
@@ -292,6 +349,9 @@ def render(t, cam_mode, ss):
             flying_wing(X, px, py, 1.0, -1, ph)
             pigeon(X, px, py, 1.0 - 0.1 * u, +1 if True else -1, head_dy=-10, wing=0.6 * math.sin(ph), legs=False)
     out = img.resize((W, H), Image.LANCZOS) if ss != 1 else img
+    return finish(out, t)
+
+def finish(out, t):
     d = ImageDraw.Draw(out)
     # title: first second only, full size, in the empty sky
     if t < 1.0:
@@ -352,7 +412,7 @@ def main():
     secs = float(args[args.index("--secs") + 1]) if "--secs" in args else END
     ss = 1.5
     if "--sheet" in args:
-        times = [1.0, 3.0, T1 + 1.0, SAY + 0.5, T2 + 0.3, FLY + 0.6]
+        times = [1.0, T1 - 0.3, T1 + 1.0, SAY + 0.5, T2 + 0.3, FLY + 0.6]
         ims = [render(t, mode(t), 1.0).resize((360, 640)) for t in times]
         sheet = Image.new("RGB", (360 * 3, 640 * 2))
         for i, im in enumerate(ims):
