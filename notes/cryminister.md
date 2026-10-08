@@ -41,6 +41,8 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 36 | 20 | - | Arm higher, holding the phone up for the over-the-shoulder view: it now rises out of the frame on the left above the name and description. | done (in code; not yet rendered) |
 | 37 | ZapBets | - | Advertising window: Sam picked option 3, a yellow poster in both windows: FREE £10 BET for new customers*, small print "*18+. Must not be currently being eaten." | done (in code; not yet rendered) |
 | 38 | all | after lines 1, 12, 13, 15, 17 | Crackles at line ends. In Sam's recordings too (he checked): the phone's voice clean-up chopped the final "s"/"z"/"k" hiss into bursts (about 12 a second) and a thump, made obvious by the film's extra volume. Now each line's tail keeps its real consonant, then only ever fades (smooth_tail); lines Sam ran together (16-18) stay one unbroken piece; soft 100 ms end fades; the tone matching never brightens above 4 kHz. | done (in code; not yet rendered) |
+| 39 | 1 | end | A last thump between the bursts of the final "z": the tail now keeps only the first strong moment of the consonant, then fades. | done (in code; not yet rendered) |
+| 40 | 19 | - | Line 19 ("I'm going to keep fighting for a fairer and safer country") cut, picture and sound: it slowed the joke and added nothing. Film now 58.4 s. Lines are looked up by number, not position. | done (in code; not yet rendered) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).

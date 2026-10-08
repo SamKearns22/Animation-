@@ -74,11 +74,11 @@ LINES = [
     dict(n=16, shot='mid', text="I know it's a problem,", audio=('cry-16-18', 0.0, 2.235)),
     dict(n=17, shot='maul', text='Okay,', audio=('cry-16-18', 2.235, 2.67)),
     dict(n=18, shot='mid', text='Just STOP YELLING.', audio=('cry-16-18', 2.67, None)),
-    dict(n=19, shot='close', text="I'm going to keep fighting for a fairer and safer country.", audio=('cry-19', 0.0, None)),
+    # line 19 ("I'm going to keep fighting...") cut by Sam, 8 Oct: it slowed the joke and added nothing
     dict(n=20, shot='run', text='Aw fook, here come some now.', audio=('cry-20', 0.0, None)),
 ]
 PADS = {1: (0.35, 0.25), 2: (0.25, 0.55), 3: (0.15, 0.25), 4: (0.75, 0.5), 5: (0.9, 1.3), 6: (0.25, 0.7),
-        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.0), 18: (0.0, 0.45), 19: (0.15, 0.45), 20: (0.35, 1.8)}
+        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.0), 18: (0.0, 0.45), 20: (0.35, 1.8)}
 STRESS = 4                                    # Andy's stress in shots 13-14, 1-6 (Sam picks from the cast sheet)
 ANDY = dict(B.BURNHAM, full=True, pose='custom', name='Andy')
 MAN = dict(skin=B.PALE, hw=66, hh=86, jaw='round', hair='crop', hair_c=(150, 112, 74), outfit='jumper',
@@ -212,7 +212,8 @@ def smooth_tail(y):
     from scipy.signal import butter, sosfilt
     hiss = sosfilt(butter(4, 3000, 'high', fs=SR, output='sos'), tail)
     hs = uniform_filter1d(hiss ** 2, int(0.02 * SR))
-    pk = int(np.argmax(hs[:int(0.2 * SR)]))                                # the real "s", "z" or "k" (the brightest
+    first = hs[:int(0.2 * SR)]
+    pk = int(np.argmax(first >= 0.7 * first.max()))                        # the real "s", "z" or "k" (its first strong
                                                                              # moment) is kept whole,
     fall = np.concatenate([env[:pk], np.minimum.accumulate(slow[pk:])])     # then the hiss never rises again
     g = np.minimum(1.0, fall / env)
@@ -281,7 +282,7 @@ def kind(t):
 
 
 def line_of(n):
-    return LINES[n - 1]
+    return next(ln for ln in LINES if ln['n'] == n)          # by number: line 19 was cut
 
 
 def word_at(n, k):
@@ -292,7 +293,7 @@ def word_at(n, k):
 ATTACK = SHOTS[1][1] + 1.0                    # the first wolf's jaws reach the man's throat
 POP = word_at(4, 2)                           # "smaller": the wolf pops to 60%
 ARMOUR = word_at(6, 3)                        # "wolfproof": armour (and a wolf biting it) appear on the old lady
-CHASE = SHOTS[19][1]
+CHASE = SHOTS[-1][1]
 
 
 def u_in(t):
@@ -1363,7 +1364,7 @@ SMALL_CHASERS = (2, 4)
 
 
 def run_scene(img, t, only=None):
-    u = t - SHOTS[19][1]
+    u = t - SHOTS[-1][1]
     bob = 16 * abs(math.sin(u * math.pi * 3.0))                   # his running jolts the phone
     vp = (RUN_VP[0] + 10 * math.sin(u * 9.4), RUN_VP[1] - bob)
     X = screen_ctx(img)
@@ -1411,7 +1412,7 @@ def run_scene(img, t, only=None):
                 continue
             k = FOC / d
             gx, gy = proj(x, 0.0, d, vp)
-            last = SHOTS[19][2] - t
+            last = SHOTS[-1][2] - t
             leap = None if not (i == 0 and last < 0.5) else 1.0 - last / 0.5
             small = i in SMALL_CHASERS                                 # two of the government's smaller wolves, scrambling
             size = WOLF_S * (0.6 if small else 1.0)                    # along on quicker, shorter strides
@@ -1421,7 +1422,7 @@ def run_scene(img, t, only=None):
 
 
 def run_andy(img, t):
-    u = t - SHOTS[19][1]
+    u = t - SHOTS[-1][1]
     bob = 16 * abs(math.sin(u * math.pi * 3.0))
     cam = B.Cam(2.8, AX - 230 / 2.8, 900 - (40 - bob) / 2.8)
     sp = andy_sp(t, 20)
@@ -1840,7 +1841,7 @@ def audits():
              ('the old lady [shot 6]', ARMOUR - 0.1, ARMOUR + 0.1, 'the armour appears in an instant: the joke'),
              ('the net wolf [shot 5]', SHOTS[4][1], SHOTS[4][2], 'bounding at us, growing as it comes; the leap'),
              ('the man [shot 5]', SHOTS[4][1], SHOTS[4][2], 'running at us, growing as he comes'),
-             ('Andy [20-run]', SHOTS[19][1], SHOTS[19][2], 'running: the phone jolts every stride'),
+             ('Andy [20-run]', SHOTS[-1][1], SHOTS[-1][2], 'running: the phone jolts every stride'),
              ('Andy [12-wide]', SHOTS[11][1], SHOTS[11][2], 'tiny in frame: the hand-held phone drift moves him a few pixels')]
     allow += [(f'wolf {i + 1} [shot 2]', s2[1], s2[2], 'bounding in and leaping on the man') for i in range(5)]
     allow += [(f'Andy [{k}]', a, a + 0.5, 'his gesture snaps into place at the cut') for k, a, b, i in SHOTS]
