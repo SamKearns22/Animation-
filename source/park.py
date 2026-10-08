@@ -434,8 +434,8 @@ def finish(out, t):
 def mode(t):
     if T1 <= t < T2:
         return "close"
-    if T1 - 1.0 <= t < T1 or T2 <= t < T2 + 0.7:
-        return "face"                      # hard cuts in on his face: the glance, then the shock
+    if T1 - 1.0 <= t < T1:
+        return "face"                      # one hard cut in on his face: the glance (no shock close-up)
     return "wide"
 
 # ---- sound: park ambience + birds + wing flaps + the voice
