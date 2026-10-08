@@ -167,6 +167,65 @@ def painting(p, x0, y0, x1, y1, subject='horse'):
         p.poly([(x0 + w * 0.28, y0 + h * 0.4), (x0 + w * 0.5, y0 + h * 0.28), (x0 + w * 0.72, y0 + h * 0.4)], (120, 110, 100), INK, 2)
 
 
+def palace_painting(img, p, cam, x0, y0, x1, y1):
+    """A big bright oil of a British royal palace: a long pale-stone front with a pillared centre and its balcony,
+    the royal standard flying, black and gold railings, scarlet guardsmen, a blue summer sky (generic, no likeness
+    of any one building)."""
+    box(p, x0 - 26, y0 - 26, x1 + 26, y1 + 26, (238, 192, 76), 3)
+    box(p, x0 - 10, y0 - 10, x1 + 10, y1 + 10, (190, 140, 40), 2)
+    w, h = x1 - x0, y1 - y0
+    X = lambda u: x0 + w * u
+    Y = lambda v: y0 + h * v
+    box(p, x0, y0, x1, y1, (72, 150, 226), 2)                                 # summer sky
+    soft(img, cam, [(x0, Y(0.3)), (x1, Y(0.3)), (x1, Y(0.62)), (x0, Y(0.62))], (180, 220, 250), 0.6, 20)
+    for cx, cy, r in ((0.15, 0.12, 0.07), (0.24, 0.1, 0.05), (0.7, 0.16, 0.08), (0.8, 0.13, 0.05), (0.46, 0.08, 0.04)):
+        p.ell(X(cx), Y(cy), w * r, h * r * 0.9, (252, 252, 255), None)
+    box(p, x0, Y(0.78), x1, y1, (226, 210, 166), 0)                          # the forecourt
+    box(p, x0, Y(0.7), X(0.06), y1, (58, 140, 66), 0)                         # trees at either end
+    box(p, X(0.94), Y(0.7), x1, y1, (58, 140, 66), 0)
+    for u in (0.02, 0.05, 0.95, 0.98):
+        p.ell(X(u), Y(0.6), w * 0.04, h * 0.14, (70, 156, 72), INK, 1.6)
+    stone, stone_d = (246, 232, 198), (214, 196, 156)
+    box(p, X(0.06), Y(0.36), X(0.94), Y(0.8), stone, 2)                       # the long front
+    box(p, X(0.06), Y(0.33), X(0.94), Y(0.37), stone_d, 1.6)                  # balustrade along the roof
+    for k in range(60):
+        u = 0.07 + 0.86 * k / 59
+        p.line([(X(u), Y(0.33)), (X(u), Y(0.37))], (190, 172, 132), 1.2)
+    for row, (v0, v1) in enumerate(((0.42, 0.52), (0.58, 0.68), (0.71, 0.77))):
+        for k in range(22):
+            u = 0.08 + 0.84 * k / 21
+            if 0.38 < u < 0.62 and row < 2:
+                continue
+            box(p, X(u) - w * 0.009, Y(v0), X(u) + w * 0.009, Y(v1), (60, 84, 120), 1.2)
+    box(p, X(0.38), Y(0.3), X(0.62), Y(0.8), (252, 242, 214), 2)              # the pillared centre
+    p.poly([(X(0.37), Y(0.3)), (X(0.5), Y(0.2)), (X(0.63), Y(0.3))], (252, 242, 214), INK, 2)   # pediment
+    p.poly([(X(0.41), Y(0.29)), (X(0.5), Y(0.23)), (X(0.59), Y(0.29))], None, stone_d, 1.4)
+    for k in range(8):
+        u = 0.395 + 0.21 * k / 7
+        box(p, X(u) - w * 0.006, Y(0.33), X(u) + w * 0.006, Y(0.78), (255, 250, 232), 1.2)
+    box(p, X(0.43), Y(0.53), X(0.57), Y(0.56), stone_d, 1.6)                 # the balcony, hung with crimson
+    p.poly([(X(0.44), Y(0.56)), (X(0.56), Y(0.56)), (X(0.55), Y(0.6)), (X(0.45), Y(0.6))], (196, 20, 40), INK, 1.4)
+    for k in range(3):
+        box(p, X(0.455 + 0.035 * k), Y(0.44), X(0.48 + 0.035 * k), Y(0.53), (60, 84, 120), 1.2)
+    p.line([(X(0.5), Y(0.2)), (X(0.5), Y(0.04))], (60, 60, 60), 2)            # flagpole and the royal standard
+    fx, fy, fw, fh = X(0.5), Y(0.04), w * 0.09, h * 0.09
+    for (a, b, c) in (((0, 0), (220, 30, 40), 0), ((1, 0), (250, 200, 40), 0), ((0, 1), (30, 70, 170), 0), ((1, 1), (220, 30, 40), 0)):
+        box(p, fx + a[0] * fw / 2, fy + a[1] * fh / 2, fx + (a[0] + 1) * fw / 2, fy + (a[1] + 1) * fh / 2, b, 0)
+    box(p, fx, fy, fx + fw, fy + fh, None, 1.6)
+    p.line([(x0, Y(0.86)), (x1, Y(0.86))], (24, 24, 28), 2.4)                # black railings with gilded gates
+    for k in range(70):
+        u = k / 69
+        p.line([(X(u), Y(0.86)), (X(u), Y(0.95))], (24, 24, 28), 1.4)
+    for u in (0.44, 0.56):
+        box(p, X(u) - w * 0.03, Y(0.83), X(u) + w * 0.03, Y(0.95), None, 2.4, (250, 196, 50))
+    for u in (0.2, 0.32, 0.68, 0.8):                                          # guardsmen: bearskin, scarlet, black
+        gx = X(u)
+        p.ell(gx, Y(0.8), w * 0.007, h * 0.03, (20, 20, 22), None)
+        box(p, gx - w * 0.006, Y(0.83), gx + w * 0.006, Y(0.88), (214, 24, 36), 0)
+        box(p, gx - w * 0.005, Y(0.88), gx + w * 0.005, Y(0.93), (20, 20, 22), 0)
+    soft(img, cam, [(X(0.06), Y(0.36)), (X(0.2), Y(0.36)), (X(0.2), Y(0.8)), (X(0.06), Y(0.8))], (120, 90, 60), 0.18, 10)
+
+
 def chandelier(p, cx, top, s=1.0):
     p.line([(cx, top - 400), (cx, top)], GILT_D, 4)
     p.ell(cx, top + 40 * s, 120 * s, 26 * s, GILT, INK, 2.6)
@@ -430,13 +489,17 @@ def hutt(img, cam, t):
 
 # ------------------------------------------------------------------------------------------------ the models
 MODEL_FEET = 1600
-MS = 0.42
-MODELS = [  # x, hair, colour, skin, what she is doing (one sentence each)
-    dict(x=130, hair='blonde', hair_c=(232, 202, 128), skin=B.PALE, act='phone'),     # scrolling her phone, head down
-    dict(x=305, hair='bob', hair_c=(74, 48, 34), skin=B.PINK, act='hips'),           # hands on hips, glaring at him
-    dict(x=480, hair='long', hair_c=(150, 72, 40), skin=B.PALE, act='bored'),        # hands clasped, eyes half shut
-    dict(x=655, hair='long', hair_c=(32, 28, 30), skin=B.PINK, act='selfie'),        # a selfie, smiling, arm up
-    dict(x=830, hair='bob', hair_c=(238, 230, 212), skin=B.PALE, act='nails'),       # inspecting her nails, yawning
+MODELS = [  # x, hair, colour, skin, what she is doing (one sentence each); her own height (s) and build
+    dict(x=130, hair='blonde', hair_c=(232, 202, 128), skin=B.PALE, act='phone',      # scrolling her phone, head down
+         s=0.455, sw=114, waist=0.72, hips=0.94, hw=56, hh=86, jaw='long'),          # very tall and willowy
+    dict(x=305, hair='bob', hair_c=(74, 48, 34), skin=B.PINK, act='hips',            # hands on hips, glaring at him
+         s=0.385, sw=126, waist=0.74, hips=1.2, hw=62, hh=80, jaw='round'),          # short and curvy
+    dict(x=480, hair='long', hair_c=(150, 72, 40), skin=B.PALE, act='bored',         # hands clasped, eyes half shut
+         s=0.425, sw=140, waist=0.84, hips=0.96, hw=60, hh=82, jaw='square'),        # athletic, broad shoulders
+    dict(x=655, hair='long', hair_c=(32, 28, 30), skin=B.PINK, act='selfie',         # a selfie, smiling, arm up
+         s=0.44, sw=134, waist=0.92, hips=1.16, hw=64, hh=82, jaw='soft'),           # tall with a fuller figure
+    dict(x=830, hair='bob', hair_c=(238, 230, 212), skin=B.PALE, act='nails',        # inspecting her nails, yawning
+         s=0.395, sw=110, waist=0.78, hips=1.0, hw=56, hh=80, jaw='soft'),           # petite
 ]
 MODEL_BLINKS = [F.blinks(30 + i, 7.0, 16.0) for i in range(len(MODELS))]
 
@@ -444,13 +507,21 @@ MODEL_BLINKS = [F.blinks(30 + i, 7.0, 16.0) for i in range(len(MODELS))]
 def leia_torso(orig):
     """A gold bodice, a long burgundy skirt panel on a gold belt, and a gold slave collar (the costume evoked)."""
     def torso(img, p, sp, t):
-        orig(img, p, sp, t)
         if not sp.get('leia'):
-            return
+            return orig(img, p, sp, t)
         bottom = sp.get('bottom', 560)
         sw = sp.get('shoulders', 150)
-        p.poly([(-sw + 4, 300), (sw - 4, 300), (sw - 2, 338), (-sw + 2, 338)], B.GOLD, INK, 2.2)
-        p.poly([(-62, 338), (62, 338), (74, bottom - 2), (-74, bottom - 2)], (128, 30, 44), INK, 2.2)
+        wa, hp = sw * sp.get('waist', 0.8), sw * sp.get('hips', 1.0)
+        skin = sp['skin']
+        p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)                # neck
+        soft(img, p.cam, [(-32, -76), (32, -76), (30, -40), (-30, -40)], (150, 90, 80), 0.35, 4)
+        gown = curve([(-40, -4), (-sw * 0.8, 12), (-sw, 52), (-sw * 0.98, 170), (-wa, 300), (-hp, 450), (-hp * 1.05, bottom),
+                      (hp * 1.05, bottom), (hp, 450), (wa, 300), (sw * 0.98, 170), (sw, 52), (sw * 0.8, 12), (40, -4)], 4)
+        p.poly(gown, sp.get('dress', B.GOLD), INK, 2.6)                               # the gown, shaped to her build
+        p.poly([(-46, -4), (46, -4), (30, 50), (0, 70), (-30, 50)], skin, INK, 2.2)     # neckline
+        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (hp, 450), (hp, bottom), (hp * 0.5, bottom)], (0, 0, 0), 0.22, 10)
+        p.poly([(-wa - 2, 296), (wa + 2, 296), (wa * 1.04 + 2, 334), (-wa * 1.04 - 2, 334)], B.GOLD, INK, 2.2)
+        p.poly([(-wa * 0.55, 334), (wa * 0.55, 334), (hp * 0.6, bottom - 2), (-hp * 0.6, bottom - 2)], (128, 30, 44), INK, 2.2)
         p.line([(0, 350), (0, bottom - 10)], (100, 22, 34), 2)
         p.poly(oval(0, -26, 40, 14, 24), B.GOLD, INK, 2.2)                         # the collar
         p.ell(0, -10, 8, 8, None, INK, 2.6)                                       # its ring
@@ -462,8 +533,9 @@ B.torso = leia_torso(B.torso)
 
 def model_sp(i, t):
     m = MODELS[i]
-    sp = dict(skin=m['skin'], hw=60, hh=82, jaw='soft', hair=m['hair'], hair_c=m['hair_c'], outfit='dress',
-              dress=(214, 168, 64), trousers=(214, 168, 64), bottom=884, shoulders=124, full=True, pose='custom',
+    sp = dict(skin=m['skin'], hw=m['hw'], hh=m['hh'], jaw=m['jaw'], hair=m['hair'], hair_c=m['hair_c'], outfit='dress',
+              dress=(214, 168, 64), trousers=(214, 168, 64), bottom=884, shoulders=m['sw'], waist=m['waist'],
+              hips=m['hips'], full=True, pose='custom',
               leia=True, lips=True, name=f'model {i + 1}', earring=i % 2 == 0)
     rig = F.Rig(sp)
     sp['blink'] = F.blinking(t, MODEL_BLINKS[i])
@@ -515,16 +587,16 @@ def phone(p, x, y, back=False, ang=0.0):
 
 def models(img, cam, t, chain_start):
     """The line of models on the floor in front of the dais, chained collar to collar back to his hand."""
-    neck = MODEL_FEET - F.SOLE_Y * MS
     collars = []
     for i, m in enumerate(MODELS):
-        soft(img, cam, oval(m['x'], MODEL_FEET + 2, 80, 14, 24), (0, 0, 0), 0.3, 6)
+        soft(img, cam, oval(m['x'], MODEL_FEET + 2, 190 * m['s'], 14, 24), (0, 0, 0), 0.3, 6)
     for i, m in enumerate(MODELS):
         sp, rig = model_sp(i, t)
         x = m['x'] + 2.0 * math.sin(2 * math.pi * t / (4.0 + 0.6 * i) + i)        # a gentle sway, never in step
         x -= 10 * spring(t - TUG - 0.06 * i) * max(0.0, 1 - 0.3 * i)
-        B.person(img, cam, x, neck, MS, sp, t)
-        L = B.Local(cam, x, neck, MS)
+        neck = MODEL_FEET - F.SOLE_Y * m['s']                                     # every pair of feet on the same floor
+        B.person(img, cam, x, neck, m['s'], sp, t)
+        L = B.Local(cam, x, neck, m['s'])
         lp = B.Pen(img, L)
         if m['act'] in ('phone', 'selfie'):
             hx, hy = hand_centre(sp['arms']['R'])
@@ -551,13 +623,12 @@ def models(img, cam, t, chain_start):
 
 
 def wall_b(img, cam, t):
-    """Andrew's end of the room: picture, chandelier, crimson drapes, a red dais, the hookah, him, the models."""
+    """Andrew's end of the room: the palace picture, crimson drapes, a red dais, the hookah, him, the models."""
     p = B.Pen(img, cam)
     wallpaper(img, p, *SPAN)
-    painting(p, 330, 250, 750, 500, 'house')
+    palace_painting(img, p, cam, 150, 150, 930, 560)                           # the royal palace, big and bright
     drape(p, -40, 110, 60, FY - 10, 1)
     drape(p, 1120, 970, 60, FY - 10, -1)
-    chandelier(p, 540, 110, 1.3)
     box(p, -610, 1112, 1690, 1152, (176, 40, 52), 3)                          # the dais: velvet top, gilt edge
     box(p, -610, 1152, 1690, FY + 30, (140, 26, 40), 3)
     p.line([(-610, 1158), (1690, 1158)], GILT, 5)
@@ -668,7 +739,7 @@ def checks():
             c = wall_cam(cam, 'B')
             heads.append(('Andrew', c.P(HUTT_AT[0] + HK * 670, HUTT_AT[1] + HK * 700), 190 * cam.z))
             for i, m in enumerate(MODELS):
-                heads.append((f'model {i + 1}', c.P(m['x'], MODEL_FEET - F.SOLE_Y * MS - 150 * MS), 62 * MS * cam.z))
+                heads.append((f'model {i + 1}', c.P(m['x'], MODEL_FEET - F.SOLE_Y * m['s'] - 150 * m['s']), 62 * m['s'] * cam.z))
         for name, (x, y), r in heads:
             if x - r < SAFE[0] or x + r > SAFE[2] or y - r < SAFE[1] or y + r > SAFE[3]:
                 bad.append(f'{t:.2f} s: {name}\'s face leaves the safe area ({x:.0f}, {y:.0f})')
