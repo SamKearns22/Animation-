@@ -384,6 +384,9 @@ this series. Full details in `tiktok-design.md`.
 - The new checks, run on The Park's old faults, caught all of them, and two more in the template itself (its title over
   both heads, its example arm bent across the chest).
 
+### Lesson from "Cry Minister" (8 Oct, approved by Sam)
+- A mouth seen from the side is see-through between the jaws; only a mouth seen from the front shows the dark throat.
+
 # Part 3. The coloured-pencil comedy shorts
 For Dam, The Salt and the Oxford rap battles (Andy and Sam).
 - **The look:** coloured pencil on off-white paper, with visible strokes and paper texture, and simple
