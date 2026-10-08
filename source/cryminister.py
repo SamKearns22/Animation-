@@ -341,14 +341,6 @@ def shop(img, cam, x0, x1, kind_):
             window(X, wx - 380, BASE - STOREY + 520, wx + 380, BASE - 420, int(wx) % 97, (40, 70, 52), (230, 196, 120), (3, 2))
         box(X, (x0 + x1) / 2 - 230, BASE - STOREY + 520, (x0 + x1) / 2 + 230, BASE, (30, 50, 40), 63)   # door
         X.ell((x0 + x1) / 2 + 150, BASE - 640, 18, 18, (226, 190, 96))
-        sx = x1 - 260                                                        # the hanging sign: a goose and a cranberry
-        X.seg((sx, BASE - STOREY - 150), (sx + 330, BASE - STOREY - 150), 22, (30, 26, 24))
-        box(X, sx + 30, BASE - STOREY - 140, sx + 330, BASE - STOREY + 260, (226, 190, 96), 64, 5)
-        box(X, sx + 50, BASE - STOREY - 120, sx + 310, BASE - STOREY + 240, (34, 60, 44), 65, 4)
-        blob(X, [(sx + 170, BASE - STOREY + 110, 80, 50, 0.0), (sx + 230, BASE - STOREY + 30, 22, 60, 0.3)], (246, 244, 236), ol=4)
-        X.ell(sx + 248, BASE - STOREY - 20, 26, 20, (246, 244, 236))
-        X.poly([(sx + 270, BASE - STOREY - 26), (sx + 300, BASE - STOREY - 14), (sx + 270, BASE - STOREY - 8)], (240, 150, 40))
-        X.ell(sx + 110, BASE - STOREY + 190, 30, 30, (178, 24, 52))
     elif kind_ == 'zap':                       # ZapBets: a loud betting shop, purple and yellow, frosted windows
         box(X, x0, top + 120, x1, BASE - STOREY, (176, 150, 128), 71)
         for k in range(2):
@@ -1536,210 +1528,19 @@ def frame_image(t):
 
 
 # ------------------------------------------------------------------------------------------------- sound
-_R = np.random.default_rng(5)
-
-
-def _bp(x, lo, hi):
-    from scipy.signal import butter, sosfilt
-    return sosfilt(butter(2, [lo, hi], 'band', fs=SR, output='sos'), x)
-
-
-def _env(n, att, dec):
-    t = np.arange(n) / SR
-    return np.minimum(1.0, t / max(att, 1e-4)) * np.exp(-t / dec)
-
-
-def _add(track, at, clip, gain=1.0):
-    i = int(at * SR)
-    if i >= len(track) or i + len(clip) <= 0:
-        return
-    a = max(0, -i)
-    j = min(len(track), i + len(clip))
-    track[max(0, i):j] += clip[a:a + j - max(0, i)] * gain
-
-
-def crunch(size=1.0):
-    """A wet crunch: a short bright crack of gristle and bone over a squelch."""
-    n = int(0.09 * SR)
-    c = _bp(_R.standard_normal(n), 1200, 5000) * _env(n, 0.002, 0.018)
-    sq = _bp(_R.standard_normal(n), 180, 700) * _env(n, 0.006, 0.04) * 1.6
-    return (c * 0.7 + sq) * size
-
-
-def tear():
-    """A hunk ripped away: a rising wet tearing sweep."""
-    n = int(0.35 * SR)
-    x = _R.standard_normal(n)
-    lo = _bp(x, 300, 900) * np.linspace(1, 0.3, n)
-    hi = _bp(x, 1500, 4000) * np.linspace(0.2, 1.0, n)
-    return (lo + hi * 0.6) * _env(n, 0.03, 0.12) * 1.8
-
-
-def growl(dur, f0=110.0, rough=1.0):
-    """A wolf's growl: a buzzing low voice, rattling, with breath through it."""
-    n = int(dur * SR)
-    t = np.arange(n) / SR
-    f = f0 * (1 + 0.06 * np.sin(2 * np.pi * 3.1 * t) + 0.03 * _R.standard_normal(n).cumsum() / np.sqrt(np.arange(1, n + 1)))
-    ph = 2 * np.pi * np.cumsum(f) / SR
-    v = sum(np.sin(k * ph) / k ** 0.9 for k in range(1, 14))
-    am = 0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 28 * t)) * rough
-    br = _bp(_R.standard_normal(n), 400, 2500) * 0.5
-    e = np.minimum(1, t / 0.08) * np.minimum(1, (dur - t) / 0.12)
-    return _bp(v * am + br, 90, 4000) * e * 0.35
-
-
-def paw(heavy=1.0):
-    """A big paw striking the pavement: a soft thump with a scrape of claws."""
-    n = int(0.12 * SR)
-    th = _bp(_R.standard_normal(n), 100, 400) * _env(n, 0.002, 0.03) * 2.0
-    cl = _bp(_R.standard_normal(n), 3000, 7000) * _env(n, 0.001, 0.01) * 0.4
-    return (th + cl) * heavy
-
-
-def shoe():
-    n = int(0.1 * SR)
-    return _bp(_R.standard_normal(n), 250, 2500) * _env(n, 0.001, 0.02) * 1.4
-
-
-def whoosh(dur=0.35):
-    n = int(dur * SR)
-    t = np.arange(n) / SR
-    x = _bp(_R.standard_normal(n), 500, 2500) * np.sin(np.pi * t / dur) ** 2
-    return x * 0.5
-
-
-def yelp():
-    n = int(0.3 * SR)
-    t = np.arange(n) / SR
-    f = 950 - 500 * t / 0.3
-    ph = 2 * np.pi * np.cumsum(f) / SR
-    return (np.sin(ph) + 0.4 * np.sin(2 * ph) + 0.2 * np.sin(3 * ph)) * _env(n, 0.01, 0.12) * 0.5
-
-
-def rustle(dur=0.6):
-    n = int(dur * SR)
-    x = _bp(_R.standard_normal(n), 2000, 7000)
-    gates = (_R.random(n // 400 + 1) < 0.5).repeat(400)[:n]
-    return x * gates * _env(n, 0.005, dur / 2.5) * 0.6
-
-
-FEED_GAIN = {'half': 0.75, 'maul': 0.95, 'mid': 0.32, 'close': 0.3, 'further': 0.3, 'eyes': 0.25, 'wide': 0.3,
-             'lady': 0.08, 'bigwolf': 0.1}
-
-
-def effects(n):
-    """Every wolf sound, placed by when it really starts."""
-    fx = np.zeros(n)
-    feed = np.zeros(n)
-    rnd = random.Random(9)
-    t = ATTACK + 0.2                                                   # the pack feeding: crunching, worrying, tearing
-    while t < BLACK_AT:
-        _add(feed, t, crunch(rnd.uniform(0.5, 1.1)))
-        t += rnd.uniform(0.06, 0.2)
-    for i in range(5):
-        dx, dz, face, pal, ph = PACK[i]
-        t_land = ATTACK - 0.45 + 0.2 * i + 0.45
-        k = 0
-        while True:
-            rel = t_land + (k + (0.8 - ph) % 1.0) * RIP
-            if rel > BLACK_AT:
-                break
-            _add(feed, rel - 0.15, tear(), rnd.uniform(0.6, 1.0))
-            if k % 3 == 0:
-                _add(feed, rel + 0.3, growl(0.7, 130 + 15 * i, 0.8), 0.5)
-            k += 1
-    g = np.zeros(n)                                                    # how loud the feeding is: by what the shot shows
-    for key, a, b, i in SHOTS:
-        g[int(a * SR):int(b * SR)] = FEED_GAIN.get(LINES[i]['shot'], 0.0)
-    k = int(0.06 * SR)
-    g = np.convolve(g, np.ones(k) / k, mode='same')                    # no clicks at the cuts
-    g[int(BLACK_AT * SR):] = 0
-    fx += feed * g
-    for i in range(5):                                                 # shot 2: the pack bounds in and leaps
-        t_leap = ATTACK - 0.45 + 0.2 * i
-        for q in range(4):
-            _add(fx, t_leap - 0.9 + q * 0.21, paw(0.8))
-        _add(fx, t_leap, whoosh(0.4), 0.9)
-        _add(fx, t_leap + 0.45, paw(1.6))
-    _add(fx, ATTACK - 0.3, growl(0.9, 150, 1.0), 1.0)                   # the snarl as the first hits his throat
-    s4 = SHOTS[3]                                                      # shot 4: a big growl, then a silly yappy one
-    _add(fx, s4[1] + 0.05, growl(POP - s4[1] - 0.05, 100, 1.0), 1.1)
-    _add(fx, POP, growl(s4[2] - POP, 230, 0.6), 0.7)
-    s5 = SHOTS[4]                                                      # shot 5: feet and paws down the alley, the net
-    for q in range(40):
-        tq = s5[1] + q / 6.0
-        if alley_run(tq)[0] > 1.3:
-            _add(fx, tq, shoe(), 0.9 * min(1.0, 6.0 / alley_run(tq)[0]))
-    hit = s5[1] + first_tangle()
-    tq = s5[1]
-    while tq < hit:
-        d = alley_run(tq)[2]
-        for o in (0.0, 0.07, 0.19, 0.26):
-            _add(fx, tq + o, paw(1.2 * min(1.0, 7.0 / d)))
-        tq += 1 / 2.6
-    _add(fx, hit, paw(3.0))
-    _add(fx, hit, rustle(1.4), 1.6)
-    _add(fx, hit + 0.05, yelp(), 1.2)
-    _add(fx, hit + 0.4, growl(s5[2] - hit - 0.5, 160, 1.0), 0.9)
-    for q in range(6):
-        _add(fx, hit + 0.5 + q * 0.37, rustle(0.3), 0.8)
-    s6 = SHOTS[5]                                                      # shot 6: gnawing at the Kevlar, getting nowhere
-    tq = ARMOUR
-    while tq < s6[2]:
-        _add(fx, tq, crunch(0.6), 0.5)
-        n2 = int(0.07 * SR)
-        _add(fx, tq + 0.02, np.sin(2 * np.pi * 2600 * np.arange(n2) / SR) * _env(n2, 0.005, 0.02) * 0.08)   # teeth skid
-        tq += 1 / 3.2
-    _add(fx, ARMOUR, growl(s6[2] - ARMOUR, 140, 0.8), 0.45)
-    s20 = SHOTS[19]                                                    # shot 20: running for it, the pack gaining
-    tq = s20[1]
-    while tq < BLACK_AT:
-        u = tq - s20[1]
-        _add(fx, tq, shoe(), 0.9)
-        tq += 1 / 3.0
-    for i in range(5):
-        tq = s20[1] + 0.05 * i
-        while tq < BLACK_AT:
-            u = tq - s20[1]
-            d = 15.5 - 3.4 * u + [0.0, 2.5, 4.0, 1.4, 5.5][i]
-            for o in (0.0, 0.07, 0.19, 0.26):
-                _add(fx, tq + o, paw(1.4 * min(1.0, 4.0 / max(d, 1.5))))
-            tq += 1 / 2.4
-    _add(fx, s20[1] + 0.8, growl(BLACK_AT - s20[1] - 0.8, 150, 1.0), 0.8)
-    _add(fx, BLACK_AT - 0.5, whoosh(0.5), 1.4)
-    _add(fx, BLACK_AT - 0.45, growl(0.45, 170, 1.0), 1.6)
-    fx[int(BLACK_AT * SR):] = 0                                        # the hard cut: everything stops
-    return fx
-
-
-def street_bed(n):
-    """A faint British high street under it all: distant traffic and air, never dead silence."""
-    from scipy.signal import butter, sosfilt
-    x = sosfilt(butter(2, [150, 1800], 'band', fs=SR, output='sos'), np.random.default_rng(1).standard_normal(n))
-    return x * 0.012
-
-
 def soundtrack(stems=False):
-    """Sam's voice; the wolves; a faint street. Effects dip under every line so the voice stays clear."""
+    """Sam's voice only (every sound made in code was removed at his request)."""
     n = int((DUR + 0.3) * SR)
     voice = np.zeros(n)
     for ln in LINES:
         s_ = int(ln['start'] * SR)
         seg = ln['_voice'][:max(0, n - s_)]
         voice[s_:s_ + len(seg)] += seg
-    rest = effects(n) * 0.5 + street_bed(n)
-    rest[int(BLACK_AT * SR):] = 0
-    duck = np.ones(n)                                                  # under each stretch of speech: 9 dB down
-    for ln in LINES:
-        for a, b in ln['_stretches']:
-            duck[int((ln['start'] + a - 0.05) * SR):int((ln['start'] + b + 0.05) * SR)] = 0.3
-    k = int(0.08 * SR)
-    duck = np.convolve(duck, np.ones(k) / k, mode='same')
-    rest = rest * duck
-    mix = voice + rest
+    rest = np.zeros(n)
+    mix = voice.copy()
     end = int(BLACK_AT * SR)
     g = 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)                     # master: about -14 LUFS
-    mix, voice, rest = M.limiter(mix * g, -2.6), voice * g, rest * g
+    mix, voice = M.limiter(mix * g, -2.6), voice * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
 
