@@ -140,7 +140,8 @@ def man(X, t, shock, arm_t, glance=0.0, pv=(1.0, 0.0)):
     X.rect(x0 - 12, 770, x0 + 12, 1080, COAT_D, r=6, line=False)
     X.ell(x0, 770, 70, 38, COAT_D)      # collar
     # left arm (viewer's left): rests on knee
-    X.rell(x0 - 125, 880, 40, 92, 0.15, COAT)
+    X.seg((x0 - 105, 830), (x0 - 100, 1035), 78, OUT)
+    X.seg((x0 - 105, 830), (x0 - 100, 1035), 66, COAT)
     X.ell(x0 - 100, 1040, 32, 32, SKIN)
     # right arm scatters seed
     if shock:
