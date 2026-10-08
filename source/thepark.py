@@ -4,7 +4,8 @@ drawing and every movement is new.
 
 Story: an old man on a park bench (flat cap, camel coat, grey beard) feeds the pigeons, unimpressed. He glances at the
 one on the bench beside him. Close on it: it tips its head back, looks up at him and opens its beak: "Nobody will
-believe you." He is stunned. It flies off. The other pigeons all turn and stare at him.
+believe you." He is stunned. It flies off. The other pigeons just carry on being
+pigeons, and his eyes dart from one to the next in case one of them speaks too.
 References (Sam, 8 Oct): a rock dove (grey body, dark head, green-purple neck sheen, two dark wing bars, orange eye,
 pink feet); a pigeon tipping its head back with its beak wide open; older Black men in a park (flat cap, camel coat,
 short grey beard); their shock (eyes wide with white all round, raised brows, forehead lines, mouth open).
@@ -137,7 +138,7 @@ def park(img, cam, t):
 
 
 # ------------------------------------------------------------------------------------------------- pigeons
-def pigeon(X, x, y, s, face, pal=0, peck=0.0, beak=0.0, wing=0.0, legs=True, lid=0.45, turn=0.0, flap=None, up=0.0):
+def pigeon(X, x, y, s, face, pal=0, peck=0.0, beak=0.0, wing=0.0, legs=True, lid=0.45, turn=0.0, flap=None, up=0.0, shine=False):
     """A rock dove side-on, Satire style: a plump lumpy body with one outline, a darker head, the green-purple neck sheen,
     two dark bars on the wing, a white cere on a small dark beak, an orange eye, pink feet. (x, y): its feet.
     peck dips the head; up (0-1) tips the head right back to look up; beak (0-1) opens it; turn (0-1) swings the head
@@ -180,6 +181,8 @@ def pigeon(X, x, y, s, face, pal=0, peck=0.0, beak=0.0, wing=0.0, legs=True, lid
     for dx in ((0,) if turn < 0.5 else (-11, 11)):          # one eye in profile, two staring straight at us
         X.ell(ex + dx * s, hy - 7 * s, 10 * s, 10 * s, (242, 140, 40))
         X.ell(ex + dx * s, hy - 7 * s, 4.5 * s, 4.5 * s, INK, line=False)
+        if shine:                                                                   # a catchlight: friendly, not shifty
+            X.ell(ex + dx * s - 2.5 * s, hy - 10 * s, 1.8 * s, 1.8 * s, (255, 255, 255), line=False)
         if lid > 0:
             X.poly([(ex + dx * s - 11 * s, hy - 18 * s), (ex + dx * s + 11 * s, hy - 18 * s),
                     (ex + dx * s + 11 * s, hy - 18 * s + 20 * lid * s), (ex + dx * s - 11 * s, hy - 18 * s + 20 * lid * s)], head, line=False)
@@ -201,11 +204,12 @@ def pecks(t, seed, rate=1.2):
     return (1 - abs(ph * 4 - 1)) if ph < 0.5 else 0.0
 
 
-def flock(X, t, stare=0.0):
+def flock(X, t):
+    """The pigeons on the ground, just being pigeons: pottering about, bobbing, pecking at the seed. Friendly open eyes."""
     for i, (x, y, s, f, sd, pal) in enumerate(FLOCK):
-        X.ell(x, y + 6 * s, 66 * s, 11 * s, (172, 150, 112), line=False)
-        u = max(0.0, min(1.0, (stare - 0.12 * i) / 0.25))                         # they turn to stare, one by one
-        pigeon(X, x + 6 * math.sin(t * 0.8 + i) * (1 - u), y, s, f, pal, peck=pecks(t, sd) * (1 - u), turn=u)
+        wx = x + 26 * s * math.sin(t * 0.45 + i * 1.7)                              # a slow potter back and forth
+        X.ell(wx, y + 6 * s, 66 * s, 11 * s, (172, 150, 112), line=False)
+        pigeon(X, wx, y, s, f, pal, peck=pecks(t, sd), lid=0.0, shine=True)
 
 
 def bench_pigeon(X, t):
@@ -221,12 +225,39 @@ def bench_pigeon(X, t):
     return fx, fy
 
 
-def seed_specks(X, t, hand):
-    ph = (t % 1.4) / 1.4
-    if 0.42 < ph < 0.95:
-        f = (ph - 0.42) / 0.53
-        for k in range(6):
-            X.ell(hand[0] + 60 * f + k * 16, hand[1] + 18 + 300 * f * f + k * 10 * f, 5, 5, (232, 200, 90), line=False)
+def _handfuls():
+    """Every grain he throws: (release time, start, landing spot, flight time, size, colour, spin). Loose and uneven."""
+    out, rnd = [], random.Random(17)
+    k = 0
+    while k * 1.4 + 0.62 < T2:
+        r = k * 1.4 + 0.62
+        hx, hy = TOSS.at(0.62)
+        h = (X0 + hx * S, NECK + hy * S)
+        for _ in range(rnd.randint(7, 11)):
+            land = (rnd.uniform(560, 1010), rnd.uniform(1235, 1470))
+            out.append((r + rnd.uniform(0, 0.06), h, land, rnd.uniform(0.45, 0.8), rnd.uniform(3.0, 5.5),
+                        rnd.choice([(232, 200, 90), (214, 176, 96), (196, 150, 82), (240, 220, 150)]), rnd.uniform(0, 3)))
+        k += 1
+    return out
+
+
+GRAINS = _handfuls()
+
+
+def seeds(X, t):
+    """The thrown seed: each grain arcs out of his hand under gravity, lands on the path and stays there."""
+    g = 2400.0
+    for r, h, land, d, sz, col, ph in GRAINS:
+        u = t - r
+        if u < 0:
+            continue
+        if u >= d:
+            X.ell(land[0], land[1], sz * 1.2, sz * 0.7, col, line=False)              # lying on the ground
+            continue
+        vy = (land[1] - h[1] - g * d * d / 2) / d
+        x = h[0] + (land[0] - h[0]) * u / d
+        y = h[1] + vy * u + g * u * u / 2
+        X.ell(x, y, sz * (0.8 + 0.4 * abs(math.sin(u * 14 + ph))), sz, col, line=False)    # tumbling as it flies
 
 
 # ------------------------------------------------------------------------------------------------- the man
@@ -258,7 +289,7 @@ DARTS = [(1.0, 1), (1.5, 6), (2.0, 3), (2.5, 4), (3.0, 2), (3.5, 5), (3.9, 0)]  
 
 def gaze(t):
     """The spot his shocked eyes are on: the bench pigeon, then it as it flies, then (the sting) each pigeon on the
-    ground in turn as they stare back, as if any of them might speak next. Each move is a quick two-frame flick."""
+    ground in turn as they carry on pecking, as if any of them might speak next. Each move is a quick two-frame flick."""
     u = t - FLY
     if u < 0:
         return BENCH_P[0], BENCH_P[1] - 100
@@ -340,12 +371,14 @@ def man(img, cam, t):
         pass                                                                        # his eyes travel to the pigeon
     elif t < FLY:
         filmkit.eyeline('the man', t, eye, (sp['look'], 0.0), BENCH_P)
-    if t < T2:
-        seed_specks(X, t, (X0 + TOSS.at(t % 1.4)[0] * S, NECK + TOSS.at(t % 1.4)[1] * S))
 
 
 # ------------------------------------------------------------------------------------------------- shot 3: his view
-POV_CAM = (1.35, 540, 900)                       # the original's angle: straight down at it, through his eyes
+def pov_cam(t):
+    """The original's angle, straight down at it through his eyes, slowly pushing in towards its face."""
+    u = max(0.0, min(1.0, (t - T1) / (T2 - T1)))
+    u = u * u * (3 - 2 * u)
+    return B.Cam(1.35 + 0.45 * u, 540, 900 + 90 * u)
 
 
 def pov_pigeon(X, t):
@@ -354,9 +387,11 @@ def pov_pigeon(X, t):
     body, wingc, head, sh1, sh2 = PALS[0]
     cx = 540 + 6 * math.sin(t * 1.3)
     up = max(0.0, min(1.0, (t - (T1 + 0.15)) / 0.3))
-    for fx in (-1, 1):                                                              # pink toes poking out
-        for tx in (-22, 0, 22):
-            X.seg((cx + fx * 150, 1000), (cx + fx * 170 + tx, 1060), 12, (214, 112, 112))
+    for fx in (-1, 1):                                  # feet under its breast: legs hidden, toes peeking out either side
+        for ex, ey in ((124, 1012), (150, 1002), (166, 970)):                       # three thick toes, pointing forward
+            X.seg((cx + fx * 108, 930), (cx + fx * ex, ey), 20, (214, 112, 112))
+            X.ell(cx + fx * ex, ey, 6, 6, (70, 52, 56), line=False)              # claws
+        X.ell(cx + fx * 110, 935, 30, 26, (214, 112, 112))                        # the foot, under its breast
     X.poly(rough([(cx - 70, 560), (cx - 125, 320), (cx, 290), (cx + 125, 320), (cx + 70, 560)], 5, 71), wingc)   # tail
     X.poly([(cx - 125, 320), (cx, 290), (cx + 125, 320), (cx + 118, 352), (cx, 324), (cx - 118, 352)], (40, 42, 50))
     blob(X, [(cx, 740, 195, 270, 0.0), (cx, 860, 170, 150, 0.0)], body, ol=3)
@@ -389,7 +424,7 @@ def pov_pigeon(X, t):
 
 
 def talk(img, t):
-    cam = B.Cam(*POV_CAM)
+    cam = pov_cam(t)
     X = ctx(img, cam)
     X.rect(-200, -200, 1300, 2100, (150, 96, 54), line=False)                       # the bench seat from above
     for k, y in enumerate(range(-60, 2000, 330)):
@@ -416,7 +451,8 @@ def picture(t):
     X = ctx(img, cam)
     man(img, cam, t)
     bench_pigeon(X, t)
-    flock(X, t, stare=(t - (FLY + 1.2)) if t > FLY + 1.2 else 0.0)
+    seeds(X, t)
+    flock(X, t)
     return img
 
 
@@ -430,7 +466,7 @@ def overlay(img, t):
         if c:
             PP.caption(img, c)
         if t < 2.0:
-            B.title_lines(img, TITLE, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
+            B.title_lines(img, (' '.join(TITLE),), cap=116, top=310, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
     return img
 
 
@@ -483,7 +519,7 @@ def checks():
 
 
 def talk_alone(img, t):
-    pov_pigeon(ctx(img, B.Cam(*POV_CAM)), t)
+    pov_pigeon(ctx(img, pov_cam(t)), t)
 
 
 def audits():
