@@ -398,12 +398,12 @@ def make_audio(path):
     n = int(END * sr)
     rnd = np.random.RandomState(1)
     a = np.zeros(n)
-    for k in range(12):
+    for k in range(0):  # wing flaps removed
         o = int((FLY + k * 0.085) * sr)
         ln = int(0.06 * sr)
         if o + ln < n:
             a[o:o + ln] += rnd.randn(ln) * np.exp(-np.arange(ln) / (0.02 * sr)) * 0.35
-    a = a / max(1e-6, np.abs(a).max()) * 0.35
+    a = a * 0.0
     with wave.open(path, "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
         w.writeframes((a * 32767).astype("<i2").tobytes())
