@@ -1,225 +1,225 @@
-# Code map: russiadent.py (3290 lines). Regenerate: python3 source/codemap.py russiadent.py
+# Code map: russiadent.py (3307 lines). Regenerate: python3 source/codemap.py russiadent.py
 
-- 40: HERE (data)
-- 41: FPS (data)
-- 42: SR (data)
-- 43: TITLE (data)
-- 44: UPM (data)
-- 47: WALL (data)
-- 48: WALL_D (data)
-- 49: PANEL (data)
-- 50: PANEL_D (data)
-- 51: PARQUET (data)
-- 52: PARQUET_D (data)
-- 53: CEIL (data)
-- 54: BACKDROP (data)
-- 55: BACKDROP_L (data)
-- 56: FRAME_GOLD (data)
-- 57: PODIUM (data)
-- 58: PODIUM_L (data)
-- 59: STAGE (data)
-- 60: CHAIR (data)
-- 61: CHAIR_FRAME (data)
-- 62: GLASS (data)
-- 63: NET (data)
-- 64: BLOOD (data)
-- 65: BLOOD_D (data)
-- 66: ZSKIN (data)
-- 67: ZSKIN_D (data)
-- 71: ROOM (data)
-- 72: STAGE_BOX (data)
-- 73: PODIUM_BOX (data)
-- 74: PESKOV_AT (data)
-- 75: BACKDROP_BOX (data)
-- 76: FLAG_AT (data)
-- 77: ROWS_Z (data)
-- 78: SEATS_X (data)
-- 79: WINDOWS_Z (data)
-- 80: SIDE_DOORS (data)
-- 81: BACK_DOORS (data)
-- 82: RISERS (data)
-- 83: TRIPODS (data)
-- 84: CLOCK (data)
-- 85: PLANT_AT (data)
-- 86: CRATE_AT (data)
-- 89: `check_plan` Set pieces that must stay apart (best-practice 1.3): seats, podium, flag, tripods, plant, crate.
-- 106: `class PCam` A perspective camera in the plan: at (x, y, z), heading along +Z (dirz=1) or -Z (dirz=-1), turned by yaw
-- 130: NEAR (data)
-- 133: `clipz` Clip a polygon (list of (X, Y, Z)) against the camera's near plane; returns screen points.
-- 148: `quad` 
-- 154: `seg` 
-- 164: `face` 
-- 220: `hair_back` 
-- 244: `hair_front` 
-- 324: `beard` 
-- 349: `torso` 
-- 409: `mouth` 
-- 466: `splat` Flat cartoon blood: an irregular blob and a few round drops flung out. No anatomy, no realism.
-- 482: `legs_draw` Everyone has legs and feet (figure-rig.md). kind: stand, run, kneel, lunge.
-- 516: `zombie_reach` The classic zombie reach, straight at the camera: seen end-on the arms are very short, so this is a named
-- 524: `person` Draw one person, neck base at world (x, y), scale s, leaning by tilt (radians, about the hips).
-- 532: HAND_R (data)
-- 535: `chand` 
-- 539: `phone_prop` A phone held in a circle hand: a dark slab standing up from (x, y), its back to us.
-- 547: `gesture_hand` 
-- 559: `no_stump_arms` A zombie missing an arm: that arm is simply not drawn (the torso draws the torn sleeve).
-- 566: `_person` 
-- 586: `person_back` The same person seen from behind (running away, pulling at a door): no face, the hair covering the head.
-- 628: PESKOV (data)
-- 632: REPORTER (data)
-- 636: ZOMBIE (data)
-- 643: `mic` A gooseneck microphone on a stand with a plain coloured cube flag (no outlet's name).
-- 655: `room` The press room from any camera in the plan: walls, windows, doors, floor, stage, backdrop, chairs, tripods.
-- 776: `outside` Zombies beyond an opening (a window, a doorway), seen only through it: drawn on their own layer and masked
-- 808: `through` Places beyond a side-wall opening (centred at zc, `width` wide) that the camera actually sees through it: each
-- 822: `floor_splat` A flat red pool on the floor, squashed by the camera's view of the floor.
-- 841: CLUTTER (data)
-- 845: `floor_clutter` What the stampede left on the floor at the front: papers, a notepad, a dropped microphone, a lost shoe, a
-- 869: `chair` A folding chair at plan (X, Z), facing the podium (-Z). over: knocked over sideways (0-1).
-- 895: `tripod` 
-- 910: `risers` 
-- 917: `flag` A plain white-blue-red flag on a pole, folds hanging, a gold tip. No emblem.
-- 942: `podium` The podium: plain dark wood, no emblem. Top 1.25 m above the floor (on the stage). Two microphones with plain
-- 975: `podium_mics` The two microphones, in front of his chest, clear of his face.
-- 986: `cam_front` Shot 1 and 5: from the camera platform at the back, along the aisle, a long lens on the podium. Slow zoom in.
-- 993: `peskov_spec` 
-- 1002: `draw_peskov` 
-- 1011: `shot_front` 
-- 1030: `cam_reverse` Shot 2: the 180. From just beside the podium, at his eye height, looking down the hall to the back doors.
-- 1035: `chaos_items` 
-- 1052: `draw_items` 
-- 1071: `shot_reverse` 
-- 1090: CHAOS_CHAIRS (data)
-- 1093: `crowd_spec` 
-- 1100: SKINS (data)
-- 1101: PRESS_C (data)
-- 1106: CAST (data)
-- 1128: `reporter_base` 
-- 1149: ZCAST (data)
-- 1172: `zombie_base` A zombie: from the cast list if it has a part, otherwise one of the crowd at the windows and doors (varied
-- 1203: `check_outfits` No two people in the hall look alike (best-practice 1.3): each person's look is unique.
-- 1215: CROWD (data)
-- 1262: PEOPLE_R (data)
-- 1265: `where` A person's place on the plan at t seconds after the 180: a steady walk (v, until), or keyframes
-- 1282: `check_crowd` No two people ever overlap on the floor plan as they move (except a pair meant to touch: an attacker and
-- 1299: HIDE_SEAT (data)
-- 1300: TRIPOD_TAKEN (data)
-- 1301: FLOOR_SPLATS (data)
-- 1302: AIR_DROPS (data)
-- 1305: PENDING (data)
-- 1308: `grab_and_draw_forearm` 
-- 1317: `grip_and_bite` Drawn in the victim's own (leaning) frame, over him: the zombie's forearms wrapped round his chest from behind
-- 1344: `class _Offset` A frame placed inside another: origin at (ox, oy) of the parent, turned by a (the zombie's head on the neck).
-- 1358: `hider` Seen from behind: knees on the floor, bottom in the air, her shoulders, arms and head jammed under the chair's
-- 1380: `ik2` Two-bone arm from shoulder to target (lengths l1, l2): the elbow on the `bend` side. Returns (elbow, hand),
-- 1393: `swing` A strike, over and over: a fast blow down (the first quarter) and a slower lift back up (0 = raised, 1 = struc
-- 1399: `lerp2` 
-- 1403: `crowd_person` Everyone in the outbreak, each with one clear action, and always moving (never a frozen pose).
-- 1568: `phone_screen` The ministry's page on her phone: a generic blue bar with a plain Russian header (no emblem), the report.
-- 1596: `class Turned` A local frame turned by `ang` (radians, clockwise on screen) about (cx, cy) in world pixels: the phone's own
-- 1609: `limb` A tapering finger or thumb along a centre line `cl` with widths `ws` (half-widths), rounded at the tip.
-- 1629: `thumb` A thumb seen from above: broad where it leaves the palm, a bend at the knuckle, a flat nail at the tip.
-- 1643: `finger` A curled finger (back of the finger towards us): knuckle creases and a nail at the tip.
-- 1664: `phone_hand_layer` Her hand holding the phone up (shot 4), on its own layer so it can move on its own when the phone drops: the
-- 1679: `phone_hands_layer` 
-- 1683: `shot_phone` Shot 4: a straight insert of her phone's screen filling the frame, the room just visible round it, out of focu
-- 1734: `taper` A smooth limb piece from a to b, wa to wb wide, with a round joint at a.
-- 1746: `crawl_hand` Where her hand is (her own units) at this point of the crawl: planted, then lifted and moved forward.
-- 1752: `reporter_crawl` Crawling on hands and knees across the floor, seen from the side (heading to our left when flip=1), her face
-- 1830: `inside` Is the point inside the polygon (even-odd rule)?
-- 1841: `check_neck` Best-practice 1.3: a neck grows out of the body. The two base corners of the neck must lie inside the body
-- 1849: CHAIR_HIT (data)
-- 1850: WIN_BURST (data)
-- 1851: WIN_Z (data)
-- 1854: `class _Place` A frame placed inside another at (ox, oy), turned by a (a head on a neck that lies along the floor).
-- 1867: `zombie_down` A zombie flat on its back on the floor, seen side-on: feet at one end, the head lolling at the other (head
-- 1934: `_wall_mask` A mask that is clear everywhere except over the wall below y_top between z0 and z1 (what hides the legs of
-- 1944: `_masked` 
-- 1949: `window_fall` The front one at the window: pressed to the glass; when it bursts it topples over the sill head first into a
-- 1977: `window_climb` The second one: when the glass goes it steps up, a knee on the sill, and climbs in, clawing at the room.
-- 1995: `window_pane` 
-- 1999: `cracks` Cracks spreading through a pane from where it is struck: jagged white lines, growing (0-1).
-- 2024: `shards` The burst: glass thrown into the room, falling, then lying glinting on the floor.
-- 2049: `glass_prints` Where a zombie's own hand is pressed to the glass: a smeared grimy, bloody print round it, streaks dragged
-- 2064: HEROINE (data)
-- 2065: HEROINE_S3 (data)
-- 2066: PHONE_S3 (data)
-- 2069: `floor_phone` A phone lying face up on the floor (about 15 x 7 cm), its screen lit.
-- 2081: CRAWL_STOP (data)
-- 2084: `heroine_x` Where she is along her line, tl seconds into shot 3 (crawling until CRAWL_STOP, then still).
-- 2089: `heroine_state` Her crawl at tl seconds into shot 3: the crawl cycle, and the pickup on the stroke that lands on the phone.
-- 2101: `shot_crawl` Shot 3: low among the chairs, looking towards the back of the hall; she crawls across, away from the zombie
-- 2138: `turnaround` 
-- 2150: `closeup` 
-- 2157: `sheet` 
-- 2196: `title_frame` 
-- 2210: LINE1 (data)
-- 2212: LINE2 (data)
-- 2213: REC_FILE (data)
-- 2214: REC_CUTS (data)
-- 2218: `rec_lines` Sam's two lines, cleaned (hum, rumble and hiss off; the outdoor noise taken down hard and gated out of the
-- 2254: REC_PIECES (data)
-- 2257: `rec_word_times` Each caption piece's words spread over its own speech stretches, by syllables.
-- 2278: WPS (data)
-- 2281: `syl` 
-- 2285: `word_times` [(piece index, start, end)] for each word, at the pace, with short pauses at commas and full stops.
-- 2300: T (data)
-- 2301: W1 (data)
-- 2314: W2 (data)
-- 2319: SHOTS (data)
-- 2321: BLINKS (data)
-- 2324: `track_of` Mouth shapes for a placeholder line: the words placed at their times.
-- 2334: `rec_track` Mouth shapes piece by piece, each over its own speech stretches (so every phrase moves his mouth).
-- 2349: TRACK (data)
-- 2353: `caption_at` 
-- 2362: `shot_at` 
-- 2369: `peskov_kw` 
-- 2376: `_sprite_pen` 
-- 2382: `podium_hand` The hand slapped on the podium's front edge: a sleeve from below and a circle hand clamped over the edge.
-- 2398: `mic_arm` The severed arm still holding its microphone: circle hand round the mic's handle, the forearm ending in a flat
-- 2417: `paste_sprite` Paste a hands3d layer so its `origin` pixel lands on canvas point `at`, scaled and turned (degrees).
-- 2433: `ragged` Roughen an outline: every point nudged a little (seeded, so it is the same each frame).
-- 2438: `hand_smear` What a bloody hand leaves when it clings to the podium's front edge and slides down: a palm print where it
-- 2502: `film_front` Shot 1: the slow zoom while he speaks. At T['slap'] a bloodied hand slaps onto the podium's front edge from
-- 2524: `film_front_end` Shot 5: back on him, the camera where the zoom ended. The arm flies in behind him and slaps the backdrop,
-- 2563: `film_face` Shot 3b: a tracking close-up, the camera travelling with her at floor level as she keeps crawling, the phone
-- 2596: `film_crawl` Shot 3: she crawls across, snatching up her phone without stopping.
-- 2601: `phone_parts` Shot 4 in three layers, so each can move and blood lands only on what it hits: the room behind (out of
-- 2648: `clip_to` Keep only the parts of a layer inside a mask (blood stays on what it hit).
-- 2656: `moved` A layer moved by (dx, dy) canvas pixels and turned by ang degrees about a point.
-- 2665: `film_phone` Shot 4: her phone, held up in her one circle hand (no typing); a roar right behind her (a shadow falls,
-- 2741: SPRAY (data)
-- 2748: SPRAY (data)
-- 2751: `dsplat` A drop that hit the glass while flying in direction `ang`: a blob stretched along its flight, spikes and
-- 2788: SHOT_FN (data)
-- 2792: `frame_image` 
-- 2811: `scream` A human scream: a strained voice gliding up, wavering, rough, through vowel resonances.
-- 2828: `roar` A zombie's roar: a low, rasping, gurgling voice.
-- 2843: `thud` 
-- 2852: `crash` Chairs going over: a thud and metal legs clattering.
-- 2863: `glass_snd` A window bursting in: a hard crack, a bright spray of breaking glass, then shards tinkling down.
-- 2876: `chair_hit` A metal chair smashed into someone: a wet smack and the frame clanging as it buckles.
-- 2887: `splat_snd` A wet splat: a soft, low burst of noise with a few droplets.
-- 2897: `crunch` Bone breaking: a quick run of sharp cracks over a dull thud.
-- 2908: `slap` 
-- 2915: `shutter` 
-- 2923: `tap_snd` 
-- 2929: `chaos_bed` The outbreak heard: screams overlapping (men and women), roars, chairs going over, splats, banging on the
-- 2955: `soundtrack` 
-- 3003: `overlays` Captions and the title go on LAST, on the finished picture, so a wording or timing note never needs the
-- 3015: `render_frame` 
-- 3030: `render` Frames are cached (pictures only). reuse=True with redo=('reverse', ...) re-renders only those shots and takes
-- 3062: `check_mouths` Every stretch of speech must move his mouth (once, "Ministry of Health" got through with a still mouth).
-- 3073: `print_subtitles` The subtitles as plain text with their times, to proofread before a render (not after).
-- 3087: `_in_frame` 
-- 3094: `check_closeups_seen_in_wides` Anyone in the close-up's background must already have been seen in shot 2 or 3 (Sam's rule).
-- 3117: MARKS (data)
-- 3123: `checks` Every check that stops a bad render before it starts (best-practice 1.3, guides/preflight.md).
-- 3132: FAST_OK (data)
-- 3136: `_views` 
-- 3142: `_audit_draw` 
-- 3163: `_audit_one` 
-- 3169: `audit_specs` Every character (an attacker with their victim as one) alone, in every shot that shows them, as runs of
-- 3216: `audits` The general audit (guides/preflight.md): the body, the movement and the permanent marks, over the whole film.
-- 3231: `cast_sheet` Every reporter and zombie on one sheet, to approve the cast BEFORE any animation (one cheap render).
-- 3254: `main` 
+- 41: HERE (data)
+- 42: FPS (data)
+- 43: SR (data)
+- 44: TITLE (data)
+- 45: UPM (data)
+- 48: WALL (data)
+- 49: WALL_D (data)
+- 50: PANEL (data)
+- 51: PANEL_D (data)
+- 52: PARQUET (data)
+- 53: PARQUET_D (data)
+- 54: CEIL (data)
+- 55: BACKDROP (data)
+- 56: BACKDROP_L (data)
+- 57: FRAME_GOLD (data)
+- 58: PODIUM (data)
+- 59: PODIUM_L (data)
+- 60: STAGE (data)
+- 61: CHAIR (data)
+- 62: CHAIR_FRAME (data)
+- 63: GLASS (data)
+- 64: NET (data)
+- 65: BLOOD (data)
+- 66: BLOOD_D (data)
+- 67: ZSKIN (data)
+- 68: ZSKIN_D (data)
+- 72: ROOM (data)
+- 73: STAGE_BOX (data)
+- 74: PODIUM_BOX (data)
+- 75: PESKOV_AT (data)
+- 76: BACKDROP_BOX (data)
+- 77: FLAG_AT (data)
+- 78: ROWS_Z (data)
+- 79: SEATS_X (data)
+- 80: WINDOWS_Z (data)
+- 81: SIDE_DOORS (data)
+- 82: BACK_DOORS (data)
+- 83: RISERS (data)
+- 84: TRIPODS (data)
+- 85: CLOCK (data)
+- 86: PLANT_AT (data)
+- 87: CRATE_AT (data)
+- 90: `check_plan` Set pieces that must stay apart (best-practice 1.3): seats, podium, flag, tripods, plant, crate.
+- 107: `class PCam` A perspective camera in the plan: at (x, y, z), heading along +Z (dirz=1) or -Z (dirz=-1), turned by yaw
+- 131: NEAR (data)
+- 134: `clipz` Clip a polygon (list of (X, Y, Z)) against the camera's near plane; returns screen points.
+- 149: `quad` 
+- 155: `seg` 
+- 165: `face` 
+- 221: `hair_back` 
+- 245: `hair_front` 
+- 325: `beard` 
+- 350: `torso` 
+- 410: `mouth` 
+- 467: `splat` Flat cartoon blood: an irregular blob and a few round drops flung out. No anatomy, no realism.
+- 483: `legs_draw` Everyone has legs and feet (figure-rig.md). kind: stand, run, kneel, lunge.
+- 517: `zombie_reach` The classic zombie reach, straight at the camera: seen end-on the arms are very short, so this is a named
+- 525: `person` Draw one person, neck base at world (x, y), scale s, leaning by tilt (radians, about the hips).
+- 533: HAND_R (data)
+- 536: `chand` 
+- 540: `phone_prop` A phone held in a circle hand: a dark slab standing up from (x, y), its back to us.
+- 548: `gesture_hand` 
+- 560: `no_stump_arms` A zombie missing an arm: that arm is simply not drawn (the torso draws the torn sleeve).
+- 567: `_person` 
+- 587: `person_back` The same person seen from behind (running away, pulling at a door): no face, the hair covering the head.
+- 629: PESKOV (data)
+- 633: REPORTER (data)
+- 637: ZOMBIE (data)
+- 644: `mic` A gooseneck microphone on a stand with a plain coloured cube flag (no outlet's name).
+- 656: `room` The press room from any camera in the plan: walls, windows, doors, floor, stage, backdrop, chairs, tripods.
+- 777: `outside` Zombies beyond an opening (a window, a doorway), seen only through it: drawn on their own layer and masked
+- 809: `through` Places beyond a side-wall opening (centred at zc, `width` wide) that the camera actually sees through it: each
+- 823: `floor_splat` A flat red pool on the floor, squashed by the camera's view of the floor.
+- 842: CLUTTER (data)
+- 846: `floor_clutter` What the stampede left on the floor at the front: papers, a notepad, a dropped microphone, a lost shoe, a
+- 870: `chair` A folding chair at plan (X, Z), facing the podium (-Z). over: knocked over sideways (0-1).
+- 896: `tripod` 
+- 911: `risers` 
+- 918: `flag` A plain white-blue-red flag on a pole, folds hanging, a gold tip. No emblem.
+- 943: `podium` The podium: plain dark wood, no emblem. Top 1.25 m above the floor (on the stage). Two microphones with plain
+- 976: `podium_mics` The two microphones, in front of his chest, clear of his face.
+- 987: `cam_front` Shot 1 and 5: from the camera platform at the back, along the aisle, a long lens on the podium. Slow zoom in.
+- 994: `peskov_spec` 
+- 1003: `draw_peskov` 
+- 1012: `shot_front` 
+- 1031: `cam_reverse` Shot 2: the 180. From just beside the podium, at his eye height, looking down the hall to the back doors.
+- 1036: `chaos_items` 
+- 1053: `draw_items` 
+- 1072: `shot_reverse` 
+- 1091: CHAOS_CHAIRS (data)
+- 1094: `crowd_spec` 
+- 1101: SKINS (data)
+- 1102: PRESS_C (data)
+- 1107: CAST (data)
+- 1129: `reporter_base` 
+- 1150: ZCAST (data)
+- 1173: `zombie_base` A zombie: from the cast list if it has a part, otherwise one of the crowd at the windows and doors (varied
+- 1204: `check_outfits` No two people in the hall look alike (best-practice 1.3): each person's look is unique.
+- 1216: CROWD (data)
+- 1263: PEOPLE_R (data)
+- 1266: `where` A person's place on the plan at t seconds after the 180: a steady walk (v, until), or keyframes
+- 1283: `check_crowd` No two people ever overlap on the floor plan as they move (except a pair meant to touch: an attacker and
+- 1300: HIDE_SEAT (data)
+- 1301: TRIPOD_TAKEN (data)
+- 1302: FLOOR_SPLATS (data)
+- 1303: AIR_DROPS (data)
+- 1306: PENDING (data)
+- 1309: `grab_and_draw_forearm` 
+- 1318: `grip_and_bite` Drawn in the victim's own (leaning) frame, over him: the zombie's forearms wrapped round his chest from behind
+- 1345: `class _Offset` A frame placed inside another: origin at (ox, oy) of the parent, turned by a (the zombie's head on the neck).
+- 1359: `hider` Seen from behind: knees on the floor, bottom in the air, her shoulders, arms and head jammed under the chair's
+- 1381: `ik2` Two-bone arm from shoulder to target (lengths l1, l2): the elbow on the `bend` side. Returns (elbow, hand),
+- 1394: `swing` A strike, over and over: a fast blow down (the first quarter) and a slower lift back up (0 = raised, 1 = struc
+- 1400: `lerp2` 
+- 1404: `crowd_person` Everyone in the outbreak, each with one clear action, and always moving (never a frozen pose).
+- 1574: `phone_screen` The ministry's page on her phone: a generic blue bar with a plain Russian header (no emblem), the report.
+- 1602: `class Turned` A local frame turned by `ang` (radians, clockwise on screen) about (cx, cy) in world pixels: the phone's own
+- 1615: `limb` A tapering finger or thumb along a centre line `cl` with widths `ws` (half-widths), rounded at the tip.
+- 1635: `thumb` A thumb seen from above: broad where it leaves the palm, a bend at the knuckle, a flat nail at the tip.
+- 1649: `finger` A curled finger (back of the finger towards us): knuckle creases and a nail at the tip.
+- 1670: `phone_hand_layer` Her hand holding the phone up (shot 4), on its own layer so it can move on its own when the phone drops: the
+- 1685: `phone_hands_layer` 
+- 1689: `shot_phone` Shot 4: a straight insert of her phone's screen filling the frame, the room just visible round it, out of focu
+- 1740: `taper` A smooth limb piece from a to b, wa to wb wide, with a round joint at a.
+- 1752: `crawl_hand` Where her hand is (her own units) at this point of the crawl: planted, then lifted and moved forward.
+- 1758: `reporter_crawl` Crawling on hands and knees across the floor, seen from the side (heading to our left when flip=1), her face
+- 1836: `inside` Is the point inside the polygon (even-odd rule)?
+- 1847: `check_neck` Best-practice 1.3: a neck grows out of the body. The two base corners of the neck must lie inside the body
+- 1855: CHAIR_HIT (data)
+- 1856: WIN_BURST (data)
+- 1857: WIN_Z (data)
+- 1860: `class _Place` A frame placed inside another at (ox, oy), turned by a (a head on a neck that lies along the floor).
+- 1873: `zombie_down` A zombie flat on its back on the floor, seen side-on: feet at one end, the head lolling at the other (head
+- 1940: `_wall_mask` A mask that is clear everywhere except over the wall below y_top between z0 and z1 (what hides the legs of
+- 1950: `_masked` 
+- 1955: `window_fall` The front one at the window: pressed to the glass; when it bursts it topples over the sill head first into a
+- 1983: `window_climb` The second one: when the glass goes it steps up, a knee on the sill, and climbs in, clawing at the room.
+- 2001: `window_pane` 
+- 2005: `cracks` Cracks spreading through a pane from where it is struck: jagged white lines, growing (0-1).
+- 2030: `shards` The burst: glass thrown into the room, falling, then lying glinting on the floor.
+- 2055: `glass_prints` Where a zombie's own hand is pressed to the glass: a smeared grimy, bloody print round it, streaks dragged
+- 2070: HEROINE (data)
+- 2071: HEROINE_S3 (data)
+- 2072: PHONE_S3 (data)
+- 2075: `floor_phone` A phone lying face up on the floor (about 15 x 7 cm), its screen lit.
+- 2087: CRAWL_STOP (data)
+- 2090: `heroine_x` Where she is along her line, tl seconds into shot 3 (crawling until CRAWL_STOP, then still).
+- 2095: `heroine_state` Her crawl at tl seconds into shot 3: the crawl cycle, and the pickup on the stroke that lands on the phone.
+- 2107: `shot_crawl` Shot 3: low among the chairs, looking towards the back of the hall; she crawls across, away from the zombie
+- 2144: `turnaround` 
+- 2156: `closeup` 
+- 2163: `sheet` 
+- 2202: `title_frame` 
+- 2216: LINE1 (data)
+- 2218: LINE2 (data)
+- 2219: REC_FILE (data)
+- 2220: REC_CUTS (data)
+- 2224: `rec_lines` Sam's two lines, cleaned (hum, rumble and hiss off; the outdoor noise taken down hard and gated out of the
+- 2260: REC_PIECES (data)
+- 2263: `rec_word_times` Each caption piece's words spread over its own speech stretches, by syllables.
+- 2284: WPS (data)
+- 2287: `syl` 
+- 2291: `word_times` [(piece index, start, end)] for each word, at the pace, with short pauses at commas and full stops.
+- 2306: T (data)
+- 2307: W1 (data)
+- 2320: W2 (data)
+- 2325: SHOTS (data)
+- 2327: BLINKS (data)
+- 2330: `track_of` Mouth shapes for a placeholder line: the words placed at their times.
+- 2340: `rec_track` Mouth shapes piece by piece, each over its own speech stretches (so every phrase moves his mouth).
+- 2355: TRACK (data)
+- 2359: `caption_at` 
+- 2368: `shot_at` 
+- 2375: `peskov_kw` 
+- 2382: `_sprite_pen` 
+- 2388: `podium_hand` The hand slapped on the podium's front edge: a sleeve from below and a circle hand clamped over the edge.
+- 2404: `mic_arm` The severed arm still holding its microphone: circle hand round the mic's handle, the forearm ending in a flat
+- 2423: `paste_sprite` Paste a hands3d layer so its `origin` pixel lands on canvas point `at`, scaled and turned (degrees).
+- 2439: `ragged` Roughen an outline: every point nudged a little (seeded, so it is the same each frame).
+- 2444: `hand_smear` What a bloody hand leaves when it clings to the podium's front edge and slides down: a palm print where it
+- 2508: `film_front` Shot 1: the slow zoom while he speaks. At T['slap'] a bloodied hand slaps onto the podium's front edge from
+- 2530: `film_front_end` Shot 5: back on him, the camera where the zoom ended. The arm flies in behind him and slaps the backdrop,
+- 2569: `film_face` Shot 3b: a tracking close-up, the camera travelling with her at floor level as she keeps crawling, the phone
+- 2602: `film_crawl` Shot 3: she crawls across, snatching up her phone without stopping.
+- 2607: `phone_parts` Shot 4 in three layers, so each can move and blood lands only on what it hits: the room behind (out of
+- 2654: `clip_to` Keep only the parts of a layer inside a mask (blood stays on what it hit).
+- 2662: `moved` A layer moved by (dx, dy) canvas pixels and turned by ang degrees about a point.
+- 2671: `film_phone` Shot 4: her phone, held up in her one circle hand (no typing); a roar right behind her (a shadow falls,
+- 2747: SPRAY (data)
+- 2754: SPRAY (data)
+- 2757: `dsplat` A drop that hit the glass while flying in direction `ang`: a blob stretched along its flight, spikes and
+- 2794: SHOT_FN (data)
+- 2798: `frame_image` 
+- 2817: `scream` A human scream: a strained voice gliding up, wavering, rough, through vowel resonances.
+- 2834: `roar` A zombie's roar: a low, rasping, gurgling voice.
+- 2849: `thud` 
+- 2858: `crash` Chairs going over: a thud and metal legs clattering.
+- 2869: `glass_snd` A window bursting in: a hard crack, a bright spray of breaking glass, then shards tinkling down.
+- 2882: `chair_hit` A metal chair smashed into someone: a wet smack and the frame clanging as it buckles.
+- 2893: `splat_snd` A wet splat: a soft, low burst of noise with a few droplets.
+- 2903: `crunch` Bone breaking: a quick run of sharp cracks over a dull thud.
+- 2914: `slap` 
+- 2921: `shutter` 
+- 2929: `tap_snd` 
+- 2935: `chaos_bed` The outbreak heard: screams overlapping (men and women), roars, chairs going over, splats, banging on the
+- 2961: `soundtrack` 
+- 3013: `overlays` Captions and the title go on LAST, on the finished picture, so a wording or timing note never needs the
+- 3025: `render_frame` 
+- 3040: `render` Frames are cached (pictures only). reuse=True with redo=('reverse', ...) re-renders only those shots and takes
+- 3072: `check_mouths` Every stretch of speech must move his mouth (once, "Ministry of Health" got through with a still mouth).
+- 3083: `print_subtitles` The subtitles as plain text with their times, to proofread before a render (not after).
+- 3097: `_in_frame` 
+- 3104: `check_closeups_seen_in_wides` Anyone in the close-up's background must already have been seen in shot 2 or 3 (Sam's rule).
+- 3127: MARKS (data)
+- 3133: `checks` Every check that stops a bad render before it starts (best-practice 1.3, guides/preflight.md).
+- 3147: FAST_OK (data)
+- 3151: `_views` 
+- 3157: `_audit_draw` 
+- 3178: `_audit_one` 
+- 3186: `audit_specs` Every character (an attacker with their victim as one) alone, in every shot that shows them, as runs of
+- 3233: `audits` The general audit (guides/preflight.md): the body, the movement and the permanent marks, over the whole film.
+- 3248: `cast_sheet` Every reporter and zombie on one sheet, to approve the cast BEFORE any animation (one cheap render).
+- 3271: `main` 

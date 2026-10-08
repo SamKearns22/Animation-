@@ -69,3 +69,22 @@ def limb(X, a, b, w, col):
     for p in (a, b):
         X.ell(p[0], p[1], r, r, col, line=False)
     X.seg(a, b, w, col)
+
+
+def rough(pts, amount=6, seed=0):
+    """Hand-cut corners: every point nudged a little (the same each frame), so boxes never look like clip-art."""
+    r = random.Random(seed)
+    return [(x + r.uniform(-amount, amount), y + r.uniform(-amount, amount)) for x, y in pts]
+
+
+def install_circle_hands(B, r=26):
+    """Make every arm drawn by burnham.py end in a plain circle hand; a 'phone' hand gets a phone laid over it."""
+    def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+        d = (wr[0] - el[0], wr[1] - el[1])
+        n = math.hypot(*d) or 1.0
+        cx, cy = wr[0] + d[0] / n * 12, wr[1] + d[1] / n * 12
+        if shape == 'phone':
+            p.poly([(cx - 26, cy - 90), (cx + 26, cy - 90), (cx + 26, cy + 10), (cx - 26, cy + 10)], (52, 58, 72), OUT, 2.2)
+        p.ell(cx, cy, r, r, skin, OUT, 2.4)
+    B.gesture_hand = gesture_hand
+

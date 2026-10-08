@@ -23,6 +23,8 @@ I don't know how to code. Please:
 - **Short two-person film ("quick video"): read only `guides/quick-video.md` and nothing else below.** Don't open other
   guides or the big source files. Use Sonnet at medium effort, and ask me for all my notes in one batch after the one
   stills sheet.
+- **Satire-style film (the TikTok parody series, beyond two people talking): read `guides/satire.md` (one page) first**,
+  start from `source/satire_template.py`, and open `guides/best-practice.md` Part 2 only for a scene that page doesn't cover.
 - **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
   animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the
   coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part
@@ -33,9 +35,8 @@ I don't know how to code. Please:
 # Drawing people (not for quick videos)
 
 - Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
-- Satire-style films: draw with `source/satire_style.py` from the start, approve a cast sheet first, run pre-flight (it includes the
-  general body/movement audit) before any render, and use the picture cache (`guides/preflight.md`, last section). Big film
-  file? read `guides/russiadent-map.md`-style code maps first (`python3 source/codemap.py FILE.py`).
+- Satire-style films: everything (style kit, cast sheet, checks, audit, picture cache) is in `guides/satire.md`. Big film file?
+  read its code map first (`python3 source/codemap.py FILE.py`; `guides/russiadent-map.md` is the biggest film's).
 - For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any
   person, and follow `guides/preflight.md` from the first brief: run `python3 source/preflight.py FILM OUT_DIR`
   before every animatic, and `python3 source/voices.py FILES` as soon as recordings arrive.

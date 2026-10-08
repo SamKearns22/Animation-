@@ -32,6 +32,7 @@ import burnham as B
 import peepee as PP          # Rot, ctext, the series' caption
 import mossad as M           # brows, mouths, tilted heads, hair styles (patched into burnham on import)
 import figure as F
+import filmkit
 import kit
 from ed import INK, curve, oval, soft
 
@@ -1523,6 +1524,10 @@ def crowd_person(img, cam, pc, who, t):
             deg, tl = 100 + 12 * u, 0.3 - 0.2 * u + 0.035 * math.sin(t * 9)
         sp['mouth'] = 'grimace' if t < H + 0.25 else 'wail'
         sp['look'] = 1.0                           # his eyes on the zombie at his side, the whole time
+        mate = next((w for w in CROWD if w.get('pair') == who.get('pair') and w is not who), None)
+        if mate is not None:
+            X2, Z2 = where(mate, t)
+            filmkit.eyeline(f'person {k} (chair)', t, cam.P(nx, ny - 150 * s), (sp['look'], 0.0), cam.P(*pc.P(X2, 1.5, Z2)))
         sp['arms'] = {'L': rig.arm('L', L_, 'grip', 'down', strict=False), 'R': rig.arm('R', R_, 'grip', 'out', strict=False)}
         p = person(img, cam, nx, ny, s, sp, t, legs='lunge', phase=2.0, tilt=tl)
         hx, hy = (L_[0] + R_[0]) / 2, (L_[1] + R_[1]) / 2
@@ -1547,7 +1552,7 @@ def crowd_person(img, cam, pc, who, t):
         reach = (-330 + 40 * w2, -120 + 80 * w1)          # one arm flung out for help, the other shoving its face away;
         sp['arms'] = {'L': rig.arm('L', reach, 'palm', 'out', strict=False),       # eyes on his attacker, head turned from it
                       'R': rig.arm('R', (200 + 15 * w1, -60 + 15 * w2), 'palm', 'out', strict=False)}
-        sp.update(look=-1.0, tilt=-0.22)
+        sp.update(look=1.0, tilt=-0.22)     # eyes on the biter at his right shoulder, head turned away from it
         sp['splats'] = [(60, 60, 22, 9), (90, 140, 14, 10)]
         sp['face_splats'] = [(30, -120, 9, 11)]
         L = B.Local(cam, nx, ny, s)
@@ -1556,6 +1561,7 @@ def crowd_person(img, cam, pc, who, t):
         if who.get('pair') in PENDING:
             zsp, zs = PENDING.pop(who['pair'])
             grip_and_bite(img, Rv, zsp, t, k)
+            filmkit.eyeline(f"person {k} (grabbed)", t, Rv.P(0, -150), (sp['look'], 0.0), _Offset(Rv, 135, -5, -0.5).P(0, -150))
     elif act == 'hide':        # the ostrich: head and shoulders jammed under a chair, the rest of her very much not hidden
         sp.update(jacket=(176, 44, 52), trousers=(196, 172, 132))      # bright, so she reads against the chairs
         sp.pop('skirt', None)
@@ -2952,7 +2958,7 @@ def chaos_bed(t0, t1, seed=5):
     return out
 
 
-def soundtrack():
+def soundtrack(stems=False):
     n = int(T['dur'] * SR)
     mix = np.zeros(n)
     # shot 1: the quiet press room: only the photographers' shutters, now and then; the hand's wet slap
@@ -2974,8 +2980,10 @@ def soundtrack():
         bed[i - k:i + k] *= np.linspace(1, 1, 2 * k)
     g[(tt >= W2[0][1] - 0.2)] = 0.45                             # down further under his last line
     place(mix, bed * g * 0.8, T['s2'])                         # the hall 20% down (Sam)
-    place(mix, rec_lines()[0][0], 0.30)                          # Sam as Peskov
-    place(mix, rec_lines()[1][0], W2[0][1], 1.2)                  # 'Any more questions?' 20% up (Sam)
+    vox = np.zeros(n)
+    place(vox, rec_lines()[0][0], 0.30)                          # Sam as Peskov
+    place(vox, rec_lines()[1][0], W2[0][1], 1.2)                  # 'Any more questions?' 20% up (Sam)
+    mix += vox
     # shot 2's big moments, over the din: the window bursting in; the chair; the body hitting the floor and bouncing
     place(mix, glass_snd(), T['s2'] + WIN_BURST, 0.7)
     place(mix, thud(80, 0.4, 0.3), T['s2'] + WIN_BURST + 0.45, 0.4)
@@ -2988,6 +2996,8 @@ def soundtrack():
     # shot 5: the arm slaps the wall
     place(mix, slap(), T['arm_hit'], 0.8)
     place(mix, splat_snd(1.0), T['arm_hit'] + 0.01, 0.5)
+    if stems:                                                    # for the voice-balance check
+        return mix, vox, mix - vox
     end = int(T['black'] * SR)
     k = int(0.005 * SR)
     # master: about -14 LUFS, peaks no higher than -1 dBTP (measured on the film up to the cut)
@@ -3126,6 +3136,11 @@ def checks():
     check_outfits()
     check_mouths()
     check_closeups_seen_in_wides()
+    _, vox, rest = soundtrack(stems=True)
+    sp_ = [(0.30 + a, 0.30 + b) for a, b in rec_lines()[0][1]] + [(W2[0][1] + a, W2[0][1] + b) for a, b in rec_lines()[1][1]]
+    bad = filmkit.voice_balance(vox, rest, SR, sp_)
+    if bad:
+        raise ValueError('check: ' + '; '.join(bad))
     print_subtitles()
 
 
@@ -3163,7 +3178,9 @@ def _audit_draw(vi, members, hero):
 def _audit_one(spec):
     import filmkit
     name, vi, members, times, hero, allow = spec
-    return filmkit.silhouette_audit({name: (times, _audit_draw(vi, members, hero))}, fps=12, allow=allow)
+    filmkit.EYES.clear()
+    out = filmkit.silhouette_audit({name: (times, _audit_draw(vi, members, hero))}, fps=12, allow=allow)
+    return out + filmkit.check_eyelines()
 
 
 def audit_specs():

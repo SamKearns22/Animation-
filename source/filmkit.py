@@ -10,6 +10,8 @@ wrong place). These look at the RESULT instead, so they catch faults nobody thou
   check_joints       generic joint rules (angle limits, bone lengths, attachment points) for any pose given as joints.
   probe_marks        permanent marks (a smear, a broken window) must still be on screen at later times.
   visible_spots      which floor spots are on screen in all of several cameras (to place action seen in two shots).
+  eyeline / check_eyelines   everyone looks at whoever they fight or talk to.
+  voice_balance      the voice sits clearly above crowd, music and effects wherever someone speaks.
 Used by preflight.py through a film's own audits() and checks(). See guides/preflight.md.
 """
 import math
@@ -187,6 +189,51 @@ def check_joints(joints, rules):
             _, a, b, d = r
             if math.dist(joints[a], joints[b]) < d:
                 out.append(f'{a} is within {d:.0f} of {b} (passing through it)')
+    return out
+
+
+# ------------------------------------------------------------------------------------------------ eyelines
+EYES = []
+
+
+def eyeline(name, t, eye, look, target):
+    """Called while drawing: where a character's eyes are, which way they look (x, y: the pupils' offset) and what they
+    SHOULD be looking at (the person they fight or talk to). check_eyelines() then tests them all."""
+    EYES.append((name, t, tuple(eye), tuple(look), tuple(target)))
+
+
+def check_eyelines(min_cos=0.3, clear=True):
+    """Everyone looks at whoever they are dealing with (twice a fighter stared at nothing). Returns faults."""
+    out, seen = [], set()
+    for name, t, eye, look, target in EYES:
+        dx, dy = target[0] - eye[0], target[1] - eye[1]
+        if abs(look[1]) < 1e-9:              # pupils only move sideways: the side must be right
+            ok = abs(dx) < 10 or (look[0] > 0) == (dx > 0) and abs(look[0]) > 0.2
+        else:
+            n = (math.hypot(dx, dy) * math.hypot(*look)) or 1e-9
+            ok = (dx * look[0] + dy * look[1]) / n >= min_cos
+        if not ok and name not in seen:
+            seen.add(name)
+            out.append(f'{name} at {t:.2f} s: not looking at who they are dealing with')
+    if clear:
+        EYES.clear()
+    return out
+
+
+# ------------------------------------------------------------------------------------------------ sound
+def voice_balance(voice, rest, sr, windows, min_db=6.0, label='voice'):
+    """The voice must sit clearly above everything else (crowd, music, effects) wherever someone speaks: at least
+    min_db louder, measured over each speech window [(start, end) seconds]. Returns faults."""
+    out = []
+    for a, b in windows:
+        i, j = int(a * sr), int(b * sr)
+        if j - i < sr // 10:
+            continue
+        v = np.sqrt(np.mean(voice[i:j] ** 2)) + 1e-12
+        r = np.sqrt(np.mean(rest[i:j] ** 2)) + 1e-12
+        m = 20 * math.log10(v / r)
+        if m < min_db:
+            out.append(f'{label} at {a:.2f}-{b:.2f} s is only {m:.1f} dB above the rest of the sound (needs {min_db:.0f})')
     return out
 
 
