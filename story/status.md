@@ -7,15 +7,16 @@ Read this first in any new session, after CLAUDE.md.
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
 ## Done: "Cry Minister" (TikTok, Satire style, `prompts/cry-minister.md`)
-- Final (v3, 8 Oct): `animations/cry-minister-vertical.mp4`, 63.3 s, 7.7 MB, 1080 x 1920, 12 fps; full render 18 min on 4 cores,
-  title removed with --reuse in 3 min, re-encoded smaller. Not yet posted. Voice only. No in-video title (Sam, 8 Oct: test
-  posting without it; the Cranberry title goes on the cover). Shoppers use the new three-quarter walk (`source/walker.py`).
-- Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves: side-on lope, leap, feeding; coming at us, leaping
-  at the lens, tangled in a net; flat red gore). Notes, Sam's decisions and all notes applied: `notes/cryminister.md`.
-- Sam's 20 lines (16 files, `source/audio/cry-*.m4a`; two files hold three lines each), cleaned, matched in tone, levelled.
-  A made-up TikTok screen sits on every frame (Sam's note 8). Andy-style word captions.
-- Checks: plan checks, voice balance, title clear, body audit clean; caption-speed warnings left only where Sam speaks
-  fast (word-by-word captions, his style). Review files (stills, cast sheet, voice reel) stay in `review/`, off GitHub.
+- Final (v4, 8 Oct): `animations/cry-minister-vertical.mp4`, 58.4 s, 8.3 MB, 1080 x 1920, 12 fps; full render 17 min on 4 cores,
+  re-encoded smaller (CRF 25). Not yet posted. Voice only. No in-video title (the Cranberry title goes on the cover).
+- v4 changes (notes 29-40): line 19 ("keep fighting") cut; selfie arm raised out of frame; glance back at the wolves; lived-in
+  terraces in the chase; the man in blue stops, hands on hips, glares and shakes his head; wider walkers; one mouth at a
+  time; FREE £10 BET poster in ZapBets' windows; sound no longer squashed (-16.8 LUFS, at most 3 dB limiting), line-end
+  hiss bursts from the phone recordings smoothed, lines 16-18 one unbroken piece.
+- Code: `source/cryminister.py` (film), `source/wolf.py` (dire wolves), `source/walker.py` (three-quarter walk). Shared
+  sound tools now in `source/mossad_audio.py` (`master`, `smooth_tail`, `limit_check`). Notes: `notes/cryminister.md`.
+- Sam's lines (19 used; `source/audio/cry-*.m4a`), cleaned, matched in tone, levelled. Made-up TikTok screen on every frame.
+- Checks: plan checks, voice balance, limiting, body audit clean. Sound questions (silence between lines) left as meant.
 - Change a caption or the description: `python3 source/cryminister.py final OUT.mp4 --reuse` (pictures cached).
 
 ## Done: "The Park" (TikTok, rebuilt in Satire style 8 Oct, `source/thepark.py`)

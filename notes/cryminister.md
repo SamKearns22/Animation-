@@ -31,18 +31,18 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 26 | 20 | - | Chasers a mix of full and smaller wolves; Andy angry / terrified / panicked, no red eyes (red eyes only in 13-14). | done |
 | 27 | 15 | - | More despairing on "I CAN'T stop every wolf attack". | done |
 | 28 | all | - | No in-video title (tested on TikTok; title on the cover). | done |
-| 29 | 20 | - | His selfie arm ended in a dark block (read as a second phone): the arm now reaches to the lens and leaves the frame bottom left. | done (in code; not yet rendered) |
-| 30 | 20 | "here come" | He looked away from the wolves: now glances back over his shoulder at them, then back to us. | done (in code; not yet rendered) |
-| 31 | 20 | - | Blank red buildings on the right: now shop fronts, fascia boards, doors, sash windows, drainpipes. | done (in code; not yet rendered) |
-| 32 | all | - | Crackles (Sam heard them still after the first fix): the film was turned up 7 dB over the recordings and every loud word squashed by up to 8 dB in milliseconds. Now the loud stretches are eased down gently (over 30 ms, back over 300 ms), at most 3 dB of soft limiting on a few bursts, mastered at -16.8 LUFS (was -14). | done (in code; not yet rendered) |
-| 33 | 2 | 6-9.9 s | The man in blue barely reacted: now stops dead, hands on hips, a hard frown at the pack, three slow big head shakes, then walks on. | done (in code; not yet rendered) |
-| 34 | shoppers | - | Walkers looked too thin: body squeezed less (0.78 to 0.9), legs thicker. | done (in code; not yet rendered) |
-| 35 | 20 | - | Two mouths at once: the gritted teeth were drawn over his talking mouth. Now only when the talking mouth is off; between "Aw fook" shouts, gritted teeth instead of a lopsided smirk. | done (in code; not yet rendered) |
-| 36 | 20 | - | Arm higher, holding the phone up for the over-the-shoulder view: it now rises out of the frame on the left above the name and description. | done (in code; not yet rendered) |
-| 37 | ZapBets | - | Advertising window: Sam picked option 3, a yellow poster in both windows: FREE £10 BET for new customers*, small print "*18+. Must not be currently being eaten." | done (in code; not yet rendered) |
-| 38 | all | after lines 1, 12, 13, 15, 17 | Crackles at line ends. In Sam's recordings too (he checked): the phone's voice clean-up chopped the final "s"/"z"/"k" hiss into bursts (about 12 a second) and a thump, made obvious by the film's extra volume. Now each line's tail keeps its real consonant, then only ever fades (smooth_tail); lines Sam ran together (16-18) stay one unbroken piece; soft 100 ms end fades; the tone matching never brightens above 4 kHz. | done (in code; not yet rendered) |
-| 39 | 1 | end | A last thump between the bursts of the final "z": the tail now keeps only the first strong moment of the consonant, then fades. | done (in code; not yet rendered) |
-| 40 | 19 | - | Line 19 ("I'm going to keep fighting for a fairer and safer country") cut, picture and sound: it slowed the joke and added nothing. Film now 58.4 s. Lines are looked up by number, not position. | done (in code; not yet rendered) |
+| 29 | 20 | - | His selfie arm ended in a dark block (read as a second phone): the arm now reaches to the lens and leaves the frame bottom left. | done (v4) |
+| 30 | 20 | "here come" | He looked away from the wolves: now glances back over his shoulder at them, then back to us. | done (v4) |
+| 31 | 20 | - | Blank red buildings on the right: now shop fronts, fascia boards, doors, sash windows, drainpipes. | done (v4) |
+| 32 | all | - | Crackles (Sam heard them still after the first fix): the film was turned up 7 dB over the recordings and every loud word squashed by up to 8 dB in milliseconds. Now the loud stretches are eased down gently (over 30 ms, back over 300 ms), at most 3 dB of soft limiting on a few bursts, mastered at -16.8 LUFS (was -14). | done (v4) |
+| 33 | 2 | 6-9.9 s | The man in blue barely reacted: now stops dead, hands on hips, a hard frown at the pack, three slow big head shakes, then walks on. | done (v4) |
+| 34 | shoppers | - | Walkers looked too thin: body squeezed less (0.78 to 0.9), legs thicker. | done (v4) |
+| 35 | 20 | - | Two mouths at once: the gritted teeth were drawn over his talking mouth. Now only when the talking mouth is off; between "Aw fook" shouts, gritted teeth instead of a lopsided smirk. | done (v4) |
+| 36 | 20 | - | Arm higher, holding the phone up for the over-the-shoulder view: it now rises out of the frame on the left above the name and description. | done (v4) |
+| 37 | ZapBets | - | Advertising window: Sam picked option 3, a yellow poster in both windows: FREE £10 BET for new customers*, small print "*18+. Must not be currently being eaten." | done (v4) |
+| 38 | all | after lines 1, 12, 13, 15, 17 | Crackles at line ends. In Sam's recordings too (he checked): the phone's voice clean-up chopped the final "s"/"z"/"k" hiss into bursts (about 12 a second) and a thump, made obvious by the film's extra volume. Now each line's tail keeps its real consonant, then only ever fades (smooth_tail); lines Sam ran together (16-18) stay one unbroken piece; soft 100 ms end fades; the tone matching never brightens above 4 kHz. | done (v4) |
+| 39 | 1 | end | A last thump between the bursts of the final "z": the tail now keeps only the first strong moment of the consonant, then fades. | done (v4) |
+| 40 | 19 | - | Line 19 ("I'm going to keep fighting for a fairer and safer country") cut, picture and sound: it slowed the joke and added nothing. Film now 58.4 s. Lines are looked up by number, not position. | done (v4) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).
