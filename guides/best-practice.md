@@ -421,6 +421,11 @@ Specific lessons recorded there include:
 - slices that fall differently;
 - a full redraw whenever the camera moves.
 
+**Checks and speed (horror trailer, 8 Oct)** (details: `guides/pipeline.md`, last section)
+- Run `horror_preflight.py` before every render: the whole skeleton over every frame in about a minute. Fix every fault first.
+- Render with `--reuse`; check every new drawing against the lookbook with `lookbook_check.py`; keep title cards last.
+- The Satire rules (circle hands, flat colour, the Satire style kit) never apply here: the trailer keeps its own look.
+
 ---
 
 # Part 5. How we work and deliver (every project)

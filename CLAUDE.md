@@ -47,6 +47,7 @@ I don't know how to code. Please:
   - before making or changing a shot, read `guides/pipeline.md` (how shots are built from reusable parts and recipes);
   - the story and the director's decisions for the animation test are in `story/animation-test.md`;
   - the film's premise and hidden backstory are in `story/yuletide.md` (never reveal the backstory in the trailer);
-  - compare every new shot against the approved frames in `lookbook/` so the look stays consistent;
+  - before rendering, run `python3 source/horror_preflight.py` (every pose of every frame, about a minute); render with
+    `shot.py sequence ... --reuse`; check every new drawing with `python3 source/lookbook_check.py OUT_DIR` against `lookbook/`;
   - the trailer should evoke the style and quality of an A24 horror film (the craft, never the brand): read
     `guides/tone.md` before planning or changing any shot.

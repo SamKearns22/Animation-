@@ -286,7 +286,30 @@ def save_passes(path, res, cam, scene, W, H):
     np.savez_compressed(path, cam=cam, SP=scene['SP'], **res, **extra)
 
 
-def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=None):
+def source_hash(recipe_path):
+    """A fingerprint of a shot's recipe and every project file it imports (directly or not), so a finished shot is
+    reused only when nothing it depends on has changed."""
+    import ast
+    import hashlib
+    here = os.path.dirname(os.path.abspath(__file__))
+    seen, todo, h = set(), [os.path.abspath(recipe_path)], hashlib.sha256()
+    while todo:
+        p = todo.pop()
+        if p in seen or not os.path.exists(p):
+            continue
+        seen.add(p)
+        src = open(p, 'rb').read()
+        h.update(p.encode() + src)
+        for node in ast.walk(ast.parse(src)):
+            names = [a.name for a in node.names] if isinstance(node, ast.Import) else \
+                [node.module] if isinstance(node, ast.ImportFrom) and node.module else []
+            for n in names:
+                for base in (here, os.path.dirname(p)):
+                    todo.append(os.path.join(base, n.split('.')[0] + '.py'))
+    return h.hexdigest()[:16]
+
+
+def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=None, reuse=False):
     """Render a shot as a numbered series of drawings (one every `every` frames: on twos by default).
     The first is rendered and drawn whole; after that only the part of the picture the moving things can
     reach is rendered and redrawn, and pasted over the first. The set's shadows are made once."""
@@ -295,6 +318,11 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
     import graphite
     from PIL import Image
     os.makedirs(out_dir, exist_ok=True)
+    fp = os.path.join(out_dir, 'source.hash')
+    if reuse and os.path.exists(fp) and open(fp).read() == source_hash(recipe_path) and \
+            os.path.exists(os.path.join(out_dir, 'log.json')):
+        print(f'{recipe_path}: unchanged since its last render: drawings in {out_dir} reused', flush=True)
+        return
     rec = load_recipe(recipe_path)
     if times is None:
         times = getattr(rec, 'TIMES', None)          # a recipe may choose its drawings (fast action on ones)
@@ -367,6 +395,8 @@ def sequence(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, fps=24, every=2, times=
               flush=True)
     with open(os.path.join(out_dir, 'log.json'), 'w') as f:
         json.dump(log, f, indent=1)
+    with open(os.path.join(out_dir, 'source.hash'), 'w') as f:
+        f.write(source_hash(recipe_path))
     print(f'{len(times)} drawings in {time.time() - t_all:.0f}s', flush=True)
 
 
@@ -389,7 +419,9 @@ def still(recipe_path, out_dir, W=W_VIDEO, H=H_VIDEO, t=0.0):
 
 if __name__ == '__main__':
     a = sys.argv[1:]
+    reuse = '--reuse' in a
+    a = [v for v in a if v != '--reuse']
     if a[0] == 'sequence':
-        sequence(a[1], a[2], *(int(v) for v in a[3:5]))
+        sequence(a[1], a[2], *(int(v) for v in a[3:5]), reuse=reuse)
     if a[0] == 'still':
         still(a[1], a[2], *(int(v) for v in a[3:5]), *(float(v) for v in a[5:6]))
