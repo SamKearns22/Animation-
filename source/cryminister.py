@@ -1676,7 +1676,8 @@ def audits():
              ('the old lady [shot 6]', ARMOUR - 0.1, ARMOUR + 0.1, 'the armour appears in an instant: the joke'),
              ('the net wolf [shot 5]', SHOTS[4][1], SHOTS[4][2], 'bounding at us, growing as it comes; the leap'),
              ('the man [shot 5]', SHOTS[4][1], SHOTS[4][2], 'running at us, growing as he comes'),
-             ('Andy [20-run]', SHOTS[19][1], SHOTS[19][2], 'running: the phone jolts every stride')]
+             ('Andy [20-run]', SHOTS[19][1], SHOTS[19][2], 'running: the phone jolts every stride'),
+             ('Andy [12-wide]', SHOTS[11][1], SHOTS[11][2], 'tiny in frame: the hand-held phone drift moves him a few pixels')]
     allow += [(f'wolf {i + 1} [shot 2]', s2[1], s2[2], 'bounding in and leaping on the man') for i in range(5)]
     allow += [(f'Andy [{k}]', a, a + 0.5, 'his gesture snaps into place at the cut') for k, a, b, i in SHOTS]
     filmkit.EYES.clear()

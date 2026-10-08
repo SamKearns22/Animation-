@@ -13,6 +13,16 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 8 | all | - | The full TikTok screen on every frame (search bar, buttons and counts, account picture, name, description, progress bar), placed so the real app never hides it completely. Replaces the little white caption. | done |
 | 9 | 6 | - | Kevlar on her arms too; the wolf chews on it without success. | done |
 | 10 | 13-14 | - | Andy's stress level: 4, Haunted. | done |
+| 11 | 2+ | - | The attacked man must be a proper character, not a flat blob. | done |
+| 12 | 5 | - | Running arms were wrong (crossed on his chest). | done |
+| 13 | 5 | - | The net falls on the wolf. | done |
+| 14 | 6 | - | The old lady extends her armoured arm; the wolf gnaws on it. | done |
+| 15 | all | - | Remove the pub's hanging sign (looked rude). | done |
+| 16 | 12 | wide | Andy was huge next to tiny shoppers; graffiti looked like WordArt (hand-drawn mix used; Sam never picked from the 6 styles). | done |
+| 17 | 20 | - | Andy's mouth vanished (wrong mouth shape name). | done |
+| 18 | all | - | Remove every sound made in code. Film is voice only. | done |
+| 19 | shoppers | - | Drawn in the show's usual people style (conference-goer models, changed up). | done |
+| 20 | man | - | Man City shirt from Sam's reference photo. | done |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).

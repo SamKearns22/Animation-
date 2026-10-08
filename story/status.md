@@ -7,12 +7,13 @@ Read this first in any new session, after CLAUDE.md.
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
 ## Done: "Cry Minister" (TikTok, Satire style, `prompts/cry-minister.md`)
-- Final: `animations/cry-minister-vertical.mp4`, 63.3 s, 7.9 MB, 1080 x 1920, 12 fps; full render 10.5 min on 4 cores
-  (then re-encoded smaller). Not yet posted.
+- Final (v2, 8 Oct, after Sam's notes): `animations/cry-minister-vertical.mp4`, 63.3 s, 7.7 MB, 1080 x 1920, 12 fps; full render
+  18.5 min on 4 cores (then re-encoded smaller). Not yet posted. Voice only (no sounds made in code): Sam may send real
+  sound effects / a street recording to place under it. Man City shirt from Sam's reference (made-up crest and sponsor).
 - Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves: side-on lope, leap, feeding; coming at us, leaping
   at the lens, tangled in a net; flat red gore). Notes, Sam's decisions and all notes applied: `notes/cryminister.md`.
 - Sam's 20 lines (16 files, `source/audio/cry-*.m4a`; two files hold three lines each), cleaned, matched in tone, levelled.
-  Wolf sounds all made in code. A made-up TikTok screen sits on every frame (Sam's note 8). Andy-style word captions.
+  A made-up TikTok screen sits on every frame (Sam's note 8). Andy-style word captions.
 - Checks: plan checks, voice balance, title clear, body audit clean; caption-speed warnings left only where Sam speaks
   fast (word-by-word captions, his style). Review files (stills, cast sheet, voice reel) stay in `review/`, off GitHub.
 - Change a caption or the description: `python3 source/cryminister.py final OUT.mp4 --reuse` (pictures cached).
