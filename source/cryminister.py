@@ -78,7 +78,7 @@ LINES = [
     dict(n=20, shot='run', text='Aw fook, here come some now.', audio=('cry-20', 0.0, None)),
 ]
 PADS = {1: (0.35, 0.25), 2: (0.25, 0.55), 3: (0.15, 0.25), 4: (0.75, 0.5), 5: (0.9, 1.3), 6: (0.25, 0.7),
-        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.08), 18: (0.0, 0.45), 19: (0.15, 0.45), 20: (0.35, 1.8)}
+        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.0), 18: (0.0, 0.45), 19: (0.15, 0.45), 20: (0.35, 1.8)}
 STRESS = 4                                    # Andy's stress in shots 13-14, 1-6 (Sam picks from the cast sheet)
 ANDY = dict(B.BURNHAM, full=True, pose='custom', name='Andy')
 MAN = dict(skin=B.PALE, hw=66, hh=86, jaw='round', hair='crop', hair_c=(150, 112, 74), outfit='jumper',
@@ -122,6 +122,7 @@ def _match_tone(lines):
         sm = np.array([np.mean(g_db[(f >= fc / 2 ** (1 / 6)) & (f <= fc * 2 ** (1 / 6))]) if fc > 0 else 0.0 for fc in f])
         sm = np.clip(np.nan_to_num(sm), -4.0, 4.0)
         sm[f < 80] = sm[f > 80][0] if np.any(f > 80) else 0.0
+        sm[f > 4000] = np.minimum(sm[f > 4000], 0.0)              # never brighten the hiss (note 38)
         h = firwin2(1025, f / (SR / 2), 10 ** (sm / 20))
         out.append(fftconvolve(x, h, mode='same'))
     return out
@@ -132,33 +133,55 @@ VOICE_LUFS = -20.0
 
 def _voices():
     """Sam's 20 lines: hum and hiss out, cut from their files, the takes matched in tone and set to one loudness.
-    A file holding several lines keeps their loudness relative to each other (the shouts stay shouts)."""
+    A file holding several lines keeps their loudness relative to each other (the shouts stay shouts).
+    Lines Sam ran together and the film plays back to back (16-17-18) stay ONE unbroken piece of sound, split only for
+    the mouths: cutting them apart with fades and a gap left a blip after "okay" (note 38). Every piece ends with a soft
+    fade, since several takes stop dead in the middle of a hiss (lines 1, 12, 13)."""
     files = {}
     for ln in LINES:
         name = ln['audio'][0]
         if name not in files:
             x = load(os.path.join(HERE, 'audio', name + '.m4a'))
             files[name] = MA.denoise(MA.dehum(x))
-    raw = []
-    for ln in LINES:
-        name, a, b = ln['audio']
+    runs = []                                   # lines played as one piece: same file, cut where the next begins, no gap
+    for i, ln in enumerate(LINES):
+        if runs:
+            prev = LINES[runs[-1][-1]]
+            if (prev['audio'][0] == ln['audio'][0] and prev['audio'][2] == ln['audio'][1]
+                    and PADS.get(prev['n'], (0.12, 0.25))[1] == 0 and PADS.get(ln['n'], (0.12, 0.25))[0] == 0):
+                runs[-1].append(i)
+                continue
+        runs.append([i])
+    pieces = []
+    for run in runs:
+        name, a, _ = LINES[run[0]]['audio']
+        b = LINES[run[-1]]['audio'][2]
         x = files[name]
         i = int(_cut(x, a) * SR) if a > 0 else 0
         j = int(_cut(x, b) * SR) if b is not None else len(x)
         seg = x[i:j]
+        s0, s1 = 0, len(seg)
         st = MA.pauses(seg, 0.12)
-        if st:                                  # trim the silence round the words (50 ms kept each side)
-            s0, s1 = max(0, int((st[0][0] - 0.05) * SR)), min(len(seg), int((st[-1][1] + 0.08) * SR))
-            if a > 0:                           # a line cut from the middle of a run starts on its own word
-                s0 = 0
-            seg = seg[s0:s1]
-        raw.append(seg)
-    raw = _match_tone(raw)
+        if st:                                  # trim the silence round the words (50 ms kept before, 80 ms after)
+            s0 = 0 if a > 0 else max(0, int((st[0][0] - 0.05) * SR))   # a line cut from a run starts on its own word
+            s1 = min(len(seg), int((st[-1][1] + 0.08) * SR))
+        inner = [int(_cut(x, LINES[k]['audio'][1]) * SR) - i - s0 for k in run[1:]]
+        pieces.append((run, seg[s0:s1], inner))
+    toned = _match_tone([pc[1] for pc in pieces])
     gains = {}
-    for ln, x in zip(LINES, raw):               # loudness per file: lines from one file keep their balance
-        gains.setdefault(ln['audio'][0], []).append(x)
+    for (run, _, _), y in zip(pieces, toned):   # loudness per file: lines from one file keep their balance
+        gains.setdefault(LINES[run[0]]['audio'][0], []).append(y)
     g = {k: 10 ** ((VOICE_LUFS - MA.lufs(np.concatenate(v))) / 20) for k, v in gains.items()}
-    return [MA.edges(x * g[ln['audio'][0]]) for ln, x in zip(LINES, raw)]
+    out = [None] * len(LINES)
+    for (run, _, inner), y in zip(pieces, toned):
+        y = y * g[LINES[run[0]]['audio'][0]]
+        k_in, k_out = int(0.01 * SR), int(0.1 * SR)
+        y[:k_in] *= np.linspace(0, 1, k_in)
+        y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))     # a soft 100 ms fade at the very end
+        cuts = [0] + inner + [len(y)]
+        for k, idx in enumerate(run):
+            out[idx] = y[cuts[k]:cuts[k + 1]]
+    return out
 
 
 VOICES = _voices()
@@ -353,9 +376,13 @@ def shop(img, cam, x0, x1, kind_):
         sign_text(img, cam, (x0 + x1) / 2 + 120, BASE - STOREY + 230, 'ZapBets', 300, (250, 216, 40), stroke=3)
         for k, wx in enumerate((x0 + 480, x1 - 480)):
             box(X, wx - 400, BASE - STOREY + 520, wx + 400, BASE - 420, (210, 216, 222), 77 + k, 4)
-            sign_text(img, cam, wx, BASE - STOREY + 760, 'WIN', 150, (86, 40, 128))
-            sign_text(img, cam, wx, BASE - STOREY + 960, 'BIG!', 150, (200, 30, 60))
-            sign_text(img, cam, wx, BASE - STOREY + 1170, '£££', 120, (60, 140, 70))
+            y0 = BASE - STOREY + 520                                 # the free-bet poster in the window (Sam's pick, note 37)
+            box(X, wx - 340, y0 + 60, wx + 340, BASE - 480, (250, 216, 40), 120 + k, 5)
+            sign_text(img, cam, wx, y0 + 210, 'FREE', 170, (86, 40, 128))
+            sign_text(img, cam, wx, y0 + 400, '£10 BET', 170, (200, 30, 60))
+            sign_text(img, cam, wx, y0 + 560, 'for new customers*', 70, (40, 30, 40))
+            sign_text(img, cam, wx, y0 + 700, '*18+. Must not be', 52, (40, 30, 40))
+            sign_text(img, cam, wx, y0 + 775, 'currently being eaten.', 52, (40, 30, 40))
         box(X, (x0 + x1) / 2 - 200, BASE - STOREY + 520, (x0 + x1) / 2 + 200, BASE, (40, 40, 46), 79)
     elif kind_ == 'boarded':                   # an empty shop: boarded up, a torn TO LET, a faded fascia
         box(X, x0, top + 200, x1, BASE - STOREY, (150, 120, 100), 81)

@@ -39,7 +39,8 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 34 | shoppers | - | Walkers looked too thin: body squeezed less (0.78 to 0.9), legs thicker. | done (in code; not yet rendered) |
 | 35 | 20 | - | Two mouths at once: the gritted teeth were drawn over his talking mouth. Now only when the talking mouth is off; between "Aw fook" shouts, gritted teeth instead of a lopsided smirk. | done (in code; not yet rendered) |
 | 36 | 20 | - | Arm higher, holding the phone up for the over-the-shoulder view: it now rises out of the frame on the left above the name and description. | done (in code; not yet rendered) |
-| 37 | ZapBets | - | Ideas for the gambling shop's advertising window. | ideas sent, waiting for Sam's pick |
+| 37 | ZapBets | - | Advertising window: Sam picked option 3, a yellow poster in both windows: FREE £10 BET for new customers*, small print "*18+. Must not be currently being eaten." | done (in code; not yet rendered) |
+| 38 | all | after lines 1, 12, 13, 17 | Crackles still there after the second fix, just after those lines. Takes 1, 12, 13 stop dead mid-hiss (a fluttering "s"), turned up 2-3x into dead silence; lines 16-18 were cut apart mid-sound with fades and an 80 ms gap (a blip after "okay"). Now: lines Sam ran together stay one unbroken piece; every line ends with a soft 100 ms fade; the tone matching never brightens above 4 kHz. | done (in code; not yet rendered) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).
