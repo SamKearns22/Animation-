@@ -154,7 +154,7 @@ def state(who, t):
     if g == 'point':
         arms = rig.pose('point', side=near, target=(toward * 700, -60))
     elif g == 'talk':
-        arms = dict(rig.pose('sides'), **{near: rig.arm(near, (sh[0] + toward * (70 + 14 * w), sh[1] + 150 - 20 * w), 'palm', 'down')})
+        arms = dict(rig.pose('sides'), **{near: rig.arm(near, (sh[0] + toward * (46 + 12 * w), sh[1] + 330 - 12 * w), 'palm', 'depth')})
     elif g == 'wave':
         arms = dict(rig.pose('sides'), **{near: rig.arm(near, (sh[0] + toward * (40 + 25 * w), sh[1] - 110), 'palm', 'down')})
     elif g == 'shrug':

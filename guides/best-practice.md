@@ -258,6 +258,9 @@ this series. Full details in `tiktok-design.md`.
   low behind them. Put the creature on a tall platform so its whole silhouette (the tail) clears their heads.
 - **Chains, leads and ropes to people never cross a face:** let the slack hang down through a gap between two people
   and loop up to the collar, as a real chain would.
+- **A check only knows what it measures:** the arm guard measured lengths and the elbow angle, so an elbow folded
+  back across the chest passed (Sam spotted it in the animatic). When a fault gets past the checks, add the check that
+  would have caught it (`figure.audit_arm` now does), test it on the good poses too, and fix every copy of the code.
 - **A swing (whip pan) is one camera turning in one set:** build the room as a strip of walls and slide the camera
   along it with motion blur (9 drawings averaged per frame), so both ends are the same room.
 

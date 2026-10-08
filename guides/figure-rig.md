@@ -53,6 +53,9 @@ hangs past the hands; that is the garment, not long arms.
   elbows (`'out'`) are for hands on hips, typing, gestures; `'in'` when a hand crosses the body (clutching the chest).
 - **Foreshortening only shortens.** An arm reaching towards or away from the camera (typing towards the screen) is
   given `depth` (0-0.6) and is drawn shorter; nothing is ever drawn longer than the rig.
+- **Never `bend='down'` for a hand near the body's own side:** with a short reach it folds the elbow back across
+  the chest (Andrew the Hutt's PR man; quick.py's `talk` gesture had the same fault). Use `'depth'` for a small beat
+  by the side, `'out'` for a big gesture. The guard now stops it.
 - **The guard measures every arm drawn anywhere** (`figure.guard(B)`), including hand-typed ones and other people's
   code: an upper arm or forearm more than 6% too long, an arm squashed below 40%, or an elbow folded tighter than
   25 degrees stops the render with the shot and time.
@@ -142,6 +145,7 @@ for these films: too costly in rounds and renders.
 | Check | Where | Stops the render when |
 |---|---|---|
 | Arm guard | every arm drawn (`figure.guard`) | a segment is >6% too long, <40%, or the elbow folds past 25° |
+| Elbow across the body | every arm drawn (`figure.guard`) | the elbow sits on the chest's centre line while the forearm points back out to the hand's own side (Andrew the Hutt) |
 | Unreachable target | `Rig.arm` | the hand can't reach without stretching |
 | Fingertips on the keyboard | patriots2 `check_on_keys` | a typing fingertip misses the keys |
 | Set pieces apart | `check_apart` (ward, ambulance, desk) | two listed outlines overlap |

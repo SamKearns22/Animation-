@@ -560,10 +560,17 @@ def model_sp(i, t):
         arms = rig.pose('clasped')
         sp['lid'] = 5
     elif a == 'selfie':
+        # phone hanging at her side; one quick, joyless selfie mid-speech, then it drops again
         sh = rig.shoulder('R')
-        arms = dict(rig.pose('sides'), R=rig.arm('R', (sh[0] + 50, sh[1] - 250), 'palm', 'out'))
-        mouth, look = 'smile', 0.0
-        sp['tilt'] = 0.12 + sp['tilt']
+        down = (sh[0] + 30, sh[1] + 0.9 * rig.reach('palm'))
+        up = (sh[0] + 50, sh[1] - 250)
+        k = ease((t - 10.3) / 0.35) * (1 - ease((t - 11.9) / 0.35))
+        tgt = (down[0] + (up[0] - down[0]) * k + 150 * math.sin(math.pi * k), down[1] + (up[1] - down[1]) * k)   # swung out, not past the shoulder
+        arms = dict(rig.pose('sides'), R=rig.arm('R', tgt, 'palm', 'out'))
+        sp['brows'] = 'serious'
+        sp['lid'] = 3
+        look = 0.6 * (1 - k)
+        sp['tilt'] = 0.08 * k + sp['tilt']
     else:  # nails: one hand held up in front of her, looked at; a yawn now and then
         arms = dict(rig.pose('sides'), **rig.pose('hold', side='L', lift=1.0))
         look = -0.5
@@ -606,7 +613,8 @@ def models(img, cam, t, chain_start):
         lp = B.Pen(img, L)
         if m['act'] in ('phone', 'selfie'):
             hx, hy = hand_centre(sp['arms']['R'])
-            phone(lp, hx, hy - 18, back=m['act'] == 'selfie', ang=0.3 if m['act'] == 'selfie' else 0.0)
+            phone(lp, hx, hy - 18 if hy < 300 or m['act'] == 'phone' else hy + 10, back=m['act'] == 'selfie',
+                  ang=0.3 if m['act'] == 'selfie' else 0.0)
             Q.chand(lp, hx, hy, sp['skin'])
         collars.append(L.P(0, -6))
     # the chain: from his hand down to the middle model's collar, and collar to collar along the line
@@ -669,7 +677,7 @@ def pr_state(t):
     if speaking and t < PAN0:                                                  # small beats with the free hand
         w = math.sin(2 * math.pi * 1.0 * t)
         sh = rig.shoulder('R')
-        arms['R'] = rig.arm('R', (sh[0] + 70 + 14 * w, sh[1] + 160 - 20 * w), 'palm', 'down')
+        arms['R'] = rig.arm('R', (sh[0] + 46 + 12 * w, sh[1] + 330 - 12 * w), 'palm', 'depth')   # a small beat by his side
     sp['arms'] = arms
     shape = mouths.at(TRACK['PR'], t)
     sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
@@ -805,6 +813,7 @@ def main():
     if len(a) < 2 or a[0] not in ('stills', 'final'):
         print(__doc__)
         return
+    F.guard(B)                                    # every arm drawn is measured, in stills and renders too
     checks()
     if a[0] == 'stills':
         stills(a[1])

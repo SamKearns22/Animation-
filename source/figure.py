@@ -237,6 +237,13 @@ def audit_arm(sh, el, wr, where='an arm'):
     cosang = (a[0] * b[0] + a[1] * b[1]) / ((math.hypot(*a) * math.hypot(*b)) or 1)
     if math.degrees(math.acos(max(-1, min(1, cosang)))) < 25:
         fail(f'{where}: elbow folded tighter than 25 degrees')
+    # The elbow folded back across the body (Andrew the Hutt: lengths and angle were fine, but the elbow sat on the
+    # chest's centre line and the forearm ran back outwards to a hand by his own side; no arm can do that seen from
+    # the front). Hands reaching across the body (clutching the chest, clasped) are fine: their wrists go inwards.
+    sgn = 1 if sh[0] >= 0 else -1
+    if sgn * el[0] < sgn * sh[0] - 0.5 * UPPER and sgn * wr[0] > sgn * el[0] + 0.3 * FORE:
+        fail(f'{where}: elbow folded back across the body (elbow on the chest, forearm pointing back out): '
+             f"bend the elbow 'out' or 'depth'")
 
 
 _GUARDED = {}
