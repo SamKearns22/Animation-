@@ -268,7 +268,7 @@ def man_state(t):
     arms = rig.pose('sides')
     arms['L'] = rig.arm('L', (-150, 360), 'grip', 'depth', 0.3, strict=False)                # the seed bag on his knee
     if stunned:
-        arms['R'] = rig.arm('R', (175, 380 + 14 * math.sin(t * 4)), 'palm', 'depth', 0.3, strict=False)   # the arm drops
+        arms['R'] = rig.arm('R', (175, 380), 'palm', 'depth', 0.3, strict=False)   # the arm drops, and stays
     else:
         arms['R'] = rig.arm('R', TOSS.at(t % 1.4), 'palm', 'out', strict=False)
     sp['arms'] = arms
@@ -288,13 +288,9 @@ DARTS = [(1.8, 1), (2.3, 6), (2.8, 3), (3.3, 4), (3.8, 2), (4.3, 5), (4.7, 0)]  
 
 
 def head_turn(t):
-    """Stunned, his head holds still and turns now and then towards what his eyes are on, following a beat behind."""
-    ex = X0
-    acc = 0.0
-    for k in range(6):                                                # where his eyes were over the last half second
-        gx, gy = gaze(t - 0.1 * k)
-        acc += max(-1.0, min(1.0, (gx - ex) / 450))
-    return -0.02 - 0.07 * acc / 6
+    """Stunned, his head holds dead still, then snaps to each new pigeon a frame after his eyes do: paranoid, not woozy."""
+    gx, gy = gaze(t - 1.0 / FPS)
+    return -0.02 - 0.10 * max(-1.0, min(1.0, (gx - X0) / 450))
 
 
 def gaze(t):
