@@ -6,6 +6,14 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
+## In progress: "Cry Minister" (TikTok, Satire style, `prompts/cry-minister.md`)
+- Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves: side-on lope, leap, feeding; coming at us, leaping
+  at the lens, tangled in a net; flat red gore). Notes and decisions: `notes/cryminister.md`.
+- Sam's 20 lines recorded (16 files, `source/audio/cry-*.m4a`; two files hold three lines each). Cleaned, matched in tone,
+  levelled. Film about 63 s. Review files (voice reel, cast sheet, stills) are made in `review/` and kept off GitHub (drafts).
+- 8 Oct: cast sheet, one still per shot and the voice reel sent in the chat, with questions. Waiting on Sam's answers and notes; then the
+  wolf sounds, the full animation pass, checks and the final.
+
 ## Done: "The Park" (TikTok, rebuilt in Satire style 8 Oct, `source/thepark.py`)
 - Final: `animations/the-park-vertical.mp4`, 17.1 s, 1.76 MB; posted 8 Oct. Shock level 2; eye-dart sting at the end.
 - Lessons became rules and checks in `guides/satire.md` (see best-practice Part 2, "Lessons from The Park").
