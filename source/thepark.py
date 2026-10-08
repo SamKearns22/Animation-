@@ -49,13 +49,13 @@ T1 = 5.0                    # cut to the bench pigeon, close: it looks up at him
 SAY = T1 + 1.1              # it speaks
 T2 = SAY + VL + 0.7         # back to the wide: he is stunned
 FLY = T2 + 1.3              # it takes off
-DUR = FLY + 3.6
+DUR = FLY + 4.4             # the sting: his eyes flick from pigeon to pigeon
 SHOTS = [('wide', 0.0, T1 - 1.0), ('glance', T1 - 1.0, T1), ('talk', T1, T2), ('end', T2, DUR)]
 MAN = dict(skin=B.DEEP, hair='bald', hair_c=(150, 150, 154), jacket=(176, 122, 72), shirt=(60, 62, 70), tie=None,
            trousers=(70, 64, 58), outfit='suit', jaw='round', hw=74, hh=90, age=True, full=False, pose='custom',
            beard='full', beard_c=(170, 168, 166), beard_grey=(214, 212, 210))
 CAP, CAP_D = (126, 58, 46), (92, 40, 32)      # his flat cap
-SHOCK = 4                                     # how shocked he is, 1-6 (Sam picks from the shock sheet)
+SHOCK = 2                                     # how shocked he is, 1-6 (Sam picks from the shock sheet)
 SHOCKS = [   # eye (w, h), pupil, brow lift and arch, forehead lines, open mouth (w, h), cap jump, sweat drops, tremble
     dict(name='1 Puzzled', eye=(15, 15), pupil=6.0, brow=4, arch=4, one_brow=True, lines=0, mouth=None, pop=12, sweat=0, tremble=False),
     dict(name='2 Taken aback', eye=(16, 18), pupil=5.5, brow=6, arch=6, lines=1, mouth=(6, 7), pop=18, sweat=0, tremble=False),
@@ -247,8 +247,33 @@ def man_state(t):
     sp['mouth'] = 'set'
     if stunned:                                   # his own brows hidden: the shock draws raised grey ones
         sp['brows'], sp['brow_c'] = 'wow', MAN['skin']
+        if SHOCKS[SHOCK - 1]['mouth']:
+            sp['mouth'] = 'hidden'                # one mouth only: the shock draws its own, in the same place
     sp['blink'] = ((t % 3.4) < 0.12 and not stunned) or stunned       # stunned: his own eyes are drawn wide over the top
     return sp
+
+
+DARTS = [(1.0, 1), (1.5, 6), (2.0, 3), (2.5, 4), (3.0, 2), (3.5, 5), (3.9, 0)]   # (seconds after take-off, which pigeon)
+
+
+def gaze(t):
+    """The spot his shocked eyes are on: the bench pigeon, then it as it flies, then (the sting) each pigeon on the
+    ground in turn as they stare back, as if any of them might speak next. Each move is a quick two-frame flick."""
+    u = t - FLY
+    if u < 0:
+        return BENCH_P[0], BENCH_P[1] - 100
+    x, y = BENCH_P[0] + 330 * u + 30 * u * u, BENCH_P[1] - 100 - 260 * u - 60 * u * u
+    if u < DARTS[0][0]:
+        return min(x, 1300), max(y, 200)
+    prev = (min(BENCH_P[0] + 330 * DARTS[0][0] + 30 * DARTS[0][0] ** 2, 1300), 200)
+    for k, (at, i) in enumerate(DARTS):
+        nxt = DARTS[k + 1][0] if k + 1 < len(DARTS) else 1e9
+        if at <= u < nxt:
+            tgt = (FLOCK[i][0], FLOCK[i][1] - 60 * FLOCK[i][2])
+            f = min(1.0, (u - at) / (2.0 / FPS))
+            return prev[0] + (tgt[0] - prev[0]) * f, prev[1] + (tgt[1] - prev[1]) * f
+        prev = (FLOCK[i][0], FLOCK[i][1] - 60 * FLOCK[i][2])
+    return prev
 
 
 def man(img, cam, t):
@@ -266,11 +291,15 @@ def man(img, cam, t):
     p = B.Pen(img, peepee.Rot(L, sp['tilt'], pivot=(0, -60)))                      # his head, as tilted
     hx, hy, hw, hh = 0, -150, MAN['hw'], MAN['hh']
     lv = SHOCKS[SHOCK - 1]
+    gx, gy = gaze(t)                                                                # where his pupils point
+    ew = (X0, NECK - 158 * S)
+    d = math.hypot(gx - ew[0], gy - ew[1]) or 1.0
+    ox, oy = 4 + (lv['eye'][0] - lv['pupil'] - 3) * (gx - ew[0]) / d, (lv['eye'][1] - lv['pupil'] - 3) * (gy - ew[1]) / d
     if stunned:                     # shock, at the chosen level: eyes, pupils, brows, forehead, mouth, cap, sweat, tremble
         for sgn in (-1, 1):
             ex, ey = -4 + sgn * 30, hy - 8
             p.ell(ex, ey, lv['eye'][0], lv['eye'][1], (252, 252, 248), INK, 2.4)
-            p.ell(ex + 4, ey, lv['pupil'], lv['pupil'], INK, None)
+            p.ell(ex + ox, ey + oy, lv['pupil'], lv['pupil'], INK, None)
             other = lv.get('one_brow') and sgn == -1                                 # puzzled: one brow stays down
             by = ey - lv['eye'][1] - 7 - (0 if other else lv['brow'])
             arch = 1 if other else lv['arch']
@@ -282,7 +311,7 @@ def man(img, cam, t):
             y = hy - 8 - lv['eye'][1] - 7 - lv['brow'] - 16 - 9 * k
             p.line([(-36, y + 4), (-4, y), (30, y + 4)], B.dk(MAN['skin'], 0.7), 2.0)
         if lv['mouth']:
-            p.ell(-4, hy + 46 + lv['mouth'][1] * 0.3, lv['mouth'][0], lv['mouth'][1], (60, 24, 30), INK, 2.2)
+            p.ell(-4, hy + 60 + lv['mouth'][1] * 0.3, lv['mouth'][0], lv['mouth'][1], (60, 24, 30), INK, 2.2)
         for k in range(lv['sweat']):                                                 # sweat drops at his temple
             sx, sy = hw * 0.78 + 4 * k, hy - 30 + 34 * k
             p.poly([(sx, sy - 16), (sx + 8, sy), (sx, sy + 7), (sx - 8, sy)], (170, 214, 236), INK, 2.0)
