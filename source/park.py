@@ -38,7 +38,7 @@ GRAVEL = (200, 176, 136)
 PALS = {'grey': (GREY_P, GREY_D), 'dark': ((96, 98, 112), (64, 66, 80)), 'pale': ((196, 198, 204), (150, 154, 164)),
         'brown': ((158, 124, 98), (116, 88, 66))}
 
-from filmcow import Cam, Ctx, blob, limb   # the shared Filmcow kit (source/filmcow.py)
+from satire_style import Cam, Ctx, blob, limb   # the shared Filmcow kit (source/satire_style.py)
 
 
 # ---- background

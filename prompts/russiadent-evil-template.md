@@ -1,4 +1,4 @@
-# Template: a story-style brief for a Filmcow-style TikTok film (worked example: Russiadent Evil)
+# Template: a story-style brief for a Satire-style TikTok film (worked example: Russiadent Evil)
 
 Copy the headings, replace the content. Plain words, pace as "slow" and "fast", style by name.
 
@@ -6,7 +6,7 @@ Copy the headings, replace the content. Plain words, pace as "slow" and "fast", 
 RUSSIADENT EVIL
 
 STYLE
-- Vertical TikTok. Filmcow style throughout. Cranberry Title style for the title, held a beat longer than usual. Hard cut to black at the very end.
+- Vertical TikTok. Satire style throughout. Cranberry Title style for the title, held a beat longer than usual. Hard cut to black at the very end.
 - Hands are always simple circles. Props sit over them.
 - Show me the cast and one still of each shot first. Then make one final version.
 

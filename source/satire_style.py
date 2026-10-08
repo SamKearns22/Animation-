@@ -1,4 +1,4 @@
-"""filmcow: the shared Filmcow-style drawing kit (flat colour, one thick black outline, lumpy shapes, circle hands).
+"""filmcow: the shared Satire-style drawing kit (flat colour, one thick black outline, lumpy shapes, circle hands).
 Use it from the first frame of any new film so the look never needs a rescue (The Park's first version had no style
 and had to be redrawn). Pure Pillow, no other files.
 Rules of the look (guides/filmcow-style.md): flat colour (no gradients, glows or highlight blobs); ONE outline weight

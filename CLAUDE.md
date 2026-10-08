@@ -33,7 +33,7 @@ I don't know how to code. Please:
 # Drawing people (not for quick videos)
 
 - Hands are always a plain circle at the end of the arm, with props laid over it (South Park style).
-- Filmcow-style films: draw with `source/filmcow.py` from the start, approve a cast sheet first, run pre-flight (it includes the
+- Satire-style films: draw with `source/satire_style.py` from the start, approve a cast sheet first, run pre-flight (it includes the
   general body/movement audit) before any render, and use the picture cache (`guides/preflight.md`, last section). Big film
   file? read `guides/russiadent-map.md`-style code maps first (`python3 source/codemap.py FILE.py`).
 - For the flat cartoon films (the TikTok parody series), read `guides/figure-rig.md` before building or animating any

@@ -248,7 +248,7 @@ Read this first in any new session, after CLAUDE.md.
 - Render in the background and report once at the end.
 
 ## Tooling added 8 Oct (for future Filmcow films)
-- `source/filmkit.py` (general body/movement audit, `Beats`, joint rules, permanent-marks probe, visible spots), `source/filmcow.py`
+- `source/filmkit.py` (general body/movement audit, `Beats`, joint rules, permanent-marks probe, visible spots), `source/satire_style.py`
   (style kit, used by `park.py`), `source/codemap.py`, `notes/_template.md`, `prompts/_brief-skeleton.md`. Russiadent Evil: pre-flight is
   parallel and runs the audit; the render caches pictures and puts captions and the title on last. Details: `guides/preflight.md`.
 - Found by the audit in the finished Russiadent Evil: the zombie that falls through the window pops from lying flat to crawling

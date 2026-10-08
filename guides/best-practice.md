@@ -9,7 +9,7 @@ purpose:
   on purpose is fine. Doing it by accident is not.
 - **Parts 2-4, project rules.** These are what we have learned for one kind of film. They apply only to
   that kind of film, never to everything:
-  - **Part 2:** the TikTok parody series in the flat, FilmCow-influenced cartoon look. This series is
+  - **Part 2:** the TikTok parody series in the flat, Satire style, FilmCow-influenced cartoon look. This series is
     ongoing.
   - **Part 3:** the coloured-pencil comedy shorts.
   - **Part 4:** the Yuletide horror trailer.
@@ -200,7 +200,7 @@ Sources: BBC Subtitle Guidelines; Netflix Timed Text Style Guide.
 
 ---
 
-# Part 2. The TikTok parody series (flat, FilmCow-influenced cartoon)
+# Part 2. The TikTok parody series (flat, Satire style, FilmCow-influenced cartoon)
 For Listening & Learning, Hope Again, The Patriots and future topical parodies. These rules apply only to
 this series. Full details in `tiktok-design.md`.
 
@@ -337,8 +337,8 @@ this series. Full details in `tiktok-design.md`.
   - big Anton capitals for shouts, plain italics for a childish aside (The Patriots).
 - **Endings:** a hard cut to black.
 
-**Efficiency and quality kit (Russiadent Evil and The Park, 8 Oct)** (general tools in `source/filmkit.py`, look in `source/filmcow.py`)
-- **Start every film from the style kit** (`filmcow.py`: flat colour, one outline weight, lumpy `blob` shapes, rounded `limb`,
+**Efficiency and quality kit (Russiadent Evil and The Park, 8 Oct)** (general tools in `source/filmkit.py`, look in `source/satire_style.py`)
+- **Start every film from the style kit** (`satire_style.py`: flat colour, one outline weight, lumpy `blob` shapes, rounded `limb`,
   circle hands). Never "draw clean, then fix the style": The Park had to be redrawn. Vary every copy (palettes, sizes,
   facing). Deadpan faces: heavy lids, one brow up, flat mouth. Hard cuts and a close-up for the reaction that matters.
 - **Cast sheet first** (`python3 source/FILM.py cast OUT.png`, one cheap render): approve faces, builds and outfits

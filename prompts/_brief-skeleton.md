@@ -1,6 +1,6 @@
 # Brief skeleton (copy, fill in; see prompts/russiadent-evil-template.md for a finished example)
 
-TITLE / STYLE: Filmcow style. Cranberry Title style. Ending: hard cut to black.
+TITLE / STYLE: Satire style. Cranberry Title style. Ending: hard cut to black.
 THE STORY: (3-5 sentences: who, what happens, the joke, what the main character never does.)
 THE PLACE: (rooms, objects, left/right/back details; shown from which directions.)
 THE PEOPLE: (each: look, build, clothes, how they act. Say who must differ from whom. Cast sheet first.)

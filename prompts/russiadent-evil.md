@@ -64,7 +64,7 @@ zombie outbreak is tearing through his own press conference, and the Ministry of
 
 ## The look
 - Our TikTok parody look: flat shapes, clean black outlines, almond eyes with small pupils, soft shading,
-  deadpan staging, hard cuts (FilmCow-influenced, but our own: no dot eyes or FilmCow construction).
+  deadpan staging, hard cuts (Satire style, FilmCow-influenced, but our own: no dot eyes or FilmCow construction).
 - **Peskov** as a recognisable caricature of a public figure (affectionate-to-sharp, never a traced likeness):
   - his big grey moustache, grey hair swept back, heavy-lidded calm eyes, dark suit, white shirt, tie;
   - at a podium with a microphone, in front of a plain blue official backdrop;
