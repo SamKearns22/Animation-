@@ -248,3 +248,7 @@ Read this first in any new session, after CLAUDE.md.
   session, then a fresh session.
 - Always make a quick animatic (quarter size, no drawing pass) before a full render; look at few images.
 - Render in the background and report once at the end.
+
+## The Park (quick video, one man and pigeons)
+- Made by source/park.py (own script, as quick.py cannot draw parks or pigeons). Output animations/the-park-vertical.mp4, ~12 s, 1.1 MB.
+- Waiting for Sam's recording at source/audio/park-1.m4a ("Nobody will believe you."); re-run `python3 source/park.py animations/the-park-vertical.mp4` and it re-times itself.
