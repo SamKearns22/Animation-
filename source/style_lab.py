@@ -10,6 +10,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py options         sheet 2: the same three tiles in today's look and in each option
   python3 source/style_lab.py lines           The Patriots' two-shot drawn with ten different kinds of line
   python3 source/style_lab.py shapes          The Patriots' two-shot with ten kinds of shape (less boxy)
+  python3 source/style_lab.py repose          The Patriots' two-shot, same drawing, everyone re-posed with an attitude
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -1121,7 +1122,7 @@ def line_style(B, style):
 PATRIOTS_T = 0.6                                            # the cover moment: him mid-line, thumb out
 
 
-def patriots_still(t=PATRIOTS_T):
+def patriots_still(t=PATRIOTS_T, full=False):
     """The Patriots' frame at t, drawn by the film's own code, without its title and captions."""
     sys.path.insert(0, HERE)
     import peepee as PP
@@ -1144,7 +1145,8 @@ def patriots_still(t=PATRIOTS_T):
         PP.protester(img, cam, 670, fy - 928 * s, s, dict(pst, arm_only='L'), t)
     img = img.convert('RGB').resize((1080, 1920), Image.LANCZOS)
     neck = fy - 928 * s
-    box = (20, int(neck - 300 * s), 1060, int(neck + 640 * s))
+    box = ((0, int(neck - 340 * s), 1080, min(1920, int(fy + 120 * s))) if full else
+           (20, int(neck - 300 * s), 1060, int(neck + 640 * s)))
     return img.crop(box)
 
 
@@ -1321,6 +1323,119 @@ def shapes(out):
     grid(items, out, 3, tw, int(tw * h / w), 'The Patriots: one still, ten kinds of shape', start=0)
 
 
+# ------------------------------------------------------------------------------------------------ 8. re-posed
+# The Patriots' two-shot with the same drawing in every way (lines, shapes, colours, faces, camera) but every person
+# given an attitude: weight on one leg, a lean, tilted shoulders and head, arms doing something, the background
+# people busy with their own business instead of standing to attention for the camera.
+
+ATTITUDE = {  # who: (lean, hips, shoulders): lean tips the body from the feet (+ = top to our right); hips shift
+              # sideways onto one leg (own units); shoulders tilt (+ = our right shoulder lower)
+    'protester': (0.05, -34, 0.05),      # leaning back from her, chest out, hip cocked towards her
+    'reporter': (0.035, -26, -0.04),     # leaning in to him, weight on her back foot
+    'mate0': (-0.03, 30, -0.05),         # arms folded, slouched
+    'mate1': (0.025, -28, 0.06),         # turned to his mate, chatting
+    'mate2': (-0.02, 22, 0.03),
+    'dad': (-0.02, 30, 0.04),            # hands on hips, fed up, staring at the queue
+    'mum': (0.02, -24, -0.05),           # turned to him, saying something
+    'kid_a': (0.06, 20, 0.06),           # fidgeting, looking back the way they came
+    'kid_b': (-0.07, -30, -0.07),        # leaning on mum
+    'officer': (0.03, 34, -0.05),        # arms folded, bored, looking at nothing
+}
+
+
+def _bump(y, a, b, c):
+    """0 below a, rising to 1 at b, back to 0 at c (own units: neck 0, hips about 440, feet about 928)."""
+    if y <= a or y >= c:
+        return 0.0
+    return _sm(a, b, y) if y < b else 1 - _sm(b, c, y)
+
+
+def repose_patches(PP):
+    import figure as F
+    B = PP.B
+    cur = {}
+    OrigLocal, orig_person, orig_pro, orig_mic = B.Local, B.person, PP.protester, PP.mic
+
+    class Local(OrigLocal):
+        def P(self, x, y):
+            a = cur.get('who')
+            if a:
+                lean, hips, sh = ATTITUDE[a]
+                x = x + hips * _bump(y, 60, 440, 900) + lean * (928 - y)
+                y = y + sh * x * (1 - _sm(150, 440, y))
+            return OrigLocal.P(self, x, y)
+
+    family = {id(PP.FAMILY_SP[0]): 'dad', id(PP.FAMILY_SP[1]): 'mum', id(PP.FAMILY_SP[2]): 'kid_a',
+              id(PP.FAMILY_SP[3]): 'kid_b'}
+
+    def person(img, cam, x, y, s, sp, t=0.0, flip=1):
+        who = ('reporter' if sp.get('lips') else 'officer' if sp.get('jacket') == PP.HIVIS else family.get(id(sp)))
+        sp = dict(sp)
+        rig = F.Rig(sp)
+        if who == 'reporter':                               # mic arm bent and held in to him, the other hand loose
+            sp['arms'] = {'L': ((-150, 280), (-70, 430), 'fist'), 'R': ((160, 215), (300, 140), 'fist')}
+            sp.update(tilt=-0.07)
+        elif who == 'officer':
+            sp.update(pose='custom', arms={'L': ((-170, 300), (70, 250), 'fist'), 'R': ((170, 300), (-70, 270), 'fist')},
+                      turn=-0.35, look=-0.8, lid=4, tilt=-0.08)
+        elif who == 'dad':
+            sp.update(pose='custom', arms=rig.pose('hips'), turn=0.55, look=1.0, mouth='set', tilt=0.05)
+        elif who == 'mum':
+            sp.update(pose='custom', arms={'L': ((-150, 290), (-140, 490), 'fist'), 'R': ((190, 280), (250, 100), 'palm')},
+                      turn=-0.5, look=-1.0, mouth='mid', tilt=0.06)
+        elif who == 'kid_a':
+            sp.update(turn=-0.9, look=-1.0, tilt=-0.1)
+        elif who == 'kid_b':
+            sp.update(turn=0.6, look=0.6, tilt=0.12)
+        cur['who'] = who
+        try:
+            return orig_person(img, cam, x, y, s, sp, t, flip)
+        finally:
+            cur.pop('who', None)
+
+    def protester(img, cam, x, y, s, st, t=0.0, doodle=True, pole=None):
+        st = dict(st)
+        if doodle:
+            who = 'protester'
+            st.update(tilt=st.get('tilt', 0.0) + 0.08, head_dy=st.get('head_dy', 0.0) - 6)
+        else:
+            i = int(round((pole or 0) / 1.7))
+            who = f'mate{i}'
+            if i == 0:                                      # arms folded, flag pole leant on his shoulder
+                st.update(arms={'L': ((-215, 300), (60, 250), 'fist'), 'R': ((215, 300), (-60, 270), 'fist')},
+                          turn=0.5, look=0.9, tilt=-0.06)
+            elif i == 1:
+                st.update(turn=-0.55, look=-1.0, tilt=0.1)
+            else:
+                st.update(turn=0.4, look=0.7, tilt=-0.05)
+        cur['who'] = who
+        try:
+            return orig_pro(img, cam, x, y, s, st, t, doodle, pole)
+        finally:
+            cur.pop('who', None)
+
+    def mic(img, L, wr, el, target):
+        cur['who'] = 'reporter'
+        try:
+            return orig_mic(img, L, wr, el, target)
+        finally:
+            cur.pop('who', None)
+
+    return [(B, 'Local', Local), (B, 'person', person), (PP, 'protester', protester), (PP, 'mic', mic)]
+
+
+def repose(out):
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    today = patriots_still(full=True)
+    with swapped(repose_patches(PP)):
+        new = patriots_still(full=True)
+    grid([(today, 'Today'), (new, 'Re-posed: same drawing, everyone with an attitude')], out, 2, 940,
+         int(940 * today.height / today.width), 'The Patriots: how people stand', start=0)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -1331,6 +1446,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'repose':
+        repose(a[1] if len(a) > 1 else os.path.join(REVIEW, 'repose-patriots.jpg'))
     elif a[0] == 'shapes':
         shapes(a[1] if len(a) > 1 else os.path.join(REVIEW, 'shapes-patriots.jpg'))
     elif a[0] == 'lines':
