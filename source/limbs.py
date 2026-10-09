@@ -27,6 +27,7 @@ sys.path.insert(0, HERE)
 from ed import curve  # noqa: E402
 
 INK = (24, 20, 22)
+LENS = {}                                                   # {'side': 'L'}: that arm reaches towards the camera
 
 
 def _resample(P, step):
@@ -141,6 +142,9 @@ def install(B):
         busy.append(1)
         try:
             spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)
+            if LENS.get('side') and (sh[0] < 0) == (LENS['side'] == 'L'):   # reaching to the camera: the near end
+                s_ = np.linspace(0, 1, len(spine))                          # swells, as anything close to the lens
+                hw = hw * (1 + LENS.get('swell', 1.0) * s_ ** 2)
             lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
             q = B.Pen(lay, p.cam)
             o = q.w(2.6) / p.cam.S(1)
@@ -329,6 +333,16 @@ def cryminister_fixes(CM):
             sp['arms'][side] = (el, wr, 'fist')
         return sp
     CM.andy_sp = andy_sp
+    # the selfie: his phone arm swells as it reaches towards the lens
+    orig_run = CM.run_andy
+
+    def run_andy(img, t):
+        LENS.update(side='L', swell=2.2)
+        try:
+            return orig_run(img, t)
+        finally:
+            LENS.clear()
+    CM.run_andy = run_andy
     # 4. the running man pumps his arms twice a second (six drawings a pump) instead of three (four drawings)
     orig_man = CM.alley_man
     CM.alley_man = lambda img, X, d, duck, u: orig_man(img, X, d, duck, u * 2 / 3)

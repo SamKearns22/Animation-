@@ -1388,9 +1388,9 @@ def run_andy(img, t):
     cam = B.Cam(2.8, AX - 230 / 2.8, 900 - (40 - bob) / 2.8)
     sp = andy_sp(t, 20)
     rig = F.Rig(sp)
-    # his phone arm reaches up and out to the lens, leaving the frame on the left above his shoulder: he holds the
-    # phone high for the over-the-shoulder view (notes 29, 36), the elbow bent, never a straight pole (note 39)
-    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-365, -190), 'fist', 'down', 0.0, strict=False))
+    # his phone arm reaches TOWARDS the lens (it is his hand holding the phone that films him): foreshortened, it
+    # leaves the frame on the left just above the name and description, never swinging off sideways (notes 29, 36, 39)
+    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-430, -20), 'fist', 'down', 0.25, strict=False))
     wt = word_times(line_of(20))
     talking = sp['mouth'] != 'v:rest'
     if t < wt[1][1] + 0.1:                                         # "Aw fook": pissed off - brows driven down, teeth bared
