@@ -1417,14 +1417,13 @@ def run_andy(img, t):
     opened = shape in ('AI', 'O', 'U', 'WQ', 'E', 'L')
     if mode == 'angry':                                            # shouting it, teeth bared (never a pucker or grin)
         sp.update(brows='fierce', lid=4, look=0.0, turn=0.0, tilt=-0.06)
-        sp['mouth'] = ('v:etc' if shape == 'E' else sp['mouth']) if talking else 'hidden'   # lip sync; gritted between
+        sp['mouth'] = (('v:etc' if shape == 'E' else sp['mouth']) if opened else 'hidden') if talking else 'hidden'
     elif mode == 'terrified':                                      # gaping, the corners pulled down
         sp.update(brows='outrage', lid=-4, look=-0.95, turn=-0.3, tilt=0.02)   # back over his shoulder at them (note 30)
-        sp['mouth'] = ('v:etc' if shape == 'E' else sp['mouth']) if talking else 'agape'   # lip sync; gaping between
+        sp['mouth'] = 'agape' if (opened or not talking) else 'hidden'   # Sam, 9 Oct: never a calm line (it read as happy)
     else:                                                          # panicked: brows shot up, eyes wide, gritted teeth
         sp.update(brows='outrage', lid=-2, look=0.0, turn=0.0, tilt=-0.08, harrow=0.0)
-        if not talking or shape == 'E':
-            sp['mouth'] = 'hidden'                                 # the grimace is drawn below instead
+        sp['mouth'] = 'agape' if (talking and opened) else 'hidden'   # gaping on the words, gritted between: never calm
     B.person(img, cam, AX, NECK, S, sp, t)
     import peepee as PP
     p = B.Pen(img, PP.Rot(B.Local(cam, AX, NECK, S), sp.get('tilt', 0.0), pivot=(0, -60)))
