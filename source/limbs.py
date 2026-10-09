@@ -12,6 +12,7 @@ Nothing in any film changes: the shapes are swapped in memory while a picture or
 
   python3 source/limbs.py still OUT.jpg          The Patriots' two-shot, today and with the new limbs, side by side
   python3 source/limbs.py animatic OUT.mp4       The Patriots animatic (540 x 960) with the new limbs
+  python3 source/limbs.py cryminister OUT.mp4    Cry Minister's quick look (540 x 960, as its own --small) with the new limbs
 """
 import math
 import os
@@ -49,6 +50,11 @@ def _inside(pt, poly):
         if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / ((y2 - y1) or 1e-9) + x1:
             c = not c
     return c
+
+
+def _smooth(e0, e1, x):
+    u = min(1.0, max(0.0, (x - e0) / (e1 - e0)))
+    return u * u * (3 - 2 * u)
 
 
 def _who(cam):
@@ -123,6 +129,9 @@ def install(B):
         return orig_line(self, follow(self, pts), colr, lw)
 
     def arm(p, sh, el, wr, sleeve, w=30):
+        import figure
+        if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
+            figure.audit_arm(sh, el, wr)
         body = next((pts for who, pts in reversed(drawn) if who == _who(p.cam) and _inside(sh, pts)), None)
         busy.append(1)
         try:
@@ -142,18 +151,35 @@ def install(B):
             edge = spine + lower * n * (hw - 4)[:, None]
             inner = spine + lower * n * (hw * 0.45)[:, None]
             _shade(lay, p.cam, [tuple(v) for v in np.vstack([edge, inner[::-1]])], 0.25, 6)
-            if body is not None:                             # tucked in: hidden where it lies over the body near the
-                mask = Image.new('L', p.img.size, 0)         # shoulder, so it comes out from behind the body's edge
+            if body is not None:
+                # Tucked in: only the top of the UPPER arm (where it grows out of the shoulder) is hidden where it lies
+                # over the body, fading out along the arm. The forearm and hand are never hidden, wherever they go
+                # (a hand brought up across the chest near the shoulder stays in front of the body).
+                l1 = math.hypot(el[0] - sh[0], el[1] - sh[1]) or 1.0
+                along = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
+                k_el = int(np.argmin([math.hypot(v[0] - el[0], v[1] - el[1]) for v in spine]))
+                upper = Image.new('L', p.img.size, 0)
+                ud = ImageDraw.Draw(upper)
+                for i in range(k_el, -1, -1):                # from the elbow back to the shoulder, rising weight
+                    wgt = 1.0 - _smooth(0.3 * l1, 0.6 * l1, along[i])
+                    if wgt <= 0:
+                        continue
+                    X, Y = p.cam.P(*spine[i])
+                    R = p.cam.S(hw[i] + o) + 2
+                    ud.ellipse([X - R, Y - R, X + R, Y + R], fill=int(255 * wgt))
+                fore = Image.new('L', p.img.size, 0)
+                fd = ImageDraw.Draw(fore)
+                for i in range(k_el, len(spine)):
+                    X, Y = p.cam.P(*spine[i])
+                    R = p.cam.S(hw[i] + o) + 2
+                    fd.ellipse([X - R, Y - R, X + R, Y + R], fill=255)
+                mask = Image.new('L', p.img.size, 0)
                 bp = [p.cam.P(*v) for v in body]
                 md = ImageDraw.Draw(mask)
                 md.polygon(bp, fill=255)
                 md.line(bp + bp[:1], fill=255, width=q.w(2.6) + 2, joint='curve')
-                near = Image.new('L', p.img.size, 0)
-                X, Y = p.cam.P(*sh)
-                R = p.cam.S(math.hypot(el[0] - sh[0], el[1] - sh[1]) * 0.6)
-                ImageDraw.Draw(near).ellipse([X - R, Y - R, X + R, Y + R], fill=255)
-                near = near.filter(ImageFilter.GaussianBlur(float(p.cam.S(w * 0.6))))   # a soft end, never a cut
-                hide = np.minimum(np.asarray(mask), np.asarray(near))
+                hide = np.minimum(np.asarray(mask), np.asarray(upper)).astype(np.int16)
+                hide[np.asarray(fore) > 0] = 0
                 a = np.asarray(lay.getchannel('A')).astype(np.int16) - hide
                 lay.putalpha(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
             p.img.alpha_composite(lay)
@@ -244,6 +270,12 @@ def main():
         import peepee as PP
         install(PP.B)                                        # the render's helper processes inherit the new limbs
         PP.render(a[1], (540, 960), 26, 1)
+    elif a[0] == 'cryminister':
+        import cryminister as CM
+        install(CM.B)                                        # after the film's own arm checker, which stays on
+        CM.E.render('cryminister-limbs', a[1], size=(540, 960), ss=1, fps=CM.FPS, dur=CM.DUR, picture=CM.picture,
+                    overlay=CM.overlay, shot_of=CM.shot_of, sound=CM.soundtrack, write_wav=CM.MA.write_wav,
+                    set_ss=lambda v: setattr(CM.B, 'SS', v), crf=26)
 
 
 if __name__ == '__main__':
