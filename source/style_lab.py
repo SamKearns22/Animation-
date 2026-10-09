@@ -12,6 +12,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py shapes          The Patriots' two-shot with ten kinds of shape (less boxy)
   python3 source/style_lab.py repose          The Patriots' two-shot, same drawing, everyone re-posed with an attitude
   python3 source/style_lab.py arms            The Patriots' two-shot with five kinds of more natural arm
+  python3 source/style_lab.py tuck            close-ups of the natural sleeve tucked into the body at the shoulder
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -1490,6 +1491,17 @@ def fluid_arm(B, style):
         t_ = np.gradient(spine, axis=0)
         n = np.stack([-t_[:, 1], t_[:, 0]], 1) / (np.hypot(*t_.T)[:, None] + 1e-9)
         left, right = spine + n * hw[:, None], spine - n * hw[:, None]
+        if style == 'tube':                                  # a solid tube, its outline drawn underneath: it cannot
+            o = p.w(2.6) / p.cam.S(1)                        # fold over itself however sharp the elbow
+            dense, _ = _resample(spine, max(1.0, w * 0.25))
+            sd = np.hypot(*np.diff(spine, axis=0).T)
+            sd = np.concatenate([[0], np.cumsum(sd)])
+            sdd = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(dense, axis=0).T))])
+            hwd = np.interp(sdd / (sdd[-1] or 1.0), sd / (sd[-1] or 1.0), hw)
+            for col, extra in ((INK_, o), (sleeve, 0.0)):
+                for (x_, y_), r_ in zip(dense, hwd):
+                    p.ell(x_, y_, r_ + extra, r_ + extra, col, None, n=20)
+            return
         p.ell(S[0], S[1], hw[0], hw[0], sleeve, None)       # a round shoulder under the sleeve, no outline
         p.poly([tuple(v) for v in np.vstack([left, right[::-1]])], sleeve, None)
         # outline: the outer edge from the very top (it continues the shoulder), the inner edge from the armpit down
@@ -1526,6 +1538,83 @@ def arms_sheet(out):
     grid(items, out, 3, 640, int(640 * h / w), 'The Patriots: more natural arms', start=0)
 
 
+# ------------------------------------------------------------------------------------------------ 10. tucked arms
+# The natural sleeve, joined to the body the way a real sleeve is: the part of the arm that lies over the body near
+# the shoulder is hidden, so the arm comes out from behind the body's own outline instead of sitting on top of it.
+
+def _inside(pt, poly):
+    x, y = pt
+    c = False
+    for (x1, y1), (x2, y2) in zip(poly, poly[1:] + poly[:1]):
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / ((y2 - y1) or 1e-9) + x1:
+            c = not c
+    return c
+
+
+def tucked_arm(B, style='sleeve'):
+    """The fluid arm, tucked in at the shoulder. Every filled shape a person's pen draws is remembered, so the arm
+    can find the body it hangs from (the last shape under its shoulder, drawn by the same pen)."""
+    drawn = []
+    orig_poly = B.Pen.poly
+    base = fluid_arm(B, 'tube')
+
+    busy = []
+
+    def poly(self, pts, fill, line=B.INK, lw=4):
+        if fill is not None and len(pts) >= 6 and not busy:  # the arm's own pieces are not remembered
+            drawn.append((id(self.cam), list(pts), self.cam))
+            del drawn[:-60]
+        return orig_poly(self, pts, fill, line, lw)
+
+    def arm(p, sh, el, wr, sleeve, w=30):
+        body = next((pts for cid, pts, cam in reversed(drawn) if cid == id(p.cam) and _inside(sh, pts)), None)
+        busy.append(1)
+        try:
+            if body is None:                                 # an arm drawn before the body: the body will cover it
+                return base(p, sh, el, wr, sleeve, w)
+            lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
+            base(B.Pen(lay, p.cam), sh, el, wr, sleeve, w)
+        finally:
+            busy.pop()
+        mask = Image.new('L', p.img.size, 0)
+        md = ImageDraw.Draw(mask)
+        bp = [p.cam.P(*q) for q in body]
+        md.polygon(bp, fill=255)
+        md.line(bp + bp[:1], fill=255, width=p.w(2.6) + 2, joint='curve')  # keep the body's own outline on top
+        near = Image.new('L', p.img.size, 0)                 # only near the shoulder: a forearm across the body shows
+        X, Y = p.cam.P(*sh)
+        l1 = math.hypot(el[0] - sh[0], el[1] - sh[1])
+        R = p.cam.S(l1 * 0.6)
+        ImageDraw.Draw(near).ellipse([X - R, Y - R, X + R, Y + R], fill=255)
+        hide = np.minimum(np.asarray(mask), np.asarray(near))
+        a = np.asarray(lay.getchannel('A')).astype(np.int16) - hide
+        lay.putalpha(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+        p.img.alpha_composite(lay)
+
+    return [(B.Pen, 'poly', poly), (B, 'arm', arm)]
+
+
+def tuck(out):
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    frames = [('Today', patriots_still(full=True))]
+    with swapped([(B, 'arm', fluid_arm(B, 'sleeve'))]):
+        frames.append(('Natural sleeve, as sent', patriots_still(full=True)))
+    with swapped(tucked_arm(B)):
+        frames.append(('Natural sleeve, tucked in', patriots_still(full=True)))
+    s = 0.8                                                  # the two-shot's people scale
+    top = 340 * s                                            # the still starts this far above their necks
+    spots = [(220 + 114 * s, 'her mic arm'), (670 - 156 * s, 'his hand-on-hip arm'), (670 + 156 * s, 'his thumb arm')]
+    items = []
+    for x, where in spots:
+        for name, im in frames:
+            box = (int(x - 150), int(top + 60 * s - 130), int(x + 150), int(top + 60 * s + 170))
+            items.append((im.crop(box).resize((600, 600), Image.LANCZOS), f'{name}: {where}'))
+    grid(items, out, 3, 600, 600, 'Where the arm meets the body (close-up)')
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -1536,6 +1625,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'tuck':
+        tuck(a[1] if len(a) > 1 else os.path.join(REVIEW, 'tuck-patriots.jpg'))
     elif a[0] == 'arms':
         arms_sheet(a[1] if len(a) > 1 else os.path.join(REVIEW, 'arms-patriots.jpg'))
     elif a[0] == 'repose':
