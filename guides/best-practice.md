@@ -152,6 +152,9 @@ design as storytelling: Walter Murch and the film-sound literature.
   (`mossad_audio.pauses`), keep only from 0.06 s before each phrase to 0.12 s after it, fade each edge over 25 ms, and
   leave true silence everywhere else; then check the mix is exactly silent outside the phrases. One call does it:
   `mossad_audio.gate(x)` (used by `hutt.py` and `quick.py`). The words themselves are never touched.
+  Only count a stretch as speech if it reaches about a third of the take's loudest moment, measured over 50 ms
+  (`mossad_audio.speech`): a quiet second of mumbling before "Yes" was once taken for the word and the caption and
+  mouth ran a second early. Then confirm by measurement that sound, mouth and caption start together.
 - **Time the film to the recordings, not the other way round:** place each recording so its first word lands where
   the action needs it, and derive the cuts, captions and mouth shapes from the phrases actually heard (`RECS` in
   `hutt.py`). Tie later beats to events ("0.9 s after the cut"), never to fixed seconds, so a re-record or a speed
