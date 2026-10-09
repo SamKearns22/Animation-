@@ -6,7 +6,7 @@
         so the body's own outline stays crisp over the join. Drawn as a solid tube, so a sharp elbow cannot fold.
   Legs: one smooth shape: fuller at the thigh, in at the knee, a little calf, slim at the ankle; a gentle curve
         through the knee. Pockets and seams drawn on a leg follow its shape. Shoes unchanged.
-  Both keep the film's soft shading on the shadow side, like the limbs they replace.
+  Legs keep the film's soft shading down the outer side; arms are flat, like the film's own arms.
 
 Nothing in any film changes: the shapes are swapped in memory while a picture or video is drawn.
 
@@ -147,35 +147,31 @@ def install(B):
             dense, sdd = _resample(spine, max(1.0, w * 0.25))
             sd = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
             hwd = np.interp(sdd / (sdd[-1] or 1.0), sd / (sd[-1] or 1.0), hw)
-            for col, extra in ((INK, o), (sleeve, 0.0)):    # a solid tube, its outline underneath
+            ld = ImageDraw.Draw(lay)                         # a solid tube of true circles (a smooth edge, never
+            for col, extra in ((INK, o), (sleeve, 0.0)):    # beaded), its outline underneath
                 for (x_, y_), r_ in zip(dense, hwd):
-                    q.ell(x_, y_, r_ + extra, r_ + extra, col, None, n=20)
+                    X_, Y_ = p.cam.P(x_, y_)
+                    R_ = p.cam.S(r_ + extra)
+                    ld.ellipse([X_ - R_, Y_ - R_, X_ + R_, Y_ + R_], fill=col)
             n = _normals(spine)
             if fold > 0.2:                                   # a small crease inside a tight bend
                 side = -1 if turn > 0 else 1
                 c0 = spine[k_el] + side * n[k_el] * hw[k_el] * 0.95
                 q.line([tuple(c0), tuple(c0 - side * n[k_el] * hw[k_el] * 0.6 * fold)], INK, 2.0)
-            # the film's soft shading, on the lower side
-            left, right = spine + n * hw[:, None], spine - n * hw[:, None]
-            lower = 1 if left[:, 1].mean() > right[:, 1].mean() else -1
-            edge = spine + lower * n * (hw - 4)[:, None]
-            inner = spine + lower * n * (hw * 0.45)[:, None]
-            _shade(lay, p.cam, [tuple(v) for v in np.vstack([edge, inner[::-1]])], 0.25, 6)
             if body is not None:
-                # Tucked in: only the top of the UPPER arm (where it grows out of the shoulder) is hidden where it lies
-                # over the body, fading out along the arm. The forearm and hand are never hidden, wherever they go
-                # (a hand brought up across the chest near the shoulder stays in front of the body).
-                l1 = math.hypot(el[0] - sh[0], el[1] - sh[1]) or 1.0
-                along = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
-                upper = Image.new('L', p.img.size, 0)
-                ud = ImageDraw.Draw(upper)
-                for i in range(k_el, -1, -1):                # from the elbow back to the shoulder, rising weight
-                    wgt = 1.0 - _smooth(0.3 * l1, 0.6 * l1, along[i])
-                    if wgt <= 0:
-                        continue
-                    X, Y = p.cam.P(*spine[i])
-                    R = p.cam.S(hw[i] + o) + 2
-                    ud.ellipse([X - R, Y - R, X + R, Y + R], fill=int(255 * wgt))
+                # Tucked in: only the round end of the sleeve BEHIND the shoulder point is hidden where it lies over
+                # the body, so the arm always visibly starts at the shoulder (never from the ribs or hips). The
+                # forearm and hand are never hidden, wherever they go.
+                X0, Y0 = p.cam.P(*sh)
+                X1, Y1 = p.cam.P(*el)
+                ux, uy = X1 - X0, Y1 - Y0
+                ul = math.hypot(ux, uy) or 1.0
+                ux, uy = ux / ul, uy / ul
+                r_px = p.cam.S(hw[0] + o)
+                yy, xx = np.mgrid[0:p.img.height, 0:p.img.width]
+                along = (xx - X0) * ux + (yy - Y0) * uy        # how far along the upper arm, in pixels
+                upper = np.clip((0.15 * r_px - along) / (0.35 * r_px), 0, 1) * 255
+                upper = Image.fromarray(upper.astype(np.uint8))
                 fore = Image.new('L', p.img.size, 0)
                 fd = ImageDraw.Draw(fore)
                 for i in range(k_el, len(spine)):
@@ -284,12 +280,12 @@ def _arm_near(F, rig, side, target, bend, prev):
     a = math.acos(max(-1.0, min(1.0, (U * U + d * d - Fh * Fh) / (2 * U * d))))
     base = math.atan2(dy, dx)
     cands = [(sh[0] + U * math.cos(base + s_ * a), sh[1] + U * math.sin(base + s_ * a)) for s_ in (1, -1)]
-    if prev is None:
-        sgn = -1 if side == 'L' else 1
-        key = {'out': lambda e: sgn * e[0], 'in': lambda e: -sgn * e[0], 'down': lambda e: e[1], 'up': lambda e: -e[1]}[bend]
-        el = max(cands, key=key)
-    else:
-        el = min(cands, key=lambda e: math.hypot(e[0] - prev[0], e[1] - prev[1]))
+    sgn = -1 if side == 'L' else 1
+    key = {'out': lambda e: sgn * e[0], 'in': lambda e: -sgn * e[0], 'down': lambda e: e[1], 'up': lambda e: -e[1]}[bend]
+    el = max(cands, key=key)                                # the film's own rule chooses the elbow...
+    if prev is not None and math.hypot(el[0] - prev[0], el[1] - prev[1]) > 0.6 * U:
+        ok = [e for e in cands if sgn * e[0] >= sgn * sh[0] - 10] or cands   # ...unless it would flip in one frame:
+        el = min(ok, key=lambda e: math.hypot(e[0] - prev[0], e[1] - prev[1]))   # then the nearer, never crossed
     dd = math.hypot(target[0] - el[0], target[1] - el[1]) or 1.0
     wr = (el[0] + (target[0] - el[0]) / dd * rig.fore, el[1] + (target[1] - el[1]) / dd * rig.fore)
     return el, wr
@@ -300,18 +296,14 @@ def cryminister_fixes(CM):
     B_ = CM.B_
     # 3. moves too fast for 12 frames a second: an in-between for "Any job", a longer face-palm swing
     CM.GEST[10] = dict(
-        L=B_(10, (-0.1, 'set-up', (-200, 300)), (0.12, 'lift', (-330, 170)), (0.42, 'wide', (-410, 30), 'slow'), (2.0, 'hold', (-400, 40))),
-        R=B_(10, (-0.1, 'set-up', (200, 300)), (0.12, 'lift', (330, 170)), (0.42, 'wide', (410, 30), 'slow'), (2.0, 'hold', (400, 40))))
+        L=B_(10, (-0.1, 'set-up', (-200, 300)), (0.12, 'lift', (-320, 110)), (0.42, 'wide', (-410, 30), 'slow'), (2.0, 'hold', (-400, 40))),
+        R=B_(10, (-0.1, 'set-up', (200, 300)), (0.12, 'lift', (320, 110)), (0.42, 'wide', (410, 30), 'slow'), (2.0, 'hold', (400, 40))))
     CM.GEST[15] = dict(R=B_(15, (-0.3, 'set-up', (140, 260)), (-0.17, 'swing out', (290, 60)), (-0.05, 'up', (190, -160)),
                             (0.14, 'palm', (-8, -212)), (4.0, 'hold', (-10, -214))))
     CM.GEST[18] = {sd: B_(18, (-0.05, 'set-up', (g * 200, 260)), (0.1, 'lift', (g * 255, 150)),
                           (0.32, 'palms out', (g * 260, -30)), (2.0, 'hold', (g * 250, -20)))
                    for sd, g in (('L', -1), ('R', 1))}
-    # 2. "COME ON": fists to the chest a little lower and further out, so the arms bend instead of folding flat
-    CM.GEST[16] = {sd: B_(16, (-0.12, 'raise', (g * 330, 0)), (0.18, 'pull', (g * 250, 190), 'fast'),
-                          (0.3, 'COME ON', (g * 160, 250), 'fast'), (0.5, 'shake', (g * 170, 228)),
-                          (0.7, 'COME ON', (g * 160, 255), 'fast'), (1.4, 'hold', (g * 165, 250)))
-                   for sd, g in (('L', -1), ('R', 1))}
+    # 2. ("COME ON" now set in the film itself: fists lifted clear of the real app's username)
     # 1. elbows keep to the side they were on: each frame's elbow is the solution nearest the last frame's, walked
     #    through from the start of the shot (so every frame is the same however the render splits the work)
     orig = CM.andy_sp
