@@ -8,6 +8,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py sample          sheet 1: the numbered contact sheet of 20 tiles from six films
   python3 source/style_lab.py zoom            close crops of details sheet 1 is too small to show
   python3 source/style_lab.py options         sheet 2: the same three tiles in today's look and in each option
+  python3 source/style_lab.py lines           The Patriots' two-shot drawn with ten different kinds of line
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -95,7 +96,7 @@ def fit(im, w, h, bg=PAPER):
     return box
 
 
-def grid(items, out, cols, tw, th, title):
+def grid(items, out, cols, tw, th, title, start=1):
     """items: (picture, label). A numbered sheet, labels under each tile."""
     lab, gap, head = 54, 14, 70
     rows = (len(items) + cols - 1) // cols
@@ -107,7 +108,7 @@ def grid(items, out, cols, tw, th, title):
         x, y = gap + (i % cols) * (tw + gap), head + (i // cols) * (th + lab + gap)
         sheet.paste(fit(im, tw, th), (x, y))
         d.rectangle([x, y, x + 46, y + 40], fill=(20, 20, 20))
-        d.text((x + 23, y + 20), str(i + 1), font=ImageFont.truetype(SANS, 28), fill=(255, 255, 255), anchor='mm')
+        d.text((x + 23, y + 20), str(i + start) if i + start else '-', font=ImageFont.truetype(SANS, 28), fill=(255, 255, 255), anchor='mm')
         words, line, lines = label.split(), '', []
         for w_ in words:
             if d.textlength(line + ' ' + w_, font=f) > tw and line:
@@ -976,6 +977,195 @@ def styleframe(out):
     print(out, sheet.size)
 
 
+# ------------------------------------------------------------------------------------------------ 6. ten line styles
+# The Patriots' two-shot (the reporter and the protester) drawn ten ways. Only HOW each shape's edge is drawn changes:
+# same shapes, same colours, same amount in the picture. All ten without the blurred shading.
+
+LINE_STYLES = [  # (key, name on the sheet)
+    ('brush', 'Brush pen: swells and tapers'),
+    ('felt', 'Felt-tip: even line, slow hand wobble'),
+    ('paper', 'Cut paper: no outline, scissor edges, paper shadow'),
+    ('self', 'Self-coloured: each outline a darker shade of its fill'),
+    ('chisel', 'Chisel marker: thick and thin by direction'),
+    ('crayon', 'Crayon: grainy, broken line'),
+    ('sketch', 'Sketchy: two quick passes, ends overshoot'),
+    ('hierarchy', 'Line hierarchy: heavy on big shapes, fine on details'),
+    ('marker', 'Chunky marker: double weight, round ends'),
+    ('colouredin', 'Coloured in by hand: fill misses the lines'),
+]
+
+
+def _wobble(q, amp, seed, step=3.0, closed=True):
+    """The path pushed in and out by a slow, uneven wobble (a hand moving, not a jitter)."""
+    P = np.asarray(q + [q[0]] if closed else q, float)
+    P, s = _resample(P, step)
+    if len(P) < 3:
+        return [tuple(v) for v in P]
+    r = random.Random(seed)
+    off = np.zeros(len(P))
+    for _ in range(2):
+        off += r.uniform(0.4, 1.0) * np.sin(2 * math.pi * s / r.uniform(70, 260) + r.uniform(0, 6.3))
+    off *= amp / 1.6
+    t_ = np.gradient(P, axis=0)
+    n = np.stack([-t_[:, 1], t_[:, 0]], 1) / (np.hypot(*t_.T)[:, None] + 1e-9)
+    return [tuple(v) for v in P + n * off[:, None]]
+
+
+_GRAIN = {}
+
+
+def _grain(size, seed=9):
+    if size not in _GRAIN:
+        rnd = np.random.default_rng(seed)
+        w, h = size
+        fine = rnd.random((h, w))
+        coarse = np.asarray(Image.fromarray((rnd.random((h // 6 + 1, w // 6 + 1)) * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC), float) / 255
+        _GRAIN[size] = 0.55 * fine + 0.45 * coarse
+    return _GRAIN[size]
+
+
+def _textured_line(img, q, width, col, closed, keep=0.42):
+    """A line drawn through paper grain: only where the grain lets the crayon touch."""
+    xs, ys = [v[0] for v in q], [v[1] for v in q]
+    pad = int(width) + 2
+    x0, y0 = max(0, int(min(xs)) - pad), max(0, int(min(ys)) - pad)
+    x1, y1 = min(img.width, int(max(xs)) + pad), min(img.height, int(max(ys)) + pad)
+    if x1 <= x0 or y1 <= y0:
+        return
+    m = Image.new('L', (x1 - x0, y1 - y0), 0)
+    pts = [(a - x0, b - y0) for a, b in q] + ([(q[0][0] - x0, q[0][1] - y0)] if closed else [])
+    ImageDraw.Draw(m).line(pts, fill=255, width=max(1, int(width)), joint='curve')
+    g = _grain(img.size)[y0:y1, x0:x1]
+    a = np.asarray(m, float) / 255 * np.clip((g - (1 - keep)) / 0.12 + 0.5, 0, 1)
+    lay = Image.new('RGBA', m.size, col + (0,))
+    lay.putalpha(Image.fromarray((a * 255).astype(np.uint8)))
+    img.alpha_composite(lay, (x0, y0))
+
+
+def line_style(B, style):
+    """Swap the people library's pen so every edge is drawn in `style`. Returns the pairs for swapped()."""
+    INK_ = B.INK
+
+    def dark(c, k=0.55):
+        return tuple(int(v * k) for v in c[:3])
+
+    def draw_line(self, q, width, col, closed, seed, fill=None):
+        d = self.d
+        if style == 'brush':
+            ink(d, q, width * 2.2, closed, seed, col)
+        elif style == 'felt':
+            d.line(_wobble(q, width * 2.4, seed, closed=closed), fill=col, width=max(1, int(width * 1.3)), joint='curve')
+        elif style == 'paper':
+            if fill is None or self._small:
+                d.line(q + ([q[0]] if closed else []), fill=col, width=max(1, int(width * 0.7)), joint='curve')
+        elif style == 'self':
+            c = dark(fill) if (fill is not None and col == INK_) else col
+            d.line(q + ([q[0]] if closed else []), fill=c, width=max(1, int(width * 1.8)), joint='curve')
+        elif style == 'chisel':
+            P, _ = _resample(np.asarray(q + [q[0]] if closed else q, float), 2.0)
+            for a, b in zip(P, P[1:]):
+                ang = math.atan2(b[1] - a[1], b[0] - a[0])
+                w = width * (0.4 + 2.8 * abs(math.sin(ang - 0.6)))
+                d.line([tuple(a), tuple(b)], fill=col, width=max(1, int(w)))
+                d.ellipse([a[0] - w / 2, a[1] - w / 2, a[0] + w / 2, a[1] + w / 2], fill=col)
+        elif style == 'crayon':
+            _textured_line(self.img, _wobble(q, width * 0.8, seed, closed=closed), width * 2.8, col[:3], False)
+        elif style == 'sketch':
+            for k in range(2):
+                qq = _wobble(q, width * 2.6, seed + 31 * k, closed=closed)
+                if len(qq) > 2:                             # each pass runs on past its ends
+                    a, b = np.asarray(qq[0]), np.asarray(qq[1])
+                    y_, z_ = np.asarray(qq[-1]), np.asarray(qq[-2])
+                    qq = [tuple(a + (a - b) * width * 3 / (np.hypot(*(a - b)) + 1e-9))] + qq + \
+                         [tuple(y_ + (y_ - z_) * width * 3 / (np.hypot(*(y_ - z_)) + 1e-9))]
+                d.line(qq, fill=col, width=max(1, int(width * 0.8)), joint='curve')
+        elif style == 'hierarchy':
+            xs, ys = [v[0] for v in q], [v[1] for v in q]
+            diag = math.hypot(max(xs) - min(xs), max(ys) - min(ys)) / B.SS
+            k = min(3.2, max(0.4, (diag / 140) ** 0.9))
+            d.line(q + ([q[0]] if closed else []), fill=col, width=max(1, int(width * k)), joint='curve')
+        elif style == 'marker':
+            qq = q + ([q[0]] if closed else [])
+            w = width * 3.2
+            d.line(qq, fill=col, width=max(1, int(w)), joint='curve')
+            for v in (qq[0], qq[-1]):
+                d.ellipse([v[0] - w / 2, v[1] - w / 2, v[0] + w / 2, v[1] + w / 2], fill=col)
+        elif style == 'colouredin':
+            d.line(q + ([q[0]] if closed else []), fill=col, width=max(1, int(width)), joint='curve')
+
+    def poly(self, pts, fill, line=INK_, lw=4):
+        q = [self.cam.P(*p) for p in pts]
+        xs, ys = [v[0] for v in q], [v[1] for v in q]
+        self._small = max(max(xs) - min(xs), max(ys) - min(ys)) < 34 * B.SS
+        seed = _seed(pts)
+        if fill is not None:
+            if style == 'paper' and not self._small:        # scissor-cut edge and a crisp paper shadow under it
+                cut = _wobble(q, 3.0 * B.SS, seed, step=7.0)
+                ImageDraw.Draw(self.img, 'RGBA').polygon([(x + 4 * B.SS, y + 6 * B.SS) for x, y in cut], fill=(0, 0, 0, 95))
+                self.d.polygon(cut, fill=fill)
+            elif style == 'colouredin' and not self._small:  # coloured in by hand: short of the line here, over it there
+                self.d.polygon(_wobble(q, 9.0 * B.SS, seed + 5, step=6.0), fill=fill)
+            else:
+                self.d.polygon(q, fill=fill)
+        if line:
+            draw_line(self, q, self.w(lw), line, True, seed, fill)
+
+    def pline(self, pts, colr=INK_, lw=4):
+        self._small = True
+        draw_line(self, [self.cam.P(*p) for p in pts], self.w(lw), colr, False, _seed(pts))
+
+    return [(B.Pen, 'poly', poly), (B.Pen, 'line', pline)]
+
+
+PATRIOTS_T = 0.6                                            # the cover moment: him mid-line, thumb out
+
+
+def patriots_still(t=PATRIOTS_T):
+    """The Patriots' frame at t, drawn by the film's own code, without its title and captions."""
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    view = next(v for v, a, b in PP.SHOTS if a <= t < b)
+    img = B.canvas()
+    cam = B.Cam(*PP.CAMS[view])
+    g = PP.background(img, cam, t)
+    PP.gulls(img, cam, t)
+    PP.mates(img, cam, g, t, PP.MATES[:1])
+    PP.stuck(img, cam, g, t, PP.WHERE)
+    PP.mates(img, cam, g, t, PP.MATES[1:])
+    (_, fy), s = g.feet(0, 1.0)
+    sp, target = PP.rep_state(t, view)
+    pst = PP.pro_state(t)
+    PP.protester(img, cam, 670, fy - 928 * s, s, pst, t)
+    B.person(img, cam, 220, fy - 928 * s, s, sp, t)
+    PP.mic(img, B.Local(cam, 220, fy - 928 * s, s), sp['arms']['R'][1], sp['arms']['R'][0], target)
+    if pst['arms']['L'][2] == 'point':
+        PP.protester(img, cam, 670, fy - 928 * s, s, dict(pst, arm_only='L'), t)
+    img = img.convert('RGB').resize((1080, 1920), Image.LANCZOS)
+    neck = fy - 928 * s
+    box = (20, int(neck - 300 * s), 1060, int(neck + 640 * s))
+    return img.crop(box)
+
+
+def lines(out):
+    import ed
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    items = [(patriots_still(), 'Today, for comparison')]
+    flat_shading = [(m, 'soft', lambda *a, **k: None) for m in list(sys.modules.values())
+                    if getattr(m, 'soft', None) is ed.soft]
+    for key, name in LINE_STYLES:
+        t0 = time.time()
+        with swapped(flat_shading + line_style(B, key)):
+            items.append((patriots_still(), name))
+        print(key, f'{time.time() - t0:.1f} s', flush=True)
+    w, h = items[0][0].size
+    tw = 640
+    grid(items, out, 3, tw, int(tw * h / w), 'The Patriots: one still, ten ways of drawing the line', start=0)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -986,6 +1176,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'lines':
+        lines(a[1] if len(a) > 1 else os.path.join(REVIEW, 'lines-patriots.jpg'))
     elif a[0] == 'styleframe':
         styleframe(a[1] if len(a) > 1 else os.path.join(REVIEW, 'styleframe-cryminister.jpg'))
     elif a[0] == 'clip':
