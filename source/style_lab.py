@@ -13,6 +13,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py repose          The Patriots' two-shot, same drawing, everyone re-posed with an attitude
   python3 source/style_lab.py arms            The Patriots' two-shot with five kinds of more natural arm
   python3 source/style_lab.py tuck            close-ups of the natural sleeve tucked into the body at the shoulder
+  python3 source/style_lab.py legs            natural legs (with the tucked arms): the whole still and close-ups
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -1615,6 +1616,97 @@ def tuck(out):
     grid(items, out, 3, 600, 600, 'Where the arm meets the body (close-up)')
 
 
+# ------------------------------------------------------------------------------------------------ 11. natural legs
+# Today a leg is a straight box with a shoe. These are one smooth shape: fuller at the thigh, in at the knee, a little
+# calf, slim at the ankle; the knee very slightly bent. Drawn as a solid tube with its outline underneath (like the
+# tucked arms), before the body, so the coat or jacket covers the top of each leg.
+
+def _tube(p, spine, hw, col):
+    o = p.w(2.6) / p.cam.S(1)
+    sd = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
+    dense, sdd = _resample(spine, max(1.0, float(np.min(hw)) * 0.25))
+    hwd = np.interp(sdd / (sdd[-1] or 1.0), sd / (sd[-1] or 1.0), hw)
+    for c, extra in ((B_INK, o), (col, 0.0)):
+        for (x_, y_), r_ in zip(dense, hwd):
+            p.ell(x_, y_, r_ + extra, r_ + extra, c, None, n=20)
+
+
+B_INK = (24, 20, 22)
+
+
+def natural_legs(B):
+    from ed import curve
+
+    def legs(img, p, sp):
+        tc = sp.get('trousers', sp.get('jacket', B.NAVY))
+        o = sp.get('stance', 0)
+        maps = {'o': o}
+        for sgn in (-1, 1):
+            hip = np.array([sgn * 55.0, 450.0])
+            knee = np.array([sgn * (62 + o * 0.6), 690.0])           # the knee a touch out: never ruler-straight
+            ankle = np.array([sgn * (58 + o), 890.0])
+            u = np.linspace(0, 1, 40)[:, None]                 # one gentle curve through the knee, no corner
+            ctrl = 2 * knee - (hip + ankle) / 2
+            spine = (1 - u) ** 2 * hip + 2 * (1 - u) * u * ctrl + u ** 2 * ankle
+            s = np.linspace(0, 1, len(spine))
+            hw = np.interp(s, [0, 0.2, 0.48, 0.62, 0.78, 1.0], [50, 48, 37, 39, 34, 27])   # thigh, knee, calf, ankle
+            k = np.exp(-0.5 * (np.arange(-6, 7) / 2.5) ** 2)
+            hw = np.convolve(np.pad(hw, 6, mode='edge'), k / k.sum(), mode='valid')        # swells, never corners
+            t_ = np.gradient(spine, axis=0)
+            n = np.stack([-t_[:, 1], t_[:, 0]], 1) / (np.hypot(*t_.T)[:, None] + 1e-9)
+            left, right = spine + n * hw[:, None], spine - n * hw[:, None]
+            p.poly([tuple(v) for v in np.vstack([left, right[::-1]])], tc, B.INK, 2.6)   # one smooth shape, clean line
+            maps[sgn] = (spine, hw)
+            p.poly(curve([(sgn * (24 + o), 896), (sgn * (94 + o), 894), (sgn * (128 + o), 910), (sgn * (124 + o), 928),
+                          (sgn * (20 + o), 928)], 4), (22, 20, 22), B.INK, 2.4)
+        p._legmap = maps                                       # pockets and seams drawn on a leg follow its shape
+
+    def follow(self, pts):
+        m = getattr(self, '_legmap', None)
+        if not m or min(q[1] for q in pts) < 500 or max(abs(q[0]) for q in pts) > 112 + m['o']:
+            return pts                                       # only what is drawn on the legs themselves
+        o, out = m['o'], []
+        for x, y in pts:                                     # from the old straight leg to the new one, by height
+            sgn = 1 if x > 0 else -1
+            spine, hw = m[sgn]
+            u = (y - 440) / 460
+            c_old = sgn * (55 + (5 + o * 0.6) * u)
+            h_old = 49 - 19 * u
+            c_new = np.interp(y, spine[:, 1], spine[:, 0])
+            h_new = np.interp(y, spine[:, 1], hw)
+            out.append((c_new + (x - c_old) * h_new / h_old, y))
+        return out
+
+    orig_poly, orig_line = B.Pen.poly, B.Pen.line
+
+    def poly(self, pts, fill, line=B.INK, lw=4):
+        return orig_poly(self, follow(self, pts), fill, line, lw)
+
+    def line(self, pts, colr=B.INK, lw=4):
+        return orig_line(self, follow(self, pts), colr, lw)
+
+    return [(B, 'legs', legs), (B.Pen, 'poly', poly), (B.Pen, 'line', line)]
+
+
+def legs_sheet(out):
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    today = patriots_still(full=True)
+    with swapped(tucked_arm(B) + natural_legs(B)):
+        new = patriots_still(full=True)
+    s = 0.8
+    items = [(today, 'Today'), (new, 'New arms and new legs')]
+    for x, half, who in ((220, 170, 'her legs'), (670, 200, 'his legs')):
+        box = (int(x - half), 560, int(x + half), 1060)
+        for name, im in (('Today', today), ('New', new)):
+            items.append((im.crop(box).resize((700, int(700 * 500 / (2 * half))), Image.LANCZOS), f'{name}: {who}'))
+    grid(items[:2], out.replace('.jpg', '-whole.jpg'), 2, 900, int(900 * today.height / today.width),
+         'The Patriots: today and with the new arms and legs', start=0)
+    grid(items[2:], out, 2, 700, 1000, 'The legs, close up', start=0)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -1625,6 +1717,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'legs':
+        legs_sheet(a[1] if len(a) > 1 else os.path.join(REVIEW, 'legs-patriots.jpg'))
     elif a[0] == 'tuck':
         tuck(a[1] if len(a) > 1 else os.path.join(REVIEW, 'tuck-patriots.jpg'))
     elif a[0] == 'arms':
