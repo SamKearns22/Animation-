@@ -12,6 +12,7 @@ Nothing in any film changes: the shapes are swapped in memory while a picture or
 
   python3 source/limbs.py still OUT.jpg          The Patriots' two-shot, today and with the new limbs, side by side
   python3 source/limbs.py animatic OUT.mp4       The Patriots animatic (540 x 960) with the new limbs
+  (Cry Minister and every film made from the satire template switch these on themselves.)
   python3 source/limbs.py cryminister OUT.mp4 [--fixes]   Cry Minister's quick look (540 x 960) with the new limbs;
                                                  --fixes: steady elbows, in-betweens, no flat folds, slower arm pump
 """
@@ -59,6 +60,19 @@ def _smooth(e0, e1, x):
     return u * u * (3 - 2 * u)
 
 
+class _Shifted:
+    """A camera whose picture starts at (x0, y0) of the real one: an arm drawn on its own small rectangle."""
+    def __init__(self, cam, x0, y0):
+        self.cam, self.x0, self.y0, self.s = cam, x0, y0, cam.s
+
+    def P(self, x, y):
+        X, Y = self.cam.P(x, y)
+        return X - self.x0, Y - self.y0
+
+    def S(self, v):
+        return self.cam.S(v)
+
+
 def _who(cam):
     """The same person's pen, even when the film makes a fresh one to redraw an arm on top."""
     if hasattr(cam, 'ox'):
@@ -104,7 +118,10 @@ def _arm_spine(sh, el, wr, w):
 
 
 def install(B):
-    """Swap the people library's arms and legs for the new shapes. Returns a function that puts the old ones back."""
+    """Swap the people library's arms and legs for the new shapes. Returns a function that puts the old ones back.
+    Safe to call twice (the second call does nothing). Call it after figure.guard(B): the arm checker stays on."""
+    if getattr(B, '_limbs', None):
+        return B._limbs
     old = {'arm': B.arm, 'legs': B.legs, 'poly': B.Pen.poly, 'line': B.Pen.line}
     drawn, busy = [], []
     orig_poly, orig_line = B.Pen.poly, B.Pen.line
@@ -145,17 +162,28 @@ def install(B):
             if LENS.get('side') and (sh[0] < 0) == (LENS['side'] == 'L'):   # reaching to the camera: the near end
                 s_ = np.linspace(0, 1, len(spine))                          # swells, as anything close to the lens
                 hw = hw * (1 + LENS.get('swell', 1.0) * s_ ** 2)
-            lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
-            q = B.Pen(lay, p.cam)
-            o = q.w(2.6) / p.cam.S(1)
+            o = B.Pen(p.img, p.cam).w(2.6) / p.cam.S(1)
             dense, sdd = _resample(spine, max(1.0, w * 0.25))
             sd = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
             hwd = np.interp(sdd / (sdd[-1] or 1.0), sd / (sd[-1] or 1.0), hw)
+            # everything below works on the arm's own rectangle of the picture (fast at full size)
+            pts_px = [p.cam.P(*v) for v in dense]
+            rmax = max(p.cam.S(r_ + o) for r_ in hwd) + 6
+            bx0 = max(0, int(min(x for x, _ in pts_px) - rmax))
+            by0 = max(0, int(min(y for _, y in pts_px) - rmax))
+            bx1 = min(p.img.width, int(max(x for x, _ in pts_px) + rmax) + 1)
+            by1 = min(p.img.height, int(max(y for _, y in pts_px) + rmax) + 1)
+            if bx1 <= bx0 or by1 <= by0:
+                return
+            cam = _Shifted(p.cam, bx0, by0)
+            W, H = bx1 - bx0, by1 - by0
+            lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+            q = B.Pen(lay, cam)
             ld = ImageDraw.Draw(lay)                         # a solid tube of true circles (a smooth edge, never
             for col, extra in ((INK, o), (sleeve, 0.0)):    # beaded), its outline underneath
                 for (x_, y_), r_ in zip(dense, hwd):
-                    X_, Y_ = p.cam.P(x_, y_)
-                    R_ = p.cam.S(r_ + extra)
+                    X_, Y_ = cam.P(x_, y_)
+                    R_ = cam.S(r_ + extra)
                     ld.ellipse([X_ - R_, Y_ - R_, X_ + R_, Y_ + R_], fill=col)
             n = _normals(spine)
             if fold > 0.2:                                   # a small crease inside a tight bend
@@ -167,9 +195,8 @@ def install(B):
                 # arm; never the forearm or hand), the arm is hidden where it lies over the body, and the body's own
                 # edge line is painted over in the sleeve's colour where the arm covers it. What is left is a single
                 # outline running from the shoulder down the arm, with no seam, gap or hump.
-                W, H = p.img.size
-                X0, Y0 = p.cam.P(*sh)
-                X1, Y1 = p.cam.P(*el)
+                X0, Y0 = cam.P(*sh)
+                X1, Y1 = cam.P(*el)
                 ux, uy = X1 - X0, Y1 - Y0
                 ul = math.hypot(ux, uy) or 1.0
                 ux, uy = ux / ul, uy / ul
@@ -179,29 +206,31 @@ def install(B):
                 fore = Image.new('L', (W, H), 0)
                 fd = ImageDraw.Draw(fore)
                 for i in range(k_el, len(spine)):
-                    X, Y = p.cam.P(*spine[i])
-                    R = p.cam.S(hw[i] + o) + 2
+                    X, Y = cam.P(*spine[i])
+                    R = cam.S(hw[i] + o) + 2
                     fd.ellipse([X - R, Y - R, X + R, Y + R], fill=255)
                 zone[np.asarray(fore) > 0] = 0
-                bm = Image.new('L', (W, H), 0)
-                ImageDraw.Draw(bm).polygon([p.cam.P(*v) for v in body], fill=255)
-                inside = np.asarray(bm) / 255.0
+                pad = 8                                              # the body, a little beyond the rectangle so its
+                bm = Image.new('L', (W + 2 * pad, H + 2 * pad), 0)   # edge is found right up to the rectangle's sides
+                ImageDraw.Draw(bm).polygon([(x + pad, y + pad) for x, y in (cam.P(*v) for v in body)], fill=255)
+                k = 2 * (q.w(2.6) // 2) + 3
+                edge = (np.asarray(bm.filter(ImageFilter.MaxFilter(k))).astype(float)
+                        - np.asarray(bm.filter(ImageFilter.MinFilter(k))))[pad:pad + H, pad:pad + W]
+                inside = np.asarray(bm)[pad:pad + H, pad:pad + W] / 255.0
                 a = np.asarray(lay.getchannel('A')).astype(float)
                 lay.putalpha(Image.fromarray(np.clip(a * (1 - zone * inside), 0, 255).astype(np.uint8)))
                 fill_m = Image.new('L', (W, H), 0)                 # the arm's own fill (without its outline)
                 fm = ImageDraw.Draw(fill_m)
                 for (x_, y_), r_ in zip(dense, hwd):
-                    X_, Y_ = p.cam.P(x_, y_)
-                    R_ = p.cam.S(r_) - 1
+                    X_, Y_ = cam.P(x_, y_)
+                    R_ = cam.S(r_) - 1
                     fm.ellipse([X_ - R_, Y_ - R_, X_ + R_, Y_ + R_], fill=255)
-                k = 2 * (q.w(2.6) // 2) + 3
-                edge = np.asarray(bm.filter(ImageFilter.MaxFilter(k))).astype(float) - np.asarray(bm.filter(ImageFilter.MinFilter(k)))
                 seam = np.clip(edge / 255.0, 0, 1) * (np.asarray(fill_m) / 255.0) * zone
                 if seam.max() > 0:
                     patch = Image.new('RGBA', (W, H), tuple(sleeve[:3]) + (0,))
                     patch.putalpha(Image.fromarray((seam * 255).astype(np.uint8)))
-                    p.img.alpha_composite(patch)
-            p.img.alpha_composite(lay)
+                    p.img.alpha_composite(patch, (bx0, by0))
+            p.img.alpha_composite(lay, (bx0, by0))
         finally:
             busy.pop()
 
@@ -234,6 +263,8 @@ def install(B):
 
     def restore():
         B.arm, B.legs, B.Pen.poly, B.Pen.line = old['arm'], old['legs'], old['poly'], old['line']
+        B._limbs = None
+    B._limbs = restore
     return restore
 
 
@@ -306,6 +337,9 @@ def _arm_near(F, rig, side, target, bend, prev):
 
 
 def cryminister_fixes(CM):
+    if getattr(CM, '_limb_fixes', False):                    # once only
+        return
+    CM._limb_fixes = True
     F = CM.F
     B_ = CM.B_
     # 3. moves too fast for 12 frames a second: an in-between for "Any job", a longer face-palm swing

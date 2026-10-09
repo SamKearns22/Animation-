@@ -270,6 +270,8 @@ def main():
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
+import limbs                     # noqa: E402
+limbs.install(B)                 # natural arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
 
 if __name__ == '__main__':
     main()

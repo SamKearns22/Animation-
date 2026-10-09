@@ -1864,6 +1864,9 @@ def main():
 
 
 F.guard(B)
+import limbs                     # noqa: E402  the new arm and leg shapes (one outline at the shoulder, smooth legs) and
+limbs.install(B)                 # this film's motion fixes: steady elbows, in-betweens, the selfie arm to the lens
+limbs.cryminister_fixes(sys.modules[__name__])
 
 if __name__ == '__main__':
     main()
