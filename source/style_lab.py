@@ -9,6 +9,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py zoom            close crops of details sheet 1 is too small to show
   python3 source/style_lab.py options         sheet 2: the same three tiles in today's look and in each option
   python3 source/style_lab.py lines           The Patriots' two-shot drawn with ten different kinds of line
+  python3 source/style_lab.py shapes          The Patriots' two-shot with ten kinds of shape (less boxy)
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -1166,6 +1167,160 @@ def lines(out):
     grid(items, out, 3, tw, int(tw * h / w), 'The Patriots: one still, ten ways of drawing the line', start=0)
 
 
+# ------------------------------------------------------------------------------------------------ 7. ten shape styles
+# The Patriots' two-shot again, this time changing the SHAPES: every boxy shape (a body, a sleeve, a trouser leg, a
+# lorry, a sign: a polygon of a few corners) is rebuilt another way. Curved shapes (heads, hair) and small ones (eyes,
+# mouths) are left alone, so the faces stay exactly as they are. Same line, same colours, same amount in the picture.
+
+SHAPE_STYLES = [
+    ('round', 'Rounded corners'),
+    ('pill', 'Pills: corners rounded all the way'),
+    ('pebble', 'Pebbles: soft all over'),
+    ('bulge', 'Inflated: every edge bows out'),
+    ('rhythm', 'Straight against curve: every other edge bows'),
+    ('pear', 'Weighty: narrow at the top, heavy at the bottom'),
+    ('bean', 'Beans: weighty and soft (South Park bodies)'),
+    ('lean', 'Leaning: each shape tipped its own way'),
+    ('cut', 'Scissor-cut: uneven straight cuts'),
+    ('lumpy', 'Lumpy: a few slow lumps round each edge'),
+]
+
+
+def _area(P):
+    x, y = P[:, 0], P[:, 1]
+    return 0.5 * np.sum(x * np.roll(y, -1) - np.roll(x, -1) * y)
+
+
+def _round_corners(P, frac, cap=None, n=6):
+    out = []
+    m = len(P)
+    for i in range(m):
+        a, p, b = P[i - 1], P[i], P[(i + 1) % m]
+        la, lb = np.hypot(*(a - p)), np.hypot(*(b - p))
+        if la < 1e-6 or lb < 1e-6:
+            continue
+        r = frac * min(la, lb)
+        if cap is not None:
+            r = min(r, cap)
+        s, e = p + (a - p) / la * r, p + (b - p) / lb * r
+        for u in np.linspace(0, 1, n):
+            out.append((1 - u) ** 2 * s + 2 * (1 - u) * u * p + u ** 2 * e)
+    return np.array(out)
+
+
+def _chaikin(P, k=3, c=0.25):
+    for _ in range(k):
+        Q = []
+        for i in range(len(P)):
+            a, b = P[i], P[(i + 1) % len(P)]
+            Q += [a * (1 - c) + b * c, a * c + b * (1 - c)]
+        P = np.array(Q)
+    return P
+
+
+def _bow(P, amp, every=1):
+    """Each edge (or every other one) bowed outwards into a gentle arc, amp times its length."""
+    out_sign = 1.0 if _area(P) > 0 else -1.0
+    out = []
+    for i in range(len(P)):
+        a, b = P[i], P[(i + 1) % len(P)]
+        d = b - a
+        L = np.hypot(*d)
+        n = np.array([d[1], -d[0]]) / (L + 1e-9) * out_sign
+        bow = amp * L if i % every == 0 else 0.0
+        for u in np.linspace(0, 1, 10, endpoint=False):
+            out.append(a + d * u + n * bow * math.sin(math.pi * u))
+    return np.array(out)
+
+
+def _weight(P, top, bottom):
+    """Narrower at the top of the shape, wider at the bottom (or the reverse)."""
+    y0, y1 = P[:, 1].min(), P[:, 1].max()
+    cx = (P[:, 0].min() + P[:, 0].max()) / 2
+    v = (P[:, 1] - y0) / max(1e-6, y1 - y0)
+    Q = P.copy()
+    Q[:, 0] = cx + (P[:, 0] - cx) * (top + (bottom - top) * v)
+    return Q
+
+
+def reshape(P, style, seed):
+    r = random.Random(seed)
+    size = max(np.ptp(P[:, 0]), np.ptp(P[:, 1]))
+    if style == 'round':
+        return _round_corners(P, 0.32)
+    if style == 'pill':
+        return _round_corners(P, 0.5, n=10)
+    if style == 'pebble':
+        return _chaikin(P, 4, 0.3)
+    if style == 'bulge':
+        return _bow(P, 0.09)
+    if style == 'rhythm':
+        return _round_corners(_bow(P, 0.16, every=2), 0.15)
+    if style == 'pear':
+        return _round_corners(_weight(P, 0.8, 1.18), 0.15)
+    if style == 'bean':
+        return _chaikin(_weight(P, 0.78, 1.2), 4, 0.3)
+    if style == 'lean':
+        a = r.uniform(-0.16, 0.16)
+        cy = (P[:, 1].min() + P[:, 1].max()) / 2
+        Q = P.copy()
+        Q[:, 0] += (P[:, 1] - cy) * math.tan(a)
+        return _round_corners(Q, 0.12)
+    if style == 'cut':
+        out = []
+        for i in range(len(P)):
+            a, b = P[i], P[(i + 1) % len(P)]
+            d = b - a
+            L = np.hypot(*d)
+            n = np.array([-d[1], d[0]]) / (L + 1e-9)
+            out.append(a + r.uniform(-0.03, 0.03) * size * np.array([r.random() - 0.5, r.random() - 0.5]))
+            for _ in range(r.choice((0, 1, 1, 2))):
+                u = r.uniform(0.25, 0.75)
+                out.append(a + d * u + n * r.uniform(-0.05, 0.05) * L)
+        return np.array(out)
+    if style == 'lumpy':
+        Q, s = _resample(np.vstack([P, P[:1]]), max(1.0, size / 60))
+        L = s[-1] or 1.0
+        out_sign = 1.0 if _area(P) > 0 else -1.0
+        t_ = np.gradient(Q, axis=0)
+        n = np.stack([t_[:, 1], -t_[:, 0]], 1) / (np.hypot(*t_.T)[:, None] + 1e-9) * -out_sign
+        off = np.zeros(len(Q))
+        for _ in range(2):
+            off += r.uniform(0.5, 1.0) * np.sin(2 * math.pi * r.randint(3, 6) * s / L + r.uniform(0, 6.3))
+        return Q + n * (off * 0.022 * size)[:, None]
+    return P
+
+
+def shape_style(B, style):
+    orig = B.Pen.poly
+
+    def poly(self, pts, fill, line=B.INK, lw=4):
+        P = np.asarray(pts, float)
+        if 3 <= len(P) <= 14 and max(np.ptp(P[:, 0]), np.ptp(P[:, 1])) * self.cam.S(1) / B.SS > 26:
+            P = reshape(P, style, _seed(pts))
+            pts = [tuple(v) for v in P]
+        return orig(self, pts, fill, line, lw)
+    return [(B.Pen, 'poly', poly)]
+
+
+def shapes(out):
+    import ed
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    items = [(patriots_still(), 'Today, for comparison')]
+    flat_shading = [(m, 'soft', lambda *a, **k: None) for m in list(sys.modules.values())
+                    if getattr(m, 'soft', None) is ed.soft]
+    for key, name in SHAPE_STYLES:
+        with swapped(flat_shading + shape_style(B, key)):
+            items.append((patriots_still(), name))
+        print(key, flush=True)
+    w, h = items[0][0].size
+    tw = 640
+    grid(items, out, 3, tw, int(tw * h / w), 'The Patriots: one still, ten kinds of shape', start=0)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -1176,6 +1331,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'shapes':
+        shapes(a[1] if len(a) > 1 else os.path.join(REVIEW, 'shapes-patriots.jpg'))
     elif a[0] == 'lines':
         lines(a[1] if len(a) > 1 else os.path.join(REVIEW, 'lines-patriots.jpg'))
     elif a[0] == 'styleframe':
