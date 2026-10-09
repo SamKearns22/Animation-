@@ -12,4 +12,5 @@ Titles are added by `source/add_title.py`.
 | `andrew-discord.mp4` | Andrew | Finished, Discord copy under 10 MB | same |
 | `sam.mp4` | Sam | Finished (2:58): the pigeon answers. Under 10 MB so fine for Discord | `source/sam.py` |
 | `listening-and-learning.mp4` | Listening & Learning | Finished (1:02) | `source/ed.py` |
+| `andrew-hutt-vertical.mp4` | (no title) | Finished (0:21), TikTok vertical, 5.7 MB | `source/hutt.py` |
 | `king-in-the-north-vertical.mp4` | Hope Again | Finished (0:38), TikTok vertical, 4.3 MB | `source/burnham.py`, `source/burnham_film.py` |

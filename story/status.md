@@ -6,6 +6,13 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
+## Done: "Andrew the Hutt" (TikTok satire, no title)
+- **Finished 9 Oct:** `animations/andrew-hutt-vertical.mp4` (21.5 s, 1080 x 1920, 12 fps, 5.7 MB; full render 18 min on
+  4 cores: `python3 source/hutt.py final OUT.mp4`; animatic `--scale 0.5`, about 4 min). Code `source/hutt.py`; Sam's
+  takes `source/audio/andrew-hutt-1..3.m4a` (Andrew's sped up 15%, pitch kept). PR man in a green drawing room (royal
+  arms, painting of Andrew and Sarah Ferguson shaking Gaddafi's hands) -> 0.4 s whip -> Andrew as a reclining
+  Hutt on a velvet platform, five chained models, palace painting -> hard cut back. Cover: the PR man mid-line, ~0:01.5.
+
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
   `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.
