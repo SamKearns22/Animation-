@@ -11,6 +11,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py lines           The Patriots' two-shot drawn with ten different kinds of line
   python3 source/style_lab.py shapes          The Patriots' two-shot with ten kinds of shape (less boxy)
   python3 source/style_lab.py repose          The Patriots' two-shot, same drawing, everyone re-posed with an attitude
+  python3 source/style_lab.py arms            The Patriots' two-shot with five kinds of more natural arm
   python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
@@ -1436,6 +1437,95 @@ def repose(out):
          int(940 * today.height / today.width), 'The Patriots: how people stand', start=0)
 
 
+# ------------------------------------------------------------------------------------------------ 9. fluid arms
+# Today an arm is two straight tapered boxes and a circle at the elbow, laid on the body with a straight cut at the
+# shoulder. These arms are one continuous shape that curves through the elbow and grows out of the body (no line
+# across the shoulder). Same pose, same colours, same line weight.
+
+ARM_STYLES = [
+    ('sleeve', 'Natural sleeve: one shape, fuller at the shoulder'),
+    ('hose', 'Rubber hose: one smooth curve, no elbow'),
+    ('crease', 'Natural sleeve with creases in the bend'),
+    ('slim', 'Slim: thinner, closer to South Park'),
+    ('loose', 'Loose coat sleeve: wider at the cuff'),
+]
+
+
+def _bez(a, b, c, d, n=14):
+    u = np.linspace(0, 1, n)[:, None]
+    return (1 - u) ** 3 * a + 3 * (1 - u) ** 2 * u * b + 3 * (1 - u) * u ** 2 * c + u ** 3 * d
+
+
+def fluid_arm(B, style):
+    INK_ = B.INK
+
+    def arm(p, sh, el, wr, sleeve, w=30):
+        S, E, Wr = (np.asarray(v, float) for v in (sh, el, wr))
+        l1, l2 = np.hypot(*(E - S)) or 1.0, np.hypot(*(Wr - E)) or 1.0
+        if style == 'hose':                                  # one curve from shoulder to wrist through the elbow
+            C = 2 * E - (S + Wr) / 2
+            u = np.linspace(0, 1, 28)[:, None]
+            spine = (1 - u) ** 2 * S + 2 * (1 - u) * u * C + u ** 2 * Wr
+            k_el = 14
+        else:                                                # through the elbow, but with a smooth bend
+            d1, d2 = (E - S) / l1, (Wr - E) / l2               # a real elbow, its point gently rounded
+            r = min(0.9 * w, 0.4 * l1, 0.4 * l2)
+            u = np.linspace(0, 1, 10)[:, None]
+            corner = (1 - u) ** 2 * (E - d1 * r) + 2 * (1 - u) * u * E + u ** 2 * (E + d2 * r)
+            a = S + (E - d1 * r - S) * np.linspace(0, 1, 10)[:, None]
+            b = (E + d2 * r) + (Wr - E - d2 * r) * np.linspace(0, 1, 10)[:, None]
+            spine = np.vstack([a, corner[1:], b[1:]])
+            k_el = len(a) + 4
+        seg = np.hypot(*np.diff(spine, axis=0).T)
+        s = np.concatenate([[0], np.cumsum(seg)])
+        s /= s[-1] or 1.0
+        if style == 'hose':
+            hw = np.full_like(s, w * 0.8)
+        elif style == 'slim':
+            hw = w * 0.72 * (1.08 - 0.32 * s)
+        elif style == 'loose':
+            hw = w * (1.1 - 0.3 * s + 0.45 * np.clip((s - 0.72) / 0.28, 0, 1) ** 1.5)
+        else:
+            hw = w * (1.15 - 0.42 * s) * (1 + 0.05 * np.sin(2 * math.pi * s))
+        t_ = np.gradient(spine, axis=0)
+        n = np.stack([-t_[:, 1], t_[:, 0]], 1) / (np.hypot(*t_.T)[:, None] + 1e-9)
+        left, right = spine + n * hw[:, None], spine - n * hw[:, None]
+        p.ell(S[0], S[1], hw[0], hw[0], sleeve, None)       # a round shoulder under the sleeve, no outline
+        p.poly([tuple(v) for v in np.vstack([left, right[::-1]])], sleeve, None)
+        # outline: the outer edge from the very top (it continues the shoulder), the inner edge from the armpit down
+        outer_is_left = abs(left[1][0]) > abs(right[1][0])
+        k0 = int(len(s) * 0.16)
+        for edge, outer in ((left, outer_is_left), (right, not outer_is_left)):
+            p.line([tuple(v) for v in (edge if outer else edge[k0:])], INK_, 2.6)
+        p.line([tuple(left[-1]), tuple(right[-1])], INK_, 2.6)  # the cuff
+        if style == 'crease':                                # two little folds inside the bend
+            d1, d2 = (E - S) / l1, (Wr - E) / l2
+            bend = math.atan2(d1[0] * d2[1] - d1[1] * d2[0], float(d1 @ d2))
+            if abs(bend) > 0.35:
+                inner = right if bend > 0 else left
+                sgn = -1 if bend > 0 else 1
+                for j, dk in ((-2, 0.55), (2, 0.4)):
+                    q = inner[k_el + j]
+                    nn = n[k_el + j] * sgn
+                    p.line([tuple(q), tuple(q + nn * hw[k_el] * dk + t_[k_el + j] / (np.hypot(*t_[k_el + j]) + 1e-9) * 6)],
+                           INK_, 2.0)
+    return arm
+
+
+def arms_sheet(out):
+    sys.path.insert(0, HERE)
+    import peepee as PP
+    B = PP.B
+    B.SS = 2
+    items = [(patriots_still(), 'Today: two boxes and a circle')]
+    for key, name in ARM_STYLES:
+        with swapped([(B, 'arm', fluid_arm(B, key))]):
+            items.append((patriots_still(), name))
+        print(key, flush=True)
+    w, h = items[0][0].size
+    grid(items, out, 3, 640, int(640 * h / w), 'The Patriots: more natural arms', start=0)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -1446,6 +1536,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'arms':
+        arms_sheet(a[1] if len(a) > 1 else os.path.join(REVIEW, 'arms-patriots.jpg'))
     elif a[0] == 'repose':
         repose(a[1] if len(a) > 1 else os.path.join(REVIEW, 'repose-patriots.jpg'))
     elif a[0] == 'shapes':
