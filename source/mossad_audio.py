@@ -130,6 +130,22 @@ def pauses(x, min_gap=0.12):
     return [(a / 100, b / 100) for a, b in merged if b - a >= 4]
 
 
+def gate(x, stretches=None, before=0.06, after=0.12, fade=0.025):
+    """Keep only the speech: each phrase from a hair before to a hair after, with short fades, and true silence
+    between (Sam's breaths and phone handling at the start, end and between phrases are gone). Andrew the Hutt."""
+    if stretches is None:
+        stretches = [(a, b) for a, b in pauses(x, 0.12) if b - a > 0.3]
+    g = np.zeros(len(x))
+    k = int(fade * SR)
+    for a, b in stretches:
+        i0, i1 = max(0, int((a - before) * SR)), min(len(x), int((b + after) * SR))
+        g[i0:i1] = 1.0
+        n0, n1 = min(k, i1 - i0), min(k, i1 - i0)
+        g[i0:i0 + n0] = np.minimum(g[i0:i0 + n0], np.linspace(0, 1, n0))
+        g[i1 - n1:i1] = np.minimum(g[i1 - n1:i1], np.linspace(1, 0, n1))
+    return x * g
+
+
 def write_wav(path, x):
     with wave.open(path, 'wb') as w:
         w.setnchannels(1)

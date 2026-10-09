@@ -324,7 +324,7 @@ def soundtrack(total=None):
     rng = np.random.default_rng(5)
     for ln in LINES:
         if ln.get('_name') and not ln.get('_missing'):
-            a = MA.line(ln['_name'])
+            a = MA.gate(MA.line(ln['_name']))                # only the speech: no breaths or fumbling
             s = int(ln['start'] * SR)
             seg = a[:max(0, n - s)]
             mix[s:s + len(seg)] += seg

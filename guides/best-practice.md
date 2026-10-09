@@ -147,6 +147,15 @@ design as storytelling: Walter Murch and the film-sound literature.
 - **Effects match the world and the tone:** realistic and understated for a realistic film. Exaggerated
   sounds are a style choice, not a default.
 - **Contrast makes impact:** a beat of silence before a big hit; quiet before loud.
+- **Trim recordings tight to the voice** (Sam's approval, Andrew the Hutt, 9 Oct): phone recordings carry breaths,
+  handling noise and fumbling before, between and after the words. Find each phrase of speech in the recording
+  (`mossad_audio.pauses`), keep only from 0.06 s before each phrase to 0.12 s after it, fade each edge over 25 ms, and
+  leave true silence everywhere else; then check the mix is exactly silent outside the phrases. One call does it:
+  `mossad_audio.gate(x)` (used by `hutt.py` and `quick.py`). The words themselves are never touched.
+- **Time the film to the recordings, not the other way round:** place each recording so its first word lands where
+  the action needs it, and derive the cuts, captions and mouth shapes from the phrases actually heard (`RECS` in
+  `hutt.py`). Tie later beats to events ("0.9 s after the cut"), never to fixed seconds, so a re-record or a speed
+  change moves everything with it.
 - **Clean edits:** every cut and every start and stop of a sound gets a short fade (a few milliseconds up
   to about 30), so nothing clicks. Before delivering, scan the finished track for clicks.
 - **Loudness:**

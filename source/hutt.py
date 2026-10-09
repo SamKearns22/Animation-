@@ -44,17 +44,40 @@ SPAN = (-610, 1690)                           # each wall's extent in its own co
 import mossad_audio as MA     # noqa: E402
 from voices import syllables_in   # noqa: E402
 
+def faster(x, k):
+    """The recording sped up by k without changing its pitch (ffmpeg's atempo), at Sam's request."""
+    import tempfile
+    import imageio_ffmpeg
+    from burnham_film import load
+    with tempfile.TemporaryDirectory() as d:
+        a, b = os.path.join(d, 'a.wav'), os.path.join(d, 'b.wav')
+        MA.write_wav(a, x / max(1.0, np.abs(x).max()))
+        subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-loglevel', 'error', '-y', '-i', a, '-filter:a', f'atempo={k}',
+                        b], check=True)
+        return load(b) * max(1.0, np.abs(x).max())
+
+
+SPEED = {'andrew-hutt-2': 1.15}               # Andrew's line 15% quicker (pitch unchanged)
+CAPTION_AS = {'Are you absolutely sure': 'Are you sure'}   # what the caption shows, where Sam wants it shorter
+AUDIO = {}
 RECS = [
     ('PR', 'andrew-hutt-1', 0.2, ["Andrew, you're already | the most hated man in the country.",
                                   'Are you absolutely sure | you want to sue the police?']),
-    ('AJ', 'andrew-hutt-2', 7.4, ['Mee shall ruin those clowns,', 'che da they did tah je um',
+    ('AJ', 'andrew-hutt-2', 'reveal', ['Mee shall ruin those clowns,', 'che da they did tah je um',
                                   'myo good best pateesa Epstein.', 'Ho ho ho!']),
-    ('PR', 'andrew-hutt-3', 20.75, ['Yes,', "I was afraid you'd say that."]),
+    ('PR', 'andrew-hutt-3', 'reply', ['Yes,', "I was afraid you'd say that."]),
 ]
 SR = MA.SR
 LINES, PLACED = [], []
 for who, name, at, phrases in RECS:
     x = MA.line(name)
+    if name in SPEED:
+        x = faster(x, SPEED[name])
+    AUDIO[name] = x
+    if at == 'reveal':                                            # 0.8 s after the swing lands on him
+        at = LINES[-1]['end'] + 0.4 + 0.4 + 0.8
+    elif at == 'reply':                                           # 0.9 s after the cut back to the PR man
+        at = LINES[-1]['end'] + 0.35 + 0.9
     st = [(a, b) for a, b in MA.pauses(x, 0.12) if b - a > 0.3]   # stretches of speech (stray clicks ignored)
     if len(st) == 5:                                              # Andrew's laugh comes as two bursts: one phrase
         st = st[:3] + [(st[3][0], st[4][1])]
@@ -78,7 +101,7 @@ for who, name, at, phrases in RECS:
 PR1_END = LINES[3]['end']
 AJ = [ln for ln in LINES if ln['who'] == 'AJ']
 PAN0 = PR1_END + 0.4                          # the 180-degree swing
-PAN1 = PAN0 + 1.2
+PAN1 = PAN0 + 0.4                             # a quick whip
 LAUGH = (AJ[-1]['start'], AJ[-1]['end'])
 CUT_BACK = LAUGH[1] + 0.35                    # hard cut back to the PR man
 YES = LINES[-2]['start']
@@ -96,15 +119,7 @@ def soundtrack(total):
     n = int(total * SR)
     mix = np.zeros(n)
     for name, off, st in PLACED:
-        a = MA.line(name).copy()
-        g = np.zeros(len(a))                                      # keep only the speech: each phrase, a hair either
-        fade = int(0.025 * SR)                                    # side, with short fades so nothing clicks
-        for a0, b0 in st:
-            i0, i1 = max(0, int((a0 - 0.06) * SR)), min(len(a), int((b0 + 0.12) * SR))
-            g[i0:i1] = 1.0
-            g[i0:min(i1, i0 + fade)] = np.linspace(0, 1, min(i1, i0 + fade) - i0)
-            g[max(i0, i1 - fade):i1] = np.minimum(g[max(i0, i1 - fade):i1], np.linspace(1, 0, i1 - max(i0, i1 - fade)))
-        a *= g
+        a = MA.gate(AUDIO[name], st)                          # only the speech: no breaths or fumbling
         s0 = int(round(off * SR))
         seg = a[max(0, -s0):]
         s0 = max(0, s0)
@@ -126,7 +141,7 @@ def caption_at(t):
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
             if PAN0 <= t < PAN1:
                 return None                   # no caption across the swing
-            return ln['text']
+            return CAPTION_AS.get(ln['text'], ln['text'])
     return None
 
 
@@ -899,7 +914,7 @@ def frame_image(t):
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
     if PAN0 <= t < PAN1:                                                       # motion blur through the swing
-        n = 9
+        n = 15                                                                 # the whip is fast: more drawings
         acc = None
         for k in range(n):
             tt = t + (k / (n - 1) - 0.5) * 0.6 / FPS
