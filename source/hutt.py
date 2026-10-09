@@ -60,7 +60,7 @@ for who, name, at, phrases in RECS:
         st = st[:3] + [(st[3][0], st[4][1])]
     assert len(st) == len(phrases), f'{name}: {len(st)} phrases heard, {len(phrases)} written'
     off = at - st[0][0]                                           # recording time + off = film time
-    PLACED.append((name, off))
+    PLACED.append((name, off, st))
     hop = SR // 100
     env = np.array([np.sqrt(np.mean(x[k:k + hop] ** 2)) for k in range(0, len(x) - hop, hop)])
     env = env / (env.max() + 1e-9)
@@ -95,8 +95,16 @@ def soundtrack(total):
     import mossad as M
     n = int(total * SR)
     mix = np.zeros(n)
-    for name, off in PLACED:
-        a = MA.line(name)
+    for name, off, st in PLACED:
+        a = MA.line(name).copy()
+        g = np.zeros(len(a))                                      # keep only the speech: each phrase, a hair either
+        fade = int(0.025 * SR)                                    # side, with short fades so nothing clicks
+        for a0, b0 in st:
+            i0, i1 = max(0, int((a0 - 0.06) * SR)), min(len(a), int((b0 + 0.12) * SR))
+            g[i0:i1] = 1.0
+            g[i0:min(i1, i0 + fade)] = np.linspace(0, 1, min(i1, i0 + fade) - i0)
+            g[max(i0, i1 - fade):i1] = np.minimum(g[max(i0, i1 - fade):i1], np.linspace(1, 0, i1 - max(i0, i1 - fade)))
+        a *= g
         s0 = int(round(off * SR))
         seg = a[max(0, -s0):]
         s0 = max(0, s0)
@@ -276,6 +284,132 @@ def palace_painting(img, p, cam, x0, y0, x1, y1):
     soft(img, cam, [(X(0.06), Y(0.36)), (X(0.2), Y(0.36)), (X(0.2), Y(0.8)), (X(0.06), Y(0.8))], (120, 90, 60), 0.18, 10)
 
 
+def lion(p, x, y, s, rampant=False, gold=(240, 196, 60), claw=(40, 90, 180)):
+    """A heraldic lion, flat and simple: passant (walking, facing us) or rampant (rearing)."""
+    if rampant:
+        p.ell(x, y, 13 * s, 24 * s, gold, INK, 1.4, rot=0.35)
+        p.ell(x + 10 * s, y - 24 * s, 9 * s, 8 * s, gold, INK, 1.4)
+        for (a, b) in (((4, -10), (22, -24)), ((8, 2), (26, -8)), ((-4, 18), (6, 34)), ((-8, 16), (-20, 32))):
+            p.line([(x + a[0] * s, y + a[1] * s), (x + b[0] * s, y + b[1] * s)], gold, 5 * s)
+        p.line([(x - 8 * s, y + 10 * s), (x - 20 * s, y - 6 * s), (x - 14 * s, y - 24 * s)], gold, 3 * s)
+        p.ell(x + 18 * s, y - 22 * s, 2.4 * s, 2.4 * s, claw, None)
+        return
+    p.ell(x, y, 22 * s, 8 * s, gold, INK, 1.4)
+    p.ell(x - 22 * s, y - 6 * s, 9 * s, 9 * s, gold, INK, 1.4)
+    for dx in (-14, -6, 10, 18):
+        p.line([(x + dx * s, y + 4 * s), (x + dx * s, y + 15 * s)], gold, 4 * s)
+    p.line([(x + 20 * s, y - 2 * s), (x + 30 * s, y - 14 * s), (x + 24 * s, y - 20 * s)], gold, 3 * s)
+    p.ell(x - 28 * s, y - 2 * s, 2.4 * s, 2.4 * s, claw, None)
+
+
+def royal_arms(p, cx, top, w):
+    """The royal arms on a shield (England's lions twice, Scotland's lion within its border, Ireland's harp),
+    hung on the wall: a simplified flat drawing in the film's style."""
+    h = w * 1.2
+    x0, x1 = cx - w / 2, cx + w / 2
+    shape = [(x0, top), (x1, top), (x1, top + h * 0.55)] + \
+            [(cx + w / 2 * math.cos(a), top + h * 0.55 + h * 0.45 * math.sin(a)) for a in np.linspace(0, math.pi / 2, 10)][1:] + \
+            [(cx - w / 2 * math.cos(a), top + h * 0.55 + h * 0.45 * math.sin(a)) for a in np.linspace(math.pi / 2, 0, 10)][1:] + \
+            [(x0, top + h * 0.55)]
+    red, gold, blue = (196, 30, 40), (240, 196, 60), (30, 96, 170)
+    p.poly(shape, red, INK, 3.4)
+    ym = top + h * 0.5
+    p.poly([(cx, top), (x1, top), (x1, ym), (cx, ym)], gold, None)               # Scotland
+    q = [pt for pt in shape if pt[0] <= cx + 0.5 and pt[1] >= ym - 0.5]
+    p.poly([(x0, ym), (cx, ym)] + sorted([pt for pt in q if pt[1] > ym], key=lambda v: -v[0]) + [(x0, ym)], blue, None)
+    p.line([(cx, top), (cx, top + h)], INK, 2.2)
+    p.line([(x0, ym), (x1, ym)], INK, 2.2)
+    p.poly(shape, None, INK, 3.4)
+    s = w / 170
+    for k in range(3):                                                         # England, top left
+        lion(p, cx - w / 4 + 4 * s, top + 24 * s + k * 26 * s, 0.85 * s)
+    for k in range(3):                                                         # England, bottom right
+        lion(p, cx + w / 4 - 2 * s, ym + 22 * s + k * 22 * s, 0.75 * s)
+    box(p, cx + 10 * s, top + 8 * s, x1 - 10 * s, ym - 8 * s, None, 2.4, red)     # Scotland: the border and lion
+    lion(p, cx + w / 4, top + h * 0.26, 1.0 * s, rampant=True, gold=red, claw=blue)
+    hx, hy = cx - w / 4, ym + h * 0.2                                          # Ireland: the harp
+    p.line([(hx - 18 * s, hy - 26 * s), (hx + 16 * s, hy - 30 * s), (hx + 20 * s, hy + 30 * s)], gold, 4 * s)
+    p.line([(hx - 18 * s, hy - 26 * s), (hx - 8 * s, hy + 4 * s), (hx + 20 * s, hy + 30 * s)], gold, 4 * s)
+    for k in range(5):
+        u = (k + 1) / 6
+        p.line([(hx - 16 * s + 34 * s * u, hy - 27 * s - 3 * s * u), (hx - 12 * s + 32 * s * u, hy - 8 * s + 30 * s * u)],
+               gold, 1.2 * s)
+
+
+def gaddafi_painting(img, p, cam, x0, y0, x1, y1, t):
+    """A bright gilt-framed oil of a state function: Andrew and Sarah Ferguson shaking Colonel Gaddafi's hands,
+    all three beaming, under a chandelier, a Union flag and a plain green flag behind them."""
+    box(p, x0 - 22, y0 - 22, x1 + 22, y1 + 22, (238, 192, 76), 3)
+    box(p, x0 - 8, y0 - 8, x1 + 8, y1 + 8, (190, 140, 40), 2)
+    w, h = x1 - x0, y1 - y0
+    box(p, x0, y0, x1, y1, (176, 34, 52), 2)                                  # a red and gold reception room
+    for k in range(6):
+        x = x0 + w * (k + 0.5) / 6
+        p.line([(x, y0), (x, y0 + h * 0.72)], (206, 160, 60), 2)
+    soft(img, cam, oval(x0 + w / 2, y0 + h * 0.2, w * 0.5, h * 0.22), (255, 230, 150), 0.55, 14)
+    p.ell(x0 + w / 2, y0 + 26, 30, 7, GILT, INK, 1.4)                         # the chandelier
+    for k in range(-2, 3):
+        p.ell(x0 + w / 2 + 12 * k, y0 + 40, 2.5, 4, (250, 250, 255), None)
+    for fx, colr in ((x0 + 20, None), (x1 - 20, (20, 150, 60))):              # the two flags on poles
+        p.line([(fx, y0 + 30), (fx, y0 + h * 0.8)], (60, 50, 40), 2)
+        fl = [(fx, y0 + 34), (fx + (28 if colr is None else -28), y0 + 34), (fx + (28 if colr is None else -28), y0 + 70), (fx, y0 + 70)]
+        if colr:
+            p.poly(fl, colr, INK, 1.2)
+        else:
+            p.poly(fl, (20, 50, 130), INK, 1.2)
+            p.line([fl[0], fl[2]], (250, 250, 250), 3)
+            p.line([fl[1], fl[3]], (250, 250, 250), 3)
+            p.line([((fl[0][0] + fl[1][0]) / 2, fl[0][1]), ((fl[0][0] + fl[1][0]) / 2, fl[2][1])], (210, 20, 40), 3)
+            p.line([(fl[0][0], (fl[0][1] + fl[2][1]) / 2), (fl[1][0], (fl[0][1] + fl[2][1]) / 2)], (210, 20, 40), 3)
+    box(p, x0, y0 + h * 0.72, x1, y1, (150, 24, 40), 0)                       # red carpet
+    s = 0.15
+    floor = y1 - 10
+    neck = floor - F.SOLE_Y * s
+    xs = {'A': x0 + w * 0.18, 'G': x0 + w * 0.5, 'S': x0 + w * 0.82}
+    gap = (xs['G'] - xs['A']) / s                                              # person units between neighbours
+    andrew = dict(skin=(242, 196, 176), hw=70, hh=90, jaw='round', hair='side', hair_c=(232, 232, 228),
+                  brow_c=(220, 220, 214), outfit='suit', jacket=(30, 36, 70), trousers=(30, 36, 70), tie=(20, 20, 24),
+                  age=True, full=True, pose='custom', mouth='smile', brows='joy', name='painted Andrew')
+    sarah = dict(skin=(246, 206, 186), hw=62, hh=84, jaw='soft', hair='long', hair_c=(176, 82, 46), outfit='dress',
+                 dress=(30, 150, 80), trousers=(30, 150, 80), bottom=860, shoulders=128, full=True, pose='custom',
+                 mouth='smile', brows='joy', lips=True, earring=True, name='painted Sarah')
+    gad = dict(skin=(196, 142, 104), hw=70, hh=90, jaw='square', hair='bald', hair_c=(30, 26, 26), outfit='suit',
+               jacket=(22, 26, 40), trousers=(22, 26, 40), tie=(16, 16, 20), age=True, full=True, pose='custom',
+               mouth='smile', lid=4, name='painted Gaddafi')
+    ra, rs, rg = F.Rig(andrew), F.Rig(sarah), F.Rig(gad)
+    MEET_Y = 250                                                                # hands meet halfway, at the waist
+    andrew['arms'] = dict(ra.pose('sides'), R=ra.arm('R', (gap / 2, MEET_Y), 'fist', 'out'))
+    sarah['arms'] = dict(rs.pose('sides'), L=rs.arm('L', (-gap / 2, MEET_Y), 'fist', 'out'))
+    gad['arms'] = {'L': rg.arm('L', (-gap / 2, MEET_Y), 'fist', 'out'), 'R': rg.arm('R', (gap / 2, MEET_Y), 'fist', 'out')}
+    gl = B.Local(cam, xs['G'], neck, s)
+    gp = B.Pen(img, gl)
+    for k in range(14):                                                        # his mane of black curls, behind
+        a = math.pi * (0.95 + 1.1 * k / 13)
+        gp.ell(88 * math.cos(a), -150 + 70 * math.sin(a) - 10, 34, 34, (30, 26, 26), INK, 1.4)
+    B.person(img, cam, xs['A'], neck, s, andrew, t)
+    B.person(img, cam, xs['S'], neck, s, sarah, t)
+    B.person(img, cam, xs['G'], neck, s, gad, t)
+    for sgn in (-1, 1):                                                        # Sarah's pink-lined green ruffles
+        sl = B.Pen(img, B.Local(cam, xs['S'], neck, s))
+        sl.poly([(sgn * 60, 0), (sgn * 170, 30), (sgn * 150, 200), (sgn * 110, 60)], (30, 150, 80), INK, 1.6)
+        sl.poly([(sgn * 120, 50), (sgn * 150, 190), (sgn * 132, 70)], (236, 80, 160), None)
+    gp.poly(curve([(-34, -98), (0, -106), (34, -98), (30, -88), (0, -94), (-30, -88)], 3), (36, 30, 30), INK, 1.4)  # moustache
+    gp.poly(curve([(-16, -78), (16, -78), (12, -50), (0, -44), (-12, -50)], 3), (52, 44, 42), INK, 1.4)          # goatee
+    for k in range(7):                                                         # his curls over the brow
+        gp.ell(-60 + 20 * k, -150 - 82 + 6 * abs(k - 3), 18, 16, (30, 26, 26), INK, 1.2)
+    for sgn in (-1, 1):                                                        # gold epaulettes and fringe, red tabs
+        gp.poly([(sgn * 60, -6), (sgn * 160, 24), (sgn * 160, 56), (sgn * 60, 30)], (236, 190, 60), INK, 1.6)
+        for k in range(6):
+            fx = sgn * (110 + 9 * k)
+            gp.line([(fx, 44), (fx, 84)], (236, 190, 60), 4)
+        gp.poly([(sgn * 30, 10), (sgn * 54, 10), (sgn * 56, 70), (sgn * 32, 70)], (210, 40, 40), INK, 1.4)
+    for k, c in enumerate(((210, 40, 40), (40, 140, 60), (240, 200, 40), (40, 80, 180))):   # medal ribbons
+        gp.poly([(-110 + 22 * k, 140), (-90 + 22 * k, 140), (-90 + 22 * k, 156), (-110 + 22 * k, 156)], c, INK, 1)
+    for who in ('A', 'S'):                                                     # the clasped hands, in front
+        mx = (xs[who] + xs['G']) / 2
+        p.ell(mx, neck + MEET_Y * s + 2, 7.5, 7.5, (230, 180, 150), INK, 1.4)
+
+
 def chandelier(p, cx, top, s=1.0):
     p.line([(cx, top - 400), (cx, top)], GILT_D, 4)
     p.ell(cx, top + 40 * s, 120 * s, 26 * s, GILT, INK, 2.6)
@@ -289,20 +423,21 @@ def chandelier(p, cx, top, s=1.0):
 
 
 def wall_a(img, cam, t):
-    """Behind the PR man: a tall window with crimson drapes, a sporting picture, a console table and lamp."""
+    """Behind the PR man: a window with crimson drapes at the left edge, the royal arms on the wall to his left, the
+    painting of the Gaddafi handshake to his right, a console table and lamp."""
     p = B.Pen(img, cam)
     wallpaper(img, p, *SPAN)
-    box(p, 214, 250, 446, 1010, (176, 206, 226), 4)           # the window: a pale grey English sky
-    soft(img, cam, [(214, 700), (446, 640), (446, 1010), (214, 1010)], (220, 232, 236), 0.6, 30)
-    for x in (330,):
-        p.line([(x, 250), (x, 1010)], CREAM, 9)
+    box(p, -20, 250, 170, 1010, (176, 206, 226), 4)           # the window: a pale grey English sky
+    soft(img, cam, [(-20, 700), (170, 640), (170, 1010), (-20, 1010)], (220, 232, 236), 0.6, 30)
+    p.line([(75, 250), (75, 1010)], CREAM, 9)
     for y in (500, 760):
-        p.line([(214, y), (446, y)], CREAM, 9)
-    box(p, 200, 1004, 460, 1030, CREAM, 2.4)                   # sill
-    drape(p, 120, 240, 200, FY - 10, 1)
-    drape(p, 540, 420, 200, FY - 10, -1)
-    box(p, 100, 176, 560, 236, CRIMSON_D, 3)                   # pelmet
-    painting(p, 690, 380, 960, 610)
+        p.line([(-20, y), (170, y)], CREAM, 9)
+    box(p, -34, 1004, 184, 1030, CREAM, 2.4)                   # sill
+    drape(p, -120, -4, 200, FY - 10, 1)
+    drape(p, 264, 150, 200, FY - 10, -1)
+    box(p, -140, 176, 284, 236, CRIMSON_D, 3)                  # pelmet
+    royal_arms(p, 365, 330, 170)
+    gaddafi_painting(img, p, cam, 625, 300, 850, 600, t)
     box(p, 650, 1000, 1010, 1030, WOOD, 3)                     # console table and its lamp and decanter
     for x in (670, 990):
         box(p, x, 1030, x + 18, FY - 2, WOOD_D, 2.4)
