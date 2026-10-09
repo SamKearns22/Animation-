@@ -8,6 +8,7 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py sample          sheet 1: the numbered contact sheet of 20 tiles from six films
   python3 source/style_lab.py zoom            close crops of details sheet 1 is too small to show
   python3 source/style_lab.py options         sheet 2: the same three tiles in today's look and in each option
+  python3 source/style_lab.py styleframe      Cry Minister's opening redesigned (Filmcow / South Park), faces kept
   python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
   python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
 """
@@ -793,6 +794,188 @@ def clip(out):
     print(out, f'{os.path.getsize(out) / 1e6:.1f} MB', f'{time.time() - t0:.0f} s')
 
 
+# ------------------------------------------------------------------------------------------------ 5. a style frame
+# The look redesigned the Filmcow / South Park way: our faces exactly as they are, on small simple bodies; backgrounds
+# of a few big flat shapes with no outline (only characters are outlined); little in the frame, each thing on purpose.
+
+DESIGNS = {  # each person's own build (local units, the head is about 140 wide): torso half-width and height,
+             # how much it widens to the hem, leg length, a belly, which way the arms hang
+    'Andy': dict(tw=70, th=185, flare=1.1, legs=118, belly=0),
+    'the old lady': dict(tw=62, th=165, flare=1.45, legs=52, belly=10),
+    'the man': dict(tw=98, th=168, flare=1.18, legs=92, belly=34),
+    'shopper': dict(tw=56, th=205, flare=1.02, legs=140, belly=0),
+}
+
+
+def tube(p, L, pts, w, col):
+    """A stubby arm: a round-ended tube through the points, one outline all round (drawn as a black tube underneath)."""
+    o = p.w(2.6) / L.S(1)
+    for c, ww in (((24, 20, 22), w + 2 * o), (col, w)):
+        for a, b in zip(pts, pts[1:]):
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            n = math.hypot(dx, dy) or 1.0
+            nx, ny = -dy / n * ww / 2, dx / n * ww / 2
+            p.poly([(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)], c, None)
+        for q in pts:
+            p.ell(q[0], q[1], ww / 2, ww / 2, c, None)
+
+
+def toon(img, cam, x, ground, k, sp, design, hands=None, t=0.0, phone=False):
+    """One person in the new proportions, feet on `ground` at x, size k. Our own head and face, unchanged; no neck; a
+    body of a few chunky shapes; circle hands. hands: {'L': (x, y), 'R': (x, y)} in the person's own units."""
+    from ed import curve
+    B = sys.modules['burnham']
+    hw, hh = sp.get('hw', 72), sp.get('hh', 88)
+    tw, th, fl, legs, belly = design['tw'], design['th'], design['flare'], design['legs'], design['belly']
+    L = B.Local(cam, x, ground - (th + legs) * k, k)
+    p = B.Pen(img, L)
+    skin = sp['skin']
+    out = sp.get('outfit', 'suit')
+    coat = sp.get('dress') if out == 'dress' else sp.get('jacket', B.NAVY)
+    hy = -hh * 0.78
+    B.hair_back(p, sp, 0, hy, hw, hh)
+    for s_ in (-1, 1):                                       # two stubby legs and flat black shoes
+        lx = s_ * tw * fl * 0.42
+        leg_c = skin if out == 'dress' else sp.get('trousers', (34, 34, 40))
+        p.poly([(lx - 21, th - 20), (lx + 21, th - 20), (lx + 19, th + legs), (lx - 19, th + legs)], leg_c)
+        p.ell(lx + s_ * 9, th + legs + 4, 34, 15, (26, 24, 26))
+    sh = {s_: (s_ * (tw - 6), 30) for s_ in (-1, 1)}
+    hands = hands or {}
+    for side, s_ in (('L', -1), ('R', 1)):                   # arms behind the body when they hang down
+        hx_, hy_ = hands.get(side, (s_ * (tw * fl + 10), th * 0.74))
+        if hy_ > 60:
+            tube(p, L, [sh[s_], ((sh[s_][0] + hx_) / 2 + s_ * 6, (sh[s_][1] + hy_) / 2), (hx_, hy_)], 34, coat)
+    body = curve([(-34, -8), (-tw * 0.86, 4), (-tw, 42), (-(tw * fl * 0.97 + belly), th * 0.6), (-tw * fl, th),
+                  (tw * fl, th), (tw * fl * 0.97 + belly, th * 0.6), (tw, 42), (tw * 0.86, 4), (34, -8)], 3)
+    p.poly(body, coat)
+    if out == 'suit':                                        # shirt, tie, two lapel lines: nothing more
+        p.poly([(-28, -6), (28, -6), (0, th * 0.44)], sp.get('shirt', (230, 234, 240)))
+        p.poly([(-8, 4), (8, 4), (11, th * 0.38), (0, th * 0.47), (-11, th * 0.38)], sp.get('tie', (150, 32, 44)))
+        p.line([(-28, -6), (-4, th * 0.5)], B.INK, 2.4)
+        p.line([(28, -6), (4, th * 0.5)], B.INK, 2.4)
+    elif out == 'jumper':                                    # a football shirt: white collar, a badge
+        p.poly([(-30, -6), (30, -6), (0, 30)], (240, 240, 240))
+        p.ell(tw * 0.42, 52, 13, 15, (240, 240, 240))
+    elif out == 'dress':
+        for k_ in range(3):                                  # three big buttons
+            p.ell(0, 40 + k_ * 40, 7, 7, B.lt(coat, 0.8))
+    for side, s_ in (('L', -1), ('R', 1)):                   # raised arms in front
+        hx_, hy_ = hands.get(side, (s_ * (tw * fl + 10), th * 0.74))
+        if hy_ <= 60:
+            tube(p, L, [sh[s_], (sh[s_][0] + s_ * 70, 70), (hx_, hy_)], 34, coat)
+    for side, s_ in (('L', -1), ('R', 1)):
+        hx_, hy_ = hands.get(side, (s_ * (tw * fl + 10), th * 0.74))
+        if phone and side == 'R':
+            p.poly([(hx_ - 26, hy_ - 64), (hx_ + 26, hy_ - 64), (hx_ + 26, hy_ + 16), (hx_ - 26, hy_ + 16)], (40, 44, 56))
+        p.ell(hx_, hy_, 24, 24, skin)
+    B.head(img, p, sp, t, 0, hy)
+
+
+def _pts(cam, pts):
+    return [cam.P(*q) for q in pts]
+
+
+def flat(d, cam, pts, fill, seed=0, j=5):
+    """A background shape: flat colour, no outline, corners cut by hand (a little uneven, never jittered evenly)."""
+    r = random.Random(seed)
+    d.polygon(_pts(cam, [(x + r.gauss(0, j), y + r.gauss(0, j)) for x, y in pts]), fill=fill)
+
+
+def style_frame(CM, t=1.5):
+    """Cry Minister's opening, redesigned: Andy to camera on the high street; behind him one wolf at its meal and one
+    shopper walking past on her phone. Nothing else."""
+    import wolf as WF
+    B = CM.B
+    B.SS = 2
+    img = B.canvas((200, 208, 212))
+    cam = B.Cam(1.0)
+    d = ImageDraw.Draw(img)
+    # the street: six big shapes
+    flat(d, cam, [(-20, 250), (540, 236), (548, 1170), (-20, 1170)], (238, 230, 212), 1)     # the pub, plaster
+    flat(d, cam, [(-20, 200), (520, 214), (560, 262), (-20, 262)], (84, 58, 50), 2)          # its roof
+    for k, bx in enumerate((70, 260, 450)):                                                   # three black beams
+        flat(d, cam, [(bx - 26, 262), (bx + 26, 262), (bx + 30 + 6 * k, 700), (bx - 22 + 6 * k, 700)], (46, 36, 32), 3 + k)
+    flat(d, cam, [(-20, 690), (548, 690), (552, 1170), (-20, 1170)], (44, 76, 56), 7)       # the green pub front
+    flat(d, cam, [(30, 860), (300, 852), (304, 1100), (28, 1104)], (232, 198, 116), 8)       # one warm window
+    flat(d, cam, [(540, 300), (1100, 290), (1100, 1170), (548, 1170)], (176, 138, 116), 9)  # ZapBets, upstairs
+    flat(d, cam, [(660, 400), (880, 396), (884, 590), (662, 594)], (92, 96, 108), 10)
+    flat(d, cam, [(548, 690), (1100, 680), (1100, 1170), (552, 1170)], (94, 48, 134), 11)  # ZapBets, purple
+    flat(d, cam, [(600, 860), (900, 856), (904, 1110), (598, 1114)], (248, 214, 56), 12)   # its free-bet poster
+    flat(d, cam, [(-20, 1160), (1100, 1150), (1100, 1920), (-20, 1920)], (180, 176, 168), 13)  # the pavement
+    for s, xx, yy, size, col, font in (('THE GOOSE', 60, 712, 70, (232, 196, 100), CM.PUB_FONT),
+                                       ('ZapBets', 640, 700, 96, (248, 214, 56), B.ANTON),
+                                       ('FREE', 668, 870, 84, (94, 48, 134), B.ANTON),
+                                       ('£10 BET', 628, 968, 84, (200, 30, 60), B.ANTON)):
+        lay = hand_letters(s, font, cam.S(size), col, hash(s) & 0xFFFF)
+        X0, Y0 = cam.P(xx, yy)
+        img.alpha_composite(lay, (int(X0 - size * 0.4 * B.SS), int(Y0 - size * 0.3 * B.SS)))
+    # behind him, the absurd thing: one wolf at its meal, a pair of legs sticking out; a flat red pool
+    X = CM.X_(img, cam)
+    WF.blood(X, 860, 1236, 120, 3)
+    for dy, ang in ((0, 0.05), (26, -0.08)):                 # his legs, trousers and shoes, pointing at us
+        X.poly([(900, 1214 + dy), (1010, 1206 + dy + 40 * ang), (1012, 1232 + dy + 40 * ang), (900, 1240 + dy)], (60, 70, 96))
+        X.ell(1024, 1219 + dy + 40 * ang, 14, 22, (26, 24, 26))
+    WF.side(X, 820, 1240, 0.62, -1, 1, feed=0.35, blood=0.6, seed=4)
+    # walking past on the left, not looking: a shopper on her phone
+    sh_sp = dict(CM.SHOPPER_LOOKS[2], turn=0.0, look=0.4, lid=4, mouth='line', outfit='suit', hair='bob',
+                 jacket=(172, 92, 60), shirt=(236, 220, 200), tie=(172, 92, 60), trousers=(40, 40, 46))
+    toon(img, cam, 170, 1300, 0.86, sh_sp, DESIGNS['shopper'], hands={'R': (40, 40)}, t=t, phone=True)
+    # Andy, to camera, thumbing back over his shoulder at it
+    sp = CM.andy_sp(t)
+    sp['look'] = 0.0
+    toon(img, cam, 520, 1640, 2.35, sp, DESIGNS['Andy'], hands={'L': (-150, 150), 'R': (120, -40)}, t=t)
+    return img
+
+
+def cast_row(CM):
+    """The four people of Cry Minister in the new proportions, each a different build, on one flat floor."""
+    B = CM.B
+    B.SS = 2
+    img = B.canvas((214, 208, 198))
+    cam = B.Cam(1.0)
+    d = ImageDraw.Draw(img)
+    flat(d, cam, [(-20, 1400), (1100, 1390), (1100, 1920), (-20, 1920)], (190, 182, 170), 5)
+    sp = CM.andy_sp(1.5)
+    sp['look'] = 0.0
+    people = [(CM.LADY, 'the old lady', 150, 0.95, {'R': (60, 20)}),
+              (sp, 'Andy', 410, 1.0, None),
+              (dict(CM.MAN, mouth='line'), 'the man', 680, 0.98, {'L': (-150, 120), 'R': (150, 120)}),
+              (dict(CM.SHOPPER_LOOKS[5], outfit='suit', mouth='smile'), 'shopper', 920, 0.98, None)]
+    for spx, name, x, k, hands in people:
+        toon(img, cam, x, 1460, k * 1.12, dict(spx), DESIGNS[name], hands=hands, t=1.5,
+             phone=(name == 'the old lady'))
+    return img
+
+
+def styleframe(out):
+    CM = _film()
+    import ed
+    B = CM.B
+    quiet = [(m, 'soft', lambda *a, **k: None) for m in list(sys.modules.values()) if getattr(m, 'soft', None) is ed.soft]
+    quiet += [(m, 'glow', lambda *a, **k: None) for m in list(sys.modules.values()) if getattr(m, 'glow', None) is ed.glow]
+    with swapped(quiet):                                     # flat colour only: no airbrushed shadow on any face
+        new = style_frame(CM).convert('RGB').resize((1080, 1920), Image.LANCZOS).convert('RGBA')
+        cast = cast_row(CM).convert('RGB').resize((1080, 1920), Image.LANCZOS).crop((0, 560, 1080, 1560))
+    B.SS = 1
+    new = CM.overlay(new, 1.5).convert('RGB')
+    today = Image.open(os.path.join(RAW, 'cm', '1.5.jpg')).convert('RGB')
+    tw, th, gap, head = 560, 996, 20, 80
+    sheet = Image.new('RGB', (2 * tw + 3 * gap, head + th + 60 + 560 + 60), PAPER)
+    dd = ImageDraw.Draw(sheet)
+    f = ImageFont.truetype(SANS, 30)
+    dd.text((gap, 20), 'Style frame: Cry Minister, opening shot', font=ImageFont.truetype(SANS, 38), fill=(20, 20, 20))
+    for i, (im, lab) in enumerate(((today, 'Today'), (new, 'Redesigned (same faces)'))):
+        x = gap + i * (tw + gap)
+        sheet.paste(im.resize((tw, th), Image.LANCZOS), (x, head))
+        dd.text((x, head + th + 12), lab, font=f, fill=(20, 20, 20))
+    y = head + th + 60
+    cw = 2 * tw + gap
+    sheet.paste(cast.resize((cw, int(cast.height * cw / cast.width)), Image.LANCZOS).crop((0, 0, cw, 520)), (gap, y))
+    dd.text((gap, y + 524), 'The cast in the new proportions: the old lady, Andy, the man, a shopper', font=f, fill=(20, 20, 20))
+    sheet.save(out, quality=90)
+    print(out, sheet.size)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -803,6 +986,8 @@ def main():
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
     elif a[0] == 'example':
         example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'styleframe':
+        styleframe(a[1] if len(a) > 1 else os.path.join(REVIEW, 'styleframe-cryminister.jpg'))
     elif a[0] == 'clip':
         clip(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.mp4'))
     elif a[0] == 'options':
