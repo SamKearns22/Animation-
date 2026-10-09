@@ -738,6 +738,12 @@ CLIP = (9.5, 21.0)                                          # Hope Again: end of
 
 def _clip_init(proposed):
     global _BF
+    from PIL import ImageFilter as IF
+
+    class GaussianBlur(IF.GaussianBlur):                    # Hope Again passes NumPy numbers, which newer Pillow
+        def __init__(self, radius=2):                       # rejects; plain numbers here (the film is not changed)
+            super().__init__(radius if isinstance(radius, tuple) else float(radius))
+    IF.GaussianBlur = GaussianBlur
     sys.path.insert(0, HERE)
     import burnham_film as BF
     import types
