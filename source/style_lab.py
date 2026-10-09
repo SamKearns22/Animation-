@@ -8,6 +8,8 @@ All pictures go to review/ai-tells/ (kept off GitHub by .gitignore).
   python3 source/style_lab.py sample          sheet 1: the numbered contact sheet of 20 tiles from six films
   python3 source/style_lab.py zoom            close crops of details sheet 1 is too small to show
   python3 source/style_lab.py options         sheet 2: the same three tiles in today's look and in each option
+  python3 source/style_lab.py clip            Hope Again, 11.5 s, today then with the proposal, as a video
+  python3 source/style_lab.py example         Hope Again, four shots, today and with the proposal
 """
 import math
 import os
@@ -285,9 +287,18 @@ def opt_ink(CM):
 
     pairs = [(B.Pen, 'poly', pen_poly), (B.Pen, 'line', pen_line), (Ctx, 'poly', ctx_poly), (Ctx, 'ell', ctx_ell),
              (B, 'gradient', _banded_gradient(B))]
+    def glow(img, cam, x, y, r, colr, alpha):
+        return                                              # no glows at all: flat colour only
+    import types
+    from PIL import ImageFilter as IF
+    sharp = types.SimpleNamespace(GaussianBlur=lambda r: IF.GaussianBlur(0))   # no soft-focus blur anywhere
     for m in list(sys.modules.values()):
+        if getattr(m, 'ImageFilter', None) is IF and m.__name__ in ('burnham', 'cryminister'):
+            pairs.append((m, 'ImageFilter', sharp))
         if getattr(m, 'soft', None) is ed.soft:
             pairs.append((m, 'soft', _flat_soft(ed.soft)))
+        if getattr(m, 'glow', None) is ed.glow:
+            pairs.append((m, 'glow', glow))
     return swapped(pairs)
 
 
@@ -335,10 +346,18 @@ def print_look(im, inks, seed=1, key=(1.0, 0.96, 0.88), desat=0.22):
 
 # Option 3: everybody a different shape -----------------------------------------------------------------------------
 
+IS_LEAD = [lambda sp: sp.get('name') == 'Andy']           # the film's lead: keeps his caricature
+TWOS = [False]                                              # background people held two frames each (6 drawings a second)
+
+
+def _twos(t):
+    return math.floor(t * 6 + 1e-6) / 6 if TWOS[0] else t
+
+
 def _params(sp):
     name = str(sp.get('name'))
     r = random.Random(name + str(sp.get('skin')) + str(sp.get('jacket')) + str(sp.get('hair')))
-    if name == 'Andy':                                      # the lead keeps his caricature, just less of a template
+    if IS_LEAD[0](sp):                                      # the lead keeps his caricature, just less of a template
         head = dict(sx=0.92, sy=1.08, jaw=-0.16, brow=0.08, fsc=0.86, fdy=8, asym=3.5, tilt=0.035)
         body = dict(kx=0.94, ky=1.0, kl=1.04, lean=0.02)
     else:
@@ -389,6 +408,10 @@ def opt_variety(CM):
 
     class Local(OrigLocal):
         def P(self, x, y):
+            if cur.get('crowd'):                            # a head in a crowd seen from behind: its own size and spot
+                r = random.Random(hash((round(self.ox), round(self.oy))))
+                kx, ky, dx = r.uniform(0.8, 1.25), r.uniform(0.85, 1.2), r.uniform(-45, 45)
+                return OrigLocal.P(self, x * kx + dx, y * ky if y < 0 else y)
             bp = cur.get('body')
             if bp:
                 g = _sm(-80, 40, y)                         # below the neck only; the head has its own shape
@@ -412,12 +435,29 @@ def opt_variety(CM):
     def person(img, cam, x, y, s, sp, t=0.0, flip=1):
         cur['head'], cur['body'] = _params(sp)
         cur['sp'] = sp
+        if not IS_LEAD[0](sp):
+            t = _twos(t)
         try:
             return orig_person(img, cam, x, y, s, sp, t, flip)
         finally:
             cur.clear()
 
-    return swapped([(B, 'person', person), (B, 'head', head), (B, 'hair_back', hair_back), (B, 'Local', Local)])
+    pairs = [(B, 'person', person), (B, 'head', head), (B, 'hair_back', hair_back), (B, 'Local', Local)]
+    if hasattr(B, 'heads_from_behind'):
+        orig_heads = B.heads_from_behind
+
+        def heads_from_behind(*a, **k):
+            if 't' in k:
+                k['t'] = _twos(k['t'])
+            elif len(a) > 6:
+                a = a[:6] + (_twos(a[6]),) + a[7:]
+            cur['crowd'] = True
+            try:
+                return orig_heads(*a, **k)
+            finally:
+                cur.clear()
+        pairs.append((B, 'heads_from_behind', heads_from_behind))
+    return swapped(pairs)
 
 
 # Option 4: a world made and worn by hand ---------------------------------------------------------------------------
@@ -667,6 +707,86 @@ def options(out):
     print(out, sheet.size)
 
 
+# ------------------------------------------------------------------------------------------------ 3. an example film
+
+EXAMPLE_SHOTS = ['1', '2', '3', '10']                       # Hope Again: the stage, the hall, the front row, swords
+
+
+def example(out):
+    """Hope Again, four shots: as it was made (top row) and with the proposal (bottom row): hand-drawn line, no blur
+    or glow, everyone a different shape. Drawn from the film's own shot list; the film itself is not changed."""
+    import types
+    sys.path.insert(0, HERE)
+    import burnham as H
+    film = types.SimpleNamespace(B=H, OUT=H.INK)
+    IS_LEAD[0] = lambda sp: sp.get('jaw') == 'long' and sp.get('hh') == 96   # Burnham, and the king he becomes
+    shots = {n: (name, fn) for n, name, _, fn in H.BOARD}
+    today, new = [], []
+    for n in EXAMPLE_SHOTS:
+        name, fn = shots[n]
+        today.append((H.finish(fn()), f'{n}. {name}: today'))
+        with opt_ink(film), opt_variety(film):
+            new.append((H.finish(fn()), f'{n}. {name}: proposed'))
+        print('shot', n, flush=True)
+    grid(today + new, out, 4, 380, 676, 'Hope Again: today (top) and the proposal (bottom)')
+
+
+# ------------------------------------------------------------------------------------------------ 4. an example clip
+
+CLIP = (9.5, 21.0)                                          # Hope Again: end of the speech, ovation, front row, knights
+
+
+def _clip_init(proposed):
+    global _BF
+    sys.path.insert(0, HERE)
+    import burnham_film as BF
+    import types
+    BF.B.SS = 2
+    _BF = BF
+    if proposed:
+        IS_LEAD[0] = lambda sp: sp.get('jaw') == 'long' and sp.get('hh') == 96
+        TWOS[0] = True
+        film = types.SimpleNamespace(B=BF.B, OUT=BF.B.INK)
+        opt_ink(film).__enter__()                           # stays on in this helper process until it ends
+        opt_variety(film).__enter__()
+
+
+def _clip_frame(args):
+    i, label = args
+    img = _BF.frame_image(i).convert('RGB').resize((1080, 1920), Image.LANCZOS)
+    d = ImageDraw.Draw(img)
+    f = ImageFont.truetype(SANS, 40)
+    w = d.textlength(label, font=f)
+    d.rounded_rectangle([540 - w / 2 - 24, 330, 540 + w / 2 + 24, 394], 14, fill=(255, 255, 255))
+    d.text((540, 362), label, font=f, fill=(20, 20, 20), anchor='mm')
+    return np.asarray(img).tobytes()
+
+
+def clip(out):
+    """The same stretch of Hope Again twice: as made (TODAY), then with the proposal (PROPOSED), with the film's sound."""
+    from multiprocessing import Pool
+    import imageio_ffmpeg
+    fps = 12
+    frames = range(int(CLIP[0] * fps), int(CLIP[1] * fps))
+    src = os.path.join(ROOT, 'animations', 'king-in-the-north-vertical.mp4')
+    a0, a1 = frames[0] / fps, (frames[-1] + 1) / fps
+    ff = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
+                           '-s', '1080x1920', '-r', str(fps), '-i', '-', '-i', src, '-filter_complex',
+                           f'[1:a]atrim={a0}:{a1},asetpts=PTS-STARTPTS,asplit[a][b];[a][b]concat=n=2:v=0:a=1[s]',
+                           '-map', '0:v', '-map', '[s]', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '23',
+                           '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
+    t0 = time.time()
+    for proposed, label in ((False, 'TODAY'), (True, 'PROPOSED')):
+        with Pool(os.cpu_count(), initializer=_clip_init, initargs=(proposed,)) as pool:
+            for k, buf in enumerate(pool.imap(_clip_frame, [(i, label) for i in frames], chunksize=2)):
+                ff.stdin.write(buf)
+                if k % 24 == 0:
+                    print(label, k, '/', len(frames), f'{time.time() - t0:.0f} s', flush=True)
+    ff.stdin.close()
+    ff.wait()
+    print(out, f'{os.path.getsize(out) / 1e6:.1f} MB', f'{time.time() - t0:.0f} s')
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'gather':
@@ -675,6 +795,10 @@ def main():
         sample(a[1] if len(a) > 1 else os.path.join(REVIEW, 'sheet1-sample.jpg'))
     elif a[0] == 'zoom':
         zoom(a[1] if len(a) > 1 else os.path.join(REVIEW, 'zoom-details.jpg'))
+    elif a[0] == 'example':
+        example(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.jpg'))
+    elif a[0] == 'clip':
+        clip(a[1] if len(a) > 1 else os.path.join(REVIEW, 'example-hope-again.mp4'))
     elif a[0] == 'options':
         options(a[1] if len(a) > 1 else os.path.join(REVIEW, 'sheet2-options.jpg'))
 
