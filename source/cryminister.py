@@ -187,6 +187,13 @@ def _voices():
 
 
 VOICES = _voices()
+END_AT = {1: 2.45}                            # Sam, 9 Oct: line 1 ends here (cuts off the distortion at its end)
+for _i, _ln in enumerate(LINES):
+    if _ln['n'] in END_AT:
+        _v = VOICES[_i][:int(END_AT[_ln['n']] * SR)].copy()
+        _k = int(0.03 * SR)
+        _v[-_k:] *= np.linspace(1, 0, _k)     # a 30 ms fade, so the cut never clicks
+        VOICES[_i] = _v
 
 # ------------------------------------------------------------------------------------------------- the timeline
 T = 0.0
