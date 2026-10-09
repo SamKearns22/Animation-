@@ -65,7 +65,7 @@ RECS = [
                                   'Are you absolutely sure | you want to sue the police?']),
     ('AJ', 'andrew-hutt-2', 'reveal', ['Mee shall ruin those clowns,', 'che da they did tah je um',
                                   'myo good best pateesa Epstein.', 'Ho ho ho!']),
-    ('PR', 'andrew-hutt-3', 'reply', ['Yes,', "I was afraid you'd say that."]),
+    ('PR', 'andrew-hutt-3', 'reply', ["Yes, I was afraid you'd say that."]),
 ]
 SR = MA.SR
 LINES, PLACED = [], []
@@ -78,9 +78,14 @@ for who, name, at, phrases in RECS:
         at = LINES[-1]['end'] + 0.4 + 0.4 + 0.8
     elif at == 'reply':                                           # 0.9 s after the cut back to the PR man
         at = LINES[-1]['end'] + 0.35 + 0.9
-    st = [(a, b) for a, b in MA.pauses(x, 0.12) if b - a > 0.3]   # stretches of speech (stray clicks ignored)
-    if len(st) == 5:                                              # Andrew's laugh comes as two bursts: one phrase
-        st = st[:3] + [(st[3][0], st[4][1])]
+    st = MA.speech(x)                                             # real speech only (no fumbling or breaths)
+    if len(st) == len(phrases) + 1:                               # Andrew's laugh comes as two bursts: one phrase
+        st = st[:-2] + [(st[-2][0], st[-1][1])]
+    while len(st) < len(phrases):                                 # one breath for two written phrases: split it
+        j = len(st) - 1                                           # where the syllables say the break falls
+        rest = phrases[j:len(phrases) - (len(st) - 1 - j)]
+        share = syllables_in(rest[0].replace(' | ', ' ')) / sum(syllables_in(r.replace(' | ', ' ')) for r in rest)
+        st = st[:j] + list(MA.split_at(x, st[j], share)) + st[j + 1:]
     assert len(st) == len(phrases), f'{name}: {len(st)} phrases heard, {len(phrases)} written'
     off = at - st[0][0]                                           # recording time + off = film time
     PLACED.append((name, off, st))

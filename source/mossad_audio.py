@@ -130,11 +130,36 @@ def pauses(x, min_gap=0.12):
     return [(a / 100, b / 100) for a, b in merged if b - a >= 4]
 
 
+def speech(x, min_level=0.35):
+    """The stretches of real speech: phrases (pauses) whose loudness reaches min_level of the recording's loudest
+    moment. Quieter stretches are handling noise, breaths or mumbling (Andrew the Hutt: a quiet second of fumbling
+    before "Yes" was taken for the word, and the caption and mouth ran a second early)."""
+    hop = SR // 100
+    env = np.array([np.sqrt(np.mean(x[i:i + hop] ** 2)) for i in range(0, len(x) - hop, hop)])
+    env = np.sqrt(np.convolve(env ** 2, np.ones(5) / 5, 'same'))   # 50 ms windows: a click is not a voice
+    top = env.max() + 1e-12
+    return [(a, b) for a, b in pauses(x, 0.12) if b - a > 0.15 and env[int(a * 100):int(b * 100)].max() >= min_level * top]
+
+
+def split_at(x, stretch, share):
+    """Split one stretch of speech in two at the quietest moment nearest `share` of the way through (0-1)."""
+    a, b = stretch
+    hop = SR // 100
+    env = np.array([np.sqrt(np.mean(x[i:i + hop] ** 2)) for i in range(int(a * SR), int(b * SR) - hop, hop)])
+    env = np.convolve(env, np.ones(3) / 3, 'same')
+    aim = int(share * len(env))
+    lo, hi = max(2, aim - 12), min(len(env) - 2, aim + 12)
+    mins = [i for i in range(lo, hi) if env[i] <= env[i - 1] and env[i] <= env[i + 1]] or [aim]
+    i = min(mins, key=lambda k: abs(k - aim) * 0.02 + env[k] / (env.max() + 1e-9))   # quiet, and near the aim
+    t = a + i / 100
+    return (a, t), (t + 0.01, b)
+
+
 def gate(x, stretches=None, before=0.06, after=0.12, fade=0.025):
     """Keep only the speech: each phrase from a hair before to a hair after, with short fades, and true silence
     between (Sam's breaths and phone handling at the start, end and between phrases are gone). Andrew the Hutt."""
     if stretches is None:
-        stretches = [(a, b) for a, b in pauses(x, 0.12) if b - a > 0.3]
+        stretches = speech(x)
     g = np.zeros(len(x))
     k = int(fade * SR)
     for a, b in stretches:
