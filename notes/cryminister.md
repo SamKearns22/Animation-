@@ -46,6 +46,7 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 41 | 20 | - | The selfie arm (note 36) swung off the side of the screen instead of reaching to the phone filming him: it now reaches towards the lens (foreshortened; with the new limbs it swells as it nears the camera), leaving the frame on the left just above the name and description. | done (in code; not yet rendered) |
 | 42 | all | - | Seen inside the real TikTok screen (measured from Sam's iPhone, `source/tiktok_overlay.py`): the made-up buttons, search bar and progress line sat beside the real ones as a cluttered double. Only his name and description are kept, ending left of the real buttons. | done (in code; not yet rendered) |
 | 43 | 16 | "COME ON" | His fists sat under the real app's username: lifted about 30 units (still at his chest). | done (in code; not yet rendered) |
+| 44 | 12 | wide | Zoom in 20%: the edge of the set showed (the paving lines stopped and the pavement went plain). 20% closer, the action kept just above his name (the spire tip now just off the top), and the paving lines drawn all the way down. | done (in code; not yet rendered) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).

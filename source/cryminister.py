@@ -280,7 +280,7 @@ CAMS = {
     'half': ((2.6, AX - 520 / 2.6, 918), (0.62, MAN_X + 250 / 0.62, -440)),
     'close': ((4.4, AX, 905), (0.7, -1700, -931)),
     'further': ((1.6, AX, 1060), (0.26, -1650, -1468)),
-    'wide': ((0.42, AX + 240, 599), (0.13, -400, -2698)),
+    'wide': ((0.42, AX + 240, 599), (0.156, -400, -2122)),    # 20% closer (Sam, 9 Oct); the action above his name
     'eyes': ((16.0, AX - 4, 886), (2.3, -1650, -1000)),
     'lady': ((1.15, AX - 40, 1190), (0.36, 1480, -560)),
     'bigwolf': (None, (1.05, 430, -470)),
@@ -527,8 +527,8 @@ def street(img, cam, t, wide=False):
         shop(img, cam, x0, x1, k)
     box(X, -12000, BASE, 12000, 20000, (176, 174, 168), 2, 0, line=False)                              # the pavement
     for k in range(-30, 31):
-        X.seg((k * 480, BASE), (k * 480 * 1.25, 3000), 5, (150, 148, 142))
-    for k in range(6):
+        X.seg((k * 480, BASE), (k * 480 * 1.566, 7000), 5, (150, 148, 142))   # all the way down (the wide sees far)
+    for k in range(12):
         X.seg((-12000, BASE + 140 * k * (1 + 0.3 * k)), (12000, BASE + 140 * k * (1 + 0.3 * k)), 5, (150, 148, 142))
     X.rect(-12000, BASE - 20, 12000, BASE + 10, (120, 118, 114), line=False)
     for lx in (-4800, 1250, 6400):                                                                      # lampposts, a bin
