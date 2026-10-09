@@ -66,7 +66,7 @@ LINES = [
     dict(n=9, shot='close', text='Please get a job.', audio=('cry-9', 0.0, None)),
     dict(n=10, shot='mid', text='Any job.', audio=('cry-10', 0.0, None)),
     dict(n=11, shot='further', text='We have NO money.', audio=('cry-11', 0.0, None)),
-    dict(n=12, shot='wide', text='You want change when I can barely afford to faff about with the margins.',
+    dict(n=12, shot='wide', text='You want change when I can barely afford to FAFF about with the margins.',
          audio=('cry-12', 0.0, None)),
     dict(n=13, shot='eyes', text="I'm so stressed.", audio=('cry-13', 0.0, None)),
     dict(n=14, shot='mid', text="I haven't slept for weeks.", audio=('cry-14', 0.0, None)),
@@ -911,10 +911,13 @@ GEST = {
                   (0.7, 'COME ON', (-115, 205), 'fast'), (1.4, 'hold', (-118, 200))),
              R=B_(16, (-0.12, 'raise', (330, 0)), (0.18, 'pull', (250, 190), 'fast'), (0.3, 'COME ON', (115, 200), 'fast'), (0.5, 'shake', (125, 175)),
                   (0.7, 'COME ON', (115, 205), 'fast'), (1.4, 'hold', (118, 200)))),
-    18: dict(L=B_(18, (-0.05, 'set-up', (-200, 260)), (0.2, 'palms out', (-260, -30), 'fast'), (2.0, 'hold', (-250, -20))),
-             R=B_(18, (-0.05, 'set-up', (200, 260)), (0.2, 'palms out', (260, -30), 'fast'), (2.0, 'hold', (250, -20)))),
+    # Sam, 9 Oct: angrier. Fists wound up by the shoulders, slammed down on "STOP" and again on "YELLING".
+    18: dict(L=B_(18, (-0.1, 'wind up', (-240, 60)), (0.31, 'STOP', (-190, 240), 'fast'), (0.5, 'lift', (-230, 110)),
+                  (0.66, 'YELLING', (-195, 250), 'fast'), (2.0, 'hold', (-195, 245))),
+             R=B_(18, (-0.08, 'wind up', (240, 60)), (0.33, 'STOP', (190, 240), 'fast'), (0.52, 'lift', (230, 110)),
+                  (0.68, 'YELLING', (195, 250), 'fast'), (2.0, 'hold', (195, 245)))),
 }
-BEND = {6: {'L': 'down'}, 10: {'L': 'down', 'R': 'down'}, 16: {'L': 'down', 'R': 'down'}, 18: {'L': 'down', 'R': 'down'}}
+BEND = {6: {'L': 'down'}, 10: {'L': 'down', 'R': 'down'}, 16: {'L': 'down', 'R': 'down'}}
 FACE = {   # brows, lids, harrow (the weight of it: rings under the eyes), what he does with his mouth between words
     1: dict(brows='sincere', lid=2), 2: dict(brows='serious', lid=2), 3: dict(brows='sincere', lid=3),
     6: dict(brows='confused', lid=5, rest='smile'), 7: dict(brows='sincere', lid=2, harrow=0.2),
@@ -922,7 +925,8 @@ FACE = {   # brows, lids, harrow (the weight of it: rings under the eyes), what 
     10: dict(brows='alarm', lid=-1, harrow=0.4), 11: dict(brows='outrage', lid=-1, harrow=0.45),
     12: dict(brows='alarm', lid=0, harrow=0.5), 13: dict(brows='alarm', stress=True), 14: dict(brows='alarm', stress=True),
     15: dict(brows='alarm', lid=7, harrow=0.45, rest='set'), 16: dict(brows='fierce', lid=2, harrow=0.6),
-    18: dict(brows='alarm', lid=-2, harrow=0.65), 19: dict(brows='sincere', lid=2, harrow=0.3),
+    18: dict(brows='fierce', lid=2, harrow=0.6),       # angry like line 16, not alarmed (Sam, 9 Oct)
+    19: dict(brows='sincere', lid=2, harrow=0.3),
     20: dict(brows='alarm', lid=-2, harrow=0.4)}
 LEVELS = [   # Andy's stress (shots 13-14), 1 = slight, 6 = huge: rings, red rims, eye size, pupil, lid twitch, sweat, hair
     dict(name='1 Tired', harrow=0.35, rim=0.0, eye=1.0, pupil=4.5, twitch=False, sweat=0, hair=0),
@@ -1413,10 +1417,10 @@ def run_andy(img, t):
     opened = shape in ('AI', 'O', 'U', 'WQ', 'E', 'L')
     if mode == 'angry':                                            # shouting it, teeth bared (never a pucker or grin)
         sp.update(brows='fierce', lid=4, look=0.0, turn=0.0, tilt=-0.06)
-        sp['mouth'] = 'shout' if talking and opened else 'hidden'   # between shouts: gritted teeth, never a smirk
+        sp['mouth'] = ('v:etc' if shape == 'E' else sp['mouth']) if talking else 'hidden'   # lip sync; gritted between
     elif mode == 'terrified':                                      # gaping, the corners pulled down
         sp.update(brows='outrage', lid=-4, look=-0.95, turn=-0.3, tilt=0.02)   # back over his shoulder at them (note 30)
-        sp['mouth'] = 'agape'                                      # never closes into a calm line
+        sp['mouth'] = ('v:etc' if shape == 'E' else sp['mouth']) if talking else 'agape'   # lip sync; gaping between
     else:                                                          # panicked: brows shot up, eyes wide, gritted teeth
         sp.update(brows='outrage', lid=-2, look=0.0, turn=0.0, tilt=-0.08, harrow=0.0)
         if not talking or shape == 'E':
