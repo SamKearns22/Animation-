@@ -8,7 +8,7 @@ answers in Huttese. Hard cut back to the PR man, who has seen this coming.
 
 The series' look (burnham.py people, circle hands, figure.py arms, mouths.py lip sync, the standard captions).
 The room is one strip of three walls, so the swing is one camera turning, and every shot of each wall draws the
-same set. No sound yet: the words are timed at a natural pace and a silent track keeps players happy.
+same set. Sam's three recordings set the timing (RECS); they play exactly as recorded.
 
     python3 source/hutt.py stills OUT.jpg             the key frames on one sheet (about 30 s)
     python3 source/hutt.py final OUT.mp4 [--scale 0.5] [--secs 3]
@@ -39,33 +39,77 @@ U0 = {'A': 0, 'C': 2300, 'B': 4600}           # the three walls along the camera
 SPAN = (-610, 1690)                           # each wall's extent in its own coordinates
 
 # ------------------------------------------------------------------------------------------------- the script
-PAN0, PAN1 = 6.7, 7.9                         # the 180-degree swing
-CUT_BACK = 15.7                               # hard cut back to the PR man
-BLACK_AT = 19.3
-DUR = BLACK_AT + 0.35
-SCRIPT = [  # who, words ('|' splits the caption at a pause), start, length (no recordings yet: a natural pace)
-    ('PR', "Andrew, you're already | the most hated man in the country.", 0.2, 2.9),
-    ('PR', 'Are you absolutely sure | you want to sue the police?', 3.4, 2.9),
-    ('AJ', 'Mee shall ruin those clowns, | che da they did tah je um', 8.7, 3.5),
-    ('AJ', 'myo good best pateesa Epstein. Ho ho ho!', 12.3, 3.05),
-    ('PR', "Yes, I was afraid you'd say that.", 16.65, 2.0),
-]
-LAUGH = (14.0, 15.45)
-TUG = 9.3                                    # "ruin": he yanks the chain
-SHOTS = [('PR man', 0.0, PAN0), ('swing', PAN0, PAN1), ('Andrew', PAN1, CUT_BACK), ('PR man again', CUT_BACK, BLACK_AT)]
+# Sam's recordings (source/audio/andrew-hutt-N.m4a), played exactly as recorded. Each is placed so its first word
+# lands at `at`; each phrase of speech (found in the recording) carries its caption pieces ('|' splits a phrase).
+import mossad_audio as MA     # noqa: E402
+from voices import syllables_in   # noqa: E402
 
-LINES = []
-for who, cap, st, d in SCRIPT:
-    text = cap.replace(' | ', ' ')
-    stretches = [(0.0, d)] if who != 'AJ' or 'Ho' not in text else [(0.0, LAUGH[0] - st - 0.05), (LAUGH[0] - st, d)]
-    trk = [(a + st, b + st, s) for a, b, s in mouths.track(text, stretches)]
-    pieces, words, k = cap.split(' | '), len(text.split()), 0
-    for j, pc in enumerate(pieces):                       # each caption piece is on screen for its share of the words
-        n = len(pc.split())
-        a, b = st + d * k / words, st + d * (k + n) / words
-        k += n
-        LINES.append(dict(who=who, text=pc, start=a, end=b, track=trk if j == 0 else []))
+RECS = [
+    ('PR', 'andrew-hutt-1', 0.2, ["Andrew, you're already | the most hated man in the country.",
+                                  'Are you absolutely sure | you want to sue the police?']),
+    ('AJ', 'andrew-hutt-2', 7.4, ['Mee shall ruin those clowns,', 'che da they did tah je um',
+                                  'myo good best pateesa Epstein.', 'Ho ho ho!']),
+    ('PR', 'andrew-hutt-3', 20.75, ['Yes,', "I was afraid you'd say that."]),
+]
+SR = MA.SR
+LINES, PLACED = [], []
+for who, name, at, phrases in RECS:
+    x = MA.line(name)
+    st = [(a, b) for a, b in MA.pauses(x, 0.12) if b - a > 0.3]   # stretches of speech (stray clicks ignored)
+    if len(st) == 5:                                              # Andrew's laugh comes as two bursts: one phrase
+        st = st[:3] + [(st[3][0], st[4][1])]
+    assert len(st) == len(phrases), f'{name}: {len(st)} phrases heard, {len(phrases)} written'
+    off = at - st[0][0]                                           # recording time + off = film time
+    PLACED.append((name, off))
+    hop = SR // 100
+    env = np.array([np.sqrt(np.mean(x[k:k + hop] ** 2)) for k in range(0, len(x) - hop, hop)])
+    env = env / (env.max() + 1e-9)
+    text = ' '.join(p.replace(' | ', ' ') for p in phrases)
+    trk = [(a + off, b + off, sh) for a, b, sh in mouths.track(text, st, env, 100)]
+    for j, (cap, (a, b)) in enumerate(zip(phrases, st)):
+        pieces = cap.split(' | ')
+        words = syllables_in(cap.replace(' | ', ' '))
+        k = 0
+        for pc in pieces:                                         # a piece is on screen for its share of the syllables
+            n = syllables_in(pc)
+            LINES.append(dict(who=who, text=pc, start=off + a + (b - a) * k / words, end=off + a + (b - a) * (k + n) / words,
+                              track=trk if (j, k) == (0, 0) else []))
+            k += n
+PR1_END = LINES[3]['end']
+AJ = [ln for ln in LINES if ln['who'] == 'AJ']
+PAN0 = PR1_END + 0.4                          # the 180-degree swing
+PAN1 = PAN0 + 1.2
+LAUGH = (AJ[-1]['start'], AJ[-1]['end'])
+CUT_BACK = LAUGH[1] + 0.35                    # hard cut back to the PR man
+YES = LINES[-2]['start']
+BLACK_AT = LINES[-1]['end'] + 0.7
+DUR = BLACK_AT + 0.35
+TUG = AJ[0]['start'] + 0.95                   # "ruin": he yanks the chain
+SELFIE = (AJ[1]['start'] + 0.3, AJ[2]['start'] - 0.2)
+SHOTS = [('PR man', 0.0, PAN0), ('swing', PAN0, PAN1), ('Andrew', PAN1, CUT_BACK), ('PR man again', CUT_BACK, BLACK_AT)]
 TRACK = {w: [x for ln in LINES if ln['who'] == w for x in ln['track']] for w in ('PR', 'AJ')}
+
+
+def soundtrack(total):
+    """The three recordings at their places, mastered to about -14 LUFS, cut with the picture."""
+    import mossad as M
+    n = int(total * SR)
+    mix = np.zeros(n)
+    for name, off in PLACED:
+        a = MA.line(name)
+        s0 = int(round(off * SR))
+        seg = a[max(0, -s0):]
+        s0 = max(0, s0)
+        seg = seg[:max(0, n - s0)]
+        mix[s0:s0 + len(seg)] += seg
+    end = min(n, int(BLACK_AT * SR))
+    for _ in range(3):
+        mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
+        mix = M.limiter(mix, -2.6)
+    k = int(0.005 * SR)
+    mix[end - k:end] *= np.linspace(1, 0, k)
+    mix[end:] = 0
+    return mix
 
 
 def caption_at(t):
@@ -328,7 +372,7 @@ def hutt_state(t):
         open_ = max(open_, 0.55 + 0.4 * abs(math.sin(math.pi * (t - LAUGH[0]) * 2.4)))
     bounce = -abs(math.sin(math.pi * (t - LAUGH[0]) * 2.4)) * 16 * laugh if laugh else 0.0
     sy = 1.0 + 0.008 * math.sin(2 * math.pi * t / 3.6) - (0.025 * laugh * abs(math.sin(math.pi * (t - LAUGH[0]) * 2.4)))
-    look = 0.75 if t < 8.25 else (0.0 if t < 13.0 else -0.15)  # eyes slide from his pizza to us, then sidelong
+    look = 0.75 if t < AJ[0]['start'] - 0.5 else (0.0 if t < AJ[2]['start'] + 1.5 else -0.15)  # eyes slide from his pizza to us, then sidelong
     blink = F.blinking(t, HUTT_BLINKS) or laugh > 0.3
     tug = 0.0
     if t >= TUG:
@@ -337,7 +381,7 @@ def hutt_state(t):
     return dict(open=open_, laugh=laugh, bounce=bounce, sy=sy, look=look, blink=blink, tug=tug)
 
 
-HUTT_BLINKS = F.blinks(21, 8.0, 16.0, per_min=(8, 12))
+HUTT_BLINKS = F.blinks(21, PAN1, CUT_BACK, per_min=(8, 12))
 
 
 def hookah(img, p, cam, t):
@@ -507,7 +551,7 @@ MODELS = [  # x, hair, colour, skin, what she is doing (one sentence each); her 
     dict(x=830, hair='bob', hair_c=(238, 230, 212), skin=B.PALE, act='nails',        # inspecting her nails, yawning
          s=0.395, sw=110, waist=0.78, hips=1.0, hw=56, hh=80, jaw='soft'),           # petite
 ]
-MODEL_BLINKS = [F.blinks(30 + i, 7.0, 16.0) for i in range(len(MODELS))]
+MODEL_BLINKS = [F.blinks(30 + i, PAN0, CUT_BACK) for i in range(len(MODELS))]
 
 
 def leia_torso(orig):
@@ -564,7 +608,7 @@ def model_sp(i, t):
         sh = rig.shoulder('R')
         down = (sh[0] + 30, sh[1] + 0.9 * rig.reach('palm'))
         up = (sh[0] + 50, sh[1] - 250)
-        k = ease((t - 10.3) / 0.35) * (1 - ease((t - 11.9) / 0.35))
+        k = ease((t - SELFIE[0]) / 0.35) * (1 - ease((t - SELFIE[1]) / 0.35))
         tgt = (down[0] + (up[0] - down[0]) * k + 150 * math.sin(math.pi * k), down[1] + (up[1] - down[1]) * k)   # swung out, not past the shoulder
         arms = dict(rig.pose('sides'), R=rig.arm('R', tgt, 'palm', 'out'))
         sp['brows'] = 'serious'
@@ -676,12 +720,12 @@ def pr_state(t):
     sp['arms'] = arms
     shape = mouths.at(TRACK['PR'], t)
     sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
-    sp['blink'] = F.blinking(t, PR_BLINKS) or 16.05 <= t < 16.45                # the weary blink before "Yes"
+    sp['blink'] = F.blinking(t, PR_BLINKS) or YES - 0.6 <= t < YES - 0.2                # the weary blink before "Yes"
     sp['brows'] = 'serious'
-    if 3.55 <= t < 4.6:                                                        # "absolutely sure?"
+    if LINES[2]['start'] <= t < LINES[2]['end'] + 0.5:                                                        # "absolutely sure?"
         sp['brow_raise'], sp['brows'] = 5, None
     sp['lid'] = 2 if t >= CUT_BACK else 0
-    sp['breath'] = F.breath(t, 4.0, 1.5) + (4 * math.sin(math.pi * (t - 16.1) / 0.8) if 16.1 <= t < 16.9 else 0)
+    sp['breath'] = F.breath(t, 4.0, 1.5) + (4 * math.sin(math.pi * (t - YES + 0.55) / 0.8) if YES - 0.55 <= t < YES + 0.25 else 0)
     return sp
 
 
@@ -760,7 +804,7 @@ def checks():
 # ------------------------------------------------------------------------------------------------ output
 def stills(out):
     B.SS = 2
-    ts = [1.6, 4.0, 7.2, 8.6, 10.6, 14.2, 16.2, 17.4]
+    ts = [1.2, 3.6, PAN0 + 0.5, PAN1 + 0.4, AJ[1]['start'] + 1, LAUGH[0] + 0.4, CUT_BACK + 0.4, YES + 1.2]
     tiles = []
     for t in ts:
         im = frame_image(t).convert('RGB').resize((540, 960), Image.LANCZOS)
@@ -788,11 +832,12 @@ def render(out, scale=1.0, secs=None):
     total = secs or DUR
     n = int(round(total * FPS))
     t0 = time.time()
+    wav = out + '.wav'
+    MA.write_wav(wav, soundtrack(total))
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-                          '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-f', 'lavfi', '-i',
-                          'anullsrc=channel_layout=stereo:sample_rate=48000', '-map', '0:v', '-map', '1:a',
+                          '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
                           '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
-                          '-b:a', '64k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
+                          '-b:a', '128k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:
         for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss) for i in range(n)], chunksize=2)):
             p.stdin.write(fr)
@@ -800,6 +845,7 @@ def render(out, scale=1.0, secs=None):
                 print(f'frame {k}/{n}', flush=True)
     p.stdin.close()
     p.wait()
+    os.remove(wav)
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB, {n} frames, {time.time() - t0:.0f} s)')
 
 
