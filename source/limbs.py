@@ -12,7 +12,8 @@ Nothing in any film changes: the shapes are swapped in memory while a picture or
 
   python3 source/limbs.py still OUT.jpg          The Patriots' two-shot, today and with the new limbs, side by side
   python3 source/limbs.py animatic OUT.mp4       The Patriots animatic (540 x 960) with the new limbs
-  python3 source/limbs.py cryminister OUT.mp4    Cry Minister's quick look (540 x 960, as its own --small) with the new limbs
+  python3 source/limbs.py cryminister OUT.mp4 [--fixes]   Cry Minister's quick look (540 x 960) with the new limbs;
+                                                 --fixes: steady elbows, in-betweens, no flat folds, slower arm pump
 """
 import math
 import os
@@ -94,7 +95,11 @@ def _arm_spine(sh, el, wr, w):
     spine = np.vstack([a, corner[1:], b[1:]])
     s = np.linspace(0, 1, len(spine))
     hw = w * (1.15 - 0.42 * s) * (1 + 0.05 * np.sin(2 * math.pi * s))   # fuller at the shoulder, slim at the wrist
-    return spine, hw
+    bend = math.degrees(math.acos(max(-1.0, min(1.0, float(d1 @ d2)))))
+    fold = max(0.0, min(1.0, (bend - 100) / 50))           # a tight fold: slimmer at the elbow, so it reads as a bend
+    s_el = (len(a) + 4) / len(spine)
+    hw = hw * (1 - 0.22 * fold * np.exp(-((s - s_el) / 0.1) ** 2))
+    return spine, hw, fold, len(a) + 4, float(d1[0] * d2[1] - d1[1] * d2[0])
 
 
 def install(B):
@@ -135,7 +140,7 @@ def install(B):
         body = next((pts for who, pts in reversed(drawn) if who == _who(p.cam) and _inside(sh, pts)), None)
         busy.append(1)
         try:
-            spine, hw = _arm_spine(sh, el, wr, w)
+            spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)
             lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
             q = B.Pen(lay, p.cam)
             o = q.w(2.6) / p.cam.S(1)
@@ -145,7 +150,12 @@ def install(B):
             for col, extra in ((INK, o), (sleeve, 0.0)):    # a solid tube, its outline underneath
                 for (x_, y_), r_ in zip(dense, hwd):
                     q.ell(x_, y_, r_ + extra, r_ + extra, col, None, n=20)
-            n = _normals(spine)                              # the film's soft shading, on the lower side
+            n = _normals(spine)
+            if fold > 0.2:                                   # a small crease inside a tight bend
+                side = -1 if turn > 0 else 1
+                c0 = spine[k_el] + side * n[k_el] * hw[k_el] * 0.95
+                q.line([tuple(c0), tuple(c0 - side * n[k_el] * hw[k_el] * 0.6 * fold)], INK, 2.0)
+            # the film's soft shading, on the lower side
             left, right = spine + n * hw[:, None], spine - n * hw[:, None]
             lower = 1 if left[:, 1].mean() > right[:, 1].mean() else -1
             edge = spine + lower * n * (hw - 4)[:, None]
@@ -157,7 +167,6 @@ def install(B):
                 # (a hand brought up across the chest near the shoulder stays in front of the body).
                 l1 = math.hypot(el[0] - sh[0], el[1] - sh[1]) or 1.0
                 along = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(spine, axis=0).T))])
-                k_el = int(np.argmin([math.hypot(v[0] - el[0], v[1] - el[1]) for v in spine]))
                 upper = Image.new('L', p.img.size, 0)
                 ud = ImageDraw.Draw(upper)
                 for i in range(k_el, -1, -1):                # from the elbow back to the shoulder, rising weight
@@ -262,6 +271,77 @@ def still(out, t=0.6):
     print(out)
 
 
+# ------------------------------------------------------------------------------------------------ Cry Minister fixes
+
+def _arm_near(F, rig, side, target, bend, prev):
+    """The rig's arm, but with the elbow on whichever of its two possible sides is nearer to where it was a frame ago
+    (the bend rule only chooses the first frame), so an elbow never flips across in a single frame."""
+    sh = rig.shoulder(side)
+    U, Fh = rig.upper, rig.fore + F.HAND.get('fist', 14)
+    dx, dy = target[0] - sh[0], target[1] - sh[1]
+    d = min(math.hypot(dx, dy), U + Fh)
+    d = max(d, abs(U - Fh) + 1e-3)
+    a = math.acos(max(-1.0, min(1.0, (U * U + d * d - Fh * Fh) / (2 * U * d))))
+    base = math.atan2(dy, dx)
+    cands = [(sh[0] + U * math.cos(base + s_ * a), sh[1] + U * math.sin(base + s_ * a)) for s_ in (1, -1)]
+    if prev is None:
+        sgn = -1 if side == 'L' else 1
+        key = {'out': lambda e: sgn * e[0], 'in': lambda e: -sgn * e[0], 'down': lambda e: e[1], 'up': lambda e: -e[1]}[bend]
+        el = max(cands, key=key)
+    else:
+        el = min(cands, key=lambda e: math.hypot(e[0] - prev[0], e[1] - prev[1]))
+    dd = math.hypot(target[0] - el[0], target[1] - el[1]) or 1.0
+    wr = (el[0] + (target[0] - el[0]) / dd * rig.fore, el[1] + (target[1] - el[1]) / dd * rig.fore)
+    return el, wr
+
+
+def cryminister_fixes(CM):
+    F = CM.F
+    B_ = CM.B_
+    # 3. moves too fast for 12 frames a second: an in-between for "Any job", a longer face-palm swing
+    CM.GEST[10] = dict(
+        L=B_(10, (-0.1, 'set-up', (-200, 300)), (0.12, 'lift', (-330, 170)), (0.42, 'wide', (-410, 30), 'slow'), (2.0, 'hold', (-400, 40))),
+        R=B_(10, (-0.1, 'set-up', (200, 300)), (0.12, 'lift', (330, 170)), (0.42, 'wide', (410, 30), 'slow'), (2.0, 'hold', (400, 40))))
+    CM.GEST[15] = dict(R=B_(15, (-0.3, 'set-up', (140, 260)), (-0.17, 'swing out', (290, 60)), (-0.05, 'up', (190, -160)),
+                            (0.14, 'palm', (-8, -212)), (4.0, 'hold', (-10, -214))))
+    CM.GEST[18] = {sd: B_(18, (-0.05, 'set-up', (g * 200, 260)), (0.1, 'lift', (g * 255, 150)),
+                          (0.32, 'palms out', (g * 260, -30)), (2.0, 'hold', (g * 250, -20)))
+                   for sd, g in (('L', -1), ('R', 1))}
+    # 2. "COME ON": fists to the chest a little lower and further out, so the arms bend instead of folding flat
+    CM.GEST[16] = {sd: B_(16, (-0.12, 'raise', (g * 330, 0)), (0.18, 'pull', (g * 250, 190), 'fast'),
+                          (0.3, 'COME ON', (g * 160, 250), 'fast'), (0.5, 'shake', (g * 170, 228)),
+                          (0.7, 'COME ON', (g * 160, 255), 'fast'), (1.4, 'hold', (g * 165, 250)))
+                   for sd, g in (('L', -1), ('R', 1))}
+    # 1. elbows keep to the side they were on: each frame's elbow is the solution nearest the last frame's, walked
+    #    through from the start of the shot (so every frame is the same however the render splits the work)
+    orig = CM.andy_sp
+
+    def andy_sp(t, n=None):
+        sp = orig(t, n)
+        n = n or CM.line_of_t(t)
+        g = CM.GEST.get(n)
+        if not g:
+            return sp
+        rig = F.Rig(sp)
+        t0 = CM.shot_at(t)[1]
+        for side, beats in g.items():
+            bend = CM.BEND.get(n, {}).get(side, 'out')
+            prev = None
+            k = math.ceil(t0 * CM.FPS - 1e-6)
+            steps = [k / CM.FPS for k in range(k, int(math.floor(t * CM.FPS + 1e-6)) + 1)] or [t]
+            if abs(steps[-1] - t) > 1e-6:
+                steps.append(t)
+            for tt in steps:
+                el, wr = _arm_near(F, rig, side, beats.at(tt), bend, prev)
+                prev = el
+            sp['arms'][side] = (el, wr, 'fist')
+        return sp
+    CM.andy_sp = andy_sp
+    # 4. the running man pumps his arms twice a second (six drawings a pump) instead of three (four drawings)
+    orig_man = CM.alley_man
+    CM.alley_man = lambda img, X, d, duck, u: orig_man(img, X, d, duck, u * 2 / 3)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'still':
@@ -273,6 +353,8 @@ def main():
     elif a[0] == 'cryminister':
         import cryminister as CM
         install(CM.B)                                        # after the film's own arm checker, which stays on
+        if '--fixes' in a:
+            cryminister_fixes(CM)
         CM.E.render('cryminister-limbs', a[1], size=(540, 960), ss=1, fps=CM.FPS, dur=CM.DUR, picture=CM.picture,
                     overlay=CM.overlay, shot_of=CM.shot_of, sound=CM.soundtrack, write_wav=CM.MA.write_wav,
                     set_ss=lambda v: setattr(CM.B, 'SS', v), crf=26)
