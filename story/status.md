@@ -12,6 +12,10 @@ Read this first in any new session, after CLAUDE.md.
   takes `source/audio/andrew-hutt-1..3.m4a` (Andrew's sped up 15%, pitch kept). PR man in a green drawing room (royal
   arms, painting of Andrew and Sarah Ferguson shaking Gaddafi's hands) -> 0.4 s whip -> Andrew as a reclining
   Hutt on a velvet platform, five chained models, palace painting -> hard cut back. Cover: the PR man mid-line, ~0:01.5.
+- Posted 9 Oct 2026, 5:51pm. After ~3.2 h: 850 views, average watch 9.8 s of 21.5 (46%), 14.9% watched to the end,
+  47 likes (5.5%), 2 comments, 11 shares, 4 saves, 1 new follower. Second only to Mossad. Weak spot: the average
+  viewer leaves ~9.8 s in, during the 11.7 s unbroken Andrew shot of gibberish captions, before "Epstein" (~12.5 s)
+  and the PR man's reply (18.4 s). Check the retention graph for where the drop is.
 
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
