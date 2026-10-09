@@ -907,10 +907,10 @@ GEST = {
     12: dict(R=B_(12, (0.0, 'set-up', (170, 300)), (1.0, 'offer', (250, 240)), (2.5, 'turn', (200, 300)),
                   (3.5, 'offer', (260, 230)), (5.5, 'settle', (170, 320)))),
     15: dict(R=B_(15, (-0.25, 'set-up', (140, 260)), (-0.12, 'swing out', (290, 60)), (-0.02, 'up', (190, -160)), (0.1, 'palm', (-8, -212), 'fast'), (4.0, 'hold', (-10, -214)))),
-    16: dict(L=B_(16, (-0.12, 'raise', (-330, 0)), (0.18, 'pull', (-250, 190), 'fast'), (0.3, 'COME ON', (-115, 200), 'fast'), (0.5, 'shake', (-125, 175)),
-                  (0.7, 'COME ON', (-115, 205), 'fast'), (1.4, 'hold', (-118, 200))),
-             R=B_(16, (-0.12, 'raise', (330, 0)), (0.18, 'pull', (250, 190), 'fast'), (0.3, 'COME ON', (115, 200), 'fast'), (0.5, 'shake', (125, 175)),
-                  (0.7, 'COME ON', (115, 205), 'fast'), (1.4, 'hold', (118, 200)))),
+    16: dict(L=B_(16, (-0.12, 'raise', (-330, 0)), (0.18, 'pull', (-250, 190), 'fast'), (0.3, 'COME ON', (-115, 170), 'fast'), (0.5, 'shake', (-125, 150)),
+                  (0.7, 'COME ON', (-115, 175), 'fast'), (1.4, 'hold', (-118, 170))),
+             R=B_(16, (-0.12, 'raise', (330, 0)), (0.18, 'pull', (250, 190), 'fast'), (0.3, 'COME ON', (115, 170), 'fast'), (0.5, 'shake', (125, 150)),
+                  (0.7, 'COME ON', (115, 175), 'fast'), (1.4, 'hold', (118, 170)))),
     # Sam, 9 Oct: angrier. Fists wound up by the shoulders, slammed down on "STOP" and again on "YELLING".
     18: dict(L=B_(18, (-0.1, 'wind up', (-240, 60)), (0.31, 'STOP', (-190, 240), 'fast'), (0.5, 'lift', (-230, 110)),
                   (0.66, 'YELLING', (-195, 250), 'fast'), (2.0, 'hold', (-195, 245))),
@@ -1402,9 +1402,9 @@ def run_andy(img, t):
     cam = B.Cam(2.8, AX - 230 / 2.8, 900 - (40 - bob) / 2.8)
     sp = andy_sp(t, 20)
     rig = F.Rig(sp)
-    # his phone arm reaches up and out to the lens, leaving the frame on the left above his shoulder: he holds the
-    # phone high for the over-the-shoulder view (notes 29, 36)
-    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-460, -150), 'fist', 'down', 0.0, strict=False))
+    # his phone arm reaches TOWARDS the lens (it is his hand holding the phone that films him): foreshortened, it
+    # leaves the frame on the left just above the name and description, never swinging off sideways (notes 29, 36, 41)
+    sp['arms'] = dict(rig.pose('sides'), L=rig.arm('L', (-430, -20), 'fist', 'down', 0.25, strict=False))
     wt = word_times(line_of(20))
     talking = sp['mouth'] != 'v:rest'
     if t < wt[1][1] + 0.1:                                         # "Aw fook": pissed off - brows driven down, teeth bared
@@ -1542,87 +1542,21 @@ def his_caption(img, s, y):
 
 UI_FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Medium.woff')
 DESCRIPTION = 'Tough on wolves. Tough on the causes of wolves.'
-COUNTS = ('94.2K', '4,817', '6,102', '11.9K')        # likes, comments, saves, shares (made up, like his real posts)
-
-
-def _icon_heart(d, cx, cy, r, fill):
-    pts = []
-    for k in range(60):
-        a = 2 * math.pi * k / 60
-        x = 16 * math.sin(a) ** 3
-        y = -(13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a))
-        pts.append((cx + x * r / 17, cy + y * r / 17))
-    d.polygon(pts, fill=fill)
-
-
-def _icon_bubble(d, cx, cy, r, fill, dot):
-    d.ellipse([cx - r, cy - r * 0.86, cx + r, cy + r * 0.86], fill=fill)
-    d.polygon([(cx + r * 0.3, cy + r * 0.6), (cx + r * 0.85, cy + r * 1.05), (cx + r * 0.75, cy + r * 0.4)], fill=fill)
-    for k in (-1, 0, 1):
-        d.ellipse([cx + k * r * 0.42 - r * 0.12, cy - r * 0.12, cx + k * r * 0.42 + r * 0.12, cy + r * 0.12], fill=dot)
-
-
-def _icon_bookmark(d, cx, cy, r, fill):
-    d.polygon([(cx - r * 0.72, cy - r), (cx + r * 0.72, cy - r), (cx + r * 0.72, cy + r), (cx, cy + r * 0.5),
-               (cx - r * 0.72, cy + r)], fill=fill)
-
-
-def _icon_share(d, cx, cy, r, fill):
-    d.polygon([(cx + r, cy - r * 0.05), (cx + r * 0.05, cy - r * 0.95), (cx + r * 0.05, cy - r * 0.45), (cx - r * 0.3, cy - r * 0.4),
-               (cx - r * 0.85, cy + r * 0.1), (cx - r * 0.95, cy + r * 0.9), (cx - r * 0.5, cy + r * 0.35),
-               (cx + r * 0.05, cy + r * 0.3), (cx + r * 0.05, cy + r * 0.85)], fill=fill)
-
-
-_AVATAR = {}
-
-
-def _avatar(size):
-    """His account picture: the cartoon Andy, head and shoulders, in a white ring."""
-    if size not in _AVATAR:
-        keep = B.SS
-        B.SS = 1
-        im = B.canvas((108, 150, 96))
-        sp = dict(ANDY, mouth='smile', look=0.0, brows='sincere', lid=2)
-        sp['arms'] = F.Rig(sp).pose('sides')
-        B.person(im, B.Cam(4.2, AX, NECK - 80), AX, NECK, S, sp, 0.0)
-        B.SS = keep
-        im = im.crop((540 - 300, 960 - 300, 540 + 300, 960 + 300)).resize((size, size), Image.LANCZOS)
-        m = Image.new('L', (size, size), 0)
-        ImageDraw.Draw(m).ellipse([0, 0, size - 1, size - 1], fill=255)
-        im.putalpha(m)
-        _AVATAR[size] = im
-    return _AVATAR[size]
-
-
 def tiktok_ui(img, t):
-    """A TikTok screen over the film, always on, so there is no doubt it is his TikTok. Every piece sits just inside
-    where the real app draws its own (search bar under the top tabs, buttons left of the real column, name and
-    description above the real ones), so the viewer's own TikTok never covers ours completely."""
+    """His TikTok name and description over the film, always on, so there is no doubt it is his TikTok. Only these:
+    on a phone the real app draws its own tabs, buttons, progress line and description, and made-up copies of them
+    sat beside the real ones as a cluttered double (note 42, checked with source/tiktok_overlay.py). Name and
+    description sit above the real app's description and end left of its button column."""
     SS = img.width // 1080
     F_ = lambda size, bold=True: ImageFont.truetype(CAP_FONT if bold else UI_FONT, int(size * SS))
     sh = Image.new('RGBA', img.size, (0, 0, 0, 0))                  # soft shadows first
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    size = 34
+    while ImageDraw.Draw(lay).textlength(DESCRIPTION + '  more', font=F_(size, False)) > 780 * SS:
+        size -= 1                                                  # never under the real buttons (from x 900)
     for layer, col, off in ((sh, (0, 0, 0, 110), 2), (lay, (255, 255, 255, 255), 0)):
         d = ImageDraw.Draw(layer)
         o = off * SS
-        # the search bar
-        d.line([(62 * SS + o, 366 * SS + o), (84 * SS + o, 344 * SS + o)], fill=col, width=5 * SS)
-        d.line([(62 * SS + o, 366 * SS + o), (84 * SS + o, 388 * SS + o)], fill=col, width=5 * SS)
-        d.rounded_rectangle([118 * SS + o, 326 * SS + o, 1010 * SS + o, 406 * SS + o], radius=20 * SS, outline=col, width=3 * SS)
-        d.ellipse([150 * SS + o, 348 * SS + o, 180 * SS + o, 378 * SS + o], outline=col, width=4 * SS)
-        d.line([(176 * SS + o, 374 * SS + o), (190 * SS + o, 388 * SS + o)], fill=col, width=4 * SS)
-        d.text((206 * SS + o, 366 * SS + o), 'Find related content', font=F_(38, False), fill=col, anchor='lm')
-        d.line([(830 * SS + o, 342 * SS + o), (830 * SS + o, 390 * SS + o)], fill=col, width=2 * SS)
-        d.text((990 * SS + o, 366 * SS + o), 'Search', font=F_(38), fill=col, anchor='rm')
-        # the button column
-        cx = 836 * SS + o
-        _icon_heart(d, cx, 900 * SS + o, 40 * SS, col)
-        _icon_bubble(d, cx, 1032 * SS + o, 38 * SS, col, (0, 0, 0, 0) if layer is sh else (150, 150, 150, 255))
-        _icon_bookmark(d, cx, 1162 * SS + o, 34 * SS, col)
-        _icon_share(d, cx, 1290 * SS + o, 38 * SS, col)
-        for y, txt in zip((962, 1092, 1222, 1352), COUNTS):
-            d.text((cx, y * SS + o), txt, font=F_(30), fill=col, anchor='mm')
-        # his name, the tick, how long ago; the description; the progress bar
         name = HANDLE.lstrip('@')
         d.text((60 * SS + o, 1398 * SS + o), name, font=F_(42), fill=col, anchor='ls')
         nx = 60 * SS + d.textlength(name, font=F_(42)) + 14 * SS
@@ -1630,20 +1564,8 @@ def tiktok_ui(img, t):
             d.ellipse([nx, 1366 * SS, nx + 30 * SS, 1396 * SS], fill=(32, 213, 236, 255))
             d.line([(nx + 8 * SS, 1381 * SS), (nx + 13 * SS, 1387 * SS), (nx + 23 * SS, 1374 * SS)], fill=(255, 255, 255), width=4 * SS)
         d.text((nx + 42 * SS + o, 1398 * SS + o), '· 1d ago', font=F_(36, False), fill=col if layer is sh else (210, 210, 210, 255), anchor='ls')
-        d.text((60 * SS + o, 1452 * SS + o), DESCRIPTION, font=F_(34, False), fill=col, anchor='ls')
-        d.text((60 * SS + o + d.textlength(DESCRIPTION + '  ', font=F_(34, False)), 1452 * SS + o), 'more', font=F_(34), fill=col, anchor='ls')
-    d = ImageDraw.Draw(lay)
-    u = min(1.0, t / BLACK_AT)
-    d.rounded_rectangle([60 * SS, 1478 * SS, 1020 * SS, 1483 * SS], radius=3 * SS, fill=(255, 255, 255, 90))
-    d.rounded_rectangle([60 * SS, 1478 * SS, (60 + 960 * u) * SS, 1483 * SS], radius=3 * SS, fill=(255, 255, 255, 230))
-    d.ellipse([(60 + 960 * u - 7) * SS, 1473 * SS, (60 + 960 * u + 7) * SS, 1487 * SS], fill=(255, 255, 255, 255))
-    av = _avatar(100 * SS)                                         # his account picture, with the red follow button
-    ImageDraw.Draw(sh).ellipse([786 * SS, 718 * SS, 890 * SS, 822 * SS], fill=(0, 0, 0, 110))
-    lay.alpha_composite(av, (786 * SS, 716 * SS))
-    d.ellipse([786 * SS, 716 * SS, 886 * SS, 816 * SS], outline=(255, 255, 255), width=4 * SS)
-    d.ellipse([815 * SS, 796 * SS, 857 * SS, 838 * SS], fill=(234, 40, 78))
-    d.line([(826 * SS, 817 * SS), (846 * SS, 817 * SS)], fill=(255, 255, 255), width=5 * SS)
-    d.line([(836 * SS, 807 * SS), (836 * SS, 827 * SS)], fill=(255, 255, 255), width=5 * SS)
+        d.text((60 * SS + o, 1452 * SS + o), DESCRIPTION, font=F_(size, False), fill=col, anchor='ls')
+        d.text((60 * SS + o + d.textlength(DESCRIPTION + '  ', font=F_(size, False)), 1452 * SS + o), 'more', font=F_(size), fill=col, anchor='ls')
     img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(4 * SS)))
     img.alpha_composite(lay)
 

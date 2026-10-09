@@ -18,6 +18,7 @@ Read this first in any new session, after CLAUDE.md.
 - Sam's lines (19 used; `source/audio/cry-*.m4a`), cleaned, matched in tone, levelled. Made-up TikTok screen on every frame.
 - Checks: plan checks, voice balance, limiting, body audit clean. Sound questions (silence between lines) left as meant.
 - Change a caption or the description: `python3 source/cryminister.py final OUT.mp4 --reuse` (pictures cached).
+- 9 Oct (from the style-review chat): notes 41-43 in code (selfie arm reaches to the lens; only his name and description over the real TikTok screen; COME ON fists lifted). Test tools: `source/limbs.py` (new arm and leg shapes, swapped in memory: `python3 source/limbs.py cryminister OUT.mp4 --fixes`), `source/tiktok_overlay.py` (the real app screen over a video, measured from Sam's iPhone). One Cry Minister only: this branch.
 
 ## Done: "The Park" (TikTok, rebuilt in Satire style 8 Oct, `source/thepark.py`)
 - Final: `animations/the-park-vertical.mp4`, 17.1 s, 1.76 MB; posted 8 Oct. Shock level 2; eye-dart sting at the end.

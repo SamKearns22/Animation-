@@ -43,6 +43,9 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 38 | all | after lines 1, 12, 13, 15, 17 | Crackles at line ends. In Sam's recordings too (he checked): the phone's voice clean-up chopped the final "s"/"z"/"k" hiss into bursts (about 12 a second) and a thump, made obvious by the film's extra volume. Now each line's tail keeps its real consonant, then only ever fades (smooth_tail); lines Sam ran together (16-18) stay one unbroken piece; soft 100 ms end fades; the tone matching never brightens above 4 kHz. | done (v4) |
 | 39 | 1 | end | A last thump between the bursts of the final "z": the tail now keeps only the first strong moment of the consonant, then fades. | done (v4) |
 | 40 | 19 | - | Line 19 ("I'm going to keep fighting for a fairer and safer country") cut, picture and sound: it slowed the joke and added nothing. Film now 58.4 s. Lines are looked up by number, not position. | done (v4) |
+| 41 | 20 | - | The selfie arm (note 36) swung off the side of the screen instead of reaching to the phone filming him: it now reaches towards the lens (foreshortened; with the new limbs it swells as it nears the camera), leaving the frame on the left just above the name and description. | done (in code; not yet rendered) |
+| 42 | all | - | Seen inside the real TikTok screen (measured from Sam's iPhone, `source/tiktok_overlay.py`): the made-up buttons, search bar and progress line sat beside the real ones as a cluttered double. Only his name and description are kept, ending left of the real buttons. | done (in code; not yet rendered) |
+| 43 | 16 | "COME ON" | His fists sat under the real app's username: lifted about 30 units (still at his chest). | done (in code; not yet rendered) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).
