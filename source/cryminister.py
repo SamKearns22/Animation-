@@ -888,8 +888,8 @@ def B_(n, *beats):
 # His gestures, line by line: each hand's target in his own units (x right, y down from the neck), as beats timed from
 # the start of the line. Every frame of every gesture is tested (audits).
 GEST = {
-    1: dict(L=B_(1, (-0.2, 'set-up', (-40, 330)), (0.5, 'hold', (-40, 330)), (1.2, 'open', (-270, 200), 'slow')),
-            R=B_(1, (-0.2, 'set-up', (40, 330)), (0.55, 'hold', (40, 330)), (1.25, 'open', (270, 200), 'slow'))),
+    1: dict(L=B_(1, (-0.2, 'set-up', (-40, 330)), (0.5, 'hold', (-40, 330)), (1.2, 'open', (-320, 170), 'slow')),
+            R=B_(1, (-0.2, 'set-up', (40, 330)), (0.55, 'hold', (40, 330)), (1.25, 'open', (320, 170), 'slow'))),
     2: dict(R=B_(2, (0.0, 'set-up', (170, 300)), (0.5, 'chop', (200, 230)), (0.7, 'down', (180, 320), 'fast'),
                  (2.6, 'chop', (210, 220)), (2.8, 'down', (190, 320), 'fast'), (3.6, 'chop', (210, 220)),
                  (3.8, 'down', (190, 330), 'fast'), (5.0, 'settle', (170, 320), 'slow'))),
@@ -917,7 +917,7 @@ GEST = {
              R=B_(18, (-0.08, 'wind up', (240, 60)), (0.33, 'STOP', (190, 240), 'fast'), (0.52, 'lift', (230, 110)),
                   (0.68, 'YELLING', (195, 250), 'fast'), (2.0, 'hold', (195, 245)))),
 }
-BEND = {6: {'L': 'down'}, 10: {'L': 'down', 'R': 'down'}, 16: {'L': 'down', 'R': 'down'}}
+BEND = {1: {'L': 'down', 'R': 'down'}, 6: {'L': 'down'}, 10: {'L': 'down', 'R': 'down'}, 16: {'L': 'down', 'R': 'down'}}
 FACE = {   # brows, lids, harrow (the weight of it: rings under the eyes), what he does with his mouth between words
     1: dict(brows='sincere', lid=2), 2: dict(brows='serious', lid=2), 3: dict(brows='sincere', lid=3),
     6: dict(brows='confused', lid=5, rest='smile'), 7: dict(brows='sincere', lid=2, harrow=0.2),
@@ -1420,7 +1420,8 @@ def run_andy(img, t):
         sp['mouth'] = (('v:etc' if shape == 'E' else sp['mouth']) if opened else 'hidden') if talking else 'hidden'
     elif mode == 'terrified':                                      # gaping, the corners pulled down
         sp.update(brows='outrage', lid=-4, look=-0.95, turn=-0.3, tilt=0.02)   # back over his shoulder at them (note 30)
-        sp['mouth'] = 'agape' if (opened or not talking) else 'hidden'   # Sam, 9 Oct: never a calm line (it read as happy)
+        sp['mouth'] = ('hidden' if t > line_of(20)['end'] else         # after the line: one held grimace, never
+                       'agape' if (opened or not talking) else 'hidden')   # open-shut (read as still talking, note 45)
     else:                                                          # panicked: brows shot up, eyes wide, gritted teeth
         sp.update(brows='outrage', lid=-2, look=0.0, turn=0.0, tilt=-0.08, harrow=0.0)
         sp['mouth'] = 'agape' if (talking and opened) else 'hidden'   # gaping on the words, gritted between: never calm

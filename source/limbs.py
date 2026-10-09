@@ -163,34 +163,44 @@ def install(B):
                 c0 = spine[k_el] + side * n[k_el] * hw[k_el] * 0.95
                 q.line([tuple(c0), tuple(c0 - side * n[k_el] * hw[k_el] * 0.6 * fold)], INK, 2.0)
             if body is not None:
-                # Tucked in: only the round end of the sleeve BEHIND the shoulder point is hidden where it lies over
-                # the body, so the arm always visibly starts at the shoulder (never from the ribs or hips). The
-                # forearm and hand are never hidden, wherever they go.
+                # One outline at the shoulder, as one piece of clothing: near the shoulder (fading out along the upper
+                # arm; never the forearm or hand), the arm is hidden where it lies over the body, and the body's own
+                # edge line is painted over in the sleeve's colour where the arm covers it. What is left is a single
+                # outline running from the shoulder down the arm, with no seam, gap or hump.
+                W, H = p.img.size
                 X0, Y0 = p.cam.P(*sh)
                 X1, Y1 = p.cam.P(*el)
                 ux, uy = X1 - X0, Y1 - Y0
                 ul = math.hypot(ux, uy) or 1.0
                 ux, uy = ux / ul, uy / ul
-                r_px = p.cam.S(hw[0] + o)
-                yy, xx = np.mgrid[0:p.img.height, 0:p.img.width]
-                along = (xx - X0) * ux + (yy - Y0) * uy        # how far along the upper arm, in pixels
-                upper = np.clip((0.15 * r_px - along) / (0.35 * r_px), 0, 1) * 255
-                upper = Image.fromarray(upper.astype(np.uint8))
-                fore = Image.new('L', p.img.size, 0)
+                yy, xx = np.mgrid[0:H, 0:W]
+                along = (xx - X0) * ux + (yy - Y0) * uy
+                zone = np.clip((0.6 * ul - along) / (0.3 * ul), 0, 1)       # 1 to 0.3 of the upper arm, then fades
+                fore = Image.new('L', (W, H), 0)
                 fd = ImageDraw.Draw(fore)
                 for i in range(k_el, len(spine)):
                     X, Y = p.cam.P(*spine[i])
                     R = p.cam.S(hw[i] + o) + 2
                     fd.ellipse([X - R, Y - R, X + R, Y + R], fill=255)
-                mask = Image.new('L', p.img.size, 0)
-                bp = [p.cam.P(*v) for v in body]
-                md = ImageDraw.Draw(mask)
-                md.polygon(bp, fill=255)
-                md.line(bp + bp[:1], fill=255, width=q.w(2.6) + 2, joint='curve')
-                hide = np.minimum(np.asarray(mask), np.asarray(upper)).astype(np.int16)
-                hide[np.asarray(fore) > 0] = 0
-                a = np.asarray(lay.getchannel('A')).astype(np.int16) - hide
-                lay.putalpha(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+                zone[np.asarray(fore) > 0] = 0
+                bm = Image.new('L', (W, H), 0)
+                ImageDraw.Draw(bm).polygon([p.cam.P(*v) for v in body], fill=255)
+                inside = np.asarray(bm) / 255.0
+                a = np.asarray(lay.getchannel('A')).astype(float)
+                lay.putalpha(Image.fromarray(np.clip(a * (1 - zone * inside), 0, 255).astype(np.uint8)))
+                fill_m = Image.new('L', (W, H), 0)                 # the arm's own fill (without its outline)
+                fm = ImageDraw.Draw(fill_m)
+                for (x_, y_), r_ in zip(dense, hwd):
+                    X_, Y_ = p.cam.P(x_, y_)
+                    R_ = p.cam.S(r_) - 1
+                    fm.ellipse([X_ - R_, Y_ - R_, X_ + R_, Y_ + R_], fill=255)
+                k = 2 * (q.w(2.6) // 2) + 3
+                edge = np.asarray(bm.filter(ImageFilter.MaxFilter(k))).astype(float) - np.asarray(bm.filter(ImageFilter.MinFilter(k)))
+                seam = np.clip(edge / 255.0, 0, 1) * (np.asarray(fill_m) / 255.0) * zone
+                if seam.max() > 0:
+                    patch = Image.new('RGBA', (W, H), tuple(sleeve[:3]) + (0,))
+                    patch.putalpha(Image.fromarray((seam * 255).astype(np.uint8)))
+                    p.img.alpha_composite(patch)
             p.img.alpha_composite(lay)
         finally:
             busy.pop()
@@ -346,6 +356,44 @@ def cryminister_fixes(CM):
     CM.alley_man = lambda img, X, d, duck, u: orig_man(img, X, d, duck, u * 2 / 3)
 
 
+def _part_frame(args):
+    CM, i = _PARTS['CM'], args
+    CM.B.SS = 1
+    img = CM.overlay(CM.picture(i / CM.FPS), i / CM.FPS)
+    return np.asarray(img.convert('RGB').resize((540, 960), Image.LANCZOS)).tobytes()
+
+
+_PARTS = {}
+
+
+def parts(CM, out, spans):
+    """Stretches of the film (seconds from, to), back to back, each with its own sound, as a quick look."""
+    import subprocess
+    import imageio_ffmpeg
+    from multiprocessing import Pool
+    _PARTS['CM'] = CM
+    mix = CM.soundtrack()
+    sr = CM.SR
+    frames, sound = [], []
+    for a, b in spans:
+        i0, i1 = int(round(a * CM.FPS)), int(round(b * CM.FPS))
+        frames += list(range(i0, i1))
+        sound.append(mix[int(i0 / CM.FPS * sr):int(i1 / CM.FPS * sr)])
+    wav = out + '.wav'
+    CM.MA.write_wav(wav, np.concatenate(sound))
+    ff = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
+                           '-s', '540x960', '-r', str(CM.FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
+                           '-c:v', 'libx264', '-crf', '24', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k',
+                           '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
+    with Pool(os.cpu_count()) as pool:
+        for fr in pool.imap(_part_frame, frames, chunksize=2):
+            ff.stdin.write(fr)
+    ff.stdin.close()
+    ff.wait()
+    os.remove(wav)
+    print(out, f'{os.path.getsize(out) / 1e6:.1f} MB, {len(frames) / CM.FPS:.1f} s')
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'still':
@@ -354,6 +402,12 @@ def main():
         import peepee as PP
         install(PP.B)                                        # the render's helper processes inherit the new limbs
         PP.render(a[1], (540, 960), 26, 1)
+    elif a[0] == 'parts':                                   # only some stretches of Cry Minister, back to back, with sound
+        import cryminister as CM
+        install(CM.B)
+        cryminister_fixes(CM)
+        spans = [tuple(float(v) for v in x.split('-')) for x in a[2:]]
+        parts(CM, a[1], spans)
     elif a[0] == 'cryminister':
         import cryminister as CM
         install(CM.B)                                        # after the film's own arm checker, which stays on
