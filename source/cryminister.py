@@ -77,8 +77,10 @@ LINES = [
     # line 19 ("I'm going to keep fighting...") cut by Sam, 8 Oct: it slowed the joke and added nothing
     dict(n=20, shot='run', text='Aw fook, here come some now.', audio=('cry-20', 0.0, None)),
 ]
-PADS = {1: (0.35, 0.25), 2: (0.25, 0.55), 3: (0.15, 0.25), 4: (0.75, 0.5), 5: (0.9, 1.3), 6: (0.25, 0.7),
-        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.0), 18: (0.0, 0.45), 20: (0.35, 1.8)}
+# Silence before and after each line (s). Sam, 9 Oct: dead air closed up, each gap ending just after its sight gag lands
+# (the snarl before the pop, the net on the wolf, the bite on the armour); the chase ends about a second sooner.
+PADS = {1: (0.2, 0.25), 2: (0.25, 0.35), 3: (0.15, 0.25), 4: (0.45, 0.45), 5: (0.4, 0.45), 6: (0.25, 0.45),
+        12: (0.3, 0.5), 16: (0.12, 0.0), 17: (0.0, 0.0), 18: (0.0, 0.45), 20: (0.35, 0.9)}
 STRESS = 4                                    # Andy's stress in shots 13-14, 1-6 (Sam picks from the cast sheet)
 ANDY = dict(B.BURNHAM, full=True, pose='custom', name='Andy')
 MAN = dict(skin=B.PALE, hw=66, hh=86, jaw='round', hair='crop', hair_c=(150, 112, 74), outfit='jumper',
@@ -255,6 +257,7 @@ ATTACK = SHOTS[1][1] + 1.0                    # the first wolf's jaws reach the 
 POP = word_at(4, 2)                           # "smaller": the wolf pops to 60%
 ARMOUR = word_at(6, 3)                        # "wolfproof": armour (and a wolf biting it) appear on the old lady
 CHASE = SHOTS[-1][1]
+CHASE_RATE = 13.5 / (SHOTS[-1][2] - SHOTS[-1][1])   # the pack closes to the same distance however long the run lasts
 
 
 def u_in(t):
@@ -1365,7 +1368,7 @@ def run_scene(img, t, only=None):
     if only in (None, 'wolves'):
         order = []
         for i in range(5):
-            d = 15.5 - 3.4 * u + [0.0, 2.5, 4.0, 1.4, 5.5][i]
+            d = 15.5 - CHASE_RATE * u + [0.0, 2.5, 4.0, 1.4, 5.5][i]
             x = [-0.9, 0.5, -0.3, -1.7, 1.0][i]
             order.append((d, i, x))
         for d, i, x in sorted(order, reverse=True):
