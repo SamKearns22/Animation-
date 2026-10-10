@@ -49,6 +49,8 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 44 | 12 | wide | Zoom in 20%: the edge of the set showed (the paving lines stopped and the pavement went plain). 20% closer, the action kept just above his name (the spire tip now just off the top), and the paving lines drawn all the way down. | done (in code; not yet rendered) |
 | 45 | 20 | after the line | His mouth kept opening and shutting after "here come some now" (gaping on each glance back, gritted between), so he looked still to be talking: after the line, one held grimace, eyes still terrified on the glances. | done (in code; not yet rendered) |
 | 46 | 1 | "familiar sight" | Strange arm pose: elbows up and out, forearms sloping down. Now his arms open out further and a little higher with the elbows down, a presenting gesture. | done (in code; not yet rendered) |
+| 47 | 6, 12 | - | Walkers from the right popped into frame (they started their walk inside the picture): they now start off screen and walk in, same path once on screen. | done (v5.1) |
+| 48 | 20 | - | The terraces on the right jumped back twice as he ran (their loop wrapped every 7 though they stand 9 apart; the shops' colours shuffled on each wrap): each side wraps at its own spacing and every plot keeps its own look. | done (v5.1) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Brief: `prompts/cry-minister.md`. Code: `source/cryminister.py` (film), `source/wolf.py` (the dire wolves, reusable).

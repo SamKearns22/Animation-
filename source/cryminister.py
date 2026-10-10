@@ -616,8 +616,8 @@ def _shoppers():
     out, rnd = [], random.Random(77)
     for k in range(15):
         d = 1 if k % 2 == 0 else -1
-        t0 = -4.0 + 4.6 * k + rnd.uniform(-0.8, 0.8)
-        x0 = -5600 if d > 0 else 2600
+        t0 = -4.0 + 4.6 * k + rnd.uniform(-0.8, 0.8) - (2000 / 640 if d < 0 else 0.0)   # same path, entering earlier
+        x0 = -5600 if d > 0 else 4600                    # from the right: off screen even in the wide (note 47)
         lane = -80 if k % 3 else 300
         size = rnd.uniform(0.86, 1.04)
         # when each one passes the kill: a quick glance at the wolves; some also glance at the PM
@@ -1350,30 +1350,33 @@ def run_scene(img, t, only=None):
         quad(X, [P(3.5, 0, 1.2), P(40, 0, 1.2), P(40, 0, 200), P(3.5, 0, 200)], (84, 84, 90))                 # the road
         quad(X, [P(-3.5, 0, 1.0), P(-3.5, 0, 200), P(-3.5, 9, 200), P(-3.5, 9, 1.0)], (176, 150, 128))       # shop fronts
         shift = (u * 6.0) % 7.0                                    # he runs away from them: they slide off into the distance
+        m7 = int(u * 6.0 // 7.0)                                   # each plot keeps its own look as it slides (note 48)
         cols = [(40, 70, 52), (86, 40, 128), (120, 116, 108), (40, 40, 46), (236, 170, 200)]
         for k in range(12):
             d0, d1 = 2.0 + k * 7.0 + shift, 2.0 + k * 7.0 + 6.4 + shift
-            c = cols[k % len(cols)]
+            c = cols[(k - m7) % len(cols)]
             quad(X, [P(-3.5, 0, d0), P(-3.5, 0, d1), P(-3.5, 3.4, d1), P(-3.5, 3.4, d0)], c)
             quad(X, [P(-3.5, 2.6, d0), P(-3.5, 2.6, d1), P(-3.5, 3.4, d1), P(-3.5, 3.4, d0)], B.dk(c, 0.7))
-            if k % 5 == 0:
+            if (k - m7) % 5 == 0:
                 for j in range(5):
                     dd = d0 + 0.6 + j * 1.15
                     X.d.line([P(-3.5, 3.6, dd), P(-3.5, 8.6, dd)], fill=(40, 32, 30), width=max(1, int(18 * B.SS * 4 / dd)))
         fronts = [(46, 92, 70), (176, 52, 48), (40, 56, 96), (210, 170, 60), (96, 60, 110)]
+        shift9, m9 = (u * 6.0) % 9.0, int(u * 6.0 // 9.0)          # the terraces are 9 apart: they wrap at 9, not 7 (note 48)
         for k in reversed(range(10)):                              # the far side of the road: brick terraces, lived in (note 31)
-            d0 = 4.0 + k * 9.0 + shift
-            brick = (150, 78, 60) if k % 2 else (140, 72, 56)
+            d0 = 4.0 + k * 9.0 + shift9
+            kk = k - m9
+            brick = (150, 78, 60) if kk % 2 else (140, 72, 56)
             Q = lambda a, b, y0, y1, c, ln=True: quad(X, [P(9.0, y0, d0 + a), P(9.0, y0, d0 + b), P(9.0, y1, d0 + b),
                                                           P(9.0, y1, d0 + a)], c, ln)
             Q(0, 8.6, 0, 8, brick)
-            fr = fronts[(k * 3) % len(fronts)]
+            fr = fronts[(kk * 3) % len(fronts)]
             Q(0.3, 8.3, 2.7, 3.4, fr)                              # the shop's fascia board
             Q(0.6, 5.6, 0.5, 2.5, (150, 176, 190))                 # its window
             Q(6.2, 7.6, 0.0, 2.4, B.dk(fr, 0.75))                  # its door
             for a in (0.9, 3.7, 6.5):                              # sash windows upstairs, white frames
                 Q(a, a + 1.4, 4.3, 6.2, (236, 232, 222))
-                Q(a + 0.15, a + 1.25, 4.45, 6.05, (70, 80, 92) if (k + int(a)) % 3 else (150, 170, 184))
+                Q(a + 0.15, a + 1.25, 4.45, 6.05, (70, 80, 92) if (kk + int(a)) % 3 else (150, 170, 184))
             Q(8.45, 8.6, 0.0, 8.0, (60, 60, 64), False)            # a drainpipe between houses
     # the five wolves, bounding after him, gaining; the leader leaps at the lens at the end
     if only in (None, 'wolves'):
