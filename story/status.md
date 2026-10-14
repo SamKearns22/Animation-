@@ -52,6 +52,21 @@ Read this first in any new session, after CLAUDE.md.
 - Final: `animations/the-park-vertical.mp4`, 17.1 s, 1.76 MB; posted 8 Oct. Shock level 2; eye-dart sting at the end.
 - Lessons became rules and checks in `guides/satire.md` (see best-practice Part 2, "Lessons from The Park").
 
+## In progress: "A Professional" (TikTok, Steve Backshall stranded on Neptune, `prompts/a-professional.md`)
+- Stage 2 done 5 Oct 2026: model sheet and storyboard sent to Sam for approval (`python3 source/professional.py model
+  OUT.jpg` / `sheet OUT.jpg`; `times` prints the timeline). Next: Sam's notes, then pre-flight and the animatic.
+- All code in `source/professional.py`; shared series tools started in `source/series.py` (person with legs always,
+  rolled sleeves, boots, seated legs at the rig's own lengths, a perspective `Room` camera so the press room is one
+  plan seen by every camera including the reverse angle, `Turned` bodies, profile heads, placeholder timing, sheets,
+  render). patriots2.py is untouched.
+- Timing from Sam's pace (placeholders) comes to about 89 s, not 80: first laugh ("supercritical strata") at about
+  17 s, "kayak to safety" at about 28 s. The real recordings decide; pauses can be tightened then.
+- Choices made: line 2 split into a push-in and a closer shot (no shot over 8 s, except the 8.9 s cold open, which
+  carries the premise); line 3 split so the kayak circles on "kayak to safety" (he paddles on one side only: the
+  visible cause); her laser dot circles the STEVE marker in the diagram shot; line 7 captioned as a shout (big
+  capitals); press room plan in `ROOM`/`SEATING` constants (lectern at her elbow height, 1.0 m).
+- Audio comes later: Sam records lines 01-10; run `python3 source/voices.py FILES --script ...` when they arrive.
+
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
   `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.

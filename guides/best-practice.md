@@ -339,6 +339,17 @@ this series. Full details in `tiktok-design.md`.
 - **Work from the newest branch:** before a new film, check the other branches (`git branch -r`) for tools built in
   other chats (the new limbs lived only on the Cry Minister branch, and this film first started without them).
 
+**Lessons from A Professional (stage 2, 5 Oct)**
+- **Props at the cartoon body's heights, not real-world metres:** our figure is about 6 heads tall, so its elbow is
+  0.41 m below the neck. A lectern at a real 1.12 m reached the spokesperson's chest and her hands tangled across it;
+  at her elbow height (1.0 m) the forearms rest on it naturally. Take working heights from the rig's landmarks.
+- **Seated people must show their laps:** with the jacket reaching mid-thigh as when standing, seated journalists read
+  as short people standing. End the clothes at the lap and let the seat's edge show either side.
+- **One set, one plan, a real camera:** `series.Room` projects the press room's plan (metres) for every camera, so the
+  reverse angle shows the same room and sizes follow distance; anything at or behind the camera is skipped.
+- **Name who is wrong:** `series.person` tells the arm guard whose arm failed (it caught a TV operator's, a phone
+  holder's and a sipping arm whose path passed too close to the shoulder before anything was rendered).
+
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
   guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
