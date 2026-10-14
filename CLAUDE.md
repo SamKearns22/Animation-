@@ -39,6 +39,10 @@ I don't know how to code. Please:
 
 # Where things stand
 
+- **One main line of work:** `claude/create-claude-md-oe8z4g` (GitHub's default branch) holds everything. Every chat
+  starts from it; before starting, check `git branch -r` for newer work on other branches and merge it in; at the end,
+  merge back into it. Never leave a tool or lesson only on a side branch (the new limbs once were, 14 Oct).
+
 - **Short two-person film ("quick video"): read only `guides/quick-video.md` and nothing else below.** Don't open other
   guides or the big source files. Use Sonnet at medium effort, and ask me for all my notes in one batch after the one
   stills sheet.
