@@ -461,16 +461,16 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
             p.ell(hx - 0.5 * hw, hy + 32, 4, 4, B.GOLD, INK, 1.2)
         p.poly(outline, None, INK, 2.6)
     elif view == 'side':
-        if kind == 'long':
-            p.poly(curve([(hx - 40, hy - hh), (hx - 90, hy - 30), (hx - 96, hy + length * 0.7), (hx - 70, hy + length),
-                          (hx - 10, hy + length * 0.8), (hx - 6, hy + 10)], 4), c, INK, 2.6)
         face = [(hx - 62, hy - 70), (hx - 40, hy - hh - 6), (hx + 20, hy - hh - 4), (hx + 58, hy - 56), (hx + 64, hy - 24),
                 (hx + 62, hy - 6), (hx + 84, hy + 28), (hx + 64, hy + 36), (hx + 68, hy + 52), (hx + 62, hy + 60),
                 (hx + 66, hy + 74), (hx + 54, hy + 100), (hx + 18, hy + 108), (hx - 22, hy + 88), (hx - 60, hy + 40)]
         if sp.get('nose') == 'long':
             face[6] = (hx + 92, hy + 32)
         outline = curve(face, 3)
-        p.poly(outline, skin, INK, 2.6)
+        p.poly(outline, skin, INK if kind == 'bald' else None, 2.6)
+        if kind == 'long':                          # long hair falls over the back of the head (no skull showing through)
+            p.poly(curve([(hx - 40, hy - hh), (hx - 90, hy - 30), (hx - 96, hy + length * 0.7), (hx - 70, hy + length),
+                          (hx - 10, hy + length * 0.8), (hx - 6, hy + 10)], 4), c, INK, 2.6)
         if beard in ('short', 'trim', 'full', 'white'):
             low = 0 if beard in ('short', 'trim') else 30
             p.poly(curve([(hx - 40, hy + 26), (hx - 22, hy + 88 + low), (hx + 18, hy + 108 + low), (hx + 54, hy + 100 + low),
@@ -512,7 +512,10 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
                           (hx + 18, hy - hh + 12), (hx - 10, hy - 62), (hx - 44, hy - 46)], 3), c, INK, 2.2)
         if sp.get('earring'):
             p.ell(hx - 18, hy + 34, 4, 4, B.GOLD, INK, 1.2)
-        p.poly(outline, None, INK, 2.6)
+        if kind == 'bald':
+            p.poly(outline, None, INK, 2.6)
+        else:                                       # re-ink only the face's edge: the skull stays hidden under the hair (Sam)
+            p.line(outline[9:40], INK, 2.6)         # forehead to jaw only (curve() closes, so slice the outline)
     else:
         bt = 0.6 if view == 'three_back' else 0.0
         for side in (-1, 1):
@@ -579,7 +582,7 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     if view in ('three', 'side', 'three_back'):
         behind.add(arms_far[0])
     if view == 'back':
-        behind |= {sd for sd in 'LR' if depth['wr' + sd] > depth['sh' + sd] + 40}
+        behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands in front of him: hidden by his back (Sam)
     if seated:
         chair(p, view, j2, sp, under=True)
     for sd in hips_far:

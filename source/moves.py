@@ -74,9 +74,9 @@ GAITS = {  # steps a second (Williams), step length (m), foot lift, time each fo
     #          arm bend (rad), lean (deg), float height (person units, runs only)
     'stroll': dict(sps=1.5, step=0.38, lift=40, duty=0.62, swing=0.22, bend=0.15, lean=1, float=0),
     'walk':   dict(sps=2.0, step=0.45, lift=56, duty=0.60, swing=0.32, bend=0.20, lean=2, float=0),
-    'brisk':  dict(sps=2.6, step=0.52, lift=62, duty=0.57, swing=0.42, bend=0.35, lean=4, float=0),
-    'run':    dict(sps=3.4, step=0.95, lift=150, duty=0.36, swing=0.75, bend=1.45, lean=9, float=28),
-    'sprint': dict(sps=4.4, step=1.25, lift=190, duty=0.30, swing=1.00, bend=1.55, lean=16, float=40),
+    'brisk':  dict(sps=2.6, step=0.52, lift=62, duty=0.57, swing=0.42, bend=0.35, lean=4, float=0, kick=0.35),
+    'run':    dict(sps=3.4, step=0.95, lift=150, duty=0.36, swing=0.75, bend=1.45, lean=9, float=28, kick=0.55),
+    'sprint': dict(sps=4.4, step=1.25, lift=190, duty=0.30, swing=0.80, bend=1.45, lean=16, float=40, kick=0.6),
 }
 
 
@@ -109,12 +109,18 @@ def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
             e = 1 - (1 - k) ** 1.6
             z = -sweep / 2 + sweep * e
             lift = g['lift'] * math.sin(math.pi * min(1.0, k * 1.15)) ** 1.2
+            kick = g.get('kick', 0.0) * step                  # after toe-off the leg carries on back and up before
+            if kick:                                          # swinging through (the run's follow-through, Sam)
+                fold = math.sin(math.pi * min(1.0, k / 0.6))  # the heel folds up towards the seat, knee pointing down,
+                z -= 0.35 * kick * fold * (1 - k)            # never a straight leg sticking out behind (Sam)
+                lift += 1.1 * kick * fold
             j['toe' + side] = 14 * (1 - k) ** 2 - 8 * k ** 2              # toes down leaving, toes up to meet the floor
         planted[side] = u < duty
         j['foot' + side] = (sg * 50, V.ANKLE_Y - lift, z)
         other = 'R' if side == 'L' else 'L'                   # the opposite arm swings with this leg's opposite
         swing = -z / max(1.0, sweep / 2)
-        fwd = g['swing'] * (swing if swing > 0 else 0.35 * swing) + 0.12   # arms swing mostly in front (Sam)
+        fwd = min(1.0, g['swing'] * (swing if swing > 0 else 0.35 * swing) + 0.12)   # mostly in front (Sam); fist
+        # never above the chin, so a sprinter doesn't punch his own face (Sam)
         V.set_arm(j, other, fwd, g['bend'] + 0.15 + 0.2 * max(0.0, swing) * (g['bend'] > 1))
     drop = 0.0
     for side in 'LR':

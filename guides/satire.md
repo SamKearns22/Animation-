@@ -41,6 +41,9 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
   Arms hang clear of the jacket, never tucked in; a shrug opens the arms well out. One prop per hand (the 'cup' hand draws its cup).
 - **Bending forward shortens the jacket hem to the hips** (no long tail when sitting down); a steering wheel stands
   nearly upright facing the driver (25 degrees back), never flat like a plate. (Sam, 14 Oct)
+- **Runs:** after toe-off the back leg extends, then the heel folds up towards the seat (never a straight leg sticking
+  out behind); fists pump no higher than the chin. Side heads: long hair covers the back of the skull, and only the
+  face's edge is re-inked over the hair; back views hide hands that are in front of the body. (Sam, 14 Oct)
 - **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
