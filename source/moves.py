@@ -229,6 +229,25 @@ def _mug(p, j2, side='R'):
     p.line([(x + 30, y - 50), (x + 46, y - 34), (x + 30, y - 18)], INK, 3.2)
 
 
+def cup(sp, side='R'):
+    """A takeaway coffee cup held in a round hand (the hand drawn again over it, fingers round the front)."""
+    def draw(p, j2):
+        x, y = j2['wr' + side]
+        x, y = x + (12 if side == 'R' else -12) * 0, y - 6
+        p.poly([(x - 30, y - 64), (x + 30, y - 64), (x + 24, y + 40), (x - 24, y + 40)], (246, 245, 241), INK, 2.2)
+        p.poly([(x - 34, y - 78), (x + 34, y - 78), (x + 32, y - 62), (x - 32, y - 62)], (60, 60, 66), INK, 2.0)
+        p.poly([(x - 28, y - 30), (x + 28, y - 30), (x + 26, y - 4), (x - 26, y - 4)], (170, 120, 80), None)
+        p.ell(x, y + 6, 25, 23, sp['skin'], INK, 2.6)
+    return draw
+
+
+def hold_cup(j, sp, side='R', face=False):
+    """Put the cup in a hand already placed (shape 'grip'); `face`: the hand is at the face, drawn over it."""
+    j.setdefault('hand', {})[side] = 'grip'
+    j.setdefault('face_props' if face else 'props', []).append(cup(sp, side))
+    return j
+
+
 def _mic(p, j2, side='R'):
     x, y = j2['wr' + side]
     p.poly([(x - 9, y - 10), (x + 9, y - 10), (x + 7, y - 110), (x - 7, y - 110)], (30, 30, 34), INK, 2.0)
@@ -315,10 +334,12 @@ def pose(sp, name, beat=0.0, target=None):
             V.arm_to(j, s, (sg * 100, 250.0, 160.0), 'down', 'fist')
         j['props'] = [_paper]
     elif name == 'mug':
-        V.arm_to(j, 'R', (70.0, 300.0, 130.0), 'down', 'cup')                 # the 'cup' hand draws its own cup
+        V.arm_to(j, 'R', (70.0, 300.0, 130.0), 'down', 'grip')
+        hold_cup(j, sp)
     elif name == 'mug_sip':
-        V.arm_to(j, 'R', (22.0, -40.0, 120.0), 'down', 'cup')                 # cup rim at the lips,
+        V.arm_to(j, 'R', (22.0, 10.0, 120.0), 'down', 'grip')                  # cup rim at the lips,
         j['on_face'] = {'R'}                                                    # in front of the face
+        hold_cup(j, sp, face=True)
     elif name == 'mic':
         V.arm_to(j, 'R', (30.0, 20.0, 150.0), 'down', 'fist')
         j['props'] = [lambda p, j2: _mic(p, j2)]
