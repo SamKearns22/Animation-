@@ -41,6 +41,7 @@ import mouths                # noqa: E402
 import mossad as M           # noqa: E402
 import mossad_audio as MA    # noqa: E402
 import kit                   # noqa: E402
+import views as V            # noqa: E402  real drawings from every angle (the turn)
 import filmkit               # noqa: E402  the satire checks: audit, eyelines, idle shifts, sound questions
 import film_engine as E      # noqa: E402  render with the picture cache; captions put on last
 from satire_style import limb, rough   # noqa: E402
@@ -151,7 +152,7 @@ for i, ln in enumerate(LINES):
     if i == 0:
         SHOTS.append([ln['cam'], 0.0, None])
     elif ln['cam'] != LINES[i - 1]['cam']:
-        lead = 0.14 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)   # cut on his turn
+        lead = 0.85 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)   # see his turn
         if ln['cam'] in ('flip', 'zack_pov'):
             lead = ln['start'] - LINES[i - 1]['end'] - 0.15        # these shots start at once: the turn, the flip
         cut = ln['start'] - lead
@@ -176,7 +177,7 @@ CAPS = [dict(c, shout=ln['key'] in SHOUT, who=ln['who']) for ln in LINES for c i
 
 WALK_END = 2.5                              # the advisor reaches his spot
 STRAIGHTEN = L['list']['end'] + 0.15        # Zack stands up and turns to him
-FLIP = (L['shoplift']['start'] - 0.75, L['shoplift']['start'] - 0.2)   # the card turns over
+FLIP = (L['shoplift']['caps'][1]['start'] - 0.2, L['shoplift']['caps'][1]['start'] + 0.05)   # turns over on "Shoplifting"
 SLAM = L['absolutely']['start'] + 0.42      # his fist on the table at "ab-SO-lutely"
 
 
@@ -256,6 +257,17 @@ def card_face():
     return im
 
 
+def _first_only():
+    """The written side with only item 1 on it, for the drawings while the card is turning (squashed), so no unread
+    item can flash past even compressed."""
+    im = Image.new('RGBA', card_face().size, (250, 249, 244, 255))
+    W, H = im.size
+    x0, y0, x1, y1 = ITEMS[0][2]
+    box_ = (int(x0 * W) - 10, int(y0 * H) - 10, int(x1 * W) + 10, int(y1 * H) + 10)
+    im.paste(card_face().crop(box_), box_[:2])
+    return im
+
+
 def item_at(k, fx=0.5, fy=0.5):
     """World point of item k (0-2) on the card held at the advisor's spot, fx/fy across its box."""
     x0, y0, x1, y1 = ITEMS[k][2]
@@ -286,6 +298,8 @@ def draw_card(img, Lc, t, lift):
     if k < 0.04:
         return
     face = front if a > math.pi / 2 else _CARD['back']
+    if face is front and k < 0.97:
+        face = _CARD.setdefault('first', _first_only())
     cy = CARD_CY - lift
     x0, y0 = Lc.P(-CARD_W / 2, cy - CARD_H / 2 * k)
     x1, y1 = Lc.P(CARD_W / 2, cy + CARD_H / 2 * k)
@@ -623,7 +637,7 @@ def zack_state(t):
         elif REACT[0] - 0.4 <= t < L['bingo']['start'] - 0.3:               # the nuclear line: his face lights up
             sp['brows'] = 'wow'
             sp['mouth'] = 'smile' if t > REACT[0] + 0.5 else 'set'
-    if t >= SPIN[1] and sp.get('look', 0) < -0.3:             # facing round and looking at the advisor (checked)
+    if t >= TURN_END and sp.get('look', 0) < -0.3:            # facing round and looking at the advisor (checked)
         filmkit.eyeline('Zack', t, (ZX, NECK - 150 * S), (sp['look'], 0.0), (AX, NECK - 150 * S))
     sp['blink'] = F.blinking(t, Z_BLINKS)
     sp['breath'] = F.breath(t, 2.6 if t < STRAIGHTEN else 4.0, 6 if t < STRAIGHTEN else 2.5)
@@ -698,9 +712,9 @@ def camera(t):
         k = ease((t - a) / max(0.1, FLIP[0] - a))
         return blend((2.7, AX, head + 40), one, k)
     if name == 'card2':                                        # item 1, then across to item 2 as he says it
-        return blend(one, two, ease((t - (L['drill']['caps'][1]['start'] - 0.35)) / 0.5))
+        return blend(one, two, ease((t - (L['drill']['caps'][1]['start'] - 0.3)) / 0.4))   # lands on "North Sea"
     if name == 'card3':                                        # item 2, pulling out onto item 3 (the last: all may show)
-        return blend(two, three, ease((t - (L['nuclear']['caps'][1]['start'] - 0.35)) / 0.6))   # at "Nuclear"
+        return blend(two, three, ease((t - (L['nuclear']['caps'][1]['start'] - 0.35)) / 0.45))   # lands on "Nuclear"
     raise KeyError(name)
 
 
@@ -902,31 +916,37 @@ def person_at(img, cam, x, sp, t, legs=None, flip=1.0):
         B.legs = keep
 
 
-TURN = (L['zionism']['start'] - 0.42, L['zionism']['start'] - 0.14)   # he starts to turn in the wide; cut on the action
-SPIN = TURN                                    # (kept for older references)
+TURN0 = L['zionism']['start'] - 0.75             # he turns round from the desk to the advisor (South Park's method)
+TURN_KEYS = [(0.0, 180), (0.15, -135), (0.30, -90), (0.45, -45), (0.60, 0)]   # (seconds in, view): each held 2 drawings
+if os.environ.get('TURN4'):                    # Sam's test: only four directions, as South Park's rigs (back, side, front)
+    TURN_KEYS = [(0.0, 180), (0.25, -90), (0.50, 0)]
+TURN_END = TURN0 + TURN_KEYS[-1][0]
 
 
-def turn_at(t):
-    """Cut on the action, the way live action and South Park hide a turn: in the wide he starts round (head first, his
-    cheek, beard and ear coming into view, the shoulders narrowing a little as they rotate); the close-up picks him up
-    already facing round, finishing the turn into the shout. Returns (back view?, head turn 0-1, body narrowing,
-    extra face turn)."""
-    if t < TURN[0]:
-        return True, 0.0, 1.0, 0.0
-    if t < TURN[1]:
-        u = ease((t - TURN[0]) / (TURN[1] - TURN[0]))
-        return True, u, 1.0 - 0.14 * u, 0.0
-    u = ease((t - TURN[1]) / 0.25)
-    return False, 0.0, 0.88 + 0.12 * u, -0.3 * (1 - u)
+def turn_view(t, lead=0.0):
+    """The view at time t through the turn (the head is drawn `lead` seconds ahead, a drawing before the body)."""
+    v = TURN_KEYS[0][1]
+    for at, view in TURN_KEYS:
+        if t + lead >= TURN0 + at:
+            v = view
+    return v
 
 
 def zack(img, cam, t):
+    """Zack: from behind at the desk; through the turn, a swap of real drawings view by view (views.py: back,
+    three-quarter back, side, three-quarter, front), the head a drawing ahead of the body; then the front view."""
     sp = zack_state(t)
-    back, bt, kx, extra = turn_at(t)
-    sp['back'], sp['back_turn'] = back, bt
-    sp['turn'] = sp.get('turn', 0.0) + extra
     kit.feet_shadow(img, cam, ZX, NECK, S)
-    person_at(img, cam, ZX, sp, t, flip=kx)
+    if t < TURN0:
+        sp['back'] = True
+        person_at(img, cam, ZX, sp, t)
+    elif t < TURN_END:
+        q = dict(sp, back=False, mouth='set', brows='fierce')
+        V.person(img, cam, ZX, NECK, S, q, t, turn_view(t), V.standing(q), head_yaw=turn_view(t, 1 / 12))
+    else:
+        sp['back'] = False
+        sp['turn'] = sp.get('turn', 0.0) - 0.3 * (1 - ease((t - TURN_END) / 0.25))   # head still coming round
+        person_at(img, cam, ZX, sp, t)
     return sp
 
 
@@ -1091,7 +1111,7 @@ def checks():
         for t in (a + 0.05, (a + b) / 2, b - 0.05):
             cam = camera(t)
             for who, x, hw in (('Zack', ZX, 72), ('advisor', adv_x(t), 62)):
-                if name.startswith('card') or name == 'flip' and t > FLIP[0]:
+                if name.startswith('card') or name == 'flip' and t > a + 0.1:   # card close-ups: no face to keep in frame
                     continue
                 X, Y = cam.P(x, NECK - 150 * S)
                 r = hw * S * cam.z
@@ -1125,7 +1145,7 @@ def checks():
 
 
 ALLOW = [  # deliberate: (who, from, to, why) for the audit
-    ('Zack', TURN[0] - 0.1, TURN[1] + 0.35, 'the turn, cut on the action: back view to front across the cut'),
+    ('Zack', TURN0 - 0.1, TURN_END + 0.3, 'the turn: drawings swap view by view (South Park), so the shape changes'),
     ('Zack', L['zionism']['start'] - 0.25, L['zionism']['start'] + 0.15, 'arms flung up with the shout'),
     ('advisor', FLIP[0] - 0.1, FLIP[1] + 0.1, 'the card turning over (its outline squashes)'),
 ]
@@ -1185,7 +1205,7 @@ def cast(out):
     """The cast in every view the film uses (satire.md: Sam approves this): Zack from behind at the desk, mid-spin,
     shouting, thinking, delighted; the advisor walking in, standing with the card's back, and the card turned."""
     B.SS = 2
-    views = [('Zack: at the desk', 'Z', 1.0), ('Zack: mid-spin', 'Z', SPIN[0] + 0.12), ('Zack: the shout', 'Z', L['zionism']['start'] + 0.3),
+    views = [('Zack: at the desk', 'Z', 1.0), ('Zack: mid-turn', 'Z', TURN0 + 0.32), ('Zack: the shout', 'Z', L['zionism']['start'] + 0.3),
              ('Zack: thinking', 'Z', L['hmm']['start'] + 0.4), ('Zack: finger guns', 'Z', L['bingo']['start'] + 0.3),
              ('advisor: walking in', 'A', 1.2), ('advisor: card back', 'A', L['know']['start'] + 0.5),
              ('advisor: card turned', 'A', L['shoplift']['start'] + 0.5)]
