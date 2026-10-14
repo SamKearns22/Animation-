@@ -16,7 +16,9 @@ recordings arrive (name them by line key, e.g. `polanski-upset.m4a` in source/au
 line by line and the whole film re-times itself to them.
 
     python3 source/polanski.py stills OUT.jpg             key frames on one sheet
-    python3 source/polanski.py final OUT.mp4 [--scale 0.5] [--secs 3]
+    python3 source/polanski.py cast OUT.jpg               the cast in every view the film uses
+    python3 source/polanski.py check                      plan checks, subtitles, sound questions and the audit
+    python3 source/polanski.py final OUT.mp4 [--small] [--reuse --redo SHOT,SHOT]
     python3 source/preflight.py polanski OUT_DIR          the series' checks and contact sheet
 """
 import math
@@ -39,6 +41,10 @@ import mouths                # noqa: E402
 import mossad as M           # noqa: E402
 import mossad_audio as MA    # noqa: E402
 import kit                   # noqa: E402
+import filmkit               # noqa: E402  the satire checks: audit, eyelines, idle shifts, sound questions
+import film_engine as E      # noqa: E402  render with the picture cache; captions put on last
+import walker                # noqa: E402  the three-quarter walk (Cry Minister)
+from satire_style import limb, rough   # noqa: E402
 from ed import INK, curve, oval, soft   # noqa: E402
 from voices import syllables_in          # noqa: E402
 
@@ -67,7 +73,7 @@ SCRIPT = [
      ["Okay. What do you think of,", "Shoplifting Is Sexism."]),
     ('hmm', 'Z', 'zack', 0.6, "Hmmmmm.", ["Hmmm."]),
     ('no', 'Z', 'zack', 0.55, "No.", ["No."]),
-    ('drill', 'A', 'card2', 0.7, "Alright. What about, North Sea Drilling is Ableism?",
+    ('drill', 'A', 'card2', 1.0, "Alright. What about, North Sea Drilling is Ableism?",
      ["Alright. What about,", "North Sea Drilling Is Ableism?"]),
     ('absolutely', 'Z', 'zack', 0.4, "It absolutely is.", ["It absolutely is."]),
     ('notthat', 'Z', 'zack', 0.45, "But no, no. Not that.", ["But no, no, not that."]),
@@ -150,6 +156,9 @@ for i, ln in enumerate(LINES):
         if ln['cam'] in ('flip', 'zack_pov'):
             lead = ln['start'] - LINES[i - 1]['end'] - 0.15        # these shots start at once: the turn, the flip
         cut = ln['start'] - lead
+        prev = LINES[i - 1]
+        if prev['cam'] != 'wide' and ln['key'] != 'zionism':
+            cut = max(cut, min(ln['start'] - 0.1, prev['caps'][-1]['start'] + 1.05))   # the last caption gets 1 s to read
         SHOTS[-1][2] = cut
         SHOTS.append([ln['cam'], cut, None])
 BLACK_AT = L['bingo']['end'] + 0.75
@@ -465,21 +474,6 @@ def torso(img, p, sp, t):
 B.head, B.torso = head, torso
 
 
-def walking_legs(phase, stride=60, lift_h=18):
-    """A walk: each leg swings by `stride` (his units) and lifts as it comes forward (patriots2's walk)."""
-    def legs(img, p, sp):
-        tc = sp.get('trousers', (40, 40, 46))
-        for k, sgn in enumerate((-1, 1)):
-            sw = stride * math.sin(phase + k * math.pi)
-            lift = max(0.0, lift_h * math.sin(phase + k * math.pi + 1.2))
-            leg = [(sgn * 6, 440), (sgn * 104, 440), (sgn * 100 + sw * 0.5, 700), (sgn * 90 + sw, 900 - lift),
-                   (sgn * 30 + sw, 902 - lift), (sgn * 18 + sw * 0.5, 700)]
-            p.poly(leg, tc, INK, 2.6)
-            p.poly(curve([(sgn * 24 + sw, 896 - lift), (sgn * 94 + sw, 894 - lift), (sgn * 128 + sw, 910 - lift),
-                          (sgn * 124 + sw, 928 - lift), (sgn * 20 + sw, 928 - lift)], 4), (22, 20, 22), INK, 2.4)
-    return legs
-
-
 # ------------------------------------------------------------------------------------------------ the cast
 OLD_ZACK = dict(skin=B.OLIVE, hw=72, hh=94, jaw='square', hair='crop', hair_c=(38, 32, 28), brow_c=(34, 28, 24),
                 brow_w=4.6, beard='trim', beard_c=(60, 50, 44), nose='long')   # the first animatic's Zack
@@ -621,6 +615,8 @@ def zack_state(t):
         elif REACT[0] - 0.4 <= t < L['bingo']['start'] - 0.3:               # the nuclear line: his face lights up
             sp['brows'] = 'wow'
             sp['mouth'] = 'smile' if t > REACT[0] + 0.5 else 'set'
+    if t >= SPIN[1] and sp.get('look', 0) < -0.3:             # facing round and looking at the advisor (checked)
+        filmkit.eyeline('Zack', t, (ZX, NECK - 150 * S), (sp['look'], 0.0), (AX, NECK - 150 * S))
     sp['blink'] = F.blinking(t, Z_BLINKS)
     sp['breath'] = F.breath(t, 2.6 if t < STRAIGHTEN else 4.0, 6 if t < STRAIGHTEN else 2.5)
     return sp
@@ -642,7 +638,7 @@ def adv_state(t):
     sp['brows'] = 'sincere'
     sp['look'] = F.look_at(AX, ZX)
     sp['turn'] = 0.12
-    sp['tilt'] = 0.05 + 0.02 * math.sin(2 * math.pi * t / 3.7)               # a loose, easy sway of the head
+    sp['tilt'] = 0.05 + filmkit.shifts(t, seed=2, amount=0.03)               # a loose head: held, small quick shifts
     sp['mouth'] = mouth_shape('A', t, 'smile' if t < L['zionism']['start'] else 'set')
     if L['know']['start'] <= t < L['know']['end']:                           # "we know, buddy": the nods
         sp['head_dy'] = 7 * abs(math.sin(math.pi * (t - L['know']['start']) / 0.45))
@@ -654,6 +650,8 @@ def adv_state(t):
         sp['lid'] = 2 if t < L['well']['start'] + 0.35 else 7
     sp['blink'] = F.blinking(t, A_BLINKS)
     sp['breath'] = F.breath(t, 4.2, 2.0, 0.3)
+    if sp['look'] > 0.3:                                       # looking at Zack (checked: eyelines)
+        filmkit.eyeline('advisor', t, (adv_x(t), NECK - 150 * S), (sp['look'], 0.0), (ZX, NECK - 150 * S))
     return sp
 
 
@@ -719,7 +717,9 @@ WALL_PLAN = {
 
 
 def box(p, x0, y0, x1, y1, f, lw=2.6, line=INK):
-    p.poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], f, line, lw)
+    """A hand-cut box (satire style: corners nudged a little, the same every frame; never ruler-straight)."""
+    amt = min(6.0, 0.05 * min(abs(x1 - x0), abs(y1 - y0)))
+    p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], amt, int(x0 * 7 + y0 * 13) % 9973), f, line, lw)
 
 
 def text(img, cam, x, y, s, size, fill, angle=0.0, font=None):
@@ -922,18 +922,28 @@ def zack(img, cam, t):
     return sp
 
 
+WALK_V = (AX + 170) / (WALK_END * 0.91)       # his walking speed (world units a second) before he slows to stop
+
+
 def advisor(img, cam, t):
+    """The advisor: walks in three-quarter view (walker.py, Cry Minister), card held to his chest, slowing and
+    turning to the front as he stops; then stands. The card and his gripping hands go on top."""
     sp = adv_state(t)
     x = adv_x(t)
-    walking = t < WALK_END
-    legs = None
-    if walking:
-        ph, bob, stride = F.walk(t, (AX + 170) / WALK_END / 0.82, S)
-        sp['bob'] = -bob * (1 - ease((t - WALK_END + 0.4) / 0.4))
-        legs = walking_legs(ph, 52 * (1 - ease((t - WALK_END + 0.4) / 0.4)))
-    kit.feet_shadow(img, cam, x, NECK, S)
-    person_at(img, cam, x, sp, t, legs)
-    Lc = B.Local(cam, x, NECK + sp.get('bob', 0.0), S)
+    if t < WALK_END:
+        u = ease((t - (WALK_END - 0.5)) / 0.5)
+        speed = max(1.0, (adv_x(t + 0.04) - adv_x(max(0.0, t - 0.04))) / 0.08)
+        ph = (0.95 * (x + 170) / WALK_V) % 1.0
+        kx, turn = mix(0.9, 1.0, u), mix(0.55, sp['turn'], u)
+        kit.contact_shadow(img, cam, x, FY, 240 * S)
+        walker.walk(img, cam, B, F, x, FY, S, sp, t, 1, ph, speed, turn=turn, kx=kx, limb=limb, arms=sp['arms'], blend=1.0)
+        neck = FY - (F.SOLE_Y - 8 * abs(math.cos(2 * math.pi * ph))) * S
+        frame = walker.Squash(cam, x, kx)
+    else:
+        kit.feet_shadow(img, cam, x, NECK, S)
+        person_at(img, cam, x, sp, t)
+        neck, frame = NECK, cam
+    Lc = B.Local(frame, x, neck, S)
     draw_card(img, Lc, t, sp['_lift'])
     p = B.Pen(img, Lc)
     for side in 'LR':                                         # his hands over the card's edges: the grip
@@ -951,14 +961,22 @@ def scene(t, cam):
     return img
 
 
-def frame_image(t):
+def picture(t):
+    """The frame without captions (they go on last, so a wording note never re-renders a picture)."""
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
-    img = scene(t, camera(t))
-    c = caption_at(t)
+    return scene(t, camera(t))
+
+
+def overlay(img, t):
+    c = caption_at(t) if t < BLACK_AT else None
     if c:
         Q.caption(img, c, next(x['shout'] for x in CAPS if x['text'] == c))
     return img
+
+
+def frame_image(t):
+    return overlay(picture(t), t)
 
 
 # ---------------------------------------------------------------------------------------------------- sound
@@ -1005,9 +1023,10 @@ def soundtrack(total):
     n = int(total * SR)
     out = np.zeros(n)
     rng = np.random.default_rng(7)
-    for ln in LINES:
-        x = MA.gate(ln['x'], ln['st']) if ln['real'] else ln['x']
-        place(out, x, ln['off'])
+    real = any(ln['real'] for ln in LINES)
+    for ln in LINES:                    # the robot stand-ins set the timing only: Sam never hears them (14 Oct)
+        if ln['real']:
+            place(out, MA.gate(ln['x'], ln['st']), ln['off'])
     # footsteps: one at each foot contact of the walk
     step = 1 / 2.0
     k = 0.25
@@ -1017,9 +1036,10 @@ def soundtrack(total):
     place(out, sfx_flip(rng) * 0.4, FLIP[0] + 0.05)
     place(out, sfx_thud(rng) * 0.8, SLAM)
     end = min(n, int(BLACK_AT * SR))
-    for _ in range(3):                                         # master: about -14 LUFS, peaks under -1 dBTP
-        out *= 10 ** ((-14.0 - MA.lufs(out[:end])) / 20)
-        out = M.limiter(out, -2.6)
+    if real:
+        out, _ = MA.master(out, end)                           # -16 LUFS, levelled gently, never squashed past 3 dB
+    else:
+        out *= 0.35 / (np.abs(out).max() + 1e-9)               # effects only: at a natural level, not raised to voice loudness
     f = int(0.005 * SR)
     out[end - f:end] *= np.linspace(1, 0, f)                   # hard cut to black: picture and sound together
     out[end:] = 0
@@ -1055,8 +1075,50 @@ def checks():
         if not TABLE['x0'] < ZX + side * 196 * S < TABLE['x1']:
             bad.append('Zack\'s hands are off the end of the table')
     B.SS = 2
+    E.print_subtitles(caption_at, BLACK_AT, FPS)
+    windows = [(ln['off'] + a, ln['off'] + b) for ln in LINES for a, b in ln['st']]
+    bad += E.check_mouths(sorted(x for w in 'ZA' for x in TRACK[w]), windows)
+    mix_ = soundtrack(DUR)
+    for q in filmkit.sound_questions({'mix': mix_}, SR, cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
+        print('QUESTION FOR SAM:', q)
     if bad:
         raise ValueError('; '.join(bad))
+
+
+ALLOW = [  # deliberate: (who, from, to, why) for the audit
+    ('Zack', SPIN[0] - 0.1, SPIN[1] + 0.1, 'the spin: his body narrows to its edge and opens out the other way'),
+    ('Zack', L['zionism']['start'] - 0.25, L['zionism']['start'] + 0.15, 'arms flung up with the shout'),
+    ('advisor', FLIP[0] - 0.1, FLIP[1] + 0.1, 'the card turning over (its outline squashes)'),
+    ('advisor', WALK_END - 0.15, WALK_END + 0.15, 'the walk settles into his standing pose'),
+]
+
+
+def audits():
+    """The satire audit: each man drawn alone on every frame he is in shot (in pieces, popping, stretching, frozen),
+    then the eyelines."""
+    B.SS = 1
+
+    def alone(fn):
+        def draw(t):
+            lay = Image.new('RGBA', (B.W, B.H), (0, 0, 0, 0))
+            fn(lay, camera(t), t)
+            return lay
+        return draw
+
+    def in_shot(t, x):
+        X, _ = camera(t).P(x, NECK)
+        return -100 < X < 1180
+    actors = {}
+    for who, fn, xf in (('Zack', zack, lambda t: ZX), ('advisor', advisor, adv_x)):
+        for shot, a, b in SHOTS:
+            ts = [i / FPS for i in range(int(math.ceil(a * FPS)), int(b * FPS)) if in_shot(i / FPS, xf(i / FPS))]
+            if ts:
+                actors[f'{who} [{shot} {a:.1f}s]'] = (ts, alone(fn))
+    allow = [(n, a, b, why) for who, a, b, why in ALLOW for n in actors if n.startswith(who)]
+    filmkit.EYES.clear()
+    faults = filmkit.silhouette_audit(actors, fps=FPS, allow=allow)
+    faults += filmkit.check_eyelines()
+    return faults
 
 
 # ---------------------------------------------------------------------------------------------------- output
@@ -1081,59 +1143,37 @@ def stills(out):
     print('stills:', out)
 
 
-def model(out):
-    """Zack's model sheet: the first animatic's version beside the new one, in his main expressions."""
+def cast(out):
+    """The cast in every view the film uses (satire.md: Sam approves this): Zack from behind at the desk, mid-spin,
+    shouting, thinking, delighted; the advisor walking in, standing with the card's back, and the card turned."""
     B.SS = 2
-    faces = [('seething', dict(brows='fierce', lid=5, mouth='set')), ('shouting', dict(brows='fierce', mouth='v:AI')),
-             ('skeptical', dict(brows='confused', mouth='set', look=-0.6, turn=-0.3)),
-             ('delighted', dict(brows='joy', mouth='smile', look=-0.6, turn=-0.3))]
+    views = [('Zack: at the desk', 'Z', 1.0), ('Zack: mid-spin', 'Z', SPIN[0] + 0.12), ('Zack: the shout', 'Z', L['zionism']['start'] + 0.3),
+             ('Zack: thinking', 'Z', L['hmm']['start'] + 0.4), ('Zack: finger guns', 'Z', L['bingo']['start'] + 0.3),
+             ('advisor: walking in', 'A', 1.2), ('advisor: card back', 'A', L['know']['start'] + 0.5),
+             ('advisor: card turned', 'A', L['shoplift']['start'] + 0.5)]
     tiles = []
-    for label, base in (('before', dict(ZACK, **OLD_ZACK)), ('after', ZACK)):
-        for name, f in faces:
-            img = Image.new('RGBA', (500 * B.SS, 560 * B.SS), (226, 228, 214, 255))
-            cam = B.Cam(2.0, 0, 0)
-            cam.P = (lambda c: lambda x, y: (x * c.z * B.SS + 250 * B.SS, (y + 120) * c.z * B.SS + 260 * B.SS))(cam)
-            sp = dict(base, **f, arms={'L': ((-150, 270), (-140, 440), 'fist'), 'R': ((150, 270), (140, 440), 'fist')})
-            B.person(img, cam, 0, 0, 1.0 * S, sp, 0.0)
-            im = img.convert('RGB').resize((500, 560), Image.LANCZOS)
-            ImageDraw.Draw(im).text((14, 516), f'{label}: {name}', font=ImageFont.truetype(B.SANS, 26), fill=(30, 30, 30))
-            tiles.append(im)
-    sheet = Image.new('RGB', (4 * 510, 2 * 570), (40, 40, 40))
+    for label, who, t in views:
+        x = ZX if who == 'Z' else adv_x(t)
+        cam = B.Cam(1.2, x, NECK + 330)
+        img = B.canvas((226, 228, 214))
+        (zack if who == 'Z' else advisor)(img, cam, t)
+        im = img.convert('RGB').resize((360, 640), Image.LANCZOS).crop((30, 40, 330, 640))
+        ImageDraw.Draw(im).text((10, 568), label, font=ImageFont.truetype(B.SANS, 20), fill=(30, 30, 30))
+        tiles.append(im)
+    sheet = Image.new('RGB', (4 * 306, 2 * 606), (40, 40, 40))
     for i, im in enumerate(tiles):
-        sheet.paste(im, ((i % 4) * 510, (i // 4) * 570))
+        sheet.paste(im, ((i % 4) * 306, (i // 4) * 606))
     sheet.save(out, quality=90)
-    print('model sheet:', out)
+    print('cast sheet:', out)
 
 
-def render_frame(args):
-    i, size, ss = args
-    B.SS = ss
-    return np.asarray(frame_image(i / FPS).convert('RGB').resize(size, Image.LANCZOS)).tobytes()
-
-
-def render(out, scale=1.0, secs=None):
-    import imageio_ffmpeg
-    from multiprocessing import Pool
-    size = (int(1080 * scale) // 2 * 2, int(1920 * scale) // 2 * 2)
-    ss = 2 if scale > 0.6 else 1
-    total = secs or DUR
-    n = int(round(total * FPS))
+def render(out, small=False, reuse=False, redo=()):
     t0 = time.time()
-    wav = out + '.wav'
-    MA.write_wav(wav, soundtrack(total))
-    p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-                          '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
-                          '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
-                          '-b:a', '128k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
-    with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss) for i in range(n)], chunksize=2)):
-            p.stdin.write(fr)
-            if k % 48 == 0:
-                print(f'frame {k}/{n}', flush=True)
-    p.stdin.close()
-    p.wait()
-    os.remove(wav)
-    print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB, {n} frames, {time.time() - t0:.0f} s)')
+    E.render('polanski', out, size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
+             picture=picture, overlay=overlay, shot_of=lambda t: shot_at(t)[0], sound=lambda: soundtrack(DUR),
+             write_wav=MA.write_wav, set_ss=lambda v: setattr(B, 'SS', v), crf=24 if small else 20, reuse=reuse,
+             redo=redo)
+    print(f'render took {time.time() - t0:.0f} s')
 
 
 def main():
@@ -1145,21 +1185,28 @@ def main():
             print(f'shot {s[0]:11s} {s[1]:6.2f}-{s[2]:6.2f} ({s[2] - s[1]:.1f} s)')
         print(f'black at {BLACK_AT:.2f} s')
         return
-    if len(a) == 2 and a[0] == 'model':
-        model(a[1])
+    if len(a) == 2 and a[0] == 'cast':
+        cast(a[1])
+        return
+    if a and a[0] == 'check':
+        checks()
+        f = audits()
+        print('\n'.join('AUDIT: ' + x for x in f) or 'audit: clean')
         return
     if len(a) < 2 or a[0] not in ('stills', 'final'):
         print(__doc__)
         return
-    F.guard(B)                                    # every arm drawn is measured, in stills and renders too
     checks()
     if a[0] == 'stills':
         stills(a[1])
     else:
-        scale = float(a[a.index('--scale') + 1]) if '--scale' in a else 1.0
-        secs = float(a[a.index('--secs') + 1]) if '--secs' in a else None
-        render(a[1], scale, secs)
+        render(a[1], small='--small' in a, reuse='--reuse' in a,
+               redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
 
+
+F.guard(B)                    # every arm drawn is measured against the rig; a wrong one stops the render
+import limbs                  # noqa: E402
+limbs.install(B)              # the new arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
 
 if __name__ == '__main__':
     main()

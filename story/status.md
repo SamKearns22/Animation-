@@ -16,7 +16,10 @@ Read this first in any new session, after CLAUDE.md.
   temples, short light salt-and-pepper beard; `polanski.py model OUT.jpg` shows before and after). Advisor (Shaggy as an operative): long wavy hair, wispy goatee, silver lower-lip
   ring, olive blazer, white shirt, brown skinny tie, green lanyard. The A3 card's list: Shoplifting Is Sexism / North Sea
   Drilling Is Ableism / Nuclear Proliferation ... Native Populations. Finger guns: the one named exception to circle hands.
-- Animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
+- Animatic v2 sent 14 Oct (48 s, 540 x 960, 1.8 MB, 3 min render; picture cache, so caption/sound notes take seconds):
+  notes 1-6 in `notes/polanski.md` (new Zack, desk against the wall + spin, card focus, new limbs and walker, satire
+  audit clean, no robot voice). `python3 source/polanski.py check | cast OUT | stills OUT | final OUT --small`.
+- First animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
   stand-ins; Sam to record 15 lines named `polanski-KEY.m4a` (keys in `SCRIPT`). Next: Sam's notes, recordings, final.
 
 ## Done: "Andrew the Hutt" (TikTok satire, no title)

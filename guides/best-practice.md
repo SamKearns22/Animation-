@@ -332,6 +332,12 @@ this series. Full details in `tiktok-design.md`.
 - **Card and sign close-ups:** frame the item being read high in the picture, so the captions below never cover
   writing the audience must read.
 - **A caption never spills into the next shot;** it stops at the cut.
+- **Stand-in voices are for timing only: never on anything sent to Sam** (his note, 14 Oct). The animatic carries the
+  effects and captions; the robot lines stay inside the code.
+- **Hiding what's written further down a card or sign:** a 9:16 frame wide enough to read a line always shows the whole
+  card, so framing can't hide it; keep the unread lines out of focus and rack focus to each as it is read.
+- **Work from the newest branch:** before a new film, check the other branches (`git branch -r`) for tools built in
+  other chats (the new limbs lived only on the Cry Minister branch, and this film first started without them).
 
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
