@@ -34,6 +34,7 @@ THIGH, SHIN, ANKLE_Y = 228, 218, 890          # person units: hips at 450, soles
 M_PER_UNIT = 0.00152                          # metres per person unit (series.py: neck to soles 1.41 m)
 ELEV = 0.14                                   # the camera a little above: nearer points sit lower
 HIP_Y = 450.0
+JACKET = 505.0                                # jacket hem just below the hips: more leg shows (Sam, 14 Oct)
 SEAT_DROP = 222.0                             # seated: the body lower by this (knee-height chair, thighs level)
 LONG_HAIR = {'long': 150, 'bob': 110, 'blonde': 260, 'wavy': 230}
 BALD = {'bald', 'wisps'}
@@ -210,7 +211,7 @@ def leg(p, j, side, yaw, sp):
 
     def foot_pt(dx, dy, dz):
         return (fx + dx, fy + dy - dz * math.sin(a), fz + dz * math.cos(a))
-    box = [foot_pt(sx, sy, sz) for sx in (-28, 28) for sy in (4, 38) for sz in (-32, 96)]
+    box = [foot_pt(sx, sy, sz) for sx in (-28, 28) for sy in (0, 36) for sz in (-28, 92)]   # the shoe starts at the ankle
     hull = _hull([project(q, yaw)[0] for q in box])
     p.poly(curve(hull, 3), sp.get('shoe', (22, 20, 22)), INK, 2.4)
 
@@ -281,7 +282,7 @@ class Lean:
 def torso_view(img, p, sp, view, seated=False):
     """The torso for each non-front view, facing right, in the person's own clothes."""
     sw, skin = sp.get('shoulders', 150), sp['skin']
-    bottom = min(sp.get('bottom', 560), 470) if seated else sp.get('bottom', 560)
+    bottom = min(sp.get('bottom', JACKET), 470) if seated else sp.get('bottom', JACKET)
     out = sp.get('outfit', 'suit')
     jc = sp.get('dress', (190, 30, 44)) if out == 'dress' else sp.get('jacket', (40, 40, 46))
     sc = sp.get('shirt', (244, 244, 240))
@@ -589,6 +590,7 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
             arm(p, j2, sd, sp)
     if view == 'front':
         q = dict(sp_draw, pose='none', full=False)
+        q.setdefault('bottom', JACKET)
         if seated:
             q['bottom'] = min(q.get('bottom', 560), 470)
         B.torso(img, B.Pen(img, up), q, t)
