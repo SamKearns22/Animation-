@@ -41,8 +41,10 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
   Arms hang clear of the jacket, never tucked in; a shrug opens the arms well out. One prop per hand (the 'cup' hand draws its cup).
 - **Bending forward shortens the jacket hem to the hips** (no long tail when sitting down); a steering wheel stands
   nearly upright facing the driver (25 degrees back), never flat like a plate. (Sam, 14 Oct)
-- **Runs:** after toe-off the back leg extends, then the heel folds up towards the seat (never a straight leg sticking
-  out behind); fists pump no higher than the chin. Side heads: long hair covers the back of the skull, and only the
+- **Runs (Sam's side-on photo refs, 14 Oct):** in flight the legs open into a long split: the back leg pushed out long
+  behind, foot just off the floor; then the heel folds up under the seat; the knee drives forward with the shin hanging;
+  the foot lands just ahead of the hips. Elbows at a right angle, an even swing: back elbow well behind the body,
+  front fist at chest height. The OPPOSITE arm comes forward with each leg (a bug had it on the same side). Side heads: long hair covers the back of the skull, and only the
   face's edge is re-inked over the hair; back views hide hands that are in front of the body. (Sam, 14 Oct)
 - **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
