@@ -543,9 +543,10 @@ def zack_state(t):
     over = set()                                                                # hands on the table: drawn over it
     if t < STRAIGHTEN:
         if up > 0:
-            side_out = {'L': (-360, 110), 'R': (360, 110)}                  # out to the side on the way, never past
-            tg = {s: (lerp2(table[s], side_out[s], up / 0.5) if up < 0.5 else    # the shoulder (no folded elbow)
-                      lerp2(side_out[s], raised[s], (up - 0.5) / 0.5)) for s in 'LR'}
+            # held poses, not a sliding path (limited animation, and a slide passed through a scarecrow pose):
+            # hands on the desk -> elbows low and out, hands rising beside his head -> flung up for the shout
+            mid = {'L': (-250, -30), 'R': (250, -30)}
+            tg = dict(table) if up < 0.12 else (mid if up < 0.6 else raised)
             shape = {'L': 'palm', 'R': 'palm'}
             if up < 0.3:
                 over = {'L', 'R'}
@@ -639,7 +640,7 @@ def zack_state(t):
             sp['mouth'] = 'smile' if t > REACT[0] + 0.5 else 'set'
     if t >= TURN_END and sp.get('look', 0) < -0.3:            # facing round and looking at the advisor (checked)
         filmkit.eyeline('Zack', t, (ZX, NECK - 150 * S), (sp['look'], 0.0), (AX, NECK - 150 * S))
-    sp['blink'] = F.blinking(t, Z_BLINKS)
+    sp['blink'] = F.blinking(t, Z_BLINKS) and not (TURN0 - 0.2 <= t < L['zionism']['start'] + 0.6)   # eyes open for the shout
     sp['breath'] = F.breath(t, 2.6 if t < STRAIGHTEN else 4.0, 6 if t < STRAIGHTEN else 2.5)
     return sp
 
@@ -940,6 +941,9 @@ def zack(img, cam, t):
     sp = zack_state(t)
     kit.feet_shadow(img, cam, ZX, NECK, S)
     if t < TURN0:
+        sp['back'] = True
+        person_at(img, cam, ZX, sp, t)
+    elif t < TURN_END and turn_view(t) == 180:                       # still facing the desk: hands stay on it
         sp['back'] = True
         person_at(img, cam, ZX, sp, t)
     elif t < TURN_END:

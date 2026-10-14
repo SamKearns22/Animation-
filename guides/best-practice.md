@@ -332,6 +332,10 @@ this series. Full details in `tiktok-design.md`.
 - **Card and sign close-ups:** frame the item being read high in the picture, so the captions below never cover
   writing the audience must read.
 - **A caption never spills into the next shot;** it stops at the cut.
+- **Big fast moves are held poses, not a slide between them** (Sam, 14 Oct): routing a hand through a stop-off point to
+  dodge the arm checker produced a scarecrow frame (arms straight out, forearms dangling) on a drawn frame. Use two or
+  three real key poses (hands on the desk, hands rising beside the head, flung up), each held, checked by the arm
+  guard; and no blink on the frames of a big reaction.
 - **Stand-in voices are for timing only: never on anything sent to Sam** (his note, 14 Oct). The animatic carries the
   effects and captions; the robot lines stay inside the code.
 - **Hiding what's written further down a card or sign:** a 9:16 frame wide enough to read a line always shows the whole

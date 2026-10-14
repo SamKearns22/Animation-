@@ -13,6 +13,8 @@
 | 9 | the turn | ~4.3 s | flips like paper | v3: cut on the action (head and cheek come round in the wide; the close-up finishes the turn); proper turns wait for the movement system |
 | 11 | card | ~24 s | reveal "Shoplifting" only as he reaches the word | done v4: card stays face down until the word, then flips in 0.25 s; items 2 and 3 land on "North Sea" and "Nuclear"; while turning the card only carries item 1 |
 | 12 | the turn | ~4 s | swivel and thin, then suddenly round in the next shot: use South Park's method | done v4: one shot, real drawings swapped view by view (views.py), the head a drawing ahead; a second render with four directions only (TURN4=1) for Sam to choose |
+| 13 | the turn | ~4 s | try a straight 180 | done: TURN180=1, back view to front in one drawing, hands on the desk until the pop |
+| 14 | the shout | ~4.6 s | "why this pose?" (arms straight out, forearms hanging, eyes shut) | done: held key poses for the arm raise (desk, beside the head, up), no blink through the shout |
 | 10 | foreground | 0-20 s | the laptop sat on a giant grey box | done: a campaign table with a green VOTE GREEN cloth to the floor; everything on it lies low (nothing in front of the card) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
