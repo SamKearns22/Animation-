@@ -79,3 +79,9 @@ films (the satire template picks it up automatically).
 - **Turn standard (Sam, 14 Oct): the straight 180**, a pop from one view to the other in one drawing, held poses either
   side; the five-angle and four-direction turns stay available for a script that asks.
 - **No sound effects by default** (Sam, 14 Oct).
+
+## Built (14 Oct)
+- `views.py` (angles, 3D skeleton, lean, chair, arm checks in 3D), `moves.py` (gaits, travel, pace, 24 poses, sit/stand,
+  combat, cars, checks, events for optional sounds), `stage.py` (perspective floor), `reel.py` (sheet and test reel).
+  Wired into `satire_template.py` (imports; `moves.audit()` in its audits) and `guides/satire.md`.
+- Bingo Bingo's turn uses the views; its walk-in stays the foreground-table cheat until a re-stage is asked for.

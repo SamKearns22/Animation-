@@ -25,6 +25,20 @@ faces; hard cuts; a close-up for the reaction that matters; Cranberry Title styl
 No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
 flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
 
+## Movement: walking, turning, poses, sitting, combat, cars (built to order)
+- `views.py`: anyone from any angle (front, three-quarter, side, three-quarter back, back; facing left is mirrored),
+  posed on a hidden 3D skeleton: say where a hand or foot goes and the elbow or knee is solved. Side and back views are
+  worked out from the front design (hair and beard by kind, clothes by outfit).
+- `moves.py`: gaits (stroll, walk, brisk, run, sprint: Williams' tempos, runs float), `travel` along a path in metres
+  (body and face the way they go, planted feet never slide), `pace` (straight-180 turns at the ends); poses (standing
+  styles, gestures, things held); sitting down and standing up (four phases); combat (punch, kick, sword, taking a blow,
+  falling in stages); driving and getting in or out of a car (the car drawn per film). Each has checks.
+- `stage.py`: people on a perspective floor (series.Room): size follows distance, feet on the floor, nearer drawn over.
+- **Turns are a straight 180** (Sam's standard): one drawing to the other, held poses either side.
+- **Big moves are held key poses**, never a slide through an in-between nobody makes; gestures keep their direction.
+- `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
+- `walker.py` (Cry Minister's walk) is retired for new films; Cry Minister keeps it.
+
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
 - Nobody is ever frozen, and nobody wobbles: idle life is a held pose with a quick small shift now and then

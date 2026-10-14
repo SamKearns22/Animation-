@@ -232,6 +232,7 @@ def audits():
                                     [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90),
                                      ('side', 'el', 'sh', 0)])
     faults += THUMP.audit(arm_rule, label='A thumps the table')
+    faults += moves.audit()                                  # the movement library's own checks (gaits, poses)
     return faults
 
 
@@ -272,6 +273,14 @@ def main():
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
 import limbs                     # noqa: E402
 limbs.install(B)                 # natural arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
+# Movement (guides/movement-system-plan.md, guides/reference-pack.md), built to order: use only what the script needs.
+#   views.person(img, cam, x, y, s, sp, t, yaw, pose)   anyone from any angle (front, three-quarter, side, back)
+#   moves.gait / travel / pace, moves.pose(sp, 'arms_folded'), moves.sit_down / stand_up, moves.punch / kick / sword /
+#   hit_react / fall, moves.driving / car_in / car_out; stage.Stage(series.Room(...)) for people on a perspective floor.
+#   Turns: the straight 180 (one drawing to the other). No sound effects unless the script asks.
+import views                     # noqa: E402,F401
+import moves                     # noqa: E402,F401
+import stage                     # noqa: E402,F401
 
 if __name__ == '__main__':
     main()
