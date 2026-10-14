@@ -36,6 +36,13 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
 - `stage.py`: people on a perspective floor (series.Room): size follows distance, feet on the floor, nearer drawn over.
 - **Turns are a straight 180** (Sam's standard): one drawing to the other, held poses either side.
 - **Big moves are held key poses**, never a slide through an in-between nobody makes; gestures keep their direction.
+- **Hands on the face are drawn in front of it** (`j['on_face']`, props at the face `j['face_props']`): facepalm over
+  the eyes with the elbow out, head in hands = the head drops forward into palms on the cheeks, a sip = cup rim at the lips.
+  Arms hang clear of the jacket, never tucked in; a shrug opens the arms well out. One prop per hand (the 'cup' hand draws its cup).
+- **Bending forward shortens the jacket hem to the hips** (no long tail when sitting down); a steering wheel stands
+  nearly upright facing the driver (25 degrees back), never flat like a plate. (Sam, 14 Oct)
+- **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
+  and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
 - `walker.py` (Cry Minister's walk) is retired for new films; Cry Minister keeps it.
 

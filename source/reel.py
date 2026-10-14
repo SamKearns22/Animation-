@@ -96,12 +96,12 @@ def _room(X=0.0, f=1700.0):
     return series.Room(X, 1.5, 7.5, f, sx=540, sy=600)
 
 
-@section('Gaits from the side: stroll, walk, brisk, run, sprint', 9.0)
+@section('Gaits from the side: stroll, walk, brisk, run, sprint', 13.0)
 def gaits(img, cam, t, zack, adv):
     import stage
     kinds = list(MV.GAITS)
-    k = min(len(kinds) - 1, int(t / 1.8))
-    kind, u = kinds[k], t - k * 1.8
+    k = min(len(kinds) - 1, int(t / 2.6))                 # each gait held longer (Sam: a little slower)
+    kind, u = kinds[k], t - k * 2.6
     X = MV.speed(kind) * u
     st = stage.Stage(_room(X))                            # the camera follows him: the floor slides under planted feet
     st.floor(img, cam, x0=X - 6, x1=X + 6)
@@ -147,18 +147,21 @@ STYLES = ['relaxed', 'hips', 'arms_folded', 'pockets', 'behind_back', 'slumped',
 PROPS = ['phone_ear', 'phone_read', 'paper', 'mug', 'mug_sip', 'mic', 'pen', 'bag']
 
 
-def _cycle(sp, names, t, hold=0.65):
+HOLD = 1.1                                                # seconds on each pose (Sam: a little slower)
+
+
+def _cycle(sp, names, t, hold=HOLD):
     """Held poses, one to the next with a single in-between drawing (limited animation)."""
     k = int(t / hold)
     u = t - k * hold
-    a = MV.pose(sp, names[min(k, len(names) - 1)], beat=abs(math.sin(math.pi * u / 0.33)))
+    a = MV.pose(sp, names[min(k, len(names) - 1)], beat=abs(math.sin(math.pi * u / 0.45)))
     if u < 1 / 12 and k > 0:
         b = MV.pose(sp, names[k - 1])
         return MV.mix_poses(b, a, 0.5), names[min(k, len(names) - 1)]
     return a, names[min(k, len(names) - 1)]
 
 
-@section('Standing styles and gestures', len(STYLES) * 0.65)
+@section('Standing styles and gestures', len(STYLES) * HOLD)
 def styles(img, cam, t, zack, adv):
     import stage
     st = stage.Stage(_room(f=2300.0))
@@ -168,7 +171,7 @@ def styles(img, cam, t, zack, adv):
     return name.replace('_', ' ')
 
 
-@section('Holding things', len(PROPS) * 0.65)
+@section('Holding things', len(PROPS) * HOLD)
 def holding(img, cam, t, zack, adv):
     import stage
     st = stage.Stage(_room(f=2300.0))
@@ -178,8 +181,9 @@ def holding(img, cam, t, zack, adv):
     return name.replace('_', ' ')
 
 
-@section('Sitting down and standing up (the four phases)', 6.0)
+@section('Sitting down and standing up (the four phases)', 7.5)
 def sitting(img, cam, t, zack, adv):
+    t *= 0.8                                               # a little slower (Sam)
     import stage
     st = stage.Stage(_room(f=2100.0))
     st.floor(img, cam)
@@ -194,8 +198,9 @@ def sitting(img, cam, t, zack, adv):
     st.draw(img, cam, [stage.Actor(adv, 0.0, 4.0, 90, pose, t)])
 
 
-@section('Combat: punch, the hit and the fall, a kick, a sword swing', 9.0)
+@section('Combat: punch, the hit and the fall, a kick, a sword swing', 11.25)
 def combat(img, cam, t, zack, adv):
+    t *= 0.8
     import stage
     st = stage.Stage(_room(f=2000.0))
     st.floor(img, cam)
@@ -221,8 +226,9 @@ def combat(img, cam, t, zack, adv):
     return 'sword swing'
 
 
-@section('Car-ready: driving, getting in (the car is drawn per film)', 5.0)
+@section('Car-ready: driving, getting in (the car is drawn per film)', 6.25)
 def car(img, cam, t, zack, adv):
+    t *= 0.8
     import stage
     st = stage.Stage(_room(f=2100.0))
     st.floor(img, cam)
@@ -243,13 +249,15 @@ def reel_frame(i):
             img = B.canvas(BG)
             cam = B.Cam(1.0, 540, 960)
             sub = fn(img, cam, t, zack, adv)
-            d = ImageDraw.Draw(img)
-            f = ImageFont.truetype(B.SANS, 34)
-            rows = B.wrap(title, f, 960)
+            d = ImageDraw.Draw(img)                    # labels on a dark band at the top, clear of the person (Sam)
+            f, fs = ImageFont.truetype(B.SANS, 40), ImageFont.truetype(B.SANS, 58)
+            rows = B.wrap(title, f, 940)
+            h = 50 * len(rows) + (80 if sub else 0) + 40
+            d.rectangle([0, 150, 1080, 150 + h], fill=(28, 30, 36))
             for k, r in enumerate(rows):
-                d.text((540, 360 + 44 * k), r, font=f, fill=(30, 30, 30), anchor='mm')
+                d.text((540, 190 + 50 * k), r, font=f, fill=(210, 212, 218), anchor='mm')
             if sub:
-                d.text((540, 360 + 44 * len(rows) + 10), sub, font=ImageFont.truetype(B.SANS, 30), fill=(90, 90, 90), anchor='mm')
+                d.text((540, 190 + 50 * len(rows) + 30), sub, font=fs, fill=(255, 214, 90), anchor='mm')
             return np.asarray(img.convert('RGB').resize((540, 960), Image.LANCZOS)).tobytes()
         t -= dur
     return np.asarray(B.canvas((0, 0, 0)).convert('RGB').resize((540, 960))).tobytes()

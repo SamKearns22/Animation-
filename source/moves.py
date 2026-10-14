@@ -267,24 +267,26 @@ def pose(sp, name, beat=0.0, target=None):
     elif name == 'shrug':
         j['head_dy'] = -6
         for s, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, s, (sg * (sw + 130), 330.0, 70.0), 'down', 'palm')
+            V.arm_to(j, s, (sg * (sw + 230), 290.0, 110.0), 'out', 'palm')     # arms well out from the body (Sam)
     elif name == 'point':                                    # at a target, the other hand on the hip
         V.arm_to(j, 'R', target or (sw + 400, 60.0, 250.0), 'down', 'point')
         V.arm_to(j, 'L', (-(sw - 4), 380.0, 10.0), 'out')
     elif name == 'facepalm':
         j['head_dy'] = 10
         j['lean'] = 6
-        V.arm_to(j, 'R', (14.0, -170.0, 80.0), 'down', 'palm')
+        V.arm_to(j, 'R', (14.0, -176.0, 96.0), (1.0, 0.5, 0.2), 'palm')   # palm over the eyes, elbow out to the side,
+        j['on_face'] = {'R'}                                         # drawn in front of the face
     elif name == 'head_in_hands':
-        j['head_dy'] = 26
-        j['lean'] = 14
+        j['head_dy'] = 40                                            # the head drops forward into the palms
+        j['lean'] = 16
         for s, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, s, (sg * 62, -118.0, 46.0), (1.0, 0.7, 0.9), 'palm')   # elbows forward and a little out
+            V.arm_to(j, s, (sg * 50, -96.0, 92.0), (0.5, 1.0, 0.6), 'palm')    # palms over the cheeks, elbows down in front
+        j['on_face'] = {'L', 'R'}
     elif name == 'heart':
         V.arm_to(j, 'R', (40.0, 160.0, 46.0), 'down', 'palm')
     elif name == 'phone_ear':
         V.arm_to(j, 'R', (82.0, -140.0, 16.0), (0.6, 1.0, 0.7), 'phone')       # elbow down and forward, forearm up
-        j['props'] = [lambda p, j2: _phone(p, j2, 'R', ear=True)]
+        j['face_props'] = [lambda p, j2: _phone(p, j2, 'R', ear=True)]
     elif name == 'phone_read':
         j['head_dy'] = 8
         V.arm_to(j, 'R', (30.0, 230.0, 180.0), 'down', 'phone')
@@ -294,11 +296,10 @@ def pose(sp, name, beat=0.0, target=None):
             V.arm_to(j, s, (sg * 100, 250.0, 160.0), 'down', 'fist')
         j['props'] = [_paper]
     elif name == 'mug':
-        V.arm_to(j, 'R', (70.0, 300.0, 130.0), 'down', 'cup')
-        j['props'] = [lambda p, j2: _mug(p, j2)]
+        V.arm_to(j, 'R', (70.0, 300.0, 130.0), 'down', 'cup')                 # the 'cup' hand draws its own cup
     elif name == 'mug_sip':
-        V.arm_to(j, 'R', (24.0, -96.0, 80.0), 'down', 'cup')
-        j['props'] = [lambda p, j2: _mug(p, j2)]
+        V.arm_to(j, 'R', (22.0, -40.0, 120.0), 'down', 'cup')                 # cup rim at the lips,
+        j['on_face'] = {'R'}                                                    # in front of the face
     elif name == 'mic':
         V.arm_to(j, 'R', (30.0, 20.0, 150.0), 'down', 'fist')
         j['props'] = [lambda p, j2: _mic(p, j2)]
@@ -418,8 +419,10 @@ def sword(sp, t, t_hit, side='R'):
     down['lean'] = 14
     rest = pose(sp, 'standing')
     V.arm_to(rest, side, (120.0, 300.0, 150.0), 'down')
+    lift = pose(sp, 'standing')                                     # the wind-up passes the shoulder, elbow out
+    V.arm_to(lift, side, (170.0, -80.0, 40.0), 'out')
     fastest = t_hit - 1 / FPS <= t < t_hit
-    j = keyed(t, [(t_hit - 0.8, rest), (t_hit - 0.35, up_), (t_hit - 0.15, up_), (t_hit, down), (t_hit + 0.25, down),
+    j = keyed(t, [(t_hit - 0.8, rest), (t_hit - 0.58, lift), (t_hit - 0.35, up_), (t_hit - 0.15, up_), (t_hit, down), (t_hit + 0.25, down),
                   (t_hit + 0.7, rest)], curve='fast' if t_hit - 0.15 <= t < t_hit else 'ease')
     j = dict(j)
     j['props'] = [lambda p, j2: _sword(p, j2, side, smear=fastest)]
@@ -474,16 +477,22 @@ def fall(sp, t, t0):
 def driving(sp, t, steer=0.0):
     """Seated at the wheel, hands at ten to two, small steering moves; the film draws the car and slides the world."""
     j = seated(sp)
-    wheel = (0.0, 230.0, 250.0)
-    a = math.radians(30 + 12 * steer)
-    for s, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, s, (wheel[0] + sg * 80 * math.cos(a), wheel[1] - 80 * math.sin(a) * (1 - 0.3 * sg * steer), wheel[2]),
-                 'down', 'grip')
+    wheel, R, tilt = (0.0, 200.0, 260.0), 95.0, math.radians(25)    # a real wheel stands nearly upright, facing him,
+    up = (0.0, -math.cos(tilt), -math.sin(tilt))                    # its top tipped back towards him (Sam, 14 Oct)
+
+    def rim(ang):                                                   # ang: 0 = 3 o'clock, 90 = 12 o'clock
+        c, s_ = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        return (wheel[0] + R * c, wheel[1] + R * s_ * up[1], wheel[2] + R * s_ * up[2])
+    turn = 14 * steer
+    for s, sg in (('L', -1), ('R', 1)):                             # hands at ten to two, turning with the wheel
+        V.arm_to(j, s, rim(90 - sg * 60 - turn), 'down', 'grip')
 
     def draw_wheel(p, j2):
-        cx = (j2['wrL'][0] + j2['wrR'][0]) / 2
-        cy = (j2['wrL'][1] + j2['wrR'][1]) / 2 + 40
-        p.ell(cx, cy, 110, 40, None, (30, 30, 34), 10)
+        pts = [V.project(rim(k * 15), j2['yaw'])[0] for k in range(24)]
+        p.poly(pts + pts[:1], None, (30, 30, 34), 10)
+        hub = V.project(wheel, j2['yaw'])[0]
+        col = V.project((wheel[0], wheel[1] + 260, wheel[2] + 60), j2['yaw'])[0]
+        p.line([hub, col], (30, 30, 34), 12)                        # the steering column down into the dashboard
     j['props'] = [draw_wheel]
     return j
 

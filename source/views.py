@@ -139,11 +139,11 @@ def standing(sp):
         j['hip' + side] = (sg * 55, HIP_Y, 0.0)
         j['foot' + side] = (sg * 60, ANKLE_Y, 6.0)
         j['sh' + side] = (sg * (sw - 14), 60.0, 0.0)
-        arm_to(j, side, (sg * (sw - 6), 470.0, 40.0), 'back')
+        arm_to(j, side, (sg * (sw + 24), 466.0, 44.0), 'back')     # hands clear of the jacket, not tucked in (Sam)
     return j
 
 
-def set_arm(j, side, swing, bend, out=0.05):
+def set_arm(j, side, swing, bend, out=0.12):
     """Arm joints from angles (both bones keep the rig's lengths): swing brings the upper arm forward (+) or back."""
     sg = -1 if side == 'L' else 1
     sx, sy, sz = j['sh' + side]
@@ -569,6 +569,7 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     for k in ('shL', 'shR', 'elL', 'elR', 'wrL', 'wrR'):
         j2[k], depth[k] = project(leaned(j[k], lean), view_deg)
     j2['hand'] = j.get('hand', {})
+    j2['yaw'] = view_deg                       # so a prop can project its own 3D shape (a steering wheel)
     sp_draw = dict(sp)
     sp_draw['head_dy'] = sp.get('head_dy', 0) + j.get('head_dy', 0)
     seated = j.get('seated', False)
@@ -595,7 +596,8 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
             q['bottom'] = min(q.get('bottom', 560), 470)
         B.torso(img, B.Pen(img, up), q, t)
     else:
-        torso_view(img, B.Pen(img, up), sp_draw, view, seated)
+        bent = dict(sp_draw, bottom=min(sp_draw.get('bottom', JACKET), 470)) if lean > 12 else sp_draw
+        torso_view(img, B.Pen(img, up), bent, view, seated)   # bending: the hem stops at the hips, never a long tail (Sam)
     for sd in arms_far:
         if sd not in behind:
             arm(p, j2, sd, sp)
@@ -603,6 +605,10 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         draw(p, j2)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
     head_view(img, B.Pen(img, up), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+    for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
+        arm(p, j2, sd, sp)
+    for draw in j.get('face_props', []):
+        draw(p, j2)
     return j2
 
 
