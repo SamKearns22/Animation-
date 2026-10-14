@@ -21,6 +21,17 @@ Read this first in any new session, after CLAUDE.md.
   audit clean, no robot voice). `python3 source/polanski.py check | cast OUT | stills OUT | final OUT --small`.
 - First animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
   stand-ins; Sam to record 15 lines named `polanski-KEY.m4a` (keys in `SCRIPT`). Next: Sam's notes, recordings, final.
+- Later on 14 Oct: card revealed by camera framing, straight-180 turn (now the standard), no sound effects, enthused
+  advisor at "Shoplifting". **Still waiting on:** Sam's 15 recordings, then an animatic offer and the final. No full render
+  until Sam asks.
+
+## Done: the movement toolkit (14 Oct, `guides/movement-system-plan.md`)
+- `views.py` (every angle, 3D skeleton), `moves.py` (gaits, poses, sitting, combat, cars), `stage.py` (perspective floor),
+  `reel.py reel OUT.mp4` (the test reel, approved through v4 with Sam's notes). Rules learned are in `guides/satire.md`
+  (Movement section): runs from Sam's photo refs, opposite arm swing, hands in front of the face, held cups drawn over
+  round hands, heads outlined from every angle with hair over the outline, a slightly slower pace. Improve as we go.
+- Celebration short `source/duel.py` (30 s, wordless, the Bingo Bingo pair): animatic sent 14 Oct, Sam happy ("good
+  fun"); no final render asked for. `python3 source/duel.py film OUT.mp4` makes the full version (about 6-8 min).
 
 ## Done: "Andrew the Hutt" (TikTok satire, no title)
 - **Finished 9 Oct:** `animations/andrew-hutt-vertical.mp4` (21.5 s, 1080 x 1920, 12 fps, 5.7 MB; full render 18 min on
