@@ -17,6 +17,8 @@
 | 14 | the shout | ~4.6 s | "why this pose?" (arms straight out, forearms hanging, eyes shut) | done: held key poses for the arm raise (desk, beside the head, up), no blink through the shout |
 | 15 | finger guns | ~47 s | lines on the fingers cut off | done: each finger and thumb a rounded shape with one outline round the tip |
 | 16 | "not that" | ~36 s | pumping the arm downwards: why? | done: it was a vertical bob meant as a wave; now a palm-out "no, no" wag sideways in front of the chest, one held pose per "no" |
+| 17 | all | - | no sound effects unless the script asks (rule for every film) | done: voices only; v5 silent until recordings |
+| 18 | Shoplifting reveal | ~20 s | advisor more positive and enthused | done v5: brows up, eyes wide on Zack, head cocked, broad grin, from the start of the shot |
 | 10 | foreground | 0-20 s | the laptop sat on a giant grey box | done: a campaign table with a green VOTE GREEN cloth to the floor; everything on it lies low (nothing in front of the card) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):

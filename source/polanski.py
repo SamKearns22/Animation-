@@ -175,6 +175,7 @@ SHOTS = [tuple(s) for s in SHOTS]
 TRACK = {w: [x for ln in LINES if ln['who'] == w for x in ln['track']] for w in 'ZA'}
 CAPS = [dict(c, shout=ln['key'] in SHOUT, who=ln['who']) for ln in LINES for c in ln['caps']]
 
+FLIP_SHOT = next(s[1] for s in SHOTS if s[0] == 'flip')   # the shot that tilts from his face down to the card
 WALK_END = 2.5                              # the advisor reaches his spot
 STRAIGHTEN = L['list']['end'] + 0.15        # Zack stands up and turns to him
 FLIP = (L['shoplift']['caps'][1]['start'] - 0.2, L['shoplift']['caps'][1]['start'] + 0.05)   # turns over on "Shoplifting"
@@ -672,9 +673,12 @@ def adv_state(t):
     sp['mouth'] = mouth_shape('A', t, 'smile' if t < L['zionism']['start'] else 'set')
     if L['know']['start'] <= t < L['know']['end']:                           # "we know, buddy": the nods
         sp['head_dy'] = 7 * abs(math.sin(math.pi * (t - L['know']['start']) / 0.45))
-    if L['shoplift']['start'] - 0.2 <= t < L['shoplift']['end'] or L['drill']['start'] - 0.2 <= t < L['drill']['end'] \
-            or L['nuclear']['start'] - 0.2 <= t < L['nuclear']['end']:      # reading off the card
-        sp['lid'], sp['look'], sp['turn'] = 7, 0.1, 0.05
+    if FLIP_SHOT <= t < L['shoplift']['end'] + 0.3:                       # the reveal: positive, enthused (Sam, 14 Oct):
+        sp['lid'], sp['brows'], sp['look'], sp['turn'] = 0, 'wow', 0.7, 0.15     # brows up, eyes wide on Zack, smiling
+        sp['mouth'] = mouth_shape('A', t, 'grin')
+        sp['tilt'] = 0.08                                                         # head cocked, eager
+    elif L['drill']['start'] - 0.2 <= t < L['drill']['end'] or L['nuclear']['start'] - 0.2 <= t < L['nuclear']['end']:
+        sp['lid'], sp['look'], sp['turn'] = 7, 0.1, 0.05                         # reading off the card
     if L['well']['start'] - 0.3 <= t < L['well']['end'] + 0.2:               # caught out: brows up, a glance down
         sp['brows'] = 'alarm'
         sp['lid'] = 2 if t < L['well']['start'] + 0.35 else 7
