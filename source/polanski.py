@@ -79,7 +79,7 @@ SCRIPT = [
       "Disadvantaged Native Populations."]),
     ('bingo', 'Z', 'zack_bingo', 0.55, "Bingo! Bingo!", ["Bingo bingo!"]),
 ]
-SHOUT = {'zionism'}                          # big Anton capitals for the shout
+SHOUT = set()                                # Sam: the shout's caption as written, 'Zionism IS racism!' (no all-capitals)
 # The stand-in voices: Zack in British English, the advisor slower and higher, an American drawl.
 VOICE = {'Z': ['-v', 'en-gb', '-s', '200', '-p', '42'], 'A': ['-v', 'en-us', '-s', '163', '-p', '64']}   # Sam's pace
 VOICE_LINE = {'zionism': ['-v', 'en-gb', '-s', '175', '-p', '58', '-a', '200'], 'hmm': ['-v', 'en-gb', '-s', '110', '-p', '36'],
@@ -146,7 +146,7 @@ for i, ln in enumerate(LINES):
     if i == 0:
         SHOTS.append([ln['cam'], 0.0, None])
     elif ln['cam'] != LINES[i - 1]['cam']:
-        lead = 0.04 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)
+        lead = 0.5 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)   # see him spin
         if ln['cam'] in ('flip', 'zack_pov'):
             lead = ln['start'] - LINES[i - 1]['end'] - 0.15        # these shots start at once: the turn, the flip
         cut = ln['start'] - lead
@@ -213,24 +213,49 @@ ITEMS = [  # what is written on the card (marker capitals), and where each item 
 _CARD = {}
 
 
-def card_face():
-    """The card's written side, drawn once at high resolution: three numbered items in green marker capitals."""
-    if 'front' in _CARD:
-        return _CARD['front']
-    W, H = 1000, 1400
-    im = Image.new('RGBA', (W, H), (250, 249, 244, 255))
-    d = ImageDraw.Draw(im)
-    for n, txt, y0, y1, size in ITEMS:
-        f = ImageFont.truetype(B.ANTON, size)
-        rows = B.wrap(txt, f, W - 230)
-        hgt = len(rows) * size * 1.1
-        top = H * (y0 + y1) / 2 - hgt / 2
-        d.text((60, top), n, font=f, fill=(30, 110, 60))
-        for i, r in enumerate(rows):
-            d.text((170, top + i * size * 1.1), r, font=f, fill=(22, 90, 48))
-        if n != '3.':                                                # a marker rule between items
-            d.line([(60, H * y1 + 18), (W - 60, H * y1 + 10)], fill=(150, 196, 160), width=6)
-    _CARD['front'] = im
+BLUR = [0, 9, 17, 26]                       # card pixels (1000 wide): sharp, then out of focus enough to be unreadable
+
+
+def card_face(focus=0.0):
+    """The card's written side: three numbered items in green marker capitals. Only the item being read is in
+    focus (Sam: never spoil the next joke); the others are blurred out of focus, like a close lens racking down the
+    card. A 9:16 frame wide enough to read a line always holds the whole card, so framing alone can't hide them."""
+    from PIL import ImageFilter
+    if 'back' not in _CARD:
+        W, H = 1000, 1400
+        for k, (n, txt, y0, y1, size) in enumerate(ITEMS):                   # each item on its own layer
+            lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+            d = ImageDraw.Draw(lay)
+            f = ImageFont.truetype(B.ANTON, size)
+            rows = B.wrap(txt, f, W - 230)
+            hgt = len(rows) * size * 1.1
+            top = H * (y0 + y1) / 2 - hgt / 2
+            d.text((60, top), n, font=f, fill=(30, 110, 60))
+            for i, r in enumerate(rows):
+                d.text((170, top + i * size * 1.1), r, font=f, fill=(22, 90, 48))
+            if n != '3.':                                            # a marker rule under the item
+                d.line([(60, H * y1 + 18), (W - 60, H * y1 + 10)], fill=(150, 196, 160), width=6)
+            for j, r in enumerate(BLUR):
+                _CARD[(k, j)] = lay.filter(ImageFilter.GaussianBlur(r)) if r else lay
+        back = Image.new('RGBA', (W, H), (214, 196, 160, 255))       # the plain card back (grey-brown board)
+        db = ImageDraw.Draw(back)
+        for k in range(0, H, 46):
+            db.line([(0, k), (W, k + 8)], fill=(204, 186, 150), width=3)
+        _CARD['back'] = back
+    levels = tuple(min(len(BLUR) - 1, int(round(min(1.0, abs(k - focus)) * (len(BLUR) - 1)))) for k in range(len(ITEMS)))
+    if levels not in _CARD:
+        im = Image.new('RGBA', (1000, 1400), (250, 249, 244, 255))
+        for k, j in enumerate(levels):
+            im.alpha_composite(_CARD[(k, j)])
+        _CARD[levels] = im
+    return _CARD[levels]
+
+
+def focus_at(t):
+    """Which item is in focus (0-2, continuous): racks with the camera from item to item as each is read."""
+    kd = ease((t - (L['drill']['caps'][1]['start'] - 0.35)) / 0.5)
+    k3 = ease((t - CARD3_START) / 0.6)
+    return kd + k3
     back = Image.new('RGBA', (W, H), (214, 196, 160, 255))           # the plain card back (grey-brown board)
     db = ImageDraw.Draw(back)
     for k in range(0, H, 46):
@@ -252,12 +277,12 @@ def flip_angle(t):
 
 def draw_card(img, Lc, t, lift):
     """The card between the advisor's hands (Lc: his local frame), turned by flip_angle (squashed top to bottom)."""
-    card_face()
+    front = card_face(focus_at(t))
     a = flip_angle(t)
     k = abs(math.cos(a))
     if k < 0.04:
         return
-    face = _CARD['front'] if a > math.pi / 2 else _CARD['back']
+    face = front if a > math.pi / 2 else _CARD['back']
     cy = CARD_CY - lift
     x0, y0 = Lc.P(-CARD_W / 2, cy - CARD_H / 2 * k)
     x1, y1 = Lc.P(CARD_W / 2, cy + CARD_H / 2 * k)
@@ -398,6 +423,46 @@ def hair_front(p, sp, hx, hy, hw, hh, fx):
 
 
 B.beard, B.mouth, B.torso, B.hair_front = beard, mouth, torso, hair_front
+_head_front, _torso_front = B.head, B.torso
+
+
+def head(img, p, sp, t, hx, hy):
+    """From behind (Zack facing the wall): ears, the back of the skull, his short dark top over the clipped, lighter
+    back and sides, a crease at the nape. No face."""
+    if not sp.get('back'):
+        return _head_front(img, p, sp, t, hx, hy)
+    hw, hh, skin = sp.get('hw', 72), sp.get('hh', 88), sp['skin']
+    c = sp.get('hair_c', (72, 58, 48))
+    for sgn in (-1, 1):
+        p.poly(oval(hx + sgn * (hw + 2), hy + 6, 12, 22), skin, INK, 2.4)
+    outline = B.head_outline(hx, hy, hw, hh, sp.get('jaw', 'round'))
+    p.poly(outline, skin, INK, 2.6)
+    p.poly(curve([(hx - hw * 0.98, hy - 30), (hx - hw, hy + 20), (hx - hw * 0.8, hy + hh * 0.62), (hx, hy + hh * 0.74),
+                  (hx + hw * 0.8, hy + hh * 0.62), (hx + hw, hy + 20), (hx + hw * 0.98, hy - 30), (hx, hy - hh * 0.5)], 4),
+           blend(skin, c, 0.42), None)                                  # the clipped back and sides
+    p.poly(curve([(hx - hw * 0.96, hy - hh * 0.5), (hx - hw * 0.8, hy - hh * 0.92), (hx, hy - hh * 1.06),
+                  (hx + hw * 0.8, hy - hh * 0.92), (hx + hw * 0.96, hy - hh * 0.5), (hx + hw * 0.5, hy - hh * 0.1),
+                  (hx, hy), (hx - hw * 0.5, hy - hh * 0.1)], 4), c, None)          # the longer top
+    p.poly(outline, None, INK, 2.6)
+    p.line([(hx - 18, hy + hh * 0.95), (hx, hy + hh * 0.9), (hx + 18, hy + hh * 0.95)], B.dk(skin, 0.8), 1.8)
+
+
+def torso(img, p, sp, t):
+    """From behind: the jacket's back with its centre seam and vent, the white shirt collar above it."""
+    if not sp.get('back'):
+        return _torso_front(img, p, sp, t)
+    sw, bottom, skin, jc = sp.get('shoulders', 150), sp.get('bottom', 560), sp['skin'], sp.get('jacket', (36, 38, 48))
+    p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)
+    p.poly([(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200), (-sw + 6, bottom), (sw - 6, bottom), (sw + 6, 200),
+            (sw, 50), (sw * 0.8, 12), (40, -4)], jc, INK, 2.6)
+    p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sp.get('shirt', (246, 246, 244)), INK, 2.0)   # shirt collar
+    p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)                    # jacket collar
+    p.line([(0, 26), (0, bottom - 110)], B.dk(jc, 0.7), 2.2)
+    p.line([(0, bottom - 110), (0, bottom)], INK, 2.2)                                              # the vent
+    soft(img, p.cam, [(-sw, 60), (-sw * 0.4, 30), (-sw * 0.5, bottom), (-sw, bottom)], (0, 0, 0), 0.22, 10)
+
+
+B.head, B.torso = head, torso
 
 
 def walking_legs(phase, stride=60, lift_h=18):
@@ -427,7 +492,7 @@ ADV = dict(name='advisor', skin=(244, 214, 190), hw=62, hh=96, jaw='long', hair=
            lanyard=True, lanyard_c=(40, 140, 70), full=True, pose='custom')
 Z_BLINKS = F.blinks(3, 0.3, DUR, talking=True, per_min=(14, 20))
 A_BLINKS = F.blinks(8, 0.3, DUR, talking=True)
-TABLE = dict(x0=560, x1=1020, top=1000, depth=40)   # front edge at `top`; the far edge `depth` above it
+TABLE = dict(x0=560, x1=1020, top=1035, depth=40)   # against the back wall: front edge at `top` (just below his hips)
 TABLE_LOCAL_Y = (TABLE['top'] - TABLE['depth'] * 0.5 - NECK) / S   # Zack's units: the middle of the table top
 
 
@@ -824,35 +889,37 @@ def table(img, cam, t):
     p.ell(x0 + a, py(d) - 17, 6, 14, (60, 60, 66), INK, 1.6)
 
 
-def person_at(img, cam, x, sp, t, legs=None):
+def person_at(img, cam, x, sp, t, legs=None, flip=1.0):
     keep = B.legs
     if legs:
         B.legs = legs
     try:
-        B.person(img, cam, x, NECK + sp.get('bob', 0.0), S, sp, t)
+        B.person(img, cam, x, NECK + sp.get('bob', 0.0), S, sp, t, flip)
     finally:
         B.legs = keep
 
 
+SPIN = (L['zionism']['start'] - 0.42, L['zionism']['start'] - 0.12)   # he spins round from the desk to the advisor
+
+
+def spin_at(t):
+    """(back view?, horizontal squash) through the spin: a quick turn drawn as the body narrowing to its edge and
+    opening out again the other way round."""
+    if t < SPIN[0]:
+        return True, 1.0
+    if t >= SPIN[1]:
+        return False, 1.0
+    c = math.cos(math.pi * ease((t - SPIN[0]) / (SPIN[1] - SPIN[0])))
+    return c > 0, max(0.14, abs(c))
+
+
 def zack(img, cam, t):
     sp = zack_state(t)
+    back, k = spin_at(t)
+    sp['back'] = back
     kit.feet_shadow(img, cam, ZX, NECK, S)
-    person_at(img, cam, ZX, sp, t)
+    person_at(img, cam, ZX, sp, t, flip=k)
     return sp
-
-
-def zack_over_table(img, cam, sp, t):
-    """Hands on the table are in front of its far edge: draw those forearms and hands again over the table top."""
-    if not sp['_over']:
-        return
-    Lz = B.Local(cam, ZX, NECK, S)
-    p = B.Pen(img, Lz)
-    sw = sp.get('shoulders', 150)
-    for side, sgn in (('L', -1), ('R', 1)):
-        if side in sp['_over']:
-            el, wr, shape = sp['arms'][side][:3]
-            B.arm(p, (sgn * (sw - 14), 60 + sp.get('shoulder_dy', 0)), el, wr, sp['jacket'])
-            B.gesture_hand(p, el, wr, shape, sp['skin'])
 
 
 def advisor(img, cam, t):
@@ -878,9 +945,8 @@ def scene(t, cam):
     img = B.canvas()
     room(img, cam, t)
     floor_litter(img, cam)
-    sp = zack(img, cam, t)
-    table(img, cam, t)
-    zack_over_table(img, cam, sp, t)
+    table(img, cam, t)                        # the desk against the wall, behind him
+    zack(img, cam, t)
     advisor(img, cam, t)
     return img
 
