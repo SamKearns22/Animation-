@@ -30,6 +30,25 @@ Read this first in any new session, after CLAUDE.md.
   viewer leaves ~9.8 s in, during the 11.7 s unbroken Andrew shot of gibberish captions, before "Epstein" (~12.5 s)
   and the PR man's reply (18.4 s). Check the retention graph for where the drop is.
 
+## Done: "Cry Minister" (TikTok, Satire style, `prompts/cry-minister.md`)
+- Final (v4, 8 Oct): `animations/cry-minister-vertical.mp4`, 58.4 s, 8.3 MB, 1080 x 1920, 12 fps; full render 17 min on 4 cores,
+  re-encoded smaller (CRF 25). Not yet posted. Voice only. No in-video title (the Cranberry title goes on the cover).
+- v4 changes (notes 29-40): line 19 ("keep fighting") cut; selfie arm raised out of frame; glance back at the wolves; lived-in
+  terraces in the chase; the man in blue stops, hands on hips, glares and shakes his head; wider walkers; one mouth at a
+  time; FREE £10 BET poster in ZapBets' windows; sound no longer squashed (-16.8 LUFS, at most 3 dB limiting), line-end
+  hiss bursts from the phone recordings smoothed, lines 16-18 one unbroken piece.
+- Code: `source/cryminister.py` (film), `source/wolf.py` (dire wolves), `source/walker.py` (three-quarter walk). Shared
+  sound tools now in `source/mossad_audio.py` (`master`, `smooth_tail`, `limit_check`). Notes: `notes/cryminister.md`.
+- Sam's lines (19 used; `source/audio/cry-*.m4a`), cleaned, matched in tone, levelled. Made-up TikTok screen on every frame.
+- Checks: plan checks, voice balance, limiting, body audit clean. Sound questions (silence between lines) left as meant.
+- Change a caption or the description: `python3 source/cryminister.py final OUT.mp4 --reuse` (pictures cached).
+- 9 Oct (from the style-review chat): notes 41-43 in code (selfie arm reaches to the lens; only his name and description over the real TikTok screen; COME ON fists lifted). Test tools: `source/limbs.py` (new arm and leg shapes, swapped in memory: `python3 source/limbs.py cryminister OUT.mp4 --fixes`), `source/tiktok_overlay.py` (the real app screen over a video, measured from Sam's iPhone). One Cry Minister only: this branch.
+- FINAL v5.1 (10 Oct, notes 47-48: walkers walk in, the run's street scrolls steadily; shots 6, 12, 20 re-rendered with --reuse in 7.5 min). v5: `animations/cry-minister-vertical.mp4`, 55.1 s, 11.6 MB, 1080 x 1920, 12 fps, rendered in 20 min on 4 cores. New limbs built in (natural arms with one outline at the shoulder, shaped legs), motion fixes, notes 41-46. Not yet posted.
+
+## Done: "The Park" (TikTok, rebuilt in Satire style 8 Oct, `source/thepark.py`)
+- Final: `animations/the-park-vertical.mp4`, 17.1 s, 1.76 MB; posted 8 Oct. Shock level 2; eye-dart sting at the end.
+- Lessons became rules and checks in `guides/satire.md` (see best-practice Part 2, "Lessons from The Park").
+
 ## Done: "Russiadent Evil" (TikTok, `prompts/russiadent-evil.md`)
 - **Finished 7 Oct:** `animations/russiadent-evil-vertical.mp4` (28.6 s, 1080 x 1920, 5.0 MB). Sam's voice from
   `source/audio/russiadent-peskov.m4a` (recorded outdoors: cleaned in `rec_lines`). Title on 2 s; circle hands.
@@ -272,3 +291,10 @@ Read this first in any new session, after CLAUDE.md.
   session, then a fresh session.
 - Always make a quick animatic (quarter size, no drawing pass) before a full render; look at few images.
 - Render in the background and report once at the end.
+
+## Tooling added 8 Oct (for future Satire-style films)
+- `source/filmkit.py` (general body/movement audit, `Beats`, joint rules, permanent-marks probe, visible spots), `source/satire_style.py`
+  (style kit, used by `park.py`), `source/codemap.py`, `notes/_template.md`, `prompts/_brief-skeleton.md`. Russiadent Evil: pre-flight is
+  parallel and runs the audit; the render caches pictures and puts captions and the title on last. Details: `guides/preflight.md`.
+- Found by the audit in the finished Russiadent Evil: the zombie that falls through the window pops from lying flat to crawling
+  (about 15.6 s). Not fixed (film is finished).

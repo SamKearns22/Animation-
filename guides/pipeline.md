@@ -61,3 +61,22 @@ Keep continuity in the recipes: the ham's cut position and the slices lying abou
   Uses more of the plan's allowance; worth it when renders run to tens of hours.
 - **Queues:** a render queue must wait on something that cannot match itself (a finished-file marker or
   a log line), never on a search of running commands.
+
+## Checks and speed (8 Oct): before, during and after rendering
+- **Before any render (minutes, not hours):** `python3 source/horror_preflight.py [shots/s1_chop.py ...]`. It solves every
+  character's pose for every frame of every shot (no scene build, no render, all processor cores) and tests the skeleton:
+  bones that change length, joints bent past what a body does (elbows, neck, spine), joints that jump between frames faster
+  than a body moves, and (as a note, since stillness is a horror tool) anything completely still for over 2 s. A deliberate
+  fast move goes in the recipe as `FAST = [(t0, t1, 'why')]`. `checks.py` still runs on every frame at render time.
+- **Re-render only what changed:** `python3 source/shot.py sequence RECIPE OUT_DIR [W H] --reuse` skips a shot whose recipe
+  and every project file it imports are unchanged since its last render (fingerprint in `OUT_DIR/source.hash`). Title cards
+  stay last (`add_title.py` on the finished video), so wording notes never re-render a drawing.
+- **The look can't drift:** `python3 source/lookbook_check.py OUT_DIR` compares every drawing's tones (brightness, contrast,
+  deep shadow, paper white, the whole tonal spread) with that shot's approved frames in `lookbook/`; black frames are skipped.
+- **The voice above the score:** `horror_trailer_music.py` prints `CHECK (voice under the score)` if the dialogue is less
+  than 6 dB above the score and the hush where it speaks.
+- **Actions as beats:** `filmkit.Beats` takes 3D points too (a cleaver path, a hand target): name the beats (set-up,
+  action, contact, follow-through, settle), give each a pace, and `audit` it with a rule over every frame.
+- Not built yet: a gaze check (that the head actually turns to what a recipe's `look_at` names). It needs the head's
+  facing direction from `rig.Pose`; add it when a shot depends on a look.
+

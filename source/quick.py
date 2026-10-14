@@ -8,7 +8,8 @@ fill in a brief (prompts/quick-example.json) and run the commands in guides/quic
 
     python3 source/quick.py check BRIEF.json             seconds: the brief, captions, timing, safe area, recordings
     python3 source/quick.py sheet BRIEF.json OUT_DIR     about 2 minutes: every body check + ONE contact sheet to look at
-    python3 source/quick.py final BRIEF.json OUT.mp4 [--scale 0.5] [--secs 3]    the film (1080 x 1920 by default)
+    python3 source/quick.py final BRIEF.json OUT.mp4 [--scale 0.5] [--secs 3] [--reuse [--redo 2,3]]
+                                       the film (1080 x 1920); --reuse after a caption/timing note re-renders no pictures
 """
 import json
 import math
@@ -31,6 +32,9 @@ import figure as F           # noqa: E402
 import mouths                # noqa: E402
 import mossad_audio as MA    # noqa: E402
 from ed import INK           # noqa: E402
+import filmkit               # noqa: E402  the general checks (body audit, eyelines, voice balance)
+import film_engine as E     # noqa: E402  render with the picture cache, subtitle list, mouth check
+from satire_style import rough   # noqa: E402  Satire style: hand-cut shapes, never clip-art
 
 mouths.install(B)
 FPS, SR = 12, MA.SR
@@ -180,7 +184,9 @@ def state(who, t):
         sp['brow_raise'] = 6
     sp['blink'] = F.blinking(t, BLINKS[who])
     sp['look'] = F.look_at(XS[who], XS[other])
+    filmkit.eyeline(who, t, (XS[who], NECK_Y - 150 * S), (sp['look'], 0.0), (XS[other], NECK_Y - 150 * S))
     sp['breath'] = F.breath(t, 4.0, 1.5, 0.0 if who == 'A' else 0.4)
+    sp['tilt'] = 0.05 * math.sin(t * 1.7 + (0 if who == 'A' else 2))   # never frozen: a small sway while listening
     return sp
 
 
@@ -212,7 +218,7 @@ def head_box(who, cam):
 
 def background(img, cam):
     p = B.Pen(img, cam)
-    box = lambda x0, y0, x1, y1, f: p.poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], f, INK, 3)
+    box = lambda x0, y0, x1, y1, f: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, int(x0 * 7 + y0 * 3 + x1)), f, INK, 3)
     spec = BG
     if spec.startswith('#'):
         box(-600, -600, 1700, 2600, col(spec))
@@ -282,7 +288,8 @@ def caption_at(t):
     return None
 
 
-def frame_image(t):
+def picture(t):
+    """The frame WITHOUT captions or title (they go on last: a wording note never re-renders a picture)."""
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
     cam = cam_for(t)
@@ -292,12 +299,21 @@ def frame_image(t):
         if abs(XS[who] - cam.cx) * cam.z > 540 + 130 * S * cam.z:
             continue                                      # out of the picture: not drawn
         B.person(img, cam, XS[who], NECK_Y, S, state(who, t), t)
-    c = caption_at(t)
-    if c:
-        caption(img, c, next(l.get('shout', False) for l in LINES if l['text'] == c))
-    if TITLE and t < 1.0:
-        B.title(img, TITLE, alpha=1.0 if t < 0.7 else 1.0 - (t - 0.7) / 0.3, maxw=720)
     return img
+
+
+def overlay(img, t):
+    if t < BLACK_AT:
+        c = caption_at(t)
+        if c:
+            caption(img, c, next(l.get('shout', False) for l in LINES if l['text'] == c))
+        if TITLE and t < 1.0:
+            B.title(img, TITLE, alpha=1.0 if t < 0.7 else 1.0 - (t - 0.7) / 0.3, maxw=720)
+    return img
+
+
+def frame_image(t):
+    return overlay(picture(t), t)
 
 
 # ------------------------------------------------------------------------------------------------------ sound
@@ -318,9 +334,10 @@ def sfx(kind, rng):
     return np.zeros(10)
 
 
-def soundtrack(total=None):
+def soundtrack(total=None, stems=False):
     n = int((total or DUR) * SR)
     mix = np.zeros(n)
+    voice = np.zeros(n)
     rng = np.random.default_rng(5)
     for ln in LINES:
         if ln.get('_name') and not ln.get('_missing'):
@@ -328,11 +345,14 @@ def soundtrack(total=None):
             s = int(ln['start'] * SR)
             seg = a[:max(0, n - s)]
             mix[s:s + len(seg)] += seg
+            voice[s:s + len(seg)] += seg
     for e in BRIEF.get('sfx', []):
         s = int(e['at'] * SR)
         seg = sfx(e['type'], rng)[:max(0, n - s)] * e.get('gain', 0.35)
         mix[s:s + len(seg)] += seg
     end = min(n, int(BLACK_AT * SR))
+    if stems:                                             # for the voice-balance check: the voice and everything else
+        return mix, voice, mix - voice
     if np.abs(mix[:end]).max() > 1e-6:
         for _ in range(3):                                # master: about -14 LUFS, peaks under -1 dBTP
             mix *= 10 ** ((-14.0 - MA.lufs(mix[:end])) / 20)
@@ -425,35 +445,49 @@ def sheet(out_dir):
 
 # -------------------------------------------------------------------------------------------- render
 
-def render_frame(args):
-    i, size, ss = args
-    B.SS = ss
-    return np.asarray(frame_image(i / FPS).convert('RGB').resize(size, Image.LANCZOS)).tobytes()
-
-
-def render(out, scale=1.0, secs=None):
-    import imageio_ffmpeg
-    from multiprocessing import Pool
+def render(out, scale=1.0, secs=None, reuse=False, redo=()):
+    """The film, with the picture cached: after a caption or timing note, `final ... --reuse` re-renders nothing."""
     size = (int(1080 * scale) // 2 * 2, int(1920 * scale) // 2 * 2)
-    ss = 2 if scale > 0.6 else 1
-    total = secs or DUR
-    n = int(round(total * FPS))
-    wav = out + '.wav'
-    MA.write_wav(wav, soundtrack(total))
-    t0 = time.time()
-    p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-                          '-s', f'{size[0]}x{size[1]}', '-r', str(FPS), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
-                          '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
-                          '-b:a', '128k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
-    with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(render_frame, [(i, size, ss) for i in range(n)], chunksize=2)):
-            p.stdin.write(fr)
-            if k % 60 == 0:
-                print(f'frame {k}/{n}', flush=True)
-    p.stdin.close()
-    p.wait()
-    os.remove(wav)
-    print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB, {n} frames, {time.time() - t0:.0f} s)')
+    name = 'quick-' + os.path.splitext(os.path.basename(sys.argv[2]))[0]
+    E.render(name, out, size=size, ss=2 if scale > 0.6 else 1, fps=FPS, dur=secs or DUR, picture=picture, overlay=overlay,
+             shot_of=lambda t: str(SHOT_LIST.index(shot_at(t)) + 1), sound=lambda: soundtrack(secs or DUR),
+             write_wav=MA.write_wav, set_ss=lambda v: setattr(B, 'SS', v), preset='medium', reuse=reuse, redo=redo)
+
+
+def checks():
+    """Run by preflight.py (the sheet step): mouths move for every line, the voice sits above the effects, and the
+    subtitles printed to proofread."""
+    E.print_subtitles(caption_at, BLACK_AT, FPS)
+    windows = [(l['start'] + a, l['start'] + b) for l in LINES if l.get('_name') and not l.get('_missing')
+               for a, b in MA.pauses(MA.line(l['_name']), 0.12)]          # the actual speech, not the silence round it
+    faults = E.check_mouths(sorted(x for w in 'AB' for x in TRACK[w]), windows)
+    if windows:
+        _, voice, rest = soundtrack(stems=True)
+        faults += filmkit.voice_balance(voice, rest, SR, windows)
+    if faults:
+        raise ValueError('check: ' + '; '.join(faults))
+
+
+def audits():
+    """Run by preflight.py: each person drawn alone over the whole film (in pieces, popping, stretching, frozen) and
+    the eyelines (each looks at the other)."""
+    from PIL import Image as _I
+
+    def alone(who):
+        def draw(t):
+            lay = _I.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
+            return lay
+        return draw
+    actors = {}
+    for k, s in enumerate(SHOT_LIST):
+        for who in 'AB':
+            ts = [i / FPS for i in range(int(s['start'] * FPS), int(s['end'] * FPS))
+                  if abs(XS[who] - cam_for(i / FPS).cx) * cam_for(i / FPS).z <= 540 + 130 * S * cam_for(i / FPS).z]
+            if ts:
+                actors[f'{who} [shot {k + 1}]'] = (ts, alone(who))
+    filmkit.EYES.clear()
+    return filmkit.silhouette_audit(actors, fps=FPS) + filmkit.check_eyelines()
 
 
 def main():
@@ -469,7 +503,8 @@ def main():
     else:
         scale = float(a[a.index('--scale') + 1]) if '--scale' in a else 1.0
         secs = float(a[a.index('--secs') + 1]) if '--secs' in a else None
-        render(a[2], scale, secs)
+        render(a[2], scale, secs, reuse='--reuse' in a,
+               redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
 
 
 if os.environ.get('QUICK_BRIEF'):                 # imported by preflight.py (a separate process)

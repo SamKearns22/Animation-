@@ -83,3 +83,14 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 | Lifeboat a different size in the next scene | brief: recurring objects listed; one drawing at a fixed size relative to its people |
 | Chair seat floating, stand too thin | figure-rig: seated hips on the seat; under-desk knee space drawn |
 | Film much longer than briefed | brief: honest length estimate from the pace |
+
+## Added 8 Oct (Russiadent Evil): general audits, parallel run, picture cache
+- `python3 source/preflight.py FILM OUT_DIR` now uses every processor core (the film took 19 minutes on one) and, if the
+  film defines `checks()` and `audits()`, runs them: plan checks, then the general body/movement audit
+  (`source/filmkit.py`), then the permanent-marks probes. A film without an end time (`BLACK_AT` or `DUR`) is refused.
+- **Audit what any body part does, not one fault:** each character alone, as a picture, over time (in pieces, pops,
+  stretches, frozen). Allowed fast moves and known separate shapes (a blood pool) are listed in the film's `FAST_OK`.
+- After an edit to one action: `python3 -c "import FILM as R; print(R.audits())"` (about 2 minutes), then look at ONE small strip.
+- Render: `python3 source/FILM.py final OUT` (caches pictures); `... final OUT --reuse --redo none` for caption/timing notes;
+  `... --reuse --redo shot1,shot2` for notes on those shots only. Sound-only notes: rebuild the sound and attach it.
+

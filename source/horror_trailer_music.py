@@ -902,6 +902,27 @@ def main():
     i = int((DIALOGUE_AT - 0.35) * SR)
     st[i:i + len(air), 0] += air
     st[i:i + len(air), 1] += air[::-1]  # a slightly different hush in each ear
+    # the voice must sit clearly above the score and the hush wherever it speaks (filmkit.voice_balance)
+    import filmkit
+    vox = dialogue()
+    i = int(DIALOGUE_AT * SR)
+    rest = st[i:i + len(vox)].mean(axis=1) - vox
+    hop = SR // 100
+    env = np.array([np.sqrt(np.mean(vox[k:k + hop] ** 2)) for k in range(0, len(vox) - hop, hop)])
+    on = env > env.max() * 0.1
+    wins, a0 = [], None
+    for k, o in enumerate(list(on) + [False]):
+        if o and a0 is None:
+            a0 = k
+        if not o and a0 is not None:
+            wins.append((DIALOGUE_AT + a0 / 100, DIALOGUE_AT + k / 100))
+            a0 = None
+    full_v = np.zeros(len(st))
+    full_v[i:i + len(vox)] = vox
+    full_r = np.zeros(len(st))
+    full_r[i:i + len(rest)] = rest
+    for f in filmkit.voice_balance(full_v, full_r, SR, wins):
+        print('CHECK (voice under the score):', f)
     v = breathing()  # someone breathing in the dark...
     i = int(BREATH_AT * SR)
     st[i:i + len(v), 0] += v

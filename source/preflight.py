@@ -30,6 +30,35 @@ SAFE = (60, 310, 900, 1500)
 MAX_SHOT = 8.0
 
 
+_FILM = None
+_FPS = 12
+
+
+def _check_frame(i):
+    film = _FILM
+    t = i / _FPS
+    shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
+    F.CONTEXT['where'] = f'{shot} {t:.2f}s'
+    n0 = len(F.LOG)
+    err = None
+    try:
+        film.frame_image(t)
+    except Exception as e:
+        err = (str(e), isinstance(e, ValueError), traceback.format_exc())
+    return t, err, list(F.LOG[n0:])
+
+
+def _sheet_tile(k):
+    t = k + 0.5
+    im = _FILM.frame_image(t).convert('RGB').resize((B.W, B.H))
+    d = ImageDraw.Draw(im, 'RGBA')
+    for box in ((0, 0, 1080, SAFE[1]), (0, SAFE[3], 1080, 1920), (SAFE[2], 864, 1080, SAFE[3])):
+        d.rectangle(box, fill=(255, 0, 0, 60))
+    d.rectangle(SAFE, outline=(0, 255, 0, 255), width=5)
+    d.text((20, 1840), f'{t:.1f} s', font=ImageFont.truetype(B.SANS, 60), fill=(255, 255, 255))
+    return im.resize((216, 384))
+
+
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
@@ -46,18 +75,20 @@ def main():
     fps = getattr(film, 'FPS', 12)
     problems = []
     B.SS = 1
-    # 2. every 3rd frame, small: the checks inside the drawing code
-    for i in range(0, int(end * fps), 3):
-        t = i / fps
-        shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
-        F.CONTEXT['where'] = f'{shot} {t:.2f}s'
-        try:
-            film.frame_image(t)
-        except Exception as e:
-            problems.append(f'{t:6.2f} s: {e}')
-            if not isinstance(e, ValueError):
-                traceback.print_exc()
+    # 2. every 3rd frame, small: the checks inside the drawing code (all processor cores)
+    global _FILM, _FPS
+    _FILM, _FPS = film, fps
+    from multiprocessing import Pool
+    with Pool(os.cpu_count()) as pool:
+        for t, err, log in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
+            F.LOG.extend(log)
+            if err:
+                problems.append(f'{t:6.2f} s: {err[0]}')
+                if not err[1]:
+                    print(err[2])
     F.CONTEXT['where'] = ''
+    if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
+        problems += film.audits()
     # 3. captions
     f = ImageFont.truetype(B.SANS, 50)
     seen = {}
@@ -81,17 +112,9 @@ def main():
             problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s: '
                             f'fine only if chosen, e.g. an unbroken speech)')
     # 5. contact sheet with the safe area drawn on
-    tiles = []
     logged = len(F.LOG)                         # the sheet's frames repeat ones already checked
-    for k in range(int(end)):
-        t = k + 0.5
-        im = film.frame_image(t).convert('RGB').resize((B.W, B.H))
-        d = ImageDraw.Draw(im, 'RGBA')
-        for box in ((0, 0, 1080, SAFE[1]), (0, SAFE[3], 1080, 1920), (SAFE[2], 864, 1080, SAFE[3])):
-            d.rectangle(box, fill=(255, 0, 0, 60))
-        d.rectangle(SAFE, outline=(0, 255, 0, 255), width=5)
-        d.text((20, 1840), f'{t:.1f} s', font=ImageFont.truetype(B.SANS, 60), fill=(255, 255, 255))
-        tiles.append(im.resize((216, 384)))
+    with Pool(os.cpu_count()) as pool:
+        tiles = pool.map(_sheet_tile, range(int(end)))
     cols = 10
     sheet = Image.new('RGB', (cols * 216, ((len(tiles) + cols - 1) // cols) * 384), (20, 20, 20))
     for i, im in enumerate(tiles):

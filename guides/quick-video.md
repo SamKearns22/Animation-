@@ -42,3 +42,16 @@ Test any change cheaply first: `final ... /tmp/t.mp4 --scale 0.5 --secs 3` (10 s
 | `too fast to read` (note) | Add 0.5 s before the next line. |
 | `no recording` (note) | Fine only if Sam meant a silent line. |
 If anything still fails twice, or the fault is inside `quick.py`, stop and tell Sam in plain words: do not rewrite it.
+
+## Added 8 Oct: the Satire checks run here too
+- The `sheet` step now also runs: mouths move for every phrase, the voice sits at least 6 dB above the effects, the
+  subtitles printed as text (proofread them there), each person drawn alone over the whole film (in pieces, popping,
+  stretching, frozen), and the eyelines (A and B look at each other). It must still say `0 problem(s)`.
+- Backgrounds are drawn in Satire style (hand-cut corners, flat colour); listeners sway slightly (never frozen).
+- After a caption or timing note: `final ... --reuse` (no pictures re-rendered, about a minute).
+| Message | Fix |
+|---|---|
+| `frozen` | Give that line a `gesture` or a `react` face. |
+| `only N dB above the rest` | Lower that sound effect's `gain`. |
+| `no mouth movement` | The recording and the text don't match: ask Sam. |
+
