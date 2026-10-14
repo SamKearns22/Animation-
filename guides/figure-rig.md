@@ -53,6 +53,11 @@ hangs past the hands; that is the garment, not long arms.
   elbows (`'out'`) are for hands on hips, typing, gestures; `'in'` when a hand crosses the body (clutching the chest).
 - **Foreshortening only shortens.** An arm reaching towards or away from the camera (typing towards the screen) is
   given `depth` (0-0.6) and is drawn shorter; nothing is ever drawn longer than the rig.
+- **A hand to the chin (thinking) brings the elbow forward, towards the camera:** `rig.arm('R', (26, -36), 'fist', 'down',
+  depth=0.45)`. With the arm in the picture plane the elbow lands above the head or across the chest, and the guard
+  stops it (Bingo Bingo, 14 Oct).
+- **A hand passing the shoulder (arms flung up, back down) goes out to the side on the way** (a waypoint), or the
+  elbow folds past 25 degrees mid-move. Check every frame of a move, not only its ends.
 - **Never `bend='down'` for a hand near the body's own side:** with a short reach it folds the elbow back across
   the chest (Andrew the Hutt's PR man; quick.py's `talk` gesture had the same fault). Use `'depth'` for a small beat
   by the side, `'out'` for a big gesture. The guard now stops it.

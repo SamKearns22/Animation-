@@ -309,6 +309,15 @@ this series. Full details in `tiktok-design.md`.
 - Keep the joke's words readable through the effect (the big splats round the edges of the page).
 - **Repeating actions vary:** strikes, thrashing and clawing each have their own rhythm and phase, never in step.
 
+**Straight to the animatic (Bingo Bingo, 14 Oct)**
+- **Before Sam records, time the animatic with stand-in voices** (espeak-ng, installed by the setup script): the film
+  is timed from their speech exactly as it will be from his, so pacing, cuts and captions can be judged, and his
+  recordings (`polanski-KEY.m4a`) replace them line by line. The robot rushes short words: slow a line's stand-in
+  until its captions pass the reading-speed check, rather than splitting the caption into tiny pieces.
+- **Card and sign close-ups:** frame the item being read high in the picture, so the captions below never cover
+  writing the audience must read.
+- **A caption never spills into the next shot;** it stops at the cut.
+
 **Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
 - **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
   guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their

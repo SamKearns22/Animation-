@@ -6,6 +6,18 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
+## In progress: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
+- Script from Sam, 14 Oct; jumped straight to the animatic (no stills step). Code `source/polanski.py` (`times`, `stills`,
+  `final OUT --scale 0.5`); `python3 source/preflight.py polanski OUT_DIR` passes with 0 problems.
+- Green Party HQ after losing the Holborn & St Pancras by-election: one set (whiteboard, cork board of VOTE GREEN posters,
+  VICTORY PARTY sign with letters fallen, broken blind, leaflet boxes, placard, tipped bin, leaflets and deflated
+  balloons on the floor); every shot is the wide camera moved and zoomed. Zack: olive skin, crop, trimmed beard, dark
+  blazer, white open shirt, green rosette. Advisor (Shaggy as an operative): long wavy hair, wispy goatee, silver lower-lip
+  ring, olive blazer, white shirt, brown skinny tie, green lanyard. The A3 card's list: Shoplifting Is Sexism / North Sea
+  Drilling Is Ableism / Nuclear Proliferation ... Native Populations. Finger guns: the one named exception to circle hands.
+- Animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
+  stand-ins; Sam to record 15 lines named `polanski-KEY.m4a` (keys in `SCRIPT`). Next: Sam's notes, recordings, final.
+
 ## Done: "Andrew the Hutt" (TikTok satire, no title)
 - **Finished 9 Oct:** `animations/andrew-hutt-vertical.mp4` (21.5 s, 1080 x 1920, 12 fps, 5.7 MB; full render 18 min on
   4 cores: `python3 source/hutt.py final OUT.mp4`; animatic `--scale 0.5`, about 4 min). Code `source/hutt.py`; Sam's
