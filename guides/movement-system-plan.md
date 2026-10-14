@@ -69,9 +69,13 @@ films (the satire template picks it up automatically).
   Sam approves before any engine is built; (5) build: **a floor-and-camera model with true perspective first** (Sam:
   "perspective is important"), angles, walk and turn, core pack (standing styles, talking gestures, sitting and standing
   up, holding things), combat pack (punch, kick, sword swing, taking a blow and falling), car-ready seated poses and
-  getting in and out (the car itself drawn per film); checks; footstep and hit sounds; a regression still from every
+  getting in and out (the car itself drawn per film); checks; footstep and hit sounds available but OFF unless the script or Sam asks (Sam, 14 Oct); a regression still from every
   finished film before and after; (6) one **Satire film package**: the people library, figure.py, limbs.py, the new
   views and gaits, satire_style, filmkit and film_engine combined into one efficient package behind the satire
   template (walker.py retired, nothing duplicated).
 - **Real people from the side:** Sam sends profile photos when he can; otherwise the side and back views are worked out
   logically from what the front shows (hairline, beard line, nose and jaw from the front photos).
+
+- **Turn standard (Sam, 14 Oct): the straight 180**, a pop from one view to the other in one drawing, held poses either
+  side; the five-angle and four-direction turns stay available for a script that asks.
+- **No sound effects by default** (Sam, 14 Oct).

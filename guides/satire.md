@@ -56,6 +56,7 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
 - Anyone in a close-up must be seen in a wide shot.
 
 ## Sound (all in `source/mossad_audio.py`)
+- **No sound effects unless the script names them or Sam asks** (Sam, 14 Oct): voices only by default.
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
   their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.

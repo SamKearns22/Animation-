@@ -925,11 +925,11 @@ def person_at(img, cam, x, sp, t, legs=None, flip=1.0):
 
 
 TURN0 = L['zionism']['start'] - 0.75             # he turns round from the desk to the advisor (South Park's method)
-TURN_KEYS = [(0.0, 180), (0.15, -135), (0.30, -90), (0.45, -45), (0.60, 0)]   # (seconds in, view): each held 2 drawings
-if os.environ.get('TURN4'):                    # Sam's test: only four directions, as South Park's rigs (back, side, front)
+TURN_KEYS = [(0.0, 180), (0.5, 0)]            # Sam's standard (14 Oct): a straight 180, back to front in one drawing
+if os.environ.get('TURN5'):                    # the older tests, kept to compare: five angles, or four directions
+    TURN_KEYS = [(0.0, 180), (0.15, -135), (0.30, -90), (0.45, -45), (0.60, 0)]
+if os.environ.get('TURN4'):
     TURN_KEYS = [(0.0, 180), (0.25, -90), (0.50, 0)]
-if os.environ.get('TURN180'):                  # Sam's test: a straight 180, back view to front in one drawing (a pop)
-    TURN_KEYS = [(0.0, 180), (0.5, 0)]
 TURN_END = TURN0 + TURN_KEYS[-1][0]
 
 
@@ -955,7 +955,7 @@ def zack(img, cam, t):
         person_at(img, cam, ZX, sp, t)
     elif t < TURN_END:
         q = dict(sp, back=False, mouth='set', brows='fierce')
-        lead = 0.0 if os.environ.get('TURN180') else 1 / 12          # a pop has no in-between for the head to lead
+        lead = 1 / 12 if len(TURN_KEYS) > 2 else 0.0                  # a pop has no in-between for the head to lead
         V.person(img, cam, ZX, NECK, S, q, t, turn_view(t), V.standing(q), head_yaw=turn_view(t, lead))
     else:
         sp['back'] = False
@@ -1093,14 +1093,7 @@ def soundtrack(total):
     for ln in LINES:                    # the robot stand-ins set the timing only: Sam never hears them (14 Oct)
         if ln['real']:
             place(out, MA.gate(ln['x'], ln['st']), ln['off'])
-    # footsteps: one at each foot contact of the walk
-    step = 1 / 2.0
-    k = 0.25
-    while k < WALK_END - 0.1:
-        place(out, sfx_steps(1, rng) * 0.35, k)
-        k += step
-    place(out, sfx_flip(rng) * 0.4, FLIP[0] + 0.05)
-    place(out, sfx_thud(rng) * 0.8, SLAM)
+    # no sound effects: Sam's rule (14 Oct), only what the script asks for (the sfx_ makers stay for when it does)
     end = min(n, int(BLACK_AT * SR))
     if real:
         out, _ = MA.master(out, end)                           # -16 LUFS, levelled gently, never squashed past 3 dB
