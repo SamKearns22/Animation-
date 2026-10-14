@@ -312,7 +312,7 @@ def torso_view(img, p, sp, view, seated=False):
         p.line([(-sw * 0.6, 60), (-sw * 0.72, bottom - 10)], jd, 2.0)
         soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.88, bottom)], (0, 0, 0), 0.25, 10)
         if sp.get('rosette'):
-            p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 1.8)
+            p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 2.4)
             p.ell(o - 70, 120, 8, 8, (248, 248, 240), INK, 1.4)
         if sp.get('lanyard'):
             lc = sp.get('lanyard_c', (40, 140, 70))
@@ -333,19 +333,19 @@ def torso_view(img, p, sp, view, seated=False):
             p.poly([(10, -10), (40, -4), (36, 40), (14, 24)], skin, None)
         soft(img, p.cam, [(-d * 1.02, 60), (-d * 0.5, 60), (-d * 0.5, bottom), (-d * 0.92, bottom)], (0, 0, 0), 0.25, 10)
         if sp.get('rosette'):
-            p.ell(d * 0.7, 120, 16, 20, (40, 156, 72), INK, 1.8)
+            p.ell(d * 0.7, 120, 16, 20, (40, 156, 72), INK, 2.4)
         if sp.get('lanyard'):
             lc = sp.get('lanyard_c', (40, 140, 70))
             p.line([(30, 0), (d * 0.95, 200)], lc, 6)
             p.poly([(d * 0.85, 196), (d * 1.05, 196), (d * 1.05, 270), (d * 0.85, 270)], (248, 248, 248), INK, 2.0)
     else:
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
-        p.poly([(-32 + off, -80), (32 + off, -80), (36 + off, 10), (-36 + off, 10)], skin, INK, 2.6)
-        p.poly([(-40 + off, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-(sw - 6) * k, bottom),
-                ((sw - 6) * k, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40 + off, -4)], jc, INK, 2.6)
+        p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)       # the neck stays under the head
+        p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-(sw - 6) * k, bottom),
+                ((sw - 6) * k, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):
-            p.poly([(-40 + off, -12), (40 + off, -12), (44 + off, 8), (-44 + off, 8)], sc, INK, 2.0)
-            p.poly([(-44 + off, 6), (44 + off, 6), (40 + off, 26), (-40 + off, 26)], B.dk(jc, 0.85), INK, 2.0)
+            p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)            # the collar round the neck
+            p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
         soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k, bottom)], (0, 0, 0), 0.22, 10)
@@ -441,6 +441,9 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
             p.line([(fx, hy - 6), (fx + 22, hy + 28), (fx + 10, hy + 35)], INK, 2.0)
         p.line([(fx + 2, hy + 33), (fx + 6, hy + 36)], INK, 1.6)
         B.mouth(p, sp, t, fx + 4, hy + sp.get('mouth_y', 62))
+        p.poly(outline, None, INK, 2.6)           # the head's outline, then hair over it: no skull line in the hair (Sam)
+        if sp.get('earring'):
+            p.ell(hx - 0.5 * hw, hy + 32, 4, 4, B.GOLD, INK, 1.2)
         if kind == 'bald':
             p.poly(curve([(hx - hw * 0.98, hy - 20), (hx - hw * 0.92, hy - hh * 0.55), (hx - hw * 0.5, hy - hh * 0.6),
                           (hx - hw * 0.62, hy + 4), (hx - hw * 0.95, hy + 24)], 4), c, INK, 2.0)
@@ -448,18 +451,16 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         else:
             p.poly(curve([(hx - hw * 0.98, hy - 20), (hx - hw * 0.84, hy - hh * 0.7), (hx - hw * 0.3, hy - hh * 1.04),
                           (hx + hw * 0.2, hy - hh * 1.0), (hx - hw * 0.05, hy - hh * 0.6), (hx - hw * 0.32, hy - 10),
-                          (hx - hw * 0.62, hy + 4), (hx - hw * 0.95, hy + 24)], 4), side_c, None)
+                          (hx - hw * 0.62, hy + 4), (hx - hw * 0.95, hy + 24)], 4), side_c, INK, 2.2)
             front = 0.72 if sp.get('hair') != 'fade' else 0.4
             p.poly(curve([(hx - hw * 0.92, hy - hh * 0.5), (hx - hw * 0.76, hy - hh * 0.94), (hx - hw * 0.1, hy - hh * 1.1),
                           (hx + hw * 0.55, hy - hh * 0.98), (hx + hw * 0.9, hy - hh * 0.62), (hx + hw * front, hy - hh * 0.7),
                           (hx + hw * 0.12, hy - hh * 0.66), (hx - hw * 0.25, hy - hh * 0.6)], 4), c, INK, 2.2)
             if kind == 'long':
-                p.poly(curve([(hx - hw * 0.95, hy - hh * 0.4), (hx - hw * 0.7, hy + 20), (hx - hw * 0.62, hy + length * 0.5),
+                p.poly(curve([(hx - hw * 1.08, hy - hh * 0.4), (hx - hw * 1.1, hy + 20), (hx - hw * 0.9, hy + length * 0.5),
                               (hx - hw * 0.4, hy + length * 0.45), (hx - hw * 0.45, hy - 20), (hx - hw * 0.3, hy - hh * 0.6)], 4),
-                       c, INK, 2.2)
-        if sp.get('earring'):
-            p.ell(hx - 0.5 * hw, hy + 32, 4, 4, B.GOLD, INK, 1.2)
-        p.poly(outline, None, INK, 2.6)
+                       c, INK, 2.2)                   # covers the back of the skull
+
     elif view == 'side':
         face = [(hx - 62, hy - 70), (hx - 40, hy - hh - 6), (hx + 20, hy - hh - 4), (hx + 58, hy - 56), (hx + 64, hy - 24),
                 (hx + 62, hy - 6), (hx + 84, hy + 28), (hx + 64, hy + 36), (hx + 68, hy + 52), (hx + 62, hy + 60),
@@ -499,6 +500,10 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
             p.line([(hx + 44, hy + 58), (hx + 56, hy + 62), (hx + 66, hy + 54)], INK, 2.2)
         else:
             p.line([(hx + 46, hy + 58), (hx + 64, hy + 56)], INK, 2.2)
+        if kind != 'long':                          # the head's outline first, the hair over it (Sam: never a skull line
+            p.poly(outline, None, INK, 2.6)         # showing through hair)
+        else:                                       # long hair hides the back of the skull: ink the face's edge only
+            p.line(outline[9:40], INK, 2.6)         # (forehead to jaw; curve() closes, so slice the outline)
         if kind == 'bald':
             p.poly(curve([(hx - 66, hy - 30), (hx - 64, hy - 70), (hx - 40, hy - 56), (hx - 34, hy - 20), (hx - 40, hy + 30),
                           (hx - 62, hy + 24)], 3), c, INK, 2.0)
@@ -506,53 +511,42 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         else:
             p.poly(curve([(hx - 66, hy - 30), (hx - 70, hy - 76), (hx - 34, hy - hh - 16), (hx + 24, hy - hh - 14),
                           (hx + 44, hy - hh + 8), (hx + 20, hy - hh + 14), (hx - 6, hy - 56), (hx - 34, hy - 20), (hx - 40, hy + 30),
-                          (hx - 62, hy + 24)], 3), side_c, None)
+                          (hx - 62, hy + 24)], 3), side_c, INK, 2.6)       # its back edge is the head's silhouette: lined
             reach = 46 if sp.get('hair') == 'fade' else 60
             p.poly(curve([(hx - 62, hy - 64), (hx - 36, hy - hh - 18), (hx + 26, hy - hh - 16), (hx + reach, hy - hh + 6),
                           (hx + 18, hy - hh + 12), (hx - 10, hy - 62), (hx - 44, hy - 46)], 3), c, INK, 2.2)
         if sp.get('earring'):
             p.ell(hx - 18, hy + 34, 4, 4, B.GOLD, INK, 1.2)
-        if kind == 'bald':
-            p.poly(outline, None, INK, 2.6)
-        else:                                       # re-ink only the face's edge: the skull stays hidden under the hair (Sam)
-            p.line(outline[9:40], INK, 2.6)         # forehead to jaw only (curve() closes, so slice the outline)
-    else:
-        bt = 0.6 if view == 'three_back' else 0.0
+    else:                                           # from behind: the back of the skull, the neck rising straight into it,
+        bt = 0.6 if view == 'three_back' else 0.0  # hair drawn over it; no chin, no jaw crease, no stray bits of face (Sam)
         for side in (-1, 1):
-            if side > 0 and bt > 0:
-                continue
-            p.poly(oval(hx + side * (hw + 2), hy + 6, 12, 22), skin, INK, 2.4)
-        outline = B.head_outline(hx, hy, hw, hh, sp.get('jaw', 'round'))
+            if not (side > 0 and bt > 0):
+                p.poly(oval(hx + side * (hw + 2), hy + 6, 12, 22), skin, INK, 2.4)
+        outline = curve([(hx - hw, hy - 10), (hx - hw * 0.86, hy - hh * 0.72), (hx, hy - hh * 1.06), (hx + hw * 0.86, hy - hh * 0.72),
+                         (hx + hw, hy - 10), (hx + hw * 0.92, hy + hh * 0.42), (hx + hw * 0.66, hy + hh * 0.72), (hx, hy + hh * 0.8),
+                         (hx - hw * 0.66, hy + hh * 0.72), (hx - hw * 0.92, hy + hh * 0.42)], 4)
         p.poly(outline, skin, INK, 2.6)
+        nw, ny = 32.0, hy + hh * 0.55               # the same neck the body draws
+        p.poly([(hx - nw, ny), (hx + nw, ny), (hx + nw, hy + 132), (hx - nw, hy + 132)], skin, None)
+        for sg in (-1, 1):
+            p.line([(hx + sg * nw, hy + hh * 0.66), (hx + sg * nw, hy + 132)], INK, 2.6)
+        if bt > 0:                                  # the near ear, come round towards us
+            p.poly(oval(hx + hw * (1 - 0.42 * bt), hy + 6, 12, 22), skin, INK, 2.4)
         if kind == 'bald':
             p.poly(curve([(hx - hw, hy - 10), (hx - hw * 0.9, hy + hh * 0.5), (hx, hy + hh * 0.62), (hx + hw * 0.9, hy + hh * 0.5),
                           (hx + hw, hy - 10), (hx, hy + 10)], 4), c, None)
             p.ell(hx, hy - hh * 0.6, hw * 0.3, hh * 0.1, (255, 240, 230), None)
         else:
-            p.poly(curve([(hx - hw * 0.98, hy - 30), (hx - hw, hy + 20), (hx - hw * 0.8, hy + hh * 0.62), (hx, hy + hh * 0.74),
-                          (hx + hw * 0.8, hy + hh * 0.62), (hx + hw, hy + 20), (hx + hw * 0.98, hy - 30), (hx, hy - hh * 0.5)], 4),
-                   side_c, None)
-            p.poly(curve([(hx - hw * 0.96, hy - hh * 0.5), (hx - hw * 0.8, hy - hh * 0.92), (hx, hy - hh * 1.06),
-                          (hx + hw * 0.8, hy - hh * 0.92), (hx + hw * 0.96, hy - hh * 0.5), (hx + hw * 0.5, hy - hh * 0.1),
-                          (hx, hy), (hx - hw * 0.5, hy - hh * 0.1)], 4), c, None)
+            p.poly(curve([(hx - hw * 0.99, hy - 30), (hx - hw * 0.97, hy + 20), (hx - hw * 0.8, hy + hh * 0.5), (hx, hy + hh * 0.66),
+                          (hx + hw * 0.8, hy + hh * 0.5), (hx + hw * 0.97, hy + 20), (hx + hw * 0.99, hy - 30), (hx, hy - hh * 0.5)], 4),
+                   side_c, INK, 2.2)
+            p.poly(curve([(hx - hw * 1.0, hy - hh * 0.5), (hx - hw * 0.84, hy - hh * 0.94), (hx, hy - hh * 1.09),
+                          (hx + hw * 0.84, hy - hh * 0.94), (hx + hw * 1.0, hy - hh * 0.5), (hx + hw * 0.5, hy - hh * 0.1),
+                          (hx, hy), (hx - hw * 0.5, hy - hh * 0.1)], 4), c, INK, 2.2)
             if kind == 'long':
-                p.poly(curve([(hx - hw * 1.05, hy - hh * 0.4), (hx - hw * 1.1, hy + length * 0.7), (hx - hw * 0.8, hy + length),
-                              (hx + hw * 0.8, hy + length), (hx + hw * 1.1, hy + length * 0.7), (hx + hw * 1.05, hy - hh * 0.4),
-                              (hx, hy - hh * 1.06)], 4), c, INK, 2.6)
-        if bt > 0:
-            w = hw * 0.5 * bt
-            p.poly(curve([(hx + hw * 0.99, hy - hh * 0.35), (hx + hw - w, hy - hh * 0.4), (hx + hw - w * 1.15, hy + hh * 0.4),
-                          (hx + hw - w * 0.8, hy + hh * 1.0), (hx + hw * 0.8, hy + hh * 0.86), (hx + hw * 0.99, hy + 10)], 4),
-                   skin, None)
-            if beard:
-                p.poly(curve([(hx + hw * 0.99, hy + 22), (hx + hw - w * 1.1, hy + 26), (hx + hw - w * 0.85, hy + hh * 1.02),
-                              (hx + hw * 0.82, hy + hh * 0.88)], 4), bfill, None)
-            p.line([(hx + hw - w * 0.2, hy - hh * 0.38), (hx + hw - w * 0.9, hy - hh * 0.42)], bc, 3.2)
-            p.poly([(hx + hw - 2, hy - 2), (hx + hw + 8, hy + 24), (hx + hw - 2, hy + 34)], skin, INK, 2.0)
-            p.poly(oval(hx + hw + 2 - hw * 0.42 * bt, hy + 6, 12, 22), skin, INK, 2.4)
-        p.poly(outline, None, INK, 2.6)
-        if kind != 'long':
-            p.line([(hx - 18, hy + hh * 0.95), (hx, hy + hh * 0.9), (hx + 18, hy + hh * 0.95)], B.dk(skin, 0.8), 1.8)
+                p.poly(curve([(hx - hw * 1.08, hy - hh * 0.4), (hx - hw * 1.12, hy + length * 0.7), (hx - hw * 0.8, hy + length),
+                              (hx + hw * 0.8, hy + length), (hx + hw * 1.12, hy + length * 0.7), (hx + hw * 1.08, hy - hh * 0.4),
+                              (hx, hy - hh * 1.1)], 4), c, INK, 2.6)
 
 
 # ------------------------------------------------------------------------------------------------ one person

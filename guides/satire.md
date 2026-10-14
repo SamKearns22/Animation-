@@ -46,6 +46,9 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
   the foot lands just ahead of the hips. Elbows at a right angle, an even swing: back elbow well behind the body,
   front fist at chest height. The OPPOSITE arm comes forward with each leg (a bug had it on the same side). Side heads: long hair covers the back of the skull, and only the
   face's edge is re-inked over the hair; back views hide hands that are in front of the body. (Sam, 14 Oct)
+- **Heads from every angle (Sam, 14 Oct):** draw the head's outline first and the hair over it, inked, so a skull line
+  never shows through hair. From behind there is no chin or jaw crease: the neck rises straight into the back of the
+  skull, under the nape hair, and no bits of the far face (nose, cheek, beard) poke out. Every part has an outline.
 - **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
