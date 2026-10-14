@@ -11,8 +11,9 @@ Read this first in any new session, after CLAUDE.md.
   `final OUT --scale 0.5`); `python3 source/preflight.py polanski OUT_DIR` passes with 0 problems.
 - Green Party HQ after losing the Holborn & St Pancras by-election: one set (whiteboard, cork board of VOTE GREEN posters,
   VICTORY PARTY sign with letters fallen, broken blind, leaflet boxes, placard, tipped bin, leaflets and deflated
-  balloons on the floor); every shot is the wide camera moved and zoomed. Zack: olive skin, crop, trimmed beard, dark
-  blazer, white open shirt, green rosette. Advisor (Shaggy as an operative): long wavy hair, wispy goatee, silver lower-lip
+  balloons on the floor); every shot is the wide camera moved and zoomed. Zack: dark
+  blazer, white open shirt, green rosette (redrawn 14 Oct from Sam's photos: lighter skin, faded sides and receding
+  temples, short light salt-and-pepper beard; `polanski.py model OUT.jpg` shows before and after). Advisor (Shaggy as an operative): long wavy hair, wispy goatee, silver lower-lip
   ring, olive blazer, white shirt, brown skinny tie, green lanyard. The A3 card's list: Shoplifting Is Sexism / North Sea
   Drilling Is Ableism / Nuclear Proliferation ... Native Populations. Finger guns: the one named exception to circle hands.
 - Animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng

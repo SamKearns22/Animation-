@@ -304,6 +304,8 @@ _beard, _mouth, _torso = B.beard, B.mouth, B.torso
 
 
 def beard(p, sp, hx, hy, hw, hh, fx):
+    if sp.get('beard') == 'short':
+        return short_beard(p, sp, hx, hy, hw, hh, fx)
     if sp.get('beard') != 'goatee':
         return _beard(p, sp, hx, hy, hw, hh, fx)
     c = sp.get('beard_c', (120, 84, 48))
@@ -317,6 +319,33 @@ def beard(p, sp, hx, hy, hw, hh, fx):
     for sgn in (-1, 1):                                                # a few stray whiskers on the jaw
         p.line([(fx + sgn * 44, hy + 70), (fx + sgn * 47, hy + 80)], c, 1.6)
         p.line([(fx + sgn * 52, hy + 58), (fx + sgn * 56, hy + 67)], c, 1.6)
+
+
+def blend(a, b, k):
+    return tuple(int(round(x + (y - x) * k)) for x, y in zip(a, b))
+
+
+def short_beard(p, sp, hx, hy, hw, hh, fx):
+    """Zack's beard (from Sam's photos): short and light, salt and pepper, kept to a clean line across the cheeks, the
+    skin showing through; a light moustache joining it round the mouth."""
+    skin, c = sp['skin'], sp.get('beard_c', (120, 104, 92))
+    fill = blend(skin, c, 0.55)
+    edge = blend(skin, c, 0.85)
+    pts = [(hx - hw - 1, hy + 18), (hx - hw * 0.98, hy + hh * 0.62), (hx - hw * 0.62, hy + hh * 1.06),
+           (fx, hy + hh * 1.2), (hx + hw * 0.62, hy + hh * 1.06), (hx + hw * 0.98, hy + hh * 0.62),
+           (hx + hw + 1, hy + 18), (hx + hw * 0.84, hy + 56), (hx + hw * 0.6, hy + 70), (fx + 26, hy + 74),
+           (fx, hy + 78), (fx - 26, hy + 74), (hx - hw * 0.6, hy + 70), (hx - hw * 0.84, hy + 56)]
+    p.poly(curve(pts, 5), fill, edge, 1.6)
+    p.poly(curve([(fx - 28, hy + 56), (fx - 8, hy + 49), (fx + 8, hy + 49), (fx + 28, hy + 56), (fx + 18, hy + 57),
+                  (fx - 18, hy + 57)], 4), fill, edge, 1.2)
+    rng = np.random.default_rng(12)                                    # a hint of texture: short fine hairs, some grey
+    for _ in range(46):
+        a = rng.uniform(0.2, math.pi - 0.2)
+        r = rng.uniform(0.6, 0.95)
+        x, y = fx + hw * 0.92 * r * math.cos(a), hy + 40 + hh * 0.74 * r * math.sin(a)
+        if abs(x - fx) < 34 and hy + 44 < y < hy + 78:
+            continue                                                   # keep the lips clear
+        p.line([(x, y), (x + 1.5, y + 5)], blend(fill, c, 0.6) if rng.random() < 0.65 else blend(fill, (225, 222, 216), 0.6), 1.1)
 
 
 def mouth(p, sp, t, fx, my):
@@ -344,7 +373,31 @@ def torso(img, p, sp, t):
         p.ell(x, y, 10, 10, (248, 248, 240), INK, 1.6)
 
 
-B.beard, B.mouth, B.torso = beard, mouth, torso
+_hair_front = B.hair_front
+
+
+def hair_front(p, sp, hx, hy, hw, hh, fx):
+    """'fade': Zack's hair (from Sam's photos): short dark top over a receding hairline, the sides clipped close and
+    lighter (skin showing through), fading out above the ears."""
+    if sp.get('hair') != 'fade':
+        return _hair_front(p, sp, hx, hy, hw, hh, fx)
+    c, skin = sp.get('hair_c', (72, 58, 48)), sp['skin']
+    side = blend(skin, c, 0.42)
+    for sgn in (-1, 1):                                                # the clipped sides
+        p.poly(curve([(hx + sgn * hw, hy + 2), (hx + sgn * (hw + 2), hy - 40), (hx + sgn * hw * 0.9, hy - hh * 0.62),
+                      (hx + sgn * hw * 0.66, hy - hh * 0.62), (hx + sgn * (hw - 10), hy - 30),
+                      (hx + sgn * (hw - 6), hy + 2)], 4), side, None)
+    top = [(hx - hw * 0.9, hy - hh * 0.58), (hx - hw * 0.76, hy - hh * 0.92), (hx - hw * 0.3, hy - hh * 1.06),
+           (hx + hw * 0.3, hy - hh * 1.06), (hx + hw * 0.76, hy - hh * 0.92), (hx + hw * 0.9, hy - hh * 0.58),
+           (hx + hw * 0.62, hy - hh * 0.66), (hx + hw * 0.4, hy - hh * 0.86),                  # receding temples
+           (fx + 6, hy - hh * 0.74), (hx - hw * 0.4, hy - hh * 0.86), (hx - hw * 0.62, hy - hh * 0.66)]
+    p.poly(curve(top, 4), c, INK, 2.2)
+    for k in range(5):                                                 # a few strands brushed forward
+        x = hx - hw * 0.5 + k * hw * 0.24
+        p.line([(x, hy - hh * 1.04), (x + 8, hy - hh * 0.8)], B.dk(c, 0.7), 1.4)
+
+
+B.beard, B.mouth, B.torso, B.hair_front = beard, mouth, torso, hair_front
 
 
 def walking_legs(phase, stride=60, lift_h=18):
@@ -363,8 +416,10 @@ def walking_legs(phase, stride=60, lift_h=18):
 
 
 # ------------------------------------------------------------------------------------------------ the cast
-ZACK = dict(name='Zack', skin=B.OLIVE, hw=72, hh=94, jaw='square', hair='crop', hair_c=(38, 32, 28), brow_c=(34, 28, 24),
-            brow_w=4.6, beard='trim', beard_c=(60, 50, 44), nose='long', outfit='suit', jacket=(36, 38, 48),
+OLD_ZACK = dict(skin=B.OLIVE, hw=72, hh=94, jaw='square', hair='crop', hair_c=(38, 32, 28), brow_c=(34, 28, 24),
+                brow_w=4.6, beard='trim', beard_c=(60, 50, 44), nose='long')   # the first animatic's Zack
+ZACK = dict(name='Zack', skin=(240, 202, 176), hw=76, hh=92, jaw='round', hair='fade', hair_c=(78, 62, 50),
+            brow_c=(84, 66, 54), brow_w=4.0, beard='short', beard_c=(112, 96, 86), nose='line', outfit='suit', jacket=(36, 38, 48),
             trousers=(36, 38, 48), shirt=(246, 246, 244), rosette=True, creases=1, full=True, pose='custom')
 ADV = dict(name='advisor', skin=(244, 214, 190), hw=62, hh=96, jaw='long', hair='wavy', hair_c=(146, 100, 56),
            brow_c=(110, 76, 44), beard='goatee', beard_c=(130, 92, 52), lip_ring=True, outfit='suit',
@@ -960,6 +1015,30 @@ def stills(out):
     print('stills:', out)
 
 
+def model(out):
+    """Zack's model sheet: the first animatic's version beside the new one, in his main expressions."""
+    B.SS = 2
+    faces = [('seething', dict(brows='fierce', lid=5, mouth='set')), ('shouting', dict(brows='fierce', mouth='v:AI')),
+             ('skeptical', dict(brows='confused', mouth='set', look=-0.6, turn=-0.3)),
+             ('delighted', dict(brows='joy', mouth='smile', look=-0.6, turn=-0.3))]
+    tiles = []
+    for label, base in (('before', dict(ZACK, **OLD_ZACK)), ('after', ZACK)):
+        for name, f in faces:
+            img = Image.new('RGBA', (500 * B.SS, 560 * B.SS), (226, 228, 214, 255))
+            cam = B.Cam(2.0, 0, 0)
+            cam.P = (lambda c: lambda x, y: (x * c.z * B.SS + 250 * B.SS, (y + 120) * c.z * B.SS + 260 * B.SS))(cam)
+            sp = dict(base, **f, arms={'L': ((-150, 270), (-140, 440), 'fist'), 'R': ((150, 270), (140, 440), 'fist')})
+            B.person(img, cam, 0, 0, 1.0 * S, sp, 0.0)
+            im = img.convert('RGB').resize((500, 560), Image.LANCZOS)
+            ImageDraw.Draw(im).text((14, 516), f'{label}: {name}', font=ImageFont.truetype(B.SANS, 26), fill=(30, 30, 30))
+            tiles.append(im)
+    sheet = Image.new('RGB', (4 * 510, 2 * 570), (40, 40, 40))
+    for i, im in enumerate(tiles):
+        sheet.paste(im, ((i % 4) * 510, (i // 4) * 570))
+    sheet.save(out, quality=90)
+    print('model sheet:', out)
+
+
 def render_frame(args):
     i, size, ss = args
     B.SS = ss
@@ -999,6 +1078,9 @@ def main():
         for s in SHOTS:
             print(f'shot {s[0]:11s} {s[1]:6.2f}-{s[2]:6.2f} ({s[2] - s[1]:.1f} s)')
         print(f'black at {BLACK_AT:.2f} s')
+        return
+    if len(a) == 2 and a[0] == 'model':
+        model(a[1])
         return
     if len(a) < 2 or a[0] not in ('stills', 'final'):
         print(__doc__)
