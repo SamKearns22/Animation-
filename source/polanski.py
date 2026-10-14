@@ -920,6 +920,8 @@ TURN0 = L['zionism']['start'] - 0.75             # he turns round from the desk 
 TURN_KEYS = [(0.0, 180), (0.15, -135), (0.30, -90), (0.45, -45), (0.60, 0)]   # (seconds in, view): each held 2 drawings
 if os.environ.get('TURN4'):                    # Sam's test: only four directions, as South Park's rigs (back, side, front)
     TURN_KEYS = [(0.0, 180), (0.25, -90), (0.50, 0)]
+if os.environ.get('TURN180'):                  # Sam's test: a straight 180, back view to front in one drawing (a pop)
+    TURN_KEYS = [(0.0, 180), (0.5, 0)]
 TURN_END = TURN0 + TURN_KEYS[-1][0]
 
 
@@ -942,7 +944,8 @@ def zack(img, cam, t):
         person_at(img, cam, ZX, sp, t)
     elif t < TURN_END:
         q = dict(sp, back=False, mouth='set', brows='fierce')
-        V.person(img, cam, ZX, NECK, S, q, t, turn_view(t), V.standing(q), head_yaw=turn_view(t, 1 / 12))
+        lead = 0.0 if os.environ.get('TURN180') else 1 / 12          # a pop has no in-between for the head to lead
+        V.person(img, cam, ZX, NECK, S, q, t, turn_view(t), V.standing(q), head_yaw=turn_view(t, lead))
     else:
         sp['back'] = False
         sp['turn'] = sp.get('turn', 0.0) - 0.3 * (1 - ease((t - TURN_END) / 0.25))   # head still coming round
