@@ -327,16 +327,22 @@ def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
     u = (d[0] / n, d[1] / n)
     c = (wr[0] + u[0] * 12, wr[1] + u[1] * 12)
     if shape == 'gun':
-        tip = (c[0] + u[0] * 58, c[1] + u[1] * 58)
-        p.line([c, tip], INK, 23)
-        p.line([c, tip], skin, 16)
         side = (-u[1], u[0]) if u[0] < 0 else (u[1], -u[0])          # the thumb points up
         if side[1] > 0:
             side = (-side[0], -side[1])
-        th = (c[0] + side[0] * 34, c[1] + side[1] * 34)
-        p.line([c, th], INK, 19)
-        p.line([c, th], skin, 12)
+        capsule(p, c, (c[0] + u[0] * 62, c[1] + u[1] * 62), 9, skin)          # the finger, outlined round its tip
+        capsule(p, c, (c[0] + side[0] * 38, c[1] + side[1] * 38), 8, skin)    # the thumb
     Q.chand(p, c[0], c[1], skin)
+
+
+def capsule(p, a, b, r, fill):
+    """A rounded bar from a to b (a finger): one outline all the way round, rounded at both ends."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    n = math.hypot(dx, dy) or 1.0
+    ang = math.atan2(dy, dx)
+    pts = [(b[0] + r * math.cos(ang + k), b[1] + r * math.sin(ang + k)) for k in np.linspace(-math.pi / 2, math.pi / 2, 9)]
+    pts += [(a[0] + r * math.cos(ang + k), a[1] + r * math.sin(ang + k)) for k in np.linspace(math.pi / 2, 3 * math.pi / 2, 9)]
+    p.poly(pts, fill, INK, 2.2)
 
 
 B.gesture_hand = gesture_hand
@@ -583,12 +589,13 @@ def zack_state(t):
             over.add('R')
     nt0 = L['notthat']['start'] - 0.1
     if nt0 <= t < L['bingo']['start'] - 0.3:
-        u = ease((t - nt0) / 0.3)
-        wave = 14 * math.sin(2 * math.pi * 2.2 * (t - nt0))
-        tg['R'] = lerp2((186, TABLE_LOCAL_Y), (sh['R'][0] + 120, sh['R'][1] + 190 + wave), u)
+        # "no, no": the hand up in front of his chest, palm out, wagged side to side once on each "no" (held poses)
+        ln = L['notthat']
+        span = ln['end'] - ln['start']
+        k = (t - ln['start']) / span
+        tg['R'] = (186, TABLE_LOCAL_Y) if t < ln['start'] + 0.02 else (20, 140) if k < 0.28 or 0.5 <= k else (90, 150)
+        bend['R'] = 'out'
         shape['R'] = 'palm'
-        if u < 0.4:
-            over.add('R')
         if t > L['notthat']['end'] + 0.25:
             tg['R'] = lerp2(tg['R'], hips['R'], ease((t - L['notthat']['end'] - 0.25) / 0.4))
             shape['R'] = 'fist'

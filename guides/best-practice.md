@@ -336,6 +336,8 @@ this series. Full details in `tiktok-design.md`.
   dodge the arm checker produced a scarecrow frame (arms straight out, forearms dangling) on a drawn frame. Use two or
   three real key poses (hands on the desk, hands rising beside the head, flung up), each held, checked by the arm
   guard; and no blink on the frames of a big reaction.
+- **A gesture's direction is its meaning:** "no, no" is a sideways wag; a vertical bob of the same hand reads as pumping
+  (Sam, 14 Oct). Write each gesture's direction into the beat, and time it to the words it goes with.
 - **Stand-in voices are for timing only: never on anything sent to Sam** (his note, 14 Oct). The animatic carries the
   effects and captions; the robot lines stay inside the code.
 - **Hiding what's written further down a card or sign:** a 9:16 frame wide enough to read a line always shows the whole

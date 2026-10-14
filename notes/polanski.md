@@ -15,6 +15,8 @@
 | 12 | the turn | ~4 s | swivel and thin, then suddenly round in the next shot: use South Park's method | done v4: one shot, real drawings swapped view by view (views.py), the head a drawing ahead; a second render with four directions only (TURN4=1) for Sam to choose |
 | 13 | the turn | ~4 s | try a straight 180 | done: TURN180=1, back view to front in one drawing, hands on the desk until the pop |
 | 14 | the shout | ~4.6 s | "why this pose?" (arms straight out, forearms hanging, eyes shut) | done: held key poses for the arm raise (desk, beside the head, up), no blink through the shout |
+| 15 | finger guns | ~47 s | lines on the fingers cut off | done: each finger and thumb a rounded shape with one outline round the tip |
+| 16 | "not that" | ~36 s | pumping the arm downwards: why? | done: it was a vertical bob meant as a wave; now a palm-out "no, no" wag sideways in front of the chest, one held pose per "no" |
 | 10 | foreground | 0-20 s | the laptop sat on a giant grey box | done: a campaign table with a green VOTE GREEN cloth to the floor; everything on it lies low (nothing in front of the card) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
