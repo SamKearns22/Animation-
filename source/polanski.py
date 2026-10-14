@@ -43,7 +43,6 @@ import mossad_audio as MA    # noqa: E402
 import kit                   # noqa: E402
 import filmkit               # noqa: E402  the satire checks: audit, eyelines, idle shifts, sound questions
 import film_engine as E      # noqa: E402  render with the picture cache; captions put on last
-import walker                # noqa: E402  the three-quarter walk (Cry Minister)
 from satire_style import limb, rough   # noqa: E402
 from ed import INK, curve, oval, soft   # noqa: E402
 from voices import syllables_in          # noqa: E402
@@ -152,7 +151,7 @@ for i, ln in enumerate(LINES):
     if i == 0:
         SHOTS.append([ln['cam'], 0.0, None])
     elif ln['cam'] != LINES[i - 1]['cam']:
-        lead = 0.5 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)   # see him spin
+        lead = 0.14 if ln['key'] == 'zionism' else min(0.6, (ln['start'] - LINES[i - 1]['end']) * 0.6)   # cut on his turn
         if ln['cam'] in ('flip', 'zack_pov'):
             lead = ln['start'] - LINES[i - 1]['end'] - 0.15        # these shots start at once: the turn, the flip
         cut = ln['start'] - lead
@@ -213,70 +212,65 @@ def lerp2(p, q, u):
 
 # ------------------------------------------------------------------------------------------------- the A3 card
 CARD_W, CARD_H, CARD_CY = 250, 350, 300     # advisor's units: A3 portrait (297 x 420 mm; a head is about 23 cm)
-ITEMS = [  # what is written on the card (marker capitals), and where each item sits (fraction of the height)
-    ('1.', 'SHOPLIFTING IS SEXISM', 0.06, 0.27, 112),
-    ('2.', 'NORTH SEA DRILLING IS ABLEISM', 0.31, 0.55, 104),
+ITEMS = [  # a real brainstorm sheet: each item in its own place, so a close frame holds only that one (Sam: reveal by
+    # the camera's frame, never blur). (number, text, box as card fractions x0, y0, x1, y1)
+    ('1.', 'SHOPLIFTING IS SEXISM', (0.04, 0.03, 0.45, 0.31)),
+    ('2.', 'NORTH SEA DRILLING IS ABLEISM', (0.55, 0.06, 0.96, 0.36)),
     ('3.', 'NUCLEAR PROLIFERATION IS INHERENT VIOLENCE DIRECTED TOWARDS ECONOMICALLY DISADVANTAGED NATIVE '
-           'POPULATIONS', 0.59, 0.97, 76),
+           'POPULATIONS', (0.04, 0.64, 0.96, 0.98)),
 ]
+ITEM_Z = 10.5                                # close enough that the frame holds item 1 or 2 alone (checked)
+ITEM3_Z = 5.0                                # item 3 is read last: the whole card may show
 _CARD = {}
 
 
-BLUR = [0, 9, 17, 26]                       # card pixels (1000 wide): sharp, then out of focus enough to be unreadable
-
-
-def card_face(focus=0.0):
-    """The card's written side: three numbered items in green marker capitals. Only the item being read is in
-    focus (Sam: never spoil the next joke); the others are blurred out of focus, like a close lens racking down the
-    card. A 9:16 frame wide enough to read a line always holds the whole card, so framing alone can't hide them."""
-    from PIL import ImageFilter
-    if 'back' not in _CARD:
-        W, H = 1000, 1400
-        for k, (n, txt, y0, y1, size) in enumerate(ITEMS):                   # each item on its own layer
-            lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-            d = ImageDraw.Draw(lay)
+def card_face():
+    """The card's written side, drawn once at 2000 x 2800: green marker capitals, each item fitted to its own box."""
+    if 'front' in _CARD:
+        return _CARD['front']
+    W, H = 2000, 2800
+    im = Image.new('RGBA', (W, H), (250, 249, 244, 255))
+    d = ImageDraw.Draw(im)
+    for n, txt, (x0, y0, x1, y1) in ITEMS:
+        bx0, by0, bx1, by1 = x0 * W, y0 * H, x1 * W, y1 * H
+        size = 300
+        while size > 40:                                             # the biggest marker size that fits its box
             f = ImageFont.truetype(B.ANTON, size)
-            rows = B.wrap(txt, f, W - 230)
-            hgt = len(rows) * size * 1.1
-            top = H * (y0 + y1) / 2 - hgt / 2
-            d.text((60, top), n, font=f, fill=(30, 110, 60))
-            for i, r in enumerate(rows):
-                d.text((170, top + i * size * 1.1), r, font=f, fill=(22, 90, 48))
-            if n != '3.':                                            # a marker rule under the item
-                d.line([(60, H * y1 + 18), (W - 60, H * y1 + 10)], fill=(150, 196, 160), width=6)
-            for j, r in enumerate(BLUR):
-                _CARD[(k, j)] = lay.filter(ImageFilter.GaussianBlur(r)) if r else lay
-        back = Image.new('RGBA', (W, H), (214, 196, 160, 255))       # the plain card back (grey-brown board)
-        db = ImageDraw.Draw(back)
-        for k in range(0, H, 46):
-            db.line([(0, k), (W, k + 8)], fill=(204, 186, 150), width=3)
-        _CARD['back'] = back
-    levels = tuple(min(len(BLUR) - 1, int(round(min(1.0, abs(k - focus)) * (len(BLUR) - 1)))) for k in range(len(ITEMS)))
-    if levels not in _CARD:
-        im = Image.new('RGBA', (1000, 1400), (250, 249, 244, 255))
-        for k, j in enumerate(levels):
-            im.alpha_composite(_CARD[(k, j)])
-        _CARD[levels] = im
-    return _CARD[levels]
-
-
-def focus_at(t):
-    """Which item is in focus (0-2, continuous): racks with the camera from item to item as each is read."""
-    kd = ease((t - (L['drill']['caps'][1]['start'] - 0.35)) / 0.5)
-    k3 = ease((t - CARD3_START) / 0.6)
-    return kd + k3
-    back = Image.new('RGBA', (W, H), (214, 196, 160, 255))           # the plain card back (grey-brown board)
+            rows = B.wrap(txt, f, bx1 - bx0 - size * 0.9)
+            wide = max(f.getbbox(r)[2] for r in rows)
+            if len(rows) * size * 1.08 <= by1 - by0 and wide <= bx1 - bx0 - size * 0.9:   # every row inside its box
+                break
+            size -= 6
+        top = (by0 + by1) / 2 - len(rows) * size * 1.08 / 2
+        d.text((bx0, top), n, font=f, fill=(30, 110, 60))
+        for i, r in enumerate(rows):
+            d.text((bx0 + size * 0.9, top + i * size * 1.08), r, font=f, fill=(22, 90, 48))
+    d.line([(W * 0.5, H * 0.05), (W * 0.5, H * 0.4)], fill=(150, 196, 160), width=8)    # marker rules between items
+    d.line([(W * 0.05, H * 0.5), (W * 0.95, H * 0.49)], fill=(150, 196, 160), width=8)
+    _CARD['front'] = im
+    back = Image.new('RGBA', (1000, 1400), (214, 196, 160, 255))     # the plain card back (grey-brown board)
     db = ImageDraw.Draw(back)
-    for k in range(0, H, 46):
-        db.line([(0, k), (W, k + 8)], fill=(204, 186, 150), width=3)
+    for k in range(0, 1400, 46):
+        db.line([(0, k), (1000, k + 8)], fill=(204, 186, 150), width=3)
     _CARD['back'] = back
     return im
 
 
-def item_y(k, frac=0.5):
-    """World height of a point on item k (0-2) of the card, frac of the way down that item."""
-    n, txt, y0, y1, size = ITEMS[k]
-    return NECK + (CARD_CY - CARD_H / 2 + CARD_H * (y0 + (y1 - y0) * frac)) * S
+def item_at(k, fx=0.5, fy=0.5):
+    """World point of item k (0-2) on the card held at the advisor's spot, fx/fy across its box."""
+    x0, y0, x1, y1 = ITEMS[k][2]
+    cx = -CARD_W / 2 + CARD_W * (x0 + (x1 - x0) * fx)
+    cy = CARD_CY - CARD_H / 2 + CARD_H * (y0 + (y1 - y0) * fy)
+    return AX + cx * S, NECK + cy * S
+
+
+def item_cam(k):
+    """The close-up on item k: its middle at screen y 700 (clear of the captions)."""
+    z = ITEM3_Z if k == 2 else ITEM_Z
+    x, y = item_at(k)
+    if k == 2:
+        x = AX
+    return z, x, y + (960 - 700) / z
 
 
 def flip_angle(t):
@@ -286,7 +280,7 @@ def flip_angle(t):
 
 def draw_card(img, Lc, t, lift):
     """The card between the advisor's hands (Lc: his local frame), turned by flip_angle (squashed top to bottom)."""
-    front = card_face(focus_at(t))
+    front = card_face()
     a = flip_angle(t)
     k = abs(math.cos(a))
     if k < 0.04:
@@ -443,6 +437,8 @@ def head(img, p, sp, t, hx, hy):
     hw, hh, skin = sp.get('hw', 72), sp.get('hh', 88), sp['skin']
     c = sp.get('hair_c', (72, 58, 48))
     for sgn in (-1, 1):
+        if sgn < 0 and sp.get('back_turn', 0.0) > 0:
+            continue                                  # the near ear is drawn moving round with the face, below
         p.poly(oval(hx + sgn * (hw + 2), hy + 6, 12, 22), skin, INK, 2.4)
     outline = B.head_outline(hx, hy, hw, hh, sp.get('jaw', 'round'))
     p.poly(outline, skin, INK, 2.6)
@@ -452,6 +448,18 @@ def head(img, p, sp, t, hx, hy):
     p.poly(curve([(hx - hw * 0.96, hy - hh * 0.5), (hx - hw * 0.8, hy - hh * 0.92), (hx, hy - hh * 1.06),
                   (hx + hw * 0.8, hy - hh * 0.92), (hx + hw * 0.96, hy - hh * 0.5), (hx + hw * 0.5, hy - hh * 0.1),
                   (hx, hy), (hx - hw * 0.5, hy - hh * 0.1)], 4), c, None)          # the longer top
+    bt = sp.get('back_turn', 0.0)
+    if bt > 0:                                       # turning to the left (the advisor's side): cheek, beard, nose come round
+        w = hw * 0.5 * bt
+        p.poly(curve([(hx - hw * 0.99, hy - hh * 0.35), (hx - hw + w, hy - hh * 0.4), (hx - hw + w * 1.15, hy + hh * 0.4),
+                      (hx - hw + w * 0.8, hy + hh * 1.0), (hx - hw * 0.8, hy + hh * 0.86), (hx - hw * 0.99, hy + 10)], 4),
+               skin, None)
+        p.poly(curve([(hx - hw * 0.99, hy + 22), (hx - hw + w * 1.1, hy + 26), (hx - hw + w * 0.85, hy + hh * 1.02),
+                      (hx - hw * 0.82, hy + hh * 0.88)], 4), blend(skin, sp.get('beard_c', (112, 96, 86)), 0.55), None)
+        p.line([(hx - hw + w * 0.2, hy - hh * 0.38), (hx - hw + w * 0.9, hy - hh * 0.42)], sp.get('brow_c', INK), 3.2)
+        if bt > 0.45:                                # the tip of his nose past the outline
+            p.poly([(hx - hw + 2, hy - 2), (hx - hw - 12 * bt, hy + 24), (hx - hw + 2, hy + 34)], skin, INK, 2.0)
+        p.poly(oval(hx - hw - 2 + hw * 0.42 * bt, hy + 6, 12, 22), skin, INK, 2.4)       # the near ear, moving round
     p.poly(outline, None, INK, 2.6)
     p.line([(hx - 18, hy + hh * 0.95), (hx, hy + hh * 0.9), (hx + 18, hy + hh * 0.95)], B.dk(skin, 0.8), 1.8)
 
@@ -683,21 +691,16 @@ def camera(t):
         return B.Cam(1.85 + 0.12 * u, AX, 760)
     if name == 'adv_face':
         return B.Cam(2.7, AX, head + 30)                                        # the card's top just below the caption
-    # card close-ups: the item being read sits high in the frame, so the captions below never cover its writing
-    one = (3.0, item_y(0) + (960 - 620) / 3.0)                                  # item 1 at screen y 620
-    two = (3.4, item_y(1) + (960 - 720) / 3.4)                                  # item 2 at screen y 720
-    if name == 'flip':                                                         # down from his face to the card's first item
-        k = ease((t - a) / max(0.1, FLIP[1] + 0.2 - a))
-        return B.Cam(mix(2.7, one[0], k), AX, mix(head + 40, one[1], k))
-    if name == 'card2':                                                        # item 1, then down to item 2 as he says it
-        k = ease((t - (L['drill']['caps'][1]['start'] - 0.35)) / 0.5)
-        return B.Cam(mix(one[0], two[0], k), AX, mix(one[1], two[1], k))
-    if name == 'card3':                                                        # item 2 down to item 3, panning as he reads it
-        k0 = ease((t - CARD3_START) / 0.6)
-        c = L['nuclear']['caps']
-        k = ease((t - c[1]['start']) / (c[-1]['end'] - c[1]['start']))
-        y3 = lambda f: item_y(2, f) + (960 - 720) / 3.4
-        return B.Cam(3.4, AX, mix(mix(two[1], y3(0.15), k0), y3(0.85), k))
+    # card close-ups: each item is revealed only when the frame moves onto it (Sam: by framing, never blur)
+    one, two, three = item_cam(0), item_cam(1), item_cam(2)
+    blend = lambda p, q, k: B.Cam(p[0] * (q[0] / p[0]) ** k, mix(p[1], q[1], k), mix(p[2], q[2], k))   # even zoom
+    if name == 'flip':                                         # down from his face onto item 1, landing before the turn
+        k = ease((t - a) / max(0.1, FLIP[0] - a))
+        return blend((2.7, AX, head + 40), one, k)
+    if name == 'card2':                                        # item 1, then across to item 2 as he says it
+        return blend(one, two, ease((t - (L['drill']['caps'][1]['start'] - 0.35)) / 0.5))
+    if name == 'card3':                                        # item 2, pulling out onto item 3 (the last: all may show)
+        return blend(two, three, ease((t - (L['nuclear']['caps'][1]['start'] - 0.35)) / 0.6))   # at "Nuclear"
     raise KeyError(name)
 
 
@@ -899,56 +902,84 @@ def person_at(img, cam, x, sp, t, legs=None, flip=1.0):
         B.legs = keep
 
 
-SPIN = (L['zionism']['start'] - 0.42, L['zionism']['start'] - 0.12)   # he spins round from the desk to the advisor
+TURN = (L['zionism']['start'] - 0.42, L['zionism']['start'] - 0.14)   # he starts to turn in the wide; cut on the action
+SPIN = TURN                                    # (kept for older references)
 
 
-def spin_at(t):
-    """(back view?, horizontal squash) through the spin: a quick turn drawn as the body narrowing to its edge and
-    opening out again the other way round."""
-    if t < SPIN[0]:
-        return True, 1.0
-    if t >= SPIN[1]:
-        return False, 1.0
-    c = math.cos(math.pi * ease((t - SPIN[0]) / (SPIN[1] - SPIN[0])))
-    return c > 0, max(0.14, abs(c))
+def turn_at(t):
+    """Cut on the action, the way live action and South Park hide a turn: in the wide he starts round (head first, his
+    cheek, beard and ear coming into view, the shoulders narrowing a little as they rotate); the close-up picks him up
+    already facing round, finishing the turn into the shout. Returns (back view?, head turn 0-1, body narrowing,
+    extra face turn)."""
+    if t < TURN[0]:
+        return True, 0.0, 1.0, 0.0
+    if t < TURN[1]:
+        u = ease((t - TURN[0]) / (TURN[1] - TURN[0]))
+        return True, u, 1.0 - 0.14 * u, 0.0
+    u = ease((t - TURN[1]) / 0.25)
+    return False, 0.0, 0.88 + 0.12 * u, -0.3 * (1 - u)
 
 
 def zack(img, cam, t):
     sp = zack_state(t)
-    back, k = spin_at(t)
-    sp['back'] = back
+    back, bt, kx, extra = turn_at(t)
+    sp['back'], sp['back_turn'] = back, bt
+    sp['turn'] = sp.get('turn', 0.0) + extra
     kit.feet_shadow(img, cam, ZX, NECK, S)
-    person_at(img, cam, ZX, sp, t, flip=k)
+    person_at(img, cam, ZX, sp, t, flip=kx)
     return sp
 
 
-WALK_V = (AX + 170) / (WALK_END * 0.91)       # his walking speed (world units a second) before he slows to stop
-
-
 def advisor(img, cam, t):
-    """The advisor: walks in three-quarter view (walker.py, Cry Minister), card held to his chest, slowing and
-    turning to the front as he stops; then stands. The card and his gripping hands go on top."""
+    """The advisor walks in behind the desk in the foreground (it hides his legs: the walk is told by the body's bob and
+    sway, the cheat Sam agreed until the new walking system exists), turned a little the way he walks, settling to face
+    us as he stops. The card and his gripping hands go on top."""
     sp = adv_state(t)
     x = adv_x(t)
     if t < WALK_END:
         u = ease((t - (WALK_END - 0.5)) / 0.5)
-        speed = max(1.0, (adv_x(t + 0.04) - adv_x(max(0.0, t - 0.04))) / 0.08)
-        ph = (0.95 * (x + 170) / WALK_V) % 1.0
-        kx, turn = mix(0.9, 1.0, u), mix(0.55, sp['turn'], u)
-        kit.contact_shadow(img, cam, x, FY, 240 * S)
-        walker.walk(img, cam, B, F, x, FY, S, sp, t, 1, ph, speed, turn=turn, kx=kx, limb=limb, arms=sp['arms'], blend=1.0)
-        neck = FY - (F.SOLE_Y - 8 * abs(math.cos(2 * math.pi * ph))) * S
-        frame = walker.Squash(cam, x, kx)
-    else:
-        kit.feet_shadow(img, cam, x, NECK, S)
-        person_at(img, cam, x, sp, t)
-        neck, frame = NECK, cam
-    Lc = B.Local(frame, x, neck, S)
+        ph = 2 * math.pi * 1.0 * t                                     # two steps a second (Williams: a natural walk)
+        sp['bob'] = -7 * abs(math.sin(ph)) * (1 - u)                  # highest as the legs pass, lowest on each contact
+        sp['tilt'] = sp.get('tilt', 0.0) + 0.025 * math.sin(ph) * (1 - u)   # the weight going side to side
+        sp['turn'] = mix(0.45, sp['turn'], u)
+    kit.feet_shadow(img, cam, x, NECK, S)
+    person_at(img, cam, x, sp, t)
+    Lc = B.Local(cam, x, NECK + sp.get('bob', 0.0), S)
     draw_card(img, Lc, t, sp['_lift'])
     p = B.Pen(img, Lc)
     for side in 'LR':                                         # his hands over the card's edges: the grip
         el, wr, shape = sp['arms'][side][:3]
         B.gesture_hand(p, el, wr, shape, sp['skin'])
+
+
+FG = dict(x0=-300, x1=590, top=1118)          # the desk nearest the camera (world units; its front runs off the frame)
+
+
+def fg_desk(img, cam, t):
+    """A campaign table in the near foreground, bottom left (green cloth to the floor, hiding the advisor's legs): a closed laptop, leaflets, a mug, a phone; everything on it
+    lies low, so nothing rises in front of the advisor's card."""
+    p = B.Pen(img, cam)
+    x0, x1, top = FG['x0'], FG['x1'], FG['top']
+    p.poly([(x0, top - 34), (x1 - 10, top - 34), (x1, top), (x0, top)], WOOD, INK, 3)                  # the wooden top
+    # a campaign table: a green cloth draped over the front down to the floor, its folds and hem, a printed slogan
+    cloth = [(x0, top - 4)] + [(x, top - 4 + 3 * math.sin(x * 0.05)) for x in range(int(x0) + 40, int(x1), 40)] + \
+            [(x1 + 6, top - 4), (x1 + 14, 2700), (x0, 2700)]
+    p.poly(cloth, GREEN, INK, 3)
+    for k, x in enumerate(range(int(x0) + 70, int(x1), 95)):                                        # hanging folds
+        p.line([(x, top + 10), (x + 6 * math.sin(k * 1.7), top + 300), (x - 4, 2700)], GREEN_D, 3)
+    p.line([(x0, top + 18), (x1 + 8, top + 18)], GREEN_D, 2.4)                                      # the edge of the top
+    box(p, 20, top + 70, 180, top + 170, (248, 248, 242), 2.6)                                      # the printed panel (left,
+    text(img, cam, 100, top + 101, 'VOTE', 36, GREEN_D)                                                  # clear of the card's
+    text(img, cam, 100, top + 140, 'GREEN', 36, GREEN_D)                                                 # close-ups)
+    box(p, 10, top - 40, 190, top - 22, (70, 72, 80), 2.4)                                         # a closed laptop, flat
+    p.ell(100, top - 31, 7, 5, GREEN, None)                                                         # its green sticker
+    box(p, 470, top - 64, 516, top - 18, (246, 246, 240), 2.2)                                     # a mug (clear of the card)
+    p.line(oval(524, top - 42, 12, 14, 16, -1.4, 1.4), INK, 3)
+    box(p, 470, top - 52, 516, top - 40, GREEN, 0)
+    for k in range(3):                                                                               # leaflets
+        p.poly(rough([(250 + 6 * k, top - 22 - 5 * k), (350 + 4 * k, top - 24 - 5 * k), (354, top - 18 - 5 * k),
+                      (246, top - 16 - 5 * k)], 2, k), GREEN if k % 2 else (246, 246, 240), INK, 1.4)
+    box(p, 520, top - 24, 570, top - 16, (30, 30, 34), 1.6)                                         # a phone, face down
 
 
 def scene(t, cam):
@@ -958,6 +989,7 @@ def scene(t, cam):
     table(img, cam, t)                        # the desk against the wall, behind him
     zack(img, cam, t)
     advisor(img, cam, t)
+    fg_desk(img, cam, t)                      # the desk in the foreground, nearest the camera
     return img
 
 
@@ -1074,6 +1106,13 @@ def checks():
     for side in (-1, 1):
         if not TABLE['x0'] < ZX + side * 196 * S < TABLE['x1']:
             bad.append('Zack\'s hands are off the end of the table')
+    for k in (0, 1):                                  # Sam: each item revealed by the frame alone (no other item in it)
+        z, cx, cy = item_cam(k)
+        f = (cx - 540 / z, cy - 960 / z, cx + 540 / z, cy + 960 / z)
+        for j in range(3):
+            (x0, y0), (x1, y1) = item_at(j, 0, 0), item_at(j, 1, 1)
+            if j != k and min(f[2], x1) > max(f[0], x0) and min(f[3], y1) > max(f[1], y0):
+                bad.append(f'the close-up on item {k + 1} also shows item {j + 1}')
     B.SS = 2
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     windows = [(ln['off'] + a, ln['off'] + b) for ln in LINES for a, b in ln['st']]
@@ -1086,10 +1125,9 @@ def checks():
 
 
 ALLOW = [  # deliberate: (who, from, to, why) for the audit
-    ('Zack', SPIN[0] - 0.1, SPIN[1] + 0.1, 'the spin: his body narrows to its edge and opens out the other way'),
+    ('Zack', TURN[0] - 0.1, TURN[1] + 0.35, 'the turn, cut on the action: back view to front across the cut'),
     ('Zack', L['zionism']['start'] - 0.25, L['zionism']['start'] + 0.15, 'arms flung up with the shout'),
     ('advisor', FLIP[0] - 0.1, FLIP[1] + 0.1, 'the card turning over (its outline squashes)'),
-    ('advisor', WALK_END - 0.15, WALK_END + 0.15, 'the walk settles into his standing pose'),
 ]
 
 

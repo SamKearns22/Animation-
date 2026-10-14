@@ -59,3 +59,19 @@ films (the satire template picks it up automatically).
   top right, item 3 written across the bottom; each close-up frames only its own item (narrow and high), so the next
   one is out of frame until the camera moves to it. No blur.
 - The walk-in and Zack's spin wait for steps 1-3 and are then rebuilt with them.
+
+## Agreed with Sam, 14 Oct (after his critique round)
+- **Build to order:** the shared engine once; angles, gaits and poses only when a script needs them, then kept on a
+  pose menu for every film after.
+- **Order:** (1) finish Bingo Bingo with film cheats (done: animatic v3); (2) one main line of work (all branches merged,
+  every chat starts from it); (3) research pass -> `guides/reference-pack.md` (limited animation, "on twos", as the style
+  target; realism only keeps poses believable); (4) look test: Zack in three-quarter and profile plus one short walk,
+  Sam approves before any engine is built; (5) build: **a floor-and-camera model with true perspective first** (Sam:
+  "perspective is important"), angles, walk and turn, core pack (standing styles, talking gestures, sitting and standing
+  up, holding things), combat pack (punch, kick, sword swing, taking a blow and falling), car-ready seated poses and
+  getting in and out (the car itself drawn per film); checks; footstep and hit sounds; a regression still from every
+  finished film before and after; (6) one **Satire film package**: the people library, figure.py, limbs.py, the new
+  views and gaits, satire_style, filmkit and film_engine combined into one efficient package behind the satire
+  template (walker.py retired, nothing duplicated).
+- **Real people from the side:** Sam sends profile photos when he can; otherwise the side and back views are worked out
+  logically from what the front shows (hairline, beard line, nose and jaw from the front photos).
