@@ -43,7 +43,7 @@ EYES = ((0.293, 0.357), (0.707, 0.357))                 # his eyes (fractions of
 def sucking(t):
     """0-1: how hard he is sucking (eyes wide, mouth a black O round the straw), from the sip to just after it."""
     a = min(1.0, max(0.0, (t - (SIP_AT - 0.08)) / 0.15))
-    b = min(1.0, max(0.0, (t - (SIP_AT + 1.15)) / 0.3))
+    b = min(1.0, max(0.0, (t - (SIP_AT + slurp()['length'] + 0.35)) / 0.2))   # as long as the slurp, and a beat
     return a * (1 - b)
 
 
@@ -209,7 +209,7 @@ def frame(t):
     m = Image.new('L', (SIZE, SIZE), 0)
     ImageDraw.Draw(m).rounded_rectangle([0, 0, SIZE - 1, SIZE - 1], 44, fill=255)
     img.paste(pic, (DX, DY), m)
-    sip = min(1.0, max(0.0, (t - SIP_AT) / 0.6))
+    sip = sip_of(t)                                                          # at the pace of the slurp (Sam)
     widen(img, k)
     o_mouth(img, k)
     juice_box(img, sip, k >= 0.5)
@@ -240,18 +240,44 @@ def clip(out):
     os.remove(sound)
 
 
+_slurp = {}
+
+
+def slurp():
+    """Sam's slurp, cleaned like the voices, trimmed to the slurp alone, at a natural level; and how far the juice
+    has climbed at each moment of it (its loudness added up), so the juice rises at the pace of the sound."""
+    if not _slurp:
+        import mossad_audio as MA
+        from burnham_film import load, SR
+        x = MA.denoise(MA.dehum(load(SLURP)))
+        st = MA.speech(x) or [(0.0, len(x) / SR)]
+        a, b = st[0]                                                       # the slurp alone (the later sound was noise)
+        x = x[max(0, int((a - 0.04) * SR)):int((b + 0.08) * SR)]
+        f = int(0.01 * SR)
+        x[:f] *= np.linspace(0, 1, f)
+        x[-f:] *= np.linspace(1, 0, f)
+        x = x * 10 ** ((-20 - MA.lufs(x)) / 20)
+        hop = SR // 100
+        env = np.array([np.sqrt(np.mean(x[i:i + hop] ** 2)) for i in range(0, len(x) - hop, hop)])
+        climb = np.cumsum(env) / max(1e-9, env.sum())
+        _slurp.update(x=x, sr=SR, climb=climb, length=len(x) / SR)
+    return _slurp
+
+
+def sip_of(t):
+    """0-1: how far up the straw the juice is (1 = in his mouth), following the slurp's loudness."""
+    sl = slurp()
+    u = t - SIP_AT
+    if u <= 0:
+        return 0.0
+    i = int(u * 100)
+    return 1.0 if i >= len(sl['climb']) else float(sl['climb'][i])
+
+
 def slurp_track(path):
-    """Sam's slurp (asked for, 15 Oct): its sound starts as the juice starts up the straw, at a natural level."""
-    import mossad_audio as MA
-    from burnham_film import load, SR
-    x = MA.denoise(MA.dehum(load(SLURP)))                                  # cleaned like the voices
-    st = MA.speech(x) or [(0.0, len(x) / SR)]
-    a, b = st[0]                                                           # the slurp alone (the later sound was noise)
-    x = x[max(0, int((a - 0.04) * SR)):int((b + 0.08) * SR)]
-    f = int(0.01 * SR)
-    x[:f] *= np.linspace(0, 1, f)
-    x[-f:] *= np.linspace(1, 0, f)
-    x = x * 10 ** ((-20 - MA.lufs(x)) / 20)
+    """The sound: the slurp starts as the juice starts up the straw."""
+    sl = slurp()
+    x, SR = sl['x'], sl['sr']
     out = np.zeros(int(DUR * SR) + SR)
     i = int(SIP_AT * SR)
     out[i:i + len(x)] += x[:len(out) - i]
