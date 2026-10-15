@@ -40,10 +40,10 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "we work tirelessly for America, [smile2] [down] and the people, they understand that, and I look forward to "
           "the president, [double] the president, with his helping, [up] with his [onsmile3] agenda. || "
           "My president and I, eh, [down] excuse me, [up] my [wide] master and I are very happy to be, [smile2] [down] "
-          "and like, our kids are [delight] helicopters, [up] and I really think that with the biggest swell of "
-          "support, the people are really, I just, [down] you know it's so. [up] [awkward] I'll get back to you on "
-          "that. || [down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had "
-          "a one day war, [down] and I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+          "and like, our kids are [delight] ^helicopters, [up] and I really think that with the biggest swell of "
+          "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^Let me get back to you "
+          "on that. || [down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had "
+          "a one day war, [down] I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
 # Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
 # "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
@@ -99,6 +99,9 @@ def _syllable_beats(v, runs):
     return [t for t in ts if any(a_ - 0.02 <= t <= b_ + 0.02 for a_, b_ in runs)]
 
 
+FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
+
+
 def build_timeline():
     """Words timed to the recording; her acting (glances, smiles, the sigh) placed by the tags."""
     MA, v, runs, cuts = _voice()
@@ -110,8 +113,14 @@ def build_timeline():
         prev = c + 1
     words, events = [], []                     # words: (start, end, text); events: (word index, tag)
     nuclei = _syllable_beats(v, runs)
+    global FRESH
+    fresh = FRESH
     for text, grp in zip(parts_text, groups):
         toks = text.split()
+        for i_, w_ in enumerate(toks):                 # '^word': its subtitle starts fresh, exactly on the word
+            if w_.startswith('^'):
+                fresh.add(len(words) + sum(1 for x in toks[:i_] if not x.startswith('[')))
+                toks[i_] = w_[1:]
         plain = [w for w in toks if not w.startswith('[')]
         sy = [syllables(w) for w in plain]
         S = sum(sy)
@@ -293,9 +302,9 @@ def state(t):
     if s['gaze'] == 'up':                                  # looking round the journalists while she talks: the eyes
         rnd = random.Random(31)                            # jump to a new face and hold, the head follows a little
         tt, k = 0.0, 0
-        spots = [-0.95, -0.45, 0.1, 0.55, 1.0, -0.2, 0.8, -0.7]
+        spots = [-0.48, -0.22, 0.05, 0.28, 0.5, -0.1, 0.4, -0.35]   # half as wide, half as often (Sam, 15 Oct)
         while tt <= t:
-            tt += rnd.uniform(0.7, 1.6)
+            tt += rnd.uniform(1.4, 3.2)
             k += 1
         s['look_x'] = spots[(k * 3) % len(spots)]
         s['look_dy'] = 2.0                                 # the press sit below her
@@ -314,10 +323,15 @@ def state(t):
                 s['brow'] = 14.0
                 s['squint'] = 0.5
                 s['head_tilt'] = -0.06
-            elif kind == 'awkward':                            # worried brows, eyes sliding sideways, a tight grimace
-                s['worry'] = 1.0
-                s['brow'] = 4.0
-                s['look_x'] = 0.8 if int((t - a) / 0.7) % 2 == 0 else -0.6
+            elif kind == 'awkward':                            # sheepish, looking dead at the crowd (Sam, 15 Oct):
+                s['worry'] = 1.0                               # worried brows, chin dipped a touch, a tight grimace
+                s['brow'] = 3.0
+                s['look_x'] = 0.0
+                s['look_dy'] = 2.5
+                s['gaze'] = 'up'
+                s['lid'] = 0.15
+                s['head_dy'] = 6.0
+                s['head_tilt'] = 0.05
                 if s['mouth'] == 'rest' and s['smile'] == 0:
                     s['mouth'] = 'grimace'
     a, b = SIGH
@@ -336,7 +350,7 @@ def state(t):
     if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0:
         s['closed'] = True
     s['head_tilt'] += filmkit.shifts(t, seed=4, amount=0.025)
-    s['head_dx'] = 40 * filmkit.shifts(t, seed=9, amount=0.06) + 9 * s['look_x'] * (s['gaze'] == 'up')
+    s['head_dx'] = 40 * filmkit.shifts(t, seed=9, amount=0.06) + 6 * s['look_x'] * (s['gaze'] == 'up')
     return s
 
 
@@ -1263,8 +1277,11 @@ def _caption_chunks():
     """Subtitles (Sam, 15 Oct): the script in pieces at its commas and full stops, each at most 42 characters
     (two rows), timed to her words; tiny pieces join their neighbour; each stays up until just before the next."""
     pieces, cur = [], []
-    for st_, en_, w in TALK:
-        cur.append((st_, en_, w))
+    for wi, (st_, en_, w) in enumerate(TALK):
+        if wi in FRESH and cur:
+            pieces.append(cur)
+            cur = []
+        cur.append((st_, en_, w, wi))
         if w[-1] in ',.':
             pieces.append(cur)
             cur = []
@@ -1272,39 +1289,42 @@ def _caption_chunks():
         pieces.append(cur)
     split = []
     for pc in pieces:                                  # anything over 42 characters splits at its middle word
-        while len(' '.join(w for _, _, w in pc)) > 42:
-            total = len(' '.join(w for _, _, w in pc))
-            k = min(range(1, len(pc)), key=lambda i: abs(len(' '.join(w for _, _, w in pc[:i])) - total / 2))
+        while len(' '.join(x[2] for x in pc)) > 42:
+            total = len(' '.join(x[2] for x in pc))
+            k = min(range(1, len(pc)), key=lambda i: abs(len(' '.join(x[2] for x in pc[:i])) - total / 2))
             split.append(pc[:k])
             pc = pc[k:]
         split.append(pc)
     pieces = split
     merged = []
     for pc in pieces:
-        text = ' '.join(w for _, _, w in pc)
+        text = ' '.join(x[2] for x in pc)
         if merged:
             prev = merged[-1]
-            ptext = ' '.join(w for _, _, w in prev)
+            ptext = ' '.join(x[2] for x in prev)
             gap = pc[0][0] - prev[-1][1]
-            if (len(text) < 14 or len(ptext) < 10) and len(ptext) + 1 + len(text) <= 40 and gap < 0.5:
+            fresh_here = pc[0][3] in FRESH or any(x[3] in FRESH for x in prev)
+            if not fresh_here and (len(text) < 14 or len(ptext) < 10) and len(ptext) + 1 + len(text) <= 40 and gap < 0.5:
                 merged[-1] = prev + pc
                 continue
         merged.append(pc)
     out = []
     for i, pc in enumerate(merged):
-        start = pc[0][0] - 0.2
-        nxt = merged[i + 1][0][0] - 0.2 if i + 1 < len(merged) else BLACK_AT
-        text = ' '.join(w for _, _, w in pc)
+        start = pc[0][0] - (0.0 if pc[0][3] in FRESH else 0.2)
+        nn = merged[i + 1] if i + 1 < len(merged) else None
+        nxt = (nn[0][0] - (0.0 if nn[0][3] in FRESH else 0.2)) if nn else BLACK_AT
+        text = ' '.join(x[2] for x in pc)
         end = min(nxt, max(pc[-1][1] + 0.4, start + len(text) / 15.0))
         out.append([start, end, text])
     for i in range(len(out) - 1):                      # a quick piece borrows a moment from the next (readable)
         need = len(out[i][2].split()) / 3.5 + 0.1
-        if out[i][1] - out[i][0] < need:
+        if out[i][1] - out[i][0] < need and out[i + 1][2].split()[0] not in FRESH_TEXT:
             out[i][1] = out[i][0] + need
             out[i + 1][0] = max(out[i + 1][0], out[i][1])
     return [tuple(c) for c in out]
 
 
+FRESH_TEXT = {TALK[i][2] for i in FRESH}
 CAPTIONS = _caption_chunks()
 
 

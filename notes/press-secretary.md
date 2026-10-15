@@ -27,6 +27,10 @@
 | 23 | subtitles | opening | First "it's really" subtitle left too soon: words now matched syllable by syllable to the beats detected in the recording (168 beats, 172 script syllables), commas still sit on real pauses | done |
 | 24 | acting | big smiles | Mouth stopped moving in the smiles: she now talks through the smile (jaw opens with her voice) and flashes a crazed smile the moment she stops | done |
 | 25 | acting | talking to the room | Eyes now roam the journalists while she speaks (jump to a face, hold 0.7-1.6 s, head follows a little) | done |
+| 26 | subtitles | "I just need" | The line before "I just want" is "I just need" (no "and") | done |
+| 27 | acting | talking to the room | Looking around halved: holds 1.4-3.2 s, half as wide, head follows less | done |
+| 28 | subtitles | punchlines | "helicopters," its own subtitle; "Let me get back to you on that." appears exactly as she starts it (wording as Sam says it in take 2) | done |
+| 29 | acting | "Let me get back to you on that" | Looking dead at the crowd, sheepish: worried brows, chin dipped, tight grimace in the pause | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.
