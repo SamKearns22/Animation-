@@ -67,7 +67,7 @@ SCRIPT = [
     ('heads', 'A', 'zack', 0.3, "But don't worry, we've put our heads together",
      ["But don't worry, we've put our heads together"]),
     ('list', 'A', 'adv', 0.45, "and came up with a new list of painful oversimplifications that people might enjoy more.",
-     ["and came up with a new list of painful oversimplifications", "that people might enjoy more."]),
+     ["and came up with a new list", "of painful oversimplifications", "that people might enjoy more."]),
     ('hear', 'Z', 'zack_pov', 0.9, "Alright. Let's hear it.", ["Alright, let's hear it."]),
     ('shoplift', 'A', 'flip', 1.4, "Okay. What do you think of, Shoplifting is Sexism.",
      ["Okay. What do you think of,", "Shoplifting Is Sexism."]),
