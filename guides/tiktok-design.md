@@ -98,7 +98,9 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).
 - Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]`.
 - Watch its cost: compare "watched full video" and followers per 1,000 views over the next 4-5 posts with the
-  posts before it. Sam accepts a small dip in completion for the brand identity.
+  posts before it.
+  Baseline before the sign-off (Bingo Bingo, 3.5 h after posting): 3,476 views, average watch 19.8 s (39%), 22% to
+  the end, 5% likes, 5 followers = about 1.4 per 1,000 views. Sam accepts a small dip in completion for the brand identity.
 
 ## Cover
 - Chosen in the TikTok app when posting ("Edit cover"): a frame that intrigues without spoiling the joke,
