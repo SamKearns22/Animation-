@@ -1103,7 +1103,67 @@ def picture(t):
     return img
 
 
+def _caption_chunks():
+    """Subtitles (Sam, 15 Oct): the script in pieces at its commas and full stops, each at most 42 characters
+    (two rows), timed to her words; tiny pieces join their neighbour; each stays up until just before the next."""
+    pieces, cur = [], []
+    for st_, en_, w in TALK:
+        cur.append((st_, en_, w))
+        if w[-1] in ',.':
+            pieces.append(cur)
+            cur = []
+    if cur:
+        pieces.append(cur)
+    split = []
+    for pc in pieces:                                  # anything over 42 characters splits at its middle word
+        while len(' '.join(w for _, _, w in pc)) > 42:
+            total = len(' '.join(w for _, _, w in pc))
+            k = min(range(1, len(pc)), key=lambda i: abs(len(' '.join(w for _, _, w in pc[:i])) - total / 2))
+            split.append(pc[:k])
+            pc = pc[k:]
+        split.append(pc)
+    pieces = split
+    merged = []
+    for pc in pieces:
+        text = ' '.join(w for _, _, w in pc)
+        if merged:
+            prev = merged[-1]
+            ptext = ' '.join(w for _, _, w in prev)
+            gap = pc[0][0] - prev[-1][1]
+            if (len(text) < 14 or len(ptext) < 10) and len(ptext) + 1 + len(text) <= 40 and gap < 0.5:
+                merged[-1] = prev + pc
+                continue
+        merged.append(pc)
+    out = []
+    for i, pc in enumerate(merged):
+        start = pc[0][0] - 0.2
+        nxt = merged[i + 1][0][0] - 0.2 if i + 1 < len(merged) else BLACK_AT
+        text = ' '.join(w for _, _, w in pc)
+        end = min(nxt, max(pc[-1][1] + 0.4, start + len(text) / 15.0))
+        out.append([start, end, text])
+    for i in range(len(out) - 1):                      # a quick piece borrows a moment from the next (readable)
+        need = len(out[i][2].split()) / 3.5 + 0.1
+        if out[i][1] - out[i][0] < need:
+            out[i][1] = out[i][0] + need
+            out[i + 1][0] = max(out[i + 1][0], out[i][1])
+    return [tuple(c) for c in out]
+
+
+CAPTIONS = _caption_chunks()
+
+
+def caption_at(t):
+    return next((c for a, b, c in CAPTIONS if a <= t < b), None)
+
+
 def overlay(img, t):
+    """Subtitles go on last (a wording change never re-renders a picture). The Hook Text is stamped later by
+    hook_text.py / finish.py, at y 1180 so it clears both her face and the subtitles."""
+    if t < BLACK_AT:
+        c = caption_at(t)
+        if c:
+            import peepee as PP
+            PP.caption(img, c)
     return img
 
 
