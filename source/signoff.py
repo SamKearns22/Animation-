@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""The CranbriJoos sign-off (Sam, 15 Oct): the profile beaver, deadpan behind a little bar counter, takes one sip
-from a CranbriJoos juice box through a straw; the account name is on the counter. About a second, silent unless Sam
-asks for a slurp. Added to the end of every film, after the last line (never before the punchline).
+"""The CranbriJoos sign-off (Sam, 15 Oct): the profile picture itself. The beaver never blinks; the white fire
+behind him dances; in his paw, where the leaves were, a white juice box with the CranbriJoos logo in big red
+balloon letters ("Cranbri" larger than "Joos"); its straw goes up to his mouth and he takes a sip. About 1.5 s,
+silent unless Sam asks for a slurp. Joined onto the end of every film, after the last line.
 
-    python3 signoff.py still OUT.png          one frame, for approval
+    python3 signoff.py sheet OUT.jpg          a few frames side by side, for checking
     python3 signoff.py clip OUT.mp4           the sign-off on its own (1080 x 1920, 12 fps)
     python3 signoff.py add FILM.mp4 OUT.mp4   a finished film with the sign-off joined on the end
 """
@@ -16,98 +17,201 @@ import tempfile
 import imageio_ffmpeg
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from scipy import ndimage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-OPEN = os.path.join(ROOT, 'profile', 'cranbrijoos-tiktok-1080-eyes-open.png')
-SHUT = os.path.join(ROOT, 'profile', 'cranbrijoos-tiktok-1080.png')
-TITLE_FONT = os.path.join(HERE, 'fonts', 'Anton-Regular.ttf')
+PFP = os.path.join(ROOT, 'profile', 'cranbrijoos-tiktok-1080-eyes-open.png')   # eyes open: he never blinks
+FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')
 FF = imageio_ffmpeg.get_ffmpeg_exe()
-FPS = 12
+FPS, DUR = 12, 2.0
 W, H = 1080, 1920
-SIZE, CROP = 1350, 135                       # the profile square enlarged to fill the top; its sides trimmed
-TOP = 0
-COUNTER = int(SIZE * 0.712)                  # the counter's top edge: hides the paws and leaves
-CRANBERRY, INK = (178, 24, 52), (24, 20, 22)
-MOUTH = (int(0.555 * SIZE) - CROP, int(0.6 * SIZE))   # the corner of the mouth, beside the teeth
+SIZE = 860                                   # the profile picture in the middle of the screen, white all round (Sam)
+DX, DY = (W - SIZE) // 2, (H - SIZE) // 2 - 60
+PAPER = (250, 250, 248)
+SLURP = os.path.join(HERE, 'audio', 'signoff-slurp.m4a')
+SIP_AT = 0.45                                # the juice starts up the straw (and the slurp starts) here
+INK = (24, 20, 22)
+RED = np.array([206, 22, 48], float)
+MOUTH = (0.548 * SIZE + DX, 0.605 * SIZE + DY)          # the corner of his mouth, beside the teeth
+BOX = tuple(int(f * SIZE + o) for f, o in ((0.57, DX), (0.70, DY), (1.05, DX), (1.10, DY)))   # where the leaves were
+PAW = (0.585, 0.885, 0.05, 0.04)                       # his right paw (centre and half-size, as fractions of the square)
+
+_cache = {}
 
 
-def background(img):
-    """Above the square: the profile picture's own dark sky, stretched up so the frame is full."""
-    sq = Image.open(OPEN).convert('RGB')
-    strip = sq.crop((0, 0, 1080, 40)).resize((1080, TOP), Image.BICUBIC).filter(ImageFilter.GaussianBlur(6))
-    img.paste(strip, (0, 0))
+def plates():
+    """The picture split once: the beaver (leaves removed) with a soft-edged mask, and the background (fire and sky)
+    with the beaver filled in from its surroundings, so the fire can move behind him."""
+    if _cache:
+        return _cache
+    sq = np.asarray(Image.open(PFP).convert('RGB').resize((SIZE, SIZE), Image.LANCZOS)).astype(float)
+    r, g, b = sq[..., 0], sq[..., 1], sq[..., 2]
+    leaf = (g > r + 12) & (g > b + 6)
+    brown = (r > b + 18) & (r > 60)
+    body = ndimage.binary_closing(brown | leaf, iterations=6)
+    body = ndimage.binary_fill_holes(body)                     # eyes, nose and claws inside him count as him
+    lab, n = ndimage.label(body)
+    if n > 1:
+        sizes = ndimage.sum(body, lab, range(1, n + 1))
+        body = lab == (1 + int(np.argmax(sizes)))
+    leaf = ndimage.binary_dilation(leaf, iterations=4) & body
+    _, (iy, ix) = ndimage.distance_transform_edt(leaf, return_indices=True)
+    fur = sq[iy, ix]                                           # leaves replaced by the nearest fur
+    fur = np.where(leaf[..., None], ndimage.uniform_filter(fur, (9, 9, 1)), sq)
+    _, (by, bx) = ndimage.distance_transform_edt(body, return_indices=True)
+    bg = sq[by, bx]                                            # behind him: the nearest fire or sky
+    bg = np.where(body[..., None], ndimage.uniform_filter(bg, (25, 25, 1)), sq)
+    alpha = ndimage.gaussian_filter(body.astype(float), 1.2)
+    _cache.update(fur=fur, bg=bg, alpha=alpha)
+    return _cache
 
 
-def juice_box(d, cx, base, squeeze=0.0):
-    """A small cranberry-red juice box on the counter, its straw up to the beaver's mouth; `squeeze` 0-1 dents its
-    sides as he sips."""
-    w, h = 124, 150
-    x0, x1, y0, y1 = cx - w / 2, cx + w / 2, base - h, base
-    dent = 10 * squeeze
-    d.polygon([(x0, y0), (x1, y0), (x1 - dent, (y0 + y1) / 2), (x1, y1), (x0, y1), (x0 + dent, (y0 + y1) / 2)],
-              fill=CRANBERRY, outline=INK, width=5)
-    d.polygon([(x0, y0), (x1, y0), (x1 - 14, y0 - 16), (x0 + 14, y0 - 16)], fill=(150, 18, 42), outline=INK, width=4)
-    d.rounded_rectangle([x0 + 12, y0 + 24, x1 - 12, y0 + 88], 10, fill=(250, 246, 240), outline=INK, width=3)
-    f = ImageFont.truetype(TITLE_FONT, 22)
-    for i, word in enumerate(('CRANBRI', 'JOOS')):
-        tw = d.textlength(word, font=f)
-        d.text((cx - tw / 2, y0 + 30 + i * 27), word, font=f, fill=CRANBERRY)
-    for dx, dy in ((-24, 118), (0, 110), (22, 120)):                      # cranberries on the side
-        d.ellipse([cx + dx - 11, y0 + dy - 11, cx + dx + 11, y0 + dy + 11], fill=(200, 30, 60), outline=INK, width=3)
-    # the straw: out of the top corner, a bend, up into the mouth; it fills with juice as he sips
-    sx, sy = x0 + 30, y0 - 10
-    pts = [(sx, sy), (sx - 10, sy - 26), (MOUTH[0], MOUTH[1])]
-    for wdt, col in ((20, INK), (13, (250, 250, 250))):
-        d.line(pts, fill=col, width=wdt, joint='curve')
-    if squeeze > 0:
-        u = min(1.0, squeeze * 1.6)
-        d.line([(sx, sy), (sx - 10 * u, sy - 26 * u)], fill=CRANBERRY, width=8)
+def dancing(bg, t):
+    """The fire flickers and sways: each column of flame bends side to side, more towards its tips, and the flames
+    stretch up and down a little."""
+    h, w, _ = bg.shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    up = 1 - yy / h                                            # higher up sways more (the tips)
+    sx = xx + (14 * np.sin(yy / 46 - t * 9.0) + 7 * np.sin(yy / 17 + xx / 60 + t * 13)) * (0.35 + up)
+    sy = yy + 9 * np.sin(xx / 38 + t * 11) * (0.3 + up)
+    sx, sy = xx + (sx - xx) * SIZE / 1350, yy + (sy - yy) * SIZE / 1350      # sway scaled to the picture's size
+    out = np.empty_like(bg)
+    for c in range(3):
+        out[..., c] = ndimage.map_coordinates(bg[..., c], [np.clip(sy, 0, h - 1), np.clip(sx, 0, w - 1)], order=1)
+    return out
 
 
-def counter(d):
-    d.rectangle([0, COUNTER, W, H], fill=(112, 66, 40))
-    d.rectangle([0, COUNTER, W, COUNTER + 34], fill=(140, 86, 52), outline=INK, width=5)
-    for y in range(COUNTER + 80, H, 70):                                   # wood grain
-        d.line([(0, y), (W, y + 6)], fill=(98, 56, 34), width=3)
-    f = ImageFont.truetype(TITLE_FONT, 150)
-    name = 'CranbriJoos'
-    tw = d.textlength(name, font=f)
-    x, y = 480 - tw / 2, COUNTER + 120                                     # centred in the safe area (x 60-900)
-    d.text((x, y), name, font=f, fill=CRANBERRY, stroke_width=8, stroke_fill=INK)
+def balloon(text, size):
+    """Red balloon letters: rounded, shaded like inflated rubber, with a shine, as an RGBA image."""
+    f = ImageFont.truetype(FONT, size)
+    pad = size // 3
+    gap = size * 0.1                                                       # each letter its own balloon
+    dd = ImageDraw.Draw(Image.new('L', (1, 1)))
+    tw = int(sum(dd.textlength(ch, font=f) for ch in text) + gap * (len(text) - 1))
+    m = Image.new('L', (tw + 2 * pad, int(size * 1.3) + 2 * pad), 0)
+    md = ImageDraw.Draw(m)
+    x = pad
+    for ch in text:
+        md.text((x, pad), ch, font=f, fill=255, stroke_width=size // 22, stroke_fill=255)
+        x += dd.textlength(ch, font=f) + gap
+    mask = np.asarray(m.filter(ImageFilter.GaussianBlur(size / 45)), float) / 255
+    solid = mask > 0.5
+    hgt = ndimage.gaussian_filter(solid.astype(float), size / 14)           # the puff
+    gy, gx = np.gradient(hgt)
+    k = size / 6
+    nx, ny, nz = -gx * k, -gy * k, np.ones_like(hgt)
+    n = np.sqrt(nx * nx + ny * ny + nz * nz)
+    lx, ly, lz = -0.45, -0.6, 0.66
+    diff = np.clip((nx * lx + ny * ly + nz * lz) / n, 0, 1)
+    spec = np.clip((nx * -0.3 + ny * -0.5 + nz * 0.8) / n, 0, 1) ** 40
+    col = RED[None, None, :] * (0.45 + 0.75 * diff[..., None]) + 255 * 0.9 * spec[..., None]
+    edge = solid & ~ndimage.binary_erosion(solid, iterations=max(3, size // 22))
+    col[edge] = (110, 8, 24)
+    rgba = np.dstack([np.clip(col, 0, 255), solid * 255.0]).astype(np.uint8)
+    return Image.fromarray(rgba, 'RGBA')
 
 
-def frame(k, n):
-    """Frame k of n: eyes open; then the sip (eyes shut, box squeezed, juice up the straw); then back to us, deadpan."""
-    u = k / max(1, n - 1)
-    sipping = 0.3 <= u < 0.68
-    img = Image.new('RGB', (W, H), (40, 44, 52))
-    sq = Image.open(SHUT if sipping else OPEN).convert('RGB').resize((SIZE, SIZE), Image.LANCZOS)
-    img.paste(sq.crop((CROP, 0, CROP + W, SIZE)), (0, TOP))
+def juice_box(img, sip):
+    """The white box in his paw, the logo on its front, the straw up to his mouth; `sip` 0-1: juice up the straw,
+    the box's sides drawn in a little."""
     d = ImageDraw.Draw(img)
-    counter(d)
-    juice_box(d, MOUTH[0] + 120, COUNTER + 16, squeeze=min(1.0, (u - 0.3) / 0.25) if sipping else (0.4 if u >= 0.68 else 0.0))
+    x0, y0, x1, y1 = BOX
+    dent = 12 * sip
+    side = 30
+    d.polygon([(x1, y0), (x1 + side, y0 - 18), (x1 + side, y1 - 18), (x1, y1)], fill=(206, 208, 210), outline=INK, width=4)
+    d.polygon([(x0, y0), (x1, y0), (x1 + side, y0 - 18), (x0 + side, y0 - 18)], fill=(236, 237, 238), outline=INK, width=4)
+    d.polygon([(x0, y0), (x1, y0), (x1 - dent, (y0 + y1) / 2), (x1, y1), (x0, y1), (x0 + dent, (y0 + y1) / 2)],
+              fill=(252, 252, 250), outline=INK, width=6)
+    cx = (x0 + x1) / 2
+    hh = y1 - y0
+    for word, size, y in (('Cranbri', 120, y0 + 0.05 * hh), ('Joos', 92, y0 + 0.37 * hh)):
+        lg = balloon(word, size)
+        if lg.width > (x1 - x0) - 16:
+            lg = lg.resize((int(x1 - x0 - 16), int(lg.height * (x1 - x0 - 16) / lg.width)), Image.LANCZOS)
+        img.paste(lg, (int(cx - lg.width / 2), int(y)), lg)
+    for dx, f in ((-34, 0.90), (0, 0.87), (32, 0.91)):                    # three cranberries under the name
+        dy = f * hh
+        d.ellipse([cx + dx - 14, y0 + dy - 14, cx + dx + 14, y0 + dy + 14], fill=(206, 22, 48), outline=INK, width=3)
+        d.ellipse([cx + dx - 7, y0 + dy - 9, cx + dx - 2, y0 + dy - 4], fill=(255, 220, 220))
+    # the straw: out of the top, up, and bent across into the corner of his mouth
+    sx, sy = x0 + 34, y0 - 10
+    bend = MOUTH[1] - 70                                                   # up above his mouth, then across into it
+    pts = [(sx, sy), (sx, bend), (MOUTH[0] + 8, MOUTH[1])]
+    d.line(pts, fill=INK, width=18, joint='curve')
+    d.line(pts, fill=(250, 250, 250), width=11, joint='curve')
+    if sip > 0:                                                            # the juice climbs the straw
+        full = sy - bend
+        top = sy - full * min(1.0, sip * 1.3)
+        d.line([(sx, sy), (sx, top)], fill=tuple(int(c) for c in RED), width=7)
+        if sip * 1.3 > 1:
+            u = min(1.0, (sip * 1.3 - 1) / 0.3)
+            d.line([(sx, bend), (sx + (MOUTH[0] + 8 - sx) * u, bend + (MOUTH[1] - bend) * u)],
+                   fill=tuple(int(c) for c in RED), width=7)
+
+
+def frame(t):
+    p = plates()
+    bg = dancing(p['bg'], t)
+    a = p['alpha'][..., None]
+    sq = bg * (1 - a) + p['fur'] * a
+    img = Image.new('RGB', (W, H), PAPER)
+    pic = Image.fromarray(np.clip(sq, 0, 255).astype(np.uint8))
+    m = Image.new('L', (SIZE, SIZE), 0)
+    ImageDraw.Draw(m).rounded_rectangle([0, 0, SIZE - 1, SIZE - 1], 44, fill=255)
+    img.paste(pic, (DX, DY), m)
+    sip = min(1.0, max(0.0, (t - SIP_AT) / 0.6))
+    juice_box(img, sip)
+    # his paw over the bottom of the box, so he is holding it
+    px, py, rx, ry = PAW
+    fur = Image.fromarray(np.clip(p['fur'], 0, 255).astype(np.uint8))
+    cx, cy, ex, ey = px * SIZE, py * SIZE, rx * SIZE, ry * SIZE
+    m = Image.new('L', fur.size, 0)
+    ImageDraw.Draw(m).ellipse([cx - ex, cy - ey, cx + ex, cy + ey], fill=255)
+    m = m.filter(ImageFilter.GaussianBlur(1.5))
+    box = (int(cx - ex - 6), int(cy - ey - 6), int(cx + ex + 6), int(cy + ey + 6))
+    img.paste(fur.crop(box), (box[0] + DX, box[1] + DY), m.crop(box))
     return img
 
 
-def frames(dur=1.2):
-    n = int(round(dur * FPS))
-    return [frame(k, n) for k in range(n)]
-
-
-def clip(out, dur=1.2):
+def clip(out):
+    n = int(round(DUR * FPS))
+    sound = os.path.splitext(out)[0] + '-slurp.wav'
+    slurp_track(sound)
     p = subprocess.Popen([FF, '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-                          '-r', str(FPS), '-i', '-', '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=mono', '-shortest',
+                          '-r', str(FPS), '-i', '-', '-i', sound, '-shortest',
                           '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-movflags', '+faststart',
                           out], stdin=subprocess.PIPE)
-    for im in frames(dur):
-        p.stdin.write(np.asarray(im).tobytes())
+    for k in range(n):
+        p.stdin.write(np.asarray(frame(k / FPS)).tobytes())
     p.stdin.close()
     p.wait()
+    os.remove(sound)
+
+
+def slurp_track(path):
+    """Sam's slurp (asked for, 15 Oct): its sound starts as the juice starts up the straw, at a natural level."""
+    import mossad_audio as MA
+    from burnham_film import load, SR
+    x = load(SLURP)
+    st = MA.speech(x) or [(0.0, len(x) / SR)]
+    a, b = st[0][0], st[-1][1]
+    x = x[max(0, int((a - 0.04) * SR)):int((b + 0.08) * SR)]
+    f = int(0.01 * SR)
+    x[:f] *= np.linspace(0, 1, f)
+    x[-f:] *= np.linspace(1, 0, f)
+    x = x * 10 ** ((-20 - MA.lufs(x)) / 20)
+    out = np.zeros(int(DUR * SR) + SR)
+    i = int(SIP_AT * SR)
+    out[i:i + len(x)] += x[:len(out) - i]
+    import wave
+    with wave.open(path, 'wb') as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
+        w.writeframes((np.clip(out[:int(DUR * SR)], -1, 1) * 32767).astype('<i2').tobytes())
 
 
 def add(film, out):
-    """Join the sign-off onto the end of a finished film (same size and frame rate), sound kept."""
+    """Join the sign-off onto the end of a finished film (1080 x 1920, 12 fps), its sound kept."""
     with tempfile.TemporaryDirectory() as tmp:
         so = os.path.join(tmp, 'signoff.mp4')
         clip(so)
@@ -119,10 +223,18 @@ def add(film, out):
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB')
 
 
+def sheet(out, times=(0.0, 0.5, 0.8, 1.2)):
+    ims = [frame(t).resize((360, 640)) for t in times]
+    s = Image.new('RGB', (360 * len(ims), 640))
+    for i, im in enumerate(ims):
+        s.paste(im, (360 * i, 0))
+    s.save(out, quality=88)
+
+
 if __name__ == '__main__':
     cmd = sys.argv[1]
-    if cmd == 'still':
-        frame(int(sys.argv[3]) if len(sys.argv) > 3 else 0, 14).save(sys.argv[2])
+    if cmd == 'sheet':
+        sheet(sys.argv[2])
     elif cmd == 'clip':
         clip(sys.argv[2])
     elif cmd == 'add':
