@@ -9,6 +9,7 @@
 | 5 | push | smiles | Smile 20% less strange | done |
 | 6 | push | all | Stage detailing: navy carpet with grey stars, white edge, podium on a wooden pedestal | done |
 | 7 | push | all | Lettering on podium and seal wobbled in size and spilled out of the logos: now drawn once and scaled exactly, sized to fit | done |
+| 8 | push | close-up | Line work round the hair confusing, like a second haircut behind: the hair is now one shape with one outline; the back of the hair kept inside it; stray highlight lines removed | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

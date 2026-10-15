@@ -230,49 +230,63 @@ def wave_edge(x_of, y0, y1, n, amp, phase=0.0):
 
 
 def hair_mass(p, hx, hy, hw, hh, shrug):
-    """The back of the hair: rounded volume above the head, waves falling behind the shoulders to mid-back.
-    Narrower than her shoulders, so the blazer's shoulders show either side."""
-    right = wave_edge(lambda u: hx + hw + 30 + 26 * math.sin(u * math.pi * 0.8), hy - hh * 0.5, hy + 330 + shrug, 12, 8)
-    left = [(2 * hx - x, y) for x, y in right]
-    top = oval(hx, hy - 6, hw + 30, hh + 30, 18, math.pi * 1.05, math.pi * 1.95)
-    pts = left[::-1][:-1] + [left[0]] + top + right + [(hx + hw + 10, hy + 350 + shrug), (hx - hw - 10, hy + 350 + shrug)]
-    pts = left[::-1] + top + right + [(hx, hy + 360 + shrug)]
-    p.poly(curve(pts, 3), HAIR, INK, 2.6)
+    """The back of the hair, seen only in the gap behind her neck: kept inside the front locks' outline so no
+    second edge ever shows round them (Sam, 15 Oct: 'a second haircut hiding just behind')."""
+    pts = [(hx - hw - 4, hy - hh * 0.3), (hx + hw + 4, hy - hh * 0.3), (hx + hw + 4, hy + 290 + shrug),
+           (hx - hw - 4, hy + 290 + shrug)]
+    p.poly(pts, HAIR_D, None)
 
 
-def hair_locks(p, hx, hy, hw, hh, sh_dy):
-    """The long waves falling in FRONT of each shoulder over the blazer, to mid-chest, framing the face."""
+def _locks(hx, hy, hw, hh, sh_dy):
+    """The two long waves falling in front of the shoulders, as outlines (starting up inside the crown, so they
+    join it with no seam)."""
+    out = []
     for sgn in (-1, 1):
-        outer = wave_edge(lambda u: hx + sgn * (hw + 22 + 30 * math.sin(u * math.pi * 0.9)), hy - hh * 0.3,
-                          hy + 300 + sh_dy, 12, 11 * sgn, 0.4)
+        outer = wave_edge(lambda u: hx + sgn * (hw + 24 + 28 * math.sin(u * math.pi * 0.9)), hy - hh * 0.55,
+                          hy + 300 + sh_dy, 12, 10 * sgn, 0.0)
         inner = wave_edge(lambda u: hx + sgn * (hw * 0.86 - 4 * u + 6 * math.sin(u * math.pi)), hy + 20,
                           hy + 290 + sh_dy, 10, 7 * sgn, 0.9)
         tip = (hx + sgn * (hw + 18), hy + 330 + sh_dy)
-        pts = inner + [tip] + outer[::-1]
-        p.poly(curve(pts, 3), HAIR, INK, 2.6)
-        for k in range(3):                               # strands following the waves
-            line = wave_edge(lambda u: hx + sgn * (hw + 6 + 12 * k + 26 * math.sin(u * math.pi * 0.9)), hy + 10 + 12 * k,
-                             hy + 270 - 20 * k + sh_dy, 8, 9 * sgn, 0.6)
-            p.line(line, HAIR_D, 1.7)
-        hl = wave_edge(lambda u: hx + sgn * (hw + 18 + 26 * math.sin(u * math.pi * 0.9)), hy + 30, hy + 140, 4, 9 * sgn, 0.6)
-        p.line(hl, HAIR_L, 3.0)
+        out.append(curve([(hx + sgn * hw * 0.6, hy - hh * 0.7)] + inner + [tip] + outer[::-1], 3))
+    return out
 
 
-def hair_top(p, hx, hy, hw, hh, fx):
-    """The crown, full and rounded, a side parting (our left), swept to both sides and down past the temples."""
+def _crown(hx, hy, hw, hh, fx):
+    """The crown: full and rounded, its lower edge the hairline across the forehead (side parting, our left)."""
     part = fx - hw * 0.25
     outer = oval(hx, hy - 8, hw + 24, hh + 28, 20, math.pi * 0.97, math.pi * 2.03)
     line = [(hx + hw + 18, hy + 30), (hx + hw * 0.92, hy - hh * 0.3), (hx + hw * 0.62, hy - hh * 0.7),
             (part + hw * 0.25, hy - hh * 0.86), (part, hy - hh * 0.98), (part - hw * 0.2, hy - hh * 0.84),
             (hx - hw * 0.7, hy - hh * 0.62), (hx - hw * 0.94, hy - hh * 0.2), (hx - hw - 18, hy + 30)]
-    p.poly(curve(outer + line, 3), HAIR, INK, 2.6)
-    p.line([(part, hy - hh * 1.22), (part + 3, hy - hh * 0.98)], HAIR_D, 2.0)
-    for k in range(3):
-        p.line(curve([(part + 10 + 14 * k, hy - hh * 1.16 + 8 * k), (hx + hw * 0.7 + 6 * k, hy - hh * 0.9 + 12 * k),
-                      (hx + hw + 6 + 2 * k, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
-        p.line(curve([(part - 10 - 12 * k, hy - hh * 1.14 + 8 * k), (hx - hw * 0.7 - 6 * k, hy - hh * 0.86 + 12 * k),
-                      (hx - hw - 6 - 2 * k, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
-    p.line([(part + 16, hy - hh * 1.18), (hx + hw * 0.55, hy - hh * 1.06)], HAIR_L, 3.4)
+    return curve(outer + line, 3), curve(line, 3)[7:-7], part
+
+
+def hair_front(p, hx, hy, hw, hh, sh_dy):
+    """Locks and crown as ONE shape with ONE outline: every piece outlined first, then every fill laid on top,
+    so the seams between pieces vanish. Drawn before the face; the hairline goes over the face after."""
+    pieces = _locks(hx, hy, hw, hh, sh_dy) + [_crown(hx, hy, hw, hh, hx)[0]]
+    for pts in pieces:
+        p.poly(pts, HAIR, INK, 5.2)
+    for pts in pieces:
+        p.poly(pts, HAIR, None)
+    for sgn in (-1, 1):                                   # two soft strands inside each lock, never past its edge
+        for k in range(2):
+            line = wave_edge(lambda u: hx + sgn * (hw + 20 + 10 * k + 22 * math.sin(u * math.pi * 0.9)),
+                             hy + 40 + 30 * k, hy + 250 - 30 * k + sh_dy, 8, 7 * sgn, 0.3)
+            p.line(line, HAIR_D, 1.6)
+
+
+def hair_top(p, hx, hy, hw, hh, fx):
+    """The crown again, over the face: fill, the hairline, the parting and a few combed strands."""
+    shape, line, part = _crown(hx, hy, hw, hh, fx)
+    p.poly(shape, HAIR, None)
+    p.line(line, INK, 2.6)
+    p.line([(part, hy - hh * 1.2), (part + 3, hy - hh * 0.98)], HAIR_D, 2.0)
+    for k in range(2):
+        p.line(curve([(part + 14 + 16 * k, hy - hh * 1.14 + 8 * k), (hx + hw * 0.7 + 6 * k, hy - hh * 0.88 + 12 * k),
+                      (hx + hw + 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
+        p.line(curve([(part - 12 - 12 * k, hy - hh * 1.12 + 8 * k), (hx - hw * 0.7 - 6 * k, hy - hh * 0.84 + 12 * k),
+                      (hx - hw - 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
 
 
 def eye(p, ex, ey, sgn, st):
@@ -428,7 +442,6 @@ def her(img, cam, t, st=None, notes=True):
     tilt = st['head_tilt']
     hair_mass(p, hx * 0.6, hy, hw, hh, sh)
     torso(p, sh)
-    hair_locks(p, hx * 0.6, hy, hw, hh, sh)
     arms(p, sh)
     # the head (tilt by shearing the face sideways a little: flat, never a 3D turn)
     T = B.Local(cam, NECK[0] + 0, NECK[1] + 0, 1.0)
@@ -448,6 +461,7 @@ def her(img, cam, t, st=None, notes=True):
     q = B.Pen(img, Tilted(T))
     for sgn in (-1, 1):                                   # ears hidden under the hair; a gold stud shows
         q.ell(hx + sgn * (hw + 1), hy + 14, 9, 17, SKIN, INK, 2.0)
+    hair_front(q, hx, hy, hw, hh, sh)
     q.poly(head_shape(hx, hy, hw, hh), SKIN, INK, 2.6)
     face(q, hx, hy, hw, hh, st)
     q.poly(head_shape(hx, hy, hw, hh), None, INK, 2.6)
