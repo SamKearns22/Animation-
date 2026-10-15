@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+"""Stamp the Set-Up Text (the opening line that introduces the joke) onto a finished TikTok video, in TikTok's own caption look (Sam, 15 Oct: readability
+first, like the app's native text): TikTok Sans Bold, sentence case, black on a white rounded box, near the middle of
+the safe area, over the picture while it plays. On from the first frame, gone (a quick fade) at `--until` seconds -
+by default the first cut. Picture and sound are otherwise untouched.
+
+    python3 setup_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880]
+"""
+import os
+import subprocess
+import sys
+import tempfile
+
+import imageio_ffmpeg
+from PIL import Image, ImageDraw, ImageFont
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')
+FF = imageio_ffmpeg.get_ffmpeg_exe()
+SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide (guides/tiktok-design.md)
+
+
+def card(w, h, text, y_mid, path, size=74):
+    k = w / 1080
+    im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    while True:                                # one or two balanced lines, inside the safe width
+        f = ImageFont.truetype(FONT, int(size * k))
+        words = text.split()
+        rows = [text]
+        if d.textlength(text, font=f) > (SAFE_X1 - SAFE_X0 - 80) * k:
+            cut = min(range(1, len(words)), key=lambda i: abs(d.textlength(' '.join(words[:i]), font=f)
+                                                               - d.textlength(' '.join(words[i:]), font=f)))
+            rows = [' '.join(words[:cut]), ' '.join(words[cut:])]
+        if max(d.textlength(r, font=f) for r in rows) <= (SAFE_X1 - SAFE_X0 - 80) * k:
+            break
+        size -= 4
+    lh = int(f.size * 1.18)
+    pad_x, pad_y = int(30 * k), int(16 * k)
+    cx = (SAFE_X0 + SAFE_X1) / 2 * k
+    top = y_mid * k - len(rows) * lh / 2
+    for i, r in enumerate(rows):               # each row its own white box, like the app's caption style
+        tw = d.textlength(r, font=f)
+        y = top + i * lh
+        d.rounded_rectangle([cx - tw / 2 - pad_x, y - pad_y, cx + tw / 2 + pad_x, y + lh + pad_y - int(6 * k)],
+                            radius=int(18 * k), fill=(255, 255, 255, 255))
+    for i, r in enumerate(rows):
+        tw = d.textlength(r, font=f)
+        d.text((cx - tw / 2, top + i * lh + int(2 * k)), r, font=f, fill=(0, 0, 0, 255))
+    im.save(path)
+
+
+def main():
+    a = sys.argv[1:]
+    until, y_mid = 3.6, 880
+    if '--until' in a:
+        i = a.index('--until'); until = float(a[i + 1]); del a[i:i + 2]
+    if '--y' in a:
+        i = a.index('--y'); y_mid = float(a[i + 1]); del a[i:i + 2]
+    src, dst, text = a[0], a[1], ' '.join(a[2:])
+    probe = subprocess.run([FF, '-i', src], capture_output=True, text=True).stderr
+    w, h = next((int(x), int(y)) for t in probe.replace(',', ' ').split() if 'x' in t
+                for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
+    with tempfile.TemporaryDirectory() as tmp:
+        png = os.path.join(tmp, "setup.png")
+        card(w, h, text, y_mid, png)
+        fade = 0.25
+        vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
+              f'[0:v][t]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]')
+        subprocess.run([FF, '-y', '-loglevel', 'error', '-i', src, '-loop', '1', '-t', str(until), '-i', png,
+                        '-filter_complex', vf, '-map', '[v]', '-map', '0:a?', '-c:v', 'libx264', '-crf', '20',
+                        '-preset', 'slow', '-c:a', 'copy', '-movflags', '+faststart', dst], check=True)
+    print(f'{dst}: {os.path.getsize(dst) / 1e6:.1f} MB')
+
+
+if __name__ == '__main__':
+    main()

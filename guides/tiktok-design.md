@@ -65,6 +65,16 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   the busiest moment, and look at it.
 - Always drawn fresh at 1080 × 1920 (never an enlarged copy of a smaller title), onto an untitled render.
 
+## Set-Up Text (Sam, 15 Oct)
+- A short line at the start that introduces the joke's situation (e.g. "Zack Polanski this week"); the eye reads the
+  concept, then the viewer stays to see where the joke goes. Never gives the punchline away.
+- **Readability first, not our title style:** TikTok's own caption look - TikTok Sans Bold, sentence case, black on
+  a white rounded box (one box per row), near the middle of the safe area, over the moving picture, never over a face.
+- On from the first frame through the opening shot (about 3-4 s, a quick fade at the first cut).
+- `python3 source/setup_text.py IN.mp4 OUT.mp4 "Line" [--until 3.6] [--y 880]`, always onto an untitled render: keep
+  the untitled final in `source/data/FILM/` (not on GitHub) so the line can be changed without a re-render.
+- The cranberry style stays for **titles** only (the cover and the 1-second opening title).
+
 ## Cover
 - Chosen in the TikTok app when posting ("Edit cover"): a frame that intrigues without spoiling the joke,
   ideally the character mid-line. It cannot be changed after posting.

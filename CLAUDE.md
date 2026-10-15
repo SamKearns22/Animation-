@@ -35,7 +35,8 @@ I don't know how to code. Please:
   look again at a picture that hasn't changed; and when a fix is simple and certain, trust it and check it with the rest
   at the end.
 - **No sound effects unless the script specifies them or I ask for them.** Voices only by default.
-- For TikTok versions, follow `guides/tiktok-design.md` (size, title, safe areas, posting). Say how long each render will take, report how long it took, and send a push notification when it finishes.
+- For TikTok versions, follow `guides/tiktok-design.md` (size, title, Set-Up Text, safe areas, posting). Titles are
+  cranberry; Set-Up Text (the line introducing the joke) is TikTok's white-box caption style, for readability. Say how long each render will take, report how long it took, and send a push notification when it finishes.
 - **Push notifications for anything long:** whenever a render or any other long process (animatic, storyboard, sound build, upload, research) finishes, fails, or stops to wait for my decision, send a push notification to my phone saying what is ready or what is needed (details in `guides/tiktok-design.md`, "Working").
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
 - The tools (Python with Pillow, NumPy, imageio and a bundled ffmpeg) are installed automatically at the start of each session by `.claude/hooks/setup.sh`.
