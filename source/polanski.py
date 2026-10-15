@@ -63,7 +63,7 @@ SCRIPT = [
     ('upset', 'A', 'wide', 0.25, "Zack, I know you're upset that everyone is mad at you about the conference motion",
      ["Zack, I know you're upset that everyone", "is mad at you about the conference motion—"]),
     ('zionism', 'Z', 'zack', 0.0, "Zionism IS racism!", ["Zionism IS racism!"]),
-    ('know', 'A', 'adv', 0.35, "We know, buddy. It's super racism.", ["We know buddy, it's super racism."]),
+    ('know', 'A', 'adv', 0.35, "I know, buddy. It's super racism.", ["I know, buddy, it's super racism."]),
     ('heads', 'A', 'zack', 0.3, "But don't worry, we've put our heads together",
      ["But don't worry, we've put our heads together"]),
     ('list', 'A', 'adv', 0.45, "and came up with a new list of painful oversimplifications that people might enjoy more.",
@@ -402,9 +402,9 @@ def mouth(p, sp, t, fx, my):
     if sp.get('lip_ring'):                                             # a silver ring through the lower lip, off centre
         m = sp.get('mouth', '')
         low = {'v:AI': 16, 'v:O': 14, 'v:E': 9, 'v:U': 9, 'v:WQ': 8, 'v:L': 13}.get(m, 7)
-        p.line(oval(fx + 13, my + low + 6, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), INK, 5.6)
-        p.line(oval(fx + 13, my + low + 6, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), (214, 218, 228), 3.0)
-        p.ell(fx + 18, my + low + 3, 1.6, 1.6, (255, 255, 255), None)
+        p.line(oval(fx + 13, my + low + 1, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), INK, 5.6)
+        p.line(oval(fx + 13, my + low + 1, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), (214, 218, 228), 3.0)
+        p.ell(fx + 18, my + low - 2, 1.6, 1.6, (255, 255, 255), None)
 
 
 def torso(img, p, sp, t):
