@@ -80,9 +80,9 @@ SCRIPT = [
     ('well', 'A', 'adv_face', 0.45, "Okay, well.", ["Okay, well…"]),
     ('nuclear', 'A', 'card3', 0.35,
      "Focus groups really liked, Nuclear Proliferation is Inherent Violence Directed Towards Economically "
-     "Disadvantaged Native Populations.",
+     "Disadvantaged Indigenous Populations.",
      ["Focus groups really liked", "Nuclear Proliferation Is Inherent Violence", "Directed Towards Economically",
-      "Disadvantaged Native Populations."]),
+      "Disadvantaged Indigenous Populations."]),
     ('bingo', 'Z', 'zack_bingo', 0.55, "Bingo! Bingo!", ["Bingo bingo!"]),
 ]
 SHOUT = set()                                # Sam: the shout's caption as written, 'Zionism IS racism!' (no all-capitals)
@@ -218,7 +218,7 @@ ITEMS = [  # a real brainstorm sheet: each item in its own place, so a close fra
     # the camera's frame, never blur). (number, text, box as card fractions x0, y0, x1, y1)
     ('1.', 'SHOPLIFTING IS SEXISM', (0.04, 0.03, 0.45, 0.31)),
     ('2.', 'NORTH SEA DRILLING IS ABLEISM', (0.55, 0.06, 0.96, 0.36)),
-    ('3.', 'NUCLEAR PROLIFERATION IS INHERENT VIOLENCE DIRECTED TOWARDS ECONOMICALLY DISADVANTAGED NATIVE '
+    ('3.', 'NUCLEAR PROLIFERATION IS INHERENT VIOLENCE DIRECTED TOWARDS ECONOMICALLY DISADVANTAGED INDIGENOUS '
            'POPULATIONS', (0.04, 0.64, 0.96, 0.98)),
 ]
 ITEM_Z = 10.5                                # close enough that the frame holds item 1 or 2 alone (checked)

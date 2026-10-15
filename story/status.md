@@ -15,7 +15,7 @@ Read this first in any new session, after CLAUDE.md.
   blazer, white open shirt, green rosette (redrawn 14 Oct from Sam's photos: lighter skin, faded sides and receding
   temples, short light salt-and-pepper beard; `polanski.py model OUT.jpg` shows before and after). Advisor (Shaggy as an operative): long wavy hair, wispy goatee, silver lower-lip
   ring, olive blazer, white shirt, brown skinny tie, green lanyard. The A3 card's list: Shoplifting Is Sexism / North Sea
-  Drilling Is Ableism / Nuclear Proliferation ... Native Populations. Finger guns: the one named exception to circle hands.
+  Drilling Is Ableism / Nuclear Proliferation ... Indigenous Populations. Finger guns: the one named exception to circle hands.
 - Animatic v2 sent 14 Oct (48 s, 540 x 960, 1.8 MB, 3 min render; picture cache, so caption/sound notes take seconds):
   notes 1-6 in `notes/polanski.md` (new Zack, desk against the wall + spin, card focus, new limbs and walker, satire
   audit clean, no robot voice). `python3 source/polanski.py check | cast OUT | stills OUT | final OUT --small`.

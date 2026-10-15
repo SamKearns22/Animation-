@@ -121,7 +121,8 @@ def track(text, stretches, env=None, env_rate=100, lead=1 / 12):
             m = (t0 + t1) / 2 + lead
             i = int(m * env_rate)
             lv = env[min(max(i, 0), len(env) - 1)] if len(env) else 1
-            quiet.append((t0, t1, s if lv > 0.08 else 'rest'))
+            speaking = any(a <= m <= b for a, b in stretches)      # a soft word inside detected speech still moves
+            quiet.append((t0, t1, s if lv > 0.08 or speaking else 'rest'))   # the mouth (Bingo Bingo's quiet "Okay")
         out = quiet
     return out
 
