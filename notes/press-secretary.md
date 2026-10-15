@@ -41,6 +41,7 @@
 | 37 | acting | "cause it's booming" | Excited: eyes wide, brows high, talking through a big smile with a little bounce, crazed flash after | done, not yet rendered |
 | 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done, not yet rendered |
 | 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done, not yet rendered |
+| 40 | acting | final "venezuela." | Dead-eyed and despondent, staring straight into the camera: heavy lids, eyes dead centre, faint sad brows, chin down a touch, no blinks, utterly still to the cut | done, not yet rendered |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

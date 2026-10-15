@@ -43,7 +43,7 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "and like, our kids are [delight] ^helicopters, [up] and I really think that with the biggest swell of "
           "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^I'll get back to you "
           "on that. || [down] So, like. I think if we all just, you know, [up] [excited] cause it's booming, [smile3] and we've had "
-          "a one day war, [down] I just need, I just need. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+          "a one day war, [down] I just need, I just need. || I just want. || [sigh] Venezuela. || [dead] venezuela.")
 # Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
 # "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
@@ -201,6 +201,9 @@ def build_timeline():
             gaze.append((before + 0.05, 'up'))
         elif tag == 'sigh':
             sigh = (before + 0.25, after - 0.1)
+        elif tag == 'dead':                                    # the last line: dead-eyed, straight down the lens
+            exprs.append((words[wi][0] - 0.35, end + 1.0, 'dead'))
+            gaze.append((words[wi][0] - 0.35, 'up'))
         elif tag == 'excited':                                 # through the phrase, to its comma: eyes wide, big
             j = wi                                             # talking smile, a little bounce (Sam, 15 Oct)
             while j < len(words) - 1 and words[j][2][-1] not in ',.':
@@ -413,8 +416,16 @@ def state(t):
     if t >= b:                                            # after the sigh: heavier lids, flatter, deader
         s['lid'] = max(s['lid'], 0.7)
         s['brow'] = -3.0
-    if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0:
+    dead = any(a_ <= t < b_ and k_ == 'dead' for a_, b_, k_ in EXPRS)
+    if dead:                                              # dead-eyed and despondent, staring straight into the camera
+        s.update(gaze='up', look_x=0.0, look_dy=0.0, lid=0.42, worry=0.55, brow=-2.0, head_dy=5.0, smile=0, squint=0.0)
+        if s['mouth'] == 'rest':
+            s['mouth'] = 'rest'
+    if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0 and not dead:
         s['closed'] = True
+    if dead:                                              # utterly still: no shifts, no turn
+        s['head_dx'] = 0.0
+        return s
     s['head_tilt'] += filmkit.shifts(t, seed=4, amount=0.025)
     s['head_dx'] = 40 * filmkit.shifts(t, seed=9, amount=0.06) + 6 * s['look_x'] * (s['gaze'] == 'up')
     return s
