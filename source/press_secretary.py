@@ -31,95 +31,107 @@ SERIF = os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf')
 # The draft script as beats. ('say', words, gaze) | ('look', 'up'/'down') | ('smile', level, secs) | ('hold', secs)
 # | ('sigh', secs). Speaking time comes from the syllables; '...' leaves a long halting gap, '.' a short one.
 # When Sam's recording arrives, these timings are replaced by the recording's.
-SCRIPT = [   # Sam's script (15 Oct), staged: she reads with her head right down, snaps up, smiles, checks again
-    ('hold', 0.6, 0),
-    ('say', 'So like... uh...', 'down'), ('say', "it's really,", 'down'),
-    ('look', 'up'), ('say', "yes, it's really important", 'up'),
-    ('say', 'that with the president we are,', 'up'), ('say', 'we work tirelessly for America,', 'up'),
-    ('smile', 2, 0.9),
-    ('look', 'down'), ('say', 'and the people,', 'down'), ('say', 'they understand that,', 'down'),
-    ('say', 'and I look forward to the president,', 'down'),
-    ('look', 'up'), ('look', 'down'),                    # a nervous double-check
-    ('say', 'the president...', 'down'),
-    ('say', 'with his helping,', 'down'), ('look', 'up'), ('say', 'with his agenda.', 'up'),
-    ('smile', 3, 1.2),
-    ('say', 'My president and I,', 'up'), ('say', 'eh,', 'up'),
-    ('look', 'down'), ('say', 'excuse me,', 'down'), ('look', 'up'), ('say', 'my master and I', 'up'),
-    ('say', 'are very happy to be,', 'up'),
-    ('smile', 2, 0.8),
-    ('look', 'down'), ('say', 'and like,', 'down'), ('say', 'our kids are helicopters,', 'down'),
-    ('look', 'up'), ('say', 'and I really think that with the biggest swell of support,', 'up'),
-    ('say', 'the people are really,', 'up'), ('say', 'I just,', 'up'),
-    ('look', 'down'), ('say', "you know it's so.", 'down'),
-    ('hold', 0.6, 0),
-    ('look', 'up'), ('say', "I'll get back to you on that.", 'up'),
-    ('smile', 2, 0.9),
-    ('look', 'down'), ('say', 'So, like.', 'down'), ('say', 'I think if we all just,', 'down'), ('say', 'you know,', 'down'),
-    ('look', 'up'), ('say', "cause it's booming,", 'up'),
-    ('smile', 3, 0.7),
-    ('say', "and we've had a one day war,", 'up'),
-    ('look', 'down'), ('say', 'and I just need,', 'down'), ('say', 'I just want.', 'down'),
-    ('hold', 2.6, 0),                                    # it goes silent: head down, staring at the page
-    ('say', 'I just want.', 'down'),
-    ('hold', 0.4, 0),
-    ('sigh', 1.5),
-    ('say', 'Venezuela.', 'down'),
-    ('hold', 0.9, 0),
-    ('look', 'up'), ('say', 'venezuela.', 'up'),        # quieter, flat, straight at the room
-    ('hold', 0.8, 1),
-]
-SYL = 0.13          # seconds a syllable (the halting comes from the gaps)
-# ====================================================================================================================
+# Sam's script and recording (15 Oct): source/audio/press-secretary.m4a. Tags place her acting between words:
+# [down] / [up] she looks at her notes or the room (an instant glance), [double] a nervous check up and straight back
+# down, [smile2] / [smile3] a big smile at the room in the pause, [sigh] the big sigh in the pause before the next word.
+# '||' marks the five longest silences in the recording (paragraph ends, the silence, the sigh, before the last word),
+# which anchor the words; inside each part the words are spread over the real stretches of speech by syllables.
+SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that with the president we are, we work "
+          "tirelessly for America, [smile2] [down] and the people, they understand that, and I look forward to the "
+          "president, [double] the president, with his helping, [up] with his agenda. [smile3] || "
+          "My president and I, eh, [down] excuse me, [up] my master and I are very happy to be, [smile2] [down] and "
+          "like, our kids are helicopters, [up] and I really think that with the biggest swell of support, the people "
+          "are really, I just, [down] you know it's so. [up] I'll get back to you on that. [smile2] || "
+          "[down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had a one "
+          "day war, [down] and I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+AUDIO = 'press-secretary'
+LEAD = 0.6                       # seconds of her at the podium before the first word
+TAIL = 0.9                       # the hold on her face after the last word, then the hard cut
 
 
 def syllables(w):
-    w = w.lower().strip('.,!?-')
+    w = w.lower().strip(".,!?-'")
     groups = sum(1 for i, c in enumerate(w) if c in 'aeiouy' and (i == 0 or w[i - 1] not in 'aeiouy'))
     return max(1, groups - (1 if w.endswith('e') and groups > 1 and not w.endswith('le') else 0))
 
 
+def _voice():
+    import mossad_audio as MA
+    v = MA.line(AUDIO)
+    runs = [(a_, b_) for a_, b_ in MA.pauses(v, 0.12) if b_ - a_ > 0.05]
+    cut = max(0.0, runs[0][0] - LEAD)
+    return MA, v[int(cut * MA.SR):], [(a_ - cut, b_ - cut) for a_, b_ in runs], cut
+
+
 def build_timeline():
-    """Each beat with its start and end; the speech as (start, end) windows per syllable run."""
-    t, beats, talk = 0.0, [], []
-    gaze = 'up'
-    for b in SCRIPT:
-        kind = b[0]
-        if kind == 'say':
-            gaze = b[2]
-            for chunk in b[1].replace('...', '...|').split('|'):
-                words = chunk.split()
-                if not words:
-                    continue
-                d = sum(syllables(w) for w in words) * SYL + 0.04
-                talk.append((t, t + d, chunk.strip()))
-                beats.append(('say', t, t + d, gaze))
-                t += d
-                gap = 0.45 if chunk.strip().endswith('...') else 0.2 if chunk.strip().endswith('.') else 0.06
-                beats.append(('gap', t, t + gap, gaze))
-                t += gap
-        elif kind == 'look':
-            gaze = b[1]
-            beats.append(('look', t, t + 0.25, gaze))
-            t += 0.25
-        elif kind == 'smile':
-            beats.append(('smile', t, t + b[2], b[1]))
-            gaze = 'up'
-            t += b[2]
-        elif kind == 'hold':
-            beats.append(('hold', t, t + b[1], b[2]))
-            t += b[1]
-        elif kind == 'sigh':
-            beats.append(('sigh', t, t + b[1], None))
-            t += b[1]
-    return beats, talk, t
+    """Words timed to the recording; her acting (glances, smiles, the sigh) placed by the tags."""
+    MA, v, runs, _ = _voice()
+    gaps = sorted(range(len(runs) - 1), key=lambda i: runs[i + 1][0] - runs[i][1], reverse=True)
+    parts_text = [x.strip() for x in SCRIPT.split('||')]
+    cuts = sorted(gaps[:len(parts_text) - 1])
+    groups, prev = [], 0
+    for c in cuts + [len(runs) - 1]:
+        groups.append(runs[prev:c + 1])
+        prev = c + 1
+    words, events = [], []                     # words: (start, end, text); events: (word index, tag)
+    for text, grp in zip(parts_text, groups):
+        toks = text.split()
+        sy = [syllables(w) for w in toks if not w.startswith('[')]
+        total, speech = sum(sy), sum(b_ - a_ for a_, b_ in grp)
+
+        def at(frac):                          # a fraction of this part's speech -> a time in the recording
+            left = frac * speech
+            for a_, b_ in grp:
+                if left <= b_ - a_ + 1e-9:
+                    return a_ + left
+                left -= b_ - a_
+            return grp[-1][1]
+        done, k = 0, 0
+        for w in toks:
+            if w.startswith('['):
+                events.append((len(words), w.strip('[]')))
+                continue
+            st_, en_ = at(done / total), at((done + sy[k]) / total)
+            words.append((st_, en_, w))
+            done += sy[k]
+            k += 1
+    end = words[-1][1] + TAIL
+    gaze, smiles, sigh = [(0.0, 'up')], [], (1e9, 1e9)
+    for wi, tag in events:
+        before = words[wi - 1][1] if wi > 0 else 0.0
+        after = words[wi][0] if wi < len(words) else end
+        if tag in ('down', 'up'):
+            gaze.append((max(before, after - 0.35) if wi > 0 else 0.0, tag))
+        elif tag == 'double':
+            g0 = max(before, after - 0.75)
+            gaze += [(g0, 'up'), (g0 + 0.32, 'down')]
+        elif tag.startswith('smile'):
+            smiles.append((before + 0.05, max(after - 0.05, before + 0.45), int(tag[-1])))   # fills the pause, never talks over a line for long
+            gaze.append((before + 0.05, 'up'))
+        elif tag == 'sigh':
+            sigh = (before + 0.25, after - 0.1)
+    gaze.sort()
+    return words, gaze, smiles, sigh, end, v, runs
 
 
-BEATS, TALK, END = build_timeline()
-DUR = round(END + 0.25, 2)            # the hard cut to black comes just after the last hold
+TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS = build_timeline()
+DUR = round(END + 0.25, 2)
 BLACK_AT = END
 SHOTS = [('push', 0.0, DUR)]            # one continuous shot (the pre-flight reads this)
 BLINKS = F.blinks(17, 0.4, END, talking=True)
-SIGH = next(((a, b) for k, a, b, _ in BEATS if k == 'sigh'), (1e9, 1e9))
+
+
+def _envelope():
+    """How loud her voice is on each picture (for the mouth): 0 silent .. 1 her loudest."""
+    import mossad_audio as MA
+    hop = MA.SR // FPS
+    n = len(VOICE) // hop + 1
+    e = np.array([np.sqrt(np.mean(VOICE[i * hop:(i + 1) * hop] ** 2)) if i * hop < len(VOICE) else 0.0 for i in range(n)])
+    return e / (np.percentile(e[e > 0], 97) + 1e-9)
+
+
+ENV = _envelope()
+
 
 # ------------------------------------------------------------------------------------------------ the camera
 # One slow push-in: the zoom grows at a steady rate (log-linear, so it never seems to speed up), easing in at the
@@ -169,46 +181,38 @@ IRIS = (96, 120, 112)
 PODIUM_TOP = 280
 
 
+def gaze_at(t):
+    g = 'up'
+    for gt, gv in GAZE:
+        if gt <= t:
+            g = gv
+    return g
+
+
 def state(t):
     """Everything about her at time t: where she looks, lids, brows, mouth, head and shoulders."""
-    s = dict(gaze='up', lid=0.0, brow=0.0, mouth='rest', smile=0, head_dy=0.0, head_tilt=0.0, sh_dy=0.0,
+    s = dict(gaze=gaze_at(t), lid=0.0, brow=0.0, mouth='rest', smile=0, head_dy=0.0, head_tilt=0.0, sh_dy=0.0,
              closed=False, look_x=0.0, squint=0.0)
-    beat = next((b for b in BEATS if b[1] <= t < b[2]), BEATS[-1])
-    kind, a, b, arg = beat
-    # what her gaze was coming into this beat (the 'look' beats snap on their first frame: an instant glance)
-    if kind in ('say', 'gap', 'look'):
-        s['gaze'] = arg
-    elif kind == 'smile':
-        s['gaze'] = 'up'
-    elif kind == 'hold':
-        s['gaze'] = 'up' if arg else 'down'
-    elif kind == 'sigh':
-        s['gaze'] = 'down'
-    if kind == 'say':
-        k = int((t - a) * FPS)
-        rnd = random.Random(int(a * 1000) + k // 1)
-        seq = ['small', 'mid', 'open', 'mid', 'small', 'open', 'mid']
-        s['mouth'] = seq[(k + int(a * 7)) % len(seq)] if (t - a) < (b - a) - 0.06 else 'rest'
-        if rnd.random() < 0.12:
-            s['mouth'] = 'small'
-    if kind == 'smile':
-        level = arg
-        u = (t - a) / (b - a)
-        on = smooth((t - a) / 0.12)                    # the smile switches ON almost at once
-        off = 1.0 - smooth((t - (b - 0.1)) / 0.1)      # and OFF, just as suddenly (that is the strangeness)
+    i = int(round(t * FPS))
+    lv = ENV[i] if i < len(ENV) else 0.0
+    if lv > 0.08:                                         # the mouth follows the loudness of her voice
+        s['mouth'] = 'small' if lv < 0.3 else ('mid' if lv < 0.62 else ['open', 'mid'][i % 2])
+    for a, b, level in SMILES:
+        on = smooth((t - a) / 0.12)                        # the smile switches ON almost at once
+        off = 1.0 - smooth((t - (b - 0.1)) / 0.1)          # and OFF, just as suddenly (that is the strangeness)
         if on * off > 0.5:
             s['smile'] = level
             s['brow'] = 5 + 3 * level
             s['squint'] = 0.2 * level
-            s['head_tilt'] = 0.04 * (1 if level == 3 else -1) * smooth(u * 4)
-    if kind == 'hold' and arg:
-        s['smile'] = 1
-    if s['gaze'] == 'down':                # head right down, eyes on the paper (Sam, note 13: an inexperienced speaker)
+            s['head_tilt'] = 0.04 * (1 if level == 3 else -1) * smooth((t - a) / max(0.2, (b - a) / 4))
+            s['gaze'] = 'up'
+    if s['gaze'] == 'down' and s['smile'] == 0:            # head right down, eyes on the paper (note 13)
         s['lid'] = 0.86
         s['head_dy'] = 24.0
         s['feat_dy'] = 9.0
         s['brow'] = -3.0
-    if kind == 'sigh':
+    a, b = SIGH
+    if a <= t < b:
         u = (t - a) / (b - a)
         rise = smooth(u / 0.45) - smooth((u - 0.5) / 0.4) * 1.25
         s['sh_dy'] = -16.0 * rise
@@ -217,7 +221,7 @@ def state(t):
         s['closed'] = 0.25 < u < 0.8
         s['mouth'] = 'blow' if 0.5 < u < 0.92 else 'rest'
         s['brow'] = 3.0 * rise
-    if t >= SIGH[1]:                       # after the sigh: heavier lids, flatter, deader
+    if t >= b:                                            # after the sigh: heavier lids, flatter, deader
         s['lid'] = max(s['lid'], 0.7)
         s['brow'] = -3.0
     if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0:
@@ -1181,11 +1185,27 @@ def stills(out, times):
 def beat_name(t):
     if t >= BLACK_AT:
         return 'black'
-    k, a, b, arg = next((x for x in BEATS if x[1] <= t < x[2]), BEATS[-1])
-    if k == 'say':
-        words = next((w for (s, e, w) in TALK if s <= t < e), '')
-        return f'"{words}"'
-    return {'smile': f'smile {arg}', 'look': f'looks {arg}', 'sigh': 'SIGH', 'hold': 'hold', 'gap': '(pause)'}[k]
+    if SIGH[0] <= t < SIGH[1]:
+        return 'SIGH'
+    sm = next((lv for a, b, lv in SMILES if a <= t < b), None)
+    if sm:
+        return f'smile {sm}'
+    w = next((w for a, b, w in TALK if a - 0.05 <= t < b + 0.05), None)
+    return f'"{w}" ({gaze_at(t)})' if w else f'(pause, {gaze_at(t)})'
+
+
+def soundtrack():
+    """Her voice only (no effects), from the first word's lead-in, mastered to -16 LUFS; silent after the cut."""
+    import mossad_audio as MA
+    n = int((DUR + 0.3) * MA.SR)
+    mix = np.zeros(n)
+    seg = VOICE[:n]
+    mix[:len(seg)] = seg
+    end = int(BLACK_AT * MA.SR)
+    mix[end:] = 0
+    mix, _ = MA.master(mix, end)
+    mix[end:] = 0
+    return mix
 
 
 def _write_wav(path, mix):
@@ -1201,14 +1221,14 @@ def main():
         stills(a[1], [float(x) for x in a[2:]])
     elif a[0] == 'timeline':
         print(f'length {END:.1f} s, push ends {PUSH_END:.1f} s')
-        for k, s, e, arg in BEATS:
-            if k != 'gap':
-                print(f'{s:5.1f}-{e:5.1f}  {beat_name((s + e) / 2)}')
+        for st_, en_, w in TALK:
+            print(f'{st_:5.1f}-{en_:5.1f}  {w}  ({gaze_at(st_ + 0.01)})')
+        print('smiles', [(round(x, 1), round(y, 1), l) for x, y, l in SMILES], 'sigh', [round(x, 1) for x in SIGH])
     elif a[0] == 'final':
         import film_engine as E
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
-                 picture=picture, overlay=overlay, shot_of=lambda t: 'push', sound=lambda: np.zeros(int((DUR + 0.3) * 48000)),
+                 picture=picture, overlay=overlay, shot_of=lambda t: 'push', sound=soundtrack,
                  write_wav=_write_wav, set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 22,
                  reuse='--reuse' in a, redo=())
 
