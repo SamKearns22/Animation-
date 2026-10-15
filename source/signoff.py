@@ -165,11 +165,20 @@ def juice_box(img, sip, sucking_now=False):
     d = ImageDraw.Draw(img)
     x0, y0, x1, y1 = BOX
     dent = 12 * sip
-    side = 30
+    side, g = 30, 100                                                      # depth; the height of the gable top
+    red, dred = (200, 24, 50), (150, 14, 36)
+    rx0, rx1, ry = x0 + side / 2, x1 + side / 2, y0 - g                    # the ridge, half-way back
+    # a juice carton (Sam): a gable top with its sealed fin, in red trim
     d.polygon([(x1, y0), (x1 + side, y0 - 18), (x1 + side, y1 - 18), (x1, y1)], fill=(206, 208, 210), outline=INK, width=4)
-    d.polygon([(x0, y0), (x1, y0), (x1 + side, y0 - 18), (x0 + side, y0 - 18)], fill=(236, 237, 238), outline=INK, width=4)
+    d.polygon([(x1, y0), (x1 + side, y0 - 18), (rx1, ry)], fill=dred, outline=INK, width=4)          # side gable
+    d.polygon([(x0, y0), (x1, y0), (rx1, ry), (rx0, ry)], fill=red, outline=INK, width=4)            # front roof
+    d.polygon([(rx0 - 4, ry), (rx1 + 4, ry), (rx1 + 4, ry - 16), (rx0 - 4, ry - 16)], fill=red, outline=INK, width=4)  # fin
     d.polygon([(x0, y0), (x1, y0), (x1 - dent, (y0 + y1) / 2), (x1, y1), (x0, y1), (x0 + dent, (y0 + y1) / 2)],
               fill=(252, 252, 250), outline=INK, width=6)
+    d.rectangle([x0 + 3, y1 - 30, x1 - 3, y1 - 4], fill=red)                # red trim: a band round the bottom
+    d.polygon([(x1 + 2, y1 - 30), (x1 + side - 2, y1 - 48), (x1 + side - 2, y1 - 22), (x1 + 2, y1 - 4)], fill=dred)
+    d.line([(x0 + 6, y0 + 10), (x1 - 6, y0 + 10)], fill=red, width=6)        # and a thin line under the top
+    d.line([(x0, y1), (x1, y1)], fill=INK, width=6)
     cx = (x0 + x1) / 2
     hh = y1 - y0
     for word, size, y in (('Cranbri', 120, y0 + 0.05 * hh), ('Joos', 92, y0 + 0.37 * hh)):
@@ -182,7 +191,7 @@ def juice_box(img, sip, sucking_now=False):
         d.ellipse([cx + dx - 14, y0 + dy - 14, cx + dx + 14, y0 + dy + 14], fill=(206, 22, 48), outline=INK, width=3)
         d.ellipse([cx + dx - 7, y0 + dy - 9, cx + dx - 2, y0 + dy - 4], fill=(255, 220, 220))
     # the straw: out of the top, up, and bent across into the corner of his mouth
-    sx, sy = x0 + 34, y0 - 10
+    sx, sy = x0 + 46, y0 - g * 0.45                                        # out of the carton's roof
     bend = MOUTH[1] - 70                                                   # up, then across and down into his mouth
     end = PUCKER if sucking_now else (MOUTH[0] + 0.012 * SIZE, MOUTH[1] - 0.006 * SIZE)
     pts = [(sx, sy), (sx, bend), end]
