@@ -337,3 +337,10 @@ Read this first in any new session, after CLAUDE.md.
   parallel and runs the audit; the render caches pictures and puts captions and the title on last. Details: `guides/preflight.md`.
 - Found by the audit in the finished Russiadent Evil: the zombie that falls through the window pops from lying flat to crawling
   (about 15.6 s). Not fixed (film is finished).
+
+## In progress: "The New Press Secretary" (TikTok, one slow push-in, `prompts/press-secretary.md`)
+- 15 Oct: brief and draft script; `source/press_secretary.py` draws her (as true to the reference photos as the style
+  allows), the briefing room, the podium and the reporters, with a depth push-in (near rows of reporters swell and slide
+  away). Silent, no title, no subtitles (Sam: the Cranberry title stays available but is no longer automatic).
+- Cast sheet and 12-still outline sent. The draft runs about 30 s at a halting pace; Sam's recording will set the timing.
+- Next: Sam's notes on the outline, then offer the animatic (wait for Y/N), then his recording.
