@@ -99,8 +99,9 @@ def _syllable_beats(v, runs):
     return [t for t in ts if any(a_ - 0.02 <= t <= b_ + 0.02 for a_, b_ in runs)]
 
 
-START_WORD = 'I look forward'   # the film opens on these words (None: from the very start)
-PINS = {'helicopters,': 38.95, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
+START_WORD = 'I look forward'
+PRE_ROLL = 0.45                  # Sam, 15 Oct: the opening 'I' was clipped; the sound now starts this much earlier   # the film opens on these words (None: from the very start)
+PINS = {'helicopters,': 38.95, 'Let me get back': 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
 FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
 
 
@@ -230,7 +231,7 @@ def _trim(start_word):
     global TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS, EXPRS, FRESH
     import mossad_audio as MA
     k = next(i for i in range(len(TALK) - 3) if [w for _, _, w in TALK[i:i + 3]] == start_word.split()[:3])
-    t0 = TALK[k][0] - LEAD
+    t0 = TALK[k][0] - LEAD - PRE_ROLL          # a little sound before it, so the first word is never clipped
     TALK = [(a - t0, b - t0, w) for a, b, w in TALK[k:]]
     g0 = [g for t_, g in GAZE if t_ <= t0][-1:] or ['up']
     GAZE = [(0.0, g0[0])] + [(t_ - t0, g) for t_, g in GAZE if t_ > t0]
@@ -238,7 +239,9 @@ def _trim(start_word):
     EXPRS = [(a - t0, b - t0, x) for a, b, x in EXPRS if b > t0]
     SIGH = (SIGH[0] - t0, SIGH[1] - t0)
     END -= t0
-    VOICE = VOICE[int(t0 * MA.SR):]
+    VOICE = VOICE[int(t0 * MA.SR):].copy()
+    nf = int(0.06 * MA.SR)
+    VOICE[:nf] *= np.linspace(0, 1, nf)         # a 60 ms fade-in at the cut (no click)
     RUNS = [(a - t0, b - t0) for a, b in RUNS if b > t0]
     FRESH = {i - k for i in FRESH if i >= k}
 
