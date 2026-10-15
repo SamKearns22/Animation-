@@ -795,55 +795,211 @@ def seat_backs(img, cam, row):
                 L.line([(-w + 30 + k * 40, 46), (-w + 30 + k * 40, 136)], (170, 172, 178), 3)
 
 
+def _look(r):
+    """Each reporter's own build and clothes, worked out once from their seed: shoulder width and slope, a
+    higher shoulder, head size, the garment and its pattern (Sam, 15 Oct: no identical blocky backs)."""
+    if 'look' in r:
+        return r['look']
+    g = np.random.default_rng(r['seed'])
+    garment = ['suit', 'suit', 'suit', 'blazer', 'sweater', 'blouse', 'cardigan', 'shirt'][g.integers(8)]
+    if r['style'] in ('long', 'pony', 'bun', 'bob') and garment == 'suit' and g.random() < 0.6:
+        garment = 'blazer'
+    pattern = None
+    if garment in ('suit', 'blazer') and g.random() < 0.4:
+        pattern = ['pinstripe', 'check', 'tweed'][g.integers(3)]
+    L = dict(sw=float(g.uniform(118, 158)), slope=float(g.uniform(24, 52)), hi=float(g.uniform(-12, 12)),
+             nw=float(g.uniform(21, 29)), hrx=float(g.uniform(56, 70)), hry=float(g.uniform(70, 84)),
+             garment=garment, pattern=pattern, lumps=[float(v) for v in g.uniform(-1, 1, 14)],
+             shade_side=1 if g.random() < 0.5 else -1, folds=int(g.integers(2, 5)),
+             tufts=[float(v) for v in g.uniform(0.7, 1.3, 9)])
+    r['look'] = L
+    return L
+
+
+def _torso_outline(L, bottom=600):
+    """Neck, the trapezius sloping to each shoulder, the round of the shoulder, the arms hanging down."""
+    sw, sl, hi, nw = L['sw'], L['slope'], L['hi'], L['nw']
+    pts = [(-sw + 6, bottom), (-sw - 6, sl + 150), (-sw - 4, sl + 60 - hi), (-sw + 18, sl + 12 - hi),
+           (-sw * 0.55, sl * 0.45 - hi * 0.6), (-nw - 10, 6), (-nw, -2), (nw, -2), (nw + 10, 6),
+           (sw * 0.55, sl * 0.45 + hi * 0.6), (sw - 18, sl + 12 + hi), (sw + 4, sl + 60 + hi), (sw + 6, sl + 150),
+           (sw - 6, bottom)]
+    return curve(pts, 4)
+
+
+def _head_outline(L, cx, cy):
+    """A hand-cut, slightly lumpy head (never a perfect oval)."""
+    n = len(L['lumps'])
+    return curve([(cx + L['hrx'] * (1 + 0.035 * L['lumps'][k]) * math.cos(2 * math.pi * k / n),
+                   cy + L['hry'] * (1 + 0.035 * L['lumps'][(k + 3) % n]) * math.sin(2 * math.pi * k / n)) for k in range(n)], 3)
+
+
+def _clothes(p, L, jc, sd, t):
+    """Seams, collar, folds and pattern on the back of the garment; a flat shadow down one side."""
+    sw, sl, hi, nw = L['sw'], L['slope'], L['hi'], L['nw']
+    jd, jl = B.dk(jc, 0.8), B.lt(jc, 1.18)
+    side = L['shade_side']
+    p.poly(curve([(side * sw * 0.45, sl * 0.4 + 20), (side * (sw - 10), sl + 30 + hi * side), (side * (sw + 2), sl + 160),
+                  (side * (sw - 4), 600), (side * sw * 0.55, 600), (side * sw * 0.6, 260)], 3), jd, None)   # flat shadow
+    pat = L['pattern']
+    if pat:                                               # the cloth's pattern, kept inside the back
+        x0, x1, y0 = -sw + 26, sw - 26, sl + 46
+        if pat == 'pinstripe':
+            for k in range(int((x1 - x0) / 16)):
+                p.line([(x0 + k * 16, y0), (x0 + k * 16, 600)], jl, 1.2)
+        elif pat == 'check':
+            for k in range(int((x1 - x0) / 34)):
+                p.line([(x0 + k * 34, y0), (x0 + k * 34, 600)], jl, 1.6)
+            for k in range(int((600 - y0) / 34)):
+                p.line([(x0, y0 + k * 34), (x1, y0 + k * 34)], jl, 1.6)
+        else:
+            g = np.random.default_rng(sd)
+            for _ in range(70):
+                x, y = g.uniform(x0, x1), g.uniform(y0, 560)
+                p.line([(x, y), (x + 5, y + 2)], jl if g.random() < 0.5 else jd, 1.4)
+    gm = L['garment']
+    if gm in ('suit', 'blazer'):
+        p.line([(0, 30), (0, 600)], jd, 2.0)                                       # the centre back seam
+        for sgn in (-1, 1):
+            p.line([(sgn * (nw + 12), 10), (sgn * (sw - 16), sl + 10 + hi * sgn)], jd, 1.6)   # shoulder seams
+            p.line(curve([(sgn * (sw - 16), sl + 12 + hi * sgn), (sgn * (sw - 30), sl + 90), (sgn * (sw - 26), sl + 170),
+                          (sgn * (sw - 22), sl + 175)], 3)[:-4], jd, 1.6)        # the armhole
+        for k in range(L['folds']):                                                # creases across the back
+            y = 120 + 40 * k
+            sg = 1 if (k + sd) % 2 else -1
+            p.line(curve([(sg * 20, y), (sg * 60, y - 10), (sg * (sw - 40), y + 12), (sg * (sw - 30), y + 20)], 3)[:-4], jd, 1.4)
+        p.poly(curve([(-nw - 22, 12), (-nw - 14, -10), (0, -14), (nw + 14, -10), (nw + 22, 12), (0, 22)], 3), jc, INK, 2.2)  # collar
+        if gm == 'suit':
+            p.poly(curve([(-nw - 6, -6), (0, -12), (nw + 6, -6), (nw + 4, -18), (0, -24), (-nw - 4, -18)], 3), (242, 240, 236), INK, 1.8)
+    elif gm in ('sweater', 'cardigan'):
+        p.poly(curve([(-nw - 18, 14), (-nw - 12, -8), (0, -12), (nw + 12, -8), (nw + 18, 14), (0, 18)], 3), jd, INK, 2.2)
+        for k in range(-6, 7):                                                     # the ribbed neck
+            p.line([(k * (nw + 14) / 6, -8 + abs(k) * 0.6), (k * (nw + 16) / 6, 14)], B.dk(jc, 0.65), 1.2)
+        for row in range(5):                                                       # knit texture
+            y = sl + 60 + row * 90
+            for k in range(-4, 5):
+                x = k * sw / 5 + (row % 2) * 12
+                p.line([(x - 5, y), (x, y + 6), (x + 5, y)], jl, 1.2)
+        for sgn in (-1, 1):
+            p.line(curve([(sgn * (nw + 16), 10), (sgn * (sw * 0.6), sl + 40), (sgn * (sw - 20), sl + 150)], 3)[:-3], jd, 1.4)
+    else:                                                 # blouse or shirt: soft drapes, a yoke seam
+        p.line(curve([(-sw + 22, sl + 40), (0, sl + 30), (sw - 22, sl + 40)], 3)[1:-1], jd, 1.4)
+        for k in range(3):
+            x = -sw * 0.5 + k * sw * 0.5
+            p.line(curve([(x, sl + 60), (x + 10, 260), (x - 6, 420), (x + 4, 590)], 3)[:-3], jd, 1.4)
+        p.poly(curve([(-nw - 10, 8), (-nw - 4, -14), (0, -18), (nw + 4, -14), (nw + 10, 8), (0, 12)], 3),
+               (246, 244, 240) if gm == 'shirt' else jc, INK, 1.8)
+
+
+def _hair(p, L, st, hc, skin, cx, cy, sd):
+    """Hair from behind, with its own nape, tufts and strands; a bald crown keeps its fringe."""
+    rx, ry = L['hrx'], L['hry']
+    hd, hl = B.dk(hc, 0.75), B.lt(hc, 1.2)
+    tf = L['tufts']
+    head = _head_outline(L, cx, cy)
+    if st == 'bald':
+        p.poly(head, skin, INK, 2.8)
+        band = [(cx - rx - 3, cy - 6), (cx - rx * 0.9, cy + ry * 0.55)] + \
+               [(cx - rx * 0.6 + k * rx * 0.3, cy + ry * (0.86 + 0.06 * tf[k])) for k in range(5)] + \
+               [(cx + rx * 0.9, cy + ry * 0.55), (cx + rx + 3, cy - 6), (cx + rx * 0.7, cy + ry * 0.25), (cx, cy + ry * 0.36),
+                (cx - rx * 0.7, cy + ry * 0.25)]
+        p.poly(curve(band, 3), hc, INK, 2.2)
+        p.line(curve([(cx - rx * 0.3, cy - ry * 0.6), (cx, cy - ry * 0.7), (cx + rx * 0.2, cy - ry * 0.62)], 3)[1:-1],
+               B.lt(skin, 1.08), 3)
+        return
+    if st == 'long':
+        p.poly(curve([(cx - rx - 6, cy - 20), (cx - rx - 14, cy + 120), (cx - rx * 0.4, cy + 250 * tf[0]),
+                      (cx, cy + 240 * tf[1]), (cx + rx * 0.5, cy + 255 * tf[2]), (cx + rx + 14, cy + 120),
+                      (cx + rx + 6, cy - 20), (cx, cy - ry - 8)], 4), hc, INK, 2.8)
+        for k in range(5):
+            x = cx - rx * 0.7 + k * rx * 0.35
+            p.line(curve([(x, cy - ry * 0.6), (x - 6, cy + 60), (x + 4, cy + 200 * tf[k])], 3)[:-3], hd, 1.6)
+        part = cx + rx * 0.15 * L['lumps'][0]
+        p.line([(part, cy - ry - 6), (part + 2, cy - ry * 0.5)], hd, 2.0)          # the parting
+        for sgn in (-1, 1):                                                        # the waves at the sides
+            p.line(curve([(cx + sgn * (rx + 2), cy - 10), (cx + sgn * (rx + 12), cy + 60), (cx + sgn * (rx + 4), cy + 130),
+                          (cx + sgn * (rx + 14), cy + 200)], 3)[1:-2], hd, 1.6)
+        return
+    p.poly(head, hc, INK, 2.8)
+    if st in ('short', 'curly'):
+        nape = [(cx - rx * 0.62, cy + ry * 0.8)] + [(cx - rx * 0.4 + k * rx * 0.2, cy + ry * (0.86 + 0.05 * tf[k]))
+                                                    for k in range(5)] + [(cx + rx * 0.62, cy + ry * 0.8)]
+        p.poly(nape + [(cx + rx * 0.5, cy + ry * 0.98), (cx, cy + ry * 1.04), (cx - rx * 0.5, cy + ry * 0.98)], skin, None)
+        p.line(nape, INK, 1.8)                                                     # the nape's hairline, low
+        if st == 'curly':
+            for k in range(14):
+                a = math.pi * (0.95 + k / 12.0)
+                p.ell(cx + rx * 0.98 * math.cos(a), cy + ry * 0.95 * math.sin(a), 15 * tf[k % 9], 13, hc, INK, 2.0)
+            for k in range(8):
+                p.line(oval(cx - rx * 0.5 + (k % 4) * rx * 0.33, cy - ry * 0.4 + (k // 4) * 40, 7, 6, 8, 0, 4), hd, 1.4)
+        else:
+            whorl = (cx + rx * 0.2, cy - ry * 0.55)
+            for k in range(7):                                                     # combed from the crown
+                a = -0.9 + k * 0.42
+                p.line(curve([whorl, (whorl[0] + rx * 0.5 * math.sin(a), whorl[1] + ry * 0.6 * math.cos(a) * 0.8),
+                              (whorl[0] + rx * 0.8 * math.sin(a), whorl[1] + ry * 1.0 * math.cos(a))], 3)[1:-3], hd, 1.4)
+    elif st == 'bob':
+        p.poly(curve([(cx - rx - 8, cy - 30), (cx - rx - 12, cy + 70), (cx - rx * 0.4, cy + 96 * tf[0]), (cx, cy + 90),
+                      (cx + rx * 0.4, cy + 98 * tf[1]), (cx + rx + 12, cy + 70), (cx + rx + 8, cy - 30), (cx, cy - ry - 6)], 4),
+               hc, INK, 2.8)
+        for k in range(5):
+            x = cx - rx * 0.6 + k * rx * 0.3
+            p.line(curve([(x, cy - ry * 0.7), (x - 4, cy + 20), (x + 2, cy + 84)], 3)[:-2], hd, 1.5)
+    elif st in ('pony', 'bun'):
+        for k in range(6):
+            a = -0.8 + k * 0.32
+            p.line(curve([(cx + rx * math.sin(a) * 0.95, cy - ry * 0.6), (cx + rx * math.sin(a) * 0.5, cy - ry * 0.1),
+                          (cx, cy + 6)], 3)[1:-2], hd, 1.4)
+        if st == 'pony':
+            p.poly(curve([(cx - 14, cy), (cx + 14, cy), (cx + 24 * tf[0], cy + 90), (cx + 6, cy + 150 * tf[1]),
+                          (cx - 14, cy + 100)], 3), hc, INK, 2.4)
+            p.line(curve([(cx, cy + 20), (cx + 8, cy + 90), (cx + 2, cy + 130)], 3)[:-2], hd, 1.4)
+            p.poly(curve([(cx - 15, cy - 8), (cx + 15, cy - 8), (cx + 14, cy + 8), (cx - 14, cy + 8)], 2),
+                   (190, 50, 70), INK, 1.8)
+        else:
+            p.poly(curve(oval(cx + 4, cy - ry * 0.2, 34 * tf[0], 28, 10), 3), hc, INK, 2.4)
+            p.line(oval(cx + 4, cy - ry * 0.2, 18, 12, 10, 0.4, 4.6), hd, 1.4)
+    p.line(curve([(cx - rx * 0.5, cy - ry * 0.75), (cx - rx * 0.2, cy - ry * 0.88), (cx + rx * 0.1, cy - ry * 0.86)], 3)[1:-1],
+           hl, 2.4)                                                                # a flat sheen on top
+
+
 def reporter(img, cam, r, t):
-    """A seated reporter from behind: head, hair, shoulders and back. Quiet life only (Sam, 15 Oct): shifting in
-    the seat now and then, a glance down or to a neighbour, typing on a laptop (elbows going), scribbling notes."""
+    """A seated reporter from behind, each one their own build, clothes and haircut. Quiet life only (Sam,
+    15 Oct): shifting in the seat now and then, a glance aside or down, typing (elbows going), scribbling notes."""
     if r.get('empty'):
         return
     sd = r['seed']
+    L = _look(r)
     dx = 9 * filmkit.shifts(t, seed=sd, amount=1.0, hold=(2.0, 4.5))           # shuffling in the seat
     hdx = 10 * filmkit.shifts(t, seed=sd + 1, amount=1.0, hold=(1.6, 3.6))     # a glance aside
     hdy = 8 * max(0.0, filmkit.shifts(t, seed=sd + 2, amount=1.0, hold=(1.8, 4.0)))   # a glance down at the notes
     p = B.Pen(img, B.Local(cam, r['x'] + dx * r['s'], r['y'], r['s']))
     ph = B.Pen(img, B.Local(cam, r['x'] + (dx + hdx) * r['s'], r['y'] + hdy * r['s'], r['s']))
     hc, jc, skin, st = r['hair'], r['jacket'], r['skin'], r['style']
+    sw, sl = L['sw'], L['slope']
     if r.get('typing'):                                   # elbows out at the sides, bobbing while they type
         on = (t * 0.9 + sd % 13) % 4.0 < 2.8
         for sgn in (-1, 1):
             bob = 4 * math.sin(t * 22 + sgn * 1.7 + sd % 5) if on else 0.0
-            p.ell(sgn * 150, 230 + bob * sgn, 34, 46, jc, INK, 2.8)
-    p.poly(curve([(-150, 600), (-148, 60), (-80, 4), (80, 4), (148, 60), (150, 600)], 4), jc, INK, 3)
-    ph.poly([(-28, 6 - hdy), (28, 6 - hdy), (24, -30), (-24, -30)], skin, INK, 2.4)
-    p.poly([(-32, 2), (32, 2), (26, 20), (-26, 20)], (240, 238, 234), None)          # a collar
-    p = ph
-    for sgn in (-1, 1):
-        p.ell(sgn * 66, -70, 12, 20, skin, INK, 3)
-    if st == 'bald':
-        p.ell(0, -84, 64, 78, skin, INK, 3)
-        p.poly(curve([(-66, -60), (-60, -20), (0, -6), (60, -20), (66, -60), (40, -40), (-40, -40)], 3), hc, INK, 2.4)
-    else:
-        p.ell(0, -84, 66, 80, hc, INK, 3)
-        if st == 'bob':
-            p.poly(curve([(-74, -90), (-80, 0), (0, 12), (80, 0), (74, -90), (0, -150)], 3), hc, INK, 3)
-        elif st == 'long':
-            p.poly(curve([(-70, -90), (-80, 140), (0, 160), (80, 140), (70, -90), (0, -150)], 3), hc, INK, 3)
-        elif st == 'pony':
-            p.poly(curve([(-16, -40), (16, -40), (22, 80), (0, 120), (-22, 80)], 3), hc, INK, 2.6)
-            p.ell(0, -40, 14, 9, (190, 50, 70), INK, 2)
-        elif st == 'bun':
-            p.ell(0, -150, 34, 30, hc, INK, 3)
-        elif st == 'curly':
-            for k in range(10):
-                a = math.pi * (1.0 + k / 9.0)
-                p.ell(70 * math.cos(a), -84 + 84 * math.sin(a), 22, 22, hc, INK, 2.4)
-            p.ell(0, -84, 62, 74, hc, None)
-        p.line([(-30, -150), (-20, -100)], B.dk(hc, 0.8), 2)
+            p.poly(curve(oval(sgn * (sw + 4), sl + 190 + bob * sgn, 30, 44, 10), 3), jc, INK, 2.6)
+    # the neck first (behind the collar), then the back, then the head
+    nw = L['nw']
+    ph.poly(curve([(-nw, 10 - hdy), (-nw + 2, -40), (0, -46), (nw - 2, -40), (nw, 10 - hdy)], 3), skin, INK, 2.4)
+    ph.line([(-nw * 0.4, -10), (nw * 0.3, -12)], B.dk(skin, 0.86), 1.4)
+    p.poly(_torso_outline(L), jc, INK, 2.8)
+    _clothes(p, L, jc, sd, t)
+    p.poly(_torso_outline(L), None, INK, 2.8)
+    cx, cy = 0, -84
+    for sgn in (-1, 1):                                   # ears, with an inner fold
+        ph.poly(curve(oval(cx + sgn * (L['hrx'] - 2), cy + 14, 11, 19, 10), 3), skin, INK, 2.4)
+        ph.line([(cx + sgn * (L['hrx'] + 1), cy + 4), (cx + sgn * (L['hrx'] + 4), cy + 22)], B.dk(skin, 0.8), 1.4)
+    _hair(ph, L, st, hc, skin, cx, cy, sd)
     if r['pad'] and not r.get('typing'):                  # a notebook held up by the shoulder, scribbled in
-        q = B.Pen(img, B.Local(cam, r['x'] + dx * r['s'], r['y'], r['s']))
         tilt = 4 * math.sin(t * 9 + sd) if (t + sd % 7) % 3.0 < 1.6 else 0.0
-        q.poly(rough([(84, 60 + tilt), (160, 50 - tilt), (166, 150 - tilt), (90, 160 + tilt)], 3, sd), (250, 248, 236), INK, 2.4)
+        q = p
+        q.poly(rough([(sw - 60, 60 + tilt), (sw + 16, 50 - tilt), (sw + 22, 150 - tilt), (sw - 54, 160 + tilt)], 3, sd),
+               (250, 248, 236), INK, 2.4)
         for k in range(3):
-            q.line([(98, 80 + 20 * k), (148, 74 + 20 * k)], (150, 160, 190), 2)
+            q.line([(sw - 44, 80 + 20 * k), (sw + 4, 74 + 20 * k)], (150, 160, 190), 2)
 
 
 def crowd(img, t):

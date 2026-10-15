@@ -12,6 +12,7 @@
 | 8 | push | close-up | Line work round the hair confusing, like a second haircut behind: the hair is now one shape with one outline; the back of the hair kept inside it; stray highlight lines removed | done |
 | 9 | push | reading her notes | A line cut through her eyes (the lowered lid was a straight bar): the lid is now a soft curve sagging over the top of the iris, lashes and crease follow it | done |
 | 10 | push | crowd | Two empty chairs only; no raised hands; small movements (shuffling, glances, typing elbows, scribbling notes) | done |
+| 11 | push | crowd | Backs too blocky, read as AI-drawn: each reporter now has their own build, lumpy head, haircut with nape and strands, clothing seams, collars, creases, knit or pattern, a flat shadow side | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.
