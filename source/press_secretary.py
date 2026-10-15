@@ -755,16 +755,18 @@ def _reporters():
         xs = A0[0] - half + pitch * (np.arange(n) + (0.5 if len(rows) % 2 else 0.0))
         seats = []
         for x in xs:
-            empty = rng.random() < 0.06
-            hand = (not empty) and rng.random() < 0.3
+            empty = False
+            hand = False                                  # no hands up (Sam, 15 Oct)
             seats.append(dict(f=f, x=float(x + rng.uniform(-0.06, 0.06) * pitch), y=float(wy + rng.uniform(-10, 10) * s),
                               s=s, hair=hairs[rng.integers(len(hairs))], jacket=jackets[rng.integers(len(jackets))],
                               skin=skins[rng.integers(5)], style=styles[rng.integers(len(styles))], hand=hand,
                               side=1 if rng.random() < 0.5 else -1, up_at=float(rng.uniform(0, 9)),
                               seed=int(rng.integers(1e6)), empty=empty,
-                              phone=hand and rng.random() < 0.35, pad=(not hand) and rng.random() < 0.25,
+                              phone=False, pad=rng.random() < 0.15, typing=rng.random() < 0.45,
                               lean=float(rng.uniform(-0.06, 0.06))))
         rows.append((f, seats, pitch, wy, s))
+    for ri, target in ((1, A0[0] - 330), (2, A0[0] + 360)):   # exactly two empty seats, both in view at the start
+        min(rows[ri][1], key=lambda r: abs(r['x'] - target))['empty'] = True
     return rows
 
 
@@ -794,28 +796,26 @@ def seat_backs(img, cam, row):
 
 
 def reporter(img, cam, r, t):
-    """A seated reporter from behind: head, hair, shoulders and back; some with one hand up (now and then
-    lowered and raised again), a few holding a phone up. Relaxed and normal; nobody looks round."""
+    """A seated reporter from behind: head, hair, shoulders and back. Quiet life only (Sam, 15 Oct): shifting in
+    the seat now and then, a glance down or to a neighbour, typing on a laptop (elbows going), scribbling notes."""
     if r.get('empty'):
         return
-    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    sd = r['seed']
+    dx = 9 * filmkit.shifts(t, seed=sd, amount=1.0, hold=(2.0, 4.5))           # shuffling in the seat
+    hdx = 10 * filmkit.shifts(t, seed=sd + 1, amount=1.0, hold=(1.6, 3.6))     # a glance aside
+    hdy = 8 * max(0.0, filmkit.shifts(t, seed=sd + 2, amount=1.0, hold=(1.8, 4.0)))   # a glance down at the notes
+    p = B.Pen(img, B.Local(cam, r['x'] + dx * r['s'], r['y'], r['s']))
+    ph = B.Pen(img, B.Local(cam, r['x'] + (dx + hdx) * r['s'], r['y'] + hdy * r['s'], r['s']))
     hc, jc, skin, st = r['hair'], r['jacket'], r['skin'], r['style']
-    up = False
-    if r['hand']:
-        up = (t + r['up_at']) % 9.0 < 6.8
-    if up:
-        sg = r['side']
-        sway = 5 * filmkit.shifts(t, seed=r['seed'], amount=1.0)
-        p.poly([(sg * 74, 40), (sg * 136, 46), (sg * 128 + sway, -220), (sg * 76 + sway, -226)], jc, INK, 3)
-        hx, hy = sg * 102 + sway, -252
-        if r['phone']:
-            p.poly(rough([(hx - 26, hy - 70), (hx + 26, hy - 70), (hx + 26, hy + 30), (hx - 26, hy + 30)], 1, r['seed']),
-                   (30, 30, 34), INK, 2.4)
-            p.poly([(hx - 20, hy - 62), (hx + 20, hy - 62), (hx + 20, hy + 22), (hx - 20, hy + 22)], (150, 190, 220), None)
-        p.ell(hx, hy + (20 if r['phone'] else 0), 30, 32, skin, INK, 3)
+    if r.get('typing'):                                   # elbows out at the sides, bobbing while they type
+        on = (t * 0.9 + sd % 13) % 4.0 < 2.8
+        for sgn in (-1, 1):
+            bob = 4 * math.sin(t * 22 + sgn * 1.7 + sd % 5) if on else 0.0
+            p.ell(sgn * 150, 230 + bob * sgn, 34, 46, jc, INK, 2.8)
     p.poly(curve([(-150, 600), (-148, 60), (-80, 4), (80, 4), (148, 60), (150, 600)], 4), jc, INK, 3)
-    p.poly([(-28, 6), (28, 6), (24, -30), (-24, -30)], skin, INK, 2.4)
+    ph.poly([(-28, 6 - hdy), (28, 6 - hdy), (24, -30), (-24, -30)], skin, INK, 2.4)
     p.poly([(-32, 2), (32, 2), (26, 20), (-26, 20)], (240, 238, 234), None)          # a collar
+    p = ph
     for sgn in (-1, 1):
         p.ell(sgn * 66, -70, 12, 20, skin, INK, 3)
     if st == 'bald':
@@ -838,8 +838,12 @@ def reporter(img, cam, r, t):
                 p.ell(70 * math.cos(a), -84 + 84 * math.sin(a), 22, 22, hc, INK, 2.4)
             p.ell(0, -84, 62, 74, hc, None)
         p.line([(-30, -150), (-20, -100)], B.dk(hc, 0.8), 2)
-    if r['pad'] and not up:                               # a notebook held up beside the shoulder
-        p.poly(rough([(84, 60), (160, 50), (166, 150), (90, 160)], 3, r['seed']), (250, 248, 236), INK, 2.4)
+    if r['pad'] and not r.get('typing'):                  # a notebook held up by the shoulder, scribbled in
+        q = B.Pen(img, B.Local(cam, r['x'] + dx * r['s'], r['y'], r['s']))
+        tilt = 4 * math.sin(t * 9 + sd) if (t + sd % 7) % 3.0 < 1.6 else 0.0
+        q.poly(rough([(84, 60 + tilt), (160, 50 - tilt), (166, 150 - tilt), (90, 160 + tilt)], 3, sd), (250, 248, 236), INK, 2.4)
+        for k in range(3):
+            q.line([(98, 80 + 20 * k), (148, 74 + 20 * k)], (150, 160, 190), 2)
 
 
 def crowd(img, t):
