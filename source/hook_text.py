@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Stamp the Set-Up Text (the opening line that introduces the joke) onto a finished TikTok video, in TikTok's own caption look (Sam, 15 Oct: readability
+"""Stamp the Hook Text (the opening line that introduces the joke) onto a finished TikTok video, in TikTok's own caption look (Sam, 15 Oct: readability
 first, like the app's native text): TikTok Sans Bold, sentence case, black on a white rounded box, near the middle of
 the safe area, over the picture while it plays. On from the first frame, gone (a quick fade) at `--until` seconds -
 by default the first cut. Picture and sound are otherwise untouched.
 
-    python3 setup_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880]
+    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880]
 """
 import os
 import subprocess
@@ -62,7 +62,7 @@ def main():
     w, h = next((int(x), int(y)) for t in probe.replace(',', ' ').split() if 'x' in t
                 for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
     with tempfile.TemporaryDirectory() as tmp:
-        png = os.path.join(tmp, "setup.png")
+        png = os.path.join(tmp, "hook.png")
         card(w, h, text, y_mid, png)
         fade = 0.25
         vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
