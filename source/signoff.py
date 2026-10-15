@@ -33,7 +33,8 @@ SLURP = os.path.join(HERE, 'audio', 'signoff-slurp.m4a')
 SIP_AT = 0.45                                # the juice starts up the straw (and the slurp starts) here
 INK = (24, 20, 22)
 RED = np.array([206, 22, 48], float)
-MOUTH = (0.50 * SIZE + DX, 0.706 * SIZE + DY)           # his own mouth: the dark oval just under his teeth (Sam)
+MOUTH = (0.565 * SIZE + DX, 0.613 * SIZE + DY)          # his mouth: the line along the top of his teeth, just to the
+                                                        # right of them (the dark oval below is his chin - Sam)
 BOX = tuple(int(f * SIZE + o) for f, o in ((0.57, DX), (0.70, DY), (1.05, DX), (1.10, DY)))   # where the leaves were
 PAW = (0.585, 0.885, 0.05, 0.04)
 EYES = ((0.293, 0.357), (0.707, 0.357))                 # his eyes (fractions of the square)
@@ -68,7 +69,7 @@ def o_mouth(img, k):
     if k < 0.5:
         return
     d = ImageDraw.Draw(img)
-    r = 0.036 * SIZE
+    r = 0.03 * SIZE
     d.ellipse([MOUTH[0] - r, MOUTH[1] - r * 0.95, MOUTH[0] + r, MOUTH[1] + r * 0.95], fill=(14, 10, 10))
 
 
@@ -172,7 +173,7 @@ def juice_box(img, sip, sucking_now=False):
     # the straw: out of the top, up, and bent across into the corner of his mouth
     sx, sy = x0 + 34, y0 - 10
     bend = MOUTH[1] - 70                                                   # up, then across and down into his mouth
-    end = (MOUTH[0] + (0.0 if sucking_now else 0.045 * SIZE), MOUTH[1])
+    end = (MOUTH[0] + (0.0 if sucking_now else 0.012 * SIZE), MOUTH[1] - (0.0 if sucking_now else 0.006 * SIZE))
     pts = [(sx, sy), (sx, bend), end]
     d.line(pts, fill=INK, width=18, joint='curve')
     d.line(pts, fill=(250, 250, 250), width=11, joint='curve')
