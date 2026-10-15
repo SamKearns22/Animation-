@@ -15,6 +15,8 @@
 | 11 | push | crowd | Backs too blocky, read as AI-drawn: each reporter now has their own build, lumpy head, haircut with nape and strands, clothing seams, collars, creases, knit or pattern, a flat shadow side | done |
 | 12 | push | all | Flag: dots coming off it, sock shape: redrawn from the photos (hangs in folds by the pole, scalloped edge, gathered tail, slanted stripes, stars kept inside the canton, gold spear tip) | done |
 | 13 | push | reading her notes | Look down more when she checks her notes, like an inexperienced public speaker: head drops, lids right down, features lower (more forehead), held too long, snaps back up; a nervous double-check | done |
+| 14 | audio | paras 1-2 | Second take of paragraphs 1 and 2 replaces the first; first take kept from "So, like." on | done |
+| 15 | push | close-ups | Lines crossed the whites of the eyes (smile and looking down): the eye is now one opening between the lids, the iris cut to it, lids drawn corner to corner | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

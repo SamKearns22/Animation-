@@ -2,7 +2,7 @@
 """The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled final
 render, add the Hook Text (if the film has one) and the CranbriJoos sign-off at the end.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]
+    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--until 3.6]
 
 Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text can change without a re-render.
 """
@@ -23,7 +23,13 @@ def has_sound(path):
 
 def main():
     src, dst = sys.argv[1], sys.argv[2]
-    hook = ' '.join(sys.argv[3:])
+    rest, extra = sys.argv[3:], []
+    for flag in ('--y', '--until'):                # passed on to hook_text.py (e.g. a lower line, clear of a face)
+        if flag in rest:
+            i = rest.index(flag)
+            extra += [flag, rest[i + 1]]
+            rest = rest[:i] + rest[i + 2:]
+    hook = ' '.join(rest)
     with tempfile.TemporaryDirectory() as tmp:
         step = src
         if not has_sound(step):                    # a silent film gets a silent track, so the sign-off's slurp can join on
@@ -33,7 +39,7 @@ def main():
             step = quiet
         if hook:
             hooked = os.path.join(tmp, 'hooked.mp4')
-            subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook], check=True)
+            subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)
             step = hooked
         subprocess.run([sys.executable, os.path.join(HERE, 'signoff.py'), 'add', step, dst], check=True)
 

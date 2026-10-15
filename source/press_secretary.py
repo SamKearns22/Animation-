@@ -44,7 +44,10 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "are really, I just, [down] you know it's so. [up] I'll get back to you on that. [smile2] || "
           "[down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had a one "
           "day war, [down] and I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
-AUDIO = 'press-secretary'
+AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
+    ('press-secretary-p12', 0.0, None, 1),    # first take from "So, like." to the end
+    ('press-secretary', 44.6, None, 3)]
+JOIN_GAP = 1.2                   # the pause between the two takes (a paragraph break)
 LEAD = 0.6                       # seconds of her at the podium before the first word
 TAIL = 0.9                       # the hold on her face after the last word, then the hard cut
 
@@ -56,19 +59,36 @@ def syllables(w):
 
 
 def _voice():
+    """The soundtrack's voice: the takes joined end to end, each cleaned and levelled alike; the stretches of
+    speech; and which silences are the anchors between the script's parts."""
     import mossad_audio as MA
-    v = MA.line(AUDIO)
-    runs = [(a_, b_) for a_, b_ in MA.pauses(v, 0.12) if b_ - a_ > 0.05]
-    cut = max(0.0, runs[0][0] - LEAD)
-    return MA, v[int(cut * MA.SR):], [(a_ - cut, b_ - cut) for a_, b_ in runs], cut
+    pieces, runs, anchors, t0 = [], [], [], 0.0
+    for k, (name, a_, b_, n_anch) in enumerate(AUDIO_PARTS):
+        v = MA.line(name)
+        v = v[int(a_ * MA.SR):(int(b_ * MA.SR) if b_ else None)]
+        r = [(x, y) for x, y in MA.pauses(v, 0.12) if y - x > 0.05]
+        lead = LEAD if k == 0 else JOIN_GAP
+        cut = max(0.0, r[0][0] - (lead if k == 0 else 0.15))
+        v = v[int(cut * MA.SR):int((r[-1][1] + 0.3) * MA.SR)]
+        if k > 0:
+            pieces.append(np.zeros(int((JOIN_GAP - 0.15) * MA.SR)))
+            t0 += JOIN_GAP - 0.15
+            anchors.append(len(runs) - 1)                       # the join is an anchor
+        base = len(runs)
+        rr = [(x - cut + t0, y - cut + t0) for x, y in r]
+        gaps = sorted(range(len(rr) - 1), key=lambda i: rr[i + 1][0] - rr[i][1], reverse=True)[:n_anch]
+        anchors += [base + g for g in gaps]
+        runs += rr
+        pieces.append(v)
+        t0 += len(v) / MA.SR
+    return MA, np.concatenate(pieces), runs, sorted(anchors)
 
 
 def build_timeline():
     """Words timed to the recording; her acting (glances, smiles, the sigh) placed by the tags."""
-    MA, v, runs, _ = _voice()
-    gaps = sorted(range(len(runs) - 1), key=lambda i: runs[i + 1][0] - runs[i][1], reverse=True)
+    MA, v, runs, cuts = _voice()
     parts_text = [x.strip() for x in SCRIPT.split('||')]
-    cuts = sorted(gaps[:len(parts_text) - 1])
+    assert len(cuts) == len(parts_text) - 1, (len(cuts), len(parts_text))
     groups, prev = [], 0
     for c in cuts + [len(runs) - 1]:
         groups.append(runs[prev:c + 1])
@@ -305,43 +325,79 @@ def hair_top(p, hx, hy, hw, hh, fx):
                       (hx - hw - 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
 
 
+def _clip_convex(subject, window):
+    """The part of a shape inside a convex window (Sutherland-Hodgman): the iris kept inside the eye."""
+    def inside(p_, a_, b_):
+        return (b_[0] - a_[0]) * (p_[1] - a_[1]) - (b_[1] - a_[1]) * (p_[0] - a_[0]) >= 0
+
+    def cross(p1, p2, a_, b_):
+        x1, y1, x2, y2 = p1[0], p1[1], p2[0], p2[1]
+        x3, y3, x4, y4 = a_[0], a_[1], b_[0], b_[1]
+        d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        if abs(d) < 1e-9:
+            return p2
+        u = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / d
+        return (x1 + u * (x2 - x1), y1 + u * (y2 - y1))
+    out = list(subject)
+    for i in range(len(window)):
+        a_, b_ = window[i], window[(i + 1) % len(window)]
+        inp, out = out, []
+        if not inp:
+            break
+        s_ = inp[-1]
+        for e_ in inp:
+            if inside(e_, a_, b_):
+                if not inside(s_, a_, b_):
+                    out.append(cross(s_, e_, a_, b_))
+                out.append(e_)
+            elif inside(s_, a_, b_):
+                out.append(cross(s_, e_, a_, b_))
+            s_ = e_
+    return out
+
+
 def eye(p, ex, ey, sgn, st):
-    """A large almond eye: heavy dark liner, lashes flicked out at the corner, a hazel iris."""
+    """A large almond eye: heavy liner along the upper lid, lashes flicked out at the corner, a hazel iris. The eye
+    is ONE opening between the two lids; the iris is cut to it, so no line ever crosses the white (Sam, 15 Oct)."""
     lid, squint = st['lid'], st['squint']
     w, h = 21, 10
+    us = np.linspace(-1, 1, 15)
     if st['closed']:
-        p.line([(ex - w, ey + 1), (ex - 8, ey + 6), (ex + 8, ey + 6), (ex + w, ey + 1)], INK, 3.4)
+        p.line([(ex + w * u, ey + 1 + 5 * (1 - u * u)) for u in us], INK, 3.4)
         for k in range(3):
             lx = ex + sgn * (8 + 6 * k)
             p.line([(lx, ey + 5), (lx + sgn * 5, ey + 12)], INK, 1.8)
         return
     low = h * (1 - squint)                                # a big smile pushes the lower lid up
-    almond = [(ex - w, ey), (ex - w * 0.45, ey - h), (ex + w * 0.45, ey - h), (ex + w, ey), (ex + w * 0.45, ey + low),
-              (ex - w * 0.45, ey + low)]
-    p.poly(almond, (252, 252, 250), None)
+    upper_open = [(ex + w * u, ey - h * (1 - u * u)) for u in us]
+    upper = [(ex + w * u, ey - h * (1 - u * u) * (1 - lid * 1.08)) for u in us]
+    lower = [(ex + w * u, ey + low * (1 - u * u) - 0.8 * h * squint * (1 - u * u) * 0.0) for u in us]
+    opening = upper + lower[::-1][1:-1]
+    p.poly(opening, (252, 252, 250), None)
     dx = st['look_x'] * 6
     dy = 5 if st['gaze'] == 'down' else 0
-    p.ell(ex + dx, ey + dy, 9, 9, IRIS, INK, 1.4)
-    p.ell(ex + dx, ey + dy, 4.2, 4.2, INK, None)
-    p.ell(ex + dx + 3, ey + dy - 3, 1.8, 1.8, (255, 255, 255), None)
-    # the upper lid's edge: the almond's top arc when open; lowered (reading her notes), a soft curve that sags
-    # in the middle over the top of the iris, never a straight bar across the eye (Sam, 15 Oct)
-    mid = ey - h + lid * h * 1.25
-    edge = [(ex - w * 1.02, ey)] + [(ex + w * u, mid + (ey - mid) * abs(u) ** 2.2) for u in np.linspace(-0.8, 0.8, 9)] + \
-           [(ex + w * 1.06, ey - 1)]
-    if lid > 0:
-        top = [(ex + w * u, ey - h * (1 - abs(u) ** 2) - 1) for u in np.linspace(1, -1, 9)]
-        p.poly(edge + top, (214, 174, 160), None)
-    p.line([(ex - w * 0.45, ey + low), (ex + w * 0.45, ey + low), (ex + w, ey)], INK, 1.6)
-    p.line(edge, INK, 3.4)                                # the liner, along the lid's edge
-    tip = (ex + sgn * w * 1.06, ey - 1)
+    cx, cy = ex + dx, ey + dy
+    circ = lambda r: [(cx + r * math.cos(a_), cy + r * math.sin(a_)) for a_ in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
+    iris = _clip_convex(opening[::-1], circ(9))
+    if len(iris) >= 3:
+        p.poly(iris, IRIS, None)
+    pupil = _clip_convex(opening[::-1], circ(4.2))
+    if len(pupil) >= 3:
+        p.poly(pupil, INK, None)
+    hl = (cx + 3, cy - 3)
+    if lid < 0.4 and squint < 0.5:
+        p.ell(hl[0], hl[1], 1.8, 1.8, (255, 255, 255), None)
+    if lid > 0:                                           # the lowered lid, made up, above the lid's edge
+        p.poly(upper_open + upper[::-1], (214, 174, 160), None)
+    p.line(lower, INK, 1.6)                               # the lower lid, corner to corner
+    p.line(upper, INK, 3.4)                               # the liner, along the upper lid's edge, corner to corner
+    tip = upper[-1] if sgn > 0 else upper[0]
     p.line([tip, (tip[0] + sgn * 8, tip[1] - 6)], INK, 2.6)        # the winged flick
     for k in range(3):                                    # lashes at the outer corner, from the lid's edge
-        u = sgn * (0.35 + 0.2 * k)
-        x0, y0 = ex + w * u, mid + (ey - mid) * abs(u) ** 2.2
-        p.line([(x0, y0), (x0 + sgn * 4, y0 - 6 - k + (8 if lid > 0.3 else 0))], INK, 1.6)
+        x0, y0 = upper[7 + sgn * (3 + k)]
+        p.line([(x0, y0), (x0 + sgn * 4, y0 - 6 - k + (9 if lid > 0.3 else 0))], INK, 1.6)
     crease = [(ex + w * 0.7 * u, ey - h - 7 - 3 * (1 - u * u)) for u in np.linspace(-1, 1, 7)]
-    p.line(crease, (198, 156, 140), 1.4)                  # the crease, made up, following the lid
+    p.line(crease, (198, 156, 140), 1.4)                  # the crease, made up
 
 
 def mouth(p, fx, my, st):
