@@ -43,7 +43,7 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "and like, our kids are [delight] ^helicopters, [up] and I really think that with the biggest swell of "
           "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^Let me get back to you "
           "on that. || [down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had "
-          "a one day war, [down] I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+          "a one day war, [down] I just need. || I just want. || [sigh] Venezuela. || [up] venezuela.")
 # Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
 # "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
@@ -99,6 +99,8 @@ def _syllable_beats(v, runs):
     return [t for t in ts if any(a_ - 0.02 <= t <= b_ + 0.02 for a_, b_ in runs)]
 
 
+START_WORD = 'I look forward'   # the film opens on these words (None: from the very start)
+PINS = {'helicopters,': 38.95, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
 FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
 
 
@@ -113,6 +115,7 @@ def build_timeline():
         prev = c + 1
     words, events = [], []                     # words: (start, end, text); events: (word index, tag)
     nuclei = _syllable_beats(v, runs)
+    part_ranges = []
     global FRESH
     fresh = FRESH
     for text, grp in zip(parts_text, groups):
@@ -166,6 +169,21 @@ def build_timeline():
         for k in range(len(part)):                       # keep every word inside its part, in order
             part[k][0] = max(part[k][0], grp[0][0] - 0.05, part[k - 1][1] - 0.02 if k else -1)
             part[k][1] = max(part[k][1], part[k][0] + 0.12)
+        part_ranges.append((start_idx, len(words)))
+    for (k0, k1) in part_ranges:                         # Sam's pins: a word starts exactly where he heard it
+        pts = [(words[k0][0], words[k0][0])]
+        for phrase, at_ in PINS.items():
+            n_ = len(phrase.split())
+            for k in range(k0, k1 - n_ + 1):
+                if [w[2] for w in words[k:k + n_]] == phrase.split():
+                    pts.append((words[k][0], at_))
+        pts.append((words[k1 - 1][1], words[k1 - 1][1]))
+        pts.sort()
+        if len(pts) > 2:
+            xs, ys = [p_[0] for p_ in pts], [p_[1] for p_ in pts]
+            for k in range(k0, k1):
+                words[k][0] = float(np.interp(words[k][0], xs, ys))
+                words[k][1] = max(float(np.interp(words[k][1], xs, ys)), words[k][0] + 0.12)
     words = [tuple(w) for w in words]
     end = words[-1][1] + TAIL
     gaze, smiles, sigh, exprs = [(0.0, 'up')], [], (1e9, 1e9), []
@@ -204,6 +222,29 @@ def build_timeline():
 
 
 TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS, EXPRS = build_timeline()
+
+
+def _trim(start_word):
+    """Start the film at a later word (Sam, 15 Oct: 'starts with I look forward to the President'): everything
+    before it is cut, everything after slides earlier, her pose carries over."""
+    global TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS, EXPRS, FRESH
+    import mossad_audio as MA
+    k = next(i for i in range(len(TALK) - 3) if [w for _, _, w in TALK[i:i + 3]] == start_word.split()[:3])
+    t0 = TALK[k][0] - LEAD
+    TALK = [(a - t0, b - t0, w) for a, b, w in TALK[k:]]
+    g0 = [g for t_, g in GAZE if t_ <= t0][-1:] or ['up']
+    GAZE = [(0.0, g0[0])] + [(t_ - t0, g) for t_, g in GAZE if t_ > t0]
+    SMILES = [(a - t0, b - t0, l) for a, b, l in SMILES if b > t0]
+    EXPRS = [(a - t0, b - t0, x) for a, b, x in EXPRS if b > t0]
+    SIGH = (SIGH[0] - t0, SIGH[1] - t0)
+    END -= t0
+    VOICE = VOICE[int(t0 * MA.SR):]
+    RUNS = [(a - t0, b - t0) for a, b in RUNS if b > t0]
+    FRESH = {i - k for i in FRESH if i >= k}
+
+
+if START_WORD:
+    _trim(START_WORD)
 DUR = round(END + 0.25, 2)
 BLACK_AT = END
 SHOTS = [('push', 0.0, DUR)]            # one continuous shot (the pre-flight reads this)

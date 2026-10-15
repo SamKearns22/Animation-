@@ -31,6 +31,9 @@
 | 27 | acting | talking to the room | Looking around halved: holds 1.4-3.2 s, half as wide, head follows less | done |
 | 28 | subtitles | punchlines | "helicopters," its own subtitle; "Let me get back to you on that." appears exactly as she starts it (wording as Sam says it in take 2) | done |
 | 29 | acting | "Let me get back to you on that" | Looking dead at the crowd, sheepish: worried brows, chin dipped, tight grimace in the pause | done |
+| 30 | edit | opening | The film now opens on "I look forward to the President" (START_WORD); same Hook Text | done |
+| 31 | subtitles | 1:03 (uncut) | Sam says "I just need" there: the first "I just want." is not in the take, so it is cut from the script; "I just need." pinned to 63.29 s of the full take | done |
+| 32 | subtitles | 0:39 (uncut) | "helicopters," pinned to start at 38.95 s of the full take | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.
