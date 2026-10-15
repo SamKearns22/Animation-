@@ -402,9 +402,12 @@ def mouth(p, sp, t, fx, my):
     if sp.get('lip_ring'):                                             # a silver ring through the lower lip, off centre
         m = sp.get('mouth', '')
         low = {'v:AI': 16, 'v:O': 14, 'v:E': 9, 'v:U': 9, 'v:WQ': 8, 'v:L': 13}.get(m, 7)
-        p.line(oval(fx + 13, my + low + 1, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), INK, 5.6)
-        p.line(oval(fx + 13, my + low + 1, 6.5, 6.5, 20, -0.4, 2 * math.pi - 1.0), (214, 218, 228), 3.0)
-        p.ell(fx + 18, my + low - 2, 1.6, 1.6, (255, 255, 255), None)
+        x0, top, hole = fx + 8, my + low * 0.45, my + low + 6     # a hoop through the lower lip, seen from the front:
+        pts = [(x0 + 4.5 * math.sin(math.pi * u), hole + (top - hole) * u) for u in np.linspace(0, 1, 12)]
+        p.ell(x0, hole + 0.5, 2.0, 1.6, B.dk(sp['skin'], 0.6), None)   # out of the skin below the lip,
+        p.line(pts, INK, 5.0)                                            # over the lip's edge and into the mouth
+        p.line(pts, (214, 218, 228), 2.6)
+        p.ell(x0 + 4.2, (hole + top) / 2 - 2, 1.3, 1.3, (255, 255, 255), None)
 
 
 def torso(img, p, sp, t):
