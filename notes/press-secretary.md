@@ -13,6 +13,7 @@
 | 9 | push | reading her notes | A line cut through her eyes (the lowered lid was a straight bar): the lid is now a soft curve sagging over the top of the iris, lashes and crease follow it | done |
 | 10 | push | crowd | Two empty chairs only; no raised hands; small movements (shuffling, glances, typing elbows, scribbling notes) | done |
 | 11 | push | crowd | Backs too blocky, read as AI-drawn: each reporter now has their own build, lumpy head, haircut with nape and strands, clothing seams, collars, creases, knit or pattern, a flat shadow side | done |
+| 12 | push | all | Flag: dots coming off it, sock shape: redrawn from the photos (hangs in folds by the pole, scalloped edge, gathered tail, slanted stripes, stars kept inside the canton, gold spear tip) | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

@@ -568,35 +568,69 @@ def seal(img, cam, cx, cy, rx, ry, words=True):
         stamp_text(img, cam, 'WASHINGTON', cx, cy + ry * 0.66, rx * 0.5, (232, 242, 250))
 
 
+def _clip(img, lay, cam, *outlines):
+    """Composite a layer onto the picture, kept inside every outline given (their overlap)."""
+    a = np.asarray(lay.getchannel('A'))
+    for pts in outlines:
+        m = Image.new('L', img.size, 0)
+        ImageDraw.Draw(m).polygon([cam.P(*pt) for pt in pts], fill=255)
+        a = np.minimum(a, np.asarray(m))
+    lay.putalpha(Image.fromarray(a))
+    img.alpha_composite(lay)
+
+
+def _star(p, cx, cy, r, colr):
+    pts = [(cx + (r if k % 2 == 0 else r * 0.42) * math.cos(-math.pi / 2 + k * math.pi / 5),
+            cy + (r if k % 2 == 0 else r * 0.42) * math.sin(-math.pi / 2 + k * math.pi / 5)) for k in range(10)]
+    p.poly(pts, colr, None)
+
+
 def flag(img, cam, x, top, bottom, t):
-    """The US flag on a pole, hanging in folds (stars on blue, red and white stripes), a gold finial.
-    The stripes and stars are drawn on their own layer and cut to the cloth's outline."""
+    """The US flag on its pole, as in the briefing-room photos: the cloth hangs straight down beside the pole in
+    soft vertical folds, the free edge scalloped where the folds turn, a gathered tail near the bottom; the blue
+    canton at the top by the pole with its stars kept inside it; the stripes falling at a slant along the drape.
+    A brass pole with a gold spear tip. (Sam, 15 Oct: no dots off the flag, no sock shape.)"""
     p = B.Pen(img, cam)
+    w = 170
+    # the pole and its gold spear tip
+    p.poly(rough([(x - 6, top - 40), (x + 6, top - 40), (x + 7, STAGE_Y - 40), (x - 7, STAGE_Y - 40)], 1, 3),
+           (200, 170, 90), INK, 2)
+    p.ell(x, top - 52, 14, 14, (222, 184, 80), INK, 2)
+    p.poly([(x - 12, top - 62), (x, top - 120), (x + 12, top - 62), (x, top - 70)], (222, 184, 80), INK, 2)
+    # the cloth: attached down the pole, scalloped free edge, a gathered tail
+    cloth = curve([(x + 5, top), (x + w * 0.55, top + 6), (x + w, top + 26), (x + w + 16, top + 170),
+                   (x + w - 8, top + 260), (x + w + 12, top + 390), (x + w - 14, top + 520), (x + w, top + 660),
+                   (x + w * 0.76, top + 840), (x + w * 0.52, top + 990), (x + w * 0.4, bottom),
+                   (x + w * 0.22, bottom - 110), (x + 18, bottom - 300), (x + 5, top + 700)], 4)
+    p.poly(cloth, (246, 246, 244), None)
+    slope, sh = 0.42, 62.0
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     q = B.Pen(lay, cam)
-    p.poly(rough([(x - 6, top), (x + 6, top), (x + 7, STAGE_Y - 40), (x - 7, STAGE_Y - 40)], 1, 3), (200, 170, 90), INK, 2)
-    p.ell(x, top - 18, 16, 20, (222, 184, 80), INK, 2)
-    w = 160
-    cloth = [(x + 6, top + 10), (x + w, top + 30), (x + w + 30, top + 300), (x + w - 10, bottom - 120),
-             (x + w * 0.5, bottom), (x + 8, bottom - 60)]
-    p.poly(curve(cloth, 4), (246, 246, 244), INK, 2.4)
-    sh = (bottom - top) / 13.0
-    for k in range(0, 13, 2):                             # seven red stripes across the whole cloth
-        y0 = top + 10 + k * sh
-        q.poly([(x - 40, y0), (x + w + 120, y0 + 10), (x + w + 120, y0 + 10 + sh), (x - 40, y0 + sh)], (190, 40, 54), None)
-    q.poly([(x + 8, top + 12), (x + w * 0.62, top + 22), (x + w * 0.66, top + 420), (x + 8, top + 400)], (34, 48, 110), None)
-    rng = np.random.default_rng(3)
-    for k in range(26):
-        sx, sy = x + 24 + (k % 4) * 30 + rng.uniform(-4, 4), top + 40 + (k // 4) * 56 + rng.uniform(-4, 4)
-        q.ell(sx, sy, 5, 5, (246, 246, 244), None)
-    for k in range(4):                                    # the folds
-        fx_ = x + 50 + k * 46
-        q.line([(fx_, top + 30), (fx_ + 10, top + 400), (fx_ - 6, bottom - 100)], (120, 30, 40), 2.0)
-    m = Image.new('L', img.size, 0)
-    ImageDraw.Draw(m).polygon([cam.P(*pt) for pt in curve(cloth, 4)], fill=255)
-    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(m))))
-    img.alpha_composite(lay)
-    p.poly(curve(cloth, 4), None, INK, 2.4)
+    for k in range(0, 22, 2):                             # red stripes, falling at a slant along the drape
+        y0 = top + 20 + k * sh
+        q.poly([(x - 20, y0 - 20 * slope), (x + w + 40, y0 + (w + 40) * slope),
+                (x + w + 40, y0 + sh + (w + 40) * slope), (x - 20, y0 + sh - 20 * slope)], (190, 40, 54), None)
+    cw = w * 0.6                                           # the canton: down seven stripes, by the pole
+    c_bot = top + 20 + 7 * sh
+    canton = [(x - 20, top - 20), (x + cw, top - 20), (x + cw, c_bot + cw * slope), (x - 20, c_bot - 20 * slope)]
+    q.poly(canton, (34, 48, 110), None)
+    _clip(img, lay, cam, cloth)
+    st = Image.new('RGBA', img.size, (0, 0, 0, 0))         # the stars, only ever inside the canton
+    sp = B.Pen(st, cam)
+    for row in range(9):
+        for col in range(4):
+            sx = x + 18 + col * 26 + (13 if row % 2 else 0)
+            sy = top + 30 + row * 40 + (sx - x) * slope
+            _star(sp, sx, sy, 7, (246, 246, 244))
+    _clip(img, st, cam, cloth, canton)
+    sd = Image.new('RGBA', img.size, (0, 0, 0, 0))         # the folds: flat darker bands where the cloth turns away
+    fp = B.Pen(sd, cam)
+    for fx0, fx1 in ((w * 0.28, w * 0.42), (w * 0.7, w * 0.86)):
+        fp.poly([(x + fx0, top), (x + fx1, top), (x + fx1 - 10, bottom), (x + fx0 - 20, bottom)], (0, 0, 0, 46), None)
+    _clip(img, sd, cam, cloth)
+    for fx0 in (w * 0.28, w * 0.7):
+        p.line([(x + fx0, top + 30), (x + fx0 - 4, top + 400), (x + fx0 - 16, bottom - 160)], (60, 24, 36), 1.6)
+    p.poly(cloth, None, INK, 2.4)
 
 
 def stars(p, x0, x1, y0, y1, gap, size, seed):
