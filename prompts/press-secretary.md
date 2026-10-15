@@ -78,3 +78,9 @@ venezuela.
 Staging (in `SCRIPT` in source/press_secretary.py): reads with her head right down, snaps up, smiles; a nervous
 double-check before "the president"; a glance down at "excuse me" and up for "my master"; the silence is her staring at
 the page; the sigh comes after the second "I just want"; the second "venezuela" is quieter, flat, straight at the room.
+
+## Hook Text (Sam, 15 Oct)
+"Your first day as Press Secretary" - applied at the finishing step onto the clean final render:
+`python3 source/hook_text.py CLEAN.mp4 OUT.mp4 "Your first day as Press Secretary" --until 3.6 --y 1250`
+(y 1250 keeps it on the podium's pedestal, clear of her face; the default 880 covered her). Then the sign-off
+(`finish.py`). Keep the clean final in `source/data/press-secretary/` (not on GitHub).
