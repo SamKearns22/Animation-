@@ -401,11 +401,15 @@ def mouth(p, sp, t, fx, my):
     _mouth(p, sp, t, fx, my)
     if sp.get('lip_ring'):                                             # a silver ring through the lower lip, off centre
         m = sp.get('mouth', '')
-        low = {'v:AI': 16, 'v:O': 14, 'v:E': 9, 'v:U': 9, 'v:WQ': 8, 'v:L': 13}.get(m, 7)
-        x0, top, hole = fx + 8, my + low * 0.45, my + low + 6     # a hoop through the lower lip, seen from the front:
+        # where the lower lip's edge is, a little right of centre, for each mouth shape (x, y from the mouth's centre):
+        # the hoop comes out of the skin just below the lip, wraps over the lip's edge and goes into the mouth (Sam)
+        dx, edge = {'rest': (8, 2), 'line': (8, 2), 'set': (8, 0.5), 'v:MBP': (8, 3), 'smile': (8, 5), 'pleased': (8, 6),
+                    'v:etc': (8, 6), 'v:FV': (8, 7), 'v:E': (8, 8), 'v:AI': (8, 19), 'v:O': (6, 17), 'v:U': (3, 11),
+                    'v:WQ': (2, 9), 'v:L': (7, 14), 'grin': (8, 11), 'agape': (6, 16), 'v:rest': (8, 2)}.get(m, (8, 3))
+        x0, top, hole = fx + dx, my + edge - 1, my + edge + 10
         pts = [(x0 + 4.5 * math.sin(math.pi * u), hole + (top - hole) * u) for u in np.linspace(0, 1, 12)]
-        p.ell(x0, hole + 0.5, 2.0, 1.6, B.dk(sp['skin'], 0.6), None)   # out of the skin below the lip,
-        p.line(pts, INK, 5.0)                                            # over the lip's edge and into the mouth
+        p.ell(x0, hole + 0.5, 2.0, 1.6, B.dk(sp['skin'], 0.6), None)   # the piercing hole
+        p.line(pts, INK, 5.0)
         p.line(pts, (214, 218, 228), 2.6)
         p.ell(x0 + 4.2, (hole + top) / 2 - 2, 1.3, 1.3, (255, 255, 255), None)
 
