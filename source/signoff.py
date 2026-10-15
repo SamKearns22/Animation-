@@ -33,8 +33,8 @@ SLURP = os.path.join(HERE, 'audio', 'signoff-slurp.m4a')
 SIP_AT = 0.45                                # the juice starts up the straw (and the slurp starts) here
 INK = (24, 20, 22)
 RED = np.array([206, 22, 48], float)
-MOUTH = (0.565 * SIZE + DX, 0.613 * SIZE + DY)          # his mouth: the line along the top of his teeth, just to the
-                                                        # right of them (the dark oval below is his chin - Sam)
+MOUTH = (0.565 * SIZE + DX, 0.613 * SIZE + DY)          # the end of his mouth line, beside his teeth (straw at rest)
+PUCKER = (0.50 * SIZE + DX, 0.625 * SIZE + DY)          # while he sucks: mouth and teeth gone, a small O here
 BOX = tuple(int(f * SIZE + o) for f, o in ((0.57, DX), (0.70, DY), (1.05, DX), (1.10, DY)))   # where the leaves were
 PAW = (0.585, 0.885, 0.05, 0.04)
 EYES = ((0.293, 0.357), (0.707, 0.357))                 # his eyes (fractions of the square)
@@ -69,8 +69,8 @@ def o_mouth(img, k):
     if k < 0.5:
         return
     d = ImageDraw.Draw(img)
-    r = 0.03 * SIZE
-    d.ellipse([MOUTH[0] - r, MOUTH[1] - r * 0.95, MOUTH[0] + r, MOUTH[1] + r * 0.95], fill=(14, 10, 10))
+    r = 0.017 * SIZE                                                       # small, round, tight on the straw
+    d.ellipse([PUCKER[0] - r, PUCKER[1] - r, PUCKER[0] + r, PUCKER[1] + r], fill=(14, 10, 10))
 
 
 _cache = {}
@@ -99,7 +99,18 @@ def plates():
     bg = sq[by, bx]                                            # behind him: the nearest fire or sky
     bg = np.where(body[..., None], ndimage.uniform_filter(bg, (25, 25, 1)), sq)
     alpha = ndimage.gaussian_filter(body.astype(float), 1.2)
-    _cache.update(fur=fur, bg=bg, alpha=alpha)
+    # the same face with no mouth at all (line and teeth gone into fur), for while he sucks: the patch is filled with
+    # fur from his cheek beside it, blended in softly
+    y0, y1, x0, x1 = int(0.585 * SIZE), int(0.705 * SIZE), int(0.405 * SIZE), int(0.605 * SIZE)
+    shift = int(0.21 * SIZE)
+    hush = fur.copy()
+    patch = fur[y0:y1, x0 - shift:x1 - shift]
+    m = np.zeros((y1 - y0, x1 - x0))
+    yy, xx = np.mgrid[0:y1 - y0, 0:x1 - x0]
+    m[((yy - (y1 - y0) / 2) / ((y1 - y0) / 2)) ** 2 + ((xx - (x1 - x0) / 2) / ((x1 - x0) / 2)) ** 2 <= 1] = 1
+    m = ndimage.gaussian_filter(m, 6)[..., None]
+    hush[y0:y1, x0:x1] = fur[y0:y1, x0:x1] * (1 - m) + patch * m
+    _cache.update(fur=fur, hush=hush, bg=bg, alpha=alpha)
     return _cache
 
 
@@ -173,7 +184,7 @@ def juice_box(img, sip, sucking_now=False):
     # the straw: out of the top, up, and bent across into the corner of his mouth
     sx, sy = x0 + 34, y0 - 10
     bend = MOUTH[1] - 70                                                   # up, then across and down into his mouth
-    end = (MOUTH[0] + (0.0 if sucking_now else 0.012 * SIZE), MOUTH[1] - (0.0 if sucking_now else 0.006 * SIZE))
+    end = PUCKER if sucking_now else (MOUTH[0] + 0.012 * SIZE, MOUTH[1] - 0.006 * SIZE)
     pts = [(sx, sy), (sx, bend), end]
     d.line(pts, fill=INK, width=18, joint='curve')
     d.line(pts, fill=(250, 250, 250), width=11, joint='curve')
@@ -191,14 +202,14 @@ def frame(t):
     p = plates()
     bg = dancing(p['bg'], t)
     a = p['alpha'][..., None]
-    sq = bg * (1 - a) + p['fur'] * a
+    k = sucking(t)
+    sq = bg * (1 - a) + (p['hush'] if k >= 0.5 else p['fur']) * a          # sucking: his mouth is gone (Sam)
     img = Image.new('RGB', (W, H), PAPER)
     pic = Image.fromarray(np.clip(sq, 0, 255).astype(np.uint8))
     m = Image.new('L', (SIZE, SIZE), 0)
     ImageDraw.Draw(m).rounded_rectangle([0, 0, SIZE - 1, SIZE - 1], 44, fill=255)
     img.paste(pic, (DX, DY), m)
     sip = min(1.0, max(0.0, (t - SIP_AT) / 0.6))
-    k = sucking(t)
     widen(img, k)
     o_mouth(img, k)
     juice_box(img, sip, k >= 0.5)
