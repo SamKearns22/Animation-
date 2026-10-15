@@ -15,6 +15,8 @@ I don't know how to code. Please:
 - Put finished animations in the `animations/` folder with a clear name.
 - **Before any full render, offer me an animatic** (a quick, lower-quality version of the whole film) and wait for my
   Y or N. Never assume either way.
+- **Always ask me before starting a final render, and wait for a clear yes.** Notes like "fix this before the final
+  render" are not a go-ahead (15 Oct).
 - **Switching models to save money.** Each film moves through stages, and each stage has a model:
   - planning (reading the brief, staging the shots, questions for me): Opus, high effort;
   - building anything new (a new character, creature, set or tool): Opus, high effort;
