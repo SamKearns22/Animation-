@@ -81,7 +81,7 @@ the page; the sigh comes after the second "I just want"; the second "venezuela" 
 
 ## Hook Text (Sam, 15 Oct)
 "Your first day as Press Secretary" - applied at the finishing step onto the clean final render:
-`python3 source/hook_text.py CLEAN.mp4 OUT.mp4 "Your first day as Press Secretary" --until 3.6 --y 1180`
+`python3 source/hook_text.py CLEAN.mp4 OUT.mp4 "Your first day as Press Secretary" --until 3.6 --y 1180 --centre`
 (y 1180 keeps it on the podium's pedestal, clear of her face (the default 880 covered her) and just above the subtitles). Then the sign-off
 (`finish.py`). Keep the clean final in `source/data/press-secretary/` (not on GitHub).
 

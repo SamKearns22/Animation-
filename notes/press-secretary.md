@@ -17,6 +17,13 @@
 | 13 | push | reading her notes | Look down more when she checks her notes, like an inexperienced public speaker: head drops, lids right down, features lower (more forehead), held too long, snaps back up; a nervous double-check | done |
 | 14 | audio | paras 1-2 | Second take of paragraphs 1 and 2 replaces the first; first take kept from "So, like." on | done |
 | 15 | push | close-ups | Lines crossed the whites of the eyes (smile and looking down): the eye is now one opening between the lids, the iris cut to it, lids drawn corner to corner | done |
+| 16 | acting | "we work tirelessly" | Looks down | done |
+| 17 | acting | "agenda" | Big smile during the word | done |
+| 18 | acting | "master" | Eyes slightly wide | done |
+| 19 | acting | "helicopters" | Delighted (smile, brows high, eyes crinkled) | done |
+| 20 | acting | "I'll get back to you on that" | Slightly awkward: worried brows, eyes sliding sideways, a tight grimace in the pause | done |
+| 21 | subtitles | all | Out of alignment: each comma and full stop now snaps to the nearest real pause in the recording | done |
+| 22 | hook | open | Hook Text centred, same height (--centre) | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

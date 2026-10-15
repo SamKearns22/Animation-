@@ -36,14 +36,16 @@ SERIF = os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf')
 # down, [smile2] / [smile3] a big smile at the room in the pause, [sigh] the big sigh in the pause before the next word.
 # '||' marks the five longest silences in the recording (paragraph ends, the silence, the sigh, before the last word),
 # which anchor the words; inside each part the words are spread over the real stretches of speech by syllables.
-SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that with the president we are, we work "
-          "tirelessly for America, [smile2] [down] and the people, they understand that, and I look forward to the "
-          "president, [double] the president, with his helping, [up] with his agenda. [smile3] || "
-          "My president and I, eh, [down] excuse me, [up] my master and I are very happy to be, [smile2] [down] and "
-          "like, our kids are helicopters, [up] and I really think that with the biggest swell of support, the people "
-          "are really, I just, [down] you know it's so. [up] I'll get back to you on that. [smile2] || "
-          "[down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had a one "
-          "day war, [down] and I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that with the president we are, [down] "
+          "we work tirelessly for America, [smile2] [down] and the people, they understand that, and I look forward to "
+          "the president, [double] the president, with his helping, [up] with his [onsmile3] agenda. || "
+          "My president and I, eh, [down] excuse me, [up] my [wide] master and I are very happy to be, [smile2] [down] "
+          "and like, our kids are [delight] helicopters, [up] and I really think that with the biggest swell of "
+          "support, the people are really, I just, [down] you know it's so. [up] [awkward] I'll get back to you on "
+          "that. || [down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had "
+          "a one day war, [down] and I just need, I just want. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+# Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
+# "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
     ('press-secretary-p12', 0.0, None, 1),    # first take from "So, like." to the end
     ('press-secretary', 44.6, None, 3)]
@@ -96,27 +98,70 @@ def build_timeline():
     words, events = [], []                     # words: (start, end, text); events: (word index, tag)
     for text, grp in zip(parts_text, groups):
         toks = text.split()
-        sy = [syllables(w) for w in toks if not w.startswith('[')]
+        plain = [w for w in toks if not w.startswith('[')]
+        sy = [syllables(w) for w in plain]
         total, speech = sum(sy), sum(b_ - a_ for a_, b_ in grp)
+        cum, gaps = 0.0, []                    # each pause's place on the speech-only clock, and its length
+        for j in range(len(grp) - 1):
+            cum += grp[j][1] - grp[j][0]
+            gaps.append((cum, grp[j + 1][0] - grp[j][1]))
 
-        def at(frac):                          # a fraction of this part's speech -> a time in the recording
-            left = frac * speech
+        def at(pos, start=False):              # a place on the speech-only clock -> a time in the recording
+            left = pos
             for a_, b_ in grp:
-                if left <= b_ - a_ + 1e-9:
-                    return a_ + left
+                if left < b_ - a_ - 1e-6 or (not start and left <= b_ - a_ + 1e-6):
+                    return a_ + max(0.0, left)
                 left -= b_ - a_
             return grp[-1][1]
-        done, k = 0, 0
+        # chunk ends (after a comma or full stop) snap to the nearest real pause, preferring longer pauses
+        ends, done = [], 0
+        for i, w in enumerate(plain):
+            done += sy[i]
+            if w[-1] in ',.' and i < len(plain) - 1:
+                ends.append((i, done))
+        bounds, last, used = {}, 0.0, set()
+        rate = speech / total
+        for i, cs in ends:
+            ideal = cs * rate
+            best, bscore = None, 1e9
+            for j, (pos, ln) in enumerate(gaps):
+                if j in used or pos <= last + 0.15:
+                    continue
+                d = abs(pos - ideal)
+                if d < max(0.9, 0.3 * ideal) and d - 0.6 * min(ln, 1.0) < bscore:
+                    best, bscore = j, d - 0.6 * min(ln, 1.0)
+            if best is not None:
+                used.add(best)
+                bounds[i] = gaps[best][0]
+            else:
+                bounds[i] = max(ideal, last + 0.15)
+            last = bounds[i]
+        # words spread by syllables inside their chunk
+        chunk_start, chunk_words, k = 0.0, [], 0
+        pending = []
         for w in toks:
             if w.startswith('['):
-                events.append((len(words), w.strip('[]')))
+                pending.append(w.strip('[]'))
                 continue
-            st_, en_ = at(done / total), at((done + sy[k]) / total)
-            words.append((st_, en_, w))
-            done += sy[k]
+            for tag in pending:
+                events.append((len(words) + len(chunk_words), tag))
+            pending = []
+            chunk_words.append((w, sy[k]))
+            if k in bounds or k == len(plain) - 1:
+                chunk_end = bounds.get(k, speech)
+                csy = sum(x for _, x in chunk_words)
+                d0 = 0
+                for ww, x in chunk_words:
+                    p0 = chunk_start + (chunk_end - chunk_start) * d0 / csy
+                    p1 = chunk_start + (chunk_end - chunk_start) * (d0 + x) / csy
+                    words.append((at(p0, start=True), at(p1), ww))
+                    d0 += x
+                chunk_start, chunk_words = chunk_end, []
             k += 1
+        for tag in pending:
+            events.append((len(words), tag))
     end = words[-1][1] + TAIL
-    gaze, smiles, sigh = [(0.0, 'up')], [], (1e9, 1e9)
+    gaze, smiles, sigh, exprs = [(0.0, 'up')], [], (1e9, 1e9), []
     for wi, tag in events:
         before = words[wi - 1][1] if wi > 0 else 0.0
         after = words[wi][0] if wi < len(words) else end
@@ -130,11 +175,28 @@ def build_timeline():
             gaze.append((before + 0.05, 'up'))
         elif tag == 'sigh':
             sigh = (before + 0.25, after - 0.1)
+        elif tag in ('onsmile2', 'onsmile3', 'delight', 'wide', 'awkward'):
+            w0, w1 = words[wi][0], words[wi][1]
+            nxt = words[wi + 1][0] if wi + 1 < len(words) else end
+            gaze.append((w0 - 0.1, 'up'))
+            if tag == 'wide':                                  # eyes slightly wide on the word
+                exprs.append((w0 - 0.05, w1 + 0.35, 'wide'))
+            elif tag == 'awkward':                             # through the sentence and the pause after it
+                j = wi
+                while j < len(words) - 1 and words[j][2][-1] != '.':
+                    j += 1
+                nx = words[j + 1][0] if j + 1 < len(words) else end
+                exprs.append((w0 - 0.1, min(nx - 0.05, words[j][1] + 1.6), 'awkward'))
+            else:                                              # a smile DURING the word, held into the pause
+                b1 = max(w1 + 0.45, min(nxt - 0.05, w1 + 1.2))
+                smiles.append((w0 - 0.08, b1, 2 if tag == 'delight' else int(tag[-1])))
+                if tag == 'delight':
+                    exprs.append((w0 - 0.08, b1, 'delight'))
     gaze.sort()
-    return words, gaze, smiles, sigh, end, v, runs
+    return words, gaze, smiles, sigh, end, v, runs, exprs
 
 
-TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS = build_timeline()
+TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS, EXPRS = build_timeline()
 DUR = round(END + 0.25, 2)
 BLACK_AT = END
 SHOTS = [('push', 0.0, DUR)]            # one continuous shot (the pre-flight reads this)
@@ -231,6 +293,22 @@ def state(t):
         s['head_dy'] = 24.0
         s['feat_dy'] = 9.0
         s['brow'] = -3.0
+    for a, b, kind in EXPRS:
+        if a <= t < b:
+            if kind == 'wide':                                 # eyes slightly wide, brows up
+                s['wide'] = 1.0
+                s['lid'] = 0.0
+                s['brow'] = max(s['brow'], 8.0)
+            elif kind == 'delight':                            # delighted: brows high, eyes crinkled, head tipped
+                s['brow'] = 14.0
+                s['squint'] = 0.5
+                s['head_tilt'] = -0.06
+            elif kind == 'awkward':                            # worried brows, eyes sliding sideways, a tight grimace
+                s['worry'] = 1.0
+                s['brow'] = 4.0
+                s['look_x'] = 0.8 if int((t - a) / 0.7) % 2 == 0 else -0.6
+                if s['mouth'] == 'rest' and s['smile'] == 0:
+                    s['mouth'] = 'grimace'
     a, b = SIGH
     if a <= t < b:
         u = (t - a) / (b - a)
@@ -360,7 +438,7 @@ def eye(p, ex, ey, sgn, st):
     """A large almond eye: heavy liner along the upper lid, lashes flicked out at the corner, a hazel iris. The eye
     is ONE opening between the two lids; the iris is cut to it, so no line ever crosses the white (Sam, 15 Oct)."""
     lid, squint = st['lid'], st['squint']
-    w, h = 21, 10
+    w, h = 21, 10 + 3.5 * st.get('wide', 0.0)             # slightly wide: more white above and below the iris
     us = np.linspace(-1, 1, 15)
     if st['closed']:
         p.line([(ex + w * u, ey + 1 + 5 * (1 - u * u)) for u in us], INK, 3.4)
@@ -368,7 +446,7 @@ def eye(p, ex, ey, sgn, st):
             lx = ex + sgn * (8 + 6 * k)
             p.line([(lx, ey + 5), (lx + sgn * 5, ey + 12)], INK, 1.8)
         return
-    low = h * (1 - squint)                                # a big smile pushes the lower lid up
+    low = (h + 1.5 * st.get('wide', 0.0)) * (1 - squint)  # a big smile pushes the lower lid up
     upper_open = [(ex + w * u, ey - h * (1 - u * u)) for u in us]
     upper = [(ex + w * u, ey - h * (1 - u * u) * (1 - lid * 1.08)) for u in us]
     lower = [(ex + w * u, ey + low * (1 - u * u) - 0.8 * h * squint * (1 - u * u) * 0.0) for u in us]
@@ -425,6 +503,14 @@ def mouth(p, fx, my, st):
             p.line([(fx + sgn * (w + 4), my - up - 12), (fx + sgn * (w + 10), my - up), (fx + sgn * (w + 4), my - up + 10)],
                    SKIN_D, 1.8)
         return
+    if m == 'grimace':                                    # slightly awkward: lips pressed tight, wide, one corner up
+        top = [(fx - 28, my + 2), (fx - 10, my - 2), (fx + 10, my - 2), (fx + 28, my - 4)]
+        bot = [(fx + 28, my - 4), (fx + 12, my + 7), (fx - 12, my + 8), (fx - 28, my + 2)]
+        p.poly(curve(top + bot, 3), LIP, INK, 1.8)
+        p.line([(fx - 28, my + 2), (fx, my + 2), (fx + 28, my - 4)], INK, 2.2)
+        p.line([(fx + 28, my - 4), (fx + 33, my - 8)], SKIN_D, 1.6)
+        p.line([(fx - 28, my + 2), (fx - 32, my + 5)], SKIN_D, 1.6)
+        return
     if m == 'blow':                                       # the sigh: a small rounded breath out
         p.poly(curve(oval(fx, my + 4, 11, 9, 12)), LIP, INK, 2.0)
         p.ell(fx, my + 4, 5, 4, (96, 34, 42), None)
@@ -460,8 +546,9 @@ def face(p, hx, hy, hw, hh, st):
     for sgn in (-1, 1):                                   # arched, filled-in brows, darker than the hair
         ex = fx + sgn * 29
         by = hy - 30 - brow
-        p.poly([(ex - sgn * 18, by + 6), (ex - sgn * 4, by - 3), (ex + sgn * 10, by - 7), (ex + sgn * 24, by + 2),
-                (ex + sgn * 10, by - 2), (ex - sgn * 4, by + 2)], BROW, BROW, 1.6)
+        wy = 7 * st.get('worry', 0.0)                       # worried: inner ends lifted, outer ends dropped
+        p.poly([(ex - sgn * 18, by + 6 - wy), (ex - sgn * 4, by - 3 - wy * 0.6), (ex + sgn * 10, by - 7), (ex + sgn * 24, by + 2 + wy * 0.5),
+                (ex + sgn * 10, by - 2), (ex - sgn * 4, by + 2 - wy * 0.6)], BROW, BROW, 1.6)
     for sgn in (-1, 1):
         eye(p, fx + sgn * 29, hy - 6 + st.get('eye_dy', 0), sgn, st)
     p.line([(fx - 3, hy - 4), (fx - 6, hy + 26), (fx - 2, hy + 33), (fx + 7, hy + 31)], INK, 1.8)   # a slim nose
