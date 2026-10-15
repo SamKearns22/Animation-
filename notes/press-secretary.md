@@ -24,6 +24,9 @@
 | 20 | acting | "I'll get back to you on that" | Slightly awkward: worried brows, eyes sliding sideways, a tight grimace in the pause | done |
 | 21 | subtitles | all | Out of alignment: each comma and full stop now snaps to the nearest real pause in the recording | done |
 | 22 | hook | open | Hook Text centred, same height (--centre) | done |
+| 23 | subtitles | opening | First "it's really" subtitle left too soon: words now matched syllable by syllable to the beats detected in the recording (168 beats, 172 script syllables), commas still sit on real pauses | done |
+| 24 | acting | big smiles | Mouth stopped moving in the smiles: she now talks through the smile (jaw opens with her voice) and flashes a crazed smile the moment she stops | done |
+| 25 | acting | talking to the room | Eyes now roam the journalists while she speaks (jump to a face, hold 0.7-1.6 s, head follows a little) | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

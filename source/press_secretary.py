@@ -86,6 +86,19 @@ def _voice():
     return MA, np.concatenate(pieces), runs, sorted(anchors)
 
 
+def _syllable_beats(v, runs):
+    """The moments each syllable peaks in the voice (loudness of the speech band), inside the stretches of speech."""
+    from scipy.signal import butter, find_peaks, sosfilt
+    import mossad_audio as MA
+    x = sosfilt(butter(2, [300, 2500], 'band', fs=MA.SR, output='sos'), v)
+    hop = MA.SR // 200
+    e = np.array([np.sqrt(np.mean(x[i:i + hop] ** 2)) for i in range(0, len(x) - hop, hop)])
+    e = np.convolve(e, np.hanning(9) / np.hanning(9).sum(), 'same')
+    pk, _ = find_peaks(e, distance=18, prominence=e.max() * 0.06)
+    ts = pk / 200.0
+    return [t for t in ts if any(a_ - 0.02 <= t <= b_ + 0.02 for a_, b_ in runs)]
+
+
 def build_timeline():
     """Words timed to the recording; her acting (glances, smiles, the sigh) placed by the tags."""
     MA, v, runs, cuts = _voice()
@@ -96,70 +109,55 @@ def build_timeline():
         groups.append(runs[prev:c + 1])
         prev = c + 1
     words, events = [], []                     # words: (start, end, text); events: (word index, tag)
+    nuclei = _syllable_beats(v, runs)
     for text, grp in zip(parts_text, groups):
         toks = text.split()
         plain = [w for w in toks if not w.startswith('[')]
         sy = [syllables(w) for w in plain]
-        total, speech = sum(sy), sum(b_ - a_ for a_, b_ in grp)
-        cum, gaps = 0.0, []                    # each pause's place on the speech-only clock, and its length
-        for j in range(len(grp) - 1):
-            cum += grp[j][1] - grp[j][0]
-            gaps.append((cum, grp[j + 1][0] - grp[j][1]))
+        S = sum(sy)
+        nuc = [x for x in nuclei if grp[0][0] - 0.05 <= x <= grp[-1][1] + 0.05]
+        if len(nuc) < 2:
+            nuc = [grp[0][0], grp[-1][1]]
+        N = len(nuc)
 
-        def at(pos, start=False):              # a place on the speech-only clock -> a time in the recording
-            left = pos
-            for a_, b_ in grp:
-                if left < b_ - a_ - 1e-6 or (not start and left <= b_ - a_ + 1e-6):
-                    return a_ + max(0.0, left)
-                left -= b_ - a_
-            return grp[-1][1]
-        # chunk ends (after a comma or full stop) snap to the nearest real pause, preferring longer pauses
-        ends, done = [], 0
-        for i, w in enumerate(plain):
-            done += sy[i]
-            if w[-1] in ',.' and i < len(plain) - 1:
-                ends.append((i, done))
-        bounds, last, used = {}, 0.0, set()
-        rate = speech / total
-        for i, cs in ends:
-            ideal = cs * rate
-            best, bscore = None, 1e9
-            for j, (pos, ln) in enumerate(gaps):
-                if j in used or pos <= last + 0.15:
-                    continue
-                d = abs(pos - ideal)
-                if d < max(0.9, 0.3 * ideal) and d - 0.6 * min(ln, 1.0) < bscore:
-                    best, bscore = j, d - 0.6 * min(ln, 1.0)
-            if best is not None:
-                used.add(best)
-                bounds[i] = gaps[best][0]
-            else:
-                bounds[i] = max(ideal, last + 0.15)
-            last = bounds[i]
-        # words spread by syllables inside their chunk
-        chunk_start, chunk_words, k = 0.0, [], 0
-        pending = []
+        def T(f):                              # a (fractional) syllable beat -> its time in the recording
+            f = min(max(f, 0.0), N - 1.0)
+            i = int(f)
+            return nuc[i] if i >= N - 1 else nuc[i] + (nuc[i + 1] - nuc[i]) * (f - i)
+        # each script syllable is matched to the recording's syllable beats in order (Sam, 15 Oct: the
+        # subtitles ran ahead); the beat counter misses about 1 in 6, so the matching is by proportion
+        done, pending, start_idx = 0, [], len(words)
         for w in toks:
             if w.startswith('['):
                 pending.append(w.strip('[]'))
                 continue
             for tag in pending:
-                events.append((len(words) + len(chunk_words), tag))
+                events.append((len(words), tag))
             pending = []
-            chunk_words.append((w, sy[k]))
-            if k in bounds or k == len(plain) - 1:
-                chunk_end = bounds.get(k, speech)
-                csy = sum(x for _, x in chunk_words)
-                d0 = 0
-                for ww, x in chunk_words:
-                    p0 = chunk_start + (chunk_end - chunk_start) * d0 / csy
-                    p1 = chunk_start + (chunk_end - chunk_start) * (d0 + x) / csy
-                    words.append((at(p0, start=True), at(p1), ww))
-                    d0 += x
-                chunk_start, chunk_words = chunk_end, []
-            k += 1
+            k = len(words) - start_idx
+            i0, i1 = done * N / S, (done + sy[k]) * N / S
+            words.append([T(i0) - 0.12, T(max(i0, i1 - 1.0)) + 0.16, w])
+            done += sy[k]
         for tag in pending:
             events.append((len(words), tag))
+        # a comma or full stop sits on the nearest real pause, if there is one close by
+        part = words[start_idx:]
+        pauses = [(grp[j][1], grp[j + 1][0]) for j in range(len(grp) - 1)]
+        taken = set()
+        for k in range(len(part) - 1):
+            if part[k][2][-1] not in ',.':
+                continue
+            e = part[k][1]
+            best = min((j for j in range(len(pauses)) if j not in taken), key=lambda j: abs(pauses[j][0] - e),
+                       default=None)
+            if best is not None and abs(pauses[best][0] - e) < 0.7:
+                taken.add(best)
+                part[k][1] = pauses[best][0] + 0.05
+                part[k + 1][0] = pauses[best][1] - 0.05
+        for k in range(len(part)):                       # keep every word inside its part, in order
+            part[k][0] = max(part[k][0], grp[0][0] - 0.05, part[k - 1][1] - 0.02 if k else -1)
+            part[k][1] = max(part[k][1], part[k][0] + 0.12)
+    words = [tuple(w) for w in words]
     end = words[-1][1] + TAIL
     gaze, smiles, sigh, exprs = [(0.0, 'up')], [], (1e9, 1e9), []
     for wi, tag in events:
@@ -283,11 +281,24 @@ def state(t):
         on = smooth((t - a) / 0.12)                        # the smile switches ON almost at once
         off = 1.0 - smooth((t - (b - 0.1)) / 0.1)          # and OFF, just as suddenly (that is the strangeness)
         if on * off > 0.5:
+            # talking: she keeps speaking THROUGH the smile (the jaw opens with her voice); the moment she stops,
+            # it flashes into the crazed one (Sam, 15 Oct)
+            level = 2 if lv > 0.08 else 3
+            s['smile_open'] = 0.0 if lv <= 0.08 else min(1.0, lv)
             s['smile'] = level
             s['brow'] = 5 + 3 * level
             s['squint'] = 0.2 * level
             s['head_tilt'] = 0.04 * (1 if level == 3 else -1) * smooth((t - a) / max(0.2, (b - a) / 4))
             s['gaze'] = 'up'
+    if s['gaze'] == 'up':                                  # looking round the journalists while she talks: the eyes
+        rnd = random.Random(31)                            # jump to a new face and hold, the head follows a little
+        tt, k = 0.0, 0
+        spots = [-0.95, -0.45, 0.1, 0.55, 1.0, -0.2, 0.8, -0.7]
+        while tt <= t:
+            tt += rnd.uniform(0.7, 1.6)
+            k += 1
+        s['look_x'] = spots[(k * 3) % len(spots)]
+        s['look_dy'] = 2.0                                 # the press sit below her
     if s['gaze'] == 'down' and s['smile'] == 0:            # head right down, eyes on the paper (note 13)
         s['lid'] = 0.86
         s['head_dy'] = 24.0
@@ -325,7 +336,7 @@ def state(t):
     if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0:
         s['closed'] = True
     s['head_tilt'] += filmkit.shifts(t, seed=4, amount=0.025)
-    s['head_dx'] = 40 * filmkit.shifts(t, seed=9, amount=0.06)
+    s['head_dx'] = 40 * filmkit.shifts(t, seed=9, amount=0.06) + 9 * s['look_x'] * (s['gaze'] == 'up')
     return s
 
 
@@ -452,8 +463,8 @@ def eye(p, ex, ey, sgn, st):
     lower = [(ex + w * u, ey + low * (1 - u * u) - 0.8 * h * squint * (1 - u * u) * 0.0) for u in us]
     opening = upper + lower[::-1][1:-1]
     p.poly(opening, (252, 252, 250), None)
-    dx = st['look_x'] * 6
-    dy = 5 if st['gaze'] == 'down' else 0
+    dx = st['look_x'] * 7
+    dy = 5 if st['gaze'] == 'down' else st.get('look_dy', 0.0)
     cx, cy = ex + dx, ey + dy
     circ = lambda r: [(cx + r * math.cos(a_), cy + r * math.sin(a_)) for a_ in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
     iris = _clip_convex(opening[::-1], circ(9))
@@ -484,6 +495,8 @@ def mouth(p, fx, my, st):
         w = 36 if sm == 2 else 42
         up = 9 if sm == 2 else 12
         drop = 16 if sm == 2 else 21
+        drop += 12 * st.get('smile_open', 0.0)            # talking through it: the jaw drops with her voice
+        w -= 4 * st.get('smile_open', 0.0)
         outer = curve([(fx - w, my - up), (fx - w * 0.5, my - 4), (fx, my - 3), (fx + w * 0.5, my - 4), (fx + w, my - up),
                        (fx + w * 0.62, my + drop * 0.7), (fx, my + drop), (fx - w * 0.62, my + drop * 0.7)], 4)
         p.poly(outer, LIP, INK, 2.2)
