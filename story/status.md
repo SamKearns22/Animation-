@@ -21,8 +21,9 @@ Read this first in any new session, after CLAUDE.md.
   audit clean, no robot voice). `python3 source/polanski.py check | cast OUT | stills OUT | final OUT --small`.
 - First animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
   stand-ins; Sam to record 15 lines named `polanski-KEY.m4a` (keys in `SCRIPT`). Next: Sam's notes, recordings, final.
-- **Finished 15 Oct:** `animations/bingo-bingo-vertical.mp4` (50 s, 1080 x 1920, 3.9 MB), Sam's 15 voice lines, title
-  "Zack Polanski / this week" (house style, inside the TikTok safe area, fades by 4 s).
+- **Finished 15 Oct:** `animations/bingo-bingo-vertical.mp4` (50 s, 1080 x 1920, 5.4 MB), Sam's 15 voice lines, Hook Text
+  "Zack Polanski this week" (`hook_text.py`, TikTok caption style, gone at the first cut). The untitled final is kept in
+  `source/data/polanski/bingo-untitled.mp4` (not on GitHub) so the Hook Text can change in seconds.
 - Later on 14 Oct: card revealed by camera framing, straight-180 turn (now the standard), no sound effects, enthused
   advisor at "Shoplifting". **Still waiting on:** Sam's 15 recordings, then an animatic offer and the final. No full render
   until Sam asks.
