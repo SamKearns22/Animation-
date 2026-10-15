@@ -36,6 +36,11 @@
 | 32 | subtitles | 0:39 (uncut) | "helicopters," pinned to start at 38.95 s of the full take | done |
 | 33 | subtitles | 32 s (animatic 15) | "Let me get back to you on that." pinned there (50.26 s of the full take) | done, not yet rendered |
 | 34 | audio | opening | The opening "I" was clipped: the sound starts 0.45 s earlier with a 60 ms fade-in (everything slides 0.45 s later) | done, not yet rendered |
+| 35 | subtitles | get back | Reads "I'll get back to you on that." | done, not yet rendered |
+| 36 | acting | get back | More uncomfortable: stronger worried brows, a bead of sweat, eyes flick down and back, a swallow, tighter grimace | done, not yet rendered |
+| 37 | acting | "cause it's booming" | Excited: eyes wide, brows high, talking through a big smile with a little bounce, crazed flash after | done, not yet rendered |
+| 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done, not yet rendered |
+| 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done, not yet rendered |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

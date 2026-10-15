@@ -41,9 +41,9 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "the president, [double] the president, with his helping, [up] with his [onsmile3] agenda. || "
           "My president and I, eh, [down] excuse me, [up] my [wide] master and I are very happy to be, [smile2] [down] "
           "and like, our kids are [delight] ^helicopters, [up] and I really think that with the biggest swell of "
-          "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^Let me get back to you "
-          "on that. || [down] So, like. I think if we all just, you know, [up] cause it's booming, [smile3] and we've had "
-          "a one day war, [down] I just need. || I just want. || [sigh] Venezuela. || [up] venezuela.")
+          "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^I'll get back to you "
+          "on that. || [down] So, like. I think if we all just, you know, [up] [excited] cause it's booming, [smile3] and we've had "
+          "a one day war, [down] I just need, I just need. || I just want. || [sigh] Venezuela. || [up] venezuela.")
 # Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
 # "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
@@ -101,7 +101,7 @@ def _syllable_beats(v, runs):
 
 START_WORD = 'I look forward'
 PRE_ROLL = 0.45                  # Sam, 15 Oct: the opening 'I' was clipped; the sound now starts this much earlier   # the film opens on these words (None: from the very start)
-PINS = {'helicopters,': 38.95, 'Let me get back': 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
+PINS = {'helicopters,': 38.95, "I'll get back to": 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
 FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
 
 
@@ -201,12 +201,20 @@ def build_timeline():
             gaze.append((before + 0.05, 'up'))
         elif tag == 'sigh':
             sigh = (before + 0.25, after - 0.1)
+        elif tag == 'excited':                                 # through the phrase, to its comma: eyes wide, big
+            j = wi                                             # talking smile, a little bounce (Sam, 15 Oct)
+            while j < len(words) - 1 and words[j][2][-1] not in ',.':
+                j += 1
+            e1 = words[j][1] + 0.1
+            exprs.append((words[wi][0] - 0.1, e1, 'excited'))
+            smiles.append((words[wi][0] - 0.1, e1, 2))
+            gaze.append((words[wi][0] - 0.15, 'up'))
         elif tag in ('onsmile2', 'onsmile3', 'delight', 'wide', 'awkward'):
             w0, w1 = words[wi][0], words[wi][1]
             nxt = words[wi + 1][0] if wi + 1 < len(words) else end
             gaze.append((w0 - 0.1, 'up'))
             if tag == 'wide':                                  # eyes slightly wide on the word
-                exprs.append((w0 - 0.05, w1 + 0.35, 'wide'))
+                exprs.append((w0 - 0.45, w1 + 0.3, 'wide'))   # kicks in just before the word (Sam, 15 Oct)
             elif tag == 'awkward':                             # through the sentence and the pause after it
                 j = wi
                 while j < len(words) - 1 and words[j][2][-1] != '.':
@@ -367,15 +375,29 @@ def state(t):
                 s['brow'] = 14.0
                 s['squint'] = 0.5
                 s['head_tilt'] = -0.06
+            elif kind == 'excited':                            # excited: wide eyes, brows high, a bounce
+                s['wide'] = 1.0
+                s['lid'] = 0.0
+                s['squint'] = 0.0
+                s['brow'] = 16.0
+                s['head_dy'] = -7.0 * abs(math.sin((t - a) * 7.0))
+                s['sh_dy'] = -4.0 * abs(math.sin((t - a) * 7.0))
             elif kind == 'awkward':                            # sheepish, looking dead at the crowd (Sam, 15 Oct):
-                s['worry'] = 1.0                               # worried brows, chin dipped a touch, a tight grimace
-                s['brow'] = 3.0
-                s['look_x'] = 0.0
+                s['worry'] = 1.6                               # worried brows, chin dipped, a tight grimace, and
+                s['brow'] = 2.0                                # more uncomfortable (Sam, 15 Oct): a bead of sweat,
+                s['look_x'] = 0.0                              # a nervous flick of the eyes down and back, a swallow
                 s['look_dy'] = 2.5
                 s['gaze'] = 'up'
-                s['lid'] = 0.15
-                s['head_dy'] = 6.0
-                s['head_tilt'] = 0.05
+                s['lid'] = 0.22
+                s['head_dy'] = 7.0
+                s['head_tilt'] = 0.06
+                s['sweat'] = min(1.0, (t - a) / 0.4)
+                u = t - a
+                if 1.9 < u < 2.25 or 3.4 < u < 3.7:            # eyes flick down to the notes and straight back
+                    s['look_dy'] = 6.0
+                    s['lid'] = 0.5
+                if 2.8 < u < 3.1:                              # a swallow: the chin dips and comes back
+                    s['head_dy'] = 11.0
                 if s['mouth'] == 'rest' and s['smile'] == 0:
                     s['mouth'] = 'grimace'
     a, b = SIGH
@@ -575,12 +597,12 @@ def mouth(p, fx, my, st):
                    SKIN_D, 1.8)
         return
     if m == 'grimace':                                    # slightly awkward: lips pressed tight, wide, one corner up
-        top = [(fx - 28, my + 2), (fx - 10, my - 2), (fx + 10, my - 2), (fx + 28, my - 4)]
-        bot = [(fx + 28, my - 4), (fx + 12, my + 7), (fx - 12, my + 8), (fx - 28, my + 2)]
+        top = [(fx - 28, my + 4), (fx - 10, my - 1), (fx + 10, my - 1), (fx + 28, my + 1)]
+        bot = [(fx + 28, my + 1), (fx + 12, my + 6), (fx - 12, my + 7), (fx - 28, my + 4)]
         p.poly(curve(top + bot, 3), LIP, INK, 1.8)
-        p.line([(fx - 28, my + 2), (fx, my + 2), (fx + 28, my - 4)], INK, 2.2)
-        p.line([(fx + 28, my - 4), (fx + 33, my - 8)], SKIN_D, 1.6)
-        p.line([(fx - 28, my + 2), (fx - 32, my + 5)], SKIN_D, 1.6)
+        p.line([(fx - 28, my + 4), (fx, my + 2), (fx + 28, my + 1)], INK, 2.2)
+        p.line([(fx + 28, my + 1), (fx + 32, my + 5)], SKIN_D, 1.6)
+        p.line([(fx - 28, my + 4), (fx - 32, my + 8)], SKIN_D, 1.6)
         return
     if m == 'blow':                                       # the sigh: a small rounded breath out
         p.poly(curve(oval(fx, my + 4, 11, 9, 12)), LIP, INK, 2.0)
@@ -700,6 +722,11 @@ def her(img, cam, t, st=None, notes=True):
     hair_front(q, hx, hy, hw, hh, sh)
     q.poly(head_shape(hx, hy, hw, hh), SKIN, INK, 2.6)
     face(q, hx, hy, hw, hh, st)
+    if st.get('sweat', 0) > 0:                            # a single bead of sweat at her temple, flat, outlined
+        sx, sy = hx + hw * 0.72, hy - hh * 0.42 + 10 * st['sweat']
+        q.poly(curve([(sx, sy - 13), (sx + 7, sy + 1), (sx + 5, sy + 8), (sx - 5, sy + 8), (sx - 7, sy + 1)], 3),
+               (214, 236, 250), INK, 1.6)
+        q.line([(sx - 2, sy - 2), (sx - 3, sy + 3)], (255, 255, 255), 1.6)
     q.poly(head_shape(hx, hy, hw, hh), None, INK, 2.6)
     hair_top(q, hx, hy, hw, hh, hx)
 
