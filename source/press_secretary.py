@@ -300,7 +300,6 @@ def eye(p, ex, ey, sgn, st):
             p.line([(lx, ey + 5), (lx + sgn * 5, ey + 12)], INK, 1.8)
         return
     low = h * (1 - squint)                                # a big smile pushes the lower lid up
-    top_y = ey - h + lid * h * 1.6
     almond = [(ex - w, ey), (ex - w * 0.45, ey - h), (ex + w * 0.45, ey - h), (ex + w, ey), (ex + w * 0.45, ey + low),
               (ex - w * 0.45, ey + low)]
     p.poly(almond, (252, 252, 250), None)
@@ -309,18 +308,24 @@ def eye(p, ex, ey, sgn, st):
     p.ell(ex + dx, ey + dy, 9, 9, IRIS, INK, 1.4)
     p.ell(ex + dx, ey + dy, 4.2, 4.2, INK, None)
     p.ell(ex + dx + 3, ey + dy - 3, 1.8, 1.8, (255, 255, 255), None)
-    if lid > 0:                                           # the upper lid lowered (reading her notes)
-        p.poly([(ex - w - 1, ey - 1), (ex - w * 0.45, ey - h - 2), (ex + w * 0.45, ey - h - 2), (ex + w + 1, ey - 1),
-                (ex + w * 0.45, top_y), (ex - w * 0.45, top_y)], (206, 166, 150), None)
+    # the upper lid's edge: the almond's top arc when open; lowered (reading her notes), a soft curve that sags
+    # in the middle over the top of the iris, never a straight bar across the eye (Sam, 15 Oct)
+    mid = ey - h + lid * h * 1.25
+    edge = [(ex - w * 1.02, ey)] + [(ex + w * u, mid + (ey - mid) * abs(u) ** 2.2) for u in np.linspace(-0.8, 0.8, 9)] + \
+           [(ex + w * 1.06, ey - 1)]
+    if lid > 0:
+        top = [(ex + w * u, ey - h * (1 - abs(u) ** 2) - 1) for u in np.linspace(1, -1, 9)]
+        p.poly(edge + top, (214, 174, 160), None)
     p.line([(ex - w * 0.45, ey + low), (ex + w * 0.45, ey + low), (ex + w, ey)], INK, 1.6)
-    p.line([(ex - w * 1.02, ey), (ex - w * 0.45, min(ey - 1, top_y)), (ex + w * 0.45, min(ey - 1, top_y)),
-            (ex + w * 1.06, ey - 1)], INK, 3.6)           # the liner
+    p.line(edge, INK, 3.4)                                # the liner, along the lid's edge
     tip = (ex + sgn * w * 1.06, ey - 1)
     p.line([tip, (tip[0] + sgn * 8, tip[1] - 6)], INK, 2.6)        # the winged flick
-    for k in range(3):
-        lx = ex + sgn * (6 + 6 * k)
-        p.line([(lx, min(ey - 1, top_y) - 1), (lx + sgn * 4, min(ey - 1, top_y) - 7 - k)], INK, 1.6)
-    p.line([(ex - w * 0.6, ey - h - 9), (ex + w * 0.6, ey - h - 9)], (198, 156, 140), 1.4)   # the crease, made up
+    for k in range(3):                                    # lashes at the outer corner, from the lid's edge
+        u = sgn * (0.35 + 0.2 * k)
+        x0, y0 = ex + w * u, mid + (ey - mid) * abs(u) ** 2.2
+        p.line([(x0, y0), (x0 + sgn * 4, y0 - 6 - k + (8 if lid > 0.3 else 0))], INK, 1.6)
+    crease = [(ex + w * 0.7 * u, ey - h - 7 - 3 * (1 - u * u)) for u in np.linspace(-1, 1, 7)]
+    p.line(crease, (198, 156, 140), 1.4)                  # the crease, made up, following the lid
 
 
 def mouth(p, fx, my, st):

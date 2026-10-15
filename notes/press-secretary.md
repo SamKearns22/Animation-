@@ -10,6 +10,7 @@
 | 6 | push | all | Stage detailing: navy carpet with grey stars, white edge, podium on a wooden pedestal | done |
 | 7 | push | all | Lettering on podium and seal wobbled in size and spilled out of the logos: now drawn once and scaled exactly, sized to fit | done |
 | 8 | push | close-up | Line work round the hair confusing, like a second haircut behind: the hair is now one shape with one outline; the back of the hair kept inside it; stray highlight lines removed | done |
+| 9 | push | reading her notes | A line cut through her eyes (the lowered lid was a straight bar): the lid is now a soft curve sagging over the top of the iris, lashes and crease follow it | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.
