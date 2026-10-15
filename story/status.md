@@ -343,4 +343,5 @@ Read this first in any new session, after CLAUDE.md.
   allows), the briefing room, the podium and the reporters, with a depth push-in (near rows of reporters swell and slide
   away). Silent, no title, no subtitles (Sam: the Cranberry title stays available but is no longer automatic).
 - Cast sheet and 12-still outline sent. The draft runs about 30 s at a halting pace; Sam's recording will set the timing.
-- Next: Sam's notes on the outline, then offer the animatic (wait for Y/N), then his recording.
+- Animatics 1-7 sent; Sam's notes 1-12 done (`notes/press-secretary.md`). Sam happy with the look (15 Oct).
+- Next: Sam writes the final script and records it; then fit her mouth and beats to the recording, animatic, final.

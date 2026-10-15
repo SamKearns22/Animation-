@@ -107,6 +107,7 @@ def build_timeline():
 BEATS, TALK, END = build_timeline()
 DUR = round(END + 0.25, 2)            # the hard cut to black comes just after the last hold
 BLACK_AT = END
+SHOTS = [('push', 0.0, DUR)]            # one continuous shot (the pre-flight reads this)
 BLINKS = F.blinks(17, 0.4, END, talking=True)
 SIGH = next(((a, b) for k, a, b, _ in BEATS if k == 'sigh'), (1e9, 1e9))
 
@@ -114,8 +115,8 @@ SIGH = next(((a, b) for k, a, b, _ in BEATS if k == 'sigh'), (1e9, 1e9))
 # One slow push-in: the zoom grows at a steady rate (log-linear, so it never seems to speed up), easing in at the
 # start. Depth: each layer sits f closer to the camera than her (negative = behind her), so the reporters in front
 # swell and slide away under the lens while the back wall barely moves.
-Z0, Z1 = 0.6, 3.3
-A0, A1 = (560.0, 1250.0), (540.0, 880.0)       # the point the camera looks at: the room, then her face
+Z0, Z1 = 0.5, 3.3
+A0, A1 = (560.0, 1400.0), (540.0, 880.0)       # the point the camera looks at: the room, then her face
 D0 = Z1 / Z0                                    # her distance at the start (1 at the end)
 PUSH_END = END - 0.9                            # arrives on the close-up just before "Venezuela"
 
@@ -135,7 +136,7 @@ def cam_at(t, f=0.0):
             return None
         z *= (d / (d - f)) / (D0 / (D0 - f))
     ax = A0[0] + (A1[0] - A0[0]) * u
-    ay = A0[1] + (A1[1] - A0[1]) * (u ** 0.8)
+    ay = A0[1] + (A1[1] - A0[1]) * (u ** 0.9)
     return B.Cam(z, ax, ay)
 
 
@@ -187,9 +188,9 @@ def state(t):
         off = 1.0 - smooth((t - (b - 0.1)) / 0.1)      # and OFF, just as suddenly (that is the strangeness)
         if on * off > 0.5:
             s['smile'] = level
-            s['brow'] = 6 + 4 * level
-            s['squint'] = 0.25 * level
-            s['head_tilt'] = 0.05 * (1 if level == 3 else -1) * smooth(u * 4)
+            s['brow'] = 5 + 3 * level
+            s['squint'] = 0.2 * level
+            s['head_tilt'] = 0.04 * (1 if level == 3 else -1) * smooth(u * 4)
     if kind == 'hold' and arg:
         s['smile'] = 1
     if s['gaze'] == 'down':
@@ -229,49 +230,63 @@ def wave_edge(x_of, y0, y1, n, amp, phase=0.0):
 
 
 def hair_mass(p, hx, hy, hw, hh, shrug):
-    """The back of the hair: rounded volume above the head, waves falling behind the shoulders to mid-back.
-    Narrower than her shoulders, so the blazer's shoulders show either side."""
-    right = wave_edge(lambda u: hx + hw + 30 + 26 * math.sin(u * math.pi * 0.8), hy - hh * 0.5, hy + 330 + shrug, 12, 8)
-    left = [(2 * hx - x, y) for x, y in right]
-    top = oval(hx, hy - 6, hw + 30, hh + 30, 18, math.pi * 1.05, math.pi * 1.95)
-    pts = left[::-1][:-1] + [left[0]] + top + right + [(hx + hw + 10, hy + 350 + shrug), (hx - hw - 10, hy + 350 + shrug)]
-    pts = left[::-1] + top + right + [(hx, hy + 360 + shrug)]
-    p.poly(curve(pts, 3), HAIR_D, INK, 2.6)
+    """The back of the hair, seen only in the gap behind her neck: kept inside the front locks' outline so no
+    second edge ever shows round them (Sam, 15 Oct: 'a second haircut hiding just behind')."""
+    pts = [(hx - hw - 4, hy - hh * 0.3), (hx + hw + 4, hy - hh * 0.3), (hx + hw + 4, hy + 290 + shrug),
+           (hx - hw - 4, hy + 290 + shrug)]
+    p.poly(pts, HAIR_D, None)
 
 
-def hair_locks(p, hx, hy, hw, hh, sh_dy):
-    """The long waves falling in FRONT of each shoulder over the blazer, to mid-chest, framing the face."""
+def _locks(hx, hy, hw, hh, sh_dy):
+    """The two long waves falling in front of the shoulders, as outlines (starting up inside the crown, so they
+    join it with no seam)."""
+    out = []
     for sgn in (-1, 1):
-        outer = wave_edge(lambda u: hx + sgn * (hw + 22 + 30 * math.sin(u * math.pi * 0.9)), hy - hh * 0.3,
-                          hy + 300 + sh_dy, 12, 11 * sgn, 0.4)
+        outer = wave_edge(lambda u: hx + sgn * (hw + 24 + 28 * math.sin(u * math.pi * 0.9)), hy - hh * 0.55,
+                          hy + 300 + sh_dy, 12, 10 * sgn, 0.0)
         inner = wave_edge(lambda u: hx + sgn * (hw * 0.86 - 4 * u + 6 * math.sin(u * math.pi)), hy + 20,
                           hy + 290 + sh_dy, 10, 7 * sgn, 0.9)
         tip = (hx + sgn * (hw + 18), hy + 330 + sh_dy)
-        pts = inner + [tip] + outer[::-1]
-        p.poly(curve(pts, 3), HAIR, INK, 2.6)
-        for k in range(3):                               # strands following the waves
-            line = wave_edge(lambda u: hx + sgn * (hw + 6 + 12 * k + 26 * math.sin(u * math.pi * 0.9)), hy + 10 + 12 * k,
-                             hy + 270 - 20 * k + sh_dy, 8, 9 * sgn, 0.6)
-            p.line(line, HAIR_D, 1.7)
-        hl = wave_edge(lambda u: hx + sgn * (hw + 18 + 26 * math.sin(u * math.pi * 0.9)), hy + 30, hy + 140, 4, 9 * sgn, 0.6)
-        p.line(hl, HAIR_L, 3.0)
+        out.append(curve([(hx + sgn * hw * 0.6, hy - hh * 0.7)] + inner + [tip] + outer[::-1], 3))
+    return out
 
 
-def hair_top(p, hx, hy, hw, hh, fx):
-    """The crown, full and rounded, a side parting (our left), swept to both sides and down past the temples."""
+def _crown(hx, hy, hw, hh, fx):
+    """The crown: full and rounded, its lower edge the hairline across the forehead (side parting, our left)."""
     part = fx - hw * 0.25
     outer = oval(hx, hy - 8, hw + 24, hh + 28, 20, math.pi * 0.97, math.pi * 2.03)
     line = [(hx + hw + 18, hy + 30), (hx + hw * 0.92, hy - hh * 0.3), (hx + hw * 0.62, hy - hh * 0.7),
             (part + hw * 0.25, hy - hh * 0.86), (part, hy - hh * 0.98), (part - hw * 0.2, hy - hh * 0.84),
             (hx - hw * 0.7, hy - hh * 0.62), (hx - hw * 0.94, hy - hh * 0.2), (hx - hw - 18, hy + 30)]
-    p.poly(curve(outer + line, 3), HAIR, INK, 2.6)
-    p.line([(part, hy - hh * 1.22), (part + 3, hy - hh * 0.98)], HAIR_D, 2.0)
-    for k in range(3):
-        p.line(curve([(part + 10 + 14 * k, hy - hh * 1.16 + 8 * k), (hx + hw * 0.7 + 6 * k, hy - hh * 0.9 + 12 * k),
-                      (hx + hw + 6 + 2 * k, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
-        p.line(curve([(part - 10 - 12 * k, hy - hh * 1.14 + 8 * k), (hx - hw * 0.7 - 6 * k, hy - hh * 0.86 + 12 * k),
-                      (hx - hw - 6 - 2 * k, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
-    p.line([(part + 16, hy - hh * 1.18), (hx + hw * 0.55, hy - hh * 1.06)], HAIR_L, 3.4)
+    return curve(outer + line, 3), curve(line, 3)[7:-7], part
+
+
+def hair_front(p, hx, hy, hw, hh, sh_dy):
+    """Locks and crown as ONE shape with ONE outline: every piece outlined first, then every fill laid on top,
+    so the seams between pieces vanish. Drawn before the face; the hairline goes over the face after."""
+    pieces = _locks(hx, hy, hw, hh, sh_dy) + [_crown(hx, hy, hw, hh, hx)[0]]
+    for pts in pieces:
+        p.poly(pts, HAIR, INK, 5.2)
+    for pts in pieces:
+        p.poly(pts, HAIR, None)
+    for sgn in (-1, 1):                                   # two soft strands inside each lock, never past its edge
+        for k in range(2):
+            line = wave_edge(lambda u: hx + sgn * (hw + 20 + 10 * k + 22 * math.sin(u * math.pi * 0.9)),
+                             hy + 40 + 30 * k, hy + 250 - 30 * k + sh_dy, 8, 7 * sgn, 0.3)
+            p.line(line, HAIR_D, 1.6)
+
+
+def hair_top(p, hx, hy, hw, hh, fx):
+    """The crown again, over the face: fill, the hairline, the parting and a few combed strands."""
+    shape, line, part = _crown(hx, hy, hw, hh, fx)
+    p.poly(shape, HAIR, None)
+    p.line(line, INK, 2.6)
+    p.line([(part, hy - hh * 1.2), (part + 3, hy - hh * 0.98)], HAIR_D, 2.0)
+    for k in range(2):
+        p.line(curve([(part + 14 + 16 * k, hy - hh * 1.14 + 8 * k), (hx + hw * 0.7 + 6 * k, hy - hh * 0.88 + 12 * k),
+                      (hx + hw + 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
+        p.line(curve([(part - 12 - 12 * k, hy - hh * 1.12 + 8 * k), (hx - hw * 0.7 - 6 * k, hy - hh * 0.84 + 12 * k),
+                      (hx - hw - 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], HAIR_D, 1.6)
 
 
 def eye(p, ex, ey, sgn, st):
@@ -285,7 +300,6 @@ def eye(p, ex, ey, sgn, st):
             p.line([(lx, ey + 5), (lx + sgn * 5, ey + 12)], INK, 1.8)
         return
     low = h * (1 - squint)                                # a big smile pushes the lower lid up
-    top_y = ey - h + lid * h * 1.6
     almond = [(ex - w, ey), (ex - w * 0.45, ey - h), (ex + w * 0.45, ey - h), (ex + w, ey), (ex + w * 0.45, ey + low),
               (ex - w * 0.45, ey + low)]
     p.poly(almond, (252, 252, 250), None)
@@ -294,26 +308,32 @@ def eye(p, ex, ey, sgn, st):
     p.ell(ex + dx, ey + dy, 9, 9, IRIS, INK, 1.4)
     p.ell(ex + dx, ey + dy, 4.2, 4.2, INK, None)
     p.ell(ex + dx + 3, ey + dy - 3, 1.8, 1.8, (255, 255, 255), None)
-    if lid > 0:                                           # the upper lid lowered (reading her notes)
-        p.poly([(ex - w - 1, ey - 1), (ex - w * 0.45, ey - h - 2), (ex + w * 0.45, ey - h - 2), (ex + w + 1, ey - 1),
-                (ex + w * 0.45, top_y), (ex - w * 0.45, top_y)], (206, 166, 150), None)
+    # the upper lid's edge: the almond's top arc when open; lowered (reading her notes), a soft curve that sags
+    # in the middle over the top of the iris, never a straight bar across the eye (Sam, 15 Oct)
+    mid = ey - h + lid * h * 1.25
+    edge = [(ex - w * 1.02, ey)] + [(ex + w * u, mid + (ey - mid) * abs(u) ** 2.2) for u in np.linspace(-0.8, 0.8, 9)] + \
+           [(ex + w * 1.06, ey - 1)]
+    if lid > 0:
+        top = [(ex + w * u, ey - h * (1 - abs(u) ** 2) - 1) for u in np.linspace(1, -1, 9)]
+        p.poly(edge + top, (214, 174, 160), None)
     p.line([(ex - w * 0.45, ey + low), (ex + w * 0.45, ey + low), (ex + w, ey)], INK, 1.6)
-    p.line([(ex - w * 1.02, ey), (ex - w * 0.45, min(ey - 1, top_y)), (ex + w * 0.45, min(ey - 1, top_y)),
-            (ex + w * 1.06, ey - 1)], INK, 3.6)           # the liner
+    p.line(edge, INK, 3.4)                                # the liner, along the lid's edge
     tip = (ex + sgn * w * 1.06, ey - 1)
     p.line([tip, (tip[0] + sgn * 8, tip[1] - 6)], INK, 2.6)        # the winged flick
-    for k in range(3):
-        lx = ex + sgn * (6 + 6 * k)
-        p.line([(lx, min(ey - 1, top_y) - 1), (lx + sgn * 4, min(ey - 1, top_y) - 7 - k)], INK, 1.6)
-    p.line([(ex - w * 0.6, ey - h - 9), (ex + w * 0.6, ey - h - 9)], (198, 156, 140), 1.4)   # the crease, made up
+    for k in range(3):                                    # lashes at the outer corner, from the lid's edge
+        u = sgn * (0.35 + 0.2 * k)
+        x0, y0 = ex + w * u, mid + (ey - mid) * abs(u) ** 2.2
+        p.line([(x0, y0), (x0 + sgn * 4, y0 - 6 - k + (8 if lid > 0.3 else 0))], INK, 1.6)
+    crease = [(ex + w * 0.7 * u, ey - h - 7 - 3 * (1 - u * u)) for u in np.linspace(-1, 1, 7)]
+    p.line(crease, (198, 156, 140), 1.4)                  # the crease, made up, following the lid
 
 
 def mouth(p, fx, my, st):
     m, sm = st['mouth'], st['smile']
     if sm >= 2:                                           # the big strange smile: wide, all top teeth (3: both rows)
-        w = 38 if sm == 2 else 46
-        up = 10 if sm == 2 else 14
-        drop = 18 if sm == 2 else 26
+        w = 36 if sm == 2 else 42
+        up = 9 if sm == 2 else 12
+        drop = 16 if sm == 2 else 21
         outer = curve([(fx - w, my - up), (fx - w * 0.5, my - 4), (fx, my - 3), (fx + w * 0.5, my - 4), (fx + w, my - up),
                        (fx + w * 0.62, my + drop * 0.7), (fx, my + drop), (fx - w * 0.62, my + drop * 0.7)], 4)
         p.poly(outer, LIP, INK, 2.2)
@@ -427,7 +447,6 @@ def her(img, cam, t, st=None, notes=True):
     tilt = st['head_tilt']
     hair_mass(p, hx * 0.6, hy, hw, hh, sh)
     torso(p, sh)
-    hair_locks(p, hx * 0.6, hy, hw, hh, sh)
     arms(p, sh)
     # the head (tilt by shearing the face sideways a little: flat, never a 3D turn)
     T = B.Local(cam, NECK[0] + 0, NECK[1] + 0, 1.0)
@@ -447,6 +466,7 @@ def her(img, cam, t, st=None, notes=True):
     q = B.Pen(img, Tilted(T))
     for sgn in (-1, 1):                                   # ears hidden under the hair; a gold stud shows
         q.ell(hx + sgn * (hw + 1), hy + 14, 9, 17, SKIN, INK, 2.0)
+    hair_front(q, hx, hy, hw, hh, sh)
     q.poly(head_shape(hx, hy, hw, hh), SKIN, INK, 2.6)
     face(q, hx, hy, hw, hh, st)
     q.poly(head_shape(hx, hy, hw, hh), None, INK, 2.6)
@@ -457,22 +477,64 @@ def her(img, cam, t, st=None, notes=True):
 SET_BLUE = (120, 178, 214)
 SET_BLUE_L = (160, 206, 232)
 SET_BLUE_D = (64, 108, 156)
-CURTAIN = (26, 44, 92)
-CREAM = (236, 228, 210)
-WOOD = (120, 70, 40)
-PODIUM_C = (30, 32, 42)
-CARPET = (34, 44, 92)
+DRAPE = (28, 58, 128)
+DRAPE_D = (18, 40, 96)
+WALL = (240, 238, 232)
+WALL_D = (214, 212, 206)
+WOOD = (132, 76, 42)
+WOOD_D = (96, 52, 28)
+PODIUM_C = (30, 36, 56)
+CARPET = (34, 44, 86)
+STAR = (176, 182, 196)
+FLOOR = (62, 70, 96)
+CREAM = WALL
+# The room, from Sam's photos (15 Oct): a low stage between two white columns, recessed into the wall; the blue
+# backdrop with the seal in the middle, dark blue drapes either side; a white beam above the columns and a low
+# ceiling of light boxes; the stage carpet navy with grey stars and a white edge; rows of wooden-backed seats.
+# World units at her distance: 1 m is about 830. Her neck is at y 1000; her feet (the stage) at 2200.
+STAGE_Y = 2200          # the stage surface at the front
+STAGE_EDGE = 2240       # the white trim along its front
+FLOOR_Y = 2370          # the room's floor: the stage is only a shallow step up
+BEAM_Y = -300           # the underside of the beam over the columns
+COL_X = (-410, 1490)    # the two white columns at the stage's front corners
 
 
-def text(img, cam, x, y, s, size, colr, font=SERIF, anchor='mm'):
-    """Lettering in world units."""
-    f = ImageFont.truetype(font, max(4, int(cam.S(size))))
-    try:
-        f.set_variation_by_axes([600])
-    except Exception:
-        pass
-    X, Y = cam.P(x, y)
-    ImageDraw.Draw(img).text((X, Y), s, font=f, fill=colr, anchor=anchor)
+# ------------------------------------------------------------------------------------------------ steady lettering
+_GLYPHS = {}
+
+
+def stamp_text(img, cam, s, cx, cy, width, colr, font=SERIF, weight=700):
+    """Lettering drawn once at high resolution, then scaled to an exact width in world units with sub-pixel
+    placement, so it never jumps in size from frame to frame and always fits inside its plaque or seal."""
+    key = (s, colr, font, weight)
+    if key not in _GLYPHS:
+        f = ImageFont.truetype(font, 240)
+        try:
+            f.set_variation_by_axes([weight])
+        except Exception:
+            pass
+        l, t_, r, b = f.getbbox(s)
+        lay = Image.new('RGBA', (r - l + 20, b - t_ + 20), colr + (0,))
+        ImageDraw.Draw(lay).text((10 - l, 10 - t_), s, font=f, fill=colr + (255,))
+        _GLYPHS[key] = lay
+    src = _GLYPHS[key]
+    W = cam.S(width)
+    if W < 3:
+        return
+    k = W / src.width
+    if k < 0.5:                                   # shrink in one good step first (no shimmering), then place exactly
+        src = src.resize((max(1, int(src.width * k * 2)), max(1, int(src.height * k * 2))), Image.LANCZOS)
+        k = W / src.width
+    H = src.height * k
+    X, Y = cam.P(cx, cy)
+    ox, oy = X - W / 2, Y - H / 2
+    x0, y0 = int(math.floor(ox)), int(math.floor(oy))
+    tile = src.transform((int(math.ceil(W)) + 2, int(math.ceil(H)) + 2), Image.AFFINE,
+                         (1 / k, 0, (x0 - ox) / k, 0, 1 / k, (y0 - oy) / k), resample=Image.BICUBIC)
+    l0, t0 = max(0, -x0), max(0, -y0)
+    r0, b0 = min(tile.width, img.width - x0), min(tile.height, img.height - y0)
+    if r0 > l0 and b0 > t0:
+        img.alpha_composite(tile.crop((l0, t0, r0, b0)), (x0 + l0, y0 + t0))
 
 
 def white_house(p, cx, cy, w):
@@ -489,140 +551,206 @@ def white_house(p, cx, cy, w):
     for side in (-1, 1):
         for k in range(4):
             x = cx + side * (w * 0.44 + k * w * 0.14)
-            p.poly([(x - 5, cy - h * 0.18), (x + 5, cy - h * 0.18), (x + 5, cy - h * 0.42), (x - 5, cy - h * 0.42)],
-                   pal_d, None)
+            p.poly([(x - w * 0.03, cy - h * 0.18), (x + w * 0.03, cy - h * 0.18), (x + w * 0.03, cy - h * 0.42),
+                    (x - w * 0.03, cy - h * 0.42)], pal_d, None)
     p.line([(cx, cy - h * 1.16), (cx, cy - h * 1.5)], INK, 1.4)
     p.poly([(cx, cy - h * 1.5), (cx + w * 0.12, cy - h * 1.44), (cx, cy - h * 1.38)], (190, 50, 60), None)
 
 
-def flag(img, cam, x, top, bottom, t):
-    """The US flag on a pole, hanging in folds (stars on blue, red and white stripes), a gold finial.
-    The stripes and stars are drawn on their own layer and cut to the cloth's outline."""
+def seal(img, cam, cx, cy, rx, ry, words=True):
+    """The oval White House seal: a pale rim, deep blue, the house, the words inside the oval."""
     p = B.Pen(img, cam)
+    p.ell(cx, cy, rx * 1.06, ry * 1.08, (150, 196, 224), INK, 2.4)
+    p.ell(cx, cy, rx, ry, (46, 98, 150), (214, 234, 246), 3.0)
+    white_house(p, cx, cy - ry * 0.02, rx * 0.5)
+    if words:
+        stamp_text(img, cam, 'THE WHITE HOUSE', cx, cy + ry * 0.4, rx * 1.1, (232, 242, 250))
+        stamp_text(img, cam, 'WASHINGTON', cx, cy + ry * 0.66, rx * 0.5, (232, 242, 250))
+
+
+def _clip(img, lay, cam, *outlines):
+    """Composite a layer onto the picture, kept inside every outline given (their overlap)."""
+    a = np.asarray(lay.getchannel('A'))
+    for pts in outlines:
+        m = Image.new('L', img.size, 0)
+        ImageDraw.Draw(m).polygon([cam.P(*pt) for pt in pts], fill=255)
+        a = np.minimum(a, np.asarray(m))
+    lay.putalpha(Image.fromarray(a))
+    img.alpha_composite(lay)
+
+
+def _star(p, cx, cy, r, colr):
+    pts = [(cx + (r if k % 2 == 0 else r * 0.42) * math.cos(-math.pi / 2 + k * math.pi / 5),
+            cy + (r if k % 2 == 0 else r * 0.42) * math.sin(-math.pi / 2 + k * math.pi / 5)) for k in range(10)]
+    p.poly(pts, colr, None)
+
+
+def flag(img, cam, x, top, bottom, t):
+    """The US flag on its pole, as in the briefing-room photos: the cloth hangs straight down beside the pole in
+    soft vertical folds, the free edge scalloped where the folds turn, a gathered tail near the bottom; the blue
+    canton at the top by the pole with its stars kept inside it; the stripes falling at a slant along the drape.
+    A brass pole with a gold spear tip. (Sam, 15 Oct: no dots off the flag, no sock shape.)"""
+    p = B.Pen(img, cam)
+    w = 170
+    # the pole and its gold spear tip
+    p.poly(rough([(x - 6, top - 40), (x + 6, top - 40), (x + 7, STAGE_Y - 40), (x - 7, STAGE_Y - 40)], 1, 3),
+           (200, 170, 90), INK, 2)
+    p.ell(x, top - 52, 14, 14, (222, 184, 80), INK, 2)
+    p.poly([(x - 12, top - 62), (x, top - 120), (x + 12, top - 62), (x, top - 70)], (222, 184, 80), INK, 2)
+    # the cloth: attached down the pole, scalloped free edge, a gathered tail
+    cloth = curve([(x + 5, top), (x + w * 0.55, top + 6), (x + w, top + 26), (x + w + 16, top + 170),
+                   (x + w - 8, top + 260), (x + w + 12, top + 390), (x + w - 14, top + 520), (x + w, top + 660),
+                   (x + w * 0.76, top + 840), (x + w * 0.52, top + 990), (x + w * 0.4, bottom),
+                   (x + w * 0.22, bottom - 110), (x + 18, bottom - 300), (x + 5, top + 700)], 4)
+    p.poly(cloth, (246, 246, 244), None)
+    slope, sh = 0.42, 62.0
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     q = B.Pen(lay, cam)
-    p.poly(rough([(x - 6, top), (x + 6, top), (x + 7, bottom + 600), (x - 7, bottom + 600)], 1, 3), (200, 170, 90), INK, 2)
-    p.ell(x, top - 18, 16, 20, (222, 184, 80), INK, 2)
-    w = 210
-    cloth = [(x + 6, top + 10), (x + w, top + 30), (x + w + 30, top + 300), (x + w - 10, bottom - 120),
-             (x + w * 0.5, bottom), (x + 8, bottom - 60)]
-    p.poly(curve(cloth, 4), (246, 246, 244), INK, 2.4)
-    sh = (bottom - top) / 13.0
-    for k in range(0, 13, 2):                             # seven red stripes across the whole cloth
-        y0 = top + 10 + k * sh
-        q.poly([(x - 40, y0), (x + w + 120, y0 + 10), (x + w + 120, y0 + 10 + sh), (x - 40, y0 + sh)], (190, 40, 54), None)
-    q.poly([(x + 8, top + 12), (x + w * 0.62, top + 22), (x + w * 0.66, top + 420), (x + 8, top + 400)], (34, 48, 110), None)
-    rng = np.random.default_rng(3)
-    for k in range(26):
-        sx, sy = x + 24 + (k % 4) * 30 + rng.uniform(-4, 4), top + 40 + (k // 4) * 56 + rng.uniform(-4, 4)
-        q.ell(sx, sy, 5, 5, (246, 246, 244), None)
-    for k in range(4):                                    # the folds
-        fx_ = x + 50 + k * 46
-        q.line([(fx_, top + 30), (fx_ + 10, top + 400), (fx_ - 6, bottom - 100)], (120, 30, 40), 2.0)
-    m = Image.new('L', img.size, 0)
-    ImageDraw.Draw(m).polygon([cam.P(*pt) for pt in curve(cloth, 4)], fill=255)
-    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(m))))
-    img.alpha_composite(lay)
-    p.poly(curve(cloth, 4), None, INK, 2.4)
+    for k in range(0, 22, 2):                             # red stripes, falling at a slant along the drape
+        y0 = top + 20 + k * sh
+        q.poly([(x - 20, y0 - 20 * slope), (x + w + 40, y0 + (w + 40) * slope),
+                (x + w + 40, y0 + sh + (w + 40) * slope), (x - 20, y0 + sh - 20 * slope)], (190, 40, 54), None)
+    cw = w * 0.6                                           # the canton: down seven stripes, by the pole
+    c_bot = top + 20 + 7 * sh
+    canton = [(x - 20, top - 20), (x + cw, top - 20), (x + cw, c_bot + cw * slope), (x - 20, c_bot - 20 * slope)]
+    q.poly(canton, (34, 48, 110), None)
+    _clip(img, lay, cam, cloth)
+    st = Image.new('RGBA', img.size, (0, 0, 0, 0))         # the stars, only ever inside the canton
+    sp = B.Pen(st, cam)
+    for row in range(9):
+        for col in range(4):
+            sx = x + 18 + col * 26 + (13 if row % 2 else 0)
+            sy = top + 30 + row * 40 + (sx - x) * slope
+            _star(sp, sx, sy, 7, (246, 246, 244))
+    _clip(img, st, cam, cloth, canton)
+    sd = Image.new('RGBA', img.size, (0, 0, 0, 0))         # the folds: flat darker bands where the cloth turns away
+    fp = B.Pen(sd, cam)
+    for fx0, fx1 in ((w * 0.28, w * 0.42), (w * 0.7, w * 0.86)):
+        fp.poly([(x + fx0, top), (x + fx1, top), (x + fx1 - 10, bottom), (x + fx0 - 20, bottom)], (0, 0, 0, 46), None)
+    _clip(img, sd, cam, cloth)
+    for fx0 in (w * 0.28, w * 0.7):
+        p.line([(x + fx0, top + 30), (x + fx0 - 4, top + 400), (x + fx0 - 16, bottom - 160)], (60, 24, 36), 1.6)
+    p.poly(cloth, None, INK, 2.4)
 
 
-def backdrop(img, cam, t):
-    """The briefing-room wall: cream walls and pilasters, the blue backdrop, dark blue curtains, the seal,
-    the frosted side panels with little seals, the flag."""
+def stars(p, x0, x1, y0, y1, gap, size, seed):
+    """Small grey five-point stars in a staggered grid, as on the briefing-room stage carpet."""
+    rng = np.random.default_rng(seed)
+    row = 0
+    y = y0 + gap * 0.4
+    while y < y1:
+        x = x0 + (gap * 0.5 if row % 2 else 0) + gap * 0.25
+        while x < x1:
+            r = size * (0.92 + 0.16 * rng.random())
+            pts = [(x + (r if k % 2 == 0 else r * 0.45) * math.cos(-math.pi / 2 + k * math.pi / 5),
+                    y + (r if k % 2 == 0 else r * 0.45) * math.sin(-math.pi / 2 + k * math.pi / 5) * 0.6) for k in range(10)]
+            p.poly(pts, STAR, None)
+            x += gap
+        y += gap * 0.45
+        row += 1
+
+
+def column(p, x, top, bottom, w=70):
+    """A round white column: fluting, a moulded base and a simple capital."""
+    p.poly(rough([(x - w, top + 60), (x + w, top + 60), (x + w, bottom - 60), (x - w, bottom - 60)], 2, int(x)), WALL, INK, 2.6)
+    for k in range(-3, 4):
+        p.line([(x + k * w * 0.26, top + 80), (x + k * w * 0.26, bottom - 80)], WALL_D, 2.0)
+    p.line([(x + w * 0.62, top + 70), (x + w * 0.62, bottom - 70)], (200, 198, 192), 6)        # the shaded side
+    for y0, h, ww in ((top, 30, 1.35), (top + 30, 30, 1.15), (bottom - 60, 30, 1.2), (bottom - 30, 30, 1.4)):
+        p.poly(rough([(x - w * ww, y0), (x + w * ww, y0), (x + w * ww, y0 + h), (x - w * ww, y0 + h)], 2, int(y0)),
+               WALL, INK, 2.2)
+
+
+def back_wall(img, cam, t):
+    """Behind her (a little further back than she is): the backdrop, the seal, the drapes, the flag."""
     p = B.Pen(img, cam)
-    p.poly(rough([(-1400, -1400), (2500, -1400), (2500, 1720), (-1400, 1720)], 4, 1), CREAM, INK, 3)
-    p.poly([(-1400, -500), (2500, -500), (2500, -460), (-1400, -460)], (214, 204, 184), INK, 2.4)   # crown moulding
-    for x in (-430, 1520):                                # white pilasters either side
-        p.poly(rough([(x - 70, -460), (x + 70, -460), (x + 70, 1720), (x - 70, 1720)], 3, x), (246, 242, 232), INK, 2.6)
-        p.poly([(x - 90, -460), (x + 90, -460), (x + 90, -400), (x - 90, -400)], (246, 242, 232), INK, 2.4)
-        p.line([(x - 30, -380), (x - 30, 1700)], (220, 214, 200), 2)
-        p.line([(x + 30, -380), (x + 30, 1700)], (220, 214, 200), 2)
-    p.poly(rough([(-1250, 600), (-700, 600), (-700, 1720), (-1250, 1720)], 3, 21), (150, 118, 84), INK, 2.6)  # a door
-    p.ell(-760, 1180, 12, 12, (222, 184, 80), INK, 1.6)
-    p.poly(rough([(1760, 640), (2260, 640), (2260, 1720), (1760, 1720)], 3, 22), (150, 118, 84), INK, 2.6)
-    p.ell(1820, 1200, 12, 12, (222, 184, 80), INK, 1.6)
-    p.poly(rough([(1780, 300), (2240, 300), (2240, 520), (1780, 520)], 3, 23), (40, 50, 90), INK, 2.4)   # a TV screen
-    p.poly(rough([(1800, 318), (2220, 318), (2220, 502), (1800, 502)], 2, 24), (90, 130, 170), None)
-    text(img, cam, 2010, 410, 'LIVE', 46, (240, 240, 240), font=B.ANTON)
-    # the backdrop: dark curtains either side, a pale blue centre
-    p.poly(rough([(-360, -420), (1440, -420), (1440, 1720), (-360, 1720)], 3, 2), CURTAIN, INK, 3)
-    for k in range(10):
-        x = -340 + k * 22
-        p.line([(x, -400), (x + 4, 1700)], (16, 30, 70), 2)
-        x = 1260 + k * 18
-        p.line([(x, -400), (x + 4, 1700)], (16, 30, 70), 2)
-    p.poly(rough([(-120, -380), (1240, -380), (1240, 1720), (-120, 1720)], 3, 4), SET_BLUE, INK, 3)
-    for k in range(6):                                    # the frosted glass bands
-        x = -100 + k * 36
-        p.line([(x, -360), (x, 1700)], SET_BLUE_L, 3)
-    for j in range(6):                                    # little seals on the right-hand panel
-        for i in range(2):
-            cx, cy = 1040 + i * 150, -260 + j * 300 + (i * 150)
-            p.ell(cx, cy, 52, 36, SET_BLUE_L, SET_BLUE_D, 2)
-            p.poly([(cx - 26, cy + 10), (cx + 26, cy + 10), (cx + 26, cy - 6), (cx - 26, cy - 6)], SET_BLUE_D, None)
-    for j in range(5):
-        cx, cy = 10, -200 + j * 380
-        p.ell(cx, cy, 52, 36, SET_BLUE_L, SET_BLUE_D, 2)
-        p.poly([(cx - 26, cy + 10), (cx + 26, cy + 10), (cx + 26, cy - 6), (cx - 26, cy - 6)], SET_BLUE_D, None)
-    # the big seal: oval, the house, the words
-    cx, cy, rx, ry = 600, 640, 300, 200
-    p.ell(cx, cy, rx + 18, ry + 16, (90, 148, 190), INK, 2.6)
-    p.ell(cx, cy, rx, ry, (52, 108, 160), (210, 232, 244), 3.4)
-    white_house(p, cx, cy + 30, rx * 0.5)
-    _seal_words(img, cam, cx, cy)
-    flag(img, cam, 150, 420, 1560, t)
+    p.poly([(-2600, BEAM_Y - 200), (3700, BEAM_Y - 200), (3700, STAGE_Y), (-2600, STAGE_Y)], DRAPE_D, INK, 3)
+    # dark blue drapes either side of the backdrop, in folds
+    for x0, x1, sd in ((-420, 40, 1), (1040, 1500, 2)):
+        p.poly(rough([(x0, BEAM_Y), (x1, BEAM_Y), (x1, STAGE_Y), (x0, STAGE_Y)], 3, sd), DRAPE, INK, 3)
+        for k in range(int((x1 - x0) / 46)):
+            x = x0 + 24 + k * 46
+            p.line([(x, BEAM_Y + 10), (x + 6, STAGE_Y - 10)], DRAPE_D, 3)
+    # the pale blue backdrop: glass bands, little seals down the right, the big seal above her
+    p.poly(rough([(40, BEAM_Y), (1040, BEAM_Y), (1040, STAGE_Y), (40, STAGE_Y)], 2, 3), SET_BLUE, INK, 3)
+    for x in (50, 70, 90, 990, 1010, 1030):
+        p.line([(x, BEAM_Y + 10), (x, STAGE_Y - 10)], SET_BLUE_L, 3)
+    for j in range(7):
+        cy = BEAM_Y + 160 + j * 300
+        p.ell(950, cy, 50, 33, SET_BLUE_L, SET_BLUE_D, 2)
+        white_house(p, 950, cy + 8, 22)
+    seal(img, cam, 545, 420, 260, 172)
+    flag(img, cam, 170, 520, 1700, t)
+    p.poly(rough([(130, STAGE_Y - 40), (210, STAGE_Y - 40), (220, STAGE_Y), (120, STAGE_Y)], 1, 5), (196, 164, 84), INK, 2)
 
 
-def _seal_words(img, cam, cx, cy):
-    for s, y, size in (('THE WHITE HOUSE', cy + 100, 52), ('WASHINGTON', cy + 152, 30)):
-        f = ImageFont.truetype(SERIF, max(4, int(cam.S(size))))
-        try:
-            f.set_variation_by_axes([700])
-        except Exception:
-            pass
-        X, Y = cam.P(cx, y)
-        ImageDraw.Draw(img).text((X, Y), s, font=f, fill=(236, 244, 250), anchor='mm')
-
-
-def stage_floor(img, cam):
-    """The low stage: navy carpet with small gold stars, a front edge, then the room's carpet."""
+def room(img, cam):
+    """The room around the stage (level with her): side walls, the beam, the low ceiling of light boxes, the
+    stage itself, the floor."""
     p = B.Pen(img, cam)
-    p.poly(rough([(-1400, 1700), (2500, 1700), (2500, 1860), (-1400, 1860)], 3, 31), CARPET, INK, 3)
-    rng = np.random.default_rng(8)
-    for k in range(70):
-        x, y = rng.uniform(-1300, 2400), rng.uniform(1716, 1846)
-        p.ell(x, y, 5, 3.5, (210, 180, 90), None)
-    p.poly(rough([(-1400, 1860), (2500, 1860), (2500, 1900), (-1400, 1900)], 2, 32), (20, 26, 60), INK, 2.4)
-    p.poly(rough([(-1600, 1900), (2700, 1900), (2700, 4400), (-1600, 4400)], 3, 33), (88, 96, 124), INK, 3)
+    # side walls: blue panels beside the columns, then white walls; a round seal on the left, an arch on the right
+    p.poly([(-2600, -1400), (3700, -1400), (3700, FLOOR_Y), (-2600, FLOOR_Y)], WALL, INK, 3)
+    for x0, x1 in ((-820, -410), (1490, 1900)):
+        p.poly(rough([(x0, BEAM_Y), (x1, BEAM_Y), (x1, FLOOR_Y), (x0, FLOOR_Y)], 3, x0), (52, 92, 160), INK, 3)
+        p.poly(rough([(x0 + 60, 900), (x1 - 60, 900), (x1 - 60, FLOOR_Y), (x0 + 60, FLOOR_Y)], 3, x0 + 1), (44, 80, 146), INK, 2.4)
+    p.ell(-1150, 600, 120, 120, (60, 104, 156), INK, 2.6)
+    p.ell(-1150, 600, 100, 100, (46, 98, 150), (214, 234, 246), 2.4)
+    white_house(p, -1150, 610, 52)
+    p.poly(curve([(2050, FLOOR_Y), (2050, 700), (2150, 520), (2350, 470), (2550, 520), (2650, 700), (2650, FLOOR_Y)], 4)[:-2],
+           (226, 224, 218), INK, 2.6)
+    p.ell(-1400, 1000, 18, 26, (220, 200, 60), INK, 1.6)                                         # a fire alarm
+    # the beam over the columns, and the ceiling: a grid of bright light boxes
+    p.poly(rough([(-960, BEAM_Y - 140), (2040, BEAM_Y - 140), (2040, BEAM_Y), (-960, BEAM_Y)], 2, 61), WALL, INK, 3)
+    p.line([(-960, BEAM_Y - 40), (2040, BEAM_Y - 40)], WALL_D, 3)
+    p.poly([(-2600, -1400), (3700, -1400), (3700, BEAM_Y - 140), (-2600, BEAM_Y - 140)], (226, 226, 224), INK, 3)
+    for j, (y, h, n, x0, x1) in enumerate(((-560, 90, 7, -900, 1980), (-820, 120, 6, -1300, 2380), (-1180, 160, 5, -1900, 2980))):
+        p.poly([(x0 - 200, y - 30), (x1 + 200, y - 30), (x1 + 200, y + h + 30), (x0 - 200, y + h + 30)], (196, 198, 200), INK, 2)
+        for k in range(n):
+            x = x0 + (x1 - x0) * k / (n - 1)
+            w = (x1 - x0) / (n - 1) * 0.36
+            p.poly(rough([(x - w, y), (x + w, y), (x + w, y + h), (x - w, y + h)], 2, j * 10 + k), (252, 252, 248), (150, 150, 154), 2.4)
+    # the stage: navy carpet with grey stars, a white edge, the riser, the room's floor
+    p.poly([(-820, STAGE_Y - 150), (1900, STAGE_Y - 150), (1900, STAGE_EDGE), (-820, STAGE_EDGE)], CARPET, INK, 3)
+    stars(p, -800, 1880, STAGE_Y - 140, STAGE_EDGE - 6, 130, 18, 7)
+    p.poly(rough([(-860, STAGE_EDGE), (1940, STAGE_EDGE), (1940, STAGE_EDGE + 34), (-860, STAGE_EDGE + 34)], 2, 62),
+           (244, 242, 236), INK, 2.6)
+    p.poly([(-860, STAGE_EDGE + 34), (1940, STAGE_EDGE + 34), (1940, FLOOR_Y), (-860, FLOOR_Y)], (40, 50, 96), INK, 2.6)
+    p.poly([(-2600, FLOOR_Y), (3700, FLOOR_Y), (3700, 6000), (-2600, 6000)], FLOOR, INK, 3)
+
+
+def columns(img, cam):
+    p = B.Pen(img, cam)
+    for x in COL_X:
+        column(p, x, BEAM_Y, STAGE_EDGE + 10)
 
 
 def podium(img, cam):
-    """The dark wooden podium: a wood top, a near-black front with the White House plaque, two gooseneck mics."""
+    """The briefing-room podium: a dark top with the plaque, on a wooden pedestal that narrows and flares to a
+    wide base on the stage; two thin microphones."""
     p = B.Pen(img, cam)
     x0, y0 = NECK[0], NECK[1] + PODIUM_TOP
-    top = [(x0 - 230, y0 - 4), (x0 + 230, y0 - 4), (x0 + 244, y0 + 26), (x0 - 244, y0 + 26)]
-    body = [(x0 - 236, y0 + 26), (x0 + 236, y0 + 26), (x0 + 190, y0 + 560), (x0 + 120, y0 + 720), (x0 - 120, y0 + 720),
-            (x0 - 190, y0 + 560)]
-    p.poly(rough(body, 3, 41), PODIUM_C, INK, 3)
-    p.poly([(x0 - 236, y0 + 26), (x0 - 150, y0 + 26), (x0 - 120, y0 + 720), (x0 - 190, y0 + 560)], (22, 24, 32), None)
-    p.poly([(x0 + 236, y0 + 26), (x0 + 150, y0 + 26), (x0 + 120, y0 + 720), (x0 + 190, y0 + 560)], (22, 24, 32), None)
-    p.poly(rough(body, 3, 41), None, INK, 3)
-    p.poly(rough(top, 2, 42), WOOD, INK, 2.6)
-    p.line([(x0 - 228, y0 + 6), (x0 + 228, y0 + 6)], (150, 94, 56), 2)
-    # the plaque
-    px0, py0, px1, py1 = x0 - 150, y0 + 70, x0 + 150, y0 + 230
-    p.poly(rough([(px0, py0), (px1, py0), (px1, py1), (px0, py1)], 2, 43), (18, 18, 22), (90, 90, 100), 2.6)
-    p.line([(px0 + 20, py0 + 92), (px1 - 20, py0 + 92)], (196, 36, 46), 4)
-    for s, y, size in (('THE WHITE HOUSE', py0 + 54, 40), ('WASHINGTON', py0 + 124, 24)):
-        f = ImageFont.truetype(SERIF, max(4, int(cam.S(size))))
-        try:
-            f.set_variation_by_axes([700])
-        except Exception:
-            pass
-        X, Y = cam.P(x0, y)
-        ImageDraw.Draw(img).text((X, Y), s, font=f, fill=(242, 240, 236), anchor='mm')
+    base_y = STAGE_Y - 20
+    # the pedestal: wood, edged in navy
+    ped = [(x0 - 170, y0 + 280), (x0 + 170, y0 + 280), (x0 + 95, base_y - 190), (x0 + 290, base_y - 20),
+           (x0 - 290, base_y - 20), (x0 - 95, base_y - 190)]
+    p.poly(rough(ped, 2, 44), PODIUM_C, INK, 3)
+    p.poly([(x0 - 105, y0 + 290), (x0 + 105, y0 + 290), (x0 + 55, base_y - 200), (x0 + 210, base_y - 40),
+            (x0 - 210, base_y - 40), (x0 - 55, base_y - 200)], WOOD, None)
+    p.line([(x0, y0 + 250), (x0, base_y - 60)], WOOD_D, 3)
+    p.poly(rough([(x0 - 310, base_y - 24), (x0 + 310, base_y - 24), (x0 + 322, base_y + 12), (x0 - 322, base_y + 12)], 2, 45),
+           WOOD, INK, 2.6)
+    # the top: slanted lid, a deep dark front with the plaque
+    body = [(x0 - 316, y0 + 20), (x0 + 316, y0 + 20), (x0 + 290, y0 + 290), (x0 - 290, y0 + 290)]
+    p.poly(rough(body, 2, 41), PODIUM_C, INK, 3)
+    p.poly(rough([(x0 - 304, y0 - 6), (x0 + 304, y0 - 6), (x0 + 326, y0 + 22), (x0 - 326, y0 + 22)], 2, 42),
+           (44, 50, 72), INK, 2.6)
+    px0, py0, px1, py1 = x0 - 200, y0 + 70, x0 + 200, y0 + 230
+    p.poly(rough([(px0, py0), (px1, py0), (px1, py1), (px0, py1)], 2, 43), (16, 18, 24), (96, 98, 110), 2.4)
+    p.line([(px0 + 24, py0 + 96), (px1 - 24, py0 + 96)], (196, 36, 46), 5)
+    stamp_text(img, cam, 'THE WHITE HOUSE', x0, py0 + 56, 320, (242, 240, 236))
+    stamp_text(img, cam, 'WASHINGTON', x0, py0 + 126, 150, (242, 240, 236))
     for sgn in (-1, 1):                                   # the two thin microphones, leaning in towards her
-        base = (x0 + sgn * 150, y0 - 2)
+        base = (x0 + sgn * 170, y0 - 2)
         tip = (x0 + sgn * 96, y0 - 150)
         p.line([base, (x0 + sgn * 140, y0 - 80), tip], (20, 20, 24), 3)
         p.ell(tip[0], tip[1], 7, 12, (20, 20, 24), INK, 1.4, rot=-sgn * 0.5)
@@ -637,106 +765,323 @@ def notes(img, cam):
 
 
 # ------------------------------------------------------------------------------------------------ the reporters
-REPORTER_ROWS = [  # (f: how much nearer the camera than her, screen y of the heads at the start, count)
-    (2.2, 1320, 7), (2.55, 1410, 6), (2.85, 1520, 6), (3.1, 1650, 5), (3.3, 1800, 4), (3.45, 1960, 4)]
+# Rows of seated reporters seen from behind, each in a wooden-backed seat, filling the room wall to wall. Each row
+# sits f nearer the camera than her; `sy` is where its heads land on screen in the opening frame.
+REPORTER_ROWS = [(0.9, 1440), (1.9, 1540), (2.8, 1660), (3.6, 1800), (4.3, 1960), (4.8, 2150)]
 
 
 def _reporters():
     rng = np.random.default_rng(12)
-    out = []
-    hairs = [(58, 44, 36), (30, 24, 22), (150, 110, 70), (210, 178, 120), (170, 166, 162), (110, 70, 46), (80, 40, 30)]
+    rows = []
+    hairs = [(58, 44, 36), (30, 24, 22), (150, 110, 70), (210, 178, 120), (170, 166, 162), (110, 70, 46), (80, 40, 30),
+             (196, 196, 192)]
     jackets = [B.NAVY, B.CHARCOAL, (110, 40, 50), (70, 90, 120), (90, 96, 80), (60, 60, 70), (40, 110, 90),
-               (150, 120, 90), (120, 60, 110)]
+               (150, 120, 90), (120, 160, 196), (222, 110, 50), (200, 60, 70), (236, 210, 214)]
     skins = [B.PALE, B.PINK, B.OLIVE, B.BROWN, B.DEEP]
-    styles = ['short', 'bob', 'pony', 'long', 'bald', 'short', 'bun', 'curly']
-    for ri, (f, sy, n) in enumerate(REPORTER_ROWS):
+    styles = ['short', 'bob', 'pony', 'long', 'bald', 'short', 'bun', 'curly', 'short', 'long']
+    for f, sy in REPORTER_ROWS:
         k0 = D0 / (D0 - f)
-        z0 = Z0 * k0
-        s = 0.8 * k0 * 0.62
+        s = 1.05 * k0
         wy = A0[1] + (sy - 960) / Z0                     # world position that lands at screen y sy at the start
-        width = 1080 / z0 * 1.25
-        xs = np.linspace(A0[0] - width * 0.5, A0[0] + width * 0.5, n) + rng.uniform(-0.12, 0.12, n) * width / n
-        xs = xs + (width / n * 0.5 if ri % 2 else 0)
+        pitch = 330 * s
+        half = 1080 / (Z0 * k0) * 0.5 + pitch            # wall to wall, with a seat spare at each end
+        n = int(2 * half / pitch) + 2
+        xs = A0[0] - half + pitch * (np.arange(n) + (0.5 if len(rows) % 2 else 0.0))
+        seats = []
         for x in xs:
-            hand = rng.random() < 0.38
-            out.append(dict(f=f, x=float(x), y=float(wy), s=s, hair=hairs[rng.integers(len(hairs))],
-                            jacket=jackets[rng.integers(len(jackets))], skin=skins[rng.integers(5)],
-                            style=styles[rng.integers(len(styles))], hand=hand, side=1 if rng.random() < 0.5 else -1,
-                            up_at=float(rng.uniform(0, 8)), seed=int(rng.integers(1e6)),
-                            props=('pad' if rng.random() < 0.3 else None)))
-    return out
+            empty = False
+            hand = False                                  # no hands up (Sam, 15 Oct)
+            seats.append(dict(f=f, x=float(x + rng.uniform(-0.06, 0.06) * pitch), y=float(wy + rng.uniform(-10, 10) * s),
+                              s=s, hair=hairs[rng.integers(len(hairs))], jacket=jackets[rng.integers(len(jackets))],
+                              skin=skins[rng.integers(5)], style=styles[rng.integers(len(styles))], hand=hand,
+                              side=1 if rng.random() < 0.5 else -1, up_at=float(rng.uniform(0, 9)),
+                              seed=int(rng.integers(1e6)), empty=empty,
+                              phone=False, pad=rng.random() < 0.15, typing=rng.random() < 0.45,
+                              lean=float(rng.uniform(-0.06, 0.06))))
+        rows.append((f, seats, pitch, wy, s))
+    for ri, target in ((1, A0[0] - 330), (2, A0[0] + 360)):   # exactly two empty seats, both in view at the start
+        min(rows[ri][1], key=lambda r: abs(r['x'] - target))['empty'] = True
+    return rows
 
 
-REPORTERS = _reporters()
+ROWS = _reporters()
+REPORTERS = [r for _, seats, _, _, _ in ROWS for r in seats if not r['empty']]
+
+
+def seat_backs(img, cam, row):
+    """The row's wooden seat backs, in front of the people sitting in them: rounded tops, a grey striped
+    cushion showing in each gap, carried down out of sight (nobody sinks into the floor)."""
+    f, seats, pitch, wy, s = row
+    p = B.Pen(img, cam)
+    for r in seats:
+        L = B.Pen(img, B.Local(cam, r['x'], wy, s))
+        w = 150
+        L.poly(rough([(-w, 170), (-w + 12, 140), (w - 12, 140), (w, 170), (w, 900), (-w, 900)], 2, r['seed'] % 97),
+               WOOD, INK, 2.8)
+        L.line([(-w + 14, 160), (w - 14, 160)], (160, 100, 60), 3)
+        L.poly([(-48, 186), (48, 186), (48, 900), (-48, 900)], (118, 122, 132), INK, 2.2)   # the striped panel
+        for k in range(5):
+            L.line([(-36 + k * 18, 196), (-36 + k * 18, 890)], (196, 198, 204), 5)
+        L.line([(-w + 20, 200), (-w + 20, 880)], WOOD_D, 2.4)
+        if r['empty']:                                    # an empty seat: the striped cushion shows above the back
+            L.poly([(-w + 16, 40), (w - 16, 40), (w - 16, 140), (-w + 16, 140)], (120, 124, 132), INK, 2.4)
+            for k in range(7):
+                L.line([(-w + 30 + k * 40, 46), (-w + 30 + k * 40, 136)], (170, 172, 178), 3)
+
+
+def _look(r):
+    """Each reporter's own build and clothes, worked out once from their seed: shoulder width and slope, a
+    higher shoulder, head size, the garment and its pattern (Sam, 15 Oct: no identical blocky backs)."""
+    if 'look' in r:
+        return r['look']
+    g = np.random.default_rng(r['seed'])
+    garment = ['suit', 'suit', 'suit', 'blazer', 'sweater', 'blouse', 'cardigan', 'shirt'][g.integers(8)]
+    if r['style'] in ('long', 'pony', 'bun', 'bob') and garment == 'suit' and g.random() < 0.6:
+        garment = 'blazer'
+    pattern = None
+    if garment in ('suit', 'blazer') and g.random() < 0.4:
+        pattern = ['pinstripe', 'check', 'tweed'][g.integers(3)]
+    L = dict(sw=float(g.uniform(118, 158)), slope=float(g.uniform(24, 52)), hi=float(g.uniform(-12, 12)),
+             nw=float(g.uniform(21, 29)), hrx=float(g.uniform(56, 70)), hry=float(g.uniform(70, 84)),
+             garment=garment, pattern=pattern, lumps=[float(v) for v in g.uniform(-1, 1, 14)],
+             shade_side=1 if g.random() < 0.5 else -1, folds=int(g.integers(2, 5)),
+             tufts=[float(v) for v in g.uniform(0.7, 1.3, 9)])
+    r['look'] = L
+    return L
+
+
+def _torso_outline(L, bottom=600):
+    """Neck, the trapezius sloping to each shoulder, the round of the shoulder, the arms hanging down."""
+    sw, sl, hi, nw = L['sw'], L['slope'], L['hi'], L['nw']
+    pts = [(-sw + 6, bottom), (-sw - 6, sl + 150), (-sw - 4, sl + 60 - hi), (-sw + 18, sl + 12 - hi),
+           (-sw * 0.55, sl * 0.45 - hi * 0.6), (-nw - 10, 6), (-nw, -2), (nw, -2), (nw + 10, 6),
+           (sw * 0.55, sl * 0.45 + hi * 0.6), (sw - 18, sl + 12 + hi), (sw + 4, sl + 60 + hi), (sw + 6, sl + 150),
+           (sw - 6, bottom)]
+    return curve(pts, 4)
+
+
+def _head_outline(L, cx, cy):
+    """A hand-cut, slightly lumpy head (never a perfect oval)."""
+    n = len(L['lumps'])
+    return curve([(cx + L['hrx'] * (1 + 0.035 * L['lumps'][k]) * math.cos(2 * math.pi * k / n),
+                   cy + L['hry'] * (1 + 0.035 * L['lumps'][(k + 3) % n]) * math.sin(2 * math.pi * k / n)) for k in range(n)], 3)
+
+
+def _clothes(p, L, jc, sd, t):
+    """Seams, collar, folds and pattern on the back of the garment; a flat shadow down one side."""
+    sw, sl, hi, nw = L['sw'], L['slope'], L['hi'], L['nw']
+    jd, jl = B.dk(jc, 0.8), B.lt(jc, 1.18)
+    side = L['shade_side']
+    p.poly(curve([(side * sw * 0.45, sl * 0.4 + 20), (side * (sw - 10), sl + 30 + hi * side), (side * (sw + 2), sl + 160),
+                  (side * (sw - 4), 600), (side * sw * 0.55, 600), (side * sw * 0.6, 260)], 3), jd, None)   # flat shadow
+    pat = L['pattern']
+    if pat:                                               # the cloth's pattern, kept inside the back
+        x0, x1, y0 = -sw + 26, sw - 26, sl + 46
+        if pat == 'pinstripe':
+            for k in range(int((x1 - x0) / 16)):
+                p.line([(x0 + k * 16, y0), (x0 + k * 16, 600)], jl, 1.2)
+        elif pat == 'check':
+            for k in range(int((x1 - x0) / 34)):
+                p.line([(x0 + k * 34, y0), (x0 + k * 34, 600)], jl, 1.6)
+            for k in range(int((600 - y0) / 34)):
+                p.line([(x0, y0 + k * 34), (x1, y0 + k * 34)], jl, 1.6)
+        else:
+            g = np.random.default_rng(sd)
+            for _ in range(70):
+                x, y = g.uniform(x0, x1), g.uniform(y0, 560)
+                p.line([(x, y), (x + 5, y + 2)], jl if g.random() < 0.5 else jd, 1.4)
+    gm = L['garment']
+    if gm in ('suit', 'blazer'):
+        p.line([(0, 30), (0, 600)], jd, 2.0)                                       # the centre back seam
+        for sgn in (-1, 1):
+            p.line([(sgn * (nw + 12), 10), (sgn * (sw - 16), sl + 10 + hi * sgn)], jd, 1.6)   # shoulder seams
+            p.line(curve([(sgn * (sw - 16), sl + 12 + hi * sgn), (sgn * (sw - 30), sl + 90), (sgn * (sw - 26), sl + 170),
+                          (sgn * (sw - 22), sl + 175)], 3)[:-4], jd, 1.6)        # the armhole
+        for k in range(L['folds']):                                                # creases across the back
+            y = 120 + 40 * k
+            sg = 1 if (k + sd) % 2 else -1
+            p.line(curve([(sg * 20, y), (sg * 60, y - 10), (sg * (sw - 40), y + 12), (sg * (sw - 30), y + 20)], 3)[:-4], jd, 1.4)
+        p.poly(curve([(-nw - 22, 12), (-nw - 14, -10), (0, -14), (nw + 14, -10), (nw + 22, 12), (0, 22)], 3), jc, INK, 2.2)  # collar
+        if gm == 'suit':
+            p.poly(curve([(-nw - 6, -6), (0, -12), (nw + 6, -6), (nw + 4, -18), (0, -24), (-nw - 4, -18)], 3), (242, 240, 236), INK, 1.8)
+    elif gm in ('sweater', 'cardigan'):
+        p.poly(curve([(-nw - 18, 14), (-nw - 12, -8), (0, -12), (nw + 12, -8), (nw + 18, 14), (0, 18)], 3), jd, INK, 2.2)
+        for k in range(-6, 7):                                                     # the ribbed neck
+            p.line([(k * (nw + 14) / 6, -8 + abs(k) * 0.6), (k * (nw + 16) / 6, 14)], B.dk(jc, 0.65), 1.2)
+        for row in range(5):                                                       # knit texture
+            y = sl + 60 + row * 90
+            for k in range(-4, 5):
+                x = k * sw / 5 + (row % 2) * 12
+                p.line([(x - 5, y), (x, y + 6), (x + 5, y)], jl, 1.2)
+        for sgn in (-1, 1):
+            p.line(curve([(sgn * (nw + 16), 10), (sgn * (sw * 0.6), sl + 40), (sgn * (sw - 20), sl + 150)], 3)[:-3], jd, 1.4)
+    else:                                                 # blouse or shirt: soft drapes, a yoke seam
+        p.line(curve([(-sw + 22, sl + 40), (0, sl + 30), (sw - 22, sl + 40)], 3)[1:-1], jd, 1.4)
+        for k in range(3):
+            x = -sw * 0.5 + k * sw * 0.5
+            p.line(curve([(x, sl + 60), (x + 10, 260), (x - 6, 420), (x + 4, 590)], 3)[:-3], jd, 1.4)
+        p.poly(curve([(-nw - 10, 8), (-nw - 4, -14), (0, -18), (nw + 4, -14), (nw + 10, 8), (0, 12)], 3),
+               (246, 244, 240) if gm == 'shirt' else jc, INK, 1.8)
+
+
+def _hair(p, L, st, hc, skin, cx, cy, sd):
+    """Hair from behind, with its own nape, tufts and strands; a bald crown keeps its fringe."""
+    rx, ry = L['hrx'], L['hry']
+    hd, hl = B.dk(hc, 0.75), B.lt(hc, 1.2)
+    tf = L['tufts']
+    head = _head_outline(L, cx, cy)
+    if st == 'bald':
+        p.poly(head, skin, INK, 2.8)
+        band = [(cx - rx - 3, cy - 6), (cx - rx * 0.9, cy + ry * 0.55)] + \
+               [(cx - rx * 0.6 + k * rx * 0.3, cy + ry * (0.86 + 0.06 * tf[k])) for k in range(5)] + \
+               [(cx + rx * 0.9, cy + ry * 0.55), (cx + rx + 3, cy - 6), (cx + rx * 0.7, cy + ry * 0.25), (cx, cy + ry * 0.36),
+                (cx - rx * 0.7, cy + ry * 0.25)]
+        p.poly(curve(band, 3), hc, INK, 2.2)
+        p.line(curve([(cx - rx * 0.3, cy - ry * 0.6), (cx, cy - ry * 0.7), (cx + rx * 0.2, cy - ry * 0.62)], 3)[1:-1],
+               B.lt(skin, 1.08), 3)
+        return
+    if st == 'long':
+        p.poly(curve([(cx - rx - 6, cy - 20), (cx - rx - 14, cy + 120), (cx - rx * 0.4, cy + 250 * tf[0]),
+                      (cx, cy + 240 * tf[1]), (cx + rx * 0.5, cy + 255 * tf[2]), (cx + rx + 14, cy + 120),
+                      (cx + rx + 6, cy - 20), (cx, cy - ry - 8)], 4), hc, INK, 2.8)
+        for k in range(5):
+            x = cx - rx * 0.7 + k * rx * 0.35
+            p.line(curve([(x, cy - ry * 0.6), (x - 6, cy + 60), (x + 4, cy + 200 * tf[k])], 3)[:-3], hd, 1.6)
+        part = cx + rx * 0.15 * L['lumps'][0]
+        p.line([(part, cy - ry - 6), (part + 2, cy - ry * 0.5)], hd, 2.0)          # the parting
+        for sgn in (-1, 1):                                                        # the waves at the sides
+            p.line(curve([(cx + sgn * (rx + 2), cy - 10), (cx + sgn * (rx + 12), cy + 60), (cx + sgn * (rx + 4), cy + 130),
+                          (cx + sgn * (rx + 14), cy + 200)], 3)[1:-2], hd, 1.6)
+        return
+    p.poly(head, hc, INK, 2.8)
+    if st in ('short', 'curly'):
+        nape = [(cx - rx * 0.62, cy + ry * 0.8)] + [(cx - rx * 0.4 + k * rx * 0.2, cy + ry * (0.86 + 0.05 * tf[k]))
+                                                    for k in range(5)] + [(cx + rx * 0.62, cy + ry * 0.8)]
+        p.poly(nape + [(cx + rx * 0.5, cy + ry * 0.98), (cx, cy + ry * 1.04), (cx - rx * 0.5, cy + ry * 0.98)], skin, None)
+        p.line(nape, INK, 1.8)                                                     # the nape's hairline, low
+        if st == 'curly':
+            for k in range(14):
+                a = math.pi * (0.95 + k / 12.0)
+                p.ell(cx + rx * 0.98 * math.cos(a), cy + ry * 0.95 * math.sin(a), 15 * tf[k % 9], 13, hc, INK, 2.0)
+            for k in range(8):
+                p.line(oval(cx - rx * 0.5 + (k % 4) * rx * 0.33, cy - ry * 0.4 + (k // 4) * 40, 7, 6, 8, 0, 4), hd, 1.4)
+        else:
+            whorl = (cx + rx * 0.2, cy - ry * 0.55)
+            for k in range(7):                                                     # combed from the crown
+                a = -0.9 + k * 0.42
+                p.line(curve([whorl, (whorl[0] + rx * 0.5 * math.sin(a), whorl[1] + ry * 0.6 * math.cos(a) * 0.8),
+                              (whorl[0] + rx * 0.8 * math.sin(a), whorl[1] + ry * 1.0 * math.cos(a))], 3)[1:-3], hd, 1.4)
+    elif st == 'bob':
+        p.poly(curve([(cx - rx - 8, cy - 30), (cx - rx - 12, cy + 70), (cx - rx * 0.4, cy + 96 * tf[0]), (cx, cy + 90),
+                      (cx + rx * 0.4, cy + 98 * tf[1]), (cx + rx + 12, cy + 70), (cx + rx + 8, cy - 30), (cx, cy - ry - 6)], 4),
+               hc, INK, 2.8)
+        for k in range(5):
+            x = cx - rx * 0.6 + k * rx * 0.3
+            p.line(curve([(x, cy - ry * 0.7), (x - 4, cy + 20), (x + 2, cy + 84)], 3)[:-2], hd, 1.5)
+    elif st in ('pony', 'bun'):
+        for k in range(6):
+            a = -0.8 + k * 0.32
+            p.line(curve([(cx + rx * math.sin(a) * 0.95, cy - ry * 0.6), (cx + rx * math.sin(a) * 0.5, cy - ry * 0.1),
+                          (cx, cy + 6)], 3)[1:-2], hd, 1.4)
+        if st == 'pony':
+            p.poly(curve([(cx - 14, cy), (cx + 14, cy), (cx + 24 * tf[0], cy + 90), (cx + 6, cy + 150 * tf[1]),
+                          (cx - 14, cy + 100)], 3), hc, INK, 2.4)
+            p.line(curve([(cx, cy + 20), (cx + 8, cy + 90), (cx + 2, cy + 130)], 3)[:-2], hd, 1.4)
+            p.poly(curve([(cx - 15, cy - 8), (cx + 15, cy - 8), (cx + 14, cy + 8), (cx - 14, cy + 8)], 2),
+                   (190, 50, 70), INK, 1.8)
+        else:
+            p.poly(curve(oval(cx + 4, cy - ry * 0.2, 34 * tf[0], 28, 10), 3), hc, INK, 2.4)
+            p.line(oval(cx + 4, cy - ry * 0.2, 18, 12, 10, 0.4, 4.6), hd, 1.4)
+    p.line(curve([(cx - rx * 0.5, cy - ry * 0.75), (cx - rx * 0.2, cy - ry * 0.88), (cx + rx * 0.1, cy - ry * 0.86)], 3)[1:-1],
+           hl, 2.4)                                                                # a flat sheen on top
 
 
 def reporter(img, cam, r, t):
-    """A seated reporter from behind: head, hair, shoulders; some with one hand up (a circle hand), held high,
-    lowered now and then and raised again. Relaxed and normal; nobody looks round."""
-    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    """A seated reporter from behind, each one their own build, clothes and haircut. Quiet life only (Sam,
+    15 Oct): shifting in the seat now and then, a glance aside or down, typing (elbows going), scribbling notes."""
+    if r.get('empty'):
+        return
+    sd = r['seed']
+    L = _look(r)
+    dx = 9 * filmkit.shifts(t, seed=sd, amount=1.0, hold=(2.0, 4.5))           # shuffling in the seat
+    hdx = 10 * filmkit.shifts(t, seed=sd + 1, amount=1.0, hold=(1.6, 3.6))     # a glance aside
+    hdy = 8 * max(0.0, filmkit.shifts(t, seed=sd + 2, amount=1.0, hold=(1.8, 4.0)))   # a glance down at the notes
+    p = B.Pen(img, B.Local(cam, r['x'] + dx * r['s'], r['y'], r['s']))
+    ph = B.Pen(img, B.Local(cam, r['x'] + (dx + hdx) * r['s'], r['y'] + hdy * r['s'], r['s']))
     hc, jc, skin, st = r['hair'], r['jacket'], r['skin'], r['style']
-    up = False
-    if r['hand']:
-        ph = (t + r['up_at']) % 9.0
-        up = ph < 6.5                                    # up for a long while, down briefly, up again
-    if up:
-        sg = r['side']
-        sway = 6 * filmkit.shifts(t, seed=r['seed'], amount=1.0)
-        p.poly([(sg * 76, 30), (sg * 136, 40), (sg * 120 + sway, -230), (sg * 70 + sway, -236)], jc, INK, 3)
-        p.ell(sg * 95 + sway, -262, 30, 32, skin, INK, 3)
-    p.poly(curve([(-150, 220), (-140, 50), (-70, 0), (70, 0), (140, 50), (150, 220)], 4), jc, INK, 3)
-    p.poly([(-28, 2), (28, 2), (24, -30), (-24, -30)], skin, INK, 2.4)
-    for sgn in (-1, 1):
-        p.ell(sgn * 66, -70, 12, 20, skin, INK, 3)
-    if st == 'bald':
-        p.ell(0, -84, 64, 78, skin, INK, 3)
-        p.poly(curve([(-66, -60), (-60, -20), (0, -6), (60, -20), (66, -60), (40, -40), (-40, -40)], 3), hc, INK, 2.4)
-    else:
-        p.ell(0, -84, 66, 80, hc, INK, 3)
-        if st == 'bob':
-            p.poly(curve([(-74, -90), (-80, 0), (0, 12), (80, 0), (74, -90), (0, -150)], 3), hc, INK, 3)
-        elif st == 'long':
-            p.poly(curve([(-70, -90), (-80, 120), (0, 140), (80, 120), (70, -90), (0, -150)], 3), hc, INK, 3)
-        elif st == 'pony':
-            p.ell(0, -84, 66, 80, hc, INK, 3)
-            p.poly(curve([(-16, -40), (16, -40), (22, 80), (0, 120), (-22, 80)], 3), hc, INK, 2.6)
-            p.ell(0, -40, 14, 9, (190, 50, 70), INK, 2)
-        elif st == 'bun':
-            p.ell(0, -150, 34, 30, hc, INK, 3)
-        elif st == 'curly':
-            for k in range(10):
-                a = math.pi * (1.0 + k / 9.0)
-                p.ell(70 * math.cos(a), -84 + 84 * math.sin(a), 22, 22, hc, INK, 2.4)
-            p.ell(0, -84, 62, 74, hc, None)
-        p.line([(-30, -150), (-20, -100)], B.dk(hc, 0.8), 2)
-    if r['props'] == 'pad' and not up:                   # a notepad held up on one shoulder side
-        p.poly(rough([(70, 60), (150, 50), (156, 150), (76, 160)], 3, r['seed']), (250, 248, 236), INK, 2.4)
+    sw, sl = L['sw'], L['slope']
+    if r.get('typing'):                                   # elbows out at the sides, bobbing while they type
+        on = (t * 0.9 + sd % 13) % 4.0 < 2.8
+        for sgn in (-1, 1):
+            bob = 4 * math.sin(t * 22 + sgn * 1.7 + sd % 5) if on else 0.0
+            p.poly(curve(oval(sgn * (sw + 4), sl + 190 + bob * sgn, 30, 44, 10), 3), jc, INK, 2.6)
+    # the neck first (behind the collar), then the back, then the head
+    nw = L['nw']
+    ph.poly(curve([(-nw, 10 - hdy), (-nw + 2, -40), (0, -46), (nw - 2, -40), (nw, 10 - hdy)], 3), skin, INK, 2.4)
+    ph.line([(-nw * 0.4, -10), (nw * 0.3, -12)], B.dk(skin, 0.86), 1.4)
+    p.poly(_torso_outline(L), jc, INK, 2.8)
+    _clothes(p, L, jc, sd, t)
+    p.poly(_torso_outline(L), None, INK, 2.8)
+    cx, cy = 0, -84
+    for sgn in (-1, 1):                                   # ears, with an inner fold
+        ph.poly(curve(oval(cx + sgn * (L['hrx'] - 2), cy + 14, 11, 19, 10), 3), skin, INK, 2.4)
+        ph.line([(cx + sgn * (L['hrx'] + 1), cy + 4), (cx + sgn * (L['hrx'] + 4), cy + 22)], B.dk(skin, 0.8), 1.4)
+    _hair(ph, L, st, hc, skin, cx, cy, sd)
+    if r['pad'] and not r.get('typing'):                  # a notebook held up by the shoulder, scribbled in
+        tilt = 4 * math.sin(t * 9 + sd) if (t + sd % 7) % 3.0 < 1.6 else 0.0
+        q = p
+        q.poly(rough([(sw - 60, 60 + tilt), (sw + 16, 50 - tilt), (sw + 22, 150 - tilt), (sw - 54, 160 + tilt)], 3, sd),
+               (250, 248, 236), INK, 2.4)
+        for k in range(3):
+            q.line([(sw - 44, 80 + 20 * k), (sw + 4, 74 + 20 * k)], (150, 160, 190), 2)
 
 
 def crowd(img, t):
-    """Rows drawn back to front, each with its own depth (nearer rows swell and slide away as we push in)."""
-    for f, _, _ in sorted(REPORTER_ROWS, key=lambda r: r[0]):
+    """Rows drawn back to front, each with its own depth (nearer rows swell and slide away as we push in);
+    each row's people, then the backs of the seats they sit in."""
+    for row in sorted(ROWS, key=lambda r: r[0]):
+        f, seats = row[0], row[1]
         cam = cam_at(t, f)
         if cam is None:
             continue
-        for r in REPORTERS:
-            if r['f'] == f:
-                X, Y = cam.P(r['x'], r['y'])
-                if -cam.S(300 * r['s']) < X < B.W * B.SS + cam.S(300 * r['s']) and Y < B.H * B.SS + cam.S(420 * r['s']):
-                    reporter(img, cam, r, t)
+        X, Y = cam.P(A0[0], row[3])
+        if Y - cam.S(400 * row[4]) > B.H * B.SS:
+            continue
+        for r in seats:
+            reporter(img, cam, r, t)
+        seat_backs(img, cam, row)
+
+
+TV_RISER = 1.6        # the camera riser on the right sits this much nearer than her
+
+
+def tv_crew(img, cam, t):
+    """A camera riser on the right: two TV cameras on tripods and an operator, side on."""
+    p = B.Pen(img, cam)
+    p.poly(rough([(1500, 2500), (2700, 2500), (2700, 3400), (1500, 3400)], 3, 71), (70, 74, 86), INK, 3)
+    for k, x in enumerate((1700, 2150)):
+        for dx in (-90, 0, 90):
+            p.line([(x, 2160), (x + dx, 2500)], (40, 40, 44), 5)
+        p.poly(rough([(x - 150, 2040), (x + 120, 2040), (x + 120, 2160), (x - 150, 2160)], 2, 72 + k), (36, 36, 40), INK, 2.6)
+        p.poly(rough([(x - 260, 2060), (x - 150, 2050), (x - 150, 2150), (x - 260, 2140)], 2, 74 + k), (24, 24, 28), INK, 2.4)
+        p.ell(x - 262, 2100, 16, 40, (90, 110, 140), INK, 2)
+    op = dict(x=2380, y=1900, s=0.9, hair=(40, 30, 26), jacket=(40, 44, 54), skin=B.PINK, style='short', hand=False,
+              side=1, up_at=0.0, seed=5, empty=False, phone=False, pad=False)
+    reporter(img, cam, op, t)
 
 
 # ------------------------------------------------------------------------------------------------ the frame
 def picture(t):
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
-    img = B.canvas(CREAM)
-    backdrop(img, cam_at(t, -0.35), t)
-    stage_floor(img, cam_at(t, 0.0))
+    img = B.canvas(WALL)
+    room(img, cam_at(t, -0.3))
+    back_wall(img, cam_at(t, -0.3), t)
     cam = cam_at(t)
     her(img, cam, t)
     notes(img, cam)
     podium(img, cam_at(t, 0.04))
+    columns(img, cam_at(t, 0.25))
     crowd(img, t)
     return img
 
@@ -768,8 +1113,8 @@ def cast_sheet(out):
         ('2  talking', dict(mouth='mid')),
         ('3  reading her notes', dict(gaze='down', lid=0.62, head_dy=10, brow=-2, mouth='small')),
         ('4  smile 1: small, closed', dict(smile=1, brow=4)),
-        ('5  smile 2: the big toothy one', dict(smile=2, brow=14, squint=0.5, head_tilt=-0.05)),
-        ('6  smile 3: the huge strange one', dict(smile=3, brow=18, squint=0.75, head_tilt=0.05)),
+        ('5  smile 2: the big toothy one', dict(smile=2, brow=11, squint=0.4, head_tilt=-0.04)),
+        ('6  smile 3: the huge strange one', dict(smile=3, brow=14, squint=0.6, head_tilt=0.04)),
         ('7  the sigh', dict(gaze='down', closed=True, mouth='blow', sh_dy=-14, head_dy=10, brow=3)),
         ('8  "...Venezuela" (flat, dead)', dict(gaze='down', lid=0.72, head_dy=12, brow=-3, mouth='small')),
     ]
@@ -830,6 +1175,11 @@ def beat_name(t):
     return {'smile': f'smile {arg}', 'look': f'looks {arg}', 'sigh': 'SIGH', 'hold': 'hold', 'gap': '(pause)'}[k]
 
 
+def _write_wav(path, mix):
+    import mossad_audio as MA
+    MA.write_wav(path, mix)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'cast':
@@ -846,7 +1196,7 @@ def main():
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=lambda t: 'push', sound=lambda: np.zeros(int((DUR + 0.3) * 48000)),
-                 write_wav=None, set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 22,
+                 write_wav=_write_wav, set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 22,
                  reuse='--reuse' in a, redo=())
 
 

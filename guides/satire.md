@@ -22,7 +22,10 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 Flat colour, one outline weight, no gradients or glows; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
 or ruler-straight boxes; every copy different (colours, sizes, facing); circle hands with props laid over them; deadpan
 faces; hard cuts; a close-up for the reaction that matters; no title by default (Sam, 15 Oct); the Cranberry Title style (on 2 s) only when asked for.
-No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
+**Crowds seen from behind are never one repeated block** (Sam, 15 Oct: it 'screams drawn with AI'): each person
+gets their own shoulder width, slope and a higher shoulder, a lumpy head, a haircut with a low nape, and real clothing
+detail (collar, seams, creases, ribbed knit, a flat shadow side, sometimes pinstripe, check or tweed). See
+`press_secretary.reporter`. No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
 flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
 
 ## Movement: walking, turning, poses, sitting, combat, cars (built to order)
