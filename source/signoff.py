@@ -35,7 +35,56 @@ INK = (24, 20, 22)
 RED = np.array([206, 22, 48], float)
 MOUTH = (0.548 * SIZE + DX, 0.605 * SIZE + DY)          # the corner of his mouth, beside the teeth
 BOX = tuple(int(f * SIZE + o) for f, o in ((0.57, DX), (0.70, DY), (1.05, DX), (1.10, DY)))   # where the leaves were
-PAW = (0.585, 0.885, 0.05, 0.04)                       # his right paw (centre and half-size, as fractions of the square)
+PAW = (0.585, 0.885, 0.05, 0.04)
+EYES = ((0.293, 0.357), (0.707, 0.357))                 # his eyes (fractions of the square)
+
+
+def sucking(t):
+    """0-1: how hard he is sucking (eyes wide, lips pursed round the straw), from the sip to just after it."""
+    a = min(1.0, max(0.0, (t - (SIP_AT - 0.08)) / 0.15))
+    b = min(1.0, max(0.0, (t - (SIP_AT + 1.15)) / 0.3))
+    return a * (1 - b)
+
+
+def widen(img, k):
+    """His eyes open wide (k 0-1): each eye drawn larger in place, mostly taller."""
+    if k <= 0:
+        return
+    for fx, fy in EYES:
+        cx, cy = fx * SIZE + DX, fy * SIZE + DY
+        r = 0.055 * SIZE
+        box = (int(cx - r), int(cy - r), int(cx + r), int(cy + r))
+        patch = img.crop(box)
+        sx, sy = 1 + 0.55 * k, 1 + 0.95 * k
+        big = patch.resize((int(patch.width * sx), int(patch.height * sy)), Image.LANCZOS)
+        m = Image.new('L', big.size, 0)
+        ImageDraw.Draw(m).ellipse([big.width * 0.18, big.height * 0.18, big.width * 0.82, big.height * 0.82], fill=255)
+        m = m.filter(ImageFilter.GaussianBlur(4))
+        img.paste(big, (int(cx - big.width / 2), int(cy - big.height / 2)), m)
+
+
+def lips(img, k, fur, sip=0.0):
+    """His lips closed round the straw's end: a small pursed mouth, tighter and pushed forward as he sucks, with the
+    cheeks drawn in."""
+    d = ImageDraw.Draw(img, 'RGBA')
+    mx, my = MOUTH[0] + 8, MOUTH[1]
+    lip = (122, 72, 64)                                                    # a darker, pinkish brown: lips
+    rw, rh = 36 - 11 * k, 23 + 8 * k                                        # an "o", tighter as he sucks
+    d.ellipse([mx - rw, my - rh, mx + rw, my + rh], fill=lip, outline=INK, width=5)
+    tip = tuple(int(c) for c in RED) if sip * 1.3 >= 1.25 else (250, 250, 250)   # the straw's end; red once juice arrives
+    d.ellipse([mx - rw * 0.42, my - rh * 0.42, mx + rw * 0.42, my + rh * 0.42], fill=tip, outline=INK, width=3)
+    for i in range(3):                                                     # pucker creases
+        a = -0.9 + 0.9 * i
+        d.line([(mx + rw * 0.55 * math.cos(a), my + rh * 0.55 * math.sin(a)),
+                (mx + rw * 0.95 * math.cos(a), my + rh * 0.95 * math.sin(a))], fill=INK, width=2)
+    if k > 0:                                                              # cheeks drawn in: a soft shadow
+        sh = Image.new('L', img.size, 0)
+        sd = ImageDraw.Draw(sh)
+        for sgn in (-1, 1):
+            cx, cy = 0.5 * SIZE + DX + sgn * 0.2 * SIZE, 0.59 * SIZE + DY
+            sd.ellipse([cx - 26, cy - 44, cx + 26, cy + 44], fill=int(55 * k))
+        sh = sh.filter(ImageFilter.GaussianBlur(14))
+        img.paste((50, 26, 14), (0, 0), sh)                       # his right paw (centre and half-size, as fractions of the square)
 
 _cache = {}
 
@@ -161,7 +210,10 @@ def frame(t):
     ImageDraw.Draw(m).rounded_rectangle([0, 0, SIZE - 1, SIZE - 1], 44, fill=255)
     img.paste(pic, (DX, DY), m)
     sip = min(1.0, max(0.0, (t - SIP_AT) / 0.6))
+    k = sucking(t)
+    widen(img, k)
     juice_box(img, sip)
+    lips(img, k, p['fur'], sip)
     # his paw over the bottom of the box, so he is holding it
     px, py, rx, ry = PAW
     fur = Image.fromarray(np.clip(p['fur'], 0, 255).astype(np.uint8))
@@ -193,9 +245,9 @@ def slurp_track(path):
     """Sam's slurp (asked for, 15 Oct): its sound starts as the juice starts up the straw, at a natural level."""
     import mossad_audio as MA
     from burnham_film import load, SR
-    x = load(SLURP)
+    x = MA.denoise(MA.dehum(load(SLURP)))                                  # cleaned like the voices
     st = MA.speech(x) or [(0.0, len(x) / SR)]
-    a, b = st[0][0], st[-1][1]
+    a, b = st[0]                                                           # the slurp alone (the later sound was noise)
     x = x[max(0, int((a - 0.04) * SR)):int((b + 0.08) * SR)]
     f = int(0.01 * SR)
     x[:f] *= np.linspace(0, 1, f)
