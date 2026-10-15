@@ -31,32 +31,42 @@ SERIF = os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf')
 # The draft script as beats. ('say', words, gaze) | ('look', 'up'/'down') | ('smile', level, secs) | ('hold', secs)
 # | ('sigh', secs). Speaking time comes from the syllables; '...' leaves a long halting gap, '.' a short one.
 # When Sam's recording arrives, these timings are replaced by the recording's.
-SCRIPT = [
-    ('hold', 0.5, 1),
-    ('say', 'Good morning.', 'up'), ('say', 'I am...', 'up'), ('say', 'so honoured.', 'up'),
-    ('say', 'To be.', 'up'), ('say', 'Here.', 'up'),
+SCRIPT = [   # Sam's script (15 Oct), staged: she reads with her head right down, snaps up, smiles, checks again
+    ('hold', 0.6, 0),
+    ('say', 'So like... uh...', 'down'), ('say', "it's really,", 'down'),
+    ('look', 'up'), ('say', "yes, it's really important", 'up'),
+    ('say', 'that with the president we are,', 'up'), ('say', 'we work tirelessly for America,', 'up'),
     ('smile', 2, 0.9),
-    ('look', 'down'),
-    ('say', 'President Trump has...', 'down'), ('say', 'amplified.', 'down'),
-    ('look', 'up'), ('say', 'And multiplied.', 'up'),
-    ('look', 'down'), ('say', 'And...', 'down'), ('say', 'expanded.', 'down'), ('say', 'The amplification.', 'down'),
-    ('smile', 3, 1.3),
-    ('say', 'Of wins.', 'up'), ('say', 'For...', 'up'), ('say', 'Americans.', 'up'),
-    ('look', 'down'), ('say', 'For... for Americans.', 'down'),
-    ('say', 'Attendance is at...', 'down'), ('say', 'record...', 'down'), ('say', 'highs.', 'down'),
+    ('look', 'down'), ('say', 'and the people,', 'down'), ('say', 'they understand that,', 'down'),
+    ('say', 'and I look forward to the president,', 'down'),
+    ('look', 'up'), ('look', 'down'),                    # a nervous double-check
+    ('say', 'the president...', 'down'),
+    ('say', 'with his helping,', 'down'), ('look', 'up'), ('say', 'with his agenda.', 'up'),
+    ('smile', 3, 1.2),
+    ('say', 'My president and I,', 'up'), ('say', 'eh,', 'up'),
+    ('look', 'down'), ('say', 'excuse me,', 'down'), ('look', 'up'), ('say', 'my master and I', 'up'),
+    ('say', 'are very happy to be,', 'up'),
+    ('smile', 2, 0.8),
+    ('look', 'down'), ('say', 'and like,', 'down'), ('say', 'our kids are helicopters,', 'down'),
+    ('look', 'up'), ('say', 'and I really think that with the biggest swell of support,', 'up'),
+    ('say', 'the people are really,', 'up'), ('say', 'I just,', 'up'),
+    ('look', 'down'), ('say', "you know it's so.", 'down'),
+    ('hold', 0.6, 0),
+    ('look', 'up'), ('say', "I'll get back to you on that.", 'up'),
     ('smile', 2, 0.9),
-    ('say', 'He is an energetic...', 'up'), ('say', 'president.', 'up'),
-    ('smile', 3, 0.8),
-    ('say', 'Very...', 'up'), ('say', 'energetic.', 'up'),
-    ('look', 'down'),
-    ('say', 'A historic...', 'down'), ('say', 'one-day...', 'down'), ('say', 'war.', 'down'),
-    ('smile', 2, 0.7),
-    ('look', 'down'),
-    ('say', 'And a great relationship...', 'down'),
-    ('hold', 0.3, 0),
-    ('sigh', 1.4),
-    ('say', 'with Venezuela.', 'down'),
-    ('hold', 0.7, 0),
+    ('look', 'down'), ('say', 'So, like.', 'down'), ('say', 'I think if we all just,', 'down'), ('say', 'you know,', 'down'),
+    ('look', 'up'), ('say', "cause it's booming,", 'up'),
+    ('smile', 3, 0.7),
+    ('say', "and we've had a one day war,", 'up'),
+    ('look', 'down'), ('say', 'and I just need,', 'down'), ('say', 'I just want.', 'down'),
+    ('hold', 2.6, 0),                                    # it goes silent: head down, staring at the page
+    ('say', 'I just want.', 'down'),
+    ('hold', 0.4, 0),
+    ('sigh', 1.5),
+    ('say', 'Venezuela.', 'down'),
+    ('hold', 0.9, 0),
+    ('look', 'up'), ('say', 'venezuela.', 'up'),        # quieter, flat, straight at the room
+    ('hold', 0.8, 1),
 ]
 SYL = 0.13          # seconds a syllable (the halting comes from the gaps)
 # ====================================================================================================================
@@ -193,15 +203,17 @@ def state(t):
             s['head_tilt'] = 0.04 * (1 if level == 3 else -1) * smooth(u * 4)
     if kind == 'hold' and arg:
         s['smile'] = 1
-    if s['gaze'] == 'down':
-        s['lid'] = 0.62
-        s['head_dy'] = 10.0
-        s['brow'] = -2.0
+    if s['gaze'] == 'down':                # head right down, eyes on the paper (Sam, note 13: an inexperienced speaker)
+        s['lid'] = 0.86
+        s['head_dy'] = 24.0
+        s['feat_dy'] = 9.0
+        s['brow'] = -3.0
     if kind == 'sigh':
         u = (t - a) / (b - a)
         rise = smooth(u / 0.45) - smooth((u - 0.5) / 0.4) * 1.25
         s['sh_dy'] = -16.0 * rise
-        s['head_dy'] = 14.0 - 6 * rise
+        s['head_dy'] = 24.0 - 12 * rise
+        s['feat_dy'] = 9.0 * (1 - max(0.0, rise))
         s['closed'] = 0.25 < u < 0.8
         s['mouth'] = 'blow' if 0.5 < u < 0.92 else 'rest'
         s['brow'] = 3.0 * rise
@@ -383,6 +395,7 @@ def mouth(p, fx, my, st):
 
 def face(p, hx, hy, hw, hh, st):
     fx = hx
+    hy = hy + st.get('feat_dy', 0.0)                       # looking down: the features drop, more forehead shows
     brow = st['brow']
     for sgn in (-1, 1):                                   # arched, filled-in brows, darker than the hair
         ex = fx + sgn * 29

@@ -53,3 +53,28 @@ SOUND
 KEEP TRUE
 - Her notes stay on the podium. The reporters are always the same people.
 ```
+
+## Sam's final script (15 Oct)
+
+So like uh it's really, yes, it's really important that with the president we are, we work tirelessly for America,
+and the people, they understand that, and I look forward to the president, the president, with his helping, with his
+agenda.
+
+My president and I, eh, excuse me, my master and I are very happy to be, and like, our kids are helicopters, and I
+really think that with the biggest swell of support, the people are really, I just, you know it's so. I'll get back to
+you on that.
+
+So, like. I think if we all just, you know, cause it's booming, and we've had a one day war, and I just need, I just
+want.
+
+(It goes silent.)
+
+I just want.
+
+Venezuela.
+
+venezuela.
+
+Staging (in `SCRIPT` in source/press_secretary.py): reads with her head right down, snaps up, smiles; a nervous
+double-check before "the president"; a glance down at "excuse me" and up for "my master"; the silence is her staring at
+the page; the sigh comes after the second "I just want"; the second "venezuela" is quieter, flat, straight at the room.

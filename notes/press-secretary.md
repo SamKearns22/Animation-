@@ -14,7 +14,7 @@
 | 10 | push | crowd | Two empty chairs only; no raised hands; small movements (shuffling, glances, typing elbows, scribbling notes) | done |
 | 11 | push | crowd | Backs too blocky, read as AI-drawn: each reporter now has their own build, lumpy head, haircut with nape and strands, clothing seams, collars, creases, knit or pattern, a flat shadow side | done |
 | 12 | push | all | Flag: dots coming off it, sock shape: redrawn from the photos (hangs in folds by the pole, scalloped edge, gathered tail, slanted stripes, stars kept inside the canton, gold spear tip) | done |
-| 13 | push | reading her notes | Look down more when she checks her notes: head properly dipped, eyes on the paper, like an inexperienced public speaker. Do it with the script (Sam: wait) | open |
+| 13 | push | reading her notes | Look down more when she checks her notes, like an inexperienced public speaker: head drops, lids right down, features lower (more forehead), held too long, snaps back up; a nervous double-check | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.
