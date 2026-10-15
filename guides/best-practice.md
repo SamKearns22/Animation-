@@ -534,6 +534,23 @@ Specific lessons recorded there include:
   - apply every note;
   - check that a fix hasn't broken anything else;
   - where possible, add an automatic check so a fault can't return.
+- **Lessons from Bingo Bingo (15 Oct):**
+  - **Ask before every final render** and wait for a clear yes; "fix this before the final" is not one (CLAUDE.md).
+  - **Keep the clean final.** Save the untitled render in `source/data/FILM/` before adding any title or Hook Text,
+    so text changes take seconds; never overwrite it with a titled copy.
+  - **Re-render only what changed.** A change to the first few seconds (text, a fix) is redrawn for those frames
+    and spliced onto the finished film with its sound untouched (90 s instead of 18 min). Check the join.
+  - **Recordings with two lines in one file:** measure with `voices.py`, match each file to script lines by its
+    phrases and syllables, and split at the pause between lines (`source/audio/FILM-KEY.m4a`). A later retake
+    replaces both pieces of its file, so the two lines match.
+  - **Fast real delivery vs subtitles:** if a line is spoken faster than 220 words a minute, add a short breath
+    where two takes join and re-split the captions; if it still runs fast, say so rather than paraphrase.
+  - **Things worn on the mouth** (a lip ring) are placed for each mouth shape (where its lower lip is), not at one
+    fixed spot, and checked on one sheet of every shape.
+  - **Sam sees every picture Claude opens.** When a film is meant to be a surprise, open no stills of it at all
+    before the render.
+  - **Titles vs Hook Text:** titles are cranberry; the line introducing the joke is Hook Text in TikTok's own
+    caption style, for readability (`guides/tiktok-design.md`).
 - **Automatic clip checks (The Patriots 2):** every set piece that must stay separate (a wall monitor and a curtain, a
   dispenser and a cupboard) is listed with its outline, and the render stops if any two overlap; a typing fingertip
   must land on the keyboard. Uniform details (reflective bands, badges) are drawn as part of the jacket, before the
