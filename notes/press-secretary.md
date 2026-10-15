@@ -34,14 +34,14 @@
 | 30 | edit | opening | The film now opens on "I look forward to the President" (START_WORD); same Hook Text | done |
 | 31 | subtitles | 1:03 (uncut) | Sam says "I just need" there: the first "I just want." is not in the take, so it is cut from the script; "I just need." pinned to 63.29 s of the full take | done |
 | 32 | subtitles | 0:39 (uncut) | "helicopters," pinned to start at 38.95 s of the full take | done |
-| 33 | subtitles | 32 s (animatic 15) | "Let me get back to you on that." pinned there (50.26 s of the full take) | done, not yet rendered |
-| 34 | audio | opening | The opening "I" was clipped: the sound starts 0.45 s earlier with a 60 ms fade-in (everything slides 0.45 s later) | done, not yet rendered |
-| 35 | subtitles | get back | Reads "I'll get back to you on that." | done, not yet rendered |
-| 36 | acting | get back | More uncomfortable: stronger worried brows, a bead of sweat, eyes flick down and back, a swallow, tighter grimace | done, not yet rendered |
-| 37 | acting | "cause it's booming" | Excited: eyes wide, brows high, talking through a big smile with a little bounce, crazed flash after | done, not yet rendered |
-| 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done, not yet rendered |
-| 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done, not yet rendered |
-| 40 | acting | final "venezuela." | Dead-eyed and despondent, staring straight into the camera: heavy lids, eyes dead centre, faint sad brows, chin down a touch, no blinks, utterly still to the cut | done, not yet rendered |
+| 33 | subtitles | 32 s (animatic 15) | "Let me get back to you on that." pinned there (50.26 s of the full take) | done |
+| 34 | audio | opening | The opening "I" was clipped, and no scrap of the word before may be heard: the cut sits in the 40 ms silence between "and" and "I" (18.02 s of the full take), half a second of silence laid before it, 10 ms fade; "I look forward" pinned there; every other pin is tied to the take, so all sync points hold | done |
+| 35 | subtitles | get back | Reads "I'll get back to you on that." | done |
+| 36 | acting | get back | More uncomfortable: stronger worried brows, a bead of sweat, eyes flick down and back, a swallow, tighter grimace | done |
+| 37 | acting | "cause it's booming" | Excited: eyes wide, brows high, talking through a big smile with a little bounce, crazed flash after | done |
+| 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done |
+| 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done |
+| 40 | acting | final "venezuela." | Dead-eyed and despondent, staring straight into the camera: heavy lids, eyes dead centre, faint sad brows, chin down a touch, no blinks, utterly still to the cut | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

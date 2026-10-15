@@ -100,8 +100,9 @@ def _syllable_beats(v, runs):
 
 
 START_WORD = 'I look forward'
-PRE_ROLL = 0.45                  # Sam, 15 Oct: the opening 'I' was clipped; the sound now starts this much earlier   # the film opens on these words (None: from the very start)
-PINS = {'helicopters,': 38.95, "I'll get back to": 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
+CUT_AT = 18.02                   # the film's sound starts here in the full take: in the 40 ms gap between 'and' and 'I'
+                                 # (Sam, 15 Oct: keep the 'I', never a scrap of the word before it); silence is laid before it   # the film opens on these words (None: from the very start)
+PINS = {'I look forward': 18.04, 'helicopters,': 38.95, "I'll get back to": 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
 FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
 
 
@@ -242,7 +243,7 @@ def _trim(start_word):
     global TALK, GAZE, SMILES, SIGH, END, VOICE, RUNS, EXPRS, FRESH
     import mossad_audio as MA
     k = next(i for i in range(len(TALK) - 3) if [w for _, _, w in TALK[i:i + 3]] == start_word.split()[:3])
-    t0 = TALK[k][0] - LEAD - PRE_ROLL          # a little sound before it, so the first word is never clipped
+    t0 = CUT_AT - LEAD                           # the cut sits in the silence just before the first word
     TALK = [(a - t0, b - t0, w) for a, b, w in TALK[k:]]
     g0 = [g for t_, g in GAZE if t_ <= t0][-1:] or ['up']
     GAZE = [(0.0, g0[0])] + [(t_ - t0, g) for t_, g in GAZE if t_ > t0]
@@ -250,10 +251,11 @@ def _trim(start_word):
     EXPRS = [(a - t0, b - t0, x) for a, b, x in EXPRS if b > t0]
     SIGH = (SIGH[0] - t0, SIGH[1] - t0)
     END -= t0
-    VOICE = VOICE[int(t0 * MA.SR):].copy()
-    nf = int(0.06 * MA.SR)
-    VOICE[:nf] *= np.linspace(0, 1, nf)         # a 60 ms fade-in at the cut (no click)
-    RUNS = [(a - t0, b - t0) for a, b in RUNS if b > t0]
+    rest = VOICE[int(CUT_AT * MA.SR):].copy()
+    nf = int(0.01 * MA.SR)
+    rest[:nf] *= np.linspace(0, 1, nf)          # a 10 ms fade-in at the cut, inside the silence (no click)
+    VOICE = np.concatenate([np.zeros(int(LEAD * MA.SR)), rest])
+    RUNS = [(max(a, CUT_AT) - t0, b - t0) for a, b in RUNS if b > CUT_AT]
     FRESH = {i - k for i in FRESH if i >= k}
 
 
