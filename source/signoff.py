@@ -33,14 +33,14 @@ SLURP = os.path.join(HERE, 'audio', 'signoff-slurp.m4a')
 SIP_AT = 0.45                                # the juice starts up the straw (and the slurp starts) here
 INK = (24, 20, 22)
 RED = np.array([206, 22, 48], float)
-MOUTH = (0.548 * SIZE + DX, 0.605 * SIZE + DY)          # the corner of his mouth, beside the teeth
+MOUTH = (0.50 * SIZE + DX, 0.706 * SIZE + DY)           # his own mouth: the dark oval just under his teeth (Sam)
 BOX = tuple(int(f * SIZE + o) for f, o in ((0.57, DX), (0.70, DY), (1.05, DX), (1.10, DY)))   # where the leaves were
 PAW = (0.585, 0.885, 0.05, 0.04)
 EYES = ((0.293, 0.357), (0.707, 0.357))                 # his eyes (fractions of the square)
 
 
 def sucking(t):
-    """0-1: how hard he is sucking (eyes wide, lips pursed round the straw), from the sip to just after it."""
+    """0-1: how hard he is sucking (eyes wide, mouth a black O round the straw), from the sip to just after it."""
     a = min(1.0, max(0.0, (t - (SIP_AT - 0.08)) / 0.15))
     b = min(1.0, max(0.0, (t - (SIP_AT + 1.15)) / 0.3))
     return a * (1 - b)
@@ -63,28 +63,14 @@ def widen(img, k):
         img.paste(big, (int(cx - big.width / 2), int(cy - big.height / 2)), m)
 
 
-def lips(img, k, fur, sip=0.0):
-    """His lips closed round the straw's end: a small pursed mouth, tighter and pushed forward as he sucks, with the
-    cheeks drawn in."""
-    d = ImageDraw.Draw(img, 'RGBA')
-    mx, my = MOUTH[0] + 8, MOUTH[1]
-    lip = (122, 72, 64)                                                    # a darker, pinkish brown: lips
-    rw, rh = 36 - 11 * k, 23 + 8 * k                                        # an "o", tighter as he sucks
-    d.ellipse([mx - rw, my - rh, mx + rw, my + rh], fill=lip, outline=INK, width=5)
-    tip = tuple(int(c) for c in RED) if sip * 1.3 >= 1.25 else (250, 250, 250)   # the straw's end; red once juice arrives
-    d.ellipse([mx - rw * 0.42, my - rh * 0.42, mx + rw * 0.42, my + rh * 0.42], fill=tip, outline=INK, width=3)
-    for i in range(3):                                                     # pucker creases
-        a = -0.9 + 0.9 * i
-        d.line([(mx + rw * 0.55 * math.cos(a), my + rh * 0.55 * math.sin(a)),
-                (mx + rw * 0.95 * math.cos(a), my + rh * 0.95 * math.sin(a))], fill=INK, width=2)
-    if k > 0:                                                              # cheeks drawn in: a soft shadow
-        sh = Image.new('L', img.size, 0)
-        sd = ImageDraw.Draw(sh)
-        for sgn in (-1, 1):
-            cx, cy = 0.5 * SIZE + DX + sgn * 0.2 * SIZE, 0.59 * SIZE + DY
-            sd.ellipse([cx - 26, cy - 44, cx + 26, cy + 44], fill=int(55 * k))
-        sh = sh.filter(ImageFilter.GaussianBlur(14))
-        img.paste((50, 26, 14), (0, 0), sh)                       # his right paw (centre and half-size, as fractions of the square)
+def o_mouth(img, k):
+    """While he sucks, his mouth snaps into a round black O around the straw (Sam: his own mouth, no extra lips)."""
+    if k < 0.5:
+        return
+    d = ImageDraw.Draw(img)
+    r = 0.036 * SIZE
+    d.ellipse([MOUTH[0] - r, MOUTH[1] - r * 0.95, MOUTH[0] + r, MOUTH[1] + r * 0.95], fill=(14, 10, 10))
+
 
 _cache = {}
 
@@ -161,7 +147,7 @@ def balloon(text, size):
     return Image.fromarray(rgba, 'RGBA')
 
 
-def juice_box(img, sip):
+def juice_box(img, sip, sucking_now=False):
     """The white box in his paw, the logo on its front, the straw up to his mouth; `sip` 0-1: juice up the straw,
     the box's sides drawn in a little."""
     d = ImageDraw.Draw(img)
@@ -185,8 +171,9 @@ def juice_box(img, sip):
         d.ellipse([cx + dx - 7, y0 + dy - 9, cx + dx - 2, y0 + dy - 4], fill=(255, 220, 220))
     # the straw: out of the top, up, and bent across into the corner of his mouth
     sx, sy = x0 + 34, y0 - 10
-    bend = MOUTH[1] - 70                                                   # up above his mouth, then across into it
-    pts = [(sx, sy), (sx, bend), (MOUTH[0] + 8, MOUTH[1])]
+    bend = MOUTH[1] - 70                                                   # up, then across and down into his mouth
+    end = (MOUTH[0] + (0.0 if sucking_now else 0.045 * SIZE), MOUTH[1])
+    pts = [(sx, sy), (sx, bend), end]
     d.line(pts, fill=INK, width=18, joint='curve')
     d.line(pts, fill=(250, 250, 250), width=11, joint='curve')
     if sip > 0:                                                            # the juice climbs the straw
@@ -195,7 +182,7 @@ def juice_box(img, sip):
         d.line([(sx, sy), (sx, top)], fill=tuple(int(c) for c in RED), width=7)
         if sip * 1.3 > 1:
             u = min(1.0, (sip * 1.3 - 1) / 0.3)
-            d.line([(sx, bend), (sx + (MOUTH[0] + 8 - sx) * u, bend + (MOUTH[1] - bend) * u)],
+            d.line([(sx, bend), (sx + (end[0] - sx) * u, bend + (end[1] - bend) * u)],
                    fill=tuple(int(c) for c in RED), width=7)
 
 
@@ -212,8 +199,8 @@ def frame(t):
     sip = min(1.0, max(0.0, (t - SIP_AT) / 0.6))
     k = sucking(t)
     widen(img, k)
-    juice_box(img, sip)
-    lips(img, k, p['fur'], sip)
+    o_mouth(img, k)
+    juice_box(img, sip, k >= 0.5)
     # his paw over the bottom of the box, so he is holding it
     px, py, rx, ry = PAW
     fur = Image.fromarray(np.clip(p['fur'], 0, 255).astype(np.uint8))
