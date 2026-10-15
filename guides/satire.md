@@ -21,7 +21,7 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 ## The look (all built in: `source/satire_style.py`)
 Flat colour, one outline weight, no gradients or glows; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
 or ruler-straight boxes; every copy different (colours, sizes, facing); circle hands with props laid over them; deadpan
-faces; hard cuts; a close-up for the reaction that matters; Cranberry Title style for the title, on 2 s.
+faces; hard cuts; a close-up for the reaction that matters; no title by default (Sam, 15 Oct); the Cranberry Title style (on 2 s) only when asked for.
 No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
 flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
 
