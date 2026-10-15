@@ -75,6 +75,22 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   the untitled final in `source/data/FILM/` (not on GitHub) so the line can be changed without a re-render.
 - The cranberry style stays for **titles** only (the cover and the 1-second opening title).
 
+## Strategy (Sam, 15 Oct)
+- **The account's thing:** breaking news and current cultural satire, alongside some pure comedy. Topics follow the
+  news; the style stays consistent. The Salt is the one recurring comedy bit (a fixed day each week, also fills
+  slow news days).
+- **The account is the series:** the same look, the same Hook Text pattern on news films (e.g. "[Name] this week"),
+  and a short signature sign-off, so viewers learn what they will get and follow for the next story.
+- **Recurring politicians are the cast:** build each caricature once and reuse it whenever they are back in the news.
+- **Two speeds:** a same-day reaction (15-25 s, two people, quick-video method) and a feature within 48 hours
+  (30-45 s) for big stories. News films go up as soon as they are ready; timeliness beats the ideal posting slot.
+- **Profile:** pin the three best films; playlists by politician if available; post text uses the story's search words.
+- **Goalposts:** mid-Nov ~1,000+ views typical, 200-300 followers; mid-Jan 2,000-3,000 typical, 1,000+ followers,
+  a breakout on a big story; autumn 2027 ~10,000 followers.
+- **Weekly check:** news-to-post time; followers per 1,000 views (about 1-3 on 15 Oct, aim 10); average watch as a
+  share of length, news and Salt separately. Results so far (15 Oct): the three under 30 s held viewers best
+  (Mossad 56%, Cry Minister 47%, The Park 41%); the 50-60 s films sat at 19-35%.
+
 ## Cover
 - Chosen in the TikTok app when posting ("Edit cover"): a frame that intrigues without spoiling the joke,
   ideally the character mid-line. It cannot be changed after posting.
