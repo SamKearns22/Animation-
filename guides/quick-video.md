@@ -22,8 +22,9 @@ Estimate the length (words / 3.3 a second, plus pauses) and say plainly if it wi
    drawn on. It must say `0 problem(s)`. Look at the sheet once; if it is wrong, fix the brief and run step 3 again.
 4. Tell Sam what you chose and the render time (about 3 minutes per 20 s of film); get his notes in ONE message and
    apply them all at once.
-5. `python3 source/quick.py final prompts/NAME.json animations/NAME-vertical.mp4` in the background; send a push
-   notification when it ends. Check `ls -l`: 1-4 MB expected, never over 8 MB.
+5. `python3 source/quick.py final prompts/NAME.json source/data/NAME-clean.mp4` in the background, then
+   `python3 source/finish.py source/data/NAME-clean.mp4 animations/NAME-vertical.mp4 ["Hook Text"]` (adds the Hook
+   Text if any, and the CranbriJoos sign-off at the end: every video, Sam 15 Oct); send a push notification when it ends. Check `ls -l`: 1-4 MB expected, never over 8 MB.
 6. Send the file in the chat, suggest a cover (the frame at 0:00.5), add 3 lines to `story/status.md`, and commit
    only the video, the brief and the recordings. Sam writes the post text himself.
 Test any change cheaply first: `final ... /tmp/t.mp4 --scale 0.5 --secs 3` (10 seconds).

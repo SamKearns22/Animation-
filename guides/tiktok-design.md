@@ -91,6 +91,17 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   share of length, news and Salt separately. Results so far (15 Oct): the three under 30 s held viewers best
   (Mossad 56%, Cry Minister 47%, The Park 41%); the 50-60 s films sat at 19-35%.
 
+## Sign-off (Sam, 15 Oct): on every video
+- The last 2 seconds of every TikTok video, after the final line: the profile picture in the middle on white, the fire
+  dancing, the beaver (never blinking) holding a white CranbriJoos carton (red trim, red balloon logo, "Cranbri" larger
+  than "Joos"); as Sam's slurp plays his mouth and teeth vanish into a small black O round the straw, his eyes widen,
+  and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).
+- Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]`.
+- Watch its cost: compare "watched full video" and followers per 1,000 views over the next 4-5 posts with the
+  posts before it.
+  Baseline before the sign-off (Bingo Bingo, 3.5 h after posting): 3,476 views, average watch 19.8 s (39%), 22% to
+  the end, 5% likes, 5 followers = about 1.4 per 1,000 views. Sam accepts a small dip in completion for the brand identity.
+
 ## Cover
 - Chosen in the TikTok app when posting ("Edit cover"): a frame that intrigues without spoiling the joke,
   ideally the character mid-line. It cannot be changed after posting.
