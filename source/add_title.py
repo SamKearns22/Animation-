@@ -55,14 +55,17 @@ def title_card(w, h, lines, path, widen=1.2, colour=CRANBERRY):
             f = ImageFont.truetype(FONT, size)
             lay = _line(line, f, max(3, int(size * 0.075)), colour)
             lay = lay.resize((int(lay.width * widen), lay.height), Image.LANCZOS)  # wider, easier to read
-            if lay.width <= w * 0.92:
+            fit = 840 * w / 1080 if h > w else w * 0.92      # TikTok: inside the safe area (x 60-900 at 1080 wide)
+            if lay.width <= fit:
                 break
             size = int(size * 0.93)
         layers.append(lay)
     total = sum(int(l.height * 0.82) for l in layers)
-    y = h / 3 - total / 2
+    vertical = h > w
+    y = 335 * h / 1920 if vertical else h / 3 - total / 2   # TikTok: just under the tabs (top 16%), over background
+    cx = 480 * w / 1080 if vertical else w / 2              # the safe area's centre, clear of the buttons on the right
     for lay in layers:
-        im.alpha_composite(lay, (int((w - lay.width) / 2), int(y - lay.height * 0.09)))
+        im.alpha_composite(lay, (int(cx - lay.width / 2), int(y - lay.height * 0.09)))
         y += lay.height * 0.82
     im.save(path)
 

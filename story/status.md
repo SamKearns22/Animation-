@@ -6,7 +6,7 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
-## In progress: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
+## Done: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
 - Script from Sam, 14 Oct; jumped straight to the animatic (no stills step). Code `source/polanski.py` (`times`, `stills`,
   `final OUT --scale 0.5`); `python3 source/preflight.py polanski OUT_DIR` passes with 0 problems.
 - Green Party HQ after losing the Holborn & St Pancras by-election: one set (whiteboard, cork board of VOTE GREEN posters,
@@ -21,6 +21,8 @@ Read this first in any new session, after CLAUDE.md.
   audit clean, no robot voice). `python3 source/polanski.py check | cast OUT | stills OUT | final OUT --small`.
 - First animatic sent 14 Oct (48 s at robot pace, 540 x 960, 3.4 MB, 2 min render; not in `animations/`). Voices are espeak-ng
   stand-ins; Sam to record 15 lines named `polanski-KEY.m4a` (keys in `SCRIPT`). Next: Sam's notes, recordings, final.
+- **Finished 15 Oct:** `animations/bingo-bingo-vertical.mp4` (50 s, 1080 x 1920, 3.9 MB), Sam's 15 voice lines, title
+  "Zack Polanski / this week" (house style, inside the TikTok safe area, fades by 4 s).
 - Later on 14 Oct: card revealed by camera framing, straight-180 turn (now the standard), no sound effects, enthused
   advisor at "Shoplifting". **Still waiting on:** Sam's 15 recordings, then an animatic offer and the final. No full render
   until Sam asks.
