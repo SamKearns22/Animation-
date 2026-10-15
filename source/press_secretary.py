@@ -107,6 +107,7 @@ def build_timeline():
 BEATS, TALK, END = build_timeline()
 DUR = round(END + 0.25, 2)            # the hard cut to black comes just after the last hold
 BLACK_AT = END
+SHOTS = [('push', 0.0, DUR)]            # one continuous shot (the pre-flight reads this)
 BLINKS = F.blinks(17, 0.4, END, talking=True)
 SIGH = next(((a, b) for k, a, b, _ in BEATS if k == 'sigh'), (1e9, 1e9))
 
@@ -830,6 +831,11 @@ def beat_name(t):
     return {'smile': f'smile {arg}', 'look': f'looks {arg}', 'sigh': 'SIGH', 'hold': 'hold', 'gap': '(pause)'}[k]
 
 
+def _write_wav(path, mix):
+    import mossad_audio as MA
+    MA.write_wav(path, mix)
+
+
 def main():
     a = sys.argv[1:]
     if a[0] == 'cast':
@@ -846,7 +852,7 @@ def main():
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=lambda t: 'push', sound=lambda: np.zeros(int((DUR + 0.3) * 48000)),
-                 write_wav=None, set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 22,
+                 write_wav=_write_wav, set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 22,
                  reuse='--reuse' in a, redo=())
 
 
