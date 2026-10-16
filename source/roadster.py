@@ -531,12 +531,10 @@ def _face(img, p, st, hx, hy):
     up = st['look_up']
     R = 142
     # the dark inside of the suit, seen through the bottom of the bubble, and the neck rising out of it
-    a0 = math.asin(0.62)                                          # one dark shape: the bubble below its chord
-    inner = [(hx + R * math.cos(a), -150 + R * math.sin(a)) for a in np.linspace(a0, math.pi - a0, 30)]
-    p.poly(inner, (58, 58, 64), None)
     p.poly(rough([(hx - 46, hy + 60), (hx + 46, hy + 60), (hx + 56, -10), (hx - 56, -10)], 1.5, 49), SKIN, INK, 2.6)
-    band = [(hx + R * math.cos(a), -150 + R * math.sin(a)) for a in np.linspace(math.asin(0.84), math.pi - math.asin(0.84), 20)]
-    p.poly(band, (58, 58, 64), None)                              # the collar's shadow across the neck, joining both sides
+    a0 = math.asin(0.8)                                           # the suit's dark inside: the bubble below one flat
+    inner = [(hx + R * math.cos(a), -150 + R * math.sin(a)) for a in np.linspace(a0, math.pi - a0, 30)]
+    p.poly(inner, (58, 58, 64), None)                             # line straight across, over the neck (Sam, 16 Oct)
     for sgn in (-1, 1):                                           # ears, standing out a little
         p.poly(rough([(hx + sgn * 74 + sgn * 11 * math.cos(a), hy + 4 + 21 * math.sin(a))
                       for a in np.linspace(0, 2 * math.pi, 16, endpoint=False)], 1.2, 50 + sgn), SKIN, INK, 2.6)

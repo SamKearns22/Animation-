@@ -77,5 +77,5 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   Hab; the "DAYS WITHOUT AN INCIDENT" board removed (never asked for) - the hangar wall has panel seams and an EXIT sign.
 - Sam's notes, round 2 (16 Oct): likeness approved. No name on the helmet (text laid over looked bad). NO close-up:
   in the Mars shot Damon is framed big enough to read his eyes (scale MARS_S, the set behind him) and they widen from
-  strength 2 to 5 as the car falls. The helmet's dark inside is one connected shape. The car lands UPSIDE DOWN, jets
+  strength 2 to 5 as the car falls. The helmet's dark inside is one shape with a flat, level top line straight across the bubble, over the neck (Sam: a dip showing more neck is not how light works). The car lands UPSIDE DOWN, jets
   off: it just drops and crashes down flat on him (the wreck is drawn upside down, wheels in the air).
