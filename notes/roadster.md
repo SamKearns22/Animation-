@@ -71,3 +71,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   ~7 syllables as expected, -20.6 LUFS, a clean second of silence in front); `roadster-crash.mp3` = Sam's crash
   (2.1 s, sound until 1.69 s, peaks -0.4 dB: placed by when it really starts, `filmkit.place`);
   `roadster-original.m4a` = the original clip's sound. The clip itself: `references/roadster/00-original-clip.mp4`.
+- Sam's notes on the cast sheet (16 Oct), all fixed: no moustache (he usually has none); the face redrawn closer to
+  Damon (broad square head and jaw, dimpled chin, strong straight brows, deep-set eyes, fringe pushed up, light
+  stubble); a thick neck rising out of the dark inside of the suit (no floating head); the airlock joined onto the
+  Hab; the "DAYS WITHOUT AN INCIDENT" board removed (never asked for) - the hangar wall has panel seams and an EXIT sign.

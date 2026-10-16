@@ -524,41 +524,60 @@ def _helmet(img, p, L, st, t):
 
 
 def _face(img, p, st, hx, hy):
-    """His face: short brown hair, light moustache and stubble, blue eyes. wide 1..6 opens the eyes from a hopeful
-    look to a huge, frozen stare; the brows rise with it."""
+    """Damon's face (from Sam's refs 19-24): a broad, square head and jaw, a dimpled chin, strong straight brows over
+    smallish deep-set blue eyes, a rounded nose, thin wide lips, short brown hair with the fringe pushed up, light
+    stubble, no moustache; a thick neck going down into the dark inside of the suit. wide 1..6 opens the eyes from a
+    hopeful look to a huge frozen stare, the brows rising with it."""
     k = (st['wide'] - 1) / 5.0
     up = st['look_up']
+    R = 142
+    # the dark inside of the suit, seen through the bottom of the bubble, and the neck rising out of it
+    inner = [(hx + R * 0.98 * math.cos(a), -150 + R * 0.98 * math.sin(a)) for a in np.linspace(0.18, math.pi - 0.18, 24)]
+    p.poly(inner + [(hx - 96, -44), (hx + 96, -44)][::-1][::-1], (58, 58, 64), None)
+    p.poly(rough([(hx - 46, hy + 60), (hx + 46, hy + 60), (hx + 56, -10), (hx - 56, -10)], 1.5, 49), SKIN, INK, 2.6)
+    p.poly([(hx - 50, -30), (hx + 50, -30), (hx + 56, -10), (hx - 56, -10)], (58, 58, 64), None)     # collar shadow
+    for sgn in (-1, 1):                                           # ears, standing out a little
+        p.poly(rough([(hx + sgn * 74 + sgn * 11 * math.cos(a), hy + 4 + 21 * math.sin(a))
+                      for a in np.linspace(0, 2 * math.pi, 16, endpoint=False)], 1.2, 50 + sgn), SKIN, INK, 2.6)
+    head = [(hx - 26, hy + 84), (hx - 60, hy + 54), (hx - 72, hy + 10), (hx - 72, hy - 40), (hx - 60, hy - 76),
+            (hx - 30, hy - 94), (hx + 30, hy - 94), (hx + 60, hy - 76), (hx + 72, hy - 40), (hx + 72, hy + 10),
+            (hx + 60, hy + 54), (hx + 26, hy + 84), (hx, hy + 90)]
+    p.poly(rough(head, 1.5, 52), SKIN, INK, 2.8)
+    p.poly([(hx - 26, hy + 76), (hx - 52, hy + 52), (hx - 62, hy + 30), (hx - 50, hy + 44), (hx - 22, hy + 66), (hx, hy + 70),
+            (hx + 22, hy + 66), (hx + 50, hy + 44), (hx + 62, hy + 30), (hx + 52, hy + 52), (hx + 26, hy + 76),
+            (hx, hy + 82)], dk(SKIN, 0.93), None)                                                   # light stubble
+    p.line([(hx, hy + 76), (hx + 1, hy + 85)], dk(SKIN, 0.72), 2.2)                                # the chin dimple
+    hair = [(hx - 72, hy - 30), (hx - 70, hy - 70), (hx - 44, hy - 96), (hx - 6, hy - 104), (hx + 30, hy - 108),
+            (hx + 58, hy - 92), (hx + 74, hy - 62), (hx + 72, hy - 30), (hx + 64, hy - 56), (hx + 40, hy - 70),
+            (hx + 18, hy - 78), (hx - 6, hy - 70), (hx - 30, hy - 66), (hx - 56, hy - 54)]
+    p.poly(rough(hair, 1.5, 54), HAIR, INK, 2.6)
+    p.line([(hx + 10, hy - 98), (hx + 24, hy - 84)], dk(HAIR, 0.8), 2.0)                          # the fringe pushed up
+    p.line([(hx - 20, hy - 94), (hx - 10, hy - 80)], dk(HAIR, 0.8), 2.0)
     for sgn in (-1, 1):
-        p.poly(rough([(hx + sgn * 70 + sgn * 10 * math.cos(a), hy + 8 + 22 * math.sin(a))
-                      for a in np.linspace(0, 2 * math.pi, 16, endpoint=False)], 1.5, 50 + sgn), SKIN, INK, 2.6)
-    head = [(hx + 70 * math.cos(a) * (0.94 if math.sin(a) > 0.3 else 1.0), hy + 88 * math.sin(a))
-            for a in np.linspace(0, 2 * math.pi, 40, endpoint=False)]
-    p.poly(rough(head, 2.5, 52), SKIN, INK, 2.8)
-    p.poly(rough([(hx - 58, hy + 30), (hx - 40, hy + 70), (hx, hy + 88), (hx + 40, hy + 70), (hx + 58, hy + 30),
-                  (hx + 40, hy + 52), (hx, hy + 60), (hx - 40, hy + 52)], 2, 53), dk(SKIN, 0.9), None)   # stubble
-    p.poly(rough([(hx - 70, hy - 20), (hx - 66, hy - 70), (hx - 30, hy - 92), (hx + 30, hy - 94), (hx + 64, hy - 74),
-                  (hx + 72, hy - 24), (hx + 56, hy - 52), (hx + 10, hy - 64), (hx - 36, hy - 60), (hx - 58, hy - 44)],
-                 2.5, 54), HAIR, INK, 2.6)
-    for sgn in (-1, 1):
-        ex, ey = hx + sgn * 30, hy - 6
+        ex, ey = hx + sgn * 30, hy - 8
+        p.line([(ex - 14, ey - 13), (ex + 14, ey - 13)], dk(SKIN, 0.82), 2.0)                     # deep-set: lid crease
         _eye(p, ex, ey, sgn, k, up)
-        br = ey - 22 - 4 * up - 16 * k
-        p.line([(ex - sgn * 4 - 14, br + 2 + sgn * 0), (ex + 14 * 1, br - 2 + 0)] if sgn < 0 else
-               [(ex - 14, br - 2), (ex + 14, br + 2)], dk(HAIR, 0.8), 4.0)
-    p.line([(hx - 2, hy - 2), (hx - 9, hy + 26), (hx - 3, hy + 31), (hx + 6, hy + 29)], INK, 2.0)
-    p.poly(rough([(hx - 22, hy + 42), (hx, hy + 38), (hx + 22, hy + 42), (hx + 18, hy + 47), (hx, hy + 44),
-                  (hx - 18, hy + 47)], 1, 55), dk(HAIR, 0.95), None)                                     # moustache
+        br = ey - 21 - 3 * up - 15 * k
+        inner_x, outer_x = ex - sgn * 18, ex + sgn * 19
+        p.poly([(inner_x, br + 1), (ex, br - 2), (outer_x, br + 2), (outer_x, br + 7), (ex, br + 4), (inner_x, br + 7)],
+               dk(HAIR, 0.78), None)                                                                 # strong straight brows
+    p.line([(hx - 3, hy - 6), (hx - 7, hy + 22)], dk(SKIN, 0.7), 2.0)                            # nose: bridge, round tip
+    p.poly(rough([(hx - 14, hy + 24), (hx - 6, hy + 32), (hx + 6, hy + 33), (hx + 14, hy + 25), (hx + 6, hy + 28),
+                  (hx - 6, hy + 28)], 0.8, 56), dk(SKIN, 0.86), None)
+    for sgn in (-1, 1):
+        p.line([(hx + sgn * 12, hy + 30), (hx + sgn * 6, hy + 32)], INK, 1.8)
+        p.line([(hx + sgn * 26, hy + 30), (hx + sgn * 30, hy + 52)], dk(SKIN, 0.82), 1.8)          # smile lines
     if k > 0.55:                                                   # lips part at the biggest strengths
         o = 3 + 9 * (k - 0.55) / 0.45
-        p.poly([(hx - 10, hy + 54), (hx + 10, hy + 54), (hx + 8, hy + 54 + o), (hx - 8, hy + 54 + o)], (110, 50, 46),
+        p.poly([(hx - 14, hy + 54), (hx + 14, hy + 54), (hx + 11, hy + 54 + o), (hx - 11, hy + 54 + o)], (110, 50, 46),
                INK, 2.0)
-    else:
-        p.line([(hx - 14, hy + 55), (hx, hy + 53 - 2 * (1 - k)), (hx + 14, hy + 55)], INK, 2.4)
+    else:                                                          # thin, wide, a hopeful lift at the corners
+        p.line([(hx - 20, hy + 52), (hx - 8, hy + 55), (hx + 8, hy + 55), (hx + 20, hy + 52 - 2 * (1 - k))], INK, 2.4)
 
 
 def _eye(p, ex, ey, sgn, k, up):
     """One opening between two lids, the iris cut to it (no line ever crosses the white)."""
-    w, h = 17 + 3 * k, 6 + 10 * k
+    w, h = 15 + 3 * k, 5 + 10 * k
     us = np.linspace(-1, 1, 15)
     upper = [(ex + w * u, ey - h * (1 - u * u)) for u in us]
     lower = [(ex + w * u, ey + (4 + 6 * k) * (1 - u * u)) for u in us]
@@ -569,7 +588,7 @@ def _eye(p, ex, ey, sgn, k, up):
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
     iris = _clip_convex(opening[::-1], circ(r_iris))
     if len(iris) >= 3:
-        p.poly(iris, (90, 140, 190), None)
+        p.poly(iris, (86, 132, 178), None)
     pupil = _clip_convex(opening[::-1], circ(r_iris * 0.48))
     if len(pupil) >= 3:
         p.poly(pupil, INK, None)
@@ -590,11 +609,12 @@ def hangar(img, cam, t=0.0):
         x = 30 + i * 80
         p.line([(x, 110), (x + 40, 330)], (30, 30, 38), 2)
         p.ell(x + 10, 150 + 6 * (i % 3), 4, 4, (220, 220, 200), None)
-    # the lit board on the back wall (a joke tied to the film; no blank surfaces)
-    p.poly(rough([(60, 840), (380, 840), (380, 1060), (60, 1060)], 3, 60), (30, 30, 36), (90, 90, 100), 3)
-    _text(img, cam, 220, 885, 'DAYS WITHOUT AN', 26, (230, 230, 220))
-    _text(img, cam, 220, 925, 'INCIDENT', 26, (230, 230, 220))
-    _text(img, cam, 220, 1000, '0', 70, (240, 70, 60))
+    # the back wall: tall panels and a green exit sign, no new jokes (Sam, 16 Oct: only what the script has)
+    for i in range(9):
+        x = 20 + i * 130
+        p.line([(x, 360), (x, 1290)], (26, 26, 32), 2)
+    p.poly(rough([(80, 1150), (190, 1150), (190, 1196), (80, 1196)], 2, 60), (40, 150, 80), INK, 2)
+    _text(img, cam, 135, 1173, 'EXIT', 20, (230, 250, 230))
     # floor
     p.poly([(-200, 1300), (1280, 1300), (1280, 2200), (-200, 2200)], (36, 36, 42), None)
     p.line([(-200, 1300), (1280, 1300)], (60, 60, 68), 2)
@@ -688,14 +708,18 @@ def mars(img, cam, t=0.0):
         x = hx0 + i * 54
         p.line([(x, hy0 - 156 + 2 * i), (x, hy0 - 4)], (170, 168, 160), 2)
     _flag(p, hx0 + 340, hy0 - 90, 0.8)
-    p.poly([(hx0 - 80 + 70 * math.cos(a) * 0.55, hy0 - 70 + 72 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 30)],
-           (240, 238, 230), INK, 3)                                                       # the round airlock
-    p.poly(rough([(hx0 - 100, hy0 - 112), (hx0 - 62, hy0 - 112), (hx0 - 62, hy0 - 30), (hx0 - 100, hy0 - 30)], 2, 76),
-           (210, 206, 196), INK, 2)
-    _text(img, cam, hx0 - 82, hy0 - 128, 'CAUTION', 7, (200, 60, 40))
+    p.poly(rough([(hx0 - 66, hy0 - 128), (hx0 + 6, hy0 - 132), (hx0 + 6, hy0 - 6), (hx0 - 66, hy0 - 10)], 2, 76),
+           (228, 224, 214), INK, 3)                                                       # the airlock's drum, joined on
+    for x in (hx0 - 44, hx0 - 22):
+        p.line([(x, hy0 - 128), (x, hy0 - 10)], (176, 172, 164), 2)
+    p.poly([(hx0 - 66 + 38 * math.cos(a), hy0 - 69 + 60 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 30)],
+           (240, 238, 230), INK, 3)                                                       # its round end, with the door
+    p.poly(rough([(hx0 - 84, hy0 - 104), (hx0 - 50, hy0 - 104), (hx0 - 50, hy0 - 32), (hx0 - 84, hy0 - 32)], 1.5, 77),
+           (212, 208, 198), INK, 2)
+    _text(img, cam, hx0 - 66, hy0 - 116, 'CAUTION', 7, (200, 60, 40))
     # solar boards on the left, crates and numbered flags in front
     for i in range(3):
-        x = 40 + i * 150
+        x = 10 + i * 140
         p.poly(rough([(x, 940), (x + 130, 936), (x + 132, 1040), (x + 2, 1044)], 3, 77 + i), (220, 222, 226), INK, 3)
         for gx in range(4):
             for gy in range(4):

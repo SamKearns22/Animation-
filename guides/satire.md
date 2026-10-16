@@ -31,7 +31,9 @@ gets their own shoulder width, slope and a higher shoulder, a lumpy head, a hair
 detail (collar, seams, creases, ribbed knit, a flat shadow side, sometimes pinstripe, check or tweed). See
 `press_secretary.reporter`. **No off-style cartoon shorthand** (sweat drops, anger veins, stars, motion lines...) in any film unless Sam asks (16 Oct): show a
 feeling with the face and body. No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
-flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
+flat wall reads as unfinished or computer-made). Signs and posters are neutral and true to the place (an EXIT sign,
+a CAUTION label); **never add a joke Sam hasn't approved** (Sam, 16 Oct: a 'DAYS WITHOUT AN INCIDENT: 0' board slipped
+into Roadster unasked). Suggest a sign gag as a question with the cast sheet, and add it only on his yes.
 
 ## Movement: walking, turning, poses, sitting, combat, cars (built to order)
 - `views.py`: anyone from any angle (front, three-quarter, side, three-quarter back, back; facing left is mirrored),
