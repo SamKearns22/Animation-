@@ -20,7 +20,7 @@ os.environ.setdefault('PENCIL_FPS', '8')
 import numpy as np  # noqa: E402
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 
-from pencil import Canvas, blob, clamp01, col, ell, lerp, render_video, sstep, W, H, FPS, SR  # noqa: E402
+from pencil_cartoon import Canvas, blob, clamp01, col, ell, lerp, render_video, sstep, W, H, FPS, SR  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DUR = 239.4

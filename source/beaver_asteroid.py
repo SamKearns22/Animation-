@@ -12,8 +12,8 @@ import sys
 import numpy as np
 from PIL import Image
 
-from pencil import *  # noqa: F401,F403  (canvas, colours, helpers)
-from pencil import FIRE, Canvas, Track, blob, clamp01, col, ell, flame, lerp, noise, render_video, smoke_wisp, \
+from pencil_cartoon import *  # noqa: F401,F403  (canvas, colours, helpers)
+from pencil_cartoon import FIRE, Canvas, Track, blob, clamp01, col, ell, flame, lerp, noise, render_video, smoke_wisp, \
     sstep, stars, sweep, tt, decay, W, H, FPS
 
 DUR = 45.0
