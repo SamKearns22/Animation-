@@ -134,9 +134,9 @@ def crumple(V, k, seed=7):
     x, z = V[:, 0], V[:, 2]
     V[:, 0] = x - np.sign(x) * k * np.clip(np.abs(x) - 50, 0, None) * 0.34          # folded towards the middle
     top = np.clip((z - 24) / 80, 0, 1)
-    V[:, 2] = z - k * top * (z - 24) * 0.78                                           # flattened from above
+    V[:, 2] = z - k * top * (z - 24) * 0.62                                           # flattened from above
     V[:, 2] += k * 26 * np.clip(np.abs(x) / 230, 0, 1) ** 2 * top                     # ends kicked up: a V fold
-    V[:, 1] *= 1 + k * 0.22 * top                                                     # bulging out as it squashes
+    V[:, 1] *= 1 + k * 0.32 * top                                                     # bulging out as it squashes
     V += r.normal(0, 1, V.shape) * k * np.array([16, 14, 9])                          # buckled panels
     return V
 
@@ -268,7 +268,7 @@ def _face_index(section, band):
 
 def _tone(m, n):
     lit = float(np.dot(n, LIGHT))
-    base = {'body': BODY, 'nose': BODY, 'tail': BODY, 'glass': GLASS, 'sill': SILL, 'bottom': (24, 24, 26)}[m]
+    base = {'body': BODY, 'nose': BODY, 'tail': BODY, 'glass': GLASS, 'sill': SILL, 'bottom': (92, 94, 102)}[m]
     k = 1.0 if lit > 0.35 else (0.86 if lit > -0.1 else 0.7)       # three flat tones: lit, side, shadow
     if m == 'glass':
         k = 1.0 if lit > 0.2 else 0.8
@@ -520,7 +520,6 @@ def _helmet(img, p, L, st, t):
            None, INK, 4.4)
     # the collar ring
     p.poly(rough([(-104, -12), (104, -12), (112, 22), (-112, 22)], 3, 44), SUIT_OR, INK, 4)
-    _text(img, L, 0, -276, 'WATNEY', 15, INK)
 
 
 def _face(img, p, st, hx, hy):
@@ -532,10 +531,12 @@ def _face(img, p, st, hx, hy):
     up = st['look_up']
     R = 142
     # the dark inside of the suit, seen through the bottom of the bubble, and the neck rising out of it
-    inner = [(hx + R * 0.98 * math.cos(a), -150 + R * 0.98 * math.sin(a)) for a in np.linspace(0.18, math.pi - 0.18, 24)]
-    p.poly(inner + [(hx - 96, -44), (hx + 96, -44)][::-1][::-1], (58, 58, 64), None)
+    a0 = math.asin(0.62)                                          # one dark shape: the bubble below its chord
+    inner = [(hx + R * math.cos(a), -150 + R * math.sin(a)) for a in np.linspace(a0, math.pi - a0, 30)]
+    p.poly(inner, (58, 58, 64), None)
     p.poly(rough([(hx - 46, hy + 60), (hx + 46, hy + 60), (hx + 56, -10), (hx - 56, -10)], 1.5, 49), SKIN, INK, 2.6)
-    p.poly([(hx - 50, -30), (hx + 50, -30), (hx + 56, -10), (hx - 56, -10)], (58, 58, 64), None)     # collar shadow
+    band = [(hx + R * math.cos(a), -150 + R * math.sin(a)) for a in np.linspace(math.asin(0.84), math.pi - math.asin(0.84), 20)]
+    p.poly(band, (58, 58, 64), None)                              # the collar's shadow across the neck, joining both sides
     for sgn in (-1, 1):                                           # ears, standing out a little
         p.poly(rough([(hx + sgn * 74 + sgn * 11 * math.cos(a), hy + 4 + 21 * math.sin(a))
                       for a in np.linspace(0, 2 * math.pi, 16, endpoint=False)], 1.2, 50 + sgn), SKIN, INK, 2.6)
@@ -745,6 +746,9 @@ def mars(img, cam, t=0.0):
                (146, 82, 50), None)
 
 
+MARS_NECK, MARS_S = 1010, 0.95        # Damon in the Mars shot: big enough to read his eyes, the set behind him
+
+
 # ============================================== SPACE (Dam's pencil) ================================================
 def space_stars(t, car_view=None, comet=True):
     """Shot 6: deep blue-black with soft blue-violet nebula wisps, a faint Milky Way band, dense small stars, a few
@@ -815,7 +819,7 @@ def _label(img, x, y, s, size=26, fill=(30, 30, 30)):
 
 def cast_sheet(out):
     B.SS = 1
-    W, H = 2160, 3000
+    W, H = 2160, 2720
     sheet = _panel(W, H)
     cell = lambda: Image.new('RGBA', (1080, 1920), (226, 222, 216, 255))
 
@@ -839,28 +843,24 @@ def cast_sheet(out):
         lay = cell()
         car(lay, cam, 540, 900, 1.0, View(yaw=8, elev=10, flip=-i * 45), jets=1.0, t=i / 12)
         place(lay, 20 + i * 265, 960, 260, 380, f'{i * 45} deg')
-    # upside down with jets; the wreck; the wreck with its lamp lit
-    _label(sheet, 20, 1360, 'Upside down, jets / the wreck / the wreck, lamp lit on "Fatality Avoided"', 34)
+    # upside down with jets; the landing: dropped upside down, no jets, crushed flat; its lamp lit
+    _label(sheet, 20, 1360, 'Upside down, jets / it lands upside down, no jets, crushed flat / lamp lit on the line', 34)
     lay = cell()
     car(lay, cam, 540, 900, 1.4, View(yaw=30, elev=12, flip=180), jets=1.0)
-    place(lay, 20, 1410, 700, 420, 'upside down')
-    lay = cell()
-    debris(lay, cam, 540, 1020, 1.6)
-    car(lay, cam, 540, 980, 1.6, View(yaw=35, elev=16), crush=1.0)
-    place(lay, 730, 1410, 700, 420, 'the wreck')
-    lay = cell()
-    debris(lay, cam, 540, 1020, 1.6)
-    car(lay, cam, 540, 980, 1.6, View(yaw=35, elev=16), crush=1.0, headlight=True)
-    place(lay, 1440, 1410, 700, 420, 'lamp lit')
-    # Damon: wide, and the eyes-widening strength sheet
-    _label(sheet, 20, 1860, 'MATT DAMON (Watney): front, and his eyes widening, 1 = hopeful .. 6 = huge (pick one)', 34)
-    lay = cell()
-    damon(lay, cam, 540, 640, 0.95, dict(look_up=0.8, wide=1))
-    place(lay, 20, 1910, 520, 1060, 'front')
-    for i in range(6):
+    place(lay, 20, 1410, 700, 420, 'upside down, jets')
+    for i, lit in enumerate((False, True)):
         lay = cell()
-        damon(lay, B.Cam(3.2, 540, 850), 540, 1000, 1.0, dict(look_up=1.0, wide=i + 1, visor_car=i / 5))
-        place(lay, 560 + (i % 3) * 530, 1910 + (i // 3) * 530, 520, 520, str(i + 1))
+        debris(lay, cam, 540, 1010, 1.6)
+        car(lay, cam, 540, 960, 1.6, View(yaw=-30, elev=10, flip=180), crush=1.0, headlight=lit)
+        place(lay, 730 + i * 710, 1410, 700, 420, 'lamp lit' if lit else 'crashed, upside down')
+    # Damon in the Mars shot (no close-up): framed big enough to read his eyes; they widen from 2 to 5
+    _label(sheet, 20, 1860, 'MATT DAMON in the Mars shot (no close-up): his eyes widen from 2 to 5 as the car falls', 34)
+    for i, w in enumerate((2, 3, 4, 5)):
+        lay = B.canvas((0, 0, 0))
+        mars(lay, cam)
+        damon(lay, cam, 540, MARS_NECK, MARS_S, dict(look_up=1.0, wide=w, visor_car=(w - 2) / 3))
+        sheet.alpha_composite(lay.crop((140, 520, 940, 1700)).resize((520, 767)), (20 + i * 535, 1910))
+        _label(sheet, 30 + i * 535, 1918, str(w), 34, (250, 250, 250))
     sheet.convert('RGB').save(out, quality=88)
 
 
@@ -878,7 +878,7 @@ def sets_sheet(out):
     panels = [('Hangar, ramp, dials', lay)]
     lay = B.canvas((0, 0, 0))
     mars(lay, cam)
-    damon(lay, cam, 330, 1240, 0.42, dict(look_up=0.9))
+    damon(lay, cam, 540, MARS_NECK, MARS_S, dict(look_up=0.9, wide=2))
     panels.append(('The Martian set', lay))
     st = space_stars(20.0).convert('RGBA')
     car(st, cam, 420, 1100, 1.0, View(yaw=20, elev=20, flip=-60), jets=1.0)

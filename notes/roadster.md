@@ -53,8 +53,8 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Damon references 19-24 (Sam, 16 Oct). Helmet: clear bubble with a gold visor over the top half, the face visible
   below it; orange-and-white helmet shell rim, side lamps, a red "2" on the helmet side. Suit: orange-red and silver-grey
   panels, "ARES III" down the chest strap, a white chest control box, US flag and NASA patches on the shoulders, a red
-  "2" on the shoulder and backpack, dark grey gloves with silver knuckles. Face: short brown hair, a light moustache and
-  stubble, steady blue eyes. 22 (the visor close-up) is the model for the eyes-widening close-up; 24 for the front.
+  "2" on the shoulder and backpack, dark grey gloves with silver knuckles. Face: short brown hair, light stubble, NO
+  moustache (Sam), steady blue eyes. 24 for the front.
 - Space references 25-32 (Sam, 16 Oct), all drawn in Dam's coloured pencil. Shot 6 (stars): deep blue-black with soft
   blue-violet nebula wisps (25), a faint Milky Way band (26), dense small blue-white stars with a few bright
   four-point ones (27), and the green comet (28) drifting far behind the car. Shot 7 (Mars): starts small and
@@ -75,3 +75,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   Damon (broad square head and jaw, dimpled chin, strong straight brows, deep-set eyes, fringe pushed up, light
   stubble); a thick neck rising out of the dark inside of the suit (no floating head); the airlock joined onto the
   Hab; the "DAYS WITHOUT AN INCIDENT" board removed (never asked for) - the hangar wall has panel seams and an EXIT sign.
+- Sam's notes, round 2 (16 Oct): likeness approved. No name on the helmet (text laid over looked bad). NO close-up:
+  in the Mars shot Damon is framed big enough to read his eyes (scale MARS_S, the set behind him) and they widen from
+  strength 2 to 5 as the car falls. The helmet's dark inside is one connected shape. The car lands UPSIDE DOWN, jets
+  off: it just drops and crashes down flat on him (the wreck is drawn upside down, wheels in the air).
