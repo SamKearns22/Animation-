@@ -120,3 +120,6 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   wreck and its lamp show on the line); the sigh slower, bigger and clearer (a big breath in, eyes closed on the long
   breath out, shoulders sinking lower, hands coming down slowly; +0.6 s, film 32.0 s); the visor reflection was a
   white blob that read as a bubble coming through the helmet - now a tiny upside-down car, wheels up.
+- Sam (16 Oct): the sigh read as happy and content (mouth corners up, closed eyes as calm arcs). Now: uneasy while
+  looking about (flat mouth, brows up in the middle), weary on the sigh (lips apart on the breath out, closed eyes
+  drooping at the outer corners), low and lonely looking at the floor (mouth corners down, sad brows); alert at T_SEEN.

@@ -423,7 +423,7 @@ HAIR = (112, 80, 52)
 def damon(img, cam, x, y, s, st=None, t=0.0):
     """Watney in his suit, front view. st: look_up 0..1, wide 1..6 (the eyes-widening strength), visor_car
     (0..1, the car's reflection growing in the gold visor)."""
-    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0, squash=1.0, shut=False), **(st or {}))
+    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0, squash=1.0, shut=False, sad=0.0, exhale=False), **(st or {}))
     L = PoseLocal(cam, x, y, s, st['lean'], st['rise'], st['squash'])
     p = B.Pen(img, L)
     R = lambda pts, sd, a=4: rough(pts, a, sd)
@@ -575,6 +575,7 @@ def _face(img, p, st, hx, hy):
     up = st['look_up']
     R = 142
     turn = st.get('turn', 0.0)                                    # the features slide towards where he looks
+    sad = st.get('sad', 0.0)                                      # 0 neutral .. 1 low (brows up in the middle, mouth down)
     # the dark inside of the suit, seen through the bottom of the bubble, and the neck rising out of it
     p.poly(rough([(hx - 46, hy + 60), (hx + 46, hy + 60), (hx + 56, -10), (hx - 56, -10)], 1.5, 49), SKIN, INK, 2.6)
     a0 = math.asin(0.8)                                           # the suit's dark inside: the bubble below one flat
@@ -602,13 +603,15 @@ def _face(img, p, st, hx, hy):
     for sgn in (-1, 1):
         ex, ey = hx + sgn * 30, hy - 8 + 5 * down
         p.line([(ex - 14, ey - 13), (ex + 14, ey - 13)], dk(SKIN, 0.82), 2.0)                     # deep-set: lid crease
-        if st.get('shut'):
-            p.line([(ex - 15 + 30 * u_ / 6, ey + 2 * (1 - ((u_ - 3) / 3) ** 2)) for u_ in range(7)], INK, 2.6)
+        if st.get('shut'):                                         # closed, drooping at the outer corner (weary)
+            p.line([(ex - sgn * 15, ey - 1), (ex, ey + 1), (ex + sgn * 15, ey + 5)], INK, 2.6)
         else:
             _eye(p, ex, ey, sgn, k, up, turn, down)
         br = ey - 21 - 3 * up - 15 * k
         inner_x, outer_x = ex - sgn * 18, ex + sgn * 19
-        p.poly([(inner_x, br + 1), (ex, br - 2), (outer_x, br + 2), (outer_x, br + 7), (ex, br + 4), (inner_x, br + 7)],
+        lift = 9 * sad                                             # sad: the inner ends pulled up, the outer ends down
+        p.poly([(inner_x, br + 1 - lift), (ex, br - 2 - lift * 0.4), (outer_x, br + 2 + lift * 0.3),
+                (outer_x, br + 7 + lift * 0.3), (ex, br + 4 - lift * 0.4), (inner_x, br + 7 - lift)],
                dk(HAIR, 0.78), None)                                                                 # strong straight brows
     p.line([(hx - 3, hy - 6), (hx - 7, hy + 22)], dk(SKIN, 0.7), 2.0)                            # nose: bridge, round tip
     p.poly(rough([(hx - 14, hy + 24), (hx - 6, hy + 32), (hx + 6, hy + 33), (hx + 14, hy + 25), (hx + 6, hy + 28),
@@ -620,8 +623,11 @@ def _face(img, p, st, hx, hy):
         o = 3 + 9 * (k - 0.55) / 0.45
         p.poly([(hx - 14, hy + 54), (hx + 14, hy + 54), (hx + 11, hy + 54 + o), (hx - 11, hy + 54 + o)], (110, 50, 46),
                INK, 2.0)
-    else:                                                          # thin, wide, a hopeful lift at the corners
-        p.line([(hx - 20, hy + 52), (hx - 8, hy + 55), (hx + 8, hy + 55), (hx + 20, hy + 52 - 2 * (1 - k))], INK, 2.4)
+    elif st.get('exhale'):                                         # the long breath out: lips a little apart
+        p.poly(_lumpy(hx, hy + 55, 8, 5, 77, 12, 0.1), (110, 50, 46), INK, 2.0)
+    else:                                                          # thin and wide; the corners drop when he's low
+        c = 7 * sad
+        p.line([(hx - 20, hy + 53 + c), (hx - 8, hy + 54), (hx + 8, hy + 54), (hx + 20, hy + 53 + c)], INK, 2.4)
 
 
 def _eye(p, ex, ey, sgn, k, up, turn=0.0, down=0.0):
@@ -1330,7 +1336,11 @@ def damon_state(t):
     look_up = 0.25 + 0.75 * ease((t - T_SEEN - 0.1) / 0.4)
     look_up -= 0.6 * down
     shut = T_SIGH + 0.85 <= t < T_SIGH + 1.6                        # eyes closed on the long breath out
+    exhale = T_SIGH + 0.8 <= t < T_SIGH + 1.7
+    sad = 0.3 + 0.7 * ease((t - T_SIGH) / 0.8)                      # uneasy while he looks about; low from the sigh on
+    sad *= 1 - ease((t - T_SEEN - 0.1) / 0.3)                       # gone when he looks up at what's coming
     return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms, rise=rise, down=down, shut=shut,
+                sad=sad, exhale=exhale,
                 visor_car=max(0.0, (t - T_SEEN) / (T_IMPACT - T_SEEN)))
 
 
