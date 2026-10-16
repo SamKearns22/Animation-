@@ -1772,6 +1772,8 @@ def main():
         stills_sheet(a[1])
     elif a[0] == 'animatic':
         render(a[1], small=True)
+    elif a[0] == 'final':                       # the clean, untitled full render (1080 x 1920); finish.py adds the rest
+        render(a[1], small=False, reuse='--reuse' in a)
     elif a[0] == 'frames':
         B.SS = 1
         for x in a[2:]:
