@@ -50,3 +50,8 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   (domes, a different rover): not used, the film's own look wins. Shot 8 is staged on 13 (the film's wide shot),
   reframed upright: cliffs high, the Hab behind, Damon by the panels, rocks and flags in front; the car falls from the
   top of the frame.
+- Damon references 19-24 (Sam, 16 Oct). Helmet: clear bubble with a gold visor over the top half, the face visible
+  below it; orange-and-white helmet shell rim, side lamps, a red "2" on the helmet side. Suit: orange-red and silver-grey
+  panels, "ARES III" down the chest strap, a white chest control box, US flag and NASA patches on the shoulders, a red
+  "2" on the shoulder and backpack, dark grey gloves with silver knuckles. Face: short brown hair, a light moustache and
+  stubble, steady blue eyes. 22 (the visor close-up) is the model for the eyes-widening close-up; 24 for the front.
