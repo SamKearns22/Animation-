@@ -67,3 +67,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   (right, with a top-down car icon). The number that rose to 67.8 is ALTITUDE in feet, not speed. Plan: keep both
   real dials. Altitude climbs to the Mars distance, 738,188,976,378 ft (what one hour at Sam's 139,808,750 mph
   covers); G-force climbs to 1,274,210 G (reaching that speed in about 5 s). Speed is not shown (Sam may overrule).
+- Sound files (Sam, 16 Oct), in `source/audio/`: `roadster-1.m4a` = "Fatality avoided." (3.2 s; speech 1.02-2.56 s,
+  ~7 syllables as expected, -20.6 LUFS, a clean second of silence in front); `roadster-crash.mp3` = Sam's crash
+  (2.1 s, sound until 1.69 s, peaks -0.4 dB: placed by when it really starts, `filmkit.place`);
+  `roadster-original.m4a` = the original clip's sound. The clip itself: `references/roadster/00-original-clip.mp4`.
