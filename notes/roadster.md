@@ -42,3 +42,11 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   The "hydraulics" are the underside cold-gas jets: four white plumes straight down (03, 05, 08), which make the smoke
   in the original. 08's body looks like a Cybertruck/Cybercab: used for the jets and smoke only. 04 (white seats,
   red trim) is for the wreck's exposed interior. Musk (06) is not in the film.
+- Mars references 09-18 in `references/roadster/` (Sam, 16 Oct). The film's real set: Wadi Rum sandstone cliffs and
+  hazy orange-brown sky; the Hab is a low white segmented building with round white airlock cylinders (09, 13, 14),
+  a US flag on its side, solar-panel boards, NASA crates, numbered sample flags on poles, the R2 rover with big balloon
+  tyres (17). Watney's suit: orange-red and white panels, grey knee pads, big chest unit, helmet with side lights,
+  WATNEY on the helmet top and a big "20"-style number on the backpack (11, 14). 10, 15 and 18 are concept/fan art
+  (domes, a different rover): not used, the film's own look wins. Shot 8 is staged on 13 (the film's wide shot),
+  reframed upright: cliffs high, the Hab behind, Damon by the panels, rocks and flags in front; the car falls from the
+  top of the frame.
