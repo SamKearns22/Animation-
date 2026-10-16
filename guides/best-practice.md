@@ -96,9 +96,8 @@ and the research in `movement.md`.
 
 ## 1.3 Staging, continuity and layering
 - **Physical sense (Roadster, 16 Oct):** real sizes (a car is about 2.5 times a person's height); something falling
-  straight onto a person stays the same size (same distance from us) and must hit them, never pass in front of them;
-  whatever lands on someone hides or squashes them; something above a person's head is out of a level shot, so show
-  what they see (a shadow, a reflection). Check these on the stills, before the animatic.
+  straight onto a person stays the same size (same distance from us) and must hit them, never pass in front of them.
+  Check these on the stills, before the animatic.
 - **Read every word in a reference at full size before planning** (Roadster: the dial read ALTITUDE, not speed).
 - **Recreating real footage (Roadster, 16 Oct: the ramp took three rounds):** before drawing anything, (1) step
   through the source at 6-10 frames a second over every key action and write down positions, angles and timings per

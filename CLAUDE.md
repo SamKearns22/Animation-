@@ -32,6 +32,8 @@ I don't know how to code. Please:
   or offer me the option to override the advice.
 - **"Hold" means collect, don't act (16 Oct):** when I say hold, reply to each note with how you understood it and how
   you'll fix it, change nothing, and do everything in one round when I say go.
+- **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
+  add and where, and wait for my numbers.
 - **Flag your own additions:** anything I didn't ask for (a sign, a reflection, a new joke, a sound) is named as your
   addition in the message, so I can say no before it costs a round.
 - **Motion-led films (stunts, action): after the cast sheet, go to a quick animatic early**; stills can't show timing,
