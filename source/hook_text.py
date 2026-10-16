@@ -20,8 +20,18 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide (guides/tiktok-design.md)
 
 
+def emoji_img(ch, px):
+    """An emoji as a picture (Google's Noto emoji, in source/fonts/emoji/<hex>.png): TikTok Sans has no emoji."""
+    path = os.path.join(HERE, 'fonts', 'emoji', f'{ord(ch):x}.png')
+    return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
+
+
 def card(w, h, text, y_mid, path, size=74, centre=False):
     k = w / 1080
+    tail = ''
+    while text and ord(text[-1]) > 0x2000:          # trailing emoji are drawn as pictures after the last word
+        tail, text = text[-1] + tail, text[:-1]
+    text = text.rstrip()
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     while True:                                # one or two balanced lines, inside the safe width
@@ -36,17 +46,25 @@ def card(w, h, text, y_mid, path, size=74, centre=False):
             break
         size -= 4
     lh = int(f.size * 1.18)
+    em = int(f.size * 1.0)
+    emw = (em + int(10 * k)) * len(tail)             # room for the emoji on the last row
     pad_x, pad_y = int(30 * k), int(16 * k)
     cx = (540 if centre else (SAFE_X0 + SAFE_X1) / 2) * k     # --centre: the middle of the frame (Sam, 15 Oct)
     top = y_mid * k - len(rows) * lh / 2
     for i, r in enumerate(rows):               # each row its own white box, like the app's caption style
-        tw = d.textlength(r, font=f)
+        tw = d.textlength(r, font=f) + (emw if i == len(rows) - 1 else 0)
         y = top + i * lh
         d.rounded_rectangle([cx - tw / 2 - pad_x, y - pad_y, cx + tw / 2 + pad_x, y + lh + pad_y - int(6 * k)],
                             radius=int(18 * k), fill=(255, 255, 255, 255))
     for i, r in enumerate(rows):
-        tw = d.textlength(r, font=f)
+        last = i == len(rows) - 1
+        tw = d.textlength(r, font=f) + (emw if last else 0)
         d.text((cx - tw / 2, top + i * lh + int(2 * k)), r, font=f, fill=(0, 0, 0, 255))
+        if last:
+            ex = cx - tw / 2 + d.textlength(r, font=f) + int(10 * k)
+            for ch in tail:
+                im.alpha_composite(emoji_img(ch, em), (int(ex), int(top + i * lh + (lh - em) / 2)))
+                ex += em + int(10 * k)
     im.save(path)
 
 
