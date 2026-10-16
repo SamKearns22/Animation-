@@ -52,6 +52,11 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
 - **Heads from every angle (Sam, 14 Oct):** draw the head's outline first and the hair over it, inked, so a skull line
   never shows through hair. From behind there is no chin or jaw crease: the neck rises straight into the back of the
   skull, under the nape hair, and no bits of the far face (nose, cheek, beard) poke out. Every part has an outline.
+- **No blink may land on a key face** (Sam, 15 Oct: her eyes were shut on the punchline word): blinks are kept out of
+  every expression window and just around it.
+- **A big change of pose eases like the sigh** (Sam, 15 Oct: the sigh was 'the smoothest expression so far'; the head
+  snapping up for the last line was not): glances still jump, but a head lifting into a new held pose blends from
+  the exact old pose to the new one over about 0.7 s, eased in and out.
 - **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.

@@ -42,6 +42,12 @@
 | 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done |
 | 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done |
 | 40 | acting | final "venezuela." | Dead-eyed and despondent, staring straight into the camera: heavy lids, eyes dead centre, faint sad brows, chin down a touch, no blinks, utterly still to the cut | done |
+| 41 | acting | final line | Head snapped up: now lifts from her exact reading pose to the dead stare over 0.7 s, eased like the sigh | done |
+| 42 | acting | "master" | Eyes were closed (a blink): no blink may land on a key face now | done |
+| 43 | acting | "I'll get back" | Sweat drop removed (off-style); less happy, more "yeaaah... sorry": wince, apologetic head tilt, small tight talking mouth, clenched-teeth grimace in the pause | done |
+| 44 | subtitles | "I'll get back" | Starts at 32.97 s (pinned) | done |
+| 45 | subtitles | first "I just need," | Reads "and I just need," | done |
+| 46 | subtitles | all | Still a bit early: each now comes up 0.1 s after its first word starts, never ahead | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

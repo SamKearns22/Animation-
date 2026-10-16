@@ -43,7 +43,7 @@ SCRIPT = ("[down] So like uh it's really, [up] yes, it's really important that w
           "and like, our kids are [delight] ^helicopters, [up] and I really think that with the biggest swell of "
           "support, the people are really, I just, [down] you know it's so. [up] [awkward] ^I'll get back to you "
           "on that. || [down] So, like. I think if we all just, you know, [up] [excited] cause it's booming, [smile3] and we've had "
-          "a one day war, [down] I just need, I just need. || I just want. || [sigh] Venezuela. || [dead] venezuela.")
+          "a one day war, [down] and I just need, I just need. || I just want. || [sigh] Venezuela. || [dead] venezuela.")
 # Sam's acting notes (15 Oct): looks down at "we work tirelessly"; big smile DURING "agenda"; eyes slightly wide at
 # "master"; delighted at "helicopters"; slightly awkward through "I'll get back to you on that".
 AUDIO_PARTS = [  # (recording, from, to, anchors inside it): Sam's second take of paragraphs 1-2 (15 Oct), then the
@@ -102,7 +102,7 @@ def _syllable_beats(v, runs):
 START_WORD = 'I look forward'
 CUT_AT = 18.02                   # the film's sound starts here in the full take: in the 40 ms gap between 'and' and 'I'
                                  # (Sam, 15 Oct: keep the 'I', never a scrap of the word before it); silence is laid before it   # the film opens on these words (None: from the very start)
-PINS = {'I look forward': 18.04, 'helicopters,': 38.95, "I'll get back to": 50.26, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
+PINS = {'I look forward': 18.04, 'helicopters,': 38.95, "I'll get back to": 50.39, 'I just need.': 63.29}   # an exact phrase -> where it starts, in the full take
 FRESH = set()            # word indices whose subtitle starts fresh and exactly on the word (punchlines)
 
 
@@ -203,8 +203,8 @@ def build_timeline():
         elif tag == 'sigh':
             sigh = (before + 0.25, after - 0.1)
         elif tag == 'dead':                                    # the last line: dead-eyed, straight down the lens
-            exprs.append((words[wi][0] - 0.35, end + 1.0, 'dead'))
-            gaze.append((words[wi][0] - 0.35, 'up'))
+            exprs.append((words[wi][0] - 0.85, end + 1.0, 'dead'))
+            gaze.append((words[wi][0] - 0.5, 'up'))
         elif tag == 'excited':                                 # through the phrase, to its comma: eyes wide, big
             j = wi                                             # talking smile, a little bounce (Sam, 15 Oct)
             while j < len(words) - 1 and words[j][2][-1] not in ',.':
@@ -388,6 +388,7 @@ def state(t):
                 s['head_dy'] = -7.0 * abs(math.sin((t - a) * 7.0))
                 s['sh_dy'] = -4.0 * abs(math.sin((t - a) * 7.0))
             elif kind == 'awkward':                            # sheepish, looking dead at the crowd (Sam, 15 Oct):
+                s['wince'] = 1.0                               # 'yeaaah... sorry' (Sam, 15 Oct): a wince, never happy
                 s['worry'] = 1.6                               # worried brows, chin dipped, a tight grimace, and
                 s['brow'] = 2.0                                # more uncomfortable (Sam, 15 Oct): a bead of sweat,
                 s['look_x'] = 0.0                              # a nervous flick of the eyes down and back, a swallow
@@ -395,8 +396,12 @@ def state(t):
                 s['gaze'] = 'up'
                 s['lid'] = 0.22
                 s['head_dy'] = 7.0
-                s['head_tilt'] = 0.06
-                s['sweat'] = min(1.0, (t - a) / 0.4)
+                s['head_tilt'] = 0.1                           # the apologetic head tilt
+                s['squint'] = 0.25                             # wincing
+                if s['mouth'] == 'open':                        # talking small and tight, never a big open mouth
+                    s['mouth'] = 'mid'
+                if s['mouth'] == 'grimace':
+                    s['mouth'] = 'eek'
                 u = t - a
                 if 1.9 < u < 2.25 or 3.4 < u < 3.7:            # eyes flick down to the notes and straight back
                     s['look_dy'] = 6.0
@@ -404,7 +409,7 @@ def state(t):
                 if 2.8 < u < 3.1:                              # a swallow: the chin dips and comes back
                     s['head_dy'] = 11.0
                 if s['mouth'] == 'rest' and s['smile'] == 0:
-                    s['mouth'] = 'grimace'
+                    s['mouth'] = 'eek'                         # the 'yeaaah... sorry' wince in the pause
     a, b = SIGH
     if a <= t < b:
         u = (t - a) / (b - a)
@@ -420,10 +425,17 @@ def state(t):
         s['brow'] = -3.0
     dead = any(a_ <= t < b_ and k_ == 'dead' for a_, b_, k_ in EXPRS)
     if dead:                                              # dead-eyed and despondent, staring straight into the camera
-        s.update(gaze='up', look_x=0.0, look_dy=0.0, lid=0.42, worry=0.55, brow=-2.0, head_dy=5.0, smile=0, squint=0.0)
+        a_dead = next(a_ for a_, b_, k_ in EXPRS if k_ == 'dead')
+        u = smooth((t - a_dead) / 0.7)                    # the head lifts into it over 0.7 s, eased like the sigh
+        base = dict(lid=0.86, worry=0.0, brow=-3.0, head_dy=24.0, feat_dy=9.0, look_dy=5.0, look_x=0.0)   # her reading pose
+        target = dict(lid=0.42, worry=0.55, brow=-2.0, head_dy=5.0, feat_dy=0.0, look_dy=0.0, look_x=0.0)
+        for key in target:
+            s[key] = base[key] + (target[key] - base[key]) * u
+        s.update(gaze='up', smile=0, squint=0.0)
         if s['mouth'] == 'rest':
             s['mouth'] = 'rest'
-    if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0 and not dead:
+    keyface = any(a_ - 0.3 <= t < b_ + 0.2 for a_, b_, k_ in EXPRS)   # no blink may land on a key face (Sam, 15 Oct)
+    if any(bt <= t < bt + 0.14 for bt in BLINKS) and s['smile'] == 0 and not dead and not keyface:
         s['closed'] = True
     if dead:                                              # utterly still: no shifts, no turn
         s['head_dx'] = 0.0
@@ -608,6 +620,19 @@ def mouth(p, fx, my, st):
         for sgn in (-1, 1):                               # cheeks bunched up by it
             p.line([(fx + sgn * (w + 4), my - up - 12), (fx + sgn * (w + 10), my - up), (fx + sgn * (w + 4), my - up + 10)],
                    SKIN_D, 1.8)
+        return
+    if m == 'eek':                                        # 'yeaaah... sorry': lips pulled wide and flat over clenched teeth
+        outer = [(fx - 30, my + 5), (fx - 14, my - 3), (fx + 14, my - 3), (fx + 30, my + 5), (fx + 16, my + 13),
+                 (fx - 16, my + 13)]
+        p.poly(curve(outer, 3), LIP, INK, 1.8)
+        teeth = [(fx - 24, my + 3), (fx - 12, my), (fx + 12, my), (fx + 24, my + 3), (fx + 14, my + 9), (fx - 14, my + 9)]
+        p.poly(curve(teeth, 2), (252, 252, 248), None)
+        p.line([(fx - 24, my + 5), (fx, my + 4.5), (fx + 24, my + 5)], (200, 196, 190), 1.2)
+        for k in range(-2, 3):
+            p.line([(fx + k * 8, my + 1), (fx + k * 8, my + 8)], (214, 210, 204), 1.0)
+        p.poly(curve(outer, 3), None, INK, 1.8)
+        for sgn in (-1, 1):
+            p.line([(fx + sgn * 30, my + 5), (fx + sgn * 35, my + 10)], SKIN_D, 1.6)
         return
     if m == 'grimace':                                    # slightly awkward: lips pressed tight, wide, one corner up
         top = [(fx - 28, my + 4), (fx - 10, my - 1), (fx + 10, my - 1), (fx + 28, my + 1)]
@@ -1394,9 +1419,9 @@ def _caption_chunks():
         merged.append(pc)
     out = []
     for i, pc in enumerate(merged):
-        start = pc[0][0] - (0.0 if pc[0][3] in FRESH else 0.2)
+        start = pc[0][0] + (0.0 if pc[0][3] in FRESH else 0.1)   # with the word, never ahead of it (Sam, 15 Oct)
         nn = merged[i + 1] if i + 1 < len(merged) else None
-        nxt = (nn[0][0] - (0.0 if nn[0][3] in FRESH else 0.2)) if nn else BLACK_AT
+        nxt = (nn[0][0] + (0.0 if nn[0][3] in FRESH else 0.1)) if nn else BLACK_AT
         text = ' '.join(x[2] for x in pc)
         end = min(nxt, max(pc[-1][1] + 0.4, start + len(text) / 15.0))
         out.append([start, end, text])
