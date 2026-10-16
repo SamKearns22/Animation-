@@ -87,6 +87,18 @@ more of the way through.
 5. Keep lengths short for topical satire (the Mossad length of about 30 s worked best so far).
 6. Put the key search words in the caption and the spoken script.
 
+## 7. Added 16 Oct 2026 (Roadster): same-day posting and hashtags
+- **Posting twice in a day:** no TikTok statement or credible dataset found that says a second same-day video is
+  penalised. Evidence is forum anecdote ("splits engagement", "might look spammy"). Plausible mechanisms only: the For You
+  feed won't show one viewer the same creator twice in a row, and a new video's first test viewers may overlap with the
+  last one's. Against that, Buffer's same-account data (section 3) says more posts a week means more views per post.
+  Verdict: unproven, small risk; spacing 18-24 h costs little. **A single flop or hit at one slot proves nothing about the
+  slot** (topic, length and opening are all different).
+- **Hashtags:** TikTok lists hashtags with captions and sounds as "video information", a lower-weight signal than watch
+  behaviour. Vendors (Dash Social, Heropost, Birdeye; unverified) agree on 3-5 specific tags, a mix of one broad, one or
+  two niche and one or two topical, claim a five-tag cap since 2025, and say hashtags never beat a video people finish
+  and share. Caption and spoken search words count for more. So: few, specific tags, matched to the search words in the caption.
+
 ## Sources
 - TikTok Newsroom: https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you
 - TikTok Community Guidelines, For You feed eligibility (UK): https://www.tiktok.com/safety/en-GB/policies-and-engagement/fyf-standards

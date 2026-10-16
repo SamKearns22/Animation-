@@ -122,6 +122,9 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   #animation, #parody or #satire), and a question that invites replies. Pin that question as a comment.
 - **The director writes the post text and the pinned question himself. Claude never suggests lines or wording
   for them** (it can still suggest a cover frame and point out if a hashtag would spoil the joke).
+- **Hashtags: Claude may always suggest the best ones (Sam, 16 Oct), but always in the context of the TikTok algorithm and
+  what the evidence says about reach** (`guides/tiktok-posting-research.md` section 7): few and specific, matched to the
+  caption's search words, none that give away the twist.
 - Reply to comments in the first hour. Keep the next video ready within 24-48 hours.
 - X gets the original widescreen version.
 
