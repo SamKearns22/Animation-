@@ -731,19 +731,32 @@ def draw_ramp(img, cam):
     lat = np.array([0, 1.0, 0])
     idx = list(range(0, len(RAMP_P), 3)) + [len(RAMP_P) - 1]
     cam_pos = np.linalg.inv(CAM_R) @ np.array([0, -CAM_F, 0])  # where the camera stands, in ramp space
-    # the scaffold tower behind the curve
-    for j in range(0, len(idx) - 6, 6):
-        a, b = idx[j], idx[j + 6]
-        if RAMP_TH[a] < math.radians(60):
-            continue
+    # the support tower behind the curve: legs from the back of the ramp down to the floor, braced (Sam, 16 Oct)
+    steel, steel_d = (76, 78, 86), (58, 60, 68)
+    legs = [i for i in idx if RAMP_TH[i] > math.radians(25)][::5]
+    tops = {}
+    for i in legs:
+        back = RAMP_P[i] - ramp_at(RAMP_S[i])[3] * 160
         for off in (RAMP_HW * 0.8, -RAMP_HW * 0.8):
-            A = RAMP_P[a] - ramp_at(RAMP_S[a])[3] * 160 + lat * off
-            Bb = RAMP_P[b] - ramp_at(RAMP_S[b])[3] * 160 + lat * off
-            (pa, _), (pb, _) = ramp_px(A), ramp_px(Bb)
-            p.line([tuple(pa), tuple(pb)], (76, 78, 86), 3)
-        A1 = RAMP_P[a] - ramp_at(RAMP_S[a])[3] * 160 + lat * RAMP_HW * 0.8
-        B1 = RAMP_P[b] - ramp_at(RAMP_S[b])[3] * 160 - lat * RAMP_HW * 0.8
-        p.line([tuple(ramp_px(A1)[0]), tuple(ramp_px(B1)[0])], (60, 62, 70), 2)
+            top = back + lat * off
+            foot = np.array([top[0], top[1], 0.0])
+            tops[(i, off)] = (top, foot)
+            p.line([tuple(ramp_px(top)[0]), tuple(ramp_px(foot)[0])], steel, 3)
+    for a_, b_ in zip(legs, legs[1:]):
+        for off in (RAMP_HW * 0.8, -RAMP_HW * 0.8):
+            ta, fa = tops[(a_, off)]
+            tb, fb = tops[(b_, off)]
+            p.line([tuple(ramp_px(ta)[0]), tuple(ramp_px(tb)[0])], steel, 3)       # along the ramp's back
+            for h in np.linspace(0.0, 1.0, 5)[:-1]:                                 # X bracing between the legs
+                lo_a, hi_a = fa + (ta - fa) * h, fa + (ta - fa) * (h + 0.25)
+                lo_b, hi_b = fb + (tb - fb) * h, fb + (tb - fb) * (h + 0.25)
+                p.line([tuple(ramp_px(lo_a)[0]), tuple(ramp_px(hi_b)[0])], steel_d, 2)
+                p.line([tuple(ramp_px(lo_b)[0]), tuple(ramp_px(hi_a)[0])], steel_d, 2)
+    for side in (1, -1):                                         # the ramp's red edges run on back along the floor
+        a3, b3 = np.array([0.0, side * RAMP_HW, 0.0]), np.array([-5200.0, side * RAMP_HW, 0.0])
+        pa, pb = tuple(ramp_px(a3)[0]), tuple(ramp_px(b3)[0])
+        p.line([pa, pb], (120, 30, 34), 9)
+        p.line([pa, pb], (240, 70, 64), 5)
     quads = []
     for a, b in zip(idx, idx[1:]):
         _, _, _, na = ramp_at(RAMP_S[a])
@@ -792,9 +805,6 @@ def hangar(img, cam, t=0.0):
     p.line([(X0, 1300), (X1, 1300)], (60, 60, 68), 2)
     for i in range(16):
         p.line([(X0 + i * 260, 2200), (X0 + 500 + i * 230, 1300)], (46, 46, 54), 2)
-    for y, x0, x1 in ((1330, -1900, 380), (1420, -2100, 120)):
-        p.line([(x0, y), (x1, y)], (120, 30, 34), 9)
-        p.line([(x0, y), (x1, y)], (236, 64, 60), 4)
     draw_ramp(img, cam)
     return None
 
