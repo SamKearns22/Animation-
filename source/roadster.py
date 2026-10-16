@@ -556,8 +556,8 @@ def _helmet(img, p, L, st, t):
     p.poly([(hx - R * 0.55, hy - R * 0.86), (hx - R * 0.15, hy - R * 0.98), (hx - R * 0.42, vy + 8),
             (hx - R * 0.78, vy + 2)], VISOR_D, None)
     if st['visor_car'] > 0:                                # the car's reflection, growing as it falls on him
-        pass        # the visor reflection is gone (Sam, 16 Oct: a blob, then a black speck, at this size); the spreading
-        #             shadow and his eyes tell it
+        k = st['visor_car']                                # a tiny upside-down car, wheels up (Sam, 16 Oct: keep it)
+        car(img, L, hx + 18, hy - R * 0.62, 0.05 + 0.17 * k, View(yaw=-90, elev=4, flip=180))
     p.line(edge, INK, 3.2)
     p.line([(hx + R * 0.36, hy - R * 0.8), (hx + R * 0.62, hy - R * 0.6)], (250, 226, 160), 3)   # a glint line
     p.poly([(hx + R * math.cos(a), hy + R * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 48, endpoint=False)],
