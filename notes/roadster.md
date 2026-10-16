@@ -27,3 +27,11 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   too loud or annoying, getting nearer and further as the camera distance to the car changes. Sam records
   "Fatality Avoided" flat; we make it robotic and glitchy. Damon silent.
 - References: Sam is sending them (Roadster, The Martian set, Damon in suit, stars and Mars-in-the-distance shots).
+- Hydraulics come from the original audio (Sam, 16 Oct): the hiss band (2-8 kHz) rises from 3.25 s, peaks at 4.25 s
+  (the launch off the ramp) and fades by 5.75 s; a smaller hiss at 0-1.25 s; thumps at 5.69 and 6.04 s (landing).
+  Music sits under it, so the cut-out hiss is high-passed and checked on a sound-check file before any render.
+- Each flip faster than the last, scene by scene (about 1.4 s per flip in shot 1 down to about 0.25 s by the Mars
+  approach); each flip gets its hiss, shorter and a little higher each time, never louder than the original.
+- Impact: Sam supplies the crash sound. The car crumples catastrophically on Damon: real impact (screen shake, dust
+  ring, roof caved in, wheels splayed, panels buckled, glass and parts scattering under gravity and staying put).
+  Damon is simply gone. When "Fatality Avoided" is spoken, one light on the wreck flickers on (a single headlight).
