@@ -7,6 +7,7 @@ sets; Dam's coloured pencil (pencil_cartoon) for every space shot. Notes and dec
                                                 his eyes-widening strength sheet (1-6)
     python3 source/roadster.py sets OUT.jpg     the hangar and ramp (with the dials), the Mars set, the two pencil
                                                 space shots with the car in them
+    python3 source/roadster.py stills OUT.jpg   one still per key moment of every shot, on one sheet
 """
 import math
 import os
@@ -651,11 +652,20 @@ def dials(img, cam, g=1.0, alt=0.0, pitch=0.0):
     """The demo's two dials, kept as they are, with whatever numbers the story needs (G-FORCE left, ALTITUDE right)."""
     p = B.Pen(img, cam)
     for x, label, val, unit in ((150, 'G-FORCE', g, 'G'), (830, 'ALTITUDE', alt, 'FT')):
-        p.ell(x, 1400, 62, 62, None, (220, 220, 220), 2.4)
+        p.ell(x, 1400, 62, 62, (14, 14, 18), (220, 220, 220), 2.4)
         p.line([(x + 62 * math.cos(a), 1400 + 62 * math.sin(a)) for a in np.linspace(2.2, 2.2 + 4.3 * min(1, abs(val) / 70 + 0.15), 20)],
                (250, 250, 250), 4)
         _text(img, cam, x, 1376, label, 10, (210, 210, 210))
-        _text(img, cam, x, 1404, _num(val), 22 if abs(val) < 1e4 else 13, (250, 250, 250))
+        if abs(val) < 1e5:
+            _text(img, cam, x, 1404, _num(val), 22 if abs(val) < 1e4 else 17, (250, 250, 250))
+        else:                                                 # too long for the dial: on a dark plate under it
+            txt = _num(val)
+            wd = 9 * len(txt) + 16
+            cx = min(1040 - wd / 2, max(40 + wd / 2, x))
+            p.poly([(cx - wd / 2, 1474), (cx + wd / 2, 1474), (cx + wd / 2, 1504), (cx - wd / 2, 1504)], (14, 14, 18),
+                   (220, 220, 220), 2)
+            _text(img, cam, cx, 1489, txt, 16, (250, 250, 250))
+            _text(img, cam, x, 1404, '...', 22, (250, 250, 250))
         _text(img, cam, x, 1432, unit, 10, (210, 210, 210))
     v = View(yaw=0, elev=0, flip=pitch)                         # the little side-on car icon turns with the car
     car(img, cam, 270, 1400, 0.16, v)
@@ -744,7 +754,7 @@ def mars(img, cam, t=0.0):
                (146, 82, 50), None)
 
 
-MARS_NECK, MARS_S = 1010, 0.95        # Damon in the Mars shot: big enough to read his eyes, the set behind him
+MARS_NECK, MARS_S = 960, 0.85        # Damon in the Mars shot: big enough to read his eyes, the set behind him
 
 
 # ============================================== SPACE (Dam's pencil) ================================================
@@ -804,6 +814,352 @@ def space_mars(t, grow=0.0):
     res = c.result()
     m = PC.M if res.shape[0] > 1920 else 0
     return Image.fromarray(res[m:m + 1920, m:m + 1080])
+
+
+# ============================================== THE FILM: TIMELINE ==================================================
+FPS = 12
+SHOTS = [   # (name, start, end): hard cuts
+    ('hangar', 0.0, 10.6),    # 1: the original demo, shot for shot to 6 s; then it keeps flipping and goes up
+    ('roof', 10.6, 12.0),     # 2: out through the hangar roof (outside, night)
+    ('clouds', 12.0, 13.6),   # 3: up through ordinary clouds (pencil)
+    ('sea', 13.6, 15.4),      # 4: wide, bursting through the high cloud layer (pencil)
+    ('earth', 15.4, 17.6),    # 5: the Earth from space, silent (pencil)
+    ('stars', 17.6, 19.6),    # 6: flipping through the stars, the comet far off (pencil)
+    ('towards', 19.6, 21.8),  # 7: flipping towards Mars as it swells (pencil)
+    ('mars', 21.8, 29.0),     # 8: Damon hopeful, eyes 2 -> 5, the car drops upside down, crushes him; the line
+]
+DUR = 29.0
+T_LAND1 = 6.0          # lands in the smoke (as the original)
+T_UP = 9.6             # the jets go full and it shoots up
+T_SEEN = 22.9          # a speck in the Mars sky
+T_IMPACT = 24.2
+T_LINE = 25.0          # roadster-1.m4a starts here (its speech starts 1.02 s in: "Fatality avoided" at ~26.0)
+T_LAMP = 26.0
+MARS_DIST_FT = 738188976378
+FLIP_PERIOD = {'hangar': 1.4, 'roof': 1.1, 'clouds': 0.9, 'sea': 0.75, 'earth': 0.6, 'stars': 0.45, 'towards': 0.3}
+
+
+def shot_of(t):
+    return next((s for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1])
+
+
+def ease(x):
+    x = min(1.0, max(0.0, x))
+    return x * x * (3 - 2 * x)
+
+
+def flip_angle(t):
+    """The car's own nose-over-tail angle (degrees, negative = nose up and over backwards), faster each scene."""
+    if t < 4.0:
+        return -_ramp_pitch(_climb_u(t))
+    if t < T_LAND1:
+        return -80 - 280 * ease((t - 4.0) / (T_LAND1 - 4.0))
+    acc, prev = -360.0, T_LAND1
+    for name, a, b in SHOTS:
+        if b <= T_LAND1 or name == 'mars':
+            continue
+        a = max(a, T_LAND1)
+        span = min(t, b) - a
+        if span > 0:
+            acc -= 360 * span / FLIP_PERIOD[name]
+        if t < b:
+            break
+    return acc
+
+
+def _climb_u(t):
+    return 0.22 + 0.78 * (t / 4.0) ** 1.6
+
+
+def _ramp_pitch(u):
+    return 80 * u ** 1.5
+
+
+def altitude(t):
+    """The ALTITUDE dial (ft): the original's climb to 67.8, back to 0 at the landing, the hops, then the journey to
+    Mars (the Earth-Mars distance in feet on arrival)."""
+    if t < 4.5:
+        return 7.4 + 60.4 * (t / 4.5) ** 1.3
+    if t < T_LAND1:
+        return 67.8 * (1 - ease((t - 4.5) / 1.5))
+    if t < T_UP:
+        ph = (t - T_LAND1) % 1.2
+        return 38 * math.sin(math.pi * ph / 1.2)
+    if t < 21.8:
+        k = (t - T_UP) / (21.8 - T_UP)
+        return 20 * (MARS_DIST_FT / 20) ** k                        # roughly exponential: feet, miles, millions...
+    return float(MARS_DIST_FT)
+
+
+def gforce(t):
+    if t < T_LAND1:
+        return [1.4, 1.1, 0.9, 0.9, 0.9, 0.9, 0.8, 1.1, 1.1, 0.2, 0.4, 0.3][min(11, int(t * 2))]
+    if t < T_UP:
+        return 3.3 + 1.5 * math.sin(t * 5)
+    if t < 21.8:
+        return 1274210.0 * ease((t - T_UP) / 1.2)
+    return 1274210.0
+
+
+# ---------------------------------------------------------------------------- shot 1: the hangar
+HANGAR_SPINE = None
+
+
+def hangar_car(t):
+    """Where the car is in shot 1: (x, y, scale, View, jets)."""
+    global HANGAR_SPINE
+    if HANGAR_SPINE is None:
+        HANGAR_SPINE = hangar(B.canvas((0, 0, 0)), B.Cam(1.0, 540, 960))
+    sp = HANGAR_SPINE
+    if t < 4.0:                                                     # climbing the ramp, seen from behind
+        u = _climb_u(t)
+        x, y = sp(u)
+        k = (120 - 55 * u) / 120
+        return x, y - 40 * k, 0.75 * k, View(yaw=-90, elev=10, flip=flip_angle(t)), 0.0
+    tx, ty = sp(1.0)
+    if t < T_LAND1:                                                 # off the top, over backwards, down into the smoke
+        f = (t - 4.0) / (T_LAND1 - 4.0)
+        x = tx + (360 - tx) * f
+        y = ty - 180 * math.sin(math.pi * min(1, f * 1.2)) + (1240 - ty) * f ** 2.2
+        return x, y, 0.55 + 0.2 * f, View(yaw=-120, elev=12, flip=flip_angle(t)), 0.0
+    if t < T_UP:                                                    # hops on its jets, flipping, each one higher
+        ph = (t - T_LAND1) / 1.2
+        h = [260, 420, 600][min(2, int(ph))]
+        y = 1240 - h * math.sin(math.pi * (ph % 1))
+        return 380 + 30 * math.sin(t), y, 0.75, View(yaw=-120, elev=12, flip=flip_angle(t)), 1.0
+    f = (t - T_UP) / (10.6 - T_UP)                                  # full jets: straight up, out of the top
+    return 380, 1240 - 1500 * f ** 1.6, 0.75, View(yaw=-120, elev=12, flip=flip_angle(t)), 1.0
+
+
+def picture_hangar(t):
+    cam = B.Cam(1.0 + 0.04 * ease(t / 10.0), 540, 960)              # the original's slight push-in
+    img = B.canvas((0, 0, 0))
+    hangar(img, cam, t)
+    x, y, s, v, jets = hangar_car(t)
+    if t >= T_LAND1 - 0.05:                                         # the smoke from the landing and the jets
+        grow = ease((t - T_LAND1 + 0.05) / 1.0)
+        smoke_cloud(img, cam, 400, 1300, 420 * grow + 120, 150 * grow + 40, 5)
+    car(img, cam, x, y, s, v, jets=jets, t=t)
+    if t >= T_LAND1 - 0.05:
+        smoke_cloud(img, cam, 520, 1340, 360 * ease((t - T_LAND1) / 1.4) + 60, 90, 6)
+    dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(t))
+    return img
+
+
+# ---------------------------------------------------------------------------- shot 2: out through the roof
+def picture_roof(t):
+    u = t - 10.6
+    cam = B.Cam(1.0, 540, 960)
+    img = B.canvas((22, 28, 56))
+    p = B.Pen(img, cam)
+    r = np.random.default_rng(3)
+    for _ in range(60):
+        p.ell(r.uniform(0, 1080), r.uniform(0, 1100), 2.2, 2.2, (230, 230, 210), None)
+    # the hangar roof from just above its edge: corrugated, skylights, vents
+    roof = [(-100, 1150), (1180, 1080), (1180, 2100), (-100, 2100)]
+    p.poly(roof, (70, 74, 84), INK, 4)
+    for i in range(30):
+        x = -100 + i * 46
+        p.line([(x, 1150 - i * 2.4), (x - 120, 2100)], (56, 60, 70), 2)
+    for i in range(3):
+        y = 1350 + i * 200
+        p.poly(rough([(80, y), (300, y - 8), (310, y + 60), (84, y + 66)], 3, 10 + i), (40, 46, 62), INK, 3)
+        p.poly(rough([(760, y - 20), (980, y - 28), (990, y + 40), (764, y + 46)], 3, 20 + i), (40, 46, 62), INK, 3)
+    p.poly(rough([(900, 1180), (980, 1176), (980, 1100), (900, 1104)], 2, 30), (110, 114, 124), INK, 3)   # a vent
+    # the hole it tore, the panels thrown up (each its own size and speed, under gravity)
+    hole = [(540 + 130 * math.cos(a) * (1 + 0.25 * math.sin(a * 5)), 1500 + 50 * math.sin(a) * (1 + 0.3 * math.cos(a * 7)))
+            for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
+    p.poly(hole, (16, 14, 18), INK, 4)
+    p.poly([(540 + 90 * math.cos(a), 1500 + 30 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 20)],
+           (250, 210, 140), None)                                                         # light from inside
+    for i in range(9):
+        vx, vy = r.uniform(-260, 260), r.uniform(-1500, -800)
+        x = 540 + vx * u
+        y = 1500 + vy * u + 900 * u * u
+        a, w = r.uniform(0, 6) + u * r.uniform(-6, 6), r.uniform(26, 60)
+        pts = [(x + w * math.cos(a + q), y + 0.5 * w * math.sin(a + q)) for q in (0, 1.9, 3.3, 4.8)]
+        p.poly(pts, (88, 92, 102), INK, 2.4)
+    y = 1500 - 1700 * (u / 1.4) ** 1.2
+    car(img, cam, 540, y, 0.9, View(yaw=-60, elev=12, flip=flip_angle(t)), jets=1.0, t=t)
+    dials(img, cam, gforce(t), altitude(t), flip_angle(t))
+    return img
+
+
+# ---------------------------------------------------------------------------- shots 3-7: Dam's pencil
+def _pencil(t):
+    import pencil_cartoon as PC
+    return PC, PC.Canvas(int(round(t * PC.FPS)))
+
+
+def _paste(c, layer):
+    """Lay a flat Satire-style layer (RGBA) into a pencil canvas."""
+    a = np.asarray(layer, np.float32) / 255.0
+    al = a[..., 3:4]
+    c.img = c.img * (1 - al) + a[..., :3] * al
+
+
+def _car_layer(x, y, s, view, jets, t):
+    lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+    car(lay, B.Cam(1.0, 540, 960), x, y, s, view, jets=jets, t=t)
+    return lay
+
+
+def _finish_pencil(c, t):
+    lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+    dials(lay, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(t))
+    _paste(c, lay)
+    return Image.fromarray(c.result()).convert('RGBA')
+
+
+def picture_clouds(t):
+    import beaver_asteroid as DAM
+    PC, c = _pencil(t)
+    u = t - 12.0
+    c.fill_screen(PC.col(0.40, 0.60, 0.88), 1.4)
+    c.vgrad(PC.col(0.74, 0.85, 0.97), 0.0, 0.85, 0, 1920)
+    for (x, y0, r, seed) in DAM.CUMULUS:
+        DAM.cumulus(c, x, y0 + 1400 * u, r, seed)
+    _paste(c, _car_layer(540, 1500 - 437 * u, 0.7, View(yaw=-40, elev=8, flip=flip_angle(t)), 1.0, t))
+    bx, by, br, bseed = DAM.BIG_CLOUD
+    DAM.cumulus(c, bx, -600 + 1400 * u, br, bseed)                  # the cloud it punches up through, in front
+    return _finish_pencil(c, t)
+
+
+def picture_sea(t):
+    import beaver_asteroid as DAM
+    PC, c = _pencil(t)
+    u = t - 13.6
+    c.fill_screen(PC.col(0.12, 0.17, 0.33), 1.5)
+    c.vgrad(PC.col(0.36, 0.45, 0.62), 0.0, 0.9, 150, DAM.HORIZON - 250)
+    c.vgrad(PC.col(0.99, 0.80, 0.56), 0.0, 0.95, DAM.HORIZON - 380, DAM.HORIZON + 10)
+    for x, y, ln in DAM.WISPS:
+        c.line([(x, y), (x + ln, y + 2)], PC.col(0.80, 0.68, 0.70), lw=5, pressure=0.8, opacity=0.5)
+    c.glow(DAM.SUN[0], DAM.SUN[1], 700, PC.col(1.0, 0.82, 0.5), 0.7, power=1.6)
+    c.glow(DAM.SUN[0], DAM.SUN[1], 170, PC.WHITE, 1.0, power=1.3)
+    ry = DAM.HORIZON + 120 - 900 * min(1.0, u / 1.8) ** 0.85
+    for (x, y, rad, seed) in DAM.CLOUD_SEA:
+        DAM.cloud_puff(c, x, y, rad, seed)
+    if u > 0.15:                                                    # its white jet trail out of the cloud sea
+        ys = np.linspace(DAM.HORIZON + 60, ry + 20, 30)
+        wd = 5 + 0.03 * (ys - ry)
+        xc = 430 + 6 * np.sin(ys * 0.03)
+        c.poly(np.concatenate([np.stack([xc - wd, ys], 1), np.stack([xc + wd, ys], 1)[::-1]]),
+               fill=PC.col(0.97, 0.97, 0.99), pressure=1.0, jit=1.5)
+        _paste(c, _car_layer(430, ry, 0.13, View(yaw=-30, elev=10, flip=flip_angle(t)), 1.0, t))
+    return _finish_pencil(c, t)
+
+
+def picture_earth(t):
+    import beaver_asteroid as DAM
+    PC, c = _pencil(t)
+    u = t - 15.4
+    c.fill_screen(DAM.DEEP, 1.3)
+    PC.stars(c, 160, seed=5, dim=0.8)
+    DAM.earth_limb(c)
+    DAM.sunrise(c, t)
+    _paste(c, _car_layer(560, 1000 - 420 * u / 2.2, 0.16, View(yaw=-30, elev=12, flip=flip_angle(t)), 1.0, t))
+    return _finish_pencil(c, t)
+
+
+def picture_stars(t):
+    u = t - 17.6
+    bg = space_stars(t)
+    PC, c = _pencil(t)
+    c.img = np.asarray(bg.convert('RGB'), np.float32) / 255.0
+    _paste(c, _car_layer(260 + 520 * u / 2.0, 1500 - 900 * u / 2.0, 0.6, View(yaw=-20, elev=18, flip=flip_angle(t)), 1.0, t))
+    return _finish_pencil(c, t)
+
+
+def picture_towards(t):
+    u = (t - 19.6) / 2.2
+    bg = space_mars(t, 0.08 + 0.92 * u)
+    PC, c = _pencil(t)
+    c.img = np.asarray(bg.convert('RGB'), np.float32) / 255.0
+    _paste(c, _car_layer(380 + 200 * u, 1450 - 500 * u, 0.7 * (1 - 0.75 * u), View(yaw=-150, elev=20, flip=flip_angle(t)),
+                         1.0, t))
+    return _finish_pencil(c, t)
+
+
+# ---------------------------------------------------------------------------- shot 8: Mars
+def damon_eyes(t):
+    """Strength 2 (hopeful) while he waits; widening to 5 as the car falls into view (eyes snap, feelings ease)."""
+    return 2 + 3 * ease((t - T_SEEN) / (T_IMPACT - 0.25 - T_SEEN))
+
+
+def picture_mars(t):
+    shake = 0.0
+    if T_IMPACT <= t < T_IMPACT + 0.45:
+        k = 1 - (t - T_IMPACT) / 0.45
+        shake = 26 * k * math.sin((t - T_IMPACT) * 90)
+    cam = B.Cam(1.0, 540 + shake, 960 + shake * 0.6)
+    img = B.canvas((0, 0, 0))
+    mars(img, cam, t)
+    ground = MARS_NECK + 928 * MARS_S - 40
+    if t < T_IMPACT:
+        damon(img, cam, 540, MARS_NECK, MARS_S, dict(look_up=1.0, wide=damon_eyes(t), visor_car=max(0, (t - T_SEEN) / 1.3)))
+        if t >= T_SEEN:                                             # dropping: no jets, upside down, still turning
+            f = (t - T_SEEN) / (T_IMPACT - T_SEEN)
+            y = -150 + (ground - 120 + 150) * f ** 2
+            s = 0.1 + 0.9 * f ** 2
+            car(img, cam, 540, y, s, View(yaw=-30, elev=10, flip=180 + 140 * (1 - f)), jets=0.0, t=t)
+    else:
+        debris(img, cam, 540, ground + 20, 1.3)
+        car(img, cam, 540, ground - 40, 1.3, View(yaw=-30, elev=10, flip=180), crush=1.0, headlight=t >= T_LAMP and
+            not (T_LAMP + 0.12 < t < T_LAMP + 0.24))                # the lamp flickers on with the line
+        d = t - T_IMPACT
+        if d < 1.4:                                                 # the dust burst: thrown out, then settling
+            g = 0.55 + 0.45 * ease(d / 0.3)
+            fade = 1 - ease((d - 0.45) / 0.95)
+            if fade > 0.02:
+                smoke_cloud(img, cam, 540, ground - 60 * fade, 1100 * g, 520 * fade + 40, 8, fill=(222, 156, 112),
+                            shade=(190, 120, 82))
+    if t < T_IMPACT:
+        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, 21.79)))
+    return img
+
+
+PICTURES = {'hangar': picture_hangar, 'roof': picture_roof, 'clouds': picture_clouds, 'sea': picture_sea,
+            'earth': picture_earth, 'stars': picture_stars, 'towards': picture_towards, 'mars': picture_mars}
+
+
+def picture(t):
+    """The frame WITHOUT captions (they go on last, so wording notes never re-render a picture)."""
+    return PICTURES[shot_of(t)[0]](t)
+
+
+def caption_at(t):
+    return 'Fatality avoided.' if T_LAMP - 0.1 <= t < T_LAMP + 2.2 else None
+
+
+def overlay(img, t):
+    c = caption_at(t)
+    if c:
+        import peepee as PP
+        PP.caption(img, c)
+    return img
+
+
+def frame_image(t):
+    return overlay(picture(t), t)
+
+
+STILLS = [(2.0, '1 climbing the ramp'), (4.9, '1 off the top'), (8.0, '1 hopping, flipping'), (10.2, '1 jets full'),
+          (11.2, '2 out through the roof'), (12.8, '3 up through clouds'), (14.6, '4 through the cloud sea'),
+          (16.6, '5 the Earth'), (18.6, '6 the stars'), (21.0, '7 towards Mars'), (23.6, '8 Damon, the car falls'),
+          (24.3, '8 the crash'), (26.6, '8 "Fatality avoided"')]
+
+
+def stills_sheet(out):
+    B.SS = 1
+    cols, w, h = 5, 400, 711
+    rows = (len(STILLS) + cols - 1) // cols
+    sheet = Image.new('RGB', (cols * w + (cols + 1) * 10, rows * (h + 50) + 10), (232, 228, 222))
+    for i, (t, lab) in enumerate(STILLS):
+        im = frame_image(t).convert('RGB').resize((w, h))
+        x, y = 10 + (i % cols) * (w + 10), 10 + (i // cols) * (h + 50)
+        sheet.paste(im, (x, y + 40))
+        _label(sheet, x, y + 6, f'{t:.1f}s  {lab}', 22)
+    sheet.save(out, quality=86)
 
 
 # ============================================== SHEETS ==============================================================
@@ -896,6 +1252,8 @@ def main():
         cast_sheet(a[1])
     elif a[0] == 'sets':
         sets_sheet(a[1])
+    elif a[0] == 'stills':
+        stills_sheet(a[1])
 
 
 if __name__ == '__main__':

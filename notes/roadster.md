@@ -79,3 +79,10 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   in the Mars shot Damon is framed big enough to read his eyes (scale MARS_S, the set behind him) and they widen from
   strength 2 to 5 as the car falls. The helmet's dark inside is one shape with a flat, level top line straight across the bubble, over the neck (Sam: a dip showing more neck is not how light works). The car lands UPSIDE DOWN, jets
   off: it just drops and crashes down flat on him (the wreck is drawn upside down, wheels in the air).
+- Shot plan (16 Oct, stills sheet `python3 source/roadster.py stills OUT.jpg`): 1 hangar 0-10.6 s (the original to
+  6 s, then hops on its jets flipping every 1.4 s, full jets and up at 9.6 s); 2 out through the roof 10.6-12.0;
+  3 clouds 12.0-13.6; 4 cloud sea 13.6-15.4; 5 Earth 15.4-17.6; 6 stars 17.6-19.6; 7 towards Mars 19.6-21.8;
+  8 Mars 21.8-29.0 (a speck at 22.9, eyes 2->5, impact 24.2 with shake and a dust burst, the line's file at 25.0,
+  "Fatality avoided" and the lamp at 26.0). Flip periods per shot 1.4 -> 0.3 s. Dials on until the impact; long
+  numbers sit on a plate under the dial. Damon at MARS_S 0.85 so the wreck lands on the ground in frame.
+  29 s + the 2 s sign-off.
