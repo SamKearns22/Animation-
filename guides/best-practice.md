@@ -46,6 +46,9 @@ If two files disagree, this file wins; then fix the other file.
   music or an artist's signature look.
 
 ## 1.2 Movement and acting
+- **Check that the feeling reads (Roadster, 16 Oct):** sad or weary = brows raised in the middle, mouth corners down,
+  closed eyes drooping at the outer corners; calm upward arcs for closed eyes and lifted mouth corners read as content,
+  even mid-sigh. Before sending, ask of each key face: would a stranger name the right feeling at phone size?
 - **Natural, moderate movement for every character (Sam, 16 Oct; applies to all films):** never stock-still like a
   robot or a scarecrow by default, never frantic unless the script calls for it. Normal movement that fits the scene
   (weight shifts, glances, small gestures, posture, a sigh). If unsure what suits a character or scene, describe it to
@@ -92,6 +95,11 @@ and the research in `movement.md`.
   one look: who does what to whom, and the result stays visible.
 
 ## 1.3 Staging, continuity and layering
+- **Physical sense (Roadster, 16 Oct):** real sizes (a car is about 2.5 times a person's height); something falling
+  straight onto a person stays the same size (same distance from us) and must hit them, never pass in front of them;
+  whatever lands on someone hides or squashes them; something above a person's head is out of a level shot, so show
+  what they see (a shadow, a reflection). Check these on the stills, before the animatic.
+- **Read every word in a reference at full size before planning** (Roadster: the dial read ALTITUDE, not speed).
 - **Recreating real footage (Roadster, 16 Oct: the ramp took three rounds):** before drawing anything, (1) step
   through the source at 6-10 frames a second over every key action and write down positions, angles and timings per
   frame; (2) work out the source camera (where it stands, what it looks along) and build any set the action touches
@@ -161,6 +169,11 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Place action by sightlines before animating:** `filmkit.visible_spots` lists floor spots seen in every chosen
   camera, so an attack seen in two shots is placed once, correctly.
 
+## 1.3b Keeping old films working (Roadster, 16 Oct)
+- Never give a new tool the name of an existing file: `pencil.py` was replaced by a different tool and silently broke
+  Dam and the rap battles (fixed by pointing them at `pencil_cartoon.py`). Before replacing or renaming a module, search
+  for every file that imports it, and render one still of each film that uses it.
+
 ## 1.4 Sound
 Sources: EBU R 128 and streaming-platform loudness practice; standard audio-editing practice. On sound
 design as storytelling: Walter Murch and the film-sound literature.
@@ -197,6 +210,11 @@ design as storytelling: Walter Murch and the film-sound literature.
 - **Music:** original or properly licensed; never lift a show's or film's music.
 
 ## 1.5 Look and art direction
+- **Effects are never Looney Tunes (Roadster dust, 16 Oct):** dust, smoke and explosions are built from many irregular
+  parts (a low wall, ragged billows with dark undersides and light tops, streaks, fine particles, debris that lands and
+  stays) and they thin over time. Ask Sam for a photo reference for any big effect before drawing it.
+- **A detail too small to read looks like a glitch** (the visor reflection read as a white bubble, then a black speck):
+  give it a clear silhouette at phone size, or ask Sam whether to keep it.
 - **One coherent look per film,** with a defined palette, line and texture, held in every shot.
 - **Spend detail where the eye should go:** faces, hands, the key prop. The rest is simpler, especially
   towards the frame edges.
