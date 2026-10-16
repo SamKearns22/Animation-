@@ -123,3 +123,5 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Sam (16 Oct): the sigh read as happy and content (mouth corners up, closed eyes as calm arcs). Now: uneasy while
   looking about (flat mouth, brows up in the middle), weary on the sigh (lips apart on the breath out, closed eyes
   drooping at the outer corners), low and lonely looking at the floor (mouth corners down, sad brows); alert at T_SEEN.
+- The visor reflection removed (16 Oct): too small to read at this framing (a white bubble, then a black speck);
+  the spreading shadow and his widening eyes carry the moment.
