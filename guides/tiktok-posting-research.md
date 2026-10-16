@@ -99,6 +99,17 @@ more of the way through.
   two niche and one or two topical, claim a five-tag cap since 2025, and say hashtags never beat a video people finish
   and share. Caption and spoken search words count for more. So: few, specific tags, matched to the search words in the caption.
 
+## 8. Paid Promote (16 Oct 2026, Sam asked about boosting the Bayeux film)
+- Promote turns a posted video into an ad in the For You feed. Goals: views, likes and comments, followers, profile
+  views; audience automatic or custom (age, gender, interests); budget and days. Sources (first.media, AndR, Printify,
+  TikTok's own business blog): it doesn't change the video's organic reach directly; TikTok advises promoting your
+  best-performing videos, not ones you feel should have done better; creators report "views" goals bring views but few
+  follows. Only videos with original sound or Commercial Music Library sound can be promoted.
+- Paid political ads are banned on TikTok, so films about politicians (Polanski, the Press Secretary) can't be promoted;
+  Bayeux, The Salt and Roadster-type films can.
+- What it buys is strangers' first seconds: a video whose strangers swipe early pays for swipes. Check the video's
+  average watch, completion and retention curve in TikTok Studio first.
+
 ## Sources
 - TikTok Newsroom: https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you
 - TikTok Community Guidelines, For You feed eligibility (UK): https://www.tiktok.com/safety/en-GB/policies-and-engagement/fyf-standards
