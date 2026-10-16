@@ -105,3 +105,12 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   (4) Hook Text: "Tesla Kills Two Birds With One Stone 🚀" (the rocket as a Noto emoji image at the end of the line).
   (5) New standing rule for every film: natural, moderate movement (guides/satire.md, best-practice.md 1.2).
   Space shots: Sam loves them - leave them alone unless he asks.
+- Sam's animatic-2 notes (16 Oct), done: the ramp is now ONE 3D curve (flat run, curve to vertical, tall vertical,
+  the curl to 170 deg, then a 3.8 m overhang the whole car hangs from) seen from the side-diagonal camera of his
+  170-deg reference; the car is placed on the same curve with the same camera (`car_on_ramp`), so it stays centred
+  on the surface in perspective every frame; off the top it rolls upright while its nose dips to the ground, jets
+  firing, then flies left. Exit signs removed (no signs in the hangar). Dial car icons removed (cluttering). Shot 8:
+  once the car's underside reaches his helmet he is squashed down under it (never passes in front of him). The dust
+  rebuilt after Sam's dust-storm photo: a dense low wall, many ragged billows with dark undersides and pale tops,
+  streaky curtains, dark grit spraying out, dirt clods, stones and car parts on Mars gravity landing and staying;
+  the cloud thins over ~2 s to a haze. Not Looney Tunes.

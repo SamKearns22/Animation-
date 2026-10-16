@@ -423,8 +423,8 @@ HAIR = (112, 80, 52)
 def damon(img, cam, x, y, s, st=None, t=0.0):
     """Watney in his suit, front view. st: look_up 0..1, wide 1..6 (the eyes-widening strength), visor_car
     (0..1, the car's reflection growing in the gold visor)."""
-    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0), **(st or {}))
-    L = PoseLocal(cam, x, y, s, st['lean'], st['rise'])
+    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0, squash=1.0), **(st or {}))
+    L = PoseLocal(cam, x, y, s, st['lean'], st['rise'], st['squash'])
     p = B.Pen(img, L)
     R = lambda pts, sd, a=4: rough(pts, a, sd)
     # backpack showing past the shoulders
@@ -476,14 +476,15 @@ ARM_HIP_R = ((235, 250), (135, 385))             # his left hand on his hip
 
 class PoseLocal(B.Local):
     """A person's own coordinates with the whole body leaning (degrees) about the point between the feet."""
-    def __init__(self, cam, ox, oy, s, lean=0.0, rise=0.0):
+    def __init__(self, cam, ox, oy, s, lean=0.0, rise=0.0, squash=1.0):
         super().__init__(cam, ox, oy, s)
+        self.squash = squash                              # flattened under something (height kept above the feet)
         self.c, self.sn = math.cos(math.radians(lean)), math.sin(math.radians(lean))
         self.rise = rise                                  # the upper body lifting (a breath in) or sinking (+)
 
     def P(self, x, y):
         y = y - self.rise * min(1.0, max(0.0, (440 - y) / 440)) if self.rise else y
-        dy = y - 928
+        dy = (y - 928) * self.squash
         return super().P(x * self.c - dy * self.sn, 928 + x * self.sn + dy * self.c)
 
 
@@ -645,6 +646,122 @@ def _eye(p, ex, ey, sgn, k, up, turn=0.0, down=0.0):
 
 
 # ================================================ THE SETS =========================================================
+
+# ============================================== THE RAMP (one 3D curve) =============================================
+# Ramp axes (cm): X forward along the floor, Y to the ramp's left, Z up. The centre line: a short flat run, a curve
+# up to vertical, a tall vertical stretch, then the curl over the top to 170 deg, where the car hangs upside down.
+# The camera looks at it from a side-diagonal angle (Sam's ref 33-35 and the 170 deg PITCH frame): it rises at the
+# right and curls over to the upper left. The car is placed on the same curve with the same camera, so it stays on
+# the centre line, at the ramp's own perspective, in every frame.
+RAMP_HW = 190                                   # half the ramp's width
+RAMP_SEGS = [(220, 0.0), (700, 90.0), (900, 0.0), (560, 80.0), (380, 0.0)]   # (length, degrees turned); the last
+#   straight is the overhang the whole car hangs from (Sam, 16 Oct)
+
+
+def _ramp_line(step=10.0):
+    pts, ang = [np.array([0.0, 0.0, 0.0])], [0.0]
+    th = 0.0
+    for length, turn in RAMP_SEGS:
+        n = max(1, int(length / step))
+        for _ in range(n):
+            th += math.radians(turn) / n
+            d = np.array([math.cos(th), 0.0, math.sin(th)]) * (length / n)
+            pts.append(pts[-1] + d)
+            ang.append(th)
+    P = np.array(pts)
+    s = np.concatenate([[0], np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))])
+    return P, np.array(ang), s
+
+
+RAMP_P, RAMP_TH, RAMP_S = _ramp_line()
+RAMP_LEN = RAMP_S[-1]
+_fw = np.array([0.74, 0.67, 0.0])               # the ramp's forward direction, seen from the camera: right and away
+CAM_R = np.stack([_fw, np.cross([0, 0, 1.0], _fw), [0, 0, 1.0]], 1)   # ramp axes -> camera (x right, y away, z up)
+CAM_F = 7000.0                                  # camera distance (cm): mild perspective
+_q = RAMP_P @ CAM_R.T
+RAMP_SCALE = 960.0 / (_q[:, 2].max() - _q[:, 2].min())               # the ramp fills about half the frame's height
+RAMP_ORIGIN = (560 - RAMP_SCALE * (_q[:, 0].min() + _q[:, 0].max()) / 2, 1300.0)   # centred in the frame
+
+
+def ramp_px(W):
+    """A ramp-space point (cm) -> hangar world pixels, and its depth (cm, + away)."""
+    q = np.asarray(W, float) @ CAM_R.T
+    k = CAM_F / (CAM_F + q[..., 1])
+    return np.stack([RAMP_ORIGIN[0] + q[..., 0] * RAMP_SCALE * k, RAMP_ORIGIN[1] - q[..., 2] * RAMP_SCALE * k], -1), q[..., 1]
+
+
+def ramp_at(s):
+    """Centre point, tangent angle and frame at distance s along the ramp."""
+    s = min(max(s, 0.0), RAMP_LEN)
+    i = int(np.searchsorted(RAMP_S, s).clip(1, len(RAMP_S) - 1))
+    f = (s - RAMP_S[i - 1]) / max(1e-9, RAMP_S[i] - RAMP_S[i - 1])
+    P = RAMP_P[i - 1] + (RAMP_P[i] - RAMP_P[i - 1]) * f
+    th = RAMP_TH[i - 1] + (RAMP_TH[i] - RAMP_TH[i - 1]) * f
+    tang = np.array([math.cos(th), 0.0, math.sin(th)])
+    nrm = np.array([-math.sin(th), 0.0, math.cos(th)])          # the surface's up (towards the inside of the curve)
+    return P, th, tang, nrm
+
+
+def car_view_on(R_world, pos_world):
+    """A View for the car with its own axes given in ramp space (columns: forward, left, up) at a ramp-space
+    position; returns (screen x, y, scale px per cm, View)."""
+    (sx, sy), depth = ramp_px(pos_world)
+    v = View()
+    v.R = CAM_R @ R_world
+    v.Rc = R_world
+    v.focal = CAM_F + depth
+    return sx, sy, RAMP_SCALE * CAM_F / (CAM_F + depth), v
+
+
+def car_on_ramp(s):
+    """The car at distance s along the ramp: nose along the ramp, wheels on the surface, centred."""
+    P, th, tang, nrm = ramp_at(s)
+    R = np.stack([tang, np.array([0, 1.0, 0]), nrm], 1)
+    return car_view_on(R, P + nrm * CENTRE[2]) , R, P
+
+
+def draw_ramp(img, cam):
+    p = B.Pen(img, cam)
+    lat = np.array([0, 1.0, 0])
+    idx = list(range(0, len(RAMP_P), 3)) + [len(RAMP_P) - 1]
+    cam_pos = np.linalg.inv(CAM_R) @ np.array([0, -CAM_F, 0])  # where the camera stands, in ramp space
+    # the scaffold tower behind the curve
+    for j in range(0, len(idx) - 6, 6):
+        a, b = idx[j], idx[j + 6]
+        if RAMP_TH[a] < math.radians(60):
+            continue
+        for off in (RAMP_HW * 0.8, -RAMP_HW * 0.8):
+            A = RAMP_P[a] - ramp_at(RAMP_S[a])[3] * 160 + lat * off
+            Bb = RAMP_P[b] - ramp_at(RAMP_S[b])[3] * 160 + lat * off
+            (pa, _), (pb, _) = ramp_px(A), ramp_px(Bb)
+            p.line([tuple(pa), tuple(pb)], (76, 78, 86), 3)
+        A1 = RAMP_P[a] - ramp_at(RAMP_S[a])[3] * 160 + lat * RAMP_HW * 0.8
+        B1 = RAMP_P[b] - ramp_at(RAMP_S[b])[3] * 160 - lat * RAMP_HW * 0.8
+        p.line([tuple(ramp_px(A1)[0]), tuple(ramp_px(B1)[0])], (60, 62, 70), 2)
+    quads = []
+    for a, b in zip(idx, idx[1:]):
+        _, _, _, na = ramp_at(RAMP_S[a])
+        corners = [RAMP_P[a] + lat * RAMP_HW, RAMP_P[b] + lat * RAMP_HW, RAMP_P[b] - lat * RAMP_HW, RAMP_P[a] - lat * RAMP_HW]
+        mid = (RAMP_P[a] + RAMP_P[b]) / 2
+        front = np.dot(na, cam_pos - mid) > 0
+        depth = ramp_px(mid)[1]
+        quads.append((depth, corners, front, a, b))
+    order = sorted(quads, key=lambda q: -q[0])
+    for depth, corners, front, a, b in order:
+        pts = [tuple(ramp_px(c)[0]) for c in corners]
+        p.poly(pts, (198, 198, 196) if front else (112, 112, 118), None)
+    for depth, corners, front, a, b in order:                   # the red neon edges and the centre line, on top
+        pts = [tuple(ramp_px(c)[0]) for c in corners]
+        p.line([pts[0], pts[1]], (240, 70, 64), 7)
+        p.line([pts[2], pts[3]], (240, 70, 64), 7)
+        if front:
+            p.line([tuple(ramp_px(RAMP_P[a])[0]), tuple(ramp_px(RAMP_P[b])[0])], (246, 246, 240), 2.4)
+    (fp, _) = ramp_px(np.array([[-120, RAMP_HW + 60, 0], [140, RAMP_HW + 60, 0], [140, -RAMP_HW - 60, 0],
+                                [-120, -RAMP_HW - 60, 0]]))
+    p.poly([tuple(q) for q in fp], (150, 150, 152), INK, 3)      # the floor plate (drawn last: at the front)
+    return None
+
+
 def hangar(img, cam, t=0.0):
     """The dark hangar: the ramp (grey concrete, red neon edges, a white centre line) curving up from a floor plate
     to nearly vertical, a steel scaffold tower behind its right side, roof beams and lights high up, a lit board."""
@@ -658,13 +775,10 @@ def hangar(img, cam, t=0.0):
         x = X0 + 30 + i * 80
         p.line([(x, 110), (x + 40, 330)], (30, 30, 38), 2)
         p.ell(x + 10, 150 + 6 * (i % 3), 4, 4, (220, 220, 200), None)
-    # the back wall: tall panels, exit signs, a few small blue work lights (as in the original), no jokes
+    # the back wall: tall panels and a few small blue work lights (as in the original); no signs (Sam, 16 Oct)
     for i in range(31):
         x = X0 + 20 + i * 130
         p.line([(x, 360), (x, 1290)], (26, 26, 32), 2)
-    for ex in (80, -1240):
-        p.poly(rough([(ex, 1150), (ex + 110, 1150), (ex + 110, 1196), (ex, 1196)], 2, 60), (40, 150, 80), INK, 2)
-        _text(img, cam, ex + 55, 1173, 'EXIT', 20, (230, 250, 230))
     for bx in (-1700, -900, -420, 300):
         p.ell(bx, 1230, 9, 14, (90, 150, 230), None)
     # floor, with the long red light strips the car lands among
@@ -675,39 +789,15 @@ def hangar(img, cam, t=0.0):
     for y, x0, x1 in ((1330, -1900, 380), (1420, -2100, 120)):
         p.line([(x0, y), (x1, y)], (120, 30, 34), 9)
         p.line([(x0, y), (x1, y)], (236, 64, 60), 4)
-    # the ramp's centre line: a curve from the floor plate (bottom) up to near-vertical (top)
-    base, top = (660, 1300), (470, 370)
-    def spine(u):                                              # u 0 at the foot .. 1 at the top
-        x = base[0] + (top[0] - base[0]) * u ** 2.2 + 70 * math.sin(u * math.pi) * 0.6
-        y = base[1] - (base[1] - top[1]) * (1 - (1 - u) ** 1.6)
-        return x, y
-    # the scaffold tower behind the right edge
-    for u in np.linspace(0.05, 0.95, 12):
-        x, y = spine(u)
-        x2, y2 = spine(min(1.0, u + 0.075))
-        p.line([(x + 110, y), (x2 + 110, y2)], (76, 78, 86), 3)
-        p.line([(x + 170, y), (x2 + 170, y2)], (76, 78, 86), 3)
-        p.line([(x + 110, y), (x2 + 170, y2)], (60, 62, 70), 2)
-        p.line([(x + 170, y), (x2 + 110, y2)], (60, 62, 70), 2)
-    us = np.linspace(0, 1, 30)
-    half = lambda u: 120 - 55 * u                              # narrower with height (further away)
-    left = [(spine(u)[0] - half(u), spine(u)[1]) for u in us]
-    right = [(spine(u)[0] + half(u), spine(u)[1]) for u in us]
-    p.poly(left + right[::-1], (196, 196, 194), INK, 3)
-    p.poly([(spine(u)[0] - half(u) * 0.2, spine(u)[1]) for u in us[:20]] +
-           [(spine(u)[0] - half(u) * 0.9, spine(u)[1]) for u in us[:20]][::-1], (176, 176, 176), None)   # a flat shadow side
-    p.line(left, (240, 70, 64), 9)
-    p.line(right, (240, 70, 64), 9)
-    p.line([spine(u) for u in us], (246, 246, 240), 3)
-    p.poly(rough([(470, 1290), (820, 1290), (850, 1330), (440, 1330)], 2, 61), (150, 150, 152), INK, 3)  # floor plate
-    return spine
+    draw_ramp(img, cam)
+    return None
 
 
 DIAL_Y, DIAL_R = 1385, 92
 DIAL_X = (165, 800)                          # inside TikTok's safe area (x 60-900, y 310-1500; buttons on the right)
 
 
-def dials(img, cam, g=1.0, alt=0.0, pitch=0.0, icons=True):
+def dials(img, cam, g=1.0, alt=0.0, pitch=0.0, icons=False):   # icons removed (Sam: cluttering)
     """The demo's two dials, kept as they are, with whatever numbers the story needs (G-FORCE left, ALTITUDE right).
     Big enough to read on a phone and clear of TikTok's buttons; a number too long for its dial sits on a plate above."""
     p = B.Pen(img, cam)
@@ -1009,42 +1099,58 @@ def hangar_cam_x(t):
     return 540 - 640 * ease((t - 4.6) / 2.3) - 30 * max(0.0, t - 6.9)
 
 
+R_FLAT = np.array([[-1.0, 0, 0], [0, -1.0, 0], [0, 0, 1.0]])   # upright, nose back along -X (flying left, as the original)
+S_START, S_TOP = 0.5 * RAMP_LEN, RAMP_LEN - 300.0     # the whole car under the overhang, its tail clear of the end
+HOVER_S = 0.6                                                   # its size once it is flying towards us
+
+
+def _world_y(deg):
+    return rot('y', math.radians(deg))
+
+
 def hangar_car(t):
-    """Where the car is in shot 1: (x, y, scale, View, jets). Every frame changes; nothing jumps."""
-    global HANGAR_SPINE
-    if HANGAR_SPINE is None:
-        HANGAR_SPINE = hangar(B.canvas((0, 0, 0)), B.Cam(1.0, 540, 960))
-    sp = HANGAR_SPINE
-    if t < T_DROP:                                                  # round the curl, seen from behind; hangs at the top
-        u = _climb_u(t)
-        x, y = sp(min(u, 0.95))                                     # on the surface, never past its top edge
-        k = (120 - 55 * u) / 120
-        return x, y - 40 * k * (1 - u) ** 0.5, 0.75 * k, View(yaw=-90, elev=10, flip=flip_angle(t)), 0.0
-    tx, ty = sp(0.95)
-    k0 = 0.75 * 65 / 120
-    if t < T_UPRIGHT:                                               # falls, turning nose-down then upright; jets fire
+    """Where the car is in shot 1: (x, y, scale, View, jets). On the ramp it is placed on the 3D curve with the
+    ramp's own camera (centred, on the surface, in perspective); every frame changes and nothing jumps."""
+    if t < T_DROP:                                                  # round the curl, slowing into the hang at the top
+        k = min(1.0, t / T_TOP)
+        s_ = S_START + (S_TOP - S_START) * (1 - (1 - k) ** 1.15) + 25 * max(0.0, t - T_TOP)
+        (sx, sy, sc, v), _, _ = car_on_ramp(s_)
+        return sx, sy, sc, v, 0.0
+    (sx0, sy0, sc0, v0), R0, P0 = car_on_ramp(S_TOP + 25 * (T_DROP - T_TOP))
+    if t < T_UPRIGHT:                                               # falls: nose dips to the ground as it rolls upright
         f = (t - T_DROP) / (T_UPRIGHT - T_DROP)
-        x = tx - 230 * ease(f)
-        y = ty - 30 + 330 * f * f
-        yaw = -90 - 90 * ease(f)                                    # from seen-from-behind to side-on, nose left
+        e = ease(f)
+        roll = 180 * (1 - e)
+        dip = 10 * (1 - f) - 55 * math.sin(math.pi * f)
+        R = _world_y(dip) @ R_FLAT @ rot('x', math.radians(roll))
+        v = View()
+        v.R, v.Rc, v.focal = CAM_R @ R, R, v0.focal
+        x = sx0 - 230 * e
+        y = sy0 + 330 * f * f
         jets = ease((t - T_JETS) / 0.25)
-        return x, y, k0 + (0.72 - k0) * ease(f), View(yaw=yaw, elev=10, flip=flip_angle(t)), jets
-    x_up, y_up = tx - 230, ty - 30 + 330
+        return x, y, sc0 + (HOVER_S - sc0) * e, v, jets
+    x_up, y_up = sx0 - 230, sy0 + 330
+
+    def flat_view(flip):
+        R = _world_y(flip) @ R_FLAT
+        v = View()
+        v.R, v.Rc, v.focal = CAM_R @ R, R, v0.focal
+        return v
     if t < T_SETTLE:                                                # flies left on its jets, sinking into the smoke
         f = (t - T_UPRIGHT) / (T_SETTLE - T_UPRIGHT)
         x = x_up + (HOP_X - x_up) * ease(f)
         y = y_up + (1240 - y_up) * ease(f) + 10 * math.sin(t * 9) * (1 - f)
-        return x, y, 0.72, View(yaw=-180, elev=10, flip=-360 + 4 * math.sin(t * 7)), 1.0
+        return x, y, HOVER_S, flat_view(4 * math.sin(t * 7)), 1.0
     if t < T_UP:                                                    # our addition: it won't stop - hops and flips
         ph = (t - T_SETTLE - 0.2) / 1.1
         if ph < 0:
-            return HOP_X, 1240, 0.72, View(yaw=-180, elev=10, flip=-360), 0.4
+            return HOP_X, 1240, HOVER_S, flat_view(0.0), 0.4
         h = [300, 460, 620][min(2, int(ph))]
         y = 1240 - h * math.sin(math.pi * (ph % 1))
-        return HOP_X - 25 * ph, y, 0.72, View(yaw=-180, elev=10, flip=flip_angle(t)), 1.0
+        return HOP_X - 25 * ph, y, HOVER_S, flat_view(flip_angle(t)), 1.0
     f = (t - T_UP) / (S1('hangar') - T_UP)                          # full jets: straight up, out of the top
     xh = HOP_X - 25 * (T_UP - T_SETTLE - 0.2) / 1.1
-    return xh, 1240 - 1450 * f ** 1.5, 0.72, View(yaw=-180, elev=10, flip=flip_angle(t)), 1.0
+    return xh, 1240 - 1450 * f ** 1.5, HOVER_S, flat_view(flip_angle(t)), 1.0
 
 
 def picture_hangar(t):
@@ -1237,45 +1343,185 @@ T_ENTER = T_IMPACT - 0.35                   # the car drops into the top of fram
 
 
 def picture_mars(t):
-    """Shot 8. He looks up, hopeful; he can't see straight up in this framing, so we see what he sees in his visor
-    (the car's reflection growing) and its shadow spreading on the ground round him; then it drops into the top of
-    frame at full size (same distance from us as him: no growing) and lands on him upside down, jets off."""
+    """Shot 8. He looks about, sighs, gives up; the shadow spreads and the car grows in his visor; it drops into the
+    top of frame at full size (same distance from us as him) and lands ON him, upside down, jets off: once its
+    underside reaches his helmet he is squashed down under it, so it never passes in front of him. Then the dust."""
     shake = 0.0
-    if T_IMPACT <= t < T_IMPACT + 0.45:
-        k = 1 - (t - T_IMPACT) / 0.45
-        shake = 26 * k * math.sin((t - T_IMPACT) * 90)
+    if T_IMPACT <= t < T_IMPACT + 0.5:
+        k = 1 - (t - T_IMPACT) / 0.5
+        shake = 24 * k * math.sin((t - T_IMPACT) * 85)
     cam = B.Cam(1.0, 540 + shake, 960 + shake * 0.6)
     img = B.canvas((0, 0, 0))
     mars(img, cam, t)
     ground = MARS_NECK + 928 * MARS_S
+    helmet_top = MARS_NECK - 292 * MARS_S
     p = B.Pen(img, cam)
-    if T_SEEN <= t < T_IMPACT:                                      # the falling car's shadow, spreading
-        f = ease((t - T_SEEN) / (T_IMPACT - T_SEEN))
-        w = 80 + 440 * f
-        p.ell(540, ground - 6, w, w * 0.16, (150, 80, 50), None)
     if t < T_IMPACT:
-        damon(img, cam, 540, MARS_NECK, MARS_S, damon_state(t))
-        if t >= T_ENTER:                                            # dropping under gravity, in front of him
-            v = View(flip=180 + 25 * (1 - (t - T_ENTER) / (T_IMPACT - T_ENTER)), **MARS_VIEW)
+        if T_SEEN <= t:                                             # the falling car's shadow, spreading
+            f = ease((t - T_SEEN) / (T_IMPACT - T_SEEN))
+            w = 80 + 440 * f
+            p.ell(540, ground - 6, w, w * 0.16, (150, 80, 50), None)
+        st = damon_state(t)
+        v = View(flip=180 + 25 * (1 - min(1.0, max(0.0, (t - T_ENTER) / (T_IMPACT - T_ENTER)))), **MARS_VIEW)
+        y_car = None
+        if t >= T_ENTER:
             land_y = ground - car_bottom(v, CAR_S_MARS)
             f = (t - T_ENTER) / (T_IMPACT - T_ENTER)
-            y = -700 + (land_y + 700) * f * f
-            car(img, cam, 540, y, CAR_S_MARS, v, jets=0.0, t=t)
-    else:
-        v = View(flip=180, **MARS_VIEW)
-        debris(img, cam, 540, ground - 10, CAR_S_MARS * 0.6, spread=1.4)
-        car(img, cam, 540, ground - car_bottom(v, CAR_S_MARS, 0.85), CAR_S_MARS, v, crush=0.85,
-            headlight=t >= T_LAMP and not (T_LAMP + 0.12 < t < T_LAMP + 0.24))     # the lamp flickers on with the line
-        d = t - T_IMPACT
-        if d < 1.4:                                                 # the dust burst: thrown out, then settling
-            g = 0.55 + 0.45 * ease(d / 0.3)
-            fade = 1 - ease((d - 0.45) / 0.95)
-            if fade > 0.02:
-                smoke_cloud(img, cam, 540, ground - 60 * fade, 1300 * g, 620 * fade + 40, 8, fill=(222, 156, 112),
-                            shade=(190, 120, 82))
-    if t < T_IMPACT:
-        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, M0 - 0.01)), icons=False)  # clear of him
+            y_car = -700 + (land_y + 700) * f * f
+            under = y_car + car_bottom(v, CAR_S_MARS)
+            if under > helmet_top:                                  # it is on him: he is squashed down under it
+                st['squash'] = max(0.05, (ground - under) / (ground - helmet_top))
+        damon(img, cam, 540, MARS_NECK, MARS_S, st)
+        if y_car is not None:
+            car(img, cam, 540, y_car, CAR_S_MARS, v, jets=0.0, t=t)
+        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t))
+        return img
+    d = t - T_IMPACT
+    v = View(flip=180, **MARS_VIEW)
+    dust_burst(img, cam, 540, ground, d, layer='back')
+    car(img, cam, 540, ground - car_bottom(v, CAR_S_MARS, 0.85), CAR_S_MARS, v, crush=0.85,
+        headlight=t >= T_LAMP and not (T_LAMP + 0.12 < t < T_LAMP + 0.24))     # the lamp flickers on with the line
+    dust_burst(img, cam, 540, ground, d, layer='front')
     return img
+
+
+G_MARS = 3.71 * CAR_S_MARS * 100              # Mars gravity in px/s^2 at Damon's distance (a third of Earth's)
+DUST = (204, 150, 104)          # Mars dust, after Sam's dust-storm reference (16 Oct): pale sunlit tops,
+DUST_D = (156, 100, 64)         # dark brown undersides, streaky curtains, dark grit spraying from the edges
+DUST_L = (236, 204, 162)
+DUST_DD = (112, 70, 46)
+
+
+def _lumpy(cx, cy, rx, ry, seed, n=18, amt=0.22):
+    r = np.random.default_rng(seed)
+    k = r.uniform(1 - amt, 1 + amt, n)
+    k = (k + np.roll(k, 1) + np.roll(k, -1)) / 3
+    return [(cx + rx * k[i] * math.cos(2 * math.pi * i / n), cy + ry * k[i] * math.sin(2 * math.pi * i / n)) for i in range(n)]
+
+
+def _pieces(seed=21):
+    """Everything the crash throws: specks, dirt clods and stones, and car parts; each its own size and speed."""
+    r = np.random.default_rng(seed)
+    out = []
+    for i in range(160):
+        out.append(dict(kind='speck', vx=r.normal(0, 380), vy=-r.uniform(250, 950), size=r.uniform(2, 5),
+                        x0=r.normal(0, 120), col=DUST_D if i % 3 else (120, 70, 44)))
+    for i in range(26):
+        out.append(dict(kind='clod', vx=r.normal(0, 300), vy=-r.uniform(300, 800), size=r.uniform(9, 22),
+                        x0=r.normal(0, 160), col=(150, 86, 52) if i % 2 else (120, 70, 44), spin=r.uniform(-8, 8), seed=i))
+    parts = [('panel', (238, 238, 234)), ('panel', (226, 226, 222)), ('glass', (196, 210, 226)), ('glass', (196, 210, 226)),
+             ('glass', (180, 196, 214)), ('trim', (40, 40, 44)), ('trim', (226, 46, 52)), ('hubcap', (58, 60, 66)),
+             ('panel', (238, 238, 234)), ('glass', (196, 210, 226))]
+    for i, (kind, col) in enumerate(parts):
+        out.append(dict(kind=kind, vx=r.choice([-1, 1]) * r.uniform(200, 520), vy=-r.uniform(450, 1000),
+                        size=r.uniform(14, 30), x0=r.normal(0, 140), col=col, spin=r.uniform(-10, 10), seed=100 + i))
+    return out
+
+
+PIECES = _pieces()
+
+
+def _piece_at(pc, d, ground):
+    """Thrown, falling under Mars gravity, landing and staying where it lands (a little bounce for parts)."""
+    t_land = 2 * -pc['vy'] / G_MARS
+    tt = min(d, t_land)
+    x = pc['x0'] + pc['vx'] * tt
+    y = pc['vy'] * tt + 0.5 * G_MARS * tt * tt
+    ang = pc.get('spin', 0) * tt
+    return x, ground + y - (6 if d < t_land else 0) + 8 * (abs(pc['x0'] + pc['vx'] * t_land) > -1), ang, d >= t_land
+
+
+def dust_burst(img, cam, x, ground, d, layer):
+    """The crash, not a cartoon puff: a low ring of dirt rolling out along the ground with ragged edges, a plume
+    billowing up and drifting off on the breeze, fine dust thrown everywhere, clods, stones and car parts flying out
+    through it on Mars gravity and staying where they land; the dust thins over about two seconds to a faint haze.
+    Flat tones and one outline (guides/satire.md), drawn on layers so the cloud can thin."""
+    p = B.Pen(img, cam)
+    if layer == 'front':                                         # the thrown things (in front of the wreck)
+        for i, pc in enumerate(PIECES):
+            px, py, ang, landed = _piece_at(pc, d, ground)
+            px += x
+            sz = pc['size']
+            if pc['kind'] == 'speck':
+                p.ell(px, py, sz, sz * (0.6 if landed else 1), pc['col'], None)
+            elif pc['kind'] == 'hubcap':
+                p.ell(px, py, sz, sz * (0.35 if landed else abs(math.cos(ang)) * 0.9 + 0.1), pc['col'], INK, 2)
+            else:
+                k = 0.5 if landed else 1.0
+                pts = [(px + sz * math.cos(ang + q), py + sz * k * 0.6 * math.sin(ang + q))
+                       for q in (0, 1.7 + 0.3 * (i % 3), 3.4, 4.9)]
+                p.poly(pts, pc['col'], INK, 1.8)
+    # the cloud, on its own layer so it can thin
+    if d > 3.2:
+        return
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    q = B.Pen(lay, cam)
+    grow = 1 - math.exp(-d * 6)
+    rise = 1 - math.exp(-d * 2.0)
+    wind = 80 * d
+    r = np.random.default_rng(55 if layer == 'back' else 56)
+    blobs = []
+    if layer == 'back':                                          # the plume: many ragged billows in a rising dome
+        for i in range(36):
+            th = math.radians(r.uniform(-165, -15))
+            dist = r.uniform(0.15, 1.0) ** 0.7
+            reach = (260 + 420 * rise) * dist
+            bx = x + math.cos(th) * reach * 1.25 + wind * dist
+            by = ground - 40 + math.sin(th) * reach * (0.6 + 0.8 * rise)
+            rad = r.uniform(45, 115) * (0.55 + 0.45 * grow) * (1 + 0.5 * rise * dist)
+            blobs.append((by, bx, rad, 900 + i))
+        for i in range(14):                                      # streaks of dirt thrown out in arcs
+            th = math.radians(r.uniform(-170, -10))
+            L0 = (200 + 650 * grow) * r.uniform(0.5, 1.0)
+            tip = (x + math.cos(th) * L0, ground - 30 + math.sin(th) * L0 * 0.8 + 0.5 * G_MARS * 0.15 * d * d)
+            w = r.uniform(10, 22)
+            nx, ny = -math.sin(th), math.cos(th)
+            q.poly([(x + nx * w, ground - 30 + ny * w), tip, (x - nx * w, ground - 30 - ny * w)], DUST_D, INK, 1.6)
+    else:                                                        # the ring: low, wide billows rolling out along the ground
+        for i in range(30):
+            side = -1 if i % 2 else 1
+            f = r.uniform(0.0, 1.0)
+            bx = x + side * (90 + 760 * grow * f) + wind * 0.4
+            rad = r.uniform(45, 100) * (1.1 - 0.5 * f) * (0.45 + 0.55 * grow)
+            by = ground - rad * r.uniform(0.25, 0.55)
+            blobs.append((by, bx, rad, 1000 + i))
+    if layer == 'back':                                          # streaky curtains of dust down to the ground
+        for i in range(16):
+            cx_ = x + r.uniform(-1, 1) * (180 + 520 * grow) + wind * 0.6
+            top = ground - (120 + 520 * rise) * r.uniform(0.3, 1.0)
+            w = r.uniform(18, 46) * (0.5 + 0.5 * grow)
+            q.poly([(cx_ - w * 0.4, top), (cx_ + w * 0.4, top), (cx_ + w, ground), (cx_ - w, ground)], DUST_D, None)
+            for k in range(3):
+                lx = cx_ + (k - 1) * w * 0.45
+                q.line([(lx, top + 20), (lx + (k - 1) * w * 0.3, ground - 4)], DUST_DD, 2.0)
+    else:                                                        # the dense low wall the ring rolls out of
+        wall = [(x - 120 - 700 * grow, ground)] + [
+            (x + u * (120 + 700 * grow) + wind * 0.4, ground - (90 + 160 * grow) * (1 - abs(u)) ** 0.6 * r.uniform(0.75, 1.1))
+            for u in np.linspace(-1, 1, 24)] + [(x + 120 + 700 * grow, ground)]
+        q.poly(wall, DUST_D, INK, 2.4)
+    for by, bx, rad, sd in sorted(blobs):                         # outlines first, so the cloud has one outer edge
+        q.poly(_lumpy(bx, by, rad * 1.25 + 4, rad * 0.85 + 4, sd, 22, 0.32), INK, None)
+    for by, bx, rad, sd in sorted(blobs):                         # each billow: dark underside, mid body, sunlit top
+        q.poly(_lumpy(bx, by, rad * 1.25, rad * 0.85, sd, 22, 0.32), DUST_D, None)
+        q.poly(_lumpy(bx + rad * 0.15, by + rad * 0.3, rad * 0.95, rad * 0.45, sd + 3, 18, 0.3), DUST_DD, None)
+        q.poly(_lumpy(bx - rad * 0.2, by - rad * 0.2, rad * 0.95, rad * 0.55, sd + 1, 20, 0.3), DUST, None)
+        q.poly(_lumpy(bx - rad * 0.35, by - rad * 0.38, rad * 0.5, rad * 0.26, sd + 2, 16, 0.3), DUST_L, None)
+    if layer == 'back':                                          # dark grit spraying out of the top and the edges
+        for i in range(110):
+            th = math.radians(r.uniform(-175, -5))
+            sp = r.uniform(350, 1100)
+            tt = d
+            gx = x + math.cos(th) * sp * tt
+            gy = ground - 60 + math.sin(th) * sp * tt + 0.5 * G_MARS * tt * tt
+            if gy < ground:
+                g_ = r.uniform(2, 5.5)
+                q.ell(gx, gy, g_, g_, DUST_DD if i % 3 else INK, None)
+    opacity = 1.0 if d < 0.55 else max(0.0, 1.0 - (d - 0.55) / 2.2) * 0.9 + 0.1 * (d < 2.9)
+    if layer == 'front':
+        opacity *= 0.95
+    a = np.asarray(lay).copy()
+    a[..., 3] = (a[..., 3].astype(np.float32) * opacity).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(a))
 
 
 PICTURES = {'hangar': picture_hangar, 'roof': picture_roof, 'clouds': picture_clouds, 'sea': picture_sea,
