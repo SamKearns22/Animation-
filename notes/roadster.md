@@ -35,3 +35,10 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Impact: Sam supplies the crash sound. The car crumples catastrophically on Damon: real impact (screen shake, dust
   ring, roof caved in, wheels splayed, panels buckled, glass and parts scattering under gravity and staying put).
   Damon is simply gone. When "Fatality Avoided" is spoken, one light on the wreck flickers on (a single headlight).
+- Car references in `references/roadster/` (Sam, 16 Oct). Design read from them: white wedge supercar, faceted flat
+  panels (Countach-like), black lower sill band, dark six-spoke wheels, tall rear wing, full-width red light bar,
+  plate "RDSTR", four round exhausts. Front: two small triangular corner headlights + a thin white light bar across
+  the nose (the wreck light is one of these corner headlights; 02 is a Model 3 lamp, used only for the glow).
+  The "hydraulics" are the underside cold-gas jets: four white plumes straight down (03, 05, 08), which make the smoke
+  in the original. 08's body looks like a Cybertruck/Cybercab: used for the jets and smoke only. 04 (white seats,
+  red trim) is for the wreck's exposed interior. Musk (06) is not in the film.
