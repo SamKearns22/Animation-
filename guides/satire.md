@@ -133,13 +133,6 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   at the same volume, to learn whether the fault is in the recording or our processing. Send each sound fix as a
   sound-check file (the soundtrack over one still) before any render.
 
-## Overlays and Hook Text (Roadster, 16 Oct)
-- On-screen readouts (dials, scores) sit inside the safe area and are big enough to read on a phone; no decorative icons
-  beside them (Sam: cluttering). A number too long for its dial shows short (1.3M) with the full figure on a plate.
-- Check the frames under the Hook Text: it must not cover the action of the opening seconds (`finish.py ... --y`).
-  Emoji at the end of the Hook Text are drawn as Noto pictures (`source/fonts/emoji/<hex>.png`; download new ones from
-  fonts.gstatic.com/s/e/notoemoji/latest/<hex>/512.png).
-
 ## Before every render
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit
 alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above

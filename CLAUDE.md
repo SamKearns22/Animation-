@@ -30,12 +30,6 @@ I don't know how to code. Please:
   their own rule (Sonnet, medium effort).
   **If I start a task on the wrong model, refuse and tell me it is on the wrong setting.** Then either let me change it,
   or offer me the option to override the advice.
-- **"Hold" means collect, don't act (16 Oct):** when I say hold, reply to each note with how you understood it and how
-  you'll fix it, change nothing, and do everything in one round when I say go.
-- **Flag your own additions:** anything I didn't ask for (a sign, a reflection, a new joke, a sound) is named as your
-  addition in the message, so I can say no before it costs a round.
-- **Motion-led films (stunts, action): after the cast sheet, go to a quick animatic early**; stills can't show timing,
-  camera moves or physics (Roadster: I asked to skip the stills and see it moving).
 - **Test pictures are expensive, so look at as few as possible.** Check a change on one combined sheet (several small frames
   side by side) rather than one picture at a time; open a frame full size only for a detail a small one can't show; never
   look again at a picture that hasn't changed; and when a fix is simple and certain, trust it and check it with the rest
