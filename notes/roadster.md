@@ -55,3 +55,8 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   panels, "ARES III" down the chest strap, a white chest control box, US flag and NASA patches on the shoulders, a red
   "2" on the shoulder and backpack, dark grey gloves with silver knuckles. Face: short brown hair, a light moustache and
   stubble, steady blue eyes. 22 (the visor close-up) is the model for the eyes-widening close-up; 24 for the front.
+- Space references 25-32 (Sam, 16 Oct), all drawn in Dam's coloured pencil. Shot 6 (stars): deep blue-black with soft
+  blue-violet nebula wisps (25), a faint Milky Way band (26), dense small blue-white stars with a few bright
+  four-point ones (27), and the green comet (28) drifting far behind the car. Shot 7 (Mars): starts small and
+  side-lit in the distance (30), the car flipping towards it as it grows until it fills the upright frame half
+  off-screen (31), with craters, the dark Valles Marineris scar and a white polar cap (29, 32). Hard cut to the surface.
