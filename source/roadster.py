@@ -423,7 +423,7 @@ HAIR = (112, 80, 52)
 def damon(img, cam, x, y, s, st=None, t=0.0):
     """Watney in his suit, front view. st: look_up 0..1, wide 1..6 (the eyes-widening strength), visor_car
     (0..1, the car's reflection growing in the gold visor)."""
-    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0, squash=1.0), **(st or {}))
+    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0, squash=1.0, shut=False), **(st or {}))
     L = PoseLocal(cam, x, y, s, st['lean'], st['rise'], st['squash'])
     p = B.Pen(img, L)
     R = lambda pts, sd, a=4: rough(pts, a, sd)
@@ -556,11 +556,8 @@ def _helmet(img, p, L, st, t):
     p.poly([(hx - R * 0.55, hy - R * 0.86), (hx - R * 0.15, hy - R * 0.98), (hx - R * 0.42, vy + 8),
             (hx - R * 0.78, vy + 2)], VISOR_D, None)
     if st['visor_car'] > 0:                                # the car's reflection, growing as it falls on him
-        k = st['visor_car']
-        cx, cy = hx + 20, hy - R * 0.6
-        w = 16 + 60 * k
-        p.poly([(cx - w, cy + w * 0.2), (cx - w * 0.3, cy - w * 0.25), (cx + w * 0.6, cy - w * 0.2),
-                (cx + w, cy + w * 0.15), (cx - w * 0.9, cy + w * 0.3)], (250, 244, 220), INK, 1.6)
+        k = st['visor_car']                                # a tiny upside-down car, wheels up (not a white blob)
+        car(img, L, hx + 18, hy - R * 0.62, 0.05 + 0.17 * k, View(yaw=-90, elev=4, flip=180))
     p.line(edge, INK, 3.2)
     p.line([(hx + R * 0.36, hy - R * 0.8), (hx + R * 0.62, hy - R * 0.6)], (250, 226, 160), 3)   # a glint line
     p.poly([(hx + R * math.cos(a), hy + R * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 48, endpoint=False)],
@@ -605,7 +602,10 @@ def _face(img, p, st, hx, hy):
     for sgn in (-1, 1):
         ex, ey = hx + sgn * 30, hy - 8 + 5 * down
         p.line([(ex - 14, ey - 13), (ex + 14, ey - 13)], dk(SKIN, 0.82), 2.0)                     # deep-set: lid crease
-        _eye(p, ex, ey, sgn, k, up, turn, down)
+        if st.get('shut'):
+            p.line([(ex - 15 + 30 * u_ / 6, ey + 2 * (1 - ((u_ - 3) / 3) ** 2)) for u_ in range(7)], INK, 2.6)
+        else:
+            _eye(p, ex, ey, sgn, k, up, turn, down)
         br = ey - 21 - 3 * up - 15 * k
         inner_x, outer_x = ex - sgn * 18, ex + sgn * 19
         p.poly([(inner_x, br + 1), (ex, br - 2), (outer_x, br + 2), (outer_x, br + 7), (ex, br + 4), (inner_x, br + 7)],
@@ -986,9 +986,9 @@ SHOTS = [   # (name, start, end): hard cuts
     ('earth', 14.85, 17.05),  # 5: the Earth from space, silent (pencil)
     ('stars', 17.05, 19.05),  # 6: flipping through the stars, the comet far off (pencil)
     ('towards', 19.05, 21.25),# 7: flipping towards Mars as it swells (pencil)
-    ('mars', 21.25, 31.4),    # 8: Damon looks about, sighs, gives up; the car drops upside down on him; the line
+    ('mars', 21.25, 32.0),    # 8: Damon looks about, sighs, gives up; the car drops upside down on him; the line
 ]
-DUR = 31.4
+DUR = 32.0
 # shot 1, timed to the original frame by frame (3.0-6.8 s studied at 6 frames a second)
 T_TOP = 4.3            # reaches the top of the curl, hanging upside down under it
 T_DROP = 4.55          # falls away, nose turning towards the ground
@@ -1001,9 +1001,9 @@ T_LAND1 = T_SETTLE
 M0 = 21.25
 T_GLANCE = M0 + 0.75   # looking about: a glance the other way
 T_SIGH = M0 + 1.35     # a deep sigh: shoulders up and down, hands drop
-T_DOWN = M0 + 2.55     # looks at the floor, as if nobody is coming
-T_SEEN = M0 + 4.15     # the shadow spreads; he looks up; the car grows in his visor
-T_IMPACT = M0 + 5.35
+T_DOWN = M0 + 3.15     # looks at the floor, as if nobody is coming
+T_SEEN = M0 + 4.75     # the shadow spreads; he looks up; the car grows in his visor
+T_IMPACT = M0 + 5.95
 T_LINE = T_IMPACT + 0.8    # roadster-1.m4a starts here (its speech starts 1.02 s in)
 T_LAMP = T_IMPACT + 1.8
 MARS_DIST_FT = 738188976378
@@ -1081,8 +1081,9 @@ def gforce(t):
         return [1.4, 1.1, 0.9, 0.9, 0.9, 0.9, 0.8, 1.1, 1.1, 0.2, 0.4, 0.3, 1.2, 1.0][min(13, int(t * 2))]
     if t < T_UP:
         return 3.3 + 1.5 * math.sin(t * 5)
-    if t < M0:
-        return 1274210.0 * ease((t - T_UP) / 1.2)
+    if t < M0:                                                      # climbs through the journey (Sam: too fast before)
+        k = min(1.0, (t - T_UP) / (S0('stars') - T_UP))
+        return 4.0 * (1274210.0 / 4.0) ** k
     return 1274210.0
 
 
@@ -1100,7 +1101,7 @@ def hangar_cam_x(t):
 
 
 R_FLAT = np.array([[-1.0, 0, 0], [0, -1.0, 0], [0, 0, 1.0]])   # upright, nose back along -X (flying left, as the original)
-S_START, S_TOP = 0.5 * RAMP_LEN, RAMP_LEN - 300.0     # the whole car under the overhang, its tail clear of the end
+S_START, S_TOP = 0.2 * RAMP_LEN, RAMP_LEN - 300.0     # the whole car under the overhang, its tail clear of the end
 HOVER_S = 0.6                                                   # its size once it is flying towards us
 
 
@@ -1321,14 +1322,15 @@ def damon_state(t):
     turn = -1.0 if t < T_GLANCE else (0.8 if t < T_SIGH + 0.2 else 0.0)
     lean = -2.0 + 4.0 * ease((t - T_GLANCE) / 0.45) - 2.0 * ease((t - T_SIGH) / 0.6)
     lean += 0.8 * math.sin((t - T_DOWN) * 2.1) * (T_DOWN <= t < T_SEEN)          # a small shift as he stands there
-    f = ease((t - T_SIGH - 0.35) / 0.55)                          # hands come down during the sigh
+    f = ease((t - T_SIGH - 0.6) / 0.9)                            # hands come down slowly during the sigh
     arms = {'L': _lerp_pose(ARM_VISOR_L, ARM_HANG['L'], f), 'R': _lerp_pose(ARM_HIP_R, ARM_HANG['R'], f)}
-    breath_in, breath_out = ease((t - T_SIGH) / 0.55), ease((t - T_SIGH - 0.6) / 0.8)
-    rise = 12 * breath_in - 18 * breath_out                        # up on the breath in, sinking lower on the way out
+    breath_in, breath_out = ease((t - T_SIGH) / 0.75), ease((t - T_SIGH - 0.8) / 1.0)
+    rise = 26 * breath_in - 40 * breath_out                        # a big breath in, then sinking lower on the way out
     down = ease((t - T_DOWN) / 0.6) * (1 - ease((t - T_SEEN - 0.1) / 0.25))
     look_up = 0.25 + 0.75 * ease((t - T_SEEN - 0.1) / 0.4)
     look_up -= 0.6 * down
-    return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms, rise=rise, down=down,
+    shut = T_SIGH + 0.85 <= t < T_SIGH + 1.6                        # eyes closed on the long breath out
+    return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms, rise=rise, down=down, shut=shut,
                 visor_car=max(0.0, (t - T_SEEN) / (T_IMPACT - T_SEEN)))
 
 
@@ -1452,7 +1454,7 @@ def dust_burst(img, cam, x, ground, d, layer):
                        for q in (0, 1.7 + 0.3 * (i % 3), 3.4, 4.9)]
                 p.poly(pts, pc['col'], INK, 1.8)
     # the cloud, on its own layer so it can thin
-    if d > 3.2:
+    if d > 4.6:
         return
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     q = B.Pen(lay, cam)
@@ -1462,13 +1464,13 @@ def dust_burst(img, cam, x, ground, d, layer):
     r = np.random.default_rng(55 if layer == 'back' else 56)
     blobs = []
     if layer == 'back':                                          # the plume: many ragged billows in a rising dome
-        for i in range(36):
+        for i in range(48):
             th = math.radians(r.uniform(-165, -15))
             dist = r.uniform(0.15, 1.0) ** 0.7
-            reach = (260 + 420 * rise) * dist
+            reach = (360 + 560 * rise) * dist
             bx = x + math.cos(th) * reach * 1.25 + wind * dist
             by = ground - 40 + math.sin(th) * reach * (0.6 + 0.8 * rise)
-            rad = r.uniform(45, 115) * (0.55 + 0.45 * grow) * (1 + 0.5 * rise * dist)
+            rad = r.uniform(55, 140) * (0.55 + 0.45 * grow) * (1 + 0.6 * rise * dist)
             blobs.append((by, bx, rad, 900 + i))
         for i in range(14):                                      # streaks of dirt thrown out in arcs
             th = math.radians(r.uniform(-170, -10))
@@ -1481,7 +1483,7 @@ def dust_burst(img, cam, x, ground, d, layer):
         for i in range(30):
             side = -1 if i % 2 else 1
             f = r.uniform(0.0, 1.0)
-            bx = x + side * (90 + 760 * grow * f) + wind * 0.4
+            bx = x + side * (90 + 900 * grow * f) + wind * 0.4
             rad = r.uniform(45, 100) * (1.1 - 0.5 * f) * (0.45 + 0.55 * grow)
             by = ground - rad * r.uniform(0.25, 0.55)
             blobs.append((by, bx, rad, 1000 + i))
@@ -1516,9 +1518,9 @@ def dust_burst(img, cam, x, ground, d, layer):
             if gy < ground:
                 g_ = r.uniform(2, 5.5)
                 q.ell(gx, gy, g_, g_, DUST_DD if i % 3 else INK, None)
-    opacity = 1.0 if d < 0.55 else max(0.0, 1.0 - (d - 0.55) / 2.2) * 0.9 + 0.1 * (d < 2.9)
-    if layer == 'front':
-        opacity *= 0.95
+    opacity = 1.0 if d < 1.0 else max(0.0, 1.0 - (d - 1.0) / 3.4)    # thick for a second, thinning over 3.4 s
+    if layer == 'front':                                         # the low dust in front settles first, so the wreck
+        opacity *= max(0.0, 1.0 - max(0.0, d - 0.8) / 1.0)      # (and its lamp, on the line) shows while the plume lingers
     a = np.asarray(lay).copy()
     a[..., 3] = (a[..., 3].astype(np.float32) * opacity).astype(np.uint8)
     img.alpha_composite(Image.fromarray(a))

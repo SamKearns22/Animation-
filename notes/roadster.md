@@ -114,3 +114,9 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   rebuilt after Sam's dust-storm photo: a dense low wall, many ragged billows with dark undersides and pale tops,
   streaky curtains, dark grit spraying out, dirt clods, stones and car parts on Mars gravity landing and staying;
   the cloud thins over ~2 s to a haze. Not Looney Tunes.
+- Sam's animatic-3 notes (16 Oct), done: the car starts nearer the bottom of the ramp (as the original); the G-force
+  climbs through the journey (4 G at the launch, the full 1.27M by the stars shot), not in a second; the dust larger
+  and lasting longer (thick for a second, the plume thinning over 3.4 s; the low dust in front settles first so the
+  wreck and its lamp show on the line); the sigh slower, bigger and clearer (a big breath in, eyes closed on the long
+  breath out, shoulders sinking lower, hands coming down slowly; +0.6 s, film 32.0 s); the visor reflection was a
+  white blob that read as a bubble coming through the helmet - now a tiny upside-down car, wheels up.
