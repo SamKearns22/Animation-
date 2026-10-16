@@ -86,3 +86,11 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   "Fatality avoided" and the lamp at 26.0). Flip periods per shot 1.4 -> 0.3 s. Dials on until the impact; long
   numbers sit on a plate under the dial. Damon at MARS_S 0.85 so the wreck lands on the ground in frame.
   29 s + the 2 s sign-off.
+- Sam's notes on the stills (16 Oct), fixed: shot 1 follows the original's camera (still on the ramp for the climb,
+  then panning left with the car as it flies, lands and hops; the ramp leaves the frame on the right; the hangar is
+  4000 px wide, with red floor light strips and small blue lights as in the original). Shot 8: the car falls straight
+  down onto him, so it is full size at his distance from the first frame (never growing), drawn in front of him;
+  he can't see straight up, so its reflection grows in his visor and its shadow spreads round his feet; it drops into
+  the top of frame 0.35 s before the impact, upside down, nose towards us. Mars zoomed out (MARS_S 0.64). Dials
+  bigger (radius 92, numbers 38 px) inside the safe area (x 165 and 800, y 1385); a long number shows short in the
+  dial (1.3M, 738B) and in full on a plate above it.

@@ -142,6 +142,12 @@ def crumple(V, k, seed=7):
     return V
 
 
+def car_bottom(view, s, crush=0.0):
+    """How far below its middle the car's lowest point is drawn (world pixels), to stand it on the ground."""
+    P2, _ = view.screen(view.world(crumple(VERTS, crush)))
+    return float(P2[:, 1].max()) * s
+
+
 def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, smoke=True):
     """Draw the Roadster with its middle at world (x, y), s world pixels per cm. jets 0..1: the four underside
     cold-gas jets (the 'hydraulics'); crush 0..1: the wreck; headlight: one corner lamp lit on the wreck."""
@@ -188,13 +194,15 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
         out = cen - view.world(CENTRE + np.array([0, 0, 0]))
         if np.dot(n, out) < 0:
             n = -n
-        facing = np.dot(n, cen - cam_pos) < 0 or crush > 0      # a wreck is not a closed shape: draw every panel
-        vis.append((idx, facing, n, cen[1]))
+        real = np.dot(n, cen - cam_pos) < 0
+        facing = real or crush > 0                              # a wreck is not a closed shape: draw every panel
+        vis.append((idx, facing, n, cen[1], real))
     order = sorted([v for v in vis if v[1]], key=lambda v: -v[3])
-    for idx, _, n, _ in order:
+    for idx, _, n, _, _ in order:
         fi, m = FACES[idx]
         p.poly([tuple(P2[i]) for i in fi], _tone(m, n), None)
     facing = {v[0]: v[1] for v in vis}
+    towards = {v[0]: v[4] for v in vis}
     normal = {v[0]: v[2] for v in vis}
     edges = {}
     for idx, (fi, m) in enumerate(FACES):
@@ -215,13 +223,13 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
     # details laid on the body (only when the face they sit on is towards us)
     nose_face = len(FACES) - 2
     tail_face = len(FACES) - 1
-    if facing[nose_face]:
+    if towards[nose_face]:
         bar = [tuple(wpt(_crushed((233, w, 33), crush))) for w in (-44, 44)]
         p.line(bar, INK, 6.0)
         p.line(bar, LAMP if not crush else (120, 120, 120), 3.0)
     lit_side = 1 if (view.world(CENTRE + np.array([0, 1.0, 0])) - view.world(CENTRE))[1] < 0 else -1
     for side in (1, -1):                             # the triangular corner headlamps on the nose
-        if facing[nose_face]:
+        if towards[nose_face]:
             tri = [(234, side * 48, 42), (234, side * 74, 41), (234, side * 70, 34)]
             lit = (not crush) or (headlight and side == lit_side)
             p.poly([tuple(wpt(_crushed(q, crush))) for q in tri], LAMP if lit else (90, 92, 96), INK, 2.0)
@@ -235,7 +243,7 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
                             (cx + 34 * math.cos(a), cy + 34 * math.sin(a))], (255, 246, 170), 2.6)
     if crush > 0.5:                                  # the glass smashed: cracks across every pane we see
         rr = np.random.default_rng(9)
-        for idx, _, n, _ in order:
+        for idx, _, n, _, _ in order:
             fi, m = FACES[idx]
             if m == 'glass':
                 q = np.array([P2[i] for i in fi])
@@ -244,7 +252,7 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
                     tgt = q[rr.integers(len(q))] * 0.7 + c0 * 0.3
                     mid = (c0 + tgt) / 2 + rr.normal(0, 3, 2)
                     p.line([tuple(c0), tuple(mid), tuple(tgt)], (190, 198, 210), 1.8)
-    if facing[tail_face]:
+    if towards[tail_face]:
         bar = [wpt(_crushed((-231, w, 66), crush)) for w in (-88, 88)]
         p.line(bar, RED_BAR, 5.0)
         plate = [(-231, -18, 50), (-231, 18, 50), (-231, 18, 38), (-231, -18, 38)]
@@ -601,25 +609,32 @@ def hangar(img, cam, t=0.0):
     """The dark hangar: the ramp (grey concrete, red neon edges, a white centre line) curving up from a floor plate
     to nearly vertical, a steel scaffold tower behind its right side, roof beams and lights high up, a lit board."""
     p = B.Pen(img, cam)
-    p.poly([(-200, -200), (1280, -200), (1280, 2200), (-200, 2200)], (14, 14, 18), None)
+    X0, X1 = -2200, 1800                                       # wide: the camera pans left with the car (as the original)
+    p.poly([(X0, -200), (X1, -200), (X1, 2200), (X0, 2200)], (14, 14, 18), None)
     for i in range(7):                                         # roof trusses, faint in the dark
         y = 120 + i * 34
-        p.line([(-100, y), (1180, y - 20)], (34, 34, 42), 3)
-    for i in range(14):
-        x = 30 + i * 80
+        p.line([(X0, y + 10), (X1, y - 20)], (34, 34, 42), 3)
+    for i in range(50):
+        x = X0 + 30 + i * 80
         p.line([(x, 110), (x + 40, 330)], (30, 30, 38), 2)
         p.ell(x + 10, 150 + 6 * (i % 3), 4, 4, (220, 220, 200), None)
-    # the back wall: tall panels and a green exit sign, no new jokes (Sam, 16 Oct: only what the script has)
-    for i in range(9):
-        x = 20 + i * 130
+    # the back wall: tall panels, exit signs, a few small blue work lights (as in the original), no jokes
+    for i in range(31):
+        x = X0 + 20 + i * 130
         p.line([(x, 360), (x, 1290)], (26, 26, 32), 2)
-    p.poly(rough([(80, 1150), (190, 1150), (190, 1196), (80, 1196)], 2, 60), (40, 150, 80), INK, 2)
-    _text(img, cam, 135, 1173, 'EXIT', 20, (230, 250, 230))
-    # floor
-    p.poly([(-200, 1300), (1280, 1300), (1280, 2200), (-200, 2200)], (36, 36, 42), None)
-    p.line([(-200, 1300), (1280, 1300)], (60, 60, 68), 2)
-    for i in range(6):
-        p.line([(-200 + i * 260, 2200), (300 + i * 110, 1300)], (46, 46, 54), 2)
+    for ex in (80, -1240):
+        p.poly(rough([(ex, 1150), (ex + 110, 1150), (ex + 110, 1196), (ex, 1196)], 2, 60), (40, 150, 80), INK, 2)
+        _text(img, cam, ex + 55, 1173, 'EXIT', 20, (230, 250, 230))
+    for bx in (-1700, -900, -420, 300):
+        p.ell(bx, 1230, 9, 14, (90, 150, 230), None)
+    # floor, with the long red light strips the car lands among
+    p.poly([(X0, 1300), (X1, 1300), (X1, 2200), (X0, 2200)], (36, 36, 42), None)
+    p.line([(X0, 1300), (X1, 1300)], (60, 60, 68), 2)
+    for i in range(16):
+        p.line([(X0 + i * 260, 2200), (X0 + 500 + i * 230, 1300)], (46, 46, 54), 2)
+    for y, x0, x1 in ((1330, -1900, 380), (1420, -2100, 120)):
+        p.line([(x0, y), (x1, y)], (120, 30, 34), 9)
+        p.line([(x0, y), (x1, y)], (236, 64, 60), 4)
     # the ramp's centre line: a curve from the floor plate (bottom) up to near-vertical (top)
     base, top = (640, 1300), (520, 380)
     def spine(u):                                              # u 0 at the foot .. 1 at the top
@@ -648,28 +663,41 @@ def hangar(img, cam, t=0.0):
     return spine
 
 
+DIAL_Y, DIAL_R = 1385, 92
+DIAL_X = (165, 800)                          # inside TikTok's safe area (x 60-900, y 310-1500; buttons on the right)
+
+
 def dials(img, cam, g=1.0, alt=0.0, pitch=0.0):
-    """The demo's two dials, kept as they are, with whatever numbers the story needs (G-FORCE left, ALTITUDE right)."""
+    """The demo's two dials, kept as they are, with whatever numbers the story needs (G-FORCE left, ALTITUDE right).
+    Big enough to read on a phone and clear of TikTok's buttons; a number too long for its dial sits on a plate above."""
     p = B.Pen(img, cam)
-    for x, label, val, unit in ((150, 'G-FORCE', g, 'G'), (830, 'ALTITUDE', alt, 'FT')):
-        p.ell(x, 1400, 62, 62, (14, 14, 18), (220, 220, 220), 2.4)
-        p.line([(x + 62 * math.cos(a), 1400 + 62 * math.sin(a)) for a in np.linspace(2.2, 2.2 + 4.3 * min(1, abs(val) / 70 + 0.15), 20)],
-               (250, 250, 250), 4)
-        _text(img, cam, x, 1376, label, 10, (210, 210, 210))
-        if abs(val) < 1e5:
-            _text(img, cam, x, 1404, _num(val), 22 if abs(val) < 1e4 else 17, (250, 250, 250))
-        else:                                                 # too long for the dial: on a dark plate under it
-            txt = _num(val)
-            wd = 9 * len(txt) + 16
-            cx = min(1040 - wd / 2, max(40 + wd / 2, x))
-            p.poly([(cx - wd / 2, 1474), (cx + wd / 2, 1474), (cx + wd / 2, 1504), (cx - wd / 2, 1504)], (14, 14, 18),
-                   (220, 220, 220), 2)
-            _text(img, cam, cx, 1489, txt, 16, (250, 250, 250))
-            _text(img, cam, x, 1404, '...', 22, (250, 250, 250))
-        _text(img, cam, x, 1432, unit, 10, (210, 210, 210))
-    v = View(yaw=0, elev=0, flip=pitch)                         # the little side-on car icon turns with the car
-    car(img, cam, 270, 1400, 0.16, v)
-    car(img, cam, 712, 1400, 0.16, View(yaw=90, elev=89))       # the top-down icon
+    for x, label, val, unit in ((DIAL_X[0], 'G-FORCE', g, 'G'), (DIAL_X[1], 'ALTITUDE', alt, 'FT')):
+        p.ell(x, DIAL_Y, DIAL_R, DIAL_R, (14, 14, 18), (225, 225, 225), 3.4)
+        frac = min(1.0, math.log10(abs(val) + 1) / 12 + 0.12)
+        p.line([(x + DIAL_R * math.cos(a), DIAL_Y + DIAL_R * math.sin(a)) for a in np.linspace(2.2, 2.2 + 5.0 * frac, 30)],
+               (250, 250, 250), 6)
+        _text(img, cam, x, DIAL_Y - 42, label, 18, (215, 215, 215))
+        _text(img, cam, x, DIAL_Y + 44, unit, 18, (215, 215, 215))
+        txt = _num(val)
+        if len(txt) <= 7:
+            _text(img, cam, x, DIAL_Y + 2, txt, 38 if len(txt) <= 5 else 30, (252, 252, 252))
+        else:
+            _text(img, cam, x, DIAL_Y + 2, _short(val), 34, (252, 252, 252))
+            wd = 15.5 * len(txt) + 24
+            cx = min(890 - wd / 2, max(70 + wd / 2, x))
+            y0 = DIAL_Y - DIAL_R - 58
+            p.poly([(cx - wd / 2, y0), (cx + wd / 2, y0), (cx + wd / 2, y0 + 44), (cx - wd / 2, y0 + 44)], (14, 14, 18),
+                   (225, 225, 225), 2.4)
+            _text(img, cam, cx, y0 + 22, txt, 26, (252, 252, 252))
+    car(img, cam, DIAL_X[0] + 165, DIAL_Y, 0.26, View(yaw=0, elev=0, flip=pitch))   # the side-on icon turns with the car
+    car(img, cam, DIAL_X[1] - 160, DIAL_Y, 0.24, View(yaw=90, elev=89))               # the top-down icon
+
+
+def _short(v):
+    for d, u in ((1e12, 'T'), (1e9, 'B'), (1e6, 'M'), (1e3, 'K')):
+        if abs(v) >= d:
+            return f'{v / d:.1f}{u}' if abs(v) < 100 * d else f'{v / d:.0f}{u}'
+    return f'{v:.0f}'
 
 
 def _num(v):
@@ -754,7 +782,7 @@ def mars(img, cam, t=0.0):
                (146, 82, 50), None)
 
 
-MARS_NECK, MARS_S = 960, 0.85        # Damon in the Mars shot: big enough to read his eyes, the set behind him
+MARS_NECK, MARS_S = 1080, 0.64        # Damon in the Mars shot: big enough to read his eyes, the set behind him
 
 
 # ============================================== SPACE (Dam's pencil) ================================================
@@ -905,6 +933,16 @@ def gforce(t):
 HANGAR_SPINE = None
 
 
+def hangar_cam_x(t):
+    """The original's camera: still on the ramp while the car climbs, then panning left with it as it flies off,
+    lands and slides on through the smoke (the ramp leaves the frame on the right)."""
+    if t < 4.2:
+        return 540.0
+    if t < 7.6:
+        return 540 - 900 * ease((t - 4.2) / 3.4)
+    return -360 - 120 * (t - 7.6) / 3.0
+
+
 def hangar_car(t):
     """Where the car is in shot 1: (x, y, scale, View, jets)."""
     global HANGAR_SPINE
@@ -917,31 +955,34 @@ def hangar_car(t):
         k = (120 - 55 * u) / 120
         return x, y - 40 * k, 0.75 * k, View(yaw=-90, elev=10, flip=flip_angle(t)), 0.0
     tx, ty = sp(1.0)
-    if t < T_LAND1:                                                 # off the top, over backwards, down into the smoke
+    land_x = -260
+    if t < T_LAND1:                                                 # off the top, over backwards, down to the left
         f = (t - 4.0) / (T_LAND1 - 4.0)
-        x = tx + (360 - tx) * f
-        y = ty - 180 * math.sin(math.pi * min(1, f * 1.2)) + (1240 - ty) * f ** 2.2
-        return x, y, 0.55 + 0.2 * f, View(yaw=-120, elev=12, flip=flip_angle(t)), 0.0
-    if t < T_UP:                                                    # hops on its jets, flipping, each one higher
+        x = tx + (land_x - tx) * f
+        y = ty - 200 * math.sin(math.pi * min(1, f * 1.15)) + (1240 - ty) * f ** 2.4
+        return x, y, 0.55 + 0.2 * f, View(yaw=-150, elev=12, flip=flip_angle(t)), 0.0
+    if t < T_UP:                                                    # hops on its jets, flipping, drifting left
         ph = (t - T_LAND1) / 1.2
         h = [260, 420, 600][min(2, int(ph))]
         y = 1240 - h * math.sin(math.pi * (ph % 1))
-        return 380 + 30 * math.sin(t), y, 0.75, View(yaw=-120, elev=12, flip=flip_angle(t)), 1.0
+        return land_x - 60 * (t - T_LAND1), y, 0.75, View(yaw=-160, elev=12, flip=flip_angle(t)), 1.0
     f = (t - T_UP) / (10.6 - T_UP)                                  # full jets: straight up, out of the top
-    return 380, 1240 - 1500 * f ** 1.6, 0.75, View(yaw=-120, elev=12, flip=flip_angle(t)), 1.0
+    return land_x - 60 * (T_UP - T_LAND1), 1240 - 1500 * f ** 1.6, 0.75, View(yaw=-160, elev=12, flip=flip_angle(t)), 1.0
 
 
 def picture_hangar(t):
-    cam = B.Cam(1.0 + 0.04 * ease(t / 10.0), 540, 960)              # the original's slight push-in
+    cx = hangar_cam_x(t)
+    cam = B.Cam(1.0 + 0.04 * ease(t / 10.0), cx, 960)               # pans with the car; the slight push-in
     img = B.canvas((0, 0, 0))
     hangar(img, cam, t)
     x, y, s, v, jets = hangar_car(t)
+    lx = -260 - 60 * max(0.0, min(t, T_UP) - T_LAND1)
     if t >= T_LAND1 - 0.05:                                         # the smoke from the landing and the jets
         grow = ease((t - T_LAND1 + 0.05) / 1.0)
-        smoke_cloud(img, cam, 400, 1300, 420 * grow + 120, 150 * grow + 40, 5)
+        smoke_cloud(img, cam, lx, 1300, 420 * grow + 120, 150 * grow + 40, 5)
     car(img, cam, x, y, s, v, jets=jets, t=t)
     if t >= T_LAND1 - 0.05:
-        smoke_cloud(img, cam, 520, 1340, 360 * ease((t - T_LAND1) / 1.4) + 60, 90, 6)
+        smoke_cloud(img, cam, lx + 120, 1340, 360 * ease((t - T_LAND1) / 1.4) + 60, 90, 6)
     dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(t))
     return img
 
@@ -1086,7 +1127,15 @@ def damon_eyes(t):
     return 2 + 3 * ease((t - T_SEEN) / (T_IMPACT - 0.25 - T_SEEN))
 
 
+CAR_S_MARS = MARS_S * 928 / 185            # the car at Damon's distance: px per cm from his height (1.85 m)
+MARS_VIEW = dict(yaw=-90, elev=4)           # end-on (upside down, so this puts the nose towards us), so the 2 m wide car fits the frame
+T_ENTER = 23.85                             # the car drops into the top of frame
+
+
 def picture_mars(t):
+    """Shot 8. He looks up, hopeful; he can't see straight up in this framing, so we see what he sees in his visor
+    (the car's reflection growing) and its shadow spreading on the ground round him; then it drops into the top of
+    frame at full size (same distance from us as him: no growing) and lands on him upside down, jets off."""
     shake = 0.0
     if T_IMPACT <= t < T_IMPACT + 0.45:
         k = 1 - (t - T_IMPACT) / 0.45
@@ -1094,24 +1143,32 @@ def picture_mars(t):
     cam = B.Cam(1.0, 540 + shake, 960 + shake * 0.6)
     img = B.canvas((0, 0, 0))
     mars(img, cam, t)
-    ground = MARS_NECK + 928 * MARS_S - 40
+    ground = MARS_NECK + 928 * MARS_S
+    p = B.Pen(img, cam)
+    if T_SEEN <= t < T_IMPACT:                                      # the falling car's shadow, spreading
+        f = ease((t - T_SEEN) / (T_IMPACT - T_SEEN))
+        w = 80 + 440 * f
+        p.ell(540, ground - 6, w, w * 0.16, (150, 80, 50), None)
     if t < T_IMPACT:
-        damon(img, cam, 540, MARS_NECK, MARS_S, dict(look_up=1.0, wide=damon_eyes(t), visor_car=max(0, (t - T_SEEN) / 1.3)))
-        if t >= T_SEEN:                                             # dropping: no jets, upside down, still turning
-            f = (t - T_SEEN) / (T_IMPACT - T_SEEN)
-            y = -150 + (ground - 120 + 150) * f ** 2
-            s = 0.1 + 0.9 * f ** 2
-            car(img, cam, 540, y, s, View(yaw=-30, elev=10, flip=180 + 140 * (1 - f)), jets=0.0, t=t)
+        damon(img, cam, 540, MARS_NECK, MARS_S, dict(look_up=1.0, wide=damon_eyes(t),
+                                                      visor_car=max(0, (t - T_SEEN) / (T_IMPACT - T_SEEN))))
+        if t >= T_ENTER:                                            # dropping under gravity, in front of him
+            v = View(flip=180 + 25 * (1 - (t - T_ENTER) / (T_IMPACT - T_ENTER)), **MARS_VIEW)
+            land_y = ground - car_bottom(v, CAR_S_MARS)
+            f = (t - T_ENTER) / (T_IMPACT - T_ENTER)
+            y = -700 + (land_y + 700) * f * f
+            car(img, cam, 540, y, CAR_S_MARS, v, jets=0.0, t=t)
     else:
-        debris(img, cam, 540, ground + 20, 1.3)
-        car(img, cam, 540, ground - 40, 1.3, View(yaw=-30, elev=10, flip=180), crush=1.0, headlight=t >= T_LAMP and
-            not (T_LAMP + 0.12 < t < T_LAMP + 0.24))                # the lamp flickers on with the line
+        v = View(flip=180, **MARS_VIEW)
+        debris(img, cam, 540, ground - 10, CAR_S_MARS * 0.6, spread=1.4)
+        car(img, cam, 540, ground - car_bottom(v, CAR_S_MARS, 0.85), CAR_S_MARS, v, crush=0.85,
+            headlight=t >= T_LAMP and not (T_LAMP + 0.12 < t < T_LAMP + 0.24))     # the lamp flickers on with the line
         d = t - T_IMPACT
         if d < 1.4:                                                 # the dust burst: thrown out, then settling
             g = 0.55 + 0.45 * ease(d / 0.3)
             fade = 1 - ease((d - 0.45) / 0.95)
             if fade > 0.02:
-                smoke_cloud(img, cam, 540, ground - 60 * fade, 1100 * g, 520 * fade + 40, 8, fill=(222, 156, 112),
+                smoke_cloud(img, cam, 540, ground - 60 * fade, 1300 * g, 620 * fade + 40, 8, fill=(222, 156, 112),
                             shade=(190, 120, 82))
     if t < T_IMPACT:
         dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, 21.79)))
@@ -1143,9 +1200,9 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
-STILLS = [(2.0, '1 climbing the ramp'), (4.9, '1 off the top'), (8.0, '1 hopping, flipping'), (10.2, '1 jets full'),
+STILLS = [(2.0, '1 climbing the ramp'), (4.9, '1 off the top'), (6.1, '1 lands, camera follows'), (8.0, '1 hopping, flipping'), (10.2, '1 jets full'),
           (11.2, '2 out through the roof'), (12.8, '3 up through clouds'), (14.6, '4 through the cloud sea'),
-          (16.6, '5 the Earth'), (18.6, '6 the stars'), (21.0, '7 towards Mars'), (23.6, '8 Damon, the car falls'),
+          (16.6, '5 the Earth'), (18.6, '6 the stars'), (21.0, '7 towards Mars'), (23.5, '8 its shadow, in his visor'), (24.05, '8 the drop'),
           (24.3, '8 the crash'), (26.6, '8 "Fatality avoided"')]
 
 
