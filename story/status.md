@@ -338,10 +338,15 @@ Read this first in any new session, after CLAUDE.md.
 - Found by the audit in the finished Russiadent Evil: the zombie that falls through the window pops from lying flat to crawling
   (about 15.6 s). Not fixed (film is finished).
 
-## In progress: "The New Press Secretary" (TikTok, one slow push-in, `prompts/press-secretary.md`)
+## Done: "The New Press Secretary" (TikTok, one slow push-in, `prompts/press-secretary.md`)
 - 15 Oct: brief and draft script; `source/press_secretary.py` draws her (as true to the reference photos as the style
   allows), the briefing room, the podium and the reporters, with a depth push-in (near rows of reporters swell and slide
   away). Silent, no title, no subtitles (Sam: the Cranberry title stays available but is no longer automatic).
 - Cast sheet and 12-still outline sent. The draft runs about 30 s at a halting pace; Sam's recording will set the timing.
 - Animatics 1-7 sent; Sam's notes 1-12 done (`notes/press-secretary.md`). Sam happy with the look (15 Oct).
-- Next: Sam writes the final script and records it; then fit her mouth and beats to the recording, animatic, final.
+- 16 Oct: FINAL rendered (full size 1080x1920, 59.8 s with the sign-off, 12.4 MB): `animations/press-secretary-vertical.mp4`.
+  Clean untitled version kept in `source/data/press-secretary/` (not on GitHub). Hook Text "Your first day as Press Secretary"
+  (centred, y 1180, 3.6 s); no title; silent but for Sam's voice; subtitles on; CranbriJoos sign-off (cranberries moved up
+  into the white space). 46 notes in `notes/press-secretary.md`. Lessons are in `guides/satire.md`.
+- To do after posting: explain the word-timing tool (needs huggingface.co allowed in the environment's network settings);
+  Sam to send reference photos so missing ones can be suggested next time.

@@ -8,6 +8,10 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    where people stand, who looks at whom, lines, shots, actions as beats). Everything else is already wired in.
    **A remake** of an older film starts from the template too (bring over only the story, recordings and timing, never
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
+   **References (Sam, 16 Oct):** when Sam sends reference photos, say which are still missing for the best quality (the
+   room from several angles incl. empty and from above, the person front and side, props), before drawing.
+   **Length and opening line:** settle them early; judge the length on the first animatic with the real voice (the
+   Press Secretary film was cut from 75 s to 57 s only after seeing it in motion).
 2. Read Sam's brief (`prompts/_brief-skeleton.md` is the shape; `prompts/russiadent-evil-template.md` a finished one).
    Ask all questions in ONE message, each with a recommended answer. Notes go in `notes/NAME.md` (`notes/_template.md`).
    Remind Sam: leave about a second of silence after each line before stopping the recording, and turn off the
@@ -25,7 +29,8 @@ faces; hard cuts; a close-up for the reaction that matters; no title by default 
 **Crowds seen from behind are never one repeated block** (Sam, 15 Oct: it 'screams drawn with AI'): each person
 gets their own shoulder width, slope and a higher shoulder, a lumpy head, a haircut with a low nape, and real clothing
 detail (collar, seams, creases, ribbed knit, a flat shadow side, sometimes pinstripe, check or tweed). See
-`press_secretary.reporter`. No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
+`press_secretary.reporter`. **No off-style cartoon shorthand** (sweat drops, anger veins, stars, motion lines...) in any film unless Sam asks (16 Oct): show a
+feeling with the face and body. No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
 flat wall reads as unfinished or computer-made); signs and posters carry a joke tied to the film where they can.
 
 ## Movement: walking, turning, poses, sitting, combat, cars (built to order)
@@ -52,6 +57,19 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
 - **Heads from every angle (Sam, 14 Oct):** draw the head's outline first and the hair over it, inked, so a skull line
   never shows through hair. From behind there is no chin or jaw crease: the neck rises straight into the back of the
   skull, under the nape hair, and no bits of the far face (nose, cheek, beard) poke out. Every part has an outline.
+- **Hair is one shape with one outline** (Sam, 16 Oct: 'a second haircut hiding behind'): locks and crown are outlined first,
+  then filled together; nothing sits behind them that can peek out.
+- **An eye is one opening between two lids** with the iris cut to it, so no line ever crosses the white; the lowered lid
+  is a curve sagging over the iris, never a straight bar. See `press_secretary.eye`.
+- **Lettering on signs and logos** is drawn once at high resolution and scaled smoothly to a fixed width (`stamp_text`), so
+  it never pulses or spills out of its plaque or seal.
+- **No blink may land on a key face** (Sam, 15 Oct: her eyes were shut on the punchline word): blinks are kept out of
+  every expression window and just around it.
+- **Eyes and jokes snap; bodies and feelings ease** (Sam, 16 Oct: 'let's try it'). Glances, a strange smile switching on, hard
+  cuts: instant. A head or shoulders moving, a sigh, settling into a new feeling: eased in and out.
+- **A big change of pose eases like the sigh** (Sam, 15 Oct: the sigh was 'the smoothest expression so far'; the head
+  snapping up for the last line was not): glances still jump, but a head lifting into a new held pose blends from
+  the exact old pose to the new one over about 0.7 s, eased in and out.
 - **Pace a little slower** (Sam, 14 Oct): hold each pose about a second, let actions play at about 0.8 speed; walks
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
@@ -87,8 +105,17 @@ flat wall reads as unfinished or computer-made); signs and posters carry a joke 
 - Sound effects are placed by when they really start (`filmkit.place`), not by the start of their file.
 - Anyone in a close-up must be seen in a wide shot.
 
+## Subtitles (Sam, 16 Oct)
+- **Never ahead of the voice:** each comes up with its first word (about 0.1 s after it starts), never before.
+- **A punchline gets its own subtitle**, on the exact word (e.g. "helicopters,", "I'll get back to you on that.").
+- **Word timing:** match the script's syllables to the syllable beats in the recording (see `press_secretary._syllable_beats`),
+  snap each comma and full stop to the nearest real pause, and pin any word Sam names to his second
+  (`PINS`). Evenly spreading words over a stretch drifts. Sam's times refer to the animatic he last watched.
+
 ## Sound (all in `source/mossad_audio.py`)
 - **No sound effects unless the script names them or Sam asks** (Sam, 14 Oct): voices only by default.
+- **Cut a recording only in a moment of silence** (Sam, 16 Oct): find the quiet gap before the first wanted word (loudness in
+  20 ms steps), cut there and lay silence in front; never start earlier to be safe (a scrap of the word before is heard).
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
   their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.

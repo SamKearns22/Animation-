@@ -14,7 +14,40 @@
 | 10 | push | crowd | Two empty chairs only; no raised hands; small movements (shuffling, glances, typing elbows, scribbling notes) | done |
 | 11 | push | crowd | Backs too blocky, read as AI-drawn: each reporter now has their own build, lumpy head, haircut with nape and strands, clothing seams, collars, creases, knit or pattern, a flat shadow side | done |
 | 12 | push | all | Flag: dots coming off it, sock shape: redrawn from the photos (hangs in folds by the pole, scalloped edge, gathered tail, slanted stripes, stars kept inside the canton, gold spear tip) | done |
-| 13 | push | reading her notes | Look down more when she checks her notes: head properly dipped, eyes on the paper, like an inexperienced public speaker. Do it with the script (Sam: wait) | open |
+| 13 | push | reading her notes | Look down more when she checks her notes, like an inexperienced public speaker: head drops, lids right down, features lower (more forehead), held too long, snaps back up; a nervous double-check | done |
+| 14 | audio | paras 1-2 | Second take of paragraphs 1 and 2 replaces the first; first take kept from "So, like." on | done |
+| 15 | push | close-ups | Lines crossed the whites of the eyes (smile and looking down): the eye is now one opening between the lids, the iris cut to it, lids drawn corner to corner | done |
+| 16 | acting | "we work tirelessly" | Looks down | done |
+| 17 | acting | "agenda" | Big smile during the word | done |
+| 18 | acting | "master" | Eyes slightly wide | done |
+| 19 | acting | "helicopters" | Delighted (smile, brows high, eyes crinkled) | done |
+| 20 | acting | "I'll get back to you on that" | Slightly awkward: worried brows, eyes sliding sideways, a tight grimace in the pause | done |
+| 21 | subtitles | all | Out of alignment: each comma and full stop now snaps to the nearest real pause in the recording | done |
+| 22 | hook | open | Hook Text centred, same height (--centre) | done |
+| 23 | subtitles | opening | First "it's really" subtitle left too soon: words now matched syllable by syllable to the beats detected in the recording (168 beats, 172 script syllables), commas still sit on real pauses | done |
+| 24 | acting | big smiles | Mouth stopped moving in the smiles: she now talks through the smile (jaw opens with her voice) and flashes a crazed smile the moment she stops | done |
+| 25 | acting | talking to the room | Eyes now roam the journalists while she speaks (jump to a face, hold 0.7-1.6 s, head follows a little) | done |
+| 26 | subtitles | "I just need" | The line before "I just want" is "I just need" (no "and") | done |
+| 27 | acting | talking to the room | Looking around halved: holds 1.4-3.2 s, half as wide, head follows less | done |
+| 28 | subtitles | punchlines | "helicopters," its own subtitle; "Let me get back to you on that." appears exactly as she starts it (wording as Sam says it in take 2) | done |
+| 29 | acting | "Let me get back to you on that" | Looking dead at the crowd, sheepish: worried brows, chin dipped, tight grimace in the pause | done |
+| 30 | edit | opening | The film now opens on "I look forward to the President" (START_WORD); same Hook Text | done |
+| 31 | subtitles | 1:03 (uncut) | Sam says "I just need" there: the first "I just want." is not in the take, so it is cut from the script; "I just need." pinned to 63.29 s of the full take | done |
+| 32 | subtitles | 0:39 (uncut) | "helicopters," pinned to start at 38.95 s of the full take | done |
+| 33 | subtitles | 32 s (animatic 15) | "Let me get back to you on that." pinned there (50.26 s of the full take) | done |
+| 34 | audio | opening | The opening "I" was clipped, and no scrap of the word before may be heard: the cut sits in the 40 ms silence between "and" and "I" (18.02 s of the full take), half a second of silence laid before it, 10 ms fade; "I look forward" pinned there; every other pin is tied to the take, so all sync points hold | done |
+| 35 | subtitles | get back | Reads "I'll get back to you on that." | done |
+| 36 | acting | get back | More uncomfortable: stronger worried brows, a bead of sweat, eyes flick down and back, a swallow, tighter grimace | done |
+| 37 | acting | "cause it's booming" | Excited: eyes wide, brows high, talking through a big smile with a little bounce, crazed flash after | done |
+| 38 | script | end of para 3 | The second "I just need" restored ("I just need, I just need."); the pin stays on the second | done |
+| 39 | acting | "master" | Wide eyes kick in just before the word (0.45 s early) | done |
+| 40 | acting | final "venezuela." | Dead-eyed and despondent, staring straight into the camera: heavy lids, eyes dead centre, faint sad brows, chin down a touch, no blinks, utterly still to the cut | done |
+| 41 | acting | final line | Head snapped up: now lifts from her exact reading pose to the dead stare over 0.7 s, eased like the sigh | done |
+| 42 | acting | "master" | Eyes were closed (a blink): no blink may land on a key face now | done |
+| 43 | acting | "I'll get back" | Sweat drop removed (off-style); less happy, more "yeaaah... sorry": wince, apologetic head tilt, small tight talking mouth, clenched-teeth grimace in the pause | done |
+| 44 | subtitles | "I'll get back" | Starts at 32.97 s (pinned) | done |
+| 45 | subtitles | first "I just need," | Reads "and I just need," | done |
+| 46 | subtitles | all | Still a bit early: each now comes up 0.1 s after its first word starts, never ahead | done |
 
 Decisions made:
 - No title, no subtitles, silent until Sam's recording.

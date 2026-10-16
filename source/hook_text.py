@@ -4,7 +4,7 @@ first, like the app's native text): TikTok Sans Bold, sentence case, black on a 
 the safe area, over the picture while it plays. On from the first frame, gone (a quick fade) at `--until` seconds -
 by default the first cut. Picture and sound are otherwise untouched.
 
-    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880]
+    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--centre]
 """
 import os
 import subprocess
@@ -20,7 +20,7 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide (guides/tiktok-design.md)
 
 
-def card(w, h, text, y_mid, path, size=74):
+def card(w, h, text, y_mid, path, size=74, centre=False):
     k = w / 1080
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
@@ -37,7 +37,7 @@ def card(w, h, text, y_mid, path, size=74):
         size -= 4
     lh = int(f.size * 1.18)
     pad_x, pad_y = int(30 * k), int(16 * k)
-    cx = (SAFE_X0 + SAFE_X1) / 2 * k
+    cx = (540 if centre else (SAFE_X0 + SAFE_X1) / 2) * k     # --centre: the middle of the frame (Sam, 15 Oct)
     top = y_mid * k - len(rows) * lh / 2
     for i, r in enumerate(rows):               # each row its own white box, like the app's caption style
         tw = d.textlength(r, font=f)
@@ -53,6 +53,9 @@ def card(w, h, text, y_mid, path, size=74):
 def main():
     a = sys.argv[1:]
     until, y_mid = 3.6, 880
+    centre = '--centre' in a
+    if centre:
+        a.remove('--centre')
     if '--until' in a:
         i = a.index('--until'); until = float(a[i + 1]); del a[i:i + 2]
     if '--y' in a:
@@ -63,7 +66,7 @@ def main():
                 for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "hook.png")
-        card(w, h, text, y_mid, png)
+        card(w, h, text, y_mid, png, centre=centre)
         fade = 0.25
         vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
               f'[0:v][t]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]')

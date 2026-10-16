@@ -96,6 +96,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   dancing, the beaver (never blinking) holding a white CranbriJoos carton (red trim, red balloon logo, "Cranbri" larger
   than "Joos"); as Sam's slurp plays his mouth and teeth vanish into a small black O round the straw, his eyes widen,
   and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).
+- The carton's three cranberries sit wholly in the white space between "Joos" and the red band along the bottom (Sam, 16 Oct:
+  they used to overlap the band); fixed in `signoff.py`, so every sign-off has it.
 - Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]`.
 - Watch its cost: compare "watched full video" and followers per 1,000 views over the next 4-5 posts with the
   posts before it.
