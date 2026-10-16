@@ -8,6 +8,7 @@ sets; Dam's coloured pencil (pencil_cartoon) for every space shot. Notes and dec
     python3 source/roadster.py sets OUT.jpg     the hangar and ramp (with the dials), the Mars set, the two pencil
                                                 space shots with the car in them
     python3 source/roadster.py stills OUT.jpg   one still per key moment of every shot, on one sheet
+    python3 source/roadster.py animatic OUT.mp4 the quick whole film (540 x 960) with the sound
 """
 import math
 import os
@@ -422,8 +423,8 @@ HAIR = (112, 80, 52)
 def damon(img, cam, x, y, s, st=None, t=0.0):
     """Watney in his suit, front view. st: look_up 0..1, wide 1..6 (the eyes-widening strength), visor_car
     (0..1, the car's reflection growing in the gold visor)."""
-    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0), **(st or {}))
-    L = B.Local(cam, x, y, s)
+    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None), **(st or {}))
+    L = PoseLocal(cam, x, y, s, st['lean'])
     p = B.Pen(img, L)
     R = lambda pts, sd, a=4: rough(pts, a, sd)
     # backpack showing past the shoulders
@@ -453,14 +454,48 @@ def damon(img, cam, x, y, s, st=None, t=0.0):
     # shoulder patches: the flag and the red 2
     _flag(p, -118, 70, 0.55)
     _text(img, L, 112, 64, '2', 30, (200, 40, 40))
-    # arms hanging a little out from the bulk of the suit, dark gloves (plain circles)
-    for sgn in (-1, 1):
-        sh, el, wr = (sgn * 140, 60), (sgn * 172, 260), (sgn * 166, 420)
-        _sleeve(p, sh, el, 72, SUIT_OR)
-        _sleeve(p, el, wr, 64, SUIT_GR)
-        p.ell(wr[0], wr[1] + 30, 34, 34, GLOVE, INK, 3.4)
-        p.line([(wr[0] - 18, wr[1] + 20), (wr[0] + 18, wr[1] + 20)], (170, 172, 178), 3)
+    # arms (hanging a little out from the bulk of the suit by default), dark gloves (plain circles); a hand raised to
+    # the visor is drawn after the helmet, in front of it
+    arms = st['arms'] or {'L': ARM_HANG['L'], 'R': ARM_HANG['R']}
+    front = []
+    for side, sgn in (('L', -1), ('R', 1)):
+        el, wr = arms[side]
+        if wr[1] < 40:
+            front.append((sgn, el, wr))
+        else:
+            _arm(p, sgn, el, wr)
     _helmet(img, p, L, st, t)
+    for sgn, el, wr in front:
+        _arm(p, sgn, el, wr)
+
+
+ARM_HANG = {'L': ((-172, 260), (-166, 420)), 'R': ((172, 260), (166, 420))}
+ARM_VISOR_L = ((-215, -30), (-112, -178))        # his right hand up at the brow, shading his eyes
+ARM_HIP_R = ((235, 250), (135, 385))             # his left hand on his hip
+
+
+class PoseLocal(B.Local):
+    """A person's own coordinates with the whole body leaning (degrees) about the point between the feet."""
+    def __init__(self, cam, ox, oy, s, lean=0.0):
+        super().__init__(cam, ox, oy, s)
+        self.c, self.sn = math.cos(math.radians(lean)), math.sin(math.radians(lean))
+
+    def P(self, x, y):
+        dy = y - 928
+        return super().P(x * self.c - dy * self.sn, 928 + x * self.sn + dy * self.c)
+
+
+def _arm(p, sgn, el, wr):
+    sh = (sgn * 140, 60)
+    _sleeve(p, sh, el, 72, SUIT_OR)
+    _sleeve(p, el, wr, 64, SUIT_GR)
+    d = np.array(wr, float) - np.array(el, float)
+    d = d / (np.linalg.norm(d) + 1e-9)
+    gx, gy = wr[0] + d[0] * 30, wr[1] + d[1] * 30
+    p.ell(gx, gy, 34, 34, GLOVE, INK, 3.4)
+    n = (-d[1], d[0])
+    p.line([(wr[0] + d[0] * 20 - n[0] * 18, wr[1] + d[1] * 20 - n[1] * 18),
+            (wr[0] + d[0] * 20 + n[0] * 18, wr[1] + d[1] * 20 + n[1] * 18)], (170, 172, 178), 3)
 
 
 def _sleeve(p, a, b, w, col):
@@ -539,6 +574,7 @@ def _face(img, p, st, hx, hy):
     k = (st['wide'] - 1) / 5.0
     up = st['look_up']
     R = 142
+    turn = st.get('turn', 0.0)                                    # the features slide towards where he looks
     # the dark inside of the suit, seen through the bottom of the bubble, and the neck rising out of it
     p.poly(rough([(hx - 46, hy + 60), (hx + 46, hy + 60), (hx + 56, -10), (hx - 56, -10)], 1.5, 49), SKIN, INK, 2.6)
     a0 = math.asin(0.8)                                           # the suit's dark inside: the bubble below one flat
@@ -561,10 +597,11 @@ def _face(img, p, st, hx, hy):
     p.poly(rough(hair, 1.5, 54), HAIR, INK, 2.6)
     p.line([(hx + 10, hy - 98), (hx + 24, hy - 84)], dk(HAIR, 0.8), 2.0)                          # the fringe pushed up
     p.line([(hx - 20, hy - 94), (hx - 10, hy - 80)], dk(HAIR, 0.8), 2.0)
+    hx0, hx = hx, hx + 14 * turn
     for sgn in (-1, 1):
         ex, ey = hx + sgn * 30, hy - 8
         p.line([(ex - 14, ey - 13), (ex + 14, ey - 13)], dk(SKIN, 0.82), 2.0)                     # deep-set: lid crease
-        _eye(p, ex, ey, sgn, k, up)
+        _eye(p, ex, ey, sgn, k, up, turn)
         br = ey - 21 - 3 * up - 15 * k
         inner_x, outer_x = ex - sgn * 18, ex + sgn * 19
         p.poly([(inner_x, br + 1), (ex, br - 2), (outer_x, br + 2), (outer_x, br + 7), (ex, br + 4), (inner_x, br + 7)],
@@ -583,7 +620,7 @@ def _face(img, p, st, hx, hy):
         p.line([(hx - 20, hy + 52), (hx - 8, hy + 55), (hx + 8, hy + 55), (hx + 20, hy + 52 - 2 * (1 - k))], INK, 2.4)
 
 
-def _eye(p, ex, ey, sgn, k, up):
+def _eye(p, ex, ey, sgn, k, up, turn=0.0):
     """One opening between two lids, the iris cut to it (no line ever crosses the white)."""
     w, h = 15 + 3 * k, 5 + 10 * k
     us = np.linspace(-1, 1, 15)
@@ -591,7 +628,7 @@ def _eye(p, ex, ey, sgn, k, up):
     lower = [(ex + w * u, ey + (4 + 6 * k) * (1 - u * u)) for u in us]
     opening = upper + lower[::-1][1:-1]
     p.poly(opening, (252, 252, 250), None)
-    cx, cy = ex, ey - 3 * up - 2 * k
+    cx, cy = ex + 6 * turn, ey - 3 * up - 2 * k
     r_iris = 8.5 - 2.2 * k
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
     iris = _clip_convex(opening[::-1], circ(r_iris))
@@ -667,7 +704,7 @@ DIAL_Y, DIAL_R = 1385, 92
 DIAL_X = (165, 800)                          # inside TikTok's safe area (x 60-900, y 310-1500; buttons on the right)
 
 
-def dials(img, cam, g=1.0, alt=0.0, pitch=0.0):
+def dials(img, cam, g=1.0, alt=0.0, pitch=0.0, icons=True):
     """The demo's two dials, kept as they are, with whatever numbers the story needs (G-FORCE left, ALTITUDE right).
     Big enough to read on a phone and clear of TikTok's buttons; a number too long for its dial sits on a plate above."""
     p = B.Pen(img, cam)
@@ -689,8 +726,9 @@ def dials(img, cam, g=1.0, alt=0.0, pitch=0.0):
             p.poly([(cx - wd / 2, y0), (cx + wd / 2, y0), (cx + wd / 2, y0 + 44), (cx - wd / 2, y0 + 44)], (14, 14, 18),
                    (225, 225, 225), 2.4)
             _text(img, cam, cx, y0 + 22, txt, 26, (252, 252, 252))
-    car(img, cam, DIAL_X[0] + 165, DIAL_Y, 0.26, View(yaw=0, elev=0, flip=pitch))   # the side-on icon turns with the car
-    car(img, cam, DIAL_X[1] - 160, DIAL_Y, 0.24, View(yaw=90, elev=89))               # the top-down icon
+    if icons:
+        car(img, cam, DIAL_X[0] + 165, DIAL_Y, 0.26, View(yaw=0, elev=0, flip=pitch))   # the side-on icon turns with it
+        car(img, cam, DIAL_X[1] - 160, DIAL_Y, 0.24, View(yaw=90, elev=89))               # the top-down icon
 
 
 def _short(v):
@@ -859,7 +897,7 @@ SHOTS = [   # (name, start, end): hard cuts
 DUR = 29.0
 T_LAND1 = 6.0          # lands in the smoke (as the original)
 T_UP = 9.6             # the jets go full and it shoots up
-T_SEEN = 22.9          # a speck in the Mars sky
+T_SEEN = 23.25         # he notices: looks up, the shadow spreads, the car grows in his visor
 T_IMPACT = 24.2
 T_LINE = 25.0          # roadster-1.m4a starts here (its speech starts 1.02 s in: "Fatality avoided" at ~26.0)
 T_LAMP = 26.0
@@ -1040,14 +1078,18 @@ def _paste(c, layer):
 
 
 def _car_layer(x, y, s, view, jets, t):
+    ss, B.SS = B.SS, 1                                              # pencil frames are 1080 x 1920
     lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
     car(lay, B.Cam(1.0, 540, 960), x, y, s, view, jets=jets, t=t)
+    B.SS = ss
     return lay
 
 
 def _finish_pencil(c, t):
+    ss, B.SS = B.SS, 1
     lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
     dials(lay, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(t))
+    B.SS = ss
     _paste(c, lay)
     return Image.fromarray(c.result()).convert('RGBA')
 
@@ -1122,6 +1164,24 @@ def picture_towards(t):
 
 
 # ---------------------------------------------------------------------------- shot 8: Mars
+def _lerp_pose(a, b, f):
+    return tuple(tuple(a[i][j] + (b[i][j] - a[i][j]) * f for j in range(2)) for i in range(2))
+
+
+def damon_state(t):
+    """He waits, looking about: a hand shading his eyes and the other on his hip, looking off to one side, then a
+    glance the other way and a shift of weight; then he comes still, faces us and his eyes go up and widen.
+    Glances snap; the body eases (guides/satire.md)."""
+    T_STILL = 22.95
+    turn = -1.0 if t < 22.5 else (0.8 if t < T_STILL else 0.0)
+    lean = -2.0 + 4.0 * ease((t - 22.45) / 0.45) - 2.0 * ease((t - T_STILL) / 0.35)
+    f = ease((t - T_STILL) / 0.35)                               # hands come down to his sides
+    arms = {'L': _lerp_pose(ARM_VISOR_L, ARM_HANG['L'], f), 'R': _lerp_pose(ARM_HIP_R, ARM_HANG['R'], f)}
+    look_up = 0.25 + 0.75 * ease((t - T_SEEN) / 0.4)
+    return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms,
+                visor_car=max(0.0, (t - T_SEEN) / (T_IMPACT - T_SEEN)))
+
+
 def damon_eyes(t):
     """Strength 2 (hopeful) while he waits; widening to 5 as the car falls into view (eyes snap, feelings ease)."""
     return 2 + 3 * ease((t - T_SEEN) / (T_IMPACT - 0.25 - T_SEEN))
@@ -1150,8 +1210,7 @@ def picture_mars(t):
         w = 80 + 440 * f
         p.ell(540, ground - 6, w, w * 0.16, (150, 80, 50), None)
     if t < T_IMPACT:
-        damon(img, cam, 540, MARS_NECK, MARS_S, dict(look_up=1.0, wide=damon_eyes(t),
-                                                      visor_car=max(0, (t - T_SEEN) / (T_IMPACT - T_SEEN))))
+        damon(img, cam, 540, MARS_NECK, MARS_S, damon_state(t))
         if t >= T_ENTER:                                            # dropping under gravity, in front of him
             v = View(flip=180 + 25 * (1 - (t - T_ENTER) / (T_IMPACT - T_ENTER)), **MARS_VIEW)
             land_y = ground - car_bottom(v, CAR_S_MARS)
@@ -1171,7 +1230,7 @@ def picture_mars(t):
                 smoke_cloud(img, cam, 540, ground - 60 * fade, 1300 * g, 620 * fade + 40, 8, fill=(222, 156, 112),
                             shade=(190, 120, 82))
     if t < T_IMPACT:
-        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, 21.79)))
+        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, 21.79)), icons=False)  # clear of him
     return img
 
 
@@ -1217,6 +1276,91 @@ def stills_sheet(out):
         sheet.paste(im, (x, y + 40))
         _label(sheet, x, y + 6, f'{t:.1f}s  {lab}', 22)
     sheet.save(out, quality=86)
+
+
+# ============================================== SOUND =============================================================
+def _hp(x, hz, sr):
+    from scipy.signal import butter, sosfilt
+    return sosfilt(butter(4, hz, 'highpass', fs=sr, output='sos'), x)
+
+
+def _fade(x, a, b, sr):
+    x = x.copy()
+    na, nb = int(a * sr), int(b * sr)
+    if na:
+        x[:na] *= np.linspace(0, 1, na)
+    if nb:
+        x[-nb:] *= np.linspace(1, 0, nb)
+    return x
+
+
+def _place(mix, x, at, sr, gain=1.0):
+    s0 = int(at * sr)
+    if s0 >= len(mix):
+        return
+    seg = x[:len(mix) - s0] * gain
+    mix[s0:s0 + len(seg)] += seg
+
+
+def robot(x, sr):
+    """'Fatality avoided' as a broken car voice: a metallic ring, a coarse sample rate, a stutter on the first
+    syllable and two dropouts."""
+    t = np.arange(len(x)) / sr
+    y = x * (0.55 + 0.45 * np.sin(2 * np.pi * 72 * t))
+    step = 4
+    y = np.repeat(y[::step], step)[:len(x)]
+    s0 = int(1.02 * sr)                                         # the speech starts 1.02 s into the file
+    chunk = y[s0:s0 + int(0.11 * sr)].copy()
+    y = np.concatenate([y[:s0], chunk, chunk * 0.9, y[s0:]])    # "Fa-fa-fatality"
+    for at in (1.72, 2.38):
+        a = int(at * sr)
+        y[a:a + int(0.045 * sr)] *= 0.05
+    return y
+
+
+GAIN = {'hangar': 0.35, 'roof': 0.8, 'clouds': 0.55, 'sea': 0.22, 'earth': 0.28, 'stars': 0.5, 'towards': 0.45}
+
+
+def soundtrack(stems=False):
+    import mossad_audio as MA
+    from burnham_film import load
+    sr = MA.SR
+    n = int((DUR + 0.3) * sr)
+    fx, voice = np.zeros(n), np.zeros(n)
+    orig = load(os.path.join(HERE, 'audio', 'roadster-original.m4a'))
+    _place(fx, _fade(orig, 0.0, 0.25, sr), 0.0, sr)              # shot 1: the demo's own sound
+    hiss = _hp(orig[int(3.6 * sr):int(5.0 * sr)], 1500, sr)      # the jets' hiss, out of the original
+    hiss = hiss / (np.abs(hiss).max() + 1e-9) * 0.5
+    k = 0
+    for name, a, b in SHOTS:                                     # one hiss per flip, shorter and higher each scene
+        if name == 'mars':
+            continue
+        per = FLIP_PERIOD[name]
+        t0 = max(a, T_LAND1)
+        while t0 < b - 0.05:
+            d = min(0.8 * per, 1.0, b - t0)
+            rate = 1 + 0.06 * k
+            src = hiss[(np.arange(int(d * sr)) * rate).astype(int) % len(hiss)]
+            _place(fx, _fade(src, 0.02, min(0.15, d / 2), sr), t0, sr, GAIN[name])
+            t0 += per
+            k += 1
+    crash = load(os.path.join(HERE, 'audio', 'roadster-crash.mp3'))
+    onset = int(np.argmax(np.abs(crash) > 0.1 * np.abs(crash).max()))
+    _place(fx, crash[onset:], T_IMPACT, sr, 1.0)                 # placed by when it really starts
+    v = robot(MA.line('roadster-1'), sr)
+    _place(voice, v, T_LINE, sr)
+    mix = fx + voice
+    mix, g = MA.master(mix, int(DUR * sr))
+    return (mix, voice * g, fx * g) if stems else mix
+
+
+def render(out, small=True, reuse=False, redo=()):
+    import film_engine as E
+    import mossad_audio as MA
+    E.render(NAME, out, size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
+             picture=picture, overlay=overlay, shot_of=lambda t: shot_of(t)[0], sound=soundtrack,
+             write_wav=MA.write_wav, set_ss=lambda v: setattr(B, 'SS', v), crf=27 if small else 20,
+             reuse=reuse, redo=redo, preset='veryfast' if small else 'slow')
 
 
 # ============================================== SHEETS ==============================================================
@@ -1311,6 +1455,12 @@ def main():
         sets_sheet(a[1])
     elif a[0] == 'stills':
         stills_sheet(a[1])
+    elif a[0] == 'animatic':
+        render(a[1], small=True)
+    elif a[0] == 'frames':
+        B.SS = 1
+        for x in a[2:]:
+            frame_image(float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=86)
 
 
 if __name__ == '__main__':
