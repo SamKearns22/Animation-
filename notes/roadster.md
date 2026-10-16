@@ -60,3 +60,10 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   four-point ones (27), and the green comet (28) drifting far behind the car. Shot 7 (Mars): starts small and
   side-lit in the distance (30), the car flipping towards it as it grows until it fills the upright frame half
   off-screen (31), with craters, the dark Valles Marineris scar and a white polar cap (29, 32). Hard cut to the surface.
+- Ramp references 33-35 (Sam, 16 Oct). The ramp: pale grey concrete, red neon strips down both edges, a white centre
+  line, rising from a flat floor plate with a small lip, curving up to near-vertical; a steel lattice scaffold tower
+  behind its right side; black hangar beyond. The car starts at the foot, seen from behind (35), and climbs.
+- CORRECTION to the dials: the HUD reads "G-FORCE 1.0 G" (left, with a side-on car icon) and "ALTITUDE 0.0 FT"
+  (right, with a top-down car icon). The number that rose to 67.8 is ALTITUDE in feet, not speed. Plan: keep both
+  real dials. Altitude climbs to the Mars distance, 738,188,976,378 ft (what one hour at Sam's 139,808,750 mph
+  covers); G-force climbs to 1,274,210 G (reaching that speed in about 5 s). Speed is not shown (Sam may overrule).
