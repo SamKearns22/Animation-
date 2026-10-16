@@ -92,6 +92,12 @@ and the research in `movement.md`.
   one look: who does what to whom, and the result stays visible.
 
 ## 1.3 Staging, continuity and layering
+- **Recreating real footage (Roadster, 16 Oct: the ramp took three rounds):** before drawing anything, (1) step
+  through the source at 6-10 frames a second over every key action and write down positions, angles and timings per
+  frame; (2) work out the source camera (where it stands, what it looks along) and build any set the action touches
+  (a ramp, a track, stairs) as 3D geometry seen through that same camera; (3) put the moving thing on that geometry
+  with the same camera, never a flat 2D shape with the object laid on top; (4) check a few frames side by side against
+  the source before the first animatic. A 2 fps sheet and a 2D ramp cost two extra rounds.
 Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuity editing).
 - **Staging:** each shot shows one idea clearly, with the eye led to it by framing, contrast and detail.
   Keep the action and the important props in frame. Avoid dead space unless it is the point.
