@@ -423,8 +423,8 @@ HAIR = (112, 80, 52)
 def damon(img, cam, x, y, s, st=None, t=0.0):
     """Watney in his suit, front view. st: look_up 0..1, wide 1..6 (the eyes-widening strength), visor_car
     (0..1, the car's reflection growing in the gold visor)."""
-    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None), **(st or {}))
-    L = PoseLocal(cam, x, y, s, st['lean'])
+    st = dict(dict(look_up=0.6, wide=1, visor_car=0.0, turn=0.0, lean=0.0, arms=None, rise=0.0, down=0.0), **(st or {}))
+    L = PoseLocal(cam, x, y, s, st['lean'], st['rise'])
     p = B.Pen(img, L)
     R = lambda pts, sd, a=4: rough(pts, a, sd)
     # backpack showing past the shoulders
@@ -476,11 +476,13 @@ ARM_HIP_R = ((235, 250), (135, 385))             # his left hand on his hip
 
 class PoseLocal(B.Local):
     """A person's own coordinates with the whole body leaning (degrees) about the point between the feet."""
-    def __init__(self, cam, ox, oy, s, lean=0.0):
+    def __init__(self, cam, ox, oy, s, lean=0.0, rise=0.0):
         super().__init__(cam, ox, oy, s)
         self.c, self.sn = math.cos(math.radians(lean)), math.sin(math.radians(lean))
+        self.rise = rise                                  # the upper body lifting (a breath in) or sinking (+)
 
     def P(self, x, y):
+        y = y - self.rise * min(1.0, max(0.0, (440 - y) / 440)) if self.rise else y
         dy = y - 928
         return super().P(x * self.c - dy * self.sn, 928 + x * self.sn + dy * self.c)
 
@@ -598,10 +600,11 @@ def _face(img, p, st, hx, hy):
     p.line([(hx + 10, hy - 98), (hx + 24, hy - 84)], dk(HAIR, 0.8), 2.0)                          # the fringe pushed up
     p.line([(hx - 20, hy - 94), (hx - 10, hy - 80)], dk(HAIR, 0.8), 2.0)
     hx0, hx = hx, hx + 14 * turn
+    down = st.get('down', 0.0)
     for sgn in (-1, 1):
-        ex, ey = hx + sgn * 30, hy - 8
+        ex, ey = hx + sgn * 30, hy - 8 + 5 * down
         p.line([(ex - 14, ey - 13), (ex + 14, ey - 13)], dk(SKIN, 0.82), 2.0)                     # deep-set: lid crease
-        _eye(p, ex, ey, sgn, k, up, turn)
+        _eye(p, ex, ey, sgn, k, up, turn, down)
         br = ey - 21 - 3 * up - 15 * k
         inner_x, outer_x = ex - sgn * 18, ex + sgn * 19
         p.poly([(inner_x, br + 1), (ex, br - 2), (outer_x, br + 2), (outer_x, br + 7), (ex, br + 4), (inner_x, br + 7)],
@@ -620,15 +623,15 @@ def _face(img, p, st, hx, hy):
         p.line([(hx - 20, hy + 52), (hx - 8, hy + 55), (hx + 8, hy + 55), (hx + 20, hy + 52 - 2 * (1 - k))], INK, 2.4)
 
 
-def _eye(p, ex, ey, sgn, k, up, turn=0.0):
+def _eye(p, ex, ey, sgn, k, up, turn=0.0, down=0.0):
     """One opening between two lids, the iris cut to it (no line ever crosses the white)."""
-    w, h = 15 + 3 * k, 5 + 10 * k
+    w, h = 15 + 3 * k, (5 + 10 * k) * (1 - 0.45 * down)        # looking down: the upper lids come down
     us = np.linspace(-1, 1, 15)
     upper = [(ex + w * u, ey - h * (1 - u * u)) for u in us]
     lower = [(ex + w * u, ey + (4 + 6 * k) * (1 - u * u)) for u in us]
     opening = upper + lower[::-1][1:-1]
     p.poly(opening, (252, 252, 250), None)
-    cx, cy = ex + 6 * turn, ey - 3 * up - 2 * k
+    cx, cy = ex + 6 * turn, ey - 3 * up - 2 * k + 4 * down
     r_iris = 8.5 - 2.2 * k
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
     iris = _clip_convex(opening[::-1], circ(r_iris))
@@ -673,7 +676,7 @@ def hangar(img, cam, t=0.0):
         p.line([(x0, y), (x1, y)], (120, 30, 34), 9)
         p.line([(x0, y), (x1, y)], (236, 64, 60), 4)
     # the ramp's centre line: a curve from the floor plate (bottom) up to near-vertical (top)
-    base, top = (640, 1300), (520, 380)
+    base, top = (660, 1300), (470, 370)
     def spine(u):                                              # u 0 at the foot .. 1 at the top
         x = base[0] + (top[0] - base[0]) * u ** 2.2 + 70 * math.sin(u * math.pi) * 0.6
         y = base[1] - (base[1] - top[1]) * (1 - (1 - u) ** 1.6)
@@ -885,24 +888,44 @@ def space_mars(t, grow=0.0):
 # ============================================== THE FILM: TIMELINE ==================================================
 FPS = 12
 SHOTS = [   # (name, start, end): hard cuts
-    ('hangar', 0.0, 10.6),    # 1: the original demo, shot for shot to 6 s; then it keeps flipping and goes up
-    ('roof', 10.6, 12.0),     # 2: out through the hangar roof (outside, night)
-    ('clouds', 12.0, 13.6),   # 3: up through ordinary clouds (pencil)
-    ('sea', 13.6, 15.4),      # 4: wide, bursting through the high cloud layer (pencil)
-    ('earth', 15.4, 17.6),    # 5: the Earth from space, silent (pencil)
-    ('stars', 17.6, 19.6),    # 6: flipping through the stars, the comet far off (pencil)
-    ('towards', 19.6, 21.8),  # 7: flipping towards Mars as it swells (pencil)
-    ('mars', 21.8, 29.0),     # 8: Damon hopeful, eyes 2 -> 5, the car drops upside down, crushes him; the line
+    ('hangar', 0.0, 10.05),   # 1: the original demo, move for move to 6.7 s; then it keeps flipping and goes up.
+                              #    Ends where the original's sound ends (the crowd gasping as it shoots up)
+    ('roof', 10.05, 11.45),   # 2: out through the hangar roof (outside, night), a crunch
+    ('clouds', 11.45, 13.05), # 3: up through ordinary clouds (pencil)
+    ('sea', 13.05, 14.85),    # 4: wide, bursting through the high cloud layer (pencil)
+    ('earth', 14.85, 17.05),  # 5: the Earth from space, silent (pencil)
+    ('stars', 17.05, 19.05),  # 6: flipping through the stars, the comet far off (pencil)
+    ('towards', 19.05, 21.25),# 7: flipping towards Mars as it swells (pencil)
+    ('mars', 21.25, 31.4),    # 8: Damon looks about, sighs, gives up; the car drops upside down on him; the line
 ]
-DUR = 29.0
-T_LAND1 = 6.0          # lands in the smoke (as the original)
-T_UP = 9.6             # the jets go full and it shoots up
-T_SEEN = 23.25         # he notices: looks up, the shadow spreads, the car grows in his visor
-T_IMPACT = 24.2
-T_LINE = 25.0          # roadster-1.m4a starts here (its speech starts 1.02 s in: "Fatality avoided" at ~26.0)
-T_LAMP = 26.0
+DUR = 31.4
+# shot 1, timed to the original frame by frame (3.0-6.8 s studied at 6 frames a second)
+T_TOP = 4.3            # reaches the top of the curl, hanging upside down under it
+T_DROP = 4.55          # falls away, nose turning towards the ground
+T_JETS = 5.0           # the jets ignite mid-turn
+T_UPRIGHT = 5.5        # upright, flying left on its four jets
+T_SETTLE = 6.7         # sunk into the smoke and settled
+T_UP = 9.2             # after its own hops: full jets, straight up
+T_LAND1 = T_SETTLE
+# shot 8
+M0 = 21.25
+T_GLANCE = M0 + 0.75   # looking about: a glance the other way
+T_SIGH = M0 + 1.35     # a deep sigh: shoulders up and down, hands drop
+T_DOWN = M0 + 2.55     # looks at the floor, as if nobody is coming
+T_SEEN = M0 + 4.15     # the shadow spreads; he looks up; the car grows in his visor
+T_IMPACT = M0 + 5.35
+T_LINE = T_IMPACT + 0.8    # roadster-1.m4a starts here (its speech starts 1.02 s in)
+T_LAMP = T_IMPACT + 1.8
 MARS_DIST_FT = 738188976378
-FLIP_PERIOD = {'hangar': 1.4, 'roof': 1.1, 'clouds': 0.9, 'sea': 0.75, 'earth': 0.6, 'stars': 0.45, 'towards': 0.3}
+FLIP_PERIOD = {'hangar': 1.1, 'roof': 0.95, 'clouds': 0.85, 'sea': 0.75, 'earth': 0.6, 'stars': 0.45, 'towards': 0.3}
+
+
+def S0(name):
+    return next(a for n, a, b in SHOTS if n == name)
+
+
+def S1(name):
+    return next(b for n, a, b in SHOTS if n == name)
 
 
 def shot_of(t):
@@ -914,17 +937,32 @@ def ease(x):
     return x * x * (3 - 2 * x)
 
 
+def _climb_u(t):
+    """How far up the ramp (0 foot .. 1 top of the curl): fast at first, slowing into the hang at the top."""
+    return 0.42 + 0.58 * min(1.0, t / T_TOP) ** 1.1         # as the original: mid-ramp at 0 s, the top at 4.3 s
+
+
+def _ramp_pitch(u):
+    return 170 * u ** 1.7                    # flat at the foot, vertical about two-thirds up, 170 deg at the top
+
+
 def flip_angle(t):
-    """The car's own nose-over-tail angle (degrees, negative = nose up and over backwards), faster each scene."""
-    if t < 4.0:
+    """The car's own nose-over-tail angle (degrees; more negative = further over backwards). Round the curl to
+    170 deg, hanging; then on round (nose to the ground) to upright as it falls and the jets fire; then a flip per
+    hop, faster each scene."""
+    if t < T_DROP:
         return -_ramp_pitch(_climb_u(t))
-    if t < T_LAND1:
-        return -80 - 280 * ease((t - 4.0) / (T_LAND1 - 4.0))
-    acc, prev = -360.0, T_LAND1
+    if t < T_UPRIGHT:
+        return -170 - 190 * ease((t - T_DROP) / (T_UPRIGHT - T_DROP))
+    if t < T_SETTLE + 0.2:
+        return -360.0
+    acc = -360.0
     for name, a, b in SHOTS:
-        if b <= T_LAND1 or name == 'mars':
+        if name == 'mars':
+            break
+        a = max(a, T_SETTLE + 0.2)
+        if b <= a:
             continue
-        a = max(a, T_LAND1)
         span = min(t, b) - a
         if span > 0:
             acc -= 360 * span / FLIP_PERIOD[name]
@@ -933,79 +971,80 @@ def flip_angle(t):
     return acc
 
 
-def _climb_u(t):
-    return 0.22 + 0.78 * (t / 4.0) ** 1.6
-
-
-def _ramp_pitch(u):
-    return 80 * u ** 1.5
-
-
 def altitude(t):
-    """The ALTITUDE dial (ft): the original's climb to 67.8, back to 0 at the landing, the hops, then the journey to
-    Mars (the Earth-Mars distance in feet on arrival)."""
-    if t < 4.5:
-        return 7.4 + 60.4 * (t / 4.5) ** 1.3
-    if t < T_LAND1:
-        return 67.8 * (1 - ease((t - 4.5) / 1.5))
+    """The ALTITUDE dial (ft): the original's climb to ~66, falling back as it flies off and settles, its hops, then
+    the journey to Mars (the Earth-Mars distance in feet on arrival)."""
+    if t < T_TOP:
+        return 7.4 + 59.0 * (t / T_TOP) ** 1.3
+    if t < T_SETTLE:
+        return 66.4 * (1 - ease((t - T_TOP) / (T_SETTLE - T_TOP)))
     if t < T_UP:
-        ph = (t - T_LAND1) % 1.2
-        return 38 * math.sin(math.pi * ph / 1.2)
-    if t < 21.8:
-        k = (t - T_UP) / (21.8 - T_UP)
+        return 30 * abs(math.sin(math.pi * (t - T_SETTLE) / 1.1))
+    if t < M0:
+        k = (t - T_UP) / (M0 - T_UP)
         return 20 * (MARS_DIST_FT / 20) ** k                        # roughly exponential: feet, miles, millions...
     return float(MARS_DIST_FT)
 
 
 def gforce(t):
-    if t < T_LAND1:
-        return [1.4, 1.1, 0.9, 0.9, 0.9, 0.9, 0.8, 1.1, 1.1, 0.2, 0.4, 0.3][min(11, int(t * 2))]
+    if t < T_SETTLE:
+        return [1.4, 1.1, 0.9, 0.9, 0.9, 0.9, 0.8, 1.1, 1.1, 0.2, 0.4, 0.3, 1.2, 1.0][min(13, int(t * 2))]
     if t < T_UP:
         return 3.3 + 1.5 * math.sin(t * 5)
-    if t < 21.8:
+    if t < M0:
         return 1274210.0 * ease((t - T_UP) / 1.2)
     return 1274210.0
 
 
 # ---------------------------------------------------------------------------- shot 1: the hangar
 HANGAR_SPINE = None
+HOP_X = -90            # where it settles and hops
 
 
 def hangar_cam_x(t):
-    """The original's camera: still on the ramp while the car climbs, then panning left with it as it flies off,
-    lands and slides on through the smoke (the ramp leaves the frame on the right)."""
-    if t < 4.2:
+    """The original's camera: still on the ramp while the car climbs and hangs, then panning left with it as it
+    falls, flies on its jets and settles (the ramp leaves the frame on the right)."""
+    if t < 4.6:
         return 540.0
-    if t < 7.6:
-        return 540 - 900 * ease((t - 4.2) / 3.4)
-    return -360 - 120 * (t - 7.6) / 3.0
+    return 540 - 640 * ease((t - 4.6) / 2.3) - 30 * max(0.0, t - 6.9)
 
 
 def hangar_car(t):
-    """Where the car is in shot 1: (x, y, scale, View, jets)."""
+    """Where the car is in shot 1: (x, y, scale, View, jets). Every frame changes; nothing jumps."""
     global HANGAR_SPINE
     if HANGAR_SPINE is None:
         HANGAR_SPINE = hangar(B.canvas((0, 0, 0)), B.Cam(1.0, 540, 960))
     sp = HANGAR_SPINE
-    if t < 4.0:                                                     # climbing the ramp, seen from behind
+    if t < T_DROP:                                                  # round the curl, seen from behind; hangs at the top
         u = _climb_u(t)
-        x, y = sp(u)
+        x, y = sp(min(u, 0.95))                                     # on the surface, never past its top edge
         k = (120 - 55 * u) / 120
-        return x, y - 40 * k, 0.75 * k, View(yaw=-90, elev=10, flip=flip_angle(t)), 0.0
-    tx, ty = sp(1.0)
-    land_x = -260
-    if t < T_LAND1:                                                 # off the top, over backwards, down to the left
-        f = (t - 4.0) / (T_LAND1 - 4.0)
-        x = tx + (land_x - tx) * f
-        y = ty - 200 * math.sin(math.pi * min(1, f * 1.15)) + (1240 - ty) * f ** 2.4
-        return x, y, 0.55 + 0.2 * f, View(yaw=-150, elev=12, flip=flip_angle(t)), 0.0
-    if t < T_UP:                                                    # hops on its jets, flipping, drifting left
-        ph = (t - T_LAND1) / 1.2
-        h = [260, 420, 600][min(2, int(ph))]
+        return x, y - 40 * k * (1 - u) ** 0.5, 0.75 * k, View(yaw=-90, elev=10, flip=flip_angle(t)), 0.0
+    tx, ty = sp(0.95)
+    k0 = 0.75 * 65 / 120
+    if t < T_UPRIGHT:                                               # falls, turning nose-down then upright; jets fire
+        f = (t - T_DROP) / (T_UPRIGHT - T_DROP)
+        x = tx - 230 * ease(f)
+        y = ty - 30 + 330 * f * f
+        yaw = -90 - 90 * ease(f)                                    # from seen-from-behind to side-on, nose left
+        jets = ease((t - T_JETS) / 0.25)
+        return x, y, k0 + (0.72 - k0) * ease(f), View(yaw=yaw, elev=10, flip=flip_angle(t)), jets
+    x_up, y_up = tx - 230, ty - 30 + 330
+    if t < T_SETTLE:                                                # flies left on its jets, sinking into the smoke
+        f = (t - T_UPRIGHT) / (T_SETTLE - T_UPRIGHT)
+        x = x_up + (HOP_X - x_up) * ease(f)
+        y = y_up + (1240 - y_up) * ease(f) + 10 * math.sin(t * 9) * (1 - f)
+        return x, y, 0.72, View(yaw=-180, elev=10, flip=-360 + 4 * math.sin(t * 7)), 1.0
+    if t < T_UP:                                                    # our addition: it won't stop - hops and flips
+        ph = (t - T_SETTLE - 0.2) / 1.1
+        if ph < 0:
+            return HOP_X, 1240, 0.72, View(yaw=-180, elev=10, flip=-360), 0.4
+        h = [300, 460, 620][min(2, int(ph))]
         y = 1240 - h * math.sin(math.pi * (ph % 1))
-        return land_x - 60 * (t - T_LAND1), y, 0.75, View(yaw=-160, elev=12, flip=flip_angle(t)), 1.0
-    f = (t - T_UP) / (10.6 - T_UP)                                  # full jets: straight up, out of the top
-    return land_x - 60 * (T_UP - T_LAND1), 1240 - 1500 * f ** 1.6, 0.75, View(yaw=-160, elev=12, flip=flip_angle(t)), 1.0
+        return HOP_X - 25 * ph, y, 0.72, View(yaw=-180, elev=10, flip=flip_angle(t)), 1.0
+    f = (t - T_UP) / (S1('hangar') - T_UP)                          # full jets: straight up, out of the top
+    xh = HOP_X - 25 * (T_UP - T_SETTLE - 0.2) / 1.1
+    return xh, 1240 - 1450 * f ** 1.5, 0.72, View(yaw=-180, elev=10, flip=flip_angle(t)), 1.0
 
 
 def picture_hangar(t):
@@ -1014,20 +1053,20 @@ def picture_hangar(t):
     img = B.canvas((0, 0, 0))
     hangar(img, cam, t)
     x, y, s, v, jets = hangar_car(t)
-    lx = -260 - 60 * max(0.0, min(t, T_UP) - T_LAND1)
-    if t >= T_LAND1 - 0.05:                                         # the smoke from the landing and the jets
-        grow = ease((t - T_LAND1 + 0.05) / 1.0)
-        smoke_cloud(img, cam, lx, 1300, 420 * grow + 120, 150 * grow + 40, 5)
+    t_smoke = T_UPRIGHT + 0.6                                       # the jets reach the floor
+    if t >= t_smoke:
+        grow = ease((t - t_smoke) / 1.0)
+        smoke_cloud(img, cam, HOP_X - 40, 1300, 440 * grow + 80, 160 * grow + 30, 5)
     car(img, cam, x, y, s, v, jets=jets, t=t)
-    if t >= T_LAND1 - 0.05:
-        smoke_cloud(img, cam, lx + 120, 1340, 360 * ease((t - T_LAND1) / 1.4) + 60, 90, 6)
+    if t >= t_smoke + 0.2:
+        smoke_cloud(img, cam, HOP_X + 90, 1345, 380 * ease((t - t_smoke - 0.2) / 1.2) + 50, 90, 6)
     dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(t))
     return img
 
 
 # ---------------------------------------------------------------------------- shot 2: out through the roof
 def picture_roof(t):
-    u = t - 10.6
+    u = t - S0('roof')
     cam = B.Cam(1.0, 540, 960)
     img = B.canvas((22, 28, 56))
     p = B.Pen(img, cam)
@@ -1097,7 +1136,7 @@ def _finish_pencil(c, t):
 def picture_clouds(t):
     import beaver_asteroid as DAM
     PC, c = _pencil(t)
-    u = t - 12.0
+    u = t - S0('clouds')
     c.fill_screen(PC.col(0.40, 0.60, 0.88), 1.4)
     c.vgrad(PC.col(0.74, 0.85, 0.97), 0.0, 0.85, 0, 1920)
     for (x, y0, r, seed) in DAM.CUMULUS:
@@ -1111,7 +1150,7 @@ def picture_clouds(t):
 def picture_sea(t):
     import beaver_asteroid as DAM
     PC, c = _pencil(t)
-    u = t - 13.6
+    u = t - S0('sea')
     c.fill_screen(PC.col(0.12, 0.17, 0.33), 1.5)
     c.vgrad(PC.col(0.36, 0.45, 0.62), 0.0, 0.9, 150, DAM.HORIZON - 250)
     c.vgrad(PC.col(0.99, 0.80, 0.56), 0.0, 0.95, DAM.HORIZON - 380, DAM.HORIZON + 10)
@@ -1135,7 +1174,7 @@ def picture_sea(t):
 def picture_earth(t):
     import beaver_asteroid as DAM
     PC, c = _pencil(t)
-    u = t - 15.4
+    u = t - S0('earth')
     c.fill_screen(DAM.DEEP, 1.3)
     PC.stars(c, 160, seed=5, dim=0.8)
     DAM.earth_limb(c)
@@ -1145,7 +1184,7 @@ def picture_earth(t):
 
 
 def picture_stars(t):
-    u = t - 17.6
+    u = t - S0('stars')
     bg = space_stars(t)
     PC, c = _pencil(t)
     c.img = np.asarray(bg.convert('RGB'), np.float32) / 255.0
@@ -1154,7 +1193,7 @@ def picture_stars(t):
 
 
 def picture_towards(t):
-    u = (t - 19.6) / 2.2
+    u = (t - S0('towards')) / 2.2
     bg = space_mars(t, 0.08 + 0.92 * u)
     PC, c = _pencil(t)
     c.img = np.asarray(bg.convert('RGB'), np.float32) / 255.0
@@ -1169,27 +1208,32 @@ def _lerp_pose(a, b, f):
 
 
 def damon_state(t):
-    """He waits, looking about: a hand shading his eyes and the other on his hip, looking off to one side, then a
-    glance the other way and a shift of weight; then he comes still, faces us and his eyes go up and widen.
-    Glances snap; the body eases (guides/satire.md)."""
-    T_STILL = 22.95
-    turn = -1.0 if t < 22.5 else (0.8 if t < T_STILL else 0.0)
-    lean = -2.0 + 4.0 * ease((t - 22.45) / 0.45) - 2.0 * ease((t - T_STILL) / 0.35)
-    f = ease((t - T_STILL) / 0.35)                               # hands come down to his sides
+    """Natural, moderate movement (guides/satire.md, 'Movement'): he waits, looking about - a hand shading his eyes,
+    the other on his hip, a glance the other way with a shift of weight; a deep sigh, hands dropping; he looks at the
+    floor as if nobody is coming (still, with a small shift now and then, never frozen); the shadow spreads, his eyes
+    go up and widen. Glances snap; the body eases."""
+    turn = -1.0 if t < T_GLANCE else (0.8 if t < T_SIGH + 0.2 else 0.0)
+    lean = -2.0 + 4.0 * ease((t - T_GLANCE) / 0.45) - 2.0 * ease((t - T_SIGH) / 0.6)
+    lean += 0.8 * math.sin((t - T_DOWN) * 2.1) * (T_DOWN <= t < T_SEEN)          # a small shift as he stands there
+    f = ease((t - T_SIGH - 0.35) / 0.55)                          # hands come down during the sigh
     arms = {'L': _lerp_pose(ARM_VISOR_L, ARM_HANG['L'], f), 'R': _lerp_pose(ARM_HIP_R, ARM_HANG['R'], f)}
-    look_up = 0.25 + 0.75 * ease((t - T_SEEN) / 0.4)
-    return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms,
+    breath_in, breath_out = ease((t - T_SIGH) / 0.55), ease((t - T_SIGH - 0.6) / 0.8)
+    rise = 12 * breath_in - 18 * breath_out                        # up on the breath in, sinking lower on the way out
+    down = ease((t - T_DOWN) / 0.6) * (1 - ease((t - T_SEEN - 0.1) / 0.25))
+    look_up = 0.25 + 0.75 * ease((t - T_SEEN - 0.1) / 0.4)
+    look_up -= 0.6 * down
+    return dict(look_up=look_up, wide=damon_eyes(t), turn=turn, lean=lean, arms=arms, rise=rise, down=down,
                 visor_car=max(0.0, (t - T_SEEN) / (T_IMPACT - T_SEEN)))
 
 
 def damon_eyes(t):
     """Strength 2 (hopeful) while he waits; widening to 5 as the car falls into view (eyes snap, feelings ease)."""
-    return 2 + 3 * ease((t - T_SEEN) / (T_IMPACT - 0.25 - T_SEEN))
+    return 2 + 3 * ease((t - T_SEEN - 0.2) / (T_IMPACT - 0.25 - T_SEEN - 0.2))
 
 
 CAR_S_MARS = MARS_S * 928 / 185            # the car at Damon's distance: px per cm from his height (1.85 m)
 MARS_VIEW = dict(yaw=-90, elev=4)           # end-on (upside down, so this puts the nose towards us), so the 2 m wide car fits the frame
-T_ENTER = 23.85                             # the car drops into the top of frame
+T_ENTER = T_IMPACT - 0.35                   # the car drops into the top of frame
 
 
 def picture_mars(t):
@@ -1230,7 +1274,7 @@ def picture_mars(t):
                 smoke_cloud(img, cam, 540, ground - 60 * fade, 1300 * g, 620 * fade + 40, 8, fill=(222, 156, 112),
                             shade=(190, 120, 82))
     if t < T_IMPACT:
-        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, 21.79)), icons=False)  # clear of him
+        dials(img, B.Cam(1.0, 540, 960), gforce(t), altitude(t), flip_angle(min(t, M0 - 0.01)), icons=False)  # clear of him
     return img
 
 
@@ -1328,7 +1372,8 @@ def soundtrack(stems=False):
     n = int((DUR + 0.3) * sr)
     fx, voice = np.zeros(n), np.zeros(n)
     orig = load(os.path.join(HERE, 'audio', 'roadster-original.m4a'))
-    _place(fx, _fade(orig, 0.0, 0.25, sr), 0.0, sr)              # shot 1: the demo's own sound
+    cut = int(S1('hangar') * sr)                                 # shot 1: the demo's own sound, to the cut
+    _place(fx, _fade(orig[:cut], 0.0, 0.015, sr), 0.0, sr)
     hiss = _hp(orig[int(3.6 * sr):int(5.0 * sr)], 1500, sr)      # the jets' hiss, out of the original
     hiss = hiss / (np.abs(hiss).max() + 1e-9) * 0.5
     k = 0
@@ -1336,7 +1381,7 @@ def soundtrack(stems=False):
         if name == 'mars':
             continue
         per = FLIP_PERIOD[name]
-        t0 = max(a, T_LAND1)
+        t0 = max(a, T_SETTLE + 0.2)
         while t0 < b - 0.05:
             d = min(0.8 * per, 1.0, b - t0)
             rate = 1 + 0.06 * k
@@ -1347,6 +1392,8 @@ def soundtrack(stems=False):
     crash = load(os.path.join(HERE, 'audio', 'roadster-crash.mp3'))
     onset = int(np.argmax(np.abs(crash) > 0.1 * np.abs(crash).max()))
     _place(fx, crash[onset:], T_IMPACT, sr, 1.0)                 # placed by when it really starts
+    crunch = _fade(crash[onset:onset + int(0.45 * sr)], 0.0, 0.2, sr)
+    _place(fx, crunch, S0('roof') + 0.04, sr, 0.45)              # the crunch through the roof (Sam, 16 Oct)
     v = robot(MA.line('roadster-1'), sr)
     _place(voice, v, T_LINE, sr)
     mix = fx + voice

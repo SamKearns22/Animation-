@@ -79,6 +79,10 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
+- **Natural, moderate movement (Sam, 16 Oct, every film):** characters are never stock-still like robots or
+  scarecrows by default, and never frantic unless the script calls for it. Give them normal movement that fits the
+  scene (weight shifts, glances about, small gestures, adjusting their posture, a sigh). When unsure what movement suits
+  a character or a scene, describe it to Sam and get his OK **before** making the stills.
 - Nobody is ever frozen, and nobody wobbles: idle life is a held pose with a quick small shift now and then
   (`filmkit.shifts`), a blink or a glance; never a looping sway or tremble. A dead-still hold that is the joke (a
   stunned stare) is listed in `allow` (checked: the audit).

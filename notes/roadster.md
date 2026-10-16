@@ -94,3 +94,14 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   the top of frame 0.35 s before the impact, upside down, nose towards us. Mars zoomed out (MARS_S 0.64). Dials
   bigger (radius 92, numbers 38 px) inside the safe area (x 165 and 800, y 1385); a long number shows short in the
   dial (1.3M, 738B) and in full on a plate above it.
+- Sam's animatic notes (16 Oct), done: (1) shot 1 rebuilt from the original frame by frame (3.0-6.8 s at 6 fps): it
+  climbs round the curl (pitch 0 -> 170 deg, mid-ramp at 0 s, the top at 4.3 s) and hangs upside down under it;
+  falls at 4.55 s, turning nose-down then upright by 5.5 s; the jets ignite at 5.0 s mid-turn; it flies left on its
+  jets, sinking into the smoke, and settles at 6.7 s; the camera holds until 4.6 s then pans left with it. Then its
+  own hops and flips, and straight up at 9.2 s. The shot ends at 10.05 s, where the original's sound ends (the crowd
+  as it shoots up); the sound is cut at the transition. (2) A crunch through the roof (a 0.45 s slice of Sam's crash,
+  quieter). (3) Damon given 3 more seconds: looks about, a deep sigh (shoulders up then sinking, hands drop), looks
+  at the floor as if nobody is coming, then the shadow, he looks up, eyes widen, the crash. Film 31.4 s + sign-off.
+  (4) Hook Text: "Tesla Kills Two Birds With One Stone 🚀" (the rocket as a Noto emoji image at the end of the line).
+  (5) New standing rule for every film: natural, moderate movement (guides/satire.md, best-practice.md 1.2).
+  Space shots: Sam loves them - leave them alone unless he asks.

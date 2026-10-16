@@ -46,6 +46,10 @@ If two files disagree, this file wins; then fix the other file.
   music or an artist's signature look.
 
 ## 1.2 Movement and acting
+- **Natural, moderate movement for every character (Sam, 16 Oct; applies to all films):** never stock-still like a
+  robot or a scarecrow by default, never frantic unless the script calls for it. Normal movement that fits the scene
+  (weight shifts, glances, small gestures, posture, a sigh). If unsure what suits a character or scene, describe it to
+  Sam and get his OK before making the stills.
 Sources: *The Illusion of Life* (Thomas & Johnston), *The Animator's Survival Kit* (Richard Williams),
 and the research in `movement.md`.
 - **The twelve principles** are the baseline:
