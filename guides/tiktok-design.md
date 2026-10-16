@@ -51,7 +51,12 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
     for about the first second only (gone by 1 s, 1.6 s at most);
   - the full-size title lives on the **cover** (chosen when posting) and in the post text instead.
 - **Tight set-ups:** TikTok viewers give a video seconds, not minutes. Cut the set-up to the shortest version
-  that still lands the joke (aim for 15-30 s in all; the first payoff or turn within about 8-10 s).
+  that still lands the joke (aim for 15-30 s in all).
+- **Jokes early (Sam, 16 Oct):** the first laugh within about 5 seconds (open mid-situation; the Hook Text sets the
+  scene); the best joke before the halfway point, never saved for the end; under about 40 s unless the laughs keep
+  coming. Evidence: Press Secretary (60 s, best jokes late) averaged 9.3 s watched, 1.8% to the end, 0 shares, 691 views;
+  Bingo Bingo (51 s, an outburst in the first seconds) averaged 24.9 s (49%), 29% to the end, 107 shares, 16,200 views
+  and 30 followers (about 1.9 per 1,000) after a day. Check the script against this rule before staging any film.
 - On the cover: as big as fits within the safe width. A long title goes on two lines of equal size.
 - **Standard title size** (so the profile grid matches): capitals about 148 px tall per line, as in
   Listening & Learning (`title_lines` in `source/burnham.py`); two words go on two lines. On TikTok it is
