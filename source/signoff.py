@@ -186,7 +186,9 @@ def juice_box(img, sip, sucking_now=False):
         if lg.width > (x1 - x0) - 16:
             lg = lg.resize((int(x1 - x0 - 16), int(lg.height * (x1 - x0 - 16) / lg.width)), Image.LANCZOS)
         img.paste(lg, (int(cx - lg.width / 2), int(y)), lg)
-    for dx, f in ((-34, 0.90), (0, 0.87), (32, 0.91)):                    # three cranberries under the name
+    # three cranberries under the name, wholly in the white space between "Joos" and the red band along the bottom
+    # (Sam, 16 Oct: they sat on the trim; every sign-off keeps them clear of it)
+    for dx, f in ((-34, 0.815), (0, 0.79), (32, 0.82)):
         dy = f * hh
         d.ellipse([cx + dx - 14, y0 + dy - 14, cx + dx + 14, y0 + dy + 14], fill=(206, 22, 48), outline=INK, width=3)
         d.ellipse([cx + dx - 7, y0 + dy - 9, cx + dx - 2, y0 + dy - 4], fill=(255, 220, 220))
