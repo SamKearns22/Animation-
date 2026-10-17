@@ -34,3 +34,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   rings round the eyes, scowl. Zelensky: all black (black military-style jacket over a black shirt, no tie), short
   dark hair, close dark beard, heavy brows. Putin: dark suit, white shirt, dark navy dotted or burgundy tie, thin
   receding pale hair, wide cheekbones, narrow eyes, deadpan. Side and three-quarter views: 18, 21, 23, 27.
+- Slates (refs 28-35): a black chalkboard, landscape (about A5), standing in a light-wood block stand (small dark
+  'THE TRAITORS' logo on its front); the name in white chalk, uneven handwriting (caps or mixed). Players hold it with
+  both hands at the table edge or lifted to the chest; a cut-crystal goblet (patterned glass, short stem) beside them.
+  Reveal framing: seated player from the waist up, square to camera, slate low in frame, dark wood panels behind.
