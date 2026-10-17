@@ -581,7 +581,9 @@ def spatter(seed=4, source=(-1.0, -0.35)):
             if rng.random() > 0.35 + 0.65 * side:
                 continue
             r = rng.choice([0.8, 1.2, 1.7, 2.4, 3.4, 4.6], p=[0.36, 0.26, 0.18, 0.11, 0.06, 0.03])
-            if y < -60:                                # the face: fine spray only
+            if y < -60:                                # the face: a lighter, finer spray (half the dots)
+                if r < 1.5 and rng.random() < 0.5:
+                    continue
                 r = min(r, 2.4)
                 if abs(y + 148) < 14 and (abs(x - 29) < 22 or abs(x + 29) < 22):
                     continue                           # keep the eyes clear

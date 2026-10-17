@@ -44,3 +44,13 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   way (direction, droplets, smears), not cartoony, not so visceral it triggers content warnings. 6 Zelensky in his
   sombre all-black diplomatic clothes (refs 16-24). 7 Putin's slate already shows his vote for Zelensky in Cyrillic:
   ЗЕЛЕНСКИЙ. 8 Hook Text: "The Traitors: the final three".
+- Cast sheet sent 17 Oct (`python3 source/traitors.py cast OUT.jpg`); no notes on blood or likenesses: approved.
+- Zelensky (Sam, 17 Oct: "I like him moving 2-5"): in shot 3 he sinks through the head-in-hands strengths 2 -> 5,
+  eased like a sigh; at 5 (hands over his eyes) by "Jesus Christ", mouth still visible.
+- Trump's speech gets one cut to a closer shot on "And because. And because" (Sam liked the suggestion, 17 Oct;
+  Andrew the Hutt lost viewers in an 11.7 s unbroken shot).
+- Stills sheet sent 17 Oct (`python3 source/traitors.py sheet OUT.jpg 0.6 5.6 7.95 16.8 19.4 20.6 22.6`); checks and
+  audit clean, no sound questions. Shots: Claudia 0-6.5 (slow push-in), Trump 6.5-15.4, Trump close 15.4-20.3, the
+  quarter of the table 20.3-24.4. Hook Text to go at --y 1150 (clear of Claudia's face in the opening seconds).
+- The second "And because" has no subtitle of its own (it would flash for 0.35 s): "And because." stays up through
+  the stall until the punchline.
