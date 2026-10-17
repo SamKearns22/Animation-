@@ -62,7 +62,8 @@ CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes abou
     (L1 + 3.61, L1 + 4.77, 'Zelensky'),
     (L1 + 4.80, L1 + 6.57, 'is a traitor?'),
     (L2 + 0.37, L2 + 1.25, "I'm voting for him"),
-    (L2 + 1.25, L2 + 2.82, "because I don't trust him."),
+    (L2 + 1.25, L2 + 1.88, "because I don't"),       # split so no word is left alone on a second row (Sam, 17 Oct)
+    (L2 + 1.88, L2 + 2.82, 'trust him.'),
     (L2 + 3.27, L2 + 3.88, 'Because I think'),
     (L2 + 3.88, L2 + 5.33, "he's a disgrace."),
     (L2 + 5.75, L2 + 6.30, "He doesn't like"),
@@ -499,11 +500,27 @@ def caption_at(t):
     return None
 
 
+CAPTION_PX = 56    # the series' caption is 50 px; this film 56 (Sam, 17 Oct): the widest chunk still sits inside x 60-900
+
+
+def caption(img, s, bottom=1480):
+    """peepee.caption at this film's size (the shared one stays at 50 px for the other films)."""
+    S = B.SS
+    f = ImageFont.truetype(B.SANS, CAPTION_PX * S)
+    rows = B.wrap(s, f, 700 * S)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for i, row in enumerate(rows):
+        y = (bottom - 34 - 64 * (len(rows) - 1 - i)) * S
+        d.text((540 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=5 * S, stroke_fill=(0, 0, 0))
+    img.alpha_composite(lay)
+
+
 def overlay(img, t):
     if t < BLACK_AT:
         c = caption_at(t)
         if c:
-            PP.caption(img, c)
+            caption(img, c)
     return img
 
 
