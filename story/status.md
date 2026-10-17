@@ -370,3 +370,5 @@ Read this first in any new session, after CLAUDE.md.
   head-in-hands 2 -> 5, Claudia), room/table in `traitors.py`. References in `references/traitors/`.
 - Lessons: no added room tone (the levelling lifted it into audible static); short subtitle chunks (rule in guides/satire.md).
 - Posting plan: Sunday 18 Oct, 9am (Sam). Post text offered, not yet written.
+- 17 Oct (later): subtitles 56 px for this film (series 50 px; widest chunk x 253-827, safe 60-900) and "because I don't
+  trust him." split in two (no lonely word); final re-rendered 141 s and re-finished: 3.0 MB, 26.4 s.
