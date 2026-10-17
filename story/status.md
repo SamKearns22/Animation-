@@ -360,3 +360,13 @@ Read this first in any new session, after CLAUDE.md.
   into the white space). 46 notes in `notes/press-secretary.md`. Lessons are in `guides/satire.md`.
 - To do after posting: explain the word-timing tool (needs huggingface.co allowed in the environment's network settings);
   Sam to send reference photos so missing ones can be suggested next time.
+
+## Done: "The Traitors" (TikTok satire, final Round Table: Trump, Putin, Zelensky; `notes/traitors.md`, `source/traitors.py`)
+- **Finished 17 Oct:** `animations/traitors-vertical.mp4` (26.4 s, 1080 x 1920, 12 fps, 2.9 MB). Final render 135 s on 4
+  cores (`python3 source/traitors.py final OUT.mp4`, animatic with `--small` about 40 s); untitled render kept in
+  `source/data/traitors/traitors-untitled.mp4` (not on GitHub); finished with `finish.py ... "The Traitors: the final
+  three" --y 400 --centre`. Sam's three takes `source/audio/traitors-1..3.m4a` (Claudia says just "Donald,").
+- People in `source/traitors_cast.py` (Trump, Putin with blood spatter and Cyrillic slate, Zelensky sinking through
+  head-in-hands 2 -> 5, Claudia), room/table in `traitors.py`. References in `references/traitors/`.
+- Lessons: no added room tone (the levelling lifted it into audible static); short subtitle chunks (rule in guides/satire.md).
+- Posting plan: Sunday 18 Oct, 9am (Sam). Post text offered, not yet written.
