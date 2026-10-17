@@ -43,7 +43,7 @@ NAME = 'traitors'
 # "And because I just don't like looking at him."; the 1.1 s stall before the last is the joke, kept);
 # Zelensky 1.42-2.84.
 LINES = [
-    dict(n=1, who='claudia', text='Donald Trump, why do you think Zelensky is a traitor?', audio='traitors-1',
+    dict(n=1, who='claudia', text='Donald, why do you think Zelensky is a traitor?', audio='traitors-1',
          trim=0.33, at=0.0),
     dict(n=2, who='trump', text="I'm voting for him because I don't trust him. Because I think he's a disgrace. "
                                 "He doesn't like any of my deals. And because. And because I just don't like looking at him.",
@@ -57,8 +57,8 @@ DUR = BLACK_AT = 24.4
 # its own, on its word ("I" at 11.32 s in Trump's take, its syllable peak). The second "And because" (0.45 s before
 # the punchline) is not given its own subtitle: it would flash up for a third of a second. Times in file seconds + the take's origin.
 CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes about once a second)
-    (L1 + 0.93, L1 + 2.24, 'Donald Trump,'),
-    (L1 + 2.24, L1 + 3.51, 'why do you think'),
+    (L1 + 0.93, L1 + 2.05, 'Donald,'),               # Sam's take says just "Donald" (17 Oct)
+    (L1 + 2.05, L1 + 3.51, 'why do you think'),
     (L1 + 3.61, L1 + 4.77, 'Zelensky'),
     (L1 + 4.80, L1 + 6.57, 'is a traitor?'),
     (L2 + 0.37, L2 + 1.25, "I'm voting for him"),
@@ -73,7 +73,7 @@ CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes abou
     (L2 + 11.92, L2 + 13.5, 'looking at him.'),
     (L3 + 1.52, L3 + 3.2, 'Jesus Christ.'),
 ]
-HOOK = 'The Traitors: the final three'
+HOOK = 'The Traitors: the final three'   # finish.py ... --y 400 --centre (on the wall above Claudia, Sam 17 Oct)
 JABS = [L2 + 1.30, L2 + 3.21, L2 + 9.12, L2 + 11.04]       # "because": Trump jabs his slate (syllable peaks)
 SEARCH = (L2 + 9.8, L2 + 10.85)                            # the stall: his eyes drift up and away for a reason
 SNEER = (L2 + 11.95, SHOTS[2][2])                           # "looking at him": a glance across at Zelensky, the sneer

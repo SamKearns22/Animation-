@@ -61,3 +61,5 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Round 2 notes (Sam, 17 Oct), done: Putin and Zelensky each have a goblet (by their outer hand, in frame); one empty
   chair between them (not three); the added room tone removed (heard as static; the takes' own background is now
   quieter than the originals'). Subtitle rule approved and added to guides/satire.md. Animatic v2 sent.
+- Round 3 (Sam, 17 Oct): Hook Text on the wall above Claudia, centred: finish.py ... "The Traitors: the final three"
+  --y 400 --centre. Claudia's take says just "Donald," (not "Donald Trump,"): line text and subtitle changed.
