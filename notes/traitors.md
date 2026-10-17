@@ -14,7 +14,7 @@ Brief (Sam, 17 Oct):
 - Topical hooks: Trump called Ukraine's refinery strikes a "disgrace" (Newsmax, 15 Oct); "my deals" = the US-Russia
   diesel deal; he said Ukraine should "get a new president" (10 Oct).
 
-Recordings (filed 17 Oct, matched by length and phrasing, confirmed by Sam 17 Oct):
+Recordings (filed 17 Oct, matched by length and phrasing, waiting on Sam's OK):
 - `source/audio/traitors-1.m4a` = Claudia (New Recording 22, 7.4 s, 5 phrases, slow and dramatic)
 - `source/audio/traitors-2.m4a` = Trump (New Recording 18, 14.1 s, 5 phrases; the 4th is "And because.")
 - `source/audio/traitors-3.m4a` = Zelensky (New Recording 19, 3.9 s, one phrase at 1.4-2.9 s)
@@ -26,8 +26,11 @@ wood panelled walls with lattice grilles and warm wall lights. 08 is a different
 Claudia stands behind the players at the table (03, 10): black velvet jacket, white frilled blouse, black bow, fringe.
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
-- Recording 22 = Claudia, 18 = Trump, 19 = Zelensky (Sam, 17 Oct).
-- Claudia's look (Sam's answer 2, refs 11-15): black tailored jacket, white blouse with big frilled cuffs showing
+- Claudia's look (refs 11-15; question 2 still open, recommended her own look, not the cloak): black tailored jacket, white blouse with big frilled cuffs showing
   past the sleeves, a black rose/bow at the throat, heavy straight black fringe to the eyebrows, long straight black
   hair past the shoulders, dark smoky eyes, nude lips; hands clasped in front at the waist (her standing pose, 11).
-  Not the hooded cloak.
+- Sam's '1.', '2.', '3.' label which reference group he is sending (room, Claudia, the three leaders), not answers.
+- Leaders (refs 16-27): Trump: navy suit, white shirt, red tie, flag pin, swept blond-orange hair, tanned face, pale
+  rings round the eyes, scowl. Zelensky: all black (black military-style jacket over a black shirt, no tie), short
+  dark hair, close dark beard, heavy brows. Putin: dark suit, white shirt, dark navy dotted or burgundy tie, thin
+  receding pale hair, wide cheekbones, narrow eyes, deadpan. Side and three-quarter views: 18, 21, 23, 27.
