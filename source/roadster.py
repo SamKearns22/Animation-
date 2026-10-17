@@ -1256,42 +1256,71 @@ def _finish_pencil(c, t):
     return Image.fromarray(c.result()).convert('RGBA')
 
 
+class _Night:
+    """Dam's clouds re-lit for a night launch (Sam, 17 Oct: the hangar is at night, so the whole climb stays night -
+    moonlit clouds and cloud sea, no daytime blue, no sunset). Swaps Dam's cloud colours while a shot is drawn."""
+    def __enter__(self):
+        import beaver_asteroid as DAM
+        import pencil_cartoon as PC
+        self.DAM, self.keep = DAM, (DAM.CU_SHADOW, DAM.CU_MID, DAM.CU_LIT, DAM.C_SHADOW, DAM.C_MID, DAM.C_LIT, DAM.C_HI)
+        DAM.CU_SHADOW, DAM.CU_MID, DAM.CU_LIT = PC.col(0.20, 0.24, 0.38), PC.col(0.36, 0.42, 0.58), PC.col(0.66, 0.72, 0.86)
+        DAM.C_SHADOW, DAM.C_MID = PC.col(0.14, 0.17, 0.30), PC.col(0.28, 0.33, 0.50)
+        DAM.C_LIT, DAM.C_HI = PC.col(0.52, 0.58, 0.76), PC.col(0.80, 0.84, 0.94)
+        return DAM
+
+    def __exit__(self, *a):
+        D = self.DAM
+        D.CU_SHADOW, D.CU_MID, D.CU_LIT, D.C_SHADOW, D.C_MID, D.C_LIT, D.C_HI = self.keep
+
+
+MOON = (820, 300)
+
+
+def _moon(c, PC, x, y, r=46):
+    c.glow(x, y, r * 6, PC.col(0.55, 0.62, 0.80), 0.35, power=1.6)
+    c.poly(PC.ell(x, y, r, r, 0, 40), fill=PC.col(0.94, 0.94, 0.88), pressure=1.1, jit=0.6)
+    c.poly(PC.ell(x - r * 0.3, y - r * 0.15, r * 0.22, r * 0.18, 0, 16), fill=PC.col(0.80, 0.80, 0.76), opacity=0.8)
+    c.poly(PC.ell(x + r * 0.25, y + r * 0.3, r * 0.15, r * 0.12, 0, 16), fill=PC.col(0.80, 0.80, 0.76), opacity=0.8)
+
+
 def picture_clouds(t):
-    import beaver_asteroid as DAM
-    PC, c = _pencil(t)
-    u = t - S0('clouds')
-    c.fill_screen(PC.col(0.40, 0.60, 0.88), 1.4)
-    c.vgrad(PC.col(0.74, 0.85, 0.97), 0.0, 0.85, 0, 1920)
-    for (x, y0, r, seed) in DAM.CUMULUS:
-        DAM.cumulus(c, x, y0 + 1400 * u, r, seed)
-    _paste(c, _car_layer(540, 1500 - 437 * u, 0.7, View(yaw=-40, elev=8, flip=flip_angle(t)), 1.0, t))
-    bx, by, br, bseed = DAM.BIG_CLOUD
-    DAM.cumulus(c, bx, -600 + 1400 * u, br, bseed)                  # the cloud it punches up through, in front
-    return _finish_pencil(c, t)
+    """Shot 3: up through ordinary clouds, at night - moonlit."""
+    with _Night() as DAM:
+        PC, c = _pencil(t)
+        u = t - S0('clouds')
+        c.fill_screen(PC.col(0.05, 0.08, 0.18), 1.4)
+        c.vgrad(PC.col(0.14, 0.19, 0.34), 0.0, 0.85, 0, 1920)
+        PC.stars(c, 90, seed=8, dim=0.6)
+        _moon(c, PC, *MOON)
+        for (x, y0, r, seed) in DAM.CUMULUS:
+            DAM.cumulus(c, x, y0 + 1400 * u, r, seed)
+        _paste(c, _car_layer(540, 1500 - 437 * u, 0.7, View(yaw=-40, elev=8, flip=flip_angle(t)), 1.0, t))
+        bx, by, br, bseed = DAM.BIG_CLOUD
+        DAM.cumulus(c, bx, -600 + 1400 * u, br, bseed)              # the cloud it punches up through, in front
+        return _finish_pencil(c, t)
 
 
 def picture_sea(t):
-    import beaver_asteroid as DAM
-    PC, c = _pencil(t)
-    u = t - S0('sea')
-    c.fill_screen(PC.col(0.12, 0.17, 0.33), 1.5)
-    c.vgrad(PC.col(0.36, 0.45, 0.62), 0.0, 0.9, 150, DAM.HORIZON - 250)
-    c.vgrad(PC.col(0.99, 0.80, 0.56), 0.0, 0.95, DAM.HORIZON - 380, DAM.HORIZON + 10)
-    for x, y, ln in DAM.WISPS:
-        c.line([(x, y), (x + ln, y + 2)], PC.col(0.80, 0.68, 0.70), lw=5, pressure=0.8, opacity=0.5)
-    c.glow(DAM.SUN[0], DAM.SUN[1], 700, PC.col(1.0, 0.82, 0.5), 0.7, power=1.6)
-    c.glow(DAM.SUN[0], DAM.SUN[1], 170, PC.WHITE, 1.0, power=1.3)
-    ry = DAM.HORIZON + 120 - 900 * min(1.0, u / 1.8) ** 0.85
-    for (x, y, rad, seed) in DAM.CLOUD_SEA:
-        DAM.cloud_puff(c, x, y, rad, seed)
-    if u > 0.15:                                                    # its white jet trail out of the cloud sea
-        ys = np.linspace(DAM.HORIZON + 60, ry + 20, 30)
-        wd = 5 + 0.03 * (ys - ry)
-        xc = 430 + 6 * np.sin(ys * 0.03)
-        c.poly(np.concatenate([np.stack([xc - wd, ys], 1), np.stack([xc + wd, ys], 1)[::-1]]),
-               fill=PC.col(0.97, 0.97, 0.99), pressure=1.0, jit=1.5)
-        _paste(c, _car_layer(430, ry, 0.13, View(yaw=-30, elev=10, flip=flip_angle(t)), 1.0, t))
-    return _finish_pencil(c, t)
+    """Shot 4: wide, bursting up through the high cloud layer, at night - a moonlit cloud sea under the stars."""
+    with _Night() as DAM:
+        PC, c = _pencil(t)
+        u = t - S0('sea')
+        c.fill_screen(PC.col(0.03, 0.05, 0.12), 1.5)
+        c.vgrad(PC.col(0.10, 0.14, 0.28), 0.0, 0.9, 150, DAM.HORIZON - 120)
+        c.vgrad(PC.col(0.22, 0.28, 0.46), 0.0, 0.7, DAM.HORIZON - 260, DAM.HORIZON + 10)   # a faint glow on the horizon
+        PC.stars(c, 150, seed=9, dim=0.75)
+        _moon(c, PC, 300, 520, 40)
+        ry = DAM.HORIZON + 120 - 900 * min(1.0, u / 1.8) ** 0.85
+        for (x, y, rad, seed) in DAM.CLOUD_SEA:
+            DAM.cloud_puff(c, x, y, rad, seed)
+        if u > 0.15:                                                # its white jet trail out of the cloud sea
+            ys = np.linspace(DAM.HORIZON + 60, ry + 20, 30)
+            wd = 5 + 0.03 * (ys - ry)
+            xc = 430 + 6 * np.sin(ys * 0.03)
+            c.poly(np.concatenate([np.stack([xc - wd, ys], 1), np.stack([xc + wd, ys], 1)[::-1]]),
+                   fill=PC.col(0.86, 0.88, 0.94), pressure=1.0, jit=1.5)
+            _paste(c, _car_layer(430, ry, 0.13, View(yaw=-30, elev=10, flip=flip_angle(t)), 1.0, t))
+        return _finish_pencil(c, t)
 
 
 def picture_earth(t):
@@ -1773,7 +1802,8 @@ def main():
     elif a[0] == 'animatic':
         render(a[1], small=True)
     elif a[0] == 'final':                       # the clean, untitled full render (1080 x 1920); finish.py adds the rest
-        render(a[1], small=False, reuse='--reuse' in a)
+        render(a[1], small=False, reuse='--reuse' in a,
+               redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
     elif a[0] == 'frames':
         B.SS = 1
         for x in a[2:]:

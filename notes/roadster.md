@@ -127,3 +127,6 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   the spreading shadow and his widening eyes carry the moment.
 - Support tower now stands on the floor (legs from the back of the ramp to the ground, X-braced); the red floor
   strips are the ramp's own red edges carried back along the floor from its foot (Sam, 16 Oct).
+- Sam (17 Oct): the climb showed three times of day (night hangar, daytime clouds, sunset cloud sea). Shots 3-4 are
+  now night (`_Night`: Dam's clouds re-lit moonlit blue, a dark starry sky, a moon; the cloud sea under the stars with
+  a faint horizon glow); the Earth shot keeps the dawn on the planet's edge seen from orbit.
