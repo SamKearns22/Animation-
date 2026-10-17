@@ -14,7 +14,7 @@ Brief (Sam, 17 Oct):
 - Topical hooks: Trump called Ukraine's refinery strikes a "disgrace" (Newsmax, 15 Oct); "my deals" = the US-Russia
   diesel deal; he said Ukraine should "get a new president" (10 Oct).
 
-Recordings (filed 17 Oct, matched by length and phrasing, waiting on Sam's OK):
+Recordings (filed 17 Oct, matched by length and phrasing, confirmed by Sam 17 Oct):
 - `source/audio/traitors-1.m4a` = Claudia (New Recording 22, 7.4 s, 5 phrases, slow and dramatic)
 - `source/audio/traitors-2.m4a` = Trump (New Recording 18, 14.1 s, 5 phrases; the 4th is "And because.")
 - `source/audio/traitors-3.m4a` = Zelensky (New Recording 19, 3.9 s, one phrase at 1.4-2.9 s)
@@ -38,3 +38,9 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   'THE TRAITORS' logo on its front); the name in white chalk, uneven handwriting (caps or mixed). Players hold it with
   both hands at the table edge or lifted to the chest; a cut-crystal goblet (patterned glass, short stem) beside them.
   Reveal framing: seated player from the waist up, square to camera, slate low in frame, dark wood panels behind.
+- Sam's answers (17 Oct): 1 recordings confirmed. 2 no cloak: Claudia in her own black jacket and frilled cuffs.
+  3 shot 3 shows ONE QUARTER of the table with Putin and Zelensky at either end of that arc (they would never sit
+  next to each other). 4 Trump pugnacious, arrogant, brash. 5 the blood is spattered all over Putin in a believable
+  way (direction, droplets, smears), not cartoony, not so visceral it triggers content warnings. 6 Zelensky in his
+  sombre all-black diplomatic clothes (refs 16-24). 7 Putin's slate already shows his vote for Zelensky in Cyrillic:
+  ЗЕЛЕНСКИЙ. 8 Hook Text: "The Traitors: the final three".
