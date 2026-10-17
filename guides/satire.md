@@ -112,6 +112,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Anyone in a close-up must be seen in a wide shot.
 
 ## Subtitles (Sam, 16 Oct)
+- **Short chunks of two to five words**, each on its first word, so the text changes about once a second (Sam,
+  17 Oct: holds second-by-second attention).
 - **Never ahead of the voice:** each comes up with its first word (about 0.1 s after it starts), never before.
 - **A punchline gets its own subtitle**, on the exact word (e.g. "helicopters,", "I'll get back to you on that.").
 - **Word timing:** match the script's syllables to the syllable beats in the recording (see `press_secretary._syllable_beats`),

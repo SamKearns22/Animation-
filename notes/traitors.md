@@ -58,3 +58,6 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   (one corner well up into the cheek, a crease, eyes narrowed); the second "And because" keeps its own subtitle;
   subtitles in short chunks of 2-5 words. Rule for guides/satire.md proposed, not yet approved.
 - Animatic v1 sent 17 Oct (24.4 s, 540 x 960, 1.0 MB, 34 s render; `final OUT --small`).
+- Round 2 notes (Sam, 17 Oct), done: Putin and Zelensky each have a goblet (by their outer hand, in frame); one empty
+  chair between them (not three); the added room tone removed (heard as static; the takes' own background is now
+  quieter than the originals'). Subtitle rule approved and added to guides/satire.md. Animatic v2 sent.

@@ -406,7 +406,7 @@ def shot_trump(img, t, close=False):
 S3 = dict(cx=540, cy=1730, rx=1000, ry=500)
 S3_SEATS = [math.radians(a) for a in range(-90 + 9, 270, 18)]       # the same 20 places
 P_SEAT, Z_SEAT = math.radians(-90 - 20), math.radians(-90 + 20)     # a quarter of the table (Sam): one at each end,
-EMPTY = [math.radians(a) for a in (-90 - 10, -90, -90 + 10)]        # the empty places between (spacing squeezed)
+EMPTY = [math.radians(-90)]                                         # one empty place between (Sam: too many chairs)
 
 
 def seat_place(a):
@@ -458,7 +458,7 @@ def shot_arc(img, t):
             C.draw_slate(img, p, 130 * towards, TABLE_Y + 96, SLATE_W, 'ЗЕЛЕНСКИЙ', cyrillic=True, seed=4)
         else:
             C.draw_slate(img, p, 130 * towards, TABLE_Y + 96, SLATE_W, '', face_up=False)
-        C.goblet(p, -190 * towards, TABLE_Y + 70)
+        C.goblet(p, -105 * towards, TABLE_Y + 70)     # by their outer hand, kept in frame (Sam: each has one)
 
 
 # ------------------------------------------------------------------------------------------------ idle life
@@ -513,7 +513,7 @@ def frame_image(t):
 
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.random.default_rng(1).standard_normal(n) * 0.002    # quiet room tone
+    voice, rest = np.zeros(n), np.zeros(n)     # no added room tone (Sam, 17 Oct: it was heard as static)
     for ln in LINES:
         s = int(ln['start'] * SR)
         seg = ln['_voice'][:max(0, n - s)]
