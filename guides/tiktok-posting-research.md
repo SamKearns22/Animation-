@@ -73,6 +73,7 @@ How to read this:
 | MOSSAD (30 s) | Sun 4 Oct, 9:02am | 6,906 views at 6 h; 17.1 s average watch; 37% to the end |
 | The Patriots 2 (60 s) | Mon 5 Oct, 1pm | 255 views at 1.5 h; 14.8 s average; 14% to the end |
 | DLC (49 s) | Tue 6 Oct, 5:35pm | 175 views at 2.5 h; 7.3 s average; 3.8% to the end |
+| ROADSTER (32 s + 2 s sign-off) | Sat 17 Oct, 9:37am (the day after the Friday lunchtime post) | 4,529 views at about 2 h 50 min; 12.0 s average (35% of 34 s); 5.53% to the end; 80 likes (1.8%), 7 comments, 0 shares, 6 saves, 0 new followers |
 These differ in topic, length, opening and age, so **time of day cannot be separated from everything else.** The
 clearest pattern is the one TikTok describes: shorter, with a person and a situation from the first frame, was watched
 more of the way through.
