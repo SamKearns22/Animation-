@@ -46,7 +46,7 @@ LINES = [
     dict(n=1, who='claudia', text='Donald, why do you think Zelensky is a traitor?', audio='traitors-1',
          trim=0.33, at=0.0),
     dict(n=2, who='trump', text="I'm voting for him because I don't trust him. Because I think he's a disgrace. "
-                                "He doesn't like any of my deals. And because. And because I just don't like looking at him.",
+                                "Because he doesn't like any of my deals. And because. And because I just don't like looking at him.",
          audio='traitors-2', trim=0.0, at=6.63),
     dict(n=3, who='zelensky', text='Jesus Christ.', audio='traitors-3', trim=0.0, at=20.48),
 ]
@@ -66,8 +66,8 @@ CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes abou
     (L2 + 1.88, L2 + 2.82, 'trust him.'),
     (L2 + 3.27, L2 + 3.88, 'Because I think'),
     (L2 + 3.88, L2 + 5.33, "he's a disgrace."),
-    (L2 + 5.75, L2 + 6.30, "He doesn't like"),
-    (L2 + 6.30, L2 + 8.38, 'any of my deals.'),
+    (L2 + 5.75, L2 + 6.46, "Because he doesn't"),
+    (L2 + 6.46, L2 + 8.38, 'like any of my deals.'),
     (L2 + 9.02, L2 + 10.92, 'And because.'),
     (L2 + 10.92, L2 + 11.32, 'And because'),       # brief, but kept (Sam, 17 Oct)
     (L2 + 11.32, L2 + 11.92, "I just don't like"),
@@ -75,7 +75,7 @@ CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes abou
     (L3 + 1.52, L3 + 3.2, 'Jesus Christ.'),
 ]
 HOOK = 'The Traitors: the final three'   # finish.py ... --y 400 --centre (on the wall above Claudia, Sam 17 Oct)
-JABS = [L2 + 1.30, L2 + 3.21, L2 + 9.12, L2 + 11.04]       # "because": Trump jabs his slate (syllable peaks)
+JABS = [L2 + 1.30, L2 + 3.21, L2 + 5.72, L2 + 9.12, L2 + 11.04]       # "because": Trump jabs his slate (syllable peaks)
 SEARCH = (L2 + 9.8, L2 + 10.85)                            # the stall: his eyes drift up and away for a reason
 SNEER = (L2 + 11.95, SHOTS[2][2])                           # "looking at him": a glance across at Zelensky, the sneer
 Z_SINK = [(20.3, 2.0), (20.7, 2.0), (21.75, 4.0), (23.0, 5.0)]   # Zelensky's head-in-hands strength (Sam: 2 -> 5)
