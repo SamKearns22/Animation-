@@ -67,7 +67,7 @@ Read this first in any new session, after CLAUDE.md.
 - Lessons became rules and checks in `guides/satire.md` (see best-practice Part 2, "Lessons from The Park").
 
 ## Done: "Roadster" (TikTok satire, Tesla Roadster flying-car demo to Mars, `notes/roadster.md`, `source/roadster.py`)
-- Final: `animations/roadster-vertical.mp4` (34 s with the 2 s sign-off, 10.0 MB, 1080 x 1920), 16 Oct 2026. Clean untitled
+- Final: `animations/roadster-vertical.mp4` (34 s with the 2 s sign-off, 9.7 MB, 1080 x 1920), 16 Oct 2026; re-rendered 17 Oct with the whole climb at night (82 s: only the two cloud shots redone). Clean untitled
   render kept in `source/data/roadster/roadster-CLEAN.mp4` (not on GitHub; it took 128 s). Hook Text "Tesla Kills Two
   Birds With One Stone" + Noto rocket emoji (picture in `source/fonts/emoji/`, drawn by `hook_text.py`), placed at
   y 440 (`--y 440`) so it clears the car on the ramp.
