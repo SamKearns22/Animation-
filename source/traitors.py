@@ -56,20 +56,27 @@ DUR = BLACK_AT = 24.4
 # Subtitles: (start, end, text): each with its first word (Sam, 16 Oct: never ahead of the voice); the punchline on
 # its own, on its word ("I" at 11.32 s in Trump's take, its syllable peak). The second "And because" (0.45 s before
 # the punchline) is not given its own subtitle: it would flash up for a third of a second. Times in file seconds + the take's origin.
-CAPS = [
-    (L1 + 0.93, L1 + 3.51, 'Donald Trump, why do you think'),
-    (L1 + 3.61, L1 + 6.57, 'Zelensky is a traitor?'),
-    (L2 + 0.37, L2 + 2.82, "I'm voting for him because I don't trust him."),
-    (L2 + 3.27, L2 + 5.33, "Because I think he's a disgrace."),
-    (L2 + 5.75, L2 + 8.38, "He doesn't like any of my deals."),
-    (L2 + 9.02, L2 + 11.32, 'And because.'),         # stays up through the stall and the second "And because"
-    (L2 + 11.32, L2 + 13.5, "I just don't like looking at him."),
+CAPS = [   # short chunks, two to five words (Sam, 17 Oct: the text changes about once a second)
+    (L1 + 0.93, L1 + 2.24, 'Donald Trump,'),
+    (L1 + 2.24, L1 + 3.51, 'why do you think'),
+    (L1 + 3.61, L1 + 4.77, 'Zelensky'),
+    (L1 + 4.80, L1 + 6.57, 'is a traitor?'),
+    (L2 + 0.37, L2 + 1.25, "I'm voting for him"),
+    (L2 + 1.25, L2 + 2.82, "because I don't trust him."),
+    (L2 + 3.27, L2 + 3.88, 'Because I think'),
+    (L2 + 3.88, L2 + 5.33, "he's a disgrace."),
+    (L2 + 5.75, L2 + 6.30, "He doesn't like"),
+    (L2 + 6.30, L2 + 8.38, 'any of my deals.'),
+    (L2 + 9.02, L2 + 10.92, 'And because.'),
+    (L2 + 10.92, L2 + 11.32, 'And because'),       # brief, but kept (Sam, 17 Oct)
+    (L2 + 11.32, L2 + 11.92, "I just don't like"),
+    (L2 + 11.92, L2 + 13.5, 'looking at him.'),
     (L3 + 1.52, L3 + 3.2, 'Jesus Christ.'),
 ]
 HOOK = 'The Traitors: the final three'
 JABS = [L2 + 1.30, L2 + 3.21, L2 + 9.12, L2 + 11.04]       # "because": Trump jabs his slate (syllable peaks)
 SEARCH = (L2 + 9.8, L2 + 10.85)                            # the stall: his eyes drift up and away for a reason
-SNEER = (L2 + 12.3, SHOTS[2][2])                           # "looking at him": a glance across at Zelensky, the sneer
+SNEER = (L2 + 11.95, SHOTS[2][2])                           # "looking at him": a glance across at Zelensky, the sneer
 Z_SINK = [(20.3, 2.0), (20.7, 2.0), (21.75, 4.0), (23.0, 5.0)]   # Zelensky's head-in-hands strength (Sam: 2 -> 5)
 TABLE_Y = 300             # a seated player's edge of the table, in their own units (neck at 0, shoulders at 60)
 STAND_Y = 430             # the table's edge for someone standing (Claudia)
@@ -412,7 +419,7 @@ def seat_place(a):
 
 def putin_state(t):
     sh = filmkit.shifts(t, seed=31, amount=1.0)
-    return dict(mouth='rest', smirk=0.6, look=0.25, turn=0.28, blink=F.blinking(t, BLINKS['putin']),
+    return dict(mouth='rest', smirk=1.0, lid=0.48, squint=0.4, look=0.25, turn=0.28, blink=F.blinking(t, BLINKS['putin']),
                 head_dx=3 * sh, head_dy=10)
 
 

@@ -54,3 +54,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   quarter of the table 20.3-24.4. Hook Text to go at --y 1150 (clear of Claudia's face in the opening seconds).
 - The second "And because" has no subtitle of its own (it would flash for 0.35 s): "And because." stays up through
   the stall until the punchline.
+- Round 1 notes (Sam, 17 Oct), done: less blood round Putin's mouth (mouth kept clear) and a sly satisfied smirk
+  (one corner well up into the cheek, a crease, eyes narrowed); the second "And because" keeps its own subtitle;
+  subtitles in short chunks of 2-5 words. Rule for guides/satire.md proposed, not yet approved.
+- Animatic v1 sent 17 Oct (24.4 s, 540 x 960, 1.0 MB, 34 s render; `final OUT --small`).

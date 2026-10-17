@@ -262,12 +262,14 @@ def putin_head(img, p, sp, t, hx, hy):
     p.line([(fx - 12, fy + 31), (fx - 7, fy + 34)], INK, 1.4)
     my = fy + 58
 
-    def rest():                                        # thin flat lips; smug: the left corner (our right) up a touch
-        s = sp.get('smirk', 0.0)
-        p.line([(fx - 20, my + 3), (fx - 6, my + 1), (fx + 8, my + 1 - 2 * s), (fx + 20, my - 5 * s)], INK, 2.4)
-        p.line([(fx - 8, my + 7), (fx + 8, my + 7 - s)], blend(skin, (180, 110, 110), 0.4), 1.6)
+    def rest():                                        # thin lips; the sly, satisfied smirk (Sam, 17 Oct): the left
+        s = sp.get('smirk', 0.0)                       # corner (our right) pulled well up into the cheek, a crease
+        p.line(curve([(fx - 20, my + 2), (fx - 6, my + 2 - s), (fx + 8, my - 1 - 4 * s), (fx + 22, my - 12 * s),
+                      (fx + 8, my - 1 - 4 * s), (fx - 6, my + 2 - s)], 3)[:10], INK, 2.4)
+        p.line([(fx - 8, my + 7), (fx + 10, my + 6 - 3 * s)], blend(skin, (180, 110, 110), 0.4), 1.6)
         if s > 0.3:
-            p.line([(fx + 21, my - 6 * s), (fx + 25, my - 2 * s)], sd, 1.4)
+            p.line(curve([(fx + 26, my - 22 * s), (fx + 30, my - 10 * s), (fx + 27, my + 2)], 3)[:7], sd, 1.6)
+            p.line([(fx - 22, my + 1), (fx - 25, my + 4)], sd, 1.2)
     talk_or(p, sp, t, fx, my, rest)
     return fx
 
@@ -587,6 +589,8 @@ def spatter(seed=4, source=(-1.0, -0.35)):
                 r = min(r, 2.4)
                 if abs(y + 148) < 14 and (abs(x - 29) < 22 or abs(x + 29) < 22):
                     continue                           # keep the eyes clear
+                if abs(x) < 40 and -104 < y < -62:
+                    continue                           # and the mouth (Sam, 17 Oct: the smile must read)
             c = fresh if rng.random() < 0.6 else dark
             if r < 2.0:
                 out.append(('dot', (x, y, r), c))
@@ -597,7 +601,7 @@ def spatter(seed=4, source=(-1.0, -0.35)):
                 pts.append((x + ux * r * math.cos(a) - uy * r * math.sin(a) * -1, y + uy * r * math.cos(a) + ux * r * math.sin(a) * -1))
             pts.append((x - ux * L, y - uy * L))
             out.append(('poly', pts, c))
-    for cx, cy, big in [(52, -112, 6), (40, -196, 5), (-20, -92, 4), (62, -170, 4), (50, 120, 12), (-40, 60, 9),
+    for cx, cy, big in [(56, -118, 6), (40, -196, 5), (-50, -118, 4), (62, -170, 4), (50, 120, 12), (-40, 60, 9),
                         (90, 30, 10), (120, 180, 9), (-100, 140, 8), (20, 220, 10), (70, -60, 6)]:
         blob = [(cx + big * (0.8 + 0.4 * rng.random()) * math.cos(a), cy + big * (0.8 + 0.4 * rng.random()) * math.sin(a))
                 for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)]
