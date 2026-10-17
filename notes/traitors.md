@@ -27,3 +27,7 @@ Claudia stands behind the players at the table (03, 10): black velvet jacket, wh
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Recording 22 = Claudia, 18 = Trump, 19 = Zelensky (Sam, 17 Oct).
+- Claudia's look (Sam's answer 2, refs 11-15): black tailored jacket, white blouse with big frilled cuffs showing
+  past the sleeves, a black rose/bow at the throat, heavy straight black fringe to the eyebrows, long straight black
+  hair past the shoulders, dark smoky eyes, nude lips; hands clasped in front at the waist (her standing pose, 11).
+  Not the hooded cloak.
