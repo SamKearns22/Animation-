@@ -6,6 +6,20 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
+## In progress: "Shocking Behaviour" (TikTok satire, Reform UK HQ undercover; `source/shocking.py`, `source/shocking_cast.py`)
+- Brief from Sam, 18 Oct: ITV's undercover journalist walks into Millbank Tower (lapel camera, ITV + REC); slam cut to
+  Farage, Jenrick, Tice and Braverman doing the "Messy" trend dance (Sofia Richie's moves) under pop lights; the
+  journalist's South Park shock in the doorway; Jenrick trips over his own feet into a desk (mug, coffee, papers,
+  pens fly; crash sound, Sam's yes); Farage's swipe kills the music and lights; his bleeped rant (two bleeps, then
+  one; subtitles "******* ******", "*****"). All action after the doorway in one wide shot (Sam).
+- Recordings: `source/audio/shocking-1.m4a` (narrator), `shocking-2.m4a` (Farage, gaps for the bleeps).
+- The song: Sam's three screen recordings and the song bed live in `source/data/shocking/` (NOT on GitHub: copyright;
+  Sam, 18 Oct). Rebuild with `python3 source/shocking.py music`. In a new session they must be re-sent by Sam.
+- The finished film with the song goes to Sam in the chat only, never into `animations/` on GitHub.
+- Animatics 1-5 sent 18 Oct. Finish with: `python3 source/finish.py CLEAN.mp4 OUT.mp4 "Reform HQ: EXPOSED!" --y 560
+  --x 700` (the Hook Text on the tower's windows, clear of the ITV/REC readout and the sign: Sam).
+- Next: Sam's clear yes for the final render (Sonnet).
+
 ## Done: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
 - Script from Sam, 14 Oct; jumped straight to the animatic (no stills step). Code `source/polanski.py` (`times`, `stills`,
   `final OUT --scale 0.5`); `python3 source/preflight.py polanski OUT_DIR` passes with 0 problems.

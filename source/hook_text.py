@@ -4,7 +4,7 @@ first, like the app's native text): TikTok Sans Bold, sentence case, black on a 
 the safe area, over the picture while it plays. On from the first frame, gone (a quick fade) at `--until` seconds -
 by default the first cut. Picture and sound are otherwise untouched.
 
-    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--centre]
+    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--x 540] [--centre]
 """
 import os
 import subprocess
@@ -26,7 +26,7 @@ def emoji_img(ch, px):
     return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
 
 
-def card(w, h, text, y_mid, path, size=74, centre=False):
+def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None):
     k = w / 1080
     tail = ''
     while text and ord(text[-1]) > 0x2000:          # trailing emoji are drawn as pictures after the last word
@@ -49,7 +49,8 @@ def card(w, h, text, y_mid, path, size=74, centre=False):
     em = int(f.size * 1.0)
     emw = (em + int(10 * k)) * len(tail)             # room for the emoji on the last row
     pad_x, pad_y = int(30 * k), int(16 * k)
-    cx = (540 if centre else (SAFE_X0 + SAFE_X1) / 2) * k     # --centre: the middle of the frame (Sam, 15 Oct)
+    cx = (x_mid if x_mid is not None else 540 if centre else (SAFE_X0 + SAFE_X1) / 2) * k   # --centre: the middle
+    # of the frame (Sam, 15 Oct); --x: the card's middle anywhere across (Shocking Behaviour: onto the tower's windows)
     top = y_mid * k - len(rows) * lh / 2
     for i, r in enumerate(rows):               # each row its own white box, like the app's caption style
         tw = d.textlength(r, font=f) + (emw if i == len(rows) - 1 else 0)
@@ -78,13 +79,16 @@ def main():
         i = a.index('--until'); until = float(a[i + 1]); del a[i:i + 2]
     if '--y' in a:
         i = a.index('--y'); y_mid = float(a[i + 1]); del a[i:i + 2]
+    x_mid = None
+    if '--x' in a:
+        i = a.index('--x'); x_mid = float(a[i + 1]); del a[i:i + 2]
     src, dst, text = a[0], a[1], ' '.join(a[2:])
     probe = subprocess.run([FF, '-i', src], capture_output=True, text=True).stderr
     w, h = next((int(x), int(y)) for t in probe.replace(',', ' ').split() if 'x' in t
                 for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "hook.png")
-        card(w, h, text, y_mid, png, centre=centre)
+        card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid)
         fade = 0.25
         vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
               f'[0:v][t]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]')
