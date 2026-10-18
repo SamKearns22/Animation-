@@ -10,6 +10,11 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
    **References (Sam, 16 Oct):** when Sam sends reference photos, say which are still missing for the best quality (the
    room from several angles incl. empty and from above, the person front and side, props), before drawing.
+   **A likeness pack for anyone famous (18 Oct):** ask at the start for one straight-on photo, one three-quarter, one
+   smiling or talking, and one or two caricatures Sam likes (the caricatures show what to exaggerate).
+   **Reuse before building (18 Oct):** the plan names the kit part for each person, movement and prop (views, moves:
+   walks, runs, falls in stages, combat; stage; perform; props falling under gravity); build new only where nothing
+   fits, and say so. Shocking Behaviour hand-built its trip and lost six rounds to it.
    **Length and opening line:** settle them early; judge the length on the first animatic with the real voice (the
    Press Secretary film was cut from 75 s to 57 s only after seeing it in motion).
 2. Read Sam's brief (`prompts/_brief-skeleton.md` is the shape; `prompts/russiadent-evil-template.md` a finished one).
@@ -21,6 +26,34 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key
    reaction, a **numbered strength sheet** (1 = slight, 6 = huge) for Sam to pick a number from.
 4. `python3 source/NAME.py stills OUT_DIR T T ...`: one still per shot. Sam's notes come back in one batch.
+
+## Getting it right first time (18 Oct: Sam's review of Shocking Behaviour's rounds)
+- **A reference is a checklist.** Before drawing anything from a photo, write down what it shows: how many, colours,
+  positions, which way they face, brands, proportions. Then `python3 source/compare.py REF OURS OUT.jpg` (side by
+  side, same height, guide lines across) and tick each one off before sending. (The scooters took three goes.)
+- **Likeness method.** Measure the face on the straight-on photo with compare.py's guide lines: face width to height,
+  where the hairline, brows, eyes, nose base, mouth and chin sit, eye size and spacing, mouth width, the lines and
+  creases. Build the head to those numbers (in the house style), then put it beside the photo and list every
+  difference yourself before Sam sees it. Exaggerate what the caricatures exaggerate. (Farage took six passes.)
+- **Real sizes.** Every prop and set piece is drawn at its real size in metres through the scene's camera (sizes
+  from `source/sizes.py`; add a missing one after looking it up), and listed in the film's `PROP_SIZES` so
+  preflight checks it. A new prop goes on the cast sheet beside a person (`sizes.scale_ref`). (The paper, pens, lift
+  and doorway came out the wrong size.)
+- **Body landmarks.** The cast sheet draws the waist, hips, knee and ankle lines (`landmarks.draw`); every garment
+  edge is listed in `OUTFIT` and checked: skirts start at the waist, suit jackets end below the hips, a knee-length
+  hem sits at the knee. Each person's height is set to their real one, relative to the others. (Skirts first started
+  at the knee; Jenrick came out squat.)
+- **Line work** is checked by `source/linecheck.py` on each of the cast alone (`LINE_SUBJECTS`): every outside edge
+  inked, no edge between two colours without a line, one line weight. It saves one marked picture to look at.
+- **Natural performance by default** (`source/perform.py`): overlapping action (hands and head arrive after the body),
+  a knee bounce on the beat, faces that vary every two beats; the whole upper body sways as one piece (the neck
+  stays on). (The first dance faces were robotic and the moves stiff.)
+- **Song joins** are checked by `source/musiccheck.py` (the film's `SPLICE`): no beat skipped or doubled. (The old
+  bridge skipped two beats; Sam heard it twice.)
+- **The Hook Text never covers a sign or readout** listed in `KEEP_CLEAR` (`source/hookcheck.py`, with the film's
+  `HOOK` set exactly as finish.py is given it). (It once sat over MILLBANK TOWER.)
+- **`source/housestyle.py`** (run by preflight) says if the template's style is off (the smoother limbs, the arm
+  checker, the general audit) or a check is missing what it needs from the film.
 
 ## The look (all built in: `source/satire_style.py`)
 Flat colour, one outline weight, no gradients or glows; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
@@ -104,13 +137,19 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Plan big moves in the floor plan first: a fallen body is long; place action seen in two shots with
   `filmkit.visible_spots`.
 - Anything that changes stays changed (a smear, a broken window): list it and probe it (`filmkit.probe_marks`).
-- **Anything on the floor (spills, stains, dropped things) is drawn as part of the floor, before the people** (Sam,
-  18 Oct: coffee floated over Farage's leg); check where each piece lands against everyone's feet.
-- **Before every animatic, check that nobody passes through anybody or the furniture** (Sam, 18 Oct: Jenrick clipped
-  straight through Farage): floor-plan distances on every frame, with a fault if two people are closer than two body
-  half-widths or anyone walks into a desk. And anyone who must stay in shot never touches the frame's edge. Both are
-  plan checks in the film's own `checks()` (see `source/shocking.py`: `collision_faults`, `frame_faults`), run by
-  `preflight.py`.
+- **Nothing passes through anything** (Sam, 18 Oct, after the trip in Shocking Behaviour took nine rounds). Before every
+  animatic `preflight.py` runs `source/clipcheck.py` over every frame: every body, head, limb, hand, prop, piece of
+  furniture and flying thing is a solid (the film's `solids(t)`; people come free from their pose with
+  `clipcheck.person_solids`), and no two may overlap unless the contact is listed in `ALLOWED` (a hand on a desk, a
+  punch landing). Drawing order: the film's `layers(t)` in the order it draws them; nearer is always on top, and when
+  two swap front and back, the one moving must not be hidden behind the other at that moment (or a part jumps out
+  from behind in one frame: Jenrick's arm and Farage). Anything on the floor (spills, stains, dropped things) is drawn
+  as part of the floor, before the people. `IN_SHOT` people never touch the frame's edge.
+- **Movement that obeys physics** (the same check): no part moves faster than a real one can in a frame (a teleport);
+  if the script says someone hits something, they really touch it (`CONTACTS`: Jenrick first stopped short of the
+  desk); a stumble or fall keeps moving until it lands (`MOMENTUM`: he slowed and steadied himself); things knocked
+  flying go the way they were pushed (`PUSHES`: the pens flew backwards onto his legs). For any motion-led beat, plan
+  the path in metres with a speed for each moment before drawing a pose, and judge it in a short clip.
 - Anything thrown or dropped falls under gravity, scatters unevenly (each piece its own size and speed), lands, and
   stays where it lands.
 - The title never covers anyone (checked). It sits no higher than 310 px (TikTok's buttons); one line sits highest
@@ -154,11 +193,15 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,
 stretching, frozen; actions, including elbows staying on their own side; eyelines; the title clear of everyone), and a
-contact sheet with the safe area. Fix every fault, or list a deliberate one (`FAST_OK`/`allow`) with its reason.
+contact sheet with the safe area, and the shared checks (housestyle, clipcheck, hookcheck, musiccheck, linecheck,
+sizes, landmarks: see 'Getting it right first time'). Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/
+`ALLOWED`/`LINE_OK`) with its reason.
 It also prints **QUESTIONS FOR SAM** about the sound (deep wind rumble, dead silence, a jump in volume at a cut). They may
 be meant: put each to Sam with a recommended answer, and change nothing until he answers.
 
 ## Render
+- `python3 source/NAME.py final OUT.mp4 --small --span T0 T1`: a clip of just that moment (under a minute) for any
+  note on movement (Sam, 18 Oct); no yes needed first.
 - `python3 source/NAME.py final OUT.mp4 --small`: a quick look (540 x 960), only when a shot's movement changed.
 - `python3 source/NAME.py final animations/NAME-vertical.mp4`: the final. Pictures are cached; captions and title go on last.
 - Caption or timing note: `... final OUT --reuse` (no pictures re-rendered). Note on shot X: `... --reuse --redo X`.
@@ -179,3 +222,14 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
 | `only N dB above the rest` | Turn the crowd, music or effects down under that line (or the line up). |
 | `... is missing at` | A permanent mark isn't drawn in that shot: draw it from the list of permanent changes. |
 | `never seen in shot 2 or 3` | Move that person, or show them in a wide shot. |
+| `passes through` | Two solids overlap: move the path or the pose apart; a deliberate contact goes in `ALLOWED` with its times. |
+| `passes ... while partly hidden behind them` | Someone passes in front of or behind another while overlapping on screen: keep the arm (or path) clear of them as they pass. |
+| `is drawn over ... nearer` | Draw it before the nearer thing (floor things before the people), or move it nearer. |
+| `jumps ... in one frame` | A teleport: add in-between keys, space the keys further apart, or slow the move (a slap may be listed in `FAST_OK`). |
+| `should hit ... stops ... short` / `slows to` / `flies against` | Move the end point to real contact; keep the speed up (no eased stop); launch things the way the push goes. |
+| `the Hook Text ... covers` | Move it (`--y`/`--x`, the same in `HOOK`) clear of the sign or readout. |
+| `the song skips` / `repeats` | Start the next piece where the message says, then send a sound-check clip. |
+| `no outline` / `edge with no line` / `line weight` | Ink that edge with the house outline; see the marked picture. A flat shadow side may go in `LINE_OK`. |
+| `a real ... is about` / `too thin` | Redraw it at its real size (sizes.SIZES) through the scene's camera. |
+| `the skirt top is at` (etc.) | Move the garment edge to its landmark (waist, hips, knee). |
+| `house style:` | Switch the template's default back on, or give the check what it needs. |

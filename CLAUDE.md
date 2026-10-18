@@ -19,6 +19,10 @@ I don't know how to code. Please:
   render" are not a go-ahead (15 Oct).
 - **Before every animatic render, including a re-render after notes, show me the check sheet and wait for a clear
   yes.** A note in reply is not a yes (18 Oct).
+- **Notes on movement get a short clip, not stills or a full animatic (18 Oct).** When a note is about movement
+  (timing, a trip, a crash, anything passing through something), render only the few seconds around it, small
+  (`final OUT --small --span T0 T1`, under a minute), and send that. Clips need no yes first; a full animatic comes
+  only once the clips look right, and still needs the check sheet and a clear yes.
 - **Switching models to save money.** Each film moves through stages, and each stage has a model:
   - planning (reading the brief, staging the shots, questions for me): Opus, high effort;
   - building anything new (a new character, creature, set or tool): Opus, high effort;
@@ -36,6 +40,12 @@ I don't know how to code. Please:
   you'll fix it, change nothing, and do everything in one round when I say go.
 - **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
   add and where, and wait for my numbers.
+- **Self-review before every send (18 Oct):** with every sheet, clip or animatic, list in a line or two what was
+  checked (which checks ran, what was compared with the references) and anything I'm unsure of, so Sam knows where
+  to look. Never send something a check has flagged without saying so.
+- **The brief is a checklist (18 Oct):** before the first animatic, every detail in Sam's brief and notes (wording,
+  asterisk and bleep counts, who stands where, colours, props) is copied into the film's notes file as a list and
+  ticked off against the film; anything not done is named in the message.
 - **Flag your own additions:** anything I didn't ask for (a sign, a reflection, a new joke, a sound) is named as your
   addition in the message, so I can say no before it costs a round.
 - **Motion-led films (stunts, action): after the cast sheet, go to a quick animatic early**; stills can't show timing,
@@ -65,7 +75,10 @@ I don't know how to code. Please:
   guides or the big source files. Use Sonnet at medium effort, and ask me for all my notes in one batch after the one
   stills sheet.
 - **Satire-style film (the TikTok parody series, beyond two people talking): read `guides/satire.md` (one page) first**,
-  start from `source/satire_template.py`, and open `guides/best-practice.md` Part 2 only for a scene that page doesn't cover.
+  start from `source/satire_template.py` (always: it carries the house style and the checks; Shocking Behaviour
+  didn't, and lost rounds to boxy limbs and a missing audit), and open `guides/best-practice.md` Part 2 only for a
+  scene that page doesn't cover. **Reuse before building:** the plan names which kit part does each person,
+  movement and prop (`guides/satire.md`, Movement); build new only where nothing fits, and say so.
 - **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
   animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the
   coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part

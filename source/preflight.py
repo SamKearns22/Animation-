@@ -4,7 +4,10 @@ took many renders because faults were found by eye, one round at a time).
 
 Works on any film module that has frame_image(t) and SHOTS [(name, start, end)], plus optionally caption_at(t)
 and BLACK_AT / DUR. It:
-1. turns on the figure guard (every arm drawn is measured; see figure.py) and runs every module-level check;
+1. turns on the figure guard (every arm drawn is measured; see figure.py) and runs every module-level check,
+   then the shared checks (housestyle: the template's style on; clipcheck: solids, drawing order, teleports,
+   contacts; hookcheck: the Hook Text clear of signs; musiccheck: song joins; linecheck: outlines; sizes: real
+   sizes; landmarks: clothes against the body), each only if the film defines what it needs;
 2. draws every 3rd frame small and quick, so any check inside the drawing code (overlaps, fingertips on the
    keyboard, feet on the floor, unreachable hands) fires now, with the time of the frame;
 3. checks the captions: at most 700 px wide in at most 2 rows of 42 characters, on screen long enough to read
@@ -69,11 +72,23 @@ def main():
     F.guard(B)
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
+    shared = []                                 # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
+    B.SS = 1
+    import clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
+    shared += housestyle.faults(film, B)        # the template's house style is on, and each check has its inputs
+    if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT')):
+        shared += clipcheck.run(film)           # nothing passes through anything; nothing teleports; drawing order
+    shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
+    shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
+    shared += linecheck.faults(film)            # every shape outlined, one line weight (the cast)
+    shared += sizes.faults(film)                # props and set pieces at their real size
+    shared += landmarks.faults(film)            # clothes start and end where real ones do
+    print('shared checks:', 'clean' if not shared else f'{len(shared)} fault(s)')
     end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
     if not end:                                 # a film without an end time would pass having checked nothing
         sys.exit('preflight: the film module needs BLACK_AT or DUR (its length in seconds)')
     fps = getattr(film, 'FPS', 12)
-    problems = []
+    problems = list(shared)
     B.SS = 1
     # 2. every 3rd frame, small: the checks inside the drawing code (all processor cores)
     global _FILM, _FPS

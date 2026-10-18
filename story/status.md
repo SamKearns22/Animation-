@@ -22,8 +22,11 @@ Read this first in any new session, after CLAUDE.md.
 - Animatics 1-5 sent 18 Oct. Finish with: `python3 source/finish.py CLEAN.mp4 OUT.mp4 "Reform HQ: EXPOSED!" --y 560
   --x 700` (the Hook Text on the tower's windows, clear of the ITV/REC readout and the sign: Sam).
 - FINAL RENDERED 18 Oct (Sam: "PERFECT. Render final"): 27.7 s, 14.9 MB, sent to Sam in the chat. Trip clips (`final --small --span T0 T1`)
-  replaced full animatics for notes on motion. Next: review of the sticking points (Opus, high); the shared clip check
-  (`source/clipcheck.py`, half built, not wired in) awaits Sam's approval of the general rule.
+  replaced full animatics for notes on motion. Review of the sticking points done 18 Oct: all 14 rules approved and
+  built (CLAUDE.md; guides/satire.md 'Getting it right first time'; clipcheck, hookcheck, musiccheck, linecheck,
+  sizes, landmarks, housestyle, compare, perform; all run by preflight). Their first run on the approved final found
+  only small things (3-4 cm brushes hidden behind people, a paper drifting through Jenrick's arm, the lift door
+  thinner than a real one, no general audit): left as they are; the film is posted as approved.
 
 ## Done: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
 - Script from Sam, 14 Oct; jumped straight to the animatic (no stills step). Code `source/polanski.py` (`times`, `stills`,

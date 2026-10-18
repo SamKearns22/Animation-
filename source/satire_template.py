@@ -8,7 +8,7 @@ Guide: guides/satire.md.
     python3 source/NAME.py cast OUT.png              the cast on one sheet: approve it before any animation
     python3 source/NAME.py stills OUT_DIR T [T ...]  stills at these times (seconds)
     python3 source/NAME.py check                     every check and the audit (also run by preflight.py)
-    python3 source/NAME.py final OUT.mp4 [--small] [--reuse --redo SHOT,SHOT]
+    python3 source/NAME.py final OUT.mp4 [--small] [--reuse --redo SHOT,SHOT] [--span T0 T1]   (--span: a clip of one moment)
 """
 import math
 import os
@@ -55,6 +55,15 @@ DUR = 5.6
 # The value is A's near hand target in A's own units (x right, y down from the neck). Every frame is tested.
 THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)),
                        (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])
+# What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
+HOOK = ('Hook Text here', {'y': 880})               # exactly as finish.py will be given it (--y, --x, --until)
+KEEP_CLEAR = []                                     # [(name, box_at(t) -> (x0, y0, x1, y1) or None)]: signs, readouts
+PROP_SIZES = []                                     # [(name, sizes.SIZES kind, w, h, px_per_m or None or 0)]
+OUTFIT = {}                                         # {who: {'skirt top': y, 'jacket hem': y, ...}} person units
+HEIGHTS = {}                                        # {who: real height in metres}
+ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate contacts, hits, falls, knock-ons
+# define solids(t) and layers(t) for any film where people or things move near each other (see clipcheck.py and
+# shocking.py), and SPLICE = ((clip, start, end), ...) for a song joined from recordings (musiccheck.py)
 # ====================================================================================================================
 
 S, FY = 0.8, 1420                                 # people's scale, floor line
@@ -237,14 +246,33 @@ def audits():
 
 
 def cast_sheet(out):
-    """Everyone side by side. Add every OTHER view each character appears in (from above, a close-up, mid-action),
-    and for the film's key reaction a numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
+    """Everyone side by side, with the body landmarks (waist, hips, knee) drawn across to check the clothes against,
+    and a 1.75 m person and a 1 m ruler for scale (sizes.scale_ref). Add every OTHER view each character appears in
+    (from above, a close-up, mid-action), any new prop beside the scale person, and for the film's key reaction a
+    numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
+    import landmarks
+    import sizes
+    from PIL import ImageDraw
     img = Image.new('RGBA', (1080, 1080), (230, 226, 220, 255))
     for i, who in enumerate('AB'):
         sp = dict(CAST[who], full=True, pose='custom')
         sp['arms'] = F.Rig(sp).pose('sides')
         B.person(img, B.Cam(1.0, 540, 960), 300 + 480 * i, 260, 0.62, sp, 0.0)
+    d = ImageDraw.Draw(img)
+    landmarks.draw(d, 540, 260, 0.62, 1000)
+    sizes.scale_ref(d, 520, 260 + 928 * 0.62, 0.62 / landmarks.V.M_PER_UNIT)
     img.convert('RGB').save(out)
+
+
+def LINE_SUBJECTS():
+    """Each of the cast alone, large, for the line-work check (linecheck.py)."""
+    def one(who):
+        def d(im):
+            sp = dict(CAST[who], full=True, pose='custom')
+            sp['arms'] = F.Rig(sp).pose('sides')
+            B.person(im, B.Cam(1.0, 540, 960), 540, 420, 1.45, sp, 0.0)
+        return d
+    return [(who, one(who)) for who in CAST]
 
 
 def main():
@@ -267,7 +295,8 @@ def main():
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
-                 redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
+                 redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
+                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None)
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
@@ -281,6 +310,7 @@ limbs.install(B)                 # natural arms and legs: one outline at the sho
 import views                     # noqa: E402,F401
 import moves                     # noqa: E402,F401
 import stage                     # noqa: E402,F401
+import perform                   # noqa: E402,F401  natural performance: follow-through, beat bounce, varied faces
 
 if __name__ == '__main__':
     main()

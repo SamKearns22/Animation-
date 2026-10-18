@@ -958,18 +958,48 @@ def scooter(d, x, y, i):
         d.ellipse([sh(mx * 0.9 - 16, y - 210)[0], y - 210, sh(mx * 0.9 + 16, y - 210)[0], y - 186], fill=(90, 100, 110), outline=INK, width=2)
 
 
-def lapel_frame(t):
-    """Shot 1: the walk up to the doors through her lapel camera (refs undercover-1, 2): chest height, looking up,
-    crooked and swaying with each step, a cheap soft picture with washed-out colour and a pink-grey cast, grain, her
-    jacket's dark edge smudging one corner, and the REC readout (Sam, 18 Oct: yes to REC)."""
-    plate = millbank_plate()
+def lapel_view(t):
+    """The part of the Millbank plate the lapel camera sees at t (box) and its tilt (degrees, PIL's rotate)."""
     u = t / SLAM
     z = 1.0 + 0.55 * u * u * 0.6 + 0.25 * u                # walking closer: the entrance grows
     step = math.sin(2 * math.pi * 1.9 * t)                 # two steps a second
     roll = -4.0 + 1.8 * step
     cx, cy = 810 + 30 * math.sin(2 * math.pi * 0.95 * t), 1750 - 260 * u + 14 * abs(step)
     w, h = 1080 / z / 1.5 * 1.5, 1920 / z / 1.5 * 1.5
-    box = (cx - w / 2 * 1.5, cy - h / 2 * 1.5, cx + w / 2 * 1.5, cy + h / 2 * 1.5)
+    return (cx - w / 2 * 1.5, cy - h / 2 * 1.5, cx + w / 2 * 1.5, cy + h / 2 * 1.5), roll
+
+
+def plate_to_frame(px, py, t):
+    """A point on the Millbank plate to where it shows on the 1080 x 1920 frame at t."""
+    (x0, y0, x1, y1), roll = lapel_view(t)
+    x, y = (px - x0) / (x1 - x0) * 1080, (py - y0) / (y1 - y0) * 1920
+    a = math.radians(roll)                                 # PIL turns the picture anticlockwise about its middle
+    dx, dy = x - 540, y - 960
+    return 540 + dx * math.cos(a) + dy * math.sin(a), 960 - dx * math.sin(a) + dy * math.cos(a)
+
+
+def sign_box(t):
+    """The MILLBANK TOWER lettering on the canopy, on the frame (for the Hook Text check)."""
+    if t >= SLAM:
+        return None
+    font = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans.ttf'), 92)
+    l, tp, r, b = ImageDraw.Draw(Image.new('L', (1, 1))).textbbox((810, 1652), 'M I L L B A N K   T O W E R',
+                                                                    font=font, anchor='mm')
+    pts = [plate_to_frame(x, y, t) for x in (l, r) for y in (tp, b)]
+    return (min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts))
+
+
+HOOK = ('Reform HQ: EXPOSED!', {'y': 560, 'x': 700})        # as finish.py is given it (Sam, 18 Oct: on the windows)
+KEEP_CLEAR = [('the MILLBANK TOWER sign', sign_box),
+              ('the ITV / REC readout', lambda t: (70, 480, 440, 640) if t < SLAM else None)]
+
+
+def lapel_frame(t):
+    """Shot 1: the walk up to the doors through her lapel camera (refs undercover-1, 2): chest height, looking up,
+    crooked and swaying with each step, a cheap soft picture with washed-out colour and a pink-grey cast, grain, her
+    jacket's dark edge smudging one corner, and the REC readout (Sam, 18 Oct: yes to REC)."""
+    plate = millbank_plate()
+    box, roll = lapel_view(t)
     W, H = B.W * B.SS, B.H * B.SS
     im = plate.transform((W, H), Image.EXTENT, box, Image.BILINEAR).rotate(roll, Image.BILINEAR, expand=False,
                                                                            fillcolor=SKY + (255,))
@@ -1457,6 +1487,112 @@ def item_faults():
                     seen.add((i, who))
                     faults.append(f'{t:.2f} s: the {ITEMS[i][0]} is behind {who} but drawn over them')
     return faults
+
+
+# --------------------------------------------------------------------------------------------- the shared clip check
+# clipcheck.py (Sam, 18 Oct: nothing passes through anything): every dancer's body as solids, the desk, everything
+# flung off it; the pieces drawn separately as layers; the deliberate contacts and the trip's physics.
+def dancer_states(t):
+    """(who, X, Z, key pose, extra, step) for the four dancers at t, as dance_frame draws them."""
+    out = []
+    for who in DANCERS:
+        X, Z = SPOT[who]
+        extra, step = {}, None
+        if who == 'farage':
+            X, Z = farage_pos(t)
+            k, extra = (farage_dance_state(t), {}) if t < FARAGE_AT else farage_shout_state(t)
+            step = farage_step(t)
+        elif who == 'jenrick':
+            X, Z, k = trip_state(t) if t >= TRIP else (X, Z, dance_pose(t - SLAM))
+            step = k.get('step')
+        else:
+            k = other_dance_state(who, t)
+        out.append((who, X, Z, k, extra, step))
+    return out
+
+
+def _joints(who, k, step):
+    sp = dict(C.CAST[who])
+    j = build(sp, k)
+    if step and step[0]:
+        side = 'L' if step[1] else 'R'
+        x, y, z = j['foot' + side]
+        j['foot' + side] = (x - 30, y - 40, z + 60)
+    return sp, j
+
+
+def solids(t):
+    import clipcheck as CC
+    if shot_of(t) not in ('dance', 'dance2'):
+        return []
+    out = []
+    for who, X, Z, k, extra, step in dancer_states(t):
+        sp, j = _joints(who, k, step)
+        out += CC.person_solids(who, j, X, Z, 0.0, sp, roll=k.get('roll', 0.0) if who == 'jenrick' else 0.0)
+    X, Z, yaw = PHONE_AT
+    out.append(CC.capsule('phone man', 'body', (X, 0.1, Z), (X, 1.5, Z), 0.2))
+    x0, x1, z0, z1 = CRASH_DESK
+    out.append(CC.box('desk', 'top', (x0, 0.0, z0), (x1, DESK_TOP, z1)))
+    for i, (kind, *_r) in enumerate(ITEMS):
+        X, Y, Z, ang, landed = item_at(i, t)
+        r = {'mug': 0.05, 'pot': 0.05, 'plant': 0.07, 'paper': 0.03, 'pen': 0.012}[kind]
+        out.append(CC.sphere(f'item:{kind}{i}', 'item', (X, Y + r, Z), r))
+    return out
+
+
+def layers(t):
+    """The pieces drawn separately, in drawing order (the dancers far to near, then the desk, the things flung
+    off it, the phone man)."""
+    if shot_of(t) not in ('dance', 'dance2'):
+        return []
+    cam3 = DANCE_CAM
+    out = []
+    for who, X, Z, k, extra, step in sorted(dancer_states(t), key=lambda q: -q[2]):
+        if who == 'jenrick':
+            out.append((who, Z, lambda im, X=X, Z=Z, k=k: jenrick_layer(im, cam3, X, Z, k, t)))
+        else:
+            out.append((who, Z, lambda im, who=who, X=X, Z=Z, k=k, e=extra, st=step:
+                        make_person(im, cam3, who, X, Z, k, t, extra=e, step=st)))
+    out.append(('desk', CRASH_DESK[2:], lambda im: crash_desk(im, cam3, t)))
+    for i, it in enumerate(ITEMS):
+        if t >= CRASH + it[4]:
+            out.append((f'{it[0]} {i}', item_at(i, t)[2], lambda im, i=i: draw_item(im, cam3, i, t)))
+    out.append(('phone man', PHONE_AT[1], lambda im: phone_guy(im, cam3, t)))
+    return out
+
+
+def LINE_SUBJECTS():
+    """Each of the cast alone, large, for the line-work check (linecheck.py)."""
+    out = []
+    for who in ('tice', 'jenrick', 'farage', 'braverman', 'journalist'):
+        def d(im, who=who):
+            sp = dict(C.CAST[who], mood='neutral')
+            j = V.standing(sp)
+            if who == 'journalist':
+                j['props'] = [lambda p, j2, sp=sp: C.handbag(p, sp)]
+            V.person(im, B.Cam(1.0, 540, 960), 540, 420, 1.45, sp, 0.0, 0, j)
+        out.append((who, d))
+    return out
+
+
+# The other shared checks (sizes.py, landmarks.py): props at their real size (the lift door's shape is judged
+# alone: its depth beyond the doorway is not set), and the clothes against the body's landmarks.
+PROP_SIZES = [('the paper', 'A4 paper', 0.21, 0.297, None), ('a pen', 'biro', 0.14, 0.012, None),
+              ('the mug', 'mug', 0.09, 0.10, None), ('the crash desk', 'desk', CRASH_DESK[1] - CRASH_DESK[0], DESK_TOP, None),
+              ('the doorway', 'double doorway', 860, 1291, 0.96 / V.M_PER_UNIT),
+              ('the lift door', 'lift door opening', 270, 830, 0)]
+OUTFIT = {'braverman': {'cropped jacket hem': 430, 'skirt top': 400, 'skirt hem': 745},
+          'journalist': {'skirt top': 392, 'skirt hem': 745}}
+
+
+CLIP_SPAN = (SLAM, DUR)
+ALLOWED = [('jenrick', 'desk', CRASH - 0.15, DUR),                  # he crashes into it and lies against it
+           ('item:*', 'desk', 0.0, DUR), ('item:*', 'item:*', 0.0, DUR),   # things sit on the desk, side by side
+           ('jenrick', 'item:*', CRASH - 0.15, CRASH + 0.3)]          # he knocks them flying
+IN_SHOT = [('jenrick', TRIP - 0.2, CRASH + 1.5)]
+CONTACTS = [('jenrick.body', 'desk', CRASH)]                              # Sam, 18 Oct: he stopped just short of it
+MOMENTUM = [('jenrick', TRIP + 0.25, CRASH - 0.02, 0.12)]            # Sam, 18 Oct: he must not steady himself
+PUSHES = [('jenrick', CRASH, [f'item:{it[0]}{i}' for i, it in enumerate(ITEMS) if it[0] != 'paper'])]  # (paper floats)
 
 
 def checks():
