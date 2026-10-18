@@ -337,15 +337,19 @@ def trip_state(t):
     stum2 = P((-170, 60, 300), (300, 40, 100), 'down', 'out', lean=8, dip=18, mood='scared', head=-8, roll=2)
     catch3 = dict(P((-190, 180, 280), (260, 140, 120), 'down', 'out', lean=6, dip=24, mood='scared', roll=2),
                   feet={'L': (-70, A - 60, -60.0), 'R': (60, A, 20.0)})
-    right = P((-170, 320, 200), (230, 300, 120), 'down', 'out', lean=4, dip=8, mood='scared')
+    # then his legs run away with him (Sam, 18 Oct: faster into the table, out of control of his legs): quick short
+    # steps, faster and faster, arms flailing, straight into the desk at full speed
+    run1 = P((-170, 200, 300), (300, -40, 120), 'down', 'out', lean=10, dip=12, mood='scared', head=-6, roll=-2)
+    run2 = P((-190, 20, 260), (270, 170, 260), 'down', 'out', lean=12, dip=8, mood='scared', head=6, roll=2)
     reach = P((-170, 330, 280), (200, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3)
     slam = P((-160, 430, 230), (190, 430, 210), 'down', 'out', lean=14, dip=4, mood='scared', chin=0.35)
     slump = P((-165, 440, 240), (200, 440, 220), 'down', 'out', lean=12, dip=6, mood='scared', chin=0.4)
     up = P((-165, 420, 200), (190, 420, 180), 'down', 'out', lean=8, dip=6, mood='scared', chin=0.2, look=1.0)
     hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=8, dip=12, mood='scared', chin=0.3, look=1.0)
     T = TRIP_LEN
-    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.3, right),
-            (1.75, reach), (T, slam), (T + 0.2, slump), (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
+    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.28, run1),
+            (1.46, run2), (1.62, run1), (1.76, run2), (1.88, run1), (1.97, reach), (T, slam), (T + 0.2, slump),
+            (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
     k = dict(hunch)
     for (a, ka), (b2, kb) in zip(keys, keys[1:]):
         if u < b2:
@@ -356,16 +360,20 @@ def trip_state(t):
                 fa, fb = ka.get('feet', FOOT0), kb.get('feet', FOOT0)
                 k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(fa[sd], fb[sd])) for sd in 'LR'}
             break
-    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.12), (0.62, 0.16), (0.88, 0.34), (1.06, 0.38), (1.3, 0.55), (1.75, 0.82),
-            (T, 1.0)]
+    # the catches cover little ground; from 1.06 s he accelerates all the way into the desk (no slowing before it)
+    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.05), (0.62, 0.07), (0.88, 0.13), (1.06, 0.15)]
     w = 1.0
-    for (a, pa), (b2, pb) in zip(path, path[1:]):
-        if u < b2:
-            w = pa + (pb - pa) * ease((u - a) / (b2 - a))
-            break
+    if u < 1.06:
+        for (a, pa), (b2, pb) in zip(path, path[1:]):
+            if u < b2:
+                w = pa + (pb - pa) * ease((u - a) / (b2 - a))
+                break
+    elif u < T:
+        v = (u - 1.06) / (T - 1.06)
+        w = 0.15 + 0.85 * v ** 2.4                                         # speeding up hard into the impact
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
-    if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps between the catches
-        k['step'] = (True, int(u / 0.16) % 2)
+    if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps; faster and faster at the end
+        k['step'] = (True, int(u / 0.16) % 2) if u < 1.06 else (True, int(1.06 / 0.16 + (u - 1.06) ** 1.4 * 14) % 2)
     if u >= T:                                                             # the jolt of the impact
         k['dip'] = k['dip'] + 10 * math.exp(-((u - T) / 0.06) ** 2)
     return X, Z, k
