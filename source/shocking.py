@@ -403,9 +403,10 @@ def draw_item(img, cam3, i, t):
         d.line(rot([(-0.07, 0), (0.07, 0)]), fill=(30, 60, 160), width=max(2, int(0.012 * sc)))
 
 
-COFFEE = [(0.9 + dv[0], 1.4 + dv[1], 1.1 + dv[2], dl) for dv, dl in
-          (((0.3, 0.4, -0.2), 0.0), ((-0.2, 0.6, 0.1), 0.02), ((0.5, 0.2, 0.3), 0.03), ((0.1, 0.8, -0.3), 0.01),
-           ((-0.4, 0.3, 0.4), 0.04), ((0.6, 0.7, 0.0), 0.02), ((0.0, 0.1, 0.5), 0.05))]
+COFFEE = [   # (across: to our right, up, away from us; delay): all of it thrown to the right, landing on the carpet in
+    # the clear space in front of the dancers, never on them (Sam, 18 Oct)
+    (1.0, 1.0, 0.45, 0.0), (1.25, 0.8, 0.5, 0.02), (0.85, 1.2, 0.35, 0.01), (1.4, 0.9, 0.6, 0.03),
+    (1.1, 0.6, 0.3, 0.04), (0.75, 0.9, 0.55, 0.02), (1.3, 1.1, 0.4, 0.05)]
 COFFEE_C = (92, 54, 28)
 
 
@@ -1069,6 +1070,7 @@ def dance_frame(t, cam3=DANCE_CAM):
     if on:
         pop_lights(img, t, cam3)
         ring_lights(img, cam3, song_clock(t))
+    coffee(img, cam3, t, stains=True)                       # puddles are part of the floor: drawn before anyone
     for sp, X, Z, yaw in sorted(WORKERS, key=lambda w: -w[2]):
         seated_worker(img, cam3, sp, X, Z, yaw, t)
     people = []
@@ -1097,7 +1099,6 @@ def dance_frame(t, cam3=DANCE_CAM):
             x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra)
             if who == 'farage' and t >= FARAGE_AT:
                 spit_at(img, x, y - 150 * s + 70 * s, s, t)
-    coffee(img, cam3, t, stains=True)                       # the coffee on the carpet stays where it landed
     crash_desk(img, cam3, t, top_only=True)
     if jen and jen[1] < 3.0:                                 # at the desk: his body over its top, legs behind it
         jenrick_layer(img, cam3, *jen, t, legs=False)
