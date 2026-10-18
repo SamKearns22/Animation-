@@ -106,6 +106,11 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Anything that changes stays changed (a smear, a broken window): list it and probe it (`filmkit.probe_marks`).
 - **Anything on the floor (spills, stains, dropped things) is drawn as part of the floor, before the people** (Sam,
   18 Oct: coffee floated over Farage's leg); check where each piece lands against everyone's feet.
+- **Before every animatic, check that nobody passes through anybody or the furniture** (Sam, 18 Oct: Jenrick clipped
+  straight through Farage): floor-plan distances on every frame, with a fault if two people are closer than two body
+  half-widths or anyone walks into a desk. And anyone who must stay in shot never touches the frame's edge. Both are
+  plan checks in the film's own `checks()` (see `source/shocking.py`: `collision_faults`, `frame_faults`), run by
+  `preflight.py`.
 - Anything thrown or dropped falls under gravity, scatters unevenly (each piece its own size and speed), lands, and
   stays where it lands.
 - The title never covers anyone (checked). It sits no higher than 310 px (TikTok's buttons); one line sits highest
