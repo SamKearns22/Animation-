@@ -5,7 +5,8 @@ One shared check for every film, run by preflight.py before every animatic. A fi
 
   solids(t)   -> [Solid]: every person's parts (person_solids gives them from a views.py pose), every prop, piece of
                  furniture and flying thing, in metres (X across, + right; Y up from the floor; Z away from the camera)
-  layers(t)   -> [(name, depth, draw)]: the things drawn as separate pieces, in the order the film draws them;
+  layers(t)   -> [(name, depth, draw)]: EVERY piece the film draws, in its order (a person drawn twice is two
+                 layers: leaving the second out let Jenrick stand 'inside' a desk, 18 Oct);
                  depth in metres from the camera, or (nearest, furthest) for something deep like a desk;
                  draw(img) paints one alone on a clear 1080 x 1920 layer
   ALLOWED     =  [(a, b, t0, t1)]: deliberate contacts (a hand on a desk, a punch landing); a/b = owner or owner.part

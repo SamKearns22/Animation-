@@ -46,6 +46,9 @@ I don't know how to code. Please:
 - **The brief is a checklist (18 Oct):** before the first animatic, every detail in Sam's brief and notes (wording,
   asterisk and bleep counts, who stands where, colours, props) is copied into the film's notes file as a list and
   ticked off against the film; anything not done is named in the message.
+- **Flag what a fix takes away (18 Oct):** if a fix removes or hides something Sam has already seen (a prop, a person,
+  a joke, a landing in shot), name it in the message as a loss, so he can say no before it goes in. (Shocking
+  Behaviour: fixing the pens sent the mug out of shot, and it was only mentioned in passing.)
 - **Flag your own additions:** anything I didn't ask for (a sign, a reflection, a new joke, a sound) is named as your
   addition in the message, so I can say no before it costs a round.
 - **Motion-led films (stunts, action): after the cast sheet, go to a quick animatic early**; stills can't show timing,

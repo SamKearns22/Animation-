@@ -145,6 +145,11 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   two swap front and back, the one moving must not be hidden behind the other at that moment (or a part jumps out
   from behind in one frame: Jenrick's arm and Farage). Anything on the floor (spills, stains, dropped things) is drawn
   as part of the floor, before the people. `IN_SHOT` people never touch the frame's edge.
+  **Nothing is left out of `layers(t)`** (Sam, 18 Oct: Jenrick stood 'inside the desk' after the trip because his
+  second drawing, over the desk top, was the one piece not checked). Better, never draw a person twice: draw
+  furniture in pieces (top, legs, front panel), each at its own depth, so someone behind a desk is hidden by its top
+  and someone leaning over it shows above it. If a second pass is unavoidable, it is its own layer and may show only
+  the parts that really sit above the thing it is drawn over (here: only while he lay across the desk).
 - **Movement that obeys physics** (the same check): no part moves faster than a real one can in a frame (a teleport);
   if the script says someone hits something, they really touch it (`CONTACTS`: Jenrick first stopped short of the
   desk); a stumble or fall keeps moving until it lands (`MOMENTUM`: he slowed and steadied himself); things knocked
