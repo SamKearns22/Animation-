@@ -184,6 +184,15 @@ def routine_pose(m):
     return dict(KEYS[keys[-1][1]])
 
 
+# Their faces change together every two beats through happy, groovy expressions (Sam, 18 Oct: more variety, still
+# in sync). Faces snap (eyes and jokes snap); the body keeps flowing.
+FACES = ['grin', 'sing', 'pout', 'grin', 'bliss', 'smug', 'sing', 'grin', 'pout', 'bliss', 'smug', 'sing']
+
+
+def face_at(m):
+    return FACES[int(max(0.0, m) / (2 * BEAT)) % len(FACES)]
+
+
 def dance_pose(m):
     """The pose with follow-through: the body leads; the hands arrive 0.06 s later and the head 0.09 s later
     (overlapping action), and a bounce in the knees on every beat."""
@@ -194,6 +203,7 @@ def dance_pose(m):
         k[f] = arms[f]
     k['head'], k['chin'] = head['head'], head['chin']
     k['dip'] += 7 * (0.5 - 0.5 * math.cos(2 * math.pi * m / BEAT))
+    k['mood'] = face_at(m)
     return k
 
 

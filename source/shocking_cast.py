@@ -60,6 +60,14 @@ def brows(p, sp, fx, ey, gap, c, w, inner0, outer0, length):
             inner, outer = (inner + 6, outer - 2) if sgn < 0 else (inner - 4, outer - 9)
         elif mood == 'grin':
             inner, outer = inner - 3, outer - 4
+        elif mood == 'sing':                           # brows lifted, singing along
+            inner, outer = inner - 7, outer - 5
+        elif mood == 'bliss':                          # lost in the music: brows up and soft in the middle
+            inner, outer = inner - 6, outer + 1
+        elif mood == 'pout':                           # cool: brows down a touch, level
+            inner, outer = inner + 3, outer + 1
+        elif mood == 'smug':                           # cheeky: one brow cocked
+            inner, outer = (inner + 2, outer) if sgn < 0 else (inner - 8, outer - 10)
         if mood == 'wtf' and sgn > 0:                  # one brow higher: 'what am I looking at'
             inner, outer = inner - 5, outer - 6
         brow(p, fx + sgn * gap, ey + sp.get('brow_dy', 0), sgn, c, w, inner, outer, length)
@@ -101,6 +109,21 @@ def rest_mouth(p, sp, fx, my, lip, width=24, lips=False):
     elif mood == 'wtf':                                 # slack, slightly open, flat
         p.poly(curve([(fx - w * 0.6, my + 2), (fx + w * 0.6, my + 1), (fx + w * 0.4, my + 9), (fx - w * 0.4, my + 9)], 3),
                MOUTH_IN, INK, 1.8)
+    elif mood == 'sing':                                # singing along: open, round-topped, top teeth showing
+        shape = curve([(fx - w * 0.7, my), (fx, my - 5), (fx + w * 0.7, my), (fx + w * 0.5, my + 20), (fx, my + 26),
+                       (fx - w * 0.5, my + 20)], 3)
+        p.poly(shape, MOUTH_IN, INK, 2.0)
+        p.poly(curve([(fx - w * 0.6, my), (fx, my - 4), (fx + w * 0.6, my), (fx, my + 5)], 3), TEETH, None)
+        p.poly(curve(oval(fx, my + 19, w * 0.3, 5, 10)), (200, 96, 100), None)              # the tongue
+        p.line(shape, INK, 2.0)
+    elif mood == 'pout':                                # the cool pout: lips pushed out in a small rosebud
+        p.poly(curve(oval(fx, my + 4, w * 0.42, 9, 14)), lip if lips else (200, 120, 110), INK, 1.9)
+        p.line([(fx - w * 0.3, my + 4), (fx, my + 6), (fx + w * 0.3, my + 4)], INK, 1.8)
+    elif mood == 'bliss':                               # eyes shut, a soft wide smile
+        p.line(curve([(fx - w - 4, my - 7), (fx - w * 0.4, my + 9), (fx + w * 0.4, my + 9), (fx + w + 4, my - 7)], 3), INK, 2.6)
+    elif mood == 'smug':                                # a lopsided, cheeky smile
+        p.line(curve([(fx - w, my + 3), (fx - w * 0.2, my + 6), (fx + w * 0.5, my + 2), (fx + w + 4, my - 8)], 3), INK, 2.4)
+        p.line([(fx + w + 4, my - 8), (fx + w + 9, my - 4)], INK, 1.6)
     else:                                               # neutral / cool: closed, a faint smile
         k = 0.6 if mood == 'neutral' else 0.2
         if lips:
@@ -126,7 +149,13 @@ def eye_state(sp, lid=0.2, squint=0.0):
         squint = 0.35
     elif mood == 'wtf':
         l = 0.35 if not sp.get('wide') else 0.0
-    return dict(lid=l, look=sp.get('look', 0.0), squint=squint, closed=sp.get('blink', False),
+    elif mood == 'sing':
+        l, squint = 0.1, 0.15
+    elif mood == 'pout':
+        l = max(l, 0.38)                               # cool, heavy-lidded
+    elif mood == 'smug':
+        l, squint = max(l, 0.3), 0.25
+    return dict(lid=l, look=sp.get('look', 0.0), squint=squint, closed=sp.get('blink', False) or mood == 'bliss',
                 gaze_dy=sp.get('gaze_dy', 0.0))
 
 
