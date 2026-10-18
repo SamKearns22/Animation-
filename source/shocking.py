@@ -403,6 +403,46 @@ def draw_item(img, cam3, i, t):
         d.line(rot([(-0.07, 0), (0.07, 0)]), fill=(30, 60, 160), width=max(2, int(0.012 * sc)))
 
 
+COFFEE = [(0.9 + dv[0], 1.4 + dv[1], 1.1 + dv[2], dl) for dv, dl in
+          (((0.3, 0.4, -0.2), 0.0), ((-0.2, 0.6, 0.1), 0.02), ((0.5, 0.2, 0.3), 0.03), ((0.1, 0.8, -0.3), 0.01),
+           ((-0.4, 0.3, 0.4), 0.04), ((0.6, 0.7, 0.0), 0.02), ((0.0, 0.1, 0.5), 0.05))]
+COFFEE_C = (92, 54, 28)
+
+
+def coffee_at(i, t):
+    """A drop of coffee thrown from the mug: (X, Y, Z, landed)."""
+    vx, vy, vz, dl = COFFEE[i]
+    X0, Z0 = ITEMS[0][1], ITEMS[0][2]
+    u = t - CRASH - dl
+    if u <= 0:
+        return None
+    land = (vy + math.sqrt(vy * vy + 2 * 9.8 * DESK_TOP)) / 9.8
+    uu = min(u, land)
+    return X0 + vx * uu, max(0.0, DESK_TOP + 0.08 + vy * uu - 4.9 * uu * uu), Z0 + vz * uu, u >= land
+
+
+def coffee(img, cam3, t, stains):
+    """stains=True: the puddles on the carpet where the drops landed (they stay); False: the drops in flight."""
+    k = img.size[0] / 1080
+    d = ImageDraw.Draw(img)
+    for i in range(len(COFFEE)):
+        c = coffee_at(i, t)
+        if c is None or c[3] != stains:
+            continue
+        X, Y, Z, landed = c
+        x, y = cam3.pt(X, Z, Y)
+        sc = cam3.foc / Z * k
+        if stains:
+            rng = np.random.default_rng(i)
+            r = 0.07 + 0.04 * rng.random()
+            pts = [(x * k + math.cos(a) * r * sc * (0.8 + 0.4 * rng.random()),
+                    y * k + math.sin(a) * r * 0.35 * sc * (0.8 + 0.4 * rng.random())) for a in np.linspace(0, 6.28, 12, endpoint=False)]
+            d.polygon(pts, fill=COFFEE_C)
+        else:
+            r = 0.022 * sc
+            d.ellipse([x * k - r, y * k - r * 1.4, x * k + r, y * k + r], fill=COFFEE_C, outline=INK)
+
+
 def crash_desk(img, cam3, t, top_only=None):
     """The desk at the front left that Jenrick crashes into (cut off by the frame's edge): its top with a monitor,
     keyboard and the things that go flying; its front. top_only: True = only the top, False = only the front."""
@@ -455,7 +495,7 @@ WORKERS = [
     (worker(B.PALE, 'side', (170, 166, 162), (50, 54, 66), 'suit', (50, 54, 66), tie=(150, 120, 40), name='w5'), 1.75, 10.8, -135),
 ]
 PHONE_GUY = worker(B.PALE, 'side', (110, 70, 46), (52, 60, 80), 'suit', (52, 60, 80), tie=(90, 30, 50), name='phone')
-PHONE_AT = (0.74, 2.1, -90)       # front right, side-on to us, facing the dancers, filming on his phone
+PHONE_AT = (0.84, 2.1, -135)      # front right, half in shot, turned diagonally towards Farage, filming (Sam)
 
 
 def seated_worker(img, cam3, sp, X, Z, yaw, t):
@@ -469,12 +509,20 @@ def seated_worker(img, cam3, sp, X, Z, yaw, t):
 
 
 def phone_in_hands(p, j2):
-    """A phone held landscape between the two hands, centred on them, its dark back to us."""
+    """The phone held up between his hands, its camera pointing at the dancers and its lit screen towards him (and
+    us, behind him); the hands drawn again over its edges, so it sits inside his grip (Sam, 18 Oct)."""
     (xl, yl), (xr, yr) = j2['wrL'], j2['wrR']
-    cx, cy = (xl + xr) / 2, (yl + yr) / 2 - 6
-    w, h = abs(xr - xl) / 2 + 26, 40
-    p.poly([(cx - w, cy - h), (cx + w, cy - h), (cx + w, cy + h), (cx - w, cy + h)], (36, 38, 46), INK, 2.4)
-    p.ell(cx - w + 18, cy - h + 16, 7, 7, (70, 74, 84), INK, 1.4)                # the camera lens
+    cx, cy = (xl + xr) / 2, (yl + yr) / 2 - 8
+    w, h = abs(xr - xl) / 2 + 14, 44                        # held landscape, its ends in his hands
+    p.poly([(cx - w, cy - h), (cx + w, cy - h), (cx + w, cy + h), (cx - w, cy + h)], (30, 32, 38), INK, 2.4)
+    p.poly([(cx - w + 7, cy - h + 7), (cx + w - 7, cy - h + 7), (cx + w - 7, cy + h - 7), (cx - w + 7, cy + h - 7)],
+           (196, 222, 240), None)                                                   # the lit screen, filming
+    p.ell(cx - w + 16, cy - h + 14, 6, 6, (230, 40, 40), None)                      # the red record dot
+    for side in 'LR':                                       # the hands over the phone's edges
+        el, wr = j2['el' + side], j2['wr' + side]
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1.0
+        p.ell(wr[0] + dx / n * 12, wr[1] + dy / n * 12, 26, 26, PHONE_GUY['skin'], INK, 2.4)
 
 
 def phone_guy(img, cam3, t):
@@ -482,8 +530,8 @@ def phone_guy(img, cam3, t):
     sp = dict(PHONE_GUY)
     j = V.standing(sp)
     X, Z, yaw = PHONE_AT
-    for side, dx in (('L', -18), ('R', 18)):                 # both hands on the phone, held up high above the heads
-        V.arm_to(j, side, (dx, -200.0, 240.0), 'down', 'fist')
+    for side, dx in (('L', -62), ('R', 62)):                 # both hands on the phone's ends, held up in front of his face
+        V.arm_to(j, side, (dx, -170.0, 250.0), 'down', 'fist')
     j['props'] = [lambda p, j2: phone_in_hands(p, j2)]
     x, y, s = cam3.person(X, Z)
     V.person(img, B.Cam(1.0, 540, 960), x, y, s, sp, t, yaw, j)
@@ -1028,6 +1076,7 @@ def dance_frame(t, cam3=DANCE_CAM):
             x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra)
             if who == 'farage' and t >= FARAGE_AT:
                 spit_at(img, x, y - 150 * s + 70 * s, s, t)
+    coffee(img, cam3, t, stains=True)                       # the coffee on the carpet stays where it landed
     crash_desk(img, cam3, t, top_only=True)
     if jen and jen[1] < 3.0:                                 # at the desk: his body over its top, legs behind it
         jenrick_layer(img, cam3, *jen, t, legs=False)
@@ -1035,6 +1084,7 @@ def dance_frame(t, cam3=DANCE_CAM):
     for i, it in enumerate(ITEMS):
         if t >= CRASH + it[4]:
             draw_item(img, cam3, i, t)
+    coffee(img, cam3, t, stains=False)
     phone_guy(img, cam3, t)
     if on:                                                  # the coloured light falls over everyone too
         tint = Image.new('RGBA', img.size, wash_colour(song_clock(t)) + (22,))
