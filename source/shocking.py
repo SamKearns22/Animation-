@@ -316,13 +316,30 @@ BLINKS = {w: F.blinks(i + 3, 0.0, DUR) for i, w in enumerate(DANCERS)}
 FOOT0 = {'L': (-60.0, V.ANKLE_Y, 6.0), 'R': (60.0, V.ANKLE_Y, 6.0)}      # standing feet (V.standing)
 
 
+CATCHES = (0.18, 0.62, 1.06, 1.44)    # when Jenrick's feet catch (each one checks him, never stops him)
+
+
+def trip_progress(u):
+    """How far along his way to the desk he is (0-1) at u s into the trip: he is never still once the first catch
+    sends him off balance (Sam, 18 Oct: he slowed and steadied himself before the run): the speed surges after each
+    catch and sags at the next, while rising all the way to the impact."""
+    if u <= 0.18:
+        return 0.0
+    n = 400
+    us = np.linspace(0.18, TRIP_LEN, n)
+    v = (0.3 + 1.0 * ((us - 0.18) / (TRIP_LEN - 0.18)) ** 2)
+    for c in CATCHES[1:]:
+        v = v * (1 - 0.45 * np.exp(-((us - c) / 0.07) ** 2))              # each catch checks him, a little
+    d = np.concatenate([[0.0], np.cumsum((v[1:] + v[:-1]) / 2 * np.diff(us))])
+    return float(np.interp(u, us, d / d[-1]))
+
+
 def trip_state(t):
-    """Jenrick's trip (Sam, 18 Oct): a few stumbling trips, then he rights himself and lurches into the desk. No
-    deep lean (seen from the front it only shrank him); his balance is shown by the feet catching, the knees
-    buckling, the arms flung out and a small sideways wobble. 0.18 his left foot catches over his right; 0.42 a
-    stumbling step, arms out; 0.62 the right foot catches over the left, knees buckle; 0.88 another stumble; 1.06 he
-    stubs his left toe; 1.3-1.75 quicker, steadier steps as he tries to right himself; then the lurch into the desk
-    (TRIP_LEN), as before. Returns (X, Z, key pose)."""
+    """Jenrick's trip (Sam, 18 Oct): stumbling trips, and he never finds his balance again before the desk. No deep
+    lean (seen from the front it only shrank him); his balance is shown by the feet catching, the knees buckling,
+    the arms flung up and out and a side-to-side wobble. 0.18 his left foot catches over his right; 0.62 the right
+    over the left, knees buckle; 1.06 he stubs his left toe; 1.44 a near-tangle; then his legs run away with him,
+    faster and faster, into the desk (TRIP_LEN); his speed never drops to a stop (trip_progress). Returns (X, Z, key pose)."""
     u = t - TRIP
     X0, Z0 = SPOT['jenrick']
     X1, Z1 = JENRICK_END
@@ -339,18 +356,22 @@ def trip_state(t):
     stum2 = P((-170, 60, 300), (170, -160, 150), 'down', 'out', lean=8, dip=18, mood='scared', head=-8, roll=2)
     catch3 = dict(P((-190, 180, 280), (140, -220, 180), 'down', 'out', lean=6, dip=24, mood='scared', roll=2),
                   feet={'L': (-70, A - 60, -60.0), 'R': (60, A, 20.0)})
-    # then his legs run away with him (Sam, 18 Oct: faster into the table, out of control of his legs): quick short
-    # steps, faster and faster, arms flailing, straight into the desk at full speed
-    run1 = P((-170, 200, 300), (150, -200, 160), 'down', 'out', lean=10, dip=12, mood='scared', head=-6, roll=-2)
-    run2 = P((-190, 20, 260), (60, 240, 300), 'down', 'out', lean=12, dip=8, mood='scared', head=6, roll=2)
-    reach = P((-170, 330, 280), (190, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3)
+    # then he never finds his feet again (Sam, 18 Oct: he steadied himself before the run; he must stay unbalanced
+    # all the way to the desk): another stumble and a near-tangle, then his legs run away with him, wobbling side
+    # to side, faster and faster, straight into the desk
+    stum3 = P((-200, 120, 300), (160, -190, 150), 'down', 'out', lean=10, dip=26, mood='scared', head=8, roll=-4)
+    catch4 = dict(P((-180, 230, 280), (120, -230, 180), 'down', 'out', lean=8, dip=30, mood='scared', head=-8, roll=4),
+                  feet={'L': (10, A - 30, 80.0), 'R': (40, A, -10.0)})
+    run1 = P((-170, 200, 300), (150, -200, 160), 'down', 'out', lean=12, dip=14, mood='scared', head=-6, roll=4)
+    run2 = P((-190, 20, 260), (60, 240, 300), 'down', 'out', lean=12, dip=10, mood='scared', head=6, roll=-1)
+    reach = P((-170, 330, 280), (190, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3, roll=-1)
     slam = P((-160, 430, 230), (190, 430, 210), 'down', 'out', lean=14, dip=4, mood='scared', chin=0.35)
     slump = P((-165, 440, 240), (200, 440, 220), 'down', 'out', lean=12, dip=6, mood='scared', chin=0.4)
     up = P((-165, 420, 200), (190, 420, 180), 'down', 'out', lean=8, dip=6, mood='scared', chin=0.2, look=1.0)
     hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=8, dip=12, mood='scared', chin=0.3, look=1.0)
     T = TRIP_LEN
-    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.36, run1),
-            (1.66, run2), (1.92, reach), (T, slam), (T + 0.2, slump),
+    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.26, stum3),
+            (1.44, catch4), (1.64, run1), (1.82, run2), (1.94, reach), (T, slam), (T + 0.2, slump),
             (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
     k = dict(hunch)
     for (a, ka), (b2, kb) in zip(keys, keys[1:]):
@@ -363,23 +384,10 @@ def trip_state(t):
                 k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(fa[sd], fb[sd])) for sd in 'LR'}
             break
     # the catches cover little ground; from 1.06 s he accelerates all the way into the desk (no slowing before it)
-    # the catches lurch him forward and stop him dead, as in the trip Sam liked (metres along his way); from 1.06 s
-    # his legs run away with him, faster and faster, all the way into the desk (no slowing before it)
-    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.09), (0.62, 0.12), (0.88, 0.25), (1.06, 0.28)]
-    dist = math.hypot(X1 - X0, Z1 - Z0)
-    m = dist
-    if u < 1.06:
-        for (a, pa), (b2, pb) in zip(path, path[1:]):
-            if u < b2:
-                m = pa + (pb - pa) * ease((u - a) / (b2 - a))
-                break
-    elif u < T:
-        v = (u - 1.06) / (T - 1.06)
-        m = 0.28 + (dist - 0.28) * v ** 1.8                                # speeding up hard into the impact
-    w = m / dist
+    w = trip_progress(u) if u < T else 1.0
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
     if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps; faster and faster at the end
-        k['step'] = (True, int(u / 0.16) % 2) if u < 1.06 else (True, int(1.06 / 0.16 + (u - 1.06) ** 1.4 * 14) % 2)
+        k['step'] = (True, int(u / 0.16) % 2) if u < 1.44 else (True, int(1.44 / 0.16 + (u - 1.44) ** 1.3 * 16) % 2)
     if u >= T:                                                             # the jolt of the impact
         k['dip'] = k['dip'] + 10 * math.exp(-((u - T) / 0.06) ** 2)
     return X, Z, k
@@ -387,14 +395,17 @@ def trip_state(t):
 
 # The things on the desk he crashes into (Sam, 18 Oct: knocking stuff over): flung on the impact, falling under
 # gravity, each its own size and speed; the papers flutter; everything stays where it lands.
-ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, towards the far side +), delay (s)
-    ('mug', -0.92, 1.95, (0.9, 1.4, 1.1), 0.00),
-    ('pot', -1.22, 2.05, (0.3, 1.8, 0.9), 0.03),
-    ('plant', -1.6, 1.8, (-0.4, 1.2, 0.6), 0.06),
-    ('paper', -1.0, 1.75, (0.5, 2.0, 0.3), 0.00), ('paper', -1.1, 1.8, (-0.2, 2.4, 0.5), 0.02),
-    ('paper', -0.95, 1.85, (0.9, 1.8, 0.7), 0.04), ('paper', -1.2, 1.7, (0.2, 2.6, -0.2), 0.05),
-    ('pen', -1.15, 2.0, (0.6, 2.2, 1.3), 0.03), ('pen', -1.2, 2.05, (1.1, 1.6, 0.9), 0.04),
-    ('pen', -1.17, 2.02, (-0.3, 2.0, 1.5), 0.05)]
+ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, away from us +), delay (s). He hits the
+    # desk from behind, so everything is flung TOWARDS us (Sam, 18 Oct: pens had landed behind him and were drawn on
+    # his legs): the mug, pot, plant and two pens fly out of the bottom of the shot; the papers flutter down and a
+    # pen skids onto the carpet in front of him, to the right of the desk, never under it or behind anyone.
+    ('mug', -0.92, 1.95, (0.6, 1.4, -1.2), 0.00),
+    ('pot', -1.22, 2.05, (0.3, 1.8, -1.1), 0.03),
+    ('plant', -1.6, 1.8, (0.2, 1.1, -0.9), 0.06),
+    ('paper', -1.0, 1.75, (0.65, 2.0, 0.45), 0.00), ('paper', -1.1, 1.8, (0.6, 2.4, -0.6), 0.02),
+    ('paper', -0.95, 1.85, (0.75, 1.8, 0.3), 0.04), ('paper', -1.2, 1.7, (0.2, 2.6, -0.6), 0.05),
+    ('pen', -1.15, 2.0, (1.6, 1.6, 0.2), 0.03), ('pen', -1.2, 2.05, (0.9, 1.6, -1.4), 0.04),
+    ('pen', -1.17, 2.02, (-0.2, 2.0, -1.5), 0.05)]
 DESK_TOP = 0.74
 DESK_DX = 0.0                    # (the desk stays where Sam liked it: 18 Oct)
 
@@ -442,11 +453,36 @@ def draw_item(img, cam3, i, t):
         for a in (-0.5, 0.0, 0.5):
             d.polygon(rot([(0, -0.09), (0.05 * math.sin(a) - 0.02, -0.2), (0.05 * math.sin(a) + 0.02, -0.2)]),
                       fill=(70, 140, 70), outline=INK)
-    elif kind == 'paper':
-        w, h = (0.15, 0.03) if landed else (0.15, 0.1 * abs(math.cos(ang * 2)) + 0.02)
-        d.polygon(rot([(-w, -h), (w, -h), (w, h), (-w, h)]), fill=(252, 252, 250), outline=INK)
-    elif kind == 'pen':
-        d.line(rot([(-0.07, 0), (0.07, 0)]), fill=(30, 60, 160), width=max(2, int(0.012 * sc)))
+    elif kind == 'paper':                                 # a sheet of A4 with lines of print, tumbling in 3D
+        psi = 0.6 * i + 0.5 * ang
+        phi = 0.0 if landed else 1.1 * math.sin(ang * 1.7 + i)
+
+        def corner(u, v):
+            a_, b_ = u * 0.105, v * 0.15
+            return cam3.pt(X + a_ * math.cos(psi) - b_ * math.cos(phi) * math.sin(psi), Z + a_ * math.sin(psi)
+                           + b_ * math.cos(phi) * math.cos(psi), Y + 0.004 + b_ * math.sin(phi))
+        quad = [corner(-1, -1), corner(1, -1), corner(1, 1), corner(-1, 1)]
+        d.polygon([(px * k, py * k) for px, py in quad], fill=(252, 252, 250), outline=INK)
+        for v in (-0.6, -0.35, -0.1, 0.15, 0.4):
+            (ax, ay), (bx, by) = corner(-0.7, v), corner(0.7 if v < 0.3 else 0.2, v)
+            d.line([(ax * k, ay * k), (bx * k, by * k)], fill=(150, 150, 156), width=max(1, int(2 * k)))
+    elif kind == 'pen':                                   # a biro: clear barrel, blue cap and end, black tip
+        beta = 0.0 if landed else 0.8 * ang
+        dx, dy, dz = math.cos(ang) * math.cos(beta), math.sin(beta), math.sin(ang) * math.cos(beta)
+        (ax, ay), (bx, by) = (cam3.pt(X + q * 0.07 * dx, Z + q * 0.07 * dz, Y + 0.006 + q * 0.07 * dy) for q in (-1, 1))
+        ax, ay, bx, by = ax * k, ay * k, bx * k, by * k
+        L = math.hypot(bx - ax, by - ay) or 1.0
+        nx, ny = -(by - ay) / L * 0.0065 * sc, (bx - ax) / L * 0.0065 * sc
+
+        def seg(u0, u1, w=1.0):
+            p0, p1 = (ax + (bx - ax) * u0, ay + (by - ay) * u0), (ax + (bx - ax) * u1, ay + (by - ay) * u1)
+            return [(p0[0] + nx * w, p0[1] + ny * w), (p1[0] + nx * w, p1[1] + ny * w),
+                    (p1[0] - nx * w, p1[1] - ny * w), (p0[0] - nx * w, p0[1] - ny * w)]
+        d.polygon(seg(0.0, 1.0), fill=(232, 238, 242), outline=INK)            # the barrel
+        d.polygon(seg(0.0, 0.3, 1.15), fill=(30, 60, 170), outline=INK)         # the cap
+        d.polygon(seg(0.94, 1.0, 1.0), fill=(30, 60, 170), outline=INK)         # the end plug
+        d.line([(ax + (bx - ax) * 0.3, ay + (by - ay) * 0.3), (ax + (bx - ax) * 0.94, ay + (by - ay) * 0.94)],
+               fill=(30, 60, 170), width=max(1, int(0.003 * sc)))               # the ink tube inside
 
 
 COFFEE = [   # (across: to our right, up, away from us; delay): all of it thrown to the right, landing on the carpet in
@@ -1397,9 +1433,35 @@ def layering_faults():
     return faults
 
 
+def item_faults():
+    """The things knocked off the desk (Sam, 18 Oct: pens had landed behind Jenrick and were drawn on his legs). They
+    are drawn after the people, so on every frame each one must be nearer the camera than anyone it covers on
+    screen, and nothing may come to rest under the desk where it would show through it."""
+    faults, seen = [], set()
+    x0, x1, z0, z1 = CRASH_DESK
+    for n in range(int(CRASH * FPS), int(DUR * FPS)):
+        t = n / FPS
+        pos = floor_positions(t)
+        for i in range(len(ITEMS)):
+            X, Y, Z, ang, landed = item_at(i, t)
+            x, y = DANCE_CAM.pt(X, Z, Y)
+            if not (0 <= x <= 1080 and 0 <= y <= 1920):
+                continue
+            if landed and x0 < X < x1 and z0 < Z < z1 and (i, 'desk') not in seen:
+                seen.add((i, 'desk'))
+                faults.append(f'{t:.2f} s: the {ITEMS[i][0]} lands under the desk')
+            for who, (PX, PZ) in pos.items():
+                px, py, ps = DANCE_CAM.person(PX, PZ)
+                inside = abs(x - px) < 210 * ps and py - 330 * ps < y < py + 960 * ps
+                if inside and Z > PZ - 0.05 and (i, who) not in seen:
+                    seen.add((i, who))
+                    faults.append(f'{t:.2f} s: the {ITEMS[i][0]} is behind {who} but drawn over them')
+    return faults
+
+
 def checks():
     """The film's own plan checks (run by preflight.py): collisions, Jenrick staying in shot, drawing order."""
-    faults = collision_faults() + frame_faults() + layering_faults()
+    faults = collision_faults() + frame_faults() + layering_faults() + item_faults()
     print('collision, framing and layering checks:', 'clean' if not faults else f'{len(faults)} fault(s)')
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
