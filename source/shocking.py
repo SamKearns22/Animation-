@@ -508,21 +508,30 @@ def seated_worker(img, cam3, sp, X, Z, yaw, t):
     V.person(img, B.Cam(1.0, 540, 960), x, y, s, dict(sp, blink=F.blinking(t, BLINKS.get(sp['name'], ()))), t, yaw, j)
 
 
-def phone_in_hands(p, j2):
-    """The phone held up between his hands, its camera pointing at the dancers and its lit screen towards him (and
-    us, behind him); the hands drawn again over its edges, so it sits inside his grip (Sam, 18 Oct)."""
-    (xl, yl), (xr, yr) = j2['wrL'], j2['wrR']
-    cx, cy = (xl + xr) / 2, (yl + yr) / 2 - 8
-    w, h = abs(xr - xl) / 2 + 14, 44                        # held landscape, its ends in his hands
+def phone_in_hand(p, j2, t):
+    """The phone held upright in his right hand (Sam, 18 Oct), its camera to the dancers and its screen towards us,
+    showing what it films: the pop lights' colour, flashing with the strobe; the plain office once they stop. The
+    hand is drawn again over its lower edge, so the phone sits in his grip."""
+    el, wr = j2['elR'], j2['wrR']
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1.0
+    hx, hy = wr[0] + dx / n * 12, wr[1] + dy / n * 12
+    w, h = 30, 58
+    cx, cy = hx, hy - 34
     p.poly([(cx - w, cy - h), (cx + w, cy - h), (cx + w, cy + h), (cx - w, cy + h)], (30, 32, 38), INK, 2.4)
-    p.poly([(cx - w + 7, cy - h + 7), (cx + w - 7, cy - h + 7), (cx + w - 7, cy + h - 7), (cx - w + 7, cy + h - 7)],
-           (196, 222, 240), None)                                                   # the lit screen, filming
-    p.ell(cx - w + 16, cy - h + 14, 6, 6, (230, 40, 40), None)                      # the red record dot
-    for side in 'LR':                                       # the hands over the phone's edges
-        el, wr = j2['el' + side], j2['wr' + side]
-        dx, dy = wr[0] - el[0], wr[1] - el[1]
-        n = math.hypot(dx, dy) or 1.0
-        p.ell(wr[0] + dx / n * 12, wr[1] + dy / n * 12, 26, 26, PHONE_GUY['skin'], INK, 2.4)
+    if music_on(t):
+        m = song_clock(t)
+        scr = blend_c(wash_colour(m), (255, 255, 255), 0.5 if (m % BEAT) / BEAT < 0.12 else 0.15)
+    else:
+        scr = (214, 220, 224)
+    p.poly([(cx - w + 6, cy - h + 10), (cx + w - 6, cy - h + 10), (cx + w - 6, cy + h - 10), (cx - w + 6, cy + h - 10)],
+           scr, None)
+    p.ell(cx, cy + h - 22, 5, 5, (230, 40, 40), None)                                 # the record button
+    p.ell(hx, hy, 26, 26, PHONE_GUY['skin'], INK, 2.4)
+
+
+def blend_c(a, b, k):
+    return tuple(int(x + (y - x) * k) for x, y in zip(a, b))
 
 
 def phone_guy(img, cam3, t):
@@ -530,9 +539,8 @@ def phone_guy(img, cam3, t):
     sp = dict(PHONE_GUY)
     j = V.standing(sp)
     X, Z, yaw = PHONE_AT
-    for side, dx in (('L', -62), ('R', 62)):                 # both hands on the phone's ends, held up in front of his face
-        V.arm_to(j, side, (dx, -170.0, 250.0), 'down', 'fist')
-    j['props'] = [lambda p, j2: phone_in_hands(p, j2)]
+    V.arm_to(j, 'R', (20.0, -150.0, 260.0), 'down', 'fist')   # the phone held up in one hand; the other hangs
+    j['props'] = [lambda p, j2: phone_in_hand(p, j2, t)]
     x, y, s = cam3.person(X, Z)
     V.person(img, B.Cam(1.0, 540, 960), x, y, s, sp, t, yaw, j)
 
@@ -794,40 +802,53 @@ def millbank_plate():
     for y in range(2340, H2, 110):
         d.line([(0, y), (W2, y + 30)], fill=(160, 156, 150), width=3)
     d.polygon([(-20, 2560), (W2 + 20, 2520), (W2 + 20, 2640), (-20, 2690)], fill=(70, 130, 200))
-    for i, x in enumerate(range(60, W2 - 200, 300)):       # parked scooters along the kerb (Claude's addition)
-        scooter(d, x, 2450 + (i % 2) * 18, i)
+    for i in range(len(SCOOTERS)):                         # packed tight along the kerb, nose-out (Claude's addition)
+        scooter(d, 110 + i * 200 + (i % 3) * 12, 2320 + (i % 2) * 10, i)   # on the paving, the cycle lane in front
     d.line([(1460, 2300), (1460, 1300)], fill=(40, 42, 46), width=14)                   # a lamp post
     d.rectangle([1444, 1280, 1476, 1310], fill=(40, 42, 46))
     _PLATE['img'] = img
     return img
 
 
+SCOOTERS = [   # (body colour, kind, lean) left to right, as parked outside Millbank Tower (ref millbank-scooters)
+    ((206, 208, 212), 'scooter', -4), ((176, 178, 184), 'scooter', 3), ((40, 40, 44), 'scooter', -2),
+    ((52, 30, 30), 'motorbike', 5), ((34, 34, 38), 'scooter', -3), ((26, 26, 30), 'motorbike', 2),
+    ((96, 98, 104), 'scooter', -5), ((214, 214, 212), 'scooter', 4)]
+
+
 def scooter(d, x, y, i):
-    """A parked scooter in side view (refs millbank-2, 3; Sam, 18 Oct: more detail): tyres with hubs, the curved body
-    panel and footboard, seat, top box, handlebars with mirrors, headlight, number plate."""
-    body = [(200, 200, 204), (40, 42, 48), (176, 30, 36), (230, 230, 226), (30, 60, 110)][i % 5]
-    trim = (24, 24, 28)
-    for wx in (x + 40, x + 220):                           # tyres and hubs
-        d.ellipse([wx - 44, y + 76, wx + 44, y + 164], fill=(26, 26, 28), outline=INK, width=3)
-        d.ellipse([wx - 22, y + 98, wx + 22, y + 142], fill=(170, 172, 176), outline=INK, width=2)
-        for a in range(5):
-            ang = a * 2 * math.pi / 5
-            d.line([(wx, y + 120), (wx + 18 * math.cos(ang), y + 120 + 18 * math.sin(ang))], fill=(110, 112, 118), width=3)
-    d.polygon([(x + 220, y + 120), (x + 196, y - 10), (x + 210, y - 14), (x + 236, y + 116)], fill=(120, 122, 128),
-              outline=INK)                                 # the front fork
-    d.polygon([(x - 6, y + 70), (x + 40, y + 20), (x + 120, y + 26), (x + 150, y + 82), (x + 196, y + 84), (x + 206, y + 30),
-               (x + 230, y - 20), (x + 246, y + 70), (x + 214, y + 110), (x + 64, y + 110)], fill=body, outline=INK)
-    d.polygon([(x + 110, y + 88), (x + 200, y + 88), (x + 196, y + 104), (x + 108, y + 104)], fill=trim, outline=INK)  # footboard
-    d.polygon([(x + 20, y + 22), (x + 136, y + 14), (x + 140, y + 30), (x + 22, y + 38)], fill=trim, outline=INK)       # seat
-    d.rectangle([x - 4, y - 46, x + 76, y + 18], fill=(36, 36, 40), outline=INK, width=2)                               # top box
-    d.line([(x + 6, y - 20), (x + 66, y - 20)], fill=(90, 90, 96), width=3)
-    d.line([(x + 230, y - 20), (x + 190, y - 34), (x + 258, y - 40)], fill=trim, width=6)                               # bars
-    for mx in (x + 196, x + 254):                          # mirrors on stalks
-        d.line([(mx, y - 36), (mx + 4, y - 70)], fill=trim, width=3)
-        d.ellipse([mx - 9, y - 84, mx + 17, y - 66], fill=(150, 170, 186), outline=INK, width=2)
-    d.ellipse([x + 236, y - 8, x + 258, y + 14], fill=(250, 246, 210), outline=INK, width=2)                           # headlight
-    d.rectangle([x - 18, y + 54, x + 14, y + 72], fill=(240, 200, 40), outline=INK, width=2)                            # plate
-    d.ellipse([x - 12, y + 34, x + 4, y + 48], fill=(200, 40, 40), outline=INK, width=1)                                # tail lamp
+    """A scooter or motorbike parked nose-out towards the road, seen from the front (ref millbank-scooters, Sam
+    18 Oct: authentic colour and position): front wheel and mudguard, the front shield with its headlights, a tall
+    tinted windscreen, handlebars with mirrors, a black leg cover, a top box behind; the motorbikes are naked bikes
+    with a red frame and a round lamp. Packed tight, each leaning a little on its stand."""
+    body, kind, lean = SCOOTERS[i % len(SCOOTERS)]
+    s_ = math.sin(math.radians(lean))
+    sh = lambda px, py: (x + px + (y + 170 - py) * -s_, py)            # lean about the tyre's contact
+    poly_ = lambda pts, fill, w=3: d.polygon([sh(px, py) for px, py in pts], fill=fill, outline=INK, width=w)
+    if kind == 'motorbike':
+        poly_([(-60, y - 120), (60, y - 120), (70, y - 40), (-70, y - 40)], (30, 30, 34))           # tank and seat
+        poly_([(-14, y - 40), (14, y - 40), (18, y + 90), (-18, y + 90)], (200, 50, 40))             # the red frame/fork
+        poly_([(-22, y + 40), (22, y + 40), (22, y + 170), (-22, y + 170)], (24, 24, 26))           # tyre, head-on
+        poly_([(-30, y + 30), (30, y + 30), (24, y + 60), (-24, y + 60)], body)                     # mudguard
+        d.ellipse([sh(-26, y - 60)[0], y - 60, sh(26, y - 60)[0], y - 8], fill=(250, 246, 214), outline=INK, width=3)
+        d.line([sh(-90, y - 70), sh(90, y - 70)], fill=(30, 30, 34), width=7)                       # bars
+        for mx in (-90, 90):
+            d.ellipse([sh(mx - 14, y - 110)[0], y - 110, sh(mx + 14, y - 110)[0], y - 92], fill=(90, 100, 110), outline=INK, width=2)
+        return
+    poly_([(-74, y - 210), (74, y - 210), (78, y - 150), (-78, y - 150)], (28, 28, 32))               # top box behind
+    poly_([(-96, y - 30), (96, y - 30), (80, y + 120), (-80, y + 120)], (30, 30, 34))               # leg cover
+    poly_([(-26, y + 60), (26, y + 60), (26, y + 170), (-26, y + 170)], (24, 24, 26))               # tyre, head-on
+    d.ellipse([sh(-14, y + 90)[0], y + 90, sh(14, y + 90)[0], y + 130], fill=(170, 172, 176), outline=INK, width=2)
+    poly_([(-40, y + 46), (40, y + 46), (32, y + 80), (-32, y + 80)], body)                         # mudguard
+    poly_([(-70, y - 130), (70, y - 130), (78, y - 40), (40, y + 30), (-40, y + 30), (-78, y - 40)], body)   # shield
+    poly_([(-54, y - 104), (54, y - 104), (40, y - 86), (-40, y - 86)], (244, 242, 220), 2)        # one wide headlight
+    for hx in (-66, 66):                                                                             # indicators
+        poly_([(hx - 9, y - 70), (hx + 9, y - 70), (hx + 7, y - 58), (hx - 7, y - 58)], (236, 150, 50), 2)
+    poly_([(-44, y - 262), (0, y - 270), (44, y - 262), (64, y - 130), (-64, y - 130)], (120, 132, 142))   # tall tinted screen
+    d.line([sh(-110, y - 140), sh(110, y - 140)], fill=(30, 30, 34), width=7)                        # bars
+    for mx in (-110, 110):                                                                           # mirrors
+        d.line([sh(mx, y - 140), sh(mx * 0.9, y - 190)], fill=(30, 30, 34), width=4)
+        d.ellipse([sh(mx * 0.9 - 16, y - 210)[0], y - 210, sh(mx * 0.9 + 16, y - 210)[0], y - 186], fill=(90, 100, 110), outline=INK, width=2)
 
 
 def lapel_frame(t):
