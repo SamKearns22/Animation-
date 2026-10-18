@@ -1053,7 +1053,7 @@ def jenrick_layer(img, cam3, X, Z, k, t, legs=True):
     if legs:
         return make_person(img, cam3, 'jenrick', X, Z, k, t, step=k.get('step'))
     keep = V.leg
-    V.leg = lambda *a, **kw: None
+    V.leg = lambda *a, **kw: None                          # (restored to the shaped leg below)
     try:
         return make_person(img, cam3, 'jenrick', X, Z, k, t)
     finally:
@@ -1313,6 +1313,33 @@ def main():
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
 
+
+# The smoother limbs used since Cry Minister and Bingo Bingo (Sam, 18 Oct: no boxy arms and legs): the arm checker on,
+# then limbs.install for the arms (one tapered sleeve coming from behind the shoulder); the bending legs drawn by
+# views get the same shaping (fuller thigh, in at the knee, a little calf, slim ankle).
+F.guard(B)
+import limbs                     # noqa: E402
+limbs.install(B)
+
+
+def shaped_leg(p, j, side, yaw, sp):
+    hip3, foot3 = j['hip' + side], j['foot' + side]
+    knee3 = V.knee_of(j, side)
+    hip, knee, foot = (V.project(q, yaw)[0] for q in (hip3, knee3, foot3))
+    lerp2 = lambda a, b2, u: (a[0] + (b2[0] - a[0]) * u, a[1] + (b2[1] - a[1]) * u)
+    pts = [hip, lerp2(hip, knee, 0.45), knee, lerp2(knee, foot, 0.32), lerp2(knee, foot, 0.8), foot]
+    V.tube(p, pts, [50, 45, 33, 37, 26, 25], sp.get('trousers', (40, 40, 46)))
+    fx, fy, fz = foot3
+    a = math.radians(j.get('toe' + side, 0.0))
+
+    def foot_pt(dx, dy, dz):
+        return (fx + dx, fy + dy - dz * math.sin(a), fz + dz * math.cos(a))
+    box = [foot_pt(sx, sy, sz) for sx in (-28, 28) for sy in (0, 36) for sz in (-28, 92)]
+    hull = V._hull([V.project(q, yaw)[0] for q in box])
+    p.poly(curve(hull, 3), sp.get('shoe', (22, 20, 22)), INK, 2.4)
+
+
+V.leg = shaped_leg
 
 if __name__ == '__main__':
     main()
