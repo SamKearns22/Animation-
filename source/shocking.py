@@ -1126,6 +1126,28 @@ def jenrick_layer(img, cam3, X, Z, k, t, legs=True):
     return r
 
 
+def desk_top_mask(size, cam3):
+    """The desk top's outline on screen, as a mask: the only place Jenrick's second pass may draw."""
+    from PIL import ImageDraw as _D
+    k = size[0] / 1080
+    x0, x1, z0, z1 = CRASH_DESK
+    pts = [cam3.pt(x0, z0, DESK_TOP), cam3.pt(x1 + 0.05, z0, DESK_TOP), cam3.pt(x1 + 0.05, z1, DESK_TOP), cam3.pt(x0, z1, DESK_TOP)]
+    m = Image.new('L', size, 0)
+    _D.Draw(m).polygon([(x * k, y * k) for x, y in pts], fill=255)
+    return m
+
+
+def over_desk_top(img, cam3, jen, t):
+    """Jenrick's upper body laid over the desk top he has fallen on, clipped to the desk top, so the second pass
+    can never paint him over anyone else (it once put his arm in front of Farage's)."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    jenrick_layer(lay, cam3, *jen, t, legs=False)
+    a = lay.split()[3]
+    from PIL import ImageChops
+    lay.putalpha(ImageChops.multiply(a, desk_top_mask(img.size, cam3)))
+    img.alpha_composite(lay)
+
+
 def dance_frame(t, cam3=DANCE_CAM):
     """Shots 2 and 4, one wide shot (Sam, 18 Oct): the four of them dancing under the pop lights; office workers at
     the desks watching or working; a man at the front right filming it on his phone; Jenrick's trip and crash into
@@ -1167,8 +1189,8 @@ def dance_frame(t, cam3=DANCE_CAM):
             if who == 'farage' and t >= FARAGE_AT:
                 spit_at(img, x, y - 150 * s + 70 * s, s, t)
     crash_desk(img, cam3, t, top_only=True)
-    if jen and jen[1] < 3.0:                                 # at the desk: his body over its top, legs behind it
-        jenrick_layer(img, cam3, *jen, t, legs=False)
+    if jen and jen[1] < 3.0:                                 # at the desk: his body over its top, legs behind it,
+        over_desk_top(img, cam3, jen, t)                     # drawn again ONLY where the desk top is (Sam, 18 Oct)
     crash_desk(img, cam3, t, top_only=False)
     for i, it in enumerate(ITEMS):
         if t >= CRASH + it[4]:
@@ -1335,10 +1357,34 @@ def frame_faults():
     return faults
 
 
+def layering_faults():
+    """Drawing order (Sam, 18 Oct: Jenrick's arm showed in front of Farage although he was further away): on every
+    frame where Jenrick is drawn a second time over the desk, the extra pixels must lie on the desk top only."""
+    faults = []
+    keep = B.SS
+    B.SS = 1
+    m = desk_top_mask((1080, 1920), DANCE_CAM)
+    import numpy as _np
+    mask = _np.asarray(m) > 0
+    t = TRIP
+    while t <= DUR:
+        X, Z, k = trip_state(t)
+        if Z < 3.0:
+            lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+            over_desk_top(lay, DANCE_CAM, (X, Z, k), t)
+            drawn = _np.asarray(lay.split()[3]) > 0
+            if (drawn & ~mask).any():
+                faults.append(f"{t:.2f} s: Jenrick's second pass draws outside the desk top")
+                break
+        t += 3 / FPS
+    B.SS = keep
+    return faults
+
+
 def checks():
-    """The film's own plan checks (run by preflight.py): collisions and Jenrick staying in shot."""
-    faults = collision_faults() + frame_faults()
-    print('collision and framing checks:', 'clean' if not faults else f'{len(faults)} fault(s)')
+    """The film's own plan checks (run by preflight.py): collisions, Jenrick staying in shot, drawing order."""
+    faults = collision_faults() + frame_faults() + layering_faults()
+    print('collision, framing and layering checks:', 'clean' if not faults else f'{len(faults)} fault(s)')
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
