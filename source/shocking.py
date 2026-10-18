@@ -54,7 +54,8 @@ LINES = [
     dict(n=2, who='farage', audio='shocking-2', start=2.48, at=FARAGE_AT,
          text="Damn it Jenrick, if you can't stay in formation I swear to [bleep] I'll have your [bleep] ass deported."),
 ]
-BLEEPS = [(5.57, 6.60), (7.32, 7.99)]          # in Farage's file seconds
+# in Farage's file seconds: Sam's first gap holds two words, so two bleeps with a short break between (Sam, 18 Oct)
+BLEEPS = [(5.57, 6.04), (6.10, 6.60), (7.32, 7.99)]
 DUR = BLACK_AT = round(FARAGE_AT + (8.96 - 2.48) + 1.1, 2)
 # All the action after the doorway plays in the one wide shot (Sam, 18 Oct: no close-up cut to Farage).
 SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[1]), ('dance2', DOOR[1], DUR)]
@@ -641,14 +642,14 @@ NARR_OFF = 0.4 - 2.8                                       # film time = file ti
 FAR_OFF = FARAGE_AT - 2.48
 FAR_BITS = [   # Farage's take, piece by piece (file seconds): the words, and the gaps Sam left for the bleeps
     ('Damn it Jenrick,', 2.48, 3.31), ("if you can't stay in formation I swear to", 3.45, 5.57),
-    ('bloody hell', 5.60, 6.55), ("I'll have your", 6.60, 7.32), ('bloody', 7.36, 7.95), ('ass deported.', 7.99, 8.96)]
+    ('bloody', 5.60, 6.0), ('hell', 6.12, 6.55), ("I'll have your", 6.60, 7.32), ('bloody', 7.36, 7.95), ('ass deported.', 7.99, 8.96)]
 FAR_TRACK = [(a + FAR_OFF, b2 + FAR_OFF, sh) for txt, a0, b0 in FAR_BITS
              for a, b2, sh in mouths.track(txt, [(a0, b0)])]
 CAPS = [   # short chunks (two to five words), each with its first word
     (0.4, 1.5, 'ITV sent an'), (1.5, 2.9, 'undercover journalist'), (2.9, 4.3, "into Reform UK's HQ,"),
     (4.3, 5.6, 'where she observed'), (5.6, 6.9, 'shocking behaviour.'),
-    (2.48 + FAR_OFF, 3.4 + FAR_OFF, 'Damn it Jenrick,'), (3.45 + FAR_OFF, 5.0 + FAR_OFF, "if you can't stay in formation"), (5.0 + FAR_OFF, 6.6 + FAR_OFF, 'I swear to ****'),
-    (6.6 + FAR_OFF, 7.9 + FAR_OFF, "I'll have your ****"), (7.99 + FAR_OFF, 9.4 + FAR_OFF, 'ass deported.')]
+    (2.48 + FAR_OFF, 3.4 + FAR_OFF, 'Damn it Jenrick,'), (3.45 + FAR_OFF, 5.0 + FAR_OFF, "if you can't stay in formation"), (5.0 + FAR_OFF, 6.6 + FAR_OFF, 'I swear to ******* ******'),
+    (6.6 + FAR_OFF, 7.9 + FAR_OFF, "I'll have your *****"), (7.99 + FAR_OFF, 9.4 + FAR_OFF, 'ass deported.')]
 
 
 def caption_at(t):
