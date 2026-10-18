@@ -48,3 +48,8 @@ experiments and compare against the numbers above.
    Both need Sam's OK.
 6. No more follower promotions; shares come with followers (Bingo Bingo 6.8 shares and 2.1 followers per 1,000 views).
 Targets to test by mid-November: comments 5+ per 1,000 views, followers 3+ per 1,000.
+
+## Decision (Sam, 18 Oct)
+TikTok only. No cross-posting to X, Reels or Shorts for now (no time; X in particular is a lot of work). Revisit in
+mid-November. What stays on the list: names in the Hook Text, speed on topical stories, an earlier first laugh, a weekly
+24-hour check.
