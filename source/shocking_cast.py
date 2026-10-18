@@ -612,6 +612,7 @@ def journalist_torso(img, p, sp, t):
     p.poly([(-24, 204), (-2, 204), (-2, 236), (-24, 236)], (200, 200, 206), None)
     for k in range(3):
         p.line([(4, 208 + 10 * k), (26 - 6 * k, 208 + 10 * k)], (150, 150, 156), 2.0)
+    skirt(p, sp, top=392)                                # the blouse tucked into the skirt at the waist
     handbag(p, sp)
 
 
@@ -626,12 +627,14 @@ def handbag(p, sp, side=-1):
 
 
 # --------------------------------------------------------------------------------------------- skirts
-def skirt(p, sp):
-    """A straight skirt to just below the knee (Sam, 18 Oct: knee length), front view."""
+def skirt(p, sp, top=400):
+    """A straight skirt from the waist to the knee (Sam, 18 Oct: start higher, end higher), front view."""
     c = sp.get('skirt')
     w = sp['shoulders'] - 26
-    p.poly(curve([(-w, 400), (w, 400), (w + 16, 745), (-w - 16, 745)], 2), c, INK, 2.4)
-    p.line([(-w - 6, 690), (-w * 0.2, 745)], dk(c, 0.8), 1.4)
+    p.poly(curve([(-w, top), (w, top), (w + 14, 690), (-w - 14, 690)], 2), c, INK, 2.4)
+    p.line([(-w - 6, 640), (-w * 0.2, 690)], dk(c, 0.8), 1.4)
+    if sp.get('who') == 'journalist':                    # the waistband over the tucked-in blouse
+        p.line([(-w, top + 8), (w, top + 8)], dk(c, 0.75), 1.6)
 
 
 # --------------------------------------------------------------------------------------------- the hooks
@@ -652,8 +655,8 @@ def torso(img, p, sp, t):
     who = sp.get('who')
     if who in BACKS:                                     # long hair falls behind the shoulders
         BACKS[who](p, sp, sp.get('head_dx', 0.0), -150 + sp.get('head_dy', 0), sp.get('hw', 60), sp.get('hh', 88))
-    if sp.get('skirt'):
-        skirt(p, sp)
+    if sp.get('skirt') and who != 'journalist':
+        skirt(p, sp)                                     # under the jacket, which ends at the waist
     _torso(img, p, sp, t)
     f = TORSOS.get(who)
     if f:
@@ -670,8 +673,10 @@ TICE = dict(who='tice', name='Tice', skin=T_SKIN, hw=72, hh=98, head_dy=8, outfi
             shirt=(246, 246, 244), tie=(34, 150, 150), shoulders=156, trousers=(30, 38, 66), full=True, pose='custom')
 BRAVERMAN = dict(who='braverman', name='Braverman', skin=S_SKIN, hw=60, hh=88, head_dy=10, outfit='suit',
                  jacket=(206, 204, 198), shirt=(248, 246, 242), shoulders=128, skirt=(196, 194, 188), trousers=S_SKIN,
+                 bottom=430,
                  shoe=(40, 36, 40), full=True, pose='custom')
 JOURNALIST = dict(who='journalist', name='Journalist', skin=N_SKIN, hw=60, hh=88, head_dy=10, outfit='blouse',
                   jacket=(250, 250, 248), shirt=(250, 250, 248), shoulders=124, skirt=(34, 44, 84), trousers=N_SKIN,
+                  bottom=420,
                   shoe=(30, 30, 40), full=True, pose='custom')
 CAST = {'farage': FARAGE, 'jenrick': JENRICK, 'tice': TICE, 'braverman': BRAVERMAN, 'journalist': JOURNALIST}
