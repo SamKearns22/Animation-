@@ -896,6 +896,8 @@ def rec_overlay(img, t):
     d = ImageDraw.Draw(img)
     f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 40 * S)
     x, y = 80 * S, 560 * S
+    f0 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 46 * S)
+    d.text((x, y - 62 * S), 'ITV', font=f0, fill=(250, 250, 250), stroke_width=2 * S, stroke_fill=(30, 30, 30))   # (Sam, 18 Oct)
     if int(t * 2) % 2 == 0:                                # the dot blinks once a second
         d.ellipse([x, y, x + 34 * S, y + 34 * S], fill=(230, 30, 36))
     d.text((x + 50 * S, y + 17 * S), 'REC', font=f, fill=(250, 250, 250), anchor='lm', stroke_width=2 * S,
