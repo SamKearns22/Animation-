@@ -14,8 +14,8 @@ Read this first in any new session, after CLAUDE.md.
   one; subtitles "******* ******", "*****"). All action after the doorway in one wide shot (Sam).
 - Recordings: `source/audio/shocking-1.m4a` (narrator), `shocking-2.m4a` (Farage, gaps for the bleeps).
 - The song: Sam's screen recordings (clips a-d) and the song bed live in `source/data/shocking/` (NOT on GitHub: copyright;
-  Sam, 18 Oct). Sam re-sent the back half from the better-sounding second source (clip d); the bed is now clip c, a
-  0.5 s bridge from clip a, then clip d to 7.7 s (it drops out 7.8-8.4 s), 30 ms crossfades. Rebuild with `python3
+  Sam, 18 Oct). The bed is now the better source only: clip e (continuous from the start, 0.45-8.90 s) then clip d
+  (E = D + 7.145 s, used 1.755-7.70 s; it drops out at 7.8 s). The old join through clip a had skipped two beats. Rebuild with `python3
   source/shocking.py music`. In a new session they must be re-sent by Sam.
 - The finished film with the song goes to Sam in the chat only, never into `animations/` on GitHub.
 - Animatics 1-5 sent 18 Oct. Finish with: `python3 source/finish.py CLEAN.mp4 OUT.mp4 "Reform HQ: EXPOSED!" --y 560

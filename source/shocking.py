@@ -655,10 +655,12 @@ CLIP_A = os.path.join(DATA, 'clip-a.mov')                 # Sam's screen recordi
 CLIP_B = os.path.join(DATA, 'clip-b.mov')                 # (the poorer-sounding first source: now only a back-up)
 CLIP_C = os.path.join(DATA, 'clip-c.mov')                 # the beginning, from the better-sounding second source
 CLIP_D = os.path.join(DATA, 'clip-d.mov')                 # the back half, from that same better source (Sam, 18 Oct)
-# The song bed, one continuous song (measured: A = C - 0.73 s; B = D + 0.12 s; clip D drops out at 7.8-8.4 s, so it
-# is used only to 7.7 s): clip C from its first sound (0.45 s) to 5.60 s; a short bridge from clip A over the part
-# clip C stops short of (C 5.60-6.05; the only piece left from the poorer source); then clip D from 0.06 s.
-SPLICE = ((CLIP_C, 0.45, 5.60), (CLIP_A, 4.87, 5.382), (CLIP_D, 0.06, 7.70))
+CLIP_E = os.path.join(DATA, 'clip-e.mov')                 # the better source again, continuous from the start for 9 s
+# The song bed, one continuous song from the better source only (Sam, 18 Oct: 'one second still from video 1, it
+# dips'): clip E from its first sound (0.45 s, the same moment as clip C) to 8.90 s, then clip D, which matches clip E
+# exactly from E 7.145 s (measured to the millisecond), from 1.755 s to 7.70 s (D drops out at 7.8). The old join
+# through clip A had been skipping about 1.1 s (two beats) of the song: that was the dip.
+SPLICE = ((CLIP_E, 0.45, 8.90), (CLIP_D, 8.90 - 7.145, 7.70))
 XFADE = 0.03                                               # each join is a 30 ms equal-power crossfade
 
 
