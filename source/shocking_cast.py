@@ -14,7 +14,7 @@ burnham by `who` in the person's dict, so everyone else is untouched.
     Braverman  pale grey skirt suit, white top, sparkly earrings; long dark-brown hair with caramel ends, parted off
                centre; slim face, arched brows
     Journalist 28, long blonde hair, a slightly prominent nose; white buttoned blouse, navy skirt, Reform lanyard,
-               a small handbag held loosely
+               a small handbag on a thin black strap over her shoulder
 
 Moods (sp['mood']): 'grin' (dancing), 'cool', 'neutral', 'contempt', 'fury', 'scared', 'alarm', 'upset', 'wtf'.
 """
@@ -139,55 +139,137 @@ def flush(p, sp, fx, fy, skin):
 
 
 # --------------------------------------------------------------------------------------------- Farage
-F_SKIN = (234, 172, 142)
-F_HAIR = (206, 204, 198)
-F_HAIR_D = (160, 158, 154)
+# The recurring character: the most exacting likeness (Sam, 18 Oct), from refs farage-1..4. What makes him him:
+# a long face tapering to a rounded chin with soft jowls at the jaw; big ears that stand out; silver hair with real
+# volume, brushed up and back off the forehead into a rounded front, the temples receding (an M hairline), the sides
+# brushed back over the ears; high arched brows; heavy hooded lids drooping at the outer corners over pale grey-blue
+# eyes, pouches beneath; a long straight nose with a fleshy tip; deep parentheses from the nose wings past the mouth;
+# a wide mouth, thin upper lip, fuller lower lip; forehead creases; the famous grin, all upper teeth.
+F_SKIN = (234, 170, 140)
+F_SKIN_D = (206, 134, 108)       # creases and folds
+F_FLUSH = (226, 140, 118)        # the ruddy cheeks and nose
+F_HAIR = (212, 210, 204)
+F_HAIR_D = (164, 162, 158)
+F_HAIR_L = (236, 234, 230)
+F_BROW = (150, 134, 118)
+F_IRIS = (128, 150, 162)
+F_LIP = (190, 110, 100)
+
+
+def farage_mouth(p, sp, fx, my):
+    """His mouths: the big grin (all upper teeth, the lips stretched wide), the closed smirk, contempt, fury."""
+    mood = sp.get('mood', 'neutral')
+    if talking(sp):
+        mouths.draw(p, dict(sp, lips=True, lip_c=F_LIP), fx, my, sp['mouth'][2:])
+        return
+    if mood == 'grin':
+        w = 36
+        shape = curve([(fx - w, my - 6), (fx - w * 0.5, my - 1), (fx, my + 1), (fx + w * 0.5, my - 1), (fx + w, my - 6),
+                       (fx + w * 0.7, my + 14), (fx + w * 0.3, my + 22), (fx - w * 0.3, my + 22), (fx - w * 0.7, my + 14)], 3)
+        p.poly(shape, MOUTH_IN, INK, 2.2)
+        teeth = curve([(fx - w + 4, my - 4), (fx, my + 2), (fx + w - 4, my - 4), (fx + w * 0.62, my + 9), (fx, my + 12),
+                       (fx - w * 0.62, my + 9)], 3)
+        p.poly(teeth, TEETH, None)
+        for k in (-2, -1, 0, 1, 2):
+            p.line([(fx + k * 9, my + 1 - abs(k)), (fx + k * 9.5, my + 10 - abs(k) * 1.5)], (214, 208, 196), 1.1)
+        p.poly(curve([(fx - w * 0.5, my + 18), (fx, my + 21), (fx + w * 0.5, my + 18), (fx, my + 25)], 3), F_LIP, None)
+        p.line(shape, INK, 2.2)
+        for sgn in (-1, 1):                              # the corners dig into the cheeks
+            p.line([(fx + sgn * w, my - 6), (fx + sgn * (w + 7), my - 12)], INK, 1.8)
+            p.line(curve([(fx + sgn * (w + 4), my - 2), (fx + sgn * (w + 8), my + 8), (fx + sgn * (w + 4), my + 16)], 3),
+                   F_SKIN_D, 1.4)
+        return
+    if mood == 'neutral' or mood == 'cool':              # the closed, knowing smirk: thin top lip, fuller lower lip
+        w = 30
+        p.poly(curve([(fx - w * 0.8, my + 1), (fx, my + 3), (fx + w * 0.8, my - 1), (fx + w * 0.4, my + 10), (fx, my + 11),
+                      (fx - w * 0.4, my + 10)], 3), blend(F_SKIN, F_LIP, 0.5), None)
+        p.line(curve([(fx - w, my), (fx - w * 0.4, my + 2), (fx + w * 0.3, my + 1), (fx + w, my - 4)], 3), INK, 2.4)
+        p.line([(fx - w * 0.4, my + 14), (fx + w * 0.4, my + 14)], F_SKIN_D, 1.4)
+        return
+    rest_mouth(p, sp, fx, my, F_LIP, width=30)
 
 
 def farage_head(img, p, sp, t, hx, hy):
     hw, hh, skin = 70, 100, F_SKIN
     fx = hx + sp.get('turn', 0.0) * hw * 0.2
     fy = hy + 10 * sp.get('down', 0.0)
-    ears(p, hx, hy + 4, hw, skin, rx=13, ry=24)
-    outline = curve([(hx - hw, hy - 14), (hx - hw * 0.9, hy - hh * 0.72), (hx - hw * 0.45, hy - hh * 1.02),
-                     (hx + hw * 0.45, hy - hh * 1.02), (hx + hw * 0.9, hy - hh * 0.72), (hx + hw, hy - 14),
-                     (hx + hw * 1.0, hy + hh * 0.45), (hx + hw * 0.8, hy + hh * 0.86), (hx + hw * 0.4, hy + hh * 1.08),
-                     (hx, hy + hh * 1.14), (hx - hw * 0.4, hy + hh * 1.08), (hx - hw * 0.8, hy + hh * 0.86),
-                     (hx - hw * 1.0, hy + hh * 0.45)], 4)
-    p.poly(outline, skin, INK, 2.6)
-    if sp.get('mood') == 'fury':
-        p.poly(outline, blend(skin, (220, 96, 84), 0.3 * sp.get('red', 1.0)), INK, 2.6)
-    sd = dk(skin, 0.8)
-    for k in range(3):                                  # forehead creases (a high forehead)
-        p.line([(fx - 34, fy - 54 + 9 * k), (fx, fy - 58 + 9 * k), (fx + 34, fy - 54 + 9 * k)], sd, 1.5)
-    st = eye_state(sp, lid=0.38)
-    for sgn in (-1, 1):                                 # heavy-lidded, slightly bulging eyes, pouches beneath
+    mood = sp.get('mood', 'neutral')
+    for sgn in (-1, 1):                                  # big ears that stand out, set a little high
+        p.poly(curve(oval(hx + sgn * (hw + 6), hy - 2, 16, 30, 18)), skin, INK, 2.4)
+        p.line(curve([(hx + sgn * (hw + 4), hy - 20), (hx + sgn * (hw + 14), hy - 12), (hx + sgn * (hw + 14), hy + 8),
+                      (hx + sgn * (hw + 6), hy + 18)], 3), F_SKIN_D, 1.6)
+    outline = curve([(hx - hw, hy - 16), (hx - hw * 0.92, hy - hh * 0.72), (hx - hw * 0.5, hy - hh * 1.02),
+                     (hx + hw * 0.5, hy - hh * 1.02), (hx + hw * 0.92, hy - hh * 0.72), (hx + hw, hy - 16),
+                     (hx + hw * 1.0, hy + hh * 0.34), (hx + hw * 0.9, hy + hh * 0.68),            # soft jowls at the jaw
+                     (hx + hw * 0.62, hy + hh * 0.94), (hx + hw * 0.28, hy + hh * 1.12), (hx, hy + hh * 1.17),
+                     (hx - hw * 0.28, hy + hh * 1.12), (hx - hw * 0.62, hy + hh * 0.94), (hx - hw * 0.9, hy + hh * 0.68),
+                     (hx - hw * 1.0, hy + hh * 0.34)], 4)
+    face_c = skin
+    if mood == 'fury':
+        face_c = blend(skin, (222, 100, 86), 0.32 * sp.get('red', 1.0))
+    p.poly(outline, face_c, INK, 2.6)
+    flush = blend(face_c, F_FLUSH, 0.3)
+    for sgn in (-1, 1):                                  # ruddy cheeks: flat patches, no glow
+        p.poly(curve(oval(fx + sgn * 38, fy + 26, 24, 16, 12)), flush, None)
+    sd = dk(face_c, 0.7)
+    for k in range(3):                                   # forehead creases, lifting when the brows lift
+        lift = -4 if mood in ('grin', 'alarm', 'wtf') else (3 if mood == 'fury' else 0)
+        y = fy - 62 + 9 * k + lift
+        p.line(curve([(fx - 36 + 4 * k, y + 2), (fx - 10, y - 2), (fx + 12, y - 1), (fx + 36 - 4 * k, y + 2)], 3), sd, 1.9)
+    if mood == 'fury':                                   # the knot between the brows
+        p.line([(fx - 7, fy - 34), (fx - 4, fy - 22)], sd, 1.6)
+        p.line([(fx + 7, fy - 34), (fx + 4, fy - 22)], sd, 1.6)
+    st = eye_state(sp, lid=0.4)
+    for sgn in (-1, 1):
         ex, ey = fx + sgn * 29, fy - 8
-        eye(p, ex, ey, sgn, 17, 10, (120, 140, 150), st, dk(skin, 0.86), liner=2.6)
-        p.line([(ex - 14, ey + 12), (ex, ey + 16), (ex + 14, ey + 11)], sd, 1.5)
-        p.line([(ex + sgn * 18, ey - 4), (ex + sgn * 26, ey - 8)], sd, 1.2)
-    brows(p, sp, fx, fy - 30, 29, (170, 160, 150), 6, 0, -4, 30)
-    p.line([(fx - 2, fy - 6), (fx - 6, fy + 30), (fx + 2, fy + 36), (fx + 12, fy + 32)], INK, 1.9)   # a long nose
-    p.line([(fx - 14, fy + 32), (fx - 8, fy + 36)], INK, 1.5)
-    for sgn in (-1, 1):                                 # the deep smile lines, nose wing to past the mouth
-        p.line(curve([(fx + sgn * 20, fy + 32), (fx + sgn * 36, fy + 56), (fx + sgn * 40, fy + 82)], 3), sd, 2.0)
+        eye(p, ex, ey, sgn, 17, 10, F_IRIS, st, dk(face_c, 0.9), liner=2.6)
+        if not st['closed']:                             # the hooded fold drooping over the outer corner
+            p.line(curve([(ex - sgn * 12, ey - 13), (ex + sgn * 4, ey - 16), (ex + sgn * 16, ey - 11),
+                          (ex + sgn * 22, ey - 1)], 3), INK, 2.2)
+        p.line(curve([(ex - 13, ey + 11), (ex, ey + 15), (ex + 13, ey + 10)], 3), sd, 2.0)      # pouches
+        p.line(curve([(ex - 9, ey + 20), (ex + sgn * 2, ey + 24), (ex + 11, ey + 19)], 3), sd, 1.6)
+        p.line([(ex + sgn * 20, ey - 2), (ex + sgn * 28, ey - 6)], sd, 1.2)                    # crow's feet
+        p.line([(ex + sgn * 20, ey + 3), (ex + sgn * 28, ey + 6)], sd, 1.2)
+    brows(p, sp, fx, fy - 33, 29, F_BROW, 6, 3, -1, 32)                                       # high, arched
+    # a long straight nose with a fleshy tip and flared wings
+    p.line([(fx - 4, fy - 12), (fx - 7, fy + 24)], INK, 1.9)
+    p.poly(curve([(fx - 9, fy + 26), (fx - 2, fy + 21), (fx + 8, fy + 24), (fx + 10, fy + 34), (fx, fy + 39),
+                  (fx - 10, fy + 34)], 3), flush, None)
+    p.line(curve([(fx - 17, fy + 30), (fx - 13, fy + 37), (fx - 5, fy + 38), (fx, fy + 40), (fx + 5, fy + 38),
+                  (fx + 13, fy + 37), (fx + 17, fy + 30)], 3), INK, 1.9)
+    for sgn in (-1, 1):
+        p.line(curve([(fx + sgn * 17, fy + 30), (fx + sgn * 19, fy + 24), (fx + sgn * 14, fy + 20)], 3), INK, 1.6)
     my = fy + 62
-    mouth_or_talk(p, sp, fx, my, (196, 112, 104), width=28)
-    # silver hair swept straight back from a high receding hairline: the top and the sides, none on the forehead
-    top = hy - hh - 10
-    hair = [(hx - hw - 6, hy + 6), (hx - hw - 10, hy - 40), (hx - hw * 0.98, top + 40), (hx - hw * 0.7, top + 6),
-            (hx - hw * 0.2, top - 6), (hx + hw * 0.3, top - 6), (hx + hw * 0.76, top + 8), (hx + hw * 1.0, top + 40),
-            (hx + hw + 10, hy - 40), (hx + hw + 6, hy + 6), (hx + hw - 6, hy - 26), (hx + hw * 0.8, hy - hh * 0.62),
-            (hx + hw * 0.5, hy - hh * 0.8), (hx + hw * 0.2, hy - hh * 0.86), (hx - hw * 0.2, hy - hh * 0.86),
-            (hx - hw * 0.5, hy - hh * 0.8), (hx - hw * 0.8, hy - hh * 0.62), (hx - hw + 6, hy - 26)]
+    wide = 1.25 if mood == 'grin' else 1.0
+    for sgn in (-1, 1):                                  # the deep parentheses, nose wings to past the mouth
+        p.line(curve([(fx + sgn * 22, fy + 26), (fx + sgn * 34 * wide, fy + 46), (fx + sgn * 40 * wide, fy + 66),
+                      (fx + sgn * 38 * wide, fy + 86)], 3), sd, 2.6)
+        p.line(curve([(hx + sgn * hw * 0.9, hy + hh * 0.66), (hx + sgn * hw * 0.74, hy + hh * 0.86),
+                      (hx + sgn * hw * 0.62, hy + hh * 0.96)], 3), sd, 1.5)                     # jowl folds
+    farage_mouth(p, sp, fx, my)
+    p.line(curve([(fx - 10, hy + hh * 1.02), (fx, hy + hh * 1.0), (fx + 10, hy + hh * 1.02)], 3), sd, 1.4)   # chin
+    # the hair: volume brushed up and back into a rounded front, temples receding (M), sides back over the ears
+    top = hy - hh - 40
+    line_y = hy - hh * 0.84
+    hair = [(hx - hw - 2, hy + 2), (hx - hw - 6, hy - 40), (hx - hw - 2, top + 70), (hx - hw * 0.8, top + 26),
+            (hx - hw * 0.36, top + 2), (hx + hw * 0.2, top - 4), (hx + hw * 0.7, top + 10), (hx + hw * 0.98, top + 52),
+            (hx + hw + 6, hy - 40), (hx + hw + 2, hy + 2), (hx + hw - 6, hy - 30), (hx + hw * 0.86, hy - hh * 0.6),
+            (hx + hw * 0.62, hy - hh * 0.76),                                              # the receding temple
+            (hx + hw * 0.4, line_y - 6), (hx + hw * 0.14, line_y + 1), (hx - hw * 0.14, line_y + 2),
+            (hx - hw * 0.4, line_y - 5), (hx - hw * 0.62, hy - hh * 0.76), (hx - hw * 0.86, hy - hh * 0.6),
+            (hx - hw + 6, hy - 30)]
     p.poly(curve(hair, 4), F_HAIR, INK, 2.6)
-    for k in range(6):                                  # combed straight back: soft waves running from front to crown
-        x0 = hx - hw * 0.6 + k * hw * 0.24
-        p.line(curve([(x0, hy - hh * 0.84), (x0 + 6, hy - hh * 0.98), (x0 + 2, top + 4)], 3)[:9], F_HAIR_D, 1.4)
+    for k in range(6):                                   # brushed up from the front and back over the crown
+        x0 = hx - hw * 0.5 + k * hw * 0.2
+        p.line(curve([(x0, line_y - 4), (x0 + 2, line_y - 18), (x0 + 6, top + 30), (x0 + 12, top + 20)], 3)[:-3],
+               F_HAIR_D, 1.6)
     return fx
 
 
 def farage_torso(img, p, sp, t):
+    for sgn in (-1, 1):                                  # the cords and folds of his neck above the collar
+        p.line([(sgn * 12, -78), (sgn * 18, -24)], F_SKIN_D, 1.6)
+    p.line(curve([(-16, -40), (0, -34), (16, -40)], 3), F_SKIN_D, 1.4)
     tie = sp.get('tie', (226, 140, 170))
     p.poly([(-12, 16), (12, 16), (16, 200), (0, 226), (-16, 200)], tie, INK, 2.0)
     p.poly([(-12, -2), (12, -2), (9, 18), (-9, 18)], tie, INK, 2.0)
@@ -338,26 +420,91 @@ def tice_torso(img, p, sp, t):
     p.line([(x, y - 6), (x, y + 6)], (200, 30, 44), 2.4)
 
 
+# --------------------------------------------------------------------------------------------- long hair (one shape)
+def _edge(x_of, y0, y1, n, amp, phase=0.0):
+    """Points down a softly waving edge: x_of(u) the base line plus a gentle S."""
+    return [(x_of(k / n) + amp * math.sin(phase + k / n * math.pi * 2.6), y0 + (y1 - y0) * k / n) for k in range(n + 1)]
+
+
+def _lock(hx, hy, hw, hh, sgn, length, wave, u0=0.0):
+    """One long lock falling past the shoulder from up inside the crown, tapering to an uneven point (never a
+    rounded end). u0 > 0 gives only the part of the lock below that fraction (its lighter ends), on the same edges."""
+    outer = lambda u: hx + sgn * (hw + 20 + 22 * math.sin(u * math.pi * 0.85))
+    inner = lambda u: hx + sgn * (hw * 0.84 + 10 * math.sin(u * math.pi * 0.9) - 6 * u)
+    y0o, y0i, y1 = hy - hh * 0.55, hy + 10, hy + length
+    n = 14
+    o = [pt for pt in _edge(outer, y0o, y1, n, wave * sgn, 0.0) if (pt[1] - y0o) / (y1 - y0o) >= u0]
+    i = [pt for pt in _edge(inner, y0i, y1 - 14, n, wave * 0.7 * sgn, 0.9) if (pt[1] - y0i) / (y1 - 14 - y0i) >= u0 + (0.14 if u0 else 0)]
+    tip = [(hx + sgn * (hw + 30), y1 + 26), (hx + sgn * (hw + 16), y1 + 12), (hx + sgn * (hw + 6), y1 + 30)]
+    head = [] if u0 > 0 else [(hx + sgn * hw * 0.55, hy - hh * 0.72)]
+    return curve(head + i + tip[::-1] + o[::-1], 3)
+
+
+def _crown(hx, hy, hw, hh, part, top=26):
+    """The crown, its lower edge the hairline across the forehead from the parting."""
+    outer = oval(hx, hy - 8, hw + 22, hh + top, 22, math.pi * 0.97, math.pi * 2.03)
+    line = [(hx + hw + 16, hy + 30), (hx + hw * 0.92, hy - hh * 0.3), (hx + hw * 0.62, hy - hh * 0.72),
+            (part + hw * 0.22, hy - hh * 0.88), (part, hy - hh * 1.0), (part - hw * 0.22, hy - hh * 0.86),
+            (hx - hw * 0.68, hy - hh * 0.64), (hx - hw * 0.94, hy - hh * 0.2), (hx - hw - 16, hy + 30)]
+    return curve(outer + line, 3), curve(line, 3)[7:-7]
+
+
+def long_hair_front(p, hx, hy, hw, hh, part, col, dark, length=270, ends=None, wave=8):
+    """Locks and crown as ONE shape with ONE outline (Sam, 16 Oct): every piece outlined first, then every fill laid
+    on top, so no seam or second layer shows. Lighter ends (balayage) are a fill inside the same edges, no outline.
+    Drawn before the face; the crown and hairline go over the face after (long_hair_top)."""
+    pieces = [_lock(hx, hy, hw, hh, sgn, length, wave) for sgn in (-1, 1)] + [_crown(hx, hy, hw, hh, part)[0]]
+    for pts in pieces:
+        p.poly(pts, col, INK, 5.2)
+    for pts in pieces:
+        p.poly(pts, col, None)
+    if ends:
+        for sgn in (-1, 1):
+            p.poly(_lock(hx, hy, hw, hh, sgn, length, wave, u0=0.66), ends, None)
+    for sgn in (-1, 1):                                  # two soft strands inside each lock, never past its edge
+        for k in range(2):
+            line = _edge(lambda u: hx + sgn * (hw + 12 + 8 * k + 16 * math.sin(u * math.pi * 0.85)), hy + 30 + 30 * k,
+                         hy + length - 40 - 30 * k, 8, wave * 0.8 * sgn, 0.3)
+            p.line(line, dark, 1.5)
+
+
+def long_hair_top(p, hx, hy, hw, hh, part, col, dark):
+    shape, line = _crown(hx, hy, hw, hh, part)
+    p.poly(shape, col, None)
+    p.line(line, INK, 2.6)
+    p.line([(part, hy - hh * 1.22), (part + 3, hy - hh * 1.0)], dark, 2.0)
+    for k in range(2):
+        p.line(curve([(part + 14 + 16 * k, hy - hh * 1.16 + 8 * k), (hx + hw * 0.7 + 6 * k, hy - hh * 0.9 + 12 * k),
+                      (hx + hw + 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], dark, 1.5)
+        p.line(curve([(part - 12 - 12 * k, hy - hh * 1.14 + 8 * k), (hx - hw * 0.7 - 6 * k, hy - hh * 0.86 + 12 * k),
+                      (hx - hw - 4, hy - hh * 0.3 + 10 * k)], 3)[:-3], dark, 1.5)
+
+
+def hair_mass(p, hx, hy, hw, hh, col, length):
+    """The back of the hair, seen only in the gap behind the neck: kept inside the front locks' outline so no
+    second edge ever shows round them."""
+    p.poly([(hx - hw - 4, hy - hh * 0.3), (hx + hw + 4, hy - hh * 0.3), (hx + hw + 4, hy + length - 20),
+            (hx - hw - 4, hy + length - 20)], col, None)
+
+
 # --------------------------------------------------------------------------------------------- Braverman
 S_SKIN = (182, 124, 92)
 S_HAIR = (52, 36, 28)
-S_HAIR_L = (150, 104, 64)        # the caramel ends
+S_HAIR_D = (34, 24, 18)
+S_HAIR_L = (104, 72, 48)         # the caramel ends, inside the same outline
 S_LIP = (156, 88, 80)
 
 
 def braverman_hair_back(p, sp, hx, hy, hw, hh):
-    pts = [(hx - hw - 22, hy - 50), (hx - hw - 34, hy + 120), (hx - hw - 40, hy + 260), (hx - hw - 10, hy + 300),
-           (hx + hw + 10, hy + 300), (hx + hw + 40, hy + 260), (hx + hw + 34, hy + 120), (hx + hw + 22, hy - 50),
-           (hx, hy - hh - 22)]
-    p.poly(curve(pts, 5), S_HAIR, INK, 2.6)
-    p.poly(curve([(hx - hw - 38, hy + 200), (hx - hw - 40, hy + 262), (hx - hw - 10, hy + 300), (hx + hw + 10, hy + 300),
-                  (hx + hw + 40, hy + 262), (hx + hw + 38, hy + 200)], 4), S_HAIR_L, None)
+    hair_mass(p, hx, hy, hw, hh, S_HAIR_D, 250)
 
 
 def braverman_head(img, p, sp, t, hx, hy):
     hw, hh, skin = 60, 88, S_SKIN
     fx = hx + sp.get('turn', 0.0) * hw * 0.2
     fy = hy + 10 * sp.get('down', 0.0)
+    part = hx - hw * 0.22                               # parted a little off centre (our left)
+    long_hair_front(p, hx, hy, hw, hh, part, S_HAIR, S_HAIR_D, length=250, ends=S_HAIR_L, wave=6)
     outline = curve([(hx - hw, hy - 10), (hx - hw * 0.9, hy - hh * 0.7), (hx - hw * 0.45, hy - hh * 1.04),
                      (hx + hw * 0.45, hy - hh * 1.04), (hx + hw * 0.9, hy - hh * 0.7), (hx + hw, hy - 10),
                      (hx + hw * 0.98, hy + hh * 0.4), (hx + hw * 0.7, hy + hh * 0.9), (hx + hw * 0.26, hy + hh * 1.1),
@@ -373,27 +520,10 @@ def braverman_head(img, p, sp, t, hx, hy):
         p.line([(fx + sgn * 40, fy + 12), (fx + sgn * 34, fy + 34)], dk(skin, 0.88), 1.4)   # cheekbones
     my = fy + 52
     mouth_or_talk(p, sp, fx, my, S_LIP, width=19, lips=True)
-    for sgn in (-1, 1):                                  # sparkly earrings
-        x, y = hx + sgn * (hw + 2), hy + 34
-        p.ell(x, y, 6, 6, (236, 230, 220), INK, 1.4)
-        p.ell(x, y + 12, 4, 4, (200, 210, 230), INK, 1.2)
-    # the front: parted a little off centre (our left), falling either side of the face and over the shoulders
-    top = hy - hh - 16
-    px = hx - hw * 0.25
-    for sgn in (-1, 1):
-        if sgn < 0:
-            pts = [(px, top), (hx - hw * 0.8, top + 16), (hx - hw - 14, hy - 40), (hx - hw - 22, hy + 120),
-                   (hx - hw - 28, hy + 240), (hx - hw + 6, hy + 230), (hx - hw + 4, hy + 90), (hx - hw * 0.86, hy - 10),
-                   (hx - hw * 0.7, hy - hh * 0.62), (px - 6, hy - hh * 0.9)]
-        else:
-            pts = [(px, top), (hx + hw * 0.6, top + 6), (hx + hw + 14, hy - 40), (hx + hw + 22, hy + 120),
-                   (hx + hw + 28, hy + 240), (hx + hw - 6, hy + 230), (hx + hw - 4, hy + 90), (hx + hw * 0.88, hy - 10),
-                   (hx + hw * 0.6, hy - hh * 0.72), (px + 10, hy - hh * 0.92)]
-        p.poly(curve(pts, 4), S_HAIR, INK, 2.4)
-        p.poly(curve([(hx + sgn * (hw + 22), hy + 150), (hx + sgn * (hw + 28), hy + 240), (hx + sgn * (hw - 6), hy + 230),
-                      (hx + sgn * (hw - 3), hy + 150)], 3), S_HAIR_L, None)
-        p.line(curve([(hx + sgn * (hw + 4), hy - 50), (hx + sgn * (hw + 12), hy + 40), (hx + sgn * (hw + 14), hy + 180)],
-                     3), (84, 60, 44), 1.3)
+    long_hair_top(p, hx, hy, hw, hh, part, S_HAIR, S_HAIR_D)
+    for sgn in (-1, 1):                                  # sparkly earrings, just showing under the hair
+        x, y = hx + sgn * (hw - 2), hy + 30
+        p.ell(x, y, 5, 5, (236, 230, 220), INK, 1.3)
     return fx
 
 
@@ -409,20 +539,27 @@ def braverman_torso(img, p, sp, t):
 # --------------------------------------------------------------------------------------------- the journalist
 N_SKIN = (246, 214, 194)
 N_HAIR = (232, 200, 124)
-N_HAIR_D = (196, 156, 86)
+N_HAIR_D = (196, 158, 88)
 N_LIP = (214, 140, 140)
 
 
 def journalist_hair_back(p, sp, hx, hy, hw, hh):
-    pts = [(hx - hw - 22, hy - 50), (hx - hw - 30, hy + 120), (hx - hw - 32, hy + 280), (hx + hw + 32, hy + 280),
-           (hx + hw + 30, hy + 120), (hx + hw + 22, hy - 50), (hx, hy - hh - 22)]
-    p.poly(curve(pts, 5), N_HAIR_D, INK, 2.6)
+    hair_mass(p, hx, hy, hw, hh, N_HAIR_D, 270)
+
+
+def shock_eye(p, ex, ey, sgn, w, h, look=0.0):
+    """Wide with shock (South Park): a big white opening, no lid over it, a tiny pupil."""
+    p.poly(curve(oval(ex, ey, w, h, 20)), (252, 252, 250), INK, 2.4)
+    p.ell(ex + look * w * 0.35, ey + 1, 3.4, 3.4, INK, None)
+    p.line([(ex + sgn * w * 0.9, ey - h * 0.5), (ex + sgn * (w + 5), ey - h * 0.8)], INK, 1.8)     # a lash
 
 
 def journalist_head(img, p, sp, t, hx, hy):
     hw, hh, skin = 60, 88, N_SKIN
     fx = hx + sp.get('turn', 0.0) * hw * 0.2
     fy = hy + 10 * sp.get('down', 0.0)
+    part = hx + hw * 0.3                                # side parting (our right)
+    long_hair_front(p, hx, hy, hw, hh, part, N_HAIR, N_HAIR_D, length=270, wave=9)
     outline = curve([(hx - hw, hy - 10), (hx - hw * 0.9, hy - hh * 0.7), (hx - hw * 0.45, hy - hh * 1.04),
                      (hx + hw * 0.45, hy - hh * 1.04), (hx + hw * 0.9, hy - hh * 0.7), (hx + hw, hy - 10),
                      (hx + hw * 0.96, hy + hh * 0.44), (hx + hw * 0.66, hy + hh * 0.92), (hx + hw * 0.24, hy + hh * 1.1),
@@ -430,30 +567,31 @@ def journalist_head(img, p, sp, t, hx, hy):
                      (hx - hw * 0.96, hy + hh * 0.44)], 4)
     p.poly(outline, skin, INK, 2.6)
     st = eye_state(sp, lid=0.12)
+    shock = sp.get('mood') == 'wtf'
     for sgn in (-1, 1):
-        eye(p, fx + sgn * 25, fy - 6, sgn, 15, 9, (92, 132, 170), st, dk(skin, 0.88), liner=2.8, lower=1.6, lashes=True)
-    brows(p, sp, fx, fy - 29, 25, (176, 140, 90), 4.5, 0, -3, 25)
+        if shock and not st['closed']:
+            shock_eye(p, fx + sgn * 25, fy - 8, sgn, 19, 16, st['look'])
+        else:
+            eye(p, fx + sgn * 25, fy - 6, sgn, 15, 9, (92, 132, 170), st, dk(skin, 0.88), liner=2.8, lower=1.6,
+                lashes=True)
+    if shock:
+        for sgn in (-1, 1):                              # high, tilted up in the middle (worried disbelief)
+            p.line([(fx + sgn * 10, fy - 36), (fx + sgn * 38, fy - 30)], (150, 116, 70), 4.6)
+    else:
+        brows(p, sp, fx, fy - 29, 25, (176, 140, 90), 4.5, 0, -3, 25)
     # a slightly prominent nose: longer, a defined bridge and a rounded tip
     p.line([(fx - 3, fy - 4), (fx - 8, fy + 28)], INK, 1.8)
     p.line(curve([(fx - 10, fy + 26), (fx - 6, fy + 36), (fx + 4, fy + 38), (fx + 12, fy + 33), (fx + 8, fy + 27)], 3), INK, 1.8)
     p.line([(fx - 13, fy + 32), (fx - 9, fy + 35)], INK, 1.3)
     my = fy + 57
-    mouth_or_talk(p, sp, fx, my, N_LIP, width=19, lips=True)
-    top = hy - hh - 18
-    px = hx + hw * 0.2
-    for sgn in (-1, 1):                                  # long blonde hair, side parting (our right), past the shoulders
-        if sgn < 0:
-            pts = [(px, top), (hx - hw * 0.7, top + 10), (hx - hw - 14, hy - 40), (hx - hw - 22, hy + 120),
-                   (hx - hw - 26, hy + 260), (hx - hw + 8, hy + 250), (hx - hw + 4, hy + 90), (hx - hw * 0.86, hy - 10),
-                   (hx - hw * 0.5, hy - hh * 0.74), (px - 8, hy - hh * 0.94)]
-        else:
-            pts = [(px, top), (hx + hw * 0.8, top + 16), (hx + hw + 14, hy - 40), (hx + hw + 22, hy + 120),
-                   (hx + hw + 26, hy + 260), (hx + hw - 8, hy + 250), (hx + hw - 4, hy + 90), (hx + hw * 0.88, hy - 10),
-                   (hx + hw * 0.76, hy - hh * 0.66), (px + 6, hy - hh * 0.9)]
-        p.poly(curve(pts, 4), N_HAIR, INK, 2.4)
-        for k in range(2):
-            p.line(curve([(hx + sgn * (hw + 2 + 6 * k), hy - 50), (hx + sgn * (hw + 8 + 6 * k), hy + 40),
-                          (hx + sgn * (hw + 8 + 6 * k), hy + 200)], 3), N_HAIR_D, 1.3)
+    if shock and not talking(sp):                       # hanging open: a dark shape, the top edge drooping
+        k = sp.get('gape', 1.0)
+        p.poly(curve([(fx - 15, my + 6), (fx - 6, my + 1), (fx, my + 2), (fx + 6, my + 1), (fx + 15, my + 6),
+                      (fx + 13, my + 6 + 12 * k), (fx, my + 8 + 15 * k), (fx - 13, my + 6 + 12 * k)], 3),
+               (40, 20, 24), INK, 2.0)
+    else:
+        mouth_or_talk(p, sp, fx, my, N_LIP, width=19, lips=True)
+    long_hair_top(p, hx, hy, hw, hh, part, N_HAIR, N_HAIR_D)
     return fx
 
 
@@ -473,24 +611,26 @@ def journalist_torso(img, p, sp, t):
     p.poly([(-24, 204), (-2, 204), (-2, 236), (-24, 236)], (200, 200, 206), None)
     for k in range(3):
         p.line([(4, 208 + 10 * k), (26 - 6 * k, 208 + 10 * k)], (150, 150, 156), 2.0)
+    handbag(p, sp)
 
 
-def handbag(p, j2, side='L'):
-    """A small handbag held loosely by its handle, hanging from the hand."""
-    x, y = j2['wr' + side]
-    p.line(curve([(x - 16, y + 6), (x, y - 10), (x + 16, y + 6)], 3), (40, 30, 30), 3.2)
-    p.poly(curve([(x - 44, y + 6), (x + 44, y + 6), (x + 50, y + 74), (x - 50, y + 74)], 2), (36, 34, 48), INK, 2.2)
-    p.line([(x - 44, y + 22), (x + 44, y + 22)], (70, 66, 84), 1.6)
-    p.ell(x, y + 24, 5, 4, (200, 176, 110), INK, 1.0)
+def handbag(p, sp, side=-1):
+    """A small handbag on a thin black strap over her shoulder, hanging at her hip (Sam, 18 Oct: not held)."""
+    sw = sp['shoulders']
+    x, y = side * (sw + 6), 470
+    p.line([(side * (sw - 30), -2), (side * (sw - 6), 120), (x - side * 20, y - 6)], (20, 18, 20), 2.6)
+    p.poly(curve([(x - 40, y), (x + 40, y), (x + 46, y + 64), (x - 46, y + 64)], 2), (36, 34, 48), INK, 2.2)
+    p.line([(x - 40, y + 16), (x + 40, y + 16)], (70, 66, 84), 1.6)
+    p.ell(x, y + 18, 5, 4, (200, 176, 110), INK, 1.0)
 
 
 # --------------------------------------------------------------------------------------------- skirts
 def skirt(p, sp):
-    """A knee-length straight skirt over the thighs (front view)."""
+    """A straight skirt to just below the knee (Sam, 18 Oct: knee length), front view."""
     c = sp.get('skirt')
     w = sp['shoulders'] - 26
-    p.poly(curve([(-w, 400), (w, 400), (w + 22, 690), (-w - 22, 690)], 2), c, INK, 2.4)
-    p.line([(-w - 6, 640), (-w * 0.2, 690)], dk(c, 0.8), 1.4)
+    p.poly(curve([(-w, 400), (w, 400), (w + 16, 745), (-w - 16, 745)], 2), c, INK, 2.4)
+    p.line([(-w - 6, 690), (-w * 0.2, 745)], dk(c, 0.8), 1.4)
 
 
 # --------------------------------------------------------------------------------------------- the hooks

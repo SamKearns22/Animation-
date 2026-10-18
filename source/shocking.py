@@ -150,25 +150,26 @@ def blend_keys(a, b2, u):
 
 
 def build(sp, k):
-    """Joints for a key pose (feet planted; hips and shoulders sway across; knees bend for the dip)."""
+    """Joints for a key pose. The sway moves the WHOLE upper body across as one piece (head, neck, jacket and arms
+    together, so the neck never comes away: Sam, 18 Oct): the caller shifts the person by j['_sway'] and the feet
+    are moved back the other way so they stay planted. The dip bends the knees."""
     j = V.standing(sp)
     sw, dip = k['sway'], k['dip']
     for side in 'LR':
-        x, y, z = j['hip' + side]
-        j['hip' + side] = (x + sw, y + dip, z)
-        x, y, z = j['sh' + side]
-        j['sh' + side] = (x + sw * 1.2, y + dip, z)
+        x, y, z = j['foot' + side]
+        j['foot' + side] = (x - sw, y - dip, z)
     for side in 'LR':
-        tx, ty, tz = k[side]
-        V.arm_to(j, side, (tx + sw * 1.2, ty + dip, tz), k['pole' + side], 'fist')
+        V.arm_to(j, side, k[side], k['pole' + side], 'fist')
     j['lean'] = k['lean']
-    j['head_dy'] = dip + 30 * max(0.0, k['chin'])
+    j['bob'] = dip
+    j['head_dy'] = 30 * max(0.0, k['chin'])
+    j['_sway'] = sw
     return j
 
 
 def face_of(sp, k):
     sp['mood'] = k['mood']
-    sp['head_dx'] = k['sway'] * 1.2 + k['head']
+    sp['head_dx'] = max(-12.0, min(12.0, k['head']))       # a small tilt only: the head stays on its neck
     sp['down'] = k['chin']
     sp['look'] = k.get('look', 0.0)
 
@@ -194,7 +195,7 @@ def dancer(img, cam, who, key, x=540, y=760, s=0.62, extra=None):
     j = build(sp, k)
     face_of(sp, k)
     sp.update(extra or {})
-    V.person(img, cam, x, y, s, sp, 0.0, 0, j)
+    V.person(img, cam, x + j['_sway'] * s, y, s, sp, 0.0, 0, j)
 
 
 def cast_sheet(out):
@@ -208,9 +209,6 @@ def cast_sheet(out):
         def d(im, cam, who=who):
             sp = dict(C.CAST[who], mood='neutral')
             j = V.standing(sp)
-            if who == 'journalist':
-                V.arm_to(j, 'L', (-150, 420, 60), 'back', 'fist')
-                j['props'] = [lambda p, j2: C.handbag(p, j2, 'L')]
             V.person(im, cam, 540, 640, 0.9, sp, 0.0, 0, j)
         sheet.paste(panel(d), (W1 * i, 0))
         label(sheet, W1 * i + 12, 10, who.title())
