@@ -17,10 +17,13 @@ Read this first in any new session, after CLAUDE.md.
   Sam, 18 Oct). The bed is now the better source only: clip e (continuous from the start, 0.45-8.90 s) then clip d
   (E = D + 7.145 s, used 1.755-7.70 s; it drops out at 7.8 s). The old join through clip a had skipped two beats. Rebuild with `python3
   source/shocking.py music`. In a new session they must be re-sent by Sam.
-- The finished film with the song goes to Sam in the chat only, never into `animations/` on GitHub.
+- The finished film with the song goes to Sam in the chat only, never to GitHub: the local copy is
+  `animations/shocking-behaviour-vertical.mp4` (gitignored); the clean render is `source/data/shocking/shocking-clean.mp4`.
 - Animatics 1-5 sent 18 Oct. Finish with: `python3 source/finish.py CLEAN.mp4 OUT.mp4 "Reform HQ: EXPOSED!" --y 560
   --x 700` (the Hook Text on the tower's windows, clear of the ITV/REC readout and the sign: Sam).
-- Next: Sam's clear yes for the final render (Sonnet).
+- FINAL RENDERED 18 Oct (Sam: "PERFECT. Render final"): 27.7 s, 14.9 MB, sent to Sam in the chat. Trip clips (`final --small --span T0 T1`)
+  replaced full animatics for notes on motion. Next: review of the sticking points (Opus, high); the shared clip check
+  (`source/clipcheck.py`, half built, not wired in) awaits Sam's approval of the general rule.
 
 ## Done: "Bingo Bingo" (working title; TikTok satire, Zack Polanski and his advisor)
 - Script from Sam, 14 Oct; jumped straight to the animatic (no stills step). Code `source/polanski.py` (`times`, `stills`,
