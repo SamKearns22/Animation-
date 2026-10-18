@@ -42,10 +42,12 @@ DATA = os.path.join(HERE, 'data', NAME)
 # gaps for the bleeps at 5.57-6.60 and 7.32-7.99 in the file).
 SLAM = 7.0                       # the slam cut into the dance; the song starts here
 BEAT = 0.539                     # the song's beat (111 bpm, measured)
-DOOR = (11.0, 13.0)              # the cutaway to the journalist in the doorway
-TRIP = 16.0                      # three seconds into the second dance shot, Jenrick trips
-SWIPE = 17.0                     # Farage's swipe lands: the music and the strobes stop dead
-FARAGE_AT = 17.4                 # film time where Farage's first word starts
+SONG_SHIFT = 3.037               # the routine's first planned beat, now that the song starts on "'Cos I'm so messy"
+DOOR = (13.0, 15.0)              # the cutaway to the journalist (Sam: hold the first dance two seconds longer)
+TRIP = 18.0                      # three seconds into the second dance shot, Jenrick trips over his own feet
+CRASH = TRIP + 1.05              # ... and crashes into the desk at the front left (Sam, 18 Oct)
+SWIPE = TRIP + 1.75              # Farage's swipe lands: the music and the strobes stop dead
+FARAGE_AT = SWIPE + 0.4          # film time where Farage's first word starts
 LINES = [
     dict(n=1, who='narrator', audio='shocking-1', start=2.8, at=0.4,
          text="ITV sent an undercover journalist into Reform UK's HQ, where she observed shocking behaviour."),
@@ -53,14 +55,17 @@ LINES = [
          text="Damn it Jenrick, if you can't stay in formation I swear to [bleep] I'll have your [bleep] ass deported."),
 ]
 BLEEPS = [(5.57, 6.60), (7.32, 7.99)]          # in Farage's file seconds
-SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[1]), ('dance2', DOOR[1], FARAGE_AT),
-         ('farage', FARAGE_AT, 21.6), ('wide', 21.6, 25.0)]     # the cut to the wide falls after the first bleep
-DUR = BLACK_AT = 25.0
+DUR = BLACK_AT = round(FARAGE_AT + (8.96 - 2.48) + 1.1, 2)
+# All the action after the doorway plays in the one wide shot (Sam, 18 Oct: no close-up cut to Farage).
+SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[1]), ('dance2', DOOR[1], DUR)]
 # The formation (Sam, 18 Oct), as seen on screen: Farage front centre, Jenrick middle left, Braverman middle right,
 # Tice back left (set a little further out than Jenrick so his face is never hidden). Floor positions in metres:
-# X across (+ right), Z away from the camera.
-SPOT = {'farage': (0.0, 3.0), 'jenrick': (-0.75, 3.7), 'braverman': (0.75, 3.7), 'tice': (-1.3, 4.4)}
+# X across (+ right), Z away from the camera (the camera brought forward towards them: Sam, 18 Oct).
+SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.35), 'tice': (-1.18, 4.0)}
 DANCERS = ('tice', 'jenrick', 'braverman', 'farage')     # far to near (drawing order)
+CRASH_DESK = (-2.1, -0.62, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
+# (its right end kept left of where he dances, so his feet, and the trip over them, stay in view: Sam, 18 Oct)
+JENRICK_END = (-0.8, 2.62)                               # where he hits it (its back edge, at his hips)
 # ====================================================================================================================
 
 
@@ -110,32 +115,37 @@ def P(L, R, poleL='out', poleR='out', sway=0.0, dip=0.0, lean=0.0, head=0.0, chi
 
 
 LOOSE_L, LOOSE_R = (-176, 400, 70), (176, 400, 70)
-KEYS = {   # from the trend's original dance (Sam's clip, the woman on the right), frame by frame
-    'thumb_R': P((-170, 390, 80), (240, -40, -60), 'back', 'out', sway=-20, dip=8, head=8),       # thumb jerked back over the shoulder
-    'thumb_L': P((-240, -40, -60), (170, 390, 80), 'out', 'back', sway=20, dip=8, head=-8),
-    'flick': P((-232, 440, 40), (232, 440, 40), 'back', 'back', dip=14),                       # both hands flicked down and out
-    'lean_up': P((-150, 470, 120), (150, 470, 120), 'back', 'back', dip=4, lean=13, chin=0.2), # leaning in to the camera,
-    'lean_dn': P((-150, 480, 130), (150, 480, 130), 'back', 'back', dip=16, lean=15, chin=0.3),  # shoulders hunched, bobbing
-    'chin_R': P((-150, 350, 80), (330, 300, 70), 'out', 'down', sway=-12, chin=-0.7, mood='cool'),   # chin up, arm swept out
-    'chin_L': P((-330, 300, 70), (150, 350, 80), 'down', 'out', sway=12, chin=-0.7, mood='cool'),
-    'sway_L': P((-190, 390, 60), (170, 380, 80), 'back', 'back', sway=-22, dip=6, head=-12),
-    'sway_R': P((-170, 380, 80), (190, 390, 60), 'back', 'back', sway=22, dip=6, head=12),
-    'point': P((-176, 400, 70), (70, 160, 300), 'back', 'down', sway=-10, dip=6, head=6),       # finger pointed at us
-    'point2': P((-176, 400, 70), (90, 190, 290), 'back', 'down', sway=-4, dip=12, head=4),
-    'chin_hand': P((-180, 400, 70), (50, -70, 150), 'back', 'down', sway=10, head=10, chin=0.1, mood='cool'),   # hand by
-    'chin_hand2': P((-180, 400, 70), (80, -50, 140), 'back', 'down', sway=16, head=14, chin=0.15, mood='cool'),  # the chin
+KEYS = {   # from the trend's original dance (Sam's clip, the woman on the right), made bigger: the whole body moves,
+    # wide sways, deep dips, arms flung wider and higher (Sam, 18 Oct: more exaggerated, take up more space)
+    'thumb_R': P((-230, 330, 90), (270, -90, -50), 'back', 'out', sway=-52, dip=24, head=12, lean=6),   # thumb jerked back
+    'thumb_L': P((-270, -90, -50), (230, 330, 90), 'out', 'back', sway=52, dip=24, head=-12, lean=6),   # over the shoulder
+    'flick': P((-320, 400, 40), (320, 400, 40), 'back', 'back', dip=46, lean=10),            # both hands flicked down, out
+    'lean_up': P((-210, 430, 170), (210, 430, 170), 'back', 'back', dip=12, lean=22, chin=0.25),   # leaning right in
+    'lean_dn': P((-230, 470, 180), (230, 470, 180), 'back', 'back', dip=38, lean=26, chin=0.35),   # bobbing, hunched
+    'chin_R': P((-170, 320, 90), (390, 160, 60), 'out', 'down', sway=-42, dip=8, lean=-8, chin=-0.8, mood='cool'),
+    'chin_L': P((-390, 160, 60), (170, 320, 90), 'down', 'out', sway=42, dip=8, lean=-8, chin=-0.8, mood='cool'),
+    'sway_L': P((-290, 310, 70), (210, 360, 110), 'back', 'back', sway=-58, dip=20, head=-12),
+    'sway_R': P((-210, 360, 110), (290, 310, 70), 'back', 'back', sway=58, dip=20, head=12),
+    'point': P((-230, 380, 80), (60, 110, 330), 'back', 'down', sway=-32, dip=16, lean=10, head=8),    # pointing at us
+    'point2': P((-230, 380, 80), (120, 170, 310), 'back', 'down', sway=-8, dip=34, lean=16, head=4),
+    'chin_hand': P((-280, 360, 60), (50, -70, 150), 'back', 'down', sway=36, dip=10, head=12, chin=0.1, mood='cool'),
+    'chin_hand2': P((-300, 330, 60), (90, -40, 140), 'back', 'down', sway=54, dip=26, head=12, chin=0.15, mood='cool'),
 }
 # The routine on the song's clock (m: seconds since the slam cut), on its beats. Sam's clip mapped onto our song bed:
 # m 0-2.7 = her clip 2.76-5.45 s (thumbs back, the flick, leaning in); m 2.7- = clip two from 0.25 s (chin up with
 # the arm swept out, swaying, pointing at the camera, the hand by the chin).
 b = BEAT
-ROUTINE = [(0.0, 'thumb_R'), (b, 'thumb_L'), (2 * b, 'thumb_R'), (2.6 * b, 'flick'), (3.1 * b, 'lean_up'),
+_ROUTINE = [(0.0, 'thumb_R'), (b, 'thumb_L'), (2 * b, 'thumb_R'), (2.6 * b, 'flick'), (3.1 * b, 'lean_up'),
            (3.6 * b, 'lean_dn'), (4.1 * b, 'lean_up'), (4.6 * b, 'lean_dn'), (5.0 * b, 'chin_R'),
            (6.0 * b, 'chin_L'), (7.0 * b, 'sway_L'), (8 * b, 'sway_R'), (9 * b, 'sway_L'), (10 * b, 'sway_R'),
            (11 * b, 'sway_L'), (12 * b, 'sway_R'), (13 * b, 'point'), (13.5 * b, 'point2'), (14 * b, 'point'),
            (14.5 * b, 'point2'), (15 * b, 'chin_hand'), (15.5 * b, 'chin_hand2'), (16 * b, 'chin_hand'),
            (16.5 * b, 'chin_hand2'), (17 * b, 'chin_hand'), (17.5 * b, 'chin_hand2'), (18 * b, 'chin_hand'),
            (18.5 * b, 'chin_hand2'), (19 * b, 'chin_hand')]
+# The song now starts on "'Cos I'm so messy" (Sam, 18 Oct), 3.04 s earlier in the song: an opening on its first
+# beats (a sway, the thumbs, chin up), then the routine as before, moved along.
+ROUTINE = ([(0.0, 'sway_R'), (0.347, 'thumb_R'), (0.885, 'thumb_L'), (1.423, 'chin_R'), (1.961, 'chin_L'),
+            (2.499, 'sway_L')] + [(m + SONG_SHIFT, key) for m, key in _ROUTINE])
 
 
 def _cr(p0, p1, p2, p3, u):
@@ -188,13 +198,17 @@ def dance_pose(m):
 
 def build(sp, k):
     """Joints for a key pose. The sway moves the WHOLE upper body across as one piece (head, neck, jacket and arms
-    together, so the neck never comes away: Sam, 18 Oct): the caller shifts the person by j['_sway'] and the feet
-    are moved back the other way so they stay planted. The dip bends the knees."""
+    together, so the neck never comes away: Sam, 18 Oct): the caller shifts the person by j['_sway']. On a big sway
+    the foot on that side steps out with it and the other stays planted; the dip bends the knees. A pose may set
+    the feet itself (k['feet']: the trip)."""
     j = V.standing(sp)
     sw, dip = k['sway'], k['dip']
-    for side in 'LR':
+    for side, sg in (('L', -1), ('R', 1)):
         x, y, z = j['foot' + side]
-        j['foot' + side] = (x - sw, y - dip, z)
+        out = max(0.0, sw * sg) * 0.55                    # the leading foot steps out with the sway
+        j['foot' + side] = (x - sw + sg * out + (sw * 0.0), y - dip, z)
+    for side, ft in (k.get('feet') or {}).items():
+        j['foot' + side] = (ft[0] - sw, ft[1] - dip, ft[2])
     for side in 'LR':
         sx, sy, sz = j['sh' + side]
         tx, ty, tz = k[side]
@@ -218,41 +232,16 @@ def face_of(sp, k):
 
 
 # --------------------------------------------------------------------------------------------- who does what, when
-def trip_state(t):
-    """Jenrick's trip (film seconds from TRIP): the foot catches, he lurches forward and to our left, arms flung up,
-    stumbles three quick steps to the edge of the floor and catches himself, bent over; then straightens, hunched and
-    scared. Returns (X, Z, key pose, extra face)."""
-    u = t - TRIP
-    X0, Z0 = SPOT['jenrick']
-    X1, Z1 = -1.3, 3.1                                    # where he ends up (half out of the dance shot)
-    if u < 0:
-        return X0, Z0, None, {}
-    flail = P((-300, -40, 60), (300, -60, 60), 'out', 'out', lean=20, mood='scared', head=-8)
-    flail2 = P((-260, 60, 80), (280, -100, 40), 'out', 'out', lean=24, mood='scared', head=8)
-    caught = P((-110, 520, 140), (110, 520, 140), 'back', 'back', lean=28, dip=40, mood='scared', chin=0.2)
-    hunch = P((-150, 440, 90), (150, 440, 90), 'back', 'back', lean=8, dip=10, mood='scared', chin=0.3, look=1.0)
-    keys = [(0.0, flail), (0.25, flail2), (0.5, flail), (0.75, caught), (1.3, caught), (1.8, hunch)]
-    for (a, ka), (b2, kb) in zip(keys, keys[1:]):
-        if u < b2:
-            k = blend_keys(ka, kb, ease((u - a) / (b2 - a)))
-            break
-    else:
-        k = dict(hunch)
-    w = ease(min(1.0, u / 0.75))
-    X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
-    k['step'] = (u < 0.75, int(u / 0.18) % 2)              # quick stumbling steps while travelling
-    return X, Z, k, {}
-
-
 def blend_keys(a, b2, u):
     out = {}
     for k, v in a.items():
-        if isinstance(v, tuple):
-            out[k] = tuple(x + (y - x) * u for x, y in zip(v, b2[k]))
+        w = b2.get(k, v)                                   # a key only one pose has (the trip's feet) holds
+        if isinstance(v, tuple) and isinstance(w, tuple):
+            out[k] = tuple(x + (y - x) * u for x, y in zip(v, w))
         elif isinstance(v, (int, float)) and not isinstance(v, bool):
-            out[k] = v + (b2[k] - v) * u
+            out[k] = v + (w - v) * u
         else:
-            out[k] = v if u < 0.5 else b2[k]
+            out[k] = v if u < 0.5 else w
     return out
 
 
@@ -285,8 +274,10 @@ def other_dance_state(who, t):
     if t < SWIPE:
         return dance_pose(t - SLAM)
     frozen = dance_pose(SWIPE - SLAM)
-    k = blend_keys(frozen, STAND, ease((t - SWIPE - 0.25) / 0.45)) if t > SWIPE + 0.25 else dict(frozen)
-    k.update(mood='alarm' if who == 'tice' else 'upset', look=-0.8 if who == 'braverman' else 0.6)
+    react = (P((-200, 420, 50), (200, 420, 50), 'back', 'back', lean=-6, mood='alarm', look=0.6) if who == 'tice' else
+             P((-176, 420, 60), (-30, 120, 120), 'back', 'down', mood='upset', look=-0.9))
+    k = blend_keys(frozen, react, ease((t - SWIPE - 0.25) / 0.6)) if t > SWIPE + 0.25 else dict(frozen)
+    k.update(mood='alarm' if who == 'tice' else 'upset', look=0.6 if who == 'tice' else -0.9)
     return k
 
 
@@ -307,6 +298,198 @@ def make_person(img, cam3, who, X, Z, k, t, extra=None, step=None):
 
 
 BLINKS = {w: F.blinks(i + 3, 0.0, DUR) for i, w in enumerate(DANCERS)}
+
+
+def trip_state(t):
+    """Jenrick's trip (Sam, 18 Oct: over his own feet, clearly; the whole journey and the impact in shot): mid-move
+    his right foot hooks behind his left ankle (0-0.3 s), he pitches forward with his arms flung up (0.3-0.55),
+    stumbles three quick steps towards us and to the left (0.55-1.05) and crashes into the desk at the front left,
+    folding over it (1.05); he lies there a beat, then pushes himself up, hunched and scared, looking at Farage.
+    Returns (X, Z, key pose)."""
+    u = t - TRIP
+    X0, Z0 = SPOT['jenrick']
+    X1, Z1 = JENRICK_END
+    if u < 0:
+        return X0, Z0, None
+    base = dance_pose(TRIP - SLAM)
+    hook = dict(base, feet={'L': (-58, V.ANKLE_Y, 10.0), 'R': (-120, V.ANKLE_Y - 34, -40.0)}, lean=6, mood='scared')
+    catch = dict(P((-150, 300, 140), (150, 300, 140), 'down', 'down', lean=16, dip=12, mood='scared', head=-6),
+                 feet={'L': (-50, V.ANKLE_Y, 30.0), 'R': (-110, V.ANKLE_Y - 50, -70.0)})
+    flail = P((-320, -60, 60), (300, -90, 60), 'out', 'out', lean=18, dip=8, mood='scared', head=-10)
+    flail2 = P((-280, 40, 90), (320, -120, 40), 'out', 'out', lean=18, dip=14, mood='scared', head=10)
+    slam = P((-190, 430, 210), (190, 430, 210), 'out', 'out', lean=18, dip=4, mood='scared', chin=0.35)
+    slump = P((-200, 440, 220), (200, 440, 220), 'out', 'out', lean=16, dip=6, mood='scared', chin=0.4)
+    up = P((-190, 420, 180), (190, 420, 180), 'out', 'out', lean=10, dip=6, mood='scared', chin=0.2, look=1.0)
+    hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=10, dip=12, mood='scared', chin=0.3, look=1.0)
+    keys = [(0.0, base), (0.18, hook), (0.32, catch), (0.45, flail), (0.62, flail2), (0.8, flail), (0.95, flail2),
+            (1.05, slam), (1.25, slump), (1.75, slump), (2.2, up), (2.6, hunch)]
+    k = dict(hunch)
+    for (a, ka), (b2, kb) in zip(keys, keys[1:]):
+        if u < b2:
+            w = (u - a) / (b2 - a)
+            k = blend_keys(ka, kb, w * w * w if b2 == 1.05 else ease(w))   # fast into the impact
+            if 'feet' in ka and u < 0.32:
+                k['feet'] = ka['feet'] if w < 0.5 else kb.get('feet', ka['feet'])
+            break
+    w = 0.0 if u < 0.38 else min(1.0, (u - 0.38) / 0.67)
+    w = w * w                                              # accelerating, out of control
+    X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
+    if 0.38 <= u < 1.05:                                   # quick stumbling steps on the way
+        k['step'] = (True, int((u - 0.38) / 0.17) % 2)
+    if u >= 1.05:                                          # the jolt of the impact
+        k['dip'] = k['dip'] + 10 * math.exp(-((u - 1.05) / 0.06) ** 2)
+    return X, Z, k
+
+
+# The things on the desk he crashes into (Sam, 18 Oct: knocking stuff over): flung on the impact, falling under
+# gravity, each its own size and speed; the papers flutter; everything stays where it lands.
+ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, towards the far side +), delay (s)
+    ('mug', -0.92, 1.95, (0.9, 1.4, 1.1), 0.00),
+    ('pot', -1.22, 2.05, (0.3, 1.8, 0.9), 0.03),
+    ('plant', -1.6, 1.8, (-0.4, 1.2, 0.6), 0.06),
+    ('paper', -1.0, 1.75, (0.5, 2.0, 0.3), 0.00), ('paper', -1.1, 1.8, (-0.2, 2.4, 0.5), 0.02),
+    ('paper', -0.95, 1.85, (0.9, 1.8, 0.7), 0.04), ('paper', -1.2, 1.7, (0.2, 2.6, -0.2), 0.05),
+    ('pen', -1.15, 2.0, (0.6, 2.2, 1.3), 0.03), ('pen', -1.2, 2.05, (1.1, 1.6, 0.9), 0.04),
+    ('pen', -1.17, 2.02, (-0.3, 2.0, 1.5), 0.05)]
+DESK_TOP = 0.74
+
+
+def item_at(i, t):
+    """Where item i is at time t: (X, Y, Z, angle, landed)."""
+    kind, X, Z, (vx, vy, vz), delay = ITEMS[i]
+    u = t - CRASH - delay
+    if u <= 0:
+        return X, DESK_TOP, Z, 0.0, False
+    g = 2.2 if kind == 'paper' else 9.8                   # paper drifts down
+    if kind == 'paper':
+        vy *= 0.6
+    land = (vy + math.sqrt(vy * vy + 2 * g * DESK_TOP)) / g   # when it reaches the floor
+    uu = min(u, land)
+    Xn = X + vx * uu + (0.12 * math.sin(uu * 7 + i) if kind == 'paper' else 0.0)
+    Yn = DESK_TOP + vy * uu - 0.5 * g * uu * uu
+    Zn = Z + vz * uu
+    spin = (3 + i) * uu if kind != 'paper' else 1.4 * math.sin(uu * 5 + i)
+    if u >= land:
+        spin = (math.pi / 2 if kind in ('mug', 'pot') else spin)   # the mug and pot lie on their sides
+    return Xn, max(0.0, Yn), Zn, spin, u >= land
+
+
+def draw_item(img, cam3, i, t):
+    kind = ITEMS[i][0]
+    X, Y, Z, ang, landed = item_at(i, t)
+    k = img.size[0] / 1080
+    x, y = cam3.pt(X, Z, Y)
+    sc = cam3.foc / Z * k
+    d = ImageDraw.Draw(img)
+
+    def rot(pts):
+        c, s_ = math.cos(ang), math.sin(ang)
+        return [(x * k + (px * c - py * s_) * sc, y * k + (px * s_ + py * c) * sc) for px, py in pts]
+    if kind == 'mug':
+        d.polygon(rot([(-0.045, 0), (0.045, 0), (0.045, -0.1), (-0.045, -0.1)]), fill=(250, 250, 250), outline=INK)
+        d.polygon(rot([(0.045, -0.03), (0.07, -0.035), (0.07, -0.07), (0.045, -0.075)]), fill=(250, 250, 250), outline=INK)
+        d.polygon(rot([(-0.03, -0.1), (0.03, -0.1), (0.03, -0.085), (-0.03, -0.085)]), fill=(110, 70, 40))
+    elif kind == 'pot':
+        d.polygon(rot([(-0.04, 0), (0.04, 0), (0.045, -0.1), (-0.045, -0.1)]), fill=(40, 40, 46), outline=INK)
+    elif kind == 'plant':
+        d.polygon(rot([(-0.06, 0), (0.06, 0), (0.07, -0.09), (-0.07, -0.09)]), fill=(196, 110, 70), outline=INK)
+        for a in (-0.5, 0.0, 0.5):
+            d.polygon(rot([(0, -0.09), (0.05 * math.sin(a) - 0.02, -0.2), (0.05 * math.sin(a) + 0.02, -0.2)]),
+                      fill=(70, 140, 70), outline=INK)
+    elif kind == 'paper':
+        w, h = (0.15, 0.03) if landed else (0.15, 0.1 * abs(math.cos(ang * 2)) + 0.02)
+        d.polygon(rot([(-w, -h), (w, -h), (w, h), (-w, h)]), fill=(252, 252, 250), outline=INK)
+    elif kind == 'pen':
+        d.line(rot([(-0.07, 0), (0.07, 0)]), fill=(30, 60, 160), width=max(2, int(0.012 * sc)))
+
+
+def crash_desk(img, cam3, t, top_only=None):
+    """The desk at the front left that Jenrick crashes into (cut off by the frame's edge): its top with a monitor,
+    keyboard and the things that go flying; its front. top_only: True = only the top, False = only the front."""
+    k = img.size[0] / 1080
+    d = ImageDraw.Draw(img)
+    P3 = cam3.pt
+    x0, x1, z0, z1 = CRASH_DESK
+    shake = 0.02 * math.exp(-((t - CRASH) / 0.12) ** 2) * math.sin(t * 90) if t > CRASH - 0.05 else 0.0
+    if top_only in (None, True):
+        poly(d, [P3(x0, z0, DESK_TOP), P3(x1 + shake, z0, DESK_TOP), P3(x1 + shake, z1, DESK_TOP), P3(x0, z1, DESK_TOP)],
+             (232, 226, 214), k)                                                               # a pale oak top
+        mx = -1.45
+        tip = 0.0 if t < CRASH else min(0.35, (t - CRASH) * 2.0)          # the monitor rocks back
+        poly(d, [P3(mx - 0.3, z1 - 0.1, DESK_TOP + 0.08), P3(mx + 0.3, z1 - 0.1, DESK_TOP + 0.08),
+                 P3(mx + 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1), P3(mx - 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1)],
+             MONITOR, k)
+        poly(d, [P3(mx - 0.22, z0 + 0.25, DESK_TOP), P3(mx + 0.22, z0 + 0.25, DESK_TOP), P3(mx + 0.22, z0 + 0.4, DESK_TOP),
+                 P3(mx - 0.22, z0 + 0.4, DESK_TOP)], (60, 62, 68), k)                      # keyboard
+        for i, it in enumerate(ITEMS):
+            if t < CRASH + it[4]:
+                draw_item(img, cam3, i, t)
+    if top_only in (None, False):
+        for lx, lz in ((x1 + shake - 0.05, z0 + 0.05), (x1 + shake - 0.05, z1 - 0.05)):   # steel legs
+            poly(d, [P3(lx - 0.03, lz, 0.0), P3(lx + 0.03, lz, 0.0), P3(lx + 0.03, lz, DESK_TOP - 0.03),
+                     P3(lx - 0.03, lz, DESK_TOP - 0.03)], (150, 152, 158), k)
+        poly(d, [P3(x0, z0, DESK_TOP - 0.04), P3(x1 + shake, z0, DESK_TOP - 0.04), P3(x1 + shake, z0, DESK_TOP),
+                 P3(x0, z0, DESK_TOP)], (196, 186, 168), k)                                    # the top's front edge
+        poly(d, [P3(x1 + shake, z0, DESK_TOP - 0.04), P3(x1 + shake, z1, DESK_TOP - 0.04), P3(x1 + shake, z1, DESK_TOP),
+                 P3(x1 + shake, z0, DESK_TOP)], (180, 170, 152), k)
+
+
+# --------------------------------------------------------------------------------------------- the office people
+def worker(skin, hair, hair_c, jacket, outfit, trousers, **kw):
+    """An office worker dressed for a professional office (Sam, 18 Oct): suits, shirts, blouses."""
+    sp = dict(skin=skin, hair=hair, hair_c=hair_c, jacket=jacket, outfit=outfit, trousers=trousers, shirt=(244, 244, 242),
+              shoulders=kw.pop('shoulders', 140), hw=kw.pop('hw', 66), hh=kw.pop('hh', 88), full=True, pose='custom',
+              mouth='set', jaw=kw.pop('jaw', 'soft'))
+    sp.update(kw)
+    return sp
+
+
+# who, X, Z, facing (degrees: 45 = three-quarter towards the middle from the left; 135 = turned away, working)
+WORKERS = [
+    (worker(B.PALE, 'bob', (90, 60, 40), (60, 66, 84), 'blouse', (40, 42, 52), lashes=True, name='w1'), -1.7, 5.6, 45),
+    (worker((240, 196, 170), 'crop', (30, 24, 22), (40, 44, 60), 'suit', (40, 44, 60), tie=(120, 30, 40), glasses=True,
+            name='w2'), 1.7, 5.6, -45),
+    (worker((236, 190, 162), 'side', (58, 44, 36), (70, 74, 82), 'suit', (60, 62, 70), tie=(40, 60, 110), name='w3'), -1.75, 8.2, 135),
+    (worker((248, 212, 196), 'long', (200, 170, 110), (120, 40, 60), 'blouse', (34, 34, 40),
+            lashes=True, name='w4'), 1.75, 8.2, -45),
+    (worker(B.PALE, 'side', (170, 166, 162), (50, 54, 66), 'suit', (50, 54, 66), tie=(150, 120, 40), name='w5'), 1.75, 10.8, -135),
+]
+PHONE_GUY = worker(B.PALE, 'side', (110, 70, 46), (52, 60, 80), 'suit', (52, 60, 80), tie=(90, 30, 50), name='phone')
+PHONE_AT = (0.74, 2.1, -90)       # front right, side-on to us, facing the dancers, filming on his phone
+
+
+def seated_worker(img, cam3, sp, X, Z, yaw, t):
+    import moves
+    j = moves.seated(dict(sp))
+    if abs(yaw) > 90:                                       # working: hands forward on the keyboard
+        for side, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, side, (sg * 80, 360.0, 260.0), 'back', 'fist')
+    x, y, s = cam3.person(X, Z)
+    V.person(img, B.Cam(1.0, 540, 960), x, y, s, dict(sp, blink=F.blinking(t, BLINKS.get(sp['name'], ()))), t, yaw, j)
+
+
+def phone_in_hands(p, j2):
+    """A phone held landscape between the two hands, centred on them, its dark back to us."""
+    (xl, yl), (xr, yr) = j2['wrL'], j2['wrR']
+    cx, cy = (xl + xr) / 2, (yl + yr) / 2 - 6
+    w, h = abs(xr - xl) / 2 + 26, 40
+    p.poly([(cx - w, cy - h), (cx + w, cy - h), (cx + w, cy + h), (cx - w, cy + h)], (36, 38, 46), INK, 2.4)
+    p.ell(cx - w + 18, cy - h + 16, 7, 7, (70, 74, 84), INK, 1.4)                # the camera lens
+
+
+def phone_guy(img, cam3, t):
+    """The man at the front right filming the dance on his phone (Sam, 18 Oct), seen from behind, phone held up."""
+    sp = dict(PHONE_GUY)
+    j = V.standing(sp)
+    X, Z, yaw = PHONE_AT
+    for side, dx in (('L', -18), ('R', 18)):                 # both hands on the phone, held up high above the heads
+        V.arm_to(j, side, (dx, -200.0, 240.0), 'down', 'fist')
+    j['props'] = [lambda p, j2: phone_in_hands(p, j2)]
+    x, y, s = cam3.person(X, Z)
+    V.person(img, B.Cam(1.0, 540, 960), x, y, s, sp, t, yaw, j)
+
+
+BLINKS.update({w[0]['name']: F.blinks(20 + i, 0.0, 40.0) for i, w in enumerate(WORKERS)})
 
 
 # --------------------------------------------------------------------------------------------- lights and sound
@@ -371,22 +554,25 @@ def load_song():
     return x
 
 
-CLIP_A = os.path.join(DATA, 'clip-a.mov')                 # Sam's two screen recordings of the trend video (not on GitHub)
+CLIP_A = os.path.join(DATA, 'clip-a.mov')                 # Sam's screen recordings of the trend video (not on GitHub)
 CLIP_B = os.path.join(DATA, 'clip-b.mov')
-SPLICE = ((2.757, 5.447), (0.245, 8.2))                    # each half's music, cut on the beat (measured: 111 bpm)
+CLIP_C = os.path.join(DATA, 'clip-c.mov')                 # the beginning, with the sound on: "'Cos I'm so messy"
+# The song bed: clip C from the song's first sound (0.45 s, "'Cos I'm so messy": Sam, 18 Oct) to 5.55 s; clip A
+# carries on exactly (measured: A = C - 0.73 s) to 5.447 s, on a beat; then clip B from 0.245 s (on the beat).
+SPLICE = ((CLIP_C, 0.45, 5.55), (CLIP_A, 4.82, 5.447), (CLIP_B, 0.245, 8.2))
 
 
 def build_music():
-    """The song bed from Sam's two halves, joined on a beat: half A 2.757-5.447 s (five beats), then half B from
-    0.245 s. Copyrighted, so kept in source/data/shocking/ (not on GitHub; Sam, 18 Oct)."""
+    """The song bed from Sam's three clips (SPLICE), joined without a jump. Copyrighted, so kept in
+    source/data/shocking/ (not on GitHub; Sam, 18 Oct)."""
     import imageio_ffmpeg
     import subprocess
     out = []
-    for clip, (a, b2) in zip((CLIP_A, CLIP_B), SPLICE):
+    for clip, a, b2 in SPLICE:
         raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-ss', str(a), '-t', str(b2 - a), '-i', clip,
                               '-vn', '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True, check=True).stdout
         x = np.frombuffer(raw, np.int16).astype(np.float64) / 32768
-        f = int(0.008 * SR)                                # no click at the join
+        f = int(0.006 * SR)                                # no click at the joins
         x[:f] *= np.linspace(0, 1, f)
         x[-f:] *= np.linspace(1, 0, f)
         out.append(x)
@@ -415,6 +601,49 @@ def caption_at(t):
     return None
 
 
+def crash_sound(track):
+    """Jenrick hitting the desk (Sam, 18 Oct: yes to the sound): a heavy thump and rattle on impact, then each thing
+    clattering down where and when it lands (the mug's clink, the pot's clack, pens ticking, paper settling).
+    Made here from shaped noise and tones (no outside recording)."""
+    rng = np.random.default_rng(7)
+
+    def at(sec, x, gain):
+        i = int(sec * SR)
+        n = min(len(x), len(track) - i)
+        if n > 0:
+            track[i:i + n] += x[:n] * gain
+    n = int(0.45 * SR)
+    tt = np.arange(n) / SR
+    thump = np.sin(2 * np.pi * 70 * tt) * np.exp(-tt * 14) + 0.5 * np.sin(2 * np.pi * 120 * tt) * np.exp(-tt * 20)
+    rattle = rng.standard_normal(n) * np.exp(-tt * 9)
+    rattle = np.convolve(rattle, np.ones(6) / 6, 'same')
+    at(CRASH, thump * 0.9 + rattle * 0.35, 0.6)
+    for i, it in enumerate(ITEMS):
+        kind = it[0]
+        land = None
+        for k in range(1, 400):
+            if item_at(i, CRASH + k / 100)[4]:
+                land = CRASH + k / 100
+                break
+        if land is None or kind == 'paper':
+            continue
+        m = int(0.25 * SR)
+        tt = np.arange(m) / SR
+        if kind == 'mug':
+            x = (np.sin(2 * np.pi * 2300 * tt) + 0.6 * np.sin(2 * np.pi * 3700 * tt)) * np.exp(-tt * 30)
+            x += rng.standard_normal(m) * np.exp(-tt * 60) * 0.5
+            g = 0.3
+        elif kind in ('pot', 'plant'):
+            x = rng.standard_normal(m) * np.exp(-tt * 40) + np.sin(2 * np.pi * 400 * tt) * np.exp(-tt * 30)
+            g = 0.25
+        else:
+            x = rng.standard_normal(m) * np.exp(-tt * 120)
+            g = 0.12
+        at(land, x, g)
+    m = int(0.6 * SR)                                       # the papers settling
+    at(CRASH + 0.9, np.convolve(rng.standard_normal(m), np.ones(30) / 30, 'same') * np.exp(-np.arange(m) / SR * 5), 0.08)
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)
@@ -436,7 +665,8 @@ def soundtrack(stems=False):
         tone[:f] *= np.linspace(0, 1, f)
         tone[-f:] *= np.linspace(1, 0, f)
         voice[s0:s1] += tone
-    song = load_song() * 0.36                            # sits just under the voices' loudness
+    crash_sound(rest)
+    song = load_song() * 0.75                            # loud: it never plays under a voice (Sam: louder)
     s0, s1 = int(SLAM * SR), int(SWIPE * SR)               # the song stops dead on the swipe
     seg = song[:s1 - s0].copy()
     f = int(0.012 * SR)
@@ -516,18 +746,40 @@ def millbank_plate():
     for y in range(2340, H2, 110):
         d.line([(0, y), (W2, y + 30)], fill=(160, 156, 150), width=3)
     d.polygon([(-20, 2560), (W2 + 20, 2520), (W2 + 20, 2640), (-20, 2690)], fill=(70, 130, 200))
-    for i, x in enumerate(range(90, W2, 260)):             # parked scooters along the kerb (Claude's addition)
-        y = 2470 + (i % 2) * 14
-        col = [(30, 30, 34), (200, 200, 204), (60, 62, 70)][i % 3]
-        d.ellipse([x, y + 60, x + 70, y + 130], fill=(24, 24, 26), outline=INK, width=3)
-        d.ellipse([x + 160, y + 60, x + 230, y + 130], fill=(24, 24, 26), outline=INK, width=3)
-        d.polygon([(x + 30, y + 70), (x + 70, y), (x + 170, y + 10), (x + 210, y + 80), (x + 120, y + 96)], fill=col,
-                  outline=INK)
-        d.rectangle([x + 60, y - 30, x + 150, y + 4], fill=(28, 28, 30), outline=INK, width=2)
+    for i, x in enumerate(range(60, W2 - 200, 300)):       # parked scooters along the kerb (Claude's addition)
+        scooter(d, x, 2450 + (i % 2) * 18, i)
     d.line([(1460, 2300), (1460, 1300)], fill=(40, 42, 46), width=14)                   # a lamp post
     d.rectangle([1444, 1280, 1476, 1310], fill=(40, 42, 46))
     _PLATE['img'] = img
     return img
+
+
+def scooter(d, x, y, i):
+    """A parked scooter in side view (refs millbank-2, 3; Sam, 18 Oct: more detail): tyres with hubs, the curved body
+    panel and footboard, seat, top box, handlebars with mirrors, headlight, number plate."""
+    body = [(200, 200, 204), (40, 42, 48), (176, 30, 36), (230, 230, 226), (30, 60, 110)][i % 5]
+    trim = (24, 24, 28)
+    for wx in (x + 40, x + 220):                           # tyres and hubs
+        d.ellipse([wx - 44, y + 76, wx + 44, y + 164], fill=(26, 26, 28), outline=INK, width=3)
+        d.ellipse([wx - 22, y + 98, wx + 22, y + 142], fill=(170, 172, 176), outline=INK, width=2)
+        for a in range(5):
+            ang = a * 2 * math.pi / 5
+            d.line([(wx, y + 120), (wx + 18 * math.cos(ang), y + 120 + 18 * math.sin(ang))], fill=(110, 112, 118), width=3)
+    d.polygon([(x + 220, y + 120), (x + 196, y - 10), (x + 210, y - 14), (x + 236, y + 116)], fill=(120, 122, 128),
+              outline=INK)                                 # the front fork
+    d.polygon([(x - 6, y + 70), (x + 40, y + 20), (x + 120, y + 26), (x + 150, y + 82), (x + 196, y + 84), (x + 206, y + 30),
+               (x + 230, y - 20), (x + 246, y + 70), (x + 214, y + 110), (x + 64, y + 110)], fill=body, outline=INK)
+    d.polygon([(x + 110, y + 88), (x + 200, y + 88), (x + 196, y + 104), (x + 108, y + 104)], fill=trim, outline=INK)  # footboard
+    d.polygon([(x + 20, y + 22), (x + 136, y + 14), (x + 140, y + 30), (x + 22, y + 38)], fill=trim, outline=INK)       # seat
+    d.rectangle([x - 4, y - 46, x + 76, y + 18], fill=(36, 36, 40), outline=INK, width=2)                               # top box
+    d.line([(x + 6, y - 20), (x + 66, y - 20)], fill=(90, 90, 96), width=3)
+    d.line([(x + 230, y - 20), (x + 190, y - 34), (x + 258, y - 40)], fill=trim, width=6)                               # bars
+    for mx in (x + 196, x + 254):                          # mirrors on stalks
+        d.line([(mx, y - 36), (mx + 4, y - 70)], fill=trim, width=3)
+        d.ellipse([mx - 9, y - 84, mx + 17, y - 66], fill=(150, 170, 186), outline=INK, width=2)
+    d.ellipse([x + 236, y - 8, x + 258, y + 14], fill=(250, 246, 210), outline=INK, width=2)                           # headlight
+    d.rectangle([x - 18, y + 54, x + 14, y + 72], fill=(240, 200, 40), outline=INK, width=2)                            # plate
+    d.ellipse([x - 12, y + 34, x + 4, y + 48], fill=(200, 40, 40), outline=INK, width=1)                                # tail lamp
 
 
 def lapel_frame(t):
@@ -726,31 +978,65 @@ def room(cam3, lit=True):
     return _ROOM[key].copy()
 
 
+def jenrick_layer(img, cam3, X, Z, k, t, legs=True):
+    """Jenrick drawn whole, or without his legs (after the desk he crashed into, so his body lies over its top while
+    his legs stay behind it)."""
+    if legs:
+        return make_person(img, cam3, 'jenrick', X, Z, k, t, step=k.get('step'))
+    keep = V.leg
+    V.leg = lambda *a, **kw: None
+    try:
+        return make_person(img, cam3, 'jenrick', X, Z, k, t)
+    finally:
+        V.leg = keep
+
+
 def dance_frame(t, cam3=DANCE_CAM):
-    """Shots 2 and 4: the four of them on the dance floor; the pop lights until the swipe."""
+    """Shots 2 and 4, one wide shot (Sam, 18 Oct): the four of them dancing under the pop lights; office workers at
+    the desks watching or working; a man at the front right filming it on his phone; Jenrick's trip and crash into
+    the desk at the front left; the swipe; the outburst and everyone's reactions."""
     img = room(cam3)
     on = music_on(t)
     if on:
         pop_lights(img, t, cam3)
         ring_lights(img, cam3, song_clock(t))
+    for sp, X, Z, yaw in sorted(WORKERS, key=lambda w: -w[2]):
+        seated_worker(img, cam3, sp, X, Z, yaw, t)
     people = []
+    jen = None
     for who in DANCERS:
         X, Z = SPOT[who]
-        step = None
+        extra = {}
         if who == 'farage':
-            k = farage_dance_state(t)
+            if t < FARAGE_AT:
+                k = farage_dance_state(t)
+            else:
+                k, extra = farage_shout_state(t)
         elif who == 'jenrick':
             if t >= TRIP:
-                X, Z, k, _ = trip_state(t)
-                step = k.get('step')
+                X, Z, k = trip_state(t)
             else:
                 k = dance_pose(t - SLAM)
+            jen = (X, Z, k)
         else:
             k = other_dance_state(who, t)
-        people.append((Z, who, X, k, step))
-    for Z, who, X, k, step in sorted(people, key=lambda q: -q[0]):
-        make_person(img, cam3, who, X, Z, k, t, step=step)
-    if on:                                                  # the coloured light falls over the dancers too
+        people.append((Z, who, X, k, extra))
+    for Z, who, X, k, extra in sorted(people, key=lambda q: -q[0]):
+        if who == 'jenrick':
+            jenrick_layer(img, cam3, X, Z, k, t)
+        else:
+            x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra)
+            if who == 'farage' and t >= FARAGE_AT:
+                spit_at(img, x, y - 150 * s + 70 * s, s, t)
+    crash_desk(img, cam3, t, top_only=True)
+    if jen and jen[1] < 3.0:                                 # at the desk: his body over its top, legs behind it
+        jenrick_layer(img, cam3, *jen, t, legs=False)
+    crash_desk(img, cam3, t, top_only=False)
+    for i, it in enumerate(ITEMS):
+        if t >= CRASH + it[4]:
+            draw_item(img, cam3, i, t)
+    phone_guy(img, cam3, t)
+    if on:                                                  # the coloured light falls over everyone too
         tint = Image.new('RGBA', img.size, wash_colour(song_clock(t)) + (22,))
         img.alpha_composite(tint)
         if (song_clock(t) % BEAT) / BEAT < 0.12:
@@ -769,20 +1055,32 @@ def door_frame(t):
     k = img.size[0] / 1080
     d = ImageDraw.Draw(img)
     poly(d, [(0, 0), (1080, 0), (1080, 1920), (0, 1920)], WALL, k)
-    poly(d, [(250, 240), (830, 240), (830, 1920), (250, 1920)], (236, 236, 232), k)           # the frame
-    poly(d, [(290, 280), (790, 280), (790, 1920), (290, 1920)], (150, 156, 164), k)            # the corridor
-    poly(d, [(290, 1500), (790, 1500), (790, 1920), (290, 1920)], (120, 124, 130), k)
-    poly(d, [(560, 520), (760, 520), (760, 1500), (560, 1500)], (190, 196, 200), k)             # the lift doors
-    d.line([(660 * k, 520 * k), (660 * k, 1500 * k)], fill=INK, width=max(1, int(2 * k)))
-    poly(d, [(480, 120), (600, 120), (600, 180), (480, 180)], (40, 160, 80), k)                 # EXIT sign
+    # a wide double doorway (Sam, 18 Oct: wider, and seen from a little further back)
+    poly(d, [(110, 420), (970, 420), (970, 1920), (110, 1920)], (236, 236, 232), k)            # the frame
+    poly(d, [(150, 460), (930, 460), (930, 1920), (150, 1920)], (150, 156, 164), k)            # the corridor
+    poly(d, [(150, 1560), (930, 1560), (930, 1920), (150, 1920)], (120, 124, 130), k)
+    # one proper lift (Sam, 18 Oct): a steel surround, two leaves meeting in the middle, call button, floor display
+    poly(d, [(560, 700), (880, 700), (880, 1560), (560, 1560)], (120, 124, 132), k)
+    poly(d, [(585, 730), (855, 730), (855, 1560), (585, 1560)], (196, 202, 208), k)
+    d.line([(720 * k, 730 * k), (720 * k, 1560 * k)], fill=INK, width=max(1, int(3 * k)))
+    poly(d, [(660, 640), (780, 640), (780, 684), (660, 684)], (30, 30, 34), k)
+    f0 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(30 * k))
+    d.text((720 * k, 662 * k), '4', font=f0, fill=(240, 120, 60), anchor='mm')
+    poly(d, [(896, 1080), (924, 1080), (924, 1140), (896, 1140)], (150, 154, 160), k)
+    d.ellipse([903 * k, 1098 * k, 917 * k, 1112 * k], fill=(240, 200, 90), outline=INK)
+    for x0 in (150, 930):                                                                        # the doors, open
+        poly(d, [(x0, 460), (x0 + (60 if x0 < 500 else -60), 500), (x0 + (60 if x0 < 500 else -60), 1900), (x0, 1920)],
+             (214, 216, 214), k)
+    poly(d, [(480, 300), (600, 300), (600, 360), (480, 360)], (40, 160, 80), k)                 # EXIT sign
     f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(34 * k))
-    d.text((540 * k, 150 * k), 'EXIT', font=f, fill=(250, 250, 250), anchor='mm')
+    d.text((540 * k, 330 * k), 'EXIT', font=f, fill=(250, 250, 250), anchor='mm')
+    poly(d, [(40, 900), (80, 900), (80, 960), (40, 960)], (246, 246, 244), k)                   # light switch
     sp = dict(C.JOURNALIST, mood='wtf', look=-0.1)
     u = t - DOOR[0]
     sp['blink'] = any(b <= t < b + 0.42 for b in DOOR_BLINKS)                                 # slow blinks
     sp['gape'] = 0.8 + 0.2 * ease(u / 0.6)
     j = V.standing(sp)
-    V.person(img, B.Cam(1.0, 540, 960), 540, 640, 1.18, sp, t, 0, j)
+    V.person(img, B.Cam(1.0, 540, 960), 540, 820, 0.96, sp, t, 0, j)
     m = song_clock(t)                                       # the pop lights spill over her from the room
     img.alpha_composite(Image.new('RGBA', img.size, wash_colour(m) + (40,)))
     if (m % BEAT) / BEAT < 0.12:
@@ -798,54 +1096,12 @@ def farage_shout_state(t):
     m = mouths.at(FAR_TRACK, t)
     talking_now = m != 'rest'
     jab = max((math.exp(-((t - (j + FAR_OFF)) / 0.12) ** 2) for j in JAB), default=0.0)
-    k = P((-260 - 40 * jab, 40 - 30 * jab, 200 + 40 * jab), (176, 420, 60), 'down', 'back', mood='fury', look=-1.0,
-          head=-8, lean=4 + 4 * jab)
+    k = P((-280 - 40 * jab, 120 - 30 * jab, 220 + 40 * jab), (176, 420, 60), 'down', 'back', mood='fury', look=-1.0,
+          head=-8, lean=4 + 4 * jab, chin=0.15)
     extra = dict(mood='fury', strength=1.4, red=1.0, look=-1.0, turn=-0.3)
     if talking_now:
         extra['mouth'] = 'v:' + m
     return k, extra
-
-
-def spit(img, cam, x, y, s, t):
-    """Spit flying from his mouth on the loudest words (Claude's addition): small drops thrown towards Jenrick,
-    falling under gravity, gone after half a second."""
-    k = img.size[0] / 1080
-    d = ImageDraw.Draw(img)
-    for j in JAB:
-        u = t - (j + FAR_OFF)
-        if 0 <= u < 0.5:
-            rng = np.random.default_rng(int(j * 100))
-            for _ in range(7):
-                vx, vy = -rng.uniform(260, 520), -rng.uniform(40, 200)
-                px = x + (-10 + vx * u) * s * cam.z
-                py = y + (-80 + vy * u + 900 * u * u) * s * cam.z
-                r = rng.uniform(2.0, 4.0) * s * cam.z * 1.6
-                d.ellipse([(px - r) * k, (py - r) * k, (px + r) * k, (py + r) * k], fill=(236, 244, 250), outline=INK)
-
-
-def farage_close_frame(t):
-    """Shot 5: close on Farage, screaming at Jenrick (off to our left); office lights back to normal."""
-    cam3 = DANCE_CAM
-    img = room(cam3)
-    X, Z = SPOT['farage']
-    k, extra = farage_shout_state(t)
-    big = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    big.alpha_composite(img)
-    x, y, s = cam3.person(X, Z)
-    z = 2.3
-    cam = B.Cam(z, x, y - 120 * s)
-    bg = img.transform(img.size, Image.EXTENT, ((x - 540 / z) * B.SS, (y - 120 * s - 960 / z) * B.SS,
-                                                (x + 540 / z) * B.SS, (y - 120 * s + 960 / z) * B.SS), Image.BILINEAR)
-    sp = dict(C.FARAGE)
-    j = build(sp, k)
-    face_of(sp, k)
-    sp.update(extra)
-    sp['blink'] = F.blinking(t, BLINKS['farage'])
-    V.person(bg, cam, x, y, s, sp, t, 0, j)
-    spit(bg, cam, 540 + 0, 960 + (y - (y - 120 * s)) * 0 - (120 * s - 0) * z * 0, s, t) if False else None
-    hx, hy = cam.P(x, y - 150 * s + 60 * s)
-    spit_at(bg, hx / B.SS, hy / B.SS, s * z, t)
-    return bg
 
 
 def spit_at(img, mx, my, sc, t):
@@ -863,33 +1119,6 @@ def spit_at(img, mx, my, sc, t):
                 d.ellipse([(px - r) * k, (py - r) * k, (px + r) * k, (py + r) * k], fill=(236, 244, 250), outline=INK)
 
 
-REACT = {'jenrick': ((-1.3, 3.1), P((-150, 440, 90), (150, 440, 90), 'back', 'back', lean=8, dip=10, mood='scared',
-                                         chin=0.3, look=1.0)),
-         'tice': ((-1.3, 4.4), P((-190, 420, 50), (190, 420, 50), 'back', 'back', lean=-5, mood='alarm', look=0.7)),
-         'braverman': ((0.75, 3.7), P((-176, 420, 60), (-30, 120, 120), 'back', 'down', mood='upset', look=-0.9))}
-
-
-def wide_frame(t):
-    """Shot 6: everyone, wider: Farage finishing his rant at Jenrick; Jenrick scared and miserable at the edge of
-    the floor; Tice mildly alarmed, leaning back; Braverman shocked and upset, hand to her chest."""
-    cam3 = WIDE_CAM
-    img = room(cam3)
-    people = []
-    for who in DANCERS:
-        if who == 'farage':
-            k, extra = farage_shout_state(t)
-            (X, Z) = SPOT['farage']
-        else:
-            (X, Z), k = REACT[who]
-            extra = {}
-        people.append((Z, who, X, k, extra))
-    for Z, who, X, k, extra in sorted(people, key=lambda q: -q[0]):
-        x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra)
-        if who == 'farage':
-            spit_at(img, x, y - 150 * s + 60 * s, s, t)
-    return img
-
-
 # --------------------------------------------------------------------------------------------- the film
 def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
@@ -903,11 +1132,7 @@ def picture(t):
         return lapel_frame(t)
     if s in ('dance', 'dance2'):
         return dance_frame(t)
-    if s == 'door':
-        return door_frame(t)
-    if s == 'farage':
-        return farage_close_frame(t)
-    return wide_frame(t)
+    return door_frame(t)
 
 
 def overlay(img, t):
