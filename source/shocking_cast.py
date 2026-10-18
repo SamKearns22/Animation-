@@ -470,13 +470,29 @@ def _lock(hx, hy, hw, hh, sgn, length, wave, u0=0.0):
     return curve(head + i + tip[::-1] + o[::-1], 3)
 
 
+def ocurve(pts, n=3):
+    """An OPEN Catmull-Rom through the points (ed.curve closes its loop, which would draw a line straight across the
+    face from one end of a hairline to the other)."""
+    p = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(p) - 2):
+        p0, p1, p2, p3 = (np.asarray(q, float) for q in p[i - 1:i + 3])
+        for u in np.linspace(0, 1, n, endpoint=False):
+            out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
+                                    + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
+    out.append(tuple(p[-2]))
+    return out
+
+
 def _crown(hx, hy, hw, hh, part, top=26):
     """The crown, its lower edge the hairline across the forehead from the parting."""
     outer = oval(hx, hy - 8, hw + 22, hh + top, 22, math.pi * 0.97, math.pi * 2.03)
-    line = [(hx + hw + 16, hy + 30), (hx + hw * 0.92, hy - hh * 0.3), (hx + hw * 0.62, hy - hh * 0.72),
+    line = [(hx + hw + 14, hy - hh * 0.1), (hx + hw * 0.94, hy - hh * 0.34), (hx + hw * 0.62, hy - hh * 0.72),
             (part + hw * 0.22, hy - hh * 0.88), (part, hy - hh * 1.0), (part - hw * 0.22, hy - hh * 0.86),
-            (hx - hw * 0.68, hy - hh * 0.64), (hx - hw * 0.94, hy - hh * 0.2), (hx - hw - 16, hy + 30)]
-    return curve(outer + line, 3), curve(line, 3)[7:-7]
+            (hx - hw * 0.62, hy - hh * 0.68), (hx - hw * 0.94, hy - hh * 0.34), (hx - hw - 14, hy - hh * 0.1)]
+    # (Sam, 18 Oct: the hair wedges beside the eyes were distracting: the hairline now meets the face's edge above
+    # the brows, the same on both sides, and is stroked along its whole length)
+    return curve(outer + line, 3), ocurve(line, 4)
 
 
 def long_hair_front(p, hx, hy, hw, hh, part, col, dark, length=270, ends=None, wave=8):
@@ -610,9 +626,9 @@ def journalist_head(img, p, sp, t, hx, hy):
     else:
         brows(p, sp, fx, fy - 29, 25, (176, 140, 90), 4.5, 0, -3, 25)
     # a slightly prominent nose: longer, a defined bridge and a rounded tip
-    p.line([(fx - 3, fy - 4), (fx - 8, fy + 28)], INK, 1.8)
-    p.line(curve([(fx - 10, fy + 26), (fx - 6, fy + 36), (fx + 4, fy + 38), (fx + 12, fy + 33), (fx + 8, fy + 27)], 3), INK, 1.8)
-    p.line([(fx - 13, fy + 32), (fx - 9, fy + 35)], INK, 1.3)
+    p.line([(fx - 3, fy - 4), (fx - 8, fy + 28)], INK, 2.2)
+    p.line(curve([(fx - 10, fy + 26), (fx - 6, fy + 36), (fx + 4, fy + 38), (fx + 12, fy + 33), (fx + 8, fy + 27)], 3), INK, 2.2)
+    p.line([(fx - 13, fy + 32), (fx - 9, fy + 35)], INK, 2.0)
     my = fy + 57
     if shock and not talking(sp):                       # hanging open: a dark shape, the top edge drooping
         k = sp.get('gape', 1.0)
@@ -626,44 +642,51 @@ def journalist_head(img, p, sp, t, hx, hy):
 
 
 def journalist_torso(img, p, sp, t):
-    """A white buttoned blouse (collar, a placket of buttons); the Reform lanyard round her neck with its card."""
-    p.poly([(-sp['shoulders'] + 8, 0), (sp['shoulders'] - 8, 0), (sp['shoulders'], 50), (sp['shoulders'] - 6, 420),
-            (-sp['shoulders'] + 6, 420), (-sp['shoulders'], 50)], (250, 250, 248), None)
+    """A white buttoned blouse (collar, a placket of buttons); the Reform lanyard round her neck with its card.
+    One line weight throughout (Sam, 18 Oct): every outline 2.4, inner details 2.0, nothing without its outline."""
+    sw, bot = sp['shoulders'], sp.get('bottom', 420)
+    inset = [(-31, 2), (-(sw * 0.8 - 9), 18), (-(sw - 9), 56), (-(sw - 3), 200), (-(sw - 15), bot - 6),
+             (sw - 15, bot - 6), (sw - 3, 200), (sw - 9, 56), (sw * 0.8 - 9, 18), (31, 2)]
+    p.poly(inset, (250, 250, 248), None)                 # inside the body's own outline only: hides the library's chest panel
     for sgn in (-1, 1):                                  # the collar points
-        p.poly([(sgn * 6, 20), (sgn * 40, -6), (sgn * 54, 4), (sgn * 30, 44)], (252, 252, 250), INK, 1.8)
-    p.line([(0, 20), (0, 420)], (214, 214, 214), 1.6)
+        p.poly([(sgn * 6, 20), (sgn * 40, -6), (sgn * 54, 4), (sgn * 30, 44)], (252, 252, 250), INK, 2.4)
+    p.line([(0, 20), (0, bot - 8)], (200, 200, 206), 2.0)
     for k in range(5):
-        p.ell(6, 60 + 70 * k, 3.5, 3.5, (226, 226, 226), INK, 1.0)
-    for sgn in (-1, 1):                                  # the lanyard
-        p.line([(sgn * 30, -60), (sgn * 26, 40), (sgn * 6, 170)], REFORM, 6)
-    p.poly([(-34, 170), (34, 170), (34, 250), (-34, 250)], (250, 250, 250), INK, 1.6)    # the pass
-    p.poly([(-34, 170), (34, 170), (34, 194), (-34, 194)], REFORM, INK, 1.4)
-    p.poly([(-24, 204), (-2, 204), (-2, 236), (-24, 236)], (200, 200, 206), None)
+        p.ell(6, 60 + 70 * k, 3.5, 3.5, (236, 236, 236), INK, 1.4)
+    for sgn in (-1, 1):                                  # the lanyard: an outlined band
+        pts = [(sgn * 30, -60), (sgn * 26, 40), (sgn * 6, 170)]
+        p.line(pts, INK, 10)
+        p.line(pts, REFORM, 6)
+    p.poly([(-34, 170), (34, 170), (34, 250), (-34, 250)], (250, 250, 250), INK, 2.4)    # the pass
+    p.poly([(-34, 170), (34, 170), (34, 194), (-34, 194)], REFORM, INK, 2.4)
+    p.poly([(-24, 204), (-2, 204), (-2, 236), (-24, 236)], (200, 200, 206), INK, 1.6)
     for k in range(3):
         p.line([(4, 208 + 10 * k), (26 - 6 * k, 208 + 10 * k)], (150, 150, 156), 2.0)
     skirt(p, sp, top=392)                                # the blouse tucked into the skirt at the waist
-    handbag(p, sp)
 
 
 def handbag(p, sp, side=-1):
-    """A small handbag on a thin black strap over her shoulder, hanging at her hip (Sam, 18 Oct: not held)."""
+    """A small handbag on a thin black strap over her shoulder, hanging at her hip (Sam, 18 Oct: not held). Drawn as
+    a prop, after the arms, so the strap shows over the sleeve."""
     sw = sp['shoulders']
-    x, y = side * (sw + 6), 470
-    p.line([(side * (sw - 30), -2), (side * (sw - 6), 120), (x - side * 20, y - 6)], (20, 18, 20), 2.6)
-    p.poly(curve([(x - 40, y), (x + 40, y), (x + 46, y + 64), (x - 46, y + 64)], 2), (36, 34, 48), INK, 2.2)
-    p.line([(x - 40, y + 16), (x + 40, y + 16)], (70, 66, 84), 1.6)
-    p.ell(x, y + 18, 5, 4, (200, 176, 110), INK, 1.0)
+    x, y = side * (sw + 2), 468
+    p.line([(side * (sw - 36), -6), (side * (sw - 12), 120), (side * (sw + 2), 300), (x, y - 4)], (20, 18, 20), 2.6)
+    p.poly([(x - 40, y), (x + 40, y), (x + 46, y + 64), (x - 46, y + 64)], (36, 34, 48), INK, 2.4)
+    p.line([(x - 40, y + 16), (x + 40, y + 16)], (80, 76, 94), 2.0)
+    p.ell(x, y + 18, 5, 4, (200, 176, 110), INK, 1.4)
 
 
 # --------------------------------------------------------------------------------------------- skirts
 def skirt(p, sp, top=400):
-    """A straight skirt from the waist to the knee (Sam, 18 Oct: start higher, end higher), front view."""
+    """A straight skirt from the waist to the knee (Sam, 18 Oct), front view: straight sides, a clean outline. The
+    journalist's is as wide as her body at the waist, so her blouse never pokes out at the hips."""
     c = sp.get('skirt')
-    w = sp['shoulders'] - 26
-    p.poly(curve([(-w, top), (w, top), (w + 14, 690), (-w - 14, 690)], 2), c, INK, 2.4)
-    p.line([(-w - 6, 640), (-w * 0.2, 690)], dk(c, 0.8), 1.4)
+    wt = sp['shoulders'] - 2 if sp.get('who') == 'journalist' else sp['shoulders'] - 26
+    wh = wt - 8
+    p.poly([(-wt, top), (wt, top), (wh, 745), (-wh, 745)], c, INK, 2.4)
+    p.line([(-wt * 0.45, top + 6), (-wh * 0.5, 740)], dk(c, 0.82), 2.0)        # one soft fold
     if sp.get('who') == 'journalist':                    # the waistband over the tucked-in blouse
-        p.line([(-w, top + 8), (w, top + 8)], dk(c, 0.75), 1.6)
+        p.line([(-wt, top + 10), (wt, top + 10)], dk(c, 0.75), 2.0)
 
 
 # --------------------------------------------------------------------------------------------- the hooks

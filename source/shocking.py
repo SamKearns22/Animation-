@@ -44,9 +44,10 @@ SLAM = 7.0                       # the slam cut into the dance; the song starts 
 BEAT = 0.539                     # the song's beat (111 bpm, measured)
 SONG_SHIFT = 3.037               # the routine's first planned beat, now that the song starts on "'Cos I'm so messy"
 DOOR = (13.0, 15.0)              # the cutaway to the journalist (Sam: hold the first dance two seconds longer)
-TRIP = 18.0                      # three seconds into the second dance shot, Jenrick trips over his own feet
-CRASH = TRIP + 1.05              # ... and crashes into the desk at the front left (Sam, 18 Oct)
-SWIPE = TRIP + 1.75              # Farage's swipe lands: the music and the strobes stop dead
+TRIP = 17.0                      # Jenrick's foot catches: a two-second trip over his own feet (Sam, 18 Oct: one more second)
+TRIP_LEN = 2.05                  # from the catch to the crash
+CRASH = TRIP + TRIP_LEN          # ... he crashes into the desk at the front left
+SWIPE = CRASH + 0.7              # Farage's swipe lands: the music and the strobes stop dead
 FARAGE_AT = SWIPE + 0.4          # film time where Farage's first word starts
 LINES = [
     dict(n=1, who='narrator', audio='shocking-1', start=2.8, at=0.4,
@@ -64,9 +65,9 @@ SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[
 # X across (+ right), Z away from the camera (the camera brought forward towards them: Sam, 18 Oct).
 SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.35), 'tice': (-1.18, 4.0)}
 DANCERS = ('tice', 'jenrick', 'braverman', 'farage')     # far to near (drawing order)
-CRASH_DESK = (-2.1, -0.62, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
+CRASH_DESK = (-1.75, -0.27, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
 # (its right end kept left of where he dances, so his feet, and the trip over them, stay in view: Sam, 18 Oct)
-JENRICK_END = (-0.8, 2.62)                               # where he hits it (its back edge, at his hips)
+JENRICK_END = (-0.35, 2.62)                               # where he hits it (its back edge, at his hips)
 # ====================================================================================================================
 
 
@@ -90,7 +91,7 @@ class Cam3:
         return x, y - SOLE * s, s
 
 
-DANCE_CAM = Cam3(1400.0, horizon=820.0)
+DANCE_CAM = Cam3(1400.0, horizon=820.0, cx=610.0)         # looking a little to the left, so Jenrick's whole fall stays in frame
 WIDE_CAM = Cam3(1000.0, horizon=820.0)        # the reaction shot: a wider lens, so Jenrick is in it after his stumble
 
 
@@ -109,10 +110,10 @@ def lerp(a, b, u):
 # A key pose: hand targets for the screen-left (L) and screen-right (R) hands in the body's frame (x across, y down
 # from the neck, z towards us), the elbow direction, plus sway (the whole upper body across, feet planted), dip
 # (knees bend), lean (degrees forward), head tilt (head across), chin (head up -, down +), and the face.
-def P(L, R, poleL='out', poleR='out', sway=0.0, dip=0.0, lean=0.0, head=0.0, chin=0.0, mood='grin', look=0.0):
+def P(L, R, poleL='out', poleR='out', sway=0.0, dip=0.0, lean=0.0, head=0.0, chin=0.0, mood='grin', look=0.0, roll=0.0):
     pv = lambda q: V.POLES[q] if isinstance(q, str) else q
     return dict(L=L, R=R, poleL=pv(poleL), poleR=pv(poleR), sway=sway, dip=dip, lean=lean, head=head, chin=chin,
-                mood=mood, look=look)
+                mood=mood, look=look, roll=roll)
 
 
 LOOSE_L, LOOSE_R = (-176, 400, 70), (176, 400, 70)
@@ -262,10 +263,10 @@ SWIPED = P((-176, 420, 60), (330, 110, 60), 'back', 'out', mood='contempt', look
 
 
 def farage_dance_state(t):
-    """Farage dances until he sees the trip (TRIP + 0.35 s): his head snaps round to our left, contempt; then the
+    """Farage dances until he sees the trip (TRIP + 0.9 s): his head snaps round to our left, contempt; then the
     swipe: wind up across his chest, and the hand cuts out through the air, landing on SWIPE."""
     m = t - SLAM
-    see = TRIP + 0.35
+    see = TRIP + 0.9
     if t < see:
         return dance_pose(m)
     if t < SWIPE - 0.3:
@@ -312,43 +313,54 @@ BLINKS = {w: F.blinks(i + 3, 0.0, DUR) for i, w in enumerate(DANCERS)}
 
 
 def trip_state(t):
-    """Jenrick's trip (Sam, 18 Oct: over his own feet, clearly; the whole journey and the impact in shot): mid-move
-    his right foot hooks behind his left ankle (0-0.3 s), he pitches forward with his arms flung up (0.3-0.55),
-    stumbles three quick steps towards us and to the left (0.55-1.05) and crashes into the desk at the front left,
-    folding over it (1.05); he lies there a beat, then pushes himself up, hunched and scared, looking at Farage.
-    Returns (X, Z, key pose)."""
+    """Jenrick's trip (Sam, 18 Oct: over his own feet, easy to see, falling forward off balance; two seconds):
+    0-0.25 s mid-dance his left foot hooks over the other leg and the grin drops; 0.25-0.6 he lurches, feet tangled,
+    still in place, tipping forward, arms flung; 0.6-2.05 he falls forward, leaning further and further (up to 33
+    degrees) off balance, arms windmilling, taking stumbling steps towards us and to the left, faster and faster;
+    2.05 he hits the desk and folds over it; he lies there a beat, then pushes himself up, hunched and scared,
+    looking at Farage. Returns (X, Z, key pose)."""
     u = t - TRIP
     X0, Z0 = SPOT['jenrick']
     X1, Z1 = JENRICK_END
     if u < 0:
         return X0, Z0, None
     base = dance_pose(TRIP - SLAM)
-    hook = dict(base, feet={'L': (-58, V.ANKLE_Y, 10.0), 'R': (-120, V.ANKLE_Y - 34, -40.0)}, lean=6, mood='scared')
-    catch = dict(P((-150, 300, 140), (150, 300, 140), 'down', 'down', lean=16, dip=12, mood='scared', head=-6),
-                 feet={'L': (-50, V.ANKLE_Y, 30.0), 'R': (-110, V.ANKLE_Y - 50, -70.0)})
-    flail = P((-320, -60, 60), (300, -90, 60), 'out', 'out', lean=18, dip=8, mood='scared', head=-10)
-    flail2 = P((-280, 40, 90), (320, -120, 40), 'out', 'out', lean=18, dip=14, mood='scared', head=10)
-    slam = P((-190, 430, 210), (190, 430, 210), 'out', 'out', lean=18, dip=4, mood='scared', chin=0.35)
+    tangle = {'L': (30, V.ANKLE_Y - 34, 70.0), 'R': (62, V.ANKLE_Y, 6.0)}      # left foot over the right leg, lifted
+    tangle2 = {'L': (46, V.ANKLE_Y - 46, 90.0), 'R': (70, V.ANKLE_Y, 6.0)}
+    hook = dict(base, feet=tangle, lean=10, dip=10, mood='scared', roll=4)
+    lurch = dict(P((-250, 120, 120), (250, 120, 120), 'out', 'out', lean=20, dip=14, mood='scared', head=-8, chin=0.2, roll=7),
+                 feet=tangle2)
+    tip = P((-250, -40, 80), (310, -70, 80), 'out', 'out', lean=27, dip=12, mood='scared', head=-10, chin=0.3, roll=8)
+    fall1 = P((-220, 40, 100), (320, -110, 50), 'out', 'out', lean=33, dip=16, mood='scared', head=10, chin=0.4, roll=9)
+    fall2 = P((-250, -60, 70), (290, 20, 110), 'out', 'out', lean=33, dip=18, mood='scared', head=-10, chin=0.4, roll=7)
+    fall3 = P((-215, 30, 110), (330, -90, 60), 'out', 'out', lean=31, dip=14, mood='scared', head=10, chin=0.4, roll=9)
+    slam = P((-190, 430, 210), (190, 430, 210), 'out', 'out', lean=22, dip=4, mood='scared', chin=0.35, roll=3)
     slump = P((-200, 440, 220), (200, 440, 220), 'out', 'out', lean=16, dip=6, mood='scared', chin=0.4)
     up = P((-190, 420, 180), (190, 420, 180), 'out', 'out', lean=10, dip=6, mood='scared', chin=0.2, look=1.0)
     hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=10, dip=12, mood='scared', chin=0.3, look=1.0)
-    keys = [(0.0, base), (0.18, hook), (0.32, catch), (0.45, flail), (0.62, flail2), (0.8, flail), (0.95, flail2),
-            (1.05, slam), (1.25, slump), (1.75, slump), (2.2, up), (2.6, hunch)]
+    T = TRIP_LEN
+    keys = [(0.0, base), (0.22, hook), (0.6, lurch), (0.95, tip), (1.3, fall1), (1.6, fall2), (1.85, fall3),
+            (T, slam), (T + 0.2, slump), (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
     k = dict(hunch)
     for (a, ka), (b2, kb) in zip(keys, keys[1:]):
         if u < b2:
             w = (u - a) / (b2 - a)
-            k = blend_keys(ka, kb, w * w * w if b2 == 1.05 else ease(w))   # fast into the impact
-            if 'feet' in ka and u < 0.32:
-                k['feet'] = ka['feet'] if w < 0.5 else kb.get('feet', ka['feet'])
+            k = blend_keys(ka, kb, w * w * w if b2 == T else ease(w))     # fast into the impact
+            if 'feet' in ka and 'feet' in kb:                             # the tangled feet slide from one hold to the next
+                k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(ka['feet'][sd], kb['feet'][sd])) for sd in 'LR'}
+            elif 'feet' in ka and u < 0.6:
+                k['feet'] = ka['feet']
+            elif 'feet' in kb and u < 0.6:
+                k['feet'] = kb['feet']
+            else:
+                k.pop('feet', None)
             break
-    w = 0.0 if u < 0.38 else min(1.0, (u - 0.38) / 0.67)
-    w = w * w                                              # accelerating, out of control
+    w = 0.0 if u < 0.6 else min(1.0, (u - 0.6) / (T - 0.6)) ** 1.7        # in place until he tips, then faster and faster
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
-    if 0.38 <= u < 1.05:                                   # quick stumbling steps on the way
-        k['step'] = (True, int((u - 0.38) / 0.17) % 2)
-    if u >= 1.05:                                          # the jolt of the impact
-        k['dip'] = k['dip'] + 10 * math.exp(-((u - 1.05) / 0.06) ** 2)
+    if 0.6 <= u < T:                                                       # quick stumbling steps on the way
+        k['step'] = (True, int((u - 0.6) / 0.17) % 2)
+    if u >= T:                                                             # the jolt of the impact
+        k['dip'] = k['dip'] + 10 * math.exp(-((u - T) / 0.06) ** 2)
     return X, Z, k
 
 
@@ -363,11 +375,13 @@ ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, towa
     ('pen', -1.15, 2.0, (0.6, 2.2, 1.3), 0.03), ('pen', -1.2, 2.05, (1.1, 1.6, 0.9), 0.04),
     ('pen', -1.17, 2.02, (-0.3, 2.0, 1.5), 0.05)]
 DESK_TOP = 0.74
+DESK_DX = 0.2                    # the desk and its things moved right so he stays in frame all the way down (Sam, 18 Oct)
 
 
 def item_at(i, t):
     """Where item i is at time t: (X, Y, Z, angle, landed)."""
     kind, X, Z, (vx, vy, vz), delay = ITEMS[i]
+    X += DESK_DX
     u = t - CRASH - delay
     if u <= 0:
         return X, DESK_TOP, Z, 0.0, False
@@ -424,7 +438,7 @@ COFFEE_C = (92, 54, 28)
 def coffee_at(i, t):
     """A drop of coffee thrown from the mug: (X, Y, Z, landed)."""
     vx, vy, vz, dl = COFFEE[i]
-    X0, Z0 = ITEMS[0][1], ITEMS[0][2]
+    X0, Z0 = ITEMS[0][1] + DESK_DX, ITEMS[0][2]
     u = t - CRASH - dl
     if u <= 0:
         return None
@@ -466,7 +480,7 @@ def crash_desk(img, cam3, t, top_only=None):
     if top_only in (None, True):
         poly(d, [P3(x0, z0, DESK_TOP), P3(x1 + shake, z0, DESK_TOP), P3(x1 + shake, z1, DESK_TOP), P3(x0, z1, DESK_TOP)],
              (232, 226, 214), k)                                                               # a pale oak top
-        mx = -1.45
+        mx = -1.0
         tip = 0.0 if t < CRASH else min(0.35, (t - CRASH) * 2.0)          # the monitor rocks back
         poly(d, [P3(mx - 0.3, z1 - 0.1, DESK_TOP + 0.08), P3(mx + 0.3, z1 - 0.1, DESK_TOP + 0.08),
                  P3(mx + 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1), P3(mx - 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1)],
@@ -507,7 +521,7 @@ WORKERS = [
     (worker(B.PALE, 'side', (170, 166, 162), (50, 54, 66), 'suit', (50, 54, 66), tie=(150, 120, 40), name='w5'), 1.75, 10.8, -135),
 ]
 PHONE_GUY = worker(B.PALE, 'side', (110, 70, 46), (52, 60, 80), 'suit', (52, 60, 80), tie=(90, 30, 50), name='phone')
-PHONE_AT = (0.84, 2.1, -135)      # front right, half in shot, turned diagonally towards Farage, filming (Sam)
+PHONE_AT = (0.66, 2.1, -135)      # front right, half in shot, turned diagonally towards Farage, filming (Sam)
 
 
 def seated_worker(img, cam3, sp, X, Z, yaw, t):
@@ -1085,15 +1099,24 @@ def room(cam3, lit=True):
 
 def jenrick_layer(img, cam3, X, Z, k, t, legs=True):
     """Jenrick drawn whole, or without his legs (after the desk he crashed into, so his body lies over its top while
-    his legs stay behind it)."""
-    if legs:
-        return make_person(img, cam3, 'jenrick', X, Z, k, t, step=k.get('step'))
+    his legs stay behind it). When he is falling (k['roll']) he is drawn on a layer of his own and tipped sideways
+    about his feet, so the trip reads from the front (Sam, 18 Oct: it looked as if he just ran forward)."""
+    roll = k.get('roll', 0.0)
+    target = img
+    if abs(roll) > 0.5:
+        target = Image.new('RGBA', img.size, (0, 0, 0, 0))
     keep = V.leg
-    V.leg = lambda *a, **kw: None                          # (restored to the shaped leg below)
+    if not legs:
+        V.leg = lambda *a, **kw: None                      # (restored below)
     try:
-        return make_person(img, cam3, 'jenrick', X, Z, k, t)
+        r = make_person(target, cam3, 'jenrick', X, Z, k, t, step=k.get('step') if legs else None)
     finally:
         V.leg = keep
+    if target is not img:
+        fx, fy = cam3.pt(X, Z)
+        k2 = img.size[0] / 1080
+        img.alpha_composite(target.rotate(roll, resample=Image.BICUBIC, center=(fx * k2, fy * k2)))
+    return r
 
 
 def dance_frame(t, cam3=DANCE_CAM):
@@ -1187,6 +1210,7 @@ def door_frame(t):
     sp['blink'] = any(b <= t < b + 0.42 for b in DOOR_BLINKS)                                 # slow blinks
     sp['gape'] = 0.8 + 0.2 * ease(u / 0.6)
     j = V.standing(sp)
+    j['props'] = [lambda p, j2: C.handbag(p, sp)]            # the bag on its strap, over the sleeve
     V.person(img, B.Cam(1.0, 540, 960), 540, 820, 0.96, sp, t, 0, j)
     m = song_clock(t)                                       # the pop lights spill over her from the room
     img.alpha_composite(Image.new('RGBA', img.size, wash_colour(m) + (40,)))
@@ -1302,6 +1326,8 @@ def cast_sheet(out):
         def d(im, cam, who=who):
             sp = dict(C.CAST[who], mood='neutral')
             j = V.standing(sp)
+            if who == 'journalist':
+                j['props'] = [lambda p, j2, sp=sp: C.handbag(p, sp)]
             V.person(im, cam, 540, 640, 0.9, sp, 0.0, 0, j)
         sheet.paste(panel(d), (W1 * i, 0))
         label(sheet, W1 * i + 12, 10, who.title())
