@@ -104,6 +104,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Plan big moves in the floor plan first: a fallen body is long; place action seen in two shots with
   `filmkit.visible_spots`.
 - Anything that changes stays changed (a smear, a broken window): list it and probe it (`filmkit.probe_marks`).
+- **Anything on the floor (spills, stains, dropped things) is drawn as part of the floor, before the people** (Sam,
+  18 Oct: coffee floated over Farage's leg); check where each piece lands against everyone's feet.
 - Anything thrown or dropped falls under gravity, scatters unevenly (each piece its own size and speed), lands, and
   stays where it lands.
 - The title never covers anyone (checked). It sits no higher than 310 px (TikTok's buttons); one line sits highest
