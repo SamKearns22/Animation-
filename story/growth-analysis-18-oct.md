@@ -53,3 +53,8 @@ Targets to test by mid-November: comments 5+ per 1,000 views, followers 3+ per 1
 TikTok only. No cross-posting to X, Reels or Shorts for now (no time; X in particular is a lot of work). Revisit in
 mid-November. What stays on the list: names in the Hook Text, speed on topical stories, an earlier first laugh, a weekly
 24-hour check.
+
+## Profile snapshot (Sam, 18 Oct 10:59)
+107 followers (about 30 of them from the DLC promotion: junk, so about 77 real), 46 following, 2,602 likes. Bio: "Animated
+satire and absurdist comedy. Daily unless distracted. no comment." Pinned: Roadster 5,503, Mossad 7,705, Bingo Bingo 17.9K.
+Traitors 833 views about two hours after posting. Baseline for mid-November (goal 200-300 followers): about 77 real.
