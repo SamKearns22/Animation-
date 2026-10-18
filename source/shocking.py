@@ -623,28 +623,50 @@ def load_song():
 
 
 CLIP_A = os.path.join(DATA, 'clip-a.mov')                 # Sam's screen recordings of the trend video (not on GitHub)
-CLIP_B = os.path.join(DATA, 'clip-b.mov')
-CLIP_C = os.path.join(DATA, 'clip-c.mov')                 # the beginning, with the sound on: "'Cos I'm so messy"
-# The song bed: clip C from the song's first sound (0.45 s, "'Cos I'm so messy": Sam, 18 Oct) to 5.55 s; clip A
-# carries on exactly (measured: A = C - 0.73 s) to 5.447 s, on a beat; then clip B from 0.245 s (on the beat).
-SPLICE = ((CLIP_C, 0.45, 5.55), (CLIP_A, 4.82, 5.447), (CLIP_B, 0.245, 8.2))
+CLIP_B = os.path.join(DATA, 'clip-b.mov')                 # (the poorer-sounding first source: now only a back-up)
+CLIP_C = os.path.join(DATA, 'clip-c.mov')                 # the beginning, from the better-sounding second source
+CLIP_D = os.path.join(DATA, 'clip-d.mov')                 # the back half, from that same better source (Sam, 18 Oct)
+# The song bed, one continuous song (measured: A = C - 0.73 s; B = D + 0.12 s; clip D drops out at 7.8-8.4 s, so it
+# is used only to 7.7 s): clip C from its first sound (0.45 s) to 5.60 s; a short bridge from clip A over the part
+# clip C stops short of (C 5.60-6.05; the only piece left from the poorer source); then clip D from 0.06 s.
+SPLICE = ((CLIP_C, 0.45, 5.60), (CLIP_A, 4.87, 5.382), (CLIP_D, 0.06, 7.70))
+XFADE = 0.03                                               # each join is a 30 ms equal-power crossfade
+
+
+def _piece(clip, a, b2, pre, post):
+    """A piece of a clip's sound, mono, with `pre` and `post` extra seconds either side for the crossfades."""
+    import imageio_ffmpeg
+    import subprocess
+    t0 = max(0.0, a - pre)
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-ss', str(t0), '-t', str(b2 + post - t0), '-i', clip,
+                          '-vn', '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.int16).astype(np.float64) / 32768, a - t0
 
 
 def build_music():
-    """The song bed from Sam's three clips (SPLICE), joined without a jump. Copyrighted, so kept in
-    source/data/shocking/ (not on GitHub; Sam, 18 Oct)."""
-    import imageio_ffmpeg
-    import subprocess
-    out = []
-    for clip, a, b2 in SPLICE:
-        raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-ss', str(a), '-t', str(b2 - a), '-i', clip,
-                              '-vn', '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True, check=True).stdout
-        x = np.frombuffer(raw, np.int16).astype(np.float64) / 32768
-        f = int(0.006 * SR)                                # no click at the joins
-        x[:f] *= np.linspace(0, 1, f)
-        x[-f:] *= np.linspace(1, 0, f)
-        out.append(x)
-    MA.write_wav(os.path.join(DATA, 'song.wav'), np.concatenate(out))
+    """The song bed from Sam's clips (SPLICE), joined without a jump. Each piece is levelled to the first (the bridge
+    is from a different source), and the joins are 30 ms crossfades. Copyrighted, so kept in source/data/shocking/
+    (not on GitHub; Sam, 18 Oct). Timeline unchanged by the crossfades: each join is centred on its cut."""
+    h = int(XFADE / 2 * SR)
+    pieces = []
+    ref = None
+    for i, (clip, a, b2) in enumerate(SPLICE):
+        x, lead = _piece(clip, a, b2, XFADE / 2 if i else 0.0, XFADE / 2 if i < len(SPLICE) - 1 else 0.0)
+        core = x[int(lead * SR):int(lead * SR) + int((b2 - a) * SR)]
+        rms = math.sqrt(float(np.mean(core ** 2))) + 1e-9
+        ref = rms if ref is None else ref
+        pieces.append(x * (ref / rms))                       # level each piece to the first
+    out = pieces[0].copy()
+    n0 = int(0.006 * SR)
+    out[:n0] *= np.linspace(0, 1, n0)                        # no click at the very start
+    for x in pieces[1:]:
+        k = min(2 * h, len(out), len(x))
+        w = np.linspace(0, math.pi / 2, k)
+        out[-k:] = out[-k:] * np.cos(w) + x[:k] * np.sin(w)  # equal power, over the join
+        out = np.concatenate([out, x[k:]])
+    out[-n0:] *= np.linspace(1, 0, n0)
+    MA.write_wav(os.path.join(DATA, 'song.wav'), out)
+    print(f'song bed: {len(out) / SR:.2f} s from {len(pieces)} pieces')
 
 
 # --------------------------------------------------------------------------------------------- the voices

@@ -13,8 +13,10 @@ Read this first in any new session, after CLAUDE.md.
   pens fly; crash sound, Sam's yes); Farage's swipe kills the music and lights; his bleeped rant (two bleeps, then
   one; subtitles "******* ******", "*****"). All action after the doorway in one wide shot (Sam).
 - Recordings: `source/audio/shocking-1.m4a` (narrator), `shocking-2.m4a` (Farage, gaps for the bleeps).
-- The song: Sam's three screen recordings and the song bed live in `source/data/shocking/` (NOT on GitHub: copyright;
-  Sam, 18 Oct). Rebuild with `python3 source/shocking.py music`. In a new session they must be re-sent by Sam.
+- The song: Sam's screen recordings (clips a-d) and the song bed live in `source/data/shocking/` (NOT on GitHub: copyright;
+  Sam, 18 Oct). Sam re-sent the back half from the better-sounding second source (clip d); the bed is now clip c, a
+  0.5 s bridge from clip a, then clip d to 7.7 s (it drops out 7.8-8.4 s), 30 ms crossfades. Rebuild with `python3
+  source/shocking.py music`. In a new session they must be re-sent by Sam.
 - The finished film with the song goes to Sam in the chat only, never into `animations/` on GitHub.
 - Animatics 1-5 sent 18 Oct. Finish with: `python3 source/finish.py CLEAN.mp4 OUT.mp4 "Reform HQ: EXPOSED!" --y 560
   --x 700` (the Hook Text on the tower's windows, clear of the ITV/REC readout and the sign: Sam).
