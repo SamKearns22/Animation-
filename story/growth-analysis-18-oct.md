@@ -32,3 +32,18 @@ Median views of the six: about 930. Six posts in nine days is about 4.7 a week.
 ## Verdict
 Views are ahead of plan (typical about 930 against the mid-November goal of 1,000+). Retention and followers per 1,000
 views are the weak points. See the chat message for the full reading and recommendations.
+
+## Comments and followers: what to try (18 Oct)
+Our comments per 1,000 views: Cry Minister 5.3, DLC 7.3, Bingo Bingo 2.5, Press Secretary 1.9, Roadster 1.6, Traitors 0.
+Outside rule of thumb: an average comment rate is 0.5-2% of views (5-20 per 1,000). Followers per 1,000 views: 0 to 2.
+The evidence for the tactics below is creator advice and vendor blogs, not controlled studies: run them as two-week
+experiments and compare against the numbers above.
+1. Pinned first comment from the account, a short opinionated question tied to the film (Traitors: "Who's the real Traitor?").
+2. Reply to every comment in the first hours; a video reply (TikTok's own feature) to the best one each week. Idea to
+   approve: reply in character with "no comment." (matches the bio).
+3. End films with an open question or an open vote, never closing the thread (does not give the joke away).
+4. Make The Traitors a recurring series (same room, Claudia and table; a new banishment each time): a reason to follow.
+5. Post text says what you get and when ("a new banishment every ..."); bio (now "no comment.") could add a promise.
+   Both need Sam's OK.
+6. No more follower promotions; shares come with followers (Bingo Bingo 6.8 shares and 2.1 followers per 1,000 views).
+Targets to test by mid-November: comments 5+ per 1,000 views, followers 3+ per 1,000.
