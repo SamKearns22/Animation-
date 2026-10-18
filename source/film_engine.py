@@ -30,30 +30,35 @@ def _frame(args):
 
 
 def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, write_wav, set_ss, crf=20,
-           reuse=False, redo=(), preset='slow'):
+           reuse=False, redo=(), preset='slow', span=None):
     """picture(t) -> image without captions or title; overlay(img, t) -> img with them; shot_of(t) -> shot name;
     sound() -> the mixed soundtrack array; write_wav(path, mix). The cache ($FILM_CACHE or ~/.cache/filmcache) is
-    only trusted when reuse=True: it cannot know what code changed, so name the shots that did (redo)."""
+    only trusted when reuse=True: it cannot know what code changed, so name the shots that did (redo).
+    span=(t0, t1) renders just that stretch, with its sound: a quick clip of one moment for notes on motion (Sam,
+    18 Oct: stills can't show a problem in movement, and a whole animatic is wasted on one moment)."""
     import imageio_ffmpeg
     from multiprocessing import Pool
     cache = os.path.join(os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache')),
                          f'{name}-{size[0]}x{size[1]}-ss{ss}')
     os.makedirs(cache, exist_ok=True)
     n = int(round(dur * fps))
+    first = 0
+    if span:
+        first, n = int(round(span[0] * fps)), min(n, int(round(span[1] * fps)))
     redo_set = {i for i in range(n) if shot_of(i / fps) in redo}
     _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss)
     wav = out + '.wav'
     write_wav(wav, sound())
     print(f'picture cache: {cache}' + (f' (re-rendering {sorted(redo)}, reusing the rest)' if reuse else ''), flush=True)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
-                          '-s', f'{size[0]}x{size[1]}', '-r', str(fps), '-i', '-', '-i', wav, '-map', '0:v', '-map', '1:a',
+                          '-s', f'{size[0]}x{size[1]}', '-r', str(fps), '-i', '-', *(['-ss', f'{first / fps:.3f}'] if first else []), '-i', wav, '-map', '0:v', '-map', '1:a',
                           '-c:v', 'libx264', '-crf', str(crf), '-preset', preset, '-pix_fmt', 'yuv420p', '-c:a', 'aac',
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(n)], chunksize=2)):
+        for k, fr in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
             p.stdin.write(fr)
             if k % 48 == 0:
-                print(f'frame {k}/{n}', flush=True)
+                print(f'frame {k}/{n - first}', flush=True)
     p.stdin.close()
     p.wait()
     os.remove(wav)

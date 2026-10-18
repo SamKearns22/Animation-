@@ -67,7 +67,8 @@ SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.3
 DANCERS = ('tice', 'jenrick', 'braverman', 'farage')     # far to near (drawing order)
 CRASH_DESK = (-2.1, -0.62, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
 # (its right end kept left of where he dances, so his feet, and the trip over them, stay in view: Sam, 18 Oct)
-JENRICK_END = (-0.66, 2.62)                              # (the desk's right-hand corner: he stays in shot)                               # where he hits it (its back edge, at his hips)
+JENRICK_END = (-0.58, 2.43)          # where he hits the desk: its right-hand corner (he stays in shot), his hips right
+# against its back edge (Sam, 18 Oct: he stopped just short of it)
 # ====================================================================================================================
 
 
@@ -330,25 +331,26 @@ def trip_state(t):
     A = V.ANKLE_Y
     base = dance_pose(TRIP - SLAM)
     catch1 = dict(base, feet={'L': (30, A - 34, 70.0), 'R': (62, A, 6.0)}, lean=6, dip=16, mood='scared', roll=4)
-    # the left arm (towards the frame's edge) reaches forward to break the fall; the right one flails out wide
-    stum1 = P((-180, 140, 300), (290, -60, 80), 'down', 'out', lean=8, dip=22, mood='scared', head=-8, roll=-3)
-    catch2 = dict(P((-200, 220, 260), (300, -80, 90), 'down', 'out', lean=6, dip=30, mood='scared', head=8, roll=-5),
+    # the left arm (towards the frame's edge) reaches forward to break the fall; the right one flails UP, never out
+    # behind Farage (Sam, 18 Oct: it jumped from behind him to the front in one frame when Jenrick passed him)
+    stum1 = P((-180, 140, 300), (150, -210, 140), 'down', 'out', lean=8, dip=22, mood='scared', head=-8, roll=-3)
+    catch2 = dict(P((-200, 220, 260), (130, -240, 170), 'down', 'out', lean=6, dip=30, mood='scared', head=8, roll=-5),
                   feet={'L': (-62, A, 6.0), 'R': (-30, A - 34, 70.0)})
-    stum2 = P((-170, 60, 300), (300, 40, 100), 'down', 'out', lean=8, dip=18, mood='scared', head=-8, roll=2)
-    catch3 = dict(P((-190, 180, 280), (260, 140, 120), 'down', 'out', lean=6, dip=24, mood='scared', roll=2),
+    stum2 = P((-170, 60, 300), (170, -160, 150), 'down', 'out', lean=8, dip=18, mood='scared', head=-8, roll=2)
+    catch3 = dict(P((-190, 180, 280), (140, -220, 180), 'down', 'out', lean=6, dip=24, mood='scared', roll=2),
                   feet={'L': (-70, A - 60, -60.0), 'R': (60, A, 20.0)})
     # then his legs run away with him (Sam, 18 Oct: faster into the table, out of control of his legs): quick short
     # steps, faster and faster, arms flailing, straight into the desk at full speed
-    run1 = P((-170, 200, 300), (300, -40, 120), 'down', 'out', lean=10, dip=12, mood='scared', head=-6, roll=-2)
-    run2 = P((-190, 20, 260), (270, 170, 260), 'down', 'out', lean=12, dip=8, mood='scared', head=6, roll=2)
-    reach = P((-170, 330, 280), (200, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3)
+    run1 = P((-170, 200, 300), (150, -200, 160), 'down', 'out', lean=10, dip=12, mood='scared', head=-6, roll=-2)
+    run2 = P((-190, 20, 260), (60, 240, 300), 'down', 'out', lean=12, dip=8, mood='scared', head=6, roll=2)
+    reach = P((-170, 330, 280), (190, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3)
     slam = P((-160, 430, 230), (190, 430, 210), 'down', 'out', lean=14, dip=4, mood='scared', chin=0.35)
     slump = P((-165, 440, 240), (200, 440, 220), 'down', 'out', lean=12, dip=6, mood='scared', chin=0.4)
     up = P((-165, 420, 200), (190, 420, 180), 'down', 'out', lean=8, dip=6, mood='scared', chin=0.2, look=1.0)
     hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=8, dip=12, mood='scared', chin=0.3, look=1.0)
     T = TRIP_LEN
-    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.28, run1),
-            (1.46, run2), (1.62, run1), (1.76, run2), (1.88, run1), (1.97, reach), (T, slam), (T + 0.2, slump),
+    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.36, run1),
+            (1.66, run2), (1.92, reach), (T, slam), (T + 0.2, slump),
             (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
     k = dict(hunch)
     for (a, ka), (b2, kb) in zip(keys, keys[1:]):
@@ -361,16 +363,20 @@ def trip_state(t):
                 k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(fa[sd], fb[sd])) for sd in 'LR'}
             break
     # the catches cover little ground; from 1.06 s he accelerates all the way into the desk (no slowing before it)
-    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.05), (0.62, 0.07), (0.88, 0.13), (1.06, 0.15)]
-    w = 1.0
+    # the catches lurch him forward and stop him dead, as in the trip Sam liked (metres along his way); from 1.06 s
+    # his legs run away with him, faster and faster, all the way into the desk (no slowing before it)
+    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.09), (0.62, 0.12), (0.88, 0.25), (1.06, 0.28)]
+    dist = math.hypot(X1 - X0, Z1 - Z0)
+    m = dist
     if u < 1.06:
         for (a, pa), (b2, pb) in zip(path, path[1:]):
             if u < b2:
-                w = pa + (pb - pa) * ease((u - a) / (b2 - a))
+                m = pa + (pb - pa) * ease((u - a) / (b2 - a))
                 break
     elif u < T:
         v = (u - 1.06) / (T - 1.06)
-        w = 0.15 + 0.85 * v ** 2.4                                         # speeding up hard into the impact
+        m = 0.28 + (dist - 0.28) * v ** 1.8                                # speeding up hard into the impact
+    w = m / dist
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
     if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps; faster and faster at the end
         k['step'] = (True, int(u / 0.16) % 2) if u < 1.06 else (True, int(1.06 / 0.16 + (u - 1.06) ** 1.4 * 14) % 2)
@@ -1342,7 +1348,7 @@ def collision_faults():
                     seen.add((names[a], names[b]))
                     faults.append(f'{t:.2f} s: {names[a]} passes through {names[b]} ({d:.2f} m apart)')
             dd = math.hypot(max(x0 - Xa, 0.0, Xa - x1), max(z0 - Za, 0.0, Za - z1))
-            if dd < BODY_R - 0.02 and (names[a], 'desk') not in seen:
+            if dd < 0.10 and (names[a], 'desk') not in seen:      # hips may touch its edge, never enter it
                 seen.add((names[a], 'desk'))
                 faults.append(f'{t:.2f} s: {names[a]} walks into the desk ({dd:.2f} m from its edge)')
     return faults
@@ -1524,7 +1530,8 @@ def main():
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
-                 redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else ())
+                 redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
+                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None)
 
 
 # The smoother limbs used since Cry Minister and Bingo Bingo (Sam, 18 Oct: no boxy arms and legs): the arm checker on,
