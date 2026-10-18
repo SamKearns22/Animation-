@@ -38,10 +38,11 @@ Our comments per 1,000 views: Cry Minister 5.3, DLC 7.3, Bingo Bingo 2.5, Press 
 Outside rule of thumb: an average comment rate is 0.5-2% of views (5-20 per 1,000). Followers per 1,000 views: 0 to 2.
 The evidence for the tactics below is creator advice and vendor blogs, not controlled studies: run them as two-week
 experiments and compare against the numbers above.
-1. Pinned first comment from the account, a short opinionated question tied to the film (Traitors: "Who's the real Traitor?").
+1. Pinned first comment from the account in its own deadpan voice (e.g. "no comment."), a joke for commenters to riff on.
 2. Reply to every comment in the first hours; a video reply (TikTok's own feature) to the best one each week. Idea to
    approve: reply in character with "no comment." (matches the bio).
-3. End films with an open question or an open vote, never closing the thread (does not give the joke away).
+3. (Withdrawn, Sam 18 Oct: open-question endings are not how sketch comedy works. Keep the closed punchline; the fix is
+   an earlier first laugh so viewers reach it. Quotable lines get quoted back in comments: judgement, not data.)
 4. Make The Traitors a recurring series (same room, Claudia and table; a new banishment each time): a reason to follow.
 5. Post text says what you get and when ("a new banishment every ..."); bio (now "no comment.") could add a promise.
    Both need Sam's OK.
