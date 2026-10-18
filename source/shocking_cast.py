@@ -163,19 +163,19 @@ def farage_mouth(p, sp, fx, my):
     if talking(sp):
         mouths.draw(p, dict(sp, lips=True, lip_c=F_LIP), fx, my, sp['mouth'][2:])
         return
-    if mood == 'grin':
-        w = 36
-        shape = curve([(fx - w, my - 6), (fx - w * 0.5, my - 1), (fx, my + 1), (fx + w * 0.5, my - 1), (fx + w, my - 6),
-                       (fx + w * 0.7, my + 14), (fx + w * 0.3, my + 22), (fx - w * 0.3, my + 22), (fx - w * 0.7, my + 14)], 3)
-        p.poly(shape, MOUTH_IN, INK, 2.2)
-        teeth = curve([(fx - w + 4, my - 4), (fx, my + 2), (fx + w - 4, my - 4), (fx + w * 0.62, my + 9), (fx, my + 12),
-                       (fx - w * 0.62, my + 9)], 3)
-        p.poly(teeth, TEETH, None)
-        for k in (-2, -1, 0, 1, 2):
-            p.line([(fx + k * 9, my + 1 - abs(k)), (fx + k * 9.5, my + 10 - abs(k) * 1.5)], (214, 208, 196), 1.1)
-        p.line(shape, INK, 2.2)
-        for sgn in (-1, 1):                              # the corners dig into the cheeks
-            p.line([(fx + sgn * w, my - 6), (fx + sgn * (w + 7), my - 12)], INK, 1.8)
+    if mood == 'grin':                                   # the caricaturists' grin: huge, gappy, ear to ear
+        w = 46
+        shape = curve([(fx - w, my - 10), (fx - w * 0.5, my - 3), (fx, my - 1), (fx + w * 0.5, my - 3), (fx + w, my - 10),
+                       (fx + w * 0.74, my + 16), (fx + w * 0.34, my + 28), (fx - w * 0.34, my + 28), (fx - w * 0.74, my + 16)], 3)
+        p.poly(shape, MOUTH_IN, INK, 2.4)
+        teeth = curve([(fx - w + 5, my - 8), (fx - w * 0.5, my - 1), (fx, my + 1), (fx + w * 0.5, my - 1), (fx + w - 5, my - 8),
+                       (fx + w * 0.7, my + 8), (fx + w * 0.3, my + 14), (fx - w * 0.3, my + 14), (fx - w * 0.7, my + 8)], 3)
+        p.poly(teeth, TEETH, None)                       # one solid, even row of big upper teeth (Sam: no gaps)
+        for x in (-30, -18, -6, 6, 18, 30):
+            p.line([(fx + x, my + abs(x) * 0.12 - 1), (fx + x * 0.97, my + 13 - abs(x) * 0.16)], (206, 200, 188), 1.2)
+        p.line(shape, INK, 2.4)
+        for sgn in (-1, 1):                              # the corners dig deep into the cheeks
+            p.line([(fx + sgn * w, my - 10), (fx + sgn * (w + 8), my - 17)], INK, 2.0)
         return
     if mood in ('neutral', 'cool'):                      # pressed and downturned, an upside-down U
         w = 32
@@ -189,7 +189,7 @@ def farage_mouth(p, sp, fx, my):
 
 
 def farage_head(img, p, sp, t, hx, hy):
-    hw, hh, skin = 72, 100, F_SKIN
+    hw, hh, skin = 74, 104, F_SKIN                       # a touch bigger: the caricaturists' head
     fx = hx + sp.get('turn', 0.0) * hw * 0.2
     fy = hy + 10 * sp.get('down', 0.0)
     mood = sp.get('mood', 'neutral')
@@ -216,8 +216,15 @@ def farage_head(img, p, sp, t, hx, hy):
     p.line([(fx - 6, fy - 34), (fx - 4, fy - 22)], sd, 1.6)                                   # between the brows
     p.line([(fx + 6, fy - 34), (fx + 4, fy - 22)], sd, 1.6)
     st = eye_state(sp, lid=0.5)
+    grin = mood == 'grin' and sp.get('laugh') and not talking(sp)   # eyes squeezed shut only on a big laugh
     for sgn in (-1, 1):
         ex, ey = fx + sgn * 28, fy - 8
+        if grin:                                         # squeezed shut into crescents, the cheeks bunched up
+            p.line(curve([(ex - 15, ey + 2), (ex, ey - 7), (ex + 15, ey + 2)], 3), INK, 2.8)
+            p.line(curve([(ex - 16, ey + 13), (ex, ey + 20), (ex + 16, ey + 12)], 3), sd, 2.2)
+            p.line([(ex + sgn * 17, ey + 1), (ex + sgn * 27, ey - 4)], sd, 1.6)
+            p.line([(ex + sgn * 17, ey + 5), (ex + sgn * 27, ey + 8)], sd, 1.6)
+            continue
         eye(p, ex, ey, sgn, 15, 9, F_IRIS, st, dk(face_c, 0.9), liner=2.6)
         if not st['closed']:                             # the heavy lid fold, sloping down over the outer corner
             p.line(curve([(ex - sgn * 13, ey - 11), (ex - sgn * 2, ey - 15), (ex + sgn * 10, ey - 13),
@@ -229,12 +236,12 @@ def farage_head(img, p, sp, t, hx, hy):
     brows(p, sp, fx, fy - 26, 28, F_BROW, 6, -3, 6, 34)
     # a long nose, broad at the base, a fleshy rounded tip and flared wings
     p.line([(fx - 5, fy - 14), (fx - 8, fy + 24)], INK, 1.9)
-    p.line(curve([(fx - 20, fy + 30), (fx - 15, fy + 38), (fx - 6, fy + 40), (fx, fy + 43), (fx + 6, fy + 40),
-                  (fx + 15, fy + 38), (fx + 20, fy + 30)], 3), INK, 2.0)
+    p.line(curve([(fx - 23, fy + 32), (fx - 18, fy + 41), (fx - 7, fy + 43), (fx, fy + 47), (fx + 7, fy + 43),
+                  (fx + 18, fy + 41), (fx + 23, fy + 32)], 3), INK, 2.1)
     for sgn in (-1, 1):
-        p.line(curve([(fx + sgn * 20, fy + 30), (fx + sgn * 22, fy + 22), (fx + sgn * 15, fy + 18)], 3), INK, 1.7)
-    my = fy + 66
-    wide = 1.25 if mood == 'grin' else 1.0
+        p.line(curve([(fx + sgn * 23, fy + 32), (fx + sgn * 25, fy + 22), (fx + sgn * 16, fy + 17)], 3), INK, 1.8)
+    my = fy + 70                                         # a long upper lip
+    wide = 1.3 if mood == 'grin' else 1.0
     for sgn in (-1, 1):                                  # the deep lines, nose wings to past the mouth corners
         p.line(curve([(fx + sgn * 24, fy + 28), (fx + sgn * 36 * wide, fy + 48), (fx + sgn * 42 * wide, fy + 70),
                       (fx + sgn * 40 * wide, fy + 92)], 3), sd, 2.6)
