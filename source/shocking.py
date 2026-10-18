@@ -63,7 +63,8 @@ SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[
 # The formation (Sam, 18 Oct), as seen on screen: Farage front centre, Jenrick middle left, Braverman middle right,
 # Tice back left (set a little further out than Jenrick so his face is never hidden). Floor positions in metres:
 # X across (+ right), Z away from the camera (the camera brought forward towards them: Sam, 18 Oct).
-SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.35), 'tice': (-1.18, 4.0)}
+SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.35), 'tice': (-1.26, 4.0)}
+# (Tice 8 cm further out than first set: his arm brushed Jenrick's as the trip began; clipcheck, 18 Oct)
 DANCERS = ('tice', 'jenrick', 'braverman', 'farage')     # far to near (drawing order)
 CRASH_DESK = (-2.1, -0.62, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
 # (its right end kept left of where he dances, so his feet, and the trip over them, stay in view: Sam, 18 Oct)
@@ -282,6 +283,19 @@ def farage_dance_state(t):
     return blend_keys(SWIPED, STAND, ease((t - SWIPE - 0.5) / 0.5)) if t > SWIPE + 0.5 else dict(SWIPED)
 
 
+def alive(k, t, seed):
+    """A held pose that still lives (the audit: never frozen 2.5 s; guides/satire.md): small quick shifts of the
+    head, lean, chin and hands every 1.4-2.6 s (filmkit.shifts), like someone shifting their weight. No sway loop."""
+    k = dict(k)
+    k['head'] = k.get('head', 0.0) + 8 * filmkit.shifts(t, seed, 1.0)
+    k['lean'] = k.get('lean', 0.0) + 3 * filmkit.shifts(t, seed + 1, 1.0)
+    k['chin'] = k.get('chin', 0.0) + 0.1 * filmkit.shifts(t, seed + 2, 1.0)
+    for side, sd in (('L', 3), ('R', 4)):
+        x, y, z = k[side]
+        k[side] = (x + 10 * filmkit.shifts(t, seed + sd, 1.0), y + 14 * filmkit.shifts(t, seed + sd + 2, 1.0), z)
+    return k
+
+
 def other_dance_state(who, t):
     """Tice and Braverman dance on until the swipe, freeze on it, then let their arms drop and look round."""
     if t < SWIPE:
@@ -291,6 +305,8 @@ def other_dance_state(who, t):
              P((-176, 420, 60), (-30, 120, 120), 'back', 'down', mood='upset', look=-0.9))
     k = blend_keys(frozen, react, ease((t - SWIPE - 0.25) / 0.6)) if t > SWIPE + 0.25 else dict(frozen)
     k.update(mood='alarm' if who == 'tice' else 'upset', look=0.6 if who == 'tice' else -0.9)
+    if t > SWIPE + 0.85:
+        k = alive(k, t, 11 if who == 'tice' else 13)
     return k
 
 
@@ -359,7 +375,7 @@ def trip_state(t):
     # then he never finds his feet again (Sam, 18 Oct: he steadied himself before the run; he must stay unbalanced
     # all the way to the desk): another stumble and a near-tangle, then his legs run away with him, wobbling side
     # to side, faster and faster, straight into the desk
-    stum3 = P((-200, 120, 300), (160, -190, 150), 'down', 'out', lean=10, dip=26, mood='scared', head=8, roll=-4)
+    stum3 = P((-200, 120, 300), (120, -200, 170), 'down', 'out', lean=10, dip=26, mood='scared', head=8, roll=-2)
     catch4 = dict(P((-180, 230, 280), (120, -230, 180), 'down', 'out', lean=8, dip=30, mood='scared', head=-8, roll=4),
                   feet={'L': (10, A - 30, 80.0), 'R': (40, A, -10.0)})
     run1 = P((-170, 200, 300), (150, -200, 160), 'down', 'out', lean=12, dip=14, mood='scared', head=-6, roll=4)
@@ -388,6 +404,8 @@ def trip_state(t):
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
     if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps; faster and faster at the end
         k['step'] = (True, int(u / 0.16) % 2) if u < 1.44 else (True, int(1.44 / 0.16 + (u - 1.44) ** 1.3 * 16) % 2)
+    if u >= T + 1.55:                                                      # held, but alive (never frozen)
+        k = alive(k, t, 7)
     if u >= T:                                                             # the jolt of the impact
         k['dip'] = k['dip'] + 10 * math.exp(-((u - T) / 0.06) ** 2)
     return X, Z, k
@@ -403,8 +421,8 @@ ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, away
     ('pot', -1.22, 2.05, (0.3, 1.8, -1.1), 0.03),
     ('plant', -1.6, 1.8, (0.2, 1.1, -0.9), 0.06),
     ('paper', -1.0, 1.75, (0.65, 2.0, 0.45), 0.00), ('paper', -1.1, 1.8, (0.6, 2.4, -0.6), 0.02),
-    ('paper', -0.95, 1.85, (0.75, 1.8, 0.3), 0.04), ('paper', -1.2, 1.7, (0.2, 2.6, -0.6), 0.05),
-    ('pen', -1.15, 2.0, (1.6, 1.6, 0.2), 0.03), ('pen', -1.2, 2.05, (0.9, 1.6, -1.4), 0.04),
+    ('paper', -0.95, 1.85, (0.75, 1.8, -0.2), 0.04), ('paper', -1.2, 1.7, (0.2, 2.6, -0.6), 0.05),
+    ('pen', -1.15, 2.2, (1.6, 1.6, -0.05), 0.03), ('pen', -1.2, 2.05, (0.9, 1.6, -1.4), 0.04),
     ('pen', -1.17, 2.02, (-0.2, 2.0, -1.5), 0.05)]
 DESK_TOP = 0.74
 DESK_DX = 0.0                    # (the desk stays where Sam liked it: 18 Oct)
@@ -1303,12 +1321,14 @@ def door_frame(t):
     poly(d, [(150, 460), (930, 460), (930, 1920), (150, 1920)], (150, 156, 164), k)            # the corridor
     poly(d, [(150, 1560), (930, 1560), (930, 1920), (150, 1920)], (120, 124, 130), k)
     # one proper lift (Sam, 18 Oct): a steel surround, two leaves meeting in the middle, call button, floor display
-    poly(d, [(560, 700), (880, 700), (880, 1560), (560, 1560)], (120, 124, 132), k)
-    poly(d, [(585, 730), (855, 730), (855, 1560), (585, 1560)], (196, 202, 208), k)
-    d.line([(720 * k, 730 * k), (720 * k, 1560 * k)], fill=INK, width=max(1, int(3 * k)))
-    poly(d, [(660, 640), (780, 640), (780, 684), (660, 684)], (30, 30, 34), k)
+    # (its doors in a real lift's shape, about half as wide as tall, 1 x 2.1 m: sizes.py, 18 Oct; it stands at the
+    # far end of the corridor, so it is smaller than the doorway she is in)
+    poly(d, [(540, 870), (880, 870), (880, 1560), (540, 1560)], (120, 124, 132), k)
+    poly(d, [(560, 900), (860, 900), (860, 1560), (560, 1560)], (196, 202, 208), k)
+    d.line([(710 * k, 900 * k), (710 * k, 1560 * k)], fill=INK, width=max(1, int(3 * k)))
+    poly(d, [(650, 812), (770, 812), (770, 856), (650, 856)], (30, 30, 34), k)
     f0 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(30 * k))
-    d.text((720 * k, 662 * k), '4', font=f0, fill=(240, 120, 60), anchor='mm')
+    d.text((710 * k, 834 * k), '4', font=f0, fill=(240, 120, 60), anchor='mm')
     poly(d, [(896, 1080), (924, 1080), (924, 1140), (896, 1140)], (150, 154, 160), k)
     d.ellipse([903 * k, 1098 * k, 917 * k, 1112 * k], fill=(240, 200, 90), outline=INK)
     for x0 in (150, 930):                                                                        # the doors, open
@@ -1338,7 +1358,7 @@ JAB = [3.6, 4.4, 5.2, 6.7, 8.2]                             # file seconds of hi
 
 # After the swipe Farage strides over to Jenrick at the desk and rants right in his face (Sam, 18 Oct: 'I did enjoy
 # how Farage ended up shouting and spitting straight in his face'), close but never through him (collision_faults).
-FARAGE_IN = (-0.17, 2.7)
+FARAGE_IN = (-0.05, 2.72)          # right in Jenrick's face, his jabbing arm just short of him (clipcheck, 18 Oct)
 WALK_IN = (SWIPE + 0.45, SWIPE + 1.25)
 
 
@@ -1356,7 +1376,8 @@ def farage_shout_state(t):
     m = mouths.at(FAR_TRACK, t)
     talking_now = m != 'rest'
     jab = max((math.exp(-((t - (j + FAR_OFF)) / 0.12) ** 2) for j in JAB), default=0.0)
-    k = P((-280 - 40 * jab, 120 - 30 * jab, 220 + 40 * jab), (176, 420, 60), 'down', 'back', mood='fury', look=-1.0,
+    # (the finger jabs at Jenrick's face but stops short of him: the first one reached 7 cm into him; clipcheck)
+    k = P((-150 - 25 * jab, 110 - 25 * jab, 80 + 20 * jab), (176, 420, 60), 'down', 'back', mood='fury', look=-1.0,
           head=-8, lean=4 + 4 * jab, chin=0.15)
     extra = dict(mood='fury', strength=1.4, red=1.0, look=-1.0, turn=-0.3)
     if talking_now:
@@ -1580,15 +1601,35 @@ def LINE_SUBJECTS():
 PROP_SIZES = [('the paper', 'A4 paper', 0.21, 0.297, None), ('a pen', 'biro', 0.14, 0.012, None),
               ('the mug', 'mug', 0.09, 0.10, None), ('the crash desk', 'desk', CRASH_DESK[1] - CRASH_DESK[0], DESK_TOP, None),
               ('the doorway', 'double doorway', 860, 1291, 0.96 / V.M_PER_UNIT),
-              ('the lift door', 'lift door opening', 270, 830, 0)]
+              ('the lift door', 'lift door opening', 300, 660, 0)]
 OUTFIT = {'braverman': {'cropped jacket hem': 430, 'skirt top': 400, 'skirt hem': 745},
           'journalist': {'skirt top': 392, 'skirt hem': 745}}
+
+
+def audits():
+    """The general audit (filmkit; the template's, which this film was first made without: housestyle, 18 Oct): each
+    dancer alone over every frame of the office shots: in pieces, popping, stretching, frozen."""
+    ts = [i / FPS for i in range(int(SLAM * FPS), int(DUR * FPS)) if shot_of(i / FPS) in ('dance', 'dance2')]
+    actors = {}
+    for who in DANCERS:
+        def draw(t, who=who):
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            for name, depth, f in layers(t):
+                if name == who:
+                    f(lay)
+            return lay
+        actors[who] = (ts, draw)
+    return filmkit.silhouette_audit(actors, fps=FPS, still_ok=AUDIT_STILL_OK)
+
+
+AUDIT_STILL_OK = ()
 
 
 CLIP_SPAN = (SLAM, DUR)
 ALLOWED = [('jenrick', 'desk', CRASH - 0.15, DUR),                  # he crashes into it and lies against it
            ('item:*', 'desk', 0.0, DUR), ('item:*', 'item:*', 0.0, DUR),   # things sit on the desk, side by side
-           ('jenrick', 'item:*', CRASH - 0.15, CRASH + 0.3)]          # he knocks them flying
+           ('jenrick', 'item:*', CRASH - 0.15, CRASH + 0.3),          # he knocks them flying
+           ('farage.handL', 'jenrick', FARAGE_AT, DUR)]                # the jabbing finger brushes him (2 cm, behind him)
 IN_SHOT = [('jenrick', TRIP - 0.2, CRASH + 1.5)]
 CONTACTS = [('jenrick.body', 'desk', CRASH)]                              # Sam, 18 Oct: he stopped just short of it
 MOMENTUM = [('jenrick', TRIP + 0.25, CRASH - 0.02, 0.12)]            # Sam, 18 Oct: he must not steady himself
