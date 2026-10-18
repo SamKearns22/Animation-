@@ -65,9 +65,9 @@ SHOTS = [('lapel', 0.0, SLAM), ('dance', SLAM, DOOR[0]), ('door', DOOR[0], DOOR[
 # X across (+ right), Z away from the camera (the camera brought forward towards them: Sam, 18 Oct).
 SPOT = {'farage': (0.0, 2.75), 'jenrick': (-0.68, 3.35), 'braverman': (0.68, 3.35), 'tice': (-1.18, 4.0)}
 DANCERS = ('tice', 'jenrick', 'braverman', 'farage')     # far to near (drawing order)
-CRASH_DESK = (-1.75, -0.27, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
+CRASH_DESK = (-2.1, -0.62, 1.55, 2.3)                    # x0, x1, z0, z1 of the desk Jenrick crashes into
 # (its right end kept left of where he dances, so his feet, and the trip over them, stay in view: Sam, 18 Oct)
-JENRICK_END = (-0.35, 2.62)                               # where he hits it (its back edge, at his hips)
+JENRICK_END = (-0.66, 2.62)                              # (the desk's right-hand corner: he stays in shot)                               # where he hits it (its back edge, at his hips)
 # ====================================================================================================================
 
 
@@ -91,7 +91,7 @@ class Cam3:
         return x, y - SOLE * s, s
 
 
-DANCE_CAM = Cam3(1400.0, horizon=820.0, cx=610.0)         # looking a little to the left, so Jenrick's whole fall stays in frame
+DANCE_CAM = Cam3(1400.0, horizon=820.0)
 WIDE_CAM = Cam3(1000.0, horizon=820.0)        # the reaction shot: a wider lens, so Jenrick is in it after his stumble
 
 
@@ -312,53 +312,60 @@ def make_person(img, cam3, who, X, Z, k, t, extra=None, step=None):
 BLINKS = {w: F.blinks(i + 3, 0.0, DUR) for i, w in enumerate(DANCERS)}
 
 
+FOOT0 = {'L': (-60.0, V.ANKLE_Y, 6.0), 'R': (60.0, V.ANKLE_Y, 6.0)}      # standing feet (V.standing)
+
+
 def trip_state(t):
-    """Jenrick's trip (Sam, 18 Oct: over his own feet, easy to see, falling forward off balance; two seconds):
-    0-0.25 s mid-dance his left foot hooks over the other leg and the grin drops; 0.25-0.6 he lurches, feet tangled,
-    still in place, tipping forward, arms flung; 0.6-2.05 he falls forward, leaning further and further (up to 33
-    degrees) off balance, arms windmilling, taking stumbling steps towards us and to the left, faster and faster;
-    2.05 he hits the desk and folds over it; he lies there a beat, then pushes himself up, hunched and scared,
-    looking at Farage. Returns (X, Z, key pose)."""
+    """Jenrick's trip (Sam, 18 Oct): a few stumbling trips, then he rights himself and lurches into the desk. No
+    deep lean (seen from the front it only shrank him); his balance is shown by the feet catching, the knees
+    buckling, the arms flung out and a small sideways wobble. 0.18 his left foot catches over his right; 0.42 a
+    stumbling step, arms out; 0.62 the right foot catches over the left, knees buckle; 0.88 another stumble; 1.06 he
+    stubs his left toe; 1.3-1.75 quicker, steadier steps as he tries to right himself; then the lurch into the desk
+    (TRIP_LEN), as before. Returns (X, Z, key pose)."""
     u = t - TRIP
     X0, Z0 = SPOT['jenrick']
     X1, Z1 = JENRICK_END
     if u < 0:
         return X0, Z0, None
+    A = V.ANKLE_Y
     base = dance_pose(TRIP - SLAM)
-    tangle = {'L': (30, V.ANKLE_Y - 34, 70.0), 'R': (62, V.ANKLE_Y, 6.0)}      # left foot over the right leg, lifted
-    tangle2 = {'L': (46, V.ANKLE_Y - 46, 90.0), 'R': (70, V.ANKLE_Y, 6.0)}
-    hook = dict(base, feet=tangle, lean=10, dip=10, mood='scared', roll=4)
-    lurch = dict(P((-250, 120, 120), (250, 120, 120), 'out', 'out', lean=20, dip=14, mood='scared', head=-8, chin=0.2, roll=7),
-                 feet=tangle2)
-    tip = P((-250, -40, 80), (310, -70, 80), 'out', 'out', lean=27, dip=12, mood='scared', head=-10, chin=0.3, roll=8)
-    fall1 = P((-220, 40, 100), (320, -110, 50), 'out', 'out', lean=33, dip=16, mood='scared', head=10, chin=0.4, roll=9)
-    fall2 = P((-250, -60, 70), (290, 20, 110), 'out', 'out', lean=33, dip=18, mood='scared', head=-10, chin=0.4, roll=7)
-    fall3 = P((-215, 30, 110), (330, -90, 60), 'out', 'out', lean=31, dip=14, mood='scared', head=10, chin=0.4, roll=9)
-    slam = P((-190, 430, 210), (190, 430, 210), 'out', 'out', lean=22, dip=4, mood='scared', chin=0.35, roll=3)
-    slump = P((-200, 440, 220), (200, 440, 220), 'out', 'out', lean=16, dip=6, mood='scared', chin=0.4)
-    up = P((-190, 420, 180), (190, 420, 180), 'out', 'out', lean=10, dip=6, mood='scared', chin=0.2, look=1.0)
-    hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=10, dip=12, mood='scared', chin=0.3, look=1.0)
+    catch1 = dict(base, feet={'L': (30, A - 34, 70.0), 'R': (62, A, 6.0)}, lean=6, dip=16, mood='scared', roll=4)
+    # the left arm (towards the frame's edge) reaches forward to break the fall; the right one flails out wide
+    stum1 = P((-180, 140, 300), (290, -60, 80), 'down', 'out', lean=8, dip=22, mood='scared', head=-8, roll=-3)
+    catch2 = dict(P((-200, 220, 260), (300, -80, 90), 'down', 'out', lean=6, dip=30, mood='scared', head=8, roll=-5),
+                  feet={'L': (-62, A, 6.0), 'R': (-30, A - 34, 70.0)})
+    stum2 = P((-170, 60, 300), (300, 40, 100), 'down', 'out', lean=8, dip=18, mood='scared', head=-8, roll=2)
+    catch3 = dict(P((-190, 180, 280), (260, 140, 120), 'down', 'out', lean=6, dip=24, mood='scared', roll=2),
+                  feet={'L': (-70, A - 60, -60.0), 'R': (60, A, 20.0)})
+    right = P((-170, 320, 200), (230, 300, 120), 'down', 'out', lean=4, dip=8, mood='scared')
+    reach = P((-170, 330, 280), (200, 330, 260), 'down', 'out', lean=10, dip=6, mood='scared', chin=0.3)
+    slam = P((-160, 430, 230), (190, 430, 210), 'down', 'out', lean=14, dip=4, mood='scared', chin=0.35)
+    slump = P((-165, 440, 240), (200, 440, 220), 'down', 'out', lean=12, dip=6, mood='scared', chin=0.4)
+    up = P((-165, 420, 200), (190, 420, 180), 'down', 'out', lean=8, dip=6, mood='scared', chin=0.2, look=1.0)
+    hunch = P((-170, 430, 160), (170, 430, 160), 'back', 'back', lean=8, dip=12, mood='scared', chin=0.3, look=1.0)
     T = TRIP_LEN
-    keys = [(0.0, base), (0.22, hook), (0.6, lurch), (0.95, tip), (1.3, fall1), (1.6, fall2), (1.85, fall3),
-            (T, slam), (T + 0.2, slump), (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
+    keys = [(0.0, base), (0.18, catch1), (0.42, stum1), (0.62, catch2), (0.88, stum2), (1.06, catch3), (1.3, right),
+            (1.75, reach), (T, slam), (T + 0.2, slump), (T + 0.7, slump), (T + 1.15, up), (T + 1.55, hunch)]
     k = dict(hunch)
     for (a, ka), (b2, kb) in zip(keys, keys[1:]):
         if u < b2:
             w = (u - a) / (b2 - a)
             k = blend_keys(ka, kb, w * w * w if b2 == T else ease(w))     # fast into the impact
-            if 'feet' in ka and 'feet' in kb:                             # the tangled feet slide from one hold to the next
-                k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(ka['feet'][sd], kb['feet'][sd])) for sd in 'LR'}
-            elif 'feet' in ka and u < 0.6:
-                k['feet'] = ka['feet']
-            elif 'feet' in kb and u < 0.6:
-                k['feet'] = kb['feet']
-            else:
-                k.pop('feet', None)
+            k.pop('feet', None)
+            if 'feet' in ka or 'feet' in kb:                              # a caught foot, and back to standing
+                fa, fb = ka.get('feet', FOOT0), kb.get('feet', FOOT0)
+                k['feet'] = {sd: tuple(x + (y - x) * ease(w) for x, y in zip(fa[sd], fb[sd])) for sd in 'LR'}
             break
-    w = 0.0 if u < 0.6 else min(1.0, (u - 0.6) / (T - 0.6)) ** 1.7        # in place until he tips, then faster and faster
+    path = [(0.0, 0.0), (0.18, 0.0), (0.42, 0.12), (0.62, 0.16), (0.88, 0.34), (1.06, 0.38), (1.3, 0.55), (1.75, 0.82),
+            (T, 1.0)]
+    w = 1.0
+    for (a, pa), (b2, pb) in zip(path, path[1:]):
+        if u < b2:
+            w = pa + (pb - pa) * ease((u - a) / (b2 - a))
+            break
     X, Z = X0 + (X1 - X0) * w, Z0 + (Z1 - Z0) * w
-    if 0.6 <= u < T:                                                       # quick stumbling steps on the way
-        k['step'] = (True, int((u - 0.6) / 0.17) % 2)
+    if u < T and 'feet' not in k and u > 0.18:                             # stumbling steps between the catches
+        k['step'] = (True, int(u / 0.16) % 2)
     if u >= T:                                                             # the jolt of the impact
         k['dip'] = k['dip'] + 10 * math.exp(-((u - T) / 0.06) ** 2)
     return X, Z, k
@@ -375,7 +382,7 @@ ITEMS = [   # kind, X, Z on the desk top, launch velocity (m/s: across, up, towa
     ('pen', -1.15, 2.0, (0.6, 2.2, 1.3), 0.03), ('pen', -1.2, 2.05, (1.1, 1.6, 0.9), 0.04),
     ('pen', -1.17, 2.02, (-0.3, 2.0, 1.5), 0.05)]
 DESK_TOP = 0.74
-DESK_DX = 0.2                    # the desk and its things moved right so he stays in frame all the way down (Sam, 18 Oct)
+DESK_DX = 0.0                    # (the desk stays where Sam liked it: 18 Oct)
 
 
 def item_at(i, t):
@@ -480,7 +487,7 @@ def crash_desk(img, cam3, t, top_only=None):
     if top_only in (None, True):
         poly(d, [P3(x0, z0, DESK_TOP), P3(x1 + shake, z0, DESK_TOP), P3(x1 + shake, z1, DESK_TOP), P3(x0, z1, DESK_TOP)],
              (232, 226, 214), k)                                                               # a pale oak top
-        mx = -1.0
+        mx = -1.45
         tip = 0.0 if t < CRASH else min(0.35, (t - CRASH) * 2.0)          # the monitor rocks back
         poly(d, [P3(mx - 0.3, z1 - 0.1, DESK_TOP + 0.08), P3(mx + 0.3, z1 - 0.1, DESK_TOP + 0.08),
                  P3(mx + 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1), P3(mx - 0.3, z1 - 0.1 + tip * 0.2, DESK_TOP + 0.48 - tip * 0.1)],
@@ -521,7 +528,7 @@ WORKERS = [
     (worker(B.PALE, 'side', (170, 166, 162), (50, 54, 66), 'suit', (50, 54, 66), tie=(150, 120, 40), name='w5'), 1.75, 10.8, -135),
 ]
 PHONE_GUY = worker(B.PALE, 'side', (110, 70, 46), (52, 60, 80), 'suit', (52, 60, 80), tie=(90, 30, 50), name='phone')
-PHONE_AT = (0.66, 2.1, -135)      # front right, half in shot, turned diagonally towards Farage, filming (Sam)
+PHONE_AT = (0.84, 2.1, -135)      # front right, half in shot, turned diagonally towards Farage, filming (Sam)
 
 
 def seated_worker(img, cam3, sp, X, Z, yaw, t):
@@ -1137,6 +1144,7 @@ def dance_frame(t, cam3=DANCE_CAM):
         X, Z = SPOT[who]
         extra = {}
         if who == 'farage':
+            X, Z = farage_pos(t)
             if t < FARAGE_AT:
                 k = farage_dance_state(t)
             else:
@@ -1154,7 +1162,8 @@ def dance_frame(t, cam3=DANCE_CAM):
         if who == 'jenrick':
             jenrick_layer(img, cam3, X, Z, k, t)
         else:
-            x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra)
+            x, y, s = make_person(img, cam3, who, X, Z, k, t, extra=extra,
+                                  step=farage_step(t) if who == 'farage' else None)
             if who == 'farage' and t >= FARAGE_AT:
                 spit_at(img, x, y - 150 * s + 70 * s, s, t)
     crash_desk(img, cam3, t, top_only=True)
@@ -1223,6 +1232,22 @@ def door_frame(t):
 JAB = [3.6, 4.4, 5.2, 6.7, 8.2]                             # file seconds of his stressed words: a finger jab on each
 
 
+# After the swipe Farage strides over to Jenrick at the desk and rants right in his face (Sam, 18 Oct: 'I did enjoy
+# how Farage ended up shouting and spitting straight in his face'), close but never through him (collision_faults).
+FARAGE_IN = (-0.17, 2.7)
+WALK_IN = (SWIPE + 0.45, SWIPE + 1.25)
+
+
+def farage_pos(t):
+    X0, Z0 = SPOT['farage']
+    u = ease((t - WALK_IN[0]) / (WALK_IN[1] - WALK_IN[0]))
+    return X0 + (FARAGE_IN[0] - X0) * u, Z0 + (FARAGE_IN[1] - Z0) * u
+
+
+def farage_step(t):
+    return (True, int(t / 0.2) % 2) if WALK_IN[0] < t < WALK_IN[1] else None
+
+
 def farage_shout_state(t):
     m = mouths.at(FAR_TRACK, t)
     talking_now = m != 'rest'
@@ -1248,6 +1273,74 @@ def spit_at(img, mx, my, sc, t):
                 py = my + (vy * u + 900 * u * u) * sc
                 r = rng.uniform(2.0, 4.0) * sc
                 d.ellipse([(px - r) * k, (py - r) * k, (px + r) * k, (py + r) * k], fill=(236, 244, 250), outline=INK)
+
+
+# --------------------------------------------------------------------------------------------- the checks
+BODY_R = 0.22                   # a person's half-width on the floor plan (metres)
+
+
+def floor_positions(t):
+    """Where everyone stands on the floor at time t (metres)."""
+    pos = {'farage': farage_pos(t), 'tice': SPOT['tice'], 'braverman': SPOT['braverman'],
+           'jenrick': trip_state(t)[:2] if t >= TRIP else SPOT['jenrick'], 'phone man': PHONE_AT[:2]}
+    for sp, X, Z, yaw in WORKERS:
+        pos[sp['name']] = (X, Z)
+    return pos
+
+
+def collision_faults():
+    """Nobody passes through anybody, or into the desk (Sam, 18 Oct: Jenrick clipped straight through Farage). On
+    every frame of the office shots, the floor-plan distance between any two people must be at least two body
+    half-widths, and no one's body may enter the desk Jenrick crashes into (his hands reach it; his body stops at
+    its edge). Returns faults, the first frame of each pair only."""
+    faults, seen = [], set()
+    x0, x1, z0, z1 = CRASH_DESK
+    for i in range(int(SLAM * FPS), int(DUR * FPS)):
+        t = i / FPS
+        if shot_of(t) not in ('dance', 'dance2'):
+            continue
+        pos = floor_positions(t)
+        names = list(pos)
+        for a in range(len(names)):
+            Xa, Za = pos[names[a]]
+            for b in range(a + 1, len(names)):
+                Xb, Zb = pos[names[b]]
+                d = math.hypot(Xa - Xb, Za - Zb)
+                if d < 2 * BODY_R and (names[a], names[b]) not in seen:
+                    seen.add((names[a], names[b]))
+                    faults.append(f'{t:.2f} s: {names[a]} passes through {names[b]} ({d:.2f} m apart)')
+            dd = math.hypot(max(x0 - Xa, 0.0, Xa - x1), max(z0 - Za, 0.0, Za - z1))
+            if dd < BODY_R - 0.02 and (names[a], 'desk') not in seen:
+                seen.add((names[a], 'desk'))
+                faults.append(f'{t:.2f} s: {names[a]} walks into the desk ({dd:.2f} m from its edge)')
+    return faults
+
+
+def frame_faults():
+    """Jenrick's whole trip and impact stay in shot (Sam, 18 Oct): his drawing never touches the frame's edge."""
+    faults = []
+    keep = B.SS
+    B.SS = 1
+    t = TRIP - 0.2
+    while t <= CRASH + 1.5:
+        X, Z, k = trip_state(t) if t >= TRIP else (*SPOT['jenrick'], dance_pose(t - SLAM))
+        lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        jenrick_layer(lay, DANCE_CAM, X, Z, k, t, legs=True)
+        bb = lay.getbbox()
+        if bb and (bb[0] <= 0 or bb[2] >= 1080 or bb[1] <= 0):
+            faults.append(f'{t:.2f} s: Jenrick runs off the edge of the frame {bb}')
+            break
+        t += 1 / FPS
+    B.SS = keep
+    return faults
+
+
+def checks():
+    """The film's own plan checks (run by preflight.py): collisions and Jenrick staying in shot."""
+    faults = collision_faults() + frame_faults()
+    print('collision and framing checks:', 'clean' if not faults else f'{len(faults)} fault(s)')
+    if faults:
+        raise ValueError('check: ' + '; '.join(faults))
 
 
 # --------------------------------------------------------------------------------------------- the film
@@ -1366,6 +1459,8 @@ def main():
         os.makedirs(a[1], exist_ok=True)
         for x in a[2:]:
             frame_image(float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=88)
+    elif a[0] == 'check':
+        checks()
     elif a[0] == 'sheet':
         stills_sheet(a[1], [float(x) for x in a[2:]])
     elif a[0] == 'final':
