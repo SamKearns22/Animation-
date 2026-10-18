@@ -39,7 +39,7 @@ Outside rule of thumb: an average comment rate is 0.5-2% of views (5-20 per 1,00
 The evidence for the tactics below is creator advice and vendor blogs, not controlled studies: run them as two-week
 experiments and compare against the numbers above.
 1. Pinned first comment from the account in its own deadpan voice (e.g. "no comment."), a joke for commenters to riff on.
-2. Reply to every comment in the first hours; a video reply (TikTok's own feature) to the best one each week. Idea to
+2. Already done: Sam replies to comments within about 5 minutes. Still to try: a video reply (TikTok's own feature) to the best one each week. Idea to
    approve: reply in character with "no comment." (matches the bio).
 3. (Withdrawn, Sam 18 Oct: open-question endings are not how sketch comedy works. Keep the closed punchline; the fix is
    an earlier first laugh so viewers reach it. Quotable lines get quoted back in comments: judgement, not data.)
