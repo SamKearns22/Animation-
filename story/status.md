@@ -397,3 +397,8 @@ Read this first in any new session, after CLAUDE.md.
 - 17 Oct (night): Trump's line corrected to "Because he doesn't like any of my deals" (subtitle chunks "Because he
   doesn't" / "like any of my deals."; a fifth slate jab on the new "Because"); final re-rendered 144 s and re-finished:
   3.0 MB, 26.4 s.
+
+## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
+- 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
+  written; questions sent to Sam. Next: Sam's answers, then the cast sheet (`source/poker_mon.py`), then an early
+  quick animatic (motion-led film).
