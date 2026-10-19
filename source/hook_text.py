@@ -28,6 +28,7 @@ def emoji_img(ch, px):
 
 def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None):
     k = w / 1080
+    text = text.replace('\ufe0f', '')                 # emoji variation selectors: the picture is the emoji
     tail = ''
     while text and ord(text[-1]) > 0x2000:          # trailing emoji are drawn as pictures after the last word
         tail, text = text[-1] + tail, text[:-1]
