@@ -197,19 +197,18 @@ def tube(p, pts, w0, w1, col, lw=2.6):
 
 
 def wing(p, sx, sy, sg, k=1.0, spread=0.0):
-    """One small bat wing from the shoulder blade: an orange arm along the top edge, teal skin scalloped between the
-    fingers. spread 0 (folded up behind) .. 1 (wide open)."""
+    """One small bat wing from the shoulder blade: an orange frame along the top edge, plain teal skin scalloped below
+    it (Sam, 19 Oct: never an orange line across the middle). spread 0 (folded up behind) .. 1 (wide open)."""
     tip = (sx + sg * (230 + 170 * spread) * k, sy - (300 - 150 * spread) * k)
     elbow = (sx + sg * (110 + 60 * spread) * k, sy - (230 - 60 * spread) * k)
     f1 = (sx + sg * (230 + 150 * spread) * k, sy - (70 - 60 * spread) * k)
     f2 = (sx + sg * (110 + 70 * spread) * k, sy + (10 + 30 * spread) * k)
-    skin = [(sx, sy), elbow, tip, (tip[0] - sg * 10 * k, tip[1] + 60 * k),
+    tube(p, [(sx, sy), elbow, tip], 34 * k, 12 * k, ORANGE)          # the orange frame: the wing's top edge only
+    skin = [(sx, sy + 14 * k), (elbow[0], elbow[1] + 14 * k), (tip[0] - sg * 8 * k, tip[1] + 12 * k),
+            (tip[0] - sg * 10 * k, tip[1] + 60 * k),
             ((tip[0] + f1[0]) / 2 - sg * 40 * k, (tip[1] + f1[1]) / 2 - 10 * k), f1,
             ((f1[0] + f2[0]) / 2 - sg * 40 * k, (f1[1] + f2[1]) / 2 - 20 * k), f2, (sx, sy + 30 * k)]
-    p.poly(skin, TEAL, INK, 2.6)
-    for f in (f1, f2):
-        p.line([elbow, f], TEAL_D, 2.4)
-    tube(p, [(sx, sy), elbow, tip], 44 * k, 14 * k, ORANGE)
+    p.poly(skin, TEAL, INK, 2.6)                                       # plain teal skin, no lines across it (Sam)
 
 
 IRIS = (34, 40, 70)
