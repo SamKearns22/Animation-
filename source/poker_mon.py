@@ -297,12 +297,13 @@ def shot_blast(img, t):
 
 # ------------------------------------------------------------------------------------------------ the film
 def cam_p1(t):
-    """Shots 1 and 5: player one from player two's seat (a reverse angle across the table); shot 5 pushes in."""
-    k0 = ease(t / SHOTS[0][2])                               # a slow push in through his line
-    look, f = (1.45 + 0.1 * k0, 0.9 + 0.05 * k0, 0.0), 1750.0 + 650.0 * k0
-    if t >= SHOTS[4][1]:
-        k = ease((t - SHOTS[4][1]) / 1.2)
-        look, f = (1.55 + 0.15 * k, 0.95 + 0.25 * k, 0.0), 2400.0 + 2200.0 * k
+    """Shot 1: close across the table on player one, so his Poker Mon cards and chips read (Sam, 19 Oct: shot one
+    closer, the concept was missed), a slow push in through his line. Shot 5 (lit): from player two's seat, pushing in."""
+    if t < SHOTS[4][1]:
+        k0 = ease(t / SHOTS[0][2])
+        return R.Cam3((0.62, 1.3, -0.22), (1.42, 0.9 + 0.05 * k0, 0.04), focal=1050.0 + 220.0 * k0)
+    k = ease((t - SHOTS[4][1]) / 1.2)
+    look, f = (1.55 + 0.15 * k, 0.95 + 0.25 * k, 0.0), 2400.0 + 2200.0 * k
     return R.Cam3((-0.95, 1.7, -0.35), look, focal=f)
 
 
@@ -330,11 +331,12 @@ def picture(t):
     img = B.canvas(WALL)
     sh = shot_of(t)
     me = sys.modules[__name__]
-    if sh in ('p1', 'lit'):
-        extra = [(540, 820, 760, 0.9 * light_level(t), (255, 236, 170))] if sh == 'lit' else []
+    fill = [(540, 900, 1100, 0.5, (255, 214, 160))]   # the lamp over the table is out of frame in shots 1 and 2:
+    if sh in ('p1', 'lit'):                            # its light still falls on them (Sam, 19 Oct: shot 2 was darker)
+        extra = [(540, 820, 760, 0.9 * light_level(t), (255, 236, 170))] if sh == 'lit' else fill
         R.render(img, t, me, cam_p1(t), extra)
     elif sh == 'cards':
-        R.render(img, t, me, cam_cards(t))
+        R.render(img, t, me, cam_cards(t), fill)
     elif sh in ('p2', 'reveal'):
         R.render(img, t, me, cam_p2(t))
     else:
@@ -421,6 +423,22 @@ def glass_break(n, t0):
     return out
 
 
+def gasp(n, t0):
+    """The young man's gasp at the four Queens (Sam, 19 Oct): a quick sharp breath in, breathy and voiced a little,
+    rising, a third of a second, never a steady noise. Made in code; a recording of Sam's ("S1 gasp") would replace it."""
+    from scipy.signal import butter, sosfilt
+    rng = np.random.default_rng(31)
+    out = np.zeros(n)
+    a = int(t0 * SR)
+    m = min(n - a, int(0.38 * SR))
+    tt = np.arange(m) / SR
+    breath = sosfilt(butter(2, [700, 2600], 'band', fs=SR, output='sos'), rng.standard_normal(m))
+    env = np.minimum(1, tt / 0.04) * np.exp(-np.maximum(0, tt - 0.08) * 9)
+    voice = np.sin(2 * np.pi * np.cumsum(260 + 160 * tt / 0.38) / SR) * 0.25
+    out[a:a + m] = (breath * 0.35 + voice * 0.12) * env
+    return out
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
@@ -430,6 +448,7 @@ def soundtrack(stems=False):
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
     rest += hum(n, CHARGE[0] + 0.1, FIRE)
+    rest += gasp(n, R.GASP[0] + 0.05)                  # Sam asked for it (19 Oct)
     rest += blast(n, FIRE, BEAM_END[1])
     win = R.through_window(dragon_state(FIRE + 0.05))
     if win:
@@ -480,6 +499,14 @@ def hit_check():
     faults = []
     d = dragon_state(FIRE + 0.05)
     for (kind, who), h in R.blast_hits(d).items():
+        if kind == 'T':                                      # a thing on the table: the beam within reach of it
+            x, z = R.THINGS[who][1]
+            m, dr = R.beam_ray(h[0], d)
+            dd, _ = R.dist_to_ray((x, R.TABLE_H + 0.03, z), m, dr, R.beam_end(m, dr)[1])
+            if dd > R.THING_HIT_R * 1.05:
+                faults.append(f'a {R.THINGS[who][0]} at ({x:.2f}, {z:.2f}) flies at {h[0]:.2f} s with the beam '
+                              f'{dd:.2f} m away')
+            continue
         if kind != 'P':
             continue
         t = h[0]
@@ -517,6 +544,9 @@ def table_check():
                 continue
             if math.dist(p1, p2) < 0.8 * (THING_R.get(k1, 0.05) + THING_R.get(k2, 0.05)):
                 faults.append(f'table plan: a {k1} at {p1} and a {k2} at {p2} overlap')
+    for k, (x, z), ex in R.THINGS:                       # everything on the table top, never past its edge in
+        if (x / R.TABLE_A[0]) ** 2 + (z / R.TABLE_A[1]) ** 2 > 0.97:     # the air (Sam, 19 Oct: a glass floated)
+            faults.append(f'table plan: a {k} at ({x:.2f}, {z:.2f}) is past the table\'s edge, in mid-air')
     stacks = [xz for k, xz, ex in R.THINGS if k == 'chip' and not ex.get('loose')]
     for k, xz in big:
         if k not in ('card', 'tray') and any(math.dist(xz, c) < THING_R.get(k, 0.05) + 0.0195 for c in stacks):

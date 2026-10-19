@@ -82,8 +82,8 @@ SCONCES = [('+x', -0.55, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2
 REACT = {
     'LADY': dict(delay=0.35, rise=0.6, path=[(-0.8, 1.4), (-0.55, 2.45), (0.4, 3.3)], kind='brisk', arms='panic'),
     'HUSBAND': dict(delay=0.25, path=[(-1.0, 2.2), (-0.3, 3.0), (0.3, 3.45)], kind='run'),
-    'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.15, 3.35)], kind='run', arms='panic',
-                   crouch_end=True),                     # cowers at the window: he goes through it
+    'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.9, 2.0), (1.6, 2.9), (2.3, 2.3), (1.6, 1.9), (1.25, 2.35)],
+                   kind='brisk', arms='panic'),          # running about in a panic, then thrown out of the window
     'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
     'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (2.45, 2.7)], kind='walk', arms='stop'),   # clear of the window
     'CARDS': dict(delay=0.4, rise=0.5, path=[(0.8, 1.4), (1.35, 2.5), (1.6, 3.35)], kind='brisk', crouch_end=True),
@@ -216,7 +216,8 @@ def sweep_cam(t):
     a_ = math.radians(beam_angle(min(t, Clock.BEAM_END[1])))
     on_beam = (DRAGON[0] + 3.0 * math.cos(a_), 1.0, DRAGON[1] + 3.0 * math.sin(a_))
     look = tuple(0.55 * q + 0.45 * c for q, c in zip(on_beam, (0.2, 1.0, 0.0)))
-    w = 0.45 * math.exp(-((t - Clock.IMPACT) / 0.6) ** 2)  # leaning to player one as the beam reaches him
+    w = 0.75 * math.exp(-((t - Clock.IMPACT + 0.25) / 0.65) ** 2)   # pushing in on player one as it nears him: his
+                                                                       # "no no no" must read (Sam, 19 Oct)
     look = tuple(l_ + w * (q - l_) for l_, q in zip(look, (SEATED['P1'][0] + 0.4, 1.0, SEATED['P1'][1] - 0.3)))
     drift = ease((t - Clock.FIRE) / 5.0)
     pos = (0.9 - 0.3 * drift, 3.1, -3.8)
@@ -225,7 +226,8 @@ def sweep_cam(t):
     pos = tuple(p0 + (p1 - p0) * b for p0, p1 in zip(pos, (-0.45, 1.75, -1.15)))
     look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-1.45, 0.98, 0.05)))
     k = max(0.0, 1 - (t - Clock.IMPACT) / 0.45) if t >= Clock.IMPACT else 0.0
-    focal = 1300 + 650 * b                               # wide while the beam goes round; tighter for the push in
+    focal = 1300 + 650 * b + 1500 * w                    # wide while the beam goes round; in on player one; tighter
+                                                         # for the push in
     return Cam3(pos, look, focal=focal,
                 shake=(14 * k * math.sin(t * 90), 10 * k * math.cos(t * 77)))
 
@@ -307,6 +309,7 @@ class Body:
         self.spin = spin
         self.track = []                                  # (t, pos, angle, event)
         self.wall_t = self.floor_t = self.wall = None
+        self.ceil = None
         self._run(p0, v0)
 
     def _run(self, p, v):
@@ -332,6 +335,8 @@ class Body:
                                 if self.wall_t is None:
                                     self.wall_t, self.wall = t, (axis, sg)
                 if p[1] > CEIL - self.r and v[1] > 0:
+                    if self.ceil is None:
+                        self.ceil = (t, (p[0], CEIL, p[2]))     # where it smashed into the ceiling
                     p[1], v[1] = CEIL - self.r, -v[1] * 0.3
                 over = self.table and (p[0] / TABLE_A[0]) ** 2 + (p[2] / TABLE_A[1]) ** 2 < 1.0
                 ground = TABLE_H + self.r if over and p[1] > TABLE_H else self.r
@@ -429,6 +434,27 @@ def window_glass(cam, p, wall, a0, a1, y0, y1, t):
                     cam.poly(p, pts, (96, 112, 150), INK, 1.4)
 
 
+def drape_cut(wall, d0, d1):
+    """When and how high the beam's end crosses a drape panel on its wall (its first crossing), or None."""
+    key = ('drape', wall, round(d0, 3))
+    if key in _CACHE:
+        return _CACHE[key]
+    out = None
+    if FILM[0] is not None:
+        dfire = FILM[0].dragon_state(Clock.FIRE + 0.05)
+        t = Clock.FIRE + 0.08
+        while t < Clock.BEAM_END[0] and out is None:
+            m, d = beam_ray(t, dfire)
+            end, _ = beam_end(m, d)
+            on = (abs(end[0] - RX) < 0.05) if wall == '+x' else (abs(end[2] - RZ) < 0.05)
+            a = end[2] if wall == '+x' else end[0]
+            if on and d0 <= a <= d1 and 0.15 < end[1] < 2.8:
+                out = (t, end[1])
+            t += 1 / 240
+    _CACHE[key] = out
+    return out
+
+
 def decor(img, cam, t, ign):
     """Minimal old-world pieces: a gilt-framed portrait and a landscape, velvet drapes at a tall window, a
     sideboard with a decanter and a candelabra, a marble bust on a plinth, brass sconces with candles."""
@@ -446,11 +472,22 @@ def decor(img, cam, t, ign):
         window_glass(cam, p, wall, a0 + 0.25, a1 - 0.25, 0.4, 2.85, t)
         cam.poly(p, _wall_pts(wall, (a0 + a1) / 2 - 0.02, (a0 + a1) / 2 + 0.02, 0.4, 2.85, 0.012), WOOD, None)
         for d0, d1 in ((a0, a0 + 0.42), (a1 - 0.42, a1)):
-            cam.poly(p, _wall_pts(wall, d0, d1, 0.0, 3.0, 0.02), DRAPE, INK, 2.2)
-            for k in range(3):
-                x = d0 + (d1 - d0) * (k + 1) / 4
-                cam.line(p, [_wall_pts(wall, x, x, 0.05, 2.9, 0.025)[0], _wall_pts(wall, x, x, 0.05, 2.9, 0.025)[3]],
-                         DRAPE_D, 2.4)
+            cut = drape_cut(wall, d0, d1)                  # cut in two where the beam crossed it (Sam, 19 Oct)
+            pieces = [(0.0, 3.0)]
+            if cut and t >= cut[0]:
+                tc, yc = cut
+                fall = 0.5 * G * (t - tc) ** 2              # the lower half drops ...
+                top, bot = yc - fall, -fall
+                if bot < 0.0:                              # ... and crumples on the floor
+                    bot, top = 0.0, max(0.22, top)
+                pieces = [(yc + 0.03, 3.0), (bot, top)]
+            for y0_, y1_ in pieces:
+                cam.poly(p, _wall_pts(wall, d0, d1, y0_, y1_, 0.02), DRAPE, INK, 2.2)
+                for k in range(3):
+                    x = d0 + (d1 - d0) * (k + 1) / 4
+                    q = _wall_pts(wall, x, x, y0_ + 0.05, y1_ - 0.05, 0.025)
+                    if y1_ - y0_ > 0.15:
+                        cam.line(p, [q[0], q[3]], DRAPE_D, 2.4)
         cam.poly(p, _wall_pts(wall, a0 - 0.1, a1 + 0.1, 2.92, 3.08, 0.03), GOLD, INK, 2.0)          # the pelmet
     # the sideboard on the -x wall, behind player two: dark wood, a decanter, a candelabra
     sx0, sx1 = -RX, -RX + 0.5
@@ -603,9 +640,9 @@ def _things():
     stacks(1.3, 0.45, [(18, 'ultra'), (15, 'poke'), (12, 'great'), (8, 'master')], -1)   # clear of his resting hand
     T.append(('tumbler', (1.3, -0.42), dict(drink=(196, 120, 40))))
     T.append(('napkin', (1.1, -0.36), {}))              # clear of the heiress's stacks
-    for who, (x, z), drink in (('LADY', (-0.8, 0.98), 'flute'), ('CARDS', (0.8, 0.98), 'martini'),
-                               ('OLD', (-0.55, -0.98), 'tumbler'), ('MOGUL', (0.55, -0.98), 'tumbler'),
-                               ('HEIRESS', (0.95, -0.66), 'flute')):
+    for who, (x, z), drink in (('LADY', (-0.8, 0.72), 'flute'), ('CARDS', (0.8, 0.72), 'martini'),   # all on the
+                               ('OLD', (-0.55, -0.72), 'tumbler'), ('MOGUL', (0.55, -0.72), 'tumbler'),   # table top
+                               ('HEIRESS', (0.95, -0.58), 'flute')):           # (Sam, 19 Oct: a glass floated)
         sg = 1 if z > 0 else -1
         hx = -1 if who == 'HEIRESS' else 1               # her drink on her other side, clear of player one's things
         for k in range(2):
@@ -613,9 +650,9 @@ def _things():
         stacks(x - 0.3 * hx, z - sg * 0.05, [(14, 'great'), (12, 'poke'), (10, 'ultra')], sg)
         T.append((drink, (x + 0.3 * hx, z - sg * 0.1), {}))
         T.append(('napkin', (x + 0.2 * hx, z + sg * 0.06), {}))
-    T.append(('ashtray', (-0.2, -0.95), {}))
-    T.append(('cigarbox', (-0.95, -0.72), {}))
-    T.append(('pad', (-0.85, -0.55), {}))
+    T.append(('ashtray', (-0.2, -0.78), {}))
+    T.append(('cigarbox', (-1.0, -0.45), {}))
+    T.append(('pad', (-0.42, -0.5), {}))
     T.append(('shoe', (0.32, 0.86), {}))
     for k in range(6):                                   # the discard pile
         T.append(('card', (-0.32 + rng.uniform(-0.01, 0.01), 0.86 + rng.uniform(-0.01, 0.01)), dict(face=None, ang=rng.uniform(-8, 8))))
@@ -624,7 +661,7 @@ def _things():
     for row, kind in enumerate(('poke', 'great', 'ultra', 'master', 'poke')):
         chips(-0.12 + row * 0.06, 0.85, 14, kind)
     T.append(('candelabra', (0.05, 0.5), {}))           # off the line between the two players
-    T.append(('bucket', (-0.3, -0.55), {}))              # champagne on ice
+    T.append(('bucket', (-0.3, 0.42), {}))               # champagne on ice (clear of every camera's line)
     for cx, cz, n in ((0.35, 0.12, 22), (0.7, -0.22, 18), (0.95, 0.22, 16), (-0.05, -0.12, 20)):   # the bets,
         for k in range(n):                               # pushed into the middle: loose piles, chips at all angles
             r, a = math.sqrt(rng.uniform(0, 1)) * 0.09, rng.uniform(0, 2 * math.pi)
@@ -633,6 +670,13 @@ def _things():
                            ang=rng.uniform(0, 180))))
     stacks(-1.3, 0.38, [(16, 'ultra'), (14, 'poke'), (12, 'great')], 1)   # player two's own chips
     T.append(('tumbler', (-1.32, -0.45), dict(drink=(150, 70, 30))))
+    out = []                                             # anything that would hang past the table's edge comes
+    for kind, (x, z), ex in T:                           # in onto the top (Sam, 19 Oct: a glass floated in the air)
+        e = (x / TABLE_A[0]) ** 2 + (z / TABLE_A[1]) ** 2
+        if e > 0.9:
+            x, z = x * math.sqrt(0.9 / e), z * math.sqrt(0.9 / e)
+        out.append((kind, (x, z), ex))
+    T = out
     return T
 
 
@@ -699,6 +743,7 @@ _CACHE = {}
 
 HIT_R = 0.4         # a body is hit when the beam's centre passes within this (beam ~0.12 m + half a body)
 END_R = 0.9         # or when the beam's end (its blast on the wall) comes this close to them
+THING_HIT_R = 0.45  # a thing on the table: within the beam's glow
 
 
 def blast_hits(dfire):
@@ -722,16 +767,12 @@ def blast_hits(dfire):
         end, length = beam_end(m, d)
         sweep = beam_angle(t + 0.01) - beam_angle(t)
         if t >= Clock.FIRE + 0.08:                     # once the beam has reached across the room
-            hd = _norm((d[0], 0.0, d[2]))                # the blast sweeps the table under the beam's track
-            for key, (x, z) in table_pts.items():
-                if key in out:
-                    continue
-                v = (x - m[0], 0.0, z - m[2])
-                along = _dot(v, hd)
-                near_p1 = t < Clock.IMPACT + 0.25 and math.hypot(x - SEATED['P1'][0], z - SEATED['P1'][1]) < 1.0 + 4 * (t - Clock.IMPACT)
-                if (along > 0.5 and math.hypot(v[0] - hd[0] * along, v[2] - hd[2] * along) < 0.45) or near_p1:
-                    out[key] = (t, m, 1 if sweep >= 0 else -1)   # under the beam's track, or the shockwave of the
-                                                                  # first hit spreading from player one
+            for key, (x, z) in table_pts.items():         # things fly only where the beam really touches them
+                if key in out:                                # (Sam, 19 Oct: a box and chips flew before it reached
+                    continue                                  # them; no unseen shockwave, no track under a high beam)
+                dd, s_ = dist_to_ray((x, TABLE_H + 0.03, z), m, d, length)
+                if dd < THING_HIT_R and s_ > 0.3:
+                    out[key] = (t, m, 1 if sweep >= 0 else -1)
             for key, (p, r) in pts.items():
                 if key not in out:
                     dd, s = dist_to_ray(p, m, d, length)
@@ -782,8 +823,9 @@ def thing_body(i, dfire):
 
 # Sam, 19 Oct: not everyone into a wall the same way. These are clipped by the beam and tossed high into the air,
 # spinning, and land flat on their faces (on the floor, or on the table if they come down over it).
-FLYERS = {'LADY': (-0.35, 0.4), 'CARDS': (0.55, 0.42), 'BEAU': (1.0, -0.15),        # face down on the table
-          'HUSBAND': (-0.6, 2.4), 'GUARD1': (2.6, 1.7)}                                # on the floor
+FLYERS = {'LADY': (-0.35, 0.4), 'CARDS': (0.55, 0.42),                              # face down on the table
+          'BEAU': None}                                                                # on the floor
+# (the husband goes across the room into the right-hand wall; the young man in white into the ceiling and down)
 # (the heiress flew up right in front of player one as he was hit: she goes out past the camera instead)
 # (the far side: those tossed up near the camera filled the frame)
 
@@ -797,7 +839,21 @@ def person_body(who, dfire):
     if hit:
         x, y, z = hit[3]
         rng = np.random.default_rng(sum(map(ord, who)))
-        if who in FLYERS:                                # clipped: tossed high, spinning, down flat on their face
+        if who == 'DEALER':                              # thrown straight at the far window, through it (Sam, 19 Oct:
+            tx, tz = 1.3, RZ + 1.0                       # we must see him fly out)
+            dx, dz = tx - x, tz - z
+            dist = math.hypot(dx, dz)
+            b = Body((x, y, z), (dx / dist * 5.5, 2.8, dz / dist * 5.5), hit[0], r=0.3, e=0.05, wall_e=0.06,
+                     spin=520.0, grip=0.08)
+        elif who == 'HUSBAND':                           # shot all the way across to the right-hand wall, behind the
+            tx, tz = -RX, 2.0                            # Dragonite (Sam, 19 Oct)
+            dx, dz = tx - x, tz - z
+            dist = math.hypot(dx, dz)
+            b = Body((x, y, z), (dx / dist * 8.5, 2.6, dz / dist * 8.5), hit[0], r=0.3, e=0.05, wall_e=0.06,
+                     spin=-700.0, grip=0.08)
+        elif who == 'BEAU':                              # straight up into the ceiling, then smashed back down to
+            b = Body((x, y, z), (0.35, 9.0, -0.25), hit[0], r=0.25, e=0.06, wall_e=0.1, spin=1100.0, grip=0.3)
+        elif who in FLYERS:                              # clipped: tossed high, spinning, down flat on their face
             tx, tz = FLYERS[who]                         # where they come down (onto the table, or open floor)
             on_table = (tx / TABLE_A[0]) ** 2 + (tz / TABLE_A[1]) ** 2 < 1.0
             r_ = 0.25
@@ -1012,6 +1068,20 @@ def craters(img, cam, t, dfire):
     """Impact craters where people smack against the walls (Sam, 19 Oct): from the moment of the hit, a jagged hollow
     in the plaster (or the wood below the rail) where the body struck, with cracks running out from it; they stay."""
     p = B.Pen(img, FLAT)
+    for who in list(SEATED) + list(STANDING):            # and where someone smashed into the ceiling
+        b = person_body(who, dfire) if who != 'P2' else None
+        if b is None or b.ceil is None or t < b.ceil[0]:
+            continue
+        cx, _, cz = b.ceil[1]
+        rng = np.random.default_rng(57 + sum(map(ord, who)))
+        n = 14
+        angs = np.linspace(0, 2 * math.pi, n, endpoint=False) + rng.uniform(-0.15, 0.15, n)
+        rad = rng.uniform(0.8, 1.15, n)
+        on = lambda a_, r_: (cx + math.cos(a_) * r_, CEIL - 0.004, min(RZ - 0.02, cz + math.sin(a_) * r_))
+        cam.poly(p, [on(a_, 0.42 * k_) for a_, k_ in zip(angs, rad)], (170, 150, 112), INK, 2.0)
+        cam.poly(p, [on(a_, 0.28 * k_) for a_, k_ in zip(angs, rad)], (82, 62, 44), INK, 1.6)
+        for a_ in angs[::2]:
+            cam.line(p, [on(a_, 0.45), on(a_ + rng.uniform(-0.3, 0.3), 0.75 + rng.uniform(0, 0.3))], INK, 2.0)
     for who in list(SEATED) + list(STANDING):
         if who == 'P2':
             continue
@@ -1384,8 +1454,12 @@ def people_pose(film, who, t, sp):
         return None
     if who == 'P1':
         sp.update(film.p1_face(min(t, film.SHOTS[4][2] - 0.01)))
-    else:                                                # everyone stares at the Dragonite as it charges, then
+    elif t >= Clock.CHARGE0:                             # everyone stares at the Dragonite as it charges, then
         sp.update(brows='alarm', mouth='agape' if t < Clock.FIRE else 'shout', look=-0.6, lid=0)   # cries out
+    elif who == 'BEAU' and GASP[0] <= t < GASP[1]:       # four of a kind: the young man gasps (Sam, 19 Oct)
+        sp.update(brows='wow', mouth='agape', lid=0, look=0.3)
+    else:                                                # before that, at ease: watching the game
+        sp.update(mouth='line', look=0.2 * math.sin(sum(map(ord, who)) + t * 0.4))
     return None
 
 
@@ -1403,6 +1477,11 @@ DRAWN = {}           # this frame: who -> (X, Yneck, s, yaw, mirror, j, j2)
 POS = {}             # this frame: (kind, who) -> world position, for the drawing order
 
 
+def _norm2(v):
+    n = math.hypot(*v) or 1.0
+    return (v[0] / n, v[1] / n)
+
+
 def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
     """Someone where they are at t (seated in their armchair, standing, getting up, running, cowering), the view
     from their facing. Returns (X, Y, s)."""
@@ -1414,9 +1493,15 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
         j = seated_joints(film, sp)
     elif who == 'BEAU' and tp < Clock.FIRE + REACT['BEAU']['delay']:
         pass
+    if who == 'BEAU' and GASP[0] <= tp < GASP[1] + 0.3:          # his free hand to his chest as he gasps
+        V.arm_to(j, 'L', (-20.0, 170.0, 70.0), 'down', 'palm')
     if who == 'BEAU' and tp < Clock.FIRE + REACT['BEAU']['delay']:     # a champagne flute in his hand
         V.arm_to(j, 'R', (60.0, 230.0, 160.0), 'down', 'fist')
         j['props'].append(lambda p, j2: C.glass(p, j2['wrR'][0] + 4, j2['wrR'][1] + 6, 120 * 0.22 / 0.2, 'flute'))
+    if who == 'P1' and tp >= Clock.FIRE:                # shrinking back, turned half toward us: his face reads
+        u = ease((tp - Clock.FIRE) / 0.4)
+        f = _norm2((f[0] * (1 - u) - 0.7 * u, f[1] * (1 - u) - 0.75 * u))
+        sp['head_dx'] = sp.get('head_dx', 0.0) + 9 * math.sin((tp - Clock.FIRE) * 24)   # shaking his head: no!
     (X, Y), k = cam.project((x, neck, z))
     s = k * M_UNIT
     yaw = cam.yaw_of((x, 0, z), f)
@@ -1428,10 +1513,10 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
     elif who == 'P1':                                    # the beam coming for him: leaning back, both palms out,
         j = seated_joints(film, sp, 'rest')              # waving, "no no no, stop stop" (Sam, 19 Oct)
         u = ease((tp - Clock.FIRE) / 0.25)
-        wave = 55 * math.sin((tp - Clock.FIRE) * 14)
+        wave = 32 * math.sin((tp - Clock.FIRE) * 14)    # (never across his face: it must read)
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 105 + wave * u, 60.0 - 140 * u + 15 * math.sin((tp - Clock.FIRE) * 28),
-                             200 + 90 * u), 'down', 'palm')
+            V.arm_to(j, sd, (sg * 165 + wave * u, 60.0 - 230 * u + 15 * math.sin((tp - Clock.FIRE) * 28),
+                             180 + 110 * u), 'down', 'palm')           # both palms up and out before him, waving
         j['lean'] = -9 * u
         sp.update(brows='alarm', lid=0, look=0.0,
                   mouth='shout' if int((tp - Clock.FIRE) * 7) % 2 == 0 else 'agape')   # "no! no! no!"
@@ -1440,6 +1525,12 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
         sh = j21['shL'] if not m1 else j21['shR']
         tgt = (X1 + s1 * sh[0] * (-1 if m1 else 1), Y1 + s1 * sh[1])
         V.arm_to(j, 'R', screen_hand_target(j, 'R', yaw, mirror, X, Y, s, tgt, 180.0), 'down', 'palm')
+    if who not in SEATED or j.get('seated') is False:   # standing: a soft shadow on the floor under them, so they
+        sh = Image.new('RGBA', img.size, (0, 0, 0, 0))  # stand in the room, not over it (Sam, 19 Oct: flat figures)
+        ring = [(x + 0.3 * math.cos(u), 0.003, z + 0.22 * math.sin(u)) for u in np.linspace(0, 2 * math.pi, 24)]
+        if all(cam.depth(q) > 0.3 for q in ring):
+            B.Pen(sh, FLAT).poly([cam.project(q)[0] for q in ring], (0, 0, 0, 70), None)
+            img.alpha_composite(sh)
     j2 = C.person(img, FLAT, X, Y - bob * s, s, sp, tp, yaw, j)
     DRAWN[who] = (X, Y, s, yaw, mirror, j, j2)
     return X, Y, s
@@ -1492,6 +1583,7 @@ def p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
 
 P2_CARDS = (-1.4, 0.24)                    # where player two lays his own hand, face down
 ARMS_UP = [False]
+GASP = (3.75, 4.6)                         # the young man in white gasps at the Queens (shot 2)
 DRAGON_S = [0.25]                          # the Dragonite's scale on screen this frame
 
 
@@ -1543,35 +1635,109 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     return j
 
 
+LIE_AXIS = {'LADY': (0.0, 1.0), 'CARDS': (0.0, -1.0)}   # which way they lie on the table: across it, side by side
+
+
 def faceplant(img, cam, film, who, b, t):
-    """Flat on their face where they came down (Sam, 19 Oct): seen from behind (the back of the head), arms flung out
-    past the head, lying along the floor or the table top; a splat as they land, then still."""
+    """Flat on their face where they came down (Sam, 19 Oct): a body built in the room from rounded volumes (head,
+    torso, arms flung past the head, legs), each a tube or ball in their colours, outlined, projected by the camera,
+    so it lies in true perspective on the table or the floor (never a squashed flat picture); a shadow under it."""
     pos = b.at(t)[0]
     if cam.depth(pos) < 0.6:
         return None
+    sp = C.PEOPLE[who]
     ground = pos[1] - b.r
-    sp = dict(C.PEOPLE[who], blink=True, mouth='agape')
-    j = V.standing(sp)
-    j['props'] = [C.dress_up(sp)]
-    V.arm_to(j, 'L', (-170.0, -230.0, 20.0), 'out', 'palm')       # arms flung out beyond the head
-    V.arm_to(j, 'R', (190.0, -210.0, 20.0), 'out', 'palm')
     rng = np.random.default_rng(sum(map(ord, who)))
-    (X, Y), k = cam.project((pos[0], ground + 0.08, pos[2]))
-    s = k * M_UNIT
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    C.person(lay, FLAT, X, Y - 470 * s, s, sp, t, 180.0, j)        # from behind: face down, into the floor
-    box = lay.getbbox()
-    if not box:
+    ax = LIE_AXIS.get(who)
+    if ax is None:
+        a_ = rng.uniform(0, 2 * math.pi)
+        ax = (math.cos(a_), math.sin(a_))
+    sd = (-ax[1], ax[0])
+    bounce = 0.06 * math.exp(-(t - b.floor_t) * 9) * abs(math.sin((t - b.floor_t) * 18))
+    H = (pos[0] - ax[0] * 0.2, ground, pos[2] - ax[1] * 0.2)
+    at = lambda al, si, h: (H[0] + ax[0] * al + sd[0] * si, ground + h + bounce, H[2] + ax[1] * al + sd[1] * si)
+    jacket = sp.get('jacket', (40, 40, 44))
+    legs = sp.get('trousers', jacket)
+    skin, hair = sp['skin'], sp.get('hair_c', sp['skin'])
+    if sp.get('hair') == 'bald':
+        hair = skin
+    dress = sp.get('outfit') == 'dress'
+    parts = []                                           # (world a, world b, radius a, radius b, colour)
+    if dress:                                            # a gown: one tapered volume from the hips to the feet
+        parts.append((at(0.05, 0, 0.1), at(-0.85, 0, 0.06), 0.12, 0.07, sp.get('dress', jacket)))
+        for si in (-1, 1):                               # her feet, out of the hem
+            parts.append((at(-0.9, si * 0.05, 0.04), at(-1.0, si * 0.06, 0.04), 0.035, 0.03, skin))
+    else:
+        for si in (-1, 1):
+            parts.append((at(0.0, si * 0.09, 0.08), at(-0.86, si * 0.15, 0.07), 0.075, 0.06, legs))
+            parts.append((at(-0.88, si * 0.15, 0.06), at(-0.98, si * 0.16, 0.06), 0.05, 0.045, (24, 22, 26)))
+    parts.append((at(0.0, 0, 0.1), at(0.5, 0, 0.11), 0.13, 0.14, jacket if not dress else sp.get('dress')))
+    for si in (-1, 1):                                   # arms flung out past the head, hands on the surface
+        parts.append((at(0.5, si * 0.19, 0.12), at(0.95, si * 0.36, 0.06), 0.06, 0.05,
+                      jacket if not dress else skin))
+        parts.append((at(0.98, si * 0.37, 0.05), at(0.98, si * 0.37, 0.05), 0.055, 0.055, skin))
+    parts.append((at(0.62, 0, 0.13), at(0.66, 0, 0.13), 0.07, 0.07, skin))       # the neck
+    parts.append((at(0.78, 0, 0.13), at(0.78, 0, 0.13), 0.12, 0.12, hair))       # the back of the head: face down
+    p = B.Pen(img, FLAT)
+    sh = Image.new('RGBA', img.size, (0, 0, 0, 0))       # the shadow under the body
+    shp = B.Pen(sh, FLAT)
+    ring = [at(math.cos(u) * 1.0 - 0.05, math.sin(u) * 0.38, 0.0) for u in np.linspace(0, 2 * math.pi, 28)]
+    shp.poly([cam.project(q)[0] for q in ring], (0, 0, 0, 90), None)
+    img.alpha_composite(sh)
+    drawn = []
+    for wa, wb, ra, rb, col in parts:
+        (A, ka), (Bq, kb) = cam.project(wa), cam.project(wb)
+        drawn.append(((cam.depth(wa) + cam.depth(wb)) / 2, A, Bq, ra * ka, rb * kb, col))
+    for _, A, Bq, ra, rb, col in sorted(drawn, key=lambda v: -v[0]):     # far parts first
+        if math.hypot(Bq[0] - A[0], Bq[1] - A[1]) < 1.0:
+            p.ell(A[0], A[1], ra, ra, col, INK, 2.0)
+        else:
+            C.tube(p, [A, Bq], 2 * ra, 2 * rb, col, 2.0)
+            p.ell(A[0], A[1], ra, ra, col, None)
+            p.ell(Bq[0], Bq[1], rb, rb, col, None)
+            p.line([A, Bq], B.dk(col, 0.82), max(1.0, 0.35 * ra))         # a shade down its length: volume
+    (X, Y), k = cam.project(H)
+    return X, Y, k * M_UNIT
+
+
+def out_of_window(img, cam, film, who, b, t, win):
+    """Past the glass: still flying, away into the night and falling, seen only through the broken window (Sam,
+    19 Oct: we must see the dealer physically fly out)."""
+    dt = t - b.wall_t
+    if dt > 0.9:
         return None
-    piece = lay.crop(box)
-    u = min(1.0, (t - b.floor_t) / 0.12)
-    ang = (1 if rng.uniform() > 0.5 else -1) * rng.uniform(70, 105)  # lying along the floor
-    piece = piece.rotate(ang, Image.BILINEAR, expand=True)
-    squash = 0.75 - 0.2 * u                                         # the splat, then flat (seen from above)
-    piece = piece.resize((piece.width, max(1, int(piece.height * squash))), Image.BILINEAR)
+    p0 = b.at(b.wall_t)[0]
+    pos = (p0[0] + 0.4 * dt, p0[1] + 1.2 * dt - 0.5 * G * dt * dt, RZ + 0.1 + 4.5 * dt)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    fly_sprite(lay, cam, film, who, b, pos, b.at(b.wall_t)[1] + 500 * dt)
+    w, a0, a1, y0, y1 = [g for g in GLASS if g[0] == win[1]][0]
+    pts = [cam.project(q)[0] for q in _wall_pts(w, a0, a1, y0, y1, 0.0)]
+    mask = Image.new('L', img.size, 0)
+    ImageDraw.Draw(mask).polygon([(x * B.SS, y * B.SS) for x, y in pts], fill=255)
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(mask))))
+    img.alpha_composite(lay)
+    return None
+
+
+def fly_sprite(img, cam, film, who, b, pos, ang):
+    """The person as they were when hit, at world pos, turned by ang (the flight drawing)."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    X0, Y0, s0 = draw_person(lay, cam, film, who, b.t0)
+    bbox = lay.getbbox()
+    if not bbox or cam.depth(pos) < 0.7:
+        return
+    (X, Y), k = cam.project(pos)
+    sc = k * M_UNIT / s0
     S = B.SS
-    img.alpha_composite(piece, (int(X * S - piece.width / 2), int(Y * S - piece.height / 2)))
-    return X, Y, s
+    piece = lay.crop(bbox)
+    ax, ay = X0 * S - bbox[0], Y0 * S - bbox[1]
+    big = piece.resize((max(1, int(piece.width * sc)), max(1, int(piece.height * sc))), Image.BILINEAR)
+    pad = int(max(big.size)) + 2
+    canvas = Image.new('RGBA', (big.width + 2 * pad, big.height + 2 * pad), (0, 0, 0, 0))
+    canvas.paste(big, (pad, pad))
+    cx, cy = pad + ax * sc, pad + ay * sc
+    rot = canvas.rotate(ang, Image.BILINEAR, center=(cx, cy))
+    img.paste(rot, (int(X * S - cx), int(Y * S - cy)), rot)
 
 
 def thrown_person(img, cam, film, who, t, dfire):
@@ -1581,8 +1747,8 @@ def thrown_person(img, cam, film, who, t, dfire):
     if b is None or t < b.t0:
         return draw_person(img, cam, film, who, t, hand_on=(who == 'ESCORT'))
     win = through_window(dfire)
-    if win and win[0] == who and t >= b.wall_t + 0.04:
-        return None                                      # out through the window, into the night
+    if win and win[0] == who and t >= b.wall_t:
+        return out_of_window(img, cam, film, who, b, t, win)   # out through the window, into the night
     if b.floor_t is not None and t >= b.floor_t and who in FLYERS:
         return faceplant(img, cam, film, who, b, t)
     if b.floor_t is not None and t >= b.floor_t:
