@@ -95,6 +95,7 @@
 | 90 | (19 Oct) "Cut the red curtains in two when the beam strikes through it. The lower half drops to the floor." | yes: each panel cut where the beam's end crosses it (low, 0.5-1 m, where the beam is); the lower part drops and crumples |
 | 91 | (19 Oct) "The man in white ... strike the ceiling and smash back down to the ground." | yes: straight up into the ceiling (a crack), down face first on the floor |
 | 92 | (19 Oct) "There's a crater on the window again" | yes: the guard thrown clear of it; crater_check: never on a window, curtain or painting |
+| 93 | (19 Oct) "Horrifying plastic legs" | yes: no seam line down the tubes; the cartoon faceplant (knees down, lower legs kicked up, feet to the ceiling); her gown flares to the knees, red heels; both lie along the table, all on it (lying_check), and stay where they land |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.

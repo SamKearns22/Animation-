@@ -532,6 +532,21 @@ def hit_check():
     return faults
 
 
+def lying_check():
+    """Bodies lying on the table stay on it (Sam, 19 Oct: legs hung over the edge in mid-air): the point where each
+    lands is well inside the table, with the body's length (about 1.3 m with the legs kicked up) inside too."""
+    faults = []
+    d = dragon_state(FIRE + 0.05)
+    for who, ax in R.LIE_AXIS.items():
+        b = R.person_body(who, d)
+        x, _, z = b.at(b.floor_t)[0]
+        for al in (-0.62, 1.05):                             # the knees' end and the hands' end, from the hips
+            px, pz = x - ax[0] * 0.2 + ax[0] * al, z - ax[1] * 0.2 + ax[1] * al
+            if (px / R.TABLE_A[0]) ** 2 + (pz / R.TABLE_A[1]) ** 2 > 0.95:
+                faults.append(f'{who} lies on the table with part of the body past its edge ({px:.2f}, {pz:.2f})')
+    return faults
+
+
 def crater_check():
     """No crater on a window, a curtain or the painting (Sam, 19 Oct): every wall hit near one is listed, and the
     film's crater_spot must have refused it."""
@@ -673,6 +688,7 @@ def audits():
     faults += clearance_check()
     faults += table_check()
     faults += crater_check()
+    faults += lying_check()
     faults += hit_check()
     faults += contact_check()
     return faults

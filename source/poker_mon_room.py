@@ -823,7 +823,7 @@ def thing_body(i, dfire):
 
 # Sam, 19 Oct: not everyone into a wall the same way. These are clipped by the beam and tossed high into the air,
 # spinning, and land flat on their faces (on the floor, or on the table if they come down over it).
-FLYERS = {'LADY': (-0.35, 0.4), 'CARDS': (0.55, 0.42),                              # face down on the table
+FLYERS = {'LADY': (-0.02, 0.45), 'CARDS': (0.02, -0.42),                            # face down on the table
           'BEAU': None}                                                                # on the floor
 # (the husband goes across the room into the right-hand wall; the young man in white into the ceiling and down)
 # (the heiress flew up right in front of player one as he was hit: she goes out past the camera instead)
@@ -1659,14 +1659,14 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     return j
 
 
-LIE_AXIS = {'LADY': (0.0, 1.0), 'CARDS': (0.0, -1.0)}   # which way they lie on the table: across it, side by side
+LIE_AXIS = {'LADY': (1.0, 0.0), 'CARDS': (-1.0, 0.0)}   # along the table, side by side, head to toe (all on it)
 
 
 def faceplant(img, cam, film, who, b, t):
     """Flat on their face where they came down (Sam, 19 Oct): a body built in the room from rounded volumes (head,
     torso, arms flung past the head, legs), each a tube or ball in their colours, outlined, projected by the camera,
     so it lies in true perspective on the table or the floor (never a squashed flat picture); a shadow under it."""
-    pos = b.at(t)[0]
+    pos = b.at(b.floor_t)[0]                             # it stays where it lands: a body on felt does not skid
     if cam.depth(pos) < 0.6:
         return None
     sp = C.PEOPLE[who]
@@ -1695,21 +1695,21 @@ def faceplant(img, cam, film, who, b, t):
     turn = rng.choice([-1, 1]) * 0.07                                        # head turned, cheek on the table
     sp_ = settle
     parts = []                                           # (world a, world b, radius a, radius b, colour)
-    if dress:                                            # a gown: hips to knees, then the calves and feet below it
-        parts.append((at(0.05, 0, 0.09), at(-0.5, 0.04, 0.07), 0.12, 0.1, top))
-        for si, kn, ft in ((-1, kneeL, footL), (1, kneeR, footR)):
-            k_ = at(-0.5, si * 0.09, 0.05)
-            f_ = at(-0.85 + 0.3 * ft * sp_, si * (0.12 + 0.2 * kn * sp_), 0.04)
-            parts.append((k_, f_, 0.05, 0.04, skin))
-    else:
-        for si, kn, ft in ((-1, kneeL, footL), (1, kneeR, footR)):
-            hip = at(0.0, si * 0.09, 0.07)
-            knee = at(-0.45, si * (0.12 + 0.18 * kn * sp_), 0.06)
-            foot = at(-0.88 + 0.35 * ft * sp_, si * (0.12 + 0.32 * kn * sp_), 0.05)
-            parts.append((hip, knee, 0.075, 0.065, legs))
-            parts.append((knee, foot, 0.065, 0.055, legs))
-            parts.append((foot, at(-0.97 + 0.35 * ft * sp_, si * (0.13 + 0.34 * kn * sp_), 0.05), 0.05, 0.045,
-                          (24, 22, 26)))
+    # face down, knees on the surface, lower legs kicked up in the air, feet to the ceiling: the cartoon faceplant,
+    # and it keeps the whole body on the table (Sam, 19 Oct: "horrifying plastic legs" hanging over the edge)
+    if dress:                                            # a gown flaring from the hips to the knees, then calves up
+        parts.append((at(0.05, 0, 0.09), at(-0.48, 0, 0.08), 0.12, 0.16, top))
+    for si, kn, ft in ((-1, kneeL, footL), (1, kneeR, footR)):
+        hip = at(0.0, si * 0.09, 0.07)
+        knee = at(-0.45, si * (0.11 + 0.08 * kn * sp_), 0.06)
+        foot = at(-0.5 - 0.12 * ft * sp_, si * (0.12 + 0.1 * kn * sp_), 0.06 + 0.36 * sp_ * (0.8 + 0.2 * ft))
+        if not dress:
+            parts.append((hip, knee, 0.075, 0.068, legs))
+        parts.append((knee, foot, 0.06 if not dress else 0.045, 0.05 if not dress else 0.035, legs if not dress
+                      else skin))
+        tip = (foot[0] - ax[0] * 0.09, foot[1] + 0.02, foot[2] - ax[1] * 0.09)
+        parts.append((foot, tip, 0.05 if not dress else 0.035, 0.045 if not dress else 0.03,
+                      (24, 22, 26) if not dress else sp.get('lip_c', (180, 30, 40))))     # shoes; her heels
     parts.append((at(0.0, 0, 0.09), at(0.5, 0, 0.1), 0.13, 0.14, top))
     for si, el, hd in ((-1, elbL, handL), (1, elbR, handR)):   # arms bent at the elbow, flung about
         sh_ = at(0.48, si * 0.18, 0.1)
@@ -1744,7 +1744,6 @@ def faceplant(img, cam, film, who, b, t):
             C.tube(p, [A, Bq], 2 * ra, 2 * rb, col, 2.0)
             p.ell(A[0], A[1], ra, ra, col, None)
             p.ell(Bq[0], Bq[1], rb, rb, col, None)
-            p.line([A, Bq], B.dk(col, 0.82), max(1.0, 0.35 * ra))         # a shade down its length: volume
     (X, Y), k = cam.project(H)
     return X, Y, k * M_UNIT
 
