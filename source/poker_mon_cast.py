@@ -334,15 +334,17 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
     nl, nr = hr([(-100 + 20 * turn, -200), (100 + 20 * turn, -200)])
     body = [nl] + T([(-125, -1030), (-200, -920), (-290, -720), (-380, -440), (-390, -260), (-300, -110), (0, -60),
                      (300, -110), (390, -260), (380, -440), (290, -720), (200, -920), (125, -1030)]) + [nr]
-    p.poly(curve(body, 5), ORANGE, None)
-    p.line(open_curve(body, 5), INK, 3.0)
+    edge = open_curve(body, 5)                         # fill and outline on one path (a closed curve's fill
+    p.poly(edge, ORANGE, None)                         # bulged past the open outline at the neck)
+    p.line(edge, INK, 3.0)
     bx = 50 * turn
     cl, cr = hr([(bx - 58, -160), (bx + 58, -160)])
     belly = [cl] + T([(bx - 88, -1000), (bx - 160, -880), (bx - 230, -680), (bx - 300, -430), (bx - 290, -250),
                       (bx - 200, -120), (bx, -90), (bx + 200, -120), (bx + 290, -250), (bx + 300, -430),
                       (bx + 230, -680), (bx + 160, -880), (bx + 88, -1000)]) + [cr]
-    p.poly(curve(belly, 5), CREAM, None)                                               # the cream runs up the throat
-    p.line(open_curve(belly, 5), INK, 2.6)
+    edge = open_curve(belly, 5)
+    p.poly(edge, CREAM, None)                          # the cream runs up the throat
+    p.line(edge, INK, 2.6)
     for k in range(1, 9):                                                               # the bands across the belly
         yb = -990 + k * 102
         f = (yb + 990) / 900
