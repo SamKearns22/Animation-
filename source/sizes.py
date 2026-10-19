@@ -20,7 +20,7 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     'A4 paper': (0.21, 0.297), 'biro': (0.145, 0.01), 'pencil': (0.175, 0.008), 'mug': (0.085, 0.095),
     'takeaway cup': (0.09, 0.15), 'can': (0.066, 0.115), 'pen pot': (0.08, 0.1), 'desk plant': (0.15, 0.25),
     'phone': (0.072, 0.15), 'laptop open': (0.33, 0.23), 'monitor': (0.55, 0.36), 'keyboard': (0.44, 0.03),
-    'lanyard card': (0.054, 0.086), 'small handbag': (0.25, 0.18), 'briefcase': (0.42, 0.32),
+    'lanyard card': (0.054, 0.086), 'playing card': (0.063, 0.088), 'poker chip': (0.039, 0.0033), 'small handbag': (0.25, 0.18), 'briefcase': (0.42, 0.32),
     'desk': (1.4, 0.74), 'desk depth': (0.75, 0.74), 'office chair': (0.6, 1.0), 'meeting table': (2.4, 0.74),
     'door': (0.84, 2.04), 'double doorway': (1.6, 2.1), 'lift door opening': (1.0, 2.1), 'lift surround': (1.4, 2.4),
     'window pane': (1.2, 1.5), 'ceiling height office': (3.0, 2.7), 'light switch': (0.086, 0.086), 'exit sign': (0.36, 0.13),

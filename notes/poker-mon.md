@@ -3,20 +3,27 @@
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word) | done? |
 |---|------|------|
-| 1 | "A high class and stakes poker game. They are, in fact, playing Poker Mon Cards" | |
-| 2 | "The first player lays out his hand confidently. All Queens." | |
-| 3 | First player says: "Four of a kind." | |
-| 4 | "We 180 to the second player, who inspects their hand." | |
-| 5 | Second player says: "Dragonite, use hyper beam." | |
-| 6 | "The shot expands, showing that a Dragonite stands next to him in a bow tie." | |
-| 7 | "The Dragonite prepares hyper beam." | |
-| 8 | "We see the first player slowly lit by glowing light." | |
-| 9 | "We see the scene from above at an angle, à la The Salt." | |
-| 10 | "Dragonite fires the huge blast ray, hyper beam, throwing the other players and everything in the room far back off camera, à la the Salt." | |
-| 11 | The joke: poker, but Pokemon cards; instead of losing, player two uses a powerful Pokemon move and destroys the game and the other players in comical explosive fashion. | |
-| 12 | "Use the Pokemon brand detailing on the cards and infuse them with the standard detailing of poker cards and chips." | |
-| 13 | "We never use the word Poke'mon, just Poker Mon." (on screen, in subtitles, in the Hook Text, anywhere) | |
-| 14 | Use the real Pokemon imagery (Sam, 19 Oct: go ahead, no monetisation for now). | |
+| 1 | "A high class and stakes poker game. They are, in fact, playing Poker Mon Cards" | yes |
+| 2 | "The first player lays out his hand confidently. All Queens." | yes (shot 1, 0.5-1.5 s) |
+| 3 | First player says: "Four of a kind." | subtitled; voice pending (recordings) |
+| 4 | "We 180 to the second player, who inspects their hand." | yes (shot 3, eyes down 4.9-5.9 s) |
+| 5 | Second player says: "Dragonite, use hyper beam." | subtitled; voice pending |
+| 6 | "The shot expands, showing that a Dragonite stands next to him in a bow tie." | yes (8.0-9.6 s pull-back) |
+| 7 | "The Dragonite prepares hyper beam." | yes (head back, light in the mouth) |
+| 8 | "We see the first player slowly lit by glowing light." | yes (shot 5) |
+| 9 | "We see the scene from above at an angle, à la The Salt." | yes (shot 6) |
+| 10 | "Dragonite fires the huge blast ray, hyper beam, throwing the other players and everything in the room far back off camera, à la the Salt." | yes (12.7-14 s) |
+| 11 | The joke: poker, but Pokemon cards; instead of losing, player two uses a powerful Pokemon move and destroys the game and the other players in comical explosive fashion. | yes |
+| 12 | "Use the Pokemon brand detailing on the cards and infuse them with the standard detailing of poker cards and chips." | yes |
+| 13 | "We never use the word Poke'mon, just Poker Mon." (on screen, in subtitles, in the Hook Text, anywhere) | yes (the check fails if it appears) |
+| 14 | Use the real Pokemon imagery (Sam, 19 Oct: go ahead, no monetisation for now). | yes |
+| 15 | Players are made up (not the Bond characters): "rich, classy and collected". | yes |
+| 16 | The blast shot: like the end of The Salt, "when things and people (the woman) go hilariously flying out of shot". | yes (the woman in red spins off left) |
+| 17 | Sound effects: a charge-up hum and a big blast (Sam: "Please"). | yes (made in code) |
+| 18 | The glow: "Try the glow effect here as it correlates with the hyper beam from the show" (real soft glow, an exception to the house style's no-glow rule, this film only). | yes (soft glow; this film only) |
+| 19 | Ending: hold on the wrecked empty room, player two and Dragonite unbothered; player two calmly pulls the chips in. | yes (15.8-17 s) |
+| 20 | Cards: Queens keep the poker art and corner Q, with the yellow Poker Mon border and an HP number; backs are the blue swirl, Poke Ball and POKER MON; chips like Poke Balls. Player two holds "Pokemon themed standard cards" (no Dragonite card). | yes (P2's hand only on the cast sheet; we see his backs) |
+| 21 | Table: three other players (one in the playing-card shirt), a dealer and two guards, all blown away. | yes |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
@@ -40,7 +47,11 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   never used: the cards, logo and chips say POKER MON.
 - Format: TikTok vertical (1080 x 1920), Satire style, `source/poker_mon.py` from `source/satire_template.py`; no title;
   ends with the CranbriJoos sign-off via finish.py. Motion-led film: after the cast sheet, go to a quick animatic early.
-- Draft shot plan (waiting on Sam's answers), about 14 s plus the 2 s sign-off:
+- 19 Oct answers: 1 made-up players (rich, classy, collected; no Bond characters); 2 The Salt ending (people and things
+  flying hilariously out of shot); 3 recordings pending; 4 yes to charge hum and blast; 5 real glow like the show;
+  6 yes, hold on the wreck and player two pulls the chips in; 7 yes, but player two holds Pokemon-themed standard
+  cards, not a Dragonite card; 8 yes; 9 Hook Text pending.
+- Draft shot plan, about 14 s plus the 2 s sign-off:
   1. Player 1 across the table, mid shot: lays his hand face up on the felt, confident. "Four of a kind."
   2. Close insert: the four Queens on the felt, readable (staging choice, to be confirmed).
   3. 180 to player 2, close: inspects his cards. "Dragonite, use hyper beam."
@@ -51,3 +62,10 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Reuse: people from `views.py`/`moves.py` (sitting, gestures, things held; taking a blow and falling in stages for the
   blast); props under gravity for the cards, chips and chairs; the room on `stage.py`. New builds: Dragonite, the
   Hyper Beam, the card faces and backs, Poke Ball chips, the casino room.
+- 19 Oct: Sam asked to go straight through to the animatic (cast sheet shown with the check sheet, not separately).
+  Built: source/poker_mon_cast.py (people, Dragonite, cards, chips, glow), source/poker_mon.py (six shots, about 18 s):
+  1 player one lays the Queens (0-3.6), 2 the Queens on the felt (3.6-4.7), 3 player two close (4.7-8.0), 4 the shot
+  widens to the Dragonite, which charges (8.0-11.0), 5 player one lit (11.0-12.5), 6 from above: the beam, everyone
+  thrown out of shot, then a push in on player two pulling in the pot (12.5-18.0).
+- Additions of mine (flagged to Sam): the Queens insert shot; chips as Great/Ultra/Master Balls; a small jolt at the
+  impact; the burnt track left by the beam; the closing push in; the Dragonite's smug closed eyes at the end.
