@@ -66,6 +66,7 @@
 | 61 | (19 Oct) "Make the charge brighter and more expansive." | yes: room light up to the whole frame, a wide halo, a bigger core and sparks streaming in (sparks: my addition), all sized by the Dragonite on screen |
 | 62 | (19 Oct) "Card hand clips through chips and break clipping rules." | yes: his chip stacks moved 9 cm out, his hand rests in the clear gap between the Queens and the chips; clearance_check (a resting hand stays 3 cm clear of everything on the table) runs with the audits |
 | 63 | (19 Oct) "1.5 seconds of Dragonite looking neutral before charging" | yes: the charge starts 1.5 s later; everything after it moved with it (film 21.9 -> 23.4 s) |
+| 64 | (19 Oct) "A white box appears over player 2 when it zooms out" | yes: his chair's back was sorted by a point at seat height, which came nearer than him as the camera tilted up; the chair halves now sit just behind and just in front of their sitter's own point |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
