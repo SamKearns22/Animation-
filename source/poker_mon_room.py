@@ -824,6 +824,43 @@ def scorch(img, cam, t, dfire):
             p.line([A, Bp], (24, 18, 16), max(2, 0.1 * (ka + kb) / 2))
 
 
+def craters(img, cam, t, dfire):
+    """Impact craters where people smack against the walls (Sam, 19 Oct): from the moment of the hit, a jagged hollow
+    in the plaster (or the wood below the rail) where the body struck, with cracks running out from it; they stay."""
+    p = B.Pen(img, FLAT)
+    for who in list(SEATED) + list(STANDING):
+        if who == 'P2':
+            continue
+        b = person_body(who, dfire)
+        if b is None or b.wall is None or t < b.wall_t:
+            continue
+        axis, sg = b.wall
+        pos = drifted(who, b, b.wall_t, dfire)[0]
+        along = pos[2] if axis == 0 else pos[0]
+        lim = RZ if axis == 0 else RX
+        along = max(-lim + 0.5, min(lim - 0.5, along))
+        y = max(0.45, min(CEIL - 0.5, pos[1]))
+        on = lambda a, h, d=0.006: ((sg * (RX - d), h, a) if axis == 0 else (a, h, sg * (RZ - d)))
+        rng = np.random.default_rng(31 + sum(map(ord, who)))
+        r = 0.36 * min(1.0, 0.4 + (t - b.wall_t) / 0.06 * 0.6)          # punched in over a few frames
+        n = 15
+        angs = np.linspace(0, 2 * math.pi, n, endpoint=False) + rng.uniform(-0.15, 0.15, n)
+        rad = rng.uniform(0.8, 1.12, n)
+        low = y < 1.0                                                   # below the gilt rail: the wooden dado
+        rim = [on(along + math.cos(a) * r * k * 1.1, y + math.sin(a) * r * k * 1.25) for a, k in zip(angs, rad)]
+        hole = [on(along + math.cos(a) * r * k * 0.72, y + math.sin(a) * r * k * 0.85, 0.004)
+                for a, k in zip(angs, rad * rng.uniform(0.85, 1.05, n))]
+        cam.poly(p, rim, (150, 128, 96) if not low else (120, 80, 50), INK, 2.0)       # broken plaster round it
+        cam.poly(p, hole, (74, 52, 34) if not low else (40, 22, 14), INK, 1.6)        # the hollow, in shadow
+        for a in angs[::2]:                                             # cracks running out across the wall
+            a2 = a + rng.uniform(-0.3, 0.3)
+            pts = [on(along + math.cos(a) * r * 1.05, y + math.sin(a) * r * 1.2)]
+            for k in (1.5, 1.9 + rng.uniform(0, 0.5)):
+                pts.append(on(along + math.cos(a2) * r * k, y + math.sin(a2) * r * k * 1.15 + rng.uniform(-0.03, 0.03)))
+                a2 += rng.uniform(-0.35, 0.35)
+            cam.line(p, pts, INK, 2.0)
+
+
 # ------------------------------------------------------------------------------------------------ drawing things
 def draw_thing(img, cam, kind, ex, pos, ang, t, burning, seed, flying):
     """One thing at pos (world), turned by ang (degrees) about the vertical while flat, tumbling while it flies."""
@@ -1400,6 +1437,7 @@ def render(img, t, film, cam, extra_lights=()):
     floor_and_walls(img, cam, t)
     decor(img, cam, t, None)
     scorch(img, cam, t, dfire)
+    craters(img, cam, t, dfire)
     items = []
     POS.clear()
     tdep = cam.depth((0.0, TABLE_H, 0.0))
@@ -1461,7 +1499,7 @@ def render(img, t, film, cam, extra_lights=()):
             if t >= (Clock.PUTDOWN[0] + Clock.PUTDOWN[1]) / 2:
                 for k in range(5):
                     card3(img, cam, C.card_back(), P2_CARDS[0] + 0.004 * k, P2_CARDS[1] + 0.012 * k, 0.063, 90 + 6 * k)
-            p2_arms(img)
+            seated_arms(img, t)
         elif kind == 'person':
             if who == 'P2':
                 draw_person(img, cam, film, who, t)
@@ -1564,14 +1602,23 @@ def render(img, t, film, cam, extra_lights=()):
         C.glow(img, FLAT, [(mouth[0], mouth[1], 8 + 26 * st['ball'])], strength=0.5 + 0.5 * st['ball'])
 
 
-def p2_arms(img):
-    """Player two's forearms lie over the table's edge: drawn again after the table and the pot (not while he holds
-    his cards up at his chest: they are clear of the table then)."""
-    if 'P2' not in DRAWN or FILM[0] is None or ARMS_UP[0]:
+def seated_arms(img, t):
+    """The players' forearms lie over the table's edge and their hands on the felt: drawn again after the table and the
+    pot, with anything held in a gripping hand (player one's fan of Queens), so the table never covers a hand that is
+    on it (Sam, 19 Oct: player two's hands hidden under the table as he drew in the pot; then player one laying his
+    Queens). Not while player two holds his cards up at his chest (clear of the table then); player one only while
+    seated (before the blast)."""
+    if FILM[0] is None:
         return
-    X, Y, s, yaw, mirror, j, j2 = DRAWN['P2']
-    L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)
-    p = B.Pen(img, L)
-    for sd in 'LR':                                      # (no height cut-off: at this table his wrists sit higher
-        if j2.get('hand', {}).get(sd) in ('fist', 'palm'):   # than in the close shots, and were hidden, Sam 19 Oct)
-            V.arm(p, j2, sd, C.PEOPLE['P2'])
+    for who in ('P1', 'P2'):
+        if who not in DRAWN or (who == 'P2' and ARMS_UP[0]) or (who == 'P1' and t >= Clock.FIRE):
+            continue
+        X, Y, s, yaw, mirror, j, j2 = DRAWN[who]
+        L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)
+        p = B.Pen(img, L)
+        for draw in j.get('props', []):
+            if getattr(draw, 'held', False):
+                draw(p, j2)
+        for sd in 'LR':                                  # (no height cut-off: at this table the wrists sit higher
+            if j2.get('hand', {}).get(sd) in ('fist', 'palm'):   # than in the close shots, and were hidden, Sam 19 Oct)
+                V.arm(p, j2, sd, C.PEOPLE[who])

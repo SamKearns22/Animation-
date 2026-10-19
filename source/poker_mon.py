@@ -262,15 +262,16 @@ def fire_eyes(t):
 
 
 def dragon_state(t):
-    """The Dragonite's head, mouth, eyes, wings and arms over the film. Its mouth is only ever the gentle closed smile
-    (refs dragonite-1..3) or the round O of the Hyper Beam, switching on one frame (Sam, 19 Oct: never a jaw working up
-    and down, and the O never grows or shrinks)."""
+    """The Dragonite's head, mouth, eyes, wings and arms over the film. Its mouth is only ever closed (the plain muzzle
+    of Sam's photo) or the round O of the Hyper Beam, never a jaw working up and down (Sam, 19 Oct). Closed when we
+    first see it; a small O once the charge is under way; wide open only as it blasts (Sam, 19 Oct)."""
     st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0, shape='jaw')
-    if t >= CHARGE[0]:                                          # charging: head back, the O, the light growing in it
+    if t >= CHARGE[0]:                                          # charging: head back, then a small O, light growing
         k = ease((t - CHARGE[0]) / 0.7)
-        st.update(head=-18 * k, mouth_open=1.0, shape='o', eyes='soft' if k > 0.3 else 'open',
-                  wings=0.15 + 0.5 * k, arms=0.35 * k)
-        st['ball'] = ease((t - CHARGE[0] - 0.4) / (FIRE - CHARGE[0] - 0.4))
+        st.update(head=-18 * k, eyes='soft' if k > 0.3 else 'open', wings=0.15 + 0.5 * k, arms=0.35 * k)
+        if t >= CHARGE[0] + 0.6:
+            st.update(mouth_open=0.12, shape='o')
+        st['ball'] = ease((t - CHARGE[0] - 0.6) / (FIRE - CHARGE[0] - 0.6))
     if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast): firing
         k = min(1.0, (t - (FIRE - 0.12)) / 0.12)
         st.update(head=-18 + 30 * k, lean=8 * k, mouth_open=1.0, shape='o', wings=0.65 + 0.35 * k,
@@ -433,21 +434,31 @@ def checks():
 
 def hands_check():
     """Hands that touch something must be seen touching it (Sam, 19 Oct: player two's hands were hidden under the
-    table as he drew in the pot, and nothing caught it). On frames of the pull, the patch of picture at each of his
-    hands must be his hand, not the felt or the table's rail."""
+    table as he drew in the pot, then player one's as he laid his Queens, and nothing caught either). On frames of the
+    lay and of the pull, the patch of picture at each hand on the felt must be that hand, not the felt or the rail."""
     faults = []
     keep = B.SS
     B.SS = 1
-    for t in [float(x) for x in np.linspace(R.Clock.PULL[0] + 0.05, R.Clock.PULL[1] - 0.05, 4)]:
-        im = np.asarray(picture(t).convert('RGB')).astype(int)
-        X, Y, s, yaw, mirror, j, j2 = R.DRAWN['P2']
-        for sd in 'LR':
-            wx, wy = j2['wr' + sd]
-            px, py = int(X + s * wx * (-1 if mirror else 1)), int(Y + s * wy)
-            patch = im[max(0, py - 4):py + 5, max(0, px - 4):px + 5]
-            felt = ((patch[..., 1] > patch[..., 0] + 10) | (patch.sum(-1) < 140)).mean()
-            if felt > 0.5:
-                faults.append(f'player two\'s {sd} hand is hidden at {t:.2f} s (the table is drawn over it)')
+    c = R.Clock
+    frames = [(float(t), 'P1', 'R') for t in np.linspace(LAY[0] + 0.45 * (LAY[1] - LAY[0]), LAY[1] - 0.05, 4)]
+    frames += [(float(t), 'P1', 'L') for t in (LAY[0] + 0.3, 3.0)]
+    frames += [(float(t), 'P2', sd) for t in np.linspace(c.PULL[0] + 0.05, c.PULL[1] - 0.05, 4) for sd in 'LR']
+    names = {'P1': 'player one', 'P2': 'player two'}
+    cache = {}
+    for t, who, sd in frames:
+        if t not in cache:
+            cache[t] = (np.asarray(picture(t).convert('RGB')).astype(int), dict(R.DRAWN))
+        im, drawn = cache[t]
+        if who not in drawn:
+            faults.append(f'{names[who]} is not drawn at {t:.2f} s (hand check)')
+            continue
+        X, Y, s, yaw, mirror, j, j2 = drawn[who]
+        wx, wy = j2['wr' + sd]
+        px, py = int(X + s * wx * (-1 if mirror else 1)), int(Y + s * wy)
+        patch = im[max(0, py - 4):py + 5, max(0, px - 4):px + 5]
+        felt = ((patch[..., 1] > patch[..., 0] + 10) | (patch.sum(-1) < 140)).mean()
+        if felt > 0.5:
+            faults.append(f"{names[who]}'s {sd} hand is hidden at {t:.2f} s (the table is drawn over it)")
     B.SS = keep
     return faults
 
