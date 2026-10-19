@@ -73,7 +73,7 @@ WIFE = dict(name='WIFE', skin=B.PALE, hw=62, hh=86, jaw='soft', hair='bob', hair
             outfit='dress', dress=(26, 110, 74), jacket=(26, 110, 74), trousers=(22, 96, 64), lip_c=(176, 70, 80),
             age=True, pearls=True, shoulders=126, mouth='line', seed=20)
 # The woman in red's husband: a silver fox in a midnight-blue dinner jacket.
-HUSBAND = dict(name='HUSBAND', skin=B.PINK, hw=68, hh=90, jaw='square', hair='side', hair_c=(150, 146, 144),
+HUSBAND = dict(name='HUSBAND', skin=B.PINK, hw=68, hh=90, jaw='square', hair='crop', hair_c=(150, 146, 144),
                brow_c=(110, 104, 100), outfit='suit', jacket=(30, 36, 70), shirt=SHIRT, trousers=(24, 28, 54),
                shoulders=152, bow=(20, 20, 26), creases=1, mouth='line', seed=21)
 # A young hanger-on: white dinner jacket, champagne in hand.
