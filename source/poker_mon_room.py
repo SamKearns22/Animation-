@@ -1465,8 +1465,10 @@ def render(img, t, film, cam, extra_lights=()):
             still = who == 'P2' or react(who, t, dict(C.PEOPLE[who]))[3] is None
             cb = chair_body(who, dfire) if who != 'P2' else None
             if still and (cb is None or t < cb.t0):
-                items.append((cam.depth((x, 0.5, z)) + 0.001, 'chair_far', who))
-                items.append((cam.depth((x, 0.5, z)) - 0.001, 'chair_near', who))
+                dp = cam.depth(POS[('person', who)])     # its back just behind its sitter, its front just in front,
+                items.append((dp + 0.001, 'chair_far', who))   # by HIS point (a point at seat height came nearer
+                items.append((dp - 0.001, 'chair_near', who))  # as the camera tilted up: the back drew over player
+                                                               # two in the zoom out, Sam 19 Oct)
                 POS[('chair_far', who)] = POS[('chair_near', who)] = (x, 0.5, z)
             else:
                 cpos = cb.at(t)[0] if cb is not None and t >= cb.t0 else (x, 0.5, z)
