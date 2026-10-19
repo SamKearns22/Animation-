@@ -1254,6 +1254,7 @@ def p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
 
 P2_CARDS = (-1.4, 0.24)                    # where player two lays his own hand, face down
 ARMS_UP = [False]
+DRAGON_S = [0.25]                          # the Dragonite's scale on screen this frame
 
 
 def queen_shown(i, film):
@@ -1528,6 +1529,7 @@ def render(img, t, film, cam, extra_lights=()):
                 f = (math.cos(a), math.sin(a))
             (X, Y), k = cam.project((x, 0.0, z))
             yaw = cam.yaw_of((x, 0, z), f)
+            DRAGON_S[0] = k * M_UNIT                     # its scale on screen: the charge's glow is sized by it
             mouth = C.dragonite(img, FLAT, X, Y, k * M_UNIT, t, turn=min(1.0, abs(yaw) / 55.0),
                                 flip=1 if yaw >= 0 else -1, head=st['head'], mouth_open=st['mouth_open'],
                                 eyes=st['eyes'], wings=st['wings'], arms=st['arms'], lean=st['lean'],
@@ -1607,16 +1609,17 @@ def render(img, t, film, cam, extra_lights=()):
     elif Clock.CHARGE0 < t < Clock.FIRE and mouth is not None:
         st = film.dragon_state(t)
         k = st['ball']                                   # brighter and more expansive (Sam, 19 Oct): a wide halo,
-        C.glow(img, FLAT, [(mouth[0], mouth[1], 40 + 170 * k)], strength=0.45 * k)   # a big core, and sparks
-        if k > 0.05:                                     # streaming in to the mouth (the show's energy gathering)
+        ds = DRAGON_S[0]                                 # a big core and sparks streaming in to the mouth (the show's
+        C.glow(img, FLAT, [(mouth[0], mouth[1], ds * (90 + 480 * k))], strength=0.5 * k)   # energy gathering), all
+        if k > 0.05:                                     # in the Dragonite's own size, so they read at any distance
             rng = np.random.default_rng(5)
             sparks = []
-            for a, ph, sp in zip(rng.uniform(0, 2 * math.pi, 22), rng.uniform(0, 1, 22), rng.uniform(0.7, 1.3, 22)):
+            for a, ph, sp in zip(rng.uniform(0, 2 * math.pi, 26), rng.uniform(0, 1, 26), rng.uniform(0.7, 1.3, 26)):
                 f = (t * 0.9 * sp + ph) % 1.0            # each spark flies in from far out, again and again
-                r = (140 + 420 * k) * (1 - f)
-                sparks.append((mouth[0] + r * math.cos(a), mouth[1] + r * math.sin(a), 3 + 6 * k * (1 - f * 0.5)))
-            C.glow(img, FLAT, sparks, strength=0.8)
-        C.glow(img, FLAT, [(mouth[0], mouth[1], 10 + 52 * k)], strength=0.6 + 0.6 * k)
+                r = ds * (300 + 800 * k) * (1 - f)
+                sparks.append((mouth[0] + r * math.cos(a), mouth[1] + r * math.sin(a), ds * (8 + 14 * k) * (1 - f * 0.5)))
+            C.glow(img, FLAT, sparks, strength=0.85)
+        C.glow(img, FLAT, [(mouth[0], mouth[1], ds * (24 + 110 * k))], strength=0.6 + 0.6 * k)
 
 
 def seated_arms(img, t, cam=None, on=()):
