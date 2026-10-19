@@ -298,17 +298,26 @@ def slurp_track(path):
         w.writeframes((np.clip(out[:int(DUR * SR)], -1, 1) * 32767).astype('<i2').tobytes())
 
 
-def add(film, out):
-    """Join the sign-off onto the end of a finished film (1080 x 1920, 12 fps), its sound kept."""
+def add(film, out, fps=None, crf=None):
+    """Join the sign-off onto the end of a finished film (1080 x 1920), its sound kept. The film's own frame rate is
+    kept (12 for most; DLC is 24: joining it at 12 halved its smoothness, 19 Oct); crf 20 unless the film's own
+    encoding was lighter (then about the same size as it was)."""
+    probe = subprocess.run([FF, '-i', film], capture_output=True, text=True).stderr
+    if fps is None:
+        import re
+        m = re.search(r'(\d+(?:\.\d+)?) fps', probe)
+        fps = int(round(float(m.group(1)))) if m else 12
+    if crf is None:
+        crf = 20 if fps <= 12 else 26
     with tempfile.TemporaryDirectory() as tmp:
         so = os.path.join(tmp, 'signoff.mp4')
         clip(so)
         subprocess.run([FF, '-y', '-loglevel', 'error', '-i', film, '-i', so, '-filter_complex',
-                        '[0:v]fps=12,format=yuv420p[a];[1:v]fps=12,format=yuv420p[b];[0:a]aresample=48000[x];'
+                        f'[0:v]fps={fps},format=yuv420p[a];[1:v]fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'
                         '[1:a]aresample=48000[y];[a][x][b][y]concat=n=2:v=1:a=1[v][s]',
-                        '-map', '[v]', '-map', '[s]', '-c:v', 'libx264', '-crf', '20', '-preset', 'slow', '-c:a', 'aac',
-                        '-b:a', '160k', '-movflags', '+faststart', out], check=True)
-    print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB')
+                        '-map', '[v]', '-map', '[s]', '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow',
+                        '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
+    print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB at {fps} fps')
 
 
 def sheet(out, times=(0.0, 0.5, 0.8, 1.2)):
