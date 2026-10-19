@@ -130,7 +130,7 @@ def dress_up(sp):
         if sp.get('bow'):
             bow_tie(p, 0, 4, sp['bow'])
         if sp.get('earpiece'):                         # the coiled wire, inked like everything else
-            wire = curve([(sp['hw'] - 4, -150), (sp['hw'] + 12, -110), (sp['hw'] + 4, -40), (sp['hw'] - 14, 10)], 3)
+            wire = open_curve([(sp['hw'] - 4, -150), (sp['hw'] + 12, -110), (sp['hw'] + 4, -40), (sp['hw'] - 14, 10)], 3)
             p.line(wire, INK, 4.0)
             p.line(wire, (200, 200, 206), 2.0)
     return draw
@@ -179,9 +179,23 @@ def _ovl(cx, cy, rx, ry, n=36):
     return [(cx + rx * math.cos(a), cy + ry * math.sin(a)) for a in np.linspace(0, 2 * math.pi, n, endpoint=False)]
 
 
+def open_curve(pts, n=6):
+    """Catmull-Rom through the points, end to end. ed.curve closes the loop (right for outlines): a tube or a line drawn
+    on it doubled back from its end to its start (the orange line across the wing, the looped antennae, Sam 19 Oct)."""
+    q = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(q) - 2):
+        p0, p1, p2, p3 = (np.asarray(q[i + d], float) for d in (-1, 0, 1, 2))
+        for u in np.linspace(0, 1, n, endpoint=False):
+            out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
+                                    + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
+    out.append(tuple(map(float, pts[-1])))
+    return out
+
+
 def tube(p, pts, w0, w1, col, lw=2.6):
     """A limb as one outlined shape tapering from w0 to w1 along pts (never a thick line with square ends)."""
-    pts = curve(pts, 3) if len(pts) > 2 else pts
+    pts = open_curve(pts, 3) if len(pts) > 2 else pts
     n = len(pts)
     left, right = [], []
     for i, (x, y) in enumerate(pts):
@@ -197,18 +211,18 @@ def tube(p, pts, w0, w1, col, lw=2.6):
 
 
 def wing(p, sx, sy, sg, k=1.0, spread=0.0):
-    """One small bat wing from the shoulder blade: an orange frame along the top edge, plain teal skin scalloped below
-    it (Sam, 19 Oct: never an orange line across the middle). spread 0 (folded up behind) .. 1 (wide open)."""
+    """One small bat wing from the shoulder blade: an orange frame along the top edge, solid teal below it, scalloped
+    between the fingers (Sam, 19 Oct: orange at the top, solid blue for the rest, no gaps, no line across the middle). spread 0 (folded up behind) .. 1 (wide open)."""
     tip = (sx + sg * (230 + 170 * spread) * k, sy - (300 - 150 * spread) * k)
     elbow = (sx + sg * (110 + 60 * spread) * k, sy - (230 - 60 * spread) * k)
     f1 = (sx + sg * (230 + 150 * spread) * k, sy - (70 - 60 * spread) * k)
     f2 = (sx + sg * (110 + 70 * spread) * k, sy + (10 + 30 * spread) * k)
-    tube(p, [(sx, sy), elbow, tip], 34 * k, 12 * k, ORANGE)          # the orange frame: the wing's top edge only
-    skin = [(sx, sy + 14 * k), (elbow[0], elbow[1] + 14 * k), (tip[0] - sg * 8 * k, tip[1] + 12 * k),
-            (tip[0] - sg * 10 * k, tip[1] + 60 * k),
+    skin = [(sx, sy), elbow, tip, (tip[0] - sg * 10 * k, tip[1] + 60 * k),
             ((tip[0] + f1[0]) / 2 - sg * 40 * k, (tip[1] + f1[1]) / 2 - 10 * k), f1,
             ((f1[0] + f2[0]) / 2 - sg * 40 * k, (f1[1] + f2[1]) / 2 - 20 * k), f2, (sx, sy + 30 * k)]
-    p.poly(skin, TEAL, INK, 2.6)                                       # plain teal skin, no lines across it (Sam)
+    p.poly(skin, TEAL, INK, 2.6)                       # solid blue below, no lines across it (Sam, 19 Oct)
+    tube(p, [(sx, sy), elbow, tip], 30 * k, 12 * k, ORANGE)   # the orange frame along the top, overlapping the blue:
+                                                               # no gap between them
 
 
 IRIS = (34, 40, 70)
@@ -238,14 +252,12 @@ def dragonite_head(p, piv, deg, turn, mouth_open, eyes, mouth_shape='jaw'):
     for sg in (-1, 1):                                                                 # the nostrils, at the tip
         p.line(R([(sx + sg * 26 + 40 * turn - 6, sy - 28), (sx + sg * 26 + 40 * turn + 6, sy - 31)]), INK, 3.0)
     mouth_at = (sx + 15 * turn, sy + 44)
-    if mouth_shape == 'o' and mouth_open > 0.02:       # a small neat O, darker lips round it
+    if mouth_shape == 'o' and mouth_open > 0.02:       # a round O, opening wide as it beams (Sam), darker lips round it
         ox, oy = mouth_at
-        p.poly(R(_ovl(ox, oy, 30, 27)), ORANGE_D, INK, 2.4)
-        p.poly(R(_ovl(ox, oy, 19, 17)), (92, 34, 32), INK, 2.0)
-    else:                                              # the gentle smile, curling up into the cheek
-        smile = curve([(sx - mw * 0.55 + 30 * turn, sy + 38), (sx - 10 + 20 * turn, sy + 58),
-                       (sx + mw * 0.45 + 10 * turn, sy + 44), (sx + mw * 0.7 + 10 * turn, sy + 18)], 3)
-        p.line(R(smile[:-1] if len(smile) > 1 else smile), INK, 3.0)
+        r_ = 18 + 34 * mouth_open
+        p.poly(R(_ovl(ox, oy, r_ + 10, (r_ + 10) * 0.92)), ORANGE_D, INK, 2.4)
+        p.poly(R(_ovl(ox, oy, r_, r_ * 0.92)), (92, 34, 32), INK, 2.0)
+    # closed: no mouth line at all, the plain muzzle of Sam's photo (19 Oct: "there isn't [a smile] in the photo")
     eye_block(p, R, hx, hy, turn, eyes)
     return R([mouth_at])[0]
 
@@ -267,9 +279,9 @@ def eye_block(p, R, hx, hy, turn, eyes):
         if style == 'closed':
             p.line(R([(ex - 24, ey + 2), (ex, ey + 12), (ex + 24, ey + 2)]), INK, 3.6)
         elif style == 'arc':                                       # happy, closed, curving up
-            p.line(R(curve([(ex - 24, ey + 8), (ex, ey - 8), (ex + 24, ey + 8)], 3)), INK, 4.2)
+            p.line(R(open_curve([(ex - 24, ey + 8), (ex, ey - 8), (ex + 24, ey + 8)], 3)), INK, 4.2)
         elif style == 'squint':                                    # screwed up, a curved slit
-            p.line(R(curve([(ex - 24, ey + 2), (ex, ey - 4), (ex + 24, ey + 4)], 3)), INK, 4.6)
+            p.line(R(open_curve([(ex - 24, ey + 2), (ex, ey - 4), (ex + 24, ey + 4)], 3)), INK, 4.6)
             p.line(R([(ex - 20, ey + 12), (ex + 18, ey + 14)]), ORANGE_D, 2.4)
         elif style == 'narrow':                                    # determined: the top of the eye cut by a lid
             p.poly(R([(ex - 24 * k, ey - 4 - sg * 6), (ex + 24 * k, ey - 4 + sg * 6), (ex + 22 * k, ey + 18),
@@ -288,7 +300,7 @@ def eye_block(p, R, hx, hy, turn, eyes):
                 p.poly(R(curve([(ex - ew - 6, ey + eh * (0.5 + lo * 0.5)), (ex, ey + eh * lo * 0.4 - eh * 0.1 * (1 - lo)),
                                 (ex + ew + 6, ey + eh * (0.5 + lo * 0.5)), (ex + ew + 6, ey + eh + 8), (ex - ew - 6, ey + eh + 8)], 3)),
                        ORANGE, None)
-                p.line(R(curve([(ex - ew - 2, ey + eh * (0.5 + lo * 0.5)), (ex, ey + eh * lo * 0.4 - eh * 0.1 * (1 - lo)),
+                p.line(R(open_curve([(ex - ew - 2, ey + eh * (0.5 + lo * 0.5)), (ex, ey + eh * lo * 0.4 - eh * 0.1 * (1 - lo)),
                                 (ex + ew + 2, ey + eh * (0.5 + lo * 0.5))], 3)), INK, 2.4)
             if style == 'focus':                                   # a kind lid: lowered, sloping down to the outside
                 inner = -sg                                        # the inner corner is toward the face's middle
@@ -318,7 +330,7 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
     tail = curve([(-80, -260), (-320, -230), (-520, -120), (-640, -10), (-720, 50), (-600, 40), (-450, -20),
                   (-280, -90), (-90, -120)], 4)                                         # the tail, behind
     p.poly(T(tail), ORANGE, INK, 2.8)
-    p.line(T(curve([(-560, 0), (-400, -90), (-230, -150)], 3)), CREAM_D, 3)
+    p.line(T(open_curve([(-560, 0), (-400, -90), (-230, -150)], 3)), CREAM_D, 3)
     for sg in (-1, 1):                                                                  # both wings, behind
         k = 0.85 if sg < 0 else 1.0
         wing(p, *T([(sg * 140 * k + 30 * turn, -860)])[0], sg, k * 1.15, wings)
@@ -341,13 +353,24 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
         yb = -990 + k * 102
         f = (yb + 990) / 900
         w_ = 90 + 210 * math.sin(math.pi * min(1.0, f * 0.62 + 0.08)) ** 0.8
-        p.line(T(curve([(bx - w_ * 0.96, yb - 6), (bx, yb + 14), (bx + w_ * 0.96, yb - 6)], 3)), CREAM_D, 2.6)
+        p.line(T(open_curve([(bx - w_ * 0.96, yb - 6), (bx, yb + 14), (bx + w_ * 0.96, yb - 6)], 3)), CREAM_D, 2.6)
     for sg in (-1, 1):                                                                  # short arms, circle hands
         sh = (sg * 190 + 40 * turn, -840)
         hand = (sh[0] + sg * (90 + 200 * arms), sh[1] + 170 - 120 * arms)
         el = (sh[0] + sg * (70 + 90 * arms), sh[1] + 100 - 30 * arms)
         tube(p, T([sh, el, hand]), 84, 64, ORANGE)
         p.poly(T(_ovl(*hand, 46, 46)), ORANGE, INK, 2.6)
+    piv = T([(0, -1000)])[0]                           # the neck: the body carried up into the head, turning with it
+    nk = _rot([(piv[0] - 105 + 20 * turn, piv[1] - 200), (piv[0] + 105 + 20 * turn, piv[1] - 200)], piv, head + lean)  # (Sam: never a loose head)
+    nb = T([(-128, -975), (128, -975)])
+    p.poly([nb[0], nk[0], nk[1], nb[1]], ORANGE, None)
+    p.line([nb[0], nk[0]], INK, 2.8)
+    p.line([nb[1], nk[1]], INK, 2.8)
+    ck = _rot([(piv[0] + bx - 62, piv[1] - 150), (piv[0] + bx + 62, piv[1] - 150)], piv, head + lean)                   # the cream runs up the throat
+    cb = T([(bx - 92, -975), (bx + 92, -975)])
+    p.poly([cb[0], ck[0], ck[1], cb[1]], CREAM, None)
+    p.line([cb[0], ck[0]], INK, 2.4)
+    p.line([cb[1], ck[1]], INK, 2.4)
     if bow:
         bp = T([(40 * turn, -1000)])[0]
         bow_tie(p, bp[0], bp[1], (22, 22, 28), 2.4)
@@ -734,7 +757,7 @@ def candelabra2(p, x, y, h, t, seed=0, lit=True):
            BRASS, INK, 1.2)
     p.ell(x, y - h * 0.26, w * 1.5, h * 0.03, BRASS_L, INK, 1.0)
     for sg in (-1, 1):
-        arm = curve([(x, y - h * 0.46), (x + sg * h * 0.12, y - h * 0.4), (x + sg * h * 0.2, y - h * 0.48),
+        arm = open_curve([(x, y - h * 0.46), (x + sg * h * 0.12, y - h * 0.4), (x + sg * h * 0.2, y - h * 0.48),
                      (x + sg * h * 0.2, y - h * 0.55)], 4)
         p.line(arm, INK, max(3, w * 1.4))
         p.line(arm, BRASS, max(2, w * 0.9))
@@ -755,7 +778,7 @@ def sconce(p, x, y, k, t, seed=0):
     candle under a little pleated shade."""
     p.poly(rough([(x - 0.05 * k, y - 0.02 * k), (x + 0.05 * k, y - 0.02 * k), (x + 0.04 * k, y + 0.16 * k),
                   (x, y + 0.2 * k), (x - 0.04 * k, y + 0.16 * k)], 1, seed), BRASS, INK, 1.4)
-    arm = curve([(x, y + 0.1 * k), (x + 0.06 * k, y + 0.12 * k), (x + 0.1 * k, y + 0.06 * k), (x + 0.1 * k, y)], 3)
+    arm = open_curve([(x, y + 0.1 * k), (x + 0.06 * k, y + 0.12 * k), (x + 0.1 * k, y + 0.06 * k), (x + 0.1 * k, y)], 3)
     p.line(arm, INK, max(3, 0.018 * k))
     p.line(arm, BRASS, max(2, 0.011 * k))
     candle(p, x + 0.1 * k, y, 0.2 * k, t, seed, w=0.012 * k)
@@ -895,7 +918,7 @@ def portrait_image():
     p.poly(curve([(cx - 26, 240), (cx - 4, 233), (cx + 4, 233), (cx + 28, 240), (cx + 6, 244), (cx - 6, 244)], 3),
            (120, 116, 112), ink, 1.2)                                                         # the moustache
     p.line([(cx - 4, 252), (cx + 10, 252)], (120, 60, 56), 2)                                # the mouth
-    p.line(curve([(cx + 6, 196), (cx + 2, 222), (cx - 6, 230), (cx + 6, 232)], 3), ink, 1.6)  # the nose
+    p.line(open_curve([(cx + 6, 196), (cx + 2, 222), (cx - 6, 230), (cx + 6, 232)], 3), ink, 1.6)  # the nose
     for ex in (cx - 22, cx + 22):                                                             # the eyes, the brows
         p.poly([(ex - 11, 200), (ex, 194), (ex + 11, 200), (ex, 204)], (240, 232, 220), ink, 1.2)
         p.ell(ex + 2, 199, 3.4, 3.4, (40, 30, 26), None)
@@ -943,8 +966,8 @@ def bust_image():
     p = B.Pen(im, ImgCam())
     m, md = (238, 234, 226), (206, 200, 190)
     p.poly(curve([(20, 296), (30, 230), (70, 196), (150, 196), (196, 232), (204, 296)], 4), m, INK, 2.2)   # chest
-    p.line(curve([(60, 210), (100, 250), (150, 236), (190, 260)], 3), md, 3)                          # drapery folds
-    p.line(curve([(40, 250), (90, 280), (140, 270)], 3), md, 3)
+    p.line(open_curve([(60, 210), (100, 250), (150, 236), (190, 260)], 3), md, 3)                          # drapery folds
+    p.line(open_curve([(40, 250), (90, 280), (140, 270)], 3), md, 3)
     p.poly([(92, 150), (132, 150), (138, 206), (88, 206)], m, INK, 2)                                    # the neck
     head = curve([(70, 110), (76, 52), (118, 26), (162, 40), (176, 80), (184, 104), (174, 112), (178, 126),
                   (168, 132), (166, 150), (140, 160), (100, 156), (78, 140)], 4)
@@ -952,7 +975,7 @@ def bust_image():
     for cx, cy in ((90, 50), (110, 38), (132, 34), (80, 70), (78, 92), (96, 64)):                        # the curls
         p.ell(cx, cy, 13, 11, md, INK, 1.2)
     p.line([(150, 82), (160, 80)], INK, 2)                                                              # a blank eye
-    p.line(curve([(170, 92), (182, 106), (172, 112)], 3), INK, 1.6)                                     # the nose
+    p.line(open_curve([(170, 92), (182, 106), (172, 112)], 3), INK, 1.6)                                     # the nose
     p.line([(160, 128), (172, 126)], INK, 1.6)
     p.ell(98, 98, 10, 14, md, INK, 1.4)                                                                 # the ear
     _PICS['bust'] = im
