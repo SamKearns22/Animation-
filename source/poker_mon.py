@@ -44,12 +44,12 @@ LINES = [
     dict(n=1, who='P1', text='Four of a kind.', audio='poker-mon-1', start=1.9, end=3.0),
     dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=6.1, end=7.7),
 ]
-SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 8.0), ('reveal', 8.0, 11.0), ('lit', 11.0, 12.5),
-         ('blast', 12.5, R.Clock.END)]
+SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 8.0), ('reveal', 8.0, 12.5), ('lit', 12.5, 14.0),
+         ('blast', 14.0, R.Clock.END)]
 DUR = BLACK_AT = R.Clock.END
 LAY = (0.5, 1.5)          # player one lays his hand: the fan leaves his hand, the cards spread on the felt
 LOOK_DOWN = (4.9, 5.9)    # player two inspects his hand
-CHARGE = (8.9, 12.6)      # the Dragonite throws its head back; the ball of light grows in its mouth
+CHARGE = (R.Clock.CHARGE0, 14.1)   # after 1.5 s looking neutral (Sam): head back, the light grows in its mouth
 FIRE = R.Clock.FIRE       # the head snaps forward: the beam
 IMPACT = R.Clock.IMPACT   # it reaches player one; then it sweeps round the table (poker_mon_room.SWEEP)
 BEAM_END = R.Clock.BEAM_END   # the beam thins and goes out
@@ -73,7 +73,7 @@ for ln in LINES:                                  # time each line to its record
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
              for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in ('P1', 'P2')}
 BLINKS = {'P1': [b for b in F.blinks(5, 0.6, 11.0, talking=True) if not 1.7 < b < 3.4],
-          'P2': [b for b in F.blinks(9, 4.8, 18.0, talking=True) if not 7.5 < b < 8.6]}
+          'P2': [b for b in F.blinks(9, 4.8, 19.5, talking=True) if not 7.5 < b < 8.6]}
 # Subtitles: short chunks, each on its first word; the punchline on its own.
 CAPS = [(LINES[0]['start'] + 0.05, LINES[0]['end'] + 0.4, 'Four of a kind.'),
         (LINES[1]['start'] + 0.05, LINES[1]['end'] + 0.3, 'Dragonite, use hyper beam.')]
@@ -430,6 +430,25 @@ def checks():
         print('QUESTION FOR SAM:', q)
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
+
+
+THING_R = dict(chip=0.0195, card=0.045, tumbler=0.04, napkin=0.07, flute=0.035, martini=0.05, ashtray=0.06,
+               cigarbox=0.1, pad=0.08, shoe=0.1, button=0.025, tray=0.2, candelabra=0.12, bucket=0.11)
+HAND_R = 0.05      # a hand resting on the felt, in metres
+
+
+def clearance_check():
+    """Nothing passes through anything (Sam, 19 Oct: player one's resting hand sat in his chip stacks): each hand
+    resting on the felt keeps clear of every thing on the table (sizes in THING_R)."""
+    faults = []
+    rests = {'R': (R.P1_REST_X, R.P1_REST_Z), 'L': (R.P1_REST_X, -R.P1_REST_Z)}
+    for sd, (hx, hz) in rests.items():
+        for kind, (x, z), ex in R.THINGS:
+            gap = math.hypot(hx - x, hz - z) - HAND_R - THING_R.get(kind, 0.05)
+            if gap < 0.03:
+                faults.append(f"player one's resting {sd} hand at ({hx:.2f}, {hz:.2f}) goes into a {kind} at "
+                              f"({x:.2f}, {z:.2f})")
+    return sorted(set(faults))
 
 
 def hands_check():

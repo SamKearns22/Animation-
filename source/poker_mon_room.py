@@ -181,26 +181,27 @@ def ease(u):
 
 # ------------------------------------------------------------------------------------------------ the film's clock
 class Clock:
-    """The film's times, handed in by poker_mon (FIRE, IMPACT, BEAM_END, PULL...)."""
-    FIRE = 12.7
-    IMPACT = 12.78
-    BEAM_END = (16.8, 17.1)       # Sam: the firing extended by a few seconds (two sweeps round the room)
-    PAUSE = (17.4, 18.7)          # everything settles; nothing moves but flames, the camera still (Sam)
-    PUSH = (18.7, 19.7)           # then the camera moves in on player two
-    PUTDOWN = (18.75, 19.15)      # he lays his own cards face down (he has held them since shot 3)
-    REACH = (19.3, 19.75)         # his hands go out to the far side of the pot
-    TOPPLE = (19.75, 20.0)        # they press in: the stacks topple into a loose pile (chips are separate pieces)
-    PULL = (20.0, 20.85)          # he drags the pile to him, his hands on it the whole way
-    RELEASE = (20.85, 21.25)
-    END = 21.9
-    CHARGE0 = 8.9
+    """The film's times, handed in by poker_mon (FIRE, IMPACT, BEAM_END, PULL...). Everything from the charge on
+    moved 1.5 s later (Sam, 19 Oct: 1.5 s of the Dragonite looking neutral before it charges)."""
+    FIRE = 14.2
+    IMPACT = 14.28
+    BEAM_END = (18.3, 18.6)       # Sam: the firing extended by a few seconds (two sweeps round the room)
+    PAUSE = (18.9, 20.2)          # everything settles; nothing moves but flames, the camera still (Sam)
+    PUSH = (20.2, 21.2)           # then the camera moves in on player two
+    PUTDOWN = (20.25, 20.65)      # he lays his own cards face down (he has held them since shot 3)
+    REACH = (20.8, 21.25)         # his hands go out to the far side of the pot
+    TOPPLE = (21.25, 21.5)        # they press in: the stacks topple into a loose pile (chips are separate pieces)
+    PULL = (21.5, 22.35)          # he drags the pile to him, his hands on it the whole way
+    RELEASE = (22.35, 22.75)
+    END = 23.4
+    CHARGE0 = 10.4
 
 
 def sweep_cam(t):
     """High in the near-right corner (behind player one's shoulder, the Dragonite and player two facing us across
     the room), sweeping along the near wall to its middle as the beam fires; a slow drift while things fly; then an
     eased push in on player two and the pot."""
-    a = ease((t - 12.45) / 1.5)
+    a = ease((t - (Clock.FIRE - 0.25)) / 1.5)
     pos = (3.3 - 3.1 * a, 3.0 - 0.05 * a, -3.55 - 0.2 * a)
     look = (-0.15 - 0.45 * a, 1.2, 0.3 + 0.35 * a)
     b = ease((t - Clock.PUSH[0]) / (Clock.PUSH[1] - Clock.PUSH[0]))
@@ -223,7 +224,7 @@ def mouth_world(dstate):
 
 # The sweep: degrees from the Dragonite's mouth (0 = +x, + toward +z). It fires at player one, sweeps down the near
 # side, then back up across the far side; never round to player two (about -96).
-SWEEP = [(12.70, -15.0), (12.86, -15.0), (15.0, 62.0), (15.25, 62.0), (16.4, -72.0), (16.8, -72.0), (17.1, -60.0)]
+SWEEP = [(14.20, -15.0), (14.36, -15.0), (16.5, 62.0), (16.75, 62.0), (17.9, -72.0), (18.3, -72.0), (18.6, -60.0)]
 
 
 def beam_angle(t):
@@ -529,7 +530,7 @@ def _things():
             chips(x + (k % 2) * 0.045 * sg, z + (k - len(plan) / 2) * 0.045, n, kind)
     for i, suit in enumerate('SCDH'):                    # player one's Queens: laid face up in shot 1 (shown from then)
         T.append(('card', (1.29, -0.16 + i * 0.105), dict(face=('Q', suit), ang=90 + (i - 1.5) * 5, laid=i)))
-    stacks(1.3, 0.36, [(18, 'ultra'), (15, 'poke'), (12, 'great'), (8, 'master')], -1)
+    stacks(1.3, 0.45, [(18, 'ultra'), (15, 'poke'), (12, 'great'), (8, 'master')], -1)   # clear of his resting hand
     T.append(('tumbler', (1.3, -0.42), dict(drink=(196, 120, 40))))
     T.append(('napkin', (1.2, -0.56), {}))
     for who, (x, z), drink in (('LADY', (-0.8, 0.98), 'flute'), ('CARDS', (0.8, 0.98), 'martini'),
@@ -1263,7 +1264,7 @@ def queen_shown(i, film):
     return a + (0.4 + 0.42 * i / 3) * (b - a)
 
 
-P1_REST_X, P1_REST_Z = 1.43, 0.28        # player one's resting hands: either side of his Queens (z -0.16 .. 0.16)
+P1_REST_X, P1_REST_Z = 1.43, 0.245       # player one's resting hands: either side of his Queens (z -0.16 .. 0.16)
 
 
 def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
