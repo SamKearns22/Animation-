@@ -1425,6 +1425,16 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
         j = p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror)
     if who == 'P1' and tp < Clock.FIRE:
         j = p1_lay_pose(img, cam, film, sp, tp, X, Y, s, yaw, mirror)
+    elif who == 'P1':                                    # the beam coming for him: leaning back, both palms out,
+        j = seated_joints(film, sp, 'rest')              # waving, "no no no, stop stop" (Sam, 19 Oct)
+        u = ease((tp - Clock.FIRE) / 0.25)
+        wave = 55 * math.sin((tp - Clock.FIRE) * 14)
+        for sd, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, sd, (sg * 105 + wave * u, 60.0 - 140 * u + 15 * math.sin((tp - Clock.FIRE) * 28),
+                             200 + 90 * u), 'down', 'palm')
+        j['lean'] = -9 * u
+        sp.update(brows='alarm', lid=0, look=0.0,
+                  mouth='shout' if int((tp - Clock.FIRE) * 7) % 2 == 0 else 'agape')   # "no! no! no!"
     if hand_on and who == 'ESCORT' and 'P1' in DRAWN and tp < Clock.FIRE + REACT['ESCORT']['delay']:
         X1, Y1, s1, yaw1, m1, j1, j21 = DRAWN['P1']     # her hand on player one's shoulder: real contact
         sh = j21['shL'] if not m1 else j21['shR']
@@ -1908,7 +1918,7 @@ def seated_arms(img, t, cam=None, on=()):
     if FILM[0] is None:
         return
     for who in ('P1', 'P2'):
-        if who not in DRAWN or (who == 'P2' and ARMS_UP[0]) or (who == 'P1' and t >= Clock.FIRE):
+        if who not in DRAWN or (who == 'P2' and ARMS_UP[0]) or (who == 'P1' and t >= Clock.IMPACT):
             continue
         X, Y, s, yaw, mirror, j, j2 = DRAWN[who]
         L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)
