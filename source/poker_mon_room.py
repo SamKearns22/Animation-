@@ -914,7 +914,7 @@ def things(img, cam, t, dfire, on_table):
         if ex.get('laid') is not None and t < queen_shown(ex['laid'], FILM[0]):
             continue                                     # player one has not laid it yet
         if b is None or t < b.t0:
-            if on_table and cam.depth((x, y, z)) > 0.6:
+            if on_table and cam.depth((x, y, z)) > 0.3:
                 out.append((cam.depth((x, y, z)), i, (x, y, z), ex.get('ang', 0.0) if kind == 'chip' else 0.0,
                             False, False))
             continue
@@ -1135,6 +1135,7 @@ def seated_joints(film, sp, kind='rest'):
 
 
 DRAWN = {}           # this frame: who -> (X, Yneck, s, yaw, mirror, j, j2)
+POS = {}             # this frame: (kind, who) -> world position, for the drawing order
 
 
 def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
@@ -1331,7 +1332,7 @@ def chair(img, cam, who, t, dfire, near_than=None, far_than=None):
 
 
 # ------------------------------------------------------------------------------------------------ light
-def parlour(img, lights, ambient=0.48, warm=(1.0, 0.86, 0.66)):
+def parlour(img, lights, ambient=0.55, warm=(1.0, 0.86, 0.66)):
     """Low parlour light: the picture darkened to the room's glow, with warm pools round each lamp, sconce, candle
     and fire (each (X, Y, radius px, strength, colour))."""
     W_, H_ = img.size
@@ -1398,6 +1399,7 @@ def render(img, t, film, cam, extra_lights=()):
     decor(img, cam, t, None)
     scorch(img, cam, t, dfire)
     items = []
+    POS.clear()
     tdep = cam.depth((0.0, TABLE_H, 0.0))
     items.append((tdep, 'table', None))
     for who in list(SEATED) + list(STANDING):
@@ -1408,6 +1410,7 @@ def render(img, t, film, cam, extra_lights=()):
             x, z, f, j, neck, bob = react(who, t, dict(C.PEOPLE[who]))
             pos = (x, neck, z)
         items.append((cam.depth(pos), 'person', who))
+        POS[('person', who)] = pos
         if who in SEATED:
             x, z, f = SEATED[who]
             still = who == 'P2' or react(who, t, dict(C.PEOPLE[who]))[3] is None
@@ -1415,16 +1418,37 @@ def render(img, t, film, cam, extra_lights=()):
             if still and (cb is None or t < cb.t0):
                 items.append((cam.depth((x, 0.5, z)) + 0.001, 'chair_far', who))
                 items.append((cam.depth((x, 0.5, z)) - 0.001, 'chair_near', who))
+                POS[('chair_far', who)] = POS[('chair_near', who)] = (x, 0.5, z)
             else:
                 cpos = cb.at(t)[0] if cb is not None and t >= cb.t0 else (x, 0.5, z)
                 items.append((cam.depth(cpos), 'chair_all', who))
+                POS[('chair_all', who)] = cpos
     items.append((cam.depth((DRAGON[0], 1.0, DRAGON[1])), 'dragon', None))
+    POS[('dragon', None)] = (DRAGON[0], 1.0, DRAGON[1])
     items.append((cam.depth(lamp_point(t)[0]) - 0.5, 'lamp', None))
     for dep, i, pos, ang, flying, burning in things(img, cam, t, dfire, on_table=False):
         items.append((dep, 'thing', (i, pos, ang, flying, burning)))
+        POS[('thing', (i, pos, ang, flying, burning))] = pos
     mouth = None
     lamp_px = None
-    for dep, kind, who in sorted(items, key=lambda it: -it[0]):
+
+    def side_of_table(dep, kind, who):
+        """0: beyond the table from the camera (drawn before it), 1: the table, 2: this side of it. A person, chair
+        or anything else is judged against the point of the rail nearest to it, never the table's centre (a camera at
+        the table's edge would draw the whole table over the player across it)."""
+        if kind == 'table':
+            return 1
+        pos = POS.get((kind, who))
+        if pos is None:
+            return 2 if dep < tdep else 0
+        a = math.atan2(pos[2] / TABLE_A[1], pos[0] / TABLE_A[0])
+        rail = (TABLE_A[0] * math.cos(a), TABLE_H, TABLE_A[1] * math.sin(a))
+        inside = (pos[0] / TABLE_A[0]) ** 2 + (pos[2] / TABLE_A[1]) ** 2 < 1.0 and pos[1] > TABLE_H - 0.05
+        if inside:
+            return 2                                     # over the table itself (flying things): this side
+        flat = lambda q: math.hypot(q[0] - cam.pos[0], q[2] - cam.pos[2])   # across the floor, not along the lens
+        return 0 if flat(pos) > flat(rail) else 2
+    for dep, kind, who in sorted(items, key=lambda it: (side_of_table(*it), -it[0])):
         if dep < 0.35 and kind in ('person', 'dragon', 'chair_far', 'chair_near', 'chair_all'):
             continue                                     # behind the camera (it sits in their seat)
         if kind == 'table':
@@ -1492,7 +1516,10 @@ def render(img, t, film, cam, extra_lights=()):
             FIRES.append((X, Y, 0.35 * k, 60 + i * 10 + kk))
     # the light: lamp pool, sconces and candles (flickering), fires, the beam
     if lamp_px:
-        LIGHTS.append((lamp_px[0], lamp_px[1] + 0.6 * lamp_px[2], 1.4 * lamp_px[2], 0.75, (255, 214, 150)))
+        LIGHTS.append((lamp_px[0], lamp_px[1] + 0.6 * lamp_px[2], 1.6 * lamp_px[2], 1.0, (255, 214, 150)))
+    tc, tk = cam.project((0.0, TABLE_H, 0.0))                # the lamp's pool on the felt (the game must read)
+    if cam.depth((0.0, TABLE_H, 0.0)) > 0.3:
+        LIGHTS.append((tc[0], tc[1], 1.3 * tk, 0.55, (255, 222, 170)))
     for wall, a, y in SCONCES:
         y += 0.2
         pt = (RX - 0.1, y, a) if wall == '+x' else (-RX + 0.1, y, a) if wall == '-x' else (a, y, RZ - 0.1)

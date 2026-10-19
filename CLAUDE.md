@@ -83,7 +83,8 @@ I don't know how to code. Please:
 - **Satire-style film (the TikTok parody series, beyond two people talking): read `guides/satire.md` (one page) first**,
   start from `source/satire_template.py` (always: it carries the house style and the checks; Shocking Behaviour
   didn't, and lost rounds to boxy limbs and a missing audit), and open `guides/best-practice.md` Part 2 only for a
-  scene that page doesn't cover. **Reuse before building:** the plan names which kit part does each person,
+  scene that page doesn't cover. **Also follow best-practice Part 1 sections 1.2 and 1.3 (contact and continuity)
+  for every film** (19 Oct: Poker Mon skipped them, and its table emptied between shots and its chips slid untouched). **Reuse before building:** the plan names which kit part does each person,
   movement and prop (`guides/satire.md`, Movement); build new only where nothing fits, and say so.
 - **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
   animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the

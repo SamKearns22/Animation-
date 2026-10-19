@@ -83,6 +83,7 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 | Lifeboat a different size in the next scene | brief: recurring objects listed; one drawing at a fixed size relative to its people |
 | Chair seat floating, stand too thin | figure-rig: seated hips on the seat; under-desk knee space drawn |
 | Film much longer than briefed | brief: honest length estimate from the pace |
+| Table emptied between shots; chips slid to him with no hand on them (Poker Mon) | one set, one table plan for every camera; objects driven by the hand; the contact and hands-seen checks |
 
 ## Added 8 Oct (Russiadent Evil): general audits, parallel run, picture cache
 - `python3 source/preflight.py FILM OUT_DIR` now uses every processor core (the film took 19 minutes on one) and, if the

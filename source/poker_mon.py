@@ -142,7 +142,7 @@ def seated(sp, kind='rest', u=0.0):
         V.arm_to(j, 'R', spread_hand(u), 'down', 'palm')
     elif kind == 'fan':
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 58, 140.0, 230.0), 'down', 'fist')     # up off the table, cards to his eyes
+            V.arm_to(j, sd, (sg * 58, 70.0, 250.0), 'down', 'fist')      # held up at his chest, well clear of the table
     elif kind == 'pull':
         for sd, sg in (('L', -1), ('R', 1)):
             z = 330.0 - 110 * u
@@ -288,17 +288,17 @@ def shot_blast(img, t):
 def cam_p1(t):
     """Shots 1 and 5: player one from player two's seat (a reverse angle across the table); shot 5 pushes in."""
     k0 = ease(t / SHOTS[0][2])                               # a slow push in through his line
-    look, f = (1.35 + 0.15 * k0, 0.85 + 0.08 * k0, 0.0), 1350.0 + 650.0 * k0
+    look, f = (1.45 + 0.1 * k0, 0.9 + 0.05 * k0, 0.0), 1750.0 + 650.0 * k0
     if t >= SHOTS[4][1]:
         k = ease((t - SHOTS[4][1]) / 1.2)
-        look, f = (1.5 + 0.2 * k, 0.93 + 0.27 * k, 0.0), 2000.0 + 2600.0 * k
+        look, f = (1.55 + 0.15 * k, 0.95 + 0.25 * k, 0.0), 2400.0 + 2200.0 * k
     return R.Cam3((-0.95, 1.7, -0.35), look, focal=f)
 
 
 def cam_cards(t):
     """Shot 2: down on player one's Queens, his chips and his whisky beside them."""
     k = ease((t - SHOTS[1][1]) / (SHOTS[1][2] - SHOTS[1][1]))
-    return R.Cam3((0.7, 1.35, -0.05), (1.29, 0.77, 0.0), focal=2100.0 + 150.0 * k)
+    return R.Cam3((1.05, 1.08, -0.66), (1.31, 0.86, 0.14), focal=1500.0 + 150.0 * k)
 
 
 def cam_p2(t):

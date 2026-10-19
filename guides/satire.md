@@ -110,6 +110,23 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
 - `walker.py` (Cry Minister's walk) is retired for new films; Cry Minister keeps it.
 
+## One set, one plan, real contact (Sam, 19 Oct: Poker Mon)
+- **Each location is built once, in 3D, and every shot is a camera on it** (`poker_mon_room.render` with a `Cam3`):
+  close-ups, reverse angles and the wide shot all draw the same room, furniture, people and props. Never redraw a
+  place or its props by hand for one shot (Poker Mon's close shots had a few hand-placed props while the wide shot
+  had its own list, so the table emptied between cuts).
+- **Everything on a table, desk or shelf comes from one written plan** (Poker Mon's `THINGS`): kind, place in metres
+  from the table's centre, its own details. A busy scene is busy in every shot: a high-stakes table has tall chip
+  stacks at every place, bets in the middle, cards, drinks, napkins, ashtrays.
+- **Anything a hand moves is driven by the hand, never on its own timeline:** one grip point moves both the hand
+  targets and the object (Poker Mon's `grip(t)`), and a hand that cannot reach is a fault, never a hand stopped short
+  (`screen_hand_target.clamped`, `CONTACT_FAULTS`). The chips once slid to him with no hand on them.
+- **Loose things behave as pieces:** stacks topple when pushed, a pile is dragged as a pile (the back pieces lag and
+  spread), a glass tips before it spills, thrown things bounce and stay where they land.
+- **Checks (run by preflight through the film's `audits()`):** a contact check (every touch reaches what it touches;
+  an object moves only while held) and a hands-seen check (a hand on something is drawn over it, never under the
+  table). Copy `contact_check` and `hands_check` from `source/poker_mon.py`.
+
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
 - **Natural, moderate movement (Sam, 16 Oct, every film):** characters are never stock-still like robots or
