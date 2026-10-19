@@ -24,6 +24,7 @@ import burnham as B              # noqa: E402
 import views as V                # noqa: E402
 import figure as F               # noqa: E402
 import poker_mon_cast as C       # noqa: E402
+import moves                     # noqa: E402
 from ed import INK, curve        # noqa: E402
 from satire_style import rough   # noqa: E402
 
@@ -62,13 +63,29 @@ SEATED = {
 STANDING = {
     'DEALER': (0.0, 1.55, (0.0, -1.0)),
     'HUSBAND': (-1.0, 2.2, (0.2, -1.0)),
-    'BEAU': (1.55, 2.15, (-0.5, -1.0)),
+    'BEAU': (1.35, 2.15, (-0.5, -1.0)),
     'WIFE': (-1.15, -1.75, (0.4, 1.0)),
     'ESCORT': (2.55, -0.6, (-1.0, 0.35)),
-    'GUARD1': (3.7, 3.1, (-1.0, -1.0)),
+    'GUARD1': (1.6, 3.4, (-0.4, -1.0)),
     'GUARD2': (3.7, -3.0, (-1.0, 1.0)),
 }
 DRAGON = (-2.15, 1.0, (1.0, -0.3))
+# Sam, 19 Oct: people react before they are hit, never standing still. From the moment it fires (after `delay`):
+# seated players rise (`rise` seconds; the old man slowly) and back away or cower; those standing turn and run along
+# `path` (x, z, metres) with their hands up, or crouch where they are; the guard walks at it, palm out. Each is hit
+# wherever they have got to when the sweep reaches them.
+REACT = {
+    'LADY': dict(delay=0.35, rise=0.6, path=[(-0.8, 1.4), (-0.55, 2.45), (0.4, 3.3)], kind='brisk', arms='panic'),
+    'HUSBAND': dict(delay=0.25, path=[(-1.0, 2.2), (-0.3, 3.0), (0.3, 3.45)], kind='run'),
+    'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.1, 3.4)], kind='run', arms='panic'),
+    'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
+    'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (1.05, 2.55)], kind='walk', arms='stop'),
+    'CARDS': dict(delay=0.4, rise=0.5, crouch=True),
+    'OLD': dict(delay=0.5, rise=2.2),
+    'WIFE': dict(delay=0.2, path=[(-1.15, -1.75), (-0.5, -3.0)], kind='run', arms='panic'),
+    'ESCORT': dict(delay=0.12, path=[(2.55, -0.6), (3.3, -1.8), (3.25, -3.2)], kind='run', arms='panic'),
+    'GUARD2': dict(delay=0.3, crouch=True),
+}
 POT = (-1.2, 0.05)                        # the pot, in front of player two
 DRAPES = [('x', 1.2, 2.6), ('z', 0.6, 2.0)]   # cloth: on the +x wall from z 1.2 to 2.6, on the +z wall from x 0.6
 PAINTING = ('z', -1.35, 0.05, 1.45, 2.5)      # the landscape on the far wall: canvas, it burns too
@@ -166,11 +183,13 @@ class Clock:
     """The film's times, handed in by poker_mon (FIRE, IMPACT, BEAM_END, PULL...)."""
     FIRE = 12.7
     IMPACT = 12.78
-    BEAM_END = (14.35, 14.6)
-    PAUSE = (14.9, 16.2)          # everything settles; nobody moves for a beat (Sam: a pause before the chips)
-    REACH = (16.2, 16.65)         # player two's hands go out to the pot
-    PULL = (16.65, 17.6)          # he draws it in, his hands on it
-    RELEASE = (17.6, 18.0)
+    BEAM_END = (16.8, 17.1)       # Sam: the firing extended by a few seconds (two sweeps round the room)
+    PAUSE = (17.4, 18.7)          # everything settles; nothing moves but flames, the camera still (Sam)
+    PUSH = (18.7, 19.7)           # then the camera moves in on player two
+    REACH = (19.3, 19.75)         # his hands go out to the pot
+    PULL = (19.75, 20.7)          # he draws it in, his hands on it
+    RELEASE = (20.7, 21.1)
+    END = 21.8
     CHARGE0 = 8.9
 
 
@@ -180,12 +199,14 @@ def sweep_cam(t):
     eased push in on player two and the pot."""
     a = ease((t - 12.45) / 1.5)
     pos = (3.3 - 3.1 * a, 3.0 - 0.05 * a, -3.55 - 0.2 * a)
-    look = (-0.15 - 0.75 * a, 1.2, 0.3 + 0.25 * a)
-    b = ease((t - 15.2) / 1.2)
+    look = (-0.15 - 0.45 * a, 1.2, 0.3 + 0.35 * a)
+    b = ease((t - Clock.PUSH[0]) / (Clock.PUSH[1] - Clock.PUSH[0]))
     pos = tuple(p0 + (p1 - p0) * b for p0, p1 in zip(pos, (0.1, 2.45, -1.95)))
     look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-1.45, 1.05, 0.15)))
     k = max(0.0, 1 - (t - Clock.IMPACT) / 0.45) if t >= Clock.IMPACT else 0.0
-    return Cam3(pos, look, shake=(14 * k * math.sin(t * 90), 10 * k * math.cos(t * 77)))
+    focal = 1650 - 330 * a + 500 * b                     # widening as it sweeps (the whole far wall in view),
+    return Cam3(pos, look, focal=focal,                   # tighter again for the push in
+                shake=(14 * k * math.sin(t * 90), 10 * k * math.cos(t * 77)))
 
 
 # ------------------------------------------------------------------------------------------------ the beam
@@ -199,7 +220,8 @@ def mouth_world(dstate):
 
 # The sweep: degrees from the Dragonite's mouth (0 = +x, + toward +z). It fires at player one, sweeps down the near
 # side, then back up across the far side; never round to player two (about -96).
-SWEEP = [(12.70, -15.0), (12.86, -15.0), (13.4, -70.0), (13.5, -70.0), (14.3, 60.0), (14.6, 60.0)]
+SWEEP = [(12.70, -15.0), (12.86, -15.0), (13.9, -72.0), (14.25, -72.0), (15.6, 62.0), (16.0, 62.0), (16.8, 0.0),
+         (17.1, 0.0)]
 
 
 def beam_angle(t):
@@ -546,20 +568,27 @@ def blast_hits(dfire):
         pts[('T', i)] = ((x, TABLE_H + 0.03, z), 0.75)
     for who, (x, z, f) in SEATED.items():
         if who != 'P2':
-            pts[('P', who)] = ((x, 0.95, z), 0.7)
-    for who, (x, z, f) in STANDING.items():
-        pts[('P', who)] = ((x, 1.25, z), 0.7)
+            pts[('C', who)] = ((x, 0.6, z), 0.75)
+    movers = [w for w in list(SEATED) + list(STANDING) if w != 'P2']
     out = {}
     t = Clock.FIRE
     while t < Clock.BEAM_END[0]:
         m, d = beam_ray(t, dfire)
         end, length = beam_end(m, d)
         sweep = beam_angle(t + 0.01) - beam_angle(t)
-        for key, (p, r) in pts.items():
-            if key not in out and t >= Clock.IMPACT - 0.02:
-                dd, s = dist_to_ray(p, m, d, length)
-                if dd < r and s > 0.3:
-                    out[key] = (t, m, 1 if sweep >= 0 else -1)
+        if t >= Clock.IMPACT - 0.02:
+            for key, (p, r) in pts.items():
+                if key not in out:
+                    dd, s = dist_to_ray(p, m, d, length)
+                    if dd < r and s > 0.3:
+                        out[key] = (t, m, 1 if sweep >= 0 else -1)
+            for who in movers:                          # people where they have got to
+                if ('P', who) in out:
+                    continue
+                x, z, f, j, neck, bob = react(who, t, dict(C.PEOPLE[who]))
+                dd, s = dist_to_ray((x, neck - 0.25, z), m, d, length)
+                if dd < 0.6 and s > 0.3:
+                    out[('P', who)] = (t, m, 1 if sweep >= 0 else -1, (x, neck, z))
         t += 1 / 240
     _CACHE['hits'] = out
     return out
@@ -567,7 +596,7 @@ def blast_hits(dfire):
 
 def launch(key, p0, hit, speed, up, spin, r, e, wall_e=None, seed=0, grip=0.6):
     """A body thrown from p0: away from the beam's mouth, dragged a little along the sweep, up, spinning."""
-    t, m, sg = hit
+    t, m, sg = hit[:3]
     rng = np.random.default_rng(seed)
     along = _norm((p0[0] - m[0], 0.0, p0[2] - m[2]))
     radial = _norm((p0[0] / TABLE_A[0], 0.0, p0[2] / TABLE_A[1]))      # the blast spreads out from the table
@@ -601,8 +630,7 @@ def person_body(who, dfire):
     hit = blast_hits(dfire).get(key)
     b = None
     if hit:
-        x, z, f = (SEATED.get(who) or STANDING[who])
-        y = NECK_SEATED if who in SEATED else NECK_STANDING
+        x, y, z = hit[3]
         rng = np.random.default_rng(sum(map(ord, who)))
         b = launch(key, (x, y, z), hit, rng.uniform(6.0, 7.5), rng.uniform(2.6, 3.6),
                    rng.choice([-1, 1]) * rng.uniform(420, 820), 0.3, 0.05, wall_e=0.06, seed=sum(map(ord, who)),
@@ -615,12 +643,12 @@ def chair_body(who, dfire):
     key = ('C', who)
     if key in _CACHE:
         return _CACHE[key]
-    hit = blast_hits(dfire).get(('P', who))
+    hit = blast_hits(dfire).get(('C', who))
     b = None
     if hit:
         x, z, f = SEATED[who]
         rng = np.random.default_rng(7 + sum(map(ord, who)))
-        b = launch(key, (x, 0.5, z), (hit[0] + 0.03, hit[1], hit[2]), rng.uniform(3.5, 5.0), rng.uniform(1.8, 2.8),
+        b = launch(key, (x, 0.5, z), hit, rng.uniform(3.5, 5.0), rng.uniform(1.8, 2.8),
                    rng.uniform(300, 600), 0.35, 0.25, wall_e=0.3, seed=7 + sum(map(ord, who)))
         b.axis = _norm((rng.uniform(-1, 1), rng.uniform(-0.3, 0.3), rng.uniform(-1, 1)))
     _CACHE[key] = b
@@ -747,6 +775,8 @@ def things(img, cam, t, dfire, on_table):
         if on_table:
             continue
         pos, ang = b.at(t)
+        if cam.depth(pos) < 2.2:                         # right under the lens: out of the picture
+            continue
         flying = b.floor_t is None or t < b.floor_t + 0.3
         burning = kind in FIRE_KINDS and (i % 2 == 0 or kind != 'card')
         out.append((cam.depth(pos), i, pos, ang, flying, burning))
@@ -807,13 +837,82 @@ def heap_pose(sp, u=1.0):
     j['props'] = [C.dress_up(sp)]
     j['bob'] = 300 + 138 * u
     floor = 928 - j['bob']
+    j['footL'] = (-90.0, floor - 30, 150 + 40 * u)       # one knee up, one leg flung out: no two limbs alike
+    j['footR'] = (120.0 + 30 * u, floor - 30, 150 + 290 * u)
     for s, sg in (('L', -1), ('R', 1)):
-        j['foot' + s] = (sg * (80 + 50 * u), floor - 30, 150 + 260 * u)
         j['knee_pole' + s] = (0.3 * sg, -1.0, 0.4)
-        V.arm_to(j, s, (sg * (170 + 40 * u), min(floor - 50, 470.0), 40.0), 'out', 'palm')
-    j['lean'] = 14 * u                                   # folded forward over the legs
-    j['head_dy'] = 44 * u
+    V.arm_to(j, 'L', (-200.0 - 30 * u, min(floor - 50, 470.0), 30.0), 'out', 'palm')    # one hand limp on the floor
+    V.arm_to(j, 'R', (40.0, 380.0, 150.0), 'down', 'palm')                              # the other in the lap
+    j['lean'] = 16 * u                                   # folded forward
+    j['head_dy'] = 48 * u
     return j
+
+
+def _along(path, d):
+    for a, b in zip(path, path[1:]):
+        seg = math.hypot(b[0] - a[0], b[1] - a[1])
+        if d <= seg:
+            u = d / seg
+            return (a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u), (b[0] - a[0], b[1] - a[1]), True
+        d -= seg
+    a, b = path[-2], path[-1]
+    return b, (b[0] - a[0], b[1] - a[1]), False
+
+
+def react(who, t, sp):
+    """Where someone is and their pose at t, reacting to the Dragonite firing: (x, z, facing, joints, neck height,
+    bob). Before it fires, seated or standing in place."""
+    seated0 = who in SEATED
+    x, z, f = (SEATED.get(who) or STANDING[who])
+    r = REACT.get(who, {})
+    t0 = Clock.FIRE + r.get('delay', 99.0)
+    if seated0:
+        j = None                                       # the seated pose (built by the caller)
+        neck, bob = NECK_SEATED, V.SEAT_DROP
+    else:
+        j = C.pose_standing(sp)
+        neck, bob = NECK_STANDING, 0.0
+    if t < t0 or not r:
+        return x, z, f, j, neck, bob
+    dt = t - t0
+    rise = r.get('rise', 0.0) if seated0 else 0.0
+    if seated0 and dt < rise:                           # getting up out of the armchair (in stages)
+        j = moves.stand_up(sp, ease(dt / rise) * 0.95)
+        j['seated'] = False
+        j['props'] = [C.dress_up(sp)]
+        if who == 'OLD':                               # an old man's struggle: both hands pushing on the arms
+            for sd, sg in (('L', -1), ('R', 1)):
+                V.arm_to(j, sd, (sg * 200, 420.0, 120.0), 'out', 'palm')
+        return x, z, f, j, (928 - j['bob']) * M_UNIT, j['bob']
+    dt -= rise
+    if r.get('crouch'):                                 # down behind what cover there is, arms over the head
+        k = ease(dt / 0.35)
+        j = V.standing(sp)
+        j['props'] = [C.dress_up(sp)]
+        j['bob'] = 260 * k
+        for sd, sg in (('L', -1), ('R', 1)):
+            j['foot' + sd] = (sg * 90, V.ANKLE_Y - 260 * k, 120 * k)
+            j['knee_pole' + sd] = (0.3 * sg, -1.0, 0.6)
+            V.arm_to(j, sd, (sg * (150 - 90 * k), -60 - 170 * k, 60.0 + 40 * k), 'out', 'palm')
+        j['lean'] = 22 * k
+        j['head_dy'] = 20 * k
+        return x, z, f, j, (928 - j['bob']) * M_UNIT, j['bob']
+    path = r.get('path')
+    if not path:
+        return x, z, f, j or C.pose_standing(sp), neck if not seated0 else NECK_STANDING, 0.0
+    v = {'run': 3.2, 'brisk': 2.0, 'walk': 1.3}[r['kind']]
+    (px, pz), dirn, moving = _along(path, dt * v)
+    if moving:
+        j = moves.gait(sp, dt, {'run': 'run', 'brisk': 'brisk', 'walk': 'walk'}[r['kind']])
+    else:
+        j = V.standing(sp)
+    j['props'] = [C.dress_up(sp)]
+    if r.get('arms') == 'panic':                        # hands up by the head as they go
+        for sd, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, sd, (sg * 150, -170.0, 80.0), 'out', 'palm')
+    elif r.get('arms') == 'stop':                       # the guard: a palm held out at it, "stop"
+        V.arm_to(j, 'R', (70.0, 40.0, 380.0), 'down', 'palm')
+    return px, pz, dirn, j, NECK_STANDING - j.get('bob', 0.0) * M_UNIT, j.get('bob', 0.0)
 
 
 def people_pose(film, who, t, sp):
@@ -823,8 +922,8 @@ def people_pose(film, who, t, sp):
         return None
     if who == 'P1':
         sp.update(film.p1_face(film.SHOTS[4][2] - 0.01))
-    else:                                                # everyone stares at the Dragonite as it charges
-        sp.update(brows='alarm', mouth='agape', look=-0.6, lid=0)
+    else:                                                # everyone stares at the Dragonite as it charges, then
+        sp.update(brows='alarm', mouth='agape' if t < Clock.FIRE else 'shout', look=-0.6, lid=0)   # cries out
     return None
 
 
@@ -842,31 +941,27 @@ DRAWN = {}           # this frame: who -> (X, Yneck, s, yaw, mirror, j, j2)
 
 
 def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
-    """Someone in place (seated in their armchair, or standing), the view from their facing. Returns (X, Y, s)."""
+    """Someone where they are at t (seated in their armchair, standing, getting up, running, cowering), the view
+    from their facing. Returns (X, Y, s)."""
     tp = t if t_pose is None else t_pose
     sp = dict(C.PEOPLE[who], blink=F.blinking(tp, film.BLINKS.get(who, [])), mouth='line', look=0.0)
-    if who in SEATED:
-        x, z, f = SEATED[who]
-        (X, Y), k = cam.project((x, NECK_SEATED, z))
-        people_pose(film, who, tp, sp)
+    people_pose(film, who, tp, sp)
+    x, z, f, j, neck, bob = react(who, tp, sp)
+    if j is None:                                        # still in the armchair
         j = seated_joints(film, sp)
-        bob = V.SEAT_DROP
-    else:
-        x, z, f = STANDING[who]
-        (X, Y), k = cam.project((x, NECK_STANDING, z))
-        people_pose(film, who, tp, sp)
-        j = C.pose_standing(sp)
-        bob = 0.0
-        if who == 'BEAU':                                # a champagne flute in his hand
-            V.arm_to(j, 'R', (60.0, 230.0, 160.0), 'down', 'fist')
-            j['props'].append(lambda p, j2: C.glass(p, j2['wrR'][0] + 4, j2['wrR'][1] + 6, 120, 'flute'))
+    elif who == 'BEAU' and tp < Clock.FIRE + REACT['BEAU']['delay']:
+        pass
+    if who == 'BEAU' and tp < Clock.FIRE + REACT['BEAU']['delay']:     # a champagne flute in his hand
+        V.arm_to(j, 'R', (60.0, 230.0, 160.0), 'down', 'fist')
+        j['props'].append(lambda p, j2: C.glass(p, j2['wrR'][0] + 4, j2['wrR'][1] + 6, 120 * 0.22 / 0.2, 'flute'))
+    (X, Y), k = cam.project((x, neck, z))
     s = k * M_UNIT
     yaw = cam.yaw_of((x, 0, z), f)
     mirror = V.snap(yaw)[1]
     if who == 'P2':
         j = p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror)
-    if hand_on and who == 'ESCORT' and 'P1' in DRAWN:     # her hand on player one's shoulder: real contact
-        X1, Y1, s1, yaw1, m1, j1, j21 = DRAWN['P1']
+    if hand_on and who == 'ESCORT' and 'P1' in DRAWN and tp < Clock.FIRE + REACT['ESCORT']['delay']:
+        X1, Y1, s1, yaw1, m1, j1, j21 = DRAWN['P1']     # her hand on player one's shoulder: real contact
         sh = j21['shL'] if not m1 else j21['shR']
         tgt = (X1 + s1 * sh[0] * (-1 if m1 else 1), Y1 + s1 * sh[1])
         V.arm_to(j, 'R', screen_hand_target(j, 'R', yaw, mirror, X, Y, s, tgt, 180.0), 'down', 'palm')
@@ -919,7 +1014,7 @@ def thrown_person(img, cam, film, who, t, dfire):
         else:
             facing = _norm((cam.pos[0] - pos[0], cam.pos[2] - pos[2]))
         u = ease((t - b.floor_t) / 0.3)
-        sp = dict(C.PEOPLE[who], blink=True, mouth='agape', brows='weary')
+        sp = dict(C.PEOPLE[who], blink=True, mouth='agape', brows='weary', turn=0.5 * u)
         j = heap_pose(sp, u)
         neck_h = 0.06 + (928 - j['bob'] - 478) * M_UNIT + 0.67
         (X, Y), k = cam.project((pos[0], neck_h, pos[2]))
@@ -944,7 +1039,7 @@ def thrown_person(img, cam, film, who, t, dfire):
     (X, Y), k = cam.project(pos)
     sc = k * M_UNIT / s0
     reach = max(bbox[2] - bbox[0], bbox[3] - bbox[1]) / B.SS * sc
-    if sc > 5 or not (-reach < X < 1080 + reach and -reach < Y < 1920 + reach):
+    if sc > 2.2 or not (-reach < X < 1080 + reach and -reach < Y < 1920 + reach):
         return None
     S = B.SS
     piece = lay.crop(bbox)
@@ -1040,21 +1135,24 @@ def shot(img, t, film):
     items = []
     tdep = cam.depth((0.0, TABLE_H, 0.0))
     items.append((tdep, 'table', None))
-    for who in SEATED:
-        x, z, f = SEATED[who]
-        items.append((cam.depth((x, NECK_SEATED, z)), 'person', who))
-        items.append((cam.depth((x, 0.5, z)) + 0.001, 'chair_far', who))
-        items.append((cam.depth((x, 0.5, z)) - 0.001, 'chair_near', who))
-    for who in STANDING:
-        b = person_body(who, dfire)
-        pos = b.at(t)[0] if b is not None and t >= b.t0 else (STANDING[who][0], 1.0, STANDING[who][1])
-        items.append((cam.depth(pos), 'person', who))
-    for who in SEATED:                                  # the seated thrown sort where they now are
-        b = person_body(who, dfire)
+    for who in list(SEATED) + list(STANDING):
+        b = person_body(who, dfire) if who != 'P2' else None
         if b is not None and t >= b.t0:
             pos = b.at(t)[0]
-            items = [it for it in items if not (it[1] == 'person' and it[2] == who)]
-            items.append((cam.depth(pos), 'person', who))
+        else:
+            x, z, f, j, neck, bob = react(who, t, dict(C.PEOPLE[who]))
+            pos = (x, neck, z)
+        items.append((cam.depth(pos), 'person', who))
+        if who in SEATED:
+            x, z, f = SEATED[who]
+            still = who == 'P2' or react(who, t, dict(C.PEOPLE[who]))[3] is None
+            cb = chair_body(who, dfire) if who != 'P2' else None
+            if still and (cb is None or t < cb.t0):
+                items.append((cam.depth((x, 0.5, z)) + 0.001, 'chair_far', who))
+                items.append((cam.depth((x, 0.5, z)) - 0.001, 'chair_near', who))
+            else:
+                cpos = cb.at(t)[0] if cb is not None and t >= cb.t0 else (x, 0.5, z)
+                items.append((cam.depth(cpos), 'chair_all', who))
     items.append((cam.depth((DRAGON[0], 1.0, DRAGON[1])), 'dragon', None))
     items.append((cam.depth(lamp_point(t)[0]) - 0.5, 'lamp', None))
     for dep, i, pos, ang, flying, burning in things(img, cam, t, dfire, on_table=False):
@@ -1073,6 +1171,8 @@ def shot(img, t, film):
                 draw_person(img, cam, film, who, t)
             else:
                 thrown_person(img, cam, film, who, t, dfire)
+        elif kind == 'chair_all':
+            chair(img, cam, who, t, dfire)
         elif kind in ('chair_far', 'chair_near'):
             pd = cam.depth((SEATED[who][0], NECK_SEATED, SEATED[who][1]))
             if kind == 'chair_far':
@@ -1082,11 +1182,15 @@ def shot(img, t, film):
         elif kind == 'dragon':
             st = film.dragon_state(t)
             x, z, f = DRAGON
+            if Clock.FIRE <= t < Clock.BEAM_END[1]:     # it turns with its sweep (its body as far as it can)
+                a = math.radians(max(-75.0, min(25.0, beam_angle(t))))
+                f = (math.cos(a), math.sin(a))
             (X, Y), k = cam.project((x, 0.0, z))
             yaw = cam.yaw_of((x, 0, z), f)
             mouth = C.dragonite(img, FLAT, X, Y, k * M_UNIT, t, turn=min(1.0, abs(yaw) / 55.0),
                                 flip=1 if yaw >= 0 else -1, head=st['head'], mouth_open=st['mouth_open'],
-                                eyes=st['eyes'], wings=st['wings'], arms=st['arms'], lean=st['lean'])
+                                eyes=st['eyes'], wings=st['wings'], arms=st['arms'], lean=st['lean'],
+                                mouth_shape=st.get('shape', 'jaw'))
         elif kind == 'lamp':
             lamp_px = draw_lamp(img, cam, t)
         elif kind == 'thing':

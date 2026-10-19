@@ -212,7 +212,7 @@ def wing(p, sx, sy, sg, k=1.0, spread=0.0):
     tube(p, [(sx, sy), elbow, tip], 44 * k, 14 * k, ORANGE)
 
 
-def dragonite_head(p, piv, deg, turn, mouth_open, eyes):
+def dragonite_head(p, piv, deg, turn, mouth_open, eyes, mouth_shape='jaw'):
     """The head on its neck pivot, rotated by deg (negative: thrown back, chin up). turn 0 front .. 1 three-quarter
     to the right. mouth_open 0..1; eyes 'open', 'narrow', 'closed', 'wide'. Returns the mouth centre."""
     R = lambda pts: _rot(pts, piv, deg)
@@ -229,6 +229,17 @@ def dragonite_head(p, piv, deg, turn, mouth_open, eyes):
     p.poly(R([(hx - 18 - 14 * turn, hy - 138), (hx + 18 - 14 * turn, hy - 138), (hx - 16 * turn, hy - 196)]),
            ORANGE, INK, 2.2)                                                            # the small horn
     jaw = 80 * mouth_open
+    if mouth_shape == 'o' and mouth_open > 0.02:                   # firing: lips pursed into a round O (Sam)
+        p.poly(R(_ovl(sx, sy, 150 + 10 * turn, 100)), ORANGE, INK, 2.8)
+        ox, oy = sx + 20 * turn, sy + 52
+        r_ = 30 + 18 * mouth_open
+        p.poly(R(_ovl(ox, oy, r_ + 14, r_ + 12)), ORANGE_D, INK, 2.6)                 # the pursed lips
+        p.poly(R(_ovl(ox, oy, r_, r_ * 0.95)), MOUTH, INK, 2.2)                       # the O
+        p.poly(R(_ovl(hx - 6 * turn, hy + 10, 140, 64)), ORANGE, None)
+        for sg in (-1, 1):
+            p.ell(*R([(sx + sg * 32 + 12 * turn, sy - 30)])[0], 7, 5, INK, None)
+        eye_block(p, R, hx, hy, turn, eyes)
+        return R([(ox, oy)])[0]
     if mouth_open > 0.02:                                          # open: the dark mouth between snout and jaw
         p.poly(R(_ovl(sx + 6 * turn, sy + 40 + jaw * 0.45, 110, 34 + jaw * 0.55)), MOUTH, INK, 2.6)
         p.poly(R(_ovl(sx + 6 * turn, sy + 62 + jaw * 0.6, 60, 14 + jaw * 0.2)), TONGUE, None)
@@ -240,6 +251,11 @@ def dragonite_head(p, piv, deg, turn, mouth_open, eyes):
     p.poly(R(_ovl(hx - 6 * turn, hy + 10, 140, 64)), ORANGE, None)                     # one shape: no seam line
     for sg in (-1, 1):
         p.ell(*R([(sx + sg * 32 + 12 * turn, sy - 30)])[0], 7, 5, INK, None)           # nostrils
+    eye_block(p, R, hx, hy, turn, eyes)
+    return R([(sx + 6 * turn, sy + 40 + jaw * 0.45)])[0]
+
+
+def eye_block(p, R, hx, hy, turn, eyes):
     for sg in (-1, 1):                                                                  # the big friendly eyes
         k = 1.0 if sg > 0 else 1.0 - 0.3 * turn
         ex, ey = hx + sg * 66 * k + 34 * turn, hy - 30
@@ -253,11 +269,10 @@ def dragonite_head(p, piv, deg, turn, mouth_open, eyes):
             r = 1.2 if eyes == 'wide' else 1.0
             p.poly(R(_ovl(ex, ey, 26 * k * r, 36 * r)), INK, INK, 2.0)
             p.ell(*R([(ex + 9, ey - 13)])[0], 9, 10, (250, 250, 250), None)
-    return R([(sx + 6 * turn, sy + 40 + jaw * 0.45)])[0]
 
 
 def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0.0, eyes='open', wings=0.15,
-              arms=0.0, lean=0.0, bow=True):
+              arms=0.0, lean=0.0, bow=True, mouth_shape='jaw'):
     """The Dragonite standing, feet at world (x, y), scale s (the people's scale), turned `turn` (0 facing us .. 1
     three-quarter) toward the right of frame (flip=-1: toward the left). head: degrees (negative thrown back);
     arms 0 at its sides .. 1 out wide (bracing); lean: degrees forward (+). Returns the mouth point (world)."""
@@ -301,7 +316,7 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
         bp = T([(40 * turn, -1000)])[0]
         bow_tie(p, bp[0], bp[1], (22, 22, 28), 2.4)
     piv = T([(0, -1000)])[0]
-    m = dragonite_head(p, piv, head + lean, turn, mouth_open, eyes)
+    m = dragonite_head(p, piv, head + lean, turn, mouth_open, eyes, mouth_shape)
     return L.ox + L.k * m[0] * L.flip, L.oy + L.k * m[1]
 
 

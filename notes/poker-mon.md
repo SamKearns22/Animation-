@@ -35,6 +35,11 @@
 | 30 | "Make flying directions believable and add rebound physicals to wall strikes." | yes: thrown along the beam and out from the table; walls, floor and ceiling bounce; a thud on the wall |
 | 31 | "Make people who hit walls collapse in a heap." | yes: they slide down the wall and slump over |
 | 32 | "Add a moment of pause before the chips are collected." | yes: 14.9-16.2 s, nothing moves but flames and candles |
+| 33 | (19 Oct) "Please fix all listed problems." (my critique: heaps seen, still camera for the pause, short ending, debris, lit shot, heaps, fly-bys) | yes: the camera holds wide through the collapses and the pause, then pushes in; 0.7 s hold at the end; lit shot softened; heaps slumped with one knee up; nothing fills the lens |
+| 34 | "The cards and chips are oversized." | yes: real size in every shot (card 63 mm, chip 39 mm) |
+| 35 | "The Dragonite should form an O with its mouth when firing." | yes: pursed lips round an O while the beam is on |
+| 36 | "Please extend the firing scene by a few seconds." | yes: 1.9 s to 4.4 s, two sweeps round the room |
+| 37 | "Please have people reacting or trying to move out the way before being hit rather than standing static." | yes: they rise and back away, run with hands up, cower, the old man struggles up, the guard walks at it palm out |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.

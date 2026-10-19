@@ -45,8 +45,8 @@ LINES = [
     dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=6.1, end=7.7),
 ]
 SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 8.0), ('reveal', 8.0, 11.0), ('lit', 11.0, 12.5),
-         ('blast', 12.5, 19.0)]
-DUR = BLACK_AT = 19.0
+         ('blast', 12.5, R.Clock.END)]
+DUR = BLACK_AT = R.Clock.END
 LAY = (0.5, 1.5)          # player one lays his hand: the fan leaves his hand, the cards spread on the felt
 LOOK_DOWN = (4.9, 5.9)    # player two inspects his hand
 CHARGE = (8.9, 12.6)      # the Dragonite throws its head back; the ball of light grows in its mouth
@@ -220,7 +220,9 @@ def seated(sp, kind='rest', u=0.0):
     return j
 
 
-SPREAD = dict(chest=(40.0, 190.0, 170.0), start=(-130.0, TABLE_Y + 46, 300.0), end=(150.0, TABLE_Y + 46, 300.0),
+CARD_U = 0.063 / V.M_PER_UNIT      # a card's width in person units (real size, Sam: never oversized)
+CHIP_U = 0.0195 / V.M_PER_UNIT     # a chip's radius
+SPREAD = dict(chest=(40.0, 190.0, 170.0), start=(-60.0, TABLE_Y + 46, 300.0), end=(80.0, TABLE_Y + 46, 300.0),
               rest=(90.0, TABLE_Y + 40, 250.0))
 
 
@@ -331,7 +333,7 @@ def shot_p1(img, t):
     u = (t - LAY[0]) / (LAY[1] - LAY[0])
     j = seated(sp, 'hold', min(1.0, max(0.0, u)))
     if u < 0.4:                                                        # the hand still holds the fan (backs to us)
-        j['props'].append(held_fan(img, 4, lambda j2: (j2['wrR'][0] - 4, j2['wrR'][1] - 10), 120, 12))
+        j['props'].append(held_fan(img, 4, lambda j2: (j2['wrR'][0] - 4, j2['wrR'][1] - 10), CARD_U, 12))
     x = S1['x'] + idle_x('P1', t)
     shL = j['shL']                                                     # her hand rests on his left shoulder
     tgt_screen = (x + s * shL[0], S1['neck'] + s * (shL[1] - 16 + V.ELEV * shL[2]))
@@ -344,12 +346,12 @@ def shot_p1(img, t):
     V.arm(pe, je2, 'R', spe)                                           # her arm lies over his shoulder
     table_far(img, cam, S1['x'], S1['neck'], s, -900, 900, seed=1)
     L = B.Local(cam, S1['x'], S1['neck'], s)
-    C.chip_stack(img, L, -330, TABLE_Y + 260, 52, 6, 'poke', seed=1)
-    C.chip_stack(img, L, -220, TABLE_Y + 300, 52, 4, 'great', seed=2)
-    C.chip_stack(img, L, 330, TABLE_Y + 290, 52, 5, 'ultra', seed=3)
+    C.chip_stack(img, L, -330, TABLE_Y + 260, CHIP_U, 6, 'poke', seed=1)
+    C.chip_stack(img, L, -220, TABLE_Y + 300, CHIP_U, 4, 'great', seed=2)
+    C.chip_stack(img, L, 330, TABLE_Y + 290, CHIP_U, 5, 'ultra', seed=3)
     pl = B.Pen(img, L)
-    C.glass(pl, -400, TABLE_Y + 200, 110, 'tumbler', (196, 120, 40))
-    pl.poly(rough(C.card_quad(-470, TABLE_Y + 330, 140, 30, 0.5), 2, 3), (248, 246, 240), INK, 1.4)   # a napkin
+    C.glass(pl, -400, TABLE_Y + 200, 0.09 / V.M_PER_UNIT, 'tumbler', (196, 120, 40))
+    pl.poly(rough(C.card_quad(-470, TABLE_Y + 330, 0.15 / V.M_PER_UNIT, 30, 0.5), 2, 3), (248, 246, 240), INK, 1.4)
     candles = [(250, TABLE_Y + 170), (290, TABLE_Y + 180)]
     for i, (cx_, cy_) in enumerate(candles):
         C.candle(pl, cx_, cy_, 120, t, 70 + i, w=14)
@@ -365,7 +367,7 @@ def shot_p1(img, t):
         X, Y = L.P(cx_, cy_ - 140)
         lights.append((X / B.SS, Y / B.SS, 220 * L.s, 0.55 * C.flicker(t, 70 + i), (255, 190, 110)))
     if close:                                                          # the Hyper Beam's light, growing on him
-        lights.append((540, 760, 1100, 1.6 * light_level(t), (255, 236, 170)))
+        lights.append((300, 700, 650, 0.8 * light_level(t), (255, 236, 170)))     # from the Dragonite's side
     R.parlour(img, lights)
     for i, (cx_, cy_) in enumerate(candles):                           # the flames are self-lit
         C.candle(pl, cx_, cy_, 120, t, 70 + i, w=14)
@@ -408,11 +410,11 @@ def laid_queens(img, L, t):
     hx = spread_hand(min(u, 0.82))[0]
     x0, x1 = SPREAD['start'][0], SPREAD['end'][0]
     for i, suit in enumerate('SCDH'):
-        cx = x0 + 10 + i * (x1 - x0 - 20) / 3
-        if hx < cx - 30:
+        cx = x0 + i * (x1 - x0) / 3
+        if hx < cx - 8:
             continue
         y = TABLE_Y + 46 + V.ELEV * 300 + 30                    # the felt under the palm, as views draws it
-        C.place_image(img, L, C.card_face('Q', suit), C.card_quad(cx, y, 150, (i - 1.5) * 5, 0.55))
+        C.place_image(img, L, C.card_face('Q', suit), C.card_quad(cx, y, CARD_U, (i - 1.5) * 5, 0.55))
 
 
 # ------------------------------------------------------------------------------------------------ shot 2: the cards
@@ -423,14 +425,15 @@ def shot_cards(img, t):
     p = B.Pen(img, cam)
     p.poly([(-200, -200), (1280, -200), (1280, 2200), (-200, 2200)], FELT, None)
     p.line(curve([(-200, 300), (540, 200), (1280, 300)], 4), LINE_Y, 6)
+    k = 3600.0                                                   # px a metre: everything at its real size
     for i, suit in enumerate('SCDH'):
-        C.place_image(img, cam, C.card_face('Q', suit), C.card_quad(240 + i * 200, 960 + abs(i - 1.5) * 30, 300,
+        C.place_image(img, cam, C.card_face('Q', suit), C.card_quad(330 + i * 140, 980 + abs(i - 1.5) * 18, 0.063 * k,
                                                                      (i - 1.5) * 7))
-    C.chip_stack(img, cam, 180, 1500, 90, 6, 'poke', squash=0.5, seed=4)
-    C.chip_stack(img, cam, 400, 1580, 90, 4, 'great', squash=0.5, seed=5)
-    C.chip_stack(img, cam, 840, 1520, 90, 7, 'ultra', squash=0.5, seed=6)
-    C.chip_stack(img, cam, 860, 440, 90, 3, 'master', squash=0.5, seed=7)
-    C.glass(p, 200, 560, 190, 'tumbler', (196, 120, 40))
+    C.chip_stack(img, cam, 170, 1500, 0.0195 * k, 6, 'poke', squash=0.5, seed=4)
+    C.chip_stack(img, cam, 340, 1580, 0.0195 * k, 4, 'great', squash=0.5, seed=5)
+    C.chip_stack(img, cam, 880, 1520, 0.0195 * k, 7, 'ultra', squash=0.5, seed=6)
+    C.chip_stack(img, cam, 900, 470, 0.0195 * k, 3, 'master', squash=0.5, seed=7)
+    C.glass(p, 190, 640, 0.09 * k, 'tumbler', (196, 120, 40))
     lights = [(540, 900, 900, 0.75, (255, 214, 150)), (180, 440, 420, 0.4 * C.flicker(t, 70), (255, 190, 110))]
     R.parlour(img, lights)
 
@@ -461,7 +464,7 @@ def reveal_cam(t):
 
 def dragon_state(t):
     """The Dragonite's head, mouth, eyes, wings and arms over the film."""
-    st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0)
+    st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0, shape='jaw')
     if t >= CHARGE[0]:
         k = ease((t - CHARGE[0]) / 0.7)
         st.update(head=-34 * k, mouth_open=0.9 * k, eyes='narrow' if k > 0.3 else 'open', wings=0.15 + 0.5 * k,
@@ -470,11 +473,11 @@ def dragon_state(t):
     if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast)
         k = min(1.0, (t - (FIRE - 0.12)) / 0.12)
         st.update(head=-34 + 50 * k, lean=10 * k, mouth_open=1.0, wings=0.65 + 0.35 * k, arms=0.35 + 0.65 * k,
-                  eyes='narrow')
+                  eyes='narrow', shape='o' if k > 0.5 else 'jaw')     # firing: the mouth an O (Sam)
     if t >= BEAM_END[1]:                                        # done: settles, mouth shut, pleased with itself
         k = ease((t - BEAM_END[1]) / 0.6)
         st.update(head=16 * (1 - k), lean=10 * (1 - k), mouth_open=1.0 * (1 - k), wings=1.0 - 0.85 * k,
-                  arms=1.0 - k, eyes='closed' if k > 0.5 else 'narrow', ball=0.0)
+                  arms=1.0 - k, eyes='closed' if k > 0.5 else 'narrow', ball=0.0, shape='o')
     return st
 
 
@@ -513,14 +516,14 @@ def shot_p2(img, t):
     sp.update(p2_face(t))
     j = seated(sp, 'fan')
     j['props'].append(held_fan(img, 5, lambda j2: ((j2['wrL'][0] + j2['wrR'][0]) / 2, (j2['wrL'][1] + j2['wrR'][1]) / 2 - 6),
-                               118, 11))
+                               CARD_U, 11))
     x = S3['x'] + idle_x('P2', t)
     C.person(img, cam, x, S3['neck'], s, sp, t, 0, j)
     table_far(img, cam, S3['x'], S3['neck'], s, -1400, 900, seed=5)
     L = B.Local(cam, S3['x'], S3['neck'], s)
-    C.chip_stack(img, L, -260, TABLE_Y + 260, 52, 8, 'ultra', seed=8)
-    C.chip_stack(img, L, 250, TABLE_Y + 280, 52, 5, 'great', seed=9)
-    C.chip_stack(img, L, 360, TABLE_Y + 330, 52, 3, 'master', seed=10)
+    C.chip_stack(img, L, -260, TABLE_Y + 260, CHIP_U, 8, 'ultra', seed=8)
+    C.chip_stack(img, L, 250, TABLE_Y + 280, CHIP_U, 5, 'great', seed=9)
+    C.chip_stack(img, L, 360, TABLE_Y + 330, CHIP_U, 3, 'master', seed=10)
     hanging_shade(img, cam, 640, -80, 520, seed=4)
     lights = [(cam.P(640, 1300)[0] / B.SS, cam.P(640, 1300)[1] / B.SS, 650 * cam.z, 0.7, (255, 214, 150))]
     for lx in (80, 1000):
@@ -601,7 +604,7 @@ def blast(n, t0, t_end):
     rng = np.random.default_rng(5)
     out = np.zeros(n)
     a = int(t0 * SR)
-    m = min(n - a, int(3.2 * SR))
+    m = min(n - a, int((t_end - t0 + 2.0) * SR))
     tt = np.arange(m) / SR
     noise = rng.standard_normal(m)
     k = np.exp(-np.linspace(0, 1, 40))
