@@ -83,6 +83,18 @@
 | 78 | (19 Oct) "Those characters are all eerie and still before they are struck." / "Run in place? They should be trying to run away, cower or dodge" | yes: at the wall they flee along it away from the beam, then cower trembling; the beam's wall blast takes those under it |
 | 79 | (19 Oct) "Player 1 still sits stock still ... waving his hands before him like, no no no, stop stop stop." | yes: leaning back, both palms out waving from the fire to his hit, shouting |
 | 80 | (19 Oct) "The players who land flat on the table look like 2D paper ... Player 1 looks like a cardboard cut out ... Perhaps there is a way to do this in 2D" | NOT YET: plan proposed (people drawn from the camera's height, shading for volume and floor shadows, lying bodies built from rounded shapes); waiting for Sam's go at Opus high effort |
+| 81 | (19 Oct) "Shot one needs to be closer ... can't see the Pokemon cards or chips" | yes: camera half way across the table, lower, on him and his cards; a fill light |
+| 82 | (19 Oct) "Shot 2 is noticeably darker" | yes: the lamp's light added to shots 1 and 2 |
+| 83 | (19 Oct) "Add a gasp from the man in the background" | yes: the young man in white gasps at the Queens (face, hand to chest) and a made gasp sound (a recording of Sam's would replace it) |
+| 84 | (19 Oct) "The cocktail glass is floating in the air." | yes: every thing pulled onto the table top; table_check now fails anything past the edge |
+| 85 | (19 Oct) "A brown square and chips ... flies off before struck" | yes: no unseen shockwave; table things fly only within 0.45 m of the beam (its glow); hit_check covers things |
+| 86 | (19 Oct) "Not at all clear that player one is doing the no no no action. His face is impassive" | yes: the camera pushes in on him; he turns half to us, both palms up, shaking his head, shouting |
+| 87 | (19 Oct) "We don't see the dealer fly out the window" | yes: he runs about in a panic, is thrown across into the window and seen flying out beyond the glass |
+| 88 | (19 Oct) "The man in blue ... shoot all the way to the right wall." | yes: the husband across the room past the Dragonite into the right-hand wall |
+| 89 | (19 Oct) "The people who land on the table still look like flat pieces of expanding cardboard" / "enormous shadows ... floating ... lying like matchsticks" | yes: bodies built from 3D volumes, sprawled (bent knees and elbows, head turned), flush, tight shadows |
+| 90 | (19 Oct) "Cut the red curtains in two when the beam strikes through it. The lower half drops to the floor." | yes: each panel cut where the beam's end crosses it (low, 0.5-1 m, where the beam is); the lower part drops and crumples |
+| 91 | (19 Oct) "The man in white ... strike the ceiling and smash back down to the ground." | yes: straight up into the ceiling (a crack), down face first on the floor |
+| 92 | (19 Oct) "There's a crater on the window again" | yes: the guard thrown clear of it; crater_check: never on a window, curtain or painting |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
