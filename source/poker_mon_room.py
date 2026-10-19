@@ -1401,7 +1401,10 @@ def parlour(img, lights, ambient=0.55, warm=(1.0, 0.86, 0.66)):
     L = np.clip(L, 0, 1.35)
     Lim = Image.fromarray((L / 1.35 * 255).astype(np.uint8)).resize((W_, H_), Image.BILINEAR)
     a = np.asarray(img, np.float32)
-    a[..., :3] *= np.asarray(Lim, np.float32) * (1.35 / 255)
+    a[..., :3] *= np.minimum(np.asarray(Lim, np.float32) * (1.35 / 255), 1.2)
+    rgb = a[..., :3]                                     # a soft shoulder, never a hard clip: pale skin and the
+    hi = rgb > 190                                       # Dragonite's cream keep their colour under the lights
+    rgb[hi] = 190 + 65 * (1 - np.exp(-(rgb[hi] - 190) / 65))   # (Sam, 19 Oct: faces were burning to white)
     img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), img.mode))
 
 
