@@ -41,8 +41,8 @@ NAME = 'poker-mon'
 # =============================================== STORY ==============================================================
 # Sam's recordings are still to come ('audio' names the file when they do; until then the line is timed by hand).
 LINES = [
-    dict(n=1, who='P1', text='Four of a kind.', audio='poker-mon-1', start=1.9, end=3.0),
-    dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=6.1, end=7.7),
+    dict(n=1, who='P1', text='Four of a kind.', audio='poker-mon-1', start=0.55, end=3.0),   # start: where the recording's file begins (it opens with a second of room tone)
+    dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=4.4, end=7.7),
 ]
 SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 8.0), ('reveal', 8.0, 12.5), ('lit', 12.5, 14.0),
          ('blast', 14.0, R.Clock.END)]
@@ -70,13 +70,15 @@ for ln in LINES:                                  # time each line to its record
         v = MA.line(ln['audio'])
         ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
         ln['_stretches'] = MA.pauses(v, 0.12)
+for ln in LINES:                                  # when the words are actually spoken (the file has quiet at each end)
+    ln['_say'] = (ln['start'] + ln['_stretches'][0][0], ln['start'] + ln['_stretches'][-1][1])
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
              for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in ('P1', 'P2')}
 BLINKS = {'P1': [b for b in F.blinks(5, 0.6, 11.0, talking=True) if not 1.7 < b < 3.4],
           'P2': [b for b in F.blinks(9, 4.8, 19.5, talking=True) if not 7.5 < b < 8.6]}
 # Subtitles: short chunks, each on its first word; the punchline on its own.
-CAPS = [(LINES[0]['start'] + 0.05, LINES[0]['end'] + 0.4, 'Four of a kind.'),
-        (LINES[1]['start'] + 0.05, LINES[1]['end'] + 0.3, 'Dragonite, use hyper beam.')]
+CAPS = [(LINES[0]['_say'][0] - 0.05, LINES[0]['_say'][1] + 0.4, 'Four of a kind.'),
+        (LINES[1]['_say'][0] - 0.05, min(8.0, LINES[1]['_say'][1] + 0.3), 'Dragonite, use hyper beam.')]
 
 
 def shot_of(t):
@@ -229,8 +231,8 @@ def p1_face(t):
     sh = filmkit.shifts(t, seed=101, amount=1.0)
     out = dict(look=0.0, blink=F.blinking(t, BLINKS['P1']), head_dx=4 * sh, head_dy=8, lid=2)
     m = talking_mouth('P1', t)
-    out['mouth'] = m or ('pleased' if t > LINES[0]['end'] else 'line')
-    if t > LINES[0]['end']:
+    out['mouth'] = m or ('pleased' if t > LINES[0]['_say'][1] else 'line')
+    if t > LINES[0]['_say'][1]:
         out.update(brows='confused', lid=4)                    # the smug look: one brow up, heavy lids
     if t >= SHOTS[4][1]:                                       # lit by the glow: the smirk goes, then alarm
         k = (t - SHOTS[4][1]) / (SHOTS[4][2] - SHOTS[4][1])
