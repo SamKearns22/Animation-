@@ -97,6 +97,7 @@
 | 92 | (19 Oct) "There's a crater on the window again" | yes: the guard thrown clear of it; crater_check: never on a window, curtain or painting |
 | 93 | (19 Oct) "Horrifying plastic legs" | yes: no seam line down the tubes; the cartoon faceplant (knees down, lower legs kicked up, feet to the ceiling); her gown flares to the knees, red heels; both lie along the table, all on it (lying_check), and stay where they land |
 | 94 | (19 Oct) "A decently sized pokeball emblem on the table design at eight points of the compass. One clearly visible in shot one. Plus a larger central one." | yes: eight 24 cm Poke Balls printed in the felt round the table (tops to the rail), a 52 cm one in the middle; the east one fills the foreground of shot 1 |
+| 95 | (19 Oct) Final render; Hook Text "Poker Mon Cards" + four card suits | done: animations/poker-mon-vertical.mp4 (26.9 s, 10.1 MB: film 24.9 s + the 2 s CranbriJoos sign-off); the untitled render kept in source/data/poker-mon/ (not on GitHub); hook_text.py now counts emoji in the box width (the four suits ran off the left edge) |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.

@@ -43,7 +43,9 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None):
             cut = min(range(1, len(words)), key=lambda i: abs(d.textlength(' '.join(words[:i]), font=f)
                                                                - d.textlength(' '.join(words[i:]), font=f)))
             rows = [' '.join(words[:cut]), ' '.join(words[cut:])]
-        if max(d.textlength(r, font=f) for r in rows) <= (SAFE_X1 - SAFE_X0 - 80) * k:
+        room = (f.size + int(10 * k)) * len(tail)        # the emoji count towards the width (four suits overran it)
+        if max(d.textlength(r, font=f) + (room if i == len(rows) - 1 else 0)
+               for i, r in enumerate(rows)) <= (SAFE_X1 - SAFE_X0 - 80) * k:
             break
         size -= 4
     lh = int(f.size * 1.18)

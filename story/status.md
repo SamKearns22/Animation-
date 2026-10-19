@@ -402,3 +402,5 @@ Read this first in any new session, after CLAUDE.md.
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
   written; questions sent to Sam. Next: Sam's answers, then the cast sheet (`source/poker_mon.py`), then an early
   quick animatic (motion-led film).
+
+- Poker Mon final rendered 19 Oct: `animations/poker-mon-vertical.mp4` (26.9 s, 10.1 MB), Hook Text "Poker Mon Cards ♦♣♥♠", CranbriJoos sign-off. Pending: Sam's posting; the 3D look of standing/sitting people in high shots (plan proposed, not built); a recorded gasp to replace the made one.
