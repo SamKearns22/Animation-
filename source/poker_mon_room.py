@@ -65,11 +65,12 @@ STANDING = {
     'HUSBAND': (-1.0, 2.2, (0.2, -1.0)),
     'BEAU': (1.35, 2.15, (-0.5, -1.0)),
     'WIFE': (-1.15, -1.75, (0.4, 1.0)),
-    'ESCORT': (2.55, -0.6, (-1.0, 0.35)),
+    'ESCORT': (2.4, -0.95, (-1.0, 0.35)),
     'GUARD1': (1.6, 3.4, (-0.4, -1.0)),
     'GUARD2': (3.7, -3.0, (-1.0, 1.0)),
 }
 DRAGON = (-2.15, 1.0, (1.0, -0.3))
+SCONCES = [('+x', 0.05, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2.4, 1.75), ('+z', 3.7, 1.75)]
 # Sam, 19 Oct: people react before they are hit, never standing still. From the moment it fires (after `delay`):
 # seated players rise (`rise` seconds; the old man slowly) and back away or cower; those standing turn and run along
 # `path` (x, z, metres) with their hands up, or crouch where they are; the guard walks at it, palm out. Each is hit
@@ -80,10 +81,11 @@ REACT = {
     'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.1, 3.4)], kind='run', arms='panic'),
     'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
     'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (1.05, 2.55)], kind='walk', arms='stop'),
-    'CARDS': dict(delay=0.4, rise=0.5, crouch=True),
-    'OLD': dict(delay=0.5, rise=2.2),
-    'WIFE': dict(delay=0.2, path=[(-1.15, -1.75), (-0.5, -3.0)], kind='run', arms='panic'),
-    'ESCORT': dict(delay=0.12, path=[(2.55, -0.6), (3.3, -1.8), (3.25, -3.2)], kind='run', arms='panic'),
+    'CARDS': dict(delay=0.4, rise=0.5, path=[(0.8, 1.4), (1.35, 2.5), (1.6, 3.35)], kind='brisk', crouch_end=True),
+    'OLD': dict(delay=0.5, rise=2.2, path=[(-0.55, -1.4), (-1.6, -1.65), (-2.6, -2.0)], kind='brisk'),
+    'WIFE': dict(delay=0.2, path=[(-1.15, -1.75), (-0.5, -3.0)], kind='run', arms='panic', crouch_end=True),
+    'ESCORT': dict(delay=0.12, path=[(2.4, -0.95), (3.3, -1.9), (3.25, -3.2)], kind='run', arms='panic',
+                   crouch_end=True),
     'GUARD2': dict(delay=0.3, crouch=True),
 }
 POT = (-1.2, 0.05)                        # the pot, in front of player two
@@ -220,8 +222,7 @@ def mouth_world(dstate):
 
 # The sweep: degrees from the Dragonite's mouth (0 = +x, + toward +z). It fires at player one, sweeps down the near
 # side, then back up across the far side; never round to player two (about -96).
-SWEEP = [(12.70, -15.0), (12.86, -15.0), (13.9, -72.0), (14.25, -72.0), (15.6, 62.0), (16.0, 62.0), (16.8, 0.0),
-         (17.1, 0.0)]
+SWEEP = [(12.70, -15.0), (12.86, -15.0), (15.0, 62.0), (15.25, 62.0), (16.4, -72.0), (16.8, -72.0), (17.1, -60.0)]
 
 
 def beam_angle(t):
@@ -362,18 +363,12 @@ def decor(img, cam, t, ign):
     sideboard with a decanter and a candelabra, a marble bust on a plinth, brass sconces with candles."""
     p = B.Pen(img, FLAT)
     # the portrait over player one (+x wall) and a landscape on the far wall (+z)
-    for wall, a0, a1, y0, y1, kind in (('+x', -2.2, -0.8, 1.3, 2.75, 'portrait'), ('+z',) + PAINTING[1:] + ('land',)):
-        cam.poly(p, _wall_pts(wall, a0 - 0.08, a1 + 0.08, y0 - 0.08, y1 + 0.08, 0.01), GOLD, INK, 2.4)
-        cam.poly(p, _wall_pts(wall, a0, a1, y0, y1, 0.012), (60, 44, 34) if kind == 'portrait' else (120, 150, 160),
-                 INK, 1.8)
-        if kind == 'portrait':                                  # a dark old master: a figure in a ruff
-            mid = (a0 + a1) / 2
-            cam.poly(p, _wall_pts(wall, mid - 0.32, mid + 0.32, y0, y0 + 0.55, 0.014), (30, 26, 28), None)
-            cam.poly(p, _wall_pts(wall, mid - 0.2, mid + 0.2, y0 + 0.5, y0 + 0.64, 0.015), (226, 220, 206), INK, 1.2)
-            cam.poly(p, _wall_pts(wall, mid - 0.15, mid + 0.15, y0 + 0.62, y0 + 1.05, 0.015), (206, 168, 140), INK, 1.4)
-        else:                                                   # hills, a lake, a pale sky
-            cam.poly(p, _wall_pts(wall, a0, a1, y0, y0 + 0.45, 0.014), (70, 110, 70), None)
-            cam.poly(p, _wall_pts(wall, a0 + 0.3, a1 - 0.2, y0 + 0.2, y0 + 0.35, 0.015), (90, 130, 170), None)
+    for wall, a0, a1, y0, y1, src in (('+x', -2.2, -0.8, 1.3, 2.75, C.portrait_image()),
+                                      ('+z', PAINTING[1], PAINTING[2], PAINTING[3], PAINTING[4], C.landscape_image())):
+        q = _wall_pts(wall, a0, a1, y0, y1, 0.012)          # its corners: (a0, y0) (a1, y0) (a1, y1) (a0, y1)
+        corners = [q[3], q[2], q[1], q[0]] if wall == '+x' else [q[2], q[3], q[0], q[1]]   # as seen from the room
+        if all(cam.depth(c) > 0.3 for c in corners):
+            C.place_image(img, FLAT, src, [cam.project(c)[0] for c in corners])
     # the tall window with velvet drapes (cloth: they catch fire when the beam reaches them)
     for wall, a0, a1 in (('+' + w, a0_, a1_) for w, a0_, a1_ in DRAPES):
         cam.poly(p, _wall_pts(wall, a0 + 0.25, a1 - 0.25, 0.4, 2.85, 0.01), (30, 34, 56), INK, 2.2)   # night outside
@@ -391,30 +386,27 @@ def decor(img, cam, t, ign):
     # the bust on its plinth in the far corner
     box(img, cam, p, (RX - 0.75, 0.0, RZ - 0.75), (RX - 0.25, 1.05, RZ - 0.25), (220, 214, 204), (190, 184, 176))
     (X, Y), k = cam.project((RX - 0.5, 1.05, RZ - 0.5))
-    p.poly(rough([(X - 0.16 * k, Y), (X + 0.16 * k, Y), (X + 0.12 * k, Y - 0.16 * k), (X - 0.12 * k, Y - 0.16 * k)], 2, 3),
-           (236, 232, 224), INK, 2.0)
-    p.ell(X, Y - 0.27 * k, 0.1 * k, 0.12 * k, (236, 232, 224), INK, 2.0)
+    bw, bh = 0.42 * k, 0.57 * k                                  # the marble bust: 42 x 57 cm
+    C.place_image(img, FLAT, C.bust_image(), [(X - bw / 2, Y - bh), (X + bw / 2, Y - bh), (X + bw / 2, Y), (X - bw / 2, Y)])
+    for wall, a, y in SCONCES:                                   # brass sconces with candles
+        pt = (RX - 0.04, y, a) if wall == '+x' else (-RX + 0.04, y, a) if wall == '-x' else (a, y, RZ - 0.04)
+        if cam.depth(pt) > 0.5:
+            (X, Y), k = cam.project(pt)
+            C.sconce(p, X, Y, k, t, int(abs(a) * 10 + 50))
 
 
 def sideboard_props(img, cam, t):
     """The decanter and the candelabra on the sideboard (drawn after the light, the flames self-lit)."""
     p = B.Pen(img, FLAT)
     (X, Y), k = cam.project((-RX + 0.25, 0.9, 0.0))
-    p.poly(rough([(X - 0.06 * k, Y), (X + 0.06 * k, Y), (X + 0.07 * k, Y - 0.14 * k), (X + 0.02 * k, Y - 0.2 * k),
-                  (X + 0.02 * k, Y - 0.27 * k), (X - 0.02 * k, Y - 0.27 * k), (X - 0.02 * k, Y - 0.2 * k),
-                  (X - 0.07 * k, Y - 0.14 * k)], 1, 2), (150, 70, 36), INK, 1.6)
+    C.decanter(p, X, Y, 0.3 * k)
     candelabra(p, cam, (-RX + 0.25, 0.9, 0.9), t, 31)
 
 
 def candelabra(p, cam, base, t, seed, lit=True, ang=0.0, flying=False):
+    """A three-branched brass candelabra 45 cm tall standing at the world point `base`."""
     (X, Y), k = cam.project(base)
-    h = 0.34 * k
-    p.line([(X, Y), (X, Y - h * 0.7)], GOLD, max(2, 0.025 * k))
-    p.poly([(X - 0.06 * k, Y), (X + 0.06 * k, Y), (X + 0.03 * k, Y - 0.03 * k), (X - 0.03 * k, Y - 0.03 * k)], GOLD, INK, 1.4)
-    p.line(curve([(X - 0.13 * k, Y - h * 0.62), (X, Y - h * 0.72), (X + 0.13 * k, Y - h * 0.62)], 3), GOLD,
-           max(2, 0.02 * k))
-    for i, dx in enumerate((-0.13, 0.0, 0.13)):
-        C.candle(p, X + dx * k, Y - h * (0.62 if dx else 0.74), 0.14 * k, t, seed + i, lit, w=0.012 * k)
+    C.candelabra2(p, X, Y, 0.45 * k, t, seed, lit)
 
 
 def box(img, cam, p, a, b, col, col_d):
@@ -637,6 +629,54 @@ def person_body(who, dfire):
                    grip=0.08)
     _CACHE[key] = b
     return b
+
+
+def heap_offsets(dfire):
+    """How far each thrown person drifts along the wall they land against, so heaps lie side by side (at least
+    0.6 m apart) instead of in one tangle. Applied gradually over the flight."""
+    if 'heaps' in _CACHE:
+        return _CACHE['heaps']
+    walls = {}
+    for who in list(SEATED) + list(STANDING):
+        if who == 'P2':
+            continue
+        b = person_body(who, dfire)
+        if b is None or b.wall is None:
+            continue
+        pos = b.at(b.floor_t or b.t0 + 2)[0]
+        along = 2 if b.wall[0] == 0 else 0
+        walls.setdefault(b.wall, []).append((pos[along], who))
+    out = {}
+    for wall, lst in walls.items():
+        lst.sort()
+        placed = []
+        for a, who in lst:
+            if placed and a < placed[-1] + 0.6:
+                a2 = placed[-1] + 0.6
+            else:
+                a2 = a
+            placed.append(a2)
+            out[who] = (wall, a2 - a)
+        span = placed[-1] - lst[-1][0]                  # keep the row centred where they fell
+        for who in [w for _, w in lst]:
+            wall_, d = out[who]
+            out[who] = (wall_, d - span / 2)
+    _CACHE['heaps'] = out
+    return out
+
+
+def drifted(who, b, t, dfire):
+    pos, ang = b.at(t)
+    off = heap_offsets(dfire).get(who)
+    if not off:
+        return pos, ang
+    (axis, sg), d = off
+    end = b.floor_t or (b.t0 + 1.0)
+    k = ease((t - b.t0) / max(0.1, end - b.t0))
+    along = 2 if axis == 0 else 0
+    pos = list(pos)
+    pos[along] += d * k
+    return tuple(pos), ang
 
 
 def chair_body(who, dfire):
@@ -885,7 +925,15 @@ def react(who, t, sp):
                 V.arm_to(j, sd, (sg * 200, 420.0, 120.0), 'out', 'palm')
         return x, z, f, j, (928 - j['bob']) * M_UNIT, j['bob']
     dt -= rise
-    if r.get('crouch'):                                 # down behind what cover there is, arms over the head
+    path = r.get('path')
+    v = {'run': 3.2, 'brisk': 2.0, 'walk': 1.3}.get(r.get('kind'), 1.0)
+    arrive = None
+    if path and r.get('crouch_end'):
+        arrive = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(path, path[1:])) / v
+    if r.get('crouch') or (arrive is not None and dt >= arrive):   # down where they are, arms over the head
+        if arrive is not None:
+            dt -= arrive
+            x, z = path[-1]
         k = ease(dt / 0.35)
         j = V.standing(sp)
         j['props'] = [C.dress_up(sp)]
@@ -896,11 +944,12 @@ def react(who, t, sp):
             V.arm_to(j, sd, (sg * (150 - 90 * k), -60 - 170 * k, 60.0 + 40 * k), 'out', 'palm')
         j['lean'] = 22 * k
         j['head_dy'] = 20 * k
+        if arrive is not None:                          # facing back the way they came: watching it
+            a, b = path[-2], path[-1]
+            f = (a[0] - b[0], a[1] - b[1])
         return x, z, f, j, (928 - j['bob']) * M_UNIT, j['bob']
-    path = r.get('path')
     if not path:
         return x, z, f, j or C.pose_standing(sp), neck if not seated0 else NECK_STANDING, 0.0
-    v = {'run': 3.2, 'brisk': 2.0, 'walk': 1.3}[r['kind']]
     (px, pz), dirn, moving = _along(path, dt * v)
     if moving:
         j = moves.gait(sp, dt, {'run': 'run', 'brisk': 'brisk', 'walk': 'walk'}[r['kind']])
@@ -1005,7 +1054,7 @@ def thrown_person(img, cam, film, who, t, dfire):
     if b is None or t < b.t0:
         return draw_person(img, cam, film, who, t, hand_on=(who == 'ESCORT'))
     if b.floor_t is not None and t >= b.floor_t:
-        pos, _ = b.at(t)
+        pos, _ = drifted(who, b, t, dfire)
         if cam.depth(pos) < 0.6:
             return None
         if b.wall is not None:
@@ -1026,7 +1075,7 @@ def thrown_person(img, cam, film, who, t, dfire):
         lay = lay.rotate(tilt, Image.BILINEAR, center=hip)
         img.alpha_composite(lay)
         return X, Y, s
-    pos, ang = b.at(t)
+    pos, ang = drifted(who, b, t, dfire)
     if cam.depth(pos) < 0.7:
         return None
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -1223,7 +1272,8 @@ def shot(img, t, film):
     # the light: lamp pool, sconces and candles (flickering), fires, the beam
     if lamp_px:
         LIGHTS.append((lamp_px[0], lamp_px[1] + 0.6 * lamp_px[2], 1.4 * lamp_px[2], 0.75, (255, 214, 150)))
-    for wall, a, y in (('+x', 0.05, 1.95), ('+z', -2.3, 1.95), ('-x', -1.5, 1.95), ('-x', 2.4, 1.95), ('+z', 3.7, 1.95)):
+    for wall, a, y in SCONCES:
+        y += 0.2
         pt = (RX - 0.1, y, a) if wall == '+x' else (-RX + 0.1, y, a) if wall == '-x' else (a, y, RZ - 0.1)
         (X, Y), k = cam.project(pt)
         if cam.depth(pt) > 0.5:
@@ -1272,6 +1322,6 @@ def p2_arms(img):
     X, Y, s, yaw, mirror, j, j2 = DRAWN['P2']
     L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)
     p = B.Pen(img, L)
-    for sd in 'LR':
-        if j2.get('hand', {}).get(sd) in ('fist', 'palm') and j['wr' + sd][1] > 260:
+    for sd in 'LR':                                      # (no height cut-off: at this table his wrists sit higher
+        if j2.get('hand', {}).get(sd) in ('fist', 'palm'):   # than in the close shots, and were hidden, Sam 19 Oct)
             V.arm(p, j2, sd, C.PEOPLE['P2'])

@@ -352,9 +352,10 @@ def shot_p1(img, t):
     pl = B.Pen(img, L)
     C.glass(pl, -400, TABLE_Y + 200, 0.09 / V.M_PER_UNIT, 'tumbler', (196, 120, 40))
     pl.poly(rough(C.card_quad(-470, TABLE_Y + 330, 0.15 / V.M_PER_UNIT, 30, 0.5), 2, 3), (248, 246, 240), INK, 1.4)
-    candles = [(250, TABLE_Y + 170), (290, TABLE_Y + 180)]
+    candles = [(250, TABLE_Y + 170), (300, TABLE_Y + 180)]
+    CANDLE_U = 0.3 / V.M_PER_UNIT                              # a candle in its candlestick: 30 cm
     for i, (cx_, cy_) in enumerate(candles):
-        C.candle(pl, cx_, cy_, 120, t, 70 + i, w=14)
+        C.candle(pl, cx_, cy_, CANDLE_U, t, 70 + i, w=0.011 / V.M_PER_UNIT)
     laid_queens(img, L, t)
     arms_over_table(img, cam, x, S1['neck'], s, sp, j, j2)
     arms_over_table(img, cam, 1080, 1140, 0.95, C.CARDS, jc, jc2)
@@ -364,28 +365,19 @@ def shot_p1(img, t):
         X, Y = cam.P(lx, 600)
         lights.append((X / B.SS, Y / B.SS, 260 * cam.z, 0.5 * C.flicker(t, lx), (255, 196, 120)))
     for i, (cx_, cy_) in enumerate(candles):
-        X, Y = L.P(cx_, cy_ - 140)
+        X, Y = L.P(cx_, cy_ - CANDLE_U)
         lights.append((X / B.SS, Y / B.SS, 220 * L.s, 0.55 * C.flicker(t, 70 + i), (255, 190, 110)))
     if close:                                                          # the Hyper Beam's light, growing on him
         lights.append((300, 700, 650, 0.8 * light_level(t), (255, 236, 170)))     # from the Dragonite's side
     R.parlour(img, lights)
     for i, (cx_, cy_) in enumerate(candles):                           # the flames are self-lit
-        C.candle(pl, cx_, cy_, 120, t, 70 + i, w=14)
+        C.candle(pl, cx_, cy_, CANDLE_U, t, 70 + i, w=0.011 / V.M_PER_UNIT)
 
 
 def portrait(img, cam, x, y, w, h):
-    """A dark old-master portrait in a gilt frame (a figure in a ruff), flat colour."""
-    p = B.Pen(img, cam)
-    p.poly(rough([(x - w / 2 - 22, y - 22), (x + w / 2 + 22, y - 22), (x + w / 2 + 22, y + h + 22), (x - w / 2 - 22, y + h + 22)],
-                 3, 1), GOLD, INK, 2.6)
-    p.poly([(x - w / 2, y), (x + w / 2, y), (x + w / 2, y + h), (x - w / 2, y + h)], (60, 44, 34), INK, 2.0)
-    p.poly([(x - w * 0.36, y + h), (x + w * 0.36, y + h), (x + w * 0.3, y + h * 0.62), (x - w * 0.3, y + h * 0.62)],
-           (30, 26, 28), None)
-    p.ell(x, y + h * 0.6, w * 0.2, h * 0.06, (226, 220, 206), INK, 1.4)
-    p.ell(x, y + h * 0.42, w * 0.14, h * 0.17, (206, 168, 140), INK, 1.6)
-    for sg in (-1, 1):                                                 # the sitter's eyes and a stern mouth
-        p.ell(x + sg * w * 0.05, y + h * 0.4, 3, 3, INK, None)
-    p.line([(x - w * 0.04, y + h * 0.5), (x + w * 0.04, y + h * 0.5)], INK, 2)
+    """The old-master portrait in its gilt frame (poker_mon_cast.portrait_image), laid on the wall."""
+    C.place_image(img, cam, C.portrait_image(), [(x - w / 2 - 22, y - 22), (x + w / 2 + 22, y - 22),
+                                                (x + w / 2 + 22, y + h + 22), (x - w / 2 - 22, y + h + 22)])
 
 
 def drapes(img, cam, x0, x1, y0, y1):
@@ -462,6 +454,11 @@ def reveal_cam(t):
     return B.Cam(1.7 + (0.74 - 1.7) * k, S3['x'] + (330 - S3['x']) * k, 800 + (900 - 800) * k)
 
 
+def fire_eyes(t):
+    """Sam's pick from the eye sheet (19 Oct): 4 'aim' for the first half of the beam, 6 'puppy' for the second."""
+    return 'aim' if t < (FIRE + BEAM_END[0]) / 2 else 'puppy'
+
+
 def dragon_state(t):
     """The Dragonite's head, mouth, eyes, wings and arms over the film."""
     st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0, shape='jaw')
@@ -473,7 +470,7 @@ def dragon_state(t):
     if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast)
         k = min(1.0, (t - (FIRE - 0.12)) / 0.12)
         st.update(head=-34 + 50 * k, lean=10 * k, mouth_open=1.0, wings=0.65 + 0.35 * k, arms=0.35 + 0.65 * k,
-                  eyes='narrow', shape='o' if k > 0.5 else 'jaw')     # firing: the mouth an O (Sam)
+                  eyes=fire_eyes(t) if k > 0.5 else 'narrow', shape='o' if k > 0.5 else 'jaw')   # firing: an O (Sam)
     if t >= BEAM_END[1]:                                        # done: settles, mouth shut, pleased with itself
         k = ease((t - BEAM_END[1]) / 0.6)
         st.update(head=16 * (1 - k), lean=10 * (1 - k), mouth_open=1.0 * (1 - k), wings=1.0 - 0.85 * k,
@@ -494,10 +491,9 @@ def sideboard2d(img, cam, t, x, y, flames_only=False):
                          2, dx + 3), R.WOOD_D, R.GOLD_D, 1.8)
         p.poly(rough([(x - 190, y - 200), (x - 150, y - 200), (x - 140, y - 260), (x - 160, y - 300), (x - 160, y - 330),
                       (x - 180, y - 330), (x - 180, y - 300), (x - 200, y - 260)], 1, 2), (150, 70, 36), INK, 1.8)
-    for i, dx in enumerate((100, 140, 180)):
-        if not flames_only:
-            p.line([(140 + x, y - 200), (140 + x, y - 280)], R.GOLD, 6)
-        C.candle(p, x + dx, y - 280 + (14 if i != 1 else 0), 70, t, 31 + i, w=9)
+    if not flames_only:
+        C.decanter(p, x - 170, y - 200, 0.3 / V.M_PER_UNIT * 0.62)
+    C.candelabra2(p, x + 140, y - 200, 0.45 / V.M_PER_UNIT * 0.62, t, 31)
 
 
 def shot_p2(img, t):
@@ -660,6 +656,27 @@ def checks():
         raise ValueError('check: ' + '; '.join(faults))
 
 
+def hands_check():
+    """Hands that touch something must be seen touching it (Sam, 19 Oct: player two's hands were hidden under the
+    table as he drew in the pot, and nothing caught it). On frames of the pull, the patch of picture at each of his
+    hands must be his hand, not the felt or the table's rail."""
+    faults = []
+    keep = B.SS
+    B.SS = 1
+    for t in np.linspace(R.Clock.PULL[0] + 0.05, R.Clock.PULL[1] - 0.05, 4):
+        im = np.asarray(picture(t).convert('RGB')).astype(int)
+        X, Y, s, yaw, mirror, j, j2 = R.DRAWN['P2']
+        for sd in 'LR':
+            wx, wy = j2['wr' + sd]
+            px, py = int(X + s * wx * (-1 if mirror else 1)), int(Y + s * wy)
+            patch = im[max(0, py - 4):py + 5, max(0, px - 4):px + 5]
+            felt = ((patch[..., 1] > patch[..., 0] + 10) | (patch.sum(-1) < 140)).mean()
+            if felt > 0.5:
+                faults.append(f'player two\'s {sd} hand is hidden at {t:.2f} s (the table is drawn over it)')
+    B.SS = keep
+    return faults
+
+
 def audits():
     """The general audit: player one and player two alone over every frame they are on screen (shots 1-5)."""
     def alone(who):
@@ -688,6 +705,7 @@ def audits():
                 actors[f'{who} [{shot}]'] = (ts, alone(who))
     faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
     faults += moves.audit()
+    faults += hands_check()
     return faults
 
 
