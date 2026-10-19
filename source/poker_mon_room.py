@@ -1314,14 +1314,17 @@ def react(who, t, sp):
             dt -= arrive
             x, z = path[-1]
         k = ease(dt / 0.35)
+        ph = sum(map(ord, who)) * 0.37                  # never still while they wait for it (Sam, 19 Oct: the
+        tr = math.sin(t * 29 + ph)                      # people waiting were eerie and still): trembling, rocking
         j = V.standing(sp)
         j['props'] = [C.dress_up(sp)]
-        j['bob'] = 260 * k
+        j['bob'] = 260 * k + 7 * tr * k
         for sd, sg in (('L', -1), ('R', 1)):
             j['foot' + sd] = (sg * 90, V.ANKLE_Y - 260 * k, 120 * k)
             j['knee_pole' + sd] = (0.3 * sg, -1.0, 0.6)
-            V.arm_to(j, sd, (sg * (150 - 90 * k), -60 - 170 * k, 60.0 + 40 * k), 'out', 'palm')
-        j['lean'] = 22 * k
+            V.arm_to(j, sd, (sg * (150 - 90 * k) + 10 * math.sin(t * 23 + ph + sg), -60 - 170 * k
+                             + 12 * math.sin(t * 17 + ph * sg), 60.0 + 40 * k), 'out', 'palm')
+        j['lean'] = 22 * k + 5 * math.sin(t * 6 + ph) * k
         j['head_dy'] = 20 * k
         if arrive is not None:                          # facing back the way they came: watching it
             a, b = path[-2], path[-1]
@@ -1330,14 +1333,20 @@ def react(who, t, sp):
     if not path:
         return x, z, f, j or C.pose_standing(sp), neck if not seated0 else NECK_STANDING, 0.0
     (px, pz), dirn, moving = _along(path, dt * v)
+    ph = sum(map(ord, who)) * 0.37
     if moving:
         j = moves.gait(sp, dt, {'run': 'run', 'brisk': 'brisk', 'walk': 'walk'}[r['kind']])
-    else:
-        j = V.standing(sp)
+    else:                                               # cornered: never still (Sam, 19 Oct: eerie and still before
+        j = moves.gait(sp, dt, 'run')                   # they were struck): running on the spot, shuffling along,
+        n = _norm((dirn[0], 0.0, dirn[1]))              # looking about
+        sh = 0.18 * math.sin(t * 2.7 + ph)
+        px, pz = px - n[2] * sh, pz + n[0] * sh
+        turn = math.radians(70 * math.sin(t * 3.3 + ph))
+        dirn = (n[0] * math.cos(turn) - n[2] * math.sin(turn), n[0] * math.sin(turn) + n[2] * math.cos(turn))
     j['props'] = [C.dress_up(sp)]
-    if r.get('arms') == 'panic':                        # hands up by the head as they go
+    if r.get('arms') == 'panic' or not moving:          # hands up by the head as they go, waving
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 150, -170.0, 80.0), 'out', 'palm')
+            V.arm_to(j, sd, (sg * 150, -170.0 + 45 * math.sin(t * 9 + ph + sg * 1.3), 80.0), 'out', 'palm')
     elif r.get('arms') == 'stop':                       # the guard: a palm held out at it, "stop"
         V.arm_to(j, 'R', (70.0, 40.0, 380.0), 'down', 'palm')
     return px, pz, dirn, j, NECK_STANDING - j.get('bob', 0.0) * M_UNIT, j.get('bob', 0.0)

@@ -457,7 +457,20 @@ def face(img, p, sp, t, hx, hy, hw, hh):
         else:
             almond = [(ex - 17, ey), (ex - 8, ey - 8), (ex + 8, ey - 8), (ex + 17, ey), (ex + 8, ey + 7), (ex - 8, ey + 7)]
             p.poly(almond, (250, 250, 248), INK, 2.0)
-            p.ell(ex + look * 7, ey + 1 + sp.get('look_v', 0.0) * 4, 4.5, 4.5, INK, None)   # look_v: +1 down
+            lv = sp.get('look_v', 0.0)                                   # +1 down, -1 up
+            px_, py_ = ex + look * 7, ey + 1 + lv * 5
+            # the pupil stays inside the eye: any part past the eye's edge is under the lid (Sam, 19 Oct), so it is
+            # drawn already cut to the eye's outline (each point held between its top and bottom edges)
+            def _edge(x, pts):
+                for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+                    if x0 <= x <= x1:
+                        return y0 + (y1 - y0) * (x - x0) / max(1e-6, x1 - x0)
+                return ey
+            bot = [(ex - 17, ey), (ex - 8, ey + 7), (ex + 8, ey + 7), (ex + 17, ey)]
+            top = [(ex - 17, ey), (ex - 8, ey - 8), (ex + 8, ey - 8), (ex + 17, ey)]
+            circ = [(px_ + 4.5 * math.cos(a_), py_ + 4.5 * math.sin(a_)) for a_ in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
+            circ = [(x, min(max(y, _edge(x, top) + 1), _edge(x, bot) - 1)) for x, y in circ]
+            p.poly(circ, INK, None)
             if lid > 0:  # a heavy lid drooping over the top of the eye
                 p.poly([(ex - 18, ey - 2), (ex - 8, ey - 10), (ex + 8, ey - 10), (ex + 18, ey - 2), (ex + 17, ey - 1 + lid),
                         (ex + 8, ey - 9 + lid), (ex - 8, ey - 9 + lid), (ex - 17, ey - 1 + lid)], dk(skin, 0.84), None)

@@ -109,6 +109,10 @@ Every hand is a circle at the end of the arm (`chand`; `gesture_hand` replaces b
 are laid over the circle (`phone_prop`); grips are implied, never drawn. `hands3d.py` (MakeHuman hands) is retired
 for these films: too costly in rounds and renders.
 
+**Pupils stay inside the eyes (Sam, 19 Oct: Poker Mon).** However far a character looks (`look`, `look_v`), the pupil
+never crosses the eye's outline: any part past the edge is under the lid. `burnham.face` draws the pupil already cut
+to the eye's shape, so this holds in every film.
+
 **Which side of the hand a held prop goes on depends on the moment (Sam, 19 Oct: Poker Mon).** Decide it per prop,
 from where the fingers are: a prop shown to us across the palm (a phone screen, a badge held up) goes over the hand;
 an item gripped with the fingers wrapped round the side we see (a fan of cards held facing its owner, a glass, a
