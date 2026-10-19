@@ -68,6 +68,8 @@
 | 63 | (19 Oct) "1.5 seconds of Dragonite looking neutral before charging" | yes: the charge starts 1.5 s later; everything after it moved with it (film 21.9 -> 23.4 s) |
 | 64 | (19 Oct) "A white box appears over player 2 when it zooms out" | yes: his chair's back was sorted by a point at seat height, which came nearer than him as the camera tilted up; the chair halves now sit just behind and just in front of their sitter's own point |
 | 65 | (19 Oct) "Feel free to change the light." (faces burning to white) | yes: the parlour light lifts colours at most 1.2x and rolls off the brightest tones instead of clipping to white |
+| 66 | (19 Oct) Recordings: line 1 "Four of a kind." (file 6efaf6c9-4.m4a, 3.5 s, speech 0.98-2.56 s) and line 2 "Dragonite, use hyper beam." (ff6d113d-Hyper.m4a, 4.2 s, speech 1.04-3.53 s) | in: filed as source/audio/poker-mon-1/2.m4a; speech at 1.53-3.11 s and 5.44-7.93 s; captions follow the words |
+| 67 | (19 Oct) "Remove Dragonite line, he does not speak." | yes: no Dragonite recording, no head bob |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
