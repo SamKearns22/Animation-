@@ -425,254 +425,435 @@ def shot_p2(img, t):
 
 
 # ------------------------------------------------------------------------------------------------ shot 6: the blast
-# From above at an angle, behind player one: the long table runs up the frame to player two and the Dragonite at the
-# far end. Seats (screen x, neck y, scale, view yaw): near the camera is bigger.
-TABLE = dict(cx=540, cy=980, rx=390, ry=600)
-SEATS = {
-    'P2': (540, 300, 0.5, 0),
-    'LADY': (175, 650, 0.6, 90),
-    'CARDS': (905, 650, 0.6, -90),
-    'OLD': (150, 1120, 0.7, 90),
-    'P1': (540, 1530, 0.9, 180),
+# Sam, 19 Oct: from a dynamic upper-diagonal angle, a sweeping view. The room is laid out in metres (y up; the table's
+# long axis along z, player two at the far end +z, player one at the near end -z) and seen by a real perspective
+# camera that sweeps from high behind player one's shoulder round to the corner of the room as the beam fires, so
+# the table and the beam run corner to corner; it holds while everyone is thrown (The Salt), then pushes in on player
+# two pulling in the pot. People and the Dragonite stand on the floor as flat drawings facing the camera in the view
+# their facing gives; anyone thrown flies on a real arc (gravity), spinning, and chips that stay in shot land.
+M_UNIT = V.M_PER_UNIT
+TABLE_H = 0.76
+TABLE_A = (0.95, 1.6)                     # the oval's half-width (x) and half-length (z)
+NECK_SEATED = (928 - V.SEAT_DROP) * M_UNIT
+NECK_STANDING = 928 * M_UNIT
+ROOM = (-3.4, 3.2, -4.6, 3.6)             # x0, x1, z0, z1: the far walls stand at x1 and z1
+SEATS3 = {                                # (x, z, facing (dx, dz)) seated round the table
+    'P2': (0.0, 2.05, (0, -1)),
+    'P1': (0.0, -2.05, (0, 1)),
+    'LADY': (-1.35, 0.6, (1, 0)),
+    'OLD': (-1.35, -0.75, (1, 0)),
+    'CARDS': (1.35, 0.6, (-1, 0)),
 }
-STANDING = {'DEALER': (960, 1040, 0.62, -90), 'GUARD1': (900, 210, 0.48, 0), 'GUARD2': (120, 1700, 0.85, 180)}
-DRAGON_F = dict(x=330, foot=520, s=0.42)
-POT = (640, 520)
-# How each is thrown when the blast reaches them (The Salt): away from the beam's line, up toward the camera (they
-# grow), spinning; each its own speed (screen units per second), spin (degrees per second) and lift.
+STANDING3 = {'DEALER': (1.45, -0.6, (-1, 0)), 'GUARD1': (1.7, 3.0, (0, -1)), 'GUARD2': (1.9, -2.7, (-0.4, 1))}
+DRAGON3 = (-1.05, 2.35, (0.3, -1))
+POT3 = (0.35, 1.2)
+# Thrown by the blast (world metres per second): away from the beam, up, spinning (degrees per second); each its own.
 THROWS = {
-    'P1': dict(t=IMPACT, v=(60, 2600), spin=-500, lift=3.2),
-    'OLD': dict(t=IMPACT + 0.05, v=(-1900, 900), spin=-720, lift=1.6),
-    'LADY': dict(t=IMPACT + 0.08, v=(-2100, -500), spin=1080, lift=2.4),
-    'CARDS': dict(t=IMPACT + 0.06, v=(2000, -300), spin=-900, lift=1.8),
-    'DEALER': dict(t=IMPACT + 0.04, v=(2200, 600), spin=640, lift=1.4),
-    'GUARD2': dict(t=IMPACT + 0.02, v=(-1500, 1800), spin=-420, lift=2.0),
-    'GUARD1': dict(t=IMPACT + 0.10, v=(1700, -1200), spin=560, lift=1.2),
+    'P1': dict(t=IMPACT, v=(-1.0, 3.2, -6.5), spin=-380),
+    'OLD': dict(t=IMPACT + 0.05, v=(-5.5, 3.0, -2.5), spin=-560),
+    'LADY': dict(t=IMPACT + 0.09, v=(-4.8, 3.8, -0.8), spin=820),
+    'CARDS': dict(t=IMPACT + 0.07, v=(5.0, 3.0, -2.0), spin=-640),
+    'DEALER': dict(t=IMPACT + 0.04, v=(5.5, 2.6, -2.8), spin=520),
+    'GUARD2': dict(t=IMPACT + 0.03, v=(3.0, 2.6, -5.5), spin=-360),
+    'GUARD1': dict(t=IMPACT + 0.11, v=(4.6, 2.8, -1.4), spin=440),
 }
+G = 9.8
+
+
+def _norm(v):
+    n = math.sqrt(sum(c * c for c in v)) or 1.0
+    return tuple(c / n for c in v)
+
+
+def _cross(a, b):
+    return (a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
+
+
+def _dot(a, b):
+    return sum(x * y for x, y in zip(a, b))
+
+
+class Cam3:
+    """A perspective camera at `pos` looking at `at`; project() gives the frame point (px) and the pixels per metre
+    there. A shake is added on the frame."""
+    def __init__(self, pos, at, focal=2300.0, shake=(0.0, 0.0)):
+        self.pos, self.focal, self.shake = pos, focal, shake
+        self.f = _norm(tuple(a - p for a, p in zip(at, pos)))
+        self.r = _norm(_cross(self.f, (0.0, 1.0, 0.0)))
+        self.u = _cross(self.r, self.f)
+
+    def depth(self, p):
+        return _dot(tuple(a - b for a, b in zip(p, self.pos)), self.f)
+
+    def project(self, p):
+        d = tuple(a - b for a, b in zip(p, self.pos))
+        z = max(0.05, _dot(d, self.f))
+        k = self.focal / z
+        return (540 + _dot(d, self.r) * k + self.shake[0], 960 - _dot(d, self.u) * k + self.shake[1]), k
+
+    def yaw_of(self, p, facing):
+        """The drawn view for someone at p facing `facing` (dx, dz): 0 facing us, +90 facing right of frame."""
+        fx, fz = _norm((facing[0], facing[1]))
+        to_cam = _norm((self.pos[0] - p[0], self.pos[2] - p[2]))
+        right = _norm((self.r[0], self.r[2]))
+        return math.degrees(math.atan2(fx * right[0] + fz * right[1], fx * to_cam[0] + fz * to_cam[1]))
+
+
+def sweep(t):
+    """The camera over the shot: (azimuth from behind player one, degrees; height; distance; look-at point)."""
+    a = ease((t - 12.45) / 0.85)                                  # the sweep round to the corner, through the fire
+    az, h, r = 10 + 22 * a, 5.6 - 0.9 * a, 6.2 - 0.6 * a
+    look = (0.0 - 0.45 * a, 0.8 + 0.1 * a, -0.1 + 0.55 * a)       # swinging toward the Dragonite's end
+    drift = (t - 13.3) / 1.7 if t > 13.3 else 0.0                 # a slow drift on while they fly
+    az += 4 * min(1.0, max(0.0, drift))
+    b = ease((t - 15.0) / 1.3)                                    # the push in on player two and the pot
+    h, r = h + (3.3 - h) * b, r + (4.4 - r) * b
+    look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-0.6, 1.25, 1.75)))
+    return az, h, r, look
 
 
 def blast_cam(t):
-    """A small jolt at the impact, settling at once; once the room is empty, an eased push in on player two and the
-    Dragonite at the far end (he pulls in the pot)."""
-    k = max(0.0, 1 - (t - IMPACT) / 0.45) if t >= IMPACT else 0.0
-    u = ease((t - 15.0) / 1.0)
-    return B.Cam(1.0 + 0.7 * u, 540 + (540 - 540) * u + 14 * k * math.sin(t * 90),
-                 960 + (430 - 960) * u + 10 * k * math.cos(t * 77))
+    az, h, r, look = sweep(t)
+    a = math.radians(az)
+    pos = (look[0] - r * math.sin(a), h, look[2] - r * math.cos(a))
+    k = max(0.0, 1 - (t - IMPACT) / 0.45) if t >= IMPACT else 0.0     # the jolt at the impact
+    return Cam3(pos, look, shake=(16 * k * math.sin(t * 90), 12 * k * math.cos(t * 77)))
 
 
-def ell(cx, cy, rx, ry, n=90, r=1.0):
-    return [(cx + rx * r * math.cos(a), cy + ry * r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, n, endpoint=False)]
+FLAT = B.Cam(1.0, 540, 960)
 
 
-def beam_line(t):
-    """The beam's start (the Dragonite's mouth) and end (past player one, out of frame), and its width."""
-    if t < FIRE or t >= BEAM_END[1]:
-        return None
-    mouth = dragon_mouth_f(t)
-    end = (560, 2300)
-    grow = ease((t - FIRE) / 0.1)
-    fade = 1 - ease((t - BEAM_END[0]) / (BEAM_END[1] - BEAM_END[0]))
-    reach = min(1.0, (t - FIRE) / 0.1)                           # it shoots out in a tenth of a second
-    e = (mouth[0] + (end[0] - mouth[0]) * reach, mouth[1] + (end[1] - mouth[1]) * reach)
-    return mouth, e, 46 * grow * fade + 6
+def poly3(p, cam, pts, fill, line=INK, lw=2.4):
+    p.poly([cam.project(q)[0] for q in pts], fill, line, lw)
 
 
-_MOUTH = {}
+def room(img, cam):
+    """Carpet, the two far walls (cream panels framed in gold, a rail, sconces), the carpet's pattern."""
+    p = B.Pen(img, FLAT)
+    x0, x1, z0, z1 = ROOM
+    poly3(p, cam, [(x0 - 6, 0, z0 - 6), (x1, 0, z0 - 6), (x1, 0, z1), (x0 - 6, 0, z1)], CARPET, None)
+    for k in np.arange(z0 - 6, z1, 0.55):                           # the carpet's diagonal pattern
+        p.line([cam.project((x0 - 6, 0, k))[0], cam.project((x1, 0, k + 1.1))[0]], CARPET_D, 3)
+    for wall_pts, n_pan, along in (([(x0 - 6, 0, z1), (x1, 0, z1), (x1, 3.0, z1), (x0 - 6, 3.0, z1)], 6, 'x'),
+                                   ([(x1, 0, z1), (x1, 0, z0 - 6), (x1, 3.0, z0 - 6), (x1, 3.0, z1)], 6, 'z')):
+        poly3(p, cam, wall_pts, WALL, INK, 2.6)
+        for i in range(n_pan + 4):
+            if along == 'x':
+                a0, a1 = x1 - 1.2 * (i + 1) + 0.12, x1 - 1.2 * i - 0.12
+                quad = lambda y0, y1: [(a0, y0, z1), (a1, y0, z1), (a1, y1, z1), (a0, y1, z1)]
+            else:
+                a0, a1 = z1 - 1.2 * (i + 1) + 0.12, z1 - 1.2 * i - 0.12
+                quad = lambda y0, y1: [(x1, y0, a1), (x1, y0, a0), (x1, y1, a0), (x1, y1, a1)]
+            poly3(p, cam, quad(1.15, 2.75), WALL_D, GOLD, 2.6)
+            poly3(p, cam, quad(0.15, 0.9), WALL_D, GOLD, 2.2)
+        rail = [(x0 - 6, 1.0, z1), (x1, 1.0, z1)] if along == 'x' else [(x1, 1.0, z1), (x1, 1.0, z0 - 6)]
+        p.line([cam.project(q)[0] for q in rail], GOLD, 6)
+    for sx, sz in ((x1, 0.6), (x1, -1.8), (-1.2, z1), (1.2, z1)):     # brass sconces with pale shades
+        (X, Y), k = cam.project((sx, 1.95, sz))
+        p.poly(rough([(X - 0.13 * k, Y), (X + 0.13 * k, Y), (X + 0.09 * k, Y - 0.17 * k), (X - 0.09 * k, Y - 0.17 * k)], 2,
+                     int(abs(sz * 10))), SHADE, INK, 2.0)
 
 
-def dragon_mouth_f(t):
-    k = round(t * FPS)
-    if k not in _MOUTH:
-        st = dragon_state(t)
-        scratch = B.canvas((0, 0, 0))
-        _MOUTH[k] = C.dragonite(scratch, B.Cam(1.0, 540, 960), DRAGON_F['x'], DRAGON_F['foot'], DRAGON_F['s'], t,
-                                turn=0.5, flip=1, head=st['head'], mouth_open=st['mouth_open'], eyes=st['eyes'],
-                                wings=st['wings'], arms=st['arms'], lean=st['lean'])
-    return _MOUTH[k]
+def oval3(cx, cz, y, ax, az, n=96, r=1.0):
+    return [(cx + ax * r * math.cos(a), y, cz + az * r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, n,
+                                                                                          endpoint=False)]
 
 
-def scorch(img, cam):
-    """The beam's burnt track across the felt and carpet: stays once made."""
-    p = B.Pen(img, cam)
-    a = dragon_mouth_f(FIRE + 0.2)
-    b = (560, 2300)
-    dx, dy = b[0] - a[0], b[1] - a[1]
-    d = math.hypot(dx, dy)
-    nx, ny = -dy / d, dx / d
-    def band(scale):
+def table3(img, cam, t):
+    """The oval table in perspective: its edge (the side we see), the leather rail, the felt, the yellow line."""
+    p = B.Pen(img, FLAT)
+    top = oval3(0, 0, TABLE_H, *TABLE_A)
+    low = oval3(0, 0, TABLE_H - 0.12, *TABLE_A)
+    pts = [cam.project(q)[0] for q in top]
+    lpts = [cam.project(q)[0] for q in low]
+    for i in range(len(pts)):                                        # the rim's side, one face at a time
+        j = (i + 1) % len(pts)
+        p.poly([pts[i], pts[j], lpts[j], lpts[i]], RAIL, None)
+    p.poly(lpts, None, INK, 2.4)
+    p.poly(pts, RAIL, INK, 2.6)
+    p.poly([cam.project(q)[0] for q in oval3(0, 0, TABLE_H + 0.005, *TABLE_A, r=0.86)], FELT, INK, 2.2)
+    p.line([cam.project(q)[0] for q in oval3(0, 0, TABLE_H + 0.006, *TABLE_A, r=0.66)] +
+           [cam.project(oval3(0, 0, TABLE_H + 0.006, *TABLE_A, r=0.66)[0])[0]], LINE_Y, 3)
+
+
+def card3(img, cam, src, x, z, w, ang, y=TABLE_H + 0.006):
+    h = w * C.CH / C.CW
+    a = math.radians(ang)
+    q = []
+    for dx, dz in ((-w / 2, h / 2), (w / 2, h / 2), (w / 2, -h / 2), (-w / 2, -h / 2)):
+        q.append((x + dx * math.cos(a) - dz * math.sin(a), y, z + dx * math.sin(a) + dz * math.cos(a)))
+    C.place_image(img, FLAT, src, [cam.project(pt)[0] for pt in q])
+
+
+def stack3(img, cam, x, z, n, kind, seed=0, y=TABLE_H):
+    (X, Y), k = cam.project((x, y, z))
+    tilt = max(0.3, min(0.9, _dot(cam.f, (0, -1, 0))))
+    C.chip_stack(img, FLAT, X, Y, 0.0195 * k, n, kind, squash=tilt, seed=seed)
+
+
+def beam3(t):
+    """The beam's world start (the Dragonite's mouth) and end (through player one's chest and on past him)."""
+    m = mouth3(t)
+    tgt = (0.0, 1.0, -2.05)
+    d = _norm(tuple(b - a for a, b in zip(m, tgt)))
+    return m, tuple(a + c * 9.0 for a, c in zip(m, d))
+
+
+def mouth3(t):
+    """The Dragonite's mouth in the world: its head height, a little forward, up while it rears back."""
+    st = dragon_state(t)
+    x, z, f = DRAGON3
+    f = _norm(f)
+    back = max(0.0, -st['head']) / 34.0
+    return (x + f[0] * 0.28 * (1 - back), DRAGONITE_MOUTH + 0.25 * back, z + f[1] * 0.28 * (1 - back))
+
+
+DRAGONITE_MOUTH = 2.2 * 0.8
+
+
+def scorch3(img, cam):
+    """The beam's burnt track along the felt and on across the carpet: stays once made."""
+    p = B.Pen(img, FLAT)
+    (mx, my, mz), (ex, ey, ez) = beam3(FIRE + 0.3)
+    d = _norm((ex - mx, ez - mz))
+    n = (-d[1], d[0])
+
+    def band(y, s0, s1, w, scale):
         pts = []
-        for k in np.linspace(0.14, 1.0, 16):
-            w = (20 + 90 * k) * scale
-            pts.append((a[0] + dx * k + nx * w, a[1] + dy * k + ny * w))
-        for k in np.linspace(1.0, 0.14, 16):
-            w = (20 + 90 * k) * scale
-            pts.append((a[0] + dx * k - nx * w, a[1] + dy * k - ny * w))
+        ss = np.linspace(s0, s1, 14)
+        for s in ss:
+            ww = w * scale * (0.6 + 0.4 * (s - s0) / max(0.01, s1 - s0))
+            pts.append(cam.project((mx + d[0] * s + n[0] * ww, y, mz + d[1] * s + n[1] * ww))[0])
+        for s in ss[::-1]:
+            ww = w * scale * (0.6 + 0.4 * (s - s0) / max(0.01, s1 - s0))
+            pts.append(cam.project((mx + d[0] * s - n[0] * ww, y, mz + d[1] * s - n[1] * ww))[0])
         return pts
-    p.poly(rough(band(1.0), 16, 5), (176, 84, 34), None)                  # a singed, still-glowing edge
-    p.poly(rough(band(0.8), 12, 6), (60, 40, 30), None)
-    p.poly(rough(band(0.55), 10, 7), (22, 18, 18), None)                  # the black burn at its heart
+    out = [u for u in np.linspace(0.0, 12.0, 481)
+           if ((mx + d[0] * u) / (TABLE_A[0] * 1.05)) ** 2 + ((mz + d[1] * u) / (TABLE_A[1] * 1.05)) ** 2 > 1
+           and mz + d[1] * u < 0]
+    for y, s0, s1 in ((0.0, out[0], 12.0),):
+        p.poly(rough(band(y, s0, s1, 0.22, 1.0), 10, 5), (176, 84, 34), None)
+        p.poly(rough(band(y, s0, s1, 0.22, 0.75), 8, 6), (60, 40, 30), None)
+        p.poly(rough(band(y, s0, s1, 0.22, 0.48), 6, 7), (22, 18, 18), None)
 
 
-def seat_person(img, cam, who, x, y, s, yaw, t):
-    sp = dict(C.PEOPLE[who], chair_c=ARMCHAIR, chair_d=ARMCHAIR_D)
-    sp.update(dict(look=0.0, blink=F.blinking(t, BLINKS.get(who, [])), mouth='line'))
-    if who == 'P2':
-        sp.update(p2_face(t))
-        if t >= PULL[0]:
-            u = ease((t - PULL[0]) / (PULL[1] - PULL[0]))
-            j = seated(sp, 'pull', u)
+def person3(img, cam, who, t, t_pose=None):
+    """Draw someone where they sit or stand, the view from their facing; returns their neck point and scale."""
+    tp = t if t_pose is None else t_pose
+    if who in SEATS3:
+        x, z, f = SEATS3[who]
+        (X, Y), k = cam.project((x, NECK_SEATED, z))
+        s = k * M_UNIT
+        yaw = cam.yaw_of((x, 0, z), f)
+        sp = dict(C.PEOPLE[who], chair_c=ARMCHAIR, chair_d=ARMCHAIR_D, look=0.0, mouth='line',
+                  blink=F.blinking(tp, BLINKS.get(who, [])))
+        if who == 'P2':
+            sp.update(p2_face(tp))
+            j = seated(sp, 'pull', ease((tp - PULL[0]) / (PULL[1] - PULL[0]))) if tp >= PULL[0] else seated(sp, 'rest')
+        elif who == 'P1':
+            sp.update(p1_face(SHOTS[4][2] - 0.01))
+            j = seated(sp, 'rest')
         else:
             j = seated(sp, 'rest')
-    elif who == 'P1':
-        sp.update(p1_face(SHOTS[4][2] - 0.01))
-        j = seated(sp, 'rest')
-    else:
-        j = seated(sp, 'rest')
-    j['seated'] = True
-    j['bob'] = V.SEAT_DROP
-    for sd, sg in (('L', -1), ('R', 1)):
-        j['foot' + sd] = (sg * 64, 928 - V.SEAT_DROP - 38, V.THIGH * 0.98)
-        j['knee_pole' + sd] = (0.1 * sg, -1.0, 0.7)
-    j2 = C.person(img, cam, x, y - V.SEAT_DROP * s, s, sp, t, yaw, j)
-    if who == 'P2':
-        _P2_ARMS[:] = [(x, y - V.SEAT_DROP * s, s, sp, j, j2)]
-    return j2
+        j['seated'] = True
+        j['bob'] = V.SEAT_DROP
+        for sd, sg in (('L', -1), ('R', 1)):
+            j['foot' + sd] = (sg * 64, 928 - V.SEAT_DROP - 38, V.THIGH * 0.98)
+            j['knee_pole' + sd] = (0.1 * sg, -1.0, 0.7)
+        j2 = C.person(img, FLAT, X, Y - V.SEAT_DROP * s, s, sp, tp, yaw, j)
+        if who == 'P2':
+            _P2_ARMS3[:] = [(X, Y, s, sp, j, j2, yaw)]
+        return (X, Y), s
+    x, z, f = STANDING3[who]
+    (X, Y), k = cam.project((x, NECK_STANDING, z))
+    s = k * M_UNIT
+    sp = dict(C.PEOPLE[who], look=0.0, mouth='line', blink=F.blinking(tp, BLINKS.get(who, [])))
+    C.person(img, FLAT, X, Y, s, sp, tp, cam.yaw_of((x, 0, z), f), C.pose_standing(sp))
+    return (X, Y), s
 
 
-_P2_ARMS = []
+_P2_ARMS3 = []
 
 
-def stand_person(img, cam, who, x, y, s, yaw, t):
-    sp = dict(C.PEOPLE[who], look=0.0, mouth='line', blink=F.blinking(t, BLINKS.get(who, [])))
-    return C.person(img, cam, x, y, s, sp, t, yaw, C.pose_standing(sp))
+def p2_arms3(img):
+    """Player two's forearms lie over the table's edge: drawn again after the table."""
+    for X, Y, s, sp, j, j2, yaw in _P2_ARMS3:
+        mirror = V.snap(yaw)[1]
+        L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)
+        p = B.Pen(img, L)
+        for sd in 'LR':
+            if j2.get('hand', {}).get(sd) in ('fist', 'palm') and j['wr' + sd][1] > TABLE_Y - 30:
+                V.arm(p, j2, sd, sp)
 
 
-def thrown(img, cam, who, draw, t):
-    """Draw someone (with their chair) as they were at the impact, then thrown: away, up toward us, spinning."""
+def home3(who):
+    if who in SEATS3:
+        x, z, _ = SEATS3[who]
+        return (x, NECK_SEATED, z)
+    x, z, _ = STANDING3[who]
+    return (x, NECK_STANDING, z)
+
+
+def thrown3(img, cam, who, t):
+    """Someone (with their chair) as they were at the blast, thrown on a real arc: away, up, spinning; gone once out
+    of shot."""
     th = THROWS[who]
     dt = t - th['t']
     if dt < 0:
-        draw(img, cam, t)
+        person3(img, cam, who, t)
         return
-    if dt > 1.0:
+    if dt > 1.6:
         return
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    draw(lay, cam, th['t'])
+    (X0, Y0), s0 = person3(lay, cam, who, t, th['t'])
     bbox = lay.getbbox()
     if not bbox:
         return
-    cx0, cy0 = (bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2
-    sc = 1.0 + th['lift'] * dt + 1.4 * dt * dt                   # rising toward the camera: bigger
-    ang = th['spin'] * dt
-    off = (cam.S(th['v'][0] * dt), cam.S(th['v'][1] * dt + 300 * dt * dt))
+    h0 = home3(who)
+    pos = (h0[0] + th['v'][0] * dt, h0[1] + th['v'][1] * dt - 0.5 * G * dt * dt, h0[2] + th['v'][2] * dt)
+    if cam.depth(pos) < 0.8 or pos[1] < -1.0:                  # past the camera, or gone through the floor: gone
+        return
+    (X, Y), k = cam.project(pos)
+    sc = k * M_UNIT / s0
+    reach = max(bbox[2] - bbox[0], bbox[3] - bbox[1]) / B.SS * sc
+    if sc > 6 or not (-reach < X < 1080 + reach and -reach < Y < 1920 + reach):
+        return                                                    # out of shot (or filling the lens): gone
     piece = lay.crop(bbox)
+    S = B.SS
+    ax, ay = X0 * S - bbox[0], Y0 * S - bbox[1]                  # spin about the neck
     w, h = piece.size
-    piece = piece.resize((max(1, int(w * sc)), max(1, int(h * sc))), Image.BILINEAR).rotate(ang, Image.BILINEAR,
-                                                                                             expand=True)
-    X = int(cx0 + off[0] - piece.width / 2)
-    Y = int(cy0 + off[1] - piece.height / 2)
-    img.paste(piece, (X, Y), piece)
+    big = piece.resize((max(1, int(w * sc)), max(1, int(h * sc))), Image.BILINEAR)
+    ang = th['spin'] * dt
+    pad = int(max(big.size)) + 2
+    canvas = Image.new('RGBA', (big.width + 2 * pad, big.height + 2 * pad), (0, 0, 0, 0))
+    canvas.paste(big, (pad, pad))
+    cx, cy = pad + ax * sc, pad + ay * sc
+    rot = canvas.rotate(ang, Image.BILINEAR, center=(cx, cy))
+    img.paste(rot, (int(X * S - cx), int(Y * S - cy)), rot)
 
 
-def debris(img, cam, t):
-    """Chips and cards blown off the table: each its own size, speed and spin, out of shot."""
+def debris3(img, cam, t, landed_only=False):
+    """Chips and cards blown off the table: each its own size, speed and spin. Those that come down inside the room
+    land on the carpet and stay there."""
     dt = t - IMPACT
-    if dt < 0 or dt > 1.2:
+    if dt < 0:
         return
     rng = np.random.default_rng(77)
-    for i in range(46):
-        x0 = TABLE['cx'] + rng.uniform(-0.8, 0.8) * TABLE['rx']
-        y0 = TABLE['cy'] + rng.uniform(-0.5, 0.9) * TABLE['ry']
-        if math.hypot(x0 - POT[0], y0 - POT[1]) < 90:
+    for i in range(60):
+        a = rng.uniform(0, 2 * math.pi)
+        r0 = rng.uniform(0.15, 0.85)
+        x0, z0 = TABLE_A[0] * r0 * math.cos(a), TABLE_A[1] * r0 * math.sin(a)
+        if math.hypot(x0 - POT3[0], z0 - POT3[1]) < 0.35:
             continue
-        side = -1 if x0 < 560 else 1
-        v = (side * rng.uniform(900, 2400), rng.uniform(-600, 1800))
-        start = rng.uniform(0.0, 0.18)
-        u = dt - start
+        side = -1 if x0 < 0 else 1
+        v = (side * rng.uniform(2.0, 7.5), rng.uniform(2.0, 6.5), rng.uniform(-6.0, 1.5))
+        st = rng.uniform(0.0, 0.2)
+        u = dt - st
+        spin = rng.uniform(-900, 900)
         if u < 0:
             continue
-        x, y = x0 + v[0] * u, y0 + v[1] * u + 200 * u * u
-        sc = 1 + rng.uniform(0.8, 2.6) * u
-        ang = rng.uniform(-900, 900) * u
+        tl = (v[1] + math.sqrt(v[1] ** 2 + 2 * G * TABLE_H)) / G      # when it reaches the floor
+        uu = min(u, tl)
+        pos = (x0 + v[0] * uu, TABLE_H + v[1] * uu - 0.5 * G * uu * uu, z0 + v[2] * uu)
+        on_floor = u >= tl
+        inside = ROOM[0] < pos[0] < ROOM[1] - 0.05 and ROOM[2] < pos[2] < ROOM[3] - 0.05
+        if on_floor and not inside:
+            continue
+        if landed_only != on_floor:
+            continue
+        (X, Y), k = cam.project((pos[0], max(0.0, pos[1]), pos[2]))
+        ang = spin * uu
         if i % 3 == 0:
             src = C.card_back() if i % 2 else C.card_face(['7', '3', 'K', '9'][i % 4], 'SCDH'[i % 4], 60)
-            C.place_image(img, cam, src, C.card_quad(x, y, 70 * sc, ang, 0.8))
+            w = 0.063 * k
+            C.place_image(img, FLAT, src, C.card_quad(X, Y, w, ang, 0.55 if on_floor else 0.9))
         else:
             kind = ['poke', 'great', 'ultra', 'poke', 'master'][i % 5]
-            r = 22 * sc
-            C.place_image(img, cam, C.chip_face(kind), C.card_quad(x, y, 2 * r, ang, 0.7 * C.CW / C.CH * 1.4))
+            w = 0.039 * k
+            C.place_image(img, FLAT, C.chip_face(kind), C.card_quad(X, Y, w, ang,
+                                                                       (0.5 if on_floor else 0.9) * C.CW / C.CH))
+
+
+def dragon3(img, cam, t):
+    x, z, f = DRAGON3
+    (X, Y), k = cam.project((x, 0.0, z))
+    yaw = cam.yaw_of((x, 0, z), f)
+    st = dragon_state(t)
+    turn = min(1.0, abs(yaw) / 55.0)
+    return C.dragonite(img, FLAT, X, Y, k * M_UNIT, t, turn=turn, flip=1 if yaw >= 0 else -1, head=st['head'],
+                       mouth_open=st['mouth_open'], eyes=st['eyes'], wings=st['wings'], arms=st['arms'],
+                       lean=st['lean'])
 
 
 def shot_blast(img, t):
     cam = blast_cam(t)
-    p = B.Pen(img, cam)
-    p.poly([(-200, -300), (1280, -300), (1280, 2300), (-200, 2300)], CARPET, None)
-    for k in range(-6, 14):                                        # the carpet's pattern
-        y = k * 170
-        p.line([(-200, y), (1280, y + 120)], CARPET_D, 3)
-    p.poly([(-200, -300), (1280, -300), (1280, 60), (-200, 60)], WALL, INK, 2.6)  # the far wall's foot, at the top
-    p.poly([(-200, 40), (1280, 40), (1280, 70), (-200, 70)], GOLD, INK, 2.0)
-    if t >= IMPACT:
-        scorch(img, cam)
-
-    def stood(who):
-        x, y, s, yaw = STANDING[who]
-        return lambda im, c, tt: stand_person(im, c, who, x, y, s, yaw, tt)
-
-    def sat(who):
-        x, y, s, yaw = SEATS[who]
-        return lambda im, c, tt: seat_person(im, c, who, x, y, s, yaw, tt)
-    thrown(img, cam, 'GUARD1', stood('GUARD1'), t)                 # the far end first: the guard, player two
-    seat_person(img, cam, 'P2', *SEATS['P2'][:3], SEATS['P2'][3], t)
-    cx, cy, rx, ry = TABLE['cx'], TABLE['cy'], TABLE['rx'], TABLE['ry']          # the table
-    side = [(cx + rx * math.cos(a), cy + ry * math.sin(a)) for a in np.linspace(0, math.pi, 50)]
-    p.poly(side + [(x, y + 40) for x, y in side[::-1]], RAIL, INK, 2.6)
-    p.poly(ell(cx, cy, rx, ry), RAIL, INK, 2.6)
-    p.poly(ell(cx, cy, rx, ry, r=0.9), FELT, INK, 2.2)
-    p.line(ell(cx, cy, rx, ry, r=0.72) + [ell(cx, cy, rx, ry, r=0.72)[0]], LINE_Y, 3)
-    if t >= IMPACT:
-        scorch_on_felt(img, cam)
-    for x, y, s_, sp, j, j2 in _P2_ARMS:                           # his forearms lie over the table's edge
-        arms_over_table(img, cam, x, y + V.SEAT_DROP * s_, s_, sp, j, j2)
-    pull = ease((t - PULL[0]) / (PULL[1] - PULL[0])) if t >= PULL[0] else 0.0
-    px, py = POT[0] + (560 - POT[0]) * pull, POT[1] + (380 - POT[1]) * pull
-    C.chip_stack(img, cam, px - 40, py, 30, 6, 'ultra', squash=0.6, seed=11)
-    C.chip_stack(img, cam, px + 30, py + 10, 30, 8, 'poke', squash=0.6, seed=12)
-    C.chip_stack(img, cam, px - 5, py + 50, 30, 4, 'master', squash=0.6, seed=13)
-    if t < IMPACT:                                                 # the hands and chips on the table before the blast
-        for i, suit in enumerate('SCDH'):
-            C.place_image(img, cam, C.card_face('Q', suit), C.card_quad(480 + i * 40, 1260, 70, (i - 1.5) * 8, 0.75))
-        for x, y, k in ((300, 900, 'poke'), (780, 900, 'great'), (330, 1200, 'great'), (420, 1340, 'ultra'),
-                        (760, 1250, 'poke')):
-            C.chip_stack(img, cam, x, y, 26, 5, k, squash=0.6, seed=x)
-    st = dragon_state(t)
-    C.dragonite(img, cam, DRAGON_F['x'], DRAGON_F['foot'], DRAGON_F['s'], t, turn=0.5, flip=1, head=st['head'],
-                mouth_open=st['mouth_open'], eyes=st['eyes'], wings=st['wings'], arms=st['arms'], lean=st['lean'])
-    for who in ('LADY', 'CARDS'):
-        thrown(img, cam, who, sat(who), t)
-    thrown(img, cam, 'DEALER', stood('DEALER'), t)
-    thrown(img, cam, 'OLD', sat('OLD'), t)
-    thrown(img, cam, 'P1', sat('P1'), t)
-    thrown(img, cam, 'GUARD2', stood('GUARD2'), t)
-    debris(img, cam, t)
-    bl = beam_line(t)
-    if bl:
-        (x0, y0), (x1, y1), w = bl
-        n = int(max(40, math.hypot(x1 - x0, y1 - y0) / max(4.0, w * 0.35)))
-        C.glow(img, cam, [(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k, w * (0.7 + 0.6 * k)) for k in np.linspace(0, 1, n)],
+    room(img, cam)
+    debris3(img, cam, t, landed_only=True)
+    # everything far from the camera first; the table goes in at its own depth
+    items = []
+    for who in list(SEATS3) + list(STANDING3):
+        items.append((cam.depth(home3(who)), who))
+    items.append((cam.depth((DRAGON3[0], 1.0, DRAGON3[1])), 'DRAGON'))
+    items.append((cam.depth((0.0, TABLE_H, 0.0)), 'TABLE'))
+    mouth = None
+    for _, who in sorted(items, reverse=True):
+        if who == 'TABLE':
+            table3(img, cam, t)
+            pull = ease((t - PULL[0]) / (PULL[1] - PULL[0])) if t >= PULL[0] else 0.0
+            px, pz = POT3[0] + (0.0 - POT3[0]) * pull, POT3[1] + (1.42 - POT3[1]) * pull
+            for i, (dx, dz, n_, kd) in enumerate(((-0.09, 0.0, 9, 'ultra'), (0.0, 0.04, 12, 'poke'),
+                                                  (0.09, 0.0, 7, 'great'), (-0.05, -0.08, 5, 'master'),
+                                                  (0.05, -0.08, 10, 'poke'), (0.13, -0.06, 6, 'ultra'))):
+                stack3(img, cam, px + dx, pz + dz, n_, kd, seed=11 + i)       # the pot
+            p2_arms3(img)
+            if t < IMPACT:
+                for i, suit in enumerate('SCDH'):
+                    card3(img, cam, C.card_face('Q', suit), -0.12 + i * 0.075, -1.25, 0.063, (i - 1.5) * 8)
+                for x, z, kd in ((-0.55, -0.8, 'poke'), (0.55, -0.85, 'great'), (-0.6, 0.5, 'great'),
+                                 (0.6, 0.55, 'ultra'), (0.25, -1.15, 'poke')):
+                    stack3(img, cam, x, z, 5, kd, seed=int(abs(x * 100 + z * 10)))
+        elif who == 'DRAGON':
+            mouth = dragon3(img, cam, t)
+        elif who in THROWS:
+            thrown3(img, cam, who, t)
+        else:
+            person3(img, cam, who, t)
+    debris3(img, cam, t)
+    if FIRE <= t < BEAM_END[1]:
+        m, e = beam3(t)
+        (x0, y0), k0 = mouth, None
+        (x1, y1), k1 = cam.project(e)
+        reach = min(1.0, (t - FIRE) / 0.1)
+        x1, y1 = x0 + (x1 - x0) * reach, y0 + (y1 - y0) * reach
+        fade = 1 - ease((t - BEAM_END[0]) / (BEAM_END[1] - BEAM_END[0]))
+        w0 = (0.11 * cam.project(m)[1]) * ease((t - FIRE) / 0.1) * fade + 6
+        n = int(max(40, math.hypot(x1 - x0, y1 - y0) / max(4.0, w0 * 0.35)))
+        C.glow(img, FLAT, [(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, w0 * (0.8 + 0.6 * u)) for u in np.linspace(0, 1, n)],
                strength=1.0)
-        wash(img, 0.45, centre=(x0 + (x1 - x0) * 0.5, y0 + (y1 - y0) * 0.5), cam=cam, radius=1300)
-    elif t >= BEAM_END[1]:
-        wash(img, light_level(t) * 0.5)
-    elif CHARGE[0] < t < FIRE:
+        wash(img, 0.22)
+    elif CHARGE[0] < t < FIRE and mouth is not None:
         st = dragon_state(t)
-        m = dragon_mouth_f(t)
-        C.glow(img, cam, [(m[0], m[1], 6 + 24 * st['ball'])], strength=0.5 + 0.5 * st['ball'])
+        C.glow(img, FLAT, [(mouth[0], mouth[1], 8 + 26 * st['ball'])], strength=0.5 + 0.5 * st['ball'])
 
 
-def scorch_on_felt(img, cam):
-    """The same burnt track carried on across the felt (drawn over the table)."""
-    scorch(img, cam)
+def scorch3_felt(img, cam):
+    """Drawn with the table (the felt part of the burnt track sits on its top)."""
+    p = B.Pen(img, FLAT)
+    (mx, my, mz), (ex, ey, ez) = beam3(FIRE + 0.3)
+    d = _norm((ex - mx, ez - mz))
+    n = (-d[1], d[0])
+    inside = [u for u in np.linspace(0.0, 6.0, 241)
+              if ((mx + d[0] * u) / (TABLE_A[0] * 0.84)) ** 2 + ((mz + d[1] * u) / (TABLE_A[1] * 0.84)) ** 2 < 1]
+    if not inside:
+        return
+    for scale, col in ((1.0, (176, 84, 34)), (0.75, (60, 40, 30)), (0.48, (22, 18, 18))):
+        pts = []
+        ss = np.linspace(inside[0], inside[-1], 12)
+        for s in ss:
+            pts.append(cam.project((mx + d[0] * s + n[0] * 0.18 * scale, TABLE_H + 0.007, mz + d[1] * s + n[1] * 0.18 * scale))[0])
+        for s in ss[::-1]:
+            pts.append(cam.project((mx + d[0] * s - n[0] * 0.18 * scale, TABLE_H + 0.007, mz + d[1] * s - n[1] * 0.18 * scale))[0])
+        p.poly(rough(pts, 6, int(scale * 10)), col, None)
 
 
 # ------------------------------------------------------------------------------------------------ the film
