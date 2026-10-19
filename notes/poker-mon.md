@@ -40,6 +40,11 @@
 | 35 | "The Dragonite should form an O with its mouth when firing." | yes: pursed lips round an O while the beam is on |
 | 36 | "Please extend the firing scene by a few seconds." | yes: 1.9 s to 4.4 s, two sweeps round the room |
 | 37 | "Please have people reacting or trying to move out the way before being hit rather than standing static." | yes: they rise and back away, run with hands up, cower, the old man struggles up, the guard walks at it palm out |
+| 38 | (19 Oct) "Explore different eyes for Dragonite when he fires. Friendly concentration ... he's a good boy." Then: "4 at first and 6 for the second half of the beam" | yes: eye sheet of six; 4 'aim' then 6 'puppy' |
+| 39 | "Consider if there's a way of running automated critique-fix cycle and update me with each round, stopping if you need my input." | doing: rounds of sheet, critique, fix, with an update each round |
+| 40 | "Note the low detail on objects (candles without holders, low quality portrait with an egg head and simple face, rudimentary mug)." | yes: brass candlesticks, candelabra, sconces, crystal tumbler, flute, martini, decanter, an old-master portrait, a landscape, a marble bust |
+| 41 | "Have you noticed that the player's hands when he reaches for the chips are underneath the table?" | yes: fixed (forearms drawn over the table); a new check fails if his hands are hidden |
+| 42 | "Please add some pokeballs into the Queen detailing" | yes: she holds a Poke Ball, Poke Ball roundels on the robe, Poke Ball jewels in the crown |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
