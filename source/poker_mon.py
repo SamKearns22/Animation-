@@ -532,6 +532,28 @@ def hit_check():
     return faults
 
 
+def crater_check():
+    """No crater on a window, a curtain or the painting (Sam, 19 Oct): every wall hit near one is listed, and the
+    film's crater_spot must have refused it."""
+    faults = []
+    d = dragon_state(FIRE + 0.05)
+    for who in list(R.SEATED) + list(R.STANDING):
+        b = R.person_body(who, d) if who != 'P2' else None
+        if b is None or b.wall is None or who in R.FLYERS:
+            continue
+        win = R.through_window(d)
+        if win and win[0] == who:
+            continue
+        spot = R.crater_spot(who, b, d)
+        if spot is None:
+            continue
+        name, along, y = spot
+        for w, a0, a1 in R.DRAPES:
+            if '+' + w == name and a0 - 0.4 < along < a1 + 0.4:
+                faults.append(f"{who}'s crater lands on the {name} window or its curtains")
+    return faults
+
+
 def table_check():
     """One table plan, nothing inside anything (Sam, 19 Oct: the table well populated, never clipping): no two things
     on the table overlap (cards may), and nothing stands on a chip stack."""
@@ -650,6 +672,7 @@ def audits():
     faults += hands_check()
     faults += clearance_check()
     faults += table_check()
+    faults += crater_check()
     faults += hit_check()
     faults += contact_check()
     return faults

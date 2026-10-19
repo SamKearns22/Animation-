@@ -845,6 +845,12 @@ def person_body(who, dfire):
             dist = math.hypot(dx, dz)
             b = Body((x, y, z), (dx / dist * 5.5, 2.8, dz / dist * 5.5), hit[0], r=0.3, e=0.05, wall_e=0.06,
                      spin=520.0, grip=0.08)
+        elif who == 'GUARD1':                            # into plain wall along the far wall, clear of the window the
+            tx, tz = 3.1, RZ                             # dealer goes through (Sam, 19 Oct: a crater on the window)
+            dx, dz = tx - x, tz - z
+            dist = math.hypot(dx, dz) or 1.0
+            b = Body((x, y, z), (dx / dist * 6.5, 2.4, dz / dist * 6.5), hit[0], r=0.3, e=0.05, wall_e=0.06,
+                     spin=-600.0, grip=0.08)
         elif who == 'HUSBAND':                           # shot all the way across to the right-hand wall, behind the
             tx, tz = -RX, 2.0                            # Dragonite (Sam, 19 Oct)
             dx, dz = tx - x, tz - z
@@ -1064,6 +1070,22 @@ def draw_shard(img, cam, sh, t):
     p.line([pts[0], pts[1]], (255, 255, 255), max(1.0, r * 0.18))   # its glint
 
 
+def crater_spot(who, b, dfire):
+    """(wall name, along, height) where a body's crater goes, or None when it would fall on a window, a curtain or
+    the painting (Sam, 19 Oct: craters on a window, twice): a body there slides down the cloth, no crater."""
+    axis, sg = b.wall
+    pos = drifted(who, b, b.wall_t, dfire)[0]
+    name = ('+' if sg > 0 else '-') + ('x' if axis == 0 else 'z')
+    along = pos[2] if axis == 0 else pos[0]
+    for w, a0, a1 in DRAPES:                             # the window and its curtains, edge to edge
+        if '+' + w == name and a0 - 0.4 < along < a1 + 0.4:
+            return None
+    pw, pa0, pa1, py0, py1 = PAINTING
+    if '+' + pw == name and pa0 - 0.4 < along < pa1 + 0.4 and py0 - 0.4 < pos[1] < py1 + 0.4:
+        return None
+    return name, along, pos[1]
+
+
 def craters(img, cam, t, dfire):
     """Impact craters where people smack against the walls (Sam, 19 Oct): from the moment of the hit, a jagged hollow
     in the plaster (or the wood below the rail) where the body struck, with cracks running out from it; they stay."""
@@ -1091,6 +1113,8 @@ def craters(img, cam, t, dfire):
         win = through_window(dfire)
         if win and win[0] == who:
             continue                                     # through the glass: no crater, the window breaks instead
+        if crater_spot(who, b, dfire) is None:
+            continue                                     # on a window, curtain or painting: never a crater there
         axis, sg = b.wall
         pos = drifted(who, b, b.wall_t, dfire)[0]
         along = pos[2] if axis == 0 else pos[0]
