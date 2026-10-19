@@ -531,6 +531,7 @@ def audits():
     faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
     faults += moves.audit()
     faults += hands_check()
+    faults += clearance_check()
     faults += contact_check()
     return faults
 
