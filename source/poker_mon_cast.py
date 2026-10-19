@@ -89,8 +89,8 @@ HEIRESS = dict(name='HEIRESS', skin=B.PINK, hw=60, hh=86, jaw='soft', hair='bob'
                outfit='dress', dress=(204, 160, 64), jacket=(204, 160, 64), trousers=(184, 142, 54),
                lip_c=(180, 40, 56), earring=True, shoulders=124, mouth='line', seed=24)
 MAGNATE = dict(name='MAGNATE', skin=B.DEEP, hw=76, hh=92, jaw='square', hair='bald', beard='full',
-               beard_c=(30, 26, 24), brow_c=(30, 26, 24), outfit='suit', jacket=(62, 62, 68), shirt=SHIRT,
-               tie=(110, 20, 34), trousers=(56, 56, 62), shoulders=170, mouth='line', seed=25)
+               beard_c=(74, 54, 42), brow_c=(60, 44, 36), outfit='suit', jacket=(96, 96, 104), shirt=SHIRT,
+               tie=(110, 20, 34), trousers=(88, 88, 96), shoulders=170, mouth='line', seed=25)
 STARLET = dict(name='STARLET', skin=B.PALE, hw=60, hh=86, jaw='soft', hair='wavy', hair_c=(150, 62, 34), lashes=True,
                outfit='dress', dress=(196, 196, 208), jacket=(196, 196, 208), trousers=(176, 176, 188),
                lip_c=(196, 30, 46), earring=True, shoulders=122, sequins=True, mouth='line', seed=26)

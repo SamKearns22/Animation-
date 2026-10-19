@@ -60,7 +60,7 @@ PROP_SIZES = [('playing card', 'playing card', 0.063, 0.088, None)]
 OUTFIT = {}
 HEIGHTS = C.HEIGHTS
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
-LINE_OK = [('GUARD1', 'edge with no line', 566, 106)]   # the shine on his bald head: a flat highlight, the kit's own
+LINE_OK = [('GUARD1', 'edge with no line', 566, 106), ('MAGNATE', 'edge with no line', 567, 105)]   # the shine on his bald head: a flat highlight, the kit's own
 TABLE_Y = 300             # a seated player's edge of the table, in their own units (neck at 0)
 # ====================================================================================================================
 

@@ -70,6 +70,11 @@
 | 65 | (19 Oct) "Feel free to change the light." (faces burning to white) | yes: the parlour light lifts colours at most 1.2x and rolls off the brightest tones instead of clipping to white |
 | 66 | (19 Oct) Recordings: line 1 "Four of a kind." (file 6efaf6c9-4.m4a, 3.5 s, speech 0.98-2.56 s) and line 2 "Dragonite, use hyper beam." (ff6d113d-Hyper.m4a, 4.2 s, speech 1.04-3.53 s) | in: filed as source/audio/poker-mon-1/2.m4a; speech at 1.53-3.11 s and 5.44-7.93 s; captions follow the words |
 | 67 | (19 Oct) "Remove Dragonite line, he does not speak." | yes: no Dragonite recording, no head bob |
+| 68 | (19 Oct) "Originally the chips had Pokeballs on them, and now they don't." | yes: the full ball (coloured top, white bottom, band, button, Great/Ultra/Master markings) on every chip face again |
+| 69 | (19 Oct) "A beat where player 2 looks down at his cards and raises his eyebrow and then looks back up ... he has a bad hand." | yes: looks down 4.9 s, one brow up from 5.4 s, looks up 6.25 s, speaks 6.8-9.3 s; everything after moved 1.5 s (film 24.9 s) |
+| 70 | (19 Oct) "Some of your impact craters land on a window ... one person launched out the window ... tinkling glass and glass flying everywhere." | yes: the dealer goes through the far window (no crater); glass sheen while whole, jagged teeth once broken, 70 shards that land and stay; crash and tinkles; the guard walks clear of the glass |
+| 71 | (19 Oct) "Not enough people on the left side of the table ... more players and more hangers-on getting hit." | yes: MOGUL (burgundy velvet) and HEIRESS (gold gown) seated on the near side, MAGNATE (charcoal, beard) and STARLET (silver sequins) standing behind; all cower and are thrown past the camera at ~19 s; table things moved so nothing overlaps (table_check) |
+| 72 | (19 Oct) "You have added a distracting hiss ... consider how to prevent that in the future." | yes: the template's white-noise "room tone" removed (here and in satire_template.py, which is how it reached every film); the roar's noise filtered; filmkit.hiss_check runs in the checks |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
