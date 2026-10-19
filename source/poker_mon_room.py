@@ -82,7 +82,8 @@ SCONCES = [('+x', -0.55, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2
 REACT = {
     'LADY': dict(delay=0.35, rise=0.6, path=[(-0.8, 1.4), (-0.55, 2.45), (0.4, 3.3)], kind='brisk', arms='panic'),
     'HUSBAND': dict(delay=0.25, path=[(-1.0, 2.2), (-0.3, 3.0), (0.3, 3.45)], kind='run'),
-    'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.1, 3.4)], kind='run', arms='panic'),
+    'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.15, 3.35)], kind='run', arms='panic',
+                   crouch_end=True),                     # cowers at the window: he goes through it
     'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
     'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (2.45, 2.7)], kind='walk', arms='stop'),   # clear of the window
     'CARDS': dict(delay=0.4, rise=0.5, path=[(0.8, 1.4), (1.35, 2.5), (1.6, 3.35)], kind='brisk', crouch_end=True),
@@ -697,6 +698,7 @@ _CACHE = {}
 
 
 HIT_R = 0.4         # a body is hit when the beam's centre passes within this (beam ~0.12 m + half a body)
+END_R = 0.9         # or when the beam's end (its blast on the wall) comes this close to them
 
 
 def blast_hits(dfire):
@@ -740,7 +742,8 @@ def blast_hits(dfire):
                     continue
                 x, z, f, j, neck, bob = react(who, t, dict(C.PEOPLE[who]))
                 dd, s = dist_to_ray((x, neck - 0.25, z), m, d, length)
-                if dd < HIT_R and s > 0.3:                # the drawn beam really touching them (Sam, 19 Oct: the
+                boom = math.hypot(end[0] - x, end[2] - z) < END_R and end[1] < neck + 0.9   # where it meets the
+                if (dd < HIT_R and s > 0.3) or boom:      # wall: the blast there takes those cowering under it                # the drawn beam really touching them (Sam, 19 Oct: the
                                                           # woman in red flew up before it reached her at 0.6 m)
                     out[('P', who)] = (t, m, 1 if sweep >= 0 else -1, (x, neck, z))
         t += 1 / 240
@@ -1278,6 +1281,24 @@ def _along(path, d):
     return b, (b[0] - a[0], b[1] - a[1]), False
 
 
+def cower(who, sp, x, z, f, t, dt):
+    """Down where they are, arms over the head, trembling (never still: Sam, 19 Oct)."""
+    k = ease(dt / 0.35)
+    ph = sum(map(ord, who)) * 0.37
+    tr = math.sin(t * 29 + ph)
+    j = V.standing(sp)
+    j['props'] = [C.dress_up(sp)]
+    j['bob'] = 260 * k + 7 * tr * k
+    for sd, sg in (('L', -1), ('R', 1)):
+        j['foot' + sd] = (sg * 90, V.ANKLE_Y - 260 * k, 120 * k)
+        j['knee_pole' + sd] = (0.3 * sg, -1.0, 0.6)
+        V.arm_to(j, sd, (sg * (150 - 90 * k) + 10 * math.sin(t * 23 + ph + sg), -60 - 170 * k
+                         + 12 * math.sin(t * 17 + ph * sg), 60.0 + 40 * k), 'out', 'palm')
+    j['lean'] = 22 * k + 5 * math.sin(t * 6 + ph) * k
+    j['head_dy'] = 20 * k
+    return x, z, f, j, (928 - j['bob']) * M_UNIT, j['bob']
+
+
 def react(who, t, sp):
     """Where someone is and their pose at t, reacting to the Dragonite firing: (x, z, facing, joints, neck height,
     bob). Before it fires, seated or standing in place."""
@@ -1336,13 +1357,17 @@ def react(who, t, sp):
     ph = sum(map(ord, who)) * 0.37
     if moving:
         j = moves.gait(sp, dt, {'run': 'run', 'brisk': 'brisk', 'walk': 'walk'}[r['kind']])
-    else:                                               # cornered: never still (Sam, 19 Oct: eerie and still before
-        j = moves.gait(sp, dt, 'run')                   # they were struck): running on the spot, shuffling along,
-        n = _norm((dirn[0], 0.0, dirn[1]))              # looking about
-        sh = 0.18 * math.sin(t * 2.7 + ph)
-        px, pz = px - n[2] * sh, pz + n[0] * sh
-        turn = math.radians(70 * math.sin(t * 3.3 + ph))
-        dirn = (n[0] * math.cos(turn) - n[2] * math.sin(turn), n[0] * math.sin(turn) + n[2] * math.cos(turn))
+    else:                                               # at the wall: they keep fleeing along it, away from where
+        extra = dt - sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(path, path[1:])) / v
+        tx, tz = (1.0, 0.0) if RZ - abs(pz) < RX - abs(px) else (0.0, 1.0)     # the beam comes from (it sweeps
+        ang = lambda qx, qz: math.atan2(qz - DRAGON[1], qx - DRAGON[0])         # round to larger angles), then
+        sg = 1.0 if ang(px + 0.1 * tx, pz + 0.1 * tz) > ang(px - 0.1 * tx, pz - 0.1 * tz) else -1.0   # dive into
+        run = min(extra * 3.2, 1.2)                     # a cower (Sam, 19 Oct: run away, cower or dodge)
+        px, pz = px + tx * sg * run, pz + tz * sg * run
+        if extra * 3.2 >= 1.2:
+            return cower(who, sp, px, pz, (-tz * sg, tx * sg), t, extra - 1.2 / 3.2)
+        j = moves.gait(sp, dt, 'run')
+        dirn = (tx * sg, tz * sg)
     j['props'] = [C.dress_up(sp)]
     if r.get('arms') == 'panic' or not moving:          # hands up by the head as they go, waving
         for sd, sg in (('L', -1), ('R', 1)):

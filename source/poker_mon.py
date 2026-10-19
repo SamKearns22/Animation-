@@ -497,6 +497,8 @@ def hit_check():
         u = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / max(1e-6, vx * vx + vy * vy)))
         gap = math.hypot(ax + vx * u - px, ay + vy * u - py)
         reach = 0.3 * k + 0.13 * km                          # half a body plus the beam's drawn half-width
+        if math.hypot(end[0] - x, end[2] - z) < R.END_R:     # the blast where the beam meets the wall, beside them
+            continue
         if gap > reach * 1.25:
             faults.append(f'{who} is thrown at {t:.2f} s with the beam {gap:.0f} px away on screen (touching is '
                           f'{reach:.0f} px)')
