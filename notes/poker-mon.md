@@ -62,6 +62,8 @@
 | 57 | (19 Oct) "Start Dragonite with his mouth closed in his first shot." | yes: closed through the reveal and while the head goes back |
 | 58 | (19 Oct) "Open it only slightly as he is charging ... then full open when he blasts." | yes: a small O from 0.6 s into the charge; wide on the blast |
 | 59 | (19 Oct) "Leave impact craters when people smack against walls." | yes: a jagged hollow with cracks where each body hits; stays |
+| 60 | (19 Oct) "His arms now cover the cards." | yes: his hands rest on the felt either side of the Queens; the cards nearer us are drawn over his arms (except while his palm is on them) |
+| 61 | (19 Oct) "Make the charge brighter and more expansive." | yes: room light up to the whole frame, a wide halo, a bigger core and sparks streaming in (sparks: my addition), all sized by the Dragonite on screen |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
