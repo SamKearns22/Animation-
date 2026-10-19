@@ -260,21 +260,23 @@ def fire_eyes(t):
 
 
 def dragon_state(t):
-    """The Dragonite's head, mouth, eyes, wings and arms over the film."""
+    """The Dragonite's head, mouth, eyes, wings and arms over the film. Its mouth is only ever the gentle closed smile
+    (refs dragonite-1..3) or the round O of the Hyper Beam, switching on one frame (Sam, 19 Oct: never a jaw working up
+    and down, and the O never grows or shrinks)."""
     st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0, shape='jaw')
-    if t >= CHARGE[0]:
+    if t >= CHARGE[0]:                                          # charging: head back, the O, the light growing in it
         k = ease((t - CHARGE[0]) / 0.7)
-        st.update(head=-34 * k, mouth_open=0.9 * k, eyes='narrow' if k > 0.3 else 'open', wings=0.15 + 0.5 * k,
-                  arms=0.35 * k)
+        st.update(head=-34 * k, mouth_open=1.0, shape='o', eyes='narrow' if k > 0.3 else 'open',
+                  wings=0.15 + 0.5 * k, arms=0.35 * k)
         st['ball'] = ease((t - CHARGE[0] - 0.4) / (FIRE - CHARGE[0] - 0.4))
-    if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast)
+    if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast): firing
         k = min(1.0, (t - (FIRE - 0.12)) / 0.12)
-        st.update(head=-34 + 50 * k, lean=10 * k, mouth_open=1.0, wings=0.65 + 0.35 * k, arms=0.35 + 0.65 * k,
-                  eyes=fire_eyes(t) if k > 0.5 else 'narrow', shape='o' if k > 0.5 else 'jaw')   # firing: an O (Sam)
-    if t >= BEAM_END[1]:                                        # done: settles, mouth shut, pleased with itself
+        st.update(head=-34 + 50 * k, lean=10 * k, mouth_open=1.0, shape='o', wings=0.65 + 0.35 * k,
+                  arms=0.35 + 0.65 * k, eyes=fire_eyes(t) if k > 0.5 else 'narrow')
+    if t >= BEAM_END[1]:                                        # done: the smile back at once; settles, pleased
         k = ease((t - BEAM_END[1]) / 0.6)
-        st.update(head=16 * (1 - k), lean=10 * (1 - k), mouth_open=1.0 * (1 - k), wings=1.0 - 0.85 * k,
-                  arms=1.0 - k, eyes='closed' if k > 0.5 else 'narrow', ball=0.0, shape='o')
+        st.update(head=16 * (1 - k), lean=10 * (1 - k), mouth_open=0.0, shape='jaw', wings=1.0 - 0.85 * k,
+                  arms=1.0 - k, eyes='closed' if k > 0.5 else 'narrow', ball=0.0)
     return st
 
 
