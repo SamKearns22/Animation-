@@ -775,8 +775,8 @@ def things(img, cam, t, dfire, on_table):
         if on_table:
             continue
         pos, ang = b.at(t)
-        if cam.depth(pos) < 2.2:                         # right under the lens: out of the picture
-            continue
+        if cam.depth(pos) < 2.2 or math.hypot(pos[0] - cam.pos[0], pos[2] - cam.pos[2]) < 2.4:
+            continue                                     # landed right under the lens: out of the picture
         flying = b.floor_t is None or t < b.floor_t + 0.3
         burning = kind in FIRE_KINDS and (i % 2 == 0 or kind != 'card')
         out.append((cam.depth(pos), i, pos, ang, flying, burning))
