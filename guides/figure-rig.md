@@ -109,6 +109,13 @@ Every hand is a circle at the end of the arm (`chand`; `gesture_hand` replaces b
 are laid over the circle (`phone_prop`); grips are implied, never drawn. `hands3d.py` (MakeHuman hands) is retired
 for these films: too costly in rounds and renders.
 
+**Which side of the hand a held prop goes on depends on the moment (Sam, 19 Oct: Poker Mon).** Decide it per prop,
+from where the fingers are: a prop shown to us across the palm (a phone screen, a badge held up) goes over the hand;
+an item gripped with the fingers wrapped round the side we see (a fan of cards held facing its owner, a glass, a
+handle) has the hand drawn over it. In code, a prop marked `held` needs `j['grip']` (the gripping hands, drawn after
+the props) or `views.person` stops the render; both players' cards in Poker Mon were drawn over their hands, and
+once floated between them.
+
 ## 6. Movement and timing (numbers from movement.md, at our 12 drawings a second)
 - **Slow in, slow out** (`ease`), **anticipation** before a big move (`anticipate`: a small opposite move first),
   **follow-through** (`overshoot`: arrive a touch past the pose and settle).
