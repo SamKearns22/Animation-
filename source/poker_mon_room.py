@@ -208,18 +208,24 @@ class Clock:
 
 
 def sweep_cam(t):
-    """High in the near-right corner (behind player one's shoulder, the Dragonite and player two facing us across
-    the room), sweeping along the near wall to its middle as the beam fires; a slow drift while things fly; then an
-    eased push in on player two and the pot."""
-    a = ease((t - (Clock.FIRE - 0.25)) / 1.5)
-    pos = (3.3 - 3.1 * a, 3.0 - 0.05 * a, -3.55 - 0.2 * a)
-    look = (-0.15 - 0.45 * a, 1.2, 0.3 + 0.35 * a)
+    """High above the near side, following the beam round (Sam, 19 Oct: one smooth sweep, everyone hit, and we see
+    player one hit): it looks part way along the beam (blended with the table's middle), so it opens on the near side,
+    swings through player one as the beam reaches him, and rises to the far side; then an eased push in on player
+    two and the pot."""
+    a_ = math.radians(beam_angle(min(t, Clock.BEAM_END[1])))
+    on_beam = (DRAGON[0] + 3.0 * math.cos(a_), 1.0, DRAGON[1] + 3.0 * math.sin(a_))
+    look = tuple(0.55 * q + 0.45 * c for q, c in zip(on_beam, (0.2, 1.0, 0.0)))
+    w = 0.45 * math.exp(-((t - Clock.IMPACT) / 0.6) ** 2)  # leaning to player one as the beam reaches him
+    look = tuple(l_ + w * (q - l_) for l_, q in zip(look, (SEATED['P1'][0] + 0.4, 1.0, SEATED['P1'][1] - 0.3)))
+    drift = ease((t - Clock.FIRE) / 5.0)
+    pos = (0.9 - 0.3 * drift, 3.1, -3.8)
+    a = 0.0
     b = ease((t - Clock.PUSH[0]) / (Clock.PUSH[1] - Clock.PUSH[0]))
     pos = tuple(p0 + (p1 - p0) * b for p0, p1 in zip(pos, (-0.45, 1.75, -1.15)))
     look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-1.45, 0.98, 0.05)))
     k = max(0.0, 1 - (t - Clock.IMPACT) / 0.45) if t >= Clock.IMPACT else 0.0
-    focal = 1650 - 330 * a + 300 * b                     # widening as it sweeps (the whole far wall in view),
-    return Cam3(pos, look, focal=focal,                   # tighter again for the push in
+    focal = 1300 + 650 * b                               # wide while the beam goes round; tighter for the push in
+    return Cam3(pos, look, focal=focal,
                 shake=(14 * k * math.sin(t * 90), 10 * k * math.cos(t * 77)))
 
 
@@ -234,7 +240,18 @@ def mouth_world(dstate):
 
 # The sweep: degrees from the Dragonite's mouth (0 = +x, + toward +z). It fires at player one, sweeps down the near
 # side, then back up across the far side; never round to player two (about -96).
-SWEEP = [(15.70, -15.0), (15.86, -15.0), (18.00, 62.0), (18.25, 62.0), (19.40, -72.0), (19.80, -72.0), (20.10, -60.0)]
+# Sam, 19 Oct: one smooth motion round the table, hitting everyone. It fires at the near side (the people there no
+# longer get away), turns steadily through player one (seen hit) and on round the far side; then holds and goes out.
+SWEEP = [(Clock.FIRE, -80.0), (Clock.FIRE + 0.2, -80.0), (Clock.FIRE + 3.8, 65.0), (Clock.BEAM_END[1], 65.0)]
+
+
+def _impact():
+    """When the sweep reaches player one (his angle from the Dragonite)."""
+    a1 = math.degrees(math.atan2(SEATED['P1'][1] - DRAGON[1], SEATED['P1'][0] - DRAGON[0]))
+    t = SWEEP[1][0]
+    while t < SWEEP[2][0] and beam_angle(t) < a1:
+        t += 1 / 240
+    return t
 
 
 def beam_angle(t):
@@ -245,6 +262,9 @@ def beam_angle(t):
             u = (t - t0) / (t1 - t0)
             return a0 + (a1 - a0) * (u * u * (3 - 2 * u))
     return SWEEP[-1][1]
+
+
+Clock.IMPACT = _impact()     # the beam reaches player one part way round its sweep (Sam: we see him hit)
 
 
 def beam_ray(t, dstate_fire):
@@ -279,7 +299,8 @@ def dist_to_ray(p, m, d, length):
 class Body:
     """Something thrown: launched at t0 from p0 with velocity v0; bounces off the walls, ceiling and floor
     (restitution e, friction on the floor), comes to rest and stays. Steps at 240 Hz, cached."""
-    def __init__(self, p0, v0, t0, r=0.05, e=0.35, wall_e=None, spin=0.0, grip=0.6):
+    def __init__(self, p0, v0, t0, r=0.05, e=0.35, wall_e=None, spin=0.0, grip=0.6, table=False):
+        self.table = table                               # lands on the table top when it comes down over it
         self.t0, self.r, self.e, self.wall_e = t0, r, e, (e if wall_e is None else wall_e)
         self.grip = grip                                 # how much speed along the wall survives a hit
         self.spin = spin
@@ -311,8 +332,10 @@ class Body:
                                     self.wall_t, self.wall = t, (axis, sg)
                 if p[1] > CEIL - self.r and v[1] > 0:
                     p[1], v[1] = CEIL - self.r, -v[1] * 0.3
-                if p[1] < self.r:
-                    p[1] = self.r
+                over = self.table and (p[0] / TABLE_A[0]) ** 2 + (p[2] / TABLE_A[1]) ** 2 < 1.0
+                ground = TABLE_H + self.r if over and p[1] > TABLE_H else self.r
+                if p[1] < ground:
+                    p[1] = ground
                     if self.floor_t is None:
                         self.floor_t = t
                     if v[1] < 0:
@@ -673,6 +696,9 @@ def pot_chip_positions(t):
 _CACHE = {}
 
 
+HIT_R = 0.4         # a body is hit when the beam's centre passes within this (beam ~0.12 m + half a body)
+
+
 def blast_hits(dfire):
     """When the sweeping beam's blast reaches each thing and each person (the first moment it passes close), with the
     sweep's direction then. Cached."""
@@ -685,7 +711,7 @@ def blast_hits(dfire):
             table_pts[('T', i)] = (x, z)
     for who, (x, z, f) in SEATED.items():
         if who != 'P2':
-            pts[('C', who)] = ((x, 0.6, z), 0.75)
+            pts[('C', who)] = ((x, 0.6, z), 0.45)
     movers = [w for w in list(SEATED) + list(STANDING) if w != 'P2']
     out = {}
     t = Clock.FIRE
@@ -693,7 +719,7 @@ def blast_hits(dfire):
         m, d = beam_ray(t, dfire)
         end, length = beam_end(m, d)
         sweep = beam_angle(t + 0.01) - beam_angle(t)
-        if t >= Clock.IMPACT - 0.02:
+        if t >= Clock.FIRE + 0.08:                     # once the beam has reached across the room
             hd = _norm((d[0], 0.0, d[2]))                # the blast sweeps the table under the beam's track
             for key, (x, z) in table_pts.items():
                 if key in out:
@@ -701,7 +727,7 @@ def blast_hits(dfire):
                 v = (x - m[0], 0.0, z - m[2])
                 along = _dot(v, hd)
                 near_p1 = t < Clock.IMPACT + 0.25 and math.hypot(x - SEATED['P1'][0], z - SEATED['P1'][1]) < 1.0 + 4 * (t - Clock.IMPACT)
-                if (along > 0.5 and math.hypot(v[0] - hd[0] * along, v[2] - hd[2] * along) < 0.7) or near_p1:
+                if (along > 0.5 and math.hypot(v[0] - hd[0] * along, v[2] - hd[2] * along) < 0.45) or near_p1:
                     out[key] = (t, m, 1 if sweep >= 0 else -1)   # under the beam's track, or the shockwave of the
                                                                   # first hit spreading from player one
             for key, (p, r) in pts.items():
@@ -714,14 +740,15 @@ def blast_hits(dfire):
                     continue
                 x, z, f, j, neck, bob = react(who, t, dict(C.PEOPLE[who]))
                 dd, s = dist_to_ray((x, neck - 0.25, z), m, d, length)
-                if dd < 0.6 and s > 0.3:
+                if dd < HIT_R and s > 0.3:                # the drawn beam really touching them (Sam, 19 Oct: the
+                                                          # woman in red flew up before it reached her at 0.6 m)
                     out[('P', who)] = (t, m, 1 if sweep >= 0 else -1, (x, neck, z))
         t += 1 / 240
     _CACHE['hits'] = out
     return out
 
 
-def launch(key, p0, hit, speed, up, spin, r, e, wall_e=None, seed=0, grip=0.6):
+def launch(key, p0, hit, speed, up, spin, r, e, wall_e=None, seed=0, grip=0.6, table=False):
     """A body thrown from p0: away from the beam's mouth, dragged a little along the sweep, up, spinning."""
     t, m, sg = hit[:3]
     rng = np.random.default_rng(seed)
@@ -730,7 +757,7 @@ def launch(key, p0, hit, speed, up, spin, r, e, wall_e=None, seed=0, grip=0.6):
     away = _norm(_add(_mul(along, 0.55), _mul(radial, 0.8)))
     side = (-away[2] * sg, 0.0, away[0] * sg)
     v = _add(_add(_mul(away, speed), _mul(side, speed * 0.25 * rng.uniform(0.5, 1.2))), (0.0, up, 0.0))
-    return Body(p0, v, t, r=r, e=e, wall_e=wall_e, spin=spin, grip=grip)
+    return Body(p0, v, t, r=r, e=e, wall_e=wall_e, spin=spin, grip=grip, table=table)
 
 
 def thing_body(i, dfire):
@@ -750,6 +777,14 @@ def thing_body(i, dfire):
     return b
 
 
+# Sam, 19 Oct: not everyone into a wall the same way. These are clipped by the beam and tossed high into the air,
+# spinning, and land flat on their faces (on the floor, or on the table if they come down over it).
+FLYERS = {'LADY': (-0.35, 0.4), 'CARDS': (0.55, 0.42), 'BEAU': (1.0, -0.15),        # face down on the table
+          'HUSBAND': (-0.6, 2.4), 'GUARD1': (2.6, 1.7)}                                # on the floor
+# (the heiress flew up right in front of player one as he was hit: she goes out past the camera instead)
+# (the far side: those tossed up near the camera filled the frame)
+
+
 def person_body(who, dfire):
     key = ('P', who)
     if key in _CACHE:
@@ -759,9 +794,19 @@ def person_body(who, dfire):
     if hit:
         x, y, z = hit[3]
         rng = np.random.default_rng(sum(map(ord, who)))
-        b = launch(key, (x, y, z), hit, rng.uniform(6.0, 7.5), rng.uniform(2.6, 3.6),
-                   rng.choice([-1, 1]) * rng.uniform(420, 820), 0.3, 0.05, wall_e=0.06, seed=sum(map(ord, who)),
-                   grip=0.08)
+        if who in FLYERS:                                # clipped: tossed high, spinning, down flat on their face
+            tx, tz = FLYERS[who]                         # where they come down (onto the table, or open floor)
+            on_table = (tx / TABLE_A[0]) ** 2 + (tz / TABLE_A[1]) ** 2 < 1.0
+            r_ = 0.25
+            ground = (TABLE_H if on_table else 0.0) + r_
+            up = rng.uniform(5.2, 5.6)
+            T = (up + math.sqrt(up * up + 2 * G * max(0.0, y - ground))) / G
+            b = Body((x, y, z), ((tx - x) / T, up, (tz - z) / T), hit[0], r=r_, e=0.08, wall_e=0.1,
+                     spin=rng.choice([-1, 1]) * rng.uniform(900, 1300), grip=0.3, table=True)
+        else:
+            b = launch(key, (x, y, z), hit, rng.uniform(6.0, 7.5), rng.uniform(2.6, 3.6),
+                       rng.choice([-1, 1]) * rng.uniform(420, 820), 0.3, 0.05, wall_e=0.06,
+                       seed=sum(map(ord, who)), grip=0.08)
     _CACHE[key] = b
     return b
 
@@ -779,8 +824,8 @@ def heap_offsets(dfire):
         if b is None or b.wall is None:
             continue
         win = through_window(dfire)
-        if win and win[0] == who:
-            continue                                     # gone through the window: no heap
+        if (win and win[0] == who) or who in FLYERS:
+            continue                                     # through the window, or face down mid-room: no heap
         pos = b.at(b.floor_t or b.t0 + 2)[0]
         along = 2 if b.wall[0] == 0 else 0
         walls.setdefault(b.wall, []).append((pos[along], who))
@@ -1454,6 +1499,37 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     return j
 
 
+def faceplant(img, cam, film, who, b, t):
+    """Flat on their face where they came down (Sam, 19 Oct): seen from behind (the back of the head), arms flung out
+    past the head, lying along the floor or the table top; a splat as they land, then still."""
+    pos = b.at(t)[0]
+    if cam.depth(pos) < 0.6:
+        return None
+    ground = pos[1] - b.r
+    sp = dict(C.PEOPLE[who], blink=True, mouth='agape')
+    j = V.standing(sp)
+    j['props'] = [C.dress_up(sp)]
+    V.arm_to(j, 'L', (-170.0, -230.0, 20.0), 'out', 'palm')       # arms flung out beyond the head
+    V.arm_to(j, 'R', (190.0, -210.0, 20.0), 'out', 'palm')
+    rng = np.random.default_rng(sum(map(ord, who)))
+    (X, Y), k = cam.project((pos[0], ground + 0.08, pos[2]))
+    s = k * M_UNIT
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    C.person(lay, FLAT, X, Y - 470 * s, s, sp, t, 180.0, j)        # from behind: face down, into the floor
+    box = lay.getbbox()
+    if not box:
+        return None
+    piece = lay.crop(box)
+    u = min(1.0, (t - b.floor_t) / 0.12)
+    ang = (1 if rng.uniform() > 0.5 else -1) * rng.uniform(70, 105)  # lying along the floor
+    piece = piece.rotate(ang, Image.BILINEAR, expand=True)
+    squash = 0.75 - 0.2 * u                                         # the splat, then flat (seen from above)
+    piece = piece.resize((piece.width, max(1, int(piece.height * squash))), Image.BILINEAR)
+    S = B.SS
+    img.alpha_composite(piece, (int(X * S - piece.width / 2), int(Y * S - piece.height / 2)))
+    return X, Y, s
+
+
 def thrown_person(img, cam, film, who, t, dfire):
     """Before the blast: in place. Thrown: the drawing as they were, flying on its arc, spinning; slapped against a
     wall it turns upright and slides down; on the floor, a heap that stays. Out of the room past the camera: gone."""
@@ -1463,6 +1539,8 @@ def thrown_person(img, cam, film, who, t, dfire):
     win = through_window(dfire)
     if win and win[0] == who and t >= b.wall_t + 0.04:
         return None                                      # out through the window, into the night
+    if b.floor_t is not None and t >= b.floor_t and who in FLYERS:
+        return faceplant(img, cam, film, who, b, t)
     if b.floor_t is not None and t >= b.floor_t:
         pos, _ = drifted(who, b, t, dfire)
         if cam.depth(pos) < 0.6:
@@ -1481,7 +1559,8 @@ def thrown_person(img, cam, film, who, t, dfire):
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))             # slumped over to one side, against the wall
         C.person(lay, FLAT, X, Y - j['bob'] * s, s, sp, t, cam.yaw_of(pos, facing), j)
         hip = (X * B.SS, (Y + 450 * s) * B.SS)
-        tilt = (1 if sum(map(ord, who)) % 2 else -1) * 28 * u
+        lean_by = (28, 78, 10)[sum(map(ord, who)) % 3]   # not everyone the same (Sam, 19 Oct): slumped, keeled
+        tilt = (1 if sum(map(ord, who)) % 2 else -1) * lean_by * u   # over on their side, or sagging low
         lay = lay.rotate(tilt, Image.BILINEAR, center=hip)
         img.alpha_composite(lay)
         return X, Y, s

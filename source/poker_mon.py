@@ -250,10 +250,12 @@ DRAGON = dict(x=-60, foot=1560, s=0.84)
 def p2_face(t):
     sh = filmkit.shifts(t, seed=202, amount=1.0)
     out = dict(look=0.0, blink=F.blinking(t, BLINKS['P2']), head_dx=3 * sh, head_dy=8, mouth='line', brows='serious')
-    if LOOK_DOWN[0] <= t < LOOK_DOWN[1]:                       # inspecting his hand: eyes down to the cards
-        out.update(lid=7, head_dy=16)
-    if LOOK_DOWN[0] + 0.5 <= t < LOOK_DOWN[1] + 0.35:          # one eyebrow rises: a bad hand (Sam, 19 Oct); it
-        out['brows'] = 'confused'                              # stays up a moment as he looks back up
+    if LOOK_DOWN[0] <= t < LOOK_DOWN[0] + 0.65:                # eyes all the way down to his cards (Sam, 19 Oct)
+        out.update(lid=7, head_dy=26, look_v=1.0)
+    elif LOOK_DOWN[0] + 0.65 <= t < LOOK_DOWN[1]:              # then across the table at his opponent, heavy-lidded
+        out.update(lid=7, head_dy=16)                          # (Sam liked this look)
+    if LOOK_DOWN[0] + 0.65 <= t < LOOK_DOWN[1] + 0.35:         # one eyebrow up: a bad hand; it stays up a moment
+        out['brows'] = 'confused'                              # as he settles
     m = talking_mouth('P2', t)
     if m:
         out['mouth'] = m
@@ -472,6 +474,35 @@ THING_R = dict(chip=0.0195, card=0.045, tumbler=0.04, napkin=0.07, flute=0.035, 
 HAND_R = 0.05      # a hand resting on the felt, in metres
 
 
+def hit_check():
+    """Nobody is thrown before the beam touches them (Sam, 19 Oct: the woman in red flipped up into the air before
+    it reached her). At each person's hit, in the blast camera, the drawn beam must overlap them on screen."""
+    faults = []
+    d = dragon_state(FIRE + 0.05)
+    for (kind, who), h in R.blast_hits(d).items():
+        if kind != 'P':
+            continue
+        t = h[0]
+        cam = R.sweep_cam(t)
+        x, neck, z = h[3]
+        body = (x, neck - 0.25, z)
+        if cam.depth(body) < 0.5:
+            continue
+        (px, py), k = cam.project(body)
+        m, dr = R.beam_ray(t, d)
+        end, _ = R.beam_end(m, dr)
+        (ax, ay), km = cam.project(m)
+        (bx, by), _ = cam.project(end)
+        vx, vy = bx - ax, by - ay
+        u = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / max(1e-6, vx * vx + vy * vy)))
+        gap = math.hypot(ax + vx * u - px, ay + vy * u - py)
+        reach = 0.3 * k + 0.13 * km                          # half a body plus the beam's drawn half-width
+        if gap > reach * 1.25:
+            faults.append(f'{who} is thrown at {t:.2f} s with the beam {gap:.0f} px away on screen (touching is '
+                          f'{reach:.0f} px)')
+    return faults
+
+
 def table_check():
     """One table plan, nothing inside anything (Sam, 19 Oct: the table well populated, never clipping): no two things
     on the table overlap (cards may), and nothing stands on a chip stack."""
@@ -587,6 +618,7 @@ def audits():
     faults += hands_check()
     faults += clearance_check()
     faults += table_check()
+    faults += hit_check()
     faults += contact_check()
     return faults
 

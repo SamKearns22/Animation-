@@ -457,7 +457,7 @@ def face(img, p, sp, t, hx, hy, hw, hh):
         else:
             almond = [(ex - 17, ey), (ex - 8, ey - 8), (ex + 8, ey - 8), (ex + 17, ey), (ex + 8, ey + 7), (ex - 8, ey + 7)]
             p.poly(almond, (250, 250, 248), INK, 2.0)
-            p.ell(ex + look * 7, ey + 1, 4.5, 4.5, INK, None)
+            p.ell(ex + look * 7, ey + 1 + sp.get('look_v', 0.0) * 4, 4.5, 4.5, INK, None)   # look_v: +1 down
             if lid > 0:  # a heavy lid drooping over the top of the eye
                 p.poly([(ex - 18, ey - 2), (ex - 8, ey - 10), (ex + 8, ey - 10), (ex + 18, ey - 2), (ex + 17, ey - 1 + lid),
                         (ex + 8, ey - 9 + lid), (ex - 8, ey - 9 + lid), (ex - 17, ey - 1 + lid)], dk(skin, 0.84), None)
