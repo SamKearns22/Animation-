@@ -197,7 +197,7 @@ def light_level(t):
     if t < CHARGE[0] + 0.4:
         return 0.0
     if t < FIRE:
-        return 0.55 * ease((t - CHARGE[0] - 0.4) / (FIRE - CHARGE[0] - 0.4)) ** 1.4
+        return 0.8 * ease((t - CHARGE[0] - 0.4) / (FIRE - CHARGE[0] - 0.4)) ** 1.2   # brighter (Sam, 19 Oct)
     if t < BEAM_END[0]:
         return 0.9
     return 0.9 * (1 - ease((t - BEAM_END[0]) / (BEAM_END[1] - BEAM_END[0] + 0.4)))

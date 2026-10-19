@@ -1262,6 +1262,9 @@ def queen_shown(i, film):
     return a + (0.4 + 0.42 * i / 3) * (b - a)
 
 
+P1_REST_X, P1_REST_Z = 1.43, 0.28        # player one's resting hands: either side of his Queens (z -0.16 .. 0.16)
+
+
 def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     """Player one lays his hand: the fan held at his chest; his palm comes down on the felt where the first Queen
     goes (contact), slides along as the four are spread under it, then rests beside them."""
@@ -1272,12 +1275,16 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     xq = THINGS[0][1][0]
     chest = (40.0, 190.0, 170.0)
 
-    def to(world):
+    def to(world, sd='R'):
         zb = (SEATED['P1'][0] - world[0]) / M_UNIT
-        tg = screen_hand_target(j, 'R', yaw, mirror, X, Y, s, cam.project(world)[0], zb)
+        tg = screen_hand_target(j, sd, yaw, mirror, X, Y, s, cam.project(world)[0], zb)
         if getattr(screen_hand_target, 'clamped', False):
-            CONTACT_FAULTS.append((t, 'P1', f'hand cannot reach {world}'))
+            CONTACT_FAULTS.append((t, 'P1', f'{sd} hand cannot reach {world}'))
         return tg
+    # his hands rest on the felt either side of where the Queens lie, never on them (Sam, 19 Oct: his arms covered
+    # the cards); his left is toward -z (the spread runs from there to his right, where that hand comes to rest)
+    rest_at = {sd: (P1_REST_X, TABLE_H + 0.02, z) for sd, z in (('R', P1_REST_Z), ('L', -P1_REST_Z))}
+    V.arm_to(j, 'L', to(rest_at['L'], 'L'), 'down', 'fist')
     if u < 0.4:
         k = ease(max(0.0, u) / 0.4)
         tgt = to((xq, TABLE_H + 0.02, zq[0]))
@@ -1291,7 +1298,7 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     else:
         k = ease(min(1.0, (u - 0.82) / 0.18))
         end = to((xq, TABLE_H + 0.02, zq[-1]))
-        rest = j['wrR']
+        rest = to(rest_at['R'])
         pos = tuple(e + (r - e) * k for e, r in zip(end, rest))
     V.arm_to(j, 'R', pos, 'down', 'palm')
     return j
@@ -1382,8 +1389,8 @@ def parlour(img, lights, ambient=0.55, warm=(1.0, 0.86, 0.66)):
     Lg, Lb = Lr.copy() * warm[1], Lr.copy() * warm[2]
     Lr = Lr * warm[0]
     S = B.SS
-    for X, Y, R, k, col in lights:
-        R_ = max(4.0, min(R, 900.0) * S / sm)            # a pool of light, never the whole frame
+    for X, Y, R, k, col, *cap in lights:               # cap: the charge may light the whole room (Sam, 19 Oct)
+        R_ = max(4.0, min(R, cap[0] if cap else 900.0) * S / sm)   # otherwise a pool of light, never the whole frame
         g = np.exp(-(((Xs - X * S / sm) ** 2 + (Ys - Y * S / sm) ** 2) / (R_ * R_))) * k
         Lr += g * col[0] / 255
         Lg += g * col[1] / 255
@@ -1499,7 +1506,7 @@ def render(img, t, film, cam, extra_lights=()):
             if t >= (Clock.PUTDOWN[0] + Clock.PUTDOWN[1]) / 2:
                 for k in range(5):
                     card3(img, cam, C.card_back(), P2_CARDS[0] + 0.004 * k, P2_CARDS[1] + 0.012 * k, 0.063, 90 + 6 * k)
-            seated_arms(img, t)
+            seated_arms(img, t, cam, on)
         elif kind == 'person':
             if who == 'P2':
                 draw_person(img, cam, film, who, t)
@@ -1588,7 +1595,7 @@ def render(img, t, film, cam, extra_lights=()):
             LIGHTS.append((X1, Y1, 300, 1.2 * fade, (255, 220, 150)))
     elif Clock.CHARGE0 < t < Clock.FIRE and mouth is not None:
         st = film.dragon_state(t)
-        LIGHTS.append((mouth[0], mouth[1], 300 + 500 * st['ball'], 0.3 + 0.7 * st['ball'], (255, 236, 170)))
+        LIGHTS.append((mouth[0], mouth[1], 400 + 1500 * st['ball'], 0.5 + 1.2 * st['ball'], (255, 240, 190), 2200.0))
     parlour(img, LIGHTS)
     p = B.Pen(img, FLAT)                                 # self-lit: flames, the beam
     for X, Y, h, sd in FIRES:
@@ -1599,10 +1606,20 @@ def render(img, t, film, cam, extra_lights=()):
             C.glow(img, FLAT, [(beam_pts[-1][0], beam_pts[-1][1], beam_pts[-1][2] * 2.2)], strength=0.8)
     elif Clock.CHARGE0 < t < Clock.FIRE and mouth is not None:
         st = film.dragon_state(t)
-        C.glow(img, FLAT, [(mouth[0], mouth[1], 8 + 26 * st['ball'])], strength=0.5 + 0.5 * st['ball'])
+        k = st['ball']                                   # brighter and more expansive (Sam, 19 Oct): a wide halo,
+        C.glow(img, FLAT, [(mouth[0], mouth[1], 40 + 170 * k)], strength=0.45 * k)   # a big core, and sparks
+        if k > 0.05:                                     # streaming in to the mouth (the show's energy gathering)
+            rng = np.random.default_rng(5)
+            sparks = []
+            for a, ph, sp in zip(rng.uniform(0, 2 * math.pi, 22), rng.uniform(0, 1, 22), rng.uniform(0.7, 1.3, 22)):
+                f = (t * 0.9 * sp + ph) % 1.0            # each spark flies in from far out, again and again
+                r = (140 + 420 * k) * (1 - f)
+                sparks.append((mouth[0] + r * math.cos(a), mouth[1] + r * math.sin(a), 3 + 6 * k * (1 - f * 0.5)))
+            C.glow(img, FLAT, sparks, strength=0.8)
+        C.glow(img, FLAT, [(mouth[0], mouth[1], 10 + 52 * k)], strength=0.6 + 0.6 * k)
 
 
-def seated_arms(img, t):
+def seated_arms(img, t, cam=None, on=()):
     """The players' forearms lie over the table's edge and their hands on the felt: drawn again after the table and the
     pot, with anything held in a gripping hand (player one's fan of Queens), so the table never covers a hand that is
     on it (Sam, 19 Oct: player two's hands hidden under the table as he drew in the pot; then player one laying his
@@ -1622,3 +1639,11 @@ def seated_arms(img, t):
         for sd in 'LR':                                  # (no height cut-off: at this table the wrists sit higher
             if j2.get('hand', {}).get(sd) in ('fist', 'palm'):   # than in the close shots, and were hidden, Sam 19 Oct)
                 V.arm(p, j2, sd, C.PEOPLE[who])
+        if who == 'P1' and cam is not None:
+            a, b = FILM[0].LAY                           # things on the felt nearer us than his hands go back over his
+            u = (t - a) / (b - a)                        # arms (Sam, 19 Oct: his arms covered the Queens), except while
+            if not 0.38 <= u <= 1.0:                     # his palm is on them, laying them, or going back over them
+                wd = cam.depth((SEATED['P1'][0] - 240 * M_UNIT, TABLE_H, SEATED['P1'][1]))
+                near = [v for v in on if v[0] < wd and v[2][0] > SEATED['P1'][0] - 0.75
+                        and THINGS[v[1]][0] != 'candelabra']
+                draw_things(img, cam, t, sorted(near, key=lambda v: -v[0]))
