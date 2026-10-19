@@ -1653,36 +1653,61 @@ def faceplant(img, cam, film, who, b, t):
         a_ = rng.uniform(0, 2 * math.pi)
         ax = (math.cos(a_), math.sin(a_))
     sd = (-ax[1], ax[0])
-    bounce = 0.06 * math.exp(-(t - b.floor_t) * 9) * abs(math.sin((t - b.floor_t) * 18))
+    settle = ease(min(1.0, (t - b.floor_t) / 0.18))      # landing: limbs flop out into the sprawl, flush on the top
     H = (pos[0] - ax[0] * 0.2, ground, pos[2] - ax[1] * 0.2)
-    at = lambda al, si, h: (H[0] + ax[0] * al + sd[0] * si, ground + h + bounce, H[2] + ax[1] * al + sd[1] * si)
+    at = lambda al, si, h: (H[0] + ax[0] * al + sd[0] * si, ground + h, H[2] + ax[1] * al + sd[1] * si)
     jacket = sp.get('jacket', (40, 40, 44))
     legs = sp.get('trousers', jacket)
     skin, hair = sp['skin'], sp.get('hair_c', sp['skin'])
     if sp.get('hair') == 'bald':
         hair = skin
     dress = sp.get('outfit') == 'dress'
+    top = sp.get('dress', jacket) if dress else jacket
+    # a sprawl, not a matchstick (Sam, 19 Oct): every limb bends at knee or elbow, each body its own way
+    kneeL, kneeR = rng.uniform(0.15, 0.45), rng.uniform(-0.1, 0.35)          # how far each knee is flung out
+    footL, footR = rng.uniform(-0.05, 0.25), rng.uniform(0.35, 0.6)          # the right leg drawn up
+    elbL, elbR = rng.uniform(0.35, 0.55), rng.uniform(0.3, 0.5)
+    handL, handR = rng.uniform(0.55, 0.95), rng.uniform(0.1, 0.4)            # one arm past the head, one by it
+    turn = rng.choice([-1, 1]) * 0.07                                        # head turned, cheek on the table
+    sp_ = settle
     parts = []                                           # (world a, world b, radius a, radius b, colour)
-    if dress:                                            # a gown: one tapered volume from the hips to the feet
-        parts.append((at(0.05, 0, 0.1), at(-0.85, 0, 0.06), 0.12, 0.07, sp.get('dress', jacket)))
-        for si in (-1, 1):                               # her feet, out of the hem
-            parts.append((at(-0.9, si * 0.05, 0.04), at(-1.0, si * 0.06, 0.04), 0.035, 0.03, skin))
+    if dress:                                            # a gown: hips to knees, then the calves and feet below it
+        parts.append((at(0.05, 0, 0.09), at(-0.5, 0.04, 0.07), 0.12, 0.1, top))
+        for si, kn, ft in ((-1, kneeL, footL), (1, kneeR, footR)):
+            k_ = at(-0.5, si * 0.09, 0.05)
+            f_ = at(-0.85 + 0.3 * ft * sp_, si * (0.12 + 0.2 * kn * sp_), 0.04)
+            parts.append((k_, f_, 0.05, 0.04, skin))
     else:
-        for si in (-1, 1):
-            parts.append((at(0.0, si * 0.09, 0.08), at(-0.86, si * 0.15, 0.07), 0.075, 0.06, legs))
-            parts.append((at(-0.88, si * 0.15, 0.06), at(-0.98, si * 0.16, 0.06), 0.05, 0.045, (24, 22, 26)))
-    parts.append((at(0.0, 0, 0.1), at(0.5, 0, 0.11), 0.13, 0.14, jacket if not dress else sp.get('dress')))
-    for si in (-1, 1):                                   # arms flung out past the head, hands on the surface
-        parts.append((at(0.5, si * 0.19, 0.12), at(0.95, si * 0.36, 0.06), 0.06, 0.05,
-                      jacket if not dress else skin))
-        parts.append((at(0.98, si * 0.37, 0.05), at(0.98, si * 0.37, 0.05), 0.055, 0.055, skin))
-    parts.append((at(0.62, 0, 0.13), at(0.66, 0, 0.13), 0.07, 0.07, skin))       # the neck
-    parts.append((at(0.78, 0, 0.13), at(0.78, 0, 0.13), 0.12, 0.12, hair))       # the back of the head: face down
+        for si, kn, ft in ((-1, kneeL, footL), (1, kneeR, footR)):
+            hip = at(0.0, si * 0.09, 0.07)
+            knee = at(-0.45, si * (0.12 + 0.18 * kn * sp_), 0.06)
+            foot = at(-0.88 + 0.35 * ft * sp_, si * (0.12 + 0.32 * kn * sp_), 0.05)
+            parts.append((hip, knee, 0.075, 0.065, legs))
+            parts.append((knee, foot, 0.065, 0.055, legs))
+            parts.append((foot, at(-0.97 + 0.35 * ft * sp_, si * (0.13 + 0.34 * kn * sp_), 0.05), 0.05, 0.045,
+                          (24, 22, 26)))
+    parts.append((at(0.0, 0, 0.09), at(0.5, 0, 0.1), 0.13, 0.14, top))
+    for si, el, hd in ((-1, elbL, handL), (1, elbR, handR)):   # arms bent at the elbow, flung about
+        sh_ = at(0.48, si * 0.18, 0.1)
+        elb = at(0.48 + 0.12 * el * sp_, si * (0.3 + 0.12 * el * sp_), 0.06)
+        hand = at(0.5 + 0.45 * hd * sp_, si * (0.36 - 0.1 * hd * sp_), 0.04)
+        parts.append((sh_, elb, 0.06, 0.055, top if not dress else skin))
+        parts.append((elb, hand, 0.055, 0.045, top if not dress else skin))
+        parts.append((hand, hand, 0.05, 0.05, skin))
+    parts.append((at(0.6, turn * 0.3, 0.1), at(0.65, turn * 0.5, 0.1), 0.065, 0.065, skin))   # the neck
+    parts.append((at(0.76, turn, 0.11), at(0.76, turn, 0.11), 0.115, 0.115, hair))           # the back of the head
+    parts.append((at(0.74, turn + 0.11 * (1 if turn > 0 else -1), 0.1),
+                  at(0.74, turn + 0.11 * (1 if turn > 0 else -1), 0.1), 0.03, 0.03, skin))  # an ear: the head turned
     p = B.Pen(img, FLAT)
     sh = Image.new('RGBA', img.size, (0, 0, 0, 0))       # the shadow under the body
     shp = B.Pen(sh, FLAT)
-    ring = [at(math.cos(u) * 1.0 - 0.05, math.sin(u) * 0.38, 0.0) for u in np.linspace(0, 2 * math.pi, 28)]
-    shp.poly([cam.project(q)[0] for q in ring], (0, 0, 0, 90), None)
+    for wa, wb, ra, rb, col in parts:                    # a tight shadow under each part, on the surface itself
+        A, Bq = cam.project((wa[0], ground + 0.002, wa[2]))[0], cam.project((wb[0], ground + 0.002, wb[2]))[0]
+        k = cam.project((wa[0], ground, wa[2]))[1]
+        if math.hypot(Bq[0] - A[0], Bq[1] - A[1]) < 1.0:
+            shp.ell(A[0], A[1], ra * k * 1.05, ra * k * 0.6, (0, 0, 0, 55), None)
+        else:
+            C.tube(shp, [A, Bq], 2.1 * ra * k, 2.1 * rb * k, (0, 0, 0, 55), 0)
     img.alpha_composite(sh)
     drawn = []
     for wa, wb, ra, rb, col in parts:
