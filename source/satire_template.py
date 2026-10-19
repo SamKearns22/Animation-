@@ -159,7 +159,7 @@ def frame_image(t):
 
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.random.default_rng(1).standard_normal(n) * 0.002    # quiet room tone
+    voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
     for ln in LINES:
         if ln['_voice'] is not None:
             s = int(ln['start'] * SR)
@@ -194,6 +194,7 @@ def checks():
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     faults += title_check()
     mix, voice, rest = soundtrack(stems=True)
+    faults += filmkit.hiss_check(mix, SR, BLACK_AT)               # no steady hiss (Sam, 19 Oct)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
         print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him

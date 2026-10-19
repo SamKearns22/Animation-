@@ -42,14 +42,14 @@ NAME = 'poker-mon'
 # Sam's recordings are still to come ('audio' names the file when they do; until then the line is timed by hand).
 LINES = [
     dict(n=1, who='P1', text='Four of a kind.', audio='poker-mon-1', start=0.55, end=3.0),   # start: where the recording's file begins (it opens with a second of room tone)
-    dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=4.4, end=7.7),
+    dict(n=2, who='P2', text='Dragonite, use hyper beam.', audio='poker-mon-2', start=5.76, end=7.7),
 ]
-SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 8.0), ('reveal', 8.0, 12.5), ('lit', 12.5, 14.0),
-         ('blast', 14.0, R.Clock.END)]
+SHOTS = [('p1', 0.0, 3.6), ('cards', 3.6, 4.7), ('p2', 4.7, 9.5), ('reveal', 9.5, 14.0), ('lit', 14.0, 15.5),
+         ('blast', 15.5, R.Clock.END)]
 DUR = BLACK_AT = R.Clock.END
 LAY = (0.5, 1.5)          # player one lays his hand: the fan leaves his hand, the cards spread on the felt
-LOOK_DOWN = (4.9, 5.9)    # player two inspects his hand
-CHARGE = (R.Clock.CHARGE0, 14.1)   # after 1.5 s looking neutral (Sam): head back, the light grows in its mouth
+LOOK_DOWN = (4.9, 6.25)   # player two inspects his hand: looks down, one brow rises (a bad hand), looks up
+CHARGE = (R.Clock.CHARGE0, 15.6)   # after 1.5 s looking neutral (Sam): head back, the light grows in its mouth
 FIRE = R.Clock.FIRE       # the head snaps forward: the beam
 IMPACT = R.Clock.IMPACT   # it reaches player one; then it sweeps round the table (poker_mon_room.SWEEP)
 BEAM_END = R.Clock.BEAM_END   # the beam thins and goes out
@@ -74,11 +74,11 @@ for ln in LINES:                                  # when the words are actually 
     ln['_say'] = (ln['start'] + ln['_stretches'][0][0], ln['start'] + ln['_stretches'][-1][1])
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
              for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in ('P1', 'P2')}
-BLINKS = {'P1': [b for b in F.blinks(5, 0.6, 11.0, talking=True) if not 1.7 < b < 3.4],
-          'P2': [b for b in F.blinks(9, 4.8, 19.5, talking=True) if not 7.5 < b < 8.6]}
+BLINKS = {'P1': [b for b in F.blinks(5, 0.6, 16.0, talking=True) if not 1.7 < b < 3.4],
+          'P2': [b for b in F.blinks(9, 4.8, 21.0, talking=True) if not 9.0 < b < 10.1 and not LOOK_DOWN[0] < b < LOOK_DOWN[1] + 0.4]}
 # Subtitles: short chunks, each on its first word; the punchline on its own.
 CAPS = [(LINES[0]['_say'][0] - 0.05, LINES[0]['_say'][1] + 0.4, 'Four of a kind.'),
-        (LINES[1]['_say'][0] - 0.05, min(8.0, LINES[1]['_say'][1] + 0.3), 'Dragonite, use hyper beam.')]
+        (LINES[1]['_say'][0] - 0.05, min(SHOTS[3][1], LINES[1]['_say'][1] + 0.3), 'Dragonite, use hyper beam.')]
 
 
 def shot_of(t):
@@ -252,6 +252,8 @@ def p2_face(t):
     out = dict(look=0.0, blink=F.blinking(t, BLINKS['P2']), head_dx=3 * sh, head_dy=8, mouth='line', brows='serious')
     if LOOK_DOWN[0] <= t < LOOK_DOWN[1]:                       # inspecting his hand: eyes down to the cards
         out.update(lid=7, head_dy=16)
+    if LOOK_DOWN[0] + 0.5 <= t < LOOK_DOWN[1] + 0.35:          # one eyebrow rises: a bad hand (Sam, 19 Oct); it
+        out['brows'] = 'confused'                              # stays up a moment as he looks back up
     m = talking_mouth('P2', t)
     if m:
         out['mouth'] = m
@@ -385,14 +387,16 @@ def blast(n, t0, t_end):
     low = np.convolve(noise, k / k.sum(), mode='same')
     boom = np.sin(2 * np.pi * np.cumsum(55 - 25 * np.minimum(tt, 1)) / SR) * np.exp(-tt * 2.2)
     roar_env = np.clip((t_end - t0 - tt) / 0.4, 0, 1) * np.minimum(1, tt / 0.03)
-    roar = (0.6 * low + 0.15 * noise) * roar_env + 0.2 * np.sin(2 * np.pi * 180 * tt) * roar_env
+    from scipy.signal import butter, sosfilt         # the roar's grit kept under 2.5 kHz: raw white noise hisses
+    grit = sosfilt(butter(4, 2500, 'low', fs=SR, output='sos'), noise)
+    roar = (0.6 * low + 0.15 * grit) * roar_env + 0.2 * np.sin(2 * np.pi * 180 * tt) * roar_env
     out[a:a + m] = 0.9 * boom + 0.5 * roar + 0.5 * low * np.exp(-tt * 1.5)
     return out
 
 
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.random.default_rng(1).standard_normal(n) * 0.002    # quiet room tone
+    voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
     for ln in LINES:
         if ln['_voice'] is not None:
             s = int(ln['start'] * SR)
@@ -427,6 +431,7 @@ def checks():
             'pokemon' in ln['text'].lower() for ln in LINES):
         faults.append('the word Pokemon is used (Sam: never; only Poker Mon)')
     mix, voice, rest = soundtrack(stems=True)
+    faults += filmkit.hiss_check(mix, SR, BLACK_AT)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
         print('QUESTION FOR SAM:', q)

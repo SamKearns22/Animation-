@@ -182,19 +182,20 @@ def ease(u):
 # ------------------------------------------------------------------------------------------------ the film's clock
 class Clock:
     """The film's times, handed in by poker_mon (FIRE, IMPACT, BEAM_END, PULL...). Everything from the charge on
-    moved 1.5 s later (Sam, 19 Oct: 1.5 s of the Dragonite looking neutral before it charges)."""
-    FIRE = 14.2
-    IMPACT = 14.28
-    BEAM_END = (18.3, 18.6)       # Sam: the firing extended by a few seconds (two sweeps round the room)
-    PAUSE = (18.9, 20.2)          # everything settles; nothing moves but flames, the camera still (Sam)
-    PUSH = (20.2, 21.2)           # then the camera moves in on player two
-    PUTDOWN = (20.25, 20.65)      # he lays his own cards face down (he has held them since shot 3)
-    REACH = (20.8, 21.25)         # his hands go out to the far side of the pot
-    TOPPLE = (21.25, 21.5)        # they press in: the stacks topple into a loose pile (chips are separate pieces)
-    PULL = (21.5, 22.35)          # he drags the pile to him, his hands on it the whole way
-    RELEASE = (22.35, 22.75)
-    END = 23.4
-    CHARGE0 = 10.4
+    moved 1.5 s later (Sam, 19 Oct: 1.5 s of the Dragonite looking neutral before it charges), then 1.5 s more
+    (Sam, 19 Oct: player two's bad-hand beat before his line)."""
+    FIRE = 15.7
+    IMPACT = 15.78
+    BEAM_END = (19.8, 20.1)       # Sam: the firing extended by a few seconds (two sweeps round the room)
+    PAUSE = (20.4, 21.7)          # everything settles; nothing moves but flames, the camera still (Sam)
+    PUSH = (21.7, 22.7)           # then the camera moves in on player two
+    PUTDOWN = (21.75, 22.15)      # he lays his own cards face down (he has held them since shot 3)
+    REACH = (22.3, 22.75)         # his hands go out to the far side of the pot
+    TOPPLE = (22.75, 23)        # they press in: the stacks topple into a loose pile (chips are separate pieces)
+    PULL = (23, 23.85)          # he drags the pile to him, his hands on it the whole way
+    RELEASE = (23.85, 24.25)
+    END = 24.9
+    CHARGE0 = 11.9
 
 
 def sweep_cam(t):
@@ -224,7 +225,7 @@ def mouth_world(dstate):
 
 # The sweep: degrees from the Dragonite's mouth (0 = +x, + toward +z). It fires at player one, sweeps down the near
 # side, then back up across the far side; never round to player two (about -96).
-SWEEP = [(14.20, -15.0), (14.36, -15.0), (16.5, 62.0), (16.75, 62.0), (17.9, -72.0), (18.3, -72.0), (18.6, -60.0)]
+SWEEP = [(15.70, -15.0), (15.86, -15.0), (18.00, 62.0), (18.25, 62.0), (19.40, -72.0), (19.80, -72.0), (20.10, -60.0)]
 
 
 def beam_angle(t):
@@ -1019,8 +1020,18 @@ def draw_chip(img, cam, pos, ang, kind, sq):
         for a in range(6):
             aa = math.radians(ang) + a * math.pi / 3
             p.ell(X + 0.82 * r * math.cos(aa), Y + 0.82 * r * sq * math.sin(aa), r * 0.13, r * 0.13 * sq, (250, 250, 248), None)
-        p.ell(X, Y, r * 0.5, r * 0.5 * sq, (250, 250, 248), INK, 0.8)
-        p.poly([(X - r * 0.5, Y - 0.5), (X + r * 0.5, Y - 0.5), (X + r * 0.5, Y + 0.5), (X - r * 0.5, Y + 0.5)], INK, None)
+        # the Poke Ball on its face (Sam, 19 Oct: the chips are Poke Balls; the 3D rebuild had lost all but the band):
+        # top half the ball's colour, bottom white, black band, white button, a Great/Ultra/Master Ball's markings
+        rb, base = r * 0.64, math.radians(ang)
+        e = lambda a_, k=1.0: (X + rb * k * math.cos(a_), Y + rb * k * sq * math.sin(a_))
+        p.ell(X, Y, rb, rb * sq, (250, 250, 248), INK, 0.9)
+        p.poly([e(base + math.pi + u * math.pi / 16) for u in range(17)], top, INK, 0.9)
+        if stripes and r > 6:
+            for off in (-0.55, 0.55):
+                p.ell(*e(base - math.pi / 2 + off, 0.6), rb * 0.17, rb * 0.17 * sq, stripes, None)
+        p.line([e(base), e(base + math.pi)], INK, max(1.2, rb * 0.16))
+        p.ell(X, Y, rb * 0.3, rb * 0.3 * sq, INK, None)
+        p.ell(X, Y, rb * 0.19, rb * 0.19 * sq, (250, 250, 248), INK, 0.6)
 
 
 # ------------------------------------------------------------------------------------------------ people

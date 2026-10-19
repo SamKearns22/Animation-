@@ -269,6 +269,25 @@ def _rms_db(x):
     return 20 * math.log10(float(np.sqrt(np.mean(x ** 2))) + 1e-12)
 
 
+def hiss_check(mix, sr, end=None, limit=-62.0):
+    """A steady hiss is a FAULT, never a question (Sam, 19 Oct: "a distracting hiss, like you did in the last
+    video"): white noise laid under a film as "room tone" (it was in satire_template, so every film inherited it)
+    comes up with the mastering and hisses through every quiet moment. In the quietest fifth of the film (0.25 s
+    windows), the sound above 4 kHz must stay under `limit` dBFS. Returns a list of faults."""
+    from scipy.signal import butter, sosfilt
+    x = np.asarray(mix, float)[:int(end * sr) if end else None]
+    hi = sosfilt(butter(4, 4000, 'high', fs=sr, output='sos'), x)
+    w = int(0.25 * sr)
+    lv = lambda v: 20 * np.log10(np.sqrt((v ** 2).mean()) + 1e-12)
+    wins = sorted((lv(x[i:i + w]), lv(hi[i:i + w])) for i in range(0, len(x) - w, w))
+    quiet = [h for _, h in wins[:max(2, len(wins) // 5)]]
+    level = float(np.median(quiet))
+    if level > limit:
+        return [f'a steady hiss at {level:.0f} dBFS above 4 kHz runs through the quiet parts (limit {limit:.0f}): '
+                f'look for noise laid under the film (room tone) or an unfiltered noise effect']
+    return []
+
+
 def sound_questions(stems, sr, cuts=(), start=0.0, end=None):
     """Things in the sound that are usually mistakes but may be meant, as QUESTIONS for Sam (never fixed without him):
       deep rumble   a sound whose energy is mostly below 100 Hz (wind in an outdoor recording);
