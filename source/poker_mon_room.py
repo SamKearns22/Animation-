@@ -557,6 +557,7 @@ def table(img, cam):
     cam.poly(p, oval(TABLE_H + 0.005, 0.86), FELT, INK, 2.2)
     ring = oval(TABLE_H + 0.006, 0.64)
     cam.line(p, ring + [ring[0]], LINE_Y, 3)
+    felt_emblems(cam, p)                                # the Poke Balls printed in the felt
 
 
 # ------------------------------------------------------------------------------------------------ armchairs
@@ -591,6 +592,32 @@ def chair_faces(pos, facing, rot=None):
                 pts = [rotate(q, *rot) for q in pts]
             out.append((pts, col))
     return out
+
+
+def felt_ball(cam, p, cx, cz, r, ux, uz):
+    """A Poke Ball printed in the felt at (cx, cz), radius r (m), its top towards (ux, uz)."""
+    y = TABLE_H + 0.007
+    rx, rz = uz, -ux                                     # across the emblem
+    pt = lambda a, k=1.0: (cx + r * k * (math.cos(a) * rx + math.sin(a) * ux), y, cz + r * k * (math.cos(a) * rz + math.sin(a) * uz))
+    ring = lambda k: [pt(a, k) for a in np.linspace(0, 2 * math.pi, 40, endpoint=False)]
+    cam.poly(p, ring(1.0), (236, 226, 200), INK, 1.8)                             # the white half (all of it)
+    cam.poly(p, [pt(a) for a in np.linspace(0, math.pi, 21)], (176, 34, 40), INK, 1.8)   # the red top half
+    band = [(cx + r * (sgx * rx) + r * 0.09 * sgy * ux, y, cz + r * (sgx * rz) + r * 0.09 * sgy * uz)
+            for sgx, sgy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+    cam.poly(p, band, INK, None)                                                     # the black band
+    cam.poly(p, ring(0.3), INK, None)
+    cam.poly(p, ring(0.19), (236, 226, 200), INK, 1.2)                             # the button
+
+
+def felt_emblems(cam, p):
+    """The table's design (Sam, 19 Oct): a Poke Ball printed in the felt at each of the eight points of the compass,
+    tops facing out to the rail, and a larger one in the middle. Printed in the cloth: everything rests on them."""
+    for k in range(8):
+        a = k * math.pi / 4
+        cx, cz = 0.62 * TABLE_A[0] * math.cos(a), 0.62 * TABLE_A[1] * math.sin(a)
+        n = math.hypot(math.cos(a) / TABLE_A[0], math.sin(a) / TABLE_A[1])
+        felt_ball(cam, p, cx, cz, 0.12, math.cos(a) / TABLE_A[0] / n, math.sin(a) / TABLE_A[1] / n)
+    felt_ball(cam, p, 0.0, 0.0, 0.26, 1.0, 0.0)                                   # the big one, its top to player one
 
 
 def rotate(p, axis, ang, pivot):
