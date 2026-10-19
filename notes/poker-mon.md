@@ -54,6 +54,10 @@
 | 49 | (19 Oct) "Dragonite looks really monstrous here. Can we aim for this cute guy's face?" (dragonite-cute-face.jpg) | yes: head redrawn to the reference (long rounded muzzle, tall navy eyes with highlights, small smile, cream antennae with drooping tips, small horn); soft eyes while charging, head tipped back 18 degrees not 34, a small neat O |
 | 50 | (19 Oct) "Player 2 is not holding his spread of cards, they are floating in between his hands." | yes: both hands together at the foot of the fan |
 | 51 | (19 Oct) "The cards are on the wrong side of the hands." | yes: his fingers are drawn over the card backs (both players); views.person now refuses a held prop with no gripping hand (j['grip']) |
+| 52 | (19 Oct) "Dragonite doesn't have an orange line in the middle of his wing" / "orange at the top, then solid blue for the rest" (no gaps) | yes: an orange frame along the top edge over solid teal. Cause: tube() followed ed.curve, a closed loop, so every tube doubled back from its tip (also the looped antennae); now open_curve |
+| 53 | (19 Oct) "Dragonite's head is detached from his body." / "neck image is glued over rather than smoothly joined" | yes: body and neck one shape with one outline, turning with the head; the cream runs up the throat |
+| 54 | (19 Oct) "Remove the smile, there isn't one in the photo." | yes: a plain closed muzzle (replaces row 48's smile) |
+| 55 | (19 Oct) "Open the O mouth when he beams" | yes: the O grows with the beam (radius 18 + 34 x opening) |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
