@@ -24,6 +24,17 @@
 | 19 | Ending: hold on the wrecked empty room, player two and Dragonite unbothered; player two calmly pulls the chips in. | yes (15.8-17 s) |
 | 20 | Cards: Queens keep the poker art and corner Q, with the yellow Poker Mon border and an HP number; backs are the blue swirl, Poke Ball and POKER MON; chips like Poke Balls. Player two holds "Pokemon themed standard cards" (no Dragonite card). | yes (P2's hand only on the cast sheet; we see his backs) |
 | 21 | Table: three other players (one in the playing-card shirt), a dealer and two guards, all blown away. | yes |
+| 22 | (19 Oct) "Have the table centralised in a room." | yes: the table in the middle of a 8.8 x 8 m parlour, four walls |
+| 23 | "Populate the room with tasteful wall detailing and minimal old world decoration and ornamental pieces." | yes: wood dado, gilt rail, framed silk panels, cornice; a portrait, a landscape, velvet drapes at two windows, a sideboard with decanter and candelabra, a marble bust |
+| 24 | "Add low parlour lighting with the occasional flickering candle." | yes: dim room, warm pools (green lamp over the table, sconces, candles); candles flicker with an occasional gutter; every shot |
+| 25 | "Movements and positioning such as seating and moving chips across the table are following our rules and are naturalistic and there are real points of contact." | yes: the cards spread from under his palm; the escort's hand on his shoulder; player two's hands on the pot's far side, the pot moving with them; armchairs at real height |
+| 26 | "Make the Dragonite sweep his beam around the table." | yes: player one first, down the near side, back across the far side (never at player two) |
+| 27 | "Populate the table with chips cards drinks and other game paraphernalia that all go flying." | yes: chips, cards, tumblers, a flute, a martini, napkins, ashtray and cigar, score pad, dealer's shoe and button, candelabra |
+| 28 | "Add fire elements to paper and cloth items when beam strikes." | yes: cards, napkins and the score pad burn as they fly; the drapes and the landscape canvas catch fire where the beam crosses |
+| 29 | "Add a few onlookers and attractive hangers on, wives and husbands, perhaps even an attractive escort." | yes: the escort (black sequins), the old man's wife (emerald, pearls), the woman in red's husband, a young man in a white jacket |
+| 30 | "Make flying directions believable and add rebound physicals to wall strikes." | yes: thrown along the beam and out from the table; walls, floor and ceiling bounce; a thud on the wall |
+| 31 | "Make people who hit walls collapse in a heap." | yes: they slide down the wall and slump over |
+| 32 | "Add a moment of pause before the chips are collected." | yes: 14.9-16.2 s, nothing moves but flames and candles |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
@@ -69,3 +80,8 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   thrown out of shot, then a push in on player two pulling in the pot (12.5-18.0).
 - Additions of mine (flagged to Sam): the Queens insert shot; chips as Great/Ultra/Master Balls; a small jolt at the
   impact; the burnt track left by the beam; the closing push in; the Dragonite's smug closed eyes at the end.
+- 19 Oct, Sam's parlour notes: shot 6 rebuilt in source/poker_mon_room.py (a real room in metres, camera high in the
+  near-right corner sweeping along the near wall, people, chairs and table things as thrown bodies with wall and floor
+  bounces, fire, parlour light). The room turned so player one's back is to the portrait wall (+x) and the far wall
+  (+z) is in view: people thrown away from the beam and out from the table hit walls we can see. The dealer moved to
+  the far side; film now 19 s (the pause before the chips).

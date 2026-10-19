@@ -63,10 +63,27 @@ GUARD1 = dict(name='GUARD1', skin=B.DEEP, hw=74, hh=92, jaw='square', hair='bald
 GUARD2 = dict(name='GUARD2', skin=B.PALE, hw=70, hh=94, jaw='square', hair='crop', hair_c=(120, 92, 60),
               outfit='suit', jacket=SECURITY, shirt=SHIRT, tie=(18, 18, 22), trousers=SECURITY, shoulders=166,
               earpiece=True, seed=18)
+# Onlookers and hangers-on (Sam, 19 Oct): wives and husbands, an attractive escort.
+# The escort: player one's companion, long dark waves, a black sequinned gown, red lips; her hand on his shoulder.
+ESCORT = dict(name='ESCORT', skin=B.OLIVE, hw=60, hh=86, jaw='soft', hair='wavy', hair_c=(40, 28, 26), lashes=True,
+              outfit='dress', dress=(26, 24, 30), jacket=(26, 24, 30), trousers=(26, 24, 30), lip_c=(196, 30, 46),
+              earring=True, shoulders=124, sequins=True, mouth='line', seed=19)
+# The old man's wife: silver bob, emerald gown, pearls.
+WIFE = dict(name='WIFE', skin=B.PALE, hw=62, hh=86, jaw='soft', hair='bob', hair_c=(214, 214, 218), lashes=True,
+            outfit='dress', dress=(26, 110, 74), jacket=(26, 110, 74), trousers=(22, 96, 64), lip_c=(176, 70, 80),
+            age=True, pearls=True, shoulders=126, mouth='line', seed=20)
+# The woman in red's husband: a silver fox in a midnight-blue dinner jacket.
+HUSBAND = dict(name='HUSBAND', skin=B.PINK, hw=68, hh=90, jaw='square', hair='side', hair_c=(150, 146, 144),
+               brow_c=(110, 104, 100), outfit='suit', jacket=(30, 36, 70), shirt=SHIRT, trousers=(24, 28, 54),
+               shoulders=152, bow=(20, 20, 26), creases=1, mouth='line', seed=21)
+# A young hanger-on: white dinner jacket, champagne in hand.
+BEAU = dict(name='BEAU', skin=B.BROWN, hw=64, hh=88, jaw='square', hair='crop', hair_c=(30, 24, 22),
+            brow_c=(30, 24, 22), outfit='suit', jacket=(240, 236, 226), shirt=SHIRT, trousers=TUX, shoulders=148,
+            bow=(20, 20, 26), mouth='line', seed=22)
 PEOPLE = {'P1': P1, 'P2': P2, 'LADY': LADY, 'CARDS': CARDS, 'OLD': OLD, 'DEALER': DEALER, 'GUARD1': GUARD1,
-          'GUARD2': GUARD2}
+          'GUARD2': GUARD2, 'ESCORT': ESCORT, 'WIFE': WIFE, 'HUSBAND': HUSBAND, 'BEAU': BEAU}
 HEIGHTS = {'P1': 1.83, 'P2': 1.85, 'LADY': 1.70, 'CARDS': 1.80, 'OLD': 1.74, 'DEALER': 1.78, 'GUARD1': 1.93,
-           'GUARD2': 1.90}
+           'GUARD2': 1.90, 'ESCORT': 1.72, 'WIFE': 1.66, 'HUSBAND': 1.84, 'BEAU': 1.82}
 
 
 def bow_tie(p, x, y, c, k=1.0):
@@ -102,6 +119,14 @@ def dress_up(sp):
                           (sp['shoulders'] * 0.74, 470), (0, 500), (-sp['shoulders'] * 0.74, 470)], 3, 4), wc, INK, 2.4)
             for k in range(4):
                 p.ell(0, 190 + 70 * k, 5, 5, (220, 190, 110), INK, 1.2)
+        if sp.get('sequins'):                          # a scatter of sequin glints over the gown
+            rng = np.random.default_rng(sp.get('seed', 0))
+            for _ in range(26):
+                x, y = rng.uniform(-sp['shoulders'] * 0.8, sp['shoulders'] * 0.8), rng.uniform(70, 480)
+                p.ell(x, y, 3.2, 3.2, (200, 200, 214), None)
+        if sp.get('pearls'):                           # a single strand of pearls at the neckline
+            for a in np.linspace(0.2, math.pi - 0.2, 15):
+                p.ell(44 * math.cos(a), 6 + 30 * math.sin(a), 5, 5, (246, 244, 236), INK, 1.0)
         if sp.get('bow'):
             bow_tie(p, 0, 4, sp['bow'])
         if sp.get('earpiece'):                         # the coiled wire, inked like everything else
@@ -570,6 +595,82 @@ def chip_stack(img, cam, cx, cy, r, n, kind, squash=0.45, seed=0):
     yt = cy - n * th
     place_image(img, cam, chip_face(kind), [(cx - r, yt - r * squash), (cx + r, yt - r * squash),
                                              (cx + r, yt + r * squash), (cx - r, yt + r * squash)])
+
+
+# ------------------------------------------------------------------------------------------------ fire and light
+FLAME_O = (240, 112, 30)
+FLAME_Y = (255, 214, 80)
+FLAME_W = (255, 246, 200)
+
+
+def flame(p, x, y, h, t, seed=0, lean=0.0):
+    """A cartoon flame standing on (x, y), h tall: a lumpy orange tongue round a yellow heart, both licking and
+    flickering (their shape changes every frame), one outline; flat colour (the glow round it is added as light)."""
+    rng = np.random.default_rng(seed)
+    ph = rng.uniform(0, 6.28)
+    k = 1.0 + 0.16 * math.sin(t * 17 + ph) + 0.1 * math.sin(t * 29 + ph * 2)
+    hh = h * k
+    w = h * 0.36
+    sway = (math.sin(t * 9 + ph) * 0.18 + lean) * hh
+
+    def tongue(scale, col, line):
+        pts = []
+        for i, a in enumerate(np.linspace(0, math.pi, 9)):
+            r = 1.0 + 0.12 * math.sin(i * 2.3 + t * 21 + ph)
+            pts.append((x + math.cos(a) * w * scale * r, y - math.sin(a) * w * 0.7 * scale * r))
+        tip = (x + sway * scale, y - hh * scale)
+        mid_l = (x - w * 0.5 * scale + sway * 0.4 * scale, y - hh * 0.55 * scale)
+        mid_r = (x + w * 0.45 * scale + sway * 0.5 * scale, y - hh * 0.6 * scale)
+        poly = [pts[0]] + [mid_r, (tip[0] + w * 0.12 * scale, tip[1] + hh * 0.18 * scale), tip, mid_l] + [pts[-1]]
+        poly += [(x + math.cos(a) * w * scale, y + math.sin(a) * w * 0.35 * scale) for a in np.linspace(math.pi, 2 * math.pi, 7)]
+        p.poly(curve(poly, 2), col, line, 1.6)
+    tongue(1.0, FLAME_O, INK)
+    tongue(0.55, FLAME_Y, None)
+    tongue(0.25, FLAME_W, None)
+
+
+def candle(p, x, y, h, t, seed=0, lit=True, w=None):
+    """A cream candle h tall standing on (x, y), its flame flickering (an occasional big flare)."""
+    w = w or h * 0.16
+    p.poly([(x - w, y), (x + w, y), (x + w, y - h), (x - w, y - h)], (246, 238, 214), INK, 1.6)
+    p.line([(x, y - h), (x, y - h - w * 0.5)], INK, 1.4)
+    if lit:
+        flame(p, x, y - h - w * 0.2, w * 2.6 * flicker(t, seed), t, seed)
+
+
+def flicker(t, seed=0):
+    """A candle's brightness: steady with small wavers and, now and then, a sudden gutter or flare."""
+    rng = np.random.default_rng(seed + 900)
+    ph = rng.uniform(0, 100)
+    v = 1.0 + 0.06 * math.sin(t * 13 + ph) + 0.05 * math.sin(t * 23.7 + ph * 1.3)
+    gust = math.sin(t * 0.9 + ph) * math.sin(t * 2.3 + ph * 0.7)
+    if gust > 0.82:                                  # the occasional flicker
+        v *= 0.65 + 0.7 * abs(math.sin(t * 40 + ph))
+    return v
+
+
+def glass(p, x, y, h, kind='tumbler', drink=(196, 120, 40)):
+    """Drinks on the table: a whisky tumbler, a champagne flute or a martini glass, standing on (x, y)."""
+    gl = (220, 232, 236)
+    if kind == 'tumbler':
+        w = h * 0.45
+        p.poly([(x - w, y - h), (x + w, y - h), (x + w * 0.85, y), (x - w * 0.85, y)], gl, INK, 1.6)
+        p.poly([(x - w * 0.92, y - h * 0.45), (x + w * 0.92, y - h * 0.45), (x + w * 0.85, y - h * 0.06),
+                (x - w * 0.85, y - h * 0.06)], drink, None)
+        p.poly([(x - w * 0.5, y - h * 0.62), (x - w * 0.1, y - h * 0.62), (x - w * 0.1, y - h * 0.35),
+                (x - w * 0.5, y - h * 0.35)], (236, 246, 250), INK, 1.0)          # an ice cube
+    elif kind == 'flute':
+        w = h * 0.14
+        p.line([(x, y - h * 0.38), (x, y)], gl, 3)
+        p.poly([(x - w * 2, y), (x + w * 2, y), (x + w * 1.6, y - h * 0.04), (x - w * 1.6, y - h * 0.04)], gl, INK, 1.2)
+        p.poly([(x - w, y - h), (x + w, y - h), (x + w * 0.7, y - h * 0.4), (x - w * 0.7, y - h * 0.4)], (244, 226, 150),
+               INK, 1.4)
+    else:                                                                       # martini
+        w = h * 0.42
+        p.line([(x, y - h * 0.5), (x, y)], gl, 3)
+        p.poly([(x - w * 0.6, y), (x + w * 0.6, y), (x + w * 0.5, y - h * 0.04), (x - w * 0.5, y - h * 0.04)], gl, INK, 1.2)
+        p.poly([(x - w, y - h), (x + w, y - h), (x, y - h * 0.5)], (230, 236, 210), INK, 1.4)
+        p.ell(x + w * 0.3, y - h * 0.85, h * 0.07, h * 0.07, (110, 140, 50), INK, 1.0)   # the olive
 
 
 def test(out):
