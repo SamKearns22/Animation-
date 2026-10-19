@@ -40,6 +40,9 @@ I don't know how to code. Please:
   you'll fix it, change nothing, and do everything in one round when I say go.
 - **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
   add and where, and wait for my numbers.
+- **Critique-fix rounds (19 Oct):** after each batch of Sam's notes, run up to three rounds on my own (render,
+  critique, fix), sending a sheet or clip with a two-line summary each round. Stop early for any taste call, or for
+  anything that would remove something Sam has seen.
 - **Self-review before every send (18 Oct):** with every sheet, clip or animatic, list in a line or two what was
   checked (which checks ran, what was compared with the references) and anything I'm unsure of, so Sam knows where
   to look. Never send something a check has flagged without saying so.

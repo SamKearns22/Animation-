@@ -54,8 +54,8 @@ DRAPE_D = (88, 14, 30)
 
 # Who sits or stands where: (x, z, facing (dx, dz)). Seated people sit in armchairs (3D, below).
 SEATED = {
-    'P2': (-1.82, 0.0, (1.0, -0.15)),
-    'P1': (1.95, 0.0, (-1.0, 0.0)),
+    'P2': (-1.7, 0.0, (1.0, -0.15)),
+    'P1': (1.72, 0.0, (-1.0, 0.0)),
     'LADY': (-0.8, 1.4, (0.0, -1.0)),
     'CARDS': (0.8, 1.4, (0.0, -1.0)),
     'OLD': (-0.55, -1.4, (0.0, 1.0)),
@@ -70,7 +70,7 @@ STANDING = {
     'GUARD2': (3.7, -3.0, (-1.0, 1.0)),
 }
 DRAGON = (-2.15, 1.0, (1.0, -0.3))
-SCONCES = [('+x', 0.05, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2.4, 1.75), ('+z', 3.7, 1.75)]
+SCONCES = [('+x', -0.55, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2.4, 1.75), ('+z', 3.7, 1.75)]
 # Sam, 19 Oct: people react before they are hit, never standing still. From the moment it fires (after `delay`):
 # seated players rise (`rise` seconds; the old man slowly) and back away or cower; those standing turn and run along
 # `path` (x, z, metres) with their hands up, or crouch where they are; the guard walks at it, palm out. Each is hit
@@ -82,13 +82,12 @@ REACT = {
     'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
     'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (1.05, 2.55)], kind='walk', arms='stop'),
     'CARDS': dict(delay=0.4, rise=0.5, path=[(0.8, 1.4), (1.35, 2.5), (1.6, 3.35)], kind='brisk', crouch_end=True),
-    'OLD': dict(delay=0.5, rise=2.2, path=[(-0.55, -1.4), (-1.6, -1.65), (-2.6, -2.0)], kind='brisk'),
+    'OLD': dict(delay=0.3, rise=0.75, path=[(-0.55, -1.4), (-1.5, -1.6), (-2.6, -1.9)], kind='brisk'),
     'WIFE': dict(delay=0.2, path=[(-1.15, -1.75), (-0.5, -3.0)], kind='run', arms='panic', crouch_end=True),
     'ESCORT': dict(delay=0.12, path=[(2.4, -0.95), (3.3, -1.9), (3.25, -3.2)], kind='run', arms='panic',
                    crouch_end=True),
     'GUARD2': dict(delay=0.3, crouch=True),
 }
-POT = (-1.2, 0.05)                        # the pot, in front of player two
 DRAPES = [('x', 1.2, 2.6), ('z', 0.6, 2.0)]   # cloth: on the +x wall from z 1.2 to 2.6, on the +z wall from x 0.6
 PAINTING = ('z', -1.35, 0.05, 1.45, 2.5)      # the landscape on the far wall: canvas, it burns too
 FIRE_KINDS = {'card', 'napkin', 'pad'}
@@ -188,10 +187,12 @@ class Clock:
     BEAM_END = (16.8, 17.1)       # Sam: the firing extended by a few seconds (two sweeps round the room)
     PAUSE = (17.4, 18.7)          # everything settles; nothing moves but flames, the camera still (Sam)
     PUSH = (18.7, 19.7)           # then the camera moves in on player two
-    REACH = (19.3, 19.75)         # his hands go out to the pot
-    PULL = (19.75, 20.7)          # he draws it in, his hands on it
-    RELEASE = (20.7, 21.1)
-    END = 21.8
+    PUTDOWN = (18.75, 19.15)      # he lays his own cards face down (he has held them since shot 3)
+    REACH = (19.3, 19.75)         # his hands go out to the far side of the pot
+    TOPPLE = (19.75, 20.0)        # they press in: the stacks topple into a loose pile (chips are separate pieces)
+    PULL = (20.0, 20.85)          # he drags the pile to him, his hands on it the whole way
+    RELEASE = (20.85, 21.25)
+    END = 21.9
     CHARGE0 = 8.9
 
 
@@ -203,10 +204,10 @@ def sweep_cam(t):
     pos = (3.3 - 3.1 * a, 3.0 - 0.05 * a, -3.55 - 0.2 * a)
     look = (-0.15 - 0.45 * a, 1.2, 0.3 + 0.35 * a)
     b = ease((t - Clock.PUSH[0]) / (Clock.PUSH[1] - Clock.PUSH[0]))
-    pos = tuple(p0 + (p1 - p0) * b for p0, p1 in zip(pos, (0.1, 2.45, -1.95)))
-    look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-1.45, 1.05, 0.15)))
+    pos = tuple(p0 + (p1 - p0) * b for p0, p1 in zip(pos, (-0.45, 1.75, -1.15)))
+    look = tuple(l0 + (l1 - l0) * b for l0, l1 in zip(look, (-1.45, 0.98, 0.05)))
     k = max(0.0, 1 - (t - Clock.IMPACT) / 0.45) if t >= Clock.IMPACT else 0.0
-    focal = 1650 - 330 * a + 500 * b                     # widening as it sweeps (the whole far wall in view),
+    focal = 1650 - 330 * a + 300 * b                     # widening as it sweeps (the whole far wall in view),
     return Cam3(pos, look, focal=focal,                   # tighter again for the push in
                 shake=(14 * k * math.sin(t * 90), 10 * k * math.cos(t * 77)))
 
@@ -383,6 +384,7 @@ def decor(img, cam, t, ign):
     # the sideboard on the -x wall, behind player two: dark wood, a decanter, a candelabra
     sx0, sx1 = -RX, -RX + 0.5
     box(img, cam, p, (sx0, 0.0, -0.4), (sx1, 0.9, 1.4), WOOD, WOOD_D)
+    sideboard_props(img, cam, t)
     # the bust on its plinth in the far corner
     box(img, cam, p, (RX - 0.75, 0.0, RZ - 0.75), (RX - 0.25, 1.05, RZ - 0.25), (220, 214, 204), (190, 184, 176))
     (X, Y), k = cam.project((RX - 0.5, 1.05, RZ - 0.5))
@@ -431,22 +433,22 @@ def oval(y, r=1.0, n=96):
 
 
 def table(img, cam):
+    """The oval table: pedestal, the rim's side, the leather rail, the felt, the yellow line; clipped at the near
+    plane, so a camera can sit at the table itself (shots 1-5 are taken from the players' seats)."""
     p = B.Pen(img, FLAT)
     top, low = oval(TABLE_H), oval(TABLE_H - 0.12)
-    tp = [cam.project(q)[0] for q in top]
-    lp = [cam.project(q)[0] for q in low]
-    (bx, by), bk = cam.project((0, 0, 0))
-    p.poly([cam.project(q)[0] for q in oval(0.0, 0.35)], WOOD_D, INK, 2.0)                # the pedestal's foot
-    p.poly([cam.project((-0.18, 0, 0))[0], cam.project((0.18, 0, 0))[0], cam.project((0.18, TABLE_H - 0.1, 0))[0],
-            cam.project((-0.18, TABLE_H - 0.1, 0))[0]], WOOD, INK, 2.0)
-    for i in range(len(tp)):
-        j = (i + 1) % len(tp)
-        p.poly([tp[i], tp[j], lp[j], lp[i]], RAIL, None)
-    p.poly(lp, None, INK, 2.2)
-    p.poly(tp, RAIL, INK, 2.6)
-    p.poly([cam.project(q)[0] for q in oval(TABLE_H + 0.005, 0.86)], FELT, INK, 2.2)
-    ring = [cam.project(q)[0] for q in oval(TABLE_H + 0.006, 0.64)]
-    p.line(ring + [ring[0]], LINE_Y, 3)
+    cam.poly(p, oval(0.0, 0.35), WOOD_D, INK, 2.0)                                     # the pedestal's foot
+    cam.poly(p, [(-0.18, 0, 0), (0.18, 0, 0), (0.18, TABLE_H - 0.1, 0), (-0.18, TABLE_H - 0.1, 0)], WOOD, INK, 2.0)
+    for i in range(len(top)):
+        j = (i + 1) % len(top)
+        mid = tuple((top[i][k] + top[j][k]) / 2 for k in range(3))
+        if _dot(_sub(cam.pos, mid), (mid[0], 0.0, mid[2])) > 0:                       # the side facing us
+            cam.poly(p, [top[i], top[j], low[j], low[i]], RAIL, None)
+            cam.line(p, [low[i], low[j]], INK, 2.2)
+    cam.poly(p, top, RAIL, INK, 2.6)
+    cam.poly(p, oval(TABLE_H + 0.005, 0.86), FELT, INK, 2.2)
+    ring = oval(TABLE_H + 0.006, 0.64)
+    cam.line(p, ring + [ring[0]], LINE_Y, 3)
 
 
 # ------------------------------------------------------------------------------------------------ armchairs
@@ -510,43 +512,115 @@ def draw_faces(img, cam, faces, near_than=None, far_than=None):
 
 # ------------------------------------------------------------------------------------------------ table things
 def _things():
-    """Everything on the table before the blast: (kind, (x, z), extra). Each player's chips, cards and drink; the
-    old man's ashtray and cigar and his score pad; the dealer's shoe and button; napkins; the candelabra; the pot."""
+    """The table plan (Sam, 19 Oct: a really populated table, the same in every shot; everything on it flies): one
+    list of (kind, (x, z), extra) in metres from the table's centre, drawn by every camera. A high-stakes game:
+    each player's chip stacks (tall), two cards face down, a drink and a napkin; player one's four Queens (laid in
+    shot 1) and his whisky; the old man's ashtray, cigar box and score pad; the dealer's shoe, discard pile, button
+    and chip tray full of chips; a candelabra and a champagne bucket in the middle; player two's pot at his end."""
     T = []
     rng = np.random.default_rng(5)
 
     def chips(x, z, n, kind):
         for i in range(n):
-            T.append(('chip', (x + rng.uniform(-0.006, 0.006), z + rng.uniform(-0.006, 0.006)), dict(kind=kind, level=i)))
-    for i, suit in enumerate('SCDH'):                                   # player one's four Queens, face up
-        T.append(('card', (1.32, -0.17 + i * 0.11), dict(face=('Q', suit), ang=80 + (i - 1.5) * 6)))
-    chips(1.25, 0.5, 7, 'ultra'), chips(1.3, 0.62, 5, 'poke')
-    T.append(('tumbler', (1.42, -0.55), dict(drink=(196, 120, 40))))
-    T.append(('napkin', (1.2, -0.42), {}))
-    for who, (x, z), drink in (('LADY', (-0.8, 0.95), 'flute'), ('CARDS', (0.8, 0.95), 'martini'),
-                               ('OLD', (-0.55, -0.95), 'tumbler')):
+            T.append(('chip', (x + rng.uniform(-0.002, 0.002), z + rng.uniform(-0.002, 0.002)), dict(kind=kind, level=i)))
+
+    def stacks(x, z, plan, sg):                          # a row of stacks across the player's place
+        for k, (n, kind) in enumerate(plan):
+            chips(x + (k % 2) * 0.045 * sg, z + (k - len(plan) / 2) * 0.045, n, kind)
+    for i, suit in enumerate('SCDH'):                    # player one's Queens: laid face up in shot 1 (shown from then)
+        T.append(('card', (1.29, -0.16 + i * 0.105), dict(face=('Q', suit), ang=90 + (i - 1.5) * 5, laid=i)))
+    stacks(1.3, 0.36, [(18, 'ultra'), (15, 'poke'), (12, 'great'), (8, 'master')], -1)
+    T.append(('tumbler', (1.3, -0.42), dict(drink=(196, 120, 40))))
+    T.append(('napkin', (1.2, -0.56), {}))
+    for who, (x, z), drink in (('LADY', (-0.8, 0.98), 'flute'), ('CARDS', (0.8, 0.98), 'martini'),
+                               ('OLD', (-0.55, -0.98), 'tumbler')):
         sg = 1 if z > 0 else -1
         for k in range(2):
-            T.append(('card', (x - 0.05 + k * 0.06, z), dict(face=None, ang=rng.uniform(-14, 14))))
-        chips(x - 0.3, z - sg * 0.06, 6, 'great'), chips(x - 0.38, z + sg * 0.02, 4, 'poke')
+            T.append(('card', (x - 0.04 + k * 0.05, z), dict(face=None, ang=rng.uniform(-14, 14))))
+        stacks(x - 0.3, z - sg * 0.05, [(14, 'great'), (12, 'poke'), (10, 'ultra')], sg)
         T.append((drink, (x + 0.3, z - sg * 0.1), {}))
-        T.append(('napkin', (x + 0.18, z + sg * 0.08), {}))
-    T.append(('ashtray', (-0.2, -0.92), {}))
-    T.append(('pad', (-0.92, -0.62), {}))
-    T.append(('shoe', (0.0, 0.78), {}))
-    T.append(('button', (0.35, 0.62), {}))
-    T.append(('candelabra', (0.25, 0.0), {}))
-    for k in range(3):                                                  # player two's own hand, face down
-        T.append(('card', (-1.33, -0.32 + k * 0.05), dict(face=None, ang=90 + k * 8)))
-    T.append(('tumbler', (-1.3, -0.5), dict(drink=(150, 70, 30))))
+        T.append(('napkin', (x + 0.2, z + sg * 0.06), {}))
+    T.append(('ashtray', (-0.2, -0.95), {}))
+    T.append(('cigarbox', (-0.95, -0.72), {}))
+    T.append(('pad', (-0.85, -0.55), {}))
+    T.append(('shoe', (0.32, 0.86), {}))
+    for k in range(6):                                   # the discard pile
+        T.append(('card', (-0.32 + rng.uniform(-0.01, 0.01), 0.86 + rng.uniform(-0.01, 0.01)), dict(face=None, ang=rng.uniform(-8, 8))))
+    T.append(('button', (0.85, 0.55), {}))
+    T.append(('tray', (0.0, 0.85), {}))                  # the dealer's chip tray, its chips in rows
+    for row, kind in enumerate(('poke', 'great', 'ultra', 'master', 'poke')):
+        chips(-0.12 + row * 0.06, 0.85, 14, kind)
+    T.append(('candelabra', (0.05, 0.5), {}))           # off the line between the two players
+    T.append(('bucket', (-0.3, -0.55), {}))              # champagne on ice
+    for cx, cz, n in ((0.35, 0.12, 22), (0.7, -0.22, 18), (0.95, 0.22, 16), (-0.05, -0.12, 20)):   # the bets,
+        for k in range(n):                               # pushed into the middle: loose piles, chips at all angles
+            r, a = math.sqrt(rng.uniform(0, 1)) * 0.09, rng.uniform(0, 2 * math.pi)
+            T.append(('chip', (cx + r * math.cos(a), cz + r * 1.3 * math.sin(a)),
+                      dict(kind=['poke', 'great', 'ultra', 'master'][k % 4], level=int((0.09 - r) / 0.03), loose=True,
+                           ang=rng.uniform(0, 180))))
+    stacks(-1.3, 0.38, [(16, 'ultra'), (14, 'poke'), (12, 'great')], 1)   # player two's own chips
+    T.append(('tumbler', (-1.32, -0.45), dict(drink=(150, 70, 30))))
     return T
 
 
 THINGS = _things()
-POT_STACKS = [(dx, dz, n, kind) for dx, dz, n, kind in
-              ((-0.08, 0.0, 9, 'ultra'), (0.0, 0.05, 12, 'poke'), (0.08, 0.0, 7, 'great'), (-0.04, -0.08, 5, 'master'),
-               (0.05, -0.08, 10, 'poke'), (0.12, 0.08, 8, 'ultra'), (-0.12, 0.08, 6, 'great'), (0.0, 0.14, 11, 'poke'),
-               (0.13, -0.05, 9, 'poke'), (-0.11, -0.03, 7, 'great'), (0.03, -0.15, 6, 'ultra'), (-0.06, 0.15, 4, 'master'))]
+POT = (-1.29, -0.02)                       # the pot's centre, at player two's end, within his reach
+GRIP_DZ = 0.1                              # his hands either side of the pile's far edge
+
+
+def _pot_chips():
+    """The pot as separate chips: eight stacks, and where each chip lies in the loose pile once they topple (a low
+    mound, wider than it is deep, chips overlapping, each at its own angle)."""
+    rng = np.random.default_rng(11)
+    stacks = [(-0.045, -0.06, 11, 'ultra'), (0.0, -0.02, 14, 'poke'), (0.045, -0.06, 9, 'great'), (-0.04, 0.03, 8, 'master'),
+              (0.04, 0.03, 12, 'poke'), (0.0, 0.08, 10, 'great'), (-0.045, 0.1, 7, 'ultra'), (0.05, 0.11, 9, 'poke')]
+    out = []
+    for dx, dz, n, kind in stacks:
+        for lv in range(n):
+            r, a = math.sqrt(rng.uniform(0, 1)), rng.uniform(0, 2 * math.pi)
+            pile = (dx * 0.5 + 0.07 * r * math.cos(a), dz * 0.6 + 0.1 * r * math.sin(a))
+            out.append(dict(stack=(dx, dz), level=lv, kind=kind, pile=pile, h=rng.uniform(0.0, 0.012) * (1 - r),
+                            ang=rng.uniform(0, 180), lag=rng.uniform(0.0, 0.25), hop=rng.uniform(0.01, 0.03)))
+    return out
+
+
+POT_CHIPS = _pot_chips()
+
+
+def grip(t):
+    """Where the far edge of the pot is, the point his hands hold: still until the pull, then drawn to him."""
+    x0 = POT[0] + 0.08
+    x1 = x0 - 0.13
+    c = Clock
+    if t < c.PULL[0]:
+        return (x0, POT[1])
+    u = ease((t - c.PULL[0]) / (c.PULL[1] - c.PULL[0]))
+    return (x0 + (x1 - x0) * u, POT[1])
+
+
+def pot_chip_positions(t):
+    """Every pot chip's (x, y, z, angle, flat): stacked until his hands press in; toppling into the pile; the pile
+    then moves exactly as far as his hands have moved (the back chips lagging a little and spreading)."""
+    c = Clock
+    g0 = grip(c.PULL[0])
+    g = grip(t)
+    moved = (g[0] - g0[0], g[1] - g0[1])
+    out = []
+    for ch in POT_CHIPS:
+        sx, sz = POT[0] + ch['stack'][0], POT[1] + ch['stack'][1]
+        px, pz = POT[0] + ch['pile'][0], POT[1] + ch['pile'][1]
+        if t < c.TOPPLE[0]:
+            out.append((sx, TABLE_H + 0.0033 * ch['level'], sz, 0.0, False))
+            continue
+        u = ease((t - c.TOPPLE[0] - 0.012 * (14 - ch['level'])) / (c.TOPPLE[1] - c.TOPPLE[0]))
+        x = sx + (px - sx) * u
+        z = sz + (pz - sz) * u
+        y = TABLE_H + 0.0033 * ch['level'] * (1 - u) + ch['h'] * u + ch['hop'] * math.sin(math.pi * u)
+        k = 1.0 - ch['lag'] * (1 - ease((t - c.PULL[0]) / (c.PULL[1] - c.PULL[0] + 0.3))) if t >= c.PULL[0] else 1.0
+        out.append((x + moved[0] * k, y, z + moved[1] * k, ch['ang'] * u, u > 0.5))
+    return out
+
+
 _CACHE = {}
 
 
@@ -556,8 +630,10 @@ def blast_hits(dfire):
     if 'hits' in _CACHE:
         return _CACHE['hits']
     pts = {}
+    table_pts = {}
     for i, (kind, (x, z), ex) in enumerate(THINGS):
-        pts[('T', i)] = ((x, TABLE_H + 0.03, z), 0.75)
+        if x > -1.05:                                    # everything but player two's end (never at its trainer)
+            table_pts[('T', i)] = (x, z)
     for who, (x, z, f) in SEATED.items():
         if who != 'P2':
             pts[('C', who)] = ((x, 0.6, z), 0.75)
@@ -569,6 +645,16 @@ def blast_hits(dfire):
         end, length = beam_end(m, d)
         sweep = beam_angle(t + 0.01) - beam_angle(t)
         if t >= Clock.IMPACT - 0.02:
+            hd = _norm((d[0], 0.0, d[2]))                # the blast sweeps the table under the beam's track
+            for key, (x, z) in table_pts.items():
+                if key in out:
+                    continue
+                v = (x - m[0], 0.0, z - m[2])
+                along = _dot(v, hd)
+                near_p1 = t < Clock.IMPACT + 0.25 and math.hypot(x - SEATED['P1'][0], z - SEATED['P1'][1]) < 1.0 + 4 * (t - Clock.IMPACT)
+                if (along > 0.5 and math.hypot(v[0] - hd[0] * along, v[2] - hd[2] * along) < 0.7) or near_p1:
+                    out[key] = (t, m, 1 if sweep >= 0 else -1)   # under the beam's track, or the shockwave of the
+                                                                  # first hit spreading from player one
             for key, (p, r) in pts.items():
                 if key not in out:
                     dd, s = dist_to_ray(p, m, d, length)
@@ -608,7 +694,7 @@ def thing_body(i, dfire):
     if hit:
         rng = np.random.default_rng(100 + i)
         y = TABLE_H + 0.01 + 0.004 * ex.get('level', 0)
-        heavy = kind in ('shoe', 'candelabra', 'ashtray', 'tumbler')
+        heavy = kind in ('shoe', 'candelabra', 'ashtray', 'tumbler', 'tray', 'bucket', 'cigarbox')
         b = launch(key, (x, y, z), hit, rng.uniform(2.5, 5.0) if heavy else rng.uniform(3.5, 7.5),
                    rng.uniform(1.5, 4.5), rng.uniform(-900, 900), 0.03, 0.35 if not heavy else 0.2, seed=i)
     _CACHE[key] = b
@@ -745,9 +831,8 @@ def draw_thing(img, cam, kind, ex, pos, ang, t, burning, seed, flying):
     (X, Y), k = cam.project(pos)
     tilt = max(0.3, min(0.95, _dot(cam.f, (0, -1, 0)) + 0.15))
     if kind == 'chip':
-        w = 0.039 * k
-        sq = tilt if not flying else 0.3 + 0.7 * abs(math.cos(math.radians(ang * 0.7)))
-        C.place_image(img, FLAT, C.chip_face(ex['kind']), C.card_quad(X, Y, w, ang, sq * C.CW / C.CH))
+        sq = tilt if not flying else 0.15 + 0.85 * abs(math.cos(math.radians(ang * 0.7)))
+        draw_chip(img, cam, pos, ang, ex['kind'], sq)
     elif kind == 'card':
         src = C.card_face(*ex['face']) if ex.get('face') else C.card_back()
         sq = tilt if not flying else 0.25 + 0.75 * abs(math.cos(math.radians(ang * 0.6)))
@@ -781,6 +866,23 @@ def draw_thing(img, cam, kind, ex, pos, ang, t, burning, seed, flying):
         q = C.card_quad(X, Y - 0.05 * k, 0.12 * k, ang, 1.3)
         p.poly(q, (40, 30, 26), INK, 1.6)
         p.poly(C.card_quad(X, Y - 0.08 * k, 0.07 * k, ang, 0.9), C.YELLOW, INK, 1.0)
+    elif kind == 'cigarbox':                             # a cedar cigar box, lid open, cigars in a row
+        q = C.card_quad(X, Y, 0.22 * k, ang, tilt * 0.7)
+        p.poly(q, (150, 90, 50), INK, 1.4)
+        for i in range(5):
+            u = 0.15 + 0.17 * i
+            p.line([(q[0][0] + (q[1][0] - q[0][0]) * u, q[0][1] + (q[1][1] - q[0][1]) * u + 2),
+                    (q[3][0] + (q[2][0] - q[3][0]) * u, q[3][1] + (q[2][1] - q[3][1]) * u - 2)], (110, 70, 40), max(2, 0.018 * k))
+    elif kind == 'tray':                                 # the dealer's chip tray (its chips are separate things)
+        p.poly(C.card_quad(X, Y, 0.38 * k, ang, tilt * 0.4), (40, 30, 26), INK, 1.4)
+    elif kind == 'bucket':                               # champagne on ice in a silver bucket
+        h = 0.22 * k
+        p.poly([(X - 0.1 * k, Y - h), (X + 0.1 * k, Y - h), (X + 0.08 * k, Y), (X - 0.08 * k, Y)], (196, 200, 210), INK, 1.6)
+        p.ell(X, Y - h, 0.1 * k, 0.03 * k, (220, 230, 236), INK, 1.2)
+        p.line([(X + 0.02 * k, Y - h), (X + 0.06 * k, Y - h - 0.2 * k)], (30, 70, 40), max(3, 0.05 * k))      # the bottle
+        p.line([(X + 0.06 * k, Y - h - 0.2 * k), (X + 0.07 * k, Y - h - 0.27 * k)], C.BRASS, max(2, 0.025 * k))
+        for sg in (-1, 1):
+            p.ell(X + sg * 0.1 * k, Y - h * 0.7, 0.015 * k, 0.02 * k, None, INK, 1.2)
     elif kind == 'button':
         p.ell(X, Y, 0.03 * k, 0.03 * k * tilt, (250, 250, 246), INK, 1.4)
     elif kind == 'candelabra':
@@ -798,6 +900,7 @@ def draw_thing(img, cam, kind, ex, pos, ang, t, burning, seed, flying):
         FIRES.append((X, Y - 0.02 * k, 0.09 * k, seed))
 
 
+FILM = [None]        # the film module (for its clock), set by render
 FIRES = []           # flames this frame (drawn after the light, self-lit): (X, Y, height, seed)
 LIGHTS = []          # lights this frame: (X, Y, radius px, strength, colour)
 
@@ -808,9 +911,12 @@ def things(img, cam, t, dfire, on_table):
     for i, (kind, (x, z), ex) in enumerate(THINGS):
         b = thing_body(i, dfire)
         y = TABLE_H + 0.01 + 0.004 * ex.get('level', 0)
+        if ex.get('laid') is not None and t < queen_shown(ex['laid'], FILM[0]):
+            continue                                     # player one has not laid it yet
         if b is None or t < b.t0:
-            if on_table:
-                out.append((cam.depth((x, y, z)), i, (x, y, z), 0.0, False, False))
+            if on_table and cam.depth((x, y, z)) > 0.6:
+                out.append((cam.depth((x, y, z)), i, (x, y, z), ex.get('ang', 0.0) if kind == 'chip' else 0.0,
+                            False, False))
             continue
         if on_table:
             continue
@@ -835,38 +941,80 @@ def draw_things(img, cam, t, lst):
 
 
 def pot(img, cam, t, film):
-    """The pot in front of player two: still through the blast; after the pause, his hands draw it in."""
-    u = ease((t - Clock.PULL[0]) / (Clock.PULL[1] - Clock.PULL[0])) if t >= Clock.PULL[0] else 0.0
-    px = POT[0] + (-1.4 - POT[0]) * u
-    pz = POT[1] + (0.0 - POT[1]) * u
-    for dx, dz, n, kind in POT_STACKS:
-        (X, Y), k = cam.project((px + dx, TABLE_H, pz + dz))
-        C.chip_stack(img, FLAT, X, Y, 0.0195 * k, n, kind, squash=max(0.35, min(0.8, _dot(cam.f, (0, -1, 0)) + 0.2)),
-                     seed=n)
-    return (px, pz)
+    """The pot: its chips stacked, toppled or in the pile, drawn far to near."""
+    tilt = max(0.35, min(0.85, _dot(cam.f, (0, -1, 0)) + 0.2))
+    chips = pot_chip_positions(t)
+    if t < Clock.TOPPLE[0]:                              # still stacked: draw each stack as a stack
+        seen = {}
+        for ch in POT_CHIPS:
+            seen.setdefault(ch['stack'], [0, ch['kind']])[0] += 1
+        for (dx, dz), (n, kind) in sorted(seen.items(), key=lambda kv: -cam.depth((POT[0] + kv[0][0], 0, POT[1] + kv[0][1]))):
+            (X, Y), k = cam.project((POT[0] + dx, TABLE_H, POT[1] + dz))
+            C.chip_stack(img, FLAT, X, Y, 0.0195 * k, n, kind, squash=tilt, seed=n)
+        return
+    order = sorted(range(len(chips)), key=lambda i: (-cam.depth(chips[i][:3]), chips[i][1]))
+    for i in order:
+        x, y, z, ang, flat = chips[i]
+        draw_chip(img, cam, (x, y, z), ang, POT_CHIPS[i]['kind'], tilt if flat else 0.5)
+
+
+def card3(img, cam, src, x, z, w, ang, y=TABLE_H + 0.006):
+    """A card lying flat on the table at (x, z), w wide, turned ang degrees."""
+    h = w * C.CH / C.CW
+    a = math.radians(ang)
+    q = []
+    for dx, dz in ((-w / 2, h / 2), (w / 2, h / 2), (w / 2, -h / 2), (-w / 2, -h / 2)):
+        q.append((x + dx * math.cos(a) - dz * math.sin(a), y, z + dx * math.sin(a) + dz * math.cos(a)))
+    if all(cam.depth(c) > 0.3 for c in q):
+        C.place_image(img, FLAT, src, [cam.project(pt)[0] for pt in q])
+
+
+def draw_chip(img, cam, pos, ang, kind, sq):
+    """One chip (a Poke Ball chip) lying at pos: its face as a flattened disc, its rim marks and band."""
+    p = B.Pen(img, FLAT)
+    (X, Y), k = cam.project(pos)
+    r = 0.0195 * k
+    top, stripes = C.CHIPS[kind]
+    p.ell(X, Y + r * sq * 0.18, r, r * sq, B.dk(top, 0.7), INK, 1.0)               # its edge
+    p.ell(X, Y, r, r * sq, top, INK, 1.0)
+    if r > 3:
+        for a in range(6):
+            aa = math.radians(ang) + a * math.pi / 3
+            p.ell(X + 0.82 * r * math.cos(aa), Y + 0.82 * r * sq * math.sin(aa), r * 0.13, r * 0.13 * sq, (250, 250, 248), None)
+        p.ell(X, Y, r * 0.5, r * 0.5 * sq, (250, 250, 248), INK, 0.8)
+        p.poly([(X - r * 0.5, Y - 0.5), (X + r * 0.5, Y - 0.5), (X + r * 0.5, Y + 0.5), (X - r * 0.5, Y + 0.5)], INK, None)
 
 
 # ------------------------------------------------------------------------------------------------ people
 def screen_hand_target(j, side, yaw, mirror, X, Yneck, s, target, zb):
-    """The body-frame point (torso units) whose drawing lands on the frame point `target`, `zb` in front: so a hand
-    really touches what it holds on screen (views.project inverted for this view)."""
+    """The body-frame point (torso units) whose drawing lands exactly on the frame point `target`, so a hand really
+    touches what it holds on screen (views.project inverted for this view). Along the line of sight one depth is
+    free: `zb` (in front of the body) is used if the arm reaches it, otherwise the depth nearest the shoulder. If
+    even that is out of reach the hand stops at the end of the arm and `clamped` is set (a contact fault)."""
     a = math.radians(V.snap(yaw)[0])
     flip = -1 if mirror else 1
     px = (target[0] - X) / (s * flip)
     py = (target[1] - Yneck) / s
     ca, sa = math.cos(a), math.sin(a)
-    if abs(ca) > 0.3:
-        x, z = (px - zb * sa) / ca, zb
-    else:
-        x = j['sh' + side][0]
-        z = (px - x * ca) / sa
-    y = py - V.ELEV * (-x * sa + z * ca)
-    tgt = (x, y, z)
     sh = j['sh' + side]
-    d = math.sqrt(sum((u - v) ** 2 for u, v in zip(tgt, sh)))
     lim = (F.UPPER + F.FORE) * 0.97 + F.HAND['palm']
+
+    def point(z):
+        if abs(ca) > 0.3:
+            x = (px - z * sa) / ca
+        else:
+            x, z = sh[0], (px - sh[0] * ca) / sa
+        return (x, py - V.ELEV * (-x * sa + z * ca), z)
+
+    def dist(q):
+        return math.sqrt(sum((u - v) ** 2 for u, v in zip(q, sh)))
+    tgt = point(zb)
+    if dist(tgt) > lim:
+        tgt = min((point(z) for z in np.linspace(20.0, 520.0, 101)), key=dist)
+    d = dist(tgt)
+    screen_hand_target.clamped = d > lim
     if d > lim:                                          # out of reach: as far as the arm goes, never stretched
-        tgt = tuple(v + (u - v) * lim / d for u, v in zip(tgt, sh))
+        tgt = tuple(v + (u - v) * lim / d for u, v in zip(tgt, sh))   # (and the caller records a contact fault)
     return tgt
 
 
@@ -970,7 +1118,7 @@ def people_pose(film, who, t, sp):
         sp.update(film.p2_face(t))
         return None
     if who == 'P1':
-        sp.update(film.p1_face(film.SHOTS[4][2] - 0.01))
+        sp.update(film.p1_face(min(t, film.SHOTS[4][2] - 0.01)))
     else:                                                # everyone stares at the Dragonite as it charges, then
         sp.update(brows='alarm', mouth='agape' if t < Clock.FIRE else 'shout', look=-0.6, lid=0)   # cries out
     return None
@@ -1009,6 +1157,8 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
     mirror = V.snap(yaw)[1]
     if who == 'P2':
         j = p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror)
+    if who == 'P1' and tp < Clock.FIRE:
+        j = p1_lay_pose(img, cam, film, sp, tp, X, Y, s, yaw, mirror)
     if hand_on and who == 'ESCORT' and 'P1' in DRAWN and tp < Clock.FIRE + REACT['ESCORT']['delay']:
         X1, Y1, s1, yaw1, m1, j1, j21 = DRAWN['P1']     # her hand on player one's shoulder: real contact
         sh = j21['shL'] if not m1 else j21['shR']
@@ -1019,31 +1169,91 @@ def draw_person(img, cam, film, who, t, t_pose=None, hand_on=None):
     return X, Y, s
 
 
+CONTACT_FAULTS = []   # (t, who, what): a hand that could not reach what it should be touching (a check reads it)
+
+
 def p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
-    """Player two: still through the blast and the pause; then his hands go out to the pot, rest on its far side and
-    draw it in (the pot moves with them), then come back to rest."""
-    j = seated_joints(film, sp)
+    """Player two: holding his cards (since shot 3) through the blast and the pause; lays them face down; his hands
+    go out to the far side of the pot, press in (the stacks topple), drag the pile to him (it moves only with his
+    hands: the same grip point drives both), then let go."""
     c = Clock
-    if t < c.REACH[0]:
-        return j
-    if t < c.PULL[0]:
-        u = ease((t - c.REACH[0]) / (c.REACH[1] - c.REACH[0]))
-        pot_at = POT
-    elif t < c.PULL[1]:
-        u = 1.0
-        w = ease((t - c.PULL[0]) / (c.PULL[1] - c.PULL[0]))
-        pot_at = (POT[0] + (-1.4 - POT[0]) * w, POT[1] * (1 - w))
-    else:
-        u = 1 - ease((t - c.RELEASE[0]) / (c.RELEASE[1] - c.RELEASE[0]))
-        pot_at = (-1.4, 0.0)
-    rest = {sd: j['wr' + sd] for sd in 'LR'}
-    for sd, dz in (('L', -0.14), ('R', 0.14)):
-        far = (pot_at[0] + 0.15, TABLE_H + 0.05, pot_at[1] + dz)          # the far side of the pot
-        tgt_screen = cam.project(far)[0]
-        zb = max(120.0, (far[0] - SEATED['P2'][0]) / M_UNIT * 0.9)
+    j = seated_joints(film, sp, 'fan')
+    fan_held = t < (c.PUTDOWN[0] + c.PUTDOWN[1]) / 2
+
+    def to(world, sd):
+        tgt_screen = cam.project(world)[0]
+        zb = max(120.0, (world[0] - SEATED['P2'][0]) / M_UNIT)
         tgt = screen_hand_target(j, sd, yaw, mirror, X, Y, s, tgt_screen, zb)
-        cur = tuple(r + (g - r) * u for r, g in zip(rest[sd], tgt))
-        V.arm_to(j, sd, cur, 'down', 'palm')
+        if getattr(screen_hand_target, 'clamped', False):
+            CONTACT_FAULTS.append((t, 'P2', f'{sd} hand cannot reach {world}'))
+        return tgt
+    rest = {sd: j['wr' + sd] for sd in 'LR'}
+    if c.PUTDOWN[0] <= t < c.PUTDOWN[1] + 0.15:                 # laying his cards face down, both hands on them
+        u = ease((t - c.PUTDOWN[0]) / (c.PUTDOWN[1] - c.PUTDOWN[0]))
+        for sd, dz in (('L', -0.05), ('R', 0.05)):
+            tgt = to((P2_CARDS[0], TABLE_H + 0.02, P2_CARDS[1] + dz), sd)
+            V.arm_to(j, sd, tuple(r + (g - r) * u for r, g in zip(rest[sd], tgt)), 'down', 'palm')
+    elif t >= c.REACH[0]:
+        if t < c.REACH[1]:
+            u = ease((t - c.REACH[0]) / (c.REACH[1] - c.REACH[0]))
+        elif t < c.RELEASE[0]:
+            u = 1.0
+        else:
+            u = 1 - ease((t - c.RELEASE[0]) / (c.RELEASE[1] - c.RELEASE[0]))
+        gx, gz = grip(min(t, c.PULL[1]))
+        press = 0.02 * ease((t - c.TOPPLE[0]) / (c.TOPPLE[1] - c.TOPPLE[0])) if t >= c.TOPPLE[0] else 0.0
+        base = seated_joints(film, sp)
+        for sd, dz in (('L', -GRIP_DZ), ('R', GRIP_DZ)):
+            tgt = to((gx - press, TABLE_H + 0.03, gz + dz * (1 - press * 4)), sd)
+            V.arm_to(j, sd, tuple(r + (g - r) * u for r, g in zip(base['wr' + sd], tgt)), 'down', 'palm')
+    ARMS_UP[0] = t < Clock.PUTDOWN[0]
+    if fan_held:
+        j['props'].append(film.held_fan(img, 5, lambda j2: ((j2['wrL'][0] + j2['wrR'][0]) / 2,
+                                                         (j2['wrL'][1] + j2['wrR'][1]) / 2 - 6), film.CARD_U, 11))
+    return j
+
+
+P2_CARDS = (-1.4, 0.24)                    # where player two lays his own hand, face down
+ARMS_UP = [False]
+
+
+def queen_shown(i, film):
+    """When player one's palm passes over the i-th Queen's place, laying it (shot 1)."""
+    a, b = film.LAY
+    return a + (0.4 + 0.42 * i / 3) * (b - a)
+
+
+def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
+    """Player one lays his hand: the fan held at his chest; his palm comes down on the felt where the first Queen
+    goes (contact), slides along as the four are spread under it, then rests beside them."""
+    j = seated_joints(film, sp, 'rest')
+    a, b = film.LAY
+    u = (t - a) / (b - a)
+    zq = [THINGS[i][1][1] for i in range(len(THINGS)) if THINGS[i][2].get('laid') is not None]
+    xq = THINGS[0][1][0]
+    chest = (40.0, 190.0, 170.0)
+
+    def to(world):
+        zb = (SEATED['P1'][0] - world[0]) / M_UNIT
+        tg = screen_hand_target(j, 'R', yaw, mirror, X, Y, s, cam.project(world)[0], zb)
+        if getattr(screen_hand_target, 'clamped', False):
+            CONTACT_FAULTS.append((t, 'P1', f'hand cannot reach {world}'))
+        return tg
+    if u < 0.4:
+        k = ease(max(0.0, u) / 0.4)
+        tgt = to((xq, TABLE_H + 0.02, zq[0]))
+        pos = tuple(c + (g - c) * k for c, g in zip(chest, tgt))
+        pos = (pos[0], pos[1] - 60 * math.sin(math.pi * k), pos[2])
+        j['props'].append(film.held_fan(img, 4, lambda j2: (j2['wrR'][0] - 4, j2['wrR'][1] - 10), film.CARD_U, 12))
+    elif u < 0.82:
+        w = ease((u - 0.4) / 0.42)
+        pos = to((xq, TABLE_H + 0.02, zq[0] + (zq[-1] - zq[0]) * w))
+    else:
+        k = ease(min(1.0, (u - 0.82) / 0.18))
+        end = to((xq, TABLE_H + 0.02, zq[-1]))
+        rest = j['wrR']
+        pos = tuple(e + (r - e) * k for e, r in zip(end, rest))
+    V.arm_to(j, 'R', pos, 'down', 'palm')
     return j
 
 
@@ -1133,7 +1343,7 @@ def parlour(img, lights, ambient=0.48, warm=(1.0, 0.86, 0.66)):
     Lr = Lr * warm[0]
     S = B.SS
     for X, Y, R, k, col in lights:
-        R_ = max(4.0, R * S / sm)
+        R_ = max(4.0, min(R, 900.0) * S / sm)            # a pool of light, never the whole frame
         g = np.exp(-(((Xs - X * S / sm) ** 2 + (Ys - Y * S / sm) ** 2) / (R_ * R_))) * k
         Lr += g * col[0] / 255
         Lg += g * col[1] / 255
@@ -1153,7 +1363,7 @@ def lamp_point(t):
     if t > Clock.IMPACT:
         dt = t - Clock.IMPACT
         sw = 0.42 * math.exp(-dt / 2.2) * math.sin(dt * 2.6)
-    return (0.1 + 1.3 * math.sin(sw), 2.25 - 1.3 * (1 - math.cos(sw)), 0.0), sw
+    return (0.1 + 1.1 * math.sin(sw), 2.45 - 1.1 * (1 - math.cos(sw)), 0.0), sw
 
 
 def draw_lamp(img, cam, t):
@@ -1173,10 +1383,16 @@ def draw_lamp(img, cam, t):
 
 def shot(img, t, film):
     """Shot 6: the parlour from above, the beam swept round the table."""
+    render(img, t, film, sweep_cam(t))
+
+
+def render(img, t, film, cam, extra_lights=()):
+    """The one set (Sam, 19 Oct: one world, every shot a different camera on it): the room, its pieces, the table
+    and everything on it from one plan, the people where they are, the Dragonite, the light."""
     global FIRES, LIGHTS
-    FIRES, LIGHTS = [], []
+    FIRES, LIGHTS = [], list(extra_lights)
     DRAWN.clear()
-    cam = sweep_cam(t)
+    FILM[0] = film
     dfire = film.dragon_state(Clock.FIRE + 0.05)
     floor_and_walls(img, cam, t)
     decor(img, cam, t, None)
@@ -1209,11 +1425,16 @@ def shot(img, t, film):
     mouth = None
     lamp_px = None
     for dep, kind, who in sorted(items, key=lambda it: -it[0]):
+        if dep < 0.35 and kind in ('person', 'dragon', 'chair_far', 'chair_near', 'chair_all'):
+            continue                                     # behind the camera (it sits in their seat)
         if kind == 'table':
             table(img, cam)
             on = things(img, cam, t, dfire, on_table=True)
             draw_things(img, cam, t, sorted(on, key=lambda v: -v[0]))
             pot(img, cam, t, film)
+            if t >= (Clock.PUTDOWN[0] + Clock.PUTDOWN[1]) / 2:
+                for k in range(5):
+                    card3(img, cam, C.card_back(), P2_CARDS[0] + 0.004 * k, P2_CARDS[1] + 0.012 * k, 0.063, 90 + 6 * k)
             p2_arms(img)
         elif kind == 'person':
             if who == 'P2':
@@ -1302,8 +1523,7 @@ def shot(img, t, film):
         st = film.dragon_state(t)
         LIGHTS.append((mouth[0], mouth[1], 300 + 500 * st['ball'], 0.3 + 0.7 * st['ball'], (255, 236, 170)))
     parlour(img, LIGHTS)
-    p = B.Pen(img, FLAT)                                 # self-lit: flames, candles, the beam
-    sideboard_props(img, cam, t)
+    p = B.Pen(img, FLAT)                                 # self-lit: flames, the beam
     for X, Y, h, sd in FIRES:
         C.flame(p, X, Y, h, t, sd)
     if beam_pts:
@@ -1316,8 +1536,9 @@ def shot(img, t, film):
 
 
 def p2_arms(img):
-    """Player two's forearms lie over the table's edge: drawn again after the table and the pot."""
-    if 'P2' not in DRAWN:
+    """Player two's forearms lie over the table's edge: drawn again after the table and the pot (not while he holds
+    his cards up at his chest: they are clear of the table then)."""
+    if 'P2' not in DRAWN or FILM[0] is None or ARMS_UP[0]:
         return
     X, Y, s, yaw, mirror, j, j2 = DRAWN['P2']
     L = B.Local(FLAT, X, Y, s, -1 if mirror else 1)

@@ -808,7 +808,7 @@ def glass(p, x, y, h, kind='tumbler', drink=(196, 120, 40)):
                       (x + w, y - h)], 3)
         p.poly(bowl, (244, 226, 150), INK, 1.4)
         p.poly([(x - w, y - h), (x + w, y - h), (x + w * 0.98, y - h * 0.88), (x - w * 0.98, y - h * 0.88)], gl, None)
-        rng = np.random.default_rng(int(x + y))
+        rng = np.random.default_rng(int(abs(x) + abs(y)))
         for _ in range(5):                                                              # bubbles
             p.ell(x + rng.uniform(-0.5, 0.5) * w, y - h * rng.uniform(0.5, 0.85), max(1, w * 0.12), max(1, w * 0.12),
                   gl_l, None)

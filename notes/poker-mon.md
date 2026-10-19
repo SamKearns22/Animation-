@@ -45,6 +45,11 @@
 | 40 | "Note the low detail on objects (candles without holders, low quality portrait with an egg head and simple face, rudimentary mug)." | yes: brass candlesticks, candelabra, sconces, crystal tumbler, flute, martini, decanter, an old-master portrait, a landscape, a marble bust |
 | 41 | "Have you noticed that the player's hands when he reaches for the chips are underneath the table?" | yes: fixed (forearms drawn over the table); a new check fails if his hands are hidden |
 | 42 | "Please add some pokeballs into the Queen detailing" | yes: she holds a Poke Ball, Poke Ball roundels on the robe, Poke Ball jewels in the crown |
+| 43 | (19 Oct) The old man: "A" (stumble off sideways sooner) | yes: he rises in 0.75 s and goes off to the side |
+| 44 | "Everything on the table in previous scenes gets deleted for the hyper beam scene ... it should be a really populated table ... an established game already built in all of these scenes that's consistent." | yes: one set for the whole film (every shot is a camera on the same 3D parlour, poker_mon_room.render); one table plan (THINGS): tall chip stacks, bets in the middle, cards, drinks, napkins, ashtray, cigar box, score pad, shoe, discard pile, button, chip tray, candelabra, champagne bucket |
+| 45 | "Part of the joke is that everything on the table is flying everywhere ... complete pandemonium." | yes: a shockwave from the first hit, then everything under the sweep; it bounces and stays where it lands |
+| 46 | "The chips just slide in a sort of ghostly fashion towards him. There's no contact." | yes: his hands go to the pot's far edge, press in, and one grip point moves both the hands and the chips |
+| 47 | "Chips are individual pieces ... they will fall into a big pile and you will end up dragging that big pile." | yes: the stacks topple into a loose pile and the pile is dragged, the back chips lagging |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
@@ -95,3 +100,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
   bounces, fire, parlour light). The room turned so player one's back is to the portrait wall (+x) and the far wall
   (+z) is in view: people thrown away from the beam and out from the table hit walls we can see. The dealer moved to
   the far side; film now 19 s (the pause before the chips).
+- 19 Oct (Sam's consistency notes): shots 1-5 rebuilt as cameras on the one parlour (cam_p1 from player two's seat,
+  cam_cards above the Queens, cam_p2 from player one's seat with the zoom-out reveal); the hand-placed 2D shot code
+  removed. New checks: contact_check (every touch reaches what it touches; the pot moves only during the pull) and
+  hands_check (his hands are seen on the pot). Players seated at the table's edge so their hands reach.

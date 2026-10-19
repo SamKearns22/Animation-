@@ -127,76 +127,6 @@ ARMCHAIR = (236, 222, 190)
 ARMCHAIR_D = (200, 184, 150)
 
 
-def wall(img, cam, x0, x1, y0, y1, seed=0, panel_w=280, lamps=()):
-    """The casino wall: cream, tall gold-framed panels, a moulded rail, brass sconces with pale shades."""
-    p = B.Pen(img, cam)
-    p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 4, seed), WALL, INK, 2.6)
-    rail = y0 + (y1 - y0) * 0.66
-    x, k = x0 + 30, 0
-    while x < x1:
-        p.poly(rough([(x + 20, y0 + 50), (x + panel_w - 20, y0 + 50), (x + panel_w - 20, rail - 30),
-                      (x + 20, rail - 30)], 3, seed + k), WALL_D, GOLD, 3.0)
-        p.poly(rough([(x + 40, y0 + 72), (x + panel_w - 40, y0 + 72), (x + panel_w - 40, rail - 52),
-                      (x + 40, rail - 52)], 3, seed + k + 40), WALL, GOLD_D, 2.0)
-        p.poly(rough([(x + 20, rail + 30), (x + panel_w - 20, rail + 30), (x + panel_w - 20, y1 - 30),
-                      (x + 20, y1 - 30)], 3, seed + k + 80), WALL_D, GOLD, 2.4)
-        x += panel_w
-        k += 1
-    p.poly([(x0, rail - 12), (x1, rail - 12), (x1, rail + 12), (x0, rail + 12)], GOLD, INK, 2.2)
-    for lx, ly in lamps:
-        p.poly([(lx - 7, ly + 10), (lx + 7, ly + 10), (lx + 7, ly + 70), (lx - 7, ly + 70)], GOLD, INK, 1.8)
-        p.poly(rough([(lx - 34, ly + 14), (lx + 34, ly + 14), (lx + 22, ly - 34), (lx - 22, ly - 34)], 2, lx), SHADE,
-               INK, 2.0)
-
-
-def hanging_shade(img, cam, x, y, w, seed=0):
-    """A pale lampshade hung low over the table (refs casino-royale-1)."""
-    p = B.Pen(img, cam)
-    p.line([(x, y - 900), (x, y - w * 0.4)], GOLD_D, 3)
-    p.poly(rough([(x - w * 0.36, y - w * 0.42), (x + w * 0.36, y - w * 0.42), (x + w * 0.5, y), (x - w * 0.5, y)], 3,
-                 seed), SHADE, INK, 2.6)
-    p.poly([(x - w * 0.5, y - 6), (x + w * 0.5, y - 6), (x + w * 0.5, y + 6), (x - w * 0.5, y + 6)], GOLD, INK, 1.8)
-
-
-def chandelier(img, cam, x, y, w):
-    p = B.Pen(img, cam)
-    p.line([(x, y - 600), (x, y)], GOLD_D, 3)
-    for k, r in enumerate((w * 0.5, w * 0.34, w * 0.18)):
-        yy = y + k * w * 0.16
-        p.line(curve([(x - r, yy), (x, yy + r * 0.25), (x + r, yy)], 3), GOLD, 4)
-        for a in np.linspace(-1, 1, 5 + 2 * (2 - k)):
-            cx = x + a * r
-            p.poly([(cx, yy + 6), (cx + 9, yy + 26), (cx, yy + 46), (cx - 9, yy + 26)], (250, 248, 236), INK, 1.4)
-
-
-def armchair_back(img, cam, x, y, s):
-    """A cream padded casino armchair seen from the front of its back, in the units of someone seated in it."""
-    p = B.Pen(img, B.Local(cam, x, y, s))
-    p.poly(curve([(-170, 340), (-180, 60), (-160, -110), (-90, -150), (0, -158), (90, -150), (160, -110), (180, 60),
-                  (170, 340)], 4), ARMCHAIR, INK, 2.6)
-    for k in range(3):                                                             # the buttoned padding
-        for a in (-1, 0, 1):
-            p.ell(a * 90 + (45 if k % 2 else 0) * (1 if a < 1 else 0), -80 + k * 90, 5, 5, ARMCHAIR_D, None)
-
-
-def table_far(img, cam, x, y, s, x0, x1, seed=0):
-    """The far side of the table seen across it (a player's own units): leather rail, green felt, the yellow line."""
-    p = B.Pen(img, B.Local(cam, x, y, s))
-    ry = TABLE_Y
-    p.poly(rough([(x0, ry + 90), (x1, ry + 90), (x1, ry + 1400), (x0, ry + 1400)], 3, seed), FELT, INK, 2.6)
-    p.line(curve([(x0 + 60, ry + 300), (0, ry + 260), (x1 - 60, ry + 300)], 4), LINE_Y, 4)
-    p.poly(rough([(x0, ry - 4), (x1, ry - 4), (x1, ry + 96), (x0, ry + 96)], 3, seed + 3), RAIL, INK, 2.6)
-    p.line([(x0, ry + 20), (x1, ry + 20)], RAIL_L, 3)
-
-
-def arms_over_table(img, cam, x, y, s, sp, j, j2):
-    """Forearms resting on the table lie over its edge: drawn again after the table."""
-    sides = [sd for sd in 'LR' if j2.get('hand', {}).get(sd) in ('fist', 'palm') and j['wr' + sd][1] > TABLE_Y - 30]
-    p = B.Pen(img, B.Local(cam, x, y, s))
-    for sd in sides:
-        V.arm(p, j2, sd, sp)
-
-
 # ------------------------------------------------------------------------------------------------ poses
 def seated(sp, kind='rest', u=0.0):
     """The upper body of a player behind the table. kind: 'rest' (forearms on the table), 'hold' (player one's hand
@@ -212,7 +142,7 @@ def seated(sp, kind='rest', u=0.0):
         V.arm_to(j, 'R', spread_hand(u), 'down', 'palm')
     elif kind == 'fan':
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 58, 236.0, 200.0), 'down', 'fist')
+            V.arm_to(j, sd, (sg * 58, 140.0, 230.0), 'down', 'fist')     # up off the table, cards to his eyes
     elif kind == 'pull':
         for sd, sg in (('L', -1), ('R', 1)):
             z = 330.0 - 110 * u
@@ -307,129 +237,7 @@ def p1_face(t):
     return out
 
 
-def shot_p1(img, t):
-    """Player one, from player two's seat: the portrait wall behind him (poker_mon_room: the +x wall, the portrait to
-    our left, the window and drapes to our right), his escort standing at his shoulder with her hand on it, the guard
-    behind, the man in the card shirt half in frame at our right."""
-    close = t >= SHOTS[4][1]
-    cam = B.Cam(1.32, 540, 1120) if not close else B.Cam(1.6 + 0.35 * ease((t - SHOTS[4][1]) / 1.2), 540, 820)
-    wall(img, cam, -300, 1380, -200, 1500, seed=3, panel_w=300, lamps=[(140, 620), (940, 620)])
-    portrait(img, cam, 300, 250, 260, 340)
-    drapes(img, cam, 820, 1260, 40, 1180)
-    s = S1['s']
-    C.person(img, cam, 160, 560, 0.72, C.GUARD2, t, 0, C.pose_standing(C.GUARD2))
-    se, ex, ey = 1.02, 300 + idle_x('ESCORT', t) * 0.5, 905
-    spe = dict(C.ESCORT, blink=F.blinking(t, BLINKS['P1'][1:]), look=0.4, mouth='pleased' if t < SHOTS[4][1] else 'line')
-    if close and (t - SHOTS[4][1]) > 0.5:
-        spe.update(brows='alarm', mouth='agape', look=0.0)
-    je = C.pose_standing(spe)
-    armchair_back(img, cam, 1080, 1160, 0.95)
-    jc = seated(C.CARDS, 'rest')
-    jc2 = C.person(img, cam, 1080 + idle_x('CARDS', t) * 0.8, 1140, 0.95, dict(C.CARDS, look=-0.6, mouth='line'), t, -45,
-                   jc)
-    armchair_back(img, cam, S1['x'], S1['neck'] + 26 * s, s)
-    sp = dict(C.P1)
-    sp.update(p1_face(t))
-    u = (t - LAY[0]) / (LAY[1] - LAY[0])
-    j = seated(sp, 'hold', min(1.0, max(0.0, u)))
-    if u < 0.4:                                                        # the hand still holds the fan (backs to us)
-        j['props'].append(held_fan(img, 4, lambda j2: (j2['wrR'][0] - 4, j2['wrR'][1] - 10), CARD_U, 12))
-    x = S1['x'] + idle_x('P1', t)
-    shL = j['shL']                                                     # her hand rests on his left shoulder
-    tgt_screen = (x + s * shL[0], S1['neck'] + s * (shL[1] - 16 + V.ELEV * shL[2]))
-    zb = 150.0
-    tgt = ((tgt_screen[0] - ex) / se, (tgt_screen[1] - ey) / se - V.ELEV * zb, zb)
-    V.arm_to(je, 'R', tgt, 'down', 'palm')
-    je2 = C.person(img, cam, ex, ey, se, spe, t, 0, je)
-    j2 = C.person(img, cam, x, S1['neck'], s, sp, t, 0, j)
-    pe = B.Pen(img, B.Local(cam, ex, ey, se))
-    V.arm(pe, je2, 'R', spe)                                           # her arm lies over his shoulder
-    table_far(img, cam, S1['x'], S1['neck'], s, -900, 900, seed=1)
-    L = B.Local(cam, S1['x'], S1['neck'], s)
-    C.chip_stack(img, L, -330, TABLE_Y + 260, CHIP_U, 6, 'poke', seed=1)
-    C.chip_stack(img, L, -220, TABLE_Y + 300, CHIP_U, 4, 'great', seed=2)
-    C.chip_stack(img, L, 330, TABLE_Y + 290, CHIP_U, 5, 'ultra', seed=3)
-    pl = B.Pen(img, L)
-    C.glass(pl, -400, TABLE_Y + 200, 0.09 / V.M_PER_UNIT, 'tumbler', (196, 120, 40))
-    pl.poly(rough(C.card_quad(-470, TABLE_Y + 330, 0.15 / V.M_PER_UNIT, 30, 0.5), 2, 3), (248, 246, 240), INK, 1.4)
-    candles = [(250, TABLE_Y + 170), (300, TABLE_Y + 180)]
-    CANDLE_U = 0.3 / V.M_PER_UNIT                              # a candle in its candlestick: 30 cm
-    for i, (cx_, cy_) in enumerate(candles):
-        C.candle(pl, cx_, cy_, CANDLE_U, t, 70 + i, w=0.011 / V.M_PER_UNIT)
-    laid_queens(img, L, t)
-    arms_over_table(img, cam, x, S1['neck'], s, sp, j, j2)
-    arms_over_table(img, cam, 1080, 1140, 0.95, C.CARDS, jc, jc2)
-    hanging_shade(img, cam, 540, -40, 520, seed=2)
-    lights = [(cam.P(540, 1300)[0] / B.SS, cam.P(540, 1300)[1] / B.SS, 650 * cam.z, 0.7, (255, 214, 150))]
-    for lx in (140, 940):
-        X, Y = cam.P(lx, 600)
-        lights.append((X / B.SS, Y / B.SS, 260 * cam.z, 0.5 * C.flicker(t, lx), (255, 196, 120)))
-    for i, (cx_, cy_) in enumerate(candles):
-        X, Y = L.P(cx_, cy_ - CANDLE_U)
-        lights.append((X / B.SS, Y / B.SS, 220 * L.s, 0.55 * C.flicker(t, 70 + i), (255, 190, 110)))
-    if close:                                                          # the Hyper Beam's light, growing on him
-        lights.append((300, 700, 650, 0.8 * light_level(t), (255, 236, 170)))     # from the Dragonite's side
-    R.parlour(img, lights)
-    for i, (cx_, cy_) in enumerate(candles):                           # the flames are self-lit
-        C.candle(pl, cx_, cy_, CANDLE_U, t, 70 + i, w=0.011 / V.M_PER_UNIT)
-
-
-def portrait(img, cam, x, y, w, h):
-    """The old-master portrait in its gilt frame (poker_mon_cast.portrait_image), laid on the wall."""
-    C.place_image(img, cam, C.portrait_image(), [(x - w / 2 - 22, y - 22), (x + w / 2 + 22, y - 22),
-                                                (x + w / 2 + 22, y + h + 22), (x - w / 2 - 22, y + h + 22)])
-
-
-def drapes(img, cam, x0, x1, y0, y1):
-    """A tall window at night between velvet drapes, a gilt pelmet over them."""
-    p = B.Pen(img, cam)
-    p.poly([(x0 + 90, y0 + 60), (x1 - 90, y0 + 60), (x1 - 90, y1), (x0 + 90, y1)], (30, 34, 56), INK, 2.2)
-    for a0, a1 in ((x0, x0 + 150), (x1 - 150, x1)):
-        p.poly(rough([(a0, y0), (a1, y0), (a1 + (10 if a0 == x0 else -10), y1 + 60), (a0, y1 + 60)], 3, int(a0)),
-               (120, 22, 40), INK, 2.4)
-        for k in range(1, 4):
-            xx = a0 + (a1 - a0) * k / 4
-            p.line([(xx, y0 + 30), (xx + 6, y1 + 40)], (88, 14, 30), 2.4)
-    p.poly(rough([(x0 - 20, y0 - 30), (x1 + 20, y0 - 30), (x1 + 20, y0 + 40), (x0 - 20, y0 + 40)], 3, 4), GOLD, INK, 2.4)
-
-
-def laid_queens(img, L, t):
-    """The four Queens spread face up on the felt from where his hand touched down, each appearing as his palm
-    passes over its place (the hand is drawn over them, so it is always on the cards)."""
-    u = (t - LAY[0]) / (LAY[1] - LAY[0])
-    if u < 0.4:
-        return
-    hx = spread_hand(min(u, 0.82))[0]
-    x0, x1 = SPREAD['start'][0], SPREAD['end'][0]
-    for i, suit in enumerate('SCDH'):
-        cx = x0 + i * (x1 - x0) / 3
-        if hx < cx - 8:
-            continue
-        y = TABLE_Y + 46 + V.ELEV * 300 + 30                    # the felt under the palm, as views draws it
-        C.place_image(img, L, C.card_face('Q', suit), C.card_quad(cx, y, CARD_U, (i - 1.5) * 5, 0.55))
-
-
 # ------------------------------------------------------------------------------------------------ shot 2: the cards
-def shot_cards(img, t):
-    """The four Queens on the felt from above, readable; chips round them."""
-    z = 1.0 + 0.06 * ease((t - SHOTS[1][1]) / (SHOTS[1][2] - SHOTS[1][1]))
-    cam = B.Cam(z, 540, 960)
-    p = B.Pen(img, cam)
-    p.poly([(-200, -200), (1280, -200), (1280, 2200), (-200, 2200)], FELT, None)
-    p.line(curve([(-200, 300), (540, 200), (1280, 300)], 4), LINE_Y, 6)
-    k = 3600.0                                                   # px a metre: everything at its real size
-    for i, suit in enumerate('SCDH'):
-        C.place_image(img, cam, C.card_face('Q', suit), C.card_quad(330 + i * 140, 980 + abs(i - 1.5) * 18, 0.063 * k,
-                                                                     (i - 1.5) * 7))
-    C.chip_stack(img, cam, 170, 1500, 0.0195 * k, 6, 'poke', squash=0.5, seed=4)
-    C.chip_stack(img, cam, 340, 1580, 0.0195 * k, 4, 'great', squash=0.5, seed=5)
-    C.chip_stack(img, cam, 880, 1520, 0.0195 * k, 7, 'ultra', squash=0.5, seed=6)
-    C.chip_stack(img, cam, 900, 470, 0.0195 * k, 3, 'master', squash=0.5, seed=7)
-    C.glass(p, 190, 640, 0.09 * k, 'tumbler', (196, 120, 40))
-    lights = [(540, 900, 900, 0.75, (255, 214, 150)), (180, 440, 420, 0.4 * C.flicker(t, 70), (255, 190, 110))]
-    R.parlour(img, lights)
-
-
 # ------------------------------------------------------------------------------------------------ shots 3-4: player two
 S3 = dict(x=720, neck=1010, s=1.15)
 DRAGON = dict(x=-60, foot=1560, s=0.84)
@@ -444,14 +252,6 @@ def p2_face(t):
     if m:
         out['mouth'] = m
     return out
-
-
-def reveal_cam(t):
-    """Close on player two, then the shot widens (eased) to show the Dragonite beside him."""
-    if t < SHOTS[3][1] + 0.25:
-        return B.Cam(1.7, S3['x'], 800)
-    k = ease((t - SHOTS[3][1] - 0.25) / 1.3)
-    return B.Cam(1.7 + (0.74 - 1.7) * k, S3['x'] + (330 - S3['x']) * k, 800 + (900 - 800) * k)
 
 
 def fire_eyes(t):
@@ -478,64 +278,6 @@ def dragon_state(t):
     return st
 
 
-def sideboard2d(img, cam, t, x, y, flames_only=False):
-    """The sideboard against the wall behind player two: dark wood, a decanter, a candelabra (flickering)."""
-    p = B.Pen(img, cam)
-    if not flames_only:
-        p.poly(rough([(x - 260, y - 180), (x + 260, y - 180), (x + 260, y + 120), (x - 260, y + 120)], 3, 8), R.WOOD,
-               INK, 2.4)
-        p.poly(rough([(x - 280, y - 200), (x + 280, y - 200), (x + 280, y - 170), (x - 280, y - 170)], 2, 9), R.WOOD_D,
-               INK, 2.0)
-        for dx in (-130, 130):
-            p.poly(rough([(x + dx - 100, y - 140), (x + dx + 100, y - 140), (x + dx + 100, y + 90), (x + dx - 100, y + 90)],
-                         2, dx + 3), R.WOOD_D, R.GOLD_D, 1.8)
-        p.poly(rough([(x - 190, y - 200), (x - 150, y - 200), (x - 140, y - 260), (x - 160, y - 300), (x - 160, y - 330),
-                      (x - 180, y - 330), (x - 180, y - 300), (x - 200, y - 260)], 1, 2), (150, 70, 36), INK, 1.8)
-    if not flames_only:
-        C.decanter(p, x - 170, y - 200, 0.3 / V.M_PER_UNIT * 0.62)
-    C.candelabra2(p, x + 140, y - 200, 0.45 / V.M_PER_UNIT * 0.62, t, 31)
-
-
-def shot_p2(img, t):
-    cam = B.Cam(1.7, S3['x'], 800) if t < SHOTS[3][1] else reveal_cam(t)
-    wall(img, cam, -500, 1500, -300, 1500, seed=9, panel_w=300, lamps=[(80, 620), (1000, 620)])
-    chandelier(img, cam, 640, 120, 300)
-    sideboard2d(img, cam, t, 330, 1000)
-    C.person(img, cam, 1060, 560, 0.72, dict(C.WIFE, look=-0.5), t, 0, C.pose_standing(C.WIFE))
-    s = S3['s']
-    st = dragon_state(t)
-    mouth = C.dragonite(img, cam, DRAGON['x'], DRAGON['foot'], DRAGON['s'], t, turn=0.25, flip=1, head=st['head'],
-                        mouth_open=st['mouth_open'], eyes=st['eyes'], wings=st['wings'], arms=st['arms'],
-                        lean=st['lean'])
-    armchair_back(img, cam, S3['x'], S3['neck'] + 26 * s, s)
-    sp = dict(C.P2)
-    sp.update(p2_face(t))
-    j = seated(sp, 'fan')
-    j['props'].append(held_fan(img, 5, lambda j2: ((j2['wrL'][0] + j2['wrR'][0]) / 2, (j2['wrL'][1] + j2['wrR'][1]) / 2 - 6),
-                               CARD_U, 11))
-    x = S3['x'] + idle_x('P2', t)
-    C.person(img, cam, x, S3['neck'], s, sp, t, 0, j)
-    table_far(img, cam, S3['x'], S3['neck'], s, -1400, 900, seed=5)
-    L = B.Local(cam, S3['x'], S3['neck'], s)
-    C.chip_stack(img, L, -260, TABLE_Y + 260, CHIP_U, 8, 'ultra', seed=8)
-    C.chip_stack(img, L, 250, TABLE_Y + 280, CHIP_U, 5, 'great', seed=9)
-    C.chip_stack(img, L, 360, TABLE_Y + 330, CHIP_U, 3, 'master', seed=10)
-    hanging_shade(img, cam, 640, -80, 520, seed=4)
-    lights = [(cam.P(640, 1300)[0] / B.SS, cam.P(640, 1300)[1] / B.SS, 650 * cam.z, 0.7, (255, 214, 150))]
-    for lx in (80, 1000):
-        X, Y = cam.P(lx, 600)
-        lights.append((X / B.SS, Y / B.SS, 260 * cam.z, 0.5 * C.flicker(t, lx + 5), (255, 196, 120)))
-    X, Y = cam.P(470, 800)
-    lights.append((X / B.SS, Y / B.SS, 260 * cam.z, 0.5 * C.flicker(t, 31), (255, 190, 110)))
-    if st['ball'] > 0:
-        X, Y = cam.P(*mouth)
-        lights.append((X / B.SS, Y / B.SS, 900 * cam.z, 1.5 * light_level(t) + 0.3 * st['ball'], (255, 236, 170)))
-    R.parlour(img, lights)
-    sideboard2d(img, cam, t, 330, 1000, flames_only=True)
-    if st['ball'] > 0:
-        C.glow(img, cam, [(mouth[0], mouth[1], 10 + 46 * st['ball'])], strength=0.5 + 0.5 * st['ball'])
-
-
 # ------------------------------------------------------------------------------------------------ shot 6: the blast
 def shot_blast(img, t):
     """The parlour from a high corner, sweeping; the beam swept round the table (poker_mon_room)."""
@@ -543,18 +285,47 @@ def shot_blast(img, t):
 
 
 # ------------------------------------------------------------------------------------------------ the film
+def cam_p1(t):
+    """Shots 1 and 5: player one from player two's seat (a reverse angle across the table); shot 5 pushes in."""
+    k0 = ease(t / SHOTS[0][2])                               # a slow push in through his line
+    look, f = (1.35 + 0.15 * k0, 0.85 + 0.08 * k0, 0.0), 1350.0 + 650.0 * k0
+    if t >= SHOTS[4][1]:
+        k = ease((t - SHOTS[4][1]) / 1.2)
+        look, f = (1.5 + 0.2 * k, 0.93 + 0.27 * k, 0.0), 2000.0 + 2600.0 * k
+    return R.Cam3((-0.95, 1.7, -0.35), look, focal=f)
+
+
+def cam_cards(t):
+    """Shot 2: down on player one's Queens, his chips and his whisky beside them."""
+    k = ease((t - SHOTS[1][1]) / (SHOTS[1][2] - SHOTS[1][1]))
+    return R.Cam3((0.7, 1.35, -0.05), (1.29, 0.77, 0.0), focal=2100.0 + 150.0 * k)
+
+
+def cam_p2(t):
+    """Shots 3 and 4: player two from player one's seat; then the shot widens to show the Dragonite beside him."""
+    look, f = (-1.74, 1.1, -0.05), 5200.0
+    if t >= SHOTS[3][1] + 0.25:
+        k = ease((t - SHOTS[3][1] - 0.25) / 1.3)
+        look = (-1.74 - 0.25 * k, 1.1 + 0.3 * k, -0.05 + 0.55 * k)
+        f = 5200.0 + (1450.0 - 5200.0) * k
+    return R.Cam3((1.5, 1.28, -0.25), look, focal=f)
+
+
 def picture(t):
-    """The frame WITHOUT captions or Hook Text (those go on last, so wording notes never re-render a picture)."""
+    """The frame WITHOUT captions or Hook Text. One set for the whole film (Sam, 19 Oct): every shot is a camera on
+    the same parlour, table and things (poker_mon_room.render)."""
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
     img = B.canvas(WALL)
     sh = shot_of(t)
+    me = sys.modules[__name__]
     if sh in ('p1', 'lit'):
-        shot_p1(img, t)
+        extra = [(540, 820, 760, 0.9 * light_level(t), (255, 236, 170))] if sh == 'lit' else []
+        R.render(img, t, me, cam_p1(t), extra)
     elif sh == 'cards':
-        shot_cards(img, t)
+        R.render(img, t, me, cam_cards(t))
     elif sh in ('p2', 'reveal'):
-        shot_p2(img, t)
+        R.render(img, t, me, cam_p2(t))
     else:
         shot_blast(img, t)
     return img
@@ -663,7 +434,7 @@ def hands_check():
     faults = []
     keep = B.SS
     B.SS = 1
-    for t in np.linspace(R.Clock.PULL[0] + 0.05, R.Clock.PULL[1] - 0.05, 4):
+    for t in [float(x) for x in np.linspace(R.Clock.PULL[0] + 0.05, R.Clock.PULL[1] - 0.05, 4)]:
         im = np.asarray(picture(t).convert('RGB')).astype(int)
         X, Y, s, yaw, mirror, j, j2 = R.DRAWN['P2']
         for sd in 'LR':
@@ -673,6 +444,26 @@ def hands_check():
             felt = ((patch[..., 1] > patch[..., 0] + 10) | (patch.sum(-1) < 140)).mean()
             if felt > 0.5:
                 faults.append(f'player two\'s {sd} hand is hidden at {t:.2f} s (the table is drawn over it)')
+    B.SS = keep
+    return faults
+
+
+def contact_check():
+    """Every touch is real (Sam, 19 Oct: the pot slid to him with no hand on it). Through player one's lay and
+    player two's put-down, reach and pull, every hand must reach what it is meant to touch (never stopped short at the
+    end of the arm: poker_mon_room.CONTACT_FAULTS), and the pot may only move while his hands are on it."""
+    keep = B.SS
+    B.SS = 1
+    R.CONTACT_FAULTS.clear()
+    c = R.Clock
+    times = list(np.linspace(LAY[0], LAY[1], 6)) + list(np.linspace(c.PUTDOWN[0], c.RELEASE[0], 10))
+    for t in times:
+        picture(float(t))
+    faults = [f'{who}: {what} at {t:.2f} s' for t, who, what in R.CONTACT_FAULTS]
+    for t in np.linspace(c.TOPPLE[0], c.END, 60):          # the pile moves only between the start and end of the pull
+        moving = abs(R.grip(t + 0.004)[0] - R.grip(t)[0]) > 1e-7
+        if moving and not (c.PULL[0] - 0.005 <= t <= c.PULL[1]):
+            faults.append(f'the pot moves at {t:.2f} s with no hands on it')
     B.SS = keep
     return faults
 
@@ -706,6 +497,7 @@ def audits():
     faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
     faults += moves.audit()
     faults += hands_check()
+    faults += contact_check()
     return faults
 
 
