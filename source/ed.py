@@ -158,7 +158,9 @@ def soft(img, cam, pts, colr, alpha, blur=6):
 
 
 def curve(pts, n=6):
-    """Catmull-Rom through the points (closed): soft, hand-drawn curves."""
+    """Catmull-Rom through the points, CLOSED (the end joins back to the start): for shapes with an outline (a face,
+    a belly, a puddle). For anything that simply ends (an arm, an antenna, a tail, a wire, a line) use open_curve:
+    a tube or line drawn on this one doubles back from its end to its start (Poker Mon's wing, 19 Oct)."""
     p = np.asarray(pts, float)
     out = []
     for i in range(len(p)):
@@ -166,6 +168,20 @@ def curve(pts, n=6):
         for u in np.linspace(0, 1, n, endpoint=False):
             out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
                                     + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
+    return out
+
+
+def open_curve(pts, n=6):
+    """Catmull-Rom through the points, end to end, stopping at the last point: for limbs, antennae, tails, wires and
+    lines (curve() is the closed one, for outlined shapes)."""
+    q = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(q) - 2):
+        p0, p1, p2, p3 = (np.asarray(q[i + d], float) for d in (-1, 0, 1, 2))
+        for u in np.linspace(0, 1, n, endpoint=False):
+            out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
+                                    + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
+    out.append(tuple(map(float, pts[-1])))
     return out
 
 

@@ -22,7 +22,7 @@ import mossad                    # noqa: E402,F401  (brows, mouths, hair; patche
 import mouths                    # noqa: E402
 import views as V                # noqa: E402
 import moves                     # noqa: E402
-from ed import INK, curve, oval  # noqa: E402
+from ed import INK, curve, open_curve, oval  # noqa: E402
 from satire_style import rough, install_circle_hands   # noqa: E402
 
 mouths.install(B)
@@ -177,20 +177,6 @@ def _rot(pts, piv, deg):
 
 def _ovl(cx, cy, rx, ry, n=36):
     return [(cx + rx * math.cos(a), cy + ry * math.sin(a)) for a in np.linspace(0, 2 * math.pi, n, endpoint=False)]
-
-
-def open_curve(pts, n=6):
-    """Catmull-Rom through the points, end to end. ed.curve closes the loop (right for outlines): a tube or a line drawn
-    on it doubled back from its end to its start (the orange line across the wing, the looped antennae, Sam 19 Oct)."""
-    q = [pts[0]] + list(pts) + [pts[-1]]
-    out = []
-    for i in range(1, len(q) - 2):
-        p0, p1, p2, p3 = (np.asarray(q[i + d], float) for d in (-1, 0, 1, 2))
-        for u in np.linspace(0, 1, n, endpoint=False):
-            out.append(tuple(0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u
-                                    + (-p0 + 3 * p1 - 3 * p2 + p3) * u ** 3)))
-    out.append(tuple(map(float, pts[-1])))
-    return out
 
 
 def tube(p, pts, w0, w1, col, lw=2.6):
