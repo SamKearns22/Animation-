@@ -341,14 +341,22 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
         for c in (-1, 0, 1):
             cx = lx + 30 * turn + c * 56
             p.poly([(cx - 15, -8), (cx + 15, -8), (cx + 4 * c, 26)], CLAW, INK, 1.8)
-    body = curve([(-120, -1010), (-200, -920), (-290, -720), (-380, -440), (-390, -260), (-300, -110), (0, -60),
-                  (300, -110), (390, -260), (380, -440), (290, -720), (200, -920), (120, -1010)], 5)
-    p.poly(T(body), ORANGE, INK, 3.0)
+    # body and neck are one shape with one outline, the shoulders curving up into the neck, which turns with the head
+    # (Sam, 19 Oct: never a neck glued on). Its ends run up inside the head, which covers them.
+    piv = T([(0, -1000)])[0]
+    hr = lambda pts: _rot([(piv[0] + x_, piv[1] + y_) for x_, y_ in pts], piv, head + lean)
+    nl, nr = hr([(-100 + 20 * turn, -200), (100 + 20 * turn, -200)])
+    body = [nl] + T([(-125, -1030), (-200, -920), (-290, -720), (-380, -440), (-390, -260), (-300, -110), (0, -60),
+                     (300, -110), (390, -260), (380, -440), (290, -720), (200, -920), (125, -1030)]) + [nr]
+    p.poly(curve(body, 5), ORANGE, None)
+    p.line(open_curve(body, 5), INK, 3.0)
     bx = 50 * turn
-    belly = curve([(bx - 90, -990), (bx - 160, -880), (bx - 230, -680), (bx - 300, -430), (bx - 290, -250),
-                   (bx - 200, -120), (bx, -90), (bx + 200, -120), (bx + 290, -250), (bx + 300, -430),
-                   (bx + 230, -680), (bx + 160, -880), (bx + 90, -990)], 5)
-    p.poly(T(belly), CREAM, INK, 2.6)
+    cl, cr = hr([(bx - 58, -160), (bx + 58, -160)])
+    belly = [cl] + T([(bx - 88, -1000), (bx - 160, -880), (bx - 230, -680), (bx - 300, -430), (bx - 290, -250),
+                      (bx - 200, -120), (bx, -90), (bx + 200, -120), (bx + 290, -250), (bx + 300, -430),
+                      (bx + 230, -680), (bx + 160, -880), (bx + 88, -1000)]) + [cr]
+    p.poly(curve(belly, 5), CREAM, None)                                               # the cream runs up the throat
+    p.line(open_curve(belly, 5), INK, 2.6)
     for k in range(1, 9):                                                               # the bands across the belly
         yb = -990 + k * 102
         f = (yb + 990) / 900
@@ -360,21 +368,9 @@ def dragonite(img, cam, x, y, s, t=0.0, turn=0.5, flip=1, head=0.0, mouth_open=0
         el = (sh[0] + sg * (70 + 90 * arms), sh[1] + 100 - 30 * arms)
         tube(p, T([sh, el, hand]), 84, 64, ORANGE)
         p.poly(T(_ovl(*hand, 46, 46)), ORANGE, INK, 2.6)
-    piv = T([(0, -1000)])[0]                           # the neck: the body carried up into the head, turning with it
-    nk = _rot([(piv[0] - 105 + 20 * turn, piv[1] - 200), (piv[0] + 105 + 20 * turn, piv[1] - 200)], piv, head + lean)  # (Sam: never a loose head)
-    nb = T([(-128, -975), (128, -975)])
-    p.poly([nb[0], nk[0], nk[1], nb[1]], ORANGE, None)
-    p.line([nb[0], nk[0]], INK, 2.8)
-    p.line([nb[1], nk[1]], INK, 2.8)
-    ck = _rot([(piv[0] + bx - 62, piv[1] - 150), (piv[0] + bx + 62, piv[1] - 150)], piv, head + lean)                   # the cream runs up the throat
-    cb = T([(bx - 92, -975), (bx + 92, -975)])
-    p.poly([cb[0], ck[0], ck[1], cb[1]], CREAM, None)
-    p.line([cb[0], ck[0]], INK, 2.4)
-    p.line([cb[1], ck[1]], INK, 2.4)
     if bow:
         bp = T([(40 * turn, -1000)])[0]
         bow_tie(p, bp[0], bp[1], (22, 22, 28), 2.4)
-    piv = T([(0, -1000)])[0]
     m = dragonite_head(p, piv, head + lean, turn, mouth_open, eyes, mouth_shape)
     return L.ox + L.k * m[0] * L.flip, L.oy + L.k * m[1]
 
