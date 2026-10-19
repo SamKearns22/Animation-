@@ -58,6 +58,10 @@
 | 53 | (19 Oct) "Dragonite's head is detached from his body." / "neck image is glued over rather than smoothly joined" | yes: body and neck one shape with one outline, turning with the head; the cream runs up the throat |
 | 54 | (19 Oct) "Remove the smile, there isn't one in the photo." | yes: a plain closed muzzle (replaces row 48's smile) |
 | 55 | (19 Oct) "Open the O mouth when he beams" | yes: the O grows with the beam (radius 18 + 34 x opening) |
+| 56 | (19 Oct) "Player 1's hands are playing cards from beneath the table just like [player 2] was." | yes: both players' hands on the table are drawn again after it (seated_arms), with the held fan; hands_check now covers player one's lay and resting hand |
+| 57 | (19 Oct) "Start Dragonite with his mouth closed in his first shot." | yes: closed through the reveal and while the head goes back |
+| 58 | (19 Oct) "Open it only slightly as he is charging ... then full open when he blasts." | yes: a small O from 0.6 s into the charge; wide on the blast |
+| 59 | (19 Oct) "Leave impact craters when people smack against walls." | yes: a jagged hollow with cracks where each body hits; stays |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
