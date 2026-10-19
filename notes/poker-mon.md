@@ -64,6 +64,8 @@
 | 59 | (19 Oct) "Leave impact craters when people smack against walls." | yes: a jagged hollow with cracks where each body hits; stays |
 | 60 | (19 Oct) "His arms now cover the cards." | yes: his hands rest on the felt either side of the Queens; the cards nearer us are drawn over his arms (except while his palm is on them) |
 | 61 | (19 Oct) "Make the charge brighter and more expansive." | yes: room light up to the whole frame, a wide halo, a bigger core and sparks streaming in (sparks: my addition), all sized by the Dragonite on screen |
+| 62 | (19 Oct) "Card hand clips through chips and break clipping rules." | yes: his chip stacks moved 9 cm out, his hand rests in the clear gap between the Queens and the chips; clearance_check (a resting hand stays 3 cm clear of everything on the table) runs with the audits |
+| 63 | (19 Oct) "1.5 seconds of Dragonite looking neutral before charging" | yes: the charge starts 1.5 s later; everything after it moved with it (film 21.9 -> 23.4 s) |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 All in `references/poker-mon/`.
