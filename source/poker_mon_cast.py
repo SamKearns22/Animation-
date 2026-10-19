@@ -80,10 +80,26 @@ HUSBAND = dict(name='HUSBAND', skin=B.PINK, hw=68, hh=90, jaw='square', hair='cr
 BEAU = dict(name='BEAU', skin=B.BROWN, hw=64, hh=88, jaw='square', hair='crop', hair_c=(30, 24, 22),
             brow_c=(30, 24, 22), outfit='suit', jacket=(240, 236, 226), shirt=SHIRT, trousers=TUX, shoulders=148,
             bow=(20, 20, 26), mouth='line', seed=22)
+# Sam, 19 Oct: more players and hangers-on, the near side of the table filled. A player in a burgundy velvet dinner
+# jacket; a player in a gold gown; a big bearded man in charcoal behind them; a woman in silver sequins.
+MOGUL = dict(name='MOGUL', skin=B.OLIVE, hw=68, hh=90, jaw='square', hair='crop', hair_c=(28, 24, 22),
+             brow_c=(28, 24, 22), beard='stubble', outfit='suit', jacket=(100, 24, 48), shirt=SHIRT, trousers=TUX,
+             shoulders=152, bow=(20, 20, 26), mouth='line', seed=23)
+HEIRESS = dict(name='HEIRESS', skin=B.PINK, hw=60, hh=86, jaw='soft', hair='bob', hair_c=(44, 30, 26), lashes=True,
+               outfit='dress', dress=(204, 160, 64), jacket=(204, 160, 64), trousers=(184, 142, 54),
+               lip_c=(180, 40, 56), earring=True, shoulders=124, mouth='line', seed=24)
+MAGNATE = dict(name='MAGNATE', skin=B.DEEP, hw=76, hh=92, jaw='square', hair='bald', beard='full',
+               beard_c=(30, 26, 24), brow_c=(30, 26, 24), outfit='suit', jacket=(62, 62, 68), shirt=SHIRT,
+               tie=(110, 20, 34), trousers=(56, 56, 62), shoulders=170, mouth='line', seed=25)
+STARLET = dict(name='STARLET', skin=B.PALE, hw=60, hh=86, jaw='soft', hair='wavy', hair_c=(150, 62, 34), lashes=True,
+               outfit='dress', dress=(196, 196, 208), jacket=(196, 196, 208), trousers=(176, 176, 188),
+               lip_c=(196, 30, 46), earring=True, shoulders=122, sequins=True, mouth='line', seed=26)
 PEOPLE = {'P1': P1, 'P2': P2, 'LADY': LADY, 'CARDS': CARDS, 'OLD': OLD, 'DEALER': DEALER, 'GUARD1': GUARD1,
-          'GUARD2': GUARD2, 'ESCORT': ESCORT, 'WIFE': WIFE, 'HUSBAND': HUSBAND, 'BEAU': BEAU}
+          'GUARD2': GUARD2, 'ESCORT': ESCORT, 'WIFE': WIFE, 'HUSBAND': HUSBAND, 'BEAU': BEAU,
+          'MOGUL': MOGUL, 'HEIRESS': HEIRESS, 'MAGNATE': MAGNATE, 'STARLET': STARLET}
 HEIGHTS = {'P1': 1.83, 'P2': 1.85, 'LADY': 1.70, 'CARDS': 1.80, 'OLD': 1.74, 'DEALER': 1.78, 'GUARD1': 1.93,
-           'GUARD2': 1.90, 'ESCORT': 1.72, 'WIFE': 1.66, 'HUSBAND': 1.84, 'BEAU': 1.82}
+           'GUARD2': 1.90, 'ESCORT': 1.72, 'WIFE': 1.66, 'HUSBAND': 1.84, 'BEAU': 1.82,
+           'MOGUL': 1.77, 'HEIRESS': 1.68, 'MAGNATE': 1.90, 'STARLET': 1.71}
 
 
 def bow_tie(p, x, y, c, k=1.0):

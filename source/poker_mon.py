@@ -394,6 +394,31 @@ def blast(n, t0, t_end):
     return out
 
 
+def glass_break(n, t0):
+    """The window going (Sam, 19 Oct: "a tinkling glass"): a short bright crash, then shards tinkling down for about
+    a second and a half, each a quick high ping. Every part is short and decays: never a steady noise (no hiss)."""
+    from scipy.signal import butter, sosfilt
+    rng = np.random.default_rng(9)
+    out = np.zeros(n)
+    a = int(t0 * SR)
+    m = min(n - a, int(0.35 * SR))
+    if m <= 0:
+        return out
+    tt = np.arange(m) / SR
+    crash = sosfilt(butter(4, [1800, 7000], 'band', fs=SR, output='sos'), rng.standard_normal(m))
+    out[a:a + m] += 0.5 * crash * np.exp(-tt * 14)
+    for i in range(34):                                       # the tinkles: shards landing, thinning out
+        s0 = a + int((0.05 + 1.5 * rng.uniform(0, 1) ** 1.6) * SR)
+        L = int(0.09 * SR)
+        if s0 + L >= n:
+            continue
+        u = np.arange(L) / SR
+        f = rng.uniform(3200, 7200)
+        ping = (np.sin(2 * np.pi * f * u) + 0.4 * np.sin(2 * np.pi * f * 1.51 * u)) * np.exp(-u * 55)
+        out[s0:s0 + L] += ping * rng.uniform(0.04, 0.12)
+    return out
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
@@ -404,6 +429,9 @@ def soundtrack(stems=False):
             voice[s:s + len(seg)] += seg
     rest += hum(n, CHARGE[0] + 0.1, FIRE)
     rest += blast(n, FIRE, BEAM_END[1])
+    win = R.through_window(dragon_state(FIRE + 0.05))
+    if win:
+        rest += glass_break(n, win[4])                     # Sam asked for it (19 Oct)
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:
@@ -442,6 +470,25 @@ def checks():
 THING_R = dict(chip=0.0195, card=0.045, tumbler=0.04, napkin=0.07, flute=0.035, martini=0.05, ashtray=0.06,
                cigarbox=0.1, pad=0.08, shoe=0.1, button=0.025, tray=0.2, candelabra=0.12, bucket=0.11)
 HAND_R = 0.05      # a hand resting on the felt, in metres
+
+
+def table_check():
+    """One table plan, nothing inside anything (Sam, 19 Oct: the table well populated, never clipping): no two things
+    on the table overlap (cards may), and nothing stands on a chip stack."""
+    faults = []
+    big = [(k, xz) for k, xz, ex in R.THINGS if k != 'chip']
+    for a in range(len(big)):
+        for b in range(a + 1, len(big)):
+            (k1, p1), (k2, p2) = big[a], big[b]
+            if k1 == 'card' and k2 == 'card':
+                continue
+            if math.dist(p1, p2) < 0.8 * (THING_R.get(k1, 0.05) + THING_R.get(k2, 0.05)):
+                faults.append(f'table plan: a {k1} at {p1} and a {k2} at {p2} overlap')
+    stacks = [xz for k, xz, ex in R.THINGS if k == 'chip' and not ex.get('loose')]
+    for k, xz in big:
+        if k not in ('card', 'tray') and any(math.dist(xz, c) < THING_R.get(k, 0.05) + 0.0195 for c in stacks):
+            faults.append(f'table plan: a {k} at {xz} sits on a chip stack')
+    return faults
 
 
 def clearance_check():
@@ -539,6 +586,7 @@ def audits():
     faults += moves.audit()
     faults += hands_check()
     faults += clearance_check()
+    faults += table_check()
     faults += contact_check()
     return faults
 

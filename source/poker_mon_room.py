@@ -59,6 +59,8 @@ SEATED = {
     'LADY': (-0.8, 1.4, (0.0, -1.0)),
     'CARDS': (0.8, 1.4, (0.0, -1.0)),
     'OLD': (-0.55, -1.4, (0.0, 1.0)),
+    'MOGUL': (0.55, -1.42, (0.0, 1.0)),          # Sam, 19 Oct: the near side filled
+    'HEIRESS': (1.32, -1.1, (-0.6, 0.8)),
 }
 STANDING = {
     'DEALER': (0.0, 1.55, (0.0, -1.0)),
@@ -68,6 +70,8 @@ STANDING = {
     'ESCORT': (2.4, -0.95, (-1.0, 0.35)),
     'GUARD1': (1.6, 3.4, (-0.4, -1.0)),
     'GUARD2': (3.7, -3.0, (-1.0, 1.0)),
+    'MAGNATE': (0.2, -2.3, (0.1, 1.0)),
+    'STARLET': (1.25, -2.15, (-0.3, 1.0)),
 }
 DRAGON = (-2.15, 1.0, (1.0, -0.3))
 SCONCES = [('+x', -0.55, 1.75), ('+z', -2.3, 1.75), ('-x', -1.5, 1.75), ('-x', 2.4, 1.75), ('+z', 3.7, 1.75)]
@@ -80,13 +84,18 @@ REACT = {
     'HUSBAND': dict(delay=0.25, path=[(-1.0, 2.2), (-0.3, 3.0), (0.3, 3.45)], kind='run'),
     'DEALER': dict(delay=0.3, path=[(0.0, 1.55), (0.7, 2.5), (1.1, 3.4)], kind='run', arms='panic'),
     'BEAU': dict(delay=0.45, path=[(1.35, 2.15), (0.9, 2.9), (0.6, 3.5)], kind='run'),
-    'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (1.05, 2.55)], kind='walk', arms='stop'),
+    'GUARD1': dict(delay=0.7, path=[(1.6, 3.4), (2.45, 2.7)], kind='walk', arms='stop'),   # clear of the window
     'CARDS': dict(delay=0.4, rise=0.5, path=[(0.8, 1.4), (1.35, 2.5), (1.6, 3.35)], kind='brisk', crouch_end=True),
     'OLD': dict(delay=0.3, rise=0.75, path=[(-0.55, -1.4), (-1.5, -1.6), (-2.6, -1.9)], kind='brisk'),
     'WIFE': dict(delay=0.2, path=[(-1.15, -1.75), (-0.5, -3.0)], kind='run', arms='panic', crouch_end=True),
     'ESCORT': dict(delay=0.12, path=[(2.4, -0.95), (3.3, -1.9), (3.25, -3.2)], kind='run', arms='panic',
                    crouch_end=True),
     'GUARD2': dict(delay=0.3, crouch=True),
+    'MOGUL': dict(delay=0.3, rise=0.55, path=[(0.55, -1.42), (0.8, -1.95)], kind='brisk', crouch_end=True),
+    'HEIRESS': dict(delay=0.2, rise=0.5, path=[(1.32, -1.1), (1.7, -1.55)], kind='brisk', arms='panic',
+                    crouch_end=True),
+    'MAGNATE': dict(delay=0.45, path=[(0.2, -2.3), (0.05, -2.6)], kind='walk', crouch_end=True),
+    'STARLET': dict(delay=0.15, path=[(1.25, -2.15), (1.55, -2.45)], kind='run', arms='panic', crouch_end=True),
 }
 DRAPES = [('x', 1.2, 2.6), ('z', 0.6, 2.0)]   # cloth: on the +x wall from z 1.2 to 2.6, on the +z wall from x 0.6
 PAINTING = ('z', -1.35, 0.05, 1.45, 2.5)      # the landscape on the far wall: canvas, it burns too
@@ -361,6 +370,41 @@ def wall_face(img, cam, p, wall):
         cam.poly(p, _wall_pts(wall, a0 + 0.12, a0 + w - 0.12, 0.12, 0.8, 0.004), WOOD_D, GOLD_D, 1.6)
 
 
+def window_glass(cam, p, wall, a0, a1, y0, y1, t):
+    """The glass in a window: a faint sheen across each pane while whole; once a body has gone through, a hole with
+    jagged teeth of glass left round the frame (Sam, 19 Oct)."""
+    win = through_window(FILM[0].dragon_state(Clock.FIRE + 0.05)) if FILM[0] is not None else None
+    broken = win is not None and win[1] == wall and t >= win[4]
+    am = (a0 + a1) / 2
+    for b0, b1 in ((a0, am), (am, a1)):                            # the two panes, either side of the mullion
+        if not broken:
+            for k in (0.25, 0.55):                                 # the sheen: two pale diagonal streaks
+                u0, u1 = b0 + (b1 - b0) * k, b0 + (b1 - b0) * (k + 0.2)
+                q0 = _wall_pts(wall, u0, u0, y0 + 0.5, y0 + 0.5, 0.011)[0]
+                q1 = _wall_pts(wall, u1, u1, y1 - 0.4, y1 - 0.4, 0.011)[0]
+                cam.line(p, [q0, q1], (92, 104, 140), 3.0)
+        else:                                                      # teeth of glass left in the frame
+            rng = np.random.default_rng(int(b0 * 100) + 5)
+            for side in range(4):
+                n = 4
+                for i in range(n):
+                    f0, f1 = i / n, (i + 1) / n
+                    d = rng.uniform(0.08, 0.3)
+                    if side == 0:                                  # the bottom rail, teeth pointing up
+                        tri = [(b0 + (b1 - b0) * f0, y0), (b0 + (b1 - b0) * f1, y0),
+                               (b0 + (b1 - b0) * rng.uniform(f0, f1), y0 + d)]
+                    elif side == 1:                                # the top
+                        tri = [(b0 + (b1 - b0) * f0, y1), (b0 + (b1 - b0) * f1, y1),
+                               (b0 + (b1 - b0) * rng.uniform(f0, f1), y1 - d)]
+                    else:                                          # the sides
+                        x = b0 if side == 2 else b1
+                        dx = d * 0.5 if side == 2 else -d * 0.5
+                        yy0, yy1 = y0 + (y1 - y0) * f0, y0 + (y1 - y0) * f1
+                        tri = [(x, yy0), (x, yy1), (x + dx, rng.uniform(yy0, yy1))]
+                    pts = [_wall_pts(wall, u, u, y, y, 0.011)[0] for u, y in tri]
+                    cam.poly(p, pts, (96, 112, 150), INK, 1.4)
+
+
 def decor(img, cam, t, ign):
     """Minimal old-world pieces: a gilt-framed portrait and a landscape, velvet drapes at a tall window, a
     sideboard with a decanter and a candelabra, a marble bust on a plinth, brass sconces with candles."""
@@ -375,6 +419,7 @@ def decor(img, cam, t, ign):
     # the tall window with velvet drapes (cloth: they catch fire when the beam reaches them)
     for wall, a0, a1 in (('+' + w, a0_, a1_) for w, a0_, a1_ in DRAPES):
         cam.poly(p, _wall_pts(wall, a0 + 0.25, a1 - 0.25, 0.4, 2.85, 0.01), (30, 34, 56), INK, 2.2)   # night outside
+        window_glass(cam, p, wall, a0 + 0.25, a1 - 0.25, 0.4, 2.85, t)
         cam.poly(p, _wall_pts(wall, (a0 + a1) / 2 - 0.02, (a0 + a1) / 2 + 0.02, 0.4, 2.85, 0.012), WOOD, None)
         for d0, d1 in ((a0, a0 + 0.42), (a1 - 0.42, a1)):
             cam.poly(p, _wall_pts(wall, d0, d1, 0.0, 3.0, 0.02), DRAPE, INK, 2.2)
@@ -533,15 +578,17 @@ def _things():
         T.append(('card', (1.29, -0.16 + i * 0.105), dict(face=('Q', suit), ang=90 + (i - 1.5) * 5, laid=i)))
     stacks(1.3, 0.45, [(18, 'ultra'), (15, 'poke'), (12, 'great'), (8, 'master')], -1)   # clear of his resting hand
     T.append(('tumbler', (1.3, -0.42), dict(drink=(196, 120, 40))))
-    T.append(('napkin', (1.2, -0.56), {}))
+    T.append(('napkin', (1.1, -0.36), {}))              # clear of the heiress's stacks
     for who, (x, z), drink in (('LADY', (-0.8, 0.98), 'flute'), ('CARDS', (0.8, 0.98), 'martini'),
-                               ('OLD', (-0.55, -0.98), 'tumbler')):
+                               ('OLD', (-0.55, -0.98), 'tumbler'), ('MOGUL', (0.55, -0.98), 'tumbler'),
+                               ('HEIRESS', (0.95, -0.66), 'flute')):
         sg = 1 if z > 0 else -1
+        hx = -1 if who == 'HEIRESS' else 1               # her drink on her other side, clear of player one's things
         for k in range(2):
             T.append(('card', (x - 0.04 + k * 0.05, z), dict(face=None, ang=rng.uniform(-14, 14))))
-        stacks(x - 0.3, z - sg * 0.05, [(14, 'great'), (12, 'poke'), (10, 'ultra')], sg)
-        T.append((drink, (x + 0.3, z - sg * 0.1), {}))
-        T.append(('napkin', (x + 0.2, z + sg * 0.06), {}))
+        stacks(x - 0.3 * hx, z - sg * 0.05, [(14, 'great'), (12, 'poke'), (10, 'ultra')], sg)
+        T.append((drink, (x + 0.3 * hx, z - sg * 0.1), {}))
+        T.append(('napkin', (x + 0.2 * hx, z + sg * 0.06), {}))
     T.append(('ashtray', (-0.2, -0.95), {}))
     T.append(('cigarbox', (-0.95, -0.72), {}))
     T.append(('pad', (-0.85, -0.55), {}))
@@ -731,6 +778,9 @@ def heap_offsets(dfire):
         b = person_body(who, dfire)
         if b is None or b.wall is None:
             continue
+        win = through_window(dfire)
+        if win and win[0] == who:
+            continue                                     # gone through the window: no heap
         pos = b.at(b.floor_t or b.t0 + 2)[0]
         along = 2 if b.wall[0] == 0 else 0
         walls.setdefault(b.wall, []).append((pos[along], who))
@@ -826,6 +876,90 @@ def scorch(img, cam, t, dfire):
             p.line([A, Bp], (24, 18, 16), max(2, 0.1 * (ka + kb) / 2))
 
 
+GLASS = [('+' + w, a0 + 0.25, a1 - 0.25, 0.4, 2.85) for w, a0, a1 in DRAPES]   # the panes between the drapes
+
+
+def through_window(dfire):
+    """Who goes out through a window (Sam, 19 Oct: craters landed on a window, so someone flies out of it): the first
+    body whose wall hit lands on the glass. Returns (who, wall, a, y, t) or None."""
+    if 'window' in _CACHE:
+        return _CACHE['window']
+    best = None
+    for who in list(SEATED) + list(STANDING):
+        if who == 'P2':
+            continue
+        b = person_body(who, dfire)
+        if b is None or b.wall is None:
+            continue
+        axis, sg = b.wall
+        pos = b.at(b.wall_t)[0]
+        a = pos[2] if axis == 0 else pos[0]
+        name = ('+' if sg > 0 else '-') + ('x' if axis == 0 else 'z')
+        for w, a0, a1, y0, y1 in GLASS:
+            if w == name and a0 + 0.08 < a < a1 - 0.08 and y0 < pos[1] < y1 and (best is None or b.wall_t < best[4]):
+                best = (who, w, a, pos[1], b.wall_t)
+    _CACHE['window'] = best
+    return best
+
+
+def glass_shards(dfire):
+    """The window's glass bursting into the room: shards thrown out from where the body went through, falling,
+    skidding a little and lying where they land (they stay). Each: (p0, v, t0, spin, size, seed, t_land, p_land)."""
+    if 'shards' in _CACHE:
+        return _CACHE['shards']
+    out = []
+    win = through_window(dfire)
+    if win:
+        who, w, a, y, t0 = win
+        rng = np.random.default_rng(77)
+        inward = (-1.0, 0.0) if w == '+x' else (0.0, -1.0)            # into the room, away from the wall
+        for i in range(70):
+            a_ = a + rng.uniform(-0.35, 0.35)
+            y_ = min(2.8, max(0.5, y + rng.uniform(-0.6, 0.6)))
+            p0 = (RX - 0.02, y_, a_) if w == '+x' else (a_, y_, RZ - 0.02)
+            sp = rng.uniform(1.0, 4.5)
+            lat = rng.uniform(-1.6, 1.6)
+            v = ((inward[0] * sp + (lat if w != '+x' else 0.0)), rng.uniform(-0.5, 2.2),
+                 (inward[1] * sp + (lat if w == '+x' else 0.0)))
+            # time to reach the floor: y_ + vy t - g t^2 / 2 = 0
+            tl = (v[1] + math.sqrt(v[1] ** 2 + 2 * G * y_)) / G
+            pl = (p0[0] + v[0] * tl, 0.004, p0[2] + v[2] * tl)
+            pl = (max(-RX + 0.05, min(RX - 0.05, pl[0])), 0.004, max(-RZ + 0.05, min(RZ - 0.05, pl[2])))
+            out.append((p0, v, t0 + rng.uniform(0.0, 0.05), rng.uniform(-900, 900), rng.uniform(0.012, 0.035),
+                        i, tl, pl))
+    _CACHE['shards'] = out
+    return out
+
+
+def shard_at(sh, t):
+    p0, v, t0, spin, size, seed, tl, pl = sh
+    u = t - t0
+    if u < 0:
+        return None
+    if u >= tl:
+        return pl, (seed * 37) % 360, True
+    return (p0[0] + v[0] * u, p0[1] + v[1] * u - G * u * u / 2, p0[2] + v[2] * u), spin * u, False
+
+
+def draw_shard(img, cam, sh, t):
+    st = shard_at(sh, t)
+    if st is None:
+        return
+    pos, ang, down = st
+    if cam.depth(pos) < 0.4:
+        return
+    (X, Y), k = cam.project(pos)
+    r = sh[4] * k
+    if r < 1.2:
+        return
+    p = B.Pen(img, FLAT)
+    a = math.radians(ang)
+    sq = 0.35 if down else 1.0                                     # lying flat on the floor once landed
+    pts = [(X + r * math.cos(a + d), Y + r * sq * math.sin(a + d)) for d in (0.0, 2.3, 3.6)]
+    p.poly(pts, (214, 236, 244), INK, 1.0)
+    p.line([pts[0], pts[1]], (255, 255, 255), max(1.0, r * 0.18))   # its glint
+
+
 def craters(img, cam, t, dfire):
     """Impact craters where people smack against the walls (Sam, 19 Oct): from the moment of the hit, a jagged hollow
     in the plaster (or the wood below the rail) where the body struck, with cracks running out from it; they stay."""
@@ -836,6 +970,9 @@ def craters(img, cam, t, dfire):
         b = person_body(who, dfire)
         if b is None or b.wall is None or t < b.wall_t:
             continue
+        win = through_window(dfire)
+        if win and win[0] == who:
+            continue                                     # through the glass: no crater, the window breaks instead
         axis, sg = b.wall
         pos = drifted(who, b, b.wall_t, dfire)[0]
         along = pos[2] if axis == 0 else pos[0]
@@ -1323,6 +1460,9 @@ def thrown_person(img, cam, film, who, t, dfire):
     b = person_body(who, dfire)
     if b is None or t < b.t0:
         return draw_person(img, cam, film, who, t, hand_on=(who == 'ESCORT'))
+    win = through_window(dfire)
+    if win and win[0] == who and t >= b.wall_t + 0.04:
+        return None                                      # out through the window, into the night
     if b.floor_t is not None and t >= b.floor_t:
         pos, _ = drifted(who, b, t, dfire)
         if cam.depth(pos) < 0.6:
@@ -1494,6 +1634,11 @@ def render(img, t, film, cam, extra_lights=()):
     for dep, i, pos, ang, flying, burning in things(img, cam, t, dfire, on_table=False):
         items.append((dep, 'thing', (i, pos, ang, flying, burning)))
         POS[('thing', (i, pos, ang, flying, burning))] = pos
+    for sh in glass_shards(dfire):                       # the window's glass, flying and lying on the floor
+        st = shard_at(sh, t)
+        if st is not None:
+            items.append((cam.depth(st[0]), 'shard', sh))
+            POS[('shard', sh)] = st[0]
     mouth = None
     lamp_px = None
 
@@ -1530,6 +1675,8 @@ def render(img, t, film, cam, extra_lights=()):
                 draw_person(img, cam, film, who, t)
             else:
                 thrown_person(img, cam, film, who, t, dfire)
+        elif kind == 'shard':
+            draw_shard(img, cam, who, t)
         elif kind == 'chair_all':
             chair(img, cam, who, t, dfire)
         elif kind in ('chair_far', 'chair_near'):
