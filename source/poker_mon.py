@@ -142,7 +142,8 @@ def seated(sp, kind='rest', u=0.0):
         V.arm_to(j, 'R', spread_hand(u), 'down', 'palm')
     elif kind == 'fan':
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 58, 70.0, 250.0), 'down', 'fist')      # held up at his chest, well clear of the table
+            V.arm_to(j, sd, (sg * 15, 70.0, 250.0), 'down', 'fist')      # both hands together at the fan's foot, at his
+                                                                         # chest, well clear of the table (Sam: held)
     elif kind == 'pull':
         for sd, sg in (('L', -1), ('R', 1)):
             z = 330.0 - 110 * u
@@ -186,6 +187,7 @@ def held_fan(img, n, at, w, spread=10.0, back=True, faces=None):
                 pts.append((hx + dx * math.cos(a) - dy * math.sin(a), hy + dx * math.sin(a) + dy * math.cos(a)))
             src = C.card_back() if back else C.card_face(*faces[i])
             C.place_image(img, p.cam, src, pts)
+    draw.held = True               # held in a hand: views.person refuses it unless the gripping hand is drawn over it
     return draw
 
 
@@ -266,17 +268,17 @@ def dragon_state(t):
     st = dict(head=0.0, mouth_open=0.0, eyes='open', wings=0.15, arms=0.0, lean=0.0, ball=0.0, shape='jaw')
     if t >= CHARGE[0]:                                          # charging: head back, the O, the light growing in it
         k = ease((t - CHARGE[0]) / 0.7)
-        st.update(head=-34 * k, mouth_open=1.0, shape='o', eyes='narrow' if k > 0.3 else 'open',
+        st.update(head=-18 * k, mouth_open=1.0, shape='o', eyes='soft' if k > 0.3 else 'open',
                   wings=0.15 + 0.5 * k, arms=0.35 * k)
         st['ball'] = ease((t - CHARGE[0] - 0.4) / (FIRE - CHARGE[0] - 0.4))
     if t >= FIRE - 0.12:                                        # the head snaps forward and down (fast): firing
         k = min(1.0, (t - (FIRE - 0.12)) / 0.12)
-        st.update(head=-34 + 50 * k, lean=10 * k, mouth_open=1.0, shape='o', wings=0.65 + 0.35 * k,
-                  arms=0.35 + 0.65 * k, eyes=fire_eyes(t) if k > 0.5 else 'narrow')
+        st.update(head=-18 + 30 * k, lean=8 * k, mouth_open=1.0, shape='o', wings=0.65 + 0.35 * k,
+                  arms=0.35 + 0.65 * k, eyes=fire_eyes(t) if k > 0.5 else 'soft')
     if t >= BEAM_END[1]:                                        # done: the smile back at once; settles, pleased
         k = ease((t - BEAM_END[1]) / 0.6)
-        st.update(head=16 * (1 - k), lean=10 * (1 - k), mouth_open=0.0, shape='jaw', wings=1.0 - 0.85 * k,
-                  arms=1.0 - k, eyes='closed' if k > 0.5 else 'narrow', ball=0.0)
+        st.update(head=12 * (1 - k), lean=8 * (1 - k), mouth_open=0.0, shape='jaw', wings=1.0 - 0.85 * k,
+                  arms=1.0 - k, eyes='arc' if k > 0.5 else 'soft', ball=0.0)     # a happy closed-eye smile
     return st
 
 

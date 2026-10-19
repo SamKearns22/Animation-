@@ -598,8 +598,12 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     for sd in arms_far:
         if sd not in behind:
             arm(p, j2, sd, sp)
+    if any(getattr(d, 'held', False) for d in j.get('props', [])) and not j.get('grip'):
+        raise ValueError(f"{sp.get('name', 'someone')} holds a prop with no hand in front of it: set j['grip']")
     for draw in j.get('props', []):
         draw(p, j2)
+    for sd in sorted(j.get('grip', ())):          # a hand gripping a held prop (a fan of cards) is in front of it:
+        arm(p, j2, sd, sp)                         # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
     head_view(img, B.Pen(img, up), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull

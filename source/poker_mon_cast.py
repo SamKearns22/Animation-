@@ -212,47 +212,43 @@ def wing(p, sx, sy, sg, k=1.0, spread=0.0):
     tube(p, [(sx, sy), elbow, tip], 44 * k, 14 * k, ORANGE)
 
 
+IRIS = (34, 40, 70)
+
+
 def dragonite_head(p, piv, deg, turn, mouth_open, eyes, mouth_shape='jaw'):
-    """The head on its neck pivot, rotated by deg (negative: thrown back, chin up). turn 0 front .. 1 three-quarter
-    to the right. mouth_open 0..1; eyes 'open', 'narrow', 'closed', 'wide'. Returns the mouth centre."""
+    """The head on its neck pivot, rotated by deg (negative: tipped back). Drawn to Sam's cute reference
+    (dragonite-cute-face.jpg, 19 Oct): a round crown and a long rounded muzzle pushed toward the side it faces, tall
+    oval eyes with big highlights, two small nostrils at the muzzle's tip, a small smile curling up to the cheek,
+    pale cream antennae sweeping out from the brow, a small horn. turn 0 front .. 1 three-quarter to the right.
+    mouth: the gentle smile ('jaw' closed) or a small round O ('o'), nothing else (Sam). Returns the mouth point."""
     R = lambda pts: _rot(pts, piv, deg)
-    hx, hy = piv[0] + 30 * turn, piv[1] - 200                      # the skull's centre
-    sx, sy = hx + 70 * turn, hy + 70                               # the snout's centre, toward the side it faces
-    for sg in (-1, 1):                                             # antennae, behind: thin, curling back and out
+    hx, hy = piv[0] + 25 * turn, piv[1] - 235          # the crown's centre
+    sx, sy = hx + 75 * turn, hy + 105                  # the muzzle's centre: lower, toward the side it faces
+    for sg in (-1, 1):                                 # antennae: from the brow, out and a little down, tips up
         k = 1.0 if sg > 0 else 1.0 - 0.3 * turn
-        bx = hx + sg * 40 * k - 20 * turn
-        by = hy - 128
-        ant = [(bx, by), (bx + sg * 24 * k, by - 90), (bx + sg * 80 * k, by - 150), (bx + sg * 150 * k, by - 160),
-               (bx + sg * 186 * k, by - 128)]
-        tube(p, R(ant), 18, 9, ORANGE, 2.0)
-    p.poly(R(_ovl(hx - 10 * turn, hy, 160, 150)), ORANGE, INK, 2.8)                   # the skull
-    p.poly(R([(hx - 18 - 14 * turn, hy - 138), (hx + 18 - 14 * turn, hy - 138), (hx - 16 * turn, hy - 196)]),
-           ORANGE, INK, 2.2)                                                            # the small horn
-    jaw = 80 * mouth_open
-    if mouth_shape == 'o' and mouth_open > 0.02:                   # firing: lips pursed into a round O (Sam)
-        p.poly(R(_ovl(sx, sy, 150 + 10 * turn, 100)), ORANGE, INK, 2.8)
-        ox, oy = sx + 20 * turn, sy + 52
-        r_ = 30 + 18 * mouth_open
-        p.poly(R(_ovl(ox, oy, r_ + 14, r_ + 12)), ORANGE_D, INK, 2.6)                 # the pursed lips
-        p.poly(R(_ovl(ox, oy, r_, r_ * 0.95)), MOUTH, INK, 2.2)                       # the O
-        p.poly(R(_ovl(hx - 6 * turn, hy + 10, 140, 64)), ORANGE, None)
-        for sg in (-1, 1):
-            p.ell(*R([(sx + sg * 32 + 12 * turn, sy - 30)])[0], 7, 5, INK, None)
-        eye_block(p, R, hx, hy, turn, eyes)
-        return R([(ox, oy)])[0]
-    if mouth_open > 0.02:                                          # open: the dark mouth between snout and jaw
-        p.poly(R(_ovl(sx + 6 * turn, sy + 40 + jaw * 0.45, 110, 34 + jaw * 0.55)), MOUTH, INK, 2.6)
-        p.poly(R(_ovl(sx + 6 * turn, sy + 62 + jaw * 0.6, 60, 14 + jaw * 0.2)), TONGUE, None)
-        p.poly(R(_ovl(sx, sy + 70 + jaw, 118 + 10 * turn, 44)), ORANGE, INK, 2.6)       # the lower jaw
-        p.poly(R(_ovl(sx, sy - 6, 150 + 10 * turn, 74)), ORANGE, INK, 2.8)              # the upper snout
-    else:
-        p.poly(R(_ovl(sx, sy, 150 + 10 * turn, 100)), ORANGE, INK, 2.8)                 # the snout
-        p.line(R(curve([(sx - 70, sy + 40), (sx - 30, sy + 64), (sx + 30, sy + 64), (sx + 74, sy + 38)], 3)), INK, 3.2)
-    p.poly(R(_ovl(hx - 6 * turn, hy + 10, 140, 64)), ORANGE, None)                     # one shape: no seam line
-    for sg in (-1, 1):
-        p.ell(*R([(sx + sg * 32 + 12 * turn, sy - 30)])[0], 7, 5, INK, None)           # nostrils
+        bx, by = hx + sg * 42 * k - 15 * turn, hy - 108
+        ant = [(bx, by + 30), (bx + sg * 14 * k, by - 40), (bx + sg * 80 * k, by - 62), (bx + sg * 160 * k, by - 54),
+               (bx + sg * 205 * k, by - 30)]                       # rooted inside the crown; tips droop (Sam's ref)
+        tube(p, R(ant), 13, 7, CREAM, 2.0)
+    p.poly(R([(hx - 18 - 10 * turn, hy - 120), (hx + 18 - 10 * turn, hy - 120), (hx - 6 * turn, hy - 172)]), ORANGE,
+           INK, 2.2)                                                                    # the small horn
+    p.poly(R(_ovl(hx - 8 * turn, hy, 138, 128)), ORANGE, INK, 2.8)                     # the crown
+    mw, mh = 128 + 30 * turn, 92
+    p.poly(R(_ovl(sx, sy, mw, mh)), ORANGE, INK, 2.8)                                  # the long rounded muzzle
+    p.poly(R(_ovl((hx + sx) / 2, (hy + sy) / 2 - 8, 118, 70)), ORANGE, None)           # one shape: no seam between
+    for sg in (-1, 1):                                                                 # the nostrils, at the tip
+        p.line(R([(sx + sg * 26 + 40 * turn - 6, sy - 28), (sx + sg * 26 + 40 * turn + 6, sy - 31)]), INK, 3.0)
+    mouth_at = (sx + 15 * turn, sy + 44)
+    if mouth_shape == 'o' and mouth_open > 0.02:       # a small neat O, darker lips round it
+        ox, oy = mouth_at
+        p.poly(R(_ovl(ox, oy, 30, 27)), ORANGE_D, INK, 2.4)
+        p.poly(R(_ovl(ox, oy, 19, 17)), (92, 34, 32), INK, 2.0)
+    else:                                              # the gentle smile, curling up into the cheek
+        smile = curve([(sx - mw * 0.55 + 30 * turn, sy + 38), (sx - 10 + 20 * turn, sy + 58),
+                       (sx + mw * 0.45 + 10 * turn, sy + 44), (sx + mw * 0.7 + 10 * turn, sy + 18)], 3)
+        p.line(R(smile[:-1] if len(smile) > 1 else smile), INK, 3.0)
     eye_block(p, R, hx, hy, turn, eyes)
-    return R([(sx + 6 * turn, sy + 40 + jaw * 0.45)])[0]
+    return R([mouth_at])[0]
 
 
 EYE_STYLES = ['narrow', 'soft', 'focus', 'aim', 'arc', 'puppy']   # for Sam's pick of the firing eyes (19 Oct)
@@ -265,7 +261,7 @@ def eye_block(p, R, hx, hy, turn, eyes):
     if aiming), 'arc' (happy closed arcs), 'puppy' (big shining eyes, two highlights, cheeks up)."""
     for sg in (-1, 1):
         k = 1.0 if sg > 0 else 1.0 - 0.3 * turn
-        ex, ey = hx + sg * 66 * k + 34 * turn, hy - 30
+        ex, ey = hx + sg * 58 * k + 40 * turn, hy - 18
         style = eyes
         if eyes == 'aim':
             style = 'soft' if sg > 0 else 'squint'
@@ -282,9 +278,10 @@ def eye_block(p, R, hx, hy, turn, eyes):
             p.ell(*R([(ex + 8, ey + 4)])[0], 6, 5, (250, 250, 250), None)
         elif style in ('soft', 'focus', 'puppy'):
             r = 1.22 if style == 'puppy' else 1.0
-            ew, eh = 26 * k * r, 34 * r
-            p.poly(R(_ovl(ex, ey, ew, eh)), INK, INK, 2.0)
-            p.ell(*R([(ex + 9 * r, ey - 13 * r)])[0], 9 * r, 10 * r, (250, 250, 250), None)
+            ew, eh = 25 * k * r, 40 * r
+            p.poly(R(_ovl(ex, ey, ew, eh)), (250, 250, 250), INK, 2.2)
+            p.poly(R(_ovl(ex + 4 * turn, ey + 3, ew - 4, eh - 5)), IRIS, None)
+            p.ell(*R([(ex + 7 * r, ey - 14 * r)])[0], 8 * r, 12 * r, (250, 250, 250), None)
             if style == 'puppy':
                 p.ell(*R([(ex - 9, ey + 12)])[0], 4.5, 4.5, (250, 250, 250), None)
             if style in ('soft', 'puppy', 'focus'):                # cheeks pushed up: the lower lid a smile
@@ -300,10 +297,12 @@ def eye_block(p, R, hx, hy, turn, eyes):
                 pts = [(ex + inner * (ew + 6), yi), (ex - inner * (ew + 6), yo)]
                 p.poly(R([pts[0], pts[1], (pts[1][0], ey - eh - 8), (pts[0][0], ey - eh - 8)]), ORANGE, None)
                 p.line(R(pts), INK, 2.8)
-        else:
+        else:                                          # the cute eye: a tall oval, navy, two highlights
             r = 1.2 if eyes == 'wide' else 1.0
-            p.poly(R(_ovl(ex, ey, 26 * k * r, 36 * r)), INK, INK, 2.0)
-            p.ell(*R([(ex + 9, ey - 13)])[0], 9, 10, (250, 250, 250), None)
+            p.poly(R(_ovl(ex, ey, 25 * k * r, 40 * r)), (250, 250, 250), INK, 2.2)
+            p.poly(R(_ovl(ex + 4 * turn, ey + 3, 21 * k * r, 35 * r)), IRIS, None)
+            p.ell(*R([(ex + 7, ey - 14)])[0], 8 * r, 12 * r, (250, 250, 250), None)
+            p.ell(*R([(ex - 7, ey + 18)])[0], 3.5, 3.5, (200, 210, 230), None)
     if eyes == 'focus':                                            # a small crease of effort between the eyes
         p.line(R([(hx + 34 * turn - 4, hy - 74), (hx + 34 * turn - 2, hy - 58)]), ORANGE_D, 2.6)
         p.line(R([(hx + 34 * turn + 8, hy - 72), (hx + 34 * turn + 6, hy - 58)]), ORANGE_D, 2.6)

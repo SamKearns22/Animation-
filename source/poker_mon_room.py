@@ -1210,7 +1210,8 @@ def p2_pull_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
     ARMS_UP[0] = t < Clock.PUTDOWN[0]
     if fan_held:
         j['props'].append(film.held_fan(img, 5, lambda j2: ((j2['wrL'][0] + j2['wrR'][0]) / 2,
-                                                         (j2['wrL'][1] + j2['wrR'][1]) / 2 - 6), film.CARD_U, 11))
+                                                         (j2['wrL'][1] + j2['wrR'][1]) / 2 - 26), film.CARD_U, 15))
+        j['grip'] = {'L', 'R'}                     # his hands in front of the cards, never behind them
     return j
 
 
@@ -1246,6 +1247,7 @@ def p1_lay_pose(img, cam, film, sp, t, X, Y, s, yaw, mirror):
         pos = tuple(c + (g - c) * k for c, g in zip(chest, tgt))
         pos = (pos[0], pos[1] - 60 * math.sin(math.pi * k), pos[2])
         j['props'].append(film.held_fan(img, 4, lambda j2: (j2['wrR'][0] - 4, j2['wrR'][1] - 10), film.CARD_U, 12))
+        j['grip'] = {'R'}
     elif u < 0.82:
         w = ease((u - 0.4) / 0.42)
         pos = to((xq, TABLE_H + 0.02, zq[0] + (zq[-1] - zq[0]) * w))
