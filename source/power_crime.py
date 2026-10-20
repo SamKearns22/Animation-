@@ -37,6 +37,7 @@ import peepee as PP              # noqa: E402
 import film_engine as E          # noqa: E402
 from poker_mon_room import Cam3  # noqa: E402
 from ed import INK                # noqa: E402
+C.install_point_hand()           # the superintendent's prodding finger (after every module that sets the hands)
 
 FPS, SR = 12, MA.SR
 FLAT = B.Cam(1.0, 540, 960)

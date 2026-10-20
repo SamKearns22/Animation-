@@ -35,7 +35,13 @@ install_circle_hands(B)
 F.guard(B)                       # every arm measured against the rig
 limbs.install(B)                 # the smooth, shaped arms of the house style (Sam, 20 Oct: no blocky arms)
 
-_circle_hand = B.gesture_hand
+def install_point_hand():
+    """Called by the film once everything is imported (poker_mon_cast, imported for the placard, re-installs the
+    plain circle hands)."""
+    import poker_mon_cast  # noqa: F401
+    global _circle_hand
+    _circle_hand = B.gesture_hand
+    B.gesture_hand = _gesture_hand
 
 
 def _gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
@@ -55,9 +61,6 @@ def _gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
                 (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
                 (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
     return _circle_hand(p, el, wr, shape, skin, extra, t)
-
-
-B.gesture_hand = _gesture_hand
 
 # ------------------------------------------------------------------------------------------------ colours
 HIVIS, HIVIS_D = (212, 226, 40), (170, 182, 30)
