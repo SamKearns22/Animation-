@@ -425,3 +425,5 @@ Read this first in any new session, after CLAUDE.md.
 - Poker Mon final rendered 19 Oct: `animations/poker-mon-vertical.mp4` (26.9 s, 10.1 MB), Hook Text "Poker Mon Cards ♦♣♥♠", CranbriJoos sign-off. Pending: Sam's posting; the 3D look of standing/sitting people in high shots (plan proposed, not built); a recorded gasp to replace the made one.
 
 - 19 Oct: CranbriJoos sign-off added to DLC: `animations/bayeux-season-pass-vertical.mp4` is now 51.2 s, 13.0 MB, 24 fps (was 49.2 s, 9.9 MB, no sign-off). `signoff.py add` now keeps the film's own frame rate (it forced 12 fps, which would have halved DLC's smoothness).
+- 20 Oct (chat 5): Sam said Y to the check sheet; animatic 3 rendered (`final --small`, 4m54s, 2.9 MB, 581 frames) and sent.
+  NEXT: Sam's notes on animatic 3 (movement notes get clips, not a full animatic); then a final render only on a clear yes.
