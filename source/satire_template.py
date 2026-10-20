@@ -112,6 +112,14 @@ def state(who, t):
     return sp
 
 
+def mouths_seen(t):
+    """Every face on screen at t with its mouth as drawn, for the script and mouth audit (voices.py, rule 7):
+    (name, mouth, view in degrees (0 facing us), head height in pixels). Add anyone else drawn with a face."""
+    cam = cam_for(t)
+    return [(who, state(who, t)['mouth'], 0.0, 2 * CAST[who].get('hh', 90) * S * cam.z)
+            for who in 'AB' if visible(who, cam)]
+
+
 def visible(who, cam):
     return abs(XS[who] - cam.cx) * cam.z <= 540 + 130 * S * cam.z
 

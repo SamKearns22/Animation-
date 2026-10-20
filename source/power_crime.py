@@ -1514,6 +1514,12 @@ ALLOWED_POPS = [       # (thing, from, to, why)
     ('PLACARD', WIND[0], WIND[0] + 0.01, 'her placard handed over to the fling: the same card in the same place '
                                          '(within 5 cm, audit 21 Oct)'),
 ]
+# voices.py's mouth audit (rule 7): the horror mouth (power_crime_cast.horror sets 'hidden' and draws its own, open)
+MOUTH_OPENNESS = {'hidden': 0.7}
+ALLOWED_MOUTHS = [     # (who, from, to, why): a mouth meant to be open in silence
+    ('SUPER', DROP, first_word(), 'his jaw drops in horror before he speaks (brief 10); shut from his first word on (note 50)'),
+    ('JENKINS', JAB[0], JAB[0] + 2.15, 'shocked by the jab: rocked back, mouth open (note 20), until his face turns cowed'),
+]
 
 
 def _van_solids(x, z, heading, doors):
@@ -1568,20 +1574,29 @@ def _corridor_solids():
 _NO_IMG = Image.new('RGBA', (1, 1))
 
 
-def scene(t):
-    """Everyone and everything solid at time t, exactly as picture(t) draws them (audit.py)."""
+def scene(t, faces=None):
+    """Everyone and everything solid at time t, exactly as picture(t) draws them (audit.py). `faces`, a list, also
+    collects every face drawn: (name, mouth, view in degrees, head height in pixels) for voices.py's mouth audit."""
     me = sys.modules[__name__]
     real_put, real_crowd = put, crowd_draw
-    crowd, drawn = [None], [False]
+    crowd, drawn, who = [None], [False], [None]
     with A.Recorder() as rec:
         def put_(img, cam, sp, x, z, facing, j, t_, lift=0.0, height=None, head_yaw=None, shadow=True, base=0.0,
                  ground=True):
             drawn[0] = False                                 # the real put(), so whoever it skips is skipped here
+            name = crowd[0] or sp.get('name')
+            who[0] = name
             real_put(img, cam, sp, x, z, facing, j, t_, lift, height, head_yaw, False, base, ground)
+            who[0] = None
             if drawn[0]:
                 h = height or C.HEIGHTS.get(sp.get('name'), sp.get('height', 1.75))
-                name = crowd[0] or sp.get('name')
                 rec.add(name, A.placed(name, j, x, z, facing, h, lift, base, sp))
+
+        def person_(img, cam, X, Y, s, sp, t_=0.0, yaw=0, j=None, head_yaw=None):
+            drawn[0] = True
+            if faces is not None:
+                faces.append((who[0] or sp.get('name'), sp.get('mouth'), yaw if head_yaw is None else head_yaw,
+                              2 * s * sp.get('hh', 90)))
 
         def crowd_(img, cam, c, t_):
             crowd[0] = f"CROWD{c['seed']}"
@@ -1620,7 +1635,7 @@ def scene(t):
         def chair_(img, cam, x, z, facing):
             name = 'GRAN_CHAIR' if z < 0 else 'SUPER_CHAIR'
             rec.add(name, _chair_solids(x, z, facing))
-        rec.patch(C, 'person', lambda *a, **k: drawn.__setitem__(0, True))
+        rec.patch(C, 'person', person_)
         rec.patch(B, 'canvas', lambda *a, **k: _NO_IMG.copy())
         for nm, fn in (('put', put_), ('crowd_draw', crowd_), ('tiny', tiny_), ('gran_flying', flying_),
                        ('placard_flung', flung_)):
@@ -1635,6 +1650,13 @@ def scene(t):
         rec.stub(S3, 'square_back', 'light_pool', 'clip_to_doorway')
         picture(t)
     return rec.things
+
+
+def mouths_seen(t):
+    """Every face drawn at time t with its mouth (voices.py's script and mouth audit, rule 7): scene(t)'s run."""
+    faces = []
+    scene(t, faces)
+    return faces
 
 
 def stills_sheet(out, times):

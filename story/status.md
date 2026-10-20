@@ -450,5 +450,13 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   Crime Action (`python3 source/audit.py power_crime`, about 3 min): the old faults of notes 33-37 and 47 put back from
   git are all found; 38 half; 29 not testable. New in the finished film: notes 52-53 in its notes file (Jenkins pops into
   the doorway; officers through each other and through sitters in the storm and throw), not fixed: Sam to decide.
-  NEXT (fresh chat, Opus high): item 2, the script/mouth audit in `source/voices.py` (rule 7), tested on Power Crime
-  (its known faults: the missing "terrorist" sentence, note 49; "Shit" mouthed twice; the mouth hanging open, note 50).
+- 21 Oct: **2 done**: `python3 source/voices.py --film FILM` (rule 7; about 25 s; pre-flight runs it on any film with
+  `LINES`). Script v voice (phrases and syllables measured from the sound, the script's words laid over them),
+  subtitles v script (what caption_at shows, word by word), drawn mouths v voice every frame (shut in silence, moving
+  in speech, not more than about one open-and-shut a syllable). A film gives `mouths_seen(t)` (Power Crime's rides on
+  `scene(t)`; the template now has one), `MOUTH_OPENNESS`, `ALLOWED_MOUTHS`. Tested on Power Crime Action: the old
+  faults of notes 49, 50 and the double "Shit", put back in memory, plus a planted subtitle typo, all found. New in the
+  finished film: notes 54-55 (Jenkins's mouth open 7.8 s in silence after the jab; the chant written once, said three
+  times), not fixed: Sam to decide. No speech recognition is possible here (package sites blocked).
+  NEXT (fresh chat, Opus high): item 3, the film plan template (rule 1) and the reference benchmark sheet (rule 3) in
+  `source/satire_template.py`.

@@ -27,7 +27,8 @@ check by hand and say so.
    21 Oct: also flags a jump (a step far longer than the frames either side); `ALLOWED_POPS`; it prints the list]
 7. **Script and mouth audit before any picture.** For every recording compare syllable count and length with the script
    text and the subtitles; flag mismatches (the missing "terrorist" sentence). Check the mouth opens once per syllable and
-   shuts in silence unless the brief says otherwise. [tool: add to `source/voices.py`]
+   shuts in silence unless the brief says otherwise. [tool: `python3 source/voices.py --film FILM`, built 21 Oct: the
+   film's `mouths_seen(t)` and `ALLOWED_MOUTHS`; see `guides/satire.md`]
 8. **Rehearse the risky moves as clips in the planning stage.** Pick the 3-4 hardest moments (a throw, a door, a lunge, a
    crowd running in) and render each as a 2-3 second clip before building the rest of the film.
 9. **Every group has a plan for every phase.** For crowds, police, any group: write what each person does while arriving,

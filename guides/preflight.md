@@ -53,7 +53,9 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 - Run `python3 voices.py FILES --script script.txt` the moment they arrive: it reports **duplicates** (two names,
   one take: it happened twice on The Patriots 2), each file's length, phrases and syllables, and each script
   line's expected length. Ask Sam about any duplicate or any file whose length doesn't fit its line, before
-  building.
+  building. Once the film's `LINES` hold the takes, `python3 voices.py --film FILM` checks each take phrase by
+  phrase against the script, the subtitles against the script, and the drawn mouths against the voice (rule 7;
+  pre-flight runs it).
 - Clean and level (mossad_audio.line), play exactly as recorded (volume only), captions follow what was said.
 - Silences between phrases may be shortened (never the words) to tighten the film.
 

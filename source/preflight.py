@@ -84,6 +84,9 @@ def main():
     if not any(hasattr(film, a) for a in ('scene', 'solids')):   # never skipped in silence (Sam, 21 Oct: Power Crime
         shared.append('the collision and pop-in tests did not run: the film has no scene(t) (audit.py; '   # never ran
                       'guides/film-quality-rules.md rules 5 and 6)')                                      # them)
+    if hasattr(film, 'LINES'):                  # rule 7: script v recordings v subtitles, and the mouths drawn
+        import voices
+        shared += voices.check(film)
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
     shared += linecheck.faults(film)            # every shape outlined, one line weight (the cast)

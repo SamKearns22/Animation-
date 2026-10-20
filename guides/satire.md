@@ -166,6 +166,14 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   clipping check, and nobody knew). Run it alone: `python3 source/audit.py FILM [--shots a,b] [--sheet OUT.jpg]`
   (about 4 minutes for a 48 s film with a 2,000-person crowd). It does not judge drawing order (someone drawn over a
   door that should hide him): that is `layers(t)` below.
+- **Script and mouths: `python3 source/voices.py --film FILM`** (rule 7, 21 Oct; about 25 s, pre-flight runs it).
+  Each recording is cut into phrases and its syllables counted from the sound; the script's words are laid over the
+  phrases, and a phrase the script doesn't cover (a sentence said but never written down) is flagged. The subtitles
+  shown are compared word by word with the script (a starred word matches). Every frame, each speaker's drawn mouth
+  (on screen, facing us) must shut in silence, move while the voice speaks, and open and shut no more than about
+  once a syllable. A film gives `mouths_seen(t)` (copy `power_crime.mouths_seen`, which rides on its `scene(t)`, or
+  the template's), `MOUTH_OPENNESS` for its own mouth drawings, and `ALLOWED_MOUTHS` (a jaw dropped in horror) with
+  reasons. No speech recognition here: a flagged phrase means "listen to that bit", not certain proof.
 - **Nothing passes through anything** (Sam, 18 Oct, after the trip in Shocking Behaviour took nine rounds). Before every
   animatic `preflight.py` runs `source/clipcheck.py` over every frame: every body, head, limb, hand, prop, piece of
   furniture and flying thing is a solid (the film's `solids(t)`; people come free from their pose with
