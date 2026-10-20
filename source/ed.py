@@ -149,12 +149,22 @@ def mouth_shape(t):
 
 
 def soft(img, cam, pts, colr, alpha, blur=6):
-    """A soft painted shadow or highlight."""
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(lay).polygon([cam.P(*q) for q in pts], fill=colr + (int(255 * alpha),))
+    """A soft painted shadow or highlight. Blurred on a small layer round the shape only (the same picture as
+    blurring the whole frame, many times faster)."""
+    q = [cam.P(*p) for p in pts]
+    r = float(cam.S(blur)) if blur else 0.0               # a plain number (a numpy one confuses PIL)
+    pad = int(3 * r) + 3
+    x0 = max(0, int(min(x for x, _ in q)) - pad)
+    y0 = max(0, int(min(y for _, y in q)) - pad)
+    x1 = min(img.width, int(max(x for x, _ in q)) + pad + 1)
+    y1 = min(img.height, int(max(y for _, y in q)) + pad + 1)
+    if x1 <= x0 or y1 <= y0:
+        return
+    lay = Image.new('RGBA', (x1 - x0, y1 - y0), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).polygon([(x - x0, y - y0) for x, y in q], fill=colr + (int(255 * alpha),))
     if blur:
-        lay = lay.filter(ImageFilter.GaussianBlur(float(cam.S(blur))))   # a plain number (a numpy one confuses PIL)
-    img.alpha_composite(lay)
+        lay = lay.filter(ImageFilter.GaussianBlur(r))
+    img.alpha_composite(lay, (x0, y0))
 
 
 def curve(pts, n=6):
