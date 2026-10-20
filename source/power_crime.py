@@ -81,7 +81,8 @@ SHOTS = [   # (name, start, end)
     ('interro_s', 21.0, 25.8),   # close on him
     ('interro_g', 25.8, 28.6),   # close on her: trembling, unbothered
     ('door', 28.6, 34.0),        # the door opens: Jenkins
-    ('corridor', 34.0, 48.4),    # outside: the mass casualty attack; the jab; small fry
+    ('corridor_j', 34.0, 37.9),  # outside: Jenkins side on beside the door: the mass casualty attack...
+    ('corridor', 37.9, 48.4),    # both, the door between them: he leaps in, jabs Jenkins's chest: small fry
 ]
 DUR = 48.4
 BLACK_AT = DUR
@@ -94,9 +95,10 @@ DROP = 5.75                       # his jaw drops (a snap: eyes and jokes snap)
 # west and the van drives off west.
 GRAN_AT = (-3.0, 48.0)            # she stands among the sitting crowd near the gallery's steps, facing south
 FACE = (0.0, -1.0)                # the crowd's facing
-POLICE = {'SUPER': (-3.0, 18.2), 'PC1': (-4.9, 17.2), 'PC2': (-1.1, 17.2), 'PC3': (-6.8, 17.0), 'PC4': (0.8, 17.0),
-          'PC5': (-8.6, 17.1)}    # a line in front of the column and its lions, facing the crowd; the senior officer
-                                  # front centre
+POLICE_Z = 23.8                   # Sam, 20 Oct: a wall of police, shoulder to shoulder, right at the crowd's front
+POLICE = {'SUPER': (-3.0, POLICE_Z + 0.7)}
+for _k, _x in enumerate((-6.0, -5.25, -4.5, -3.75, -2.25, -1.5, -0.75, 0.0, -3.0)):
+    POLICE[f'PC{_k + 1}'] = (_x + (0.05 if _k % 2 else -0.05), POLICE_Z - (0.35 if _k == 8 else 0.0))
 VAN_AT = (-29.0, 48.0)            # its back doors face the square (east); it drives off west
 VAN_HEADING = math.pi
 THROW_FROM = (-11.0, 48.0)        # where the carriers swing and let go
@@ -120,9 +122,10 @@ SUPER_SEAT = (0.0, 0.72, (0.0, -1.0))
 DOOR_OPEN = (28.75, 29.25)
 JENKINS_IN = (29.0, 29.9)
 # The corridor: the two of them outside the door
-CORR_SUPER = (-0.36, 1.3)
-CORR_JENKINS = (0.36, 1.3)
-JAB = (37.95, 38.2)               # his finger into Jenkins's chest, on the cut-off
+CORR_SUPER = (-0.72, -1.2)        # both beside the interview room's door (on the left wall at z 0), facing each other
+CORR_JENKINS = (-0.72, 0.6)       # along the corridor; he leaps from -1.2 to -0.1 for the jab
+LEAP = (37.9, 38.15)
+JAB = (38.0, 38.2)                # his finger into Jenkins's chest, on the cut-off (as he lands from the leap)
 LEAN_IN = (38.2, 38.7)            # leaning forward, aggressive
 # ====================================================================================================================
 
@@ -219,7 +222,7 @@ def _crowd():
                 continue
             if math.hypot(x_ - GRAN_AT[0], z_ - GRAN_AT[1]) < 0.75:
                 continue
-            if abs(z_ - GRAN_AT[1]) < 1.15 and -15 < x_ < 15:   # the aisle along her row (left, right, the carry)
+            if abs(z_ - GRAN_AT[1]) < 1.75 and -16.5 < x_ < 16.5:   # the aisle along her row (left, right, the carry)
                 continue
             if abs(x_ - GRAN_AT[0]) < 0.7 and z_ > GRAN_AT[1]:  # the aisle from behind (north)
                 continue
@@ -229,7 +232,9 @@ def _crowd():
                 continue                                 # where the low camera sits
             if abs(x_ - WIDE_CAM[0]) < 1.2 and abs(z_ - WIDE_CAM[2]) < 1.2:
                 continue
-            if -10.5 < x_ < 3.5 and 15.0 < z_ < 25.5:    # the police line and the camera's straight view of it
+            if -7.0 < x_ < 1.0 and 15.0 < z_ < POLICE_Z + 1.2:   # the police wall, right at the crowd's front
+                continue
+            if abs(x_ - POLICE_CAM[0]) < 0.9 and abs(z_ - POLICE_CAM[2]) < 0.9:   # where the police camera stands
                 continue
             if x_ < -9 and abs(z_ - GRAN_AT[1]) < 2.2:     # the throw's path (she flies over the crowd either side)
                 continue
@@ -282,13 +287,15 @@ def _front():
     cx, cy, cz = LOW_CAM
     gx, gz = GRAN_AT
     d = math.hypot(gx - cx, gz - cz)
-    u = 2.3 / d
+    u = 1.35 / d
     bx, bz = cx + (gx - cx) * u, cz + (gz - cz) * u
-    return [(bx - 0.85, bz + 0.5), (bx, bz), (bx + 0.85, bz + 0.45)]
+    return [(bx - 0.8, bz + 0.55), (bx, bz), (bx + 0.8, bz + 0.5)]
 
 
-LOW_CAM = (GRAN_AT[0] + 0.25, 0.98, GRAN_AT[1] - 5.2)   # among the sitting protesters, at their eye level
-WIDE_CAM = (-1.0, 1.9, 25.0)                            # a standing person's eye height, in the crowd (past the police)
+LOW_CAM = (GRAN_AT[0] + 0.15, 0.98, GRAN_AT[1] - 3.0)   # among the sitting protesters, at their eye level (Sam:
+                                                        # close enough to read her placard)
+WIDE_CAM = (-1.0, 1.9, 26.0)                            # a standing person's eye height, in the crowd (past the police)
+POLICE_CAM = (-3.0, 1.65, 28.2)                         # behind the first rows of protesters, looking at the wall
 FRONT = _front()
 CROWD = _crowd()
 
@@ -509,14 +516,54 @@ RUNNERS = {   # (path in metres, start delay): from the west (screen right), the
     'ARV4': ([_rel(15.0, -0.4), _rel(2.2, -0.4), _rel(1.8, -1.1)], 0.05),
     'ARV5': ([_rel(16.0, 0.5), _rel(2.9, 0.5), _rel(2.5, 1.0)], 0.2),
     'ARV6': ([_rel(0.0, 18.0), _rel(0.0, 2.6), _rel(-0.8, 2.2)], 0.3),
+    # Sam, 20 Oct: more sweeping in from the left and right
+    'ARV9': ([_rel(-14.0, -1.2), _rel(-2.8, -1.2), _rel(-2.5, -1.6)], 0.35),
+    'ARV10': ([_rel(14.0, -1.2), _rel(2.8, -1.2), _rel(2.5, -1.6)], 0.4),
+    'ARV11': ([_rel(-15.0, 1.0), _rel(-3.3, 1.0), _rel(-3.0, 1.45)], 0.5),
+    'ARV12': ([_rel(15.0, 1.0), _rel(3.3, 1.0), _rel(3.0, 1.45)], 0.45),
+    'ARV13': ([_rel(-16.0, 0.2), _rel(-3.8, 0.2), _rel(-3.6, -0.1)], 0.6),
+    'ARV14': ([_rel(16.0, 0.2), _rel(3.8, 0.2), _rel(3.6, -0.1)], 0.55),
 }
+# the escort (Sam: "covering all the angles as they escort her"): where each walks round her, (dx, dz) from her, and
+# which way his rifle points (degrees right of his walk). Nobody stands between her and the side-on camera.
+ESCORT = {'ARV1': (-2.0, 0.6, -40), 'ARV2': (-2.8, 1.4, 35), 'ARV3': (1.6, 0.8, 150), 'ARV4': (2.6, 1.5, -150),
+          'ARV5': (-1.4, 1.6, 60), 'ARV6': (0.4, 1.8, 90), 'ARV9': (-3.4, -0.4, -60), 'ARV10': (3.2, -0.3, -120),
+          'ARV11': (-0.6, 2.5, 80), 'ARV12': (1.2, 2.6, 110), 'ARV13': (-2.2, 2.7, 45), 'ARV14': (2.4, 2.9, 130)}
 ROPES = {'ARV7': (GRAN_AT[0] - 0.55, GRAN_AT[1]), 'ARV8': (GRAN_AT[0] + 0.55, GRAN_AT[1])}
 
 
+def escort_pose(sp, t, at, walking):
+    """Walking (or standing) with the carbine shouldered, aimed `at` degrees off the way he walks."""
+    j = moves.gait(sp, t, 'brisk') if walking else C.pose_standing(sp)
+    aim = C.aim_pose(sp, (max(-60, min(60, at)) if abs(at) <= 90 else (60 if at > 0 else -60), 4))
+    for k in ('elL', 'wrL', 'elR', 'wrR'):
+        j[k] = aim[k]
+    j['hand'] = aim['hand']
+    j['props'] = [p for p in j.get('props', []) if not getattr(p, 'held', False)] + [C.carbine()]
+    j['grip'] = {'L', 'R'}
+    j['lean'] = 4
+    C.outfit(j, sp)
+    return j
+
+
 def runner(who, t, cam):
-    """One armed officer: running in (rifle low across the body), then aiming at her."""
+    """One armed officer: running in (rifle low across the body), aiming at her; then escorting her off in a ring,
+    rifles covering every side (Sam, 20 Oct)."""
     sp = dict(C.PEOPLE[who])
     path, delay = RUNNERS[who]
+    if t >= CARRY[0]:
+        ax, az, _, _ = moves.travel(path, CARRY[0], 'run', start=RUN_IN + delay)
+        gx, gz = gran_where(t)[:2]
+        dx, dz, at = ESCORT[who]
+        u = ease((t - CARRY[0]) / 0.7)
+        x, z = ax + (gx + dx - ax) * u, az + (gz + dz - az) * u
+        walking = t < SWING[0]
+        facing = (-1.0, 0.0)
+        if at > 90 or at < -90:                         # the back of the ring walks backwards, covering behind
+            facing = (1.0, 0.0) if not walking else facing
+        j = escort_pose(sp, t - CARRY[0], at, walking)
+        sp['blink'] = F.blinking(t, F.blinks(hash(who) % 97, 0, DUR))
+        return sp, j, x, z, facing
     x, z, yaw, state = moves.travel(path, t, 'run', start=RUN_IN + delay)
     if state == 'moving':
         j = moves.gait(sp, t - RUN_IN - delay, 'run')
@@ -678,14 +725,14 @@ def cam_for(t):
         return Cam3((WIDE_CAM[0], WIDE_CAM[1], WIDE_CAM[2] + 0.5 * u), (-1.0, 3.2, 62.0), focal=760)
     if s == 'gran':                                         # zooming in on her from among the sitting crowd
         k = ease(u / 2.6)
-        return Cam3(LOW_CAM, (GRAN_AT[0], 1.28 + 0.06 * k, GRAN_AT[1]), focal=900 + 1500 * k)
-    if s == 'police':                                      # straight on to the line (Sam: no diagonals), the column
-        return Cam3((-3.0, 1.6, 24.5), (-3.0, 1.9, 0.0), focal=1000)   # and its lions behind them
+        return Cam3(LOW_CAM, (GRAN_AT[0], 1.3 + 0.05 * k, GRAN_AT[1]), focal=900 + 1100 * k)
+    if s == 'police':                                      # straight on to the wall over the protesters' heads, the
+        return Cam3(POLICE_CAM, (-3.0, 1.7, 0.0), focal=1100)    # column and its lions behind them
     if s == 'super':                                       # straight on, close
         x, z = POLICE['SUPER']
         return Cam3((x, 1.66, z + 1.25), (x, 1.66, z), focal=1500)
     if s == 'storm':                                       # low among the sitters, straight on (the board in front)
-        return Cam3(LOW_CAM, (GRAN_AT[0], 1.9, GRAN_AT[1]), focal=1350)
+        return Cam3(LOW_CAM, (GRAN_AT[0], 1.75, GRAN_AT[1]), focal=900)
     if s == 'throw':                                       # from the south, at head height: she goes right (west)
         # side on, straight north (Sam: carried and thrown horizontally), tracking along with them like a side-scroller,
         # then with her in flight, and holding on the van as it speeds off right
@@ -699,9 +746,12 @@ def cam_for(t):
         return Cam3((0.0, 1.2, -0.25), (0.0, 1.18, 0.72), focal=1150)
     if s == 'interro_g':                                   # straight on to her
         return Cam3((0.0, 1.1, 0.25), (0.0, 1.05, -0.72), focal=1150)
-    if s == 'door':                                        # straight on to the door (to his left behind him)
-        return Cam3((0.75, 1.5, -2.0), (0.75, 1.3, 2.2), focal=900)
-    return Cam3((0.15, 1.55, 4.6), (0.0, 1.35, 1.3), focal=1150)
+    if s == 'door':                                        # in front of him, on the left (Sam): the door over his
+        return Cam3((0.42, 1.25, -0.5), (0.42, 1.2, 2.2), focal=880)   # shoulder as Jenkins comes in
+    if s == 'corridor_j':                                  # Jenkins from the front, beside the door (Sam, 20 Oct)
+        jx, jz = CORR_JENKINS
+        return Cam3((jx + 0.15, 1.6, jz - 1.35), (jx + 0.15, 1.55, jz), focal=1100)
+    return Cam3((1.0, 1.5, -0.3), (-1.2, 1.4, -0.3), focal=720)   # both, the door in the middle: the leap and the jab
 
 
 # ------------------------------------------------------------------------------------------------ the pictures
@@ -761,12 +811,12 @@ def crowd_draw(img, cam, c, t):
     (X, Y), k = cam.project((c['x'], neck, c['z']))
     s = k * M * f
     if s < 0.3:                                        # beyond a few metres (a head under about 40 px): a simple figure
-        return tiny(img, c, X, Y, s, t)
+        return tiny(img, c, X, Y, s, t, back=cam.pos[2] > c['z'])
     sp, j = crowd_pose(c, t)
     put(img, cam, sp, c['x'], c['z'], FACE, j, t, base=c.get('base', 0.0))
 
 
-def tiny(img, c, X, Y, s, t):
+def tiny(img, c, X, Y, s, t, back=False):
     """A far-off protester: coat, head and hair as flat shapes in their own colours (one outline), sitting or
     standing; flags and boards held up as small flat shapes."""
     sp = c['sp']
@@ -792,11 +842,19 @@ def tiny(img, c, X, Y, s, t):
     if sp.get('hair') in ('long', 'bob'):
         p.ell(X, hy + hh * 0.2, hw * 1.15, hh * 1.05, sp.get('hair_c', (90, 80, 70)), INK, 1.0)
     p.ell(X, hy, hw, hh, sp['skin'], INK, 1.0)
-    if sp.get('hair') not in ('bald', 'wisps'):
+    if back:                                           # seen from behind (the police shot): the back of the head
+        if sp.get('hair') in ('bald', 'wisps'):
+            p.poly([(X - hw * 1.0, hy + hh * 0.1), (X + hw * 1.0, hy + hh * 0.1), (X + hw * 0.8, hy + hh * 0.7),
+                    (X - hw * 0.8, hy + hh * 0.7)], sp.get('hair_c', (200, 196, 192)), INK, 1.0)
+        else:
+            p.ell(X, hy - hh * 0.05, hw * 1.02, hh * 0.98, sp.get('hair_c', (90, 80, 70)), INK, 1.0)
+            p.poly([(X - hw * 0.5, hy + hh * 0.6), (X + hw * 0.5, hy + hh * 0.6), (X + hw * 0.35, hy + hh * 0.9),
+                    (X - hw * 0.35, hy + hh * 0.9)], sp.get('hair_c', (90, 80, 70)), None)   # the nape, low
+    elif sp.get('hair') not in ('bald', 'wisps'):
         p.poly([(X - hw * 1.02, hy - hh * 0.05), (X - hw * 0.7, hy - hh * 0.85), (X, hy - hh * 1.04),
                 (X + hw * 0.7, hy - hh * 0.85), (X + hw * 1.02, hy - hh * 0.05), (X + hw * 0.6, hy - hh * 0.45),
                 (X - hw * 0.6, hy - hh * 0.45)], sp.get('hair_c', (90, 80, 70)), INK, 1.0)
-    if s > 0.08:                                       # a face that reads at this size: eyes, brows, mouth
+    if s > 0.08 and not back:                          # a face that reads at this size: eyes, brows, mouth
         for sg in (-1, 1):
             p.ell(X + sg * 28 * s, hy - 6 * s, 9 * s, 10 * s, (250, 250, 248), None)
             p.ell(X + sg * 28 * s, hy - 5 * s, 4.5 * s, 5 * s, INK, None)
@@ -899,7 +957,7 @@ def van_at(t):
 
 def door_officer(img, cam, t):
     """An armed officer waiting by the van's open back (ARV in a flat cap) who slams the doors after her."""
-    sp = dict(C.ARVS[2])
+    sp = dict(C.PCS[0], name='VANPC', skin=B.BROWN, hair='crop', hair_c=(30, 24, 22), seed=77)
     if t > DRIVE + 0.6:
         x, z = VAN_BACK + 1.0, VAN_AT[1] - 1.6
     else:
@@ -943,10 +1001,10 @@ def interro(img, cam, t):
         j['lean'] = lean
         for sd, sg in (('L', -1), ('R', 1)):                 # forearms on the table, leaning in
             V.arm_to(j, sd, (sg * 110.0, 300.0, 300.0), 'down', 'fist')
-        head = None
-        if t >= DOOR_OPEN[0] + 0.1:                          # the door behind him: he turns his head to it
-            head = (0.0, 1.0)
-        put(im, cam, sp, sx, sz, sf, j, t, shadow=False, head_yaw=head)
+        sp['look'] = 0.0                                     # glaring at her, even as Jenkins comes in (Sam)
+        if t >= DOOR_OPEN[0]:
+            sp['brows'] = 'fierce'
+        put(im, cam, sp, sx, sz, sf, j, t, shadow=False)
     items.append((cam.depth((gx, 1.0, gz)), gran))
     items.append((cam.depth((sx, 1.0, sz)), boss))
     if t >= JENKINS_IN[0]:
@@ -966,36 +1024,47 @@ def interro(img, cam, t):
 
 
 def corridor(img, cam, t):
+    """Outside the interview room (Sam, 20 Oct): Jenkins side on beside the door, speaking; then both, the door
+    between them: the superintendent leaps forward and jabs his finger into Jenkins's shocked chest."""
     S3.corridor(img, cam, t)
     items = []
+    leap = ease((t - LEAP[0]) / (LEAP[1] - LEAP[0])) if t >= LEAP[0] else 0.0
+    sx, sz = CORR_SUPER[0], CORR_SUPER[1] + 1.05 * leap
+    jx, jz = CORR_JENKINS
 
     def boss(im):
         sp = dict(C.SUPER)
         talking(sp, 'SUPER', t)
-        sp['brows'] = 'fierce' if t >= JAB[0] else 'weary'
-        j = C.pose_standing(sp)
-        if t >= JAB[0]:                                      # his finger in Jenkins's chest, then leaning in
+        sp['brows'] = 'fierce' if t >= LEAP[0] else 'weary'
+        j = moves.gait(sp, (t - LEAP[0]) * 1.5, 'run') if LEAP[0] <= t < LEAP[1] else C.pose_standing(sp)
+        if t >= JAB[0]:                                      # his finger into Jenkins's chest (real contact)
             u = ease((t - JAB[0]) / (JAB[1] - JAB[0]))
-            V.arm_to(j, 'R', (60.0, 120.0 + 60 * (1 - u), 160 + 280 * u), 'down', 'point')
+            f = C.HEIGHTS['JENKINS'] / 1.75
+            chest = (jx, 928 * M * f - 0.2, jz - 0.16)
+            tgt = to_torso(sx, sz, (0.0, 1.0), sp, chest)
+            rest = (60.0, 200.0, 120.0)
+            V.arm_to(j, 'R', tuple(r + (g - r) * u for r, g in zip(rest, tgt)), 'down', 'point')
             j['lean'] = 13 * ease((t - LEAN_IN[0]) / (LEAN_IN[1] - LEAN_IN[0]))
         else:
             sp['tilt'] = filmkit.shifts(t, seed=71, amount=0.02)
         C.outfit(j, sp)
-        put(im, cam, sp, CORR_SUPER[0], CORR_SUPER[1], (1.0, 0.0), j, t)
+        put(im, cam, sp, sx, sz, (0.0, 1.0), j, t)
 
     def jen(im):
         sp = dict(C.JENKINS)
         talking(sp, 'JENKINS', t)
-        sp['brows'] = 'alarm' if t < JAB[0] else 'sincere'
+        sp['brows'] = 'sincere' if t < LEAP[0] else 'alarm'
         j = C.pose_standing(sp)
-        if t >= JAB[0]:
-            j['lean'] = -6 * ease((t - JAB[0]) / 0.3)
+        if t >= JAB[0]:                                      # shocked: rocked back, mouth open
+            j['lean'] = -7 * ease((t - JAB[0]) / 0.3)
+            if mouths.at(TRACK.get('JENKINS', []), t) == 'rest':
+                sp['mouth'] = 'agape'
         else:
             sp['tilt'] = filmkit.shifts(t, seed=72, amount=0.03)
         C.outfit(j, sp)
-        put(im, cam, sp, CORR_JENKINS[0], CORR_JENKINS[1], (-1.0, 0.0), j, t)
-    items.append((cam.depth((CORR_SUPER[0], 1, CORR_SUPER[1])), boss))
-    items.append((cam.depth((CORR_JENKINS[0], 1, CORR_JENKINS[1])), jen))
+        put(im, cam, sp, jx, jz, (0.0, -1.0), j, t)
+    items.append((cam.depth((sx, 1, sz)), boss))
+    items.append((cam.depth((jx, 1, jz)), jen))
     for d, fn in sorted(items, key=lambda v: -v[0]):
         fn(img)
 

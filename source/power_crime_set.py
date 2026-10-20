@@ -391,6 +391,24 @@ def gallery(img, cam):
     columns; the grey ribbed dome on its drum with a lantern; a small domed cupola either side; St Martin's white
     steeple off to the east."""
     y0 = TERRACE_Y
+    zd = TERRACE_N + 9                                           # the dome first: it stands behind the portico
+    cylinder(img, cam, 0, zd, y0 + 15.5, y0 + 19.5, 6.2, 6.2, STONE, STONE_D, n=28)        # the drum
+    for k in range(9):                                            # its windows (the near half)
+        a = math.pi * (0.1 + 0.8 * k / 8)
+        x, z = 6.25 * math.cos(math.pi + a), zd - 6.25 * math.sin(a)
+        if cam.depth((x, y0 + 17, z)) < cam.depth((0, y0 + 17, zd)):
+            quad(img, cam, [(x - 0.4, y0 + 16.2, z), (x + 0.4, y0 + 16.2, z), (x + 0.4, y0 + 18.6, z), (x - 0.4, y0 + 18.6, z)],
+                 WINDOW, INK, 0.8)
+    for k in range(6):                                            # the ribbed lead dome
+        a0, a1 = k / 6 * math.pi / 2, (k + 1) / 6 * math.pi / 2
+        cylinder(img, cam, 0, zd, y0 + 19.5 + 6 * math.sin(a0), y0 + 19.5 + 6 * math.sin(a1), 6.2 * math.cos(a0),
+                 max(0.6, 6.2 * math.cos(a1)), (150, 158, 164) if k % 2 else (140, 148, 154), (118, 126, 132), n=28, flutes=8)
+    cylinder(img, cam, 0, zd, y0 + 25.4, y0 + 28.0, 1.0, 0.8, STONE, STONE_D, n=12)        # the lantern
+    cylinder(img, cam, 0, zd, y0 + 28.0, y0 + 29.2, 0.9, 0.05, (140, 148, 154), (118, 126, 132), n=10)
+    for sg in (-1, 1):                                            # the cupolas either side
+        cx = sg * 11.0
+        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 15.5, y0 + 18.0, 1.6, 1.6, STONE, STONE_D, n=16)
+        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 18.0, y0 + 20.0, 1.7, 0.2, (150, 158, 164), (118, 126, 132), n=16)
     for sg in (-1, 1):
         classical(img, cam, sg * 13, sg * 62, TERRACE_N + 2, y0, 13.0, bays=11, seed=40 + sg, storeys=2)
     box(img, cam, -13, 13, y0, y0 + 15.5, TERRACE_N + 2, TERRACE_N + 14, STONE, STONE_D, STONE, INK, 1.6)   # centre block
@@ -416,24 +434,6 @@ def gallery(img, cam):
          STONE, INK, 1.8)                                         # the pediment
     quad(img, cam, [(-8.6, y0 + 14.7, TERRACE_N - 6.21), (8.6, y0 + 14.7, TERRACE_N - 6.21), (0, y0 + 17.0, TERRACE_N - 6.21)],
          STONE_D, INK, 1.0)
-    zd = TERRACE_N + 9
-    cylinder(img, cam, 0, zd, y0 + 15.5, y0 + 19.5, 6.2, 6.2, STONE, STONE_D, n=28)        # the drum
-    for k in range(9):                                            # its windows (the near half)
-        a = math.pi * (0.1 + 0.8 * k / 8)
-        x, z = 6.25 * math.cos(math.pi + a), zd - 6.25 * math.sin(a)
-        if cam.depth((x, y0 + 17, z)) < cam.depth((0, y0 + 17, zd)):
-            quad(img, cam, [(x - 0.4, y0 + 16.2, z), (x + 0.4, y0 + 16.2, z), (x + 0.4, y0 + 18.6, z), (x - 0.4, y0 + 18.6, z)],
-                 WINDOW, INK, 0.8)
-    for k in range(6):                                            # the ribbed lead dome
-        a0, a1 = k / 6 * math.pi / 2, (k + 1) / 6 * math.pi / 2
-        cylinder(img, cam, 0, zd, y0 + 19.5 + 6 * math.sin(a0), y0 + 19.5 + 6 * math.sin(a1), 6.2 * math.cos(a0),
-                 max(0.6, 6.2 * math.cos(a1)), (150, 158, 164) if k % 2 else (140, 148, 154), (118, 126, 132), n=28, flutes=8)
-    cylinder(img, cam, 0, zd, y0 + 25.4, y0 + 28.0, 1.0, 0.8, STONE, STONE_D, n=12)        # the lantern
-    cylinder(img, cam, 0, zd, y0 + 28.0, y0 + 29.2, 0.9, 0.05, (140, 148, 154), (118, 126, 132), n=10)
-    for sg in (-1, 1):                                            # the cupolas either side
-        cx = sg * 11.0
-        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 15.5, y0 + 18.0, 1.6, 1.6, STONE, STONE_D, n=16)
-        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 18.0, y0 + 20.0, 1.7, 0.2, (150, 158, 164), (118, 126, 132), n=16)
     sx, sz = 70.0, TERRACE_N + 10                                 # St Martin-in-the-Fields
     classical(img, cam, sx - 10, sx + 10, sz - 8, 0, 14, bays=4, seed=46, storeys=2)
     box(img, cam, sx - 3, sx + 3, 14, 28, sz - 3, sz + 3, (244, 240, 230), STONE_D, (244, 240, 230))

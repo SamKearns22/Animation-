@@ -103,11 +103,23 @@ ARVS = [_arv(1, B.PALE, (90, 66, 44), 'peaked'), _arv(2, B.BROWN, (28, 22, 20), 
         _arv(4, B.DEEP, (24, 20, 18), 'ball', hw=74, sw=170), _arv(5, B.OLIVE, (40, 32, 28), 'ball', beard='stubble'),
         _arv(6, B.PALE, (196, 150, 90), 'ball', hw=68, sw=156),
         _arv(7, B.PALE, (60, 46, 36), 'ct', hw=72), _arv(8, B.BROWN, (30, 24, 22), 'ct', jaw='soft', hw=66, sw=148)]
+# Sam, 20 Oct: a real wall of police (four more in hi-vis) and more armed officers sweeping in from left and right
+# to escort her (six more: flat caps and navy caps).
+PCS += [_officer(6, B.PINK, 'crop', (60, 46, 36), hw=70, sw=154, beard='stubble'),
+        _officer(7, B.PALE, 'bob', (150, 110, 70), jaw='soft', hw=64, hh=86, sw=136, lashes=True),
+        _officer(8, B.BROWN, 'bald', (40, 32, 30), hw=72, sw=158),
+        _officer(9, B.OLIVE, 'side', (40, 34, 30), hw=68, sw=150)]
+ARVS += [_arv(9, B.PINK, (120, 90, 60), 'peaked', hw=70), _arv(10, B.DEEP, (24, 20, 18), 'ball', beard='trim',
+                                                                beard_c=(24, 20, 18)),
+         _arv(11, B.PALE, (196, 160, 110), 'ball', hw=66, sw=152), _arv(12, B.OLIVE, (40, 32, 28), 'peaked', beard='full',
+                                                                       beard_c=(40, 32, 28)),
+         _arv(13, B.BROWN, (28, 22, 20), 'ball', hw=72, sw=166), _arv(14, B.PALE, (90, 70, 50), 'peaked', beard='stubble')]
 PEOPLE = {'GRAN': GRAN, 'SUPER': SUPER, 'JENKINS': JENKINS}
 PEOPLE.update({p['name']: p for p in PCS + ARVS})
 HEIGHTS = {'GRAN': 1.55, 'SUPER': 1.85, 'JENKINS': 1.86}
-HEIGHTS.update({p['name']: h for p, h in zip(PCS, (1.80, 1.68, 1.88, 1.78, 1.83))})
-HEIGHTS.update({p['name']: h for p, h in zip(ARVS, (1.84, 1.82, 1.78, 1.90, 1.80, 1.79, 1.85, 1.76))})
+HEIGHTS.update({p['name']: h for p, h in zip(PCS, (1.80, 1.68, 1.88, 1.78, 1.83, 1.81, 1.70, 1.86, 1.79))})
+HEIGHTS.update({p['name']: h for p, h in zip(ARVS, (1.84, 1.82, 1.78, 1.90, 1.80, 1.79, 1.85, 1.76, 1.83, 1.88, 1.77,
+                                                    1.81, 1.89, 1.80))})
 
 # ------------------------------------------------------------------------------------------------ the protesters
 # Mostly elderly and middle-aged (Sam's brief): grey, white and thinning hair, sensible coats, fleeces and cardigans,
