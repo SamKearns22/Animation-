@@ -432,3 +432,6 @@ Read this first in any new session, after CLAUDE.md.
   (8.4 MB, 50 s), sent. Added the 🚔 emoji picture `source/fonts/emoji/1f694.png` (drawn from the system Noto font; the download was blocked).
   Open question for Sam: the sound jumps at the cuts at 25.8 s (+40 dB), 34.0 s (-21 dB) and 37.9 s (silence); left as is.
   DONE unless Sam has notes.
+- 21 Oct (chat 5, end): Sam's notes 48-51 and "Shit"/mouth-shut note done; final re-rendered (11m11s) and finished with Hook Text in the sky (`--y 430`)
+  + sign-off: `animations/power-crime-action-vertical.mp4` (8.8 MB, 49 s), sent. Sam asked for a lessons-and-rules analysis (11 rules proposed in chat,
+  awaiting Sam's numbers; none added yet). Open: the sound jumps at three cuts (left as is). DONE unless Sam has notes.
