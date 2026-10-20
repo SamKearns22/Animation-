@@ -427,3 +427,8 @@ Read this first in any new session, after CLAUDE.md.
 - 19 Oct: CranbriJoos sign-off added to DLC: `animations/bayeux-season-pass-vertical.mp4` is now 51.2 s, 13.0 MB, 24 fps (was 49.2 s, 9.9 MB, no sign-off). `signoff.py add` now keeps the film's own frame rate (it forced 12 fps, which would have halved DLC's smoothness).
 - 20 Oct (chat 5): Sam said Y to the check sheet; animatic 3 rendered (`final --small`, 4m54s, 2.9 MB, 581 frames) and sent.
   NEXT: Sam's notes on animatic 3 (movement notes get clips, not a full animatic); then a final render only on a clear yes.
+- 20 Oct (chat 5, later): Sam: "Add hook and sign-off, final render". Note 47 (van door through the officer) fixed. Final render 12m52s, finished with
+  `finish.py` (Hook Text "Met Police: Getting Priorities Right 🚔" + CranbriJoos sign-off): `animations/power-crime-action-vertical.mp4`
+  (8.4 MB, 50 s), sent. Added the 🚔 emoji picture `source/fonts/emoji/1f694.png` (drawn from the system Noto font; the download was blocked).
+  Open question for Sam: the sound jumps at the cuts at 25.8 s (+40 dB), 34.0 s (-21 dB) and 37.9 s (silence); left as is.
+  DONE unless Sam has notes.
