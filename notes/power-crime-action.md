@@ -92,4 +92,15 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 1 |      |      |      | open   |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
-- The words "Palestine Action" are never drawn anywhere in the film (proposed, Q2).
+- Sam's answers (20 Oct): 1 the real wording "I OPPOSE GENOCIDE. I SUPPORT"; 2 "Palestine Action" never drawn, she
+  drops the sign face down; 3 the chant is "Free Palestine" three times (subtitled); 4 voice as recorded, "Sh*t." in
+  the subtitle; 5 senior officer as proposed (peaked cap, white shirt, mirrored aviators, kept on indoors) plus tough
+  stubble; 6 Hollywood-style interrogation room; 7 NOT the upright landing: she flies head first through the van's
+  open back doors, we never see her inside: a hilariously violent, urgent throw of a whole person, and the van speeds
+  off urgently, lights flashing; 8 numbers as proposed (about 120 protesters, 5 officers + the senior officer, 8 armed:
+  3 left, 3 right, 2 down ropes from an unseen helicopter); 9 only she has the placard; 10 sound effects: helicopter,
+  van doors, van pulling away (and only those); 11 Hook Text "Met Police: Getting Priorities Right 🚔"; 12 build the
+  solid look for people seen from high cameras.
+- Sam (20 Oct): "Don't draw blind: request references from me if you get stuck." The photo sites were blocked by the
+  network, so drawing stopped and the references were asked for. `source/power_crime_cast.py` is a first draft
+  (uniforms, hats, placard, carbine), not yet drawn or checked; it is finished against Sam's photos.

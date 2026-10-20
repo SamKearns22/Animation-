@@ -14,7 +14,8 @@ guides/movement-system-plan.md and guides/reference-pack.md).
 
 The joints dict ("a pose"): hipL/R, footL/R, shL/R, elL/R, wrL/R (3D), plus bob (the whole body lower, +), lean
 (degrees), head_dy, hand {'L': shape, 'R': shape} ('fist', 'palm', 'gun', 'none' for a hidden hand), behind (set),
-props (list of draw(p, j2d) callables), seated (bool: the chair is drawn).
+props (list of draw(p, j2d) callables), body_props (draw(p, view, sp): clothing in the torso's frame), head_props
+(draw(p, view, sp, hx, hy): worn on the head), seated (bool: the chair is drawn).
 """
 import math
 import os
@@ -595,6 +596,8 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     else:
         bent = dict(sp_draw, bottom=min(sp_draw.get('bottom', JACKET), 470)) if lean > 12 else sp_draw
         torso_view(img, B.Pen(img, up), bent, view, seated)   # bending: the hem stops at the hips, never a long tail (Sam)
+    for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
+        draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
     for sd in arms_far:
         if sd not in behind:
             arm(p, j2, sd, sp)
@@ -606,6 +609,8 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         arm(p, j2, sd, sp)                         # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
     head_view(img, B.Pen(img, up), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+    for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
+        draw(B.Pen(img, up), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
         arm(p, j2, sd, sp)
     for draw in j.get('face_props', []):

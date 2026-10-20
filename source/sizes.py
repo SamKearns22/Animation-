@@ -27,6 +27,11 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     'moped': (0.7, 1.15), 'moped side': (1.85, 1.15), 'motorbike side': (2.1, 1.2), 'e-scooter side': (1.1, 1.2),
     'bicycle side': (1.75, 1.05), 'car side': (4.3, 1.5), 'car front': (1.8, 1.5), 'bus side': (10.5, 4.4),
     'lectern': (0.6, 1.2), 'podium flag': (0.9, 1.5), 'tv camera': (0.25, 0.3), 'microphone': (0.05, 0.2),
+    # Power Crime Action (20 Oct): Met TSG carrier = Mercedes Sprinter high roof (5.93 x 2.02 x 2.7 m); SIG MCX
+    # carbine about 0.75 m with the stock out; a protest placard of the Defend Our Juries kind about 50 cm square;
+    # a hand-waved flag 0.9 x 0.6 m on a 1.2 m pole; Nelson's Column 51.6 m to the top of the statue.
+    'police van side': (5.93, 2.7), 'police van back': (2.02, 2.7), 'carbine': (0.75, 0.2),
+    'protest placard': (0.5, 0.5), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
 }
 
 
