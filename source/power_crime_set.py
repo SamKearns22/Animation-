@@ -420,10 +420,19 @@ def gallery(img, cam):
         quad(img, cam, [(-8, y0 + 1.4 * (3 - k) / 4, z), (8, y0 + 1.4 * (3 - k) / 4, z), (8, y0 + 1.4 * (4 - k) / 4, z),
                         (-8, y0 + 1.4 * (4 - k) / 4, z)], STONE_G, INK, 0.9)
     ztop = TERRACE_N - 5.2
+    quad(img, cam, [(-10.2, y0 + 12.8, TERRACE_N - 6.2), (10.2, y0 + 12.8, TERRACE_N - 6.2), (10.2, y0 + 12.8, TERRACE_N + 2),
+                    (-10.2, y0 + 12.8, TERRACE_N + 2)], STONE_D, INK, 1.2)     # the portico's ceiling (seen from below
+    p2 = _pen(img)                                               # between the column tops: Sam, 20 Oct)
+    for k in range(1, 6):                                        # its coffers
+        z = TERRACE_N - 6.2 + k * 8.2 / 6
+        cam.line(p2, [(-10.2, y0 + 12.79, z), (10.2, y0 + 12.79, z)], B.dk(STONE_D, 0.88), 1.0)
     for k in range(8):                                           # the columns
         x = -8.6 + 17.2 * k / 7
         cylinder(img, cam, x, ztop, y0 + 1.4, y0 + 12.0, 0.62, 0.55, (242, 236, 222), STONE_D, n=16, flutes=5)
-        box(img, cam, x - 0.75, x + 0.75, y0 + 12.0, y0 + 12.8, ztop - 0.75, ztop + 0.75, STONE, STONE_D, STONE_D, INK, 1.0)
+        quad(img, cam, [(x - 0.55, y0 + 11.9, ztop - 0.62), (x + 0.55, y0 + 11.9, ztop - 0.62), (x + 0.8, y0 + 12.8, ztop - 0.8),
+                        (x - 0.8, y0 + 12.8, ztop - 0.8)], (236, 228, 210), INK, 1.0)     # the capital, flaring out
+        for dx in (-0.5, 0.0, 0.5):                              # its leaves
+            cam.line(_pen(img), [(x + dx * 0.9, y0 + 12.0, ztop - 0.7), (x + dx * 1.3, y0 + 12.7, ztop - 0.8)], STONE_D, 1.2)
     for k, x in ((1, -8.6 + 17.2 * 1.5 / 7), (6, -8.6 + 17.2 * 5.5 / 7)):    # the yellow banners (refs crowd-low-1, 2)
         zb = ztop + 0.9
         quad(img, cam, [(x - 0.75, y0 + 11.6, zb), (x + 0.75, y0 + 11.6, zb), (x + 0.75, y0 + 5.2, zb), (x - 0.75, y0 + 5.2, zb)],
