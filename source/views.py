@@ -236,7 +236,7 @@ def arm(p, j2, side, sp, shape=None):
         B.arm(p, sh, el, wr, sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
-        B.gesture_hand(p, el, wr, shape, sp['skin'])
+        B.gesture_hand(p, el, wr, shape, sp.get('glove', sp['skin']))     # 'glove': gloved hands (a colour)
 
 
 # ------------------------------------------------------------------------------------------------ the chair
@@ -407,6 +407,11 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
                           (fx + 2, hy + hh * 1.32), (fx - 10, hy + hh * 1.1)], 4), bfill, INK, 1.8)
             p.line([(fx - 24, hy + 56), (fx - 6, hy + 47), (fx + 12, hy + 47), (fx + 24, hy + 56)], bfill, 4)
         elif beard == 'stubble':
+            if sp.get('heavy_stubble'):        # tough stubble: a flat shadow over the jaw first
+                p.poly(curve([(hx - hw * 0.62, hy + 22), (hx - hw * 0.8, hy + hh * 0.6), (hx - hw * 0.22, hy + hh * 0.98),
+                              (hx + hw * 0.3, hy + hh * 1.08), (hx + hw * 0.62, hy + hh * 0.98), (hx + hw * 0.92, hy + hh * 0.55),
+                              (hx + hw * 0.9, hy + 40), (fx + 22, hy + 70), (fx - 10, hy + 72), (hx - hw * 0.1, hy + 58),
+                              (hx - hw * 0.4, hy + 38)], 4), blend(skin, sp.get('beard_c', (90, 70, 60)), 0.3), None)
             rng = np.random.default_rng(5)
             for _ in range(50):
                 a = rng.uniform(0.3, math.pi - 0.3)

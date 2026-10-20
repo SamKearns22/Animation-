@@ -382,8 +382,14 @@ def beard(p, sp, hx, hy, hw, hh, fx):
                 x = fx - 34 + 22 * k
                 p.line([(x, hy + hh * 0.95), (x - 2, hy + hh * 1.2 * long)], sp['beard_grey'], 2.0)
     elif st == 'stubble':
+        if sp.get('heavy_stubble'):  # tough stubble: a flat shadow over the jaw, cheeks and lip, then the dots
+            tone = tuple(int(a + (b - a) * 0.3) for a, b in zip(sp['skin'], sp.get('beard_c', (90, 70, 60))))
+            p.poly(curve([(hx - hw * 0.96, hy + 20), (hx - hw * 0.9, hy + hh * 0.66), (hx - hw * 0.5, hy + hh * 1.0),
+                          (fx, hy + hh * 1.08), (hx + hw * 0.5, hy + hh * 1.0), (hx + hw * 0.9, hy + hh * 0.66),
+                          (hx + hw * 0.96, hy + 20), (fx + 34, hy + 44), (fx + 14, hy + 40), (fx - 14, hy + 40),
+                          (fx - 34, hy + 44)], 4), tone, None)
         rng = np.random.default_rng(5)
-        for _ in range(70):
+        for _ in range(140 if sp.get('heavy_stubble') else 70):
             a = rng.uniform(0.3, math.pi - 0.3)
             r = rng.uniform(0.6, 0.95)
             sx, sy = fx + hw * 0.86 * r * math.cos(a), hy + 30 + hh * 0.72 * r * math.sin(a)
