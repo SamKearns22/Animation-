@@ -75,8 +75,8 @@ SHOTS = [   # (name, start, end)
     ('gran', 1.4, 4.2),          # pushing in on her: she raises her placard, trembling
     ('police', 4.2, 5.4),        # the police line by the lion: neutral, faintly sour
     ('super', 5.4, 8.7),         # close: his jaw drops (Sam: strength 3). "Shit. A code red."
-    ('storm', 8.7, 11.75),       # mid shot on her: armed officers storm in, two down ropes; carbines on her; lifted
-    ('throw', 11.75, 17.3),      # wide: carried off, swung, hurled into the van, which speeds off, lights flashing
+    ('storm', 8.7, 12.9),        # mid shot on her: armed officers storm in, two down ropes; carbines on her; lifted
+    ('throw', 12.9, 17.3),       # wide: carried off, swung, hurled into the van, which speeds off, lights flashing
     ('interro', 17.3, 21.0),     # the interrogation room, two-shot
     ('interro_s', 21.0, 25.8),   # close on him
     ('interro_g', 25.8, 28.6),   # close on her: trembling, unbothered
@@ -94,8 +94,8 @@ DROP = 5.75                       # his jaw drops (a snap: eyes and jokes snap)
 # west and the van drives off west.
 GRAN_AT = (-3.0, 36.0)            # she stands among the sitting crowd, facing the column (south)
 FACE = (0.0, -1.0)                # the crowd's facing
-POLICE = {'SUPER': (-12.6, 14.6), 'PC1': (-10.4, 13.2), 'PC2': (-11.9, 12.1), 'PC3': (-14.3, 13.3), 'PC4': (-13.8, 16.4),
-          'PC5': (-10.9, 16.3)}   # by the north-west lion, watching the crowd
+POLICE = {'SUPER': (-10.9, 16.0), 'PC1': (-10.0, 13.0), 'PC2': (-11.9, 12.1), 'PC3': (-14.3, 13.3), 'PC4': (-13.8, 16.4),
+          'PC5': (-12.6, 14.6)}   # by the north-west lion, watching the crowd; the senior officer nearest us
 VAN_AT = (-29.0, 36.0)            # its back doors face the square (east); it drives off west
 VAN_HEADING = math.pi
 THROW_FROM = (-11.0, 36.0)        # where the carriers swing and let go
@@ -230,7 +230,9 @@ def _crowd():
                 continue
             if -14.5 < x_ < -2.5 and 15.5 < z_ < 23.5:   # the police camera's view across to the line
                 continue
-            if x_ < -9 and 24 < z_ < 41:                  # the throw and the van (and the throw's camera)
+            if x_ < -9 and abs(z_ - GRAN_AT[1]) < 2.2:     # the throw's path (she flies over the crowd either side)
+                continue
+            if -10 < x_ < -2 and abs(z_ - GRAN_AT[1]) < 2.3:   # room round the throw's camera as it follows them
                 continue
             out.append((x_, z_, z_ > 52.5 or rng.random() < 0.04))
     for k, x in enumerate(np.arange(-10.5, 10.6, 0.62)):  # sitting all over the gallery's steps (refs crowd-low-1..3)
@@ -255,6 +257,7 @@ def _crowd():
         if k == 1:
             sp['board'] = 'FREE PALESTINE'
             sp['front_board'] = True
+            sp['height'] = 1.55                           # a small man, so his head stays below his board's top
         people.append(dict(sp=sp, x=x, z=z, standing=False, seed=400 + k))
     return people
 
@@ -307,7 +310,9 @@ def front_board_y(c):
     neck_m = 928 * M * fm - 470 * M * fm                         # his neck when sitting (bob 470)
     centre = top - h / 2
     hands = centre - h * 0.42                                    # board_prop: centre = hands - 0.42 h (up)
-    return (neck_m - hands) / (M * fm)
+    # the drawn hands sit a little lower than their target: the camera's slight look-down inside the figure
+    # (views.ELEV x the 170 forward) and the fist's own offset; measured by the hidden check: about 60 units
+    return (neck_m - hands) / (M * fm) - 60.0
 
 
 def ground_sit(sp, seed=0):
@@ -522,8 +527,10 @@ def roper(who, t):
         j = moves.gait(sp, phase, 'brisk')
     else:
         j = C.pose_standing(sp)
-        u = (t - SWING[0]) / (SWING[1] - SWING[0])
+        u = min(1.0, (t - SWING[0]) / (SWING[1] - SWING[0]))
         j['lean'] = -10 + 26 * u                             # back on the swing, then forward on the throw
+        if t > SWING[1]:                                     # and upright again, watching her go
+            j['lean'] = 16 * (1 - ease((t - SWING[1] - 0.25) / 0.5))
     tgt = side * 70.0
     V.arm_to(j, 'L' if side < 0 else 'R', (tgt, 60.0, 90.0), 'down', 'palm')
     V.arm_to(j, 'R' if side < 0 else 'L', (tgt, 170.0, 150.0), 'down', 'palm')
@@ -617,16 +624,20 @@ def cam_for(t):
         k = ease(u / 2.6)
         return Cam3(LOW_CAM, (GRAN_AT[0], 1.28 + 0.06 * k, GRAN_AT[1]), focal=900 + 1500 * k)
     if s == 'police':
-        return Cam3((-5.0, 1.65, 21.5), (-12.4, 1.55, 14.2), focal=1300)
+        return Cam3((-8.6, 1.65, 19.2), (-12.2, 1.55, 14.3), focal=1250)
     if s == 'super':
         x, z = POLICE['SUPER']
         d = (GRAN_AT[0] - x, GRAN_AT[1] - z)
         n = math.hypot(*d)
         return Cam3((x + d[0] / n * 1.25, 1.66, z + d[1] / n * 1.25), (x, 1.66, z), focal=1500)
-    if s == 'storm':
-        return Cam3(LOW_CAM, (GRAN_AT[0], 1.9, GRAN_AT[1]), focal=1350)
+    if s == 'storm':                                       # low among the sitters while she holds the placard; once
+        k = ease((t - (LIFT[0] - 0.3)) / 0.6)               # it falls, the camera rises to a standing eye height and
+        pos = (LOW_CAM[0], LOW_CAM[1] + 0.75 * k, LOW_CAM[2] - 0.8 * k)    # widens to show the lift and carry
+        return Cam3(pos, (GRAN_AT[0] - 1.2 * k, 1.9 - 0.4 * k, GRAN_AT[1]), focal=1350 - 450 * k)
     if s == 'throw':                                       # from the south, at head height: she goes right (west)
-        return Cam3((-13.5, 1.9, 28.5), (-22.0, 1.9, 36.0), focal=470)
+        gx = gran_where(t)[0]                               # following behind the carriers, then held behind the
+        cx = max(THROW_FROM[0], gx) + 3.8                    # throwing spot, looking down the throw to the van
+        return Cam3((cx, 2.0, GRAN_AT[1] + 0.25), (VAN_AT[0], 1.3, VAN_AT[1]), focal=1250)
     if s == 'interro':
         return Cam3((2.3, 1.45, -0.25), (0.0, 0.95, 0.0), focal=900)
     if s == 'interro_s':
@@ -693,7 +704,7 @@ def crowd_draw(img, cam, c, t):
         return
     (X, Y), k = cam.project((c['x'], neck, c['z']))
     s = k * M * f
-    if s < 0.15:                                       # far off (a head under about 20 px): a simple figure, same colours
+    if s < 0.3:                                        # beyond a few metres (a head under about 40 px): a simple figure
         return tiny(img, c, X, Y, s, t)
     sp, j = crowd_pose(c, t)
     put(img, cam, sp, c['x'], c['z'], FACE, j, t, base=c.get('base', 0.0))
@@ -714,10 +725,32 @@ def tiny(img, c, X, Y, s, t):
     else:
         p.poly([(X - sw * 1.1, Y + body - 60 * s), (X + sw * 1.1, Y + body - 60 * s), (X + sw * 1.0, Y + body + 90 * s),
                 (X - sw * 1.0, Y + body + 90 * s)], sp.get('trousers', (50, 50, 56)), INK, 1.0)
+    if sp.get('steward'):
+        p.poly([(X - sw * 0.9, Y + 40 * s), (X + sw * 0.9, Y + 40 * s), (X + sw * 0.85, Y + body * 0.85),
+                (X - sw * 0.85, Y + body * 0.85)], (244, 124, 34), INK, 1.0)
+    if sp.get('keffiyeh'):
+        p.poly([(X - 60 * s, Y - 6 * s), (X + 60 * s, Y - 6 * s), (X, Y + 60 * s)], (240, 240, 236), INK, 1.0)
     hw, hh = sp.get('hw', 68) * s, sp.get('hh', 88) * s
-    p.ell(X, Y - 150 * s, hw, hh, sp['skin'], INK, 1.0)
+    hy = Y - 150 * s
+    if sp.get('hair') in ('long', 'bob'):
+        p.ell(X, hy + hh * 0.2, hw * 1.15, hh * 1.05, sp.get('hair_c', (90, 80, 70)), INK, 1.0)
+    p.ell(X, hy, hw, hh, sp['skin'], INK, 1.0)
     if sp.get('hair') not in ('bald', 'wisps'):
-        p.ell(X, Y - 150 * s - hh * 0.5, hw * 1.02, hh * 0.55, sp.get('hair_c', (90, 80, 70)), None)
+        p.poly([(X - hw * 1.02, hy - hh * 0.05), (X - hw * 0.7, hy - hh * 0.85), (X, hy - hh * 1.04),
+                (X + hw * 0.7, hy - hh * 0.85), (X + hw * 1.02, hy - hh * 0.05), (X + hw * 0.6, hy - hh * 0.45),
+                (X - hw * 0.6, hy - hh * 0.45)], sp.get('hair_c', (90, 80, 70)), INK, 1.0)
+    if s > 0.08:                                       # a face that reads at this size: eyes, brows, mouth
+        for sg in (-1, 1):
+            p.ell(X + sg * 28 * s, hy - 6 * s, 9 * s, 10 * s, (250, 250, 248), None)
+            p.ell(X + sg * 28 * s, hy - 5 * s, 4.5 * s, 5 * s, INK, None)
+        if sp.get('glasses'):
+            for sg in (-1, 1):
+                p.ell(X + sg * 30 * s, hy - 6 * s, 22 * s, 18 * s, None, sp.get('glasses_c', INK), 1.0)
+        op = chanting(t) * (1 if c['seed'] % 5 else 0)
+        if op > 0.2:
+            p.ell(X, hy + 52 * s, 13 * s, 10 * s * (1 + op), (70, 26, 30), INK, 0.8)
+        else:
+            p.line([(X - 14 * s, hy + 52 * s), (X + 14 * s, hy + 52 * s)], INK, 0.9)
     carry = sp.get('carry')
     wave = math.sin(t * 5.2 + c['seed'])
     if carry == 'flag':
