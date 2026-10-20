@@ -95,6 +95,10 @@ I don't know how to code. Please:
   scene that page doesn't cover. **Also follow best-practice Part 1 sections 1.2 and 1.3 (contact and continuity)
   for every film** (19 Oct: Poker Mon skipped them, and its table emptied between shots and its chips slid untouched). **Reuse before building:** the plan names which kit part does each person,
   movement and prop (`guides/satire.md`, Movement); build new only where nothing fits, and say so.
+- **Every film (not quick videos): follow `guides/film-quality-rules.md` (Sam approved all 11 rules, 21 Oct).** Plan the world
+  once, benchmark against references, run the collision, pop-in and script audits before showing Sam anything, rehearse
+  the risky moves as clips, and fix each kind of note once in the shared kit. Rules marked [tool] need a tool still to be
+  built; do the check by hand until it exists.
 - **Any other film:** read `guides/best-practice.md` (the master file) before starting or changing it. Part 1 holds general
   animation principles; the later parts hold rules for one kind of project only (the TikTok parody series, the
   coloured-pencil shorts, the horror trailer) and must not be applied to others. Add each new lesson to the right part
