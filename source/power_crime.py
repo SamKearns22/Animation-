@@ -183,7 +183,7 @@ _L2 = next(l['start'] for l in LINES if l['n'] == 2)
 _sh = [m for m in TRACK['SUPER'] if _L2 <= m[0] < _L2 + 1.0 and m[2] != 'rest']
 if _sh:
     TRACK['SUPER'] = [m for m in TRACK['SUPER'] if m not in _sh]
-    TRACK['SUPER'].append((_sh[0][0], _sh[-1][1], 'AI'))
+    TRACK['SUPER'].append((_sh[0][0], _sh[0][0] + 0.26, 'AI'))
     TRACK['SUPER'].sort()
 BLINKS = {w: F.blinks(i * 7 + 3, 0.0, DUR, talking=True) for i, w in enumerate(['GRAN', 'SUPER', 'JENKINS'])}
 
@@ -837,7 +837,7 @@ def super_square(t):
             hp2 = C.horror(dict(C.SUPER), HORROR_LEVEL)    # the brows stay up while he speaks
             j['head_props'] = [brows_only(HORROR_LEVEL)] + j['head_props'][1:]
             sp['brows'], sp['brow_c'] = None, sp['skin']
-        elif t >= code_red_said():                          # Sam, 21 Oct: it hung open after "A code red."; shut
+        elif t >= first_word():                             # Sam, 21 Oct: it hung open between his words; shut
             j['head_props'] = [brows_only(HORROR_LEVEL)] + j['head_props']
             sp['brows'], sp['brow_c'], sp['mouth'] = None, sp['skin'], 'set'
         else:
@@ -847,13 +847,9 @@ def super_square(t):
     return sp, j, x, z, (0.0, 1.0)
 
 
-def code_red_said():
-    """Just after his last mouth shape of "Shit. A code red." (line 2)."""
-    end = next(l['start'] for l in LINES if l['n'] == 3)
-    t = end
-    while t > DROP and mouths.at(TRACK['SUPER'], t) == 'rest':
-        t -= 1 / 24
-    return t + 0.15
+def first_word():
+    """When he first speaks ("Shit."): the dropped jaw hangs open until then, and shuts after every word (Sam, 21 Oct)."""
+    return next(m[0] for m in TRACK['SUPER'] if m[0] > DROP and m[2] != 'rest')
 
 
 def brows_only(level):
