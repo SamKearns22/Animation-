@@ -143,6 +143,10 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 39 | corridor | animatic 2 | "Officer seems to be pointing behind Jenkins, instead of directly to his chest." | the superintendent drawn over Jenkins from the jab on, so the finger lands on the front of his chest |
 | 40 | Jenkins | animatic 2 | "Jenkins's facial expressions are too uniform ... serious and official, grave when talking about the attack." | phrase by phrase: polite (excuse me), official, firmer (urgent), grave (heavy lids, head down, eyes lowered) for the attack; alarm at the jab, then cowed |
 | 41 | throw | animatic 2 | "Can we move in just a bit closer? We feel a bit distant and are missing some of the humour" | 3.3 m from them (was 4.2), aimed a little lower so the feet and the flight stay in frame |
+| 42 | storm | clip b | "The removal and throwing away of the sign is barely legible to the eye due to lack of action frames" | each stage held longer: grab 0.25 s, wrench 0.35 s, a wind-up across his chest, the fling 0.55 s, slow out of his hand; she is lifted a little later (11.0) |
+| 43 | throw | clip c | "The police move far too quickly at the beginning, it doesn't look real. Please can we slow down the throw moment a little bit? Make that throw legible to the eye." | the escort eases into place over 1.6 s (was 0.7); the carry 1.5 m shorter; swing 0.9 s (was 0.5), flight 1.1 s (was 0.75) |
+| 44 | corridor | clip e | "Please give him a little finger pointing out for prodding Jenkins." | a short round-ended finger on his circle hand for the jab (this film's 'point' hand) |
+| 45 | sound | - | Sam's two sound effects: the police siren as the van pulls away, a whoosh for the throw | `source/audio/power-crime-siren.mp3`, `power-crime-whoosh.mp3`: the whoosh on her flight, the siren from the lights coming on, fading as it goes, just over the cut; my engine kept quieter under it |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Sam's answers (20 Oct): 1 the real wording "I OPPOSE GENOCIDE. I SUPPORT"; 2 "Palestine Action" never drawn, she

@@ -1352,6 +1352,13 @@ def engine(n):
     return tone * env * 0.35
 
 
+def sfx(name, peak):
+    """One of Sam's sound effects (source/audio/NAME.mp3), mono, scaled to `peak`."""
+    from burnham_film import load
+    x = load(os.path.join(HERE, 'audio', name + '.mp3'))
+    return x * (peak / (np.max(np.abs(x)) or 1.0))
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)
@@ -1374,7 +1381,16 @@ def soundtrack(stems=False):
     i = int((DRIVE + 0.1) * SR)
     e = engine(int(shot_start('interro') * SR) - i)                       # ends with the square (the cut)
     e[-int(0.15 * SR):] *= np.linspace(1, 0, int(0.15 * SR))
-    rest[i:i + len(e)] += e[:n - i]
+    rest[i:i + len(e)] += e[:n - i] * 0.6                                 # under the siren now
+    # Sam's two sound effects (20 Oct): the whoosh as she is thrown, the siren as the van pulls away
+    filmkit.place(rest, sfx('power-crime-whoosh', 0.5), FLIGHT[0], SR)
+    sr_ = sfx('power-crime-siren', 0.32)[int(0.5 * SR):]                   # its first half second is quiet
+    i = int(DRIVE * SR)
+    m = int((shot_start('interro') + 0.4) * SR) - i                         # carried just over the cut, then gone
+    sr_ = sr_[:m].copy()
+    sr_ *= np.minimum(1, np.arange(m) / (0.05 * SR)) * np.linspace(1, 0.55, m)   # pulling away: fading as it goes
+    sr_[-int(0.4 * SR):] *= np.linspace(1, 0, int(0.4 * SR))
+    rest[i:i + m] += sr_[:n - i]
     mix = voice + rest
     end = int(BLACK_AT * SR)
     mix, g = MA.master(mix, end)
