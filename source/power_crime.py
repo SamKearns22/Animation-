@@ -178,6 +178,13 @@ for ln in LINES:
     if ln['who'] in ('SUPER', 'JENKINS'):
         TRACK.setdefault(ln['who'], []).extend((a + ln['start'], b + ln['start'], sh)
                                                for a, b, sh in mouths.track(ln['text'], ln['_stretches']))
+# Sam, 21 Oct: "'Shit' is just one syllable but he moves his mouth twice": the word is one opening, one shape held
+_L2 = next(l['start'] for l in LINES if l['n'] == 2)
+_sh = [m for m in TRACK['SUPER'] if _L2 <= m[0] < _L2 + 1.0 and m[2] != 'rest']
+if _sh:
+    TRACK['SUPER'] = [m for m in TRACK['SUPER'] if m not in _sh]
+    TRACK['SUPER'].append((_sh[0][0], _sh[-1][1], 'AI'))
+    TRACK['SUPER'].sort()
 BLINKS = {w: F.blinks(i * 7 + 3, 0.0, DUR, talking=True) for i, w in enumerate(['GRAN', 'SUPER', 'JENKINS'])}
 
 
