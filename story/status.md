@@ -398,6 +398,12 @@ Read this first in any new session, after CLAUDE.md.
   doesn't" / "like any of my deals."; a fifth slate jab on the new "Because"); final re-rendered 144 s and re-finished:
   3.0 MB, 26.4 s.
 
+## In progress: "Power Crime Action" (TikTok satire, a granny's placard at a Trafalgar Square protest vs. the Met; `notes/power-crime-action.md`)
+- 20 Oct: brief copied into the notes as a checklist; six recordings filed (`source/audio/power-crime-1..6.m4a`,
+  checked with voices.py: no duplicates, all fit); facts checked (the real placard wording, Met armed officers' kit);
+  draft shot plan (about 43 s) and the kit parts to reuse written; questions and reference advice sent to Sam.
+  Next: Sam's answers, then the cast sheet (`source/power_crime.py`), then an early quick animatic (action-led).
+
 ## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
   written; questions sent to Sam. Next: Sam's answers, then the cast sheet (`source/poker_mon.py`), then an early
