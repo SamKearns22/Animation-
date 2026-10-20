@@ -27,7 +27,7 @@ Recordings: `source/audio/power-crime-1..6.m4a` (filed 20 Oct, see row 30).
 | 19 | "that drives off." | yes: doors slammed, lights flashing, speeds off |
 | 20 | "Interrogation room." | yes: shots 7-9 |
 | 21 | "Senior officer sits with old lady, who is trembling but otherwise unbothered." | yes: trembling hands, flat face |
-| 22 | Senior officer: "Listen to me you filth. You're going to tell me everything. The location of your cells. The nature of your resources. The aims of your organisation." | yes: line 3 |
+| 22 | Senior officer: "Listen to me you filth. You're going to tell me everything. The location of your cells. The nature of your resources. The aims of your organisation." (Sam, 20 Oct: the subtitle reads "The aims of your operation.", as he says it) | yes: line 3 |
 | 23 | "We cut to the doorway. It opens and an officer walks in." | yes: the door opens, Jenkins steps in |
 | 24 | Officer (Jenkins): "Err, excuse me sir. I need to speak to you outside. It's urgent." | yes: line 4 |
 | 25 | "We are outside in the corridor. The two officers." | yes: shot 11 |
@@ -132,7 +132,8 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 28 | storm, throw | animatic 1 | "All officers floating. Some not holding guns in their hands. Everyone moving in creepy uniform formation. Gunmen not checking the different angles." + "Very tiny rifles." + "Maybe they aren't floating and it's the shadows" | feet on their shadows (the tilted-up low camera had lifted everyone); rifles about twice as deep and a touch longer, never shrunk to a stub; low ready points forward so it reads side on; each his own stride, start and drift; inner ring aims at her, outer ring faces out over the crowd, each sweeping his sector; on the escort the rear guard walks backwards |
 | 29 | throw | animatic 1 | "Old lady flashes on the front of the van" | she was drawn whole for a moment after landing (her direction came out as zero): gone once she is through the doors |
 | 30 | corridor | animatic 1 | "Centre this scene more around the door frame so superintendent doesn't have to run so far. It should be a short sharp aggressive approach. Jenkins looks bad from the side." | framed on the door; a 0.64 m lunge in 0.25 s (was 1.05 m); Jenkins turned three-quarter to the camera; the jab with the near arm |
-| 31 | interrogation | animatic 1 | "Subtitle should read 'aims of your organisation'" | it already reads "The aims of your organisation." (checked in animatic 1 at 26-28 s): asked Sam whether he saw something else or wants "The" dropped |
+| 31 | interrogation | animatic 1 | "Subtitle should read 'aims of your organisation'", then "Sorry, the subtitle is 'The aims of your operation.'" | done: "The aims of your operation." |
+| 32 | sound | clips | "Please just keep the original audio for 'Free Palestine' — the way it's been looped over and over doesn't work at all." | done: his recording as it is, one voice (the six layered copies gone) |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Sam's answers (20 Oct): 1 the real wording "I OPPOSE GENOCIDE. I SUPPORT"; 2 "Palestine Action" never drawn, she

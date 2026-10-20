@@ -49,7 +49,7 @@ LINES = [   # (number, who, text, file, where the recording's start is placed)
     dict(n=1, who='CROWD', text='Free Palestine!', audio='power-crime-1', start=-0.35),
     dict(n=2, who='SUPER', text='Shit. A code red.', audio='power-crime-2', start=5.6),
     dict(n=3, who='SUPER', text="Listen to me, you filth. You're going to tell me everything. The location of your "
-                                "cells. The nature of your resources. The aims of your organisation.",
+                                "cells. The nature of your resources. The aims of your operation.",
          audio='power-crime-3', start=17.25),
     dict(n=4, who='JENKINS', text="Err, excuse me, sir. I need to speak to you outside. It's urgent.",
          audio='power-crime-4', start=29.3),
@@ -64,7 +64,7 @@ CHUNKS = {
     1: [['Free Palestine!'], ['Free Palestine!'], ['Free Palestine!'], ['Free Palestine!']],
     2: [['Sh*t.'], ['A code red.']],
     3: [['Listen to me, you filth.'], ["You're going to tell me", 'everything.'], ['The location of your cells.'],
-        ['The nature of your resources.'], ['The aims of your organisation.']],
+        ['The nature of your resources.'], ['The aims of your operation.']],
     4: [['Err, excuse me, sir.'], ['I need to speak', 'to you outside.'], ["It's urgent."]],
     5: [["I'm sorry to interrupt, sir,"], ["but there's been", 'a mass casualty', 'attack in—']],
     6: [["I don't have time", 'to be dealing with', 'your small fry problems,', 'Jenkins.'], ['Interrupt me again'],
@@ -1155,17 +1155,13 @@ def frame_image(t):
 
 # ------------------------------------------------------------------------------------------------ sound
 def chant_crowd():
-    """Sam's chant, layered into a crowd: six copies, each a little earlier or later, a little higher or lower,
-    quieter than the speaking lines (it is a background)."""
+    """Sam's chant just as he recorded it, one voice (Sam, 20 Oct: the six layered copies "doesn't work at all"),
+    starting 0.2 s in as before."""
     x = LINES[0]['_voice']
     out = np.zeros(len(x) + SR)
-    for k, (dt, pitch, g) in enumerate(((0.0, 1.0, 1.0), (0.09, 0.95, 0.7), (-0.06, 1.06, 0.6), (0.15, 0.9, 0.55),
-                                         (0.04, 1.1, 0.5), (-0.11, 0.98, 0.5))):
-        n = int(len(x) / pitch)
-        y = np.interp(np.linspace(0, len(x) - 1, n), np.arange(len(x)), x)
-        i = int((0.2 + dt) * SR)
-        out[i:i + n] += y[:len(out) - i] * g
-    return out / 2.2
+    i = int(0.2 * SR)
+    out[i:i + len(x)] += x
+    return out
 
 
 def heli(n0, n1):
