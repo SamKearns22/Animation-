@@ -101,7 +101,7 @@ for _k, _x in enumerate((-6.0, -5.25, -4.5, -3.75, -2.25, -1.5, -0.75, 0.0, -3.0
     POLICE[f'PC{_k + 1}'] = (_x + (0.05 if _k % 2 else -0.05), POLICE_Z - (0.35 if _k == 8 else 0.0))
 VAN_AT = (-29.0, 48.0)            # its back doors face the square (east); it drives off west
 VAN_HEADING = math.pi
-THROW_FROM = (-11.0, 48.0)        # where the carriers swing and let go
+THROW_FROM = (-9.5, 48.0)         # where the carriers swing and let go (a shorter carry: Sam, 20 Oct, too quick)
 VAN_BACK = VAN_AT[0] + 5.93 / 2   # the van's open back (x)
 # Timings of the storm and the throw
 ROPE_DROP = (8.8, 9.0)            # the ropes fall into frame
@@ -109,17 +109,20 @@ SLIDE = (9.05, 10.15)             # the two counter-terror officers slide down
 RUN_IN = 8.75                     # the six on foot run in from left, right and behind
 GRAB = (10.45, 10.8)              # their hands go to her arms
 # Sam, 20 Oct: the officer on her left (screen left, ARV7) tugs the placard out of her hands and throws it out of frame
-TUG = (10.15, 10.3)               # his hand to its edge as he lands
-TWIST = (10.3, 10.42)             # wrenched round on that edge: its face away, its back to us
-FLING = (10.42, 10.72)            # flung out of frame left, spinning
-HANDS_DROP = (10.6, 10.8)         # her hands stay up a beat, empty, then drop
-ARV7_GRAB = 10.72                 # then he takes her arm
-LIFT = (10.8, 11.25)              # she rises off the ground
-CARRY = (11.25, 14.05)            # carried east to the throwing spot (brisk)
-SWING = (14.05, 14.55)            # swung back once, then forward; let go at the end
-FLIGHT = (14.55, 15.3)            # head first through the air, about 15 m, into the van
-SLAM = (15.45, 15.7)              # an officer slams the doors
-DRIVE = 15.85                     # lights on, the van speeds off east
+# (Sam, 20 Oct, clip: "barely legible to the eye due to lack of action frames": each stage held longer)
+TUG = (10.15, 10.4)               # his hand to its edge as he lands
+TWIST = (10.4, 10.75)             # wrenched round on that edge: its face away, its back to us
+WIND = (10.75, 10.9)              # drawn back across him (the wind-up)
+FLING = (10.9, 11.45)             # flung out of frame left, spinning
+HANDS_DROP = (10.85, 11.05)       # her hands stay up a beat, empty, then drop
+ARV7_GRAB = 11.0                  # then he takes her arm
+LIFT = (11.0, 11.4)               # she rises off the ground
+CARRY = (11.4, 13.95)             # carried east to the throwing spot (brisk)
+# Sam, 20 Oct: "slow down the throw moment a little bit ... make that throw legible": a longer swing and flight
+SWING = (13.95, 14.85)            # swung back once, then forward; let go at the end
+FLIGHT = (14.85, 15.95)           # head first through the air, about 15 m, into the van
+SLAM = (16.1, 16.35)              # an officer slams the doors
+DRIVE = 16.5                      # lights on, the van speeds off east
 STAND_BY = (27.0, 29.2)           # the officer waiting by the van's doors
 
 # The interrogation room: table at the origin; she sits south of it facing the door (+z), he north with his back to it
@@ -458,7 +461,7 @@ def gran_pose(t, sp):
         j, quad = C.placard_pose(sp, t, 0.0, tremble=1.0, seed=3)      # at her chest (0), trembling
         if u < 1.0:                                         # still coming up: lower, tilted back
             j, quad = low_placard(sp, t, u)
-        if t >= TWIST[0]:                                   # wrenched out of her hands (Sam, 20 Oct): they stay up a
+        if t >= WIND[0]:                                    # wrenched out of her hands (Sam, 20 Oct): they stay up a
             j['props'] = []                                 # beat, empty, then drop
             j['hand'] = {'L': 'palm', 'R': 'palm'}
             if t >= HANDS_DROP[0]:
@@ -504,16 +507,21 @@ def placard_grip():
 
 
 def placard_flung(img, cam, t):
-    """Flung out of frame to the left (east), spinning, its plain back to us."""
-    u = (t - FLING[0]) / (FLING[1] - FLING[0])
+    """Pulled in across him (the wind-up), then flung out of frame to the left (east), spinning, its plain back to
+    us: slow out of his hand, so the eye can follow it."""
     _, (x, y, z) = placard_grip()
-    pos = (x + 3.6 * u, y + 1.1 * u - 0.4 * u * u, z - 0.3 * u)
+    if t < FLING[0]:
+        w = ease((t - WIND[0]) / (WIND[1] - WIND[0]))
+        pos, a = (x - 0.25 * w, y + 0.05 * w, z - 0.15 * w), math.radians(25 * w)
+    else:
+        u = (t - FLING[0]) / (FLING[1] - FLING[0])
+        x, y, z = x - 0.25, y + 0.05, z - 0.15
+        pos, a = (x + 3.6 * u ** 1.3, y + 1.0 * u - 0.3 * u * u, z - 0.3 * u), math.radians(25 - 540 * u)
     if cam.depth(pos) < 0.4:
         return
     (X, Y), k = cam.project(pos)
     f = C.HEIGHTS['GRAN'] / 1.75
     w, h = C.PLACARD_W * f * k / 2, C.PLACARD_H * f * k / 2
-    a = math.radians(-560 * u)
     pts = [(X + dx * math.cos(a) - dy * math.sin(a), Y + dx * math.sin(a) + dy * math.cos(a))
            for dx, dy in ((-w, -h), (w, -h), (w, h), (-w, h))]
     B.Pen(img, FLAT).poly(pts, (236, 234, 226), INK, 2.0)
@@ -661,7 +669,7 @@ def runner(who, t, cam):
         ax, az, _, _ = moves.travel(path, CARRY[0], 'run', start=RUN_IN + delay)
         gx, gz = gran_where(t)[:2]
         dx, dz, cover = ESCORT[who]
-        u = ease((t - CARRY[0]) / 0.7)
+        u = ease((t - CARRY[0]) / 1.6)                  # into the escort at a walk (Sam, 20 Oct: they had darted)
         x, z = ax + (gx + dx - ax) * u, az + (gz + dz - az) * u
         x += 0.12 * math.sin(t * 2.1 + seed)               # never in lockstep: each drifts a little in his place
         j = escort_pose(sp, t - CARRY[0], sweep(who, t), t < SWING[1] + 0.3, seed, cover)
@@ -706,15 +714,19 @@ def roper(who, t):
         grip, _ = placard_grip()
         at = to_torso(x, z, face, sp, grip)
         rest = (-40.0, 260.0, 60.0)
+        back_ = to_torso(x, z, face, sp, (x - 0.05, grip[1] + 0.1, z - 0.3))   # wound up across his chest
+        out = to_torso(x, z, face, sp, (x + 0.6, grip[1] + 0.4, z - 0.25))      # thrown out to his left, high
         if t < TWIST[1]:                                     # reaching for its edge, then holding it
             u = ease((t - TUG[0]) / (TUG[1] - TUG[0]))
             tgt = tuple(r + (g - r) * u for r, g in zip(rest, at))
+        elif t < WIND[1]:                                    # the wind-up: pulled in across him
+            u = ease((t - TWIST[1]) / (WIND[1] - TWIST[1]))
+            tgt = tuple(a + (b - a) * u for a, b in zip(at, back_))
         else:                                                # the throw: his arm sweeps out to his left and up
-            out = to_torso(x, z, face, sp, (x + 0.55, grip[1] + 0.35, z - 0.25))
-            u = ease((t - TWIST[1]) / (FLING[0] + 0.15 - TWIST[1]))
-            tgt = tuple(a + (b - a) * u for a, b in zip(at, out))
+            u = ease((t - FLING[0]) / 0.25)
+            tgt = tuple(a + (b - a) * u for a, b in zip(back_, out))
         V.arm_to(j, 'R', tgt, 'down', 'palm' if t < TUG[1] else 'fist')
-        j['lean'] = 6 if t < TWIST[1] else -4
+        j['lean'] = 6 if t < TWIST[1] else (10 if t < WIND[1] else -6)
         C.outfit(j, sp)
         return sp, j, x, z, 0.0, face
     if t < GRAB[0]:                                          # landed, crouched a moment, rising
@@ -886,7 +898,7 @@ def square(img, cam, t):
         items.append((cam.depth((x, 1.0, z)), lambda im: gran_draw(im, cam, t)))
     elif t < FLIGHT[1]:                                     # then she is inside (Sam, 20 Oct: she flashed on the van)
         items.append((cam.depth(flight_pos(t)), lambda im: gran_flying(im, cam, t)))
-    if FLING[0] <= t < FLING[1]:
+    if WIND[0] <= t < FLING[1]:
         items.append((cam.depth(placard_grip()[1]) - 0.05, lambda im: placard_flung(im, cam, t)))
     # the police line
     for who in POLICE:

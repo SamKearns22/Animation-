@@ -35,6 +35,30 @@ install_circle_hands(B)
 F.guard(B)                       # every arm measured against the rig
 limbs.install(B)                 # the smooth, shaped arms of the house style (Sam, 20 Oct: no blocky arms)
 
+_circle_hand = B.gesture_hand
+
+
+def _gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+    """A 'point' hand (Sam, 20 Oct: "give him a little finger pointing out for prodding Jenkins"): the circle with
+    one short round-ended finger sticking out the way the forearm points (drawn first, so the circle covers its root)."""
+    if shape == 'point':
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / n, dy / n
+        cx, cy = wr[0] + ux * 12, wr[1] + uy * 12
+        tip = (cx + ux * 50, cy + uy * 50)
+        w = 8.5
+        p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                (cx + uy * w, cy - ux * w)], skin, INK, 2.2)
+        p.ell(tip[0], tip[1], w, w, skin, INK, 2.2)
+        p.poly([(tip[0] - ux * 6 - uy * (w - 1.5), tip[1] - uy * 6 + ux * (w - 1.5)),
+                (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
+                (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
+    return _circle_hand(p, el, wr, shape, skin, extra, t)
+
+
+B.gesture_hand = _gesture_hand
+
 # ------------------------------------------------------------------------------------------------ colours
 HIVIS, HIVIS_D = (212, 226, 40), (170, 182, 30)
 SILVER = (206, 210, 216)
