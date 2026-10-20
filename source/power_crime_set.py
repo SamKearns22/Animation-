@@ -680,57 +680,117 @@ def column(img, cam):
                (196, 192, 184), INK, 1.4)
 
 
-def lion_profile():
-    """The lion side-on (refs lion-1..4), in its own units (metres, x along its body from the tail end (0) to the
-    paws (6.2), y up from the top of its block): lying like a sphinx, front legs straight out, paws together, head up,
-    the shaggy mane over the shoulders and chest, the tail along the side."""
-    body = [(0.3, 0.0), (0.2, 0.9), (0.8, 1.35), (2.2, 1.55), (3.4, 1.7), (3.9, 2.3), (4.1, 2.9), (4.6, 3.25),
-            (5.2, 3.2), (5.55, 2.85), (5.6, 2.5), (5.3, 2.2), (5.3, 1.6), (5.2, 0.5), (6.2, 0.45), (6.25, 0.0)]
-    mane = [(3.6, 1.5), (3.7, 2.4), (4.0, 3.2), (4.6, 3.55), (5.1, 3.45), (5.0, 2.9), (4.8, 2.0), (4.6, 1.2), (4.0, 1.0)]
-    face = [(5.0, 3.15), (5.45, 3.05), (5.75, 2.75), (5.75, 2.45), (5.45, 2.25), (5.05, 2.35)]
-    return body, mane, face
+def _hull(pts):
+    """The convex outline of some frame points (monotone chain)."""
+    pts = sorted(set((round(x, 1), round(y, 1)) for x, y in pts))
+    if len(pts) < 3:
+        return pts
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lo, hi = [], []
+    for q in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], q) <= 0:
+            lo.pop()
+        lo.append(q)
+    for q in reversed(pts):
+        while len(hi) >= 2 and cross(hi[-2], hi[-1], q) <= 0:
+            hi.pop()
+        hi.append(q)
+    return lo[:-1] + hi[:-1]
+
+
+# The lion (refs lion-1..4, Sam 20 Oct: "genuinely ridiculous... a massive hole in him"): a solid figure built from
+# rounded lumps (each an egg shape: centre (u along the body from the tail end, v up from the block's top, dx across)
+# and its half-sizes), lying like a sphinx: haunches folded, the long body, the chest up, the forelegs straight out
+# with the paws together, the great mane round the head, the muzzle forward.
+LION_BODY = [((1.0, 0.75, 0.0), (1.0, 0.75, 0.85)), ((2.4, 0.8, 0.0), (1.5, 0.8, 0.82)),
+             ((3.7, 1.05, 0.0), (0.9, 1.05, 0.8)), ((1.1, 0.62, -0.5), (0.95, 0.62, 0.45)),
+             ((1.1, 0.62, 0.5), (0.95, 0.62, 0.45))]
+LION_LEGS = [((4.1, 0.45, s * 0.42), (5.9, 0.2, s * 0.42), 0.26) for s in (-1, 1)]
+LION_PAWS = [((6.05, 0.17, s * 0.42), (0.34, 0.17, 0.28)) for s in (-1, 1)]
+LION_MANE = [((4.1, 2.2, 0.0), (0.95, 1.4, 1.08))]
+LION_FACE = [((4.7, 2.5, 0.0), (0.55, 0.72, 0.6)), ((5.15, 2.18, 0.0), (0.42, 0.4, 0.44))]
 
 
 def lion(img, cam, x, z, facing):
     """A lion on its block at the column's corner: the long plain grey block (7 x 2.4 x 2.2 m, a lettered panel in
-    its side), the bronze lion along it as a solid figure: its profile on each side face, a mane-and-face front."""
+    its side) and the bronze lion on it, solid from every side (each part's lumps filled as one shape with one
+    outline): body and legs, then the darker mane, then the face (eyes, nose and mouth on the side we see)."""
     L, Wd, H = 7.2, 2.4, 2.2
     z0, z1 = (z - 0.6, z - 0.6 + L) if facing > 0 else (z + 0.6 - L, z + 0.6)
     box(img, cam, x - Wd / 2, x + Wd / 2, 0, H, z0, z1, STONE_G, STONE_GD, STONE_G)
     side_x = x - Wd / 2 if cam.pos[0] < x else x + Wd / 2
-    quad(img, cam, [(side_x, 0.5, z0 + 1.2), (side_x, 0.5, z1 - 1.2), (side_x, 1.6, z1 - 1.2), (side_x, 1.6, z0 + 1.2)],
-         STONE_GD, INK, 1.2)
-    body, mane, face = lion_profile()
+    if abs(cam.pos[0] - x) > Wd / 2 + 0.3:                 # the lettered panel, on a side face we can see
+        quad(img, cam, [(side_x, 0.5, z0 + 1.2), (side_x, 0.5, z1 - 1.2), (side_x, 1.6, z1 - 1.2),
+                        (side_x, 1.6, z0 + 1.2)], STONE_GD, INK, 1.2)
     base = z0 + 0.4 if facing > 0 else z1 - 0.4
 
     def P(u, v, dx=0.0):
         return (x + dx, H + v, base + facing * u)
+    if cam.depth(P(3.0, 1.5)) < 1.0:
+        return
     pen = _pen(img)
-    for dx in (-0.62, 0.62) if abs(cam.pos[0] - x) > 0.1 else (0.0,):
-        if (cam.pos[0] - x) * dx < 0:                      # the far flank first
-            cam.poly(pen, [P(u, v, dx) for u, v in body], BRONZE_D, INK, 1.4)
-    for dx in (-0.62, 0.62):
-        if (cam.pos[0] - x) * dx >= 0:
-            cam.poly(pen, [P(u, v, dx) for u, v in body], BRONZE, INK, 1.8)
-            cam.poly(pen, [P(u, v, dx) for u, v in mane], BRONZE_D, INK, 1.4)
-            for k in range(5):                             # locks of the mane
-                u = 3.8 + k * 0.25
-                cam.line(pen, [P(u, 3.1 - k * 0.1, dx), P(u + 0.1, 1.6 + k * 0.1, dx)], BRONZE_L, 1.6)
-            cam.poly(pen, [P(u, v, dx) for u, v in face], BRONZE, INK, 1.4)
-            (X, Y), k = cam.project(P(5.45, 2.85, dx))
-            pen.ell(X, Y, 0.06 * k, 0.05 * k, INK, None)
-            cam.line(pen, [P(0.2, 0.3, dx), P(1.4, 0.45, dx), P(2.4, 0.35, dx)], BRONZE_L, 2.4)   # the tail
-    if (cam.pos[2] - (base + facing * 5.5)) * facing > 0:     # seen from the front: the mane and face head-on
-        fz = base + facing * 5.8
-        (X, Y), k = cam.project((x, H + 2.8, fz))
-        pen.ell(X, Y, 1.05 * k, 1.2 * k, BRONZE_D, INK, 1.6)
-        pen.ell(X, Y + 0.1 * k, 0.6 * k, 0.65 * k, BRONZE, INK, 1.4)
-        pen.ell(X - 0.22 * k, Y - 0.05 * k, 0.07 * k, 0.05 * k, INK, None)
-        pen.ell(X + 0.22 * k, Y - 0.05 * k, 0.07 * k, 0.05 * k, INK, None)
-        pen.line([(X - 0.15 * k, Y + 0.35 * k), (X, Y + 0.42 * k), (X + 0.15 * k, Y + 0.35 * k)], INK, 1.4)
-        for sg in (-1, 1):                                  # the paws stretched out together
-            (Xp, Yp), _ = cam.project((x + sg * 0.35, H + 0.25, base + facing * 6.1))
-            pen.ell(Xp, Yp, 0.32 * k, 0.22 * k, BRONZE, INK, 1.4)
+
+    def egg(c, r, n=10):                                    # an egg shape's outline in the frame
+        pts = []
+        for a in np.linspace(0, math.pi, n):
+            for b in np.linspace(0, 2 * math.pi, 2 * n, endpoint=False):
+                pts.append(cam.project(P(c[0] + r[0] * math.cos(a), c[1] + r[1] * math.sin(a) * math.cos(b),
+                                         c[2] + r[2] * math.sin(a) * math.sin(b)))[0])
+        return _hull(pts)
+
+    def rod(a, b, r):                                       # a rounded rod (a leg) between two points
+        pts = []
+        for c in (a, b):
+            for th in np.linspace(0, 2 * math.pi, 14, endpoint=False):
+                for ph in (-1.2, 0.0, 1.2):
+                    pts.append(cam.project(P(c[0] + r * math.cos(th) * math.cos(ph), c[1] + r * math.sin(th) *
+                                             math.cos(ph), c[2] + r * math.sin(ph)))[0])
+        return _hull(pts)
+
+    def part(shapes, fill, lw=1.8):                         # several lumps as one solid: ink under, then the fill
+        for q in shapes:
+            pen.poly(q, INK, INK, lw * 2)
+        for q in shapes:
+            pen.poly(q, fill, None)
+    to_cam = (cam.pos[0] - x, cam.pos[2] - (base + facing * 4.5))
+    front = to_cam[1] * facing > -0.3 * abs(to_cam[0])    # the camera ahead of (or beside) his head
+    side = 1 if to_cam[0] > 0 else -1                      # which flank we see
+    far = [egg(c, r) for c, r in LION_PAWS + LION_BODY if c[2] * side < 0]
+    near = [egg(c, r) for c, r in LION_PAWS + LION_BODY if c[2] * side >= 0]
+    legs = [rod(a, b, r) for a, b, r in LION_LEGS]
+    mane = [egg(c, r) for c, r in LION_MANE]
+    if not front:                                           # from behind, his mane is beyond his back
+        part(mane, BRONZE_D)
+    part(far + legs + near, BRONZE)
+    # the near haunch's curve, the tail along the block, the toes
+    cam.line(pen, [P(0.4, 0.2, side * 0.92), P(0.7, 1.05, side * 0.95), P(1.6, 1.15, side * 0.93),
+                   P(2.0, 0.3, side * 0.9)], BRONZE_L, 1.6)
+    cam.line(pen, [P(0.15, 0.1, side * 0.6), P(1.2, 0.05, side * 0.98), P(2.6, 0.05, side * 0.95)], BRONZE_L, 2.0)
+    for sg in (-1, 1):
+        for d in (-0.1, 0.1):
+            cam.line(pen, [P(6.25, 0.05, sg * 0.42 + d), P(6.36, 0.2, sg * 0.42 + d)], INK, 1.2)
+    if front:
+        part(mane, BRONZE_D)
+        c, r = LION_MANE[0]                                 # the mane's locks on the side we see
+        for k in range(9):
+            b = (k / 8.0 - 0.5) * 2.4
+            top = P(c[0] + 0.2 * math.cos(b), c[1] + r[1] * 0.85, c[2] + r[2] * 0.75 * math.sin(b))
+            bot = P(c[0] + r[0] * 0.6 * math.cos(b), c[1] - r[1] * 0.75, c[2] + r[2] * 0.85 * math.sin(b))
+            mid = P(c[0] + r[0] * 0.95 * math.cos(b), c[1], c[2] + r[2] * 0.98 * math.sin(b))
+            if cam.depth(mid) < cam.depth(P(*c)):
+                cam.line(pen, [top, mid, bot], BRONZE_L, 1.4)
+        part([egg(c, r) for c, r in LION_FACE], BRONZE, 1.6)
+        for sg in (-1, 1):                                  # the eyes, under heavy brows
+            e = P(5.1, 2.78, sg * 0.24)
+            if cam.depth(e) < cam.depth(P(4.7, 2.5, 0.0)) + 0.1:
+                (X, Y), k = cam.project(e)
+                pen.ell(X, Y, 0.06 * k, 0.04 * k, INK, None)
+                cam.line(pen, [P(5.14, 2.9, sg * 0.1), P(5.08, 2.92, sg * 0.38)], INK, 1.4)
+        (X, Y), k = cam.project(P(5.56, 2.36, 0.0))        # the nose and the set mouth
+        pen.ell(X, Y, 0.12 * k, 0.08 * k, INK, None)
+        cam.line(pen, [P(5.48, 2.02, -0.22), P(5.56, 2.08, 0.0), P(5.48, 2.02, 0.22)], INK, 1.4)
 
 
 def street_furniture(img, cam):

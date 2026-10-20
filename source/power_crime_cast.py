@@ -788,27 +788,44 @@ def flag_prop(t=0.0, seed=0, wave=1.0):
     return draw
 
 
-def board_prop(text, seed=0, t=0.0):
-    """A protester's board held up in both hands at chest-to-head height, bobbing a little with the chant."""
+BOARD_W = 0.6 / V.M_PER_UNIT
+
+
+def board_prop(text, seed=0, t=0.0, skin=None):
+    """A protester's board held up in both hands at chest-to-head height, bobbing a little with the chant. With
+    `skin` (Sam, 20 Oct: "hands coming through signs"): held like her placard, the card in front of the arms and only
+    the hands over it, gripping its bottom corners; from behind, the body hides it. Without (the board man in front
+    of the low camera, whose board is laid on a sight line): the hands under its middle, as before."""
     def draw(p, j2):
         key = ('board', text, seed)
         if key not in _IMAGES:
             _IMAGES[key] = board_image(text, seed=seed)
         import poker_mon_cast as PC
         (lx, ly), (rx, ry) = j2['wrL'], j2['wrR']
-        w = 0.6 / V.M_PER_UNIT
+        w = BOARD_W
         h = w * 0.62
-        cx, cy = (lx + rx) / 2, (ly + ry) / 2 - h * 0.42
+        if skin is not None:
+            c = math.cos(math.radians(j2.get('yaw', 0)))
+            if c < 0.05:
+                return
+            w *= max(0.12, c)
+            cx, cy = (lx + rx) / 2, (ly + ry) / 2 + 26 - h / 2
+        else:
+            cx, cy = (lx + rx) / 2, (ly + ry) / 2 - h * 0.42
         q = [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]
         if getattr(p.cam, 'flip', 1) != 1:
             q = [q[1], q[0], q[3], q[2]]
         PC.place_image(p.img, p.cam, _IMAGES[key], q)
-    draw.held = True
+        if skin is not None:
+            for sd in 'LR':
+                B.gesture_hand(p, j2['el' + sd], j2['wr' + sd], 'fist', skin)
+    draw.held = skin is None
     return draw
 
 
 # ------------------------------------------------------------------------------------------------ the carbine
-CARBINE = 0.75 / V.M_PER_UNIT        # its real length in person units (sizes: 'carbine')
+CARBINE = 0.85 / V.M_PER_UNIT        # its length in person units (sizes: 'carbine' 0.75 m, a touch longer to read)
+GUN_V = 2.1                          # its depth (receiver, magazine, grip) x 2.1 (Sam, 20 Oct: "very tiny rifles")
 GRIP_U, GUARD_U = 0.33, 0.66         # where the right hand (pistol grip) and the left (foregrip) hold it, butt = 0
 
 
@@ -821,12 +838,11 @@ def carbine():
         dx, dy = fx_ - gx, fy - gy
         n = math.hypot(dx, dy) or 1.0
         ux, uy = dx / n, dy / n
-        L = n / (GUARD_U - GRIP_U)                      # screen length (foreshortening comes free)
-        k = max(0.2, min(1.0, L / CARBINE))
+        L = max(n / (GUARD_U - GRIP_U), 0.55 * CARBINE)  # screen length (foreshortened, but never to a stub)
         sx, sy = -uy, ux                                # the gun's "up" on screen: the side away from the floor
         if sy > 0:
             sx, sy = -sx, -sy
-        g = 1.0 if k > 0.45 else 0.6                    # nearly end-on: the profile parts shrink
+        g = GUN_V * (1.0 if L > 0.7 * CARBINE else 0.75)   # nearly end-on: the profile parts shrink a little
 
         def P(u, v):
             return (gx + ux * (u - GRIP_U) * L + sx * v * g, gy + uy * (u - GRIP_U) * L + sy * v * g)
@@ -874,9 +890,10 @@ def aim_pose(sp, at=(0.0, 0.0), lean=5.0):
 
 
 def low_ready(j, sp):
-    """Carbine held low across the body, muzzle down and to the left (ref armed-1): for running in."""
+    """Carbine held low ready, muzzle down and forward, a little across the body (ref armed-1): for running in. Mostly
+    forward, so it reads side on (Sam, 20 Oct: across the body it went end-on and vanished)."""
     sw = sp.get('shoulders', 150)
-    return _hands_on_gun(j, (sw * 0.55, 300.0, 110.0), (-0.75, 0.45, 0.6))
+    return _hands_on_gun(j, (sw * 0.5, 280.0, 120.0), (-0.3, 0.45, 0.84))
 
 
 def clasped_pose(sp):
