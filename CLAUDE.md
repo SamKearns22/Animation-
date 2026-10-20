@@ -36,6 +36,13 @@ I don't know how to code. Please:
   their own rule (Sonnet, medium effort).
   **If I start a task on the wrong model, refuse and tell me it is on the wrong setting.** Then either let me change it,
   or offer me the option to override the advice.
+- **Fresh chat at every stage switch (Sam, 20 Oct).** Every step re-reads the whole chat so far, so one long chat costs
+  far more than several short ones (Power Crime Action: one chat of about 700 steps, about 375,000 tokens re-read per
+  step, 73% of the weekly budget gone across three films). When a film moves to the next stage, write exactly where
+  things stand (what is done, what Sam has asked for, what comes next, the files to open) into the film's notes file
+  and `story/status.md`, commit and push, then tell me to start a new chat. The new chat reads only that and the guide
+  for the film in hand, never the old history. Also: look at as few pictures as possible, and don't re-read the big
+  source files; use `python3 source/codemap.py FILE.py` and read only the lines needed.
 - **"Hold" means collect, don't act (16 Oct):** when I say hold, reply to each note with how you understood it and how
   you'll fix it, change nothing, and do everything in one round when I say go.
 - **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
