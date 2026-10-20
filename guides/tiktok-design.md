@@ -116,8 +116,10 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   ideally the character mid-line. It cannot be changed after posting.
 
 ## Posting
-- UK evenings: post around 6-7pm, ahead of the 6-10pm peak. **Under test:** Sunday about 9am (Mossad's slot; Buffer's data).
-  The evidence on timing is weak and mixed: see `guides/tiktok-posting-research.md` before changing this.
+- **Timing (Sam's TikTok Analytics, 14-19 Oct, UK time; one week only, so re-check next week):** weekdays post about
+  4pm, ahead of the 4-9pm peak (busiest hours were 5pm Fri, 7pm Thu, 8pm Wed); weekends post about 10am, ahead of the
+  11am peak (Sat and Sun both peaked at 11am). Never 1am-6am (dead every day). Bigger or smaller days follow what was
+  posted, not just the clock. The wider evidence on timing is weak and mixed: see `guides/tiktok-posting-research.md`.
 - Post text: short and dry, with the title, a few specific hashtags (the people or topic being parodied,
   #animation, #parody or #satire), and a question that invites replies. Pin that question as a comment.
 - **The director writes the post text and the pinned question himself. Claude never suggests lines or wording
