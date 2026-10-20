@@ -870,7 +870,7 @@ def cam_for(t):
         # Sam, 20 Oct: "move in just a bit closer ... we are missing some of the humour": 3.3 m from them (was 4.2)
         ax = gran_where(t)[0] if t < FLIGHT[0] else (flight_pos(min(t, FLIGHT[1]))[0] if t < FLIGHT[1] + 0.1 else VAN_BACK - 1.5)
         cx = min(ax - 0.6, -6.0)
-        cx = max(cx, VAN_BACK - 0.1)                       # holding on the van's back and the officer by it
+        cx = max(cx, VAN_BACK + 0.35)                      # holding on the van's back and the officer, who stands clear of the swinging doors
         return Cam3((cx, 1.4, GRAN_AT[1] - 3.3), (cx, 1.95, GRAN_AT[1]), focal=950)   # tilted up: less bare paving
     if s == 'interro':
         return Cam3((2.3, 1.45, -0.25), (0.0, 0.95, 0.0), focal=900)
@@ -1125,7 +1125,7 @@ def van_at(t):
 def door_officer(img, cam, t):
     """An armed officer waiting by the van's open back (ARV in a flat cap) who slams the doors after her."""
     sp = dict(C.PCS[0], name='VANPC', skin=B.BROWN, hair='crop', hair_c=(30, 24, 22), seed=77)
-    x, z = VAN_BACK + 0.45, VAN_AT[1] - 1.2                  # he stays put (Sam, 20 Oct: he had jumped out of frame)
+    x, z = VAN_BACK + 1.25, VAN_AT[1] - 1.3                  # he stays put (Sam, 20 Oct: he had jumped out of frame)
     j = C.pose_standing(sp)
     if SLAM[0] - 0.15 <= t < SLAM[1] + 0.2:                  # both hands on the doors, pushing them shut
         u = ease((t - SLAM[0] + 0.15) / 0.4)

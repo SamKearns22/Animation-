@@ -171,3 +171,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - Sam (20 Oct): "Don't draw blind: request references from me if you get stuck." The photo sites were blocked by the
   network, so drawing stopped and the references were asked for. `source/power_crime_cast.py` is a first draft
   (uniforms, hats, placard, carbine), not yet drawn or checked; it is finished against Sam's photos.
+| 47 | throw | animatic 3 | "The door clips through the character." | the door swings in a 1 m circle round its hinge and the officer stood inside it; he now stands 0.8 m further back (clear of the swing) and the tracking camera holds 0.45 m further along so he stays in shot. Clip sent |
