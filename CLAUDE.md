@@ -43,6 +43,8 @@ I don't know how to code. Please:
   and `story/status.md`, commit and push, then tell me to start a new chat. The new chat reads only that and the guide
   for the film in hand, never the old history. Also: look at as few pictures as possible, and don't re-read the big
   source files; use `python3 source/codemap.py FILE.py` and read only the lines needed.
+  **Post the handover in the chat too (Sam, 20 Oct):** whenever a new chat is needed, also paste the handover (where
+  things stand, what comes next, what to type in the new chat) into the message, so Sam has it without opening files.
 - **"Hold" means collect, don't act (16 Oct):** when I say hold, reply to each note with how you understood it and how
   you'll fix it, change nothing, and do everything in one round when I say go.
 - **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
