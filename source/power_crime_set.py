@@ -29,8 +29,8 @@ FLAT = B.Cam(1.0, 540, 960)
 M_UNIT = V.M_PER_UNIT
 
 # ------------------------------------------------------------------------------------------------ colours
-SKY, CLOUD, CLOUD_D = (120, 176, 228), (250, 250, 252), (222, 228, 240)
-PAVE, PAVE_D, PAVE_L = (196, 192, 184), (170, 166, 158), (210, 206, 198)
+SKY, CLOUD, CLOUD_D, CLOUD_G = (176, 194, 212), (248, 248, 250), (226, 230, 236), (190, 196, 206)   # overcast
+PAVE, PAVE_D, PAVE_L = (196, 192, 184), (150, 146, 138), (210, 206, 198)
 STONE, STONE_D = (226, 214, 190), (196, 182, 156)            # the cream Portland stone of the buildings
 STONE_G, STONE_GD = (200, 200, 198), (172, 172, 170)          # the pale grey granite of the column and walls
 SAND, SAND_D = (214, 176, 108), (178, 140, 76)                # the fountains' golden sandstone
@@ -137,27 +137,36 @@ def text3(img, cam, txt, corners, col, font='Anton-Regular.ttf'):
 
 # ------------------------------------------------------------------------------------------------ sky
 def sky(img, cam, t=0.0):
-    """A bright spring sky, flat blue, big flat white clouds drifting slowly (refs from-steps-1, column-fountain)."""
+    """An overcast autumn sky (Sam, 20 Oct: "add some cloudy weather"; refs crowd-low-1..3): a pale grey-blue, banks of
+    big flat clouds with grey undersides drifting slowly, a grey haze along the horizon. Flat colours, one outline on
+    the cloud tops only where they meet the sky."""
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, img.width, img.height], fill=SKY + (255,))
     p = _pen(img)
     rng = np.random.default_rng(3)
-    for k in range(9):
-        az = rng.uniform(-1.2, 1.2) + 0.004 * t
-        el = rng.uniform(0.08, 0.5)
-        far = 3000.0
-        c = (cam.pos[0] + far * math.sin(az + math.pi) * 1.0, cam.pos[1] + far * el, cam.pos[2] - far * math.cos(az) * 1.0)
-        if cam.depth(c) <= 0:
-            continue
-        (X, Y), k_ = cam.project(c)
-        w = rng.uniform(260, 520) * k_ / 1650 * 3000 / far * 3
-        h = w * rng.uniform(0.28, 0.4)
-        blobs = [(X + rng.uniform(-0.5, 0.5) * w, Y + rng.uniform(-0.3, 0.2) * h, rng.uniform(0.25, 0.42) * w)
-                 for _ in range(6)]
-        for bx, by, br in blobs:
-            p.ell(bx, by, br, br * 0.62, CLOUD_D, None)
-        for bx, by, br in blobs:
-            p.ell(bx, by - br * 0.1, br * 0.92, br * 0.54, CLOUD, None)
+    far = 3000.0
+    for layer, (n, el0, el1, size) in enumerate(((10, 0.03, 0.1, 1.3), (12, 0.1, 0.3, 1.1), (10, 0.28, 0.7, 1.0))):
+        for k in range(n):
+            az = rng.uniform(-1.4, 1.4) + 0.003 * t * (1 + layer)
+            el = rng.uniform(el0, el1)
+            for back in (0.0, math.pi):                 # clouds all round, so every camera direction has them
+                a = az + back
+                c = (cam.pos[0] + far * math.sin(a), cam.pos[1] + far * el, cam.pos[2] + far * math.cos(a))
+                if cam.depth(c) <= 0:
+                    continue
+                (X, Y), k_ = cam.project(c)
+                w = rng.uniform(0.2, 0.38) * k_ * far * size          # a cloud bank about 12-22 degrees across
+                h = w * rng.uniform(0.22, 0.34)
+                blobs = [(X + rng.uniform(-0.55, 0.55) * w, Y + rng.uniform(-0.35, 0.1) * h, rng.uniform(0.22, 0.4) * w)
+                         for _ in range(7)]
+                for bx, by, br in blobs:                    # the grey underside
+                    p.ell(bx, by + br * 0.12, br, br * 0.5, CLOUD_G, None)
+                for bx, by, br in blobs:                    # the lit tops
+                    p.ell(bx, by - br * 0.12, br * 0.9, br * 0.46, CLOUD_D, None)
+                for bx, by, br in blobs[:4]:
+                    p.ell(bx, by - br * 0.22, br * 0.7, br * 0.34, CLOUD, None)
+                p.poly([(X - w * 0.75, Y + h * 0.35), (X + w * 0.75, Y + h * 0.35), (X + w * 0.68, Y + h * 0.55),
+                        (X - w * 0.68, Y + h * 0.55)], CLOUD_G, None)  # the flat base
 
 
 # ------------------------------------------------------------------------------------------------ the square
@@ -168,6 +177,7 @@ FOUNTAINS = ((-21.0, 20.0), (21.0, 20.0))    # the two fountains' centres (just 
 F_R = 8.5                                    # the quatrefoil basin's lobe distance
 COL_BASE = 8.0                               # the column's stepped base: half-width
 LIONS = [(-7.6, -9.0, -1), (7.6, -9.0, -1), (-7.6, 9.0, 1), (7.6, 9.0, 1)]   # (x, z, facing +z north / -z south)
+GRANITE, GRANITE_D = (176, 172, 166), (150, 146, 140)
 
 
 def quatrefoil(cx, cz, r, n=96):
@@ -180,167 +190,402 @@ def quatrefoil(cx, cz, r, n=96):
 
 
 def ground(img, cam):
-    """Roads round three sides, the paved square with its darker pattern of lines round each fountain."""
-    quad(img, cam, [(-400, 0, -400), (400, 0, -400), (400, 0, 400), (-400, 0, 400)], ROAD, None)
-    quad(img, cam, [(-SQ_X, 0.01, SQ_S), (SQ_X, 0.01, SQ_S), (SQ_X, 0.01, SQ_N), (-SQ_X, 0.01, SQ_N)], PAVE, INK, 1.4)
+    """Roads round three sides with their markings; the square paved in pale granite slabs (the joints drawn near
+    the camera), a darker granite border, the inlaid diamond and square round each fountain, a broad pale walk from
+    the steps to the column (refs aerial-1..3)."""
+    quad(img, cam, [(-900, 0, -900), (900, 0, -900), (900, 0, 400), (-900, 0, 400)], ROAD, None)
+    for x0, x1, z0, z1 in ((-SQ_X - 22, SQ_X + 22, SQ_S - 26, SQ_S - 22), (-SQ_X - 22, -SQ_X - 18, SQ_S - 22, SQ_N + 26),
+                           (SQ_X + 18, SQ_X + 22, SQ_S - 22, SQ_N + 26)):      # pavements beside the buildings
+        quad(img, cam, [(x0, 0.005, z0), (x1, 0.005, z0), (x1, 0.005, z1), (x0, 0.005, z1)], PAVE_D, None)
+    quad(img, cam, [(-SQ_X, 0.01, SQ_S), (SQ_X, 0.01, SQ_S), (SQ_X, 0.01, SQ_N), (-SQ_X, 0.01, SQ_N)], GRANITE, INK, 1.4)
+    quad(img, cam, [(-SQ_X + 2, 0.011, SQ_S + 2), (SQ_X - 2, 0.011, SQ_S + 2), (SQ_X - 2, 0.011, SQ_N), (-SQ_X + 2, 0.011, SQ_N)],
+         PAVE, None)
+    quad(img, cam, [(-6, 0.012, COL_BASE + 1), (6, 0.012, COL_BASE + 1), (6, 0.012, SQ_N), (-6, 0.012, SQ_N)], PAVE_L, None)
     p = _pen(img)
+    cx, cz = cam.pos[0], cam.pos[2]
+    for x in np.arange(-SQ_X + 2, SQ_X - 1, 1.5):        # slab joints, only where they read (within 45 m)
+        if abs(x - cx) < 45:
+            cam.line(p, [(x, 0.013, max(SQ_S + 2, cz - 45)), (x, 0.013, min(SQ_N, cz + 45))], PAVE_D, 1.4)
+    for z in np.arange(SQ_S + 2, SQ_N, 1.5):
+        if abs(z - cz) < 45:
+            cam.line(p, [(max(-SQ_X + 2, cx - 45), 0.013, z), (min(SQ_X - 2, cx + 45), 0.013, z)], PAVE_D, 1.4)
     for fx, fz in FOUNTAINS:                          # the inlaid diamond and square round each fountain
         for r, rot in ((15.0, 0.0), (11.5, math.pi / 4)):
             pts = [(fx + r * math.cos(rot + k * math.pi / 2), 0.015, fz + r * math.sin(rot + k * math.pi / 2)) for k in range(4)]
-            for a, b in zip(pts, pts[1:] + pts[:1]):
-                cam.line(p, [a, b], PAVE_D, 2.0)
-    for z in np.arange(SQ_S + 6, SQ_N, 6.0):          # joint lines in the paving
-        cam.line(p, [(-SQ_X, 0.012, z), (SQ_X, 0.012, z)], PAVE_L, 1.0)
-    for z in (SQ_S - 4, SQ_S - 11):                  # lane markings on the south road
-        for x in np.arange(-120, 120, 8):
+            cam.poly(p, pts, None, (120, 116, 110), 5.0)
+    for z in (SQ_S - 6, SQ_S - 14):                  # lane markings on the south road
+        for x in np.arange(-160, 160, 8):
             cam.line(p, [(x, 0.01, z), (x + 4, 0.01, z)], ROAD_L, 2.0)
+    for x in (-SQ_X - 10, SQ_X + 10, 8.0):           # the side roads and Whitehall
+        z1 = SQ_N + 20 if abs(x) > 20 else SQ_S - 26
+        for z in np.arange(-700 if abs(x) < 20 else SQ_S - 22, z1 if abs(x) > 20 else SQ_S - 26, 8):
+            cam.line(p, [(x, 0.01, z), (x, 0.01, z + 4)], ROAD_L, 2.0)
+
+
+def edges(img, cam):
+    """The square's sides: low granite parapets along the east and west with gaps for the stairs, black bollards and a
+    kerb along the south road (refs aerial-2, lion-4)."""
+    for sg in (-1, 1):
+        x = sg * SQ_X
+        for z0, z1 in ((SQ_S, -4.0), (4.0, 26.0), (34.0, SQ_N)):
+            box(img, cam, min(x, x + sg * 0.6), max(x, x + sg * 0.6), 0, 1.1, z0, z1, GRANITE, GRANITE_D, GRANITE, INK, 1.4)
+    p = _pen(img)
+    for x in np.arange(-SQ_X, SQ_X, 2.4):
+        if cam.depth((x, 0.5, SQ_S)) > 1:
+            cam.line(p, [(x, 0, SQ_S), (x, 0.9, SQ_S)], IRON, 4.0)
+
+
+def balustrade(img, cam, x0, x1, z, y, h=1.0, col=STONE_G, col_d=STONE_GD):
+    """A stone balustrade along x at depth z, standing on y: a plinth, a row of balusters (bottle shapes as short
+    thick strokes), a coping on top, posts every 6 m."""
+    quad(img, cam, [(x0, y, z), (x1, y, z), (x1, y + 0.18, z), (x0, y + 0.18, z)], col, INK, 1.2)
+    p = _pen(img)
+    if abs(cam.depth(((x0 + x1) / 2, y, z))) < 160:
+        for x in np.arange(x0 + 0.15, x1, 0.32):
+            cam.line(p, [(x, y + 0.18, z), (x, y + h - 0.14, z)], col_d, 3.2)
+            cam.line(p, [(x, y + 0.3, z), (x, y + h - 0.3, z)], col, 2.0)
+    for x in np.arange(x0, x1 + 0.1, 6.0):
+        quad(img, cam, [(x - 0.25, y, z), (x + 0.25, y, z), (x + 0.25, y + h + 0.1, z), (x - 0.25, y + h + 0.1, z)], col, INK, 1.2)
+    quad(img, cam, [(x0, y + h - 0.14, z), (x1, y + h - 0.14, z), (x1, y + h, z), (x0, y + h, z)], col, INK, 1.2)
+
+
+def lamp_standard(img, cam, x, y, z, h=5.5):
+    """An ornate black lamp standard with twin lanterns (refs lion-4, crowd-low-2)."""
+    if cam.depth((x, y + h / 2, z)) < 1:
+        return
+    p = _pen(img)
+    cam.line(p, [(x, y, z), (x, y + h, z)], IRON, 4.0)
+    cam.line(p, [(x - 0.7, y + h - 0.4, z), (x + 0.7, y + h - 0.4, z)], IRON, 3.0)
+    for dx in (-0.7, 0.7):
+        (X, Y), k = cam.project((x + dx, y + h - 0.1, z))
+        p.poly([(X - 0.22 * k, Y + 0.3 * k), (X + 0.22 * k, Y + 0.3 * k), (X + 0.28 * k, Y - 0.25 * k), (X, Y - 0.45 * k),
+                (X - 0.28 * k, Y - 0.25 * k)], (236, 228, 190), INK, 1.2)
+    (X, Y), k = cam.project((x, y + 0.6, z))
+    p.ell(X, Y, 0.18 * k, 0.4 * k, IRON, None)
 
 
 def terrace(img, cam):
-    """The north terrace (refs from-portico, protest-3): a stone wall with railings the length of the square, the
-    wide central staircase down, the terrace's paving up top."""
-    quad(img, cam, [(-SQ_X, TERRACE_Y, SQ_N), (SQ_X, TERRACE_Y, SQ_N), (SQ_X, TERRACE_Y, TERRACE_N), (-SQ_X, TERRACE_Y, TERRACE_N)],
-         PAVE_L, INK, 1.4)
-    for x0, x1 in ((-SQ_X, STEPS[0]), (STEPS[1], SQ_X)):
+    """The north terrace (refs crowd-low-1..3, from-portico, protest-3): a granite wall 3.6 m high the length of the
+    square with a stone balustrade on top, the broad central staircase with its landing and side walls, lamp standards
+    along the top; the banners from Sam's photos tied along the balustrade (LIFT THE BAN, PEACE, DROP THE CHARGES)."""
+    if cam.pos[1] > TERRACE_Y:                                   # its top is only seen from above
+        quad(img, cam, [(-SQ_X, TERRACE_Y, SQ_N), (SQ_X, TERRACE_Y, SQ_N), (SQ_X, TERRACE_Y, TERRACE_N),
+                        (-SQ_X, TERRACE_Y, TERRACE_N)], PAVE_L, INK, 1.4)
+    p = _pen(img)
+    for x0, x1 in ((-SQ_X, STEPS[0] - 1.2), (STEPS[1] + 1.2, SQ_X)):
         quad(img, cam, [(x0, 0, SQ_N), (x1, 0, SQ_N), (x1, TERRACE_Y, SQ_N), (x0, TERRACE_Y, SQ_N)], STONE_G, INK, 1.8)
-        p = _pen(img)
-        for x in np.arange(x0, x1, 3.0):            # the wall's stone courses
-            cam.line(p, [(x, 0.0, SQ_N - 0.01), (x, TERRACE_Y, SQ_N - 0.01)], STONE_GD, 1.0)
-        cam.line(p, [(x0, TERRACE_Y + 1.0, SQ_N), (x1, TERRACE_Y + 1.0, SQ_N)], IRON, 2.6)   # the railing
-        for x in np.arange(x0, x1, 1.0):
-            cam.line(p, [(x, TERRACE_Y, SQ_N), (x, TERRACE_Y + 1.0, SQ_N)], IRON, 1.2)
-    for x0, x1, txt, cloth, ink in ((-30.0, -16.0, 'LIFT THE BAN', (246, 244, 236), (200, 30, 40)),
-                                    (-6.0, 6.0, 'PEACE', (246, 244, 236), (24, 24, 28)),
-                                    (14.0, 32.0, 'DROP THE CHARGES', (196, 30, 40), (246, 244, 236))):
-        y0, y1, zb = TERRACE_Y + 0.05, TERRACE_Y + 1.15, SQ_N - 0.05      # banners tied along the terrace railings
-        if x0 < STEPS[1] and x1 > STEPS[0]:                               # (refs crowd-low-1..3: Sam's photos)
-            zb, y0, y1 = SQ_N + 6.2, TERRACE_Y + 0.1, TERRACE_Y + 1.1      # PEACE hangs at the top of the steps
+        for y in np.arange(0.6, TERRACE_Y, 0.6):               # the wall's courses and blocks
+            cam.line(p, [(x0, y, SQ_N - 0.01), (x1, y, SQ_N - 0.01)], STONE_GD, 1.0)
+        for x in np.arange(x0, x1, 1.8):
+            cam.line(p, [(x, 0.0, SQ_N - 0.01), (x, TERRACE_Y, SQ_N - 0.01)], STONE_GD, 0.8)
+        quad(img, cam, [(x0, TERRACE_Y - 0.3, SQ_N - 0.02), (x1, TERRACE_Y - 0.3, SQ_N - 0.02), (x1, TERRACE_Y, SQ_N - 0.02),
+                        (x0, TERRACE_Y, SQ_N - 0.02)], STONE_GD, INK, 1.2)     # the cornice
+        balustrade(img, cam, x0, x1, SQ_N, TERRACE_Y)
+        for x in np.arange(x0 + 4, x1, 12.0):
+            lamp_standard(img, cam, x, TERRACE_Y, SQ_N + 1.2)
+    for sg in (-1, 1):                                           # the staircase's side walls
+        x = sg * (STEPS[1] + 0.6)
+        box(img, cam, x - 0.6, x + 0.6, 0, TERRACE_Y + 1.0, SQ_N - 0.6, SQ_N + 6.0, STONE_G, STONE_GD, STONE_G, INK, 1.4)
+        lamp_standard(img, cam, x, TERRACE_Y + 1.0, SQ_N - 0.4)
+    n = 14
+    for k in range(n):
+        y0, y1 = TERRACE_Y * k / n, TERRACE_Y * (k + 1) / n
+        z = SQ_N + (k / n) * 6.0
+        if cam.pos[1] > y1:
+            quad(img, cam, [(STEPS[0], y1, z), (STEPS[1], y1, z), (STEPS[1], y1, z + 6.0 / n), (STEPS[0], y1, z + 6.0 / n)],
+                 PAVE_L, None)
+        if cam.pos[2] < z:
+            quad(img, cam, [(STEPS[0], y0, z), (STEPS[1], y0, z), (STEPS[1], y1, z), (STEPS[0], y1, z)], STONE_G, INK, 0.9)
+    for x0, x1, txt, cloth, ink in ((-34.0, -18.0, 'LIFT THE BAN', (246, 244, 236), (200, 30, 40)),
+                                    (-7.0, 7.0, 'PEACE', (246, 244, 236), (24, 24, 28)),
+                                    (16.0, 36.0, 'DROP THE CHARGES', (196, 30, 40), (246, 244, 236))):
+        y0, y1, zb = TERRACE_Y + 0.05, TERRACE_Y + 1.1, SQ_N - 0.05      # tied along the balustrade
+        if x0 < STEPS[1] and x1 > STEPS[0]:                               # PEACE hangs across the top of the steps
+            zb, y0, y1 = SQ_N + 6.2, TERRACE_Y + 0.1, TERRACE_Y + 1.1
         quad(img, cam, [(x0, y1, zb), (x1, y1, zb), (x1, y0, zb), (x0, y0, zb)], cloth, INK, 1.6)
         w = (x1 - x0) * 0.86
         cx = (x0 + x1) / 2
         text3(img, cam, txt, [(cx + w / 2, y1 - 0.15, zb - 0.01), (cx - w / 2, y1 - 0.15, zb - 0.01),   # read from
                               (cx - w / 2, y0 + 0.15, zb - 0.01), (cx + w / 2, y0 + 0.15, zb - 0.01)], ink)  # the south
-    n = 12                                             # the steps
-    for k in range(n):
-        y0, y1 = TERRACE_Y * k / n, TERRACE_Y * (k + 1) / n
-        z = SQ_N + (k / n) * 6.0
-        quad(img, cam, [(STEPS[0], y1, z), (STEPS[1], y1, z), (STEPS[1], y1, z + 0.5), (STEPS[0], y1, z + 0.5)], PAVE_L, INK, 1.0)
-        if cam.pos[2] < z:
-            quad(img, cam, [(STEPS[0], y0, z), (STEPS[1], y0, z), (STEPS[1], y1, z), (STEPS[0], y1, z)], STONE_G, INK, 1.0)
 
 
-def facade(img, cam, x0, x1, z, y0, y1, storeys=4, bays=None, col=STONE, col_d=STONE_D, face=-1, axis='z', flag=False,
-           seed=0):
-    """A long building front (never a blank wall): stone, a ledge at each storey, rows of windows, doors at the foot,
-    a parapet; `axis` 'z': the front runs along x at depth z (facing -z if face=-1); 'x': along z at x."""
-    rng = np.random.default_rng(seed)
+def classical(img, cam, a0, a1, at, y0, h, axis='z', bays=None, col=STONE, col_d=STONE_D, seed=0, flag=False,
+              storeys=3, portico=False):
+    """A classical stone front (refs gallery-1, from-steps-1, column-fountain; never a blank wall): a rusticated
+    ground storey (banded joints, arched windows and doors), a string course, pilasters between the bays, tall
+    upper windows each under a small pediment, a heavy cornice and a balustrade along the roof. `axis` 'z': the
+    front runs along x (from a0 to a1) at depth `at`; 'x': along z at x = `at`."""
+    rng = np.random.default_rng(abs(int(seed)))
 
     def P(u, y):
-        return (x0 + (x1 - x0) * u, y, z) if axis == 'z' else (z, y, x0 + (x1 - x0) * u)
-    quad(img, cam, [P(0, y0), P(1, y0), P(1, y1), P(0, y1)], col, INK, 1.8)
-    length = abs(x1 - x0)
-    bays = bays or max(3, int(length / 4.2))
+        s = a0 + (a1 - a0) * u
+        return (s, y, at) if axis == 'z' else (at, y, s)
+    length = abs(a1 - a0)
+    if cam.depth(P(0.5, y0 + h / 2)) < -length:
+        return
+    quad(img, cam, [P(0, y0), P(1, y0), P(1, y0 + h), P(0, y0 + h)], col, INK, 1.8)
+    bays = bays or max(3, int(length / 4.6))
     p = _pen(img)
-    for s in range(storeys):
-        yb = y0 + (y1 - y0) * s / storeys
-        yt = y0 + (y1 - y0) * (s + 1) / storeys
-        cam.line(p, [P(0, yb), P(1, yb)], col_d, 1.6)
-        for b in range(bays):
-            u0 = (b + 0.28) / bays
-            u1 = (b + 0.72) / bays
-            if s == 0 and b % 4 == 2:                      # doors at the foot
-                quad(img, cam, [P(u0, yb), P(u1, yb), P(u1, yb + (yt - yb) * 0.8), P(u0, yb + (yt - yb) * 0.8)],
-                     (60, 46, 36), INK, 1.2)
-                continue
-            quad(img, cam, [P(u0, yb + (yt - yb) * 0.25), P(u1, yb + (yt - yb) * 0.25), P(u1, yb + (yt - yb) * 0.82),
-                            P(u0, yb + (yt - yb) * 0.82)], WINDOW if rng.random() < 0.8 else WINDOW_D, INK, 1.0)
-    quad(img, cam, [P(0, y1), P(1, y1), P(1, y1 + 1.2), P(0, y1 + 1.2)], col_d, INK, 1.4)        # the parapet
-    if flag:                                               # a Union flag on the roof (ref from-steps-1)
-        fx = P(0.5, y1 + 1.2)
+    g = min(4.6, h * 0.3)                                       # the rusticated ground storey
+    for y in np.arange(y0 + 0.55, y0 + g, 0.55):
+        cam.line(p, [P(0, y), P(1, y)], col_d, 1.0)
+    quad(img, cam, [P(0, y0 + g), P(1, y0 + g), P(1, y0 + g + 0.4), P(0, y0 + g + 0.4)], col_d, INK, 1.2)
+    up = (h - g - 2.2) / max(1, storeys - 1)
+    for b in range(bays):
+        u0, u1 = b / bays, (b + 1) / bays
+        uc = (u0 + u1) / 2
+        w = (u1 - u0) * 0.34
+        if b > 0:                                                # a pilaster
+            quad(img, cam, [P(u0 - 0.06 / bays, y0 + g + 0.4), P(u0 + 0.06 / bays, y0 + g + 0.4),
+                            P(u0 + 0.06 / bays, y0 + h - 1.6), P(u0 - 0.06 / bays, y0 + h - 1.6)], B.lt(col, 1.05), INK, 0.9)
+        door = b % 5 == 2
+        top = y0 + (g * 0.85 if door else g * 0.75)
+        bot = y0 if door else y0 + g * 0.25
+        quad(img, cam, [P(uc - w, bot), P(uc + w, bot), P(uc + w, top), P(uc - w, top)], (64, 50, 40) if door else WINDOW, INK, 1.0)
+        arch = [P(uc - w + 2 * w * (0.5 - 0.5 * math.cos(a)), top + (w * length) * 0.5 * math.sin(a)) for a in np.linspace(0, math.pi, 7)]
+        if (w * length) * 0.5 < 1.2:
+            quad(img, cam, arch, (64, 50, 40) if door else WINDOW, INK, 1.0)
+        for s in range(1, storeys):                              # the upper windows, each with a pediment
+            yb = y0 + g + 0.4 + (s - 1) * up + up * 0.18
+            yt = yb + up * 0.62
+            quad(img, cam, [P(uc - w * 0.8, yb), P(uc + w * 0.8, yb), P(uc + w * 0.8, yt), P(uc - w * 0.8, yt)],
+                 WINDOW if rng.random() < 0.85 else WINDOW_D, INK, 1.0)
+            for k in range(1, 3):                                 # glazing bars
+                cam.line(p, [P(uc - w * 0.8, yb + (yt - yb) * k / 3), P(uc + w * 0.8, yb + (yt - yb) * k / 3)], (100, 112, 124), 0.8)
+            quad(img, cam, [P(uc - w, yt + 0.1), P(uc + w, yt + 0.1), P(uc, yt + 0.6)], col_d, INK, 1.0)
+    quad(img, cam, [P(0, y0 + h - 1.6), P(1, y0 + h - 1.6), P(1, y0 + h - 0.9), P(0, y0 + h - 0.9)], col_d, INK, 1.4)   # cornice
+    quad(img, cam, [P(0, y0 + h - 0.9), P(1, y0 + h - 0.9), P(1, y0 + h), P(0, y0 + h)], col, INK, 1.0)
+    for u in np.linspace(0, 1, max(6, int(length / 0.6))):      # the roof balustrade
+        cam.line(p, [P(u, y0 + h), P(u, y0 + h + 0.8)], col_d, 2.0)
+    quad(img, cam, [P(0, y0 + h + 0.8), P(1, y0 + h + 0.8), P(1, y0 + h + 1.0), P(0, y0 + h + 1.0)], col, INK, 1.0)
+    if flag:                                                     # a flag on the roof (refs from-steps-1)
+        fx = P(0.5, y0 + h + 1.0)
         cam.line(p, [fx, (fx[0], fx[1] + 7, fx[2])], IRON, 2.0)
         fl = [(fx[0], fx[1] + 7, fx[2]), (fx[0] + 3, fx[1] + 6.8, fx[2]), (fx[0] + 3, fx[1] + 5, fx[2]), (fx[0], fx[1] + 5.2, fx[2])]
         quad(img, cam, fl, (30, 50, 120), INK, 1.0)
         cam.line(p, [fl[0], fl[2]], (246, 246, 246), 2.0)
         cam.line(p, [fl[1], fl[3]], (246, 246, 246), 2.0)
-        cam.line(p, [((fl[0][0] + fl[1][0]) / 2, fl[0][1], fx[2]), ((fl[0][0] + fl[1][0]) / 2, fl[3][1], fx[2])], (200, 30, 40), 2.4)
+    if portico:                                                  # a columned porch in the middle (Canada House, SA House)
+        n = 6
+        for k in range(n):
+            u = 0.5 + (k - (n - 1) / 2) * 0.035
+            q0 = P(u, y0 + 1.0)
+            cylinder_at = (q0[0], q0[2])
+            off = (1.6 if axis == 'z' else 0.0, 0.0 if axis == 'z' else 1.6)
+            sg = 1 if cam.pos[2 if axis == 'z' else 0] > at else -1
+            cx_, cz_ = (q0[0], q0[2] + sg * 1.6) if axis == 'z' else (q0[0] + sg * 1.6, q0[2])
+            cylinder(img, cam, cx_, cz_, y0 + 1.0, y0 + h - 1.6, 0.45, 0.4, (240, 232, 214), col_d, n=12)
+
+
+def facade(img, cam, x0, x1, z, y0, y1, storeys=4, bays=None, col=STONE, col_d=STONE_D, face=-1, axis='z', flag=False,
+           seed=0):
+    """A building front: now always the classical one (kept for the callers' signature)."""
+    classical(img, cam, x0, x1, z, y0, y1 - y0, axis=axis, bays=bays, col=col, col_d=col_d, seed=seed, flag=flag,
+              storeys=storeys)
 
 
 def gallery(img, cam):
-    """The National Gallery (refs gallery-1, from-steps-1): a long low stone front with pilasters and windows, the
-    central portico of eight columns under a pediment, the dome behind; St Martin's white spire off to the east."""
+    """The National Gallery (refs gallery-1, from-steps-1, crowd-low-1..3): long classical wings on the terrace (a
+    rusticated base, tall windows between pilasters, a cornice and a roof balustrade); the central portico on its
+    podium: eight pale Corinthian columns, the entablature, the pediment; two yellow banners hanging between the
+    columns; the grey ribbed dome on its drum with a lantern; a small domed cupola either side; St Martin's white
+    steeple off to the east."""
     y0 = TERRACE_Y
-    facade(img, cam, -60, 60, TERRACE_N + 2, y0, y0 + 15, storeys=2, bays=30, seed=4)
-    box(img, cam, -9, 9, y0, y0 + 14, TERRACE_N - 4, TERRACE_N + 2, STONE, STONE_D, STONE, INK, 1.6)   # portico block
-    for k in range(8):                                     # the portico's columns
-        x = -8 + 16 * k / 7
-        cylinder(img, cam, x, TERRACE_N - 3.4, y0 + 1.2, y0 + 12.4, 0.55, 0.5, (240, 232, 214), STONE_D, n=14, flutes=0)
-    ped = [(-10, y0 + 14, TERRACE_N - 4), (10, y0 + 14, TERRACE_N - 4), (0, y0 + 18, TERRACE_N - 4)]
-    quad(img, cam, ped, STONE, INK, 1.8)
-    quad(img, cam, [(-10, y0 + 12.4, TERRACE_N - 4), (10, y0 + 12.4, TERRACE_N - 4), (10, y0 + 14, TERRACE_N - 4),
-                    (-10, y0 + 14, TERRACE_N - 4)], STONE_D, INK, 1.6)
-    cylinder(img, cam, 0, TERRACE_N + 10, y0 + 15, y0 + 21, 6.0, 6.0, STONE, STONE_D, n=24)            # the drum
-    disc(img, cam, 0, y0 + 21, TERRACE_N + 10, 6.2, STONE_D)
-    for k in range(5):                                     # the dome, in rings
-        a0, a1 = k / 5 * math.pi / 2, (k + 1) / 5 * math.pi / 2
-        cylinder(img, cam, 0, TERRACE_N + 10, y0 + 21 + 6 * math.sin(a0), y0 + 21 + 6 * math.sin(a1),
-                 6 * math.cos(a0), max(0.4, 6 * math.cos(a1)), (150, 160, 166), (120, 130, 136), n=24)
-    cylinder(img, cam, 0, TERRACE_N + 10, y0 + 27, y0 + 30, 0.9, 0.5, STONE, STONE_D, n=12)
-    # St Martin-in-the-Fields: a white steeple to the north-east
-    sx, sz = 68.0, TERRACE_N + 8
-    box(img, cam, sx - 3, sx + 3, 0, 26, sz - 3, sz + 3, STONE, STONE_D, STONE)
-    for k, (h0, h1, r) in enumerate(((26, 32, 2.6), (32, 37, 2.0), (37, 41, 1.4))):
+    for sg in (-1, 1):
+        classical(img, cam, sg * 13, sg * 62, TERRACE_N + 2, y0, 13.0, bays=11, seed=40 + sg, storeys=2)
+    box(img, cam, -13, 13, y0, y0 + 15.5, TERRACE_N + 2, TERRACE_N + 14, STONE, STONE_D, STONE, INK, 1.6)   # centre block
+    classical(img, cam, -13, 13, TERRACE_N + 1.99, y0, 15.5, bays=5, seed=44, storeys=2)
+    box(img, cam, -10, 10, y0, y0 + 1.4, TERRACE_N - 6, TERRACE_N + 2, PAVE_L, STONE_GD, STONE_G, INK, 1.4)  # podium
+    p = _pen(img)
+    for k in range(4):                                           # its steps
+        z = TERRACE_N - 6 - 0.35 * (k + 1)
+        quad(img, cam, [(-8, y0 + 1.4 * (3 - k) / 4, z), (8, y0 + 1.4 * (3 - k) / 4, z), (8, y0 + 1.4 * (4 - k) / 4, z),
+                        (-8, y0 + 1.4 * (4 - k) / 4, z)], STONE_G, INK, 0.9)
+    ztop = TERRACE_N - 5.2
+    for k in range(8):                                           # the columns
+        x = -8.6 + 17.2 * k / 7
+        cylinder(img, cam, x, ztop, y0 + 1.4, y0 + 12.0, 0.62, 0.55, (242, 236, 222), STONE_D, n=16, flutes=5)
+        box(img, cam, x - 0.75, x + 0.75, y0 + 12.0, y0 + 12.8, ztop - 0.75, ztop + 0.75, STONE, STONE_D, STONE_D, INK, 1.0)
+    for k, x in ((1, -8.6 + 17.2 * 1.5 / 7), (6, -8.6 + 17.2 * 5.5 / 7)):    # the yellow banners (refs crowd-low-1, 2)
+        zb = ztop + 0.9
+        quad(img, cam, [(x - 0.75, y0 + 11.6, zb), (x + 0.75, y0 + 11.6, zb), (x + 0.75, y0 + 5.2, zb), (x - 0.75, y0 + 5.2, zb)],
+             (238, 196, 40), INK, 1.4)
+        cam.line(p, [(x - 0.5, y0 + 10.6, zb - 0.01), (x + 0.5, y0 + 10.6, zb - 0.01)], (60, 50, 30), 2.0)
+    box(img, cam, -10.2, 10.2, y0 + 12.8, y0 + 14.4, TERRACE_N - 6.2, TERRACE_N + 2, STONE, STONE_D, STONE, INK, 1.4)
+    quad(img, cam, [(-10.2, y0 + 14.4, TERRACE_N - 6.2), (10.2, y0 + 14.4, TERRACE_N - 6.2), (0, y0 + 17.6, TERRACE_N - 6.2)],
+         STONE, INK, 1.8)                                         # the pediment
+    quad(img, cam, [(-8.6, y0 + 14.7, TERRACE_N - 6.21), (8.6, y0 + 14.7, TERRACE_N - 6.21), (0, y0 + 17.0, TERRACE_N - 6.21)],
+         STONE_D, INK, 1.0)
+    zd = TERRACE_N + 9
+    cylinder(img, cam, 0, zd, y0 + 15.5, y0 + 19.5, 6.2, 6.2, STONE, STONE_D, n=28)        # the drum
+    for k in range(9):                                            # its windows (the near half)
+        a = math.pi * (0.1 + 0.8 * k / 8)
+        x, z = 6.25 * math.cos(math.pi + a), zd - 6.25 * math.sin(a)
+        if cam.depth((x, y0 + 17, z)) < cam.depth((0, y0 + 17, zd)):
+            quad(img, cam, [(x - 0.4, y0 + 16.2, z), (x + 0.4, y0 + 16.2, z), (x + 0.4, y0 + 18.6, z), (x - 0.4, y0 + 18.6, z)],
+                 WINDOW, INK, 0.8)
+    for k in range(6):                                            # the ribbed lead dome
+        a0, a1 = k / 6 * math.pi / 2, (k + 1) / 6 * math.pi / 2
+        cylinder(img, cam, 0, zd, y0 + 19.5 + 6 * math.sin(a0), y0 + 19.5 + 6 * math.sin(a1), 6.2 * math.cos(a0),
+                 max(0.6, 6.2 * math.cos(a1)), (150, 158, 164) if k % 2 else (140, 148, 154), (118, 126, 132), n=28, flutes=8)
+    cylinder(img, cam, 0, zd, y0 + 25.4, y0 + 28.0, 1.0, 0.8, STONE, STONE_D, n=12)        # the lantern
+    cylinder(img, cam, 0, zd, y0 + 28.0, y0 + 29.2, 0.9, 0.05, (140, 148, 154), (118, 126, 132), n=10)
+    for sg in (-1, 1):                                            # the cupolas either side
+        cx = sg * 11.0
+        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 15.5, y0 + 18.0, 1.6, 1.6, STONE, STONE_D, n=16)
+        cylinder(img, cam, cx, TERRACE_N + 6, y0 + 18.0, y0 + 20.0, 1.7, 0.2, (150, 158, 164), (118, 126, 132), n=16)
+    sx, sz = 70.0, TERRACE_N + 10                                 # St Martin-in-the-Fields
+    classical(img, cam, sx - 10, sx + 10, sz - 8, 0, 14, bays=4, seed=46, storeys=2)
+    box(img, cam, sx - 3, sx + 3, 14, 28, sz - 3, sz + 3, (244, 240, 230), STONE_D, (244, 240, 230))
+    for h0, h1, r in ((28, 33, 2.4), (33, 37, 1.8), (37, 40, 1.3)):
         box(img, cam, sx - r, sx + r, h0, h1, sz - r, sz + r, (244, 240, 230), STONE_D, (244, 240, 230))
-    cylinder(img, cam, sx, sz, 41, 52, 1.2, 0.05, (244, 240, 230), STONE_D, n=8)
+    cylinder(img, cam, sx, sz, 40, 52, 1.1, 0.05, (244, 240, 230), STONE_D, n=8)
 
 
-def surroundings(img, cam, t):
-    """The cream stone buildings round the square (refs from-steps-1, column-fountain), trees along the east and west
-    edges, red buses on the south road, Big Ben far down Whitehall."""
-    # Big Ben: a tall tower far to the south, a little east (from-steps-1, placard-1)
-    bx, bz = 40.0, -900.0
-    box(img, cam, bx - 6, bx + 6, 0, 75, bz - 6, bz + 6, (206, 180, 120), (176, 150, 96), (206, 180, 120), INK, 1.0)
-    box(img, cam, bx - 7, bx + 7, 60, 72, bz - 7, bz + 7, (206, 180, 120), (176, 150, 96), (206, 180, 120), INK, 1.0)
-    disc(img, cam, bx, 66, bz + 7.05, 4.5, (244, 240, 228), INK, 1.0) if cam.pos[2] > bz else None
-    cylinder(img, cam, bx, bz, 75, 96, 7, 0.4, (90, 96, 100), (70, 74, 80), n=4)
-    # south (behind the column from the gallery): Whitehall's buildings and Admiralty Arch to the south-west
-    facade(img, cam, -120, -36, -46, 0, 24, storeys=5, seed=11, flag=True)
-    facade(img, cam, 32, 130, -46, 0, 26, storeys=5, seed=12, col=(232, 222, 200), flag=True)
-    facade(img, cam, -36, 32, -150, 0, 30, storeys=6, seed=13)
-    # west (Canada House) and east (South Africa House): long stone fronts facing the square
-    facade(img, cam, -40, 70, -SQ_X - 16, 0, 22, storeys=4, axis='x', seed=14, flag=True)
-    facade(img, cam, -40, 70, SQ_X + 16, 0, 24, storeys=4, axis='x', seed=15, col=(232, 222, 200), flag=True)
-    # trees along the east and west edges
+def whitehall(img, cam):
+    """South of the square: Whitehall running away to Big Ben, lined both sides with stone government buildings (so
+    the road out of the square leads somewhere: Sam, 20 Oct), Big Ben's tower at the end."""
+    for z0 in range(-46, -700, -60):
+        z1 = z0 - 58
+        classical(img, cam, z0, z1, -2.0, 0, 20 + (z0 % 7), axis='x', bays=12, seed=100 + z0, storeys=4)
+        classical(img, cam, z0, z1, 18.0, 0, 22 - (z0 % 5), axis='x', bays=12, seed=200 + z0, storeys=4,
+                  col=(232, 222, 200))
+    bx, bz = 8.0, -760.0                                          # Big Ben
+    box(img, cam, bx - 6, bx + 6, 0, 62, bz - 6, bz + 6, (206, 180, 120), (176, 150, 96), (206, 180, 120), INK, 1.0)
+    box(img, cam, bx - 7, bx + 7, 62, 76, bz - 7, bz + 7, (206, 180, 120), (176, 150, 96), (206, 180, 120), INK, 1.0)
+    if cam.pos[2] > bz + 7:
+        disc_v(img, cam, bx, 69, bz + 7.05, 4.6, (244, 240, 228))
+    cylinder(img, cam, bx, bz, 76, 98, 7.5, 0.4, (70, 78, 84), (54, 60, 66), n=4)
+    classical(img, cam, -120, 140, -830, 0, 24, bays=40, seed=300, storeys=3, col=(206, 180, 120), col_d=(176, 150, 96))
+
+
+def disc_v(img, cam, cx, cy, z, r, col):
+    """A clock face: a disc facing the square, its hands at ten past ten."""
+    pts = [(cx + r * math.cos(a), cy + r * math.sin(a), z) for a in np.linspace(0, 2 * math.pi, 30, endpoint=False)]
+    quad(img, cam, pts, col, INK, 1.2)
+    p = _pen(img)
+    cam.line(p, [(cx, cy, z - 0.01), (cx - r * 0.5, cy + r * 0.3, z - 0.01)], INK, 1.6)
+    cam.line(p, [(cx, cy, z - 0.01), (cx + r * 0.6, cy + r * 0.5, z - 0.01)], INK, 1.6)
+
+
+def surroundings(cam, t):
+    """The buildings, Whitehall and the traffic as (depth, draw) items, drawn far to near."""
+    items = []
+    south = [(-150, -60, 'Admiralty'), (-50, -2, 'A'), (18, 80, 'B'), (80, 160, 'C')]
+    for a0, a1, nm in south:                                     # the south side, broken only by Whitehall
+        items.append((cam.depth(((a0 + a1) / 2, 10, -46)),
+                      lambda img, a0=a0, a1=a1, nm=nm: classical(img, cam, a0, a1, -46, 0, 22 if nm != 'Admiralty' else 18,
+                                                                bays=int((a1 - a0) / 4.6), seed=a0 + 500, flag=nm == 'B',
+                                                                storeys=4, col=(232, 222, 200) if nm == 'B' else STONE)))
+    items.append((cam.depth((8, 10, -300)), lambda img: whitehall(img, cam)))
+    items.append((cam.depth((-SQ_X - 26, 10, 10)), lambda img: classical(img, cam, -50, 70, -SQ_X - 26, 0, 22, axis='x',
+                                                                         bays=24, seed=14, flag=True, portico=True)))
+    items.append((cam.depth((SQ_X + 26, 10, 10)), lambda img: classical(img, cam, -50, 70, SQ_X + 26, 0, 24, axis='x',
+                                                                        bays=24, seed=15, flag=True, portico=True,
+                                                                        col=(232, 222, 200))))
+    items.append((cam.depth((0, 10, TERRACE_N + 8)), lambda img: gallery(img, cam)))
     rng = np.random.default_rng(9)
-    for side in (-1, 1):
+    for side in (-1, 1):                                         # plane trees along the east and west edges
         for z in np.arange(-10, 52, 9.0):
             x = side * (SQ_X + 6)
-            if cam.depth((x, 5, z)) < 1:
+            items.append((cam.depth((x, 5, z)), lambda img, x=x, z=z: tree(img, cam, x, z)))
+    for v in traffic(t):
+        items.append((cam.depth((v[1], 1.5, v[2])), lambda img, v=v: vehicle(img, cam, *v)))
+    return items
+
+
+def tree(img, cam, x, z):
+    if cam.depth((x, 5, z)) < 1:
+        return
+    cam.line(_pen(img), [(x, 0, z), (x, 4, z)], (90, 66, 46), 3.0)
+    (X, Y), k = cam.project((x, 6.5, z))
+    r = 3.2 * k
+    for dx, dy in ((-0.5, 0.1), (0.5, 0.1), (0, -0.4), (0, 0.3)):
+        _pen(img).ell(X + dx * r, Y + dy * r, r * 0.7, r * 0.62, TREE_D, INK, 1.4)
+    _pen(img).ell(X, Y - 0.1 * r, r * 0.8, r * 0.66, TREE, None)
+
+
+CAR_COLS = [(196, 196, 200), (40, 44, 56), (150, 30, 36), (230, 230, 226), (70, 90, 120), (110, 112, 118), (30, 30, 34)]
+
+
+def traffic(t):
+    """Vehicles on the roads round the square (Sam, 20 Oct: no traffic): buses, black cabs and cars moving both ways
+    along the south road, up and down the side roads and Whitehall. Each: (kind, x, z, heading, colour)."""
+    out = []
+    rng = np.random.default_rng(21)
+    lanes = [((-200, SQ_S - 9), (1, 0), 6.0), ((200, SQ_S - 17), (-1, 0), 5.5), ((-SQ_X - 8, -60), (0, 1), 5.0),
+             ((-SQ_X - 13, 120), (0, -1), 5.0), ((SQ_X + 8, 120), (0, -1), 5.5), ((SQ_X + 13, -60), (0, 1), 5.0),
+             ((5.0, -60), (0, -1), 6.0), ((11.0, -600), (0, 1), 6.0)]
+    for k, ((x0, z0), (dx, dz), v) in enumerate(lanes):
+        span = 400.0 if abs(dx) else (180.0 if abs(x0) > 20 else 560.0)
+        for i in range(5 if abs(dx) else 3):
+            kind = ['bus', 'cab', 'car', 'cab', 'car', 'bus', 'car'][int(rng.integers(7))]
+            off = (rng.uniform(0, span) + v * t) % span
+            x, z = x0 + dx * off, z0 + dz * off
+            out.append((kind, x, z, math.atan2(dz, dx), CAR_COLS[int(rng.integers(len(CAR_COLS)))]))
+    return out
+
+
+def obox(img, cam, cx, cz, heading, L, W, y0, y1, col, col_d, line=INK):
+    """An oriented box (a vehicle's body): its faces seen from the camera, far to near."""
+    ch, sh = math.cos(heading), math.sin(heading)
+
+    def P(u, v, y):
+        return (cx + u * ch - v * sh, y, cz + u * sh + v * ch)
+    faces = [([P(-L / 2, -W / 2, y0), P(L / 2, -W / 2, y0), P(L / 2, -W / 2, y1), P(-L / 2, -W / 2, y1)], col),
+             ([P(-L / 2, W / 2, y0), P(L / 2, W / 2, y0), P(L / 2, W / 2, y1), P(-L / 2, W / 2, y1)], col),
+             ([P(L / 2, -W / 2, y0), P(L / 2, W / 2, y0), P(L / 2, W / 2, y1), P(L / 2, -W / 2, y1)], col_d),
+             ([P(-L / 2, -W / 2, y0), P(-L / 2, W / 2, y0), P(-L / 2, W / 2, y1), P(-L / 2, -W / 2, y1)], col_d),
+             ([P(-L / 2, -W / 2, y1), P(L / 2, -W / 2, y1), P(L / 2, W / 2, y1), P(-L / 2, W / 2, y1)], B.lt(col, 1.1))]
+    vis = []
+    c = (cx, (y0 + y1) / 2, cz)
+    for pts, colr in faces:
+        ctr = tuple(np.mean(pts, axis=0))
+        if np.dot(np.subtract(ctr, c), np.subtract(cam.pos, ctr)) > 0:
+            vis.append((cam.depth(ctr), pts, colr))
+    for d, pts, colr in sorted(vis, key=lambda v: -v[0]):
+        quad(img, cam, pts, colr, line, 1.2)
+    return P
+
+
+def vehicle(img, cam, kind, x, z, heading, colr):
+    """A bus (red double-decker, 10.5 x 2.5 x 4.4 m), a black cab or a car, with windows and wheels."""
+    if cam.depth((x, 1.5, z)) < 2:
+        return
+    if kind == 'bus':
+        L, W, H, col = 10.5, 2.5, 4.4, BUS
+    elif kind == 'cab':
+        L, W, H, col = 4.6, 1.8, 1.8, (24, 24, 28)
+    else:
+        L, W, H, col = 4.3, 1.8, 1.45, colr
+    P = obox(img, cam, x, z, heading, L, W, 0.35, H * (0.55 if kind != 'bus' else 1.0), col, B.dk(col, 0.8))
+    if kind != 'bus':                                             # the cabin, narrower, with its windows
+        P2 = obox(img, cam, x - 0.2 * math.cos(heading), z - 0.2 * math.sin(heading), heading, L * 0.55, W * 0.92,
+                  H * 0.55, H, (60, 70, 84) if kind == 'car' else (40, 46, 56), (40, 46, 56))
+        if kind == 'cab':
+            (X, Y), k = cam.project((x, H + 0.12, z))
+            _pen(img).poly([(X - 0.25 * k, Y - 0.08 * k), (X + 0.25 * k, Y - 0.08 * k), (X + 0.25 * k, Y + 0.08 * k),
+                            (X - 0.25 * k, Y + 0.08 * k)], (246, 196, 40), INK, 1.0)
+    else:
+        for side in (-1, 1):
+            v = side * W / 2 * 1.01
+            if np.dot((-math.sin(heading) * side, 0, math.cos(heading) * side), np.subtract(cam.pos, P(0, v, 2))) <= 0:
                 continue
-            cam.line(_pen(img), [(x, 0, z), (x, 4, z)], (90, 66, 46), 3.0)
-            (X, Y), k = cam.project((x, 6.5, z))
-            r = 3.2 * k
-            for dx, dy in ((-0.5, 0.1), (0.5, 0.1), (0, -0.4), (0, 0.3)):
-                _pen(img).ell(X + dx * r, Y + dy * r, r * 0.7, r * 0.62, TREE_D, INK, 1.4)
-            _pen(img).ell(X, Y - 0.1 * r, r * 0.8, r * 0.66, TREE, None)
-    # red buses along the south road (moving)
-    for k, (x0, v) in enumerate(((-120.0, 6.0), (60.0, -5.0))):
-        x = x0 + v * t
-        x = ((x + 160) % 320) - 160
-        bus(img, cam, x, SQ_S - (8 if v > 0 else 14))
+            for y0, y1 in ((1.6, 2.4), (3.1, 3.9)):
+                for i in range(6):
+                    u0 = -4.8 + i * 1.65
+                    quad(img, cam, [P(u0, v, y0), P(u0 + 1.4, v, y0), P(u0 + 1.4, v, y1), P(u0, v, y1)], WINDOW, INK, 0.9)
+    p = _pen(img)
+    for u in (-L * 0.32, L * 0.32):
+        for side in (-1, 1):
+            q = P(u, side * W / 2 * 1.02, 0.35)
+            if cam.depth(q) > 1 and cam.depth(q) <= cam.depth(P(u, 0, 0.35)) + 0.5:
+                (X, Y), k = cam.project(q)
+                p.ell(X, Y, 0.36 * k, 0.36 * k, (24, 24, 26), INK, 1.2)
 
 
 def bus(img, cam, x, z):
-    """A red double-decker side-on (10.5 x 4.4 m: sizes 'bus side'): two rows of windows, wheels."""
-    box(img, cam, x - 5.25, x + 5.25, 0.4, 4.4, z - 1.25, z + 1.25, BUS, BUS_D, BUS)
-    p = _pen(img)
-    face_z = z + 1.25 if cam.pos[2] > z else z - 1.25
-    for row, (y0, y1) in enumerate(((1.6, 2.4), (3.1, 3.9))):
-        for k in range(6):
-            u0 = x - 4.8 + k * 1.65
-            quad(img, cam, [(u0, y0, face_z), (u0 + 1.4, y0, face_z), (u0 + 1.4, y1, face_z), (u0, y1, face_z)], WINDOW, INK, 1.0)
-    for wx in (x - 3.4, x + 3.4):
-        (X, Y), k = cam.project((wx, 0.5, face_z))
-        p.ell(X, Y, 0.5 * k, 0.5 * k, (30, 30, 34), INK, 1.4)
+    vehicle(img, cam, 'bus', x, z, 0.0, BUS)
 
 
 def fountain(img, cam, cx, cz, t):
@@ -497,11 +742,14 @@ def street_furniture(img, cam):
 
 
 def square_back(img, cam, t):
-    """Everything in the square drawn before the people: sky, roads, paving, buildings, gallery, terrace."""
+    """Everything in the square drawn before the people: the sky, the ground and roads, then the buildings, gallery,
+    Whitehall, trees and traffic far to near, then the square's edges and the terrace."""
     sky(img, cam, t)
-    surroundings(img, cam, t)
     ground(img, cam)
-    gallery(img, cam)
+    for d, fn in sorted(surroundings(cam, t), key=lambda v: -v[0]):
+        if d > -60:
+            fn(img)
+    edges(img, cam)
     terrace(img, cam)
 
 
@@ -654,7 +902,7 @@ def rear_doors(img, cam, W, hw, y0, roof, open_):
 # ------------------------------------------------------------------------------------------------ the rooms
 ROOM_X, ROOM_Z, ROOM_H = 2.6, 2.2, 2.7           # the interrogation room: walls at x = +-ROOM_X, z = +-ROOM_Z
 TABLE = (1.2, 0.75, 0.74)                         # the metal table: length (x), depth (z), height
-DOOR = (0.0, 0.92, 2.04)                          # the door in the back wall (+z): centre x, width, height
+DOOR = (0.95, 0.92, 2.04)                         # the door in the back wall (+z): centre x, width, height
 WALL_LO, WALL_HI = (70, 84, 80), (104, 116, 110)  # breeze block: darker below, paler above (ref interrogation-3)
 CONCRETE = (120, 118, 112)
 
