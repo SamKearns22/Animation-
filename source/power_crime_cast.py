@@ -644,6 +644,18 @@ def placard_image(px=450, lettered=True):
 
 
 _PLACARD = {}
+HIDDEN_TEST = [False]   # the check paints the never-seen part magenta, renders the frame and counts what shows
+
+
+def _placard_im():
+    key = 'test' if HIDDEN_TEST[0] else 'im'
+    if key not in _PLACARD:
+        im = placard_image()
+        if HIDDEN_TEST[0]:
+            d = ImageDraw.Draw(im)
+            d.rectangle([0, int(im.height * LETTERED), im.width, im.height], fill=(255, 0, 255, 255))
+        _PLACARD[key] = im
+    return _PLACARD[key]
 
 
 def placard_prop(quad, skin=None):
@@ -659,8 +671,6 @@ def placard_prop(quad, skin=None):
             B.gesture_hand(p, el, wr, 'fist', skin)
 
     def draw(p, j2):
-        if 'im' not in _PLACARD:
-            _PLACARD['im'] = placard_image()
         import poker_mon_cast as PC
         yaw = j2.get('yaw', 0)
         c = math.cos(math.radians(yaw))
@@ -670,7 +680,7 @@ def placard_prop(quad, skin=None):
                 p.poly(q, (236, 234, 226), INK, 2.0)                 # body hides it)
             return
         q = q if getattr(p.cam, 'flip', 1) == 1 else [q[1], q[0], q[3], q[2]]
-        PC.place_image(p.img, p.cam, _PLACARD['im'], q)
+        PC.place_image(p.img, p.cam, _placard_im(), q)
         hands(p, j2)
     return draw
 

@@ -28,6 +28,9 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 4. `python3 source/NAME.py stills OUT_DIR T T ...`: one still per shot. Sam's notes come back in one batch.
 
 ## Getting it right first time (18 Oct: Sam's review of Shocking Behaviour's rounds)
+- **Never draw blind (Sam, 20 Oct):** if a reference can't be had (a site blocked, a photo missing), stop and ask Sam
+  for it; never draw from memory. (Power Crime Action: the photo sites were blocked and the cast was started from
+  memory: brown card instead of white, tall helmets nobody wore.)
 - **A reference is a checklist.** Before drawing anything from a photo, write down what it shows: how many, colours,
   positions, which way they face, brands, proportions. Then `python3 source/compare.py REF OURS OUT.jpg` (side by
   side, same height, guide lines across) and tick each one off before sending. (The scooters took three goes.)

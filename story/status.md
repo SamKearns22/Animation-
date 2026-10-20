@@ -403,6 +403,11 @@ Read this first in any new session, after CLAUDE.md.
   checked with voices.py: no duplicates, all fit); facts checked (the real placard wording, Met armed officers' kit);
   draft shot plan (about 43 s) and the kit parts to reuse written; questions and reference advice sent to Sam.
   Next: Sam's answers, then the cast sheet (`source/power_crime.py`), then an early quick animatic (action-led).
+- 20 Oct (later): Sam's references in `references/power-crime-action/` (written up in the notes); cast sheets 1-2
+  (`source/power_crime_cast.py`; horror strength 3; Sam's cast notes 1-5 done, incl. the hem 15% narrower for every
+  film in burnham/views); the sets built in 3D (`source/power_crime_set.py`: Trafalgar Square, the van, the
+  interrogation room, the corridor); the film (`source/power_crime.py`, about 48 s + sign-off). `check` includes a
+  test that the unlettered part of her placard is never seen. Next: the check sheet, Sam's yes, the quick animatic.
 
 ## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
