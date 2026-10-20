@@ -435,3 +435,10 @@ Read this first in any new session, after CLAUDE.md.
 - 21 Oct (chat 5, end): Sam's notes 48-51 and "Shit"/mouth-shut note done; final re-rendered (11m11s) and finished with Hook Text in the sky (`--y 430`)
   + sign-off: `animations/power-crime-action-vertical.mp4` (8.8 MB, 49 s), sent. Sam asked for a lessons-and-rules analysis (11 rules proposed in chat,
   awaiting Sam's numbers; none added yet). Open: the sound jumps at three cuts (left as is). DONE unless Sam has notes.
+
+## Build list: tools for `guides/film-quality-rules.md` (Sam approved all 11 rules, 21 Oct)
+Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely first picks, most notes caught): 
+1. `source/audit.py` collision test (rule 5) and pop-in test (rule 6), working on any film built from `satire_template.py`;
+2. script/mouth audit added to `source/voices.py` (rule 7);
+3. the film plan template (rule 1) and the reference benchmark sheet (rule 3) in `source/satire_template.py`;
+4. the "portal" in the sets code (rule 2). Test the tools on Power Crime Action (known faults: 11 collision, 5 pop-in, 4 script/mouth notes).
