@@ -147,6 +147,7 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 | 43 | throw | clip c | "The police move far too quickly at the beginning, it doesn't look real. Please can we slow down the throw moment a little bit? Make that throw legible to the eye." | the escort eases into place over 1.6 s (was 0.7); the carry 1.5 m shorter; swing 0.9 s (was 0.5), flight 1.1 s (was 0.75) |
 | 44 | corridor | clip e | "Please give him a little finger pointing out for prodding Jenkins." | a short round-ended finger on his circle hand for the jab (this film's 'point' hand) |
 | 45 | sound | - | Sam's two sound effects: the police siren as the van pulls away, a whoosh for the throw | `source/audio/power-crime-siren.mp3`, `power-crime-whoosh.mp3`: the whoosh on her flight, the siren from the lights coming on, fading as it goes, just over the cut; my engine kept quieter under it |
+| 46 | corridor | before the animatic | "The bottom of the superintendent's torso changes size at the end of the scene, just after he lunges forward." | the cause: `views.py` cut every jacket hem short in one frame once a lean passed 12 degrees (his lean after the jab rises to 13); now the hem rises gradually over leans 12 to 20 (unchanged below 12 and above 20), for every film. Also smooths the same jump on the two throwers mid-throw. Clips sent |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Sam's answers (20 Oct): 1 the real wording "I OPPOSE GENOCIDE. I SUPPORT"; 2 "Palestine Action" never drawn, she

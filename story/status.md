@@ -413,6 +413,9 @@ Read this first in any new session, after CLAUDE.md.
   corridor, the jab's finger, Jenkins's faces, Sam's siren and whoosh. Checks pass (hidden part never seen). Clips sent.
   NEXT (fresh chat, Sonnet): show Sam the check sheet (`python3 source/power_crime.py sheet OUT.jpg`) and wait for a
   clear yes; then the new animatic (`python3 source/power_crime.py final OUT.mp4 --small`, about 20 min), send it.
+- 20 Oct (chat 4): Sam's note 46 done (the superintendent's jacket hem jumped shorter after the jab: `views.py`
+  now eases the bent hem over leans 12-20, for every film). Clips of the jab and the throw sent.
+  NEXT (fresh chat, Sonnet): Sam's view of the clips; then the check sheet, a clear yes, the new animatic.
 
 ## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan

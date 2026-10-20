@@ -599,8 +599,10 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
             q['bottom'] = min(q.get('bottom', 560), 470)
         B.torso(img, B.Pen(img, up), q, t)
     else:
-        bent = dict(sp_draw, bottom=min(sp_draw.get('bottom', JACKET), 470)) if lean > 12 else sp_draw
-        torso_view(img, B.Pen(img, up), bent, view, seated)   # bending: the hem stops at the hips, never a long tail (Sam)
+        hem = sp_draw.get('bottom', JACKET)       # bending: the hem rises to the hips, never a long tail (Sam); eased
+        u = min(1.0, max(0.0, (lean - 12) / 8))   # over leans 12 to 20, never a jump (Sam, 20 Oct: his torso popped
+        bent = dict(sp_draw, bottom=hem + (min(hem, 470) - hem) * u) if u > 0 else sp_draw   # shorter after the lunge)
+        torso_view(img, B.Pen(img, up), bent, view, seated)
     for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
     for sd in arms_far:
