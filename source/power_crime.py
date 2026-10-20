@@ -45,7 +45,7 @@ M = V.M_PER_UNIT
 
 # =============================================== STORY =============================================================
 NAME = 'power-crime-action'
-HOOK = ('Met Police: Getting Priorities Right \U0001F694', {'y': 880})   # Sam, 20 Oct (finish.py adds it)
+HOOK = ('Met Police: Getting Priorities Right \U0001F694', {'y': 430})   # Sam, 21 Oct: in the sky, clear of her sign
 LINES = [   # (number, who, text, file, where the recording's start is placed)
     dict(n=1, who='CROWD', text='Free Palestine!', audio='power-crime-1', start=-0.35),
     dict(n=2, who='SUPER', text='Shit. A code red.', audio='power-crime-2', start=5.6),
@@ -56,8 +56,9 @@ LINES = [   # (number, who, text, file, where the recording's start is placed)
          audio='power-crime-4', start=29.3),
     dict(n=5, who='JENKINS', text="I'm sorry to interrupt, sir, but there's been a mass casualty attack in",
          audio='power-crime-5', start=34.1),
-    dict(n=6, who='SUPER', text="I don't have time to be dealing with your small fry problems, Jenkins. Interrupt me "
-                                "again and see what happens.", audio='power-crime-6', start=38.35),
+    dict(n=6, who='SUPER', text="I don't have time to be dealing with your small fry problems, Jenkins. I'm "
+                                "interviewing a terrorist right now. Interrupt me again and see what happens.",
+         audio='power-crime-6', start=37.4),     # Sam, 21 Oct: in the instant Jenkins stops (he spoke ~1 s later)
 ]
 # Subtitles (guides/satire.md): two to five words, each up on its first word; the punchline on its own. Each line's
 # chunks are given phrase by phrase (the recording's own pauses), and spread over a phrase by syllables.
@@ -68,8 +69,8 @@ CHUNKS = {
         ['The nature of your resources.'], ['The aims of your operation.']],
     4: [['Err, excuse me, sir.'], ['I need to speak', 'to you outside.'], ["It's urgent."]],
     5: [["I'm sorry to interrupt, sir,"], ["but there's been", 'a mass casualty', 'attack in—']],
-    6: [["I don't have time", 'to be dealing with', 'your small fry problems,', 'Jenkins.'], ['Interrupt me again'],
-        ['and see what happens.']],
+    6: [["I don't have time", 'to be dealing with', 'your small fry problems,', 'Jenkins.'],
+        ["I'm interviewing", 'a terrorist right now.'], ['Interrupt me again', 'and see what happens.']],
 }
 SHOTS = [   # (name, start, end)
     ('wide', 0.0, 1.4),          # the square from the gallery's steps: the packed, chanting protest
@@ -82,10 +83,10 @@ SHOTS = [   # (name, start, end)
     ('interro_s', 21.0, 25.8),   # close on him
     ('interro_g', 25.8, 28.6),   # close on her: trembling, unbothered
     ('door', 28.6, 34.0),        # the door opens: Jenkins
-    ('corridor_j', 34.0, 37.9),  # outside: Jenkins side on beside the door: the mass casualty attack...
-    ('corridor', 37.9, 48.4),    # both, the door between them: he leaps in, jabs Jenkins's chest: small fry
+    ('corridor_j', 34.0, 37.4),  # outside: Jenkins side on beside the door: the mass casualty attack...
+    ('corridor', 37.4, 47.45),    # both, the door between them: he leaps in, jabs Jenkins's chest: small fry
 ]
-DUR = 48.4
+DUR = 47.45
 BLACK_AT = DUR
 HORROR_LEVEL = 3                  # Sam, 20 Oct
 DROP = 5.75                       # his jaw drops (a snap: eyes and jokes snap)
@@ -137,9 +138,9 @@ CORR_JENKINS = (-0.72, 0.62)      # along the corridor; Sam, 20 Oct: a short sha
 CORR_LUNGE = 0.64
 SUPER_FACE = (0.45, 1.0)          # in the two-shot both turn a little to the camera (Sam: Jenkins looked bad side on)
 JENKINS_FACE = (0.75, -1.0)
-LEAP = (37.9, 38.15)
-JAB = (38.0, 38.2)                # his finger into Jenkins's chest, on the cut-off (as he lands from the leap)
-LEAN_IN = (38.2, 38.7)            # leaning forward, aggressive
+LEAP = (37.4, 37.65)              # Sam, 21 Oct: cut early, so he is in Jenkins's face as he speaks
+JAB = (37.5, 37.7)                # his finger into Jenkins's chest, on the cut-off (as he lands from the leap)
+LEAN_IN = (37.7, 38.2)            # leaning forward, aggressive
 # ====================================================================================================================
 
 
@@ -635,7 +636,22 @@ def sweep(who, t):
     return 22 * math.sin(t * (1.1 + 0.03 * (h % 11)) + h) + 8 * math.sin(t * 2.7 + h * 0.37)
 
 
-def escort_pose(sp, t, at, walking, seed=0, cover=(-1.0, 0.0)):
+def scan(who, t):
+    """Stopped, an armed officer checks for threats: he swings round to a new spot every second or so (his own
+    pace and order: left, right, high on the buildings, low over the crowd), holds on it, then the next. Returns
+    (degrees he turns from his sector, his aim's height)."""
+    h = _seed(who)
+    beat = 0.75 + 0.1 * (h % 5)
+    k = int((t - SWING[0]) / beat + (h % 3) * 0.33)
+    def spot(i):
+        r = (h * 31 + i * 97) % 360
+        return ((r % 140) - 70.0) * (1 if i % 2 else -1), (-3, 4, 14, 6)[(h + i) % 4]
+    (a0, u0), (a1, u1) = spot(k - 1), spot(k)
+    w = ease(((t - SWING[0]) / beat + (h % 3) * 0.33 - k) / 0.3)    # a quick swing, then hold
+    return a0 + (a1 - a0) * w, u0 + (u1 - u0) * w
+
+
+def escort_pose(sp, t, at, walking, seed=0, cover=(-1.0, 0.0), up=None):
     """Walking (or standing) with the carbine shouldered, aimed `at` degrees off the way he faces; his own stride.
     They all go west: facing east, he walks backwards (the cycle run in reverse); facing north or south, short
     side steps."""
@@ -647,7 +663,7 @@ def escort_pose(sp, t, at, walking, seed=0, cover=(-1.0, 0.0)):
         j = moves.gait(sp, tt, 'brisk', steps_per_s=sps, stride=max(0.18, abs(along)) * 0.52 / M)
     else:
         j = C.pose_standing(sp)
-    aim = C.aim_pose(sp, (max(-35, min(35, at)), 4 + 3 * math.sin(t * 1.7 + seed)))
+    aim = C.aim_pose(sp, (max(-35, min(35, at)), up if up is not None else 4 + 3 * math.sin(t * 1.7 + seed)))
     for k in ('elL', 'wrL', 'elR', 'wrR'):
         j[k] = aim[k]
     j['hand'] = aim['hand']
@@ -672,9 +688,14 @@ def runner(who, t, cam):
         dx, dz, cover = ESCORT[who]
         u = ease((t - CARRY[0]) / 1.6)                  # into the escort at a walk (Sam, 20 Oct: they had darted)
         x, z = ax + (gx + dx - ax) * u, az + (gz + dz - az) * u
-        x += 0.12 * math.sin(t * 2.1 + seed)               # never in lockstep: each drifts a little in his place
-        j = escort_pose(sp, t - CARRY[0], sweep(who, t), t < SWING[1] + 0.3, seed, cover)
-        return sp, j, x, z, cover
+        x += 0.12 * math.sin(min(t, SWING[0]) * 2.1 + seed)   # never in lockstep: each drifts a little in his place
+        if t < SWING[0]:                                    # (Sam, 21 Oct: they paced on the spot once she stopped)
+            j = escort_pose(sp, t - CARRY[0], sweep(who, t), True, seed, cover)
+            return sp, j, x, z, cover
+        turn, up = scan(who, t)                             # stopped: checking for threats (Sam, 21 Oct)
+        a = math.atan2(cover[0], cover[1]) + math.radians(turn)
+        j = escort_pose(sp, t - CARRY[0], 0.0, False, seed, cover, up=up)
+        return sp, j, x, z, (math.sin(a), math.cos(a))
     x, z, yaw, state = moves.travel(path, t, 'run', start=RUN_IN + delay)
     if state == 'moving':
         j = moves.gait(sp, t - RUN_IN - delay + 0.13 * (seed % 7), 'run')
@@ -809,11 +830,23 @@ def super_square(t):
             hp2 = C.horror(dict(C.SUPER), HORROR_LEVEL)    # the brows stay up while he speaks
             j['head_props'] = [brows_only(HORROR_LEVEL)] + j['head_props'][1:]
             sp['brows'], sp['brow_c'] = None, sp['skin']
+        elif t >= code_red_said():                          # Sam, 21 Oct: it hung open after "A code red."; shut
+            j['head_props'] = [brows_only(HORROR_LEVEL)] + j['head_props']
+            sp['brows'], sp['brow_c'], sp['mouth'] = None, sp['skin'], 'set'
         else:
             j['head_props'] = [hp] + j['head_props']
     sp['tilt'] = filmkit.shifts(t, seed=61, amount=0.02)
     x, z = POLICE['SUPER']
     return sp, j, x, z, (0.0, 1.0)
+
+
+def code_red_said():
+    """Just after his last mouth shape of "Shit. A code red." (line 2)."""
+    end = next(l['start'] for l in LINES if l['n'] == 3)
+    t = end
+    while t > DROP and mouths.at(TRACK['SUPER'], t) == 'rest':
+        t -= 1 / 24
+    return t + 0.15
 
 
 def brows_only(level):
@@ -1193,13 +1226,23 @@ def interro(img, cam, t):
         fn(img)
 
 
+def see_what_happens():
+    """When "and see what happens." comes up: he pushes right into Jenkins's face (Sam, 21 Oct)."""
+    global SUBS
+    if SUBS is None:
+        SUBS = _chunks()
+    return next(t0 for t0, t1, c in SUBS if c == 'and see what happens.') - 0.15
+
+
 def corridor(img, cam, t):
     """Outside the interview room (Sam, 20 Oct): Jenkins side on beside the door, speaking; then both, the door
-    between them: the superintendent leaps forward and jabs his finger into Jenkins's shocked chest."""
+    between them: the superintendent leaps forward and jabs his finger into Jenkins's shocked chest; on "and see
+    what happens." he pushes further in, right in Jenkins's face, and Jenkins shrinks back (Sam, 21 Oct)."""
     S3.corridor(img, cam, t)
     items = []
     leap = ease((t - LEAP[0]) / (LEAP[1] - LEAP[0])) if t >= LEAP[0] else 0.0
-    sx, sz = CORR_SUPER[0], CORR_SUPER[1] + CORR_LUNGE * leap
+    push = ease((t - see_what_happens()) / 0.3)
+    sx, sz = CORR_SUPER[0], CORR_SUPER[1] + CORR_LUNGE * leap + 0.03 * push
     jx, jz = CORR_JENKINS
 
     def boss(im):
@@ -1217,7 +1260,7 @@ def corridor(img, cam, t):
             if u >= 1 and not V.reach_ok(j, 'L', tgt, 'point'):
                 CONTACT_FAULTS.append((round(t, 2), 'SUPER', 'his finger cannot reach Jenkins'))
             V.arm_to(j, 'L', tuple(r + (g - r) * u for r, g in zip(rest, tgt)), 'down', 'point')
-            j['lean'] = 13 * ease((t - LEAN_IN[0]) / (LEAN_IN[1] - LEAN_IN[0]))
+            j['lean'] = 13 * ease((t - LEAN_IN[0]) / (LEAN_IN[1] - LEAN_IN[0])) + 5 * push
         else:
             sp['tilt'] = filmkit.shifts(t, seed=71, amount=0.02)
         C.outfit(j, sp)
@@ -1229,7 +1272,7 @@ def corridor(img, cam, t):
         jenkins_face(sp, t)
         j = C.pose_standing(sp)
         if t >= JAB[0]:                                      # shocked: rocked back, mouth open
-            j['lean'] = -7 * ease((t - JAB[0]) / 0.3)
+            j['lean'] = -7 * ease((t - JAB[0]) / 0.3) - 11 * push
             if mouths.at(TRACK.get('JENKINS', []), t) == 'rest':
                 sp['mouth'] = 'agape'
         else:
@@ -1266,7 +1309,7 @@ def jenkins_face(sp, t):
         if t0 <= t and c in JENKINS_LOOKS:
             look = JENKINS_LOOKS[c]
     if t >= JAB[0]:                                          # shocked by the jab, then cowed as he is told off
-        look = ('alarm', 0, -2, 0.0, 0) if t < 40.6 else ('sincere', 2, 4, 0.5, 0)
+        look = ('alarm', 0, -2, 0.0, 0) if t < JAB[0] + 2.15 else ('sincere', 2, 4, 0.5, 0)
     sp['brows'], sp['lid'], sp['head_dy'], sp['look_v'], sp['creases'] = look
 
 
