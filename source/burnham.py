@@ -23,6 +23,7 @@ from ed import INK, curve, glow, oval, smooth, soft
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 W, H, SS = 1080, 1920, 2
+HEM = 0.85    # the torso's hem width over the shoulders' (Sam, 20 Oct: hips about 15% narrower, less blocky)
 SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 ANTON = os.path.join(HERE, 'fonts', 'Anton-Regular.ttf')
 CRANBERRY = (178, 24, 52)
@@ -611,7 +612,7 @@ def torso(img, p, sp, t):
     # neck
     p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)
     soft(img, p.cam, [(-32, -76), (32, -76), (30, -40), (-30, -40)], (150, 90, 80), 0.35, 4)
-    body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200), (-sw + 6, bottom), (sw - 6, bottom),
+    body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200), (-sw * HEM, bottom), (sw * HEM, bottom),
             (sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
     if out == 'suit':
         jc = sp.get('jacket', NAVY)
@@ -631,22 +632,22 @@ def torso(img, p, sp, t):
                    jc, INK, 2.2)
         p.line([(0, 250), (0, bottom)], jd, 2.2)
         p.ell(6, 300, 5, 5, jd, None)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
+        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
     elif out == 'dress':
         dc = sp.get('dress', (190, 30, 44))
         p.poly(body, dc, INK, 2.6)
         p.poly([(-46, -4), (46, -4), (30, 50), (0, 70), (-30, 50)], skin, INK, 2.2)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
+        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
     elif out == 'blouse':  # a dark jacket over a pale top
         jc = sp.get('jacket', CHARCOAL)
         p.poly(body, jc, INK, 2.6)
         p.poly([(-50, -4), (50, -4), (34, 180), (-34, 180)], sp.get('shirt', (236, 232, 228)), INK, 2.0)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
+        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
     elif out == 'jumper':
         jc = sp.get('jacket', (90, 110, 140))
         p.poly(body, jc, INK, 2.6)
         p.line(oval(0, -2, 46, 22, 24, 0.2, math.pi - 0.2), INK, 2.4)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
+        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
     elif out in ('armour', 'king'):
         a = sp.get('arm') or armour()
         c = a['steel']

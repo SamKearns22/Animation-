@@ -292,7 +292,7 @@ def torso_view(img, p, sp, view, seated=False):
     if view == 'three':
         o = 0.32 * sw
         p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
-        p.poly([(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86, bottom), (sw * 0.78, bottom),
+        p.poly([(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom), (sw * 0.78 * B.HEM, bottom),
                 (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
@@ -311,7 +311,7 @@ def torso_view(img, p, sp, view, seated=False):
         else:
             p.line(oval(o - 4, -2, 40, 18, 20, 0.2, math.pi - 0.2), INK, 2.4)
         p.line([(-sw * 0.6, 60), (-sw * 0.72, bottom - 10)], jd, 2.0)
-        soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.88, bottom)], (0, 0, 0), 0.25, 10)
+        soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.86 * B.HEM, bottom)], (0, 0, 0), 0.25, 10)
         if sp.get('rosette'):
             p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 2.4)
             p.ell(o - 70, 120, 8, 8, (248, 248, 240), INK, 1.4)
@@ -342,14 +342,14 @@ def torso_view(img, p, sp, view, seated=False):
     else:
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
         p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)       # the neck stays under the head
-        p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-(sw - 6) * k, bottom),
-                ((sw - 6) * k, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
+        p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
+                (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)            # the collar round the neck
             p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
-        soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k, bottom)], (0, 0, 0), 0.22, 10)
+        soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10)
 
 
 # ------------------------------------------------------------------------------------------------ head views

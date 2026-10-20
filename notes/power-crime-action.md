@@ -101,7 +101,11 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| 1 | cast | - | "Face number 3" (the senior officer's horror strength) | done: HORROR level 3 for "Shit. A code red." |
+| 2 | cast | sign at her chest | "The sign raises into her physical body ... the upper edges cut into her shoulders." | fixed: the card is in front of her arms; only her hands show, over its edges |
+| 3 | cast | hands behind back | "We don't see the arm coming down and around the back of the body, so he looks like he has no arms." | fixed: hands clasped in front at the belt instead (ref police-3) |
+| 4 | cast | arms folded | "Can I check we are using the smooth fluid arms and leg styles? The police officer on the left seems to have blocky arms" | fixed: the cast file had not switched on the house style's smooth limbs (limbs.install); now on |
+| 5 | all | - | "On all our character designs across our videos, the hips are possibly 15% too wide so the bottom of the body looks quite blocky" | done: burnham.HEM = 0.85 (the hem 15% narrower than the shoulders, tapering from the waist), front, three-quarter and back views; every film from now on |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - Sam's answers (20 Oct): 1 the real wording "I OPPOSE GENOCIDE. I SUPPORT"; 2 "Palestine Action" never drawn, she

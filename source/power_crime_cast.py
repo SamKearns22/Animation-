@@ -27,8 +27,13 @@ import views as V                # noqa: E402
 from ed import INK, curve, oval  # noqa: E402
 from satire_style import rough, install_circle_hands   # noqa: E402
 
+import figure as F               # noqa: E402
+import limbs                     # noqa: E402
+
 mouths.install(B)
 install_circle_hands(B)
+F.guard(B)                       # every arm measured against the rig
+limbs.install(B)                 # the smooth, shaped arms of the house style (Sam, 20 Oct: no blocky arms)
 
 # ------------------------------------------------------------------------------------------------ colours
 HIVIS, HIVIS_D = (212, 226, 40), (170, 182, 30)
@@ -362,11 +367,18 @@ HATS = {'peaked': peaked_cap, 'ball': ball_cap, 'ct': ball_cap}
 
 
 # ------------------------------------------------------------------------------------------------ worn on the body
-def _torso_box(view, sp):
-    """(left, right) edges of the torso at chest height for a view, facing right."""
+def _torso_box(view, sp, y=150.0):
+    """(left, right) edges of the torso at height y for a view, facing right: full width down to the waist (200),
+    then narrowing to the hem (burnham.HEM: Sam, 20 Oct, hips 15% narrower)."""
     sw = sp.get('shoulders', 150)
-    return {'front': (-sw, sw), 'three': (-sw * 0.95, sw * 0.82), 'side': (-0.6 * sw, 0.66 * sw),
+    l, r = {'front': (-sw, sw), 'three': (-sw * 0.95, sw * 0.82), 'side': (-0.6 * sw, 0.66 * sw),
             'three_back': (-sw * 0.9, sw * 0.9), 'back': (-sw, sw)}[view]
+    if view != 'side' and y > 200:
+        bottom = sp.get('bottom', V.JACKET)
+        u = min(1.0, (y - 200) / max(1.0, bottom - 200))
+        k = 1 - (1 - B.HEM) * u
+        l, r = l * k, r * k
+    return l, r
 
 
 _GLYPH = {}
@@ -412,9 +424,9 @@ def hivis(p, view, sp):
     """The hi-vis jacket (refs police-1..4): yellow; silver bands over the shoulders like braces and round the body;
     the blue-and-white chequered band near the hem; white POLICE on a blue chest patch; black collar; body camera
     centre chest; radio high on the shoulder."""
-    l, r = _torso_box(view, sp)
     bottom = sp.get('bottom', V.JACKET)
     y0 = bottom - 70                                            # the chequered band near the hem
+    l, r = _torso_box(view, sp, y0 + 44)
     n = 12
     w = (r - l - 8) / n
     for k in range(n):
@@ -423,7 +435,9 @@ def hivis(p, view, sp):
         p.poly([(l + 4 + k * w, y0 + 22), (l + 4 + (k + 1) * w, y0 + 22), (l + 4 + (k + 1) * w, y0 + 44),
                 (l + 4 + k * w, y0 + 44)], (246, 246, 242) if k % 2 == 0 else POLICE_BLUE, None)
     p.poly([(l + 4, y0), (r - 4, y0), (r - 4, y0 + 44), (l + 4, y0 + 44)], None, INK, 1.6)
-    p.poly([(l + 4, 300), (r - 4, 300), (r - 6, 326), (l + 6, 326)], SILVER, INK, 1.6)      # the band round the body
+    bl, br_ = _torso_box(view, sp, 326)
+    p.poly([(bl + 4, 300), (br_ - 4, 300), (br_ - 6, 326), (bl + 6, 326)], SILVER, INK, 1.6)   # the band round the body
+    l, r = _torso_box(view, sp)
     if view in ('front', 'three', 'back', 'three_back'):
         for x in ((l + r) / 2 - (r - l) * 0.24, (l + r) / 2 + (r - l) * 0.24):              # the braces over the shoulders
             p.poly([(x - 13, 0), (x + 13, 0), (x + 13, 300), (x - 13, 300)], SILVER, INK, 1.6)
@@ -442,8 +456,9 @@ def armour(p, view, sp):
     """The armed officer's black plate carrier (refs armed-1..4): pouches, the black POLICE patch with white letters,
     radio, body camera, a small Union flag patch, the yellow Taser in its holster at the front."""
     l, r = _torso_box(view, sp)
-    p.poly(rough([(l + 14, 36), (r - 14, 36), (r - 4, 120), (r - 6, 470), (l + 6, 470), (l + 4, 120)], 3, 5),
-           ARMOUR, INK, 2.4)
+    l2, r2 = _torso_box(view, sp, 470)
+    p.poly(rough([(l + 14, 36), (r - 14, 36), (r - 4, 120), (r - 4, 200), (r2 - 6, 470), (l2 + 6, 470), (l + 4, 200),
+                  (l + 4, 120)], 3, 5), ARMOUR, INK, 2.4)
     if view in ('front', 'three'):
         o = 0 if view == 'front' else 0.3 * sp.get('shoulders', 150)
         p.poly([(l + 30, -2), (l + 80, -2), (l + 70, 60), (l + 30, 60)], ARMOUR, INK, 2.0)        # shoulder straps
@@ -469,8 +484,9 @@ def armour(p, view, sp):
 def stab_vest(p, view, sp):
     """Jenkins's black stab vest over his black top: POLICE patch, a radio clipped high on the chest."""
     l, r = _torso_box(view, sp)
-    p.poly(rough([(l + 20, 30), (r - 20, 30), (r - 8, 110), (r - 10, 450), (l + 10, 450), (l + 8, 110)], 3, 7),
-           (20, 21, 26), INK, 2.2)
+    l2, r2 = _torso_box(view, sp, 450)
+    p.poly(rough([(l + 20, 30), (r - 20, 30), (r - 8, 110), (r - 8, 200), (r2 - 10, 450), (l2 + 10, 450), (l + 8, 200),
+                  (l + 8, 110)], 3, 7), (20, 21, 26), INK, 2.2)
     if view in ('front', 'three'):
         _patch(p, (l + r) / 2, 220, (r - l) * 0.46, 36, 'POLICE', (246, 246, 242), INK)
         p.poly([(l + 40, 80), (l + 74, 80), (l + 74, 150), (l + 40, 150)], (56, 56, 62), INK, 1.4)
@@ -544,8 +560,8 @@ def trim(p, view, sp):
     bottom = sp.get('bottom', 600)
     if view == 'front':
         p.line([(-46, -4), (0, 70), (46, -4)], INK, 7)
-    l, r = _torso_box(view, sp)
-    p.line([(l + 6, bottom - 6), (r - 6, bottom - 6)], INK, 9)
+    l, r = _torso_box(view, sp, bottom - 6)
+    p.line([(l + 4, bottom - 6), (r - 4, bottom - 6)], INK, 9)
 
 
 def holster(p, j2):
@@ -630,9 +646,18 @@ def placard_image(px=450, lettered=True):
 _PLACARD = {}
 
 
-def placard_prop(quad):
-    """Her placard as a held prop: `quad` = its corners TL, TR, BR, BL in her own units; laid into the frame through
-    her own drawing frame (so it turns and moves with her), reading forwards even when she faces left."""
+def placard_prop(quad, skin=None):
+    """Her placard: `quad` = its corners TL, TR, BR, BL in her own units; laid into the frame through her own drawing
+    frame (so it turns and moves with her), reading forwards even when she faces left. The card is in front of her
+    arms (Sam, 20 Oct: its top corners cut into her shoulders when the arms were drawn over it): only her hands show,
+    gripping its edges, drawn over it here."""
+    def hands(p, j2):
+        if skin is None or j2.get('yaw', 0) > 90:
+            return
+        for sd in 'LR':
+            el, wr = j2['el' + sd], j2['wr' + sd]
+            B.gesture_hand(p, el, wr, 'fist', skin)
+
     def draw(p, j2):
         if 'im' not in _PLACARD:
             _PLACARD['im'] = placard_image()
@@ -640,12 +665,13 @@ def placard_prop(quad):
         yaw = j2.get('yaw', 0)
         c = math.cos(math.radians(yaw))
         q = [(x * max(0.12, abs(c)), y) for x, y in quad]          # it faces the way she faces
-        if c < 0.05:                                                 # from behind: the plain back of the card
-            p.poly(q, (236, 234, 226), INK, 2.0)
+        if c < 0.05:                                                 # from behind: the plain back of the card, seen
+            if max(y for _, y in q) < -150:                          # only when it is up over her head (lower, her
+                p.poly(q, (236, 234, 226), INK, 2.0)                 # body hides it)
             return
         q = q if getattr(p.cam, 'flip', 1) == 1 else [q[1], q[0], q[3], q[2]]
         PC.place_image(p.img, p.cam, _PLACARD['im'], q)
-    draw.held = True
+        hands(p, j2)
     return draw
 
 
@@ -662,8 +688,7 @@ def placard_pose(sp, t=0.0, raise_u=1.0, tremble=1.0, seed=0):
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, (sg * (W_ / 2 - 26) + jx, bottom - 26, z), 'out', 'fist')
     quad = [(-W_ / 2 + jx, bottom - H_), (W_ / 2 + jx, bottom - H_ + 2), (W_ / 2 + jx, bottom), (-W_ / 2 + jx, bottom)]
-    j['props'] = j.get('props', []) + [placard_prop(quad)]
-    j['grip'] = {'L', 'R'}
+    j['props'] = j.get('props', []) + [placard_prop(quad, sp['skin'])]
     return j, quad
 
 
@@ -741,7 +766,7 @@ def board_prop(text, seed=0, t=0.0):
         (lx, ly), (rx, ry) = j2['wrL'], j2['wrR']
         w = 0.6 / V.M_PER_UNIT
         h = w * 0.62
-        cx, cy = (lx + rx) / 2, (ly + ry) / 2 - h * 0.3
+        cx, cy = (lx + rx) / 2, (ly + ry) / 2 - h * 0.42
         q = [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]
         if getattr(p.cam, 'flip', 1) != 1:
             q = [q[1], q[0], q[3], q[2]]
@@ -820,6 +845,15 @@ def low_ready(j, sp):
     """Carbine held low across the body, muzzle down and to the left (ref armed-1): for running in."""
     sw = sp.get('shoulders', 150)
     return _hands_on_gun(j, (sw * 0.55, 300.0, 110.0), (-0.75, 0.45, 0.6))
+
+
+def clasped_pose(sp):
+    """Hands clasped in front at the belt (ref police-3: the police line's patient stance; Sam, 20 Oct: hands behind
+    the back hid both arms from three-quarter)."""
+    j = pose_standing(sp)
+    V.arm_to(j, 'L', (-16.0, 440.0, 120.0), 'down', 'fist')
+    V.arm_to(j, 'R', (16.0, 452.0, 128.0), 'down', 'fist')
+    return j
 
 
 def rope_prop(top=-2400.0, bottom=2400.0):
@@ -1040,15 +1074,15 @@ def cast_sheet(out):
     j['footL'] = (-90.0, V.ANKLE_Y - 120, 120.0)
     j['footR'] = (70.0, V.ANKLE_Y - 40, -40.0)
     j['lean'] = -8
-    j['props'].append(rope_prop(bottom=1500.0))
+    j['props'].append(rope_prop(top=-900.0, bottom=1500.0))
     j['grip'] = {'R'}
     ny8 = floor2 - V.ANKLE_Y * s - 38 * s - 120
     person(img, cam, x, ny8, s, sp, 0.0, 90, j)
     label(x, floor2 + 24, 'rope (CT team)')
     x += 210
     s = _height_s('PC4', S0)
-    for sp_, pose_, txt in ((PCS[3], 'arms_folded', 'arms folded'), (PCS[4], 'behind_back', 'hands behind back')):
-        j = outfit(moves.pose(sp_, pose_), sp_)
+    for sp_, pose_, txt in ((PCS[3], 'arms_folded', 'arms folded'), (PCS[4], 'clasped', 'hands clasped at belt')):
+        j = outfit(moves.pose(sp_, pose_) if pose_ != 'clasped' else clasped_pose(sp_), sp_)
         person(img, cam, x, floor2 - V.ANKLE_Y * s - 38 * s, s, sp_, 0.0, 0 if pose_ == 'arms_folded' else 45, j)
         label(x, floor2 + 24, txt)
         x += 190
