@@ -37,3 +37,22 @@ What it shows:
 
 Next week: Monday lunchtime (about 1pm) is the next slot to test. Avoid Tuesday and Wednesday at 6pm until a strong film
 breaks that pattern.
+
+## Snapshot: Tue 20 Oct 2026, 13:29 (Sam's TikTok Studio screens; "recent videos remain consistent but stagnant")
+
+| Film | Posted | Age | Length | Views | Avg watch (share) | Watched in full | Likes /100 | Shares /1,000 | Saves /1,000 | Comments /1,000 | New followers (/1,000) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Traitors | Sun 18 Oct, 9:08am | 2 d | 26.4 s | 1,038 | 10.8 s (41%) | 18.5% | 5.9 | 0 | 7.7 | 1.9 | 2 (1.9) |
+| Shocking Behaviour | Sun 18 Oct, 6:03pm | 43 h | 29.8 s | 975 | 10.8 s (36%) | 11.5% | 4.1 | 1.0 | 3.1 | 15.4 | 1 (1.0) |
+| Poker Mon | Mon 19 Oct, 9:13pm | 16 h | 26.9 s | 787 | 9.9 s (37%) | 8.3% | 8.9 | 8.9 | 3.8 | 12.7 | 3 (3.8) |
+
+Reading (Claude, 20 Oct):
+- Stagnant is right: the three are 790-1,040 views, the same as the 18 Oct typical (about 930). Nothing since Bingo Bingo
+  (17.9K) and Roadster (5.5K) has broken out. The posting slot is not the lever: Sunday 9am, Sunday 6pm and Monday 9pm
+  all land in the same place.
+- **Average watch is about 10 s whatever the film (9.9, 10.8, 10.8).** Poker Mon's beam fires at 15.7 s, so the average
+  viewer leaves before the payoff. Traitors' punchline is later still.
+- Poker Mon is the best film for engagement (shares 8.9 and followers 3.8 per 1,000: both over our targets; comments
+  12.7) but the worst for completion (8.3%): the people who reach the payoff love it, too few reach it.
+- Targets from 18 Oct (comments 5+, followers 3+ per 1,000): Poker Mon and Shocking Behaviour hit comments; Poker Mon
+  hits followers.
