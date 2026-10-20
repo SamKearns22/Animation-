@@ -36,6 +36,7 @@ import mossad_audio as MA        # noqa: E402
 import peepee as PP              # noqa: E402
 import film_engine as E          # noqa: E402
 from poker_mon_room import Cam3  # noqa: E402
+from ed import INK                # noqa: E402
 
 FPS, SR = 12, MA.SR
 FLAT = B.Cam(1.0, 540, 960)
@@ -87,12 +88,18 @@ BLACK_AT = DUR
 HORROR_LEVEL = 3                  # Sam, 20 Oct
 DROP = 5.75                       # his jaw drops (a snap: eyes and jokes snap)
 
-# Where things are in the square (metres; the column at the origin; north +z)
-GRAN_AT = (3.0, 26.0)             # she stands among the sitting crowd, facing the gallery (north)
-POLICE = {'SUPER': (12.6, 14.6), 'PC1': (10.4, 13.2), 'PC2': (11.9, 12.1), 'PC3': (14.3, 13.3), 'PC4': (13.8, 16.4),
-          'PC5': (10.9, 16.3)}
-VAN_AT = (29.0, 27.0)             # its back doors face the square (west); it drives off east
-THROW_FROM = (11.0, 27.0)         # where the carriers swing and let go
+# Where things are in the square (metres; the column at the origin; north +z). Sam, 20 Oct (refs crowd-low-1..4):
+# the crowd sits packed together facing south, the gallery's steps full behind them; every camera at head height or
+# lower, inside the crowd, looking north to the gallery. So screen right (looking north) is west: she is carried
+# west and the van drives off west.
+GRAN_AT = (-3.0, 36.0)            # she stands among the sitting crowd, facing the column (south)
+FACE = (0.0, -1.0)                # the crowd's facing
+POLICE = {'SUPER': (-12.6, 14.6), 'PC1': (-10.4, 13.2), 'PC2': (-11.9, 12.1), 'PC3': (-14.3, 13.3), 'PC4': (-13.8, 16.4),
+          'PC5': (-10.9, 16.3)}   # by the north-west lion, watching the crowd
+VAN_AT = (-29.0, 36.0)            # its back doors face the square (east); it drives off west
+VAN_HEADING = math.pi
+THROW_FROM = (-11.0, 36.0)        # where the carriers swing and let go
+VAN_BACK = VAN_AT[0] + 5.93 / 2   # the van's open back (x)
 # Timings of the storm and the throw
 ROPE_DROP = (8.8, 9.0)            # the ropes fall into frame
 SLIDE = (9.05, 10.15)             # the two counter-terror officers slide down
@@ -201,7 +208,7 @@ def _crowd():
     through and where she is carried (there were gaps like these in the real sit-ins)."""
     rng = np.random.default_rng(42)
     out = []
-    for z in np.arange(16.5, 47.0, 0.85):
+    for z in np.arange(16.5, 55.5, 0.85):
         off = rng.uniform(0, 0.6)
         for x in np.arange(-17.0 + off, 17.0, 0.6):
             x_, z_ = x + rng.uniform(-0.08, 0.08), z + rng.uniform(-0.12, 0.12)
@@ -211,29 +218,37 @@ def _crowd():
                 continue
             if math.hypot(x_ - GRAN_AT[0], z_ - GRAN_AT[1]) < 0.75:
                 continue
-            if 25.4 < z_ < 27.9 and -16 < x_ < 15:       # the aisle along her row (left, right, and the carry)
+            if abs(z_ - GRAN_AT[1]) < 1.15 and -15 < x_ < 15:   # the aisle along her row (left, right, the carry)
                 continue
-            if abs(x_ - GRAN_AT[0]) < 0.7 and z_ < 25.4:  # the aisle from behind
+            if abs(x_ - GRAN_AT[0]) < 0.7 and z_ > GRAN_AT[1]:  # the aisle from behind (north)
                 continue
-            if z_ > GRAN_AT[1] and abs(x_ - GRAN_AT[0]) < 2.6 and z_ < LOW_CAM[2] + 1.0:
+            if z_ < GRAN_AT[1] and abs(x_ - GRAN_AT[0]) < 2.6 and z_ > LOW_CAM[2] - 1.0:
                 continue                                 # in front of the low camera: only the sitters in FRONT
-            if abs(x_ - LOW_CAM[0]) < 1.4 and LOW_CAM[2] - 0.5 < z_ < LOW_CAM[2] + 1.6:
+            if abs(x_ - LOW_CAM[0]) < 1.4 and LOW_CAM[2] - 1.6 < z_ < LOW_CAM[2] + 0.5:
                 continue                                 # where the low camera sits
-            if 4.5 < x_ < 14 and 15.5 < z_ < 23.5:       # the police camera's view across to the line
+            if abs(x_ - WIDE_CAM[0]) < 1.2 and abs(z_ - WIDE_CAM[2]) < 1.2:
                 continue
-            if x_ > 13 and z_ < 34:                       # clear of the police and the van
+            if -14.5 < x_ < -2.5 and 15.5 < z_ < 23.5:   # the police camera's view across to the line
                 continue
-            out.append((x_, z_, z_ < 18.8 or rng.random() < 0.04))
+            if x_ < -9 and 24 < z_ < 41:                  # the throw and the van (and the throw's camera)
+                continue
+            out.append((x_, z_, z_ > 52.5 or rng.random() < 0.04))
+    for k, x in enumerate(np.arange(-10.5, 10.6, 0.62)):  # sitting all over the gallery's steps (refs crowd-low-1..3)
+        for r in range(1, 11):
+            z_ = S3.SQ_N + r * 0.5 + rng.uniform(-0.05, 0.05)
+            if rng.random() < 0.1:
+                continue
+            out.append((x + rng.uniform(-0.08, 0.08), z_, False))
+    for x in np.arange(-40, 40, 0.7):                      # standing along the terrace railings
+        if abs(x) < 11.5 or rng.random() < 0.25:
+            continue
+        out.append((x, S3.SQ_N + 0.9 + rng.uniform(0, 0.6), True))
     people = []
     for k, (x, z, standing) in enumerate(out):
         sp = C.protester(k)
-        people.append(dict(sp=sp, x=x, z=z, standing=standing, seed=k))
-    for k, (fx, fz) in enumerate(S3.FOUNTAINS):        # a few sitting on the fountains' rims, facing out north
-        for a in (1.25, 1.6, 1.9):
-            sp = C.protester(200 + k * 3 + int(a * 10))
-            r = S3.F_R * 0.98
-            people.append(dict(sp=sp, x=fx + r * math.cos(a), z=fz + r * math.sin(a), standing=False, rim=True,
-                               seed=300 + k * 3 + int(a * 10)))
+        if rng.random() < 0.025:                       # a steward in an orange hi-vis vest (refs crowd-low-1..3)
+            sp['steward'] = True
+        people.append(dict(sp=sp, x=x, z=z, standing=standing, seed=k, base=step_height(z)))
     for k, (x, z) in enumerate(FRONT):                 # sitting in front of the low cameras (shots 2 and 5): the
         sp = C.protester(400 + k)                        # middle one's board is the foreground object that hides the
         sp['carry'] = 'board' if k == 1 else None        # bottom of her placard (Sam's brief)
@@ -244,6 +259,13 @@ def _crowd():
     return people
 
 
+def step_height(z):
+    """The ground's height at z: the paving (0), the gallery's steps rising, the terrace (TERRACE_Y)."""
+    if z <= S3.SQ_N:
+        return 0.0
+    return min(S3.TERRACE_Y, S3.TERRACE_Y * (z - S3.SQ_N) / 6.0)
+
+
 def _front():
     """The foreground sitters: the board man on the line from the low camera to the hidden part of her placard,
     2.3 m from the camera; one either side of him, a little further back."""
@@ -252,10 +274,11 @@ def _front():
     d = math.hypot(gx - cx, gz - cz)
     u = 2.3 / d
     bx, bz = cx + (gx - cx) * u, cz + (gz - cz) * u
-    return [(bx - 0.85, bz - 0.5), (bx, bz), (bx + 0.85, bz - 0.45)]
+    return [(bx - 0.85, bz + 0.5), (bx, bz), (bx + 0.85, bz + 0.45)]
 
 
-LOW_CAM = (GRAN_AT[0] + 0.25, 0.98, GRAN_AT[1] + 5.2)   # among the sitting protesters, at their eye level
+LOW_CAM = (GRAN_AT[0] + 0.25, 0.98, GRAN_AT[1] - 5.2)   # among the sitting protesters, at their eye level
+WIDE_CAM = (-1.0, 1.9, 15.2)                            # a standing person's eye height, at the crowd's front
 FRONT = _front()
 CROWD = _crowd()
 
@@ -335,16 +358,16 @@ def crowd_pose(c, t):
 
 
 # ------------------------------------------------------------------------------------------------ drawing people
-def put(img, cam, sp, x, z, facing, j, t, lift=0.0, height=None, head_yaw=None, shadow=True):
+def put(img, cam, sp, x, z, facing, j, t, lift=0.0, height=None, head_yaw=None, shadow=True, base=0.0):
     """Someone standing (or sitting, or held up `lift` metres) at floor point (x, z), facing (dx, dz), through the
     camera: their real height sets their scale; a soft flat shadow under them first."""
     h = height or C.HEIGHTS.get(sp.get('name'), sp.get('height', 1.75))
     f = h / 1.75
-    neck = (928 * M) * f + lift
+    neck = (928 * M) * f + lift + base
     if cam.depth((x, neck, z)) < 0.4:
         return None
     if shadow:
-        ring = [(x + 0.32 * math.cos(u), 0.004, z + 0.24 * math.sin(u)) for u in np.linspace(0, 2 * math.pi, 18)]
+        ring = [(x + 0.32 * math.cos(u), base + 0.004, z + 0.24 * math.sin(u)) for u in np.linspace(0, 2 * math.pi, 18)]
         if all(cam.depth(q) > 0.3 for q in ring):
             lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
             B.Pen(lay, FLAT).poly([cam.project(q)[0] for q in ring], (0, 0, 0, 60 if lift < 0.1 else 30), None)
@@ -407,31 +430,35 @@ def gran_where(t):
     """Her floor point, height off the ground, and facing, over the whole square sequence."""
     x, z = GRAN_AT
     if t < LIFT[0]:
-        return x, z, 0.0, (0.0, 1.0)
+        return x, z, 0.0, FACE
     if t < CARRY[0]:
-        return x, z, 0.35 * ease((t - LIFT[0]) / (LIFT[1] - LIFT[0])), (0.0, 1.0)
+        return x, z, 0.35 * ease((t - LIFT[0]) / (LIFT[1] - LIFT[0])), FACE
     if t < SWING[0]:
         u = (t - CARRY[0]) / (CARRY[1] - CARRY[0])
-        return x + (THROW_FROM[0] - x) * u, z + (THROW_FROM[1] - z) * u, 0.35 + 0.03 * math.sin(t * 14), (1.0, 0.0)
-    return THROW_FROM[0], THROW_FROM[1], 0.35, (1.0, 0.0)
+        return x + (THROW_FROM[0] - x) * u, z + (THROW_FROM[1] - z) * u, 0.35 + 0.03 * math.sin(t * 14), (-1.0, 0.0)
+    return THROW_FROM[0], THROW_FROM[1], 0.35, (-1.0, 0.0)
 
 
 def carriers_at(t):
     """The two counter-terror officers either side of her (her left and right arms)."""
     x, z, lift, f = gran_where(t)
     if t < CARRY[0]:
-        return (x - 0.55, z), (x + 0.55, z), (0.0, 1.0)
-    return (x, z + 0.55), (x, z - 0.55), (1.0, 0.0)
+        return (x + 0.55, z), (x - 0.55, z), FACE
+    return (x, z - 0.55), (x, z + 0.55), (-1.0, 0.0)
 
 
 # ------------------------------------------------------------------------------------------------ the armed officers
-RUNNERS = {   # (path in metres, start delay): three from the left (west), three from the right (east) and behind
-    'ARV1': ([(-14.0, 26.6), (-2.2, 26.6), (-1.6, 25.8)], 0.0),
-    'ARV2': ([(-15.0, 27.4), (-3.0, 27.4), (-2.6, 27.8)], 0.15),
-    'ARV3': ([(3.0, 12.0), (3.0, 22.2), (3.4, 23.0)], 0.1),
-    'ARV4': ([(18.0, 26.6), (7.8, 26.6), (7.6, 25.9)], 0.05),
-    'ARV5': ([(19.0, 27.6), (8.4, 27.6), (8.0, 27.9)], 0.2),
-    'ARV6': ([(-10.0, 16.0), (2.0, 24.6), (1.4, 24.4)], 0.3),
+def _rel(dx, dz):
+    return (GRAN_AT[0] + dx, GRAN_AT[1] + dz)
+
+
+RUNNERS = {   # (path in metres, start delay): from the west (screen right), the east, and from behind (north)
+    'ARV1': ([_rel(-13.0, -0.4), _rel(-1.6, -0.4), _rel(-1.4, -1.2)], 0.0),
+    'ARV2': ([_rel(-14.0, 0.5), _rel(-2.4, 0.5), _rel(-2.0, 0.9)], 0.15),
+    'ARV3': ([_rel(0.0, 14.0), _rel(0.0, 2.0), _rel(0.4, 1.4)], 0.1),
+    'ARV4': ([_rel(15.0, -0.4), _rel(2.2, -0.4), _rel(1.8, -1.1)], 0.05),
+    'ARV5': ([_rel(16.0, 0.5), _rel(2.9, 0.5), _rel(2.5, 1.0)], 0.2),
+    'ARV6': ([_rel(0.0, 18.0), _rel(0.0, 2.6), _rel(-0.8, 2.2)], 0.3),
 }
 ROPES = {'ARV7': (GRAN_AT[0] - 0.55, GRAN_AT[1]), 'ARV8': (GRAN_AT[0] + 0.55, GRAN_AT[1])}
 
@@ -472,7 +499,7 @@ def roper(who, t):
         j['props'].append(C.rope_prop(top=-9000.0, bottom=300.0))
         j['grip'] = {'R'}
         C.outfit(j, sp)
-        return sp, j, x0, z0, y, (0.0, 1.0)
+        return sp, j, x0, z0, y, FACE
     (cx, cz), (dx, dz), f = carriers_at(t)
     x, z = (cx, cz) if side < 0 else (dx, dz)
     if t < GRAB[0]:                                          # landed, crouched a moment, rising
@@ -480,7 +507,7 @@ def roper(who, t):
         u = ease((t - SLIDE[1]) / 0.3)
         j['bob'] = 60 * (1 - u)
         C.outfit(j, sp)
-        return sp, j, x, z, 0.0, (0.0, 1.0)
+        return sp, j, x, z, 0.0, FACE
     # holding her arm: his near hand under her armpit, the other on her forearm (both on the arm nearest him)
     if t < CARRY[0]:
         j = C.pose_standing(sp)
@@ -488,7 +515,7 @@ def roper(who, t):
         V.arm_to(j, 'L' if side > 0 else 'R', (tgt, 60.0, 90.0), 'down', 'palm')
         V.arm_to(j, 'R' if side > 0 else 'L', (tgt, 170.0, 150.0), 'down', 'palm')
         C.outfit(j, sp)
-        face = (-side * 1.0, 0.25)
+        face = (side * 1.0, -0.25)
         return sp, j, x, z, 0.0, face
     phase = t - CARRY[0]
     if t < SWING[0]:
@@ -504,7 +531,7 @@ def roper(who, t):
         for sd in 'LR':
             V.arm_to(j, sd, ((-1 if sd == 'L' else 1) * 120.0, -60.0, 300.0), 'down', 'palm')
     C.outfit(j, sp)
-    return sp, j, x, z, 0.0, (1.0, 0.0)
+    return sp, j, x, z, 0.0, (-1.0, 0.0)
 
 
 # ------------------------------------------------------------------------------------------------ the police line
@@ -584,13 +611,13 @@ def talking(sp, who, t):
 def cam_for(t):
     s = shot_of(t)
     u = (t - shot_start(s))
-    if s == 'wide':
-        return Cam3((0.0, 11.0, 66.0 - 1.2 * u), (0.0, 5.0, 8.0), focal=950)
+    if s == 'wide':                                        # at a standing person's eye height, looking at the gallery
+        return Cam3((WIDE_CAM[0], WIDE_CAM[1], WIDE_CAM[2] + 0.5 * u), (-1.0, 3.2, 62.0), focal=760)
     if s == 'gran':                                         # zooming in on her from among the sitting crowd
         k = ease(u / 2.6)
         return Cam3(LOW_CAM, (GRAN_AT[0], 1.28 + 0.06 * k, GRAN_AT[1]), focal=900 + 1500 * k)
     if s == 'police':
-        return Cam3((7.0, 1.65, 21.0), (12.4, 1.55, 14.2), focal=1300)
+        return Cam3((-5.0, 1.65, 21.5), (-12.4, 1.55, 14.2), focal=1300)
     if s == 'super':
         x, z = POLICE['SUPER']
         d = (GRAN_AT[0] - x, GRAN_AT[1] - z)
@@ -598,8 +625,8 @@ def cam_for(t):
         return Cam3((x + d[0] / n * 1.25, 1.66, z + d[1] / n * 1.25), (x, 1.66, z), focal=1500)
     if s == 'storm':
         return Cam3(LOW_CAM, (GRAN_AT[0], 1.9, GRAN_AT[1]), focal=1350)
-    if s == 'throw':
-        return Cam3((18.0, 3.2, 40.0), (18.0, 1.9, 27.0), focal=700)
+    if s == 'throw':                                       # from the south, at head height: she goes right (west)
+        return Cam3((-13.5, 1.9, 28.5), (-22.0, 1.9, 36.0), focal=470)
     if s == 'interro':
         return Cam3((2.3, 1.45, -0.25), (0.0, 0.95, 0.0), focal=900)
     if s == 'interro_s':
@@ -642,9 +669,9 @@ def square(img, cam, t):
                               lambda im, a=(sp, x_, z_, fc, j), y_=y_: put(im, cam, *a, t, lift=y_, shadow=y_ < 0.2)))
     # the van and the officer by it
     vx, vz = van_at(t)
-    items.append((cam.depth((vx, 1.3, vz)), lambda im: S3.van(im, cam, vx, vz, 0.0, t, doors=door_open(t),
+    items.append((cam.depth((vx, 1.3, vz)), lambda im: S3.van(im, cam, vx, vz, VAN_HEADING, t, doors=door_open(t),
                                                                lights=t >= DRIVE)))
-    items.append((cam.depth((VAN_AT[0] - 3.4, 1, VAN_AT[1] + 1.6)), lambda im: door_officer(im, cam, t)))
+    items.append((cam.depth((VAN_BACK + 0.6, 1, VAN_AT[1] - 1.5)), lambda im: door_officer(im, cam, t)))
     for d, fn in sorted(items, key=lambda v: -v[0]):
         fn(img)
 
@@ -661,7 +688,7 @@ def super_args(t):
 
 def crowd_draw(img, cam, c, t):
     f = c['sp'].get('height', 1.75) / 1.75
-    neck = 928 * M * f - (0 if c['standing'] else 470 * M * f) + (0.5 if c.get('rim') else 0.0)
+    neck = 928 * M * f - (0 if c['standing'] else 470 * M * f) + c.get('base', 0.0)
     if cam.depth((c['x'], neck, c['z'])) < 0.4:
         return
     (X, Y), k = cam.project((c['x'], neck, c['z']))
@@ -669,10 +696,7 @@ def crowd_draw(img, cam, c, t):
     if s < 0.15:                                       # far off (a head under about 20 px): a simple figure, same colours
         return tiny(img, c, X, Y, s, t)
     sp, j = crowd_pose(c, t)
-    if c.get('rim'):
-        put(img, cam, sp, c['x'], c['z'], (0.0, 1.0), j, t, lift=0.5)
-    else:
-        put(img, cam, sp, c['x'], c['z'], (0.0, 1.0), j, t)
+    put(img, cam, sp, c['x'], c['z'], FACE, j, t, base=c.get('base', 0.0))
 
 
 def tiny(img, c, X, Y, s, t):
@@ -727,7 +751,7 @@ def flight_pos(t):
     """Her centre on the throw: 15 m from the swing to the van's open back, about 3 m up at the top, fast."""
     u = (t - FLIGHT[0]) / (FLIGHT[1] - FLIGHT[0])
     x0, z0 = THROW_FROM
-    x1 = VAN_AT[0] - S3.VAN_L / 2 + 0.6
+    x1 = VAN_BACK - 0.6
     return (x0 + (x1 - x0) * u, 1.2 + 2.6 * 4 * u * (1 - u) + 0.2 * u, z0)
 
 
@@ -735,8 +759,8 @@ def gran_flying(img, cam, t):
     """Hurled head first: her drawing (stiff, arms by her sides, legs together) turned to point along the throw and
     carried along its arc; she goes in through the open doors head first, legs last, and is gone."""
     pos = flight_pos(t)
-    back = VAN_AT[0] - S3.VAN_L / 2
-    if pos[0] > back + 1.8:
+    back = VAN_BACK
+    if pos[0] < back - 1.8:
         return
     sp = gran_state(t)
     sp['brows'] = 'sincere'
@@ -751,7 +775,7 @@ def gran_flying(img, cam, t):
     (Xa, Ya), _ = cam.project(flight_pos(min(t + 0.02, FLIGHT[1])))
     ang = math.degrees(math.atan2(Ya - Y, Xa - X))
     rot = lay.rotate(-(ang + 90) * ease((t - FLIGHT[0]) / 0.12), Image.BILINEAR, center=(X * B.SS, Y * B.SS))
-    if pos[0] > back - 1.6:                                   # going in: what is past the doorway is inside
+    if pos[0] < back + 1.6:                                   # going in: what is past the doorway is inside
         (Xb, Yb), _ = cam.project((back, pos[1], pos[2]))
         mask = Image.new('L', img.size, 255)
         from PIL import ImageDraw
@@ -780,23 +804,23 @@ def van_at(t):
     if t < DRIVE + 0.15:
         return VAN_AT
     u = t - DRIVE - 0.15
-    return (VAN_AT[0] + 6.0 * u * u, VAN_AT[1])
+    return (VAN_AT[0] - 6.0 * u * u, VAN_AT[1])
 
 
 def door_officer(img, cam, t):
     """An armed officer waiting by the van's open back (ARV in a flat cap) who slams the doors after her."""
     sp = dict(C.ARVS[2])
     if t > DRIVE + 0.6:
-        x, z = VAN_AT[0] - S3.VAN_L / 2 - 1.0, VAN_AT[1] + 1.6
+        x, z = VAN_BACK + 1.0, VAN_AT[1] - 1.6
     else:
-        x, z = VAN_AT[0] - S3.VAN_L / 2 - 0.5, VAN_AT[1] + 1.4
+        x, z = VAN_BACK + 0.5, VAN_AT[1] - 1.4
     j = C.pose_standing(sp)
     if SLAM[0] - 0.15 <= t < SLAM[1] + 0.2:                  # both hands on the doors, pushing them shut
         u = ease((t - SLAM[0] + 0.15) / 0.4)
         for sd, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, sd, (sg * 80.0 + 60 * u, 150.0, 260.0 + 60 * u), 'down', 'palm')
     C.outfit(j, sp)
-    put(img, cam, sp, x, z, (1.0, -0.4), j, t)
+    put(img, cam, sp, x, z, (-1.0, 0.4), j, t)
 
 
 def interro(img, cam, t):

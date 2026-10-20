@@ -209,6 +209,17 @@ def terrace(img, cam):
         cam.line(p, [(x0, TERRACE_Y + 1.0, SQ_N), (x1, TERRACE_Y + 1.0, SQ_N)], IRON, 2.6)   # the railing
         for x in np.arange(x0, x1, 1.0):
             cam.line(p, [(x, TERRACE_Y, SQ_N), (x, TERRACE_Y + 1.0, SQ_N)], IRON, 1.2)
+    for x0, x1, txt, cloth, ink in ((-30.0, -16.0, 'LIFT THE BAN', (246, 244, 236), (200, 30, 40)),
+                                    (-6.0, 6.0, 'PEACE', (246, 244, 236), (24, 24, 28)),
+                                    (14.0, 32.0, 'DROP THE CHARGES', (196, 30, 40), (246, 244, 236))):
+        y0, y1, zb = TERRACE_Y + 0.05, TERRACE_Y + 1.15, SQ_N - 0.05      # banners tied along the terrace railings
+        if x0 < STEPS[1] and x1 > STEPS[0]:                               # (refs crowd-low-1..3: Sam's photos)
+            zb, y0, y1 = SQ_N + 6.2, TERRACE_Y + 0.1, TERRACE_Y + 1.1      # PEACE hangs at the top of the steps
+        quad(img, cam, [(x0, y1, zb), (x1, y1, zb), (x1, y0, zb), (x0, y0, zb)], cloth, INK, 1.6)
+        w = (x1 - x0) * 0.86
+        cx = (x0 + x1) / 2
+        text3(img, cam, txt, [(cx + w / 2, y1 - 0.15, zb - 0.01), (cx - w / 2, y1 - 0.15, zb - 0.01),   # read from
+                              (cx - w / 2, y0 + 0.15, zb - 0.01), (cx + w / 2, y0 + 0.15, zb - 0.01)], ink)  # the south
     n = 12                                             # the steps
     for k in range(n):
         y0, y1 = TERRACE_Y * k / n, TERRACE_Y * (k + 1) / n

@@ -153,7 +153,7 @@ def soft(img, cam, pts, colr, alpha, blur=6):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     ImageDraw.Draw(lay).polygon([cam.P(*q) for q in pts], fill=colr + (int(255 * alpha),))
     if blur:
-        lay = lay.filter(ImageFilter.GaussianBlur(cam.S(blur)))
+        lay = lay.filter(ImageFilter.GaussianBlur(float(cam.S(blur))))   # a plain number (a numpy one confuses PIL)
     img.alpha_composite(lay)
 
 

@@ -452,6 +452,16 @@ def hivis(p, view, sp):
         _patch(p, (l + r) / 2, 180, (r - l) * 0.6, 60, 'POLICE', POLICE_BLUE, (246, 246, 242))
 
 
+def steward_vest(p, view, sp):
+    """A protest steward's orange hi-vis vest (refs crowd-low-1..3): orange, two silver bands."""
+    l, r = _torso_box(view, sp)
+    l2, r2 = _torso_box(view, sp, 440)
+    p.poly([(l + 16, 10), (r - 16, 10), (r - 6, 200), (r2 - 6, 440), (l2 + 6, 440), (l + 6, 200)], (244, 124, 34), INK, 1.8)
+    for y in (270, 360):
+        a, b = _torso_box(view, sp, y + 20)
+        p.poly([(a + 8, y), (b - 8, y), (b - 8, y + 22), (a + 8, y + 22)], SILVER, INK, 1.2)
+
+
 def armour(p, view, sp):
     """The armed officer's black plate carrier (refs armed-1..4): pouches, the black POLICE patch with white letters,
     radio, body camera, a small Union flag patch, the yellow Taser in its holster at the front."""
@@ -584,7 +594,7 @@ def dress(sp):
     """The film's clothing and headwear for one person, as views' body_props and head_props."""
     body, head = [], []
     for k, fn in (('hivis', hivis), ('arv', armour), ('stab_vest', stab_vest), ('white_shirt', white_shirt),
-                  ('keffiyeh', keffiyeh), ('trim', trim)):
+                  ('keffiyeh', keffiyeh), ('trim', trim), ('steward', steward_vest)):
         if sp.get(k):
             body.append(fn)
     for k, fn in (('curls', curls), ('striped_glasses', striped_glasses), ('aviators', aviators),
