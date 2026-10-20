@@ -847,10 +847,7 @@ def van(img, cam, x, z, heading, t, doors=1.0, lights=False):
     window, the yellow bonnet, the blue light bar; at the back two tall doors with red and yellow chevrons on the
     lower half, POLICE in red across the top; doors (0 shut .. 1 swung right round to the sides) showing the grey
     caged interior. `heading`: the way its front points (radians, 0 = +x)."""
-    ch, sh = math.cos(heading), math.sin(heading)
-
-    def W(u, y, v):                                    # u along the van from its back (0) to its front (L), v across
-        return (x + (u - VAN_L / 2) * ch - v * sh, y, z + (u - VAN_L / 2) * sh + v * ch)
+    W = van_frame(x, z, heading)                       # u along the van from its back (0) to its front (L), v across
     hw = VAN_W / 2
     faces = []
     body_y0, roof = 0.45, VAN_H
@@ -944,17 +941,30 @@ def van(img, cam, x, z, heading, t, doors=1.0, lights=False):
     return W
 
 
+def rear_door(W, hw, open_, sg):
+    """One back door's points D(w, y): w across it from its hinge (0) to its edge (hw); sg -1 / +1 the side. Shared by
+    the drawing and audit.py, so the test sees the door exactly where it is drawn."""
+    ang = open_ * math.radians(260)
+
+    def D(w, y):
+        return W(-math.sin(ang) * w, y, sg * hw - sg * math.cos(ang) * w)
+    return D
+
+
+def van_frame(x, z, heading):
+    """The van's own frame W(u, y, v): u along it from its back (0) to its front (VAN_L), v across."""
+    ch, sh = math.cos(heading), math.sin(heading)
+
+    def W(u, y, v):
+        return (x + (u - VAN_L / 2) * ch - v * sh, y, z + (u - VAN_L / 2) * sh + v * ch)
+    return W
+
+
 def rear_doors(img, cam, W, hw, y0, roof, open_):
     """The two tall back doors: red and yellow chevrons on the lower half, POLICE in red across the top, a fleet
     number; hinged at the sides, swinging right round to the sides as they open (0 shut, 1 fully open)."""
     for sg in (-1, 1):
-        ang = open_ * math.radians(260)
-        hinge_v = sg * hw
-
-        def D(w, y):                                         # w across the door from its hinge (0) to its edge (hw)
-            u = -math.sin(ang) * w
-            v = hinge_v - sg * math.cos(ang) * w
-            return W(u, y, v)
+        D = rear_door(W, hw, open_, sg)
         pts = [D(0, y0), D(hw, y0), D(hw, roof), D(0, roof)]
         quad(img, cam, pts, VAN_NAVY, INK, 1.8)
         if open_ > 0.5:
@@ -1023,6 +1033,17 @@ def light_pool(img, cam):
     quad(img, cam, pts, (164, 160, 150), None)
 
 
+def door_at(open_, z):
+    """The interview room's door's points D(u, y): u across it from its hinge (0) to its edge (DOOR width). Shared by
+    the drawing and audit.py."""
+    x0 = DOOR[0] - DOOR[1] / 2
+    ang = open_ * math.radians(100)
+
+    def D(u, y):
+        return (x0 + math.cos(ang) * u, y, z + math.sin(ang) * u)
+    return D
+
+
 def door_panel(img, cam, open_, z):
     """The heavy grey metal door, hinged on its left, swinging out into the corridor (Sam, 20 Oct: Jenkins came in
     through the door itself, and the doorway was black, not lit like the corridor); a small square window. Open,
@@ -1030,10 +1051,7 @@ def door_panel(img, cam, open_, z):
     door itself swung back against the corridor wall."""
     cx, w, h = DOOR
     x0 = cx - w / 2
-    ang = open_ * math.radians(100)
-
-    def D(u, y):
-        return (x0 + math.cos(ang) * u, y, z + math.sin(ang) * u)
+    D = door_at(open_, z)
 
     def slab(im):
         quad(im, cam, [D(0, 0), D(w, 0), D(w, h), D(0, h)], (140, 142, 146), INK, 2.0)

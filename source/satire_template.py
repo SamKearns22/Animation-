@@ -62,8 +62,12 @@ PROP_SIZES = []                                     # [(name, sizes.SIZES kind, 
 OUTFIT = {}                                         # {who: {'skirt top': y, 'jacket hem': y, ...}} person units
 HEIGHTS = {}                                        # {who: real height in metres}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate contacts, hits, falls, knock-ons
-# define solids(t) and layers(t) for any film where people or things move near each other (see clipcheck.py and
-# shocking.py), and SPLICE = ((clip, start, end), ...) for a song joined from recordings (musiccheck.py)
+# Rules 5 and 6 (guides/film-quality-rules.md; audit.py): scene(t) below gives everyone and everything solid; list
+# here every contact that is meant (thing or thing.part, the other, from, to, why) and every meant pop-in.
+ALLOWED_CONTACTS = [('A.hand*', 'TABLE', 1.5, 2.2, 'A thumps the table')]
+ALLOWED_POPS = []                                   # [(name, from, to, why)], e.g. gone in through a door
+# define layers(t) for drawing order (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a
+# song joined from recordings (musiccheck.py)
 # ====================================================================================================================
 
 S, FY = 0.8, 1420                                 # people's scale, floor line
@@ -202,6 +206,39 @@ def checks():
         raise ValueError('check: ' + '; '.join(faults))
 
 
+# ------------------------------------------------------------------------------------------------ the audit
+# audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
+# (everyone at one distance, on the floor line), so its world is the frame in metres. A film with a 3D set and a
+# camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
+# copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
+# long thing with .along).
+PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
+
+
+def project(cam, P):
+    X = P[:, 0] / PX_M + 540
+    Y = FY - P[:, 1] / PX_M
+    return (X - cam.cx) * cam.z + 540, (Y - cam.cy) * cam.z + 960, np.full(len(P), 5.0)
+
+
+def scene(t):
+    import audit
+    import clipcheck as CC
+    cam = cam_for(t)
+    out = []
+    for who in 'AB':
+        if visible(who, cam):
+            x = (XS[who] - 540) * PX_M
+            sol = audit.simple(who, x, 0.0)
+            if who == 'A':                                # his thumping hand (its target is in his own units)
+                hx, hy = THUMP.at(t)
+                sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
+            out.append(audit.Thing(who, sol))
+    y0, y1 = (FY - (FY - 30)) * PX_M, (FY - (NECK_Y + 390 * S)) * PX_M
+    out.append(audit.Thing('TABLE', [CC.box('TABLE', 'top', ((380 - 540) * PX_M, y0, 0.3), ((700 - 540) * PX_M, y1, 1.0))]))
+    return out
+
+
 def title_check():
     """The title must not cover anyone: the title and each person alone, on a frame where the title shows."""
     t = 1.0
@@ -290,6 +327,8 @@ def main():
         B.SS = 1
         checks()
         f = audits()
+        import audit
+        f += [x[len('AUDIT: '):] for x in audit.check(sys.modules[__name__])]   # collisions, pop-ins (preflight too)
         print('\n'.join(['AUDIT: ' + x for x in f]) or 'audit: clean')
     elif a[0] == 'final':
         small = '--small' in a

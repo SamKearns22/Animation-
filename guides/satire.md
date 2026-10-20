@@ -157,6 +157,15 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Plan big moves in the floor plan first: a fallen body is long; place action seen in two shots with
   `filmkit.visible_spots`.
 - Anything that changes stays changed (a smear, a broken window): list it and probe it (`filmkit.probe_marks`).
+- **Collisions and pop-ins: `source/audit.py`** (rules 5 and 6 of `guides/film-quality-rules.md`, 21 Oct). Every film
+  gives `scene(t)`: its own `picture(t)` run with the drawing switched off (`audit.Recorder`), catching every person
+  (`audit.placed`, from their pose, props included) and every set piece as solids; copy `power_crime.scene()` (3D sets)
+  or the template's (flat films). Meant contacts go in `ALLOWED_CONTACTS` and meant pop-ins in `ALLOWED_POPS`, each
+  with its reason. It tests every frame and two moments between, reports only what is on screen, and lists who is in
+  each shot. Pre-flight runs it and calls it a FAULT if a film has no `scene(t)` (Power Crime Action never had the
+  clipping check, and nobody knew). Run it alone: `python3 source/audit.py FILM [--shots a,b] [--sheet OUT.jpg]`
+  (about 4 minutes for a 48 s film with a 2,000-person crowd). It does not judge drawing order (someone drawn over a
+  door that should hide him): that is `layers(t)` below.
 - **Nothing passes through anything** (Sam, 18 Oct, after the trip in Shocking Behaviour took nine rounds). Before every
   animatic `preflight.py` runs `source/clipcheck.py` over every frame: every body, head, limb, hand, prop, piece of
   furniture and flying thing is a solid (the film's `solids(t)`; people come free from their pose with
@@ -218,7 +227,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,
 stretching, frozen; actions, including elbows staying on their own side; eyelines; the title clear of everyone), and a
-contact sheet with the safe area, and the shared checks (housestyle, clipcheck, hookcheck, musiccheck, linecheck,
+contact sheet with the safe area, and the shared checks (housestyle, audit, clipcheck, hookcheck, musiccheck, linecheck,
 sizes, landmarks: see 'Getting it right first time'). Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/
 `ALLOWED`/`LINE_OK`) with its reason.
 It also prints **QUESTIONS FOR SAM** about the sound (deep wind rumble, dead silence, a jump in volume at a cut). They may

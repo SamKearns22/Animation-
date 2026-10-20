@@ -5,7 +5,8 @@ took many renders because faults were found by eye, one round at a time).
 Works on any film module that has frame_image(t) and SHOTS [(name, start, end)], plus optionally caption_at(t)
 and BLACK_AT / DUR. It:
 1. turns on the figure guard (every arm drawn is measured; see figure.py) and runs every module-level check,
-   then the shared checks (housestyle: the template's style on; clipcheck: solids, drawing order, teleports,
+   then the shared checks (housestyle: the template's style on; audit: collisions and pop-ins, from the film's
+   scene(t), a FAULT if the film has none; clipcheck: solids, drawing order, teleports,
    contacts; hookcheck: the Hook Text clear of signs; musiccheck: song joins; linecheck: outlines; sizes: real
    sizes; landmarks: clothes against the body), each only if the film defines what it needs;
 2. draws every 3rd frame small and quick, so any check inside the drawing code (overlaps, fingertips on the
@@ -74,10 +75,15 @@ def main():
         film.checks()
     shared = []                                 # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
     B.SS = 1
-    import clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
+    import audit as collisions, clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
     shared += housestyle.faults(film, B)        # the template's house style is on, and each check has its inputs
+    if hasattr(film, 'scene'):
+        shared += collisions.check(film)        # rules 5 and 6: nothing passes through anything; nothing pops in
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT')):
         shared += clipcheck.run(film)           # nothing passes through anything; nothing teleports; drawing order
+    if not any(hasattr(film, a) for a in ('scene', 'solids')):   # never skipped in silence (Sam, 21 Oct: Power Crime
+        shared.append('the collision and pop-in tests did not run: the film has no scene(t) (audit.py; '   # never ran
+                      'guides/film-quality-rules.md rules 5 and 6)')                                      # them)
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
     shared += linecheck.faults(film)            # every shape outlined, one line weight (the cast)

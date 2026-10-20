@@ -731,6 +731,7 @@ def placard_prop(quad, skin=None):
         q = q if getattr(p.cam, 'flip', 1) == 1 else [q[1], q[0], q[3], q[2]]
         PC.place_image(p.img, p.cam, _placard_im(), q)
         hands(p, j2)
+    draw.quad = quad                                                 # the card, for audit.py's collision test
     return draw
 
 
@@ -747,7 +748,9 @@ def placard_pose(sp, t=0.0, raise_u=1.0, tremble=1.0, seed=0):
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, (sg * (W_ / 2 - 26) + jx, bottom - 26, z), 'out', 'fist')
     quad = [(-W_ / 2 + jx, bottom - H_), (W_ / 2 + jx, bottom - H_ + 2), (W_ / 2 + jx, bottom), (-W_ / 2 + jx, bottom)]
-    j['props'] = j.get('props', []) + [placard_prop(quad, sp['skin'])]
+    prop = placard_prop(quad, sp['skin'])
+    prop.qz = z                                                      # how far in front of her (audit.py)
+    j['props'] = j.get('props', []) + [prop]
     return j, quad
 
 
@@ -886,6 +889,7 @@ def carbine():
         p.poly([P(0.9, -4), P(0.9, 6), P(1.0, 6), P(1.0, -4)], GUN, INK, 1.8)                                 # barrel
         p.poly([P(0.32, 22), P(0.32, 40), P(0.44, 40), P(0.44, 22)], GUN_D, INK, 1.8)                         # sight
     draw.held = True
+    draw.along = ('wrR', 'wrL', CARBINE, GRIP_U)   # laid through both hands, butt first (audit.py)
     return draw
 
 

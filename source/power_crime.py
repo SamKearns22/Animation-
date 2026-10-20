@@ -37,6 +37,8 @@ import peepee as PP              # noqa: E402
 import film_engine as E          # noqa: E402
 from poker_mon_room import Cam3  # noqa: E402
 from ed import INK                # noqa: E402
+import audit as A                # noqa: E402  collision and pop-in tests (scene, at the end)
+import clipcheck as CC           # noqa: E402
 C.install_point_hand()           # the superintendent's prodding finger (after every module that sets the hands)
 
 FPS, SR = 12, MA.SR
@@ -499,6 +501,7 @@ def wrenched_prop(quad, t, skin):
 
     def back(p, j2):
         p.poly(q, (236, 234, 226), INK, 2.0)
+    back.quad = q                                           # the card, for audit.py
     return back
 
 
@@ -515,17 +518,21 @@ def placard_grip():
     return grip, centre
 
 
-def placard_flung(img, cam, t):
-    """Pulled in across him (the wind-up), then flung out of frame to the left (east), spinning, its plain back to
-    us: slow out of his hand, so the eye can follow it."""
+def placard_flung_at(t):
+    """The flung placard's centre and its turn on screen (radians) at time t."""
     _, (x, y, z) = placard_grip()
     if t < FLING[0]:
         w = ease((t - WIND[0]) / (WIND[1] - WIND[0]))
-        pos, a = (x - 0.25 * w, y + 0.05 * w, z - 0.15 * w), math.radians(25 * w)
-    else:
-        u = (t - FLING[0]) / (FLING[1] - FLING[0])
-        x, y, z = x - 0.25, y + 0.05, z - 0.15
-        pos, a = (x + 3.6 * u ** 1.3, y + 1.0 * u - 0.3 * u * u, z - 0.3 * u), math.radians(25 - 540 * u)
+        return (x - 0.25 * w, y + 0.05 * w, z - 0.15 * w), math.radians(25 * w)
+    u = (t - FLING[0]) / (FLING[1] - FLING[0])
+    x, y, z = x - 0.25, y + 0.05, z - 0.15
+    return (x + 3.6 * u ** 1.3, y + 1.0 * u - 0.3 * u * u, z - 0.3 * u), math.radians(25 - 540 * u)
+
+
+def placard_flung(img, cam, t):
+    """Pulled in across him (the wind-up), then flung out of frame to the left (east), spinning, its plain back to
+    us: slow out of his hand, so the eye can follow it."""
+    pos, a = placard_flung_at(t)
     if cam.depth(pos) < 0.4:
         return
     (X, Y), k = cam.project(pos)
@@ -1483,6 +1490,151 @@ def hidden_check(step=1):
     finally:
         C.HIDDEN_TEST[0] = False
     return faults
+
+
+# ------------------------------------------------------------------------------------------------ the audit
+# audit.py's collision and pop-in tests (guides/film-quality-rules.md, rules 5 and 6). scene(t) runs this film's own
+# picture(t) with the drawing switched off and catches where everyone and everything is put, as solids in metres.
+ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, why)
+    ('GRAN*', 'GRAN_CHAIR', None, None, 'she sits on her chair'),
+    ('SUPER*', 'SUPER_CHAIR', None, None, 'he sits on his chair'),
+    ('GRAN.hand*', 'TABLE', None, None, 'her hands rest on the table', 0.05),
+    ('SUPER.hand*', 'TABLE', None, None, 'his fists rest on the table', 0.05),
+    ('SUPER.forearm*', 'TABLE', None, None, 'his forearms rest on the table', 0.05),
+    ('CROWD*', 'CROWD*', None, None, 'the packed crowd (Sam, note 6): neighbours touch, as real; they never move, and '
+                                     'the far ones are drawn without legs (their simple shapes overlap on the steps)'),
+    ('ARV7.hand*', 'GRAN.prop', TUG[0], WIND[0], 'he grabs her placard\'s edge and wrenches it (Sam, note 36)', 0.08),
+    ('ARV7.hand*', 'PLACARD', WIND[0], FLING[0] + 0.25, 'he holds the placard and flings it', 0.08),
+    ('GRAN.hand*', 'PLACARD', WIND[0], HANDS_DROP[0], 'her hands where the card was as it leaves them', 0.08),
+    ('ARV[78].hand*', 'GRAN.*', GRAB[0], SWING[1], 'the carriers\' hands on her arms (ref arrest)', 0.08),
+    ('ARV[78].forearm*', 'GRAN.arm*', GRAB[0], SWING[1], 'the carriers hook her arms', 0.08),
+]
+ALLOWED_POPS = [       # (thing, from, to, why)
+    ('GRAN', FLIGHT[1] - 0.1, FLIGHT[1] + 0.1, 'gone in through the van\'s open doors (the doorway hides her)'),
+    ('PLACARD', WIND[0], WIND[0] + 0.01, 'her placard handed over to the fling: the same card in the same place '
+                                         '(within 5 cm, audit 21 Oct)'),
+]
+
+
+def _van_solids(x, z, heading, doors):
+    W = S3.van_frame(x, z, heading)
+    hw, L, H = S3.VAN_W / 2, S3.VAN_L, S3.VAN_H
+
+    def bx(part, u0, u1, y0, y1, v0, v1):
+        p, q = np.array(W(u0, y0, v0)), np.array(W(u1, y1, v1))
+        return CC.box('VAN', part, np.minimum(p, q), np.maximum(p, q))
+    out = [bx('floor', 0, L, 0.1, 0.5, -hw, hw), bx('roof', 0, L - 0.9, H - 0.06, H, -hw, hw),
+           bx('sideL', 0, L - 0.9, 0.45, H, hw - 0.05, hw), bx('sideR', 0, L - 0.9, 0.45, H, -hw, -hw + 0.05),
+           bx('cab', L - 0.9, L, 0.45, H, -hw, hw)]
+    for sg in (-1, 1):
+        D = S3.rear_door(W, hw, doors, sg)
+        out.append(A.card_from('VAN', 'door' + ('L' if sg < 0 else 'R'), [D(0, 0.45), D(hw, 0.45), D(hw, H), D(0, H)],
+                               0.03))
+    return out
+
+
+def _room_solids(door):
+    X, Z, H = S3.ROOM_X, S3.ROOM_Z, S3.ROOM_H
+    cx, w, h = S3.DOOR
+    x0 = cx - w / 2
+    D = S3.door_at(door, Z - 0.01)
+    return [CC.box('ROOM', 'wall', (-X, 0, Z), (x0, H, Z + 0.1)), CC.box('ROOM', 'wall', (x0 + w, 0, Z), (X, H, Z + 0.1)),
+            CC.box('ROOM', 'wall', (x0, h, Z), (x0 + w, H, Z + 0.1)), CC.box('ROOM', 'wall', (-X, 0, -Z - 0.1), (X, H, -Z)),
+            CC.box('ROOM', 'wall', (-X - 0.1, 0, -Z), (-X, H, Z)), CC.box('ROOM', 'wall', (X, 0, -Z), (X + 0.1, H, Z)),
+            A.card_from('ROOM', 'door', [D(0, 0), D(w, 0), D(w, h), D(0, h)], 0.025)]
+
+
+def _chair_solids(x, z, facing):
+    fx, fz = facing
+    bx, bz, nx, nz = x - fx * 0.22, z - fz * 0.22, -fz, fx
+    return [CC.box('CHAIR', 'seat', (x - 0.22, 0.43, z - 0.22), (x + 0.22, 0.47, z + 0.22)),
+            A.card_from('CHAIR', 'back', [(bx - nx * 0.2, 0.62, bz - nz * 0.2), (bx + nx * 0.2, 0.62, bz + nz * 0.2),
+                                          (bx + nx * 0.2, 0.86, bz + nz * 0.2), (bx - nx * 0.2, 0.86, bz - nz * 0.2)])]
+
+
+def _table_solids():
+    L, Dp, H = S3.TABLE
+    return [CC.box('TABLE', 'top', (-L / 2, H - 0.04, -Dp / 2), (L / 2, H, Dp / 2))] + \
+        [CC.capsule('TABLE', 'leg', (x, 0, z), (x, H, z), 0.02)
+         for x in (-L / 2 + 0.05, L / 2 - 0.05) for z in (-Dp / 2 + 0.05, Dp / 2 - 0.05)]
+
+
+def _corridor_solids():
+    W, L, H = S3.CORR_W / 2, S3.CORR_L, S3.CORR_H
+    return [CC.box('CORRIDOR', 'wall', (W, 0, -2), (W + 0.1, H, L)), CC.box('CORRIDOR', 'wall', (-W - 0.1, 0, -2), (-W, H, L)),
+            CC.box('CORRIDOR', 'wall', (-W, 0, -2.1), (W, H, -2)), CC.box('CORRIDOR', 'wall', (-W, 0, L), (W, H, L + 0.1))]
+
+
+_NO_IMG = Image.new('RGBA', (1, 1))
+
+
+def scene(t):
+    """Everyone and everything solid at time t, exactly as picture(t) draws them (audit.py)."""
+    me = sys.modules[__name__]
+    real_put, real_crowd = put, crowd_draw
+    crowd, drawn = [None], [False]
+    with A.Recorder() as rec:
+        def put_(img, cam, sp, x, z, facing, j, t_, lift=0.0, height=None, head_yaw=None, shadow=True, base=0.0,
+                 ground=True):
+            drawn[0] = False                                 # the real put(), so whoever it skips is skipped here
+            real_put(img, cam, sp, x, z, facing, j, t_, lift, height, head_yaw, False, base, ground)
+            if drawn[0]:
+                h = height or C.HEIGHTS.get(sp.get('name'), sp.get('height', 1.75))
+                name = crowd[0] or sp.get('name')
+                rec.add(name, A.placed(name, j, x, z, facing, h, lift, base, sp))
+
+        def crowd_(img, cam, c, t_):
+            crowd[0] = f"CROWD{c['seed']}"
+            try:
+                real_crowd(img, cam, c, t_)
+            finally:
+                crowd[0] = None
+
+        def tiny_(img, c, X, Y, s, t_, back=False):
+            name = f"CROWD{c['seed']}"
+            rec.add(name, A.simple(name, c['x'], c['z'], c['sp'].get('height', 1.75), c.get('base', 0.0),
+                                   not (c['standing'] and not in_throw_view(c)), FACE), kind='far')
+
+        def flying_(img, cam, t_):
+            pos = np.array(flight_pos(t_))
+            if pos[0] < VAN_BACK - 1.8:                      # as gran_flying(): gone inside the van
+                return
+            d = A._unit(pos - np.array(flight_pos(t_ - 0.02)))
+            w = ease((t_ - FLIGHT[0]) / 0.12)                # turned from upright to head first, as drawn
+            hd = A._unit((1 - w) * np.array((0.0, 1.0, 0.0)) + w * d)
+            f = C.HEIGHTS['GRAN'] / 1.75
+            rec.add('GRAN', [CC.capsule('GRAN', 'body', pos - hd * 0.64 * f, pos + hd * 0.62 * f, 0.15 * f),
+                             CC.sphere('GRAN', 'head', pos + hd * 0.81 * f, 0.1 * f)])
+
+        def flung_(img, cam, t_):
+            pos, a = placard_flung_at(t_)
+            if cam.depth(pos) < 0.4:
+                return
+            f = C.HEIGHTS['GRAN'] / 1.75
+            w, h = C.PLACARD_W * f / 2, C.PLACARD_H * f / 2
+            r, u = np.array(cam.r), np.array(cam.u)          # flat to the camera, turned on screen, as drawn
+            pts = [np.array(pos) + (dx * math.cos(a) - dy * math.sin(a)) * r - (dx * math.sin(a) + dy * math.cos(a)) * u
+                   for dx, dy in ((-w, -h), (w, -h), (w, h), (-w, h))]
+            rec.add('PLACARD', [A.card_from('PLACARD', 'card', pts)])
+
+        def chair_(img, cam, x, z, facing):
+            name = 'GRAN_CHAIR' if z < 0 else 'SUPER_CHAIR'
+            rec.add(name, _chair_solids(x, z, facing))
+        rec.patch(C, 'person', lambda *a, **k: drawn.__setitem__(0, True))
+        rec.patch(B, 'canvas', lambda *a, **k: _NO_IMG.copy())
+        for nm, fn in (('put', put_), ('crowd_draw', crowd_), ('tiny', tiny_), ('gran_flying', flying_),
+                       ('placard_flung', flung_)):
+            rec.patch(me, nm, fn)
+        rec.patch(S3, 'van', lambda img, cam, x, z, hd, t_, doors=1.0, lights=False:
+                  rec.add('VAN', _van_solids(x, z, hd, doors)))
+        rec.patch(S3, 'room', lambda img, cam, t_, door=0.0: rec.add('ROOM', _room_solids(door)))
+        rec.patch(S3, 'chair', chair_)
+        rec.patch(S3, 'table', lambda img, cam: rec.add('TABLE', _table_solids()))
+        rec.patch(S3, 'corridor', lambda img, cam, t_: rec.add('CORRIDOR', _corridor_solids()))
+        rec.patch(S3, 'square_pieces', lambda cam, t_: [])
+        rec.stub(S3, 'square_back', 'light_pool', 'clip_to_doorway')
+        picture(t)
+    return rec.things
 
 
 def stills_sheet(out, times):

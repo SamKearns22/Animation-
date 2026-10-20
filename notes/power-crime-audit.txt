@@ -1,0 +1,66 @@
+audit (power-crime-action): 570 frames, each tested 3 times, 111 s
+Who is on screen, shot by shot:
+  wide: CROWD x 1120 (far 1091, full 29), GRAN
+  gran: CROWD x 329 (far 247, full 82), GRAN
+  police: PC x 7, CROWD x 6, SUPER
+  super: PC x 3, CROWD x 1, SUPER
+  storm: CROWD x 328 (far 246, full 82), ARV x 13, GRAN, PLACARD
+  throw: CROWD x 435 (far 435), ARV x 13, GRAN, VAN, VANPC
+  interro: GRAN, GRAN_CHAIR, ROOM, SUPER, SUPER_CHAIR, TABLE
+  interro_s: ROOM, SUPER, SUPER_CHAIR, TABLE
+  interro_g: GRAN, GRAN_CHAIR, ROOM, TABLE
+  door: JENKINS, ROOM, SUPER, SUPER_CHAIR, TABLE
+  corridor_j: CORRIDOR, JENKINS
+  corridor: CORRIDOR, JENKINS, SUPER
+PASSES THROUGH: 10.17-10.44 s (storm): ARV8.armL passes 7 cm into GRAN.forearmR
+PASSES THROUGH: 10.17-10.19 s (storm): ARV1.body passes 14 cm into ARV2.armL
+PASSES THROUGH: 10.28-10.36 s (storm): ARV4.armR passes 14 cm into ARV5.body
+PASSES THROUGH: 10.28-10.42 s (storm): ARV1.body passes 16 cm into ARV2.armR
+PASSES THROUGH: 10.39-10.56 s (storm): ARV7.forearmR passes 4 cm into GRAN.prop
+PASSES THROUGH: 10.44-11.39 s (storm): ARV5.shinR passes 4 cm into CROWD1581.footL
+PASSES THROUGH: 10.44-10.58 s (storm): ARV4.body passes 12 cm into ARV5.gun
+PASSES THROUGH: 10.67-10.72 s (storm): ARV3.gun passes 11 cm into ARV4.body
+PASSES THROUGH: 10.61-10.72 s (storm): ARV7.body passes 8 cm into GRAN.prop
+PASSES THROUGH: 10.67-10.83 s (storm): ARV3.body passes 11 cm into ARV5.gun
+PASSES THROUGH: 10.75-10.86 s (storm): ARV7.body passes 12 cm into PLACARD.card
+PASSES THROUGH: 10.64-10.83 s (storm): ARV14.gun passes 13 cm into ARV3.body
+PASSES THROUGH: 10.75-10.81 s (storm): GRAN.forearmL passes 4 cm into PLACARD.card
+PASSES THROUGH: 10.81 s (storm): ARV2.handL passes 4 cm into ARV6.armL
+PASSES THROUGH: 10.81-10.83 s (storm): ARV14.gun passes 12 cm into ARV4.body
+PASSES THROUGH: 10.83-10.94 s (storm): ARV13.shinL passes 10 cm into ARV6.shinL
+PASSES THROUGH: 10.89 s (storm): ARV14.thighL passes 3 cm into ARV3.shinR
+PASSES THROUGH: 10.81-10.94 s (storm): ARV3.armL passes 13 cm into ARV4.body
+PASSES THROUGH: 10.86-10.94 s (storm): ARV2.gun passes 14 cm into ARV6.body
+PASSES THROUGH: 10.94-11.06 s (storm): ARV1.body passes 14 cm into ARV6.armR
+PASSES THROUGH: 10.81-11.06 s (storm): ARV14.armR passes 14 cm into ARV5.body
+PASSES THROUGH: 11.06 s (storm): ARV14.gun passes 2 cm into CROWD1581.armR
+PASSES THROUGH: 11.17-11.19 s (storm): ARV8.forearmR passes 3 cm into GRAN.forearmR
+PASSES THROUGH: 11.03-11.39 s (storm): ARV14.thighL passes 10 cm into CROWD1580.body
+PASSES THROUGH: 11.17-11.25 s (storm): ARV14.body passes 14 cm into CROWD1581.forearmR
+PASSES THROUGH: 11.17-11.28 s (storm): ARV7.forearmL passes 4 cm into GRAN.forearmL
+PASSES THROUGH: 11.00-11.28 s (storm): ARV13.body passes 17 cm into ARV2.armL
+PASSES THROUGH: 11.17-11.58 s (storm): ARV14.shinR passes 17 cm into CROWD1657.body
+PASSES THROUGH: 10.53-11.58 s (storm): ARV2.footR passes 9 cm into CROWD1577.shinL
+PASSES THROUGH: 11.42-11.58 s (storm): ARV13.armL passes 9 cm into ARV2.armR
+PASSES THROUGH: 11.42-11.44 s (storm): ARV8.forearmL passes 3 cm into GRAN.forearmR
+PASSES THROUGH: 11.42-11.58 s (storm): ARV7.body passes 9 cm into GRAN.handL
+PASSES THROUGH: 11.42-11.58 s (storm): ARV13.footR passes 13 cm into CROWD1577.body
+PASSES THROUGH: 11.50-11.56 s (storm): ARV14.footR passes 4 cm into CROWD1658.shinR
+PASSES THROUGH: 11.58 s (storm): ARV5.footL passes 2 cm into CROWD1581.footL
+PASSES THROUGH: 11.78-12.00 s (throw): ARV13.body passes 19 cm into CROWD1577.head
+PASSES THROUGH: 12.00-12.14 s (throw): ARV11.forearmL passes 14 cm into ARV2.body
+PASSES THROUGH: 12.06-12.22 s (throw): ARV13.thighL passes 18 cm into CROWD1576.body
+PASSES THROUGH: 12.28-12.31 s (throw): ARV6.shinL passes 6 cm into CROWD1577.legs
+PASSES THROUGH: 12.31-12.39 s (throw): ARV3.shinL passes 10 cm into CROWD1578.legs
+PASSES THROUGH: ... and 55 more
+POPS: 29.00 s (door): JENKINS appears from nothing in the middle of the frame
+allowed (ALLOWED_CONTACTS): the packed crowd (Sam, note 6): neighbours touch, as real; they never move, and the far ones are drawn without legs (their simple shapes overlap on the steps): 519 pair(s), up to 18 cm
+allowed (ALLOWED_CONTACTS): he grabs her placard's edge and wrenches it (Sam, note 36): 1 pair(s), up to 5 cm
+allowed (ALLOWED_CONTACTS): the carriers hook her arms: 2 pair(s), up to 8 cm
+allowed (ALLOWED_CONTACTS): he holds the placard and flings it: 1 pair(s), up to 5 cm
+allowed (ALLOWED_CONTACTS): her hands where the card was as it leaves them: 1 pair(s), up to 4 cm
+allowed (ALLOWED_CONTACTS): the carriers' hands on her arms (ref arrest): 2 pair(s), up to 8 cm
+allowed (ALLOWED_CONTACTS): he sits on his chair: 1 pair(s), up to 11 cm
+allowed (ALLOWED_CONTACTS): his forearms rest on the table: 1 pair(s), up to 4 cm
+allowed (ALLOWED_CONTACTS): she sits on her chair: 1 pair(s), up to 10 cm
+(off screen, not counted: 880 tests found things passing into each other)

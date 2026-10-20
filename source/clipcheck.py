@@ -49,10 +49,13 @@ SCREEN = (1080, 1920)
 
 
 class Solid:
-    """kind 'capsule' (a line from a to b, radius r; a sphere when a == b) or 'box' (corners a, b)."""
-    def __init__(self, owner, part, kind, a, b, r=0.0):
+    """kind 'capsule' (a line from a to b, radius r; a sphere when a == b), 'box' (corners a, b) or 'card' (a flat
+    rectangle at any angle: corner a, edges u and v, thickness 2r: a door, a placard, a van's door)."""
+    def __init__(self, owner, part, kind, a, b, r=0.0, u=None, v=None):
         self.owner, self.part, self.kind, self.r = owner, part, kind, r
         self.a, self.b = np.asarray(a, float), np.asarray(b, float)
+        if kind == 'card':
+            self.u, self.v = np.asarray(u, float), np.asarray(v, float)
 
     @property
     def centre(self):
@@ -72,6 +75,21 @@ def sphere(owner, part, a, r):
 
 def box(owner, part, lo, hi):
     return Solid(owner, part, 'box', lo, hi)
+
+
+def card(owner, part, corner, u, v, r=0.01):
+    corner = np.asarray(corner, float)
+    return Solid(owner, part, 'card', corner, corner + np.asarray(u, float) + np.asarray(v, float), r, u, v)
+
+
+def bounds(s):
+    """The box (lo, hi) round a solid."""
+    if s.kind == 'card':
+        pts = np.array([s.a, s.a + s.u, s.a + s.v, s.a + s.u + s.v])
+        return pts.min(0) - s.r, pts.max(0) + s.r
+    if s.kind == 'box':
+        return np.minimum(s.a, s.b), np.maximum(s.a, s.b)
+    return np.minimum(s.a, s.b) - s.r, np.maximum(s.a, s.b) + s.r
 
 
 # ------------------------------------------------------------------------------------------------- distances
@@ -109,8 +127,42 @@ def _seg_box(p, q, lo, hi, n=12):
     return best
 
 
+def _card_dist(pts, c):
+    """Distance from each point (N x 3) to card c's rectangle (its middle sheet, before its thickness)."""
+    d = pts - c.a
+    uu, vv = c.u @ c.u, c.v @ c.v
+    s = np.clip(d @ c.u / (uu or 1.0), 0, 1)
+    w = np.clip(d @ c.v / (vv or 1.0), 0, 1)
+    near = c.a + s[:, None] * c.u + w[:, None] * c.v
+    return np.linalg.norm(pts - near, axis=1)
+
+
+def _card_grid(c, n=6):
+    g = np.linspace(0, 1, n)
+    return np.array([c.a + x * c.u + y * c.v for x in g for y in g])
+
+
+def _seg_pts(s, step=0.02):
+    n = int(min(60, max(2, np.linalg.norm(s.b - s.a) / max(step, s.r * 0.5)) + 1))
+    return s.a + np.linspace(0, 1, n)[:, None] * (s.b - s.a)
+
+
+def _box_dist(pts, lo, hi):
+    d = np.maximum(np.maximum(lo - pts, 0), pts - hi)
+    return np.linalg.norm(d, axis=1)
+
+
 def overlap(s1, s2):
     """How far two solids pass into each other (metres; <= 0 means apart, the gap between them)."""
+    if s1.kind == 'card' or s2.kind == 'card':                # sampled: plenty for people-sized things
+        if s1.kind != 'card':
+            s1, s2 = s2, s1
+        if s2.kind == 'capsule':
+            return s1.r + s2.r - float(_card_dist(_seg_pts(s2), s1).min())
+        if s2.kind == 'box':
+            lo, hi = np.minimum(s2.a, s2.b), np.maximum(s2.a, s2.b)
+            return s1.r - float(_box_dist(_card_grid(s1, 9), lo, hi).min())
+        return s1.r + s2.r - float(min(_card_dist(_card_grid(s1, 9), s2).min(), _card_dist(_card_grid(s2, 9), s1).min()))
     if s1.kind == 'box' and s2.kind == 'box':
         d = np.minimum(s1.b, s2.b) - np.maximum(s1.a, s2.a)
         return float(d.min())

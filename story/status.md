@@ -442,3 +442,13 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
 2. script/mouth audit added to `source/voices.py` (rule 7);
 3. the film plan template (rule 1) and the reference benchmark sheet (rule 3) in `source/satire_template.py`;
 4. the "portal" in the sets code (rule 2). Test the tools on Power Crime Action (known faults: 11 collision, 5 pop-in, 4 script/mouth notes).
+- 21 Oct: **1 done**: `source/audit.py` (collisions every frame and two moments between, on screen only; pop-ins,
+  drawing changes and jumps; who is in each shot). Built on `clipcheck.py` (which gained flat 'card' solids for doors
+  and placards). A film gives `scene(t)` (`audit.Recorder` runs its own picture code with the drawing off; copy
+  `power_crime.scene()` or the template's), `ALLOWED_CONTACTS` and `ALLOWED_POPS`. Pre-flight runs it, and now FAILS a
+  film with no `scene(t)` (Power Crime never had clipping tested: pre-flight skipped it in silence). Tested on Power
+  Crime Action (`python3 source/audit.py power_crime`, about 3 min): the old faults of notes 33-37 and 47 put back from
+  git are all found; 38 half; 29 not testable. New in the finished film: notes 52-53 in its notes file (Jenkins pops into
+  the doorway; officers through each other and through sitters in the storm and throw), not fixed: Sam to decide.
+  NEXT (fresh chat, Opus high): item 2, the script/mouth audit in `source/voices.py` (rule 7), tested on Power Crime
+  (its known faults: the missing "terrorist" sentence, note 49; "Shit" mouthed twice; the mouth hanging open, note 50).

@@ -176,3 +176,17 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 49 | corridor | final | Missing subtitle ("I'm interviewing a terrorist right now."); the cut-in to be instant, cutting away from Jenkins earlier; more in his face on "see what happens" | the sentence was in the recording but not the script: added, and the subtitles now follow its three phrases. Line 6 starts 0.95 s earlier (his first word lands as Jenkins's "in—" ends); the two-shot comes 0.5 s earlier, so he leaps in during "attack in—"; everything after moves up 0.95 s (film 47.45 s). On "and see what happens." he edges in and leans 5 degrees further, Jenkins shrinks back 11 more (a bigger push hid Jenkins's face) |
 | 50 | super | final | "After he says 'a code red', his mouth hangs open stupidly. Close it." | after his last word the horror brows stay but the mouth shuts (set) |
 | 51 | throw | final | The front armed officers kept pacing after stopping; instead point their guns different ways, checking for threats | they stop walking when she stops (the swing), the drift freezes; then each swings to a new spot every 0.75-1.15 s (left/right up to 70 degrees, high on the buildings or low over the crowd), holds, then the next |
+
+## Audit 21 Oct (`source/audit.py`, the new collision and pop-in test; full list in `notes/power-crime-audit.txt`)
+The film had never had the clipping test (it had no `solids(t)`, and pre-flight skipped it in silence). Now it has
+`scene(t)` (its own picture code run with the drawing switched off) and the allowed lists. Replays of Sam's old notes,
+each fault put back as the git history had it: 33-35 (crowd pop-ins: 102 found), the ropers' wrong sides (1.1 m jumps),
+36 (an officer's leg 15 cm into a front sitter), 37 (the van officer's 0.54 m jump), 47 (the door 7-14 cm into him) all
+found; 38 only half (his pop-in; the clip itself was drawing order, clipcheck's `layers`); 29 not testable (a turn of the
+picture, not a position). Found in the finished film, not yet noted by Sam, NOT fixed (his decision):
+
+| # | shot | time | note | status |
+|---|------|------|------|--------|
+| 52 | door | 29.00 s | (audit) Jenkins appears from nothing in the open doorway: 28.92 the doorway shows the empty corridor, 29.00 he stands in it | open: proposal: he walks in from the side of the corridor (or stands waiting as the door opens) |
+| 53 | storm, throw | 10.2-13.0 s | (audit) 95 overlaps among the armed officers: rifles and arms 11-16 cm into each other as the ring forms; escorts walking through sitters (ARV13 19 cm into a sitter's head at 11.8 s, ARV14 17 cm into one at 11.2 s); ARV7's body 8-12 cm into the placard as he wrenches it | open: proposal: space the ring's lanes and end spots, clear the escort's path of sitters; then re-run the audit |
+

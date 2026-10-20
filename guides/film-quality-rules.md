@@ -20,9 +20,11 @@ check by hand and say so.
    A flat empty area fails.
 5. **One automatic collision test.** Every person and prop gets a simple solid shape; test every frame, including the area
    swept by anything that moves (doors, arms, ropes, thrown things, a tipping hem). Anything overlapping that is not on the
-   film's "allowed contacts" list is flagged. This replaces symptom rules. [tool: `source/audit.py`]
+   film's "allowed contacts" list is flagged. This replaces symptom rules. [tool: `source/audit.py`, built 21 Oct: the
+   film's `scene(t)` and `ALLOWED_CONTACTS`; see `guides/satire.md`]
 6. **One automatic pop-in test.** Compare each frame with the next: anyone or anything that appears, vanishes or changes
-   drawing away from the frame edge is flagged. Keep a list of who is in each shot. [tool: `source/audit.py`]
+   drawing away from the frame edge is flagged. Keep a list of who is in each shot. [tool: `source/audit.py`, built
+   21 Oct: also flags a jump (a step far longer than the frames either side); `ALLOWED_POPS`; it prints the list]
 7. **Script and mouth audit before any picture.** For every recording compare syllable count and length with the script
    text and the subtitles; flag mismatches (the missing "terrorist" sentence). Check the mouth opens once per syllable and
    shuts in silence unless the brief says otherwise. [tool: add to `source/voices.py`]
