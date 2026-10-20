@@ -979,7 +979,7 @@ CONCRETE = (120, 118, 112)
 def room(img, cam, t, door=0.0):
     """The interrogation room (refs interrogation-1..3): breeze-block walls, darker below and paler above, a concrete
     floor with a blue line, the heavy grey metal door with its small window in the back wall (+z), the long dark
-    one-way mirror on the left wall (-x), the lamp over the table. `door`: 0 shut .. 1 open (swings into the room)."""
+    one-way mirror on the left wall (-x), the lamp over the table. `door`: 0 shut .. 1 open (swings out into the corridor)."""
     X, Z, H = ROOM_X, ROOM_Z, ROOM_H
     quad(img, cam, [(-X, 0, -Z), (X, 0, -Z), (X, 0, Z), (-X, 0, Z)], CONCRETE, INK, 1.4)
     p = _pen(img)
@@ -1024,19 +1024,46 @@ def light_pool(img, cam):
 
 
 def door_panel(img, cam, open_, z):
-    """The heavy grey metal door, hinged on its left, swinging into the room; a small square window."""
+    """The heavy grey metal door, hinged on its left, swinging out into the corridor (Sam, 20 Oct: Jenkins came in
+    through the door itself, and the doorway was black, not lit like the corridor); a small square window. Open,
+    the doorway shows the lit corridor beyond: the white wall opposite, the pale floor, the red alarm bar, and the
+    door itself swung back against the corridor wall."""
     cx, w, h = DOOR
     x0 = cx - w / 2
     ang = open_ * math.radians(100)
 
     def D(u, y):
-        return (x0 + math.cos(ang) * u, y, z - math.sin(ang) * u)
-    quad(img, cam, [(x0, 0, z), (x0 + w, 0, z), (x0 + w, h, z), (x0, h, z)], (24, 24, 26), INK, 1.6)   # the opening
-    quad(img, cam, [D(0, 0), D(w, 0), D(w, h), D(0, h)], (140, 142, 146), INK, 2.0)
-    quad(img, cam, [D(0.3, 1.45), D(0.62, 1.45), D(0.62, 1.75), D(0.3, 1.75)], (40, 44, 52), INK, 1.4)
-    p = _pen(img)
-    (X, Y), k = cam.project(D(w - 0.1, 1.0))
-    p.ell(X, Y, 0.04 * k, 0.04 * k, (60, 60, 66), INK, 1.0)
+        return (x0 + math.cos(ang) * u, y, z + math.sin(ang) * u)
+
+    def slab(im):
+        quad(im, cam, [D(0, 0), D(w, 0), D(w, h), D(0, h)], (140, 142, 146), INK, 2.0)
+        quad(im, cam, [D(0.3, 1.45), D(0.62, 1.45), D(0.62, 1.75), D(0.3, 1.75)], (40, 44, 52), INK, 1.4)
+        (X, Y), k = cam.project(D(w - 0.1, 1.0))
+        _pen(im).ell(X, Y, 0.04 * k, 0.04 * k, (60, 60, 66), INK, 1.0)
+    if open_ <= 0.01:
+        slab(img)
+        return
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    far, a, b = z + CORR_W, x0 - 4.0, x0 + w + 4.0
+    quad(lay, cam, [(a, 0, z), (b, 0, z), (b, 0, far), (a, 0, far)], (196, 196, 192), INK, 1.4)
+    quad(lay, cam, [(a, CORR_H, z), (b, CORR_H, z), (b, CORR_H, far), (a, CORR_H, far)], (236, 236, 232), INK, 1.4)
+    quad(lay, cam, [(a, 0, far), (b, 0, far), (b, CORR_H, far), (a, CORR_H, far)], (240, 240, 236), INK, 1.6)
+    cam.line(_pen(lay), [(a, 0.95, far - 0.01), (b, 0.95, far - 0.01)], (200, 40, 40), 3.0)
+    slab(lay)
+    clip_to_doorway(lay, cam, z)
+    img.alpha_composite(lay)
+    quad(img, cam, [(x0, 0, z), (x0 + w, 0, z), (x0 + w, h, z), (x0, h, z)], None, INK, 1.8)
+
+
+def clip_to_doorway(lay, cam, z):
+    """Keep only what shows through the doorway (for the corridor beyond it, and Jenkins until he is through)."""
+    from PIL import ImageChops, ImageDraw
+    cx, w, h = DOOR
+    x0 = cx - w / 2
+    pts = [cam.project(q)[0] for q in [(x0, 0, z), (x0 + w, 0, z), (x0 + w, h, z), (x0, h, z)]]
+    mask = Image.new('L', lay.size, 0)
+    ImageDraw.Draw(mask).polygon([(X * B.SS, Y * B.SS) for X, Y in pts], fill=255)
+    lay.putalpha(ImageChops.multiply(lay.split()[3], mask))
 
 
 def table(img, cam):

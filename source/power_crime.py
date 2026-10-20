@@ -108,6 +108,12 @@ ROPE_DROP = (8.8, 9.0)            # the ropes fall into frame
 SLIDE = (9.05, 10.15)             # the two counter-terror officers slide down
 RUN_IN = 8.75                     # the six on foot run in from left, right and behind
 GRAB = (10.45, 10.8)              # their hands go to her arms
+# Sam, 20 Oct: the officer on her left (screen left, ARV7) tugs the placard out of her hands and throws it out of frame
+TUG = (10.15, 10.3)               # his hand to its edge as he lands
+TWIST = (10.3, 10.42)             # wrenched round on that edge: its face away, its back to us
+FLING = (10.42, 10.72)            # flung out of frame left, spinning
+HANDS_DROP = (10.6, 10.8)         # her hands stay up a beat, empty, then drop
+ARV7_GRAB = 10.72                 # then he takes her arm
 LIFT = (10.8, 11.25)              # she rises off the ground
 CARRY = (11.25, 14.05)            # carried east to the throwing spot (brisk)
 SWING = (14.05, 14.55)            # swung back once, then forward; let go at the end
@@ -452,11 +458,65 @@ def gran_pose(t, sp):
         j, quad = C.placard_pose(sp, t, 0.0, tremble=1.0, seed=3)      # at her chest (0), trembling
         if u < 1.0:                                         # still coming up: lower, tilted back
             j, quad = low_placard(sp, t, u)
-        if t >= LIFT[0] - 0.4:                              # she lets go: the placard falls face down (unseen)
-            j = C.pose_standing(sp)
-            j['props'] = []
+        if t >= TWIST[0]:                                   # wrenched out of her hands (Sam, 20 Oct): they stay up a
+            j['props'] = []                                 # beat, empty, then drop
+            j['hand'] = {'L': 'palm', 'R': 'palm'}
+            if t >= HANDS_DROP[0]:
+                rest = C.pose_standing(sp)
+                v = ease((t - HANDS_DROP[0]) / (HANDS_DROP[1] - HANDS_DROP[0]))
+                for k in ('elL', 'wrL', 'elR', 'wrR'):
+                    j[k] = tuple(a + (b - a) * v for a, b in zip(j[k], rest[k]))
+        elif t >= TUG[0]:                                   # his hand on its edge (screen left), then the wrench
+            j['props'] = [wrenched_prop(quad, t, sp['skin'])]
         return j
     return None
+
+
+def wrenched_prop(quad, t, skin):
+    """Her placard as he grabs it: until the wrench her own (her hands on it); then she lets go and it swings round on
+    the edge he holds, so its face narrows to nothing where it already was (the hidden part never comes out from
+    behind the board) and its plain back swings out towards him."""
+    if t < TWIST[0]:
+        return C.placard_prop(quad, skin)
+    v = (t - TWIST[0]) / (TWIST[1] - TWIST[0])
+    c = math.cos(math.pi * min(1.0, v))
+    hinge = quad[0][0]                                      # her right is west: her -x edge is the east one (his)
+    q = [(hinge + (x - hinge) * c, y) for x, y in quad]
+    if c > 0:
+        return C.placard_prop(q, None)
+
+    def back(p, j2):
+        p.poly(q, (236, 234, 226), INK, 2.0)
+    return back
+
+
+def placard_grip():
+    """The world point on her placard's east edge (screen left) where he grabs it, and the card's centre once its back
+    has swung out (where it leaves for the fling)."""
+    gx, gz = GRAN_AT
+    f = C.HEIGHTS['GRAN'] / 1.75
+    neck = 928 * M * f
+    W_, H_ = C.PLACARD_W / M, C.PLACARD_H / M
+    z = gz - 110 * M * f
+    grip = (gx + (W_ / 2) * M * f, neck - (330 - H_ * 0.75) * M * f, z)
+    centre = (gx + W_ * M * f, neck - (330 - H_ / 2) * M * f, z)
+    return grip, centre
+
+
+def placard_flung(img, cam, t):
+    """Flung out of frame to the left (east), spinning, its plain back to us."""
+    u = (t - FLING[0]) / (FLING[1] - FLING[0])
+    _, (x, y, z) = placard_grip()
+    pos = (x + 3.6 * u, y + 1.1 * u - 0.4 * u * u, z - 0.3 * u)
+    if cam.depth(pos) < 0.4:
+        return
+    (X, Y), k = cam.project(pos)
+    f = C.HEIGHTS['GRAN'] / 1.75
+    w, h = C.PLACARD_W * f * k / 2, C.PLACARD_H * f * k / 2
+    a = math.radians(-560 * u)
+    pts = [(X + dx * math.cos(a) - dy * math.sin(a), Y + dx * math.sin(a) + dy * math.cos(a))
+           for dx, dy in ((-w, -h), (w, -h), (w, h), (-w, h))]
+    B.Pen(img, FLAT).poly(pts, (236, 234, 226), INK, 2.0)
 
 
 def low_placard(sp, t, u):
@@ -528,7 +588,7 @@ RING = {
     'ARV1': ((-1.3, 1.0), -1, 0.0, None), 'ARV4': ((1.45, 0.95), 1, 0.08, None),
     'ARV2': ((-2.2, 1.9), -1, 0.3, None), 'ARV5': ((2.35, 1.8), 1, 0.22, None),
     'ARV3': ((0.55, 2.3), 1, 0.45, None), 'ARV6': ((-0.6, 2.4), -1, 0.52, None),
-    'ARV9': ((-1.05, -0.95), -1, 0.15, (-1.0, -0.5)), 'ARV10': ((1.15, -0.9), 1, 0.27, (1.0, -0.6)),
+    'ARV9': ((-1.45, -0.55), -1, 0.15, (-1.0, -0.5)), 'ARV10': ((1.55, -0.55), 1, 0.27, (1.0, -0.6)),
     'ARV11': ((-3.0, 0.55), -1, 0.4, (-1.0, 0.2)), 'ARV12': ((3.1, 0.45), 1, 0.35, (1.0, 0.1)),
     'ARV13': ((-1.9, 3.1), -1, 0.62, (-0.7, 1.0)), 'ARV14': ((2.0, 3.2), 1, 0.58, (0.8, 1.0)),
 }
@@ -540,7 +600,9 @@ def _seed(who):
 
 def _path(who):
     (dx, dz), side, delay, _ = RING[who]
-    lane = -1.2 if dz < 0 else 1.25                 # the aisle along her row (in front of her, or behind)
+    lane = -0.7 if dz < 0 else 1.25                 # the aisle along her row (in front of her, or behind); the front
+                                                    # lane clear of the sitters by the camera (Sam, 20 Oct: a rifle
+                                                    # went through one's face); they stop just out of frame
     return [_rel(side * (6.5 + 0.4 * (_seed(who) % 3)), lane), _rel(dx, lane), _rel(dx, dz)], delay
 
 
@@ -553,7 +615,8 @@ ESCORT = {'ARV1': (-1.7, 0.7, (-1.0, 0.0)), 'ARV2': (-2.6, 1.5, (-1.0, 0.5)), 'A
           'ARV4': (2.3, 0.8, (1.0, 0.0)), 'ARV5': (1.4, 1.7, (1.0, 0.6)), 'ARV6': (-0.9, 2.0, (-0.5, 1.0)),
           'ARV9': (-2.9, 0.4, (-1.0, -0.7)), 'ARV10': (3.0, 0.35, (1.0, -0.7)), 'ARV11': (-0.2, 3.0, (-0.9, 0.5)),
           'ARV12': (1.0, 2.9, (0.9, 0.4)), 'ARV13': (-1.9, 2.8, (-1.0, -0.2)), 'ARV14': (2.6, 2.4, (1.0, 0.2))}
-ROPES = {'ARV7': (GRAN_AT[0] - 0.55, GRAN_AT[1]), 'ARV8': (GRAN_AT[0] + 0.55, GRAN_AT[1])}
+ROPES = {'ARV7': (GRAN_AT[0] + 0.55, GRAN_AT[1]), 'ARV8': (GRAN_AT[0] - 0.55, GRAN_AT[1])}   # each lands where he
+# then takes her arm (carriers_at: ARV7 east, screen left); they had landed on the wrong sides and jumped across
 
 
 def sweep(who, t):
@@ -636,6 +699,24 @@ def roper(who, t):
         return sp, j, x0, z0, y, FACE
     (cx, cz), (dx, dz), f = carriers_at(t)
     x, z = (cx, cz) if side < 0 else (dx, dz)
+    if who == 'ARV7' and t < ARV7_GRAB:                      # the placard: grabbed, wrenched round, flung (Sam)
+        j = C.pose_standing(sp)
+        j['bob'] = 60 * (1 - ease((t - SLIDE[1]) / 0.15))
+        face = (-1.0, -0.25)
+        grip, _ = placard_grip()
+        at = to_torso(x, z, face, sp, grip)
+        rest = (-40.0, 260.0, 60.0)
+        if t < TWIST[1]:                                     # reaching for its edge, then holding it
+            u = ease((t - TUG[0]) / (TUG[1] - TUG[0]))
+            tgt = tuple(r + (g - r) * u for r, g in zip(rest, at))
+        else:                                                # the throw: his arm sweeps out to his left and up
+            out = to_torso(x, z, face, sp, (x + 0.55, grip[1] + 0.35, z - 0.25))
+            u = ease((t - TWIST[1]) / (FLING[0] + 0.15 - TWIST[1]))
+            tgt = tuple(a + (b - a) * u for a, b in zip(at, out))
+        V.arm_to(j, 'R', tgt, 'down', 'palm' if t < TUG[1] else 'fist')
+        j['lean'] = 6 if t < TWIST[1] else -4
+        C.outfit(j, sp)
+        return sp, j, x, z, 0.0, face
     if t < GRAB[0]:                                          # landed, crouched a moment, rising
         j = C.pose_standing(sp)
         u = ease((t - SLIDE[1]) / 0.3)
@@ -773,10 +854,11 @@ def cam_for(t):
     if s == 'throw':                                       # from the south, at head height: she goes right (west)
         # side on, straight north (Sam: carried and thrown horizontally), tracking along with them like a side-scroller,
         # then with her in flight, and holding on the van as it speeds off right
+        # Sam, 20 Oct: "move in just a bit closer ... we are missing some of the humour": 3.3 m from them (was 4.2)
         ax = gran_where(t)[0] if t < FLIGHT[0] else (flight_pos(min(t, FLIGHT[1]))[0] if t < FLIGHT[1] + 0.1 else VAN_BACK - 1.5)
         cx = min(ax - 0.6, -6.0)
-        cx = max(cx, VAN_BACK - 0.5)
-        return Cam3((cx, 1.45, GRAN_AT[1] - 4.2), (cx, 2.3, GRAN_AT[1]), focal=950)   # tilted up: less bare paving
+        cx = max(cx, VAN_BACK - 0.1)                       # holding on the van's back and the officer by it
+        return Cam3((cx, 1.4, GRAN_AT[1] - 3.3), (cx, 1.95, GRAN_AT[1]), focal=950)   # tilted up: less bare paving
     if s == 'interro':
         return Cam3((2.3, 1.45, -0.25), (0.0, 0.95, 0.0), focal=900)
     if s == 'interro_s':                                   # straight on to him, from her side of the table
@@ -804,6 +886,8 @@ def square(img, cam, t):
         items.append((cam.depth((x, 1.0, z)), lambda im: gran_draw(im, cam, t)))
     elif t < FLIGHT[1]:                                     # then she is inside (Sam, 20 Oct: she flashed on the van)
         items.append((cam.depth(flight_pos(t)), lambda im: gran_flying(im, cam, t)))
+    if FLING[0] <= t < FLING[1]:
+        items.append((cam.depth(placard_grip()[1]) - 0.05, lambda im: placard_flung(im, cam, t)))
     # the police line
     for who in POLICE:
         if who == 'SUPER':
@@ -847,10 +931,32 @@ def crowd_draw(img, cam, c, t):
         return
     (X, Y), k = cam.project((c['x'], neck, c['z']))
     s = k * M * f
-    if s < 0.3:                                        # beyond a few metres (a head under about 40 px): a simple figure
+    if id(c) not in full_drawn(t):                     # beyond a few metres (a head under about 40 px): a simple figure
         return tiny(img, c, X, Y, s, t, back=cam.pos[2] > c['z'])
     sp, j = crowd_pose(c, t)
     put(img, cam, sp, c['x'], c['z'], FACE, j, t, base=c.get('base', 0.0), ground=not sp.get('front_board'))
+
+
+SETUPS = {'gran': ('gran', 'storm'), 'storm': ('gran', 'storm')}   # one camera position, so one look across the cut
+_FULL = {}
+
+
+def full_drawn(t):
+    """Who is drawn in full (not as a simple far figure) for the whole of this shot (Sam, 20 Oct: people popped in and
+    out as the camera moved or zoomed and they crossed the size limit): anyone who is ever big enough during the shot,
+    or across shots from the same camera position, stays in full for all of it."""
+    shots = SETUPS.get(shot_of(t), (shot_of(t),))
+    if shots not in _FULL:
+        cams = [cam_for(a + (b - a) * u) for name, a, b in SHOTS if name in shots for u in np.linspace(0, 0.999, 12)]
+        keep = set()
+        for c in CROWD:
+            f = c['sp'].get('height', 1.75) / 1.75
+            standing = c['standing'] and not in_throw_view(c)
+            pt = (c['x'], 928 * M * f - (0 if standing else 470 * M * f) + c.get('base', 0.0), c['z'])
+            if any(cam.depth(pt) >= 0.4 and cam.project(pt)[1] * M * f >= 0.3 for cam in cams):
+                keep.add(id(c))
+        _FULL[shots] = keep
+    return _FULL[shots]
 
 
 def tiny(img, c, X, Y, s, t, back=False):
@@ -1006,10 +1112,7 @@ def van_at(t):
 def door_officer(img, cam, t):
     """An armed officer waiting by the van's open back (ARV in a flat cap) who slams the doors after her."""
     sp = dict(C.PCS[0], name='VANPC', skin=B.BROWN, hair='crop', hair_c=(30, 24, 22), seed=77)
-    if t > DRIVE + 0.6:
-        x, z = VAN_BACK + 1.0, VAN_AT[1] - 1.6
-    else:
-        x, z = VAN_BACK + 0.5, VAN_AT[1] - 1.4
+    x, z = VAN_BACK + 0.45, VAN_AT[1] - 1.2                  # he stays put (Sam, 20 Oct: he had jumped out of frame)
     j = C.pose_standing(sp)
     if SLAM[0] - 0.15 <= t < SLAM[1] + 0.2:                  # both hands on the doors, pushing them shut
         u = ease((t - SLAM[0] + 0.15) / 0.4)
@@ -1062,10 +1165,16 @@ def interro(img, cam, t):
         def jen(im):
             sp = dict(C.JENKINS)
             talking(sp, 'JENKINS', t)
-            sp['brows'] = 'sincere'
+            jenkins_face(sp, t)
             j = moves.gait(sp, t - JENKINS_IN[0], 'walk') if u < 1 else C.pose_standing(sp)
             C.outfit(j, sp)
-            put(im, cam, sp, jx, jz, (0.0, -1.0) if t < SHOTS[-1][1] else JENKINS_FACE, j, t)
+            if jz > S3.ROOM_Z - 0.15:                        # still in the doorway: seen only through it (Sam, 20 Oct:
+                lay = Image.new('RGBA', im.size, (0, 0, 0, 0))   # he showed through the door itself)
+                put(lay, cam, sp, jx, jz, (0.0, -1.0), j, t)
+                S3.clip_to_doorway(lay, cam, S3.ROOM_Z - 0.01)
+                im.alpha_composite(lay)
+            else:
+                put(im, cam, sp, jx, jz, (0.0, -1.0), j, t)
         items.append((cam.depth((jx, 1.0, jz)), jen))
     for d, fn in sorted(items, key=lambda v: -v[0]):
         fn(img)
@@ -1104,7 +1213,7 @@ def corridor(img, cam, t):
     def jen(im):
         sp = dict(C.JENKINS)
         talking(sp, 'JENKINS', t)
-        sp['brows'] = 'sincere' if t < LEAP[0] else 'alarm'
+        jenkins_face(sp, t)
         j = C.pose_standing(sp)
         if t >= JAB[0]:                                      # shocked: rocked back, mouth open
             j['lean'] = -7 * ease((t - JAB[0]) / 0.3)
@@ -1114,10 +1223,38 @@ def corridor(img, cam, t):
             sp['tilt'] = filmkit.shifts(t, seed=72, amount=0.03)
         C.outfit(j, sp)
         put(im, cam, sp, jx, jz, (0.0, -1.0) if t < SHOTS[-1][1] else JENKINS_FACE, j, t)
+    if t >= JAB[0]:                                          # his finger lands on the front of Jenkins's chest, so
+        jen(img)                                             # he is drawn over Jenkins (Sam, 20 Oct: it went in
+        boss(img)                                            # behind him)
+        return
     items.append((cam.depth((sx, 1, sz)), boss))
     items.append((cam.depth((jx, 1, jz)), jen))
     for d, fn in sorted(items, key=lambda v: -v[0]):
         fn(img)
+
+
+# Jenkins's face, phrase by phrase (Sam, 20 Oct: "too uniform ... He is serious and official, grave when talking about
+# the attack"): (the subtitle he is on, or after: brows, heavy lids, head dipped, eyes down, forehead creases)
+JENKINS_LOOKS = {
+    'Err, excuse me, sir.': ('sincere', 0, 0, 0.0, 0),        # the polite interruption
+    'I need to speak': ('serious', 0, 0, 0.0, 0),             # official
+    "It's urgent.": ('serious', 1, 2, 0.0, 1),                 # firmer
+    "I'm sorry to interrupt, sir,": ('serious', 0, 0, 0.0, 0),
+    "but there's been": ('serious', 3, 6, 0.3, 2),             # grave: lids heavy, head down a touch, eyes lowered
+}
+
+
+def jenkins_face(sp, t):
+    global SUBS
+    if SUBS is None:
+        SUBS = _chunks()
+    look = JENKINS_LOOKS['Err, excuse me, sir.']
+    for t0, t1, c in SUBS:
+        if t0 <= t and c in JENKINS_LOOKS:
+            look = JENKINS_LOOKS[c]
+    if t >= JAB[0]:                                          # shocked by the jab, then cowed as he is told off
+        look = ('alarm', 0, -2, 0.0, 0) if t < 40.6 else ('sincere', 2, 4, 0.5, 0)
+    sp['brows'], sp['lid'], sp['head_dy'], sp['look_v'], sp['creases'] = look
 
 
 def close_super(img, cam, t):
