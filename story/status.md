@@ -408,6 +408,11 @@ Read this first in any new session, after CLAUDE.md.
   film in burnham/views); the sets built in 3D (`source/power_crime_set.py`: Trafalgar Square, the van, the
   interrogation room, the corridor); the film (`source/power_crime.py`, about 48 s + sign-off). `check` includes a
   test that the unlettered part of her placard is never seen. Next: the check sheet, Sam's yes, the quick animatic.
+- 20 Oct (evening, chat 3): Sam's animatic-2 notes 33-41 and clip notes 42-45 all done (see the notes file): crowd
+  pop-ins, ropers' sides, placard wrenched and flung, van officer, closer slower throw, door opens out to the lit
+  corridor, the jab's finger, Jenkins's faces, Sam's siren and whoosh. Checks pass (hidden part never seen). Clips sent.
+  NEXT (fresh chat, Sonnet): show Sam the check sheet (`python3 source/power_crime.py sheet OUT.jpg`) and wait for a
+  clear yes; then the new animatic (`python3 source/power_crime.py final OUT.mp4 --small`, about 20 min), send it.
 
 ## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
