@@ -34,26 +34,60 @@ CHUNKS = [(1, 0, "I don't really understand", 7), (1, 0, 'the joke, darling,', 4
 
 
 # ------------------------------------------------------------------------------------------------ titles
-def titles(out_dir, w=1280, h=720):
-    """The recording's frames, retimed to 24 fps; after the recording ends (3.2 s) the last frame keeps pushing in
-    slowly towards the logo, so it is still moving at the cut."""
+SETTLED = (111, 184)     # recording frames where the logo sits still and only the light streaks flow
+LOOP0, XF = 135, 24      # each replay restarts at frame 135; 24-frame (0.4 s) crossfade into it
+PUSH = 185               # from here the recording's own push-in starts (185-191): kept for the very end, at the cut
+
+
+def _aligned(frames):
+    """Each settled frame nudged (affine, found by matching the logo) so its logo sits exactly on frame PUSH-1's:
+    the crossfades then mix only the streaks, never two copies of the lettering."""
+    import cv2
+    ref = cv2.cvtColor(frames[PUSH - 1], cv2.COLOR_RGB2GRAY).astype(np.float32)
+    h, w = ref.shape
+    mask = np.zeros((h, w), np.uint8); cv2.circle(mask, (581, 291), 250, 255, -1)
+    out = {}
+    for k in range(SETTLED[0], PUSH):
+        g = cv2.cvtColor(frames[k], cv2.COLOR_RGB2GRAY).astype(np.float32)
+        M = np.eye(2, 3, dtype=np.float32)
+        try:
+            cv2.findTransformECC(ref, g, M, cv2.MOTION_AFFINE,
+                                 (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 80, 1e-5), mask, 5)
+        except cv2.error:
+            pass
+        out[k] = cv2.warpAffine(frames[k], M, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP,
+                                borderMode=cv2.BORDER_REFLECT)
+    return out
+
+
+def title_sequence():
+    """The recording at its own 59.94 fps, lengthened so the logo stays on screen until TITLES: after frame 184 the
+    settled stretch (logo still, streaks flowing) plays again twice, each replay joined by a 0.4 s crossfade of the
+    streaks, then the recording's own last 7 frames (the push-in) land exactly on the cut."""
     fr = sorted(glob.glob(os.path.join(HERE, 'data', 'strictly-crabs', 'titles', 'out', '*.png')))
+    B = [np.asarray(Image.open(f).convert('RGB')) for f in fr]
+    A = _aligned(B)
+    n_ext = round(TITLES * REC_FPS) - len(B)              # frames to add: about 99
+    reps = max(1, round(n_ext / (PUSH - LOOP0)))
+    passes = [[B[i] for i in range(PUSH)]] + [[A[i] for i in range(LOOP0, PUSH)] for _ in range(reps)]
+    for p in passes[:-1]:                                  # each pass's tail fades into the frames just before LOOP0
+        for m in range(XF):
+            w = 0.5 - 0.5 * np.cos(np.pi * (m + 1) / XF)
+            j = len(p) - XF + m
+            tail = (A[j] if j in A else p[j]).astype(np.float32)
+            p[j] = (tail * (1 - w) + A[LOOP0 - XF + m].astype(np.float32) * w).astype(np.uint8)
+    seq = [f for p in passes for f in p] + B[PUSH:]
+    return seq
+
+
+def titles(out_dir, w=1280, h=720):
+    """The opening at 24 fps, ending exactly at TITLES on the recording's last frame (then the jump cut)."""
+    seq = title_sequence()
     os.makedirs(out_dir, exist_ok=True)
-    end = (len(fr) - 1) / REC_FPS
-    last = Image.open(fr[-1]).convert('RGB')
-    cx, cy = 585, 300                                    # the ball's middle in the recording
-    for k in range(round(TITLES * FPS)):
-        t = k / FPS
-        if t <= end:
-            im = Image.open(fr[min(len(fr) - 1, round(t * REC_FPS))]).convert('RGB')
-        else:
-            f = (t - end) / (TITLES - end)
-            z = 1 + 0.12 * (f * 0.6 + 0.4 * f * f)       # carries on at about the recording's own pace, gently faster
-            W, H = last.size
-            bw, bh = W / z, H / z
-            x0 = min(max(cx - bw / 2, 0), W - bw); y0 = min(max(cy - bh / 2, 0), H - bh)
-            im = last.resize((W, H), Image.LANCZOS, box=(x0, y0, x0 + bw, y0 + bh))
-        im.resize((w, h), Image.LANCZOS).save(f'{out_dir}/{k:04d}.png')
+    n = round(TITLES * FPS)
+    for k in range(n):
+        i = len(seq) - 1 - round((n - 1 - k) * REC_FPS / FPS)    # anchored to the end: the last frame is the last frame
+        Image.fromarray(seq[max(0, i)]).resize((w, h), Image.LANCZOS).save(f'{out_dir}/{k:04d}.png')
 
 
 # ------------------------------------------------------------------------------------------------ sound

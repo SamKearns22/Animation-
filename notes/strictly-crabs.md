@@ -115,8 +115,11 @@ version and CranbriJoos sign-off per CLAUDE.md (not yet decided with Sam: widesc
 Model: notes on movement are Opus medium; building from a plan Opus medium; renders and sending Sonnet.
 
 ## Sam's animatic notes (21 Oct, chat 3) - checklist
-- [x] Logo keeps moving until 4.85 s, then a jump cut into the crabs (recording ends at 3.2 s: last frame keeps
-      pushing in slowly to 4.85; song shifted so the dance still lands on its beats: `strictly_judges.TITLES`)
+- [x] Logo keeps moving until 4.85 s, then a jump cut into the crabs. Sam (21 Oct): the extra 1.65 s must be the
+      logo's own movement carrying on, light and line effects, smooth, no weirdness (the cut lands on the music).
+      Done in `strictly_crabs_film.title_sequence`: the settled stretch (frames 135-184, logo still, streaks
+      flowing) replays twice, logo aligned exactly, 0.4 s crossfades of the streaks; the recording's own push-in
+      (185-191) lands on the cut. Song shifted so the dance keeps its beats (`strictly_judges.TITLES`).
 - [x] Back of stage from Sam's four photos (refs in chat, IMG_5706-09): 3D set in `strictly_crabs/stage.js` replaces
       the blurred photo (arches of sunburst LEDs edged in lilac neon, logo, band balcony, curved staircases, lit
       steps, side neon arcs, beams, star lights). Camera aim raised 0.5-0.6 m in every shot so the set shows.
