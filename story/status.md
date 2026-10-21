@@ -462,4 +462,4 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   `source/satire_template.py`.
 
 ## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
-Titles done; 3D dance scene built (`source/strictly_crabs/`), audited, cast sheet sent. Next: animatic (ask for check sheet yes first), then notes. Full handover at the end of `notes/strictly-crabs.md`.
+Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.

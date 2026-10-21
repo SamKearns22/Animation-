@@ -93,3 +93,23 @@ My additions to flag again: lift staged as hop onto level claws (no shoulders), 
 - People kit: smooth arms and arm checker now always on in `source/burnham.py` (Sam, 21 Oct).
 - Still to add before the final: the template's clothes, line-work, size and clipping checks for the judges.
 - Sam said "Proceed straight to animatic" (21 Oct), waiving the check-sheet-first step this once.
+
+## HANDOVER (21 Oct, end of chat 2): animatic sent, waiting for Sam's notes
+Done: titles (rebuilt), 3D crab dance, judges (Craig, Motsi, Shirley, Anton; `source/strictly_judges.py`), crabs' spin-past
+rendered see-through and composited on the desk, music (looped back 12 bars, 21 dB down under the judges, fades out),
+whole-film animatic (49.2 s, 640x360, 3.6 MB) and check sheet sent to Sam in chat. Sam said "Proceed straight to animatic",
+so the check sheet was sent with it, not before.
+Waiting on Sam: his notes on the animatic. Questions put to him: remove the small BBC logo from the titles? crabs big
+enough in the judges' shot? Anton's spring quick enough? Craig's gestures on the right words?
+Rebuild each new session (nothing below is on GitHub):
+  cd source/strictly_crabs && npm install --no-save three@0.170.0 playwright-core && python3 prep.py
+  cd source && python3 strictly_crabs_titles.py extract && python3 strictly_crabs_titles.py track && mkdir -p data/strictly-crabs/titles/out && python3 strictly_crabs_titles.py render data/strictly-crabs/titles/out
+  dance small: node render.mjs video ../data/strictly-crabs/dance-small.mp4 640 360 24 0 24.9 (about 13 min)
+  crab pass: node render.mjs pass ../data/strictly-crabs/pass 1280 720 12 26.77 36.0 (45 s)
+  judges clip: python3 source/strictly_judges.py final OUT.mp4 [--small]; film sound: see music_bed/voices in that file
+  join: titles frames (59.94 fps, hold last to 9 s, fade 8.3-9.0) + dance + judges, fps 24, then film.wav
+Still to do before any final render: add the template's clothes, line-work, size, clipping and pop-in checks to the
+judges file (housestyle lists them as missing); small leftovers in the dance (front leg brushes claw 2-3 cm, 4 frames of
+crab-crab claws up to 4 cm, 9 frames of an overstretched foot); final needs Sam's clear yes; then the vertical TikTok
+version and CranbriJoos sign-off per CLAUDE.md (not yet decided with Sam: widescreen now, vertical later).
+Model: notes on movement are Opus medium; building from a plan Opus medium; renders and sending Sonnet.
