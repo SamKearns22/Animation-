@@ -1442,5 +1442,19 @@ def main():
         sheet.save(dst, quality=88)
 
 
+def _house_limbs():
+    """The house style is always on (Sam, 21 Oct: 'no future boxy arms in our videos'): the smooth arms and legs
+    (limbs.py) and the arm checker (figure.guard) switch on for every film that draws people, whatever file it was
+    started from (Strictly Crabs' judges began from Poker Mon's file and came out boxy). Both are safe to call again,
+    so films that switch them on themselves are unchanged."""
+    import figure
+    import limbs
+    me = sys.modules[__name__]
+    figure.guard(me)
+    limbs.install(me)
+
+
+_house_limbs()
+
 if __name__ == '__main__':
     main()

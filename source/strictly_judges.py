@@ -91,7 +91,7 @@ def body_dress(p, view, sp):
             return 30 + y * 0.25 < abs(x) < sw * (0.98 - 0.12 * y / 500) and 50 < y < 490
         flower_grid(p, -sw, 50, sw, 510, inside, 10, sp.get('seed', 0))
     if sp.get('pocket'):
-        x0, x1, y = sw * 0.56, sw * 0.86, 190             # his left breast pocket (screen right, ref 01): on the
+        x0, x1, y = sw * 0.5, sw * 0.8, 120             # his left breast pocket (screen right, ref 01): on the
         p.poly(rough([(x0, y), (x0 + 12, y - 16), (x0 + 22, y - 6), (x0 + 34, y - 22), (x0 + 46, y - 4),
                       (x1, y)], 1.0, 3), (248, 248, 246), INK, 1.8)       # chest, outside the lapel, above a welt
         p.line([(x0 - 4, y), (x1 + 4, y + 2)], INK, 2.2)
