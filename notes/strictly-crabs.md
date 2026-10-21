@@ -53,6 +53,16 @@ Decisions made:
 Sam sent 12 judge photos (`refs/strictly-crabs/judges/`) and two recordings (`refs/strictly-crabs/`), checked with
 voices.py. Questions sent to Sam in one message, with recommended answers; build starts once he answers.
 Plan: one animatic of the whole film (titles, dance, judges) once the judges are built, instead of a dance-only one.
+Sam's answers (21 Oct): 1 Satire house style for the judges, crabs stay real-looking; 2 the music carries on at a
+lower volume under the judges (the track is only 33.9 s, so a loop of its closing bars, beat-matched, checked with
+musiccheck); 3 all four follow the crabs with their eyes, then Anton does his bit once they have passed; 4 outfits:
+Craig red flower jacket, Motsi yellow ruffle, Shirley black with silver swirls, Anton black tux; 5 Anton says
+"Two hundred and ninety!"; 6 no caricature: Craig flamboyant, extravagant movements; Anton shoots up with the paddle
+like an extremely formal yet excited puppy, a big smile. Then: "Give Motsi hair!" (done: sleek updo, side sweep,
+big bun; refs incl. `judges/motsi-hair-refs.png`).
+Built: `source/strictly_judges.py` (1280 x 720; `cast OUT.jpg`). Cast sheet 1 sent 21 Oct; waiting on Sam's notes.
+Next after approval: J1 and J2 movement, crabs rendered alone (transparent) from scene.js spinning past the table,
+sound, then the whole-film animatic (check sheet and a yes first).
 
 ## Where things stand (handover, 21 Oct, end of chat 1)
 Done: titles (0-9 s, Come -> Crabs, 5.7 MB, in Sam's chat; the file in `animations/` is git-ignored so it may be gone
