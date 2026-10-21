@@ -1,14 +1,24 @@
 """Strictly Crabs Dancing: swap 'Come' for 'Crabs' in the screen-recorded ident."""
-import sys, glob, json, numpy as np
+import os, sys, glob, json, subprocess, numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from scipy import ndimage
 from scipy.signal import fftconvolve
 
-S = '/tmp/claude-0/-home-user-Animation-/d61d24c7-a847-53d6-b8ca-1d1d857c7863/scratchpad'
+HERE = os.path.dirname(os.path.abspath(__file__))
+S = os.path.join(HERE, 'data', 'strictly-crabs', 'titles')          # working files (git-ignored, rebuilt any time)
+IDENT = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'ident-recording.mov')
+FF = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
+CROP = '1170:657:0:967'                                           # the picture inside the phone's screen recording
 FR = sorted(glob.glob(S + '/fr/*.png'))
 REF = 150
 BOX = (446, 234, 716, 348)          # 'Come' in the reference frame (picture coords)
 FONT = '/usr/share/fonts/truetype/freefont/FreeSerifBoldItalic.ttf'
+
+
+def extract():
+    """python3 strictly_crabs_titles.py extract: the recording's frames, cropped to the picture (no phone chrome)."""
+    os.makedirs(S + '/fr', exist_ok=True)
+    subprocess.run([FF, '-v', 'error', '-y', '-i', IDENT, '-an', '-vf', 'crop=' + CROP, S + '/fr/%04d.png'], check=True)
 
 
 def gray(im):
@@ -138,4 +148,4 @@ def render(out_dir):
 
 
 if __name__ == '__main__':
-    {'track': track, 'render': lambda: render(sys.argv[2])}[sys.argv[1]]()
+    {'extract': extract, 'track': track, 'render': lambda: render(sys.argv[2])}[sys.argv[1]]()

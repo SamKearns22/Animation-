@@ -80,3 +80,16 @@ Join: titles video + dance video, then add `refs/strictly-crabs/music.mp3` 0-33.
 Known leftovers from the audit: front leg brushes claw arm by 2-3 cm (about 50 frames), 3-4 frames of 3 cm shell-on-claw
 as she slides off his claws, 12 frames with a foot slightly off the floor.
 My additions to flag again: lift staged as hop onto level claws (no shoulders), no costumes, camera cuts.
+
+## Chat 2 progress (21 Oct): judges built, animatic being assembled
+- Titles rebuilt (tool paths fixed: `source/strictly_crabs_titles.py extract|track|render`, working files in the
+  git-ignored `source/data/strictly-crabs/titles/`). The recording is only 3.2 s, so the titles play it at real speed
+  then hold the last frame to 9 s with the fade at 8.3-9.0 (my choice, flag to Sam). The small BBC logo from the
+  recording is still top left in the titles (brief said none in the dance; ask Sam).
+- Judges: `source/strictly_judges.py` (`cast`, `stills`, `final OUT [--small]`), crabs' spin-past rendered see-through by
+  `node render.mjs pass OUT_DIR 1280 720 12 26.77 36.0`, composited on the desk. Judges run 15.3 s: Craig 6.2 s,
+  all four 9.1 s. Film total 49.2 s plus the 2 s sign-off later.
+- Music: loops back 12 bars at beat 55 (film 33.9 s onward), 21 dB down under the judges, faded out over the last 0.8 s.
+- People kit: smooth arms and arm checker now always on in `source/burnham.py` (Sam, 21 Oct).
+- Still to add before the final: the template's clothes, line-work, size and clipping checks for the judges.
+- Sam said "Proceed straight to animatic" (21 Oct), waiving the check-sheet-first step this once.
