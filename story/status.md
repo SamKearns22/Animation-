@@ -460,3 +460,6 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   times), not fixed: Sam to decide. No speech recognition is possible here (package sites blocked).
   NEXT (fresh chat, Opus high): item 3, the film plan template (rule 1) and the reference benchmark sheet (rule 3) in
   `source/satire_template.py`.
+
+## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
+Titles done; 3D dance scene built (`source/strictly_crabs/`), audited, cast sheet sent. Next: animatic (ask for check sheet yes first), then notes. Full handover at the end of `notes/strictly-crabs.md`.

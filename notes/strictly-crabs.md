@@ -38,3 +38,20 @@ Decisions made:
   C 16-24 her lunge, D 24-32 spins and she crosses in front, E 32-48 she hops onto his level claws, spin lift,
   down, F 48-56 rear-up final pose.
 - Sam said "Go" (21 Oct) to building the crabs in this chat despite the effort-setting rule.
+
+## Where things stand (handover, 21 Oct, end of chat 1)
+Done: titles (0-9 s, Come -> Crabs, 5.7 MB, in Sam's chat; the file in `animations/` is git-ignored so it may be gone
+in a new session: rebuild it from `refs/strictly-crabs/ident-recording.mov` with `source/strictly_crabs_titles.py`,
+whose paths point at an old scratchpad and need fixing, or ask Sam to resend it). Dance scene built and audited;
+cast sheet sent. Sam has NOT yet answered Y/N on the animatic, only asked for the new chat to start with it.
+Next: (1) animatic of the dance, then join after the titles with the music (see below); (2) send with check
+sheet and self-review; (3) Sam's notes; (4) final render only after a clear yes; (5) TikTok version and sign-off
+per CLAUDE.md (not yet decided with Sam: widescreen 1280x720 now, vertical later).
+Setup each session: `cd source/strictly_crabs && npm install --no-save three@0.170.0 playwright-core && python3 prep.py`
+Render: `node render.mjs video OUT.mp4 640 360 24 0 24.9` (dance seconds; 0 = 9.0 s into the music; ~6-8 min).
+Clipping audit: `node render.mjs check OUT.json 30` (about 4 s), summarise with an.py-style script (inter, floor, self, reach).
+Join: titles video + dance video, then add `refs/strictly-crabs/music.mp3` 0-33.9 s with fade out over the last 0.7 s
+(the music is 33.93 s; titles 9 s + dance 24.9 s = 33.9 s).
+Known leftovers from the audit: front leg brushes claw arm by 2-3 cm (about 50 frames), 3-4 frames of 3 cm shell-on-claw
+as she slides off his claws, 12 frames with a foot slightly off the floor.
+My additions to flag again: lift staged as hop onto level claws (no shoulders), no costumes, camera cuts.
