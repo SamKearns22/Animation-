@@ -324,7 +324,8 @@ import json                      # noqa: E402
 
 J1_DUR, J2_DUR = 6.2, 9.1
 DUR = J1_DUR + J2_DUR
-FILM_AT = 33.9                    # where the judges start in the whole film (titles 9 s + dance 24.9 s)
+TITLES = 4.85                     # the logo moves until 4.85 s, then a jump cut into the crabs (Sam, 21 Oct; was 9 s)
+FILM_AT = TITLES + 24.9           # where the judges start in the whole film (titles + dance 24.9 s)
 SHOTS = [('J1', 0.0, J1_DUR), ('J2', J1_DUR, DUR)]
 LINES = [   # start: where the recording's first sample sits (Craig's begins with 0.9 s of silence, cut in silence)
     dict(n=1, who='CRAIG', text="I don't really understand the joke, darling, but I'm having an amazing time.",
@@ -527,9 +528,10 @@ def overlay(img, t):
 # ------------------------------------------------------------------------------------------------ sound
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
 BEAT = 60 / 136
-SPLICE_AT = 9.302 + 55 * BEAT     # film time of beat 55 of the dance: the song jumps back 12 bars (48 beats) here
-SPLICE_TO = 9.302 + 7 * BEAT      # to beat 7, so it carries on under the judges without running out
-SPLICE = (('music', 0.0, SPLICE_AT), ('music', SPLICE_TO, SPLICE_TO + FILM_AT + DUR - SPLICE_AT))
+SONG_SHIFT = 9.0 - TITLES        # song time = film time + this: the dance still starts on song time 9.0 (its beats)
+SPLICE_AT = TITLES + 0.302 + 55 * BEAT   # film time of beat 55 of the dance: the song jumps back 12 bars (48 beats)
+SPLICE_TO = 9.302 + 7 * BEAT      # song time of beat 7, so it carries on under the judges without running out
+SPLICE = (('music', SONG_SHIFT, SPLICE_AT + SONG_SHIFT), ('music', SPLICE_TO, SPLICE_TO + FILM_AT + DUR - SPLICE_AT))
 UNDER = 0.085                     # the music under the judges (about 21 dB down; Sam, 21 Oct: lower, not gone)
 
 
@@ -540,10 +542,10 @@ def music_bed(f0, dur):
     sr = MA.SR
     n = int(dur * sr)
     f = f0 + np.arange(n) / sr
-    m = np.where(f < SPLICE_AT, f, SPLICE_TO + (f - SPLICE_AT))
+    m = np.where(f < SPLICE_AT, f + SONG_SHIFT, SPLICE_TO + (f - SPLICE_AT))
     idx = np.clip((m * sr).astype(int), 0, len(song) - 1)
     out = song[idx] * (m * sr < len(song))
-    g = np.ones(n)
+    g = np.clip(f / 0.15, 0, 1)                         # the song now starts part-way in: a quick fade-in, no click
     g = np.where(f >= FILM_AT, 1 - (1 - UNDER) * np.clip((f - FILM_AT) / 0.25, 0, 1), g)
     end = FILM_AT + DUR
     g *= np.clip((end - f) / 0.8, 0, 1)

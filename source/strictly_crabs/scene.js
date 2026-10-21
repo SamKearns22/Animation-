@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { Reflector } from 'three/addons/objects/Reflector.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { buildStage } from './stage.js';
 
 const Q = new URLSearchParams(location.search);
 const W = +(Q.get('w') || 1280), H = +(Q.get('h') || 720);
@@ -27,17 +28,15 @@ scene.background = ALPHA ? null : new THREE.Color(0x05020a);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.25;
-scene.fog = new THREE.Fog(0x140a22, 9, 22);
+scene.fog = new THREE.Fog(0x140a22, 12, 40);
 
 const camera = new THREE.PerspectiveCamera(35, W / H, 0.05, 100);
 const loader = new THREE.TextureLoader();
 const tex = async (f) => { const t = await loader.loadAsync('tex/' + f); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
 
-// the ballroom, far behind and out of focus
-const plateTex = await tex('plate.jpg');
-const plate = new THREE.Mesh(new THREE.PlaneGeometry(40, 15), new THREE.MeshBasicMaterial({ map: plateTex, toneMapped: false, fog: false }));
-plate.position.set(0, 6.0, -15);
-scene.add(plate);
+// the back of stage: a 3D build of the real set from Sam's reference photos (stage.js; was a blurred photo, 21 Oct)
+const stage = await buildStage(scene, loader);
+stage.group.scale.setScalar(0.6); stage.group.position.set(0, 0, -4.6);
 
 // polished dance floor: a mirror under a dark glossy film, plus a layer that only catches shadows
 const mirror = new Reflector(new THREE.PlaneGeometry(50, 50), { textureWidth: W, textureHeight: H, color: 0x8a8a96 });
@@ -49,7 +48,7 @@ scene.add(film);
 const shadowCatch = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.ShadowMaterial({ opacity: 0.55 }));
 shadowCatch.rotation.x = -Math.PI / 2; shadowCatch.position.set(0, 0.002, -5); shadowCatch.receiveShadow = true;
 scene.add(shadowCatch);
-if (ALPHA) { plate.visible = false; mirror.visible = false; film.visible = false; scene.fog = null; }
+if (ALPHA) { stage.group.visible = false; mirror.visible = false; film.visible = false; scene.fog = null; }
 
 scene.add(new THREE.HemisphereLight(0x9a7cff, 0x1a0a20, 0.55));
 const key = new THREE.DirectionalLight(0xfff1dc, 2.6);
@@ -437,11 +436,11 @@ function check() {
 // ---------------------------------------------------------------- cameras (cut on the bar lines)
 const tb = b => B0 + b * BEAT;
 const SHOTS = [
-  { to: tb(16), a: [[0, 3.1, 6.2], [0, 0.3, 0]], b: [[0, 2.8, 5.5], [0, 0.3, 0]] },
-  { to: tb(24), a: [[-1.4, 2.6, 4.9], [-1.0, 0.35, 0]], b: [[-1.1, 2.4, 4.4], [-0.9, 0.35, 0]] },
-  { to: tb(32.5), a: [[0, 5.2, 9.2], [0, 0.3, 0.4]], b: [[0.8, 4.8, 8.6], [0, 0.3, 0.4]] },
-  { to: tb(48), a: [[1.4, 2.4, 5.8], [0, 0.8, 0.3]], b: [[-0.6, 2.5, 5.6], [0, 0.8, 0.3]] },
-  { to: 1e9, a: [[0, 3.0, 6.8], [0, 0.55, 0.5]], b: [[0, 2.7, 5.9], [0, 0.6, 0.5]] },
+  { to: tb(16), a: [[0, 3.1, 6.2], [0, 0.90, 0]], b: [[0, 2.8, 5.5], [0, 0.90, 0]] },
+  { to: tb(24), a: [[-1.4, 2.6, 4.9], [-1.0, 0.95, 0]], b: [[-1.1, 2.4, 4.4], [-0.9, 0.95, 0]] },
+  { to: tb(32.5), a: [[0, 5.2, 9.2], [0, 0.90, 0.4]], b: [[0.8, 4.8, 8.6], [0, 0.90, 0.4]] },
+  { to: tb(48), a: [[1.4, 2.4, 5.8], [0, 1.40, 0.3]], b: [[-0.6, 2.5, 5.6], [0, 1.40, 0.3]] },
+  { to: 1e9, a: [[0, 3.0, 6.8], [0, 1.15, 0.5]], b: [[0, 2.7, 5.9], [0, 1.20, 0.5]] },
 ];
 function cameraAt(t) {
   let t0 = -0.5;
@@ -458,6 +457,7 @@ function cameraAt(t) {
 window.renderAt = (t, cam, draw = true) => {
   simulate(t);
   if (!draw) return check();
+  stage.update(t);
   if (cam) { camera.position.set(...cam[0]); camera.lookAt(V3(...cam[1])); } else cameraAt(t);
   renderer.render(scene, camera);
   return check();

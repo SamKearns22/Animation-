@@ -113,3 +113,23 @@ judges file (housestyle lists them as missing); small leftovers in the dance (fr
 crab-crab claws up to 4 cm, 9 frames of an overstretched foot); final needs Sam's clear yes; then the vertical TikTok
 version and CranbriJoos sign-off per CLAUDE.md (not yet decided with Sam: widescreen now, vertical later).
 Model: notes on movement are Opus medium; building from a plan Opus medium; renders and sending Sonnet.
+
+## Sam's animatic notes (21 Oct, chat 3) - checklist
+- [x] Logo keeps moving until 4.85 s, then a jump cut into the crabs (recording ends at 3.2 s: last frame keeps
+      pushing in slowly to 4.85; song shifted so the dance still lands on its beats: `strictly_judges.TITLES`)
+- [x] Back of stage from Sam's four photos (refs in chat, IMG_5706-09): 3D set in `strictly_crabs/stage.js` replaces
+      the blurred photo (arches of sunburst LEDs edged in lilac neon, logo, band balcony, curved staircases, lit
+      steps, side neon arcs, beams, star lights). Camera aim raised 0.5-0.6 m in every shot so the set shows.
+- [x] Tearing 18-22 s: was the flat photo's bottom edge meeting the mirror floor (hard line + scanline reflection);
+      gone with the photo. Clip sent.
+- [x] Subtitles (Craig in four chunks, Anton's punchline alone), Hook Text "BBC keeps things fresh 🦀", sign-off:
+      vertical version via `strictly_crabs_film.py` then `finish.py` (--y 500 --until 4.85)
+- [ ] Animatic: check sheet sent, waiting for Sam's clear yes
+
+## HANDOVER (21 Oct, chat 3)
+Rebuild: npm registry blocked this session; three.js r170 came from GitHub (git clone --depth 1 --branch r170
+--filter=blob:none --sparse https://github.com/mrdoob/three.js, sparse build + examples/jsm) copied to
+strictly_crabs/node_modules/three; playwright-core symlinked from /opt/node-tools/node_modules. Then prep.py,
+titles extract/track/render, `python3 strictly_crabs_titles.py logo` (tex/logo.png for the stage).
+Animatic: dance small (now ~55 s per film second, ~23 min), judges --small, `strictly_crabs_film.py titles DIR 640
+360`, `join`, `vertical`, then finish.py. Questions still open from chat 2: BBC logo in titles, crab size, Anton, Craig.

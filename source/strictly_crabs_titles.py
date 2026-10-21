@@ -147,5 +147,15 @@ def render(out_dir):
         im.convert('RGB').save(f'{out_dir}/{i:04d}.png')
 
 
+def logo():
+    """python3 strictly_crabs_titles.py logo: the finished 'Strictly Crabs Dancing' ball, cut from the last title
+    frame with a soft oval edge, for the logo on the 3D stage (strictly_crabs/tex/logo.png)."""
+    im = Image.open(S + '/out/0191.png').convert('RGB').crop((245, 30, 925, 570))     # ball + lettering
+    w, h = im.size
+    m = Image.new('L', (w, h)); ImageDraw.Draw(m).ellipse((10, 10, w - 10, h - 10), fill=255)
+    im.putalpha(m.filter(ImageFilter.GaussianBlur(12)))
+    im.save(os.path.join(HERE, 'strictly_crabs', 'tex', 'logo.png'))
+
+
 if __name__ == '__main__':
-    {'extract': extract, 'track': track, 'render': lambda: render(sys.argv[2])}[sys.argv[1]]()
+    {'extract': extract, 'track': track, 'render': lambda: render(sys.argv[2]), 'logo': logo}[sys.argv[1]]()
