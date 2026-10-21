@@ -77,6 +77,14 @@ def title_sequence():
             tail = (A[j] if j in A else p[j]).astype(np.float32)
             p[j] = (tail * (1 - w) + A[LOOP0 - XF + m].astype(np.float32) * w).astype(np.uint8)
     seq = [f for p in passes for f in p] + B[PUSH:]
+    # Sam, 21 Oct: the push-in needs one more frame of the expanding logo. The ball was growing about 3.5% a frame
+    # (tracked scale 1.02 -> 1.23 over frames 185-191), so three more recording frames (one 24 fps frame) are the last
+    # frame zoomed on the ball's centre by the same steady steps. The cut stays at TITLES (the film is anchored to its end).
+    import cv2
+    for z in (1.035, 1.071, 1.109):
+        M = cv2.getRotationMatrix2D((580.0, 279.0), 0, z)
+        seq.append(cv2.warpAffine(B[-1], M, (B[-1].shape[1], B[-1].shape[0]), flags=cv2.INTER_CUBIC,
+                                  borderMode=cv2.BORDER_REFLECT))
     return seq
 
 
