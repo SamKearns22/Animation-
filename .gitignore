@@ -13,3 +13,7 @@ source/data/shocking/
 animations/shocking-behaviour-vertical.mp4
 source/data/poker-mon/
 source/data/*-clean.mp4
+
+# Strictly Crabs: installed and generated each session
+source/strictly_crabs/node_modules/
+source/strictly_crabs/tex/
