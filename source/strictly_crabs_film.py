@@ -214,9 +214,9 @@ def join(dance, judges, titles_dir, out):
     probe = subprocess.run([FF, '-i', dance], capture_output=True, text=True).stderr
     w, h = probe.split('Video:')[1].split(',')[2].split()[0].split('x')
     fc = (f'[0:v]scale={w}:{h},fps={FPS},setsar=1[a];[1:v]fps={FPS},trim=0:24.9,setpts=PTS-STARTPTS,setsar=1[b];'
-          f'[2:v]scale={w}:{h},fps={FPS},trim=0:{J.DUR},setpts=PTS-STARTPTS,setsar=1[c];[a][b][c]concat=n=3:v=1[v]')
+          f'[2:v]scale={w}:{h},fps={FPS},trim=0:{J.DUR},setpts=PTS-STARTPTS,setsar=1[c];[a][b][c]concat=n=3:v=1,fps={FPS}[v]')
     subprocess.run([FF, '-v', 'error', '-y', '-framerate', str(FPS), '-i', f'{titles_dir}/%04d.png', '-i', dance, '-i', judges,
-                    '-i', wav, '-filter_complex', fc, '-map', '[v]', '-map', '3:a', '-c:v', 'libx264', '-crf', '20',
+                    '-i', wav, '-filter_complex', fc, '-map', '[v]', '-map', '3:a', '-r', str(FPS), '-c:v', 'libx264', '-crf', '20',
                     '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-shortest', out], check=True)
     os.remove(wav)
 

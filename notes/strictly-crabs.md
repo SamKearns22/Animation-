@@ -127,7 +127,10 @@ Model: notes on movement are Opus medium; building from a plan Opus medium; rend
       gone with the photo. Clip sent.
 - [x] Subtitles (Craig in four chunks, Anton's punchline alone), Hook Text "BBC keeps things fresh 🦀", sign-off:
       vertical version via `strictly_crabs_film.py` then `finish.py` (--y 500 --until 4.85)
-- [ ] Animatic: check sheet sent, waiting for Sam's clear yes
+- [x] Animatic rendered 21 Oct after Sam's yes (47 s, 8.9 MB, vertical, 1080x1920). Dance 23 min, judges 1 min, join +
+      vertical + finish 5 min. Lesson: the ffmpeg join defaulted to 25 fps (cut at 5.04 s, 4% stretch); now fps=24
+      forced in `strictly_crabs_film.join`. One extra frame of push-in added at Sam's note (cut stays at 4.85 s).
+- [ ] Waiting on Sam's notes on the animatic
 
 ## HANDOVER (21 Oct, chat 3)
 Rebuild: npm registry blocked this session; three.js r170 came from GitHub (git clone --depth 1 --branch r170
