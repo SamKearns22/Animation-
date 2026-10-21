@@ -19,6 +19,9 @@ checks; render.mjs drives headless Chromium: `node render.mjs stills|video|check
 | 7 | Clothing optional, only if logical and seamless | not added (could not see a seamless way that stays realistic) |
 | 8 | Most important: crabs are dancing and are not clipping | clipping audit in scene.js (check mode) |
 | 9 | The stage | blurred ballroom from the routine's wide shot behind a polished floor |
+| 10 | Shot J1 (21 Oct): Craig Revel Horwood alone, flamboyant, droll, exaggerated: "I don't really understand the joke, darling, but I'm having an amazing time." (`craig-amazing-time.m4a`, 6.8 s, speech 1.36-6.33) | planned, waiting on Sam's answers |
+| 11 | Shot J2: all four judges at the table, eyes on the crabs as they spin past; eyes follow them | planned |
+| 12 | Shot J2: Anton, excited, over-enthusiastic, thrusts a scoring paddle reading 290 in the air: "290!" (`anton-290.m4a`, 4.2 s, speech 0.98-3.04; measured ~13 syllables, "two hundred and ninety" is 7: ask Sam) | planned |
 
 ## References
 | reference | what it shows | ours matches? |
@@ -27,6 +30,13 @@ checks; render.mjs drives headless Chromium: `node render.mjs stills|video|check
 | 2 velvet crab on weed | same species from above | - |
 | 3 shore crab reared up | the threat pose: claws raised, orange underside | used for the final pose and his underside colour |
 | 4 shore crab, black | olive-grey shell, olive-yellow legs, chunky claws | shell texture from photo |
+| judges-ref-01, 02 | Craig: slicked-back dark hair, high forehead, arched brows, red jacket with black flower pattern (01) or burgundy velvet (02), black bow tie, white shirt with black studs, pen in hand | - |
+| judges-ref-03 | all four promo, left to right Shirley, Anton, Craig, Motsi | - |
+| judges-ref-04, 06 | Anton: short grey-brown hair, big toothy grin; gold paisley jacket (04) or black tux (06), black bow tie | - |
+| judges-ref-05, 07, 12 | the table: glittery pink/purple/silver bands, round glitter-ball emblem in the middle; seating left to right Craig, Motsi, Shirley, Anton; blue light-beam backdrop | - |
+| judges-ref-08, 09 | Shirley: dark wavy bob, big earrings and rings, black with silver swirls (08) or white ruffles (09), expressive hands | - |
+| judges-ref-10, 11 | Motsi: hair up in a bun, big gold or drop earrings, yellow ruffled one-shoulder dress (10) or sequinned black (11) | - |
+| judges-ref-12 | paddles: white round paddles with big black numbers, held up beside the face | - |
 
 ## Notes
 | # | shot | time | note | status |
@@ -38,6 +48,11 @@ Decisions made:
   C 16-24 her lunge, D 24-32 spins and she crosses in front, E 32-48 she hops onto his level claws, spin lift,
   down, F 48-56 rear-up final pose.
 - Sam said "Go" (21 Oct) to building the crabs in this chat despite the effort-setting rule.
+
+## Judges shots (added 21 Oct, chat 2, planning)
+Sam sent 12 judge photos (`refs/strictly-crabs/judges/`) and two recordings (`refs/strictly-crabs/`), checked with
+voices.py. Questions sent to Sam in one message, with recommended answers; build starts once he answers.
+Plan: one animatic of the whole film (titles, dance, judges) once the judges are built, instead of a dance-only one.
 
 ## Where things stand (handover, 21 Oct, end of chat 1)
 Done: titles (0-9 s, Come -> Crabs, 5.7 MB, in Sam's chat; the file in `animations/` is git-ignored so it may be gone
