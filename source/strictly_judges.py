@@ -29,7 +29,12 @@ import poker_mon_cast as PC      # noqa: E402  (bow_tie; installs circle hands a
 from ed import INK, curve, open_curve, oval   # noqa: E402
 from satire_style import rough   # noqa: E402
 
+import figure as F               # noqa: E402
+import limbs                     # noqa: E402
+
 B.W, B.H = 1280, 720             # the film is widescreen (the crab dance is 16:9)
+F.guard(B)                       # the house style, as in the template: every arm measured against the rig,
+limbs.install(B)                 # and the smooth arms and legs (Sam, 21 Oct: the boxy arms came back here)
 FPS = 12
 
 # ------------------------------------------------------------------------------------------------ the people
@@ -86,8 +91,10 @@ def body_dress(p, view, sp):
             return 30 + y * 0.25 < abs(x) < sw * (0.98 - 0.12 * y / 500) and 50 < y < 490
         flower_grid(p, -sw, 50, sw, 510, inside, 10, sp.get('seed', 0))
     if sp.get('pocket'):
-        p.poly(rough([(sw * 0.42, 236), (sw * 0.5, 214), (sw * 0.58, 226), (sw * 0.66, 210), (sw * 0.74, 236)], 1.5, 3),
-               (248, 248, 246), INK, 1.8)            # his left breast pocket (screen right, ref 01)
+        x0, x1, y = sw * 0.56, sw * 0.86, 190             # his left breast pocket (screen right, ref 01): on the
+        p.poly(rough([(x0, y), (x0 + 12, y - 16), (x0 + 22, y - 6), (x0 + 34, y - 22), (x0 + 46, y - 4),
+                      (x1, y)], 1.0, 3), (248, 248, 246), INK, 1.8)       # chest, outside the lapel, above a welt
+        p.line([(x0 - 4, y), (x1 + 4, y + 2)], INK, 2.2)
     if sp.get('studs'):
         for k in range(3):
             p.ell(0, 70 + 44 * k, 4, 4, (20, 20, 24), None, 0)
@@ -246,7 +253,7 @@ def table(img, cam):
     the round glitter-ball emblem in the middle."""
     p = B.Pen(img, cam)
     top = NECK_WIDE + TABLE_Y * S_WIDE
-    x0, x1 = -40, 1320
+    x0, x1 = -600, 1880
     p.poly(rough([(x0, top - 14), (x1, top - 14), (x1, top + 10), (x0, top + 10)], 2, 1), SILVER, INK, 3)   # desk top
     bands = [(PURPLE, 34), (SILVER, 10), (PINK, 40), (SILVER, 10), (PURPLE, 44), (PINK, 60), (PURPLE, 400)]
     y = top + 10
