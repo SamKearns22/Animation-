@@ -13,7 +13,8 @@ const V3 = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const UP = V3(0, 1, 0);
 
 // ---------------------------------------------------------------- renderer, set, lights
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+const ALPHA = Q.get('alpha') === '1';   // the judges' shot: crabs alone on a see-through background (shadows kept)
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: ALPHA });
 renderer.setSize(W, H);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.15;
@@ -22,7 +23,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x05020a);
+scene.background = ALPHA ? null : new THREE.Color(0x05020a);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.25;
@@ -48,6 +49,7 @@ scene.add(film);
 const shadowCatch = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.ShadowMaterial({ opacity: 0.55 }));
 shadowCatch.rotation.x = -Math.PI / 2; shadowCatch.position.set(0, 0.002, -5); shadowCatch.receiveShadow = true;
 scene.add(shadowCatch);
+if (ALPHA) { plate.visible = false; mirror.visible = false; film.visible = false; scene.fog = null; }
 
 scene.add(new THREE.HemisphereLight(0x9a7cff, 0x1a0a20, 0.55));
 const key = new THREE.DirectionalLight(0xfff1dc, 2.6);
@@ -155,7 +157,9 @@ class Crab {
   }
   // choreography: each channel eases between the beats where it is keyed
   channels(t) {
-    const b = (t - B0) / BEAT, out = { ...DEF };
+    const b = (t - B0) / BEAT;
+    if (b >= PASS.b0 - 2) return passChannels(this.name, b);
+    const out = { ...DEF };
     for (const ch in DEF) {
       const ks = this.keys.filter(k => ch in k[1]);
       if (!ks.length) continue;
@@ -200,6 +204,23 @@ class Crab {
     return { root, e, w, tip, d3 };
   }
 }
+
+// ---------------------------------------------------------------- the pass (Strictly Crabs' judges shot, J2)
+// After the routine the couple spins past the judges' desk, left to right: they turn about each other (the couple's
+// rotation, one turn every 8 beats) while the pair travels, each crab spinning on its own too, claws open. One smooth
+// path (no keys, so no stop at every key). Starts at beat PASS.b0; beats before it hold the start, off screen left.
+const PASS = { b0: 60, beats: 14, x0: -9.0, x1: 9.0, r: 1.55 };   // r: legs never meet (each spans ~1 m)
+function passChannels(name, b) {
+  const u = Math.max(0, b - PASS.b0), f = Math.min(1, u / PASS.beats);
+  const cx = PASS.x0 + (PASS.x1 - PASS.x0) * f + (b > PASS.b0 + PASS.beats ? 1.2 * (b - PASS.b0 - PASS.beats) : 0);
+  const th = -u * Math.PI / 7 + (name === 'her' ? Math.PI : 0);
+  const out = { ...DEF, passing: 1, x: cx + PASS.r * Math.cos(th), z: PASS.r * Math.sin(th), yaw: -u * 90 + (name === 'her' ? 30 : -30),
+    bounce: 0.03, Lout: 64, Lraise: 52, Lelbow: 12, Lwrist: -8, Rout: 64, Rraise: 52, Relbow: 12, Rwrist: -8 };
+  out.y -= out.bounce * (0.5 + 0.5 * Math.cos(2 * Math.PI * b));
+  out.Lraise += 8 * Math.sin(Math.PI * b); out.Rraise -= 8 * Math.sin(Math.PI * b);
+  return out;
+}
+window.PASS = PASS;
 
 // ---------------------------------------------------------------- choreography (beats; 0 = first beat after the title)
 // V = velvet crab (her, screen left), S = shore crab (him, screen right). Both face the camera (+z).
@@ -273,9 +294,10 @@ function legPose(cr, c, Mb, leg, dt, t) {
     const busy = cr.legs.filter(l => l.step && ((l.s === s && Math.abs(l.i - i) === 1) || (l.s !== s && l.i === i))).length;
     const n = cr.legs.filter(l => l.step).length;
     const far = V3(leg.foot.x - root.x, 0, leg.foot.z - root.z).length() > 0.66 || leg.foot.distanceTo(desired) > 0.3;
-    if ((!busy && n < 5) || far) {
+    const fast = c.passing;   // travelling fast across the judges' shot: quicker steps, planted further ahead
+    if ((!busy && n < (fast ? 6 : 5)) || far) {
       const lead = desired.clone().sub(leg.foot); if (lead.length() > 0.3) lead.setLength(0.3);
-      leg.step = { from: leg.foot.clone(), to: desired.clone().addScaledVector(lead, 0.15), t0: t, dur: 0.1 };
+      leg.step = { from: leg.foot.clone(), to: desired.clone().addScaledVector(lead, fast ? 0.6 : 0.15), t0: t, dur: fast ? 0.065 : 0.1 };
     }
   }
   let foot = leg.foot.clone();
@@ -440,6 +462,9 @@ window.renderAt = (t, cam, draw = true) => {
   renderer.render(scene, camera);
   return check();
 };
-window.frame = (q = 0.92) => renderer.domElement.toDataURL('image/jpeg', q);
+window.frame = (q = 0.92) => renderer.domElement.toDataURL(ALPHA ? 'image/png' : 'image/jpeg', q);
+window.screenOf = () => [V, S].map(cr => {      // each crab's centre on screen (px), for the judges' eyes
+  const v = V3(cr.c.x, cr.c.y, cr.c.z).project(camera); return [+((v.x + 1) / 2 * W).toFixed(1), +((1 - v.y) / 2 * H).toFixed(1)];
+});
 window.DBG = () => ({ V: [V.c.x, V.c.y, V.c.z, V.c.carry].map(x => +x.toFixed(3)), S: S.armPts.map(p => [p.root, p.e, p.w, p.tip].map(v => v.toArray().map(x => +x.toFixed(2)))), legs: S.legs.map(l => [l.reach, l.i, l.s]).concat(S.legs.slice(0, 1).map(l => l.pts.map(v => v.toArray().map(x => +x.toFixed(2))))) });
 window.READY = true;

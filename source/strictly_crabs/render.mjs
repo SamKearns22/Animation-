@@ -2,6 +2,8 @@
 //   node render.mjs stills OUT.png W H t1,t2,...      one sheet of stills (dance seconds)
 //   node render.mjs video OUT.mp4 W H FPS T0 T1        frames piped to ffmpeg (no sound)
 //   node render.mjs check OUT.json FPS                 clipping audit of every frame, no pictures
+//   node render.mjs pass OUT_DIR W H FPS T0 T1         the judges' shot: see-through PNG frames of the pass, a camera
+//                                                      on the desk side, and pass.json (each crab's place on screen)
 import { chromium } from 'playwright-core';
 import http from 'node:http';
 import fs from 'node:fs';
@@ -27,7 +29,7 @@ const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromi
 const page = await browser.newPage({ viewport: { width: w, height: h } });
 page.on('console', m => { if (m.type() === 'error') console.error('page:', m.text()); });
 page.on('pageerror', e => console.error('page error:', e.message));
-await page.goto(`http://localhost:${port}/index.html?w=${w}&h=${h}`);
+await page.goto(`http://localhost:${port}/index.html?w=${w}&h=${h}${mode === 'pass' ? '&alpha=1' : ''}`);
 await page.waitForFunction('window.READY === true', null, { timeout: 120000 });
 
 const grab = async () => Buffer.from((await page.evaluate(() => window.frame())).split(',')[1], 'base64');
@@ -62,6 +64,20 @@ if (mode === 'stills') {
   }
   ff.stdin.end(); await new Promise(r => ff.on('close', r));
   fs.writeFileSync(out.replace(/\.mp4$/, '-check.json'), JSON.stringify(log));
+} else if (mode === 'pass') {
+  const [fps, T0, T1] = rest.slice(2).map(Number);
+  fs.mkdirSync(out, { recursive: true });
+  const CAM = [[0, 2.1, 8.6], [0, 0.45, 0]];   // far enough back that the crabs read as small, on the floor
+  const log = [];
+  const N = Math.round((T1 - T0) * fps);
+  for (let k = 0; k < N; k++) {
+    const t = T0 + k / fps;
+    const r = await page.evaluate(([t, c]) => window.renderAt(t, c), [t, CAM]);
+    log.push({ t: +t.toFixed(3), scr: await page.evaluate(() => window.screenOf()), ...r });
+    fs.writeFileSync(`${out}/${String(k).padStart(4, '0')}.png`, await grab());
+    if (k % 24 === 0) console.log(`frame ${k}/${N}  ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  }
+  fs.writeFileSync(`${out}/pass.json`, JSON.stringify({ fps, T0, cam: CAM, w, h, frames: log }));
 } else if (mode === 'check') {
   const fps = +rest[0];
   const log = await page.evaluate(fps => { const L = []; for (let t = -0.4; t < 24.95; t += 1 / fps) L.push({ t: +t.toFixed(3), ...window.renderAt(t, null, false) }); return L; }, fps);

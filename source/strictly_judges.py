@@ -17,7 +17,7 @@ import os
 import sys
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -222,7 +222,7 @@ def person(img, cam, x, y, s, sp, t=0.0, j=None, yaw=0):
 TABLE_Y = 300.0          # the desk top, in person units below the neck (chest height, as on the show)
 S_WIDE = 0.62            # people's scale in the wide shot
 NECK_WIDE = 300          # neck height in the wide shot (frame px)
-XS = {'CRAIG': 230, 'MOTSI': 500, 'SHIRLEY': 780, 'ANTON': 1050}
+XS = {'CRAIG': 200, 'MOTSI': 490, 'SHIRLEY': 790, 'ANTON': 1080}
 BLUE = (22, 44, 128)
 BLUE_L = (64, 110, 214)
 BLUE_LL = (150, 190, 246)
@@ -234,16 +234,16 @@ SILVER = (214, 214, 230)
 def backdrop(img, cam):
     """Deep blue with pale beams fanning down from the lighting rig, and sparkles (refs 05, 07, 10: flat, no glow)."""
     p = B.Pen(img, cam)
-    p.poly([(-200, -200), (1480, -200), (1480, 900), (-200, 900)], BLUE, None, 0)
+    p.poly([(-900, -400), (2200, -400), (2200, 1200), (-900, 1200)], BLUE, None, 0)
     rng = np.random.default_rng(5)
-    for k in range(9):
-        x = -60 + k * 175
+    for k in range(15):
+        x = -620 + k * 175
         w = 50 + 20 * (k % 3)
-        p.poly(rough([(x - 14, -40), (x + 14, -40), (x + 120 + w, 760), (x + 120 - w, 760)], 4, k), BLUE_L, None, 0)
-        p.poly(rough([(x - 5, -40), (x + 5, -40), (x + 120 + w * 0.35, 760), (x + 120 - w * 0.35, 760)], 3, k + 20),
+        p.poly(rough([(x - 14, -300), (x + 14, -300), (x + 150 + w, 900), (x + 150 - w, 900)], 4, k), BLUE_L, None, 0)
+        p.poly(rough([(x - 5, -300), (x + 5, -300), (x + 150 + w * 0.35, 900), (x + 150 - w * 0.35, 900)], 3, k + 20),
                (96, 142, 230), None, 0)
-    for _ in range(140):
-        x, y = rng.uniform(-100, 1380), rng.uniform(-60, 700)
+    for _ in range(260):
+        x, y = rng.uniform(-700, 2000), rng.uniform(-260, 760)
         r = rng.uniform(1.5, 4.2)
         p.ell(x, y, r, r, BLUE_LL if rng.random() < 0.7 else (250, 250, 255), None, 0)
 
@@ -255,16 +255,17 @@ def table(img, cam):
     top = NECK_WIDE + TABLE_Y * S_WIDE
     x0, x1 = -600, 1880
     p.poly(rough([(x0, top - 14), (x1, top - 14), (x1, top + 10), (x0, top + 10)], 2, 1), SILVER, INK, 3)   # desk top
-    bands = [(PURPLE, 34), (SILVER, 10), (PINK, 40), (SILVER, 10), (PURPLE, 44), (PINK, 60), (PURPLE, 400)]
+    bands = [(PURPLE, 34), (SILVER, 10), (PINK, 40), (SILVER, 10), (PURPLE, 44), (PINK, 60)]
     y = top + 10
     for k, (c, h) in enumerate(bands):
         p.poly(rough([(x0, y), (x1, y), (x1, y + h), (x0, y + h)], 1.5, k + 3), c, INK, 2.4)
         y += h
     rng = np.random.default_rng(9)                 # glitter: flat specks, never a glow
     for _ in range(700):
-        gx, gy = rng.uniform(x0, x1), rng.uniform(top - 12, 760)
+        gx, gy = rng.uniform(x0, x1), rng.uniform(top - 12, top + 206)
         p.ell(gx, gy, 1.6, 1.6, (255, 240, 255) if rng.random() < 0.6 else (110, 60, 160), None, 0)
-    cx, cy = 640, top + 150                         # the emblem
+    floor(p, y)
+    cx, cy = 640, top + 104                         # the emblem
     p.ell(cx, cy, 120, 120, PINK, INK, 3)
     p.ell(cx, cy, 98, 98, PURPLE, INK, 2.6)
     p.ell(cx, cy, 74, 74, SILVER, INK, 2.6)
@@ -277,39 +278,297 @@ def table(img, cam):
         p.line([(cx - hw, cy + yy), (cx + hw, cy + yy)], (170, 170, 190), 1.6)
 
 
-def paddle(p, x, y, k, text='290', a=0.0):
+def floor(p, y0):
+    """The dance floor in front of the desk: dark and polished, the desk's bands mirrored in it, flat."""
+    p.poly([(-600, y0), (1880, y0), (1880, 1400), (-600, 1400)], (34, 20, 58), INK, 2.4)
+    y = y0 + 3
+    for k, (c, h) in enumerate([((92, 52, 128), 16), ((110, 60, 110), 12), ((70, 40, 100), 22)]):
+        p.poly(rough([(-600, y), (1880, y), (1880, y + h), (-600, y + h)], 1.0, 60 + k), c, None, 0)
+        y += h + 6
+    for k in range(6):                              # a few long highlights in the polish
+        x = 40 + k * 230
+        p.poly(rough([(x, y0 + 70), (x + 140, y0 + 70), (x + 160, y0 + 76), (x + 20, y0 + 76)], 1.0, 70 + k),
+               (60, 44, 96), None, 0)
+
+
+DESK_BOTTOM = NECK_WIDE + TABLE_Y * S_WIDE + 10 + 198
+
+
+def paddle(p, x, y, k, text='290', a=0.0, flat=1.0):
     """A scoring paddle (ref 12): a white disc with big black numbers on a short white handle. (x, y) = the grip."""
     ca, sa = math.cos(a), math.sin(a)
     R = lambda dx, dy: (x + dx * ca - dy * sa, y + dx * sa + dy * ca)
-    p.poly([R(-9 * k, 0), R(9 * k, 0), R(9 * k, -70 * k), R(-9 * k, -70 * k)], (246, 246, 242), INK, 2.4)
-    cx, cy = R(0, -150 * k)
-    p.ell(cx, cy, 86 * k, 86 * k, (248, 248, 244), INK, 3)
+    # flat: 1 held up facing us; lying on the desk it is seen edge-on (squashed), the numbers face down
+    p.poly([R(-9 * k, 0), R(9 * k, 0), R(9 * k, -70 * k * flat), R(-9 * k, -70 * k * flat)], (246, 246, 242), INK, 2.4)
+    cx, cy = R(0, -150 * k * flat)
+    p.ell(cx, cy, 86 * k, 86 * k * flat, (248, 248, 244), INK, 3)
     return (cx, cy, 86 * k)
 
 
 def paddle_text(img, cam, disc, text='290'):
+    """The paddle's numbers, centred on the disc (cam may be a person's own frame, B.Local)."""
     cx, cy, r = disc
-    B.text(img, cam, cx, cy, text, int(r * (1.0 if len(text) < 3 else 0.78)), INK, anchor='mm')
+    f = ImageFont.truetype(B.ANTON, max(4, int(cam.S(r * 0.95))))
+    l, t, rr, b = f.getbbox(text)
+    lay = Image.new('RGBA', (rr - l + 4, b - t + 4), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).text((2 - l, 2 - t), text, font=f, fill=INK)
+    X, Y = cam.P(cx, cy)
+    img.alpha_composite(lay, (int(X - lay.width / 2), int(Y - lay.height / 2)))
 
 
-# ------------------------------------------------------------------------------------------------ frames
-def wide(t=0.0, poses=None):
-    cam = B.Cam(1.0, 640, 360)
-    img = B.canvas()
-    backdrop(img, cam)
+# ------------------------------------------------------------------------------------------------ the shots
+# Times are seconds from the start of the judges' section (it follows the dance at 33.9 s of the film).
+import mossad_audio as MA        # noqa: E402
+import filmkit                   # noqa: E402
+import json                      # noqa: E402
+
+J1_DUR, J2_DUR = 6.2, 9.1
+DUR = J1_DUR + J2_DUR
+FILM_AT = 33.9                    # where the judges start in the whole film (titles 9 s + dance 24.9 s)
+SHOTS = [('J1', 0.0, J1_DUR), ('J2', J1_DUR, DUR)]
+LINES = [   # start: where the recording's first sample sits (Craig's begins with 0.9 s of silence, cut in silence)
+    dict(n=1, who='CRAIG', text="I don't really understand the joke, darling, but I'm having an amazing time.",
+         audio='strictly-craig', start=-0.91),
+    dict(n=2, who='ANTON', text='Two hundred and ninety!', audio='strictly-anton', start=J1_DUR + 5.2),
+]
+for ln in LINES:
+    ln['_voice'] = MA.line(ln['audio'])
+    ln['_stretches'] = MA.pauses(ln['_voice'], 0.12)
+    ln['end'] = ln['start'] + len(ln['_voice']) / MA.SR
+TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
+             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in CAST}
+SPEAKING = [(ln['who'], ln['start'] + a, ln['start'] + b) for ln in LINES for a, b in ln['_stretches']]
+REST_MOUTH = {'CRAIG': 'line', 'MOTSI': 'smile', 'SHIRLEY': 'smile', 'ANTON': 'grin'}
+_keep = [(J1_DUR + 5.75, J1_DUR + 8.35)]                # no blink on Anton's spring and his "290"
+BLINKS = {w: [b for b in F.blinks(40 + k, 0.4, DUR, talking=(w == 'CRAIG'))
+              if not any(a - 0.2 <= b <= z for a, z in _keep)] for k, w in enumerate(ORDER)}
+
+# Shot J2's camera (flat): the four at the desk, the dance floor in front for the crabs.
+Z2, CX2, CY2 = 0.7, 640, 420
+PASS_DIR = os.path.join(HERE, 'data', 'strictly-crabs', 'pass')   # the crabs alone, see-through (render.mjs pass)
+PASS_T0 = 26.77                   # dance seconds at the start of J2 (the pair enters from the left about 0.4 s in)
+CRAB_FLOOR = 622                  # the crabs' middles land here on J2's frame (px): on the dance floor strip
+_PASS = None
+
+
+def pass_info():
+    global _PASS
+    if _PASS is None:
+        with open(os.path.join(PASS_DIR, 'pass.json')) as f:
+            _PASS = json.load(f)
+    return _PASS
+
+
+def crab_frame(s2):
+    """The crab layer's frame index for J2 time s2 (seconds into the shot)."""
+    d = pass_info()
+    return min(len(d['frames']) - 1, max(0, round((PASS_T0 + s2 - d['T0']) * d['fps'])))
+
+
+def crabs_x(s2):
+    """Where the dancing pair is across J2's frame (frame px, the middle of the two), or None when off screen,
+    with which side they are off ('L' before, 'R' after)."""
+    d = pass_info()
+    xs = [x * 1280 / d['w'] for x, _ in d['frames'][crab_frame(s2)]['scr']]
+    m = sum(xs) / len(xs)
+    if max(xs) < -60:
+        return None, 'L'
+    if min(xs) > 1340:
+        return None, 'R'
+    return m, None
+
+
+def crab_drop():
+    """How far the crab layer moves down so the pair's middle sits on CRAB_FLOOR (from the render's own camera)."""
+    d = pass_info()
+    ys = [y * 1280 / d['w'] for f in d['frames'] for _, y in f['scr']]
+    return CRAB_FLOOR - sum(ys) / len(ys)
+
+
+def to_world2(fx):
+    return (fx - 640) / Z2 + CX2
+
+
+ANTON_UP = J1_DUR + 5.95          # he springs up once the crabs have gone
+
+
+def anton_rise(t):
+    """How far Anton has risen (person units): a small dip, a fast spring up with an overshoot, two puppyish bounces
+    on his toes, then still and proud."""
+    u = t - ANTON_UP
+    if u < -0.15:
+        return 0.0
+    if u < 0:
+        return -14 * math.sin(math.pi * (u + 0.15) / 0.15 / 2)          # the dip before the spring
+    if u < 0.2:
+        e = u / 0.2
+        return -14 + 224 * (1 - (1 - e) ** 3)                           # up, fast out of the dip
+    if u < 0.4:
+        return 210 - 20 * math.sin(math.pi * (u - 0.2) / 0.4)
+    if u < 1.1:
+        return 190 + 16 * abs(math.sin(math.pi * (u - 0.4) / 0.35)) * (1 - (u - 0.4) / 0.9)   # the bounces
+    return 190.0 + 4 * filmkit.shifts(t, seed=77, amount=1.0)
+
+
+CRAIG_ARMS = filmkit.Beats([   # J1: hands {side: target} in his torso's units (x right, y down from the neck, z to us)
+    # the one-hand flourishes use his screen-left hand, the side with room (Motsi sits on his other side)
+    (0.0, 'rest', {'L': (-70, 282, 160), 'R': (70, 282, 160)}),
+    (0.35, 'set-up', {'L': (-120, 210, 180), 'R': (70, 282, 160)}),
+    (0.95, 'flourish up', {'L': (-215, -60, 120), 'R': (70, 282, 160)}, 'fast'),
+    (1.65, 'rolls out', {'L': (-290, 30, 100), 'R': (70, 282, 160)}),
+    (2.2, 'darling', {'L': (-150, 120, 240), 'R': (70, 282, 160)}, 'fast'),
+    (2.95, 'hold', {'L': (-160, 132, 230), 'R': (80, 280, 160)}, 'slow'),
+    (3.35, 'set-up', {'L': (-150, 200, 180), 'R': (150, 200, 180)}),
+    (4.1, 'amazing', {'L': (-290, -130, 60), 'R': (205, -190, 70)}, 'fast'),
+    (4.95, 'hold', {'L': (-300, -160, 60), 'R': (210, -215, 70)}, 'slow'),
+    (5.75, 'settle', {'L': (-70, 282, 160), 'R': (70, 282, 160)}, 'slow'),
+])
+CRAIG_HEAD = filmkit.Beats([(0.0, 'rest', 0.0), (0.95, 'tilt in', 0.07, 'slow'), (1.65, 'tilt', 0.04),
+                            (2.2, 'darling', -0.07, 'fast'), (3.35, 'level', 0.0, 'slow'),
+                            (4.1, 'back', -0.05, 'fast'), (5.75, 'rest', 0.0, 'slow')])
+ANTON_ARM = filmkit.Beats([    # J2 (seconds of the section): his paddle hand, from the desk straight up overhead
+    (ANTON_UP - 0.1, 'grip', (70, 282, 160)),
+    (ANTON_UP + 0.18, 'thrust', (92, -200, 60), 'fast'),
+    (DUR, 'hold', (94, -196, 60), 'slow'),
+])
+
+
+def eyes_at(who, t):
+    """Where each judge looks in J2: the crabs (followed smoothly while they pass), ahead of them before they come,
+    where they went after; then (from Anton's spring) at Anton. Anton himself looks straight out once he is up."""
+    s2 = t - J1_DUR
+    if who == 'ANTON' and t >= ANTON_UP:
+        return 0.0
+    if who != 'ANTON' and t >= ANTON_UP + 0.05:
+        return F.look_at(XS[who], XS['ANTON'])
+    m, side = crabs_x(s2)
+    wx = to_world2(m) if m is not None else (-400 if side == 'L' else 1700)
+    return F.look_at(XS[who], wx, 500)
+
+
+def state(who, t):
+    """Everything about one person at time t: arms, mouth, blink, eyes, head."""
+    sp = dict(CAST[who])
+    j = joints(sp)
+    rise = 0.0
+    if who == 'CRAIG' and t < J1_DUR:
+        arms = CRAIG_ARMS.at(t)
+        for sd in 'LR':
+            V.arm_to(j, sd, arms[sd], 'out')
+        sp['tilt'] = CRAIG_HEAD.at(t)
+        sp['brow_raise'] = 4 + (5 if 2.1 <= t < 3.3 else 0)
+        sp['look'] = -0.12 if 0.9 <= t < 2.0 else 0.0
+    else:
+        sp['tilt'] = filmkit.shifts(t, seed=ORDER.index(who) + 3, amount=0.035)
+        sp['look'] = eyes_at(who, t) if t >= J1_DUR else (F.look_at(XS[who], XS['CRAIG']) if who == 'MOTSI' else 0.0)
+    if who == 'ANTON':
+        rise = anton_rise(t)
+        if t >= ANTON_UP - 0.1:
+            V.arm_to(j, 'R', ANTON_ARM.at(t), 'out')
+            V.arm_to(j, 'L', (-24, 330 - rise * 0.0, 80), 'out')      # formal: hand on his jacket front
+            j['grip'] = {'R'}
+            sp['brows'] = 'joy'
+        j['props'].append(held_paddle(t))
+    shape = mouths.at(TRACK[who], t)
+    sp['mouth'] = REST_MOUTH[who] if shape == 'rest' else 'v:' + shape
+    sp['blink'] = F.blinking(t, BLINKS[who])
+    sp['breath'] = F.breath(t, 4.0, 1.5, 0.2 * ORDER.index(who))
+    return sp, j, rise
+
+
+def held_paddle(t):
+    """Anton's paddle: lying on the desk under his hand (numbers down), then up in his fist facing us. The hand holds
+    it all along, so it only moves when his hand does."""
+    def draw(p, j2):
+        x, y = j2['wrR']
+        flat = 1.0 if t >= ANTON_UP + 0.12 else (0.2 if t < ANTON_UP else 0.2 + 0.8 * (t - ANTON_UP) / 0.12)
+        disc = paddle(p, x, y + 8, 1.0, flat=flat)
+        draw.disc = disc if flat > 0.9 else None
+    return draw
+
+
+def scene_people(img, cam, t):
     for who in ORDER:
-        person(img, cam, XS[who], NECK_WIDE, S_WIDE, CAST[who], t, (poses or {}).get(who))
-    table(img, cam)
-    return img
+        sp, j, rise = state(who, t)
+        person(img, cam, XS[who], NECK_WIDE - rise * S_WIDE, S_WIDE, sp, t, j)
+        if who == 'ANTON':
+            d = j['props'][-1]
+            if getattr(d, 'disc', None):            # the numbers, in the person's frame (scaled with him)
+                paddle_text(img, B.Local(cam, XS[who], NECK_WIDE - rise * S_WIDE, S_WIDE, 1), d.disc)
 
 
-def craig_close(t=0.0, j=None):
-    cam = B.Cam(1.7, XS['CRAIG'] + 10, NECK_WIDE + 20)
+def shot_of(t):
+    return 'J1' if t < J1_DUR else 'J2'
+
+
+def cam_for(t):
+    return B.Cam(1.6, XS['CRAIG'] + 10, NECK_WIDE + 10) if t < J1_DUR else B.Cam(Z2, CX2, CY2)
+
+
+def picture(t):
+    cam = cam_for(t)
     img = B.canvas()
     backdrop(img, cam)
-    person(img, cam, XS['CRAIG'], NECK_WIDE, S_WIDE, CAST['CRAIG'], t, j)
+    scene_people(img, cam, t)
     table(img, cam)
+    if t >= J1_DUR:
+        k = crab_frame(t - J1_DUR)
+        lay = Image.open(os.path.join(PASS_DIR, f'{k:04d}.png')).convert('RGBA')
+        W2, H2 = img.size
+        lay = lay.resize((W2, H2), Image.LANCZOS)
+        img.alpha_composite(lay, (0, int(crab_drop() * W2 / 1280)))
     return img
+
+
+def overlay(img, t):
+    return img
+
+
+# ------------------------------------------------------------------------------------------------ sound
+MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
+BEAT = 60 / 136
+SPLICE_AT = 9.302 + 55 * BEAT     # film time of beat 55 of the dance: the song jumps back 12 bars (48 beats) here
+SPLICE_TO = 9.302 + 7 * BEAT      # to beat 7, so it carries on under the judges without running out
+SPLICE = (('music', 0.0, SPLICE_AT), ('music', SPLICE_TO, SPLICE_TO + FILM_AT + DUR - SPLICE_AT))
+UNDER = 0.085                     # the music under the judges (about 21 dB down; Sam, 21 Oct: lower, not gone)
+
+
+def music_bed(f0, dur):
+    """The song for film times f0..f0+dur: whole up to the splice, then looped back 8 bars; full volume through the
+    dance, eased down to UNDER over 0.25 s at the cut to the judges, faded out over the last 0.8 s of the film."""
+    song = MA.load(MUSIC)
+    sr = MA.SR
+    n = int(dur * sr)
+    f = f0 + np.arange(n) / sr
+    m = np.where(f < SPLICE_AT, f, SPLICE_TO + (f - SPLICE_AT))
+    idx = np.clip((m * sr).astype(int), 0, len(song) - 1)
+    out = song[idx] * (m * sr < len(song))
+    g = np.ones(n)
+    g = np.where(f >= FILM_AT, 1 - (1 - UNDER) * np.clip((f - FILM_AT) / 0.25, 0, 1), g)
+    end = FILM_AT + DUR
+    g *= np.clip((end - f) / 0.8, 0, 1)
+    return out * g
+
+
+def voices(dur=None):
+    n = int(((dur or DUR) + 0.3) * MA.SR)
+    v = np.zeros(n)
+    for ln in LINES:
+        x = ln['_voice']
+        s = int(ln['start'] * MA.SR)
+        if s < 0:
+            x, s = x[-s:], 0
+        seg = x[:max(0, n - s)]
+        v[s:s + len(seg)] += seg
+    return v
+
+
+def soundtrack(stems=False):
+    """The judges' section on its own (for clips): the voices over the song, already lowered."""
+    v = voices()
+    bed = music_bed(FILM_AT, len(v) / MA.SR)
+    mix, g = MA.master(v + bed, int(DUR * MA.SR))
+    return (mix, v * g, bed * g) if stems else mix
 
 
 def cast_sheet(out):
@@ -329,8 +588,8 @@ def cast_sheet(out):
     d = ImageDraw.Draw(img)
     landmarks.draw(d, 640, 90, s, 1240)
     sheet.paste(img.convert('RGB'), (0, 0))
-    sheet.paste(wide().convert('RGB'), (0, 720))
-    sheet.paste(craig_close().convert('RGB'), (0, 1440))
+    sheet.paste(picture(J1_DUR + 0.1).convert('RGB'), (0, 720))
+    sheet.paste(picture(0.0).convert('RGB'), (0, 1440))
     sheet.save(out, quality=90)
 
 
@@ -342,7 +601,15 @@ def main():
         B.SS = 1
         os.makedirs(a[1], exist_ok=True)
         for x in a[2:]:
-            wide(float(x)).convert('RGB').save(os.path.join(a[1], f'j{x}.jpg'), quality=88)
+            picture(float(x)).convert('RGB').save(os.path.join(a[1], f'j{x}.jpg'), quality=88)
+    elif a[0] == 'final':
+        import film_engine as E
+        small = '--small' in a
+        E.render('strictly-judges', a[1], size=(640, 360) if small else (1280, 720), ss=1 if small else 2, fps=FPS,
+                 dur=DUR, picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
+                 set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
+                 redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
+                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None)
 
 
 if __name__ == '__main__':

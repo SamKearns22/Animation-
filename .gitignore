@@ -17,3 +17,4 @@ source/data/*-clean.mp4
 # Strictly Crabs: installed and generated each session
 source/strictly_crabs/node_modules/
 source/strictly_crabs/tex/
+source/data/strictly-crabs/
