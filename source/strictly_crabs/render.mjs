@@ -64,7 +64,7 @@ if (mode === 'stills') {
   fs.writeFileSync(out.replace(/\.mp4$/, '-check.json'), JSON.stringify(log));
 } else if (mode === 'check') {
   const fps = +rest[0];
-  const log = await page.evaluate(fps => { const L = []; for (let t = -0.4; t < 24.95; t += 1 / fps) L.push({ t: +t.toFixed(3), ...window.renderAt(t) }); return L; }, fps);
+  const log = await page.evaluate(fps => { const L = []; for (let t = -0.4; t < 24.95; t += 1 / fps) L.push({ t: +t.toFixed(3), ...window.renderAt(t, null, false) }); return L; }, fps);
   fs.writeFileSync(out, JSON.stringify(log));
 }
 console.log(`done in ${((Date.now() - t0) / 1000).toFixed(1)} s`);

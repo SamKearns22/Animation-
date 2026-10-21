@@ -126,11 +126,11 @@ function noiseTex(rgb, spread) {
 }
 
 // ---------------------------------------------------------------- the crab
-const LEG = { rx: [0.36, 0.40, 0.40, 0.36], rz: [0.17, 0.05, -0.07, -0.19], ang: [52, 18, -16, -48], rad: [0.92, 0.98, 0.95, 0.85],
-  L1: 0.40, L2: 0.40, carpusFrac: 0.36, dactyl: [0.08, 0.20] };
-const ARM = { root: [0.27, -0.01, 0.30], merus: 0.34, carpus: 0.18 };
+const LEG = { rx: [0.36, 0.40, 0.40, 0.36], rz: [0.12, 0.02, -0.09, -0.2], ang: [44, 14, -17, -48], rad: [1.0, 0.98, 0.95, 0.85],
+  L1: 0.42, L2: 0.44, carpusFrac: 0.36, dactyl: [0.08, 0.20] };
+const ARM = { root: [0.26, 0.04, 0.36], merus: 0.34, carpus: 0.18 };
 const DEF = { x: 0, z: 0, y: 0.36, yaw: 0, pitch: 0, roll: 0, spreadL: 1, spreadR: 1, raiseF: 0, air: 0, carry: 0, flat: 0,
-  bounce: 0, shimmy: 0, pulse: 0, Lout: 30, Lraise: 5, Lelbow: 35, Lwrist: 0, Rout: 30, Rraise: 5, Relbow: 35, Rwrist: 0 };
+  bounce: 0, shimmy: 0, pulse: 0, Lout: 30, Lraise: 32, Lelbow: 35, Lwrist: 0, Rout: 30, Rraise: 32, Relbow: 35, Rwrist: 0 };
 
 class Crab {
   constructor(name, keys) { this.name = name; this.keys = keys; this.meshes = []; }
@@ -203,11 +203,11 @@ class Crab {
 
 // ---------------------------------------------------------------- choreography (beats; 0 = first beat after the title)
 // V = velvet crab (her, screen left), S = shore crab (him, screen right). Both face the camera (+z).
-const open = (k, o = 68, r = 42) => ({ [k + 'out']: o, [k + 'raise']: r, [k + 'elbow']: 10, [k + 'wrist']: -10 });
+const open = (k, o = 68, r = 50) => ({ [k + 'out']: o, [k + 'raise']: r, [k + 'elbow']: 10, [k + 'wrist']: -10 });
 const high = (k, o = 22, r = 78) => ({ [k + 'out']: o, [k + 'raise']: r, [k + 'elbow']: 12, [k + 'wrist']: 0 });
-const rest = (k) => ({ [k + 'out']: 30, [k + 'raise']: 5, [k + 'elbow']: 35, [k + 'wrist']: 0 });
+const rest = (k) => ({ [k + 'out']: 30, [k + 'raise']: 32, [k + 'elbow']: 35, [k + 'wrist']: 0 });
 const tray = (k, r) => ({ [k + 'out']: 8, [k + 'raise']: r, [k + 'elbow']: 8, [k + 'wrist']: 0 });
-const wide = (k) => ({ [k + 'out']: 62, [k + 'raise']: 40, [k + 'elbow']: 5, [k + 'wrist']: 0 });
+const wide = (k) => ({ [k + 'out']: 75, [k + 'raise']: 45, [k + 'elbow']: 5, [k + 'wrist']: 0 });
 const both = (f, ...a) => ({ ...f('L', ...a), ...f('R', ...a) });
 
 const KV = [
@@ -218,17 +218,17 @@ const KV = [
   [8, { x: -1.9, ...both(rest), pulse: 0 }], [10, { x: -2.4 }], [12, { x: -1.9, roll: 0, shimmy: 7, ...rest('L'), ...rest('R') }],
   [12.5, { shimmy: 0 }], [13, { roll: 10, ...high('R') }], [14, { roll: -10, ...open('L') }], [15, { roll: 10 }], [16, { roll: 0, y: 0.36, pitch: 0, spreadL: 1 }],
   // C: the lunge (low, wide on her left), one claw flung high
-  [17.5, { y: 0.21, spreadL: 1.28, roll: -10, pitch: 8, ...high('R', 30, 70), ...open('L', 66, 22), bounce: 0.035 }],
-  [18, { bounce: 0.015 }], [22, { y: 0.21, spreadL: 1.28, roll: -10, pitch: 8, bounce: 0.015 }],
+  [17.5, { y: 0.27, spreadL: 1.15, roll: -10, pitch: 8, ...high('R', 30, 70), ...open('L', 66, 22), bounce: 0.035 }],
+  [18, { bounce: 0.015 }], [22, { y: 0.27, spreadL: 1.15, roll: -10, pitch: 8, bounce: 0.015 }],
   [24, { y: 0.36, spreadL: 1, roll: 0, pitch: 0, ...both(rest), yaw: 0, bounce: 0.03, shimmy: 0 }],
   // D: spin, then come forward and across in front of him
   [28, { yaw: -360, x: -1.9, z: 0 }], [30, { x: -1.6, z: 1.5 }], [32, { x: 0, z: 1.5, yaw: -360 }],
   // E: step back to him, hop up onto his claws, ride the spin, come down
   [33, { z: 0.98, y: 0.36, air: 0, bounce: 0.0, carry: 0, ...both(rest) }],
-  [33.6, { y: 0.86, air: 1 }], [33.75, { carry: 0 }], [34.25, { carry: 1, yaw: -360 }],
-  [45.5, { carry: 1, y: 0.86, air: 1, yaw: 0 }], [45.75, { carry: 0 }], [46, { y: 0.86, air: 1 }], [46.6, { y: 0.36, air: 0, x: 0, z: 0.98 }],
+  [33.6, { y: 0.92, air: 1 }], [33.75, { carry: 0 }], [34.25, { carry: 1, yaw: -360 }],
+  [45.5, { carry: 1, y: 0.76, air: 1, yaw: 0, x: 0, z: 0.9 }], [45.75, { carry: 0 }], [46.3, { y: 0.76, z: 1.8 }], [46.9, { y: 0.36, air: 0, x: 0, z: 1.8 }],
   // F: back to her mark, then rear up, claws high: the final pose
-  [47.5, { x: 0, z: 0.98 }], [49, { x: -1.35, z: 0.8, yaw: 0, pitch: 0, raiseF: 0, y: 0.36, ...both(rest), bounce: 0.03 }],
+  [47.5, { x: 0, z: 1.8 }], [49, { x: -1.35, z: 0.8, yaw: 0, pitch: 0, raiseF: 0, y: 0.36, ...both(rest), bounce: 0.03 }],
   [50.5, { pitch: 34, y: 0.56, raiseF: 1, ...both(high), bounce: 0.02, pulse: 10 }],
   [53.5, { pitch: 34, y: 0.56, ...both(high), pulse: 10 }], [54.5, { ...both(open, 60, 60), pulse: 0, bounce: 0 }],
 ];
@@ -241,13 +241,13 @@ const KS = [
   [17.5, { spreadL: 1.15, spreadR: 1.15, pitch: 12, ...both(open), bounce: 0.03 }], [22, { spreadL: 1.15, spreadR: 1.15, pitch: 12, ...both(open) }],
   [24, { spreadL: 1, spreadR: 1, pitch: 0, ...both(rest), yaw: 0 }],
   // D: spin, then back off to centre stage
-  [28, { yaw: 360, x: 1.9, z: 0 }], [30, { x: 0.9, z: -0.4 }], [32, { x: 0, z: -0.4, yaw: 360, ...both(rest) }],
+  [28, { yaw: 360, x: 1.9, z: 0, ...both(rest) }], [29, both(high)], [30, { x: 0.9, z: -0.4 }], [32, { x: 0, z: -0.4, yaw: 360, ...both(high) }],
   // E: claws out of her way, swing in under her as she hops, lift, spin, lower, swing out
   [32.6, both(wide)], [33.4, both(wide)], [33.85, { ...both(tray, 20), flat: 1 }],
   [34.25, { ...both(tray, 20) }], [36, { ...both(tray, 55), yaw: 360 }], [44, { yaw: 720, ...both(tray, 55) }],
-  [45.5, { ...both(tray, 20), flat: 1 }], [45.95, { ...both(wide), flat: 0 }], [47.5, { ...both(wide) }],
+  [45.5, { ...both(tray, 2), flat: 1 }], [46.4, { ...both(tray, 2), flat: 1 }], [47, { ...both(rest), flat: 0 }], [47.6, both(high)],
   // F: move to his mark and rear up beside her
-  [47.6, { x: 0, z: -0.4 }], [49, { x: 1.35, z: 0.2, ...both(rest), pitch: 0, y: 0.36, raiseF: 0, bounce: 0.03 }],
+  [48.3, { x: 0, z: -0.4 }], [49.6, { x: 1.35, z: 0.2, ...both(rest), pitch: 0, y: 0.36, raiseF: 0, bounce: 0.03 }],
   [50.5, { pitch: 34, y: 0.56, raiseF: 1, ...both(high), bounce: 0.02, pulse: -10 }],
   [53.5, { pitch: 34, y: 0.56, ...both(high), pulse: -10 }], [54.5, { ...both(open, 60, 60), pulse: 0, bounce: 0 }],
 ];
@@ -269,19 +269,20 @@ function legPose(cr, c, Mb, leg, dt, t) {
     const f = Math.min(1, (t - leg.step.t0) / leg.step.dur), e = f * f * (3 - 2 * f);
     leg.foot = leg.step.from.clone().lerp(leg.step.to, e); leg.foot.y = 0.09 * Math.sin(Math.PI * f);
     if (f >= 1) { leg.foot.y = 0; leg.step = null; }
-  } else if (leg.foot.distanceTo(desired) > 0.15) {
+  } else if (leg.foot.distanceTo(desired) > 0.1) {
     const busy = cr.legs.filter(l => l.step && ((l.s === s && Math.abs(l.i - i) === 1) || (l.s !== s && l.i === i))).length;
     const n = cr.legs.filter(l => l.step).length;
-    if (!busy && n < 4) {
+    const far = V3(leg.foot.x - root.x, 0, leg.foot.z - root.z).length() > 0.66 || leg.foot.distanceTo(desired) > 0.3;
+    if ((!busy && n < 5) || far) {
       const lead = desired.clone().sub(leg.foot); if (lead.length() > 0.3) lead.setLength(0.3);
-      leg.step = { from: leg.foot.clone(), to: desired.clone().addScaledVector(lead, 0.25), t0: t, dur: 0.15 };
+      leg.step = { from: leg.foot.clone(), to: desired.clone().addScaledVector(lead, 0.15), t0: t, dur: 0.1 };
     }
   }
   let foot = leg.foot.clone();
   // front legs lifted (rearing up) and legs spread in the air (being lifted) are held in the body's frame
   const raiseW = i < 2 ? c.raiseF : 0;
-  if (raiseW > 0) foot.lerp(V3(s * 0.78, 0.42, 0.55 - 0.3 * i).applyMatrix4(Mb), raiseW);
-  if (c.air > 0) foot.lerp(V3(s * r * Math.cos(a), -0.14, r * Math.sin(a)).applyMatrix4(Mb), c.air);
+  if (raiseW > 0) foot.lerp(V3(s * 0.88, 0.22, 0.18 - 0.25 * i).applyMatrix4(Mb), raiseW);
+  if (c.air > 0) foot.lerp(V3(s * r * 1.1 * Math.cos(a), -0.02, r * 1.1 * Math.sin(a)).applyMatrix4(Mb), c.air);
   // ankle above and inside the foot; the dactyl is the last segment
   const U = UP.clone().lerp(bodyUp, Math.max(c.air, raiseW)).normalize();
   const o = foot.clone().sub(root); o.addScaledVector(U, -o.dot(U)); o.normalize();
@@ -315,7 +316,7 @@ function poseCrabs(t, dt) {
   const cv = V.channels(t);
   if (cv.carry > 0) {   // she sits on his level claws, facing the way he faces
     const g = armsS.map(a => a.w.clone().addScaledVector(a.d3, S.clawLen * 0.55));
-    const seat = g[0].clone().add(g[1]).multiplyScalar(0.5); seat.y += 0.31;
+    const seat = g[0].clone().add(g[1]).multiplyScalar(0.5); seat.y += 0.34;
     cv.x += (seat.x - cv.x) * cv.carry; cv.y += (seat.y - cv.y) * cv.carry; cv.z += (seat.z - cv.z) * cv.carry;
     cv.yaw += ((cs.yaw - 720) - cv.yaw) * cv.carry;
   }
@@ -405,7 +406,8 @@ function check() {
       const g = segDist(a.a, a.b, b.a, b.b) - (a.r + b.r) * 0.8;
       if (g < res.self) { res.self = g; res.selfPair = `${cr.name}:${a.n}~${b.n}`; }
     }
-    res.reach += cr.legs.filter(l => !l.reach && cr.c.air < 0.5 && !(l.i < 2 && cr.c.raiseF > 0.5)).length;
+    const rf = cr.legs.filter(l => !l.reach && cr.c.air < 0.5 && !(l.i < 2 && cr.c.raiseF > 0.5));
+    res.reach += rf.length; if (rf.length) res.reachLegs = (res.reachLegs || '') + rf.map(l => cr.name + (l.s > 0 ? 'R' : 'L') + l.i + (l.step ? '*' : '')).join(' ') + ' ';
   }
   return res;
 }
@@ -431,12 +433,13 @@ function cameraAt(t) {
   }
 }
 
-window.renderAt = (t, cam) => {
+window.renderAt = (t, cam, draw = true) => {
   simulate(t);
+  if (!draw) return check();
   if (cam) { camera.position.set(...cam[0]); camera.lookAt(V3(...cam[1])); } else cameraAt(t);
   renderer.render(scene, camera);
   return check();
 };
 window.frame = (q = 0.92) => renderer.domElement.toDataURL('image/jpeg', q);
-window.DBG = () => ({ S: S.armPts.map(p => [p.root, p.e, p.w, p.tip].map(v => v.toArray().map(x => +x.toFixed(2)))), legs: S.legs.slice(0, 2).map(l => l.pts.map(v => v.toArray().map(x => +x.toFixed(2)))) });
+window.DBG = () => ({ V: [V.c.x, V.c.y, V.c.z, V.c.carry].map(x => +x.toFixed(3)), S: S.armPts.map(p => [p.root, p.e, p.w, p.tip].map(v => v.toArray().map(x => +x.toFixed(2)))), legs: S.legs.map(l => [l.reach, l.i, l.s]).concat(S.legs.slice(0, 1).map(l => l.pts.map(v => v.toArray().map(x => +x.toFixed(2))))) });
 window.READY = true;
