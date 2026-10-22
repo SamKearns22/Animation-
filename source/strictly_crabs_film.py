@@ -89,19 +89,15 @@ def title_sequence():
     return seq
 
 
-def tall_frame(src, s=1.45, ox=520, oy=960, cx=581, cy=291):
-    """TikTok (Sam, 22 Oct): the widescreen ident filling a whole 1080x1920 frame, nothing blurred. The picture is
-    enlarged 1.45x, ball a little left of centre; above and below, every ray from the ball's centre carries on in the
-    colour where it leaves the picture (the ident is a burst of rays, so they simply run on), left sharp."""
+def tall_frame(src, s=1.3, ox=530, oy=960, cx=581, cy=291, ea=480, eb=290):
+    """TikTok (Sam, 22 Oct): the ident filling a whole 1080x1920 frame, no widescreen rectangle left showing. The ball and
+    lettering (an oval, kept exactly as recorded) sit in the middle; everywhere outside it, every ray from the ball's
+    centre carries on in the colour where it leaves the oval, so the burst runs on to all four edges. Sharp, no blur."""
     import cv2
-    H, W = src.shape[:2]
     X, Y = np.meshgrid(np.arange(VW, dtype=np.float32), np.arange(VH, dtype=np.float32))
     du, dv = (X - ox) / s, (Y - oy) / s
-    with np.errstate(divide='ignore', invalid='ignore'):
-        tu = np.where(du > 0, (W - 3 - cx) / du, np.where(du < 0, (2 - cx) / du, np.inf))
-        tv = np.where(dv > 0, (H - 26 - cy) / dv, np.where(dv < 0, (24 - cy) / dv, np.inf))
-    t = np.minimum(np.minimum(tu, tv), 1.0)
-    return cv2.remap(src, (cx + du * t).astype(np.float32), (cy + dv * t).astype(np.float32), cv2.INTER_CUBIC)
+    e = np.maximum(np.sqrt((du / ea) ** 2 + (dv / eb) ** 2), 1.0)
+    return cv2.remap(src, (cx + du / e).astype(np.float32), (cy + dv / e).astype(np.float32), cv2.INTER_CUBIC)
 
 
 def titles(out_dir, w=1280, h=720):

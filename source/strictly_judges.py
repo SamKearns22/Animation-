@@ -330,7 +330,8 @@ import json                      # noqa: E402
 J1_DUR, J2_DUR = 6.2, 9.1
 DUR = J1_DUR + J2_DUR
 TITLES = 116 / 24                 # the logo moves until 4.85 s (Sam, 21 Oct), so the cut is on frame 116 at 24 fps
-SPEED = 1.25                      # Sam, 22 Oct: the crab dance is 25% faster (the music is sped up with it, pitch kept)
+SPEED = 1.25                      # Sam, 22 Oct: the crab dance is 25% faster (pictures only)
+MSP = 1.0                         # the music stays at its own speed (Sam, 22 Oct: not 25% faster)
 BEAT = 60 / 136                   # one beat in the dance's own time (the dance is built on this grid)
 NA, NB = 141, 268                 # dance frames kept: part A (start to just before beat 16), then part B (beat 24 on)
 DANCE_B0 = 0.302 + 24 * BEAT      # dance time where part B starts (Sam, 22 Oct: the second shot, beats 16-24, is removed)
@@ -542,10 +543,10 @@ def overlay(img, t):
 # ------------------------------------------------------------------------------------------------ sound
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
 SB0 = 9.302                       # song time of the dance's beat 0 (original speed)
-MUSIC_X = os.path.join(HERE, 'data', 'strictly-crabs', 'music-x1.25.wav')   # the song 25% faster, same pitch
-BEAT_R = BEAT / SPEED             # one beat in the film
-SB0_R = SB0 / SPEED
-SONG_AT = 9.0 / SPEED             # sped-up song time at the start of the dance
+MUSIC_X = os.path.join(HERE, 'data', 'strictly-crabs', 'music-x1.0.wav')   # the song 25% faster, same pitch
+BEAT_R = BEAT / MSP             # one beat in the film
+SB0_R = SB0 / MSP
+SONG_AT = 9.0 / MSP             # sped-up song time at the start of the dance
 FOLD_AT, FOLD_BACK = 48, 24       # Sam, 22 Oct: the crowd claps in the song's last bars (beats 48-56, heard at 23-26 s).
                                   # At beat 48 the music jumps back 24 beats (6 bars: harmony match 0.977, 0.3 dB) and
                                   # carries on from there, folding back again if it gets to 48 again; the claps never play.
@@ -558,7 +559,7 @@ def song_file():
         import imageio_ffmpeg
         os.makedirs(os.path.dirname(MUSIC_X), exist_ok=True)
         subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-y', '-i', MUSIC, '-ac', '1', '-ar', '48000',
-                        '-filter:a', f'atempo={SPEED}', MUSIC_X], check=True)
+                        '-filter:a', f'atempo={MSP}', MUSIC_X], check=True)
     return MUSIC_X
 
 
@@ -601,7 +602,7 @@ def plan_seams(total, report=None):
     either side of the picture cut and still stay on the beat; each jump is put where the bass of the two sides joins
     most cleanly (and slid up to 20 ms to match), so nothing thumps or skips."""
     segs = [(0.0, SONG_AT - TITLES)]
-    skip = (DANCE_B0 - NA * SPEED / 24) / SPEED               # the removed shot, in film seconds
+    skip = 8 * BEAT_R                                         # the removed shot: 8 beats of music
     t_cut = TITLES + DANCE_A
     film0, song0 = segs[-1]
     best = None
