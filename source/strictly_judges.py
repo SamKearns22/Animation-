@@ -632,7 +632,7 @@ def main():
     elif a[0] == 'final':
         import film_engine as E
         small = '--small' in a
-        E.render('strictly-judges', a[1], size=(640, 360) if small else (1280, 720), ss=1 if small else 2, fps=FPS,
+        E.render('strictly-judges', a[1], size=((540, 960) if small else (1080, 1920)) if TALL else ((640, 360) if small else (1280, 720)), ss=1 if small else 2, fps=FPS,
                  dur=DUR, picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
