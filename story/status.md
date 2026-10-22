@@ -436,6 +436,8 @@ Read this first in any new session, after CLAUDE.md.
   + sign-off: `animations/power-crime-action-vertical.mp4` (8.8 MB, 49 s), sent. Sam asked for a lessons-and-rules analysis (11 rules proposed in chat,
   awaiting Sam's numbers; none added yet). Open: the sound jumps at three cuts (left as is). DONE unless Sam has notes.
 
+- 22 Oct: POSTED Wed 21 Oct 4:03pm. 25 h results in `story/metrics.md` (8,099 views, 17.1 s avg watch, 12% in full, 8 new followers; 98% For You, 74% UK).
+
 ## Build list: tools for `guides/film-quality-rules.md` (Sam approved all 11 rules, 21 Oct)
 Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely first picks, most notes caught): 
 1. `source/audit.py` collision test (rule 5) and pop-in test (rule 6), working on any film built from `satire_template.py`;
