@@ -540,21 +540,18 @@ def overlay(img, t):
 # ------------------------------------------------------------------------------------------------ sound
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
 SB0 = 9.302                       # song time of the dance's beat 0
-SPLICE_BEAT, LOOP_TO = 55, 7      # at the dance's beat 55 the song jumps back to beat 7, so it lasts under the judges
-CLAPS = (16, 40)                  # Sam, 22 Oct: the crowd claps here (heard by Sam at 16-18 s; widened from 20-36); each
-                                  # is played from 24 beats (6 bars) earlier instead (harmony match 0.957, within 1.1 dB)
+FOLD_AT, FOLD_BACK = 48, 24       # Sam, 22 Oct: the crowd claps in the song's last bars (beats 48-56, heard at 23-26 s).
+                                  # At beat 48 the music jumps back 24 beats (6 bars: harmony match 0.977, 0.3 dB) and
+                                  # carries on from there, folding back again if it gets to 48 again; the claps never play.
 UNDER = 0.085 * 1.3               # the music under the judges (Sam, 22 Oct: 30% louder than before; was 0.085)
 
 
 def song_time(f):
     """Film time (array) -> where in the song to play."""
     d = f - TITLES
-    cut = CUT_FROM + CUT_BEATS * BEAT
-    s = np.where(d < CUT_FROM, 9.0 + d, 9.0 + d + CUT_BEATS * BEAT)
-    sp = SB0 + SPLICE_BEAT * BEAT
-    s = np.where((d >= CUT_FROM) & (s >= sp), SB0 + LOOP_TO * BEAT + (s - sp), s)
-    c0, c1 = SB0 + CLAPS[0] * BEAT, SB0 + CLAPS[1] * BEAT
-    return np.where((s >= c0) & (s < c1), s - (CLAPS[1] - CLAPS[0]) * BEAT, s)
+    s = np.where(d < CUT_FROM, 9.0 + d, 9.0 + d + CUT_BEATS * BEAT)      # the removed shot: 8 beats skipped, on a bar line
+    b = (s - SB0) / BEAT
+    return np.where(b >= FOLD_AT, SB0 + (FOLD_AT - FOLD_BACK + (b - FOLD_AT) % FOLD_BACK) * BEAT, s)
 
 
 def music_bed(f0, dur):

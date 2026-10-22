@@ -133,8 +133,10 @@ Model: notes on movement are Opus medium; building from a plan Opus medium; rend
 - [x] Sam's notes on the animatic (22 Oct): (1) remove the dance's second shot (beats 16-24, the close pair at film
       13.6 s) and adjust the music: cut 8 beats from both, on the bar line; dance rendered as two parts (0-7.375 s,
       10.8903-24.9 s) and joined (`strictly_crabs_film.py dance`). (2) Judges' music 30% louder (UNDER 0.085 -> 0.1105).
-      (3) Avoid the crowd clapping: measured sharp bursts on song beats 21-36; every bar there is played from 4 bars
-      earlier (beats 4-19, closest match) - `strictly_judges.song_time`; Sam to confirm by ear. (4) Full 9:16 picture,
+      (3) Avoid the crowd clapping: Sam heard it at 23-26 s of the first preview = song beats 48-55 (the song's last bars,
+      NOT the middle; my beat-detector was wrong, trust Sam's ear). Now the music jumps back 24 beats at beat 48 and
+      folds again if it reaches 48 (`strictly_judges.song_time`, FOLD_AT/FOLD_BACK); the middle of the song is as
+      originally approved. Sam to confirm by ear. (4) Full 9:16 picture,
       no blurred bands: dance rendered tall (70 deg lens, cameras 1.42x further back, floor given its glowing sunburst
       and faint printed logo, layers spaced so the floor no longer flickers); titles fill the frame by carrying the
       streaks outward from the ball (`tall_frame`); judges drawn on a 1080x1920 canvas (backdrop beams and floor
