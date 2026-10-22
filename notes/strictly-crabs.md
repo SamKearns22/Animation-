@@ -141,7 +141,13 @@ Model: notes on movement are Opus medium; building from a plan Opus medium; rend
       and faint printed logo, layers spaced so the floor no longer flickers); titles fill the frame by carrying the
       streaks outward from the ball (`tall_frame`); judges drawn on a 1080x1920 canvas (backdrop beams and floor
       extended, Craig's shot 150 higher), subtitles one line at y 1340.
-- [ ] Check sheet + music preview sent; waiting for Sam's clear yes to render the tall animatic (about 30 min)
+- [x] FINAL RENDER done 22 Oct after Sam's clear yes ("Make this the final render"): `animations/strictly-crabs-vertical.mp4`,
+      1080x1920, 24 fps, 43.5 s, 11.3 MB, rendered in 55 min (dance A 16 min, dance B 29 min, crab pass 2 min,
+      judges + titles + join + vertical + finish ~8 min). Pipeline = animatic steps at 1080x1920 (see
+      `source/strictly_crabs_film.py` docstring + `strictly_judges.py final`). Clean untitled film kept in
+      source/data/strictly-crabs/clean-final.mp4 (not on GitHub) so the Hook Text can change without a re-render.
+      Went out WITHOUT the housestyle checks still to be added to the judges file, and with the small dance
+      leftovers (claw/leg 2-3 cm, 9 frames of overstretched foot). Waiting on Sam's verdict.
 
 ## HANDOVER (21 Oct, chat 3)
 Rebuild: npm registry blocked this session; three.js r170 came from GitHub (git clone --depth 1 --branch r170
