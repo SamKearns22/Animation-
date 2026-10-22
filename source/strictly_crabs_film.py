@@ -31,7 +31,7 @@ SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 
 # subtitle chunks: (line number, stretch of speech, words, syllables) - two to five words, the punchline on its own
 CHUNKS = [(1, 0, "I can't say I understand", 7), (1, 0, 'the joke, darling,', 4), (1, 1, "but I'm having", 4),
-          (1, 1, 'a wonderful time.', 5), (2, 0, 'Two hundred and ninety!', 7)]
+          (1, 1, 'an amazing time.', 5), (2, 0, 'Two hundred and ninety!', 7)]
 
 
 # ------------------------------------------------------------------------------------------------ titles

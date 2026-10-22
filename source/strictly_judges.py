@@ -2,7 +2,7 @@
 """Strictly Crabs Dancing: the judges (Satire style), after the crab dance. Widescreen 1280 x 720 like the rest of the
 film. Refs: refs/strictly-crabs/judges/ (judges-ref-01..12). Notes: notes/strictly-crabs.md.
 
-Shot J1: Craig alone, flamboyant and droll: "I can't say I understand the joke, darling, but I'm having a wonderful time."
+Shot J1: Craig alone, flamboyant and droll: "I can't say I understand the joke, darling, but I'm having an amazing time."
 Shot J2: all four at the table (left to right Craig, Motsi, Shirley, Anton); the crabs spin past in front and every
 judge's eyes follow them; once they have passed, Anton shoots up with his paddle like a formal, excited puppy: "290!"
 
@@ -340,7 +340,7 @@ DANCE_LEN = (NA + NB) / 24
 FILM_AT = TITLES + DANCE_LEN      # where the judges start in the whole film
 SHOTS = [('J1', 0.0, J1_DUR), ('J2', J1_DUR, DUR)]
 LINES = [   # start: where the recording's first sample sits (Craig's begins with 0.9 s of silence, cut in silence)
-    dict(n=1, who='CRAIG', text="I can't say I understand the joke, darling, but I'm having a wonderful time.",
+    dict(n=1, who='CRAIG', text="I can't say I understand the joke, darling, but I'm having an amazing time.",
          audio='strictly-craig', start=-0.91),
     dict(n=2, who='ANTON', text='Two hundred and ninety!', audio='strictly-anton', start=J1_DUR + 5.2),
 ]
