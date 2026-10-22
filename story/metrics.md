@@ -90,8 +90,11 @@ Reading (Claude, 22 Oct):
 - Compared with Bingo Bingo, the gap is all in what people do afterwards: shares 2.1 vs 6.8, saves 3.8 vs 7.5, followers
   1.0 vs 2.1 per 1,000, likes 5.3 vs 7.1 per 100. It reached people through For You on watch time, not through people
   passing it on.
-- Targets from 18 Oct: comments 3.3 (target 5+, missed), followers 1.0 (target 3+, missed). Eight followers from 8,099
-  views; all 8,099 viewers were strangers.
+- Against our own films in raw numbers (Sam's point, 22 Oct), this is near the top of our range on almost everything:
+  8 followers (Mossad 9, Bingo Bingo about 38, Roadster about 1), 27 comments (Bingo Bingo about 45, Poker Mon about 10),
+  31 saves (Bingo Bingo about 134, Mossad 19), 17 shares (Mossad 20). Behind only Bingo Bingo, and from 100% cold viewers.
+- The 18 Oct targets (comments 5+, followers 3+ per 1,000) were my own guesses, not real benchmarks, so this film is not
+  "missing" them: 3.3 comments and 1.0 followers per 1,000 are simply on the low side of Bingo Bingo and Poker Mon.
 - Posting slot: Wednesday 4pm worked, and Bingo Bingo was Thursday 6:29pm. The 8 Oct note "weekday 6pm never works
   except Friday" no longer holds. Slot is not the lever; the film is.
 - Only about 12% of viewers reach the end, so only about 1 in 8 sees the CranbriJoos sign-off.
