@@ -30,7 +30,12 @@ scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.25;
 scene.fog = new THREE.Fog(0x140a22, 12, 40);
 
-const camera = new THREE.PerspectiveCamera(35, W / H, 0.05, 100);
+// TikTok (Sam, 22 Oct): a full 9:16 picture, no blurred bands. A taller lens (70 degrees top to bottom) and every
+// camera pulled back 1.42x from what it looks at, so the crabs keep the same width as in the widescreen shots and
+// the extra height shows the set above and the polished floor below.
+const TALL = H > W;
+const DOLLY = TALL ? 1.42 : 1, AIM_DROP = TALL ? 0.35 : 0;
+const camera = new THREE.PerspectiveCamera(TALL ? 70 : 35, W / H, 0.1, 120);
 const loader = new THREE.TextureLoader();
 const tex = async (f) => { const t = await loader.loadAsync('tex/' + f); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
 
@@ -42,13 +47,37 @@ stage.group.scale.setScalar(0.6); stage.group.position.set(0, 0, -4.6);
 const mirror = new Reflector(new THREE.PlaneGeometry(50, 50), { textureWidth: W, textureHeight: H, color: 0x8a8a96 });
 mirror.rotation.x = -Math.PI / 2; mirror.position.set(0, 0, -5);
 scene.add(mirror);
-const film = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshStandardMaterial({ color: 0x1a0f24, roughness: 0.35, metalness: 0.0, transparent: true, opacity: 0.72 }));
-film.rotation.x = -Math.PI / 2; film.position.set(0, 0.001, -5); film.receiveShadow = true;
+// the floor's own design (Sam's photos, 22 Oct): light lines raying out from the middle of the floor, a soft
+// pink-purple glow and the logo printed faintly in the centre. It glows by itself, so the floor near the camera
+// (which only reflects the dark behind it) still reads as the lit ballroom floor in the tall TikTok frame.
+const floorTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 2048;
+  const g = c.getContext('2d'), m = 2048 / 50, cx = 1024, cy = 1024 + 5 * m;     // floor centre at world (0, 0)
+  g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 2048);
+  const glow = g.createRadialGradient(cx, cy, 0, cx, cy, 14 * m);
+  glow.addColorStop(0, 'rgba(150,60,170,0.55)'); glow.addColorStop(0.5, 'rgba(70,25,110,0.35)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = glow; g.fillRect(0, 0, 2048, 2048);
+  let sd = 3; const r = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+  for (let k = 0; k < 90; k++) {
+    const a = k / 90 * Math.PI * 2 + r() * 0.02, len = (6 + r() * 12) * m;
+    const gr = g.createLinearGradient(cx, cy, cx + Math.cos(a) * len, cy + Math.sin(a) * len);
+    const col = ['255,90,200', '120,200,255', '200,150,255'][k % 3];
+    gr.addColorStop(0, `rgba(${col},0.0)`); gr.addColorStop(0.15, `rgba(${col},0.55)`); gr.addColorStop(1, `rgba(${col},0)`);
+    g.strokeStyle = gr; g.lineWidth = 2 + r() * 3;
+    g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len); g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+})();
+const film = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshStandardMaterial({ color: 0x1a0f24, roughness: 0.35, metalness: 0.0, transparent: true, opacity: 0.72,
+  emissive: 0xffffff, emissiveMap: floorTex, emissiveIntensity: 0.55 }));
+film.rotation.x = -Math.PI / 2; film.position.set(0, 0.004, -5); film.receiveShadow = true;
 scene.add(film);
+const floorLogo = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 2.7), new THREE.MeshBasicMaterial({ map: await tex('logo.png'), transparent: true, opacity: 0.22, depthWrite: false, toneMapped: false }));
+floorLogo.rotation.x = -Math.PI / 2; floorLogo.position.set(0, 0.0055, 0.3); scene.add(floorLogo);
 const shadowCatch = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.ShadowMaterial({ opacity: 0.55 }));
-shadowCatch.rotation.x = -Math.PI / 2; shadowCatch.position.set(0, 0.002, -5); shadowCatch.receiveShadow = true;
+shadowCatch.rotation.x = -Math.PI / 2; shadowCatch.position.set(0, 0.007, -5); shadowCatch.receiveShadow = true;
 scene.add(shadowCatch);
-if (ALPHA) { stage.group.visible = false; mirror.visible = false; film.visible = false; scene.fog = null; }
+if (ALPHA) { floorLogo.visible = false; stage.group.visible = false; mirror.visible = false; film.visible = false; scene.fog = null; }
 
 scene.add(new THREE.HemisphereLight(0x9a7cff, 0x1a0a20, 0.55));
 const key = new THREE.DirectionalLight(0xfff1dc, 2.6);
@@ -448,6 +477,8 @@ function cameraAt(t) {
     if (t < s.to) {
       const f = Math.min(1, Math.max(0, (t - t0) / (Math.min(s.to, 25) - t0)));
       const p = V3(...s.a[0]).lerp(V3(...s.b[0]), f), l = V3(...s.a[1]).lerp(V3(...s.b[1]), f);
+      l.y -= AIM_DROP;
+      p.sub(l).multiplyScalar(DOLLY).add(l);
       camera.position.copy(p); camera.lookAt(l); return;
     }
     t0 = s.to;

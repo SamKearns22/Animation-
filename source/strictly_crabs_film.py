@@ -26,6 +26,7 @@ REC_FPS = 59.94
 VW, VH = 1080, 1920
 PW, PH = 1080, 608               # the widescreen picture fitted to the width: the crabs reach the frame edges, so no crop
 PIC_TOP = 640
+CAP_TOP = 1310            # tall film: one line on the dance floor below the desk (and the crabs), inside the safe area
 SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 
 # subtitle chunks: (line number, stretch of speech, words, syllables) - two to five words, the punchline on its own
@@ -88,6 +89,29 @@ def title_sequence():
     return seq
 
 
+def tall_frame(src, s=1.25, ox=520, oy=960, cx=581, cy=291):
+    """TikTok (Sam, 22 Oct): the widescreen ident filling a whole 1080x1920 frame. The picture is enlarged 1.25x with
+    the ball a little left of centre (clear of TikTok's buttons); above and below, every ray from the ball's centre
+    carries on with the colour where it leaves the picture, softened, so the light streaks run on to the frame edges."""
+    import cv2
+    H, W = src.shape[:2]
+    X, Y = np.meshgrid(np.arange(VW, dtype=np.float32), np.arange(VH, dtype=np.float32))
+    du, dv = (X - ox) / s, (Y - oy) / s
+    with np.errstate(divide='ignore', invalid='ignore'):
+        tu = np.where(du > 0, (W - 3 - cx) / du, np.where(du < 0, (2 - cx) / du, np.inf))
+        tv = np.where(dv > 0, (H - 3 - cy) / dv, np.where(dv < 0, (2 - cy) / dv, np.inf))
+    traw = np.minimum(tu, tv)
+    t = np.minimum(traw, 1.0)
+    beyond = 1 / np.maximum(traw, 1e-6)                  # under 1 inside the picture, 1 at its edge, over 1 beyond
+    uu, vv = (cx + du * t).astype(np.float32), (cy + dv * t).astype(np.float32)
+    img = cv2.remap(src, uu, vv, cv2.INTER_LINEAR).astype(np.float32)
+    soft = cv2.remap(cv2.GaussianBlur(src, (0, 0), 2.5), uu, vv, cv2.INTER_LINEAR).astype(np.float32)
+    w = np.clip((beyond - 0.92) * 5, 0, 1)[..., None]    # the blend starts just inside the edge: no seam
+    img = img * (1 - w) + soft * w
+    fade = np.clip(1 - (beyond - 1) * 0.35, 0.45, 1)[..., None]
+    return np.clip(img * fade, 0, 255).astype(np.uint8)
+
+
 def titles(out_dir, w=1280, h=720):
     """The opening at 24 fps, ending exactly at TITLES on the recording's last frame (then the jump cut)."""
     seq = title_sequence()
@@ -95,7 +119,10 @@ def titles(out_dir, w=1280, h=720):
     n = round(TITLES * FPS)
     for k in range(n):
         i = len(seq) - 1 - round((n - 1 - k) * REC_FPS / FPS)    # anchored to the end: the last frame is the last frame
-        Image.fromarray(seq[max(0, i)]).resize((w, h), Image.LANCZOS).save(f'{out_dir}/{k:04d}.png')
+        fr = seq[max(0, i)]
+        if h > w:
+            fr = tall_frame(fr)
+        Image.fromarray(fr).resize((w, h), Image.LANCZOS).save(f'{out_dir}/{k:04d}.png')
 
 
 # ------------------------------------------------------------------------------------------------ sound
@@ -152,7 +179,7 @@ def wrap(s, f, width):
 def caption(img, s, top):
     f = ImageFont.truetype(SANS, 52)
     d = ImageDraw.Draw(img)
-    for i, row in enumerate(wrap(s, f, 700)):
+    for i, row in enumerate(wrap(s, f, 820)):
         d.text((540, top + 30 + i * 66), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=5,
                stroke_fill=(0, 0, 0))
 
@@ -195,10 +222,11 @@ def vertical(src, dst):
         if len(buf) < w * h * 3:
             break
         t = k / FPS
-        img = compose(Image.frombuffer('RGB', (w, h), buf))
+        pic = Image.frombuffer('RGB', (w, h), buf)
+        img = pic.resize((VW, VH), Image.LANCZOS) if h > w else compose(pic)
         for a, b, text in subs:
             if a <= t < b:
-                caption(img, text, PIC_TOP + PH + 24)
+                caption(img, text, CAP_TOP if h > w else PIC_TOP + PH + 24)
         enc.stdin.write(img.tobytes())
         k += 1
     enc.stdin.close(); enc.wait(); p.wait()
@@ -206,6 +234,12 @@ def vertical(src, dst):
 
 
 # ------------------------------------------------------------------------------------------------ join
+def dance_parts(a, b, out):
+    """The dance with its second shot taken out (Sam, 22 Oct): part A (start to beat 16) then part B (beat 24 on)."""
+    subprocess.run([FF, '-v', 'error', '-y', '-i', a, '-i', b, '-filter_complex', '[0:v][1:v]concat=n=2:v=1[v]', '-map', '[v]',
+                    '-r', str(FPS), '-c:v', 'libx264', '-crf', '18', '-pix_fmt', 'yuv420p', out], check=True)
+
+
 def join(dance, judges, titles_dir, out):
     import strictly_judges as J
     import mossad_audio as MA
@@ -213,7 +247,7 @@ def join(dance, judges, titles_dir, out):
     MA.write_wav(wav, film_sound())
     probe = subprocess.run([FF, '-i', dance], capture_output=True, text=True).stderr
     w, h = probe.split('Video:')[1].split(',')[2].split()[0].split('x')
-    fc = (f'[0:v]scale={w}:{h},fps={FPS},setsar=1[a];[1:v]fps={FPS},trim=0:24.9,setpts=PTS-STARTPTS,setsar=1[b];'
+    fc = (f'[0:v]scale={w}:{h},fps={FPS},setsar=1[a];[1:v]fps={FPS},trim=0:{J.DANCE_LEN},setpts=PTS-STARTPTS,setsar=1[b];'
           f'[2:v]scale={w}:{h},fps={FPS},trim=0:{J.DUR},setpts=PTS-STARTPTS,setsar=1[c];[a][b][c]concat=n=3:v=1,fps={FPS}[v]')
     subprocess.run([FF, '-v', 'error', '-y', '-framerate', str(FPS), '-i', f'{titles_dir}/%04d.png', '-i', dance, '-i', judges,
                     '-i', wav, '-filter_complex', fc, '-map', '[v]', '-map', '3:a', '-r', str(FPS), '-c:v', 'libx264', '-crf', '20',
@@ -228,6 +262,8 @@ if __name__ == '__main__':
     elif a[0] == 'sound':
         import mossad_audio as MA
         MA.write_wav(a[1], film_sound())
+    elif a[0] == 'dance':
+        dance_parts(a[1], a[2], a[3])
     elif a[0] == 'join':
         join(*a[1:5])
     elif a[0] == 'vertical':

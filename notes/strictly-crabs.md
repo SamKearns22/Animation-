@@ -130,7 +130,16 @@ Model: notes on movement are Opus medium; building from a plan Opus medium; rend
 - [x] Animatic rendered 21 Oct after Sam's yes (47 s, 8.9 MB, vertical, 1080x1920). Dance 23 min, judges 1 min, join +
       vertical + finish 5 min. Lesson: the ffmpeg join defaulted to 25 fps (cut at 5.04 s, 4% stretch); now fps=24
       forced in `strictly_crabs_film.join`. One extra frame of push-in added at Sam's note (cut stays at 4.85 s).
-- [ ] Waiting on Sam's notes on the animatic
+- [x] Sam's notes on the animatic (22 Oct): (1) remove the dance's second shot (beats 16-24, the close pair at film
+      13.6 s) and adjust the music: cut 8 beats from both, on the bar line; dance rendered as two parts (0-7.375 s,
+      10.8903-24.9 s) and joined (`strictly_crabs_film.py dance`). (2) Judges' music 30% louder (UNDER 0.085 -> 0.1105).
+      (3) Avoid the crowd clapping: measured sharp bursts on song beats 21-36; every bar there is played from 4 bars
+      earlier (beats 4-19, closest match) - `strictly_judges.song_time`; Sam to confirm by ear. (4) Full 9:16 picture,
+      no blurred bands: dance rendered tall (70 deg lens, cameras 1.42x further back, floor given its glowing sunburst
+      and faint printed logo, layers spaced so the floor no longer flickers); titles fill the frame by carrying the
+      streaks outward from the ball (`tall_frame`); judges drawn on a 1080x1920 canvas (backdrop beams and floor
+      extended, Craig's shot 150 higher), subtitles one line at y 1340.
+- [ ] Check sheet + music preview sent; waiting for Sam's clear yes to render the tall animatic (about 30 min)
 
 ## HANDOVER (21 Oct, chat 3)
 Rebuild: npm registry blocked this session; three.js r170 came from GitHub (git clone --depth 1 --branch r170

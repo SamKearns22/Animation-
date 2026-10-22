@@ -32,7 +32,9 @@ from satire_style import rough   # noqa: E402
 import figure as F               # noqa: E402
 import limbs                     # noqa: E402
 
-B.W, B.H = 1280, 720             # the film is widescreen (the crab dance is 16:9)
+TALL = os.environ.get('STRICTLY_WIDE') != '1'    # TikTok (Sam, 22 Oct): a full 9:16 picture, no blurred bands
+B.W, B.H = (1080, 1920) if TALL else (1280, 720)
+FIT = 1080 / 1280 if TALL else 1.0     # tall cameras zoom out so each shot keeps its widescreen width
 F.guard(B)                       # the house style, as in the template: every arm measured against the rig,
 limbs.install(B)                 # and the smooth arms and legs (Sam, 21 Oct: the boxy arms came back here)
 FPS = 12
@@ -234,16 +236,18 @@ SILVER = (214, 214, 230)
 def backdrop(img, cam):
     """Deep blue with pale beams fanning down from the lighting rig, and sparkles (refs 05, 07, 10: flat, no glow)."""
     p = B.Pen(img, cam)
-    p.poly([(-900, -400), (2200, -400), (2200, 1200), (-900, 1200)], BLUE, None, 0)
+    p.poly([(-900, -3200), (2200, -3200), (2200, 1200), (-900, 1200)], BLUE, None, 0)
     rng = np.random.default_rng(5)
     for k in range(15):
         x = -620 + k * 175
         w = 50 + 20 * (k % 3)
-        p.poly(rough([(x - 14, -300), (x + 14, -300), (x + 150 + w, 900), (x + 150 - w, 900)], 4, k), BLUE_L, None, 0)
-        p.poly(rough([(x - 5, -300), (x + 5, -300), (x + 150 + w * 0.35, 900), (x + 150 - w * 0.35, 900)], 3, k + 20),
+        y0 = -1500 if TALL else -300                 # tall frame: the same beams, carried on up to the rig
+        x0 = x + (y0 + 300) * 150 / 1200
+        p.poly(rough([(x0 - 14, y0), (x0 + 14, y0), (x + 150 + w, 900), (x + 150 - w, 900)], 4, k), BLUE_L, None, 0)
+        p.poly(rough([(x0 - 5, y0), (x0 + 5, y0), (x + 150 + w * 0.35, 900), (x + 150 - w * 0.35, 900)], 3, k + 20),
                (96, 142, 230), None, 0)
-    for _ in range(260):
-        x, y = rng.uniform(-700, 2000), rng.uniform(-260, 760)
+    for _ in range(520 if TALL else 260):
+        x, y = rng.uniform(-700, 2000), rng.uniform(-1500 if TALL else -260, 760)
         r = rng.uniform(1.5, 4.2)
         p.ell(x, y, r, r, BLUE_LL if rng.random() < 0.7 else (250, 250, 255), None, 0)
 
@@ -280,7 +284,7 @@ def table(img, cam):
 
 def floor(p, y0):
     """The dance floor in front of the desk: dark and polished, the desk's bands mirrored in it, flat."""
-    p.poly([(-600, y0), (1880, y0), (1880, 1400), (-600, 1400)], (34, 20, 58), INK, 2.4)
+    p.poly([(-600, y0), (1880, y0), (1880, 3200), (-600, 3200)], (34, 20, 58), INK, 2.4)
     y = y0 + 3
     for k, (c, h) in enumerate([((92, 52, 128), 16), ((110, 60, 110), 12), ((70, 40, 100), 22)]):
         p.poly(rough([(-600, y), (1880, y), (1880, y + h), (-600, y + h)], 1.0, 60 + k), c, None, 0)
@@ -324,8 +328,13 @@ import json                      # noqa: E402
 
 J1_DUR, J2_DUR = 6.2, 9.1
 DUR = J1_DUR + J2_DUR
-TITLES = 4.85                     # the logo moves until 4.85 s, then a jump cut into the crabs (Sam, 21 Oct; was 9 s)
-FILM_AT = TITLES + 24.9           # where the judges start in the whole film (titles + dance 24.9 s)
+TITLES = 116 / 24                 # the logo moves until 4.85 s (Sam, 21 Oct), so the cut is on frame 116 at 24 fps
+BEAT = 60 / 136
+CUT_FROM, CUT_BEATS = 0.302 + 16 * BEAT, 8   # Sam, 22 Oct: the dance's second shot (beats 16-24) is removed
+DANCE_A = 177 / 24                # dance frames kept before the cut (0 .. beat 16), then from beat 24 to the end
+DANCE_B0 = 0.302 + 24 * BEAT
+DANCE_LEN = DANCE_A + round((24.9 - DANCE_B0) * 24) / 24
+FILM_AT = TITLES + DANCE_LEN      # where the judges start in the whole film
 SHOTS = [('J1', 0.0, J1_DUR), ('J2', J1_DUR, DUR)]
 LINES = [   # start: where the recording's first sample sits (Craig's begins with 0.9 s of silence, cut in silence)
     dict(n=1, who='CRAIG', text="I don't really understand the joke, darling, but I'm having an amazing time.",
@@ -503,7 +512,8 @@ def shot_of(t):
 
 
 def cam_for(t):
-    return B.Cam(1.6, XS['CRAIG'] + 10, NECK_WIDE + 10) if t < J1_DUR else B.Cam(Z2, CX2, CY2)
+    return B.Cam(1.6 * FIT, XS['CRAIG'] + 10, NECK_WIDE + 10 + (150 if TALL else 0)) if t < J1_DUR else B.Cam(Z2 * FIT, CX2, CY2)
+    # tall J1 sits 150 higher so the desk ends above TikTok's bottom band and the subtitle has floor to sit on
 
 
 def picture(t):
@@ -515,9 +525,11 @@ def picture(t):
     if t >= J1_DUR:
         k = crab_frame(t - J1_DUR)
         lay = Image.open(os.path.join(PASS_DIR, f'{k:04d}.png')).convert('RGBA')
-        W2, H2 = img.size
-        lay = lay.resize((W2, H2), Image.LANCZOS)
-        img.alpha_composite(lay, (0, int(crab_drop() * W2 / 1280)))
+        k = cam.z / Z2 * B.SS                      # the crab layer was rendered for J2's widescreen frame (1280 px)
+        lay = lay.resize((round(1280 * k), round(720 * k)), Image.LANCZOS)
+        x0, y0 = cam.P(CX2 - 640 / Z2, CY2 + (crab_drop() - 360) / Z2)
+        top = Image.new('RGBA', img.size); top.paste(lay, (int(round(x0)), int(round(y0))))
+        img.alpha_composite(top)
     return img
 
 
@@ -527,28 +539,44 @@ def overlay(img, t):
 
 # ------------------------------------------------------------------------------------------------ sound
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
-BEAT = 60 / 136
-SONG_SHIFT = 9.0 - TITLES        # song time = film time + this: the dance still starts on song time 9.0 (its beats)
-SPLICE_AT = TITLES + 0.302 + 55 * BEAT   # film time of beat 55 of the dance: the song jumps back 12 bars (48 beats)
-SPLICE_TO = 9.302 + 7 * BEAT      # song time of beat 7, so it carries on under the judges without running out
-SPLICE = (('music', SONG_SHIFT, SPLICE_AT + SONG_SHIFT), ('music', SPLICE_TO, SPLICE_TO + FILM_AT + DUR - SPLICE_AT))
-UNDER = 0.085                     # the music under the judges (about 21 dB down; Sam, 21 Oct: lower, not gone)
+SB0 = 9.302                       # song time of the dance's beat 0
+SPLICE_BEAT, LOOP_TO = 55, 7      # at the dance's beat 55 the song jumps back to beat 7, so it lasts under the judges
+CLAPS = (20, 36)                  # Sam, 22 Oct: the crowd claps in these beats (measured: sharp bursts on 21-36); each
+                                  # is played from 16 beats (4 bars) earlier instead, the closest match in the song
+UNDER = 0.085 * 1.3               # the music under the judges (Sam, 22 Oct: 30% louder than before; was 0.085)
+
+
+def song_time(f):
+    """Film time (array) -> where in the song to play."""
+    d = f - TITLES
+    cut = CUT_FROM + CUT_BEATS * BEAT
+    s = np.where(d < CUT_FROM, 9.0 + d, 9.0 + d + CUT_BEATS * BEAT)
+    sp = SB0 + SPLICE_BEAT * BEAT
+    s = np.where((d >= CUT_FROM) & (s >= sp), SB0 + LOOP_TO * BEAT + (s - sp), s)
+    c0, c1 = SB0 + CLAPS[0] * BEAT, SB0 + CLAPS[1] * BEAT
+    return np.where((s >= c0) & (s < c1), s - (CLAPS[1] - CLAPS[0]) * BEAT, s)
 
 
 def music_bed(f0, dur):
-    """The song for film times f0..f0+dur: whole up to the splice, then looped back 8 bars; full volume through the
-    dance, eased down to UNDER over 0.25 s at the cut to the judges, faded out over the last 0.8 s of the film."""
+    """The song for film times f0..f0+dur, following song_time, with a 30 ms crossfade at every jump (on bar lines);
+    full volume through the dance, eased down to UNDER at the cut to the judges, faded out over the last 0.8 s."""
     song = MA.load(MUSIC)
     sr = MA.SR
     n = int(dur * sr)
     f = f0 + np.arange(n) / sr
-    m = np.where(f < SPLICE_AT, f + SONG_SHIFT, SPLICE_TO + (f - SPLICE_AT))
-    idx = np.clip((m * sr).astype(int), 0, len(song) - 1)
-    out = song[idx] * (m * sr < len(song))
-    g = np.clip(f / 0.15, 0, 1)                         # the song now starts part-way in: a quick fade-in, no click
-    g = np.where(f >= FILM_AT, 1 - (1 - UNDER) * np.clip((f - FILM_AT) / 0.25, 0, 1), g)
-    end = FILM_AT + DUR
-    g *= np.clip((end - f) / 0.8, 0, 1)
+    m = song_time(f)
+    at = lambda pos: song[np.clip((pos * sr).astype(int), 0, len(song) - 1)] * (pos * sr < len(song))
+    out = at(m)
+    h = int(0.015 * sr)
+    for i in np.nonzero(np.abs(np.diff(m) - 1 / sr) > 1e-3)[0] + 1:
+        k = np.arange(max(0, i - h), min(n, i + h))
+        r = (k - (i - h)) / (2 * h)
+        left = at(m[i - 1] + (k - (i - 1)) / sr)
+        right = at(m[i] + (k - i) / sr)
+        out[k] = left * np.cos(r * np.pi / 2) + right * np.sin(r * np.pi / 2)
+    g = np.clip(f / 0.15, 0, 1)                          # the song starts part-way in: a quick fade-in, no click
+    g = np.where(f >= FILM_AT, g * (1 - (1 - UNDER) * np.clip((f - FILM_AT) / 0.25, 0, 1)), g)
+    g *= np.clip((FILM_AT + DUR - f) / 0.8, 0, 1)
     return out * g
 
 
