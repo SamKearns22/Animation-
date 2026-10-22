@@ -541,8 +541,8 @@ def overlay(img, t):
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
 SB0 = 9.302                       # song time of the dance's beat 0
 SPLICE_BEAT, LOOP_TO = 55, 7      # at the dance's beat 55 the song jumps back to beat 7, so it lasts under the judges
-CLAPS = (20, 36)                  # Sam, 22 Oct: the crowd claps in these beats (measured: sharp bursts on 21-36); each
-                                  # is played from 16 beats (4 bars) earlier instead, the closest match in the song
+CLAPS = (16, 40)                  # Sam, 22 Oct: the crowd claps here (heard by Sam at 16-18 s; widened from 20-36); each
+                                  # is played from 24 beats (6 bars) earlier instead (harmony match 0.957, within 1.1 dB)
 UNDER = 0.085 * 1.3               # the music under the judges (Sam, 22 Oct: 30% louder than before; was 0.085)
 
 
