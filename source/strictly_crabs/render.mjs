@@ -50,13 +50,13 @@ if (mode === 'stills') {
   const filt = n > 1 ? `xstack=inputs=${n}:layout=${layout}:fill=black` : 'null';
   await new Promise(r => spawn(FF, ['-v', 'error', '-y', ...inputs, '-filter_complex', filt, out], { stdio: 'inherit' }).on('close', r));
 } else if (mode === 'video') {
-  const [fps, T0, T1] = rest.slice(2).map(Number);
+  const [fps, T0, T1, SP = 1] = rest.slice(2).map(Number);   // SP: dance seconds per film second (1.25 = 25% faster)
   const ff = spawn(FF, ['-v', 'error', '-y', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(fps), '-i', '-',
     '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-pix_fmt', 'yuv420p', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   const log = [];
   const N = Math.round((T1 - T0) * fps);
   for (let k = 0; k < N; k++) {
-    const t = T0 + k / fps;
+    const t = T0 + SP * k / fps;
     const r = await page.evaluate(t => window.renderAt(t), t);
     log.push({ t: +t.toFixed(3), ...r });
     if (!ff.stdin.write(await grab())) await new Promise(r => ff.stdin.once('drain', r));

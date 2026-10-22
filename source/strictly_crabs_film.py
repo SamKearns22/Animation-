@@ -30,8 +30,8 @@ CAP_TOP = 1310            # tall film: one line on the dance floor below the des
 SANS = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 
 # subtitle chunks: (line number, stretch of speech, words, syllables) - two to five words, the punchline on its own
-CHUNKS = [(1, 0, "I don't really understand", 7), (1, 0, 'the joke, darling,', 4), (1, 1, "but I'm having", 4),
-          (1, 1, 'an amazing time.', 5), (2, 0, 'Two hundred and ninety!', 7)]
+CHUNKS = [(1, 0, "I can't say I understand", 7), (1, 0, 'the joke, darling,', 4), (1, 1, "but I'm having", 4),
+          (1, 1, 'a wonderful time.', 5), (2, 0, 'Two hundred and ninety!', 7)]
 
 
 # ------------------------------------------------------------------------------------------------ titles
@@ -89,27 +89,19 @@ def title_sequence():
     return seq
 
 
-def tall_frame(src, s=1.25, ox=520, oy=960, cx=581, cy=291):
-    """TikTok (Sam, 22 Oct): the widescreen ident filling a whole 1080x1920 frame. The picture is enlarged 1.25x with
-    the ball a little left of centre (clear of TikTok's buttons); above and below, every ray from the ball's centre
-    carries on with the colour where it leaves the picture, softened, so the light streaks run on to the frame edges."""
+def tall_frame(src, s=1.45, ox=520, oy=960, cx=581, cy=291):
+    """TikTok (Sam, 22 Oct): the widescreen ident filling a whole 1080x1920 frame, nothing blurred. The picture is
+    enlarged 1.45x, ball a little left of centre; above and below, every ray from the ball's centre carries on in the
+    colour where it leaves the picture (the ident is a burst of rays, so they simply run on), left sharp."""
     import cv2
     H, W = src.shape[:2]
     X, Y = np.meshgrid(np.arange(VW, dtype=np.float32), np.arange(VH, dtype=np.float32))
     du, dv = (X - ox) / s, (Y - oy) / s
     with np.errstate(divide='ignore', invalid='ignore'):
         tu = np.where(du > 0, (W - 3 - cx) / du, np.where(du < 0, (2 - cx) / du, np.inf))
-        tv = np.where(dv > 0, (H - 3 - cy) / dv, np.where(dv < 0, (2 - cy) / dv, np.inf))
-    traw = np.minimum(tu, tv)
-    t = np.minimum(traw, 1.0)
-    beyond = 1 / np.maximum(traw, 1e-6)                  # under 1 inside the picture, 1 at its edge, over 1 beyond
-    uu, vv = (cx + du * t).astype(np.float32), (cy + dv * t).astype(np.float32)
-    img = cv2.remap(src, uu, vv, cv2.INTER_LINEAR).astype(np.float32)
-    soft = cv2.remap(cv2.GaussianBlur(src, (0, 0), 2.5), uu, vv, cv2.INTER_LINEAR).astype(np.float32)
-    w = np.clip((beyond - 0.92) * 5, 0, 1)[..., None]    # the blend starts just inside the edge: no seam
-    img = img * (1 - w) + soft * w
-    fade = np.clip(1 - (beyond - 1) * 0.35, 0.45, 1)[..., None]
-    return np.clip(img * fade, 0, 255).astype(np.uint8)
+        tv = np.where(dv > 0, (H - 26 - cy) / dv, np.where(dv < 0, (24 - cy) / dv, np.inf))
+    t = np.minimum(np.minimum(tu, tv), 1.0)
+    return cv2.remap(src, (cx + du * t).astype(np.float32), (cy + dv * t).astype(np.float32), cv2.INTER_CUBIC)
 
 
 def titles(out_dir, w=1280, h=720):

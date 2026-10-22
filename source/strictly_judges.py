@@ -2,7 +2,7 @@
 """Strictly Crabs Dancing: the judges (Satire style), after the crab dance. Widescreen 1280 x 720 like the rest of the
 film. Refs: refs/strictly-crabs/judges/ (judges-ref-01..12). Notes: notes/strictly-crabs.md.
 
-Shot J1: Craig alone, flamboyant and droll: "I don't really understand the joke, darling, but I'm having an amazing time."
+Shot J1: Craig alone, flamboyant and droll: "I can't say I understand the joke, darling, but I'm having a wonderful time."
 Shot J2: all four at the table (left to right Craig, Motsi, Shirley, Anton); the crabs spin past in front and every
 judge's eyes follow them; once they have passed, Anton shoots up with his paddle like a formal, excited puppy: "290!"
 
@@ -14,6 +14,7 @@ Motsi's ruffle, Shirley's silver swirls, the bow ties, the bun), with the table,
 """
 import math
 import os
+import subprocess
 import sys
 
 import numpy as np
@@ -329,15 +330,16 @@ import json                      # noqa: E402
 J1_DUR, J2_DUR = 6.2, 9.1
 DUR = J1_DUR + J2_DUR
 TITLES = 116 / 24                 # the logo moves until 4.85 s (Sam, 21 Oct), so the cut is on frame 116 at 24 fps
-BEAT = 60 / 136
-CUT_FROM, CUT_BEATS = 0.302 + 16 * BEAT, 8   # Sam, 22 Oct: the dance's second shot (beats 16-24) is removed
-DANCE_A = 177 / 24                # dance frames kept before the cut (0 .. beat 16), then from beat 24 to the end
-DANCE_B0 = 0.302 + 24 * BEAT
-DANCE_LEN = DANCE_A + round((24.9 - DANCE_B0) * 24) / 24
+SPEED = 1.25                      # Sam, 22 Oct: the crab dance is 25% faster (the music is sped up with it, pitch kept)
+BEAT = 60 / 136                   # one beat in the dance's own time (the dance is built on this grid)
+NA, NB = 141, 268                 # dance frames kept: part A (start to just before beat 16), then part B (beat 24 on)
+DANCE_B0 = 0.302 + 24 * BEAT      # dance time where part B starts (Sam, 22 Oct: the second shot, beats 16-24, is removed)
+DANCE_A = NA / 24                 # real seconds of part A
+DANCE_LEN = (NA + NB) / 24
 FILM_AT = TITLES + DANCE_LEN      # where the judges start in the whole film
 SHOTS = [('J1', 0.0, J1_DUR), ('J2', J1_DUR, DUR)]
 LINES = [   # start: where the recording's first sample sits (Craig's begins with 0.9 s of silence, cut in silence)
-    dict(n=1, who='CRAIG', text="I don't really understand the joke, darling, but I'm having an amazing time.",
+    dict(n=1, who='CRAIG', text="I can't say I understand the joke, darling, but I'm having a wonderful time.",
          audio='strictly-craig', start=-0.91),
     dict(n=2, who='ANTON', text='Two hundred and ninety!', audio='strictly-anton', start=J1_DUR + 5.2),
 ]
@@ -372,7 +374,7 @@ def pass_info():
 def crab_frame(s2):
     """The crab layer's frame index for J2 time s2 (seconds into the shot)."""
     d = pass_info()
-    return min(len(d['frames']) - 1, max(0, round((PASS_T0 + s2 - d['T0']) * d['fps'])))
+    return min(len(d['frames']) - 1, max(0, round((PASS_T0 + SPEED * s2 - d['T0']) * d['fps'])))   # the pass is in dance time
 
 
 def crabs_x(s2):
@@ -539,37 +541,122 @@ def overlay(img, t):
 
 # ------------------------------------------------------------------------------------------------ sound
 MUSIC = os.path.join(HERE, '..', 'refs', 'strictly-crabs', 'music.mp3')
-SB0 = 9.302                       # song time of the dance's beat 0
+SB0 = 9.302                       # song time of the dance's beat 0 (original speed)
+MUSIC_X = os.path.join(HERE, 'data', 'strictly-crabs', 'music-x1.25.wav')   # the song 25% faster, same pitch
+BEAT_R = BEAT / SPEED             # one beat in the film
+SB0_R = SB0 / SPEED
+SONG_AT = 9.0 / SPEED             # sped-up song time at the start of the dance
 FOLD_AT, FOLD_BACK = 48, 24       # Sam, 22 Oct: the crowd claps in the song's last bars (beats 48-56, heard at 23-26 s).
                                   # At beat 48 the music jumps back 24 beats (6 bars: harmony match 0.977, 0.3 dB) and
                                   # carries on from there, folding back again if it gets to 48 again; the claps never play.
 UNDER = 0.085 * 1.3               # the music under the judges (Sam, 22 Oct: 30% louder than before; was 0.085)
+SEAM_SEARCH, SEAM_WIN, SEAM_FADE = 0.020, 0.040, 0.030   # a splice may slide up to 20 ms to match the bass waveform
 
 
-def song_time(f):
-    """Film time (array) -> where in the song to play."""
-    d = f - TITLES
-    s = np.where(d < CUT_FROM, 9.0 + d, 9.0 + d + CUT_BEATS * BEAT)      # the removed shot: 8 beats skipped, on a bar line
-    b = (s - SB0) / BEAT
-    return np.where(b >= FOLD_AT, SB0 + (FOLD_AT - FOLD_BACK + (b - FOLD_AT) % FOLD_BACK) * BEAT, s)
+def song_file():
+    if not os.path.exists(MUSIC_X):
+        import imageio_ffmpeg
+        os.makedirs(os.path.dirname(MUSIC_X), exist_ok=True)
+        subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-y', '-i', MUSIC, '-ac', '1', '-ar', '48000',
+                        '-filter:a', f'atempo={SPEED}', MUSIC_X], check=True)
+    return MUSIC_X
 
 
-def music_bed(f0, dur):
-    """The song for film times f0..f0+dur, following song_time, with a 30 ms crossfade at every jump (on bar lines);
-    full volume through the dance, eased down to UNDER at the cut to the judges, faded out over the last 0.8 s."""
-    song = MA.load(MUSIC)
+_LOW = None
+
+
+def low_song():
+    """The sped-up song's low end (below 400 Hz: bass and kick), where a badly joined splice thumps."""
+    global _LOW
+    if _LOW is None:
+        from scipy.signal import butter, sosfiltfilt
+        _LOW = sosfiltfilt(butter(4, 400, 'low', fs=MA.SR, output='sos'), MA.load(song_file()))
+    return _LOW
+
+
+def seam_fit(po, pi):
+    """Slide the incoming position pi by up to +-20 ms so its bass waveform carries on from the outgoing music at po
+    without a jump (the highest match of the 40 ms either side). Returns (shift in seconds, residual at the best shift,
+    residual with no shift): residual = how much the two waveforms still differ, as a fraction of their size."""
+    x = low_song()
+    sr = MA.SR
+    w = int(SEAM_WIN * sr)
+
+    def win(p, k):
+        i = int(round(p * sr)) + k
+        return x[i - w:i + w]
+    a = win(po, 0)
+    res = {}
+    for k in range(-int(SEAM_SEARCH * sr), int(SEAM_SEARCH * sr) + 1, 2):
+        b = win(pi, k)
+        res[k] = float(np.sqrt(np.mean((a - b) ** 2)) / (np.sqrt(np.mean(a ** 2)) + 1e-9))
+    best = min(res, key=res.get)
+    return best / sr, res[best], res[0]
+
+
+def plan_seams(total, report=None):
+    """The music's path through the sped-up song as segments [(film time, song position at that time)], each played at
+    normal speed. The song jumps twice kinds of ways: over the removed shot (8 beats on) and back from the claps (24
+    beats back, whenever it would reach beat 48). The beat pattern repeats every 2 bars, so a jump may sit a few beats
+    either side of the picture cut and still stay on the beat; each jump is put where the bass of the two sides joins
+    most cleanly (and slid up to 20 ms to match), so nothing thumps or skips."""
+    segs = [(0.0, SONG_AT - TITLES)]
+    skip = (DANCE_B0 - NA * SPEED / 24) / SPEED               # the removed shot, in film seconds
+    t_cut = TITLES + DANCE_A
+    film0, song0 = segs[-1]
+    best = None
+    for tau in np.arange(-3, 3.01, 0.125):                    # beats either side of the picture cut
+        fc = t_cut + tau * BEAT_R
+        po = song0 + (fc - film0)
+        d, r, z = seam_fit(po, po + skip)
+        if best is None or r < best[0]:
+            best = (r, fc, po + skip + d, d, z, tau)
+    segs.append((best[1], best[2]))
+    if report is not None:
+        report.append(('removed shot', best[1], best[3], best[0], best[4], best[5]))
+    while True:
+        film0, song0 = segs[-1]
+        t48 = film0 + (SB0_R + FOLD_AT * BEAT_R - song0)      # when this stretch would reach the clap bars
+        if t48 > total:
+            break
+        best = None
+        for tau in np.arange(-4, 0.001, 0.125):
+            fc = t48 + tau * BEAT_R
+            if fc < film0 + 1.0:
+                continue
+            po = song0 + (fc - film0)
+            d, r, z = seam_fit(po, po - FOLD_BACK * BEAT_R)
+            if best is None or r < best[0]:
+                best = (r, fc, po - FOLD_BACK * BEAT_R + d, d, z, tau)
+        segs.append((best[1], best[2]))
+        if report is not None:
+            report.append(('back from claps', best[1], best[3], best[0], best[4], best[5]))
+    return segs
+
+
+def music_bed(f0, dur, report=None):
+    """The sped-up song for film times f0..f0+dur along plan_seams, each jump a 30 ms equal-power crossfade. Full
+    volume through the dance, eased down to UNDER at the cut to the judges, faded out over the last 0.8 s."""
+    song = MA.load(song_file())
     sr = MA.SR
     n = int(dur * sr)
     f = f0 + np.arange(n) / sr
-    m = song_time(f)
+    segs = plan_seams(FILM_AT + DUR, report)
+    starts = np.array([a for a, _ in segs])
+    sp = np.array([b for _, b in segs])
+    j = np.searchsorted(starts, f, 'right') - 1
+    m = sp[j] + (f - starts[j])
     at = lambda pos: song[np.clip((pos * sr).astype(int), 0, len(song) - 1)] * (pos * sr < len(song))
     out = at(m)
-    h = int(0.015 * sr)
-    for i in np.nonzero(np.abs(np.diff(m) - 1 / sr) > 1e-3)[0] + 1:
+    h = int(SEAM_FADE / 2 * sr)
+    for q in range(1, len(segs)):
+        i = int(round((segs[q][0] - f0) * sr))
+        if i < -h or i > n + h:
+            continue
         k = np.arange(max(0, i - h), min(n, i + h))
         r = (k - (i - h)) / (2 * h)
-        left = at(m[i - 1] + (k - (i - 1)) / sr)
-        right = at(m[i] + (k - i) / sr)
+        left = at(segs[q - 1][1] + (f[k] - segs[q - 1][0]))
+        right = at(segs[q][1] + (f[k] - segs[q][0]))
         out[k] = left * np.cos(r * np.pi / 2) + right * np.sin(r * np.pi / 2)
     g = np.clip(f / 0.15, 0, 1)                          # the song starts part-way in: a quick fade-in, no click
     g = np.where(f >= FILM_AT, g * (1 - (1 - UNDER) * np.clip((f - FILM_AT) / 0.25, 0, 1)), g)
