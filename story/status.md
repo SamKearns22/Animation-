@@ -465,3 +465,4 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
 
 ## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.
+- 23 Oct: POSTED Thu 22 Oct 4:01pm. 20 h: 256 views, 6.5 s avg watch, 3.65% in full, 0 followers (`story/metrics.md`).

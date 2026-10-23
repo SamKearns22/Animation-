@@ -98,3 +98,25 @@ Reading (Claude, 22 Oct):
 - Posting slot: Wednesday 4pm worked, and Bingo Bingo was Thursday 6:29pm. The 8 Oct note "weekday 6pm never works
   except Friday" no longer holds. Slot is not the lever; the film is.
 - Only about 12% of viewers reach the end, so only about 1 in 8 sees the CranbriJoos sign-off.
+
+## Snapshot: Fri 23 Oct 2026, 12:11 (Sam's TikTok Studio screens)
+
+| Film | Posted | Age | Length | Views | Avg watch (share) | Watched in full | Likes /100 | Shares /1,000 | Saves /1,000 | Comments /1,000 | New followers (/1,000) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Power Crime Action | Wed 21 Oct, 4:03pm | 44 h | 49.4 s | 8,716 | 17.2 s (35%) | 12.3% | 5.6 | 2.2 | 3.9 | 3.1 | 10 (1.1) |
+| Strictly Crabs Dancing | Thu 22 Oct, 4:01pm | 20 h | 39.2 s | 256 | 6.5 s (17%) | 3.65% | 5.5 | 3.9 | 0 | 23.4 | 0 |
+
+Raw: Power Crime Action 487 likes, 27 comments, 19 shares, 34 saves; Strictly Crabs 14 likes, 6 comments, 1 share, 0 saves.
+
+Reading (Claude, 23 Oct):
+- Power Crime Action is levelling off: +617 views in the 18 h since the last snapshot (8,099 to 8,716), the daily
+  chart peaked on day one and is fading. Retention is steady (17.2 s, 12.3%), followers 8 to 10. Likely ends near 9-10K.
+- Strictly Crabs stalled at 256 views, almost exactly like DLC (251 views, 6.1 s, 2.7% in full) and Russiadent Evil
+  (357, 6.6 s). Average watch of 6.5 s is the same "leave at about 6 s" pattern as every film that stopped at a few
+  hundred. 256 is also about the size of TikTok's first test batch (200-500 people), so it looks as if it did not pass
+  that first test, rather than being shown widely and ignored.
+- The few who stayed were engaged: 5.5 likes per 100 (same as Power Crime Action) and 6 comments from 256 views (23 per
+  1,000, our highest rate yet, though 6 comments is a tiny sample). The film itself isn't disliked; too few people stay
+  past the first seconds for TikTok to push it.
+- Sam's note: he expected it to underperform and posted it because the joke amused him. Kept as a deliberate
+  passion post, not a mistake.
