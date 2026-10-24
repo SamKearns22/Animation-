@@ -32,6 +32,8 @@ G = 9.8
 TEAL, TEAL_D = (64, 190, 196), (40, 150, 160)
 CREAM = (244, 232, 200)
 BEAN = (222, 110, 50)
+# Beans in sauce (ref beans-in-sauce, Sam's note 14): thin glossy orange-red sauce, pale cream beans sitting in it
+SAUCE, SAUCE_D, SAUCE_L, BEAN_C = (200, 66, 28), (150, 40, 16), (246, 170, 120), (238, 214, 162)
 WATER, WATER_D = (206, 228, 242), (170, 204, 226)
 CAP = (40, 90, 200)
 CHARCOAL, CHARCOAL_D = (66, 68, 74), (44, 46, 52)
@@ -113,6 +115,47 @@ def tin(img, cam, c, dent=0.0, lid=True):
         (x, y), kk = cam.project(q)
         p.poly([(x - 0.012 * kk, y), (x, y - 0.01 * kk), (x + 0.012 * kk, y + 0.002 * kk), (x, y + 0.008 * kk)],
                TEAL_D, INK, 1.0)
+
+
+PLATE, PLATE_RIM, PLATE_D = (246, 246, 240), (64, 104, 176), (214, 216, 210)
+RACK = (150, 154, 160)
+CROCK_AT = (-5.22, 0.92, 1.5)        # the dish rack on the sink run (Sam, 24 Oct: crockery on the sides, not the island)
+
+
+def dish_rack(img, cam, c=CROCK_AT, smashed=False):
+    """A dish rack on the worktop: a low grey wire tray (38 cm along the run), three plates standing up in it (26 cm,
+    a blue rim) and two mugs. Smashed (shot 12, robot 4's blast): the tray left with two broken halves lying in it."""
+    p = _pen(img)
+    if cam.depth(c) < 0.2:
+        return
+    x, y, z = c
+    tray = [(x - 0.14, y, z - 0.19), (x + 0.14, y, z - 0.19), (x + 0.14, y, z + 0.19), (x - 0.14, y, z + 0.19)]
+    cam.poly(p, [(a, b + 0.055, d) for a, b, d in tray], (190, 194, 198), INK, 1.2)
+    for k in range(5):                                         # its wires
+        zz = z - 0.17 + 0.085 * k
+        cam.line(p, [(x - 0.14, y + 0.055, zz), (x + 0.14, y + 0.055, zz)], RACK, 1.2)
+    if smashed:
+        for k, (dz, a0) in enumerate(((-0.08, 0.4), (0.07, 3.6))):
+            half = [(x + 0.11 * math.cos(a0 + math.pi * i / 8), y + 0.06, z + dz + 0.09 * math.sin(a0 + math.pi * i / 8))
+                    for i in range(9)]
+            half += [(x + 0.02, y + 0.06, z + dz + 0.01), (x - 0.03, y + 0.06, z + dz - 0.02)]
+            cam.poly(p, half, PLATE, INK, 1.2)
+        return
+    things = [('plate', z - 0.12), ('plate', z - 0.04), ('plate', z + 0.04), ('mug', z + 0.13)]
+    for kind, zz in sorted(things, key=lambda q: -math.dist(cam.pos, (x, y, q[1]))):
+        if kind == 'plate':
+            ring = [(x + 0.13 * math.cos(a), y + 0.07 + 0.13 + 0.13 * math.sin(a), zz) for a in np.linspace(0, 6.283, 22, endpoint=False)]
+            cam.poly(p, ring, PLATE, INK, 1.2)
+            rim = [(x + (a - x) * 0.84, b * 0.84 + (y + 0.2) * 0.16, d) for a, b, d in ring]
+            cam.line(p, rim + rim[:1], PLATE_RIM, 1.4)
+            cam.poly(p, [(x + (a - x) * 0.55, b * 0.55 + (y + 0.2) * 0.45, d) for a, b, d in ring], PLATE_D, None)
+        else:
+            for dx in (-0.05, 0.05):
+                mc = (x + dx, y + 0.055, zz)
+                S.cylinder(mc, 0.042, 0.095, {'side': PLATE, 'top': PLATE_D}, n=16)[0].draw(img, cam, p)
+                a = _facing_arc(cam, mc)
+                cam.poly(p, _ring(mc, 0.0425, y + 0.125, 10, a - 1.3, a + 1.3) + _ring(mc, 0.0425, y + 0.135, 10, a + 1.3, a - 1.3),
+                         PLATE_RIM, None)
 
 
 def bottle(img, cam, c):
@@ -392,10 +435,68 @@ def draw_piece(img, cam, pc, t):
                     zip(radii, np.linspace(0, 2 * math.pi, nv, endpoint=False))], WATER, WATER_D, 1.0)
         else:
             p.ell(X, Y, s * 0.6, s * 0.8, WATER, WATER_D, 1.0)
-    elif pc.kind == 'bean':                                   # a baked bean in its orange sauce
-        p.ell(X, Y, s * 0.9, s * 0.6, BEAN, (150, 70, 30), 1.0)
+    elif pc.kind == 'bean':                                   # a single bean, a coat of sauce on it
+        p.ell(X, Y, s * 0.9, s * 0.6, BEAN_C, INK, 1.0)
+        p.ell(X + s * 0.15, Y + s * 0.15, s * 0.55, s * 0.3, SAUCE, None)
+    elif pc.kind == 'goop':                                   # a clump of beans in thin sauce (Sam's note 14): a
+        goop(p, cam, pc, t, (x, y, z), X, Y, s, rng)          # wobbling blob in flight, a flat glossy splat once down
     else:
         p.poly(pts, pc.col, INK, 1.2)
+
+
+def landed_at(pc):
+    """When a piece came to rest (seconds), or None."""
+    last = pc.track[-1][0]
+    for i in range(len(pc.track) - 1, 0, -1):
+        if pc.track[i - 1][0] != last:
+            return pc.t0 + i / 120 if i < len(pc.track) - 1 else None
+    return pc.t0
+
+
+def goop(p, cam, pc, t, at, X, Y, s, rng):
+    x, y, z = at
+    tl = landed_at(pc)
+    nb = int(rng.integers(2, 5))
+    if tl is not None and t >= tl:                            # down: a flat splat lying on the surface, beans in it
+        k = min(1.0, 0.55 + (t - tl) / 0.25)                  # it spreads out as it lands
+        R = pc.size * 1.5 * k
+        nv = 11
+        rad = rng.uniform(0.6, 1.0, nv)
+        a0 = rng.uniform(0, 6.3)
+        ring = [(x + R * rad[i] * math.cos(a0 + 6.283 * i / nv), y + 0.003, z + R * rad[i] * 0.8 * math.sin(a0 + 6.283 * i / nv))
+                for i in range(nv)]
+        if getattr(pc, 'drip', None) is not None:             # over the island's edge: a run of sauce down its side
+            (ex, ey, ez), (nx, nz) = pc.drip
+            L = 0.28 * min(1.0, max(0.0, (t - tl) / 1.6))
+            w = pc.size * 0.45
+            if L > 0.01:
+                tx, tz = -nz, nx
+                run = [(ex + tx * w, ey, ez + tz * w), (ex - tx * w, ey, ez - tz * w),
+                       (ex - tx * w * 0.6 + nx * 0.004, ey - L, ez - tz * w * 0.6 + nz * 0.004),
+                       (ex + tx * w * 0.7 + nx * 0.004, ey - L * 0.75, ez + tz * w * 0.7 + nz * 0.004)]
+                if all(cam.depth(q) > 0.2 for q in run):
+                    cam.poly(p, run, SAUCE, INK, 1.0)
+        if not all(cam.depth(q) > 0.2 for q in ring):
+            return
+        cam.poly(p, ring, SAUCE, INK, 1.0)
+        pts = [cam.project(q)[0] for q in ring]
+        cx, cy = sum(q[0] for q in pts) / nv, sum(q[1] for q in pts) / nv
+        p.poly([(cx + (u - cx) * 0.75 + 1, cy + (v - cy) * 0.75 + 1) for u, v in pts], SAUCE_D, None)
+        p.poly([(cx + (u - cx) * 0.62, cy + (v - cy) * 0.62) for u, v in pts], SAUCE, None)
+        bs = max(1.2, s * 0.32)
+        for i in range(nb):                                   # the beans sitting in it
+            a = rng.uniform(0, 6.3)
+            r = rng.uniform(0.0, 0.5)
+            bx, by = cx + math.cos(a) * r * s * 1.2, cy + math.sin(a) * r * s * 0.5
+            p.ell(bx, by, bs, bs * 0.62, BEAN_C, INK, 0.9)
+        p.ell(cx - s * 0.4, cy - s * 0.12, s * 0.28, s * 0.07, SAUCE_L, None)   # the gloss
+        return
+    wob = 1 + 0.18 * math.sin((t - pc.t0) * 30 + pc.seed % 7)   # in flight: a wobbling blob of sauce, beans showing
+    p.ell(X, Y, s * 0.9 * wob, s * 0.7 / wob, SAUCE, INK, 1.0)
+    for i in range(nb):
+        a = rng.uniform(0, 6.3)
+        p.ell(X + math.cos(a) * s * 0.4, Y + math.sin(a) * s * 0.3, s * 0.28, s * 0.18, BEAN_C, INK, 0.8)
+    p.ell(X - s * 0.35, Y - s * 0.3, s * 0.22, s * 0.08, SAUCE_L, None)
 
 
 # ------------------------------------------------------------------------------------------------ effects
@@ -425,21 +526,29 @@ def sparks(img, cam, t, t0, at, seed, n=14, col='yellow', speed=3.0, life=0.35, 
 
 
 def flash(img, cam, at, size, seed=0, col='yellow'):
-    """A hard-edged impact or muzzle flash at a world point (a star facing us), for one or two frames."""
+    """A hard-edged impact or muzzle flash at a world point: a lumpy, uneven flat burst of light facing us (never a
+    star: Sam, 24 Oct, 'too cartoony'; stars are off-style shorthand, guides/satire.md), for one frame."""
     if cam.depth(at) < 0.2:
         return
     (X, Y), k = cam.project(at)
     rng = np.random.default_rng(seed)
-    r = size * k
-    n = 10
-    pts = [(X + r * (1.0 if i % 2 == 0 else rng.uniform(0.35, 0.5)) * math.cos(a),
-            Y + r * (1.0 if i % 2 == 0 else rng.uniform(0.35, 0.5)) * math.sin(a))
-           for i, a in enumerate(np.linspace(0, 2 * math.pi, n, endpoint=False) + rng.uniform(0, 1))]
+    r = size * k * 0.8
+    n = 13                                     # many soft, uneven lobes: a ragged blob, no points
+    a0 = rng.uniform(0, 2 * math.pi)
+    rad = rng.uniform(0.72, 1.0, n)
+    pts = []
+    for i in range(n * 3):                     # each lobe a curve between its neighbours (hand-cut, never spiky)
+        f = i / 3
+        i0, i1 = int(f) % n, (int(f) + 1) % n
+        w = f - int(f)
+        rr = rad[i0] + (rad[i1] - rad[i0]) * (3 * w * w - 2 * w * w * w) + 0.05 * math.sin(math.pi * w)
+        a = a0 + 2 * math.pi * f / n
+        pts.append((X + r * rr * math.cos(a), Y + r * rr * 0.92 * math.sin(a)))
     p = _pen(img)
-    outer, mid = ((255, 160, 40), (255, 232, 110)) if col == 'yellow' else (COBALT, COBALT_L)
+    outer, mid = ((255, 176, 60), (255, 232, 120)) if col == 'yellow' else (COBALT, COBALT_L)
     p.poly(pts, outer, INK, 1.6)
-    p.poly([(X + (x - X) * 0.6, Y + (y - Y) * 0.6) for x, y in pts], mid, None)
-    p.poly([(X + (x - X) * 0.28, Y + (y - Y) * 0.28) for x, y in pts], (255, 255, 244), None)
+    p.poly([(X + (x - X) * 0.62, Y + (y - Y) * 0.62) for x, y in pts], mid, None)
+    p.poly([(X + (x - X) * 0.3, Y + (y - Y) * 0.3) for x, y in pts], (255, 255, 244), None)
 
 
 def plasma(img, cam, a, b, width=0.065):

@@ -41,7 +41,7 @@ FLAT = S.FLAT
 NAME = 'prepper-minister'
 HANDLE = '@TheTikTokPM'                     # the TikTokPM frame from the final Cry Minister (name and description only)
 DESCRIPTION = ''                            # Sam, 24 Oct: the TikTok description comes later
-HOOK = ('Hook Text from Sam', {'y': 880})   # comes later from Sam (finish.py adds it with the CranbriJoos sign-off)
+HOOK = ('Andy asks the UK to stockpile', {'y': 880})   # Sam, 24 Oct (finish.py adds it with the CranbriJoos sign-off)
 # Each line: its recording (source/audio/prepper/), where its speech starts in the film (`at`), and its subtitles as
 # (time in the recording, chunk): two to five words, each up on its first word; the punchline on its own.
 LINES = [
@@ -427,10 +427,13 @@ SPEC = {   # each robot: its arms (A cannon, B blade, C and D cannon, 1-2 blade,
     '1': dict(arms={'R': 'blade', 'L': 'hand'}), '2': dict(arms={'R': 'hand', 'L': 'blade'}),
     '3': dict(arms={'R': 'cannon', 'L': 'hand'}), '4': dict(arms={'R': 'cannon', 'L': 'hand'}),
     '5': dict(arms={'R': 'cannon', 'L': 'hand'}), '6': dict(arms={'R': 'cannon', 'L': 'hand'}),
+    '7': dict(arms={'R': 'cannon', 'L': 'hand'}), '8': dict(arms={'R': 'hand', 'L': 'cannon'}),
 }
 # Wes's aim (plan degrees, unwrapped so he swings the short way): robot 4 at the window, round past the hall door to
 # robot 2 in the wide opening, robot 6 under it, back to robot 5 coming in from the hall, then on at the opening.
-WES_AIM = [(0.0, 236.0), (1.4, 246.0), (3.9, 244.0), (4.6, 448.0), (7.2, 451.0), (7.45, 486.0), (8.35, 486.0),
+# Sam, 24 Oct: once robot 4 blew he held on the empty window and read as staring at Andy: he now swings the long way
+# round (never past Andy) onto robot 3 coming in from the lounge, then on to robot 2
+WES_AIM = [(0.0, 236.0), (1.4, 246.0), (2.85, 244.0), (3.45, 468.0), (4.3, 462.0), (4.6, 448.0), (7.2, 451.0), (7.45, 486.0), (8.35, 486.0),
            (8.9, 409.0), (9.85, 409.0), (10.3, 430.0), (11.0, 455.0)]
 # Andy: robot 4 (west), a snap turn to robot 1 coming from the east, on his knees under its blade, up again, robot 3.
 ANDY_AIM = [(0.0, 282.0), (3.0, 282.0), (3.15, 72.0), (5.6, 72.0), (5.75, 92.0), (8.5, 92.0), (8.75, 29.0), (11.0, 29.0)]
@@ -440,8 +443,14 @@ DODGES = [(0.45, 0.95, -1), (2.45, 2.95, -1), (3.95, 4.45, 1), (4.85, 5.35, 1)] 
 KNEEL = (6.4, 6.65, 7.9, 8.5)                        # down, on his knees, up again (the blade passes over him)
 SWIPE = (6.1, 6.55, 6.9)                             # robot 1: wind-up, the swipe across, through
 HEAD1 = 7.35                                         # Andy shoots robot 1's head off (the camera west: Andy nearest,
-DIES = {'4': 3.9, '2': 7.2, '6': 8.35, '3': 5.6}     # the robot beyond him); cut down (robot 5 is blown apart)
-BLOWN5 = 9.8
+DIES = {'2': 7.2, '6': 8.35, '3': 5.6}               # the robot beyond him); cut down (robots 4 and 5 blown apart)
+# Sam's note 17 (24 Oct): robot 4 takes the hits (holes, sparks, a jolt each) and explodes like robot 5, while the
+# camera still faces the window (it turns away from about 3.2 s)
+BLOWN = {'4': 2.75, '5': 9.8}
+BLOWN5 = BLOWN['5']
+# Robots 7 and 8 (note 17): cannons, stalking across the west garden towards the window; still far short of it when
+# the camera turns away, and never inside in this shot (my call on their timing)
+GARDEN = {'7': ((-12.2, 0.7), (-7.4, 1.9)), '8': ((-12.8, 4.7), (-7.9, 3.3))}
 # The plasma (robot, seconds, what it is aimed at): every shot misses its man (he dodges or it goes wide) and burns
 # where it lands; robot 6's two blow up the tins and bottles on the island, two of robot 5's take out the pendants.
 PLASMA12 = [('4', 0.5, 'andy'), ('5', 2.0, 'wes'), ('4', 2.5, 'andy'), ('3', 4.0, 'andy'), ('3', 4.9, 'andy'),
@@ -594,6 +603,25 @@ def robot_pose(name, t):
         if 0.3 <= u <= 0.8 or u > 2.2:               # a shot from the sill as it climbs; then crouched, firing
             aim_cannon(p, '4', u, height=p.get('y', 0.0) + 1.1 + (0.5 if u < 1 else 0.0))
         andy_holes('4', sp)
+        jolt = 0.0                                    # each round that strikes it knocks it back a little
+        for k, h in enumerate(h for h in (WES_HITS or []) if h[4] == 'robot 4'):
+            if 0 <= t - h[0] < 0.12:
+                jolt += (5.0 if k % 2 else 3.0) * (1 - (t - h[0]) / 0.12)
+        for s_, who in ANDY_SHOTS:
+            if who == '4' and 0 <= u - s_ < 0.25:
+                jolt += 9.0 * (1 - (u - s_) / 0.25)
+        p['lean'] = p.get('lean', 0.0) - jolt
+        if u >= BLOWN['4']:                           # blown apart on the sink run: the legs left, toppling back
+            sp['dead'] = True
+            sp['headless'] = True
+            sp['lost'] = {'armR', 'armL', 'chest', 'ridge', 'cowl', 'shoulder', 'flare', 'rib'}
+            k = ease((u - BLOWN['4'] - 0.1) / 0.5)
+            p['fall'] = (80 * k, 270.0)
+        return p, sp
+    elif name in GARDEN:                              # stalking across the garden towards the window
+        a, b = GARDEN[name]
+        p = R.pose(**R.walk(u, a, b, 0.0, 11.0, stride=0.42, phase=0.5 if name == '8' else 0.0))
+        p['sweep'] = R.eye_sweep(t, 0.3 if name == '7' else 0.8)
     elif name == '5':                                 # walks in from the hall door in stages, firing at Wes
         stages = [(0.0, 1.5, (-1.2, 5.9), (-1.2, 5.3)), (3.5, 4.6, (-1.2, 5.3), (-1.25, 5.0)),
                   (6.8, 8.2, (-1.25, 5.0), (-1.3, 4.75))]
@@ -629,7 +657,7 @@ def robot_pose(name, t):
 
 
 ROBOTS_IN = {'s8': ['A'], 's9': ['A', 'B'], 's10': ['C', 'D'], 's11': ['5'],
-             's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5', '6']}
+             's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5', '6', '7', '8']}
 
 
 def aim_at(keys, u):
@@ -699,6 +727,22 @@ for name in ('island', 'north units', 'sink run', 'tall units'):
 SOLID_BOXES.append(('wall cupboards', (-5.6, 1.58, 5.05), (-1.8, 2.53, 5.4)))
 
 
+# The walls a round can strike: (axis, value, normal (0: either side), extent along it, the openings in it)
+WALLS = [(0, -5.6, 1, (0.0, 5.4), ['kitchen window']), (0, 0.0, 0, (0.0, 5.4), ['wide opening']),
+         (0, 6.0, -1, (0.0, 5.4), ['living window']), (2, 0.0, 1, (-5.6, 6.0), []),
+         (2, 5.4, -1, (-5.6, 6.0), ['kitchen door', 'living door'])]
+
+
+def opening_at(ax, v, along, y, pad=0.0):
+    """Is this point of a wall (axis, value) in one of its openings? (Shot 12: the kitchen window's glass and frames
+    are gone, the doors open.)"""
+    key = ('x' if ax == 0 else 'z', v)
+    for o in PL.OPENINGS.values():
+        if o['wall'] == key and o['span'][0] - pad <= along <= o['span'][1] + pad and o['sill'] - pad <= y <= o['head'] + pad:
+            return True
+    return False
+
+
 def ray_hit(o, d, robots=()):
     """Where a shot from o along d lands: the nearest robot (a sphere round its chest), unit or wall. Returns (point,
     normal, what)."""
@@ -731,19 +775,28 @@ def ray_hit(o, d, robots=()):
             tmax = min(tmax, t2)
         if tmin < tmax and 0.05 < tmin < best[0]:
             best = (tmin, o + d * tmin, nrm, name)
-    # the kitchen's walls (the wide opening lets a shot on into the living room), the floor and ceiling
-    for ax, v, n in ((0, -5.6, 1), (0, 6.0, -1), (2, 0.0, 1), (2, 5.4, -1), (1, 0.0, 1), (1, S.CEIL, -1)):
+    # the walls with their openings (Sam's note 18, 24 Oct: holes hung in the empty window): a round through the
+    # shot-out kitchen window, the wide opening or a doorway flies on, and marks only a real surface beyond (or none)
+    for ax, v, n, (a0, a1), holes in WALLS:
         if abs(d[ax]) < 1e-9:
             continue
         tt = (v - o[ax]) / d[ax]
-        if 0.05 < tt < best[0]:
-            hp = o + d * tt
-            nrm = np.zeros(3)
-            nrm[ax] = n
-            best = (tt, hp, nrm, 'wall' if ax != 1 else ('floor' if n > 0 else 'ceiling'))
-    if best[1] is not None and best[3] == 'wall' and abs(best[2][0]) > 0 and best[1][0] <= 0.01 and \
-            not (1.2 <= best[1][2] <= 4.0 and best[1][1] < 2.4):
-        pass
+        if not 0.05 < tt < best[0]:
+            continue
+        hp = o + d * tt
+        along = hp[2] if ax == 0 else hp[0]
+        if not (a0 <= along <= a1 and 0.0 <= hp[1] <= S.CEIL) or opening_at(ax, v, along, hp[1]):
+            continue
+        nrm = np.zeros(3)
+        nrm[ax] = n if n else -math.copysign(1.0, d[ax])
+        best = (tt, hp, nrm, 'wall')
+    for y, n in ((0.0, 1), (S.CEIL, -1)):             # the floor and ceiling, inside the house only
+        if abs(d[1]) < 1e-9:
+            continue
+        tt = (y - o[1]) / d[1]
+        hp = o + d * tt
+        if 0.05 < tt < best[0] and -5.6 <= hp[0] <= 6.0 and 0.0 <= hp[2] <= 5.4:
+            best = (tt, hp, np.array([0.0, float(n), 0.0]), 'floor' if n > 0 else 'ceiling')
     return best[1], best[2], best[3]
 
 
@@ -774,8 +827,16 @@ def wes_shots():
         u = U12(t)
         fac = math.radians(aim_at(WES_AIM, u) + 4 * math.sin(i * 2.3))
         o = (WES12[0] + 0.7 * math.sin(fac), 0.98, WES12[1] + 0.7 * math.cos(fac))
-        d = (math.sin(fac), 0.1 + 0.04 * math.sin(i * 1.7), math.cos(fac))
-        hp, n, what = ray_hit(o, d, robot_targets(t))
+        rise = 0.1                                     # the barrels ride up to the chest of the robot he swings at
+        tg = robot_targets(t)                          # (Sam's note 17: robot 4 had taken none of his rounds)
+        near = [(abs((math.degrees(math.atan2(c[0] - o[0], c[2] - o[2])) - math.degrees(fac) + 180) % 360 - 180), c)
+                for _, c, _ in tg]
+        near = [(a, c) for a, c in near if a < 12]
+        if near:
+            c = min(near)[1]
+            rise = (c[1] - o[1]) / max(0.5, math.hypot(c[0] - o[0], c[2] - o[2]))
+        d = (math.sin(fac), rise + 0.04 * math.sin(i * 1.7), math.cos(fac))
+        hp, n, what = ray_hit(o, d, tg)
         if hp is not None:
             out.append((t, tuple(o), tuple(hp), tuple(n), what, i))
     return out
@@ -792,9 +853,11 @@ def plasma_tracks():
         o = np.asarray(next((q.c for q in ps if q.name.startswith('core')), J['handR']), float)
         g = np.asarray(plasma_aim(what, t0), float)
         hp, n, hit = ray_hit(o, g - o)
+        if hp is None:                                 # out through an opening into the garden: no mark
+            hp, n = o + (g - o) / np.linalg.norm(g - o) * 12.0, np.array([0.0, 1.0, 0.0])
         dist = float(np.linalg.norm(np.asarray(hp) - o))
         tr = dict(name=name, t0=t0, o=tuple(o), hp=tuple(hp), n=tuple(n), what=what, t_hit=t0 + dist / PLASMA_SPEED,
-                  pendants={})
+                  pendants={}, lands=hit is not None)
         d = (np.asarray(hp) - o) / dist
         for k in range(3):
             c = np.asarray(pendant_at(k))
@@ -849,9 +912,10 @@ def _prepare12():
         pc.kind, pc.col, pc.size, pc.seed = 'case', X.BRASS, 0.022, 500 + i
         DEBRIS12.append(pc)
     for tr in PLASMA:                                  # the plasma burns where it lands
-        MARKS.append(dict(t=tr['t_hit'], at=tr['hp'], n=tr['n'], kind='scorch', size=0.16, seed=int(tr['t0'] * 10),
-                          room='kitchen'))
-        BURNS.append((tr['t_hit'], tr['hp'], tr['n'], int(tr['t0'] * 10)))
+        if tr['lands']:
+            MARKS.append(dict(t=tr['t_hit'], at=tr['hp'], n=tr['n'], kind='scorch', size=0.16, seed=int(tr['t0'] * 10),
+                              room='kitchen'))
+            BURNS.append((tr['t_hit'], tr['hp'], tr['n'], int(tr['t0'] * 10)))
         for k, tk in tr['pendants'].items():           # a pendant in its way shatters
             if k not in BROKEN:
                 BROKEN[k] = tk
@@ -865,7 +929,18 @@ def _prepare12():
                 tb = tr['t_hit'] + 0.03 * k
                 at = (x, 1.0, z)
                 if tr['what'] == 'tins':
-                    DEBRIS12.extend(X.burst(tb, at, 26, 2.0, 400 + k, kind='bean', size=0.016, up=1.6, box=box, tops=tops))
+                    goo = X.burst(tb, at, 9, 1.7, 400 + k, kind='goop', size=0.05, up=1.3, box=box, tops=tops)
+                    ix, iz = isl['at']
+                    for pc in goo:                     # a splat at the island's edge runs off it (Sam's note 14)
+                        (gx, gy, gz), _ = pc.track[-1]
+                        if abs(gy - 0.92 - pc.r) < 0.02:
+                            ex, ez = gx - ix, gz - iz
+                            if 1.2 - abs(ex) < 0.1:
+                                pc.drip = ((ix + math.copysign(1.2, ex), 0.92, gz), (math.copysign(1.0, ex), 0.0))
+                            elif 0.5 - abs(ez) < 0.1:
+                                pc.drip = ((gx, 0.92, iz + math.copysign(0.5, ez)), (0.0, math.copysign(1.0, ez)))
+                    DEBRIS12.extend(goo)
+                    DEBRIS12.extend(X.burst(tb, at, 8, 2.0, 405 + k, kind='bean', size=0.016, up=1.6, box=box, tops=tops))
                     DEBRIS12.extend(X.burst(tb, at, 5, 2.2, 410 + k, kind='chip', col=(48, 170, 170), size=0.035, up=1.8,
                                             box=box, tops=tops))
                 else:
@@ -875,15 +950,21 @@ def _prepare12():
                                             up=1.4, box=box, tops=tops))
                     DEBRIS12.extend(X.burst(tb, (x, 1.2, z), 1, 1.2, 440 + k, kind='chip', col=(40, 110, 200), size=0.03,
                                             up=2.0, box=box, tops=tops))
-    p5, sp5 = robot_pose('5', T['s12'] + BLOWN5 - 0.01)   # robot 5 blown to pieces: chunks of plate everywhere, staying
-    J5, _ = R.skeleton(p5)
-    c5 = tuple(J5['chest'])
-    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 30, 3.2, 600, kind='chip', col=R.CHROME[0], size=0.09, up=1.6, box=kbox,
-                            tops=tops, spread=1.4))
-    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 14, 3.0, 601, kind='chip', col=R.CHROME_D[1], size=0.07, up=1.4,
-                            box=kbox, tops=tops, spread=1.4))
-    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 8, 2.6, 602, kind='splinter', col=(70, 74, 82), size=0.08, up=1.2,
-                            box=kbox, tops=tops, spread=1.4))
+    for k, (name, ub) in enumerate(sorted(BLOWN.items())):   # robots 4 and 5 blown to pieces: chunks of plate
+        p5, sp5 = robot_pose(name, T['s12'] + ub - 0.01)       # everywhere, staying where they land
+        J5, _ = R.skeleton(p5)
+        c5 = tuple(J5['chest'])
+        dn = (0.5, 0.1, 0.0) if name == '4' else None          # robot 4's thrown into the kitchen, off the sink run
+        DEBRIS12.extend(X.burst(T['s12'] + ub, c5, 30, 3.2, 600 + 10 * k, kind='chip', col=R.CHROME[0], size=0.09, up=1.6,
+                                box=kbox, tops=tops, spread=1.4, dirn=dn))
+        DEBRIS12.extend(X.burst(T['s12'] + ub, c5, 14, 3.0, 601 + 10 * k, kind='chip', col=R.CHROME_D[1], size=0.07,
+                                up=1.4, box=kbox, tops=tops, spread=1.4, dirn=dn))
+        DEBRIS12.extend(X.burst(T['s12'] + ub, c5, 8, 2.6, 602 + 10 * k, kind='splinter', col=(70, 74, 82), size=0.08,
+                                up=1.2, box=kbox, tops=tops, spread=1.4, dirn=dn))
+    cr = X.CROCK_AT                                    # the dish rack smashed by robot 4's blast: plate and mug shards
+    for k, col in enumerate((X.PLATE, X.PLATE, X.PLATE_RIM)):
+        DEBRIS12.extend(X.burst(T['s12'] + BLOWN['4'] + 0.04, (cr[0], cr[1] + 0.15, cr[2]), 9 if k < 2 else 4, 2.2,
+                                650 + k, kind='chip', col=col, size=0.045, up=1.2, box=kbox, tops=tops, dirn=(0.5, 0.1, -0.3)))
 
 
 def item_gone(kind, t):
@@ -963,7 +1044,7 @@ def actors(t, cam, fx):
 
 def _heads():
     out = {}
-    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (-0.6, 3.2, -1.6))):
+    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (-0.6, 3.2, -1.6)), ('4', BLOWN['4'], (1.9, 3.0, 0.4))):
         p, sp = robot_pose(name, T['s12'] + u0 - 0.01)
         J, _ = R.skeleton(p)
         out[name] = X.Piece(tuple(J['head']), v, T['s12'] + u0, r=0.15, e=0.3, spin=9, box=(-5.55, -0.05, 0.05, 5.35),
@@ -998,6 +1079,8 @@ def house_state(t):
     if t >= FIRE10 + 0.8 and s not in ('s5', 's6'):   # the minigun shreds the frames too (Sam: robot 4 climbs through)
         st['glass']['_frames_gone'] = ('kitchen window',)
     st['island'] = lambda im, cam: draw_island_items(im, cam, t)
+    smashed = s == 's12' and U12(t) >= BLOWN['4']     # robot 4's blast smashes the dish rack beside it (my addition)
+    st['on'] = {'sink run': lambda im, cam: X.dish_rack(im, cam, smashed=smashed)}
     if s == 's12':
         _prepare12()
         st['marks'] = [m for m in MARKS if m['t'] <= t]
@@ -1055,8 +1138,8 @@ def effects(img, cam, t, fx):
             X.alexa(img, cam, (bx, by - 0.045 * X.ALEXA_K, bz), light=False)
             X.sparks(img, cam, t, FIRE6 + BOLT6, BOLT6_TO, 6, n=18, col='yellow', speed=2.4)
             X.sparks(img, cam, t, FIRE6 + BOLT6 + 0.15, BOLT6_TO, 7, n=10, col='blue', speed=1.6)
-            if t < FIRE6 + BOLT6 + 0.17:
-                X.flash(img, cam, BOLT6_TO, 0.18, seed=2)
+            if t < FIRE6 + BOLT6 + 1 / FPS:          # one frame only, small (Sam's note 19: the big two-frame star
+                X.flash(img, cam, BOLT6_TO, 0.07, seed=2)   # read as a yellow slab on the worktop)
             X.smoke(img, cam, t, FIRE6 + BOLT6 + 0.1, BOLT6_TO, 8, n=4, life=1.2, size=0.06)
             d = np.subtract(BOLT6_TO, BOLT6_FROM)
             d = d / np.linalg.norm(d)
@@ -1107,13 +1190,15 @@ def effects(img, cam, t, fx):
             J, _ = R.skeleton(p1)
             X.sparks(D(J['neck']), cam, t, T['s12'] + HEAD1, tuple(J['neck']), 33, n=16, col='blue', speed=2.0)
             X.smoke(D(J['neck']), cam, t, T['s12'] + HEAD1 + 0.1, tuple(J['neck']), 34, n=3, life=1.2, size=0.08)
-        if BLOWN5 <= u < BLOWN5 + 2.5:                            # robot 5 blown apart: flash, sparks, smoke
-            c5 = HEADS['5'].track[0][0]
-            if u < BLOWN5 + 0.17:
-                X.flash(D(c5), cam, c5, 0.55, seed=55)
-            X.sparks(D(c5), cam, t, T['s12'] + BLOWN5, c5, 55, n=30, col='yellow', speed=3.4, life=0.5)
-            X.sparks(D(c5), cam, t, T['s12'] + BLOWN5 + 0.05, c5, 56, n=18, col='blue', speed=2.6, life=0.5)
-            X.smoke(D(c5), cam, t, T['s12'] + BLOWN5 + 0.1, c5, 57, n=6, life=2.2, size=0.18)
+        for name, ub in BLOWN.items():                            # robots 4 and 5 blown apart: flash, sparks, smoke
+            if not ub <= u < ub + 2.5:
+                continue
+            c5, sd = HEADS[name].track[0][0], 55 + 10 * int(name)
+            if u < ub + 0.17:
+                X.flash(D(c5), cam, c5, 0.5, seed=sd)
+            X.sparks(D(c5), cam, t, T['s12'] + ub, c5, sd, n=30, col='yellow', speed=3.4, life=0.5)
+            X.sparks(D(c5), cam, t, T['s12'] + ub + 0.05, c5, sd + 1, n=18, col='blue', speed=2.6, life=0.5)
+            X.smoke(D(c5), cam, t, T['s12'] + ub + 0.1, c5, sd + 2, n=6, life=2.2, size=0.18)
         for tr in PLASMA:                                         # the plasma bolts, and the flash where they land
             if tr['t0'] <= t < tr['t_hit'] + 0.12:
                 L_ = (tr['t_hit'] - tr['t0'])
@@ -1122,9 +1207,9 @@ def effects(img, cam, t, fx):
                     a = lerp3(tr['o'], tr['hp'], max(0.0, k - 0.6 / (L_ * PLASMA_SPEED)))
                     b = lerp3(tr['o'], tr['hp'], min(1.0, k))
                     X.plasma(D(b), cam, a, b)
-                else:
+                elif tr['lands']:
                     X.flash(D(tr['hp']), cam, tr['hp'], 0.22, seed=int(tr['t0'] * 10), col='blue')
-            if tr['t_hit'] <= t < tr['t_hit'] + 1.5:
+            if tr['lands'] and tr['t_hit'] <= t < tr['t_hit'] + 1.5:
                 X.smoke(D(tr['hp']), cam, t, tr['t_hit'], tr['hp'], int(tr['t0'] * 10), n=3, life=1.3, size=0.1)
         for tb, at, n, seed in BURNS:                             # and burns there for a few seconds
             X.flames(D(at), cam, t, tb, at, n, seed)
@@ -1224,10 +1309,27 @@ def frame_image(t):
 SFX = {}
 
 
+# Short slices of Sam's longer files (Sam, 24 Oct: one moment of crockery sound per impact): (file, from, to) seconds
+SLICES = {'crockery': ('crockery', 0.08, 0.55), 'robot-step': ('robot-walk', 1.0, 1.45)}
+
+
 def sfx(name):
     if name not in SFX:
-        SFX[name] = MA.load(os.path.join(HERE, 'audio', 'prepper', f'sfx-{name}.mp3'))
+        f, a, b = SLICES.get(name, (name, None, None))
+        clip = np.asarray(MA.load(os.path.join(HERE, 'audio', 'prepper', f'sfx-{f}.mp3')), float)
+        if a is not None:
+            clip = clip[int(a * SR):int(b * SR)].copy()
+            fo = int(0.08 * SR)                        # a quick fade out, so the slice never clicks
+            clip[-fo:] *= np.linspace(1, 0, fo)
+            clip[:int(0.004 * SR)] *= np.linspace(0, 1, int(0.004 * SR))
+        SFX[name] = clip
     return SFX[name]
+
+
+def steps(t0, t1, start, end, stride):
+    """When a robot's feet come down on a walk (R.walk plants one every stride)."""
+    L = math.dist(start, end)
+    return [t0 + (t1 - t0) * k * stride / L for k in range(1, int(L / stride) + 1)]
 
 
 def sound_events():
@@ -1244,10 +1346,17 @@ def sound_events():
     ev += [('plasma-gun', T['s12'] + t0, 0.55) for _, t0, _ in PLASMA12]
     ev += [('laser-sword', T['s12'] + SWIPE[1], 0.7)]
     ev += [('robot-wounded', T['s12'] + HEAD1, 0.7), ('sparks', T['s12'] + HEAD1, 0.6)]
-    ev += [('robot-wounded', T['s12'] + BLOWN5, 0.8), ('sparks', T['s12'] + BLOWN5, 0.8)]
+    ev += [x for ub in BLOWN.values() for x in (('robot-explosion', T['s12'] + ub, 0.9), ('sparks', T['s12'] + ub + 0.05, 0.6))]
     ev += [('robot-wounded', T['s12'] + u_ + 0.05, 0.5) for u_ in DIES.values()]
     _prepare12()
     ev += [('glass-shattered', tk, 0.5) for tk in BROKEN.values()]
+    ev += [('crockery', T['s12'] + BLOWN['4'] + 0.05, 0.6)]   # the dish rack: one smash, in shot (crockery_check)
+    s12 = T['s12']                                     # robot footsteps: robot 1 coming at Andy, robot 5's stages
+    walks = [(1.6, 6.0, (2.0, 1.7), (-2.05, 1.75), 0.5, 0.45), (0.0, 1.5, (-1.2, 5.9), (-1.2, 5.3), 0.4, 0.4),
+             (3.5, 4.6, (-1.2, 5.3), (-1.25, 5.0), 0.4, 0.4), (6.8, 8.2, (-1.25, 5.0), (-1.3, 4.75), 0.4, 0.4)]
+    for t0, t1, a, b, stride, g in walks:
+        ev += [('robot-step', s12 + ts, g) for ts in steps(t0, t1, a, b, stride)]
+    ev += [('robot-step', ROBOT8 + 0.25 * k, 0.45) for k in (0, 1)]
     return ev
 
 
@@ -1288,8 +1397,38 @@ def checks():
     windows = [(ln['start'] + a, ln['start'] + b) for ln in LINES if not ln.get('off') for a, b in ln['_stretches']]
     faults = E.check_mouths(sorted(x for w in TRACK for x in TRACK[w]), windows)
     faults += facing_check()
+    faults += marks_check()
+    faults += crockery_check()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
+
+
+def crockery_check():
+    """Sam, 24 Oct: a crockery sound only when crockery is hit, one per impact, and the hit in frame."""
+    out = []
+    for name, at, _ in sound_events():
+        if name == 'crockery':
+            cam = cam_for(at)
+            (x, y), _ = cam.project(X.CROCK_AT)
+            if not (cam.depth(X.CROCK_AT) > 0.3 and 60 < x < 1020 and 60 < y < 1860):
+                out.append(f'{at:.2f}s the crockery sound plays with the dish rack out of frame')
+    return out
+
+
+def marks_check():
+    """Sam's note 18 (24 Oct): bullet holes hung in the empty window. Every mark shot 12 leaves must sit on a real
+    surface: inside the house, on a wall, unit, floor or ceiling, never in an opening."""
+    _prepare12()
+    faults = []
+    for m in MARKS:
+        x, y, z = m['at']
+        if not (-5.61 <= x <= 6.01 and -0.01 <= y <= S.CEIL + 0.01 and -0.01 <= z <= 5.41):
+            faults.append(f"{m['t']:.2f}s a {m['kind']} outside the house at ({x:.2f}, {y:.2f}, {z:.2f})")
+        for ax, v, _, _, _ in WALLS:
+            pt = (x, y, z)
+            if abs(pt[ax] - v) < 0.02 and opening_at(ax, v, z if ax == 0 else x, y, pad=-0.02):
+                faults.append(f"{m['t']:.2f}s a {m['kind']} in an opening at ({x:.2f}, {y:.2f}, {z:.2f})")
+    return faults
 
 
 def facing_check():

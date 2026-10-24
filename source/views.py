@@ -596,8 +596,13 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     # before the torso, so only what sticks out past him shows (Sam, 24 Oct: Prepper Minister's hands and pistol were
     # drawn over his back, so his body read as facing us under the back of his head)
     # (24 Oct, Wes: a minigun draws its own fists, so 'grip' is empty: any held thing with a hand out in front counts)
-    held = any(getattr(d, 'held', False) for d in j.get('props', [])) or bool(j.get('grip'))
-    held_behind = view == 'back' and held and bool(behind & (set(j.get('grip') or 'LR')))
+    # (24 Oct, note 16: the same from three-quarter back: Wes's minigun and fists were drawn over his back at an angle)
+    held = any(getattr(d, 'held', False) or getattr(d, 'own_fists', False) for d in j.get('props', [])) or \
+        bool(j.get('grip'))
+    reach = {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands out in front, past his chest
+    rear = view in ('back', 'three_back')
+    held_behind = held and (bool(behind & (set(j.get('grip') or 'LR'))) if view == 'back' else
+                            view == 'three_back' and bool(reach & set(j.get('grip') or 'LR')))
     if held_behind:
         for sd in arms_far:                        # both arms reach forward to it: hidden by his back too, only
             if sd not in behind:                   # what shows past his sides is seen
@@ -632,8 +637,7 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
     # nothing he holds out in front of him is drawn over his back
     j2['_drawn'] = dict(view=view, head=hv, yaw=yaw, head_yaw=yaw if head_yaw is None else head_yaw,
-                        held_over_back=view == 'back' and held and not held_behind and
-                        any(depth['wr' + sd] < depth['sh' + sd] - 10 for sd in 'LR'))
+                        held_over_back=rear and held and not held_behind and bool(reach))
     head_view(img, B.Pen(img, up), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])

@@ -425,17 +425,18 @@ def glock(side='R', flash=0.0, aim3=None, rec=None):
 
 
 def muzzle_flash(p, at, d, size, end_on=False, seed=0):
-    """A muzzle flash in the flat house style: a hard-edged star, white core in yellow and orange, for a frame or two
-    (no glow)."""
+    """A muzzle flash in the flat house style: a lumpy, uneven burst (never a star: Sam, 24 Oct, 'too cartoony'),
+    white core in yellow and orange, for a frame or two (no glow)."""
     rng = np.random.default_rng(seed)
     if end_on:
-        pts = [(at[0] + size * (1.0 if k % 2 == 0 else 0.42) * math.cos(a), at[1] + size * (1.0 if k % 2 == 0 else 0.42) * math.sin(a))
-               for k, a in enumerate(np.linspace(0, 2 * math.pi, 14, endpoint=False) + rng.uniform(0, 0.5))]
+        rad = rng.uniform(0.74, 1.0, 11)
+        pts = [(at[0] + size * rad[k] * math.cos(a), at[1] + size * rad[k] * math.sin(a))
+               for k, a in enumerate(np.linspace(0, 2 * math.pi, 11, endpoint=False) + rng.uniform(0, 0.5))]
     else:
         nx, ny = -d[1], d[0]
         pts = []
         for k, a in enumerate(np.linspace(-1.2, 1.2, 9)):
-            r = size * (1.0 if k % 2 == 0 else 0.45) * (1.3 if abs(a) < 0.2 else 1.0)
+            r = size * rng.uniform(0.7, 1.0) * (1.25 if abs(a) < 0.2 else 1.0)
             pts.append((at[0] + (d[0] * math.cos(a) + nx * math.sin(a)) * r, at[1] + (d[1] * math.cos(a) + ny * math.sin(a)) * r))
         pts = [at] + pts
     p.poly(pts, (255, 170, 40), INK, 1.6)
@@ -537,6 +538,7 @@ def minigun(spin=0.0, flash=0.0, belt_to=None, seed=0, skin=None, rec=None):
             _fists(p, j2, skin)
     draw.held = skin is None
     draw.along = ('wrR', 'wrL', MINIGUN, MG_GRIP)
+    draw.own_fists = True                  # it draws his fists on its grips (views.py: held, so hidden by his back)
     return draw
 
 

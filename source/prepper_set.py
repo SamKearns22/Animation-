@@ -1163,7 +1163,8 @@ def house(img, cam, t, actors=(), state=None):
     """Draw the house through `cam` at time t. `actors`: dicts with 'at' (x, z), 'r' (plan radius), 'draw' (img ->
     None), optional 'room' (forced) and 'foot'. `state`: doors {'living door': deg, 'kitchen door': deg}, 'glass'
     (broken panes), 'marks' (bullet holes and scorches, each with its time), 'island' (a draw for what stands on the
-    island: one part with it), 'gone' (furniture names not drawn)."""
+    island: one part with it), 'on' ({furniture name: a draw for what stands on it}), 'gone' (furniture names not
+    drawn)."""
     state = state or {}
     here = room_of(cam.pos[0], cam.pos[2])
     if here == 'outside':
@@ -1177,7 +1178,9 @@ def house(img, cam, t, actors=(), state=None):
             parts = _parts(name + ' broken', lambda maker=maker: maker(broken=True))
         else:
             parts = _parts(name, maker)
-        groups[room].append(dict(foot=foot, draw=lambda im, parts=parts: draw_parts(im, cam, parts)))
+        on = state.get('on', {}).get(name)                  # what stands on it (the dish rack on the sink run)
+        groups[room].append(dict(foot=foot, draw=lambda im, parts=parts, on=on: (draw_parts(im, cam, parts),
+                                                                               on and on(im, cam))))
     if state.get('island'):
         ix, iz, w, d, h, f, _ = _thing('island')
         isl = island_parts()
