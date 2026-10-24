@@ -5,10 +5,12 @@ Read this first in any new session, after CLAUDE.md.
 ## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
 - Brief: `prompts/prepper-minister.md`. Plan in metres: `source/prepper_plan.py` (`sketch OUT.jpg`). References:
   `references/prepper-minister/`. Sam's sound effects: `source/audio/prepper/`.
-- 24 Oct (planning, Opus high): references filed and checked, house plan sketched, questions sent in one batch.
-  Sam answered everything and sent the last references (24 Oct). Waiting on: recordings, 5 extra sounds.
-- Next (fresh chat, Opus high): build robot, Wes, 3D house, weapons and effects; rehearsal clips (shot 12 loop, shot 6
-  bolt) with the cast sheet. Read only `notes/prepper-minister.md` "Where things stand" and `guides/satire.md`.
+- 24 Oct: planning done (Opus high). References all in, house plan approved (shot 8 door moved), every question
+  answered, all 11 recordings in and checked. Still wanted from Sam: 5 sound effects (robot footsteps, robot crashing
+  down, bullets on metal, tin clank, crockery smashing).
+- NEXT (fresh chat, Opus high): building: `source/prepper.py` from the template, the robot, Wes, Andy's outfit, the 3D
+  house, props and effects; then the cast sheet with rehearsal clips of the shot 12 loop and shot 6's bolt. Read only
+  `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
