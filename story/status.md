@@ -6,8 +6,7 @@ Read this first in any new session, after CLAUDE.md.
 - Brief: `prompts/prepper-minister.md`. Plan in metres: `source/prepper_plan.py` (`sketch OUT.jpg`). References:
   `references/prepper-minister/`. Sam's sound effects: `source/audio/prepper/`.
 - 24 Oct (planning, Opus high): references filed and checked, house plan sketched, questions sent in one batch.
-  Waiting on Sam: answers, missing references (robot full length, side, back, eye, cannon; Wes caricatures; Andy in a
-  white shirt; hallway; armchair, drinks cabinet, Lake District watercolour; beans tin, water bottle), recordings, 5 sounds.
+  Sam answered everything and sent the last references (24 Oct). Waiting on: recordings, 5 extra sounds.
 - Next (fresh chat, Opus high): build robot, Wes, 3D house, weapons and effects; rehearsal clips (shot 12 loop, shot 6
   bolt) with the cast sheet. Read only `notes/prepper-minister.md` "Where things stand" and `guides/satire.md`.
 

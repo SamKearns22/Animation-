@@ -27,7 +27,7 @@ ROOMS = {   # name: (x0, z0, x1, z1)
 # Openings in walls. wall: ('x', value) or ('z', value); span along the wall; sill and head heights.
 OPENINGS = {
     'wide opening': dict(wall=('x', 0.0), span=(1.2, 4.0), sill=0.0, head=2.4),
-    'living door': dict(wall=('z', 5.4), span=(2.58, 3.42), sill=0.0, head=2.04, hinge=2.58, swings='living room',
+    'living door': dict(wall=('z', 5.4), span=(2.13, 2.97), sill=0.0, head=2.04, hinge=2.13, swings='living room',
                         note='hinged on the left (west); booted open, it swings left and bangs the wall beside the drinks cabinet'),
     'kitchen door': dict(wall=('z', 5.4), span=(-1.62, -0.78), sill=0.0, head=2.04, hinge=-0.78, swings='kitchen'),
     'front door': dict(wall=('x', 6.0), span=(5.75, 6.65), sill=0.0, head=2.1),
@@ -42,9 +42,9 @@ THINGS = {
     'tv': dict(at=(3.0, 0.08), size=(1.45, 0.05, 0.84), y=0.72, facing=0, note='65-inch, on the media unit'),
     'media unit': dict(at=(3.0, 0.24), size=(2.0, 0.42, 0.5), facing=0),
     'sofa': dict(at=(3.0, 3.75), size=(2.4, 0.95, 0.85), facing=180, note='faces the TV; seat 0.45 m'),
-    'coffee table': dict(at=(3.0, 2.45), size=(1.2, 0.6, 0.4), facing=0),
-    'drinks cabinet': dict(at=(1.2, 5.17), size=(0.8, 0.45, 1.5), facing=180, note='left of the hallway door'),
-    'watercolour': dict(at=(4.4, 5.39), size=(0.9, 0.02, 0.65), y=1.22, facing=180, note='Lake District fells, right of the door'),
+    'coffee table': dict(at=(3.0, 2.2), size=(1.2, 0.6, 0.4), facing=0),
+    'drinks cabinet': dict(at=(0.85, 5.17), size=(0.8, 0.45, 1.5), facing=180, note='left of the hallway door'),
+    'watercolour': dict(at=(4.0, 5.39), size=(0.9, 0.02, 0.65), y=1.22, facing=180, note='Lake District fells, right of the door'),
     'armchair': dict(at=(5.15, 1.7), size=(0.85, 0.85, 0.95), facing=250, note='plush old-world, by the window'),
     'side table': dict(at=(4.55, 3.8), size=(0.45, 0.45, 0.55), facing=180),
     'floor lamp': dict(at=(5.6, 4.95), size=(0.35, 0.35, 1.6), facing=180),
@@ -65,15 +65,15 @@ THINGS = {
 PEOPLE = {
     'andy sofa (1-4, 7, start of 8)': dict(at=(3.0, 3.6), facing=180, who='Andy'),
     'andy kitchen (6)': dict(at=(-1.3, 1.95), facing=300, who='Andy'),
-    'andy aims (end of 8, 9)': dict(at=(3.95, 1.75), facing=345, who='Andy'),
-    'wes enters (8)': dict(at=(3.0, 5.2), facing=180, who='Wes'),
+    'andy aims (end of 8, 9)': dict(at=(2.95, 2.95), facing=355, who='Andy'),
+    'wes enters (8)': dict(at=(2.55, 5.2), facing=180, who='Wes'),
     'wes at island (10)': dict(at=(-4.45, 2.7), facing=90, who='Wes'),
     'andy (11, 12)': dict(at=(-2.9, 1.85), facing=0, who='Andy'),
     'wes (12)': dict(at=(-2.7, 3.55), facing=180, who='Wes'),
 }
 
 ROBOTS = {   # robot: where it comes from and where it ends up. Every body stays where it falls.
-    'robot A (8)': dict(at=(3.0, 5.9), arm='cannon', note='over Wes\'s shoulder in the hall; bolt to the head; falls back into the hall'),
+    'robot A (8)': dict(at=(2.55, 5.95), arm='cannon', note='over Wes\'s shoulder in the hall; bolt to the head; falls back into the hall'),
     'robot B (9)': dict(at=(0.4, 2.4), arm='blade', note='lunges from the wide opening (screen left); shot; drops in the living room'),
     'robots C, D (10)': dict(at=(-6.0, 2.2), arm='cannon', note='at the kitchen window; shot through the glass; fall back outside'),
     'robot 1 (12)': dict(at=(-0.3, 2.2), arm='blade', note='walks in from the lounge'),
@@ -93,9 +93,9 @@ CAMS = {
     6: dict(path=[(-0.9, 1.4, 1.1), (-2.4, 1.3, 3.0), (-3.7, 1.15, 4.3)], look=(-4.2, 0.97, 5.05),
             note='Andy waist up, then follows the bolt to the Alexa'),
     7: dict(pos=(3.0, 1.1, 1.5), look=(3.0, 1.0, 3.7), note='as shot 2'),
-    8: dict(path=[(3.0, 1.1, 1.5), (3.45, 1.35, 3.2), (4.6, 1.5, 3.25), (4.75, 1.55, 2.4), (3.8, 1.55, 2.3)],
-            look=(3.0, 1.35, 5.4), note='forward past Andy\'s left shoulder, round to the right, ends facing the door; '
-                                         'Andy just behind the end point'),
+    8: dict(path=[(3.0, 1.1, 1.5), (2.95, 1.4, 3.0), (2.75, 1.5, 3.75), (2.6, 1.55, 4.15)],
+            look=(2.55, 1.4, 5.4), note='Sam, 24 Oct: the door is just behind Andy, slightly left; the camera passes over '
+                                         'his (right) shoulder and arrives at the doorway; Andy, risen, just behind it'),
     9: dict(pos=(3.0, 1.15, 0.35), look=(3.0, 1.15, 5.4), note='wide (a wider lens), from the shot 1 spot'),
     10: dict(pos=(-0.6, 1.45, 2.7), look=(-4.5, 1.3, 2.7), note='mid shot: minigun on the island, window behind, units right'),
     11: dict(path=[(-1.9, 1.05, 1.7), (-1.5, 1.3, 3.2)], look=(-1.2, 1.4, 5.3), note='close on a tin, then follows it to the door'),
@@ -297,7 +297,7 @@ def sketch(out):
         ('A = Andy, W = Wes (the stick shows which way they face). Hexagons = robots: A at the hall door (8), B from the opening (9),', f_mid),
         ('C and D at the kitchen window (10), 1 to 5 in shot 12 (5 is the one in the kitchen door in shot 11).', f_mid),
         ('Living room 6 x 5.4 m, kitchen 5.6 x 5.4 m, hallway 1.6 m wide, ceilings 2.8 m. Doors 0.84 m, the wide opening 2.8 m.', f_mid),
-        ('The hallway door is hinged on its left: kicked open, it swings left and bangs the wall beside the drinks cabinet.', f_mid),
+        ('Hallway door just behind Andy, slightly left. Hinged on its left: kicked open, it bangs the wall by the drinks cabinet.', f_mid),
     ]
     yy = y + 16
     for text, f in lines:

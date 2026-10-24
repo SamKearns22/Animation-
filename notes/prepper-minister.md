@@ -7,7 +7,9 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 ## Where things stand (24 Oct, planning chat, Opus high)
 - Done: brief read; Sam's 20 reference pictures and 12 sound effects filed; house plan in metres written and sketched;
   references checked (below); questions sent to Sam in one batch (below).
-- Waiting on Sam: answers to the questions, the missing references, the recordings, and the 5 extra sounds.
+- Sam answered every question and sent the last references (24 Oct; see Decisions). Waiting on: the recordings
+  ("dialogue incoming") and the 5 extra sounds (robot footsteps, robot crashing down, bullets on metal, tin clank,
+  crockery smashing).
 - Next (Opus high, a fresh chat): build the new parts (robot, Wes, the 3D house, the weapons and effects), then the
   rehearsal clips of shot 12's loop and shot 6's bolt move alongside the cast sheet, then the composition sheet of the
   key shots, one still per shot, the animatic.
@@ -76,19 +78,21 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 | living-1, living-2 | cream modern sofas, marble fireplace, panelled walls, tall glazing, big monochrome painting, leather armchair, wall-mounted TV over a low wood unit, round wood coffee tables | living room furniture, TV wall, refinement |
 | crossbow | pistol crossbow, folding stock, red-dot sight, short limbs and string, grey camo, DEMON lettering (dropped: no logos) | the crossbow |
 | minigun-1, minigun-2 (the second sent twice) | six-barrel rotary gun, top carry handle, rear grips, ammo belt in a loop to a backpack frame | the minigun and its ammo loop (no backpack in the film) |
-| pistols | top: Browning Hi-Power; bottom: Glock 17 | the pistol (Sam to choose; Glock recommended) |
-| machete | long blade with a hooked tip, black handle, brass rivets | Wes's machete (oiled) |
+| pistols | top: Browning Hi-Power; bottom: Glock 17 | the pistol: the Glock (Sam, 24 Oct) |
+| machete (sent twice) | long blade with a hooked tip, black handle, brass rivets | Wes's machete (oiled) |
 | alexa | Echo Dot (5th gen): charcoal fabric sphere, black base, blue light ring, two buttons on top | the Alexa |
 
-**Still missing (never draw from memory):**
-1. Robot: full length (legs and feet), side view, back view (shot 12 goes all the way round), a close-up of the eye
-   slot, and an arm cannon. (The blade picture covers the blade.)
-2. Wes: one or two caricatures you like.
-3. Andy in a white open-necked shirt, no jacket (the Hope Again model wears a suit).
-4. The hallway: a well-lit London entrance hall.
-5. A plush old-world armchair, a drinks cabinet, and a Lake District watercolour you like.
-6. A tin of beans (any; the label goes plain) and a 2-litre water bottle.
-Nice to have: a room photographed from high in a corner; a torn suit jacket (action-film style).
+| robot-4-full-front-and-back | statue of the 2004 Centurion, full length, front and back: long thin legs, reverse-angled shins, plated thighs, three-toed feet; back: hood falls to a spine ridge, ribbed back, hip plates | full length, legs, feet, back view |
+| robot-5-side-profile | right figure: the 2004 Centurion in profile (hood crest, long jaw-like visor, plated upper arm, tall); left figure: an older-style Cylon (not ours) | side view (right figure only) |
+| robot-6-eye-closeup | the visor slot from below: a dark band across the face, one bright eye inside it, chrome ribbing under the chin | the eye (ours cobalt, a flat shape, no glow) |
+| robot-7-walking-back-three-quarter | an older-style Cylon from behind, walking: box backpack, exposed pistons in the legs | how the leg joints move only; not its body |
+| robot-cannon-palm | a robot arm whose open palm holds a glowing core | the cannon: plasma fires from the open palm |
+| andy-white-top | Andy now: dark rectangular glasses, grey-flecked dark hair, white short-sleeved zip-neck polo | face and glasses check; the outfit stays the brief's white shirt |
+| water-bottle-2l | 2-litre bottle, ribbed sides, blue cap, pale blue label with hills (Tesco: dropped) | the water bottles, plain blue label |
+| beans-tin | Heinz tin: turquoise label, keystone panel (Heinz: dropped) | the beans: a turquoise tin with a plain band reading BAKED BEANS and a few beans drawn on it |
+
+**References: all in (24 Oct).** Sam: no caricature of Wes needed; the hallway and furniture are kept simple (we barely
+see the hallway; he may change his mind on the furniture), so no photos for them.
 
 ## The world (rule 1): `source/prepper_plan.py` is the plan; summary
 - Plan view: x east, z north (away from shot 1's camera). Living room 6 x 5.4 m (forest green carpet), kitchen 5.6 x
@@ -136,3 +140,13 @@ Nice to have: a room photographed from high in a corner; a torn suit jacket (act
 Decisions made (kept so a new chat never has to rediscover them):
 - 24 Oct: the 360 loop and shot 6's bolt move are rehearsed as clips alongside the cast sheet (brief 9.3).
 - 24 Oct: the bleep is made in code (a 1 kHz tone over the word); no sound file needed.
+- 24 Oct, Sam's answers: house layout yes; Andy's outfit yes (white shirt, top button undone, sleeves rolled, navy
+  chinos, tan belt with the pistol behind it, brown shoes); pistol: Glock; crossbow as the photo without DEMON; robots
+  2.1 m and duck through doors; Wes torn and dirty, no blood; robots hit show sparks, flat grey smoke, torn wiring, no
+  fluids; arms as planned (A cannon, B blade, C and D cannon, 1-2 blade, 3-5 cannon; the shot 11 robot is robot 5); the
+  ammo belt round Wes's forehead like a bandana, loose end to the gun; TikTok description: later; length: judge on the
+  animatic.
+- 24 Oct, shot 8 (Sam): the hallway door is just behind Andy, slightly left; the camera passes over his shoulder and
+  arrives at the doorway. Door moved to x 2.13-2.97 (the sofa's centre is 3.0); the camera passes over his right
+  shoulder; Andy stands up unseen and fires from just behind the camera; shot 9 finds him standing in front of the
+  sofa, back to us. The coffee table moved 0.25 m towards the TV to give him room.
