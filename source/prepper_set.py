@@ -474,10 +474,14 @@ def window(img, cam, p, wall, name, s0, s1, sill, head, glass):
     n_panes = max(2, int(round((s1 - s0) / 0.8)))
     w = (s1 - s0) / n_panes
     tr = head - 0.45
-    panes = []
+    gone = name in glass.get('_frames_gone', ())                       # shot out (Sam, 24 Oct): mullions and transom gone, one
+    panes = []                                                # open hole with shards round the surround
     for i in range(n_panes):
         a0, a1 = s0 + i * w, s0 + (i + 1) * w
         panes += [(f'{name} {i} low', a0, a1, sill, tr), (f'{name} {i} top', a0, a1, tr, head)]
+    if gone:
+        panes = [(f'{name} hole', s0, s1, sill, head)]
+        glass = {f'{name} hole': {'seed': 11}}
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     lp = pen(lay)
     for key, a0, a1, y0, y1 in panes:
@@ -507,10 +511,10 @@ def window(img, cam, p, wall, name, s0, s1, sill, head, glass):
                     cam.poly(lp, tri, GLASS + (90,), (255, 255, 255, 200), 1.2)
     img.alpha_composite(lay)
     fw = 0.05
-    for a in [s0 + i * w for i in range(n_panes + 1)]:        # mullions
+    for a in ([s0, s1] if gone else [s0 + i * w for i in range(n_panes + 1)]):        # mullions
         cam.poly(p, [wpt(wall, a - fw, sill, -0.02), wpt(wall, a + fw, sill, -0.02), wpt(wall, a + fw, head, -0.02),
                      wpt(wall, a - fw, head, -0.02)], SKIRT, INK, 1.6)
-    for y in (sill, tr, head):                                # transom, sill and head rails
+    for y in ((sill, head) if gone else (sill, tr, head)):   # transom, sill and head rails
         cam.poly(p, [wpt(wall, s0, y - fw, -0.02), wpt(wall, s1, y - fw, -0.02), wpt(wall, s1, y + fw, -0.02),
                      wpt(wall, s0, y + fw, -0.02)], SKIRT, INK, 1.6)
     if name == 'living window':                              # long linen curtains drawn back either side
@@ -985,9 +989,22 @@ def console_parts():
             obox((2.8, 0.8, 6.83), (0.2, 0.03, 0.14), 10, {'all': (40, 40, 44)})]
 
 
-def pendant_parts(x, z, drop=1.0, r=0.14):
-    """A brass globe pendant on a black cord (ref kitchen-2)."""
+def pendant_parts(x, z, drop=1.0, r=0.14, broken=False):
+    """A brass globe pendant on a black cord (ref kitchen-2). Broken (shot 12, Sam 24 Oct): the globe blown away, a
+    jagged brass cap and the bare bulb holder left swinging on the cord."""
     y = CEIL - drop
+    if broken:
+        cord = Face([(x, CEIL, z), (x, y, z), (x + 0.01, y, z)], None, None)
+        cord.draw = lambda img, cam, p: cam.line(p, [(x, CEIL, z), (x, y + r * 1.2, z)], BLACK, 2.0)
+        cap = Face([(x, y, z), (x, y + r, z), (x + r, y, z)], None, None)
+        def gb(img, cam, p):
+            rim = [(x + r * 0.55 * math.cos(a), y + r * (1.05 - 0.25 * ((k * 5) % 3) / 2), z + r * 0.55 * math.sin(a))
+                   for k, a in enumerate(np.linspace(0, 6.28, 10, endpoint=False))]
+            blob3(img, cam, p, sphere_pts((x, y + r * 1.15, z), r * 0.45, 6, sy=0.6) + rim, BRASS, INK, 1.8)
+            cam.poly(p, [(x - 0.02, y + r * 0.95, z), (x + 0.02, y + r * 0.95, z), (x + 0.02, y + r * 0.7, z),
+                         (x - 0.02, y + r * 0.7, z)], (60, 58, 56), INK, 1.2)
+        cap.draw = gb
+        return [[cord], [cap]]
     cord = Face([(x, CEIL, z), (x, y, z), (x + 0.01, y, z)], None, None)
     cord.draw = lambda img, cam, p: cam.line(p, [(x, CEIL, z), (x, y + r, z)], BLACK, 2.0)
     globe = Face([(x, y, z), (x, y + r, z), (x + r, y, z)], None, None)
@@ -1072,7 +1089,8 @@ def furniture():
     ix, iz = PL.THINGS['island']['at']
     for k, dx in enumerate((-0.7, 0.0, 0.7)):
         out.append((f'pendant {k}', 'kitchen', [(ix + dx - 0.1, iz - 0.1), (ix + dx + 0.1, iz - 0.1), (ix + dx + 0.1, iz + 0.1),
-                                                 (ix + dx - 0.1, iz + 0.1)], lambda dx=dx: pendant_parts(ix + dx, iz, 0.7)))
+                                                 (ix + dx - 0.1, iz + 0.1)],
+                    lambda dx=dx, broken=False: pendant_parts(ix + dx, iz, 0.7, broken=broken)))
     out.append(('living pendant', 'living room', [(2.9, 2.6), (3.1, 2.6), (3.1, 2.8), (2.9, 2.8)],
                 lambda: pendant_parts(3.0, 2.7, 0.6, 0.2)))
     return out
@@ -1155,7 +1173,10 @@ def house(img, cam, t, actors=(), state=None):
     for name, room, foot, maker in FURNITURE:
         if name in state.get('gone', ()):
             continue
-        parts = _parts(name, maker)
+        if name in state.get('broken', ()):                 # shot to pieces (a pendant)
+            parts = _parts(name + ' broken', lambda maker=maker: maker(broken=True))
+        else:
+            parts = _parts(name, maker)
         groups[room].append(dict(foot=foot, draw=lambda im, parts=parts: draw_parts(im, cam, parts)))
     if state.get('island'):
         ix, iz, w, d, h, f, _ = _thing('island')

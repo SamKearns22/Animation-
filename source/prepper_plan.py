@@ -76,11 +76,17 @@ ROBOTS = {   # robot: where it comes from and where it ends up. Every body stays
     'robot A (8)': dict(at=(2.55, 5.95), arm='cannon', note='over Wes\'s shoulder in the hall; bolt to the head; falls back into the hall'),
     'robot B (9)': dict(at=(0.4, 2.4), arm='blade', note='lunges from the wide opening (screen left); shot; drops in the living room'),
     'robots C, D (10)': dict(at=(-6.0, 2.2), arm='cannon', note='at the kitchen window; shot through the glass; fall back outside'),
-    'robot 1 (12)': dict(at=(-0.3, 2.2), arm='blade', note='walks in from the lounge'),
-    'robot 2 (12)': dict(at=(-0.5, 3.5), arm='blade', note='walks in from the lounge'),
-    'robot 3 (12)': dict(at=(-1.75, 1.05), arm='cannon', note='comes at Andy firing; head shot off'),
-    'robot 4 (12)': dict(at=(-5.35, 2.3), arm='cannon', note='crawls in over the kitchen window sill'),
-    'robot 5 (11, 12)': dict(at=(-1.2, 5.6), arm='cannon', note='in the hall-to-kitchen door: the tin dents off it (11); fires and misses (12)'),
+    # shot 12 (Sam's notes 3-8, 24 Oct). Every path stays clear of the camera's loop while the camera is near it.
+    'robot 1 (12)': dict(at=(-2.05, 1.75), arm='blade', note='walks in from the lounge, comes at Andy, swipes over him as he '
+                                                               'drops to his knees; he shoots its head off'),
+    'robot 2 (12)': dict(at=(-0.7, 3.5), arm='blade', note='walks in from the lounge; Wes cuts it down'),
+    'robot 3 (12)': dict(at=(-0.35, 2.7), arm='cannon', note='comes in from the lounge firing at Andy; he shoots it down'),
+    'robot 4 (12)': dict(at=(-5.25, 2.3), arm='cannon', note='crawls in through the shot-out kitchen window; fires at Andy; '
+                                                               'Wes riddles it'),
+    'robot 5 (11, 12)': dict(at=(-1.3, 4.75), arm='cannon', note='the tin dents off it in the door (11); walks in firing at '
+                                                                  'Wes, blown to pieces (12)'),
+    'robot 6 (12)': dict(at=(0.15, 1.5), arm='cannon', note='Sam: under the wide opening, on the right; fires plasma, then '
+                                                             'riddled by Wes'),
 }
 
 # Cameras: position (x, y, z) and the point looked at. A moving shot gives a path of positions.
@@ -100,14 +106,16 @@ CAMS = {
     9: dict(pos=(3.0, 1.15, 0.35), look=(3.0, 1.15, 5.4), note='wide (a wider lens), from the shot 1 spot'),
     10: dict(pos=(-0.6, 1.45, 2.7), look=(-4.5, 1.3, 2.7), note='mid shot: minigun on the island, window behind, units right'),
     11: dict(path=[(-1.9, 1.05, 1.7), (-1.5, 1.3, 3.2)], look=(-1.2, 1.4, 5.3), note='close on a tin, then follows it to the door'),
-    12: dict(orbit=dict(centre=(-2.8, 2.7), rx=2.0, rz=1.85, y=1.6, turns=1.0, seconds=7.0), look_y=1.15,
-             note='one full loop round Wes and Andy'),
+    12: dict(orbit=dict(centre=(-2.8, 2.7), rx=1.8, rz=1.85, y=1.6, turns=1.0, seconds=11.0, start_deg=-53.0), look_y=1.15,
+             note='one full loop round Wes and Andy, slowed to 11 s (Sam, 24 Oct); it starts south-east of the island so '
+                  'it sees Andy drop under the blade from the north-west, past Wes, not from behind Wes'),
 }
 
 
 def orbit_pos(t, o):
-    """Camera on the shot 12 loop, t from 0 to o['seconds']: starts south of the island, goes round anticlockwise."""
-    a = -math.pi / 2 + 2 * math.pi * o['turns'] * t / o['seconds']
+    """Camera on the shot 12 loop, t from 0 to o['seconds']: starts at `start_deg` (-90 = south of the island), goes
+    round anticlockwise."""
+    a = math.radians(o.get('start_deg', -90.0)) + 2 * math.pi * o['turns'] * t / o['seconds']
     return (o['centre'][0] + o['rx'] * math.cos(a), o['y'], o['centre'][1] + o['rz'] * math.sin(a))
 
 

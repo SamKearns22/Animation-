@@ -72,17 +72,17 @@ LINES = [
          bleep=(1.45, 1.95)),            # over "pussy" (the word gone); to be checked by ear on the animatic
 ]
 T = dict(s1=0.0, s2=2.1, s3=4.2, s4=6.85, s5=9.3, s6=14.2, s7=18.6, s8=22.1, s9=28.3, s10=43.0, s11=48.0, s12=50.0,
-         end=57.0)
+         end=61.0)
 SHOTS = [('s1', T['s1'], T['s2']), ('s2', T['s2'], T['s3']), ('s3', T['s3'], T['s4']), ('s4', T['s4'], T['s5']),
          ('s5', T['s5'], T['s6']), ('s6', T['s6'], T['s7']), ('s7', T['s7'], T['s8']), ('s8', T['s8'], T['s9']),
          ('s9', T['s9'], T['s10']), ('s10', T['s10'], T['s11']), ('s11', T['s11'], T['s12']), ('s12', T['s12'], T['end'])]
-DUR = T['end'] + 0.4                        # shot 12 is 7 s, then a hard cut to black
+DUR = T['end'] + 0.4                        # shot 12 is 11 s (Sam, 24 Oct: was 7), then a hard cut to black
 BLACK_AT = T['end']
 FEAR_AT = {'s1': 1, 's2': 1, 's3': 3, 's4': 4, 's6': 3, 's7': 5, 's9': 6, 's11': 6, 's12': 6}   # notes: stress per shot
 # The beats (seconds in the film). Shot 5: the items appear on the beat of each word.
 ITEMS_AT = dict(beans=10.64, water=11.09, crossbow=12.06, minigun=13.24)
 FIRE6 = 16.95                               # shot 6: he fires as "...Alexa." ends
-BOLT6 = 0.6                                 # the bolt's flight (the camera follows it)
+BOLT6 = 0.8                                 # the bolt's flight (the camera follows it, the Alexa held in view: Sam)
 DOOR8, ROBOT8, BOLT8 = 23.7, 26.2, 27.1     # shot 8: the door booted open; the robot over his shoulder; the bolt
 SPIN9, LUNGE9, SHOTS9 = 29.4, 36.8, (37.3, 37.55, 37.8)
 WINDOW10, PLASMA10, FIRE10 = 45.0, 45.6, 46.1
@@ -92,7 +92,7 @@ KEEP_CLEAR = []
 PROP_SIZES = [('crossbow', 'crossbow', 0.72, 0.3, None), ('minigun', 'minigun', 0.9, 0.25, None),
               ('pistol', 'pistol', 0.186, 0.138, None), ('machete', 'machete', 0.6, 0.06, None),
               ('beans', 'can', 0.066, 0.11, None), ('water', '2L bottle', 0.105, 0.33, None),
-              ('alexa', 'smart speaker', 0.1, 0.09, None), ('robot', 'robot', 0.6, 2.1, None)]
+              ('alexa', 'smart speaker', 0.1 * X.ALEXA_K, 0.09 * X.ALEXA_K, None), ('robot', 'robot', 0.6, 2.1, None)]
 HEIGHTS = C.HEIGHTS
 OUTFIT = {'Andy': {'shirt hem (tucked, belt)': 468}}
 ALLOWED_CONTACTS = []
@@ -190,7 +190,7 @@ def lerp3(a, b, u):
 
 BOLT6_FROM = (-1.62, 1.33, 2.2)                      # the crossbow's tip (shot 6)
 ALEXA = (PL.THINGS['alexa']['at'][0], 0.92, PL.THINGS['alexa']['at'][1])
-BOLT6_TO = (ALEXA[0], ALEXA[1] + 0.05, ALEXA[2])
+BOLT6_TO = (ALEXA[0], ALEXA[1] + 0.05 * X.ALEXA_K, ALEXA[2])
 
 
 def bolt6_at(t):
@@ -219,15 +219,15 @@ def cam_for(t):
         d = np.subtract(BOLT6_TO, BOLT6_FROM)
         d = d / np.linalg.norm(d)
         k = ease((t - FIRE6 - 0.08) / 0.35)
-        chase = tuple(np.add(b, -d * 0.7) + np.array([0.1, 0.16, 0.0]))
+        chase = tuple(np.add(b, -d * 0.7) + np.array([0.1, 0.35, 0.0]))   # high enough to clear the island's bottles
         end = (-3.75, 1.12, 4.42)
         if t > FIRE6 + BOLT6:
             v = ease((t - FIRE6 - BOLT6) / 0.5)
             pos = lerp3(chase, end, v)
         else:
             pos = lerp3(start, chase, k)
-        look = lerp3(look0, tuple(np.add(b, d * 1.2)), k) if t <= FIRE6 + BOLT6 else lerp3(tuple(np.add(b, d * 1.2)), ALEXA, ease((t - FIRE6 - BOLT6) / 0.4))
-        return S.Cam(pos, look, focal=1650 - 650 * k)
+        look = lerp3(look0, ALEXA, ease((t - FIRE6 - 0.08) / 0.3))   # Sam: the Alexa seen clearly before the bolt lands
+        return S.Cam(pos, look, focal=1650 - 450 * k)
     if s == 's8':
         pts = PL.smooth(PL.CAMS[8]['path'])
         k = ease(u / 1.5)
@@ -362,6 +362,7 @@ def island_items(t):
         items.append(('minigun', MINIGUN_SPOT))
     if t >= THROW11 - 0.6:
         items = [it for it in items if not (it[0] == 'tin' and it[1] == TIN_SPOTS[2])]
+    items = [it for it in items if not (it[0] in ('tin', 'bottle') and item_gone(it[0], t))]   # blown up (shot 12)
     return items
 
 
@@ -387,8 +388,13 @@ ALEXA_BITS = (X.burst(FIRE6 + BOLT6, (ALEXA[0], ALEXA[1] + 0.05, ALEXA[2]), 16, 
                       up=1.4, dirn=(-0.5, 0.0, 0.3), box=ALEXA_BOX, tops=TOPS) +
               X.burst(FIRE6 + BOLT6, (ALEXA[0], ALEXA[1] + 0.05, ALEXA[2]), 6, 1.8, 63, col=(20, 20, 24), size=0.03,
                       up=1.2, dirn=(-0.4, 0.0, 0.4), box=ALEXA_BOX, tops=TOPS))
-ALEXA_BALL = X.Piece((ALEXA[0], ALEXA[1] + 0.05, ALEXA[2]), (0.9, 1.6, -1.4), FIRE6 + BOLT6, r=0.05, e=0.3, spin=3,
+ALEXA_BALL = X.Piece((ALEXA[0], ALEXA[1] + 0.05 * X.ALEXA_K, ALEXA[2]), (-1.2, 1.5, -0.3), FIRE6 + BOLT6, r=0.05 * X.ALEXA_K, e=0.3, spin=3,
                      box=ALEXA_BOX, tops=TOPS)
+
+
+ln6 = next(ln for ln in LINES if ln['n'] == 6)
+TURN6 = ln6['start'] + (ln6['chunks'][1][0] - ln6['_cut']) - 0.05   # on the second "Test them"
+LOOK6 = 245.0                                     # from where he stands, towards the lens
 
 
 def andy6(t):
@@ -402,29 +408,90 @@ def andy6(t):
     if FIRE6 <= t < FIRE6 + 0.25:                    # the kick of the shot
         j['lean'] = -3
         j['head_dy'] = -4
-    return sp, j, aim_yaw
+    # Sam, 24 Oct: he says "Test them." to us, then his head snaps round to the sights on "Test them on your Alexa"
+    head = LOOK6 if t < TURN6 else None
+    return sp, j, aim_yaw, head
 
 
 # ------------------------------------------------------------------------------------------------ shot 12
+# Sam's notes 3-11 (24 Oct): 11 s instead of 7; the camera's loop slowed to match (one turn in 11 s, prepper_plan); six
+# robots, each with its own beat timed to when the camera faces it (the loop starts south-east and goes round
+# anticlockwise: east at 1.6 s, north at 4.4 s, west at 7.1 s, south at 9.9 s): robot 4 at the window while the camera
+# looks west; robot 1's blade at Andy seen from the north-west, past Wes; robots 2, 3 and 6 in the wide opening while
+# it looks east; robot 5 blown apart while it looks north. Every robot path stays clear of the camera while it passes.
 U12 = lambda t: t - T['s12']
 ANDY12, WES12 = PL.PEOPLE['andy (11, 12)']['at'], PL.PEOPLE['wes (12)']['at']
-SPEC = {   # each robot: its arms (A cannon, B blade, C and D cannon, 1-2 blade, 3-5 cannon: Sam, 24 Oct)
+SPEC = {   # each robot: its arms (A cannon, B blade, C and D cannon, 1-2 blade, 3-5 cannon: Sam, 24 Oct; 6 cannon)
     'A': dict(arms={'R': 'cannon', 'L': 'hand'}), 'B': dict(arms={'R': 'blade', 'L': 'hand'}),
     'C': dict(arms={'R': 'cannon', 'L': 'hand'}), 'D': dict(arms={'R': 'hand', 'L': 'cannon'}),
     '1': dict(arms={'R': 'blade', 'L': 'hand'}), '2': dict(arms={'R': 'hand', 'L': 'blade'}),
     '3': dict(arms={'R': 'cannon', 'L': 'hand'}), '4': dict(arms={'R': 'cannon', 'L': 'hand'}),
-    '5': dict(arms={'R': 'cannon', 'L': 'hand'}),
+    '5': dict(arms={'R': 'cannon', 'L': 'hand'}), '6': dict(arms={'R': 'cannon', 'L': 'hand'}),
 }
-# Wes's aim in shot 12 (plan degrees and seconds): robot 1, then robot 2, then sweeping to the hall door at robot 5;
-# he never stops firing; his eyes follow his targets.
-WES_AIM = [(0.0, 100.0), (2.6, 104.0), (3.0, 82.0), (4.6, 86.0), (5.2, 45.0), (7.0, 38.0)]
-# Andy: robot 3 (south-east), dodge, robot 4 (west window), robot 3 again (its head off), robot 4.
-ANDY_AIM = [(0.0, 128.0), (0.9, 128.0), (1.6, 128.0), (2.2, 255.0), (2.9, 128.0), (3.6, 130.0), (4.4, 265.0), (7.0, 268.0)]
-ANDY_SHOTS = [1.05, 1.3, 1.55, 3.25, 3.42, 4.95, 5.25, 5.6, 6.2]
-DODGES = [(0.45, 0.95, 1), (2.2, 2.7, -1)]       # (from, to, side): he jinks sideways out of a plasma burst
-PLASMA12 = [('3', 0.35, 'andy'), ('4', 2.1, 'andy'), ('5', 2.8, 'miss'), ('3', 2.6, 'andy'), ('5', 5.1, 'miss'),
-            ('4', 6.3, 'andy')]
-HEAD3 = 3.42                                       # Andy shoots robot 3's head off
+# Wes's aim (plan degrees, unwrapped so he swings the short way): robot 4 at the window, round past the hall door to
+# robot 2 in the wide opening, robot 6 under it, back to robot 5 coming in from the hall, then on at the opening.
+WES_AIM = [(0.0, 236.0), (1.4, 246.0), (3.9, 244.0), (4.6, 448.0), (7.2, 451.0), (7.45, 486.0), (8.35, 486.0),
+           (8.9, 409.0), (9.85, 409.0), (10.3, 430.0), (11.0, 455.0)]
+# Andy: robot 4 (west), a snap turn to robot 1 coming from the east, on his knees under its blade, up again, robot 3.
+ANDY_AIM = [(0.0, 282.0), (3.0, 282.0), (3.15, 72.0), (5.6, 72.0), (5.75, 92.0), (8.5, 92.0), (8.75, 29.0), (11.0, 29.0)]
+ANDY_SHOTS = [(1.4, '4'), (1.65, '4'), (1.9, '4'), (4.55, '3'), (4.75, '3'), (5.25, '3'), (5.4, '3'), (5.95, '1'),
+              (6.15, '1'), (7.15, '1h'), (7.35, '1h'), (9.0, '5'), (9.25, '5'), (9.5, '5')]
+DODGES = [(0.45, 0.95, -1), (2.45, 2.95, -1), (3.95, 4.45, 1), (4.85, 5.35, 1)]   # (from, to, side): out of the plasma
+KNEEL = (6.4, 6.65, 7.9, 8.5)                        # down, on his knees, up again (the blade passes over him)
+SWIPE = (6.1, 6.55, 6.9)                             # robot 1: wind-up, the swipe across, through
+HEAD1 = 7.35                                         # Andy shoots robot 1's head off (the camera west: Andy nearest,
+DIES = {'4': 3.9, '2': 7.2, '6': 8.35, '3': 5.6}     # the robot beyond him); cut down (robot 5 is blown apart)
+BLOWN5 = 9.8
+# The plasma (robot, seconds, what it is aimed at): every shot misses its man (he dodges or it goes wide) and burns
+# where it lands; robot 6's two blow up the tins and bottles on the island, two of robot 5's take out the pendants.
+PLASMA12 = [('4', 0.5, 'andy'), ('5', 2.0, 'wes'), ('4', 2.5, 'andy'), ('3', 4.0, 'andy'), ('3', 4.9, 'andy'),
+            ('5', 5.2, 'wes'), ('6', 6.0, 'tins'), ('6', 6.9, 'bottles'), ('5', 7.6, 'pendant 2'), ('5', 8.4, 'pendant 0'),
+            ('5', 9.05, 'wes')]
+PLASMA_SPEED = 9.0                                   # metres a second
+
+
+def bearing(a, b):
+    return math.degrees(math.atan2(b[0] - a[0], b[1] - a[1])) % 360
+
+
+def pendant_at(k):
+    ix, iz = PL.THINGS['island']['at']
+    return (ix + (-0.7, 0.0, 0.7)[k], S.CEIL - 0.7 + 0.08, iz)
+
+
+def plasma_aim(what, t):
+    """Where a plasma shot is aimed (a world point)."""
+    if what == 'andy':
+        return (ANDY12[0], 1.3, ANDY12[1])
+    if what == 'wes':
+        return (WES12[0] + 0.35, 1.45, WES12[1] - 0.2)
+    if what == 'tins':
+        return (TIN_SPOTS[1][0], 0.97, TIN_SPOTS[1][1])
+    if what == 'bottles':
+        return (BOTTLE_SPOTS[0][0], 1.05, BOTTLE_SPOTS[0][1])
+    return pendant_at(int(what[-1]))
+
+
+def next_plasma(name, u):
+    """The plasma shot this robot is aiming at (its next one, or its last)."""
+    mine = [(t0, what) for n, t0, what in PLASMA12 if n == name]
+    if not mine:
+        return None
+    return next(((t0, w) for t0, w in mine if t0 >= u - 0.15), mine[-1])
+
+
+def aim_cannon(p, name, u, height=1.62):
+    nxt = next_plasma(name, u)
+    if nxt:
+        a, pole = R.aim(plasma_aim(nxt[1], T['s12'] + nxt[0]), p['pos'], p['yaw'], 'R', height=height)
+        p['handR'], p['poleR'] = a, pole
+    return p
+
+
+def andy_holes(name, sp):
+    for i, (s_, who) in enumerate(ANDY_SHOTS):
+        if who == name:
+            sp['holes'].append(dict(part='chest', i=30 + 41 * i, t=T['s12'] + s_ + 0.03, r=0.026))
 
 
 def robot_pose(name, t):
@@ -476,76 +543,93 @@ def robot_pose(name, t):
     if t < T['s12']:
         return None, sp
     u = U12(t)
-    if name == '1':
-        start, end = (0.9, 2.2), (-0.3, 2.2)
-        p = R.pose(**R.walk(min(u, 2.6), start, end, 0.0, 2.6, stride=0.5))
-        p['handR'] = (0.3, 1.45, 0.62)
+    if name == '1':                                   # from the lounge at Andy; the swipe over him; its head off
+        start, end = (2.0, 1.7), (-2.05, 1.75)
+        if u < 1.6:
+            return None, sp
+        p = R.pose(**R.walk(min(u, 6.0), start, end, 1.6, 6.0, stride=0.5))
         p['sweep'] = R.eye_sweep(t)
-        for i in range(8):
-            sp['holes'].append(dict(part=['chest', 'shoulderR', 'hood', 'thighL'][i % 4], i=17 * i + 5, t=T['s12'] + 0.4 + 0.27 * i))
-        if u >= 1.6:
-            sp['lost'] = {'armR'}                   # the blade arm shot away
-        if u >= 2.6:
-            sp['dead'] = True
-            k = ease((u - 2.6) / 0.6)
-            p['fall'] = (90 * k, 90.0)
-        return p, sp
-    if name == '2':
-        start, end = (1.0, 3.6), (-0.9, 3.5)
-        p = R.pose(**R.walk(min(u, 4.6), start, end, 0.0, 4.6, stride=0.5, phase=0.3))
-        p['handL'] = (-0.3, 1.45, 0.62)
-        p['sweep'] = R.eye_sweep(t, 0.4)
-        for i in range(8):
-            sp['holes'].append(dict(part=['chest', 'hood', 'shoulderL', 'pelvis'][i % 4], i=23 * i + 7, t=T['s12'] + 3.05 + 0.2 * i))
-        if u >= 4.6:
-            sp['dead'] = True
-            k = ease((u - 4.6) / 0.6)
-            p['fall'] = (90 * k, 70.0)
-        return p, sp
-    if name == '3':
-        start, end = (-0.9, 0.7), (-1.75, 1.05)
-        p = R.pose(**R.walk(min(u, 3.4), start, end, 0.0, 3.4, stride=0.45))
-        a, pole = R.aim((ANDY12[0], 1.2, ANDY12[1]), p['pos'], p['yaw'], 'R')
-        p['handR'], p['poleR'] = a, pole
-        p['sweep'] = R.eye_sweep(t, 0.7)
-        for i, ts in enumerate(ANDY_SHOTS[:3]):
-            sp['holes'].append(dict(part='chest', i=30 + 41 * i, t=T['s12'] + ts + 0.03))
-        if u >= HEAD3:
+        reach = (0.3, 1.45, 0.62)                     # the blade arm held out in front as it comes
+        wind, cut, thru = SWIPE
+        if u < wind:
+            p['handR'] = reach
+        elif u < cut:
+            p['handR'] = lerp3(reach, (0.6, 1.78, 0.12), ease((u - wind) / (cut - wind)))
+        else:
+            p['handR'] = lerp3((0.6, 1.78, 0.12), (-0.5, 1.5, 0.5), ease((u - cut) / (thru - cut)))
+        andy_holes('1', sp)
+        if u >= HEAD1:
             sp['headless'] = True
-            k = ease((u - HEAD3 - 0.15) / 0.9)
-            p['fall'] = (88 * k, 160.0)
+            k = ease((u - HEAD1 - 0.15) / 0.9)
+            p['fall'] = (88 * k, 91.0)                # back the way it came, along the floor clear of the camera
             p['lean'] = 10 * k
         return p, sp
-    if name == '4':                                   # crawling in over the kitchen window's sill, onto the sink run
+    if name == '2':                                   # in from the lounge, blade out; Wes cuts it down
+        if u < 4.6:
+            return None, sp
+        p = R.pose(**R.walk(min(u, 7.0), (1.6, 3.6), (-0.7, 3.5), 4.6, 7.0, stride=0.5, phase=0.3))
+        p['handL'] = (-0.3, 1.45, 0.62)
+        p['sweep'] = R.eye_sweep(t, 0.4)
+    elif name == '3':                                 # in from the lounge, firing at Andy
+        if u < 2.4:
+            return None, sp
+        p = R.pose(**R.walk(min(u, 3.8), (1.4, 2.6), (-0.35, 2.7), 2.4, 3.8, stride=0.45))
+        p['yaw'] = bearing(p['pos'], ANDY12)          # its cannon on him as it comes
+        aim_cannon(p, '3', u)
+        p['sweep'] = R.eye_sweep(t, 0.7)
+        andy_holes('3', sp)
+    elif name == '4':                                 # in through the shot-out window, onto the sink run, firing
         keys = [(0.0, R.pose(pos=(-6.0, 2.3), yaw=90, lean=55, y=0.15, handR=(0.3, 1.2, 0.75), handL=(-0.3, 1.2, 0.75))),
-                (1.8, R.pose(pos=(-5.6, 2.3), yaw=90, lean=70, y=0.75, handR=(0.3, 1.0, 0.85), handL=(-0.3, 1.0, 0.85),
+                (1.2, R.pose(pos=(-5.6, 2.3), yaw=90, lean=70, y=0.75, handR=(0.3, 1.0, 0.85), handL=(-0.3, 1.0, 0.85),
                              footR=(0.13, 0.5, -0.4), footL=(-0.13, 0.3, -0.5))),
-                (3.6, R.pose(pos=(-5.25, 2.3), yaw=90, lean=30, y=0.92 - 0.38, footR=(0.13, 0.46, 0.25),
+                (2.2, R.pose(pos=(-5.25, 2.3), yaw=90, lean=30, y=0.92 - 0.38, footR=(0.13, 0.46, 0.25),
                              footL=(-0.13, 0.46, -0.1), handR=(0.3, 0.95, 0.4), handL=(-0.3, 0.95, 0.4))),
-                (7.0, R.pose(pos=(-5.22, 2.3), yaw=95, lean=24, y=0.92 - 0.38, footR=(0.13, 0.46, 0.25),
-                             footL=(-0.13, 0.46, -0.1), handR=(0.3, 0.95, 0.4), handL=(-0.3, 0.95, 0.4)))]
+                (11.0, R.pose(pos=(-5.22, 2.3), yaw=95, lean=24, y=0.92 - 0.38, footR=(0.13, 0.46, 0.25),
+                              footL=(-0.13, 0.46, -0.1), handR=(0.3, 0.95, 0.4), handL=(-0.3, 0.95, 0.4)))]
         p = keys[0][1]
         for (t0, a), (t1, b) in zip(keys, keys[1:]):
             if u >= t0:
                 p = R.blend(a, b, ease((u - t0) / (t1 - t0)))
         p['sweep'] = R.eye_sweep(t, 0.2)
-        if u > 4.0:                                   # crouched on the worktop, firing at Andy
-            a, pole = R.aim((ANDY12[0], 1.3, ANDY12[1]), p['pos'], p['yaw'], 'R', height=0.92 + 1.1)
-            p['handR'], p['poleR'] = a, pole
-        for i, ts in enumerate(ANDY_SHOTS[5:]):
-            sp['holes'].append(dict(part=['chest', 'hood', 'chest', 'pelvis'][i % 4], i=50 + 31 * i, t=T['s12'] + ts + 0.03))
+        if 0.3 <= u <= 0.8 or u > 2.2:               # a shot from the sill as it climbs; then crouched, firing
+            aim_cannon(p, '4', u, height=p.get('y', 0.0) + 1.1 + (0.5 if u < 1 else 0.0))
+        andy_holes('4', sp)
+    elif name == '5':                                 # walks in from the hall door in stages, firing at Wes
+        stages = [(0.0, 1.5, (-1.2, 5.9), (-1.2, 5.3)), (3.5, 4.6, (-1.2, 5.3), (-1.25, 5.0)),
+                  (6.8, 8.2, (-1.25, 5.0), (-1.3, 4.75))]
+        st = next((x for x in stages if u <= x[1]), stages[-1])
+        p = R.pose(**R.walk(u, st[2], st[3], st[0], st[1], stride=0.4))
+        p['yaw'] = bearing(p['pos'], WES12)           # it keeps its cannon on him as it comes
+        aim_cannon(p, '5', u)
+        p['sweep'] = R.eye_sweep(t, 0.5)
+        andy_holes('5', sp)
+        if u >= BLOWN5:                               # blown apart: the legs and hips left, toppling back
+            sp['dead'] = True
+            sp['headless'] = True
+            sp['lost'] = {'armR', 'armL', 'chest', 'ridge', 'cowl', 'shoulder', 'flare', 'rib'}
+            k = ease((u - BLOWN5 - 0.1) / 0.5)
+            p['fall'] = (85 * k, 0.0)
         return p, sp
-    if name == '5':                                   # in the hall-to-kitchen door, firing in and missing
-        p = R.pose(pos=(-1.2, 5.75), yaw=180, lean=10, sweep=R.eye_sweep(t, 0.5))
-        a, pole = R.aim((-2.4, 1.2, 2.6), p['pos'], p['yaw'], 'R')
-        p['handR'], p['poleR'] = a, pole
-        for i in range(5):
-            sp['holes'].append(dict(part=['chest', 'shoulderL', 'hood'][i % 3], i=19 * i + 3, t=T['s12'] + 5.3 + 0.2 * i))
-        return p, sp
-    return None, sp
+    elif name == '6':                                 # under the wide opening, on the right (Sam): fires, riddled
+        if u < 4.6:
+            return None, sp
+        p = R.pose(**R.walk(min(u, 5.7), (1.4, 1.5), (0.15, 1.5), 4.6, 5.7, stride=0.45))
+        if u > 5.7:
+            p['yaw'] = 270.0
+        aim_cannon(p, '6', u)
+        p['sweep'] = R.eye_sweep(t, 0.9)
+    else:
+        return None, sp
+    if name in DIES and u >= DIES[name]:
+        sp['dead'] = True
+        k = ease((u - DIES[name]) / 0.6)
+        p['fall'] = (88 * k, {'4': 0.0}.get(name, (p['yaw'] + 180) % 360))
+        p['head_pitch'] = -15 * k
+    return p, sp
 
 
-ROBOTS_IN = {'s8': ['A'], 's9': ['A', 'B'], 's10': ['C', 'D'], 's11': ['5'], 's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5']}
+ROBOTS_IN = {'s8': ['A'], 's9': ['A', 'B'], 's10': ['C', 'D'], 's11': ['5'],
+             's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5', '6']}
 
 
 def aim_at(keys, u):
@@ -561,22 +645,39 @@ def wes12(t):
     sp['mouth'] = 'shout'
     sp['lid'] = -3
     sp['blink'] = False
-    fac = aim_at(WES_AIM, u)
+    fac = aim_at(WES_AIM, u) % 360
     f = int(t * FPS)
     rec = {}
     j = C.minigun_hip(sp, (0.0, 4.0), spin=t * 6.0, flash=1.0 if f % 2 == 0 else 0.6, rec=rec, seed=f)
     return sp, j, fac, rec
 
 
+def kneel(j, sp, k):
+    """Down on his right knee, the left foot planted forward (k 0 standing .. 1 kneeling)."""
+    drop = 215.0 * k
+    j['bob'] = j.get('bob', 0.0) + drop
+    floor = V.ANKLE_Y - drop
+    j['footR'] = (60.0, floor + 40 * k, 6.0 - 190 * k)
+    j['footL'] = (-70.0, floor, 6.0 + 200 * k)
+    j['knee_poleR'] = (0.1, 0.4, 1.0)
+    j['knee_poleL'] = (-0.1, -0.3, 1.0)
+    return j
+
+
 def andy12(t):
     u = U12(t)
     sp = C.fear(C.ANDY, 6)
-    sp['mouth'] = 'shout' if any(abs(u - d0) < 0.5 for d0, _, _ in DODGES) else 'set'
+    sp['mouth'] = 'shout' if any(abs(u - d0) < 0.5 for d0, _, _ in DODGES) or KNEEL[0] <= u <= KNEEL[1] + 0.3 else 'set'
     sp['blink'] = False
-    fac = aim_at(ANDY_AIM, u)
-    flash = any(0 <= u - s_ < 1 / FPS for s_ in ANDY_SHOTS)
+    fac = aim_at(ANDY_AIM, u) % 360
+    flash = any(0 <= u - s_ < 1 / FPS for s_, _ in ANDY_SHOTS)
+    d0_, d1_, u0_, u1_ = KNEEL
+    kk = ease((u - d0_) / (d1_ - d0_)) if u < u0_ else 1 - ease((u - u0_) / (u1_ - u0_))
+    up = -48 * ease((u - d1_) / 0.3) if d1_ <= u <= u0_ else 0.0   # on his knees, aiming up at robot 1's head
     rec = {}
-    j = C.glock_aim(sp, (0.0, 2.0), flash=1.0 if flash else 0.0, rec=rec)
+    j = C.glock_aim(sp, (0.0, 2.0 + up), flash=1.0 if flash else 0.0, rec=rec)
+    if kk > 0:
+        kneel(j, sp, kk)
     x, z = ANDY12
     for d0, d1, side in DODGES:                       # a jink sideways and a duck out of the plasma's way
         if d0 <= u <= d1 + 0.3:
@@ -584,7 +685,7 @@ def andy12(t):
             a = math.radians(fac + 90 * side)
             x += 0.35 * k * math.sin(a)
             z += 0.35 * k * math.cos(a)
-            j['bob'] = 60 * k
+            j['bob'] = j.get('bob', 0.0) + 60 * k
             j['lean'] = 12 * k
     return sp, j, fac, rec, (x, z)
 
@@ -651,11 +752,13 @@ SURFACE = {'island': ((84, 98, 104), 'wood'), 'north units': ((226, 228, 224), '
            'wall': ((238, 238, 234), 'plaster'), 'floor': ((150, 150, 146), 'tile'), 'ceiling': ((246, 244, 238), 'plaster')}
 
 
+
+
 def robot_targets(t):
     out = []
     for name in ROBOTS_IN.get(shot_of(t), []):
         p, sp = robot_pose(name, t)
-        if p is None or sp.get('dead'):
+        if p is None or sp.get('dead') or sp.get('headless'):
             continue
         J, _ = R.skeleton(p)
         out.append((name, tuple(J['chest']), 0.32))
@@ -663,69 +766,151 @@ def robot_targets(t):
 
 
 def wes_shots():
-    """Every round Wes fires in shot 12 that lands (12 a second sampled; each leaves a mark, every third a burst of
-    debris or sparks)."""
+    """Every round Wes fires in shot 12 that lands (12 a second sampled; each leaves a mark, every second one on wood
+    a spray of splinters). The barrels ride up to chest height as he leans in."""
     out = []
-    for i in range(int(7.0 * 12)):
+    for i in range(int((T['end'] - T['s12']) * 12)):
         t = T['s12'] + i / 12
         u = U12(t)
         fac = math.radians(aim_at(WES_AIM, u) + 4 * math.sin(i * 2.3))
         o = (WES12[0] + 0.7 * math.sin(fac), 0.98, WES12[1] + 0.7 * math.cos(fac))
-        d = (math.sin(fac), -0.02 + 0.03 * math.sin(i * 1.7), math.cos(fac))
+        d = (math.sin(fac), 0.1 + 0.04 * math.sin(i * 1.7), math.cos(fac))
         hp, n, what = ray_hit(o, d, robot_targets(t))
         if hp is not None:
             out.append((t, tuple(o), tuple(hp), tuple(n), what, i))
     return out
 
 
+def plasma_tracks():
+    """Each plasma shot: from the robot's palm at the moment it fires towards what it aims at, on until it hits
+    something solid (where it scorches and burns); which pendants it passes through on the way."""
+    out = []
+    for name, u0, what in PLASMA12:
+        t0 = T['s12'] + u0
+        p, sp = robot_pose(name, t0)
+        ps, J = R.parts(p, sp)
+        o = np.asarray(next((q.c for q in ps if q.name.startswith('core')), J['handR']), float)
+        g = np.asarray(plasma_aim(what, t0), float)
+        hp, n, hit = ray_hit(o, g - o)
+        dist = float(np.linalg.norm(np.asarray(hp) - o))
+        tr = dict(name=name, t0=t0, o=tuple(o), hp=tuple(hp), n=tuple(n), what=what, t_hit=t0 + dist / PLASMA_SPEED,
+                  pendants={})
+        d = (np.asarray(hp) - o) / dist
+        for k in range(3):
+            c = np.asarray(pendant_at(k))
+            s_ = float(np.dot(c - o, d))
+            if 0 < s_ < dist and np.linalg.norm(o + d * s_ - c) < 0.22:
+                tr['pendants'][k] = t0 + s_ / PLASMA_SPEED
+        out.append(tr)
+    return out
+
+
 WES_HITS = None
+PLASMA = None
 MARKS = None
 DEBRIS12 = None
+BURNS = None
+BROKEN = None
 
 
 def _prepare12():
-    global WES_HITS, MARKS, DEBRIS12
+    """Everything shot 12 leaves behind, worked out once: marks, debris, spent cases, burst tins and bottles, the
+    broken pendants, robot 5 in pieces."""
+    global WES_HITS, PLASMA, MARKS, DEBRIS12, BURNS, BROKEN
     if WES_HITS is not None:
         return
     WES_HITS = wes_shots()
-    MARKS, DEBRIS12 = [], []
+    PLASMA = plasma_tracks()
+    MARKS, DEBRIS12, BURNS, BROKEN = [], [], [], {}
     box = (-5.55, 5.95, 0.05, 5.35)
+    kbox = (-5.55, -0.05, 0.05, 5.35)
+    isl = PL.THINGS['island']
+    tops = TOPS + [(isl['at'][0] - 1.2, isl['at'][0] + 1.2, isl['at'][1] - 0.5, isl['at'][1] + 0.5, 0.92)]
     for (t, o, hp, n, what, i) in WES_HITS:
         if what.startswith('robot'):
             continue
         col, kind = SURFACE.get(what, ((220, 220, 214), 'chip'))
-        MARKS.append(dict(t=t, at=hp, n=n, kind='hole', size=0.03 + 0.01 * (i % 3), seed=i, room='kitchen', chip=col))
-        if i % 3 == 0:
-            DEBRIS12.extend(X.burst(t, hp, 5, 2.0, 100 + i, kind='chip', col=col, size=0.03, up=1.0, dirn=n, box=box, tops=TOPS))
-    for name, t0, kind in PLASMA12:
-        if kind == 'miss':
-            hp, n = plasma_target(name, T['s12'] + t0)
-            MARKS.append(dict(t=T['s12'] + t0 + 0.35, at=tuple(hp), n=tuple(n), kind='scorch', size=0.14, seed=7, room='kitchen'))
+        MARKS.append(dict(t=t, at=hp, n=n, kind='hole', size=0.05 + 0.015 * (i % 3), seed=i, room='kitchen', chip=col))
+        if kind == 'wood' and i % 2 == 0:              # cupboards splintering (Sam, 24 Oct)
+            DEBRIS12.extend(X.burst(t, hp, 6, 2.2, 100 + i, kind='splinter', col=col if i % 4 else (206, 174, 124),
+                                    size=0.045, up=1.0, dirn=n, box=box, tops=tops))
+        elif i % 3 == 0:
+            DEBRIS12.extend(X.burst(t, hp, 5, 2.0, 100 + i, kind='chip', col=col, size=0.03, up=1.0, dirn=n, box=box, tops=tops))
+    for i in range(0, len(WES_HITS) + 40, 2):         # spent cases flying off the minigun, landing and staying
+        t = T['s12'] + i / 12
+        if t >= T['end']:
+            break
+        fac = math.radians(aim_at(WES_AIM, U12(t)) % 360)
+        fwd, rt = np.array([math.sin(fac), 0, math.cos(fac)]), np.array([math.cos(fac), 0, -math.sin(fac)])
+        at = np.array([WES12[0], 0.95, WES12[1]]) + fwd * 0.3 + rt * 0.18
+        rng = np.random.default_rng(500 + i)
+        v = rt * rng.uniform(1.4, 2.2) + fwd * rng.uniform(-0.4, 0.4) + np.array([0, rng.uniform(1.2, 2.0), 0])
+        pc = X.Piece(tuple(at), tuple(v), t, r=0.008, e=0.4, spin=rng.uniform(-20, 20), box=box, tops=tops)
+        pc.kind, pc.col, pc.size, pc.seed = 'case', X.BRASS, 0.022, 500 + i
+        DEBRIS12.append(pc)
+    for tr in PLASMA:                                  # the plasma burns where it lands
+        MARKS.append(dict(t=tr['t_hit'], at=tr['hp'], n=tr['n'], kind='scorch', size=0.16, seed=int(tr['t0'] * 10),
+                          room='kitchen'))
+        BURNS.append((tr['t_hit'], tr['hp'], tr['n'], int(tr['t0'] * 10)))
+        for k, tk in tr['pendants'].items():           # a pendant in its way shatters
+            if k not in BROKEN:
+                BROKEN[k] = tk
+                c = pendant_at(k)
+                DEBRIS12.extend(X.burst(tk, c, 12, 2.4, 300 + k, kind='glass', size=0.04, up=0.5, box=box, tops=tops))
+                DEBRIS12.extend(X.burst(tk, c, 6, 2.2, 310 + k, kind='chip', col=(204, 160, 72), size=0.04, up=0.5,
+                                        box=box, tops=tops))
+        if tr['what'] in ('tins', 'bottles'):          # the tins and bottles blow up across the worktop
+            spots = TIN_SPOTS if tr['what'] == 'tins' else BOTTLE_SPOTS
+            for k, (x, z) in enumerate(spots):
+                tb = tr['t_hit'] + 0.03 * k
+                at = (x, 1.0, z)
+                if tr['what'] == 'tins':
+                    DEBRIS12.extend(X.burst(tb, at, 26, 2.0, 400 + k, kind='bean', size=0.016, up=1.6, box=box, tops=tops))
+                    DEBRIS12.extend(X.burst(tb, at, 5, 2.2, 410 + k, kind='chip', col=(48, 170, 170), size=0.035, up=1.8,
+                                            box=box, tops=tops))
+                else:
+                    DEBRIS12.extend(X.burst(tb, (x, 1.08, z), 24, 2.0, 420 + k, kind='drop', size=0.03, up=1.4, box=box,
+                                            tops=tops))
+                    DEBRIS12.extend(X.burst(tb, (x, 1.08, z), 4, 1.8, 430 + k, kind='chip', col=(230, 240, 248), size=0.04,
+                                            up=1.4, box=box, tops=tops))
+                    DEBRIS12.extend(X.burst(tb, (x, 1.2, z), 1, 1.2, 440 + k, kind='chip', col=(40, 110, 200), size=0.03,
+                                            up=2.0, box=box, tops=tops))
+    p5, sp5 = robot_pose('5', T['s12'] + BLOWN5 - 0.01)   # robot 5 blown to pieces: chunks of plate everywhere, staying
+    J5, _ = R.skeleton(p5)
+    c5 = tuple(J5['chest'])
+    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 30, 3.2, 600, kind='chip', col=R.CHROME[0], size=0.09, up=1.6, box=kbox,
+                            tops=tops, spread=1.4))
+    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 14, 3.0, 601, kind='chip', col=R.CHROME_D[1], size=0.07, up=1.4,
+                            box=kbox, tops=tops, spread=1.4))
+    DEBRIS12.extend(X.burst(T['s12'] + BLOWN5, c5, 8, 2.6, 602, kind='splinter', col=(70, 74, 82), size=0.08, up=1.2,
+                            box=kbox, tops=tops, spread=1.4))
 
 
-def plasma_target(name, t):
-    if name == '5':
-        return (-2.6, 1.1, 2.0), (0, 0, 1)            # misses: past Andy into the tall units' side
-    return (ANDY12[0] + 0.5, 1.2, ANDY12[1] - 0.4), (0, 0, 1)
+def item_gone(kind, t):
+    """When a tin or bottle on the island has been blown up (shot 12)."""
+    if shot_of(t) != 's12':
+        return False
+    _prepare12()
+    return any(tr['what'] == kind + 's' and t >= tr['t_hit'] for tr in PLASMA)
 
 
-def plasma_track(name, t0):
-    """A plasma bolt from robot `name`'s palm at t0 towards its target: (origin, target), 0.35 s in flight."""
-    p, sp = robot_pose(name, t0)
-    if p is None:
-        return None
-    ps, J = R.parts(p, sp)
-    core = next((q.c for q in ps if q.name.startswith('core')), J['handR'])
-    if name == '5':
-        tgt = (-2.6, 1.1, 0.7)
-    elif name == '3':
-        tgt = (ANDY12[0] - 0.4, 1.25, ANDY12[1] + 0.2)
-    else:
-        tgt = (ANDY12[0] + 0.3, 1.3, ANDY12[1] - 0.6)
-    return tuple(core), tgt
+def wes_holes(name):
+    _prepare12()
+    parts = ['chest', 'shoulderR', 'shoulderL', 'pelvis', 'chest', 'thighL', 'thighR']
+    return [dict(part=parts[k % len(parts)], i=17 * k + 5, t=ts + 0.02, r=0.026)
+            for k, (ts, o, hp, n, what, i) in enumerate(h for h in WES_HITS if h[4] == 'robot ' + name)]
 
 
 # ------------------------------------------------------------------------------------------------ the picture
+def masked(im, cam, fx, xz, draw):
+    """Draw a person on a layer of their own, lay it on, and keep their silhouette (and depth) for Behind."""
+    lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    r = draw(lay)
+    im.alpha_composite(lay)
+    fx.setdefault('masks', []).append((cam.depth((xz[0], 1.2, xz[1])), lay.getchannel('A').point(lambda a: 255 if a > 128 else 0)))
+    return r
+
+
 def actors(t, cam, fx):
     """Everyone and everything that moves, as actors for the set's painter (plan point, radius, draw)."""
     s = shot_of(t)
@@ -736,20 +921,20 @@ def actors(t, cam, fx):
         x, z = PL.PEOPLE['andy sofa (1-4, 7, start of 8)']['at']
         out.append(dict(at=(x, z), r=0.25, draw=lambda im: put(im, cam, sp, x, z, 180, j, t)))
     elif s == 's6':
-        sp, j, fac = andy6(t)
+        sp, j, fac, hf = andy6(t)
         x, z = PL.PEOPLE['andy kitchen (6)']['at']
-        out.append(dict(at=(x, z), r=0.25, draw=lambda im: put(im, cam, sp, x, z, fac, j, t)))
-        if t < FIRE6 + BOLT6:
-            out.append(dict(at=ALEXA[::2], r=0.06, draw=lambda im: X.alexa(im, cam, ALEXA)))
+        out.append(dict(at=(x, z), r=0.25, draw=lambda im: put(im, cam, sp, x, z, fac, j, t, head_facing=hf)))
     elif s == 's12':
         _prepare12()
         sp, j, fac, rec = wes12(t)
-        out.append(dict(at=WES12, r=0.3, draw=lambda im: fx.__setitem__('wes', (put(im, cam, sp, WES12[0], WES12[1], fac, j, t), rec))))
+        out.append(dict(at=WES12, r=0.3, draw=lambda im: fx.__setitem__('wes', (masked(im, cam, fx, WES12, lambda l: put(
+            l, cam, sp, WES12[0], WES12[1], fac, j, t)), rec))))
         sp2, j2, fac2, rec2, (ax_, az_) = andy12(t)
-        out.append(dict(at=(ax_, az_), r=0.3, draw=lambda im: fx.__setitem__('andy', (put(im, cam, sp2, ax_, az_, fac2, j2, t), rec2))))
+        out.append(dict(at=(ax_, az_), r=0.3, draw=lambda im: fx.__setitem__('andy', (masked(im, cam, fx, (ax_, az_), lambda l: put(
+            l, cam, sp2, ax_, az_, fac2, j2, t)), rec2))))
         # the Alexa's remains, up on rod legs, scuttling at Wes with a kitchen knife
         (bx, by, bz), _ = ALEXA_BALL.at(T['s12'] - 0.01)
-        k = ease((u - 1.5) / 5.5)
+        k = ease((u - 1.5) / 8.5)
         ax2, az2 = bx + (WES12[0] - 0.35 - bx) * k, bz + (WES12[1] + 0.25 - bz) * k
         face = math.degrees(math.atan2(WES12[0] - ax2, WES12[1] - az2))
         if u < 1.2:
@@ -760,34 +945,37 @@ def actors(t, cam, fx):
         p, sp_r = robot_pose(name, t)
         if p is None:
             continue
+        if s == 's12':
+            sp_r['holes'] = sp_r['holes'] + wes_holes(name)
         J, _ = R.skeleton(p)
         foot = (float(J['hipC'][0]), float(J['hipC'][2]))
         if p.get('fall') and p['fall'][0] > 30:
             foot = (float(J['chest'][0]), float(J['chest'][2]))
         out.append(dict(at=foot, r=0.3, draw=lambda im, p=p, sp_r=sp_r, name=name: fx.setdefault('robots', {}).__setitem__(
             name, R.draw(im, cam, p, sp_r, t))))
-    if s == 's12' and U12(t) >= HEAD3:                # robot 3's head, flying off and rolling to a stop
-        hp = HEAD3_PIECE.at(t)
-        out.append(dict(at=(hp[0][0], hp[0][2]), r=0.15, draw=lambda im: flying_head(im, cam, t)))
+    if s == 's12':                                    # the heads shot off (robot 1) and blown off (robot 5), landing
+        for name, piece in HEADS.items():
+            if t >= piece.t0:
+                hp = piece.at(t)
+                out.append(dict(at=(hp[0][0], hp[0][2]), r=0.15, draw=lambda im, piece=piece: flying_head(im, cam, t, piece)))
     return out
 
 
-HEAD3_PIECE = None
+def _heads():
+    out = {}
+    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (-0.6, 3.2, -1.6))):
+        p, sp = robot_pose(name, T['s12'] + u0 - 0.01)
+        J, _ = R.skeleton(p)
+        out[name] = X.Piece(tuple(J['head']), v, T['s12'] + u0, r=0.15, e=0.3, spin=9, box=(-5.55, -0.05, 0.05, 5.35),
+                            tops=TOPS)
+    return out
 
 
-def _head3():
-    global HEAD3_PIECE
-    p, sp = robot_pose('3', T['s12'] + HEAD3 - 0.01)
-    J, _ = R.skeleton(p)
-    HEAD3_PIECE = X.Piece(tuple(J['head']), (-1.2, 2.2, 1.8), T['s12'] + HEAD3, r=0.15, e=0.3, spin=9,
-                          box=(-5.55, -0.05, 0.05, 5.35), tops=TOPS)
+HEADS = _heads()
 
 
-_head3()
-
-
-def flying_head(img, cam, t):
-    (x, y, z), ang = HEAD3_PIECE.at(t)
+def flying_head(img, cam, t, piece):
+    (x, y, z), ang = piece.at(t)
     H = R.rot([1, 0.3, 0.2], ang)
     parts = R.head_parts(np.array([x, y, z]), H, 0.0, {'dead': True})
     pen = B.Pen(img, FLAT)
@@ -807,18 +995,53 @@ def house_state(t):
         for i in range(3):
             for part in ('low', 'top'):
                 st['glass'][f'kitchen window {i} {part}'] = {'seed': i * 2 + (part == 'top')}
+    if t >= FIRE10 + 0.8 and s not in ('s5', 's6'):   # the minigun shreds the frames too (Sam: robot 4 climbs through)
+        st['glass']['_frames_gone'] = ('kitchen window',)
     st['island'] = lambda im, cam: draw_island_items(im, cam, t)
     if s == 's12':
         _prepare12()
         st['marks'] = [m for m in MARKS if m['t'] <= t]
+        st['broken'] = {f'pendant {k}' for k, tk in BROKEN.items() if t >= tk}
     return st
+
+
+class Behind:
+    """Effects drawn at their true depth against the people (Sam, 24 Oct: debris flying behind Andy was drawn over
+    him). D(point) gives the picture to draw an effect at that world point on: the frame itself when nothing is nearer,
+    or a layer that is cut away wherever a nearer person stands, laid on at finish()."""
+    def __init__(self, img, cam, masks):
+        self.img, self.cam = img, cam
+        self.masks = sorted(masks, key=lambda m: m[0])           # (depth, mask), nearest first
+        self.layers = {}
+
+    def __call__(self, at):
+        d = self.cam.depth(tuple(float(v) for v in at))
+        g = sum(1 for dm, _ in self.masks if dm < d - 0.15)
+        if g == 0:
+            return self.img
+        if g not in self.layers:
+            self.layers[g] = Image.new('RGBA', self.img.size, (0, 0, 0, 0))
+        return self.layers[g]
+
+    def finish(self):
+        from PIL import ImageChops
+        for g in sorted(self.layers, reverse=True):              # the farthest first
+            lay = self.layers[g]
+            cut = self.masks[0][1]
+            for _, m in self.masks[1:g]:
+                cut = ImageChops.lighter(cut, m)
+            lay.putalpha(ImageChops.subtract(lay.getchannel('A'), cut))
+            self.img.alpha_composite(lay)
 
 
 def effects(img, cam, t, fx):
     """The flat effects over the frame, shot by shot."""
     s = shot_of(t)
     p = B.Pen(img, FLAT)
+    p = B.Pen(img, FLAT)
     if s == 's6':
+        if t < FIRE6 + BOLT6:                         # the Alexa on the worktop, drawn over the units (Sam, 24 Oct:
+            X.alexa(img, cam, ALEXA)                  # the painter had it behind them, so it never showed)
         if FIRE6 <= t < FIRE6 + BOLT6:
             b = bolt6_at(t)
             d = np.subtract(BOLT6_TO, BOLT6_FROM)
@@ -829,7 +1052,7 @@ def effects(img, cam, t, fx):
             for pc in ALEXA_BITS:
                 X.draw_piece(img, cam, pc, t)
             (bx, by, bz), ang = ALEXA_BALL.at(t)
-            X.alexa(img, cam, (bx, by - 0.045, bz), light=False)
+            X.alexa(img, cam, (bx, by - 0.045 * X.ALEXA_K, bz), light=False)
             X.sparks(img, cam, t, FIRE6 + BOLT6, BOLT6_TO, 6, n=18, col='yellow', speed=2.4)
             X.sparks(img, cam, t, FIRE6 + BOLT6 + 0.15, BOLT6_TO, 7, n=10, col='blue', speed=1.6)
             if t < FIRE6 + BOLT6 + 0.17:
@@ -842,6 +1065,7 @@ def effects(img, cam, t, fx):
         u = U12(t)
         f = int(t * FPS)
         X.room_flash(img, 1.0 if f % 2 == 0 else 0.45)
+        D = Behind(img, cam, fx.get('masks', []))      # effects behind Andy or Wes are hidden by them (Sam, 24 Oct)
         we = fx.get('wes')
         if we and we[1].get('muzzle'):
             mx, my = we[1]['muzzle']
@@ -855,54 +1079,75 @@ def effects(img, cam, t, fx):
         for (ts, o, hp, n, what, i) in WES_HITS:                 # what he hits: sparks off robots, flashes off walls
             if 0 <= t - ts < 0.45:
                 if what.startswith('robot'):
-                    X.sparks(img, cam, t, ts, hp, i, n=8, col='yellow' if i % 2 else 'blue', speed=2.2, dirn=n)
+                    X.sparks(D(hp), cam, t, ts, hp, i, n=8, col='yellow' if i % 2 else 'blue', speed=2.2, dirn=n)
                     if t - ts < 1 / FPS:
-                        X.flash(img, cam, hp, 0.08, seed=i)
+                        X.flash(D(hp), cam, hp, 0.08, seed=i)
                 elif t - ts < 1 / FPS and i % 2 == 0:
-                    X.flash(img, cam, hp, 0.06, seed=i)
+                    X.flash(D(hp), cam, hp, 0.06, seed=i)
         for pc in DEBRIS12:
-            X.draw_piece(img, cam, pc, t)
+            X.draw_piece(D(pc.at(t)[0]), cam, pc, t)
         an = fx.get('andy')
-        if an and an[1].get('muzzle'):
-            for s_ in ANDY_SHOTS:
-                if 0 <= u - s_ < 1 / FPS:
-                    fac = math.radians(aim_at(ANDY_AIM, s_))
-                    o = (ANDY12[0] + 0.6 * math.sin(fac), 1.35, ANDY12[1] + 0.6 * math.cos(fac))
-                    hp, n, what = ray_hit(o, (math.sin(fac), -0.03, math.cos(fac)), robot_targets(t))
-                    if hp is not None and cam.depth(tuple(hp)) > 0.2:
-                        (hx, hy), _ = cam.project(tuple(hp))
-                        mx, my = an[1]['muzzle']
-                        p.line([(mx + (hx - mx) * 0.3, my + (hy - my) * 0.3), (mx + (hx - mx) * 0.8, my + (hy - my) * 0.8)],
-                               (255, 236, 150), 2.2)
-        for s_ in ANDY_SHOTS:
-            if 0 <= u - s_ < 0.4:
-                fac = math.radians(aim_at(ANDY_AIM, s_))
-                o = (ANDY12[0] + 0.6 * math.sin(fac), 1.35, ANDY12[1] + 0.6 * math.cos(fac))
-                hp, n, what = ray_hit(o, (math.sin(fac), -0.03, math.cos(fac)), robot_targets(T['s12'] + s_))
-                if hp is not None:
-                    X.sparks(img, cam, t, T['s12'] + s_, tuple(hp), int(s_ * 100), n=10, col='yellow', speed=2.5, dirn=n)
-        if HEAD3 <= u < HEAD3 + 1.0:                              # the head comes off: blue sparks from the neck
-            p3, sp3 = robot_pose('3', t)
-            J, _ = R.skeleton(p3)
-            X.sparks(img, cam, t, T['s12'] + HEAD3, tuple(J['neck']), 33, n=16, col='blue', speed=2.0)
-            X.smoke(img, cam, t, T['s12'] + HEAD3 + 0.1, tuple(J['neck']), 34, n=3, life=1.2, size=0.08)
-        for name, t0, kind in PLASMA12:
-            tt = T['s12'] + t0
-            if tt <= t < tt + 0.45:
-                tr = plasma_track(name, tt)
-                if tr:
-                    o, g = tr
-                    k = (t - tt) / 0.35
-                    if k <= 1.0:
-                        a = lerp3(o, g, max(0.0, k - 0.25))
-                        b = lerp3(o, g, min(1.0, k))
-                        X.plasma(img, cam, a, b)
-                    else:
-                        X.flash(img, cam, g, 0.2, seed=int(t0 * 10), col='blue')
-            if tt + 0.35 <= t < tt + 1.5:
-                tr = plasma_track(name, tt)
-                if tr:
-                    X.smoke(img, cam, t, tt + 0.35, tr[1], int(t0 * 10), n=3, life=1.1, size=0.1)
+        for s_, who in ANDY_SHOTS:                                # Andy's rounds: a tracer, sparks where they strike
+            if not 0 <= u - s_ < 0.4:
+                continue
+            o, g = andy_round(s_, who)
+            if u - s_ < 1 / FPS and an and an[1].get('muzzle') and cam.depth(g) > 0.2:
+                (hx, hy), _ = cam.project(g)
+                mx, my = an[1]['muzzle']
+                p.line([(mx + (hx - mx) * 0.3, my + (hy - my) * 0.3), (mx + (hx - mx) * 0.8, my + (hy - my) * 0.8)],
+                       (255, 236, 150), 2.2)
+            X.sparks(D(g), cam, t, T['s12'] + s_, g, int(s_ * 100), n=10, col='yellow', speed=2.5)
+        wind, cut, thru = SWIPE                                   # robot 1's blade: the sweep over Andy's head
+        if cut <= u < thru + 0.15:
+            J1, _ = R.skeleton(robot_pose('1', t)[0])
+            tips = [blade_tip('1', T['s12'] + cut + (min(u, thru) - cut) * k / 7) for k in range(8)]
+            X.blade_arc(D(J1['chest']), cam, [q for q in tips if q is not None][-6:])
+        if HEAD1 <= u < HEAD1 + 1.0:                              # robot 1's head comes off: blue sparks from the neck
+            p1, sp1 = robot_pose('1', t)
+            J, _ = R.skeleton(p1)
+            X.sparks(D(J['neck']), cam, t, T['s12'] + HEAD1, tuple(J['neck']), 33, n=16, col='blue', speed=2.0)
+            X.smoke(D(J['neck']), cam, t, T['s12'] + HEAD1 + 0.1, tuple(J['neck']), 34, n=3, life=1.2, size=0.08)
+        if BLOWN5 <= u < BLOWN5 + 2.5:                            # robot 5 blown apart: flash, sparks, smoke
+            c5 = HEADS['5'].track[0][0]
+            if u < BLOWN5 + 0.17:
+                X.flash(D(c5), cam, c5, 0.55, seed=55)
+            X.sparks(D(c5), cam, t, T['s12'] + BLOWN5, c5, 55, n=30, col='yellow', speed=3.4, life=0.5)
+            X.sparks(D(c5), cam, t, T['s12'] + BLOWN5 + 0.05, c5, 56, n=18, col='blue', speed=2.6, life=0.5)
+            X.smoke(D(c5), cam, t, T['s12'] + BLOWN5 + 0.1, c5, 57, n=6, life=2.2, size=0.18)
+        for tr in PLASMA:                                         # the plasma bolts, and the flash where they land
+            if tr['t0'] <= t < tr['t_hit'] + 0.12:
+                L_ = (tr['t_hit'] - tr['t0'])
+                k = (t - tr['t0']) / max(1e-6, L_)
+                if k <= 1.0:
+                    a = lerp3(tr['o'], tr['hp'], max(0.0, k - 0.6 / (L_ * PLASMA_SPEED)))
+                    b = lerp3(tr['o'], tr['hp'], min(1.0, k))
+                    X.plasma(D(b), cam, a, b)
+                else:
+                    X.flash(D(tr['hp']), cam, tr['hp'], 0.22, seed=int(tr['t0'] * 10), col='blue')
+            if tr['t_hit'] <= t < tr['t_hit'] + 1.5:
+                X.smoke(D(tr['hp']), cam, t, tr['t_hit'], tr['hp'], int(tr['t0'] * 10), n=3, life=1.3, size=0.1)
+        for tb, at, n, seed in BURNS:                             # and burns there for a few seconds
+            X.flames(D(at), cam, t, tb, at, n, seed)
+        D.finish()
+
+
+def andy_round(s_, who):
+    """One of Andy's rounds in shot 12: from his pistol to the point it strikes (robot `who`'s chest, or its head)."""
+    t = T['s12'] + s_
+    sp, j, fac, rec, (x, z) = andy12(t)
+    kneeling = KNEEL[0] <= s_ <= KNEEL[3]
+    a = math.radians(fac)
+    o = (x + 0.6 * math.sin(a), 0.95 if kneeling else 1.35, z + 0.6 * math.cos(a))
+    p, spr = robot_pose(who[0], t)
+    J, _ = R.skeleton(p)
+    return o, tuple(J['head'] if who.endswith('h') else J['chest'])
+
+
+def blade_tip(name, t):
+    p, sp = robot_pose(name, t)
+    ps, J = R.parts(p, sp)
+    tips = [q.pts[4] for q in ps if q.name.startswith('blade') and not q.name.startswith('bladecore')]
+    return tuple(tips[0]) if tips else None
 
 
 def picture(t):
@@ -994,9 +1239,15 @@ def sound_events():
           ('laser-sword', LUNGE9 + 0.1, 0.6)] + [('pistol', s_, 0.8) for s_ in SHOTS9] + \
          [('robot-wounded', SHOTS9[-1] + 0.1, 0.6), ('glass-shattered', FIRE10, 0.9), ('plasma-gun', PLASMA10, 0.7),
           ('minigun', FIRE10, 0.9), ('minigun', T['s12'], 0.9), ('minigun', T['s12'] + 2.4, 0.9), ('minigun', T['s12'] + 4.8, 0.9)]
-    ev += [('pistol', T['s12'] + s_, 0.7) for s_ in ANDY_SHOTS]
+    ev += [('minigun', T['s12'] + 7.2, 0.9), ('minigun', T['s12'] + 9.6, 0.9)]
+    ev += [('pistol', T['s12'] + s_, 0.7) for s_, _ in ANDY_SHOTS]
     ev += [('plasma-gun', T['s12'] + t0, 0.55) for _, t0, _ in PLASMA12]
-    ev += [('robot-wounded', T['s12'] + HEAD3, 0.7), ('sparks', T['s12'] + HEAD3, 0.6)]
+    ev += [('laser-sword', T['s12'] + SWIPE[1], 0.7)]
+    ev += [('robot-wounded', T['s12'] + HEAD1, 0.7), ('sparks', T['s12'] + HEAD1, 0.6)]
+    ev += [('robot-wounded', T['s12'] + BLOWN5, 0.8), ('sparks', T['s12'] + BLOWN5, 0.8)]
+    ev += [('robot-wounded', T['s12'] + u_ + 0.05, 0.5) for u_ in DIES.values()]
+    _prepare12()
+    ev += [('glass-shattered', tk, 0.5) for tk in BROKEN.values()]
     return ev
 
 
@@ -1036,8 +1287,39 @@ def checks():
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     windows = [(ln['start'] + a, ln['start'] + b) for ln in LINES if not ln.get('off') for a, b in ln['_stretches']]
     faults = E.check_mouths(sorted(x for w in TRACK for x in TRACK[w]), windows)
+    faults += facing_check()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
+
+
+def facing_check():
+    """Sam's note 11 (24 Oct): Andy's face looked backwards while his body faced forwards. Every frame of shots 6 and
+    12, Andy and Wes are drawn alone through the shot's camera: the head may turn at most 95 degrees from the body, and
+    from behind nothing they hold out in front may be drawn over their back."""
+    faults = []
+    for s0, s1 in ((T['s6'], T['s7']), (T['s12'], T['end'])):
+        for f in range(int(s0 * FPS), int(s1 * FPS)):
+            t = f / FPS
+            cam = cam_for(t)
+            if shot_of(t) == 's6':
+                sp, j, fac, hf = andy6(t)
+                who = [('Andy', sp, j, fac, hf, PL.PEOPLE['andy kitchen (6)']['at'])]
+            else:
+                sp, j, fac, rec = wes12(t)
+                sp2, j2, fac2, rec2, xz = andy12(t)
+                who = [('Wes', sp, j, fac, None, WES12), ('Andy', sp2, j2, fac2, None, xz)]
+            for name, sp_, j_, fac_, hf_, (x, z) in who:
+                img = B.canvas((255, 255, 255))
+                r = put(img, cam, sp_, x, z, fac_, j_, t, head_facing=hf_)
+                if not r:
+                    continue
+                d = r['j2']['_drawn']
+                turn = abs((d['head_yaw'] - d['yaw'] + 180) % 360 - 180)
+                if turn > 95:
+                    faults.append(f'{t:.2f}s {name}: head turned {turn:.0f} degrees from his body')
+                if d['held_over_back']:
+                    faults.append(f'{t:.2f}s {name}: seen from behind, what he holds is drawn over his back')
+    return faults
 
 
 def audits():

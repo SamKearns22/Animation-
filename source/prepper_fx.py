@@ -201,12 +201,16 @@ def minigun3(img, cam, c, yaw, belt=True):
     cam.line(p, [L(-0.3, 0.13, 0), L(-0.26, 0.2, 0), L(-0.12, 0.2, 0), L(-0.08, 0.13, 0)], GUN_D, max(2.0, 0.02 * k))
 
 
+ALEXA_K = 2.0      # Sam, 24 Oct: the Alexa 100% bigger than a real Echo Dot (200 mm across, not 100)
+
+
 def alexa(img, cam, c, light=True):
     """The Echo Dot (ref alexa): a charcoal fabric ball 100 mm across on a black base, the blue light ring at the
     bottom, two buttons on top, the fabric's weave as fine flecks."""
     p = _pen(img)
-    r = 0.05
-    ctr = (c[0], c[1] + 0.045, c[2])
+    K = ALEXA_K
+    r = 0.05 * K
+    ctr = (c[0], c[1] + 0.045 * K, c[2])
     S.blob3(img, cam, p, S.sphere_pts(ctr, r, 9), CHARCOAL, INK, 1.6)
     rng = np.random.default_rng(4)
     for _ in range(40):                                        # the fabric's weave
@@ -214,15 +218,15 @@ def alexa(img, cam, c, light=True):
         q = (ctr[0] + r * math.sin(th) * math.cos(ph), ctr[1] + r * math.cos(th), ctr[2] + r * math.sin(th) * math.sin(ph))
         if np.dot(np.subtract(q, ctr), np.subtract(cam.pos, q)) > 0:
             (x, y), k = cam.project(q)
-            p.ell(x, y, max(0.6, 0.002 * k), max(0.6, 0.002 * k), CHARCOAL_D, None)
-    base = _ring(c, r * 0.86, c[1] + 0.003, 20) + _ring(c, r * 0.86, c[1] + 0.012, 20)
+            p.ell(x, y, max(0.6, 0.002 * K * k), max(0.6, 0.002 * K * k), CHARCOAL_D, None)
+    base = _ring(c, r * 0.86, c[1] + 0.003 * K, 20) + _ring(c, r * 0.86, c[1] + 0.012 * K, 20)
     S.blob3(img, cam, p, base, (20, 20, 24), INK, 1.4)
     a = _facing_arc(cam, c)
     if light:
-        ring = _ring(c, r * 0.88, c[1] + 0.012, 12, a - 1.4, a + 1.4) + _ring(c, r * 0.88, c[1] + 0.018, 12, a + 1.4, a - 1.4)
+        ring = _ring(c, r * 0.88, c[1] + 0.012 * K, 12, a - 1.4, a + 1.4) + _ring(c, r * 0.88, c[1] + 0.018 * K, 12, a + 1.4, a - 1.4)
         cam.poly(p, ring, (90, 190, 255), None)
-    for dx in (-0.015, 0.015):
-        q = _ring((ctr[0] + dx, 0, ctr[2]), 0.005, ctr[1] + r * 0.99, 8)
+    for dx in (-0.015 * K, 0.015 * K):
+        q = _ring((ctr[0] + dx, 0, ctr[2]), 0.005 * K, ctr[1] + r * 0.99, 8)
         cam.poly(p, q, CHARCOAL_D, INK, 1.0)
 
 
@@ -230,8 +234,10 @@ def alexa_walker(img, cam, c, t, facing=0.0, knife=True):
     """Its battered remains up on tiny metal rod legs (shot 12): the ball cracked open (a jagged hole, a green circuit
     board and wires showing), four thin jointed rods for legs scuttling, a fifth rod holding up a kitchen knife."""
     p = _pen(img)
-    r = 0.05
-    L = _local(c, facing)
+    K = ALEXA_K
+    r = 0.05 * K
+    L0 = _local(c, facing)
+    L = lambda a, b, c_: L0(a * K, b * K, c_ * K)       # everything but the knife at the Alexa's size
     lift = 0.14
     ctr = L(0, lift + 0.045, 0)
     for k, (u, v) in enumerate(((0.03, 0.04), (0.03, -0.04), (-0.03, 0.04), (-0.03, -0.04))):     # legs, far first
@@ -370,6 +376,24 @@ def draw_piece(img, cam, pc, t):
     if pc.kind == 'glass':
         p.poly(pts, (220, 236, 246), (255, 255, 255), 1.2)
         p.line(pts[:2], INK, 1.0)
+    elif pc.kind in ('case', 'splinter'):                    # a spent brass case or a splinter: a short stick
+        L = s * (1.6 if pc.kind == 'case' else 2.6)
+        w = max(1.2, s * (0.5 if pc.kind == 'case' else 0.35))
+        dx, dy = math.cos(ang) * L, math.sin(ang) * L * 0.6
+        nx, ny = -dy / (math.hypot(dx, dy) or 1) * w, dx / (math.hypot(dx, dy) or 1) * w
+        q = [(X - dx + nx, Y - dy + ny), (X + dx + nx, Y + dy + ny), (X + dx - nx * (0.3 if pc.kind == 'splinter' else 1),
+             Y + dy - ny * (0.3 if pc.kind == 'splinter' else 1)), (X - dx - nx, Y - dy - ny)]
+        p.poly(q, pc.col, INK, 1.0)
+    elif pc.kind == 'drop':                                   # water: a pale drop in flight, a flat splash once down
+        (x0, y0, z0), _ = pc.track[-1]
+        down = (x, y, z) == (x0, y0, z0)
+        if down:
+            p.poly([(X + s * 1.6 * r * math.cos(a), Y + s * 0.5 * r * math.sin(a)) for r, a in
+                    zip(radii, np.linspace(0, 2 * math.pi, nv, endpoint=False))], WATER, WATER_D, 1.0)
+        else:
+            p.ell(X, Y, s * 0.6, s * 0.8, WATER, WATER_D, 1.0)
+    elif pc.kind == 'bean':                                   # a baked bean in its orange sauce
+        p.ell(X, Y, s * 0.9, s * 0.6, BEAN, (150, 70, 30), 1.0)
     else:
         p.poly(pts, pc.col, INK, 1.2)
 
@@ -505,3 +529,31 @@ def room_flash(img, amount):
 
 if __name__ == '__main__':
     print(__doc__)
+
+
+def flames(img, cam, t, t0, at, nrm, seed, life=3.0, size=0.1):
+    """A plasma scorch burning (Sam, 24 Oct): a few flat flame tongues licking up off the mark, flickering, dying down
+    over `life` seconds. Flat orange and yellow, an ink edge; no glow."""
+    u = t - t0
+    if u < 0 or u > life:
+        return
+    k = 1.0 - (u / life) ** 2
+    rng = np.random.default_rng(seed)
+    p = _pen(img)
+    up = np.array([0.0, 1.0, 0.0])
+    n = np.asarray(nrm, float)
+    side = np.cross(n, up) if abs(n[1]) < 0.9 else np.array([1.0, 0.0, 0.0])
+    side = side / (np.linalg.norm(side) or 1)
+    f = int(t * 12)
+    for i in range(4):
+        off = (i - 1.5) * size * 0.45 + rng.uniform(-0.02, 0.02)
+        h = size * k * (0.9 + 0.5 * ((f * 7 + i * 13 + seed) % 5) / 4)
+        base = np.asarray(at) + n * 0.02 + side * off
+        lean = side * size * 0.15 * math.sin(f * 1.7 + i)
+        for col, sc in (((236, 110, 30), 1.0), ((255, 214, 80), 0.55)):
+            w = size * 0.22 * sc
+            pts3 = [base - side * w, base - side * w * 0.4 + up * h * sc * 0.6 + lean * 0.5, base + up * h * sc + lean,
+                    base + side * w * 0.4 + up * h * sc * 0.55 + lean * 0.4, base + side * w]
+            if min(cam.depth(tuple(q)) for q in pts3) < 0.2:
+                return
+            p.poly([cam.project(tuple(q))[0] for q in pts3], col, INK if sc == 1.0 else None, 1.2)

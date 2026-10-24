@@ -5,6 +5,12 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `source/audio/prepper/sfx-*.mp3`.
 
 ## Where things stand (handover, 24 Oct, end of the building chat)
+- **24 Oct, notes chat:** notes 1-13 and 15 applied (table below); new clips of shot 6 (`--span 14.25 18.6`) and shot 12
+  (`--span 50.0 61.4`) sent to Sam. Shot 12 is now 11 s (film 61 s + black), six robots (robot 6 new), the beats in
+  `prepper.py` under "shot 12" (one comment block says which robot does what, when). Shared-kit fixes: `views.py` (held
+  things seen from behind), `prepper_set.py` (window frames shot out, broken pendants). Waiting for: Sam's notes on the
+  clips, and his baked-beans reference photo (note 14). Unsure: Andy's knee-drop is partly behind the island, and robot 5's
+  blast has no explosion sound (none in the sounds Sam sent: ask for one). The handover below is the building chat's.
 - **Stage done: building** (Opus high). New files, all working together:
   - `source/prepper_set.py`: the house in 3D from `prepper_plan.py` (rooms, walls with real openings showing the next
     room, windows with glass that breaks, both doors that swing, carpet, tiles, panelling, all the furniture, the
@@ -163,17 +169,21 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 | 6 | 14.2 | Andy looks at the camera at the start of the shot, then his head turns (to the sights) and he fires | open |
-| 2 | 6 | 17.0-17.6 | We don't actually see the Alexa properly before it explodes: show it clearly in shot before the bolt lands | open |
-| 3 | 12 | ~51-53 | The robot in the window clips through a window frame: remove the frames (they are shot out in shot 10 anyway) | open |
-| 4 | 12 | | The robot in the doorway (robot 5) is too static: have it walking in and firing | open |
-| 5 | 12 | | Add another robot beneath the arch (the wide opening), on the right; a good shot of it firing blue plasma before it is riddled with bullets | open |
-| 6 | 12 | | Extend the shot by four seconds (7 s to 11 s) | open |
-| 7 | 12 | | One robot comes at Andy with a glowing blue blade; Andy drops to his knees as it swipes and shoots its head off (the blade swipe passes over him) | open |
-| 8 | 12 | | The robot in the doorway fires a few times at Streeting before being blown to smithereens (pieces flying, stays wrecked) | open |
-| 9 | 12 | | Slow the camera's spin as needed to take all of this in | open |
-| 10 | 12 | | More visible damage: bullet holes appearing where the minigun hits (big enough to read); burning scorch marks where the plasma hits; the bean tins and water bottles on the island blowing up, throwing water and baked beans across the worktop; the pendant lights shattering; cupboards splintering; spent cases flying off Wes's minigun | open |
-| 11 | 12 | | A couple of times Andy's face looks backwards while his body faces forwards (head and body pointing opposite ways: check his head turn against his body in every frame, and add a check for it) | open |
+| 1 | 6 | 14.2 | Andy looks at the camera at the start of the shot, then his head turns (to the sights) and he fires | done: he looks at the lens on "Test them.", his head snaps to the sights on the second "Test them" |
+| 2 | 6 | 17.0-17.6 | We don't actually see the Alexa properly before it explodes: show it clearly in shot before the bolt lands | done: the Alexa was being painted behind the units (never showed); now drawn over them, the camera locks on it, the bolt flight 0.8 s |
+| 3 | 12 | ~51-53 | The robot in the window clips through a window frame: remove the frames (they are shot out in shot 10 anyway) | done: from shot 10 (0.8 s after the glass goes) the kitchen window has only its outer surround; robot 4 climbs through the hole |
+| 4 | 12 | | The robot in the doorway (robot 5) is too static: have it walking in and firing | done: robot 5 walks in from the hall in three stages, firing |
+| 5 | 12 | | Add another robot beneath the arch (the wide opening), on the right; a good shot of it firing blue plasma before it is riddled with bullets | done: robot 6 (new, cannon) under the wide opening, on the right as the camera looks east; fires twice, riddled by Wes |
+| 6 | 12 | | Extend the shot by four seconds (7 s to 11 s) | done: shot 12 runs 50-61 s; the film is now 61 s + black |
+| 7 | 12 | | One robot comes at Andy with a glowing blue blade; Andy drops to his knees as it swipes and shoots its head off (the blade swipe passes over him) | done: robot 1 (blade) comes at Andy; he drops to one knee, the blade sweeps over him, he shoots its head off from his knee (seen from the west, Andy nearest). Robot 3 keeps its plasma attack but is shot in the chest (its head-off moved to robot 1) |
+| 8 | 12 | | The robot in the doorway fires a few times at Streeting before being blown to smithereens (pieces flying, stays wrecked) | done: robot 5 fires five times at Wes, then is blown apart (head and plates flying, legs left, toppling; pieces stay) |
+| 9 | 12 | | Slow the camera's spin as needed to take all of this in | done: one loop in 11 s (was 7); it starts south-east so each beat is faced |
+| 10 | 12 | | More visible damage: bullet holes appearing where the minigun hits (big enough to read); burning scorch marks where the plasma hits; the bean tins and water bottles on the island blowing up, throwing water and baked beans across the worktop; the pendant lights shattering; cupboards splintering; spent cases flying off Wes's minigun | done: bigger bullet holes (5-8 cm), plasma scorches that burn ~3 s, tins and bottles blown up by robot 6, two pendants shattered by robot 5, cupboards splintering, spent cases off the minigun that land and stay |
+| 11 | 12 | | A couple of times Andy's face looks backwards while his body faces forwards (head and body pointing opposite ways: check his head turn against his body in every frame, and add a check for it) | done: the cause was his hands and pistol drawn over his back when seen from behind; fixed in views.py for every film; new check prepper.facing_check (every frame of shots 6 and 12) |
+| 12 | 12 | | Wes has the same fault as Andy: the minigun drawn over his back when seen from behind | done: any held thing counts now (the minigun draws its own fists); both arms go behind his back too |
+| 13 | 12 | | The effects clip through Andy (debris drawn over him) | done: Andy and Wes are drawn on their own layers; every effect behind one of them is cut away where they stand (`Behind`). Robots don't do this yet |
+| 14 | 12 | | Baked beans are more goopy and liquid | open: Sam is sending a reference photo; beans unchanged until it arrives |
+| 15 | 6, 12 | | Make the Alexa 100% bigger | done: `prepper_fx.ALEXA_K = 2.0` (200 mm across), its remains in shot 12 too |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
 happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned
