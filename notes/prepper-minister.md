@@ -4,7 +4,40 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (handover, 24 Oct, end of the building chat)
+## Where things stand (handover, 24 Oct, end of the first notes chat)
+- **Stage now: apply Sam's notes 14 and 16-19, then the animatic** (Opus, medium effort, fresh chat). Sam's words: "correct
+  problems and then create animatic".
+- **Done in the notes chat:** notes 1-13 and 15 (table below, each says what changed). Shot 12 is 11 s (film 61 s + black),
+  timed beat by beat in `source/prepper.py` under "shot 12" (the comment block there says which robot does what and when,
+  and when the camera faces each part of the room). New clips of shot 6 (`--span 14.25 18.6`) and shot 12
+  (`--span 50.0 61.4`) were sent; Sam's notes 16-19 came back on them.
+- **Open, in this order:** note 16 (Wes three-quarter back: `views.py`, shared kit), 18 (bullet holes in empty openings:
+  `ray_hit`), 17 (robot 4 takes hits and explodes; robots 7 and 8 in the garden), 19 (shot 6 impact flash), 14 (goopy
+  beans from `references/prepper-minister/beans-in-sauce.jpg`).
+- **Then, before the animatic (CLAUDE.md, guides/satire.md, guides/film-quality-rules.md):**
+  1. Send new clips of shots 6 and 12 (no yes needed) with the self-review lines; run up to three critique-fix rounds.
+  2. The known gaps from the building chat still stand: shots 1-5 and 7-11 are blocked out only (people in place, simple
+     gestures) and need their acting and movement to the brief; no mouth movement at 35.75-36.40 s (end of "DID YOU GET
+     THE BEANS?", `check` flags it); captions run on across cuts; the bleep's timing to check by ear; `scene(t)` for
+     `audit.py` and `voices.py --film` not wired in (both needed before any animatic); sound effects placed roughly.
+  3. Tick the brief checklist below against the film; run `python3 source/preflight.py prepper-minister OUT_DIR`.
+  4. Show Sam the check sheet and wait for a clear yes (a note in reply is not a yes), then render the animatic
+     (`final OUT --small`, about 1 s a frame across all cores: roughly 4-6 min for 61 s; push notification when done).
+- **Still wanted from Sam:** an explosion sound (robots 4 and 5 blow up; none in his sound effects), the 5 sounds asked
+  for at planning (robot footsteps, robot crash, bullets on metal, tin clank, crockery), the TikTok description and
+  Hook Text.
+- **My additions to flag again with the animatic:** robot 3's head-shot moved to robot 1 (robot 3 now shot in the
+  chest); robot 4 dies on the worktop (to become an explosion, note 17); Andy also shoots robot 5; robot 6's plasma
+  bursts the tins and bottles; robot 5's plasma shatters two pendants.
+- **Unsure:** Andy's knee-drop (56.5-57.5 s) is partly hidden by the island; robots don't hide effects behind them yet
+  (only Andy and Wes do: `Behind` in prepper.py).
+- **Sam's working rule from this chat:** when he says "hold responses until all my notes are through", send NO replies
+  at all until he says the notes are done (his plain "hold" = reply to each note with the plan, change nothing).
+- **Files to open:** this file (this section and the Notes table); `guides/satire.md`; `source/prepper.py` (code map
+  first: `python3 source/codemap.py source/prepper.py`); `source/views.py` around `held_behind`; the other
+  `prepper_*.py` files only for the part a note is about.
+
+## Earlier handover (24 Oct, end of the building chat)
 - **24 Oct, notes chat:** notes 1-13 and 15 applied (table below); new clips of shot 6 (`--span 14.25 18.6`) and shot 12
   (`--span 50.0 61.4`) sent to Sam. Shot 12 is now 11 s (film 61 s + black), six robots (robot 6 new), the beats in
   `prepper.py` under "shot 12" (one comment block says which robot does what, when). Shared-kit fixes: `views.py` (held
@@ -105,6 +138,7 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 | reference | what it shows | use |
 |---|------|------|
 | robot-1-front-left, robot-2-three-quarter, robot-3-front-corridor | Cylon Centurion, waist up: chrome, hooded head with a raised central crest, narrow visor slot with one eye (red in the show; ours cobalt), segmented neck, big curved shoulder plates, chest plate with a centre ridge, slim ribbed waist, long arms with plated forearms, jointed fingers | robot design (front, three-quarter) |
+| beans-in-sauce (Sam, 24 Oct) | beans in a ladle over a pan: many small plump oval beans, pale cream to light tan, each with a bright highlight, packed together half sunk in a thin glossy orange-red to brick sauce that runs and drips | the burst tins in shot 12 (note 14) |
 | robot-blade-arm | concept art, not a Cylon: forearm opens into a long curved glowing blade, white and pale blue | the blade arm's shape and how it sits on the forearm |
 | wes-1 (podium, straight on, talking), wes-2 (Question Time, three-quarter), wes-3 (Downing St, three-quarter smile), wes-4 and wes-5 (walking, full length, front and side) | short dark hair, side parting, faded sides, high forehead; round face, full cheeks; dark navy suit, white shirt, burgundy tie; poppy (not used); stocky build | Wes's likeness and build |
 | kitchen-1 | wood island with dark (slate-like) top, grey bar stools, black pendants, marble splashback, wood beams, herringbone wood floor | island, stools, pendants, worktop colour |
@@ -182,8 +216,12 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 11 | 12 | | A couple of times Andy's face looks backwards while his body faces forwards (head and body pointing opposite ways: check his head turn against his body in every frame, and add a check for it) | done: the cause was his hands and pistol drawn over his back when seen from behind; fixed in views.py for every film; new check prepper.facing_check (every frame of shots 6 and 12) |
 | 12 | 12 | | Wes has the same fault as Andy: the minigun drawn over his back when seen from behind | done: any held thing counts now (the minigun draws its own fists); both arms go behind his back too |
 | 13 | 12 | | The effects clip through Andy (debris drawn over him) | done: Andy and Wes are drawn on their own layers; every effect behind one of them is cut away where they stand (`Behind`). Robots don't do this yet |
-| 14 | 12 | | Baked beans are more goopy and liquid | open: Sam is sending a reference photo; beans unchanged until it arrives |
+| 14 | 12 | | Baked beans are more goopy and liquid | open: photo in (`references/prepper-minister/beans-in-sauce.jpg`). Burst tins throw clumps of thin glossy orange-red sauce with pale cream beans in it; they land as flat glossy splats with beans sitting in them and stay; some sauce runs off the island's edge |
 | 15 | 6, 12 | | Make the Alexa 100% bigger | done: `prepper_fx.ALEXA_K = 2.0` (200 mm across), its remains in shot 12 too |
+| 16 | 12 | 0:03, 0:04, 0:09 of the clip | Gun and body still wrong: Wes seen from behind AT AN ANGLE (three-quarter back) has the minigun and both fists drawn over his back, an arm bent across his back | open: extend the `views.py` rule (`held_behind`) from 'back' to 'three_back' too: gun, fists and forearms drawn before the torso, only what sticks out past his side shows; extend `facing_check` to flag it from any rear angle |
+| 17 | 12 | ~51-54 | Robot 4 (in the window): they both fire at it for some time, so it should visibly take hits (holes, sparks, a jolt per burst) and then EXPLODE (like robot 5), not slump. Add two more robots (7 and 8) advancing across the garden outside the window; they never reach the window before the camera turns away | open: robot 4's blast replaces its slump (pieces stay on the worktop and floor); robots 7 and 8 (cannon) walk across the garden while the camera looks west, still well short of the window when it turns away; flag their timing as my call |
+| 18 | 12 | | Bullet holes hang in empty space (hits on the empty window frame) | open: `ray_hit` treats the whole west wall as solid, window hole included. Rounds through any opening (kitchen window once shot out, wide opening, hall door) fly on (a mark only on a real surface beyond, or none); robots 7 and 8 can catch sparks. Add a check that every mark sits on a real surface |
+| 19 | 6 | ~17.75 | "I don't know what this yellow detail is": the impact flash where the bolt hits the Alexa, seen from the low camera it squashes into a flat yellow slab with a white edge on the worktop | open: an upright star flash facing the camera, one frame only, plus a short spark spray and the pieces; check the impact frame full size |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
 happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned

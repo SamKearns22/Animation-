@@ -17,8 +17,10 @@ Read this first in any new session, after CLAUDE.md.
   4 s longer, slower spin; notes 10-11: much more visible damage (holes, scorches, tins and bottles bursting,
   lights shattering, cupboards splintering, spent cases), and Andy's head sometimes facing backwards on a forward body).
 - 24 Oct: cast sheet approved (Wes good; Andy's fear numbers as planned).
-- NEXT (fresh chat, Opus medium): apply Sam's notes 1-11 and send new clips. Read only
-  `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
+- 24 Oct (notes chat, Opus medium): notes 1-13 and 15 applied (shot 12 now 11 s, six robots, more damage; shared fix
+  in `views.py` for held things seen from behind; new facing check); clips sent; Sam's notes 14 and 16-19 filed.
+- NEXT (fresh chat, Opus medium): apply notes 14 and 16-19, then the remaining gaps, check sheet, Sam's yes, animatic.
+  Read only `notes/prepper-minister.md` ("Where things stand" and the Notes table) and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
