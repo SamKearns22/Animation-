@@ -32,6 +32,8 @@ import prepper_plan as PL        # noqa: E402
 import prepper_set as S          # noqa: E402
 import prepper_robot as R        # noqa: E402
 import prepper_fx as X           # noqa: E402
+import audit as A                # noqa: E402
+import clipcheck as CC           # noqa: E402
 
 FPS, SR = 12, MA.SR
 M = V.M_PER_UNIT
@@ -146,8 +148,14 @@ TRACK = {}
 for ln in LINES:
     if ln.get('off'):                                # shot 5: his voice over the empty kitchen (no mouth)
         continue
+    joined = []                                      # bursts under 0.2 s apart are one phrase (the shouted "DID YOU
+    for a, b in ln['_stretches']:                    # GET THE BEANS?" came as three, and ran out of words)
+        if joined and a - joined[-1][1] < 0.2:
+            joined[-1] = (joined[-1][0], b)
+        else:
+            joined.append((a, b))
     TRACK.setdefault(ln['who'], []).extend((a + ln['start'], b + ln['start'], sh)
-                                           for a, b, sh in mouths.track(ln['text'], ln['_stretches']))
+                                           for a, b, sh in mouths.track(ln['text'], joined))
 for k in TRACK:
     TRACK[k].sort()
 BLINKS = {'Andy': F.blinks(7, 0.0, DUR, talking=True), 'Wes': F.blinks(11, 0.0, DUR, talking=True)}
@@ -193,9 +201,22 @@ ALEXA = (PL.THINGS['alexa']['at'][0], 0.92, PL.THINGS['alexa']['at'][1])
 BOLT6_TO = (ALEXA[0], ALEXA[1] + 0.05 * X.ALEXA_K, ALEXA[2])
 
 
+def _stuck():
+    """Where the bolt ends up (Sam, 24 Oct: sticking out of the wall): through the Alexa, on nearly level into the
+    splashback just above the worktop, its shaft and vanes standing out towards the room."""
+    d = np.subtract(BOLT6_TO, BOLT6_FROM)
+    d = np.array([d[0], 0.0, d[2]]) / math.hypot(d[0], d[2])
+    d[1] = -0.12
+    k = (5.4 - BOLT6_TO[2]) / d[2]
+    return (BOLT6_TO[0] + d[0] * k, 1.1, 5.4), tuple(d)
+
+
 def bolt6_at(t):
     u = (t - FIRE6) / BOLT6
     return lerp3(BOLT6_FROM, BOLT6_TO, min(1.0, max(0.0, u)))
+
+
+BOLT6_STUCK = _stuck()
 
 
 def cam_for(t):
@@ -291,15 +312,16 @@ def sofa_pose(sp, lean=8.0):
 
 
 # ------------------------------------------------------------------------------------------------ Andy
-WAVE = filmkit.Beats([(0.3, 'set-up', (150, 300, 60)), (0.6, 'raise', (150, -10, 80)), (0.85, 'flick', (190, -30, 80), 'fast'),
-                      (1.05, 'back', (150, -10, 80)), (1.6, 'down', (150, 300, 60), 'slow')])
+WAVE = filmkit.Beats([(0.3, 'set-up', (150, 300, 60)), (0.6, 'raise', (240, 0, 220)), (0.85, 'flick', (280, -20, 210), 'fast'),
+                      (1.05, 'back', (240, 0, 220)), (1.6, 'down', (150, 300, 60), 'slow')])   # held out clear of the
+#                                                         shoulder (25 Oct: the elbow folded too tight at 0.5 s)
 
 
 def andy_sofa(t, s):
     """Andy on the sofa (shots 1-4, 7): leaning forward to the lens, talking to us; his gestures per shot."""
     sp = C.fear(C.ANDY, FEAR_AT.get(s, 1), talking=talking('Andy', t))
     m = mouth_at('Andy', t)
-    sp['mouth'] = m or sp['mouth']
+    sp['mouth'] = m or sp.get('mouth') or C.FEAR[max(0, min(5, FEAR_AT.get(s, 1) - 1))]['mouth']   # between words
     if FEAR_AT.get(s, 1) >= 4 and not m:
         sp['mouth'] = 'set'
     sp['blink'] = F.blinking(t, BLINKS['Andy'])
@@ -505,7 +527,7 @@ def andy_holes(name, sp):
 
 def robot_pose(name, t):
     """Every robot's pose at time t (and its spec, with damage so far). Bodies stay where they fall."""
-    sp = dict(SPEC[name])
+    sp = dict(SPEC[name], name='robot ' + name)
     sp['holes'] = []
     if name == 'A':                                   # shot 8: in the hall behind Wes; the bolt; falls back
         x, z = PL.ROBOTS['robot A (8)']['at']
@@ -1141,9 +1163,7 @@ def effects(img, cam, t, fx):
             if t < FIRE6 + BOLT6 + 1 / FPS:          # one frame only, small (Sam's note 19: the big two-frame star
                 X.flash(img, cam, BOLT6_TO, 0.07, seed=2)   # read as a yellow slab on the worktop)
             X.smoke(img, cam, t, FIRE6 + BOLT6 + 0.1, BOLT6_TO, 8, n=4, life=1.2, size=0.06)
-            d = np.subtract(BOLT6_TO, BOLT6_FROM)
-            d = d / np.linalg.norm(d)
-            X.bolt(img, cam, tuple(np.add(BOLT6_TO, d * ((5.39 - BOLT6_TO[2]) / d[2]))), d)   # stuck in the splashback
+            X.bolt(img, cam, *BOLT6_STUCK)               # through the Alexa and stuck in the splashback
     if s == 's12':
         u = U12(t)
         f = int(t * FPS)
@@ -1213,6 +1233,7 @@ def effects(img, cam, t, fx):
                 X.smoke(D(tr['hp']), cam, t, tr['t_hit'], tr['hp'], int(tr['t0'] * 10), n=3, life=1.3, size=0.1)
         for tb, at, n, seed in BURNS:                             # and burns there for a few seconds
             X.flames(D(at), cam, t, tb, at, n, seed)
+        X.bolt(D(BOLT6_STUCK[0]), cam, *BOLT6_STUCK)  # shot 6's bolt, still in the splashback
         D.finish()
 
 
@@ -1382,14 +1403,70 @@ def soundtrack(stems=False):
 
 
 # ------------------------------------------------------------------------------------------------ checks
-def mouths_seen(t):
-    """Every face on screen with its mouth as drawn (voices.py, rule 7): (name, mouth, view, head height px)."""
-    s = shot_of(t)
+def _robot_solids(name, p, sp):
+    """A robot's solids from its skeleton (2.1 m tall): body, head (unless it is gone), arms and legs as capsules."""
+    J, _ = R.skeleton(p)
+    lost = sp.get('lost', set())
     out = []
-    if s in ('s1', 's2', 's3', 's4', 's7', 's6'):
-        sp = andy_sofa(t, s)[0] if s != 's6' else andy6(t)[0]
-        out.append(('Andy', sp['mouth'], 0.0, 200.0))
+    if 'chest' not in lost:
+        out.append(CC.capsule(name, 'body', J['hipC'], J['chest'], 0.2))
+    else:
+        out.append(CC.sphere(name, 'hips', J['hipC'], 0.17))
+    if not sp.get('headless'):
+        out.append(CC.sphere(name, 'head', J['head'], 0.14))
+    for sd in 'RL':
+        if 'arm' + sd not in lost:
+            out.append(CC.capsule(name, 'arm' + sd, J['sh' + sd], J['el' + sd], 0.07))
+            out.append(CC.capsule(name, 'hand' + sd, J['el' + sd], J['hand' + sd], 0.07))
+        out.append(CC.capsule(name, 'leg' + sd, J['hip' + sd], J['knee' + sd], 0.08))
+        out.append(CC.capsule(name, 'shin' + sd, J['knee' + sd], J['ankle' + sd], 0.07))
     return out
+
+
+def scene(t, faces=None):
+    """Everyone and everything solid at time t, as picture(t) puts them (audit.py, rule 5); `faces` also collects
+    each face drawn (name, mouth, view, head height px) for voices.py (rule 7)."""
+    me = sys.modules[__name__]
+    with A.Recorder() as rec:
+        def put_(img, cam, sp, x, z, facing, j, t_, head_facing=None, lift=0.0, shadow=True):
+            name = sp.get('name', 'someone')
+            h = HEIGHTS.get(name, 1.75)
+            fd = (math.sin(math.radians(facing)), math.cos(math.radians(facing)))
+            if cam.depth((x, 1.5, z)) < 0.3:
+                return None
+            rec.add(name, A.placed(name, j, x, z, fd, h, lift, 0.0, sp))
+            if faces is not None:
+                yaw = cam.yaw_of((x, 0, z), fd if head_facing is None else
+                                 (math.sin(math.radians(head_facing)), math.cos(math.radians(head_facing))))
+                (_, y0), k = cam.project((x, h - 0.1, z))
+                faces.append((name, sp.get('mouth'), yaw, 0.22 * k))
+            return None
+
+        def robot_(img, cam, p, sp, t_):
+            rec.add(sp.get('name', 'robot'), _robot_solids(sp.get('name', 'robot'), p, sp))
+            return {}
+
+        def house_(img, cam, t_, actors=(), state=None):
+            for name, lo, hi in SOLID_BOXES:
+                rec.add(name.upper(), [CC.box(name.upper(), 'box', lo, hi)])
+            for a in actors:
+                a['draw'](img)
+        rec.patch(me, 'put', put_)
+        rec.patch(me, 'masked', lambda im, cam, fx, xz, draw: draw(im))
+        rec.patch(me, 'effects', lambda *a, **k: None)
+        rec.patch(me, 'flying_head', lambda *a, **k: None)
+        rec.patch(R, 'draw', robot_)
+        rec.patch(S, 'house', house_)
+        rec.patch(X, 'alexa_walker', lambda *a, **k: None)
+        picture(t)
+    return rec.things
+
+
+def mouths_seen(t):
+    """Every face on screen with its mouth as drawn (voices.py, rule 7): scene(t)'s run."""
+    faces = []
+    scene(t, faces)
+    return faces
 
 
 def checks():

@@ -906,9 +906,10 @@ def north_units_parts():
                                 (a, 2.5, 5.4 - 0.35 - 0.003)], UNIT)
         parts.append(obox(((x0 + x1) / 2, 1.58, 5.4 - 0.18), (x1 - x0, 0.95, 0.35), 0, {'all': UNIT, 'bottom': UNIT_D},
                           extras={'back': doors}))
-    # a few things on the worktop (lived in): a knife block, a bowl of lemons, a coffee machine
+    # a few things on the worktop (lived in): a knife block, a coffee machine
     parts.append(obox((x - 1.3, h, z), (0.12, 0.24, 0.14), 0, {'all': WALNUT}))
-    parts.append(cylinder((x - 0.6, h, z + 0.05), 0.13, 0.08, {'side': (240, 240, 236), 'top': (230, 210, 80)}, n=16))
+    # (Sam, 24 Oct: the bowl of lemons stood where the Alexa sits and popped into view as a yellow slab when the
+    # Alexa went; it is gone from the set, so no shot shows it)
     parts.append(obox((x + 1.4, h, z + 0.05), (0.25, 0.36, 0.34), 0, {'all': (50, 50, 56), 'back': (70, 70, 76)}))
     return parts
 
