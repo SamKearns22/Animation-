@@ -16,7 +16,8 @@ Read this first in any new session, after CLAUDE.md.
   under the arch firing plasma then riddled, a blade robot swipes as Andy drops to his knees and shoots its head off,
   4 s longer, slower spin; notes 10-11: much more visible damage (holes, scorches, tins and bottles bursting,
   lights shattering, cupboards splintering, spent cases), and Andy's head sometimes facing backwards on a forward body).
-- NEXT (fresh chat, Opus medium): apply Sam's notes 1-11 and send new clips; ask for his fear numbers. Read only
+- 24 Oct: cast sheet approved (Wes good; Andy's fear numbers as planned).
+- NEXT (fresh chat, Opus medium): apply Sam's notes 1-11 and send new clips. Read only
   `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)

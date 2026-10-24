@@ -34,6 +34,7 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
   animatic); sound effects are placed roughly (robot footsteps, crash, bullets on metal, tin clank, crockery still
   wanted from Sam); TikTok description and Hook Text still to come from Sam.
 - **Sam's notes 1-11 are in (24 Oct, table below)**: two on shot 6, nine on shot 12. Not yet acted on.
+- **Cast sheet approved (Sam, 24 Oct)**: Wes is good; Andy's fear numbers as planned (no question to ask).
 - **Next stage: reading Sam's notes and deciding the fixes (Opus, medium effort, fresh chat).** Plan the fixes for
   notes 1-11 (who is which robot, the new 11 s timeline, the slower orbit, camera paths clear of every robot), apply
   them, then send new clips of shot 6 and shot 12 (`final OUT --small --span`; clips need no yes). Then: composition
@@ -174,9 +175,9 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 10 | 12 | | More visible damage: bullet holes appearing where the minigun hits (big enough to read); burning scorch marks where the plasma hits; the bean tins and water bottles on the island blowing up, throwing water and baked beans across the worktop; the pendant lights shattering; cupboards splintering; spent cases flying off Wes's minigun | open |
 | 11 | 12 | | A couple of times Andy's face looks backwards while his body faces forwards (head and body pointing opposite ways: check his head turn against his body in every frame, and add a check for it) | open |
 
-Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". No notes yet on the cast sheet, and
-Andy's fear numbers per shot not given: ask once in the new chat (my plan stands until then: 1, 1, 3, 4, -, 3, 5, -, 6,
--, 6, 6).
+Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
+happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned
+(shot 1: 1, 2: 1, 3: 3, 4: 4, 6: 3, 7: 5, 9: 6, 11: 6, 12: 6; `FEAR_AT` in prepper.py already holds these).
 
 Decisions made (kept so a new chat never has to rediscover them):
 - 24 Oct: the 360 loop and shot 6's bolt move are rehearsed as clips alongside the cast sheet (brief 9.3).
