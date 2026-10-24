@@ -33,9 +33,9 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
   collision and pop-in audit (`scene(t)`, `audit.py`) and `voices.py --film` are not wired in yet (must be before any
   animatic); sound effects are placed roughly (robot footsteps, crash, bullets on metal, tin clank, crockery still
   wanted from Sam); TikTok description and Hook Text still to come from Sam.
-- **Sam's notes 1-9 are in (24 Oct, table below)**: two on shot 6, seven on shot 12. Not yet acted on.
+- **Sam's notes 1-11 are in (24 Oct, table below)**: two on shot 6, nine on shot 12. Not yet acted on.
 - **Next stage: reading Sam's notes and deciding the fixes (Opus, medium effort, fresh chat).** Plan the fixes for
-  notes 1-9 (who is which robot, the new 11 s timeline, the slower orbit, camera paths clear of every robot), apply
+  notes 1-11 (who is which robot, the new 11 s timeline, the slower orbit, camera paths clear of every robot), apply
   them, then send new clips of shot 6 and shot 12 (`final OUT --small --span`; clips need no yes). Then: composition
   sheet of the key shots (rule 11), one still per shot, wire the audits, check sheet, animatic.
 - **Files to open:** this file; `guides/satire.md`; `source/prepper.py` (use `python3 source/codemap.py`); the other
@@ -171,6 +171,8 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 7 | 12 | | One robot comes at Andy with a glowing blue blade; Andy drops to his knees as it swipes and shoots its head off (the blade swipe passes over him) | open |
 | 8 | 12 | | The robot in the doorway fires a few times at Streeting before being blown to smithereens (pieces flying, stays wrecked) | open |
 | 9 | 12 | | Slow the camera's spin as needed to take all of this in | open |
+| 10 | 12 | | More visible damage: bullet holes appearing where the minigun hits (big enough to read); burning scorch marks where the plasma hits; the bean tins and water bottles on the island blowing up, throwing water and baked beans across the worktop; the pendant lights shattering; cupboards splintering; spent cases flying off Wes's minigun | open |
+| 11 | 12 | | A couple of times Andy's face looks backwards while his body faces forwards (head and body pointing opposite ways: check his head turn against his body in every frame, and add a check for it) | open |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". No notes yet on the cast sheet, and
 Andy's fear numbers per shot not given: ask once in the new chat (my plan stands until then: 1, 1, 3, 4, -, 3, 5, -, 6,

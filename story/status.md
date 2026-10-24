@@ -14,8 +14,9 @@ Read this first in any new session, after CLAUDE.md.
 - 24 Oct: Sam's notes 1-9 on the clips filed in the notes file (shot 6: look to camera then turn and fire; see the
   Alexa before it bursts. Shot 12: window frames out, robot 5 walks in firing at Wes then blown apart, a new robot
   under the arch firing plasma then riddled, a blade robot swipes as Andy drops to his knees and shoots its head off,
-  4 s longer, slower spin).
-- NEXT (fresh chat, Opus medium): apply Sam's notes 1-9 and send new clips; ask for his fear numbers. Read only
+  4 s longer, slower spin; notes 10-11: much more visible damage (holes, scorches, tins and bottles bursting,
+  lights shattering, cupboards splintering, spent cases), and Andy's head sometimes facing backwards on a forward body).
+- NEXT (fresh chat, Opus medium): apply Sam's notes 1-11 and send new clips; ask for his fear numbers. Read only
   `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)
