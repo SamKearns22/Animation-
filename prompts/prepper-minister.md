@@ -140,8 +140,7 @@ The TikTokPM frame from the final Cry Minister, on every frame.
 ---
 
 ## SOUND REFERENCES (Sam to find on a free library; check each licence allows posting to TikTok)
-Shot 5: tin set down on worktop (x2 or 3); plastic bottle set down; crossbow set on a worktop (wood and metal); heavy
-metal minigun set down; ammo belt chain rattle.
+Shot 5: none. The items simply appear.
 Shot 6: crossbow release with a meaty thump; bolt whoosh; bolt hitting a plastic and electronic device; device shattering and
 small parts scattering; electrical sparks crackle.
 Shot 8: heavy wooden door kicked open and hitting the wall; robot servo whirr and mechanical footsteps; robot scanning eye
