@@ -47,6 +47,8 @@ I don't know how to code. Please:
   things stand, what comes next, what to type in the new chat) into the message, so Sam has it without opening files.
 - **"Hold" means collect, don't act (16 Oct):** when I say hold, reply to each note with how you understood it and how
   you'll fix it, change nothing, and do everything in one round when I say go.
+  **"Hold responses until all my notes are through" means no replies at all (Sam, 24 Oct):** stay silent, change
+  nothing, until I say the notes are done.
 - **New rules and lessons are proposed to me first, and added only once I approve them (16 Oct).** Say what you would
   add and where, and wait for my numbers.
 - **Critique-fix rounds (19 Oct):** after each batch of Sam's notes, run up to three rounds on my own (render,
