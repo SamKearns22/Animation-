@@ -90,8 +90,9 @@ CAMS = {
     3: dict(pos=(3.0, 1.1, 2.9), look=(3.0, 1.05, 3.75), note='extreme close-up'),
     4: dict(pos=(3.0, 1.15, 0.35), look=(3.0, 1.0, 3.7), note='as shot 1'),
     5: dict(pos=(-2.8, 1.45, 0.9), look=(-2.8, 0.95, 2.7), note='mid shot of the island, nobody in shot'),
-    6: dict(path=[(-0.9, 1.4, 1.1), (-2.4, 1.3, 3.0), (-3.7, 1.15, 4.3)], look=(-4.2, 0.97, 5.05),
-            note='Andy waist up, then follows the bolt to the Alexa'),
+    6: dict(path=[(-2.3, 1.42, 1.49), (-2.4, 1.3, 3.0), (-3.75, 1.12, 4.42)], look=(-4.2, 0.97, 5.05),
+            note='Andy waist up from his left-front (24 Oct: the first start showed his back), then rides behind the '
+                 'bolt to the Alexa (prepper.cam_for)'),
     7: dict(pos=(3.0, 1.1, 1.5), look=(3.0, 1.0, 3.7), note='as shot 2'),
     8: dict(path=[(3.0, 1.1, 1.5), (2.95, 1.4, 3.0), (2.75, 1.5, 3.75), (2.6, 1.55, 4.15)],
             look=(2.55, 1.4, 5.4), note='Sam, 24 Oct: the door is just behind Andy, slightly left; the camera passes over '

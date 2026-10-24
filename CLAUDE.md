@@ -77,6 +77,9 @@ I don't know how to code. Please:
   `python3 source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 ["Hook Text"]`, from the clean untitled render kept
   in `source/data/`; it adds the Hook Text and the sign-off. The slurp is the one standing sound effect.
 - **Push notifications for anything long:** whenever a render or any other long process (animatic, storyboard, sound build, upload, research) finishes, fails, or stops to wait for my decision, send a push notification to my phone saying what is ready or what is needed (details in `guides/tiktok-design.md`, "Working").
+  **Also at every major stage end and every handover (Sam, 24 Oct, all films):** when a film's stage is finished (planning,
+  building, stills, animatic, final...) or a new chat is needed, send a push notification saying what is done and what
+  to do next (for example "Building done: cast sheet and clips ready. Start a new chat on Opus medium").
 - I only have an iPhone and this app, no computer. When an animation is finished, **send the file to me directly in the chat** so I can tap it and save it to my Photos. Never give me steps that need a computer.
 - The tools (Python with Pillow, NumPy, imageio and a bundled ffmpeg) are installed automatically at the start of each session by `.claude/hooks/setup.sh`.
 

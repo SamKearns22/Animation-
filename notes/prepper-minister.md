@@ -4,32 +4,39 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (handover, 24 Oct, end of the planning chat)
-- **Stage done: planning** (Opus high). Brief read; all references in and checked (table below); house plan in metres
-  written and sketched (`source/prepper_plan.py`, `python3 source/prepper_plan.py sketch OUT.jpg`), Sam approved it with
-  one change (shot 8: the hallway door just behind Andy, slightly left; done). Every question answered (Decisions,
-  at the bottom of this file).
-- **Recordings: all 11 lines in** (`source/audio/prepper/line-*.m4a`), checked with `voices.py` (no duplicates; syllable
-  counts fit the script). Line 5 is one file with all of shot 5 ("I don't just mean beans and water." 0.86-2.70 s,
-  "Crossbow." 3.37-4.01, "Minigun." 4.55-5.34). Line 9a holds "We are already out of time." (0.70-2.60), "Did you get the
-  beans?" (3.29-4.34), "DID YOU GET THE BEANS?" (4.99-6.79). Line 9b: "Streeting, you pussy," (0.84-1.89; the bleep goes
-  over "pussy") "there's a minigun in the kitchen." (3.03-4.53). Line 1 is quiet (-32 LUFS): level it with the rest.
-- **Sound effects:** 12 from Sam in `source/audio/prepper/sfx-*.mp3` (his second pistol and minigun files were the same
-  as the first). Still wanted from Sam: robot footsteps, a robot crashing down, bullets on metal, a tin clank, crockery
-  smashing. The bleep is made in code.
-- **Next stage: building anything new** (Opus high, this fresh chat). In order:
-  1. Copy `source/satire_template.py` to `source/prepper.py`; fill its STORY section from the brief and this file
-     (lines by number, `LINES` from the recordings above).
-  2. Build new: the Cylon robot (front, three-quarter, side, three-quarter back, back; blade arm; palm cannon; cobalt
-     eye sweeping), Wes (likeness from `references/prepper-minister/wes-*.jpg`, torn suit), Andy's new outfit, the
-     house as one 3D set read from `prepper_plan.py` (like `poker_mon_room.py`), the props (crossbow, minigun with belt,
-     Glock, machete, Alexa whole/smashed/on rod legs, beans tins, 2L bottles, kitchen knife) and the flat effects.
-     Reuse first: see "Reuse before building" below.
-  3. The cast sheet (every view, a strength sheet for Andy's fear 1-6), with the two rehearsal clips: the shot 12
-     loop and shot 6's bolt move (`final OUT --small --span`). Send all three together; self-review line with each.
-  Then (later stages): composition sheet of the key shots (rule 11), one still per shot, check sheet, animatic.
-- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md`; `prompts/prepper-minister.md` (the
-  brief); `source/prepper_plan.py`. Big source files: `python3 source/codemap.py FILE.py` and read only the lines needed.
+## Where things stand (handover, 24 Oct, end of the building chat)
+- **Stage done: building** (Opus high). New files, all working together:
+  - `source/prepper_set.py`: the house in 3D from `prepper_plan.py` (rooms, walls with real openings showing the next
+    room, windows with glass that breaks, both doors that swing, carpet, tiles, panelling, all the furniture, the
+    gardens outside the windows, marks that stay). `python3 source/prepper_set.py test OUT.jpg` = every camera.
+  - `source/prepper_robot.py`: the Centurion as a real 3D figure (hood, crest, V face, visor slot with the cobalt eye
+    sweeping, shoulder plates, ribbed waist, three-toed feet; blade arm or cannon palm; walks, aims, falls, loses its
+    head or an arm, bullet holes stay).
+  - `source/prepper_cast.py`: Andy (white shirt open at the neck, rolled sleeves, chinos, tan belt, Glock behind it;
+    `FEAR` 1-6), Wes (likeness, torn dirty suit, belt bandana), held props (crossbow, Glock, machete, minigun with belt,
+    tin). `source/prepper_fx.py`: tins, bottles, crossbow and minigun on the island, the Alexa (whole, smashed, on rod
+    legs with a knife), the bolt; sparks, debris that lands and stays, smoke, plasma, tracers, flashes, room flash.
+  - `source/prepper.py`: the film (from the template): all 10 recordings by line number, subtitles (p**** bleeped),
+    TikTokPM frame, timeline of all 12 shots (57 s + black). Shots 6 and 12 are choreographed in full; shots 1-5 and
+    7-11 are blocked out only (people in place, simple gestures) and are the next stage's work.
+- **Sent to Sam (24 Oct):** the cast sheet (`python3 source/prepper.py cast OUT.jpg`), and the two rehearsal clips:
+  shot 6's bolt move (`final OUT --small --span 14.25 18.6`) and the shot 12 loop (`--span 50.0 57.4`).
+  Waiting for Sam's notes and his fear numbers per shot.
+- **Changes from the plan, flagged to Sam:** shot 6 starts from Andy's left-front (the plan's start was behind him,
+  so we saw his back); the end at the Alexa is as planned. Shot 12: robot 4 crawls in over the sill and stays crouched
+  on the sink run firing (stepping down onto the floor put it in the camera's path).
+- **My additions, flagged to Sam:** the bolt left stuck in the splashback; robot 3's head lands on the island and
+  stays; a knife block, lemons and a coffee machine on the worktop; a mirror, console and coats in the hall; gardens
+  and neighbours' houses outside the windows.
+- **Known gaps for the next stage:** shots 1-5, 7-11 blocked only; no mouth movement on the end of "DID YOU GET THE
+  BEANS?" (check flags 35.75-36.40 s); captions run on across cuts; the bleep's timing needs checking by ear; the
+  collision and pop-in audit (`scene(t)`, `audit.py`) and `voices.py --film` are not wired in yet (must be before any
+  animatic); sound effects are placed roughly (robot footsteps, crash, bullets on metal, tin clank, crockery still
+  wanted from Sam); TikTok description and Hook Text still to come from Sam.
+- **Next stage: reading Sam's notes and deciding the fixes (Opus, medium effort, fresh chat).** Then: composition
+  sheet of the key shots (rule 11), one still per shot, wire the audits, check sheet, animatic.
+- **Files to open:** this file; `guides/satire.md`; `source/prepper.py` (use `python3 source/codemap.py`); the other
+  `prepper_*.py` files only for the part a note is about.
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail, ticked before the first animatic
 | # | from the brief (word for word where it matters) | done? |

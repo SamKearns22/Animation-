@@ -8,8 +8,10 @@ Read this first in any new session, after CLAUDE.md.
 - 24 Oct: planning done (Opus high). References all in, house plan approved (shot 8 door moved), every question
   answered, all 11 recordings in and checked. Still wanted from Sam: 5 sound effects (robot footsteps, robot crashing
   down, bullets on metal, tin clank, crockery smashing).
-- NEXT (fresh chat, Opus high): building: `source/prepper.py` from the template, the robot, Wes, Andy's outfit, the 3D
-  house, props and effects; then the cast sheet with rehearsal clips of the shot 12 loop and shot 6's bolt. Read only
+- 24 Oct (building chat, Opus high): built `source/prepper.py` (from the template), `prepper_set.py` (3D house),
+  `prepper_robot.py` (3D robot), `prepper_cast.py` (Andy, Wes, held props), `prepper_fx.py` (things, effects).
+  Cast sheet and two rehearsal clips (shot 6 bolt, shot 12 loop) sent to Sam.
+- NEXT (fresh chat, Opus medium): Sam's notes on the cast sheet and clips, and his fear numbers. Read only
   `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)
