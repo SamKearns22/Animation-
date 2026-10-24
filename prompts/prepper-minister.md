@@ -133,8 +133,8 @@ The TikTokPM frame from the final Cry Minister, on every frame.
    - The props: a modern crossbow, a minigun with its ammo belt, the pistol Sam wants, a machete, an Alexa speaker.
    - Claude says which are still missing, and never draws from memory.
 2. Claude asks all remaining questions in one batch, each with a recommended answer.
-3. Because the film is ambitious, Claude first renders short rehearsal clips of the hardest moments: the 360-degree loop
-   in shot 12 and the crossbow-bolt tracking move in shot 6.
+3. Because the film is ambitious, Claude renders short rehearsal clips of the hardest moments: the 360-degree loop
+   in shot 12 and the crossbow-bolt tracking move in shot 6, alongside the cast sheet.
 4. Then the house sketch, the cast sheet, one still per shot and the animatic, as the film rules say.
 
 ---

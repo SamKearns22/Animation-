@@ -2,6 +2,15 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
+- Brief: `prompts/prepper-minister.md`. Plan in metres: `source/prepper_plan.py` (`sketch OUT.jpg`). References:
+  `references/prepper-minister/`. Sam's sound effects: `source/audio/prepper/`.
+- 24 Oct (planning, Opus high): references filed and checked, house plan sketched, questions sent in one batch.
+  Waiting on Sam: answers, missing references (robot full length, side, back, eye, cannon; Wes caricatures; Andy in a
+  white shirt; hallway; armchair, drinks cabinet, Lake District watercolour; beans tin, water bottle), recordings, 5 sounds.
+- Next (fresh chat, Opus high): build robot, Wes, 3D house, weapons and effects; rehearsal clips (shot 12 loop, shot 6
+  bolt) with the cast sheet. Read only `notes/prepper-minister.md` "Where things stand" and `guides/satire.md`.
+
 ## Quick videos (about 5% of a week)
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
