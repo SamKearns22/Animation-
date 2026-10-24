@@ -11,7 +11,11 @@ Read this first in any new session, after CLAUDE.md.
 - 24 Oct (building chat, Opus high): built `source/prepper.py` (from the template), `prepper_set.py` (3D house),
   `prepper_robot.py` (3D robot), `prepper_cast.py` (Andy, Wes, held props), `prepper_fx.py` (things, effects).
   Cast sheet and two rehearsal clips (shot 6 bolt, shot 12 loop) sent to Sam.
-- NEXT (fresh chat, Opus medium): Sam's notes on the cast sheet and clips, and his fear numbers. Read only
+- 24 Oct: Sam's notes 1-9 on the clips filed in the notes file (shot 6: look to camera then turn and fire; see the
+  Alexa before it bursts. Shot 12: window frames out, robot 5 walks in firing at Wes then blown apart, a new robot
+  under the arch firing plasma then riddled, a blade robot swipes as Andy drops to his knees and shoots its head off,
+  4 s longer, slower spin).
+- NEXT (fresh chat, Opus medium): apply Sam's notes 1-9 and send new clips; ask for his fear numbers. Read only
   `notes/prepper-minister.md` ("Where things stand") and `guides/satire.md`.
 
 ## Quick videos (about 5% of a week)

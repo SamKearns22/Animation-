@@ -33,7 +33,10 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
   collision and pop-in audit (`scene(t)`, `audit.py`) and `voices.py --film` are not wired in yet (must be before any
   animatic); sound effects are placed roughly (robot footsteps, crash, bullets on metal, tin clank, crockery still
   wanted from Sam); TikTok description and Hook Text still to come from Sam.
-- **Next stage: reading Sam's notes and deciding the fixes (Opus, medium effort, fresh chat).** Then: composition
+- **Sam's notes 1-9 are in (24 Oct, table below)**: two on shot 6, seven on shot 12. Not yet acted on.
+- **Next stage: reading Sam's notes and deciding the fixes (Opus, medium effort, fresh chat).** Plan the fixes for
+  notes 1-9 (who is which robot, the new 11 s timeline, the slower orbit, camera paths clear of every robot), apply
+  them, then send new clips of shot 6 and shot 12 (`final OUT --small --span`; clips need no yes). Then: composition
   sheet of the key shots (rule 11), one still per shot, wire the audits, check sheet, animatic.
 - **Files to open:** this file; `guides/satire.md`; `source/prepper.py` (use `python3 source/codemap.py`); the other
   `prepper_*.py` files only for the part a note is about.
@@ -159,7 +162,19 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| 1 | 6 | 14.2 | Andy looks at the camera at the start of the shot, then his head turns (to the sights) and he fires | open |
+| 2 | 6 | 17.0-17.6 | We don't actually see the Alexa properly before it explodes: show it clearly in shot before the bolt lands | open |
+| 3 | 12 | ~51-53 | The robot in the window clips through a window frame: remove the frames (they are shot out in shot 10 anyway) | open |
+| 4 | 12 | | The robot in the doorway (robot 5) is too static: have it walking in and firing | open |
+| 5 | 12 | | Add another robot beneath the arch (the wide opening), on the right; a good shot of it firing blue plasma before it is riddled with bullets | open |
+| 6 | 12 | | Extend the shot by four seconds (7 s to 11 s) | open |
+| 7 | 12 | | One robot comes at Andy with a glowing blue blade; Andy drops to his knees as it swipes and shoots its head off (the blade swipe passes over him) | open |
+| 8 | 12 | | The robot in the doorway fires a few times at Streeting before being blown to smithereens (pieces flying, stays wrecked) | open |
+| 9 | 12 | | Slow the camera's spin as needed to take all of this in | open |
+
+Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". No notes yet on the cast sheet, and
+Andy's fear numbers per shot not given: ask once in the new chat (my plan stands until then: 1, 1, 3, 4, -, 3, 5, -, 6,
+-, 6, 6).
 
 Decisions made (kept so a new chat never has to rediscover them):
 - 24 Oct: the 360 loop and shot 6's bolt move are rehearsed as clips alongside the cast sheet (brief 9.3).
