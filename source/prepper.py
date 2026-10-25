@@ -106,8 +106,14 @@ PROP_SIZES = [('crossbow', 'crossbow', 0.72, 0.3, None), ('minigun', 'minigun', 
               ('alexa', 'smart speaker', 0.1 * X.ALEXA_K, 0.09 * X.ALEXA_K, None), ('robot', 'robot', 0.6, 2.1, None)]
 HEIGHTS = C.HEIGHTS
 OUTFIT = {'Andy': {'shirt hem (tucked, belt)': 468}}
-ALLOWED_CONTACTS = []
-ALLOWED_POPS = []
+ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, why)
+    ('Wes.*', 'ISLAND', 43.9, 44.45, 'he grabs the minigun off the island top'),
+    ('Wes.gun', 'ISLAND', None, None, 'the barrels held just over the island edge (a few cm, the box is the worktop)', 0.05),
+]
+ALLOWED_POPS = [       # (thing, from, to, why)
+    ('robot C', 44.1, 44.4, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
+    ('robot D', 44.25, 44.55, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
+]
 # ====================================================================================================================
 
 
@@ -486,7 +492,7 @@ def andy6(t):
 WES_KICK8 = (2.6, 6.0)                              # Wes kicks the door from here (in the hall, behind it)
 WES_DOOR8 = (2.3, 5.45)                             # and lurches into the doorway (left of it: the robot shows)
 WES_BACK9 = (1.75, 4.65)                            # shot 9: he backs away from the door to here, beside the cabinet
-WES_RUN9 = [(1.75, 4.65), (0.6, 3.75), (-0.8, 3.55), (-2.7, 3.55)]   # and runs for the kitchen (on into shot 10)
+WES_RUN9 = [(1.75, 4.65), (0.75, 4.2), (-0.2, 3.72), (-0.8, 3.6), (-2.7, 3.55)]   # runs for the kitchen (on into 10)
 RUN9 = 42.35
 
 
@@ -603,7 +609,7 @@ ANDY_AIM9 = (2.95, 2.95)
 FLING9 = (29.45, 29.95)                             # the crossbow flung aside: leaves his hands, lands
 XBOW_LANDS = ((3.85, 2.45), 35.0)
 SIDESTEP9 = (36.95, 37.2)
-ANDY_STEP9 = (3.55, 2.95)
+ANDY_STEP9 = (3.8, 2.95)
 
 
 def andy9(t):
@@ -767,7 +773,7 @@ def wes10(t):
             j['lean'] = j.get('lean', 0.0) + 4.0
         return sp, j, x, z, fac, None, rec
     sp['brows'] = 'outrage'
-    sp['mouth'] = 'shout'
+    sp['mouth'] = 'set'                              # jaw clenched as he fires (no voice: the mouth stays shut)
     sp['blink'] = False
     # side-on to us as he fires (seen from behind, the gun was hidden by his back), swung right onto the robots
     j = C.minigun_hip(sp, (22.0, 4.0), spin=(t - FIRE10) * 6.0 if firing else 0.0,
@@ -1046,8 +1052,13 @@ def robot_pose(name, t):
                 p['lean'] -= 9 * (1 - (t - ts) / 0.15)
         if t >= SHOTS9[-1] + 0.1:
             sp['dead'] = True
-            k2 = ease((t - SHOTS9[-1] - 0.1) / 0.7)
-            p['fall'] = (84 * k2, 300)                # back and to the left, still in frame, clear of the sofa
+            k2 = ease((t - SHOTS9[-1] - 0.1) / 0.7)   # its knees go and it crumples forward towards Andy, in frame,
+            p['y'] = -0.6 * k2                        # clear of the sofa, the table and every later path
+            p['footR'] = (0.13, 0.08 + 0.6 * k2, 0.03 - 0.45 * k2)
+            p['footL'] = (-0.13, 0.08 + 0.6 * k2, 0.03 - 0.4 * k2)
+            p['head_pitch'] = 30 * k2
+            p['handR'] = (0.4, 0.75, 0.3)
+            p['fall'] = (38 * k2, 100)
         return p, sp
     if name in ('C', 'D'):                            # shot 10: outside the kitchen window; shot through the glass
         # Sam's note 29 (25 Oct): they just appeared. Now each walks in along the outside wall from behind the window's
@@ -1194,7 +1205,7 @@ def robot_pose(name, t):
     if name in DIES and u >= DIES[name]:
         sp['dead'] = True
         k = ease((u - DIES[name]) / 0.6)
-        p['fall'] = (88 * k, {'4': 0.0}.get(name, (p['yaw'] + 180) % 360))
+        p['fall'] = (88 * k, {'4': 0.0, '3': 110.0}.get(name, (p['yaw'] + 180) % 360))   # 3: clear of robot 2 (audit)
         p['head_pitch'] = -15 * k
     return p, sp
 
