@@ -109,16 +109,26 @@ PROP_SIZES = [('crossbow', 'crossbow', 0.72, 0.3, None), ('minigun', 'minigun', 
               ('alexa', 'smart speaker', 0.1 * X.ALEXA_K, 0.09 * X.ALEXA_K, None), ('robot', 'robot', 0.6, 2.1, None)]
 HEIGHTS = C.HEIGHTS
 OUTFIT = {'Andy': {'shirt hem (tucked, belt)': 468}}
+ALLOWED_MOUTHS = [('Wes', BOLT8_HIT - 0.1, BOLT8 + 0.65, 'his jaw drops in shock as the bolt hits the robot (note 44)')]
 ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, why)
     ('WALL*', 'WALL*', None, None, 'walls meet at the corners'),
     ('WALL*', 'DRINKS CABINET', None, None, 'the cabinet stands against the wall'),
     ('WALL*', 'MEDIA UNIT', None, None, 'the media unit stands against the wall'),
     ('Andy.*', 'SOFA', None, T['s8'] + 0.6, 'he sits on it (shots 1-4 and 7; shot 8 starts on him seated)'),
+    ('WALL*', 'NORTH UNITS', None, None, 'the units stand against the walls'),
+    ('WALL*', 'SINK RUN', None, None, 'the units stand against the walls'),
+    ('WALL*', 'TALL UNITS', None, None, 'the units stand against the walls'),
+    ('robot 4.*', 'SINK RUN', T['s12'], T['s12'] + 3.4, 'it climbs in over the sink run (shot 12)'),
+    ('robot 4.*', 'WALL*', T['s12'], T['s12'] + 3.6, 'it climbs in through the shot-out window, over the sill'),
+    ('Wes.*', 'ISLAND', 43.5, 43.9, 'his hand on the island as he arrives'),
     ('Wes.footR', 'WALL*', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door in its frame'),
     ('Wes.*', 'ISLAND', 43.9, 44.45, 'he grabs the minigun off the island top'),
     ('Wes.gun', 'ISLAND', None, None, 'the barrels held just over the island edge (a few cm, the box is the worktop)', 0.05),
 ]
 ALLOWED_POPS = [       # (thing, from, to, why)
+    ('WALL*', None, None, 'a wall solid for the collision check only (the set draws the real walls)'),
+    ('robot 4', T['s12'] + 2.75 - 0.05, T['s12'] + 2.75 + 0.1,   'blown apart (its pieces fly)'),
+    ('robot 5', T['s12'] + 9.8 - 0.05, T['s12'] + 9.8 + 0.1,   'blown apart (its pieces fly)'),
     ('robot C', 44.1, 44.4, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
     ('robot D', 44.25, 44.55, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
 ]
@@ -1363,7 +1373,8 @@ def robot_pose(name, t):
     elif name == '6':                                 # under the wide opening, on the right (Sam): fires, riddled
         if u < 4.6:
             return None, sp
-        p = R.pose(**R.walk(min(u, 5.7), (1.4, 1.5), (0.15, 1.5), 4.6, 5.7, stride=0.45))
+        p = R.pose(**R.walk(min(u, 5.7), (1.4, 1.6), (0.15, 1.6), 4.6, 5.7, stride=0.45))   # (its hand was in the
+        #                                                   opening's edge at z 1.5)
         if u > 5.7:
             p['yaw'] = 270.0
         aim_cannon(p, '6', u)
