@@ -1229,6 +1229,18 @@ def _dent5_i():
 DENT5_I = _dent5_i()
 
 
+def _frags9():
+    out = []
+    for i, s_ in enumerate(SHOTS9):                     # chrome chips knocked off robot B's chest, each its own
+        JB, _ = R.skeleton(robot_pose('B', s_ + 0.04)[0])
+        out.append(X.burst(s_ + 0.03, tuple(JB['chest']), 5, 1.8, 130 + i, col=(200, 206, 216), size=0.03, up=1.0,
+                           dirn=(-1.0, 0.0, 0.0), box=(0.05, 5.95, 0.05, 5.35), tops=[]))
+    return out
+
+
+FRAGS9 = _frags9()
+
+
 ROBOTS_IN = {'s8': ['A'], 's9': ['A', 'B'], 's10': ['C', 'D'], 's11': ['5', 'C', 'D'],
              's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5', '6', '7', '8']}
 
@@ -1755,6 +1767,38 @@ def effects(img, cam, t, fx):
                 X.flash(img, cam, BOLT6_TO, 0.07, seed=2)   # read as a yellow slab on the worktop)
             X.smoke(img, cam, t, FIRE6 + BOLT6 + 0.1, BOLT6_TO, 8, n=4, life=1.2, size=0.06)
             X.bolt(img, cam, *BOLT6_STUCK)               # through the Alexa and stuck in the splashback
+    if s == 's9':                                         # brief row 34: the blade's arc, the rounds, sparks, fragments
+        D = Behind(img, cam, fx.get('masks', []))
+        tip, d = bolt8_stuck(t)                              # robot A in the hall, the bolt still in its head
+        X.bolt(D(tip), cam, tip, d)
+        k = int((t - BOLT8_HIT - 0.4) / 0.6)
+        X.sparks(D(tip), cam, t, BOLT8_HIT + 0.4 + 0.6 * k, tip, 90 + k, n=6, col='blue', speed=1.2)
+        cut, thru = LUNGE9 + 0.3, LUNGE9 + 0.5
+        if cut - 0.08 <= t < thru + 0.15:
+            tips = [blade_tip('B', cut - 0.08 + (min(t, thru) - cut + 0.08) * q / 7) for q in range(8)]
+            JB, _ = R.skeleton(robot_pose('B', t)[0])
+            X.blade_arc(D(JB['chest']), cam, [q for q in tips if q is not None][-6:])
+        an = fx.get('andy')
+        for i, s_ in enumerate(SHOTS9):
+            if not 0 <= t - s_ < 0.6:
+                continue
+            JB, _ = R.skeleton(robot_pose('B', s_ + 0.04)[0])
+            g = tuple(JB['chest'] + np.array([0.0, 0.05 * (i - 1), 0.0]))
+            if t - s_ < 1 / FPS and an and an[1].get('muzzle') and cam.depth(g) > 0.2:
+                (hx, hy), _ = cam.project(g)
+                mx, my = an[1]['muzzle']
+                B.Pen(img, FLAT).line([(mx + (hx - mx) * 0.25, my + (hy - my) * 0.25),
+                                       (mx + (hx - mx) * 0.8, my + (hy - my) * 0.8)], (255, 236, 150), 2.4)
+            if t - s_ < 1 / FPS:
+                X.flash(D(g), cam, g, 0.07, seed=120 + i)
+            X.sparks(D(g), cam, t, s_ + 0.03, g, 121 + i, n=12, col='yellow', speed=2.4)
+            for pc in FRAGS9[i]:
+                X.draw_piece(D(pc.at(t)[0]), cam, pc, t)
+        for i, s_ in enumerate(SHOTS9):                      # the fragments stay where they land
+            if t - s_ >= 0.6:
+                for pc in FRAGS9[i]:
+                    X.draw_piece(D(pc.at(t)[0]), cam, pc, t)
+        D.finish()
     if s == 's8' and t >= BOLT8:
         D = Behind(img, cam, fx.get('masks', []))
         if t < BOLT8_HIT:                                   # the bolt in flight (from just behind the lens)
