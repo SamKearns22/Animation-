@@ -20,7 +20,9 @@ checklist") has a blank "done?" row, or before the composition sheet has been se
 DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
 against the audit's roster). It prints a short summary; the full list goes to OUT_DIR/NAME-preflight.txt (rule 19).
 The shared kit's checks (kitchecks.py, rule 13) run here on every film: facing on the drawing pass, marks, sounds,
-and (inside the audit) hands on what they touch, props held, resting hands clear.
+and (inside the audit) hands on what they touch, props held, resting hands clear. So do viewchecks.py's (rules 15-18,
+20): effect shapes, readability, direction across a cut, effects hidden behind figures, and on the drawing pass every
+held prop turned through every view.
 
 Usage:
     python3 preflight.py patriots2 OUT_DIR            before the animatic: stops at the first fault
@@ -47,19 +49,25 @@ _FILM = None
 _FPS = 12
 
 
+_TURNED = set()                 # (per worker) the people and props already turned through every view
+
+
 def _check_frame(i):
     import kitchecks
+    import viewchecks
     film = _FILM
     t = i / _FPS
     shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
     F.CONTEXT['where'] = f'{shot} {t:.2f}s'
-    n0, d0 = len(F.LOG), len(kitchecks.DRAWN)
+    n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
     err = None
     try:
         film.frame_image(t)
     except Exception as e:
         err = (str(e), isinstance(e, ValueError), traceback.format_exc())
-    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:])
+    turned = viewchecks.turn_faults(kitchecks.POSES[p0:], _TURNED)   # rule 20: every held prop through every view
+    del kitchecks.POSES[p0:]
+    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned
 
 
 def notes_path(film, name):
@@ -169,6 +177,9 @@ def main():
     if hasattr(film, 'LINES'):                  # rule 7: script v recordings v subtitles, and the mouths drawn
         import voices
         shared += voices.check(film)
+    if every_film:
+        import viewchecks                       # rules 15-18: effect shapes, readability, direction across a cut,
+        shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     shared += kitchecks.marks(film)             # rule 13: marks on real surfaces
     shared += kitchecks.sounds(film)            # rule 13: a sound tied to a thing only with it in frame, once a hit
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
@@ -189,9 +200,10 @@ def main():
     drawn = []
     from multiprocessing import Pool
     with Pool(os.cpu_count()) as pool:
-        for t, err, log, dr in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
+        for t, err, log, dr, turned in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
             F.LOG.extend(log)
             drawn += dr
+            problems += [x for x in turned if x not in problems]
             if err:
                 problems.append(f'{t:6.2f} s: {err[0]}')
                 if not err[1]:

@@ -188,6 +188,7 @@ class SceneChecks:
 
 # ------------------------------------------------------------------------------------------------ from the drawing
 DRAWN = []                    # every views.py person drawn since install(): (where, name, drawn dict)
+POSES = []                    # everyone drawn holding something: (where, name, sp, joints, t), for viewchecks' turn test
 
 
 def install():
@@ -207,6 +208,8 @@ def install():
             where = ''
         if isinstance(j2, dict) and '_drawn' in j2:
             DRAWN.append((where, sp.get('name', 'someone'), dict(j2['_drawn'])))
+        if joints and joints.get('props'):
+            POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
         return j2
     person._logged = True
     for m in list(sys.modules.values()):

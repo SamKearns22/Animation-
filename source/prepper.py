@@ -2490,6 +2490,60 @@ def checks():
         raise ValueError('check: ' + '; '.join(faults))
 
 
+# ------------------------------------------------------------------------------------------------ for viewchecks.py
+def movers(t):
+    """What flies (rule 16: screen direction and side of each person kept across a cut): the bolts, the plasma, the tin."""
+    out = []
+    o, e = PLASMA10_PATH
+    if PLASMA10 <= t <= SCORCH10['t']:
+        out.append(('plasma (shot 10)', lerp3(o, e, (t - PLASMA10) / (SCORCH10['t'] - PLASMA10))))
+    if shot_of(t) == 's12':
+        _prepare12()
+        for k, tr in enumerate(PLASMA):
+            if tr['t0'] <= t <= tr['t_hit']:
+                out.append((f'plasma {k + 1}', lerp3(tr['o'], tr['hp'], (t - tr['t0']) / (tr['t_hit'] - tr['t0']))))
+    if FIRE6 <= t <= FIRE6 + BOLT6:
+        out.append(('bolt (shot 6)', bolt6_at(t)))
+    if BOLT8 <= t <= BOLT8_HIT:
+        out.append(('bolt (shot 8)', bolt8_at(t)[0]))
+    if THROW11 <= t <= LAND11:
+        out.append(('tin', tuple(tin11(t))))
+    return out
+
+
+def effect_points(t):
+    """The effects in the room at t, for rule 17 (a figure in front of one hides it): the flying bolts and plasma,
+    and each plasma's flash where it lands."""
+    pts = [(n, p, 0.08) for n, p in movers(t) if n != 'tin']
+    if shot_of(t) == 's12':
+        pts += [(f'plasma {k + 1} flash', tr['hp'], 0.25) for k, tr in enumerate(PLASMA) if 0 <= t - tr['t_hit'] < 0.1]
+    return pts
+
+
+EFFECT_SWITCH = [(sys.modules[__name__], 'effects')]   # what draws the flat effects (switched off to find them)
+DIRECTION_SWAPS = []                                 # [(mover, cut time, why)]: a planned swap across a cut
+_FX_CAM = S.Cam((0.0, 1.2, -2.5), (0.0, 1.2, 0.0))
+EFFECTS = [   # rule 15: each effect with its shape, drawn alone and tested (no stars, no regular spikes, no motion lines)
+    ('impact flash', 'burst', lambda img: X.flash(img, _FX_CAM, (0.0, 1.2, 0.0), 0.3, seed=4)),
+    ('blue impact flash', 'burst', lambda img: X.flash(img, _FX_CAM, (0.0, 1.2, 0.0), 0.3, seed=7, col='blue')),
+    ('muzzle flash', 'burst', lambda img: C.muzzle_flash(B.Pen(img, FLAT), (540, 960), (1.0, 0.0), 140, seed=2)),
+    ('muzzle flash end on', 'burst', lambda img: C.muzzle_flash(B.Pen(img, FLAT), (540, 960), (1.0, 0.0), 140,
+                                                                end_on=True, seed=3)),
+    ('sparks', 'sparks', lambda img: X.sparks(img, _FX_CAM, 0.1, 0.0, (0.0, 1.2, 0.0), seed=5)),
+    ('plasma bolt', 'bolt', lambda img: X.plasma(img, _FX_CAM, (-0.6, 1.2, 0.0), (0.6, 1.3, 0.0))),
+    ('smoke', 'smoke', lambda img: X.smoke(img, _FX_CAM, 0.5, 0.0, (0.0, 1.2, 0.0), seed=6)),
+]
+JOKE_PROPS = [   # rule 18: every prop a joke needs, at phone size (name, times, where, size in metres)
+    ('beans', [ITEMS_AT['beans'] + 0.3], (TIN_SPOTS[0][0], 0.975, TIN_SPOTS[0][1]), 0.11),
+    ('water bottle', [ITEMS_AT['water'] + 0.3], (BOTTLE_SPOTS[0][0], 1.08, BOTTLE_SPOTS[0][1]), 0.33),
+    ('crossbow', [ITEMS_AT['crossbow'] + 0.3], (CROSSBOW_SPOT[0][0], 0.95, CROSSBOW_SPOT[0][1]), 0.72),
+    ('minigun', [ITEMS_AT['minigun'] + 0.3], (MINIGUN_SPOT[0][0], 1.0, MINIGUN_SPOT[0][1]), 0.9),
+    ('Alexa', [FIRE6 + BOLT6 - 0.2], ALEXA, 0.09 * X.ALEXA_K),
+    ('coffee and coaster', [1.0, 7.5], COFFEE, 0.12),
+    ('tin (thrown)', [GRAB11 + 0.3], lambda t: tuple(tin11(t)), 0.11),
+]
+
+
 def all_marks():
     """Every mark the film leaves (kitchecks.marks: each on a real surface, rule 13)."""
     _prepare12()

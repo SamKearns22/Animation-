@@ -89,6 +89,13 @@ SET_EXCLUDE = []                                    # rule 12: [(set piece, why)
 TOUCHES = []                                        # [(hand, thing, from, to, why)], e.g. ('A.handR', 'MUG', 2.0, 3.1, ...)
 FREE_MOVES = []                                     # [(thing, from, to, why)], e.g. ('MUG', 3.1, 3.6, 'knocked flying')
 SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
+# Rules 15-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
+# 'burst' must be lumpy, never a star; no motion lines); every prop a joke needs at least 40 px on screen (the sheet:
+# python3 source/viewchecks.py NAME SHEET.jpg); and, with a 3D camera, movers(t) -> [(name, (x, y, z))] for the
+# direction across each cut, effect_points(t) + EFFECT_SWITCH for effects hidden behind figures. Held props are
+# turned through every view by themselves.
+EFFECTS = []                                        # [(name, 'burst' / 'sparks' / 'trail' / 'smoke' / ..., draw(img))]
+JOKE_PROPS = []                                     # [(name, [times], (x, y, z) or fn(t), size in metres)]
 # define layers(t) for drawing order (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a
 # song joined from recordings (musiccheck.py)
 # ====================================================================================================================
