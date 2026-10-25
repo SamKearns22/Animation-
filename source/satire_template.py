@@ -234,7 +234,9 @@ def checks():
 
 # ------------------------------------------------------------------------------------------------ the audit
 # audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
-# (everyone at one distance, on the floor line), so its world is the frame in metres. A film with a 3D set and a
+# (everyone at one distance, on the floor line), so its world is the frame in metres. scene(t) gives the people and
+# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 12):
+# list only what to leave out, SET_EXCLUDE = [(name, why)]. A film with a 3D set and a
 # camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
 # copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
 # long thing with .along).
@@ -259,9 +261,7 @@ def scene(t):
                 hx, hy = THUMP.at(t)
                 sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
             out.append(audit.Thing(who, sol))
-    y0, y1 = (FY - (FY - 30)) * PX_M, (FY - (NECK_Y + 390 * S)) * PX_M
-    out.append(audit.Thing('TABLE', [CC.box('TABLE', 'top', ((380 - 540) * PX_M, y0, 0.3), ((700 - 540) * PX_M, y1, 1.0))]))
-    return out
+    return out                                            # the walls, the table and every THING: from PLAN (rule 12)
 
 
 def title_check():

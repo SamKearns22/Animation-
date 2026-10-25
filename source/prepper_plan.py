@@ -58,6 +58,7 @@ THINGS = {
     'stool 1': dict(at=(-3.6, 2.0), size=(0.4, 0.4, 0.75), facing=0),
     'stool 2': dict(at=(-1.3, 2.7), size=(0.4, 0.4, 0.75), facing=0),   # at the island's east end (25 Oct: south of
     #                                                          it, it stood where Andy kneels and robot 1 falls in shot 12)
+    'wall cupboards': dict(at=(-3.7, 5.225), size=(3.8, 0.35, 0.95), y=1.58, facing=180, note='over the north units'),
     'alexa': dict(at=(-4.2, 5.05), size=(0.1, 0.1, 0.09), y=0.92, facing=180, note='Echo Dot, on the north worktop'),
     # hallway: well lit (pendant, fanlight over the front door), stairs along the north wall
     'stairs': dict(at=(-1.0, 6.55), size=(3.2, 0.9, 2.8), facing=90),

@@ -110,18 +110,14 @@ PROP_SIZES = [('crossbow', 'crossbow', 0.72, 0.3, None), ('minigun', 'minigun', 
 HEIGHTS = C.HEIGHTS
 OUTFIT = {'Andy': {'shirt hem (tucked, belt)': 468}}
 ALLOWED_MOUTHS = [('Wes', BOLT8_HIT - 0.1, BOLT8 + 0.65, 'his jaw drops in shock as the bolt hits the robot (note 44)')]
-ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, why)
-    ('WALL*', 'WALL*', None, None, 'walls meet at the corners'),
-    ('WALL*', 'DRINKS CABINET', None, None, 'the cabinet stands against the wall'),
-    ('WALL*', 'MEDIA UNIT', None, None, 'the media unit stands against the wall'),
+ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, why); set pieces touching: never a fault
     ('Andy.*', 'SOFA', None, T['s8'] + 0.6, 'he sits on it (shots 1-4 and 7; shot 8 starts on him seated)'),
-    ('WALL*', 'NORTH UNITS', None, None, 'the units stand against the walls'),
-    ('WALL*', 'SINK RUN', None, None, 'the units stand against the walls'),
-    ('WALL*', 'TALL UNITS', None, None, 'the units stand against the walls'),
     ('robot 4.*', 'SINK RUN', T['s12'], T['s12'] + 3.4, 'it climbs in over the sink run (shot 12)'),
     ('robot 4.*', 'WALL*', T['s12'], T['s12'] + 3.6, 'it climbs in through the shot-out window, over the sill'),
     ('Wes.*', 'ISLAND', 43.5, 43.9, 'his hand on the island as he arrives'),
     ('Wes.footR', 'WALL*', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door in its frame'),
+    ('Wes.footR', 'DOOR LIVING DOOR', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door'),
+    ('Wes.shinR', 'DOOR LIVING DOOR', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door'),
     ('Wes.*', 'ISLAND', 43.9, 44.45, 'he grabs the minigun off the island top'),
     ('Wes.gun', 'ISLAND', None, None, 'the barrels held just over the island edge (a few cm, the box is the worktop)', 0.05),
 ]
@@ -133,6 +129,9 @@ ALLOWED_POPS = [       # (thing, from, to, why)
     ('robot D', 44.25, 44.55, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
 ]
 PLAN = PL                                           # rule 1: the world in metres (plan.py checks it)
+SET_EXCLUDE = [   # rule 12: the set's solids the collision audit leaves out (everything else in the plan is in)
+    ('ALEXA', 'the film draws it, shatters it (shot 6) and walks its remains (shot 12) itself (prepper_fx)'),
+]
 BENCHMARK = [   # rule 3 (benchmark.py): what makes each place recognisable, and how ours has it
     dict(place='kitchen', refs=['kitchen-1-wood-island.jpg', 'kitchen-2-grey-island.jpg'], at=13.6, items=[
         ('an island in the middle, stools along it', 'done: island_parts, two grey stools (stool_parts)'),
@@ -1934,6 +1933,11 @@ def flying_head(img, cam, t, piece):
         R.draw_part(pen, cam, q, L)
 
 
+def door_angles(t):
+    """How far each door stands open (degrees) for the collision audit's door leaves (sets.solids, rule 12)."""
+    return house_state(t)['doors']
+
+
 def house_state(t):
     s = shot_of(t)
     st = {'doors': {'living door': 0.0, 'kitchen door': 0.0}, 'marks': [], 'glass': {}}
@@ -2417,11 +2421,7 @@ def scene(t, faces=None):
             rec.add(sp.get('name', 'robot'), _robot_solids(sp.get('name', 'robot'), p, sp))
             return {}
 
-        def house_(img, cam, t_, actors=(), state=None):
-            for name, lo, hi in SOLID_BOXES:
-                rec.add(name.upper(), [CC.box(name.upper(), 'box', lo, hi)])
-            for name, lo, hi in WALL_BOXES:
-                rec.add('WALL', [CC.box('WALL', name, lo, hi)])
+        def house_(img, cam, t_, actors=(), state=None):   # the walls, doors and furniture: sets.solids (rule 12)
             for a in actors:
                 a['draw'](img)
         rec.patch(me, 'put', put_)

@@ -15,6 +15,10 @@ one got through. This tests the RESULT, on every frame:
               changes drawing (a simple far figure becoming a full one), or jumps (moves much further in one frame
               than in the frames either side), unless the film's ALLOWED_POPS names it (gone in through a door).
   roster      who is on screen in each shot (the rule's "list of who is in each shot").
+  the set     a film with a PLAN gets every wall (cut round its openings; pieces by an opening named as its frame),
+              every THING and every door leaf (at film.door_angles(t)) as solids by itself (sets.solids, rule 12):
+              the film lists only what to leave out, SET_EXCLUDE = [(name pattern, why)]. Set pieces touching each
+              other are never a fault; they are left out of the roster.
 
 A film joins in by giving, besides SHOTS, FPS, DUR and cam_for(t):
   scene(t)          -> [Thing]: everyone and everything solid at time t, as drawn. Make it with a Recorder: the film's
@@ -222,7 +226,7 @@ def _pop_ok(film, name, t):
 
 
 def _group(name):
-    return re.sub(r'[#_]?\d+$', '', name) or name
+    return re.sub(r'[#_ ]?\d+$', '', name) or name
 
 
 # ------------------------------------------------------------------------------------------------- the test
@@ -248,6 +252,8 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
     frames = [i for i in range(int(math.ceil(a * fps - 1e-6)), int(math.ceil(b * fps - 1e-6)))
               if shots is None or shot_of(i / fps) in shots]
     started = time.time()
+    import sets
+    set_solids = (lambda t: sets.solids(film, t)) if getattr(film, 'PLAN', None) is not None else (lambda t: [])
     keys, pairs = {}, {}                  # last key of each thing; pairs passing into each other {(a, b): overlaps}
     hits = {}                             # (a, b) -> [(t, depth, part a, part b, shot, on screen)]
     offscreen = 0
@@ -270,6 +276,9 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
                     nm, n = f'{th.name}~{n}', n + 1
                 th.name = nm
                 things[nm] = th
+            for th in set_solids(t):      # rule 12: the set's walls, frames, doors and furniture, from the plan
+                if th.name not in things:
+                    things[th.name] = th
             names = list(things)
             lo = np.array([things[n].lo for n in names]) if names else np.zeros((0, 3))
             hi = np.array([things[n].hi for n in names]) if names else np.zeros((0, 3))
@@ -284,6 +293,8 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
                     if y == x or (y in dset and y < x):
                         continue
                     A, B = things[names[x]], things[names[y]]
+                    if A.kind == 'set' and B.kind == 'set':          # two set pieces touching never move
+                        continue
                     ov = _pair_overlaps(A, B)
                     if ov:
                         pa, pb = sorted((A.name, B.name))
@@ -345,6 +356,8 @@ def _pops(film, recs):
             continue
         for n in set(A) | set(B):
             a, b = A.get(n), B.get(n)
+            if (a or b)[0] == 'set':      # the set's own pieces (a door leaf too) never pop
+                continue
             if a and not b and a[3] and not _pop_ok(film, n, ta):
                 out.append(dict(what='pop', t=ta, names=(n,), shot=sa,
                                 text=f'{ta:.2f} s ({sa}): {n} vanishes in the middle of the frame (next frame: gone)'))
@@ -358,7 +371,8 @@ def _pops(film, recs):
     tracks = {}
     for i, t, s, R in recs:
         for n, (kind, pos, seen, inside, box) in R.items():
-            tracks.setdefault(n, []).append((i, t, s, pos, seen))
+            if kind != 'set':             # a slammed door is not a teleport
+                tracks.setdefault(n, []).append((i, t, s, pos, seen))
     for n, tr in tracks.items():
         steps = [(q[1], q[2], float(np.linalg.norm(q[3] - p[3])), p[4] or q[4]) if q[0] == p[0] + 1 and q[2] == p[2]
                  else None for p, q in zip(tr, tr[1:])]
@@ -381,7 +395,7 @@ def _roster(recs):
         for i, t, s, R in recs:
             if s == shot:
                 for n, v in R.items():
-                    if v[2]:
+                    if v[2] and v[0] != 'set':
                         on.setdefault(n, set()).add(v[0])
         groups = {}
         for n, kinds in on.items():
@@ -447,7 +461,8 @@ def sheet(film, faults, out, most=12):
         draw = getattr(film, 'frame_image', None) or film.picture
         fr = draw(t).convert('RGB').resize((w, h))
         d = ImageDraw.Draw(fr)
-        things = {th.name: th for th in film.scene(t)}
+        import sets
+        things = {th.name: th for th in list(sets.solids(film, t)) + list(film.scene(t))}
         cam = film.cam_for(t)
         for n in f['names']:
             th = things.get(n)
