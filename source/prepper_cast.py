@@ -261,23 +261,36 @@ _ARM = V.arm
 
 
 def _arm(p, j2, side, sp, shape=None):
-    _ARM(p, j2, side, sp, shape)
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
-    if sp.get('rolled'):                                     # bare forearms below a rolled cuff
-        a = (el[0] + (wr[0] - el[0]) * 0.22, el[1] + (wr[1] - el[1]) * 0.22)
-        dx, dy = wr[0] - a[0], wr[1] - a[1]
-        n = math.hypot(dx, dy) or 1.0
-        nx, ny = -dy / n, dx / n
-        w0, w1 = 14.0, 11.5
-        p.poly([(a[0] + nx * w0, a[1] + ny * w0), (wr[0] + nx * w1, wr[1] + ny * w1), (wr[0] - nx * w1, wr[1] - ny * w1),
-                (a[0] - nx * w0, a[1] - ny * w0)], sp['skin'], INK, 2.2)
-        c0 = (a[0] - dx / n * 6, a[1] - dy / n * 6)
-        p.poly([(c0[0] + nx * 17, c0[1] + ny * 17), (a[0] + dx / n * 10 + nx * 16, a[1] + dy / n * 10 + ny * 16),
-                (a[0] + dx / n * 10 - nx * 16, a[1] + dy / n * 10 - ny * 16), (c0[0] - nx * 17, c0[1] - ny * 17)],
-               WHITE, INK, 2.0)
+    if sp.get('rolled'):
+        # Sam's note 26 (25 Oct): the wrists looked sunk in the sleeves (the sleeve ran on under a narrow strip of skin
+        # to the wrist). Now the bare forearm is its own limb from the elbow, the sleeve stops at the elbow, and a fat
+        # rolled cuff sits over the join; the hand comes out of the skin, never out of cloth, even foreshortened.
+        with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
+            B.arm(p, sh, el, wr, sp['skin'], w=24)
+            mid = ((sh[0] + el[0]) / 2, (sh[1] + el[1]) / 2)
+            B.arm(p, sh, mid, el, sp.get('sleeve', WHITE))
+        fx, fy = wr[0] - el[0], wr[1] - el[1]
+        fl = math.hypot(fx, fy)
+        if fl < 18:                                          # pointing at us: the band lies across the upper arm's line
+            fx, fy = el[0] - sh[0], el[1] - sh[1]
+            fl = math.hypot(fx, fy) or 1.0
+        dx, dy = fx / fl, fy / fl
+        nx, ny = -dy, dx
+        c0 = (el[0] - dx * 4, el[1] - dy * 4)
+        c1 = (el[0] + dx * 16, el[1] + dy * 16)
+        hw0, hw1 = 27.0, 25.5
+        band = [(c0[0] + nx * hw0, c0[1] + ny * hw0), (c1[0] + nx * hw1, c1[1] + ny * hw1),
+                (c1[0] + dx * 3, c1[1] + dy * 3), (c1[0] - nx * hw1, c1[1] - ny * hw1),
+                (c0[0] - nx * hw0, c0[1] - ny * hw0), (c0[0] - dx * 2, c0[1] - dy * 2)]
+        p.poly(band, WHITE, INK, 2.2)
+        m = (el[0] + dx * 6, el[1] + dy * 6)                 # the roll's fold
+        p.line([(m[0] + nx * 22, m[1] + ny * 22), (m[0] - nx * 22, m[1] - ny * 22)], WHITE_D, 1.6)
         shape = shape or j2.get('hand', {}).get(side, 'fist')
         if shape != 'none':
             B.gesture_hand(p, el, wr, shape, sp['skin'])
+    else:
+        _ARM(p, j2, side, sp, shape)
     if sp.get('torn') and side == 'L':                       # his left sleeve torn at the elbow
         m = (el[0] + (sh[0] - el[0]) * 0.15, el[1] + (sh[1] - el[1]) * 0.15)
         pts = [(m[0] + 16 * math.cos(a) * (0.6 if k % 2 else 1.0), m[1] + 10 * math.sin(a) * (0.6 if k % 2 else 1.0))

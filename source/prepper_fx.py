@@ -108,13 +108,60 @@ def tin(img, cam, c, dent=0.0, lid=True):
         top = _ring(c, r, c[1] + h, 18)
         cam.poly(p, top, (196, 200, 204), INK, 1.4)
         cam.poly(p, _ring(c, r * 0.78, c[1] + h + 0.001, 14), (176, 180, 186), None)
-    stamp(img, cam, (c[0] + r * 1.02 * math.cos(a + 0.7), c[1] + 0.067, c[2] + r * 1.02 * math.sin(a + 0.7)),
-          (c[0] + r * 1.02 * math.cos(a - 0.7), c[1] + 0.067, c[2] + r * 1.02 * math.sin(a - 0.7)), 'BAKED BEANS')
+    s0 = (c[0] + r * 1.02 * math.cos(a + 0.7), c[1] + 0.067, c[2] + r * 1.02 * math.sin(a + 0.7))
+    s1 = (c[0] + r * 1.02 * math.cos(a - 0.7), c[1] + 0.067, c[2] + r * 1.02 * math.sin(a - 0.7))
+    if cam.project(s0)[0][0] > cam.project(s1)[0][0]:          # always read left to right (it came out mirrored)
+        s0, s1 = s1, s0
+    stamp(img, cam, s0, s1, 'BAKED BEANS')
     if dent > 0:                                               # the dent where it hit the robot
         q = (c[0] + r * math.cos(a), c[1] + 0.09, c[2] + r * math.sin(a))
         (x, y), kk = cam.project(q)
         p.poly([(x - 0.012 * kk, y), (x, y - 0.01 * kk), (x + 0.012 * kk, y + 0.002 * kk), (x, y + 0.008 * kk)],
                TEAL_D, INK, 1.0)
+
+
+MUG, MUG_D, COFFEE, CORK = (196, 64, 52), (150, 44, 36), (92, 58, 34), (196, 160, 112)
+
+
+def coffee(img, cam, c, t, handle=-0.6):
+    """Sam's note 32 (25 Oct): Andy's coffee on the table in front of the sofa, steaming: a round cork coaster
+    (100 mm), a brick-red mug (85 mm across, 95 mm tall) with its handle, dark coffee near the rim, and a few thin
+    pale wisps of steam rising and drifting (flat lines, no glow)."""
+    if cam.depth(c) < 0.15:
+        return
+    p = _pen(img)
+    cam.poly(p, _ring(c, 0.05, c[1] + 0.004, 18), CORK, INK, 1.2)
+    m = (c[0], c[1] + 0.006, c[2])
+    r, h = 0.0425, 0.095
+    a = _facing_arc(cam, m)
+    hd = (math.cos(a + handle), math.sin(a + handle))           # the handle, a little to one side of the front
+    def hpt(k, y):
+        return (m[0] + hd[0] * (r + k), m[1] + y, m[2] + hd[1] * (r + k))
+    behind = math.cos(handle) < 0
+    loop = [hpt(0.0, 0.075), hpt(0.022, 0.072), hpt(0.03, 0.05), hpt(0.022, 0.026), hpt(0.0, 0.022)]
+    def draw_handle():
+        cam.line(p, loop, INK, max(3.0, 0.016 * cam.project(m)[1]))
+        cam.line(p, loop, MUG, max(1.8, 0.009 * cam.project(m)[1]))
+    if behind:
+        draw_handle()
+    S.cylinder(m, r, h, {'side': MUG, 'top': MUG_D}, n=20)[0].draw(img, cam, p)
+    cam.poly(p, _ring(m, r, m[1] + h, 20), (238, 232, 222), INK, 1.4)
+    cam.poly(p, _ring(m, r * 0.82, m[1] + h - 0.012, 18), COFFEE, None)
+    if not behind:
+        draw_handle()
+    top = (m[0], m[1] + h, m[2])
+    for k in range(3):                                             # the steam: three wisps, each its own drift
+        ph = t * 1.3 + k * 0.37
+        u = ph % 1.0
+        pts = []
+        for i in range(7):
+            v = i / 6
+            y = top[1] + 0.01 + 0.16 * (u * 0.5 + v * 0.5)
+            dx = 0.012 * math.sin(6.0 * v + ph * 4 + k) + (k - 1) * 0.014
+            pts.append((top[0] + dx, y, top[2]))
+        fade = math.sin(math.pi * u)
+        if fade > 0.15:
+            cam.line(p, pts, (236, 236, 232), max(1.6, 0.007 * cam.project(top)[1] * fade))
 
 
 PLATE, PLATE_RIM, PLATE_D = (246, 246, 240), (64, 104, 176), (214, 216, 210)
@@ -194,24 +241,57 @@ def _local(c, yaw):
 
 
 def crossbow3(img, cam, c, yaw):
-    """The crossbow lying on the island: the rail and stock, the grip on its side, the limbs spread across the front,
-    the string, the red-dot sight, a bolt."""
+    """The crossbow lying on the island (ref crossbow). Sam's note 27 (25 Oct): it didn't read as a crossbow, so the
+    parts that make one are bold: the curved limbs spread wide across the front with their tips swept forward, the
+    bright string drawn back in a V to the latch, the foot stirrup at the nose, the long rail with a bolt loaded (bright
+    vanes), the red-dot sight, the pistol grip and trigger guard, the skeletal stock and butt. Mid grey with lighter
+    edges so it stands off the dark slate."""
     p = _pen(img)
     L = _local(c, yaw)
-    def bx(u0, u1, v0, v1, y0, y1, col):
-        parts = S.obox(((L((u0 + u1) / 2, y0, (v0 + v1) / 2))), (v1 - v0, y1 - y0, u1 - u0), yaw, {'all': col})
-        S.draw_parts(img, cam, [parts], p)
-    bx(-0.36, -0.12, -0.012, 0.012, 0.0, 0.05, GUN_D)       # stock
-    bx(-0.12, 0.34, -0.022, 0.022, 0.0, 0.045, GUN)          # rail
-    bx(-0.08, -0.02, 0.022, 0.09, 0.0, 0.03, GUN_D)          # grip, lying on its side
-    bx(0.0, 0.07, -0.015, 0.015, 0.045, 0.08, GUN_D)         # sight
-    tip = L(0.32, 0.03, 0.0)
-    for sg in (-1, 1):
-        a = L(0.26, 0.03, sg * 0.3)
-        m = L(0.33, 0.03, sg * 0.15)
-        cam.line(p, [tip, m, a], GUN_D, max(2.0, 0.02 * cam.project(tip)[1]))
-        cam.line(p, [a, L(0.04, 0.05, 0.0)], (230, 230, 226), 1.4)
-    cam.line(p, [L(0.02, 0.05, 0.0), L(0.4, 0.05, 0.0)], (30, 30, 30), max(1.5, 0.008 * cam.project(tip)[1]))
+    body, edge, dark = (118, 122, 130), (176, 180, 186), (40, 42, 46)
+    k = cam.project(L(0, 0, 0))[1]
+    def flat(pts, col, y=0.03, lw=1.8):
+        cam.poly(p, [L(u, y, v) for u, v in pts], col, INK, lw)
+    flat([(-0.36, -0.03), (-0.3, -0.035), (-0.3, 0.035), (-0.36, 0.03)], dark, 0.02)                 # butt plate
+    flat([(-0.3, -0.012), (-0.12, -0.014), (-0.12, 0.014), (-0.3, 0.012)], body, 0.03)               # stock bars
+    flat([(-0.28, -0.03), (-0.14, -0.03), (-0.14, -0.018), (-0.28, -0.018)], body, 0.03)
+    flat([(-0.12, -0.03), (0.36, -0.022), (0.36, 0.022), (-0.12, 0.03)], body, 0.045)               # the rail
+    flat([(-0.1, 0.03), (-0.02, 0.03), (-0.05, 0.12), (-0.11, 0.115)], dark, 0.03)                  # pistol grip
+    flat([(-0.02, 0.03), (0.05, 0.03), (0.04, 0.07), (-0.03, 0.075)], body, 0.031)                  # trigger guard
+    flat([(0.0, -0.016), (0.08, -0.016), (0.08, 0.016), (0.0, 0.016)], dark, 0.085)                 # red-dot sight
+    (sx, sy), kk = cam.project(L(0.075, 0.09, 0.0))
+    p.ell(sx, sy, max(1.5, 0.006 * kk), max(1.5, 0.006 * kk), (220, 40, 40), None)
+    flat([(0.36, -0.05), (0.44, -0.05), (0.44, 0.05), (0.36, 0.05)], dark, 0.035)                   # foot stirrup
+    flat([(0.38, -0.03), (0.42, -0.03), (0.42, 0.03), (0.38, 0.03)], (60, 60, 64), 0.036, 1.0)
+    for sg in (-1, 1):                                                                               # the limbs
+        spine = [(0.31, sg * 0.03), (0.3, sg * 0.12), (0.27, sg * 0.21), (0.25, sg * 0.27), (0.27, sg * 0.31)]
+        out = [(u + 0.018, v) for u, v in spine]
+        inn = [(u - 0.018, v) for u, v in spine[::-1]]
+        flat(out + inn, body, 0.04)
+        cam.line(p, [L(u + 0.014, 0.042, v) for u, v in spine], edge, max(1.2, 0.004 * k))
+    latch = L(0.02, 0.05, 0.0)
+    for sg in (-1, 1):                                                                               # the string
+        cam.line(p, [L(0.25, 0.045, sg * 0.305), latch], (246, 244, 236), max(1.8, 0.006 * k))
+    cam.line(p, [L(0.02, 0.055, 0.0), L(0.37, 0.055, 0.0)], (30, 30, 30), max(1.6, 0.006 * k))      # the bolt
+    for sg in (-1, 0, 1):
+        cam.line(p, [L(0.03, 0.055, 0.0), L(0.07, 0.06 + 0.01 * (sg == 0), 0.012 * sg)], (240, 120, 30), max(1.6, 0.007 * k))
+
+
+def machete_floor(img, cam, c, yaw, tilt=0.0):
+    """The oiled machete lying where Wes dropped it (shot 10 on): a long steel blade hooked at the tip, dark oil smears,
+    a black handle with brass rivets. `tilt` lifts its point (falling)."""
+    p = _pen(img)
+    L = _local(c, yaw)
+    def P(u, v):
+        return L(u, 0.012 + tilt * max(0.0, u + 0.15), v)
+    blade = [(-0.0, -0.02), (0.36, -0.03), (0.44, -0.012), (0.46, 0.03), (0.4, 0.035), (0.0, 0.02)]
+    cam.poly(p, [P(u, v) for u, v in blade], (186, 190, 196), INK, 1.6)
+    cam.poly(p, [P(u, v) for u, v in [(0.08, -0.01), (0.22, -0.016), (0.24, 0.004), (0.12, 0.012)]], (90, 92, 96), None)
+    cam.line(p, [P(0.02, 0.016), P(0.4, 0.028)], (246, 248, 250), 1.4)
+    cam.poly(p, [P(u, v) for u, v in [(-0.15, -0.02), (0.0, -0.022), (0.0, 0.022), (-0.15, 0.018)]], (26, 26, 28), INK, 1.4)
+    for u in (-0.11, -0.04):
+        (x, y), k = cam.project(P(u, 0.0))
+        p.ell(x, y, max(1.2, 0.004 * k), max(1.2, 0.004 * k), (214, 170, 76), None)
 
 
 def minigun3(img, cam, c, yaw, belt=True):

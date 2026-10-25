@@ -719,7 +719,7 @@ def coffee_table_parts():
              cylinder((x, 0.0, z), w * 0.32, h - 0.05, {'side': WALNUT_D, 'top': WALNUT_D}, n=20, rz=d * 0.3)]
     parts.append(obox((x - 0.2, h, z + 0.05), (0.3, 0.05, 0.22), 12, {'all': (40, 60, 90)}))      # books
     parts.append(obox((x - 0.2, h + 0.05, z + 0.05), (0.26, 0.04, 0.2), 6, {'all': (226, 220, 206)}))
-    parts.append(cylinder((x + 0.3, h, z - 0.04), 0.1, 0.06, {'side': (40, 40, 44), 'top': (60, 60, 66)}, n=16))   # a bowl
+    # (Sam's note 31, 25 Oct: the dark bowl here read as an unknown black object; gone, his coffee stands here now)
     return parts
 
 

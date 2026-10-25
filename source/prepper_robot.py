@@ -438,6 +438,21 @@ def hole(pen, cam, part, h):
         return
     a = _n(np.cross(n, [0, 1, 0]) if abs(n[1]) < 0.9 else np.cross(n, [1, 0, 0]))
     b = np.cross(n, a)
+    if h.get('dent'):                                           # a dent (the tin, Sam's note 30): a shallow dish
+        r = h.get('r', 0.05)                                    # pushed in, its upper lip in shadow, a hard glint
+        rim = np.array([c + n * 0.002 + (a * math.cos(q) * 1.15 + b * math.sin(q) * 0.85) * r * (1 + 0.12 * math.sin(4 * q))
+                        for q in np.linspace(0, 2 * math.pi, 12, endpoint=False)])
+        X, Y, D = project(cam, rim)
+        pen.poly(list(zip(X, Y)), CHROME[1], INK, 1.2)
+        top = np.array([c + n * 0.003 + (a * math.cos(q) * 1.0 + b * math.sin(q) * 0.7) * r
+                        for q in np.linspace(0.15 * math.pi, 0.85 * math.pi, 7)] +
+                       [c + n * 0.003 + (a * math.cos(q) * 0.8 + b * (math.sin(q) * 0.25 + 0.1)) * r
+                        for q in np.linspace(0.85 * math.pi, 0.15 * math.pi, 7)])
+        X, Y, D = project(cam, top)
+        pen.poly(list(zip(X, Y)), (70, 74, 82), None)
+        X, Y, D = project(cam, np.array([c + n * 0.004 - b * r * 0.45 - a * r * 0.4, c + n * 0.004 - b * r * 0.5 + a * r * 0.3]))
+        pen.line(list(zip(X, Y)), (250, 252, 255), 2.0)
+        return
     r = h.get('r', 0.016)
     ring = np.array([c + n * 0.002 + (a * math.cos(q) + b * math.sin(q)) * r * (1.0 + 0.25 * math.sin(3 * q))
                      for q in np.linspace(0, 2 * math.pi, 8, endpoint=False)])
