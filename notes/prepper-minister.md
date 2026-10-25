@@ -286,6 +286,34 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 34 | 8 |  | The robot hit by the crossbow bolt just vanishes: it collapses against the wall and stays in frame | done: robot A is knocked back to the hall wall and slides down to sit, the bolt in its head, sparking every 0.6 s; it stays |
 | 35 | 8 |  | Door opening: speed it up once the camera gets there; it lingers a beat too long | done: the camera arrives in 1.2 s (was 1.5) and Wes boots the door as it does; his line follows 0.9 s later (was 0.9 s of empty doorway then the line) |
 | 36 | 10 |  | Streeting's first minigun burst and the window shattering need proper effects; snarl face to camera, eyes to the left, then he spins and fires | done: snap in on Wes's snarl (bared teeth, eyes sliding left), plasma over his left shoulder, he spins side-on and fires: big muzzle flash, tracers, every pane bursting (glass out into the garden and onto the sink run), cases pouring, C and D take hits and fall |
+| 37 | 1 |  | Andy needs a better wave: it only comes up level with his torso | open |
+| 38 | all |  | Right sleeve: the cuff detail looks detached compared with the left, in every shot | open |
+| 39 | 2 |  | Arm move: reaching forward to the camera, 'hey, here's an interesting fact for you' | open |
+| 40 | all |  | Subtitles must be centred (they drift a bit to the left) | open |
+| 41 | 1-4, 7 |  | No coaster under the mug, and no steam | open |
+| 42 | 8 |  | First frame of Wes kicking the door: the kicking leg seems wrapped behind his body | open |
+| 43 | 8 |  | His elbow clips the side of the doorway as he steps forward | open |
+| 44 | 8 |  | No duck at the crossbow shot (clear line of sight): he glances that way, shocked | open |
+| 45 | 8 |  | When he turns, the machete faces behind his back, wrapped round his torso: a recurring weapon fault, needs a rule for future films | open |
+| 46 | 8 |  | Blue sparks on robot A's wound are so small they're barely noticeable | open |
+| 47 | 9 |  | Wes clips backwards through the doorframe; fix, and find out why the collision check missed it | open |
+| 48 | 9 |  | The crossbow is wrapped round Andy's right shoulder: it should point forward (out of frame) | open |
+| 49 | 9 |  | He throws the crossbow away more convincingly (it seems to just drop from him) | open |
+| 50 | 9 |  | The flying crossbow is a flat 2D line in mid-air | open |
+| 51 | 9 |  | Andy holds the pistol in two hands at the grip, low, in a ready position while he talks to us | open |
+| 52 | 9 |  | New shots: zoom in to Andy's face on each "Did you get the beans?", more distressed each time; then back to the wide shot for the robot charge | open |
+| 53 | 9 |  | After the swipe the blue effect comes out of the sword tip like a wavy ribbon, then vanishes (the beats before and after look right) | open |
+| 54 | 9 |  | 'you' still lost. Sam did not say 'pussy' in the recording: he left a gap for the bleep | open |
+| 55 | 10 |  | The ammo belt hangs off the table | open |
+| 56 | 10 |  | The belt wraps itself round his head: he doesn't use his hands (check the holding rules) | open |
+| 57 | 10 |  | After the snarl the view changes and the blue bolt goes through Wes's head: not the path it had in the frame before | open |
+| 58 | 10 |  | He turns round completely to fire (now facing left, the gun clips through the table) | open |
+| 59 | 10 |  | During the snarl his eyes look the opposite way to the one we need | open |
+| 60 | 11 |  | The bean pick-up has many frame-to-frame inconsistencies: analyse | open |
+| 61 | 11 |  | Once the tin is gripped, hold a second more | open |
+| 62 | 11 |  | Hold a beat as robot 5 stares down at itself, with a sound for the look down (from Sam's robot sounds if none fits) | open |
+| 63 | 12 |  | Delete the dead robots in the garden (out of frame), so robots 7 and 8 can advance menacingly with weapons drawn | open |
+| 64 | all |  | The next animatic has the Hook Text and the sign-off | open |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
 happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned
