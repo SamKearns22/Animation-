@@ -569,7 +569,7 @@ def machete_up(j, k=1.0, t=0.0, pole='out'):
     sh = 0.0 if k < 1 else 6 * math.sin(t * 9.0)
     # Sam, 25 Oct: it read as hooked under his armpit: the fist now out in front of his chest, the blade up before him
     V.arm_to(j, 'R', (150 - 60 * k, 330 - 150 * k + sh, 60 + 260 * k), pole, 'fist')
-    up_ = (0.3 - 0.2 * k, -1.0, 0.25 + 0.2 * k)                   # blade up and a little forward (his own frame:
+    up_ = (0.3 - 0.48 * k, -1.0, 0.25 + 0.2 * k)                   # blade up across his chest, clear of his arm and face (his own frame:
     j['props'] = j.get('props', []) + [C.machete('R', aim3=up_)]   # it turns with him, note 45)
     j['grip'] = set(j.get('grip', set())) | {'R'}
     return j
@@ -1892,13 +1892,16 @@ def actors(t, cam, fx):
         for name, piece in HEADS.items():
             if t >= piece.t0:
                 hp = piece.at(t)
+                if hp[0][1] > 0.8:                   # up on the island (or in the air): drawn with the effects, Sam
+                    continue                         # 25 Oct (the painter sorted it against the island as it orbited)
                 out.append(dict(at=(hp[0][0], hp[0][2]), r=0.15, draw=lambda im, piece=piece: flying_head(im, cam, t, piece)))
     return out
 
 
 def _heads():
     out = {}
-    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (-0.6, 3.2, -1.6)), ('4', BLOWN['4'], (1.9, 3.0, 0.4))):
+    # Sam, 25 Oct: head 5 landed inside the island: now thrown clear of it
+    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (0.6, 3.2, 0.15)), ('4', BLOWN['4'], (1.9, 3.0, 0.4))):
         p, sp = robot_pose(name, T['s12'] + u0 - 0.01)
         J, _ = R.skeleton(p)
         out[name] = X.Piece(tuple(J['head']), v, T['s12'] + u0, r=0.15, e=0.3, spin=9, box=(-5.55, -0.05, 0.05, 5.35),
@@ -2088,7 +2091,7 @@ def effects(img, cam, t, fx):
                     tgt = (-6.3, rng.uniform(1.0, 2.3), rng.uniform(w['span'][0] + 0.2, w['span'][1] - 0.2))
                     if cam.depth(tgt) > 0.2:
                         (hx, hy), _ = cam.project(tgt)
-                        a0 = rng.uniform(0.2, 0.6)
+                        a0 = rng.uniform(0.62, 0.8)   # Sam, 25 Oct: they started low, through the island
                         B.Pen(img, FLAT).line([(mx + (hx - mx) * a0, my + (hy - my) * a0),
                                                (mx + (hx - mx) * (a0 + 0.3), my + (hy - my) * (a0 + 0.3))], (255, 236, 150), 2.6)
             for name in ('C', 'D'):                        # sparks off the robots as the rounds strike
@@ -2187,6 +2190,10 @@ def effects(img, cam, t, fx):
         for tb, at, n, seed in BURNS:                             # and burns there for a few seconds
             X.flames(D(at), cam, t, tb, at, n, seed)
         X.bolt(D(BOLT6_STUCK[0]), cam, *BOLT6_STUCK)  # shot 6's bolt, still in the splashback
+        for name, piece in HEADS.items():               # heads up on the island or in the air (Sam, 25 Oct)
+            if t >= piece.t0 and piece.at(t)[0][1] > 0.8:
+                hp = piece.at(t)[0]
+                flying_head(D(hp), cam, t, piece)
         ap, af = alexa12_at(U12(t))                     # the Alexa's remains on the worktop (Sam, 25 Oct)
         X.alexa_walker(D(ap), cam, ap, t, af, knife=U12(t) > 0.8)
         D.finish()
