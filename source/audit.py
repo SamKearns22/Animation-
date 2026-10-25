@@ -33,8 +33,10 @@ A film joins in by giving, besides SHOTS, FPS, DUR and cam_for(t):
   project(cam, P)   optional: world points (N x 3) -> screen x, y, depth (three arrays of N). The default handles a
                        Cam3-style camera (pos, f, r, u, focal; poker_mon_room.Cam3) on a 1080 x 1920 frame.
 
-    python3 source/audit.py FILM [--from T0] [--to T1] [--shots a,b] [--sub 2] [--sheet OUT.jpg]
+    python3 source/audit.py FILM [--from T0] [--to T1] [--shots a,b] [--sub 2] [--sheet OUT.jpg] [--out FULL.txt]
       FILM is the module name in source/ (power_crime). --sheet: a small frame of each fault, the things outlined.
+      Prints a short summary; the whole report (roster, every fault, allowed contacts) goes to review/FILM-audit.txt
+      (or --out) (rule 19).
 Also run by preflight.py through the film's audits(): return audit.check(film) there.
 """
 import fnmatch
@@ -58,6 +60,7 @@ SUB = 2                          # tests between frames (a slammed door turns ~4
 EDGE = 4                         # pixels: a thing this close to the frame's edge is coming or going, not popping
 JUMP = 0.25                      # metres: a jump shorter than this is never flagged (a twitch, a step)
 FRAME = (1080, 1920)
+LAST_ROSTER = {}                 # the last run's {shot: names on screen}
 
 
 # ------------------------------------------------------------------------------------------------- what is tested
@@ -211,8 +214,8 @@ def _hit(pattern, thing, part):
 def _contact_ok(film, a, pa, b, pb, t, depth=0.0):
     """The ALLOWED_CONTACTS entry that covers this contact (None: a fault). An entry's optional sixth item caps how
     deep the contact may go (a hand resting ON a table, not sunk into it)."""
-    for ent in getattr(film, 'ALLOWED_CONTACTS', ()):
-        x, y, t0, t1 = ent[:4]
+    for ent in list(getattr(film, 'ALLOWED_CONTACTS', ())) + list(getattr(film, 'TOUCHES', ())):   # a meant touch
+        x, y, t0, t1 = ent[:4]                                                                    # (kitchecks)
         cap = ent[5] if len(ent) > 5 else None
         if (t0 is None or t >= t0) and (t1 is None or t <= t1) and (cap is None or depth <= cap) and \
                 ((_hit(x, a, pa) and _hit(y, b, pb)) or (_hit(x, b, pb) and _hit(y, a, pa))):
@@ -245,7 +248,7 @@ def _pair_overlaps(A, B):
 
 def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
     """Both tests over the film (or a stretch of it). Returns the faults: dicts with 'what', 't', 'names', 'text'."""
-    fps, dur = film.FPS, film.DUR
+    fps, dur = film.FPS, min(film.DUR, getattr(film, 'BLACK_AT', film.DUR))   # nothing to test in the black
     shot_of = (lambda t: next((s[0] for s in film.SHOTS if s[1] <= t < s[2]), film.SHOTS[-1][0]))
     a = 0.0 if t0 is None else t0
     b = dur if t1 is None else min(t1, dur)
@@ -254,6 +257,8 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
     started = time.time()
     import sets
     set_solids = (lambda t: sets.solids(film, t)) if getattr(film, 'PLAN', None) is not None else (lambda t: [])
+    import kitchecks
+    shared = kitchecks.SceneChecks(film)  # rule 13: hands on what they touch, and seen; props held; resting hands
     keys, pairs = {}, {}                  # last key of each thing; pairs passing into each other {(a, b): overlaps}
     hits = {}                             # (a, b) -> [(t, depth, part a, part b, shot, on screen)]
     offscreen = 0
@@ -320,11 +325,16 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
                     continue
                 hits.setdefault((pa, pb), []).append((t, worst[2], worst[0], worst[1], shot))
             if k == 0:
+                shared.frame(i, t, shot, things, cam)
                 seen, inside, box = _screen_boxes(film, cam, lo, hi)
                 recs.append((i, t, shot, {n: (things[n].kind, things[n].pos, bool(seen[x]), bool(inside[x]), box[x])
                                           for x, n in enumerate(names)}))
-    faults = _collisions(hits, fps, sub) + _pops(film, recs)
+    faults = _collisions(hits, fps, sub) + _pops(film, recs) + shared.faults()
     faults.sort(key=lambda f: f['t'])
+    global LAST_ROSTER                    # who was on screen in each shot (pre-flight's shot cast check, rule 14)
+    LAST_ROSTER = {}
+    for i, t, s, R in recs:
+        LAST_ROSTER.setdefault(s, set()).update(n for n, v in R.items() if v[2] and v[0] != 'set')
     if log:
         log(report(film, recs, faults, offscreen, len(frames), sub, time.time() - started, used))
     return faults
@@ -402,8 +412,8 @@ def _roster(recs):
             groups.setdefault(_group(n), []).append((n, kinds))
         parts = []
         for g, mem in sorted(groups.items(), key=lambda kv: (-len(kv[1]), kv[0])):
-            if len(mem) == 1 and mem[0][0] == g:
-                parts.append(g)
+            if len(mem) == 1 and mem[0][1] == {'full'}:
+                parts.append(mem[0][0])
                 continue
             kinds = {}
             for n, ks in mem:
@@ -416,12 +426,12 @@ def _roster(recs):
 
 
 def report(film, recs, faults, offscreen, nframes, sub, secs, used=None):
-    head = {'collision': 'PASSES THROUGH', 'pop': 'POPS', 'change': 'CHANGES DRAWING', 'jump': 'JUMPS'}
+    head = HEAD
     lines = [f'audit ({getattr(film, "NAME", film.__name__)}): {nframes} frames, each tested {sub + 1} times, '
              f'{secs:.0f} s', 'Who is on screen, shot by shot:'] + _roster(recs)
     if not faults:
         lines.append('audit: clean (nothing on screen passes through anything; nothing pops, changes or jumps)')
-    for what in ('collision', 'pop', 'change', 'jump'):
+    for what in head:
         fs = [f for f in faults if f['what'] == what]
         for f in fs[:40]:
             lines.append(f'{head[what]}: {f["text"]}')
@@ -434,9 +444,17 @@ def report(film, recs, faults, offscreen, nframes, sub, secs, used=None):
     return '\n'.join(lines)
 
 
+HEAD = {'collision': 'PASSES THROUGH', 'pop': 'POPS', 'change': 'CHANGES DRAWING', 'jump': 'JUMPS',
+        'touch': 'TOUCH', 'hidden': 'HIDDEN', 'held': 'HELD', 'resting': 'RESTING'}
+
+
+def check_lines(faults):
+    return [f'AUDIT: {HEAD[f["what"]]}: {f["text"]}' for f in faults]
+
+
 def check(film, **kw):
-    """For a film's audits() (preflight.py): the faults as lines."""
-    return ['AUDIT: ' + f['text'] for f in run(film, log=None, **kw)]
+    """For a film's audits() (preflight.py): the faults as lines ('AUDIT: KIND: text')."""
+    return check_lines(run(film, log=None, **kw))
 
 
 def sheet(film, faults, out, most=12):
@@ -485,7 +503,14 @@ def main():
         return cast(a[a.index(k) + 1]) if k in a else None
     if hasattr(film, 'B'):
         film.B.SS = 1
-    faults = run(film, opt('--from'), opt('--to'), opt('--shots', lambda s: s.split(',')), opt('--sub', int) or SUB)
+    full = []
+    faults = run(film, opt('--from'), opt('--to'), opt('--shots', lambda s: s.split(',')), opt('--sub', int) or SUB,
+                 log=full.append)
+    import report                          # rule 19: a short summary here, the whole report in the file
+    path = opt('--out', str) or os.path.join(os.path.dirname(HERE), 'review', f'{a[0]}-audit.txt')
+    print(full[0].split('\n')[0])
+    report.summarise('audit', [l.split(': ', 1)[1] if ': ' in l else l for l in check_lines(faults)], path,
+                     notes=full)
     if '--sheet' in a:
         print('sheet:', sheet(film, faults, a[a.index('--sheet') + 1]))
     sys.exit(1 if faults else 0)

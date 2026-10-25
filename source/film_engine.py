@@ -4,6 +4,8 @@
                   note re-renders nothing (about a minute); --redo SHOT re-renders only that shot.
   print_subtitles the subtitles as text with times, to proofread BEFORE rendering.
   check_mouths    every stretch of speech moves a mouth.
+Every review copy (a --small animatic or a --span clip) has the film time and the shot burned into its top-left
+corner, so Sam's times point straight at the frame (guides/film-quality-rules.md, rule 29); the full-size final never.
 """
 import os
 import subprocess
@@ -26,16 +28,35 @@ def _frame(args):
     else:
         pic = j['picture'](t)
         pic.save(path, compress_level=1)
-    return np.asarray(j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)).tobytes()
+    im = j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)
+    if j.get('stamp'):
+        stamp(im, t, j['shot_of'](t))
+    return np.asarray(im).tobytes()
+
+
+def stamp(im, t, shot):
+    """The film time and shot in the top-left corner (inside TikTok's top bar, never over the picture's action)."""
+    from PIL import ImageDraw, ImageFont
+    k = im.width / 1080
+    f = ImageFont.truetype(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts', 'DejaVuSans-Bold.ttf'),
+                           max(12, int(40 * k)))
+    txt = f'{t:5.2f} s   shot {shot}'
+    d = ImageDraw.Draw(im, 'RGBA')
+    x0, y0, x1, y1 = d.textbbox((int(24 * k), int(24 * k)), txt, font=f)
+    d.rectangle((x0 - 10 * k, y0 - 8 * k, x1 + 10 * k, y1 + 8 * k), fill=(0, 0, 0, 170))
+    d.text((int(24 * k), int(24 * k)), txt, font=f, fill=(255, 255, 255))
+    return im
 
 
 def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, write_wav, set_ss, crf=20,
-           reuse=False, redo=(), preset='slow', span=None):
+           reuse=False, redo=(), preset='slow', span=None, stamp=None):
     """picture(t) -> image without captions or title; overlay(img, t) -> img with them; shot_of(t) -> shot name;
     sound() -> the mixed soundtrack array; write_wav(path, mix). The cache ($FILM_CACHE or ~/.cache/filmcache) is
     only trusted when reuse=True: it cannot know what code changed, so name the shots that did (redo).
     span=(t0, t1) renders just that stretch, with its sound: a quick clip of one moment for notes on motion (Sam,
-    18 Oct: stills can't show a problem in movement, and a whole animatic is wasted on one moment)."""
+    18 Oct: stills can't show a problem in movement, and a whole animatic is wasted on one moment).
+    stamp: the time and shot in the corner; None (the default) = on for every review copy (a span, or smaller than
+    full size: rule 29), off for the full-size final."""
     import imageio_ffmpeg
     from multiprocessing import Pool
     cache = os.path.join(os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache')),
@@ -46,7 +67,10 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     if span:
         first, n = int(round(span[0] * fps)), min(n, int(round(span[1] * fps)))
     redo_set = {i for i in range(n) if shot_of(i / fps) in redo}
-    _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss)
+    if stamp is None:
+        stamp = bool(span) or size[0] < 1080 and size[1] < 1920
+    _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss,
+                shot_of=shot_of, stamp=stamp)
     wav = out + '.wav'
     write_wav(wav, sound())
     print(f'picture cache: {cache}' + (f' (re-rendering {sorted(redo)}, reusing the rest)' if reuse else ''), flush=True)

@@ -119,6 +119,7 @@ ALLOWED_CONTACTS = [   # (thing or thing.part, thing or thing.part, from, to, wh
     ('Wes.footR', 'DOOR LIVING DOOR', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door'),
     ('Wes.shinR', 'DOOR LIVING DOOR', DOOR8 - 0.05, DOOR8 + 0.45, 'his kick lands on the door'),
     ('Wes.*', 'ISLAND', 43.9, 44.45, 'he grabs the minigun off the island top'),
+    ('TIN', 'robot 5', DENT11 - 0.05, DENT11 + 0.1, 'the tin dents its chest and bounces off (brief)'),
     ('Wes.gun', 'ISLAND', None, None, 'the barrels held just over the island edge (a few cm, the box is the worktop)', 0.05),
 ]
 ALLOWED_POPS = [       # (thing, from, to, why)
@@ -128,6 +129,17 @@ ALLOWED_POPS = [       # (thing, from, to, why)
     ('robot C', 44.1, 44.4, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
     ('robot D', 44.25, 44.55, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
 ]
+TOUCHES = [   # rule 13 (kitchecks): a hand on what it moves, every frame, and seen (hand, thing, from, to, why)
+    ('Andy.handL', 'TIN', GRAB11 - 0.05, HOLD11 + 0.3, 'he grips the tin and pulls it back to throw (note 60)'),
+]
+FREE_MOVES = [('TIN', THROW11, None, 'thrown: it flies, dents robot 5, falls and stays')]
+SOUND_SOURCES = {'crockery': X.CROCK_AT}            # sounds tied to a thing: only with it in frame, once per hit
+SHOT_CAST = {   # rule 14: who the brief puts in each shot (pre-flight checks each is on screen there)
+    's1': ['Andy'], 's2': ['Andy'], 's3': ['Andy'], 's4': ['Andy'], 's5': [], 's6': ['Andy'], 's7': ['Andy'],
+    's8': ['Wes', 'robot A'], 's9': ['Andy', 'Wes', 'robot B'], 's10': ['Wes', 'robot C', 'robot D'],
+    's11': ['Andy', 'TIN', 'robot 5'],
+    's12': ['Andy', 'Wes', 'robot 1', 'robot 2', 'robot 3', 'robot 4', 'robot 5', 'robot 6', 'Alexa'],
+}
 PLAN = PL                                           # rule 1: the world in metres (plan.py checks it)
 SET_EXCLUDE = [   # rule 12: the set's solids the collision audit leaves out (everything else in the plan is in)
     ('ALEXA', 'the film draws it, shatters it (shot 6) and walks its remains (shot 12) itself (prepper_fx)'),
@@ -1032,23 +1044,43 @@ def _tin_hit():
     return tuple(J['chest'] + fr['chest'] @ np.array([-0.12, -0.03, 0.16]))   # off the centre ridge, so it shows
 
 
+def hand11(t):
+    """Shot 11: where Andy's left hand is (None out of the shot): in from behind the lens to the tin, the grip held,
+    then back out past the lens to throw."""
+    tx, tz = TIN_SPOTS[2]
+    grip = np.array([tx, 0.92 + 0.07, tz - 0.04])
+    away = np.array([tx + 0.05, 1.2, 2.02])          # behind the lens: the arm comes in from, and goes back past, it
+    if t < T['s11'] or t >= HOLD11 + 0.35:
+        return None
+    if t < GRAB11:
+        return away + (grip - away) * ease((t - T['s11']) / (GRAB11 - T['s11']))
+    if t < HOLD11:                                    # the grip held (a little squeeze and lift)
+        return grip + np.array([0.0, 0.015 * ease((t - GRAB11) / 0.25), 0.0])
+    return grip + np.array([0.0, 0.015, 0.0]) + (away - grip) * ease((t - HOLD11) / 0.3)
+
+
+def tin11(t):
+    """Shot 11: where the thrown tin is (its middle; None while it is behind the lens in his hand)."""
+    if t < GRAB11:
+        tx, tz = TIN_SPOTS[2]
+        return np.array([tx, 0.92 + 0.055, tz])
+    if t < HOLD11 + 0.35:
+        h = hand11(t)
+        return h - np.array([0.0, 0.07, -0.04]) + np.array([0.0, 0.055, 0.0])
+    if t < THROW11:
+        return None
+    return np.array(tin11_at(t)) + np.array([0.0, 0.055, 0.0])
+
+
 def andy_arm11(img, cam, t):
     """Shot 11: only Andy's left arm is in frame (he is just behind the camera, south of the island, the Glock in his
     right): it slides in from the frame's edge over the worktop, closes on the tin, holds it a second, and pulls back
     out of frame to throw. Sam's notes 60-61 (25 Oct): the tin left the island before the hand got there, the arm
     popped in mid-frame, and the tin jumped into the fist drawn over it. Now the hand drives the tin: it stands until
     the fist closes on it, then moves only with the fist, drawn under the fingers."""
-    tx, tz = TIN_SPOTS[2]
-    grip = np.array([tx, 0.92 + 0.07, tz - 0.04])
-    away = np.array([tx + 0.05, 1.2, 2.02])          # behind the lens: the arm comes in from, and goes back past, it
-    if t < T['s11'] or t >= HOLD11 + 0.35:
+    hand = hand11(t)
+    if hand is None:
         return
-    if t < GRAB11:
-        hand = away + (grip - away) * ease((t - T['s11']) / (GRAB11 - T['s11']))
-    elif t < HOLD11:                                  # the grip held (a little squeeze and lift)
-        hand = grip + np.array([0.0, 0.015 * ease((t - GRAB11) / 0.25), 0.0])
-    else:
-        hand = grip + np.array([0.0, 0.015, 0.0]) + (away - grip) * ease((t - HOLD11) / 0.3)
     if t >= GRAB11:                                   # the tin in his fist, drawn first (his fingers over it)
         X.tin(img, cam, (hand[0], hand[1] - 0.07, hand[2] + 0.04))
     sh = np.array([-3.1, 1.32, 2.12])                   # leaning in over the island's edge
@@ -2430,8 +2462,15 @@ def scene(t, faces=None):
         rec.patch(me, 'flying_head', lambda *a, **k: None)
         rec.patch(R, 'draw', robot_)
         rec.patch(S, 'house', house_)
-        rec.patch(X, 'alexa_walker', lambda *a, **k: None)
+        rec.patch(X, 'alexa_walker', lambda img, cam, c, t_, *a, **k: rec.add('Alexa', [CC.sphere(
+            'Alexa', 'body', (c[0], 0.24, c[2]), 0.1)]))
         picture(t)
+        if shot_of(t) == 's11':                            # Andy's hand and the tin he grabs and throws (note 60)
+            h, tin = hand11(t), tin11(t)
+            if h is not None:
+                rec.add('Andy', [CC.sphere('Andy', 'handL', h, 0.045)])
+            if tin is not None:
+                rec.add('TIN', [CC.capsule('TIN', 'tin', tin - (0, 0.022, 0), tin + (0, 0.022, 0), 0.033)])
     return rec.things
 
 
@@ -2446,69 +2485,15 @@ def checks():
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     windows = [(ln['start'] + a, ln['start'] + b) for ln in LINES if not ln.get('off') for a, b in ln['_stretches']]
     faults = E.check_mouths(sorted(x for w in TRACK for x in TRACK[w]), windows)
-    faults += facing_check()
-    faults += marks_check()
-    faults += crockery_check()
+    # facing, marks and the crockery sound: the shared checks (kitchecks.py), run by pre-flight on every film
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
 
-def crockery_check():
-    """Sam, 24 Oct: a crockery sound only when crockery is hit, one per impact, and the hit in frame."""
-    out = []
-    for name, at, _ in sound_events():
-        if name == 'crockery':
-            cam = cam_for(at)
-            (x, y), _ = cam.project(X.CROCK_AT)
-            if not (cam.depth(X.CROCK_AT) > 0.3 and 60 < x < 1020 and 60 < y < 1860):
-                out.append(f'{at:.2f}s the crockery sound plays with the dish rack out of frame')
-    return out
-
-
-def marks_check():
-    """Sam's note 18 (24 Oct): bullet holes hung in the empty window. Every mark shot 12 leaves must sit on a real
-    surface: inside the house, on a wall, unit, floor or ceiling, never in an opening."""
+def all_marks():
+    """Every mark the film leaves (kitchecks.marks: each on a real surface, rule 13)."""
     _prepare12()
-    faults = []
-    for m in MARKS:
-        x, y, z = m['at']
-        if not (-5.61 <= x <= 6.01 and -0.01 <= y <= S.CEIL + 0.01 and -0.01 <= z <= 5.41):
-            faults.append(f"{m['t']:.2f}s a {m['kind']} outside the house at ({x:.2f}, {y:.2f}, {z:.2f})")
-        for ax, v, _, _, _ in WALLS:
-            pt = (x, y, z)
-            if abs(pt[ax] - v) < 0.02 and opening_at(ax, v, z if ax == 0 else x, y, pad=-0.02):
-                faults.append(f"{m['t']:.2f}s a {m['kind']} in an opening at ({x:.2f}, {y:.2f}, {z:.2f})")
-    return faults
-
-
-def facing_check():
-    """Sam's note 11 (24 Oct): Andy's face looked backwards while his body faced forwards. Every frame of shots 6 and
-    12, Andy and Wes are drawn alone through the shot's camera: the head may turn at most 95 degrees from the body, and
-    from behind nothing they hold out in front may be drawn over their back."""
-    faults = []
-    for s0, s1 in ((T['s6'], T['s7']), (T['s12'], T['end'])):
-        for f in range(int(s0 * FPS), int(s1 * FPS)):
-            t = f / FPS
-            cam = cam_for(t)
-            if shot_of(t) == 's6':
-                sp, j, fac, hf = andy6(t)
-                who = [('Andy', sp, j, fac, hf, PL.PEOPLE['andy kitchen (6)']['at'])]
-            else:
-                sp, j, fac, rec = wes12(t)
-                sp2, j2, fac2, rec2, xz = andy12(t)
-                who = [('Wes', sp, j, fac, None, WES12), ('Andy', sp2, j2, fac2, None, xz)]
-            for name, sp_, j_, fac_, hf_, (x, z) in who:
-                img = B.canvas((255, 255, 255))
-                r = put(img, cam, sp_, x, z, fac_, j_, t, head_facing=hf_)
-                if not r:
-                    continue
-                d = r['j2']['_drawn']
-                turn = abs((d['head_yaw'] - d['yaw'] + 180) % 360 - 180)
-                if turn > 95:
-                    faults.append(f'{t:.2f}s {name}: head turned {turn:.0f} degrees from his body')
-                if d['held_over_back']:
-                    faults.append(f'{t:.2f}s {name}: seen from behind, what he holds is drawn over his back')
-    return faults
+    return [SCORCH10] + list(MARKS)
 
 
 def audits():

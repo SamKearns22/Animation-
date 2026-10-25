@@ -82,6 +82,13 @@ ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate c
 # here every contact that is meant (thing or thing.part, the other, from, to, why) and every meant pop-in.
 ALLOWED_CONTACTS = [('A.hand*', 'TABLE', 1.5, 2.2, 'A thumps the table')]
 ALLOWED_POPS = []                                   # [(name, from, to, why)], e.g. gone in through a door
+SET_EXCLUDE = []                                    # rule 12: [(set piece, why)]: what the audit leaves out of the set
+# Rule 13 (kitchecks.py, run by pre-flight on every film): a hand on what it moves, every frame, and seen; a prop that
+# moves has a hand on it unless it flies, falls or slides; a resting hand keeps 3 cm clear; marks on real surfaces
+# (define all_marks()); a sound tied to a thing plays only with it in frame, once per hit
+TOUCHES = []                                        # [(hand, thing, from, to, why)], e.g. ('A.handR', 'MUG', 2.0, 3.1, ...)
+FREE_MOVES = []                                     # [(thing, from, to, why)], e.g. ('MUG', 3.1, 3.6, 'knocked flying')
+SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
 # define layers(t) for drawing order (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a
 # song joined from recordings (musiccheck.py)
 # ====================================================================================================================
