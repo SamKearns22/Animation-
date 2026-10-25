@@ -776,7 +776,9 @@ def wes10(t):
     sp['mouth'] = 'set'                              # jaw clenched as he fires (no voice: the mouth stays shut)
     sp['blink'] = False
     # side-on to us as he fires (seen from behind, the gun was hidden by his back), swung right onto the robots
-    j = C.minigun_hip(sp, (22.0, 4.0), spin=(t - FIRE10) * 6.0 if firing else 0.0,
+    if shot_of(t) == 's11' and t < THROW11 + 0.3:    # only his muzzle would poke into the low tin shot: a flame
+        firing = False                               # on the worktop with no gun (25 Oct), so no flash there
+    j = C.minigun_hip(sp, (22.0, 4.0), spin=(t - FIRE10) * 6.0 if t >= FIRE10 else 0.0,
                       flash=(1.0 if f % 2 == 0 else 0.6) if firing else 0.0, belt_to=belt, rec=rec, seed=f)
     return sp, j, x, z, 228.0, None, rec
 
