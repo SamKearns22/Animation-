@@ -4,38 +4,39 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (handover, 25 Oct, shots 8-11 chat: stopped at 2% budget, NO code changed yet)
-- Read the code; nothing built. Current state (sheet seen): shots 8-11 have no people; shot 8 even drops Andy from the
-  sofa at its first frame; robot B never shows on screen; no bolt, plasma, tracers or tin drawn; shot 11's camera frames
-  the water bottles, not the tin. Sounds for 8-10 are already placed in `sound_events`.
-- **Staging plan (ready to build, Opus high):**
-  - 8: Andy seated (shot 7 pose, same hand-shake phase: give `andy_sofa` a `u`), head turns over his right shoulder as the
-    camera rises; Wes kicks the door at (2.6, 6.0) (`moves.kick`, t_hit DOOR8), lurches to (2.5, 5.15), machete up, fear 5
-    (`C.fear` on Wes), glance back east ~25.5; robot A walks the hall (3.9, 6.1)->(2.75, 6.1) 25.9-26.6, turns south;
-    bolt from (2.95, 1.45, 2.95) fired 27.1, hits head 27.22 (passes ~0.3 m from lens, clear of Wes); bolt stays in the
-    head (keep it in the head's frame); robot slumps back against the hall wall to sit (y -0.55, lean -25, feet forward),
-    blue sparks then small bursts every ~0.6 s; Wes ducks 27.12, pops to face north 27.5.
-  - 9: Andy aims at the door (355) to 29.4, pops to 180, flings the crossbow left (lands ~(3.85, 2.45), stays), right hand
-    behind belt 29.55-29.8, Glock up by his face to 36.6, leans in on the shout; robot B lunges from (0.3, 2.9) to
-    (2.05, 2.95) 36.8-37.15, blade swipe 37.1-37.3 (blade_arc); Andy sidesteps to (3.55, 2.95), pops to 270, shoots
-    SHOTS9 (tracers, sparks, chips, jolts), B falls west; 9b said in profile guarding the opening, eyes flick to Wes on
-    "Streeting". Wes shuffles backwards (gait at negative time) (2.5, 5.15)->(1.75, 4.65) 28.4-30, faces Andy, flinches
-    at the lunge, runs at 42.35 on one path [(1.75,4.65),(0.6,3.75),(-0.8,3.55),(-2.7,3.55)] that carries into shot 10.
-  - 10: camera to about (-1.15, 1.45, 4.05) looking WSW so Wes at (-2.7, 3.55) (shot 12's spot) faces it with the window
-    behind; arrives ~43.7, machete dropped (stays, also drawn in 12), drags the minigun 44.05-44.35, hip 44.4, belt flung
-    over his head (animate `belt_to`) bandana on 44.8; C and D step in at x -6.25 (palms outside the glass) 44.4-45.0;
-    snarl 45.2 (needs a snarl mouth: russiadent has one); plasma from D 45.6 over his left shoulder and past the lens, a
-    scorch on the kitchen side of x=0 at about z 4.5, y 2.2 (add to MARKS); pops to the window 45.95, fires 46.1 (all
-    panes, glass burst, room flash, cases); C dies 46.4, D 47.0.
-  - 11: camera low close on TIN_SPOTS[2] from about (-2.6, 1.02, 2.3); Andy's LEFT arm in from the left (Glock in his
-    right), grab 48.45, pull back out of frame, release ~48.9 from about (-3.0, 1.8, 2.2) to robot 5's chest; camera
-    whips to follow; Wes IS in frame during the follow (unavoidable), so draw him firing at the window (~250 deg);
-    robot 5 walks (-1.2, 6.3)->(-1.2, 5.9) to meet shot 12; the tin dents, eye dips, tin lands about (-1.55, 5.15) and
-    stays (draw it in 12); add minigun sound for 11.
-  - Found: dead C and D lie where robots 7 and 8 end their walk in shot 12; move 7/8 end points (a change to shot 12:
-    tell Sam).
-- **Next:** new chat on Opus high: build the above, contact-sheet check, run the audits, show Sam the check sheet, then the
-  animatic after his yes.
+## Where things stand (handover, 25 Oct overnight run, ~03:00: shots 8-11 built, notes 25-36 done, 3 animatics)
+- **Done overnight (Sam's overrides for this run: no yes needed for the sheets or animatics; no model switches):**
+  shots 8-11 built to the staging plan below; Sam's notes 25-36 (on the first animatic) all applied (table); three
+  self-check rounds, each rendered and sent: animatic 1 (shots 8-11 + notes), 2 (shot 9 effects, robot 5's dent made
+  visible), 3 (Wes clear of the open door in 8; shot 10's camera moved east of Wes, wider lens).
+- **Latest animatic:** `final OUT --small`, 62.4 s, about 1 m 45 s to render (scratch file, sent in the chat). Shot 11 is
+  now 3 s (Sam's hold), so shot 12 runs 51-62 s.
+- **Checks (pre-flight, last run):** clean for shots 1-11. Left, all from before tonight in shot 12: robot 4's hand and
+  shins touching the sink worktop as it climbs in (meant), robots 4 and 5 moving a lot in one frame as they are blown
+  apart (meant), Wes and Andy shouting with open mouths during the shot 12 fight (no voice), Andy's glasses' line weight
+  (cast check), six short captions, line 4's "I mean, like" syllable count. Prop sizes added to `sizes.py`.
+- **Changes Sam should know about:** robots 7 and 8 (shot 12, garden) stop further out, short of dead C and D; robot 3
+  falls to the east-south-east (it lay over robot 2); the island's tins moved back ~10 cm and the crossbow placed in
+  front (shot 5's camera higher and closer); the dark bowl on the coffee table removed (coffee there now); robot B
+  crumples in a heap instead of toppling (its long fall reached Andy and later robots' paths).
+- **My additions (Sam can say no):** Wes glances back down the hall between his two sentences; robot 5 looks down at its
+  dent before snapping back up; chrome chips from robot B stay on the carpet; robot A's head sparks every 0.6 s.
+- **Shots 8-11 as built** (`source/prepper.py`, block "shots 8-11"): 8: camera arrives 1.2 s, Wes kicks the door
+  (DOOR8 23.35), lurches to the doorway (2.5, 5.45), machete up; line 8 at 24.25; robot A walks the hall 25.3-26.0,
+  turns, bolt 26.6 (hits 26.72), Wes ducks; A knocked to the hall wall, slides down to sit, the bolt kept in its head.
+  9: Andy aims at the door, pops to us 29.4, flings the crossbow (lands (3.85, 2.45), stays), Glock from behind his belt
+  up by his face, leans in on the shout; robot B rushes in from the opening, winds up, swipes as Andy sidesteps to
+  (3.8, 2.95); three rounds (tracers, sparks, chips); B crumples; "Streeting" with a glance at Wes; Wes backs from the
+  door, turns to Andy, flinches, runs 42.35 on a path north of B. 10: camera (-1.0, 1.5, 2.6); Wes arrives ~43.8, drops
+  the machete (stays), drags the minigun 44.05-44.4, flings the belt (bandana 44.8); C and D walk in along the outside
+  wall; snap in on his snarl 45.2 (eyes left); D's plasma over his left shoulder (scorch on the east wall, kept); he
+  spins side-on 45.95 and fires 46.1 (flash, tracers, panes burst, glass, cases); C and D hit and fall outside.
+  11: low over the island; Andy's left arm grabs the tin 48.45 and pulls out of frame; throw 48.9 from the south side;
+  whip to robot 5 walking into the hall door; dent 49.6; it looks down at it, then up; tin on the floor (-1.55, 5.15).
+- **Next:** Sam watches animatic 3 and gives notes, or says yes to the final render (about 30 minutes at full size,
+  then `python3 source/finish.py CLEAN.mp4 animations/prepper-minister-vertical.mp4 "Andy asks the UK to stockpile"`).
+  New chat for notes: Opus medium; for the final render alone: Sonnet. Read only this section, the Notes table, and
+  `guides/satire.md`.
 
 ## Earlier handover (25 Oct, end of the second notes chat)
 - **Done:** notes 14 and 16-24 (table). First full animatic rendered and sent on Sam's "just go" (no check sheet, his

@@ -3,8 +3,10 @@
 Read this first in any new session, after CLAUDE.md.
 
 ## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
-- 25 Oct (second notes chat): notes 14, 16-24 done; first animatic sent (Sam: "just go"). Shots 8-11 have no people
-  yet (next: build them, Opus high, fresh chat). Handover at the top of the notes file.
+- 25 Oct (overnight run, Sam asleep, his overrides: no yes for sheets/animatics, no model switches): shots 8-11 built;
+  Sam's notes 25-36 done; three check-and-fix rounds, animatics 1-3 sent. NEXT: Sam's notes on animatic 3, or his yes
+  to the final render (about 30 min, then finish.py). Handover at the top of the notes file.
+- 25 Oct (second notes chat): notes 14, 16-24 done; first animatic sent (Sam: "just go").
 - Brief: `prompts/prepper-minister.md`. Plan in metres: `source/prepper_plan.py` (`sketch OUT.jpg`). References:
   `references/prepper-minister/`. Sam's sound effects: `source/audio/prepper/`.
 - 24 Oct: planning done (Opus high). References all in, house plan approved (shot 8 door moved), every question
