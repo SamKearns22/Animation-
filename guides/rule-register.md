@@ -55,5 +55,6 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | P4 | Unattended runs stop after one animatic | CLAUDE.md | Prepper overnight run | by hand |
 | P5 | A repeated note means the first fix failed | CLAUDE.md | Prepper notes 32/41, 33/54 | by hand |
 | P6 | One handover section; old ones archived | CLAUDE.md | Prepper review | by hand |
+| S1 | Riding: mounts.py, real pace speeds, the rider's seat matches the pace | satire.md, Movement | Sam, 25 Oct (riding test) | `mounts.check` (pre-flight, for any film that imports mounts) |
 
 Planned, not built (build only when a film needs it): people lying flat look like paper cut-outs (Poker Mon note 80).
