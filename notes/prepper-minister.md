@@ -4,7 +4,31 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (handover, 25 Oct overnight run, ~03:00: shots 8-11 built, notes 25-36 done, 3 animatics)
+## Where things stand (handover, 25 Oct, notes 37-64 chat: all applied, clips sent, waiting for Sam)
+- **Done:** Sam's notes 37-64 on animatic 3 all applied (table below says what and why), plus his mid-round notes
+  (kick straight at the lens, no double foot, no knee bits, legs match; hand detached in shot 2; no neck line; hand
+  behind back; blade blob; sparks for all robots). Five clips sent (scratch files): wave + reach, kick + glance,
+  crossbow/pistol/close-ups/swipe, belt/plasma/fire, tin + holds.
+- **Timing changed:** shot 11 is now 5 s (grip held 1 s, robot 5's stare-down held 1.2 s), so shot 12 runs 53-64 s;
+  the film is 64 s + black. Close-ups inside shot 9 at 32.84 and 34.54 (`CU9`).
+- **Shared-kit changes (every film):** `views.py`: a leg kicked up in front is drawn over the torso (`raised`), a film
+  may draw a leg itself (`j['hide_legs']`). The collision audit for this film now has every wall (cut round its
+  openings) and the living-room furniture (`WALL_BOXES`, `SOLID_BOXES`).
+- **Changes Sam should know about (losses / my calls):** stool 2 moved to the island's east end (it stood where Andy
+  kneels and robot 1 falls); C and D's bodies cut from shot 12 (his ask: loss of continuity, they lay outside the
+  window); the crossbow now lands at (4.35, 2.6), further out; Wes stands one step into the room in shot 8 (5.05); he
+  fires facing 258 (not square on: his back hid the whole gun); robot 6 10 cm north; the look-down sound is his
+  robot-scan (my pick).
+- **Rules proposed to Sam (waiting for his numbers; NOT added):** see the chat of 25 Oct; 1 held props aimed in 3D,
+  2 walls and furniture in every collision audit, 3 picked-up things driven by the hand from the grip frame,
+  4 limbs at the lens drawn foreshortened.
+- **Checks:** audit clean over the whole film; every frame draws; mouths: only the known shot 12 shouting and line 4's
+  syllable count; the rest as before (glasses line weight, short captions, Alexa 200%, long shots 9 and 12).
+- **Next:** Sam's notes on the clips (Opus medium), or his yes to the check sheet, then the animatic with the Hook
+  Text and sign-off (note 64): `python3 source/prepper.py final CLEAN.mp4 --small` (about 2 min), then
+  `python3 source/finish.py CLEAN.mp4 OUT-vertical.mp4 "Andy asks the UK to stockpile"` (routine: Sonnet, new chat).
+
+## Earlier handover (25 Oct overnight run, ~03:00: shots 8-11 built, notes 25-36 done, 3 animatics)
 - **Done overnight (Sam's overrides for this run: no yes needed for the sheets or animatics; no model switches):**
   shots 8-11 built to the staging plan below; Sam's notes 25-36 (on the first animatic) all applied (table); three
   self-check rounds, each rendered and sent: animatic 1 (shots 8-11 + notes), 2 (shot 9 effects, robot 5's dent made

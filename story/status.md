@@ -3,6 +3,9 @@
 Read this first in any new session, after CLAUDE.md.
 
 ## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
+- 25 Oct (notes 37-64 chat, Opus): all of Sam's notes on animatic 3 applied, five clips sent; the walls added to the
+  collision audit (it had never seen them). NEXT: Sam's notes on the clips, or his yes to the check sheet, then the
+  animatic with Hook Text and sign-off (Sonnet, new chat). Handover at the top of the notes file.
 - 25 Oct (overnight run, Sam asleep, his overrides: no yes for sheets/animatics, no model switches): shots 8-11 built;
   Sam's notes 25-36 done; three check-and-fix rounds, animatics 1-3 sent. NEXT: Sam's notes on animatic 3, or his yes
   to the final render (about 30 min, then finish.py). Handover at the top of the notes file.
