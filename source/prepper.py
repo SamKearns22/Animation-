@@ -95,6 +95,7 @@ BOLT6 = 0.8                                 # the bolt's flight (the camera foll
 DOOR8, ROBOT8, TURN8, BOLT8 = 23.35, 25.3, 26.0, 26.6
 BOLT8_HIT = BOLT8 + 0.12
 SPIN9, LUNGE9, SHOTS9 = 29.4, 36.8, (37.3, 37.55, 37.8)
+CU9 = (32.84, 34.54, LUNGE9 - 0.4)                  # the two close-ups on "Did you get the beans?" (note 52), then wide
 WINDOW10, PLASMA10, FIRE10 = 45.0, 45.6, 46.1
 GRAB11, THROW11, DENT11 = 48.45, 48.9, 49.6      # the grab; the release (out of frame); the tin strikes robot 5
 LAND11 = 50.15                                      # the tin down on the floor, where it stays
@@ -278,6 +279,12 @@ def cam_for(t):
         look = lerp3((3.0, 1.0, 3.7), PL.CAMS[8]['look'], ease(u / 1.0))
         return S.Cam(pts[i], look, focal=1150)
     if s == 's9':
+        # Sam's note 52 (25 Oct): a hard cut in to Andy's face on each "Did you get the beans?", closer the second
+        # time; back to the wide shot for the robot's charge
+        if CU9[0] <= t < CU9[1]:
+            return S.Cam((ANDY_AIM9[0], 1.5, ANDY_AIM9[1] - 0.95), (ANDY_AIM9[0], 1.4, ANDY_AIM9[1]), focal=1250)
+        if CU9[1] <= t < CU9[2]:
+            return S.Cam((ANDY_AIM9[0], 1.45, ANDY_AIM9[1] - 1.05), (ANDY_AIM9[0], 1.36, ANDY_AIM9[1] - 0.2), focal=2000)
         return S.Cam((3.0, 1.15, 0.35), (2.7, 1.15, 5.4), focal=760)
     if s == 's10':                                  # Wes with the window behind him; a snap in on his snarl (note 36)
         look0, look1 = (-3.8, 1.4, 3.6), (WES10[0], 1.62, WES10[1])
@@ -572,12 +579,17 @@ def kick_leg(side, k, sp):
     def draw(p, j2):
         (hx, hy), (fx_, fy_) = j2['hip' + side], j2['foot' + side]
         cx, cy = fx_, fy_ + 10                         # on the real foot, covering its shoe (Sam: a double foot)
-        w0, w1 = 52.0, 52.0 + 46.0 * k                                   # widening towards us
+        w0, w1 = 50.0, 40.0 + 58.0 * k                                   # widening towards us
         dx, dy = cx - hx, cy - hy
         n = math.hypot(dx, dy) or 1.0
         nx, ny = -dy / n, dx / n
         p.poly([(hx + nx * w0, hy + ny * w0), (cx + nx * w1, cy + ny * w1), (cx - nx * w1, cy - ny * w1),
                 (hx - nx * w0, hy - ny * w0)], lit, V.INK, 2.6)
+        if k < 0.35:                                                      # not pointing at us yet: a plain shoe
+            shoe = [(cx - 34, cy - 6), (cx + 34, cy - 6), (cx + 40, cy + 22), (cx + 30, cy + 40), (cx - 30, cy + 40),
+                    (cx - 40, cy + 22)]
+            p.poly(V.curve(shoe, 3), sp.get('shoe', (22, 20, 22)), V.INK, 2.4)
+            return
         p.ell(cx, cy, w1, w1 * 0.8, lit, V.INK, 2.6)                     # the trouser hem round the ankle, end on
         sw, sh_ = w1 * 0.78, w1 * 1.25                                   # the sole, toe up, facing us
         p.ell(cx, cy - sh_ * 0.25, sw, sh_ * 0.62, (26, 24, 26), V.INK, 2.6)
@@ -618,8 +630,9 @@ def wes8(t):
                         curve='fast' if t < DOOR8 else 'ease')
         V.arm_to(j, 'L', (-170, 330, 80), 'down', 'fist')     # the free arm forward for balance, close in
         fz = j['footR'][2]
-        if fz > 200 and j['footR'][1] < 600:          # the leg coming at us: drawn foreshortened, over his body
-            j['props'] = j.get('props', []) + [kick_leg('R', min(1.0, (fz - 200) / 240), sp)]
+        if fz > 40 and j['footR'][1] < V.ANKLE_Y - 40:  # the leg off the floor: drawn by the film, foreshortened, over
+            j['props'] = j.get('props', []) + [kick_leg('R', max(0.0, min(1.0, (fz - 200) / 240)), sp)]   # his body
+            j['hide_legs'] = {'R'}                    # (Sam: bits of the real knee showed round it)
         machete_up(j, 0.6, t)
         return sp, j, WES_KICK8[0], WES_KICK8[1], 180.0, hf
     u = (t - DOOR8 - 0.55) / 0.4                     # the lurch in: two quick steps
@@ -703,44 +716,61 @@ def wes9(t):
 ANDY_AIM9 = (2.95, 2.87)
 
 
-FLING9 = (29.45, 29.95)                             # the crossbow flung aside: leaves his hands, lands
-XBOW_LANDS = ((3.85, 2.45), 35.0)
+WIND9 = (SPIN9, 29.55)                              # popped round to us, the crossbow wound across to his right
+FLING9 = (29.55, 30.05)                             # the crossbow flung aside: leaves his hand, tumbles, lands
+GLOCK9 = (29.95, 30.2)                              # the Glock from behind his belt, up into both hands, low
+XBOW_LANDS = ((4.35, 2.6), 35.0)
 SIDESTEP9 = (36.95, 37.2)
 ANDY_STEP9 = (3.8, 2.8) 
 
 
 def andy9(t):
     """Shot 9: Andy aiming the crossbow at the door (his back to us), pops round to us, flings the crossbow aside,
-    the Glock from behind his belt up by his face for the line; robot B lunges, swipes and misses as he sidesteps; he
+    the Glock from behind his belt into both hands, low, at the ready, for the line; robot B lunges, swipes and misses as he sidesteps; he
     pops to face it and shoots it down; then guards the opening in profile for "Streeting...", eyes flicking to Wes."""
-    sp = C.fear(C.ANDY, FEAR_AT['s9'], talking=talking('Andy', t))
+    # more distressed with each "Did you get the beans?" (note 52): 5 until the first, 6 in the first close-up, and in
+    # the second the eyes wider still, more sweat and a tremble
+    sp = C.fear(C.ANDY, 5 if t < CU9[0] else 6, talking=talking('Andy', t))
+    if CU9[1] <= t < CU9[2]:
+        sp['sweat'] = 12
+        sp['tilt'] = 0.02 * math.sin(t * 41) + 0.012 * math.sin(t * 27)
     m = mouth_at('Andy', t)
     sp['mouth'] = m or 'set'
     sp['blink'] = F.blinking(t, BLINKS['Andy'])
     x, z = ANDY_AIM9
     hf = None
     rec = {}
-    if t < SPIN9:
-        j = C.crossbow_aim(sp, (0.0, 2.0), loaded=False)
+    if t < SPIN9:                                    # aiming at the door, back to us: the crossbow points away,
+        j = C.crossbow_aim(sp, (0.0, 2.0), loaded=False, min_k=0.08)   # nearly hidden by him (note 48)
         return sp, j, x, z, 355.0, hf, rec
-    if t < FLING9[0]:                                # popped round to us, the crossbow swinging out to his left
-        j = V.standing(sp)
-        V.arm_to(j, 'L', (-230, 160, 120), 'out', 'fist')
-        V.arm_to(j, 'R', (150, 330, 60), 'out', 'fist')
+    # Sam's notes 49-51 (25 Oct): it just dropped from him (0.05 s from the turn to letting go). Now he pops round to
+    # us, winds the crossbow across to his right, flings it out to his left with a sweep of the arm (it tumbles away
+    # and lands), his right hand goes behind his belt, and the Glock comes up in both hands, low, at the ready
+    if t < WIND9[1]:                                 # popped round, the crossbow swung across to his right
+        k = ease((t - SPIN9) / (WIND9[1] - SPIN9))
+        j = C.crossbow_aim(sp, (15 + 45 * k, 20 + 10 * k), loaded=False)
         return sp, j, x, z, 180.0, hf, rec
     j = V.standing(sp)
     j['footL'] = (-80, V.ANKLE_Y, 15.0)
     j['footR'] = (75, V.ANKLE_Y, -10.0)
-    V.arm_to(j, 'L', (-170, 330, 40), 'out', 'palm')
-    if t < 29.8:                                     # right hand behind his belt for the Glock
-        k = ease((t - FLING9[0]) / 0.35)
-        V.arm_to(j, 'R', (150 + 20 * k, 330 + 60 * k, 40 - 140 * k), 'out', 'fist')
+    if t < FLING9[0] + 0.12:                         # the fling: his left arm sweeps out wide, the right lets go
+        k = ease((t - WIND9[1]) / 0.12)
+        V.arm_to(j, 'L', (-60 - 280 * k, 200 - 120 * k, 160 - 80 * k), 'out', 'palm' if t >= FLING9[0] else 'fist')
+        V.arm_to(j, 'R', (60 + 90 * k, 260 + 70 * k, 120 - 60 * k), 'out', 'fist')
+        j['lean'] = -4.0 * k
         return sp, j, x, z, 180.0, hf, rec
-    if t < SIDESTEP9[0]:                             # the Glock up by his face, muzzle up; leaning in on the shout
-        k = ease((t - 29.8) / 0.25)
-        V.arm_to(j, 'R', (170 - 20 * k, 390 - 450 * k, -100 + 190 * k), 'out', 'fist')
-        j['props'] = [C.glock('R', 0.0, (0.0, -1.0, 0.15), rec)]
-        j['grip'] = {'R'}
+    if t < GLOCK9[0]:                                # right hand behind his belt for the Glock, left arm settling
+        k = ease((t - FLING9[0] - 0.12) / (GLOCK9[0] - FLING9[0] - 0.12))
+        V.arm_to(j, 'L', (-340 + 170 * k, 80 + 250 * k, 80 - 40 * k), 'out', 'palm')
+        V.arm_to(j, 'R', (150 + 20 * k, 330 + 60 * k, 60 - 160 * k), 'out', 'fist')
+        return sp, j, x, z, 180.0, hf, rec
+    if t < SIDESTEP9[0]:                             # the Glock in both hands, low, at the ready, while he talks
+        k = ease((t - GLOCK9[0]) / (GLOCK9[1] - GLOCK9[0]))
+        rh = (170 - 150 * k, 390 - 60 * k, -100 + 270 * k)
+        V.arm_to(j, 'R', rh, 'down', 'fist')
+        V.arm_to(j, 'L', (-170 + 145 * k, 330 + 15 * k, 40 + 120 * k), 'down', 'fist')
+        j['props'] = [C.glock('R', 0.0, (0.0, 0.55, 0.83), rec)]
+        j['grip'] = {'R', 'L'} if k > 0.6 else {'R'}
         ln = next(l_ for l_ in LINES if l_['n'] == 9)
         shout = ln['start'] + ln['chunks'][3][0] - ln['_cut']
         if t >= shout - 0.1:
@@ -752,9 +782,10 @@ def andy9(t):
         x, z = x + (ANDY_STEP9[0] - x) * k, z + (ANDY_STEP9[1] - z) * k
         j = moves.gait(sp, t - SIDESTEP9[0], 'brisk')
         j['lean'] = -8.0
-        V.arm_to(j, 'R', (150, -60, 90), 'out', 'fist')
-        j['props'] = [C.glock('R', 0.0, (0.0, -1.0, 0.15), rec)]
-        j['grip'] = {'R'}
+        V.arm_to(j, 'R', (20, 330, 170), 'down', 'fist')         # still both hands, low, at the ready (it popped up
+        V.arm_to(j, 'L', (-25, 345, 160), 'down', 'fist')        # to one hand by his face in a frame)
+        j['props'] = [C.glock('R', 0.0, (0.0, 0.55, 0.83), rec)]
+        j['grip'] = {'R', 'L'}
         return sp, j, x, z, 180.0, hf, rec
     x, z = ANDY_STEP9                                # facing it (west): shoots; then guards the opening in profile
     flash = any(0 <= t - s_ < 1 / FPS for s_ in SHOTS9)
@@ -770,15 +801,17 @@ def andy9(t):
 
 
 def xbow9_at(t):
-    """Where the flung crossbow is (x, y, z) and its yaw: out of his left hand, a tumbling arc, down where it lands."""
-    a = (ANDY_AIM9[0] + 0.35, 1.1, ANDY_AIM9[1] - 0.1)
+    """Where the flung crossbow is (x, y, z), its yaw and its roll: out of his left hand at arm's length, a high
+    arc, turning face on to us, down flat where it lands."""
+    a = (ANDY_AIM9[0] - 0.2, 1.2, ANDY_AIM9[1] - 0.35)   # from his hands at his right, flung across in front of him
     (bx, bz), yaw1 = XBOW_LANDS
     u = (t - FLING9[0]) / (FLING9[1] - FLING9[0])
     if u >= 1.0:
-        return (bx, 0.0, bz), yaw1
+        return (bx, 0.0, bz), yaw1, 0.0
     u = max(0.0, u)
-    y = a[1] * (1 - u) + 0.45 * math.sin(math.pi * u)
-    return (a[0] + (bx - a[0]) * u, max(0.0, y), a[2] + (bz - a[2]) * u), yaw1 + 400 * (1 - u)
+    y = a[1] * (1 - u) + 0.6 * math.sin(math.pi * u)
+    # turned mostly face on to us as it flies (a tumble through edge on read as a line: note 50), flat as it lands
+    return (a[0] + (bx - a[0]) * u, max(0.0, y), a[2] + (bz - a[2]) * u), yaw1 + 95 * (1 - u), 100 * (1 - u) ** 0.7
 
 
 def _arrive10():
@@ -1742,9 +1775,9 @@ def actors(t, cam, fx):
         wsp, wj, wx, wz, wfac, whf = wes9(t)
         out.append(dict(at=(wx, wz), r=0.3, draw=lambda im: masked(im, cam, fx, (wx, wz), lambda l: put(
             l, cam, wsp, wx, wz, wfac, wj, t, head_facing=whf))))
-        if t >= FLING9[0]:
-            (bx, by, bz), byaw = xbow9_at(t)
-            out.append(dict(at=(bx, bz), r=0.2, draw=lambda im: X.crossbow3(im, cam, (bx, by, bz), byaw)))
+        if FLING9[0] <= t < FLING9[1]:              # in flight (once down it is drawn with the things left behind)
+            (bx, by, bz), byaw, broll = xbow9_at(t)
+            out.append(dict(at=(bx, bz), r=0.2, draw=lambda im: X.crossbow3(im, cam, (bx, by, bz), byaw, broll)))
     elif s == 's10':
         wsp, wj, wx, wz, wfac, whf, wrec = wes10(t)
         out.append(dict(at=(wx, wz), r=0.3, draw=lambda im: fx.__setitem__('wes', (masked(im, cam, fx, (wx, wz), lambda l: put(
@@ -1775,7 +1808,7 @@ def actors(t, cam, fx):
         else:
             out.append(dict(at=(ax2, az2), r=0.06, draw=lambda im: X.alexa_walker(im, cam, (ax2, 0.0, az2), t, face)))
     if s in ('s9', 's10', 's11', 's12') and t >= FLING9[1]:      # things left where they fell (they stay)
-        (bx, _, bz), byaw = xbow9_at(t)
+        (bx, _, bz), byaw, _r = xbow9_at(t)
         out.append(dict(at=(bx, bz), r=0.2, draw=lambda im: X.crossbow3(im, cam, (bx, 0.0, bz), byaw)))
     if s in ('s10', 's11', 's12') and t >= DROP10:
         (mx_, mz_), myaw = MACHETE10
@@ -1915,10 +1948,20 @@ def effects(img, cam, t, fx):
         k = int((t - BOLT8_HIT - 0.4) / 0.6)
         X.sparks(D(tip), cam, t, BOLT8_HIT + 0.4 + 0.6 * k, tip, 90 + k, n=6, col='blue', speed=1.2)
         cut, thru = LUNGE9 + 0.3, LUNGE9 + 0.5
-        if cut - 0.08 <= t < thru + 0.15:
-            tips = [blade_tip('B', cut - 0.08 + (min(t, thru) - cut + 0.08) * q / 7) for q in range(8)]
-            JB, _ = R.skeleton(robot_pose('B', t)[0])
-            X.blade_arc(D(JB['chest']), cam, [q for q in tips if q is not None][-6:])
+        # Sam's note 53 (25 Oct): after the swipe the trail wobbled out of the tip like a wavy ribbon, then vanished.
+        # The trail is the last 0.15 s of the tip's path only (smoothed), and after the swing its tail catches up
+        # with the tip over 0.1 s, so it shrinks into the blade instead of hanging there
+        arc_end = cut + 0.1                                # the trail stops where the sweep has crossed (after it the
+        if cut - 0.08 <= t < arc_end:                      # blade turns down at us and the trail hooked)
+            t1_ = min(t, arc_end)
+            t0_ = max(cut - 0.08, t1_ - 0.15) + max(0.0, t - arc_end) * 3.0
+            if t1_ - t0_ > 0.02:
+                tips = [blade_tip('B', t0_ + (t1_ - t0_) * q / 9) for q in range(10)]
+                tips = [np.asarray(q) for q in tips if q is not None]
+                sm = [tips[0]] + [(tips[i - 1] + 2 * tips[i] + tips[i + 1]) / 4 for i in range(1, len(tips) - 1)] + \
+                    [tips[-1]]
+                JB, _ = R.skeleton(robot_pose('B', t)[0])
+                X.blade_arc(D(JB['chest']), cam, [tuple(q) for q in sm])
         an = fx.get('andy')
         for i, s_ in enumerate(SHOTS9):
             if not 0 <= t - s_ < 0.6:

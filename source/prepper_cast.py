@@ -366,13 +366,13 @@ CROSSBOW = 0.72 / M                    # its length (stock folded out), person u
 CB_GRIP, CB_FORE = 0.36, 0.62
 
 
-def crossbow(loaded=True, skin=None, aim3=(0.0, 0.0, 1.0)):
+def crossbow(loaded=True, skin=None, aim3=(0.0, 0.0, 1.0), min_k=0.55):
     """The pistol crossbow (ref crossbow): grey-black skeletal stock folded out, a pistol grip with its trigger, the
     long rail with a red-dot sight on top, short recurved limbs at the front with the string drawn back to the latch,
     a bolt on the rail with bright vanes. Right hand on the grip, left under the front. The limbs spread wide when it
     points at us, and close to a stub side on."""
     def draw(p, j2):
-        P, L, eo, u, s = _frame(j2, 'wrR', 'wrL', CB_GRIP, CB_FORE, CROSSBOW)
+        P, L, eo, u, s = _frame(j2, 'wrR', 'wrL', CB_GRIP, CB_FORE, CROSSBOW, min_k)
         g = 1.0
         p.poly([P(0.0, -26), P(0.0, 18), P(0.05, 22), P(0.2, 10), P(0.2, -4), P(0.06, -18)], GUN_D, INK, 2.0)    # stock
         p.poly([P(0.04, -10), P(0.04, 8), P(0.17, 4), P(0.17, -2)], (236, 232, 222), None)                       # its gap
@@ -399,7 +399,8 @@ def crossbow(loaded=True, skin=None, aim3=(0.0, 0.0, 1.0)):
         if skin:
             _fists(p, j2, skin)
     draw.held = skin is None
-    draw.along = ('wrR', 'wrL', CROSSBOW, CB_GRIP)
+    draw.own_fists = skin is not None          # it draws the fists: seen from behind, hidden by his back (Sam, 25 Oct:
+    draw.along = ('wrR', 'wrL', CROSSBOW, CB_GRIP)   # a fist and the crossbow showed over Andy's back as he aimed)
     return draw
 
 
@@ -597,11 +598,13 @@ def aim_two_hands(sp, grip_u, fore_u, full, at=(0.0, 0.0), butt=None, lean=4.0, 
     return j
 
 
-def crossbow_aim(sp, at=(0.0, 0.0), j=None, loaded=True):
+def crossbow_aim(sp, at=(0.0, 0.0), j=None, loaded=True, min_k=0.55):
+    """`min_k`: the shortest it may be drawn. Seen from behind, pointing away, it is nearly end on (Sam's note 48,
+    25 Oct: a floor of 0.55 drew a stub across his shoulder): pass a small one, and only the limbs show at his sides."""
     j = aim_two_hands(sp, CB_GRIP, CB_FORE, CROSSBOW, at, j=j)
     ax, ay = math.radians(at[0]), math.radians(at[1])
     aim = (math.sin(ax) * math.cos(ay), math.sin(ay), math.cos(ax) * math.cos(ay))
-    j['props'] = j.get('props', []) + [crossbow(loaded, sp['skin'], aim)]
+    j['props'] = j.get('props', []) + [crossbow(loaded, sp['skin'], aim, min_k)]
     return j
 
 

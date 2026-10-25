@@ -241,21 +241,23 @@ def bottle(img, cam, c):
     cam.poly(p, hl, (246, 250, 252), None)
 
 
-def _local(c, yaw):
+def _local(c, yaw, roll=0.0):
     a = math.radians(yaw)
-    def L(u, y, v):                         # u along its length (forward), v across, y up
+    r = math.radians(roll)
+    def L(u, y, v):                         # u along its length (forward), v across, y up; `roll` turns it about
+        v, y = v * math.cos(r) - y * math.sin(r), v * math.sin(r) + y * math.cos(r)   # its length (tumbling)
         return (c[0] + u * math.sin(a) + v * math.cos(a), c[1] + y, c[2] + u * math.cos(a) - v * math.sin(a))
     return L
 
 
-def crossbow3(img, cam, c, yaw):
+def crossbow3(img, cam, c, yaw, roll=0.0):
     """The crossbow lying on the island (ref crossbow). Sam's note 27 (25 Oct): it didn't read as a crossbow, so the
     parts that make one are bold: the curved limbs spread wide across the front with their tips swept forward, the
     bright string drawn back in a V to the latch, the foot stirrup at the nose, the long rail with a bolt loaded (bright
     vanes), the red-dot sight, the pistol grip and trigger guard, the skeletal stock and butt. Mid grey with lighter
     edges so it stands off the dark slate."""
     p = _pen(img)
-    L = _local(c, yaw)
+    L = _local(c, yaw, roll)                  # `roll`: tumbling through the air (Sam's note 50: flat, it read as a line)
     body, edge, dark = (118, 122, 130), (176, 180, 186), (40, 42, 46)
     k = cam.project(L(0, 0, 0))[1]
     def flat(pts, col, y=0.03, lw=1.8):
