@@ -43,7 +43,7 @@ FLAT = S.FLAT
 NAME = 'prepper-minister'
 HANDLE = '@TheTikTokPM'                     # the TikTokPM frame from the final Cry Minister (name and description only)
 DESCRIPTION = ''                            # Sam, 24 Oct: the TikTok description comes later
-HOOK = ('Andy asks the UK to stockpile', {'y': 880})   # Sam, 24 Oct (finish.py adds it with the CranbriJoos sign-off)
+HOOK = ('Andy asks the UK to stockpile', {'y': 470})   # Sam, 25 Oct: above Andy's head, not over him   # Sam, 24 Oct (finish.py adds it with the CranbriJoos sign-off)
 # Each line: its recording (source/audio/prepper/), where its speech starts in the film (`at`), and its subtitles as
 # (time in the recording, chunk): two to five words, each up on its first word; the punchline on its own.
 LINES = [
@@ -52,7 +52,7 @@ LINES = [
     dict(n=2, who='Andy', audio='prepper/line-02-no-biggie', at=2.35, text='So, no biggie.',
          chunks=[(0.51, 'So,'), (1.5, 'no biggie.')]),
     dict(n=3, who='Andy', audio='prepper/line-03-stockpile', at=4.45, text='But you need to stockpile, now.',
-         chunks=[(0.45, 'But you need to stockpile,'), (2.08, 'now.')]),
+         chunks=[(0.45, 'But you need'), (1.0, 'to stockpile,'), (2.08, 'now.')]),   # Sam, 25 Oct: split (too small)
     dict(n=4, who='Andy', audio='prepper/line-04-i-mean', at=7.05, text='I mean, like, right now.',
          chunks=[(0.39, 'I mean,'), (1.01, 'like,'), (1.71, 'right now.')]),
     dict(n=5, who='Andy', audio='prepper/line-05-beans-water-crossbow-minigun', at=9.55, off=True,
@@ -604,9 +604,10 @@ def duck(j, k):
 def machete_up(j, k=1.0, t=0.0, pole='out'):
     """The machete raised in his right fist, ready (k 0 down at his side .. 1 up by his shoulder), a small shake."""
     sh = 0.0 if k < 1 else 6 * math.sin(t * 9.0)
-    V.arm_to(j, 'R', (150 + 10 * k, 330 - 230 * k + sh, 60 + 130 * k), pole, 'fist')   # elbow in (note 43)
-    up_ = (0.3 + 0.2 * k, -1.0, 0.25 - 0.1 * k)                   # blade up, tipped out and a little forward (his
-    j['props'] = j.get('props', []) + [C.machete('R', aim3=up_)]   # own frame: it turns with him, note 45)
+    # Sam, 25 Oct: it read as hooked under his armpit: the fist now out in front of his chest, the blade up before him
+    V.arm_to(j, 'R', (150 - 110 * k, 330 + 40 * k + sh, 60 + 280 * k), pole, 'fist')
+    up_ = (0.3 - 0.3 * k, -1.0, 0.25 - 0.1 * k)                   # Sam, 25 Oct: upright before him, low (it hit his face) (his own frame:
+    j['props'] = j.get('props', []) + [C.machete('R', aim3=up_)]   # it turns with him, note 45)
     j['grip'] = set(j.get('grip', set())) | {'R'}
     return j
 
@@ -979,8 +980,9 @@ def wes10(t):
     # falls first), then swinging onto D
     aim = -9.0 if t < 46.45 else -9.0 + 18.0 * ease((t - 46.45) / 0.3)   # (facing 258: square on, his back hid the
     #                                                   whole gun from this camera; a touch less shows the barrels)
-    j = C.minigun_hip(sp, (aim, 4.0), spin=(t - FIRE10) * 6.0 if t >= FIRE10 else 0.0,
-                      flash=(1.0 if f % 2 == 0 else 0.6) if firing else 0.0, belt_to=belt, rec=rec, seed=f)
+    # Sam, 25 Oct: the fire clipped through the island: the barrels raised (pitch 4 to 16 degrees)
+    j = C.minigun_hip(sp, (aim, 16.0), spin=(t - FIRE10) * 6.0 if t >= FIRE10 else 0.0,
+                      flash=0.0, belt_to=belt, rec=rec, seed=f)
     return sp, j, x, z, 258.0, None, rec
 
 
@@ -1856,6 +1858,15 @@ def masked(im, cam, fx, xz, draw):
     return r
 
 
+def alexa12_at(u):
+    """Shot 12: the Alexa's remains getting up where they lay on the worktop, hopping down, scuttling at Wes."""
+    # along the worktop (on the floor the island hid it from the camera all shot), stopping short of Wes
+    (bx, by, bz), _ = ALEXA_BALL.at(T['s12'] - 0.01)
+    k = ease((u - 1.5) / 8.5)
+    p = (bx + (-3.45 - bx) * k, 0.92, bz)
+    return p, (90.0 if 1.5 < u < 10.0 else math.degrees(math.atan2(WES12[0] - p[0], WES12[1] - p[2])))
+
+
 def actors(t, cam, fx):
     """Everyone and everything that moves, as actors for the set's painter (plan point, radius, draw)."""
     s = shot_of(t)
@@ -1904,14 +1915,13 @@ def actors(t, cam, fx):
         out.append(dict(at=(ax_, az_), r=0.3, draw=lambda im: fx.__setitem__('andy', (masked(im, cam, fx, (ax_, az_), lambda l: put(
             l, cam, sp2, ax_, az_, fac2, j2, t)), rec2))))
         # the Alexa's remains, up on rod legs, scuttling at Wes with a kitchen knife
-        (bx, by, bz), _ = ALEXA_BALL.at(T['s12'] - 0.01)
-        k = ease((u - 1.5) / 8.5)
-        ax2, az2 = bx + (WES12[0] - 0.35 - bx) * k, bz + (WES12[1] + 0.25 - bz) * k
-        face = math.degrees(math.atan2(WES12[0] - ax2, WES12[1] - az2))
-        if u < 1.2:
-            out.append(dict(at=(bx, bz), r=0.06, draw=lambda im: X.alexa_walker(im, cam, (bx, 0.0, bz), t, face, knife=u > 0.8)))
-        else:
-            out.append(dict(at=(ax2, az2), r=0.06, draw=lambda im: X.alexa_walker(im, cam, (ax2, 0.0, az2), t, face)))
+        # Sam, 25 Oct: it never showed (it stood on the floor behind the units): it gets up where it lay on the worktop
+        # (seen as the shot opens), hops down to the floor and scuttles at Wes (seen again as the camera comes round)
+        # (seen as the shot opens), hops down to the floor and scuttles at Wes (seen again as the camera comes round);
+        # up on the worktop it is drawn with the effects (the painter put it behind the units, as in shot 6)
+    # Sam, 25 Oct: the Alexa in one place all film: on the worktop in shot 5 (its remains after shot 6: effects)
+    if s == 's5':
+        out.append(dict(at=(ALEXA[0], 4.7), r=0.06, draw=lambda im: X.alexa(im, cam, ALEXA)))
     if s in ('s9', 's10', 's11', 's12') and t >= FLING9[1]:      # things left where they fell (they stay)
         (bx, _, bz), byaw, _r = xbow9_at(t)
         out.append(dict(at=(bx, bz), r=0.2, draw=lambda im: X.crossbow3(im, cam, (bx, 0.0, bz), byaw)))
@@ -1939,13 +1949,16 @@ def actors(t, cam, fx):
         for name, piece in HEADS.items():
             if t >= piece.t0:
                 hp = piece.at(t)
+                if hp[0][1] > 0.8:                   # up on the island (or in the air): drawn with the effects, Sam
+                    continue                         # 25 Oct (the painter sorted it against the island as it orbited)
                 out.append(dict(at=(hp[0][0], hp[0][2]), r=0.15, draw=lambda im, piece=piece: flying_head(im, cam, t, piece)))
     return out
 
 
 def _heads():
     out = {}
-    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (-0.6, 3.2, -1.6)), ('4', BLOWN['4'], (1.9, 3.0, 0.4))):
+    # Sam, 25 Oct: head 5 landed inside the island: now thrown clear of it
+    for name, u0, v in (('1', HEAD1, (1.4, 2.4, -0.4)), ('5', BLOWN5, (0.6, 3.2, 0.15)), ('4', BLOWN['4'], (1.9, 3.0, 0.4))):
         p, sp = robot_pose(name, T['s12'] + u0 - 0.01)
         J, _ = R.skeleton(p)
         out[name] = X.Piece(tuple(J['head']), v, T['s12'] + u0, r=0.15, e=0.3, spin=9, box=(-5.55, -0.05, 0.05, 5.35),
@@ -2132,14 +2145,15 @@ def effects(img, cam, t, fx):
             rng = np.random.default_rng(f)
             if we and we[1].get('muzzle'):                 # tracers out through the window at the robots
                 mx, my = we[1]['muzzle']
-                if f % 2 == 0:                             # a big lumpy muzzle flash every other frame (note 36)
+                if False:                                  # Sam, 25 Oct: the flash clipped through the island (the gun
+                    # is hidden behind it from this camera), so no muzzle flash here; the room still strobes
                     C.muzzle_flash(B.Pen(img, FLAT), (mx, my), (-0.97, 0.12), 48, seed=f)
                 w = PL.OPENINGS['kitchen window']
                 for k in range(3):
                     tgt = (-6.3, rng.uniform(1.0, 2.3), rng.uniform(w['span'][0] + 0.2, w['span'][1] - 0.2))
                     if cam.depth(tgt) > 0.2:
                         (hx, hy), _ = cam.project(tgt)
-                        a0 = rng.uniform(0.2, 0.6)
+                        a0 = rng.uniform(0.62, 0.8)   # Sam, 25 Oct: they started low, through the island
                         B.Pen(img, FLAT).line([(mx + (hx - mx) * a0, my + (hy - my) * a0),
                                                (mx + (hx - mx) * (a0 + 0.3), my + (hy - my) * (a0 + 0.3))], (255, 236, 150), 2.6)
             for name in ('C', 'D'):                        # sparks off the robots as the rounds strike
@@ -2238,6 +2252,19 @@ def effects(img, cam, t, fx):
         for tb, at, n, seed in BURNS:                             # and burns there for a few seconds
             X.flames(D(at), cam, t, tb, at, n, seed)
         X.bolt(D(BOLT6_STUCK[0]), cam, *BOLT6_STUCK)  # shot 6's bolt, still in the splashback
+        for name, piece in HEADS.items():               # heads up on the island or in the air (Sam, 25 Oct)
+            if t >= piece.t0 and piece.at(t)[0][1] > 0.8:
+                hp = piece.at(t)[0]
+                flying_head(D(hp), cam, t, piece)
+        ap, af = alexa12_at(U12(t))                     # the Alexa's remains on the worktop (Sam, 25 Oct)
+        X.alexa_walker(D(ap), cam, ap, t, af, knife=U12(t) > 0.8)
+        D.finish()
+    if s in ('s9', 's10', 's11'):                       # the Alexa's remains and the bolt, where shot 6 left them
+        D = Behind(img, cam, fx.get('masks', []))
+        (rx, ry, rz), _ = ALEXA_BALL.at(T['s12'] - 0.01)
+        rp = (rx, ry - 0.045 * X.ALEXA_K, rz)
+        X.alexa(D(rp), cam, rp, light=False)
+        X.bolt(D(BOLT6_STUCK[0]), cam, *BOLT6_STUCK)
         D.finish()
 
 
