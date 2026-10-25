@@ -273,6 +273,18 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 22 | 6 | end | The arrow needs to be sticking out of the wall | done: `BOLT6_STUCK`: through the Alexa, nearly level into the splashback; also drawn in shot 12 |
 | 23 | | | Sounds: robot walk, crockery, robot explosion. A small crockery slice only when crockery is hit, one per impact, in frame | done: `SLICES` in prepper.py; my addition, a dish rack on the sink run (`X.CROCK_AT`) smashed by robot 4's blast, one crockery sound, `crockery_check`; footsteps for robot 1, robot 5 and robot A; explosions for robots 4 and 5 |
 | 24 | | | Hook Text: "Andy asks the UK to stockpile" | done: `HOOK` |
+| 25 | 1-4, 7 |  | Andy's front-on sitting pose looks squat on the sofa rather than sat down | open (Sam, 25 Oct, notes on the first animatic) |
+| 26 | all |  | Andy's sleeves: the wrists look embedded in the sleeve instead of coming out of it | open (Sam, 25 Oct, notes on the first animatic) |
+| 27 | 1-7 |  | The crossbow on the table doesn't read as a crossbow: show its distinctive features (limbs, string, stock, grip, rail) | open (Sam, 25 Oct, notes on the first animatic) |
+| 28 | 9 |  | The robot coming in from the left must take a swipe (or attempt one) at Andy before it is taken down; it is slightly out of frame | open (Sam, 25 Oct, notes on the first animatic) |
+| 29 | 10 |  | The two robots outside the window just appear: they must walk, slide or sidle into view | open (Sam, 25 Oct, notes on the first animatic) |
+| 30 | 11 |  | Beans throw: hold on the robot who is hit a second longer and give it a dent where the tin lands; Andy throws from the other side of the kitchen island (where he is at the start of shot 12) | open (Sam, 25 Oct, notes on the first animatic) |
+| 31 | 1-4, 7 |  | The black object on the table in front of the sofa is unclear: make it clearer | open (Sam, 25 Oct, notes on the first animatic) |
+| 32 | 1-4, 7 |  | Give Andy a steaming cup of coffee on a coaster on the table | open (Sam, 25 Oct, notes on the first animatic) |
+| 33 | 9 | ~40.3 | The word 'you' in 'you pussy' is cut off | open (Sam, 25 Oct, notes on the first animatic) |
+| 34 | 8 |  | The robot hit by the crossbow bolt just vanishes: it collapses against the wall and stays in frame | open (Sam, 25 Oct, notes on the first animatic) |
+| 35 | 8 |  | Door opening: speed it up once the camera gets there; it lingers a beat too long | open (Sam, 25 Oct, notes on the first animatic) |
+| 36 | 10 |  | Streeting's first minigun burst and the window shattering need proper effects; snarl face to camera, eyes to the left, then he spins and fires | open (Sam, 25 Oct, notes on the first animatic) |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
 happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned
