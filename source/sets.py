@@ -19,6 +19,8 @@ backed through a door frame the audit had never heard of). Built once here, from
                                   and THING as audit Things: audit.py adds them to every frame by itself (rule 12);
                                   a film lists only what to leave out: SET_EXCLUDE = [(name pattern, why)]
   portal_faults(film)             each opening on screen in each shot must show something, never one flat colour
+                                  (people in front of it left out); PORTAL_OK = [(opening, t0, t1, why)] for a
+                                  view that is meant to be plain (an open door leaf filling the doorway)
 
     python3 source/sets.py FILM sketch OUT.jpg [SHOT ...]   each shot's camera on the plain set (portals working)
 """
@@ -38,6 +40,7 @@ from ed import INK               # noqa: E402
 FLAT = B.Cam(1.0, 540, 960)
 WALL_LOOK = dict(floor=(196, 186, 168), wall=(232, 226, 214), ceiling=(246, 244, 238), thing=(170, 140, 110))
 OUTSIDE_LOOK = dict(sky=(172, 200, 226), ground=(104, 150, 72))
+FLAT_SHARE = 0.7              # an opening whose view (people in front of it left out) is this much one colour is flat
 
 
 # ------------------------------------------------------------------------------------------------ the camera
@@ -486,10 +489,19 @@ def portal_faults(film, per_shot=2):
         for k in range(per_shot):
             t = s0 + (s1 - s0) * (k + 0.5) / per_shot
             cam = film.cam_for(t)
-            if not hasattr(cam, 'clip'):
-                return [f'portal (rule 2): not checked: cam_for(t) is not a sets.Cam']
-            im = None
-            for space, name, poly, d in portals(cam, P):     # only what is really seen through each opening
+            if hasattr(cam, 'clip'):
+                seen_through = portals(cam, P)                # only what is really seen through each opening
+            else:                                             # a flat film: each opening straight through project()
+                import audit as A
+                seen_through = []
+                for name in P.openings:
+                    pr = A._project(film, cam, np.array(opening_quad(P, name), float))
+                    if pr is not None and (np.asarray(pr[2]) > 0.2).all():
+                        lo, hi = P.sides(name)
+                        seen_through.append((hi or lo or 'outside' if lo and hi else 'outside', name,
+                                             list(zip(np.asarray(pr[0]).tolist(), np.asarray(pr[1]).tolist())), 1))
+            im, figs = None, None
+            for space, name, poly, d in seen_through:
                 q = np.array(poly, float)
                 c = q.mean(0)
                 q = c + (q - c) * 0.7                          # inset: the frame and reveals are not the view
@@ -502,15 +514,25 @@ def portal_faults(film, per_shot=2):
                 mask = Image.new('L', (1080, 1920), 0)
                 ImageDraw.Draw(mask).polygon([tuple(p) for p in q.tolist()], fill=255)
                 m = np.asarray(mask)[y0:y1, x0:x1] > 0
+                if figs is None and hasattr(film, 'scene'):      # people and robots standing in front of the opening
+                    import viewchecks                            # are not the view through it: left out
+                    figs = np.zeros((1920, 1080), bool)
+                    for th in film.scene(t):
+                        if th.kind != 'set' and any(s_.part in ('body', 'head') for s_ in th.solids):
+                            figs |= viewchecks._silhouette(film, cam, th, (1080, 1920), grow=1.6)
+                if figs is not None:
+                    m = m & ~figs[y0:y1, x0:x1]
                 px = im[y0:y1, x0:x1][m]
                 if len(px) < 100:
                     continue
                 med = np.median(px, 0)
                 spread = np.abs(px - med).sum(1)
-                lk = dict(OUTSIDE_LOOK if space == 'outside' else {}, **P.looks.get(space, {}))
+                lk = dict(OUTSIDE_LOOK if space == 'outside' else WALL_LOOK, **P.looks.get(space, {}))
                 own = any(np.abs(med - np.asarray(c)).sum() <= 24 for k, c in lk.items()   # its own wall or sky seen
                           if k in ('wall', 'floor', 'sky', 'ground'))                       # square on is fine
-                if (spread > 24).mean() < 0.02 and not own and (shot, name) not in seen:
+                ok = any(n_ == name and (a_ is None or t >= a_) and (b_ is None or t <= b_)
+                         for n_, a_, b_, *_ in getattr(film, 'PORTAL_OK', ()))       # listed, with its reason
+                if (spread <= 24).mean() >= FLAT_SHARE and not own and not ok and (shot, name) not in seen:
                     seen.add((shot, name))
                     out.append(f'portal (rule 2): {t:.2f} s ({shot}): the {name} shows one flat colour '
                                f'{tuple(int(v) for v in np.median(px, 0))}: draw the {space} beyond it (sets.house)')

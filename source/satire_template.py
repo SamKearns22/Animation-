@@ -161,7 +161,12 @@ def background(img, cam):
     p = B.Pen(img, cam)
     box = lambda x0, y0, x1, y1, f, sd: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, sd), f, (24, 20, 22), 3)
     box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
-    box(110, 470, 430, 840, (150, 190, 214), 2)
+    box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
+    box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
+    for wx in (150, 290):                                                # fill (rule 2): the building opposite,
+        box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
+    box(110, 800, 430, 840, (176, 174, 168), 7)
+    box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
     box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
     box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)          # the table A thumps
 

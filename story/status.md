@@ -505,6 +505,26 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
       effects behind them (17); readability sheet (18);
   11. kit catalogue thumbnail sheet (`guides/kit-catalogue.md`, rule 28).
   Not until a film needs it: people lying flat drawn with volume (Poker Mon note 80).
+- 25 Oct: **3-11 done** (one chat, Opus; each tested on Prepper Minister, with planted copies of its old faults):
+  3. `source/plan.py` (rule 1: the film's `PLAN` checked, `plan.py FILM sketch` draws it) and `source/benchmark.py`
+     (rule 3: `BENCHMARK`, our picture beside the references, each item ticked); both in the template, Prepper filled in.
+  4. `source/sets.py`: the shared set code (Prepper's camera and shapes moved in, frames identical) with the portal
+     (`sets.house`: the real next room through every opening, clipped, room behind room) and `portal_faults`.
+  5. `sets.solids`: every wall (cut round its openings, pieces by an opening named as its frame), door leaf
+     (`door_angles(t)`) and THING goes into the audit by itself; films list only `SET_EXCLUDE`.
+  6. `source/kitchecks.py`: hands on what they touch and seen (`TOUCHES`), props move only when held (`FREE_MOVES`),
+     resting hands 3 cm clear, head/body facing and held-over-back, marks on real surfaces, one sound per hit in
+     frame. Prepper's own facing/marks/crockery checks removed. Poker Mon keeps its three (it has no `scene(t)`).
+  7. Pre-flight refuses to start on a blank brief-checklist row or no "Composition sheet sent:" line in the notes;
+     fails a shot missing anyone in `SHOT_CAST`. Quick videos skip the every-film rules.
+  8. `source/report.py`: pre-flight and the audit print a short summary; the full list goes to a file.
+  9. `film_engine.render` stamps the film time and shot on every `--small` or `--span` render.
+  10. `source/viewchecks.py`: held props turned through every view (20), effect shapes (15), direction across a cut
+      (16), effects hidden behind figures (17), the readability sheet (18).
+  11. `source/catalogue.py`: the kit catalogue's thumbnail sheet (`python3 source/catalogue.py OUT.jpg`, about 30 s).
+  New faults the tools found in Prepper Minister: notes 65-73 in its notes file, not fixed (Sam to decide). Prepper's
+  next pre-flight will refuse until its brief checklist is ticked and the composition sheet line is written.
+  NEXT: nothing left on this list (people lying flat waits for a film that needs it).
 
 ## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.

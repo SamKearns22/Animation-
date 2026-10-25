@@ -6,16 +6,20 @@ symptoms ("hands don't go through signs"), the checks only tested what we had al
 built separately, "detailed enough" had no measure, stills can't show movement, nobody compared the script with the
 recordings, and fixes stayed in one film's file. These rules are written as causes, so they apply to any film.
 Rules marked [tool] need a tool that does not exist yet (see "Build list" in `story/status.md`); until it exists, do the
-check by hand and say so.
+check by hand and say so. (25 Oct: every [tool] in rules 1-31 is built; the tools are named in each rule.)
 
 1. **Draw the world once, in a plan.** Before any shot, write one plan in metres per film: every place (square, room,
    corridor), where each door and opening joins them, where each camera stands, which way each person faces. Every shot
-   reads from that plan. Keep it in the film's notes file.
+   reads from that plan. Keep it in the film's notes file. [tool: the film's `PLAN`, checked by `source/plan.py`
+   (pre-flight); `python3 source/plan.py FILM sketch OUT.jpg` draws it]
 2. **See-through gaps are drawn from the neighbouring space.** A doorway or window shows the real next room, its lighting,
-   floor and colours (from the plan), never a flat colour. [tool: a "portal" in the sets code]
+   floor and colours (from the plan), never a flat colour. [tool: `sets.house` draws it, the real next room clipped
+   to each opening; `sets.portal_faults` (pre-flight) fails an opening showing one flat colour]
 3. **Reference benchmark before building any place.** List the 8-10 things that make it recognisable (landmarks, ground,
    kerbs, traffic, sky, clutter, scale). Put our first picture beside Sam's reference on one sheet and tick each item; build
    whatever is missing before Sam sees it. No references yet: stop and ask. Never draw from memory (the lion had a hole).
+   [tool: the film's `BENCHMARK`; `python3 source/benchmark.py FILM OUT.jpg` makes the sheet; pre-flight fails a blank
+   item, a missing reference or fewer than 8 items]
 4. **Every set has layers and life.** Foreground, middle, background; a textured ground; something moving or lived-in.
    A flat empty area fails.
 5. **One automatic collision test.** Every person and prop gets a simple solid shape; test every frame, including the area
@@ -37,6 +41,8 @@ check by hand and say so.
     beats and give each its own minimum hold time (about 0.3 s per readable stage) and camera distance; no diagonal cameras
     unless the models hold up.
 11. **Show one rough composition sheet before building:** the 3-4 key shots, so Sam approves layout and joke first.
+    (`sets.house` with the plain painter draws any plan's rooms and things as blocks for it; pre-flight refuses to run
+    until the notes say "Composition sheet sent: DATE, FILE", rule 14)
 
 ## Rules 12-31 (approved by Sam, 25 Oct, after Prepper Minister)
 Why: Prepper Minister took 64 notes and 25% of a week; about 45 notes were mechanical. Several broke rules we already
@@ -46,26 +52,35 @@ had, because a check was copied per film (and wasn't), only looked at what the f
 **Checks**
 12. **Checks run on everything by default.** Every person, prop, wall, door frame and piece of furniture in the set is
     a solid in the collision audit, given automatically by the set builder; a film lists only what to leave out, each
-    with a reason, never what to include. (Prepper: the audit never saw a wall, note 47.) [tool]
+    with a reason, never what to include. (Prepper: the audit never saw a wall, note 47.) [tool: `sets.solids`, added
+    to every frame by `audit.py` from the film's `PLAN`; `SET_EXCLUDE = [(name, why)]`; door leaves at `door_angles(t)`]
 13. **Every check lives in the shared kit and pre-flight runs it on every film;** never copy a check from a film file.
     Move in: contact and hands-seen and resting-hand clearance (Poker Mon), head-and-body facing, marks on real
-    surfaces, one sound per hit in frame (Prepper). (The bean tin, note 60: Poker Mon's contact check never copied.) [tool]
+    surfaces, one sound per hit in frame (Prepper). (The bean tin, note 60: Poker Mon's contact check never copied.)
+    [tool: `source/kitchecks.py`: `TOUCHES`, `FREE_MOVES`, resting hands (inside the audit), facing (pre-flight's
+    drawing pass), `all_marks()`, `SOUND_SOURCES`]
 14. **Pre-flight refuses to run** while the brief checklist has a blank "done?" row, or before the composition sheet
-    (rule 11) has been sent. [tool]
+    (rule 11) has been sent. [tool: `preflight.gates`; and a shot missing anyone in `SHOT_CAST` fails]
 15. **Effect shapes are checked:** each effect is listed with its shape; a star, a regular spike or a motion line
-    fails (the off-style list, `guides/satire.md`). (Prepper's star flashes, note 20.) [tool]
+    fails (the off-style list, `guides/satire.md`). (Prepper's star flashes, note 20.) [tool: `viewchecks.shape_faults`
+    on the film's `EFFECTS`]
 16. **Direction holds across a cut:** anything moving keeps its screen direction and its side of a person across a
-    cut unless the plan says it swaps. (The plasma through Wes's head, note 57.) [tool]
-17. **Every figure in front of an effect hides it** (robots and creatures too, not only people). (Note 13.) [tool]
+    cut unless the plan says it swaps. (The plasma through Wes's head, note 57.) [tool: `viewchecks.direction_faults`
+    on `movers(t)`; `DIRECTION_SWAPS`]
+17. **Every figure in front of an effect hides it** (robots and creatures too, not only people). (Note 13.) [tool:
+    `viewchecks.hide_faults` on `effect_points(t)` and `EFFECT_SWITCH`]
 18. **Readability sheet:** every prop a joke depends on, at phone size, with its height on screen; under about 40 px
     (of 1920) it is made bigger or brought nearer before Sam sees it. (Crossbow, Alexa, coaster, sparks: notes 2, 27,
-    41, 46.) [tool]
-19. **Checks print a short summary** (counts and the first few faults); the full list goes to a file. [tool]
+    41, 46.) [tool: `viewchecks.readability_faults` on `JOKE_PROPS`; the sheet: `python3 source/viewchecks.py FILM
+    SHEET.jpg`]
+19. **Checks print a short summary** (counts and the first few faults); the full list goes to a file. [tool:
+    `source/report.py`; pre-flight writes `OUT_DIR/NAME-preflight.txt`, the audit `review/FILM-audit.txt`]
 
 **Building**
 20. **Held things aim in 3D with the holder's body**, never at a fixed screen angle; a prop that draws its own fists
     still counts as held. The prop test turns each person through every view and fails a prop drawn across their
-    back. (Machete, minigun, crossbow: notes 11, 12, 16, 45, 48.)
+    back. (Machete, minigun, crossbow: notes 11, 12, 16, 45, 48.) [tool: `viewchecks.turn_faults`, on pre-flight's
+    drawing pass]
 21. **A limb pointing at the lens is drawn foreshortened** (wider as it nears us, the sole or palm facing us), drawn
     over the body. (Wes's kick, note 42; the reach, note 39.)
 22. **My set dressing is shown on the cast or composition sheet,** kept clear of every spot where action happens, and
@@ -83,11 +98,12 @@ had, because a check was copied per film (and wasn't), only looked at what the f
 27. **A bleep: ask whether the word was said or a gap was left,** at recording; then place the bleep from the sound
     itself (where the words and gaps are), never from the script. (Notes 33 and 54.)
 28. **Reuse first:** check `guides/kit-catalogue.md`; every new set, person, prop or effect built for a film is added
-    to it when the film's building stage ends.
+    to it when the film's building stage ends (`source/catalogue.py`'s list too: `python3 source/catalogue.py OUT.jpg`
+    draws the lot on one sheet).
 
 **Notes and review**
 29. **Every review copy (clip, animatic) shows the film time and the shot number in a corner,** so Sam's times point
-    straight at the frame. [tool]
+    straight at the frame. [tool: `film_engine.render` stamps every `--small` or `--span` render]
 30. **The notes table stays short:** one line of what was done per note, no "Was:" text (git keeps the history). Label
     each note "new kind" or "seen before"; a "seen before" note means a check is missing: add it.
 31. **Clips, renders, filing and sending stay on Sonnet;** Opus only for planning, new builds and deciding fixes.

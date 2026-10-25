@@ -111,14 +111,14 @@ def cast_faults(film, roster):
     {shot: [name or pattern]}, against the audit's roster of who is on screen)."""
     want = getattr(film, 'SHOT_CAST', None)
     if want is None:
-        return ['SHOT_CAST missing: list who the brief puts in each shot ({shot: [names]}); pre-flight checks each is '
-                'on screen there (CLAUDE.md: no animatic while a shot is missing anyone)']
+        return ['SHOT CAST: SHOT_CAST missing: list who the brief puts in each shot ({shot: [names]}); pre-flight '
+                'checks each is on screen there (CLAUDE.md: no animatic while a shot is missing anyone)']
     out = []
     for shot, names in want.items():
         seen = roster.get(shot, set())
         for n in names:
             if not any(fnmatch.fnmatchcase(x, n) for x in seen):
-                out.append(f'shot {shot}: {n} is never on screen (the brief puts them in it; SHOT_CAST)')
+                out.append(f'SHOT CAST: shot {shot}: {n} is never on screen (the brief puts them in it; SHOT_CAST)')
     return out
 
 

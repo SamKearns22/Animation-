@@ -69,7 +69,9 @@ def turn_faults(poses, tested=None):
     B.SS = 1
     for where, name, sp, j, t in poses:
         key = _prop_key(name, j, where)
-        if key in tested or not j.get('props'):
+        held = any(getattr(d, 'held', False) or getattr(d, 'own_fists', False) for d in j.get('props', [])) or \
+            bool(j.get('grip'))
+        if key in tested or not held:                     # only things held (a drawn hand or leg is not)
             continue
         tested.add(key)
         bare = dict(j)                                    # the same person with each prop drawn as nothing, so the
@@ -97,9 +99,9 @@ def turn_faults(poses, tested=None):
                 out.append(f'PROP TURN: {where}: {name} turned to {yaw} degrees: what they hold sits behind them '
                            f'(drawn at a fixed screen angle, not aimed with the body?)')
                 break
-            if math.cos(math.radians(yaw)) < -0.8:        # from behind: nothing held across the back or shoulders
-                torso = np.zeros_like(prop)
-                torso[int(Y - 10 * s):int(Y + 440 * s), :] = True
+            if math.cos(math.radians(yaw)) < -0.8:        # from behind: nothing held across the back (the torso,
+                torso = np.zeros_like(prop)               # shoulders to hips; past its sides a held thing may show)
+                torso[int(Y - 10 * s):int(Y + 440 * s), int(X - 110 * s):int(X + 110 * s)] = True
                 body = (Bm[..., 3] > 0) & torso
                 if body.sum() and (prop & body).sum() > max(300, 0.01 * body.sum()):
                     out.append(f'PROP TURN: {where}: {name} seen from behind ({yaw} degrees): what they hold is drawn '
@@ -271,8 +273,8 @@ def direction_faults(film):
 
 
 # ------------------------------------------------------------------------------------------------ rule 17
-def _silhouette(film, cam, th, size):
-    """A figure's solids drawn as a mask on screen (each capsule as a run of discs)."""
+def _silhouette(film, cam, th, size, grow=1.0):
+    """A figure's solids drawn as a mask on screen (each capsule as a run of discs, `grow` times their size)."""
     import audit as A
     m = Image.new('L', size, 0)
     d = ImageDraw.Draw(m)
@@ -286,7 +288,7 @@ def _silhouette(film, cam, th, size):
         top = A._project(film, cam, pts + np.array([0.0, s.r, 0.0]))
         for x, y, z, ty in zip(pr[0], pr[1], pr[2], top[1]):
             if z > 0.2:
-                r = abs(y - ty)
+                r = abs(y - ty) * grow + (grow - 1.0) * 8
                 d.ellipse((x - r, y - r, x + r, y + r), fill=255)
     return np.asarray(m) > 0
 

@@ -141,6 +141,7 @@ SHOT_CAST = {   # rule 14: who the brief puts in each shot (pre-flight checks ea
     's12': ['Andy', 'Wes', 'robot 1', 'robot 2', 'robot 3', 'robot 4', 'robot 5', 'robot 6', 'Alexa'],
 }
 PLAN = PL                                           # rule 1: the world in metres (plan.py checks it)
+PORTAL_OK = [('kitchen door', T['s11'], T['s12'], 'its open leaf fills the doorway behind robot 5 (shot 11)')]
 SET_EXCLUDE = [   # rule 12: the set's solids the collision audit leaves out (everything else in the plan is in)
     ('ALEXA', 'the film draws it, shatters it (shot 6) and walks its remains (shot 12) itself (prepper_fx)'),
 ]

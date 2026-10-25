@@ -1,12 +1,14 @@
 # Kit catalogue: everything already built, to reuse before building (film-quality rule 28, Sam 25 Oct)
 
 Check here first when planning a film. Each line: what it is, its file, and how far it reuses. A film that builds a new
-set, person, prop or effect adds it here when its building stage ends. A thumbnail sheet of the lot is still to be
-built (`story/status.md`, Build list); until then, render a part's own test sheet to see it.
+set, person, prop or effect adds it here when its building stage ends, and to `source/catalogue.py`'s list (one line:
+section, name, file, how to draw it). See the lot on one sheet: `python3 source/catalogue.py OUT.jpg [Sets People
+Creatures Props Effects]` (about 30 s; each tile from its film's own picture, cast sheet or prop code).
 
 ## Sets (each built once in 3D, metres, y up; every shot is a camera on it)
 | set | file | see it | notes |
 |---|---|---|---|
+| Any plan's rooms (shared): floors, walls with real openings, the next room through every doorway and window (portal), every thing as a block | `source/sets.py` (the camera and shapes every set uses) | `python3 source/sets.py FILM sketch OUT.jpg` | blocks out a new film's rooms from its `PLAN` for the composition sheet; hands walls, frames, doors and things to the audit |
 | London house: living room (green carpet, panelled walls, sofa, TV, drinks cabinet, armchair, grand window), kitchen (island, slate worktops, sink run, window), hallway, gardens | `source/prepper_set.py` (plan: `prepper_plan.py`) | `python3 source/prepper_set.py test OUT.jpg` | walls with real openings, doors that swing, glass that breaks, marks that stay; walls and furniture as collision solids |
 | Trafalgar Square (column, lions, fountains, gallery steps), TSG van, interrogation room, custody corridor | `source/power_crime_set.py` | its film's `stills` | crowd seating, banners |
 | Casino parlour (oval poker table, panelled walls, chandeliers, armchairs) | `source/poker_mon_room.py` | its film's `stills` | table things from one `THINGS` plan |
@@ -53,4 +55,6 @@ built (`story/status.md`, Build list); until then, render a part's own test shee
 
 ## Movement and checks (the kit tools)
 `views.py`, `moves.py`, `stage.py`, `filmkit.py`, `perform.py`, `audit.py`, `clipcheck.py`, `voices.py`: see
-`guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`.
+`guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`. The film-quality checks (25 Oct):
+`plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),
+`report.py` (19), `catalogue.py` (28); pre-flight runs them all.

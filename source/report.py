@@ -19,6 +19,9 @@ def kind(line):
     s = line.strip()
     if re.match(r'^-?\d+(\.\d+)?\s*s\b', s):
         return 'drawing'
+    for start, k in (('caption "', 'caption'), ('shot ', 'shot length')):
+        if s.startswith(start):
+            return k
     m = re.match(r'^([A-Za-z][\w ()/-]{0,40}?):\s*(?:([A-Z][A-Z ]{2,30}):)?', s)
     if not m:
         return 'other'

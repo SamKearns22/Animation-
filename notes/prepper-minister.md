@@ -26,6 +26,9 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 - **Next:** Sam's notes on the clips (Opus medium), or his yes to the check sheet, then the animatic with the Hook
   Text and sign-off (note 64): `python3 source/prepper.py final CLEAN.mp4 --small` (about 2 min), then
   `python3 source/finish.py CLEAN.mp4 OUT-vertical.mp4 "Andy asks the UK to stockpile"` (routine: Sonnet, new chat).
+- **New since (25 Oct, the Build list tools):** pre-flight now refuses to run until the brief checklist below is ticked
+  (49 blank rows) and a "Composition sheet sent: DATE, FILE" line is in this file (rule 14); tick each row against the
+  film first. The new checks found notes 65-73 (table below): not fixed, for Sam to decide.
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail, ticked before the first animatic
 | # | from the brief (word for word where it matters) | done? |
@@ -213,6 +216,15 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 62 | 11 |  | Hold a beat as robot 5 stares down at itself, with a sound for the look down (from Sam's robot sounds if none fits) | done: robot 5 stares down at the dent 1.2 s (51.35-52.55), then snaps back up; Sam's robot-scan sound on the look down (the same one as robot A's head turn in shot 8) |
 | 63 | 12 |  | Delete the dead robots in the garden (out of frame), so robots 7 and 8 can advance menacingly with weapons drawn | done: C and D's bodies cut from shot 12 (loss: they no longer lie outside the window there); robots 7 and 8 advance to just outside the window, cannons raised on Wes |
 | 64 | all |  | The next animatic has the Hook Text and the sign-off | in hand: the next animatic goes through finish.py (Hook Text and sign-off) |
+| 65 | 9 | 29.2-30.1, 36.8-38.3, 42.4 | Found by the new checks (25 Oct, rule 12: the door leaf now in the audit): Wes stands inside the open living-room door (head 14 cm into it, then hand and shin 5 cm); edge-on from shot 9's camera, so hard to see | open: new kind (the door was never tested); Sam to decide |
+| 66 | 9 | 42.9 | Found by the new checks: Wes's right arm passes 5 cm into the wide opening's wall as he runs for the kitchen | open: seen before (note 43, the elbow in the doorway); Sam to decide |
+| 67 | 11 | 50.2-51.3 | Found by the new checks: robot 5 walks through the hallway stairs (10 cm), its path starting inside them | open: new kind; Sam to decide |
+| 68 | 12 | 53.0-54.2 | Found by the new checks: for the first 1.2 s the Alexa's remains are drawn at the crossbow's spot in the living room, then jump to the kitchen (a name reused later in `actors()`; one-line fix) | open: new kind; Sam to decide |
+| 69 | 12 | 54.2-54.6 | Found by the new checks: the Alexa's remains stand 10 cm inside the north units (where the ball fell) | open: new kind; Sam to decide |
+| 70 | 12 | 55.0-56.5, 59.3-61.3 | Found by the new checks: robots 5 and 6 rest a hand 0-2 cm from the door frame and wall (keep 3 cm clear) | open: seen before (Poker Mon note 62); Sam to decide |
+| 71 | 10-12 | from 46.2 | Found by the new checks: robot D's plasma scorch from shot 10 hangs in mid-air in the wide opening (the old marks check only looked at shot 12) | open: seen before (note 18); Sam to decide |
+| 72 | 12 | 58.0, 62.25 | Found by the new checks: plasma bolts behind Wes and behind Andy are drawn over them (the plasma is not cut away by `Behind`) | open: seen before (note 13); Sam to decide |
+| 73 | 9 | 30.0 | Found by the shared facing check (rule 13; Prepper's own only looked at shots 6 and 12): as Andy spins round, seen from behind, the crossbow he holds is drawn over his back | open: seen before (notes 11, 48); Sam to decide |
 
 Sam, 24 Oct, on the shot 12 clip: "really good first pass ... Excellent work though". On the cast sheet: "Wes is good,
 happy with your recommendations for Andy": the cast is approved, and Andy's fear per shot is settled as planned

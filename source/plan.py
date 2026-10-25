@@ -8,7 +8,8 @@ this is the same plan as a shared format, so every film has one and pre-flight c
 A film gives PLAN: a module or a dict with (plan view: x east, z north, y up; metres; facings in degrees, 0 = north,
 90 = east):
   ROOMS     {name: (x0, z0, x1, z1)}                       every place (square, room, corridor)
-  OPENINGS  {name: dict(wall=('x', value) or ('z', value), span=(a0, a1), sill=, head=[, hinge=, swings=room][, to=])}
+  OPENINGS  {name: dict(wall=('x', value) or ('z', value), span=(a0, a1), sill=, head=
+              [, hinge=, swings=room][, to=])}
               every door, window and gap; `to` names what an opening onto the outside shows (rule 2: never a flat
               colour), e.g. to='back garden'
   THINGS    {name: dict(at=(x, z), size=(along x, along z, height: as it stands), facing=deg[, y=height off the floor][, on=thing]

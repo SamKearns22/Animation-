@@ -128,11 +128,21 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   (`screen_hand_target.clamped`, `CONTACT_FAULTS`). The chips once slid to him with no hand on them.
 - **Loose things behave as pieces:** stacks topple when pushed, a pile is dragged as a pile (the back pieces lag and
   spread), a glass tips before it spills, thrown things bounce and stay where they land.
-- **Checks (run by preflight through the film's `audits()`):** a contact check (every touch reaches what it touches;
-  an object moves only while held) and a hands-seen check (a hand on something is drawn over it, never under the
-  table), and a resting hand keeps about 3 cm clear of everything else on the table (Poker Mon, note 62). These live in
-  `source/poker_mon.py` (`contact_check`, `hands_check`, `clearance_check`) until they move into the shared kit
-  (film-quality rule 13, build list); until then, copy all three into every film.
+- **Checks (shared kit, `source/kitchecks.py`, run by pre-flight on every film; film-quality rule 13, 25 Oct):** a
+  hand on what it touches every frame of the touch, and seen (nothing between it and the lens): list each touch in
+  `TOUCHES = [(hand, thing, from, to, why)]`; a prop that moves has a hand on it unless `FREE_MOVES` says it flies,
+  falls or slides; a resting hand keeps 3 cm clear of everything it is not meant to touch (Poker Mon, note 62). They
+  run on the film's `scene(t)`, so a prop or hand a joke depends on must be in it (Prepper's tin and Andy's hand in
+  shot 11). Never copy a check from a film file (Poker Mon's own `contact_check`, `hands_check`, `clearance_check` are
+  for Poker Mon only: it has no `scene(t)`).
+- **The plan and the set (film-quality rules 1, 2, 3, 12; 25 Oct):** the film's `PLAN` (rooms, openings, things,
+  people, cameras in metres; `source/plan.py` checks it and `python3 source/plan.py FILM sketch OUT.jpg` draws it) is
+  the one source for every shot. The shared set code (`source/sets.py`: the camera, the house style's shapes) draws
+  each room with the real next room through every doorway and window (`sets.house`, the portal; an opening onto the
+  outside names what it shows, `to=`), and hands every wall, door frame, door leaf (`door_angles(t)`) and thing in
+  the plan to the collision audit by itself: list only what to leave out, `SET_EXCLUDE = [(name, why)]`. Before
+  building any place, `BENCHMARK` lists the 8-10 things that make it recognisable and how ours has each
+  (`python3 source/benchmark.py FILM OUT.jpg`: our picture beside Sam's references).
 
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
@@ -170,8 +180,17 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   with its reason. It tests every frame and two moments between, reports only what is on screen, and lists who is in
   each shot. Pre-flight runs it and calls it a FAULT if a film has no `scene(t)` (Power Crime Action never had the
   clipping check, and nobody knew). Run it alone: `python3 source/audit.py FILM [--shots a,b] [--sheet OUT.jpg]`
-  (about 4 minutes for a 48 s film with a 2,000-person crowd). It does not judge drawing order (someone drawn over a
+  (about 4 minutes for a 48 s film with a 2,000-person crowd; Prepper Minister 15 s). It prints a short summary; the
+  whole report goes to `review/FILM-audit.txt` (rule 19). It does not judge drawing order (someone drawn over a
   door that should hide him): that is `layers(t)` below.
+- **What the camera shows: `source/viewchecks.py`** (film-quality rules 15-18 and 20, 25 Oct; pre-flight runs it):
+  every held prop turned through every view (never across the back, never left behind them); every effect listed in
+  `EFFECTS` with its shape and drawn alone (a 'burst' must be lumpy, never a star or regular spikes; no motion lines);
+  `movers(t)` (bolts, plasma, thrown things) keep their screen direction and their side of each person across every
+  cut (a new shot, or the camera jumping, zooming or turning in a frame) unless `DIRECTION_SWAPS` says so; with
+  `effect_points(t)` and `EFFECT_SWITCH`, an effect behind any figure (robots too) is never drawn over it; every prop a
+  joke needs (`JOKE_PROPS`) at least 40 px of 1920 on screen (`python3 source/viewchecks.py FILM SHEET.jpg`: each at
+  phone size).
 - **Script and mouths: `python3 source/voices.py --film FILM`** (rule 7, 21 Oct; about 25 s, pre-flight runs it).
   Each recording is cut into phrases and its syllables counted from the sound; the script's words are laid over the
   phrases, and a phrase the script doesn't cover (a sentence said but never written down) is flagged. The subtitles
@@ -242,9 +261,13 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,
 stretching, frozen; actions, including elbows staying on their own side; eyelines; the title clear of everyone), and a
-contact sheet with the safe area, and the shared checks (housestyle, audit, clipcheck, hookcheck, musiccheck, linecheck,
-sizes, landmarks: see 'Getting it right first time'). Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/
-`ALLOWED`/`LINE_OK`) with its reason.
+contact sheet with the safe area, and the shared checks (housestyle, plan, benchmark, sets, audit with kitchecks,
+viewchecks, clipcheck, voices, hookcheck, musiccheck, linecheck, sizes, landmarks: see 'Getting it right first time').
+Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/`ALLOWED`/`LINE_OK`) with its reason. It REFUSES to start
+(rule 14) while the brief checklist in the film's notes has a blank "done?" row or the notes have no "Composition sheet
+sent: DATE, FILE" line, and fails a shot missing anyone in `SHOT_CAST`. It prints a short summary; every fault goes to
+`OUT_DIR/NAME-preflight.txt` (rule 19). Every `--small` or `--span` render has the film time and shot in its top-left
+corner (rule 29).
 It also prints **QUESTIONS FOR SAM** about the sound (deep wind rumble, dead silence, a jump in volume at a cut). They may
 be meant: put each to Sam with a recommended answer, and change nothing until he answers.
 
