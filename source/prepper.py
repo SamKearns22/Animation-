@@ -52,7 +52,7 @@ LINES = [
     dict(n=2, who='Andy', audio='prepper/line-02-no-biggie', at=2.35, text='So, no biggie.',
          chunks=[(0.51, 'So,'), (1.5, 'no biggie.')]),
     dict(n=3, who='Andy', audio='prepper/line-03-stockpile', at=4.45, text='But you need to stockpile, now.',
-         chunks=[(0.45, 'But you need to stockpile,'), (2.08, 'now.')]),
+         chunks=[(0.45, 'But you need'), (1.0, 'to stockpile,'), (2.08, 'now.')]),   # Sam, 25 Oct: split (too small)
     dict(n=4, who='Andy', audio='prepper/line-04-i-mean', at=7.05, text='I mean, like, right now.',
          chunks=[(0.39, 'I mean,'), (1.01, 'like,'), (1.71, 'right now.')]),
     dict(n=5, who='Andy', audio='prepper/line-05-beans-water-crossbow-minigun', at=9.55, off=True,
@@ -568,8 +568,8 @@ def machete_up(j, k=1.0, t=0.0, pole='out'):
     """The machete raised in his right fist, ready (k 0 down at his side .. 1 up by his shoulder), a small shake."""
     sh = 0.0 if k < 1 else 6 * math.sin(t * 9.0)
     # Sam, 25 Oct: it read as hooked under his armpit: the fist now out in front of his chest, the blade up before him
-    V.arm_to(j, 'R', (150 - 60 * k, 330 - 150 * k + sh, 60 + 260 * k), pole, 'fist')
-    up_ = (0.3 - 0.48 * k, -1.0, 0.25 + 0.2 * k)                   # blade up across his chest, clear of his arm and face (his own frame:
+    V.arm_to(j, 'R', (150 - 110 * k, 330 + 40 * k + sh, 60 + 280 * k), pole, 'fist')
+    up_ = (0.3 - 0.3 * k, -1.0, 0.25 - 0.1 * k)                   # Sam, 25 Oct: upright before him, low (it hit his face) (his own frame:
     j['props'] = j.get('props', []) + [C.machete('R', aim3=up_)]   # it turns with him, note 45)
     j['grip'] = set(j.get('grip', set())) | {'R'}
     return j
