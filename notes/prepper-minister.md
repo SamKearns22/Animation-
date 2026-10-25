@@ -290,7 +290,7 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 38 | all |  | Right sleeve: the cuff detail looks detached compared with the left, in every shot | open |
 | 39 | 2 |  | Arm move: reaching forward to the camera, 'hey, here's an interesting fact for you' | open |
 | 40 | all |  | Subtitles must be centred (they drift a bit to the left) | open |
-| 41 | 1-4, 7 |  | No coaster under the mug, and no steam | open |
+| 41 | 1-4, 7 |  | No coaster shows under the mug and it isn't steaming (both asked for in note 32) | open |
 | 42 | 8 |  | First frame of Wes kicking the door: the kicking leg seems wrapped behind his body | open |
 | 43 | 8 |  | His elbow clips the side of the doorway as he steps forward | open |
 | 44 | 8 |  | No duck at the crossbow shot (clear line of sight): he glances that way, shocked | open |
@@ -309,7 +309,7 @@ see the hallway; he may change his mind on the furniture), so no photos for them
 | 57 | 10 |  | After the snarl the view changes and the blue bolt goes through Wes's head: not the path it had in the frame before | open |
 | 58 | 10 |  | He turns round completely to fire (now facing left, the gun clips through the table) | open |
 | 59 | 10 |  | During the snarl his eyes look the opposite way to the one we need | open |
-| 60 | 11 |  | The bean pick-up has many frame-to-frame inconsistencies: analyse | open |
+| 60 | 11 |  | The bean pick-up has many frame-to-frame inconsistencies: analyse. Sam's detail: there are beans; the beans disappear; a hand suddenly appears with no beans; then the hand is holding the beans. The hand must come in smoother and the tin must be one consistent object on screen; analyse why it happened | open |
 | 61 | 11 |  | Once the tin is gripped, hold a second more | open |
 | 62 | 11 |  | Hold a beat as robot 5 stares down at itself, with a sound for the look down (from Sam's robot sounds if none fits) | open |
 | 63 | 12 |  | Delete the dead robots in the garden (out of frame), so robots 7 and 8 can advance menacingly with weapons drawn | open |

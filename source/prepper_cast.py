@@ -105,7 +105,9 @@ def andy_shirt(p, view, sp):
     belt = sp.get('belt', TAN)
     l, r = _box(view, sp, bottom)
     if view == 'front':
-        p.poly([(-30, -4), (30, -4), (0, 58)], skin, INK, 2.0)
+        # Sam, 25 Oct: the V's top edge was inked across his neck like a necklace: only its two sides are inked
+        p.poly([(-30, -4), (30, -4), (0, 58)], skin, None)
+        p.line([(-30, -4), (0, 58), (30, -4)], INK, 2.0)
         for sg in (-1, 1):
             p.poly([(sg * 6, 56), (sg * 34, -8), (sg * 54, -4), (sg * 40, 30)], WHITE, INK, 2.0)       # collar points
         p.line([(0, 58), (0, bottom - 30)], WHITE_D, 2.0)
@@ -115,7 +117,8 @@ def andy_shirt(p, view, sp):
             p.line([(sg * 60, bottom - 60), (sg * 46, bottom - 26)], WHITE_D, 1.8)
     elif view == 'three':
         o = 0.32 * sp.get('shoulders', 150)
-        p.poly([(o - 26, -4), (o + 22, -4), (o - 2, 50)], skin, INK, 2.0)
+        p.poly([(o - 26, -4), (o + 22, -4), (o - 2, 50)], skin, None)
+        p.line([(o - 26, -4), (o - 2, 50), (o + 22, -4)], INK, 2.0)
         p.poly([(o - 4, 48), (o - 28, -8), (o - 46, -4), (o - 34, 26)], WHITE, INK, 2.0)
         p.poly([(o + 2, 48), (o + 20, -8), (o + 34, -4), (o + 26, 24)], WHITE, INK, 2.0)
         p.line([(o - 2, 50), (o + 2, bottom - 30)], WHITE_D, 2.0)
@@ -268,8 +271,10 @@ def _arm(p, j2, side, sp, shape=None):
         # rolled cuff sits over the join; the hand comes out of the skin, never out of cloth, even foreshortened.
         with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
             B.arm(p, sh, el, wr, sp['skin'], w=24)
+            # Sam's note 38 (25 Oct): the cuff looked detached (the sleeve tapered to about 19 at the elbow, under a
+            # 27-wide cuff over a 22-wide forearm). A wider sleeve ends about 24 wide, so the cuff sits flush on it
             mid = ((sh[0] + el[0]) / 2, (sh[1] + el[1]) / 2)
-            B.arm(p, sh, mid, el, sp.get('sleeve', WHITE))
+            B.arm(p, sh, mid, el, sp.get('sleeve', WHITE), w=34)
         fx, fy = wr[0] - el[0], wr[1] - el[1]
         fl = math.hypot(fx, fy)
         if fl < 18:                                          # pointing at us: the band lies across the upper arm's line
@@ -279,7 +284,7 @@ def _arm(p, j2, side, sp, shape=None):
         nx, ny = -dy, dx
         c0 = (el[0] - dx * 4, el[1] - dy * 4)
         c1 = (el[0] + dx * 16, el[1] + dy * 16)
-        hw0, hw1 = 27.0, 25.5
+        hw0, hw1 = 27.0, 26.0
         band = [(c0[0] + nx * hw0, c0[1] + ny * hw0), (c1[0] + nx * hw1, c1[1] + ny * hw1),
                 (c1[0] + dx * 3, c1[1] + dy * 3), (c1[0] - nx * hw1, c1[1] - ny * hw1),
                 (c0[0] - nx * hw0, c0[1] - ny * hw0), (c0[0] - dx * 2, c0[1] - dy * 2)]
@@ -462,18 +467,22 @@ def muzzle_flash(p, at, d, size, end_on=False, seed=0):
 MACHETE = 0.6 / M
 
 
-def machete(side='R', angle=None):
+def machete(side='R', aim3=None):
     """The oiled machete (ref machete): a long steel blade hooked at the tip, smeared dark with oil and a hard
-    highlight, a black handle with brass rivets in the fist."""
+    highlight, a black handle with brass rivets in the fist. `aim3`: where the blade points in the body's own 3D frame
+    (x across, y down, z forward), so it turns with him and shortens when it points at us or away (Sam's note 45,
+    25 Oct: it was a fixed angle on the screen, so when Wes turned it lay across his back). None: along the forearm."""
     def draw(p, j2):
         c, d, n = _one_hand(j2, side)
-        if angle is not None:
-            d = (math.cos(angle), math.sin(angle))
+        keep = 1.0
+        if aim3 is not None:
+            d, keep = _screen_dir(j2, aim3)
+        keep = max(keep, 0.3)
         nx, ny = -d[1], d[0]
         if ny > 0:
             nx, ny = -nx, -ny
         def P(u, v):
-            return (c[0] + d[0] * u + nx * v, c[1] + d[1] * u + ny * v)
+            return (c[0] + d[0] * u * keep + nx * v, c[1] + d[1] * u * keep + ny * v)
         L = MACHETE
         p.poly([P(-50, -14), P(30, -16), P(30, 16), P(-50, 14), P(-58, 0)], (24, 22, 24), INK, 2.0)       # handle
         for u in (-34, 0):

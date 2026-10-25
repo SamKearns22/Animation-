@@ -125,12 +125,20 @@ MUG, MUG_D, COFFEE, CORK = (196, 64, 52), (150, 44, 36), (92, 58, 34), (196, 160
 
 def coffee(img, cam, c, t, handle=-0.6):
     """Sam's note 32 (25 Oct): Andy's coffee on the table in front of the sofa, steaming: a round cork coaster
-    (100 mm), a brick-red mug (85 mm across, 95 mm tall) with its handle, dark coffee near the rim, and a few thin
+    (now square, 120 mm: note 41), a brick-red mug (85 mm across, 95 mm tall) with its handle, dark coffee near the rim, and a few thin
     pale wisps of steam rising and drifting (flat lines, no glow)."""
     if cam.depth(c) < 0.15:
         return
     p = _pen(img)
-    cam.poly(p, _ring(c, 0.05, c[1] + 0.004, 18), CORK, INK, 1.2)
+    # Sam's note 41 (25 Oct): the round coaster hid under the mug (7 mm showing each side), so it is a square cork one,
+    # 12 cm, turned a little, 6 mm thick with its edge drawn darker
+    def sq(y, h=0.06, a=0.35):
+        return [(c[0] + h * math.cos(a + k * math.pi / 2) - h * math.sin(a + k * math.pi / 2), y,
+                 c[2] + h * math.sin(a + k * math.pi / 2) + h * math.cos(a + k * math.pi / 2)) for k in range(4)]
+    lo, hi = sq(c[1]), sq(c[1] + 0.006)
+    for k in range(4):
+        cam.poly(p, [lo[k], lo[(k + 1) % 4], hi[(k + 1) % 4], hi[k]], tuple(int(v * 0.72) for v in CORK), INK, 1.2)
+    cam.poly(p, hi, CORK, INK, 1.4)
     m = (c[0], c[1] + 0.006, c[2])
     r, h = 0.0425, 0.095
     a = _facing_arc(cam, m)
@@ -156,12 +164,12 @@ def coffee(img, cam, c, t, handle=-0.6):
         pts = []
         for i in range(7):
             v = i / 6
-            y = top[1] + 0.01 + 0.16 * (u * 0.5 + v * 0.5)
+            y = top[1] + 0.01 + 0.2 * (u * 0.5 + v * 0.5)
             dx = 0.012 * math.sin(6.0 * v + ph * 4 + k) + (k - 1) * 0.014
             pts.append((top[0] + dx, y, top[2]))
         fade = math.sin(math.pi * u)
         if fade > 0.15:
-            cam.line(p, pts, (236, 236, 232), max(1.6, 0.007 * cam.project(top)[1] * fade))
+            cam.line(p, pts, (178, 184, 192), max(2.2, 0.009 * cam.project(top)[1] * fade))   # grey: the wall is white
 
 
 PLATE, PLATE_RIM, PLATE_D = (246, 246, 240), (64, 104, 176), (214, 216, 210)
@@ -580,9 +588,12 @@ def goop(p, cam, pc, t, at, X, Y, s, rng):
 
 
 # ------------------------------------------------------------------------------------------------ effects
-def sparks(img, cam, t, t0, at, seed, n=14, col='yellow', speed=3.0, life=0.35, dirn=None):
+def sparks(img, cam, t, t0, at, seed, n=14, col='yellow', speed=3.0, life=0.35, dirn=None, width=2.0):
     """A spray of sparks for about a third of a second: short hard streaks flying out and falling, each its own
-    speed, yellow-white (or the robots' blue)."""
+    speed, yellow-white (or the robots' blue). Sam's note 46 (25 Oct, for every robot): thick enough to read on a
+    phone (twice the old hairline), and every spray half as many again and living a little longer."""
+    n = int(round(n * 1.5))
+    life *= 1.3
     if not (t0 <= t <= t0 + life + 0.2):
         return
     rng = np.random.default_rng(seed)
@@ -601,8 +612,8 @@ def sparks(img, cam, t, t0, at, seed, n=14, col='yellow', speed=3.0, life=0.35, 
         a, b = P(max(0.0, u - 0.035)), P(u)
         if cam.depth(a) < 0.2 or cam.depth(b) < 0.2:
             continue
-        cam.line(p, [a, b], INK, 3.6)
-        cam.line(p, [a, b], c1 if i % 3 else c2, 2.2)
+        cam.line(p, [a, b], INK, 3.6 * width)
+        cam.line(p, [a, b], c1 if i % 3 else c2, 2.2 * width)
 
 
 def flash(img, cam, at, size, seed=0, col='yellow'):

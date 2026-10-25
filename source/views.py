@@ -585,8 +585,12 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands in front of him: hidden by his back (Sam)
     if seated:
         chair(p, view, j2, sp, under=True)
+    # A leg raised and kicked out in front (a front kick) is nearer than the jacket: drawn over the torso, never
+    # hidden behind it (Sam, 25 Oct: Prepper Minister's kick read as a leg wrapped behind his body)
+    raised = {sd for sd in 'LR' if depth['foot' + sd] > depth['hip' + sd] + 150 and j['foot' + sd][1] < ANKLE_Y - 150}
     for sd in hips_far:
-        leg(p, j, sd, view_deg, sp)
+        if sd not in raised:
+            leg(p, j, sd, view_deg, sp)
     for sd in 'LR':
         check_arm3(j, sd, f"{sp.get('name', 'someone')}'s {sd} arm")
     for sd in arms_far:
@@ -623,6 +627,9 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         torso_view(img, B.Pen(img, up), bent, view, seated)
     for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
+    for sd in hips_far:
+        if sd in raised:
+            leg(p, j, sd, view_deg, sp)
     for sd in arms_far:
         if sd not in behind:
             arm(p, j2, sd, sp)
