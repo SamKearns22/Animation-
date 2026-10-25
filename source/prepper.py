@@ -392,10 +392,11 @@ V.leg = _sofa_leg
 # ------------------------------------------------------------------------------------------------ Andy
 # Sam's note 37 (25 Oct): the wave only came up level with his chest. Now a real hello: the hand up beside his head,
 # palm to us, three flicks side to side, then down (the elbow out to the side, clear of the shoulder)
-WAVE = filmkit.Beats([(0.25, 'set-up', (150, 300, 60)), (0.55, 'raise', (215, -270, 70)),
-                      (0.72, 'flick', (275, -275, 60), 'fast'), (0.89, 'flick', (185, -275, 75), 'fast'),
+WAVE = filmkit.Beats([(0.25, 'set-up', (150, 300, 60)), (0.42, 'swing out', (300, 70, 150)), (0.58, 'raise', (215, -270, 70)),
+                      (0.74, 'flick', (275, -275, 60), 'fast'), (0.89, 'flick', (185, -275, 75), 'fast'),
                       (1.06, 'flick', (275, -275, 60), 'fast'), (1.23, 'flick', (200, -270, 75), 'fast'),
-                      (1.75, 'down', (150, 300, 60), 'slow')])
+                      (1.48, 'swing out', (300, 70, 150)), (1.8, 'down', (150, 300, 60), 'slow')])   # out wide each
+#                                                         way (a straight path folded the elbow shut by the shoulder)
 
 
 # (Sam, 25 Oct: pointed straight at the lens the forearm shrank to nothing and the hand floated off the sleeve: the
