@@ -545,6 +545,19 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   New faults the tools found in Prepper Minister: notes 65-73 in its notes file, not fixed (Sam to decide). Prepper's
   next pre-flight will refuse until its brief checklist is ticked and the composition sheet line is written.
   NEXT: nothing left on this list (people lying flat waits for a film that needs it).
+- 25 Oct: **12 built, waiting for Sam's look at the test sheet** (`python3 source/lying.py sheet OUT.jpg`, about
+  1 min; sent in chat, not on GitHub). `source/lying.py`: one 3D skeleton in metres traced through the set camera as
+  one body (one outline, lines only where a part lies over another or colours meet, one darker shadow tone, collar,
+  tie or bow, cuffs, jacket hem, belt with no jacket, shoe soles, the library face and back of head laid on the 3D
+  head, long hair spread on the floor face up, a flat contact shadow on floor and wall). Poses face_down, back, side
+  (curled), slump; `rest` puts the trunk, then each hand and foot, onto the floor (`contact_faults`: rests within
+  1.5 cm, nothing through it more than 0.5 cm); `solids` for the audit; `fall` hands moves.fall over at the hips'
+  landing (largest step 10.5 cm a frame, the audit flags 25 cm); `stand` draws anyone through a 3D camera: the flat
+  drawing with the real tilt (`views.person(tilt=...)`, unchanged pixels without it) up to 40 degrees, the 3D body
+  above. `python3 source/lying.py check`: all OK (3 people x 4 poses x 4 directions, both ways round).
+  Known limits: no animatic or clip yet (a fall seen in motion is the real test); a crane move across 40 degrees
+  would switch drawing (choose one per shot); 3D standing bodies are plainer than the flat ones (no lapels or pockets);
+  Poker Mon itself is not changed (done). NEXT: Sam's notes on the sheet; then merge into the main branch.
 
 ## Done (Sam, 25 Oct: posted or closed, no more work): "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.
