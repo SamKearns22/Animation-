@@ -43,13 +43,29 @@ CAST = {   # look and build per person (skin, hair, clothes, face); the cast she
     'B': dict(skin=B.OLIVE, hair='bob', hair_c=(150, 56, 40), jacket=(150, 60, 70), trousers=(50, 46, 50), outfit='blouse',
               jaw='soft', hw=64, hh=86, lashes=True),
 }
-XS = {'A': 340, 'B': 740}                         # where each stands (x across the frame)
 LOOKS_AT = {'A': 'B', 'B': 'A'}                   # who each person looks at (checked)
 LINES = [   # 'audio': 'NAME-1' uses source/audio/NAME-1.m4a and times the line to it
     dict(who='A', text='This is a template line.', start=0.3, end=2.4),
     dict(who='B', text='And this is the reply.', start=2.8, end=4.6),
 ]
 SHOTS = [('two', 0.0, 3.0), ('B', 3.0, 5.6)]       # (camera: two-shot or one person's close-up, start, end)
+# Rule 1 (plan.py): the world drawn once, in metres, before any shot: every place, every door and opening (and what
+# each shows: rule 2), every thing, where each person stands and faces, every camera. Every shot reads from it (XS
+# below comes from PEOPLE). `python3 source/plan.py NAME sketch OUT.jpg` draws it for Sam; pre-flight checks it.
+PLAN = dict(   # this template's film is flat: its plan is the strip of room the frame shows (about 2 m across)
+    CEIL=2.6,
+    ROOMS={'room': (-1.6, -3.6, 1.6, 2.0)},
+    OPENINGS={'window': dict(wall=('z', 2.0), span=(-0.82, -0.21), sill=1.07, head=1.8, to='the street')},
+    THINGS={'table': dict(at=(0.0, 0.65), size=(0.61, 0.7, 0.82), facing=0)},
+    PEOPLE={'A': dict(at=(-0.38, 0.0), facing=90, who='A'), 'B': dict(at=(0.38, 0.0), facing=270, who='B')},
+    CAMS={'two': dict(pos=(0.0, 1.0, -3.0), look=(0.0, 1.0, 0.0)), 'B': dict(pos=(0.38, 1.5, -1.2), look=(0.38, 1.5, 0.0))},
+    GROUPS={},                                      # rule 9: {group: dict(arriving=, stopped=, leaving=)}
+)
+# Rule 3 (benchmark.py): before building any place, the 8-10 things that make it recognisable, each with how ours has
+# it ('' = not built: pre-flight fails); refs in references/NAME/. No references yet: stop and ask Sam.
+BENCHMARK = [dict(place='room', refs=[], at=1.0, items=[('what makes it recognisable', '')])]
+# Rule 14 (preflight.py): who the brief puts in each shot; pre-flight refuses while any of them is never on screen there
+SHOT_CAST = {'two': ['A', 'B'], 'B': ['B']}
 DUR = 5.6
 # Any action as beats (set-up, action, contact, follow-through, settle); pace by ease: 'fast' into a hit, 'slow' out.
 # The value is A's near hand target in A's own units (x right, y down from the neck). Every frame is tested.
@@ -72,6 +88,8 @@ ALLOWED_POPS = []                                   # [(name, from, to, why)], e
 
 S, FY = 0.8, 1420                                 # people's scale, floor line
 NECK_Y = FY - F.SOLE_Y * S
+PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
+XS = {w: 540 + p['at'][0] / PX_M for w, p in PLAN['PEOPLE'].items()}   # where each stands, from the plan
 BLACK_AT = DUR
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
@@ -220,7 +238,6 @@ def checks():
 # camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
 # copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
 # long thing with .along).
-PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
 
 
 def project(cam, P):

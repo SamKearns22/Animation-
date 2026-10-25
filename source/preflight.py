@@ -77,6 +77,9 @@ def main():
     B.SS = 1
     import audit as collisions, clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
     shared += housestyle.faults(film, B)        # the template's house style is on, and each check has its inputs
+    import plan, benchmark
+    shared += plan.faults(film)                 # rule 1: one plan of the world in metres, joined up, a camera per shot
+    shared += benchmark.faults(film)            # rule 3: each place benchmarked against its references, all decided
     if hasattr(film, 'scene'):
         shared += collisions.check(film)        # rules 5 and 6: nothing passes through anything; nothing pops in
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT')):

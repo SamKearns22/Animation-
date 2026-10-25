@@ -30,9 +30,10 @@ OPENINGS = {
     'living door': dict(wall=('z', 5.4), span=(2.13, 2.97), sill=0.0, head=2.04, hinge=2.13, swings='living room',
                         note='hinged on the left (west); booted open, it swings left and bangs the wall beside the drinks cabinet'),
     'kitchen door': dict(wall=('z', 5.4), span=(-1.62, -0.78), sill=0.0, head=2.04, hinge=-0.78, swings='kitchen'),
-    'front door': dict(wall=('x', 6.0), span=(5.75, 6.65), sill=0.0, head=2.1),
-    'living window': dict(wall=('x', 6.0), span=(0.9, 4.5), sill=0.3, head=2.5, note='grand window, floor to near ceiling'),
-    'kitchen window': dict(wall=('x', -5.6), span=(1.5, 3.9), sill=0.95, head=2.4,
+    'front door': dict(wall=('x', 6.0), span=(5.75, 6.65), sill=0.0, head=2.1, to='the front path (kept shut)'),
+    'living window': dict(wall=('x', 6.0), span=(0.9, 4.5), sill=0.3, head=2.5, to='the back gardens',
+                          note='grand window, floor to near ceiling'),
+    'kitchen window': dict(wall=('x', -5.6), span=(1.5, 3.9), sill=0.95, head=2.4, to='the back gardens',
                            note='grand window over the sink run; the robots climb in over its sill'),
 }
 
@@ -64,7 +65,7 @@ THINGS = {
 
 # Where people stand (plan, metres) and which way they face (degrees; 0 = north, 90 = east, 180 = south, 270 = west).
 PEOPLE = {
-    'andy sofa (1-4, 7, start of 8)': dict(at=(3.0, 3.6), facing=180, who='Andy'),
+    'andy sofa (1-4, 7, start of 8)': dict(at=(3.0, 3.6), facing=180, who='Andy', on='sofa'),
     'andy kitchen (6)': dict(at=(-1.3, 1.95), facing=300, who='Andy'),
     'andy aims (end of 8, 9)': dict(at=(2.95, 2.95), facing=355, who='Andy'),
     'wes enters (8)': dict(at=(2.55, 5.2), facing=180, who='Wes'),

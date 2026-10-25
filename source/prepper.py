@@ -132,6 +132,31 @@ ALLOWED_POPS = [       # (thing, from, to, why)
     ('robot C', 44.1, 44.4, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
     ('robot D', 44.25, 44.55, 'walks in along the outside of the kitchen wall: the wall hides it until the window'),
 ]
+PLAN = PL                                           # rule 1: the world in metres (plan.py checks it)
+BENCHMARK = [   # rule 3 (benchmark.py): what makes each place recognisable, and how ours has it
+    dict(place='kitchen', refs=['kitchen-1-wood-island.jpg', 'kitchen-2-grey-island.jpg'], at=13.6, items=[
+        ('an island in the middle, stools along it', 'done: island_parts, two grey stools (stool_parts)'),
+        ('dark slate-like worktops', 'done: slate-effect tops, veined (run_parts)'),
+        ('shaker cupboard doors and drawers', 'done: shaker fronts, brass bar handles'),
+        ('pendant lights over the island', 'done: three brass globe pendants on black cords'),
+        ('an American fridge and built-in ovens', 'done: tall_units_parts'),
+        ('tiled splashback, wall cupboards', 'done: splashback and wall cupboards on the north run'),
+        ('a grand window at the back (brief)', 'done: the kitchen window over the sink run'),
+        ('herringbone wood floor', 'left out: large grey stone tiles, the plan\'s choice for a slate kitchen'),
+        ('wood beams on the ceiling', 'left out: a plain white ceiling with downlights (refined, contemporary)'),
+    ]),
+    dict(place='living room', refs=['living-1.jpg', 'living-2.jpg'], at=29.0, items=[
+        ('cream modern sofa', 'done: sofa_parts, three seat cushions'),
+        ('panelled walls', 'done: panel mouldings below and above a dado rail'),
+        ('tall glazing', 'done: the grand living window (east wall)'),
+        ('a TV over a low wood unit', 'done: 65-inch TV on the media unit'),
+        ('an armchair (brief: plush old-world)', 'done: burgundy velvet wingback'),
+        ('a coffee table in front of the sofa', 'done: an oval walnut table on a pedestal'),
+        ('a big painting', 'done: the Lake District watercolour (brief), right of the door'),
+        ('marble fireplace', 'left out: not in the brief; the drinks cabinet holds that wall'),
+        ('fitted carpet (brief: forest green)', 'done: forest green, two-tone tufts'),
+    ]),
+]
 # ====================================================================================================================
 
 
