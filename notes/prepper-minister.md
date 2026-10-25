@@ -4,7 +4,18 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (handover, 25 Oct, notes 37-64 chat: all applied, clips sent, waiting for Sam)
+## Where things stand (25 Oct, morning: final render for the 9am post)
+- **Animatic 4** (Hook Text + sign-off) sent; Sam's notes on it, all applied: Alexa kept the same size; the Alexa now on
+  the worktop in shot 5 and its remains (with the bolt) in shots 9-11; in shot 12 the remains get up with the knife on
+  the worktop and scuttle along it towards Wes (seen as the shot opens and as the camera comes round; on the floor the
+  island hid it); the Hook Text moved above Andy's head (`HOOK` y 470, pass `--y 470` to finish.py); Wes's machete
+  held out in front of his chest; shot 10: the minigun raised (pitch 16) and its muzzle flash removed (the gun is
+  hidden behind the island from that camera; the room strobe stays, the same as shot 12's).
+- **Sam said skip the animatic and go:** full render `final source/data/prepper-clean-final.mp4`, then
+  `finish.py ... animations/prepper-minister-vertical.mp4 "Andy asks the UK to stockpile" --y 470`.
+- Small renders (`--small`, 540x960) must be scaled to 1080x1920 before finish.py (the sign-off is full size).
+
+## Earlier: where things stood (handover, 25 Oct, notes 37-64 chat: all applied, clips sent, waiting for Sam)
 - **Done:** Sam's notes 37-64 on animatic 3 all applied (table below says what and why), plus his mid-round notes
   (kick straight at the lens, no double foot, no knee bits, legs match; hand detached in shot 2; no neck line; hand
   behind back; blade blob; sparks for all robots). Five clips sent (scratch files): wave + reach, kick + glance,
