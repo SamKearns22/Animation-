@@ -77,6 +77,7 @@ class SceneChecks:
         self.found = {}                    # (kind, names) -> [(t, text)]
         self.last_props = {}               # prop name -> (frame, pos)
         self.hand_track = {}               # (thing, part) -> [frame, pos, still since]
+        self._boxes = None
 
     def _fault(self, kind, names, t, text):
         self.found.setdefault((kind, names), []).append((t, text))
@@ -91,7 +92,19 @@ class SceneChecks:
                 return True
         return False
 
+    def _near(self, things, lo, hi, pad):
+        """The things whose boxes come within `pad` of the box lo-hi (one array test, not one per thing)."""
+        if self._boxes is None:
+            names = list(things)
+            self._boxes = (names, np.array([things[n].lo for n in names]), np.array([things[n].hi for n in names]))
+        names, L, H = self._boxes
+        if not names:
+            return []
+        m = np.all((L < hi + pad) & (H > lo - pad), axis=1)
+        return [names[k] for k in np.nonzero(m)[0]]
+
     def frame(self, i, t, shot, things, cam):
+        self._boxes = None
         # touches: the hand on the thing, and seen
         for hand, target, t0, t1, why, *_ in self.touches:
             if not _in(t, t0, t1):
@@ -122,15 +135,17 @@ class SceneChecks:
                 continue
             if any(fnmatch.fnmatchcase(n, f[0]) and _in(t, f[1], f[2]) for f in self.free):
                 continue
-            near = [o for o, oth in things.items() if o != n and any(_gap(s, th) <= CLEAR for s in _hands(oth))]
+            near = [o for o in self._near(things, th.lo, th.hi, CLEAR) if o != n and
+                    any(_gap(s, th) <= CLEAR for s in _hands(things[o]))]
             if not near:
                 self._fault('held', (n,), t, f'{t:.2f} s ({shot}): {n} moves with no hand on it (list it in '
                                              f'FREE_MOVES if it flies, falls or slides)')
         # resting: a hand held still keeps clear of what it is not meant to touch
         for n, th in things.items():
-            if not _figure(th):
+            hands = _hands(th)
+            if not hands:
                 continue
-            for s in _hands(th):
+            for s in hands:
                 key = (n, s.part)
                 c = (s.a + s.b) / 2
                 tr = self.hand_track.get(key)
@@ -141,10 +156,12 @@ class SceneChecks:
                 self.hand_track[key] = [i, c, since]
                 if t - since < REST:
                     continue
-                for o, oth in things.items():
+                import clipcheck as CC
+                slo, shi = CC.bounds(s)
+                for o in self._near(things, slo, shi, CLEAR):
                     if o == n:
                         continue
-                    g = _gap(s, oth)
+                    g = _gap(s, things[o])
                     if -0.02 < g < CLEAR and not self._allowed(n, s.part, o, t):
                         self._fault('resting', (f'{n}.{s.part}', o), t,
                                     f'{t:.2f} s ({shot}): {n}\'s resting {s.part} sits {max(g, 0) * 100:.0f} cm from '
