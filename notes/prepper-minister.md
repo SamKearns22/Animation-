@@ -4,7 +4,7 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 `python3 source/prepper_plan.py sketch OUT.jpg`). References: `references/prepper-minister/`. Sound effects Sam sent:
 `source/audio/prepper/sfx-*.mp3`.
 
-## Where things stand (25 Oct, morning: final render for the 9am post)
+## Where things stand (25 Oct: DONE. Final posted: `animations/prepper-minister-vertical.mp4`, Story: `animations/prepper-minister-story.mp4`. No more work, Sam)
 - **Animatic 4** (Hook Text + sign-off) sent; Sam's notes on it, all applied: Alexa kept the same size; the Alexa now on
   the worktop in shot 5 and its remains (with the bolt) in shots 9-11; in shot 12 the remains get up with the knife on
   the worktop and scuttle along it towards Wes (seen as the shot opens and as the camera comes round; on the floor the

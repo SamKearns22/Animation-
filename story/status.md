@@ -2,7 +2,7 @@
 
 Read this first in any new session, after CLAUDE.md.
 
-## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
 - 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
   `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.
 - 25 Oct (notes 37-64 chat, Opus): all of Sam's notes on animatic 3 applied, five clips sent; the walls added to the
@@ -35,7 +35,7 @@ Read this first in any new session, after CLAUDE.md.
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
-## In progress: "Shocking Behaviour" (TikTok satire, Reform UK HQ undercover; `source/shocking.py`, `source/shocking_cast.py`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Shocking Behaviour" (TikTok satire, Reform UK HQ undercover; `source/shocking.py`, `source/shocking_cast.py`)
 - Brief from Sam, 18 Oct: ITV's undercover journalist walks into Millbank Tower (lapel camera, ITV + REC); slam cut to
   Farage, Jenrick, Tice and Braverman doing the "Messy" trend dance (Sofia Richie's moves) under pop lights; the
   journalist's South Park shock in the doorway; Jenrick trips over his own feet into a desk (mug, coffee, papers,
@@ -127,7 +127,7 @@ Read this first in any new session, after CLAUDE.md.
   real footage starts with a frame-by-frame study, the source camera and 3D geometry (`guides/best-practice.md` 1.3).
 - Not checked by ear (no hearing here): the robot voice, the jet hisses' level, the crowd gasp at the cut to the roof.
 
-## In progress: "A Professional" (TikTok, Steve Backshall stranded on Neptune, `prompts/a-professional.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "A Professional" (TikTok, Steve Backshall stranded on Neptune, `prompts/a-professional.md`)
 - Stage 2 done 5 Oct 2026: model sheet and storyboard sent to Sam for approval (`python3 source/professional.py model
   OUT.jpg` / `sheet OUT.jpg`; `times` prints the timeline). Next: Sam's notes, then pre-flight and the animatic.
 - All code in `source/professional.py`; shared series tools started in `source/series.py` (person with legs always,
@@ -288,7 +288,7 @@ Read this first in any new session, after CLAUDE.md.
 - To post: cover around 0:04.5 (the cashier mid-smile, flag cups behind her). Avoid #oct7, #october7, #911,
   #pagerattack, #pagers and #explosion: they give away the ending and draw the strictest moderation.
 
-## In progress: TikTok versions of the rap battles
+## Done (Sam, 25 Oct: posted or closed, no more work): TikTok versions of the rap battles
 - **Andy film (`animations/andrew.mp4`, 239 s):** to be split into three TikTok parts titled OXFORD UNI RAP BATTLE -
   PART 1 / 2 / 3, cut at 8.1-85.9 s, 86.6-162.5 s and 162.5-240.4 s (the intro line is dropped; each part opens
   on a line almost at once). Prompt: `prompts/oxford-rap-battle-tiktok.md`.
@@ -298,7 +298,7 @@ Read this first in any new session, after CLAUDE.md.
   (first second), captions (700 px, centred) and UNINTELLIGIBLE flashes fresh. Still needs: a start/end time range,
   part titles, 24 fps output and per-part audio.
 
-## In progress: "The Patriots" (TikTok, file name pee-pee)
+## Done (Sam, 25 Oct: posted or closed, no more work): "The Patriots" (TikTok, file name pee-pee)
 - TV street interview at a Dover border blockade; masked protester, reporter with a BBQ mic flag; his arm badges
   "PP" and a felt-tip doodle (the other PP). Hope Again look, vertical. All code in `source/peepee.py`
   (`animatic OUT.mp4` about 3 min; `final OUT.mp4`). Timeline and captions: `LINES` / `SHOTS` at the top.
@@ -316,7 +316,7 @@ Read this first in any new session, after CLAUDE.md.
   cores. Captions use the script words; check against the recordings if Sam changed any. Cover: around 0:00.5
   (him mid-line, thumb out) with THE PATRIOTS as cover text.
 
-## In progress: "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
 - Conference speech that turns into the "King in the North" scene, 11 shots, 43 s, Listening & Learning look,
   made vertical. Pictures: `source/burnham.py` (cast, armour, shots, storyboard sheet). Timeline, sound and
   render: `source/burnham_film.py` (`animatic OUT.mp4` about 8 min at half size; `final OUT.mp4`).
@@ -427,7 +427,7 @@ Read this first in any new session, after CLAUDE.md.
   doesn't" / "like any of my deals."; a fifth slate jab on the new "Because"); final re-rendered 144 s and re-finished:
   3.0 MB, 26.4 s.
 
-## In progress: "Power Crime Action" (TikTok satire, a granny's placard at a Trafalgar Square protest vs. the Met; `notes/power-crime-action.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Power Crime Action" (TikTok satire, a granny's placard at a Trafalgar Square protest vs. the Met; `notes/power-crime-action.md`)
 - 20 Oct: brief copied into the notes as a checklist; six recordings filed (`source/audio/power-crime-1..6.m4a`,
   checked with voices.py: no duplicates, all fit); facts checked (the real placard wording, Met armed officers' kit);
   draft shot plan (about 43 s) and the kit parts to reuse written; questions and reference advice sent to Sam.
@@ -446,7 +446,7 @@ Read this first in any new session, after CLAUDE.md.
   now eases the bent hem over leans 12-20, for every film). Clips of the jab and the throw sent.
   NEXT (fresh chat, Sonnet): Sam's view of the clips; then the check sheet, a clear yes, the new animatic.
 
-## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
   written; questions sent to Sam. Next: Sam's answers, then the cast sheet (`source/poker_mon.py`), then an early
   quick animatic (motion-led film).
@@ -526,6 +526,6 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   next pre-flight will refuse until its brief checklist is ticked and the composition sheet line is written.
   NEXT: nothing left on this list (people lying flat waits for a film that needs it).
 
-## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.
 - 23 Oct: POSTED Thu 22 Oct 4:01pm. 20 h: 256 views, 6.5 s avg watch, 3.65% in full, 0 followers (`story/metrics.md`).
