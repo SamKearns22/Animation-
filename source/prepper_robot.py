@@ -410,7 +410,12 @@ def draw(img, cam, p, spec, t=0.0, tint=None):
     for part in sorted(ps, key=lambda q: -float(np.dot(q.c - np.asarray(cam.pos), np.asarray(cam.f)))):
         draw_part(pen, cam, part, L, tint)
         for h in holes:                                         # bullet holes stay where they hit
-            if h['part'] == part.name and t >= h['t']:
+            if h['part'] == part.name and t >= h['t'] and not h.get('dent'):
+                hole(pen, cam, part, h)
+    for h in holes:                                             # a dent last, so no plate in front ever hides it
+        if h.get('dent') and t >= h['t']:
+            part = next((q for q in ps if q.name == h['part']), None)
+            if part is not None:
                 hole(pen, cam, part, h)
     if spec.get('headless'):                                    # torn wiring from the neck
         for k, col in enumerate(WIRE):
@@ -449,7 +454,7 @@ def hole(pen, cam, part, h):
                        [c + n * 0.003 + (a * math.cos(q) * 0.8 + b * (math.sin(q) * 0.25 + 0.1)) * r
                         for q in np.linspace(0.85 * math.pi, 0.15 * math.pi, 7)])
         X, Y, D = project(cam, top)
-        pen.poly(list(zip(X, Y)), (70, 74, 82), None)
+        pen.poly(list(zip(X, Y)), (46, 50, 58), None)
         X, Y, D = project(cam, np.array([c + n * 0.004 - b * r * 0.45 - a * r * 0.4, c + n * 0.004 - b * r * 0.5 + a * r * 0.3]))
         pen.line(list(zip(X, Y)), (250, 252, 255), 2.0)
         return

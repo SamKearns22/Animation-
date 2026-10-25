@@ -838,7 +838,7 @@ TIN_REST = (-1.55, 5.15)                            # where it ends up on the fl
 def _tin_hit():
     p, _ = robot_pose('5', DENT11)
     J, fr = R.skeleton(p)
-    return tuple(J['chest'] + fr['chest'] @ np.array([0.0, 0.05, 0.16]))
+    return tuple(J['chest'] + fr['chest'] @ np.array([-0.12, -0.03, 0.16]))   # off the centre ridge, so it shows
 
 
 def andy_arm11(img, cam, t):
@@ -991,7 +991,7 @@ def aim_cannon(p, name, u, height=1.62):
 def dent5(sp, t):
     """Sam's note 30: the tin leaves a dent in robot 5's chest, there from the hit until it is blown apart."""
     if t >= DENT11:
-        sp['holes'].append(dict(part='chest', i=DENT5_I, t=DENT11, dent=True, r=0.055))
+        sp['holes'].append(dict(part='chest', i=DENT5_I, t=DENT11, dent=True, r=0.07))
 
 
 def andy_holes(name, sp):
