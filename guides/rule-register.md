@@ -56,4 +56,4 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | P5 | A repeated note means the first fix failed | CLAUDE.md | Prepper notes 32/41, 33/54 | by hand |
 | P6 | One handover section; old ones archived | CLAUDE.md | Prepper review | by hand |
 
-Planned, not built (build only when a film needs it): people lying flat look like paper cut-outs (Poker Mon note 80).
+| L1 | People lying down or seen from a high camera have real depth (one 3D body, one outline, a flat shadow side, resting on the floor) | satire.md (One set) | Poker Mon note 80 | `lying.py` `contact_faults` and `check` (rests, nothing through the floor, the fall's hand-over); the look by hand on `lying.py sheet` |

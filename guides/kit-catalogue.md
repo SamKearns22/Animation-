@@ -27,6 +27,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Poker players, dealer, guards, onlookers | `source/poker_mon_cast.py` | |
 | Press secretary and reporters (crowd from behind) | `source/press_secretary.py` | `reporter` |
 | Matt Damon | `source/roadster.py` | |
+| Anyone lying down (face down, on the back, curled on the side, slumped against a wall) or seen from a high camera | `source/lying.py` | 3D body from the person's own design; `lie`, `draw`, `fall`, `stand`; sheet: `python3 source/lying.py sheet OUT.jpg` |
 
 ## Creatures and machines
 | what | file | notes |

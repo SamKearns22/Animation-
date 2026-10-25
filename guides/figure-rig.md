@@ -80,7 +80,8 @@ never in one frame.
   at elbow height when seated; a hospital trolley's mattress at the staff's waist; a counter at hip height.
 - **Lying down:** a person lying on a bed is drawn side-on on their back, face up, resting on the mattress, the
   face in profile (forehead, brow, nose, mouth, chin), never a front view turned on its side. A mask or a blanket
-  is fitted to the profile.
+  is fitted to the profile. On a floor or table, or from any high camera, use `source/lying.py` (a 3D body that rests
+  on the surface, checked: `contact_faults`).
 - **Seated at a desk** (the protester): thighs under the desk, forearms over it, hands on the keyboard.
 
 ## 5. Sets and props: one plan per place (see best-practice.md, 1.3)

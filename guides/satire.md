@@ -120,6 +120,12 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   close-ups, reverse angles and the wide shot all draw the same room, furniture, people and props. Never redraw a
   place or its props by hand for one shot (Poker Mon's close shots had a few hand-placed props while the wide shot
   had its own list, so the table emptied between cuts).
+- **People lying down, or seen from a high camera: `source/lying.py`** (Build list item 12, 25 Oct; Poker Mon note 80):
+  never a flat drawing laid on its side. `lie(sp, pose, x, z, yaw)` gives a body resting on the floor or table (poses
+  'face_down', 'back', 'side', 'slump'), `draw` draws it through the set's camera as one body (one outline, a flat
+  shadow side, the person's own face and clothes, a contact shadow); `fall` hands moves.fall over to it without a pop;
+  `stand` draws anyone through a 3D camera at its real tilt (3D above 40 degrees). `contact_faults` and `solids` go in
+  the film's checks and `scene(t)`.
 - **Everything on a table, desk or shelf comes from one written plan** (Poker Mon's `THINGS`): kind, place in metres
   from the table's centre, its own details. A busy scene is busy in every shot: a high-stakes table has tall chip
   stacks at every place, bets in the middle, cards, drinks, napkins, ashtrays.
