@@ -1,4 +1,4 @@
-# Quality rules for every film (approved by Sam, 21 Oct, after Power Crime Action)
+# Quality rules for every film (rules 1-11 approved by Sam 21 Oct, after Power Crime Action; 12-31 on 25 Oct, after Prepper Minister)
 
 Why: Power Crime Action took 51 notes from Sam; about 30 were things a check could have caught (things passing through each
 other, thin places, people popping in and out, script and mouth mistakes). The old rules failed because they were written as
@@ -37,6 +37,60 @@ check by hand and say so.
     beats and give each its own minimum hold time (about 0.3 s per readable stage) and camera distance; no diagonal cameras
     unless the models hold up.
 11. **Show one rough composition sheet before building:** the 3-4 key shots, so Sam approves layout and joke first.
+
+## Rules 12-31 (approved by Sam, 25 Oct, after Prepper Minister)
+Why: Prepper Minister took 64 notes and 25% of a week; about 45 notes were mechanical. Several broke rules we already
+had, because a check was copied per film (and wasn't), only looked at what the film handed it, or didn't exist.
+**Lesson: a rule only holds if a check enforces it.** Every rule is listed in `guides/rule-register.md` with its check.
+
+**Checks**
+12. **Checks run on everything by default.** Every person, prop, wall, door frame and piece of furniture in the set is
+    a solid in the collision audit, given automatically by the set builder; a film lists only what to leave out, each
+    with a reason, never what to include. (Prepper: the audit never saw a wall, note 47.) [tool]
+13. **Every check lives in the shared kit and pre-flight runs it on every film;** never copy a check from a film file.
+    Move in: contact and hands-seen and resting-hand clearance (Poker Mon), head-and-body facing, marks on real
+    surfaces, one sound per hit in frame (Prepper). (The bean tin, note 60: Poker Mon's contact check never copied.) [tool]
+14. **Pre-flight refuses to run** while the brief checklist has a blank "done?" row, or before the composition sheet
+    (rule 11) has been sent. [tool]
+15. **Effect shapes are checked:** each effect is listed with its shape; a star, a regular spike or a motion line
+    fails (the off-style list, `guides/satire.md`). (Prepper's star flashes, note 20.) [tool]
+16. **Direction holds across a cut:** anything moving keeps its screen direction and its side of a person across a
+    cut unless the plan says it swaps. (The plasma through Wes's head, note 57.) [tool]
+17. **Every figure in front of an effect hides it** (robots and creatures too, not only people). (Note 13.) [tool]
+18. **Readability sheet:** every prop a joke depends on, at phone size, with its height on screen; under about 40 px
+    (of 1920) it is made bigger or brought nearer before Sam sees it. (Crossbow, Alexa, coaster, sparks: notes 2, 27,
+    41, 46.) [tool]
+19. **Checks print a short summary** (counts and the first few faults); the full list goes to a file. [tool]
+
+**Building**
+20. **Held things aim in 3D with the holder's body**, never at a fixed screen angle; a prop that draws its own fists
+    still counts as held. The prop test turns each person through every view and fails a prop drawn across their
+    back. (Machete, minigun, crossbow: notes 11, 12, 16, 45, 48.)
+21. **A limb pointing at the lens is drawn foreshortened** (wider as it nears us, the sole or palm facing us), drawn
+    over the body. (Wes's kick, note 42; the reach, note 39.)
+22. **My set dressing is shown on the cast or composition sheet,** kept clear of every spot where action happens, and
+    is in the collision audit. (The lemons sat where the Alexa explodes, note 19.)
+23. **A film file over about 1,000 lines is split, one file per group of shots,** so a note opens only its shots.
+
+**Planning**
+24. **Ambition estimate:** the plan lists the new builds and the risky moves and says roughly what share of a week
+    the film will cost; Sam can trim before building starts. (Prepper: 12 shots, a 3D house, a robot, five weapons,
+    a full effects set, a 360-degree loop.)
+25. **Eyelines and holds per shot:** for each shot, where each person looks and how long each key beat holds; the
+    checks compare the film with it. (Notes 21, 30, 35, 59, 61, 62.)
+26. **Every sound effect is listed at planning** (what, which moment, when it's needed), asked for in one message;
+    placeholders are named in every send.
+27. **A bleep: ask whether the word was said or a gap was left,** at recording; then place the bleep from the sound
+    itself (where the words and gaps are), never from the script. (Notes 33 and 54.)
+28. **Reuse first:** check `guides/kit-catalogue.md`; every new set, person, prop or effect built for a film is added
+    to it when the film's building stage ends.
+
+**Notes and review**
+29. **Every review copy (clip, animatic) shows the film time and the shot number in a corner,** so Sam's times point
+    straight at the frame. [tool]
+30. **The notes table stays short:** one line of what was done per note, no "Was:" text (git keeps the history). Label
+    each note "new kind" or "seen before"; a "seen before" note means a check is missing: add it.
+31. **Clips, renders, filing and sending stay on Sonnet;** Opus only for planning, new builds and deciding fixes.
 
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in

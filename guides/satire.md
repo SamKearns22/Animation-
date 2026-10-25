@@ -21,6 +21,8 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    Ask all questions in ONE message, each with a recommended answer. Notes go in `notes/NAME.md` (`notes/_template.md`).
    Remind Sam: leave about a second of silence after each line before stopping the recording, and turn off the
    iPhone's Voice Isolation mic mode (takes stopped mid-hiss, chopped by the phone's clean-up, crackled in Cry Minister).
+   For any bleeped word, ask: was the word said, or a gap left for the bleep? Note which per line (Prepper Minister:
+   Sam left a gap, and the bleep landed on "you" twice).
    In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
 3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows **every view**
    each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key
@@ -128,7 +130,9 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   spread), a glass tips before it spills, thrown things bounce and stay where they land.
 - **Checks (run by preflight through the film's `audits()`):** a contact check (every touch reaches what it touches;
   an object moves only while held) and a hands-seen check (a hand on something is drawn over it, never under the
-  table). Copy `contact_check` and `hands_check` from `source/poker_mon.py`.
+  table), and a resting hand keeps about 3 cm clear of everything else on the table (Poker Mon, note 62). These live in
+  `source/poker_mon.py` (`contact_check`, `hands_check`, `clearance_check`) until they move into the shared kit
+  (film-quality rule 13, build list); until then, copy all three into every film.
 
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
@@ -151,6 +155,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   over his shoulder towards its side of the screen.
 - A small or distant person reacting to the story uses the whole body (stops dead, hands on hips, a big slow head shake,
   then holds), placed where nothing in front hides them. A face-only reaction is for close shots.
+- **People react before a hit lands (Sam, Poker Mon note 37):** anyone about to be struck, blasted or knocked over
+  sees it coming and moves first (backs away, raises hands, cowers, tries to run); nobody stands static and waits.
 - Every action as beats: set-up, action, contact, follow-through, settle, with a pace ('fast' into a hit, 'slow' out)
   (`filmkit.Beats`; every frame of the path is tested with `filmkit.check_joints`: joint limits, bone lengths, a hand
   never through a head).
@@ -212,6 +218,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - **No sound effects unless the script names them or Sam asks** (Sam, 14 Oct): voices only by default.
 - **Cut a recording only in a moment of silence** (Sam, 16 Oct): find the quiet gap before the first wanted word (loudness in
   20 ms steps), cut there and lay silence in front; never start earlier to be safe (a scrap of the word before is heard).
+- **No added room tone** (The Traitors): the levelling lifts it into audible static. Silence between lines stays silent.
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
   their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.
@@ -246,6 +253,8 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
   note on movement (Sam, 18 Oct); no yes needed first.
 - `python3 source/NAME.py final OUT.mp4 --small`: a quick look (540 x 960), only when a shot's movement changed.
 - `python3 source/NAME.py final animations/NAME-vertical.mp4`: the final. Pictures are cached; captions and title go on last.
+- **Joining clips with ffmpeg: always set `fps=24`** (Strictly Crabs: the join defaulted to 25 fps and stretched the
+  film by 4%).
 - Caption or timing note: `... final OUT --reuse` (no pictures re-rendered). Note on shot X: `... --reuse --redo X`.
 - Sound note: rebuild the sound only and attach it to the finished picture (never a re-render).
 - Say how long it will take; push notification when it ends; send the film in the chat; update `story/status.md`.

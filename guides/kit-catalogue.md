@@ -1,0 +1,56 @@
+# Kit catalogue: everything already built, to reuse before building (film-quality rule 28, Sam 25 Oct)
+
+Check here first when planning a film. Each line: what it is, its file, and how far it reuses. A film that builds a new
+set, person, prop or effect adds it here when its building stage ends. A thumbnail sheet of the lot is still to be
+built (`story/status.md`, Build list); until then, render a part's own test sheet to see it.
+
+## Sets (each built once in 3D, metres, y up; every shot is a camera on it)
+| set | file | see it | notes |
+|---|---|---|---|
+| London house: living room (green carpet, panelled walls, sofa, TV, drinks cabinet, armchair, grand window), kitchen (island, slate worktops, sink run, window), hallway, gardens | `source/prepper_set.py` (plan: `prepper_plan.py`) | `python3 source/prepper_set.py test OUT.jpg` | walls with real openings, doors that swing, glass that breaks, marks that stay; walls and furniture as collision solids |
+| Trafalgar Square (column, lions, fountains, gallery steps), TSG van, interrogation room, custody corridor | `source/power_crime_set.py` | its film's `stills` | crowd seating, banners |
+| Casino parlour (oval poker table, panelled walls, chandeliers, armchairs) | `source/poker_mon_room.py` | its film's `stills` | table things from one `THINGS` plan |
+| Round Table (The Traitors) | `source/traitors.py` | `traitors.py stills` | slates on stands |
+| Hangar and space shots (Roadster) | `source/roadster.py` | `roadster.py cast` | space in Dam's coloured pencil |
+
+## People (satire package, `views.person`: any angle; circle hands)
+| who | file | notes |
+|---|---|---|
+| Andy Burnham (Hope Again; Prepper's white shirt, chinos, belt with Glock) | `source/burnham.py` (`BURNHAM`), `source/prepper_cast.py` | fear levels 1-6 (`FEAR`) |
+| Wes Streeting (likeness, torn suit) | `source/prepper_cast.py` (also Hope Again's in `burnham.py`) | |
+| Hope Again cabinet (Streeting, Rayner, Healey, Mahmood, Miliband; armour) | `source/burnham.py` | |
+| Trump, Putin, Zelensky, Claudia | `source/traitors_cast.py` | likeness heads |
+| Reform HQ five (Shocking Behaviour) | `source/shocking_cast.py` | likeness heads |
+| Old lady with placard, Met officers (hi-vis, senior officer, armed), protest crowd | `source/power_crime_cast.py` | crowds of 2,000 |
+| Poker players, dealer, guards, onlookers | `source/poker_mon_cast.py` | |
+| Press secretary and reporters (crowd from behind) | `source/press_secretary.py` | `reporter` |
+| Matt Damon | `source/roadster.py` | |
+
+## Creatures and machines
+| what | file | notes |
+|---|---|---|
+| Chrome Centurion robot (3D: blade arm or cannon palm, sweeping eye, walks, falls, loses head or arm, explodes, dents) | `source/prepper_robot.py` | |
+| Dragonite | `source/poker_mon_cast.py` | |
+| Tesla Roadster (every angle) | `source/roadster.py` | |
+| Crabs (Strictly Crabs) | `source/strictly_crabs_*.py` | realistic, not house style |
+
+## Props (real sizes in `source/sizes.py`)
+| what | file |
+|---|---|
+| Crossbow (3D, flight roll), Glock, oily machete, minigun with ammo belt, tin of beans | `source/prepper_cast.py`, `source/prepper_fx.py` |
+| Tins, 2 L bottles, Alexa (whole, smashed, on rod legs with a knife), crossbow bolt, mug on coaster with steam | `source/prepper_fx.py` |
+| Poker Mon cards, chips (stacks topple), drinks | `source/poker_mon_cast.py` |
+| Placards, banners | `source/power_crime_cast.py` |
+| Slates on stands | `source/traitors_cast.py` |
+| Chopping board, glazed ham, cleaver (horror trailer) | `source/props.py` |
+
+## Effects (house style: flat, lumpy, one frame for flashes; no stars, no glows)
+| what | file |
+|---|---|
+| Lumpy flash, muzzle flash, sparks, debris that lands and stays, flat smoke, plasma bolt and scorch, tracers, blade trail, glass bursts, room flash, goopy beans, bullet holes on real surfaces | `source/prepper_fx.py`, `source/prepper_cast.py` |
+| Hyper beam (soft glow: Poker Mon only, Sam's exception) | `source/poker_mon_room.py` |
+| Thrown things under gravity (bounce, stay) | Poker Mon's `launch` |
+
+## Movement and checks (the kit tools)
+`views.py`, `moves.py`, `stage.py`, `filmkit.py`, `perform.py`, `audit.py`, `clipcheck.py`, `voices.py`: see
+`guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`.

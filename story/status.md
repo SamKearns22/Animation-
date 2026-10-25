@@ -3,6 +3,8 @@
 Read this first in any new session, after CLAUDE.md.
 
 ## In progress: "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
+- 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
+  `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.
 - 25 Oct (notes 37-64 chat, Opus): all of Sam's notes on animatic 3 applied, five clips sent; the walls added to the
   collision audit (it had never seen them). NEXT: Sam's notes on the clips, or his yes to the check sheet, then the
   animatic with Hook Text and sign-off (Sonnet, new chat). Handover at the top of the notes file.
@@ -489,6 +491,20 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   times), not fixed: Sam to decide. No speech recognition is possible here (package sites blocked).
   NEXT (fresh chat, Opus high): item 3, the film plan template (rule 1) and the reference benchmark sheet (rule 3) in
   `source/satire_template.py`.
+
+- 25 Oct: **Sam approved rules 12-31 (Prepper Minister review)**; new tools to build, after items 3 and 4 above (fresh
+  chat, Opus high; test each on Prepper Minister, whose faults are logged in its notes):
+  5. checks on everything by default: the set builder hands every wall, door frame and piece of furniture to the
+     collision audit; films list only exclusions (rule 12);
+  6. move into the shared kit and pre-flight: `poker_mon.contact_check`, `hands_check`, `clearance_check`,
+     `prepper.facing_check`, `marks_check`, `crockery_check` (rule 13);
+  7. pre-flight stops on a blank brief-checklist row, a missing composition sheet, or a shot missing its people (rule 14);
+  8. checks print a short summary, full list to a file (rule 19);
+  9. film time and shot number burned into every `--small` / `--span` render (rule 29);
+  10. held-prop test through every view (rule 20); effect-shape check (15); direction across a cut (16); figures hide
+      effects behind them (17); readability sheet (18);
+  11. kit catalogue thumbnail sheet (`guides/kit-catalogue.md`, rule 28).
+  Not until a film needs it: people lying flat drawn with volume (Poker Mon note 80).
 
 ## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.

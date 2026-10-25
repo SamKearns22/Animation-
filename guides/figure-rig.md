@@ -39,6 +39,10 @@ a realistic 8-head body:
 Every person in a film uses the same lengths (children and very tall or short characters get their own `Rig`
 with scaled lengths, decided in the cast list). Clothes never change the skeleton: a long tunic (`bottom=600`)
 hangs past the hands; that is the garment, not long arms.
+**Hips 15% narrower than the shoulders on every character (Sam, Power Crime Action note 5):** the body tapers from
+the waist to a hem at 0.85 of the shoulder width (`burnham.HEM`), front, three-quarter and back; a cast built outside
+`burnham.py` (Prepper's) must use the same ratio. A jacket hem rises gradually as the body leans (12 to 20 degrees),
+never in one frame.
 
 ## 3. Limbs are solved, never typed
 - **Say where the hand goes; the rig works out the elbow** (two-bone inverse kinematics, the way professional
