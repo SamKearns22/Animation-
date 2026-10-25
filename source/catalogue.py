@@ -40,6 +40,7 @@ ENTRIES = [
     ('People', 'Press secretary, reporters', 'press_secretary.py', ('cast', 'press_secretary')),
     ('People', 'Matt Damon, the Roadster', 'roadster.py', ('cast', 'roadster')),
     ('Creatures', 'Chrome Centurion robots', 'prepper_robot.py', ('frame', 'prepper', 60.0)),
+    ('Creatures', 'Horse to ride (and donkey, pony), with rider', 'mounts.py', ('frame', 'mounts', 'horse')),
     ('Props', 'Crossbow', 'prepper_fx.py', ('fx', 'X.crossbow3(img, cam, (0, 0.9, 0), 160)')),
     ('Props', 'Minigun with ammo belt', 'prepper_fx.py', ('fx', 'X.minigun3(img, cam, (0, 0.9, 0), 120)')),
     ('Props', 'Machete', 'prepper_fx.py', ('fx', 'X.machete_floor(img, cam, (0, 0.9, 0), 120)')),

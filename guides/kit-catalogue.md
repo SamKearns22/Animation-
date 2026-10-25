@@ -33,6 +33,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | what | file | notes |
 |---|---|---|
 | Chrome Centurion robot (3D: blade arm or cannon palm, sweeping eye, walks, falls, loses head or arm, explodes, dents) | `source/prepper_robot.py` | |
+| Horse to ride, side-on (bay, chestnut, grey, black, palomino; also pony and donkey): stand, walk, trot, canter, gallop, either direction, with any satire person riding (sits, rising trot, up off the saddle at the gallop; reins, stirrups) | `source/mounts.py` | `python3 source/mounts.py reel OUT.mp4`; checks: `mounts.py check` (hooves never slide, no leg stretches, rider reaches). Side view only so far |
 | Dragonite | `source/poker_mon_cast.py` | |
 | Tesla Roadster (every angle) | `source/roadster.py` | |
 | Crabs (Strictly Crabs) | `source/strictly_crabs_*.py` | realistic, not house style |

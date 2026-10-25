@@ -180,6 +180,9 @@ def main():
     if every_film:
         import viewchecks                       # rules 15-18: effect shapes, readability, direction across a cut,
         shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
+    if 'mounts' in sys.modules:                 # riding (Sam, 25 Oct): a film with a mount gets the mount checks
+        import mounts
+        shared += mounts.check()
     shared += kitchecks.marks(film)             # rule 13: marks on real surfaces
     shared += kitchecks.sounds(film)            # rule 13: a sound tied to a thing only with it in frame, once a hit
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed

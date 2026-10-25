@@ -114,6 +114,10 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
 - `walker.py` (Cry Minister's walk) is retired for new films; Cry Minister keeps it.
+- **Riding (Sam, 25 Oct): use `source/mounts.py`** (horse, pony or donkey; stand, walk, trot, canter, gallop).
+  Paces keep their real speed; the rider sits at the walk and canter, rises at the trot, and is up off the saddle
+  at the gallop. `mounts.py check` (hooves never slide, no leg stretches, the rider reaches reins and stirrups)
+  runs in pre-flight for any film that uses a mount, before every animatic.
 
 ## One set, one plan, real contact (Sam, 19 Oct: Poker Mon)
 - **Each location is built once, in 3D, and every shot is a camera on it** (`poker_mon_room.render` with a `Cam3`):
