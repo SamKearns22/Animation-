@@ -78,8 +78,8 @@ LINES = [
 ]
 # Sam's note 30 (25 Oct): hold on robot 5 a second longer after the tin hits it, so shot 11 runs 3 s and the rest
 # moves on a second (shot 12 now 51-62 s)
-T = dict(s1=0.0, s2=2.1, s3=4.2, s4=6.85, s5=9.3, s6=14.2, s7=18.6, s8=22.1, s9=28.3, s10=43.0, s11=48.0, s12=51.0,
-         end=62.0)
+T = dict(s1=0.0, s2=2.1, s3=4.2, s4=6.85, s5=9.3, s6=14.2, s7=18.6, s8=22.1, s9=28.3, s10=43.0, s11=48.0, s12=53.0,
+         end=64.0)
 SHOTS = [('s1', T['s1'], T['s2']), ('s2', T['s2'], T['s3']), ('s3', T['s3'], T['s4']), ('s4', T['s4'], T['s5']),
          ('s5', T['s5'], T['s6']), ('s6', T['s6'], T['s7']), ('s7', T['s7'], T['s8']), ('s8', T['s8'], T['s9']),
          ('s9', T['s9'], T['s10']), ('s10', T['s10'], T['s11']), ('s11', T['s11'], T['s12']), ('s12', T['s12'], T['end'])]
@@ -97,8 +97,10 @@ BOLT8_HIT = BOLT8 + 0.12
 SPIN9, LUNGE9, SHOTS9 = 29.4, 36.8, (37.3, 37.55, 37.8)
 CU9 = (32.84, 34.54, LUNGE9 - 0.4)                  # the two close-ups on "Did you get the beans?" (note 52), then wide
 WINDOW10, PLASMA10, FIRE10 = 45.0, 45.6, 46.1
-GRAB11, THROW11, DENT11 = 48.45, 48.9, 49.6      # the grab; the release (out of frame); the tin strikes robot 5
-LAND11 = 50.15                                      # the tin down on the floor, where it stays
+# Sam's notes 61-62 (25 Oct): the grip held a second more; robot 5's stare down at its dent held (shot 12 now 53-64 s)
+GRAB11, HOLD11, THROW11, DENT11 = 48.45, 49.45, 49.9, 50.6   # grab; pull back; release (out of frame); the dent
+LAND11 = 51.15                                      # the tin down on the floor, where it stays
+LOOK11 = (DENT11 + 0.75, DENT11 + 1.95)             # robot 5 stares down at the dent (held), then snaps back up
 # What the shared checks need
 KEEP_CLEAR = []
 PROP_SIZES = [('crossbow', 'crossbow', 0.72, 0.3, None), ('minigun', 'minigun', 0.9, 0.25, None),
@@ -476,7 +478,7 @@ def island_items(t):
         return items
     if t < GRAB10[0]:
         items.append(('minigun', MINIGUN_SPOT))
-    if t >= THROW11 - 0.6:
+    if t >= GRAB11:                                  # in his fist from the grab (note 60: it went 0.15 s before)
         items = [it for it in items if not (it[0] == 'tin' and it[1] == TIN_SPOTS[2])]
     items = [it for it in items if not (it[0] in ('tin', 'bottle') and item_gone(it[0], t))]   # blown up (shot 12)
     return items
@@ -825,7 +827,7 @@ def _arrive10():
 ARRIVE10 = _arrive10()                              # Wes reaches the island (about 43.8)
 DROP10 = ARRIVE10 + 0.08                            # the machete dropped
 GRAB10 = (44.05, 44.4)                              # the minigun dragged off the island, up to his hip
-BELT10 = (44.55, 44.8)                              # the belt flung over his head: the bandana
+BELT10 = (44.45, 45.12)                             # his left hand puts the belt over his head: the bandana (note 56)
 SNARL10 = 45.2
 SPIN10 = 45.95                                      # Sam's note 36: snarl at us, eyes left, then he spins and fires
 WES10 = (-2.7, 3.55)
@@ -877,15 +879,32 @@ def wes10(t):
         j = C.minigun_hip(sp, (0.0, 40.0 * (1 - k)), spin=0.0, belt_to=None, rec=rec)
         fac = 180.0 + (FACE_CAM10 - 180.0) * k
         return sp, j, x, z, fac, None, rec
-    sp['bandana'] = t >= BELT10[1]
-    hang = (110.0, 260.0)
-    if t < BELT10[0]:
-        belt = None
-    elif t < BELT10[1]:                              # flung up and over his head
-        k = ease((t - BELT10[0]) / (BELT10[1] - BELT10[0]))
-        a = math.pi * k
-        belt = (hang[0] + (64 - hang[0]) * k + 120 * math.sin(a), hang[1] + (-196 - hang[1]) * k - 160 * math.sin(a))
-    else:
+    # Sam's note 56 (25 Oct): the belt wrapped itself round his head. Now his left hand does it: off the gun to the
+    # hanging belt, grabs it, lifts it up over his head, pulls it down onto his forehead, and goes back to the gun;
+    # the belt's end is in his hand the whole time (the gun stays at his hip on the right hand)
+    b0 = BELT10[0]
+    keys = [(b0, None), (b0 + 0.15, (100.0, 270.0, 70.0)), (b0 + 0.4, (45.0, -330.0, 40.0)),
+            (b0 + 0.53, (60.0, -205.0, 60.0)), (BELT10[1], None)]
+    sp['bandana'] = t >= b0 + 0.53
+    belt, left = None, None
+    if b0 <= t < BELT10[1]:
+        fore = None
+        for (ta, pa), (tb, pb) in zip(keys, keys[1:]):
+            if ta <= t < tb:
+                k = ease((t - ta) / (tb - ta))
+                if pa is None or pb is None:                 # leaving the gun / going back to it
+                    fore = fore or C.minigun_hip(sp, (0.0, 4.0))['wrL']
+                    pa_, pb_ = (fore, pb) if pa is None else (pa, fore)
+                    hand = lerp3(pa_, pb_, k)
+                else:
+                    hand = lerp3(pa, pb, k)
+                break
+        left = (hand, 'fist')
+        if b0 + 0.15 <= t < b0 + 0.53:                       # holding the belt's end: it goes where his hand goes
+            belt = (hand[0], hand[1] + V.ELEV * hand[2] + 10)
+        elif t >= b0 + 0.53:
+            belt = (64.0, -196.0)
+    elif t >= BELT10[1]:
         belt = (64.0, -196.0)
     firing = t >= FIRE10
     f = int(t * FPS)
@@ -894,10 +913,10 @@ def wes10(t):
         if t >= SNARL10:                             # the snarl, straight at us, his eyes sliding left
             sp['mouth'] = 'hidden'
             sp['brows'] = 'outrage'
-            sp['look'] = -1.0
+            sp['look'] = 1.0                         # to the screen's left, where robot D is (note 59: it was right)
             sp['lid'] = -2
             sp['blink'] = False
-        j = C.minigun_hip(sp, (0.0, 4.0), spin=0.0, belt_to=belt, rec=rec)
+        j = C.minigun_hip(sp, (0.0, 4.0), spin=0.0, belt_to=belt, rec=rec, left=left)
         if t >= SNARL10:
             j['head_props'] = j.get('head_props', []) + [snarl_prop]
             j['lean'] = j.get('lean', 0.0) + 4.0
@@ -905,20 +924,27 @@ def wes10(t):
     sp['brows'] = 'outrage'
     sp['mouth'] = 'set'                              # jaw clenched as he fires (no voice: the mouth stays shut)
     sp['blink'] = False
-    # side-on to us as he fires (seen from behind, the gun was hidden by his back), swung right onto the robots
     if shot_of(t) == 's11' and t < THROW11 + 0.3:    # only his muzzle would poke into the low tin shot: a flame
         firing = False                               # on the worktop with no gun (25 Oct), so no flash there
-    j = C.minigun_hip(sp, (22.0, 4.0), spin=(t - FIRE10) * 6.0 if t >= FIRE10 else 0.0,
+    # Sam's note 58 (25 Oct): side on (228) the gun pointed across the island and clipped through it. He turns right
+    # round to face the window (west) and fires along the island's north side: onto robot C (south of his line, it
+    # falls first), then swinging onto D
+    aim = -9.0 if t < 46.45 else -9.0 + 18.0 * ease((t - 46.45) / 0.3)   # (facing 258: square on, his back hid the
+    #                                                   whole gun from this camera; a touch less shows the barrels)
+    j = C.minigun_hip(sp, (aim, 4.0), spin=(t - FIRE10) * 6.0 if t >= FIRE10 else 0.0,
                       flash=(1.0 if f % 2 == 0 else 0.6) if firing else 0.0, belt_to=belt, rec=rec, seed=f)
-    return sp, j, x, z, 228.0, None, rec
+    return sp, j, x, z, 258.0, None, rec
 
 
 def plasma10():
-    """Robot D's shot: from its palm, over Wes's left shoulder, past the lens, into the kitchen wall by the lounge."""
+    """Robot D's shot: from its palm, over Wes's right shoulder, past the lens, into the kitchen wall by the lounge."""
     p, _ = robot_pose('D', PLASMA10)
     J, _ = R.skeleton(p)
     o = np.array(J['handL'] if 'handL' in J else J['chest']) + np.array([0.15, 0.0, 0.0])
-    a = math.radians(FACE_CAM10 - 90)                 # just over his left shoulder as he faces us
+    # Sam's note 57 (25 Oct): robot D is on the screen's left of Wes, so a shot over his left shoulder (the screen's
+    # right) had to cross his head, and from the wide view ran through it. Over his right shoulder it stays on D's
+    # side of him all the way
+    a = math.radians(FACE_CAM10 + 90)
     via = np.array([WES10[0] + 0.28 * math.sin(a), 1.78, WES10[1] + 0.28 * math.cos(a)])
     d = via - o
     k = (0.0 - o[0]) / d[0]
@@ -973,16 +999,23 @@ def _tin_hit():
 
 def andy_arm11(img, cam, t):
     """Shot 11: only Andy's left arm is in frame (he is just behind the camera, south of the island, the Glock in his
-    right): it reaches in over the worktop, grabs the tin, and pulls back out of frame to throw."""
+    right): it slides in from the frame's edge over the worktop, closes on the tin, holds it a second, and pulls back
+    out of frame to throw. Sam's notes 60-61 (25 Oct): the tin left the island before the hand got there, the arm
+    popped in mid-frame, and the tin jumped into the fist drawn over it. Now the hand drives the tin: it stands until
+    the fist closes on it, then moves only with the fist, drawn under the fingers."""
     tx, tz = TIN_SPOTS[2]
     grip = np.array([tx, 0.92 + 0.07, tz - 0.04])
-    away = np.array([tx + 0.05, 1.2, 2.02])
-    if t < 48.2 or t >= GRAB11 + 0.3:
+    away = np.array([tx + 0.05, 1.2, 2.02])          # behind the lens: the arm comes in from, and goes back past, it
+    if t < T['s11'] or t >= HOLD11 + 0.35:
         return
     if t < GRAB11:
-        hand = away + (grip - away) * ease((t - 48.2) / (GRAB11 - 48.2))
+        hand = away + (grip - away) * ease((t - T['s11']) / (GRAB11 - T['s11']))
+    elif t < HOLD11:                                  # the grip held (a little squeeze and lift)
+        hand = grip + np.array([0.0, 0.015 * ease((t - GRAB11) / 0.25), 0.0])
     else:
-        hand = grip + (away - grip) * ease((t - GRAB11) / 0.3)
+        hand = grip + np.array([0.0, 0.015, 0.0]) + (away - grip) * ease((t - HOLD11) / 0.3)
+    if t >= GRAB11:                                   # the tin in his fist, drawn first (his fingers over it)
+        X.tin(img, cam, (hand[0], hand[1] - 0.07, hand[2] + 0.04))
     sh = np.array([-3.1, 1.32, 2.12])                   # leaning in over the island's edge
     d = hand - sh
     n = np.linalg.norm(d)
@@ -1006,8 +1039,6 @@ def andy_arm11(img, cam, t):
     j2['hand'] = {'L': 'fist'}
     sp = C.fear(C.ANDY, 6)
     V.arm(B.Pen(img, Lc), j2, 'L', sp)
-    if t >= GRAB11:                                      # the tin in his fist
-        X.tin(img, cam, (hand[0], hand[1] - 0.05, hand[2]))
 
 
 def bolt8_at(t):
@@ -1071,7 +1102,9 @@ BLOWN = {'4': 2.75, '5': 9.8}
 BLOWN5 = BLOWN['5']
 # Robots 7 and 8 (note 17): cannons, stalking across the west garden towards the window; still far short of it when
 # the camera turns away, and never inside in this shot (my call on their timing)
-GARDEN = {'7': ((-12.2, 0.7), (-9.0, 1.2)), '8': ((-12.8, 4.7), (-9.2, 3.9))}   # 25 Oct: stop short of C and D lying there
+# Sam's note 63 (25 Oct): with C and D's bodies gone from shot 12, 7 and 8 advance much further, menacing, their
+# cannons up and aimed into the house (still outside when the camera turns away)
+GARDEN = {'7': ((-12.2, 0.7), (-7.3, 1.7)), '8': ((-12.8, 4.7), (-7.5, 3.6))}
 # The plasma (robot, seconds, what it is aimed at): every shot misses its man (he dodges or it goes wide) and burns
 # where it lands; robot 6's two blow up the tins and bottles on the island, two of robot 5's take out the pendants.
 PLASMA12 = [('4', 0.5, 'andy'), ('5', 2.0, 'wes'), ('4', 2.5, 'andy'), ('3', 4.0, 'andy'), ('3', 4.9, 'andy'),
@@ -1222,16 +1255,16 @@ def robot_pose(name, t):
             p['fall'] = (88 * k, 270)
         return p, sp
     if name == '5' and shot_of(t) == 's11':           # shot 11: walks into the hall-to-kitchen door; the tin dents it
-        p = R.pose(**R.walk(t, (-1.2, 6.3), (-1.2, 5.9), 48.0, 49.4, stride=0.4))
+        p = R.pose(**R.walk(t, (-1.2, 6.3), (-1.2, 5.9), THROW11 - 0.9, THROW11 + 0.5, stride=0.4))
         p['yaw'] = 180.0
         p['sweep'] = R.eye_sweep(t)
         if t >= DENT11:                               # knocked back, its eye dipping; then it rights itself (the hold)
             k = math.sin(math.pi * min(1.0, (t - DENT11) / 0.7))
             p['lean'] = p.get('lean', 0.0) - 14 * k
             p['head_pitch'] = 22 * k
-            if DENT11 + 0.75 <= t < 50.75:            # it looks down at the dent in its chest...
+            if LOOK11[0] <= t < LOOK11[1]:            # it stares down at the dent in its chest (held: note 62)...
                 p['head_pitch'] = 34.0
-            p['sweep'] = 0.0 if t < 50.75 else R.eye_sweep(t)   # ...and snaps back up, searching
+            p['sweep'] = 0.0 if t < LOOK11[1] else R.eye_sweep(t)   # ...and snaps back up, searching
         dent5(sp, t)
         return p, sp
     if t < T['s12']:
@@ -1307,6 +1340,9 @@ def robot_pose(name, t):
         a, b = GARDEN[name]
         p = R.pose(**R.walk(u, a, b, 0.0, 11.0, stride=0.42, phase=0.5 if name == '8' else 0.0))
         p['sweep'] = R.eye_sweep(t, 0.3 if name == '7' else 0.8)
+        side = 'R' if name == '7' else 'L'           # the cannon arm raised, on Wes through the window
+        a_, pole = R.aim((WES12[0], 1.3, WES12[1]), p['pos'], p['yaw'], side, height=1.62)
+        p['hand' + side], p['pole' + side] = a_, pole
     elif name == '5':                                 # walks in from the hall door in stages, firing at Wes
         stages = [(0.0, 1.5, (-1.2, 5.9), (-1.2, 5.3)), (3.5, 4.6, (-1.2, 5.3), (-1.25, 5.0)),
                   (6.8, 8.2, (-1.25, 5.0), (-1.3, 4.75))]
@@ -1372,7 +1408,7 @@ FRAGS9 = _frags9()
 
 
 ROBOTS_IN = {'s8': ['A'], 's9': ['A', 'B'], 's10': ['C', 'D'], 's11': ['5', 'C', 'D'],
-             's12': ['A', 'B', 'C', 'D', '1', '2', '3', '4', '5', '6', '7', '8']}
+             's12': ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8']}   # (Sam's note 63: C and D's bodies cut from 12)
 
 
 def aim_at(keys, u):
@@ -2256,7 +2292,7 @@ def sound_events():
           ('arrow-woosh', BOLT8 - 0.02, 0.8), ('sparks', BOLT8 + 0.1, 0.6), ('robot-wounded', BOLT8 + 0.15, 0.7),
           ('laser-sword', LUNGE9 + 0.3, 0.6)] + [('pistol', s_, 0.8) for s_ in SHOTS9] + \
          [('robot-wounded', SHOTS9[-1] + 0.1, 0.6), ('glass-shattered', FIRE10, 0.9), ('plasma-gun', PLASMA10, 0.7),
-          ('minigun', FIRE10, 0.9), ('minigun', T['s11'], 0.9), ('minigun', T['s12'], 0.9), ('minigun', T['s12'] + 2.4, 0.9), ('minigun', T['s12'] + 4.8, 0.9)]
+          ('minigun', FIRE10, 0.9), ('minigun', T['s11'], 0.9), ('minigun', T['s11'] + 2.4, 0.9), ('minigun', T['s12'], 0.9), ('minigun', T['s12'] + 2.4, 0.9), ('minigun', T['s12'] + 4.8, 0.9)]
     ev += [('minigun', T['s12'] + 7.2, 0.9), ('minigun', T['s12'] + 9.6, 0.9)]
     ev += [('pistol', T['s12'] + s_, 0.7) for s_, _ in ANDY_SHOTS]
     ev += [('plasma-gun', T['s12'] + t0, 0.55) for _, t0, _ in PLASMA12]
@@ -2273,7 +2309,8 @@ def sound_events():
     for t0, t1, a, b, stride, g in walks:
         ev += [('robot-step', s12 + ts, g) for ts in steps(t0, t1, a, b, stride)]
     ev += [('robot-step', ts, 0.45) for ts in steps(ROBOT8, TURN8, (3.9, 6.1), (2.75, 6.1), 0.48)]
-    ev += [('robot-step', ts, 0.4) for ts in steps(48.0, 49.4, (-1.2, 6.3), (-1.2, 5.9), 0.4)]       # robot 5 (11)
+    ev += [('robot-step', ts, 0.4) for ts in steps(THROW11 - 0.9, THROW11 + 0.5, (-1.2, 6.3), (-1.2, 5.9), 0.4)]  # robot 5
+    ev += [('robot-scan', LOOK11[0] - 0.05, 0.5)]   # Sam's note 62: its head tipping down to stare at the dent
     ev += [('robot-step', ts, 0.5) for ts in steps(LUNGE9 - 0.35, LUNGE9 + 0.35, (-0.4, 2.9), (2.05, 2.95), 0.7)]
     return ev
 

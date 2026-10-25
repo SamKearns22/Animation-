@@ -309,7 +309,8 @@ def minigun3(img, cam, c, yaw, belt=True):
     p = _pen(img)
     L = _local(c, yaw)
     if belt:                                                   # the loop of ammo: brass rounds in a curling belt
-        pts = [L(-0.1 + 0.18 * math.cos(u), 0.012, -0.22 + 0.13 * math.sin(u) - 0.02 * u) for u in np.linspace(0, 5.6, 26)]
+        # (Sam's note 55, 25 Oct: the loop hung off the island's edge; smaller, tucked in beside the gun, on the top)
+        pts = [L(-0.1 + 0.14 * math.cos(u), 0.012, -0.12 + 0.08 * math.sin(u) - 0.012 * u) for u in np.linspace(0, 5.6, 26)]
         for q0, q1 in zip(pts, pts[1:]):
             (x0, y0), k0 = cam.project(q0)
             (x1, y1), k1 = cam.project(q1)

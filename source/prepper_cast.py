@@ -501,14 +501,20 @@ MINIGUN = 0.9 / M
 MG_GRIP, MG_FORE = 0.04, 0.32
 
 
-def minigun(spin=0.0, flash=0.0, belt_to=None, seed=0, skin=None, rec=None):
+def minigun(spin=0.0, flash=0.0, belt_to=None, seed=0, skin=None, rec=None, fore3=None, lean=0.0):
     """The minigun (refs minigun-1, -2): six barrels round a spindle with a clamp ring and a muzzle ring, the motor
     housing, a carry handle on top, spade grips at the back; the ammo belt runs from its feed (under the left side) up
     to Wes's forehead (`belt_to`: the point in his units, or None for a loop hanging down). `spin` turns the barrels
-    (they blur into each other when firing); `flash` a muzzle flash at the front."""
+    (they blur into each other when firing); `flash` a muzzle flash at the front. `fore3`: where the left hand
+    held it (body units), when that hand has let go to do something else (Sam's note 56: the belt put on by hand): the
+    gun stays put on the right hand and that point, and only the right fist is drawn on it."""
     def draw(p, j2):
         if j2['yaw'] == 180:                                  # from behind: the gun and belt are in front of him
             return
+        free = fore3 is not None
+        if free:
+            j2 = dict(j2)
+            j2['wrL'] = V.project(V.leaned(fore3, lean), j2['yaw'])[0]
         P, L, eo, u, s = _frame(j2, 'wrR', 'wrL', MG_GRIP, MG_FORE, MINIGUN, min_k=0.5)
         # the belt first (behind the gun): brass rounds in black links, in a sagging curve (hidden by his back when
         # we see him from behind)
@@ -558,7 +564,7 @@ def minigun(spin=0.0, flash=0.0, belt_to=None, seed=0, skin=None, rec=None):
         if flash > 0:
             muzzle_flash(p, P(1.02, 0), u, 90 * flash, eo > 0.5, seed)
         if skin:
-            _fists(p, j2, skin)
+            _fists(p, j2, skin, ('R',) if free else ('R', 'L'))
     draw.held = skin is None
     draw.along = ('wrR', 'wrL', MINIGUN, MG_GRIP)
     draw.own_fists = True                  # it draws his fists on its grips (views.py: held, so hidden by his back)
@@ -608,7 +614,7 @@ def crossbow_aim(sp, at=(0.0, 0.0), j=None, loaded=True, min_k=0.55):
     return j
 
 
-def minigun_hip(sp, at=(0.0, 0.0), spin=0.0, flash=0.0, belt_to=(64.0, -196.0), j=None, seed=0, rec=None):
+def minigun_hip(sp, at=(0.0, 0.0), spin=0.0, flash=0.0, belt_to=(64.0, -196.0), j=None, seed=0, rec=None, left=None):
     """Wes with the minigun at his hip, braced (feet apart, leaning in): right hand on the spade grip at his hip,
     left on the carry handle, the muzzle swinging to `at`."""
     j = j or V.standing(sp)
@@ -616,7 +622,12 @@ def minigun_hip(sp, at=(0.0, 0.0), spin=0.0, flash=0.0, belt_to=(64.0, -196.0), 
     j['footL'] = (-90, V.ANKLE_Y, 30.0)
     j['footR'] = (90, V.ANKLE_Y, -20.0)
     j = aim_two_hands(sp, MG_GRIP, MG_FORE, MINIGUN, at, butt=(sw * 0.55, 330.0, -40.0), lean=6.0, j=j)
-    j['props'] = j.get('props', []) + [minigun(spin, flash, belt_to, seed, sp['skin'], rec)]
+    fore3 = None
+    if left is not None:                               # `left`: (target, shape): the left hand off the gun, doing
+        fore3 = tuple(j['wrL'])                        # something else; the gun stays where that hand held it
+        V.arm_to(j, 'L', left[0], 'out', left[1])
+        j['hand'] = {'R': 'none', 'L': left[1]}
+    j['props'] = j.get('props', []) + [minigun(spin, flash, belt_to, seed, sp['skin'], rec, fore3, j['lean'])]
     return j
 
 
