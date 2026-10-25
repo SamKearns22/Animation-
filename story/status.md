@@ -504,7 +504,27 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   10. held-prop test through every view (rule 20); effect-shape check (15); direction across a cut (16); figures hide
       effects behind them (17); readability sheet (18);
   11. kit catalogue thumbnail sheet (`guides/kit-catalogue.md`, rule 28).
-  Not until a film needs it: people lying flat drawn with volume (Poker Mon note 80).
+- 25 Oct: **item 12, Sam's go: people lying down, and people seen from a high camera, with real depth** (Poker
+  Mon note 80: "players who land flat on the table look like 2D paper ... a cardboard cut out"). Plan (Opus high,
+  fresh chat; test on a demo sheet only: the earlier films are done, Sam 25 Oct):
+  Causes found: (a) `poker_mon_room.faceplant` builds a lying body from 3D tubes, but outlines every tube separately
+  (it reads as cut-out pieces), fills each one flat with no shadow side, and has no clothes detail; (b) `views.py`
+  always draws people as if the camera were just above eye level (`ELEV = 0.14`, fixed), so from a high camera a
+  standing or seated person stays an upright flat picture.
+  1. New shared `source/lying.py`, from `faceplant`: poses face down, on the back, on the side (curled), and slumped
+     sitting against a wall; one 3D skeleton in metres, so it lies in true perspective from any camera.
+  2. Reads as one body: one outline round the whole silhouette, then fills; a flat shadow side away from the light
+     (one darker tone, house style, no gradient); collar, belt, shoe soles, hair from the person's own design
+     (`views._hair`); face on the back shown from the library face through the camera.
+  3. Contact: every part rests on the floor or table (a check), contact shadow, nothing through the surface, solids
+     handed to the audit (rule 12).
+  4. No pop: `moves.fall`'s last stage blends into the lying pose (the pop-in audit passes).
+  5. `views.person` takes the camera's real tilt instead of the fixed `ELEV`: from above, more of the head top and
+     shoulders, shorter legs, feet under the body, a floor shadow (reuse Prepper's `_sofa_leg` real-tilt method).
+  6. Test sheet `python3 source/lying.py sheet OUT.jpg`: three people, every pose, from four camera heights (eye
+     level, 30 degrees, 60 degrees, straight down), beside Poker Mon's old frame. Sam approves the sheet.
+  7. Rule register row, kit catalogue entry, `guides/satire.md` (One set) line.
+  Estimate: about 3-5% of a week.
 - 25 Oct: **3-11 done** (one chat, Opus; each tested on Prepper Minister, with planted copies of its old faults):
   3. `source/plan.py` (rule 1: the film's `PLAN` checked, `plan.py FILM sketch` draws it) and `source/benchmark.py`
      (rule 3: `BENCHMARK`, our picture beside the references, each item ticked); both in the template, Prepper filled in.
