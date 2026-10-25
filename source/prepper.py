@@ -273,9 +273,9 @@ def cam_for(t):
     if s == 's9':
         return S.Cam((3.0, 1.15, 0.35), (2.7, 1.15, 5.4), focal=760)
     if s == 's10':                                  # Wes with the window behind him; a snap in on his snarl (note 36)
-        look0, look1 = (-3.8, 1.4, 3.4), (WES10[0], 1.62, WES10[1])
+        look0, look1 = (-3.8, 1.4, 3.6), (WES10[0], 1.62, WES10[1])
         k = ease((t - (SNARL10 - 0.25)) / 0.2) if t < SPIN10 - 0.05 else 0.0
-        return S.Cam(CAM10, lerp3(look0, look1, k), focal=900 + 1400 * k)
+        return S.Cam(CAM10, lerp3(look0, look1, k), focal=800 + 1500 * k)
     if s == 's11':                                  # low over the island on the tin; whips after it to robot 5
         start, look0 = CAM11, (TIN_SPOTS[2][0], 0.98, TIN_SPOTS[2][1])
         end, look1 = (-1.55, 1.35, 3.3), (-1.2, 1.45, 5.85)
@@ -490,7 +490,7 @@ def andy6(t):
 
 # ------------------------------------------------------------------------------------------------ shots 8-11
 WES_KICK8 = (2.6, 6.0)                              # Wes kicks the door from here (in the hall, behind it)
-WES_DOOR8 = (2.3, 5.45)                             # and lurches into the doorway (left of it: the robot shows)
+WES_DOOR8 = (2.5, 5.45)                             # and lurches into the doorway (clear of the open door leaf)
 WES_BACK9 = (1.75, 4.65)                            # shot 9: he backs away from the door to here, beside the cabinet
 WES_RUN9 = [(1.75, 4.65), (0.75, 4.2), (-0.2, 3.72), (-0.8, 3.6), (-2.7, 3.55)]   # runs for the kitchen (on into 10)
 RUN9 = 42.35
@@ -699,7 +699,7 @@ BELT10 = (44.55, 44.8)                              # the belt flung over his he
 SNARL10 = 45.2
 SPIN10 = 45.95                                      # Sam's note 36: snarl at us, eyes left, then he spins and fires
 WES10 = (-2.7, 3.55)
-CAM10 = (-1.0, 1.5, 1.95)                           # south-east of him: the gun shows side-on when he fires
+CAM10 = (-1.0, 1.5, 2.6)                            # east of him: the gun shows side-on, clear of the bottles
 MACHETE10 = ((-2.35, 3.8), 115.0)                   # where the dropped machete lies (and stays: shot 12 too)
 FACE_CAM10 = math.degrees(math.atan2(CAM10[0] - WES10[0], CAM10[2] - WES10[1])) % 360
 
