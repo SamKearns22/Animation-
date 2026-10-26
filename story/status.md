@@ -281,7 +281,7 @@ Read this first in any new session, after CLAUDE.md.
   short beard, round face, thin dark glasses); doctor's line "This man's life is clearly in serious danger".
 - Could be shortened by tightening Sam's longest pauses (about 3-4 s) if the retention graph asks for it.
 
-## Done: "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
+## Done (Sam, 26 Oct: posted or closed, no more work): "Mossad" (TikTok coffee-shop parody, `prompts/mossad.md`)
 - DONE 3 Oct 2026: `animations/mossad-vertical.mp4` (30.1 s, 2.2 MB, 1080 x 1920, 12 fps; final render 14 min on 4
   cores, animatic 3 min). Checked against the safe-area guides (title, widest caption, the bang).
 - All code in `source/mossad.py` (`stills`, `sheet`, `animatic`, `final`, and `resound SRC OUT` to put a new
