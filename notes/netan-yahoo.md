@@ -95,7 +95,13 @@ Pre-flight refuses to run until this line has them, and while any "done?" box be
 | `maul-10-wide-guard` (figure) | ready stance after ignition: feet very wide, knees bent, saber hand raised back with the blade up, free arm flung out sideways, fingers spread, sash and skirts flaring | to build (from 'attack' pose) |
 | `maul-8-low-lunge` (photo) | follow-through after a strike: deep lunge, torso twisted, staff diagonal across behind him with both blades lit, free hand forward and open, looking back over his shoulder | to build (from 'strike' pose) |
 | saber look (refs 8, 9, 10) | blades: a near-white core with a red edge and a soft red halo; hilt silver with black grips | answer 10: soft glow, blades only |
-| still requested | a lightsaber cut look; a debate layout; a cat guarding a spot; Netanyahu surprised or impressed; a presenter type (optional); the saber sounds | |
+| Pack 2, lightsaber wounds (26 Oct; `references/netan-yahoo/wound-1..4`) | | |
+| `wound-1-blade-through-torso` | the moment of contact: a bright flare where the blade meets the body (white-yellow centre, orange round it), the cloth round the cut glowing, the blade's far end showing through | to build: a flare at each strike for a few frames, lumpy (house style, rule 15) |
+| `wound-2-arms-cut-sparks` | a limb cut through: a burst of orange sparks and embers and a puff of grey smoke at the cut; the sleeve end left glowing orange | to build: sparks and flat smoke from the kit (`prepper_fx.py`), at each cut |
+| `wound-3-arm-on-floor` | a cut-off arm lying flat on the floor, the sleeve end towards us, the hand curled beyond it | to build: how the pieces lie. Its BLOOD is left out (brief: no blood): cut ends are scorched black |
+| `wound-4-stab-reactions` | the person struck: back arched, head thrown back, mouth open, arms jerking up; the striker close and driving through | to build: the presenter's reaction as each strike lands (after he raises his hands, answer 8) |
+| cut edges (refs 1, 2) | edges start glowing bright orange and cool | answer 9 updated: rims glow bright orange at the cut, cool to a thin orange line on black over about a second; then wisps of steam on the pile |
+| still requested | a lightsaber cut look (DONE, pack 2); a debate layout; a cat guarding a spot; Netanyahu surprised or impressed; a presenter type (optional); the saber sounds | |
 
 ## Notes from Sam (numbered; mark each done as it is fixed)
 | # | shot | time | note | status |
