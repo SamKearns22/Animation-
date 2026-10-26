@@ -36,6 +36,9 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # carbine about 0.75 m with the stock out; a protest placard of the Defend Our Juries kind about 45 x 60 cm (Sam's photos);
     # a hand-waved flag 0.9 x 0.6 m on a 1.2 m pole; Nelson's Column 51.6 m to the top of the statue.
     'police van side': (5.93, 2.7), 'police van back': (2.02, 2.7), 'carbine': (0.75, 0.2),
+    # Newsdesk (26 Oct): Maul's double-bladed lightsaber, measured on Sam's ref 2 against a 1.75 m man: hilt about
+    # 56 cm, each blade about 65 cm (long thin things: length first)
+    'saberstaff hilt': (0.56, 0.04), 'saber blade': (0.65, 0.04),
     'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
 }
 

@@ -41,6 +41,7 @@ ENTRIES = [
     ('People', 'Press secretary, reporters', 'press_secretary.py', ('cast', 'press_secretary')),
     ('People', 'Matt Damon, the Roadster', 'roadster.py', ('cast', 'roadster')),
     ('People', 'Benjamin Netanyahu', 'netanyahu_cast.py', ('cast', 'netanyahu_cast')),
+    ('People', 'Darth Maul (hood up or down, saberstaff)', 'maul_cast.py', ('cast', 'maul_cast')),
     ('People', 'News presenter (original; Newsdesk)', 'newsdesk_cast.py', ('cast', 'newsdesk_cast')),
     ('Creatures', 'Chrome Centurion robots', 'prepper_robot.py', ('frame', 'prepper', 60.0)),
     ('Creatures', 'Horse to ride (and donkey, pony), with rider', 'mounts.py', ('frame', 'mounts', 'horse')),
