@@ -35,6 +35,9 @@
    the mug steam, `prepper_fx.py`). No blood.
 10. Saber: the soft glow (Sam's Poker Mon exception) on the blades only.
 11. Maul on the seat: crouched on it, one hand on the armrest, saber held low across him, head turning to glare; holds ~2 s.
+    Sam (pack 4, no photo: the cat was a metaphor): "ready for more action, crouched, territorial, staring around". So:
+    the crouch from `maul-7-landing-crouch` on the seat, weight forward, both blades still lit and held ready; the head
+    snaps from look to look (rule: eyes jump), body still; no settling back or relaxing.
 12. Netanyahu: shot 4 mild surprise = brows up, small lean back, no step. Shot 5: a strength sheet (1-6) for Sam to pick;
     default 3.
 13. Bleep: the "S" sound is HEARD; the bleep covers the rest of the word, from just after the S. Subtitle "S***, he's good."
