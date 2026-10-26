@@ -21,8 +21,10 @@
 ## Sam's answers (26 Oct, to the questions in one message; "yes" = my recommendation)
 1. Maul sheet: no notes; use him as built.
 2. Presenter, younger: same navy suit and glasses; no beard, no grey; darker, fuller hair; quicker head moves; more upright.
-3. Staging: all three STAND the whole film, on the open floor in front of the desk: Netanyahu screen left, presenter centre,
-   Maul screen right about 4 m from the presenter (room for the leap). The brief's "in his chair" (shot 2) is overruled.
+3. Staging: all three STAND the whole film, on the open floor in front of the desk. The brief's "in his chair" (shot 2)
+   is overruled. REVISED by Sam's layout reference (pack 3): presenter at the screen-LEFT end, Maul in the MIDDLE, Netanyahu
+   screen RIGHT, about 2.5-3 m apart (my choice: Maul next to the presenter keeps the leap-flip to about 3 m, and Netanyahu
+   watches it all from the far end). Maul leaps screen-left.
 4. Presenter's chair: a third wooden armchair (as the candidates'), behind him; all action on the open floor.
 5. Shot 3: a close shot on Maul matching shot 2's on Netanyahu (same size and height).
 6. Maul IGNITES the saber: both blades light as he springs; the ignition sound leads the jump.
@@ -101,7 +103,9 @@ Pre-flight refuses to run until this line has them, and while any "done?" box be
 | `wound-3-arm-on-floor` | a cut-off arm lying flat on the floor, the sleeve end towards us, the hand curled beyond it | to build: how the pieces lie. Its BLOOD is left out (brief: no blood): cut ends are scorched black |
 | `wound-4-stab-reactions` | the person struck: back arched, head thrown back, mouth open, arms jerking up; the striker close and driving through | to build: the presenter's reaction as each strike lands (after he raises his hands, answer 8) |
 | cut edges (refs 1, 2) | edges start glowing bright orange and cool | answer 9 updated: rims glow bright orange at the cut, cool to a thin orange line on black over about a second; then wisps of steam on the pile |
-| still requested | a lightsaber cut look (DONE, pack 2); a debate layout; a cat guarding a spot; Netanyahu surprised or impressed; a presenter type (optional); the saber sounds | |
+| Pack 3, debate layout (26 Oct; `references/netan-yahoo/debate-layout.jpg`): Sam wants THESE angles and perspective | | |
+| `debate-layout` (UK TV debate) | three people standing in a shallow line across the stage, about 2.5-3 m apart, full bodies, feet visible; the presenter at the LEFT end turned three-quarter towards the candidates; the candidates turned three-quarter back towards him and the camera; the right-hand end of the line slightly nearer the camera; camera in front, a little left of centre, a little above head height and tilted slightly down, wide enough for all three with room above; a big screen on the back wall at head height between the presenter and the middle person (our Hebrew caption goes there); a large round dark floor graphic in front of them; curved blue and purple light strips on the back wall; clear glass lecterns | to plan: this is shot 4's framing and the basis of every camera. Lecterns LEFT OUT (not in the brief; chairs behind them instead; asked Sam) |
+| still requested | a lightsaber cut look (DONE, pack 2); a debate layout (DONE, pack 3); a debate layout; a cat guarding a spot; Netanyahu surprised or impressed; a presenter type (optional); the saber sounds | |
 
 ## Notes from Sam (numbered; mark each done as it is fixed)
 | # | shot | time | note | status |
