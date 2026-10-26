@@ -1,22 +1,35 @@
 # Notes for Netan-Yahoo! (brief: `prompts/netan-yahoo.md`; code to come: `source/netan_yahoo.py` from `source/satire_template.py`)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/netan-yahoo-handovers.md)
-- **Done (26 Oct, planning chat, Opus):** questions sent in one message, all answered (below); sound effects and references
-  asked for. "President" changed to "Prime Minister" in the brief and script (Sam). Nothing built, no pictures, no render.
-- **Next:** wait for Sam's references and sounds (incoming). Then, still PLANNING in this chat: check the references
-  (missing ones named), the plan in metres, the composition sheet (rule 11). Then BUILDING (presenter variant, leap-roll,
-  cuts and pieces, saber glow, Hebrew screens, sound): Opus, high effort, fresh chat. Sam: "begin build once happy with
-  references".
-- **Already built (Newsdesk building chat):** the studio (`source/newsdesk_set.py`), the presenter (`newsdesk_cast.py`,
-  `PRESENTER`), Netanyahu (`netanyahu_cast.py`), Maul with the double-bladed saber and four poses (`maul_cast.py`), the
-  wooden armchairs (`newsdesk_props.py`). Details: `notes/newsdesk.md`. Sam has no notes on the Maul sheet.
-- **Losses and my additions Sam should know about:** additions he approved: leap and landing thump, pieces hitting the
-  floor, chair creak, steam hiss (sounds; my code); the steam wisps; the hood falling back in the roll. Set dressing: NONE
-  (Sam: the real sets are very clean); no ON AIR light, no desk props, no news sting, no studio ambience.
-- **Ambition estimate (rule 24, estimate):** cast and set built; the cost is the action. About 12-18% of a week. Sam took
-  no trims.
+- **Done (26 Oct, planning chat, Opus):** all questions answered ("Sam's answers" below); references packs 1-5 in
+  (Maul movement, wounds, debate layout, Netanyahu faces; the cat dropped; the presenter left to me); the plan in metres
+  and three versions of the composition sheet (`source/netan_yahoo_comp.py`); Sam: "let's build". "President" is
+  "Prime Minister" everywhere. Nothing built yet.
+- **Next: BUILDING, Opus high effort, fresh chat.** In order: (1) start `source/netan_yahoo.py` from
+  `source/satire_template.py` with the PLAN, cameras, `SHOT_CAST`, `BENCHMARK` from the plan below; (2) the younger
+  presenter (answer 2: a `PRESENTER` variant, say what changed); (3) eye direction (`sp['look']`) on the Netanyahu and
+  Maul heads; Netanyahu's surprised and impressed faces (pack 5) and a 1-6 strength sheet; (4) the big Hebrew screen
+  caption 'עימות לראשות הממשלה 2026' and the hook "Israeli Prime Ministerial Debate"; (5) Maul's moves from pack 1: ready
+  stance, ignition, leap-flip (hood falls back), crouch landing, three strikes and follow-through, spring onto the chair,
+  territorial crouch with head snaps (answer 11); (6) the cuts: flare, sparks, flat smoke, orange rims cooling, four
+  pieces falling into a pile, steam (answers 8-9, pack 2; no blood); the presenter's reactions (hands up, then the arch);
+  (7) the saber glow (answer 10). Then the cast sheet; then, motion-led, early clips of the risky moves (rule 8): the
+  leap-flip and landing, the three strikes and pieces, the spring onto the chair.
+- **Waiting on Sam:** the saber sounds (ignition, hum, three swings, a sizzle per cut; kept OFF GitHub); the recordings
+  (later today; "Prime Minister" in the line; "shit" said in full, S heard, rest bleeped).
+- **Already built:** studio `source/newsdesk_set.py`, presenter `newsdesk_cast.py`, Netanyahu `netanyahu_cast.py`, Maul
+  `maul_cast.py` (saberstaff, 4 poses), chairs `newsdesk_props.py`. Reuse: sparks, flat smoke, steam (`prepper_fx.py`),
+  falling pieces (Poker Mon's `launch`), lying pieces (`lying.py`).
+- **Watch out:** this planning session could not install `numba` (pypi.org blocked), which `lying.py` needs. If the
+  building chat hits it, Sam can allow pypi.org in claude.ai Settings, Capabilities.
+- **Losses and my additions Sam should know about:** spacing 1.8 m (his photo: 2.5-3 m; the tall frame); the flip is
+  mostly upwards (about 1 m of travel); shot 4 is now front-left, so the presenter is nearest (the photo had the right end
+  nearer); Netanyahu leaves the frame during shot 4's push-in. Additions he approved: thump, pieces landing, chair creak,
+  steam hiss (sounds, my code), sparks and smoke at the cuts, steam wisps, hood falling back. No set dressing.
+- **Ambition estimate (rule 24, estimate):** about 12-18% of a week; the action is the cost.
 - **Rule requests and proposals not yet in a guide:** none.
-- **Files to open:** `prompts/netan-yahoo.md`, this file, `notes/newsdesk.md`, `story/status.md` (Newsdesk section only).
+- **Files to open:** this file, `prompts/netan-yahoo.md`, `notes/newsdesk.md` (the built cast and set),
+  `guides/satire.md`, `guides/film-quality-rules.md`, `guides/figure-rig.md`, `story/status.md` (Newsdesk section only).
 
 ## Sam's answers (26 Oct, to the questions in one message; "yes" = my recommendation)
 1. Maul sheet: no notes; use him as built.
@@ -77,14 +90,19 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 - The pile: where the presenter stood, falling towards his chair. Maul then springs onto the chair (seat 0.46 m).
 - Cameras: s1 at (-1.8, 1.65, -5.4), straight in front of the presenter, zooming in (lens 2400 to 5200) from full
   figure to waist up; s2/s5 (1.8, 1.62, -3.05) straight in front of Netanyahu, chest up; s3 (0.0, 1.62, -2.75) straight
-  in front of Maul, the same framing; s4 (1.1, 1.8, -5.9) the wide, all three head to foot (Sam's photo: front, right
-  end nearer). The presenter is screen-left whenever the candidates are in shot.
+  in front of Maul, the same framing; s4 (-3.2, 1.6, -4.6), FRONT-LEFT (Sam, 26 Oct: "closer to the
+  action", half the old wide was darkness): the presenter nearest and biggest, the line receding to Netanyahu; all
+  three head to foot at the question (lens 1520, aim (-0.3, 1.1, -0.75)); it PUSHES IN as Maul ignites, ending on Maul
+  crouched on the presenter's chair with the pile in front (lens 2050, aim (-1.35, 1.05, -0.35)); Netanyahu leaves the
+  frame during the push (his reaction is shot 5). The presenter is screen-left whenever the candidates are in shot.
+  To refine when building: the presenter's hand touches the left edge at the start (rule: nobody touches the edge);
+  the bottom quarter is dark studio floor (TikTok's caption bar sits there).
 - Hook Text: the dark ceiling band at the top of every shot; the floor at the bottom of the wide is left clear (TikTok's
   caption bar).
 - To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
   across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal). Awaiting Sam's OK.
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in). Sam: "let's build" (26 Oct).
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|

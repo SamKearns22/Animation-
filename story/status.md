@@ -12,6 +12,9 @@ Read this first in any new session, after CLAUDE.md.
 - 26 Oct (planning chat, Opus): Sam answered all 16 questions (`notes/netan-yahoo.md`, "Sam's answers"); no Maul notes;
   "President" is now "Prime Minister" throughout; no set dressing. NEXT: his references and saber sounds (incoming), then the
   plan in metres and the composition sheet in the planning chat, then building in a fresh chat (Opus high).
+- 26 Oct (planning chat): references packs 1-5 in; plan in metres and the composition sheet (three versions,
+  `source/netan_yahoo_comp.py`); Sam said build. NEXT: BUILDING, Opus high, fresh chat: read `notes/netan-yahoo.md`
+  "Where things stand". Saber sounds and recordings still to come from Sam.
 ## Done (Sam, 25 Oct: posted or closed, no more work): "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
 - 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
   `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.

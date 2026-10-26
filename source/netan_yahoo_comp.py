@@ -24,7 +24,8 @@ CAMS = {
     's1 end':   S.Cam((-1.8, 1.65, -5.4), (-1.8, 1.3, -0.8), focal=5200),    # stay out of frame (Sam, 26 Oct)
     's2 / s5':  S.Cam((1.8, 1.62, -3.05), (1.8, 1.45, -0.95), focal=2700),
     's3':       S.Cam((0.0, 1.62, -2.75), (0.0, 1.47, -0.65), focal=2700),
-    's4':       S.Cam((1.1, 1.8, -5.9), (0.05, 1.0, -0.8), focal=1100),
+    's4':       S.Cam((-3.2, 1.6, -4.6), (-0.3, 1.1, -0.75), focal=1520),   # all three: front-left, presenter nearest
+    's4 push':  S.Cam((-3.2, 1.6, -4.6), (-1.35, 1.05, -0.35), focal=2050),    # pushes in as Maul ignites (Sam: closer)
 }
 
 
@@ -126,7 +127,7 @@ if __name__ == '__main__':
              ('shots 2 and 5', frame(CAMS['s2 / s5'], 'start')),
              ('shot 3', frame(CAMS['s3'], 'start')),
              ('shot 4 start', frame(CAMS['s4'], 'start')),
-             ('shot 4 end (stand-ins)', frame(CAMS['s4'], 'end'))]
+             ('shot 4 end, pushed in (stand-ins)', frame(CAMS['s4 push'], 'end'))]
     cols = 4
     rows = (len(tiles) + cols - 1) // cols
     sheet = Image.new('RGB', (cols * 560 + 20, rows * 1030 + 20), (232, 228, 222))

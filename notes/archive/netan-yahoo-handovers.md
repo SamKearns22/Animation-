@@ -20,3 +20,22 @@
   Cheapest cuts: three strikes only, one wide shot for all the action, reuse the existing poses.
 - **Rule requests and proposals not yet in a guide:** none in the brief or notes.
 - **Files to open:** `prompts/netan-yahoo.md`, this file, `notes/newsdesk.md` (the built cast and set), `story/status.md` (Newsdesk section only).
+
+## Planning, before building (26 Oct)
+- **Done (26 Oct, planning chat, Opus):** questions sent in one message, all answered (below); sound effects and references
+  asked for. "President" changed to "Prime Minister" in the brief and script (Sam). Nothing built, no pictures, no render.
+- **Next:** wait for Sam's references and sounds (incoming). Then, still PLANNING in this chat: check the references
+  (missing ones named), the plan in metres, the composition sheet (rule 11). Then BUILDING (presenter variant, leap-roll,
+  cuts and pieces, saber glow, Hebrew screens, sound): Opus, high effort, fresh chat. Sam: "begin build once happy with
+  references".
+- **Already built (Newsdesk building chat):** the studio (`source/newsdesk_set.py`), the presenter (`newsdesk_cast.py`,
+  `PRESENTER`), Netanyahu (`netanyahu_cast.py`), Maul with the double-bladed saber and four poses (`maul_cast.py`), the
+  wooden armchairs (`newsdesk_props.py`). Details: `notes/newsdesk.md`. Sam has no notes on the Maul sheet.
+- **Losses and my additions Sam should know about:** additions he approved: leap and landing thump, pieces hitting the
+  floor, chair creak, steam hiss (sounds; my code); the steam wisps; the hood falling back in the roll. Set dressing: NONE
+  (Sam: the real sets are very clean); no ON AIR light, no desk props, no news sting, no studio ambience.
+- **Ambition estimate (rule 24, estimate):** cast and set built; the cost is the action. About 12-18% of a week. Sam took
+  no trims.
+- **Rule requests and proposals not yet in a guide:** none.
+- **Files to open:** `prompts/netan-yahoo.md`, this file, `notes/newsdesk.md`, `story/status.md` (Newsdesk section only).
+
