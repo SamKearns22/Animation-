@@ -1,6 +1,13 @@
 # Notes for Netan-Yahoo! (brief: `prompts/netan-yahoo.md`; code to come: `source/netan_yahoo.py` from `source/satire_template.py`)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/netan-yahoo-handovers.md)
+- **26 Oct, 16:45: FINISHED and sent.** Final render (1080x1920, 10 min 20 s) finished with the hook + CranbriJoos sign-off:
+  `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s). Sam approved animatic 3 ("smashed it") but for Maul's glance in the
+  wide shot (his face is drawn mirrored there: fixed in `_maul_look`). Pre-flight named, not fixed: PROP TURN (the all-angle
+  staff test; never seen from behind in the film) and portal (the flat LED-blue screen seen through the glass).
+- **Still open:** Sam's call on Maul's skirt panel (said nothing: left as is); Hebrew caption is my Hebrew (needs a Hebrew
+  reader); rule proposal 12 held for the learnings message (see the end of this file); new kit items (this film's set,
+  cast, pile pieces, `hook_text --w`) still to add to `guides/kit-catalogue.md` / `source/catalogue.py`; `story/status.md`.
 - **Done (26 Oct, building chat, Opus):** the film module `source/netan_yahoo.py` (plan `source/netan_yahoo_plan.py`)
   with all five shots, the action, the 3D pile, sound and subtitles; Sam's cast notes 1-5 fixed (see "Notes from Sam");
   pre-flight clean but for shot 4's length (the brief's one continuous shot, chosen); first animatic rendered and sent
