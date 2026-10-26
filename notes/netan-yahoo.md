@@ -1,18 +1,15 @@
 # Notes for Netan-Yahoo! (brief: `prompts/netan-yahoo.md`; code to come: `source/netan_yahoo.py` from `source/satire_template.py`)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/netan-yahoo-handovers.md)
-- **Done (26 Oct, building chat, Opus):** chairs 0.15 m clear of the desk (sheet v7, Sam: "Go"); the film module
-  `source/netan_yahoo.py` (plan `source/netan_yahoo_plan.py`): all five shots, timing to the recordings, cameras (shot 1
-  zoom, shot 4 push-in), eyes (all three; Maul's eyes can now look and blink), the younger presenter
-  (`newsdesk_cast.PRESENTER_YOUNG`), Netanyahu's nod, surprised and impressed faces 1-6 (`netanyahu_cast.reaction_sheet`),
-  Maul's action (ready, leap-flip with the hood falling back, landing crouch, three strikes, spring onto the chair,
-  head snaps), the cut lines and the four pieces falling into a pile, flare, sparks, smoke, steam, the saber glow
-  (blades only), the big Hebrew screen caption, subtitles (S*** bleep from the vowel, rule 27), sound with Sam's
-  effects and my thump, creak and hiss. Cast sheet v1 and the 1-6 face sheet sent; WAITING for Sam's yes and number.
+- **Done (26 Oct, building chat, Opus):** the film module `source/netan_yahoo.py` (plan `source/netan_yahoo_plan.py`)
+  with all five shots, the action, the 3D pile, sound and subtitles; Sam's cast notes 1-5 fixed (see "Notes from Sam");
+  pre-flight clean but for shot 4's length (the brief's one continuous shot, chosen); first animatic rendered and sent
+  (`--small`). WAITING for Sam's notes on the animatic.
+- **Without numba:** pypi is refused for this session, so `lying.py` runs its 3D loops with numpy (about 5 s a body at
+  frame size). Allowing pypi.org (claude.ai Settings, Capabilities) would make it about 20 times faster.
 - **Recordings:** `source/audio/netan-yahoo-1..5.m4a` (voices.py: all fit, no duplicates). Sam's six saber sounds are
   in `source/audio/netan-yahoo-sfx/` and kept OFF GitHub (.gitignore): a new chat must ask Sam to re-attach them.
-- **Next:** on Sam's yes, motion-led: short clips of the risky moves (leap-flip and landing, the three strikes and
-  pieces, the spring onto the chair), then pre-flight, the check sheet, the animatic.
+- **Next:** Sam's animatic notes (reading notes: Opus medium); the skirt panel is his call on the animatic.
 - **My own critique still open:** the pieces are flat cut-outs turned to lie (a pile, but 2D); the flip is the drawing
   turned on screen (true for shot 4's camera); Maul's skirt panel stays stiff in the strikes; the saberstaff is not a
   solid in the collision audit (the strikes on the presenter are meant contact anyway).
@@ -151,3 +148,8 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 ## Notes from Sam (numbered; mark each done as it is fixed)
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 1 | cast | - | presenter's three-quarter looks like another man (glasses, face like Burnham); shirt and tie wrong | done: his own three-quarter head from his front drawing (`newsdesk_cast.head_view`); shirt V under his chin (`v_at`, views) |
+| 2 | cast | - | everyone thinner in head and body on the eyes row | done: the sheet squeezed the crops (sheet bug, not the cast); crops now keep the tile's shape |
+| 3 | 4 | strikes | small explosions at the strikes not needed | done: the flare removed; sparks and a little smoke kept (pack 2) |
+| 4 | 4 | pile | pieces must be 3D like bodies on the ground; slump fully to the floor; a little further from the chair | done: lying.py pieces (scorched faces), falling under gravity, flat on the floor, the pile 0.38 m further out (towards us) |
+| 5 | - | - | presenter: the bearded one; Netanyahu strength 4 on both shot 5 faces; skirt panel: decide on the animatic | done; done; open (animatic) |
