@@ -153,6 +153,7 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 | still requested | DONE: wound look (pack 2), debate layout (pack 3), Netanyahu faces (pack 5); DROPPED: the cat (Sam: a metaphor; described instead, answer 11); STILL TO COME: a presenter type (optional), the saber sounds | |
 
 - **26 Oct (end): POSTED and CLOSED (Sam).** Rule proposals approved and written as rules 32-37; nothing held. Kit catalogue updated.
+- **Actual cost (Sam, 26 Oct): 16% of a week in total** (estimate was 12-18%), including the story post and the rules.
 
 ## Notes from Sam (numbered; mark each done as it is fixed)
 | # | shot | time | note | status |
