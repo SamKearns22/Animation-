@@ -48,7 +48,9 @@ FLAT = NS.FLAT
 
 # =============================================== STORY ==============================================================
 NAME = 'netan-yahoo'
-HOOK = ('Israeli Prime Ministerial Debate', {'y': 300})   # brief; on the dark ceiling band at the top
+HOOK = ('Israeli Prime Ministerial Debate \U0001F605', {'y': 540, 'x': 225, 'w': 330, 'until': 3.95})
+# Sam, 26 Oct: beside the presenter in shot 1 (screen left: the open dark wall, clear of him as the camera pushes in),
+# with the sweat-smile emoji; until the first cut
 NS.SCREEN_CAPTION = ('עימות לראשות הממשלה', '2026')      # answer 14: 'Debate for the Premiership 2026' (my Hebrew)
 NS.SCREEN_CAPTION_BOX = (-2.45, -0.75, 1.5)               # big, across the screen (over its white bar)
 # Each line: its recording (source/audio/), where its speech starts in the film (`at`), and its subtitles as
@@ -56,8 +58,8 @@ NS.SCREEN_CAPTION_BOX = (-2.45, -0.75, 1.5)               # big, across the scre
 # Chunk times: from the recording's phrases (voices.py) and its syllables, estimated within each phrase.
 LINES = [
     dict(n=1, who='PRESENTER', audio='netan-yahoo-1', at=0.35,
-         text="It's time to introduce our candidates in tonight's debate.",
-         chunks=[(1.04, "It's time to introduce"), (2.24, 'our candidates'), (3.04, "in tonight's debate.")]),
+         text="It's time to introduce the candidates for tonight's debate.",           # Sam's wording, 26 Oct
+         chunks=[(1.04, "It's time to introduce"), (2.24, 'the candidates'), (3.04, "for tonight's debate.")]),
     dict(n=2, who='PRESENTER', audio='netan-yahoo-2', at=4.2,
          text='Liberal, moderate, gently-gently incumbent Prime Minister Netanyahu.',
          chunks=[(1.01, 'Liberal, moderate,'), (2.55, 'gently-gently incumbent'), (4.29, 'Prime Minister'),
@@ -99,7 +101,16 @@ SPECS = {'PRESENTER': dict(NC.PRESENTER, name='PRESENTER'),     # Sam (26 Oct): 
 SHOT_CAST = {'s1': ['PRESENTER'], 's2': ['NETANYAHU'], 's3': ['MAUL'], 's4': ['PRESENTER', 'NETANYAHU', 'MAUL'],
              's5': ['NETANYAHU']}
 REACT = {'s4': 1, 's5': 4}       # Netanyahu's strength (answer 12: shot 4 mild; Sam, 26 Oct: 4 on both shot 5 faces)
-KEEP_CLEAR = []
+KEEP_CLEAR = []        # filled below once the cameras are known (the presenter's head and body in shot 1)
+
+
+def _box_of(t, x, z, dx, y0, y1):
+    if shot_of(t) != 's1':
+        return None
+    c = cam_for(t)
+    pts = [c.project((x + sx, y, z))[0] for sx in (-dx, dx) for y in (y0, y1)]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return (min(xs), min(ys), max(xs), max(ys))
 PROP_SIZES = [('saberstaff blade', 'saber blade', MC.BLADE_M, 0.04, None),
               ('armchair', 'wooden armchair', 2 * PLN.CHAIR_R, NP.RAIL_TOP, None)]
 OUTFIT = {}
@@ -234,6 +245,10 @@ def in_frame(cam, x, z, h=1.6, margin=200):
 
 
 # ------------------------------------------------------------------------------------------------ the presenter
+KEEP_CLEAR += [('his head', lambda t: _box_of(t, P_AT[0], P_AT[1], 0.13, 1.5, 1.88)),
+               ('his body', lambda t: _box_of(t, P_AT[0], P_AT[1], 0.3, 0.0, 1.5))]
+
+
 def presenter(t, cam):
     """Upright, quick head moves (answer 2); eyes to the camera in shot 1, then to whoever he addresses; the flick
     to the camera after the question; alarm, hands up, the arch as each strike lands (pack 2, ref 4)."""
@@ -416,6 +431,12 @@ def _pose_chair(sp, snap):
 SNAPS = [(ON_CHAIR, -0.85, -0.5), (ON_CHAIR + 0.75, 0.9, 0.55), (ON_CHAIR + 1.35, -0.2, -0.1), (ON_CHAIR + 1.9, 0.95, 0.6)]
 
 
+def _towards(a, b, k):
+    """Plan heading a turned the fraction k of the way to heading b (the short way round)."""
+    d = (b - a + 180.0) % 360.0 - 180.0
+    return a + d * k
+
+
 def maul(t, cam):
     """Maul's spec, pose, where he is and how he is turned: (sp, j, x, z, lift, facing, roll)."""
     sp = dict(SPECS['MAUL'])
@@ -429,12 +450,15 @@ def maul(t, cam):
         j = MC.pose('stand', sp)
         j['props'] = [MC.saberstaff('R', (0.5, 1.0, 0.45), (False, False))]
         sp['look'] = look_towards(cam, M_AT, P_AT)
+        if shot_of(t) == 's4':                        # Sam's note 9: turned to the presenter, so the stare reads
+            facing = _towards(facing, to_p, 0.4)
         sp['tilt'] = 0.0                              # the stare is the joke: dead still (listed in the audit)
         return sp, j, x, z, lift, facing, roll
     sp['mood'] = 'snarl'
     if t < TAKEOFF:                                   # ignites: the ready stance, both blades lit
         j = _pose_ready(sp, (True, True))
         sp['look'] = look_towards(cam, M_AT, P_AT)
+        facing = _towards(facing, to_p, 0.4)
         return sp, j, x, z, lift, facing, roll
     if t < LAND:                                      # the leap-flip: up and over, the hood falls back in the roll
         x, z, lift = LEAP(t)
@@ -559,20 +583,123 @@ def _centre(prts):
     return np.mean([q.a for q in prts] + [q.b for q in prts], axis=0)
 
 
+def _mass(q):
+    """A part's rough volume (its weight in the piece's centre of mass)."""
+    if q.kind == LY.ROUND:
+        return (q.ra + q.rb) ** 2 * (np.linalg.norm(q.b - q.a) + q.ra + q.rb)
+    return float(np.prod(q.radii))
+
+
+def _com(prts):
+    w = np.array([_mass(q) for q in prts])
+    c = np.array([(q.a + q.b) / 2 for q in prts])
+    return (c * w[:, None]).sum(0) / w.sum()
+
+
+def _blobs(prts):
+    """Balls along each part (centre, radius): for keeping the pieces out of each other."""
+    out = []
+    for q in prts:
+        if q.kind == LY.ROUND:
+            n = max(2, int(np.linalg.norm(q.b - q.a) / 0.05) + 1)
+            for u in np.linspace(0, 1, n):
+                out.append((q.a + (q.b - q.a) * u, q.ra + (q.rb - q.ra) * u))
+        else:
+            out.append((q.a, float(np.mean(q.radii))))
+    return out
+
+
+_REST = {}
+
+
+def _rest():
+    """Sam's notes 4 and 11: each piece settles as a real thing would, lying on its broadest side (its weight as
+    low as it goes: no balancing on one point), resting on the floor, not on or inside another piece; the head
+    lies with the neck's cut end turned away from the camera (it read as an eye). {piece: (R, (dx, dz))}."""
+    if _REST:
+        return _REST
+    pcs, _ = cut_body()
+    to_cam = np.array(PLN.CAMS['s4']['pos']) - np.array([PILE_AT[0], 0.0, PILE_AT[1]])
+    to_cam[1] = 0.0
+    to_cam /= np.linalg.norm(to_cam)
+    placed = {}
+    for name, pc in PIECES.items():
+        prts = pcs[name]
+        c0 = _com(prts)
+        R0 = LY.rot((0, 1, 0), pc['spin']) @ LY.rot(pc['axis'], pc['deg'])
+        stump = None                                     # the neck's open end: its end furthest from the head
+        neck = next((q for q in prts if q.name == 'neck'), None)
+        head = next((q for q in prts if q.name == 'head'), None)
+        if neck is not None and head is not None:
+            hc = (head.a + head.b) / 2
+            stump = max((neck.a, neck.b), key=lambda e: np.linalg.norm(e - hc)) - hc   # the way the cut end faces
+        best = None
+        for ax in range(0, 360, 10):
+            for az in range(-90, 91, 10):
+                R = LY.rot((0, 0, 1), az) @ LY.rot((1, 0, 0), ax) @ R0
+                turned = LY.moved(prts, R, c0, (0, 0, 0))
+                h = _com(turned)[1] - (c0[1] + LY.lowest(turned) - c0[1])
+                cost = h + 0.0004 * (abs(ax if ax <= 180 else 360 - ax) + abs(az))   # nearest the planned fall
+                if stump is not None:                    # the neck's cut end away from us, or down
+                    d = R @ stump
+                    d = d / (np.linalg.norm(d) + 1e-9)
+                    cost += 0.3 * max(0.0, d @ to_cam + 0.3)
+                if best is None or cost < best[0]:
+                    best = (cost, R)
+        placed[name] = [best[1], np.array(pc['to'], float)]
+    for _ in range(60):                                   # push apart any that lie in each other
+        moved_any = False
+        shapes = {}
+        for name, (R, off) in placed.items():
+            prts = pcs[name]
+            c0 = _com(prts)
+            t = LY.moved(prts, R, c0, (PILE_AT[0] + off[0] - c0[0], 0.0, PILE_AT[1] + off[1] - c0[2]))
+            shapes[name] = _blobs(t)
+        names = list(placed)
+        for i in range(len(names)):
+            for j in range(i + 1, len(names)):
+                worst = 0.0
+                for pa, ra in shapes[names[i]]:
+                    for pb, rb in shapes[names[j]]:
+                        worst = max(worst, ra + rb + 0.01 - np.linalg.norm(pa - pb))
+                if worst > 0:
+                    ca = np.mean([p for p, _ in shapes[names[i]]], axis=0)
+                    cb = np.mean([p for p, _ in shapes[names[j]]], axis=0)
+                    d = np.array([ca[0] - cb[0], ca[2] - cb[2]])
+                    d = d / (np.linalg.norm(d) + 1e-9) * min(0.03, worst / 2 + 0.005)
+                    placed[names[i]][1] += d
+                    placed[names[j]][1] -= d
+                    moved_any = True
+        if not moved_any:
+            break
+    _REST.update({n: (R, tuple(off)) for n, (R, off) in placed.items()})
+    return _REST
+
+
+def _axis_angle(R):
+    ang = math.degrees(math.acos(max(-1.0, min(1.0, (np.trace(R) - 1) / 2))))
+    if ang < 1e-3:
+        return (0.0, 1.0, 0.0), 0.0
+    v = np.array([R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]])
+    if np.linalg.norm(v) < 1e-6:                          # a half turn: the axis from R + I
+        w, V_ = np.linalg.eigh((R + np.eye(3)) / 2)
+        return tuple(V_[:, -1]), ang
+    return tuple(v / np.linalg.norm(v)), ang
+
+
 def piece_at(name, t):
-    """The piece's parts at time t: turning as it falls under gravity, coming to rest flat on the floor."""
+    """The piece's parts at time t: turning as it falls under gravity, coming to rest settled on the floor."""
     pcs, _ = cut_body()
     prts = pcs[name]
-    pc = PIECES[name]
-    c0 = _centre(prts)
+    c0 = _com(prts)
+    Rf, off = _rest()[name]
     tau = max(0.0, t - FALL)
-    h0 = c0[1]
-    fall_t = math.sqrt(2 * max(0.2, h0) / G)               # about how long it takes to come down
+    fall_t = math.sqrt(2 * max(0.2, c0[1]) / G)            # about how long it takes to come down
     u = min(1.0, tau / fall_t)
-    k = u * u                                               # the turn builds up as it falls
-    R = LY.rot((0, 1, 0), pc['spin'] * k) @ LY.rot(pc['axis'], pc['deg'] * k)
-    tx = (PILE_AT[0] + pc['to'][0] - c0[0]) * (1 - (1 - u) ** 2)
-    tz = (PILE_AT[1] + pc['to'][1] - c0[2]) * (1 - (1 - u) ** 2)
+    axis, deg = _axis_angle(Rf)
+    R = LY.rot(axis, deg * u * u)                           # the turn builds up as it falls
+    tx = (PILE_AT[0] + off[0] - c0[0]) * (1 - (1 - u) ** 2)
+    tz = (PILE_AT[1] + off[1] - c0[2]) * (1 - (1 - u) ** 2)
     turned = LY.moved(prts, R, c0, (tx, 0.0, tz))
     rest_y = -LY.lowest(turned)                             # the drop that rests it on the floor
     y = max(-0.5 * G * tau * tau, rest_y) if u < 1.0 else rest_y
@@ -593,15 +720,16 @@ def draw_pile(img, cam, t):
     """The four pieces as one 3D drawing (lying.draw), with their contact shadow on the floor; drawn once and reused
     once everything has settled and the camera has stopped."""
     still = t >= max(PILE_DOWN, ON_CHAIR)
-    key = (B.SS, img.size)
-    if still and key in _PILE_CACHE:
+    key = (B.SS, img.size, cam.pos, cam.at, cam.focal, cam.shake, cam.roll)   # Sam's note 6: shot 4's copy was
+    if still and key in _PILE_CACHE:                    # pasted into shot 5 (the key had no camera)
         img.alpha_composite(_PILE_CACHE[key])
         return
     _, sp = cut_body()
     prts = [q for name in PIECES for q in piece_at(name, t)]
     rim = tuple(int(x + (y - x) * min(1.0, max(0.0, (t - S3) / 1.0))) for x, y in zip(GLOW_HOT, GLOW_COOL))
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    LY.draw(lay, cam, None, dict(sp, cut_rim=rim), surfaces=[((0.0, 0.0, 0.0), (0.0, 1.0, 0.0))], prts=prts)
+    LY.shadow(lay, cam, None, sp, [((0.0, 0.0, 0.0), (0.0, 1.0, 0.0))], prts=prts, reach=0.03)   # Sam's note 11
+    LY.draw(lay, cam, None, dict(sp, cut_rim=rim), prts=prts)
     if still:
         _PILE_CACHE[key] = lay
     img.alpha_composite(lay)

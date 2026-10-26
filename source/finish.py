@@ -2,7 +2,7 @@
 """The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled final
 render, add the Hook Text (if the film has one) and the CranbriJoos sign-off at the end.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--until 3.6] [--centre]
+    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
 
 Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text can change without a re-render.
 """
@@ -24,7 +24,7 @@ def has_sound(path):
 def main():
     src, dst = sys.argv[1], sys.argv[2]
     rest, extra = sys.argv[3:], []
-    for flag in ('--y', '--x', '--until'):                # passed on to hook_text.py (e.g. a lower line, clear of a face)
+    for flag in ('--y', '--x', '--w', '--until'):                # passed on to hook_text.py (e.g. a lower line, clear of a face)
         if flag in rest:
             i = rest.index(flag)
             extra += [flag, rest[i + 1]]

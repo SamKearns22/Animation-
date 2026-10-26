@@ -759,9 +759,10 @@ def _lw(k_px):
     return max(2, int(round(2.6 * B.SS * 0.75 * max(0.25, s) ** 0.6)))
 
 
-def shadow(img, cam, k, sp, surfaces, alpha=60, prts=None):
+def shadow(img, cam, k, sp, surfaces, alpha=60, prts=None, reach=None):
     """The flat contact shadow on each surface [(point, normal, (lo, hi) bounds in x/z or None)] where the body
-    rests on or over it (within 22 cm), before the body is drawn. `prts`: draw these parts instead of k's."""
+    rests on or over it (within 22 cm), before the body is drawn. `prts`: draw these parts instead of k's.
+    `reach`: a closer touch than 22 cm (Netan-Yahoo!'s pile: only where it meets the floor, so none shows round it)."""
     prts = prts if prts is not None else parts(k, sp)
     P = np.array([q.row() for q in prts])
     box = _bbox(cam, prts, img)
@@ -782,7 +783,7 @@ def shadow(img, cam, k, sp, surfaces, alpha=60, prts=None):
         OUT = np.zeros(len(Q), np.int32)
         ok = tt > 0
         sub = np.zeros(int(ok.sum()), np.int32)
-        _under(P, np.ascontiguousarray(Q[ok]), nrm, 0.22 if nrm[1] > 0.7 else 0.045, sub)   # a wall: the touch
+        _under(P, np.ascontiguousarray(Q[ok]), nrm, (reach or 0.22) if nrm[1] > 0.7 else 0.045, sub)   # a wall: the touch
         OUT[ok] = sub
         lay |= OUT.reshape(lay.shape).astype(bool)
     if not lay.any():

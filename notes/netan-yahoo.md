@@ -153,3 +153,9 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 | 3 | 4 | strikes | small explosions at the strikes not needed | done: the flare removed; sparks and a little smoke kept (pack 2) |
 | 4 | 4 | pile | pieces must be 3D like bodies on the ground; slump fully to the floor; a little further from the chair | done: lying.py pieces (scorched faces), falling under gravity, flat on the floor, the pile 0.38 m further out (towards us) |
 | 5 | - | - | presenter: the bearded one; Netanyahu strength 4 on both shot 5 faces; skirt panel: decide on the animatic | done; done; open (animatic) |
+| 6 | 5 | 28.5- | the pile stuck over Netanyahu; it has no reason to be in the shot | done: the settled pile's saved drawing had no camera in its key, so shot 4's copy was pasted into shot 5; keyed by camera now |
+| 7 | 1 | 0.5- | subtitle: "It's time to introduce the candidates for tonight's debate" | done |
+| 8 | 1 | 0-3.95 | Hook Text in the animatic, on his left, with 😅 at the end | done: screen left beside his head (his own left has no room as the camera pushes in), three rows (hook_text --w), stamped on the animatic; hookcheck clear |
+| 9 | 4 | to 22.3 | Maul stares to the right, not at the presenter | done: turned 40% towards the presenter before and at ignition; iris travel 0.4 -> 0.55 |
+| 10 | 4 | - | zoom in a little | done: lens 1420 -> 1650 (leap and strikes still in frame) |
+| 11 | 4 | pile | pieces float / sit on each other; shadows show; head's neck end looks like an eye | REPEAT of note 4. Why it failed: fixed turns, then dropped to the lowest point only (balanced on one point), and no check between pieces. Now: each piece settles on its broadest side (lowest centre of weight), kept out of the others, head with the neck end turned away; shadow only where it touches (reach 3 cm) |

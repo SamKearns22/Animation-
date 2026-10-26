@@ -89,7 +89,7 @@ def _eye(p, ex, ey, sgn, w, h, lid, glare, look=0.0, gaze_dy=0.0, closed=False):
     lo = [(ex + w * u, ey + h * 0.75 * (1 - u * u)) for u in us]
     opening = up + lo[::-1][1:-1]
     p.poly(opening, M_EYE, None)
-    cx, cy = ex + look * w * 0.4, ey + 1 + gaze_dy
+    cx, cy = ex + look * w * 0.55, ey + 1 + gaze_dy      # 0.55: the stare reads at a distance (Sam, 26 Oct)
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
     ring = clip_convex(opening[::-1], circ(h * 0.72))
     if len(ring) >= 3:

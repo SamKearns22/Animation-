@@ -18,11 +18,11 @@ sys.path.insert(0, HERE)
 import hook_text as H            # noqa: E402
 
 
-def hook_box(text, y=880, x=None, centre=False, **_):
+def hook_box(text, y=880, x=None, centre=False, w=None, **_):
     """Where the Hook Text's white boxes sit on the frame (x0, y0, x1, y1)."""
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, 'hook.png')
-        H.card(1080, 1920, text, y, png, centre=centre, x_mid=x)
+        H.card(1080, 1920, text, y, png, centre=centre, x_mid=x, width=w)
         return Image.open(png).getbbox()
 
 

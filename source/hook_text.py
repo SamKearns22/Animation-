@@ -4,7 +4,7 @@ first, like the app's native text): TikTok Sans Bold, sentence case, black on a 
 the safe area, over the picture while it plays. On from the first frame, gone (a quick fade) at `--until` seconds -
 by default the first cut. Picture and sound are otherwise untouched.
 
-    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--x 540] [--centre]
+    python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--x 540] [--w 400] [--centre]
 """
 import os
 import subprocess
@@ -26,8 +26,25 @@ def emoji_img(ch, px):
     return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
 
 
-def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None):
+def _rows(d, words, f, n):
+    """The words in n balanced rows (the widest row as short as it can be)."""
+    if n == 1 or len(words) < n:
+        return [' '.join(words)]
+    best = None
+    for i in range(1, len(words) - n + 2):
+        rest = _rows(d, words[i:], f, n - 1)
+        rows = [' '.join(words[:i])] + rest
+        wmax = max(d.textlength(r, font=f) for r in rows)
+        if best is None or wmax < best[0]:
+            best = (wmax, rows)
+    return best[1]
+
+
+def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None):
+    """`width`: the card's widest row (at 1080 wide) when it sits beside someone (Netan-Yahoo!): up to three rows."""
     k = w / 1080
+    room_w = (width if width else SAFE_X1 - SAFE_X0 - 80) * k
+    max_rows = 3 if width else 2
     text = text.replace('\ufe0f', '')                 # emoji variation selectors: the picture is the emoji
     tail = ''
     while text and ord(text[-1]) > 0x2000:          # trailing emoji are drawn as pictures after the last word
@@ -35,17 +52,19 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None):
     text = text.rstrip()
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    while True:                                # one or two balanced lines, inside the safe width
+    while True:                                # one to three balanced rows, inside the safe width
         f = ImageFont.truetype(FONT, int(size * k))
         words = text.split()
-        rows = [text]
-        if d.textlength(text, font=f) > (SAFE_X1 - SAFE_X0 - 80) * k:
-            cut = min(range(1, len(words)), key=lambda i: abs(d.textlength(' '.join(words[:i]), font=f)
-                                                               - d.textlength(' '.join(words[i:]), font=f)))
-            rows = [' '.join(words[:cut]), ' '.join(words[cut:])]
         room = (f.size + int(10 * k)) * len(tail)        # the emoji count towards the width (four suits overran it)
-        if max(d.textlength(r, font=f) + (room if i == len(rows) - 1 else 0)
-               for i, r in enumerate(rows)) <= (SAFE_X1 - SAFE_X0 - 80) * k:
+        fits = None
+        for n in range(1, max_rows + 1):
+            rows = _rows(d, words, f, n)
+            if max(d.textlength(r, font=f) + (room if i == len(rows) - 1 else 0)
+                   for i, r in enumerate(rows)) <= room_w:
+                fits = rows
+                break
+        if fits:
+            rows = fits
             break
         size -= 4
     lh = int(f.size * 1.18)
@@ -82,6 +101,9 @@ def main():
         i = a.index('--until'); until = float(a[i + 1]); del a[i:i + 2]
     if '--y' in a:
         i = a.index('--y'); y_mid = float(a[i + 1]); del a[i:i + 2]
+    width = None
+    if '--w' in a:
+        i = a.index('--w'); width = float(a[i + 1]); del a[i:i + 2]
     x_mid = None
     if '--x' in a:
         i = a.index('--x'); x_mid = float(a[i + 1]); del a[i:i + 2]
@@ -91,7 +113,7 @@ def main():
                 for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "hook.png")
-        card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid)
+        card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid, width=width)
         fade = 0.25
         vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
               f'[0:v][t]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]')
