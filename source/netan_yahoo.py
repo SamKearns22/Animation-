@@ -446,6 +446,16 @@ def _towards(a, b, k):
     return a + d * k
 
 
+def _maul_look(cam, me, other):
+    """Maul's glance towards `other`. Sam, 26 Oct: in the wide shot it went the wrong way: his face is drawn mirrored
+    there (checked at the eyes: look -0.65 put the pupils on the right), so the wide shot's glance is turned round and
+    held short of the corner (at the full -1 the pupil slides out of the eye and only the yellow shows)."""
+    k = look_towards(cam, me, other)
+    if cam.pos[0] < me[0] and cam.pos[2] < me[1] and abs(cam.pos[0] - me[0]) > 1.0:    # the wide camera (to his left, far)
+        return -max(-0.75, min(0.75, k))
+    return k
+
+
 def maul(t, cam):
     """Maul's spec, pose, where he is and how he is turned: (sp, j, x, z, lift, facing, roll)."""
     sp = dict(SPECS['MAUL'])
@@ -458,13 +468,13 @@ def maul(t, cam):
     if t < IGNITE:                                    # still, staring at the presenter; staff unlit at his side
         j = MC.pose('stand', sp)
         j['props'] = [MC.saberstaff('R', (0.5, 1.0, 0.45), (False, False))]
-        sp['look'] = look_towards(cam, M_AT, P_AT)
+        sp['look'] = _maul_look(cam, M_AT, P_AT)
         sp['tilt'] = 0.0                              # the stare is the joke: dead still (listed in the audit)
         return sp, j, x, z, lift, facing, roll
     sp['mood'] = 'snarl'
     if t < TAKEOFF:                                   # ignites: the ready stance, both blades lit
         j = _pose_ready(sp, (True, True))
-        sp['look'] = look_towards(cam, M_AT, P_AT)
+        sp['look'] = _maul_look(cam, M_AT, P_AT)
         return sp, j, x, z, lift, facing, roll
     if t < LAND:                                      # the leap-flip: up and over, the hood falls back in the roll
         x, z, lift = LEAP(t)
@@ -480,7 +490,7 @@ def maul(t, cam):
     x, z = LAND_AT
     to_p = math.degrees(math.atan2(P_AT[0] - x, P_AT[1] - z))
     facing = to_p - 40.0                              # three-quarter: towards the presenter, open to the camera
-    sp['look'] = look_towards(cam, LAND_AT, P_AT)
+    sp['look'] = _maul_look(cam, LAND_AT, P_AT)
     if t < S1 - 0.14:                                 # the landing crouch, then rising into the first wind-up
         k = ease((t - (S1 - 0.3)) / 0.16)
         a = _pose_crouch(sp)
