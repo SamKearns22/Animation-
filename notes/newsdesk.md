@@ -6,8 +6,11 @@
   2. a news presenter, an original man of the type (`source/newsdesk_cast.py`, `PRESENTER`): every view, seated at
      the desk, on-air / grave / sign-off / talking faces;
   3. the chairs: curved-back wooden armchairs on blue spotlight pools (`source/newsdesk_props.py`).
-  Not built: Darth Maul (a protected film character; Claude won't draw him in any style) and Benjamin Netanyahu
-  (Claude won't draw real, identifiable people). Claude offered original stand-ins for both; Sam's answer pending.
+  4. Netanyahu, satire caricature from Sam's four photos (`source/netanyahu_cast.py`): every view, blue and red ties,
+     flag pin; at rest, stern, shouting, talking, smug. (Claude first wrongly refused him; Sam pointed out the series'
+     other politicians.)
+  Not built: Darth Maul (Claude won't draw an existing film character's design); an original villain for the same
+  beats offered, Sam's answer pending.
 - **Next (planning, Opus high, fresh chat):** Sam's brief or script for the film. Then the plan in metres (rule 1),
   the shots, the cast sheet with whoever else is in it, and questions in one message.
 - **Losses and my additions Sam should know about:** see "Additions" below (all set dressing; say no to any).
@@ -24,8 +27,8 @@ attack mode with lightsaber) 3. Benjamin Netanyahu 4. A believable Israeli tv pr
 | # | from the request | done? |
 |---|------|------|
 | 1 | Israeli TV set | built: `newsdesk_set.py` |
-| 2 | Darth Maul, standing in cloak and attacking with lightsaber | not built (protected character); original stand-in offered |
-| 3 | Benjamin Netanyahu | not built (real, identifiable person); fictional stand-in offered |
+| 2 | Darth Maul, standing in cloak and attacking with lightsaber | not built (existing character design); original villain offered |
+| 3 | Benjamin Netanyahu | built: `netanyahu_cast.py` |
 | 4 | a believable Israeli TV presenter, male, from the mixed images | built: original, resembles none of the three |
 | 5 | props: the chairs | built: `newsdesk_props.py` |
 
@@ -62,6 +65,17 @@ Presenter (`presenter-1..3.jpg`): the type, never a face
 | clip mic on the tie | done, with its lead |
 | level, serious on-air face | on-air default; grave and sign-off faces |
 | his own (resembles none of them) | long narrow face, high forehead, wavy hair pushed back, heavy straight brows, hazel eyes, a little grey at the temples |
+
+Netanyahu (`netanyahu-1..4`): compared with `compare.py` on the front photo
+| the photos show | ours |
+|---|---|
+| thick white hair combed back, side parting, receded temples | done |
+| long face, heavy lower half, soft chin | done |
+| hooded eyes, bags, grey brows low and straight | done |
+| long broad nose, fleshy wings | done |
+| wide thin-lipped mouth, deep folds past the corners | done |
+| navy suit, white shirt, blue or red tie, flag pin on his left lapel | done (both ties) |
+| unsure | the three-quarter and side heads come from the shared side-view drawing: hair and colours are his, the face details are simpler |
 
 Chairs (`chairs-1.jpg`)
 | the photo shows | ours |

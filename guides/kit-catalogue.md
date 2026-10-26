@@ -24,6 +24,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Hope Again cabinet (Streeting, Rayner, Healey, Mahmood, Miliband; armour) | `source/burnham.py` | |
 | Trump, Putin, Zelensky, Claudia | `source/traitors_cast.py` | likeness heads |
 | Reform HQ five (Shocking Behaviour) | `source/shocking_cast.py` | likeness heads |
+| Benjamin Netanyahu (navy suit, blue or red tie, flag pin) | `source/netanyahu_cast.py` | likeness head; moods incl. shouting; sheet: `netanyahu_cast.py sheet OUT.jpg` |
 | Old lady with placard, Met officers (hi-vis, senior officer, armed), protest crowd | `source/power_crime_cast.py` | crowds of 2,000 |
 | Poker players, dealer, guards, onlookers | `source/poker_mon_cast.py` | |
 | Press secretary and reporters (crowd from behind) | `source/press_secretary.py` | `reporter` |
