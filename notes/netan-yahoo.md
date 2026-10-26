@@ -88,7 +88,14 @@ Pre-flight refuses to run until this line has them, and while any "done?" box be
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |
 |---|---|---|
-| (none yet: requested) | | |
+| Pack 1, Maul movement (26 Oct; `references/maul/maul-7..11`) | | |
+| `maul-11-aerial-flip` (stunt photo) | the "forward roll" done IN THE AIR: a forward flip off a springboard, upside down at the top, knees tucked, cloak billowing out, staff held upright in one hand, hood up going in | to build (leap-flip); my choice: the roll is this aerial flip, not a roll along the floor |
+| `maul-9-leap-tuck` (figure) | the top of the leap: knees tucked high, body tilted back, free hand reaching up and out with fingers spread, saber arm low, cloak and skirts flaring below, snarl | to build |
+| `maul-7-landing-crouch` (painting) | the predatory crouch: one knee near the floor, the other foot planted, free hand's fingertips splayed on the floor in front, head low and eyes up glaring, hood down, cloak pooling round him, staff held out to the side, both blades lit | to build; also the model for the crouch on the chair (answer 11) |
+| `maul-10-wide-guard` (figure) | ready stance after ignition: feet very wide, knees bent, saber hand raised back with the blade up, free arm flung out sideways, fingers spread, sash and skirts flaring | to build (from 'attack' pose) |
+| `maul-8-low-lunge` (photo) | follow-through after a strike: deep lunge, torso twisted, staff diagonal across behind him with both blades lit, free hand forward and open, looking back over his shoulder | to build (from 'strike' pose) |
+| saber look (refs 8, 9, 10) | blades: a near-white core with a red edge and a soft red halo; hilt silver with black grips | answer 10: soft glow, blades only |
+| still requested | a lightsaber cut look; a debate layout; a cat guarding a spot; Netanyahu surprised or impressed; a presenter type (optional); the saber sounds | |
 
 ## Notes from Sam (numbered; mark each done as it is fixed)
 | # | shot | time | note | status |
