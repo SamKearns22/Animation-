@@ -56,20 +56,40 @@ def netanyahu_head(img, p, sp, t, hx, hy):
                      (hx - hw * 1.0, hy + hh * 0.42)], 4)          # long, rounding to a soft chin
     p.poly(outline, skin, INK, 2.6)
     sd = dk(skin, 0.8)
-    for k in range(3):                                              # faint forehead lines
-        y = hy - hh * 0.5 + 12 * k
-        p.line(curve([(fx - 30 + 4 * k, y + 2), (fx, y - 1), (fx + 30 - 4 * k, y + 2)], 3), dk(skin, 0.88), 1.2)
     mood = sp.get('mood', 'neutral')
+    f = max(0.0, min(1.0, sp.get('react', 3) / 6.0)) if mood in ('surprised', 'impressed') else 0.0
+    sur = f if mood == 'surprised' else 0.0
+    for k in range(3 + (sur > 0.3)):                                # forehead lines: deeper when surprised
+        y = hy - hh * 0.5 + 12 * k - 8 * sur
+        lift = 5 * sur
+        p.line(curve([(fx - 30 + 4 * k, y + 2), (fx, y - 1 - lift), (fx + 30 - 4 * k, y + 2)], 3),
+               dk(skin, 0.88 - 0.1 * sur), 1.2 + 0.8 * sur)
     st = eye_state(sp, lid=0.4)                                     # hooded: the lid sits low
+    if mood == 'surprised':                                         # pack 5: eyes wide open
+        st['lid'] = 0.4 * (1 - f) if 'lid' not in sp else sp['lid']
+    elif mood == 'impressed':                                       # sizing up: a touch heavier
+        st['lid'] = 0.4 + 0.06 * f if 'lid' not in sp else sp['lid']
     for sgn in (-1, 1):
         ex, ey = fx + sgn * 27, fy - 8
         eye(p, ex, ey, sgn, 13, 6.5, N_IRIS, st, dk(skin, 0.86), liner=2.4)
         p.line(curve([(ex - 15, ey - 6), (ex - 2, ey - 13), (ex + 15, ey - 7)], 3), sd, 1.6)          # the hood's fold
         p.line(curve([(ex - 12, ey + 10), (ex, ey + 15), (ex + 12, ey + 10)], 3), sd, 1.6)          # bags
         p.line(curve([(ex - 8, ey + 18), (ex + 2, ey + 21), (ex + 12, ey + 17)], 3), dk(skin, 0.86), 1.2)
-    bmood = 'fury' if mood in ('fury', 'stern') else mood
-    brows(p, dict(sp, mood=bmood, strength=0.6 if mood == 'stern' else sp.get('strength', 1.0)), fx, fy - 22, 27,
-          N_BROW, 5.2, 2, 0, 30)                                    # grey, low and nearly straight
+    if mood in ('surprised', 'impressed'):                          # his own brows for these (the library's off)
+        for sgn in (-1, 1):
+            if mood == 'surprised':                                 # both up, the inner ends highest
+                up_in, up_out = 8 + 24 * f, 4 + 12 * f
+            elif sgn > 0:                                           # impressed: his left brow (screen right) up
+                up_in, up_out = 4 + 12 * f, 6 + 20 * f
+            else:                                                   # the other a little down
+                up_in, up_out = -1 - 2 * f, 0.0
+            y0 = fy - 22
+            p.line(curve([(fx + sgn * 9, y0 - up_in), (fx + sgn * 26, y0 - (up_in + up_out) / 2 - 3),
+                          (fx + sgn * 42, y0 - up_out + 2)], 3), N_BROW, 5.2)
+    else:
+        bmood = 'fury' if mood in ('fury', 'stern') else mood
+        brows(p, dict(sp, mood=bmood, strength=0.6 if mood == 'stern' else sp.get('strength', 1.0)), fx, fy - 22, 27,
+              N_BROW, 5.2, 2, 0, 30)                                # grey, low and nearly straight
     # the long, broad nose: the bridge, a rounded tip, both nostril wings
     p.line([(fx - 3, fy - 4), (fx - 7, fy + 28)], INK, 1.8)
     p.line(curve([(fx - 7, fy + 28), (fx - 6, fy + 38), (fx + 2, fy + 42), (fx + 9, fy + 38)], 3), INK, 2.0)    # rounded tip
@@ -95,6 +115,17 @@ def netanyahu_head(img, p, sp, t, hx, hy):
         p.poly(curve([(fx - 22, my - 1), (fx, my - 4), (fx + 22, my - 1), (fx, my + 4)], 3), SC.TEETH, None)
         p.poly(curve([(fx - 16, my + 21), (fx, my + 16), (fx + 16, my + 21), (fx, my + 24)], 3), (200, 210, 214), None)
         p.line(shape, INK, 2.2)
+    elif mood == 'surprised' and not SC.talking(sp):                # mouth dropped open, the lower lip down
+        o = 3 + 15 * f
+        shape = curve([(fx - 20 + 4 * f, my), (fx, my - 2), (fx + 20 - 4 * f, my), (fx + 14, my + o), (fx, my + o + 3),
+                       (fx - 14, my + o)], 3)
+        p.poly(shape, SC.MOUTH_IN, INK, 2.2)
+        p.poly(curve([(fx - 14, my + o), (fx, my + o + 3), (fx + 14, my + o), (fx, my + o + 7)], 3), N_LIP, INK, 1.4)
+    elif mood == 'impressed' and not SC.talking(sp):                # lips pressed together, corners a little down
+        dn = 2 + 5 * f
+        p.poly(curve([(fx - 24, my + 3), (fx, my + 1), (fx + 24, my + 3), (fx, my + 8 + 2 * f)], 3), N_LIP, None)
+        p.line(curve([(fx - 27, my + 2 + dn), (fx - 12, my + 1), (fx + 12, my + 1), (fx + 27, my + 2 + dn)], 3), INK, 2.4)
+        p.line(curve([(fx - 10, my + 14 + 2 * f), (fx, my + 12 + 2 * f), (fx + 10, my + 14 + 2 * f)], 3), sd, 1.4)   # chin pushed up
     else:
         mouth_or_talk(p, sp, fx, my, N_LIP, width=28, lips=True)
     # hair: thick, white, combed back with a slight sweep; receded at the temples, full and short over the ears
@@ -208,6 +239,41 @@ def face_png(out, sp=None):
     im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
     V.person(im, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp or NETANYAHU), 0.0, 0)
     im.crop((240, 380, 840, 1200)).save(out)
+    return out
+
+
+def reaction_sheet(out, tie=None):
+    """Netan-Yahoo! (answer 12, pack 5): the surprised and impressed faces at strengths 1-6, each row beside its photo,
+    for Sam to pick a number (default 3)."""
+    import views as V
+    from PIL import ImageFont
+    B.SS = 1
+    W, H = 2340, 1060
+    sh = Image.new('RGB', (W, H), (232, 228, 222))
+    d = ImageDraw.Draw(sh)
+    big = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 34)
+    sm = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 28)
+    base = dict(NETANYAHU_RED if tie is None else dict(NETANYAHU, tie=tie))
+    rows = [('surprised', 'netanyahu-surprised.jpg', dict(look=-0.5, gaze_dy=-2.0)),
+            ('impressed', 'netanyahu-impressed.jpg', dict(look=-0.7))]
+    for r, (mood, ref, extra) in enumerate(rows):
+        y = 60 + r * 500
+        d.text((20, y - 50), f'{mood} (strength 1 = slight .. 6 = huge); eyes towards Maul (screen left)', font=big,
+               fill=(30, 30, 30))
+        try:
+            ph = Image.open(os.path.join(HERE, '..', 'references', 'netan-yahoo', ref)).convert('RGB')
+            ph.thumbnail((330, 440))
+            sh.paste(ph, (20, y))
+        except OSError:
+            d.text((20, y + 200), 'photo missing', font=sm, fill=(160, 30, 30))
+        for k in range(1, 7):
+            im = Image.new('RGBA', (1080, 1920), (246, 244, 238, 255))
+            V.person(im, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(base, mood=mood, react=k, **extra), 0.0, 0)
+            tile = im.crop((300, 420, 780, 1060)).convert('RGB').resize((300, 400), Image.LANCZOS)
+            x = 370 + (k - 1) * 325
+            sh.paste(tile, (x, y))
+            d.text((x + 130, y + 404), str(k), font=big, fill=(30, 30, 30))
+    sh.save(out, quality=88)
     return out
 
 

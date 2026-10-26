@@ -79,17 +79,22 @@ def presenter_head(img, p, sp, t, hx, hy):
                      (hx, hy + hh * 1.16), (hx - hw * 0.46, hy + hh * 1.1), (hx - hw * 0.86, hy + hh * 0.84),
                      (hx - hw * 1.0, hy + hh * 0.46)], 4)          # long and narrow, a high forehead
     p.poly(outline, skin, INK, 2.6)
-    _beard(p, sp, hx, hy, hw, hh, fx, fy)
+    young = sp.get('young', False)
+    if sp.get('beard'):
+        _beard(p, sp, hx, hy, hw, hh, fx, fy)
+    else:                                                 # clean-shaven: the chin's soft crease only
+        p.line(curve([(fx - 12, fy + 80), (fx, fy + 83), (fx + 12, fy + 80)], 3), dk(skin, 0.84), 1.3)
     sd = dk(skin, 0.84)
     st = eye_state(sp, lid=0.26)                          # deep-set: the lid sits a little low
     for sgn in (-1, 1):
         ex, ey = fx + sgn * 25, fy - 8
         p.line(curve([(ex - 13, ey - 11), (ex, ey - 14), (ex + 13, ey - 11)], 3), sd, 1.4)   # the socket's shadow
         eye(p, ex, ey, sgn, 12, 7, P_IRIS, st, dk(skin, 0.86), liner=2.4)
-        p.line([(ex - 9, ey + 11), (ex + 1, ey + 13), (ex + 9, ey + 11)], sd, 1.2)          # a faint line under
+        if not young:
+            p.line([(ex - 9, ey + 11), (ex + 1, ey + 13), (ex + 9, ey + 11)], sd, 1.2)      # a faint line under
     mood = sp.get('mood', 'neutral')
     bsp = dict(sp, mood={'grave': 'upset'}.get(mood, mood), strength=0.45 if mood == 'grave' else sp.get('strength', 1.0))
-    brows(p, bsp, fx, fy - 30, 25, P_HAIR, 6.5, 1, 0, 30)  # heavy, straight brows
+    brows(p, bsp, fx, fy - 30, 25, sp.get('hair_c', P_HAIR), 6.5, 1, 0, 30)  # heavy, straight brows
     # the glasses: slim rounded-rectangle frames, tortoiseshell, thicker along the top
     for sgn in (-1, 1):
         ex, ey = fx + sgn * 26, fy - 7
@@ -113,17 +118,20 @@ def presenter_head(img, p, sp, t, hx, hy):
     else:
         mouth_or_talk(p, sp, fx, my, P_LIP, width=21, lips=True)
     # hair: short at the sides, a soft wave on top pushed back off the face; grey just at the temples
-    top = hy - hh - 22
-    hair = [(hx - hw - 5, hy - 8), (hx - hw - 8, hy - 50), (hx - hw * 0.96, top + 40), (hx - hw * 0.66, top + 10),
+    hc = sp.get('hair_c', P_HAIR)
+    hl = sp.get('hair_l', P_HAIR_L)
+    full = 14 if young else 0                             # the younger man: fuller on top and at the sides
+    top = hy - hh - 22 - full
+    hair = [(hx - hw - 5, hy - 8), (hx - hw - 8 - full * 0.4, hy - 50), (hx - hw * 0.96, top + 40), (hx - hw * 0.66, top + 10),
             (hx - hw * 0.24, top - 6), (hx + hw * 0.2, top - 10), (hx + hw * 0.62, top - 2), (hx + hw * 0.94, top + 24),
-            (hx + hw + 8, hy - 52), (hx + hw + 5, hy - 8), (hx + hw - 5, hy - 44), (hx + hw * 0.8, hy - hh * 0.8),
+            (hx + hw + 8 + full * 0.4, hy - 52), (hx + hw + 5, hy - 8), (hx + hw - 5, hy - 44), (hx + hw * 0.8, hy - hh * 0.8),
             (hx + hw * 0.42, hy - hh * 0.94), (hx, hy - hh * 0.98), (hx - hw * 0.44, hy - hh * 0.96),
             (hx - hw * 0.8, hy - hh * 0.82), (hx - hw + 5, hy - 44)]
-    p.poly(curve(hair, 4), P_HAIR, INK, 2.6)
+    p.poly(curve(hair, 4), hc, INK, 2.6)
     for k in range(5):                                    # the wave: strands lifting up and back
         x0 = hx - hw * 0.62 + k * hw * 0.3
-        p.line(curve([(x0, hy - hh * 0.92), (x0 + 6, top + 20), (x0 + 18, top + 6)], 3)[:9], P_HAIR_L, 1.5)
-    for sgn in (-1, 1):                                   # a little grey at the temples: three fine strokes
+        p.line(curve([(x0, hy - hh * 0.92), (x0 + 6, top + 20), (x0 + 18, top + 6)], 3)[:9], hl, 1.5)
+    for sgn in ((-1, 1) if sp.get('grey') else ()):                                   # a little grey at the temples: three fine strokes
         for k in range(3):
             x = hx + sgn * (hw - 1 + 2 * k)
             p.line([(x, hy - 14 - 4 * k), (x + sgn * 1, hy - 40 - 2 * k)], P_GREY, 1.6)
@@ -166,7 +174,12 @@ PRESENTER = dict(who='presenter', name='Presenter', skin=P_SKIN, hw=66, hh=100, 
                  glasses_c=P_FRAME, brow_c=P_HAIR, brow_w=6.0, nose='long', outfit='suit', jacket=NAVY_SUIT,
                  shirt=(246, 246, 244), tie=P_TIE, shoulders=152, trousers=NAVY_SUIT, full=True, pose='custom',
                  height=1.80)
-CAST = {'presenter': PRESENTER}
+# Netan-Yahoo! (Sam, 26 Oct, answer 2): the same man, younger: same navy suit and glasses; no beard, no grey; darker,
+# fuller hair; quicker head moves and more upright (both in the film's acting, not the drawing)
+P_HAIR_Y, P_HAIR_YL = (26, 20, 18), (58, 44, 38)
+PRESENTER_YOUNG = dict(PRESENTER, beard=None, grey=None, hair_c=P_HAIR_Y, hair_l=P_HAIR_YL, brow_c=P_HAIR_Y, young=True,
+                       height=1.80)
+CAST = {'presenter': PRESENTER, 'presenter_young': PRESENTER_YOUNG}
 
 
 def sheet(out):

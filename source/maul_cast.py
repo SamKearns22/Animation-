@@ -78,14 +78,19 @@ def _horns(p, base_pts):
         p.line([(x + nx * w * 0.9, y + ny * w * 0.9), (x - nx * w * 0.9, y - ny * w * 0.9)], M_HORN_D, 2.2)   # the root
 
 
-def _eye(p, ex, ey, sgn, w, h, lid, glare):
-    """His yellow eye: the inner end of the upper lid pulled down by `glare` (no brows: the lid makes the scowl)."""
+def _eye(p, ex, ey, sgn, w, h, lid, glare, look=0.0, gaze_dy=0.0, closed=False):
+    """His yellow eye: the inner end of the upper lid pulled down by `glare` (no brows: the lid makes the scowl).
+    look (-1 .. 1 across, screen right +) and gaze_dy (down +) move the iris; closed draws the shut lid (a blink)."""
     us = np.linspace(-1, 1, 15)
+    if closed:
+        p.line([(ex + w * u, ey + 1 + h * 0.4 * (1 - u * u) + glare * h * 0.3 * (1 - sgn * u) / 2) for u in us], INK, 2.8)
+        return
     up = [(ex + w * u, ey - h * (1 - u * u) * (1 - lid) + glare * h * 0.55 * (1 - sgn * u) / 2) for u in us]
     lo = [(ex + w * u, ey + h * 0.75 * (1 - u * u)) for u in us]
     opening = up + lo[::-1][1:-1]
     p.poly(opening, M_EYE, None)
-    circ = lambda r: [(ex + r * math.cos(a), ey + 1 + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
+    cx, cy = ex + look * w * 0.4, ey + 1 + gaze_dy
+    circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
     ring = clip_convex(opening[::-1], circ(h * 0.72))
     if len(ring) >= 3:
         p.poly(ring, M_IRIS, None)
@@ -144,7 +149,8 @@ def maul_head(img, p, sp, t, hx, hy):
     lid = 0.3 if mood != 'snarl' else 0.38
     glare = 0.55 if mood in ('neutral', 'snarl') else 0.3
     for sgn in (-1, 1):
-        _eye(p, fx + sgn * 27, fy - 10, sgn, 15, 8.5, lid, glare)
+        _eye(p, fx + sgn * 27, fy - 10, sgn, 15, 8.5, lid, glare, sp.get('look', 0.0), sp.get('gaze_dy', 0.0),
+             sp.get('blink', False))
     # nose: a red bridge, the black tip and nostrils
     p.line([(fx - 4, fy - 8), (fx - 7, fy + 28)], INK, 1.8)
     p.poly(curve([(fx - 14, fy + 32), (fx - 6, fy + 26), (fx + 6, fy + 26), (fx + 14, fy + 32), (fx + 8, fy + 42),

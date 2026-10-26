@@ -388,6 +388,10 @@ def _outline_run(img, cm, run, r, out, ends=None):
 
 
 # ---------------------------------------------------------------------------------------------- free-standing pieces
+SCREEN_CAPTION = ('משדר מיוחד',)            # the big screen's words, one entry per line (a film sets its own)
+SCREEN_CAPTION_BOX = (-1.62, -1.0, 1.05)     # left and right edge, bottom (metres, on the screen's face)
+
+
 def screen_parts():
     """The tall blue screen behind the desk (left of centre), and the two white pillars edged in red light."""
     x0, x1, z, h = -2.5, -0.7, 6.9, 4.2
@@ -401,11 +405,16 @@ def screen_parts():
             poly(img, cm, pts, col, None)
         poly(img, cm, [(-1.0, 0.9, zf - 0.004), (-0.94, 0.9, zf - 0.004), (-0.94, 3.6, zf - 0.004), (-1.0, 3.6, zf - 0.004)],
              (246, 246, 250), None)                     # the white upright bar
-        txt = heb_text('משדר מיוחד', 64, (246, 246, 250, 255))
-        w = 0.62
-        hh = w * txt.height / txt.width
-        paste_on(img, cm, [(-1.62, 1.05 + hh, zf - 0.005), (-1.0, 1.05 + hh, zf - 0.005), (-1.0, 1.05, zf - 0.005),
-                           (-1.62, 1.05, zf - 0.005)], txt)
+        rows = [heb_text(r, 96, (246, 246, 250, 255)) for r in SCREEN_CAPTION]
+        txt = Image.new('RGBA', (max(r.width for r in rows), sum(r.height for r in rows)), (0, 0, 0, 0))
+        y_ = 0
+        for r in rows:                                  # each line centred
+            txt.alpha_composite(r, ((txt.width - r.width) // 2, y_))
+            y_ += r.height
+        xl, xr, yb = SCREEN_CAPTION_BOX
+        hh = (xr - xl) * txt.height / txt.width
+        paste_on(img, cm, [(xl, yb + hh, zf - 0.005), (xr, yb + hh, zf - 0.005), (xr, yb, zf - 0.005),
+                           (xl, yb, zf - 0.005)], txt)
     led = obox(((x0 + x1) / 2, 0.0, z), (x1 - x0, h, 0.16), 180, {'all': LED_BLUE, 'front': LED_BLUE}, extras={'front': front})
     parts = [led]
     for px in (-3.1, 2.9):                              # white pillars, a red light down one edge
