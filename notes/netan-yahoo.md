@@ -6,23 +6,24 @@
   `guides/satire.md`, `guides/film-quality-rules.md`, `guides/kit-catalogue.md`. Send Sam the questions below in ONE message and
   ask for sound effects and references. Plan only; build nothing until Sam says go. Then BUILDING (new characters, new set,
   new effect): Opus, high effort, another fresh chat.
-- **Found in the kit (26 Oct):** no Netanyahu, no Israeli news studio, no newsreader, no Darth Maul, no lightsaber or
-  clean-cut effect in `guides/kit-catalogue.md`. The brief says the cast and set are "already built"; I could not find them.
-  Closest reuse: reporters (`press_secretary.py`), steam (`prepper_fx.py`), the movement toolkit for the leap and roll
-  (`moves.py`, `views.py`), the satire audit. Sam to say which film holds them, or they are new builds.
+- **Already built (26 Oct, the Newsdesk building chat; merged from GitHub):** the Israeli news studio (`source/newsdesk_set.py`),
+  the presenter (`newsdesk_cast.py`, `PRESENTER`), Netanyahu (`netanyahu_cast.py`), Darth Maul with the double-bladed lightsaber
+  and four poses (`maul_cast.py`), the chairs (`newsdesk_props.py`). Details and Sam's photos: `notes/newsdesk.md`,
+  `references/newsdesk/`, `references/maul/`. This film IS the Newsdesk film: the brief arrives here. NOT yet built: the
+  leap-and-roll, the cuts (clean-sliced chunks), the lightsaber glow and cut effect, the hand-off of the presenter to "younger
+  and more energetic" (a new variant of `PRESENTER`: say what changed), Hebrew screen text, sound.
 - **Losses and my additions Sam should know about:** none yet. Proposed additions (Sam to say no): presenter glances at the
   camera (his, shot 4: kept); a studio "ON AIR" light and desk props; a stinger on the logo; steam hiss under the chunks.
-- **Ambition estimate (rule 24-26, a guess to confirm at planning):** new Maul, new presenter, probably new Netanyahu and
-  studio, a lightsaber effect and a hard fast-action body-cut sequence: about 20-30% of a week, NOT the 10% Sam asked for
-  elsewhere. Cheapest cuts: reuse any existing Netanyahu and studio; keep the cut to 3 strikes; one wide shot for the action.
+- **Ambition estimate (rule 24-26, a guess to confirm at planning):** the people and set are built, so the cost is the action:
+  a hard fast leap, roll and crouch, the slicing sequence with chunks, the saber effect, sound. About 12-18% of a week.
+  Cheapest cuts: three strikes only, one wide shot for all the action, reuse the existing poses.
 - **Rule requests and proposals not yet in a guide:** none in the brief or notes.
-- **Files to open:** `prompts/netan-yahoo.md`, this file, `story/status.md` (the Netan-Yahoo section only).
+- **Files to open:** `prompts/netan-yahoo.md`, this file, `notes/newsdesk.md` (the built cast and set), `story/status.md` (Newsdesk section only).
 
 ## Questions for Sam (one message, at planning; pick defaults myself where he does not mind)
-1. **Cast and set "already built":** which film are they in? I cannot find Netanyahu, the studio, a presenter or Maul. If
-   they do not exist: please send references (below) and say OK to build them new.
-2. **References wanted:** Netanyahu (3-4 photos, face and usual suit); Darth Maul (face tattoos, horns, hood, robe, double-bladed
-   saber); the presenter (age, hair, suit, mic?); an Israeli TV debate studio (desk, screens, lighting); the Hebrew words below.
+1. **Sam's notes on the Maul sheet** (awaited in `notes/newsdesk.md`): any changes before the film uses him?
+2. **The presenter:** "a bit younger and more energetic": shall I keep the navy suit and glasses but drop the beard and take
+   the grey out, brighter eyes and quicker head moves? (default: yes, I choose this and say so.)
 3. **Hebrew text, exact wording** for the screens: the "News" logo (a made-up channel name, not a real channel?) and
    "Presidential Debate 2026". Correct Hebrew from you, so the letters are right and read right to left.
 4. **"Presidential" and "President Netanyahu":** he is Prime Minister in real life (the President is a different office).
@@ -41,8 +42,6 @@
 11. **Length:** about 50 words of dialogue (about 15 s) plus the action: expect 28-35 s. First payoff by 8-10 s is the
     stare at the end of shot 3. OK?
 12. **Recordings:** dialogue arrives later today. Stand-in voices time the animatic only and are never sent to Sam.
-13. **Likeness:** Netanyahu and Maul as flat cartoon likenesses in the series style (circle hands). The presenter is a new,
-    younger, energetic man: skin, hair, suit and glasses by default are my pick; I will say what I chose.
 
 ## Plan extras (film-quality-rules 24-26): eyelines and holds per shot; every sound effect (what, when, needed by);
 bleeped words (said, or a gap left?)
@@ -52,7 +51,7 @@ bleeped words (said, or a gap left?)
 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places benchmarked against
 references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
-(To do at planning: one studio set, screens upstage with the Hebrew text, three chairs, presenter's chair apart.)
+(To do at planning: the built studio, screens upstage with the Hebrew text, three chairs and the presenter's chair set, a camera for each shot.)
 
 Composition sheet sent: (rule 11: the 3-4 key shots, before building; write the date and file here once Sam has it.
 Pre-flight refuses to run until this line has them, and while any "done?" box below is blank: rule 14)
