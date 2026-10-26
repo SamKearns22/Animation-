@@ -17,8 +17,8 @@ NS.heb_text = lambda text, px, col, pad=8: _orig(CAPTION if text == 'משדר מ
 # (they talk to each other, angled so the audience sees in). Bodies face each shot's camera; only the eyes turn.
 DC = (0.0, 1.2)            # the floor disc's centre (newsdesk_set.DISC)
 P = (-1.13, 1.42, 0)       # presenter (Sam's sketch, `references/netan-yahoo/layout-sketch.jpg`: left, a little back)
-M = (0.41, 2.27, 0)        # Maul (top of the sketch, a little right of centre)
-N = (1.15, 1.2, 0)         # Netanyahu (right, level with the disc's centre)
+M = (1.15, 1.2, 0)         # Maul (right; Sam swapped him with Netanyahu, 26 Oct)
+N = (0.41, 2.27, 0)        # Netanyahu (top of the sketch, a little right of centre)
 CHAIR_BACK = 0.6           # chair centre behind the person, outwards from the disc centre: clear of his legs and of
                            # the desk's inside edge (radius 2.15 m)
 TALK_TO = (0.0, -0.5)      # every chair faces this point: centre-audience
@@ -31,10 +31,10 @@ def chair_of(p):
 CAMS = {
     's1 start': S.Cam((2.5, 1.65, -1.5), (P[0] - 0.25, 0.95, P[1]), focal=2600),   # from front-right: both candidates
     's1 end':   S.Cam((2.5, 1.65, -1.5), (P[0], 1.3, P[1]), focal=5200),          # stay out of frame (Sam)
-    's2 / s5':  S.Cam((0.2, 1.62, -0.85), (N[0], 1.45, N[1]), focal=2900),         # Maul out of frame until shot 3
-    's3':       S.Cam((M[0], 1.62, M[1] - 2.1), (M[0], 1.47, M[1]), focal=2700),
+    's2 / s5':  S.Cam((0.2, 1.62, 0.2), (N[0], 1.45, N[1]), focal=2900),         # Maul out of frame until shot 3
+    's3':       S.Cam((0.6, 1.62, -0.85), (M[0], 1.47, M[1]), focal=2700),   # Netanyahu out of frame
     's4':       S.Cam((-1.0, 1.6, -3.6), (0.3, 1.05, 1.6), focal=1420),   # all three; the presenter nearest
-    's4 push':  S.Cam((-1.0, 1.6, -3.6), (-1.2, 1.0, 1.45), focal=2050),   # pushes in as Maul ignites (Sam: closer)
+    's4 push':  S.Cam((-1.0, 1.6, -3.6), (-1.45, 1.0, 1.45), focal=2050),   # pushes in as Maul ignites (Sam: closer)
 }
 
 
@@ -127,7 +127,7 @@ def plan_tile(W=540, H=960):
         d.rectangle([x - 6, y - 6, x + 6, y + 6], fill=(20, 20, 20))
         d.text((x + 8, y - 6), name, font=f, fill=(20, 20, 20))
     # Maul's leap path
-    d.line([P2(M[0], M[1]), P2(P[0] + 0.74, P[1] + 0.41)], fill=(200, 30, 40), width=3)
+    d.line([P2(M[0], M[1]), P2(P[0] + 0.85 * (M[0] - P[0]) / math.dist(M[:2], P[:2]), P[1] + 0.85 * (M[1] - P[1]) / math.dist(M[:2], P[:2]))], fill=(200, 30, 40), width=3)
     d.text(P2(-2.6, 2.5), 'leap-flip', font=f, fill=(200, 30, 40))
     d.text((12, 12), 'From above (1 square = studio)', font=f, fill=(20, 20, 20))
     d.text((12, 36), 'desk ring (blue), floor disc (red)', font=f, fill=(20, 20, 20))

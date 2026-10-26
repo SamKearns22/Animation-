@@ -76,8 +76,8 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 180 = towards the cameras). The rough sheet's code holds these numbers: `source/netan_yahoo_comp.py` (copy into the film's
 `PLAN` and cameras when building; run `python3 source/netan_yahoo_comp.py OUT.jpg` from the repo root).
 - POSITIONS (Sam's sketch, 26 Oct, `references/netan-yahoo/layout-sketch.jpg`): a horseshoe round the floor disc,
-  open to the audience. Presenter left (-1.13, 1.42), Maul at the back a little right of centre (0.41, 2.27),
-  Netanyahu right (1.15, 1.2); all about 1.15 m from the disc's centre (0, 1.2).
+  open to the audience. Presenter left (-1.13, 1.42), NETANYAHU at the back a little right of centre (0.41, 2.27),
+  MAUL right (1.15, 1.2) (Sam swapped these two, 26 Oct); all about 1.15 m from the disc's centre (0, 1.2).
 - FACING (Sam, 26 Oct): bodies and heads face each shot's CAMERA (our people look less good at a diagonal); only the
   EYES turn: the presenter's to the candidates (screen right), the candidates' to the presenter (screen left). Building
   must add eye direction (`sp['look']`) to the Netanyahu and Maul heads: they ignore it now (the presenter's reads it).
@@ -87,12 +87,13 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 - Chairs (wooden armchairs): each 0.6 m behind its person, outwards from the disc's centre (clear of his legs, and
   of the desk's inside edge), every chair TURNED towards a point in front of the disc (0, -0.5): angled to each other
   as for a conversation, open to the audience (Sam). NO blue spotlight pools or chair shadows (Sam: they clipped).
-- Maul's leap-flip: from (0.41, 2.27) to a crouch 0.85 m from the presenter, towards Maul: about 0.9 m of travel,
-  mostly UP (the flip). The pile: where the presenter stood; his chair is behind it, so Maul springs over the pile.
+- Maul's leap-flip: from (1.15, 1.2) to a crouch 0.85 m from the presenter, towards Maul: about 1.4 m of travel,
+  right to left across the front of the disc, passing in front of Netanyahu. The pile: where the presenter stood; his chair is behind it, so Maul springs over the pile.
 - Cameras (all in `source/netan_yahoo_comp.py`): s1 from front-right (2.5, 1.65, -1.5), zooming in on the presenter
-  (lens 2600 to 5200), both candidates out of frame (checked); s2/s5 (0.2, 1.62, -0.85) on Netanyahu, chest up, Maul out
-  of frame; s3 straight in front of Maul, the same framing; s4 (-1.0, 1.6, -3.6): all three head to foot inside the
-  disc, the presenter nearest, Maul between them and further back (lens 1420), then it PUSHES IN as Maul ignites,
+  (lens 2600 to 5200), both candidates out of frame (checked); s2/s5 (0.2, 1.62, 0.2) on Netanyahu, chest up, Maul out
+  of frame (checked); s3 (0.6, 1.62, -0.85) on Maul, the same framing, Netanyahu out of frame (checked); s4 (-1.0, 1.6, -3.6): all three head to foot inside the
+  disc, the presenter nearest, Netanyahu between them at the back, Maul nearest on the
+  right with his saber (lens 1420), then it PUSHES IN as Maul ignites,
   ending on Maul crouched on the presenter's chair with the pile in front (lens 2050); Netanyahu leaves the frame
   during the push (his reaction is shot 5). The presenter is screen-left whenever the candidates are in shot.
 - Draw order to build properly: the ring desk is one item sorted by one point, so it drew over Netanyahu; the sheet
@@ -102,7 +103,7 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 - To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
   across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in); fourth, everyone inside the floor disc; fifth, Sam's horseshoe sketch, chairs angled, no pools. Sam: "let's build" (26 Oct).
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in); fourth, everyone inside the floor disc; fifth, Sam's horseshoe sketch, chairs angled, no pools; sixth, Maul and Netanyahu swapped. Sam: "let's build" (26 Oct).
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|
