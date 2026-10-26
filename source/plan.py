@@ -111,6 +111,45 @@ def corners(th):
     return out
 
 
+def _in_poly(p, poly):
+    inside = False
+    for (x1, z1), (x2, z2) in zip(poly, poly[1:] + poly[:1]):
+        if (z1 > p[1]) != (z2 > p[1]) and p[0] < x1 + (p[1] - z1) * (x2 - x1) / (z2 - z1):
+            inside = not inside
+    return inside
+
+
+def _pt_seg(p, a, b):
+    ax, az, bx, bz = a[0], a[1], b[0], b[1]
+    dx, dz = bx - ax, bz - az
+    L = dx * dx + dz * dz or 1e-12
+    u = max(0.0, min(1.0, ((p[0] - ax) * dx + (p[1] - az) * dz) / L))
+    return math.hypot(p[0] - ax - u * dx, p[1] - az - u * dz)
+
+
+def _poly_dist(p, poly):
+    """From a plan point to a polygon's outline; 0 inside it."""
+    if _in_poly(p, poly):
+        return 0.0
+    return min(_pt_seg(p, a, b) for a, b in zip(poly, poly[1:] + poly[:1]))
+
+
+def gap(A, B):
+    """The true plan gap between two THINGS in metres (0 when they meet or overlap): turned boxes by their corners,
+    round=True things (a round chair, a table) as circles of diameter size[0]."""
+    ra, rb = A.get('round'), B.get('round')
+    if ra and rb:
+        return max(0.0, math.dist(A['at'], B['at']) - A['size'][0] / 2 - B['size'][0] / 2)
+    if ra or rb:
+        c, p = (A, B) if ra else (B, A)
+        return max(0.0, _poly_dist(c['at'], corners(p)) - c['size'][0] / 2)
+    pa, pb = corners(A), corners(B)
+    if any(_in_poly(q, pb) for q in pa) or any(_in_poly(q, pa) for q in pb):
+        return 0.0
+    d = min(min(_pt_seg(q, a, b) for a, b in zip(pb, pb[1:] + pb[:1])) for q in pa)
+    return min(d, min(min(_pt_seg(q, a, b) for a, b in zip(pa, pa[1:] + pa[:1])) for q in pb))
+
+
 def heights(th):
     y = th.get('y', 0.0)
     return y, y + th['size'][2]
@@ -184,8 +223,16 @@ def faults(film):
             Bt = P.things[b]
             if A.get('on') == b or Bt.get('on') == a:
                 continue
+            if A.get('part_of') and A.get('part_of') == Bt.get('part_of'):   # pieces of one thing (a ring desk)
+                continue
             ya, yb = heights(A), heights(Bt)
-            if min(ya[1], yb[1]) - max(ya[0], yb[0]) > 0.01 and _overlap(footprint(A), footprint(Bt), 0.01):
+            if min(ya[1], yb[1]) - max(ya[0], yb[0]) <= 0.01:
+                continue
+            need = max(A.get('clear', 0.0), Bt.get('clear', 0.0))   # a minimum gap either asks for (metres)
+            g = gap(A, Bt)
+            if need > 0 and g < need - 1e-6:
+                out.append(f'plan: {a} and {b} are {g:.2f} m apart; {need:.2f} m needed (clear=)')
+            elif need <= 0 and g <= 0 and _overlap(footprint(A), footprint(Bt), 0.01):
                 out.append(f'plan: {a} and {b} stand in each other')
     for n, p in P.people.items():
         x, z = p['at']

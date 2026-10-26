@@ -272,27 +272,50 @@ def _dp(a, r, y):
     return (DISC[0] + r * math.cos(math.radians(a)), y, DISC[1] + r * math.sin(math.radians(a)))
 
 
-def desk(img, cm):
-    """The curved ring desk: per slice, the side that faces the camera (inner blue front, or outer dark back) and the
-    white top, filled far to near without lines; then one outline round what shows (house style: one outline)."""
-    steps = np.linspace(DESK_A0, DESK_A1, 77)
-    pos = cm.pos
+DESK_STEPS = np.linspace(DESK_A0, DESK_A1, 77)   # 76 slices of 3 degrees
+DESK_PIECE = 4                                   # slices per drawn piece (12 degrees): each piece is sorted on its own,
+                                                 # so whoever stands nearer is always drawn on top (Netan-Yahoo!, 26 Oct)
 
-    def faces_cam(a, r, out):
-        p = _dp(a, r, DESK_H / 2)
-        n = (math.cos(math.radians(a)) * (1 if out else -1), 0, math.sin(math.radians(a)) * (1 if out else -1))
-        return (pos[0] - p[0]) * n[0] + (pos[2] - p[2]) * n[2] > 0
+
+def _desk_faces(cm, a, r, out):
+    p = _dp(a, r, DESK_H / 2)
+    n = (math.cos(math.radians(a)) * (1 if out else -1), 0, math.sin(math.radians(a)) * (1 if out else -1))
+    return (cm.pos[0] - p[0]) * n[0] + (cm.pos[2] - p[2]) * n[2] > 0
+
+
+def _desk_runs(cm, r, out):
+    """Index runs [k0, k1] of DESK_STEPS where that side of the desk faces the camera (whole desk, not per piece)."""
+    runs, k0 = [], None
+    for k, a in enumerate(DESK_STEPS):
+        if _desk_faces(cm, a, r, out):
+            k0 = k if k0 is None else k0
+        elif k0 is not None:
+            runs.append((k0, k - 1))
+            k0 = None
+    if k0 is not None:
+        runs.append((k0, len(DESK_STEPS) - 1))
+    return runs
+
+
+def desk(img, cm, i0=0, i1=None):
+    """The curved ring desk, or the stretch of it from step i0 to i1: per slice, the side that faces the camera (inner
+    blue front, or outer dark back) and the white top, filled far to near without lines; then one outline round what
+    shows (house style: one outline). Silhouette edges come from the whole desk's runs, so pieces join seamlessly."""
+    steps = DESK_STEPS
+    i1 = len(steps) - 1 if i1 is None else i1
+    pos = cm.pos
     slices = []
-    for a0, a1 in zip(steps, steps[1:]):
+    for k in range(i0, i1):
+        a0, a1 = steps[k], steps[k + 1]
         m = (a0 + a1) / 2
         slices.append((math.dist(_dp(m, (DESK_R0 + DESK_R1) / 2, DESK_H / 2), pos), a0, a1, m))
     slices.sort(reverse=True)
     band_y = DESK_H * 0.62
     for _, a0, a1, m in slices:
-        if faces_cam(m, DESK_R1, True):                  # the dark outer back
+        if _desk_faces(cm, m, DESK_R1, True):            # the dark outer back
             poly(img, cm, [_dp(a0, DESK_R1, 0), _dp(a1, DESK_R1, 0), _dp(a1, DESK_R1, DESK_H), _dp(a0, DESK_R1, DESK_H)],
                  DESK_BACK, None)
-        if faces_cam(m, DESK_R0, False):                 # the blue front: dark lower, a lighter band, a white strip
+        if _desk_faces(cm, m, DESK_R0, False):           # the blue front: dark lower, a lighter band, a white strip
             r = DESK_R0
             poly(img, cm, [_dp(a0, r, 0), _dp(a1, r, 0), _dp(a1, r, band_y), _dp(a0, r, band_y)], DESK_BLUE, None)
             poly(img, cm, [_dp(a0, r, band_y), _dp(a1, r, band_y), _dp(a1, r, DESK_H - 0.09), _dp(a0, r, DESK_H - 0.09)],
@@ -303,19 +326,18 @@ def desk(img, cm):
             poly(img, cm, [_dp(a0, DESK_R0, DESK_H), _dp(a1, DESK_R0, DESK_H), _dp(a1, DESK_R1, DESK_H),
                            _dp(a0, DESK_R1, DESK_H)], DESK_TOP, None)
     # the outlines: the top's two edges, the bottom edge and the band lines of whatever front shows, the ends
-    lines(img, cm, [_dp(a, DESK_R0, DESK_H) for a in steps])
-    lines(img, cm, [_dp(a, DESK_R1, DESK_H) for a in steps])
+    seg = steps[i0:i1 + 1]
+    lines(img, cm, [_dp(a, DESK_R0, DESK_H) for a in seg])
+    lines(img, cm, [_dp(a, DESK_R1, DESK_H) for a in seg])
     for r, out in ((DESK_R0, False), (DESK_R1, True)):
-        run = []
-        for a in steps:
-            if faces_cam(a, r, out):
-                run.append(a)
-            elif run:
-                _outline_run(img, cm, run, r, out)
-                run = []
-        if run:
-            _outline_run(img, cm, run, r, out)
-    for a in (DESK_A0, DESK_A1):                         # the white end caps
+        for k0, k1 in _desk_runs(cm, r, out):
+            lo, hi = max(k0, i0), min(k1, i1)
+            if hi > lo:
+                _outline_run(img, cm, list(steps[lo:hi + 1]), r, out,
+                             ends=[steps[k] for k in (k0, k1) if lo <= k <= hi])
+    for k, a in ((0, DESK_A0), (len(steps) - 1, DESK_A1)):   # the white end caps
+        if not i0 <= k <= i1:
+            continue
         q = [_dp(a, DESK_R0, 0), _dp(a, DESK_R1, 0), _dp(a, DESK_R1, DESK_H), _dp(a, DESK_R0, DESK_H)]
         tang = (-math.sin(math.radians(a)), 0, math.cos(math.radians(a)))
         sgn = -1 if a == DESK_A0 else 1
@@ -324,12 +346,43 @@ def desk(img, cm):
             poly(img, cm, q, DESK_TOP, INK, 2.2)
 
 
-def _outline_run(img, cm, run, r, out):
+def desk_items():
+    """The desk as pieces, each (reference point, draw(img, cam)), for the far-to-near sort."""
+    out, n = [], len(DESK_STEPS) - 1
+    for i0 in range(0, n, DESK_PIECE):
+        i1 = min(n, i0 + DESK_PIECE)
+        m = (DESK_STEPS[i0] + DESK_STEPS[i1]) / 2
+        out.append((_dp(m, (DESK_R0 + DESK_R1) / 2, DESK_H / 2), lambda img, cm, i0=i0, i1=i1: desk(img, cm, i0, i1)))
+    return out
+
+
+def desk_plan_things(n=24):
+    """The desk for a film's PLAN THINGS (rule 12): n straight blocks, each wholly covering its stretch of the ring
+    (its inside face is the chord, so the blocks reach a little nearer the centre than the real desk: on the safe
+    side for clearance checks)."""
+    out = {}
+    da = (DESK_A1 - DESK_A0) / n
+    h = math.radians(da / 2)
+    for i in range(n):
+        m = DESK_A0 + (i + 0.5) * da
+        rin = DESK_R0 * math.cos(h)
+        rc = (rin + DESK_R1) / 2
+        x, z = DISC[0] + rc * math.cos(math.radians(m)), DISC[1] + rc * math.sin(math.radians(m))
+        f = -(90.0 + m)                          # turn that lays its width along the ring (rot_y's way)
+        t = ((f + 45.0) % 90.0) - 45.0           # the plan gives sizes along the nearest axes (plan.tilt)
+        w, d = 2 * DESK_R1 * math.sin(h), DESK_R1 - rin
+        if round((f - t) / 90.0) % 2:
+            w, d = d, w
+        out[f'desk{i + 1:02d}'] = dict(at=(round(x, 4), round(z, 4)), size=(round(w, 4), round(d, 4), DESK_H),
+                                       facing=round(t, 3), part_of='desk')
+    return out
+
+def _outline_run(img, cm, run, r, out, ends=None):
     lines(img, cm, [_dp(a, r, 0.0) for a in run], INK, 2.2)
     if not out:
         lines(img, cm, [_dp(a, r, DESK_H * 0.62) for a in run], dk(DESK_BLUE, 0.7), 1.4)
         lines(img, cm, [_dp(a, r, DESK_H - 0.09) for a in run], dk(DESK_LIGHT, 0.7), 1.2)
-    for a in (run[0], run[-1]):                          # where the face turns away: its silhouette edge
+    for a in ((run[0], run[-1]) if ends is None else ends):   # where the face turns away: its silhouette edge
         if DESK_A0 < a < DESK_A1:
             lines(img, cm, [_dp(a, r, 0.0), _dp(a, r, DESK_H)], INK, 2.2)
 
@@ -427,7 +480,7 @@ def items(people=None):
                                                              z + 0.2 * math.cos(math.radians(facing + 180)))))
     out.append(part_item(studio_camera_parts(4.6, -1.4, -55), (4.6, 1.0, -1.4)))
     out.append(part_item(monitor_parts(-4.9, 1.6, 75), (-4.9, 1.0, 1.6)))
-    out.append(((DISC[0], 0.5, DISC[1] + 0.4), desk))
+    out.extend(desk_items())
     for x, z, fn in people or []:
         out.append(((x, 1.0, z), fn))
     return out

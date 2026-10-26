@@ -15,13 +15,14 @@
   pieces falling into a pile, steam (answers 8-9, pack 2; no blood); the presenter's reactions (hands up, then the arch);
   (7) the saber glow (answer 10). Then the cast sheet; then, motion-led, early clips of the risky moves (rule 8): the
   leap-flip and landing, the three strikes and pieces, the spring onto the chair.
-- **FIX FIRST (Sam, 26 Oct, "sloppy"): Netanyahu's chair clips through the desk behind it** on composition sheet v6
-  (I missed it in my own check). Cause: his chair sits 1.75 m from the disc's centre and is turned towards the
-  audience, so its back corners reach past the desk's inside edge (2.15 m); the sheet's draw order then hid the clash.
-  Fix: move Netanyahu and his chair forwards (towards the disc's centre) until every corner of the chair, at its real
-  size and turn, clears the desk by at least 0.1 m; check all three chairs the same way. Put the chairs and the desk
-  in the plan as solids so the collision audit (rule 12) catches this every frame, and split the desk into pieces so
-  nearer is always drawn on top. Show Sam a sheet with it fixed before anything else.
+- **FIXED (building chat, 26 Oct): the chairs and the desk.** Cause, measured: every chair (round, reach 0.345 m)
+  sat 1.75 m from the disc's centre, only 0.06 m inside the desk's inner edge, so at phone size it read as touching;
+  all three chairs, not just Netanyahu's. Fix: all three people 0.1 m nearer the disc's centre (1.05 m); every chair
+  now 0.15 m clear (rule: 0.1 m). The plan now lives in `source/netan_yahoo_plan.py` (sheet and film read the same
+  numbers): the desk is 24 solid blocks, the chairs round solids with `clear=0.1`; `plan.py` now measures true gaps and
+  catches the old spots (checked). The desk draws in 12-degree pieces, each sorted on its own (`newsdesk_set.desk_items`),
+  so the sheet's draw-order cheat is gone. Kit fix found on the way: the collision audit turned angled things the
+  wrong way (mirrored, `sets._thing_solid`). Sheet v7 sent; waiting for Sam's look.
 - **Waiting on Sam:** the saber sounds (ignition, hum, three swings, a sizzle per cut; kept OFF GitHub); the recordings
   (later today; "Prime Minister" in the line; "shit" said in full, S heard, rest bleeped).
 - **Already built:** studio `source/newsdesk_set.py`, presenter `newsdesk_cast.py`, Netanyahu `netanyahu_cast.py`, Maul
@@ -29,7 +30,7 @@
   falling pieces (Poker Mon's `launch`), lying pieces (`lying.py`).
 - **Watch out:** this planning session could not install `numba` (pypi.org blocked), which `lying.py` needs. If the
   building chat hits it, Sam can allow pypi.org in claude.ai Settings, Capabilities.
-- **Losses and my additions Sam should know about:** the horseshoe from his sketch (the photo's straight line dropped); chairs angled to centre-audience; blue pools removed; the flip is
+- **Losses and my additions Sam should know about:** everyone 0.1 m nearer the disc's centre (the chair fix; Maul's leap about 0.1 m shorter); the horseshoe from his sketch (the photo's straight line dropped); chairs angled to centre-audience; blue pools removed; the flip is
   mostly upwards (about 1 m of travel); shot 4 is now front-left, so the presenter is nearest (the photo had the right end
   nearer); Netanyahu leaves the frame during shot 4's push-in. Additions he approved: thump, pieces landing, chair creak,
   steam hiss (sounds, my code), sparks and smoke at the cuts, steam wisps, hood falling back. No set dressing.
@@ -110,7 +111,7 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 - To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
   across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in); fourth, everyone inside the floor disc; fifth, Sam's horseshoe sketch, chairs angled, no pools; sixth, Maul and Netanyahu swapped. Sam: "let's build" (26 Oct).
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in); fourth, everyone inside the floor disc; fifth, Sam's horseshoe sketch, chairs angled, no pools; sixth, Maul and Netanyahu swapped; seventh (building chat), the chairs clear of the desk. Sam: "let's build" (26 Oct).
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|

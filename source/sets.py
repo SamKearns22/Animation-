@@ -552,7 +552,11 @@ def _thing_solid(CC, name, th):
     import plan as PLN
     (cx, cz), (sx, sz, sy) = th['at'], th['size']
     y0 = th.get('y', 0.0)
-    a = math.radians(-PLN.tilt(th))
+    if th.get('round'):                                   # a round thing (a round chair): an upright capsule
+        r = sx / 2
+        lo, hi = y0 + min(r, sy / 2), y0 + max(sy - r, sy / 2)
+        return CC.capsule(name, 'round', np.array((cx, lo, cz)), np.array((cx, hi, cz)), r)
+    a = math.radians(PLN.tilt(th))                      # same turn as plan.corners and rot_y (was mirrored)
     if abs(a) < 1e-3:
         return CC.box(name, 'box', (cx - sx / 2, y0, cz - sz / 2), (cx + sx / 2, y0 + sy, cz + sz / 2))
     long_x = sx >= sz

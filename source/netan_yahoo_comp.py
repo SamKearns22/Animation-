@@ -11,31 +11,12 @@ CAPTION = 'עימות לראשות הממשלה 2026'
 _orig = NS.heb_text
 NS.heb_text = lambda text, px, col, pad=8: _orig(CAPTION if text == 'משדר מיוחד' else text, px, col, pad)
 
-# ---- the plan (metres; x east = screen right, z north = away from the cameras; facing in plan degrees, 180 = south)
-# Sam's sketch (26 Oct): a horseshoe round the floor disc, open to the audience: presenter west, Maul at the back,
-# Netanyahu east, each with his chair behind him (outwards), every chair turned towards a point in front of the disc
-# (they talk to each other, angled so the audience sees in). Bodies face each shot's camera; only the eyes turn.
-DC = (0.0, 1.2)            # the floor disc's centre (newsdesk_set.DISC)
-P = (-1.13, 1.42, 0)       # presenter (Sam's sketch, `references/netan-yahoo/layout-sketch.jpg`: left, a little back)
-M = (1.15, 1.2, 0)         # Maul (right; Sam swapped him with Netanyahu, 26 Oct)
-N = (0.41, 2.27, 0)        # Netanyahu (top of the sketch, a little right of centre)
-CHAIR_BACK = 0.6           # chair centre behind the person, outwards from the disc centre: clear of his legs and of
-                           # the desk's inside edge (radius 2.15 m)
-TALK_TO = (0.0, -0.5)      # every chair faces this point: centre-audience
-def chair_of(p):
-    dx, dz = p[0] - DC[0], p[1] - DC[1]
-    n = math.hypot(dx, dz) or 1.0
-    cx, cz = p[0] + dx / n * CHAIR_BACK, p[1] + dz / n * CHAIR_BACK
-    return (cx, cz, math.degrees(math.atan2(TALK_TO[0] - cx, TALK_TO[1] - cz)))
-
-CAMS = {
-    's1 start': S.Cam((2.5, 1.65, -1.5), (P[0] - 0.25, 0.95, P[1]), focal=2600),   # from front-right: both candidates
-    's1 end':   S.Cam((2.5, 1.65, -1.5), (P[0], 1.3, P[1]), focal=5200),          # stay out of frame (Sam)
-    's2 / s5':  S.Cam((0.2, 1.62, 0.2), (N[0], 1.45, N[1]), focal=2900),         # Maul out of frame until shot 3
-    's3':       S.Cam((0.6, 1.62, -0.85), (M[0], 1.47, M[1]), focal=2700),   # Netanyahu out of frame
-    's4':       S.Cam((-1.0, 1.6, -3.6), (0.3, 1.05, 1.6), focal=1420),   # all three; the presenter nearest
-    's4 push':  S.Cam((-1.0, 1.6, -3.6), (-1.45, 1.0, 1.45), focal=2050),   # pushes in as Maul ignites (Sam: closer)
-}
+# ---- the plan: one source for the sheet and the film (source/netan_yahoo_plan.py)
+import netan_yahoo_plan as NP_
+DC, P, M, N = NP_.DC, NP_.P + (0,), NP_.M + (0,), NP_.N + (0,)
+chair_of = NP_.chair_of
+CAMS = {'s1 start': NP_.cam('s1 start'), 's1 end': NP_.cam('s1 end'), 's2 / s5': NP_.cam('s2'), 's3': NP_.cam('s3'),
+        's4': NP_.cam('s4'), 's4 push': NP_.cam('s4 push')}
 
 
 def put(img, cm, sp, x, z, facing, j, lift=0.0):
@@ -83,13 +64,7 @@ def frame(cm, phase):
         if sp is NC.PRESENTER and phase != 'to camera':
             sp = dict(sp, look=0.8)                                      # his eyes to the candidates (screen right)
         extra.append((x, z - 0.01, lambda im, c, sp=sp, j=j, x=x, z=z, f=f, lift=lift: put(im, c, sp, x, z, f, j, lift)))
-    # sheet-only: draw everything standing inside the ring after the desk (the building stage splits the desk into
-    # pieces, rule: nearer is always on top; the whole-desk sort point put it in front of Netanyahu)
-    def nearer(x, z, k=1.2):
-        dx, dz = cm.pos[0] - x, cm.pos[2] - z
-        n = math.hypot(dx, dz) or 1.0
-        return x + dx / n * k, z + dz / n * k
-    extra = [(*nearer(x, z), fn) for x, z, fn in extra]
+    # the desk is drawn in pieces, each sorted on its own (newsdesk_set.desk_items): no draw-order cheat needed
     NS.render(img, cm, extra)
     return img.convert('RGB')
 
@@ -113,8 +88,8 @@ def plan_tile(W=540, H=960):
     f = ImageFont.truetype('source/fonts/DejaVuSans-Bold.ttf', 18)
     for name, p, col in (('presenter', P, (40, 40, 40)), ('Maul', M, (200, 30, 40)), ('Netanyahu', N, (30, 60, 160))):
         hx, hz, hf = chair_of(p)
-        a, b = P2(hx - 0.3, hz + 0.3), P2(hx + 0.3, hz - 0.3)
-        d.rectangle([a, b], fill=(186, 130, 70), outline=(40, 30, 20))
+        a, b = P2(hx - NP_.CHAIR_R, hz + NP_.CHAIR_R), P2(hx + NP_.CHAIR_R, hz - NP_.CHAIR_R)
+        d.ellipse([a, b], fill=(186, 130, 70), outline=(40, 30, 20))
         x, y = P2(p[0], p[1])
         d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=col)
         ex = x + 30 * math.sin(math.radians(p[2])); ey = y - 30 * math.cos(math.radians(p[2]))
@@ -131,6 +106,7 @@ def plan_tile(W=540, H=960):
     d.text(P2(-2.6, 2.5), 'leap-flip', font=f, fill=(200, 30, 40))
     d.text((12, 12), 'From above (1 square = studio)', font=f, fill=(20, 20, 20))
     d.text((12, 36), 'desk ring (blue), floor disc (red)', font=f, fill=(20, 20, 20))
+    d.text((12, 60), 'chairs (round, to size): 0.15 m clear of the desk', font=f, fill=(20, 20, 20))
     return im
 
 
