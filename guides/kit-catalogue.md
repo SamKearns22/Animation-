@@ -66,3 +66,14 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 `guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`. The film-quality checks (25 Oct):
 `plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),
 `report.py` (19), `catalogue.py` (28); pre-flight runs them all.
+
+## Added 26 Oct (Netan-Yahoo!)
+| what | file |
+|---|---|
+| Israeli TV news studio (3D set), horseshoe layout, plan in metres | `source/newsdesk_set.py`, `source/netan_yahoo_plan.py` |
+| News presenter (bearded, own three-quarter head), curved wooden chairs | `source/newsdesk_cast.py`, `source/newsdesk_props.py` |
+| Benjamin Netanyahu (surprised and impressed faces, strength 1-6) | `source/netanyahu_cast.py` |
+| Darth Maul, double-bladed saberstaff, leap and strikes | `source/maul_cast.py` |
+| Cut-off body pieces that fall, settle and lie as a 3D pile | `source/lying.py` |
+| Hook Text beside a person, three rows (`--w`); 😅 emoji | `source/hook_text.py`, `1f605.png` |
+| Story post still (Maul close-up, cranberry lettering) | `animations/maul-icc-story.png` |

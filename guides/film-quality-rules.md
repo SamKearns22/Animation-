@@ -108,6 +108,24 @@ had, because a check was copied per film (and wasn't), only looked at what the f
     each note "new kind" or "seen before"; a "seen before" note means a check is missing: add it.
 31. **Clips, renders, filing and sending stay on Sonnet;** Opus only for planning, new builds and deciding fixes.
 
+## Rules 32-37 (approved by Sam, 26 Oct, after Netan-Yahoo!)
+32. **Pieces, rubble and parts of things settle properly.** Anything that falls and lies on the ground (cut-off pieces,
+    debris, broken parts) settles on its broadest side (lowest centre of weight), never overlaps or rests on another
+    piece, and casts a shadow only where it touches the floor. Any saved ("cached") drawing records which camera it was
+    drawn for, so it can never be reused in a shot with another camera. (Netan-Yahoo! notes 4, 6, 11.)
+33. **Test anything that falls or piles up on a short close clip before the animatic** (`final OUT --small --span T0 T1`
+    on the landing): look for floating, overlap, balancing on a point, the wrong camera's drawing. Clips need no yes.
+34. **Mirror test:** before showing a cast sheet, put each tile next to its source drawing and check nothing is squeezed
+    or flipped; before an animatic, check every shot (wide shots too) for a mirrored face, lettering or prop, and that
+    every glance goes the way the plan says. (Netan-Yahoo! notes 2 and the wide-shot glance.)
+35. **Lock the layout in the planning pass:** ask in the first questions who sits or stands where, the gap between
+    chair and desk and what must be in frame; run the plan file's true-gap check before building; a layout change after
+    building is named as a cost.
+36. **Say at planning when a tool is slow here** (3D pieces without numba, 5 s a body) and ask Sam once to allow
+    pypi.org (claude.ai Settings, Capabilities).
+37. **Files kept off GitHub (sounds, big references)** are listed in the first line of the handover with "ask Sam to
+    re-attach them", so the next chat asks at once.
+
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in
   the kit and gets a test in the automatic checks. Never fix the same kind twice.

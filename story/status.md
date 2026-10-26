@@ -3,6 +3,10 @@
 Read this first in any new session, after CLAUDE.md.
 
 
+## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
+- `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in
+  `guides/film-quality-rules.md` (listed in `guides/rule-register.md`, Q32-Q37). New kit items in `guides/kit-catalogue.md`.
+
 ## In progress: "Newsdesk" (working name; Sam's new untitled film; `notes/newsdesk.md`)
 - 26 Oct (building chat, Opus high): built the Israeli TV news studio in 3D (`source/newsdesk_set.py`), an original
   news presenter (`source/newsdesk_cast.py`) and the curved-back wooden chairs (`source/newsdesk_props.py`), from

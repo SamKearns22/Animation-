@@ -58,3 +58,9 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | S1 | Riding: mounts.py, real pace speeds, the rider's seat matches the pace | satire.md, Movement | Sam, 25 Oct (riding test) | `mounts.check` (pre-flight, for any film that imports mounts) |
 
 | L1 | People lying down or seen from a high camera have real depth (one 3D body, one outline, a flat shadow side, resting on the floor) | satire.md (One set) | Poker Mon note 80 | `lying.py` `contact_faults` and `check` (rests, nothing through the floor, the fall's hand-over); the look by hand on `lying.py sheet` |
+| Q32 | Falling pieces and rubble settle broadest side down, no overlap, shadow only at contact; saved drawings record their camera | film-quality-rules 32 | Netan-Yahoo! notes 4, 6, 11 | `lying.py` `contact_faults` for the bodies; pieces' overlap and camera key by hand on the check sheet |
+| Q33 | Falling or piling things tested on a short clip before the animatic | film-quality-rules 33 | Netan-Yahoo! note 11 | by hand on the check sheet |
+| Q34 | Mirror test: cast sheet tiles vs source drawings; every shot checked for flipped faces, lettering and glances | film-quality-rules 34 | Netan-Yahoo! note 2, wide-shot glance | by hand on the check sheet (a tool is on the Build list) |
+| Q35 | Layout locked in planning; true-gap check before building | film-quality-rules 35 | Netan-Yahoo! chair clipping, layout changes | `plan.py` true-gap check; the questions by hand |
+| Q36 | Slow tools named at planning; ask once for pypi.org | film-quality-rules 36 | Netan-Yahoo! (numpy, 5 s a body) | by hand |
+| Q37 | Files kept off GitHub listed in the handover's first line | film-quality-rules 37 | Netan-Yahoo! saber sounds | by hand (handover search) |
