@@ -15,6 +15,13 @@
   pieces falling into a pile, steam (answers 8-9, pack 2; no blood); the presenter's reactions (hands up, then the arch);
   (7) the saber glow (answer 10). Then the cast sheet; then, motion-led, early clips of the risky moves (rule 8): the
   leap-flip and landing, the three strikes and pieces, the spring onto the chair.
+- **FIX FIRST (Sam, 26 Oct, "sloppy"): Netanyahu's chair clips through the desk behind it** on composition sheet v6
+  (I missed it in my own check). Cause: his chair sits 1.75 m from the disc's centre and is turned towards the
+  audience, so its back corners reach past the desk's inside edge (2.15 m); the sheet's draw order then hid the clash.
+  Fix: move Netanyahu and his chair forwards (towards the disc's centre) until every corner of the chair, at its real
+  size and turn, clears the desk by at least 0.1 m; check all three chairs the same way. Put the chairs and the desk
+  in the plan as solids so the collision audit (rule 12) catches this every frame, and split the desk into pieces so
+  nearer is always drawn on top. Show Sam a sheet with it fixed before anything else.
 - **Waiting on Sam:** the saber sounds (ignition, hum, three swings, a sizzle per cut; kept OFF GitHub); the recordings
   (later today; "Prime Minister" in the line; "shit" said in full, S heard, rest bleeped).
 - **Already built:** studio `source/newsdesk_set.py`, presenter `newsdesk_cast.py`, Netanyahu `netanyahu_cast.py`, Maul
