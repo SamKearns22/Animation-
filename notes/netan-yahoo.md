@@ -59,11 +59,27 @@
 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places benchmarked against
 references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
-(To do at planning: the built studio, screens upstage with the Hebrew text, three chairs and the presenter's chair set, a camera for each shot.)
+The plan (metres, the studio's own: x east = screen right, z north = away from the cameras; facing in plan degrees,
+180 = towards the cameras). The rough sheet's code holds these numbers: `source/netan_yahoo_comp.py` (copy into the film's
+`PLAN` and cameras when building; run `python3 source/netan_yahoo_comp.py OUT.jpg` from the repo root).
+- Everyone stands in front of the ring desk's open front, in a shallow line (Sam's layout photo), 1.8 m apart:
+  presenter (-1.8, -0.8) facing 105 (towards the candidates; 150, to camera, in shot 1); Maul (0.0, -0.65) facing 210;
+  Netanyahu (1.8, -0.95) facing 205 (both three-quarter towards the presenter; heads and eyes to him by LOOKS_AT).
+- Chairs (wooden armchairs on blue pools): 0.75 m straight behind each person. The presenter's is Maul's goal.
+- Maul's leap-flip: from (0.0, -0.65) to a crouch about 0.85 m in front of the presenter: about 1 m of travel, mostly
+  UP (the flip). Spacing is 1.8 m, not the photo's 2.5-3 m: the phone's tall frame cannot hold three people wider apart
+  at a readable size.
+- The pile: where the presenter stood, falling towards his chair. Maul then springs onto the chair (seat 0.46 m).
+- Cameras: s1 start (3.6, 2.1, -7.2) zooming in to s1 end (-0.4, 1.6, -3.4) on the presenter, waist up; s2/s5 (2.4, 1.62,
+  -3.0) on Netanyahu, chest up; s3 (0.6, 1.62, -2.7) on Maul, the same framing; s4 (1.1, 1.8, -5.9) the wide, all three
+  head to foot (Sam's photo: front, right end nearer). Every camera sits right of its subject, so the presenter is
+  screen-left in every shot and both candidates look screen-left at him.
+- Hook Text: the dark ceiling band at the top of every shot; the floor at the bottom of the wide is left clear (TikTok's
+  caption bar).
+- To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
+  across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: (rule 11: the 3-4 key shots, before building; write the date and file here once Sam has it.
-Pre-flight refuses to run until this line has them, and while any "done?" box below is blank: rule 14)
-
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat). Awaiting Sam's OK.
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|
