@@ -63,23 +63,28 @@ The plan (metres, the studio's own: x east = screen right, z north = away from t
 180 = towards the cameras). The rough sheet's code holds these numbers: `source/netan_yahoo_comp.py` (copy into the film's
 `PLAN` and cameras when building; run `python3 source/netan_yahoo_comp.py OUT.jpg` from the repo root).
 - Everyone stands in front of the ring desk's open front, in a shallow line (Sam's layout photo), 1.8 m apart:
-  presenter (-1.8, -0.8) facing 105 (towards the candidates; 150, to camera, in shot 1); Maul (0.0, -0.65) facing 210;
-  Netanyahu (1.8, -0.95) facing 205 (both three-quarter towards the presenter; heads and eyes to him by LOOKS_AT).
+  presenter (-1.8, -0.8), Maul (0.0, -0.65), Netanyahu (1.8, -0.95).
+- FACING (Sam, 26 Oct): bodies and heads face each shot's CAMERA (our people look less good at a diagonal); only the
+  EYES turn: the presenter's to the candidates (screen right), the candidates' to the presenter (screen left). Building
+  must add eye direction (`sp['look']`) to the Netanyahu and Maul heads: they ignore it now (the presenter's reads it).
+- REVEALS (Sam, 26 Oct): neither candidate is seen before his line. Shot 1 is straight in front of the presenter, tight
+  enough that Maul's blades stay out (checked on the sheet); shot 2 shows no Maul. Shot 4 is the first time all three
+  are seen together.
 - Chairs (wooden armchairs on blue pools): 0.75 m straight behind each person. The presenter's is Maul's goal.
 - Maul's leap-flip: from (0.0, -0.65) to a crouch about 0.85 m in front of the presenter: about 1 m of travel, mostly
   UP (the flip). Spacing is 1.8 m, not the photo's 2.5-3 m: the phone's tall frame cannot hold three people wider apart
   at a readable size.
 - The pile: where the presenter stood, falling towards his chair. Maul then springs onto the chair (seat 0.46 m).
-- Cameras: s1 start (3.6, 2.1, -7.2) zooming in to s1 end (-0.4, 1.6, -3.4) on the presenter, waist up; s2/s5 (2.4, 1.62,
-  -3.0) on Netanyahu, chest up; s3 (0.6, 1.62, -2.7) on Maul, the same framing; s4 (1.1, 1.8, -5.9) the wide, all three
-  head to foot (Sam's photo: front, right end nearer). Every camera sits right of its subject, so the presenter is
-  screen-left in every shot and both candidates look screen-left at him.
+- Cameras: s1 at (-1.8, 1.65, -5.4), straight in front of the presenter, zooming in (lens 2400 to 5200) from full
+  figure to waist up; s2/s5 (1.8, 1.62, -3.05) straight in front of Netanyahu, chest up; s3 (0.0, 1.62, -2.75) straight
+  in front of Maul, the same framing; s4 (1.1, 1.8, -5.9) the wide, all three head to foot (Sam's photo: front, right
+  end nearer). The presenter is screen-left whenever the candidates are in shot.
 - Hook Text: the dark ceiling band at the top of every shot; the floor at the bottom of the wide is left clear (TikTok's
   caption bar).
 - To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
   across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat). Awaiting Sam's OK.
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal). Awaiting Sam's OK.
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|

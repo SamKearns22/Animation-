@@ -17,13 +17,13 @@ M = (0.0, -0.65, 210)      # Maul, turned three-quarter towards the presenter
 N = (1.8, -0.95, 205)      # Netanyahu
 CHAIR_BACK = 0.75
 def chair_of(p):
-    return (p[0], p[1] + CHAIR_BACK, 180 + (p[2] - 180) * 0.35)
+    return (p[0], p[1] + CHAIR_BACK, 180)
 
 CAMS = {
-    's1 start': S.Cam((3.6, 2.1, -7.2), (-0.8, 0.55, -0.6), focal=1150),
-    's1 end':   S.Cam((-0.4, 1.6, -3.4), (-1.75, 1.3, -0.8), focal=2700),
-    's2 / s5':  S.Cam((2.4, 1.62, -3.0), (1.8, 1.45, -0.95), focal=2700),
-    's3':       S.Cam((0.6, 1.62, -2.7), (0.0, 1.47, -0.65), focal=2700),
+    's1 start': S.Cam((-1.8, 1.65, -5.4), (-2.05, 0.95, -0.8), focal=2400),   # straight in front: the candidates
+    's1 end':   S.Cam((-1.8, 1.65, -5.4), (-1.8, 1.3, -0.8), focal=5200),    # stay out of frame (Sam, 26 Oct)
+    's2 / s5':  S.Cam((1.8, 1.62, -3.05), (1.8, 1.45, -0.95), focal=2700),
+    's3':       S.Cam((0.0, 1.62, -2.75), (0.0, 1.47, -0.65), focal=2700),
     's4':       S.Cam((1.1, 1.8, -5.9), (0.05, 1.0, -0.8), focal=1100),
 }
 
@@ -60,7 +60,7 @@ def frame(cm, phase):
         extra.append((cx, cz + 0.35, lambda im, c, cx=cx, cz=cz, cf=cf: (NP.pool(im, c, cx, cz), NP.shadow(im, c, cx, cz, cf))))
         extra.append((cx, cz, lambda im, c, cx=cx, cz=cz, cf=cf: NP.round_chair(im, c, cx, cz, cf)))
     if phase in ('start', 'to camera'):
-        pp = (P[0], P[1], 150) if phase == 'to camera' else P
+        pp = P
         people = [(NC.PRESENTER, V.standing(NC.PRESENTER), pp, 0.0),
                   (MC.MAUL_HOOD, MC.pose('stand', MC.MAUL_HOOD), M, 0.0),
                   (NN.NETANYAHU_RED, V.standing(NN.NETANYAHU_RED), N, 0.0)]
@@ -70,6 +70,9 @@ def frame(cm, phase):
                   (NN.NETANYAHU_RED, V.standing(NN.NETANYAHU_RED), N, 0.0)]
         extra.append((P[0], P[1], lambda im, c: chunk_pile(im, c, P[0], P[1])))
     for sp, j, (x, z, f), lift in people:
+        f = math.degrees(math.atan2(cm.pos[0] - x, cm.pos[2] - z))      # everyone faces the camera (Sam, 26 Oct)
+        if sp is NC.PRESENTER and phase != 'to camera':
+            sp = dict(sp, look=0.8)                                      # his eyes to the candidates (screen right)
         extra.append((x, z - 0.01, lambda im, c, sp=sp, j=j, x=x, z=z, f=f, lift=lift: put(im, c, sp, x, z, f, j, lift)))
     NS.render(img, cm, extra)
     return img.convert('RGB')
