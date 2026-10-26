@@ -12,20 +12,29 @@ _orig = NS.heb_text
 NS.heb_text = lambda text, px, col, pad=8: _orig(CAPTION if text == 'משדר מיוחד' else text, px, col, pad)
 
 # ---- the plan (metres; x east = screen right, z north = away from the cameras; facing in plan degrees, 180 = south)
-P = (-1.6, 0.55, 105)      # presenter (inside the floor disc: Sam, 26 Oct)
-M = (0.0, 0.75, 210)       # Maul
-N = (1.6, 0.5, 205)        # Netanyahu
-CHAIR_BACK = 0.7
+# Sam's sketch (26 Oct): a horseshoe round the floor disc, open to the audience: presenter west, Maul at the back,
+# Netanyahu east, each with his chair behind him (outwards), every chair turned towards a point in front of the disc
+# (they talk to each other, angled so the audience sees in). Bodies face each shot's camera; only the eyes turn.
+DC = (0.0, 1.2)            # the floor disc's centre (newsdesk_set.DISC)
+P = (-1.13, 1.42, 0)       # presenter (Sam's sketch, `references/netan-yahoo/layout-sketch.jpg`: left, a little back)
+M = (0.41, 2.27, 0)        # Maul (top of the sketch, a little right of centre)
+N = (1.15, 1.2, 0)         # Netanyahu (right, level with the disc's centre)
+CHAIR_BACK = 0.6           # chair centre behind the person, outwards from the disc centre: clear of his legs and of
+                           # the desk's inside edge (radius 2.15 m)
+TALK_TO = (0.0, -0.5)      # every chair faces this point: centre-audience
 def chair_of(p):
-    return (p[0], p[1] + CHAIR_BACK, 180)
+    dx, dz = p[0] - DC[0], p[1] - DC[1]
+    n = math.hypot(dx, dz) or 1.0
+    cx, cz = p[0] + dx / n * CHAIR_BACK, p[1] + dz / n * CHAIR_BACK
+    return (cx, cz, math.degrees(math.atan2(TALK_TO[0] - cx, TALK_TO[1] - cz)))
 
 CAMS = {
-    's1 start': S.Cam((P[0], 1.65, P[1] - 4.6), (P[0] - 0.3, 0.95, P[1]), focal=2500),   # straight in front: the
-    's1 end':   S.Cam((P[0], 1.65, P[1] - 4.6), (P[0], 1.3, P[1]), focal=5200),         # candidates stay out (Sam)
-    's2 / s5':  S.Cam((N[0], 1.62, N[1] - 2.1), (N[0], 1.45, N[1]), focal=2700),
+    's1 start': S.Cam((2.5, 1.65, -1.5), (P[0] - 0.25, 0.95, P[1]), focal=2600),   # from front-right: both candidates
+    's1 end':   S.Cam((2.5, 1.65, -1.5), (P[0], 1.3, P[1]), focal=5200),          # stay out of frame (Sam)
+    's2 / s5':  S.Cam((0.2, 1.62, -0.85), (N[0], 1.45, N[1]), focal=2900),         # Maul out of frame until shot 3
     's3':       S.Cam((M[0], 1.62, M[1] - 2.1), (M[0], 1.47, M[1]), focal=2700),
-    's4':       S.Cam((-3.0, 1.6, -3.25), (-0.3, 1.1, 0.6), focal=1420),   # all three: front-left, presenter nearest
-    's4 push':  S.Cam((-3.0, 1.6, -3.25), (-1.15, 1.05, 1.0), focal=2050),  # pushes in as Maul ignites (Sam: closer)
+    's4':       S.Cam((-1.0, 1.6, -3.6), (0.3, 1.05, 1.6), focal=1420),   # all three; the presenter nearest
+    's4 push':  S.Cam((-1.0, 1.6, -3.6), (-1.2, 1.0, 1.45), focal=2050),   # pushes in as Maul ignites (Sam: closer)
 }
 
 
@@ -58,7 +67,6 @@ def frame(cm, phase):
     extra = []
     for p in (P, M, N):
         cx, cz, cf = chair_of(p)
-        extra.append((cx, cz + 0.35, lambda im, c, cx=cx, cz=cz, cf=cf: (NP.pool(im, c, cx, cz), NP.shadow(im, c, cx, cz, cf))))
         extra.append((cx, cz, lambda im, c, cx=cx, cz=cz, cf=cf: NP.round_chair(im, c, cx, cz, cf)))
     if phase in ('start', 'to camera'):
         pp = P
@@ -119,8 +127,8 @@ def plan_tile(W=540, H=960):
         d.rectangle([x - 6, y - 6, x + 6, y + 6], fill=(20, 20, 20))
         d.text((x + 8, y - 6), name, font=f, fill=(20, 20, 20))
     # Maul's leap path
-    d.line([P2(M[0], M[1]), P2(P[0] + 0.85, P[1] - 0.05)], fill=(200, 30, 40), width=3)
-    d.text((P2(-1.2, -1.25)[0], P2(-1.2, -1.25)[1]), 'leap-flip ~1 m', font=f, fill=(200, 30, 40))
+    d.line([P2(M[0], M[1]), P2(P[0] + 0.74, P[1] + 0.41)], fill=(200, 30, 40), width=3)
+    d.text(P2(-2.6, 2.5), 'leap-flip', font=f, fill=(200, 30, 40))
     d.text((12, 12), 'From above (1 square = studio)', font=f, fill=(20, 20, 20))
     d.text((12, 36), 'desk ring (blue), floor disc (red)', font=f, fill=(20, 20, 20))
     return im
