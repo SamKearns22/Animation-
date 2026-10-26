@@ -43,13 +43,29 @@ CAST = {   # look and build per person (skin, hair, clothes, face); the cast she
     'B': dict(skin=B.OLIVE, hair='bob', hair_c=(150, 56, 40), jacket=(150, 60, 70), trousers=(50, 46, 50), outfit='blouse',
               jaw='soft', hw=64, hh=86, lashes=True),
 }
-XS = {'A': 340, 'B': 740}                         # where each stands (x across the frame)
 LOOKS_AT = {'A': 'B', 'B': 'A'}                   # who each person looks at (checked)
 LINES = [   # 'audio': 'NAME-1' uses source/audio/NAME-1.m4a and times the line to it
     dict(who='A', text='This is a template line.', start=0.3, end=2.4),
     dict(who='B', text='And this is the reply.', start=2.8, end=4.6),
 ]
 SHOTS = [('two', 0.0, 3.0), ('B', 3.0, 5.6)]       # (camera: two-shot or one person's close-up, start, end)
+# Rule 1 (plan.py): the world drawn once, in metres, before any shot: every place, every door and opening (and what
+# each shows: rule 2), every thing, where each person stands and faces, every camera. Every shot reads from it (XS
+# below comes from PEOPLE). `python3 source/plan.py NAME sketch OUT.jpg` draws it for Sam; pre-flight checks it.
+PLAN = dict(   # this template's film is flat: its plan is the strip of room the frame shows (about 2 m across)
+    CEIL=2.6,
+    ROOMS={'room': (-1.6, -3.6, 1.6, 2.0)},
+    OPENINGS={'window': dict(wall=('z', 2.0), span=(-0.82, -0.21), sill=1.07, head=1.8, to='the street')},
+    THINGS={'table': dict(at=(0.0, 0.65), size=(0.61, 0.7, 0.82), facing=0)},
+    PEOPLE={'A': dict(at=(-0.38, 0.0), facing=90, who='A'), 'B': dict(at=(0.38, 0.0), facing=270, who='B')},
+    CAMS={'two': dict(pos=(0.0, 1.0, -3.0), look=(0.0, 1.0, 0.0)), 'B': dict(pos=(0.38, 1.5, -1.2), look=(0.38, 1.5, 0.0))},
+    GROUPS={},                                      # rule 9: {group: dict(arriving=, stopped=, leaving=)}
+)
+# Rule 3 (benchmark.py): before building any place, the 8-10 things that make it recognisable, each with how ours has
+# it ('' = not built: pre-flight fails); refs in references/NAME/. No references yet: stop and ask Sam.
+BENCHMARK = [dict(place='room', refs=[], at=1.0, items=[('what makes it recognisable', '')])]
+# Rule 14 (preflight.py): who the brief puts in each shot; pre-flight refuses while any of them is never on screen there
+SHOT_CAST = {'two': ['A', 'B'], 'B': ['B']}
 DUR = 5.6
 # Any action as beats (set-up, action, contact, follow-through, settle); pace by ease: 'fast' into a hit, 'slow' out.
 # The value is A's near hand target in A's own units (x right, y down from the neck). Every frame is tested.
@@ -66,12 +82,28 @@ ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate c
 # here every contact that is meant (thing or thing.part, the other, from, to, why) and every meant pop-in.
 ALLOWED_CONTACTS = [('A.hand*', 'TABLE', 1.5, 2.2, 'A thumps the table')]
 ALLOWED_POPS = []                                   # [(name, from, to, why)], e.g. gone in through a door
+SET_EXCLUDE = []                                    # rule 12: [(set piece, why)]: what the audit leaves out of the set
+# Rule 13 (kitchecks.py, run by pre-flight on every film): a hand on what it moves, every frame, and seen; a prop that
+# moves has a hand on it unless it flies, falls or slides; a resting hand keeps 3 cm clear; marks on real surfaces
+# (define all_marks()); a sound tied to a thing plays only with it in frame, once per hit
+TOUCHES = []                                        # [(hand, thing, from, to, why)], e.g. ('A.handR', 'MUG', 2.0, 3.1, ...)
+FREE_MOVES = []                                     # [(thing, from, to, why)], e.g. ('MUG', 3.1, 3.6, 'knocked flying')
+SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
+# Rules 15-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
+# 'burst' must be lumpy, never a star; no motion lines); every prop a joke needs at least 40 px on screen (the sheet:
+# python3 source/viewchecks.py NAME SHEET.jpg); and, with a 3D camera, movers(t) -> [(name, (x, y, z))] for the
+# direction across each cut, effect_points(t) + EFFECT_SWITCH for effects hidden behind figures. Held props are
+# turned through every view by themselves.
+EFFECTS = []                                        # [(name, 'burst' / 'sparks' / 'trail' / 'smoke' / ..., draw(img))]
+JOKE_PROPS = []                                     # [(name, [times], (x, y, z) or fn(t), size in metres)]
 # define layers(t) for drawing order (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a
 # song joined from recordings (musiccheck.py)
 # ====================================================================================================================
 
 S, FY = 0.8, 1420                                 # people's scale, floor line
 NECK_Y = FY - F.SOLE_Y * S
+PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
+XS = {w: 540 + p['at'][0] / PX_M for w, p in PLAN['PEOPLE'].items()}   # where each stands, from the plan
 BLACK_AT = DUR
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
@@ -129,7 +161,12 @@ def background(img, cam):
     p = B.Pen(img, cam)
     box = lambda x0, y0, x1, y1, f, sd: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, sd), f, (24, 20, 22), 3)
     box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
-    box(110, 470, 430, 840, (150, 190, 214), 2)
+    box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
+    box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
+    for wx in (150, 290):                                                # fill (rule 2): the building opposite,
+        box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
+    box(110, 800, 430, 840, (176, 174, 168), 7)
+    box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
     box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
     box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)          # the table A thumps
 
@@ -216,11 +253,12 @@ def checks():
 
 # ------------------------------------------------------------------------------------------------ the audit
 # audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
-# (everyone at one distance, on the floor line), so its world is the frame in metres. A film with a 3D set and a
+# (everyone at one distance, on the floor line), so its world is the frame in metres. scene(t) gives the people and
+# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 12):
+# list only what to leave out, SET_EXCLUDE = [(name, why)]. A film with a 3D set and a
 # camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
 # copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
 # long thing with .along).
-PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
 
 
 def project(cam, P):
@@ -242,9 +280,7 @@ def scene(t):
                 hx, hy = THUMP.at(t)
                 sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
             out.append(audit.Thing(who, sol))
-    y0, y1 = (FY - (FY - 30)) * PX_M, (FY - (NECK_Y + 390 * S)) * PX_M
-    out.append(audit.Thing('TABLE', [CC.box('TABLE', 'top', ((380 - 540) * PX_M, y0, 0.3), ((700 - 540) * PX_M, y1, 1.0))]))
-    return out
+    return out                                            # the walls, the table and every THING: from PLAN (rule 12)
 
 
 def title_check():

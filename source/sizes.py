@@ -17,11 +17,16 @@ import sys
 TOL = 0.30                       # 30% either way: real things vary; anything further out looks wrong
 SIZES = {   # kind: (width m, height m), the face we usually see (UK where it matters). Length for long thin things.
     'person': (0.45, 1.75), 'child': (0.3, 1.2),
+    # weapons and kit (Prepper Minister, 25 Oct): a pistol crossbow with stock out ~72 cm long, limbs ~30 cm across
+    # folded; an M134-style minigun ~80-90 cm; a Glock 17 18.6 x 13.8 cm; a 24-inch machete ~60 cm; a 2-litre bottle
+    # ~10.5 x 33 cm; an Echo Dot 10 x 9 cm; the film's robots 2.1 m tall
+    'crossbow': (0.72, 0.3), 'minigun': (0.9, 0.25), 'pistol': (0.186, 0.138), 'machete': (0.6, 0.06),
+    '2L bottle': (0.105, 0.33), 'smart speaker': (0.1, 0.09), 'robot': (0.6, 2.1),
     'A4 paper': (0.21, 0.297), 'biro': (0.145, 0.01), 'pencil': (0.175, 0.008), 'mug': (0.085, 0.095),
     'takeaway cup': (0.09, 0.15), 'can': (0.066, 0.115), 'pen pot': (0.08, 0.1), 'desk plant': (0.15, 0.25),
     'phone': (0.072, 0.15), 'laptop open': (0.33, 0.23), 'monitor': (0.55, 0.36), 'keyboard': (0.44, 0.03),
     'lanyard card': (0.054, 0.086), 'playing card': (0.063, 0.088), 'poker chip': (0.039, 0.0033), 'small handbag': (0.25, 0.18), 'briefcase': (0.42, 0.32),
-    'desk': (1.4, 0.74), 'desk depth': (0.75, 0.74), 'office chair': (0.6, 1.0), 'meeting table': (2.4, 0.74),
+    'desk': (1.4, 0.74), 'desk depth': (0.75, 0.74), 'office chair': (0.6, 1.0), 'wooden armchair': (0.63, 0.76), 'news desk': (5.4, 0.8), 'meeting table': (2.4, 0.74),
     'door': (0.84, 2.04), 'double doorway': (1.6, 2.1), 'lift door opening': (1.0, 2.1), 'lift surround': (1.4, 2.4),
     'window pane': (1.2, 1.5), 'ceiling height office': (3.0, 2.7), 'light switch': (0.086, 0.086), 'exit sign': (0.36, 0.13),
     'moped': (0.7, 1.15), 'moped side': (1.85, 1.15), 'motorbike side': (2.1, 1.2), 'e-scooter side': (1.1, 1.2),
@@ -31,6 +36,9 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # carbine about 0.75 m with the stock out; a protest placard of the Defend Our Juries kind about 45 x 60 cm (Sam's photos);
     # a hand-waved flag 0.9 x 0.6 m on a 1.2 m pole; Nelson's Column 51.6 m to the top of the statue.
     'police van side': (5.93, 2.7), 'police van back': (2.02, 2.7), 'carbine': (0.75, 0.2),
+    # Newsdesk (26 Oct): Maul's double-bladed lightsaber, measured on Sam's ref 2 against a 1.75 m man: hilt about
+    # 56 cm, each blade about 65 cm (long thin things: length first)
+    'saberstaff hilt': (0.56, 0.04), 'saber blade': (0.65, 0.04),
     'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
 }
 

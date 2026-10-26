@@ -39,6 +39,10 @@ a realistic 8-head body:
 Every person in a film uses the same lengths (children and very tall or short characters get their own `Rig`
 with scaled lengths, decided in the cast list). Clothes never change the skeleton: a long tunic (`bottom=600`)
 hangs past the hands; that is the garment, not long arms.
+**Hips 15% narrower than the shoulders on every character (Sam, Power Crime Action note 5):** the body tapers from
+the waist to a hem at 0.85 of the shoulder width (`burnham.HEM`), front, three-quarter and back; a cast built outside
+`burnham.py` (Prepper's) must use the same ratio. A jacket hem rises gradually as the body leans (12 to 20 degrees),
+never in one frame.
 
 ## 3. Limbs are solved, never typed
 - **Say where the hand goes; the rig works out the elbow** (two-bone inverse kinematics, the way professional
@@ -76,7 +80,8 @@ hangs past the hands; that is the garment, not long arms.
   at elbow height when seated; a hospital trolley's mattress at the staff's waist; a counter at hip height.
 - **Lying down:** a person lying on a bed is drawn side-on on their back, face up, resting on the mattress, the
   face in profile (forehead, brow, nose, mouth, chin), never a front view turned on its side. A mask or a blanket
-  is fitted to the profile.
+  is fitted to the profile. On a floor or table, or from any high camera, use `source/lying.py` (a 3D body that rests
+  on the surface, checked: `contact_faults`).
 - **Seated at a desk** (the protester): thighs under the desk, forearms over it, hands on the keyboard.
 
 ## 5. Sets and props: one plan per place (see best-practice.md, 1.3)

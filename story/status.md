@@ -2,11 +2,47 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+
+## In progress: "Newsdesk" (working name; Sam's new untitled film; `notes/newsdesk.md`)
+- 26 Oct (building chat, Opus high): built the Israeli TV news studio in 3D (`source/newsdesk_set.py`), an original
+  news presenter (`source/newsdesk_cast.py`) and the curved-back wooden chairs (`source/newsdesk_props.py`), from
+  Sam's photos in `references/newsdesk/`; then Netanyahu (`source/netanyahu_cast.py`) and Darth Maul with his
+  double-bladed lightsaber (`source/maul_cast.py`, photos in `references/maul/`). NEXT: Sam's notes on the Maul sheet and his brief or script, then planning
+  (Opus high, fresh chat). Read only `notes/newsdesk.md` and `guides/satire.md`.
+## Done (Sam, 25 Oct: posted or closed, no more work): "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
+- 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
+  `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.
+- 25 Oct (notes 37-64 chat, Opus): all of Sam's notes on animatic 3 applied, five clips sent; the walls added to the
+  collision audit (it had never seen them). NEXT: Sam's notes on the clips, or his yes to the check sheet, then the
+  animatic with Hook Text and sign-off (Sonnet, new chat). Handover at the top of the notes file.
+- 25 Oct (overnight run, Sam asleep, his overrides: no yes for sheets/animatics, no model switches): shots 8-11 built;
+  Sam's notes 25-36 done; three check-and-fix rounds, animatics 1-3 sent. NEXT: Sam's notes on animatic 3, or his yes
+  to the final render (about 30 min, then finish.py). Handover at the top of the notes file.
+- 25 Oct (second notes chat): notes 14, 16-24 done; first animatic sent (Sam: "just go").
+- Brief: `prompts/prepper-minister.md`. Plan in metres: `source/prepper_plan.py` (`sketch OUT.jpg`). References:
+  `references/prepper-minister/`. Sam's sound effects: `source/audio/prepper/`.
+- 24 Oct: planning done (Opus high). References all in, house plan approved (shot 8 door moved), every question
+  answered, all 11 recordings in and checked. Still wanted from Sam: 5 sound effects (robot footsteps, robot crashing
+  down, bullets on metal, tin clank, crockery smashing).
+- 24 Oct (building chat, Opus high): built `source/prepper.py` (from the template), `prepper_set.py` (3D house),
+  `prepper_robot.py` (3D robot), `prepper_cast.py` (Andy, Wes, held props), `prepper_fx.py` (things, effects).
+  Cast sheet and two rehearsal clips (shot 6 bolt, shot 12 loop) sent to Sam.
+- 24 Oct: Sam's notes 1-9 on the clips filed in the notes file (shot 6: look to camera then turn and fire; see the
+  Alexa before it bursts. Shot 12: window frames out, robot 5 walks in firing at Wes then blown apart, a new robot
+  under the arch firing plasma then riddled, a blade robot swipes as Andy drops to his knees and shoots its head off,
+  4 s longer, slower spin; notes 10-11: much more visible damage (holes, scorches, tins and bottles bursting,
+  lights shattering, cupboards splintering, spent cases), and Andy's head sometimes facing backwards on a forward body).
+- 24 Oct: cast sheet approved (Wes good; Andy's fear numbers as planned).
+- 24 Oct (notes chat, Opus medium): notes 1-13 and 15 applied (shot 12 now 11 s, six robots, more damage; shared fix
+  in `views.py` for held things seen from behind; new facing check); clips sent; Sam's notes 14 and 16-19 filed.
+- NEXT (fresh chat, Opus medium): apply notes 14 and 16-19, then the remaining gaps, check sheet, Sam's yes, animatic.
+  Read only `notes/prepper-minister.md` ("Where things stand" and the Notes table) and `guides/satire.md`.
+
 ## Quick videos (about 5% of a week)
 - `guides/quick-video.md` is the whole recipe for a short two-person film (one brief file `prompts/NAME.json`,
   `source/quick.py check | sheet | final`; copy `prompts/quick-example.json`). One sheet, one final, no animatic.
 
-## In progress: "Shocking Behaviour" (TikTok satire, Reform UK HQ undercover; `source/shocking.py`, `source/shocking_cast.py`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Shocking Behaviour" (TikTok satire, Reform UK HQ undercover; `source/shocking.py`, `source/shocking_cast.py`)
 - Brief from Sam, 18 Oct: ITV's undercover journalist walks into Millbank Tower (lapel camera, ITV + REC); slam cut to
   Farage, Jenrick, Tice and Braverman doing the "Messy" trend dance (Sofia Richie's moves) under pop lights; the
   journalist's South Park shock in the doorway; Jenrick trips over his own feet into a desk (mug, coffee, papers,
@@ -98,7 +134,7 @@ Read this first in any new session, after CLAUDE.md.
   real footage starts with a frame-by-frame study, the source camera and 3D geometry (`guides/best-practice.md` 1.3).
 - Not checked by ear (no hearing here): the robot voice, the jet hisses' level, the crowd gasp at the cut to the roof.
 
-## In progress: "A Professional" (TikTok, Steve Backshall stranded on Neptune, `prompts/a-professional.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "A Professional" (TikTok, Steve Backshall stranded on Neptune, `prompts/a-professional.md`)
 - Stage 2 done 5 Oct 2026: model sheet and storyboard sent to Sam for approval (`python3 source/professional.py model
   OUT.jpg` / `sheet OUT.jpg`; `times` prints the timeline). Next: Sam's notes, then pre-flight and the animatic.
 - All code in `source/professional.py`; shared series tools started in `source/series.py` (person with legs always,
@@ -259,7 +295,7 @@ Read this first in any new session, after CLAUDE.md.
 - To post: cover around 0:04.5 (the cashier mid-smile, flag cups behind her). Avoid #oct7, #october7, #911,
   #pagerattack, #pagers and #explosion: they give away the ending and draw the strictest moderation.
 
-## In progress: TikTok versions of the rap battles
+## Done (Sam, 25 Oct: posted or closed, no more work): TikTok versions of the rap battles
 - **Andy film (`animations/andrew.mp4`, 239 s):** to be split into three TikTok parts titled OXFORD UNI RAP BATTLE -
   PART 1 / 2 / 3, cut at 8.1-85.9 s, 86.6-162.5 s and 162.5-240.4 s (the intro line is dropped; each part opens
   on a line almost at once). Prompt: `prompts/oxford-rap-battle-tiktok.md`.
@@ -269,7 +305,7 @@ Read this first in any new session, after CLAUDE.md.
   (first second), captions (700 px, centred) and UNINTELLIGIBLE flashes fresh. Still needs: a start/end time range,
   part titles, 24 fps output and per-part audio.
 
-## In progress: "The Patriots" (TikTok, file name pee-pee)
+## Done (Sam, 25 Oct: posted or closed, no more work): "The Patriots" (TikTok, file name pee-pee)
 - TV street interview at a Dover border blockade; masked protester, reporter with a BBQ mic flag; his arm badges
   "PP" and a felt-tip doodle (the other PP). Hope Again look, vertical. All code in `source/peepee.py`
   (`animatic OUT.mp4` about 3 min; `final OUT.mp4`). Timeline and captions: `LINES` / `SHOTS` at the top.
@@ -287,7 +323,7 @@ Read this first in any new session, after CLAUDE.md.
   cores. Captions use the script words; check against the recordings if Sam changed any. Cover: around 0:00.5
   (him mid-line, thumb out) with THE PATRIOTS as cover text.
 
-## In progress: "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Hope Again" (TikTok parody, `prompts/king-of-the-north.md`)
 - Conference speech that turns into the "King in the North" scene, 11 shots, 43 s, Listening & Learning look,
   made vertical. Pictures: `source/burnham.py` (cast, armour, shots, storyboard sheet). Timeline, sound and
   render: `source/burnham_film.py` (`animatic OUT.mp4` about 8 min at half size; `final OUT.mp4`).
@@ -398,7 +434,7 @@ Read this first in any new session, after CLAUDE.md.
   doesn't" / "like any of my deals."; a fifth slate jab on the new "Because"); final re-rendered 144 s and re-finished:
   3.0 MB, 26.4 s.
 
-## In progress: "Power Crime Action" (TikTok satire, a granny's placard at a Trafalgar Square protest vs. the Met; `notes/power-crime-action.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Power Crime Action" (TikTok satire, a granny's placard at a Trafalgar Square protest vs. the Met; `notes/power-crime-action.md`)
 - 20 Oct: brief copied into the notes as a checklist; six recordings filed (`source/audio/power-crime-1..6.m4a`,
   checked with voices.py: no duplicates, all fit); facts checked (the real placard wording, Met armed officers' kit);
   draft shot plan (about 43 s) and the kit parts to reuse written; questions and reference advice sent to Sam.
@@ -417,7 +453,7 @@ Read this first in any new session, after CLAUDE.md.
   now eases the bent hem over leans 12-20, for every film). Clips of the jab and the throw sent.
   NEXT (fresh chat, Sonnet): Sam's view of the clips; then the check sheet, a clear yes, the new animatic.
 
-## In progress: "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
+## Done (Sam, 25 Oct: posted or closed, no more work): "Poker Mon" (TikTok satire, Casino Royale poker game played with Poker Mon cards, `notes/poker-mon.md`)
 - 19 Oct: references saved in `references/poker-mon/`; brief copied into the notes as a checklist; draft shot plan
   written; questions sent to Sam. Next: Sam's answers, then the cast sheet (`source/poker_mon.py`), then an early
   quick animatic (motion-led film).
@@ -463,6 +499,73 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
   NEXT (fresh chat, Opus high): item 3, the film plan template (rule 1) and the reference benchmark sheet (rule 3) in
   `source/satire_template.py`.
 
-## In progress: "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
+- 25 Oct: **Sam approved rules 12-31 (Prepper Minister review)**; new tools to build, after items 3 and 4 above (fresh
+  chat, Opus high; test each on Prepper Minister, whose faults are logged in its notes):
+  5. checks on everything by default: the set builder hands every wall, door frame and piece of furniture to the
+     collision audit; films list only exclusions (rule 12);
+  6. move into the shared kit and pre-flight: `poker_mon.contact_check`, `hands_check`, `clearance_check`,
+     `prepper.facing_check`, `marks_check`, `crockery_check` (rule 13);
+  7. pre-flight stops on a blank brief-checklist row, a missing composition sheet, or a shot missing its people (rule 14);
+  8. checks print a short summary, full list to a file (rule 19);
+  9. film time and shot number burned into every `--small` / `--span` render (rule 29);
+  10. held-prop test through every view (rule 20); effect-shape check (15); direction across a cut (16); figures hide
+      effects behind them (17); readability sheet (18);
+  11. kit catalogue thumbnail sheet (`guides/kit-catalogue.md`, rule 28).
+- 25 Oct: **item 12, Sam's go: people lying down, and people seen from a high camera, with real depth** (Poker
+  Mon note 80: "players who land flat on the table look like 2D paper ... a cardboard cut out"). Plan (Opus high,
+  fresh chat; test on a demo sheet only: the earlier films are done, Sam 25 Oct):
+  Causes found: (a) `poker_mon_room.faceplant` builds a lying body from 3D tubes, but outlines every tube separately
+  (it reads as cut-out pieces), fills each one flat with no shadow side, and has no clothes detail; (b) `views.py`
+  always draws people as if the camera were just above eye level (`ELEV = 0.14`, fixed), so from a high camera a
+  standing or seated person stays an upright flat picture.
+  1. New shared `source/lying.py`, from `faceplant`: poses face down, on the back, on the side (curled), and slumped
+     sitting against a wall; one 3D skeleton in metres, so it lies in true perspective from any camera.
+  2. Reads as one body: one outline round the whole silhouette, then fills; a flat shadow side away from the light
+     (one darker tone, house style, no gradient); collar, belt, shoe soles, hair from the person's own design
+     (`views._hair`); face on the back shown from the library face through the camera.
+  3. Contact: every part rests on the floor or table (a check), contact shadow, nothing through the surface, solids
+     handed to the audit (rule 12).
+  4. No pop: `moves.fall`'s last stage blends into the lying pose (the pop-in audit passes).
+  5. `views.person` takes the camera's real tilt instead of the fixed `ELEV`: from above, more of the head top and
+     shoulders, shorter legs, feet under the body, a floor shadow (reuse Prepper's `_sofa_leg` real-tilt method).
+  6. Test sheet `python3 source/lying.py sheet OUT.jpg`: three people, every pose, from four camera heights (eye
+     level, 30 degrees, 60 degrees, straight down), beside Poker Mon's old frame. Sam approves the sheet.
+  7. Rule register row, kit catalogue entry, `guides/satire.md` (One set) line.
+  Estimate: about 3-5% of a week.
+- 25 Oct: **3-11 done** (one chat, Opus; each tested on Prepper Minister, with planted copies of its old faults):
+  3. `source/plan.py` (rule 1: the film's `PLAN` checked, `plan.py FILM sketch` draws it) and `source/benchmark.py`
+     (rule 3: `BENCHMARK`, our picture beside the references, each item ticked); both in the template, Prepper filled in.
+  4. `source/sets.py`: the shared set code (Prepper's camera and shapes moved in, frames identical) with the portal
+     (`sets.house`: the real next room through every opening, clipped, room behind room) and `portal_faults`.
+  5. `sets.solids`: every wall (cut round its openings, pieces by an opening named as its frame), door leaf
+     (`door_angles(t)`) and THING goes into the audit by itself; films list only `SET_EXCLUDE`.
+  6. `source/kitchecks.py`: hands on what they touch and seen (`TOUCHES`), props move only when held (`FREE_MOVES`),
+     resting hands 3 cm clear, head/body facing and held-over-back, marks on real surfaces, one sound per hit in
+     frame. Prepper's own facing/marks/crockery checks removed. Poker Mon keeps its three (it has no `scene(t)`).
+  7. Pre-flight refuses to start on a blank brief-checklist row or no "Composition sheet sent:" line in the notes;
+     fails a shot missing anyone in `SHOT_CAST`. Quick videos skip the every-film rules.
+  8. `source/report.py`: pre-flight and the audit print a short summary; the full list goes to a file.
+  9. `film_engine.render` stamps the film time and shot on every `--small` or `--span` render.
+  10. `source/viewchecks.py`: held props turned through every view (20), effect shapes (15), direction across a cut
+      (16), effects hidden behind figures (17), the readability sheet (18).
+  11. `source/catalogue.py`: the kit catalogue's thumbnail sheet (`python3 source/catalogue.py OUT.jpg`, about 30 s).
+  New faults the tools found in Prepper Minister: notes 65-73 in its notes file, not fixed (Sam to decide). Prepper's
+  next pre-flight will refuse until its brief checklist is ticked and the composition sheet line is written.
+  NEXT: nothing left on this list (people lying flat waits for a film that needs it).
+- 25 Oct: **12 built, test sheet approved by Sam and merged into the main line (25 Oct)** (`python3 source/lying.py sheet OUT.jpg`, about
+  1 min; sent in chat, not on GitHub). `source/lying.py`: one 3D skeleton in metres traced through the set camera as
+  one body (one outline, lines only where a part lies over another or colours meet, one darker shadow tone, collar,
+  tie or bow, cuffs, jacket hem, belt with no jacket, shoe soles, the library face and back of head laid on the 3D
+  head, long hair spread on the floor face up, a flat contact shadow on floor and wall). Poses face_down, back, side
+  (curled), slump; `rest` puts the trunk, then each hand and foot, onto the floor (`contact_faults`: rests within
+  1.5 cm, nothing through it more than 0.5 cm); `solids` for the audit; `fall` hands moves.fall over at the hips'
+  landing (largest step 10.5 cm a frame, the audit flags 25 cm); `stand` draws anyone through a 3D camera: the flat
+  drawing with the real tilt (`views.person(tilt=...)`, unchanged pixels without it) up to 40 degrees, the 3D body
+  above. `python3 source/lying.py check`: all OK (3 people x 4 poses x 4 directions, both ways round).
+  Known limits: no animatic or clip yet (a fall seen in motion is the real test); a crane move across 40 degrees
+  would switch drawing (choose one per shot); 3D standing bodies are plainer than the flat ones (no lapels or pockets);
+  Poker Mon itself is not changed (done). NEXT: nothing left on this list; use lying.py when a film needs people lying down or seen from above.
+
+## Done (Sam, 25 Oct: posted or closed, no more work): "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.
 - 23 Oct: POSTED Thu 22 Oct 4:01pm. 20 h: 256 views, 6.5 s avg watch, 3.65% in full, 0 followers (`story/metrics.md`).

@@ -21,6 +21,8 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    Ask all questions in ONE message, each with a recommended answer. Notes go in `notes/NAME.md` (`notes/_template.md`).
    Remind Sam: leave about a second of silence after each line before stopping the recording, and turn off the
    iPhone's Voice Isolation mic mode (takes stopped mid-hiss, chopped by the phone's clean-up, crackled in Cry Minister).
+   For any bleeped word, ask: was the word said, or a gap left for the bleep? Note which per line (Prepper Minister:
+   Sam left a gap, and the bleep landed on "you" twice).
    In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
 3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows **every view**
    each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key
@@ -112,12 +114,22 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   and runs keep their real tempo (slowing a gait reads as slow motion). Reel labels sit on a dark band at the top.
 - `python3 source/reel.py reel OUT.mp4` shows all of it; `reel.py sheet OUT.jpg` every pose on one sheet.
 - `walker.py` (Cry Minister's walk) is retired for new films; Cry Minister keeps it.
+- **Riding (Sam, 25 Oct): use `source/mounts.py`** (horse, pony or donkey; stand, walk, trot, canter, gallop).
+  Paces keep their real speed; the rider sits at the walk and canter, rises at the trot, and is up off the saddle
+  at the gallop. `mounts.py check` (hooves never slide, no leg stretches, the rider reaches reins and stirrups)
+  runs in pre-flight for any film that uses a mount, before every animatic.
 
 ## One set, one plan, real contact (Sam, 19 Oct: Poker Mon)
 - **Each location is built once, in 3D, and every shot is a camera on it** (`poker_mon_room.render` with a `Cam3`):
   close-ups, reverse angles and the wide shot all draw the same room, furniture, people and props. Never redraw a
   place or its props by hand for one shot (Poker Mon's close shots had a few hand-placed props while the wide shot
   had its own list, so the table emptied between cuts).
+- **People lying down, or seen from a high camera: `source/lying.py`** (Build list item 12, 25 Oct; Poker Mon note 80):
+  never a flat drawing laid on its side. `lie(sp, pose, x, z, yaw)` gives a body resting on the floor or table (poses
+  'face_down', 'back', 'side', 'slump'), `draw` draws it through the set's camera as one body (one outline, a flat
+  shadow side, the person's own face and clothes, a contact shadow); `fall` hands moves.fall over to it without a pop;
+  `stand` draws anyone through a 3D camera at its real tilt (3D above 40 degrees). `contact_faults` and `solids` go in
+  the film's checks and `scene(t)`.
 - **Everything on a table, desk or shelf comes from one written plan** (Poker Mon's `THINGS`): kind, place in metres
   from the table's centre, its own details. A busy scene is busy in every shot: a high-stakes table has tall chip
   stacks at every place, bets in the middle, cards, drinks, napkins, ashtrays.
@@ -126,9 +138,21 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   (`screen_hand_target.clamped`, `CONTACT_FAULTS`). The chips once slid to him with no hand on them.
 - **Loose things behave as pieces:** stacks topple when pushed, a pile is dragged as a pile (the back pieces lag and
   spread), a glass tips before it spills, thrown things bounce and stay where they land.
-- **Checks (run by preflight through the film's `audits()`):** a contact check (every touch reaches what it touches;
-  an object moves only while held) and a hands-seen check (a hand on something is drawn over it, never under the
-  table). Copy `contact_check` and `hands_check` from `source/poker_mon.py`.
+- **Checks (shared kit, `source/kitchecks.py`, run by pre-flight on every film; film-quality rule 13, 25 Oct):** a
+  hand on what it touches every frame of the touch, and seen (nothing between it and the lens): list each touch in
+  `TOUCHES = [(hand, thing, from, to, why)]`; a prop that moves has a hand on it unless `FREE_MOVES` says it flies,
+  falls or slides; a resting hand keeps 3 cm clear of everything it is not meant to touch (Poker Mon, note 62). They
+  run on the film's `scene(t)`, so a prop or hand a joke depends on must be in it (Prepper's tin and Andy's hand in
+  shot 11). Never copy a check from a film file (Poker Mon's own `contact_check`, `hands_check`, `clearance_check` are
+  for Poker Mon only: it has no `scene(t)`).
+- **The plan and the set (film-quality rules 1, 2, 3, 12; 25 Oct):** the film's `PLAN` (rooms, openings, things,
+  people, cameras in metres; `source/plan.py` checks it and `python3 source/plan.py FILM sketch OUT.jpg` draws it) is
+  the one source for every shot. The shared set code (`source/sets.py`: the camera, the house style's shapes) draws
+  each room with the real next room through every doorway and window (`sets.house`, the portal; an opening onto the
+  outside names what it shows, `to=`), and hands every wall, door frame, door leaf (`door_angles(t)`) and thing in
+  the plan to the collision audit by itself: list only what to leave out, `SET_EXCLUDE = [(name, why)]`. Before
+  building any place, `BENCHMARK` lists the 8-10 things that make it recognisable and how ours has each
+  (`python3 source/benchmark.py FILM OUT.jpg`: our picture beside Sam's references).
 
 ## Staging and acting (each is checked or has a tool)
 - Everyone in a fight or a conversation looks at the other (`LOOKS_AT`; checked: eyelines).
@@ -151,6 +175,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   over his shoulder towards its side of the screen.
 - A small or distant person reacting to the story uses the whole body (stops dead, hands on hips, a big slow head shake,
   then holds), placed where nothing in front hides them. A face-only reaction is for close shots.
+- **People react before a hit lands (Sam, Poker Mon note 37):** anyone about to be struck, blasted or knocked over
+  sees it coming and moves first (backs away, raises hands, cowers, tries to run); nobody stands static and waits.
 - Every action as beats: set-up, action, contact, follow-through, settle, with a pace ('fast' into a hit, 'slow' out)
   (`filmkit.Beats`; every frame of the path is tested with `filmkit.check_joints`: joint limits, bone lengths, a hand
   never through a head).
@@ -164,8 +190,17 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   with its reason. It tests every frame and two moments between, reports only what is on screen, and lists who is in
   each shot. Pre-flight runs it and calls it a FAULT if a film has no `scene(t)` (Power Crime Action never had the
   clipping check, and nobody knew). Run it alone: `python3 source/audit.py FILM [--shots a,b] [--sheet OUT.jpg]`
-  (about 4 minutes for a 48 s film with a 2,000-person crowd). It does not judge drawing order (someone drawn over a
+  (about 4 minutes for a 48 s film with a 2,000-person crowd; Prepper Minister 15 s). It prints a short summary; the
+  whole report goes to `review/FILM-audit.txt` (rule 19). It does not judge drawing order (someone drawn over a
   door that should hide him): that is `layers(t)` below.
+- **What the camera shows: `source/viewchecks.py`** (film-quality rules 15-18 and 20, 25 Oct; pre-flight runs it):
+  every held prop turned through every view (never across the back, never left behind them); every effect listed in
+  `EFFECTS` with its shape and drawn alone (a 'burst' must be lumpy, never a star or regular spikes; no motion lines);
+  `movers(t)` (bolts, plasma, thrown things) keep their screen direction and their side of each person across every
+  cut (a new shot, or the camera jumping, zooming or turning in a frame) unless `DIRECTION_SWAPS` says so; with
+  `effect_points(t)` and `EFFECT_SWITCH`, an effect behind any figure (robots too) is never drawn over it; every prop a
+  joke needs (`JOKE_PROPS`) at least 40 px of 1920 on screen (`python3 source/viewchecks.py FILM SHEET.jpg`: each at
+  phone size).
 - **Script and mouths: `python3 source/voices.py --film FILM`** (rule 7, 21 Oct; about 25 s, pre-flight runs it).
   Each recording is cut into phrases and its syllables counted from the sound; the script's words are laid over the
   phrases, and a phrase the script doesn't cover (a sentence said but never written down) is flagged. The subtitles
@@ -212,6 +247,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - **No sound effects unless the script names them or Sam asks** (Sam, 14 Oct): voices only by default.
 - **Cut a recording only in a moment of silence** (Sam, 16 Oct): find the quiet gap before the first wanted word (loudness in
   20 ms steps), cut there and lay silence in front; never start earlier to be safe (a scrap of the word before is heard).
+- **No added room tone** (The Traitors): the levelling lifts it into audible static. Silence between lines stays silent.
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
   their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.
@@ -235,9 +271,13 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,
 stretching, frozen; actions, including elbows staying on their own side; eyelines; the title clear of everyone), and a
-contact sheet with the safe area, and the shared checks (housestyle, audit, clipcheck, hookcheck, musiccheck, linecheck,
-sizes, landmarks: see 'Getting it right first time'). Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/
-`ALLOWED`/`LINE_OK`) with its reason.
+contact sheet with the safe area, and the shared checks (housestyle, plan, benchmark, sets, audit with kitchecks,
+viewchecks, clipcheck, voices, hookcheck, musiccheck, linecheck, sizes, landmarks: see 'Getting it right first time').
+Fix every fault, or list a deliberate one (`FAST_OK`/`allow`/`ALLOWED`/`LINE_OK`) with its reason. It REFUSES to start
+(rule 14) while the brief checklist in the film's notes has a blank "done?" row or the notes have no "Composition sheet
+sent: DATE, FILE" line, and fails a shot missing anyone in `SHOT_CAST`. It prints a short summary; every fault goes to
+`OUT_DIR/NAME-preflight.txt` (rule 19). Every `--small` or `--span` render has the film time and shot in its top-left
+corner (rule 29).
 It also prints **QUESTIONS FOR SAM** about the sound (deep wind rumble, dead silence, a jump in volume at a cut). They may
 be meant: put each to Sam with a recommended answer, and change nothing until he answers.
 
@@ -246,6 +286,8 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
   note on movement (Sam, 18 Oct); no yes needed first.
 - `python3 source/NAME.py final OUT.mp4 --small`: a quick look (540 x 960), only when a shot's movement changed.
 - `python3 source/NAME.py final animations/NAME-vertical.mp4`: the final. Pictures are cached; captions and title go on last.
+- **Joining clips with ffmpeg: always set `fps=24`** (Strictly Crabs: the join defaulted to 25 fps and stretched the
+  film by 4%).
 - Caption or timing note: `... final OUT --reuse` (no pictures re-rendered). Note on shot X: `... --reuse --redo X`.
 - Sound note: rebuild the sound only and attach it to the finished picture (never a re-render).
 - Say how long it will take; push notification when it ends; send the film in the chat; update `story/status.md`.

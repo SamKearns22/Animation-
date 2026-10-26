@@ -34,6 +34,8 @@ VIEWS = {0: 'front', 45: 'three', 90: 'side', 135: 'three_back', 180: 'back'}
 THIGH, SHIN, ANKLE_Y = 228, 218, 890          # person units: hips at 450, soles at 928 (knees just soft standing)
 M_PER_UNIT = 0.00152                          # metres per person unit (series.py: neck to soles 1.41 m)
 ELEV = 0.14                                   # the camera a little above: nearer points sit lower
+_E = [ELEV]                                   # the tilt in use: ELEV, or the camera's real one (person(tilt=...))
+HIGH = 40.0                                   # degrees: a camera steeper than this draws people in 3D (lying.stand)
 HIP_Y = 450.0
 JACKET = 505.0                                # jacket hem just below the hips: more leg shows (Sam, 14 Oct)
 SEAT_DROP = 222.0                             # seated: the body lower by this (knee-height chair, thighs level)
@@ -58,7 +60,7 @@ def project(p3, yaw):
     a = math.radians(yaw)
     x, y, z = p3
     depth = -x * math.sin(a) + z * math.cos(a)
-    return (x * math.cos(a) + z * math.sin(a), y + ELEV * depth), depth
+    return (x * math.cos(a) + z * math.sin(a), y + _E[0] * depth), depth
 
 
 def leaned(p3, lean):
@@ -261,6 +263,23 @@ def chair(p, view, j2, sp, under=True):
 
 
 # ------------------------------------------------------------------------------------------------ torso views
+class Tilted:
+    """A person's frame seen from a camera tilted down (Build list item 12, 25 Oct): heights squash by `c` towards
+    `piv` (the soles), so a high camera sees shorter legs and body; `dy` instead only moves the drawing down by
+    that much (the head: a ball looks round from any height, it only sits on the squashed neck)."""
+    def __init__(self, L, c=1.0, piv=928.0, dy=None):
+        self.L, self.cam, self.s, self.k, self.flip = L, L.cam, L.s, getattr(L, 'k', 1.0), getattr(L, 'flip', 1)
+        self.c, self.piv, self.dy = c, piv, dy
+
+    def P(self, x, y):
+        if self.dy is not None:
+            return self.L.P(x, y + self.dy)
+        return self.L.P(x, self.piv + (y - self.piv) * self.c)
+
+    def S(self, v):
+        return self.L.S(v)
+
+
 class Lean:
     """The drawing frame of the upper body, tipped by the pose's lean: a side view rotates about the hips; a front
     view foreshortens (the chest comes towards us and down)."""
@@ -268,7 +287,7 @@ class Lean:
         self.L, self.cam, self.s = L, L.cam, L.s
         a = math.radians(lean)
         cy = abs(math.cos(math.radians(yaw)))
-        self.k = (math.cos(a) - ELEV * math.sin(a)) * cy + (1 - cy)
+        self.k = (math.cos(a) - _E[0] * math.sin(a)) * cy + (1 - cy)
         self.r = a * math.sin(math.radians(yaw))
         self.c, self.s_ = math.cos(self.r), math.sin(self.r)
 
@@ -556,16 +575,32 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
 
 
 # ------------------------------------------------------------------------------------------------ one person
-def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
+def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None):
     """Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
-    in the pose `joints` (standing() if none). Returns the pose's 2D points (person units) for props and checks."""
+    in the pose `joints` (standing() if none). Returns the pose's 2D points (person units) for props and checks.
+    `tilt` = (e, c), the camera's real tilt measured at the person (lying.stand works it out; else the fixed ELEV):
+    a point one unit nearer sits e units lower, and heights squash by c towards the soles (more shoulders and the
+    tops of the feet, shorter legs). Steeper than HIGH degrees, draw them with lying.stand (in 3D) instead."""
+    if tilt is None:
+        return _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, None)
+    old = _E[0]
+    _E[0] = tilt[0]
+    try:
+        return _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt[1])
+    finally:
+        _E[0] = old
+
+
+def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     view_deg, mirror = snap(yaw)
     view = VIEWS[view_deg]
     j = joints or standing(sp)
     lean = j.get('lean', 0.0)
-    L = B.Local(cam, x, y + j.get('bob', 0.0) * s, s, -1 if mirror else 1)
+    L0 = B.Local(cam, x, y + j.get('bob', 0.0) * s, s, -1 if mirror else 1)
+    L = L0 if squash is None else Tilted(L0, squash, 928.0 - j.get('bob', 0.0))
     p = B.Pen(img, L)
     up = Lean(L, lean, view_deg)
+    up_head = up if squash is None else Lean(Tilted(L0, dy=L.piv * (1 - squash)), lean, view_deg)
     j2, depth = {}, {}
     for k in ('hipL', 'hipR', 'footL', 'footR'):
         j2[k], depth[k] = project(j[k], view_deg)
@@ -585,13 +620,36 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands in front of him: hidden by his back (Sam)
     if seated:
         chair(p, view, j2, sp, under=True)
+    # A leg raised and kicked out in front (a front kick) is nearer than the jacket: drawn over the torso, never
+    # hidden behind it (Sam, 25 Oct: Prepper Minister's kick read as a leg wrapped behind his body)
+    raised = {sd for sd in 'LR' if depth['foot' + sd] > depth['hip' + sd] + 150 and j['foot' + sd][1] < ANKLE_Y - 150}
+    hidden = set(j.get('hide_legs', ()))         # a leg the film draws itself (a kick at the lens, foreshortened)
     for sd in hips_far:
-        leg(p, j, sd, view_deg, sp)
+        if sd not in raised and sd not in hidden:
+            leg(p, j, sd, view_deg, sp)
     for sd in 'LR':
         check_arm3(j, sd, f"{sp.get('name', 'someone')}'s {sd} arm")
     for sd in arms_far:
         if sd in behind:
             arm(p, j2, sd, sp)
+    # Seen from behind, a thing held out in front of him (a pistol, a gun at the hip) is farther than his back: drawn
+    # before the torso, so only what sticks out past him shows (Sam, 24 Oct: Prepper Minister's hands and pistol were
+    # drawn over his back, so his body read as facing us under the back of his head)
+    # (24 Oct, Wes: a minigun draws its own fists, so 'grip' is empty: any held thing with a hand out in front counts)
+    # (24 Oct, note 16: the same from three-quarter back: Wes's minigun and fists were drawn over his back at an angle)
+    held = any(getattr(d, 'held', False) or getattr(d, 'own_fists', False) for d in j.get('props', [])) or \
+        bool(j.get('grip'))
+    reach = {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands out in front, past his chest
+    rear = view in ('back', 'three_back')
+    held_behind = held and (bool(behind & (set(j.get('grip') or 'LR'))) if view == 'back' else
+                            view == 'three_back' and bool(reach & set(j.get('grip') or 'LR')))
+    if held_behind:
+        for sd in arms_far:                        # both arms reach forward to it: hidden by his back too, only
+            if sd not in behind:                   # what shows past his sides is seen
+                arm(p, j2, sd, sp)
+        behind |= set('LR')
+        for draw in j.get('props', []):
+            draw(p, j2)
     if view == 'front':
         q = dict(sp_draw, pose='none', full=False)
         q.setdefault('bottom', JACKET)
@@ -605,19 +663,27 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
         torso_view(img, B.Pen(img, up), bent, view, seated)
     for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
+    for sd in hips_far:
+        if sd in raised and sd not in hidden:
+            leg(p, j, sd, view_deg, sp)
     for sd in arms_far:
         if sd not in behind:
             arm(p, j2, sd, sp)
     if any(getattr(d, 'held', False) for d in j.get('props', [])) and not j.get('grip'):
         raise ValueError(f"{sp.get('name', 'someone')} holds a prop with no hand in front of it: set j['grip']")
-    for draw in j.get('props', []):
+    for draw in ([] if held_behind else j.get('props', [])):
         draw(p, j2)
     for sd in sorted(j.get('grip', ())):          # a hand gripping a held prop (a fan of cards) is in front of it:
-        arm(p, j2, sd, sp)                         # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
+        if not (held_behind and sd in behind):     # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
+            arm(p, j2, sd, sp)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
-    head_view(img, B.Pen(img, up), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+    # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
+    # nothing he holds out in front of him is drawn over his back
+    j2['_drawn'] = dict(view=view, head=hv, yaw=yaw, head_yaw=yaw if head_yaw is None else head_yaw,
+                        held_over_back=rear and held and not held_behind and bool(reach))
+    head_view(img, B.Pen(img, up_head), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
-        draw(B.Pen(img, up), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+        draw(B.Pen(img, up_head), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
         arm(p, j2, sd, sp)
     for draw in j.get('face_props', []):

@@ -1,5 +1,21 @@
 # Notes for FILM (one file, numbered; mark each done as it is fixed)
 
+## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
+- **Done:**
+- **Next (stage, model, fresh chat):**
+- **Losses and my additions Sam should know about:**
+- **Rule requests and proposals not yet in a guide** (CLAUDE.md, "Rules are permanent"):
+- **Files to open:**
+
+## Plan extras (film-quality-rules 24-26): ambition estimate (new builds, risky moves, share of a week); eyelines and
+holds per shot; every sound effect (what, when, needed by); bleeped words (said, or a gap left?)
+
+## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places
+benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
+
+Composition sheet sent: (rule 11: the 3-4 key shots, before building; write the date and file here once Sam has it.
+Pre-flight refuses to run until this line has them, and while any "done?" box below is blank: rule 14)
+
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
 |---|------|------|
@@ -12,6 +28,9 @@
 
 ## Notes
 Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10.3 s, left: the man never looks at the zombie".
+
+Status: one line of what was done (no "Was:"; git keeps the history), and "new kind" or "seen before"
+(a "seen before" note means a check is missing: add it).
 
 | # | shot | time | note | status |
 |---|------|------|------|--------|
