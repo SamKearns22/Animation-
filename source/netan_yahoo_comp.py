@@ -12,20 +12,20 @@ _orig = NS.heb_text
 NS.heb_text = lambda text, px, col, pad=8: _orig(CAPTION if text == 'משדר מיוחד' else text, px, col, pad)
 
 # ---- the plan (metres; x east = screen right, z north = away from the cameras; facing in plan degrees, 180 = south)
-P = (-1.8, -0.8, 105)      # presenter, turned three-quarter towards the candidates
-M = (0.0, -0.65, 210)      # Maul, turned three-quarter towards the presenter
-N = (1.8, -0.95, 205)      # Netanyahu
-CHAIR_BACK = 0.75
+P = (-1.6, 0.55, 105)      # presenter (inside the floor disc: Sam, 26 Oct)
+M = (0.0, 0.75, 210)       # Maul
+N = (1.6, 0.5, 205)        # Netanyahu
+CHAIR_BACK = 0.7
 def chair_of(p):
     return (p[0], p[1] + CHAIR_BACK, 180)
 
 CAMS = {
-    's1 start': S.Cam((-1.8, 1.65, -5.4), (-2.05, 0.95, -0.8), focal=2400),   # straight in front: the candidates
-    's1 end':   S.Cam((-1.8, 1.65, -5.4), (-1.8, 1.3, -0.8), focal=5200),    # stay out of frame (Sam, 26 Oct)
-    's2 / s5':  S.Cam((1.8, 1.62, -3.05), (1.8, 1.45, -0.95), focal=2700),
-    's3':       S.Cam((0.0, 1.62, -2.75), (0.0, 1.47, -0.65), focal=2700),
-    's4':       S.Cam((-3.2, 1.6, -4.6), (-0.3, 1.1, -0.75), focal=1520),   # all three: front-left, presenter nearest
-    's4 push':  S.Cam((-3.2, 1.6, -4.6), (-1.35, 1.05, -0.35), focal=2050),    # pushes in as Maul ignites (Sam: closer)
+    's1 start': S.Cam((P[0], 1.65, P[1] - 4.6), (P[0] - 0.3, 0.95, P[1]), focal=2500),   # straight in front: the
+    's1 end':   S.Cam((P[0], 1.65, P[1] - 4.6), (P[0], 1.3, P[1]), focal=5200),         # candidates stay out (Sam)
+    's2 / s5':  S.Cam((N[0], 1.62, N[1] - 2.1), (N[0], 1.45, N[1]), focal=2700),
+    's3':       S.Cam((M[0], 1.62, M[1] - 2.1), (M[0], 1.47, M[1]), focal=2700),
+    's4':       S.Cam((-3.0, 1.6, -3.25), (-0.3, 1.1, 0.6), focal=1420),   # all three: front-left, presenter nearest
+    's4 push':  S.Cam((-3.0, 1.6, -3.25), (-1.15, 1.05, 1.0), focal=2050),  # pushes in as Maul ignites (Sam: closer)
 }
 
 
@@ -75,6 +75,13 @@ def frame(cm, phase):
         if sp is NC.PRESENTER and phase != 'to camera':
             sp = dict(sp, look=0.8)                                      # his eyes to the candidates (screen right)
         extra.append((x, z - 0.01, lambda im, c, sp=sp, j=j, x=x, z=z, f=f, lift=lift: put(im, c, sp, x, z, f, j, lift)))
+    # sheet-only: draw everything standing inside the ring after the desk (the building stage splits the desk into
+    # pieces, rule: nearer is always on top; the whole-desk sort point put it in front of Netanyahu)
+    def nearer(x, z, k=1.2):
+        dx, dz = cm.pos[0] - x, cm.pos[2] - z
+        n = math.hypot(dx, dz) or 1.0
+        return x + dx / n * k, z + dz / n * k
+    extra = [(*nearer(x, z), fn) for x, z, fn in extra]
     NS.render(img, cm, extra)
     return img.convert('RGB')
 

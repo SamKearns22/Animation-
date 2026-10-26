@@ -22,7 +22,7 @@
   falling pieces (Poker Mon's `launch`), lying pieces (`lying.py`).
 - **Watch out:** this planning session could not install `numba` (pypi.org blocked), which `lying.py` needs. If the
   building chat hits it, Sam can allow pypi.org in claude.ai Settings, Capabilities.
-- **Losses and my additions Sam should know about:** spacing 1.8 m (his photo: 2.5-3 m; the tall frame); the flip is
+- **Losses and my additions Sam should know about:** spacing 1.6 m, everyone inside the floor disc (his photo: 2.5-3 m; the tall frame); the flip is
   mostly upwards (about 1 m of travel); shot 4 is now front-left, so the presenter is nearest (the photo had the right end
   nearer); Netanyahu leaves the frame during shot 4's push-in. Additions he approved: thump, pieces landing, chair creak,
   steam hiss (sounds, my code), sparks and smoke at the cuts, steam wisps, hood falling back. No set dressing.
@@ -75,34 +75,34 @@ references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
 The plan (metres, the studio's own: x east = screen right, z north = away from the cameras; facing in plan degrees,
 180 = towards the cameras). The rough sheet's code holds these numbers: `source/netan_yahoo_comp.py` (copy into the film's
 `PLAN` and cameras when building; run `python3 source/netan_yahoo_comp.py OUT.jpg` from the repo root).
-- Everyone stands in front of the ring desk's open front, in a shallow line (Sam's layout photo), 1.8 m apart:
-  presenter (-1.8, -0.8), Maul (0.0, -0.65), Netanyahu (1.8, -0.95).
+- Everyone stands INSIDE the floor disc (Sam, 26 Oct: they were too near its dark edge), in a shallow line, 1.6 m
+  apart: presenter (-1.6, 0.55), Maul (0.0, 0.75), Netanyahu (1.6, 0.5). Their chairs (0.7 m behind) clear the desk's
+  inside edge by about 0.2 m.
 - FACING (Sam, 26 Oct): bodies and heads face each shot's CAMERA (our people look less good at a diagonal); only the
   EYES turn: the presenter's to the candidates (screen right), the candidates' to the presenter (screen left). Building
   must add eye direction (`sp['look']`) to the Netanyahu and Maul heads: they ignore it now (the presenter's reads it).
 - REVEALS (Sam, 26 Oct): neither candidate is seen before his line. Shot 1 is straight in front of the presenter, tight
   enough that Maul's blades stay out (checked on the sheet); shot 2 shows no Maul. Shot 4 is the first time all three
   are seen together.
-- Chairs (wooden armchairs on blue pools): 0.75 m straight behind each person. The presenter's is Maul's goal.
-- Maul's leap-flip: from (0.0, -0.65) to a crouch about 0.85 m in front of the presenter: about 1 m of travel, mostly
-  UP (the flip). Spacing is 1.8 m, not the photo's 2.5-3 m: the phone's tall frame cannot hold three people wider apart
+- Chairs (wooden armchairs on blue pools): 0.7 m straight behind each person, facing the cameras. The presenter's is Maul's goal.
+- Maul's leap-flip: from (0.0, 0.75) to a crouch about 0.85 m in front of the presenter: under 1 m of travel, mostly
+  UP (the flip). Spacing is 1.6 m, not the photo's 2.5-3 m: the phone's tall frame cannot hold three people wider apart
   at a readable size.
 - The pile: where the presenter stood, falling towards his chair. Maul then springs onto the chair (seat 0.46 m).
-- Cameras: s1 at (-1.8, 1.65, -5.4), straight in front of the presenter, zooming in (lens 2400 to 5200) from full
-  figure to waist up; s2/s5 (1.8, 1.62, -3.05) straight in front of Netanyahu, chest up; s3 (0.0, 1.62, -2.75) straight
-  in front of Maul, the same framing; s4 (-3.2, 1.6, -4.6), FRONT-LEFT (Sam, 26 Oct: "closer to the
-  action", half the old wide was darkness): the presenter nearest and biggest, the line receding to Netanyahu; all
-  three head to foot at the question (lens 1520, aim (-0.3, 1.1, -0.75)); it PUSHES IN as Maul ignites, ending on Maul
-  crouched on the presenter's chair with the pile in front (lens 2050, aim (-1.35, 1.05, -0.35)); Netanyahu leaves the
+- Cameras (all in `source/netan_yahoo_comp.py`): s1 straight in front of the presenter, 4.6 m back, zooming in (lens
+  2500 to 5200) from full figure to waist up, Maul's blades out of frame; s2/s5 straight in front of Netanyahu, 2.1 m
+  back, chest up; s3 the same on Maul; s4 at (-3.0, 1.6, -3.25), FRONT-LEFT (Sam: "closer to the action"): the
+  presenter nearest, all three head to foot on the floor disc at the question (lens 1420), then it PUSHES IN as Maul
+  ignites, ending on Maul crouched on the presenter's chair with the pile in front (lens 2050); Netanyahu leaves the
   frame during the push (his reaction is shot 5). The presenter is screen-left whenever the candidates are in shot.
-  To refine when building: the presenter's hand touches the left edge at the start (rule: nobody touches the edge);
-  the bottom quarter is dark studio floor (TikTok's caption bar sits there).
+- Draw order to build properly: the ring desk is one item sorted by one point, so it drew over Netanyahu; the sheet
+  cheats. Building splits the desk into pieces (satire.md: nearer is always on top).
 - Hook Text: the dark ceiling band at the top of every shot; the floor at the bottom of the wide is left clear (TikTok's
   caption bar).
 - To fix when building: the Hebrew caption on the big screen is far too small (the set's old caption box): make it big
   across the screen; the people in the wide are about a quarter of the frame tall (the photo's angle in a tall frame).
 
-Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in). Sam: "let's build" (26 Oct).
+Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_comp.py`; sent in the planning chat); second version 26 Oct after Sam's notes (face the camera; no candidate before his reveal); third, shot 4 closer (front-left, pushes in); fourth, everyone inside the floor disc. Sam: "let's build" (26 Oct).
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|
