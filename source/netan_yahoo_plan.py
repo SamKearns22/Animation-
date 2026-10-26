@@ -58,6 +58,8 @@ CAMS = {
     's3':       dict(pos=(0.6, 1.62, -0.85), look=(M[0], 1.47, M[1]), focal=2700),        # Netanyahu out
     's4':       dict(pos=(-1.0, 1.6, -3.6), look=(0.3, 1.05, 1.6), focal=1650),           # all three, presenter nearest (Sam 26 Oct: a little closer)
     's4 push':  dict(pos=(-1.0, 1.6, -3.6), look=(P[0] - 0.32, 1.0, P[1] + 0.03), focal=2050),   # in on Maul on the chair
+    's4 close':     dict(pos=(0.6, 1.62, -0.85), look=(M[0], 1.6, M[1]), focal=5400),   # Sam 26 Oct: his face, staring
+    's4 close end': dict(pos=(0.6, 1.62, -0.85), look=(M[0], 1.6, M[1]), focal=5900),
     's5':       dict(pos=(0.2, 1.62, 0.2), look=(N[0], 1.45, N[1]), focal=2900),          # as shot 2
 }
 GROUPS = {}

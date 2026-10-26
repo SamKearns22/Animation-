@@ -56,14 +56,16 @@ NS.SCREEN_CAPTION_BOX = (-2.45, -0.75, 1.5)               # big, across the scre
 # Each line: its recording (source/audio/), where its speech starts in the film (`at`), and its subtitles as
 # (time in the recording, chunk): two to five words, each up on its first word; the punchline on its own.
 # Chunk times: from the recording's phrases (voices.py) and its syllables, estimated within each phrase.
+HOLD = 1.85                      # Sam, 26 Oct: the silence after line 4 held a few beats longer (all after it moves on)
+CLOSE = (21.9, 23.9)             # ...with a close-up of Maul's face, staring, in it (then back to the wide for the attack)
 LINES = [
     dict(n=1, who='PRESENTER', audio='netan-yahoo-1', at=0.35,
          text="It's time to introduce the candidates for tonight's debate.",           # Sam's wording, 26 Oct
          chunks=[(1.04, "It's time to introduce"), (2.24, 'the candidates'), (3.04, "for tonight's debate.")]),
     dict(n=2, who='PRESENTER', audio='netan-yahoo-2', at=4.2,
-         text='Liberal, moderate, gently-gently incumbent Prime Minister Netanyahu.',
-         chunks=[(1.01, 'Liberal, moderate,'), (2.55, 'gently-gently incumbent'), (4.29, 'Prime Minister'),
-                 (5.45, 'Netanyahu.')]),
+         text='Liberal, moderate, gently-gently, incumbent Prime Minister Benjamin Netanyahu.',   # Sam, 26 Oct
+         chunks=[(1.01, 'Liberal, moderate,'), (2.55, 'gently-gently, incumbent'), (4.29, 'Prime Minister'),
+                 (5.45, 'Benjamin Netanyahu.')]),
     dict(n=3, who='PRESENTER', audio='netan-yahoo-3', at=10.85,
          text='And Sith Lord and Scourge of the Galaxy, Darth Maul.',
          chunks=[(3.43, 'And Sith Lord'), (4.66, 'and Scourge of the Galaxy,'), (6.34, 'Darth Maul.')]),
@@ -71,22 +73,23 @@ LINES = [
          text="Let's start with you, Maul. What would be your approach to the West Bank if you were elected?",
          chunks=[(0.85, "Let's start with you, Maul."), (2.88, 'What would be your approach'),
                  (4.36, 'to the West Bank if you were elected?')]),   # 4.36: measured on the recording
-    dict(n=5, who='NETANYAHU', audio='netan-yahoo-5', at=28.6, text="S***, he's good.",
+    dict(n=5, who='NETANYAHU', audio='netan-yahoo-5', at=28.6 + HOLD, text="S***, he's good.",
          chunks=[(0.98, "S***, he's good.")], bleep=(1.17, 1.37)),   # answer 13: the S heard, the rest bleeped
 ]
 # the action (seconds; shot 4's action plan: ignition sound leads the jump, answer 6)
-IGNITE = 22.3                    # both blades light (the sound's real start)
-TAKEOFF = 22.62                  # he springs
-LAND = 23.36                     # the crouch landing (thump)
-S1, S2, S3 = 23.78, 24.08, 24.38   # the three strikes: shoulder to hip, the other arm, across the thighs (answer 8)
+IGNITE = 22.3 + HOLD             # both blades light (the sound's real start)
+TAKEOFF = 22.62 + HOLD           # he springs
+LAND = 23.36 + HOLD              # the crouch landing (thump)
+S1, S2, S3 = 23.78 + HOLD, 24.08 + HOLD, 24.38 + HOLD   # the three strikes: shoulder to hip, the other arm, the thighs
 FALL = S3 + 0.04                 # the pieces part and fall
-SPRING = 25.35                   # onto the chair
-ON_CHAIR = 25.82
+SPRING = 25.35 + HOLD            # onto the chair
+ON_CHAIR = 25.82 + HOLD
 FLICK = (21.05, 21.45)           # the presenter's eyes to the camera and back (brief)
 NOD = 9.35                       # Netanyahu's nod on his name ("Netanyahu", line 2)
-T = dict(s1=0.0, s2=3.95, s3=10.6, s4=14.85, s5=28.25, end=31.4)
-SHOTS = [('s1', T['s1'], T['s2']), ('s2', T['s2'], T['s3']), ('s3', T['s3'], T['s4']), ('s4', T['s4'], T['s5']),
-         ('s5', T['s5'], T['end'])]
+T = dict(s1=0.0, s2=3.95, s3=10.6, s4=14.85, s4c=CLOSE[0], s4b=CLOSE[1], s5=28.25 + HOLD, end=31.4 + HOLD)
+SHOTS = [('s1', T['s1'], T['s2']), ('s2', T['s2'], T['s3']), ('s3', T['s3'], T['s4']), ('s4', T['s4'], T['s4c']),
+         ('s4c', T['s4c'], T['s4b']), ('s4b', T['s4b'], T['s5']), ('s5', T['s5'], T['end'])]
+WIDE = ('s4', 's4b')             # the wide shot, both halves (the close-up of Maul's stare between them)
 DUR = T['end'] + 0.2
 BLACK_AT = T['end']
 PLAN = 'netan_yahoo_plan'                        # rule 1: the world in metres
@@ -99,6 +102,7 @@ SPECS = {'PRESENTER': dict(NC.PRESENTER, name='PRESENTER'),     # Sam (26 Oct): 
          'NETANYAHU': dict(NN.NETANYAHU_RED, name='NETANYAHU'),
          'MAUL': dict(MC.MAUL_HOOD, name='MAUL')}
 SHOT_CAST = {'s1': ['PRESENTER'], 's2': ['NETANYAHU'], 's3': ['MAUL'], 's4': ['PRESENTER', 'NETANYAHU', 'MAUL'],
+             's4c': ['MAUL'], 's4b': ['PRESENTER', 'NETANYAHU', 'MAUL'],
              's5': ['NETANYAHU']}
 REACT = {'s4': 1, 's5': 4}       # Netanyahu's strength (answer 12: shot 4 mild; Sam, 26 Oct: 4 on both shot 5 faces)
 KEEP_CLEAR = []        # filled below once the cameras are known (the presenter's head and body in shot 1)
@@ -179,6 +183,7 @@ for ln in LINES:
                                            for a, b, sh in mouths.track(ln['text'], ln['_stretches']))
 for w in SPECS:
     TRACK.setdefault(w, [])
+SPOKEN_END = max(b for a, b, sh in TRACK['NETANYAHU'] if a > T['s5'])   # his last mouth shape on 'good'
 BLINKS = {'PRESENTER': F.blinks(3, 0.5, DUR, talking=True), 'NETANYAHU': F.blinks(5, 0.5, DUR),
           'MAUL': [b for b in F.blinks(7, 0.5, DUR) if not (T['s3'] - 0.3 < b < IGNITE + 0.3)]}   # his stare: unblinking
 BLINKS['NETANYAHU'] = [b for b in BLINKS['NETANYAHU'] if not (T['s5'] - 0.2 < b < T['end'])]   # no blink on the punchline
@@ -202,6 +207,10 @@ def cam_for(t):
     if s == 's3':
         c = C['s3']
         return S.Cam(c['pos'], c['look'], focal=c['focal'])
+    if s == 's4c':                                   # the close-up: his face, dead still; the faintest push in
+        a, b = C['s4 close'], C['s4 close end']
+        k = ease(u / (T['s4b'] - T['s4c']))
+        return S.Cam(a['pos'], lerp3(a['look'], b['look'], k), focal=a['focal'] + (b['focal'] - a['focal']) * k)
     a, b = C['s4'], C['s4 push']                     # shot 4: all three; pushes in as Maul ignites
     k = ease((t - IGNITE) / (ON_CHAIR - IGNITE))
     return S.Cam(a['pos'], lerp3(a['look'], b['look'], k), focal=a['focal'] + (b['focal'] - a['focal']) * k)
@@ -304,12 +313,12 @@ def netanyahu(t, cam):
     j['head_dy'] = 10.0 * ease(w)
     if t >= IGNITE + 0.25:                           # eyes on Maul from the ignition on
         sp['look'] = look_towards(cam, N_AT, maul_xz(t))
-    if s == 's4' and t >= IGNITE + 0.25:             # shot 4: mild surprise from the ignition: brows up, a small
+    if s in WIDE and t >= IGNITE + 0.25:             # shot 4: mild surprise from the ignition: brows up, a small
         sp['mood'], sp['react'] = 'surprised', REACT['s4']   # lean back (more as Maul lands), no step
         j['lean'] += -4.0 * ease((t - IGNITE - 0.25) / 0.4) - 3.0 * ease((t - LAND) / 0.3)
     if s == 's5':                                    # surprised on the line, then settles into the impressed look
         sp['mood'], sp['react'] = 'surprised', REACT['s5']
-        if t > LINES[4]['end'] + 0.1:
+        if t > SPOKEN_END:                           # Sam, 26 Oct: the mouth shut as 'good' ends, not a second on
             sp['mood'] = 'impressed'
     return sp, j
 
@@ -450,15 +459,12 @@ def maul(t, cam):
         j = MC.pose('stand', sp)
         j['props'] = [MC.saberstaff('R', (0.5, 1.0, 0.45), (False, False))]
         sp['look'] = look_towards(cam, M_AT, P_AT)
-        if shot_of(t) == 's4':                        # Sam's note 9: turned to the presenter, so the stare reads
-            facing = _towards(facing, to_p, 0.4)
         sp['tilt'] = 0.0                              # the stare is the joke: dead still (listed in the audit)
         return sp, j, x, z, lift, facing, roll
     sp['mood'] = 'snarl'
     if t < TAKEOFF:                                   # ignites: the ready stance, both blades lit
         j = _pose_ready(sp, (True, True))
         sp['look'] = look_towards(cam, M_AT, P_AT)
-        facing = _towards(facing, to_p, 0.4)
         return sp, j, x, z, lift, facing, roll
     if t < LAND:                                      # the leap-flip: up and over, the hood falls back in the roll
         x, z, lift = LEAP(t)
@@ -906,7 +912,7 @@ def picture(t):
     cam = cam_for(t)
     img = B.canvas((0, 0, 0))
     NS.render(img, cam, actors(t, cam))
-    if shot_of(t) == 's4':
+    if shot_of(t) in WIDE:
         effects(img, cam, t)
         steam(img, cam, t)
     return img
@@ -1092,9 +1098,11 @@ def checks():
 # the general audit (template): each person alone over every frame they are on screen
 AUDIT_ALLOW = [   # (name, from, to, why): fast or still on purpose
     ('MAUL [s3]', T['s3'], T['s4'], 'the stare: dead still at the presenter, the joke (brief: "intensely and stilly")'),
-    ('MAUL [s4]', T['s4'], IGNITE, 'the stare and the silence before he ignites (brief)'),
-    ('MAUL [s4]', IGNITE, ON_CHAIR + 0.1, 'the action: ignition, the leap-flip, the strikes, the spring (fast on purpose)'),
-    ('PRESENTER [s4]', S1 - 0.1, FALL + 0.1, 'struck: the arch on each blow, then cut apart'),
+    ('MAUL [s4]', T['s4'], T['s4c'], 'the stare and the silence before he ignites (brief)'),
+    ('MAUL [s4c]', T['s4c'], T['s4b'], 'the close-up stare in the silence (Sam, 26 Oct): dead still'),
+    ('MAUL [s4b]', T['s4b'], IGNITE, 'the stare, back in the wide, before he ignites'),
+    ('MAUL [s4b]', IGNITE, ON_CHAIR + 0.1, 'the action: ignition, the leap-flip, the strikes, the spring (fast on purpose)'),
+    ('PRESENTER [s4b]', S1 - 0.1, FALL + 0.1, 'struck: the arch on each blow, then cut apart'),
     ('NETANYAHU [s2]', NOD - 0.35, NOD + 0.35, 'the nod'),
 ]
 
