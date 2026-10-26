@@ -61,6 +61,7 @@ CAMS = {
     's5':       dict(pos=(0.2, 1.62, 0.2), look=(N[0], 1.45, N[1]), focal=2900),          # as shot 2
 }
 GROUPS = {}
+LOOKS = {'newsroom': {'wall': (186, 186, 194), 'floor': (70, 72, 82)}}   # its walls (newsdesk_set.newsroom)
 
 
 def cam(name):

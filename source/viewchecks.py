@@ -50,7 +50,7 @@ def _prop_key(name, j, where=''):
 def _blank_like(d):
     def blank(p, j2):
         return None
-    for k in ('held', 'own_fists', 'quad', 'qz', 'along'):
+    for k in ('held', 'own_fists', 'quad', 'qz', 'along', 'rear_under'):
         if hasattr(d, k):
             setattr(blank, k, getattr(d, k))
     return blank

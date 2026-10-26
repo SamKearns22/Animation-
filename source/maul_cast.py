@@ -461,6 +461,7 @@ def saberstaff(side='R', aim3=(0.0, -1.0, 0.0), lit=(True, True)):
             p.poly([P(sgn * 16, -12), P(sgn * 60, -12), P(sgn * 60, 12), P(sgn * 16, 12)], (24, 24, 28), INK, 1.6)  # grips
         p.ell(*P(0, 0), 7, 7, SILVER, INK, 1.4)                                                             # the join
     draw.held = True
+    draw.rear_under = True                                # from behind: drawn before his back (views)
     return draw
 
 

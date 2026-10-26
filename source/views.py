@@ -309,7 +309,7 @@ def torso_view(img, p, sp, view, seated=False):
     jd = B.dk(jc, 0.72)
     tie = sp.get('tie')
     if view == 'three':
-        o = 0.32 * sw
+        o = sp.get('v_at', 0.32 * sw)                     # where the shirt's V sits (a person may set it)
         p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
         p.poly([(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom), (sw * 0.78 * B.HEM, bottom),
                 (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)], jc, INK, 2.6)
@@ -650,6 +650,11 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         behind |= set('LR')
         for draw in j.get('props', []):
             draw(p, j2)
+    # a long thing held through the middle (Maul's saberstaff, Netan-Yahoo! 26 Oct) crosses in front of him: seen
+    # from behind it is drawn before his back, only its ends showing past him (the prop sets rear_under)
+    under = [] if held_behind or not rear else [d for d in j.get('props', []) if getattr(d, 'rear_under', False)]
+    for draw in under:
+        draw(p, j2)
     if view == 'front':
         q = dict(sp_draw, pose='none', full=False)
         q.setdefault('bottom', JACKET)
@@ -671,7 +676,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
             arm(p, j2, sd, sp)
     if any(getattr(d, 'held', False) for d in j.get('props', [])) and not j.get('grip'):
         raise ValueError(f"{sp.get('name', 'someone')} holds a prop with no hand in front of it: set j['grip']")
-    for draw in ([] if held_behind else j.get('props', [])):
+    for draw in ([] if held_behind else [d for d in j.get('props', []) if d not in under]):
         draw(p, j2)
     for sd in sorted(j.get('grip', ())):          # a hand gripping a held prop (a fan of cards) is in front of it:
         if not (held_behind and sd in behind):     # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
@@ -680,7 +685,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
     # nothing he holds out in front of him is drawn over his back
     j2['_drawn'] = dict(view=view, head=hv, yaw=yaw, head_yaw=yaw if head_yaw is None else head_yaw,
-                        held_over_back=rear and held and not held_behind and bool(reach))
+                        held_over_back=rear and held and not held_behind and bool(reach) and
+                        not (under and len(under) == len(j.get('props', []))))
     head_view(img, B.Pen(img, up_head), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up_head), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])

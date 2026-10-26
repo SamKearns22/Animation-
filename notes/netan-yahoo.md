@@ -100,28 +100,28 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note | done? |
 |---|------|------|
-| 1 | Satire style, TikTok; follow satire.md and film-quality-rules; start from `source/satire_template.py` | |
-| 2 | Plan only until Sam says go; nothing built or shown before sound effects and references are requested and questions asked | |
-| 3 | Israeli news presenter, younger and more energetic than the built one, serious in role | |
-| 4 | Introduces two candidates in a "prime ministerial debate"; everyone standing, chairs behind them (all stand throughout) | |
-| 5 | Netanyahu introduced as "liberal moderate gently-gently incumbent Prime Minister Netanyahu"; nods in acknowledgement | |
-| 6 | Darth Maul introduced as "Sith Lord and Scourge of the Galaxy"; glowers from under his hood; bloody-eyed menace | |
-| 7 | Presenter asks Maul about the West Bank; awkward silent beat while Maul stares | |
-| 8 | Presenter's eyes flick to the camera briefly, then back | |
-| 9 | Maul ignites his twin lightsaber, leaps acrobatically, forward roll, lands in a predatory crouch | |
-| 10 | Presenter alarmed; Netanyahu mildly surprised | |
-| 11 | Maul slices the presenter into a pile of steaming chunks: fluid, fast, cuts match where the strikes land | |
-| 12 | Maul steals the presenter's seat, leaps on it like a cat guarding territory, menacing and triumphant | |
-| 13 | Netanyahu, surprised and a bit impressed: "Shit, he's good"; subtitle "S***", said in audio, S heard and the rest bleeped | |
-| 14 | Shock level 3; gravity, nothing fully cartoony; no blood; clean cuts; accurate lightsaber sound effects and visuals (soft glow) | |
-| 15 | Screens in the background: News logo and "Prime Ministerial Debate 2026" in Hebrew (answer 14) | |
-| 16 | Shot 1: zoom in across the studio to the presenter, mid-large to mid-close | |
-| 17 | Shots 2 and 5: close shot on Netanyahu; shot 3: the matching close shot on Maul, staring still at the presenter | |
-| 18 | Shot 4: mid shot with all three and the presenter's chair | |
-| 19 | Hook Text: "Israeli Prime Ministerial Debate"; CranbriJoos sign-off at the end (standing rule) | |
-| 20 | Dialogue recordings arrive later in the day | |
-| 21 | No set dressing added (Sam: real sets are very clean) | |
-| 22 | Presenter's chair: a third wooden armchair behind him | |
+| 1 | Satire style, TikTok; follow satire.md and film-quality-rules; start from `source/satire_template.py` | done: `source/netan_yahoo.py` (the template's wiring; the 3D set parts as Prepper's) |
+| 2 | Plan only until Sam says go; nothing built or shown before sound effects and references are requested and questions asked | done (planning chat; Sam said go) |
+| 3 | Israeli news presenter, younger and more energetic than the built one, serious in role | changed by Sam (26 Oct): the bearded presenter as built; energetic: quicker head moves, more upright |
+| 4 | Introduces two candidates in a "prime ministerial debate"; everyone standing, chairs behind them (all stand throughout) | done: all three stand throughout, chairs behind (answer 3) |
+| 5 | Netanyahu introduced as "liberal moderate gently-gently incumbent Prime Minister Netanyahu"; nods in acknowledgement | done: line 2; the nod on "Netanyahu" (`NOD`) |
+| 6 | Darth Maul introduced as "Sith Lord and Scourge of the Galaxy"; glowers from under his hood; bloody-eyed menace | done: line 3; hood up, the glare, unblinking |
+| 7 | Presenter asks Maul about the West Bank; awkward silent beat while Maul stares | done: line 4; silent beat 20.5-22.3 s, Maul still |
+| 8 | Presenter's eyes flick to the camera briefly, then back | done: `FLICK` 21.05-21.45 s |
+| 9 | Maul ignites his twin lightsaber, leaps acrobatically, forward roll, lands in a predatory crouch | done: ignition (the sound leads), leap-flip (hood back), crouch landing |
+| 10 | Presenter alarmed; Netanyahu mildly surprised | done: presenter alarm, hands up before the blows; Netanyahu mild surprise (1) |
+| 11 | Maul slices the presenter into a pile of steaming chunks: fluid, fast, cuts match where the strikes land | done: three strikes, cut lines where they land, four 3D pieces into a pile, steam (Sam's note 4: lying.py) |
+| 12 | Maul steals the presenter's seat, leaps on it like a cat guarding territory, menacing and triumphant | done: springs onto his chair, crouched, head snapping round |
+| 13 | Netanyahu, surprised and a bit impressed: "Shit, he's good"; subtitle "S***", said in audio, S heard and the rest bleeped | done: line 5; S heard, bleep from the vowel (rule 27); subtitle S*** |
+| 14 | Shock level 3; gravity, nothing fully cartoony; no blood; clean cuts; accurate lightsaber sound effects and visuals (soft glow) | done: no blood, scorched cuts; soft glow on blades only; Sam's sounds (no flare, Sam 26 Oct) |
+| 15 | Screens in the background: News logo and "Prime Ministerial Debate 2026" in Hebrew (answer 14) | done: the debate caption big on the screen; the News logo is the floor graphic's (not on a screen) |
+| 16 | Shot 1: zoom in across the studio to the presenter, mid-large to mid-close | done: shot 1 zooms in (lens 2600 to 5200) |
+| 17 | Shots 2 and 5: close shot on Netanyahu; shot 3: the matching close shot on Maul, staring still at the presenter | done: shots 2/5 on Netanyahu; shot 3 the matching close on Maul (answer 5) |
+| 18 | Shot 4: mid shot with all three and the presenter's chair | done: shot 4 wide with all three and the presenter's chair, pushing in |
+| 19 | Hook Text: "Israeli Prime Ministerial Debate"; CranbriJoos sign-off at the end (standing rule) | done: `HOOK`; finish.py adds the Hook Text and the CranbriJoos sign-off |
+| 20 | Dialogue recordings arrive later in the day | done: five recordings in (`source/audio/netan-yahoo-1..5`) |
+| 21 | No set dressing added (Sam: real sets are very clean) | done: no set dressing |
+| 22 | Presenter's chair: a third wooden armchair behind him | done: a third armchair behind him |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |

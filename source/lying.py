@@ -33,7 +33,15 @@ import os
 import sys
 
 import numpy as np
-from numba import njit, prange
+try:                                                     # numba: the fast loops; without it (pypi blocked in a
+    from numba import njit, prange                       # session) the same maths runs vectorised with numpy below
+    HAVE_NUMBA = True
+except ImportError:
+    HAVE_NUMBA = False
+
+    def njit(*a, **k):
+        return a[0] if len(a) == 1 and callable(a[0]) and not k else (lambda f: f)
+    prange = range
 from PIL import Image, ImageDraw
 from scipy import ndimage
 
@@ -315,6 +323,7 @@ class Part:
         self.ra, self.rb = ra, rb
         self.axes = np.asarray(axes if axes is not None else np.eye(3), float)
         self.radii = np.asarray(radii if radii is not None else (ra, ra, ra), float)
+        self.scorch = []                                 # cut faces: [(centre, radius)] painted scorched (cut_parts)
 
     def row(self):
         r = np.zeros(NC)
@@ -363,6 +372,9 @@ def parts(k, sp):
     fh = np.array([hx, k['hup'], k['hfwd']])
     hw, hh = sp.get('hw', 72) * M, sp.get('hh', 90) * M
     out.append(Part('head', ELL, k['head'], axes=fh, radii=(hw, hh, hw * 1.08), mat='head', group=2))
+    if V._hair(sp)[2] not in ('long', 'bald'):         # short hair: a crown of hair over the top and back of the
+        out.append(Part('hair', ELL, k['head'] + k['hup'] * hh * 0.2 - k['hfwd'] * hw * 0.14, axes=fh,
+                        radii=(hw * 1.04, hh * 0.86, hw * 1.0), mat='hair', group=0))   # head (the face stays clear)
     if V._hair(sp)[2] != 'long':
         for sg in (-1, 1):
             out.append(Part('ear', ELL, k['head'] + hx * sg * hw * 0.96 + k['hfwd'] * 0.0, axes=fh,
@@ -394,10 +406,56 @@ def parts(k, sp):
     return out
 
 
+
+# ---- a body cut into pieces (Netan-Yahoo!): rigid sets of parts, each moved on its own, cut faces scorched
+SCORCH_C, CUT_RIM = (34, 26, 24), (214, 92, 30)
+
+
+def split_part(q, u, names=('thighup', 'thighlo')):
+    """A round cone cut across at u (0 at a .. 1 at b): two parts (base names, the side kept), the cut end of each
+    scorched."""
+    side = q.name[-1] if q.name[-1] in 'LR' else ''
+    m = q.a + (q.b - q.a) * u
+    rm = q.ra + (q.rb - q.ra) * u
+    a_ = Part(names[0] + side, q.kind, q.a, m, q.ra, rm, mat=q.mat, group=q.group)
+    b_ = Part(names[1] + side, q.kind, m, q.b, rm, q.rb, mat=q.mat, group=q.group)
+    for p_ in (a_, b_):
+        p_.scorch.append((m.copy(), rm * 1.15))
+    return a_, b_
+
+
+def moved(prts, R, centre, shift):
+    """Copies of parts turned by rotation matrix R about `centre`, then moved by `shift` (metres): a rigid piece."""
+    out = []
+    c = np.asarray(centre, float)
+    d = np.asarray(shift, float)
+    for q in prts:
+        n = Part(q.name, q.kind, R @ (q.a - c) + c + d, R @ (q.b - c) + c + d, q.ra, q.rb,
+                 axes=q.axes @ R.T, radii=q.radii, mat=q.mat, group=q.group)
+        n.scorch = [(R @ (np.asarray(cc) - c) + c + d, r) for cc, r in q.scorch]
+        out.append(n)
+    return out
+
+
+def lowest(prts, ground=0.0):
+    """How far the lowest part of these sits above the floor (metres; < 0: through it)."""
+    up, p0 = _v(0, 1, 0), _v(0, ground, 0)
+    return min(q.low(up, p0) for q in prts)
+
+
+def rot(axis, deg):
+    """Rotation matrix about a unit axis (Rodrigues)."""
+    k = _unit(np.asarray(axis, float))
+    th = math.radians(deg)
+    K = np.array([[0, -k[2], k[1]], [k[2], 0, -k[0]], [-k[1], k[0], 0]])
+    return np.eye(3) + math.sin(th) * K + (1 - math.cos(th)) * (K @ K)
+
+
 ADJ = {('belly', 'chest'), ('belly', 'pelvis'), ('belly', 'arm'), ('belly', 'shoulder'), ('chest', 'arm'), ('chest', 'neck'), ('shoulder', 'arm'), ('shoulder', 'chest'), ('chest', 'pelvis'),
        ('arm', 'forearm'), ('forearm', 'hand'), ('pelvis', 'thigh'), ('thigh', 'shin'), ('shin', 'shoe'),
        ('neck', 'head'), ('head', 'ear'), ('pelvis', 'skirt'), ('skirt', 'thigh'), ('chest', 'skirt'),
-       ('shoulder', 'neck'), ('shoulder', 'shoulder'), ('head', 'hair'), ('neck', 'hair')}
+       ('shoulder', 'neck'), ('shoulder', 'shoulder'), ('head', 'hair'), ('neck', 'hair'),
+       ('pelvis', 'thighup'), ('thighlo', 'shin')}           # a thigh cut across (split_part)
 
 
 def _adjacent(a, b):
@@ -508,6 +566,106 @@ def _under(P, Q, nrm, reach, OUT):
                 break
 
 
+# ---- the same three loops vectorised with numpy (no numba): every ray at once, the parts in turn
+def _pd_v(P, i, x, y, z):
+    if P[i, 0] == 0.0:                                   # a round cone
+        ax, ay, az = P[i, 3], P[i, 4], P[i, 5]
+        bax, bay, baz = P[i, 6] - ax, P[i, 7] - ay, P[i, 8] - az
+        r1, r2 = P[i, 9], P[i, 10]
+        l2 = bax * bax + bay * bay + baz * baz
+        if l2 < 1e-10:
+            return np.sqrt((x - ax) ** 2 + (y - ay) ** 2 + (z - az) ** 2) - r1
+        rr = r1 - r2
+        a2 = l2 - rr * rr
+        il2 = 1.0 / l2
+        pax, pay, paz = x - ax, y - ay, z - az
+        yy = pax * bax + pay * bay + paz * baz
+        zz = yy - l2
+        qx, qy, qz = pax * l2 - bax * yy, pay * l2 - bay * yy, paz * l2 - baz * yy
+        x2 = qx * qx + qy * qy + qz * qz
+        y2 = yy * yy * l2
+        z2 = zz * zz * l2
+        sr = 1.0 if rr > 0 else (-1.0 if rr < 0 else 0.0)
+        k = sr * rr * rr * x2
+        out = (np.sqrt(np.maximum(x2 * a2 * il2, 0.0)) + yy * rr) * il2 - r1
+        c2 = np.sign(yy) * a2 * y2 < k
+        out = np.where(c2, np.sqrt(x2 + y2) * il2 - r1, out)
+        c1 = np.sign(zz) * a2 * z2 > k
+        return np.where(c1, np.sqrt(x2 + z2) * il2 - r2, out)
+    dx, dy, dz = x - P[i, 3], y - P[i, 4], z - P[i, 5]   # an ellipsoid
+    lx = (dx * P[i, 11] + dy * P[i, 12] + dz * P[i, 13]) / P[i, 20]
+    ly = (dx * P[i, 14] + dy * P[i, 15] + dz * P[i, 16]) / P[i, 21]
+    lz = (dx * P[i, 17] + dy * P[i, 18] + dz * P[i, 19]) / P[i, 22]
+    k0 = np.sqrt(lx * lx + ly * ly + lz * lz)
+    k1 = np.sqrt((lx / P[i, 20]) ** 2 + (ly / P[i, 21]) ** 2 + (lz / P[i, 22]) ** 2)
+    small = k1 < 1e-9
+    return np.where(small, -min(P[i, 20], P[i, 21], P[i, 22]), k0 * (k0 - 1.0) / np.where(small, 1.0, k1))
+
+
+def _sd_v(P, x, y, z):
+    n = x.shape[0]
+    best, bid = np.full(n, 1e9), np.full(n, -1, np.int64)
+    tot, acc = np.full(n, 1e9), np.full(n, 1e9)
+    cg, ck = -1.0, 0.0
+    for i in range(P.shape[0]):
+        d = _pd_v(P, i, x, y, z)
+        better = d < best
+        best = np.where(better, d, best)
+        bid = np.where(better, i, bid)
+        g = P[i, 1]
+        if g == 0.0:
+            tot = np.minimum(tot, d)
+        elif g != cg:
+            tot = np.minimum(tot, acc)
+            acc, cg, ck = d, g, P[i, 2]
+        else:
+            h = np.maximum(ck - np.abs(acc - d), 0.0) / ck
+            acc = np.minimum(acc, d) - h * h * ck * 0.25
+    return np.minimum(tot, acc), bid
+
+
+def _march_v(P, o, D, t0, t1, T, ID, N):
+    T[:], ID[:] = -1.0, -1
+    act = np.nonzero(t1 > t0)[0]
+    t = t0.astype(float).copy()
+    e = 0.0015
+    for _ in range(160):
+        if act.size == 0:
+            break
+        tt = t[act]
+        x, y, z = o[0] + D[act, 0] * tt, o[1] + D[act, 1] * tt, o[2] + D[act, 2] * tt
+        d, i = _sd_v(P, x, y, z)
+        hit = d < 0.0003 + 0.0004 * tt
+        if hit.any():
+            h = act[hit]
+            T[h], ID[h] = tt[hit], i[hit]
+            xh, yh, zh = x[hit], y[hit], z[hit]
+            N[h, 0] = _sd_v(P, xh + e, yh, zh)[0] - _sd_v(P, xh - e, yh, zh)[0]
+            N[h, 1] = _sd_v(P, xh, yh + e, zh)[0] - _sd_v(P, xh, yh - e, zh)[0]
+            N[h, 2] = _sd_v(P, xh, yh, zh + e)[0] - _sd_v(P, xh, yh, zh - e)[0]
+        go = ~hit
+        act, tt, d = act[go], tt[go], d[go]
+        tt = tt + np.maximum(d * 0.9, 0.0004)
+        t[act] = tt
+        act = act[tt <= t1[act]]
+
+
+def _under_v(P, Q, nrm, reach, OUT):
+    OUT[:] = 0
+    left = np.arange(Q.shape[0])
+    for h in (0.008, 0.02, 0.04, 0.07, 0.1, 0.14, 0.18, 0.22):
+        if h > reach or left.size == 0:
+            break
+        d, _ = _sd_v(P, Q[left, 0] + nrm[0] * h, Q[left, 1] + nrm[1] * h, Q[left, 2] + nrm[2] * h)
+        inside = d < 0.0
+        OUT[left[inside]] = 1
+        left = left[~inside]
+
+
+if not HAVE_NUMBA:
+    _march, _under = _march_v, _under_v
+
+
 # ------------------------------------------------------------------------------------------------ the face
 class _TexCam:
     def __init__(self, ppu, s):
@@ -601,10 +759,10 @@ def _lw(k_px):
     return max(2, int(round(2.6 * B.SS * 0.75 * max(0.25, s) ** 0.6)))
 
 
-def shadow(img, cam, k, sp, surfaces, alpha=60):
+def shadow(img, cam, k, sp, surfaces, alpha=60, prts=None):
     """The flat contact shadow on each surface [(point, normal, (lo, hi) bounds in x/z or None)] where the body
-    rests on or over it (within 22 cm), before the body is drawn."""
-    prts = parts(k, sp)
+    rests on or over it (within 22 cm), before the body is drawn. `prts`: draw these parts instead of k's."""
+    prts = prts if prts is not None else parts(k, sp)
     P = np.array([q.row() for q in prts])
     box = _bbox(cam, prts, img)
     if box is None:
@@ -635,13 +793,13 @@ def shadow(img, cam, k, sp, surfaces, alpha=60):
     img.alpha_composite(sh, (x0, y0))
 
 
-def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None):
+def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
     """Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, a flat shadow side, the
     person's own face and clothes. `surfaces`: [(point, normal)] it rests on, for the contact shadow (drawn
     first). Returns {joint: frame point} for props and checks, or None if off camera."""
     if surfaces:
-        shadow(img, cam, k, sp, surfaces)
-    prts = parts(k, sp)
+        shadow(img, cam, k, sp, surfaces, prts=prts)
+    prts = prts if prts is not None else parts(k, sp)        # `prts`: a ready list (a body cut into pieces)
     P = np.ascontiguousarray(np.array([q.row() for q in prts]))
     box = _bbox(cam, prts, img)
     if box is None:
@@ -702,7 +860,7 @@ def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None):
     out[ink, :3] = INK[:3]
     out[ink, 3] = 255
     img.alpha_composite(Image.fromarray(out, 'RGBA'), (x0, y0))
-    return {n: cam.project(k[n])[0] for n in POINTS}
+    return {n: cam.project(k[n])[0] for n in POINTS} if k is not None else {}
 
 
 def _disk(lw):
@@ -786,6 +944,10 @@ def _paint(prts, ids, Pw, sp, t, cam, hit):
                 hairy = (-nl[:, 1] > -0.15) & (-nl[:, 1] < 0.35) & (nz < 0.2)   # a fringe round the back
             under = np.where(hairy[:, None], np.array(C['hair'], float), np.array(C['skin'], float))
             c = res[:, :3] * a + under * (1 - a)
+        for cen, r in q.scorch:                          # a cut face: scorched black, its rim glowing orange
+            dd = np.linalg.norm(X - np.asarray(cen)[None, :], axis=1)
+            c[dd < r] = SCORCH_C
+            c[(dd < r) & (dd > r * 0.9)] = sp.get('cut_rim', CUT_RIM)   # a thin rim
         rg = np.zeros(len(X))
         if q.mat == 'head':                              # the drawing has its own lines: none added inside the head,
             rg[:] = code(C['skin'])                      # and none where it meets the neck (no jaw crease from behind)

@@ -152,6 +152,16 @@ def newsroom(img, cm):
     poly(img, cm, [(x0, NEWS_CEIL, z0), (x1, NEWS_CEIL, z0), (x1, NEWS_CEIL, z1), (x0, NEWS_CEIL, z1)], (190, 192, 198))
     poly(img, cm, [(x0, 0, z1), (x1, 0, z1), (x1, NEWS_CEIL, z1), (x0, NEWS_CEIL, z1)], (206, 206, 212))     # far wall
     poly(img, cm, [(x1, 0, z0), (x1, 0, z1), (x1, NEWS_CEIL, z1), (x1, NEWS_CEIL, z0)], (186, 186, 194))     # east wall
+    poly(img, cm, [(x0, 0, z0), (x0, 0, z1), (x0, NEWS_CEIL, z1), (x0, NEWS_CEIL, z0)], (186, 186, 194))     # west wall
+    poly(img, cm, [(x0 + 0.02, 0, 10.6), (x0 + 0.02, 0, 11.5), (x0 + 0.02, 2.1, 11.5), (x0 + 0.02, 2.1, 10.6)],
+         (120, 124, 136))                               # its door (Netan-Yahoo!, 26 Oct: seen through the glass in shot 1)
+    poly(img, cm, [(x0 + 0.02, 1.2, 8.6), (x0 + 0.02, 1.2, 9.9), (x0 + 0.02, 2.2, 9.9), (x0 + 0.02, 2.2, 8.6)],
+         (238, 238, 240))                               # a whiteboard with notes on it
+    for k in range(3):
+        y = 1.95 - 0.22 * k
+        lines(img, cm, [(x0 + 0.03, y, 8.8), (x0 + 0.03, y, 9.5 - 0.15 * k)], (60, 80, 150), 1.6)
+    poly(img, cm, [(x0 + 0.02, 2.4, 9.0), (x0 + 0.02, 2.4, 9.5), (x0 + 0.02, 2.75, 9.5), (x0 + 0.02, 2.75, 9.0)],
+         (36, 36, 44))                                  # a wall clock's dark face
     for i, (a, b, c) in enumerate(((-6.6, -5.2, (196, 36, 46)), (-5.0, -3.6, (34, 80, 180)), (-3.4, -2.7, (196, 36, 46)))):
         poly(img, cm, [(a, 1.6, z1 - 0.02), (b, 1.6, z1 - 0.02), (b, 2.5, z1 - 0.02), (a, 2.5, z1 - 0.02)], c)
         lines(img, cm, [(a + 0.15, 2.25, z1 - 0.03), (b - 0.4, 2.25, z1 - 0.03)], (240, 240, 244), 2.0)

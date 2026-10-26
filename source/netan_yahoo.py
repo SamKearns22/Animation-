@@ -38,6 +38,7 @@ import moves                     # noqa: E402
 import sets as S                 # noqa: E402
 import prepper_fx as X           # noqa: E402
 import audit as A                # noqa: E402
+import lying as LY               # noqa: E402  3D bodies on the floor (the pile)
 import clipcheck as CC           # noqa: E402
 from ed import INK               # noqa: E402
 
@@ -59,15 +60,15 @@ LINES = [
          chunks=[(1.04, "It's time to introduce"), (2.24, 'our candidates'), (3.04, "in tonight's debate.")]),
     dict(n=2, who='PRESENTER', audio='netan-yahoo-2', at=4.2,
          text='Liberal, moderate, gently-gently incumbent Prime Minister Netanyahu.',
-         chunks=[(1.01, 'Liberal,'), (1.75, 'moderate,'), (2.55, 'gently-gently'), (3.55, 'incumbent'),
-                 (4.29, 'Prime Minister'), (5.45, 'Netanyahu.')]),
+         chunks=[(1.01, 'Liberal, moderate,'), (2.55, 'gently-gently incumbent'), (4.29, 'Prime Minister'),
+                 (5.45, 'Netanyahu.')]),
     dict(n=3, who='PRESENTER', audio='netan-yahoo-3', at=10.85,
          text='And Sith Lord and Scourge of the Galaxy, Darth Maul.',
          chunks=[(3.43, 'And Sith Lord'), (4.66, 'and Scourge of the Galaxy,'), (6.34, 'Darth Maul.')]),
     dict(n=4, who='PRESENTER', audio='netan-yahoo-4', at=15.1,
          text="Let's start with you, Maul. What would be your approach to the West Bank if you were elected?",
-         chunks=[(0.85, "Let's start"), (1.42, 'with you, Maul.'), (2.88, 'What would be'), (3.5, 'your approach'),
-                 (4.13, 'to the West Bank'), (4.96, 'if you were elected?')]),
+         chunks=[(0.85, "Let's start with you, Maul."), (2.88, 'What would be your approach'),
+                 (4.36, 'to the West Bank if you were elected?')]),   # 4.36: measured on the recording
     dict(n=5, who='NETANYAHU', audio='netan-yahoo-5', at=28.6, text="S***, he's good.",
          chunks=[(0.98, "S***, he's good.")], bleep=(1.17, 1.37)),   # answer 13: the S heard, the rest bleeped
 ]
@@ -92,14 +93,14 @@ CHAIR_P = PLN.chair_of(P_AT)
 LAND_AT = (P_AT[0] + 0.85 * (M_AT[0] - P_AT[0]) / math.dist(M_AT, P_AT),
            P_AT[1] + 0.85 * (M_AT[1] - P_AT[1]) / math.dist(M_AT, P_AT))   # 0.85 m from the presenter, Maul's side
 HEIGHTS = {'PRESENTER': 1.80, 'NETANYAHU': 1.70, 'MAUL': 1.75}
-SPECS = {'PRESENTER': dict(NC.PRESENTER_YOUNG, name='PRESENTER'),
+SPECS = {'PRESENTER': dict(NC.PRESENTER, name='PRESENTER'),     # Sam (26 Oct): the bearded one, as built
          'NETANYAHU': dict(NN.NETANYAHU_RED, name='NETANYAHU'),
          'MAUL': dict(MC.MAUL_HOOD, name='MAUL')}
 SHOT_CAST = {'s1': ['PRESENTER'], 's2': ['NETANYAHU'], 's3': ['MAUL'], 's4': ['PRESENTER', 'NETANYAHU', 'MAUL'],
              's5': ['NETANYAHU']}
-REACT = {'s4': 1, 's5': 3}       # Netanyahu's strength (answer 12: shot 4 mild; shot 5 default 3 until Sam picks)
+REACT = {'s4': 1, 's5': 4}       # Netanyahu's strength (answer 12: shot 4 mild; Sam, 26 Oct: 4 on both shot 5 faces)
 KEEP_CLEAR = []
-PROP_SIZES = [('saberstaff', 'lightsaber', MC.HILT_M + 2 * MC.BLADE_M, 0.04, None),
+PROP_SIZES = [('saberstaff blade', 'saber blade', MC.BLADE_M, 0.04, None),
               ('armchair', 'wooden armchair', 2 * PLN.CHAIR_R, NP.RAIL_TOP, None)]
 OUTFIT = {}
 ALLOWED_CONTACTS = [
@@ -108,7 +109,8 @@ ALLOWED_CONTACTS = [
     ('PIECE*', 'PIECE*', FALL, None, 'the pieces fall into one pile (brief)'),
     ('PIECE*', 'CHAIR_PRESENTER', FALL, None, 'the pile lies against his chair legs'),
 ]
-ALLOWED_POPS = [('PRESENTER', FALL - 0.05, FALL + 0.1, 'cut into four pieces: PIECE 1-4 take his place')]
+ALLOWED_POPS = [('PRESENTER', FALL - 0.05, FALL + 0.1, 'cut into four pieces: PIECE 1-4 take his place'),
+                ('PIECE*', FALL - 0.05, FALL + 0.15, 'the four pieces of the presenter, where he stood, as he comes apart')]
 SET_EXCLUDE = []
 TOUCHES, FREE_MOVES = [], [('PIECE*', FALL, None, 'cut free: they fall under gravity and stay')]
 SOUND_SOURCES = {}
@@ -280,15 +282,16 @@ def netanyahu(t, cam):
     sp['blink'] = F.blinking(t, BLINKS['NETANYAHU'])
     sp['tilt'] = filmkit.shifts(t, seed=21, amount=0.04)
     sp['breath'] = F.breath(t, 4.4, 1.2, 0.6)
+    j['lean'] = 2.0 * filmkit.shifts(t, seed=23, amount=1.0)   # a small weight shift now and then (never a sway)
     sp['look'] = look_towards(cam, N_AT, P_AT)
     w = max(0.0, 1.0 - abs(t - NOD) / 0.3)           # the respectful nod on his name: head down and back up
     sp['down'] = 0.9 * ease(w)
     j['head_dy'] = 10.0 * ease(w)
     if t >= IGNITE + 0.25:                           # eyes on Maul from the ignition on
         sp['look'] = look_towards(cam, N_AT, maul_xz(t))
-    if s == 's4' and t >= LAND - 0.1:                # shot 4: mild surprise: brows up, a small lean back, no step
-        sp['mood'], sp['react'] = 'surprised', REACT['s4']
-        j['lean'] = -3.0 * ease((t - LAND + 0.1) / 0.3)
+    if s == 's4' and t >= IGNITE + 0.25:             # shot 4: mild surprise from the ignition: brows up, a small
+        sp['mood'], sp['react'] = 'surprised', REACT['s4']   # lean back (more as Maul lands), no step
+        j['lean'] += -4.0 * ease((t - IGNITE - 0.25) / 0.4) - 3.0 * ease((t - LAND) / 0.3)
     if s == 's5':                                    # surprised on the line, then settles into the impressed look
         sp['mood'], sp['react'] = 'surprised', REACT['s5']
         if t > LINES[4]['end'] + 0.1:
@@ -332,7 +335,7 @@ def _pose_ready(sp, lit):
     j['bob'] = d
     j['footR'] = (175.0, V.ANKLE_Y - d, 30.0)
     j['footL'] = (-185.0, V.ANKLE_Y - d, -30.0)
-    V.arm_to(j, 'R', (sw + 40, -60.0, -70.0), 'out', 'fist')
+    V.arm_to(j, 'R', (sw + 40, -60.0, 20.0), 'out', 'fist')
     V.arm_to(j, 'L', (-(sw + 260), 110.0, 30.0), 'down', 'palm')
     j['props'] = [MC.saberstaff('R', (0.15, -1.0, -0.1), lit)]
     j['grip'] = {'R'}
@@ -495,32 +498,115 @@ def maul(t, cam):
 
 
 # ------------------------------------------------------------------------------------------------ the cut and the pieces
-# The four pieces (answer 8), cut by three lines in his own units (front view; x across, y down from the neck):
-# 1 shoulder to hip (diagonal), 2 the other arm off at the shoulder, 3 across the thighs.
+# Strikes 1-3 leave glowing cut lines on him (drawn on the flat figure while he stands). As the last lands he comes
+# apart into four pieces (answer 8): head and shoulder, torso, arm, legs. Sam (26 Oct, note 4): the pieces are 3D
+# bodies on the floor (lying.py, the same logic as anyone lying down), each falls under gravity, turns and slumps
+# fully to the floor, the pile a little further from the chair. Cut faces scorched black, rims orange, cooling; no blood.
 CUTS = [((-260.0, 330.0), (120.0, -60.0)), ((150.0, -40.0), (150.0, 520.0)), ((-300.0, 610.0), (300.0, 610.0))]
-BIG = 2000.0
-PIECES = {   # each piece: a polygon in his units (inside the cuts), its own fall
-    'PIECE 1': dict(name='head and shoulder', poly=[(-BIG, -BIG), (BIG, -BIG), (120.0, -60.0), (-260.0, 330.0), (-BIG, 330.0)],
-                    rest=(-0.3, 0.24, -0.08), spin=112.0, drop=0.58),     # tumbles off the top of the heap
-    'PIECE 2': dict(name='torso', poly=[(120.0, -60.0), (150.0, -40.0), (150.0, 610.0), (-BIG, 610.0), (-BIG, 330.0),
-                                        (-260.0, 330.0)],
-                    rest=(-0.04, 0.3, 0.0), spin=24.0, drop=0.5),        # drops onto the legs, crosswise
-    'PIECE 3': dict(name='arm', poly=[(150.0, -BIG), (BIG, -BIG), (BIG, 610.0), (150.0, 610.0)],
-                    rest=(0.3, 0.06, -0.18), spin=-150.0, drop=0.42),     # lands in front
-    'PIECE 4': dict(name='legs', poly=[(-BIG, 610.0), (BIG, 610.0), (BIG, BIG), (-BIG, BIG)],
-                    rest=(0.06, 0.12, 0.06), spin=-84.0, drop=0.62),      # buckle and topple: the base of the pile
-}
-for _k, _pc in PIECES.items():
-    _pc['done'] = FALL + _pc['drop']
-PILE_DOWN = max(pc['done'] for pc in PIECES.values())
 SCORCH = (34, 26, 24)
-GLOW_HOT, GLOW_COOL = (255, 186, 70), (214, 92, 30)
+GLOW_HOT, GLOW_COOL = (255, 186, 70), (150, 62, 30)
+G = 9.8
+_away = np.subtract(P_AT, CHAIR_P[:2])
+_away = _away / np.linalg.norm(_away)
+PILE_AT = (P_AT[0] + 0.02, P_AT[1] - 0.38)       # Sam: a little further from the chair (towards us, clear of Maul)
+# each piece: its parts, how it turns as it goes down (axis, degrees), where it ends up from the pile's centre
+PIECES = {
+    'PIECE 1': dict(name='head and shoulder', parts=('neck', 'head', 'hair', 'ear', 'shoulderL', 'armL', 'forearmL', 'handL'),
+                    axis=(0.25, 0.0, 1.0), deg=100.0, to=(-0.5, -0.12), spin=40.0),
+    'PIECE 2': dict(name='torso', parts=('chest', 'belly', 'shoulderR', 'pelvis', 'thighupL', 'thighupR'),
+                    axis=(0.0, 0.0, 1.0), deg=82.0, to=(-0.06, 0.34), spin=-15.0),
+    'PIECE 3': dict(name='arm', parts=('armR', 'forearmR', 'handR'), axis=(1.0, 0.0, 0.2), deg=88.0,
+                    to=(0.22, -0.3), spin=60.0),
+    'PIECE 4': dict(name='legs', parts=('thighloL', 'thighloR', 'shinL', 'shinR', 'shoeL', 'shoeR'),
+                    axis=(1.0, 0.0, 0.0), deg=-86.0, to=(0.05, -0.08), spin=10.0),
+}
+_BODY = {}
 
 
 def _cut_pose():
     """His pose as the last blow lands (frozen for the pieces)."""
     cam0 = cam_for(S3)
     return presenter(S3 + 0.05, cam0)
+
+
+def cut_body():
+    """The presenter's 3D body as cut: {piece: [lying.Part]} standing where he stood, and his spec."""
+    if 'pieces' not in _BODY:
+        sp, j = _cut_pose()
+        fd = facing_cam(cam_for(S3), *P_AT)
+        k = LY.from_views(j, sp, P_AT[0], P_AT[1], (math.sin(math.radians(fd)), math.cos(math.radians(fd))))
+        prts = []
+        for q in LY.parts(k, sp):
+            if q.name.startswith('thigh'):
+                prts.extend(LY.split_part(q, 0.45))       # strike 3: across the thighs
+            else:
+                prts.append(q)
+        diag = (k['neck'] + k['shL']) / 2 + (k['shR'] - k['shL']) * 0.0
+        for q in prts:                                    # the scorched faces of the other two cuts
+            if q.name in ('neck', 'shoulderL', 'chest', 'armL'):
+                q.scorch.append((diag, 0.12))              # strike 1: shoulder to hip
+            if q.name in ('shoulderR', 'armR', 'chest'):
+                q.scorch.append((k['shR'].copy(), 0.075))  # strike 2: the other arm
+        out = {}
+        for name, pc in PIECES.items():
+            want = set(pc['parts'])
+            out[name] = [q for q in prts if q.name in want or (q.name == 'ear' and 'ear' in want)]
+        _BODY['pieces'], _BODY['sp'] = out, dict(sp)
+    return _BODY['pieces'], _BODY['sp']
+
+
+def _centre(prts):
+    return np.mean([q.a for q in prts] + [q.b for q in prts], axis=0)
+
+
+def piece_at(name, t):
+    """The piece's parts at time t: turning as it falls under gravity, coming to rest flat on the floor."""
+    pcs, _ = cut_body()
+    prts = pcs[name]
+    pc = PIECES[name]
+    c0 = _centre(prts)
+    tau = max(0.0, t - FALL)
+    h0 = c0[1]
+    fall_t = math.sqrt(2 * max(0.2, h0) / G)               # about how long it takes to come down
+    u = min(1.0, tau / fall_t)
+    k = u * u                                               # the turn builds up as it falls
+    R = LY.rot((0, 1, 0), pc['spin'] * k) @ LY.rot(pc['axis'], pc['deg'] * k)
+    tx = (PILE_AT[0] + pc['to'][0] - c0[0]) * (1 - (1 - u) ** 2)
+    tz = (PILE_AT[1] + pc['to'][1] - c0[2]) * (1 - (1 - u) ** 2)
+    turned = LY.moved(prts, R, c0, (tx, 0.0, tz))
+    rest_y = -LY.lowest(turned)                             # the drop that rests it on the floor
+    y = max(-0.5 * G * tau * tau, rest_y) if u < 1.0 else rest_y
+    return LY.moved(turned, np.eye(3), c0, (0.0, y, 0.0))
+
+
+def _pile_down():
+    """When the last piece comes to rest (its fall from its height under gravity)."""
+    pcs, _ = cut_body()
+    return FALL + max(math.sqrt(2 * max(0.2, _centre(p)[1]) / G) for p in pcs.values())
+
+
+PILE_DOWN = _pile_down()
+_PILE_CACHE = {}
+
+
+def draw_pile(img, cam, t):
+    """The four pieces as one 3D drawing (lying.draw), with their contact shadow on the floor; drawn once and reused
+    once everything has settled and the camera has stopped."""
+    still = t >= max(PILE_DOWN, ON_CHAIR)
+    key = (B.SS, img.size)
+    if still and key in _PILE_CACHE:
+        img.alpha_composite(_PILE_CACHE[key])
+        return
+    _, sp = cut_body()
+    prts = [q for name in PIECES for q in piece_at(name, t)]
+    rim = tuple(int(x + (y - x) * min(1.0, max(0.0, (t - S3) / 1.0))) for x, y in zip(GLOW_HOT, GLOW_COOL))
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    LY.draw(lay, cam, None, dict(sp, cut_rim=rim), surfaces=[((0.0, 0.0, 0.0), (0.0, 1.0, 0.0))], prts=prts)
+    if still:
+        _PILE_CACHE[key] = lay
+    img.alpha_composite(lay)
+    for name in PIECES:
+        PIECES[name]['_at'] = tuple(_centre(piece_at(name, t)))
 
 
 def _person_layer(img, cam, sp, j, t):
@@ -538,7 +624,6 @@ def _to_screen(fr, u, v):
 
 def _draw_cuts(lay, fr, t, n):
     """The cut lines so far on him: a scorched black band, its rim bright orange at first, cooling to a thin line."""
-    d = ImageDraw.Draw(lay)
     alpha = lay.getchannel('A')
     band = Image.new('RGBA', lay.size, (0, 0, 0, 0))
     db = ImageDraw.Draw(band)
@@ -552,58 +637,6 @@ def _draw_cuts(lay, fr, t, n):
         db.line([a, b], fill=col + (255,), width=max(2, int(w * (0.5 - 0.3 * cool))))
     band.putalpha(ImageChops.multiply(band.getchannel('A'), alpha))
     lay.alpha_composite(band)
-    del d
-
-
-def _piece_state(name, t):
-    """(dx, dy, dz) metres from where it was cut, and its screen spin (degrees), at t."""
-    pc = PIECES[name]
-    u = min(1.0, max(0.0, (t - FALL) / pc['drop']))
-    rx, ry, rz = pc['rest']                          # its rest offset (x across, y = how high it rests, z depth)
-    fall = 1.0 - (1.0 - u) ** 2 if u < 1 else 1.0    # gravity: slow at first, fast at the end
-    return (rx * ease(u), -fall, rz * ease(u)), pc['spin'] * ease(u) + (0 if u < 1 else 0), u
-
-
-def draw_pieces(img, cam, t):
-    """The presenter cut into four pieces, falling into a pile where he stood (pack 2: no blood; scorched cut faces,
-    orange rims cooling)."""
-    sp, j = _cut_pose()
-    lay, fr = _person_layer(img, cam, sp, j, S3)
-    if fr is None:
-        return
-    _draw_cuts(lay, fr, t, 3)
-    f = HEIGHTS['PRESENTER'] / 1.75
-    right = np.array((math.cos(math.radians(facing_cam(cam, *P_AT))), 0.0, -math.sin(math.radians(facing_cam(cam, *P_AT)))))
-    order = sorted(PIECES, key=lambda n: PIECES[n]['rest'][2], reverse=True)   # far first
-    for name in order:
-        pc = PIECES[name]
-        poly = [_to_screen(fr, *q) for q in pc['poly']]
-        mask = Image.new('L', lay.size, 0)
-        ImageDraw.Draw(mask).polygon(poly, fill=255)
-        piece = lay.copy()
-        piece.putalpha(ImageChops.multiply(piece.getchannel('A'), mask))
-        bb = piece.getbbox()
-        if bb is None:
-            continue
-        piece = piece.crop(bb)
-        cx_s, cy_s = (bb[0] + bb[2]) / 2 / B.SS, (bb[1] + bb[3]) / 2 / B.SS
-        # its centre in the world as cut: across by the screen offset, up by its height on him
-        v_units = (cy_s - fr['Y']) / fr['s']
-        u_units = (cx_s - fr['X']) / fr['s'] * (-1 if fr['mirror'] else 1)
-        h0 = (928.0 - v_units) * M * f
-        c0 = np.array((P_AT[0], h0, P_AT[1])) + right * u_units * M * f
-        (dx, dy, dz), spin, u = _piece_state(name, t)
-        rest_h = pc['rest'][1]
-        c = c0 + right * dx + np.array((0.0, (h0 - rest_h) * dy, 0.0)) + np.array((0.0, 0.0, dz))
-        (X0, Y0), k0 = cam.project(tuple(c0))
-        (X1, Y1), k1 = cam.project(tuple(c))
-        sc = k1 / k0
-        if abs(sc - 1) > 1e-3:
-            piece = piece.resize((max(1, int(piece.width * sc)), max(1, int(piece.height * sc))), Image.LANCZOS)
-        if abs(spin) > 0.1:
-            piece = piece.rotate(spin, resample=Image.BICUBIC, expand=True)
-        img.alpha_composite(piece, (int(X1 * B.SS - piece.width / 2), int(Y1 * B.SS - piece.height / 2)))
-        pc['_at'] = tuple(c)
 
 
 def steam(img, cam, t):
@@ -667,14 +700,32 @@ def contact_point(i):
 def effects(img, cam, t):
     for i, sk in enumerate((S1, S2, S3)):
         c = contact_point(i)
-        if sk <= t < sk + 0.09:                      # the flare where the blade meets him (pack 2, ref 1): lumpy
-            X.flash(img, cam, c, 0.16, seed=40 + i)
         X.sparks(img, cam, t, sk, c, seed=50 + i, n=10, speed=2.4, life=0.35)
         X.smoke(img, cam, t, sk + 0.03, c, seed=60 + i, n=2, life=0.9, size=0.045)
 
 
-EFFECTS = [('flare', 'burst', lambda im: X.flash(im, S.Cam((0, 1.2, -1.5), (0, 1.2, 0), 1000), (0, 1.2, 0), 0.3)),
-           ('sparks', 'sparks', None), ('smoke', 'smoke', None), ('steam', 'smoke', None)]
+_TEST_CAM = S.Cam((0.0, 1.2, -1.2), (0.0, 1.2, 0.0), focal=1400)
+
+
+def _test_sparks(im):
+    X.sparks(im, _TEST_CAM, 0.12, 0.0, (0.0, 1.2, 0.0), seed=50, n=10, speed=2.4, life=0.35)
+
+
+def _test_smoke(im):
+    X.smoke(im, _TEST_CAM, 0.3, 0.0, (0.0, 1.2, 0.0), seed=60, n=2, life=0.9, size=0.045)
+
+
+def _test_steam(im):
+    old = {k: v.get('_at') for k, v in PIECES.items()}
+    for k in PIECES:
+        PIECES[k]['_at'] = (0.0, 0.9, 0.0)
+    steam(im, _TEST_CAM, PILE_DOWN + 1.0)
+    for k, v in old.items():
+        PIECES[k]['_at'] = v
+
+
+EFFECTS = [('sparks', 'sparks', _test_sparks), ('smoke', 'smoke', _test_smoke),
+           ('steam', 'smoke', _test_steam)]   # no flare at the strikes (Sam, 26 Oct)
 
 
 # ------------------------------------------------------------------------------------------------ the picture
@@ -701,7 +752,7 @@ def actors(t, cam):
                 im.alpha_composite(lay)
         out.append((P_AT[0], P_AT[1], cut_one))
     else:
-        out.append((P_AT[0], P_AT[1] - 0.05, lambda im, c: draw_pieces(im, c, t)))
+        out.append((PILE_AT[0], PILE_AT[1], lambda im, c: draw_pile(im, c, t)))
     sp, j = netanyahu(t, cam)
     out.append((N_AT[0], N_AT[1], lambda im, c, sp=sp, j=j: put(im, c, sp, N_AT[0], N_AT[1], facing_cam(c, *N_AT), j, t)))
     msp, mj, mx, mz, ml, mf, mr = maul(t, cam)
@@ -876,10 +927,11 @@ def scene(t, faces=None):
         add('PRESENTER', sp, j, P_AT[0], P_AT[1], facing_cam(cam, *P_AT))
     else:
         for name in PIECES:
-            (dx, dy, dz), _, _ = _piece_state(name, t)
-            pc = PIECES[name]
-            y = max(0.08, 1.0 + (1.0 - pc['rest'][1]) * dy)
-            things.append(A.Thing(name, [CC.sphere(name, 'piece', (P_AT[0] + dx, y, P_AT[1] + dz), 0.12)]))
+            sol = []
+            for q in piece_at(name, t):
+                r = max(q.ra, q.rb) if q.kind == LY.ROUND else float(max(q.radii))
+                sol.append(CC.capsule(name, q.name, q.a, q.b, r) if q.kind == LY.ROUND else CC.sphere(name, q.name, q.a, r))
+            things.append(A.Thing(name, sol))
     sp, j = netanyahu(t, cam)
     add('NETANYAHU', sp, j, N_AT[0], N_AT[1], facing_cam(cam, *N_AT))
     msp, mj, mx, mz, ml, mf, mr = maul(t, cam)
@@ -909,6 +961,49 @@ def checks():
         raise ValueError('check: ' + '; '.join(faults))
 
 
+# the general audit (template): each person alone over every frame they are on screen
+AUDIT_ALLOW = [   # (name, from, to, why): fast or still on purpose
+    ('MAUL [s3]', T['s3'], T['s4'], 'the stare: dead still at the presenter, the joke (brief: "intensely and stilly")'),
+    ('MAUL [s4]', T['s4'], IGNITE, 'the stare and the silence before he ignites (brief)'),
+    ('MAUL [s4]', IGNITE, ON_CHAIR + 0.1, 'the action: ignition, the leap-flip, the strikes, the spring (fast on purpose)'),
+    ('PRESENTER [s4]', S1 - 0.1, FALL + 0.1, 'struck: the arch on each blow, then cut apart'),
+    ('NETANYAHU [s2]', NOD - 0.35, NOD + 0.35, 'the nod'),
+]
+
+
+def audits():
+    """The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching,
+    frozen), and the eyelines. Returns faults."""
+    def alone(who):
+        def draw(t):
+            cam = cam_for(t)
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            if who == 'PRESENTER':
+                if t < FALL:
+                    sp, j = presenter(t, cam)
+                    put(lay, cam, sp, P_AT[0], P_AT[1], facing_cam(cam, *P_AT), j, t)
+            elif who == 'NETANYAHU':
+                sp, j = netanyahu(t, cam)
+                put(lay, cam, sp, N_AT[0], N_AT[1], facing_cam(cam, *N_AT), j, t)
+            else:
+                msp, mj, mx, mz, ml, mf, mr = maul(t, cam)
+                fr = put(lay, cam, msp, mx, mz, mf, mj, t, lift=ml)
+                if fr is not None and abs(mr) > 0.5:
+                    (Xc, Yc), _ = cam.project((mx, ml + 0.85, mz))
+                    lay = lay.rotate(mr, resample=Image.BICUBIC, center=(Xc * B.SS, Yc * B.SS))
+            return lay
+        return draw
+    actors = {}
+    where = {'PRESENTER': lambda t: P_AT, 'NETANYAHU': lambda t: N_AT, 'MAUL': maul_xz}
+    for who in SPECS:
+        for shot, a, b in SHOTS:
+            ts = [i / FPS for i in range(int(math.ceil(a * FPS)), int(b * FPS))
+                  if who in SHOT_CAST[shot] and in_frame(cam_for(i / FPS), *where[who](i / FPS))]
+            if ts:
+                actors[f'{who} [{shot}]'] = (ts, alone(who))
+    return filmkit.silhouette_audit(actors, fps=FPS, allow=AUDIT_ALLOW)
+
+
 # ------------------------------------------------------------------------------------------------ the cast sheet
 def cast_sheet(out):
     """The new looks before anything moves: the younger presenter beside the built one; eyes turning (all three);
@@ -931,8 +1026,10 @@ def cast_sheet(out):
             lay = lay.rotate(roll, resample=Image.BICUBIC, center=(540, 700 + 420 * s))
         saber_glow(im, lay)
         im.alpha_composite(lay)
-        if head_crop:                                 # the head and collar, large
-            box = (540 - 230 * s, 700 - 260 * s, 540 + 230 * s, 700 + 90 * s)
+        if head_crop:                                 # the head and collar, large: the crop the tile's own shape
+            half = 230 * s                                # (Sam, 26 Oct: a squeezed crop made everyone look thinner)
+            cy = 700 - 90 * s
+            box = (540 - half, cy - half * h / w, 540 + half, cy + half * h / w)
         else:                                         # the whole figure, whatever it does
             bb = lay.getbbox() or (0, 0, 1080, 1920)
             cx, cy = (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2
@@ -942,20 +1039,18 @@ def cast_sheet(out):
         return tile
 
     y = 20
-    d.text((20, y), 'The presenter, younger (answer 2): no beard, no grey, darker fuller hair. Left: as built.', font=big,
-           fill=(30, 30, 30))
+    d.text((20, y), "The presenter (Sam, 26 Oct: the bearded one, as built); his three-quarter now from his own head",
+           font=big, fill=(30, 30, 30))
     y += 50
-    old = dict(NC.PRESENTER, name='old')
-    young = dict(NC.PRESENTER_YOUNG)
+    young = dict(NC.PRESENTER)
     x = 20
-    for sp, lab in ((old, 'built'), (young, 'younger')):
-        for yaw in (0, 45):
-            sh.paste(person_tile(sp, V.standing(sp), yaw, 0.55, 300, 560), (x, y))
-            d.text((x + 10, y + 565), f'{lab}, {"front" if yaw == 0 else "three-quarter"}', font=sm, fill=(30, 30, 30))
-            x += 320
-    for sp, lab in ((old, 'built'), (young, 'younger')):
-        sh.paste(person_tile(sp, V.standing(sp), 0, 1.3, 300, 300, head_crop=True), (x, y + 120))
-        d.text((x + 10, y + 425), lab, font=sm, fill=(30, 30, 30))
+    for yaw in (0, 45):
+        sh.paste(person_tile(young, V.standing(young), yaw, 0.55, 300, 560), (x, y))
+        d.text((x + 10, y + 565), 'front' if yaw == 0 else 'three-quarter', font=sm, fill=(30, 30, 30))
+        x += 320
+    for yaw in (0, 45):
+        sh.paste(person_tile(young, V.standing(young), yaw, 1.3, 300, 300, head_crop=True), (x, y + 120))
+        d.text((x + 10, y + 425), 'front' if yaw == 0 else 'three-quarter', font=sm, fill=(30, 30, 30))
         x += 320
     y += 620
     d.text((20, y), 'Eyes turn, bodies face the camera (Sam, 26 Oct): look left / ahead / right', font=big,
@@ -1007,7 +1102,7 @@ def LINE_SUBJECTS():
         def d(im):
             V.person(im, FLAT, 540, 420, 1.45, dict(sp, full=True, pose='custom'), 0.0, 0, V.standing(sp))
         return d
-    return [('presenter_young', one(NC.PRESENTER_YOUNG))]
+    return [('presenter', one(NC.PRESENTER))]
 
 
 def main():

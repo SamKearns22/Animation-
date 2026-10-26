@@ -69,10 +69,18 @@ def _beard(p, sp, hx, hy, hw, hh, fx, fy):
 
 
 def presenter_head(img, p, sp, t, hx, hy):
+    """His head, front on; `three` (0..1) turns it towards a three-quarter view facing right (Sam, 26 Oct: the
+    shared three-quarter head lost his likeness), from this same drawing: features towards the near side, the far
+    eye and lens narrower, the far ear hidden, the hair mass back."""
     hw, hh, skin = sp.get('hw', 66), sp.get('hh', 100), sp['skin']
-    fx = hx + sp.get('turn', 0.0) * hw * 0.2
+    tq = sp.get('three', 0.0)
+    fx = hx + sp.get('turn', 0.0) * hw * 0.2 + tq * hw * 0.36
     fy = hy + 10 * sp.get('down', 0.0)
-    ears(p, hx, hy + 6, hw, skin)
+    if tq < 0.5:
+        ears(p, hx, hy + 6, hw, skin)
+    else:                                                 # the near ear only, set back on the side of the head
+        p.poly(oval(hx - 0.5 * hw, hy + 12, 12, 22), skin, INK, 2.4)
+        p.line([(hx - 0.5 * hw - 2, hy + 2), (hx - 0.5 * hw + 3, hy + 18)], dk(skin, 0.8), 1.6)
     outline = curve([(hx - hw, hy - 14), (hx - hw * 0.9, hy - hh * 0.76), (hx - hw * 0.46, hy - hh * 1.06),
                      (hx + hw * 0.46, hy - hh * 1.06), (hx + hw * 0.9, hy - hh * 0.76), (hx + hw, hy - 14),
                      (hx + hw * 1.0, hy + hh * 0.46), (hx + hw * 0.86, hy + hh * 0.84), (hx + hw * 0.46, hy + hh * 1.1),
@@ -87,9 +95,10 @@ def presenter_head(img, p, sp, t, hx, hy):
     sd = dk(skin, 0.84)
     st = eye_state(sp, lid=0.26)                          # deep-set: the lid sits a little low
     for sgn in (-1, 1):
-        ex, ey = fx + sgn * 25, fy - 8
+        wk = 1.0 - 0.38 * tq if sgn > 0 else 1.0           # the far eye (screen right) narrower in three-quarter
+        ex, ey = fx + sgn * 25 * (1 - 0.12 * tq * (sgn > 0)), fy - 8
         p.line(curve([(ex - 13, ey - 11), (ex, ey - 14), (ex + 13, ey - 11)], 3), sd, 1.4)   # the socket's shadow
-        eye(p, ex, ey, sgn, 12, 7, P_IRIS, st, dk(skin, 0.86), liner=2.4)
+        eye(p, ex, ey, sgn, 12 * wk, 7, P_IRIS, st, dk(skin, 0.86), liner=2.4)
         if not young:
             p.line([(ex - 9, ey + 11), (ex + 1, ey + 13), (ex + 9, ey + 11)], sd, 1.2)      # a faint line under
     mood = sp.get('mood', 'neutral')
@@ -97,12 +106,16 @@ def presenter_head(img, p, sp, t, hx, hy):
     brows(p, bsp, fx, fy - 30, 25, sp.get('hair_c', P_HAIR), 6.5, 1, 0, 30)  # heavy, straight brows
     # the glasses: slim rounded-rectangle frames, tortoiseshell, thicker along the top
     for sgn in (-1, 1):
-        ex, ey = fx + sgn * 26, fy - 7
-        fr = curve([(ex - 21, ey - 12), (ex + 21, ey - 12), (ex + 20, ey + 12), (ex - 20, ey + 12)], 3)
+        wk = 1.0 - 0.38 * tq if sgn > 0 else 1.0
+        ex, ey = fx + sgn * 26 * (1 - 0.12 * tq * (sgn > 0)), fy - 7
+        fr = curve([(ex - 21 * wk, ey - 12), (ex + 21 * wk, ey - 12), (ex + 20 * wk, ey + 12), (ex - 20 * wk, ey + 12)], 3)
         p.line(fr + [fr[0]], P_FRAME, 3.4)
-        p.line([(ex - 20, ey - 12), (ex + 20, ey - 12)], P_FRAME, 4.6)
-        p.line([(ex - 14, ey - 13), (ex - 4, ey - 13)], P_FRAME_L, 1.6)
-        p.line([(ex + sgn * 21, ey - 8), (hx + sgn * (hw + 1), fy - 12)], P_FRAME, 2.8)
+        p.line([(ex - 20 * wk, ey - 12), (ex + 20 * wk, ey - 12)], P_FRAME, 4.6)
+        p.line([(ex - 14 * wk, ey - 13), (ex - 4 * wk, ey - 13)], P_FRAME_L, 1.6)
+        if tq < 0.5:                                      # the arms back to the ears
+            p.line([(ex + sgn * 21 * wk, ey - 8), (hx + sgn * (hw + 1), fy - 12)], P_FRAME, 2.8)
+        elif sgn < 0:                                     # turned: the near arm back to the visible ear
+            p.line([(ex - 21 * wk, ey - 8), (hx - 0.5 * hw + 6, hy + 2)], P_FRAME, 2.8)
     p.line([(fx - 6, fy - 14), (fx, fy - 17), (fx + 6, fy - 14)], P_FRAME, 3.0)
     # a slightly long nose with a small bump on the bridge
     p.line([(fx - 1, fy - 2), (fx - 4, fy + 10), (fx - 3, fy + 14), (fx - 7, fy + 30), (fx, fy + 36), (fx + 9, fy + 33)],
@@ -160,6 +173,20 @@ def head(img, p, sp, t, hx, hy):
     return _head(img, p, sp, t, hx, hy)
 
 
+import views as _V                                         # noqa: E402
+_head_view = _V.head_view
+
+
+def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
+    """His three-quarter head from his own drawing (Sam, 26 Oct); the side and back views stay the shared ones."""
+    if sp.get('who') == 'presenter' and view == 'three':
+        return presenter_head(img, p, dict(sp, three=1.0), t, hx, hy)
+    return _head_view(img, p, sp, t, view, hx, hy)
+
+
+_V.head_view = head_view
+
+
 def torso(img, p, sp, t):
     _torso(img, p, sp, t)
     if sp.get('who') == 'presenter':
@@ -169,7 +196,8 @@ def torso(img, p, sp, t):
 B.head, B.torso = head, torso
 
 # hair/beard/glasses keys: what views.head_view reads for every other view (three-quarter, side, back)
-PRESENTER = dict(who='presenter', name='Presenter', skin=P_SKIN, hw=66, hh=100, head_dy=8, jaw='long',
+PRESENTER = dict(who='presenter', name='Presenter', v_at=16,    # the shirt's V under his chin in three-quarter (Sam)
+                 skin=P_SKIN, hw=66, hh=100, head_dy=8, jaw='long',
                  hair='side', hair_c=P_HAIR, grey=P_GREY, beard='short', beard_c=P_HAIR, glasses=True,
                  glasses_c=P_FRAME, brow_c=P_HAIR, brow_w=6.0, nose='long', outfit='suit', jacket=NAVY_SUIT,
                  shirt=(246, 246, 244), tie=P_TIE, shoulders=152, trousers=NAVY_SUIT, full=True, pose='custom',
