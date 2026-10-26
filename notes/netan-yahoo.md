@@ -159,3 +159,10 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 | 9 | 4 | to 22.3 | Maul stares to the right, not at the presenter | done: turned 40% towards the presenter before and at ignition; iris travel 0.4 -> 0.55 |
 | 10 | 4 | - | zoom in a little | done: lens 1420 -> 1650 (leap and strikes still in frame) |
 | 11 | 4 | pile | pieces float / sit on each other; shadows show; head's neck end looks like an eye | REPEAT of note 4. Why it failed: fixed turns, then dropped to the lowest point only (balanced on one point), and no check between pieces. Now: each piece settles on its broadest side (lowest centre of weight), kept out of the others, head with the neck end turned away; shadow only where it touches (reach 3 cm) |
+
+## Rule proposals held for the end-of-project learnings message (Sam, 26 Oct: "save it, we discuss it then"; NOT in a guide yet)
+- **Proposed rule 12 (guides/film-quality-rules.md, check: by hand on the check sheet, or a tool later):** "Pieces or bodies
+  that fall must settle on their broadest side (lowest centre of weight), must not overlap or rest on one another, and
+  cast a shadow only where they touch the floor. Any saved ('cached') drawing must record which camera it was drawn for,
+  so it can never be reused in a shot with another camera." (From notes 6 and 11, Netan-Yahoo!, 26 Oct.)
+- Also for that message: the hook can now sit beside a person (`hook_text.py --w`, three rows); `1f605.png` emoji added.
