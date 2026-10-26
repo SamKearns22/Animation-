@@ -32,6 +32,7 @@ ENTRIES = [
     ('Sets', 'Casino parlour', 'poker_mon_room.py', ('frame', 'poker_mon', 1.0)),
     ('Sets', 'Round Table (The Traitors)', 'traitors.py', ('frame', 'traitors', 21.0)),
     ('Sets', 'Hangar (Roadster)', 'roadster.py', ('frame', 'roadster', 2.0)),
+    ('Sets', 'Israeli TV news studio (Newsdesk)', 'newsdesk_set.py', ('frame', 'newsdesk_set', 'wide')),
     ('People', 'Andy, Wes, the robot (Prepper)', 'prepper_cast.py', ('cast', 'prepper')),
     ('People', 'Trump, Putin, Zelensky, Claudia', 'traitors_cast.py', ('cast', 'traitors')),
     ('People', 'Reform HQ five', 'shocking_cast.py', ('cast', 'shocking')),
@@ -39,6 +40,7 @@ ENTRIES = [
     ('People', 'Old lady, Met officers, crowd', 'power_crime_cast.py', ('frame', 'power_crime', 2.5)),
     ('People', 'Press secretary, reporters', 'press_secretary.py', ('cast', 'press_secretary')),
     ('People', 'Matt Damon, the Roadster', 'roadster.py', ('cast', 'roadster')),
+    ('People', 'News presenter (original; Newsdesk)', 'newsdesk_cast.py', ('cast', 'newsdesk_cast')),
     ('Creatures', 'Chrome Centurion robots', 'prepper_robot.py', ('frame', 'prepper', 60.0)),
     ('Creatures', 'Horse to ride (and donkey, pony), with rider', 'mounts.py', ('frame', 'mounts', 'horse')),
     ('Props', 'Crossbow', 'prepper_fx.py', ('fx', 'X.crossbow3(img, cam, (0, 0.9, 0), 160)')),
@@ -48,6 +50,8 @@ ENTRIES = [
                                                                      'X.bottle(img, cam, (0.12, 0.9, 0))')),
     ('Props', 'Alexa (whole, on rod legs)', 'prepper_fx.py', ('fx', 'X.alexa(img, cam, (-0.2, 0.9, 0)); '
                                                                      'X.alexa_walker(img, cam, (0.2, 0.75, 0), 0.3)')),
+    ('Props', 'Curved-back wooden armchair (Newsdesk)', 'newsdesk_props.py', ('fx', 'import newsdesk_props as N; '
+                                                                                   'N.round_chair(img, cam, 0.0, 0.3, 200)')),
     ('Props', 'Mug on a coaster, steaming', 'prepper_fx.py', ('fx', 'X.coffee(img, cam, (0, 0.9, 0), 1.0)')),
     ('Effects', 'Lumpy flash (yellow, blue)', 'prepper_fx.py', ('fx', 'X.flash(img, cam, (-0.25, 1.2, 0), 0.25, 3); '
                                                                        'X.flash(img, cam, (0.25, 1.2, 0), 0.25, 5, "blue")')),

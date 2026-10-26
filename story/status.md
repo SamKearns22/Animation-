@@ -2,6 +2,13 @@
 
 Read this first in any new session, after CLAUDE.md.
 
+
+## In progress: "Newsdesk" (working name; Sam's new untitled film; `notes/newsdesk.md`)
+- 26 Oct (building chat, Opus high): built the Israeli TV news studio in 3D (`source/newsdesk_set.py`), an original
+  news presenter (`source/newsdesk_cast.py`) and the curved-back wooden chairs (`source/newsdesk_props.py`), from
+  Sam's photos in `references/newsdesk/`. Not built: Darth Maul (protected character) and Benjamin Netanyahu (real
+  person); original stand-ins offered. NEXT: Sam's answer on the stand-ins and his brief or script, then planning
+  (Opus high, fresh chat). Read only `notes/newsdesk.md` and `guides/satire.md`.
 ## Done (Sam, 25 Oct: posted or closed, no more work): "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
 - 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
   `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.

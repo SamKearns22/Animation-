@@ -14,6 +14,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Casino parlour (oval poker table, panelled walls, chandeliers, armchairs) | `source/poker_mon_room.py` | its film's `stills` | table things from one `THINGS` plan |
 | Round Table (The Traitors) | `source/traitors.py` | `traitors.py stills` | slates on stands |
 | Hangar and space shots (Roadster) | `source/roadster.py` | `roadster.py cast` | space in Dam's coloured pencil |
+| Israeli TV news studio (invented channel): round floor graphic, huge curved ring desk, mesh chairs, tall swirl screen, navy LED walls, red-edged pillars, newsroom through glass, lighting grid, studio camera | `source/newsdesk_set.py` | `python3 source/newsdesk_set.py test OUT.jpg` | any camera; `render(img, cam, people)`, `put_seated` for anyone at the desk; four cameras in `CAMS`; Hebrew captions only, no real broadcaster |
 
 ## People (satire package, `views.person`: any angle; circle hands)
 | who | file | notes |
@@ -27,6 +28,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Poker players, dealer, guards, onlookers | `source/poker_mon_cast.py` | |
 | Press secretary and reporters (crowd from behind) | `source/press_secretary.py` | `reporter` |
 | Matt Damon | `source/roadster.py` | |
+| News presenter (original man, Israeli evening-news type: navy suit, tortoiseshell glasses, cropped beard, clip mic) | `source/newsdesk_cast.py` (`PRESENTER`) | every view; moods 'neutral', 'grave', 'smile' + shared; sheet: `newsdesk_cast.py sheet OUT.jpg` |
 | Anyone lying down (face down, on the back, curled on the side, slumped against a wall) or seen from a high camera | `source/lying.py` | 3D body from the person's own design; `lie`, `draw`, `fall`, `stand`; sheet: `python3 source/lying.py sheet OUT.jpg` |
 
 ## Creatures and machines
@@ -47,6 +49,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Placards, banners | `source/power_crime_cast.py` |
 | Slates on stands | `source/traitors_cast.py` |
 | Chopping board, glazed ham, cleaver (horror trailer) | `source/props.py` |
+| Curved-back wooden armchair (3D, any angle), blue spotlight pool and shadow | `source/newsdesk_props.py` (`round_chair`, `pool`, `shadow`) |
 
 ## Effects (house style: flat, lumpy, one frame for flashes; no stars, no glows)
 | what | file |
