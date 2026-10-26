@@ -1,24 +1,26 @@
 # Netan-Yahoo! (Sam's brief, 26 Oct, word for word)
 
+(Changed 26 Oct at Sam's request: "President" is now "Prime Minister" everywhere, script included; "ignores" is "ignites". His other answers: `notes/netan-yahoo.md`.)
+
 Satire-style TikTok film. Follow guides/satire.md and guides/film-quality-rules.md, and start from source/satire_template.py. Plan only until Sam says go.
 
 ## 1. THE IDEA
 Israel is due to have historically significant elections. Despite being sanctioned by the ICC for war crimes and engaging in ethnic cleansing, Netanyahu is considered moderate compared to some of his opponents. This short film finds dark comedy in that analysis.
 
-A Israeli news presenter is introducing two candidates in a presidential debate. At this stage everyone is standing but there are chairs behind them. The first is introduced as liberal, moderate, gently-does-it Netanyahu, who nods in acknowledgement. The second introduced is Sith Lord Darth Maul, who glowers darkly from under his hood. The presenter asks the first question to maul, what his approach to the West Bank would be. There's an awkward beat as Maul continues to stare with bloody-eyed menace at the presenter. Maul then ignores his twin lightsaber, leaps acrobatically and fluidly into the air, forward rolls, and lands in a predatory crouch, to the presenter's alarm and Netanyahu's mild surprise. With fluid and fast motions, Maul lightsabers the presenter into a pile of steaming chunks. Then he steals the presenter's seat and leaps upon it like a cat guarding its territory. Netanyahu says, s***, he's good.
+A Israeli news presenter is introducing two candidates in a prime ministerial debate. At this stage everyone is standing but there are chairs behind them. The first is introduced as liberal, moderate, gently-does-it Netanyahu, who nods in acknowledgement. The second introduced is Sith Lord Darth Maul, who glowers darkly from under his hood. The presenter asks the first question to maul, what his approach to the West Bank would be. There's an awkward beat as Maul continues to stare with bloody-eyed menace at the presenter. Maul then ignites his twin lightsaber, leaps acrobatically and fluidly into the air, forward rolls, and lands in a predatory crouch, to the presenter's alarm and Netanyahu's mild surprise. With fluid and fast motions, Maul lightsabers the presenter into a pile of steaming chunks. Then he steals the presenter's seat and leaps upon it like a cat guarding its territory. Netanyahu says, s***, he's good.
 
 ## 2. TONE AND LIMITS
 - Shock level 3. Nothing fully cartoony; it carries a certain gravity.
 - Lightsaber carries accurate sound effects and cuts people apart cleanly but there is no blood
 
 ## 3. THE WORLD
-All on the build set. The action takes place on the set interior. Screens in the background show the News logo and Presidential Debate 2026 in Hebrew
+All on the build set. The action takes place on the set interior. Screens in the background show the News logo and Prime Ministerial Debate 2026 in Hebrew
 
 ## 4. THE CAST
 Already built. I would like the news presenter to be a bit younger and more energetic, though serious in his role.
 
 ## 5. THE SCRIPT, SHOT BY SHOT
-Hook text: Israeli Presidential Debate
+Hook text: Israeli Prime Ministerial Debate
 
 Shot 1
 Camera: zooming in across the studio towards the presenter, mid-large to mid-close
@@ -29,7 +31,7 @@ Effect: news screens in background
 Shot 2
 Camera: Close shot at Netanyahu in his chair looking at presenter, a thoughtful poise.
 Action: He nods respectfully when his name is mentioned
-Dialogue: Liberal moderate gently-gently incumbent President Netanyahu.
+Dialogue: Liberal moderate gently-gently incumbent Prime Minister Netanyahu.
 Effect:
 
 Shot 3

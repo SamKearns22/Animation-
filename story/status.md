@@ -8,7 +8,10 @@ Read this first in any new session, after CLAUDE.md.
   news presenter (`source/newsdesk_cast.py`) and the curved-back wooden chairs (`source/newsdesk_props.py`), from
   Sam's photos in `references/newsdesk/`; then Netanyahu (`source/netanyahu_cast.py`) and Darth Maul with his
   double-bladed lightsaber (`source/maul_cast.py`, photos in `references/maul/`). NEXT: Sam's notes on the Maul sheet; the brief has arrived (26 Oct) as "Netan-Yahoo!": `prompts/netan-yahoo.md`,
-  `notes/netan-yahoo.md`. PLAN ONLY until Sam says go (planning, Opus high, fresh chat; read those two, `notes/newsdesk.md`, `guides/satire.md`).
+  `notes/netan-yahoo.md`.
+- 26 Oct (planning chat, Opus): Sam answered all 16 questions (`notes/netan-yahoo.md`, "Sam's answers"); no Maul notes;
+  "President" is now "Prime Minister" throughout; no set dressing. NEXT: his references and saber sounds (incoming), then the
+  plan in metres and the composition sheet in the planning chat, then building in a fresh chat (Opus high).
 ## Done (Sam, 25 Oct: posted or closed, no more work): "Prepper Minister" (TikTok satire: Andy Burnham's stockpiling post turns into a robot invasion; `notes/prepper-minister.md`)
 - 25 Oct (review chat): lessons from the film turned into rules 12-31 (`guides/film-quality-rules.md`,
   `guides/rule-register.md`); old handovers moved to `notes/archive/prepper-minister-handovers.md`.
