@@ -92,17 +92,22 @@ def room_shot(name, people, gun_at=True):
 
 
 def coast():
-    """Shot 1, rough: high above the sea looking south; the black cliffs, the beach, six craft, bursts, flashes."""
+    """Shot 1, rough: above the sea looking south; the black cliffs, the fields behind, the beach, six craft, bursts."""
     cm = cam('s1')
     img = B.canvas((196, 198, 196))
     p = S.pen(img)
     P = lambda x, y, z: cm.project((x, y, z))[0]
-    p.poly([P(-3000, 0, -3000), P(3000, 0, -3000), P(3000, 0, 3000), P(-3000, 0, 3000)], (96, 110, 114), INK, 0)
+    p.poly([P(-3000, 0, 0), P(3000, 0, 0), P(3000, 0, 3000), P(-3000, 0, 3000)], (96, 110, 114), INK, 0)
     p.poly(rough([P(-600, 0, 0), P(600, 0, 0), P(600, 0, 60), P(-600, 0, 60)], 4, 1), (188, 176, 150), INK, 2)
     p.poly(rough([P(-600, 0, 60), P(600, 0, 60), P(600, 0, 75), P(-600, 0, 75)], 4, 2), (150, 140, 122), INK, 2)
     cliff = [P(-600, 0, 0)] + [P(x, 32 + 6 * math.sin(x * 0.03), 0) for x in range(-600, 601, 40)] + [P(600, 0, 0)]
     p.poly(rough(cliff, 6, 3), (40, 40, 44), INK, 2)
-    p.poly([P(-600, 32, 0), P(600, 32, 0), P(600, 30, -400), P(-600, 30, -400)], (90, 100, 70), INK, 2)
+    p.poly([P(-3000, 32, 0), P(3000, 32, 0), P(3000, 30, -6000), P(-3000, 30, -6000)], (98, 112, 72), INK, 2)
+    for i in range(40):                          # Normandy fields and hedgerows behind the cliffs, to the horizon
+        fx, fz = -900 + (i % 8) * 230 + (i // 8) * 37, -60 - (i // 8) * 260
+        col = ((112, 128, 78), (132, 140, 86), (90, 108, 66), (150, 146, 96))[(i * 7) % 4]
+        p.poly(rough([P(fx, 32, fz), P(fx + 210, 32, fz), P(fx + 200, 32, fz - 240), P(fx - 10, 32, fz - 240)],
+                     3, 40 + i), col, (56, 70, 44), 2)
     for i, (x, z) in enumerate([(-70, 150), (-35, 190), (0, 140), (30, 200), (60, 160), (95, 210)]):
         hull = [P(x - 2, 0, z), P(x + 2, 0, z), P(x + 2, 0, z + 11), P(x - 2, 0, z + 11)]
         p.poly(rough(hull, 3, 10 + i), (104, 110, 112), INK, 2)
@@ -142,10 +147,10 @@ def sheet(out):
         (room_shot('s3', [('gunner turned', None), ('loader turned', None), ('patriot in the doorway', None)]),
          'Shot 3: over their helmets, the Patriot\nleaning in the doorway: "What can I say?..."'),
         (room_shot('s6', [('gunner facing him', salute), ('loader facing him', salute)]),
-         'Shot 6: "Ah, you are with the Führer?"\nboth salute: "Heil!" (the battle behind)'),
+         'Shot 6 (front on): "Ah, you are with the\nFührer?" both salute: "Heil!" (arms drawn\nshortened towards us in the build)'),
         (room_shot('s8', [('patriot approached', flap), ('gunner after the blast', None),
                           ('loader after the blast', None)]),
-         'Shot 8 (the wide): the blast on the slit\nthrows them to the west wall; he walks\nto the free gun: "Anyway..."'),
+         'Shot 8 (from the left wall): blast at left;\nGunner thrown to the far wall, Spotter back\na few steps, faces to us; Patriot right'),
         (room_shot('s9 start', [('patriot at the gun', None), ('gunner after the blast', None),
                                 ('loader after the blast', None)]),
          'Shot 9: from the slit: "They ain\'t even\nwearing poppies." He fires; then the\npush-in on their glance'),

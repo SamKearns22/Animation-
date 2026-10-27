@@ -10,6 +10,8 @@ Read this first in any new session, after CLAUDE.md.
 - 27 Oct (planning, Opus): sounds re-attached; `source/patriots3.py` started from the template; plan in metres
   (`source/patriots3_plan.py`); rough composition sheet (`source/patriots3_compose.py`). Questions sent; waiting for
   Sam's answers and his go.
+- 27 Oct: Sam answered all and said GO; three more sounds in (kept off GitHub). Reference photos blocked here:
+  ask Sam. NEXT: BUILDING, Opus high, fresh chat: read `notes/patriots-3.md` "Where things stand".
 
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in

@@ -29,8 +29,8 @@ LOOKS = {
 }
 THINGS = {   # set dressing (rule 22; my additions, Sam can say no): kept clear of every place where action happens
     'ammo crates': dict(at=(1.55, 0.72), size=(0.62, 0.42, 0.5), facing=0),
-    'shelf': dict(at=(1.88, -0.9), size=(0.22, 1.0, 0.04), facing=0, y=1.25),
-    'field telephone': dict(at=(1.88, -0.75), size=(0.18, 0.24, 0.16), facing=270, on='shelf'),
+    'shelf': dict(at=(1.88, -1.75), size=(0.22, 1.0, 0.04), facing=0, y=1.25),
+    'field telephone': dict(at=(1.88, -1.6), size=(0.18, 0.24, 0.16), facing=270, on='shelf'),
     'range card': dict(at=(-0.34, Z_IN - 0.02), size=(0.6, 0.02, 0.28), facing=180, y=2.08, solid=False,
                        why='a card pinned to the wall above the slit (ref bunker-1)'),
 }
@@ -41,28 +41,28 @@ PEOPLE = {
     'gunner turned': dict(at=(0.0, -0.05), facing=165, who='gunner'),          # turned round to the door
     'loader turned': dict(at=(-0.55, 0.05), facing=170, who='loader'),
     'patriot in the doorway': dict(at=(0.62, -2.32), facing=330, who='patriot'),   # leans on the door's west post
-    'patriot approached': dict(at=(0.75, -0.7), facing=300, who='patriot'),    # 1.0 m from the crew: talking distance
-    'gunner facing him': dict(at=(0.0, -0.05), facing=131, who='gunner'),
-    'loader facing him': dict(at=(-0.55, 0.05), facing=120, who='loader'),
-    'gunner after the blast': dict(at=(-1.7, -1.35), facing=60, who='gunner'),     # thrown back against the
-    'loader after the blast': dict(at=(-2.05, -0.6), facing=75, who='loader'),     # west wall, clear of the gun
+    'patriot approached': dict(at=(-0.9, -1.3), facing=35, who='patriot'),     # talking distance, south-west of them
+    'gunner facing him': dict(at=(0.0, -0.05), facing=215, who='gunner'),
+    'loader facing him': dict(at=(-0.55, 0.05), facing=195, who='loader'),
+    'gunner after the blast': dict(at=(1.85, -0.6), facing=270, who='gunner'),     # thrown against the east wall
+    'loader after the blast': dict(at=(0.9, -1.3), facing=260, who='loader'),      # a few steps back (Sam, 27 Oct)
     'patriot at the gun': dict(at=(0.0, 0.0), facing=0, who='patriot'),
 }
 # Every camera (the film's cam_for builds a sets.Cam from these; focal in pixels for 1080 x 1920)
 CAMS = {
-    's1': dict(pos=(-30.0, 120.0, 420.0), look=(0.0, 0.0, 60.0), focal=1150, outside=True,
+    's1': dict(pos=(-25.0, 90.0, 340.0), look=(0.0, 0.0, 70.0), focal=1150, outside=True,
                why='high above the sea, behind the six craft, looking south at the black cliffs'),
     's2': dict(pos=(0.95, 1.65, -1.6), look=(-0.3, 1.3, 1.6), focal=1000),        # behind the crew; door behind us
     's3': dict(pos=(-0.6, 1.7, 0.8), look=(0.62, 1.25, -2.4), focal=1500),        # over the crew's helmets, the door
     's4': dict(pos=(0.55, 1.5, -1.3), look=(-0.3, 1.45, 0.3), focal=1300),        # the crew from in front: the
-    's6': dict(pos=(-0.9, 1.55, -1.6), look=(-0.15, 1.45, 0.05), focal=1150),     # both side on: the salute reads
+    's6': dict(pos=(-0.55, 1.6, -1.45), look=(-0.28, 1.45, 0.05), focal=1150),    # front on, beside the Patriot (Sam)
                                                                                 # across the frame, never at the lens
     's5': dict(pos=(1.85, 2.15, -2.25), look=(-1.0, 1.0, 0.3), focal=760),        # the wide: high, back-right corner
-    's8': dict(pos=(1.85, 2.15, -2.25), look=(-1.0, 1.0, 0.3), focal=760),
-    's7': dict(pos=(0.75, 1.5, 0.2), look=(0.75, 1.4, -0.7), focal=1500),          # the Patriot, from beside the gun
-    's9 start': dict(pos=(-0.48, 1.42, 1.5), look=(-1.15, 1.3, -2.4), focal=820, outside=True,
+    's8': dict(pos=(-2.45, 1.65, -0.5), look=(1.0, 1.2, -0.5), focal=760),        # from the west wall, side on (Sam)
+    's7': dict(pos=(0.6, 1.5, -0.2), look=(-0.9, 1.4, -1.3), focal=1500),         # the Patriot, from beside the gun
+    's9 start': dict(pos=(0.45, 1.42, 1.5), look=(0.99, 1.3, -2.36), focal=820, outside=True,
                      why='in the slit itself, beside the barrel, facing into the bunker'),
-    's9 end': dict(pos=(-0.48, 1.42, 1.5), look=(-1.88, 1.45, -0.95), focal=2200, outside=True,
+    's9 end': dict(pos=(0.45, 1.42, 1.5), look=(1.55, 1.45, -1.29), focal=1700, outside=True,
                    why='the push-in on the two soldiers in the far corner'),
 }
 GROUPS = {
@@ -71,7 +71,7 @@ GROUPS = {
                      leaving='thrown back by the blast to the far corner, then stand there dumbfounded to the end'),
 }
 FRAMING = {   # rule 10: where the Hook Text sits (an empty area) and each key beat with its minimum hold
-    's1': dict(hook='the grey sky and sea above the cliffs, top third', beats=[('craft and cliffs read', 1.2)]),
+    's1': dict(hook='the grey sky above the French fields, top third', beats=[('craft and cliffs read', 1.2)]),
     's2': dict(beats=[('firing', 1.0), ('the turn, startled', 0.6)]),
     's3': dict(beats=[('the Patriot leaning in the doorway', 1.0)]),
     's4': dict(beats=[('they look at each other', 0.5), ('back at him', 0.4)]),

@@ -56,10 +56,10 @@ LINES = [
     dict(n=3, who='patriot', text='Small boat problem?', start=6.4, end=7.5, audio='patriots3-patriot-1', off=True),
     dict(n=4, who='patriot', text='What can I say? Foreign invaders coming across the sea? Happens everywhere these '
          'days.', start=8.0, end=12.2, audio='patriots3-patriot-2'),
-    dict(n=5, who='gunner', text='Who are you?', start=13.4, end=14.3, audio='patriots3-gunner-1'),
+    dict(n=5, who='loader', text='Who are you?', start=13.4, end=14.3, audio='patriots3-loader-1'),   # Sam: the spotter
     dict(n=6, who='patriot', text='Just a concerned citizen. Just a regular man with regular concerns.', start=14.8,
          end=18.4, audio='patriots3-patriot-3'),
-    dict(n=7, who='loader', text='Ah, you are with the Führer?', start=18.9, end=20.4, audio='patriots3-loader-1'),
+    dict(n=7, who='loader', text='Ah, you are with the Führer?', start=18.9, end=20.4, audio='patriots3-loader-2'),
     dict(n=8, who='gunner+loader', text='Heil!', start=20.6, end=21.2, audio='patriots3-heil'),
     dict(n=9, who='patriot', text='Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** for '
          'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***'),
@@ -97,13 +97,13 @@ BENCHMARK = [   # rule 3: filled in when each place is built ('' = not built yet
                 ('spent cases on the floor under the gun', ''), ('ammo crates, a range card, a field telephone', ''),
                 ('dim inside, lit from the slit', '')]),
 ]
-SHOT_CAST = {'s2': ['gunner', 'loader'], 's3': ['patriot'], 's4': ['gunner', 'loader'],
+SHOT_CAST = {'s2': ['gunner', 'loader'], 's3': ['patriot', 'gunner', 'loader'], 's4': ['gunner', 'loader'],
              's5': ['patriot', 'gunner', 'loader'], 's6': ['gunner', 'loader'], 's7': ['patriot'],
              's8': ['patriot', 'gunner', 'loader'], 's9': ['patriot', 'gunner', 'loader']}
 DUR = 42.6
 THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)),
                        (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])   # template's
-HOOK = ('Small boats crisis, June 1944', {'y': 300})   # to settle with Sam: over the sky in shot 1
+HOOK = ('Small Boats Crisis, June 1944', {'y': 300})   # Sam, 27 Oct; over the sky in shot 1
 KEEP_CLEAR = []
 PROP_SIZES = []                                     # the MG42, belt, box: patriots3_cast (real sizes)
 OUTFIT = PC.OUTFIT

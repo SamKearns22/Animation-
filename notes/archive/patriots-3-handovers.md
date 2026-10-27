@@ -34,3 +34,17 @@
 - **Files to open:** `prompts/patriots-3.md`; this file; `source/patriots3_cast.py` (people, MG42; `sheet`);
   `source/patriots3_bunker.py` (crew, slit, cameras; `sheet`, `clip`); `references/patriots-3/`.
 
+
+# Handover replaced 27 Oct (end of planning)
+## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
+- **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (battlefield-ambience, distant-shots, german-angriff,
+  german-see-enemy, german-fire-at-target). In a new chat, ask Sam to attach them again first thing.
+- **27 Oct, planning chat (Opus):** Sam re-attached the five sounds (filed). `source/patriots3.py` started from the
+  template (STORY: lines, nine shots, timings guessed; drawing below STORY still the template's); the plan in metres
+  is `source/patriots3_plan.py` (`python3 source/plan.py patriots3 check`: clean); the rough composition sheet is
+  `source/patriots3_compose.py` (review/patriots3-composition.jpg). Questions, sound list and ambition sent to Sam
+  (below, "Planning"). **Waiting for Sam's answers and his go.** Plan only until he says go.
+- **Next after his answers:** fold them in, then recordings (`python3 source/voices.py FILES` as they arrive) and the
+  rehearsal clips (rule 8). Building is Opus high (new sets: the coast, the room's inside; new moves).
+- **Rule requests and proposals not yet in a guide:** none.
+
