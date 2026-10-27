@@ -123,8 +123,9 @@ had, because a check was copied per film (and wasn't), only looked at what the f
     building is named as a cost.
 36. **Say at planning when a tool is slow here** (3D pieces without numba, 5 s a body) and ask Sam once to allow
     pypi.org (claude.ai Settings, Capabilities).
-37. **Files kept off GitHub (sounds, big references)** are listed in the first line of the handover with "ask Sam to
-    re-attach them", so the next chat asks at once.
+37. **Sounds and references go on GitHub by default** (Sam, 27 Oct, Patriots 3: free assets, a few MB, never worth
+    re-attaching every chat). Only a file over about 10 MB stays off; it is listed in the first line of the handover
+    with "ask Sam to re-attach it", so the next chat asks at once.
 
 ## Rules 38-39 (approved by Sam, 27 Oct, Patriots 3)
 Why: weekly usage was climbing film by film, mostly from new 3D builds; and our people look best facing the camera.

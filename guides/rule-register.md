@@ -63,6 +63,6 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | Q34 | Mirror test: cast sheet tiles vs source drawings; every shot checked for flipped faces, lettering and glances | film-quality-rules 34 | Netan-Yahoo! note 2, wide-shot glance | by hand on the check sheet (a tool is on the Build list) |
 | Q35 | Layout locked in planning; true-gap check before building | film-quality-rules 35 | Netan-Yahoo! chair clipping, layout changes | `plan.py` true-gap check; the questions by hand |
 | Q36 | Slow tools named at planning; ask once for pypi.org | film-quality-rules 36 | Netan-Yahoo! (numpy, 5 s a body) | by hand |
-| Q37 | Files kept off GitHub listed in the handover's first line | film-quality-rules 37 | Netan-Yahoo! saber sounds | by hand (handover search) |
+| Q37 | Sounds and references on GitHub by default; only files over ~10 MB kept off, listed in the handover's first line | film-quality-rules 37 | Netan-Yahoo! saber sounds | by hand (handover search) |
 | Q38 | Front on by default; a three-quarter, side or back view only where the shot demands it, listed with its reason | film-quality-rules 38 | Sam, 27 Oct (Patriots 3) | `plan.py` (pre-flight): `SHOT_MARKS` in the plan, `THREE_QUARTER_OK` in the film |
 | Q39 | 3D only when needed (camera moves round or through it, seen from 3+ angles that must agree, turned in the hand); 2D layers per camera otherwise | film-quality-rules 39; satire.md "One set, one plan" | Sam, 27 Oct (Patriots 3: usage rising) | by hand: the ambition estimate lists each 3D build and why, Sam approves |
