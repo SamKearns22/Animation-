@@ -249,7 +249,7 @@ def beach_layer(size, horizon, seed=4):
     for k in range(5):                               # wave lines
         y = horizon + (surf - horizon) * (k + 1) / 6
         p.line([(0, y), (w * 0.3, y + 3), (w * 0.7, y - 2), (w, y + 2)], SEA_D, 1.4)
-    for x, y, sc in ((w * 0.22, horizon + (surf - horizon) * 0.45, 0.8), (w * 0.64, horizon + (surf - horizon) * 0.7, 1.0)):
+    for x, y, sc in ((w * 0.22, horizon + (surf - horizon) * 0.16, 0.45), (w * 0.64, horizon + (surf - horizon) * 0.3, 0.6)):   # out at sea, still coming in (Sam: on the beach they'd be unloading)
         craft(p, x, y, 120 * sc)
     p.poly(curve([(-20, surf), (w * 0.3, surf - 6), (w * 0.6, surf + 4), (w + 20, surf - 2), (w + 20, surf + 16),
                   (w * 0.6, surf + 20), (w * 0.3, surf + 10), (-20, surf + 16)], 3), SURF, None)

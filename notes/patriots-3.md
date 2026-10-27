@@ -13,6 +13,8 @@
   reading speed because the timing is a guess until the voices; shot 9 is 9.1 s, chosen: one unbroken shot from the
   slit). Sent: `review/patriots3-stills.jpg` and five clips (coast, turn, salute and flapping, blast, firing and
   push-in). No animatic yet.
+- **27 Oct, round 2 (Opus):** Sam's notes 5-8 done (badge, boat through the slit, the coast, the poppy); check sheet
+  and three clips re-sent. Audit clean; pre-flight unchanged (the same 11 named).
 - **Next:** Sam's answer on the stills and clips. **Notes** -> deciding fixes (Opus, medium), then the check sheet
   again. **"Yes" to an animatic** -> routine stage: Sonnet, fresh chat: `python3 source/preflight.py patriots3
   review/pf` then `python3 source/patriots3.py final review/patriots3-animatic.mp4 --small` (about 2 minutes; silent
@@ -163,3 +165,7 @@ know "gunner+loader" speak together, flagged lines meant to have no subtitles, a
 | 2 | 1 (coast) | composition | come in closer; behind the cliffs read as more sea, not French countryside | done on the sheet: camera nearer, fields and hedgerows to the horizon; new kind |
 | 3 | 6 (salute) | composition | front on to them | done: camera beside the Patriot, both face us; the arms must be foreshortened (rehearsal clip); new kind |
 | 4 | 8 (blast) | composition | camera on the left (west) wall, side on: gun and blast left, Patriot right; their faces turn to us as they stumble | done in the plan: Gunner thrown to the east wall, Loader a few steps back, both face west; new kind |
+| 5 | 7 (flapping) | 21.6-26.0 | his hand slips under his PP badge | done: the badge drawn under its own forearm and hand (`patriots3_cast._patch_under_forearm`); new kind |
+| 6 | 2-9 (through the slit) | all | the boat seen through the slit is on the beach; it should still be out at sea (it would be unloading men under fire) | done: both craft near the horizon, smaller; new kind |
+| 7 | 1 (coast) | 0-3.6 | the money shot, the hook: bunker redoubts the shooting comes from, more texture, bullets skipping in the water, boats not all on one heading, craters and scorch marks where shells land, more beach defences, ripples in the wakes, explosions varied and less cartoony; anything else from D-Day | done: casemates in the cliff face firing (flash at the slits, tracers), MG pits, cliff strata and ledges, shingle, sand ripples and pools, ragged scorched craters (old and new), wire, mined stakes, hedgehogs, steel gates, swell, bullets walking across the water, three kinds of burst (sand and drifting dust, a water column and foam ring, black smoke off the cliff top) as soft billows, each craft on its own heading with rippling wakes; additions (Sam: yes): two P-47s with invasion stripes, a rocket salvo, barrage balloons, inland smoke; new kind (note 2 was the framing) |
+| 8 | 9 | 34.4-36.2 | the poppy visible when he says the poppy line | done: he stands up behind the gun, one hand on it, chest clear (33.5-36.25), never drawn mirrored facing us; poppy 24 units; new kind |

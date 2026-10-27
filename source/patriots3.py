@@ -304,6 +304,10 @@ def draw_actor(img, cam, a, t, log=True):
     if hy is not None and abs(yaw) < 22.5 and (hy < 0) != (yaw < 0) and a.who != 'patriot':
         yaw = math.copysign(max(abs(yaw), 0.5), hy)    # views.py mirrors the head with the body: a front-on soldier
                                                        # (symmetric) is drawn mirrored so his head can turn that way
+    if a.who == 'patriot' and abs(yaw) < 22.5:         # facing us he is never mirrored: the poppy (left breast)
+        yaw = abs(yaw)                                 # and his badges stay on the same sides in every shot (note 8)
+        if hy is not None and abs(hy) < 22.5:
+            hy = abs(hy)
     if V.snap(yaw)[1]:                                 # a mirrored drawing mirrors the pupils too
         sp['look'] = -sp['look']
     if not a.j.get('_dressed'):
@@ -412,7 +416,10 @@ def hold_gun(a, cam, t):
     base = CAST[a.who]
     j = a.j
     Xf, Yf, s, e, c = _tilt(cam, a.x, a.z, base)
-    deg, mirror = V.snap(view_yaw(cam, a.x, a.z, a.facing))
+    yw = view_yaw(cam, a.x, a.z, a.facing)
+    if a.who == 'patriot' and abs(yw) < 22.5:          # as draw_actor: facing us he is never mirrored
+        yw = abs(yw)
+    deg, mirror = V.snap(yw)
     flip = -1 if mirror else 1
     ang = math.radians(deg)
     Yn = Yf - 928 * s + j.get('bob', 0.0) * s
@@ -431,7 +438,11 @@ def hold_gun(a, cam, t):
     near = lambda side, q: math.dist(j['sh' + side], q)
     sides = ('R', 'L') if near('R', grips[0]) + near('L', grips[1]) <= near('L', grips[0]) + near('R', grips[1]) \
         else ('L', 'R')
-    for side, q in zip(sides, grips):
+    pairs = list(zip(sides, grips))
+    if a.one_hand:                                     # resting one hand on the stock, the other at his side
+        side = min('LR', key=lambda sd: near(sd, grips[1]))
+        pairs = [(side, grips[1])]
+    for side, q in pairs:
         if a.reach < 1.0:                              # still reaching for it: part way from where the hand was
             q = MV_lerp(j['wr' + side], q, a.reach)
         V.arm_to(j, side, q, 'down', 'fist')
@@ -440,7 +451,7 @@ def hold_gun(a, cam, t):
         draw_gun3d(img_ref[0], cam, a.fire_t, t)
     gun.held = True
     j['props'] = [gun]
-    j['grip'] = {'L', 'R'}
+    j['grip'] = {sd for sd, _ in pairs}
 
 
 img_ref = [None]

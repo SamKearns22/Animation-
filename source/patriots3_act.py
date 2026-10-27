@@ -42,6 +42,7 @@ T_BLAST = 26.8
 G_FLIGHT, L_FLIGHT = 0.42, 0.95                    # how long the Gunner flies, the Loader staggers
 T_TO_GUN = 30.6
 T_SHAKE = (33.7, 34.4)
+T_TAKE = 36.25                                     # he leans in and takes both grips, then fires
 P_BURSTS = [(36.6, 37.9), (38.3, 39.6), (40.0, 40.9), (41.6, 42.6)]
 T_MEET = 41.0
 
@@ -77,6 +78,7 @@ class Actor:
         self.sp = dict(sp or {})
         self.head_facing, self.roll, self.crew = head_facing, roll, crew
         self.holds, self.fire_t, self.reach = holds, fire_t, reach        # at the gun: hands go on its grips
+        self.one_hand = False                                              # only the hand nearest the gun on it
 
 
 def toward(a, b):
@@ -357,6 +359,11 @@ def patriot(t):
     arrive = T_TO_GUN + sum(math.dist(a, b) for a, b in zip(path, path[1:])) / MV.speed('walk')
     k = max(0.0, min(1.0, (t - arrive - 0.1) / 0.45))
     fire_t = burst_t(t, P_BURSTS)
+    up = T_SHAKE[0] - 0.2 <= t < T_TAKE                # the head shake and the poppy line: stood up behind the gun,
+    if up:                                             # one hand on it, his chest (and the poppy) clear (Sam, note 8)
+        k = min(k, 1.0 - MV.ease(min(1.0, (t - (T_SHAKE[0] - 0.2)) / 0.4)))
+    elif t >= T_TAKE:
+        k = MV.ease(min(1.0, (t - T_TAKE) / 0.3))
     j = at_gun(C.PATRIOT, k)
     j = _idle(j, t, 14) if fire_t is None else j
     if fire_t is not None:                             # the gun shoves him on every kick
@@ -365,8 +372,10 @@ def patriot(t):
     if fire_t is not None:
         sp['lid'] = 3
     hs = _shake_head(t)
-    return Actor('patriot', AT_GUN[0], AT_GUN[1], 0, j, sp, None if hs is None else hs % 360, holds=True,
-                 fire_t=fire_t, reach=MV.ease(k))
+    a = Actor('patriot', AT_GUN[0], AT_GUN[1], 0, j, sp, None if hs is None else hs % 360, holds=True,
+              fire_t=fire_t, reach=1.0 if up else MV.ease(k))
+    a.one_hand = up
+    return a
 
 
 def everyone(t):

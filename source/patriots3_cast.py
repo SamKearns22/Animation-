@@ -349,7 +349,7 @@ def patriot_jacket(p, view, sp):
                     (o - w * 1.18, 30)], B.lt(JACKET, 1.35), INK, 2.4)
         p.line([(o, 30), (o + 6, 200), (o + 12, 340), (o + 6, bottom - 26)], (96, 96, 104), 2.2)
         if view in ('front', 'three'):                 # the poppy on his left breast (Sam, 27 Oct: yes)
-            poppy(p, o + sw * (0.48 if view == 'front' else 0.3), 104)
+            poppy(p, o + sw * (0.48 if view == 'front' else 0.3), 108)   # 24 units: readable on a phone in shot 9
     else:                                               # from behind: the collar and the back seam
         o = -0.22 * sw if view == 'three_back' else 0.0
         p.poly([(-44, -92), (44, -92), (48, 6), (-48, 6)], BALA, INK, 2.4)
@@ -364,7 +364,7 @@ def patriot_jacket(p, view, sp):
 POPPY, POPPY_D, LEAF = (206, 32, 36), (150, 20, 26), (52, 110, 52)
 
 
-def poppy(p, x, y, r=17.0):
+def poppy(p, x, y, r=24.0):
     """A remembrance poppy pinned to the jacket: a green leaf behind, four lumpy red petals, a black centre."""
     p.poly([(x + r * 0.2, y + r * 0.3), (x + r * 1.5, y + r * 1.2), (x + r * 0.5, y + r * 1.0)], LEAF, INK, 1.6)
     pts = []
@@ -562,7 +562,31 @@ def _arm(p, j2, side, sp, shape=None):
         if math.hypot(el[0] - sh[0], el[1] - sh[1]) > 90:      # only when the upper arm is seen side on
             flip = getattr(p.cam, 'flip', 1)
             kind = 'doodle' if (side == 'L') == (flip > 0) else 'PP'
-            PP.patch(p.img, p, sh, el, kind)
+            _patch_under_forearm(p, j2, side, sh, el, kind)
+
+
+def _patch_under_forearm(p, j2, side, sh, el, kind):
+    """The badge is sewn on the upper arm, so a forearm folded up in front of it (flapping with the hands up by
+    the shoulders) and the hand are drawn over it, never under it (Sam, Patriots 3 note 4). The badge goes on its own
+    layer with the forearm and hand cut out of it."""
+    from PIL import ImageDraw, ImageChops
+    lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
+    PP.patch(lay, B.Pen(lay, p.cam), sh, el, kind)
+    wr = j2['wr' + side]
+    mask = Image.new('L', p.img.size, 0)
+    d = ImageDraw.Draw(mask)
+    P = p.cam.P
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / n * 34, dx / n * 34
+    d.polygon([P(el[0] + nx, el[1] + ny), P(wr[0] + nx, wr[1] + ny), P(wr[0] - nx, wr[1] - ny), P(el[0] - nx, el[1] - ny)],
+              fill=255)
+    hx, hy = wr[0] + dx / n * 22, wr[1] + dy / n * 22             # the round hand just past the wrist
+    r = abs(p.cam.S(38))
+    c = P(hx, hy)
+    d.ellipse([c[0] - r, c[1] - r, c[0] + r, c[1] + r], fill=255)
+    lay.putalpha(ImageChops.subtract(lay.getchannel('A'), mask))
+    p.img.alpha_composite(lay)
 
 
 def _leg(p, j, side, yaw, sp):
