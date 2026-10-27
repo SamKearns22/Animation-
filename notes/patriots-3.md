@@ -16,7 +16,7 @@
 - **27 Oct, round 2 (Opus):** Sam's notes 5-9 done (badge, boat through the slit, the coast, the poppy, his hands on the
   gun: note 9 fixed after the first animatic render; hand targets moved onto the receiver). Sounds (9 files) are on
   GitHub now and rule 37 is rewritten (on GitHub by default; only files over ~10 MB stay off).
-- **27 Oct (later): animatic 2 sent (`review/patriots3-animatic-2.mp4`, 2.5 MB, 43 s)** with notes 10-14 done (see the notes table). Next: Sam's notes on it; final render needs a new yes. Earlier: test recording cut and animatic 1 rendered. `source/patriots3_cut.py` cuts
+- **27 Oct (latest): animatic 3 sent (`review/patriots3-animatic-3.mp4`) with Sam's real Patriot recordings; notes 15-16 done.** Earlier: animatic 2 sent (`review/patriots3-animatic-2.mp4`, 2.5 MB, 43 s)** with notes 10-14 done (see the notes table). Next: Sam's notes on it; final render needs a new yes. Earlier: test recording cut and animatic 1 rendered. `source/patriots3_cut.py` cuts
   `patriots3-test-all.m4a` into patriot-1..6, loader-1, loader-2, heil (placeholders; levelled, pauses shortened to
   0.25 s, sped up at most 1.27x to fit the film's slots). Sam's two first lines are very quiet in the take (boosted).
   Pre-flight: 9 named (caption speeds on the fast placeholders, line 4 syllables 27 v 23, shot 9 at 9.1 s chosen).
@@ -179,3 +179,5 @@ know "gunner+loader" speak together, flagged lines meant to have no subtitles, a
 | 12 | 9 | 36.6-42.6 | his arm should be partly behind the gun (reference sent) | done: `views.person` 'wrap': arm drawn before the gun, only the hand over it, whenever the gun is nearer the lens than him (`hold_gun`); follows note 9 (the hand moved onto the gun, the arm stayed on top) |
 | 13 | 1 | 0-3.6 | hook text in the sky, not over the action, as agreed | done: I ran finish.py without the film's HOOK height (y 300); repeat: the film's setting was not passed on. Always pass `--y` from HOOK |
 | 14 | 9 | 39.75 | new line after his last: "Traitors." | done: line 12 (`patriots3-patriot-7.m4a`, Sam's take, trimmed), burst 3 moved to 40.65 to leave it clear, before their eyes meet (41.0) |
+| 15 | 5 | 14.5-19 | change "regular concerns" to "regular problems" | done in the script and subtitles; Sam's real recording says "problems" |
+| 16 | all | all | Sam's real Patriot recordings (7 files, 27 Oct 20:51-20:55, in order patriot-1..7 incl. "Traitors"); German lines unchanged | done: matched by order and words (speech reader), trimmed, pauses over 0.2 s shortened, no speed-up; line starts nudged (6 to 14.5, 7 to 19.0, Heil 20.75) so nothing overlaps; subtitles regrouped into longer chunks; the bleep on "shit" placed by syllable count (3.68-3.95 s into line 9) |
