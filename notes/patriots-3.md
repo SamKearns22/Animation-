@@ -16,19 +16,13 @@
 - **27 Oct, round 2 (Opus):** Sam's notes 5-9 done (badge, boat through the slit, the coast, the poppy, his hands on the
   gun: note 9 fixed after the first animatic render; hand targets moved onto the receiver). Sounds (9 files) are on
   GitHub now and rule 37 is rewritten (on GitHub by default; only files over ~10 MB stay off).
-- **Sam's test recording is in:** `source/audio/patriots3-test-all.m4a` (47.6 s, all the lines in order, "intentionally
-  bad reads", Sam's words). `python3 source/voices.py source/audio/patriots3-test-all.m4a` found 18 phrases (the first
-  three, 10.5-11.9 s, are clicks): 13.59-14.46, 16.00-17.44, 18.12-21.15, 22.15-24.15, 24.86-25.34, 26.22-27.38,
-  27.71-29.58, 29.98-31.72, 33.24-33.94, 34.74-36.39, 36.92-38.84, 39.47-40.21, 40.50-41.64, 43.14-45.27.
-  Not yet cut into lines (no speech recognition here: match phrases to lines by their syllables, in order, and say
-  which phrase is which line in the next message).
-- **An animatic was rendered once (silent, subtitles only; `review/patriots3-animatic.mp4`, not on GitHub) but NOT yet
-  sent to Sam.** Sam asked for a handover first. It is out of date (before the hand fix): render it again.
-- **Next (Sonnet, fresh chat):** 1) cut the test recording into the eleven lines (`source/audio/patriots3-<who>-<n>.m4a`
-  as the film's LINES expect: patriot-1..6, loader-1, loader-2, heil), checking with `voices.py`; keep the test takes
-  as placeholders and say so in every send; 2) `python3 source/preflight.py patriots3 review/pf`; 3) render
-  `python3 source/patriots3.py final review/patriots3-animatic.mp4 --small` (about 2.5 minutes) and send it to Sam;
-  Sam already said Y to the animatic. The final render needs a new clear yes.
+- **27 Oct (Sonnet): test recording cut and animatic rendered.** `source/patriots3_cut.py` cuts
+  `patriots3-test-all.m4a` into patriot-1..6, loader-1, loader-2, heil (placeholders; levelled, pauses shortened to
+  0.25 s, sped up at most 1.27x to fit the film's slots). Sam's two first lines are very quiet in the take (boosted).
+  Pre-flight: 9 named (caption speeds on the fast placeholders, line 4 syllables 27 v 23, shot 9 at 9.1 s chosen).
+  Animatic with hook text "Small Boats Crisis, June 1944" and sign-off: `review/patriots3-animatic-vertical.mp4`
+  (2.3 MB, 43 s), sent to Sam. `signoff.py` now scales the sign-off to a small animatic's size. Sam: pauses can go
+  entirely (done to 0.25 s; say if he wants 0). Next: Sam's notes on the animatic; final render needs a new yes.
 - **Rule requests and proposals not yet in a guide:** usage proposals 2 (budget per film) and 3 (composition sheet
   once) from 27 Oct, still waiting for Sam's numbers; and four kit lessons from this build, proposed (below,
   "Proposed kit lessons").

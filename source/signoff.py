@@ -313,7 +313,8 @@ def add(film, out, fps=None, crf=None):
         so = os.path.join(tmp, 'signoff.mp4')
         clip(so)
         subprocess.run([FF, '-y', '-loglevel', 'error', '-i', film, '-i', so, '-filter_complex',
-                        f'[0:v]fps={fps},format=yuv420p[a];[1:v]fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'
+                        f'[1:v][0:v]scale2ref[s1][r0];[r0]fps={fps},format=yuv420p[a];[s1]fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'   # sign-off scaled to the film's size (small animatics)
+                        
                         '[1:a]aresample=48000[y];[a][x][b][y]concat=n=2:v=1:a=1[v][s]',
                         '-map', '[v]', '-map', '[s]', '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow',
                         '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
