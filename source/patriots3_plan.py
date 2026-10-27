@@ -38,11 +38,11 @@ THINGS = {   # set dressing (rule 22; my additions, Sam can say no): kept clear 
 PEOPLE = {
     'gunner at the gun': dict(at=(0.0, 0.0), facing=0, who='gunner'),
     'loader at the gun': dict(at=(-0.55, 0.1), facing=0, who='loader'),
-    'gunner turned': dict(at=(0.0, -0.05), facing=165, who='gunner'),          # turned round to the door
+    'gunner turned': dict(at=(0.14, -0.08), facing=165, who='gunner'),         # turned round to the door
     'loader turned': dict(at=(-0.55, 0.05), facing=140, who='loader'),   # front on to shots 2 and 4
     'patriot in the doorway': dict(at=(0.62, -2.32), facing=330, who='patriot'),   # leans on the door's west post
     'patriot approached': dict(at=(-0.9, -1.3), facing=35, who='patriot'),     # talking distance, south-west of them
-    'gunner facing him': dict(at=(0.0, -0.05), facing=215, who='gunner'),
+    'gunner facing him': dict(at=(0.14, -0.08), facing=215, who='gunner'),     # (a little apart: their arms)
     'loader facing him': dict(at=(-0.55, 0.05), facing=195, who='loader'),
     'gunner after the blast': dict(at=(1.85, -0.6), facing=271, who='gunner'),     # thrown against the east wall
     'loader after the blast': dict(at=(0.9, -1.3), facing=283, who='loader'),      # a few steps back (Sam, 27 Oct)
@@ -52,7 +52,7 @@ PEOPLE = {
 }
 # Every camera (the film's cam_for builds a sets.Cam from these; focal in pixels for 1080 x 1920)
 CAMS = {
-    's1': dict(pos=(-25.0, 90.0, 340.0), look=(0.0, 0.0, 70.0), focal=1150, outside=True,
+    's1': dict(pos=(-18.0, 58.0, 220.0), look=(0.0, 2.0, 62.0), focal=1150, outside=True,
                why='high above the sea, behind the six craft, looking south at the black cliffs'),
     's2': dict(pos=(0.95, 1.65, -1.6), look=(-0.3, 1.3, 1.6), focal=1000),        # behind the crew; door behind us
     's3': dict(pos=(-0.6, 1.7, 0.8), look=(0.62, 1.25, -2.4), focal=1500),        # over the crew's helmets, the door
@@ -62,9 +62,10 @@ CAMS = {
     's5': dict(pos=(1.85, 2.15, -2.25), look=(-1.0, 1.0, 0.3), focal=760),        # the wide: high, back-right corner
     's8': dict(pos=(-2.45, 1.65, -0.5), look=(1.0, 1.2, -0.5), focal=760),        # from the west wall, side on (Sam)
     's7': dict(pos=(0.6, 1.5, -0.2), look=(-0.9, 1.4, -1.3), focal=1500),         # the Patriot, from beside the gun
-    's9 start': dict(pos=(0.45, 1.42, 1.5), look=(0.99, 1.3, -2.36), focal=820, outside=True,
+    # (build, 27 Oct: moved 70 cm west along the slit; from 0.45 the slit's east side hid the Gunner at the east wall)
+    's9 start': dict(pos=(-0.25, 1.45, 1.55), look=(0.75, 1.3, -2.0), focal=820, outside=True,
                      why='in the slit itself, beside the barrel, facing into the bunker'),
-    's9 end': dict(pos=(0.45, 1.42, 1.5), look=(1.55, 1.45, -1.29), focal=1700, outside=True,
+    's9 end': dict(pos=(-0.25, 1.45, 1.55), look=(1.4, 1.5, -0.95), focal=1700, outside=True,
                    why='the push-in on the two soldiers in the far corner'),
 }
 GROUPS = {

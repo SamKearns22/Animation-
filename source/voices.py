@@ -233,7 +233,9 @@ def caption_check(film, lines):
     for ln in lines:
         scr = [_norm(w) for w in ln['text'].split() if _norm(w)]
         cap = [_norm(w) for c in per[id(ln)] for w in c.split() if _norm(w)]
-        cap = [next((s for s in scr if _match(w, s)), w) if '*' in w else w for w in cap]
+        cap = [w if w in scr else next((s for s in scr if _match(w, s)), w) if '*' in w else w for w in cap]
+        if not cap and ln.get('sub', True) is False:   # a line meant to have no subtitles (Patriots 3's German barks)
+            continue
         if not cap:
             faults.append(f"line {ln.get('n', '?')} ({ln['who']}): no subtitles while it is spoken")
             continue
@@ -324,7 +326,8 @@ def mouth_check(film, lines, t0, t1):
     faults, unknown, used = [], set(), {}
     speech = {}                                      # each speaker's stretches of voice, in film time
     for ln in lines:
-        speech.setdefault(ln['who'], []).extend((ln['start'] + a, ln['start'] + b) for a, b in ln['_stretches'])
+        for who in ln['who'].split('+'):            # 'gunner+loader': both say it (Patriots 3's "Heil!")
+            speech.setdefault(who, []).extend((ln['start'] + a, ln['start'] + b) for a, b in ln['_stretches'])
     groups = {}
     for (who, name) in seen:
         groups.setdefault(who, []).append(name)

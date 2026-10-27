@@ -2,32 +2,26 @@
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
 - **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (battlefield-ambience, distant-shots, german-angriff,
-  german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide). First thing in the new chat: ask Sam to
-  attach all eight again.
-- **Reference photos still missing (the photo sites are blocked here, 403):** a bunker inside looking back at its door;
-  the Normandy cliffs (Pointe du Hoc) from the sea or air; a man leaning in a doorway, arms folded; a side-on photo of
-  the salute (arm angle); a shell bursting on concrete (dust, debris). Ask Sam to attach them (or to allow the photo
-  sites in the environment's network settings). Never draw these from memory (rule 3).
-- **Done (27 Oct, planning, Opus):** Sam answered every question and said **go** (answers below, "Planning"). Plan in
-  metres: `source/patriots3_plan.py` (check clean). Film file: `source/patriots3.py` (STORY in; drawing below STORY is
-  still the template's). Composition sheet with Sam's notes 2-4 folded in: `source/patriots3_compose.py`
-  (review/patriots3-composition.jpg; sent once, his notes applied, not re-sent).
-- **Next: BUILDING, Opus high, fresh chat.** Read `guides/satire.md`, `guides/film-quality-rules.md`, this file. In
-  order: (1) the rehearsal clips first (rule 8): the turn round; the front-on salute (arms foreshortened towards the
-  lens, rule 21: the composition sheet shows the kit drawing it wrong, hands at the face) and the Patriot's flapping;
-  the blast and stumble with debris settling (rules 32-33); firing from the slit with the push-in; (2) the coast (one
-  painted shot: see "Usage" below) and the room's inside once the photos are in; (3) the Patriot's poses (lean, at the
-  gun); (4) then `picture`/`scene` in patriots3.py on sets.Cam (copy power_crime / netan_yahoo's 3D pattern).
-- **New rules (Sam, 27 Oct), apply from the start:** 38 front on by default (`plan.py` checks it from `SHOT_MARKS` in
-  the plan; the views the shots demand are listed in patriots3.py's `THREE_QUARTER_OK`); 39 3D only when needed.
-  For this film: 3D = the room (the shared `sets.house`, nothing new: six angles, people crossing it) and the MG42
-  (already built). 2D = the coast (one painted shot in moving layers: craft, bursts, cliff flashes), the blast, dust,
-  chips, muzzle flashes and room light, and the room's dressing (crates, range card, board marks as flat pictures).
-  Ambition now about 15-20% of a week.
-  Recordings come from Sam when he can (list below); `python3 source/voices.py FILES` as they arrive.
-- **Rule requests and proposals not yet in a guide:** usage proposals 2 (a budget per film, logged at each handover)
-  and 3 (the composition sheet sent once) from 27 Oct (below, "Usage"): waiting for Sam's numbers. Rules 38 and 39 are
-  written (film-quality-rules, rule-register Q38, Q39).
+  german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide). They were not in this chat's container
+  either: ask Sam to attach all eight again before the sound is built.
+- **Done (27 Oct, building, Opus):** Sam sent the missing photos (`references/patriots-3/` room-1, room-2, lean-1, -2,
+  salute-1, -2, blast-1, -2, air-4, -5). Sam: **"Build without dialogue for now, just subtitles."** Built: the
+  casemate (`patriots3_room.py`), the coast (`patriots3_coast.py`), the blast and dust (`patriots3_fx.py`), all the
+  acting (`patriots3_act.py`), the film (`patriots3.py`: 3D gun with hands on its grips, subtitle chunks). Rehearsal
+  clips (rule 8) done and fixed (dust over the Patriot, a pop in the push-in, weak flapping, a wrong-way glance).
+  `python3 source/patriots3.py check`: audit clean. Pre-flight: shared checks clean; 11 named (10 subtitles under
+  reading speed because the timing is a guess until the voices; shot 9 is 9.1 s, chosen: one unbroken shot from the
+  slit). Sent: `review/patriots3-stills.jpg` and five clips (coast, turn, salute and flapping, blast, firing and
+  push-in). No animatic yet.
+- **Next:** Sam's answer on the stills and clips. **Notes** -> deciding fixes (Opus, medium), then the check sheet
+  again. **"Yes" to an animatic** -> routine stage: Sonnet, fresh chat: `python3 source/preflight.py patriots3
+  review/pf` then `python3 source/patriots3.py final review/patriots3-animatic.mp4 --small` (about 2 minutes; silent
+  but for subtitles, the sounds not yet attached). The final render needs Sam's clear yes.
+- **Rule requests and proposals not yet in a guide:** usage proposals 2 (budget per film) and 3 (composition sheet
+  once) from 27 Oct, still waiting for Sam's numbers; and four kit lessons from this build, proposed (below,
+  "Proposed kit lessons").
+- **Files to open:** `prompts/patriots-3.md`; this file; `source/patriots3.py` (STORY, picture, checks),
+  `source/patriots3_act.py` (timeline at the top), `patriots3_room.py`, `patriots3_fx.py`, `patriots3_coast.py`.
 
 ## What Sam has sent (27 Oct; he said "noted" only until the drawing request)
 - References, `references/patriots-3/`: lander-pov-1..5 (D-Day seen from a landing craft, facing the beach),
@@ -43,22 +37,22 @@
 |---|------|------|
 | 1 | The Patriot redrawn to all the new drawing guidelines | yes |
 | 2 | Two German soldiers who fire an MG42 through a bunker slit, a firer and a spotter/reloader | yes (Gunner, Loader) |
-| 3 | From high above the coast: black cliffs in the distance flashing with machine-gun fire | |
-| 4 | Artillery thundering down into the sands and spray | |
-| 5 | Six landers, stuffed to the brim with Allied troops, creep closer to the shore | |
-| 6 | A thunderous howl of gunfire | |
-| 7 | Cut to inside the bunker: the gunner fires, the spotter directs him | |
-| 8 | Patriot (off): "Small boat problem?" The men turn around, startled | |
-| 9 | The Patriot framed in the bunker doorway, leaning nonchalantly: "What can I say? Foreign invaders coming across the sea? Happens everywhere these days." | |
-| 10 | The soldiers look at each other and back to him: "Who are you?" | |
-| 11 | Patriot, approaching: "Just a concerned citizen. Just a regular man with regular concerns." | |
-| 12 | Spotter: "Ah, you are with the Furhër?" Both soldiers perform the Nazi salute: "Heil!" | |
-| 13 | Patriot: "Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** (shit) for Whatsapp." Visibly upset, waving his arm to quiet them, arms darting around | |
-| 14 | An explosion hits the lip of the bunker; the soldiers stumble back | |
-| 15 | Patriot: "Anyway, got problems with the Establishment? People trampling on your sovereignty? Let's just say I'm here to assist." | |
-| 16 | Camera in the slit facing into the bunker; the Patriot mans the gun, shakes his head sadly: "They ain't even wearing poppies." | |
-| 17 | He begins to fire; the bunker lit by muzzle flare | |
-| 18 | Zoom back in on the soldiers standing dumbfounded in the background; their eyes meet in confusion | |
+| 3 | From high above the coast: black cliffs in the distance flashing with machine-gun fire | built: shot 1, black cliffs with one-frame flashes and tracers |
+| 4 | Artillery thundering down into the sands and spray | built: 15 lumpy bursts of sand and spray |
+| 5 | Six landers, stuffed to the brim with Allied troops, creep closer to the shore | built: six LCVPs, 36 helmets each, creeping in |
+| 6 | A thunderous howl of gunfire | sound: needs Sam's files (subtitles-only build, Sam 27 Oct) |
+| 7 | Cut to inside the bunker: the gunner fires, the spotter directs him | built: shot 2, two bursts; the Loader spots and points (barks silent for now) |
+| 8 | Patriot (off): "Small boat problem?" The men turn around, startled | built: subtitle; they freeze 6.45, turn 6.95 (straight turn), startled |
+| 9 | The Patriot framed in the bunker doorway, leaning nonchalantly: "What can I say? Foreign invaders coming across the sea? Happens everywhere these days." | built: shot 3, leaning on the west post, arms folded, ankles crossed |
+| 10 | The soldiers look at each other and back to him: "Who are you?" | built: shot 4, glance at each other 12.6, back 13.1; the Loader asks |
+| 11 | Patriot, approaching: "Just a concerned citizen. Just a regular man with regular concerns." | built: shot 5, he walks up; hand on his chest on 'regular man' |
+| 12 | Spotter: "Ah, you are with the Furhër?" Both soldiers perform the Nazi salute: "Heil!" | built: shot 6, both salute (front on), 'Heil!' once |
+| 13 | Patriot: "Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** (shit) for Whatsapp." Visibly upset, waving his arm to quiet them, arms darting around | built: shot 7, front on, arms darting: up, pat down, point round, wag; bleep: no sound yet |
+| 14 | An explosion hits the lip of the bunker; the soldiers stumble back | built: shot 8, flash, shake, dust, chips settle; Gunner thrown to the east wall, Loader staggers back |
+| 15 | Patriot: "Anyway, got problems with the Establishment? People trampling on your sovereignty? Let's just say I'm here to assist." | built: shot 8, he walks to the gun on 'Anyway...' |
+| 16 | Camera in the slit facing into the bunker; the Patriot mans the gun, shakes his head sadly: "They ain't even wearing poppies." | built: shot 9, camera in the slit; head shake 33.7 |
+| 17 | He begins to fire; the bunker lit by muzzle flare | built: fires 36.6 (four bursts), room lit on every flash |
+| 18 | Zoom back in on the soldiers standing dumbfounded in the background; their eyes meet in confusion | built: push-in 39.2-40.8; their eyes meet 41.0 |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -128,7 +122,17 @@ named in the handover, never re-sent for approval (saves a round of pictures).
   round face, the later plain tunic, ankle boots and gaiters. Different on purpose so they never read as twins.
 - The breast eagle is a plain bird with an empty roundel: no swastika anywhere.
 - The slit is taller than a real one (up to 2.05 m) so the crew's faces read from the beach.
-- MG42 sound: none of Sam's files is an MG42 burst; the clip is silent.
+- MG42 sound: none of Sam's files is an MG42 burst; the clip is silent. (Later he sent `mg42`: the burst is 2.8-5.0 s.)
+- (Build, 27 Oct) Shot 9's camera moved 70 cm west along the slit (-0.25 instead of 0.45): from the old spot the slit's
+  east side hid the Gunner at the east wall. The Gunner's turned marks moved 14 cm east (their arms touched in the
+  salute). The Patriot leans 12 cm further from the door's middle so his shoulder meets the post. His back against
+  the wall at x 1.66 (the arms went into it at 1.72).
+- (Build) The salute: the right arm swung up round the shoulder, the Gunner's straight up and forward (the Loader is on
+  his right side), the Loader's up and out; the hands are the house's plain circles, so it may read as a raised fist:
+  say if it should change.
+- (Build) The blast is seen from inside (shot 8 looks along the slit wall): the flash lights the room, black smoke
+  outside, dust rolls in, chips land and stay, the camera jolts; a bite stays in the lintel for the rest of the film.
+- (Build) The German barks and the MG42 are silent until Sam re-attaches the sounds; the bleep has no sound yet.
 
 ## My additions (say no and they go)
 - A camouflage net on the Gunner's helmet; a stick grenade in the Loader's belt; binoculars for the Loader.
@@ -136,6 +140,21 @@ named in the handover, never re-sent for approval (saves a round of pictures).
 - Earth bank and grass over the bunker; board marks on the concrete.
 - In the room: ammo crates (front right), a shelf with a field telephone (east wall), a range card above the slit.
 - A red poppy on the Patriot's jacket (Sam: yes).
+- (Build, 27 Oct) A cable run under the ceiling and a caged lamp over the door (room-2); lamps along the passage; the
+  trench, sandbags and grass seen at the passage's far end; two warships passing at the bottom of shot 1; shell
+  craters and hedgehogs on the beach; the bite out of the lintel after the blast.
+
+## Proposed kit lessons (27 Oct, building; waiting for Sam's numbers, nothing written into a guide yet)
+1. `views.person`: a head can only turn the way the body's drawing is mirrored (a soldier facing us could not look
+   to his other side). Fix in views.py: mirror the head by its own direction. (Worked round in patriots3.draw_actor.)
+2. `sets.Cam.yaw_of`: uses the camera's own right, so a camera that only turns (a push-in) changes how people are
+   drawn: the Patriot popped mid push-in. Fix in sets.py: measure from the line to the person (patriots3.view_yaw).
+3. `lying.stand`: the camera tilt is measured at the floor, so close up a hand held out at chest height is drawn far
+   too low (the salute sank to the chest). Measure it at chest height (patriots3._tilt).
+4. Held 3D props: draw them through the real camera and put the hands on the grip points the camera sees
+   (patriots3.hold_gun): the old way drew the MG42 sideways and below the Patriot in shot 9. Move into the kit.
+Bugs fixed in the shared kit this build (fixes, not new rules): kitchecks dropped the camera tilt; voices.py did not
+know "gunner+loader" speak together, flagged lines meant to have no subtitles, and matched "s***" to "speech".
 
 ## Notes
 | # | shot | time | note | status |

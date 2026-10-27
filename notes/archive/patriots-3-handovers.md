@@ -48,3 +48,31 @@
   rehearsal clips (rule 8). Building is Opus high (new sets: the coast, the room's inside; new moves).
 - **Rule requests and proposals not yet in a guide:** none.
 
+## Handover to building (27 Oct, planning chat)
+- **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (battlefield-ambience, distant-shots, german-angriff,
+  german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide). First thing in the new chat: ask Sam to
+  attach all eight again.
+- **Reference photos still missing (the photo sites are blocked here, 403):** a bunker inside looking back at its door;
+  the Normandy cliffs (Pointe du Hoc) from the sea or air; a man leaning in a doorway, arms folded; a side-on photo of
+  the salute (arm angle); a shell bursting on concrete (dust, debris). Ask Sam to attach them (or to allow the photo
+  sites in the environment's network settings). Never draw these from memory (rule 3).
+- **Done (27 Oct, planning, Opus):** Sam answered every question and said **go** (answers below, "Planning"). Plan in
+  metres: `source/patriots3_plan.py` (check clean). Film file: `source/patriots3.py` (STORY in; drawing below STORY is
+  still the template's). Composition sheet with Sam's notes 2-4 folded in: `source/patriots3_compose.py`
+  (review/patriots3-composition.jpg; sent once, his notes applied, not re-sent).
+- **Next: BUILDING, Opus high, fresh chat.** Read `guides/satire.md`, `guides/film-quality-rules.md`, this file. In
+  order: (1) the rehearsal clips first (rule 8): the turn round; the front-on salute (arms foreshortened towards the
+  lens, rule 21: the composition sheet shows the kit drawing it wrong, hands at the face) and the Patriot's flapping;
+  the blast and stumble with debris settling (rules 32-33); firing from the slit with the push-in; (2) the coast (one
+  painted shot: see "Usage" below) and the room's inside once the photos are in; (3) the Patriot's poses (lean, at the
+  gun); (4) then `picture`/`scene` in patriots3.py on sets.Cam (copy power_crime / netan_yahoo's 3D pattern).
+- **New rules (Sam, 27 Oct), apply from the start:** 38 front on by default (`plan.py` checks it from `SHOT_MARKS` in
+  the plan; the views the shots demand are listed in patriots3.py's `THREE_QUARTER_OK`); 39 3D only when needed.
+  For this film: 3D = the room (the shared `sets.house`, nothing new: six angles, people crossing it) and the MG42
+  (already built). 2D = the coast (one painted shot in moving layers: craft, bursts, cliff flashes), the blast, dust,
+  chips, muzzle flashes and room light, and the room's dressing (crates, range card, board marks as flat pictures).
+  Ambition now about 15-20% of a week.
+  Recordings come from Sam when he can (list below); `python3 source/voices.py FILES` as they arrive.
+- **Rule requests and proposals not yet in a guide:** usage proposals 2 (a budget per film, logged at each handover)
+  and 3 (the composition sheet sent once) from 27 Oct (below, "Usage"): waiting for Sam's numbers. Rules 38 and 39 are
+  written (film-quality-rules, rule-register Q38, Q39).

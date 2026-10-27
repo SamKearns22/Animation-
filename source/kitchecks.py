@@ -216,8 +216,8 @@ def install():
         return
     real = views.person
 
-    def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None):
-        j2 = real(img, cam, x, y, s, sp, t, yaw, joints, head_yaw)
+    def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None):   # tilt: a 3D camera's
+        j2 = real(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt=tilt)            # real tilt (Patriots 3)
         try:
             import figure as F
             where = F.CONTEXT.get('where', '')

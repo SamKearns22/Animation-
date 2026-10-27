@@ -28,20 +28,21 @@ import peepee as PP              # noqa: E402  the series' caption
 import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
 from satire_style import rough, install_circle_hands   # noqa: E402
+from ed import INK               # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
 FPS, SR = 12, MA.SR
 
 # =============================================== STORY (change this) ===============================================
-# PLANNING STAGE (27 Oct): the story, the shots and the plan are in; everything below the STORY section is still the
-# template's flat two-person drawing. The build stage replaces picture/state/scene with the bunker set
-# (patriots3_bunker), the cast (patriots3_cast) and a sets.Cam per shot from the plan (cam_for, already done).
+# BUILD STAGE (27 Oct): the room (patriots3_room), the acting (patriots3_act), the blast (patriots3_fx) and the coast
+# (patriots3_coast) are drawn below through each shot's sets.Cam. Sam (27 Oct): no recordings yet, subtitles only.
 import patriots3_cast as PC      # noqa: E402  the Patriot, the Gunner, the Loader, the MG42
 import patriots3_plan as PL      # noqa: E402  the world in metres (rule 1)
 import sets as SETS              # noqa: E402
 
 NAME = 'patriots3'
+NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'patriots-3.md')
 TITLE = ()                                        # no title by default (Sam, 15 Oct)
 TITLE_AT = dict(cap=116, top=310)
 CAST = {'patriot': PC.PATRIOT, 'gunner': PC.GUNNER, 'loader': PC.LOADER}
@@ -53,19 +54,28 @@ LINES = [
          sub=False),
     dict(n=2, who='loader', text='Feuer auf Ziel!', start=5.4, end=6.2, audio='patriots3-sfx/german-fire-at-target',
          sub=False),
-    dict(n=3, who='patriot', text='Small boat problem?', start=6.4, end=7.5, audio='patriots3-patriot-1', off=True),
+    dict(n=3, who='patriot', text='Small boat problem?', start=6.4, end=7.5, audio='patriots3-patriot-1', off=True,
+         chunks=['Small boat problem?']),
     dict(n=4, who='patriot', text='What can I say? Foreign invaders coming across the sea? Happens everywhere these '
-         'days.', start=8.0, end=12.2, audio='patriots3-patriot-2'),
-    dict(n=5, who='loader', text='Who are you?', start=13.4, end=14.3, audio='patriots3-loader-1'),   # Sam: the spotter
+         'days.', start=8.0, end=12.2, audio='patriots3-patriot-2',
+         chunks=['What can I say?', 'Foreign invaders', 'coming across the sea?', 'Happens everywhere', 'these days.']),
+    dict(n=5, who='loader', text='Who are you?', start=13.4, end=14.3, audio='patriots3-loader-1',
+         chunks=['Who are you?']),   # Sam: the spotter
     dict(n=6, who='patriot', text='Just a concerned citizen. Just a regular man with regular concerns.', start=14.8,
-         end=18.4, audio='patriots3-patriot-3'),
-    dict(n=7, who='loader', text='Ah, you are with the Führer?', start=18.9, end=20.4, audio='patriots3-loader-2'),
-    dict(n=8, who='gunner+loader', text='Heil!', start=20.6, end=21.2, audio='patriots3-heil'),
+         end=18.4, audio='patriots3-patriot-3',
+         chunks=['Just a concerned citizen.', 'Just a regular man', 'with regular concerns.']),
+    dict(n=7, who='loader', text='Ah, you are with the Führer?', start=18.9, end=20.4, audio='patriots3-loader-2',
+         chunks=['Ah, you are', 'with the Führer?']),
+    dict(n=8, who='gunner+loader', text='Heil!', start=20.6, end=21.2, audio='patriots3-heil', chunks=['Heil!']),
     dict(n=9, who='patriot', text='Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** for '
-         'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***'),
+         'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***',
+         chunks=['Jesus Christ, lads.', 'The Free Speech Police', 'are everywhere.', 'Save that s***', 'for WhatsApp.']),
     dict(n=10, who='patriot', text='Anyway, got problems with the Establishment? People trampling on your '
-         'sovereignty? Let\'s just say I\'m here to assist.', start=27.9, end=33.2, audio='patriots3-patriot-5'),
-    dict(n=11, who='patriot', text='They ain\'t even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6'),
+         'sovereignty? Let\'s just say I\'m here to assist.', start=27.9, end=33.2, audio='patriots3-patriot-5',
+         chunks=['Anyway,', 'got problems', 'with the Establishment?', 'People trampling', 'on your sovereignty?',
+                 "Let's just say", "I'm here to assist."]),
+    dict(n=11, who='patriot', text='They ain\'t even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6',
+         chunks=["They ain't even", 'wearing poppies.']),
 ]
 SHOTS = [   # (shot, start, end): one camera each from PL.CAMS
     ('s1', 0.0, 3.6),     # high above the coast: cliffs flashing, artillery into sand and spray, six craft creeping in
@@ -80,22 +90,31 @@ SHOTS = [   # (shot, start, end): one camera each from PL.CAMS
 ]
 PLAN = {k: getattr(PL, k) for k in ('CEIL', 'ROOMS', 'OPENINGS', 'LOOKS', 'THINGS', 'PEOPLE', 'CAMS', 'GROUPS',
                                     'FRAMING', 'SHOT_MARKS')}
-BENCHMARK = [   # rule 3: filled in when each place is built ('' = not built yet: pre-flight fails)
-    dict(place='the coast from the air', refs=['air-1-fleet-low.jpg', 'air-2-fleet-and-coast.jpg',
-                                               'landers-3-from-above.jpg', 'landers-4-in-convoy.jpg'], at=1.8,
-         items=[('dark cliffs or bluffs along the shore, flashing with gunfire', ''),
-                ('a wide grey-brown beach with the tide out, wet sand darker near the sea', ''),
-                ('lines of white surf and spray', ''), ('six landing craft in a ragged line, white wakes behind', ''),
-                ('each craft packed with helmets, shoulder to shoulder (landers-3)', ''),
-                ('artillery bursts: sand and water thrown up in columns', ''), ('smoke drifting along the shore', ''),
-                ('ships far out on a grey sea, haze', ''), ('beach obstacles (hedgehogs) in the shallows', '')]),
-    dict(place='the casemate inside', refs=['bunker-1-cutaway-wn65.jpg', 'bunker-3-casemate-gunner.jpg',
-                                            'bunker-4-embrasure-inside.jpg'], at=10.0,
-         items=[('thick raw concrete, board marks from the formwork', ''), ('the slit: bright beach in a dark wall', ''),
-                ('a low heavy ceiling', ''), ('a steel door frame in the back wall (reference still missing)', ''),
-                ('the MG42 on the sill, belt and ammo box', 'built (patriots3_bunker)'),
-                ('spent cases on the floor under the gun', ''), ('ammo crates, a range card, a field telephone', ''),
-                ('dim inside, lit from the slit', '')]),
+REFS = 'references/patriots-3/'
+BENCHMARK = [   # rule 3: what makes each place recognisable, and how ours has it
+    dict(place='the coast from the air', refs=[REFS + r for r in ('air-1-fleet-low.jpg', 'air-2-fleet-and-coast.jpg',
+                                               'air-4-beach-from-above.jpg', 'landers-3-from-above.jpg')], at=1.8,
+         items=[('dark cliffs or bluffs along the shore, flashing with gunfire', 'black cliff band with gullies; '
+                 'one-frame lumpy flashes and tracer streaks every frame'),
+                ('a wide grey-brown beach with the tide out, wet sand darker near the sea', 'dry and wet sand bands, craters'),
+                ('lines of white surf and spray', 'surf lines rolling in; white spray plumes on the water'),
+                ('six landing craft in a ragged line, white wakes behind', 'six LCVPs, staggered, V wakes, bow waves'),
+                ('each craft packed with helmets, shoulder to shoulder (landers-3)', '36 helmets in each, never a grid'),
+                ('artillery bursts: sand and water thrown up in columns', '15 bursts over 3.6 s, lumpy plumes, stains stay'),
+                ('smoke drifting along the shore', 'flat grey smoke drifting east along the beach'),
+                ('ships far out on a grey sea, haze', 'two warships at the bottom corners (the fleet is behind us); haze'),
+                ('beach obstacles (hedgehogs) in the shallows', 'small dark crosses along the waterline')]),
+    dict(place='the casemate inside', refs=[REFS + r for r in ('room-1-inside-to-slit.jpg', 'room-2-inside-doorway.jpg',
+                                            'bunker-3-casemate-gunner.jpg', 'bunker-4-embrasure-inside.jpg')], at=10.0,
+         items=[('thick raw concrete, board marks from the formwork', 'vertical panel joints, board lines, damp stains'),
+                ('the slit: bright beach in a dark wall', 'the slit wall darkest, the beach bright through it'),
+                ('a low heavy ceiling', '2.4 m, ribbed with steel beams (room-1)'),
+                ('a steel door frame in the back wall', 'angle-iron frame with rivets, a sill plate (room-2)'),
+                ('the MG42 on the sill, belt and ammo box', 'the 3D MG42 on its bipod, belt into the box'),
+                ('spent cases on the floor under the gun', '46 brass cases swept under the slit'),
+                ('ammo crates, a range card, a field telephone', 'two crates, the card over the slit, phone on a shelf'),
+                ('dim inside, lit from the slit', 'flat: back wall lit, slit wall in shadow, ceiling darkest'),
+                ('cables and a caged lamp (room-2)', 'a cable run under the ceiling, a caged lamp over the door')]),
 ]
 SHOT_CAST = {'s2': ['gunner', 'loader'], 's3': ['patriot', 'gunner', 'loader'], 's4': ['gunner', 'loader'],
              's5': ['patriot', 'gunner', 'loader'], 's6': ['gunner', 'loader'], 's7': ['patriot'],
@@ -110,13 +129,17 @@ OUTFIT = PC.OUTFIT
 HEIGHTS = PC.HEIGHTS
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS = []
+ALLOWED_MOUTHS = [('loader', 6.95, 7.45, 'startled: a gasp, mouth open'), ('gunner', 6.95, 7.45, 'startled: a gasp'),
+                  ('loader', 26.8, 27.85, 'blasted: mouth open in shock'), ('gunner', 26.8, 27.3, 'blasted')]
+PORTAL_OK = [('slit', 26.3, 33.5, 'shot 8 looks along the slit wall: we see the reveal side on, as you would'),
+             ('door', 14.5, 18.7, 'shot 5 sees the doorway nearly edge on from the far corner: its reveal')]
 ALLOWED_POPS = []
 SET_EXCLUDE = []
 TOUCHES = []
 FREE_MOVES = []
 SOUND_SOURCES = {}
-EFFECTS = []
-JOKE_PROPS = []
+EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule 15)
+JOKE_PROPS = []                                   # the poppy is a line, not a prop (it is on him: 'ain't even wearing')
 # Rule 38: front on by default; these views the shot demands (plan.py checks the rest face the lens)
 THREE_QUARTER_OK = [
     ('s2', 'gunner at the gun', 'shot 2 is from behind the crew while they fire (the beach past them)'),
@@ -134,10 +157,16 @@ THREE_QUARTER_OK = [
 ]
 # ====================================================================================================================
 
-S, FY = 0.8, 1420                                 # people's scale, floor line
-NECK_Y = FY - F.SOLE_Y * S
-PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
-XS = {w: 540 + p['at'][0] / PX_M for w, p in PLAN['PEOPLE'].items()}   # where each stands, from the plan
+
+import patriots3_room as ROOM    # noqa: E402  the casemate, drawn once from the plan
+import patriots3_act as ACT      # noqa: E402  who stands where, in what pose, every moment
+import patriots3_fx as PFX       # noqa: E402  the blast, dust, chips, muzzle light
+import patriots3_coast as COAST  # noqa: E402  shot 1, painted in layers
+import views as V                # noqa: E402
+import sets as S3                # noqa: E402
+from moves import lerp as MV_lerp   # noqa: E402
+
+M = V.M_PER_UNIT
 BLACK_AT = DUR
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
@@ -145,9 +174,28 @@ for ln in LINES:                                  # time each line to its record
         v = MA.line(ln['audio'])
         ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
         ln['_stretches'] = MA.pauses(v, 0.12)
-TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
-             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in 'AB'}
-BLINKS = {w: F.blinks(7 if w == 'A' else 11, 0.5, DUR, talking=True) for w in 'AB'}
+WHO = ('patriot', 'gunner', 'loader')
+TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if w in ln['who'].split('+')
+             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in WHO}
+BLINKS = {w: F.blinks(5 + i * 4, 3.6, DUR, talking=True) for i, w in enumerate(WHO)}
+KEY_FACES = [(20.45, 21.9), (ACT.T_MEET - 0.3, DUR)]   # no blink on the salute or the glance (Sam, 15 Oct)
+BLINKS = {w: [b for b in bl if not any(a - 0.3 <= b <= c for a, c in KEY_FACES)] for w, bl in BLINKS.items()}
+
+
+def chunk_times(ln):
+    """Each subtitle chunk comes up on its first word (Sam, 16 Oct). Until the recording is in, the words are spread
+    over the line by their syllables (a placeholder: never shown as final)."""
+    chunks = ln.get('chunks') or [ln['text']]
+    syl = [sum(mouths._syllables(w) for w in c.split()) for c in chunks]
+    tot = float(sum(syl)) or 1.0
+    out, acc = [], 0
+    for c, n in zip(chunks, syl):
+        out.append((ln['start'] + 0.1 + (ln['end'] - ln['start']) * acc / tot, c))
+        acc += n
+    return out
+
+
+CHUNKS = [(t, c, ln) for ln in LINES if ln.get('sub', True) for t, c in chunk_times(ln)]
 
 
 def shot_of(t):
@@ -155,7 +203,8 @@ def shot_of(t):
 
 
 def cam_for(t):
-    """The shot's camera from the plan (a sets.Cam); shot 9 pushes in on the soldiers over its last 3.4 s."""
+    """The shot's camera from the plan (a sets.Cam); shot 9 pushes in on the soldiers over its last 3.4 s; shot 8 is
+    kicked by the blast."""
     s = shot_of(t)
     if s == 's9':
         a, b = PL.CAMS['s9 start'], PL.CAMS['s9 end']
@@ -165,73 +214,285 @@ def cam_for(t):
         mix = lambda p, q: tuple(u + (v - u) * k for u, v in zip(p, q))
         return SETS.Cam(a['pos'], mix(a['look'], b['look']), focal=a['focal'] + (b['focal'] - a['focal']) * k)
     c = PL.CAMS[s]
-    return SETS.Cam(c['pos'], c['look'], focal=c['focal'])
+    return SETS.Cam(c['pos'], c['look'], focal=c['focal'], shake=PFX.shake(t) if s == 's8' else (0.0, 0.0))
 
 
-def state(who, t):
-    """Everything about one person at time t: look, arms, mouth, blink. Logs their eyeline for the check."""
-    c = CAST[who]
-    sp = dict(c, full=True, pose='custom', name=who)
-    rig = F.Rig(sp)
-    sp['arms'] = rig.pose('sides')
-    if who == 'A' and THUMP.b[0][0] <= t <= THUMP.b[-1][0]:
-        sp['arms']['R'] = rig.arm('R', THUMP.at(t), 'grip', 'out', strict=False)
-    shape = mouths.at(TRACK[who], t)
-    sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
-    sp['blink'] = F.blinking(t, BLINKS[who])
-    sp['look'] = F.look_at(XS[who], XS[LOOKS_AT[who]])
-    sp['breath'] = F.breath(t, 4.0, 1.5, 0.0 if who == 'A' else 0.4)
-    sp['tilt'] = filmkit.shifts(t, seed=1 if who == 'A' else 2)   # never frozen: held poses, small quick shifts (no sway)
-    eye = (XS[who], NECK_Y - 150 * S)
-    filmkit.eyeline(who, t, eye, (sp['look'], 0.0), (XS[LOOKS_AT[who]], eye[1]))
-    return sp
+def _dir(deg):
+    return (math.sin(math.radians(deg)), math.cos(math.radians(deg)))
 
 
-def mouths_seen(t):
-    """Every face on screen at t with its mouth as drawn, for the script and mouth audit (voices.py, rule 7):
-    (name, mouth, view in degrees (0 facing us), head height in pixels). Add anyone else drawn with a face."""
-    cam = cam_for(t)
-    return [(who, state(who, t)['mouth'], 0.0, 2 * CAST[who].get('hh', 90) * S * cam.z)
-            for who in 'AB' if visible(who, cam)]
+def view_yaw(cam, x, z, facing):
+    """Which way someone is seen (0 facing us, +90 facing screen right), from the line between them and the lens
+    only: a camera turning on the spot (shot 9's push-in) never changes how a person is drawn (cam.yaw_of used the
+    camera's own right, so the Patriot popped to three-quarter mid push-in)."""
+    fx, fz = facing if isinstance(facing, tuple) else _dir(facing)
+    tc = np.array((cam.pos[0] - x, cam.pos[2] - z))
+    tc /= np.linalg.norm(tc) or 1.0
+    right = (-tc[1], tc[0])
+    return math.degrees(math.atan2(fx * right[0] + fz * right[1], fx * tc[0] + fz * tc[1]))
 
 
-def visible(who, cam):
-    return abs(XS[who] - cam.cx) * cam.z <= 540 + 130 * S * cam.z
+def _tilt(cam, x, z, sp):
+    """Where someone stands on screen through a 3D camera at its real tilt (as lying.stand): the floor point, their
+    drawing scale, and (e, c) for views.person."""
+    (Xf, Yf), _ = cam.project((x, 0.0, z))
+    (_, _), km = cam.project((x, 0.9, z))
+    s = PC.scale_for(sp, km * M)
+    h = PC.HEIGHTS.get(sp.get('name'), 1.75)
+    (_, Yn), _ = cam.project((x, h * 1.41 / 1.75, z))
+    c = max(0.15, min(1.0, (Yf - Yn) / (928 * s)))
+    tc = np.array((cam.pos[0] - x, 0.0, cam.pos[2] - z))
+    tc /= np.linalg.norm(tc) or 1.0
+    (_, Ym), _ = cam.project((x, 1.2, z))             # measured at the arms' height, not the floor's: close up, a
+    (_, Yq), _ = cam.project(tuple(np.array((x, 1.2, z)) + tc * 0.42))   # hand held out at chest height barely drops
+    e = max(V.ELEV, (Yq - Ym) / s / (0.42 / (M * h / 1.75)))
+    return Xf, Yf, s, e, c
 
 
-def background(img, cam):
-    """The set, in Satire style: flat colour, one outline, hand-cut corners (never ruler-straight clip-art)."""
-    p = B.Pen(img, cam)
-    box = lambda x0, y0, x1, y1, f, sd: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, sd), f, (24, 20, 22), 3)
-    box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
-    box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
-    box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
-    for wx in (150, 290):                                                # fill (rule 2): the building opposite,
-        box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
-    box(110, 800, 430, 840, (176, 174, 168), 7)
-    box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
-    box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
-    box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)          # the table A thumps
+def look_of(a, t, cam):
+    """The pupils' sideways offset (-1..1) towards what this person is looking at, from where both are on screen."""
+    target = gaze(a, t)
+    if target is None:
+        return 0.0, None
+    (X, _), k = cam.project((a.x, 1.6, a.z))
+    (TX, TY), _ = cam.project(target)
+    v = (TX - X) / (0.45 * k)
+    if abs(TX - X) > 10:                               # a look that is meant always reads: never a dead-centre stare
+        v = math.copysign(max(0.3, abs(v)), v)
+    return max(-1.0, min(1.0, v)), (TX, TY)
+
+
+def gaze(a, t):
+    """What each person looks at (rule 25): a 3D point, or None (straight ahead: firing, spotting)."""
+    P = lambda who: next(b for b in ACT.everyone(t) if b.who == who)
+    if a.who == 'patriot':
+        if t >= ACT.T_TO_GUN + 2.0:
+            return None if t >= 34.4 else (0.0, 1.2, 1.6)             # at the gun: out at the beach
+        g, l = P('gunner'), P('loader')
+        return ((g.x + l.x) / 2, 1.55, (g.z + l.z) / 2)
+    if t < ACT.T_TURN:
+        return None
+    other = 'loader' if a.who == 'gunner' else 'gunner'
+    if ACT.T_GLANCE <= t < ACT.T_BACK or t >= ACT.T_MEET:
+        o = P(other)
+        return (o.x, 1.5, o.z)
+    p = P('patriot')
+    return (p.x, 1.6, p.z)
+
+
+def face(a, t, cam):
+    sp = {}
+    shape = mouths.at(TRACK[a.who], t)
+    sp['mouth'] = ('set' if a.who == 'gunner' else 'line') if shape == 'rest' else 'v:' + shape
+    sp['blink'] = F.blinking(t, BLINKS[a.who])
+    look, scr = look_of(a, t, cam)
+    sp['look'] = look
+    sp.update(a.sp)
+    return sp, scr
+
+
+def draw_actor(img, cam, a, t, log=True):
+    base = CAST[a.who]
+    sp, scr = face(a, t, cam)
+    sp = dict(base, **sp)
+    Xf, Yf, s, e, c = _tilt(cam, a.x, a.z, base)
+    if scr is not None and abs(scr[0] - Xf) > 10:      # the eyes point the way the target really is from the face
+        sp['look'] = math.copysign(max(0.3, abs(sp['look'])), scr[0] - Xf)
+    seen = sp['look']                                  # the way the eyes point on screen
+    yaw = view_yaw(cam, a.x, a.z, a.facing)
+    hy = view_yaw(cam, a.x, a.z, a.head_facing) if a.head_facing is not None else None
+    if hy is not None and abs(yaw) < 22.5 and (hy < 0) != (yaw < 0) and a.who != 'patriot':
+        yaw = math.copysign(max(abs(yaw), 0.5), hy)    # views.py mirrors the head with the body: a front-on soldier
+                                                       # (symmetric) is drawn mirrored so his head can turn that way
+    if V.snap(yaw)[1]:                                 # a mirrored drawing mirrors the pupils too
+        sp['look'] = -sp['look']
+    if not a.j.get('_dressed'):
+        PC.outfit(a.j, base)
+        a.j['_dressed'] = True
+    ring = [(a.x + 0.3 * math.cos(u), 0.004, a.z + 0.22 * math.sin(u)) for u in np.linspace(0, 2 * math.pi, 18)]
+    if all(cam.depth(q) > 0.2 for q in ring):         # the contact shadow on the floor
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        B.Pen(lay, S3.FLAT).poly([cam.project(q)[0] for q in ring], (0, 0, 0, 55), None)
+        img.alpha_composite(lay)
+    target = img
+    if a.roll:
+        target = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    j2 = V.person(target, S3.FLAT, Xf, Yf - 928 * s, s, sp, t, yaw, a.j, hy, tilt=(e, c))
+    if a.roll:                                         # tipped onto the door post: west on screen, at this camera
+        (wx, _), _ = cam.project((a.x - 0.3, 1.4, a.z))
+        (ox, _), _ = cam.project((a.x, 1.4, a.z))
+        (_, wy), _ = cam.project((a.x, 1.4 + 0.3, a.z))
+        side = max(-1.0, min(1.0, (wx - ox) / (abs(ox - wx) + 0.3 * abs(Yf - wy) + 1e-6)))
+        target = target.rotate(-a.roll * side, resample=Image.BICUBIC, center=(Xf * B.SS, Yf * B.SS))
+        img.alpha_composite(target)
+    if log:
+        eye = (Xf, Yf - (928 + 150) * s * c)            # (the face's x is the feet's: people stand upright)
+        if scr is not None:
+            filmkit.eyeline(a.who, t, eye, (seen, 0.0), scr)
+    return j2
+
+
+def _project_patch(cam):
+    """views.project swapped for the real camera while the MG42 kit draws (its parts are 3D solids in world metres):
+    the gun is drawn in true perspective in every shot (end on in shot 9), never through a person's flat frame."""
+    return lambda p3, yaw: (cam.project(p3)[0], -cam.depth(p3))
+
+
+def draw_gun3d(img, cam, fire_t, t):
+    """The MG42 on its bipod on the sill, the belt into its box: each part a solid (the hull of its two sections),
+    far parts first; parts at or behind the lens are left out (shot 9: the muzzle is beside the camera)."""
+    g = ACT.gun_at(fire_t)
+    firing = fire_t is not None and fire_t >= 0
+    flash = 1.0 if (firing and int(round(fire_t * 12)) % 3 != 2) else 0.0
+    p = B.Pen(img, S3.FLAT)
+    real = V.project
+    V.project = _project_patch(cam)
+    try:
+        path = PC.belt_path(ACT.REST.belt_points(), 48)
+        if all(cam.depth(tuple(q)) > 0.3 for q in path):
+            PC.draw_box(p, lambda w: w, 0, ACT.REST.box_at)
+            PC.draw_belt(p, lambda w: w, 0, path, g.a, -(fire_t or 0.0) * 20 * 0.032 if firing else 0.0)
+        P = lambda w: V.project(w, 0)
+        parts = []
+        for name, col, ring, centre, kind in PC.mg42_solids(g):
+            if min(cam.depth(tuple(q)) for q in ring) < 0.2:
+                continue
+            pts, deps = zip(*(P(tuple(q)) for q in ring))
+            parts.append((sum(deps) / len(deps), name, col, list(pts)))
+        for hinge, foot in PC._bipod(g):
+            d = PC._unit(foot - hinge)
+            ring = PC._section(g, hinge, d, 0.008, 0.008, 'cyl') + PC._section(g, foot, d, 0.008, 0.008, 'cyl')
+            if min(cam.depth(tuple(q)) for q in ring) < 0.2:
+                continue
+            pts, deps = zip(*(P(tuple(q)) for q in ring))
+            parts.append((sum(deps) / len(deps), 'bipod', PC.GUN_D, list(pts)))
+        parts.sort(key=lambda q: q[0])
+        for _, name, col, pts in parts:
+            hull = V._hull(pts)
+            if len(hull) >= 3:
+                p.poly(hull, col, INK, 2.0)
+            if name == 'jacket':
+                PC._vents(p, P, g)
+        if firing:
+            PC.cases(p, lambda w: w, 0, g, fire_t)
+        if flash:
+            tip = g(1.225)
+            if cam.depth(tip) > 0.3:
+                (X, Y), k = cam.project(tip)
+                (bx, by), _ = cam.project(g(0.9))
+                dx, dy = X - bx, Y - by
+                n = math.hypot(dx, dy) or 1.0
+                PC.PC.muzzle_flash(p, (X, Y), (dx / n, dy / n), 0.2 * k, n < 0.1 * k, int(fire_t * 12))
+            else:                                     # beside the lens (shot 9): the flash floods in at the frame edge
+                q = g(1.0)
+                if cam.depth(q) > 0.15:
+                    (X, Y), _ = cam.project(q)
+                    X = min(max(X, -60), 1140)
+                    _edge_flash(img, X, Y, int(fire_t * 12))
+    finally:
+        V.project = real
+
+
+def _edge_flash(img, X, Y, seed):
+    """A big lumpy muzzle flash at a screen point (house style: no star, no glow)."""
+    rng = np.random.default_rng(seed)
+    p = B.Pen(img, S3.FLAT)
+    r = 300
+    pts = [(X + r * rng.uniform(0.6, 1.0) * math.cos(a), Y + r * 0.8 * rng.uniform(0.6, 1.0) * math.sin(a))
+           for a in np.linspace(0, 2 * math.pi, 13, endpoint=False)]
+    p.poly(pts, (255, 176, 60), INK, 2.0)
+    p.poly([(X + (x - X) * 0.6, Y + (y - Y) * 0.6) for x, y in pts], (255, 232, 120), None)
+    p.poly([(X + (x - X) * 0.3, Y + (y - Y) * 0.3) for x, y in pts], (255, 255, 244), None)
+
+
+def hold_gun(a, cam, t):
+    """Whoever is at the gun: both hands put on its grips where the camera really sees them (each grip's screen point
+    turned back into a hand target in their own frame), and the gun drawn with them, their hands over it."""
+    g = ACT.gun_at(a.fire_t)
+    base = CAST[a.who]
+    j = a.j
+    Xf, Yf, s, e, c = _tilt(cam, a.x, a.z, base)
+    deg, mirror = V.snap(view_yaw(cam, a.x, a.z, a.facing))
+    flip = -1 if mirror else 1
+    ang = math.radians(deg)
+    Yn = Yf - 928 * s + j.get('bob', 0.0) * s
+    unit = M * PC.HEIGHTS.get(base['name'], 1.75) / 1.75
+    tc = np.array((cam.pos[0] - a.x, cam.pos[2] - a.z))
+    tc /= np.linalg.norm(tc) or 1.0
+
+    def target(W):
+        (X, Y), _ = cam.project(W)
+        d = float(np.dot((W[0] - a.x, W[2] - a.z), tc)) / unit
+        px = (X - Xf) / (s * flip)
+        py = 928.0 + ((Y - Yn) / s - 928.0) / c
+        x, z, y = px * math.cos(ang) - d * math.sin(ang), px * math.sin(ang) + d * math.cos(ang), py - e * d
+        return V.leaned((x, y, z), -j.get('lean', 0.0))
+    grips = [target(g(0.39, -0.115)), target(g(0.13, -0.075))]
+    near = lambda side, q: math.dist(j['sh' + side], q)
+    sides = ('R', 'L') if near('R', grips[0]) + near('L', grips[1]) <= near('L', grips[0]) + near('R', grips[1]) \
+        else ('L', 'R')
+    for side, q in zip(sides, grips):
+        if a.reach < 1.0:                              # still reaching for it: part way from where the hand was
+            q = MV_lerp(j['wr' + side], q, a.reach)
+        V.arm_to(j, side, q, 'down', 'fist')
+
+    def gun(p, j2):
+        draw_gun3d(img_ref[0], cam, a.fire_t, t)
+    gun.held = True
+    j['props'] = [gun]
+    j['grip'] = {'L', 'R'}
+
+
+img_ref = [None]
+
+
+def on_screen(cam, a):
+    return any(cam.visible((a.x, y, a.z), margin=60) for y in (0.2, 0.9, 1.6))
 
 
 def picture(t):
     """The frame WITHOUT captions or title (those go on last, so wording notes never re-render a picture)."""
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
+    if shot_of(t) == 's1':
+        return COAST.picture(t)
     cam = cam_for(t)
-    img = B.canvas()
-    background(img, cam)
-    for who in 'AB':
-        if visible(who, cam):
-            B.person(img, cam, XS[who], NECK_Y, S, state(who, t), t)
+    img = B.canvas((0, 0, 0))
+    ROOM.draw(img, cam, t)
+    PFX.lintel_bite(img, cam, t)
+    landed = [pc for pc in PFX.pieces() if t >= pc.t0 and PFX.FX.landed_at(pc) is not None and t >= PFX.FX.landed_at(pc)]
+    for pc in landed:                                   # settled on the floor: drawn as the floor, before people
+        PFX.FX.draw_piece(img, cam, pc, t)
+    people = [a for a in ACT.everyone(t) if on_screen(cam, a)]
+    items = [(cam.depth((a.x, 0.9, a.z)), 'p', a) for a in people]
+    items += [(cam.depth(pc.at(t)[0]), 'c', pc) for pc in PFX.pieces() if t >= pc.t0 and pc not in landed]
+    items += [(cam.depth(pf[0]), 'd', pf) for pf in PFX.puffs(t)]     # dust: behind whoever is nearer than it
+    img_ref[0] = img
+    if not any(a.fire_t is not None or a.holds for a in ACT.everyone(t)):
+        items.append((cam.depth(ACT.GUN(0.6)), 'g', None))
+    for _, kind, a in sorted(items, key=lambda q: -q[0]):
+        if kind == 'p':
+            if a.holds:
+                hold_gun(a, cam, t)
+            draw_actor(img, cam, a, t)
+        elif kind == 'c':
+            PFX.FX.draw_piece(img, cam, a, t)
+        elif kind == 'd':
+            PFX.draw_puff(img, cam, a)
+        else:
+            draw_gun3d(img, cam, None, t)
+    PFX.blast_flash(img, cam, t)
+    PFX.dust(img, cam, t)
+    ROOM.foreground(img, cam)
+    PFX.muzzle_light(img, t)
     return img
 
 
 def caption_at(t):
-    for i, ln in enumerate(LINES):
-        nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
-            return ln['text']
+    for i, (a, c, ln) in enumerate(CHUNKS):
+        nxt = CHUNKS[i + 1][0] if i + 1 < len(CHUNKS) else 1e9
+        if a <= t < min(nxt, ln['end'] + 0.35):
+            return c
     return None
 
 
@@ -240,8 +501,6 @@ def overlay(img, t):
         c = caption_at(t)
         if c:
             PP.caption(img, c)
-        if t < 2.0:
-            B.title_lines(img, TITLE, **TITLE_AT, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
     return img
 
 
@@ -250,20 +509,18 @@ def frame_image(t):
 
 
 def soundtrack(stems=False):
+    """Voices only (none recorded yet: Sam, 27 Oct, 'subtitles only for now'); the effects come with his files."""
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
+    voice, rest = np.zeros(n), np.zeros(n)
     for ln in LINES:
         if ln['_voice'] is not None:
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
-    # Sound effects go in by the moment they really start, not the start of their file, e.g.
-    #   filmkit.place(rest, load('source/audio/NAME-slam.mp3'), at=1.6, sr=SR)   (lands the slam on the contact frame)
-    # Outdoor recordings and ambience: cut wind rumble (sound_questions asks about it).
     mix = voice + rest
     end = int(BLACK_AT * SR)
-    if np.abs(voice).max() > 1e-6:                              # -16 LUFS, levelled gently, never squashed by more
-        mix, g = MA.master(mix, end)                             # than 3 dB (hard limiting crackles on a phone)
+    if np.abs(voice).max() > 1e-6:
+        mix, g = MA.master(mix, end)
         voice, rest = voice * g, rest * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
@@ -272,150 +529,141 @@ def soundtrack(stems=False):
 def checks():
     """Plan checks: seconds. Raises on the first batch of faults; prints the subtitles to proofread."""
     E.print_subtitles(caption_at, BLACK_AT, FPS)
+    faults = []
     windows = [(ln['start'] + a, ln['start'] + b) for ln in LINES for a, b in ln['_stretches']]
-    faults = E.check_mouths(sorted(x for w in 'AB' for x in TRACK[w]), windows)
-    if any(ln['_voice'] is not None for ln in LINES):
-        _, voice, rest = soundtrack(stems=True)
-        faults += filmkit.voice_balance(voice, rest, SR, windows)
-        n = int((DUR + 0.3) * SR)
-        raw = np.zeros(n)
-        for ln in LINES:
-            if ln['_voice'] is not None:
-                s = int(ln['start'] * SR)
-                raw[s:s + len(ln['_voice'])] += ln['_voice'][:n - s]
-        faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
-    faults += title_check()
-    mix, voice, rest = soundtrack(stems=True)
-    faults += filmkit.hiss_check(mix, SR, BLACK_AT)               # no steady hiss (Sam, 19 Oct)
-    for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
-                                     cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
-        print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him
+    faults += E.check_mouths(sorted(x for w in WHO for x in TRACK[w]), windows)
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
 
 # ------------------------------------------------------------------------------------------------ the audit
-# audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
-# (everyone at one distance, on the floor line), so its world is the frame in metres. scene(t) gives the people and
-# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 12):
-# list only what to leave out, SET_EXCLUDE = [(name, why)]. A film with a 3D set and a
-# camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
-# copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
-# long thing with .along).
-
-
-def project(cam, P):
-    X = P[:, 0] / PX_M + 540
-    Y = FY - P[:, 1] / PX_M
-    return (X - cam.cx) * cam.z + 540, (Y - cam.cy) * cam.z + 960, np.full(len(P), 5.0)
-
-
-def scene(t):
+def scene(t, faces=None):
+    """Everyone and everything solid at time t, as picture(t) places them (audit.py, rules 5 and 6); the set's walls
+    and things join by themselves (sets.solids, rule 12). `faces` collects each face drawn for voices.py."""
     import audit
-    import clipcheck as CC
-    cam = cam_for(t)
+    cam = cam_for(t) if shot_of(t) != 's1' else None
     out = []
-    for who in 'AB':
-        if visible(who, cam):
-            x = (XS[who] - 540) * PX_M
-            sol = audit.simple(who, x, 0.0)
-            if who == 'A':                                # his thumping hand (its target is in his own units)
-                hx, hy = THUMP.at(t)
-                sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
-            out.append(audit.Thing(who, sol))
-    return out                                            # the walls, the table and every THING: from PLAN (rule 12)
+    if cam is None:
+        return out
+    for a in ACT.everyone(t):
+        if not on_screen(cam, a):
+            continue
+        h = PC.HEIGHTS.get(CAST[a.who]['name'], 1.75)
+        out.append(audit.Thing(a.who, audit.placed(a.who, a.j, a.x, a.z, _dir(a.facing), h, sp=CAST[a.who])))
+        if faces is not None and a.who != 'patriot':  # the Patriot's mouth is under the balaclava
+            sp, _ = face(a, t, cam)
+            yaw = view_yaw(cam, a.x, a.z, a.head_facing if a.head_facing is not None else a.facing)
+            Xf, Yf, s, e, c = _tilt(cam, a.x, a.z, CAST[a.who])
+            faces.append((a.who, sp['mouth'], yaw, 2 * s * CAST[a.who].get('hh', 90)))
+    return out
 
 
-def title_check():
-    """The title must not cover anyone: the title and each person alone, on a frame where the title shows."""
-    t = 1.0
-    title = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-    B.title_lines(title, TITLE, **TITLE_AT)
-    people = {}
-    for who in 'AB':
-        if visible(who, cam_for(t)):
-            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
-            people[who] = lay
-    return filmkit.title_clear(title, people)
+def mouths_seen(t):
+    faces = []
+    scene(t, faces)
+    return faces
 
 
 def audits():
-    """The general audit: each person alone over every frame they are on screen, the actions on every frame,
-    the eyelines. Returns faults."""
+    """The general audit: each person alone over every frame they are on screen; the eyelines. Returns faults."""
     def alone(who):
         def draw(t):
             lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
+            a = next(x for x in ACT.everyone(t) if x.who == who)
+            draw_actor(lay, cam_for(t), a, t)
             return lay
         return draw
     actors = {}
-    for who in 'AB':
-        for shot, a, b in SHOTS:
-            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if visible(who, cam_for(i / FPS))]
+    for who in WHO:
+        for shot, a, b in SHOTS[1:]:
+            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if shot_of(i / FPS) == shot
+                  and on_screen(cam_for(i / FPS), next(x for x in ACT.everyone(i / FPS) if x.who == who))]
             if ts:
                 actors[f'{who} [{shot}]'] = (ts, alone(who))
     filmkit.EYES.clear()
-    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=STILL_OK, allow=AUDIT_ALLOW)
     faults += filmkit.check_eyelines()
-    rig = F.Rig(dict(CAST['A'], full=True, pose='custom'))
-
-    def arm_rule(target):
-        el, wr = rig.arm('R', target, 'grip', 'out', strict=False)[:2]
-        return filmkit.check_joints({'sh': rig.shoulder('R'), 'el': el, 'wr': wr, 'head': (0, -150)},
-                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90),
-                                     ('side', 'el', 'sh', 0)])
-    faults += THUMP.audit(arm_rule, label='A thumps the table')
-    faults += moves.audit()                                  # the movement library's own checks (gaits, poses)
+    faults += moves.audit()
     return faults
 
 
+STILL_OK = ()
+AUDIT_ALLOW = [   # (name [shot], from, to, why): on purpose
+    ('gunner [s8]', ACT.T_BLAST, ACT.T_BLAST + ACT.G_FLIGHT + 0.1, 'thrown across the room by the blast (Sam, 27 Oct)'),
+    ('loader [s8]', ACT.T_BLAST, ACT.T_BLAST + ACT.L_FLIGHT + 0.1, 'knocked back by the blast, staggering'),
+    ('loader [s8]', 31.9, 32.1, 'a straight turn to face the gun (house standard: one drawing to the other)'),
+    ('gunner [s8]', 31.9, 32.1, 'a straight turn to face the gun (house standard: one drawing to the other)'),
+    ('gunner [s9]', 39.2, 40.9, 'the push-in: the camera turns and zooms, so every shape moves'),
+    ('loader [s9]', 39.2, 40.9, 'the push-in: the camera turns and zooms, so every shape moves'),
+    ('patriot [s9]', 39.2, 40.9, 'the push-in: the camera turns and zooms, so every shape moves'),
+]
+
+
+def _fx_cam():
+    return SETS.Cam((0.0, 1.5, -3.0), (0.0, 1.5, 0.0), focal=1000)
+
+
+EFFECTS[:] = [
+    ('muzzle flash', 'burst', lambda im: PC.PC.muzzle_flash(B.Pen(im, S3.FLAT), (540, 960), (1.0, 0.0), 120, False, 3)),
+    ('muzzle flash beside the lens (shot 9)', 'burst', lambda im: _edge_flash(im, 540, 960, 5)),
+    ('the blast at the slit', 'burst', lambda im: PFX.FX.flash(im, _fx_cam(), (0.0, 1.5, 0.0), 1.6, seed=3)),
+    ('a dust puff', 'smoke', lambda im: PFX.draw_puff(im, _fx_cam(), ((0.0, 1.5, 0.0), 0.4, 200, 7))),
+    ('a shell burst on the beach', 'burst', lambda im: COAST.burst(im, COAST.cam(1.0), S3.pen(im), 1.05, 1.0, -20, 60,
+                                                                    'sand')),
+]
+
+
 def cast_sheet(out):
-    """Everyone side by side, with the body landmarks (waist, hips, knee) drawn across to check the clothes against,
-    and a 1.75 m person and a 1 m ruler for scale (sizes.scale_ref). Add every OTHER view each character appears in
-    (from above, a close-up, mid-action), any new prop beside the scale person, and for the film's key reaction a
-    numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
-    import landmarks
-    import sizes
-    from PIL import ImageDraw
-    img = Image.new('RGBA', (1080, 1080), (230, 226, 220, 255))
-    for i, who in enumerate('AB'):
-        sp = dict(CAST[who], full=True, pose='custom')
-        sp['arms'] = F.Rig(sp).pose('sides')
-        B.person(img, B.Cam(1.0, 540, 960), 300 + 480 * i, 260, 0.62, sp, 0.0)
-    d = ImageDraw.Draw(img)
-    landmarks.draw(d, 540, 260, 0.62, 1000)
-    sizes.scale_ref(d, 520, 260 + 928 * 0.62, 0.62 / landmarks.V.M_PER_UNIT)
-    img.convert('RGB').save(out)
+    PC.sheet(out)
 
 
 def LINE_SUBJECTS():
-    """Each of the cast alone, large, for the line-work check (linecheck.py)."""
-    def one(who):
-        def d(im):
-            sp = dict(CAST[who], full=True, pose='custom')
-            sp['arms'] = F.Rig(sp).pose('sides')
-            B.person(im, B.Cam(1.0, 540, 960), 540, 420, 1.45, sp, 0.0)
-        return d
-    return [(who, one(who)) for who in CAST]
+    return PC.LINE_SUBJECTS()
+
+
+_BLACK = "his black balaclava and jacket count as ink, so the check's 'house' weight is the jacket (22 px): his real outlines read as thin"
+LINE_OK = [('patriot', 'line weight', x, y) for x, y in ((485, 182), (583, 183), (495, 210), (574, 210), (321, 616),
+                                                         (743, 615), (767, 615))] + \
+          [('gunner', 'line weight', 584, 181)]
+LINE_OK_WHY = {'patriot': _BLACK, 'gunner': 'the helmet rim on the approved cast drawing (cast stage, 27 Oct)'}
+
+
+def stills_sheet(out, times):
+    from PIL import ImageDraw, ImageFont
+    tiles = []
+    for t in times:
+        im = frame_image(t).convert('RGB').resize((360, 640))
+        d = ImageDraw.Draw(im)
+        d.rectangle((0, 0, 150, 30), fill=(0, 0, 0))
+        d.text((6, 4), f'{shot_of(t)}  {t:.1f}s', fill=(255, 255, 255),
+               font=ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 18))
+        tiles.append(im)
+    cols = min(5, len(tiles))
+    rows = (len(tiles) + cols - 1) // cols
+    sheet = Image.new('RGB', (cols * 364 + 4, rows * 644 + 4), (255, 255, 255))
+    for i, tile in enumerate(tiles):
+        sheet.paste(tile, (4 + (i % cols) * 364, 4 + (i // cols) * 644))
+    sheet.save(out, quality=86)
 
 
 def main():
     a = sys.argv[1:]
     if a[0] == 'cast':
-        B.SS = 1
         cast_sheet(a[1])
     elif a[0] == 'stills':
         B.SS = 1
         os.makedirs(a[1], exist_ok=True)
         for x in a[2:]:
             frame_image(float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=88)
+    elif a[0] == 'sheet':
+        B.SS = 1
+        stills_sheet(a[1], [float(x) for x in a[2:]] or [(s[1] + s[2]) / 2 for s in SHOTS])
     elif a[0] == 'check':
         B.SS = 1
         checks()
         f = audits()
         import audit
-        f += [x[len('AUDIT: '):] for x in audit.check(sys.modules[__name__])]   # collisions, pop-ins (preflight too)
+        f += [x[len('AUDIT: '):] for x in audit.check(sys.modules[__name__])]
         print('\n'.join(['AUDIT: ' + x for x in f]) or 'audit: clean')
     elif a[0] == 'final':
         small = '--small' in a
@@ -429,15 +677,8 @@ def main():
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
 import limbs                     # noqa: E402
 limbs.install(B)                 # natural arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
-# Movement (guides/movement-system-plan.md, guides/reference-pack.md), built to order: use only what the script needs.
-#   views.person(img, cam, x, y, s, sp, t, yaw, pose)   anyone from any angle (front, three-quarter, side, back)
-#   moves.gait / travel / pace, moves.pose(sp, 'arms_folded'), moves.sit_down / stand_up, moves.punch / kick / sword /
-#   hit_react / fall, moves.driving / car_in / car_out; stage.Stage(series.Room(...)) for people on a perspective floor.
-#   Turns: the straight 180 (one drawing to the other). No sound effects unless the script asks.
-import views                     # noqa: E402,F401
 import moves                     # noqa: E402,F401
-import stage                     # noqa: E402,F401
-import perform                   # noqa: E402,F401  natural performance: follow-through, beat bounce, varied faces
+import perform                   # noqa: E402,F401
 
 if __name__ == '__main__':
     main()

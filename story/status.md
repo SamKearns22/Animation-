@@ -12,6 +12,11 @@ Read this first in any new session, after CLAUDE.md.
   Sam's answers and his go.
 - 27 Oct: Sam answered all and said GO; three more sounds in (kept off GitHub). Reference photos blocked here:
   ask Sam. NEXT: BUILDING, Opus high, fresh chat: read `notes/patriots-3.md` "Where things stand".
+- 27 Oct (building, Opus): Sam sent the missing photos (room, doorway lean, salute, blasts, beach from above). Built,
+  subtitles only (Sam: no dialogue for now): the casemate (`patriots3_room.py`), the coast (`patriots3_coast.py`), the
+  blast (`patriots3_fx.py`), all the acting (`patriots3_act.py`), the film (`patriots3.py`). Pre-flight: shared checks
+  clean; named: 10 subtitles too quick (placeholder timing), shot 9 is 9.1 s (chosen). Stills sheet and five clips
+  sent. NEXT: Sam's yes or notes; then the animatic (Sonnet, fresh chat).
 
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in

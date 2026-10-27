@@ -348,6 +348,8 @@ def patriot_jacket(p, view, sp):
             p.poly([(o - w, -24), (o + w * (1 if view == 'front' else 0.8), -24), (o + w * (1.18 if view == 'front' else 0.9), 30),
                     (o - w * 1.18, 30)], B.lt(JACKET, 1.35), INK, 2.4)
         p.line([(o, 30), (o + 6, 200), (o + 12, 340), (o + 6, bottom - 26)], (96, 96, 104), 2.2)
+        if view in ('front', 'three'):                 # the poppy on his left breast (Sam, 27 Oct: yes)
+            poppy(p, o + sw * (0.48 if view == 'front' else 0.3), 104)
     else:                                               # from behind: the collar and the back seam
         o = -0.22 * sw if view == 'three_back' else 0.0
         p.poly([(-44, -92), (44, -92), (48, 6), (-48, 6)], BALA, INK, 2.4)
@@ -357,6 +359,24 @@ def patriot_jacket(p, view, sp):
     p.poly([(l + 2, bottom - 26), (r - 2, bottom - 26), (r, bottom), (l, bottom)], B.dk(JACKET, 0.8), INK, 2.0)
     for x in np.linspace(l + 14, r - 14, 12):          # the ribbed hem
         p.line([(x, bottom - 22), (x, bottom - 4)], (24, 24, 28), 1.2)
+
+
+POPPY, POPPY_D, LEAF = (206, 32, 36), (150, 20, 26), (52, 110, 52)
+
+
+def poppy(p, x, y, r=17.0):
+    """A remembrance poppy pinned to the jacket: a green leaf behind, four lumpy red petals, a black centre."""
+    p.poly([(x + r * 0.2, y + r * 0.3), (x + r * 1.5, y + r * 1.2), (x + r * 0.5, y + r * 1.0)], LEAF, INK, 1.6)
+    pts = []
+    for i in range(32):
+        a = 2 * math.pi * i / 32
+        rr = r * (0.78 + 0.22 * abs(math.cos(2 * a)))
+        pts.append((x + rr * math.cos(a), y + rr * 0.92 * math.sin(a)))
+    p.poly(pts, POPPY, INK, 1.8)
+    for a in (0.79, 2.36, 3.93, 5.5):
+        p.line([(x + r * 0.3 * math.cos(a), y + r * 0.3 * math.sin(a)), (x + r * 0.7 * math.cos(a), y + r * 0.7 * math.sin(a))],
+               POPPY_D, 1.4)
+    p.ell(x, y, r * 0.3, r * 0.3, (24, 22, 22), INK, 1.2)
 
 
 def _eagle(p, x, y, k=1.0):
