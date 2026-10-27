@@ -1,38 +1,16 @@
 # Notes for Patriots 3 (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
-- **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (field artillery, battlefield ambience, distant shots,
-  German "see enemy", German "fire at target"). First thing in the new chat: ask Sam to attach them again.
-- **Done (27 Oct, building chat):** references filed; the Patriot rebuilt on the satire kit; the Gunner and the Loader
-  (the brief's "spotter"); the MG42 as a 3D prop (belt, ammo box, flash, kick, falling cases); the bunker slit from
-  three cameras; a silent firing test clip. Sam's one note (the Loader's reach read as a cuddle) is fixed. Sam's brief
-  is in: `prompts/patriots-3.md` (word for word). No recordings yet.
-- **Next: PLANNING, Opus high, fresh chat. Plan only until Sam says go.** Read `guides/satire.md`,
-  `guides/film-quality-rules.md`, this file and the brief. Start `source/patriots3.py` from `source/satire_template.py`
-  (reuse `patriots3_cast.py` and `patriots3_bunker.py`). Then in ONE message: the brief as a checklist (below), all
-  questions with a recommended answer each, the missing references, the sound list, the ambition estimate (rule 24);
-  then the plan in metres and the composition sheet (rule 11).
-- **Points to raise at planning (my reading of the brief):**
-  - New builds: the opening from high above the coast (black cliffs flashing with gunfire, artillery into sand and
-    spray, six landing craft full of troops); the bunker's inside (back wall, the doorway the Patriot leans in, the
-    room); the explosion hitting the lip of the slit and the soldiers stumbling back; the Patriot at the MG42 (gun pose
-    for him); the camera in the slit facing in; the final push-in on the two soldiers' glance.
-  - References still missing: a bunker interior with its doorway (from inside); the Normandy cliffs/bluffs from the sea
-    or air; a person leaning in a doorway; the Nazi salute is in the brief (draw from a reference, ask Sam for one).
-  - Bleep: "s***" (shit): ask whether he says the word or leaves a gap (rule 27).
-  - Spelling on screen: the brief has "Furhër"; the usual spelling is "Führer". Ask which goes in the subtitle.
-  - TikTok: a Nazi salute and "Heil!" may be limited or removed by moderation even as satire; ask Sam if he wants it
-    as written, cut away mid-salute, or framed so it reads as the joke. Don't change it without his answer.
-  - Voices: Sam records the Patriot, the Gunner's and Spotter's lines ("Who are you?", "Ah, you are with the
-    Furhër?", "Heil!"). His two German game clips could cover the opening barks.
-  - Sound effects the script names: machine-gun fire, artillery, the explosion, the howl of gunfire. Sam's three beach
-    files cover artillery and ambience; there is no MG42 burst yet (ask).
-  - Who says "Who are you?" (the brief doesn't say): recommend the Gunner.
-- **Losses and my additions Sam should know about:** see "My additions" below (all still in).
-- **Rule requests and proposals not yet in a guide:** none (searched this file: no "rule", "every film", "from now on",
-  "proposed").
-- **Files to open:** `prompts/patriots-3.md`; this file; `source/patriots3_cast.py` (people, MG42; `sheet`);
-  `source/patriots3_bunker.py` (crew, slit, cameras; `sheet`, `clip`); `references/patriots-3/`.
+- **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (battlefield-ambience, distant-shots, german-angriff,
+  german-see-enemy, german-fire-at-target). In a new chat, ask Sam to attach them again first thing.
+- **27 Oct, planning chat (Opus):** Sam re-attached the five sounds (filed). `source/patriots3.py` started from the
+  template (STORY: lines, nine shots, timings guessed; drawing below STORY still the template's); the plan in metres
+  is `source/patriots3_plan.py` (`python3 source/plan.py patriots3 check`: clean); the rough composition sheet is
+  `source/patriots3_compose.py` (review/patriots3-composition.jpg). Questions, sound list and ambition sent to Sam
+  (below, "Planning"). **Waiting for Sam's answers and his go.** Plan only until he says go.
+- **Next after his answers:** fold them in, then recordings (`python3 source/voices.py FILES` as they arrive) and the
+  rehearsal clips (rule 8). Building is Opus high (new sets: the coast, the room's inside; new moves).
+- **Rule requests and proposals not yet in a guide:** none.
 
 ## What Sam has sent (27 Oct; he said "noted" only until the drawing request)
 - References, `references/patriots-3/`: lander-pov-1..5 (D-Day seen from a landing craft, facing the beach),
@@ -75,6 +53,36 @@
 | mg42-2, -3 | firing over the beach, big flash, hedgehogs | yes (flash in the house style: lumpy, no star) |
 | bunker-1..4 | concrete casemate, embrasure, log roof, camouflage | concrete slit, earth bank and grass on top |
 
+## Planning (27 Oct)
+Composition sheet sent: 27 Oct, review/patriots3-composition.jpg
+
+**The plan in metres** (`source/patriots3_plan.py`): x east along the slit wall, z north to the sea, y up; the Gunner's
+spot at the gun is (0, 0). Casemate 4.6 m wide x 3.5 m deep (x -2.6 to 2.0, z -2.4 to 1.11), ceiling 2.4 m. The slit
+in the north wall (x -1.3 to 0.62, sill 0.99 m, top 2.05 m, wall 0.7 m thick) shows the beach. The door is in the
+back wall behind the gun and to its right (x 0.2 to 1.1, 1.95 m high) onto a covered concrete passage that runs east
+to daylight. Marks: crew at the gun; turned to the door; facing the Patriot (side on to s6); after the blast against
+the west wall (Gunner -1.7, -1.35; Loader -2.05, -0.6). Patriot: in the doorway (0.62, -2.32) leaning on the west
+post; approached (0.75, -0.7); at the gun (0, 0).
+
+**Shots** (times are guesses until the recordings): 1 coast from high above (0-3.6) | 2 behind the crew, firing, the
+Loader's barks, "Small boat problem?" off, they turn (3.6-7.6) | 3 over their helmets, the Patriot in the doorway
+(7.6-12.4) | 4 the crew from in front, the battle behind: a look at each other, "Who are you?" (12.4-14.5) | 5 the
+wide from the back-right corner: he walks up (14.5-18.7) | 6 the crew side on: "Führer?", the salute, "Heil!"
+(18.7-21.5) | 7 the Patriot, arms darting (21.5-26.3) | 8 the wide: the blast, they're thrown to the west wall, he
+walks to the gun, "Anyway..." (26.3-33.5) | 9 from the slit: head shake, "poppies", he fires, the push-in on their
+glance (33.5-42.6) | sign-off 2 s. About 44 s in all.
+
+**Sound list (rule 26):** battlefield ambience (have; booms at 10.7, 28.7, 42.4, 60.4, 82.7 s for the artillery);
+distant shots for the cliffs (have); German barks (have: see-enemy, fire-at-target, angriff); MG42 burst close up
+(MISSING); explosion close up with debris (MISSING); bleep (kit); slurp (sign-off).
+
+**Ambition (rule 24):** new builds: the coast from the air (cliffs, beach, six packed craft, bursts, flashes); the
+room's inside and the passage; Patriot poses (lean in the doorway, flapping arms, at the gun firing); the salute; the
+blast, the stumble, dust and chips settling (rules 32-33); the room lit by the flash; the push-in. Reused: the cast,
+the MG42, the slit, the beach backdrop, prepper_fx flashes/debris/smoke/room flash, moves.travel. Risky moves to
+rehearse as clips: the turn round; the salute and the flapping; the blast and stumble; firing from the slit with the
+push-in. Estimate: about 20-25% of a week (the coast about 5%).
+
 ## Decisions made (my choices, Sam can change any)
 - The Patriot is the same man as before: balaclava, black jacket with grey sleeves, combat trousers, PP and doodle badges.
 - Gunner: about 30, lean, stubble, narrowed eyes, older tunic with the dark collar, jackboots. Loader: about 18, fair,
@@ -87,6 +95,8 @@
 - A camouflage net on the Gunner's helmet; a stick grenade in the Loader's belt; binoculars for the Loader.
 - The beach through the slit: ships on the horizon, two landing craft, hedgehogs, smoke puffs.
 - Earth bank and grass over the bunker; board marks on the concrete.
+- In the room: ammo crates (front right), a shelf with a field telephone (east wall), a range card above the slit.
+- Asked, not added: a red poppy on the Patriot's jacket.
 
 ## Notes
 | # | shot | time | note | status |
