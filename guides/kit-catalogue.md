@@ -77,3 +77,11 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Cut-off body pieces that fall, settle and lie as a 3D pile | `source/lying.py` |
 | Hook Text beside a person, three rows (`--w`); 😅 emoji | `source/hook_text.py`, `1f605.png` |
 | Story post still (Maul close-up, cranberry lettering) | `animations/maul-icc-story.png` |
+
+## Added 27 Oct (Patriots 3)
+| what | file |
+|---|---|
+| The Patriot (balaclava, PP badges) rebuilt on views.person: every view, faces | `source/patriots3_cast.py` (`PATRIOT`) |
+| German WW2 soldiers, June 1944: Gunner and Loader (M40 helmet, tunic, Y-straps, belt kit, boots or gaiters) | `source/patriots3_cast.py` (`GUNNER`, `LOADER`; `stahlhelm`, `tunic`, `kit`) |
+| MG42 as a 3D solid (any angle), ammo belt, ammo box, firing flash and recoil, falling cases | `source/patriots3_cast.py` (`Gun`, `draw_mg42`, `draw_belt`, `draw_box`, `cases`) |
+| Bunker embrasure with the crew: inside, from the beach, side section; beach backdrop (sea, craft, hedgehogs) | `source/patriots3_bunker.py` (`Crew`, `inside`, `outside`, `side`, `beach_layer`) |

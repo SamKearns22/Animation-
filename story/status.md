@@ -3,6 +3,11 @@
 Read this first in any new session, after CLAUDE.md.
 
 
+## In progress: "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
+- 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
+  rebuilt on the satire kit; the Gunner and Loader; the MG42 firing through the bunker slit. Sheets sent to Sam.
+  NEXT: Sam's notes on the sheets, then his brief.
+
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in
   `guides/film-quality-rules.md` (listed in `guides/rule-register.md`, Q32-Q37). New kit items in `guides/kit-catalogue.md`. Actual cost: 16% of a week (estimate 12-18%).

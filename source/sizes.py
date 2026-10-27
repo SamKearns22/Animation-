@@ -20,7 +20,7 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # weapons and kit (Prepper Minister, 25 Oct): a pistol crossbow with stock out ~72 cm long, limbs ~30 cm across
     # folded; an M134-style minigun ~80-90 cm; a Glock 17 18.6 x 13.8 cm; a 24-inch machete ~60 cm; a 2-litre bottle
     # ~10.5 x 33 cm; an Echo Dot 10 x 9 cm; the film's robots 2.1 m tall
-    'crossbow': (0.72, 0.3), 'minigun': (0.9, 0.25), 'pistol': (0.186, 0.138), 'machete': (0.6, 0.06),
+    'mg42': (1.22, 0.3), 'ammo box': (0.27, 0.19), 'crossbow': (0.72, 0.3), 'minigun': (0.9, 0.25), 'pistol': (0.186, 0.138), 'machete': (0.6, 0.06),
     '2L bottle': (0.105, 0.33), 'smart speaker': (0.1, 0.09), 'robot': (0.6, 2.1),
     'A4 paper': (0.21, 0.297), 'biro': (0.145, 0.01), 'pencil': (0.175, 0.008), 'mug': (0.085, 0.095),
     'takeaway cup': (0.09, 0.15), 'can': (0.066, 0.115), 'pen pot': (0.08, 0.1), 'desk plant': (0.15, 0.25),
