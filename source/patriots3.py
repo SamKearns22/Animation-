@@ -79,7 +79,7 @@ SHOTS = [   # (shot, start, end): one camera each from PL.CAMS
     ('s9', 33.5, 42.6),   # in the slit facing in: head shake, "poppies", he fires (room lit), push-in on their glance
 ]
 PLAN = {k: getattr(PL, k) for k in ('CEIL', 'ROOMS', 'OPENINGS', 'LOOKS', 'THINGS', 'PEOPLE', 'CAMS', 'GROUPS',
-                                    'FRAMING')}
+                                    'FRAMING', 'SHOT_MARKS')}
 BENCHMARK = [   # rule 3: filled in when each place is built ('' = not built yet: pre-flight fails)
     dict(place='the coast from the air', refs=['air-1-fleet-low.jpg', 'air-2-fleet-and-coast.jpg',
                                                'landers-3-from-above.jpg', 'landers-4-in-convoy.jpg'], at=1.8,
@@ -117,6 +117,21 @@ FREE_MOVES = []
 SOUND_SOURCES = {}
 EFFECTS = []
 JOKE_PROPS = []
+# Rule 38: front on by default; these views the shot demands (plan.py checks the rest face the lens)
+THREE_QUARTER_OK = [
+    ('s2', 'gunner at the gun', 'shot 2 is from behind the crew while they fire (the beach past them)'),
+    ('s2', 'loader at the gun', 'shot 2 is from behind the crew while they fire'),
+    ('s3', 'gunner turned', 'shot 3 is over their helmets at the Patriot in the doorway'),
+    ('s3', 'loader turned', 'shot 3 is over their helmets at the Patriot in the doorway'),
+    ('s5', 'patriot in the doorway', 'the wide: he walks across the room to them'),
+    ('s5', 'patriot approached', 'the wide: he faces the crew'),
+    ('s5', 'gunner facing him', 'the wide: they face the Patriot'),
+    ('s5', 'loader facing him', 'the wide: they face the Patriot'),
+    ('s8', 'patriot approached', 'Sam, 27 Oct: shot 8 side on from the west wall, the Patriot on the right'),
+    ('s8', 'gunner facing him', 'Sam: shot 8 side on; they face the Patriot until the blast'),
+    ('s8', 'loader facing him', 'Sam: shot 8 side on; they face the Patriot until the blast'),
+    ('s8', 'patriot at the gun', 'Sam: shot 8 side on; he walks to the gun, the slit on the left'),
+]
 # ====================================================================================================================
 
 S, FY = 0.8, 1420                                 # people's scale, floor line

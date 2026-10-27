@@ -126,6 +126,19 @@ had, because a check was copied per film (and wasn't), only looked at what the f
 37. **Files kept off GitHub (sounds, big references)** are listed in the first line of the handover with "ask Sam to
     re-attach them", so the next chat asks at once.
 
+## Rules 38-39 (approved by Sam, 27 Oct, Patriots 3)
+Why: weekly usage was climbing film by film, mostly from new 3D builds; and our people look best facing the camera.
+38. **Front on by default.** Our people look best facing the camera: stage every shot so each person faces the lens
+    (within about 25 degrees). A three-quarter (or side or back) view only where the shot demands it (seen from behind,
+    walking across the frame, a wide where they face someone else), each listed with its reason. [tool: `plan.py`
+    (pre-flight) from the plan's `SHOT_MARKS` {shot: [marks]}; the film's `THREE_QUARTER_OK = [(shot, mark, why)]`]
+39. **Build in 3D only when it is needed; 2D everywhere else.** A set, prop or effect is built in 3D only when the film
+    needs it: the camera moves round it or through it, it is seen from three or more angles and things in it must stay
+    put between them, or someone turns it in their hands. Everything else is 2D: one flat painted picture per camera,
+    in layers (back, middle, front), drawn to the plan's measurements. The plan in metres (rule 1) stays for every
+    film. 3D pieces already built are reused as they are. The ambition estimate (rule 24) lists each 3D build with its
+    reason, so Sam can say no before it is built.
+
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in
   the kit and gets a test in the automatic checks. Never fix the same kind twice.

@@ -39,13 +39,15 @@ PEOPLE = {
     'gunner at the gun': dict(at=(0.0, 0.0), facing=0, who='gunner'),
     'loader at the gun': dict(at=(-0.55, 0.1), facing=0, who='loader'),
     'gunner turned': dict(at=(0.0, -0.05), facing=165, who='gunner'),          # turned round to the door
-    'loader turned': dict(at=(-0.55, 0.05), facing=170, who='loader'),
+    'loader turned': dict(at=(-0.55, 0.05), facing=140, who='loader'),   # front on to shots 2 and 4
     'patriot in the doorway': dict(at=(0.62, -2.32), facing=330, who='patriot'),   # leans on the door's west post
     'patriot approached': dict(at=(-0.9, -1.3), facing=35, who='patriot'),     # talking distance, south-west of them
     'gunner facing him': dict(at=(0.0, -0.05), facing=215, who='gunner'),
     'loader facing him': dict(at=(-0.55, 0.05), facing=195, who='loader'),
-    'gunner after the blast': dict(at=(1.85, -0.6), facing=270, who='gunner'),     # thrown against the east wall
-    'loader after the blast': dict(at=(0.9, -1.3), facing=260, who='loader'),      # a few steps back (Sam, 27 Oct)
+    'gunner after the blast': dict(at=(1.85, -0.6), facing=271, who='gunner'),     # thrown against the east wall
+    'loader after the blast': dict(at=(0.9, -1.3), facing=283, who='loader'),      # a few steps back (Sam, 27 Oct)
+    'gunner watching him': dict(at=(1.85, -0.6), facing=326, who='gunner'),   # turned to the gun: front on to
+    'loader watching him': dict(at=(0.9, -1.3), facing=351, who='loader'),    # shot 9 (rule 38)
     'patriot at the gun': dict(at=(0.0, 0.0), facing=0, who='patriot'),
 }
 # Every camera (the film's cam_for builds a sets.Cam from these; focal in pixels for 1080 x 1920)
@@ -80,4 +82,15 @@ FRAMING = {   # rule 10: where the Hook Text sits (an empty area) and each key b
     's8': dict(beats=[('the blast at the slit', 0.4), ('they stumble back', 0.8), ('he walks to the gun', 1.0)]),
     's9 start': dict(beats=[('the sad head shake', 1.0), ('firing, the room lit', 1.4),
                             ('their eyes meet', 1.2)]),
+}
+SHOT_MARKS = {   # rule 38: who is on screen in each shot, by mark (plan.py checks each faces the lens)
+    's2': ['gunner at the gun', 'loader at the gun', 'gunner turned', 'loader turned'],
+    's3': ['gunner turned', 'loader turned', 'patriot in the doorway'],
+    's4': ['gunner turned', 'loader turned'],
+    's5': ['patriot in the doorway', 'patriot approached', 'gunner facing him', 'loader facing him'],
+    's6': ['gunner facing him', 'loader facing him'],
+    's7': ['patriot approached'],
+    's8': ['patriot approached', 'gunner facing him', 'loader facing him', 'gunner after the blast',
+           'loader after the blast', 'patriot at the gun'],
+    's9': ['patriot at the gun', 'gunner watching him', 'loader watching him'],
 }

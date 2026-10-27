@@ -120,7 +120,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   runs in pre-flight for any film that uses a mount, before every animatic.
 
 ## One set, one plan, real contact (Sam, 19 Oct: Poker Mon)
-- **Each location is built once, in 3D, and every shot is a camera on it** (`poker_mon_room.render` with a `Cam3`):
+- **Each location is built once from the plan, and every shot is a camera on it** (in 3D only when film-quality rule 39 says so, otherwise one flat painting per camera; Sam, 27 Oct) (`poker_mon_room.render` with a `Cam3`):
   close-ups, reverse angles and the wide shot all draw the same room, furniture, people and props. Never redraw a
   place or its props by hand for one shot (Poker Mon's close shots had a few hand-placed props while the wide shot
   had its own list, so the table emptied between cuts).

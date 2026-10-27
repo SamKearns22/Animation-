@@ -18,9 +18,16 @@
   the blast and stumble with debris settling (rules 32-33); firing from the slit with the push-in; (2) the coast (one
   painted shot: see "Usage" below) and the room's inside once the photos are in; (3) the Patriot's poses (lean, at the
   gun); (4) then `picture`/`scene` in patriots3.py on sets.Cam (copy power_crime / netan_yahoo's 3D pattern).
+- **New rules (Sam, 27 Oct), apply from the start:** 38 front on by default (`plan.py` checks it from `SHOT_MARKS` in
+  the plan; the views the shots demand are listed in patriots3.py's `THREE_QUARTER_OK`); 39 3D only when needed.
+  For this film: 3D = the room (the shared `sets.house`, nothing new: six angles, people crossing it) and the MG42
+  (already built). 2D = the coast (one painted shot in moving layers: craft, bursts, cliff flashes), the blast, dust,
+  chips, muzzle flashes and room light, and the room's dressing (crates, range card, board marks as flat pictures).
+  Ambition now about 15-20% of a week.
   Recordings come from Sam when he can (list below); `python3 source/voices.py FILES` as they arrive.
-- **Rule requests and proposals not yet in a guide:** the usage proposals sent 27 Oct (below, "Usage"): waiting for
-  Sam's numbers.
+- **Rule requests and proposals not yet in a guide:** usage proposals 2 (a budget per film, logged at each handover)
+  and 3 (the composition sheet sent once) from 27 Oct (below, "Usage"): waiting for Sam's numbers. Rules 38 and 39 are
+  written (film-quality-rules, rule-register Q38, Q39).
 
 ## What Sam has sent (27 Oct; he said "noted" only until the drawing request)
 - References, `references/patriots-3/`: lander-pov-1..5 (D-Day seen from a landing craft, facing the beach),
@@ -110,7 +117,7 @@ push-in. Estimate: about 20-25% of a week (the coast about 5%).
 
 **Usage (Sam, 27 Oct: "weekly usage seems to be increasing with each film")** proposals, waiting for his numbers:
 (1) the coast as ONE painted shot (layers that move: craft creeping, bursts, flashes), not a 3D world: saves about
-3-5% of a week; (2) a rule: every film's plan states a usage budget (share of a week), and at each handover I ask Sam
+3-5% of a week (YES: covered by rule 39); (2) a rule: every film's plan states a usage budget (share of a week), and at each handover I ask Sam
 for the week's figure and log it here; a film over budget is trimmed before the next stage (guides/film-quality-rules.md,
 "Planning", and rule-register "by hand"); (3) a rule: the composition sheet is sent once; notes on it are applied and
 named in the handover, never re-sent for approval (saves a round of pictures).

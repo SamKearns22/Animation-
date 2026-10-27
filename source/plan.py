@@ -17,7 +17,8 @@ A film gives PLAN: a module or a dict with (plan view: x east, z north, y up; me
   PEOPLE    {label: dict(at=(x, z), facing=deg, who=name[, on=thing])}   where each person stands, which way they face
   CAMS      {shot: dict(pos=(x, y, z), look=(x, y, z)) or dict(path=[...], look=) or dict(orbit=..., look_y=)}
   optional: CEIL (2.6), WALL_T, LOOKS {room: dict(floor=rgb, wall=rgb)} (the colours a portal shows, rule 2),
-            GROUPS {group: dict(arriving=, stopped=, leaving=)} (rule 9), FRAMING {shot: dict(hook=, beats=)} (rule 10)
+            GROUPS {group: dict(arriving=, stopped=, leaving=)} (rule 9), FRAMING {shot: dict(hook=, beats=)} (rule 10),
+            SHOT_MARKS {shot: [people marks]} (rule 38: front on unless the film's THREE_QUARTER_OK says why)
 A CAMS key matches a shot by name ('s6') or by its number (6).
 
     python3 source/plan.py FILM sketch OUT.jpg      the top-down sketch (rooms, doors, things, people, cameras)
@@ -254,6 +255,7 @@ def faults(film):
             if P.room_of(q[0], q[2], 0.05) is None and not c.get('outside'):
                 out.append(f'plan: camera {k} stands at ({q[0]}, {q[2]}), in no room')
                 break
+    out += front_faults(film, P)
     missing = [s[0] for s in getattr(film, 'SHOTS', []) if P.cam_for_shot(s[0]) is None]
     if missing:
         out.append(f'plan: no camera in the plan for shot(s) {", ".join(map(str, missing))}')
@@ -261,6 +263,36 @@ def faults(film):
         for phase in ('arriving', 'stopped', 'leaving'):
             if not ph.get(phase):
                 out.append(f'plan (rule 9): group {g} has no plan for {phase}')
+    return out
+
+
+def front_faults(film, P=None):
+    """Rule 38: each person faces the lens within about 25 degrees, unless the film lists that shot and mark in
+    THREE_QUARTER_OK with its reason. Reads the plan's SHOT_MARKS {shot: [people marks]} (said out loud if missing)."""
+    P = P or of(film)
+    marks = (P.src.get('SHOT_MARKS') if isinstance(P.src, dict) else getattr(P.src, 'SHOT_MARKS', None)) or {}
+    if P.people and P.cams and not marks:
+        return ['plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run']
+    ok = {(str(a), b): why for a, b, *why in getattr(film, 'THREE_QUARTER_OK', ())}
+    out = []
+    for (a, b), why in ok.items():
+        if not why or not str(why[0]).strip():
+            out.append(f'plan (rule 38): THREE_QUARTER_OK {a} {b} gives no reason')
+    for shot, labels in marks.items():
+        c = P.cam_for_shot(shot)
+        if c is None or 'pos' not in c:
+            continue
+        for lb in labels:
+            p = P.people.get(lb)
+            if p is None:
+                out.append(f'plan (rule 38): SHOT_MARKS {shot}: no person mark {lb}')
+                continue
+            to_cam = math.degrees(math.atan2(c['pos'][0] - p['at'][0], c['pos'][2] - p['at'][1]))
+            off = abs((to_cam - p['facing'] + 540) % 360 - 180)
+            if off > 25 and (str(shot), lb) not in ok:
+                kind = 'three-quarter' if off < 60 else 'side on' if off < 120 else 'from behind'
+                out.append(f'plan (rule 38): shot {shot}: {lb} is seen {kind} ({off:.0f} degrees off the lens): '
+                           f'turn them or the camera, or list it in THREE_QUARTER_OK with the reason')
     return out
 
 
