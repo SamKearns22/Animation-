@@ -127,10 +127,9 @@ class Crew:
         elif self.loader == 'spot':
             lean = 4.0
             j['lean'] = lean
-            for side, sg in (('L', -1), ('R', 1)):
-                V.arm_to(j, side, (sg * 44.0, -150.0, 118.0), 'down', 'fist')
-            j['hand'] = {'L': 'none', 'R': 'none'}
-            j['on_face'] = {'L', 'R'}
+            for side, sg in (('L', -1), ('R', 1)):     # seen from behind (shot 2): the binoculars are hidden by his head,
+                V.arm_to(j, side, (sg * 70.0, -60.0, 110.0), 'down', 'fist')   # so the hands show at the sides of it, not
+            # wrapped round the back of the head with no hands (Sam, 27 Oct)
             j['face_props'] = [binoculars(lean)]
         else:                                          # pointing out of the slit, shouting
             lean = 6.0
