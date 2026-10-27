@@ -16,7 +16,7 @@
 - **27 Oct, round 2 (Opus):** Sam's notes 5-9 done (badge, boat through the slit, the coast, the poppy, his hands on the
   gun: note 9 fixed after the first animatic render; hand targets moved onto the receiver). Sounds (9 files) are on
   GitHub now and rule 37 is rewritten (on GitHub by default; only files over ~10 MB stay off).
-- **27 Oct (latest): animatic 3 sent (`review/patriots3-animatic-3.mp4`) with Sam's real Patriot recordings; notes 15-16 done.** Earlier: animatic 2 sent (`review/patriots3-animatic-2.mp4`, 2.5 MB, 43 s)** with notes 10-14 done (see the notes table). Next: Sam's notes on it; final render needs a new yes. Earlier: test recording cut and animatic 1 rendered. `source/patriots3_cut.py` cuts
+- **27 Oct: FINAL RENDERED and sent: `animations/the-patriots-3-vertical.mp4` (5.4 MB, 43 s). Film done; only Sam's posting is left.** Earlier: animatic 3 sent (`review/patriots3-animatic-3.mp4`) with Sam's real Patriot recordings; notes 15-16 done.** Earlier: animatic 2 sent (`review/patriots3-animatic-2.mp4`, 2.5 MB, 43 s)** with notes 10-14 done (see the notes table). Next: Sam's notes on it; final render needs a new yes. Earlier: test recording cut and animatic 1 rendered. `source/patriots3_cut.py` cuts
   `patriots3-test-all.m4a` into patriot-1..6, loader-1, loader-2, heil (placeholders; levelled, pauses shortened to
   0.25 s, sped up at most 1.27x to fit the film's slots). Sam's two first lines are very quiet in the take (boosted).
   Pre-flight: 9 named (caption speeds on the fast placeholders, line 4 syllables 27 v 23, shot 9 at 9.1 s chosen).

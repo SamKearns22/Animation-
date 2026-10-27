@@ -3,7 +3,7 @@
 Read this first in any new session, after CLAUDE.md.
 
 
-## In progress: "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
+## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
   rebuilt on the satire kit; the Gunner and Loader; the MG42 firing through the bunker slit. Sheets sent to Sam;
   his note (the cuddle) fixed. Brief in: `prompts/patriots-3.md`.
