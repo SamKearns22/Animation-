@@ -754,7 +754,8 @@ def main():
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
-                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None)
+                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
+                 stamp=False if '--nostamp' in a else None)   # --nostamp: a clip to splice into a final has no overlay
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
