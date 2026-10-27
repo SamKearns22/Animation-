@@ -1,33 +1,21 @@
 # Notes for Patriots 3 (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
-- **Sounds are on GitHub now (Sam, 27 Oct: free assets, 4.3 MB):** `source/audio/patriots3-sfx/` (battlefield-ambience,
-  distant-shots, german-angriff, german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide, field-artillery).
-  Nothing to re-attach. Not placed in the film yet (voices-only build until Sam says).
-- **Done (27 Oct, building, Opus):** Sam sent the missing photos (`references/patriots-3/` room-1, room-2, lean-1, -2,
-  salute-1, -2, blast-1, -2, air-4, -5). Sam: **"Build without dialogue for now, just subtitles."** Built: the
-  casemate (`patriots3_room.py`), the coast (`patriots3_coast.py`), the blast and dust (`patriots3_fx.py`), all the
-  acting (`patriots3_act.py`), the film (`patriots3.py`: 3D gun with hands on its grips, subtitle chunks). Rehearsal
-  clips (rule 8) done and fixed (dust over the Patriot, a pop in the push-in, weak flapping, a wrong-way glance).
-  `python3 source/patriots3.py check`: audit clean. Pre-flight: shared checks clean; 11 named (10 subtitles under
-  reading speed because the timing is a guess until the voices; shot 9 is 9.1 s, chosen: one unbroken shot from the
-  slit). Sent: `review/patriots3-stills.jpg` and five clips (coast, turn, salute and flapping, blast, firing and
-  push-in). No animatic yet.
-- **27 Oct, round 2 (Opus):** Sam's notes 5-9 done (badge, boat through the slit, the coast, the poppy, his hands on the
-  gun: note 9 fixed after the first animatic render; hand targets moved onto the receiver). Sounds (9 files) are on
-  GitHub now and rule 37 is rewritten (on GitHub by default; only files over ~10 MB stay off).
-- **27 Oct: note 21 spliced into the final (frames 44-89 re-rendered, rest untouched).** FINAL RENDERED and sent: `animations/the-patriots-3-vertical.mp4` (5.4 MB, 43 s). Film done; only Sam's posting is left.** Earlier: animatic 3 sent (`review/patriots3-animatic-3.mp4`) with Sam's real Patriot recordings; notes 15-16 done.** Earlier: animatic 2 sent (`review/patriots3-animatic-2.mp4`, 2.5 MB, 43 s)** with notes 10-14 done (see the notes table). Next: Sam's notes on it; final render needs a new yes. Earlier: test recording cut and animatic 1 rendered. `source/patriots3_cut.py` cuts
-  `patriots3-test-all.m4a` into patriot-1..6, loader-1, loader-2, heil (placeholders; levelled, pauses shortened to
-  0.25 s, sped up at most 1.27x to fit the film's slots). Sam's two first lines are very quiet in the take (boosted).
-  Pre-flight: 9 named (caption speeds on the fast placeholders, line 4 syllables 27 v 23, shot 9 at 9.1 s chosen).
-  Animatic with hook text "Small Boats Crisis, June 1944" and sign-off: `review/patriots3-animatic-vertical.mp4`
-  (2.3 MB, 43 s), sent to Sam. `signoff.py` now scales the sign-off to a small animatic's size. Sam: pauses can go
-  entirely (done to 0.25 s; say if he wants 0). Next: Sam's notes on the animatic; final render needs a new yes.
-- **Rule requests and proposals not yet in a guide:** usage proposals 2 (budget per film) and 3 (composition sheet
-  once) from 27 Oct, still waiting for Sam's numbers; and four kit lessons from this build, proposed (below,
-  "Proposed kit lessons").
-- **Files to open:** `prompts/patriots-3.md`; this file; `source/patriots3.py` (STORY, picture, checks),
-  `source/patriots3_act.py` (timeline at the top), `patriots3_room.py`, `patriots3_fx.py`, `patriots3_coast.py`.
+- **PATRIOTS 3 IS DONE (Sam, 27 Oct: "once final, consider this film done").** Final: `animations/the-patriots-3-vertical.mp4`
+  (6.0 MB, 43 s, 1080 x 1920), the Loader's hand fix and the no-overlay splice included. Nothing more to do on the film
+  except Sam's posting (advice on times sent 27 Oct).
+- **Rules written 27 Oct (Sam: "execute all your rule recommendations"):** film-quality-rules 40-47 (Showstopper Shots;
+  every arm ends in a visible hand; poses from a tested gallery; looks tested at the shot's own camera; usage budget; the
+  composition sheet once; look at named frames first; splice small fixes with `--nostamp`), registered Q40-Q47 in
+  `guides/rule-register.md`, Showstopper Shots named in best-practice 1.3. Rules 41-43 need tools: on the Build list.
+- **Next (Opus, high effort, fresh chat): the Build list of 27 Oct in `story/status.md`**: `handcheck` (rule 41), the pose
+  gallery and its sheet (rule 42), the eyeline test at each shot's camera (rule 43), the four kit lessons moved into the
+  shared kit (below, "Proposed kit lessons": now approved), and `--nostamp` made a standard option of the template's
+  `main`. Test each on Patriots 3's known faults (the Loader's hand-less arms 3.6-4.0 and 6.3-6.95 s, the hands in the
+  sleeves in the flap, the Loader looking at the wall at 41-42.6 s).
+- **Rule requests and proposals not yet in a guide:** none (all of them written 27 Oct).
+- **Files to open:** `story/status.md` ("Build list 27 Oct"); `guides/film-quality-rules.md` 40-47; `source/patriots3.py`
+  (the faults' fixes: `draw_actor`, `hold_gun`, `patriots3_cast._arm`), `source/limbs.py` (`_big`), `source/patriots3_bunker.py`.
 
 ## What Sam has sent (27 Oct; he said "noted" only until the drawing request)
 - References, `references/patriots-3/`: lander-pov-1..5 (D-Day seen from a landing craft, facing the beach),

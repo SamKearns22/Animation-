@@ -168,6 +168,11 @@ Sources: Thomas & Johnston (staging); Bordwell & Thompson, *Film Art* (continuit
 - **Place action by sightlines before animating:** `filmkit.visible_spots` lists floor spots seen in every chosen
   camera, so an attack seen in two shots is placed once, correctly.
 
+**Showstopper Shots (Sam, 27 Oct).** Sam's name for a large, active, eye-catching scene: the Prepper Minister fight, the
+Shocking Behaviour dance, the Patriots 3 coast. Each gets an approved list of the screenplay's implied elements before it
+is built (film-quality-rules 40). Patriots 3's coast shows the level wanted: terrain and bunkers, boats on their own
+headings, aircraft, a combat scene that matches the place and date, and several kinds of effect.
+
 ## 1.3b Keeping old films working (Roadster, 16 Oct)
 - Never give a new tool the name of an existing file: `pencil.py` was replaced by a different tool and silently broke
   Dam and the rap battles (fixed by pointing them at `pencil_cartoon.py`). Before replacing or renaming a module, search

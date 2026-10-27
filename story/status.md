@@ -20,6 +20,23 @@ Read this first in any new session, after CLAUDE.md.
   (`source/audio/patriots3-test-all.m4a`). NEXT: cut it into the lines, then the animatic (Sonnet, fresh chat); see
   `notes/patriots-3.md` "Where things stand".
 
+## Build list 27 Oct (after Patriots 3; Sam approved rules 40-47: "execute all your rule recommendations")
+Stage: building new tools = Opus, high effort, fresh chat. In order:
+1. `handcheck` (rule 41): every frame, every view: an arm with no visible hand, a hand inside its own sleeve or over
+   another person's body, an arm wrapped round a head. Run by pre-flight. Test on Patriots 3: the Loader's hand-less arms
+   (3.6-4.0 and 6.3-6.95 s, from behind), the flap's hands in the sleeves (put back from git, `patriots3_act.FLAPS`).
+2. Pose gallery (rule 42): `guides/pose-gallery.md` and a sheet tool drawing each pose from the front, side and behind;
+   seed it with the poses built so far (folded arms, hands up, pointing, binoculars, salute, hands on a gun, flapping).
+3. Eyeline at the shot's own camera (rule 43): extend `filmkit.eyeline` so each pupil's on-screen direction is tested
+   against the plan's target; a sheet of the frames where eyes should meet. Test: the Loader at 41-42.6 s (put the
+   profile head back from `patriots3_act.loader`).
+4. The four kit lessons into the shared kit: `views.person` head mirrored by its own direction; `sets.Cam.yaw_of` from the
+   line to the person (no pop on a push-in); `lying.stand` tilt measured at chest height; held 3D props drawn through
+   the real camera with hands on the grip points (`patriots3.hold_gun`, `draw_gun3d`). Each with a test; then update
+   `guides/kit-catalogue.md`.
+5. `--nostamp` as a standard option in `satire_template.py`'s `main` (a `--span` clip carries the review stamp by default).
+Done already: `limbs.py` `_big` (only a torso-sized piece hides an arm at the shoulder).
+
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in
   `guides/film-quality-rules.md` (listed in `guides/rule-register.md`, Q32-Q37). New kit items in `guides/kit-catalogue.md`. Actual cost: 16% of a week (estimate 12-18%).

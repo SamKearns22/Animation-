@@ -140,6 +140,37 @@ Why: weekly usage was climbing film by film, mostly from new 3D builds; and our 
     film. 3D pieces already built are reused as they are. The ambition estimate (rule 24) lists each 3D build with its
     reason, so Sam can say no before it is built.
 
+## Rules 40-47 (approved by Sam, 27 Oct, after Patriots 3)
+Why: the Patriots 3 coast worked but needed detail Sam had not listed; arms, hands and glances still cost the most
+notes (hands lost in a sleeve, a hand-less arm from behind, a dark bite at a shoulder, a look at a wall); and a few
+working habits saved or cost whole rounds.
+40. **Showstopper Shots.** Sam's name for a large, active, eye-catching scene (the Prepper fight, the Behaviour dance,
+    the Patriots 3 coast). When Sam says a scene is one, the plan lists, before anything is built, the elements the
+    screenplay implies for that shot (the place and its terrain; the kinds of vehicles and props; how each one moves
+    differently from the others; the action going on behind and around; the effects and their kinds), each with a short
+    reason. Sam approves or trims the list; the shot is ticked against it at its first rehearsal clip. [by hand]
+41. **Every arm ends in a visible hand, from every view it is seen in.** No arm is wrapped round a head or back, hides its
+    hand in a sleeve or behind a head, or stops short of the end of its sleeve. Tested on every frame, in each view the
+    film uses (front, side, from behind). [tool to build: `handcheck`, run by pre-flight; by hand until it exists]
+42. **Poses come from a tested gallery.** A pose (arms folded, hands up, pointing, binoculars, salute, hands on a gun) is
+    drawn and tested once from the front, the side and from behind, then kept in `guides/pose-gallery.md` and the kit;
+    a film picks from it and only a pose not in it is built new, listed in the plan. [by hand: a gallery sheet; a tool is on
+    the Build list]
+43. **Looks are tested at the shot's own camera** (extends rule 25). The plan says, per shot, who looks at what as seen by
+    that camera; the check measures that each person's pupils point at the target on screen (never a wall, never past
+    them), and eyes that are meant to meet are shown on the check sheet as one frame each. [tool to extend:
+    `filmkit.eyeline`; by hand until then]
+44. **A usage budget per film.** The plan states a share of a week; at each handover I ask Sam for the week's figure and
+    log it in the film's notes; a film over budget is trimmed before the next stage. [by hand]
+45. **The composition sheet is sent once.** Notes on it are applied and named in the handover, never re-sent for approval.
+    [by hand]
+46. **When Sam names frames, look at exactly those frames first,** at the size he saw them, before changing anything
+    (Patriots 3 note 20: a shoulder fix aimed at the wrong cause cost a round). [by hand]
+47. **A fix to a finished film that touches only a few seconds is spliced in,** not re-rendered whole: render just that
+    stretch at full size, with the film's `--nostamp` flag (a `--span` clip carries a review stamp otherwise), join it on
+    exact frame numbers keeping the original sound, then check a corner of the new frames and the frame count. The
+    `final` render of any film still needs Sam's clear yes. [by hand]
+
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in
   the kit and gets a test in the automatic checks. Never fix the same kind twice.
