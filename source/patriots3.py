@@ -61,9 +61,9 @@ LINES = [
          chunks=['What can I say?', 'Foreign invaders', 'coming across the sea?', 'Happens everywhere', 'these days.']),
     dict(n=5, who='loader', text='Who are you?', start=13.4, end=14.3, audio='patriots3-loader-1',
          chunks=['Who are you?']),   # Sam: the spotter
-    dict(n=6, who='patriot', text='Just a concerned citizen. Just a regular man with regular concerns.', start=14.8,
+    dict(n=6, who='patriot', text='Just a concerned citizen. Just a regular man with regular problems.', start=14.8,
          end=18.4, audio='patriots3-patriot-3',
-         chunks=['Just a concerned citizen.', 'Just a regular man', 'with regular concerns.']),
+         chunks=['Just a concerned citizen.', 'Just a regular man', 'with regular problems.']),
     dict(n=7, who='loader', text='Ah, you are with the Führer?', start=18.9, end=20.4, audio='patriots3-loader-2',
          chunks=['Ah, you are', 'with the Führer?']),
     dict(n=8, who='gunner+loader', text='Heil!', start=20.6, end=21.2, audio='patriots3-heil', chunks=['Heil!']),

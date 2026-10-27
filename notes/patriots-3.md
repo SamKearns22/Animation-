@@ -51,7 +51,7 @@
 | 8 | Patriot (off): "Small boat problem?" The men turn around, startled | built: subtitle; they freeze 6.45, turn 6.95 (straight turn), startled |
 | 9 | The Patriot framed in the bunker doorway, leaning nonchalantly: "What can I say? Foreign invaders coming across the sea? Happens everywhere these days." | built: shot 3, leaning on the west post, arms folded, ankles crossed |
 | 10 | The soldiers look at each other and back to him: "Who are you?" | built: shot 4, glance at each other 12.6, back 13.1; the Loader asks |
-| 11 | Patriot, approaching: "Just a concerned citizen. Just a regular man with regular concerns." | built: shot 5, he walks up; hand on his chest on 'regular man' |
+| 11 | Patriot, approaching: "Just a concerned citizen. Just a regular man with regular problems." | built: shot 5, he walks up; hand on his chest on 'regular man' |
 | 12 | Spotter: "Ah, you are with the Furhër?" Both soldiers perform the Nazi salute: "Heil!" | built: shot 6, both salute (front on), 'Heil!' once |
 | 13 | Patriot: "Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** (shit) for Whatsapp." Visibly upset, waving his arm to quiet them, arms darting around | built: shot 7, front on, arms darting: up, pat down, point round, wag; bleep: no sound yet |
 | 14 | An explosion hits the lip of the bunker; the soldiers stumble back | built: shot 8, flash, shake, dust, chips settle; Gunner thrown to the east wall, Loader staggers back |
