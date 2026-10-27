@@ -2,15 +2,37 @@
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
 - **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (field artillery, battlefield ambience, distant shots,
-  German "see enemy", German "fire at target"). In a new chat, ask Sam to attach them again.
-- **Done (27 Oct, building, Opus):** the Patriot rebuilt on the satire kit (`source/patriots3_cast.py`, every view,
-  faces); the Gunner and the Loader (German static-division MG42 crew, June 1944); the MG42 as a 3D prop with belt, ammo
-  box, firing flash, recoil and falling cases; the bunker slit from three cameras (`source/patriots3_bunker.py`); a
-  silent 6 s firing test clip. Sheets: `patriots3_cast.py sheet OUT.jpg`, `patriots3_bunker.py sheet OUT.jpg`.
-- **Next:** Sam's notes on the two sheets and the clip; then the brief (story, lines, shots) and planning (Opus, high).
-- **Losses and my additions Sam should know about:** see "My additions" below.
-- **Rule requests and proposals not yet in a guide:** none yet.
-- **Files to open:** this file; `source/patriots3_cast.py`; `source/patriots3_bunker.py`.
+  German "see enemy", German "fire at target"). First thing in the new chat: ask Sam to attach them again.
+- **Done (27 Oct, building chat):** references filed; the Patriot rebuilt on the satire kit; the Gunner and the Loader
+  (the brief's "spotter"); the MG42 as a 3D prop (belt, ammo box, flash, kick, falling cases); the bunker slit from
+  three cameras; a silent firing test clip. Sam's one note (the Loader's reach read as a cuddle) is fixed. Sam's brief
+  is in: `prompts/patriots-3.md` (word for word). No recordings yet.
+- **Next: PLANNING, Opus high, fresh chat. Plan only until Sam says go.** Read `guides/satire.md`,
+  `guides/film-quality-rules.md`, this file and the brief. Start `source/patriots3.py` from `source/satire_template.py`
+  (reuse `patriots3_cast.py` and `patriots3_bunker.py`). Then in ONE message: the brief as a checklist (below), all
+  questions with a recommended answer each, the missing references, the sound list, the ambition estimate (rule 24);
+  then the plan in metres and the composition sheet (rule 11).
+- **Points to raise at planning (my reading of the brief):**
+  - New builds: the opening from high above the coast (black cliffs flashing with gunfire, artillery into sand and
+    spray, six landing craft full of troops); the bunker's inside (back wall, the doorway the Patriot leans in, the
+    room); the explosion hitting the lip of the slit and the soldiers stumbling back; the Patriot at the MG42 (gun pose
+    for him); the camera in the slit facing in; the final push-in on the two soldiers' glance.
+  - References still missing: a bunker interior with its doorway (from inside); the Normandy cliffs/bluffs from the sea
+    or air; a person leaning in a doorway; the Nazi salute is in the brief (draw from a reference, ask Sam for one).
+  - Bleep: "s***" (shit): ask whether he says the word or leaves a gap (rule 27).
+  - Spelling on screen: the brief has "Furhër"; the usual spelling is "Führer". Ask which goes in the subtitle.
+  - TikTok: a Nazi salute and "Heil!" may be limited or removed by moderation even as satire; ask Sam if he wants it
+    as written, cut away mid-salute, or framed so it reads as the joke. Don't change it without his answer.
+  - Voices: Sam records the Patriot, the Gunner's and Spotter's lines ("Who are you?", "Ah, you are with the
+    Furhër?", "Heil!"). His two German game clips could cover the opening barks.
+  - Sound effects the script names: machine-gun fire, artillery, the explosion, the howl of gunfire. Sam's three beach
+    files cover artillery and ambience; there is no MG42 burst yet (ask).
+  - Who says "Who are you?" (the brief doesn't say): recommend the Gunner.
+- **Losses and my additions Sam should know about:** see "My additions" below (all still in).
+- **Rule requests and proposals not yet in a guide:** none (searched this file: no "rule", "every film", "from now on",
+  "proposed").
+- **Files to open:** `prompts/patriots-3.md`; this file; `source/patriots3_cast.py` (people, MG42; `sheet`);
+  `source/patriots3_bunker.py` (crew, slit, cameras; `sheet`, `clip`); `references/patriots-3/`.
 
 ## What Sam has sent (27 Oct; he said "noted" only until the drawing request)
 - References, `references/patriots-3/`: lander-pov-1..5 (D-Day seen from a landing craft, facing the beach),
@@ -21,13 +43,27 @@
 - Requests: "Apply all our new drawing guidelines to the patriot character." "Design two German D-Day soldiers. Give
   them the ability to fire an MG42 through a bunker slit, one as the firer, the other as a spotter/reloader."
 
-## The brief as a checklist (so far)
+## The brief as a checklist (Sam's brief, prompts/patriots-3.md; the planning chat fills "done?")
 | # | from the brief or a note | done? |
 |---|------|------|
-| 1 | The Patriot redrawn to all the new drawing guidelines | yes: satire kit, every view, circle hands, hips 15% narrower, real height 1.78 m, landmarks, line check |
-| 2 | Two German D-Day soldiers | yes: the Gunner (1.80 m) and the Loader (1.70 m) |
-| 3 | They fire an MG42 through a bunker slit | yes: on its bipod on the sill, flash, kick, belt drawn in, cases falling |
-| 4 | One the firer, the other spotter/reloader | yes: Loader feeds the belt, watches with binoculars, or points and shouts |
+| 1 | The Patriot redrawn to all the new drawing guidelines | yes |
+| 2 | Two German soldiers who fire an MG42 through a bunker slit, a firer and a spotter/reloader | yes (Gunner, Loader) |
+| 3 | From high above the coast: black cliffs in the distance flashing with machine-gun fire | |
+| 4 | Artillery thundering down into the sands and spray | |
+| 5 | Six landers, stuffed to the brim with Allied troops, creep closer to the shore | |
+| 6 | A thunderous howl of gunfire | |
+| 7 | Cut to inside the bunker: the gunner fires, the spotter directs him | |
+| 8 | Patriot (off): "Small boat problem?" The men turn around, startled | |
+| 9 | The Patriot framed in the bunker doorway, leaning nonchalantly: "What can I say? Foreign invaders coming across the sea? Happens everywhere these days." | |
+| 10 | The soldiers look at each other and back to him: "Who are you?" | |
+| 11 | Patriot, approaching: "Just a concerned citizen. Just a regular man with regular concerns." | |
+| 12 | Spotter: "Ah, you are with the Furhër?" Both soldiers perform the Nazi salute: "Heil!" | |
+| 13 | Patriot: "Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** (shit) for Whatsapp." Visibly upset, waving his arm to quiet them, arms darting around | |
+| 14 | An explosion hits the lip of the bunker; the soldiers stumble back | |
+| 15 | Patriot: "Anyway, got problems with the Establishment? People trampling on your sovereignty? Let's just say I'm here to assist." | |
+| 16 | Camera in the slit facing into the bunker; the Patriot mans the gun, shakes his head sadly: "They ain't even wearing poppies." | |
+| 17 | He begins to fire; the bunker lit by muzzle flare | |
+| 18 | Zoom back in on the soldiers standing dumbfounded in the background; their eyes meet in confusion | |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
