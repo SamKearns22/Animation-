@@ -22,6 +22,7 @@ Read this first in any new session, after CLAUDE.md.
 
 ## Build list 27 Oct (after Patriots 3; Sam approved rules 40-47: "execute all your rule recommendations")
 Stage: building new tools = Opus, high effort, fresh chat. In order:
+0. `source/sheet.py FILM TIMES...` (rule 48): one labelled contact sheet (time on each tile) from any film built on the template, in one command; small, build first so the rest of the stage uses it.
 1. `handcheck` (rule 41): every frame, every view: an arm with no visible hand, a hand inside its own sleeve or over
    another person's body, an arm wrapped round a head. Run by pre-flight. Test on Patriots 3: the Loader's hand-less arms
    (3.6-4.0 and 6.3-6.95 s, from behind), the flap's hands in the sleeves (put back from git, `patriots3_act.FLAPS`).

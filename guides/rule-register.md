@@ -74,3 +74,4 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | Q45 | The composition sheet is sent once | film-quality-rules 45 | Sam, 27 Oct | by hand (handover search) |
 | Q46 | Frames Sam names are looked at first, at his size | film-quality-rules 46 | Patriots 3 note 20 | by hand on the check sheet |
 | Q47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner check) | film-quality-rules 47 | Patriots 3 notes 21-22 | by hand on the check sheet |
+| Q48 | Rules in front of me: "Rules that bite" list at every handover; by-hand rules marked kept or slipped in every self-review; one labelled sheet, not many single frames | film-quality-rules 48; CLAUDE.md | Sam, 27 Oct (usage; rules not followed strictly) | to build: `sheet.py` (Build list 27 Oct, item 0); the handover and self-review wording by hand |

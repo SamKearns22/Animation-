@@ -8,12 +8,16 @@
   every arm ends in a visible hand; poses from a tested gallery; looks tested at the shot's own camera; usage budget; the
   composition sheet once; look at named frames first; splice small fixes with `--nostamp`), registered Q40-Q47 in
   `guides/rule-register.md`, Showstopper Shots named in best-practice 1.3. Rules 41-43 need tools: on the Build list.
-- **Next (Opus, high effort, fresh chat): the Build list of 27 Oct in `story/status.md`**: `handcheck` (rule 41), the pose
+- **Next (Opus, high effort, fresh chat): the Build list of 27 Oct in `story/status.md`**: `sheet.py` first (rule 48), then `handcheck` (rule 41), the pose
   gallery and its sheet (rule 42), the eyeline test at each shot's camera (rule 43), the four kit lessons moved into the
   shared kit (below, "Proposed kit lessons": now approved), and `--nostamp` made a standard option of the template's
   `main`. Test each on Patriots 3's known faults (the Loader's hand-less arms 3.6-4.0 and 6.3-6.95 s, the hands in the
   sleeves in the flap, the Loader looking at the wall at 41-42.6 s).
-- **Rule requests and proposals not yet in a guide:** none (all of them written 27 Oct).
+- **Rules that bite at this stage (rule 48; the Opus build stage):** read little: one labelled sheet, never single frames in a
+  row (build `sheet.py` first); test every new tool on the known faults before trusting it (rules 5-7 and the Build list);
+  proposals first: nothing new goes into a guide without Sam's yes; fresh chat at the stage end, handover with this list;
+  ask the usage figure (rule 44); say plainly which by-hand rules were kept or slipped in the self-review.
+- **Rule requests and proposals not yet in a guide:** none (all of them written 27 Oct, rule 48 included).
 - **Files to open:** `story/status.md` ("Build list 27 Oct"); `guides/film-quality-rules.md` 40-47; `source/patriots3.py`
   (the faults' fixes: `draw_actor`, `hold_gun`, `patriots3_cast._arm`), `source/limbs.py` (`_big`), `source/patriots3_bunker.py`.
 

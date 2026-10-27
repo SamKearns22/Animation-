@@ -140,7 +140,7 @@ Why: weekly usage was climbing film by film, mostly from new 3D builds; and our 
     film. 3D pieces already built are reused as they are. The ambition estimate (rule 24) lists each 3D build with its
     reason, so Sam can say no before it is built.
 
-## Rules 40-47 (approved by Sam, 27 Oct, after Patriots 3)
+## Rules 40-48 (approved by Sam, 27 Oct, after Patriots 3)
 Why: the Patriots 3 coast worked but needed detail Sam had not listed; arms, hands and glances still cost the most
 notes (hands lost in a sleeve, a hand-less arm from behind, a dark bite at a shoulder, a look at a wall); and a few
 working habits saved or cost whole rounds.
@@ -170,6 +170,13 @@ working habits saved or cost whole rounds.
     stretch at full size, with the film's `--nostamp` flag (a `--span` clip carries a review stamp otherwise), join it on
     exact frame numbers keeping the original sound, then check a corner of the new frames and the frame count. The
     `final` render of any film still needs Sam's clear yes. [by hand]
+
+48. **The rules are always in front of me, and the cheap way is the easy way (Sam, 27 Oct).** Every handover opens with
+    "Rules that bite at this stage": the 3-5 by-hand rules most likely to be broken in the next stage, each with its
+    number, so a fresh chat starts with them in view. Every self-review before a send lists each by-hand rule that applied
+    as kept or slipped, and a slip is named to Sam. To look at several frames, make ONE labelled sheet (time on each
+    tile) and look once; open a single frame at full size only for a detail. [tool to build: `source/sheet.py TIMES...`
+    makes the labelled sheet from a film in one command; the handover and self-review wording by hand]
 
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in

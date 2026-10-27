@@ -80,6 +80,9 @@ I don't know how to code. Please:
   animatic; anything not done is named.
 - **Flag what a fix takes away (18 Oct)** as a loss (a prop, a person, a joke, a landing in shot), and **flag your own
   additions** (a sign, a reflection, a joke, a sound, set dressing), so I can say no before it costs a round.
+- **The rules are always in front of me (27 Oct, rule 48):** every handover opens with "Rules that bite at this stage"; every
+  self-review marks each by-hand rule kept or slipped; use one labelled sheet, not many single frames
+  (`guides/film-quality-rules.md` 48).
 - **A note I've given before is a warning (25 Oct):** if a new note repeats an earlier one, find why the first fix
   failed before changing anything, and tell me.
 
