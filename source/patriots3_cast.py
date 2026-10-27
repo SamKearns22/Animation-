@@ -555,11 +555,14 @@ def _bread_bag(p, cx, y):
 _ARM, _LEG = V.arm, V.leg
 
 
+FROM_BEHIND = [False]                              # set by the film for each person drawn: seen from the back
+
+
 def _arm(p, j2, side, sp, shape=None):
     _ARM(p, j2, side, sp, shape)
-    if sp.get('patches'):                              # his badges on the upper arms, as in The Patriots
-        sh, el = j2['sh' + side], j2['el' + side]
-        if math.hypot(el[0] - sh[0], el[1] - sh[1]) > 90:      # only when the upper arm is seen side on
+    if sp.get('patches') and not FROM_BEHIND[0]:       # his badges on the upper arms, as in The Patriots; never seen
+        sh, el = j2['sh' + side], j2['el' + side]      # from behind: they sit on the outer arm, and a ring flickered
+        if math.hypot(el[0] - sh[0], el[1] - sh[1]) > 90:      # at the shoulder in the walk's turn (Sam, 27 Oct)
             flip = getattr(p.cam, 'flip', 1)
             kind = 'doodle' if (side == 'L') == (flip > 0) else 'PP'
             _patch_under_forearm(p, j2, side, sh, el, kind)

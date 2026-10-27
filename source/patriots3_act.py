@@ -260,9 +260,9 @@ def leaning(sp):
 
 
 FLAPS = {                                          # his arms darting about (shot 7): body-frame hand targets, wide
-    'up':     {'L': (-270.0, -80.0, 120.0), 'R': (270.0, -80.0, 120.0)},      # and high enough to read on a phone
-    'pat':    {'L': (-250.0, 170.0, 170.0), 'R': (250.0, 170.0, 170.0)},      # flapping down: "keep it down!"
-    'pat2':   {'L': (-280.0, 30.0, 150.0), 'R': (280.0, 30.0, 150.0)},
+    'up':     {'L': (-300.0, -80.0, 50.0), 'R': (300.0, -80.0, 50.0)},      # and high enough to read on a phone; hands out at the sleeves' ends, not folded back into them (Sam, 27 Oct)
+    'pat':    {'L': (-290.0, 170.0, 70.0), 'R': (290.0, 170.0, 70.0)},      # flapping down: "keep it down!"
+    'pat2':   {'L': (-320.0, 30.0, 60.0), 'R': (320.0, 30.0, 60.0)},
     'pointL': {'L': (-430.0, -120.0, 80.0), 'R': (200.0, 260.0, 120.0)},
     'pointR': {'L': (-200.0, 260.0, 120.0), 'R': (430.0, -120.0, 80.0)},
     'wag1':   {'L': (-220.0, 420.0, 60.0), 'R': (90.0, -160.0, 200.0)},

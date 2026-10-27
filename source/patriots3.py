@@ -70,10 +70,10 @@ LINES = [
     dict(n=9, who='patriot', text='Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** for '
          'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***', bleep_at=(3.68, 3.95),
          chunks=['Jesus Christ, lads.', 'The Free Speech Police are everywhere.', 'Save that s*** for WhatsApp.']),
-    dict(n=10, who='patriot', text='Anyway, got problems with the Establishment? People trampling on your '
+    dict(n=10, who='patriot', text='Anyway, got some problems with the Establishment? People trampling on your '
          'sovereignty? Let\'s just say I\'m here to assist.', start=27.9, end=33.2, audio='patriots3-patriot-5',
-         chunks=['Anyway, got problems', 'with the Establishment?', 'People trampling on your sovereignty?',
-                 "Let's just say I'm here to assist."]),
+         chunks=['Anyway, got some problems', 'with the Establishment?', 'People trampling on your sovereignty?',
+                 "Let's just say,", "I'm here to assist."]),
     dict(n=11, who='patriot', text='They ain\'t even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6',
          chunks=["They ain't even", 'wearing poppies.']),
     dict(n=12, who='patriot', text='Traitors.', start=39.6, end=40.6, audio='patriots3-patriot-7',
@@ -328,6 +328,7 @@ def draw_actor(img, cam, a, t, log=True):
     target = img
     if a.roll:
         target = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    PC.FROM_BEHIND[0] = abs(yaw) > 112.5
     j2 = V.person(target, S3.FLAT, Xf, Yf - 928 * s, s, sp, t, yaw, a.j, hy, tilt=(e, c))
     if a.roll:                                         # tipped onto the door post: west on screen, at this camera
         (wx, _), _ = cam.project((a.x - 0.3, 1.4, a.z))
