@@ -55,4 +55,4 @@
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| 1 | crew, inside | all | the Loader's reach to the belt read as an arm round the Gunner ("a little cuddle") | done: he stands half a step forward beside the gun, belt held low under the feed; new kind |

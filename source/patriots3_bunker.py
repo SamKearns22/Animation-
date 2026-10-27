@@ -30,7 +30,7 @@ from satire_style import rough   # noqa: E402
 
 M = V.M_PER_UNIT
 GUNNER_AT = (0.0, 0.0)
-LOADER_AT = (-0.52, -0.2)
+LOADER_AT = (-0.55, 0.1)          # half a step forward, beside the gun (Sam, 27 Oct: his reach read as a cuddle)
 LEAN_G = 16.0
 SLIT_X = (-1.3, 0.62)          # the slit's sides, metres (the crew fit in it, seen from the beach)
 SLIT_TOP = 2.05       # tall enough that the crew's faces show from the beach (the camera sees them from below the lintel)
@@ -91,8 +91,8 @@ class Crew:
         feed = np.asarray(g(0.46, 0.022, -0.036))
         box_top = np.asarray(self.box_at) + np.asarray((0.0, 0.2, 0.0))
         if self.loader == 'feed':
-            h1 = feed + np.asarray((-0.16, -0.16, -0.1))
-            h2 = np.asarray((self.box_at[0] - 0.02, self.sill + 0.34, self.box_at[2] - 0.12))
+            h1 = feed + np.asarray((-0.14, -0.13, 0.04))       # just under the feed, low by the gun
+            h2 = np.asarray((self.box_at[0] - 0.04, self.sill + 0.26, self.box_at[2] - 0.06))
             return [feed, h1, h2, box_top]
         return [feed, feed + np.asarray((-0.16, -0.04, -0.02)), box_top]
 
