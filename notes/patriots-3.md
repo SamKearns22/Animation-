@@ -13,12 +13,22 @@
   reading speed because the timing is a guess until the voices; shot 9 is 9.1 s, chosen: one unbroken shot from the
   slit). Sent: `review/patriots3-stills.jpg` and five clips (coast, turn, salute and flapping, blast, firing and
   push-in). No animatic yet.
-- **27 Oct, round 2 (Opus):** Sam's notes 5-8 done (badge, boat through the slit, the coast, the poppy); check sheet
-  and three clips re-sent. Audit clean; pre-flight unchanged (the same 11 named).
-- **Next:** Sam's answer on the stills and clips. **Notes** -> deciding fixes (Opus, medium), then the check sheet
-  again. **"Yes" to an animatic** -> routine stage: Sonnet, fresh chat: `python3 source/preflight.py patriots3
-  review/pf` then `python3 source/patriots3.py final review/patriots3-animatic.mp4 --small` (about 2 minutes; silent
-  but for subtitles, the sounds not yet attached). The final render needs Sam's clear yes.
+- **27 Oct, round 2 (Opus):** Sam's notes 5-9 done (badge, boat through the slit, the coast, the poppy, his hands on the
+  gun: note 9 fixed after the first animatic render; hand targets moved onto the receiver). Sounds (9 files) are on
+  GitHub now and rule 37 is rewritten (on GitHub by default; only files over ~10 MB stay off).
+- **Sam's test recording is in:** `source/audio/patriots3-test-all.m4a` (47.6 s, all the lines in order, "intentionally
+  bad reads", Sam's words). `python3 source/voices.py source/audio/patriots3-test-all.m4a` found 18 phrases (the first
+  three, 10.5-11.9 s, are clicks): 13.59-14.46, 16.00-17.44, 18.12-21.15, 22.15-24.15, 24.86-25.34, 26.22-27.38,
+  27.71-29.58, 29.98-31.72, 33.24-33.94, 34.74-36.39, 36.92-38.84, 39.47-40.21, 40.50-41.64, 43.14-45.27.
+  Not yet cut into lines (no speech recognition here: match phrases to lines by their syllables, in order, and say
+  which phrase is which line in the next message).
+- **An animatic was rendered once (silent, subtitles only; `review/patriots3-animatic.mp4`, not on GitHub) but NOT yet
+  sent to Sam.** Sam asked for a handover first. It is out of date (before the hand fix): render it again.
+- **Next (Sonnet, fresh chat):** 1) cut the test recording into the eleven lines (`source/audio/patriots3-<who>-<n>.m4a`
+  as the film's LINES expect: patriot-1..6, loader-1, loader-2, heil), checking with `voices.py`; keep the test takes
+  as placeholders and say so in every send; 2) `python3 source/preflight.py patriots3 review/pf`; 3) render
+  `python3 source/patriots3.py final review/patriots3-animatic.mp4 --small` (about 2.5 minutes) and send it to Sam;
+  Sam already said Y to the animatic. The final render needs a new clear yes.
 - **Rule requests and proposals not yet in a guide:** usage proposals 2 (budget per film) and 3 (composition sheet
   once) from 27 Oct, still waiting for Sam's numbers; and four kit lessons from this build, proposed (below,
   "Proposed kit lessons").
@@ -169,3 +179,4 @@ know "gunner+loader" speak together, flagged lines meant to have no subtitles, a
 | 6 | 2-9 (through the slit) | all | the boat seen through the slit is on the beach; it should still be out at sea (it would be unloading men under fire) | done: both craft near the horizon, smaller; new kind |
 | 7 | 1 (coast) | 0-3.6 | the money shot, the hook: bunker redoubts the shooting comes from, more texture, bullets skipping in the water, boats not all on one heading, craters and scorch marks where shells land, more beach defences, ripples in the wakes, explosions varied and less cartoony; anything else from D-Day | done: casemates in the cliff face firing (flash at the slits, tracers), MG pits, cliff strata and ledges, shingle, sand ripples and pools, ragged scorched craters (old and new), wire, mined stakes, hedgehogs, steel gates, swell, bullets walking across the water, three kinds of burst (sand and drifting dust, a water column and foam ring, black smoke off the cliff top) as soft billows, each craft on its own heading with rippling wakes; additions (Sam: yes): two P-47s with invasion stripes, a rocket salvo, barrage balloons, inland smoke; new kind (note 2 was the framing) |
 | 8 | 9 | 34.4-36.2 | the poppy visible when he says the poppy line | done: he stands up behind the gun, one hand on it, chest clear (33.5-36.25), never drawn mirrored facing us; poppy 24 units; new kind |
+| 9 | 9 | 33.5-42.6 | his hand is not on the gun, it is to the side | done: hand targets moved from the grip's underside (11 cm below the gun, read as beside it) onto the receiver (`hold_gun`); new kind |

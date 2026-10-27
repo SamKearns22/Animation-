@@ -16,7 +16,9 @@ Read this first in any new session, after CLAUDE.md.
   subtitles only (Sam: no dialogue for now): the casemate (`patriots3_room.py`), the coast (`patriots3_coast.py`), the
   blast (`patriots3_fx.py`), all the acting (`patriots3_act.py`), the film (`patriots3.py`). Pre-flight: shared checks
   clean; named: 10 subtitles too quick (placeholder timing), shot 9 is 9.1 s (chosen). Stills sheet and five clips
-  sent. NEXT: Sam's yes or notes; then the animatic (Sonnet, fresh chat).
+  sent. 27 Oct later: notes 5-9 done, sounds on GitHub, rule 37 rewritten, Sam's test recording of all lines filed
+  (`source/audio/patriots3-test-all.m4a`). NEXT: cut it into the lines, then the animatic (Sonnet, fresh chat); see
+  `notes/patriots-3.md` "Where things stand".
 
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in

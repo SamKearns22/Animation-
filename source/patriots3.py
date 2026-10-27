@@ -434,7 +434,7 @@ def hold_gun(a, cam, t):
         py = 928.0 + ((Y - Yn) / s - 928.0) / c
         x, z, y = px * math.cos(ang) - d * math.sin(ang), px * math.sin(ang) + d * math.cos(ang), py - e * d
         return V.leaned((x, y, z), -j.get('lean', 0.0))
-    grips = [target(g(0.39, -0.115)), target(g(0.13, -0.075))]
+    grips = [target(g(0.40, -0.04)), target(g(0.24, 0.02))]          # on the receiver, where the camera sees them (Sam)
     near = lambda side, q: math.dist(j['sh' + side], q)
     sides = ('R', 'L') if near('R', grips[0]) + near('L', grips[1]) <= near('L', grips[0]) + near('R', grips[1]) \
         else ('L', 'R')
