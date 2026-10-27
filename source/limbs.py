@@ -55,6 +55,13 @@ def _inside(pt, poly):
     return c
 
 
+def _big(poly):
+    """A piece big enough to be the body (a torso is over 200 units tall and 80 wide); a head, collar or pocket the
+    shoulder happens to sit inside never hides the arm (Patriots 3, 27 Oct: a dark bite out of the sleeve's top)."""
+    xs, ys = [q[0] for q in poly], [q[1] for q in poly]
+    return max(ys) - min(ys) > 200 and max(xs) - min(xs) > 80
+
+
 def _smooth(e0, e1, x):
     u = min(1.0, max(0.0, (x - e0) / (e1 - e0)))
     return u * u * (3 - 2 * u)
@@ -155,7 +162,7 @@ def install(B):
         import figure
         if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
             figure.audit_arm(sh, el, wr)
-        body = next((pts for who, pts in reversed(drawn) if who == _who(p.cam) and _inside(sh, pts)), None)
+        body = next((pts for who, pts in reversed(drawn) if who == _who(p.cam) and _big(pts) and _inside(sh, pts)), None)
         busy.append(1)
         try:
             spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)
