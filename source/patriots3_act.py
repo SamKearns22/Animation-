@@ -43,7 +43,7 @@ G_FLIGHT, L_FLIGHT = 0.42, 0.95                    # how long the Gunner flies, 
 T_TO_GUN = 30.6
 T_SHAKE = (33.7, 34.4)
 T_TAKE = 36.25                                     # he leans in and takes both grips, then fires
-P_BURSTS = [(36.6, 37.9), (38.3, 39.6), (40.0, 40.9), (41.6, 42.6)]
+P_BURSTS = [(36.6, 37.9), (38.3, 39.6), (40.65, 41.5), (41.8, 42.6)]   # a gap for 'Traitors' (39.75, Sam 27 Oct)
 T_MEET = 41.0
 
 PLACE = PL.PEOPLE
@@ -242,8 +242,9 @@ def loader(t):
     j = _idle(V.standing(C.LOADER), t, 6)
     sp['brows'] = 'alarm' if t < T_BLAST + 2.0 else 'confused'
     head = None
-    if t >= T_MEET:
-        head = toward(L_BACK, G_WALL)
+    if t >= T_MEET:                                # turned to the Gunner, but only three-quarter from the slit's
+        a, c = toward(L_BACK, G_WALL), toward(L_BACK, (-0.25, 1.55))   # camera: in profile his look read as past
+        head = (a + 0.35 * (((c - a + 180) % 360) - 180)) % 360     # him; the eyes do the rest (Sam, 27 Oct)
     return Actor('loader', L_BACK[0], L_BACK[1], facing, j, sp, head)
 
 

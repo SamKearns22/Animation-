@@ -68,7 +68,7 @@ LINES = [
          chunks=['Ah, you are', 'with the Führer?']),
     dict(n=8, who='gunner+loader', text='Heil!', start=20.6, end=21.2, audio='patriots3-heil', chunks=['Heil!']),
     dict(n=9, who='patriot', text='Jesus Christ, lads. The Free Speech Police are everywhere. Save that s*** for '
-         'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***',
+         'WhatsApp.', start=21.6, end=26.0, audio='patriots3-patriot-4', bleep='s***', bleep_at=(3.56, 3.8),
          chunks=['Jesus Christ, lads.', 'The Free Speech Police', 'are everywhere.', 'Save that s***', 'for WhatsApp.']),
     dict(n=10, who='patriot', text='Anyway, got problems with the Establishment? People trampling on your '
          'sovereignty? Let\'s just say I\'m here to assist.', start=27.9, end=33.2, audio='patriots3-patriot-5',
@@ -76,6 +76,8 @@ LINES = [
                  "Let's just say", "I'm here to assist."]),
     dict(n=11, who='patriot', text='They ain\'t even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6',
          chunks=["They ain't even", 'wearing poppies.']),
+    dict(n=12, who='patriot', text='Traitors.', start=39.6, end=40.6, audio='patriots3-patriot-7',
+         chunks=['Traitors.']),   # Sam, 27 Oct: after his last line, just before their eyes meet
 ]
 SHOTS = [   # (shot, start, end): one camera each from PL.CAMS
     ('s1', 0.0, 3.6),     # high above the coast: cliffs flashing, artillery into sand and spray, six craft creeping in
@@ -170,8 +172,17 @@ M = V.M_PER_UNIT
 BLACK_AT = DUR
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
-    if ln.get('audio') and os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + '.m4a')):
-        v = MA.line(ln['audio'])
+    src = next((os.path.join(HERE, 'audio', ln['audio'] + x) for x in ('.m4a', '.wav') if ln.get('audio') and
+                os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + x))), None)
+    if src:                                       # the barks are .wav game clips: levelled like a line
+        v = MA.line(ln['audio']) if src.endswith('.m4a') else MA.load(src)
+        if src.endswith('.wav'):
+            v = v * 10 ** ((MA.LINE_LUFS - MA.lufs(v)) / 20)
+        if ln.get('bleep_at'):                    # the word gone, a 1 kHz tone in its place; the mouth still says it
+            b0, b1 = (int(x * SR) for x in ln['bleep_at'])
+            k = np.arange(b1 - b0)
+            v = v.copy()
+            v[b0:b1] = 0.18 * np.sin(2 * math.pi * 1000 * k / SR) * np.minimum(1, np.minimum(k, k[::-1]) / (0.006 * SR))
         ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
         ln['_stretches'] = MA.pauses(v, 0.12)
 WHO = ('patriot', 'gunner', 'loader')
@@ -203,16 +214,12 @@ def shot_of(t):
 
 
 def cam_for(t):
-    """The shot's camera from the plan (a sets.Cam); shot 9 pushes in on the soldiers over its last 3.4 s; shot 8 is
+    """The shot's camera from the plan (a sets.Cam); shot 9 holds still (no push-in, Sam 27 Oct); shot 8 is
     kicked by the blast."""
     s = shot_of(t)
-    if s == 's9':
-        a, b = PL.CAMS['s9 start'], PL.CAMS['s9 end']
-        t0 = next(x for n, _, x in SHOTS if n == 's9') - 3.4
-        k = min(1.0, max(0.0, (t - t0) / 1.6))
-        k = k * k * (3 - 2 * k)
-        mix = lambda p, q: tuple(u + (v - u) * k for u, v in zip(p, q))
-        return SETS.Cam(a['pos'], mix(a['look'], b['look']), focal=a['focal'] + (b['focal'] - a['focal']) * k)
+    if s == 's9':                                  # no push-in at the end (Sam, 27 Oct): they just look at each other
+        a = PL.CAMS['s9 start']
+        return SETS.Cam(a['pos'], a['look'], focal=a['focal'])
     c = PL.CAMS[s]
     return SETS.Cam(c['pos'], c['look'], focal=c['focal'], shake=PFX.shake(t) if s == 's8' else (0.0, 0.0))
 
@@ -452,6 +459,9 @@ def hold_gun(a, cam, t):
     gun.held = True
     j['props'] = [gun]
     j['grip'] = {sd for sd, _ in pairs}
+    W = g(0.32, 0.0)                                   # the gun nearer the lens than his shoulders (shot 9, from the
+    if math.dist(cam.pos, W) < math.dist(cam.pos, (a.x, 1.35, a.z)) - 0.15:   # slit): arms behind it, hands over (Sam)
+        j['wrap'] = set(j['grip'])
 
 
 img_ref = [None]
@@ -519,8 +529,47 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
+SFX = os.path.join(HERE, 'audio', 'patriots3-sfx')
+
+
+def sfx(name, t0=0.0, t1=None):
+    """One of Sam's effect files (patriots3-sfx), optionally a stretch of it, cached."""
+    key = (name, t0, t1)
+    if key not in _SFX:
+        x = MA.load(os.path.join(SFX, name))
+        _SFX[key] = x[int(t0 * SR):None if t1 is None else int(t1 * SR)]
+    return _SFX[key]
+
+
+_SFX = {}
+
+
+def _fit(x, dur, fade=0.03):
+    """A clip looped or cut to `dur` seconds, a short fade at the end."""
+    n = int(dur * SR)
+    y = np.tile(x, n // len(x) + 1)[:n].copy()
+    f = min(n, int(fade * SR))
+    y[n - f:] *= np.linspace(1, 0, f)
+    return y
+
+
+def _muffle(x, hz=900):
+    from scipy.signal import butter, sosfilt
+    return sosfilt(butter(2, hz, 'low', fs=SR, output='sos'), x)
+
+
+def sound_events():
+    """Sam's effects (27 Oct: 'where are the sound effects?'), as the notes' sound list (rule 26)."""
+    s2 = next(x for n, x, _ in SHOTS if n == 's2')
+    ev = [('amb', 0.0, DUR, 0.55), ('artillery', 0.0, s2, 0.8), ('shots', 0.0, s2, 0.5)]
+    ev += [('mg42', a, b, 0.45) for a, b in ACT.G_BURSTS] + [('mg42', a, b, 0.6) for a, b in ACT.P_BURSTS]
+    ev += [('explosion', ACT.T_BLAST, None, 1.0), ('rubble', ACT.T_BLAST + 0.45, None, 0.55)]
+    return ev
+
+
 def soundtrack(stems=False):
-    """Voices only (none recorded yet: Sam, 27 Oct, 'subtitles only for now'); the effects come with his files."""
+    """Sam's voices, the barks, and his effects: the battle loud in shot 1; inside the bunker muffled under the
+    dialogue, opening up only while the MG42 fires (Sam, 27 Oct)."""
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)
     for ln in LINES:
@@ -528,11 +577,33 @@ def soundtrack(stems=False):
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
+    s2 = int(next(x for n_, x, _ in SHOTS if n_ == 's2') * SR)
+    for name, at, until, g in sound_events():
+        if name == 'amb':                             # the battle all along: open air in shot 1, through concrete after
+            x = _fit(sfx('battlefield-ambience.mp3', 10.0), DUR + 0.3)[:n]
+            open_ = np.zeros(len(x))                 # 1 = open air: shot 1, and inside only while the MG42 fires
+            open_[:s2] = 1.0
+            for a, b in ACT.G_BURSTS + ACT.P_BURSTS:
+                open_[int(a * SR):int(b * SR)] = 1.0
+            k = np.hanning(int(0.3 * SR))
+            open_ = np.clip(np.convolve(open_, k / k.sum(), 'same'), 0, 1)   # a quick swell in and out
+            open_[:s2] = 1.0                         # the cut to inside is a hard cut
+            x = open_ * x + (1 - open_) * 0.3 * _muffle(x)   # muffled and low under the dialogue (Sam, 27 Oct)
+            rest[:len(x)] += x * g
+        elif name in ('artillery', 'shots'):
+            x = _fit(sfx('field-artillery.mp3' if name == 'artillery' else 'distant-shots.mp3'), until - at, 0.08)
+            filmkit.place(rest, x, at=at, sr=SR, gain=g)
+        elif name == 'mg42':                         # the rapid burst in Sam's file (2.8-5.0 s), cut to each burst
+            filmkit.place(rest, _fit(sfx('mg42.mp3', 2.8, 5.0), until - at), at=at, sr=SR, gain=g)
+        elif name == 'explosion':
+            filmkit.place(rest, sfx('explosion.mp3'), at=at, sr=SR, gain=g)
+        elif name == 'rubble':
+            filmkit.place(rest, sfx('rubble-slide.mp3'), at=at, sr=SR, gain=g)
+    rest *= 10 ** ((MA.LINE_LUFS - 4 - MA.lufs(rest[:int(DUR * SR)])) / 20)   # effects a little under the voices
     mix = voice + rest
     end = int(BLACK_AT * SR)
-    if np.abs(voice).max() > 1e-6:
-        mix, g = MA.master(mix, end)
-        voice, rest = voice * g, rest * g
+    mix, g = MA.master(mix, end)
+    voice, rest = voice * g, rest * g
     mix[end:] = 0
     return (mix, voice, rest) if stems else mix
 

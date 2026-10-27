@@ -680,7 +680,11 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         draw(p, j2)
     for sd in sorted(j.get('grip', ())):          # a hand gripping a held prop (a fan of cards) is in front of it:
         if not (held_behind and sd in behind):     # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
-            arm(p, j2, sd, sp)
+            if sd in j.get('wrap', ()):            # a prop nearer us than his arm (a gun he stands behind): the arm
+                shape = j2.get('hand', {}).get(sd, 'fist')   # stays behind it, only the hand over (Sam, 27 Oct)
+                B.gesture_hand(p, j2['el' + sd], j2['wr' + sd], shape, sp.get('glove', sp['skin']))
+            else:
+                arm(p, j2, sd, sp)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
     # nothing he holds out in front of him is drawn over his back
