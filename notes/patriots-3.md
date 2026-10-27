@@ -1,9 +1,9 @@
 # Notes for Patriots 3 (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-3-handovers.md)
-- **Sounds are kept off GitHub:** `source/audio/patriots3-sfx/` (battlefield-ambience, distant-shots, german-angriff,
-  german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide). They were not in this chat's container
-  either: ask Sam to attach all eight again before the sound is built.
+- **Sounds are on GitHub now (Sam, 27 Oct: free assets, 4.3 MB):** `source/audio/patriots3-sfx/` (battlefield-ambience,
+  distant-shots, german-angriff, german-see-enemy, german-fire-at-target, explosion, mg42, rubble-slide, field-artillery).
+  Nothing to re-attach. Not placed in the film yet (voices-only build until Sam says).
 - **Done (27 Oct, building, Opus):** Sam sent the missing photos (`references/patriots-3/` room-1, room-2, lean-1, -2,
   salute-1, -2, blast-1, -2, air-4, -5). Sam: **"Build without dialogue for now, just subtitles."** Built: the
   casemate (`patriots3_room.py`), the coast (`patriots3_coast.py`), the blast and dust (`patriots3_fx.py`), all the
