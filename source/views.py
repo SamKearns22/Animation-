@@ -232,13 +232,25 @@ def check_arm3(j, side, where='an arm'):
         F.fail(f'{where}: elbow folded tighter than 25 degrees')
 
 
+PROBE = {}        # set by handcheck.py while it re-draws someone: {side: (sleeve colour, hand colour), 'full': {side: pen}}
+
+
+def hand(p, j2, side, sp, shape):
+    """The hand at the end of an arm ('glove': gloved hands, a colour); while handcheck probes, in its key colour, and
+    also drawn alone on the probe's own layer, so it knows the hand's whole size."""
+    el, wr = j2['el' + side], j2['wr' + side]
+    if PROBE:
+        B.gesture_hand(PROBE['full'][side](p), el, wr, shape, PROBE[side][1])
+    B.gesture_hand(p, el, wr, shape, PROBE[side][1] if PROBE else sp.get('glove', sp['skin']))
+
+
 def arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
-        B.arm(p, sh, el, wr, sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
+        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
-        B.gesture_hand(p, el, wr, shape, sp.get('glove', sp['skin']))     # 'glove': gloved hands (a colour)
+        hand(p, j2, side, sp, shape)
 
 
 # ------------------------------------------------------------------------------------------------ the chair
@@ -280,11 +292,60 @@ class Tilted:
         return self.L.S(v)
 
 
+class Mirrored:
+    """A head's frame flipped about its own centre line (x = cx): the head faces its own way, whichever way the body's
+    drawing is mirrored (kit lesson, Patriots 3: a soldier facing us could not look to his other side)."""
+    def __init__(self, L, cx):
+        self.L, self.cx, self.cam, self.s, self.flip = L, cx, L.cam, L.s, -getattr(L, 'flip', 1)
+
+    def P(self, x, y):
+        return self.L.P(2 * self.cx - x, y)
+
+    def S(self, v):
+        return self.L.S(v)
+
+
+WHITE = (250, 250, 248)                       # the whites of the eyes, in every head the kit draws
+
+
+class Eyes(B.Pen):
+    """A head's pen that notes each eye as it is drawn (the white, then the pupil inside it), in screen pixels, so the
+    look check measures where the pupils really point on screen (rule 43), never what the film meant them to. A real
+    Pen (code that looks for one finds it); its drawing goes through the pen it wraps."""
+    def __init__(self, pen):
+        self.pen, self.found, self._white = pen, [], None
+        self.img, self.cam, self.d = pen.img, pen.cam, pen.d
+
+    def __getattr__(self, k):
+        return getattr(self.pen, k)
+
+    def poly(self, pts, fill, line=INK, lw=4):
+        self._note(fill, line, pts)
+        return self.pen.poly(pts, fill, line, lw)
+
+    def ell(self, cx, cy, rx, ry, fill, line=INK, lw=4, rot=0, n=40):
+        self._note(fill, line, [(cx - rx, cy), (cx + rx, cy), (cx, cy - ry), (cx, cy + ry)])
+        return self.pen.ell(cx, cy, rx, ry, fill, line, lw, rot, n)
+
+    def _note(self, fill, line, pts):
+        if fill is None or len(fill) < 3:
+            return
+        q = np.array([self.pen.cam.P(*v) for v in pts], float)
+        if tuple(fill[:3]) == WHITE:
+            self._white = q
+        elif self._white is not None and line is None and tuple(fill[:3]) == tuple(INK[:3]):
+            w = self._white
+            c = (w.max(0) + w.min(0)) / 2
+            half = max(1.0, (w[:, 0].max() - w[:, 0].min()) / 2)
+            self.found.append(dict(white=tuple(c), pupil=tuple(q.mean(0)), off=tuple((q.mean(0) - c) / half)))
+            self._white = None
+
+
 class Lean:
     """The drawing frame of the upper body, tipped by the pose's lean: a side view rotates about the hips; a front
     view foreshortens (the chest comes towards us and down)."""
     def __init__(self, L, lean, yaw):
-        self.L, self.cam, self.s = L, L.cam, L.s
+        self.L, self.cam, self.s, self.flip = L, L.cam, L.s, getattr(L, 'flip', 1)
         a = math.radians(lean)
         cy = abs(math.cos(math.radians(yaw)))
         self.k = (math.cos(a) - _E[0] * math.sin(a)) * cy + (1 - cy)
@@ -682,18 +743,25 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         if not (held_behind and sd in behind):     # its fingers wrap the side we see (Sam, 19 Oct: Poker Mon)
             if sd in j.get('wrap', ()):            # a prop nearer us than his arm (a gun he stands behind): the arm
                 shape = j2.get('hand', {}).get(sd, 'fist')   # stays behind it, only the hand over (Sam, 27 Oct)
-                B.gesture_hand(p, j2['el' + sd], j2['wr' + sd], shape, sp.get('glove', sp['skin']))
+                hand(p, j2, sd, sp, shape)
             else:
                 arm(p, j2, sd, sp)
     hv = VIEWS[snap(head_yaw)[0]] if head_yaw is not None else view
+    hdx = sp_draw.get('head_dx', 0.0)
+    head_mirror = snap(head_yaw)[1] if head_yaw is not None and hv != 'front' else mirror
+    if head_mirror != mirror:
+        up_head = Mirrored(up_head, hdx)          # the head faces its own way (a front-on body looking either side)
+    head_pen = Eyes(B.Pen(img, up_head))
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
     # nothing he holds out in front of him is drawn over his back
     j2['_drawn'] = dict(view=view, head=hv, yaw=yaw, head_yaw=yaw if head_yaw is None else head_yaw,
                         held_over_back=rear and held and not held_behind and bool(reach) and
                         not (under and len(under) == len(j.get('props', []))))
-    head_view(img, B.Pen(img, up_head), sp_draw, t, hv, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+    head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
+    j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
+    j2['_drawn']['head_mirror'] = head_mirror
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
-        draw(B.Pen(img, up_head), hv, sp_draw, sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'])
+        draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
         arm(p, j2, sd, sp)
     for draw in j.get('face_props', []):

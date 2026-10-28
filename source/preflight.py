@@ -20,7 +20,8 @@ checklist") has a blank "done?" row, or before the composition sheet has been se
 DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
 against the audit's roster). It prints a short summary; the full list goes to OUT_DIR/NAME-preflight.txt (rule 19).
 The shared kit's checks (kitchecks.py, rule 13) run here on every film: facing on the drawing pass, marks, sounds,
-and (inside the audit) hands on what they touch, props held, resting hands clear. So do viewchecks.py's (rules 15-18,
+and (inside the audit) hands on what they touch, props held, resting hands clear. handcheck.py (rule 41) probes
+everyone drawn, on every frame: every arm ends in a visible hand. So do viewchecks.py's (rules 15-18,
 20): effect shapes, readability, direction across a cut, effects hidden behind figures, and on the drawing pass every
 held prop turned through every view.
 
@@ -39,6 +40,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 import burnham as B
 import figure as F
+import handcheck
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAFE = (60, 310, 900, 1500)
@@ -61,13 +63,30 @@ def _check_frame(i):
     F.CONTEXT['where'] = f'{shot} {t:.2f}s'
     n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
     err = None
+    handcheck.begin()
     try:
         film.frame_image(t)
     except Exception as e:
         err = (str(e), isinstance(e, ValueError), traceback.format_exc())
+    hands = handcheck.end(t, F.CONTEXT['where'])    # rule 41: every arm ends in a visible hand
     turned = viewchecks.turn_faults(kitchecks.POSES[p0:], _TURNED)   # rule 20: every held prop through every view
     del kitchecks.POSES[p0:]
-    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned
+    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands
+
+
+def _hands_frame(i):
+    """Rule 41 on the frames the drawing pass skips: the hands are checked on every frame."""
+    t = i / _FPS
+    shot = next((s[0] for s in getattr(_FILM, 'SHOTS', []) if s[1] <= t < s[2]), '')
+    F.CONTEXT['where'] = f'{shot} {t:.2f}s'
+    n0 = len(F.LOG)
+    handcheck.begin()
+    try:
+        _FILM.frame_image(t)
+    except Exception:                               # the drawing pass reports drawing faults
+        pass
+    del F.LOG[n0:]
+    return handcheck.end(t, F.CONTEXT['where'])
 
 
 def notes_path(film, name):
@@ -150,6 +169,7 @@ def main():
     F.guard(B)
     import kitchecks
     kitchecks.install()                         # every views.py person drawn is logged for the facing check
+    handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
     shared = ['gate: ' + x for x in stop]       # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
@@ -203,14 +223,20 @@ def main():
     drawn = []
     from multiprocessing import Pool
     with Pool(os.cpu_count()) as pool:
-        for t, err, log, dr, turned in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
+        hands = []
+        for t, err, log, dr, turned, hs in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
             F.LOG.extend(log)
             drawn += dr
+            hands += hs
             problems += [x for x in turned if x not in problems]
             if err:
                 problems.append(f'{t:6.2f} s: {err[0]}')
                 if not err[1]:
                     print(err[2])
+        rest = [i for i in range(int(end * fps)) if i % 3]
+        for hs in pool.imap(_hands_frame, rest, chunksize=4):   # the hands on every frame (rule 41)
+            hands += hs
+    problems += [row[1] for row in handcheck.summary(film, hands, fps)]
     F.CONTEXT['where'] = ''
     problems += kitchecks.facing(drawn)         # rule 13: heads never turned past the body; nothing held over a back
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)

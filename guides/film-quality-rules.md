@@ -151,15 +151,18 @@ working habits saved or cost whole rounds.
     reason. Sam approves or trims the list; the shot is ticked against it at its first rehearsal clip. [by hand]
 41. **Every arm ends in a visible hand, from every view it is seen in.** No arm is wrapped round a head or back, hides its
     hand in a sleeve or behind a head, or stops short of the end of its sleeve. Tested on every frame, in each view the
-    film uses (front, side, from behind). [tool to build: `handcheck`, run by pre-flight; by hand until it exists]
+    film uses (front, side, from behind). [tool: `source/handcheck.py`, run by pre-flight on every frame (28 Oct): an
+    arm with no visible hand, a hand pushed back into its own sleeve, a hand over someone at the same distance; meant
+    exceptions in the film's `HANDS_OK`]
 42. **Poses come from a tested gallery.** A pose (arms folded, hands up, pointing, binoculars, salute, hands on a gun) is
     drawn and tested once from the front, the side and from behind, then kept in `guides/pose-gallery.md` and the kit;
-    a film picks from it and only a pose not in it is built new, listed in the plan. [by hand: a gallery sheet; a tool is on
-    the Build list]
+    a film picks from it and only a pose not in it is built new, listed in the plan. [tool: `source/posegallery.py`
+    draws every pose from five views with the hand check on, one sheet (28 Oct); picking from it is by hand]
 43. **Looks are tested at the shot's own camera** (extends rule 25). The plan says, per shot, who looks at what as seen by
     that camera; the check measures that each person's pupils point at the target on screen (never a wall, never past
-    them), and eyes that are meant to meet are shown on the check sheet as one frame each. [tool to extend:
-    `filmkit.eyeline`; by hand until then]
+    them), and eyes that are meant to meet are shown on the check sheet as one frame each. [tool: `filmkit.eyeline`
+    with `aim=`, `drawn=`, `at=` measures each face and its pupils as drawn (28 Oct); `filmkit.look_sheet` makes the
+    sheet of eyes that meet; meant looks away in the film's `LOOKS_OK`]
 44. **A usage budget per film.** The plan states a share of a week; at each handover I ask Sam for the week's figure and
     log it in the film's notes; a film over budget is trimmed before the next stage. [by hand]
 45. **The composition sheet is sent once.** Notes on it are applied and named in the handover, never re-sent for approval.
@@ -175,8 +178,9 @@ working habits saved or cost whole rounds.
     "Rules that bite at this stage": the 3-5 by-hand rules most likely to be broken in the next stage, each with its
     number, so a fresh chat starts with them in view. Every self-review before a send lists each by-hand rule that applied
     as kept or slipped, and a slip is named to Sam. To look at several frames, make ONE labelled sheet (time on each
-    tile) and look once; open a single frame at full size only for a detail. [tool to build: `source/sheet.py TIMES...`
-    makes the labelled sheet from a film in one command; the handover and self-review wording by hand]
+    tile) and look once; open a single frame at full size only for a detail. [tool: `python3 source/sheet.py FILM
+    TIMES...` makes the labelled sheet in one command (28 Oct; ranges and `--crop` for a detail); the handover and
+    self-review wording by hand]
 
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in

@@ -208,18 +208,92 @@ def check_joints(joints, rules):
 
 # ------------------------------------------------------------------------------------------------ eyelines
 EYES = []
+READS = {'front': (0, 55), 'three': (10, 100), 'side': (78, 125), 'three_back': (100, 170), 'back': (150, 180)}
+# each drawn view reads as looking at a target this many degrees round from the lens (views' yaw, either side): a
+# three-quarter face reads for a wide range; a profile only for someone at about the same distance from the lens
+# (Patriots 3 note 11: a profile at a target 69 degrees round, nearer the lens, read as looking at the wall)
+SAME = 15.0                                 # a target within this of the lens: a front face looking straight out
 
 
-def eyeline(name, t, eye, look, target):
+def eyeline(name, t, eye, look, target, aim=None, drawn=None, at=None):
     """Called while drawing: where a character's eyes are, which way they look (x, y: the pupils' offset) and what they
-    SHOULD be looking at (the person they fight or talk to). check_eyelines() then tests them all."""
-    EYES.append((name, t, tuple(eye), tuple(look), tuple(target)))
+    SHOULD be looking at (the person they fight or talk to). check_eyelines() then tests them all.
+    Rule 43 (looks tested at the shot's own camera): also pass `aim`, the way the face must point to see the target as
+    THIS camera sees it (views' yaw: 0 facing the lens, +90 facing screen right; e.g. view_yaw(cam, x, z, direction to
+    the target)), and `drawn`, the views.person result: the check then measures the face and pupils as drawn (its
+    view, mirror, each pupil inside its eye on screen), never the look the film meant. `at`: the target's name (eyes
+    meant to meet are paired for the check sheet)."""
+    d = None
+    if drawn is not None and '_drawn' in drawn:
+        d = drawn['_drawn']
+        d = dict(head=d.get('head'), mirror=d.get('head_mirror', False), eyes=list(d.get('eyes', [])))
+    EYES.append((name, t, tuple(eye), tuple(look), tuple(target), aim, d, at))
 
 
-def check_eyelines(min_cos=0.3, clear=True):
-    """Everyone looks at whoever they are dealing with (twice a fighter stared at nothing). Returns faults."""
-    out, seen = [], set()
-    for name, t, eye, look, target in EYES:
+def drawn_look(d):
+    """How a drawn face looks: (view, side: +1 screen right / -1 left / 0 straight out), from its view, its mirror and
+    its pupils as drawn; None when no eye shows on a face that should show them (a blink)."""
+    if not d or d['head'] not in READS:
+        return None
+    if d['head'] in ('three_back', 'back'):
+        return None                            # no eyes seen: nothing to measure (rule 43 is about the pupils)
+    if d['head'] != 'front':
+        return d['head'], -1 if d['mirror'] else 1
+    if not d['eyes']:
+        return None
+    off = sum(e['off'][0] for e in d['eyes']) / len(d['eyes'])       # the pupils inside the eyes, on screen
+    return 'front', 0 if abs(off) < 0.1 else (1 if off > 0 else -1)
+
+
+def look_fault(g, aim):
+    """What is wrong with a face drawn as g (drawn_look) when its target is aim degrees round (None: nothing)."""
+    view, side = g
+    a = ((aim + 180) % 360) - 180
+    lo, hi = READS[view]
+    if abs(a) < SAME:
+        return None if view == 'front' else f'looks past them (drawn {view}, the target {a:+.0f} degrees: almost ' \
+                                             f'straight out at the lens, a front face)'
+    if side and (side > 0) != (a > 0):
+        return f'looks the other way (drawn {view} to the {"right" if side > 0 else "left"}, the target {a:+.0f} ' \
+               f'degrees): at a wall, not at them'
+    if view == 'front' and not side:
+        return f'looks straight out (the target {a:+.0f} degrees round: the pupils should turn to them)'
+    if abs(a) < lo:
+        return f'looks past them (drawn {view}, the target {a:+.0f} degrees round: it reads as looking beside them, ' \
+               f'who stand nearer the lens; draw the next view towards the lens)'
+    if abs(a) > hi:
+        return f'looks short of them (drawn {view}, the target {a:+.0f} degrees round: turn the head further)'
+    return None
+
+
+def _fault(rec):
+    """The look fault of one logged look measured from its drawing (None: fine, or not measurable)."""
+    aim, d = rec[5], rec[6]
+    if aim is None or d is None:
+        return None
+    g = drawn_look(d)
+    return None if g is None else look_fault(g, aim)
+
+
+def check_eyelines(min_cos=0.3, clear=True, allow=(), gap=0.25, held=2):
+    """Everyone looks at whoever they are dealing with (twice a fighter stared at nothing). Returns faults. Looks logged
+    with `aim` and `drawn` are measured from the drawing at the shot's own camera (rule 43), one line per stretch
+    (`held` frames or more: a one-frame glance is not seen); `allow`: [(name, t0, t1, why)] looks away on purpose."""
+    out, seen, runs = [], set(), {}
+    for rec in sorted(EYES, key=lambda r: r[1]):
+        name, t, eye, look, target, aim, d, at = rec
+        if any(name == a and t0 - 1e-6 <= t <= t1 + 1e-6 for a, t0, t1, *_ in allow):
+            continue
+        if aim is not None and d is not None:
+            why = _fault(rec)
+            if why:
+                kind = why.split(' (')[0]
+                r = runs.setdefault((name, kind), [])
+                if r and t - r[-1][-1][0] <= gap:
+                    r[-1].append((t, why))
+                else:
+                    r.append([(t, why)])
+            continue
         dx, dy = target[0] - eye[0], target[1] - eye[1]
         if abs(look[1]) < 1e-9:              # pupils only move sideways: the side must be right
             ok = abs(dx) < 10 or (look[0] > 0) == (dx > 0) and abs(look[0]) > 0.2
@@ -229,8 +303,72 @@ def check_eyelines(min_cos=0.3, clear=True):
         if not ok and name not in seen:
             seen.add(name)
             out.append(f'{name} at {t:.2f} s: not looking at who they are dealing with')
+    for (name, kind), rs in runs.items():
+        for r in rs:
+            if len(r) < held:
+                continue
+            span = f'{r[0][0]:.2f}-{r[-1][0]:.2f} s, {len(r)} frames checked' if len(r) > 1 else f'{r[0][0]:.2f} s'
+            out.append((r[0][0], f'LOOKS: {name} at {r[0][0]:.2f} s: {r[0][1]} ({span}; rule 43)'))
+    out = [x for x in out if isinstance(x, str)] + [x[1] for x in sorted(x for x in out if not isinstance(x, str))]
     if clear:
         EYES.clear()
+    return out
+
+
+def meets(records=None, gap=0.3):
+    """Stretches where two people are meant to look at each other (each logged with at= the other), merged:
+    [(a, b, t0, t1)], for the check sheet (rule 43: eyes that meet are shown as one frame each)."""
+    records = EYES if records is None else records
+    looks = {}
+    for name, t, eye, look, target, aim, d, at in records:
+        if at:
+            looks.setdefault((name, at), set()).add(round(t, 3))
+    out = []
+    for (a, b), ts in looks.items():
+        if a < b and (b, a) in looks:
+            both = sorted(ts & looks[(b, a)])
+            run = []
+            for t in both:
+                if run and t - run[-1] > gap:
+                    out.append((a, b, run[0], run[-1]))
+                    run = []
+                run.append(t)
+            if run:
+                out.append((a, b, run[0], run[-1]))
+    return sorted(out, key=lambda x: x[2])
+
+
+def look_sheet(frame, records, out, size=(480, 853)):
+    """The check sheet for rule 43: one frame from the middle of each stretch where eyes should meet, each face's
+    drawn look against its target written under it (OK or the fault). frame(t) -> the picture."""
+    from PIL import Image, ImageDraw, ImageFont
+    import burnham as B
+    font = ImageFont.truetype(B.SANS, 20)
+    tiles = []
+    for a, b, t0, t1 in meets(records):
+        t = min((x[1] for x in records if x[0] == a), key=lambda u: abs(u - (t0 + t1) / 2))
+        im = frame(t).convert('RGB').resize(size)
+        tile = Image.new('RGB', (size[0], size[1] + 84), (20, 20, 24))
+        tile.paste(im, (0, 0))
+        dr = ImageDraw.Draw(tile)
+        dr.text((6, size[1] + 4), f'{t:.2f} s: {a} and {b} ({t0:.1f}-{t1:.1f} s)', font=font, fill=(255, 255, 255))
+        for k, who in enumerate((a, b)):
+            rec = min((x for x in records if x[0] == who), key=lambda x: abs(x[1] - t))
+            g = drawn_look(rec[6]) if rec[6] else None
+            why = _fault(rec)
+            txt = f'{who}: ' + ('eyes not seen' if g is None else
+                                f'{g[0]} for a target {rec[5]:+.0f} deg: ' + ('OK' if not why else why.split(' (')[0]))
+            dr.text((6, size[1] + 30 + 24 * k), txt, font=font, fill=(150, 230, 150) if g is not None and not why
+                    else (255, 170, 120))
+        tiles.append(tile)
+    if not tiles:
+        return None
+    cols = min(4, len(tiles))
+    w, h = tiles[0].size
+    sheet = Image.new('RGB', (cols * w, ((len(tiles) + cols - 1) // cols) * h), (8, 8, 10))
+    for i, tl in enumerate(tiles):
+        sheet.paste(tl, ((i % cols) * w, (i // cols) * h))
+    sheet.save(out, quality=85)
     return out
 
 

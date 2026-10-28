@@ -88,6 +88,20 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | WW2 concrete casemate inside (raw concrete with formwork joints, ribbed steel ceiling, steel door frame, cable run, caged lamp, crates, range card, field telephone, spent cases), the passage behind, the beach or a trench through the openings; the slit's reveal round a lens inside it | `source/patriots3_room.py` (`draw`, `painter`, `foreground`) |
 | The Normandy coast from the air, painted in moving layers: cliff-face casemates and MG pits firing (tracers, bullets walking across the water), textured black cliffs, shingle, rippled sand, scorched craters, wire, mined stakes, hedgehogs, steel gates, swell and surf, six LCVPs on their own headings with rippling wakes, three kinds of shell burst as soft billows, warships with barrage balloons, a rocket salvo, P-47s with invasion stripes | `source/patriots3_coast.py` (`picture`, `burst`, `craft`) |
 | A shell bursting on a bunker's slit: flash, black smoke outside, dust puffs rolling in (drawn in depth order), grit from the ceiling, concrete chips that land apart and stay, the bite left in the lintel, camera shake | `source/patriots3_fx.py` |
-| A held 3D prop through any 3D camera with the holder's hands put on its grips where the camera sees them (screen point turned back into a hand target), and the MG42 drawn in true perspective (end on, beside the lens) | `source/patriots3.py` (`hold_gun`, `draw_gun3d`, `view_yaw`, `_tilt`) |
+| A held 3D prop through any 3D camera with the holder's hands put on its grips where the camera sees them (screen point turned back into a hand target), and the MG42 drawn in true perspective (end on, beside the lens) | now in the kit: `source/held3d.py` (28 Oct); the film's own: `source/patriots3.py` (`hold_gun`, `draw_gun3d`) |
 | Remembrance poppy on a jacket | `source/patriots3_cast.py` (`poppy`) |
-| The salute (an arm swung up round the shoulder in an arc), arms darting about (flapping, pointing round, finger wag), leaning in a doorway (figure tipped onto the post), thrown back against a wall, staggering backwards | `source/patriots3_act.py` (`salute`, `flapping`, `leaning`, `gunner`, `loader`) |
+| The salute (an arm swung up round the shoulder in an arc), arms darting about (flapping, pointing round, finger wag), leaning in a doorway (figure tipped onto the post), thrown back against a wall, staggering backwards | `source/patriots3_act.py` (`salute`, `flapping`, `leaning`, `gunner`, `loader`); the salute, flapping and binoculars are now in the pose gallery |
+
+## Added 28 Oct (Build list 27 Oct: the kit lessons and the new checks)
+| what | file |
+|---|---|
+| The pose gallery: arms folded, hands up, pointing, binoculars, salute, hands on a gun (rifle at port arms), flapping (up, pat), each tested from five views; one sheet | `source/posegallery.py`, `guides/pose-gallery.md`, `guides/pose-gallery.jpg` |
+| A held 3D prop through the real camera: `through(cam)` (views.project as the camera), `body_point` (world point to hand target), `hold` (hands on the grips, the prop drawn with them, 'wrap' when it is nearer the lens) | `source/held3d.py` |
+| A flat person's place through a 3D camera, the tilt measured at the arms' height (no sinking salute close up) | `source/lying.py` (`place`; `stand` uses it) |
+| A head turned to its own side whichever way the body is drawn (a front-on body can look either way) | `source/views.py` (`Mirrored`, in `person`) |
+| A camera that only turns (a push-in) never changes how people are drawn | `source/sets.py` (`Cam.yaw_of`) |
+| The hand check (rule 41): every arm ends in a visible hand, every frame, every view; a check sheet | `source/handcheck.py` (pre-flight runs it) |
+| The look check at the shot's own camera (rule 43): each face and its pupils measured as drawn; the sheet of eyes that meet | `source/filmkit.py` (`eyeline(aim=, drawn=, at=)`, `check_eyelines`, `look_sheet`); `views.Eyes` notes each pupil |
+| One labelled contact sheet from any film in one command (rule 48) | `source/sheet.py FILM TIMES... [--crop] [--clean]` |
+| `--nostamp` for a clip to splice into a final (rule 47) | `source/satire_template.py` (`final ... --nostamp`) |
+| Each shared check tested against the fault that taught it (the old version put back, caught; the fix passes) | `source/kittests.py` |

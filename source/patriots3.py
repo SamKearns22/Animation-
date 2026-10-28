@@ -339,8 +339,11 @@ def draw_actor(img, cam, a, t, log=True):
         img.alpha_composite(target)
     if log:
         eye = (Xf, Yf - (928 + 150) * s * c)            # (the face's x is the feet's: people stand upright)
-        if scr is not None:
-            filmkit.eyeline(a.who, t, eye, (seen, 0.0), scr)
+        if scr is not None:                             # rule 43: measured from the drawing, at this camera
+            tx, _, tz = gaze(a, t)
+            aim = view_yaw(cam, a.x, a.z, (tx - a.x, tz - a.z))
+            at = next((b.who for b in ACT.everyone(t) if b.who != a.who and math.hypot(b.x - tx, b.z - tz) < 0.05), None)
+            filmkit.eyeline(a.who, t, eye, (seen, 0.0), scr, aim=aim, drawn=j2, at=at)
     return j2
 
 
@@ -665,12 +668,13 @@ def audits():
                 actors[f'{who} [{shot}]'] = (ts, alone(who))
     filmkit.EYES.clear()
     faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=STILL_OK, allow=AUDIT_ALLOW)
-    faults += filmkit.check_eyelines()
+    faults += filmkit.check_eyelines(allow=LOOKS_OK)
     faults += moves.audit()
     return faults
 
 
 STILL_OK = ()
+LOOKS_OK = [('patriot', 22.9, 24.3, 'he looks round: "the Free Speech Police are everywhere" (ACT.LOOKS_ROUND)')]
 AUDIT_ALLOW = [   # (name [shot], from, to, why): on purpose
     ('gunner [s8]', ACT.T_BLAST, ACT.T_BLAST + ACT.G_FLIGHT + 0.1, 'thrown across the room by the blast (Sam, 27 Oct)'),
     ('loader [s8]', ACT.T_BLAST, ACT.T_BLAST + ACT.L_FLIGHT + 0.1, 'knocked back by the blast, staggering'),

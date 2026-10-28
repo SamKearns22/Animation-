@@ -97,3 +97,18 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 - Render: `python3 source/FILM.py final OUT` (caches pictures); `... final OUT --reuse --redo none` for caption/timing notes;
   `... --reuse --redo shot1,shot2` for notes on those shots only. Sound-only notes: rebuild the sound and attach it.
 
+
+## Added 28 Oct (Build list 27 Oct): hands, looks, poses, sheets
+- **Hands (rule 41):** pre-flight probes everyone `views.person` draws on EVERY frame (`source/handcheck.py`): an arm
+  that shows with no hand (hidden, behind a head or a back), a hand pushed back into its own sleeve (two frames or
+  more), a hand over someone at the same distance not listed as a touch. Meant ones go in the film's `HANDS_OK`
+  [(who, side, kind, t0, t1, why)]. On its own: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]` (a sheet of
+  each fault's first frame). Older films' own figures and lying.py's 3D bodies are not seen.
+- **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; the film's
+  `audits()` then measures each face as drawn at its shot's camera (a profile reads only for someone at the same
+  distance; a three-quarter for most of the way round; a front face by its pupils). Meant looks away go in
+  `LOOKS_OK`, passed as `check_eyelines(allow=LOOKS_OK)`. `filmkit.look_sheet(picture, records, OUT)`: the eyes
+  that meet, one frame each, for the check sheet.
+- **Poses (rule 42):** pick from `guides/pose-gallery.md`; a new pose goes through `source/posegallery.py` first.
+- **Sheets (rule 48):** `python3 source/sheet.py FILM TIMES...` for any set of frames, one look.
+- **Tests:** `python3 source/kittests.py` after any change to a shared check (about 2 minutes).

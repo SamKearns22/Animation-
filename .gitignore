@@ -24,3 +24,8 @@ source/data/*-clean-final.mp4*
 source/audio/netan-yahoo-sfx/
 source/data/*-clean.mp4.wav
 
+
+# check sheets made by the tools (drafts: never on GitHub; the gallery's own copy lives in guides/)
+source/data/*-sheet.jpg
+source/data/*-hands.jpg
+source/data/pose-gallery.jpg
