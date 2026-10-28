@@ -312,12 +312,21 @@ def add(film, out, fps=None, crf=None):
     with tempfile.TemporaryDirectory() as tmp:
         so = os.path.join(tmp, 'signoff.mp4')
         clip(so)
+        import re
+        wh = re.search(r'Video:.*?, (\d{3,5})x(\d{3,5})', probe)       # the film's own size: a small animatic's sign-off
+        size = f'scale={wh.group(1)}:{wh.group(2)},' if wh else ''        # is scaled to match (scale2ref cut it to 0.75 s)
         subprocess.run([FF, '-y', '-loglevel', 'error', '-i', film, '-i', so, '-filter_complex',
-                        f'[1:v][0:v]scale2ref[s1][r0];[r0]fps={fps},format=yuv420p[a];[s1]fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'   # sign-off scaled to the film's size (small animatics)
-                        
+                        f'[0:v]fps={fps},format=yuv420p[a];[1:v]{size}fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'
                         '[1:a]aresample=48000[y];[a][x][b][y]concat=n=2:v=1:a=1[v][s]',
                         '-map', '[v]', '-map', '[s]', '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow',
                         '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
+    def frames(f):
+        return int(subprocess.run([FF.replace('ffmpeg', 'ffprobe') if os.path.exists(FF.replace('ffmpeg', 'ffprobe')) else 'ffprobe',
+                                   '-v', 'error', '-select_streams', 'v', '-count_frames', '-show_entries',
+                                   'stream=nb_read_frames', '-of', 'csv=p=0', f], capture_output=True, text=True).stdout.strip())
+    n0, n1 = frames(film), frames(out)
+    if n1 != n0 + int(round(DUR * fps)):       # the sign-off must be its full 2 s (Sam, 28 Oct: it was 0.75 s)
+        raise SystemExit(f'sign-off wrong length: film {n0} frames + sign-off should be {n0 + int(round(DUR * fps))}, got {n1}')
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB at {fps} fps')
 
 

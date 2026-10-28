@@ -182,3 +182,4 @@ know "gunner+loader" speak together, flagged lines meant to have no subtitles, a
 
 ## Usage log (rule 44)
 - 27 Oct, end of film: Sam's week at 85%. Start not recorded; Sam thinks about 15-20% (estimate was 20-25%), so inside the budget. From now on: Sam gives the figure at each handover; log it here.
+| 23 | all | 42.6-44.6 | the sign-off is only about a second long (Sam, 28 Oct) | done: my own edit of `signoff.py` (scale the sign-off to a small animatic's size, via `scale2ref`) cut the sign-off to 0.75 s in every film finished after it (Patriots 3's animatics 1-3 and its final); replaced with the film's own size read from the file; `signoff.py add` now FAILS unless the output is the film's frames + 24 (2 s); the final's film part kept, a full-length sign-off joined (no re-render); new kind (caught by Sam, not by a check, until now) |
