@@ -20,23 +20,25 @@ Read this first in any new session, after CLAUDE.md.
   (`source/audio/patriots3-test-all.m4a`). NEXT: cut it into the lines, then the animatic (Sonnet, fresh chat); see
   `notes/patriots-3.md` "Where things stand".
 
-## Build list 27 Oct (after Patriots 3; Sam approved rules 40-47: "execute all your rule recommendations")
-Stage: building new tools = Opus, high effort, fresh chat. In order:
-0. `source/sheet.py FILM TIMES...` (rule 48): one labelled contact sheet (time on each tile) from any film built on the template, in one command; small, build first so the rest of the stage uses it.
-1. `handcheck` (rule 41): every frame, every view: an arm with no visible hand, a hand inside its own sleeve or over
-   another person's body, an arm wrapped round a head. Run by pre-flight. Test on Patriots 3: the Loader's hand-less arms
-   (3.6-4.0 and 6.3-6.95 s, from behind), the flap's hands in the sleeves (put back from git, `patriots3_act.FLAPS`).
-2. Pose gallery (rule 42): `guides/pose-gallery.md` and a sheet tool drawing each pose from the front, side and behind;
-   seed it with the poses built so far (folded arms, hands up, pointing, binoculars, salute, hands on a gun, flapping).
-3. Eyeline at the shot's own camera (rule 43): extend `filmkit.eyeline` so each pupil's on-screen direction is tested
-   against the plan's target; a sheet of the frames where eyes should meet. Test: the Loader at 41-42.6 s (put the
-   profile head back from `patriots3_act.loader`).
-4. The four kit lessons into the shared kit: `views.person` head mirrored by its own direction; `sets.Cam.yaw_of` from the
-   line to the person (no pop on a push-in); `lying.stand` tilt measured at chest height; held 3D props drawn through
-   the real camera with hands on the grip points (`patriots3.hold_gun`, `draw_gun3d`). Each with a test; then update
-   `guides/kit-catalogue.md`.
-5. `--nostamp` as a standard option in `satire_template.py`'s `main` (a `--span` clip carries the review stamp by default).
-Done already: `limbs.py` `_big` (only a torso-sized piece hides an arm at the shoulder).
+## Done (28 Oct): Build list 27 Oct (after Patriots 3; rules 40-48)
+All six items built, each tested against the fault that taught it (`python3 source/kittests.py`, all pass, 15 s):
+0. `source/sheet.py FILM TIMES...` (rule 48): one labelled sheet; ranges (3.6-4.0), steps (0-40/2), `--crop`, `--clean`.
+1. `source/handcheck.py` (rule 41): pre-flight probes everyone on EVERY frame (whole pre-flight on Patriots 3: 2 min).
+   Catches the Loader's old hand-less binocular arms and the old flap hands; Patriots 3's fixed flaps pass.
+2. Pose gallery (rule 42): `source/posegallery.py`, `guides/pose-gallery.md`, sheet `guides/pose-gallery.jpg`: arms
+   folded, hands up, pointing, binoculars, salute, hands on a gun, flapping (up, pat); all pass from 5 views except
+   the rifle from behind (listed to avoid).
+3. Looks (rule 43): `filmkit.eyeline(aim=, drawn=, at=)` measures each face and its pupils as drawn at the shot's
+   camera (`views.Eyes`); `filmkit.look_sheet` for eyes that meet. Catches the old Loader profile at 41.0-42.6 s.
+4. Kit lessons: `views.person` head turns its own way (`Mirrored`); `sets.Cam.yaw_of` from the line to the person;
+   `lying.place` (tilt at the arms' height; `stand` uses it); `source/held3d.py` (held 3D props through the camera).
+5. `--nostamp` in `satire_template.py`'s `final`.
+Found by the new checks in finished films (closed, not changed; for the record): Patriots 3: the Loader's RIGHT hand is
+still behind his head in shot 2 (3.67-3.92, 6.33-6.92 s; note 21's fix brought out only the left); five looks of
+note 11's kind (Gunner 16.0-16.75, Patriot 27.1-31.1, Loader 32.0-33.4, Patriot 33.75-34.3 s, two brief ones).
+Netan-Yahoo!: seated Maul's left arm has no hand (27.8-30.0 s). Old films re-rendered now may differ slightly where a
+head turned against its body or a person stood off-centre (the two kit fixes).
+NEXT: Sam's next film (planning: Opus high, fresh chat). Use the new tools from the first brief.
 
 ## Done (Sam, 26 Oct: posted and closed, no more work): "Netan-Yahoo!" (TikTok satire, Israeli prime ministerial debate, Maul cuts the presenter in four; `notes/netan-yahoo.md`, `source/netan_yahoo.py`)
 - `animations/netan-yahoo-vertical.mp4` (4.0 MB, 35.4 s); story post `animations/maul-icc-story.png`. Lessons became rules 32-37 in

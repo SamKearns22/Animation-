@@ -281,13 +281,16 @@ def pose(sp, name, beat=0.0, target=None):
     elif name == 'arms_folded':                              # forearms across the chest, hands tucked
         V.arm_to(j, 'L', (95.0, 262.0, 92.0), (0.4, 1.0, -0.1), 'none')        # forearms level across the chest,
         V.arm_to(j, 'R', (-95.0, 236.0, 104.0), (0.4, 1.0, -0.1), 'none')      # the right one over the left
+        j['tucked'] = 'arms folded: the hands tucked under the arms'          # handcheck: hidden on purpose
     elif name == 'pockets':
         for s, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, s, (sg * (sw - 16), 430.0, 16.0), 'out', 'none')
+        j['tucked'] = 'hands in the pockets'
     elif name == 'behind_back':
         for s, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, s, (sg * 26, 410.0, -70.0), (1.0, 0.4, -0.7), 'none')
         j['behind'] = {'L', 'R'}
+        j['tucked'] = 'hands behind the back'
     elif name == 'lean_on':                                  # one hand on a surface, weight onto it, the other on the hip
         V.arm_to(j, 'R', target or (sw + 110, 360.0, 30.0), 'out', 'palm')
         V.arm_to(j, 'L', (-(sw - 4), 380.0, 10.0), 'out')

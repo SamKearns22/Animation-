@@ -1087,10 +1087,29 @@ def fall(sp, t, t0, x, z, facing, ground=0.0, pose='back', flip=1):
     return ('3d', blend(k0, k1, ease((t - t0 - 0.5) / 0.45)), surf)
 
 
-def stand(img, cam, sp, x, z, facing, j, t, ground=0.0, head_facing=None, shadow_alpha=55):
+def place(cam, x, z, ground=0.0, height=1.75, arms=1.2):
+    """Where a flat person standing at floor point (x, z) goes on screen through a 3D camera: (Xf, Yf) the floor point,
+    s their drawing scale (height in metres: the skeleton is a 1.75 m person), and views.person's tilt (e, c): heights
+    squash by c; a point one unit nearer the lens sits e units lower, measured at the arms' height (`arms` metres up,
+    kit lesson, Patriots 3: measured at the floor, close up, a hand held out at chest height sank far too low, the
+    salute to the chest)."""
+    k = height / 1.75
+    (Xf, Yf), _ = cam.project((x, ground, z))
+    (_, _), km = cam.project((x, ground + 0.9, z))
+    s = km * M * k
+    (_, Yn), _ = cam.project((x, ground + 928 * M * k, z))
+    c = max(0.15, min(1.0, (Yf - Yn) / (928 * s)))
+    tc = _unit(_v(cam.pos[0] - x, 0, cam.pos[2] - z))   # how much lower a point 0.42 m nearer us sits (Prepper)
+    (_, Ym), _ = cam.project((x, ground + arms, z))
+    (_, Yq), _ = cam.project(tuple(_v(x, ground + arms, z) + tc * 0.42))
+    e = max(V.ELEV, (Yq - Ym) / s / (0.42 / (M * k)))
+    return Xf, Yf, s, e, c
+
+
+def stand(img, cam, sp, x, z, facing, j, t, ground=0.0, head_facing=None, shadow_alpha=55, height=1.75):
     """Someone standing (or sitting: any views pose) at floor point (x, z), seen through a 3D camera at its real
     tilt. Up to views.HIGH degrees down: the flat drawing with the real tilt and a floor shadow; steeper: the 3D
-    body of the same pose. Returns ('2d', views j2) or ('3d', joints on screen)."""
+    body of the same pose. Returns ('2d', views j2) or ('3d', joints on screen). (Placed by place().)"""
     mid = _v(x, ground + 0.9, z)
     d = mid - np.asarray(cam.pos, float)
     tilt = math.degrees(math.atan2(-d[1], math.hypot(d[0], d[2])))
@@ -1102,14 +1121,7 @@ def stand(img, cam, sp, x, z, facing, j, t, ground=0.0, head_facing=None, shadow
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         B.Pen(lay, S.FLAT).poly([cam.project(q)[0] for q in ring], (0, 0, 0, shadow_alpha), None)
         img.alpha_composite(lay)
-    (Xf, Yf), kf = cam.project((x, ground, z))
-    (_, Yn), _ = cam.project((x, ground + 928 * M, z))
-    (_, _), km = cam.project(tuple(mid))
-    s = km * M
-    c = max(0.15, min(1.0, (Yf - Yn) / (928 * s)))
-    tc = _unit(_v(cam.pos[0] - x, 0, cam.pos[2] - z))   # how much lower a point 0.42 m nearer us sits (Prepper)
-    (_, Yq), _ = cam.project(tuple(_v(x, ground, z) + tc * 0.42))
-    e = max(V.ELEV, (Yq - Yf) / s / (0.42 / M))
+    Xf, Yf, s, e, c = place(cam, x, z, ground, height)
     yaw = cam.yaw_of((x, 0, z), facing)
     hy = cam.yaw_of((x, 0, z), head_facing) if head_facing is not None else None
     return ('2d', V.person(img, S.FLAT, Xf, Yf - 928 * s, s, sp, t, yaw, j, hy, tilt=(e, c)))

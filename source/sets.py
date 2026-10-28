@@ -124,16 +124,18 @@ class Cam:
                 pen.line(q[:2], col, lw)
 
     def yaw_of(self, p, facing):
-        """The drawn view for someone at p facing `facing` (dx, dz): 0 facing us, +90 facing screen right."""
+        """The drawn view for someone at p facing `facing` (dx, dz): 0 facing us, +90 facing screen right. Measured from
+        the line between them and the lens only (kit lesson, Patriots 3: with the camera's own right, a camera that
+        only turns, a push-in, changed how people were drawn, and the Patriot popped to three-quarter mid push-in)."""
         fx, fz = facing
         n = math.hypot(fx, fz) or 1.0
         fx, fz = fx / n, fz / n
         tc = (self.pos[0] - p[0], self.pos[2] - p[2])
         m = math.hypot(*tc) or 1.0
         tc = (tc[0] / m, tc[1] / m)
-        right = (self.r[0], self.r[2])
-        m = math.hypot(*right) or 1.0
-        right = (right[0] / m, right[1] / m)
+        right = (-tc[1], tc[0])                       # square to the line of sight, on the camera's right-hand side
+        if right[0] * self.r[0] + right[1] * self.r[2] < 0:
+            right = (-right[0], -right[1])
         return math.degrees(math.atan2(fx * right[0] + fz * right[1], fx * tc[0] + fz * tc[1]))
 
     def visible(self, p, margin=200):

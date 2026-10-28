@@ -8,7 +8,9 @@ Guide: guides/satire.md.
     python3 source/NAME.py cast OUT.png              the cast on one sheet: approve it before any animation
     python3 source/NAME.py stills OUT_DIR T [T ...]  stills at these times (seconds)
     python3 source/NAME.py check                     every check and the audit (also run by preflight.py)
-    python3 source/NAME.py final OUT.mp4 [--small] [--reuse --redo SHOT,SHOT] [--span T0 T1]   (--span: a clip of one moment)
+    python3 source/NAME.py final OUT.mp4 [--small] [--reuse --redo SHOT,SHOT] [--span T0 T1] [--nostamp]
+        --span: a clip of one moment (it carries a review stamp, the time and shot in the corner); --nostamp: no stamp,
+        for a stretch rendered at full size to splice into a finished film (rule 47)
 """
 import math
 import os
@@ -380,7 +382,8 @@ def main():
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
-                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None)
+                 span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
+                 stamp=False if '--nostamp' in a else None)   # --nostamp: a clip to splice into a final (rule 47)
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
@@ -391,6 +394,8 @@ limbs.install(B)                 # natural arms and legs: one outline at the sho
 #   moves.gait / travel / pace, moves.pose(sp, 'arms_folded'), moves.sit_down / stand_up, moves.punch / kick / sword /
 #   hit_react / fall, moves.driving / car_in / car_out; stage.Stage(series.Room(...)) for people on a perspective floor.
 #   Turns: the straight 180 (one drawing to the other). No sound effects unless the script asks.
+#   Poses: pick from guides/pose-gallery.md (rule 42); hands: handcheck.py runs in pre-flight (rule 41); looks with
+#   views.person: filmkit.eyeline(who, t, eye, look, target, aim=YAW_TO_TARGET, drawn=j2, at=NAME) (rule 43).
 import views                     # noqa: E402,F401
 import moves                     # noqa: E402,F401
 import stage                     # noqa: E402,F401

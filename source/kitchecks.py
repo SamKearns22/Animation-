@@ -208,12 +208,16 @@ DRAWN = []                    # every views.py person drawn since install(): (wh
 POSES = []                    # everyone drawn holding something: (where, name, sp, joints, t), for viewchecks' turn test
 
 
+_INSTALLED = []
+
+
 def install():
     """Log every views.py person drawn (their view, head turn and what they hold), for facing(). Patches views.person
     and every module that took its own name for it."""
     import views
-    if getattr(views.person, '_logged', False):
+    if getattr(views.person, '_logged', False) or _INSTALLED:
         return
+    _INSTALLED.append(1)
     real = views.person
 
     def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None):   # tilt: a 3D camera's
