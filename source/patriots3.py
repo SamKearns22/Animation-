@@ -74,8 +74,8 @@ LINES = [
          'sovereignty? Let\'s just say I\'m here to assist.', start=27.9, end=33.2, audio='patriots3-patriot-5',
          chunks=['Anyway, got some problems', 'with the Establishment?', 'People trampling on your sovereignty?',
                  "Let's just say,", "I'm here to assist."]),
-    dict(n=11, who='patriot', text='They ain\'t even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6',
-         chunks=["They ain't even", 'wearing poppies.']),
+    dict(n=11, who='patriot', text='They\'re not even wearing poppies.', start=34.4, end=36.2, audio='patriots3-patriot-6',
+         chunks=["They're not even", 'wearing poppies.']),   # Sam, 28 Oct: subtitle only (he says "ain't")
     dict(n=12, who='patriot', text='Traitors.', start=39.6, end=40.6, audio='patriots3-patriot-7',
          chunks=['Traitors.']),   # Sam, 27 Oct: after his last line, just before their eyes meet
 ]
