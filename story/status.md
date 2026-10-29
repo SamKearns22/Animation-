@@ -3,6 +3,10 @@
 Read this first in any new session, after CLAUDE.md.
 
 
+## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_cast.py`)
+- 29 Oct (planning, Opus): plan, composition sheet and cast sheet done; Sam's cast notes 1-4 applied. Next: Sam's notes,
+  then the car interior and space paintings (Opus, building). Handover in `notes/halo-no-no.md`.
+
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
   rebuilt on the satire kit; the Gunner and Loader; the MG42 firing through the bunker slit. Sheets sent to Sam;
