@@ -1,9 +1,11 @@
 # Notes for Halo No-No (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/halo-no-no-handovers.md)
-- **Done:** 29 Oct (planning, Opus): brief, references (`references/halo-no-no/01-19.jpg`) and the theme
+- **Done:** 29 Oct (building, Opus): cast sheet sent (`review/halo-no-no-cast.jpg`, `source/halo_cast.py`).
+  29 Oct (planning, Opus): brief, references (`references/halo-no-no/01-19.jpg`) and the theme
   (`source/audio/halo-theme.mp3`, 2:58) filed; plan and questions sent to Sam.
-- **Next:** Sam's answers, then the composition sheet (rule 11), then the cast sheet (building: Opus, high).
+- **Next:** Sam's notes on the cast sheet; then the cockpit and the two space paintings, then `source/halo_no_no.py` from
+  the template (building: Opus).
 - **Losses and my additions Sam should know about:** additions proposed (not yet approved): other Roadsters drifting
   past the side windows in the cockpit shots; a slow drift on the opening painting so it never sits dead still.
 - **Rule requests and proposals not yet in a guide:** none.
@@ -120,5 +122,10 @@ Decisions made:
   streak (it might hide him), no exaggeration (likeness straight). About 15 cars in shot 1, 8 in shot 6. Shot 6 is
   a Showstopper Shot (rule 40 list before building). Hook Text: "Elon Finishes The Fight".
 - Musk talking references: 20, 21 (Sam, 29 Oct).
+- Composition sheet: Sam said proceed (29 Oct); the shot 6 list and my two additions stand.
+- Cast (29 Oct): Musk's visor made taller than the real helmet's so his whole face shows and talks (my call, flagged);
+  the helmet's inside kept dark grey (brown read as long hair). Cortana: the high-collared bodysuit of ref 18, about
+  0.6 m tall; poses appear, point, kawaii (fists by her cheeks, chest out, a wink), turn (from behind, hip popped,
+  looking back over her shoulder: rule 38 exception).
 - Music never stops (Sam, 29 Oct): louder in the space shots (1, 6), quieter but noticeable in the cockpit (2-5, 7-8), easing
   down and up over about 0.3 s at each cut; the voices stay at least 6 dB above it (pre-flight checks).
