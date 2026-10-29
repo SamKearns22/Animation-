@@ -44,38 +44,38 @@ TITLE_AT = dict(cap=116, top=310)
 CAST = {'musk': dict(name='Musk'), 'cortana': dict(name='Cortana')}
 LOOKS_AT = {'cortana': 'musk'}                    # Musk looks out at the lens (rule 43: the plan's eyelines)
 THEME = os.path.join(HERE, 'audio', 'halo-theme.mp3')
-THEME_FROM = 21.0                                 # the film starts at 0:21 of the theme (Sam's brief)
+THEME_FROM = 23.5                                 # the film starts at 0:23.5 of the theme (Sam, 30 Oct: no wait)
 # Lines by number (never by position). Times are the plan's guesses until Sam's recordings arrive (Sam, 29 Oct:
 # build and time from the script with subtitles first).
 LINES = [
-    dict(n=1, who='radio', text="Musker Chief, you mind telling me what you're doing in that Roadster?", start=11.4,
-         end=15.7, audio='halo-no-no-radio', radio=True,
+    dict(n=1, who='radio', text="Musker Chief, you mind telling me what you're doing in that Roadster?", start=8.9,
+         end=13.2, audio='halo-no-no-radio', radio=True,
          chunks=['Musker Chief,', 'you mind telling me', "what you're doing", 'in that Roadster?']),
-    dict(n=2, who='musk', text='Sir, finishing this fight.', start=15.9, end=18.6, audio='halo-no-no-musk-1',
+    dict(n=2, who='musk', text='Sir, finishing this fight.', start=13.4, end=16.1, audio='halo-no-no-musk-1',
          chunks=['Sir,', 'finishing this fight.']),
     dict(n=3, who='musk', text="If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out.",
-         start=19.0, end=24.3, audio='halo-no-no-musk-2',
+         start=16.5, end=21.8, audio='halo-no-no-musk-2',
          chunks=["If we don't stop Zelensky", 'from using the Halo,', 'all life in the galaxy', 'could be wiped out.']),
     dict(n=4, who='cortana', text="Oh, Musker Chief, we're going to make him look like such Le Epic Chungus!! Kawaiii!!",
-         start=25.9, end=33.7, audio='halo-no-no-cortana-1',
+         start=23.4, end=31.2, audio='halo-no-no-cortana-1',
          chunks=['Oh, Musker Chief,', "we're going to make him", 'look like such', 'Le Epic Chungus!!', 'Kawaiii!!']),
-    dict(n=5, who='musk', text='We sure will, Breeder 04.', start=34.2, end=36.6, audio='halo-no-no-musk-3',
+    dict(n=5, who='musk', text='We sure will, Breeder 04.', start=31.7, end=34.1, audio='halo-no-no-musk-3',
          chunks=['We sure will,', 'Breeder 04.']),
-    dict(n=6, who='cortana', text='Musk-San, please let me die.', start=38.4, end=41.7, audio='halo-no-no-cortana-2',
+    dict(n=6, who='cortana', text='Musk-San, please let me die.', start=35.9, end=39.2, audio='halo-no-no-cortana-2',
          chunks=['Musk-San,', 'please let me die.']),
-    dict(n=7, who='musk', text='No.', start=42.6, end=43.5, audio='halo-no-no-musk-4', chunks=['No.']),
+    dict(n=7, who='musk', text='No.', start=40.1, end=41.0, audio='halo-no-no-musk-4', chunks=['No.']),
 ]
 SHOTS = [   # (shot, start, end)
-    ('s1', 0.0, 11.0),    # the wide: planet, ring, galaxy; the armada streams in at 7.0 (0:28 of the theme)
-    ('s2', 11.0, 18.9),   # the cabin from the windscreen: Musk at the yoke; the radio; "Sir, finishing this fight."
-    ('s3', 18.9, 24.6),   # hard cut to Musk close: "If we don't stop Zelensky..."
-    ('s4', 24.6, 34.0),   # the cabin: the discharge, Cortana appears over the passenger seat; her Chungus line
-    ('s5', 34.0, 36.9),   # Musk close, a glance at her: "We sure will, Breeder 04."
-    ('s6', 36.9, 44.8),   # the ring close-up (Showstopper Shot): the armada skims the hull; the last two lines
+    ('s1', 0.0, 8.5),     # the wide: planet, ring, galaxy; the armada streams in at 4.5 (0:28 of the theme)
+    ('s2', 8.5, 16.4),   # the cabin from the windscreen: Musk at the yoke; the radio; "Sir, finishing this fight."
+    ('s3', 16.4, 22.1),   # hard cut to Musk close: "If we don't stop Zelensky..."
+    ('s4', 22.1, 31.5),   # the cabin: the discharge, Cortana appears over the passenger seat; her Chungus line
+    ('s5', 31.5, 34.4),   # Musk close, a glance at her: "We sure will, Breeder 04."
+    ('s6', 34.4, 42.3),   # the ring close-up (Showstopper Shot): the armada skims the hull; the last two lines
 ]
 CAMS = {'s1': 'space', 's2': 'wide', 's3': 'close', 's4': 'wide', 's5': 'close', 's6': 'ring'}
 SHOT_CAST = {'s2': ['musk'], 's3': ['musk'], 's4': ['musk', 'cortana'], 's5': ['musk']}
-DUR = 44.8
+DUR = 42.3
 # Rule 1: the cabin in metres (x across the car, + to the driver's side; z from the windscreen back; y up). The space
 # shots are paintings with their own cameras (halo_sets: the wide's vanishing point, the ring's RingCam).
 PLAN = dict(
@@ -101,12 +101,12 @@ BENCHMARK = [   # rule 3: the full lists are in the notes ("Benchmarks"); the sh
                 ('the galaxy back right', "ref 02's blue stripe (Sam, note 5)"), ('nebula', 'flat lumps'),
                 ('dense stars', 'round dots'), ('room for the Hook Text and caption', 'dark sky top, lower third'),
                 ('a lane for the armada', 'the right side')]),
-    dict(place='ring close-up', refs=[REFS + '02.jpg'], at=39.0,
+    dict(place='ring close-up', refs=[REFS + '02.jpg'], at=36.5,
          items=[('dark hull sweeping top left to lower right', 'a true circle projected'), ('panels, ports, lights', 'yes'),
                 ('far side rising as seas, land, cloud', 'yes, grey rim walls'), ('planet behind left', 'lower left'),
                 ('blue galaxy band top right', 'yes'), ('stars and nebula', 'yes'), ('no car shadows', 'Sam, 29 Oct'),
                 ('room for the cars', 'the stream from the top down to the bend')]),
-    dict(place='the cabin', refs=[REFS + r for r in ('03.jpg', '04.jpg', '05.jpg')], at=13.0,
+    dict(place='the cabin', refs=[REFS + r for r in ('03.jpg', '04.jpg', '05.jpg')], at=10.5,
          items=[('white sport seats', 'yes'), ('ROADSTER plates', 'yes'), ('black glass roof', 'yes'),
                 ('black console and screen', 'yes'), ('red trim light', 'doors, bulkhead, dash'), ('black yoke', 'yes'),
                 ('rear window onto space', 'with a Roadster drifting past'), ('doors and dash detail', 'yes')]),
@@ -117,12 +117,12 @@ KEEP_CLEAR = []
 PROP_SIZES = []
 OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 0.8}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
-ALLOWED_CONTACTS = [('musk.hand*', 'YOKE', 11.0, 36.9, 'his hands on the yoke the whole time (the brief)')]
+ALLOWED_CONTACTS = [('musk.hand*', 'YOKE', 8.5, 34.4, 'his hands on the yoke the whole time (the brief)')]
 ALLOWED_MOUTHS = []
-ALLOWED_POPS = [('cortana', 25.0, 26.1, 'she forms out of the discharge (the brief)')]
+ALLOWED_POPS = [('cortana', 22.5, 23.6, 'she forms out of the discharge (the brief)')]
 SET_EXCLUDE = []
-TOUCHES = [('musk.handL', 'YOKE', 11.0, 36.9, 'turning the yoke'), ('musk.handR', 'YOKE', 11.0, 36.9, 'turning the yoke')]
-FREE_MOVES = [('ARMADA', 7.0, 11.0, 'the cars fly'), ('ARMADA', 36.9, 44.8, 'the cars fly')]
+TOUCHES = [('musk.handL', 'YOKE', 8.5, 34.4, 'turning the yoke'), ('musk.handR', 'YOKE', 8.5, 34.4, 'turning the yoke')]
+FREE_MOVES = [('ARMADA', 3.8, 8.5, 'the cars fly'), ('ARMADA', 34.4, 42.3, 'the cars fly')]
 SOUND_SOURCES = {}
 EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule 15)
 JOKE_PROPS = []
@@ -181,8 +181,8 @@ def cam_for(t):
 
 
 # ------------------------------------------------------------------------------------------------ Musk
-T_FLASH = 25.1                                    # the digital discharge (shot 4)
-GLANCE = (34.45, 35.45)                           # "We sure will": a glance to her side, then back out at the lens
+T_FLASH = 22.6                                    # the digital discharge (shot 4)
+GLANCE = (31.95, 32.95)                           # "We sure will": a glance to her side, then back out at the lens
 _BL = F.blinks(17, S0('s2'), S1('s5'), talking=True)
 BLINKS = {'musk': [b for b in _BL if not (GLANCE[0] - 0.3 <= b <= GLANCE[1])],   # never on the glance
           'cortana': F.blinks(29, T_FLASH + 1.0, S1('s4'), talking=True)}
@@ -297,7 +297,7 @@ def _flash(p, x, y, R, seed):
 # ------------------------------------------------------------------------------------------------ the armada
 VP = (360, 1080)                                  # shot 1: where the armada heads (by the ring, in front of the planet)
 F1 = 1100.0                                       # shot 1's focal length (px), for the view angle on each car
-T_ARMADA = 7.0                                    # 0:28 of the theme (the brief)
+T_ARMADA = 4.5                                    # 0:28 of the theme (the brief)
 
 
 def _armada_1():
@@ -316,7 +316,7 @@ def _armada_1():
     for te, X, Y, z0, v, spin in ((T_ARMADA + 0.7, 520, 330, 0.66, 0.60, 220),     # the lone spinners
                                   (T_ARMADA + 1.8, 380, -170, 0.70, 0.50, -260),
                                   (T_ARMADA + 2.9, 560, 60, 0.64, 0.62, 170),
-                                  (T_ARMADA + 3.5, 450, -420, 0.72, 0.56, -200)):
+                                  (T_ARMADA + 3.1, 450, -420, 0.72, 0.56, -200)):
         cars.append(dict(te=te, off=(X, Y), z0=z0, v=v, spin=spin))
     return cars
 
@@ -327,9 +327,9 @@ ARMADA_1 = _armada_1()
 def armada_1(img, cam, t):
     out = []
     for c in ARMADA_1:
-        if t < c['te']:
+        z = c['z0'] + c['v'] * (t - c['te'])     # before te it is nearer us, off the right edge, flying in
+        if z < 0.2:
             continue
-        z = c['z0'] + c['v'] * (t - c['te'])
         x, y = VP[0] + c['off'][0] / z, VP[1] + c['off'][1] / z
         out.append((z, x, y, c))
     for z, x, y, c in sorted(out, key=lambda q: -q[0]):
@@ -402,7 +402,7 @@ def _painting(key, make):
 
 def drift_at(t):
     """The approved passer-by (Sam, 29 Oct): one Roadster from the armada drifting across the rear window."""
-    u = (t - 12.0) / 6.5
+    u = (t - 9.5) / 6.5
     return u if 0 <= u <= 1 else None
 
 
@@ -590,7 +590,7 @@ def stills_sheet(out, times):
     print('wrote', out)
 
 
-KEY_TIMES = [1.5, 8.0, 10.5, 13.5, 17.5, 21.0, 25.1, 25.6, 26.6, 28.5, 30.5, 32.8, 34.8, 38.0, 40.5, 43.0]
+KEY_TIMES = [1.5, 4.8, 6.5, 8.0, 11.0, 15.0, 18.5, 22.6, 23.1, 24.1, 26.0, 28.0, 30.3, 32.3, 35.5, 38.0, 40.5]
 
 
 def main():

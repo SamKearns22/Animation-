@@ -9,7 +9,7 @@
   framings; sheet `review/halo-no-no-sets.jpg`, Sam's note 5 applied: one blue galaxy). The film in
   `source/halo_no_no.py`: story, script timings (placeholders until the recordings), subtitles in chunks, the armada
   in shot 1 (15 cars, lead alone, 4 spinning) and shot 6 (8 cars skimming the hull, 3 spinning), Cortana's discharge
-  and poses, the drifting Roadster in the rear window, the theme from 0:21 with its levels. Stills sheet
+  and poses, the drifting Roadster in the rear window, the theme (now from 0:23.5) with its levels. Stills sheet
   `review/halo-no-no-stills.jpg` and three clips (`source/data/halo-no-no/clip-armada.mp4`, `clip-cortana.mp4`,
   `clip-ring.mp4`) sent 29 Oct. Brief checklist ticked. Kit catalogue updated (rule 28).
 - **Shot 6 against the Showstopper list (rule 40, at its clip):** hull band, panels, ports, lights: yes; inner face strip
@@ -24,7 +24,11 @@
   the speaker grille between the seats, lit from the radio voice's first word to his last. (5) All seven recordings
   filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined) and the film retimed to them:
   now 44.8 s (shots 0/11.0/18.9/24.6/34.0/36.9). voices.py --film: takes match the script.
-- **Next (fresh chat):** Sam's word on the 30 Oct sheet and clip. Then before the first animatic: wire the pre-flight
+- **30 Oct, second notes:** a lone spinner popped on mid-frame: every shot 1 car is now drawn before its time too
+  (nearer us, off the right edge), so all fly in from the edge (checked: each first shows at the edge). The wait after
+  the white text is cut: the armada at 4.5 s, the theme from 0:23.5 (so 0:28 still lands on the cars); everything after
+  2.5 s earlier, film 42.3 s (shots 0/8.5/16.4/22.1/31.5/34.4). Clip `source/data/halo-no-no/clip-armada-v2.mp4`.
+- **Next (fresh chat):** Sam's word on the clip-armada-v2. Then before the first animatic: wire the pre-flight
   checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the plan's
   `SHOT_MARKS`), run `python3 source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet
   and wait for his yes (CLAUDE.md, 18 Oct). Routine from here: Sonnet.
