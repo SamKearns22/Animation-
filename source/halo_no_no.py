@@ -44,7 +44,7 @@ TITLE_AT = dict(cap=116, top=310)
 CAST = {'musk': dict(name='Musk'), 'cortana': dict(name='Cortana')}
 LOOKS_AT = {'cortana': 'musk'}                    # Musk looks out at the lens (rule 43: the plan's eyelines)
 THEME = os.path.join(HERE, 'audio', 'halo-theme.mp3')
-THEME_FROM = 23.5                                 # the film starts at 0:23.5 of the theme (Sam, 30 Oct: no wait)
+THEME_FROM = 27.5                                 # the film starts at 0:27.5 of the theme (Sam, 30 Oct: 4 s later in the song)
 # Lines by number (never by position). Times are the plan's guesses until Sam's recordings arrive (Sam, 29 Oct:
 # build and time from the script with subtitles first).
 LINES = [
@@ -66,7 +66,7 @@ LINES = [
     dict(n=7, who='musk', text='No.', start=40.1, end=41.0, audio='halo-no-no-musk-4', chunks=['No.']),
 ]
 SHOTS = [   # (shot, start, end)
-    ('s1', 0.0, 8.5),     # the wide: planet, ring, galaxy; the armada streams in at 4.5 (0:28 of the theme)
+    ('s1', 0.0, 8.5),     # the wide: planet, ring, galaxy; the armada streams in at 4.5 (0:28 of the theme in the brief; Sam moved the song 4 s on, 30 Oct: now 0:32)
     ('s2', 8.5, 16.4),   # the cabin from the windscreen: Musk at the yoke; the radio; "Sir, finishing this fight."
     ('s3', 16.4, 22.1),   # hard cut to Musk close: "If we don't stop Zelensky..."
     ('s4', 22.1, 31.5),   # the cabin: the discharge, Cortana appears over the passenger seat; her Chungus line

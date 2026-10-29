@@ -16,7 +16,7 @@
   - The rear window: a V of five following us, noses to us, on their jets, each holding then drifting a little (Sam's
     choice to me: cars always there or an opaque window; I chose the cars, cheap to draw). The approved passer-by still
     crosses in front of them.
-  - The wait after the caption is cut: the armada at 4.5 s, the theme from 0:23.5 (0:28 lands on the cars).
+  - The wait after the caption is cut: the armada at 4.5 s, the theme from 0:23.5; then Sam (30 Oct): the track was exactly 4 s behind, so now from 0:27.5 (the cars arrive at 0:32 of the song, overriding the brief's 0:28).
   - All seven recordings filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined); the
     film retimed to them: 42.3 s, shots s1 0, s2 8.5, s3 16.4, s4 22.1, s5 31.5, s6 34.4. `voices.py --film
     halo_no_no`: takes match the script.
