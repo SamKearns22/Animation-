@@ -28,20 +28,23 @@
   - Sent: sheet `review/halo-no-no-notes-30oct.jpg` (its armada frames are from before the V fix), clips
     `source/data/halo-no-no/clip-armada-v2.mp4` and `clip-armada-v3.mp4` (0-14 s: armada, radio light, rear window).
     Sam has not yet seen v3.
-- **Pre-flight first run (31 Oct, Sonnet):** `python3 source/preflight.py halo_no_no OUT` (module name with underscores).
-  Fixed: voice balance (music now ducks 10 dB under space lines, 4 dB under cabin lines; three voices were 3-5 dB over).
-  24 faults remain, all wiring, not picture: no `audits` / `LINE_SUBJECTS`; plan: no `SHOT_MARKS`, no cameras per shot,
-  roof glass/seats/console as set pieces with no room wall, Musk and Cortana "inside" their seats (need `on=`);
-  `scene(t)` empty so TOUCH (yoke), SHOT CAST (Musk s2-s5, Cortana s4) fail; script/mouth: lines 4 and 5 syllable
-  counts differ from the script (check the recordings vs script text); caption "Sir," 0.5 s too fast; s1 8.5 s and s4
-  9.4 s over 8 s (name them as chosen). This is more than filling lists: **next stage needs Opus, medium effort.**
-  Sam still has not answered on `clip-music-4s.mp4` and `clip-armada-v3.mp4`.
-- **Next (fresh chat, Sonnet; superseded by the line above: now Opus medium):** Sam's word on `clip-music-4s.mp4` (music timing) and `clip-armada-v3.mp4`. Then before the first animatic: wire the
-  pre-flight checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the
-  plan's `SHOT_MARKS`; the rear-window V and radio light are new things for the set checks), run `python3
-  source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes
-  (CLAUDE.md, 18 Oct). Wiring new checks counts as building from a clear plan: if it needs more than filling the
-  lists, switch to Opus, medium effort.
+- **Sound approved (Sam, 31 Oct): "All sound approved"** (music timing, voices, radio). `clip-armada-v3.mp4` not
+  commented on.
+- **Pre-flight wired and run (31 Oct, Opus):** `python3 source/preflight.py halo_no_no OUT` (underscores). Added
+  `scene(t)` + `project()` (Musk's body, head, both gloves on the yoke; Cortana in mid-air; plan metres), `audits()`
+  (each body alone, eyelines; Cortana's eyeline logged at Musk), `LINE_SUBJECTS`, plan cameras per shot, `SHOT_MARKS`,
+  the people `on=` their seats, roof glass as a non-solid thing, seats 1.1 m tall (under the 1.15 m roof), seats in
+  `SET_EXCLUDE`. Fixed: music ducks 10 dB under space lines, 4 dB under cabin lines (voices were 3-5 dB over it);
+  "Sir, finishing this fight." is one caption (was 0.5 s "Sir,"); Cortana's lower lids and resting mouth line 4
+  (were too thin for the house weight). Clean: collisions, pop-ins, hands on the yoke, shot cast, eyelines,
+  line work, captions, voice levels.
+  **Named, not fixed (5):** shots s1 (8.5 s) and s4 (9.4 s) over 8 s, chosen (the armada's entry on the music; the
+  discharge and Cortana's whole line unbroken). Voice-matching on lines 4 and 5: line 4's first phrase is a drawn-out
+  1.6 s "Oh," that the counter reads as 6 syllables ("Musker Chief" is in the next phrase, which matches), so its
+  mouth opening 3 times there follows the voice; line 5 is one phrase holding the whole line, the counter over-reads
+  it (10 for 7). Sound approved by Sam, so left as is. Check sheet sent in the chat (not on GitHub).
+- **Next:** Sam's yes on the check sheet, then the animatic: `python3 source/halo_no_no.py final OUT --small`
+  (about 5 min), send it, wait.
 - **Losses and my additions Sam should know about:** the lone lead car is now the point of the V of 5; 2.5 s of the
   theme's opening is cut; the radio light (green, on the grille), the rear-window V's bobbing and the shorter jets are
   my choices. Earlier: ref 01's orange galaxy core gone (Sam's note 5); the pixel crackle as small blue and white
