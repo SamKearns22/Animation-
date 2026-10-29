@@ -353,8 +353,8 @@ def cortana_arms(pose):
         return {'L': rig.arm('L', (-128, 380), 'fist', 'out'), 'R': rig.arm('R', (400, 20), 'point', 'down')}
     if pose == 'kawaii':        # fists squeezed up by her cheeks, elbows tucked in: the chest pushed forward
         return {'L': rig.arm('L', (-74, -96), 'fist', 'down', depth=0.45), 'R': rig.arm('R', (74, -96), 'fist', 'down', depth=0.45)}
-    if pose == 'turn':          # seen from behind: a fist on the hip, the other hand waving up by her head
-        return {'L': rig.arm('L', (-128, 380), 'fist', 'out'), 'R': rig.arm('R', (230, -170), 'fist', 'out')}
+    if pose == 'turn':          # seen from behind (ref 26 flipped): a fist on her popped hip, the near arm hanging loose
+        return {'L': rig.arm('L', (-150, 330), 'fist', 'out'), 'R': rig.arm('R', (128, 400), 'fist', 'out')}
     return {'L': rig.arm('L', (-120, 430), 'fist', 'depth'), 'R': rig.arm('R', (120, 430), 'fist', 'depth')}
 
 
@@ -454,10 +454,10 @@ def _cortana_front(p, st):
         _c_arms(p, st, cortana_arms('kawaii'), front=True, only_fore=True)
 
 
-def _c_arms(p, st, arms, front=True, only_fore=False):
+def _c_arms(p, st, arms, front=True, only_fore=False, shift=0.0):
     for side, sg in (('L', -1), ('R', 1)):
         el, wr, shape = arms[side]
-        sh = (sg * (C_SW - 14), 60)
+        sh = (sg * (C_SW - 14) + shift, 60)
         if not only_fore:
             _limb(p, sh, el, 46, C_SKIN)
             mid = tuple(np.array(sh) + (np.array(el) - np.array(sh)) * 0.45)
@@ -585,26 +585,60 @@ def _cortana_side(p, st):
     _cortana_head(p, dict(st, look=1.0), 14, -150, turned=1.0)
 
 
+SHIFT = 22                   # the turn pose: her shoulders shifted towards Musk, her hips away (the S-curve, ref 26)
+
+
+def _leg(p, top, knee, ankle, toe, w=(56, 24, 12)):
+    """One long leg through hip top, knee, ankle to a pointed toe; half-widths at the thigh, knee and ankle."""
+    pts = [np.array(q, float) for q in (top, knee, ankle)]
+    L, R = [], []
+    for q, nxt, hw in zip(pts, pts[1:] + [np.array(toe, float)], w):
+        d = _unit(nxt - q)
+        n = np.array([-d[1], d[0]]) * hw
+        L.append(tuple(q + n))
+        R.append(tuple(q - n))
+    p.poly(curve(L + [tuple(toe)] + R[::-1], 4), C_SUIT, INK, 3.2)
+    k = np.array(knee, float)
+    p.line(open_curve([(k[0] - 20, k[1] - 8), (k[0], k[1]), (k[0] + 20, k[1] - 8)], 3), C_LINE, 3)   # knee panel
+    a = np.array(ankle, float)
+    p.line([(a[0] - 14, a[1]), (a[0] + 14, a[1])], C_LINE, 3)                                 # boot cuff
+
+
 def _cortana_back(p, st):
-    """Turned away, the hip popped, looking back over her right shoulder at Musk (our right)."""
-    hip = (st['hip'] or 0.8) * 20
-    _legs(p, hip)
-    p.poly(curve(_body_outline(0.0, hip), 4), C_SUIT, INK, 3.4)
-    # the seat: two round forms, inked underneath and down the middle (a cringe pose, never explicit)
-    for sg in (-1, 1):
-        bx, by, rx, ry = sg * 54 + hip, 430, 64, 54
+    """Turned away, looking back over her shoulder at Musk (our right), after ref 26 flipped: the shoulders shifted
+    towards him and the hips popped hard away (an S-curve), her weight on the leg under the popped hip, the other leg
+    bent and crossing in, a fist on the popped hip, the near arm hanging loose. A cringe pose, never explicit."""
+    hip = -40
+    # the relaxed leg first (behind): bent at the knee, its toe crossing in to the standing foot
+    _leg(p, (40 + hip, 440), (6 + hip * 0.4, 690), (-40, 872), (-60, 936))
+    # the standing leg, straight under the popped hip
+    _leg(p, (-58 + hip, 440), (-44 + hip * 0.6, 690), (-36 + hip * 0.3, 880), (-34 + hip * 0.3, 950))
+    body = []
+    for x, y in _body_outline(0.0, hip):
+        if y < 290:
+            x += SHIFT * (1 - max(0.0, y) / 290)                # the shoulders lean to Musk, easing to the waist
+        if 280 <= y <= 350 and x < 0:
+            x += 12                                            # the small of her back curving in (the arch)
+        if y >= 400 and x < hip:
+            x -= 14                                            # the popped hip rounder on its own side
+        body.append((x, y))
+    p.poly(curve(body, 4), C_SUIT, INK, 3.4)
+    # the seat: the near cheek (the popped side) fuller and round past the hip line, the far one smaller
+    for sg, bx, by, rx, ry in ((1, 34 + hip, 440, 48, 44), (-1, -72 + hip, 428, 82, 62)):
         p.ell(bx, by, rx, ry, C_SUIT, None)
         p.ell(bx - sg * 4, by - 18, rx * 0.56, ry * 0.4, C_SUIT_L, None)
-        p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(0.05 * math.pi, 0.95 * math.pi, 14)],
-               INK, 2.8)
-    p.line(open_curve([(hip, 380), (hip, 430), (hip, 470)], 3), INK, 2.4)
-    p.line([(0, 20), (0, 270)], C_LINE, 3)                                                      # the back seam
-    p.line(open_curve([(-46, 80), (-20, 120), (-30, 170)], 3), C_SUIT_D, 2.4)                   # shoulder blades
-    p.line(open_curve([(46, 80), (20, 120), (30, 170)], 3), C_SUIT_D, 2.4)
-    p.poly(curve([(-58, 270), (0, 280), (58, 270), (60, 296), (0, 306), (-60, 296)], 3), C_LINE, INK, 2.4)
-    p.poly(curve([(-30, -14), (30, -14), (34, 22), (-34, 22)], 3), C_SUIT_D, INK, 3)
-    _c_arms(p, st, cortana_arms('turn'))
-    _cortana_head(p, dict(st, look=1.0), 6, -150, turned=1.0)
+        a1 = 1.2 * math.pi if sg < 0 else 0.95 * math.pi
+        p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(0.05 * math.pi, a1, 16)], INK, 3)
+    p.line(open_curve([(hip - 8, 384), (hip - 12, 430), (hip - 14, 474)], 3), INK, 3)
+    p.line([(SHIFT, 20), (SHIFT * 0.3, 200), (0, 270)], C_LINE, 3)                           # the back seam
+    p.line(open_curve([(-46 + SHIFT, 80), (-20 + SHIFT, 120), (-30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
+    p.line(open_curve([(46 + SHIFT, 80), (20 + SHIFT, 120), (30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
+    p.poly(curve([(-58, 270), (0, 280), (58, 270), (60, 296), (0, 306), (-60, 296)], 3), C_LINE, INK, 3)
+    p.poly(curve([(-30 + SHIFT, -14), (30 + SHIFT, -14), (34 + SHIFT, 22), (-34 + SHIFT, 22)], 3), C_SUIT_D, INK, 3)
+    arms = {k: (tuple(np.add(el, (SHIFT, 0))), tuple(np.add(wr, (SHIFT, 0))), sh)
+            for k, (el, wr, sh) in cortana_arms('turn').items()}
+    _c_arms(p, st, arms, shift=SHIFT)
+    _cortana_head(p, dict(st, look=1.0), 6 + SHIFT * 1.2, -150, turned=1.0)
 
 
 # ================================================== THE SHEET ======================================================

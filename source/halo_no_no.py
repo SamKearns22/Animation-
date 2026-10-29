@@ -55,7 +55,7 @@ LINES = [
          chunks=['Sir, finishing this fight.']),
     dict(n=3, who='musk', text="If we don't stop Zelensky from using the Halo, all life on Earth could be wiped out.",
          start=16.5, end=21.8, audio='halo-no-no-musk-2',
-         chunks=["If we don't stop Zelensky", 'from using the Halo,', 'all life on Earth', 'could be wiped out.']),
+         chunks=["If we don't stop Zelensky", 'from using the Halo,', 'all life on Earth could be wiped out.']),
     dict(n=4, who='cortana', text="Oh, Musker Chief, we're going to make him look like such Le Epic Chungus!! Kawaiii!!",
          start=23.4, end=31.2, audio='halo-no-no-cortana-1',
          chunks=['Oh, Musker Chief,', "we're going to make him", 'look like such', 'Le Epic Chungus!!', 'Kawaiii!!']),
@@ -121,11 +121,12 @@ HOOK = ('Elon Finishes The Fight', {'y': 330, 'until': 3.5})   # Sam, 29 Oct: up
 CAPTION_1 = ('Halo Ringworld', 'Russia - Ukraine War')         # white bold, lower third, 0.5-4 s (the brief)
 KEEP_CLEAR = []
 PROP_SIZES = []
-OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 1.0}
+OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 0.85}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS = [('musk.hand*', 'YOKE', 8.5, 34.4, 'his hands on the yoke the whole time (the brief)')]
 ALLOWED_MOUTHS = []
-ALLOWED_POPS = [('cortana', 22.5, 23.6, 'she forms out of the discharge (the brief)')]
+ALLOWED_POPS = [('cortana', 22.5, 23.6, 'she forms out of the discharge (the brief)'),
+                ('cortana', 30.4, 30.6, 'her poses snap on her words (the brief: overemphasised): side on to turned away')]
 SET_EXCLUDE = [('driver seat', 'Musk sits in it (the cabin is one flat painting, drawn behind him)'),
                ('passenger seat', 'Cortana hangs in mid-air in front of it (painted behind her)')]
 TOUCHES = [('musk.handL', 'YOKE', 8.5, 34.4, 'turning the yoke'), ('musk.handR', 'YOKE', 8.5, 34.4, 'turning the yoke')]
@@ -234,7 +235,7 @@ def musk_state(t):
 
 
 # ------------------------------------------------------------------------------------------------ Cortana
-C_SCALE = 0.525                                   # as on the approved cast sheet (about 0.8 m), in mid-air over the seat
+C_SCALE = 0.446                                   # as on the approved cast sheet (about 0.8 m), in mid-air over the seat
 
 
 def cortana_pose(t):
@@ -640,7 +641,8 @@ def audits():
             if ts:
                 actors[f'{who} [{shot}]'] = (ts, alone(who))
     filmkit.EYES.clear()
-    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    snap = [('cortana [s4]', 30.4, 30.6, 'her poses snap on her words (the brief): side on to turned away')]
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=(), allow=snap)
     faults += filmkit.check_eyelines()
     return faults
 
