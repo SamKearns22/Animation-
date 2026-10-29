@@ -121,7 +121,7 @@ HOOK = ('Elon Finishes The Fight', {'y': 330, 'until': 3.5})   # Sam, 29 Oct: up
 CAPTION_1 = ('Halo Ringworld', 'Russia - Ukraine War')         # white bold, lower third, 0.5-4 s (the brief)
 KEEP_CLEAR = []
 PROP_SIZES = []
-OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 0.8}
+OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 1.0}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS = [('musk.hand*', 'YOKE', 8.5, 34.4, 'his hands on the yoke the whole time (the brief)')]
 ALLOWED_MOUTHS = []
@@ -171,7 +171,8 @@ def chunk_times(ln):
     return out
 
 
-CHUNKS = [(t, c, ln) for ln in LINES for t, c in chunk_times(ln)]
+SUB_EARLIER = {(4, 2): 0.5, (4, 4): 0.5}          # Sam, 31 Oct: "look like such" and "Kawaiii!!" come up 0.5 s sooner (subtitles only; her poses keep their times)
+CHUNKS = [(t - SUB_EARLIER.get((ln['n'], i), 0.0), c, ln) for ln in LINES for i, (t, c) in enumerate(chunk_times(ln))]
 
 
 def chunk_at(n, i):
@@ -233,7 +234,7 @@ def musk_state(t):
 
 
 # ------------------------------------------------------------------------------------------------ Cortana
-C_SCALE = 0.42                                    # as on the approved cast sheet (about 0.8 m), in mid-air over the seat
+C_SCALE = 0.525                                   # as on the approved cast sheet (about 0.8 m), in mid-air over the seat
 
 
 def cortana_pose(t):
@@ -269,7 +270,7 @@ def cortana_state(t):
 
 def cortana_y(t):
     """She hangs in mid-air: a small quick bob now and then (a held height between, never a sine float)."""
-    return HS.CORTANA_AT[1] - 60 + 12 * filmkit.shifts(t, seed=11, amount=1.0)   # her feet clear of the cushion
+    return HS.CORTANA_AT[1] + 40 + 12 * filmkit.shifts(t, seed=11, amount=1.0)   # her feet clear of the cushion
 
 
 def discharge(img, cam, t):
