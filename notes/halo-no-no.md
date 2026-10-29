@@ -43,7 +43,8 @@
   1.6 s "Oh," that the counter reads as 6 syllables ("Musker Chief" is in the next phrase, which matches), so its
   mouth opening 3 times there follows the voice; line 5 is one phrase holding the whole line, the counter over-reads
   it (10 for 7). Sound approved by Sam, so left as is. Check sheet sent in the chat (not on GitHub).
-- **Next:** Sam's yes on the check sheet, then the animatic: `python3 source/halo_no_no.py final OUT --small`
+- **Animatic 1 rendered and sent (31 Oct, Sam: "I can't tell if there are problems with the sound until I see the animatic": the earlier 'sound approved' was withdrawn).** `source/data/halo-no-no/animatic-1.mp4` (42.3 s, 2 MB, 1m47). Waiting for Sam's notes; no more renders until he replies.
+- **(Old next, done:)** Sam's yes on the check sheet, then the animatic: `python3 source/halo_no_no.py final OUT --small`
   (about 5 min), send it, wait.
 - **Losses and my additions Sam should know about:** the lone lead car is now the point of the V of 5; 2.5 s of the
   theme's opening is cut; the radio light (green, on the grille), the rear-window V's bobbing and the shorter jets are
