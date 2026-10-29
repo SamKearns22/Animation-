@@ -624,7 +624,7 @@ def _cortana_back(p, st):
         body.append((x, y))
     p.poly(curve(body, 4), C_SUIT, INK, 3.4)
     # the seat: the near cheek (the popped side) fuller and round past the hip line, the far one smaller
-    for sg, bx, by, rx, ry in ((1, 34 + hip, 440, 48, 44), (-1, -72 + hip, 428, 82, 62)):
+    for sg, bx, by, rx, ry in ((1, 58 + hip, 432, 68, 56), (-1, -72 + hip, 428, 82, 62)):
         p.ell(bx, by, rx, ry, C_SUIT, None)
         p.ell(bx - sg * 4, by - 18, rx * 0.56, ry * 0.4, C_SUIT_L, None)
         a1 = 1.2 * math.pi if sg < 0 else 0.95 * math.pi
