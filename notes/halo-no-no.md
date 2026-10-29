@@ -67,7 +67,7 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 - The planet behind, lower left, in shadow; the blue galaxy band top right; stars.
 - About 8 Roadsters skimming the hull in a loose stream, big and near at the bottom, shrinking into the distance:
   most fly level, two or three spin nose over tail like in Roadster, each at its own speed so the stream stretches.
-- Each car's flat shadow on the hull, sliding over the panels as it passes (sells how close they skim).
+- ~~Each car's flat shadow on the hull~~ (Sam, 29 Oct: no car shadows).
 - The camera holds still (flat painting); the cars do all the moving.
 - No sounds: the theme, loud (space shot), with the last two lines over it.
 
@@ -102,6 +102,35 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | 28 | Hook Text: "Elon Finishes The Fight" (Sam, 29 Oct). |  |
 | 26 | Usage is incredibly tight: be efficient, keep the action simple. |  |
 | 27 | The theme music should always be playing, quieter but still noticeable in the Roadster scenes and louder in the space scenes. |  |
+
+## Benchmarks (rule 3): each place beside its reference, `review/halo-no-no-sets.jpg` (`python3 source/halo_sets.py sheet OUT`)
+| place | item | ours |
+|---|---|---|
+| shot 1 (ref 01) | big orange-brown planet on the left, cut by the frame edge | yes, banded and blotched, one outline |
+| | its night side top-left | yes, a dusk band then the night side |
+| | thin dark ring tilted in front of its lower half | yes, the near half dark hull with tiny lights, the far half a pale strip |
+| | bright galaxy core right of centre | yes, flat layers (white, yellow, orange, violet), thin dust lanes |
+| | violet and blue nebula | yes, flat lumps, no outline (light, not a thing) |
+| | dense small stars | yes, round dots only (no four-point stars: off-style) |
+| | room for the Hook Text (top) and the caption (lower third) | yes, dark sky at the top; the caption sits over the planet's lower part |
+| | an open lane on the right for the armada | yes |
+| | the grey warship (ref 01) | left out: the brief has only the Roadsters |
+| shot 6 (ref 02) | the dark hull band sweeping from the top left down to the lower right | yes, a true circle projected (`RING_CAM`), so the sweep is right |
+| | hull panels, round ports, hundreds of specks of light | yes |
+| | the far side rising up the right as a thin strip of seas, land, cloud | yes, with grey rim walls |
+| | the planet behind on the left | yes, lower left, its night side away from the light |
+| | the blue galaxy band top right | yes, behind the far arc |
+| | stars and nebula | yes |
+| | no car shadows | yes (Sam, 29 Oct) |
+| | room for the cars to skim the hull | yes: the space under the hull, the frame's lower half |
+| cabin (refs 03-05) | white sport seats, headrest built in, shoulder wings, grey bolsters | yes |
+| | the black ROADSTER plate with red letters on each headrest | yes (Musk's helmet hides his) |
+| | black glass roof in a black frame | yes, two panels onto space |
+| | black centre console, the screen between the seats | yes (the screen from behind, clear of Musk's arms) |
+| | red trim light | yes: doors, rear bulkhead, under the dash's edge |
+| | black yoke | yes (`halo_cast.yoke`) |
+| | the rear window onto space, a Roadster drifting past | yes (Sam's yes, 29 Oct); the car is white like the armada (Sam: the Roadster film's white car) |
+| | dark doors with handles; dash with tweeter grilles and defroster slots | yes |
 
 ## References as checklists (guides/satire.md): `references/halo-no-no/`
 | reference | what it shows | ours matches? |
@@ -143,3 +172,8 @@ Decisions made:
   looking back over her shoulder: rule 38 exception).
 - Music never stops (Sam, 29 Oct): louder in the space shots (1, 6), quieter but noticeable in the cockpit (2-5, 7-8), easing
   down and up over about 0.3 s at each cut; the voices stay at least 6 dB above it (pre-flight checks).
+- Cast sheet (Sam, 29 Oct): yes to the taller visor, the high-collared bodysuit (ref 18) and the Roadster drifting past
+  the back window in the car shots; **no car shadows on the ring**. Cast approved; on to the sets.
+- Sets built 29 Oct in `source/halo_sets.py` (sheet `review/halo-no-no-sets.jpg`). Shot 6 follows ref 02's layout (the
+  hull from the top left down to the lower right, the far side rising up the right), not my list's "lower left up to
+  top right": flagged to Sam. The cars will skim under the hull, near at the bottom left, shrinking towards the turn.
