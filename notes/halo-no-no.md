@@ -28,7 +28,15 @@
   - Sent: sheet `review/halo-no-no-notes-30oct.jpg` (its armada frames are from before the V fix), clips
     `source/data/halo-no-no/clip-armada-v2.mp4` and `clip-armada-v3.mp4` (0-14 s: armada, radio light, rear window).
     Sam has not yet seen v3.
-- **Next (fresh chat, Sonnet):** Sam's word on `clip-music-4s.mp4` (music timing) and `clip-armada-v3.mp4`. Then before the first animatic: wire the
+- **Pre-flight first run (31 Oct, Sonnet):** `python3 source/preflight.py halo_no_no OUT` (module name with underscores).
+  Fixed: voice balance (music now ducks 10 dB under space lines, 4 dB under cabin lines; three voices were 3-5 dB over).
+  24 faults remain, all wiring, not picture: no `audits` / `LINE_SUBJECTS`; plan: no `SHOT_MARKS`, no cameras per shot,
+  roof glass/seats/console as set pieces with no room wall, Musk and Cortana "inside" their seats (need `on=`);
+  `scene(t)` empty so TOUCH (yoke), SHOT CAST (Musk s2-s5, Cortana s4) fail; script/mouth: lines 4 and 5 syllable
+  counts differ from the script (check the recordings vs script text); caption "Sir," 0.5 s too fast; s1 8.5 s and s4
+  9.4 s over 8 s (name them as chosen). This is more than filling lists: **next stage needs Opus, medium effort.**
+  Sam still has not answered on `clip-music-4s.mp4` and `clip-armada-v3.mp4`.
+- **Next (fresh chat, Sonnet; superseded by the line above: now Opus medium):** Sam's word on `clip-music-4s.mp4` (music timing) and `clip-armada-v3.mp4`. Then before the first animatic: wire the
   pre-flight checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the
   plan's `SHOT_MARKS`; the rear-window V and radio light are new things for the set checks), run `python3
   source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes

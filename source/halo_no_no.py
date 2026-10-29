@@ -497,9 +497,10 @@ def music_gain(n):
     k = np.hanning(int(0.3 * SR))
     g = np.convolve(g, k / k.sum(), 'same')
     for ln in LINES:
-        if CAMS[shot_of(ln['start'])] in ('space', 'ring'):
+        space = CAMS[shot_of(ln['start'])] in ('space', 'ring')
+        if True:
             duck = np.ones(n)
-            duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** (-7 / 20)
+            duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** ((-10 if space else -4) / 20)
             g *= np.convolve(duck, k / k.sum(), 'same')
     return g
 
