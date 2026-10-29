@@ -35,7 +35,7 @@ GREY = (104, 106, 112)       # the undersuit's grey hardware
 SUIT = (48, 50, 56)          # the dark undersuit
 LAMP = (190, 214, 255)       # the small blue lights
 VISOR = (214, 158, 60)       # gold, see-through (Sam: no light streak, it might hide him)
-INSIDE = (22, 24, 30)        # the helmet's dark inside round his face (never brown: it read as long hair)
+INSIDE = (14, 16, 24)        # the helmet's dark inside round his face (never brown: it read as long hair)
 SKIN = (236, 196, 170)
 HAIR = (66, 48, 36)          # dark brown, short at the sides, swept up and back (refs 07-09, 20-21)
 IRIS = (112, 146, 168)       # blue-grey
@@ -93,8 +93,8 @@ def chief(img, cam, x, y, s, st=None, t=0.0):
         _limb(p, sh, el, 84, SUIT)
         _plate(p, sh, el, 0.15, 0.85, 78, G, 12 + sg)
     # the neck seal and the helmet
-    p.poly(R([(-96, -46), (96, -46), (110, 34), (-110, 34)], 13, 2), GREY, INK, 4)
-    for yy in (-24, -2, 18):
+    p.poly(R([(-96, -20), (96, -20), (110, 34), (-110, 34)], 13, 2), GREY, INK, 4)
+    for yy in (0, 18):
         p.line([(-98, yy), (98, yy)], dk(GREY, 0.72), 2.4)
     _helmet(img, p, L, st, t)
     # the big shoulder plates over the tops of the arms
@@ -130,138 +130,153 @@ def yoke(p, turn):
 
 def _helmet(img, p, L, st, t):
     """Mark V helmet (refs 10-12): an angular dome with a ridge, a brow over a big visor, side pieces with two blue
-    lights, a vented chin guard. The visor is made tall enough to show his whole face (a cheat on the real helmet, so
-    it is clearly Musk and his mouth can talk: Sam's brief)."""
-    hx, hy = 0, -196                     # the face's centre
+    lights, a short vented chin guard. The visor is made big enough to show his whole head and neck, filling it with
+    only a thin gap to the helmet wall (Sam, 29 Oct, notes 2 and 4; a cheat on the real helmet, so it is clearly Musk
+    and his mouth can talk)."""
     R = lambda pts, sd, a=3: rough(pts, a, sd)
-    shell = [(-128, -150), (-120, -270), (-80, -328), (0, -344), (80, -328), (120, -270), (128, -150), (124, -70),
-             (92, -34), (-92, -34), (-124, -70)]
+    shell = [(-140, -170), (-132, -310), (-90, -370), (0, -388), (90, -370), (132, -310), (140, -170), (134, -60),
+             (100, -14), (-100, -14), (-134, -60)]
     p.poly(R(shell, 40, 2), G, INK, 4.4)
-    p.poly(R([(-128, -150), (-120, -270), (-80, -328), (-60, -300), (-100, -250), (-106, -150)], 41, 2), G_D, None)
-    p.poly(R([(-20, -344), (20, -344), (24, -306), (-24, -306)], 42, 1), G_L, INK, 2.6)        # the ridge
-    # the side pieces with their two blue lights
-    for sg in (-1, 1):
-        p.poly(R([(sg * 118, -230), (sg * 150, -226), (sg * 154, -132), (sg * 122, -120)], 43 + sg, 2), G, INK, 4)
-        for ly in (-200, -164):
-            p.ell(sg * 137, ly, 10, 10, LAMP, INK, 2)
-    # the visor opening: the helmet's dark inside, his face, then the gold glass over it (see-through)
-    vis = [(-100, -282), (-60, -306), (60, -306), (100, -282), (108, -170), (88, -102), (40, -84), (-40, -84),
-           (-88, -102), (-108, -170)]
+    p.poly(R([(-140, -170), (-132, -310), (-90, -370), (-72, -344), (-114, -296), (-120, -170)], 41, 2), G_D, None)
+    p.poly(R([(-22, -388), (22, -388), (26, -350), (-26, -350)], 42, 1), G_L, INK, 2.6)        # the ridge
+    for sg in (-1, 1):                                                                          # side pieces, lights
+        p.poly(R([(sg * 128, -260), (sg * 162, -256), (sg * 166, -150), (sg * 132, -136)], 43 + sg, 2), G, INK, 4)
+        for ly in (-226, -186):
+            p.ell(sg * 148, ly, 10, 10, LAMP, INK, 2)
+    # the visor opening: the helmet's dark inside, his head and neck, then the gold glass over it (see-through)
+    vis = [(-80, -344), (80, -344), (100, -306), (106, -224), (100, -160), (80, -104), (66, -52), (-66, -52),
+           (-80, -104), (-100, -160), (-106, -224), (-100, -306)]          # following his head, a thin gap round it
     p.poly(vis, INSIDE, INK, 4)
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))                # his face, clipped to the visor's opening
-    musk_face(lay, B.Pen(lay, L), st, hx, hy)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))                # his head, clipped to the visor's opening
+    musk_face(lay, B.Pen(lay, L), st, 0, -180)
     m = Image.new('L', img.size, 0)
     ImageDraw.Draw(m).polygon([L.P(*q) for q in curve(vis, 3)], fill=255)
     lay.putalpha(Image.fromarray(np.minimum(np.array(lay.split()[3]), np.array(m))))
     img.alpha_composite(lay)
     tint = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(tint).polygon([L.P(*q) for q in curve(vis, 3)], fill=VISOR + (62,))
+    ImageDraw.Draw(tint).polygon([L.P(*q) for q in curve(vis, 3)], fill=VISOR + (40,))
     img.alpha_composite(tint)
     p.poly(curve(vis, 3), None, dk(VISOR, 0.6), 7)                                              # the gold frame
     p.poly(curve(vis, 3), None, INK, 3)
     # the brow over the visor and the vented chin guard below it
-    p.poly(R([(-112, -290), (-62, -318), (62, -318), (112, -290), (106, -276), (60, -300), (-60, -300), (-106, -276)],
+    p.poly(R([(-124, -326), (-72, -356), (72, -356), (124, -326), (118, -312), (70, -340), (-70, -340), (-118, -312)],
              45, 1.5), G_L, INK, 3)
-    chin = [(-92, -100), (-40, -80), (40, -80), (92, -100), (90, -46), (54, -28), (-54, -28), (-90, -46)]
+    chin = [(-90, -58), (-40, -46), (40, -46), (90, -58), (88, -22), (54, -8), (-54, -8), (-88, -22)]
     p.poly(R(chin, 46, 2), G, INK, 4)
     for sg in (-1, 1):
-        for i in range(3):
-            yy = -78 + i * 13
-            p.line([(sg * 30, yy), (sg * 74, yy - 6)], dk(G, 0.6), 4)
+        for i in range(2):
+            yy = -40 + i * 12
+            p.line([(sg * 30, yy), (sg * 70, yy - 5)], dk(G, 0.6), 4)
 
 
 def musk_face(img, p, st, hx, hy):
-    """Elon Musk, front on, measured on ref 08 (hairline to chin 1.0): brows 0.29, eyes 0.37, nose base 0.60, mouth
-    0.75; width at the cheeks 0.72 of the height; eye centres 0.31 of the face width either side of the middle. Long
-    face, full soft cheeks, a narrow chin; receding temples, the hair short at the sides and swept up and back; dark,
-    fairly straight brows; small, hooded blue-grey eyes with heavy lower lids; a long straight nose; a thin upper lip
-    over a fuller lower lip; light stubble round the mouth and a goatee shadow on the chin. Sam: no exaggeration."""
-    top, chin = hy - 80, hy + 84                     # hairline .. chin: 164
+    """Elon Musk, front on, measured on ref 08 (hairline to chin 1.0: brows 0.29, eyes 0.37, nose base 0.60, mouth
+    0.75) and pushed towards Sam's cartoons (refs 22-23, note 1): a high forehead with deep M-shaped receding temples,
+    the hair swept up and back into a tuft; a wide face with full apple cheeks and deep smile folds down past the
+    mouth; small narrowed eyes with crow's feet and heavy lower lids; a long nose with a round bulb tip and flared
+    nostrils; a long upper lip, thin, over a fuller pink lower one; a round chin with a dimple and a goatee shadow;
+    ears sticking out; a thick neck going down into the suit (note 2)."""
+    top, chin = hy - 85, hy + 90                     # hairline (middle) .. chin: 175
     H = chin - top
     at = lambda f: top + f * H
-    cw = 0.36 * H                                    # half the width at the cheeks
+    cw = 0.42 * H                                    # half the width at the cheeks (wide, as the cartoons)
     look = st.get('look', 0.0)
-    # the hair behind (the crown and the swept-back top, short at the sides)
-    back = [(hx - cw - 2, at(0.04)), (hx - cw + 2, at(-0.06)), (hx - cw * 0.66, at(-0.24)), (hx, at(-0.30)),
-            (hx + cw * 0.66, at(-0.24)), (hx + cw - 2, at(-0.06)), (hx + cw + 2, at(0.04))]
+    # the neck, thick, going down into the dark undersuit collar (Damon's, Roadster)
+    p.poly([(hx - cw * 0.56, at(0.80)), (hx + cw * 0.56, at(0.80)), (hx + cw * 0.64, at(1.40)), (hx - cw * 0.64, at(1.40))],
+           SKIN, INK, 2.6)
+    p.line(open_curve([(hx - cw * 0.3, at(1.08)), (hx, at(1.13)), (hx + cw * 0.3, at(1.08))], 3), dk(SKIN, 0.84), 2)
+    p.poly(curve([(hx - cw * 1.3, at(1.22)), (hx, at(1.16)), (hx + cw * 1.3, at(1.22)), (hx + cw * 1.3, at(1.6)),
+                  (hx - cw * 1.3, at(1.6))], 3), SUIT, INK, 2.6)                                # the undersuit collar
+    # the hair behind: the crown and the swept-back top
+    back = [(hx - cw * 0.98, at(0.06)), (hx - cw * 0.96, at(-0.12)), (hx - cw * 0.6, at(-0.26)), (hx, at(-0.30)),
+            (hx + cw * 0.6, at(-0.26)), (hx + cw * 0.96, at(-0.12)), (hx + cw * 0.98, at(0.06))]
     p.poly(rough(curve(back, 3), 1.2, 60), HAIR, INK, 2.6)
-    # ears (only their front edges inside the helmet)
+    # ears, sticking out
     for sg in (-1, 1):
-        p.poly(curve([(hx + sg * cw * 0.96, at(0.33)), (hx + sg * (cw + 12), at(0.36)), (hx + sg * (cw + 10), at(0.52)),
-                      (hx + sg * cw * 0.94, at(0.58))], 3), SKIN, INK, 2.4)
-    # the face: long, full in the cheeks, tapering to a narrow chin
-    face = [(hx - cw * 0.92, at(0.0)), (hx - cw, at(0.30)), (hx - cw * 0.98, at(0.52)), (hx - cw * 0.9, at(0.74)),
-            (hx - cw * 0.62, at(0.92)), (hx - cw * 0.26, at(1.0)), (hx + cw * 0.26, at(1.0)), (hx + cw * 0.62, at(0.92)),
-            (hx + cw * 0.9, at(0.74)), (hx + cw * 0.98, at(0.52)), (hx + cw, at(0.30)), (hx + cw * 0.92, at(0.0))]
+        ear = [(hx + sg * cw * 0.94, at(0.30)), (hx + sg * (cw + 16), at(0.27)), (hx + sg * (cw + 20), at(0.40)),
+               (hx + sg * (cw + 12), at(0.56)), (hx + sg * cw * 0.92, at(0.60))]
+        p.poly(curve(ear, 3), SKIN, INK, 2.4)
+        p.line(open_curve([(hx + sg * (cw + 4), at(0.34)), (hx + sg * (cw + 10), at(0.42)), (hx + sg * (cw + 4), at(0.52))], 3),
+               dk(SKIN, 0.8), 1.8)
+    # the face: wide in the cheeks, a soft jaw, a round chin
+    face = [(hx - cw, at(0.30)), (hx - cw * 0.99, at(0.54)), (hx - cw * 0.88, at(0.76)),
+            (hx - cw * 0.6, at(0.93)), (hx - cw * 0.26, at(1.0)), (hx + cw * 0.26, at(1.0)), (hx + cw * 0.6, at(0.93)),
+            (hx + cw * 0.88, at(0.76)), (hx + cw * 0.99, at(0.54)), (hx + cw, at(0.30)), (hx + cw * 0.94, at(0.0)),
+            (hx + cw * 0.78, at(-0.22)), (hx + cw * 0.4, at(-0.32)), (hx, at(-0.34)), (hx - cw * 0.4, at(-0.32)),
+            (hx - cw * 0.78, at(-0.22)), (hx - cw * 0.94, at(0.0))]                  # up to the dome: the high forehead
     p.poly(curve(face, 3), SKIN, INK, 2.8)
-    # stubble round the mouth and the goatee shadow on the chin
-    stub = dk(SKIN, 0.95)
-    p.poly(curve([(hx - cw * 0.44, at(0.70)), (hx, at(0.67)), (hx + cw * 0.44, at(0.70)), (hx + cw * 0.40, at(0.86)),
-                  (hx + cw * 0.2, at(0.99)), (hx - cw * 0.2, at(0.99)), (hx - cw * 0.40, at(0.86))], 3), stub, None)
-    p.poly(curve([(hx - cw * 0.5, at(0.84)), (hx - cw * 0.2, at(0.86)), (hx + cw * 0.2, at(0.86)), (hx + cw * 0.5, at(0.84)),
-                  (hx + cw * 0.3, at(0.97)), (hx, at(1.0)), (hx - cw * 0.3, at(0.97))], 3), (196, 156, 132), None)   # goatee
-    # short dark sides (sideburns) and the hair: receding deep at the temples, a short peak in the middle, the top
-    # swept up and back into a low quiff (refs 08, 20)
-    for sg in (-1, 1):
-        p.poly(curve([(hx + sg * cw * 1.03, at(0.24)), (hx + sg * cw * 0.95, at(0.22)), (hx + sg * cw * 0.92, at(0.08)),
-                      (hx + sg * cw * 1.02, at(0.04))], 3), HAIR, INK, 2.0)
-    front = [(hx - cw * 0.98, at(0.06)), (hx - cw * 0.88, at(0.07)), (hx - cw * 0.74, at(-0.03)),
-             (hx - cw * 0.52, at(-0.06)), (hx - cw * 0.26, at(-0.02)), (hx, at(0.0)), (hx + cw * 0.26, at(-0.02)),
-             (hx + cw * 0.52, at(-0.06)), (hx + cw * 0.74, at(-0.03)), (hx + cw * 0.88, at(0.07)), (hx + cw * 0.98, at(0.06)),
-             (hx + cw * 0.98, at(-0.14)), (hx + cw * 0.7, at(-0.30)), (hx + cw * 0.1, at(-0.38)),
-             (hx - cw * 0.5, at(-0.34)), (hx - cw * 0.98, at(-0.16))]
-    p.poly(rough(curve(front, 3), 1.0, 61), HAIR, INK, 2.6)
-    for i in range(3):                                                                   # swept back, a few strokes
-        x0 = hx - cw * 0.34 + i * cw * 0.3
-        p.line(open_curve([(x0, at(-0.06)), (x0 + 4, at(-0.18)), (x0 + 14, at(-0.28))], 3), lt(HAIR, 1.5), 1.8)
-    # eyes: small, a little hooded, heavy lower lids; brows dark and fairly straight
-    ey = at(0.37)
+    # the hairline (refs 08, 22-25): deep M-shaped recession up the temples, a forelock in the middle; the top swept
+    # up and back, parted on his right (our left), with flicked ends
+    line = [(-0.97, 0.08), (-0.90, 0.0), (-0.78, -0.12), (-0.60, -0.19), (-0.38, -0.10), (-0.16, -0.01), (0.0, 0.01),
+            (0.16, -0.01), (0.38, -0.10), (0.60, -0.19), (0.78, -0.12), (0.90, 0.0), (0.97, 0.08)]
+    crown = [(1.0, -0.14), (0.88, -0.32), (0.64, -0.40), (0.40, -0.44), (0.10, -0.46), (-0.20, -0.42), (-0.40, -0.47),
+             (-0.50, -0.40), (-0.72, -0.38), (-0.92, -0.28), (-1.0, -0.14)]
+    front = [(hx + cw * u, at(v)) for u, v in open_curve(line, 4)] + [(hx + cw * u, at(v)) for u, v in crown]
+    p.poly(rough(front, 1.0, 61), HAIR, INK, 2.6)
+    p.line(open_curve([(hx - cw * 0.46, at(-0.20)), (hx - cw * 0.50, at(-0.32)), (hx - cw * 0.46, at(-0.42))], 3), INK, 2)   # part
+    for i in range(3):                                                                   # swept up and back
+        x0 = hx - cw * 0.16 + i * cw * 0.26
+        p.line(open_curve([(x0, at(-0.10)), (x0 + 6, at(-0.24)), (x0 + 16, at(-0.38))], 3), lt(HAIR, 1.6), 2)
+    # eyes: almond, hooded, a little narrowed; heavy dark brows set close above them, straight with a soft arch
+    ey = at(0.40)
     blink = st.get('blink')
     for sg in (-1, 1):
-        ex = hx + sg * 0.31 * 2 * cw
+        ex = hx + sg * 0.27 * 2 * cw
         if blink:
-            p.line([(ex - 12, ey + 1), (ex, ey + 3), (ex + 12, ey + 1)], INK, 2.6)
+            p.line([(ex - 13, ey + 1), (ex, ey + 3), (ex + 13, ey + 1)], INK, 2.6)
         else:
             _musk_eye(p, ex, ey, look)
-        p.line([(ex - 13, ey + 9), (ex, ey + 12), (ex + 12, ey + 9)], dk(SKIN, 0.82), 1.6)        # the heavy lower lid
-        p.line([(ex - 13, ey - 8), (ex + 2, ey - 11), (ex + 13, ey - 7)], dk(SKIN, 0.8), 1.6)     # the hood crease
-        by = at(0.27) - (5 if st.get('brows') == 'up' else 0)
-        inner, outer = ex - sg * 16, ex + sg * 21
-        p.poly([(inner, by + 3), (ex + sg * 4, by - 2), (outer, by + 3), (outer, by + 5), (ex + sg * 4, by + 2),
-                (inner, by + 7)], dk(HAIR, 0.85), None)                                              # thin, a soft arch
-    # the long straight nose and its base
-    nb = at(0.58)
-    p.line([(hx - 4, ey + 2), (hx - 6, nb - 8)], dk(SKIN, 0.72), 1.8)
-    p.poly(curve([(hx - 16, nb - 4), (hx - 5, nb + 3), (hx + 5, nb + 3), (hx + 16, nb - 4), (hx + 4, nb), (hx - 4, nb)], 3),
-           dk(SKIN, 0.86), None)
+        p.line(open_curve([(ex - sg * 13, ey - 9), (ex, ey - 12), (ex + sg * 15, ey - 7)], 3), dk(SKIN, 0.74), 2.2)  # hood
+        p.line(open_curve([(ex - 13, ey + 9), (ex, ey + 12), (ex + 13, ey + 9)], 3), dk(SKIN, 0.8), 1.8)            # lower lid
+        p.line([(ex + sg * 17, ey + 2), (ex + sg * 24, ey + 5)], dk(SKIN, 0.84), 1.4)                               # crow's foot
+        by = at(0.31) - (5 if st.get('brows') == 'up' else 0)
+        inner, outer = ex - sg * 15, ex + sg * 22
+        p.poly([(inner, by + 2), (ex + sg * 4, by - 3), (outer, by + 1), (outer + sg * 2, by + 6), (ex + sg * 4, by + 4),
+                (inner, by + 9)], dk(HAIR, 0.8), None)
+    # the long nose: a shadowed bridge on one side, a round bulb, flared nostrils; smile folds curving round the mouth
+    nb = at(0.63)
+    p.line(open_curve([(hx - 9, at(0.36)), (hx - 10, at(0.48)), (hx - 14, nb - 12)], 3), dk(SKIN, 0.74), 2)
+    p.poly(curve([(hx - 13, nb - 10), (hx, nb - 16), (hx + 13, nb - 10), (hx + 12, nb - 1), (hx, nb + 3), (hx - 12, nb - 1)], 3),
+           dk(SKIN, 0.94), None)                                                                   # the bulb
+    p.line(open_curve([(hx - 12, nb - 1), (hx, nb + 3), (hx + 12, nb - 1)], 3), dk(SKIN, 0.66), 2)
     for sg in (-1, 1):
-        p.line([(hx + sg * 11, nb), (hx + sg * 5, nb + 3)], INK, 1.8)
-        p.line([(hx + sg * 18, nb + 2), (hx + sg * 25, at(0.76))], dk(SKIN, 0.86), 1.6)          # faint smile folds
-    # the mouth: a thin upper lip over a fuller lower one; talking shapes from the lip-sync set
-    my = at(0.75)
+        p.line(open_curve([(hx + sg * 12, nb - 13), (hx + sg * 22, nb - 6), (hx + sg * 20, nb + 1), (hx + sg * 11, nb)], 3),
+               dk(SKIN, 0.66), 2.2)                                                                # nostril wings
+        p.ell(hx + sg * 7, nb, 3, 1.6, dk(SKIN, 0.62), None)
+        p.line(open_curve([(hx + sg * 24, nb - 4), (hx + sg * 34, at(0.72)), (hx + sg * 32, at(0.82))], 3), dk(SKIN, 0.84), 2)
+    # stubble over the lip and the goatee on the chin, a chin dimple
+    p.poly(curve([(hx - 22, at(0.71)), (hx, at(0.69)), (hx + 22, at(0.71)), (hx + 18, at(0.74)), (hx - 18, at(0.74))], 3),
+           dk(SKIN, 0.95), None)
+    p.poly(curve([(hx - 10, at(0.86)), (hx + 10, at(0.86)), (hx + 18, at(0.94)), (hx, at(0.99)), (hx - 18, at(0.94))], 3),
+           (220, 180, 156), None)
+    p.line([(hx, at(0.93)), (hx, at(0.98))], dk(SKIN, 0.66), 2)
+    # the mouth: a defined upper lip (cupid's bow) over a fuller pink lower one, the corners just turned up (a smirk);
+    # talking shapes from the lip-sync set
+    my = at(0.79)
     shape = st.get('mouth', 'rest')
-    if shape == 'rest':                                                              # pink lips, the lower one fuller
-        p.poly(curve([(hx - 22, my + 1), (hx - 8, my - 5), (hx, my - 3), (hx + 8, my - 5), (hx + 22, my + 1), (hx + 10, my + 9),
-                      (hx - 10, my + 9)], 3), (214, 140, 136), None)
-        p.line([(hx - 22, my + 1), (hx - 8, my - 1), (hx + 8, my - 1), (hx + 22, my + 1)], INK, 2.4)
+    if shape == 'rest':
+        p.poly(curve([(hx - 24, my), (hx - 9, my - 6), (hx, my - 3), (hx + 9, my - 6), (hx + 24, my - 1), (hx + 9, my + 1),
+                      (hx - 9, my + 1)], 3), (196, 118, 116), None)                                  # upper lip
+        p.poly(curve([(hx - 20, my + 1), (hx + 20, my), (hx + 12, my + 10), (hx - 12, my + 10)], 3), (222, 146, 142), None)
+        p.line(open_curve([(hx - 25, my - 2), (hx - 10, my + 1), (hx + 10, my + 1), (hx + 25, my - 3)], 3), INK, 2.4)
     else:
         mouths.draw(p, {}, hx, my, shape)
 
 
 def _musk_eye(p, ex, ey, look):
     """One opening between two lids, the iris cut to it (no line ever crosses the white)."""
-    w = 12
+    w = 14
     us = np.linspace(-1, 1, 15)
-    upper = [(ex + w * u, ey - 5.5 * (1 - u * u) - 0.6 * u) for u in us]
-    lower = [(ex + w * u, ey + 4.5 * (1 - u * u)) for u in us]
+    upper = [(ex + w * u, ey - 6.5 * (1 - u * u) - 0.6 * u) for u in us]
+    lower = [(ex + w * u, ey + 5 * (1 - u * u)) for u in us]
     opening = upper + lower[::-1][1:-1]
     p.poly(opening, (250, 250, 246), None)
     cx, cy = ex + 6 * look, ey
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
-    iris = _clip_convex(opening[::-1], circ(6.2))
+    iris = _clip_convex(opening[::-1], circ(7))
     if len(iris) >= 3:
         p.poly(iris, IRIS, None)
-    pupil = _clip_convex(opening[::-1], circ(2.8))
+    pupil = _clip_convex(opening[::-1], circ(3.2))
     if len(pupil) >= 3:
         p.poly(pupil, INK, None)
     p.line(lower, INK, 1.4)
@@ -322,7 +337,7 @@ C_IRIS = (40, 76, 178)
 C_GLOW = (110, 180, 255)
 C_SW = 98                    # her shoulders (joints at +-84)
 
-POSES = ('appear', 'point', 'kawaii', 'turn', 'stand')
+POSES = ('appear', 'point', 'thrust', 'kawaii', 'turn', 'stand')
 
 
 def cortana_rig():
@@ -356,6 +371,8 @@ def cortana(img, cam, x, y, s, st=None, t=0.0):
     p = B.Pen(lay, L)
     if st['pose'] == 'turn':
         _cortana_back(p, st)
+    elif st['pose'] == 'thrust':
+        _cortana_side(p, st)
     else:
         _cortana_front(p, st)
     hologram(img, lay, cam, st['appear'], st['flicker'], t)
@@ -523,6 +540,51 @@ def _cortana_head(p, st, hx, hy, turned=0.0):
                             (hx - sh - 60, hy + 104)], 4), 1.5, 71), C_HAIR, INK, 3)
 
 
+def _cortana_side(p, st):
+    """Side on, facing Musk (our right): the back arched, hips back, the chest thrust right at him (Sam, 29 Oct,
+    note 3), both fists tucked behind her; the head in three-quarter towards him. A cringe pose, never explicit."""
+    # the far leg, a step behind, then the near one
+    for far, knee, ank, toe in ((True, (-26, 700), (-40, 884), (-6, 944)), (False, (16, 700), (2, 890), (40, 950))):
+        col = C_SUIT_D if far else C_SUIT
+        leg = [(-70, 430), (60, 440), (knee[0] + 34, knee[1]), (ank[0] + 18, ank[1]), (toe[0], toe[1]),
+               (ank[0] - 8, ank[1] + 18), (ank[0] - 16, ank[1]), (knee[0] - 30, knee[1]), (-96, 480)]
+        p.poly(curve(leg, 4), col, INK, 3.2)
+        p.line(open_curve([(knee[0] - 22, knee[1] - 20), (knee[0] + 4, knee[1] - 16), (knee[0] + 26, knee[1] - 22)], 3), C_LINE, 3)
+        p.line([(ank[0] - 14, ank[1] - 30), (ank[0] + 18, ank[1] - 30)], C_LINE, 3)
+    rig = F.Rig(dict(shoulders=8, name='Cortana'))                     # one shoulder joint, at (-6, 60), side on
+    far_arm = rig.arm('R', (-118, 300), 'fist', 'down')
+    near_arm = rig.arm('R', (-104, 340), 'fist', 'down')
+    el, wr, sh = far_arm
+    _limb(p, (-6, 60), el, 42, C_SUIT_D)
+    _limb(p, el, wr, 38, C_SUIT_D)
+    d = _unit(np.subtract(wr, el))
+    p.ell(wr[0] + d[0] * 14, wr[1] + d[1] * 14, 24, 24, C_SKIN_D, INK, 3)
+    body = [(-26, -8), (18, -8), (30, 24), (56, 70), (76, 100), (60, 210), (40, 282), (58, 344), (64, 440), (-70, 476),
+            (-118, 420), (-104, 352), (-40, 286), (-58, 170), (-62, 70)]
+    p.poly(curve(body, 4), C_SUIT, INK, 3.4)
+    # the bust in profile, pushed out towards him
+    bx, by, rx, ry = 94, 144, 60, 58
+    p.ell(bx, by, rx, ry, C_SUIT, None)
+    p.ell(bx - 6, by - 18, rx * 0.56, ry * 0.4, C_SUIT_L, None)
+    p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(-0.4 * math.pi, 0.75 * math.pi, 18)], INK, 3)
+    # the seat in profile, pushed back
+    p.line(open_curve([(-74, 330), (-116, 404), (-104, 456), (-70, 474)], 3), INK, 3)
+    p.poly(curve([(-20, -12), (18, -12), (22, 22), (-24, 22)], 3), C_SUIT_D, INK, 3)                # the collar
+    p.line(open_curve([(-30, 280), (4, 290), (40, 284)], 3), C_LINE, 5)                              # the belt
+    p.line(open_curve([(-40, 70), (0, 96), (40, 80)], 3), C_LINE, 3)                                 # shoulder panel
+    p.line(open_curve([(42, 300), (36, 380), (54, 440)], 3), C_LINE, 3)                              # the high-cut line
+    # the near arm, its upper arm bare to mid-way, the glove, the fist behind her
+    el, wr, sh = near_arm
+    _limb(p, (-6, 60), el, 46, C_SKIN)
+    mid = tuple(np.array((-6, 60)) + (np.array(el) - np.array((-6, 60))) * 0.45)
+    _limb(p, mid, el, 48, C_SUIT)
+    p.ell(-6, 60, 26, 26, C_SUIT_D, INK, 3)
+    _limb(p, el, wr, 42, C_SUIT)
+    d = _unit(np.subtract(wr, el))
+    p.ell(wr[0] + d[0] * 14, wr[1] + d[1] * 14, 25, 25, C_SKIN, INK, 3)
+    _cortana_head(p, dict(st, look=1.0), 14, -150, turned=1.0)
+
+
 def _cortana_back(p, st):
     """Turned away, the hip popped, looking back over her right shoulder at Musk (our right)."""
     hip = (st['hip'] or 0.8) * 20
@@ -567,7 +629,7 @@ def sheet(out):
         tiles.append((lab, img))
     # 6-9. Cortana's poses
     for pose, lab, extra in (('appear', 'Cortana appears', dict(mouth='O')), ('point', '"Oh, Musker Chief"', dict(mouth='O', hip=-0.8)),
-                             ('kawaii', '"Le Epic Chungus" (chest out)', dict(mouth='E', wink=True, lean=-4, chest=1.0)),
+                             ('thrust', '"Le Epic Chungus" (thrust at him)', dict(mouth='E', wink=True, lean=-5)),
                              ('turn', '"Kawaiii!!" (turned away)', dict(mouth='AI'))):
         img = B.canvas((14, 16, 30))
         cortana(img, B.Cam(1.0, 540, 960), 540, 620, 0.95, dict(extra, pose=pose), t=1.0)

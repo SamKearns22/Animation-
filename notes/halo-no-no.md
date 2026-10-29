@@ -105,12 +105,17 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | 13-15 | Cortana (Campaign Evolved): blue, circuit lines, short bob | |
 | 16 | Chief beside Cortana: her height and place beside him | |
 | 20-21 | Musk talking: mouth shapes, teeth show little, lower lip full; short cropped hair in 20 | |
+| 24-25 | Musk comic drawings (Sam, 29 Oct): 25 the clearest: hair swept up and back, parted on his right, deep temples, heavy straight brows close over hooded almond eyes, long nose with a round tip, defined upper lip, smirk | |
+| 22-23 | Musk cartoons (Sam, 29 Oct: what to exaggerate): high forehead with deep M-shaped receding temples, hair swept up into a tuft, wide face with full apple cheeks and deep smile folds, small narrowed eyes with crow's feet, a long nose with a round bulb tip and flared nostrils, thin upper lip over a fuller lower one, round chin with a dimple, ears sticking out | |
 | 17-19 | anime Cortana: big eyes, glossy bob with a long fringe lock, bodysuit with white panel lines (18), the look to copy | |
 
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| 1 | cast | - | Musk not quite identifiable: use the cartoon refs 22-25 | rebuilt from refs 08, 22-25: high forehead, deep receding temples, hair swept up, wider face, hooded eyes, long bulb nose, defined lips, goatee (new kind) |
+| 2 | cast | - | a neck in his helmet, like Damon in Roadster | neck into the undersuit collar (new kind) |
+| 3 | cast | - | one Cortana pose really thrusting her breasts towards him | new side-on pose 'thrust' on "Le Epic Chungus": back arched, chest pushed at him, fists behind her (new kind) |
+| 4 | cast | - | his head fills the helmet: only a thin gap to the helmet wall | visor reshaped round his head, head enlarged (new kind) |
 
 Decisions made:
 - Audio: `source/audio/halo-theme.mp3` (Sam, 29 Oct), 2:58 long; film starts at 0:21, armada enters at 0:28.
