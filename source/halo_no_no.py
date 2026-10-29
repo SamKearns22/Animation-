@@ -375,7 +375,10 @@ def _ring_view(th, flip):
     T = np.array([-math.sin(th), math.cos(th), 0.0])
     Rr = np.array([math.cos(th), math.sin(th), 0.0])
     Lf = np.cross(Rr, T)
-    Mc = np.stack([T, -Lf, -Rr], 1) @ RD.rot('y', math.radians(flip))   # roof out from the hull, jets towards it (Sam, 31 Oct: they flew upside down)
+    # roof up the screen, wheels and jets down (Sam, 31 Oct: they flew upside down); turned 50 degrees about the roof
+    # so the camera sees the car's side and the jets leave its underside (end on, from behind, the plumes read as
+    # coming off its end)
+    Mc = np.stack([T, -Lf, -Rr], 1) @ RD.rot('z', math.radians(50)) @ RD.rot('y', math.radians(flip))
     c, s = RC.c, RC.s
     right = -RC.Rt * c + RC.U * s
     up = RC.Rt * s + RC.U * c
