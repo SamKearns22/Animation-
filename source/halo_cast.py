@@ -631,7 +631,7 @@ def _cortana_back(p, st):
         p.ell(bx - sg * 4, by - 18, rx * 0.56, ry * 0.4, C_SUIT_L, None)
         a1 = 1.2 * math.pi if sg < 0 else 0.72 * math.pi   # the far cheek's line stops short of the crease
         p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(0.25 * math.pi if sg < 0 else 0.05 * math.pi, a1, 16)], INK, 3)
-    p.line(open_curve([(hip - 14, 404), (hip - 12, 446), (hip - 6, 482)], 3), INK, 3)        # the one crease (Sam)
+    p.line(open_curve([(hip - 14, 404), (hip - 13, 430), (hip - 11, 458)], 3), INK, 3)        # the one crease (Sam)
     p.line([(SHIFT, 20), (SHIFT * 0.3, 200), (0, 270)], C_LINE, 3)                           # the back seam
     p.line(open_curve([(-46 + SHIFT, 80), (-20 + SHIFT, 120), (-30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
     p.line(open_curve([(46 + SHIFT, 80), (20 + SHIFT, 120), (30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
