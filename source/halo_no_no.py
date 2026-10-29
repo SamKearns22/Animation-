@@ -112,7 +112,7 @@ BENCHMARK = [   # rule 3: the full lists are in the notes ("Benchmarks"); the sh
                 ('rear window onto space', 'with a Roadster drifting past'), ('doors and dash detail', 'yes')]),
 ]
 HOOK = ('Elon Finishes The Fight', {'y': 330, 'until': 3.5})   # Sam, 29 Oct: upper middle, 0-3.5 s
-CAPTION_1 = ('Halo Ringworld', 'Russian - Ukraine War')         # white bold, lower third, 0.5-4 s (the brief)
+CAPTION_1 = ('Halo Ringworld', 'Russia - Ukraine War')         # white bold, lower third, 0.5-4 s (the brief)
 KEEP_CLEAR = []
 PROP_SIZES = []
 OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 0.8}

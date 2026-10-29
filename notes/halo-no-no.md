@@ -10,7 +10,7 @@
     sides, seen a little from above), arriving at their own times, plus 4 lone spinners spread out. Every car is drawn
     before its time too (nearer us, off the right edge), so none pops on (checked by a script for all 15).
   - Every Roadster on its four jets as in Roadster (0.55 length in shot 1 and the rear window, so the shapes read).
-  - "Halo Ringworld" fades in at 0.5 s, "Russian - Ukraine War" at 1.0 s, both out together at 4 s.
+  - "Halo Ringworld" fades in at 0.5 s, "Russia - Ukraine War" at 1.0 s, both out together at 4 s.
   - A small green radio light above the speaker grille between the seats, lit from the radio voice's first word to his
     last.
   - The rear window: a V of five following us, noses to us, on their jets, each holding then drifting a little (Sam's
@@ -20,10 +20,15 @@
   - All seven recordings filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined); the
     film retimed to them: 42.3 s, shots s1 0, s2 8.5, s3 16.4, s4 22.1, s5 31.5, s6 34.4. `voices.py --film
     halo_no_no`: takes match the script.
+  - The white caption's second line now reads "Russia - Ukraine War" (Sam, 30 Oct; done and checked in the code, not yet
+    re-rendered).
+  - Music (Sam, 30 Oct): the track was exactly 4 s behind, so the theme now starts at 0:27.5 (`THEME_FROM`); the cars
+    arrive at 0:32 of the song, overriding the brief's 0:28. Clip with sound: `source/data/halo-no-no/clip-music-4s.mp4`
+    (0-14 s). Sam has not yet said whether it lines up.
   - Sent: sheet `review/halo-no-no-notes-30oct.jpg` (its armada frames are from before the V fix), clips
     `source/data/halo-no-no/clip-armada-v2.mp4` and `clip-armada-v3.mp4` (0-14 s: armada, radio light, rear window).
     Sam has not yet seen v3.
-- **Next (fresh chat, Sonnet):** Sam's word on `clip-armada-v3.mp4`. Then before the first animatic: wire the
+- **Next (fresh chat, Sonnet):** Sam's word on `clip-music-4s.mp4` (music timing) and `clip-armada-v3.mp4`. Then before the first animatic: wire the
   pre-flight checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the
   plan's `SHOT_MARKS`; the rear-window V and radio light are new things for the set checks), run `python3
   source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes
@@ -55,7 +60,7 @@
 **Shots (times are estimates until the recordings are in; music starts at 0:21 of the theme):**
 | shot | camera | what happens | about |
 |---|---|---|---|
-| 1 | wide space, upright | orange planet, Halo ring in front of it, galaxy core; Hook Text "Elon Finishes The Fight" (upper middle, 0-3.5 s); white bold caption "Halo Ringworld / Russian - Ukraine War" (lower third, 0.5-4 s); armada enters at 7.0 s (0:28 of the theme), sweeping diagonally left towards the planet, lead car alone in front, some spinning | 0-11 s |
+| 1 | wide space, upright | orange planet, Halo ring in front of it, galaxy core; Hook Text "Elon Finishes The Fight" (upper middle, 0-3.5 s); white bold caption "Halo Ringworld / Russia - Ukraine War" (lower third, 0.5-4 s); armada enters at 7.0 s (0:28 of the theme), sweeping diagonally left towards the planet, lead car alone in front, some spinning | 0-11 s |
 | 2 | windscreen, facing in (two seats) | Musk in the armour at the yoke, turning it back and forth; radio line; "Sir, finishing this fight." | 11-17 |
 | 3 | hard cut to Musk close-up | "If we don't stop Zelensky..." | 17-22 |
 | 4 | windscreen (hard cut back) | discharge flash and pixel crackle; Cortana appears above the passenger seat; her Chungus line | 22-29 |
@@ -96,7 +101,7 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 |---|------|------|
 | 1 | The Halo ring visible against an orange planet. | yes: shot 1, the ring over the planet's lower half |
 | 2 | The Halo theme playing from .21 seconds into the track. | yes: `THEME_FROM = 21.0` |
-| 3 | White bold text appears for a few seconds: "Halo Ringworld" / "Russian - Ukraine War" | yes: white bold, lower third, 0.5-4 s |
+| 3 | White bold text appears for a few seconds: "Halo Ringworld" / "Russia - Ukraine War" | yes: white bold, lower third, 0.5-4 s |
 | 4 | From .28 in the theme track, a fleet of Tesla Roadsters enter the scene, streaking in Armada formation towards the Halo. | yes: `T_ARMADA = 7.0` (0:28) |
 | 5 | Some are spinning in space, just like in Roadster. Others fly straight, including the one flying in front of the armada on its own. | yes: 4 of 15 spin nose over tail; the lead car flies alone in front |
 | 6 | Spaceship armada sweeping diagonal left towards planet with Halo Ringworld visible in the distance (ref 01). | yes: streaming in from the right towards the planet and ring |

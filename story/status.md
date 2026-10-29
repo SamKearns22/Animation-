@@ -8,7 +8,7 @@ Read this first in any new session, after CLAUDE.md.
   medium), then pre-flight wiring and the first animatic. Handover in `notes/halo-no-no.md`.
 - 30 Oct (notes, Opus): all Sam's notes applied (level arrowhead armada, jets, caption fades, radio light, cars
   following in the rear window, no wait before the armada); recordings filed, film retimed to 42.3 s. Next (Sonnet):
-  Sam's word on clip-armada-v3, then pre-flight and the first animatic's check sheet.
+  Sam's word on clip-music-4s (theme now from 0:27.5) and clip-armada-v3; caption now "Russia - Ukraine War"; then pre-flight and the first animatic's check sheet.
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
