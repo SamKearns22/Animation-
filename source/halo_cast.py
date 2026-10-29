@@ -621,15 +621,17 @@ def _cortana_back(p, st):
             x += 12                                            # the small of her back curving in (the arch)
         if y >= 400 and x < hip:
             x -= 14                                            # the popped hip rounder on its own side
+        if y >= 400 and x > hip:
+            x -= 22                                            # the far hip tucked inside the far cheek (one edge)
         body.append((x, y))
     p.poly(curve(body, 4), C_SUIT, INK, 3.4)
     # the seat: the near cheek (the popped side) fuller and round past the hip line, the far one smaller
     for sg, bx, by, rx, ry in ((1, 58 + hip, 432, 68, 56), (-1, -72 + hip, 428, 82, 62)):
         p.ell(bx, by, rx, ry, C_SUIT, None)
         p.ell(bx - sg * 4, by - 18, rx * 0.56, ry * 0.4, C_SUIT_L, None)
-        a1 = 1.2 * math.pi if sg < 0 else 0.95 * math.pi
-        p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(0.05 * math.pi, a1, 16)], INK, 3)
-    p.line(open_curve([(hip - 8, 384), (hip - 12, 430), (hip - 14, 474)], 3), INK, 3)
+        a1 = 1.2 * math.pi if sg < 0 else 0.72 * math.pi   # the far cheek's line stops short of the crease
+        p.line([(bx + rx * math.cos(a), by + ry * math.sin(a)) for a in np.linspace(0.25 * math.pi if sg < 0 else 0.05 * math.pi, a1, 16)], INK, 3)
+    p.line(open_curve([(hip - 14, 404), (hip - 12, 446), (hip - 6, 482)], 3), INK, 3)        # the one crease (Sam)
     p.line([(SHIFT, 20), (SHIFT * 0.3, 200), (0, 270)], C_LINE, 3)                           # the back seam
     p.line(open_curve([(-46 + SHIFT, 80), (-20 + SHIFT, 120), (-30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
     p.line(open_curve([(46 + SHIFT, 80), (20 + SHIFT, 120), (30 + SHIFT * 0.6, 170)], 3), C_SUIT_D, 3)
