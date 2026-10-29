@@ -52,7 +52,7 @@ LINES = [
          end=13.2, audio='halo-no-no-radio', radio=True,
          chunks=['Musker Chief,', 'you mind telling me', "what you're doing", 'in that Roadster?']),
     dict(n=2, who='musk', text='Sir, finishing this fight.', start=13.4, end=16.1, audio='halo-no-no-musk-1',
-         chunks=['Sir,', 'finishing this fight.']),
+         chunks=['Sir, finishing this fight.']),
     dict(n=3, who='musk', text="If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out.",
          start=16.5, end=21.8, audio='halo-no-no-musk-2',
          chunks=["If we don't stop Zelensky", 'from using the Halo,', 'all life in the galaxy', 'could be wiped out.']),
@@ -81,15 +81,21 @@ DUR = 42.3
 PLAN = dict(
     CEIL=1.15,
     ROOMS={'cabin': (-0.72, 0.0, 0.72, 1.6)},
-    OPENINGS={'rear window': dict(wall=('z', 1.6), span=(-0.58, 0.58), sill=0.62, head=1.08, to='space'),
-              'roof glass': dict(wall=('y', 1.15), span=(-0.55, 0.55), to='space')},
-    THINGS={'driver seat': dict(at=(0.37, 1.05), size=(0.54, 0.55, 1.3), facing=180),
-            'passenger seat': dict(at=(-0.37, 1.05), size=(0.54, 0.55, 1.3), facing=180),
+    OPENINGS={'rear window': dict(wall=('z', 1.6), span=(-0.58, 0.58), sill=0.62, head=1.08, to='space')},
+    THINGS={'driver seat': dict(at=(0.37, 1.05), size=(0.54, 0.55, 1.1), facing=180),
+            'passenger seat': dict(at=(-0.37, 1.05), size=(0.54, 0.55, 1.1), facing=180),
             'console': dict(at=(0.0, 0.8), size=(0.16, 0.9, 0.5), facing=0),
-            'dash': dict(at=(0.0, 0.15), size=(1.44, 0.3, 0.8), facing=0)},
-    PEOPLE={'musk': dict(at=(0.37, 0.95), facing=180, who='musk', seated=True),
-            'cortana': dict(at=(-0.37, 0.9), facing=180, who='cortana', floating=0.75)},
-    CAMS={'wide': dict(pos=(0.0, 1.0, 0.0), look=(0.0, 0.9, 1.6)), 'close': dict(pos=(0.37, 1.25, 0.25), look=(0.37, 1.25, 1.0))},
+            'dash': dict(at=(0.0, 0.15), size=(1.44, 0.3, 0.8), facing=0),
+            'roof glass': dict(at=(0.0, 0.8), size=(1.1, 1.2, 0.02), y=1.13, facing=0, solid=False,
+                               why='two black glass panels overhead onto space (the plan has openings in walls only)')},
+    PEOPLE={'musk': dict(at=(0.37, 0.95), facing=180, who='musk', seated=True, on='driver seat'),
+            'cortana': dict(at=(-0.37, 0.9), facing=180, who='cortana', floating=0.75, on='passenger seat')},
+    CAMS={'s1': dict(pos=(-30.0, 0.0, -200.0), look=(0.0, 0.0, 0.0), outside=True),   # the space painting
+          's2': dict(pos=(0.0, 1.0, 0.0), look=(0.0, 0.9, 1.6)), 's4': dict(pos=(0.0, 1.0, 0.0), look=(0.0, 0.9, 1.6)),
+          's3': dict(pos=(0.37, 1.25, 0.25), look=(0.37, 1.25, 1.0)),
+          's5': dict(pos=(0.37, 1.25, 0.25), look=(0.37, 1.25, 1.0)),
+          's6': dict(pos=(0.0, 50.0, -300.0), look=(0.0, 0.0, 0.0), outside=True)},       # the ring painting
+    SHOT_MARKS={'s2': ['musk'], 's3': ['musk'], 's4': ['musk', 'cortana'], 's5': ['musk']},
     GROUPS={'armada': dict(arriving='the lead car alone, then the rest in a loose wedge, some spinning nose over tail',
                            stopped='never stops', leaving='streams away towards the planet (s1), along the hull (s6)')},
 )
@@ -120,7 +126,8 @@ ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS = [('musk.hand*', 'YOKE', 8.5, 34.4, 'his hands on the yoke the whole time (the brief)')]
 ALLOWED_MOUTHS = []
 ALLOWED_POPS = [('cortana', 22.5, 23.6, 'she forms out of the discharge (the brief)')]
-SET_EXCLUDE = []
+SET_EXCLUDE = [('driver seat', 'Musk sits in it (the cabin is one flat painting, drawn behind him)'),
+               ('passenger seat', 'Cortana hangs in mid-air in front of it (painted behind her)')]
 TOUCHES = [('musk.handL', 'YOKE', 8.5, 34.4, 'turning the yoke'), ('musk.handR', 'YOKE', 8.5, 34.4, 'turning the yoke')]
 FREE_MOVES = [('ARMADA', 3.8, 8.5, 'the cars fly'), ('ARMADA', 34.4, 42.3, 'the cars fly')]
 SOUND_SOURCES = {}
@@ -255,6 +262,8 @@ def cortana_state(t):
     if shape and shape != 'rest':
         st['mouth'] = shape
     st.setdefault('mouth', 'smile')
+    eye = (HS.CORTANA_AT[0], cortana_y(t) - 150 * C_SCALE)
+    filmkit.eyeline('cortana', t, eye, (st['look'], 0.0), (HS.MUSK[0], HS.MUSK[1] - 150 * HS.MUSK[2]))
     return st
 
 
@@ -559,10 +568,90 @@ def mouths_seen(t):
     return out
 
 
+CUSHION_M = 0.3                                    # the cushion top, metres off the cabin floor (HS.CUSHION_Y on screen)
+
+
+def project(cam, P):
+    """Plan metres (x across, + the driver's side; y up; z back from the windscreen) to the frame: the cabin painting's
+    scale (HS.PX_M) at the seats, then the shot's camera."""
+    X = (HS.SEAT_X['driver'] + HS.SEAT_X['passenger']) / 2 + P[:, 0] * HS.PX_M
+    Y = HS.CUSHION_Y - (P[:, 1] - CUSHION_M) * HS.PX_M
+    return (X - cam.cx) * cam.z + 540, (Y - cam.cy) * cam.z + 960, P[:, 2] + 1.0
+
+
+def _to_m(x, y, z):
+    """A point of the wide framing (pixels) at depth z (metres) into plan metres."""
+    mid = (HS.SEAT_X['driver'] + HS.SEAT_X['passenger']) / 2
+    return ((x - mid) / HS.PX_M, CUSHION_M + (HS.CUSHION_Y - y) / HS.PX_M, z)
+
+
 def scene(t):
-    """Everyone solid at time t (audit.py, rules 5 and 6). The cabin is a flat painting: Musk sits, Cortana hangs in
-    mid-air in front of the passenger seat, and nothing else moves near them."""
-    return []
+    """Everyone solid at time t (audit.py, rules 5 and 6), in the plan's metres. Musk sits with his gloves on the yoke
+    (the yoke a little in front of him); Cortana hangs in mid-air in front of the passenger seat."""
+    import clipcheck as CC
+    import audit
+    sh = shot_of(t)
+    if CAMS[sh] not in ('wide', 'close'):
+        return []
+    out = []
+    x, y, s = HS.MUSK
+    zb, zh = PLAN['PEOPLE']['musk']['at'][1], 0.6                 # his body; his hands and the yoke, in front
+    m = lambda px, py, z: _to_m(x + px * s, y + py * s, z)
+    st = musk_state(t)
+    sol = [CC.capsule('musk', 'body', m(0, 40, zb), _to_m(x, HS.CUSHION_Y - 30, zb), 180 * s / HS.PX_M),
+           CC.sphere('musk', 'head', m(0, -150, zb), 120 * s / HS.PX_M)]
+    arms = HC.chief_arms(st['turn'])
+    grips = []
+    for side in 'LR':
+        el, wr, _ = arms[side]
+        d = np.subtract(wr, el) / (np.linalg.norm(np.subtract(wr, el)) + 1e-9)
+        hx, hy = wr[0] + d[0] * 26, wr[1] + d[1] * 26
+        sol.append(CC.sphere('musk', 'hand' + side, m(hx, hy, zh), 34 * s / HS.PX_M))
+        grips.append(m(*HC.yoke_grips(st['turn'])[side], zh))
+    out.append(audit.Thing('musk', sol))
+    out.append(audit.Thing('YOKE', [CC.capsule('YOKE', 'yoke', grips[0], grips[1], 0.02)]))
+    if sh == 's4' and t >= T_FLASH:
+        cx, cy = HS.CORTANA_AT[0], cortana_y(t)
+        neck = _to_m(cx, cy, PLAN['PEOPLE']['cortana']['at'][1])
+        f = HEIGHTS['cortana'] / 1.75
+        out.append(audit.Thing('cortana', audit.simple('cortana', neck[0], neck[2], height=HEIGHTS['cortana'],
+                                                       base=neck[1] - 1.41 * f)))
+    return out
+
+
+def audits():
+    """The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching,
+    frozen), and the eyelines. Returns faults."""
+    def alone(who):
+        def draw(t):
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            if who == 'musk':
+                HC.chief(lay, cam_for(t), *HS.MUSK, musk_state(t), t)
+            else:
+                HC.cortana(lay, cam_for(t), HS.CORTANA_AT[0], cortana_y(t), C_SCALE, cortana_state(t), t)
+            return lay
+        return draw
+    actors = {}
+    for shot, a, b in SHOTS:
+        for who in SHOT_CAST.get(shot, []):
+            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS))
+                  if who == 'musk' or i / FPS >= T_FLASH + 0.9]          # she forms out of the discharge first
+            if ts:
+                actors[f'{who} [{shot}]'] = (ts, alone(who))
+    filmkit.EYES.clear()
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    faults += filmkit.check_eyelines()
+    return faults
+
+
+def LINE_SUBJECTS():
+    """Each of the cast alone, large, for the line-work check (linecheck.py)."""
+    def musk(im):
+        HC.chief(im, B.Cam(1.0, 540, 960), 540, 700, 1.1, dict(turn=0.0), 0.0)
+
+    def cortana(im):
+        HC.cortana(im, B.Cam(1.0, 540, 960), 540, 500, 0.9, dict(pose='point', hip=-0.8), 1.0)
+    return [('musk', musk), ('cortana', cortana)]
 
 
 EFFECTS[:] = [

@@ -512,14 +512,14 @@ def _cortana_head(p, st, hx, hy, turned=0.0):
         p.line(lash, INK, 5)
         p.line([(ex + sg * 22 if sg > 0 else ex - 23, ey - 14 if sg > 0 else ey - 6),
                 (ex + sg * 30, ey - 22)], INK, 3.4)                                              # the outer flick
-        p.line([(ex - 12, ey + 25), (ex + 8, ey + 25)], INK, 1.8)
+        p.line([(ex - 12, ey + 25), (ex + 8, ey + 25)], INK, 4)
         p.line([(ex - 18, ey - 44), (ex + 16, ey - 48)], C_HAIR, 3)                              # a thin brow
     p.line([(hx + 3, hy + 40), (hx - 1, hy + 48)], C_SKIN_D, 2.4)                              # the nose: a tick
     m, my = st['mouth'], hy + 70
     if m == 'rest':
-        p.line([(hx - 8, my), (hx + 8, my)], INK, 2.4)
+        p.line([(hx - 8, my), (hx + 8, my)], INK, 4)
     elif m == 'smile':
-        p.line(open_curve([(hx - 14, my - 3), (hx, my + 6), (hx + 14, my - 3)], 3), INK, 2.6)
+        p.line(open_curve([(hx - 14, my - 3), (hx, my + 6), (hx + 14, my - 3)], 3), INK, 3)
     else:
         mouths.draw(p, {}, hx, my - 2, m)
     # locks in front of the ears, then the fringe: cut straight with one long lock swept across
