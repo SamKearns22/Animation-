@@ -24,18 +24,16 @@
 **Shots (times are estimates until the recordings are in; music starts at 0:21 of the theme):**
 | shot | camera | what happens | about |
 |---|---|---|---|
-| 1 | wide space, upright | orange planet, Halo ring in front of it, galaxy core; white caption "Halo Ringworld / Russian - Ukraine War" 0.5-4 s; armada enters at 7.0 s (0:28 of the theme), sweeping diagonally left towards the planet, lead car alone in front, some spinning | 0-11 s |
+| 1 | wide space, upright | orange planet, Halo ring in front of it, galaxy core; Hook Text "Elon Finishes The Fight" (upper middle, 0-3.5 s); white bold caption "Halo Ringworld / Russian - Ukraine War" (lower third, 0.5-4 s); armada enters at 7.0 s (0:28 of the theme), sweeping diagonally left towards the planet, lead car alone in front, some spinning | 0-11 s |
 | 2 | windscreen, facing in (two seats) | Musk in the armour at the yoke, turning it back and forth; radio line; "Sir, finishing this fight." | 11-17 |
-| 3 | quick zoom into Musk | "If we don't stop Zelensky..." | 17-22 |
+| 3 | hard cut to Musk close-up | "If we don't stop Zelensky..." | 17-22 |
 | 4 | windscreen (hard cut back) | discharge flash and pixel crackle; Cortana appears above the passenger seat; her Chungus line | 22-29 |
-| 5 | quick zoom into Musk | "We sure will, Breeder 04." | 29-31 |
-| 6 | ring close-up (showstopper?) | armada skirting the ring's superstructure | 31-36 |
-| 7 | windscreen | Cortana: "Musk-San, please let me die." | 36-39 |
-| 8 | Musk close | "No." | 39-40 |
-| - | sign-off | CranbriJoos, 2 s | 40-42 |
+| 5 | hard cut to Musk close-up | "We sure will, Breeder 04." | 29-31 |
+| 6 | ring close-up (Showstopper Shot) | armada skirting the ring's superstructure; over it, from inside the car, Cortana: "Musk-San, please let me die." Musk: "No." (Sam: all from space) | 31-38 |
+| - | sign-off | CranbriJoos, 2 s | 38-40 |
 
 **Eyelines (rule 25, 43):** Musk looks ahead out of the windscreen (at the lens) throughout, except a glance to
-Cortana's side on "We sure will"; "No." is straight ahead, not even looking at her. Cortana looks at Musk.
+Cortana's side on "We sure will". Cortana looks at Musk.
 Radio: nobody on screen.
 
 **Sound effects (rule 26):** none (Sam: no others needed). The radio line is filtered to sound like a radio. The
@@ -48,7 +46,19 @@ Space shots: painted backdrops (no rooms). Cockpit: the Roadster's two seats, ca
 Left-hand drive: Musk on the right of the frame, the passenger seat (Cortana) on the left. Sizes from
 `source/sizes.py`; the armour makes Musk about 2.1 m standing, so he fills his seat and touches the roof line.
 
-Composition sheet sent:
+Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
+
+**Shot 6, Showstopper Shot list (rule 40; Sam to approve or trim):**
+- The ring's hull: a huge dark band sweeping from lower left up to top right, filling half the frame; plated in panels
+  with round ports and hundreds of tiny lights (ref 02), so its scale reads.
+- The ring's inner face: a thin strip along the band's top edge showing seas, land and white cloud (ref 02).
+- The far side of the ring arcing high across the sky, thin, getting fainter.
+- The planet behind, lower left, in shadow; the blue galaxy band top right; stars.
+- About 8 Roadsters skimming the hull in a loose stream, big and near at the bottom, shrinking into the distance:
+  most fly level, two or three spin nose over tail like in Roadster, each at its own speed so the stream stretches.
+- Each car's flat shadow on the hull, sliding over the panels as it passes (sells how close they skim).
+- The camera holds still (flat painting); the cars do all the moving.
+- No sounds: the theme, loud (space shot), with the last two lines over it.
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word) | done? |
@@ -64,20 +74,21 @@ Composition sheet sent:
 | 9 | He's turning the steering back and forth. |  |
 | 10 | Voice over the radio: "Musker Chief, you mind telling me what you're doing in that Roadster?" (sounds like it's coming through the radio) |  |
 | 11 | Musk (serious): "Sir, finishing this fight." |  |
-| 12 | Zoom in on Musk. |  |
+| 12 | Zoom in on Musk. (Sam, 29 Oct: a hard cut to the close-up) |  |
 | 13 | Musk: "If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out." |  |
 | 14 | Back to windscreen shot. |  |
 | 15 | Showcase shot: Anime Girl Cortana appears, holographic and smaller, above the opposite seat, standing mid-air, after a sudden bright light of digital discharge and pixelated crackling. |  |
 | 16 | All of her movements are overemphasised and enthusiastic, occasionally shoving forward her breasts or showing her curvaceous butt. |  |
 | 17 | Anime Cortana: "Oh, Musker Chief, we're going to make him look like such Le Epic Chungus!! Kawaiii!!" |  |
-| 18 | Zoom back into Musk. |  |
+| 18 | Zoom back into Musk. (hard cut) |  |
 | 19 | Musk: "We sure will, Breeder 04." |  |
 | 20 | The Roadster Armada approaching the Halo Ringworld in the famous shot from the close-up reference (02), skirting alongside its superstructure. |  |
 | 21 | Anime Cortana: "Musk-San, please let me die." |  |
-| 22 | Musk: "No." |  |
+| 22 | Musk: "No." (Sam, 29 Oct: lines 21-22 all from space, over the ring shot) |  |
 | 23 | The joke: Musk thinks he's saving the world by taking weapons away from Ukraine but he's actually being a massive dweeb. |  |
 | 24 | No other sound effects are needed. |  |
 | 25 | Everything 2D, except Anime Girl Cortana and the Roadster Armada. |  |
+| 28 | Hook Text: "Elon Finishes The Fight" (Sam, 29 Oct). |  |
 | 26 | Usage is incredibly tight: be efficient, keep the action simple. |  |
 | 27 | The theme music should always be playing, quieter but still noticeable in the Roadster scenes and louder in the space scenes. |  |
 
@@ -91,6 +102,7 @@ Composition sheet sent:
 | 10-12 | Master Chief (Campaign Evolved): olive green plates, gold visor, grey undersuit, chest plate with a ridge, big shoulder plates, side helmet lights | |
 | 13-15 | Cortana (Campaign Evolved): blue, circuit lines, short bob | |
 | 16 | Chief beside Cortana: her height and place beside him | |
+| 20-21 | Musk talking: mouth shapes, teeth show little, lower lip full; short cropped hair in 20 | |
 | 17-19 | anime Cortana: big eyes, glossy bob with a long fringe lock, bodysuit with white panel lines (18), the look to copy | |
 
 ## Notes
@@ -100,5 +112,13 @@ Composition sheet sent:
 
 Decisions made:
 - Audio: `source/audio/halo-theme.mp3` (Sam, 29 Oct), 2:58 long; film starts at 0:21, armada enters at 0:28.
+- Answers 29 Oct: Sam records all voices later; build and time from the script with subtitles first. Hard cuts to
+  the close-ups (no zoom). The last two lines play over the ring shot (from space). The car is the Roadster film's
+  white car (`source/roadster.py`), interior from refs 03-05. Flat cartoon style for space. Cortana: flat, see-through
+  blue with scan lines and a slight glow (Sam's exception, like Poker Mon's beam); a grown woman in the bodysuit of
+  ref 18, fan-service played as cringe, never explicit. Musk: face clearly through a see-through gold visor, no light
+  streak (it might hide him), no exaggeration (likeness straight). About 15 cars in shot 1, 8 in shot 6. Shot 6 is
+  a Showstopper Shot (rule 40 list before building). Hook Text: "Elon Finishes The Fight".
+- Musk talking references: 20, 21 (Sam, 29 Oct).
 - Music never stops (Sam, 29 Oct): louder in the space shots (1, 6), quieter but noticeable in the cockpit (2-5, 7-8), easing
   down and up over about 0.3 s at each cut; the voices stay at least 6 dB above it (pre-flight checks).
