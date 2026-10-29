@@ -402,8 +402,8 @@ def armada_6(img, cam, t):
     for z, x, y, th, c in sorted(out, key=lambda q: -q[0]):
         # seen from behind and a little above, nose the way it flies, roof up, jets under it (Sam, 31 Oct, twice: the
         # ring's own frame tipped their roofs away from us, so we saw their undersides and the plumes read as
-        # leaving their ends); the spinners tumble nose over tail as before
-        RD.car(img, cam, x, y, 0.034 / z, RD.View(yaw=-80, elev=22, flip=c['spin'] * (t - S0('s6'))),
+        # leaving their ends); tipped 45 degrees nose down (Sam: they read nose up); the spinners tumble as before
+        RD.car(img, cam, x, y, 0.034 / z, RD.View(yaw=-80, elev=22, flip=45 + c['spin'] * (t - S0('s6'))),
                jets=1.0, t=t, smoke=False)      # the four jets on, as in Roadster (Sam, 30 Oct)
 
 
