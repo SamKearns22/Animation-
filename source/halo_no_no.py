@@ -172,7 +172,7 @@ def chunk_times(ln):
     return out
 
 
-SUB_EARLIER = {(4, 2): 0.5, (4, 4): 0.5}          # Sam, 31 Oct: "look like such" and "Kawaiii!!" come up 0.5 s sooner (subtitles only; her poses keep their times)
+SUB_EARLIER = {(4, 2): 0.5, (4, 3): 0.5, (4, 4): 0.5, (6, 1): -0.5}          # Sam, 31 Oct: "look like such" and "Kawaiii!!" come up 0.5 s sooner (subtitles only; her poses keep their times); 31 Oct: "Le Epic Chungus" 0.5 s sooner, "please let me die" 0.5 s later
 CHUNKS = [(t - SUB_EARLIER.get((ln['n'], i), 0.0), c, ln) for ln in LINES for i, (t, c) in enumerate(chunk_times(ln))]
 
 
