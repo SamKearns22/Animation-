@@ -123,7 +123,7 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | 10 | Voice over the radio: "Musker Chief, you mind telling me what you're doing in that Roadster?" (sounds like it's coming through the radio) | yes: subtitles now; `radio()` filter ready for the recording |
 | 11 | Musk (serious): "Sir, finishing this fight." | yes, line 2 |
 | 12 | Zoom in on Musk. (Sam, 29 Oct: a hard cut to the close-up) | yes: hard cut to shot 3 |
-| 13 | Musk: "If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out." | yes, line 3 |
+| 13 | Musk: "If we don't stop Zelensky from using the Halo, all life on Earth (Sam, 31 Oct: subtitle changed from "in the galaxy"; the recording is unchanged) could be wiped out." | yes, line 3 |
 | 14 | Back to windscreen shot. | yes: shot 4 |
 | 15 | Showcase shot: Anime Girl Cortana appears, holographic and smaller, above the opposite seat, standing mid-air, after a sudden bright light of digital discharge and pixelated crackling. | yes: one-frame flash, pixel crackle, she forms in bands over the seat |
 | 16 | All of her movements are overemphasised and enthusiastic, occasionally shoving forward her breasts or showing her curvaceous butt. | yes: appear, point, kawaii, thrust (side on), turn (her behind) |
