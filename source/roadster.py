@@ -162,11 +162,15 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
     def wpt(pt):
         return view.screen(view.world(np.array(pt, float)))[0][0]
 
-    # the jets go first: the body covers their nozzles
-    if jets > 0:
+    # the jets go first (the body covers their nozzles), unless the underside faces us: then they blast out of it
+    # towards us and go over the body (Halo No-No, Sam 31 Oct: the plumes missed the underside)
+    def draw_jets():
         down = view.Rc @ np.array([0, 0, -1.0])
         for jx, jy in ((70, 52), (70, -52), (-80, 52), (-80, -52)):
             _jet(p, view, (jx, jy, 14), down, jets, t, seed=jx + jy)
+    belly_to_us = (view.R @ np.array([0, 0, -1.0]))[1] < -0.2
+    if jets > 0 and not belly_to_us:
+        draw_jets()
 
     # wheels: far ones before the body, near ones after
     wheel_draws = []
@@ -220,6 +224,9 @@ def car(img, cam, x, y, s, view, jets=0.0, crush=0.0, headlight=False, t=0.0, sm
             draw = crease or FACES[f0][1] != FACES[f1][1]
         if draw:
             p.line([tuple(P2[a]), tuple(P2[b])], INK, 3.2)
+
+    if jets > 0 and belly_to_us:
+        draw_jets()
 
     # details laid on the body (only when the face they sit on is towards us)
     nose_face = len(FACES) - 2
