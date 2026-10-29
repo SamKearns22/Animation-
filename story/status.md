@@ -6,6 +6,9 @@ Read this first in any new session, after CLAUDE.md.
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,
   medium), then pre-flight wiring and the first animatic. Handover in `notes/halo-no-no.md`.
+- 30 Oct (notes, Opus): all Sam's notes applied (level arrowhead armada, jets, caption fades, radio light, cars
+  following in the rear window, no wait before the armada); recordings filed, film retimed to 42.3 s. Next (Sonnet):
+  Sam's word on clip-armada-v3, then pre-flight and the first animatic's check sheet.
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot

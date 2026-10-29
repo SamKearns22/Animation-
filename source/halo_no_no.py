@@ -303,16 +303,17 @@ T_ARMADA = 4.5                                    # 0:28 of the theme (the brief
 def _armada_1():
     """About 15 cars (Sam, 29 Oct), in arrowheads (Sam, 30 Oct): a V of 5 first, then a V of 3 high up and a V of 3 low
     down, each arriving at its own time; four lone cars spinning nose over tail like in Roadster, spread out between
-    them. A V flies as one: the point car in front, each pair a step behind it and out to the sides. Each car:
+    them. A V flies as one, level: the point car in front, each pair a step behind it and out to the sides. Each car:
     (enter time, offset at depth 1, start depth, speed in depth a second, spin degrees a second)."""
     cars = []
     #            enter    across  up/down  depth  speed   the V's size
-    for te, X, Y, z0, v, n in ((T_ARMADA, 420, -40, 0.60, 0.55, 5),
-                               (T_ARMADA + 1.3, 470, -330, 0.62, 0.58, 3),
-                               (T_ARMADA + 2.2, 400, 260, 0.58, 0.52, 3)):
-        for k in range(n):
-            row, side = (k + 1) // 2, (-1) ** k              # 0: the point; then a pair a row, trailing it, one each side
-            cars.append(dict(te=te, off=(X + 120 * row, Y + side * 105 * row), z0=z0, v=v, spin=0.0))
+    for te, X, Y, z0, v, n in ((T_ARMADA, 660, -40, 0.66, 0.55, 5),
+                               (T_ARMADA + 1.3, 640, -330, 0.68, 0.58, 3),
+                               (T_ARMADA + 2.2, 620, 260, 0.64, 0.52, 3)):
+        for k in range(n):       # 0: the point; then a pair a row (Sam, 30 Oct: flat, level with it), out to each side
+            row, side = (k + 1) // 2, (-1) ** k              # and a step behind it (nearer us: it flies away from us)
+            cars.append(dict(te=te, off=(X + side * 170 * row, Y + 75 * row), z0=z0 - 0.07 * row, v=v, spin=0.0))
+                                                           # seen a little from above: each pair a step lower: a ^
     for te, X, Y, z0, v, spin in ((T_ARMADA + 0.7, 520, 330, 0.66, 0.60, 220),     # the lone spinners
                                   (T_ARMADA + 1.8, 380, -170, 0.70, 0.50, -260),
                                   (T_ARMADA + 2.9, 560, 60, 0.64, 0.62, 170),
@@ -328,7 +329,7 @@ def armada_1(img, cam, t):
     out = []
     for c in ARMADA_1:
         z = c['z0'] + c['v'] * (t - c['te'])     # before te it is nearer us, off the right edge, flying in
-        if z < 0.2:
+        if z < 0.12:
             continue
         x, y = VP[0] + c['off'][0] / z, VP[1] + c['off'][1] / z
         out.append((z, x, y, c))

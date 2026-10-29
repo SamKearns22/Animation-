@@ -1,43 +1,40 @@
 # Notes for Halo No-No (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/halo-no-no-handovers.md)
-- **Rules that bite at this stage:** 41 (every arm ends in a visible hand: Musk's gloves at the bottom of the close-up),
-  43 (eyelines: Musk at the lens except the glance on "We sure will"; Cortana at Musk), 46 (when Sam names frames, look
-  at exactly those first), 40 (shot 6 ticked against its Showstopper list at its clip: done, below), 44 (usage: ask Sam
-  for the week's figure).
-- **Done (29 Oct, building, Opus):** the sets in `source/halo_sets.py` (space wide, ring close-up, the cabin in two
-  framings; sheet `review/halo-no-no-sets.jpg`, Sam's note 5 applied: one blue galaxy). The film in
-  `source/halo_no_no.py`: story, script timings (placeholders until the recordings), subtitles in chunks, the armada
-  in shot 1 (15 cars, lead alone, 4 spinning) and shot 6 (8 cars skimming the hull, 3 spinning), Cortana's discharge
-  and poses, the drifting Roadster in the rear window, the theme (now from 0:23.5) with its levels. Stills sheet
-  `review/halo-no-no-stills.jpg` and three clips (`source/data/halo-no-no/clip-armada.mp4`, `clip-cortana.mp4`,
-  `clip-ring.mp4`) sent 29 Oct. Brief checklist ticked. Kit catalogue updated (rule 28).
-- **Shot 6 against the Showstopper list (rule 40, at its clip):** hull band, panels, ports, lights: yes; inner face strip
-  and far arc: yes; planet behind, galaxy band, stars: yes; about 8 cars in a loose stream, each its own speed, three
-  spinning, big as they pass over us and shrinking to the bend: yes; no car shadows (Sam); camera still; the theme loud,
-  dipping under the two lines. Changed: the hull runs top left to lower right (ref 02's layout), flagged to Sam.
-- **Done (30 Oct, notes, Opus):** Sam's notes on the stills and clips. (1) Shot 1's armada in arrowheads: a V of 5,
-  a V of 3 high and a V of 3 low, each arriving at its own time, plus 4 lone spinners spread out (sheet
-  `review/halo-no-no-notes-30oct.jpg`, clip `source/data/halo-no-no/clip-armada-v.mp4`). (2) Every Roadster on its four
-  jets as in Roadster (shot 1 at 0.55 length so the Vs read; shot 6 and the rear-window car full). (3) "Halo Ringworld"
-  fades in at 0.5 s, "Russian - Ukraine War" at 1.0 s, both out together at 4 s. (4) A small green radio light above
-  the speaker grille between the seats, lit from the radio voice's first word to his last. (5) All seven recordings
-  filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined) and the film retimed to them:
-  now 44.8 s (shots 0/11.0/18.9/24.6/34.0/36.9). voices.py --film: takes match the script.
-- **30 Oct, second notes:** a lone spinner popped on mid-frame: every shot 1 car is now drawn before its time too
-  (nearer us, off the right edge), so all fly in from the edge (checked: each first shows at the edge). The wait after
-  the white text is cut: the armada at 4.5 s, the theme from 0:23.5 (so 0:28 still lands on the cars); everything after
-  2.5 s earlier, film 42.3 s (shots 0/8.5/16.4/22.1/31.5/34.4). Clip `source/data/halo-no-no/clip-armada-v2.mp4`.
-- **Next (fresh chat):** Sam's word on the clip-armada-v2. Then before the first animatic: wire the pre-flight
-  checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the plan's
-  `SHOT_MARKS`), run `python3 source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet
-  and wait for his yes (CLAUDE.md, 18 Oct). Routine from here: Sonnet.
-- **Losses and my additions Sam should know about:** (30 Oct) the lone lead car is now the point of the V of 5; the
-  radio light (green) is my choice of colour and place. ref 01's orange galaxy core is gone (Sam's note 5). My additions:
-  the pixel crackle as small blue and white squares; Cortana's small mid-air bob now and then; the white caption with a
-  black edge for "Halo Ringworld / Russian - Ukraine War"; the theme dips 7 dB under the two lines in shot 6 so the
-  voices stay 6 dB clear. The Hook Text is added by finish.py at the end (not on the stills).
-- **Rule requests and proposals not yet in a guide:** none.
+- **Rules that bite at this stage:** 41 (every arm ends in a visible hand: Musk's gloves on the yoke), 43 (eyelines:
+  Musk at the lens except the glance on "We sure will", now 31.95-32.95 s; Cortana at Musk), 46 (when Sam names
+  frames, look at exactly those first), 44 (usage: Sam is at 100% of the week with about £4.93 of credit, 30 Oct: keep
+  every step lean).
+- **Done (30 Oct, notes, Opus):** all of Sam's notes on the stills and clips.
+  - Shot 1's armada: level arrowheads (a V of 5, a V of 3 high, a V of 3 low, each pair a step behind and out to the
+    sides, seen a little from above), arriving at their own times, plus 4 lone spinners spread out. Every car is drawn
+    before its time too (nearer us, off the right edge), so none pops on (checked by a script for all 15).
+  - Every Roadster on its four jets as in Roadster (0.55 length in shot 1 and the rear window, so the shapes read).
+  - "Halo Ringworld" fades in at 0.5 s, "Russian - Ukraine War" at 1.0 s, both out together at 4 s.
+  - A small green radio light above the speaker grille between the seats, lit from the radio voice's first word to his
+    last.
+  - The rear window: a V of five following us, noses to us, on their jets, each holding then drifting a little (Sam's
+    choice to me: cars always there or an opaque window; I chose the cars, cheap to draw). The approved passer-by still
+    crosses in front of them.
+  - The wait after the caption is cut: the armada at 4.5 s, the theme from 0:23.5 (0:28 lands on the cars).
+  - All seven recordings filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined); the
+    film retimed to them: 42.3 s, shots s1 0, s2 8.5, s3 16.4, s4 22.1, s5 31.5, s6 34.4. `voices.py --film
+    halo_no_no`: takes match the script.
+  - Sent: sheet `review/halo-no-no-notes-30oct.jpg` (its armada frames are from before the V fix), clips
+    `source/data/halo-no-no/clip-armada-v2.mp4` and `clip-armada-v3.mp4` (0-14 s: armada, radio light, rear window).
+    Sam has not yet seen v3.
+- **Next (fresh chat, Sonnet):** Sam's word on `clip-armada-v3.mp4`. Then before the first animatic: wire the
+  pre-flight checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the
+  plan's `SHOT_MARKS`; the rear-window V and radio light are new things for the set checks), run `python3
+  source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes
+  (CLAUDE.md, 18 Oct). Wiring new checks counts as building from a clear plan: if it needs more than filling the
+  lists, switch to Opus, medium effort.
+- **Losses and my additions Sam should know about:** the lone lead car is now the point of the V of 5; 2.5 s of the
+  theme's opening is cut; the radio light (green, on the grille), the rear-window V's bobbing and the shorter jets are
+  my choices. Earlier: ref 01's orange galaxy core gone (Sam's note 5); the pixel crackle as small blue and white
+  squares; Cortana's small mid-air bob; the white caption with a black edge; the theme dips 7 dB under the two lines in
+  shot 6. The Hook Text is added by finish.py at the end.
+- **Rule requests and proposals not yet in a guide:** none (searched 30 Oct).
 - **Music (Sam, 29 Oct):** the theme never stops; louder in space (shots 1, 6), quieter in the car (2-5), easing over
   0.3 s at each cut; voices at least 6 dB above it.
 - **Files to open:** `notes/halo-no-no.md`, `guides/satire.md`, `guides/film-quality-rules.md`, `source/halo_no_no.py`

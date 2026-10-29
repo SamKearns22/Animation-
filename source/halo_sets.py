@@ -381,8 +381,9 @@ SEAT_P = (226, 226, 222)     # the textured middle panel (ref 05)
 RED = (226, 46, 52)
 
 
-def _space_in(img, cam, pts, seed, t=0.0, drift=None):
-    """A window onto space: dark sky and stars, clipped to the window; a Roadster drifting past if `drift` (0..1)."""
+def _space_in(img, cam, pts, seed, t=0.0, drift=None, follow=False):
+    """A window onto space: dark sky and stars, clipped to the window; a Roadster drifting past if `drift` (0..1);
+    `follow`: the armada's V of five behind us, noses to us, on their jets (Sam, 30 Oct: always there, following)."""
     mask = _poly_mask(img, cam, pts)
 
     def paint(lay):
@@ -393,8 +394,17 @@ def _space_in(img, cam, pts, seed, t=0.0, drift=None):
         _nebula(q, ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), -20, 5, (box[2] - box[0]) * 0.3, [NEB_V, NEB_B], seed)
         area = (box[2] - box[0]) * (box[3] - box[1])
         _stars(q, box, int(area / 1500), seed + 1)
+        import roadster as RD
+        if follow:
+            import filmkit
+            #             across  up    size   the point car nearest us, each pair further back and out to the sides
+            for k, (x, y, sc) in enumerate(((250, 548, 0.12), (830, 548, 0.12), (390, 568, 0.16), (690, 568, 0.16),
+                                            (540, 592, 0.21))):
+                bx = 9 * filmkit.shifts(t, seed=70 + k, amount=1.0)           # each holds, then drifts a little
+                by = 6 * filmkit.shifts(t, seed=80 + k, amount=1.0)
+                RD.car(lay, cam, x + bx, y + by, sc, RD.View(yaw=90 + (540 - x) * 0.03, elev=10), jets=0.55, t=t,
+                       smoke=False)
         if drift is not None:
-            import roadster as RD
             x = box[0] - 120 + (box[2] - box[0] + 240) * drift
             y = box[1] + (box[3] - box[1]) * 0.32 + 30 * drift
             RD.car(lay, cam, x, y, 0.30, RD.View(yaw=-30 + 40 * drift, elev=18, flip=25 * drift, roll=10), jets=1.0,
@@ -448,7 +458,7 @@ def cabin_back(img, cam, t=0.0, drift=None, radio=False):
         _space_in(img, cam, g, sd)
         p.poly(g, None, INK, 3)
     # the rear window, with the armada's stragglers beyond
-    _space_in(img, cam, WINDOW, 61, t, drift)
+    _space_in(img, cam, WINDOW, 61, t, drift, follow=True)
     p.poly(WINDOW, None, INK, 4)
     p.poly([(150, 430), (930, 430), (936, 452), (144, 452)], TRIM, INK, 2)          # the window's top frame
     # the rear bulkhead under the window: dark, with the red light strip and a speaker grille between the seats
