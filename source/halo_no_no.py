@@ -370,12 +370,12 @@ RC = HS.RingCam(**HS.RING_CAM)
 
 
 def _ring_view(th, flip):
-    """A car on the ring: nose along the ring (the way it flies), wheels to the hull, seen through the ring's camera
+    """A car on the ring: nose along the ring (the way it flies), roof out from the hull, seen through the ring's camera
     (its roll included), as a roadster.View."""
     T = np.array([-math.sin(th), math.cos(th), 0.0])
     Rr = np.array([math.cos(th), math.sin(th), 0.0])
     Lf = np.cross(Rr, T)
-    Mc = np.stack([T, Lf, Rr], 1) @ RD.rot('y', math.radians(flip))
+    Mc = np.stack([T, -Lf, -Rr], 1) @ RD.rot('y', math.radians(flip))   # roof out from the hull, jets towards it (Sam, 31 Oct: they flew upside down)
     c, s = RC.c, RC.s
     right = -RC.Rt * c + RC.U * s
     up = RC.Rt * s + RC.U * c
