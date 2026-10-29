@@ -1,24 +1,35 @@
 # Notes for Halo No-No (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/halo-no-no-handovers.md)
-- **Done:** planning (plan, shot list, showstopper list, composition sheet `review/halo-no-no-composition.jpg`, sent 29 Oct
-  and Sam said proceed). Cast built in `source/halo_cast.py`: Musk in the Mark V armour (head fills the visor, neck into
-  the collar, face from refs 08 and 22-25), anime Cortana (poses appear, point, thrust, kawaii, turn, stand). Sheet
-  `review/halo-no-no-cast.jpg` sent 29 Oct with Sam's notes 1-4 applied. Commit a7c2619 on the main branch.
-- **Next (stage, model, fresh chat):** Sam's notes on the cast sheet (he has not replied yet). Then, still building:
-  the car's inside (one flat painting, two framings), the opening space painting (planet, ring, armada), the ring close-up,
-  then `source/halo_no_no.py` from the template with the story (building: Opus, high effort). Type `/model` to Opus first.
-- **Losses and my additions Sam should know about:** the visor is taller than the real Mark V's (so his whole head shows);
-  Cortana's bodysuit is the high-collared one from ref 18; additions still unapproved: a Roadster drifting past the
-  back window in the car shots; car shadows on the ring. Shot 6 is a Showstopper Shot (list in the notes, Sam said yes).
-- **Rule requests and proposals not yet in a guide:** none. Sam's notes this film are group "cast", all "new kind".
-- **Music (Sam, 29 Oct):** the theme never stops; louder in space (shots 1, 6), quieter but noticeable in the car
-  (2-5, 7-8); voices at least 6 dB above it.
-- **Rules that bite at this stage:** 1 (plan in metres, drawn once), 39 (2D everywhere except Cortana and the armada: only
-  build in 3D when needed), 40 (Showstopper list approved before building shot 6), 41 (every arm ends in a visible hand),
-  43 (eyelines per shot: Musk looks out at the lens; Cortana looks at Musk).
-- **Files to open:** `notes/halo-no-no.md`, `guides/satire.md`, `guides/film-quality-rules.md`, `source/halo_cast.py`,
-  `source/satire_template.py`, `source/roadster.py` (the car, for the flip and jets).
+- **Rules that bite at this stage:** 41 (every arm ends in a visible hand: Musk's gloves at the bottom of the close-up),
+  43 (eyelines: Musk at the lens except the glance on "We sure will"; Cortana at Musk), 46 (when Sam names frames, look
+  at exactly those first), 40 (shot 6 ticked against its Showstopper list at its clip: done, below), 44 (usage: ask Sam
+  for the week's figure).
+- **Done (29 Oct, building, Opus):** the sets in `source/halo_sets.py` (space wide, ring close-up, the cabin in two
+  framings; sheet `review/halo-no-no-sets.jpg`, Sam's note 5 applied: one blue galaxy). The film in
+  `source/halo_no_no.py`: story, script timings (placeholders until the recordings), subtitles in chunks, the armada
+  in shot 1 (15 cars, lead alone, 4 spinning) and shot 6 (8 cars skimming the hull, 3 spinning), Cortana's discharge
+  and poses, the drifting Roadster in the rear window, the theme from 0:21 with its levels. Stills sheet
+  `review/halo-no-no-stills.jpg` and three clips (`source/data/halo-no-no/clip-armada.mp4`, `clip-cortana.mp4`,
+  `clip-ring.mp4`) sent 29 Oct. Brief checklist ticked. Kit catalogue updated (rule 28).
+- **Shot 6 against the Showstopper list (rule 40, at its clip):** hull band, panels, ports, lights: yes; inner face strip
+  and far arc: yes; planet behind, galaxy band, stars: yes; about 8 cars in a loose stream, each its own speed, three
+  spinning, big as they pass over us and shrinking to the bend: yes; no car shadows (Sam); camera still; the theme loud,
+  dipping under the two lines. Changed: the hull runs top left to lower right (ref 02's layout), flagged to Sam.
+- **Next (fresh chat):** Sam's notes on the stills and clips (Opus, medium effort: reading notes and deciding fixes),
+  applied in one batch. Then before the first animatic: wire the pre-flight checks into `halo_no_no.py` (`scene(t)` is
+  still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the plan's `SHOT_MARKS`), run `python3 source/preflight.py
+  halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes (CLAUDE.md, 18 Oct).
+  Recordings: Sam records all voices later (file names in `LINES`: `halo-no-no-radio`, `-musk-1..4`, `-cortana-1..2`).
+- **Losses and my additions Sam should know about:** ref 01's orange galaxy core is gone (Sam's note 5). My additions:
+  the pixel crackle as small blue and white squares; Cortana's small mid-air bob now and then; the white caption with a
+  black edge for "Halo Ringworld / Russian - Ukraine War"; the theme dips 7 dB under the two lines in shot 6 so the
+  voices stay 6 dB clear. The Hook Text is added by finish.py at the end (not on the stills).
+- **Rule requests and proposals not yet in a guide:** none.
+- **Music (Sam, 29 Oct):** the theme never stops; louder in space (shots 1, 6), quieter in the car (2-5), easing over
+  0.3 s at each cut; voices at least 6 dB above it.
+- **Files to open:** `notes/halo-no-no.md`, `guides/satire.md`, `guides/film-quality-rules.md`, `source/halo_no_no.py`
+  (`python3 source/codemap.py`), `source/halo_sets.py`, `source/halo_cast.py`.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24, 44): about 12-15% of a week.**
@@ -74,34 +85,34 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word) | done? |
 |---|------|------|
-| 1 | The Halo ring visible against an orange planet. |  |
-| 2 | The Halo theme playing from .21 seconds into the track. |  |
-| 3 | White bold text appears for a few seconds: "Halo Ringworld" / "Russian - Ukraine War" |  |
-| 4 | From .28 in the theme track, a fleet of Tesla Roadsters enter the scene, streaking in Armada formation towards the Halo. |  |
-| 5 | Some are spinning in space, just like in Roadster. Others fly straight, including the one flying in front of the armada on its own. |  |
-| 6 | Spaceship armada sweeping diagonal left towards planet with Halo Ringworld visible in the distance (ref 01). |  |
-| 7 | Cut to Tesla Roadster interior, camera at windscreen position and facing in. |  |
-| 8 | At the driving wheel is Elon Musk in Master Chief's armour. It is clearly Elon Musk through the armour's view screen. |  |
-| 9 | He's turning the steering back and forth. |  |
-| 10 | Voice over the radio: "Musker Chief, you mind telling me what you're doing in that Roadster?" (sounds like it's coming through the radio) |  |
-| 11 | Musk (serious): "Sir, finishing this fight." |  |
-| 12 | Zoom in on Musk. (Sam, 29 Oct: a hard cut to the close-up) |  |
-| 13 | Musk: "If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out." |  |
-| 14 | Back to windscreen shot. |  |
-| 15 | Showcase shot: Anime Girl Cortana appears, holographic and smaller, above the opposite seat, standing mid-air, after a sudden bright light of digital discharge and pixelated crackling. |  |
-| 16 | All of her movements are overemphasised and enthusiastic, occasionally shoving forward her breasts or showing her curvaceous butt. |  |
-| 17 | Anime Cortana: "Oh, Musker Chief, we're going to make him look like such Le Epic Chungus!! Kawaiii!!" |  |
-| 18 | Zoom back into Musk. (hard cut) |  |
-| 19 | Musk: "We sure will, Breeder 04." |  |
-| 20 | The Roadster Armada approaching the Halo Ringworld in the famous shot from the close-up reference (02), skirting alongside its superstructure. |  |
-| 21 | Anime Cortana: "Musk-San, please let me die." |  |
-| 22 | Musk: "No." (Sam, 29 Oct: lines 21-22 all from space, over the ring shot) |  |
-| 23 | The joke: Musk thinks he's saving the world by taking weapons away from Ukraine but he's actually being a massive dweeb. |  |
-| 24 | No other sound effects are needed. |  |
-| 25 | Everything 2D, except Anime Girl Cortana and the Roadster Armada. |  |
-| 28 | Hook Text: "Elon Finishes The Fight" (Sam, 29 Oct). |  |
-| 26 | Usage is incredibly tight: be efficient, keep the action simple. |  |
-| 27 | The theme music should always be playing, quieter but still noticeable in the Roadster scenes and louder in the space scenes. |  |
+| 1 | The Halo ring visible against an orange planet. | yes: shot 1, the ring over the planet's lower half |
+| 2 | The Halo theme playing from .21 seconds into the track. | yes: `THEME_FROM = 21.0` |
+| 3 | White bold text appears for a few seconds: "Halo Ringworld" / "Russian - Ukraine War" | yes: white bold, lower third, 0.5-4 s |
+| 4 | From .28 in the theme track, a fleet of Tesla Roadsters enter the scene, streaking in Armada formation towards the Halo. | yes: `T_ARMADA = 7.0` (0:28) |
+| 5 | Some are spinning in space, just like in Roadster. Others fly straight, including the one flying in front of the armada on its own. | yes: 4 of 15 spin nose over tail; the lead car flies alone in front |
+| 6 | Spaceship armada sweeping diagonal left towards planet with Halo Ringworld visible in the distance (ref 01). | yes: streaming in from the right towards the planet and ring |
+| 7 | Cut to Tesla Roadster interior, camera at windscreen position and facing in. | yes: shots 2 and 4 |
+| 8 | At the driving wheel is Elon Musk in Master Chief's armour. It is clearly Elon Musk through the armour's view screen. | yes: face through the gold visor |
+| 9 | He's turning the steering back and forth. | yes: `yoke_turn` (held, then turned the other way) |
+| 10 | Voice over the radio: "Musker Chief, you mind telling me what you're doing in that Roadster?" (sounds like it's coming through the radio) | yes: subtitles now; `radio()` filter ready for the recording |
+| 11 | Musk (serious): "Sir, finishing this fight." | yes, line 2 |
+| 12 | Zoom in on Musk. (Sam, 29 Oct: a hard cut to the close-up) | yes: hard cut to shot 3 |
+| 13 | Musk: "If we don't stop Zelensky from using the Halo, all life in the galaxy could be wiped out." | yes, line 3 |
+| 14 | Back to windscreen shot. | yes: shot 4 |
+| 15 | Showcase shot: Anime Girl Cortana appears, holographic and smaller, above the opposite seat, standing mid-air, after a sudden bright light of digital discharge and pixelated crackling. | yes: one-frame flash, pixel crackle, she forms in bands over the seat |
+| 16 | All of her movements are overemphasised and enthusiastic, occasionally shoving forward her breasts or showing her curvaceous butt. | yes: appear, point, kawaii, thrust (side on), turn (her behind) |
+| 17 | Anime Cortana: "Oh, Musker Chief, we're going to make him look like such Le Epic Chungus!! Kawaiii!!" | yes, line 4 |
+| 18 | Zoom back into Musk. (hard cut) | yes: hard cut to shot 5 |
+| 19 | Musk: "We sure will, Breeder 04." | yes, line 5 (with a glance at her) |
+| 20 | The Roadster Armada approaching the Halo Ringworld in the famous shot from the close-up reference (02), skirting alongside its superstructure. | yes: shot 6, 8 cars skimming the hull (ref 02 layout) |
+| 21 | Anime Cortana: "Musk-San, please let me die." | yes, line 6 over shot 6 |
+| 22 | Musk: "No." (Sam, 29 Oct: lines 21-22 all from space, over the ring shot) | yes, line 7 over shot 6 |
+| 23 | The joke: Musk thinks he's saving the world by taking weapons away from Ukraine but he's actually being a massive dweeb. | yes: the script as written, played straight |
+| 24 | No other sound effects are needed. | yes: none (radio filter only) |
+| 25 | Everything 2D, except Anime Girl Cortana and the Roadster Armada. | yes: paintings 2D; Cortana and the armada 3D |
+| 28 | Hook Text: "Elon Finishes The Fight" (Sam, 29 Oct). | yes: `HOOK` (finish.py adds it) |
+| 26 | Usage is incredibly tight: be efficient, keep the action simple. | yes: about 12-15% of a week planned |
+| 27 | The theme music should always be playing, quieter but still noticeable in the Roadster scenes and louder in the space scenes. | yes: `music_gain` (space loud, cabin -11 dB, 0.3 s eases, dips under the space lines) |
 
 ## Benchmarks (rule 3): each place beside its reference, `review/halo-no-no-sets.jpg` (`python3 source/halo_sets.py sheet OUT`)
 | place | item | ours |
@@ -179,3 +190,4 @@ Decisions made:
   hull from the top left down to the lower right, the far side rising up the right), not my list's "lower left up to
   top right": flagged to Sam. The cars will skim under the hull, near at the bottom left, shrinking towards the turn.
 - Sets sheet (Sam, 29 Oct): one note (5, the galaxy), then "go": on to `source/halo_no_no.py`.
+- Stills and clips sent 29 Oct (`review/halo-no-no-stills.jpg`, three clips).

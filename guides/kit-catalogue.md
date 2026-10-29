@@ -14,6 +14,8 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Casino parlour (oval poker table, panelled walls, chandeliers, armchairs) | `source/poker_mon_room.py` | its film's `stills` | table things from one `THINGS` plan |
 | Round Table (The Traitors) | `source/traitors.py` | `traitors.py stills` | slates on stands |
 | Hangar and space shots (Roadster) | `source/roadster.py` | `roadster.py cast` | space in Dam's coloured pencil |
+| Space, flat cartoon (Halo No-No): planet (bands, dusk and night side, any light direction), the Halo ring small and tilted, the blue galaxy band, nebula, stars; the Halo ring close-up (a true circle projected through `RingCam`: hull panels, ports, lights; the far side's seas, land, cloud) | `source/halo_sets.py` (`space_wide`, `ring_close`, `_planet`, `galaxy_band`, `RingCam`, `ring_point`) | `python3 source/halo_sets.py sheet OUT.jpg` | paintings, rule 39; anything flown along the ring: `halo_no_no._ring_view` (a roadster.View on the ring's axes) |
+| Tesla Roadster cabin from the windscreen facing back (white sport seats with ROADSTER plates, glass roof, rear window onto space, red trim, dash) | `source/halo_sets.py` (`cabin_back`, `cabin_front`, `cam_wide`, `cam_close`) | same sheet | one painting, two framings; space through every window; a car drifting past the rear window (`drift`) |
 | Israeli TV news studio (invented channel): round floor graphic, huge curved ring desk, mesh chairs, tall swirl screen, navy LED walls, red-edged pillars, newsroom through glass, lighting grid, studio camera | `source/newsdesk_set.py` | `python3 source/newsdesk_set.py test OUT.jpg` | any camera; `render(img, cam, people)`, `put_seated` for anyone at the desk; four cameras in `CAMS`; Hebrew captions only, no real broadcaster |
 
 ## People (satire package, `views.person`: any angle; circle hands)
@@ -29,6 +31,8 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Poker players, dealer, guards, onlookers | `source/poker_mon_cast.py` | |
 | Press secretary and reporters (crowd from behind) | `source/press_secretary.py` | `reporter` |
 | Matt Damon | `source/roadster.py` | |
+| Elon Musk in Master Chief's Mark V armour, seated at the Roadster yoke (face through a see-through gold visor; yoke turned; glance) | `source/halo_cast.py` (`chief`, `musk_face`, `yoke`) | front on, seated; sheet: `halo_cast.py sheet OUT.jpg` |
+| Anime Cortana as a flat hologram (see-through blue, scan lines, slight glow: Sam's exception; forms out of a discharge) | `source/halo_cast.py` (`cortana`, `hologram`; poses appear, point, kawaii, thrust (side), turn (back), stand) | discharge flash and pixel crackle: `halo_no_no.discharge` |
 | Darth Maul (black hooded cloak, hood up or down; painted face, horns) with the double-bladed red lightsaber | `source/maul_cast.py` (`MAUL`, `MAUL_HOOD`, `saberstaff`, `pose`) | every view; moods 'neutral' (glare), 'snarl' + talking; poses 'stand', 'present', 'attack', 'strike'; sheet: `maul_cast.py sheet OUT.jpg` |
 | News presenter (original man, Israeli evening-news type: navy suit, tortoiseshell glasses, cropped beard, clip mic) | `source/newsdesk_cast.py` (`PRESENTER`) | every view; moods 'neutral', 'grave', 'smile' + shared; sheet: `newsdesk_cast.py sheet OUT.jpg` |
 | Anyone lying down (face down, on the back, curled on the side, slumped against a wall) or seen from a high camera | `source/lying.py` | 3D body from the person's own design; `lie`, `draw`, `fall`, `stand`; sheet: `python3 source/lying.py sheet OUT.jpg` |
