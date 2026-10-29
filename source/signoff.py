@@ -25,6 +25,8 @@ PFP = os.path.join(ROOT, 'profile', 'cranbrijoos-tiktok-1080-eyes-open.png')   #
 FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 FPS, DUR = 12, 2.0
+SPEED = float(os.environ.get('SIGNOFF_SPEED', 1.0))   # 1.0 = the standing 2 s; 1.25 = 25% faster, 1.6 s (Sam, 31 Oct, Halo No-No)
+OUT_DUR = DUR / SPEED
 W, H = 1080, 1920
 SIZE = 860                                   # the profile picture in the middle of the screen, white all round (Sam)
 DX, DY = (W - SIZE) // 2, (H - SIZE) // 2 - 60
@@ -237,15 +239,15 @@ def frame(t):
 
 
 def clip(out):
-    n = int(round(DUR * FPS))
+    n = int(round(OUT_DUR * FPS))
     sound = os.path.splitext(out)[0] + '-slurp.wav'
     slurp_track(sound)
     p = subprocess.Popen([FF, '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-                          '-r', str(FPS), '-i', '-', '-i', sound, '-shortest',
+                          '-r', str(FPS), '-i', '-', '-i', sound, '-af', f'atempo={SPEED}', '-shortest',
                           '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-movflags', '+faststart',
                           out], stdin=subprocess.PIPE)
     for k in range(n):
-        p.stdin.write(np.asarray(frame(k / FPS)).tobytes())
+        p.stdin.write(np.asarray(frame(k / FPS * SPEED)).tobytes())
     p.stdin.close()
     p.wait()
     os.remove(sound)
@@ -325,8 +327,8 @@ def add(film, out, fps=None, crf=None):
                                    '-v', 'error', '-select_streams', 'v', '-count_frames', '-show_entries',
                                    'stream=nb_read_frames', '-of', 'csv=p=0', f], capture_output=True, text=True).stdout.strip())
     n0, n1 = frames(film), frames(out)
-    if n1 != n0 + int(round(DUR * fps)):       # the sign-off must be its full 2 s (Sam, 28 Oct: it was 0.75 s)
-        raise SystemExit(f'sign-off wrong length: film {n0} frames + sign-off should be {n0 + int(round(DUR * fps))}, got {n1}')
+    if n1 != n0 + int(round(OUT_DUR * fps)):   # the sign-off must be its full length (Sam, 28 Oct: it was 0.75 s)
+        raise SystemExit(f'sign-off wrong length: film {n0} frames + sign-off should be {n0 + int(round(OUT_DUR * fps))}, got {n1}')
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB at {fps} fps')
 
 
