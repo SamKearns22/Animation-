@@ -16,12 +16,20 @@
   and far arc: yes; planet behind, galaxy band, stars: yes; about 8 cars in a loose stream, each its own speed, three
   spinning, big as they pass over us and shrinking to the bend: yes; no car shadows (Sam); camera still; the theme loud,
   dipping under the two lines. Changed: the hull runs top left to lower right (ref 02's layout), flagged to Sam.
-- **Next (fresh chat):** Sam's notes on the stills and clips (Opus, medium effort: reading notes and deciding fixes),
-  applied in one batch. Then before the first animatic: wire the pre-flight checks into `halo_no_no.py` (`scene(t)` is
-  still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the plan's `SHOT_MARKS`), run `python3 source/preflight.py
-  halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet and wait for his yes (CLAUDE.md, 18 Oct).
-  Recordings: Sam records all voices later (file names in `LINES`: `halo-no-no-radio`, `-musk-1..4`, `-cortana-1..2`).
-- **Losses and my additions Sam should know about:** ref 01's orange galaxy core is gone (Sam's note 5). My additions:
+- **Done (30 Oct, notes, Opus):** Sam's notes on the stills and clips. (1) Shot 1's armada in arrowheads: a V of 5,
+  a V of 3 high and a V of 3 low, each arriving at its own time, plus 4 lone spinners spread out (sheet
+  `review/halo-no-no-notes-30oct.jpg`, clip `source/data/halo-no-no/clip-armada-v.mp4`). (2) Every Roadster on its four
+  jets as in Roadster (shot 1 at 0.55 length so the Vs read; shot 6 and the rear-window car full). (3) "Halo Ringworld"
+  fades in at 0.5 s, "Russian - Ukraine War" at 1.0 s, both out together at 4 s. (4) A small green radio light above
+  the speaker grille between the seats, lit from the radio voice's first word to his last. (5) All seven recordings
+  filed in `source/audio/` (trimmed to the speech; cortana-1 is Le_Epic + Kawaii joined) and the film retimed to them:
+  now 44.8 s (shots 0/11.0/18.9/24.6/34.0/36.9). voices.py --film: takes match the script.
+- **Next (fresh chat):** Sam's word on the 30 Oct sheet and clip. Then before the first animatic: wire the pre-flight
+  checks into `halo_no_no.py` (`scene(t)` is still empty; `audits`, `layers`, `HANDS_OK`, `LOOKS_OK`, the plan's
+  `SHOT_MARKS`), run `python3 source/preflight.py halo-no-no OUT_DIR`, fix or name every fault, show Sam the check sheet
+  and wait for his yes (CLAUDE.md, 18 Oct). Routine from here: Sonnet.
+- **Losses and my additions Sam should know about:** (30 Oct) the lone lead car is now the point of the V of 5; the
+  radio light (green) is my choice of colour and place. ref 01's orange galaxy core is gone (Sam's note 5). My additions:
   the pixel crackle as small blue and white squares; Cortana's small mid-air bob now and then; the white caption with a
   black edge for "Halo Ringworld / Russian - Ukraine War"; the theme dips 7 dB under the two lines in shot 6 so the
   voices stay 6 dB clear. The Hook Text is added by finish.py at the end (not on the stills).

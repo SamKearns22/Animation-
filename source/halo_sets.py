@@ -397,7 +397,8 @@ def _space_in(img, cam, pts, seed, t=0.0, drift=None):
             import roadster as RD
             x = box[0] - 120 + (box[2] - box[0] + 240) * drift
             y = box[1] + (box[3] - box[1]) * 0.32 + 30 * drift
-            RD.car(lay, cam, x, y, 0.30, RD.View(yaw=-30 + 40 * drift, elev=18, flip=25 * drift, roll=10), smoke=False)
+            RD.car(lay, cam, x, y, 0.30, RD.View(yaw=-30 + 40 * drift, elev=18, flip=25 * drift, roll=10), jets=1.0,
+                   t=t, smoke=False)
     _layer_masked(img, mask, paint)
 
 
@@ -427,8 +428,9 @@ def _seat(p, img, cam, cx, plate=True):
         stamp_text(img, cam, 'ROADSTER', cx, Y(0.74), 0.15 * k, RED, font=SANS)
 
 
-def cabin_back(img, cam, t=0.0, drift=None):
-    """Everything behind Musk and Cortana. drift: where the passing Roadster is across the rear window (0..1), or None."""
+def cabin_back(img, cam, t=0.0, drift=None, radio=False):
+    """Everything behind Musk and Cortana. drift: where the passing Roadster is across the rear window (0..1), or None;
+    radio: the small light above the speaker grille lit (an outside signal coming in)."""
     p = B.Pen(img, cam)
     # the roof: a black frame round two glass panels onto space (ref 03), receding to the rear window
     p.poly([(-40, -40), (1120, -40), (1120, 470), (-40, 470)], ROOF, None)
@@ -456,6 +458,9 @@ def cabin_back(img, cam, t=0.0, drift=None):
     for gx in range(470, 600, 14):
         for gy in range(880, 1060, 14):
             p.ell(gx, gy, 3, 3, (20, 20, 24), None, n=8)
+    p.ell(535, 862, 16, 16, (120, 255, 140) if radio else (40, 56, 44), INK, 2.4, n=16)   # the radio light (Sam, 30 Oct)
+    if radio:
+        p.ell(530, 857, 6, 6, (230, 255, 235), None, n=8)                                # its shine
     # the doors at the frame edges: dark panels, a red light strip, a handle
     for sg, x0, x1 in ((-1, -40, 112), (1, 1120, 968)):
         d = [(x0, 820), (x1, 800), (x1 + sg * 30, 1340), (x0, 1420)]
