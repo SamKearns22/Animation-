@@ -109,7 +109,7 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | shot 1 (ref 01) | big orange-brown planet on the left, cut by the frame edge | yes, banded and blotched, one outline |
 | | its night side top-left | yes, a dusk band then the night side |
 | | thin dark ring tilted in front of its lower half | yes, the near half dark hull with tiny lights, the far half a pale strip |
-| | bright galaxy core right of centre | yes, flat layers (white, yellow, orange, violet), thin dust lanes |
+| | the galaxy, back right | ref 02's blue stripe (Sam, note 5: one galaxy in both space shots), not ref 01's core |
 | | violet and blue nebula | yes, flat lumps, no outline (light, not a thing) |
 | | dense small stars | yes, round dots only (no four-point stars: off-style) |
 | | room for the Hook Text (top) and the caption (lower third) | yes, dark sky at the top; the caption sits over the planet's lower part |
@@ -154,6 +154,7 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | 2 | cast | - | a neck in his helmet, like Damon in Roadster | neck into the undersuit collar (new kind) |
 | 3 | cast | - | one Cortana pose really thrusting her breasts towards him | new side-on pose 'thrust' on "Le Epic Chungus": back arched, chest pushed at him, fists behind her (new kind) |
 | 4 | cast | - | his head fills the helmet: only a thin gap to the helmet wall | visor reshaped round his head, head enlarged (new kind) |
+| 5 | sets | - | two different galaxies (refs 01 and 02): keep ref 02's blue stripe | one `galaxy_band` in both space shots; ref 01's orange core gone (new kind) |
 
 Decisions made:
 - Audio: `source/audio/halo-theme.mp3` (Sam, 29 Oct), 2:58 long; film starts at 0:21, armada enters at 0:28.
@@ -177,3 +178,4 @@ Decisions made:
 - Sets built 29 Oct in `source/halo_sets.py` (sheet `review/halo-no-no-sets.jpg`). Shot 6 follows ref 02's layout (the
   hull from the top left down to the lower right, the far side rising up the right), not my list's "lower left up to
   top right": flagged to Sam. The cars will skim under the hull, near at the bottom left, shrinking towards the turn.
+- Sets sheet (Sam, 29 Oct): one note (5, the galaxy), then "go": on to `source/halo_no_no.py`.

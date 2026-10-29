@@ -2,7 +2,8 @@
 """Halo No-No's places (notes/halo-no-no.md), each a flat painting per camera (film-quality rule 39):
 
 - space_wide(): shot 1 (ref 01): the orange planet on the left, its night side top-left, the thin dark Halo ring
-  tilted in front of its lower half, the bright galaxy core right of centre, stars and nebula. Painted once.
+  tilted in front of its lower half, the blue galaxy band back right (ref 02's, the same galaxy as shot 6: Sam,
+  29 Oct), stars and nebula. Painted once.
 - ring_close(): shot 6 (ref 02): the ring's dark hull sweeping across from the top left down to the lower right, then
   the far side rising up the right as a thin strip of seas, land and cloud; the planet behind on the left, the blue
   galaxy band top right. The ring itself is a true circle projected through one camera (so the sweep and the far arc
@@ -111,18 +112,22 @@ def _ell_pts(cx, cy, rx, ry, rot=0.0, n=120):
 # ================================================ SHOT 1: THE WIDE =================================================
 PLANET = (60, 1000, 640)                     # centre and radius (ref 01: the left half, cut by the frame edge)
 HALO = (300, 1180, 215, 88, 33)              # the ring: centre, radii, tilt (degrees); in front of the planet's lower half
-CORE = (770, 700)                            # the galaxy core (ref 01: bright, right of centre)
+GALAXY = (820, 720)                          # the galaxy band's middle, back right (ref 02's blue stripe: Sam, 29 Oct)
 PLANET_COL = (198, 122, 74)
 
 
-def _galaxy_core(p, x, y, k=1.25, tilt=-9):
+def galaxy_band(p, gx, gy, length=700, k=1.0, tilt=-58):
+    """The one galaxy of the film (Sam, 29 Oct: ref 02's blue stripe, in both space shots): lumpy flat layers along a
+    diagonal, brightest along the middle."""
     a = math.radians(tilt)
-    for (rx, ry, col) in ((470, 150, (30, 24, 58)), (380, 92, (52, 36, 92)), (270, 58, (112, 70, 140)), (190, 40, (196, 112, 120)),
-                          (124, 27, (240, 168, 104)), (74, 16, (255, 226, 170)), (34, 9, (255, 252, 238))):
-        p.poly(rough(_ell_pts(x, y, rx * k, ry * k, a, 40), 4 * k, int(rx)), col, None)
-    for i, (u, w) in enumerate(((-0.55, 7), (-0.2, 9), (0.3, 8))):           # dark dust lanes across it
-        cx, cy = x + u * 260 * k * math.cos(a), y + u * 260 * k * math.sin(a) + 10 * k
-        p.poly(rough(_ell_pts(cx, cy, 60 * k, w * 0.45 * k, a + 0.05, 20), 1.5 * k, 40 + i), (124, 70, 112), None)
+    for k_, (w, col) in enumerate(((210, (30, 46, 100)), (130, (52, 88, 158)), (70, (110, 160, 214)), (26, (226, 240, 252)))):
+        top, bot = [], []
+        for u in np.linspace(-1, 1, 18):
+            x, y = gx + u * length * math.cos(a), gy + u * length * math.sin(a)
+            ww = w * k * (1 - 0.6 * u * u) * (1 + 0.22 * math.sin(u * 11 + k_))
+            top.append((x - ww * math.sin(a), y + ww * math.cos(a)))
+            bot.append((x + ww * math.sin(a) * 0.8, y - ww * math.cos(a) * 0.8))
+        p.poly(rough(curve(top + bot[::-1], 3), 6, w), col, None)
 
 
 def _planet(img, cam, p, cx, cy, R, col, night=(0.34, 0.40), seed=3, lit_from=(1, 1)):
@@ -212,8 +217,8 @@ def space_wide():
     _nebula(p, (640, 760), -25, 14, 260, [NEB_V, NEB_B, (54, 30, 80)], 5)
     _nebula(p, (900, 1500), 30, 8, 220, [NEB_B, (20, 28, 60)], 9)
     _stars(p, (0, 0, 1080, 1920), 520, 11)
-    _galaxy_core(p, *CORE)
-    _stars(p, (CORE[0] - 300, CORE[1] - 70, CORE[0] + 300, CORE[1] + 70), 60, 12, (0.8, 2.0))
+    galaxy_band(p, *GALAXY, length=620, k=0.85)
+    _stars(p, (GALAXY[0] - 300, GALAXY[1] - 400, GALAXY[0] + 300, GALAXY[1] + 400), 80, 12, (0.8, 2.2))
     _halo_far(p, *HALO)
     _planet(img, cam, p, *PLANET, PLANET_COL, night=(0.42, 0.22), seed=3, lit_from=(1, 0.75))
     _halo_far(p, *HALO)                    # the far half shows against the planet too (it is in front of it)
@@ -273,17 +278,7 @@ def ring_close():
     rc = RingCam(**RING_CAM)
     _nebula(p, (760, 260), -35, 12, 240, [NEB_B, NEB_V], 21)
     _stars(p, (0, 0, 1080, 1920), 560, 22)
-    # the blue galaxy band, top right (ref 02): lumpy flat layers along a diagonal, brightest in the middle
-    a = math.radians(-58)
-    gx, gy = 860, 420
-    for k_, (w, col) in enumerate(((210, (30, 46, 100)), (130, (52, 88, 158)), (70, (110, 160, 214)), (26, (226, 240, 252)))):
-        top, bot = [], []
-        for u in np.linspace(-1, 1, 18):
-            x, y = gx + u * 700 * math.cos(a), gy + u * 700 * math.sin(a)
-            ww = w * (1 - 0.6 * u * u) * (1 + 0.22 * math.sin(u * 11 + k_))
-            top.append((x - ww * math.sin(a), y + ww * math.cos(a)))
-            bot.append((x + ww * math.sin(a) * 0.8, y - ww * math.cos(a) * 0.8))
-        p.poly(rough(curve(top + bot[::-1], 3), 6, w), col, None)
+    galaxy_band(p, 860, 420)
     _stars(p, (500, 0, 1080, 900), 110, 23, (0.8, 2.2))
     # the planet behind, on the left, mostly in shadow (lit from the right)
     _planet(img, cam, p, -120, 1300, 560, (150, 96, 64), night=(1.15, 0.3), seed=4, lit_from=(1, -0.2))
