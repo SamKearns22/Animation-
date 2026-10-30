@@ -35,6 +35,7 @@ PIECES = [(4.5, 8.5),      # s1: the armada from its first car (the radio line s
           (22.45, 31.5),   # s4: the cabin from just before the discharge
           (31.5, 34.2),    # s5: Musk close
           (35.3, 42.3)]    # s6: the ring, starting nearer its first line
+MUSIC_UP = 1.25           # the theme 25% louder (Sam, 30 Oct)
 SPEECH_FROM = 7.4          # before the cabin, the voices run this far ahead of the picture (old 8.9 s -> 1.5 s)
 
 
@@ -148,6 +149,7 @@ def soundtrack(stems=False):
     m = np.zeros(n)
     m[:min(n, len(theme))] = theme[:n]
     m *= 10 ** ((M.MA.LINE_LUFS - 3 - M.MA.lufs(m[:int(DUR * SR)])) / 20)
+    m *= MUSIC_UP
     rest += m * music_gain(n)
     end = int(BLACK_AT * SR)
     f = int(0.4 * SR)
