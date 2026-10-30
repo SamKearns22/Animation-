@@ -52,6 +52,7 @@
   (d) tighten the dead gaps by 2-3 s (before Cortana's lines ~1.6 s, before "please let me die" ~1.8 s) (Sam: ok);
   (e) new cover: Musk glancing at Cortana (like the story still) (Sam: yes); post text without Russia/Ukraine/war (Sam did not answer; my pick);
   (f) then an animatic (Sam's yes first), then the final. Needs Opus, medium (sound timing). Source: `source/halo_no_no.py`.
+- **RETRY built (30 Oct, Opus; Sam: no cover needed, he sets it):** `source/halo_no_no_retry.py`, an edit of the approved film (untouched): kept pieces old 4.5-8.5 | 11.4-16.4 | 16.4-21.9 | 22.45-31.5 | 31.5-34.2 | 35.3-42.3; voices 7.4 s ahead over the space shot (radio at 1.5 s, cut to the cabin at 4.0 s mid-line); theme from 0:32; "Halo Ringworld" alone, 0-1.2 s. 33.25 s + 1.6 s sign-off. Gaps cut only at shot changes (about 1.7 s; inside a shot would jump). Checks: the approved film's pre-flight (same 5 named) + `retry.py check` (clean: no line cut, subtitles, voices 6 dB over). Animatic `source/data/halo-no-no/retry-animatic.mp4` sent. NEXT: Sam's yes, then `python3 source/halo_no_no_retry.py final source/data/halo-no-no/clean-retry.mp4 --nostamp` and `finish.py ... animations/halo-no-no-retry-vertical.mp4 "Elon Finishes The Fight" --y 330 --until 3.5 --signoff-speed 1.25`.
 - **(Old next, done:)** Sam's yes on the check sheet, then the animatic: `python3 source/halo_no_no.py final OUT --small`
   (about 5 min), send it, wait.
 - **Losses and my additions Sam should know about:** the lone lead car is now the point of the V of 5; 2.5 s of the
