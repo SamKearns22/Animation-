@@ -44,6 +44,14 @@
   mouth opening 3 times there follows the voice; line 5 is one phrase holding the whole line, the counter over-reads
   it (10 for 7). Sound approved by Sam, so left as is. Check sheet sent in the chat (not on GitHub).
 - **Animatic 1 rendered and sent (31 Oct, Sam: "I can't tell if there are problems with the sound until I see the animatic": the earlier 'sound approved' was withdrawn).** `source/data/halo-no-no/animatic-1.mp4` (42.3 s, 2 MB, 1m47). Waiting for Sam's notes; no more renders until he replies.
+- **Where it stood (30 Oct):** FINAL posted version = `animations/halo-no-no-vertical.mp4` (43.9 s, 5.5 MB; shot 6 cars drawn from behind and above, 45 degrees nose down, jets over the body when the belly faces us via `roadster.car`; subtitles "on Earth", "Le Epic Chungus" 0.5 s sooner, "please let me die" 0.5 s later; sign-off 1.25x via `finish.py --signoff-speed 1.25`; Hook Text `--y 330 --until 3.5`). Story post `animations/halo-no-no-story.png` (`source/halo_story.py`). Metrics: 214 views, 12.3 s avg watch (28%), 10% to the end, 14 likes, 6 shares; Account check: no restrictions (Sam, 30 Oct).
+- **RETRY plan (Sam, 30 Oct, "go"):**
+  (a) remove the "Russia - Ukraine War" caption line; "Halo Ringworld" in at 0 s, fades out by ~1.2 s;
+  (b) start from the second the first Roadster enters (old 4.5 s; film ~37.8 s + 1.6 s sign-off = ~39.4 s), music on the same beat;
+  (c) the radio line ("Musker Chief...") starts over the space shot within the first ~2 s, then cut to the cabin (Sam: yes);
+  (d) tighten the dead gaps by 2-3 s (before Cortana's lines ~1.6 s, before "please let me die" ~1.8 s) (Sam: ok);
+  (e) new cover: Musk glancing at Cortana (like the story still) (Sam: yes); post text without Russia/Ukraine/war (Sam did not answer; my pick);
+  (f) then an animatic (Sam's yes first), then the final. Needs Opus, medium (sound timing). Source: `source/halo_no_no.py`.
 - **(Old next, done:)** Sam's yes on the check sheet, then the animatic: `python3 source/halo_no_no.py final OUT --small`
   (about 5 min), send it, wait.
 - **Losses and my additions Sam should know about:** the lone lead car is now the point of the V of 5; 2.5 s of the
