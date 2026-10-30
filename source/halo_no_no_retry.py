@@ -35,7 +35,7 @@ PIECES = [(4.5, 8.5),      # s1: the armada from its first car (the radio line s
           (22.45, 31.5),   # s4: the cabin from just before the discharge
           (31.5, 34.2),    # s5: Musk close
           (35.3, 42.3)]    # s6: the ring, starting nearer its first line
-MUSIC_UP = 1.25           # the theme 25% louder (Sam, 30 Oct)
+MUSIC_UP = 1.40           # the theme 40% louder (Sam, 30 Oct)
 SPEECH_FROM = 7.4          # before the cabin, the voices run this far ahead of the picture (old 8.9 s -> 1.5 s)
 
 
@@ -119,7 +119,7 @@ def frame_image(t):
 
 # ------------------------------------------------------------------------------------------------ sound
 def music_gain(n):
-    """As the approved film: loud in space, 11 dB down in the cabin, 0.3 s eases; dips under every line (10 dB in
+    """As the approved film: loud in space, 11 dB down in the cabin, 0.3 s eases; dips under every line (11 dB in
     space, 4 dB in the cabin)."""
     g = np.zeros(n)
     for name, a, b in SHOTS:
@@ -130,7 +130,7 @@ def music_gain(n):
     for ln in LINES:
         space = shot_of(ln['start']) in M.SPACE_SHOTS
         duck = np.ones(n)
-        duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** ((-10 if space else -4) / 20)
+        duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** ((-11 if space else -4) / 20)
         g *= np.convolve(duck, k / k.sum(), 'same')
     return g
 
