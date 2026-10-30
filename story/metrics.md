@@ -120,3 +120,14 @@ Reading (Claude, 23 Oct):
   past the first seconds for TikTok to push it.
 - Sam's note: he expected it to underperform and posted it because the joke amused him. Kept as a deliberate
   passion post, not a mistake.
+
+## Snapshot: Fri 30 Oct 2026, 13:23 (Patriots 3, about 45 h after posting)
+
+| Film | Posted | Length | Views | Avg watch | Watched to end | Likes | Comments | Shares | Saves | New followers |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Patriots 3 ("Small Boats Crisis, June 1944") | Wed 28 Oct, 4:02pm | 43.25 s | 14.1K | 20.3 s (47%) | 29.16% | 1,622 | 17 | 443 | 149 | 41 |
+
+Total play time 82 h 07 m. Likes are 11.5% of views and shares 3.1%, both high; about 29% watched all 43 s, well above
+the "films over 45 s rarely get watched to the end" line above. For comparison, Halo No-No (posted Thu 29 Oct, 4:18pm,
+43.9 s) had 214 views, 12.3 s average watch (28%), 10% to the end, 14 likes, 6 shares after about 2.5 h, and Sam
+reported it blocked from the algorithm (30 Oct; not confirmed; see the chat for what to check in Account check).

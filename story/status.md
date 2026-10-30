@@ -11,6 +11,7 @@ Read this first in any new session, after CLAUDE.md.
   Sam's word on clip-music-4s (theme now from 0:27.5) and clip-armada-v3; caption now "Russia - Ukraine War"; then pre-flight and the first animatic's check sheet.
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
+- 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
   rebuilt on the satire kit; the Gunner and Loader; the MG42 firing through the bunker slit. Sheets sent to Sam;
   his note (the cuddle) fixed. Brief in: `prompts/patriots-3.md`.
