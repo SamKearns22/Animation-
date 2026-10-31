@@ -182,6 +182,21 @@ working habits saved or cost whole rounds.
     TIMES...` makes the labelled sheet in one command (28 Oct; ranges and `--crop` for a detail); the handover and
     self-review wording by hand]
 
+49. **Every famous person's head passes the likeness check before the cast sheet goes to Sam (Sam, 31 Oct, after Halo
+    No-No: viewers did not recognise Damon in Roadster).** Run `python3 source/likeness.py check PHOTO OURS.png OUT.jpg
+    --others ...` against 3 or more good photos (rule 51): at least 60% match, no feature pushed the wrong way, and 1st
+    in the line-up against the other famous faces in `references/`. Put the score on the cast sheet. Start a new head
+    from `likeness.py card` (what is distinctive, strongest first) and `likeness.py head` (a starter head with its
+    average-face twin, so the check can take away the drawing style's own pull). [tool: `source/likeness.py check`]
+50. **Every famous person gets at least one shot where their face can be read:** the face (hairline to chin) at least
+    240 px tall in the 1920-tall frame, an eighth of the height (Sam, 31 Oct: Damon in Roadster never had one; his
+    face was about 30 px, inside a helmet). [by hand on the check sheet]
+51. **The likeness pack is 3 or more straight-on, close, not-smiling photos** (the face filling much of the picture,
+    turned under 15 degrees), plus the three-quarter, talking and caricature pictures of `guides/satire.md`. The
+    caricatures show what to exaggerate; where they disagree with the measured photos, the photos win (Sam, 31 Oct:
+    Musk was drawn wide from the cartoons; five photos measure his face as average-to-long). Ask Sam for any photo
+    missing before building the head. [by hand at the brief; `likeness.py card` names a photo too small or turned]
+
 ## Saving tokens and cutting rounds
 - **Fix the cause once, in the shared kit.** Label each of Sam's notes "new kind" or "seen before". A new kind is fixed in
   the kit and gets a test in the automatic checks. Never fix the same kind twice.

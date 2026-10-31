@@ -10,8 +10,9 @@ For a full Satire-style TikTok film (more than two people talking, or any action
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
    **References (Sam, 16 Oct):** when Sam sends reference photos, say which are still missing for the best quality (the
    room from several angles incl. empty and from above, the person front and side, props), before drawing.
-   **A likeness pack for anyone famous (18 Oct):** ask at the start for one straight-on photo, one three-quarter, one
-   smiling or talking, and one or two caricatures Sam likes (the caricatures show what to exaggerate).
+   **A likeness pack for anyone famous (18 Oct; 31 Oct, film-quality-rules 51):** ask at the start for 3 or more
+   straight-on, close, not-smiling photos, one three-quarter, one smiling or talking, and one or two caricatures Sam
+   likes (the caricatures show what to exaggerate; where they disagree with the measured photos, the photos win).
    **Reuse before building (18 Oct):** the plan names the kit part for each person, movement and prop (views, moves:
    walks, runs, falls in stages, combat; stage; perform; props falling under gravity); build new only where nothing
    fits, and say so. Shocking Behaviour hand-built its trip and lost six rounds to it.
@@ -36,10 +37,14 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 - **A reference is a checklist.** Before drawing anything from a photo, write down what it shows: how many, colours,
   positions, which way they face, brands, proportions. Then `python3 source/compare.py REF OURS OUT.jpg` (side by
   side, same height, guide lines across) and tick each one off before sending. (The scooters took three goes.)
-- **Likeness method.** Measure the face on the straight-on photo with compare.py's guide lines: face width to height,
-  where the hairline, brows, eyes, nose base, mouth and chin sit, eye size and spacing, mouth width, the lines and
-  creases. Build the head to those numbers (in the house style), then put it beside the photo and list every
-  difference yourself before Sam sees it. Exaggerate what the caricatures exaggerate. (Farage took six passes.)
+- **Likeness method (31 Oct: measured by the tool, not by eye; film-quality-rules 49-51).**
+  `python3 source/likeness.py card PHOTO PHOTO PHOTO OUT.jpg` measures the straight-on photos against 109 real faces
+  and lists what is distinctive, strongest first, plus the big shapes (hair, beard, glasses) that read first at phone
+  size. `likeness.py head PHOTO OUT.png --push 1.6` draws a starter head with those differences pushed (and its
+  average-face twin); restyle it into the house style, keeping each pushed difference. Then `likeness.py check PHOTO
+  OURS.png OUT.jpg --others ...`: 60%+ match, nothing the wrong way, 1st in the line-up, before Sam sees it. After
+  filing a film's references, `likeness.py average` grows the crowd of real faces. (Farage took six passes; Damon
+  and Musk failed the line-up when measured afterwards.)
 - **Real sizes.** Every prop and set piece is drawn at its real size in metres through the scene's camera (sizes
   from `source/sizes.py`; add a missing one after looking it up), and listed in the film's `PROP_SIZES` so
   preflight checks it. A new prop goes on the cast sheet beside a person (`sizes.scale_ref`). (The paper, pens, lift
