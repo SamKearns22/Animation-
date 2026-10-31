@@ -30,3 +30,6 @@ source/data/*-sheet.jpg
 source/data/*-hands.jpg
 source/data/pose-gallery.jpg
 source/data/halo-no-no/
+
+# likeness.py's face models: downloaded at session start (.claude/hooks/setup.sh), never on GitHub
+source/models/

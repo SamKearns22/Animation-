@@ -9,6 +9,10 @@ Read this first in any new session, after CLAUDE.md.
 - 30 Oct (notes, Opus): all Sam's notes applied (level arrowhead armada, jets, caption fades, radio light, cars
   following in the rear window, no wait before the armada); recordings filed, film retimed to 42.3 s. Next (Sonnet):
   Sam's word on clip-music-4s (theme now from 0:27.5) and clip-armada-v3; caption now "Russia - Ukraine War"; then pre-flight and the first animatic's check sheet.
+- 31 Oct (lessons, Opus): Sam asked what Halo No-No teaches. Built `source/likeness.py` (face measuring: card, starter
+  head, check with line-up; average real face in `source/likeness_average.json`; models fetched by setup.sh). Tested
+  on Romesh Ranganathan and Sebastian (Sam's photo): both 1st in a line-up of 15; our old Damon (5th of 14) and Musk
+  (6th of 14) fail it. Rule proposals 49-56 sent in the chat, waiting for Sam's numbers; none written into a guide yet.
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
