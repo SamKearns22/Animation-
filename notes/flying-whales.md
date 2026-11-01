@@ -33,7 +33,8 @@
   foam slapping round the legs; the flare's flame flickers. Not visible from our camera (not losses, just hidden): the
   helideck's orange chute (behind the stair tower) and most of the walkway stub (behind the decks). No losses.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** 28% of the week at the start of this stage; ask Sam for the figure now.
+- **Usage budget (rule 44):** 31% of the week (Sam, 1 Nov, end of the build stage: brows, underwater set, rig took
+  about 3%). Ask again at the next handover.
 - **Files to open:** this file; `guides/satire.md` ("Render", "Before every render"); `guides/film-quality-rules.md`
   8, 15, 16, 29, 32, 33, 40; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_under.py`,
   `source/flying_whales_rig.py`, `source/flying_whales_sea.py`, `source/whale.py`; `source/satire_template.py`.
