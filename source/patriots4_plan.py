@@ -10,7 +10,7 @@ it from the person it shows, so everyone faces it (rule 38) and the Patriot's qu
 """
 import math
 
-R = 0.62                       # from the table's centre to where each person stands (the table is 0.49 m; clear of it)
+R = 0.62                       # from the table's centre to where each person stands (the table is 0.37 m; clear of it)
 TABLE_H = 0.95                 # they lean on it with both hands (refs 03, 09)
 EYE = 1.5
 
@@ -41,9 +41,9 @@ LOOKS = {
     'arch passage': dict(floor=(52, 38, 28), wall=(78, 50, 30), ceiling=(30, 22, 18)),
 }
 THINGS = {
-    "winner's table": dict(at=(0.0, 0.0), size=(0.49, TABLE_H, 0.49), facing=0,
-                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size, then 25% less (Sam, 1 Nov)'),
-    'coin pile': dict(at=(0.0, 0.0), size=(0.38, 0.3, 0.38), facing=0, y=TABLE_H, solid=False, on="winner's table",
+    "winner's table": dict(at=(0.0, 0.0), size=(0.37, TABLE_H, 0.37), facing=0,
+                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size, then 25% less twice (Sam, 1 Nov)'),
+    'coin pile': dict(at=(0.0, 0.0), size=(0.29, 0.3, 0.29), facing=0, y=TABLE_H, solid=False, on="winner's table",
                       why='large gold coins in about 7 tiers, more scattered round the base (ref 01)'),
     'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.9, 0.8), facing=0,
                       why='iron bowl of fire on a stand (refs 03, 09)'),
@@ -52,8 +52,8 @@ THINGS = {
 }
 PEOPLE = {
     'claudia': dict(at=clock(12), facing=facing_in(12), who='claudia'),
-    'patriot': dict(at=clock(2), facing=facing_in(2), who='patriot'),
-    'romesh': dict(at=clock(7), facing=facing_in(7), who='romesh'),
+    'patriot': dict(at=clock(3), facing=facing_in(3), who='patriot'),     # Sam, 1 Nov: the Patriot at 3, Romesh at 6
+    'romesh': dict(at=clock(6), facing=facing_in(6), who='romesh'),
     'bash': dict(at=clock(9), facing=facing_in(9), who='bash'),
 }
 
@@ -75,16 +75,16 @@ def pan(hour, focal=1146, y=1.40, why=''):
 CAMS = {   # focal in pixels for 1080 x 1920 (1146: 20 px a degree, patriots4_room.K)
     'claudia': pan(12, why='over the coins at Claudia (the Patriot 60 deg off frame)'),
     'bash': pan(9, why='panned round to Bash'),
-    'romesh': pan(7, why='panned on to Romesh; the Round Table hall behind him'),
-    'patriot': pan(2, why='the reveal: panned from Claudia to her left'),
+    'romesh': pan(6, why='Romesh; the Round Table end behind him'),
+    'patriot': pan(3, why='the reveal: a cut to Claudia\'s left'),
     'claudia close': pan(12, 2000, 1.55, why='the stares, closer'),
     'bash close': pan(9, 2000, 1.55, why='staring and blinking'),
-    'patriot close': pan(2, 2000, 1.55, why='eyes wide, sliding to Romesh'),
-    'his view': pan(8, 825, why="Romesh and Bash in one frame, the Patriot's shoulder in the corner"),
+    'patriot close': pan(3, 2000, 1.55, why='eyes wide, sliding to Romesh'),
+    'his view': pan(7, 825, why="Romesh and Bash in one frame, the Patriot's shoulder in the corner"),
 }
 CAMS.update({'claudia 2': CAMS['claudia'], 'claudia close 2': CAMS['claudia close'], 'patriot 2': CAMS['patriot'],
              'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners"),
-             'reaction': dict(CAMS['his view'], why="their reaction (Sam, 1 Nov): over his shoulder, his pointing arm in the corner")})
+             'reaction': dict(CAMS['his view'], why="their reaction: just Romesh and Bash (Sam, 1 Nov)")})
 GROUPS = {}
 FRAMING = {   # rule 10: the Hook Text over the arch above Claudia; each key beat with its minimum hold
     'claudia': dict(hook='the arch and lattice above Claudia, top third', beats=[('the question', 1.0)]),
@@ -92,7 +92,7 @@ FRAMING = {   # rule 10: the Hook Text over the arch above Claudia; each key bea
     'romesh': dict(beats=[('sincere, hands on the table', 1.0)]),
     'patriot': dict(beats=[('eyes widen', 0.8), ('Errrr held', 2.0)]),
     'his view': dict(beats=[('their eyes slide to each other', 1.2)]),
-    'reaction': dict(beats=[('mouths drop open', 0.7), ('eyes to each other, held', 1.0)]),
+    'reaction': dict(beats=[('eyes to each other, held', 1.0)]),
 }
 SHOT_MARKS = {   # rule 38: who is on screen in each shot, by mark (plan.py checks each faces the lens)
     'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'patriot': ['patriot'],

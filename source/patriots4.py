@@ -77,14 +77,14 @@ SHOTS = [('claudia', 0.0, 6.9), ('bash', 6.9, 15.8), ('romesh', 15.8, 21.8), ('c
 A = RM.ANGLES
 PANS = {}   # Sam, 1 Nov (animatic 1 note 1): the swings read as the table spinning: plain jump cuts instead
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
-    'claudia': (0.0, 1.0, None), 'bash': (270.0, 1.0, None), 'romesh': (210.0, 1.0, None),
-    'claudia 2': (0.0, 1.0, None), 'patriot': (60.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
-    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (60.0, 1.75, 'patriot'), 'his view': (241.5, 1.0, None),
-    'patriot 2': (60.0, 1.2, 'patriot'), 'traitors': (60.0, 1.15, 'patriot'), 'reaction': (241.5, 1.0, None),
+    'claudia': (0.0, 1.0, None), 'bash': (270.0, 1.0, None), 'romesh': (180.0, 1.0, None),
+    'claudia 2': (0.0, 1.0, None), 'patriot': (90.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
+    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (90.0, 1.75, 'patriot'), 'his view': (212.0, 1.0, None),
+    'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (212.0, 1.0, None),
 }
 CHEAT = {   # a film cheat for one shot: Romesh and Bash stand 60 degrees apart, too far for one frame with faces big
-    'his view': {'romesh': 230.0, 'bash': 253.0},   # enough for the eye slide, so they are moved closer for it
-    'reaction': {'romesh': 230.0, 'bash': 253.0},
+    'his view': {'romesh': 200.0, 'bash': 224.0},   # enough for the eye slide, so they are moved closer for it
+    'reaction': {'romesh': 200.0, 'bash': 224.0},
 }
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
@@ -216,7 +216,7 @@ def face_y(who):
     return neck_y(who) - 150 * PC.P3.scale_for(CAST[who], S)
 
 
-NEAR_Z, NEAR_CY = 1.2, 1050.0   # Sam, 1 Nov notes 8-9: every table shot with the camera in at the table's edge; the
+NEAR_Z, NEAR_CY = 1.35, 1050.0   # Sam, 1 Nov notes 8-9: every table shot with the camera in at the table's edge; the
                                 # table's extra scale puts its near rim at the frame's foot (patriots4_room.near_for)
 
 
@@ -233,9 +233,9 @@ def pancam(t):
     if s in ('claudia', 'bash', 'romesh', 'claudia 2', 'patriot'):   # Sam, 1 Nov notes 8-9: at the table's edge
         z, cy = NEAR_Z, NEAR_CY
     if s in ('patriot 2', 'traitors'):            # animatic 1 note 3: out a little, Bash's and Romesh's backs in both
-        z, cy = 1.0, NEAR_CY
+        z, cy = 1.15, NEAR_CY
     if s in ('his view', 'reaction'):             # a little wider, so Romesh and Bash both fit, hands and all
-        z, cy = 1.08, 1065.0
+        z, cy = 1.1, 1065.0
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
     return pc
@@ -276,18 +276,18 @@ def look(who, t):
         if t < 25.0:
             return 0.6                                    # Claudia (his left, our right)
         if t < T_MEET:
-            return 0.35                                   # the Patriot
-        if t < 46.0:
+            return -0.3                                   # the Patriot (straight across at 3 o'clock; shot 9: his
+        if t < 46.0:                                      # shoulder in the bottom-left corner)
             return -0.9                                   # Romesh
-        return 0.35 if t < T_EACH else -0.9              # back to the Patriot; then Romesh again (shot 13)
+        return -0.3 if t < T_EACH else -0.9              # back to the Patriot; then Romesh again (shot 13)
     if who == 'romesh':
         if t < 25.0:
-            return 0.3                                    # Claudia
+            return -0.25                                  # Claudia, straight across (12 o'clock from his 6)
         if t < T_MEET:
-            return 0.25                                   # the Patriot (over whose shoulder, our right, shots 9, 13)
+            return -0.3                                   # the Patriot (his shoulder bottom-left in shot 9)
         if t < 46.0:
             return 0.9                                    # Bash
-        return 0.25 if t < T_EACH else 0.9               # back to the Patriot; then Bash again (shot 13)
+        return -0.3 if t < T_EACH else 0.9               # back to the Patriot; then Bash again (shot 13)
     if who == 'patriot':
         if t < T_SLIDE:
             return -0.9                                   # Claudia, who asked him (his right, our left)
@@ -466,6 +466,48 @@ def shoulder(img, who, x, y, s):
     PC.person(img, cam, x, y, s, sp, 0.0, 180)
 
 
+def on_screen(t, pc=None):
+    """Who is drawn in this frame."""
+    pc = pc or pancam(t)
+    on = [w for w in WHO if visible(w, pc)]
+    if t < 25.6:
+        on = [w for w in on if w != 'patriot']            # never in shot before the reveal (brief 10)
+    return on
+
+
+def scene(t):
+    """The solids for the collision and pop-in tests: each person on screen at their mark on the plan (metres), as a
+    simple figure (their hands rest on the table: ALLOWED_CONTACTS); the table and every THING come from PLAN."""
+    import audit
+    out = []
+    for who in on_screen(t):
+        x, z = PL.PEOPLE[who]['at']
+        h = PC.HEIGHTS.get(CAST[who].get('name', ''), 1.75)
+        out.append(audit.Thing(who, audit.simple(who, x, z, height=h, facing=(-x, -z))))
+    return out
+
+
+def audits():
+    """The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching,
+    frozen), and the eyelines. Returns faults."""
+    def alone(who):
+        def draw(t):
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            draw_person(lay, pancam(t), who, t)
+            return lay
+        return draw
+    actors = {}
+    for who in WHO:
+        for shot, a, b in SHOTS:
+            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if who in on_screen(i / FPS)]
+            if ts:
+                actors[f'{who} [{shot}]'] = (ts, alone(who))
+    filmkit.EYES.clear()
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    faults += filmkit.check_eyelines(allow=[('patriot', 44.8, DUR, 'ahead in the awkward silence, then at both as he points')])
+    return faults
+
+
 def picture(t):
     """The frame WITHOUT captions (those go on last, so wording notes never re-render a picture)."""
     if t >= BLACK_AT:
@@ -488,8 +530,8 @@ def picture(t):
             img.paste(lay, (0, 0), Image.composite(lay.getchannel('A'), Image.new('L', lay.size, 0), arms_mask(pc, who, j2, sp)))
     RM.coin_pile(img, pc)
     s = shot_of(t)
-    if s in ('his view', 'reaction'):
-        shoulder(img, 'patriot', 1060, 1720, 1.6)
+    if s == 'his view':                           # (shot 13: just Romesh and Bash, Sam 1 Nov)
+        shoulder(img, 'patriot', 20, 1720, 1.6)   # bottom left: he sits to their left now (3 o'clock)
     if s in ('patriot 2', 'traitors'):            # in both, so they never appear from nowhere (animatic 1 note 3)
         shoulder(img, 'bash', 70, 1830, 1.6)
         shoulder(img, 'romesh', 1030, 1830, 1.6)

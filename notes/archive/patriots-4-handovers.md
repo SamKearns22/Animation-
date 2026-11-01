@@ -100,3 +100,52 @@
 - **Files to open:** this file; `guides/satire.md`; `source/patriots4_cast.py` (codemap); `source/patriots4_plan.py`;
   `source/traitors.py` (`wall`, `round_table`); `review/patriots4-cast.jpg`.
 
+
+
+## Handover archived 1 Nov (end of the stills/animatic-1 notes chat)
+- **Rules that bite at this stage (rule 48):** 46 look at exactly the frames Sam names first; 45 the composition sheet
+  is never re-sent; 25 (a note repeated is a warning: find why the first fix failed); 41 every arm ends in a visible
+  hand (shot 12's pointing hands, the table hides anything below its edge); 43 looks at each shot's camera; 44 log usage.
+- **Done (1 Nov, building, Opus high):** the cast (`source/patriots4_cast.py`, sheet `review/patriots4-cast.jpg`):
+  Romesh 74% (series look: short salt-and-pepper beard, clear frames, curls), Bash 88/91%, Claudia 80/68% (rebuilt),
+  all 1st in the line-up; the Patriot's stare grows slowly from 1 to 4 (Sam). The room (`source/patriots4_room.py`):
+  painted once all round (rule 39): pointed arch with lattice and panelled doors behind Claudia, panelled walls, fire
+  baskets, torches, candles, the Round Table hall through the opening behind Romesh (reused `traitors.wall`,
+  `traitors.round_table`); the table top and coin pile a fixed foreground, the camera turning on the spot (`PanCam`).
+  The film file `source/patriots4.py` (from the template): 12 shots, 49.0 s; recordings placed; subtitle chunks on the
+  recording's own stretches; mouths per stretch (`parts`); plan checks clean; `plan.py` clean. Stills sheet sent:
+  `review/patriots4-stills.jpg` (`python3 source/patriots4.py sheet OUT.jpg`).
+- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3, then Sam's second batch 4-8 (Notes table);
+  Sam: ignore the overhead-picture question; the silences stay for now. Shot 13 added (Sam's yes to my proposal): over
+  the Patriot's shoulder, his pointing arm and finger in the corner, Romesh and Bash drop their mouths open, then
+  slide their eyes to each other (48.2-50.2 s; shot 12 now ends 48.2). Pre-flight wired up (`scene`, `audits`,
+  eyelines by time `looking_at`, `NOTES`, benchmark paths); brief checklist ticked. Faults fixed on the way: hands
+  over the table and the over-shoulder backs were misplaced at full quality (SS 2); `traitors` / `patriots3_cast`
+  put the plain circle hands back on first use (loaded up front now); the table's footprint touched legs on the plan
+  (R 0.62); Romesh looked the wrong way in shot 9; captions merged; the "Errrr" line shortened to fit 700 px.
+  Pre-flight: 7 faults left, all named: 3 voice flags meant (Sam, note 3); 3 captions under reading time (they follow
+  Bash's and Romesh's speech; longer chunks break 42 characters); shot 2 is 8.9 s (Bash's unbroken speech). Sam said
+  "proceed to animatic" (his override: no wait for a yes on the check sheet; checks still run). Animatic 1 rendered
+  and sent. Sam's animatic-1 notes 10-12 applied; pre-flight the same 7 named faults; clips sent (5.5-27 s cuts,
+  44.5-50.2 s ending); waiting for Sam's yes to animatic 2 (check sheet sent).
+- **Next (Opus medium, reading Sam's notes):** Sam's notes on animatic 1, then the clips/fixes; the final render only on
+  his clear yes, then `finish.py` with the Hook Text.
+- **Losses, cheats and my additions:** shot 9 is a film cheat: Romesh and Bash are drawn closer together (227 and 256
+  degrees, not 210 and 270) so both faces are big enough for the eye slide; note 1's knock-ons: the people's legs now show
+  under and beside the small table (they stand behind it), the floor of the winner's room is painted (dark boards:
+  my addition, needed now the table no longer fills the frame's foot), the coins are 86% the size and 5 scattered
+  coins instead of 9 (loss), the pedestal's lit floor ring is drawn but below the frame in every shot; on the plan the
+  four stand 0.52 m from the centre, not 0.95 (no change on screen). Notes 4-8: with the camera at the table's edge
+  the table fills the frame's width again in every shot, so the 25% cut shows only as less table round the pile
+  (flagged to Sam); the Round Table has 8 chairs (5 round the far side, 2 side on, 1 near: more than the 4 asked, so
+  some show in shot 3); the Patriot's pointing finger is an exception to the plain circle hands (Sam asked for Power
+  Crime Action's); the pans no longer change zoom (every table shot is at the same distance). Shot 12 shows the backs of Bash's and
+  Romesh's heads in the bottom corners so the Patriot's two-armed point has targets (addition); the Patriot's hands are
+  circles (no pointing finger: house style). Set dressing from the refs only (fire baskets, torches, candles, lantern
+  look); no signs or jokes of mine. Bash's two silver rings not drawn yet.
+- **Usage (rule 44):** 9% of the week at the stills round (7% at the cast round, 3% at the start): about 6% spent
+  on this film of the 15% budget.
+- **Rules:** Sam will discuss all rule proposals at the END of the project; two are waiting (listed in the archived
+  handover of the cast round).
+- **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` (codemap); `source/patriots4_room.py`;
+  `source/patriots4_cast.py`; `review/patriots4-stills.jpg`.

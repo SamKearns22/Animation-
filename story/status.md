@@ -27,6 +27,10 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
 - 1 Nov (building): the room painted all round (`source/patriots4_room.py`), the film file (`source/patriots4.py`,
   12 shots, 49 s); stills sheet sent (`review/patriots4-stills.jpg`). Sam's notes in (table 50% smaller, the Round
   Table needs legs and chairs; usage 9%). NEXT: apply them (Opus medium, fresh chat): `notes/patriots-4.md`.
+- 1 Nov (notes, Opus medium): Sam's stills and animatic-1 notes 1-24 applied (smaller table, camera at the table's
+  edge, jump cuts, seats 12/3/6/9, one room, Traitors-film Claudia, original Patriot eyes, shot 13 reaction);
+  animatic 1 sent; pre-flight 7 named faults. NEXT: animatic 2 (Sonnet, fresh chat; Sam's go-ahead given):
+  `notes/patriots-4.md`, "Where things stand".
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
