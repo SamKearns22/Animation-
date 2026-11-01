@@ -59,7 +59,12 @@
   (effects): "Smoke from a moving or short-lived fire starts big and grows fast, or the column breaks into a string of
   beads."
 - **Rule requests and proposals not yet in a guide:** none from Sam (searched this file); the two lessons above are mine.
-- **Usage budget (rule 44):** 34% of the week at the last handover; ask Sam for the figure now.
+- **Usage budget (rule 44):** 37% of the week (Sam, 1 Nov, end of the effects stage: the effects, the wreck and clips
+  (c)-(e) took about 3%). Ask again at the next handover.
+- **At the end of this film (Sam, 1 Nov; do these after the final is sent, before closing the film):** (1) an audit of
+  the project for what can be streamlined and made more efficient: which checks run too often or repeat each other, and
+  ideas to use fewer tokens in film production without losing quality; (2) an audit of how my messages to Sam during
+  work can be shorter, clearer and more useful. Keep this item in every handover until both are done.
 - **Files to open:** this file (the Showstopper list and its ticks, "My additions"); the docstrings of
   `source/flying_whales_wreck.py` (CONTACTS, THROWN, FIREBALLS, FIRES, `story`) and `source/flying_whales_fx.py`;
   `guides/film-quality-rules.md` 5, 15, 25, 32, 33, 48; `guides/preflight.md` before the animatic.

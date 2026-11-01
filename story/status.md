@@ -34,6 +34,9 @@ Read this first in any new session, after CLAUDE.md.
   each whale breaks, pieces thrown, falling, splashing and sinking, fires, the finale tip and slide, freezes and
   shake; `check` clean). The rig's three clips sent: (c) Inky through the legs, (d) Blaze's fireball, (e) the finale.
   Next (fresh chat, Opus medium): Sam's notes on the clips, the emoji in the Hook Text, then the animatic check sheet.
+  Usage: 37% of the week. **At the end of this film (Sam, 1 Nov):** an efficiency audit (streamlining, checks run too
+  often or doubled up, fewer tokens without losing quality) and an audit of how my messages to Sam can be shorter and
+  clearer (see the film's handover).
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,
