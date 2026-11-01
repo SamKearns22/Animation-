@@ -92,6 +92,35 @@ def debird(x, report=False):
     return (y, hit.any(axis=0).mean() * len(x) / SR) if report else y
 
 
+LOW_BIRDS = set()    # recordings whose birds also sing at 2.4-4 kHz, inside the voice's own range (a film adds names)
+
+
+def debird_low(x):
+    """Birds at 2.4-4 kHz (Patriots 4, note 31: debird's 4 kHz floor missed Claudia's, wavy lines at 3-4 kHz running
+    between her words). Here a voice has harmonics too, so a tone counts only when it stands WHISTLE_DB above the
+    spectrum round it AND alone: nothing within half that of it 140-330 Hz either side, where a voice's next harmonic
+    would be. Brought to half the level round it. Only for recordings named in LOW_BIRDS: on the men's recordings
+    (no birds seen) it thinned Bash's voice."""
+    from scipy.ndimage import binary_dilation, median_filter
+    nper = 1024
+    f, t, X = stft(x, SR, nperseg=nper, noverlap=nper * 7 // 8)
+    mag = np.abs(X)
+    idx = np.where((f >= 2400) & (f <= 4000))[0]
+    m = mag[idx]
+    around = median_filter(mag, size=(61, 1), mode='nearest')[idx] + 1e-12
+    nb = np.zeros_like(m)
+    for o in range(3, 8):
+        nb = np.maximum(nb, np.maximum(mag[idx - o], mag[idx + o]))
+    hit = (m > around * 10 ** (WHISTLE_DB / 20)) & (m > nb * 10 ** (WHISTLE_DB / 40))
+    if not hit.any():
+        return x
+    hit = binary_dilation(hit, np.ones((7, 5), bool))
+    g = np.ones_like(mag)
+    g[idx] = np.where(hit, np.minimum(1.0, 0.5 * around / m), 1.0)
+    _, y = istft(X * g, SR, nperseg=nper, noverlap=nper * 7 // 8)
+    return y[:len(x)]
+
+
 def denoise(x):
     """Gentle spectral noise reduction, learnt from the quietest tenth of the recording."""
     nper = 2048
@@ -243,7 +272,10 @@ def line(name):
     """A recording, cleaned and set to the shared line loudness."""
     if name not in CACHE:
         x = load(os.path.join(HERE, 'audio', name + '.m4a'))
-        x = edges(smooth_tail(denoise(debird(dehum(x)))))
+        x = debird(dehum(x))
+        if name in LOW_BIRDS:
+            x = debird_low(x)
+        x = edges(smooth_tail(denoise(x)))
         CACHE[name] = x * 10 ** ((LINE_LUFS - lufs(x)) / 20)
     return CACHE[name]
 

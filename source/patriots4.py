@@ -40,6 +40,7 @@ import views as V                # noqa: E402
 mouths.install(B)
 install_circle_hands(B)
 FPS, SR = 12, MA.SR
+MA.LOW_BIRDS.add('patriots4-claudia-1')   # animatic 3 note 33: her birds at 3-4 kHz (below debird's 4 kHz floor)
 
 # =============================================== STORY =============================================================
 NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'patriots-4.md')
@@ -218,6 +219,7 @@ def face_y(who):
     return neck_y(who) - 150 * PC.P3.scale_for(CAST[who], S)
 
 
+LOWER = 230.0        # frame pixels the camera looks lower in shots 9 and 13 (the beams were the top 200)
 NEAR_Z, NEAR_CY = 1.35, 1050.0   # Sam, 1 Nov notes 8-9: every table shot with the camera in at the table's edge; the
                                 # table's extra scale puts its near rim at the frame's foot (patriots4_room.near_for)
 
@@ -240,7 +242,7 @@ def pancam(t):
         cy = RM.rim_cy(z)
     if s in ('his view', 'reaction'):             # the cheat (note 29): a little wider, so both fit, hands and all;
         z = 1.1                                   # the one table size (note 25)
-        cy = RM.rim_cy(z)
+        cy = RM.rim_cy(z) + LOWER / z             # animatic 3 note 31: the camera down, the beamed roof out of the top
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
     return pc
@@ -367,7 +369,7 @@ def state(who, t):
             sp['brow_c_real'] = sp.get('brow_c', tuple(int(v * 0.8) for v in sp.get('hair_c', (60, 44, 34))))
             sp['brow_c'] = sp['skin']                     # the library's own brows hidden under the raised ones
         j = point_at_them(sp) if t >= T_POINT else V.standing(sp)
-    j['bob'] = 3.0 * F.breath(t, 4.0, 1.0, WHO.index(who) * 0.27)
+    j['bob'] = 0.0      # animatic 3 note 32: the breathing bob read as floating; they stand still
     return sp, j
 
 
