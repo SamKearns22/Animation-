@@ -162,6 +162,8 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 22 | 13 | 48.2 s | No Patriot in the final shot: just Romesh and Bash | done 1 Nov |
 | 23 | all | | More candles and torches along the other walls | done 1 Nov: 9 more round the room, 7 on the Round Table end's far wall |
 | 24 | | | "Rules that bite" in self-reviews distracting | done 1 Nov: rule 48 changed (slips only) |
+| 25 | all | | (animatic 2) Three different table sizes (Patriot shot biggest, Bash close smallest); the size in front of Claudia is ideal | OPEN: cause: `near_for` stretches the table per shot to reach the frame's foot. Fix: one table size = Claudia close-up in every shot; move the camera, not the table |
+| 26 | 9 | 40.75 s | (animatic 2) Romesh and Bash are no longer at 6 and 9 | OPEN: cause: my cheat in `ANGLES` ('his view' and 'reaction': Romesh 200, Bash 224, not 180 and 270), added so the eyes can slide to each other. Fix: seat them at 180 and 270 again and find another way to show the look |
 | 9 | 12, 13 | 48 s | "We don't get to see R and B's reactions" | done 1 Nov: shot 13 (my proposal, Sam's yes) |
 | 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 
