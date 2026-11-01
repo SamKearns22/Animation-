@@ -1,34 +1,50 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Rules that bite at this stage (rule 48):** 40 (build only what the approved Showstopper list says; tick it at
-  the first clip); 8 and 33 (rehearsal clips of the risky moves before the rest: the first hits, the finale);
-  32 (debris settles properly; here it falls into the sea and sinks, never floats or overlaps); 22 (any set
-  dressing of mine shown on the sheet and named); 34 (mirror test before the whale sheet goes out).
-- **Done (1 Nov, planning, Opus):** 34 references filed (`references/flying-whales/`); brief checklist; Showstopper
-  list (16 items, sent to Sam; he asked no trims); ambition estimate about a third of a week; rough composition sheet
-  sent (`review/flying-whales-composition.jpg`); Sam's answers in (see Decisions). Sam turned DOWN the cost-saving
-  package: build everything as planned (whale from every view, rig in about 30 parts, lifeboats and crane whip kept,
-  three rehearsal clips).
-- **Done (1 Nov, building, Opus): the humpback** (`source/whale.py`, in `guides/kit-catalogue.md`; size in
-  `source/sizes.py`). One model in metres drawn flat in the house style, so it works from any view and size (rule 39:
-  seen from 3+ angles and in the prior scene, so a model, like the Roadster). Side, rear three-quarter, below, above,
-  front three-quarter, head on; five patterns from ref whale-patterns-below (1 Inky, 2 Blaze, 3 Freckle, 4 Bib,
-  5 Ghost; sizes x0.95-1.06); flipper wave, tail beat, climb, dive, arch, blow spray. Line check clean on all five
-  (`whale.py check`); mirror test done (side view from its left has the nose to the left; from below its left is on
-  screen right, as in the ref). Sheet sent: `review/flying-whales-whale-sheet.jpg`. Draw time about 0.4 s a whale at
-  540 wide; a 12 s shot with five whales should render in under 10 minutes.
-- **Next (fresh chat, Opus high; the rig is a new build):** Sam has not yet said yes to the whale sheet; his notes or yes come first (step 3). Then (same stage, Opus high): copy
-  `source/satire_template.py` to `source/flying_whales.py` with no cast (step 1, held back: nothing needed it for the
-  whale); the rig (`source/flying_whales_rig.py`): Jackdaw from the diagonal, about 30 breakable parts, JACKDAW name
-  board; rig sheet beside a whale at real size (`whale.draw` with the film's camera). Then the dusk sky and sea, then
-  the three rehearsal clips.
-- **Losses and my additions Sam should know about:** additions listed below (whales fly on out of frame, a freeze on
-  each contact, lifeboats and crane whip; the whale's slate blue-grey and the pattern names). No losses.
+- **Rules that bite at this stage (rule 48):** 3 (benchmark the sky and sea against the dusk refs before Sam sees
+  them); 22 (any set dressing of mine shown on the sheet and named); 40 (build only what the approved Showstopper
+  list says; tick it at the first clip); 8 and 33 (rehearsal clips of the three risky moves before the rest); 32
+  (debris falls into the sea and sinks, never floats or overlaps).
+- **New from Sam (1 Nov, during the rig build): no Hook Text in this scene. Another first scene, not yet written,
+  comes before this shot** (the whales are seen there too, which is why the whale is a full model). The sky at the
+  top of the frame is now free: kept for the smoke.
+- **Done (1 Nov, building, Opus): the rig** (`source/flying_whales_rig.py`, in `guides/kit-catalogue.md` and
+  `source/catalogue.py`; sizes in `source/sizes.py`). The Jackdaw from the diagonal in 31 breakable parts (4 legs,
+  8 bracing panels, cellar and process decks in halves, JACKDAW board, living and process modules, two lifeboats,
+  containers, crane pedestal and boom, derrick, chimneys, flare boom with a moving flame, helideck, its truss,
+  escape chute, walkway stub), each in real metres drawn flat through the film's one camera (`film_cam()`), the same
+  camera the whales use. Why parts in metres and not one painting (rule 39 says 2D for a locked camera): pieces must
+  tip, spin and sink the right way, the deck tips as one block, and whales pass between the legs; still no 3D
+  library, just boxes and tubes drawn flat. Moving a part (`State.move`) carries what stands on it; `State.whole`
+  tips everything as one block; anything below the sea is cut off by itself (the waterline). `composite()` lays
+  rig and whales together pixel by pixel by depth (whale.py now gives every whale a `depth_map`; the line check still
+  passes). Line check clean (`flying_whales_rig.py check`); benchmark against the three Jackdaw photos all ticked
+  (`python3 source/benchmark.py flying_whales_rig OUT.jpg`); mirror test: JACKDAW reads the right way; the helideck
+  is on the left as on the composition sheet (we see the opposite corner from the photo, not a mirror). About 1.4 s
+  a frame at full size, 0.4 s small. Sheet sent: `review/flying-whales-rig-sheet.jpg` (remake:
+  `python3 source/flying_whales_rig.py sheet OUT.jpg`).
+- **Sam has not yet answered the whale sheet or the rig sheet.** His notes or yes come first in the next chat.
+- **Flag for Sam (rig sheet):** at real size a whale at the rig is small: about 140 x 40 px in the full frame,
+  about a quarter of the rig's width, and from this angle the crossed bracing hides much of a whale between the legs.
+  The whales are big as they pass the camera. Asked him whether real size stays.
+- **Next (fresh chat, Opus high; a new build):** (1) Sam's notes on the whale and rig sheets. (2) The dusk sky and sea
+  (`source/flying_whales_sea.py`): pink-purple sky with streaky clouds lit from below, the sea mirroring it in
+  bands, sparkle, a slow swell, the rig's reflection and warm streaks under its lights, foam at each leg; benchmark
+  against dusk-pink-sky-rig and dusk-sunset-waves (rule 3); replaces `backdrop()` in the rig file. (3) Then copy
+  `source/satire_template.py` to `source/flying_whales.py` (held back again: nothing needed it yet; it needs the
+  12 s timeline, `scene(t)`, `PROP_SIZES`, `EFFECTS` with the flame, `BENCHMARK` from the rig file, no Hook Text)
+  and render the three rehearsal clips (rule 8): the first whale through the legs, a whale bursting through the
+  decks with a fireball, the final tip, slide and crown splash.
+- **Losses and my additions Sam should know about:** additions: blue and red containers on the process deck, rows of
+  lit windows and deck lights, railings on the deck ledges (all on the rig sheet); still standing from the whale
+  stage: whales fly on out of frame, a freeze on each contact, lifeboats and crane whip, the whale's slate blue-grey
+  and the pattern names. No losses (railings along the roof edges were tried and dropped before Sam saw them: they
+  had no outline against the sky).
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** 24% of the week used at the end of the whale stage (Sam, 1 Nov). Ask again at the start of the rig chat.
-- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 8, 22, 32-34, 39, 40;
-  `guides/kit-catalogue.md`; the references.
+- **Usage budget (rule 44):** 24% of the week at the end of the whale stage; not asked at the start of the rig chat
+  (missed); asked at this handover.
+- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 3, 8, 22, 32-34, 39, 40;
+  `guides/kit-catalogue.md`; the dusk references.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
@@ -130,10 +146,12 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | dusk-pink-sky-rig, dusk-sunset-waves | purple top, pink, orange at the horizon; streaky clouds lit from below; sea mirroring the sky in bands; warm streaks under the lights | |
 Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one duplicate dusk photo.
 
-## My additions (flag to Sam; none built yet)
+## My additions (flag to Sam)
 - Whales flying on out of frame after their hit (the brief says "no harm"; it doesn't say where they go).
 - A one- or two-frame freeze on each contact, and camera shake.
 - Lifeboats popping off and crane whipping (set life in the collapse).
+- On the rig (built 1 Nov, on the rig sheet): blue and red containers on the process deck; rows of lit windows and
+  deck lights; railings on the deck ledges.
 - The whales are slate blue-grey, not near-black (so the outline still reads at dusk and the line check can tell skin
   from ink); names for the five patterns (Inky, Blaze, Freckle, Bib, Ghost) are labels on the sheet only.
 
@@ -144,6 +162,7 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 
 Decisions made:
 - Sam (1 Nov): no cost-saving cuts; the whales are needed in the prior scene too, so build them from every view.
+- Sam (1 Nov, during the rig build): no Hook Text in this scene; another first scene, not yet written, comes first.
 - Sam's answers (1 Nov): a prior scene comes first (not written yet); this shot is 12 s; no Hook Text for now;
   the sign reads the real name JACKDAW; no sound for now, visuals only (sound later); whales at real size (14 m);
   five whales.

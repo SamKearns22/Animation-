@@ -607,13 +607,20 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
         out[m] = (out[m] * (1 - tk) + np.array([tr, tg, tb]) * tk).astype(np.uint8)
     rgba = np.dstack([out, (full_alpha * 255).astype(np.uint8)])
     img = Image.fromarray(rgba, 'RGBA')
+    # depth in metres per pixel (inf where empty; an ink line takes the nearest depth beside it), so a film can lay
+    # the whale in among other things pixel by pixel (flying_whales_rig.composite)
+    from scipy import ndimage as _ND
+    Dm = np.where(alpha, D / 100.0, np.inf)
+    Dm = np.where(ink, _ND.minimum_filter(Dm, size=k if k % 2 else k + 1), Dm)
     if S != 1:
         img = img.resize((bw, bh), Image.LANCZOS)
+        Dm = Dm[:bh * S, :bw * S].reshape(bh, S, bw, S).min(axis=(1, 3))
 
     blow_xy = cam.screen(surf(0.205, 0.0, 0.02))[0]
     bb = img.getbbox()
     bbox = (bb[0] + x0, bb[1] + y0, bb[2] + x0, bb[3] + y0) if bb else None
     spr = Sprite(img, (x0, y0), tuple(blow_xy), bbox, float(np.linalg.norm(pose.pos - campos)), None)
+    spr.depth_map = Dm.astype(np.float32)
     if blow is not None:
         _blow(spr, cam, pose, surf(0.205, 0.0, 0.02), blow, sz, ol)
     return spr
@@ -671,6 +678,14 @@ def _blow(spr, cam, pose, top, age, sz, ol):
         d.ellipse([x - bx0 - r * 0.85 - r * 0.15, y - by0 - r * 0.85 - r * 0.18,
                    x - bx0 + r * 0.85 - r * 0.15, y - by0 + r * 0.85 - r * 0.18], fill=BLOW[0] + (255,))
     canvas.alpha_composite(lay)
+    dm = getattr(spr, 'depth_map', None)
+    if dm is not None:                                    # the spray sits at the blowhole's depth
+        big = np.full((canvas.height, canvas.width), np.inf, np.float32)
+        ox, oy = int(x0 - bx0), int(y0 - by0)
+        big[oy:oy + dm.shape[0], ox:ox + dm.shape[1]] = dm
+        sp = np.asarray(lay)[..., 3] > 0
+        big[sp] = np.minimum(big[sp], float(np.linalg.norm(top - cam.pos)) - 1.0)
+        spr.depth_map = big
     spr.img = canvas
     spr.xy = (bx0, by0)
 
@@ -726,6 +741,13 @@ def _render_view(eye, pattern, size=(900, 600), **kw):
     if spr:
         spr.paste(frame)
     return frame
+
+
+def picture(t=0.0):
+    """One whale from the rear three-quarter on the dusk mauve (for catalogue.py)."""
+    bg = Image.new('RGBA', (900, 600), (214, 200, 214, 255))
+    bg.alpha_composite(_render_view(VIEWS[1][1], 1, (900, 600), t=t, flap=1.0, beat=1.0))
+    return bg
 
 
 def sheet(out):
