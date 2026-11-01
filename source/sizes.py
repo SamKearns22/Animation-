@@ -39,6 +39,8 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # Newsdesk (26 Oct): Maul's double-bladed lightsaber, measured on Sam's ref 2 against a 1.75 m man: hilt about
     # 56 cm, each blade about 65 cm (long thin things: length first)
     'saberstaff hilt': (0.56, 0.04), 'saber blade': (0.65, 0.04),
+    # Flying Whales (1 Nov): a humpback 14 m long, about 3.3 m deep at the chest (source/whale.py), flukes 5 m across
+    'humpback whale': (14.0, 3.3),
     'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
 }
 

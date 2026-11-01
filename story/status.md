@@ -9,6 +9,9 @@ Read this first in any new session, after CLAUDE.md.
   (`review/flying-whales-composition.jpg`); questions to Sam. Answers in: 12 s shot after a prior scene (not written), JACKDAW sign, visuals only,
   five whales at real size; no cost cuts. Next (fresh chat, Opus high): build the humpback from every view, whale sheet
   to Sam, then the rig. Handover in `notes/flying-whales.md`.
+- 1 Nov (building, Opus): the humpback built (`source/whale.py`: any view and size, five patterns, flipper wave, tail
+  beat, climb, dive, blow; line check clean); sheet sent (`review/flying-whales-whale-sheet.jpg`). Waiting for Sam's
+  yes, then the rig.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

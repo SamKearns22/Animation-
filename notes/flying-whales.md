@@ -10,18 +10,21 @@
   sent (`review/flying-whales-composition.jpg`); Sam's answers in (see Decisions). Sam turned DOWN the cost-saving
   package: build everything as planned (whale from every view, rig in about 30 parts, lifeboats and crane whip kept,
   three rehearsal clips).
-- **Next (building, Opus high, fresh chat):**
-  1. Copy `source/satire_template.py` to `source/flying_whales.py` (no people: strip the cast to none, keep the
-     house style and checks).
-  2. Build the humpback (`source/whale.py`, new kit; add to `guides/kit-catalogue.md`): **every view**, because
-     the whales also appear in a prior scene not yet written: side, rear three-quarter (from behind and above), from
-     below, front three-quarter; flippers that wave, tail swish, body pitch for climb and dive, blow spray; five
-     belly and fluke patterns (ref whale-patterns-below). Real size 14 m.
-  3. Whale sheet to Sam (every view, five patterns, a 14 m scale bar), and wait for his yes.
-  4. The rig (`source/flying_whales_rig.py`): Jackdaw from the diagonal, about 30 breakable parts, JACKDAW name
-     board; rig sheet beside a whale at real size. Then the dusk sky and sea, then the three rehearsal clips.
+- **Done (1 Nov, building, Opus): the humpback** (`source/whale.py`, in `guides/kit-catalogue.md`; size in
+  `source/sizes.py`). One model in metres drawn flat in the house style, so it works from any view and size (rule 39:
+  seen from 3+ angles and in the prior scene, so a model, like the Roadster). Side, rear three-quarter, below, above,
+  front three-quarter, head on; five patterns from ref whale-patterns-below (1 Inky, 2 Blaze, 3 Freckle, 4 Bib,
+  5 Ghost; sizes x0.95-1.06); flipper wave, tail beat, climb, dive, arch, blow spray. Line check clean on all five
+  (`whale.py check`); mirror test done (side view from its left has the nose to the left; from below its left is on
+  screen right, as in the ref). Sheet sent: `review/flying-whales-whale-sheet.jpg`. Draw time about 0.4 s a whale at
+  540 wide; a 12 s shot with five whales should render in under 10 minutes.
+- **Next:** wait for Sam's yes on the whale sheet (step 3). Then (same stage, Opus high): copy
+  `source/satire_template.py` to `source/flying_whales.py` with no cast (step 1, held back: nothing needed it for the
+  whale); the rig (`source/flying_whales_rig.py`): Jackdaw from the diagonal, about 30 breakable parts, JACKDAW name
+  board; rig sheet beside a whale at real size (`whale.draw` with the film's camera). Then the dusk sky and sea, then
+  the three rehearsal clips.
 - **Losses and my additions Sam should know about:** additions listed below (whales fly on out of frame, a freeze on
-  each contact, lifeboats and crane whip). No losses.
+  each contact, lifeboats and crane whip; the whale's slate blue-grey and the pattern names). No losses.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
 - **Usage budget (rule 44):** ask Sam for this week's figure at the start of the next chat and log it here.
 - **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 8, 22, 32-34, 39, 40;
@@ -131,6 +134,8 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 - Whales flying on out of frame after their hit (the brief says "no harm"; it doesn't say where they go).
 - A one- or two-frame freeze on each contact, and camera shake.
 - Lifeboats popping off and crane whipping (set life in the collapse).
+- The whales are slate blue-grey, not near-black (so the outline still reads at dusk and the line check can tell skin
+  from ink); names for the five patterns (Inky, Blaze, Freckle, Bib, Ghost) are labels on the sheet only.
 
 ## Notes
 | # | shot | time | note | status |

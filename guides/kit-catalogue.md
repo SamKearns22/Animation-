@@ -48,6 +48,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Dragonite | `source/poker_mon_cast.py` | |
 | Tesla Roadster (every angle) | `source/roadster.py` | |
 | Crabs (Strictly Crabs) | `source/strictly_crabs_*.py` | realistic, not house style |
+| Humpback whale (one model in metres, drawn flat in house style from ANY view and size: side, behind, below, above, head on; five belly and fluke patterns, each its own size; flippers wave, tail beats, climb, dive, arch, blow spray). Real size 14 m | `source/whale.py` (`draw(cam, pose, pattern, t, flap, beat, arch, blow)` returns a Sprite to paste; `Cam`, `Pose`, `view_cam`) | `python3 source/whale.py sheet OUT.jpg`, `moves OUT.jpg`, `reel OUT.mp4 --small`; `whale.py check` runs the line check on all five. Flying Whales, 1 Nov |
 
 ## Props (real sizes in `source/sizes.py`)
 | what | file |
