@@ -163,8 +163,9 @@ working habits saved or cost whole rounds.
     them), and eyes that are meant to meet are shown on the check sheet as one frame each. [tool: `filmkit.eyeline`
     with `aim=`, `drawn=`, `at=` measures each face and its pupils as drawn (28 Oct); `filmkit.look_sheet` makes the
     sheet of eyes that meet; meant looks away in the film's `LOOKS_OK`]
-44. **A usage budget per film.** The plan states a share of a week; at each handover I ask Sam for the week's figure and
-    log it in the film's notes; a film over budget is trimmed before the next stage. [by hand]
+44. **A usage budget per film.** The plan states a share of a week; I ask Sam for the week's figure only after a
+    building stage, after the animatic, and when the final is sent (Sam, 1 Nov: not at every handover), and log it in
+    the film's notes; a film over budget is trimmed before the next stage. [by hand]
 45. **The composition sheet is sent once.** Notes on it are applied and named in the handover, never re-sent for approval.
     [by hand]
 46. **When Sam names frames, look at exactly those frames first,** at the size he saw them, before changing anything

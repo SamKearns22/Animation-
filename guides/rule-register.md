@@ -70,7 +70,7 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | Q41 | Every arm ends in a visible hand, every frame, every view it is seen in | film-quality-rules 41 | Patriots 3 notes 18, 21 | `source/handcheck.py` in pre-flight, every frame (built 28 Oct); tests: `kittests.py hands` |
 | Q42 | Poses from a gallery tested front, side and behind | film-quality-rules 42 | Patriots 3 notes 12, 17, 18, 21 | `source/posegallery.py` (sheet, hand check on every view; built 28 Oct); `guides/pose-gallery.md`; test: `kittests.py gallery`; picking from it by hand |
 | Q43 | Looks tested at the shot's own camera; eyes that meet shown as one frame each | film-quality-rules 43 (extends 25) | Patriots 3 note 11 (a look at the wall) | `filmkit.eyeline(aim=, drawn=, at=)` and `check_eyelines` (built 28 Oct), in the film's audit; `filmkit.look_sheet`; test: `kittests.py looks` |
-| Q44 | A usage budget per film; the week's figure asked for at each handover | film-quality-rules 44 | Sam, 27 Oct | by hand (handover search) |
+| Q44 | A usage budget per film; the week's figure asked for only after a building stage, the animatic and the final | film-quality-rules 44 | Sam, 27 Oct; reworded 1 Nov | by hand (handover search) |
 | Q45 | The composition sheet is sent once | film-quality-rules 45 | Sam, 27 Oct | by hand (handover search) |
 | Q46 | Frames Sam names are looked at first, at his size | film-quality-rules 46 | Patriots 3 note 20 | by hand on the check sheet |
 | Q47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner check) | film-quality-rules 47 | Patriots 3 notes 21-22 | by hand on the check sheet; `--nostamp` standard in `satire_template.py` (28 Oct; test: `kittests.py nostamp`) |

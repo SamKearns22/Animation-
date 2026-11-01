@@ -31,6 +31,7 @@
   audit: build pieces only to the level the camera shows, and decide how the end looks before splitting the model.
 - **Losses and my additions Sam should know about:** unchanged since the last handover (archive, 1 Nov effects stage),
   plus my one small addition today: "III" kept on the same line as "Planet" in the Hook Text.
+- **Rule 44 reworded (Sam, 1 Nov: "Yes write into rules"):** usage asked only after a building stage, the animatic and the final; in `film-quality-rules.md` and `rule-register.md`.
 - **Lessons I'd propose (16 Oct: say the number and I'll write them in):** (1) `guides/best-practice.md` Part 1 (falling
   things): "A long piece that falls into water or onto a floor lands flat: check its tilt at the moment it lands, and
   choose its spin so it isn't standing on its end." (2) `guides/satire.md` (effects): "Smoke from a moving or
