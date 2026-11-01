@@ -15,6 +15,12 @@ Read this first in any new session, after CLAUDE.md.
   (6th of 14) fail it. Sam approved rules 49-51 (likeness check, a readable face, the likeness pack): written into film-quality-rules,
   satire.md and the rule register. 52-56 declined (too specific to this film).
 
+## In progress: "Patriots 4" (TikTok satire: the Celebrity Traitors winner's table; Romesh and Bash name their
+refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
+- 1 Nov (planning, Opus): references (`references/patriots-4/`) and 6 recordings (`source/audio/patriots4-*`) filed;
+  plan and shot list in the notes; questions sent to Sam. NEXT: his answers and likeness photos, then the plan file
+  and the composition sheet; building waits for his go.
+
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
 - 27 Oct (building, Opus): references and sounds in (sounds kept off GitHub: re-attach in a new chat); the Patriot
