@@ -30,7 +30,8 @@ import flying_whales_opener as O  # noqa: E402  the opener under the sea
 import flying_whales_sea as SEA  # noqa: E402  the rig scene's sky and sea
 import flying_whales_rig as R    # noqa: E402  the rig
 import flying_whales_paths as PATHS  # noqa: E402  the whales' paths in the rig scene
-import flying_whales_fx as FX    # noqa: E402  the water burst (the fireballs and the rest come next)
+import flying_whales_fx as FX    # noqa: E402  the effects (burst, splashes, fire, smoke, bits)
+import flying_whales_wreck as WRECK  # noqa: E402  what breaks when, the pieces falling, the finale
 import whale as W                # noqa: E402
 
 FPS, SR = 24, MA.SR
@@ -64,7 +65,19 @@ ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
 TOUCHES, FREE_MOVES, SOUND_SOURCES = [], [], {}
 EFFECTS = [('water burst', 'burst', FX.test_draw(0.3)),          # rule 15: lumpy, never a star (viewchecks)
            ('water burst falling back', 'splash', FX.test_draw(1.1)),
-           ('foam ring', 'foam', FX.test_draw(0.8, 'foam'))]        # the fireballs and the rest join as built
+           ('foam ring', 'foam', FX.test_draw(0.8, 'foam')),
+           ('fireball bursting', 'burst', FX.test_draw(0.12, 'fireball')),
+           ('fireball', 'burst', FX.test_draw(0.4, 'fireball')),
+           ('fireball burning out', 'burst', FX.test_draw(0.85, 'fireball')),
+           ('black smoke clumps', 'smoke', FX.test_draw(0.0, 'smoke')),
+           ('steam', 'smoke', FX.test_draw(0.0, 'steam')),
+           ('dust', 'smoke', FX.test_draw(0.0, 'dust')),
+           ('deck fire', 'fire', FX.test_draw(1.0, 'fire')),
+           ('splash (a falling piece)', 'burst', FX.test_draw(0.3, 'splash')),
+           ('splash falling back', 'splash', FX.test_draw(0.9, 'splash')),
+           ('crown splash (the finale)', 'burst', FX.test_draw(0.5, 'crown')),
+           ('crown splash falling back', 'splash', FX.test_draw(1.4, 'crown')),
+           ('flying bits', 'debris', FX.test_draw(0.0, 'bits'))]
 JOKE_PROPS = []
 # ====================================================================================================================
 
@@ -108,21 +121,26 @@ def rig_whales(ts):
             lumps = FX.burst_parts(cam, ps, sz, age, 11 + k * 7, head, hole)
             dist = lambda l: float(np.linalg.norm(np.asarray(l[0]) - cam.pos))
             for side, keep in ((d + 0.05, lambda l: dist(l) >= d), (d - 0.05, lambda l: dist(l) < d)):
-                lay = FX.draw_lumps(cam, [l for l in lumps if keep(l)])
-                if lay:
-                    extra.append((side, W.Sprite(lay, (0, 0), None, None, side, None)))
+                spr = FX.lumps_sprite(cam, [l for l in lumps if keep(l)], side)
+                if spr:
+                    extra.append((side, spr))
             foam += FX.foam_ring(cam, hole, age, 11 + k * 7, sz)
     return extra, foam
 
 
 def rig_scene(t, ss=1):
-    """The rig scene at film time t: sea and sky, foam on the sea, then the rig with the whales and their bursts
-    sorted in among its pieces by distance (the hits and the effects come next)."""
-    ts = t - CUT
+    """The rig scene at film time t: sea and sky (lit orange under the fires), foam on the sea, then the rig (pieces
+    moved, holed or gone: flying_whales_wreck) with the whales, their bursts and every effect sorted in among its
+    pieces by distance; then the camera's jolt. The story clock stands still for two frames at each main hit."""
+    real = t - CUT
+    ts = WRECK.story(real)
     extra, foam = rig_whales(ts)
-    sea = SEA.paint(ts, ss=ss).convert('RGBA')
-    FX.draw_foam(sea, SEA.CAM, foam)
-    return R.draw(sea, ts, extra=extra).convert('RGB')
+    fx, fx_foam, glows = WRECK.effects(ts)
+    xf, gone, swap = WRECK.rig_state(ts)
+    sea = SEA.paint(ts, glows=glows, ss=ss).convert('RGBA')
+    FX.draw_foam(sea, SEA.CAM, foam + fx_foam)
+    img = R.draw(sea, ts, xf=xf, gone=gone, extra=extra + fx, swap=swap).convert('RGB')
+    return WRECK.shift(img, *WRECK.shake(real))
 
 
 def picture(t):

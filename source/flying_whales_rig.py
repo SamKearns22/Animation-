@@ -544,7 +544,7 @@ def render(part, cam=CAM, xf=None, ss=SS):
             S_, d = cam.screen(np.array(q))
             if (d < 1).any():
                 continue
-            spots.append((S_, it['col'] if it['col'] in LAMP else _tint(it['col'])))
+            spots.append((S_, it['col'] if it['col'] in LAMP or it['col'] == INK else _tint(it['col'])))
         elif k == 'text':
             pts = mv(it['quad'])
             n = it['n'] @ Rm.T
@@ -684,10 +684,15 @@ def foam(img, t, gone=(), cam=CAM):
     img.alpha_composite(lay)
 
 
-def draw(base, t, xf=None, gone=(), with_flame=True, cam=CAM, extra=()):
+_SWAPPED = {}
+
+
+def draw(base, t, xf=None, gone=(), with_flame=True, cam=CAM, extra=(), swap=None):
     """The rig over a sea painting (RGB or RGBA), pieces in xf moved, pieces in gone left out. extra: other sprites
-    (the whales) as [(distance from the camera in m, sprite)], sorted in among the pieces far to near. Returns RGBA."""
+    (the whales) as [(distance from the camera in m, sprite)], sorted in among the pieces far to near. swap: {name:
+    (key, Part)} a changed piece drawn instead (a holed deck; painted at rest once per key). Returns RGBA."""
     xf = xf or {}
+    swap = swap or {}
     img = base.convert('RGBA') if base.mode != 'RGBA' else base.copy()
     names = [n for n in PARTS if n not in gone]
     order = [(_order_key(n, xf.get(n)), 0, n) for n in names] + [(-d, 1, k) for k, (d, _) in enumerate(extra)]
@@ -695,7 +700,16 @@ def draw(base, t, xf=None, gone=(), with_flame=True, cam=CAM, extra=()):
         if kind == 1:
             extra[n][1].paste(img)
             continue
-        spr = _rest(n) if n not in xf and cam is CAM else render(PARTS[n], cam, xf.get(n))
+        if n in swap:
+            key, part = swap[n]
+            if n not in xf and cam is CAM:
+                if (n, key) not in _SWAPPED:
+                    _SWAPPED[(n, key)] = render(part)
+                spr = _SWAPPED[(n, key)]
+            else:
+                spr = render(part, cam, xf.get(n))
+        else:
+            spr = _rest(n) if n not in xf and cam is CAM else render(PARTS[n], cam, xf.get(n))
         if spr:
             spr.paste(img)
         if n == 'flare_boom' and with_flame and 'flare_boom' not in xf:

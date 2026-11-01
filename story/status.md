@@ -29,6 +29,11 @@ Read this first in any new session, after CLAUDE.md.
   tracks, two loops round the rig, every hit planned and checked); the water burst (`source/flying_whales_fx.py`);
   clip (b) the rise and cut sent. Next (fresh chat, Opus high): the hits and effects, then the rig's three clips.
   Usage: 34% of the week.
+- 1 Nov (building, Opus high): the hits and effects (`source/flying_whales_fx.py`: fireball, smoke/steam/dust clumps,
+  deck fires, splashes up to the crown, flying bits, holes) and the wreck (`source/flying_whales_wreck.py`, new: what
+  each whale breaks, pieces thrown, falling, splashing and sinking, fires, the finale tip and slide, freezes and
+  shake; `check` clean). The rig's three clips sent: (c) Inky through the legs, (d) Blaze's fireball, (e) the finale.
+  Next (fresh chat, Opus medium): Sam's notes on the clips, the emoji in the Hook Text, then the animatic check sheet.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

@@ -1,5 +1,52 @@
 # Flying Whales: old handovers (newest first)
 
+## Handover of 1 Nov (end of the film file, paths, water burst, clips (a) and (b))
+- **Rules that bite at the next stage (rule 48):** 15 (every new effect listed in `EFFECTS` and shape-tested: the
+  fireball lumpy, never a star; smoke in separate clumps; no motion lines); 32 and 33 (falling pieces land in the sea
+  and sink, never float or balance on a point; test them on short close clips first); 5 (nothing passes through
+  anything: `paths.py contacts` flags any unplanned touch); 25 (each hit readable for at least 0.3 s, a one- or
+  two-frame freeze on contact); 8 (the rig's three rehearsal clips before the rest); 29 (clips carry the time stamp:
+  automatic); 40 (tick Showstoppers 1-18 at the rig clips); 26 (no sound effects until Sam says yes).
+- **Done (1 Nov, building, Opus high):** (1) the film file `source/flying_whales.py` (from the template; no cast; two
+  shots, 'under' 0-5.6 s and 'rig' 5.6-17.6 s; 24 fps, not the house 12, because the camera swing and fast whales
+  strobe at 12; `check` clean). (2) Clip (a), the swing (1.2-4.0 s), sent: the camera now eases its aim onto the lead
+  so side-on the lead whale is whole in the frame (it was cut off by the right edge; the camera sits 5 m further back
+  there). (3) The rig scene's whale paths in metres, `source/flying_whales_paths.py` (see "Rig scene: the whale paths"
+  below): five tracks, the two loops round the rig, hits pinned, speeds checked never to drop into a hit, every
+  contact planned (`contacts`). (4) The water burst, `source/flying_whales_fx.py`, and `whale.draw(cut_z=0)` (the
+  body hidden below the sea); shape-tested (`EFFECTS`). (5) Clip (b), the rise, cut and the rig scene's first second
+  (4.0-6.6 s), sent. (6) `R.draw(extra=...)` sorts whales in among the rig's pieces by distance. Kit catalogue updated
+  (paths, burst, `cut_z`, `extra`). Showstoppers U1-U15 ticked at clips (a) and (b) (U8: the brow reads, but small).
+- **Next (fresh chat, Opus high, building):** the effects in `source/flying_whales_fx.py`: the hits themselves (each
+  piece in `paths.HITS`/`KNOCK_ONS` knocked loose at its contact time with `R.draw(xf=...)`, thrown the way the whale
+  was going, falling under gravity, splashing (small spike splashes, lumpy) and sinking; `PARENT` pieces fall with
+  what they hang on; a 1-2 frame freeze and camera shake on each contact); fireball with black smoke (Blaze's two hits,
+  Bib's helideck), deck fire, steam, dust, the flare's smoke ribbon (Showstopper 3), the crown splash and foam rings;
+  the finale (from 7.6 s: the deck tips left end first as one block, slides into the sea, the tower last). Then the
+  rig's three clips: (c) Inky through the legs (rig 2.2-3.2 s = film 7.8-8.8); (d) Blaze through the cellar deck with a
+  fireball (film 8.4-9.4); (e) the final tip and splash. Clips need no yes; push-notify each. Start the new chat with:
+  "Flying Whales: read the handover in notes/flying-whales.md and carry on (the hits and effects, then the rig's three
+  clips)".
+- **Watch at the next clip:** the blowhole puffs seen from behind may read as white balloons on sticks (judge in
+  motion; Showstopper 5); the burst trips the star test only in its first two frames (a wide flat blob) and at 0.7 s
+  (scattered spray, tested as spray at 1.1 s instead): named, not changed.
+- **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
+  installed; add it before the first animatic (small, Opus medium). Placed with `--y 352`, on for the whole video.
+- **Losses and my additions Sam should know about:** loss: in the opener's side-on stretch the whales are a little
+  smaller (camera 26 m away, not 21, so the lead fits). Change from the rig plan: the whales no longer come "from
+  behind the camera"; they burst out of the sea in front of it (the opener's cut needs them coming up out of the water).
+  Hits moved 0.3 s later than first planned (first hit at 2.56 s: the rig is seen whole a little longer). Additions:
+  the foam ring that breaks into floating froth clumps after each burst; each whale puffs its blowhole 0.9 s after
+  surfacing; the knock-ons (lifeboats, chimneys, derrick) as whales pass through. Earlier: the small white eye under
+  each brow, foam at the legs, the flickering flare.
+- **Rule requests and proposals not yet in a guide:** none (searched this file).
+- **Usage budget (rule 44):** 34% of the week (Sam, 1 Nov, end of this stage: film file, paths, burst, clips (a) and
+  (b) took about 3%). Ask again at the next handover.
+- **Files to open:** this file ("Rig scene: the whale paths", the Showstopper list 1-18); `guides/film-quality-rules.md`
+  5, 8, 15, 25, 32, 33, 40; the docstrings of `source/flying_whales_fx.py`, `source/flying_whales_paths.py`,
+  `source/flying_whales_rig.py` (`draw`, `PARENT`, `rot`, `part_box`), `source/flying_whales_sea.py` (`glow`);
+  `guides/kit-catalogue.md` (reuse `prepper_fx` debris and `patriots3_fx` puffs before building new).
+
 ## Handover of 1 Nov (end of the opener plan)
 - **Rules that bite at this stage (rule 48):** 3 (benchmark the underwater set against "Underwater benchmark" below,
   side by side with the refs, before Sam sees it); 22 (my additions shown and named on the sheet: dusk light under the
