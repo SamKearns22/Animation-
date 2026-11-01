@@ -394,11 +394,12 @@ def _normals(grid, outward_ref=None):
 
 
 def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, light=None, ol=None, ss=2,
-         blow=None, tint=None, phase=0.0):
+         blow=None, tint=None, phase=0.0, brow=True):
     """Draw one whale. pattern 0-4 (PATTERNS) sets the markings and size. t seconds (drives the wave and beat);
     flap 0..1 how much the flippers wave; beat 0..1 how much the tail beats; arch -1..1 (+ nose and tail down: a
     hump, - a dip). blow: seconds since the last blow (None = no spray). ol: outline width in px (default: the house
-    5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. Returns a Sprite."""
+    5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. brow: the heavy, low, cross
+    brow over each eye (Sam's yes, 1 Nov: they are angry about climate change). Returns a Sprite."""
     pat = PATTERNS[pattern] if isinstance(pattern, int) else pattern
     sz = pat['size']
     L = (np.asarray(light, float) if light is not None else LIGHT)
@@ -551,7 +552,21 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
         q = seen(surf(0.225, side * math.pi * 0.58, 0.01))
         if q:
             r = max(1.5, 0.11 * sz * cam.focal / max(1, np.linalg.norm(surf(0.225, side * 1.8) - campos)) * S)
-            dc.ellipse([q[0] - r, q[1] - r * 0.7, q[0] + r, q[1] + r * 0.7], fill=INK)
+            if brow and r > 2.5 * S:
+                # with the brow: a small white round the pupil (so the brow reads as cross, not as a blob), the
+                # pupil looking forward towards the snout (determined)
+                qn = cam.screen(surf(0.19, side * math.pi * 0.58, 0.01))[0]
+                fx, fy = (qn[0] - x0) * S - q[0], (qn[1] - y0) * S - q[1]
+                fl = math.hypot(fx, fy) or 1.0
+                rw = r * 1.55
+                dc.ellipse([q[0] - rw, q[1] - rw * 0.72, q[0] + rw, q[1] + rw * 0.72], fill=PALE[0], outline=INK,
+                           width=max(1, int(round(ol * S))))
+                px, py = q[0] + fx / fl * rw * 0.42, q[1] + fy / fl * rw * 0.3
+                dc.ellipse([px - r * 0.8, py - r * 0.8, px + r * 0.8, py + r * 0.8], fill=INK)
+            else:
+                dc.ellipse([q[0] - r, q[1] - r * 0.7, q[0] + r, q[1] + r * 0.7], fill=INK)
+        if brow:
+            _brow(col, ids, side, sz, surf, cam, campos, x0, y0, S, idarr, D)
     # tubercles: rows of knobs along the top of the head and the jaw tip
     rng = np.random.default_rng(pat['seed'])
     knobs = [(si, a) for si in np.linspace(0.02, 0.17, 7) for a in (-0.35, -0.12, 0.12, 0.35)]
@@ -618,6 +633,52 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
         _blow(spr, cam, pose, surf(0.205, 0.0, 0.02), blow, sz, ol)
     return spr
 
+
+# the brow (note 5, Sam's yes 1 Nov): a heavy, low ridge over each eye, thick at its front end and slanting down
+# towards the snout, so from the side it reads as a scowl and from the front both brows angle down to the middle.
+# Its outline in metres from the eye's centre: u forward (towards the snout), v up. The lower edge sits on the top of
+# the eye (the eye is 0.22 m wide, 0.15 m high), so it hoods it.
+EYE_S, EYE_A = 0.225, 0.58 * math.pi
+BROW_U = np.linspace(-0.38, 0.36, 15)
+BROW_PROUD = 0.10                                          # how far its top edge stands off the skin (x the radius)
+
+
+def _brow_outline():
+    """[(u, v, proud)]: the lower edge back to front, a blunt front end, the upper edge front to back."""
+    f = (BROW_U - BROW_U[0]) / (BROW_U[-1] - BROW_U[0])     # 0 at the back point, 1 at the thick front end
+    low = 0.06 - 0.60 * BROW_U                              # on the eye's top at u = 0, below eye level in front
+    thick = 0.05 + 0.36 * f ** 0.6                          # narrow at the back, heavy at the front
+    up = low + thick + 0.03 * np.sin(math.pi * f)
+    lo = [(u, v, 0.012) for u, v in zip(BROW_U, low)]
+    tip = [(0.39, low[-1] + 0.35 * thick[-1], 0.6 * BROW_PROUD), (0.395, low[-1] + 0.75 * thick[-1], BROW_PROUD)]
+    hi = [(u, v, 0.012 + (BROW_PROUD - 0.012) * min(1.0, 1.4 * fk))
+          for u, v, fk in zip(BROW_U[::-1], up[::-1], f[::-1])]
+    return lo + tip + hi
+
+
+BROW = _brow_outline()
+
+
+def _brow(col, ids, side, sz, surf, cam, campos, x0, y0, S, idarr, D):
+    hh = _prof(EYE_S)[1]
+    k = math.sin(EYE_A) * hh * 1.08 * sz                    # metres of skin per radian round the body, at the eye
+    pts, deps = [], []
+    for u, v, proud in BROW:
+        p3 = surf(EYE_S - u / (BODY_L * sz), side * (EYE_A - v / k), proud)
+        P, d = cam.screen(p3)
+        if d < 0.3:
+            return
+        pts.append(((P[0] - x0) * S, (P[1] - y0) * S))
+        deps.append(float(np.linalg.norm(p3 - campos)) * 100)
+    mask = Image.new('L', col.size, 0)
+    ImageDraw.Draw(mask).polygon(pts, fill=255)
+    m = np.asarray(mask) > 0
+    if not m.any():
+        return
+    near = np.isin(idarr, (3, 4)) & (np.abs(D - np.mean(deps)) < 60 * sz + 6)   # on the body's near side
+    out = m & (idarr == 0)                                  # standing proud of the outline (a bump on the head)
+    col.paste(INK, mask=Image.fromarray(((m & (near | out)) * 255).astype(np.uint8)))
+    ids.paste(3, mask=Image.fromarray((out * 255).astype(np.uint8)))
 
 def _blow(spr, cam, pose, top, age, sz, ol):
     """The blow: a bushy column of spray shot up and a little forward from the blowhole, lumpy, flat white with a
