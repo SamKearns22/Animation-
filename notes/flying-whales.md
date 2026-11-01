@@ -125,6 +125,7 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | O7 | "In the opening scene, the whales are still beneath the waves." | |
 | O8 | "Near the end of the scene, they start to shoot towards the surface." | |
 | O9 | "In the Jackdaw scene, we see them flying." | |
+| O11 | The joke (Sam, 1 Nov): "the new behaviour we are seeing is that the animals are so angry about climate change they are defying physics to destroy infrastructure" | |
 | O10 | Sam (1 Nov, about the rig scene): "five whales smash their way through this rig, making it tumble and explode and break into parts in an orgy of effects and destruction and zooming, looping, attacking whales" | |
 
 ## References as checklists (`references/flying-whales/`)
