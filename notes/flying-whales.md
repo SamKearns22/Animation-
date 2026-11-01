@@ -40,7 +40,8 @@
   surfacing; the knock-ons (lifeboats, chimneys, derrick) as whales pass through. Earlier: the small white eye under
   each brow, foam at the legs, the flickering flare.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** 31% of the week at the last handover; ask Sam for today's figure.
+- **Usage budget (rule 44):** 34% of the week (Sam, 1 Nov, end of this stage: film file, paths, burst, clips (a) and
+  (b) took about 3%). Ask again at the next handover.
 - **Files to open:** this file ("Rig scene: the whale paths", the Showstopper list 1-18); `guides/film-quality-rules.md`
   5, 8, 15, 25, 32, 33, 40; the docstrings of `source/flying_whales_fx.py`, `source/flying_whales_paths.py`,
   `source/flying_whales_rig.py` (`draw`, `PARENT`, `rot`, `part_box`), `source/flying_whales_sea.py` (`glow`);
