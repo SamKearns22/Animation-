@@ -1,0 +1,685 @@
+#!/usr/bin/env python3
+"""Patriots 4 (The Celebrity Traitors winners): the cast. Built 1 Nov from Sam's references (references/patriots-4/).
+
+Reused (kit-catalogue, rule 28): Claudia's head and hair from `traitors_cast` (new outfit here: black jacket, cream
+high-neck blouse with a gold chain, ref 03 and 11); the Patriot whole from `patriots3_cast` (balaclava, black jacket).
+New: Romesh Ranganathan and Sebastian "Bash" Croft, as likeness heads (film-quality rules 49-51).
+
+The two new heads are drawn from MEASUREMENTS (likeness.py card on photos 14 and 16, 18 and 19), not by eye: each face
+is laid out on MediaPipe's average face and moved by how far this person differs from real faces, pushed further
+(`PUSH`). The same drawing with the average measurements is the head's twin (`--average`), so likeness.py check can
+take away what the drawing style itself does.
+
+    Romesh  rust-orange double-breasted suit, teal top; black rectangular glasses; high black curly hair, short
+            sides; full near-black beard with grey flecks; brows set high; a wide nose; a long narrow face (refs 03,
+            09, 13-16)
+    Bash    dark navy tartan suit, white shirt open at the collar; swept wavy brown hair falling over the brow; close-set
+            big eyes under low heavy brows; a narrow tapering jaw; a long nose; light stubble; two silver rings
+            (refs 04-08, 13, 17-20)
+
+    python3 source/patriots4_cast.py head WHO OUT.png [--average]   one head, large, front on (for likeness.py check)
+    python3 source/patriots4_cast.py likeness OUT_DIR                 every head checked against its photos
+    python3 source/patriots4_cast.py sheet OUT.jpg                    the cast sheet
+"""
+import math
+import os
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import burnham as B              # noqa: E402
+import traitors_cast as TC       # noqa: E402  (Claudia's head; installs the head hooks into burnham)
+import patriots3_cast as P3      # noqa: E402  (the Patriot)
+import views as V                # noqa: E402
+import mouths                    # noqa: E402
+from ed import INK, curve, oval  # noqa: E402
+
+dk, blend = TC.dk, TC.blend
+FONT = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
+REFS = os.path.join(HERE, '..', 'references', 'patriots-4')
+
+# ---------------------------------------------------------------------------------------------- the measurements
+# Real faces' middle (likeness_average.json, 'neutral') and each person's measured face (likeness.py card, 1 Nov).
+AVG = dict(face_wide=0.872, jaw_wide=0.82, forehead_wide=0.942, eyes_apart=1.325, eye_size=0.186, eye_open=0.313,
+           eye_tilt=2.474, brow_high=0.586, brow_slope=-9.371, nose_long=0.417, nose_wide=0.641, mouth_wide=0.802,
+           lip_top=0.121, lip_low=0.183, philtrum=0.133, chin_long=0.295)
+MEASURED = {
+    'romesh': dict(face_wide=0.789, jaw_wide=0.837, forehead_wide=0.951, eyes_apart=1.286, eye_size=0.2,
+                   eye_open=0.303, eye_tilt=1.718, brow_high=0.752, brow_slope=-11.316, nose_long=0.413,
+                   nose_wide=0.72, mouth_wide=0.877, lip_top=0.117, lip_low=0.206, philtrum=0.146, chin_long=0.293),
+    'bash': dict(face_wide=0.819, jaw_wide=0.781, forehead_wide=0.955, eyes_apart=1.058, eye_size=0.206,
+                 eye_open=0.363, eye_tilt=3.49, brow_high=0.478, brow_slope=-10.587, nose_long=0.458,
+                 nose_wide=0.677, mouth_wide=0.874, lip_top=0.125, lip_low=0.171, philtrum=0.117, chin_long=0.294),
+}
+MEASURED['claudia'] = dict(face_wide=0.791, jaw_wide=0.827, forehead_wide=0.956, eyes_apart=1.241, eye_size=0.209,
+                           eye_open=0.345, eye_tilt=2.185, brow_high=0.592, brow_slope=-12.039, nose_long=0.422,
+                           nose_wide=0.62, mouth_wide=0.76, lip_top=0.135, lip_low=0.169, philtrum=0.142,
+                           chin_long=0.33)   # her photos smile: mouth, nose width, philtrum and chin set from the card's
+                                             # words against smiling faces (a small mouth, a long gap, a long chin)
+PUSH = {'romesh': 1.6, 'bash': 1.6, 'claudia': 1.6}
+TUNE = {   # per measure, an extra push where the first check found the drawing under the photo (rule 49)
+    'romesh': dict(jaw_wide=1.0, nose_wide=1.6, eye_size=2.0, forehead_wide=1.5, lip_low=3.0, philtrum=2.0,
+                   brow_slope=1.8, eyes_apart=4.0, brow_high=1.8, nose_long=1.5),
+    'bash': dict(jaw_wide=3.0, philtrum=2.0, brow_slope=1.5, eye_size=1.4, nose_wide=2.0, eye_open=1.4, brow_high=1.3),
+    'claudia': dict(jaw_wide=15.0),        # the face finder pulls a drawn jaw back towards the average
+}
+
+
+def target(who, average=False):
+    """The measures to draw: the person's, pushed further from the middle (or the middle itself, for the twin)."""
+    if average:
+        return dict(AVG)
+    m, k = MEASURED[who], PUSH[who]
+    return {key: AVG[key] + k * TUNE[who].get(key, 1.0) * (m[key] - AVG[key]) for key in AVG}
+
+
+def layout(m):
+    """Where everything goes, as fractions of the face height H (forehead top 0 .. chin 1; x from the middle),
+    laid out on MediaPipe's average face (likeness.canonical) and moved to give the measures m."""
+    fw = m['face_wide']
+    ew = m['eye_size'] * fw
+    gap = m['eyes_apart'] * ew
+    ecx = gap / 2 + ew / 2
+    ipd = 2 * ecx
+    eye_y = 0.32
+    eh = m['eye_open'] * ew                            # the opening's height (upper lid to lower lid)
+    lid_top = eye_y - eh / 2
+    brow_y = lid_top - m['brow_high'] * ew             # the brow's lower edge over the pupil (landmark 52)
+    slope = math.tan(math.radians(m['brow_slope']))   # + rises to the outside
+    nose_y = 0.283 + m['nose_long'] * 0.717
+    lip0 = nose_y + m['philtrum'] * 0.717
+    mw = m['mouth_wide'] * ipd
+    lip13 = lip0 + m['lip_top'] * mw
+    lip17 = lip13 + 0.006 + m['lip_low'] * mw
+    want17 = 1.0 - m['chin_long'] * 0.717                # the chin's length: meet it halfway by moving the mouth
+    k = 1.0 + 0.5 * ((want17 - nose_y) / (lip17 - nose_y) - 1.0)
+    lip0, lip13, lip17 = (nose_y + (v - nose_y) * k for v in (lip0, lip13, lip17))
+    return dict(fw=fw, jw=m['jaw_wide'] * fw, fhw=m['forehead_wide'] * fw, ew=ew, ecx=ecx, eye_y=eye_y, eh=eh,
+                lid_top=lid_top, brow_y=brow_y, slope=slope, nose_y=nose_y, nw=m['nose_wide'] * ipd, lip0=lip0,
+                lip13=lip13, lip17=lip17, mw=mw, tilt=math.tan(math.radians(m['eye_tilt'])))
+
+
+H = 172.0          # the face height in the person's own units (the library's heads are about 190 from crown to chin)
+
+
+class Face:
+    """Turns the layout's fractions into the person's units: x across from the face's middle, y down from the top of
+    the forehead. `tq` (0..1) turns it towards a three-quarter view facing our right (features slide to the near
+    side, the far half narrows), so the likeness survives the turn (newsdesk_cast's way)."""
+
+    def __init__(self, hx, hy, tq=0.0, turn=0.0, down=0.0):
+        self.cx, self.top = hx + turn * 12, hy - 72 + 10 * down
+        self.hx, self.tq = hx, tq
+
+    def x(self, u):
+        k = 1.0 - 0.38 * self.tq if u < 0 else 1.0 - 0.1 * self.tq     # the far side (our left) narrows
+        return self.cx + 0.2 * self.tq * H + u * H * k
+
+    def __call__(self, u, v):
+        return (self.x(u), self.top + v * H)
+
+    def pts(self, uvs):
+        return [self(u, v) for u, v in uvs]
+
+
+def outline_uv(L, chin_w=0.36, crown=-0.17):
+    """The head's outline (fractions), round from the left temple over the crown and down to the chin."""
+    fw, jw, fhw = L['fw'], L['jw'], L['fhw']
+    right = [(fhw * 0.5 * 0.93, 0.0), (fhw * 0.5, 0.16), (fw * 0.5, 0.43), (fw * 0.5 * 0.97, 0.6),
+             (jw * 0.5, 0.82), (jw * 0.5 * chin_w + 0.04, 0.965), (0.0, 1.0)]
+    top = [(fhw * 0.5 * 0.7, crown * 0.6), (0.0, crown)]
+    left = [(-u, v) for u, v in right[::-1][1:]]
+    return [(-u, v) for u, v in top[::-1]] + top[1:] + right + left + [(-fhw * 0.5 * 0.93, 0.0), (-fhw * 0.5 * 0.7, crown * 0.6)]
+
+
+def eyes(p, f, L, sp, iris, lid_c, liner=2.6, wide=0.0):
+    """Both eyes (traitors_cast.eye: one opening between two lids, the iris cut to it). wide (0..1): the stare."""
+    w = L['ew'] * H / 2
+    h = L['eh'] * H / 1.8 * (1 + 0.55 * wide)
+    st = dict(lid=sp.get('lid4', 0.08) * (1 - wide), look=sp.get('look', 0.0), squint=sp.get('squint', 0.0),
+              closed=sp.get('blink', False), gaze_dy=sp.get('gaze_dy', 0.0))
+    for sgn in (-1, 1):
+        ex, ey = f(sgn * L['ecx'], L['eye_y'])
+        ww = w * (1 - 0.3 * f.tq if sgn < 0 else 1.0)
+        TC.eye(p, ex, ey, sgn, ww, h, iris, st, lid_c, liner=liner)
+
+
+def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
+    """Filled brows from inner to outer end at the measured height and slope. raise_ lifts them (surprise);
+    frown pulls the inner ends down (narrowed, accusing)."""
+    for sgn in (-1, 1):
+        ecx, ew = L['ecx'], L['ew']
+        xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew
+        y_m = L['brow_y'] - thick * 0.35 - raise_
+        yi = y_m + L['slope'] * (xm - xi) * 1.0 + frown
+        yo = y_m - L['slope'] * (xo - xm)
+        ym = y_m - 0.008
+        th = thick
+        uv = [(xi, yi - th * 0.45), (xm, ym - th * 0.6), (xo, yo - th * 0.2), (xo + 0.01, yo + th * 0.15),
+              (xm, ym + th * 0.45), (xi, yi + th * 0.55)]
+        p.poly(curve(f.pts([(sgn * u, v) for u, v in uv]), 3), c, None)
+
+
+def nose(p, f, L, skin):
+    """The bridge as one line down one side, the tip and the nostril wings at the measured width."""
+    nw, y = L['nw'], L['nose_y']
+    sd = dk(skin, 0.72)
+    p.line(f.pts([(-0.025, L['eye_y'] + 0.02), (-0.04, y - 0.07)]), sd, 1.8)
+    for sgn in (-1, 1):                                # the wings: a curve round each side of the nose's base
+        p.line(curve(f.pts([(sgn * nw * 0.32, y - 0.075), (sgn * nw * 0.5, y - 0.045), (sgn * nw * 0.46, y - 0.012),
+                            (sgn * nw * 0.26, y - 0.002)]), 3), INK, 1.8)
+    p.line(curve(f.pts([(-nw * 0.2, y - 0.002), (-0.03, y + 0.005), (0.0, y - 0.004), (0.03, y + 0.005),
+                        (nw * 0.2, y - 0.002)]), 3), INK, 1.6)
+    for sgn in (-1, 1):
+        p.poly(oval(*f(sgn * nw * 0.2, y - 0.016), 5, 3, 10), dk(skin, 0.5), None)
+
+
+def lips(p, f, L, sp, lip_c, fx_my):
+    """Closed lips at the measured width and fullness; talking shapes from mouths.draw (the series' lip sync)."""
+    fx, my = fx_my
+    mw, l0, l13, l17 = L['mw'], L['lip0'], L['lip13'], L['lip17']
+    smile = sp.get('smile', 0.0)
+
+    def rest():
+        hw = mw / 2
+        top = curve(f.pts([(-hw, l13 - 0.004 * smile), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.012), (hw * 0.4, l0 + 0.006),
+                           (hw, l13 - 0.004 * smile), (0.0, l13 + 0.004)]), 3)
+        bot = curve(f.pts([(-hw, l13 - 0.004 * smile), (0.0, l13 + 0.004), (hw, l13 - 0.004 * smile), (hw * 0.5, l17 - 0.01),
+                           (0.0, l17), (-hw * 0.5, l17 - 0.01)]), 3)
+        p.poly(top, dk(lip_c, 0.86), INK, 1.5)
+        p.poly(bot, lip_c, INK, 1.5)
+        p.line(curve(f.pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.004),
+                            (hw, l13 - 0.006 * smile)]), 3), INK, 2.2)
+    TC.talk_or(p, dict(sp, lips=True, lip_c=lip_c), 0.0, fx, my, rest)
+
+
+# ---------------------------------------------------------------------------------------------- Romesh
+R_SKIN = (182, 124, 90)
+R_HAIR = (34, 30, 32)
+R_HAIR_SIDE = (58, 54, 56)
+R_BEARD = (40, 36, 38)
+R_GREY = (138, 132, 130)
+R_LIP = (150, 92, 84)
+R_RUST = (190, 88, 42)
+R_TEAL = (36, 96, 104)
+
+
+def romesh_head(img, p, sp, t, hx, hy):
+    L = layout(target('romesh', sp.get('average', False)))
+    f = Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    skin = R_SKIN
+    for sgn in (-1, 1):                                # ears (only the near one in a three-quarter turn)
+        if sgn < 0 and f.tq > 0.5:
+            continue
+        ex, ey = f(sgn * (L['fw'] * 0.5 + 0.01), 0.42)
+        p.poly(oval(ex, ey, 11, 23, 20), skin, INK, 2.4)
+        p.line([(ex - sgn * 2, ey - 10), (ex + sgn * 3, ey), (ex - sgn * 1, ey + 10)], dk(skin, 0.7), 1.4)
+    out = curve(f.pts(outline_uv(L, 0.42)), 4)
+    p.poly(out, skin, INK, 2.6)
+    # the full beard: from the sideburns down the cheeks (its upper edge slants from the ear to near the nose) round
+    # the chin a little past it, with the moustache over the top lip (refs 14, 16)
+    fw, jw = L['fw'], L['jw']
+    ny, l0, l17 = L['nose_y'], L['lip0'], L['lip17']
+    right = [(fw * 0.5 + 0.004, 0.36), (fw * 0.5 - 0.03, 0.47), (L['nw'] * 0.75, ny - 0.035), (L['nw'] * 0.42, ny + 0.012),
+             (L['mw'] * 0.36, l0 - 0.008)]
+    # a full beard stands out past the jawline (as in the photos, where it is what makes his jaw read broad)
+    rim = [(fw * 0.5 + 0.012, 0.6), (jw * 0.5 + 0.07, 0.84), (jw * 0.4, 1.02), (jw * 0.16, 1.08), (0.0, 1.09)]
+    shape = ([(u, v) for u, v in right] + [(-u, v) for u, v in right[::-1]]
+             + [(-u, v) for u, v in rim] + [(u, v) for u, v in rim[::-1]])
+    shape = shape[:len(right) * 2] + [(-fw * 0.5 - 0.004, 0.36)] + shape[len(right) * 2:]
+    beard_pts = curve(f.pts([(u, v) for u, v in shape[len(right):]] + [(u, v) for u, v in shape[:len(right)]]), 4)
+    p.poly(beard_pts, R_BEARD, INK, 2.2)
+    rng = np.random.default_rng(14)
+    for _ in range(46):                                # grey flecks through it, more at the chin
+        u, v = rng.uniform(-jw * 0.45, jw * 0.45), rng.uniform(l17 + 0.02, 1.03)
+        if abs(u) < jw * 0.5 * (1.1 - (v - 0.8)):
+            x, y = f(u, v)
+            p.line([(x, y), (x + rng.uniform(-2, 2), y + 5)], R_GREY, 1.2)
+    eyes(p, f, L, sp, (48, 30, 22), dk(skin, 0.82), wide=sp.get('wide', 0.0))
+    brows(p, f, L, (28, 24, 24), 0.036, sp.get('brow_up', 0.0), sp.get('frown', 0.0))
+    nose(p, f, L, skin)
+    fx, my = f(0.0, (L['lip13']))
+    lips(p, f, L, sp, R_LIP, (fx, my - 6))
+    # the moustache, over the top of the upper lip
+    p.poly(curve(f.pts([(-L['mw'] * 0.58, L['lip13'] + 0.01), (-L['nw'] * 0.5, ny + 0.012), (0.0, ny + 0.02),
+                        (L['nw'] * 0.5, ny + 0.012), (L['mw'] * 0.58, L['lip13'] + 0.01), (L['mw'] * 0.3, l0 + 0.012),
+                        (0.0, l0 + 0.016), (-L['mw'] * 0.3, l0 + 0.012)]), 3), R_BEARD, INK, 1.6)
+    # black rectangular glasses (the first thing people see, says the card)
+    ew, ecx, ey = L['ew'], L['ecx'], L['eye_y']
+    for sgn in (-1, 1):
+        cx = sgn * ecx
+        w2, h1, h2 = ew * 0.82, 0.085, 0.07
+        fr = [(cx - w2, ey - h1), (cx + w2, ey - h1), (cx + w2 * 0.98, ey + h2), (cx - w2 * 0.96, ey + h2)]
+        pts = f.pts(fr)
+        p.poly(pts, None, (22, 20, 22), 6.0)
+        p.poly(pts, None, INK, 1.2)
+        tip = (sgn * (L['fw'] * 0.5 + 0.01), ey - 0.05)
+        p.line(f.pts([(cx + sgn * w2, ey - h1 + 0.02), tip]), (22, 20, 22), 5.0)
+    p.line(f.pts([(-ecx + ew * 0.82, ey - 0.05), (0.0, ey - 0.065), (ecx - ew * 0.82, ey - 0.05)]), (22, 20, 22), 5.0)
+    # the hair: short, darker-grey sides above the ears, and a high black curly top with a clear forehead
+    fhw = L['fhw']
+    side = [(fhw * 0.5 + 0.015, 0.33), (fhw * 0.5 + 0.03, 0.12), (fhw * 0.5 * 0.86, 0.0), (fhw * 0.5 * 0.86, 0.08),
+            (fhw * 0.5 * 0.97, 0.3)]
+    for sgn in (-1, 1):
+        if sgn < 0 and f.tq > 0.5:
+            continue
+        p.poly(curve(f.pts([(sgn * u, v) for u, v in side]), 3), R_HAIR_SIDE, INK, 2.0)
+    top = [(-fhw * 0.5 * 0.9, 0.02), (-fhw * 0.5 - 0.035, -0.08), (-fhw * 0.5 * 0.95, -0.2), (-0.26, -0.33),
+           (-0.12, -0.38), (0.02, -0.4), (0.15, -0.38), (0.27, -0.33), (fhw * 0.5 * 0.97, -0.2), (fhw * 0.5 + 0.035, -0.08),
+           (fhw * 0.5 * 0.9, 0.02), (0.22, 0.04), (0.08, 0.035), (-0.06, 0.04), (-0.22, 0.035)]
+    hp = curve(f.pts(top), 4)
+    # lumpy curls round the top edge: small bumps along the outline
+    bumpy = []
+    for i, q in enumerate(hp):
+        if q[1] < f.top - 0.02 * H:
+            a = rng.uniform(-3.5, 3.5)
+            bumpy.append((q[0] + a * 0.4, q[1] - abs(a)))
+        else:
+            bumpy.append(q)
+    p.poly(bumpy, R_HAIR, INK, 2.4)
+    for k in range(10):                                # curl marks inside
+        x, y = f(rng.uniform(-0.28, 0.28), rng.uniform(-0.3, -0.04))
+        p.line(curve([(x - 6, y + 3), (x - 2, y - 4), (x + 4, y - 3), (x + 5, y + 3)], 3), (70, 66, 70), 1.4)
+    return fx
+
+
+def romesh_torso(img, p, sp, t):
+    """Rust-orange double-breasted suit over a teal crew-neck top (refs 03, 09, 13)."""
+    p.poly([(-34, -36), (34, -36), (40, 10), (0, 40), (-40, 10)], R_TEAL, INK, 2.0)          # the top's neck
+    p.line([(-30, -26), (0, -18), (30, -26)], dk(R_TEAL, 0.75), 1.6)
+    for sgn in (-1, 1):                                # wide peaked lapels
+        p.poly([(sgn * 40, -4), (sgn * 74, 24), (sgn * 64, 60), (sgn * 82, 84), (sgn * 14, 236), (sgn * 26, 120)],
+               R_RUST, INK, 2.2)
+        p.line([(sgn * 70, 62), (sgn * 30, 168)], dk(R_RUST, 0.8), 1.2)
+    p.poly([(-40, 10), (0, 40), (40, 10), (24, 140), (0, 200), (-24, 140)], R_TEAL, INK, 2.0)
+    for bx in (-34, 34):                                # the double-breasted buttons
+        for by in (270, 340):
+            p.ell(bx, by, 7, 7, dk(R_RUST, 0.7), INK, 1.4)
+
+
+# ---------------------------------------------------------------------------------------------- Bash
+S_SKIN = (238, 204, 182)
+S_HAIR = (88, 60, 42)
+S_HAIR_L = (126, 90, 62)
+S_STUB = (222, 190, 172)
+S_LIP = (204, 140, 128)
+S_NAVY = (34, 40, 62)
+S_CHECK = (66, 76, 104)
+
+
+def bash_hair_back(p, sp, hx, hy):
+    L = layout(target('bash', sp.get('average', False)))
+    f = Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    fw = L['fw']
+    p.poly(curve(f.pts([(-fw * 0.5 - 0.07, 0.0), (-fw * 0.5 - 0.09, 0.4), (-fw * 0.5 - 0.04, 0.66), (-fw * 0.3, 0.6),
+                        (fw * 0.3, 0.6), (fw * 0.5 + 0.04, 0.66), (fw * 0.5 + 0.09, 0.4), (fw * 0.5 + 0.07, 0.0),
+                        (0.0, -0.3)]), 4), S_HAIR, INK, 2.4)
+
+
+def bash_head(img, p, sp, t, hx, hy):
+    L = layout(target('bash', sp.get('average', False)))
+    f = Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    skin = S_SKIN
+    for sgn in (-1, 1):
+        if sgn < 0 and f.tq > 0.5:
+            continue
+        ex, ey = f(sgn * (L['fw'] * 0.5 + 0.01), 0.43)
+        p.poly(oval(ex, ey, 10, 21, 20), skin, INK, 2.4)
+    out = curve(f.pts(outline_uv(L, 0.3)), 4)
+    p.poly(out, skin, INK, 2.6)
+    # light stubble (refs 18-20): a faint tint on the jaw, chin and over the lip, no outline of its own
+    fw, jw, ny, l0 = L['fw'], L['jw'], L['nose_y'], L['lip0']
+    stub = [(fw * 0.5 - 0.004, 0.5), (jw * 0.5 - 0.004, 0.82), (jw * 0.15, 0.985), (0.0, 0.995), (-jw * 0.15, 0.985),
+            (-jw * 0.5 + 0.004, 0.82), (-fw * 0.5 + 0.004, 0.5), (-fw * 0.36, 0.62), (-L['mw'] * 0.62, L['lip13'] + 0.03),
+            (-L['mw'] * 0.55, l0 - 0.01), (-L['nw'] * 0.45, ny + 0.01), (L['nw'] * 0.45, ny + 0.01), (L['mw'] * 0.55, l0 - 0.01),
+            (L['mw'] * 0.62, L['lip13'] + 0.03), (fw * 0.36, 0.62)]
+    p.poly(curve(f.pts(stub), 4), S_STUB, None)
+    p.poly(out, None, INK, 2.6)
+    eyes(p, f, L, sp, (92, 68, 44), dk(skin, 0.84), wide=sp.get('wide', 0.0))
+    brows(p, f, L, (62, 42, 30), 0.042, sp.get('brow_up', 0.0), sp.get('frown', 0.0))
+    nose(p, f, L, skin)
+    fx, my = f(0.0, L['lip13'])
+    lips(p, f, L, sp, S_LIP, (fx, my - 6))
+    # the hair: swept across from his right (our left) with long wavy locks falling over the brow to the eyebrows on
+    # our left, full and wide past the ears (refs 06, 18, 19)
+    fhw = L['fhw']
+    hair = [(-fw * 0.5 - 0.06, 0.5), (-fw * 0.5 - 0.11, 0.44), (-fw * 0.5 - 0.08, 0.36),   # a flicked end by the ear
+            (-fw * 0.5 - 0.12, 0.2), (-fhw * 0.5 - 0.1, -0.04), (-fhw * 0.5 - 0.04, -0.2), (-0.3, -0.34),
+            (-0.18, -0.42), (-0.04, -0.44), (0.06, -0.4), (0.16, -0.45), (0.3, -0.38), (fhw * 0.5 + 0.06, -0.24),
+            (fhw * 0.5 + 0.11, -0.06), (fw * 0.5 + 0.12, 0.18), (fw * 0.5 + 0.08, 0.34), (fw * 0.5 + 0.12, 0.44),
+            (fw * 0.5 + 0.05, 0.5), (fw * 0.5 + 0.005, 0.36), (fhw * 0.5 - 0.01, 0.12),
+            (0.26, 0.02), (0.16, 0.06), (0.1, 0.0), (0.03, 0.09),             # the sweep's lower edge, dipping to our left
+            (-0.04, 0.2), (-0.08, 0.12), (-0.13, 0.22), (-0.18, 0.13),        # locks falling over the brow
+            (-0.24, 0.2), (-0.28, 0.1), (-fhw * 0.5 + 0.01, 0.12), (-fw * 0.5 - 0.005, 0.36)]
+    p.poly(curve(f.pts(hair), 4), S_HAIR, INK, 2.4)
+    for a, b in (((-0.2, -0.34), (-0.06, 0.14)), ((-0.04, -0.38), (0.06, 0.02)), ((0.14, -0.38), (0.24, -0.02)),
+                 ((-0.34, -0.16), (-0.22, 0.14)), ((0.28, -0.28), (0.38, 0.14)), ((-0.4, 0.1), (-0.46, 0.4)),
+                 ((0.42, 0.1), (0.48, 0.4))):
+        p.line(curve(f.pts([a, ((a[0] + b[0]) / 2 + 0.03, (a[1] + b[1]) / 2), b]), 3), S_HAIR_L, 1.8)
+    return fx
+
+
+def bash_torso(img, p, sp, t):
+    """Dark navy tartan suit, white shirt open at the collar (refs 04, 06, 13)."""
+    p.poly([(-30, -40), (30, -40), (44, 8), (12, 120), (0, 150), (-12, 120), (-44, 8)], (248, 248, 246), INK, 2.0)
+    p.poly([(-12, -6), (12, -6), (0, 60)], S_SKIN, INK, 1.6)                                   # the open neck
+    for sgn in (-1, 1):
+        p.poly([(sgn * 30, -40), (sgn * 52, -6), (sgn * 12, -6)], (248, 248, 246), INK, 1.8)  # the collar points
+        p.poly([(sgn * 44, -2), (sgn * 70, 26), (sgn * 54, 104), (sgn * 66, 140), (sgn * 8, 280), (sgn * 18, 140)],
+               sp.get('jacket', S_NAVY), INK, 2.2)
+    p.ell(0, 300, 6, 6, (20, 24, 38), INK, 1.4)
+
+
+def tartan(p, j2, view, sp, x0, x1, y0, y1):
+    """A quiet navy check over the jacket: a few lighter lines each way (ref 04)."""
+    for k in range(int(x0) // 46 * 46, int(x1), 46):
+        p.line([(k, y0), (k, y1)], S_CHECK, 1.4)
+    for k in range(int(y0) // 46 * 46, int(y1), 46):
+        p.line([(x0, k), (x1, k)], S_CHECK, 1.4)
+
+
+# ---------------------------------------------------------------------------------------------- Claudia (new look)
+CREAM = (240, 230, 208)
+GOLD = (214, 172, 78)
+
+
+def claudia_head(img, p, sp, t, hx, hy):
+    """Claudia's face from her measurements (the Traitors film's head failed the likeness check: 35%, 3rd in the
+    line-up), keeping that head's look: the heavy blunt fringe to just above the eyes, long straight black curtains past
+    the jaw, smoky eyes with lashes, nude lips with the knowing half smile (refs 01, 03, 11, 21-23)."""
+    L = layout(target('claudia', sp.get('average', False)))
+    f = Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    skin = TC.C_SKIN
+    out = curve(f.pts(outline_uv(L, 0.36)), 4)
+    p.poly(out, skin, INK, 2.6)
+    w = L['ew'] * H / 2
+    h = L['eh'] * H / 1.8 * (1 + 0.55 * sp.get('wide', 0.0))
+    st = dict(lid=sp.get('lid4', 0.16), look=sp.get('look', 0.0), squint=sp.get('squint', 0.0),
+              closed=sp.get('blink', False), gaze_dy=sp.get('gaze_dy', 0.0))
+    for sgn in (-1, 1):
+        ex, ey = f(sgn * L['ecx'], L['eye_y'])
+        TC.eye(p, ex, ey, sgn, w * (1 - 0.3 * f.tq if sgn < 0 else 1.0), h, (52, 40, 38), st, (150, 120, 124),
+               liner=3.4, lower=2.2, lashes=True, smoky=(176, 146, 136))
+    nose(p, f, L, skin)
+    for sgn in (-1, 1):                                # cheekbones
+        p.line(f.pts([(sgn * L['fw'] * 0.36, 0.47), (sgn * L['fw'] * 0.32, 0.6)]), dk(skin, 0.9), 1.4)
+    fx, my = f(0.0, L['lip13'])
+    lips(p, f, L, dict(sp, smile=sp.get('smile', 0.6)), TC.C_LIP, (fx, my - 6))
+    fw, fhw, fr = L['fw'], L['fhw'], L['lid_top'] - 0.035
+    hair = [(-0.16, 1.85), (-fw * 0.5 - 0.24, 1.85), (-fw * 0.5 - 0.19, 1.0), (-fw * 0.5 - 0.13, 0.25),
+            (-fhw * 0.5 - 0.09, -0.1), (-fhw * 0.5 * 0.7, -0.27), (0.0, -0.31), (fhw * 0.5 * 0.7, -0.27),
+            (fhw * 0.5 + 0.09, -0.1), (fw * 0.5 + 0.13, 0.25), (fw * 0.5 + 0.19, 1.0), (fw * 0.5 + 0.24, 1.85),
+            (0.16, 1.85), (fw * 0.5 * 0.86, 0.9), (fw * 0.5 + 0.005, 0.5), (fw * 0.5 - 0.01, fr + 0.05),
+            (fw * 0.3, fr), (0.0, fr + 0.008), (-fw * 0.3, fr), (-fw * 0.5 + 0.01, fr + 0.05),
+            (-fw * 0.5 - 0.005, 0.5), (-fw * 0.5 * 0.86, 0.9)]
+    p.poly(f.pts(hair), TC.C_HAIR, INK, 2.6)
+    for k in range(9):                                 # the fringe's blunt ends and a sheen across the crown
+        u = -fw * 0.42 + k * fw * 0.105
+        p.line(f.pts([(u, fr - 0.2), (u + 0.01, fr - 0.01)]), (50, 50, 60), 1.2)
+    p.line(curve(f.pts([(-0.26, -0.2), (0.0, -0.25), (0.26, -0.2)]), 3), TC.C_SHEEN, 2.4)
+    for sgn in (-1, 1):
+        p.line(f.pts([(sgn * (fw * 0.5 + 0.08), 0.2), (sgn * (fw * 0.5 + 0.15), 1.4)]), TC.C_SHEEN, 1.8)
+    return fx
+
+
+def claudia4_torso(img, p, sp, t):
+    """Black tailored jacket over a cream high-neck tie blouse with a fine gold chain (refs 03, 11)."""
+    p.poly([(-34, -50), (34, -50), (42, 6), (24, 160), (0, 210), (-24, 160), (-42, 6)], CREAM, INK, 2.0)
+    p.line([(-32, -34), (32, -34)], dk(CREAM, 0.86), 1.4)
+    for sgn in (-1, 1):                                # the tie: two soft loops and two short tails at the throat
+        p.poly(curve([(0, -6), (sgn * 22, -16), (sgn * 28, -2), (sgn * 18, 4)], 3), CREAM, INK, 1.6)
+        p.poly([(sgn * 2, -2), (sgn * 14, 40), (sgn * 6, 44), (sgn * 0, 4)], dk(CREAM, 0.95), INK, 1.4)
+    p.ell(0, -4, 7, 6, dk(CREAM, 0.92), INK, 1.4)
+    p.line(curve([(-30, -20), (-20, 30), (0, 52), (20, 30), (30, -20)], 4), GOLD, 2.4)     # the gold chain
+    for sgn in (-1, 1):
+        p.poly([(sgn * 42, -2), (sgn * 66, 30), (sgn * 46, 110), (sgn * 62, 150), (sgn * 6, 250), (sgn * 24, 150)],
+               sp.get('jacket', (30, 28, 32)), INK, 2.2)
+
+
+# ---------------------------------------------------------------------------------------------- the Patriot's eyes
+def patriot_eyes(p, view, sp, hx, hy):
+    """The Patriot's eyes for this film, drawn in his balaclava's eye slot over the library's (front view only):
+    sp['stare'] 0..6 = the wide-eyed stare's strength (the numbered strength sheet; Sam picks one), sp['narrow'] =
+    the narrowed, accusing eyes of "Traitors.", sp['look'] -1..1 = where the pupils point (across)."""
+    k, narrow = sp.get('stare'), sp.get('narrow', False)
+    if view != 'front' or (k is None and not narrow):
+        return
+    hw = sp.get('hw', 76)
+    fx = hx + sp.get('turn', 0.0) * hw * 0.22
+    slot = [(fx - 60, hy - 42), (fx + 56, hy - 42), (fx + 58, hy + 10), (fx - 62, hy + 10)]
+    sc = curve(P3.rough(slot, 2, 9), 3)
+    p.poly(sc, P3.P_SKIN, None)
+    k = 0.0 if k is None else float(k)
+    look = sp.get('look', 0.0)
+    bc, bw = sp.get('brow_c', (104, 74, 54)), sp.get('brow_w', 4.4)
+    for sgn in (-1, 1):
+        ex, ey = fx - 4 + sgn * 30, hy - 10
+        if sp.get('blink'):
+            p.line([(ex - 16, ey), (ex, ey + 3), (ex + 16, ey)], INK, 2.4)
+        else:
+            w = 17 + 1.0 * k
+            up, lo = (3.5, 3.0) if narrow else (7 + 2.3 * k, 6 + 1.6 * k)
+            us = np.linspace(-1, 1, 15)
+            top = [(ex + w * u, ey - up * (1 - u * u)) for u in us]
+            bot = [(ex + w * u, ey + lo * (1 - u * u)) for u in us]
+            opening = top + bot[::-1][1:-1]
+            p.poly(opening, (250, 250, 247), None)
+            r = 5.8 - 0.42 * k if not narrow else 4.6
+            cx, cy = ex + look * w * 0.5, ey + (lo - up) * 0.15
+            circ = [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
+            ir = TC.clip_convex(opening[::-1], circ)
+            if len(ir) >= 3:
+                p.poly(ir, INK, None)
+            p.line(bot, dk(P3.P_SKIN, 0.7), 1.4)
+            p.line(top, INK, 2.6)
+        if narrow:                                     # inner ends pulled hard down: accusing
+            p.line([(ex - sgn * 8, ey - 8), (ex + sgn * 8, ey - 16), (ex + sgn * 22, ey - 20)], bc, bw * 1.2)
+        else:
+            lift = min(1.2 * k, 6)               # the brows stay inside the slot
+            p.line([(ex - sgn * 6, ey - 20 - lift), (ex + sgn * 6, ey - 24 - lift * 1.1), (ex + sgn * 20, ey - 21 - lift * 0.7)],
+                   bc, bw)
+    p.poly(sc, None, INK, 2.2)
+
+
+# ---------------------------------------------------------------------------------------------- the hooks
+TC.HEADS.update(romesh=romesh_head, bash=bash_head, claudia4=claudia_head)
+TC.TORSOS.update(romesh=romesh_torso, bash=bash_torso, claudia4=claudia4_torso)
+_hair_back = B.hair_back
+
+
+def hair_back(p, sp, hx, hy, hw, hh):
+    w = sp.get('who')
+    if w == 'claudia4':
+        return TC.claudia_hair_back(p, sp, hx, hy, hw, hh)
+    if w == 'bash':
+        return bash_hair_back(p, sp, hx, hy)
+    return _hair_back(p, sp, hx, hy, hw, hh)
+
+
+B.hair_back = hair_back
+
+ROMESH = dict(who='romesh', name='Romesh', skin=R_SKIN, hw=70, hh=92, head_dy=10, outfit='suit', jacket=R_RUST,
+              sleeve=R_RUST, trousers=R_RUST, shirt=R_TEAL, shoe=(236, 234, 228), shoulders=156, full=True,
+              pose='custom', seed=41)
+BASH = dict(who='bash', name='Bash', skin=S_SKIN, hw=70, hh=92, head_dy=10, outfit='suit', jacket=S_NAVY,
+            sleeve=S_NAVY, trousers=S_NAVY, shirt=(248, 248, 246), shoe=(30, 26, 22), shoulders=146, full=True,
+            pose='custom', seed=42)
+CLAUDIA = dict(TC.CLAUDIA, who='claudia4', jacket=(30, 28, 32), sleeve=(30, 28, 32), trousers=(30, 28, 32),
+               shirt=CREAM, shoe=(20, 20, 20), seed=43)
+PATRIOT = P3.PATRIOT
+CAST = {'claudia': CLAUDIA, 'patriot': PATRIOT, 'romesh': ROMESH, 'bash': BASH}
+HEIGHTS = {'Romesh': 1.78, 'Bash': 1.78, 'Patriot': 1.78, 'Claudia': 1.70}
+P3.HEIGHTS.update(HEIGHTS)                             # patriots3_cast.person applies the real height by name
+
+
+def person(img, cam, x, y, s, sp, t=0.0, yaw=0, j=None, head_yaw=None):
+    if sp.get('who') == 'patriot':
+        j = j or V.standing(sp)
+        if patriot_eyes not in j.get('head_props', []):
+            j['head_props'] = j.get('head_props', []) + [patriot_eyes]   # after the balaclava (P3 puts it first)
+    return P3.person(img, cam, x, y, s, sp, t, yaw, j, head_yaw)
+
+
+# ---------------------------------------------------------------------------------------------- the cast sheet
+SCORES = {   # likeness.py check (rule 49), 1 Nov: `python3 source/patriots4_cast.py likeness OUT_DIR` re-measures
+    'romesh': 'photo 14: 71%, 1st of 6. Photo 16 (smiling, other glasses): -15% (the tool matches his own two photos only 17%)',
+    'bash': 'photo 18: 88%, 1st of 6; photo 19: 91%, 1st of 6',
+    'claudia': 'photo 21: 80%, 1st of 6; photo 22: 68%, 1st of 6 (rebuilt: the Traitors head scored 35%, 3rd)',
+}
+FACES = {   # the faces each one needs in the film (labels for the sheet)
+    'claudia': [('asking', dict(mouth='v:AI')), ('staring', dict(look=0.9, smile=0.0)), ('blink', dict(blink=True, smile=0.0)),
+                ('knowing smile', dict())],
+    'bash': [('talking', dict(mouth='v:E')), ('moved, eyes shut', dict(blink=True, frown=-0.03, brow_up=0.01)),
+             ('staring', dict(look=0.9, wide=0.3)), ('eyes slide', dict(look=-0.9))],
+    'romesh': [('talking', dict(mouth='v:etc')), ('sincere', dict(frown=-0.015)), ('eyes slide', dict(look=0.9)),
+               ('still', dict())],
+}
+
+
+def _flat():
+    cam = B.Cam(1.0, 540, 960)
+    cam.P = lambda x, y: (x, y)
+    cam.S = lambda v: v
+    return cam
+
+
+def sheet(out):
+    """The cast sheet: everyone in the pose and view the film shows them in, at their real heights on one floor, with
+    the body landmarks and a 1.75 m person and a 1 m ruler; the faces large with the likeness scores beside the photos;
+    and the Patriot's stare as a numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
+    import landmarks
+    import posegallery as PG
+    import sizes
+    B.SS = 1
+    W, Hh = 3000, 3420
+    img = Image.new('RGBA', (W, Hh), (232, 228, 222, 255))
+    d = ImageDraw.Draw(img)
+    big, mid, small = (ImageFont.truetype(FONT, n) for n in (44, 30, 24))
+    d.text((30, 18), 'PATRIOTS 4: the cast (likeness heads measured; real heights; poses from the gallery)', font=big,
+           fill=(30, 30, 30))
+    cam = _flat()
+    s = 0.62
+    floor = 900
+    row = [('claudia', 0, PG.hands_on_table, 'Claudia, front\n(hands on the table, ref 03)'),
+           ('bash', 0, PG.palms_together, 'Bash, front\n(hands together, shot 2)'),
+           ('romesh', 0, PG.hands_on_table, 'Romesh, front\n(hands on the table, shot 3)'),
+           ('patriot', 0, PG.point_both, 'The Patriot, front\n("Traitors.", shot 12)'),
+           ('patriot', 0, None, 'The Patriot, front\n(the stare, shots 5-11)'),
+           ('patriot', 180, None, 'The Patriot from behind\n(his shoulder, shot 9)')]
+    for i, (who, yaw, build, label) in enumerate(row):
+        sp = dict(CAST[who], mouth='rest')
+        if who == 'patriot' and build is not None:
+            sp['narrow'] = True
+        elif who == 'patriot' and yaw == 0:
+            sp['stare'] = 3
+        lay = Image.new('RGBA', (740, 980), (0, 0, 0, 0))     # wide: the pointing hands reach far out
+        s2 = P3.scale_for(sp, s)
+        if i == 0:
+            landmarks.draw(ImageDraw.Draw(lay), 370, floor - 928 * s2, s2, 400)
+        person(lay, cam, 370, floor - 928 * s2, s, sp, 0.0, yaw, build(sp) if build else None)
+        img.alpha_composite(lay, (30 + 450 * i - 150 + (60 if i >= 3 else 0) + (90 if i >= 4 else 0), 80))
+        for k, line in enumerate(label.split('\n')):
+            d.text((250 + 450 * i + (60 if i >= 3 else 0) + (90 if i >= 4 else 0), 1000 + 30 * k), line, font=small, fill=(40, 40, 40), anchor='mm')
+    lay = Image.new('RGBA', (200, 980), (0, 0, 0, 0))
+    sizes.scale_ref(ImageDraw.Draw(lay), 100, floor, s / V.M_PER_UNIT)
+    img.alpha_composite(lay, (2790, 80))
+    d.text((2860, 1060), '1.75 m, 1 m', font=small, fill=(40, 40, 40), anchor='mm')
+    d.text((1500, 64), 'heights: Romesh, Bash, the Patriot 1.78 m; Claudia 1.70 m', font=small, fill=(40, 40, 40))
+    # the faces, each beside its photo, with the likeness score
+    y0 = 1080
+    for r, who in enumerate(('claudia', 'bash', 'romesh')):
+        y = y0 + r * 560
+        ph = Image.open(os.path.join(REFS, PHOTOS[who][0])).convert('RGB')
+        ph.thumbnail((380, 470))
+        img.paste(ph, (30, y + 40))
+        d.text((30, y), f"{CAST[who]['name']}: likeness {SCORES[who]}", font=mid, fill=(30, 30, 30))
+        for c, (label, extra) in enumerate(FACES[who]):
+            lay = Image.new('RGBA', (600, 520), (0, 0, 0, 0))
+            q = dict(dict(CAST[who], mouth='rest'), **extra)
+            person(lay, cam, 300, 440, 1.5, q, 0.0, 0)
+            img.alpha_composite(lay.crop((40, 0, 560, 480)).resize((476, 440)), (440 + 630 * c, y + 50))
+            d.text((678 + 630 * c, y + 510), label, font=small, fill=(40, 40, 40), anchor='mm')
+    # the Patriot's stare: the numbered strength sheet, then the looks the film needs
+    y = y0 + 3 * 560 + 10
+    d.text((30, y), "The Patriot's wide-eyed stare (shots 5-11): pick a strength, 1 = slight, 6 = huge.  Then: eyes sliding "
+           'to Romesh (shot 8), and narrowed for "Traitors." (shot 12)', font=mid, fill=(30, 30, 30))
+    faces = [(str(k), dict(stare=k)) for k in range(1, 7)] + [('to Romesh', dict(stare=3, look=-0.9)),
+                                                                ('"Traitors."', dict(narrow=True, mouth='v:etc'))]
+    for c, (label, extra) in enumerate(faces):
+        lay = Image.new('RGBA', (600, 520), (0, 0, 0, 0))
+        person(lay, cam, 300, 440, 1.5, dict(dict(PATRIOT, mouth='rest'), **extra), 0.0, 0)
+        img.alpha_composite(lay.crop((60, 0, 540, 480)).resize((350, 350)), (30 + 370 * c, y + 60))
+        d.text((205 + 370 * c, y + 430), label, font=mid if len(label) < 3 else small, fill=(20, 20, 20), anchor='mm')
+    img.convert('RGB').save(out, quality=88)
+    return out
+
+
+def LINE_SUBJECTS():
+    """Each of the cast alone, large, for the line-work check (linecheck.py)."""
+    def one(sp):
+        def draw(im):
+            person(im, B.Cam(1.0, 540, 960), 540, 420, 1.3, dict(sp), 0.0, 0)
+        return draw
+    return [(k, one(sp)) for k, sp in CAST.items()]
+
+
+# ---------------------------------------------------------------------------------------------- the likeness check
+PHOTOS = {
+    'romesh': ['14-romesh-straight-1.jpg', '16-romesh-straight-2.jpg'],
+    'bash': ['18-bash-straight-1.jpg', '19-bash-straight-2-hand.jpg'],
+    'claudia': ['21-claudia-straight-1.jpg', '22-claudia-straight-2.jpg'],
+}
+OTHERS = {   # the line-up: our drawing must sit nearer its own person than any of these famous faces
+    'romesh': ['patriots-4/18-bash-straight-1.jpg', 'patriots-4/21-claudia-straight-1.jpg',
+               'newsdesk/netanyahu-1-front.jpg', 'shocking/farage-5-front.jpg', 'traitors/25-putin-front-close.jpg'],
+    'bash': ['patriots-4/14-romesh-straight-1.jpg', 'patriots-4/21-claudia-straight-1.jpg',
+             'newsdesk/netanyahu-1-front.jpg', 'shocking/farage-5-front.jpg', 'traitors/25-putin-front-close.jpg'],
+    'claudia': ['patriots-4/14-romesh-straight-1.jpg', 'patriots-4/18-bash-straight-1.jpg',
+                'newsdesk/netanyahu-1-front.jpg', 'shocking/farage-5-front.jpg', 'traitors/25-putin-front-close.jpg'],
+}
+
+
+def head_png(who, out, average=False):
+    """One head, large, front on, on a plain light ground (what likeness.py check measures)."""
+    B.SS = 1
+    img = Image.new('RGBA', (700, 820), (236, 234, 230, 255))
+    sp = dict(CAST[who], average=average, mouth='rest')
+    cam = B.Cam(1.0, 540, 960)
+    cam.P = lambda x, y: (x, y)
+    cam.S = lambda v: v
+    person(img, cam, 350, 640, 2.0, sp, 0.0, 0)
+    img.convert('RGB').save(out)
+    return out
+
+
+def likeness(out_dir):
+    import subprocess
+    os.makedirs(out_dir, exist_ok=True)
+    for who in ('romesh', 'bash', 'claudia'):
+        ours = head_png(who, os.path.join(out_dir, f'{who}.png'))
+        head_png(who, os.path.join(out_dir, f'{who}-average.png'), average=True)
+        refs = os.path.join(HERE, '..', 'references')
+        for ph in PHOTOS[who]:
+            cmd = [sys.executable, os.path.join(HERE, 'likeness.py'), 'check', os.path.join(REFS, ph), ours,
+                   os.path.join(out_dir, f'{who}-check-{ph[:2]}.jpg'), '--others'] + [os.path.join(refs, o) for o in OTHERS[who]]
+            r = subprocess.run(cmd, capture_output=True, text=True)
+            print(f'--- {who} vs {ph}')
+            print('\n'.join(x for x in (r.stdout + r.stderr).splitlines()
+                            if not any(w in x for w in ('WARN', 'W0000', 'INFO', 'Logging', 'I0000'))))
+
+
+def main():
+    a = sys.argv[1:]
+    if a[0] == 'head':
+        print(head_png(a[1], a[2], '--average' in a))
+    elif a[0] == 'likeness':
+        likeness(a[1])
+    elif a[0] == 'sheet':
+        print(sheet(a[1]))
+
+
+if __name__ == '__main__':
+    main()

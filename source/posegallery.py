@@ -157,6 +157,34 @@ def flapping(sp, name='up'):
     return j
 
 
+def palms_together(sp):
+    """Hands pressed together at the chest, fingers up (Patriots 4, Bash moved, refs 07-08): the two circle hands meet
+    in front of the breastbone, elbows down and a little out."""
+    j = V.standing(sp)
+    for side, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, side, (sg * 17.0, 96.0, 96.0), 'down', 'palm')
+    return j
+
+
+def hands_on_table(sp, h=0.95, reach=120.0):
+    """Both hands resting on a table edge in front (Patriots 4, refs 03, 09): the palms flat at the table's height
+    `h` metres, `reach` units in front, shoulder-width apart, elbows bent back into the picture."""
+    j = V.standing(sp)
+    y = 928.0 - h / V.M_PER_UNIT * 1.75 / sp.get('_height', 1.75)
+    for side, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, side, (sg * 112.0, y, reach), 'back', 'palm')
+    return j
+
+
+def point_both(sp, spread=470.0):
+    """Both arms flung out, a finger pointing each way (Patriots 4, the Patriot's "Traitors.": one at each of the
+    two winners)."""
+    j = V.standing(sp)
+    for side, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, side, (sg * spread, 30.0, 220.0), "down", "point")
+    return j
+
+
 GALLERY = [   # (name, pose(sp) -> joints, where it came from)
     ('arms folded', arms_folded, 'moves.pose (hands tucked on purpose)'),
     ('hands up', hands_up, 'new, 28 Oct'),
@@ -166,11 +194,16 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
     ('hands on a gun', rifle, 'new, 28 Oct'),
     ('flapping (up)', lambda sp: flapping(sp, 'up'), 'Patriots 3, note 18'),
     ('flapping (pat)', lambda sp: flapping(sp, 'pat'), 'Patriots 3, note 18'),
+    ('palms together', palms_together, 'Patriots 4, 1 Nov'),
+    ('hands on table', hands_on_table, 'Patriots 4, 1 Nov'),
+    ('pointing both ways', point_both, 'Patriots 4, 1 Nov'),
 ]
 
 
 AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses it from there
     'hands on a gun': {'behind': 'both hands hidden by his back: show him three-quarter back instead'},
+    'hands on table': {'three-quarter back': 'the far hand is on the table beyond his body: seen from the front only',
+                       'behind': 'both hands are on the table beyond his body: seen from the front only'},
 }
 
 

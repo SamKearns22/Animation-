@@ -19,8 +19,11 @@ Read this first in any new session, after CLAUDE.md.
 refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
 - 1 Nov (planning, Opus): references (`references/patriots-4/`) and 6 recordings (`source/audio/patriots4-*`) filed;
   Sam's answers in; plan in metres (`source/patriots4_plan.py`); rough composition sheet sent: Sam called it too
-  rudimentary and moved on. Budget 15% of a week; reuse the Round Table room from The Traitors. NEXT: BUILDING (Opus
-  high, fresh chat): read `notes/patriots-4.md` "Where things stand".
+  rudimentary and moved on. Budget 15% of a week; reuse the Round Table room from The Traitors.
+- 1 Nov (building, Opus): cast built (`source/patriots4_cast.py`): Romesh, Bash and a rebuilt Claudia drawn from face
+  measurements, all pass the likeness check (1st in the line-up); the Patriot reused with stare strengths 1-6; 3 new
+  gallery poses. Cast sheet sent (`review/patriots4-cast.jpg`). Winner's room to be a painted panorama with a pan.
+  NEXT: Sam's stare number and cast notes; then the room and the film file (`notes/patriots-4.md` "Where things stand").
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).

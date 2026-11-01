@@ -22,6 +22,9 @@ pose still passes wherever this table says it does.
 | hands on a gun | `posegallery.rifle(sp)` | new, 28 Oct | front, three-quarter, side, three-quarter back | behind | port arms, hands over the rifle. From behind both hands are hidden by his back: show him three-quarter back instead. A big 3D gun through the real camera: `held3d.hold` |
 | flapping (up) | `posegallery.flapping(sp, 'up')` | Patriots 3, note 18 | all 5 views | | hands high and wide, at the sleeves' ends |
 | flapping (pat) | `posegallery.flapping(sp, 'pat')` | Patriots 3, note 18 | all 5 views | | patting the air down |
+| palms together | `posegallery.palms_together(sp)` | Patriots 4, 1 Nov | all 5 views | | hands pressed together at the chest (moved, grateful) |
+| hands on table | `posegallery.hands_on_table(sp, h)` | Patriots 4, 1 Nov | front, three-quarter, side | three-quarter back, behind | both palms on a table edge `h` metres high in front; from behind the table is beyond him, so the hands are hidden |
+| pointing both ways | `posegallery.point_both(sp)` | Patriots 4, 1 Nov | all 5 views | | both arms flung out, one finger at each of two people |
 
 **Adding a pose:** write it in `source/posegallery.py` (a function of `sp` returning the joints; credit the film), add
 it to `GALLERY`, run the sheet, fix it until every view passes or list the views that fail in `AVOID` with the reason,
