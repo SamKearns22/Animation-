@@ -223,3 +223,34 @@
   and a cheat that moves someone off their plan seat needs Sam's yes first (note 26).
 - **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` and `source/patriots4_room.py` (codemap).
 
+
+## Handover before animatic 3 (1 Nov, archived 1 Nov)
+- **Rules that bite at this stage (rule 48):** check sheet and Sam's clear yes before animatic 3 (no animatic while a
+  shot misses anyone the brief puts in it); flag losses and additions; a repeated note is a warning (find why first).
+- **Done (1 Nov, Opus high):** a real-camera wide view for shots 9 and 13 was built (`source/patriots4_wide.py`, from
+  3 o'clock, then from 1:30: notes 27-28), then Sam chose (note 29) to go BACK to animatic 2's cheat for both shots
+  (Romesh 200, Bash 224 degrees, heading 212, zoom 1.1), now with the one table size (note 25). `patriots4_wide.py`
+  is kept, unused (`WIDE = ()`), in the kit catalogue. Note 30: birds tweeting under Claudia's first line removed
+  (`mossad_audio.debird`, in every recording's cleaning: it acts only where whistles are found; on her line 132 whistle
+  moments down to 7, her voice unchanged). Her pre-flight flag (0.9-1.6 s) stays: it is her drawn-out "Romesh" (note
+  3), not the birds. Sheet sent: `review/patriots4-wide-view.jpg`. Pre-flight: the same 7 named faults.
+- **Next:** If Sam has more notes: Opus MEDIUM, fresh chat. If he is happy: the
+  check sheet (`python3 source/preflight.py patriots4 OUT_DIR`), his clear yes, then animatic 3 (Sonnet:
+  `python3 source/patriots4.py final OUT.mp4 --small`, about 2-3 minutes).
+- **Losses, cheats and my additions:** the cheat in shots 9 and 13 (Sam's choice, note 29). Bug fixed: `patriots4_room.turned_leg` drew each leg as two crossed spikes (hidden under the rim elsewhere). Plan fixes:
+  sizes are (width, depth, height): the table, coin pile, fire bowl and Round Table had height and depth swapped; the
+  table is 0.9 m (was 0.37, worked out wrongly); the Round Table moved to z -6 to clear the opening (plan only: the
+  painting is unchanged). Earlier ones still in: floor beside the table in the wider shots; cuts not swings; hall
+  lamps gone; the people bigger in frame; shot 13 and the extra candles and torches.
+- **Usage (rule 44):** not measured in this chat (no meter here: slipped).
+- **Rule requests and proposals not yet in a guide (Sam: discuss at the END of the project):** (1) PROPOSED: the
+  composition sheet uses the real cast drawings (film-quality-rules 11). (2) PROPOSED: famous heads drawn from
+  measurements, never by eye (rethink: Sam chose the eye-drawn Claudia). (3) NEW: one frame per shot at full quality
+  before the first animatic. (4) NEW: a note about a set seam is checked in every shot where it shows. (5) NEW: a
+  prop's size is fixed in the plan and never scaled per shot to fill a frame (note 25); and a cheat that moves
+  someone off their plan seat needs Sam's yes first (note 26). (6) NEW (this chat): a handover's summary of Sam's
+  choice is checked against his own words and the references before building on it (note 27: "seated, chairs" was
+  in the handover; the references show them standing, no chairs). (7) NEW (this chat, tool): plan.py warns when a
+  thing's depth is a typical height (sizes are width, depth, height; four were swapped here).
+- **Files to open:** this file; `guides/satire.md`; `source/patriots4.py`, `source/patriots4_wide.py` (codemap).
+

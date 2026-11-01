@@ -39,6 +39,9 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
   (`review/patriots4-wide-view.jpg`). NEXT: Sam's notes (Opus medium) or the check sheet, his yes, animatic 3
   (Sonnet), fresh chat: `notes/patriots-4.md`, "Where things stand". Then (notes 29-30): back to the animatic-2
   cheat for shots 9 and 13 (the wide view kept unused); birds removed from Claudia's first line (`mossad_audio.debird`).
+- 1 Nov (animatic 3, Sonnet; notes 31-33, Opus medium): animatic 3 sent; R&B camera lower, breathing bob off, low
+  birds out of Claudia's line 1 (`debird_low`); clips sent. Sam: straight to the FINAL, with the 1.6 s sign-off.
+  NEXT (Sonnet, fresh chat): pre-flight, final render, finish: `notes/patriots-4.md`, "Where things stand".
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
