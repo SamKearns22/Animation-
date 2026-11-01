@@ -10,8 +10,8 @@ is laid out on MediaPipe's average face and moved by how far this person differs
 (`PUSH`). The same drawing with the average measurements is the head's twin (`--average`), so likeness.py check can
 take away what the drawing style itself does.
 
-    Romesh  rust-orange double-breasted suit, teal top; black rectangular glasses; high black curly hair, short
-            sides; full near-black beard with grey flecks; brows set high; a wide nose; a long narrow face (refs 03,
+    Romesh  rust-orange double-breasted suit, teal top; big squarish CLEAR glasses; short tight dark curls, greying a
+            little; a SHORT salt-and-pepper beard (greyest at the chin) under a dark moustache (Sam, 1 Nov: ref 13); brows set high; a wide nose; a long narrow face (refs 03,
             09, 13-16)
     Bash    dark navy tartan suit, white shirt open at the collar; swept wavy brown hair falling over the brow; close-set
             big eyes under low heavy brows; a narrow tapering jaw; a long nose; light stubble; two silver rings
@@ -61,8 +61,8 @@ MEASURED['claudia'] = dict(face_wide=0.791, jaw_wide=0.827, forehead_wide=0.956,
                                              # words against smiling faces (a small mouth, a long gap, a long chin)
 PUSH = {'romesh': 1.6, 'bash': 1.6, 'claudia': 1.6}
 TUNE = {   # per measure, an extra push where the first check found the drawing under the photo (rule 49)
-    'romesh': dict(jaw_wide=1.0, nose_wide=1.6, eye_size=2.0, forehead_wide=1.5, lip_low=3.0, philtrum=2.0,
-                   brow_slope=1.8, eyes_apart=4.0, brow_high=1.8, nose_long=1.5),
+    'romesh': dict(jaw_wide=1.0, nose_wide=2.0, eye_size=2.0, forehead_wide=1.0, lip_low=3.0, philtrum=2.0,
+                   brow_slope=1.8, eyes_apart=4.5, brow_high=0.0, nose_long=1.5),   # searched, 1 Nov (series look)
     'bash': dict(jaw_wide=3.0, philtrum=2.0, brow_slope=1.5, eye_size=1.4, nose_wide=2.0, eye_open=1.4, brow_high=1.3),
     'claudia': dict(jaw_wide=15.0),        # the face finder pulls a drawn jaw back towards the average
 }
@@ -200,8 +200,11 @@ def lips(p, f, L, sp, lip_c, fx_my):
 R_SKIN = (182, 124, 90)
 R_HAIR = (34, 30, 32)
 R_HAIR_SIDE = (58, 54, 56)
-R_BEARD = (40, 36, 38)
-R_GREY = (138, 132, 130)
+R_BEARD = (78, 72, 72)
+R_MOUST = (34, 30, 32)
+R_GREY = (176, 172, 168)
+R_FRAME = (214, 212, 206)
+RIM = [4.0, 2.6]                 # clear frames: (outline, frame) widths
 R_LIP = (150, 92, 84)
 R_RUST = (190, 88, 42)
 R_TEAL = (36, 96, 104)
@@ -219,70 +222,82 @@ def romesh_head(img, p, sp, t, hx, hy):
         p.line([(ex - sgn * 2, ey - 10), (ex + sgn * 3, ey), (ex - sgn * 1, ey + 10)], dk(skin, 0.7), 1.4)
     out = curve(f.pts(outline_uv(L, 0.42)), 4)
     p.poly(out, skin, INK, 2.6)
-    # the full beard: from the sideburns down the cheeks (its upper edge slants from the ear to near the nose) round
-    # the chin a little past it, with the moustache over the top lip (refs 14, 16)
+    # the series look (Sam, 1 Nov: ref 13, taken two days before, with refs 04-05): a SHORT, close-trimmed beard,
+    # salt-and-pepper and greyest at the chin, under a darker moustache; it hugs the jaw, from the sideburns down
     fw, jw = L['fw'], L['jw']
     ny, l0, l17 = L['nose_y'], L['lip0'], L['lip17']
-    right = [(fw * 0.5 + 0.004, 0.36), (fw * 0.5 - 0.03, 0.47), (L['nw'] * 0.75, ny - 0.035), (L['nw'] * 0.42, ny + 0.012),
+    right = [(fw * 0.5 + 0.004, 0.3), (fw * 0.5 - 0.04, 0.5), (L['nw'] * 0.85, ny + 0.0), (L['nw'] * 0.45, ny + 0.015),
              (L['mw'] * 0.36, l0 - 0.008)]
-    # a full beard stands out past the jawline (as in the photos, where it is what makes his jaw read broad)
-    rim = [(fw * 0.5 + 0.012, 0.6), (jw * 0.5 + 0.07, 0.84), (jw * 0.4, 1.02), (jw * 0.16, 1.08), (0.0, 1.09)]
+    rim = [(fw * 0.5 + 0.006, 0.6), (jw * 0.5 + 0.03, 0.84), (jw * 0.36, 1.0), (jw * 0.14, 1.04), (0.0, 1.045)]
     shape = ([(u, v) for u, v in right] + [(-u, v) for u, v in right[::-1]]
              + [(-u, v) for u, v in rim] + [(u, v) for u, v in rim[::-1]])
-    shape = shape[:len(right) * 2] + [(-fw * 0.5 - 0.004, 0.36)] + shape[len(right) * 2:]
+    shape = shape[:len(right) * 2] + [(-fw * 0.5 - 0.004, 0.3)] + shape[len(right) * 2:]
     beard_pts = curve(f.pts([(u, v) for u, v in shape[len(right):]] + [(u, v) for u, v in shape[:len(right)]]), 4)
-    p.poly(beard_pts, R_BEARD, INK, 2.2)
+    p.poly(beard_pts, R_BEARD, INK, 2.0)
     rng = np.random.default_rng(14)
-    for _ in range(46):                                # grey flecks through it, more at the chin
-        u, v = rng.uniform(-jw * 0.45, jw * 0.45), rng.uniform(l17 + 0.02, 1.03)
-        if abs(u) < jw * 0.5 * (1.1 - (v - 0.8)):
+    for _ in range(150):                               # salt and pepper: grey flecks, thickest at the chin
+        u, v = rng.uniform(-fw * 0.5, fw * 0.5), rng.uniform(0.5, 1.03)
+        inside = abs(u) < (fw * 0.5 if v < 0.6 else jw * 0.5 * (1.0 - 1.4 * max(0.0, v - 0.84)))
+        if inside and (v > l17 or abs(u) > L['mw'] * 0.62) and rng.random() < 0.35 + 0.8 * max(0.0, v - 0.7):
             x, y = f(u, v)
-            p.line([(x, y), (x + rng.uniform(-2, 2), y + 5)], R_GREY, 1.2)
+            p.line([(x, y), (x + rng.uniform(-1.5, 1.5), y + 3.5)], R_GREY, 1.3)
     eyes(p, f, L, sp, (48, 30, 22), dk(skin, 0.82), wide=sp.get('wide', 0.0))
     brows(p, f, L, (28, 24, 24), 0.036, sp.get('brow_up', 0.0), sp.get('frown', 0.0))
     nose(p, f, L, skin)
     fx, my = f(0.0, (L['lip13']))
     lips(p, f, L, sp, R_LIP, (fx, my - 6))
-    # the moustache, over the top of the upper lip
-    p.poly(curve(f.pts([(-L['mw'] * 0.58, L['lip13'] + 0.01), (-L['nw'] * 0.5, ny + 0.012), (0.0, ny + 0.02),
-                        (L['nw'] * 0.5, ny + 0.012), (L['mw'] * 0.58, L['lip13'] + 0.01), (L['mw'] * 0.3, l0 + 0.012),
-                        (0.0, l0 + 0.016), (-L['mw'] * 0.3, l0 + 0.012)]), 3), R_BEARD, INK, 1.6)
-    # black rectangular glasses (the first thing people see, says the card)
+    # the moustache, darker than the beard, over the top of the upper lip
+    mw2, l13 = L['mw'] * 0.5, L['lip13']                # a band from under the nose, drooping past the lip corners
+    p.poly(curve(f.pts([(-mw2 * 1.2, l13 + 0.04), (-mw2 * 1.05, l0 + 0.0), (-L['nw'] * 0.45, ny + 0.014), (0.0, ny + 0.022),
+                        (L['nw'] * 0.45, ny + 0.014), (mw2 * 1.05, l0 + 0.0), (mw2 * 1.2, l13 + 0.04), (mw2 * 1.06, l13 + 0.03),
+                        (mw2 * 0.6, l0 + 0.012), (0.0, l0 + 0.016), (-mw2 * 0.6, l0 + 0.012), (-mw2 * 1.06, l13 + 0.03)]), 3),
+           R_MOUST, INK, 1.6)
+    # big squarish CLEAR frames (refs 04, 05, 13: pale see-through plastic, not black)
     ew, ecx, ey = L['ew'], L['ecx'], L['eye_y']
     for sgn in (-1, 1):
         cx = sgn * ecx
-        w2, h1, h2 = ew * 0.82, 0.085, 0.07
-        fr = [(cx - w2, ey - h1), (cx + w2, ey - h1), (cx + w2 * 0.98, ey + h2), (cx - w2 * 0.96, ey + h2)]
-        pts = f.pts(fr)
-        p.poly(pts, None, (22, 20, 22), 6.0)
-        p.poly(pts, None, INK, 1.2)
+        w2, h1, h2 = ew * 0.85, 0.085, 0.075
+        fr = [(cx - w2, ey - h1), (cx + w2, ey - h1), (cx + w2, ey + h2 * 0.8), (cx + w2 * 0.8, ey + h2),
+              (cx - w2 * 0.8, ey + h2), (cx - w2, ey + h2 * 0.8)]
+        pts = curve(f.pts(fr), 2)
+        p.poly(pts + pts[:1], None, INK, RIM[0])
+        p.poly(pts + pts[:1], None, R_FRAME, RIM[1])
+        p.line(f.pts([(cx + w2 * 0.2, ey - h1 * 0.6), (cx + w2 * 0.6, ey - h1 * 0.15)]), (246, 246, 244), 1.6)  # a glint
         tip = (sgn * (L['fw'] * 0.5 + 0.01), ey - 0.05)
-        p.line(f.pts([(cx + sgn * w2, ey - h1 + 0.02), tip]), (22, 20, 22), 5.0)
-    p.line(f.pts([(-ecx + ew * 0.82, ey - 0.05), (0.0, ey - 0.065), (ecx - ew * 0.82, ey - 0.05)]), (22, 20, 22), 5.0)
-    # the hair: short, darker-grey sides above the ears, and a high black curly top with a clear forehead
+        p.line(f.pts([(cx + sgn * w2, ey - h1 + 0.02), tip]), INK, 6.4)
+        p.line(f.pts([(cx + sgn * w2, ey - h1 + 0.02), tip]), R_FRAME, 4.0)
+    for v in (ey - 0.05, ey - h1):                     # the double bridge
+        p.line(f.pts([(-ecx + ew * 0.85, v), (0.0, v - 0.008), (ecx - ew * 0.85, v)]), INK, 5.6)
+        p.line(f.pts([(-ecx + ew * 0.85, v), (0.0, v - 0.008), (ecx - ew * 0.85, v)]), R_FRAME, 3.4)
+    # the hair: short tight curls close to the head, greying a little (ref 13)
     fhw = L['fhw']
-    side = [(fhw * 0.5 + 0.015, 0.33), (fhw * 0.5 + 0.03, 0.12), (fhw * 0.5 * 0.86, 0.0), (fhw * 0.5 * 0.86, 0.08),
-            (fhw * 0.5 * 0.97, 0.3)]
+    side = [(fhw * 0.5 + 0.015, 0.31), (fhw * 0.5 + 0.03, 0.12), (fhw * 0.5 * 0.86, 0.0), (fhw * 0.5 * 0.86, 0.08),
+            (fhw * 0.5 * 0.97, 0.29)]
     for sgn in (-1, 1):
         if sgn < 0 and f.tq > 0.5:
             continue
         p.poly(curve(f.pts([(sgn * u, v) for u, v in side]), 3), R_HAIR_SIDE, INK, 2.0)
-    top = [(-fhw * 0.5 * 0.9, 0.02), (-fhw * 0.5 - 0.035, -0.08), (-fhw * 0.5 * 0.95, -0.2), (-0.26, -0.33),
-           (-0.12, -0.38), (0.02, -0.4), (0.15, -0.38), (0.27, -0.33), (fhw * 0.5 * 0.97, -0.2), (fhw * 0.5 + 0.035, -0.08),
-           (fhw * 0.5 * 0.9, 0.02), (0.22, 0.04), (0.08, 0.035), (-0.06, 0.04), (-0.22, 0.035)]
-    hp = curve(f.pts(top), 4)
-    # lumpy curls round the top edge: small bumps along the outline
-    bumpy = []
+    top = [(-fhw * 0.5 * 0.92, 0.03), (-fhw * 0.5 - 0.035, -0.07), (-fhw * 0.5 * 0.92, -0.2), (-0.24, -0.3),
+           (-0.1, -0.34), (0.04, -0.35), (0.18, -0.33), (0.28, -0.28), (fhw * 0.5 * 0.94, -0.2), (fhw * 0.5 + 0.035, -0.07),
+           (fhw * 0.5 * 0.92, 0.03), (0.22, 0.05), (0.08, 0.035), (-0.06, 0.045), (-0.22, 0.035)]
+    hp = curve(f.pts(top), 6)
+    cx0 = sum(q[0] for q in hp) / len(hp)
+    cy0 = f.top - 0.12 * H
+    bumpy = []                                         # messy curls: uneven clumps all round the top and sides
     for i, q in enumerate(hp):
-        if q[1] < f.top - 0.02 * H:
-            a = rng.uniform(-3.5, 3.5)
-            bumpy.append((q[0] + a * 0.4, q[1] - abs(a)))
+        if q[1] < f.top + 0.02 * H:
+            a = 7.0 * abs(math.sin(i * 0.9)) ** 0.6 * (0.6 + 0.4 * math.sin(i * 2.3) ** 2)
+            dx, dy = q[0] - cx0, q[1] - cy0
+            n = math.hypot(dx, dy) or 1.0
+            bumpy.append((q[0] + dx / n * a, q[1] + dy / n * a))
         else:
             bumpy.append(q)
     p.poly(bumpy, R_HAIR, INK, 2.4)
-    for k in range(10):                                # curl marks inside
-        x, y = f(rng.uniform(-0.28, 0.28), rng.uniform(-0.3, -0.04))
-        p.line(curve([(x - 6, y + 3), (x - 2, y - 4), (x + 4, y - 3), (x + 5, y + 3)], 3), (70, 66, 70), 1.4)
+    for k in range(22):                                # curl marks inside (darker, a few grey hairs)
+        x, y = f(rng.uniform(-0.3, 0.3), rng.uniform(-0.3, -0.01))
+        c = (104, 100, 100) if k % 5 == 0 else (14, 12, 14)
+        r = rng.uniform(3.5, 6)
+        p.line([(x + r * math.cos(a), y + r * 0.8 * math.sin(a)) for a in np.linspace(0.4, 4.6, 8)], c, 1.4)
     return fx
 
 
@@ -525,7 +540,7 @@ def person(img, cam, x, y, s, sp, t=0.0, yaw=0, j=None, head_yaw=None):
 
 # ---------------------------------------------------------------------------------------------- the cast sheet
 SCORES = {   # likeness.py check (rule 49), 1 Nov: `python3 source/patriots4_cast.py likeness OUT_DIR` re-measures
-    'romesh': 'photo 14: 71%, 1st of 6. Photo 16 (smiling, other glasses): -15% (the tool matches his own two photos only 17%)',
+    'romesh': 'photo 14: 74%, 1st of 6, in the series look (ref 13). Photo 16 disagrees (the tool matches his own two photos 17%)',
     'bash': 'photo 18: 88%, 1st of 6; photo 19: 91%, 1st of 6',
     'claudia': 'photo 21: 80%, 1st of 6; photo 22: 68%, 1st of 6 (rebuilt: the Traitors head scored 35%, 3rd)',
 }
@@ -604,7 +619,7 @@ def sheet(out):
             d.text((678 + 630 * c, y + 510), label, font=small, fill=(40, 40, 40), anchor='mm')
     # the Patriot's stare: the numbered strength sheet, then the looks the film needs
     y = y0 + 3 * 560 + 10
-    d.text((30, y), "The Patriot's wide-eyed stare (shots 5-11): pick a strength, 1 = slight, 6 = huge.  Then: eyes sliding "
+    d.text((30, y), "The Patriot's wide-eyed stare (shots 5-11): Sam chose: from 1 slowly up to 4.  Then: eyes sliding "
            'to Romesh (shot 8), and narrowed for "Traitors." (shot 12)', font=mid, fill=(30, 30, 30))
     faces = [(str(k), dict(stare=k)) for k in range(1, 7)] + [('to Romesh', dict(stare=3, look=-0.9)),
                                                                 ('"Traitors."', dict(narrow=True, mouth='v:etc'))]
