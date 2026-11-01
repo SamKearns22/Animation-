@@ -10,7 +10,7 @@ it from the person it shows, so everyone faces it (rule 38) and the Patriot's qu
 """
 import math
 
-R = 0.52                       # from the table's centre to where each person stands (in close: the table is 0.49 m)
+R = 0.62                       # from the table's centre to where each person stands (the table is 0.49 m; clear of it)
 TABLE_H = 0.95                 # they lean on it with both hands (refs 03, 09)
 EYE = 1.5
 
@@ -83,7 +83,8 @@ CAMS = {   # focal in pixels for 1080 x 1920 (1146: 20 px a degree, patriots4_ro
     'his view': pan(8, 825, why="Romesh and Bash in one frame, the Patriot's shoulder in the corner"),
 }
 CAMS.update({'claudia 2': CAMS['claudia'], 'claudia close 2': CAMS['claudia close'], 'patriot 2': CAMS['patriot'],
-             'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners")})
+             'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners"),
+             'reaction': dict(CAMS['his view'], why="their reaction (Sam, 1 Nov): over his shoulder, his pointing arm in the corner")})
 GROUPS = {}
 FRAMING = {   # rule 10: the Hook Text over the arch above Claudia; each key beat with its minimum hold
     'claudia': dict(hook='the arch and lattice above Claudia, top third', beats=[('the question', 1.0)]),
@@ -91,9 +92,11 @@ FRAMING = {   # rule 10: the Hook Text over the arch above Claudia; each key bea
     'romesh': dict(beats=[('sincere, hands on the table', 1.0)]),
     'patriot': dict(beats=[('eyes widen', 0.8), ('Errrr held', 2.0)]),
     'his view': dict(beats=[('their eyes slide to each other', 1.2)]),
+    'reaction': dict(beats=[('mouths drop open', 0.7), ('eyes to each other, held', 1.0)]),
 }
 SHOT_MARKS = {   # rule 38: who is on screen in each shot, by mark (plan.py checks each faces the lens)
     'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'patriot': ['patriot'],
     'claudia close': ['claudia'], 'bash close': ['bash'], 'patriot close': ['patriot'],
     'his view': ['romesh', 'bash'],   # the Patriot's back at the frame edge
+    'reaction': ['romesh', 'bash'],
 }

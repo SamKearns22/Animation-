@@ -108,26 +108,26 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail, ticked before the first animatic
 | # | from the brief (Sam, 1 Nov) | done? |
 |---|------|------|
-| 1 | Celebrity Traitors final 2026: winners Romesh Ranganathan and Sebastian "Bash" Croft at the winner's table with Claudia Winkleman | |
+| 1 | Celebrity Traitors final 2026: winners Romesh Ranganathan and Sebastian "Bash" Croft at the winner's table with Claudia Winkleman | yes: all four at the winner's table (Claudia, Romesh, Bash; the Patriot revealed) |
 | 2 | Winner's table: a smaller table before the arch the banished players leave through | yes (half size, pedestal: note 1) |
-| 3 | The Round Table in the opposite direction (as in The Traitors film) | |
-| 4 | A stack of large gold coins on the winner's table | |
-| 5 | Camera looks over the table at Claudia: "Romesh and Bash, remind us who you did this for?" | |
-| 6 | Camera swivels to Bash: overwhelmed, emotional yet excited: "I did this for a wonderful organisation, they are called Choose Love. They help displaced people all over the world including queer refugees." | |
-| 7 | Camera swivels to Romesh: "I'm doing this for a cause that is very dear to my heart, it's the Refugee Council." | |
-| 8 | Swivel to Claudia: "And what about you?" | |
-| 9 | Only now we see a fourth person at the winner's table: The Patriot. His eyes widen | |
-| 10 | The Patriot must NOT appear in shot before this moment | |
-| 11 | "Errrrrrrrrrrrrrrr" uninterrupted, 15-20 s of the 40 s file, faded gently out; his eyes stay wide | |
-| 12 | During it: Claudia staring intently at him | |
-| 13 | Bash staring at him and blinking | |
-| 14 | The Patriot staring sideways at Romesh | |
-| 15 | Romesh and Bash moving their eyes towards each other | |
-| 16 | Claudia staring, blinking | |
-| 17 | The "errrr" slowly fades away; a moment of awkward silence | |
-| 18 | The Patriot points at the other two contestants: "Traitors." | |
-| 19 | No supershots, no sound effects | |
-| 20 | Timing of shots and the awkward looks and eye moves carry the comedy | |
+| 3 | The Round Table in the opposite direction (as in The Traitors film) | yes: behind Romesh, shot 3; one space (Sam's note 5) |
+| 4 | A stack of large gold coins on the winner's table | yes: about 7 tiers |
+| 5 | Camera looks over the table at Claudia: "Romesh and Bash, remind us who you did this for?" | yes: shot 1, over the coins |
+| 6 | Camera swivels to Bash: overwhelmed, emotional yet excited: "I did this for a wonderful organisation, they are called Choose Love. They help displaced people all over the world including queer refugees." | yes: shot 2, hands meet at his chest, eyes close on "wonderful", brows up |
+| 7 | Camera swivels to Romesh: "I'm doing this for a cause that is very dear to my heart, it's the Refugee Council." | yes: shot 3, sincere, hands on the rim |
+| 8 | Swivel to Claudia: "And what about you?" | yes: shot 4 (the swing back via Bash, never past 2 o'clock) |
+| 9 | Only now we see a fourth person at the winner's table: The Patriot. His eyes widen | yes: shot 5, eyes widen at 26.4 s |
+| 10 | The Patriot must NOT appear in shot before this moment | yes: kept out of every frame before 25.6 s (picture()) |
+| 11 | "Errrrrrrrrrrrrrrr" uninterrupted, 15-20 s of the 40 s file, faded gently out; his eyes stay wide | yes: about 18 s of the file, the last 4 faded; stare grows 1 to 4, no blinks |
+| 12 | During it: Claudia staring intently at him | yes: shot 6 |
+| 13 | Bash staring at him and blinking | yes: shot 7, blinking |
+| 14 | The Patriot staring sideways at Romesh | yes: shot 8, eyes slide, head still |
+| 15 | Romesh and Bash moving their eyes towards each other | yes: shot 9 |
+| 16 | Claudia staring, blinking | yes: shot 10, two blinks |
+| 17 | The "errrr" slowly fades away; a moment of awkward silence | yes: shot 11 (silence kept, Sam 1 Nov) |
+| 18 | The Patriot points at the other two contestants: "Traitors." | yes: shot 12, both arms, fingers (Sam's note 6); then shot 13, their reaction (my addition, Sam said yes) |
+| 19 | No supershots, no sound effects | yes: voices only |
+| 20 | Timing of shots and the awkward looks and eye moves carry the comedy | by the animatic: Sam to judge |
 
 ## References as checklists (guides/satire.md)
 | reference | what it shows | ours matches? |

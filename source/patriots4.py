@@ -41,6 +41,7 @@ install_circle_hands(B)
 FPS, SR = 12, MA.SR
 
 # =============================================== STORY =============================================================
+NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'patriots-4.md')
 NAME = 'patriots4'
 TITLE = ()                                        # no title (Sam, 15 Oct)
 TITLE_AT = dict(cap=116, top=310)
@@ -54,24 +55,25 @@ LINES = [   # start = where the recording's file starts (its speech starts later
          parts=['Romesh', 'and Bash,', 'remind us', 'who you', 'did this for?']),   # slow: a pause after each
     dict(n=2, who='bash', text='I did this for a wonderful organisation, they are called Choose Love. They help displaced '
          'people all over the world including queer refugees.', audio='patriots4-bash', start=6.69,
-         chunks=['I did this for', 'a wonderful organisation,', 'they are called', 'Choose Love.',
+         chunks=['I did this for a wonderful organisation,', 'they are called Choose Love.',
                  'They help displaced people', 'all over the world including', 'queer refugees.'],
          parts=['I did this for a wonderful organisation, they are called Choose Love. They help displaced people all '
                 'over the world including', 'queer refugees.']),   # one part per stretch of speech (after a pause)
     dict(n=3, who='romesh', text="I'm doing this for a cause that is very dear to my heart, it's the Refugee Council.",
          audio='patriots4-romesh', start=15.47,
-         chunks=["I'm doing this for a cause", 'that is very dear', 'to my heart,', "it's the Refugee Council."]),
+         chunks=["I'm doing this for a cause", 'that is very dear to my heart,', "it's the Refugee Council."]),
     dict(n=4, who='claudia', text='And what about you?', audio='patriots4-claudia-2', start=22.2,
          chunks=['And what about you?'], parts=['And what', 'about', 'you?']),
-    dict(n=5, who='patriot', text='Errrrrrrrrrrrrrrrrrrrrrrrrrrrrr...', audio='patriots4-patriot-err', start=26.43,
-         cut=0.37 + ERR_USE, chunks=['Errrrrrrrrrrrrrrrrrrrrrrrrrrrrr...']),   # Sam: one fixed line
-    dict(n=6, who='patriot', text='Traitors.', audio='patriots4-patriot-traitors', start=45.71, chunks=['Traitors.']),
+    dict(n=5, who='patriot', text='Errrrrrrrrrrrrrrrrrrrrrr...', audio='patriots4-patriot-err', start=26.43,
+         cut=0.37 + ERR_USE, chunks=['Errrrrrrrrrrrrrrrrrrrrrr...']),   # Sam: one fixed line (fewer r's: fits 700 px)
+    dict(n=6, who='patriot', text='Traitors.', audio='patriots4-patriot-traitors', start=45.71, chunks=['Traitors.'], hold=1.1),   # held into shot 13 (readable)
 ]
 # (camera, start, end): the camera turns on the spot (heading: degrees round the clock from Claudia, 12 o'clock)
 SHOTS = [('claudia', 0.0, 6.9), ('bash', 6.9, 15.8), ('romesh', 15.8, 21.8), ('claudia 2', 21.8, 25.6),
          ('patriot', 25.6, 29.3), ('claudia close', 29.3, 32.3), ('bash close', 32.3, 35.3),
          ('patriot close', 35.3, 38.3), ('his view', 38.3, 41.3), ('claudia close 2', 41.3, 44.8),
-         ('patriot 2', 44.8, 46.8), ('traitors', 46.8, 49.0)]
+         ('patriot 2', 44.8, 46.8), ('traitors', 46.8, 48.2),
+         ('reaction', 48.2, 50.2)]   # Sam, 1 Nov: Romesh's and Bash's reaction (his yes to my proposal)
 A = RM.ANGLES
 PANS = {   # shot: (from heading, to heading, pan start, pan end): eased; holds after
     'bash': (0.0, -90.0, 6.9, 7.6), 'romesh': (270.0, 210.0, 15.8, 16.5),
@@ -81,10 +83,11 @@ PANS = {   # shot: (from heading, to heading, pan start, pan end): eased; holds 
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
     'claudia': (0.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
     'bash close': (270.0, 1.75, 'bash'), 'patriot close': (60.0, 1.75, 'patriot'), 'his view': (241.5, 1.0, None),
-    'patriot 2': (60.0, 1.2, 'patriot'), 'traitors': (60.0, 1.15, 'patriot'),
+    'patriot 2': (60.0, 1.2, 'patriot'), 'traitors': (60.0, 1.15, 'patriot'), 'reaction': (241.5, 1.0, None),
 }
 CHEAT = {   # a film cheat for one shot: Romesh and Bash stand 60 degrees apart, too far for one frame with faces big
     'his view': {'romesh': 230.0, 'bash': 253.0},   # enough for the eye slide, so they are moved closer for it
+    'reaction': {'romesh': 230.0, 'bash': 253.0},
 }
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
@@ -94,13 +97,16 @@ T_MEET = 39.3                # Romesh and Bash slide their eyes to each other
 T_NARROW = 46.85             # narrowed, accusing; both arms out: "Traitors."
 T_POINT = 46.95
 T_WONDERFUL = (8.5, 9.2)     # Bash's eyes close on "wonderful"
+T_AGHAST = 48.45             # shot 13: their mouths drop open in disbelief
+T_EACH = 49.15               # then their eyes slide to each other, and hold
 PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, LOOKS=PL.LOOKS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE,
             CAMS=PL.CAMS, GROUPS=PL.GROUPS, SHOT_MARKS=PL.SHOT_MARKS)
 SHOT_CAMS = {'claudia': 'claudia', 'bash': 'bash', 'romesh': 'romesh', 'claudia 2': 'claudia', 'patriot': 'patriot',
              'claudia close': 'claudia close', 'bash close': 'bash close', 'patriot close': 'patriot close',
-             'his view': 'his view', 'claudia close 2': 'claudia close', 'patriot 2': 'patriot', 'traitors': 'patriot'}
-BENCHMARK = [dict(place="winner's room", refs=['01-claudia-winners-table-front.jpg', '03-three-at-winners-table-wide.jpg',
-                                                 '12-room-from-above.jpg'], at=1.0,
+             'his view': 'his view', 'claudia close 2': 'claudia close', 'patriot 2': 'patriot', 'traitors': 'patriot',
+             'reaction': 'his view'}
+BENCHMARK = [dict(place="winner's room", refs=['references/patriots-4/01-claudia-winners-table-front.jpg', 'references/patriots-4/03-three-at-winners-table-wide.jpg',
+                                                 'references/patriots-4/12-room-from-above.jpg'], at=1.0,
                   items=[('the pointed wooden arch the banished leave by', 'patriots4_room.arch'),
                          ('diamond lattice over red-lit panes either side and above', 'patriots4_room.lattice'),
                          ('panelled double doors in the passage beyond', 'patriots4_room.arch'),
@@ -113,7 +119,7 @@ BENCHMARK = [dict(place="winner's room", refs=['01-claudia-winners-table-front.j
 SHOT_CAST = {'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'claudia 2': ['claudia'],
              'patriot': ['patriot'], 'claudia close': ['claudia'], 'bash close': ['bash'], 'patriot close': ['patriot'],
              'his view': ['romesh', 'bash'], 'claudia close 2': ['claudia'], 'patriot 2': ['patriot'],
-             'traitors': ['patriot']}
+             'traitors': ['patriot'], 'reaction': ['romesh', 'bash']}
 THREE_QUARTER_OK = []
 HOOK = ('Celebrity Traitors winners reveal their charities', {'y': 330})   # Sam: over the arch, shot 1
 KEEP_CLEAR = []
@@ -121,7 +127,7 @@ PROP_SIZES = []
 OUTFIT = {}
 HEIGHTS = PC.HEIGHTS
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
-ALLOWED_CONTACTS = [(f'{w}.hand*', "winner's table", 0.0, 49.0, 'hands resting on the table edge (refs 03, 09)')
+ALLOWED_CONTACTS = [(f'{w}.hand*', "winner's table", 0.0, 50.2, 'hands resting on the table edge (refs 03, 09)')
                     for w in ('claudia', 'bash', 'romesh')]
 ALLOWED_POPS = []
 SET_EXCLUDE = [('fire bowl', 'painted on the panorama, out of reach'), ('round table', 'far off in the hall, painted')]
@@ -130,6 +136,11 @@ EFFECTS = []
 JOKE_PROPS = []
 LOOKS_OK = []
 HANDS_OK = []
+LINE_OK = [('patriot', 'line weight', x, y) for x, y in ((485, 182), (583, 183), (495, 210), (574, 210), (321, 616),
+                                                         (743, 615), (767, 615))]     # as Patriots 3 (same drawing)
+LINE_OK_WHY = {'patriot': "his black balaclava and jacket count as ink, so the check's 'house' weight is the jacket: "
+                          "his real outlines read as thin (as Patriots 3)"}
+ALLOWED_MOUTHS = [(w, T_AGHAST, 50.2, 'mouth dropped open in disbelief, silent (shot 13)') for w in ('romesh', 'bash')]
 # ====================================================================================================================
 
 S = 1.1                                           # people's drawing scale at zoom 1 (patriots4_room: about 1.5 m away)
@@ -226,7 +237,7 @@ def pancam(t):
     cy = 960.0 if who is None else face_y(who) + 200 / z
     if s in ('claudia', 'patriot 2', 'traitors'):  # Sam, 1 Nov note 9: in at the table's edge like shots 2-4
         z, cy = NEAR_Z, NEAR_CY
-    if s == 'his view':                           # a little wider, so Romesh and Bash both fit, hands and all
+    if s in ('his view', 'reaction'):             # a little wider, so Romesh and Bash both fit, hands and all
         z, cy = 1.08, 1065.0
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
@@ -269,13 +280,17 @@ def look(who, t):
             return 0.6                                    # Claudia (his left, our right)
         if t < T_MEET:
             return 0.35                                   # the Patriot
-        return -0.9 if t < 46.0 else 0.35                # Romesh, then back to the Patriot
+        if t < 46.0:
+            return -0.9                                   # Romesh
+        return 0.35 if t < T_EACH else -0.9              # back to the Patriot; then Romesh again (shot 13)
     if who == 'romesh':
         if t < 25.0:
             return 0.3                                    # Claudia
         if t < T_MEET:
-            return -0.3                                   # the Patriot
-        return 0.9 if t < 46.0 else -0.3                 # Bash, then back to the Patriot
+            return 0.25                                   # the Patriot (over whose shoulder, our right, shots 9, 13)
+        if t < 46.0:
+            return 0.9                                    # Bash
+        return 0.25 if t < T_EACH else 0.9               # back to the Patriot; then Bash again (shot 13)
     if who == 'patriot':
         if t < T_SLIDE:
             return -0.9                                   # Claudia, who asked him (his right, our left)
@@ -283,6 +298,20 @@ def look(who, t):
             return 0.45                                   # sideways to Romesh, head still
         return 0.0                                        # ahead: the awkward silence, then "Traitors."
     return 0.0
+
+
+def looking_at(who, t):
+    """Who each one is looking at (the eyeline check's target), matching look() above."""
+    if who == 'claudia':
+        return 'bash' if t < LINE[3]['_speech'][0] - 0.3 else 'romesh' if t < T_ASK_EYES else 'patriot'
+    if who in ('bash', 'romesh'):
+        other = 'romesh' if who == 'bash' else 'bash'
+        if t < 25.0:
+            return 'claudia'
+        if t < T_MEET or 46.0 <= t < T_EACH:
+            return 'patriot'
+        return other
+    return 'claudia' if t < T_SLIDE else 'romesh'
 
 
 def mouth(who, t):
@@ -298,6 +327,8 @@ def state(who, t):
     sp['mouth'] = mouth(who, t)
     sp['blink'] = F.blinking(t, BLINKS[who])
     sp['look'] = look(who, t)
+    if who in ('romesh', 'bash') and t >= T_AGHAST and sp['mouth'] == 'rest':
+        sp['mouth'] = 'v:O'                               # dropped open in disbelief (shot 13)
     if who == 'claudia':
         sp['smile'] = 0.6 if t < T_ASK_EYES else 0.0
         j = PG.hands_on_table(sp)
@@ -362,9 +393,12 @@ def install_point_finger(B):
                     (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
                     (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
         return circle(p, el, wr, shape, skin, extra, t)
+    gesture_hand.point_finger = True
     B.gesture_hand = gesture_hand
 
 
+import patriots3_cast  # noqa: E402,F401  (these two loaded now: on first use (the Round Table hall) they would
+import traitors        # noqa: E402,F401   put the plain circle hands back)
 install_point_finger(B)
 
 
@@ -387,7 +421,7 @@ def draw_person(img, pc, who, t):
     j2 = PC.person(img, pc.cam, x, y, S, sp, t, 0, j)
     hx, hy = pc.cam.P(x, y - 150 * PC.P3.scale_for(sp, S))
     filmkit.eyeline(who, t, (hx, hy), (sp['look'], 0.0),
-                    (pc.cam.P(pc.x(angle(LOOKS_AT[who], pc)), y)[0], hy))
+                    (pc.cam.P(pc.x(angle(looking_at(who, t), pc)), y)[0], hy))
     return j2, sp
 
 
@@ -402,8 +436,8 @@ def arms_mask(pc, who, j2, sp):
     z = pc.zoom * B.SS
     for side in 'LR':
         el, wr = j2['el' + side], j2['wr' + side]
-        pts = [pc.cam.P(x + u * s2, y + v * s2) for u, v in (el, wr)]
-        pts = [(px * B.SS, py * B.SS) for px, py in pts]
+        pts = [pc.cam.P(x + u * s2, y + v * s2) for u, v in (el, wr)]   # already in drawing pixels (P carries SS:
+        # fixed 1 Nov, the extra * SS put every hand over the table at twice its place in full-quality renders)
         dx, dy = pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]
         n = math.hypot(dx, dy) or 1.0
         hand = (pts[1][0] + dx / n * 26 * s2 * z, pts[1][1] + dy / n * 26 * s2 * z)
@@ -419,22 +453,78 @@ def arms_mask(pc, who, j2, sp):
 def shoulder(img, who, x, y, s):
     """Someone's back and shoulder in a corner of the frame, close to the lens (over-the-shoulder shots)."""
     cam = B.Cam(1.0, 540, 960)
-    cam.P = lambda a, b: (a, b)
-    cam.S = lambda v: v
+    cam.P = lambda a, b: (a * B.SS, b * B.SS)    # output pixels (fixed 1 Nov: at full quality, SS 2, they were misplaced)
+    cam.S = lambda v: v * B.SS
     sp = dict(CAST[who], mouth='rest')
     PC.person(img, cam, x, y, s, sp, 0.0, 180)
+
+
+def pointing_arm(img):
+    """Shot 13: the Patriot's right arm from his shoulder in the corner, still out straight with its finger at Bash
+    (over his shoulder, as he points in shot 12)."""
+    k, ox, oy = 1.9, 1200.0, 1600.0               # near the lens: his arm drawn 1.9 times life, from his shoulder
+    cam = B.Cam(1.0, 540, 960)
+    cam.P = lambda a, b: ((ox + a * k) * B.SS, (oy + b * k) * B.SS)
+    cam.S = lambda v: v * k * B.SS
+    p = B.Pen(img, cam)
+    sp = CAST['patriot']
+    sh, el, wr = (0.0, 0.0), (-51.0, -122.0), (-102.0, -243.0)   # straight, aimed at Bash's face (clear of his hands)
+    B.arm(p, sh, el, wr, sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
+    B.gesture_hand(p, el, wr, 'point', sp.get('glove', sp['skin']))
+
+
+def on_screen(t, pc=None):
+    """Who is drawn in this frame."""
+    pc = pc or pancam(t)
+    on = [w for w in WHO if visible(w, pc)]
+    if t < 25.6:
+        on = [w for w in on if w != 'patriot']            # never in shot before the reveal (brief 10)
+    return on
+
+
+def scene(t):
+    """The solids for the collision and pop-in tests: each person on screen at their mark on the plan (metres), as a
+    simple figure (their hands rest on the table: ALLOWED_CONTACTS); the table and every THING come from PLAN."""
+    import audit
+    out = []
+    for who in on_screen(t):
+        x, z = PL.PEOPLE[who]['at']
+        h = PC.HEIGHTS.get(CAST[who].get('name', ''), 1.75)
+        out.append(audit.Thing(who, audit.simple(who, x, z, height=h, facing=(-x, -z))))
+    return out
+
+
+def audits():
+    """The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching,
+    frozen), and the eyelines. Returns faults."""
+    def alone(who):
+        def draw(t):
+            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+            draw_person(lay, pancam(t), who, t)
+            return lay
+        return draw
+    actors = {}
+    for who in WHO:
+        for shot, a, b in SHOTS:
+            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if who in on_screen(i / FPS)]
+            if ts:
+                actors[f'{who} [{shot}]'] = (ts, alone(who))
+    filmkit.EYES.clear()
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    faults += filmkit.check_eyelines(allow=[('patriot', 44.8, DUR, 'ahead in the awkward silence, then at both as he points')])
+    return faults
 
 
 def picture(t):
     """The frame WITHOUT captions (those go on last, so wording notes never re-render a picture)."""
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
+    if not getattr(B.gesture_hand, 'point_finger', False):   # drawing the Patriot from behind loads patriots3_cast,
+        install_point_finger(B)                              # which puts the plain circle hands back (found 1 Nov)
     pc = pancam(t)
     img = B.canvas((0, 0, 0))
     RM.room(img, pc, t)
-    on = [w for w in WHO if visible(w, pc)]
-    if t < 25.6:
-        on = [w for w in on if w != 'patriot']            # never in shot before the reveal (brief 10)
+    on = on_screen(t, pc)
     layers = {}
     for who in on:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -447,8 +537,10 @@ def picture(t):
             img.paste(lay, (0, 0), Image.composite(lay.getchannel('A'), Image.new('L', lay.size, 0), arms_mask(pc, who, j2, sp)))
     RM.coin_pile(img, pc)
     s = shot_of(t)
-    if s == 'his view':
+    if s in ('his view', 'reaction'):
         shoulder(img, 'patriot', 1060, 1720, 1.6)
+    if s == 'reaction':
+        pointing_arm(img)
     if s == 'traitors':
         shoulder(img, 'bash', 60, 1800, 1.8)
         shoulder(img, 'romesh', 1040, 1800, 1.8)
@@ -458,7 +550,7 @@ def picture(t):
 def caption_at(t):
     for i, (a, c, ln) in enumerate(CHUNKS):
         nxt = CHUNKS[i + 1][0] if i + 1 < len(CHUNKS) else 1e9
-        if a <= t < min(nxt, ln['end'] + 0.35):
+        if a <= t < min(nxt, ln['end'] + ln.get('hold', 0.35)):
             return c
     return None
 
