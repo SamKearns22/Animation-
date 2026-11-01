@@ -54,8 +54,10 @@ KEYS = {
           # in front on its left (anticlockwise on screen), and smashes back through the right top deck
         (-7.0, -75.0, -4.0), (-1.0, -71.0, 0.5, 0.2), (1.5, -55.0, 8.0), (3.8, -30.0, 18.0),
         (4.0, -12.0, 26.0), (4.0, 4.7, 29.0, 3.3), (9.0, 21.0, 30.0), (14.5, 37.0, 32.0),
-        (24.0, 50.0, 44.0), (31.0, 55.0, 58.0), (27.0, 34.0, 69.0), (16.0, 6.0, 66.0),
-        (8.0, -10.0, 57.0), (6.0, -17.0, 49.0), (6.0, -8.0, 46.5), (6.8, 3.4, 46.5, 6.5),
+        # Sam, 2 Nov (note 10): the loop arcs much higher, clear above the smoke (the Hook Text is gone from this
+        # scene, so the sky is free), and comes down in front of the smoke, so the joke's wind-up is seen
+        (26.0, 50.0, 48.0), (33.0, 48.0, 70.0), (30.0, 32.0, 88.0), (20.0, 10.0, 95.0),
+        (10.0, -8.0, 86.0), (6.0, -19.0, 68.0), (5.0, -18.0, 54.0), (6.0, -8.0, 47.0), (6.8, 3.4, 46.5, 6.5),
         (9.0, 22.0, 47.0), (13.0, 42.0, 48.5), (35.0, 60.0, 60.0), (75.0, 75.0, 82.0)],
     2: [  # Freckle: through the left top deck into the crane house (the boom whips and topples), away left
         (-21.0, -73.0, -4.0), (-15.0, -69.0, 0.5, 0.35), (-15.0, -52.0, 10.0), (-15.0, -24.0, 26.0),

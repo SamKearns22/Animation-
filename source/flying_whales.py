@@ -56,7 +56,7 @@ DUR = CUT + RIG_LEN
 PLAN = dict(ROOMS={}, OPENINGS={}, THINGS={}, PEOPLE={}, CAMS={}, GROUPS={})
 BENCHMARK = []                                    # rule 3: done in the notes (B1-B10, Showstoppers) for both sets
 SHOT_CAST = {}                                    # no people
-HOOK = ('Blue Planet III looks 🔥🔥🔥', {'y': 352})   # exactly as finish.py will be given it
+HOOK = ('Blue Planet III looks 🔥🔥🔥', {'y': 352, 'until': 5.6})   # exactly as finish.py will be given it; off at the cut (Sam, 2 Nov: it blocked the rig scene)
 KEEP_CLEAR = []
 PROP_SIZES = []
 OUTFIT, HEIGHTS = {}, {}

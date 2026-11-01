@@ -14,6 +14,7 @@
   `wreck.py check` and `paths.py contacts`, all clean); the rig shot is 12.0 s (Sam's own "12 second shot"). The check
   sheet (19 frames, 0.5-17.4 s) is `review/flying-whales-check-sheet.jpg`, sent to Sam.
 - **Animatic sent (1 Nov, Sonnet):** Sam's yes to the check sheet; rendered 9.5 min, then Hook Text + 1.6 s sign-off (`--signoff-speed 1.25`, Sam's request), 19.2 s, 3 MB, `review/flying-whales-animatic.mp4`. Waiting for Sam's notes or a clear yes to the final. PROPOSED, awaiting Sam's yes: rule 'sign-off is 1.6 s on every film' (tiktok-design.md, CLAUDE.md, rule-register, finish.py default).
+- **Animatic 1 notes (2 Nov, Opus): notes 8-13 fixed, two clips sent; waiting for Sam on the clips, then the check sheet and his yes for animatic 2 (Hook Text `--until 5.6`, `--signoff-speed 1.25`).**
 - **Next (older plan, now partly done; fresh chat, Sonnet: a routine render):** Sam's yes to the check sheet (or his notes, which go back to Opus
   medium). On yes: `python3 source/flying_whales.py final source/data/flying-whales-animatic.mp4 --small` (17.6 s,
   423 frames; time it), then the Hook Text for the whole film: `python3 source/hook_text.py IN OUT "Blue Planet III
@@ -287,6 +288,12 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 | 5 | all | | angry whales: a heavy low brow (Sam's yes) | done: whale.py brow (+ small white eye, flagged) |
 | 6 | rig | | clips (c)-(e): "Clips look good so far" (Sam, 1 Nov) | done: approved as they are |
 | 7 | opening | | "I can't record right now so just use subtitle" (Sam, 1 Nov) | done: Attenborough line as subtitles only, no voice; placeholder times stand |
+| 8 | rig | 10.17 | "a whale clips through the helicopter pad" (Sam, 2 Nov, animatic 1) | done: Bib only nudged it (0.36 of its speed) and caught it up; now batted off its path, out to our left and up (`HELI_SIDE`, `HELI_UP`); clip sent |
+| 9 | rig | 15.36 | "the building clips through its own smoke" | done: in the finale the smoke is wholly behind the rig (it was sorted half in front, half behind); clip sent |
+| 10 | rig | | Blaze's loop: "make him arc higher; most of his journey is blocked by the smoke" | done: the loop's top 70 m to 95 m (about y 490 to y 190), down in front of the smoke; speed at the second hit 75 to 98 m/s; contacts the same; clip sent |
+| 11 | rig | 15.25 | "the spray of water clips behind the Jackdaw sign" | done: finale splashes and bits drawn over the whole rig; clip sent |
+| 12 | rig | | "even bigger throw up of spray and debris" when the rig hits the water | done: crown splash bigger (size 13 to 19 m, 34 to 52 lumps, height x1.4) plus 46 big bits of debris; clip sent |
+| 13 | all | | "The hook text should disappear in the rig scene, it blocks the view" | done: Hook Text off at the cut (`--until 5.6`; `HOOK` in flying_whales.py) |
 
 Decisions made:
 - Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more

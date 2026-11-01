@@ -48,11 +48,11 @@ FPS = 24
 # (story time of first touch, whale, piece): paths.contacts(), 1 Nov
 CONTACTS = [(2.56, 0, 'brace_front_low'), (2.98, 0, 'brace_back'), (3.03, 1, 'lifeboat_1'),
             (3.12, 1, 'deck_cellar_r'), (3.20, 1, 'lifeboat_2'), (3.71, 3, 'stair_tower'), (3.80, 3, 'deck_mezz_l'),
-            (3.80, 3, 'helideck_truss'), (4.01, 1, 'deck_mezz_r'), (4.11, 3, 'helideck'), (4.25, 2, 'deck_top_l'),
+            (3.80, 3, 'helideck_truss'), (3.97, 1, 'deck_mezz_r'), (4.11, 3, 'helideck'), (4.25, 2, 'deck_top_l'),
             (4.41, 2, 'crane_house'), (5.02, 4, 'flare_boom'), (5.14, 2, 'stack_1'), (5.20, 2, 'stack_2'),
-            (6.45, 1, 'deck_top_r'), (6.80, 1, 'derrick'), (7.59, 3, 'brace_front_high'), (7.59, 3, 'brace_left'),
+            (6.47, 1, 'deck_top_r'), (6.74, 1, 'derrick'), (7.59, 3, 'brace_front_high'), (7.59, 3, 'brace_left'),
             (7.59, 3, 'leg_fl')]
-MAIN = [2.56, 3.03, 3.71, 4.25, 5.02, 6.45, 7.59]     # the main hits: a freeze and a jolt on each (rule 25)
+MAIN = [2.56, 3.03, 3.71, 4.25, 5.02, 6.47, 7.59]     # the main hits: a freeze and a jolt on each (rule 25)
 HOLD = 2 / FPS                                        # the freeze: two frames
 TF = 7.62                                             # the finale starts (the leg is gone)
 
@@ -71,6 +71,11 @@ DEBRIS_COLS = {'deck_cellar': ('grey', 'dark', 'yellow', 'clad'), 'deck_mezz': (
                'deck_top': ('clad', 'white', 'grey', 'blue'), 'brace': ('yellow',), 'lifeboat': ('orange', 'white'),
                'leg': ('yellow',), 'helideck': ('deck', 'white', 'orange'), 'stair': ('yellow', 'grey'),
                'crane': ('yellow', 'white'), 'flare': ('grey', 'dark'), 'stack': ('grey', 'dark')}
+CROWN = (19.0, 13.0, 52, 4.0)                        # the crown splash: size m, ring m, lumps, height (was 13, 9, 34, 2.8)
+CROWN_BITS = 46                                      # debris thrown up with it (note 12)
+FRONT, BACK = 60.0, 250.0                            # m: the finale's splashes and bits drawn over the whole rig,
+                                                     # its smoke behind it all (notes 9, 11)
+HELI_SIDE, HELI_UP = 16.0, 12.0                   # m/s: the helideck batted aside (note 8)
 SINK = 6.0                                            # m/s: a piece going down through the water
 
 
@@ -273,6 +278,12 @@ def _build_falls():
         v0 = v * push
         v0[2] = min(v0[2], 3.0) + up                  # a climbing whale doesn't fling it skywards
         v0 = v0 + R.EU * kick
+        if name == 'helideck':                        # Sam, 2 Nov (note 8): the whale passed THROUGH it while it was
+                                                      # only nudged; now batted off the whale's path, out to our left
+                                                      # and up, so the whale sails past under it
+            h = np.array([f[0], f[1], 0.0]) / (np.linalg.norm(f[:2]) + 1e-9)
+            side = np.array([-h[1], h[0], 0.0])       # 90 degrees left of the whale's way: towards us
+            v0 = v * 0.5 + side * HELI_SIDE + np.array([0, 0, HELI_UP])
         if name == 'flare_boom':                      # it snaps at the root and drops, levelling as it falls, so
                                                       # it lands flat (spin chosen by trial: rule 32)
             fd = R.FLARE_DIR[0] * R.EU + R.FLARE_DIR[1] * R.EV + R.FLARE_DIR[2] * R.EZ
@@ -490,7 +501,18 @@ def _events():
             splashes.append((tq + 0.05, near.mean(0) * np.array([1, 1, 0]), float(np.clip(w * 0.12, 3.0, 8.0)),
                              _seed(n, tq), None, None))
     if first:
-        splashes.append((first[0], first[1], 13.0, 77, 9.0, 34))
+        # Sam, 2 Nov (note 12): an even bigger throw of spray and debris where the deck hits the sea
+        splashes.append((first[0], first[1], CROWN[0], 77, CROWN[1], CROWN[2]))
+        rng = np.random.default_rng(78)
+        cols = DEBRIS_COLS['deck_top'] + DEBRIS_COLS['deck_cellar'] + ('yellow', 'orange')
+        for i in range(CROWN_BITS):
+            a = rng.uniform(0, 2 * math.pi)
+            out_ = rng.uniform(3.0, 13.0)
+            p0 = first[1] + np.array([math.cos(a) * 6.0, math.sin(a) * 6.0, rng.uniform(1.0, 4.0)])
+            v0 = np.array([math.cos(a) * out_, math.sin(a) * out_, rng.uniform(18.0, 34.0)])
+            bits.append(Bit(first[0] + rng.uniform(0, 0.15), p0, v0, float(rng.uniform(1.2, 3.5)),
+                            R._tint(R.COL[cols[int(rng.integers(len(cols)))]][int(rng.integers(0, 2))]),
+                            int(rng.integers(1 << 30)), float(rng.uniform(-12, 12))))
         jolts.append((real_of(first[0]), 26.0))
     return bits, splashes, puffs, fireballs, fires, jolts
 
@@ -575,6 +597,7 @@ def _smoke_streams():
 
 
 PUFFS = PUFFS + _smoke_streams()
+SMOKE_SRCS = {src for kind, src, _ in PUFFS if kind == 'smoke'}
 _GROUPS = {}
 for _kind_, _src, _pf in PUFFS:
     _GROUPS.setdefault(_src, []).append(_pf)
@@ -624,15 +647,17 @@ def effects(t):
         if items:
             spr = FX.pieces_sprite(items, 0.0, ol=3.0)
             if spr:
-                extra.append((float(np.median(ds)), spr))
+                d = float(np.median(ds))
+                extra.append((min(d, FRONT) if key * 0.2 >= TF else d, spr))
     # splashes
     for ts_, at, size, seed, ring, n in SPLASHES:
         age = t - ts_
         if 0 <= age <= 2.2:
-            lumps = FX.splash_parts(at, size, age, seed, ring=ring, n=n, high=2.0 if ring is None else 2.8)
+            lumps = FX.splash_parts(at, size, age, seed, ring=ring, n=n, high=2.0 if ring is None else (CROWN[3] if size >= CROWN[0] else 2.8))
             spr = FX.lumps_sprite(cam, lumps, 0.0, ol=4.0 if size < 4 else 5.0)
             if spr:
-                extra.append((_dist(at) - 1.0, spr))
+                # the finale's water is thrown up in front of the falling block (note 11: it showed behind the sign)
+                extra.append((min(_dist(at) - 1.0, FRONT) if ts_ >= TF else _dist(at) - 1.0, spr))
             if size >= 2.0:
                 foam += FX.foam_ring(cam, at, age * (0.9 if size > 8 else 1.2), seed,
                                      size * (0.9 if ring else 0.45))
@@ -670,7 +695,10 @@ def effects(t):
         spr = FX.puffs_sprite(cam, live, t, 0.0)
         if spr:
             ds = [_dist(pf.at(t)[0]) for pf in live]
-            extra.append((float(np.median(ds)) - 2.0, spr))
+            d = float(np.median(ds)) - 2.0
+            # the tipping block leaned into its own smoke, half the columns in front of it and half behind (note 9):
+            # in the finale the smoke goes wholly behind the rig, so the sinking block stays in view
+            extra.append((max(d, BACK) if t > TF and src in SMOKE_SRCS else d, spr))
     return extra, foam, glows
 
 
