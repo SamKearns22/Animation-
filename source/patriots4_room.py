@@ -239,15 +239,15 @@ def floor(p, x0, x1):
     """The winner's room floor, from the foot of the walls down (seen beside and under the small table now): dark
     wide boards running away from us, the joints closer together near the wall."""
     top = wy(0.0)
-    p.poly([(x0, top), (x1, top), (x1, 2600), (x0, 2600)], FLOOR, INK, 2.0)
+    p.poly([(x0, top), (x1, top), (x1, 4000), (x0, 4000)], FLOOR, INK, 2.0)
     y, gap = top, 22.0
-    while y < 2600:
+    while y < 4000:
         y += gap
         gap *= 1.45
         p.line([(x0, y), (x1, y)], (54, 38, 26), 2.0)
     for i in range(int(x0 // 140) - 1, int(x1 // 140) + 2):
         bx = i * 140.0
-        p.line([(bx, top), (bx, 2600)], FLOOR_L, 1.6)
+        p.line([(bx, top), (bx, 4000)], FLOOR_L, 1.6)
 
 
 CHAIR = (122, 72, 38)
@@ -352,7 +352,7 @@ def room(img, pc, t):
     p = B.Pen(img, pc.cam)
     span = (540 / pc.zoom + 400) / K                               # degrees either side worth drawing
     a0, a1 = pc.heading - span, pc.heading + span
-    p.poly([(K * a0 - 200, -600), (K * a1 + 200, -600), (K * a1 + 200, 2600), (K * a0 - 200, 2600)], (30, 18, 12), None)
+    p.poly([(K * a0 - 200, -2000), (K * a1 + 200, -2000), (K * a1 + 200, 4000), (K * a0 - 200, 4000)], (30, 18, 12), None)
     # the walls between the openings
     cuts = sorted((pc.x((a + b) / 2) - K * (b - a) / 2, pc.x((a + b) / 2) + K * (b - a) / 2) for a, b, _ in OPEN)
     x = K * a0

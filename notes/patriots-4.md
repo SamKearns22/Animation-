@@ -4,19 +4,19 @@
 - **Rules that bite at this stage (rule 48):** check sheet and Sam's clear yes before animatic 3 (no animatic while a
   shot misses anyone the brief puts in it); flag losses and additions; a repeated note is a warning (find why first).
 - **Done (1 Nov, Opus high):** the wide view for shots 9 and 13 built (`source/patriots4_wide.py`): a real camera (in
-  the plan's metres) just behind the Patriot's place at 3 o'clock; Romesh at 6 on the left at the table's side, his
-  body turned to it (hands on its rim), face to the lens (THREE_QUARTER_OK); Bash at 9 straight across; both
-  STANDING (note 27: no chairs round this table); the same table and coin pile in true perspective at one size (0.9 m
-  across, as drawn in Claudia's close-up), its turned-leg pedestal; the painted room and ceiling behind, turned 14
-  degrees for the camera being 1.15 m off the centre (the Round Table hall behind Romesh, the wall torch between
-  them, not on his head); the Patriot's shoulder bottom left in shot 9. Eye beats kept (T_MEET 39.3, T_EACH 48.6):
-  checked on a crop. Stills sheet sent: `review/patriots4-wide-view.jpg` (Claudia close-up, 9 twice, 13).
-  Pre-flight: the same 7 named faults, nothing new. Plan check and rule 38: clean.
+  the plan's metres) ACROSS THE TABLE FROM 1:30, 1 m out, between the Patriot and Claudia (note 28; first built from
+  3 o'clock, Sam didn't like it). Romesh at 6 on the left, Bash at 9 on the right, both STANDING behind the table
+  (note 27: no chairs), front on, hands on the far rim, legs hidden by the table; the same table and coin pile in true
+  perspective, 0.9 m across; its turned-leg pedestal; the painted room and ceiling behind, turned 6 degrees so the
+  wall torch clears Bash's head (the Round Table hall stays behind Romesh); the Patriot's shoulder bottom left in
+  shot 9. Eye beats kept (T_MEET 39.3, T_EACH 48.6). Stills sheet sent: `review/patriots4-wide-view.jpg` (Claudia
+  close-up, 9 twice, 13). Pre-flight: the same 7 named faults. Plan check and rule 38: clean.
 - **Next:** Sam's notes on the wide-view sheet (Opus MEDIUM if there are notes; fresh chat). If he is happy: the
   check sheet (`python3 source/preflight.py patriots4 OUT_DIR`), his clear yes, then animatic 3 (Sonnet:
   `python3 source/patriots4.py final OUT.mp4 --small`, about 2-3 minutes).
-- **Losses, cheats and my additions:** Romesh's body turned three-quarter in 9 and 13 (his face still front on: his
-  likeness head has no turned view); the room painting turned 14 degrees in these two shots; the table's legs drawn
+- **Losses, cheats and my additions:** both drawn front on though 6 and 9 are 28 degrees off the lens from 1:30
+  (THREE_QUARTER_OK); Claudia (12) would be just past the right edge and is not drawn, nor the Patriot in 13 (note
+  22); the room painting turned 6 degrees in these two shots; the table's legs drawn
   stouter and in the table's reddish wood in the wide view (seen whole there; the room's brown is the floor's). Bug
   fixed: `patriots4_room.turned_leg` drew each leg as two crossed spikes (hidden under the rim elsewhere). Plan fixes:
   sizes are (width, depth, height): the table, coin pile, fire bowl and Round Table had height and depth swapped; the
@@ -161,6 +161,7 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 25 | all | | (animatic 2) Three different table sizes (Patriot shot biggest, Bash close smallest); the size in front of Claudia is ideal | done 1 Nov: one size (`TABLE_SCALE`), floor beside it in wide shots (Sam's choice). Cause: `near_for` stretched the table per shot to reach the frame's foot. Fix: one table size = Claudia close-up in every shot; move the camera, not the table |
 | 26 | 9 | 40.75 s | (animatic 2) Romesh and Bash are no longer at 6 and 9 | done 1 Nov: cheat removed; the wide view built (`patriots4_wide.py`): a real camera at the Patriot's place, Romesh at 6 (left, at the table's side) and Bash at 9 (across) at their real seats; the eyes slide to each other as before. Cause: my cheat in `ANGLES` ('his view' and 'reaction': Romesh 200, Bash 224, not 180 and 270), added so the eyes could slide to each other |
 | 27 | 9, 13 | | (while building the wide view) "There are no chairs around this table" | done 1 Nov: chairs removed (they were in for an hour, never sent); Romesh and Bash stand at the table as in every other shot. Cause: the last handover said 'both SEATED (chairs)'; I built from it without checking the references (ref 03: standing). Proposal 6 |
+| 28 | 9, 13 | | (wide-view sheet) "I don't like the direction the final shot has gone in. Why can't we look across at them from 1:30? Then both are in frame at 6 and 9" | done 1 Nov: camera moved to 1:30, 1 m out; both behind the table, front on. Cause: I read 'from the Patriot's seat' literally; from 3 o'clock Romesh at 6 is at the table's side, so he had to be turned |
 | 9 | 12, 13 | 48 s | "We don't get to see R and B's reactions" | done 1 Nov: shot 13 (my proposal, Sam's yes) |
 | 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 

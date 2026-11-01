@@ -116,9 +116,9 @@ SHOT_CAST = {'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'cl
              'patriot': ['patriot'], 'claudia close': ['claudia'], 'bash close': ['bash'], 'patriot close': ['patriot'],
              'his view': ['romesh', 'bash'], 'claudia close 2': ['claudia'], 'patriot 2': ['patriot'],
              'traitors': ['patriot'], 'reaction': ['romesh', 'bash']}
-THREE_QUARTER_OK = [(shot, 'romesh', "the wide view from the Patriot's seat: Romesh at 6 is at the table's side, so his body "
-                     "turns to it (hands on its rim); his face stays to the lens (his likeness head is front only)")
-                    for shot in ('his view', 'reaction')]
+THREE_QUARTER_OK = [(shot, w, "the wide across the table from 1:30 (Sam, note 28): 6 and 9 are each 28 degrees off "
+                     "the lens; drawn front on")
+                    for shot in ('his view', 'reaction') for w in ('romesh', 'bash')]
 HOOK = ('Celebrity Traitors winners reveal their charities', {'y': 330})   # Sam: over the arch, shot 1
 KEEP_CLEAR = []
 PROP_SIZES = []

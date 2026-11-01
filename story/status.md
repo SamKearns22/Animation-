@@ -34,8 +34,8 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
 - 1 Nov (animatic 2, Sonnet then Opus): animatic 2 sent; Sam's notes 25 (one table size: done) and 26 (Romesh and
   Bash at 6 and 9: cheat removed). NEXT (Opus HIGH, fresh chat): build the wide view for shots 9 and 13:
   `notes/patriots-4.md`, "Where things stand".
-- 1 Nov (building, Opus high): the wide view for shots 9 and 13 built (`source/patriots4_wide.py`: a real camera at
-  the Patriot's place, Romesh at 6 and Bash at 9 standing at the table; Sam's note 27: no chairs); stills sheet sent
+- 1 Nov (building, Opus high): the wide view for shots 9 and 13 built (`source/patriots4_wide.py`: a real camera across
+  the table from 1:30, Romesh at 6 and Bash at 9 standing behind it; Sam's notes 27 no chairs, 28 from 1:30); stills sheet sent
   (`review/patriots4-wide-view.jpg`). NEXT: Sam's notes (Opus medium) or the check sheet, his yes, animatic 3
   (Sonnet), fresh chat: `notes/patriots-4.md`, "Where things stand".
 

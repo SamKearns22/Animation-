@@ -1,10 +1,10 @@
-"""Patriots 4: the wide view from the Patriot's seat (shots 9 'his view' and 13 'reaction'; Sam, 1 Nov, animatic 2
-note 26: "build the wide view").
+"""Patriots 4: the wide view across the table from 1:30 (shots 9 'his view' and 13 'reaction'; Sam, 1 Nov, animatic 2
+note 26: "build the wide view"; note 28: from 1:30, not 3 o'clock).
 
 The rest of the film is the camera turning on the spot over the coins (patriots4_room.PanCam), where everyone is drawn
 at one distance. That cannot show two people 90 degrees apart round the table, so these two shots use a real camera
-(a pinhole, in the plan's metres) at the Patriot's place, 3 o'clock: Romesh at 6 on the left, Bash at 9 straight
-across, both STANDING at it (no chairs round this table: Sam, 1 Nov), hands on its rim; the same table (one size:
+(a pinhole, in the plan's metres) at 1:30, between the Patriot and Claudia: Romesh at 6 on the left, Bash at 9 on the
+right, both across the table, STANDING at it (no chairs round this table: Sam, 1 Nov), hands on its rim; the same table (one size:
 patriots4_room.TABLE_SCALE, as in Claudia's close-up) and coin pile, the room and its ceiling painted behind
 (patriots4_room.room). Everyone faces the lens (rule 38; Romesh's likeness head has only a front view).
 
@@ -26,15 +26,15 @@ import patriots4_plan as PL      # noqa: E402
 from ed import INK, curve, oval  # noqa: E402
 
 # ------------------------------------------------------------------------------------------------ the camera (metres)
-CAM_AT = (1.15, -0.02)   # x east, z north: just behind the Patriot's head at his seat (clock 3, 0.62 m out): from
-                         # nearer, the table and coins swelled far bigger than in Claudia's close-up (note 25)
-EYE = 1.55               # about his eye height, looking a little down past his shoulder (bottom left)
-HEADING = 252.0          # degrees (0 north, 90 east): between Romesh (6) and Bash (9)
-FOCAL = 920.0            # pixels (a 61 degree field across the 1080 frame)
-HORIZON_Y = 640.0        # where the eye line sits on screen (the camera looks a little down at the table)
-BG_TURN = -14.0          # the painted room is drawn as seen from the table's centre; this camera is 1.15 m east of
-                         # it, so the walls 3-4 m off sit about 14 degrees further round (and the wall torch at 242
-                         # degrees no longer crowns Romesh's head; the Round Table hall is behind him, as in shot 3)
+CAM_AT = (0.71, 0.71)    # x east, z north: 1:30 on the clock, 1 m out, between the Patriot (3) and Claudia (12):
+                         # Romesh (6) and Bash (9) both straight across the table, each about 28 degrees off the lens,
+                         # so both front on with their hands on its far rim (Sam, 1 Nov: "look across from 1:30")
+EYE = 1.62               # a touch above eye height: the table's near half hides their legs
+HEADING = 225.0          # degrees (0 north, 90 east): across the coins, between Romesh (6) and Bash (9)
+FOCAL = 820.0            # pixels (a 67 degree field across the 1080 frame)
+HORIZON_Y = 630.0        # where the eye line sits on screen (the camera looks a little down at the table)
+BG_TURN = -6.0           # the painted room turned a little so the wall torch clears Bash's head (the camera is 1 m off
+                         # the room's centre, so its painting is only near right anyway); the hall stays behind Romesh
 TABLE_R = 0.45           # the table's radius in metres: the drawn size (patriots4_room.TABLE_RX at the people's scale,
                          # Claudia's close-up), not the plan's old 0.37 m figure
 COIN_R, COIN_T = 0.042, 0.018
@@ -74,10 +74,8 @@ def body(who, height_m):
     return (sx, floor_y - 928.0 * s_real), s, s_real, d
 
 
-YAW = {'romesh': 45.0, 'bash': 0.0}   # Romesh sits at the table's left side as seen from 3 o'clock: his body turned
-                                      # to it (his hands reach its rim), his face to the lens (his likeness head is
-                                      # front only: THREE_QUARTER_OK); Bash is straight across, front on
-HANDS = {'romesh': (90.0, 190.0), 'bash': (112.0, 120.0)}   # (hands apart, reach forward), person units
+YAW = {'romesh': 0.0, 'bash': 0.0}    # both front on, across the table (rule 38)
+HANDS = {'romesh': (112.0, 120.0), 'bash': (112.0, 120.0)}   # (hands apart, reach forward), person units
 
 
 def standing_hands(sp, j, s_real, neck, rim, who='bash'):
