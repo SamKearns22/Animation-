@@ -75,13 +75,10 @@ SHOTS = [('claudia', 0.0, 6.9), ('bash', 6.9, 15.8), ('romesh', 15.8, 21.8), ('c
          ('patriot 2', 44.8, 46.8), ('traitors', 46.8, 48.2),
          ('reaction', 48.2, 50.2)]   # Sam, 1 Nov: Romesh's and Bash's reaction (his yes to my proposal)
 A = RM.ANGLES
-PANS = {   # shot: (from heading, to heading, pan start, pan end): eased; holds after
-    'bash': (0.0, -90.0, 6.9, 7.6), 'romesh': (270.0, 210.0, 15.8, 16.5),
-    'claudia 2': (210.0, 360.0, 21.8, 22.9),     # back round via Bash, never past 2 o'clock (the Patriot unseen)
-    'patriot': (0.0, 60.0, 25.6, 26.2),          # "circle to her left": the reveal
-}
+PANS = {}   # Sam, 1 Nov (animatic 1 note 1): the swings read as the table spinning: plain jump cuts instead
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
-    'claudia': (0.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
+    'claudia': (0.0, 1.0, None), 'bash': (270.0, 1.0, None), 'romesh': (210.0, 1.0, None),
+    'claudia 2': (0.0, 1.0, None), 'patriot': (60.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
     'bash close': (270.0, 1.75, 'bash'), 'patriot close': (60.0, 1.75, 'patriot'), 'his view': (241.5, 1.0, None),
     'patriot 2': (60.0, 1.2, 'patriot'), 'traitors': (60.0, 1.15, 'patriot'), 'reaction': (241.5, 1.0, None),
 }
@@ -97,8 +94,7 @@ T_MEET = 39.3                # Romesh and Bash slide their eyes to each other
 T_NARROW = 46.85             # narrowed, accusing; both arms out: "Traitors."
 T_POINT = 46.95
 T_WONDERFUL = (8.5, 9.2)     # Bash's eyes close on "wonderful"
-T_AGHAST = 48.45             # shot 13: their mouths drop open in disbelief
-T_EACH = 49.15               # then their eyes slide to each other, and hold
+T_EACH = 48.6                # shot 13: their eyes slide to each other, and hold (no dropped mouths: animatic 1 note 2)
 PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, LOOKS=PL.LOOKS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE,
             CAMS=PL.CAMS, GROUPS=PL.GROUPS, SHOT_MARKS=PL.SHOT_MARKS)
 SHOT_CAMS = {'claudia': 'claudia', 'bash': 'bash', 'romesh': 'romesh', 'claudia 2': 'claudia', 'patriot': 'patriot',
@@ -140,7 +136,6 @@ LINE_OK = [('patriot', 'line weight', x, y) for x, y in ((485, 182), (583, 183),
                                                          (743, 615), (767, 615))]     # as Patriots 3 (same drawing)
 LINE_OK_WHY = {'patriot': "his black balaclava and jacket count as ink, so the check's 'house' weight is the jacket: "
                           "his real outlines read as thin (as Patriots 3)"}
-ALLOWED_MOUTHS = [(w, T_AGHAST, 50.2, 'mouth dropped open in disbelief, silent (shot 13)') for w in ('romesh', 'bash')]
 # ====================================================================================================================
 
 S = 1.1                                           # people's drawing scale at zoom 1 (patriots4_room: about 1.5 m away)
@@ -235,8 +230,10 @@ def pancam(t):
         return pc
     h, z, who = STILL[s]
     cy = 960.0 if who is None else face_y(who) + 200 / z
-    if s in ('claudia', 'patriot 2', 'traitors'):  # Sam, 1 Nov note 9: in at the table's edge like shots 2-4
+    if s in ('claudia', 'bash', 'romesh', 'claudia 2', 'patriot'):   # Sam, 1 Nov notes 8-9: at the table's edge
         z, cy = NEAR_Z, NEAR_CY
+    if s in ('patriot 2', 'traitors'):            # animatic 1 note 3: out a little, Bash's and Romesh's backs in both
+        z, cy = 1.0, NEAR_CY
     if s in ('his view', 'reaction'):             # a little wider, so Romesh and Bash both fit, hands and all
         z, cy = 1.08, 1065.0
     pc = RM.PanCam(h, z, cy)
@@ -327,8 +324,6 @@ def state(who, t):
     sp['mouth'] = mouth(who, t)
     sp['blink'] = F.blinking(t, BLINKS[who])
     sp['look'] = look(who, t)
-    if who in ('romesh', 'bash') and t >= T_AGHAST and sp['mouth'] == 'rest':
-        sp['mouth'] = 'v:O'                               # dropped open in disbelief (shot 13)
     if who == 'claudia':
         sp['smile'] = 0.6 if t < T_ASK_EYES else 0.0
         j = PG.hands_on_table(sp)
@@ -541,9 +536,9 @@ def picture(t):
         shoulder(img, 'patriot', 1060, 1720, 1.6)
     if s == 'reaction':
         pointing_arm(img)
-    if s == 'traitors':
-        shoulder(img, 'bash', 60, 1800, 1.8)
-        shoulder(img, 'romesh', 1040, 1800, 1.8)
+    if s in ('patriot 2', 'traitors'):            # in both, so they never appear from nowhere (animatic 1 note 3)
+        shoulder(img, 'bash', 70, 1830, 1.6)
+        shoulder(img, 'romesh', 1030, 1830, 1.6)
     return img
 
 

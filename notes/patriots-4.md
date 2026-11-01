@@ -24,7 +24,8 @@
   Pre-flight: 7 faults left, all named: 3 voice flags meant (Sam, note 3); 3 captions under reading time (they follow
   Bash's and Romesh's speech; longer chunks break 42 characters); shot 2 is 8.9 s (Bash's unbroken speech). Sam said
   "proceed to animatic" (his override: no wait for a yes on the check sheet; checks still run). Animatic 1 rendered
-  and sent.
+  and sent. Sam's animatic-1 notes 10-12 applied; pre-flight the same 7 named faults; clips sent (5.5-27 s cuts,
+  44.5-50.2 s ending); waiting for Sam's yes to animatic 2 (check sheet sent).
 - **Next (Opus medium, reading Sam's notes):** Sam's notes on animatic 1, then the clips/fixes; the final render only on
   his clear yes, then `finish.py` with the Hook Text.
 - **Losses, cheats and my additions:** shot 9 is a film cheat: Romesh and Bash are drawn closer together (227 and 256
@@ -155,6 +156,9 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 5 | 3 | 17 s | Chairs tucked into the Round Table (they looked turned away); no wall between the two rooms (one space); the Round Table 50% closer | done 1 Nov: chairs round the far side seen front on with the rim over their seats, side chairs edge on with seats under the rim, the near one from behind; the opening's posts and lintel gone, the hall's wall up to the shared ceiling, one floor; the table about 5 m off (was 9.5): twice the size; plan: at z -4.6, opening the full wall |
 | 6 | 12 | 47.9 s | The pointing must look like pointing (as at the end of Power Crime Action) | done 1 Nov: Power Crime Action's 'point' hand (a short finger out of the round hand, a touch bigger here), both arms straight, down at the two heads in the corners, drawn over the table (`install_point_finger`, `point_at_them`, `arms_mask`) |
 | 7 | 2-4 | | Camera closer, at the edge of the table | done 1 Nov: zoom 1.2; the table and coins scaled about its far edge so its near rim sits at the frame's foot (`patriots4_room.Near`, `near_for`); hands still on the rim |
+| 10 | all | | (animatic 1) The swings look like the table spinning, not the camera: jump cuts are fine | done 1 Nov: plain cuts (`PANS` empty; shots 2-5 held at their person, the table's edge) |
+| 11 | 13 | 48.2 s | (animatic 1) No widening at the end: just looking at each other | done 1 Nov: no dropped mouths; eyes slide to each other at 48.6 s and hold |
+| 12 | 11-12 | 44.8 s | (animatic 1) R and B appear suddenly in the pointing shot: camera out a little so they are always in shot | done 1 Nov: shots 11 and 12 share one framing (zoom 1.0), Bash's and Romesh's backs in the corners of both |
 | 9 | 12, 13 | 48 s | "We don't get to see R and B's reactions" | done 1 Nov: shot 13 (my proposal, Sam's yes) |
 | 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 
