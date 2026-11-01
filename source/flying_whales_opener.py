@@ -55,9 +55,9 @@ FORMATION = [
 CAM_KEYS = [
     (0.0, 20.0, 44.0, 1.0),    # in front, a little to their right: they come at us on a slight diagonal
     (1.8, 24.0, 27.0, 0.0),    # they close on us (the lead's face and brow big)
-    (3.4, 92.0, 21.0, -1.0),   # swung round to their right side: they cross the screen left to right
-    (4.2, 98.0, 21.0, -2.0),   # alongside, pacing them
-    (CUT, 112.0, 24.0, -10.0), # dropping below them and tilting up as they race for the surface
+    (3.4, 92.0, 26.0, -1.0),   # swung round to their right side: they cross the screen left to right
+    (4.2, 98.0, 26.0, -2.0),   # alongside, pacing them (26 m: the lead whole in the frame, room ahead of its snout)
+    (CUT, 112.0, 27.0, -10.0), # dropping below them and tilting up as they race for the surface
 ]
 
 
@@ -136,9 +136,11 @@ def _key(t):
 
 
 def camera(t):
-    """The film's camera at t: placed round the aim point (7 m behind the lead, 2 m once they rise) in the pod's level
-    frame."""
-    aim, _ = _at_s(lead_s(t) - 7.0 + 5.0 * _ease((t - IMAGINED) / 1.0))   # on the rise, aim nearer the lead
+    """The film's camera at t: placed round the aim point in the pod's level frame. The aim is 7 m behind the lead's
+    middle while they come at us (the pod grouped), easing onto the lead's middle as the camera swings to their side
+    (1.8-3.4 s), so side-on the lead is whole in the frame with room ahead (clip (a), 1 Nov: aimed 7 m behind it, the
+    lead's head was cut off by the right edge from 2.5 s on)."""
+    aim, _ = _at_s(lead_s(t) - 7.0 + 7.0 * _ease((t - 1.8) / 1.6))
     ang, dist, h = _key(t)
     a = math.radians(ang)
     pos = aim + np.array([dist * math.cos(a), -dist * math.sin(a), h])

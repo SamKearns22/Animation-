@@ -394,12 +394,14 @@ def _normals(grid, outward_ref=None):
 
 
 def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, light=None, ol=None, ss=2,
-         blow=None, tint=None, phase=0.0, brow=True):
+         blow=None, tint=None, phase=0.0, brow=True, cut_z=None):
     """Draw one whale. pattern 0-4 (PATTERNS) sets the markings and size. t seconds (drives the wave and beat);
     flap 0..1 how much the flippers wave; beat 0..1 how much the tail beats; arch -1..1 (+ nose and tail down: a
     hump, - a dip). blow: seconds since the last blow (None = no spray). ol: outline width in px (default: the house
     5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. brow: the heavy, low, cross
-    brow over each eye (Sam's yes, 1 Nov: they are angry about climate change). Returns a Sprite."""
+    brow over each eye (Sam's yes, 1 Nov: they are angry about climate change). cut_z: hide every part of the whale
+    below this height (m; the sea surface, 0): a whale bursting out of the sea or diving in is cut off at the waterline
+    with no outline along the cut (the splash covers the seam). Returns a Sprite."""
     pat = PATTERNS[pattern] if isinstance(pattern, int) else pattern
     sz = pat['size']
     L = (np.asarray(light, float) if light is not None else LIGHT)
@@ -614,6 +616,19 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
     edge_img = edge_img.filter(ImageFilter.MaxFilter(k if k % 2 else k + 1))
     ink = np.asarray(edge_img) > 0
     full_alpha = alpha | ink
+    if cut_z is not None:                              # each pixel's world height, from its depth along its ray
+        yy, xx = np.mgrid[0:D.shape[0], 0:D.shape[1]]
+        rx = ((xx + 0.5) / S + x0 - W / 2) / cam.focal
+        rz = -((yy + 0.5) / S + y0 - H / 2) / cam.focal
+        nrm = np.sqrt(rx * rx + 1 + rz * rz)
+        dz = (cam.R[0, 2] * rx + cam.R[1, 2] + cam.R[2, 2] * rz) / nrm      # the ray's world z per metre
+        body = D > 0
+        below = body & (campos[2] + dz * D / 100.0 < cut_z)
+        grow = np.asarray(Image.fromarray((below * 255).astype(np.uint8)).filter(
+            ImageFilter.MaxFilter((k if k % 2 else k + 1) + 4))) > 0          # a little wider than the ink
+        full_alpha = full_alpha & ~(below | (grow & ~(body & ~below)))
+        if not full_alpha.any():
+            return None
     out = np.asarray(col).copy()
     out[ink] = INK
     if tint is not None:
@@ -627,6 +642,8 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
 
     blow_xy = cam.screen(surf(0.205, 0.0, 0.02))[0]
     bb = img.getbbox()
+    if bb is None:
+        return None
     bbox = (bb[0] + x0, bb[1] + y0, bb[2] + x0, bb[3] + y0) if bb else None
     spr = Sprite(img, (x0, y0), tuple(blow_xy), bbox, float(np.linalg.norm(pose.pos - campos)), None)
     if blow is not None:
