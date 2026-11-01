@@ -14,8 +14,8 @@ The world (whale.py axes: x right, y away from the first camera, z up; metres):
 - the camera is placed round the pod in the pod's own frame (angle from straight ahead of the pod towards its right,
   distance, height) and looks at a point 7 m behind the lead (CAM_KEYS); one lens all scene (focal 1400, the rig
   scene's lens).
-The background drawn here is a rough stand-in (bands by direction, the surface from below, specks): the real one is
-built after Sam's references and yes (rule 3).
+The water, surface, light shafts, specks, bubbles and the fish shoal are the underwater set,
+`source/flying_whales_under.py` (built 1 Nov after Sam's yes; benchmarked against his refs, rule 3).
 
     python3 source/flying_whales_opener.py comp OUT.jpg     the rough composition sheet (four key moments + the plan)
 """
@@ -30,6 +30,7 @@ from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import whale as W                                     # noqa: E402
+import flying_whales_under as U                       # noqa: E402
 
 SIZE = (1080, 1920)
 FOCAL = 1400.0
@@ -145,57 +146,39 @@ def camera(t):
     return W.Cam.looking_at(aim, pos, FOCAL, SIZE)
 
 
-# ------------------------------------------- the rough stand-in background ------------------------------------------
-WATER = [(14, 26, 58), (20, 48, 92), (30, 78, 122), (52, 118, 150), (96, 160, 172)]   # deep below -> bright up
-SURFACE = [(150, 196, 196), (228, 206, 176), (250, 226, 190)]                          # from below: far -> overhead
-HAZE = (30, 78, 122)
+# ------------------------------------------- the frame (the set: flying_whales_under) -------------------------------
+def blowhole(t, k):
+    """Whale k's blowhole (world, m) at time t: on top of the head, about a quarter back from the snout."""
+    pat, pose = poses(t)[k]
+    sz = W.PATTERNS[pat]['size']
+    return pose.world(np.array([3.78 * sz, 0.0, 0.95 * sz]))
 
 
-def background(cam):
-    w, h = cam.size
-    xs = (np.arange(w) + 0.5 - w / 2) / cam.focal
-    ys = (h / 2 - np.arange(h) - 0.5) / cam.focal
-    a, b = np.meshgrid(xs, ys)
-    d = a[..., None] * cam.R[0] + cam.R[1] + b[..., None] * cam.R[2]      # each pixel's ray in the world
-    d /= np.linalg.norm(d, axis=-1, keepdims=True)
-    el = np.degrees(np.arcsin(d[..., 2]))
-    band = np.digitize(el, [-25, -8, 6, 20])                               # flat bands by height, house style
-    img = np.array(WATER, np.uint8)[band]
-    up = d[..., 2] > 0.02
-    dist = np.where(up, -cam.pos[2] / np.maximum(d[..., 2], 1e-3), 1e9)
-    sb = np.digitize(dist, [22, 45])                                      # near overhead -> far
-    sky = np.array(SURFACE[::-1], np.uint8)[np.clip(sb, 0, 2)]
-    img = np.where((dist < 70)[..., None], sky, img)
-    im = Image.fromarray(img).convert('RGBA')
-    dr = ImageDraw.Draw(im)
-    rnd = random.Random(5)                                                # specks fixed in the water (show the move)
-    for _ in range(900):
-        p = cam.pos + np.array([rnd.uniform(-40, 40), rnd.uniform(-40, 40), rnd.uniform(-30, 8)])
-        p[2] = min(p[2], -0.5)
-        (sx, sy), z = cam.screen(p)
-        if 1 < z < 40 and 0 <= sx < w and 0 <= sy < h:
-            r = max(1.5, 60 / z)
-            dr.ellipse([sx - r, sy - r, sx + r, sy + r], fill=(200, 226, 230, 150))
-    return im
+def _pod_axes(t):
+    out = []
+    for pat, pose in poses(t):
+        sz = W.PATTERNS[pat]['size']
+        out.append((pose.world(np.array([-6.2 * sz, 0, 0])), pose.world(np.array([6.4 * sz, 0, 0])), 1.7 * sz))
+    return out
 
 
-def frame(t):
+U.set_pod('opener', _pod_axes)
+TINT = (30, 100, 170, 0.2)                            # the blue-teal of the water on every whale
+
+
+def frame(t, ss=1):
     cam = camera(t)
-    im = background(cam)
     sprs = []
     for k, (pat, pose) in enumerate(poses(t)):
-        spr = W.draw(cam, pose, pattern=pat, t=t + k * 0.37, flap=0.6, beat=1.0, tint=(60, 150, 200, 0.22),
-                     phase=k * 0.9)
+        spr = W.draw(cam, pose, pattern=pat, t=t + k * 0.37, flap=0.6, beat=1.0, tint=TINT, phase=k * 0.9)
         if spr:
-            d = float(np.linalg.norm(pose.pos - cam.pos))
-            k_h = 1 - math.exp(-max(d - 12, 0) / 40)                         # fade into the water with distance
+            k_h = U.haze(float(np.linalg.norm(pose.pos - cam.pos)))      # fade into the water with distance (B5)
             arr = np.asarray(spr.img).astype(np.float32)
-            arr[..., :3] = arr[..., :3] * (1 - k_h) + np.array(HAZE) * k_h
+            arr[..., :3] = arr[..., :3] * (1 - k_h) + np.array(U.HAZE) * k_h
             spr.img = Image.fromarray(arr.astype(np.uint8), 'RGBA')
             sprs.append(spr)
-    for spr in sorted(sprs, key=lambda s: -s.depth):
-        spr.paste(im)
-    return im.convert('RGB'), cam
+    im = U.compose(cam, t, sprs, blowhole=blowhole, since=IMAGINED, pod_key='opener', ss=ss)
+    return im, cam
 
 
 # ------------------------------------------------- the sheet --------------------------------------------------------
