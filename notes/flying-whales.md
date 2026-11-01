@@ -89,6 +89,8 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | 16 | "House satire" style | |
 | 17 | Rig built from Sam's Jackdaw references (yellow jacket legs, boxy decks, helipad, crane, flare boom) | |
 | 18 | CranbriJoos sign-off at the end (CLAUDE.md) | |
+| 19 | "Let's do the 12 second shot" | |
+| 20 | Sign: "Jackdaw" (the real name) | |
 
 ## References as checklists (`references/flying-whales/`)
 | reference | what it shows | ours matches? |
@@ -119,6 +121,9 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 | 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | open |
 
 Decisions made:
+- Sam's answers (1 Nov): a prior scene comes first (not written yet); this shot is 12 s; no Hook Text for now;
+  the sign reads the real name JACKDAW; no sound for now, visuals only (sound later); whales at real size (14 m);
+  five whales.
 - No people anywhere: empty rig, no boats or helicopters (Sam, 1 Nov).
 - Dusk (Sam's final word, 1 Nov); the pink-purple sky with the calm mirrored sea, warm wave caps in front.
 - House satire style; start from `source/satire_template.py`.
