@@ -13,17 +13,20 @@
   The film file `source/patriots4.py` (from the template): 12 shots, 49.0 s; recordings placed; subtitle chunks on the
   recording's own stretches; mouths per stretch (`parts`); plan checks clean; `plan.py` clean. Stills sheet sent:
   `review/patriots4-stills.jpg` (`python3 source/patriots4.py sheet OUT.jpg`).
-- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3, then Sam's second batch 4-8 applied (Notes
-  table); stills sheet `review/patriots4-stills.jpg` re-sent. Plan check clean.
-- **Next (Opus medium, building from a clear plan):** Sam looks at the new stills (and answers the open question on
-  note 1). Then pre-flight (`python3 source/preflight.py patriots4 OUT_DIR`: the brief checklist must be ticked first;
-  `scene(t)`, `layers(t)` and the audits are NOT yet written: copy the template's flat `scene()` and add them), the
-  check sheet, and the animatic only on Sam's clear yes.
-- **Open question (note 1):** Sam named "the reference that looks from above"; ref 12 as filed shows only the arch
-  and two people leaving (no table). Built from the brief and refs 01-03 instead; asked Sam to send the overhead
-  picture if he meant another one.
-- **Still to ask:** the dead silence before the "Errrr" (25.8 s) and after it fades (44.8 s): meant (brief 17),
-  recommended: keep (Sam has not said otherwise).
+- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3, then Sam's second batch 4-8 (Notes table);
+  Sam: ignore the overhead-picture question; the silences stay for now. Shot 13 added (Sam's yes to my proposal): over
+  the Patriot's shoulder, his pointing arm and finger in the corner, Romesh and Bash drop their mouths open, then
+  slide their eyes to each other (48.2-50.2 s; shot 12 now ends 48.2). Pre-flight wired up (`scene`, `audits`,
+  eyelines by time `looking_at`, `NOTES`, benchmark paths); brief checklist ticked. Faults fixed on the way: hands
+  over the table and the over-shoulder backs were misplaced at full quality (SS 2); `traitors` / `patriots3_cast`
+  put the plain circle hands back on first use (loaded up front now); the table's footprint touched legs on the plan
+  (R 0.62); Romesh looked the wrong way in shot 9; captions merged; the "Errrr" line shortened to fit 700 px.
+  Pre-flight: 7 faults left, all named: 3 voice flags meant (Sam, note 3); 3 captions under reading time (they follow
+  Bash's and Romesh's speech; longer chunks break 42 characters); shot 2 is 8.9 s (Bash's unbroken speech). Sam said
+  "proceed to animatic" (his override: no wait for a yes on the check sheet; checks still run). Animatic 1 rendered
+  and sent.
+- **Next (Opus medium, reading Sam's notes):** Sam's notes on animatic 1, then the clips/fixes; the final render only on
+  his clear yes, then `finish.py` with the Hook Text.
 - **Losses, cheats and my additions:** shot 9 is a film cheat: Romesh and Bash are drawn closer together (227 and 256
   degrees, not 210 and 270) so both faces are big enough for the eye slide; note 1's knock-ons: the people's legs now show
   under and beside the small table (they stand behind it), the floor of the winner's room is painted (dark boards:
@@ -152,6 +155,7 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 5 | 3 | 17 s | Chairs tucked into the Round Table (they looked turned away); no wall between the two rooms (one space); the Round Table 50% closer | done 1 Nov: chairs round the far side seen front on with the rim over their seats, side chairs edge on with seats under the rim, the near one from behind; the opening's posts and lintel gone, the hall's wall up to the shared ceiling, one floor; the table about 5 m off (was 9.5): twice the size; plan: at z -4.6, opening the full wall |
 | 6 | 12 | 47.9 s | The pointing must look like pointing (as at the end of Power Crime Action) | done 1 Nov: Power Crime Action's 'point' hand (a short finger out of the round hand, a touch bigger here), both arms straight, down at the two heads in the corners, drawn over the table (`install_point_finger`, `point_at_them`, `arms_mask`) |
 | 7 | 2-4 | | Camera closer, at the edge of the table | done 1 Nov: zoom 1.2; the table and coins scaled about its far edge so its near rim sits at the frame's foot (`patriots4_room.Near`, `near_for`); hands still on the rim |
+| 9 | 12, 13 | 48 s | "We don't get to see R and B's reactions" | done 1 Nov: shot 13 (my proposal, Sam's yes) |
 | 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 
 Decisions made (kept so a new chat never has to rediscover them):
