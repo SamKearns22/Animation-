@@ -18,8 +18,9 @@ Read this first in any new session, after CLAUDE.md.
 ## In progress: "Patriots 4" (TikTok satire: the Celebrity Traitors winner's table; Romesh and Bash name their
 refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
 - 1 Nov (planning, Opus): references (`references/patriots-4/`) and 6 recordings (`source/audio/patriots4-*`) filed;
-  plan and shot list in the notes; questions sent to Sam. NEXT: his answers and likeness photos, then the plan file
-  and the composition sheet; building waits for his go.
+  Sam's answers in; plan in metres (`source/patriots4_plan.py`); rough composition sheet sent: Sam called it too
+  rudimentary and moved on. Budget 15% of a week; reuse the Round Table room from The Traitors. NEXT: BUILDING (Opus
+  high, fresh chat): read `notes/patriots-4.md` "Where things stand".
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
