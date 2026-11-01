@@ -149,3 +149,44 @@
   handover of the cast round).
 - **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` (codemap); `source/patriots4_room.py`;
   `source/patriots4_cast.py`; `review/patriots4-stills.jpg`.
+
+
+## Handover for animatic 2 (archived 1 Nov)
+- **Rules that bite at this stage (rule 48):** CLAUDE.md: Sam said "handover to produce animatic 2" (1 Nov): that is
+  his go-ahead for ONE animatic render (pre-flight still runs; every fault fixed or named); 14 pre-flight before the
+  render; 41 every arm ends in a visible hand (the hands on the rim; shot 12's fingers); 44 log usage; push
+  notification with the render time; never the final render without Sam's clear yes.
+- **Done (1 Nov, Opus medium: Sam's notes on the stills and animatic 1, notes 1-24 in the table below):** the table is
+  0.37 m (half, then 25% less twice) on a turned-leg pedestal; every table shot has the camera at the table's edge
+  (`patriots4_room.near_for` grows the table until both bottom corners of the frame are on it); jump cuts, no swings;
+  seats: Claudia 12, the Patriot 3, Romesh 6, Bash 9 (`ANGLES`, `PEOPLE`); one room: the Round Table end behind Romesh,
+  its far wall in this room's panels, side walls turning the corner (`panels(..., k)`, `receding`), the Round Table on
+  legs with chairs tucked in; more candles and torches (`DRESS`, and on the far wall); Claudia: The Traitors film's
+  face (Sam chose it) in this film's outfit, her eyes Romesh/Bash per phrase in shot 1; the Patriot's stare in the
+  library's eye style, the library's fierce frown for "Traitors."; shot 12 points with Power Crime Action's finger
+  hand; shot 13 is just Romesh and Bash looking at each other (no Patriot); captions merged. Fixed on the way:
+  full-quality-only faults (hands over the table, over-the-shoulder backs at SS 2), hand rims, Romesh's glasses
+  flicker, the finger hand lost when `traitors` loaded. Pre-flight: 7 faults, all named (3 voice flags meant, Sam
+  note 3; 3 captions follow fast speech; shot 2 8.9 s, Bash's unbroken speech). Plan check clean.
+- **Next (SONNET, routine: render, send):** in a fresh chat: `python3 source/preflight.py patriots4 OUT_DIR`
+  (expect the same 7 named faults; read any new one and stop if it is not simple), then the animatic:
+  `python3 source/patriots4.py final OUT.mp4 --small` (about a minute; 50.2 s film), send it and the pre-flight
+  sheet (`OUT_DIR/patriots4-preflight.jpg`) to Sam, push notification, wait for his notes. Notes on looks or
+  staging go back to Opus medium (fresh chat).
+- **Losses, cheats and my additions:** swings replaced by cuts (Sam's choice); the hall lamps gone (one wall style);
+  the foreground pointing arm removed (my addition, Sam: "terrible"); shot 13's dropped mouths removed (Sam); shots 9
+  and 13 cheat Romesh and Bash closer (200 and 224 degrees, not 180 and 270); shot 9's Patriot shoulder is bottom-left
+  (he sits to their left now); the people are bigger in frame (camera moved in to the smaller table's edge: zoom
+  1.35); the plan puts everyone 0.62 m from the table centre (no change on screen). My additions still in: shot 13
+  (Sam's yes), extra candles/torches positions (Sam asked for more; placement mine).
+- **Usage (rule 44):** not measured in this chat (slipped).
+- **Rule requests and proposals not yet in a guide (Sam: discuss at the END of the project):** (1) PROPOSED earlier:
+  the composition sheet uses the real cast drawings (film-quality-rules 11). (2) PROPOSED earlier: famous heads drawn
+  from measurements, never by eye; NOTE: Sam chose the eye-drawn Traitors Claudia over the measured one (round
+  because the jaw was pushed 15x for the scorer): rethink before proposing. (3) NEW: before the first animatic,
+  render one frame per shot at full quality (SS 2): three faults here showed only at full quality (hands over the
+  table, over-the-shoulder backs, a later-loaded module swapping the hands) (film-quality-rules, by hand, or a
+  pre-flight step). (4) NEW: a note about a join or seam in a set is checked in EVERY shot where that part of the set
+  shows, not only the shot named (the room-divider note came back from shot 9) (film-quality-rules, by hand).
+- **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` (codemap).
+

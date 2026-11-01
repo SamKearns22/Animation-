@@ -31,6 +31,9 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
   edge, jump cuts, seats 12/3/6/9, one room, Traitors-film Claudia, original Patriot eyes, shot 13 reaction);
   animatic 1 sent; pre-flight 7 named faults. NEXT: animatic 2 (Sonnet, fresh chat; Sam's go-ahead given):
   `notes/patriots-4.md`, "Where things stand".
+- 1 Nov (animatic 2, Sonnet then Opus): animatic 2 sent; Sam's notes 25 (one table size: done) and 26 (Romesh and
+  Bash at 6 and 9: cheat removed). NEXT (Opus HIGH, fresh chat): build the wide view for shots 9 and 13:
+  `notes/patriots-4.md`, "Where things stand".
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).

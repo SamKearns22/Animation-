@@ -412,20 +412,19 @@ def pedestal(img, pc):
     turned_leg(p, cx, y0, floor - 30, 36)
 
 
+TABLE_SCALE = 1.04 ** 4   # Sam, 1 Nov (animatic 2 note 25): ONE table size in every shot, the one in Claudia's close-up
+
+
 def near_for(pc):
-    """How much more the foreground must be scaled (about the table's far edge) for its near rim to sit at the
-    frame's foot: the camera at the table's edge (Sam, 1 Nov notes 8-9); 1 when the table already fills it (close-ups)."""
-    depth = 2 * TABLE_RY + TABLE_THICK
-    z = pc.zoom
-    te = 960.0 + z * (TABLE_EDGE - pc.cy)     # the far rim on screen (it stays put whatever the scale)
-    f = 1.0
-    for _ in range(80):                       # grow until both bottom corners of the frame are on the table top
-        rx, ry = TABLE_RX * z * f, TABLE_RY * z * f
-        corner = (540.0 / rx) ** 2 + ((1920.0 - te - ry) / ry) ** 2
-        if corner <= 0.97:
-            break
-        f *= 1.04
-    return f
+    """How much more the foreground is scaled (about the table's far edge) than the people: the same in every shot
+    (Sam, animatic 2 note 25: three table sizes came from growing it per shot to fill the frame's foot)."""
+    return TABLE_SCALE
+
+
+def rim_cy(z):
+    """The camera's middle (world y) that puts the table's near rim just past the frame's foot at zoom z."""
+    rim = 2 * TABLE_RY + TABLE_THICK
+    return TABLE_EDGE - (975.0 - z * TABLE_SCALE * rim) / z
 
 
 class Near:

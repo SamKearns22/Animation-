@@ -79,13 +79,11 @@ PANS = {}   # Sam, 1 Nov (animatic 1 note 1): the swings read as the table spinn
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
     'claudia': (0.0, 1.0, None), 'bash': (270.0, 1.0, None), 'romesh': (180.0, 1.0, None),
     'claudia 2': (0.0, 1.0, None), 'patriot': (90.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
-    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (90.0, 1.75, 'patriot'), 'his view': (212.0, 1.0, None),
-    'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (212.0, 1.0, None),
+    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (90.0, 1.75, 'patriot'), 'his view': (225.0, 1.0, None),
+    'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (225.0, 1.0, None),
 }
-CHEAT = {   # a film cheat for one shot: Romesh and Bash stand 60 degrees apart, too far for one frame with faces big
-    'his view': {'romesh': 200.0, 'bash': 224.0},   # enough for the eye slide, so they are moved closer for it
-    'reaction': {'romesh': 200.0, 'bash': 224.0},
-}
+CHEAT = {}   # Sam, 1 Nov (animatic 2 note 26): no cheat; Romesh and Bash at their real seats in every shot
+WIDE_Z = 0.5   # shots 9 and 13 pulled right back so both fit at 90 degrees apart (Sam's choice)
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
 T_STARE4 = 44.8
@@ -231,11 +229,14 @@ def pancam(t):
     h, z, who = STILL[s]
     cy = 960.0 if who is None else face_y(who) + 200 / z
     if s in ('claudia', 'bash', 'romesh', 'claudia 2', 'patriot'):   # Sam, 1 Nov notes 8-9: at the table's edge
-        z, cy = NEAR_Z, NEAR_CY
+        z = NEAR_Z
+        cy = RM.rim_cy(z)                         # animatic 2 note 25: the one table size; its near rim at the foot
     if s in ('patriot 2', 'traitors'):            # animatic 1 note 3: out a little, Bash's and Romesh's backs in both
-        z, cy = 1.15, NEAR_CY
-    if s in ('his view', 'reaction'):             # a little wider, so Romesh and Bash both fit, hands and all
-        z, cy = 1.1, 1065.0
+        z = 1.15
+        cy = RM.rim_cy(z)
+    if s in ('his view', 'reaction'):             # animatic 2 note 26 (Sam chose): pulled right back, both at their
+        z = WIDE_Z                                # real seats (6 and 9, 90 degrees apart)
+        cy = RM.rim_cy(z)
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
     return pc
