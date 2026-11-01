@@ -1,33 +1,35 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Rules that bite at this stage (rule 48):** 40 (nothing for the opener is built until Sam approves or trims its
-  Showstopper list, below); 3 (no underwater references yet: none of the underwater set is built until they are in
-  and benchmarked); 22 (my additions named and shown: the fish shoal, the bubble trails, dusk light under the sea);
-  10 and 16 (the Hook Text band and the up-and-right direction across the hard cut); 44 (ask Sam for the week's figure).
-- **Done (1 Nov, planning, Opus high): the opening scene planned.** Showstopper list (below, "Opening scene:
-  Showstopper list"); the plan in metres as numbers in `source/flying_whales_opener.py` (pod formation, the lead's
-  track, the camera's swing, timings; the build reuses them); holds, risky moves, sounds and the ambition estimate
-  below. Rough composition sheet sent: `review/flying-whales-opener-composition.jpg` (four key moments and the plan
-  from above and from the side; the background is a stand-in; the whales have no brows yet).
-- **Waiting for Sam:** approve or trim the opener Showstopper list; the five questions in "Opener questions" (below).
-- **Next (fresh chat after Sam's answers, Opus high, building):** (1) the brow on every whale (`source/whale.py`,
-  note 5); (2) the underwater set (`source/flying_whales_under.py`: water bands by direction, the surface from below,
-  light shafts, specks, bubbles; the shoal if Sam says yes) benchmarked against Sam's underwater references (rule 3);
-  (3) the rig (`source/flying_whales_rig.py`, about 30 breakable parts, JACKDAW board, rig sheet on the sea painting
-  using `flying_whales_sea.CAM`); then rehearsal clips: the opener's swing and its rise into the cut, then the rig's
-  three. Still to do: copy `source/satire_template.py` to `source/flying_whales.py` (no cast).
+- **Rules that bite at this stage (rule 48):** 3 (benchmark the underwater set against "Underwater benchmark" below,
+  side by side with the refs, before Sam sees it); 22 (my additions shown and named on the sheet: dusk light under the
+  sea, the fish shoal, bubble trails, specks); 39 (the underwater set is 2D, painted by view direction so it turns with
+  the camera; the whale is already a model; the rig is one locked camera, painted layers); 16 (up and to the right on
+  both sides of the hard cut); 8 and 33 (rehearsal clips of the risky moves before the rest).
+- **Done (1 Nov, planning, Opus high): the opening scene planned and approved.** Sam: "all is well and you can
+  continue": the opener Showstopper list (U1-U15) approved, and all five recommendations taken (Decisions, "Opener
+  answers"). The plan in metres is numbers in `source/flying_whales_opener.py` (pod formation, the lead's track, the
+  camera's swing, timings; `comp OUT.jpg` draws the rough sheet); the composition sheet was sent
+  (`review/flying-whales-opener-composition.jpg`, once, rule 45). No more references needed: seven of Sam's whale refs
+  are underwater (benchmark below).
+- **Next (fresh chat, Opus high, building):** (1) the brow on every whale (`source/whale.py`, note 5: heavy, low,
+  angled down to the middle over each eye; readable on the lead's close pass at about 2.0 s); (2) the underwater set,
+  new: `source/flying_whales_under.py` (water bands by direction, the surface from below, light shafts, specks,
+  bubbles, the fish shoal), drawn for `flying_whales_opener.camera(t)`; benchmark sheet beside the refs (rule 3) and
+  a sheet to Sam; add it to `guides/kit-catalogue.md`; (3) the rig (`source/flying_whales_rig.py`, about 30 breakable
+  parts, JACKDAW board, rig sheet on the sea painting using `flying_whales_sea.CAM`); then rehearsal clips: the
+  opener's swing (1.2-4.0 s) and its rise into the cut (4.0-5.6 s), then the rig's three. Still to do: copy
+  `source/satire_template.py` to `source/flying_whales.py` (no cast).
 - **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
-  installed; add it before the first animatic (small, Opus medium). It must also take `--y 352` (the band) for the
-  whole video (`--until` the full length).
-- **Losses and my additions Sam should know about:** additions (opener): dusk light under the sea (a warm gold
-  surface); a shoal of small silver fish that scatters (asked); bubble trails from the blowholes on the rise (asked);
-  drifting specks in the water (needed so the camera's swing reads). Earlier ones below. No losses.
+  installed; add it before the first animatic (small, Opus medium). It is placed with `--y 352` (the upper band) and
+  stays on the whole video (`--until` the full length).
+- **Losses and my additions Sam should know about:** additions (opener, all said yes): dusk light under the sea; the
+  fish shoal; bubble trails on the rise; drifting specks. Earlier ones below. No losses.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** 24% of the week at the end of the whale stage; ask Sam for the figure now.
-- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 3, 8, 16, 22, 39, 40;
-  `guides/kit-catalogue.md`; `source/flying_whales_opener.py`, `source/flying_whales_sea.py` and `source/whale.py`
-  docstrings.
+- **Usage budget (rule 44):** 28% of the week (Sam, 1 Nov, end of the opener plan). Ask again at the next handover.
+- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 3, 8, 16, 22, 33, 39;
+  `guides/kit-catalogue.md`; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_sea.py`,
+  `source/whale.py`; the seven underwater refs (one combined sheet).
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
@@ -128,7 +130,7 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | O11 | The joke (Sam, 1 Nov): "the new behaviour we are seeing is that the animals are so angry about climate change they are defying physics to destroy infrastructure" | |
 | O10 | Sam (1 Nov, about the rig scene): "five whales smash their way through this rig, making it tumble and explode and break into parts in an orgy of effects and destruction and zooming, looping, attacking whales" | |
 
-## Opening scene: Showstopper list (rule 40: Sam approves or trims before anything is built)
+## Opening scene: Showstopper list (rule 40: approved by Sam 1 Nov; ticked at the first rehearsal clip)
 | # | element | why |
 |---|------|------|
 | U1 | Open blue water, no sea bed: deep navy below, lighter teal towards the surface, fading to blue about 45 m off | Blue Planet's open-ocean humpback shots; nothing to distract from the whales |
@@ -144,7 +146,7 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | U11 | On "imagined": they tilt up 40 degrees and race for the surface, trailing bubbles; the camera drops below them and tilts up | O5, O8 |
 | U12 | Hard cut just before the lead breaks the surface; they burst out in the rig scene heading up and to the right | O6; rule 16 (direction holds: up-right in both) |
 | U13 | The Hook Text on from the first frame, in the upper band (y 245-460), clear of the whales | O1; Sam: Hook Text on the whole video |
-| U14 | A shoal of small silver fish that scatters as the pod charges through (MY ADDITION: Sam to say yes or no) | Blue Planet life; shows the speed |
+| U14 | A shoal of small silver fish that scatters as the pod charges through (my addition; Sam: yes) | Blue Planet life; shows the speed |
 | U15 | No divers, boats or people; nothing above the surface shows (the rig is a surprise) | Sam: no people; the cut must surprise |
 
 ## Opening scene: the plan in metres (rule 1; the numbers live in `source/flying_whales_opener.py`)
@@ -172,7 +174,21 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 - Sounds (rule 26; Sam: sound later, so not asked yet): the Attenborough line (Sam records); proposed for later: a
   low underwater hum, humpback song under the line, a rush of bubbles on the rise.
 
-## Opener questions (sent to Sam 1 Nov; each with my recommendation)
+## Underwater benchmark (rule 3; Sam's refs: whale-side-under, whale-side-painting, whale-rear-three-quarter, whale-pod-from-above, whale-belly-flippers, whale-throat-grooves, whale-tail-behind)
+| # | what makes it read as under the sea | ref | ours? |
+|---|------|------|------|
+| B1 | Open water, no sea bed: bright blue up top, deep navy below | rear-three-quarter, pod-from-above | |
+| B2 | The surface from below: a bright wavy ceiling broken into ripple shapes | side-under, side-painting | |
+| B3 | Light shafts fanning down from the surface | side-painting | |
+| B4 | A trail of bubbles behind a whale | pod-from-above | |
+| B5 | Distance fades whales into the blue (the far one paler, less contrast) | pod-from-above, rear-three-quarter | |
+| B6 | Lit from above: backs bright, bellies in shade, white flippers glowing | side-under, belly-flippers | |
+| B7 | Small specks and bubbles hanging in the water near the surface | side-under | |
+| B8 | Near the surface: its underside as a hard line, the whale's back just under it | tail-behind, throat-grooves | |
+| B9 | Whales blue-grey under water (never black), white flippers and bellies the brightest thing | all | |
+| B10 | Ours is dusk (Sam's yes): the same layout, the surface glowing warm gold, the water deeper teal | (our choice) | |
+
+## Opener questions (sent to Sam 1 Nov; each with my recommendation; all answered, see Decisions)
 1. Underwater references (rule 3): none yet. Recommend: Sam sends 4-6 (Blue Planet humpbacks in open blue water from
    the front and side; the surface from below; light shafts), or says "find them" and I find them.
 2. Light under the sea: recommend dusk (deep blue-teal water, the surface glowing warm gold), the same evening as the
@@ -216,11 +232,14 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 |---|------|------|------|--------|
 | 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | done: sky and sea painted at dusk |
 | 2 | whale sheet | | "Things look great so far" (Sam, 1 Nov): the whale approved | done |
-| 3 | opening | | the opening scene brief (checklist O1-O11) | planned: Showstopper list U1-U15 and sheet sent; waiting for Sam |
+| 3 | opening | | the opening scene brief (checklist O1-O11) | planned and approved (U1-U15); to build |
 | 4 | rig | | "zooming, looping, attacking whales" (O10) | Sam: yes, two whales loop (Showstopper 17) |
 | 5 | all | | angry whales: a heavy low brow (Sam's yes) | open: change whale.py |
 
 Decisions made:
+- Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more
+  references (seven underwater refs already in); dusk light under the sea; the Hook Text in the upper band (y 245-460)
+  for the whole video; the fish shoal yes; bubble trails on the rise yes.
 - Opening scene answers (Sam, 1 Nov): Sam records the Attenborough line himself (an impression; remind him: a second
   of silence after, Voice Isolation off); about 5 s, then a hard cut to Jackdaw; the whales swim at us "but at a
   slight diagonal", the camera swings round to their side and swims alongside, and on "imagined" they tilt up and race

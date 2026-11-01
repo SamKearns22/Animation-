@@ -17,8 +17,9 @@ Read this first in any new session, after CLAUDE.md.
   Jackdaw): Sam answered all (diagonal approach, same whales, loops, angry brows). Next (fresh chat, Opus high): plan the opener, then the rig.
 - 1 Nov (planning, Opus): the opener planned: Showstopper list U1-U15, the plan in metres as numbers
   (`source/flying_whales_opener.py`), rough composition sheet sent (`review/flying-whales-opener-composition.jpg`),
-  five questions to Sam (underwater refs, dusk light under the sea, Hook Text band, fish shoal, bubble trails).
-  Waiting for Sam; then a fresh chat (Opus high, building): brows, the underwater set, the rig.
+  five questions to Sam. Sam approved all (dusk under the sea, Hook Text in the upper band, fish shoal, bubble
+  trails; the seven underwater refs are enough). Next (fresh chat, Opus high, building): brows, the underwater set,
+  the rig, then rehearsal clips. Usage: 28% of the week.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,
