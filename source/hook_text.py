@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')
+NOTO = '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'   # colour emoji (installed at session start)
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide (guides/tiktok-design.md)
 
@@ -23,7 +24,16 @@ SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide 
 def emoji_img(ch, px):
     """An emoji as a picture (Google's Noto emoji, in source/fonts/emoji/<hex>.png): TikTok Sans has no emoji."""
     path = os.path.join(HERE, 'fonts', 'emoji', f'{ord(ch):x}.png')
-    return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
+    if os.path.exists(path):
+        return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
+    f = ImageFont.truetype(NOTO, 109)                   # any other emoji: the colour font (its pictures are 136 px)
+    im = Image.new('RGBA', (136, 128), (0, 0, 0, 0))
+    ImageDraw.Draw(im).text((0, 0), ch, font=f, embedded_color=True)
+    im = im.crop(im.getbbox() or (0, 0, 136, 128))
+    side = max(im.size)                                 # square it, centred, so it sits like the PNG ones
+    sq = Image.new('RGBA', (side, side), (0, 0, 0, 0))
+    sq.alpha_composite(im, ((side - im.width) // 2, (side - im.height) // 2))
+    return sq.resize((px, px), Image.LANCZOS)
 
 
 def _rows(d, words, f, n):
@@ -54,7 +64,12 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
     d = ImageDraw.Draw(im)
     while True:                                # one to three balanced rows, inside the safe width
         f = ImageFont.truetype(FONT, int(size * k))
-        words = text.split()
+        words = []
+        for wd in text.split():                    # a number or Roman numeral stays with the word before it
+            if words and wd.strip('.,!?').isdigit() or words and set(wd.strip('.,!?')) <= set('IVX'):
+                words[-1] += ' ' + wd                  # ("Blue Planet / III looks" read badly)
+            else:
+                words.append(wd)
         room = (f.size + int(10 * k)) * len(tail)        # the emoji count towards the width (four suits overran it)
         fits = None
         for n in range(1, max_rows + 1):
@@ -69,7 +84,7 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
         size -= 4
     lh = int(f.size * 1.18)
     em = int(f.size * 1.0)
-    emw = (em + int(10 * k)) * len(tail)             # room for the emoji on the last row
+    emw = (em + int(10 * k)) * len(tail) + (d.textlength(' ', font=f) / 2 if tail else 0)   # room for the emoji
     pad_x, pad_y = int(30 * k), int(16 * k)
     cx = (x_mid if x_mid is not None else 540 if centre else (SAFE_X0 + SAFE_X1) / 2) * k   # --centre: the middle
     # of the frame (Sam, 15 Oct); --x: the card's middle anywhere across (Shocking Behaviour: onto the tower's windows)
@@ -84,7 +99,7 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
         tw = d.textlength(r, font=f) + (emw if last else 0)
         d.text((cx - tw / 2, top + i * lh + int(2 * k)), r, font=f, fill=(0, 0, 0, 255))
         if last:
-            ex = cx - tw / 2 + d.textlength(r, font=f) + int(10 * k)
+            ex = cx - tw / 2 + d.textlength(r, font=f) + int(10 * k) + d.textlength(' ', font=f) / 2   # a gap after the word
             for ch in tail:
                 im.alpha_composite(emoji_img(ch, em), (int(ex), int(top + i * lh + (lh - em) / 2)))
                 ex += em + int(10 * k)

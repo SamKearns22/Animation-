@@ -28,8 +28,7 @@
   finale (13.4-17.6), in `review/` (not on GitHub). Showstoppers ticked (below the list). `check` and `wreck.py check`
   clean.
 - **Next (fresh chat, Opus medium: reading Sam's notes on clips (c)-(e) and applying them):** wait for Sam's notes on
-  the three clips; movement notes get a short clip (`final OUT --small --span T0 T1`). Then (Opus medium) the colour
-  emoji in `source/hook_text.py` (Tool gap below). Then tick the brief checklists, run `preflight.py`, show Sam the
+  the three clips; movement notes get a short clip (`final OUT --small --span T0 T1`). The colour emoji is done (below). Then tick the brief checklists, run `preflight.py`, show Sam the
   check sheet and offer the animatic (wait for a clear yes). Still missing: Sam's Attenborough recording (placeholder
   times; remind him: a second of silence after, Voice Isolation off). Start the new chat with: "Flying Whales: read
   the handover in notes/flying-whales.md and carry on (my notes on the rig clips, then the emoji and the animatic
@@ -42,8 +41,10 @@
   puffs from the fires, the flare boom landing flat): (c) is unchanged by them, (d) only in its last few frames. The
   smoke fills the sky above the rig by the end (it passes behind the Hook Text band). The blowhole puffs seen from
   behind (Showstopper 5) still to judge in motion.
-- **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
-  installed; add it before the first animatic (small, Opus medium). Placed with `--y 352`, on for the whole video.
+- **Tool gap: closed (1 Nov, new chat):** `source/hook_text.py` now draws any emoji: the saved pictures in
+  `source/fonts/emoji/` first (🔥 saved there as `1f525.png`), else Noto Color Emoji. A number or Roman numeral stays
+  with the word before it ("Blue Planet III / looks 🔥🔥🔥", not "Blue Planet / III looks"), and the first emoji has a
+  half-space gap after the word. Placed with `--y 352`; on for the whole video means `--until` = the film's length.
 - **Losses and my additions Sam should know about:** changes from the plan: the derrick bends and stays on (it goes
   under last, "the tower last") instead of toppling (Showstopper 12 said "whipping and toppling"); the braces snap off
   whole rather than crumple, and the deck's sag (Showstopper 10) is only the first moment of the finale's tip; the whole
