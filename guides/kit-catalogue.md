@@ -25,6 +25,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Wes Streeting (likeness, torn suit) | `source/prepper_cast.py` (also Hope Again's in `burnham.py`) | |
 | Hope Again cabinet (Streeting, Rayner, Healey, Mahmood, Miliband; armour) | `source/burnham.py` | |
 | Trump, Putin, Zelensky, Claudia | `source/traitors_cast.py` | likeness heads (that Claudia scored 35% on the likeness check, 1 Nov: use Patriots 4's) |
+| The Traitors winner's room (pointed arch, lattice, panelled walls, fire baskets, torches, candles; round table, gold coin pile) painted all round, with a camera that turns on the spot (`PanCam`) | `source/patriots4_room.py` | 2D panorama; sheet: `patriots4_room.py OUT.jpg` |
 | Romesh Ranganathan, Sebastian "Bash" Croft, Claudia (measured head; black jacket, cream tie blouse, gold chain) | `source/patriots4_cast.py` | likeness heads drawn from `likeness.py` measurements (`layout`, `Face`): a new famous face = its measures in `MEASURED`, its own hair; `head WHO OUT.png [--average]`, `likeness OUT_DIR`; sheet: `patriots4_cast.py sheet OUT.jpg`. Also the Patriot's stare strengths 1-6 and narrowed eyes (`patriot_eyes`) |
 | Reform HQ five (Shocking Behaviour) | `source/shocking_cast.py` | likeness heads |
 | Benjamin Netanyahu (navy suit, blue or red tie, flag pin) | `source/netanyahu_cast.py` | likeness head; moods incl. shouting; sheet: `netanyahu_cast.py sheet OUT.jpg` |

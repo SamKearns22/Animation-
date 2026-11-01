@@ -43,7 +43,7 @@ LOOKS = {
 THINGS = {
     "winner's table": dict(at=(0.0, 0.0), size=(1.3, TABLE_H, 1.3), facing=0,
                            why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12)'),
-    'coin pile': dict(at=(0.0, 0.0), size=(0.56, 0.3, 0.56), facing=0, y=TABLE_H, solid=False,
+    'coin pile': dict(at=(0.0, 0.0), size=(0.56, 0.3, 0.56), facing=0, y=TABLE_H, solid=False, on="winner's table",
                       why='large gold coins in about 7 tiers, more scattered round the base (ref 01)'),
     'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.9, 0.8), facing=0,
                       why='iron bowl of fire on a stand (refs 03, 09)'),
@@ -63,26 +63,27 @@ def _look(hour, y=1.38):
     return (x, y, z)
 
 
-ORBIT = 0.55                   # the swivel: the camera circles the coin pile this far out, always across it from the
-CAM_Y = 1.52                   # person it looks at, so the top tiers sit in the foreground ("over the table at her")
+CAM_Y = 1.52                   # Sam, 1 Nov (to hold 15% of a week): the "swivel" is the camera TURNING on the spot
+                               # over the coin pile (the room painted once all round, patriots4_room.py), not circling
 
 
-def orbit(hour, focal=1150, y=1.30, why=''):
-    x, z = clock(hour + 6, ORBIT)
-    return dict(pos=(x, CAM_Y, z), look=_look(hour, y), focal=focal, why=why)
+def pan(hour, focal=1146, y=1.40, why=''):
+    """A camera at the table's centre, turned to look at whoever stands at this hour (it pans between them)."""
+    return dict(pos=(0.0, CAM_Y, 0.0), look=_look(hour, y), focal=focal, why=why)
 
 
-CAMS = {   # focal in pixels for 1080 x 1920
-    'claudia': orbit(12, why='across the coins at Claudia (the Patriot 60 deg off frame)'),
-    'bash': orbit(9, why='circled round to Bash'),
-    'romesh': orbit(7, why='circled on to Romesh; the Round Table far behind him'),
-    'patriot': orbit(2, why='the reveal: circled from Claudia to her left'),
-    'claudia close': orbit(12, 2100, 1.55, why='the stares, closer'),
-    'bash close': orbit(9, 2100, 1.55, why='staring and blinking'),
-    'patriot close': orbit(2, 2100, 1.55, why='eyes wide, sliding to Romesh'),
-    'his view': dict(pos=(1.75, 1.66, 1.02), look=(-0.62, 1.45, -0.42), focal=1750,
-                     why="over the Patriot's shoulder: Romesh and Bash in one frame, their eyes meeting"),
+CAMS = {   # focal in pixels for 1080 x 1920 (1146: 20 px a degree, patriots4_room.K)
+    'claudia': pan(12, why='over the coins at Claudia (the Patriot 60 deg off frame)'),
+    'bash': pan(9, why='panned round to Bash'),
+    'romesh': pan(7, why='panned on to Romesh; the Round Table hall behind him'),
+    'patriot': pan(2, why='the reveal: panned from Claudia to her left'),
+    'claudia close': pan(12, 2000, 1.55, why='the stares, closer'),
+    'bash close': pan(9, 2000, 1.55, why='staring and blinking'),
+    'patriot close': pan(2, 2000, 1.55, why='eyes wide, sliding to Romesh'),
+    'his view': pan(8, 825, why="Romesh and Bash in one frame, the Patriot's shoulder in the corner"),
 }
+CAMS.update({'claudia 2': CAMS['claudia'], 'claudia close 2': CAMS['claudia close'], 'patriot 2': CAMS['patriot'],
+             'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners")})
 GROUPS = {}
 FRAMING = {   # rule 10: the Hook Text over the arch above Claudia; each key beat with its minimum hold
     'claudia': dict(hook='the arch and lattice above Claudia, top third', beats=[('the question', 1.0)]),

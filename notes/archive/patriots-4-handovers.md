@@ -58,3 +58,45 @@
   eyes; "Errrr" subtitle one fixed line; Hook Text "Celebrity Traitors winners reveal their charities" over the arch;
   Claudia as in this final; heights Romesh, Bash, Patriot 1.78 m, Claudia 1.70 m.
 
+
+## Handover of 1 Nov (building, cast round)
+- **Rules that bite at this stage (rule 48):** 49 likeness (done, scores below); 41 every arm ends in a visible hand
+  (the pointing hands reach far out: keep them in frame); 42 poses from the gallery (3 added, below); 43 looks tested at
+  each shot's camera; 39 2D where possible (the winner's room as a painted panorama); 44 ask Sam for the week's usage.
+- **Done (1 Nov, building, Opus):** `source/patriots4_cast.py`: Romesh, Bash and Claudia as heads drawn from
+  `likeness.py` measurements (each laid out on the average face and pushed 60%; its average twin removes the style's
+  pull). Likeness check (rule 49): Bash 88% and 91%, 1st in the line-up both times; Claudia 80% and 68%, 1st (the
+  Traitors film's Claudia head scored 35%, 3rd, so she was REBUILT, keeping her fringe, smoky eyes and hair); Romesh 71%,
+  1st on photo 14; photo 16 fails (-15%), but the tool matches Romesh's two real photos to each other only 17% (16 is
+  smiling, different glasses), so 16 is not a fair test. Claudia's new outfit (black jacket, cream tie blouse, gold
+  chain); Romesh (rust double-breasted suit, teal top, glasses, beard); Bash (navy suit, white open shirt, stubble).
+  The Patriot reused whole from `patriots3_cast`, with new eyes (`patriot_eyes`: stare 1-6, narrowed, looks).
+  Romesh's likeness 74% (redrawn in the series look below); Bash and Claudia unchanged.
+  New gallery poses (`posegallery.py`, `guides/pose-gallery.md`): palms together, hands on table, pointing both ways.
+  Cast sheet sent: `review/patriots4-cast.jpg`.
+- **Decided (1 Nov, to hold 15%):** the winner's room is a painted panorama in layers (rule 39), and the "swivel" is
+  a camera PAN across it (Claudia -> Bash -> Romesh -> the Patriot), coins low in the foreground; not a 3D room with a
+  circling camera. Shot 9 shows Romesh and Bash front on (not three-quarter, rule 38).
+- **Sam's answers on the cast sheet (1 Nov):** the Patriot's stare grows SLOWLY from strength 1 to 4 over the "Errrr";
+  Romesh has a SMALLER beard in this series: draw him from ref 13 (orange suit, taken two days before), refs 04-05.
+  Done: short salt-and-pepper beard (greyest at the chin) under a darker drooping moustache, short messy curls, and
+  CLEAR squarish frames (refs 04, 05, 13; the brief said black: the photos win). Likeness 74%, 1st (photo 14; the
+  series photos are too small and he is shouting in them, so they cannot be measured). Cast sheet re-sent.
+  Rules: Sam will discuss all rule proposals at the END of the project (hold them till then).
+- **Usage (rule 44):** 1 Nov: 7% of the week, up from 3% at the start of this film (about 4% so far; budget 15%).
+- **Next (still BUILDING, Opus high, same chat if Sam is happy):** apply the cast notes; paint the winner's room
+  panorama (arch with lattice, panelled walls, fire bowl, caged torches, candles; round table, coin pile) and the
+  Round Table room behind Romesh (reuse `traitors.py`); change `patriots4_plan.py` CAMS from the orbit to the pan;
+  start `source/patriots4.py` from `source/satire_template.py`. No animatic yet.
+- **Losses and my additions:** the circling camera becomes a pan (loss); Romesh's grey flecks in the beard and the
+  curl marks in his hair, Bash's two silver rings are NOT drawn yet (circle hands; to add); set dressing from refs 03,
+  09, 10, 12 only. No jokes or signs of mine.
+- **Rule requests and proposals not yet in a guide (to put to Sam):** (1) PROPOSED (from "too rudimentary"): the
+  composition sheet uses the real cast drawings where they exist, labelled stand-ins otherwise (film-quality-rules 11,
+  rule register, by hand). (2) PROPOSED (1 Nov, building): new famous heads are drawn from the measurements
+  (`patriots4_cast.layout` and `Face`), never by eye, and the likeness check is re-run after ANY change to the drawing
+  (hair height or a collar under the chin moved scores by 20-50 points); `guides/satire.md` likeness method, rule
+  register: `likeness.py check`. No other requests.
+- **Files to open:** this file; `guides/satire.md`; `source/patriots4_cast.py` (codemap); `source/patriots4_plan.py`;
+  `source/traitors.py` (`wall`, `round_table`); `review/patriots4-cast.jpg`.
+

@@ -23,7 +23,10 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
 - 1 Nov (building, Opus): cast built (`source/patriots4_cast.py`): Romesh, Bash and a rebuilt Claudia drawn from face
   measurements, all pass the likeness check (1st in the line-up); the Patriot reused with stare strengths 1-6; 3 new
   gallery poses. Cast sheet sent (`review/patriots4-cast.jpg`). Winner's room to be a painted panorama with a pan.
-  NEXT: Sam's stare number and cast notes; then the room and the film file (`notes/patriots-4.md` "Where things stand").
+  Sam: stare 1 rising to 4; Romesh redrawn in the series look (74%).
+- 1 Nov (building): the room painted all round (`source/patriots4_room.py`), the film file (`source/patriots4.py`,
+  12 shots, 49 s); stills sheet sent (`review/patriots4-stills.jpg`). NEXT: Sam's notes on the stills (Opus medium,
+  fresh chat): read `notes/patriots-4.md` "Where things stand".
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).
