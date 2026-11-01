@@ -14,10 +14,12 @@
   caps in front; `glow()` for the sea under fires (stand-in fireballs on the sheet). About 0.2 s a frame. Sheet
   `review/flying-whales-sea-sheet.jpg` and a 4 s clip of the sea moving sent. Self-review: three rounds of my own
   (spiky band edges, box-shaped glow, caps off-screen and paper-thin: all fixed).
-- **Sam sent the opening scene (1 Nov):** checklist below ("Opening scene brief"). Questions to Sam sent in the
-  chat (see Decisions when answered).
-- **Next (fresh chat, Opus high):** Sam's answers to the opening-scene questions and his notes on the sky and sea;
-  then plan the opening scene (planning, Opus high: Showstopper list, plan in metres, composition sheet); then the
+- **Sam sent the opening scene (1 Nov):** checklist below ("Opening scene brief"). Sam answered all the questions
+  (Decisions, "Opening scene answers"): he records the Attenborough line; about 5 s; whales swim at us on a slight
+  diagonal, camera swings round alongside, they race up to the surface on "imagined"; same five whales; Hook Text on
+  the whole video; two whales loop the loop and come back for a second hit (Showstopper 17, approved); a heavy low
+  brow on every whale (approved change to the whale).
+- **Next (fresh chat, Opus high):** plan the opening scene (planning, Opus high: Showstopper list, plan in metres, composition sheet); then the
   rig (building, Opus high: `source/flying_whales_rig.py`, about 30 breakable parts, JACKDAW board, rig sheet on the
   sea painting with a whale at real size, using `flying_whales_sea.CAM`); then the three rehearsal clips. Still to
   do: copy `source/satire_template.py` to `source/flying_whales.py` (no cast).
@@ -88,6 +90,8 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 | 14 | A crown splash, white steam at the waterline, foam rings spreading, the sea glowing orange under the fire | refs splash-crown, splash-column-ring, fire-dusk-glow |
 | 15 | Camera shake on each hit, bigger at the finale | weight |
 | 16 | Nobody on the rig, no boats, no helicopters | Sam: "it's only funny if people don't die" |
+| 17 | Two whales loop the loop after their first hit and come back for a second smash (Sam's yes, 1 Nov) | "zooming, looping, attacking whales"; the defying-physics joke |
+| 18 | Every whale wears a heavy, low, cross brow over each eye (Sam's yes, 1 Nov; a change to the approved whale) | the joke: they are angry about climate change |
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): ticked before the first animatic
 | # | from the brief or a note (word for word) | done? |
@@ -160,10 +164,17 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 |---|------|------|------|--------|
 | 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | done: sky and sea painted at dusk |
 | 2 | whale sheet | | "Things look great so far" (Sam, 1 Nov): the whale approved | done |
-| 3 | opening | | the opening scene brief (checklist O1-O9) | open: questions sent |
-| 4 | rig | | "zooming, looping, attacking whales" (O10): loops are not in the approved Showstopper list | open: asked Sam |
+| 3 | opening | | the opening scene brief (checklist O1-O9) | open: answers in, to plan |
+| 4 | rig | | "zooming, looping, attacking whales" (O10) | Sam: yes, two whales loop (Showstopper 17) |
+| 5 | all | | angry whales: a heavy low brow (Sam's yes) | open: change whale.py |
 
 Decisions made:
+- Opening scene answers (Sam, 1 Nov): Sam records the Attenborough line himself (an impression; remind him: a second
+  of silence after, Voice Isolation off); about 5 s, then a hard cut to Jackdaw; the whales swim at us "but at a
+  slight diagonal", the camera swings round to their side and swims alongside, and on "imagined" they tilt up and race
+  for the bright surface; the same five whales (same patterns) in both scenes; the Hook Text stays on for the whole
+  video; two whales loop the loop and come back; a heavy low brow on every whale; the sky-and-sea additions (clouds,
+  sun just set left, glitter path) not objected to.
 - Sam (1 Nov): no cost-saving cuts; the whales are needed in the prior scene too, so build them from every view.
 - Sam's answers (1 Nov): a prior scene comes first (not written yet); this shot is 12 s; no Hook Text for now;
   the sign reads the real name JACKDAW; no sound for now, visuals only (sound later); whales at real size (14 m);
