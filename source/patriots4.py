@@ -80,12 +80,14 @@ PANS = {}   # Sam, 1 Nov (animatic 1 note 1): the swings read as the table spinn
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
     'claudia': (0.0, 1.0, None), 'bash': (270.0, 1.0, None), 'romesh': (180.0, 1.0, None),
     'claudia 2': (0.0, 1.0, None), 'patriot': (90.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
-    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (90.0, 1.75, 'patriot'), 'his view': (225.0, 1.0, None),
-    'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (225.0, 1.0, None),
+    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (90.0, 1.75, 'patriot'), 'his view': (212.0, 1.0, None),
+    'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (212.0, 1.0, None),
 }
-CHEAT = {}   # Sam, 1 Nov (animatic 2 note 26): no cheat; Romesh and Bash at their real seats in every shot
-WIDE = ('his view', 'reaction')   # Sam, 1 Nov (note 26): a real wide view from the Patriot's seat, Romesh at 6 and
-                                  # Bash at 9 standing at the table (patriots4_wide.py), not the turning camera
+CHEAT = {   # a film cheat for shots 9 and 13: Romesh and Bash stand 90 degrees apart, too far for one frame with faces
+    'his view': {'romesh': 200.0, 'bash': 224.0},   # big enough for the eye slide, so they are moved closer for it.
+    'reaction': {'romesh': 200.0, 'bash': 224.0},   # Removed for note 26, then the wide view built (patriots4_wide.py);
+}                                                   # Sam, 1 Nov (note 29): back to this cheat
+WIDE = ()   # shots drawn with patriots4_wide's real camera (none now: note 29; it was 'his view' and 'reaction')
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
 T_STARE4 = 44.8
@@ -116,9 +118,7 @@ SHOT_CAST = {'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'cl
              'patriot': ['patriot'], 'claudia close': ['claudia'], 'bash close': ['bash'], 'patriot close': ['patriot'],
              'his view': ['romesh', 'bash'], 'claudia close 2': ['claudia'], 'patriot 2': ['patriot'],
              'traitors': ['patriot'], 'reaction': ['romesh', 'bash']}
-THREE_QUARTER_OK = [(shot, w, "the wide across the table from 1:30 (Sam, note 28): 6 and 9 are each 28 degrees off "
-                     "the lens; drawn front on")
-                    for shot in ('his view', 'reaction') for w in ('romesh', 'bash')]
+THREE_QUARTER_OK = []
 HOOK = ('Celebrity Traitors winners reveal their charities', {'y': 330})   # Sam: over the arch, shot 1
 KEEP_CLEAR = []
 PROP_SIZES = []
@@ -237,6 +237,9 @@ def pancam(t):
         cy = RM.rim_cy(z)                         # animatic 2 note 25: the one table size; its near rim at the foot
     if s in ('patriot 2', 'traitors'):            # animatic 1 note 3: out a little, Bash's and Romesh's backs in both
         z = 1.15
+        cy = RM.rim_cy(z)
+    if s in ('his view', 'reaction'):             # the cheat (note 29): a little wider, so both fit, hands and all;
+        z = 1.1                                   # the one table size (note 25)
         cy = RM.rim_cy(z)
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
@@ -559,6 +562,8 @@ def picture(t):
             img.paste(lay, (0, 0), Image.composite(lay.getchannel('A'), Image.new('L', lay.size, 0), arms_mask(pc, who, j2, sp)))
     RM.coin_pile(img, pc)
     s = shot_of(t)
+    if s == 'his view':                           # (shot 13: just Romesh and Bash, Sam 1 Nov)
+        shoulder(img, 'patriot', 20, 1720, 1.6)   # bottom left: he sits to their left (3 o'clock)
     if s in ('patriot 2', 'traitors'):            # in both, so they never appear from nowhere (animatic 1 note 3)
         shoulder(img, 'bash', 70, 1830, 1.6)
         shoulder(img, 'romesh', 1030, 1830, 1.6)

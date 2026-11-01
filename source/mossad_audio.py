@@ -3,6 +3,9 @@
 
 Each recording is cleaned gently, then every line is set to the same loudness:
 - hum: a gentle high-pass below the voice (75 Hz), plus a notch on any mains hum found (50 Hz and its harmonics);
+- birdsong: whistles (pure tones 4-10 kHz standing far above their neighbours, found frame by frame) cut back to the
+  level around them; a voice is never that narrow there, so it is untouched (Patriots 4, Sam, 1 Nov: birds tweeting
+  under Claudia's first line, heard by voices.py as extra syllables);
 - hiss and room noise: spectral noise reduction learnt from the file's own quiet parts, limited to about 10 dB
   and smoothed over time and pitch, so the voice never sounds underwater or watery;
 - loudness: measured the broadcast way (ITU-R BS.1770, K-weighted, gated), every line set to the same level.
@@ -61,6 +64,32 @@ def dehum(x):
             b, a = iirnotch(h, 30, SR)
             x = sosfiltfilt(tf2sos(b, a), x)
     return x
+
+
+WHISTLE_DB = 10.0    # how far above its neighbours (in pitch) a tone must stand to count as a whistle
+# (tuned on Patriots 4's Claudia line: 132 whistle moments down to 7, the voice below 4 kHz changed by 0.003 dB)
+
+
+def debird(x, report=False):
+    """Bird whistles out: in each moment, any pitch between 4 and 10 kHz standing WHISTLE_DB above the smoothed
+    spectrum round it (a pure tone: birdsong) is brought down to half that level, with a few bins and frames either
+    side. Breathy and hissy voice sounds are broad, never peaks, so they stay. Nothing found: x comes back unchanged."""
+    from scipy.ndimage import binary_dilation, median_filter
+    nper = 1024                                   # short frames: birds slide in pitch fast
+    f, t, X = stft(x, SR, nperseg=nper, noverlap=nper * 7 // 8)
+    mag = np.abs(X)
+    band = (f >= 4000) & (f <= 10000)
+    m = mag[band]
+    around = median_filter(m, size=(61, 1), mode='nearest') + 1e-12
+    hit = m > around * 10 ** (WHISTLE_DB / 20)
+    if not hit.any():
+        return (x, 0.0) if report else x
+    hit = binary_dilation(hit, np.ones((7, 5), bool))
+    g = np.ones_like(mag)
+    g[band] = np.where(hit, np.minimum(1.0, 0.5 * around / m), 1.0)   # to half the level round it
+    _, y = istft(X * g, SR, nperseg=nper, noverlap=nper * 7 // 8)
+    y = y[:len(x)]
+    return (y, hit.any(axis=0).mean() * len(x) / SR) if report else y
 
 
 def denoise(x):
@@ -214,7 +243,7 @@ def line(name):
     """A recording, cleaned and set to the shared line loudness."""
     if name not in CACHE:
         x = load(os.path.join(HERE, 'audio', name + '.m4a'))
-        x = edges(smooth_tail(denoise(dehum(x))))
+        x = edges(smooth_tail(denoise(debird(dehum(x)))))
         CACHE[name] = x * 10 ** ((LINE_LUFS - lufs(x)) / 20)
     return CACHE[name]
 

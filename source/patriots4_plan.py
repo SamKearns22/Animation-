@@ -82,9 +82,8 @@ CAMS = {   # focal in pixels for 1080 x 1920 (1146: 20 px a degree, patriots4_ro
     'claudia close': pan(12, 2000, 1.55, why='the stares, closer'),
     'bash close': pan(9, 2000, 1.55, why='staring and blinking'),
     'patriot close': pan(3, 2000, 1.55, why='eyes wide, sliding to Romesh'),
-    'his view': dict(pos=(0.71, 1.62, 0.71), look=(-0.62 * 0.5, 1.2, -0.62 * 0.5), focal=820,
-                     why="across the table from 1:30 (patriots4_wide.CAM_AT; Sam, 1 Nov note 28): Romesh at 6 left, "
-                         "Bash at 9 right, both standing behind the table; the Patriot's shoulder bottom left (shot 9)"),
+    'his view': pan(7, 825, why="the cheat (Sam, note 29): Romesh and Bash moved closer (200 and 224 degrees) so both "
+                                 "fit with faces big; the Patriot's shoulder in the corner"),
 }
 CAMS.update({'claudia 2': CAMS['claudia'], 'claudia close 2': CAMS['claudia close'], 'patriot 2': CAMS['patriot'],
              'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners"),
