@@ -684,12 +684,17 @@ def foam(img, t, gone=(), cam=CAM):
     img.alpha_composite(lay)
 
 
-def draw(base, t, xf=None, gone=(), with_flame=True, cam=CAM):
-    """The rig over a sea painting (RGB or RGBA), pieces in xf moved, pieces in gone left out. Returns RGBA."""
+def draw(base, t, xf=None, gone=(), with_flame=True, cam=CAM, extra=()):
+    """The rig over a sea painting (RGB or RGBA), pieces in xf moved, pieces in gone left out. extra: other sprites
+    (the whales) as [(distance from the camera in m, sprite)], sorted in among the pieces far to near. Returns RGBA."""
     xf = xf or {}
     img = base.convert('RGBA') if base.mode != 'RGBA' else base.copy()
     names = [n for n in PARTS if n not in gone]
-    for n in sorted(names, key=lambda n: _order_key(n, xf.get(n))):
+    order = [(_order_key(n, xf.get(n)), 0, n) for n in names] + [(-d, 1, k) for k, (d, _) in enumerate(extra)]
+    for _, kind, n in sorted(order, key=lambda o: o[0]):
+        if kind == 1:
+            extra[n][1].paste(img)
+            continue
         spr = _rest(n) if n not in xf and cam is CAM else render(PARTS[n], cam, xf.get(n))
         if spr:
             spr.paste(img)

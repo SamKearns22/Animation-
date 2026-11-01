@@ -29,6 +29,9 @@ import film_engine as E          # noqa: E402  render with the picture cache, su
 import flying_whales_opener as O  # noqa: E402  the opener under the sea
 import flying_whales_sea as SEA  # noqa: E402  the rig scene's sky and sea
 import flying_whales_rig as R    # noqa: E402  the rig
+import flying_whales_paths as PATHS  # noqa: E402  the whales' paths in the rig scene
+import flying_whales_fx as FX    # noqa: E402  the water burst (the fireballs and the rest come next)
+import whale as W                # noqa: E402
 
 FPS, SR = 24, MA.SR
 
@@ -59,7 +62,9 @@ OUTFIT, HEIGHTS = {}, {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
 TOUCHES, FREE_MOVES, SOUND_SOURCES = [], [], {}
-EFFECTS = []                                      # the water burst, fireballs, splashes: added as they are built
+EFFECTS = [('water burst', 'burst', FX.test_draw(0.3)),          # rule 15: lumpy, never a star (viewchecks)
+           ('water burst falling back', 'splash', FX.test_draw(1.1)),
+           ('foam ring', 'foam', FX.test_draw(0.8, 'foam'))]        # the fireballs and the rest join as built
 JOKE_PROPS = []
 # ====================================================================================================================
 
@@ -76,10 +81,48 @@ def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
 
 
+BLOW_AFTER = 0.9                                  # s after breaking the surface: each whale puffs spray (Showstopper 5)
+
+
+def rig_whales(ts):
+    """[(distance, sprite)] for every whale and its water burst at rig-scene time ts, for R.draw to sort among the
+    rig's pieces; and the foam patches on the sea."""
+    cam = SEA.CAM
+    extra, foam = [], []
+    for k in PATHS.KEYS:
+        if not PATHS.on_screen(k, ts):
+            continue
+        ps = PATHS.pose(k, ts)
+        sz = W.PATTERNS[k]['size']
+        age = ts - PATHS.SURFACE[k]
+        blow = ts - PATHS.SURFACE[k] - BLOW_AFTER
+        spr = W.draw(cam, ps, pattern=k, t=ts + k * 0.37, flap=1.0, beat=1.0, tint=SEA.DUSK_TINT, phase=k * 0.9,
+                     cut_z=0.0, blow=blow if 0 <= blow <= 1.6 else None)
+        d = float(np.linalg.norm(ps.pos - cam.pos))
+        if spr:
+            extra.append((d, spr))
+        if -0.4 <= age <= 2.4:                                   # the burst and its foam
+            v = PATHS.vel(k, PATHS.SURFACE[k])
+            head = v[:2] / (np.linalg.norm(v[:2]) + 1e-9)
+            hole = PATHS.pos(k, PATHS.SURFACE[k]) * np.array([1, 1, 0])
+            lumps = FX.burst_parts(cam, ps, sz, age, 11 + k * 7, head, hole)
+            dist = lambda l: float(np.linalg.norm(np.asarray(l[0]) - cam.pos))
+            for side, keep in ((d + 0.05, lambda l: dist(l) >= d), (d - 0.05, lambda l: dist(l) < d)):
+                lay = FX.draw_lumps(cam, [l for l in lumps if keep(l)])
+                if lay:
+                    extra.append((side, W.Sprite(lay, (0, 0), None, None, side, None)))
+            foam += FX.foam_ring(cam, hole, age, 11 + k * 7, sz)
+    return extra, foam
+
+
 def rig_scene(t, ss=1):
-    """The rig scene at film time t: sea and sky, then the rig (whales and hits come next)."""
+    """The rig scene at film time t: sea and sky, foam on the sea, then the rig with the whales and their bursts
+    sorted in among its pieces by distance (the hits and the effects come next)."""
     ts = t - CUT
-    return R.draw(SEA.paint(ts, ss=ss), ts).convert('RGB')
+    extra, foam = rig_whales(ts)
+    sea = SEA.paint(ts, ss=ss).convert('RGBA')
+    FX.draw_foam(sea, SEA.CAM, foam)
+    return R.draw(sea, ts, extra=extra).convert('RGB')
 
 
 def picture(t):

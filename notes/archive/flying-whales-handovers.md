@@ -95,3 +95,42 @@
   the end of the whale stage. Ask again at the start of the next chat.
 - **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 1, 8, 22, 33, 39, 40;
   `guides/kit-catalogue.md`; `source/flying_whales_sea.py` docstring; `source/whale.py` docstring.
+
+## Handover, 1 Nov (end of building: brows, underwater set, rig)
+- **Rules that bite at the next stage (rule 48):** 8 and 33 (rehearsal clips of the risky moves before anything else:
+  the opener's swing, its rise into the cut, the rig's three hits; any falling piece on a short close clip); 16 (up and
+  to the right on both sides of the hard cut); 15 (effect shapes: the water burst, fireballs and splashes are lumpy,
+  never regular spikes); 29 (every clip shows the film time and shot in its corner); 32 (pieces land and sink
+  properly: nothing floats or balances on a point); 40 (tick the Showstopper lists U1-U15 and 1-18 at the first clips).
+- **Done (1 Nov, building, Opus high):** (1) the brow on every whale (`source/whale.py`, on by default, `brow=False`
+  for a calm whale): a heavy ridge slanting down towards the snout, standing proud of the head; plus a small white eye
+  with the pupil glaring forward (my addition: a dark dot under a dark brow merged into a blob); line check clean.
+  (2) The underwater set, `source/flying_whales_under.py`: water bands by direction, the surface from below with the
+  gold window, light shafts, specks, bubble streams on the rise, the fish shoal scattering; wired into
+  `flying_whales_opener.frame(t)`; benchmarked side by side with Sam's refs (B1-B10 all ticked; the water pushed to the
+  refs' vivid blue after the comparison); sheet sent (`review/flying-whales-underwater-sheet.jpg`). (3) The rig,
+  `source/flying_whales_rig.py`: 31 breakable pieces at real size through `flying_whales_sea.CAM`, JACKDAW board,
+  flare flame, foam at the legs, `PARENT` (what hangs on what), `part_box` (for hit tests); a moved piece is repainted
+  in perspective and cut off at the waterline; line check clean; sheet sent (`review/flying-whales-rig-sheet.jpg`:
+  whole, numbered pieces, a break test, close-up). Both new sets are in `guides/kit-catalogue.md`; rig sizes in
+  `source/sizes.py`.
+- **Next (fresh chat, Opus high: new builds are needed for the clips):** (1) copy `source/satire_template.py` to
+  `source/flying_whales.py` (no cast), wire the opener shot (`flying_whales_opener.frame`) and render rehearsal clip
+  (a), the swing, 1.2-4.0 s (`final OUT --small --span 1.2 4.0`); (2) plan the rig scene's whale paths in metres (the
+  burst out of the sea up and to the right, the five tracks, the two loops) and build the water burst, then clip (b),
+  the rise and cut, 4.0-5.6 s plus the rig scene's first second; (3) the effects (fireball and black smoke, deck fire,
+  steam, crown splash and foam rings, spike splashes, dust; the flare's smoke ribbon, Showstopper 3) and the rig's
+  three clips: the first whale through the legs; a whale through the decks with a fireball; the final tip and splash.
+  Clips need no yes; push-notify each. Start the new chat with: "Flying Whales: read the handover in
+  notes/flying-whales.md and carry on (film file, clip (a), then the rig scene's whale paths)".
+- **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
+  installed; add it before the first animatic (small, Opus medium). Placed with `--y 352`, on for the whole video.
+- **Losses and my additions Sam should know about:** additions: the small white eye under each brow (flagged, above);
+  foam slapping round the legs; the flare's flame flickers. Not visible from our camera (not losses, just hidden): the
+  helideck's orange chute (behind the stair tower) and most of the walkway stub (behind the decks). No losses.
+- **Rule requests and proposals not yet in a guide:** none (searched this file).
+- **Usage budget (rule 44):** 31% of the week (Sam, 1 Nov, end of the build stage: brows, underwater set, rig took
+  about 3%). Ask again at the next handover.
+- **Files to open:** this file; `guides/satire.md` ("Render", "Before every render"); `guides/film-quality-rules.md`
+  8, 15, 16, 29, 32, 33, 40; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_under.py`,
+  `source/flying_whales_rig.py`, `source/flying_whales_sea.py`, `source/whale.py`; `source/satire_template.py`.
