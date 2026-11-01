@@ -6,7 +6,9 @@ Read this first in any new session, after CLAUDE.md.
 ## In progress: "Flying Whales" (working name; untitled; TikTok satire: a team of flying humpbacks smash a Jackdaw-style gas platform into the sea at dusk; `notes/flying-whales.md`)
 - 1 Nov (planning, Opus): 34 references filed (`references/flying-whales/`); brief checklist, Showstopper list (rule 40),
   ambition estimate (about a third of a week; all 2D, one locked camera); rough composition sheet sent
-  (`review/flying-whales-composition.jpg`); questions to Sam. Next: his answers, then a fresh chat to build (Opus, high).
+  (`review/flying-whales-composition.jpg`); questions to Sam. Answers in: 12 s shot after a prior scene (not written), JACKDAW sign, visuals only,
+  five whales at real size; no cost cuts. Next (fresh chat, Opus high): build the humpback from every view, whale sheet
+  to Sam, then the rig. Handover in `notes/flying-whales.md`.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

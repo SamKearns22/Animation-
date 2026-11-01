@@ -1,14 +1,31 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Done (1 Nov, planning, Opus):** 34 references filed (`references/flying-whales/`); the brief as a checklist; the
-  Showstopper list (rule 40); ambition estimate; rough composition sheet (`review/flying-whales-composition.jpg`);
-  questions sent to Sam in one message.
-- **Next:** Sam's answers and his yes or trims on the Showstopper list. Then a handover and a fresh chat for building
-  (Opus, high): the whale sheet first, then the rig in breakable parts, then rehearsal clips of the first hit.
-- **Losses and my additions Sam should know about:** see "My additions" below (none built yet).
-- **Rule requests and proposals not yet in a guide:** none.
-- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 8, 32, 33, 39, 40.
+- **Rules that bite at this stage (rule 48):** 40 (build only what the approved Showstopper list says; tick it at
+  the first clip); 8 and 33 (rehearsal clips of the risky moves before the rest: the first hits, the finale);
+  32 (debris settles properly; here it falls into the sea and sinks, never floats or overlaps); 22 (any set
+  dressing of mine shown on the sheet and named); 34 (mirror test before the whale sheet goes out).
+- **Done (1 Nov, planning, Opus):** 34 references filed (`references/flying-whales/`); brief checklist; Showstopper
+  list (16 items, sent to Sam; he asked no trims); ambition estimate about a third of a week; rough composition sheet
+  sent (`review/flying-whales-composition.jpg`); Sam's answers in (see Decisions). Sam turned DOWN the cost-saving
+  package: build everything as planned (whale from every view, rig in about 30 parts, lifeboats and crane whip kept,
+  three rehearsal clips).
+- **Next (building, Opus high, fresh chat):**
+  1. Copy `source/satire_template.py` to `source/flying_whales.py` (no people: strip the cast to none, keep the
+     house style and checks).
+  2. Build the humpback (`source/whale.py`, new kit; add to `guides/kit-catalogue.md`): **every view**, because
+     the whales also appear in a prior scene not yet written: side, rear three-quarter (from behind and above), from
+     below, front three-quarter; flippers that wave, tail swish, body pitch for climb and dive, blow spray; five
+     belly and fluke patterns (ref whale-patterns-below). Real size 14 m.
+  3. Whale sheet to Sam (every view, five patterns, a 14 m scale bar), and wait for his yes.
+  4. The rig (`source/flying_whales_rig.py`): Jackdaw from the diagonal, about 30 breakable parts, JACKDAW name
+     board; rig sheet beside a whale at real size. Then the dusk sky and sea, then the three rehearsal clips.
+- **Losses and my additions Sam should know about:** additions listed below (whales fly on out of frame, a freeze on
+  each contact, lifeboats and crane whip). No losses.
+- **Rule requests and proposals not yet in a guide:** none (searched this file).
+- **Usage budget (rule 44):** ask Sam for this week's figure at the start of the next chat and log it here.
+- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 8, 22, 32-34, 39, 40;
+  `guides/kit-catalogue.md`; the references.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
@@ -121,6 +138,7 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 | 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | open |
 
 Decisions made:
+- Sam (1 Nov): no cost-saving cuts; the whales are needed in the prior scene too, so build them from every view.
 - Sam's answers (1 Nov): a prior scene comes first (not written yet); this shot is 12 s; no Hook Text for now;
   the sign reads the real name JACKDAW; no sound for now, visuals only (sound later); whales at real size (14 m);
   five whales.
