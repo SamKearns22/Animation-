@@ -15,6 +15,10 @@ Read this first in any new session, after CLAUDE.md.
 - 1 Nov (building, Opus): Sam said yes to the whale; the dusk sky and sea built (`source/flying_whales_sea.py`); sheet
   and a 4 s clip sent. Sam sent the opening scene (underwater, Attenborough line, whales rise to the surface; hard cut to
   Jackdaw): Sam answered all (diagonal approach, same whales, loops, angry brows). Next (fresh chat, Opus high): plan the opener, then the rig.
+- 1 Nov (planning, Opus): the opener planned: Showstopper list U1-U15, the plan in metres as numbers
+  (`source/flying_whales_opener.py`), rough composition sheet sent (`review/flying-whales-opener-composition.jpg`),
+  five questions to Sam (underwater refs, dusk light under the sea, Hook Text band, fish shoal, bubble trails).
+  Waiting for Sam; then a fresh chat (Opus high, building): brows, the underwater set, the rig.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

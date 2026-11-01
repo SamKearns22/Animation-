@@ -31,3 +31,36 @@
   `guides/kit-catalogue.md`; the references.
 
 
+
+## Handover, 1 Nov (end of the sky-and-sea build; before the opener plan)
+- **Rules that bite at this stage (rule 48):** 40 (the opening scene is new: its Showstopper list goes to Sam before
+  anything is built; "looping" whales would change the approved list); 1 (the opening scene gets its own plan in
+  metres: depth, where the surface is, the camera's path); 22 (my additions on a sheet and named: the clouds, the sun
+  just set left of frame); 8 and 33 (rehearsal clips of the risky moves before the rest); 39 (the opener's camera moves
+  round the whales: the whale is already a model, the underwater set is painted layers).
+- **Done (1 Nov, building, Opus): Sam said yes to the whale ("Things look great so far"). The dusk sky and sea**
+  (`source/flying_whales_sea.py`, in `guides/kit-catalogue.md`): the film's camera `CAM` (8 m up, 120 m from the rig,
+  pitch 6, focal 1400; horizon at y 1107); sky bands purple to orange swelling over a sun just set left of frame (my
+  choice: the rig stays side-lit, not a black silhouette); seven clouds lit from below (my addition); the sea
+  mirroring the bands; ripple strokes on a slow swell drifting with the wind; a twinkling glitter path; low wave
+  caps in front; `glow()` for the sea under fires (stand-in fireballs on the sheet). About 0.2 s a frame. Sheet
+  `review/flying-whales-sea-sheet.jpg` and a 4 s clip of the sea moving sent. Self-review: three rounds of my own
+  (spiky band edges, box-shaped glow, caps off-screen and paper-thin: all fixed).
+- **Sam sent the opening scene (1 Nov):** checklist below ("Opening scene brief"). Sam answered all the questions
+  (Decisions, "Opening scene answers"): he records the Attenborough line; about 5 s; whales swim at us on a slight
+  diagonal, camera swings round alongside, they race up to the surface on "imagined"; same five whales; Hook Text on
+  the whole video; two whales loop the loop and come back for a second hit (Showstopper 17, approved); a heavy low
+  brow on every whale (approved change to the whale).
+- **Next (fresh chat, Opus high):** plan the opening scene (planning, Opus high: Showstopper list, plan in metres, composition sheet); then the
+  rig (building, Opus high: `source/flying_whales_rig.py`, about 30 breakable parts, JACKDAW board, rig sheet on the
+  sea painting with a whale at real size, using `flying_whales_sea.CAM`); then the three rehearsal clips. Still to
+  do: copy `source/satire_template.py` to `source/flying_whales.py` (no cast).
+- **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
+  installed; add it before the first animatic (small, Opus medium).
+- **Losses and my additions Sam should know about:** additions: clouds; the sun just set left of frame; the glitter
+  path; plus the earlier ones (below). No losses.
+- **Rule requests and proposals not yet in a guide:** none (searched this file).
+- **Usage budget (rule 44):** 28% of the week used at the start of the sky-and-sea chat (Sam, 1 Nov); about 24% at
+  the end of the whale stage. Ask again at the start of the next chat.
+- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 1, 8, 22, 33, 39, 40;
+  `guides/kit-catalogue.md`; `source/flying_whales_sea.py` docstring; `source/whale.py` docstring.
