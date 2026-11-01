@@ -230,54 +230,84 @@ def floor(p, x0, x1):
         p.line([(bx, top), (bx, 2600)], FLOOR_L, 1.6)
 
 
-def hall_chair(img, sub, p, x, y, s, legs_to):
-    """A Round Table chair (traitors.chair_back) with its two front legs down to the hall floor."""
-    import traitors as TR
-    for dx in (-96, 96):
-        p.poly([(x + (dx - 10) * s, y + 300 * s), (x + (dx + 10) * s, y + 300 * s), (x + (dx + 10) * s, legs_to),
-                (x + (dx - 10) * s, legs_to)], (88, 50, 26), INK, 1.6)
-    TR.chair_back(img, sub, x, y, s)
+CHAIR = (122, 72, 38)
+CHAIR_D = (88, 50, 26)
+
+
+def chair_side(p, x, floor_y, ppm, sg):
+    """A Round Table chair seen from the side, tucked in under the table's rim (Sam, 1 Nov note 6): its tall back on
+    the outside (sg: -1 the table's left, 1 its right), the seat running in under the table, two legs to the floor."""
+    seat, top, depth = floor_y - 0.46 * ppm, floor_y - 1.25 * ppm, 0.46 * ppm
+    inner = x - sg * depth
+    th = 0.05 * ppm
+    for lx in (x, inner + sg * th):                                           # legs
+        p.poly([(lx - th / 2, seat), (lx + th / 2, seat), (lx + th / 2, floor_y), (lx - th / 2, floor_y)], CHAIR_D, INK, 1.6)
+    p.poly([(x + sg * th, seat - th), (inner, seat - th), (inner, seat + th * 0.6), (x + sg * th, seat + th * 0.6)],
+           CHAIR, INK, 1.8)                                                   # the seat
+    back = curve([(x - th, seat + th * 0.6), (x - th + sg * 0.04 * ppm, top + 0.1 * ppm), (x + sg * 0.07 * ppm, top),
+                  (x + sg * 0.12 * ppm, top + 0.06 * ppm), (x + th + sg * 0.05 * ppm, top + 0.14 * ppm),
+                  (x + th, seat + th * 0.6)], 3)
+    p.poly(back, CHAIR, INK, 2.0)                                             # the tall carved back, edge on
+
+
+def chair_rear(p, x, floor_y, ppm):
+    """The near chair, tucked in with its back to us: the plain rear of the carved back (its crest's curve)."""
+    w, seat, top = 0.25 * ppm, floor_y - 0.46 * ppm, floor_y - 1.25 * ppm
+    shape = curve([(-w, seat), (-w, top + 0.1 * ppm), (-w * 0.5, top + 0.04 * ppm), (0, top), (w * 0.5, top + 0.04 * ppm),
+                   (w, top + 0.1 * ppm), (w, seat)], 3)
+    p.poly([(x + u, v) for u, v in shape], CHAIR_D, INK, 2.0)
+    for dx in (-w * 0.8, w * 0.8):
+        p.poly([(x + dx - 0.025 * ppm, seat), (x + dx + 0.025 * ppm, seat), (x + dx + 0.025 * ppm, floor_y),
+                (x + dx - 0.025 * ppm, floor_y)], CHAIR_D, INK, 1.6)
 
 
 def round_table_room(p, img, x, t):
-    """The opening to the Round Table hall behind Romesh: its panelled walls with lamps and the Round Table itself,
-    far off and small (reused: traitors.wall, traitors.round_table)."""
+    """The Round Table hall behind Romesh: one space with the winner's room (Sam, 1 Nov note 6: no wall between),
+    its far wall panelled with lamps, the Round Table half as far off as first built (about 5 m from the camera),
+    standing on its legs on the floor, with chairs tucked in at the four compass points (reused: traitors.wall,
+    traitors.chair_back, traitors.round_table)."""
     import traitors as TR
-    half, top, bot = 560.0, wy(3.4), wy(0.0)
+    half, bot = 600.0, wy(0.0)
     hall_floor = HORIZON + 1.5 * 70
-    p.poly([(x - half, top), (x + half, top), (x + half, bot), (x - half, bot)], (70, 48, 34), None)
+    p.poly([(x - half, -600), (x + half, -600), (x + half, hall_floor), (x - half, hall_floor)], (36, 26, 20), None)
     sub = B.Cam(p.cam.z, p.cam.cx, p.cam.cy)
-    TR.wall(img, sub, x - half, x + half, HORIZON - 1.6 * 110, hall_floor, seed=7, panel_w=110,
+    TR.wall(img, sub, x - half, x + half, wy(4.2), hall_floor, seed=7, panel_w=110,   # up to the shared ceiling
             lamps=[(x - 300, HORIZON - 70), (x + 300, HORIZON - 70)])
-    p.poly([(x - half, hall_floor), (x + half, hall_floor), (x + half, bot), (x - half, bot)], (78, 56, 40), INK, 2.0)
-    for k in range(1, 7):                                         # the hall floor's boards, lighter than the walls
-        yy = hall_floor + (bot - hall_floor) * (k / 7) ** 1.5
-        p.line([(x - half, yy), (x + half, yy)], (62, 44, 30), 1.6)
-    tx, ty, rx, ry, thick, leg = x + 20, hall_floor + 40, 300, 46, 14, 88
-    # Sam, 1 Nov note 2: the table stands on the floor (its legs and base down to it, a shadow under it) with chairs
-    # at the four compass points
-    p.ell(tx, ty + leg + 4, rx * 0.92, ry * 0.9, (50, 36, 26), None)                       # its shadow on the floor
-    hall_chair(img, sub, p, tx, ty - ry - 34, 0.24, ty - ry + 40)                          # north, behind
-    for sg in (-1, 1):                                                                     # west and east
-        hall_chair(img, sub, p, tx + sg * (rx + 34), ty - 30, 0.27, ty + leg - 6)
-    for dx in (-0.82, -0.45, 0.45, 0.82):                                                  # its legs
+    p.poly([(x - half, hall_floor), (x + half, hall_floor), (x + half, bot + 6), (x - half, bot + 6)], FLOOR, None)
+    p.line([(x - half, hall_floor), (x + half, hall_floor)], INK, 2.0)
+    y, gap = hall_floor, 8.0
+    while y < bot:                                                # the same boards as the winner's room floor
+        y += gap
+        gap *= 1.35
+        p.line([(x - half, min(y, bot)), (x + half, min(y, bot))], (54, 38, 26), 1.8)
+    ppm = 230.0                                                   # pixels per metre at the table (5 m off)
+    rx, ry, thick = 2.25 * ppm, 0.15 * 2.25 * ppm, 0.07 * ppm
+    tx, ty = x + 20, HORIZON + (1.5 - 0.78) * ppm
+    floor_c = HORIZON + 1.5 * ppm                                 # the floor under the table's centre
+    p.ell(tx, floor_c + 6, rx * 0.95, ry * 1.1, (46, 32, 22), None)   # its shadow on the floor
+    far_ppm = 160.0                                               # the far chair, 2 m further off
+    for deg in (-90, -125, -55, -152, -28):                       # north and round the far side: fronts of their backs,
+        a = math.radians(deg)                                     # tucked in (the rim hides their seats)
+        d_ppm = far_ppm + (ppm - far_ppm) * (1 + math.sin(a))
+        cx_, cy_ = tx + rx * 1.04 * math.cos(a), ty + ry * 1.04 * math.sin(a)
+        fl = cy_ + 0.78 * d_ppm
+        sc = 0.39 * d_ppm / far_ppm
+        TR.chair_back(img, sub, cx_, fl - 1.25 * d_ppm + 76 * sc, sc)
+    for sg in (-1, 1):                                            # west and east: side on, seats under the rim
+        chair_side(p, tx + sg * (rx + 0.3 * ppm), floor_c, ppm, sg)
+    for dx in (-0.8, -0.4, 0.4, 0.8):                             # its legs
         lx = tx + dx * rx
-        ly = ty + ry * math.sqrt(1 - dx * dx) * 0.7
-        p.poly([(lx - 9, ly), (lx + 9, ly), (lx + 8, ty + leg + ry * 0.35 * math.sqrt(1 - dx * dx)),
-                (lx - 8, ty + leg + ry * 0.35 * math.sqrt(1 - dx * dx))], (70, 40, 22), INK, 1.6)
-    p.poly([(tx - 46, ty), (tx + 46, ty), (tx + 56, ty + leg + 14), (tx - 56, ty + leg + 14)], (60, 34, 20), INK, 1.8)
+        ly = ty + ry * math.sqrt(1 - dx * dx)
+        fy = floor_c + ry * 0.6 * math.sqrt(1 - dx * dx)
+        p.poly([(lx - 0.045 * ppm, ly), (lx + 0.045 * ppm, ly), (lx + 0.04 * ppm, fy), (lx - 0.04 * ppm, fy)],
+               (70, 40, 22), INK, 1.8)
     TR.round_table(img, sub, tx, ty, rx, ry, [a for a in np.linspace(0, 2 * math.pi, 12, endpoint=False)],
                    thick=thick)
-    hall_chair(img, sub, p, tx, ty + ry - 10, 0.3, ty + ry + leg)                           # south, nearest
-    for sg in (-1, 1):                                            # the opening's posts and lintel
-        p.poly(rough([(x + sg * half - 30, top), (x + sg * half + 30, top), (x + sg * half + 30, bot),
-                      (x + sg * half - 30, bot)], 2, 11), ARCH, INK, 2.4)
-    p.poly(rough([(x - half - 30, top - 40), (x + half + 30, top - 40), (x + half + 30, top + 6), (x - half - 30, top + 6)], 2, 12),
-           ARCH, INK, 2.4)
+    chair_rear(p, tx, HORIZON + 1.5 * 400.0, 400.0)              # south: the nearest (2.9 m off), its back to us
 
 
 # What stands where round the room (angle in degrees; the people's angles in ANGLES).
-OPEN = [(-30.0, 30.0, 'arch'), (178.0, 236.0, 'round table')]
+OPEN = [(-30.0, 30.0, 'arch'), (177.0, 237.0, 'round table')]
 DRESS = [('basket', -24.0, 1), ('basket', 24.0, 2), ('torch', 92.0, 3), ('candles', 130.0, 4), ('torch', 160.0, 5),
          ('candles', 252.0, 6), ('torch', 292.0, 7), ('candles', 318.0, 8), ('candles', 76.0, 9)]
 
@@ -313,8 +343,8 @@ def room(img, pc, t):
 
 
 # ------------------------------------------------------------------------------------------------ the foreground
-TABLE_RX, TABLE_RY = 590.0, 235.0   # half the first build (Sam, 1 Nov note 1: a pedestal with a flat top, 0.65 m)
-TABLE_THICK = 46.0                  # the top's edge band we see
+TABLE_RX, TABLE_RY = 442.5, 176.25  # half the first build, then 25% less (Sam, 1 Nov notes 1, 5): 0.49 m across
+TABLE_THICK = 38.0                  # the top's edge band we see
 PEDESTAL = (82, 40, 26)
 PEDESTAL_L = (124, 62, 38)
 
@@ -337,19 +367,39 @@ def pedestal(img, pc):
     cx, cy = K * pc.heading, TABLE_EDGE + TABLE_RY
     y0 = cy + TABLE_RY * 0.55
     floor = FLOOR_Y + 0.75 * FLOOR_PX * 0.5                       # the floor under the table's centre (nearer us)
-    p.poly([(cx - 150, floor - 30), (cx + 150, floor - 30), (cx + 170, floor + 30), (cx - 170, floor + 30)], PEDESTAL,
+    p.poly([(cx - 112, floor - 30), (cx + 112, floor - 30), (cx + 128, floor + 30), (cx - 128, floor + 30)], PEDESTAL,
            INK, 2.0)
-    p.poly(oval(cx, floor + 30, 250, 46, 40), (232, 170, 90), INK, 2.0)  # the lit ring at the floor
-    p.poly(oval(cx, floor + 26, 200, 34, 40), PEDESTAL, INK, 1.8)
-    for dx, w in ((-150, 52), (150, 52), (-62, 60), (62, 60)):
+    p.poly(oval(cx, floor + 30, 188, 36, 40), (232, 170, 90), INK, 2.0)  # the lit ring at the floor
+    p.poly(oval(cx, floor + 26, 150, 26, 40), PEDESTAL, INK, 1.8)
+    for dx, w in ((-112, 40), (112, 40), (-46, 46), (46, 46)):
         turned_leg(p, cx + dx, y0, floor - 30, w)
-    p.poly([(cx - 40, y0), (cx + 40, y0), (cx + 40, floor - 30), (cx - 40, floor - 30)], (64, 30, 20), INK, 2.0)
-    turned_leg(p, cx, y0, floor - 30, 64)
+    p.poly([(cx - 30, y0), (cx + 30, y0), (cx + 30, floor - 30), (cx - 30, floor - 30)], (64, 30, 20), INK, 2.0)
+    turned_leg(p, cx, y0, floor - 30, 48)
+
+
+def near_for(pc):
+    """How much more the foreground must be scaled (about the table's far edge) for its near rim to sit at the
+    frame's foot: the camera at the table's edge (Sam, 1 Nov notes 8-9); 1 when the table already fills it (close-ups)."""
+    depth = 2 * TABLE_RY + TABLE_THICK
+    return max(1.0, (980.0 / pc.zoom - (TABLE_EDGE - pc.cy)) / depth)
+
+
+class Near:
+    """The camera moved in to the table's edge (Sam, 1 Nov note 8): the table and coins are nearer the lens than the
+    people, so they grow more than the people do. The foreground is drawn through a camera zoomed `pc.near` times
+    more, about the table's far edge, so that edge (and the hands resting on it) stays where it was."""
+
+    def __init__(self, pc):
+        f = getattr(pc, 'near', 1.0)
+        self.heading = pc.heading
+        c = pc.cam
+        self.cam = B.Cam(c.z * f, c.cx, TABLE_EDGE - (TABLE_EDGE - c.cy) / f)
 
 
 def table_top(img, pc):
     """The round winner's table top (ref 01): red-brown, a light rim, a cream inlaid ring, its edge band, on its
     pedestal. Fixed in the frame's middle (the camera turns over its centre); its far edge at the people's waists."""
+    pc = Near(pc)
     pedestal(img, pc)
     p = B.Pen(img, pc.cam)
     cx, cy = K * pc.heading, TABLE_EDGE + TABLE_RY
@@ -366,7 +416,7 @@ def table_top(img, pc):
 
 
 COIN_RX, COIN_RY, COIN_T = 54.0, 19.0, 24.0
-PILE_K = 0.86         # coins a little smaller so the pile fits the smaller top (still filling most of it, ref 02)
+PILE_K = 0.66         # coins a little smaller so the pile fits the smaller top (still filling most of it, ref 02)
 
 
 def coin(p, x, y, k=1.0):
@@ -383,10 +433,11 @@ def coin(p, x, y, k=1.0):
 def coin_pile(img, pc):
     """The coin pile in about 7 tiers, a few coins scattered round its base (ref 01): stacks on a grid, tallest in
     the middle, drawn back to front; it covers most of the small top, almost to the rim (ref 02)."""
+    pc = Near(pc)
     p = B.Pen(img, pc.cam)
     cx = K * pc.heading
     k = PILE_K
-    base = TABLE_EDGE + TABLE_RY + 20
+    base = TABLE_EDGE + TABLE_RY + 15
     rng = np.random.default_rng(4)
     stacks = []
     for j in range(-3, 4):                                   # rows, back (-) to front (+)
@@ -397,13 +448,13 @@ def coin_pile(img, pc):
                 continue
             stacks.append((j, i, max(1, n)))
     for j, i, n in sorted(stacks):
-        x = cx + i * 76 + (j % 2) * 38 + rng.uniform(-6, 6)
-        y = base + j * 36
+        x = cx + i * 57 + (j % 2) * 28 + rng.uniform(-5, 5)
+        y = base + j * 27
         for kk in range(n):
             coin(p, x + rng.uniform(-3, 3), y - kk * COIN_T * k, k)
     for _ in range(5):                                       # a few scattered round the base, on the top
         a = rng.uniform(0.35, math.pi - 0.35)
-        x, y = cx + 440 * math.cos(a) * rng.uniform(0.9, 1.0), base + 120 * math.sin(a) + 20
+        x, y = cx + 330 * math.cos(a) * rng.uniform(0.9, 1.0), base + 90 * math.sin(a) + 15
         coin(p, x, y, k)
 
 

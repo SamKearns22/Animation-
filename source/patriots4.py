@@ -29,6 +29,7 @@ import peepee as PP              # noqa: E402
 import filmkit                   # noqa: E402
 import film_engine as E          # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
+from ed import INK               # noqa: E402
 import patriots4_cast as PC      # noqa: E402
 import patriots4_room as RM      # noqa: E402
 import patriots4_plan as PL      # noqa: E402
@@ -79,11 +80,11 @@ PANS = {   # shot: (from heading, to heading, pan start, pan end): eased; holds 
 }
 STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for the room's middle)
     'claudia': (0.0, 1.0, None), 'claudia close': (0.0, 1.75, 'claudia'), 'claudia close 2': (0.0, 1.75, 'claudia'),
-    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (60.0, 1.75, 'patriot'), 'his view': (240.0, 1.0, None),
+    'bash close': (270.0, 1.75, 'bash'), 'patriot close': (60.0, 1.75, 'patriot'), 'his view': (241.5, 1.0, None),
     'patriot 2': (60.0, 1.2, 'patriot'), 'traitors': (60.0, 1.15, 'patriot'),
 }
 CHEAT = {   # a film cheat for one shot: Romesh and Bash stand 60 degrees apart, too far for one frame with faces big
-    'his view': {'romesh': 227.0, 'bash': 256.0},   # enough for the eye slide, so they are moved closer for it
+    'his view': {'romesh': 230.0, 'bash': 253.0},   # enough for the eye slide, so they are moved closer for it
 }
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
@@ -209,16 +210,27 @@ def face_y(who):
     return neck_y(who) - 150 * PC.P3.scale_for(CAST[who], S)
 
 
+NEAR_Z, NEAR_CY = 1.2, 1050.0   # Sam, 1 Nov notes 8-9: every table shot with the camera in at the table's edge; the
+                                # table's extra scale puts its near rim at the frame's foot (patriots4_room.near_for)
+
+
 def pancam(t):
     s = shot_of(t)
     if s in PANS:
         h0, h1, a, b = PANS[s]
-        return RM.PanCam(h0 + (h1 - h0) * ease((t - a) / (b - a)))
+        u = ease((t - a) / (b - a))
+        pc = RM.PanCam(h0 + (h1 - h0) * u, NEAR_Z, NEAR_CY)
+        pc.near = RM.near_for(pc)
+        return pc
     h, z, who = STILL[s]
     cy = 960.0 if who is None else face_y(who) + 200 / z
-    if s == 'his view':
-        cy = 1000.0
-    return RM.PanCam(h, z, cy)
+    if s in ('claudia', 'patriot 2', 'traitors'):  # Sam, 1 Nov note 9: in at the table's edge like shots 2-4
+        z, cy = NEAR_Z, NEAR_CY
+    if s == 'his view':                           # a little wider, so Romesh and Bash both fit, hands and all
+        z, cy = 1.08, 1065.0
+    pc = RM.PanCam(h, z, cy)
+    pc.near = RM.near_for(pc)
+    return pc
 
 
 def cam_for(t):
@@ -317,12 +329,43 @@ def state(who, t):
 
 
 def point_at_them(sp):
-    """Both arms out and down towards the two shoulders in the frame's corners (shot 12): his right hand (our left) at
-    Bash, his left (our right) at Romesh (the gallery's 'pointing both ways', aimed lower)."""
+    """Shot 12: a real point (Sam, 1 Nov note 7: "more like pointing", as at the end of Power Crime Action): both arms
+    thrust out straight from the shoulder, down towards the two shoulders in the frame's corners, a finger sticking
+    out of each round hand along the arm; his right hand (our left) at Bash, his left (our right) at Romesh."""
     j = V.standing(sp)
+    reach = (F.UPPER + F.FORE) * 0.98 + F.HAND['point'] - 4      # all but straight: no bend at the elbow
     for side, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, side, (sg * 340.0, 215.0, 150.0), 'out', 'point')
+        sx, sy, sz = j['sh' + side]
+        d = (sg * 0.4, 0.5, 0.77)              # down and out at the two shoulders; drawn over the table (arms_mask)
+        n = math.sqrt(sum(c * c for c in d))
+        V.arm_to(j, side, (sx + d[0] / n * reach, sy + d[1] / n * reach, sz + d[2] / n * reach), 'down', 'point')
     return j
+
+
+def install_point_finger(B):
+    """The 'point' hand of Power Crime Action (Sam, 20 Oct; asked for again here): the plain circle with one short
+    round-ended finger sticking out the way the forearm points, drawn first so the circle covers its root."""
+    circle = B.gesture_hand
+
+    def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+        if shape == 'point':
+            dx, dy = wr[0] - el[0], wr[1] - el[1]
+            n = math.hypot(dx, dy) or 1.0
+            ux, uy = dx / n, dy / n
+            cx, cy = wr[0] + ux * 12, wr[1] + uy * 12
+            tip = (cx + ux * 62, cy + uy * 62)                     # a touch longer and thicker than Power Crime
+            w = 10.5                                               # Action's, so it reads at this distance
+            p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                    (cx + uy * w, cy - ux * w)], skin, INK, 2.2)
+            p.ell(tip[0], tip[1], w, w, skin, INK, 2.2)
+            p.poly([(tip[0] - ux * 6 - uy * (w - 1.5), tip[1] - uy * 6 + ux * (w - 1.5)),
+                    (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
+                    (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
+        return circle(p, el, wr, shape, skin, extra, t)
+    B.gesture_hand = gesture_hand
+
+
+install_point_finger(B)
 
 
 # ------------------------------------------------------------------------------------------------ drawing
@@ -367,6 +410,9 @@ def arms_mask(pc, who, j2, sp):
         d.line([pts[0], pts[1]], fill=255, width=int(64 * s2 * z))
         r = 34 * s2 * z
         d.ellipse((hand[0] - r, hand[1] - r, hand[0] + r, hand[1] + r), fill=255)
+        if j2.get('hand', {}).get(side) == 'point':              # the pointing finger too (shot 12)
+            tip = (hand[0] + dx / n * 90 * s2 * z, hand[1] + dy / n * 90 * s2 * z)
+            d.line([hand, tip], fill=255, width=int(30 * s2 * z))
     return m
 
 

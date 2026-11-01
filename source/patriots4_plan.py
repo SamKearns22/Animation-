@@ -10,7 +10,7 @@ it from the person it shows, so everyone faces it (rule 38) and the Patriot's qu
 """
 import math
 
-R = 0.6                        # from the table's centre to where each person stands (in close: the table is 0.65 m)
+R = 0.52                       # from the table's centre to where each person stands (in close: the table is 0.49 m)
 TABLE_H = 0.95                 # they lean on it with both hands (refs 03, 09)
 EYE = 1.5
 
@@ -33,7 +33,7 @@ ROOMS = {
 OPENINGS = {
     'the arch': dict(wall=('z', 4.0), span=(-1.1, 1.1), sill=0.0, head=3.2,
                      to='the dark passage the banished leave by: panelled doors, lattice above (refs 01, 03, 12)'),
-    'to the round table': dict(wall=('z', -3.2), span=(-2.4, 2.4), sill=0.0, head=3.6),
+    'to the round table': dict(wall=('z', -3.2), span=(-3.0, 3.0), sill=0.0, head=4.2),
 }
 LOOKS = {
     "winner's room": dict(floor=(70, 50, 36), wall=(92, 58, 34), ceiling=(40, 28, 22), thing=(120, 74, 44)),
@@ -41,14 +41,14 @@ LOOKS = {
     'arch passage': dict(floor=(52, 38, 28), wall=(78, 50, 30), ceiling=(30, 22, 18)),
 }
 THINGS = {
-    "winner's table": dict(at=(0.0, 0.0), size=(0.65, TABLE_H, 0.65), facing=0,
-                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size (Sam, 1 Nov)'),
-    'coin pile': dict(at=(0.0, 0.0), size=(0.5, 0.3, 0.5), facing=0, y=TABLE_H, solid=False, on="winner's table",
+    "winner's table": dict(at=(0.0, 0.0), size=(0.49, TABLE_H, 0.49), facing=0,
+                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size, then 25% less (Sam, 1 Nov)'),
+    'coin pile': dict(at=(0.0, 0.0), size=(0.38, 0.3, 0.38), facing=0, y=TABLE_H, solid=False, on="winner's table",
                       why='large gold coins in about 7 tiers, more scattered round the base (ref 01)'),
     'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.9, 0.8), facing=0,
                       why='iron bowl of fire on a stand (refs 03, 09)'),
-    'round table': dict(at=(0.0, -9.0), size=(4.5, 0.78, 4.5), facing=0,
-                        why='The Traitors Round Table (source/traitors.py round_table), far behind Romesh'),
+    'round table': dict(at=(0.0, -4.6), size=(4.5, 0.78, 4.5), facing=0,
+                        why="The Traitors Round Table (source/traitors.py round_table) behind Romesh, half as far as first built (Sam, 1 Nov); one space with the winner's room"),
 }
 PEOPLE = {
     'claudia': dict(at=clock(12), facing=facing_in(12), who='claudia'),

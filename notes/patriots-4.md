@@ -13,8 +13,8 @@
   The film file `source/patriots4.py` (from the template): 12 shots, 49.0 s; recordings placed; subtitle chunks on the
   recording's own stretches; mouths per stretch (`parts`); plan checks clean; `plan.py` clean. Stills sheet sent:
   `review/patriots4-stills.jpg` (`python3 source/patriots4.py sheet OUT.jpg`).
-- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3 applied (table below); new stills sheet
-  `review/patriots4-stills.jpg` sent. Plan check clean.
+- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3, then Sam's second batch 4-8 applied (Notes
+  table); stills sheet `review/patriots4-stills.jpg` re-sent. Plan check clean.
 - **Next (Opus medium, building from a clear plan):** Sam looks at the new stills (and answers the open question on
   note 1). Then pre-flight (`python3 source/preflight.py patriots4 OUT_DIR`: the brief checklist must be ticked first;
   `scene(t)`, `layers(t)` and the audits are NOT yet written: copy the template's flat `scene()` and add them), the
@@ -29,8 +29,11 @@
   under and beside the small table (they stand behind it), the floor of the winner's room is painted (dark boards:
   my addition, needed now the table no longer fills the frame's foot), the coins are 86% the size and 5 scattered
   coins instead of 9 (loss), the pedestal's lit floor ring is drawn but below the frame in every shot; on the plan the
-  four stand 0.6 m from the centre, not 0.95 (no change on screen). Note 2's chairs are 4 (N, E, S, W; my choice of
-  the minimum Sam asked). Shot 12 shows the backs of Bash's and
+  four stand 0.52 m from the centre, not 0.95 (no change on screen). Notes 4-8: with the camera at the table's edge
+  the table fills the frame's width again in every shot, so the 25% cut shows only as less table round the pile
+  (flagged to Sam); the Round Table has 8 chairs (5 round the far side, 2 side on, 1 near: more than the 4 asked, so
+  some show in shot 3); the Patriot's pointing finger is an exception to the plain circle hands (Sam asked for Power
+  Crime Action's); the pans no longer change zoom (every table shot is at the same distance). Shot 12 shows the backs of Bash's and
   Romesh's heads in the bottom corners so the Patriot's two-armed point has targets (addition); the Patriot's hands are
   circles (no pointing finger: house style). Set dressing from the refs only (fire baskets, torches, candles, lantern
   look); no signs or jokes of mine. Bash's two silver rings not drawn yet.
@@ -145,6 +148,11 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 1 | all | | The winner's table 50% smaller: a pedestal with a flat top | done 1 Nov: top 0.65 m (`TABLE_RX/RY` halved), edge band, four turned legs round a central column, plinth with a lit ring; coin pile refitted to cover most of the top (ref 02); plan R 0.95 -> 0.6. Overhead ref: asked (ref 12 has no table) |
 | 2 | 3 | 17 s | The Round Table through the opening behind Romesh floats | done 1 Nov: legs and a central base to the hall floor, a shadow under it, floor boards, chairs at N, E, S, W (`hall_chair`) |
 | 3 | 1 | 0.9-1.6 s | voices.py's "words before Romesh" flag: false alarm, Claudia draws the name out | meant (no change); the "Errrr" flag (44 syllables heard, 1 written) is meant too: one held sound. voices.py has no way to mark a flag as meant, so both will show in pre-flight: read and pass them |
+| 4 | all | | Reduce the table by another 25% | done 1 Nov: top 0.49 m (`TABLE_RX/RY` x 0.75), pedestal and pile scaled with it; plan R 0.52 |
+| 5 | 3 | 17 s | Chairs tucked into the Round Table (they looked turned away); no wall between the two rooms (one space); the Round Table 50% closer | done 1 Nov: chairs round the far side seen front on with the rim over their seats, side chairs edge on with seats under the rim, the near one from behind; the opening's posts and lintel gone, the hall's wall up to the shared ceiling, one floor; the table about 5 m off (was 9.5): twice the size; plan: at z -4.6, opening the full wall |
+| 6 | 12 | 47.9 s | The pointing must look like pointing (as at the end of Power Crime Action) | done 1 Nov: Power Crime Action's 'point' hand (a short finger out of the round hand, a touch bigger here), both arms straight, down at the two heads in the corners, drawn over the table (`install_point_finger`, `point_at_them`, `arms_mask`) |
+| 7 | 2-4 | | Camera closer, at the edge of the table | done 1 Nov: zoom 1.2; the table and coins scaled about its far edge so its near rim sits at the frame's foot (`patriots4_room.Near`, `near_for`); hands still on the rim |
+| 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 
 Decisions made (kept so a new chat never has to rediscover them):
 - 1 Nov: Sam sent references and recordings under "hold"; the brief came with the Opus switch. Planning only until Sam says go.
