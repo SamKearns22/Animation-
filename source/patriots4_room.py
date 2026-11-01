@@ -25,7 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import burnham as B              # noqa: E402
-from ed import INK, curve, oval  # noqa: E402
+from ed import INK, curve, oval, open_curve  # noqa: E402
 from satire_style import rough   # noqa: E402
 
 K = 20.0              # pixels per degree at zoom 1 (a 54 degree field of view across the 1080 frame)
@@ -384,15 +384,17 @@ PEDESTAL = (82, 40, 26)
 PEDESTAL_L = (124, 62, 38)
 
 
-def turned_leg(p, x, y0, y1, w):
-    """One turned leg from y0 down to y1 (ref 12): a collar, a round bulb, a slim neck, a foot."""
+def turned_leg(p, x, y0, y1, w, c=None, cl=None):
+    """One turned leg from y0 down to y1 (ref 12): a collar, a round bulb, a slim neck, a foot. (Fixed 1 Nov: each side
+    was a CLOSED curve, so the outline doubled back and crossed itself, drawing two thin spikes; hidden under the rim
+    until the wide view showed the legs whole.)"""
     h = y1 - y0
     prof = [(0.0, 0.42), (0.06, 0.42), (0.09, 0.30), (0.22, 0.30), (0.34, 0.5), (0.46, 0.5), (0.58, 0.28),
             (0.80, 0.24), (0.90, 0.40), (1.0, 0.44)]
     left = [(x - w * r, y0 + h * v) for v, r in prof]
     right = [(x + w * r, y0 + h * v) for v, r in prof][::-1]
-    p.poly(curve(left, 2) + curve(right, 2), PEDESTAL, INK, 2.0)
-    p.line([(x - w * 0.12, y0 + h * 0.36), (x - w * 0.14, y0 + h * 0.46)], PEDESTAL_L, 3.0)
+    p.poly(open_curve(left, 2) + open_curve(right, 2), c or PEDESTAL, INK, 2.0)
+    p.line([(x - w * 0.12, y0 + h * 0.36), (x - w * 0.14, y0 + h * 0.46)], cl or PEDESTAL_L, 3.0)
 
 
 def pedestal(img, pc):

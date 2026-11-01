@@ -41,13 +41,15 @@ LOOKS = {
     'arch passage': dict(floor=(52, 38, 28), wall=(78, 50, 30), ceiling=(30, 22, 18)),
 }
 THINGS = {
-    "winner's table": dict(at=(0.0, 0.0), size=(0.37, TABLE_H, 0.37), facing=0,
-                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size, then 25% less twice (Sam, 1 Nov)'),
-    'coin pile': dict(at=(0.0, 0.0), size=(0.29, 0.3, 0.29), facing=0, y=TABLE_H, solid=False, on="winner's table",
+    "winner's table": dict(at=(0.0, 0.0), size=(0.9, 0.9, TABLE_H), facing=0,
+                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size, then 25% less twice (Sam, 1 Nov); '
+                               '0.9 m is its size as drawn beside the people (the old 0.37 was worked out wrongly; the wide view, patriots4_wide.TABLE_R, draws it from here)'),
+    'coin pile': dict(at=(0.0, 0.0), size=(0.66, 0.66, 0.3), facing=0, y=TABLE_H, solid=False, on="winner's table",
                       why='large gold coins in about 7 tiers, more scattered round the base (ref 01)'),
-    'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.9, 0.8), facing=0,
+    'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.8, 0.9), facing=0,
                       why='iron bowl of fire on a stand (refs 03, 09)'),
-    'round table': dict(at=(0.0, -4.6), size=(4.5, 0.78, 4.5), facing=0,
+    'round table': dict(at=(0.0, -6.0), size=(4.5, 4.5, 0.78), facing=0,   # at z -6: clear of the opening (the sizes were read as width, height,
+                                                                      # depth before; set right 1 Nov, it poked into the winner's room)
                         why="The Traitors Round Table (source/traitors.py round_table) behind Romesh, half as far as first built (Sam, 1 Nov); one space with the winner's room"),
 }
 PEOPLE = {
@@ -80,7 +82,9 @@ CAMS = {   # focal in pixels for 1080 x 1920 (1146: 20 px a degree, patriots4_ro
     'claudia close': pan(12, 2000, 1.55, why='the stares, closer'),
     'bash close': pan(9, 2000, 1.55, why='staring and blinking'),
     'patriot close': pan(3, 2000, 1.55, why='eyes wide, sliding to Romesh'),
-    'his view': pan(7, 825, why="Romesh and Bash in one frame, the Patriot's shoulder in the corner"),
+    'his view': dict(pos=(1.15, 1.55, -0.02), look=(-0.62 * 0.5, 1.2, -0.62 * 0.5), focal=920,
+                     why="the wide view from the Patriot's seat (patriots4_wide.CAM_AT): Romesh at 6 on the left, "
+                         "Bash at 9 straight across, both standing at the table; his shoulder bottom left (Sam, 1 Nov note 26)"),
 }
 CAMS.update({'claudia 2': CAMS['claudia'], 'claudia close 2': CAMS['claudia close'], 'patriot 2': CAMS['patriot'],
              'traitors': dict(CAMS['patriot'], why="the Patriot points at both; Bash's and Romesh's backs in the corners"),

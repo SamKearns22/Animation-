@@ -33,6 +33,7 @@ from ed import INK               # noqa: E402
 import patriots4_cast as PC      # noqa: E402
 import patriots4_room as RM      # noqa: E402
 import patriots4_plan as PL      # noqa: E402
+import patriots4_wide as WV      # noqa: E402
 import posegallery as PG         # noqa: E402
 import views as V                # noqa: E402
 
@@ -83,7 +84,8 @@ STILL = {   # shot: (heading, zoom, whose face the camera centres, or None for t
     'patriot 2': (90.0, 1.2, 'patriot'), 'traitors': (90.0, 1.15, 'patriot'), 'reaction': (225.0, 1.0, None),
 }
 CHEAT = {}   # Sam, 1 Nov (animatic 2 note 26): no cheat; Romesh and Bash at their real seats in every shot
-WIDE_Z = 0.5   # shots 9 and 13 pulled right back so both fit at 90 degrees apart (Sam's choice)
+WIDE = ('his view', 'reaction')   # Sam, 1 Nov (note 26): a real wide view from the Patriot's seat, Romesh at 6 and
+                                  # Bash at 9 standing at the table (patriots4_wide.py), not the turning camera
 T_ASK_EYES = 24.78           # "you?": Claudia's eyes go to her left (the Patriot, off frame)
 T_WIDEN = 26.4               # the Patriot's eyes widen (stare 1), then grow slowly to 4 (Sam, 1 Nov)
 T_STARE4 = 44.8
@@ -114,7 +116,9 @@ SHOT_CAST = {'claudia': ['claudia'], 'bash': ['bash'], 'romesh': ['romesh'], 'cl
              'patriot': ['patriot'], 'claudia close': ['claudia'], 'bash close': ['bash'], 'patriot close': ['patriot'],
              'his view': ['romesh', 'bash'], 'claudia close 2': ['claudia'], 'patriot 2': ['patriot'],
              'traitors': ['patriot'], 'reaction': ['romesh', 'bash']}
-THREE_QUARTER_OK = []
+THREE_QUARTER_OK = [(shot, 'romesh', "the wide view from the Patriot's seat: Romesh at 6 is at the table's side, so his body "
+                     "turns to it (hands on its rim); his face stays to the lens (his likeness head is front only)")
+                    for shot in ('his view', 'reaction')]
 HOOK = ('Celebrity Traitors winners reveal their charities', {'y': 330})   # Sam: over the arch, shot 1
 KEEP_CLEAR = []
 PROP_SIZES = []
@@ -233,9 +237,6 @@ def pancam(t):
         cy = RM.rim_cy(z)                         # animatic 2 note 25: the one table size; its near rim at the foot
     if s in ('patriot 2', 'traitors'):            # animatic 1 note 3: out a little, Bash's and Romesh's backs in both
         z = 1.15
-        cy = RM.rim_cy(z)
-    if s in ('his view', 'reaction'):             # animatic 2 note 26 (Sam chose): pulled right back, both at their
-        z = WIDE_Z                                # real seats (6 and 9, 90 degrees apart)
         cy = RM.rim_cy(z)
     pc = RM.PanCam(h, z, cy)
     pc.near = RM.near_for(pc)
@@ -423,7 +424,26 @@ def visible(who, pc):
     return pc.seen(angle(who, pc), 260)
 
 
+def draw_wide(img, who, t):
+    """Shots 9 and 13: Romesh or Bash standing at the table, seen from the Patriot's place (patriots4_wide)."""
+    sp, j = state(who, t)
+    breath = j.get('bob', 0.0)
+    (x, y), s, s2, d = WV.body(who, HEIGHTS[CAST[who]['name']])
+    j = WV.standing_hands(sp, j, s2, (x, y), WV.rim_y, who)
+    j['bob'] = breath
+    j2 = PC.person(img, WV.screen_cam(), x, y, s, sp, t, WV.YAW[who], j, 0)   # the face to the lens (rule 38)
+    hy = (y + (j['bob'] - 150) * s2) * B.SS
+    other = {'romesh': 'bash', 'bash': 'romesh'}[who]
+    target = looking_at(who, t)
+    tx = WV.body(other, 1.78)[0][0] if target == other else 150.0     # the Patriot: his shoulder, bottom left
+    filmkit.eyeline(who, t, (x * B.SS, hy), (sp['look'], 0.0), (tx * B.SS, hy))
+    j2['_at'] = (x, y + j['bob'] * s2, s2)
+    return j2, sp
+
+
 def draw_person(img, pc, who, t):
+    if pc.shot in WIDE:
+        return draw_wide(img, who, t)
     sp, j = state(who, t)
     x, y = place(who, pc)
     j2 = PC.person(img, pc.cam, x, y, S, sp, t, 0, j)
@@ -439,12 +459,16 @@ def arms_mask(pc, who, j2, sp):
     from PIL import ImageDraw as D
     m = Image.new('L', (B.W * B.SS, B.H * B.SS), 0)
     d = D.Draw(m)
-    s2 = PC.P3.scale_for(sp, S)
-    x, y = place(who, pc)
-    z = pc.zoom * B.SS
+    if '_at' in j2:                                # the wide view (shots 9, 13): drawn in frame pixels
+        x, y, s2 = j2['_at']
+        cam, z = WV.screen_cam(), B.SS
+    else:
+        s2 = PC.P3.scale_for(sp, S)
+        x, y = place(who, pc)
+        cam, z = pc.cam, pc.zoom * B.SS
     for side in 'LR':
         el, wr = j2['el' + side], j2['wr' + side]
-        pts = [pc.cam.P(x + u * s2, y + v * s2) for u, v in (el, wr)]   # already in drawing pixels (P carries SS:
+        pts = [cam.P(x + u * s2, y + v * s2) for u, v in (el, wr)]   # already in drawing pixels (P carries SS:
         # fixed 1 Nov, the extra * SS put every hand over the table at twice its place in full-quality renders)
         dx, dy = pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]
         n = math.hypot(dx, dy) or 1.0
@@ -470,6 +494,8 @@ def shoulder(img, who, x, y, s):
 def on_screen(t, pc=None):
     """Who is drawn in this frame."""
     pc = pc or pancam(t)
+    if pc.shot in WIDE:
+        return list(SHOT_CAST[pc.shot])
     on = [w for w in WHO if visible(w, pc)]
     if t < 25.6:
         on = [w for w in on if w != 'patriot']            # never in shot before the reveal (brief 10)
@@ -517,6 +543,8 @@ def picture(t):
         install_point_finger(B)                              # which puts the plain circle hands back (found 1 Nov)
     pc = pancam(t)
     img = B.canvas((0, 0, 0))
+    if pc.shot in WIDE:
+        return wide_picture(img, pc, t)
     RM.room(img, pc, t)
     on = on_screen(t, pc)
     layers = {}
@@ -531,11 +559,28 @@ def picture(t):
             img.paste(lay, (0, 0), Image.composite(lay.getchannel('A'), Image.new('L', lay.size, 0), arms_mask(pc, who, j2, sp)))
     RM.coin_pile(img, pc)
     s = shot_of(t)
-    if s == 'his view':                           # (shot 13: just Romesh and Bash, Sam 1 Nov)
-        shoulder(img, 'patriot', 20, 1720, 1.6)   # bottom left: he sits to their left now (3 o'clock)
     if s in ('patriot 2', 'traitors'):            # in both, so they never appear from nowhere (animatic 1 note 3)
         shoulder(img, 'bash', 70, 1830, 1.6)
         shoulder(img, 'romesh', 1030, 1830, 1.6)
+    return img
+
+
+def wide_picture(img, pc, t):
+    """Shots 9 and 13 (patriots4_wide): the room behind, them (far to near), the table over their
+    laps, their forearms and hands again over its top, the coins; in shot 9 the Patriot's shoulder in the corner."""
+    WV.room(img, t)
+    layers = {}
+    for who in sorted(SHOT_CAST[pc.shot], key=lambda w: -WV.body(w, 1.78)[3]):
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        j2, sp = draw_person(lay, pc, who, t)
+        img.alpha_composite(lay)
+        layers[who] = (lay, j2, sp)
+    WV.table(img)
+    for who, (lay, j2, sp) in layers.items():
+        img.paste(lay, (0, 0), Image.composite(lay.getchannel('A'), Image.new('L', lay.size, 0), arms_mask(pc, who, j2, sp)))
+    WV.coin_pile(img)
+    if pc.shot == 'his view':                     # (shot 13: just Romesh and Bash, Sam 1 Nov)
+        shoulder(img, 'patriot', 20, 1720, 1.6)   # bottom left: his own shoulder, the camera at his seat
     return img
 
 

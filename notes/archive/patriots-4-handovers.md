@@ -190,3 +190,36 @@
   shows, not only the shot named (the room-divider note came back from shot 9) (film-quality-rules, by hand).
 - **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` (codemap).
 
+
+
+# Handover replaced 1 Nov (wide view built)
+- **Rules that bite at this stage (rule 48):** building new (Opus HIGH); reuse before building (`guides/kit-catalogue.md`,
+  The Traitors' Round Table room: `source/traitors*`); rule 1 (the plan in metres: everyone at their seat, 6 and 9);
+  41 every arm ends in a visible hand (on the table rim); best-practice 1.2/1.3 contact and continuity (hands on the
+  table, the same table size: note 25); check sheet and Sam's clear yes before animatic 3; flag losses and additions.
+- **Done (1 Nov):** animatic 2 rendered and sent (pre-flight: the same 7 named faults). Sam's notes 25-26. Note 25
+  fixed: ONE table size in every shot (`patriots4_room.TABLE_SCALE` = Claudia's close-up, 1.17x the people;
+  `rim_cy(z)` puts the near rim at the frame's foot); Sam chose "same table, some floor" (a little floor shows beside
+  the table in the wider shots: undoes note 8 there, his choice). Note 26: the cheat removed (`CHEAT = {}`); Romesh
+  and Bash at 180 and 270 in every shot.
+- **Next (OPUS HIGH, building new):** shots 9 'his view' (38.3-41.3 s) and 13 'reaction' (48.2-50.2 s) are BROKEN:
+  pulled back to `WIDE_Z = 0.5` (heading 225) the panorama rig shows Romesh and Bash standing full length, the
+  tiny table floating between them, black above the walls (sheet: scratchpad only; re-make it with
+  `python3 source/patriots4.py sheet OUT.jpg 40.5 49.5`). Sam chose (1 Nov): **build the wide view**: a proper
+  wide shot from the Patriot's seat (3 o'clock), Romesh at 6 and Bash at 9 both SEATED at the table (chairs), hands
+  on its rim, the same table size, the room drawn above (ceiling/walls), the Patriot's shoulder in the corner as
+  before. Eye beats kept: T_MEET 39.3 (they slide to each other), T_EACH 48.6. Reuse The Traitors' round-table
+  wide-view drawing if it fits. Then a stills sheet of shots 9 and 13 to Sam, then the check sheet and his yes
+  before animatic 3 (`python3 source/preflight.py patriots4 OUT_DIR`, `final OUT --small`).
+- **Losses, cheats and my additions:** floor shows beside the table in the wider shots (Sam's choice); swings are
+  cuts; the hall lamps gone; the foreground pointing arm removed; the people bigger in frame (zoom 1.35). Additions
+  still in: shot 13 (Sam's yes), the extra candle and torch placements.
+- **Usage (rule 44):** not measured in this chat (slipped).
+- **Rule requests and proposals not yet in a guide (Sam: discuss at the END of the project):** (1) PROPOSED: the
+  composition sheet uses the real cast drawings (film-quality-rules 11). (2) PROPOSED: famous heads drawn from
+  measurements, never by eye (rethink: Sam chose the eye-drawn Claudia). (3) NEW: one frame per shot at full quality
+  before the first animatic. (4) NEW: a note about a set seam is checked in every shot where it shows. (5) NEW (this
+  chat): a prop's size is fixed in the plan and never scaled per shot to fill a frame (note 25: three table sizes);
+  and a cheat that moves someone off their plan seat needs Sam's yes first (note 26).
+- **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` and `source/patriots4_room.py` (codemap).
+
