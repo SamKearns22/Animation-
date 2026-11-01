@@ -41,6 +41,9 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     'saberstaff hilt': (0.56, 0.04), 'saber blade': (0.65, 0.04),
     # Flying Whales (1 Nov): a humpback 14 m long, about 3.3 m deep at the chest (source/whale.py), flukes 5 m across
     'humpback whale': (14.0, 3.3),
+    # the Jackdaw-style rig (source/flying_whales_rig.py): deck block 50 x 35 m, three storeys 24 m in all, jacket legs
+    # 1.8 m across and 25 m from the sea to the deck; an enclosed lifeboat 8.5 x 3 m; a helideck about 22 m across
+    'rig deck block': (50.0, 24.0), 'rig jacket leg': (1.8, 25.0), 'enclosed lifeboat': (8.5, 3.0), 'helideck': (22.0, 1.2),
     'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
 }
 
