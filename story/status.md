@@ -37,6 +37,9 @@ Read this first in any new session, after CLAUDE.md.
   Usage: 37% of the week. **At the end of this film (Sam, 1 Nov):** an efficiency audit (streamlining, checks run too
   often or doubled up, fewer tokens without losing quality) and an audit of how my messages to Sam can be shorter and
   clearer (see the film's handover).
+- 1 Nov (Opus medium): Sam approved rig clips (c)-(e); no recording, the Attenborough line as subtitles only; colour emoji in
+  `hook_text.py`; brief checklists ticked; pre-flight 6 faults, all named (people-and-rooms checks, the chosen 12 s shot); check
+  sheet sent (`review/flying-whales-check-sheet.jpg`). Next: Sam's yes, then the animatic (Sonnet, fresh chat).
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

@@ -1,74 +1,47 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Rules that bite at the next stage (rule 48):** 5 (by hand for falling pieces: no tool tests a falling piece
-  against the pieces still standing; `paths.py contacts` covers the whales only); 32 and 33 (anything changed in how a
-  piece falls gets a short close clip first); 15 (any new or changed effect goes in `EFFECTS`: the star test still
-  flags the splash and crown at some ages it isn't asked about, see "Watch"); 25 (each hit freezes 2 frames: the story
-  clock, `wreck.story`); 22 (my additions below, named to Sam); before the first animatic: the brief checklists ticked
-  (18 Oct), `preflight.py`, the check sheet and a clear yes (18 Oct), and no animatic while a shot is missing anyone the
-  brief puts in it (25 Oct).
-- **Done (1 Nov, building, Opus high):** (1) the effects, `source/flying_whales_fx.py`: a cropped flat-shape painter
-  (frames got faster: about 5 s a frame at full size); the fireball (tall, dark red edge, orange, a yellow core that
-  burns down first, gone in 1 s into black smoke); smoke, steam and dust as separate clumps (`Puff`: each its own
-  outline; they rise and drift right, or shrink away, never fade); deck fire tongues; splashes of any size (a ring of
-  drops, a mound at the foot, a column as it falls back; the finale's crown); flying bits in the rig's colours; ragged
-  holes torn in a face; all shape-tested in `EFFECTS`. (2) The wreck, `source/flying_whales_wreck.py` (new file): every
-  contact from the paths and what it does (thrown, holed, bent); 15 pieces knocked loose, thrown the way the whale was
-  going, falling, splashing and sinking (big ones faster, still toppling, so none stands on its end: rule 32); holes
-  with fire and black smoke in three decks; four fireballs (Blaze's two hits, Bib's helideck, a gas burst where Ghost
-  snaps the flare boom); the derrick whips over and stays bent; the crane's boom snaps off and topples; the flare's
-  flame rides its boom down and goes out in steam, and its smoke ribbon (Showstopper 3) stops when it snaps; froth along
-  the waterline; the orange glow on the sea; a 2-frame freeze and a jolt on each main hit, a big jolt at the crown. The
-  finale: from 7.62 (story clock) everything still standing tips as one block towards the missing front left leg, then
-  slides under, the far end rising, the derrick last (all under at 10.57; the scene ends at story 11.42, so smoke and
-  foam settle for about 0.85 s). `wreck.py check`: the contacts still match the paths, everything reaches the sea,
-  nothing is left above it. (3) `rig.draw(swap=...)` draws a changed (holed) piece. (4) The film draws it all
-  (`rig_scene`). (5) Clips sent: (c) Inky through the legs (film 7.8-8.8), (d) Blaze's fireball (8.4-9.4), (e) the
-  finale (13.4-17.6), in `review/` (not on GitHub). Showstoppers ticked (below the list). `check` and `wreck.py check`
-  clean.
-- **Next (fresh chat, Opus medium: reading Sam's notes on clips (c)-(e) and applying them):** wait for Sam's notes on
-  the three clips; movement notes get a short clip (`final OUT --small --span T0 T1`). The colour emoji is done (below). Then tick the brief checklists, run `preflight.py`, show Sam the
-  check sheet and offer the animatic (wait for a clear yes). Still missing: Sam's Attenborough recording (placeholder
-  times; remind him: a second of silence after, Voice Isolation off). Start the new chat with: "Flying Whales: read
-  the handover in notes/flying-whales.md and carry on (my notes on the rig clips, then the emoji and the animatic
-  check sheet)".
-- **Watch at the next clip or the animatic:** the star test flags the splash at 0.15 and 0.45 s and the crown at 0.3,
-  0.7 and 0.9 s (ages not in `EFFECTS`; the listed ones pass): looked at, they are a wide low wall of white water seen
-  from 120 m and drops over a mound, not stars (the test is fooled by wide flat shapes, as with the burst); named, not
-  changed. The braces fall inside the jacket and may brush a standing leg for a frame or two (rule 5, by hand). The
-  shake and the freezes only show in motion. Clips (c) and (d) were rendered before the last two fixes (bigger smoke
-  puffs from the fires, the flare boom landing flat): (c) is unchanged by them, (d) only in its last few frames. The
-  smoke fills the sky above the rig by the end (it passes behind the Hook Text band). The blowhole puffs seen from
-  behind (Showstopper 5) still to judge in motion.
-- **Tool gap: closed (1 Nov, new chat):** `source/hook_text.py` now draws any emoji: the saved pictures in
-  `source/fonts/emoji/` first (🔥 saved there as `1f525.png`), else Noto Color Emoji. A number or Roman numeral stays
-  with the word before it ("Blue Planet III / looks 🔥🔥🔥", not "Blue Planet / III looks"), and the first emoji has a
-  half-space gap after the word. Placed with `--y 352`; on for the whole video means `--until` = the film's length.
-- **Losses and my additions Sam should know about:** changes from the plan: the derrick bends and stays on (it goes
-  under last, "the tower last") instead of toppling (Showstopper 12 said "whipping and toppling"); the braces snap off
-  whole rather than crumple, and the deck's sag (Showstopper 10) is only the first moment of the finale's tip; the whole
-  jacket goes down with the decks as one block. Additions: holes torn in the decks with embers glowing in them; dust
-  billowing out of each holed deck; the gas burst where the flare boom snaps (the fourth fireball); the flare's flame
-  riding its boom down and going out in steam; the helideck spinning like a thrown plate; the crane's boom snapping off
-  on its own; flying bits from every hit; froth all along the waterline as the rig goes in. Earlier: the foam ring
-  after each burst, the blowhole puffs, the knock-ons, the small white eye under each brow, foam at the legs, the
-  flickering flare.
+- **Rules that bite at the next stage (rule 48):** the animatic waits for Sam's clear yes to the check sheet (18 Oct; a
+  note is not a yes); unattended, one animatic then stop (25 Oct); 5 (by hand: falling pieces against the pieces still
+  standing, and the braces inside the jacket); 25 (the 2-frame freezes and jolts only show in motion); 46 (frames Sam
+  names are looked at first); self-review before the send (18 Oct).
+- **Done (1 Nov, Opus medium):** Sam on clips (c)-(e): "Clips look good so far" (note 6). No recording for now: the
+  Attenborough line runs as subtitles only (note 7; placeholder times 0.42-5.25 s, proofread). The colour emoji in
+  `source/hook_text.py` (🔥 saved in `source/fonts/emoji/1f525.png`, Noto fallback; numerals stay with the word before).
+  Both brief checklists ticked (O4 marked "changed"; 18, the sign-off, comes at the final). Pre-flight ran (7.5 min):
+  6 faults, all named, none fixed: no `audits`, no `LINE_SUBJECTS`, no ROOMS, no plan cameras, no `scene(t)` (these
+  are the people-and-rooms checks: this film has no people or rooms; the whales' own checks are `check`,
+  `wreck.py check` and `paths.py contacts`, all clean); the rig shot is 12.0 s (Sam's own "12 second shot"). The check
+  sheet (19 frames, 0.5-17.4 s) is `review/flying-whales-check-sheet.jpg`, sent to Sam.
+- **Next (fresh chat, Sonnet: a routine render):** Sam's yes to the check sheet (or his notes, which go back to Opus
+  medium). On yes: `python3 source/flying_whales.py final source/data/flying-whales-animatic.mp4 --small` (17.6 s,
+  423 frames; time it), then the Hook Text for the whole film: `python3 source/hook_text.py IN OUT "Blue Planet III
+  looks 🔥🔥🔥" --y 352 --until 17.6` (the animatic needs no sign-off). Send it with a self-review; push notification.
+  Start the new chat with: "Flying Whales: read the handover in notes/flying-whales.md; my answer to the check sheet
+  is ..." The animatic stays off GitHub (drafts stay off).
+- **Watch at the animatic:** the star test's splash and crown ages (named before: wide white water, not stars); the
+  braces brushing a standing leg; the shake and freezes; the blowhole puffs from behind; the subtitles are small and
+  low (house style) and now carry the line alone, so check they read on a phone; the whales are small in the rig
+  scene (about 20 m from 120 m) and get lost behind the smoke from about 12.6 s; from 16 s the frame is only smoke
+  and foam (the planned 0.85 s settle and the scene's end).
+- **Sam's question (1 Nov), for the end-of-film audit:** "What's the point in building a rig with over thirty parts if
+  most of it slides into the sea in a solid block anyway?" My answer: the parts carry the first 9 s of the rig scene
+  (15 thrown, holed decks, bent derrick, snapped crane and flare boom); only the last 3 s are the block. But a few
+  parts (inner braces, the far side) are barely seen, and the block finale saved work late. Lesson to weigh at the
+  audit: build pieces only to the level the camera shows, and decide how the end looks before splitting the model.
+- **Losses and my additions Sam should know about:** unchanged since the last handover (archive, 1 Nov effects stage),
+  plus my one small addition today: "III" kept on the same line as "Planet" in the Hook Text.
 - **Lessons I'd propose (16 Oct: say the number and I'll write them in):** (1) `guides/best-practice.md` Part 1 (falling
   things): "A long piece that falls into water or onto a floor lands flat: check its tilt at the moment it lands, and
-  choose its spin so it isn't standing on its end (the flare boom stood upright in the sea)." (2) `guides/satire.md`
-  (effects): "Smoke from a moving or short-lived fire starts big and grows fast, or the column breaks into a string of
-  beads."
+  choose its spin so it isn't standing on its end." (2) `guides/satire.md` (effects): "Smoke from a moving or
+  short-lived fire starts big and grows fast, or the column breaks into a string of beads." Not yet answered.
 - **Rule requests and proposals not yet in a guide:** none from Sam (searched this file); the two lessons above are mine.
-- **Usage budget (rule 44):** 37% of the week (Sam, 1 Nov, end of the effects stage: the effects, the wreck and clips
-  (c)-(e) took about 3%). Ask again at the next handover.
+- **Usage budget (rule 44):** 37% at the last handover; ask Sam again.
 - **At the end of this film (Sam, 1 Nov; do these after the final is sent, before closing the film):** (1) an audit of
-  the project for what can be streamlined and made more efficient: which checks run too often or repeat each other, and
-  ideas to use fewer tokens in film production without losing quality; (2) an audit of how my messages to Sam during
-  work can be shorter, clearer and more useful. Keep this item in every handover until both are done.
-- **Files to open:** this file (the Showstopper list and its ticks, "My additions"); the docstrings of
-  `source/flying_whales_wreck.py` (CONTACTS, THROWN, FIREBALLS, FIRES, `story`) and `source/flying_whales_fx.py`;
-  `guides/film-quality-rules.md` 5, 15, 25, 32, 33, 48; `guides/preflight.md` before the animatic.
+  the project for what can be streamlined and made more efficient (include Sam's rig-parts question above); (2) an
+  audit of how my messages to Sam can be shorter, clearer and more useful. Keep this item in every handover until both
+  are done.
+- **Files to open:** this file; `guides/preflight.md` (render lines); the check sheet.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
@@ -139,41 +112,41 @@ hit, the biggest at the crown; judge in motion).
 ## The brief as a checklist (CLAUDE.md, 18 Oct): ticked before the first animatic
 | # | from the brief or a note (word for word) | done? |
 |---|------|------|
-| 1 | "a team of flying humpback whales is going to use their massive bodies to destroy an oil rig" | |
-| 2 | "we see the Jackdaw Oil Field from a diagonal direction" | |
-| 3 | "close enough to see details but not so far away that anything is distant" | |
-| 4 | "The whole building is in shot" | |
-| 5 | "from the camera side, flying humpback whales" | |
-| 6 | "gently waving their flippers and shooting sea spray" | |
-| 7 | "float towards them like determined fat torpedoes" | |
-| 8 | "Don't have the whales slow down. If anything, they speed up the closer they get." | |
-| 9 | "Like a hand smashing through a jenga tower, except its whales and a gas field." | |
-| 10 | "They all begin to collide with the structure, bashing through it, smashing it apart" | |
-| 11 | "with no harm to the whales" | |
-| 12 | "eventually bringing the whole thing sliding into the sea" | |
-| 13 | "causing some explosions in the process" | |
-| 14 | "I don't want people on it, it's only funny if people don't die." | |
-| 15 | "Dusk." (changed from day; Sam's final word, 1 Nov) | |
-| 16 | "House satire" style | |
-| 17 | Rig built from Sam's Jackdaw references (yellow jacket legs, boxy decks, helipad, crane, flare boom) | |
-| 18 | CranbriJoos sign-off at the end (CLAUDE.md) | |
-| 19 | "Let's do the 12 second shot" | |
-| 20 | Sign: "Jackdaw" (the real name) | |
+| 1 | "a team of flying humpback whales is going to use their massive bodies to destroy an oil rig" | yes: five whales smash the rig apart (sheet 6.6-15.6) |
+| 2 | "we see the Jackdaw Oil Field from a diagonal direction" | yes: the rig seen corner-on, two faces showing (5.8) |
+| 3 | "close enough to see details but not so far away that anything is distant" | yes: the whole rig fills the middle third, decks readable (5.8) |
+| 4 | "The whole building is in shot" | yes: legs to flare tip in frame until it sinks |
+| 5 | "from the camera side, flying humpback whales" | yes: they burst out of the sea in front of the rig, nearest us (5.8-6.6) |
+| 6 | "gently waving their flippers and shooting sea spray" | yes: flippers wave (paths), blowhole puffs and spray (6.6-7.6) |
+| 7 | "float towards them like determined fat torpedoes" | yes: fat bodies, straight noses-first runs (7.6) |
+| 8 | "Don't have the whales slow down. If anything, they speed up the closer they get." | yes: paths speed up into each hit (`paths.py`) |
+| 9 | "Like a hand smashing through a jenga tower, except its whales and a gas field." | yes: they go through the legs and decks and out the far side (8.6-12.6) |
+| 10 | "They all begin to collide with the structure, bashing through it, smashing it apart" | yes: every whale hits; 15 pieces thrown loose (`wreck.py`) |
+| 11 | "with no harm to the whales" | yes: they fly on out of frame unhurt |
+| 12 | "eventually bringing the whole thing sliding into the sea" | yes: the rig tips and slides under, all under at 15.6-16.6 |
+| 13 | "causing some explosions in the process" | yes: four fireballs plus deck fires (9.6-12.6) |
+| 14 | "I don't want people on it, it's only funny if people don't die." | yes: nobody on the rig, no boats or helicopters |
+| 15 | "Dusk." (changed from day; Sam's final word, 1 Nov) | yes: pink-purple dusk sky, sun-glow on the sea |
+| 16 | "House satire" style | yes: flat colour, one ink outline (house look) |
+| 17 | Rig built from Sam's Jackdaw references (yellow jacket legs, boxy decks, helipad, crane, flare boom) | yes: yellow jacket legs, boxy decks, helideck, crane, flare boom |
+| 18 | CranbriJoos sign-off at the end (CLAUDE.md) | at the final: `finish.py` adds it (not in the animatic) |
+| 19 | "Let's do the 12 second shot" | yes: the rig scene is 12.0 s (5.6-17.6) |
+| 20 | Sign: "Jackdaw" (the real name) | yes: JACKDAW on the deck sign (5.8) |
 
 ## Opening scene brief (Sam, 1 Nov; a checklist, ticked before the first animatic)
 | # | from the brief or a note (word for word) | done? |
 |---|------|------|
-| O1 | Hook Text: "Blue Planet III looks 🔥🔥🔥" | |
-| O2 | "Humpback whales zooming through the sea." | |
-| O3 | "They come towards the camera, which moves around to follow alongside them." | |
-| O4 | David Attenborough's voice: "This series, we will see animal behaviour we could scarcely have imagined." | |
-| O5 | "As he reaches the end of the sentence, the whales are swimming upwards towards the surface." | |
-| O6 | "Hard cut to Jackdaw scene" | |
-| O7 | "In the opening scene, the whales are still beneath the waves." | |
-| O8 | "Near the end of the scene, they start to shoot towards the surface." | |
-| O9 | "In the Jackdaw scene, we see them flying." | |
-| O11 | The joke (Sam, 1 Nov): "the new behaviour we are seeing is that the animals are so angry about climate change they are defying physics to destroy infrastructure" | |
-| O10 | Sam (1 Nov, about the rig scene): "five whales smash their way through this rig, making it tumble and explode and break into parts in an orgy of effects and destruction and zooming, looping, attacking whales" | |
+| O1 | Hook Text: "Blue Planet III looks 🔥🔥🔥" | yes: `HOOK`, upper band y 352, whole video; emoji now drawn (added by `finish.py`) |
+| O2 | "Humpback whales zooming through the sea." | yes: the pod speeds through open water (0.5-3.6) |
+| O3 | "They come towards the camera, which moves around to follow alongside them." | yes: they come at us on a diagonal, camera swings to their side (0.5-4.6) |
+| O4 | David Attenborough's voice: "This series, we will see animal behaviour we could scarcely have imagined." | changed (Sam, note 7): subtitles only, no voice; placeholder times (0.3-5.0) |
+| O5 | "As he reaches the end of the sentence, the whales are swimming upwards towards the surface." | yes: they tilt up on "imagined" (4.2-5.4) |
+| O6 | "Hard cut to Jackdaw scene" | yes: hard cut at 5.6 |
+| O7 | "In the opening scene, the whales are still beneath the waves." | yes: all under water until 5.6 |
+| O8 | "Near the end of the scene, they start to shoot towards the surface." | yes: they race for the bright surface (4.6-5.4) |
+| O9 | "In the Jackdaw scene, we see them flying." | yes: flying in the rig scene |
+| O11 | The joke (Sam, 1 Nov): "the new behaviour we are seeing is that the animals are so angry about climate change they are defying physics to destroy infrastructure" | yes, by the action (no words state it): angry brows, they wreck the rig |
+| O10 | Sam (1 Nov, about the rig scene): "five whales smash their way through this rig, making it tumble and explode and break into parts in an orgy of effects and destruction and zooming, looping, attacking whales" | yes: five whales, loops (Showstopper 17), fire, pieces, the sinking |
 
 ## Opening scene: Showstopper list (rule 40: approved by Sam 1 Nov; ticked at the first rehearsal clip)
 | # | element | why |
@@ -310,6 +283,8 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 | 3 | opening | | the opening scene brief (checklist O1-O11) | set built; clips (a) and (b) sent 1 Nov |
 | 4 | rig | | "zooming, looping, attacking whales" (O10) | Sam: yes, two whales loop (Showstopper 17) |
 | 5 | all | | angry whales: a heavy low brow (Sam's yes) | done: whale.py brow (+ small white eye, flagged) |
+| 6 | rig | | clips (c)-(e): "Clips look good so far" (Sam, 1 Nov) | done: approved as they are |
+| 7 | opening | | "I can't record right now so just use subtitle" (Sam, 1 Nov) | done: Attenborough line as subtitles only, no voice; placeholder times stand |
 
 Decisions made:
 - Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more
