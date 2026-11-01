@@ -3,9 +3,10 @@
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/patriots-4-handovers.md)
 - **Done (1 Nov, planning, Opus):** brief, 12 reference pictures (`references/patriots-4/`) and 6 recordings
   (`source/audio/patriots4-*.m4a`) filed and measured; plan below; questions sent to Sam in one message.
-- **Next (planning, Opus, this chat):** Sam's answers and the likeness photos; then the plan file
-  (`source/patriots4.py` from the template, `PLAN` in metres) and the rough composition sheet (rule 11). Building waits
-  for Sam's go.
+- **Done (1 Nov, later):** Sam's answers in; plan in metres (`source/patriots4_plan.py`); rough composition sheet sent
+  (`source/patriots4_compose.py`).
+- **Next:** Sam's notes on the sheet and his GO; then BUILDING (Opus high, fresh chat): Romesh and Bash likeness heads
+  and the cast sheet, the winner's room, the film file from the template.
 - **Losses and my additions Sam should know about:** none yet (proposed additions are in the questions).
 - **Rule requests and proposals not yet in a guide:** none.
 - **Files to open:** this file; `guides/satire.md`; `source/traitors.py` (`wall`, `round_table`), `source/traitors_cast.py`
@@ -33,28 +34,43 @@ Estimated length: about 44 s plus the 2 s sign-off.
 - **Sound effects (rule 26):** none (Sam: none required). Voices only.
 - **Bleeps (rule 27):** none.
 
-## The world (rule 1): a round winner's table, four people round it (seen from above, like a clock)
-- Claudia at 12 o'clock (her back to the arch the banished leave through); Romesh at 2; the Patriot at 6 (his back to
-  the Round Table room, far off); Bash at 10. Table about 1.4 m across; coins piled in the middle in tiers.
-- Camera A: at the Patriot's eye height, just in front of him (his point of view), so he is never in shot. It swivels
-  (turns on the spot) between Claudia, Bash and Romesh. One painted panorama; a turn never redraws anyone (`Cam.yaw_of`).
-- Camera B: over Claudia's shoulder at 12 o'clock looking at the Patriot (the reverse), the Round Table far behind him.
+## The world (rule 1): `source/patriots4_plan.py` (metres; `python3 source/plan.py patriots4 sketch OUT.jpg`)
+- A round winner's table seen from above like a clock (Sam, 1 Nov: the Patriot at 2, so three quarters of the table
+  are free for the shots before the reveal): Claudia at 12 (the arch the banished leave by behind her), the Patriot
+  at 2, Romesh at 7 (the Round Table hall far behind him), Bash at 9. Table 1.3 m across, 0.95 m high; coins in about
+  7 tiers in the middle.
+- The "swivel": the camera circles the coin pile 0.55 m out, always across it from the person it shows, so the coins
+  sit in the foreground and everyone faces the lens (rule 38). It swings round the pile from one person to the next.
+  (Changed from "a camera turning on the spot over the centre": from there the coins are out of frame.)
+- Shot 9 is over the Patriot's shoulder (his back at the frame edge): Romesh and Bash in one frame, faces big enough
+  for the eye moves. Romesh three-quarter (28 degrees): list in `THREE_QUARTER_OK`.
+- **3D note (rule 39):** a camera that circles needs the room from every angle on the circle, so the winner's room is
+  a simple 3D set (four walls, the arch, the opening to the Round Table hall) with flat painted detail on its walls.
+  The Round Table far off stays a painting (reuse `traitors.round_table`).
 
-## Shot list (draft; times from the recordings)
+Composition sheet sent: 1 Nov, review/patriots4-composition.jpg (`python3 source/patriots4_compose.py OUT.jpg`)
+
+## Shot list (Sam said yes, 1 Nov; times from the recordings)
 | # | camera | who, what | looks | about |
 |---|---|---|---|---|
-| 1 | A on Claudia | "Romesh and Bash, remind us who you did this for?" | Claudia between Bash and Romesh | 6.5 s |
-| 2 | A swivels to Bash | his line, emotional, excited; hands come together at his chest | Bash at Claudia, eyes closing on "wonderful" | 8.8 s |
-| 3 | A swivels to Romesh | his line, sincere, hands on the table edge | Romesh at Claudia | 5.6 s |
-| 4 | A swivels to Claudia | "And what about you?" | Claudia straight down the lens (at the hidden Patriot) | 2.6 s |
-| 5 | B: the Patriot revealed | eyes widen; "Errrr" starts | at Claudia | 2.5 s |
-| 6 | A on Claudia, close | staring intently | at him (the lens) | 3 s |
-| 7 | A on Bash, close | staring, blinking | at him (the lens) | 3 s |
-| 8 | B on the Patriot, close | eyes stay wide; they slide sideways to Romesh (head still) | at Romesh | 3 s |
-| 9 | A wide: Bash, Claudia, Romesh | Romesh and Bash slide their eyes to each other; Claudia stares at us | each other | 3 s |
-| 10 | A on Claudia, close | staring, blinking; the "Errrr" fades out | at him | 3.5 s |
-| 11 | B on the Patriot | awkward silence, eyes still wide | ahead | 2 s |
-| 12 | B on the Patriot | points at the other two: "Traitors." | Romesh, then Bash | 2 s |
+| 1 | across the coins at Claudia | "Romesh and Bash, remind us who you did this for?" | between Bash and Romesh | 6.5 s |
+| 2 | circle round to Bash | his line, emotional, excited; hands meet at his chest, eyes close on "wonderful" | Claudia | 8.8 s |
+| 3 | on round to Romesh | his line, sincere, hands on the table edge | Claudia | 5.6 s |
+| 4 | back round to Claudia (via Bash: never past 2 o'clock) | "And what about you?"; her eyes go to her left | the Patriot (off frame) | 2.6 s |
+| 5 | circle to her left: the Patriot revealed | eyes widen; "Errrr" starts | Claudia | 2.5 s |
+| 6 | Claudia, close | staring intently | the Patriot | 3 s |
+| 7 | Bash, close | staring, blinking | the Patriot | 3 s |
+| 8 | the Patriot, close | eyes stay wide, slide sideways to Romesh (head still) | Romesh | 3 s |
+| 9 | over the Patriot's shoulder | Romesh and Bash slide their eyes to each other | each other | 3 s |
+| 10 | Claudia, close | staring, blinking; the "Errrr" fades out | the Patriot | 3.5 s |
+| 11 | the Patriot | awkward silence, eyes still wide | ahead | 2 s |
+| 12 | the Patriot | both arms out, a finger at each, narrowed accusing eyes: "Traitors." | Romesh, Bash | 2 s |
+
+Sam's answers (1 Nov): 1 the Patriot at 2 o'clock; 2-5 yes; 6 yes, with narrowed accusatory eyes; 7 the "Errrr"
+subtitle stays one fixed line; 8 Hook Text "Celebrity Traitors winners reveal their charities", over the arch;
+9 Claudia as in this final (black jacket, cream high-neck blouse); 10 heights: Romesh, Bash, Patriot 1.78 m,
+Claudia 1.70 m. Likeness photos 13-23 filed; cards made (`likeness.py card`): Romesh 2 straight-on usable, Bash 2,
+Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by eye; no caricatures yet).
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail, ticked before the first animatic
 | # | from the brief (Sam, 1 Nov) | done? |
