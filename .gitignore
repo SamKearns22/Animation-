@@ -33,3 +33,4 @@ source/data/halo-no-no/
 
 # likeness.py's face models: downloaded at session start (.claude/hooks/setup.sh), never on GitHub
 source/models/
+source/data/p4a2/
