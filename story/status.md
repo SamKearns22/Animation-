@@ -12,6 +12,9 @@ Read this first in any new session, after CLAUDE.md.
 - 1 Nov (building, Opus): the humpback built (`source/whale.py`: any view and size, five patterns, flipper wave, tail
   beat, climb, dive, blow; line check clean); sheet sent (`review/flying-whales-whale-sheet.jpg`). Waiting for Sam's
   yes, then the rig.
+- 1 Nov (building, Opus): Sam said yes to the whale; the dusk sky and sea built (`source/flying_whales_sea.py`); sheet
+  and a 4 s clip sent. Sam sent the opening scene (underwater, Attenborough line, whales rise to the surface; hard cut to
+  Jackdaw): questions sent. Next (fresh chat, Opus high): his answers, plan the opener, then the rig.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,
