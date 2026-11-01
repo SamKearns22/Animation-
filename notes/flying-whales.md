@@ -36,7 +36,7 @@
   choose its spin so it isn't standing on its end." (2) `guides/satire.md` (effects): "Smoke from a moving or
   short-lived fire starts big and grows fast, or the column breaks into a string of beads." Not yet answered.
 - **Rule requests and proposals not yet in a guide:** none from Sam (searched this file); the two lessons above are mine.
-- **Usage budget (rule 44):** 37% at the last handover; ask Sam again.
+- **Usage budget (rule 44):** 37% (Sam, 1 Nov, after the check sheet: this stage cost under 1%).
 - **At the end of this film (Sam, 1 Nov; do these after the final is sent, before closing the film):** (1) an audit of
   the project for what can be streamlined and made more efficient (include Sam's rig-parts question above); (2) an
   audit of how my messages to Sam can be shorter, clearer and more useful. Keep this item in every handover until both
