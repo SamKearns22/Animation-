@@ -13,7 +13,8 @@
   are the people-and-rooms checks: this film has no people or rooms; the whales' own checks are `check`,
   `wreck.py check` and `paths.py contacts`, all clean); the rig shot is 12.0 s (Sam's own "12 second shot"). The check
   sheet (19 frames, 0.5-17.4 s) is `review/flying-whales-check-sheet.jpg`, sent to Sam.
-- **Next (fresh chat, Sonnet: a routine render):** Sam's yes to the check sheet (or his notes, which go back to Opus
+- **Animatic sent (1 Nov, Sonnet):** Sam's yes to the check sheet; rendered 9.5 min, then Hook Text + 1.6 s sign-off (`--signoff-speed 1.25`, Sam's request), 19.2 s, 3 MB, `review/flying-whales-animatic.mp4`. Waiting for Sam's notes or a clear yes to the final. PROPOSED, awaiting Sam's yes: rule 'sign-off is 1.6 s on every film' (tiktok-design.md, CLAUDE.md, rule-register, finish.py default).
+- **Next (older plan, now partly done; fresh chat, Sonnet: a routine render):** Sam's yes to the check sheet (or his notes, which go back to Opus
   medium). On yes: `python3 source/flying_whales.py final source/data/flying-whales-animatic.mp4 --small` (17.6 s,
   423 frames; time it), then the Hook Text for the whole film: `python3 source/hook_text.py IN OUT "Blue Planet III
   looks 🔥🔥🔥" --y 352 --until 17.6` (the animatic needs no sign-off). Send it with a self-review; push notification.
