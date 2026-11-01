@@ -1,5 +1,36 @@
 # Flying Whales: old handovers (newest first)
 
+## Handover of 1 Nov (end of the opener plan)
+- **Rules that bite at this stage (rule 48):** 3 (benchmark the underwater set against "Underwater benchmark" below,
+  side by side with the refs, before Sam sees it); 22 (my additions shown and named on the sheet: dusk light under the
+  sea, the fish shoal, bubble trails, specks); 39 (the underwater set is 2D, painted by view direction so it turns with
+  the camera; the whale is already a model; the rig is one locked camera, painted layers); 16 (up and to the right on
+  both sides of the hard cut); 8 and 33 (rehearsal clips of the risky moves before the rest).
+- **Done (1 Nov, planning, Opus high): the opening scene planned and approved.** Sam: "all is well and you can
+  continue": the opener Showstopper list (U1-U15) approved, and all five recommendations taken (Decisions, "Opener
+  answers"). The plan in metres is numbers in `source/flying_whales_opener.py` (pod formation, the lead's track, the
+  camera's swing, timings; `comp OUT.jpg` draws the rough sheet); the composition sheet was sent
+  (`review/flying-whales-opener-composition.jpg`, once, rule 45). No more references needed: seven of Sam's whale refs
+  are underwater (benchmark below).
+- **Next (fresh chat, Opus high, building):** (1) the brow on every whale (`source/whale.py`, note 5: heavy, low,
+  angled down to the middle over each eye; readable on the lead's close pass at about 2.0 s); (2) the underwater set,
+  new: `source/flying_whales_under.py` (water bands by direction, the surface from below, light shafts, specks,
+  bubbles, the fish shoal), drawn for `flying_whales_opener.camera(t)`; benchmark sheet beside the refs (rule 3) and
+  a sheet to Sam; add it to `guides/kit-catalogue.md`; (3) the rig (`source/flying_whales_rig.py`, about 30 breakable
+  parts, JACKDAW board, rig sheet on the sea painting using `flying_whales_sea.CAM`); then rehearsal clips: the
+  opener's swing (1.2-4.0 s) and its rise into the cut (4.0-5.6 s), then the rig's three. Still to do: copy
+  `source/satire_template.py` to `source/flying_whales.py` (no cast).
+- **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
+  installed; add it before the first animatic (small, Opus medium). It is placed with `--y 352` (the upper band) and
+  stays on the whole video (`--until` the full length).
+- **Losses and my additions Sam should know about:** additions (opener, all said yes): dusk light under the sea; the
+  fish shoal; bubble trails on the rise; drifting specks. Earlier ones below. No losses.
+- **Rule requests and proposals not yet in a guide:** none (searched this file).
+- **Usage budget (rule 44):** 28% of the week (Sam, 1 Nov, end of the opener plan). Ask again at the next handover.
+- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 3, 8, 16, 22, 33, 39;
+  `guides/kit-catalogue.md`; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_sea.py`,
+  `source/whale.py`; the seven underwater refs (one combined sheet).
+
 ## Handover of 1 Nov (end of the whale build)
 - **Rules that bite at this stage (rule 48):** 40 (build only what the approved Showstopper list says; tick it at
   the first clip); 8 and 33 (rehearsal clips of the risky moves before the rest: the first hits, the finale);

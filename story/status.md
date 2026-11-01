@@ -20,6 +20,10 @@ Read this first in any new session, after CLAUDE.md.
   five questions to Sam. Sam approved all (dusk under the sea, Hook Text in the upper band, fish shoal, bubble
   trails; the seven underwater refs are enough). Next (fresh chat, Opus high, building): brows, the underwater set,
   the rig, then rehearsal clips. Usage: 28% of the week.
+- 1 Nov (building, Opus high): the brow on every whale (plus a small white eye, flagged); the underwater set
+  (`source/flying_whales_under.py`, benchmarked against Sam's refs; sheet sent); the Jackdaw rig in 31 breakable
+  pieces (`source/flying_whales_rig.py`; sheet sent). Next (fresh chat, Opus high): the film file, rehearsal clip (a)
+  the swing, the rig scene's whale paths and the water burst, clip (b), then the effects and the rig's three clips.
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

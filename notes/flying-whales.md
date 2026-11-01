@@ -1,35 +1,42 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Rules that bite at this stage (rule 48):** 3 (benchmark the underwater set against "Underwater benchmark" below,
-  side by side with the refs, before Sam sees it); 22 (my additions shown and named on the sheet: dusk light under the
-  sea, the fish shoal, bubble trails, specks); 39 (the underwater set is 2D, painted by view direction so it turns with
-  the camera; the whale is already a model; the rig is one locked camera, painted layers); 16 (up and to the right on
-  both sides of the hard cut); 8 and 33 (rehearsal clips of the risky moves before the rest).
-- **Done (1 Nov, planning, Opus high): the opening scene planned and approved.** Sam: "all is well and you can
-  continue": the opener Showstopper list (U1-U15) approved, and all five recommendations taken (Decisions, "Opener
-  answers"). The plan in metres is numbers in `source/flying_whales_opener.py` (pod formation, the lead's track, the
-  camera's swing, timings; `comp OUT.jpg` draws the rough sheet); the composition sheet was sent
-  (`review/flying-whales-opener-composition.jpg`, once, rule 45). No more references needed: seven of Sam's whale refs
-  are underwater (benchmark below).
-- **Next (fresh chat, Opus high, building):** (1) the brow on every whale (`source/whale.py`, note 5: heavy, low,
-  angled down to the middle over each eye; readable on the lead's close pass at about 2.0 s); (2) the underwater set,
-  new: `source/flying_whales_under.py` (water bands by direction, the surface from below, light shafts, specks,
-  bubbles, the fish shoal), drawn for `flying_whales_opener.camera(t)`; benchmark sheet beside the refs (rule 3) and
-  a sheet to Sam; add it to `guides/kit-catalogue.md`; (3) the rig (`source/flying_whales_rig.py`, about 30 breakable
-  parts, JACKDAW board, rig sheet on the sea painting using `flying_whales_sea.CAM`); then rehearsal clips: the
-  opener's swing (1.2-4.0 s) and its rise into the cut (4.0-5.6 s), then the rig's three. Still to do: copy
-  `source/satire_template.py` to `source/flying_whales.py` (no cast).
+- **Rules that bite at the next stage (rule 48):** 8 and 33 (rehearsal clips of the risky moves before anything else:
+  the opener's swing, its rise into the cut, the rig's three hits; any falling piece on a short close clip); 16 (up and
+  to the right on both sides of the hard cut); 15 (effect shapes: the water burst, fireballs and splashes are lumpy,
+  never regular spikes); 29 (every clip shows the film time and shot in its corner); 32 (pieces land and sink
+  properly: nothing floats or balances on a point); 40 (tick the Showstopper lists U1-U15 and 1-18 at the first clips).
+- **Done (1 Nov, building, Opus high):** (1) the brow on every whale (`source/whale.py`, on by default, `brow=False`
+  for a calm whale): a heavy ridge slanting down towards the snout, standing proud of the head; plus a small white eye
+  with the pupil glaring forward (my addition: a dark dot under a dark brow merged into a blob); line check clean.
+  (2) The underwater set, `source/flying_whales_under.py`: water bands by direction, the surface from below with the
+  gold window, light shafts, specks, bubble streams on the rise, the fish shoal scattering; wired into
+  `flying_whales_opener.frame(t)`; benchmarked side by side with Sam's refs (B1-B10 all ticked; the water pushed to the
+  refs' vivid blue after the comparison); sheet sent (`review/flying-whales-underwater-sheet.jpg`). (3) The rig,
+  `source/flying_whales_rig.py`: 31 breakable pieces at real size through `flying_whales_sea.CAM`, JACKDAW board,
+  flare flame, foam at the legs, `PARENT` (what hangs on what), `part_box` (for hit tests); a moved piece is repainted
+  in perspective and cut off at the waterline; line check clean; sheet sent (`review/flying-whales-rig-sheet.jpg`:
+  whole, numbered pieces, a break test, close-up). Both new sets are in `guides/kit-catalogue.md`; rig sizes in
+  `source/sizes.py`.
+- **Next (fresh chat, Opus high: new builds are needed for the clips):** (1) copy `source/satire_template.py` to
+  `source/flying_whales.py` (no cast), wire the opener shot (`flying_whales_opener.frame`) and render rehearsal clip
+  (a), the swing, 1.2-4.0 s (`final OUT --small --span 1.2 4.0`); (2) plan the rig scene's whale paths in metres (the
+  burst out of the sea up and to the right, the five tracks, the two loops) and build the water burst, then clip (b),
+  the rise and cut, 4.0-5.6 s plus the rig scene's first second; (3) the effects (fireball and black smoke, deck fire,
+  steam, crown splash and foam rings, spike splashes, dust; the flare's smoke ribbon, Showstopper 3) and the rig's
+  three clips: the first whale through the legs; a whale through the decks with a fireball; the final tip and splash.
+  Clips need no yes; push-notify each. Start the new chat with: "Flying Whales: read the handover in
+  notes/flying-whales.md and carry on (film file, clip (a), then the rig scene's whale paths)".
 - **Tool gap:** `source/hook_text.py` can't draw colour emoji yet (the Hook Text has 🔥🔥🔥); Noto Color Emoji is
-  installed; add it before the first animatic (small, Opus medium). It is placed with `--y 352` (the upper band) and
-  stays on the whole video (`--until` the full length).
-- **Losses and my additions Sam should know about:** additions (opener, all said yes): dusk light under the sea; the
-  fish shoal; bubble trails on the rise; drifting specks. Earlier ones below. No losses.
+  installed; add it before the first animatic (small, Opus medium). Placed with `--y 352`, on for the whole video.
+- **Losses and my additions Sam should know about:** additions: the small white eye under each brow (flagged, above);
+  foam slapping round the legs; the flare's flame flickers. Not visible from our camera (not losses, just hidden): the
+  helideck's orange chute (behind the stair tower) and most of the walkway stub (behind the decks). No losses.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** 28% of the week (Sam, 1 Nov, end of the opener plan). Ask again at the next handover.
-- **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 3, 8, 16, 22, 33, 39;
-  `guides/kit-catalogue.md`; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_sea.py`,
-  `source/whale.py`; the seven underwater refs (one combined sheet).
+- **Usage budget (rule 44):** 28% of the week at the start of this stage; ask Sam for the figure now.
+- **Files to open:** this file; `guides/satire.md` ("Render", "Before every render"); `guides/film-quality-rules.md`
+  8, 15, 16, 29, 32, 33, 40; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_under.py`,
+  `source/flying_whales_rig.py`, `source/flying_whales_sea.py`, `source/whale.py`; `source/satire_template.py`.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
@@ -177,16 +184,16 @@ Composition sheet sent: 1 Nov, review/flying-whales-composition.jpg
 ## Underwater benchmark (rule 3; Sam's refs: whale-side-under, whale-side-painting, whale-rear-three-quarter, whale-pod-from-above, whale-belly-flippers, whale-throat-grooves, whale-tail-behind)
 | # | what makes it read as under the sea | ref | ours? |
 |---|------|------|------|
-| B1 | Open water, no sea bed: bright blue up top, deep navy below | rear-three-quarter, pod-from-above | |
-| B2 | The surface from below: a bright wavy ceiling broken into ripple shapes | side-under, side-painting | |
-| B3 | Light shafts fanning down from the surface | side-painting | |
-| B4 | A trail of bubbles behind a whale | pod-from-above | |
-| B5 | Distance fades whales into the blue (the far one paler, less contrast) | pod-from-above, rear-three-quarter | |
-| B6 | Lit from above: backs bright, bellies in shade, white flippers glowing | side-under, belly-flippers | |
-| B7 | Small specks and bubbles hanging in the water near the surface | side-under | |
-| B8 | Near the surface: its underside as a hard line, the whale's back just under it | tail-behind, throat-grooves | |
-| B9 | Whales blue-grey under water (never black), white flippers and bellies the brightest thing | all | |
-| B10 | Ours is dusk (Sam's yes): the same layout, the surface glowing warm gold, the water deeper teal | (our choice) | |
+| B1 | Open water, no sea bed: bright blue up top, deep navy below | rear-three-quarter, pod-from-above | yes (benchmark sheet, 1 Nov) |
+| B2 | The surface from below: a bright wavy ceiling broken into ripple shapes | side-under, side-painting | yes (benchmark sheet, 1 Nov) |
+| B3 | Light shafts fanning down from the surface | side-painting | yes (benchmark sheet, 1 Nov) |
+| B4 | A trail of bubbles behind a whale | pod-from-above | yes (benchmark sheet, 1 Nov) |
+| B5 | Distance fades whales into the blue (the far one paler, less contrast) | pod-from-above, rear-three-quarter | yes (benchmark sheet, 1 Nov) |
+| B6 | Lit from above: backs bright, bellies in shade, white flippers glowing | side-under, belly-flippers | yes (benchmark sheet, 1 Nov) |
+| B7 | Small specks and bubbles hanging in the water near the surface | side-under | yes (benchmark sheet, 1 Nov) |
+| B8 | Near the surface: its underside as a hard line, the whale's back just under it | tail-behind, throat-grooves | yes (benchmark sheet, 1 Nov) |
+| B9 | Whales blue-grey under water (never black), white flippers and bellies the brightest thing | all | yes (benchmark sheet, 1 Nov) |
+| B10 | Ours is dusk (Sam's yes): the same layout, the surface glowing warm gold, the water deeper teal | (our choice) | yes (benchmark sheet, 1 Nov) |
 
 ## Opener questions (sent to Sam 1 Nov; each with my recommendation; all answered, see Decisions)
 1. Underwater references (rule 3): none yet. Recommend: Sam sends 4-6 (Blue Planet humpbacks in open blue water from
@@ -208,8 +215,8 @@ Composition sheet sent (opener): 1 Nov, review/flying-whales-opener-composition.
 | whale-tail-behind, whale-rear-three-quarter, whale-pod-from-above | from behind: wide notched flukes with a ragged back edge, a spine ridge, flippers out to the sides | |
 | whale-patterns-below | belly and fluke undersides from nearly all black to nearly all white: one per whale | |
 | fly-painting-dive, whale-breach-* | arched body, flipper held out like a wing, water streaming off | |
-| rig-jackdaw-* (5) | yellow lattice legs with X bracing; three or four boxy storeys with railings; helipad out to one side over an orange chute; tall crane; yellow name board; grey, white, red, orange, blue accents | |
-| rig-night-*, rig-sunset-pipes, rig-legs-walkway-dusk | flare on a long boom with flame and smoke; chimneys; rows of warm lights at dusk; walkway bridge | |
+| rig-jackdaw-* (5) | yellow lattice legs with X bracing; three or four boxy storeys with railings; helipad out to one side over an orange chute; tall crane; yellow name board; grey, white, red, orange, blue accents | yes (rig sheet 1 Nov); the chute is there but hidden behind the stair tower from our camera |
+| rig-night-*, rig-sunset-pipes, rig-legs-walkway-dusk | flare on a long boom with flame and smoke; chimneys; rows of warm lights at dusk; walkway bridge | yes, except the flare's smoke ribbon (comes with the effects); the walkway is a stub, mostly hidden |
 | collapse-rig-tilting, -sinking | deck tips as one block, one end under, the other high; cranes stay attached | |
 | collapse-rig-crumpled | one end collapsed: bracing tangled, deck sagging there, the rest standing | |
 | collapse-cranes-fireball, collapse-dust | fireballs bursting from the sides, smoke in separate dark clumps above, flying bits; beige-grey dust billows with chunks | |
@@ -218,12 +225,14 @@ Composition sheet sent (opener): 1 Nov, review/flying-whales-opener-composition.
 | dusk-pink-sky-rig, dusk-sunset-waves | purple top, pink, orange at the horizon; streaky clouds lit from below; sea mirroring the sky in bands; warm streaks under the lights | |
 Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one duplicate dusk photo.
 
-## My additions (flag to Sam; none built yet)
+## My additions (flag to Sam)
 - Whales flying on out of frame after their hit (the brief says "no harm"; it doesn't say where they go).
 - A one- or two-frame freeze on each contact, and camera shake.
 - Lifeboats popping off and crane whipping (set life in the collapse).
 - Sky and sea (1 Nov): seven clouds lit from below; the sun just set left of frame (so the rig is side-lit, not a
   silhouette); a glitter path of gold flecks under the sunset; low wave caps in front (Decisions: "warm wave caps").
+- A small white eye under each brow, the pupil glaring forward (1 Nov; the dark eye merged with the dark brow).
+- Foam slapping round the rig's legs; the flare's flame flickers (1 Nov).
 - The whales are slate blue-grey, not near-black (so the outline still reads at dusk and the line check can tell skin
   from ink); names for the five patterns (Inky, Blaze, Freckle, Bib, Ghost) are labels on the sheet only.
 
@@ -232,9 +241,9 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 |---|------|------|------|--------|
 | 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | done: sky and sea painted at dusk |
 | 2 | whale sheet | | "Things look great so far" (Sam, 1 Nov): the whale approved | done |
-| 3 | opening | | the opening scene brief (checklist O1-O11) | planned and approved (U1-U15); to build |
+| 3 | opening | | the opening scene brief (checklist O1-O11) | set built (flying_whales_under.py); clips next |
 | 4 | rig | | "zooming, looping, attacking whales" (O10) | Sam: yes, two whales loop (Showstopper 17) |
-| 5 | all | | angry whales: a heavy low brow (Sam's yes) | open: change whale.py |
+| 5 | all | | angry whales: a heavy low brow (Sam's yes) | done: whale.py brow (+ small white eye, flagged) |
 
 Decisions made:
 - Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more
