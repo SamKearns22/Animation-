@@ -265,8 +265,8 @@ def stare(t):
 def look(who, t):
     """Where each one's pupils point (-1 our left .. 1 our right), from the plan's clock: see the notes' eyeline list."""
     if who == 'claudia':
-        if t < LINE[2]['_speech'][0]:
-            return -0.5                                   # between Bash and Romesh (both to her right, our left)
+        if t < LINE[2]['_speech'][0]:                     # shot 1: between them, a look per phrase (animatic 1 note 2)
+            return -0.3 if claudia_asks(t) == 'romesh' else -0.75
         if t < LINE[3]['_speech'][0] - 0.3:
             return -0.7                                   # Bash
         if t < T_ASK_EYES:
@@ -297,9 +297,19 @@ def look(who, t):
     return 0.0
 
 
+def claudia_asks(t):
+    """Shot 1: whom Claudia's eyes are on: Romesh, Bash, Romesh, Bash, Romesh, one per phrase of her question (each
+    move a little before the phrase starts)."""
+    ln = LINE[1]
+    k = sum(1 for a, _ in ln['_stretches'][1:] if t >= ln['start'] + a - 0.15)
+    return ('romesh', 'bash')[k % 2]
+
+
 def looking_at(who, t):
     """Who each one is looking at (the eyeline check's target), matching look() above."""
     if who == 'claudia':
+        if t < LINE[2]['_speech'][0]:
+            return claudia_asks(t)
         return 'bash' if t < LINE[3]['_speech'][0] - 0.3 else 'romesh' if t < T_ASK_EYES else 'patriot'
     if who in ('bash', 'romesh'):
         other = 'romesh' if who == 'bash' else 'bash'
@@ -346,9 +356,11 @@ def state(who, t):
     else:
         k = stare(t)
         if t >= T_NARROW:
-            sp['narrow'] = True
+            sp['brows'], sp['lid'] = 'fierce', 3            # the library's own narrowed eyes (Patriots 3's 'cross')
         elif k is not None:
-            sp['stare'] = k
+            sp['stare'] = k                               # in the library's eye style (animatic 1 note 5)
+            sp['brow_c_real'] = sp.get('brow_c', tuple(int(v * 0.8) for v in sp.get('hair_c', (60, 44, 34))))
+            sp['brow_c'] = sp['skin']                     # the library's own brows hidden under the raised ones
         j = point_at_them(sp) if t >= T_POINT else V.standing(sp)
     j['bob'] = 3.0 * F.breath(t, 4.0, 1.0, WHO.index(who) * 0.27)
     return sp, j
@@ -435,12 +447,12 @@ def arms_mask(pc, who, j2, sp):
         # fixed 1 Nov, the extra * SS put every hand over the table at twice its place in full-quality renders)
         dx, dy = pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]
         n = math.hypot(dx, dy) or 1.0
-        hand = (pts[1][0] + dx / n * 26 * s2 * z, pts[1][1] + dy / n * 26 * s2 * z)
+        hand = (pts[1][0] + dx / n * 12 * s2 * z, pts[1][1] + dy / n * 12 * s2 * z)   # the circle hand's own centre
         d.line([pts[0], pts[1]], fill=255, width=int(64 * s2 * z))
-        r = 34 * s2 * z
+        r = 28 * s2 * z                    # the hand and its outline only (bigger showed a rim of sleeve: animatic 1)
         d.ellipse((hand[0] - r, hand[1] - r, hand[0] + r, hand[1] + r), fill=255)
         if j2.get('hand', {}).get(side) == 'point':              # the pointing finger too (shot 12)
-            tip = (hand[0] + dx / n * 90 * s2 * z, hand[1] + dy / n * 90 * s2 * z)
+            tip = (hand[0] + dx / n * 104 * s2 * z, hand[1] + dy / n * 104 * s2 * z)
             d.line([hand, tip], fill=255, width=int(30 * s2 * z))
     return m
 
@@ -452,62 +464,6 @@ def shoulder(img, who, x, y, s):
     cam.S = lambda v: v * B.SS
     sp = dict(CAST[who], mouth='rest')
     PC.person(img, cam, x, y, s, sp, 0.0, 180)
-
-
-def pointing_arm(img):
-    """Shot 13: the Patriot's right arm from his shoulder in the corner, still out straight with its finger at Bash
-    (over his shoulder, as he points in shot 12)."""
-    k, ox, oy = 1.9, 1200.0, 1600.0               # near the lens: his arm drawn 1.9 times life, from his shoulder
-    cam = B.Cam(1.0, 540, 960)
-    cam.P = lambda a, b: ((ox + a * k) * B.SS, (oy + b * k) * B.SS)
-    cam.S = lambda v: v * k * B.SS
-    p = B.Pen(img, cam)
-    sp = CAST['patriot']
-    sh, el, wr = (0.0, 0.0), (-51.0, -122.0), (-102.0, -243.0)   # straight, aimed at Bash's face (clear of his hands)
-    B.arm(p, sh, el, wr, sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
-    B.gesture_hand(p, el, wr, 'point', sp.get('glove', sp['skin']))
-
-
-def on_screen(t, pc=None):
-    """Who is drawn in this frame."""
-    pc = pc or pancam(t)
-    on = [w for w in WHO if visible(w, pc)]
-    if t < 25.6:
-        on = [w for w in on if w != 'patriot']            # never in shot before the reveal (brief 10)
-    return on
-
-
-def scene(t):
-    """The solids for the collision and pop-in tests: each person on screen at their mark on the plan (metres), as a
-    simple figure (their hands rest on the table: ALLOWED_CONTACTS); the table and every THING come from PLAN."""
-    import audit
-    out = []
-    for who in on_screen(t):
-        x, z = PL.PEOPLE[who]['at']
-        h = PC.HEIGHTS.get(CAST[who].get('name', ''), 1.75)
-        out.append(audit.Thing(who, audit.simple(who, x, z, height=h, facing=(-x, -z))))
-    return out
-
-
-def audits():
-    """The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching,
-    frozen), and the eyelines. Returns faults."""
-    def alone(who):
-        def draw(t):
-            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-            draw_person(lay, pancam(t), who, t)
-            return lay
-        return draw
-    actors = {}
-    for who in WHO:
-        for shot, a, b in SHOTS:
-            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if who in on_screen(i / FPS)]
-            if ts:
-                actors[f'{who} [{shot}]'] = (ts, alone(who))
-    filmkit.EYES.clear()
-    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
-    faults += filmkit.check_eyelines(allow=[('patriot', 44.8, DUR, 'ahead in the awkward silence, then at both as he points')])
-    return faults
 
 
 def picture(t):
@@ -534,8 +490,6 @@ def picture(t):
     s = shot_of(t)
     if s in ('his view', 'reaction'):
         shoulder(img, 'patriot', 1060, 1720, 1.6)
-    if s == 'reaction':
-        pointing_arm(img)
     if s in ('patriot 2', 'traitors'):            # in both, so they never appear from nowhere (animatic 1 note 3)
         shoulder(img, 'bash', 70, 1830, 1.6)
         shoulder(img, 'romesh', 1030, 1830, 1.6)

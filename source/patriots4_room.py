@@ -103,27 +103,46 @@ def lattice(p, x0, x1, y0, y1, step=34, glow=GLOW):
             p.line([a, b], LATTICE, 5.0)
 
 
-def panels(p, x0, x1, seed=0):
+def panels(p, x0, x1, seed=0, top=None, frieze=None, bot=None, k=1.0):
     """Tall dark wooden panels from the floor to the frieze (refs 09, 10, 12): a framed panel per 80 px, the frame
-    lighter, the inner panel with a moulding; a lattice frieze along the top, a rail below it."""
-    top, frieze, bot = wy(4.2), wy(3.5), wy(0.0)
+    lighter, the inner panel with a moulding; a lattice frieze along the top, a rail below it. top / frieze / bot and
+    the scale k draw the same wall further off (the Round Table end of the room: one style throughout, Sam 1 Nov)."""
+    top = wy(4.2) if top is None else top
+    frieze = wy(3.5) if frieze is None else frieze
+    bot = wy(0.0) if bot is None else bot
+    mid = bot - (bot - top) * 2.2 / 4.2
+    pw = 80.0 * k
     p.poly([(x0, top), (x1, top), (x1, bot), (x0, bot)], WOOD, None)
-    lattice(p, x0, x1, top + 20, frieze, 30, (120, 50, 30))
-    p.poly([(x0, frieze), (x1, frieze), (x1, frieze + 26), (x0, frieze + 26)], WOOD_L, INK, 2.2)
-    i0 = int(math.floor(x0 / 80.0))
-    for i in range(i0, int(math.ceil(x1 / 80.0)) + 1):
-        x = i * 80.0
-        if x + 80 < x0 or x > x1:
+    lattice(p, x0, x1, top + 20 * k, frieze, max(10, 30 * k), (120, 50, 30))
+    p.poly([(x0, frieze), (x1, frieze), (x1, frieze + 26 * k), (x0, frieze + 26 * k)], WOOD_L, INK, 2.2)
+    i0 = int(math.floor(x0 / pw))
+    for i in range(i0, int(math.ceil(x1 / pw)) + 1):
+        x = i * pw
+        if x + pw < x0 or x > x1:
             continue
-        a, b = max(x0, x + 6), min(x1, x + 74)
-        if b - a < 10:
+        a, b = max(x0, x + 6 * k), min(x1, x + 74 * k)
+        if b - a < 10 * k:
             continue
-        p.poly(rough([(a, frieze + 40), (b, frieze + 40), (b, bot - 10), (a, bot - 10)], 2, seed + i), WOOD_L, INK, 2.0)
-        if b - a > 30:
-            p.poly(rough([(a + 12, frieze + 58), (b - 12, frieze + 58), (b - 12, bot - 28), (a + 12, bot - 28)], 2,
-                         seed + i + 500), WOOD, WOOD_D, 1.6)
-            p.line([(a + 12, wy(2.2)), (b - 12, wy(2.2))], WOOD_D, 1.6)       # the panel's middle rail
+        p.poly(rough([(a, frieze + 40 * k), (b, frieze + 40 * k), (b, bot - 10 * k), (a, bot - 10 * k)], 2 * k, seed + i),
+               WOOD_L, INK, 2.0)
+        if b - a > 30 * k:
+            p.poly(rough([(a + 12 * k, frieze + 58 * k), (b - 12 * k, frieze + 58 * k), (b - 12 * k, bot - 28 * k),
+                          (a + 12 * k, bot - 28 * k)], 2 * k, seed + i + 500), WOOD, WOOD_D, 1.6)
+            p.line([(a + 12 * k, mid), (b - 12 * k, mid)], WOOD_D, 1.6)       # the panel's middle rail
     p.line([(x0, top), (x1, top)], INK, 2.4)
+
+
+def receding(p, xo, xi, far):
+    """A side wall turning the corner from the near walls (at xo, full height) to the far wall (at xi, `far` = its
+    top, frieze, bottom): the same wood, frieze band and panel lines, narrowing away from us."""
+    near = (wy(4.2), wy(3.5), wy(0.0))
+    lerp = lambda f, j: near[j] + (far[j] - near[j]) * f
+    p.poly([(xo, near[0]), (xi, far[0]), (xi, far[2]), (xo, near[2])], WOOD, INK, 2.0)
+    p.poly([(xo, near[0] + 20), (xi, far[0] + 6), (xi, far[1]), (xo, near[1])], (120, 50, 30), INK, 1.6)
+    p.poly([(xo, near[1]), (xi, far[1]), (xi, far[1] + 8), (xo, near[1] + 26)], WOOD_L, INK, 1.8)
+    for f in (0.12, 0.3, 0.46, 0.6, 0.72, 0.83, 0.92):           # panel edges, closer together further off
+        x = xo + (xi - xo) * f
+        p.line([(x, lerp(f, 1) + 30 * (1 - f) + 10), (x, lerp(f, 2) - 10 * (1 - f) - 3)], WOOD_D, 1.8)
 
 
 def flame(p, x, y, w, h, t, seed=0):
@@ -269,17 +288,22 @@ def round_table_room(p, img, x, t):
     import traitors as TR
     half, bot = 600.0, wy(0.0)
     hall_floor = HORIZON + 1.5 * 70
-    p.poly([(x - half, -600), (x + half, -600), (x + half, hall_floor), (x - half, hall_floor)], (36, 26, 20), None)
     sub = B.Cam(p.cam.z, p.cam.cx, p.cam.cy)
-    TR.wall(img, sub, x - half, x + half, wy(4.2), hall_floor, seed=7, panel_w=110,   # up to the shared ceiling
-            lamps=[(x - 300, HORIZON - 70), (x + 300, HORIZON - 70)])
+    k, W = 110.0 / WALL_PX, 150.0                                # the far wall's scale; the side walls' turn
+    far = (HORIZON - 2.7 * 110, HORIZON - 2.0 * 110, hall_floor)  # its top, frieze, foot (10.5 m off)
+    p.poly([(x - half, -600), (x + half, -600), (x + half, far[0]), (x - half, far[0])], (36, 22, 14), None)   # ceiling
+    panels(p, x - half + W, x + half - W, seed=7, top=far[0], frieze=far[1], bot=far[2], k=k)
     p.poly([(x - half, hall_floor), (x + half, hall_floor), (x + half, bot + 6), (x - half, bot + 6)], FLOOR, None)
-    p.line([(x - half, hall_floor), (x + half, hall_floor)], INK, 2.0)
     y, gap = hall_floor, 8.0
-    while y < bot:                                                # the same boards as the winner's room floor
+    while y < bot:                                                # the same boards as the near floor
         y += gap
         gap *= 1.35
         p.line([(x - half, min(y, bot)), (x + half, min(y, bot))], (54, 38, 26), 1.8)
+    receding(p, x - half, x - half + W, far)                      # the side walls turning the corner: one room
+    receding(p, x + half, x + half - W, far)
+    for sg in (-1, 1):                                            # the ceiling's edge over each
+        p.poly([(x + sg * half, wy(4.2)), (x + sg * (half - W), far[0]), (x + sg * (half - W), far[0] - 4),
+                (x + sg * half, wy(4.2) - 4)], (36, 22, 14), INK, 1.6)
     ppm = 230.0                                                   # pixels per metre at the table (5 m off)
     rx, ry, thick = 2.25 * ppm, 0.15 * 2.25 * ppm, 0.07 * ppm
     tx, ty = x + 20, HORIZON + (1.5 - 0.78) * ppm

@@ -159,6 +159,13 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 10 | all | | (animatic 1) The swings look like the table spinning, not the camera: jump cuts are fine | done 1 Nov: plain cuts (`PANS` empty; shots 2-5 held at their person, the table's edge) |
 | 11 | 13 | 48.2 s | (animatic 1) No widening at the end: just looking at each other | done 1 Nov: no dropped mouths; eyes slide to each other at 48.6 s and hold |
 | 12 | 11-12 | 44.8 s | (animatic 1) R and B appear suddenly in the pointing shot: camera out a little so they are always in shot | done 1 Nov: shots 11 and 12 share one framing (zoom 1.0), Bash's and Romesh's backs in the corners of both |
+| 13 | all | | (animatic 1) Claudia is round-faced; she is thin-faced | done 1 Nov: cause found: her new face's jaw was pushed 15x to win the likeness scorer, and her hair curtains framed a wide block. Sam chose The Traitors film's Claudia face (`traitors_cast.claudia_head`), kept with this film's outfit |
+| 14 | 1 | 0-7 s | Claudia's eyes move between Bash and Romesh | done 1 Nov: one look per phrase, Romesh / Bash / Romesh / Bash / Romesh (`claudia_asks`) |
+| 15 | 2-13 | | Orange/blue bubble round the hands on the table | done 1 Nov: the patch copied back over the table was bigger than the hand (a rim of sleeve): now the hand only |
+| 16 | 3 | | Romesh's glasses' lines flicker as he talks | done 1 Nov: thicker ink outline round the clear frames (5.8, was 4.0) |
+| 17 | 5-11 | 26.4 s | The Patriot's eyes change style at the stare: keep the original | done 1 Nov: the stare drawn in the library's own eye style (almond, outline, lid line, straight brows), bigger as it grows; "Traitors." uses the library's fierce brows and lid |
+| 18 | 9, 13 | 38 s | The frame between the rooms is back: one room, one wall style (REPEAT of note 5) | done 1 Nov: why the first fix failed: posts gone but the hall wall kept The Traitors film's style and met the room's wall at a hard edge, seen in shot 9 (I checked only shot 3). Now the far wall is this room's panels (`panels(..., k)`), the side walls turn the corner to it (`receding`); the hall lamps are gone (loss) |
+| 19 | 13 | 49 s | "This is terrible" (the Patriot's foreground pointing arm) | done 1 Nov: removed (my addition); his shoulder stays in the corner |
 | 9 | 12, 13 | 48 s | "We don't get to see R and B's reactions" | done 1 Nov: shot 13 (my proposal, Sam's yes) |
 | 8 | 1, 5, 9, 11, 12 | | (sent mid-work) All the other table shots closer too: camera at the table's edge, no empty floor round it | done 1 Nov: same camera as 2-4 (close-ups 6, 7, 8, 10 already fill with table); shot 9 at 1.08 with Romesh and Bash cheated a little closer (230 and 253 degrees, was 227 and 256) so both fit, hands and all |
 

@@ -64,7 +64,8 @@ TUNE = {   # per measure, an extra push where the first check found the drawing 
     'romesh': dict(jaw_wide=1.0, nose_wide=2.0, eye_size=2.0, forehead_wide=1.0, lip_low=3.0, philtrum=2.0,
                    brow_slope=1.8, eyes_apart=4.5, brow_high=0.0, nose_long=1.5),   # searched, 1 Nov (series look)
     'bash': dict(jaw_wide=3.0, philtrum=2.0, brow_slope=1.5, eye_size=1.4, nose_wide=2.0, eye_open=1.4, brow_high=1.3),
-    'claudia': dict(jaw_wide=15.0),        # the face finder pulls a drawn jaw back towards the average
+    'claudia': dict(face_wide=2.4, jaw_wide=-3.0),   # Sam, 1 Nov: she is thin-faced (the jaw x15 pushed for the
+                                                     # face finder's score made her round)
 }
 
 
@@ -204,7 +205,7 @@ R_BEARD = (78, 72, 72)
 R_MOUST = (34, 30, 32)
 R_GREY = (176, 172, 168)
 R_FRAME = (214, 212, 206)
-RIM = [4.0, 2.6]                 # clear frames: (outline, frame) widths
+RIM = [5.8, 2.8]                 # clear frames: (outline, frame) widths (thicker ink: they shimmered as he talked)
 R_LIP = (150, 92, 84)
 R_RUST = (190, 88, 42)
 R_TEAL = (36, 96, 104)
@@ -401,6 +402,10 @@ CREAM = (240, 230, 208)
 GOLD = (214, 172, 78)
 
 
+CL_TAPER = 0.62     # the hair curtains' inner edge at the jaw, as a share of the face's width (thin face: Sam)
+CL_CHIN = 0.26
+
+
 def claudia_head(img, p, sp, t, hx, hy):
     """Claudia's face from her measurements (the Traitors film's head failed the likeness check: 35%, 3rd in the
     line-up), keeping that head's look: the heavy blunt fringe to just above the eyes, long straight black curtains past
@@ -408,7 +413,7 @@ def claudia_head(img, p, sp, t, hx, hy):
     L = layout(target('claudia', sp.get('average', False)))
     f = Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
     skin = TC.C_SKIN
-    out = curve(f.pts(outline_uv(L, 0.36)), 4)
+    out = curve(f.pts(outline_uv(L, CL_CHIN)), 4)
     p.poly(out, skin, INK, 2.6)
     w = L['ew'] * H / 2
     h = L['eh'] * H / 1.8 * (1 + 0.55 * sp.get('wide', 0.0))
@@ -427,9 +432,9 @@ def claudia_head(img, p, sp, t, hx, hy):
     hair = [(-0.16, 1.85), (-fw * 0.5 - 0.24, 1.85), (-fw * 0.5 - 0.19, 1.0), (-fw * 0.5 - 0.13, 0.25),
             (-fhw * 0.5 - 0.09, -0.1), (-fhw * 0.5 * 0.7, -0.27), (0.0, -0.31), (fhw * 0.5 * 0.7, -0.27),
             (fhw * 0.5 + 0.09, -0.1), (fw * 0.5 + 0.13, 0.25), (fw * 0.5 + 0.19, 1.0), (fw * 0.5 + 0.24, 1.85),
-            (0.16, 1.85), (fw * 0.5 * 0.86, 0.9), (fw * 0.5 + 0.005, 0.5), (fw * 0.5 - 0.01, fr + 0.05),
+            (0.16, 1.85), (fw * 0.5 * CL_TAPER, 0.9), (fw * 0.5 + 0.005, 0.5), (fw * 0.5 - 0.01, fr + 0.05),
             (fw * 0.3, fr), (0.0, fr + 0.008), (-fw * 0.3, fr), (-fw * 0.5 + 0.01, fr + 0.05),
-            (-fw * 0.5 - 0.005, 0.5), (-fw * 0.5 * 0.86, 0.9)]
+            (-fw * 0.5 - 0.005, 0.5), (-fw * 0.5 * CL_TAPER, 0.9)]
     p.poly(f.pts(hair), TC.C_HAIR, INK, 2.6)
     for k in range(9):                                 # the fringe's blunt ends and a sheen across the crown
         u = -fw * 0.42 + k * fw * 0.105
@@ -456,51 +461,42 @@ def claudia4_torso(img, p, sp, t):
 
 # ---------------------------------------------------------------------------------------------- the Patriot's eyes
 def patriot_eyes(p, view, sp, hx, hy):
-    """The Patriot's eyes for this film, drawn in his balaclava's eye slot over the library's (front view only):
-    sp['stare'] 0..6 = the wide-eyed stare's strength (the numbered strength sheet; Sam picks one), sp['narrow'] =
-    the narrowed, accusing eyes of "Traitors.", sp['look'] -1..1 = where the pupils point (across)."""
-    k, narrow = sp.get('stare'), sp.get('narrow', False)
-    if view != 'front' or (k is None and not narrow):
+    """The Patriot's wide-eyed stare, drawn in the library's own eye style (Sam, 1 Nov: "I prefer the first style, the
+    original"): burnham's almond eye with its ink outline, lid line and round pupil, and the library's straight brows,
+    only bigger and raised as the stare grows. sp['stare'] 1..4 = its strength; sp['look'] -1..1 where the pupils point.
+    The library has already drawn its own eyes and (hidden: brow_c set to the skin by the film) brows underneath; these
+    cover them. The narrowed eyes of "Traitors." are the library's own (brows 'fierce', lid 3)."""
+    k = sp.get('stare')
+    if view != 'front' or k is None:
         return
+    k = float(k)
     hw = sp.get('hw', 76)
     fx = hx + sp.get('turn', 0.0) * hw * 0.22
-    slot = [(fx - 60, hy - 42), (fx + 56, hy - 42), (fx + 58, hy + 10), (fx - 62, hy + 10)]
-    sc = curve(P3.rough(slot, 2, 9), 3)
-    p.poly(sc, P3.P_SKIN, None)
-    k = 0.0 if k is None else float(k)
     look = sp.get('look', 0.0)
-    bc, bw = sp.get('brow_c', (104, 74, 54)), sp.get('brow_w', 4.4)
+    bc, bw = sp.get('brow_c_real', (104, 74, 54)), sp.get('brow_w', 3.2)
+    sx, sy = 1.0 + 0.06 * k, 1.0 + 0.2 * k                  # wider a little, taller a lot: the eyes widen
     for sgn in (-1, 1):
-        ex, ey = fx - 4 + sgn * 30, hy - 10
+        ex, ey = fx - 4 + sgn * 30, hy - 8
         if sp.get('blink'):
             p.line([(ex - 16, ey), (ex, ey + 3), (ex + 16, ey)], INK, 2.4)
         else:
-            w = 17 + 1.0 * k
-            up, lo = (3.5, 3.0) if narrow else (7 + 2.3 * k, 6 + 1.6 * k)
-            us = np.linspace(-1, 1, 15)
-            top = [(ex + w * u, ey - up * (1 - u * u)) for u in us]
-            bot = [(ex + w * u, ey + lo * (1 - u * u)) for u in us]
-            opening = top + bot[::-1][1:-1]
-            p.poly(opening, (250, 250, 247), None)
-            r = 5.8 - 0.42 * k if not narrow else 4.6
-            cx, cy = ex + look * w * 0.5, ey + (lo - up) * 0.15
-            circ = [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
-            ir = TC.clip_convex(opening[::-1], circ)
+            top = [(ex - 17 * sx, ey), (ex - 8 * sx, ey - 8 * sy), (ex + 8 * sx, ey - 8 * sy), (ex + 17 * sx, ey)]
+            bot = [(ex - 17 * sx, ey), (ex - 8 * sx, ey + 7 * sy), (ex + 8 * sx, ey + 7 * sy), (ex + 17 * sx, ey)]
+            almond = top + bot[::-1][1:-1]
+            p.poly(almond, (250, 250, 248), INK, 2.0)
+            cx, cy = ex + look * 7 * sx, ey + 1
+            circ = [(cx + 4.5 * math.cos(a), cy + 4.5 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24, endpoint=False)]
+            ir = TC.clip_convex(almond[::-1], circ)
             if len(ir) >= 3:
                 p.poly(ir, INK, None)
-            p.line(bot, dk(P3.P_SKIN, 0.7), 1.4)
             p.line(top, INK, 2.6)
-        if narrow:                                     # inner ends pulled hard down: accusing
-            p.line([(ex - sgn * 8, ey - 8), (ex + sgn * 8, ey - 16), (ex + sgn * 22, ey - 20)], bc, bw * 1.2)
-        else:
-            lift = min(1.2 * k, 6)               # the brows stay inside the slot
-            p.line([(ex - sgn * 6, ey - 20 - lift), (ex + sgn * 6, ey - 24 - lift * 1.1), (ex + sgn * 20, ey - 21 - lift * 0.7)],
-                   bc, bw)
-    p.poly(sc, None, INK, 2.2)
+        lift = 1.6 * k                                        # the library's straight brow, raised with the stare
+        p.line([(ex - sgn * 6, ey - 22 - lift), (ex + sgn * 20, ey - 20 - lift * 0.3)], bc, bw)
 
 
 # ---------------------------------------------------------------------------------------------- the hooks
-TC.HEADS.update(romesh=romesh_head, bash=bash_head, claudia4=claudia_head)
+TC.HEADS.update(romesh=romesh_head, bash=bash_head,
+                claudia4=TC.claudia_head)   # Sam, 1 Nov: The Traitors film's Claudia face (thin), this film's outfit
 TC.TORSOS.update(romesh=romesh_torso, bash=bash_torso, claudia4=claudia4_torso)
 _hair_back = B.hair_back
 
@@ -587,9 +583,10 @@ def sheet(out):
     for i, (who, yaw, build, label) in enumerate(row):
         sp = dict(CAST[who], mouth='rest')
         if who == 'patriot' and build is not None:
-            sp['narrow'] = True
+            sp['brows'], sp['lid'] = 'fierce', 3
         elif who == 'patriot' and yaw == 0:
             sp['stare'] = 3
+            sp['brow_c_real'], sp['brow_c'] = sp.get('brow_c', (104, 74, 54)), sp['skin']
         lay = Image.new('RGBA', (740, 980), (0, 0, 0, 0))     # wide: the pointing hands reach far out
         s2 = P3.scale_for(sp, s)
         if i == 0:
