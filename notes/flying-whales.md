@@ -18,7 +18,7 @@
   (`whale.py check`); mirror test done (side view from its left has the nose to the left; from below its left is on
   screen right, as in the ref). Sheet sent: `review/flying-whales-whale-sheet.jpg`. Draw time about 0.4 s a whale at
   540 wide; a 12 s shot with five whales should render in under 10 minutes.
-- **Next:** wait for Sam's yes on the whale sheet (step 3). Then (same stage, Opus high): copy
+- **Next (fresh chat, Opus high; the rig is a new build):** Sam has not yet said yes to the whale sheet; his notes or yes come first (step 3). Then (same stage, Opus high): copy
   `source/satire_template.py` to `source/flying_whales.py` with no cast (step 1, held back: nothing needed it for the
   whale); the rig (`source/flying_whales_rig.py`): Jackdaw from the diagonal, about 30 breakable parts, JACKDAW name
   board; rig sheet beside a whale at real size (`whale.draw` with the film's camera). Then the dusk sky and sea, then
@@ -26,7 +26,7 @@
 - **Losses and my additions Sam should know about:** additions listed below (whales fly on out of frame, a freeze on
   each contact, lifeboats and crane whip; the whale's slate blue-grey and the pattern names). No losses.
 - **Rule requests and proposals not yet in a guide:** none (searched this file).
-- **Usage budget (rule 44):** ask Sam for this week's figure at the start of the next chat and log it here.
+- **Usage budget (rule 44):** 24% of the week used at the end of the whale stage (Sam, 1 Nov). Ask again at the start of the rig chat.
 - **Files to open:** this file; `guides/satire.md`; `guides/film-quality-rules.md` 8, 22, 32-34, 39, 40;
   `guides/kit-catalogue.md`; the references.
 
