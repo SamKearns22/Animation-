@@ -13,28 +13,24 @@
   The film file `source/patriots4.py` (from the template): 12 shots, 49.0 s; recordings placed; subtitle chunks on the
   recording's own stretches; mouths per stretch (`parts`); plan checks clean; `plan.py` clean. Stills sheet sent:
   `review/patriots4-stills.jpg` (`python3 source/patriots4.py sheet OUT.jpg`).
-- **Next (READING SAM'S NOTES on the stills, Opus MEDIUM, fresh chat):** take Sam's notes in one batch; apply them
-  (building from a clear plan: Opus medium). Then pre-flight (`python3 source/preflight.py patriots4 OUT_DIR`: the
-  brief checklist must be ticked first; `scene(t)`, `layers(t)` and the audits are NOT yet written: copy the
-  template's flat `scene()` and add them), the check sheet, and the animatic only on Sam's clear yes.
-- **SAM'S NOTES ON THE STILLS (1 Nov, notes table 1-4): apply them first (Opus medium).**
-  - **Note 1, the winner's table is 50% smaller:** a pedestal with a flat top, not a wide table. How I understood it:
-    the table top's width (`patriots4_room.TABLE_RX/RY`, the plan's `winner's table` 1.3 m) halves (about 0.65 m
-    across); the coin pile then covers most of its top (ref 02 shows exactly that: a stepped pyramid of coin stacks
-    almost to the rim); show the pedestal/turned legs below the top where the frame shows them. Knock-on to decide:
-    the people stand 0.95 m from the centre, so with a 0.33 m radius their hands cannot rest on it: move them in
-    (`patriots4_plan.R`, `patriots4_room.ANGLES` unchanged) or change the hands to resting at their sides / on the
-    rim; say which to Sam. Sam named "the reference that looks from above": ref 12 as filed shows only the arch from
-    above (no table) and refs 02-03 are not overhead, so ASK Sam which picture he means (or for it), before drawing.
-  - **Note 2, the Round Table through the opening behind Romesh (shot 3) floats:** give it its legs/base down to the
-    hall floor, the floor clearly under it, and at least four chairs at the compass points (`traitors.chair_back`, or
-    a small seated-chair drawing); `patriots4_room.round_table_room`.
-  - **Note 3:** no words before "Romesh": voices.py's 0.9-1.6 s flag is a false alarm (Claudia draws the name out):
-    list it as meant. The "Errrr" flag (44 syllables heard, 1 written) is meant too (one held sound).
-  - **Still to ask:** the dead silence before the "Errrr" (25.8 s) and after it fades (44.8 s): meant (brief 17),
-    recommended: keep (Sam has not said otherwise).
+- **Done (1 Nov, applying the stills notes, Opus medium):** notes 1-3 applied (table below); new stills sheet
+  `review/patriots4-stills.jpg` sent. Plan check clean.
+- **Next (Opus medium, building from a clear plan):** Sam looks at the new stills (and answers the open question on
+  note 1). Then pre-flight (`python3 source/preflight.py patriots4 OUT_DIR`: the brief checklist must be ticked first;
+  `scene(t)`, `layers(t)` and the audits are NOT yet written: copy the template's flat `scene()` and add them), the
+  check sheet, and the animatic only on Sam's clear yes.
+- **Open question (note 1):** Sam named "the reference that looks from above"; ref 12 as filed shows only the arch
+  and two people leaving (no table). Built from the brief and refs 01-03 instead; asked Sam to send the overhead
+  picture if he meant another one.
+- **Still to ask:** the dead silence before the "Errrr" (25.8 s) and after it fades (44.8 s): meant (brief 17),
+  recommended: keep (Sam has not said otherwise).
 - **Losses, cheats and my additions:** shot 9 is a film cheat: Romesh and Bash are drawn closer together (227 and 256
-  degrees, not 210 and 270) so both faces are big enough for the eye slide; shot 12 shows the backs of Bash's and
+  degrees, not 210 and 270) so both faces are big enough for the eye slide; note 1's knock-ons: the people's legs now show
+  under and beside the small table (they stand behind it), the floor of the winner's room is painted (dark boards:
+  my addition, needed now the table no longer fills the frame's foot), the coins are 86% the size and 5 scattered
+  coins instead of 9 (loss), the pedestal's lit floor ring is drawn but below the frame in every shot; on the plan the
+  four stand 0.6 m from the centre, not 0.95 (no change on screen). Note 2's chairs are 4 (N, E, S, W; my choice of
+  the minimum Sam asked). Shot 12 shows the backs of Bash's and
   Romesh's heads in the bottom corners so the Patriot's two-armed point has targets (addition); the Patriot's hands are
   circles (no pointing finger: house style). Set dressing from the refs only (fire baskets, torches, candles, lantern
   look); no signs or jokes of mine. Bash's two silver rings not drawn yet.
@@ -110,7 +106,7 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | # | from the brief (Sam, 1 Nov) | done? |
 |---|------|------|
 | 1 | Celebrity Traitors final 2026: winners Romesh Ranganathan and Sebastian "Bash" Croft at the winner's table with Claudia Winkleman | |
-| 2 | Winner's table: a smaller table before the arch the banished players leave through | |
+| 2 | Winner's table: a smaller table before the arch the banished players leave through | yes (half size, pedestal: note 1) |
 | 3 | The Round Table in the opposite direction (as in The Traitors film) | |
 | 4 | A stack of large gold coins on the winner's table | |
 | 5 | Camera looks over the table at Claudia: "Romesh and Bash, remind us who you did this for?" | |
@@ -146,6 +142,9 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 1 | all | | The winner's table 50% smaller: a pedestal with a flat top | done 1 Nov: top 0.65 m (`TABLE_RX/RY` halved), edge band, four turned legs round a central column, plinth with a lit ring; coin pile refitted to cover most of the top (ref 02); plan R 0.95 -> 0.6. Overhead ref: asked (ref 12 has no table) |
+| 2 | 3 | 17 s | The Round Table through the opening behind Romesh floats | done 1 Nov: legs and a central base to the hall floor, a shadow under it, floor boards, chairs at N, E, S, W (`hall_chair`) |
+| 3 | 1 | 0.9-1.6 s | voices.py's "words before Romesh" flag: false alarm, Claudia draws the name out | meant (no change); the "Errrr" flag (44 syllables heard, 1 written) is meant too: one held sound. voices.py has no way to mark a flag as meant, so both will show in pre-flight: read and pass them |
 
 Decisions made (kept so a new chat never has to rediscover them):
 - 1 Nov: Sam sent references and recordings under "hold"; the brief came with the Opus switch. Planning only until Sam says go.

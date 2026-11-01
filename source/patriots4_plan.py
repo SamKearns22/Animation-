@@ -10,7 +10,7 @@ it from the person it shows, so everyone faces it (rule 38) and the Patriot's qu
 """
 import math
 
-R = 0.95                       # from the table's centre to where each person stands
+R = 0.6                        # from the table's centre to where each person stands (in close: the table is 0.65 m)
 TABLE_H = 0.95                 # they lean on it with both hands (refs 03, 09)
 EYE = 1.5
 
@@ -41,9 +41,9 @@ LOOKS = {
     'arch passage': dict(floor=(52, 38, 28), wall=(78, 50, 30), ceiling=(30, 22, 18)),
 }
 THINGS = {
-    "winner's table": dict(at=(0.0, 0.0), size=(1.3, TABLE_H, 1.3), facing=0,
-                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12)'),
-    'coin pile': dict(at=(0.0, 0.0), size=(0.56, 0.3, 0.56), facing=0, y=TABLE_H, solid=False, on="winner's table",
+    "winner's table": dict(at=(0.0, 0.0), size=(0.65, TABLE_H, 0.65), facing=0,
+                           why='round, light rim, cream inlaid ring, on a pedestal of turned legs (refs 01, 12); half size (Sam, 1 Nov)'),
+    'coin pile': dict(at=(0.0, 0.0), size=(0.5, 0.3, 0.5), facing=0, y=TABLE_H, solid=False, on="winner's table",
                       why='large gold coins in about 7 tiers, more scattered round the base (ref 01)'),
     'fire bowl': dict(at=(-2.0, -1.6), size=(0.8, 0.9, 0.8), facing=0,
                       why='iron bowl of fire on a stand (refs 03, 09)'),
