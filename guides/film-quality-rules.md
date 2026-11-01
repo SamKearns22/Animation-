@@ -176,8 +176,8 @@ working habits saved or cost whole rounds.
 
 48. **The rules are always in front of me, and the cheap way is the easy way (Sam, 27 Oct).** Every handover opens with
     "Rules that bite at this stage": the 3-5 by-hand rules most likely to be broken in the next stage, each with its
-    number, so a fresh chat starts with them in view. Every self-review before a send lists each by-hand rule that applied
-    as kept or slipped, and a slip is named to Sam. To look at several frames, make ONE labelled sheet (time on each
+    number, so a fresh chat starts with them in view. In a self-review, name only the by-hand rules that slipped or were
+    at risk (one line each); say nothing about the ones kept (Sam, 1 Nov: the kept list is distracting). To look at several frames, make ONE labelled sheet (time on each
     tile) and look once; open a single frame at full size only for a detail. [tool: `python3 source/sheet.py FILM
     TIMES...` makes the labelled sheet in one command (28 Oct; ranges and `--crop` for a detail); the handover and
     self-review wording by hand]
