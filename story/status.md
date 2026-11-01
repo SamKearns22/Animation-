@@ -25,8 +25,8 @@ refugee charities, then the Patriot is asked; `notes/patriots-4.md`)
   gallery poses. Cast sheet sent (`review/patriots4-cast.jpg`). Winner's room to be a painted panorama with a pan.
   Sam: stare 1 rising to 4; Romesh redrawn in the series look (74%).
 - 1 Nov (building): the room painted all round (`source/patriots4_room.py`), the film file (`source/patriots4.py`,
-  12 shots, 49 s); stills sheet sent (`review/patriots4-stills.jpg`). NEXT: Sam's notes on the stills (Opus medium,
-  fresh chat): read `notes/patriots-4.md` "Where things stand".
+  12 shots, 49 s); stills sheet sent (`review/patriots4-stills.jpg`). Sam's notes in (table 50% smaller, the Round
+  Table needs legs and chairs; usage 9%). NEXT: apply them (Opus medium, fresh chat): `notes/patriots-4.md`.
 
 ## Done (final sent 27 Oct): "Patriots 3" (D-Day: a German MG42 bunker; `notes/patriots-3.md`)
 - 30 Oct: POSTED Wed 28 Oct 4:02pm. About 45 h: 14.1K views, avg watch 20.3 s of 43.25 (47%), 29.16% to the end, 1,622 likes, 443 shares, 149 saves, 41 new followers (`story/metrics.md`).

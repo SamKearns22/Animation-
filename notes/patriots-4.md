@@ -17,16 +17,29 @@
   (building from a clear plan: Opus medium). Then pre-flight (`python3 source/preflight.py patriots4 OUT_DIR`: the
   brief checklist must be ticked first; `scene(t)`, `layers(t)` and the audits are NOT yet written: copy the
   template's flat `scene()` and add them), the check sheet, and the animatic only on Sam's clear yes.
-- **Open questions for Sam (asked 1 Nov):** (1) voices.py hears about 3 syllables before "Romesh" in Claudia's first
-  recording (0.9-1.6 s) that no script word covers: is there an extra word, or is she just slow? (2) the dead silence
-  before the "Errrr" (25.8 s) and after it fades (44.8 s): meant (brief 17), recommended: keep. The "Errrr" itself is
-  flagged by voices.py (44 syllables heard, 1 written): meant, one held sound.
+- **SAM'S NOTES ON THE STILLS (1 Nov, notes table 1-4): apply them first (Opus medium).**
+  - **Note 1, the winner's table is 50% smaller:** a pedestal with a flat top, not a wide table. How I understood it:
+    the table top's width (`patriots4_room.TABLE_RX/RY`, the plan's `winner's table` 1.3 m) halves (about 0.65 m
+    across); the coin pile then covers most of its top (ref 02 shows exactly that: a stepped pyramid of coin stacks
+    almost to the rim); show the pedestal/turned legs below the top where the frame shows them. Knock-on to decide:
+    the people stand 0.95 m from the centre, so with a 0.33 m radius their hands cannot rest on it: move them in
+    (`patriots4_plan.R`, `patriots4_room.ANGLES` unchanged) or change the hands to resting at their sides / on the
+    rim; say which to Sam. Sam named "the reference that looks from above": ref 12 as filed shows only the arch from
+    above (no table) and refs 02-03 are not overhead, so ASK Sam which picture he means (or for it), before drawing.
+  - **Note 2, the Round Table through the opening behind Romesh (shot 3) floats:** give it its legs/base down to the
+    hall floor, the floor clearly under it, and at least four chairs at the compass points (`traitors.chair_back`, or
+    a small seated-chair drawing); `patriots4_room.round_table_room`.
+  - **Note 3:** no words before "Romesh": voices.py's 0.9-1.6 s flag is a false alarm (Claudia draws the name out):
+    list it as meant. The "Errrr" flag (44 syllables heard, 1 written) is meant too (one held sound).
+  - **Still to ask:** the dead silence before the "Errrr" (25.8 s) and after it fades (44.8 s): meant (brief 17),
+    recommended: keep (Sam has not said otherwise).
 - **Losses, cheats and my additions:** shot 9 is a film cheat: Romesh and Bash are drawn closer together (227 and 256
   degrees, not 210 and 270) so both faces are big enough for the eye slide; shot 12 shows the backs of Bash's and
   Romesh's heads in the bottom corners so the Patriot's two-armed point has targets (addition); the Patriot's hands are
   circles (no pointing finger: house style). Set dressing from the refs only (fire baskets, torches, candles, lantern
   look); no signs or jokes of mine. Bash's two silver rings not drawn yet.
-- **Usage (rule 44):** 7% of the week at the cast round (3% at the start); ask Sam again at this handover.
+- **Usage (rule 44):** 9% of the week at the stills round (7% at the cast round, 3% at the start): about 6% spent
+  on this film of the 15% budget.
 - **Rules:** Sam will discuss all rule proposals at the END of the project; two are waiting (listed in the archived
   handover of the cast round).
 - **Files to open:** this file; `guides/satire.md`; `source/patriots4.py` (codemap); `source/patriots4_room.py`;
