@@ -1,8 +1,8 @@
 # Pre-flight: get it right before the first render
 
-We make these films almost daily. The Patriots 2 needed many full renders because faults were found by eye after
-each one. This checklist moves every lesson we learned to the start, where a fix costs minutes. Use it for every
-film, with `guides/figure-rig.md` (bodies and movement) and `guides/best-practice.md` (the master file).
+Every lesson moved to the start, where a fix costs minutes. Use it for every film, with `guides/figure-rig.md` (bodies
+and movement) and the rulebook, `guides/film-quality-rules.md`. (The Patriots 2 table of where each lesson came from
+is in git history.)
 
 ## Stage 1: the brief (one message of questions, each with a recommended answer)
 - **Timing:** natural pace from Sam's own (3.0-3.6 words a second); estimate the length from the script and say
@@ -35,17 +35,25 @@ film, with `guides/figure-rig.md` (bodies and movement) and `guides/best-practic
 - **A composition check per shot:** the busiest actions spread across the frame, none piled in one corner.
 
 ## Stage 3: before the first animatic (automatic)
-`python3 preflight.py FILM OUT_DIR` runs everything below on every third frame and makes a contact sheet with the
-safe area drawn on; fix whatever it reports, then render the animatic.
-- Arms: the guard (no limb longer than the rig; hands that can't reach are errors).
-- Contacts: fingertips on keys, feet on floors, hips on seats.
-- Sets: listed set pieces never overlap; desk items from one plan.
-- Captions: at most 2 rows of 42 characters within 700 px; readable speed.
-- Shots over 8 s are flagged (keep only the chosen ones, such as an unbroken speech).
-- People: footprints never overlap along their paths (except named pairs); feet on the floor even when leaning; nobody
-  scaled away from the cast's size.
-- **Then review the motion yourself before sending:** a strip of frames across every shot, looking at every corner (a
-  frozen figure, a clip, an empty or crowded corner shows only in motion, never in one still).
+`python3 source/preflight.py FILM OUT_DIR` (all cores; the full list of what it runs: `guides/satire.md`, "Before every
+render"). It runs only the checks for what the film contains (`HAS` in the film: people, rooms, voices, effects,
+props; rule 58) and says which it skipped. It draws every 3rd frame (the checks inside the drawing code), checks the
+hands on every frame, checks captions (2 rows of 42 characters, 700 px, readable speed) and shot lengths (over 8 s is
+flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` or `DUR`.
+- **The render lock (rule 59):** pre-flight leaves a pass stamp for the code as it is now. The animatic and the final
+  refuse to start without it, or after any code change since; faults already named to Sam need `--faults-named`.
+  So a failed pre-flight can never be followed by a render in the same command.
+- **Hands (rule 41):** `source/handcheck.py` probes everyone `views.person` draws, every frame. Meant exceptions in the
+  film's `HANDS_OK` [(who, side, kind, t0, t1, why)]. Alone: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]`.
+- **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; meant looks
+  away in `LOOKS_OK`, passed as `check_eyelines(allow=LOOKS_OK)`; `filmkit.look_sheet(picture, records, OUT)`.
+- **Poses (rule 42):** pick from `guides/pose-gallery.md`; a new pose goes through `source/posegallery.py` first.
+- **In front and behind (rule 57):** the film's `draw_order(t)` (names, back to front); planned swaps in `ORDER_SWAPS`.
+- **After an edit to one action:** `python3 source/FILM.py check` (seconds to minutes), then ONE small sheet
+  (`python3 source/sheet.py FILM TIMES...`, rule 48).
+- **Tests:** `python3 source/kittests.py` after any change to a shared check (a few minutes).
+- **Then review the motion yourself before sending:** a strip of frames across every shot, every corner (a frozen
+  figure, a clip, an empty or crowded corner shows only in motion).
 
 ## Stage 4: recordings
 - **Naming:** Sam names each file with its script line number first (`03 people.m4a`, `04 traitors.m4a`; extra
@@ -62,53 +70,3 @@ safe area drawn on; fix whatever it reports, then render the animatic.
 ## Stage 5: the final render
 - One final render, checked against the safe-area guides (title, widest caption, busiest frame).
 - Deliver in the chat, save in `animations/`, update `story/status.md`, add new lessons to the master file.
-
-## The lessons this checklist comes from (The Patriots 2)
-| Fault found late | Now caught at |
-|---|---|
-| Legs missing on people at frame edges | figure-rig: legs always drawn (person() refuses otherwise) |
-| Arms too long; hands to the knees | figure guard + rig (stage 3) |
-| Trolley at knee height | brief: props at working height; rail pose at the waist |
-| Fingertips on the desk, not the keys | contact check (stage 3) |
-| Mouth moving under the balaclava while typing | figure-rig 6: a heard letter is not spoken |
-| Reverse shot showed a different room | brief: one plan per location |
-| Desk items changed between shots | brief: desk plan; one plan drawn by every camera |
-| A monitor through a curtain | set pieces listed and checked (stage 3) |
-| Uniform stripes drawn over arms | figure-rig 5: garment details before the arms |
-| Beer can wobbling with no cause | storyboard look: every movement needs a visible cause |
-| Women in the boat without headscarves | brief: real groups checked against sources |
-| Grey "beads" in young men's hair | brief: hair designed per person on the model sheet |
-| Lying patient sliding off the bed; no face profile | model sheet: lying view designed up front |
-| Doctor resembling a real politician | model sheet: compared with the series' existing caricatures |
-| Mislabelled and duplicate recordings | stage 4: naming rule and voices.py |
-| A caption on three rows | stage 3 caption check |
-| Lifeboat a different size in the next scene | brief: recurring objects listed; one drawing at a fixed size relative to its people |
-| Chair seat floating, stand too thin | figure-rig: seated hips on the seat; under-desk knee space drawn |
-| Film much longer than briefed | brief: honest length estimate from the pace |
-| Table emptied between shots; chips slid to him with no hand on them (Poker Mon) | one set, one table plan for every camera; objects driven by the hand; the contact and hands-seen checks |
-
-## Added 8 Oct (Russiadent Evil): general audits, parallel run, picture cache
-- `python3 source/preflight.py FILM OUT_DIR` now uses every processor core (the film took 19 minutes on one) and, if the
-  film defines `checks()` and `audits()`, runs them: plan checks, then the general body/movement audit
-  (`source/filmkit.py`), then the permanent-marks probes. A film without an end time (`BLACK_AT` or `DUR`) is refused.
-- **Audit what any body part does, not one fault:** each character alone, as a picture, over time (in pieces, pops,
-  stretches, frozen). Allowed fast moves and known separate shapes (a blood pool) are listed in the film's `FAST_OK`.
-- After an edit to one action: `python3 -c "import FILM as R; print(R.audits())"` (about 2 minutes), then look at ONE small strip.
-- Render: `python3 source/FILM.py final OUT` (caches pictures); `... final OUT --reuse --redo none` for caption/timing notes;
-  `... --reuse --redo shot1,shot2` for notes on those shots only. Sound-only notes: rebuild the sound and attach it.
-
-
-## Added 28 Oct (Build list 27 Oct): hands, looks, poses, sheets
-- **Hands (rule 41):** pre-flight probes everyone `views.person` draws on EVERY frame (`source/handcheck.py`): an arm
-  that shows with no hand (hidden, behind a head or a back), a hand pushed back into its own sleeve (two frames or
-  more), a hand over someone at the same distance not listed as a touch. Meant ones go in the film's `HANDS_OK`
-  [(who, side, kind, t0, t1, why)]. On its own: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]` (a sheet of
-  each fault's first frame). Older films' own figures and lying.py's 3D bodies are not seen.
-- **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; the film's
-  `audits()` then measures each face as drawn at its shot's camera (a profile reads only for someone at the same
-  distance; a three-quarter for most of the way round; a front face by its pupils). Meant looks away go in
-  `LOOKS_OK`, passed as `check_eyelines(allow=LOOKS_OK)`. `filmkit.look_sheet(picture, records, OUT)`: the eyes
-  that meet, one frame each, for the check sheet.
-- **Poses (rule 42):** pick from `guides/pose-gallery.md`; a new pose goes through `source/posegallery.py` first.
-- **Sheets (rule 48):** `python3 source/sheet.py FILM TIMES...` for any set of frames, one look.
-- **Tests:** `python3 source/kittests.py` after any change to a shared check (about 2 minutes).

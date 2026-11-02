@@ -9,7 +9,7 @@ Continue the animation project. First read these and follow them:
 - guides/best-practice.md: Part 1, plus **Part 2, the TikTok parody series**, which this film belongs to (every
   lesson from Mossad and The Patriots 2);
 - guides/tiktok-design.md;
-- guides/pipeline.md: the animatic-first rule;
+- guides/yuletide/pipeline.md: the animatic-first rule;
 - **guides/preflight.md: follow its stages in order, from this brief to the final render;**
 - **guides/figure-rig.md: every person is built and posed with `source/figure.py`.**
 

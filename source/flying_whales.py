@@ -41,6 +41,7 @@ FPS, SR = 24, MA.SR
 NAME = 'flying-whales'
 TITLE = ()                                        # no title (Sam, 15 Oct)
 CAST = {}                                         # no people (brief 14)
+HAS = {'voices', 'effects', 'props'}              # rule 58 (2 Nov): no people, no rooms
 LOOKS_AT = {}
 # Attenborough (Sam records it; 'audio' then times the line to source/audio/flying-whales-1.m4a). Placeholder times
 # until then: subtitles in chunks of two to five words, each on its first word (guides/satire.md, Subtitles).

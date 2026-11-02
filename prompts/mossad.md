@@ -5,7 +5,7 @@ Continue the animation project. First read these and follow them:
 - story/status.md;
 - guides/best-practice.md: Part 1, plus **Part 2, the TikTok parody series**, which this film belongs to;
 - guides/tiktok-design.md;
-- guides/pipeline.md: the animatic-first rule.
+- guides/yuletide/pipeline.md: the animatic-first rule.
 
 The working rules:
 - plain English for me;

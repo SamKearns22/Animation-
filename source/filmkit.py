@@ -407,18 +407,28 @@ def _rms_db(x):
     return 20 * math.log10(float(np.sqrt(np.mean(x ** 2))) + 1e-12)
 
 
-def hiss_check(mix, sr, end=None, limit=-62.0):
-    """A steady hiss is a FAULT, never a question (Sam, 19 Oct: "a distracting hiss, like you did in the last
-    video"): white noise laid under a film as "room tone" (it was in satire_template, so every film inherited it)
-    comes up with the mastering and hisses through every quiet moment. In the quietest fifth of the film (0.25 s
-    windows), the sound above 4 kHz must stay under `limit` dBFS. Returns a list of faults."""
+def hiss_check(mix, sr, end=None, limit=-62.0, voice=None):
+    """A steady hiss is a FAULT, never a question: white noise laid under a film as "room tone" comes up with the
+    mastering and hisses through every quiet moment. The sound above 4 kHz in the quiet stretches must stay under
+    `limit` dBFS. Returns a list of faults.
+    voice (rule 60): the voice track alone. Given it, the check listens only in the gaps between lines (0.25 s
+    windows where the voice is silent), so the "s" sounds of speech are never taken for hiss (Flying Whales: the
+    quietest fifth of the mix was the narration). Without it (older films), the quietest fifth of the mix."""
     from scipy.signal import butter, sosfilt
     x = np.asarray(mix, float)[:int(end * sr) if end else None]
     hi = sosfilt(butter(4, 4000, 'high', fs=sr, output='sos'), x)
     w = int(0.25 * sr)
     lv = lambda v: 20 * np.log10(np.sqrt((v ** 2).mean()) + 1e-12)
-    wins = sorted((lv(x[i:i + w]), lv(hi[i:i + w])) for i in range(0, len(x) - w, w))
-    quiet = [h for _, h in wins[:max(2, len(wins) // 5)]]
+    if voice is not None:
+        v = np.zeros(len(x))
+        vv = np.asarray(voice, float)[:len(x)]
+        v[:len(vv)] = vv
+        quiet = [lv(hi[i:i + w]) for i in range(0, len(x) - w, w) if lv(v[i:i + w]) < -60]
+        if len(quiet) < 2:
+            return []                           # no gap between lines long enough to listen in
+    else:
+        wins = sorted((lv(x[i:i + w]), lv(hi[i:i + w])) for i in range(0, len(x) - w, w))
+        quiet = [h for _, h in wins[:max(2, len(wins) // 5)]]
     level = float(np.median(quiet))
     if level > limit:
         return [f'a steady hiss at {level:.0f} dBFS above 4 kHz runs through the quiet parts (limit {limit:.0f}): '

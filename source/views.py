@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """views: anyone from any angle, posed on a hidden 3D skeleton (the satire package's people; see
-guides/movement-system-plan.md and guides/reference-pack.md).
+guides/archive/movement-system-plan.md and guides/reference-pack.md).
 
 - Five real drawings per person, facing right: 'front', 'three' (three-quarter), 'side' (profile), 'three_back',
   'back'; facing left is the same drawing mirrored. A turn swaps drawings (the standard is a straight 180 pop).

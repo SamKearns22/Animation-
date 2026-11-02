@@ -94,7 +94,7 @@ def head_test(out, shape=None, details=None, local=None):
 
 
 YOUNG_WOMAN = dict(gender=0.0, age=0.577, muscle=0.5, weight=0.45, height=0.6, proportions=0.8)
-# her own face, from MakeHuman's regional sliders (see guides/character-anatomy.md, section 4): a softer,
+# her own face, from MakeHuman's regional sliders (see guides/yuletide/character-anatomy.md, section 4): a softer,
 # more feminine structure - finer nose, fuller lips, higher cheekbones, a neat chin - and the small
 # asymmetries every real face has
 MOTHER_FACE = {

@@ -7,13 +7,55 @@
 Every review copy (a --small animatic or a --span clip) has the film time and the shot burned into its top-left
 corner, so Sam's times point straight at the frame (guides/film-quality-rules.md, rule 29); the full-size final never.
 """
+import glob
+import hashlib
+import json
 import os
 import subprocess
+import sys
 
 import numpy as np
 from PIL import Image
 
 _JOB = {}
+HERE = os.path.dirname(os.path.abspath(__file__))
+PASSES = os.path.join(os.path.dirname(HERE), 'review', 'preflight-pass')   # rule 59: pre-flight's pass stamps
+
+
+def code_hash():
+    """One fingerprint of all the code (source/ and its folders): any change to any file changes it, so a pass stamp
+    can only ever mean "pre-flight passed on the code as it is now"."""
+    h = hashlib.sha1()
+    for f in sorted(glob.glob(os.path.join(HERE, '**', '*.py'), recursive=True)):
+        if '__pycache__' in f:
+            continue
+        h.update(os.path.relpath(f, HERE).encode())
+        with open(f, 'rb') as fh:
+            h.update(fh.read())
+    return h.hexdigest()
+
+
+def write_pass(film, faults):
+    """Pre-flight's stamp (rule 59): the code it ran on, and how many faults it found."""
+    os.makedirs(PASSES, exist_ok=True)
+    with open(os.path.join(PASSES, f'{film}.json'), 'w') as fh:
+        json.dump({'code': code_hash(), 'faults': faults}, fh)
+
+
+def lock_fault(film, faults_named=False):
+    """Rule 59: why an animatic or final render may not start (None: it may). A render that ran on past a failed
+    pre-flight (Flying Whales, animatic 4) cannot happen again: the render itself checks."""
+    path = os.path.join(PASSES, f'{film}.json')
+    if not os.path.exists(path):
+        return f'pre-flight has not been run on {film} in this session: python3 source/preflight.py {film} OUT_DIR'
+    with open(path) as fh:
+        stamp = json.load(fh)
+    if stamp['code'] != code_hash():
+        return f'the code has changed since pre-flight last ran on {film}: run it again'
+    if stamp['faults'] and not faults_named:
+        return (f'pre-flight found {stamp["faults"]} fault(s) on {film}: fix them, or, if every one has been named to '
+                f'Sam, add --faults-named')
+    return None
 
 
 def _frame(args):
@@ -49,14 +91,24 @@ def stamp(im, t, shot):
 
 
 def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, write_wav, set_ss, crf=20,
-           reuse=False, redo=(), preset='slow', span=None, stamp=None):
+           reuse=False, redo=(), preset='slow', span=None, stamp=None, lock=None):
     """picture(t) -> image without captions or title; overlay(img, t) -> img with them; shot_of(t) -> shot name;
     sound() -> the mixed soundtrack array; write_wav(path, mix). The cache ($FILM_CACHE or ~/.cache/filmcache) is
     only trusted when reuse=True: it cannot know what code changed, so name the shots that did (redo).
     span=(t0, t1) renders just that stretch, with its sound: a quick clip of one moment for notes on motion (Sam,
     18 Oct: stills can't show a problem in movement, and a whole animatic is wasted on one moment).
     stamp: the time and shot in the corner; None (the default) = on for every review copy (a span, or smaller than
-    full size: rule 29), off for the full-size final."""
+    full size: rule 29), off for the full-size final.
+    lock (rule 59): an animatic or final (no span) needs pre-flight's pass on the code as it is now; None = on for every
+    film but quick videos and clips; False only for a tool's own demo render, never a film."""
+    main = sys.modules.get('__main__')
+    film = os.path.splitext(os.path.basename(getattr(main, '__file__', '') or ''))[0]
+    if lock is None:
+        lock = not span and film != 'quick' and not getattr(main, 'QUICK', False)
+    if lock:
+        why = lock_fault(film, '--faults-named' in sys.argv)
+        if why:
+            sys.exit('render REFUSED (rule 59): ' + why)
     import imageio_ffmpeg
     from multiprocessing import Pool
     cache = os.path.join(os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache')),

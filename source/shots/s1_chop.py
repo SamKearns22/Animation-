@@ -2,7 +2,7 @@
 the meat steady. She chops two neat 1 cm slices, which tip over onto the board. After the first chop her eyes
 find her daughter across the island (a blink with the glance; her head follows); the second chop falls while
 she looks at the girl, not the blade, and a warm smile slowly grows. (See story/animation-test.md and
-guides/movement.md for the timings.)"""
+guides/yuletide/movement.md for the timings.)"""
 import numpy as np
 
 from props import Board, Ham, Cleaver, PastryPlate, slice_lying

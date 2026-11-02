@@ -1,30 +1,13 @@
 # Best practice: the master file
 
-Read this before starting or changing any film, in any chat. It has two kinds of rule, kept apart on
-purpose:
-
-- **Part 1, general principles.** These apply to any animation we make. They come from recognised sources
-  (listed at the end) and are written as principles, not recipes. Every one serves the film's intent. If a
-  shot is meant to look awkward, stiff, ugly or wrong (a comic pose, a horror beat), breaking a principle
-  on purpose is fine. Doing it by accident is not.
-- **Parts 2-4, project rules.** These are what we have learned for one kind of film. They apply only to
-  that kind of film, never to everything:
-  - **Part 2:** the TikTok parody series in the flat, Satire style, FilmCow-influenced cartoon look. This series is
-    ongoing.
-  - **Part 3:** the coloured-pencil comedy shorts.
-  - **Part 4:** the Yuletide horror trailer.
-- **Part 5:** how we work and deliver, for every project.
-
-The detailed guides hold the numbers and the code:
-- `tiktok-design.md`: TikTok format, safe area, titles, posting
-- `character-anatomy.md` and `movement.md`: people and motion
-- `pipeline.md`: the 3D pencil shots
-- `figure-rig.md`: bodies and movement in the flat cartoon films (`source/figure.py`)
-- `preflight.md`: the checklist that catches problems before the first render
-- `tone.md`: the horror trailer
-- `perfect-prompt.md`: how to brief a film
-
-If two files disagree, this file wins; then fix the other file.
+- **Part 1, general principles** for any animation we make, from recognised sources (listed at the end), written as
+  principles. Breaking one on purpose (a comic pose, a horror beat) is fine; by accident is not.
+- **Part 2:** the TikTok parody series (flat Satire style).
+- **Part 5:** how we work and deliver, every project.
+- Every rule, once, with its check: `guides/film-quality-rules.md` (the rulebook). If a guide disagrees with the
+  rulebook, the rulebook wins; then fix the guide.
+- Archived: the coloured-pencil shorts (`guides/archive/best-practice-pencil.md`). The Yuletide trailer, a separate
+  experiment: `guides/yuletide/`.
 
 ---
 
@@ -448,7 +431,7 @@ this series. Full details in `tiktok-design.md`.
 - **After any edit to an action, run the audit (about 2 minutes), not an animatic.** An animatic only when the movement
   of a shot changed; review a changed shot with a stills strip first.
 - **Map before you search:** `python3 source/codemap.py FILE.py` lists every function with its line number
-  (`guides/russiadent-map.md` is the map of the biggest film).
+  (`guides/archive/russiadent-map.md` is the map of the biggest film).
 - **Notes go in one batch, numbered, each with shot and time** ("shot 2, 10.3 s, left"): see `notes/_template.md`.
   Lock subtitle wording and sound-mix levels in the brief (`prompts/_brief-skeleton.md`).
 - Known limit: a speech-to-text model cannot be downloaded on this machine (the network blocks it), so word timing from a
@@ -485,59 +468,6 @@ this series. Full details in `tiktok-design.md`.
   chopped hiss at line ends, then lines cut apart mid-sound. Now rules in `guides/satire.md` ("Sound"), with the tools
   in `source/mossad_audio.py`. Also new there: selfie arms, whole-body background reactions, no blank surfaces, one
   mouth at a time, lines looked up by number.
-
-# Part 3. The coloured-pencil comedy shorts
-For Dam, The Salt and the Oxford rap battles (Andy and Sam).
-- **The look:** coloured pencil on off-white paper, with visible strokes and paper texture, and simple
-  backgrounds.
-- **Realism serves the joke:** the beaver is drawn like a field-guide illustration because "cartooning him
-  reduces the absurdity" (Dam). Sounds are realistic and understated, never cartoon noises.
-- **Lessons from Dam:**
-  - a long, slow build-up (13 seconds) before the launch;
-  - a slow pull-back that stops dead at the launch, keeping the dam the same size;
-  - a glance up shows only a sliver of eye white;
-  - splashes behind the dam are drawn behind the beaver;
-  - the feet come out from under the fur;
-  - no click at the cut to silence;
-  - the explosion stays loudest on a phone.
-- **Lessons from The Salt:**
-  - a clean coat of arms that reads at phone size;
-  - flames sit on wicks, and floors have no seams;
-  - the crash is framed inside the safe area;
-  - the deadpan pause after "Of course!" is kept when the film is tightened.
-- **Lessons from the rap battles:**
-  - whole-line subtitles from the punctuated script, held until the next line;
-  - a flashing red UNINTELLIGIBLE sign for words nobody can make out;
-  - the two rappers at matching heights;
-  - the crowd modelled on the real audience;
-  - no cutbacks in the middle of a picture gag.
-- TikTok versions follow the TikTok format in Part 2. Widescreen originals converted to vertical are
-  enlarged by a third, with a soft glow of their own edges above and below.
-
----
-
-# Part 4. The Yuletide horror trailer (3D world drawn in graphite)
-The guides for this project are `tone.md`, `character-anatomy.md`, `movement.md` and `pipeline.md`, and
-they apply to this project:
-- the A24 craft (dread over shock, restraint, patient camera);
-- graphite with colour only on food, plants and decorations (and later blood);
-- MakeHuman bodies, measured contacts and automatic checks;
-- the animatic-first workflow.
-
-Specific lessons recorded there include:
-- the cleaver held with a near-straight wrist, the blade turning with the forearm and coming square only
-  in the cut;
-- the chest following the spine only;
-- eyes clamped with lids following the gaze;
-- slices that fall differently;
-- a full redraw whenever the camera moves.
-
-**Checks and speed (horror trailer, 8 Oct)** (details: `guides/pipeline.md`, last section)
-- Run `horror_preflight.py` before every render: the whole skeleton over every frame in about a minute. Fix every fault first.
-- Render with `--reuse`; check every new drawing against the lookbook with `lookbook_check.py`; keep title cards last.
-- The Satire rules (circle hands, flat colour, the Satire style kit) never apply here: the trailer keeps its own look.
-
----
 
 # Part 5. How we work and deliver (every project)
 1. **Brief:** ask all questions in one message, with a recommended answer for each.

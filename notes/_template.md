@@ -1,14 +1,23 @@
 # Notes for FILM (one file, numbered; mark each done as it is fixed)
 
-## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
+- **Rules that bite next:** (3, by number from guides/film-quality-rules.md)
 - **Done:**
-- **Next (stage, model, fresh chat):**
-- **Losses and my additions Sam should know about:**
-- **Rule requests and proposals not yet in a guide** (CLAUDE.md, "Rules are permanent"):
-- **Files to open:**
+- **Spent against the estimate (rule 55):** (each build: estimated / spent; name any running over)
+- **Next:** (stage, model, and what Sam types in the new chat)
+- **Needs Sam:** (numbered, my pick first; or "nothing")
+- **Read:** (which sections of which guide; nothing else)
+- **Lost / Added:** (what fixes took away, what I added)
+- **Open rule requests:** (CLAUDE.md, "Rules are permanent"; or "none")
+- **For Claude:** (code names, files, commands)
 
-## Plan extras (film-quality-rules 24-26): ambition estimate (new builds, risky moves, share of a week); eyelines and
-holds per shot; every sound effect (what, when, needed by); bleeped words (said, or a gap left?)
+## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
+its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
+break; eyelines and holds per shot; every sound effect (what, when, needed by); bleeped words (said, or a gap left?)
+
+| build or risky move | why (3D? parts the camera sees) | estimate (% of a week) | spent |
+|---|---|---|---|
+|   |   |   |   |
 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places
 benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)

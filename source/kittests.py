@@ -247,6 +247,58 @@ def nostamp_in_the_template():
     return no is False and default is None, f'with --nostamp: stamp={no}; without: stamp={default} (on for clips)'
 
 
+# ------------------------------------------------------------------------------------------------ rules 57, 59, 60
+@test
+def order_flip_mid_shot():
+    """Rule 57 (Flying Whales note 16): a smoke column sent behind the rig at one instant is caught; a planned swap is not."""
+    import types
+    import clipcheck as C
+    film = types.SimpleNamespace(SHOTS=[('rig', 0.0, 2.0)], FPS=12, DUR=2.0,
+                                 draw_order=lambda t: ['sea', 'smoke', 'rig'] if t >= 1.0 else ['sea', 'rig', 'smoke'])
+    caught = C.flip_faults(film, C._times(film)[0])
+    film.ORDER_SWAPS = [('smoke', 'rig', 0.9, 1.1, 'meant')]
+    planned = C.flip_faults(film, C._times(film)[0])
+    film.SHOTS = [('a', 0.0, 1.0), ('b', 1.0, 2.0)]
+    film.ORDER_SWAPS = []
+    at_cut = C.flip_faults(film, C._times(film)[0])
+    return bool(caught) and not planned and not at_cut, f'caught {len(caught)}; planned {len(planned)}; at a cut {len(at_cut)}'
+
+
+@test
+def hiss_heard_only_between_lines():
+    """Rule 60 (Flying Whales): speech full of "s" sounds is not hiss; noise in the gaps between lines still is."""
+    import numpy as np
+    import filmkit
+    sr, rng = 48000, np.random.default_rng(1)
+    voice = 0.05 * rng.standard_normal(sr * 12)                     # 12 s of hissy "speech" (all "s" sounds) ...
+    voice[6 * sr:int(6.5 * sr)] = 0                                 # ... with one short pause, as in a busy film
+    old = filmkit.hiss_check(voice, sr, 12.0)                       # the quietest fifth: mostly speech, a false alarm
+    clean = filmkit.hiss_check(voice, sr, 12.0, voice=voice)
+    hissy = filmkit.hiss_check(voice + 0.003 * rng.standard_normal(len(voice)), sr, 12.0, voice=voice)
+    return bool(old) and not clean and bool(hissy), \
+        f'old way: {len(old)} fault(s) (the false alarm); speech alone: {len(clean)}; noise in the pause: {len(hissy)}'
+
+
+@test
+def render_lock():
+    """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
+    import film_engine as E
+    import tempfile
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    try:
+        none = E.lock_fault('x')
+        E.write_pass('x', 0)
+        ok = E.lock_fault('x')
+        E.write_pass('x', 3)
+        faults = E.lock_fault('x')
+        named = E.lock_fault('x', faults_named=True)
+    finally:
+        E.PASSES = real
+    return bool(none) and ok is None and bool(faults) and named is None, \
+        f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}'
+
+
 # ------------------------------------------------------------------------------------------------ running them
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''

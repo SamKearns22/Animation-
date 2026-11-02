@@ -1,11 +1,17 @@
 # Satire-style film: the one page to read
 
 For a full Satire-style TikTok film (more than two people talking, or any action). For two people talking, use
-`guides/quick-video.md` instead. Open `guides/best-practice.md` Part 2 only for a kind of scene this page doesn't cover.
+`guides/quick-video.md` instead. This page says HOW (the tools and the method); every rule is written once, with its
+check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections the handover names. Open
+`guides/best-practice.md` Part 2 only for a kind of scene this page doesn't cover.
 
 ## Start
 1. Copy `source/satire_template.py` to `source/NAME.py`; set `NAME`, and change only its STORY section (title, cast,
-   where people stand, who looks at whom, lines, shots, actions as beats). Everything else is already wired in.
+   where people stand, who looks at whom, lines, shots, actions as beats). Everything else is already wired in. Set
+   `HAS` to what the film contains (people, rooms, voices, effects, props; rule 58): pre-flight then runs only the
+   checks for those, and the lists for the rest stay empty.
+   **Build only what the camera shows (rules 54, 55):** before splitting anything into parts, decide how its ending
+   looks and which parts the camera sees break; give each new build its own cost in the estimate.
    **A remake** of an older film starts from the template too (bring over only the story, recordings and timing, never
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
    **References (Sam, 16 Oct):** when Sam sends reference photos, say which are still missing for the best quality (the
@@ -253,6 +259,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - **Cut a recording only in a moment of silence** (Sam, 16 Oct): find the quiet gap before the first wanted word (loudness in
   20 ms steps), cut there and lay silence in front; never start earlier to be safe (a scrap of the word before is heard).
 - **No added room tone** (The Traitors): the levelling lifts it into audible static. Silence between lines stays silent.
+  The hiss check listens only in those silences (`filmkit.hiss_check(mix, SR, end, voice=voice)`, rule 60): it looks
+  for a steady high "sss" (noise laid under the film), never the "s" sounds in speech.
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over
   their average; squashed 8 dB to reach -14 LUFS, they crackled on a phone.
@@ -273,7 +281,11 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 
 ## Before every render
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit
-alone, seconds to minutes). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
+alone, seconds to minutes). It runs only the checks for what the film's `HAS` lists, and names the rest. **The render
+lock (rule 59):** an animatic or final will not start unless pre-flight passed on the code as it is now (any code
+change means running it again); faults already named to Sam need `--faults-named` on the render. It also checks,
+from the film's `draw_order(t)`, that nothing flips from in front to behind in one frame (rule 57; planned swaps in
+`ORDER_SWAPS`; Flying Whales note 16). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,
 stretching, frozen; actions, including elbows staying on their own side; eyelines; the title clear of everyone), and a
 contact sheet with the safe area, and the shared checks (housestyle, plan, benchmark, sets, audit with kitchecks,
@@ -290,7 +302,10 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
 - `python3 source/NAME.py final OUT.mp4 --small --span T0 T1`: a clip of just that moment (under a minute) for any
   note on movement (Sam, 18 Oct); no yes needed first.
 - `python3 source/NAME.py final OUT.mp4 --small`: a quick look (540 x 960), only when a shot's movement changed.
-- `python3 source/NAME.py final animations/NAME-vertical.mp4`: the final. Pictures are cached; captions and title go on last.
+- `python3 source/NAME.py final source/data/NAME-clean.mp4`: the final (needs pre-flight's pass: rule 59), then
+  `finish.py`. Pictures are cached; captions and title go on last.
+- **A fault in one piece is a fault of its kind (rule 56):** fix and test every piece like it, not only the one Sam
+  named (Flying Whales notes 8 and 15: the helideck fixed, the stair tower left).
 - **Joining clips with ffmpeg: always set `fps=24`** (Strictly Crabs: the join defaulted to 25 fps and stretched the
   film by 4%).
 - Caption or timing note: `... final OUT --reuse` (no pictures re-rendered). Note on shot X: `... --reuse --redo X`.

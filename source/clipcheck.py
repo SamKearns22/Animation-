@@ -16,6 +16,11 @@ One shared check for every film, run by preflight.py before every animatic. A fi
   PUSHES      =  [(pusher, t, [owners])]: things knocked flying at t go the way the pusher was moving
   FAST_OK     =  [(owner.part, t0, t1)]: a deliberate whip-fast move (a slap) allowed past the speed limit
   CLIP_SPAN   =  (t0, t1): the stretch to check (default the whole film); SHOTS: no speed is judged across a cut
+  draw_order(t) -> [name, ...]: what is drawn, back to front (rule 57; cheap: just the names, no drawing). Any two
+                 that swap places between two frames of one shot are a fault: something jumps from behind to in
+                 front, or vanishes behind, in one frame (Flying Whales note 16: a smoke column sent behind the rig
+                 at one instant). Without draw_order, the names of layers(t) are used.
+  ORDER_SWAPS =  [(a, b, t0, t1, why)]: planned swaps (a whale flying round in front of the rig)
 
 The checks:
 1. Solids: no two solids of different owners overlap by more than TOUCH, unless the pair is ALLOWED then.
@@ -367,6 +372,34 @@ def order_faults(film, times, fps):
     return faults
 
 
+def flip_faults(film, times):
+    """Rule 57: nothing flips from in front to behind (or back) between two frames of a shot unless planned. Checks
+    every pair present in both frames; a pair listed in ORDER_SWAPS (names or fnmatch patterns) is fine in its time."""
+    import fnmatch
+    get = getattr(film, 'draw_order', None) or (lambda t: [n for n, _, _ in film.layers(t)])
+    ok = getattr(film, 'ORDER_SWAPS', ())
+
+    def planned(a, b, t):
+        return any(t0 <= t <= t1 and ((fnmatch.fnmatchcase(a, x) and fnmatch.fnmatchcase(b, y)) or
+                                      (fnmatch.fnmatchcase(a, y) and fnmatch.fnmatchcase(b, x)))
+                   for x, y, t0, t1, *_ in ok)
+    faults, seen, prev = [], set(), None
+    for t in times:
+        order = {n: i for i, n in enumerate(get(t))}
+        if prev is not None and _shot(film, t) == _shot(film, prev[0]):
+            po = prev[1]
+            both = [n for n in order if n in po]
+            for i, a in enumerate(both):
+                for b in both[i + 1:]:
+                    if (order[a] - order[b]) * (po[a] - po[b]) < 0 and (a, b) not in seen and not planned(a, b, t):
+                        seen.add((a, b))
+                        front = a if order[a] > order[b] else b
+                        faults.append(f'{t:.2f} s: {a} and {b} swap front and back in one frame ({front} is now in '
+                                      f'front): keep each on its side, or list the swap in ORDER_SWAPS with why')
+        prev = (t, order)
+    return faults
+
+
 def in_shot_faults(film):
     faults = []
     fps = getattr(film, 'FPS', 12)
@@ -393,7 +426,10 @@ def run(film):
         faults += solid_faults(film, times) + motion_faults(film, times, fps)
     if hasattr(film, 'layers'):
         faults += order_faults(film, times, fps)
-    faults += in_shot_faults(film)
+    if hasattr(film, 'layers') or hasattr(film, 'draw_order'):
+        faults += flip_faults(film, times)
+    if hasattr(film, 'IN_SHOT'):
+        faults += in_shot_faults(film)
     return faults
 
 

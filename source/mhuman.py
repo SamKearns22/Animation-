@@ -8,7 +8,7 @@ This module downloads those files (they are not kept in our repository), mixes t
 and hands back a triangle mesh, which mesh_sdf.py then turns into a shape our renderer can draw.
 
 The formulas follow MakeHuman's own code (apps/human.py, shared/skeleton.py, shared/animation.py); see
-guides/character-anatomy.md, section 5. MakeHuman units are decimetres, y up, the face towards +z.
+guides/yuletide/character-anatomy.md, section 5. MakeHuman units are decimetres, y up, the face towards +z.
 """
 import json
 import os

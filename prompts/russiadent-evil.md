@@ -11,7 +11,7 @@ Continue the animation project. First read these and follow them:
 - guides/tiktok-design.md;
 - guides/figure-rig.md, for every person;
 - guides/preflight.md: follow its stages in order, from the brief to the final render;
-- guides/pipeline.md: the animatic-first rule.
+- guides/yuletide/pipeline.md: the animatic-first rule.
 
 The working rules:
 - plain English for me;

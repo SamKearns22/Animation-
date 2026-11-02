@@ -454,7 +454,7 @@ def main():
         install(CM.B)                                        # after the film's own arm checker, which stays on
         if '--fixes' in a:
             cryminister_fixes(CM)
-        CM.E.render('cryminister-limbs', a[1], size=(540, 960), ss=1, fps=CM.FPS, dur=CM.DUR, picture=CM.picture,
+        CM.E.render('cryminister-limbs', a[1], lock=False, size=(540, 960), ss=1, fps=CM.FPS, dur=CM.DUR, picture=CM.picture,
                     overlay=CM.overlay, shot_of=CM.shot_of, sound=CM.soundtrack, write_wav=CM.MA.write_wav,
                     set_ss=lambda v: setattr(CM.B, 'SS', v), crf=26)
 

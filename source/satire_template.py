@@ -37,6 +37,9 @@ FPS, SR = 12, MA.SR
 
 # =============================================== STORY (change this) ===============================================
 NAME = 'satire-template'
+# Rule 58: what this film contains. Pre-flight runs only the checks for these and names the ones it skips. Remove what
+# the film has none of (Flying Whales: no people, no rooms), and the lists for it below can stay empty.
+HAS = {'people', 'rooms', 'voices', 'effects', 'props'}
 TITLE = ('THE TEMPLATE',)                         # Cranberry Title style, on for 2 s; one line sits highest
 TITLE_AT = dict(cap=116, top=310)                 # its size and height: checked never to cover anyone
 CAST = {   # look and build per person (skin, hair, clothes, face); the cast sheet shows them side by side
@@ -98,8 +101,10 @@ SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or 
 # turned through every view by themselves.
 EFFECTS = []                                        # [(name, 'burst' / 'sparks' / 'trail' / 'smoke' / ..., draw(img))]
 JOKE_PROPS = []                                     # [(name, [times], (x, y, z) or fn(t), size in metres)]
-# define layers(t) for drawing order (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a
-# song joined from recordings (musiccheck.py)
+ORDER_SWAPS = []                                    # rule 57: [(a, b, from, to, why)] planned in-front/behind swaps
+# draw_order(t) below: what is drawn, back to front, for the flip check (rule 57). Define layers(t) for the full
+# drawing-order check (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a song joined
+# from recordings (musiccheck.py)
 # ====================================================================================================================
 
 S, FY = 0.8, 1420                                 # people's scale, floor line
@@ -186,6 +191,15 @@ def picture(t):
     return img
 
 
+def draw_order(t):
+    """Rule 57: the names picture(t) draws, back to front (keep it in step with picture: sort effects, smoke and people
+    here the same way). Nothing may swap places in one frame within a shot unless it is in ORDER_SWAPS."""
+    if t >= BLACK_AT:
+        return []
+    cam = cam_for(t)
+    return ['background'] + [w for w in 'AB' if visible(w, cam)]
+
+
 def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
@@ -245,7 +259,7 @@ def checks():
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     faults += title_check()
     mix, voice, rest = soundtrack(stems=True)
-    faults += filmkit.hiss_check(mix, SR, BLACK_AT)               # no steady hiss (Sam, 19 Oct)
+    faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice)  # no steady hiss, heard only between lines (rule 60)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
         print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him
@@ -389,7 +403,7 @@ def main():
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
 import limbs                     # noqa: E402
 limbs.install(B)                 # natural arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
-# Movement (guides/movement-system-plan.md, guides/reference-pack.md), built to order: use only what the script needs.
+# Movement (guides/archive/movement-system-plan.md, guides/reference-pack.md), built to order: use only what the script needs.
 #   views.person(img, cam, x, y, s, sp, t, yaw, pose)   anyone from any angle (front, three-quarter, side, back)
 #   moves.gait / travel / pace, moves.pose(sp, 'arms_folded'), moves.sit_down / stand_up, moves.punch / kick / sword /
 #   hit_react / fall, moves.driving / car_in / car_out; stage.Stage(series.Room(...)) for people on a perspective floor.

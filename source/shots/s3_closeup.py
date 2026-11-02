@@ -4,7 +4,7 @@ fall towards her fingers, with intent and force, and cut to black before it land
 all is well; she can see full well what she is doing; she inexplicably does it anyway.
 
 The blade lies across her outstretched fingers at their middle joints: it would take at least three of them.
-(See story/animation-test.md and guides/movement.md.)"""
+(See story/animation-test.md and guides/yuletide/movement.md.)"""
 import os
 import sys
 

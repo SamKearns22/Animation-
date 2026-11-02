@@ -6,7 +6,7 @@ Continue the animation project. First read these and follow them:
 - guides/best-practice.md: Part 1, plus **Part 2, the TikTok parody series**, which this film belongs to (including
   every lesson from Mossad);
 - guides/tiktok-design.md;
-- guides/pipeline.md: the animatic-first rule.
+- guides/yuletide/pipeline.md: the animatic-first rule.
 
 The working rules:
 - plain English for me;

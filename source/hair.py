@@ -309,7 +309,7 @@ def grid(style, H, Rh, head, bodies=(), hides=None, lks=None):
 
 
 class Sim:
-    """Hair in motion (see guides/movement.md, section 4): each lock is a chain of points. Its roots, lying on
+    """Hair in motion (see guides/yuletide/movement.md, section 4): each lock is a chain of points. Its roots, lying on
     the scalp, move with the head at once; the hanging part is pulled towards where it would rest in this
     pose by springs that are stiff near the scalp and loose at the ends, and damped - so when the head moves,
     the ends lag, swing past and settle within a swing or two. Each lock keeps its length. Then every point is

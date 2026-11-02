@@ -36,5 +36,5 @@ Three cards appear during the trailer, at points still to be decided:
 > WAS BLOOD
 
 - Each line is its own card, so the sentence builds across the trailer, the last card landing late.
-- Style (see guides/tone.md): plain, clean capitals on black, sparse and quiet - no effects - held just long
+- Style (see guides/yuletide/tone.md): plain, clean capitals on black, sparse and quiet - no effects - held just long
   enough to read. The words stay ambiguous: they hint at a sacrifice without revealing the backstory.

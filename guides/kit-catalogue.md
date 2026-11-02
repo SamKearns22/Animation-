@@ -1,4 +1,4 @@
-# Kit catalogue: everything already built, to reuse before building (film-quality rule 28, Sam 25 Oct)
+# Kit catalogue: everything already built, to reuse before building (rule 28)
 
 Check here first when planning a film. Each line: what it is, its file, and how far it reuses. A film that builds a new
 set, person, prop or effect adds it here when its building stage ends, and to `source/catalogue.py`'s list (one line:
@@ -24,6 +24,9 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Water burst when a big body breaks the surface, flat house style, in metres through any camera: a froth collar hiding the waterline cut, a column of water thrown up in smooth streaks that fall back as stubby drops, a foam ring on the sea that breaks into floating clumps (never fades); front and back layers so it wraps the body. Pairs with `whale.draw(cut_z=0)` (the body hidden below the sea) | `source/flying_whales_fx.py` (`burst_parts`, `draw_lumps`, `foam_ring`, `draw_foam`, `test_draw` for EFFECTS) | `python3 source/flying_whales_fx.py sheet OUT.jpg` (six ages) | about 0.3 s a burst a frame |
 | Fire, smoke and water effects, flat house style, in metres through any camera, each a cropped sprite (fast): a tall lumpy fireball (dark red edge, orange, a yellow core that burns down first, gone in 1 s); smoke, steam and dust as separate clumps each with its own outline, rising and drifting with the wind, never fading (`Puff`); fire tongues leaning with the wind out of a hole; splashes of any size from a falling bit to a crown (a ring of drops, a mound at the foot, a column falling back); flying chunks in any colours; a ragged hole torn in any flat face (spot items, with embers) | `source/flying_whales_fx.py` (`fireball_sprite`, `Puff` + `puffs_sprite`, `fire_sprite`, `splash_parts` + `lumps_sprite`, `chunk_poly` + `pieces_sprite`, `hole_items`, `shape_sprite`; `test_draw(age, what)` for EFFECTS) | `python3 -c` with `test_draw` (each effect alone) | a few ms each |
 | A structure wrecked piece by piece (Flying Whales rig): each hit from the hitters' paths knocks pieces loose (thrown the way the hitter went, tumbling, falling, splashing into the sea and sinking under the waterline, never standing on an end), holes others, bends others; pieces ride what they hang on; the whole thing tips and slides under; a 2-frame freeze and a camera jolt on each hit; every effect timed from the hits | `source/flying_whales_wreck.py` (`story`, `rig_state`, `effects`, `shake`, `shift`, `Fall`, `check`) with `flying_whales_rig.draw(swap=...)` | `python3 source/flying_whales_wreck.py table` / `check` | worked out once at start (1.5 s); about 5 s a full-size frame with everything |
+| Bunker embrasure with the crew: inside, from the beach, side section; beach backdrop (sea, craft, hedgehogs) | `source/patriots3_bunker.py` (`Crew`, `inside`, `outside`, `side`, `beach_layer`) | | |
+| WW2 concrete casemate inside (raw concrete with formwork joints, ribbed steel ceiling, steel door frame, cable run, caged lamp, crates, range card, field telephone, spent cases), the passage behind, the beach or a trench through the openings; the slit's reveal round a lens inside it | `source/patriots3_room.py` (`draw`, `painter`, `foreground`) | | |
+| The Normandy coast from the air, painted in moving layers: cliff-face casemates and MG pits firing (tracers, bullets walking across the water), textured black cliffs, shingle, rippled sand, scorched craters, wire, mined stakes, hedgehogs, steel gates, swell and surf, six LCVPs on their own headings with rippling wakes, three kinds of shell burst as soft billows, warships with barrage balloons, a rocket salvo, P-47s with invasion stripes | `source/patriots3_coast.py` (`picture`, `burst`, `craft`) | | |
 
 ## People (satire package, `views.person`: any angle; circle hands)
 | who | file | notes |
@@ -46,6 +49,8 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Darth Maul (black hooded cloak, hood up or down; painted face, horns) with the double-bladed red lightsaber | `source/maul_cast.py` (`MAUL`, `MAUL_HOOD`, `saberstaff`, `pose`) | every view; moods 'neutral' (glare), 'snarl' + talking; poses 'stand', 'present', 'attack', 'strike'; sheet: `maul_cast.py sheet OUT.jpg` |
 | News presenter (original man, Israeli evening-news type: navy suit, tortoiseshell glasses, cropped beard, clip mic) | `source/newsdesk_cast.py` (`PRESENTER`) | every view; moods 'neutral', 'grave', 'smile' + shared; sheet: `newsdesk_cast.py sheet OUT.jpg` |
 | Anyone lying down (face down, on the back, curled on the side, slumped against a wall) or seen from a high camera | `source/lying.py` | 3D body from the person's own design; `lie`, `draw`, `fall`, `stand`; sheet: `python3 source/lying.py sheet OUT.jpg` |
+| The Patriot (balaclava, PP badges) rebuilt on views.person: every view, faces | `source/patriots3_cast.py` (`PATRIOT`) | |
+| German WW2 soldiers, June 1944: Gunner and Loader (M40 helmet, tunic, Y-straps, belt kit, boots or gaiters) | `source/patriots3_cast.py` (`GUNNER`, `LOADER`; `stahlhelm`, `tunic`, `kit`) | |
 
 ## Creatures and machines
 | what | file | notes |
@@ -68,6 +73,8 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Chopping board, glazed ham, cleaver (horror trailer) | `source/props.py` |
 | Double-bladed lightsaber (either blade on or off, turns with the hand in 3D, flat house-style blades) | `source/maul_cast.py` (`saberstaff`) |
 | Curved-back wooden armchair (3D, any angle), blue spotlight pool and shadow | `source/newsdesk_props.py` (`round_chair`, `pool`, `shadow`) |
+| MG42 as a 3D solid (any angle), ammo belt, ammo box, firing flash and recoil, falling cases | `source/patriots3_cast.py` (`Gun`, `draw_mg42`, `draw_belt`, `draw_box`, `cases`) |
+| Remembrance poppy on a jacket | `source/patriots3_cast.py` (`poppy`) |
 
 ## Effects (house style: flat, lumpy, one frame for flashes; no stars, no glows)
 | what | file |
@@ -75,6 +82,10 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Lumpy flash, muzzle flash, sparks, debris that lands and stays, flat smoke, plasma bolt and scorch, tracers, blade trail, glass bursts, room flash, goopy beans, bullet holes on real surfaces | `source/prepper_fx.py`, `source/prepper_cast.py` |
 | Hyper beam (soft glow: Poker Mon only, Sam's exception) | `source/poker_mon_room.py` |
 | Thrown things under gravity (bounce, stay) | Poker Mon's `launch` |
+| Cut-off body pieces that fall, settle and lie as a 3D pile | `source/lying.py` |
+| Hook Text beside a person, three rows (`--w`); 😅 emoji | `source/hook_text.py`, `1f605.png` |
+| Story post still (Maul close-up, cranberry lettering) | `animations/maul-icc-story.png` |
+| A shell bursting on a bunker's slit: flash, black smoke outside, dust puffs rolling in (drawn in depth order), grit from the ceiling, concrete chips that land apart and stay, the bite left in the lintel, camera shake | `source/patriots3_fx.py` |
 
 ## Movement and checks (the kit tools)
 `views.py`, `moves.py`, `stage.py`, `filmkit.py`, `perform.py`, `audit.py`, `clipcheck.py`, `voices.py`: see
@@ -82,34 +93,10 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 `plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),
 `report.py` (19), `catalogue.py` (28); pre-flight runs them all.
 
-## Added 26 Oct (Netan-Yahoo!)
 | what | file |
 |---|---|
-| Israeli TV news studio (3D set), horseshoe layout, plan in metres | `source/newsdesk_set.py`, `source/netan_yahoo_plan.py` |
-| News presenter (bearded, own three-quarter head), curved wooden chairs | `source/newsdesk_cast.py`, `source/newsdesk_props.py` |
-| Benjamin Netanyahu (surprised and impressed faces, strength 1-6) | `source/netanyahu_cast.py` |
-| Darth Maul, double-bladed saberstaff, leap and strikes | `source/maul_cast.py` |
-| Cut-off body pieces that fall, settle and lie as a 3D pile | `source/lying.py` |
-| Hook Text beside a person, three rows (`--w`); 😅 emoji | `source/hook_text.py`, `1f605.png` |
-| Story post still (Maul close-up, cranberry lettering) | `animations/maul-icc-story.png` |
-
-## Added 27 Oct (Patriots 3)
-| what | file |
-|---|---|
-| The Patriot (balaclava, PP badges) rebuilt on views.person: every view, faces | `source/patriots3_cast.py` (`PATRIOT`) |
-| German WW2 soldiers, June 1944: Gunner and Loader (M40 helmet, tunic, Y-straps, belt kit, boots or gaiters) | `source/patriots3_cast.py` (`GUNNER`, `LOADER`; `stahlhelm`, `tunic`, `kit`) |
-| MG42 as a 3D solid (any angle), ammo belt, ammo box, firing flash and recoil, falling cases | `source/patriots3_cast.py` (`Gun`, `draw_mg42`, `draw_belt`, `draw_box`, `cases`) |
-| Bunker embrasure with the crew: inside, from the beach, side section; beach backdrop (sea, craft, hedgehogs) | `source/patriots3_bunker.py` (`Crew`, `inside`, `outside`, `side`, `beach_layer`) |
-| WW2 concrete casemate inside (raw concrete with formwork joints, ribbed steel ceiling, steel door frame, cable run, caged lamp, crates, range card, field telephone, spent cases), the passage behind, the beach or a trench through the openings; the slit's reveal round a lens inside it | `source/patriots3_room.py` (`draw`, `painter`, `foreground`) |
-| The Normandy coast from the air, painted in moving layers: cliff-face casemates and MG pits firing (tracers, bullets walking across the water), textured black cliffs, shingle, rippled sand, scorched craters, wire, mined stakes, hedgehogs, steel gates, swell and surf, six LCVPs on their own headings with rippling wakes, three kinds of shell burst as soft billows, warships with barrage balloons, a rocket salvo, P-47s with invasion stripes | `source/patriots3_coast.py` (`picture`, `burst`, `craft`) |
-| A shell bursting on a bunker's slit: flash, black smoke outside, dust puffs rolling in (drawn in depth order), grit from the ceiling, concrete chips that land apart and stay, the bite left in the lintel, camera shake | `source/patriots3_fx.py` |
 | A held 3D prop through any 3D camera with the holder's hands put on its grips where the camera sees them (screen point turned back into a hand target), and the MG42 drawn in true perspective (end on, beside the lens) | now in the kit: `source/held3d.py` (28 Oct); the film's own: `source/patriots3.py` (`hold_gun`, `draw_gun3d`) |
-| Remembrance poppy on a jacket | `source/patriots3_cast.py` (`poppy`) |
 | The salute (an arm swung up round the shoulder in an arc), arms darting about (flapping, pointing round, finger wag), leaning in a doorway (figure tipped onto the post), thrown back against a wall, staggering backwards | `source/patriots3_act.py` (`salute`, `flapping`, `leaning`, `gunner`, `loader`); the salute, flapping and binoculars are now in the pose gallery |
-
-## Added 28 Oct (Build list 27 Oct: the kit lessons and the new checks)
-| what | file |
-|---|---|
 | The pose gallery: arms folded, hands up, pointing, binoculars, salute, hands on a gun (rifle at port arms), flapping (up, pat), each tested from five views; one sheet | `source/posegallery.py`, `guides/pose-gallery.md`, `guides/pose-gallery.jpg` |
 | A held 3D prop through the real camera: `through(cam)` (views.project as the camera), `body_point` (world point to hand target), `hold` (hands on the grips, the prop drawn with them, 'wrap' when it is nearer the lens) | `source/held3d.py` |
 | A flat person's place through a 3D camera, the tilt measured at the arms' height (no sinking salute close up) | `source/lying.py` (`place`; `stand` uses it) |
@@ -120,3 +107,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | One labelled contact sheet from any film in one command (rule 48) | `source/sheet.py FILM TIMES... [--crop] [--clean]` |
 | `--nostamp` for a clip to splice into a final (rule 47) | `source/satire_template.py` (`final ... --nostamp`) |
 | Each shared check tested against the fault that taught it (the old version put back, caught; the fix passes) | `source/kittests.py` |
+| Pre-flight runs only the checks for what a film contains, and names the ones it skips (rule 58) | `source/preflight.py` (the film's `HAS`) |
+| Nothing flips from in front to behind in one frame within a shot (rule 57) | `source/clipcheck.py` (`flip_faults`; the film's `draw_order(t)`, `ORDER_SWAPS`) |
+| The render lock: no animatic or final without pre-flight's pass on the code as it is now (rule 59) | `source/film_engine.py` (`lock_fault`, `write_pass`; `--faults-named`) |
+| The hiss check heard only between lines (rule 60) | `source/filmkit.py` (`hiss_check(voice=)`) |

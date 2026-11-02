@@ -1,4 +1,4 @@
-"""A posable MakeHuman body, for any of our characters (see guides/character-anatomy.md).
+"""A posable MakeHuman body, for any of our characters (see guides/yuletide/character-anatomy.md).
 
 The whole body is MakeHuman's measured model with its real skeleton. For each pose the skin is bent by the
 skeleton exactly as MakeHuman (and every animation package) does it - each point of skin moved by a weighted

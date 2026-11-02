@@ -1,4 +1,4 @@
-"""The mother, built on MakeHuman's measured human (see mhuman.py and guides/character-anatomy.md).
+"""The mother, built on MakeHuman's measured human (see mhuman.py and guides/yuletide/character-anatomy.md).
 
 Produces the pieces the scene needs, each as a distance grid in its own local frame:
 - her head and neck, in head coordinates (origin midway between the eyeballs, x to her left, y up, z out of

@@ -11,7 +11,7 @@ choosing for me where there's a choice. **Do not render any video in this chat.*
 one or two test stills is fine.
 
 1. **Where are tokens being wasted?**
-   Read `guides/best-practice.md` (especially Part 5), `guides/preflight.md`, `guides/pipeline.md`,
+   Read `guides/best-practice.md` (especially Part 5), `guides/preflight.md`, `guides/yuletide/pipeline.md`,
    `guides/figure-rig.md`, `story/status.md` and the git log (`git log --stat -30`).
    Estimate where our usage goes: re-reading long guides, very long source files (for example
    `source/russiadent.py` is about 3,000 lines), render-and-review loops, editing rounds, notes found late, and

@@ -2,7 +2,7 @@
 droopy felt Santa hat, her forearms on the worktop, staring over it with a blank, mildly curious look,
 watching her mother cut. In the foreground her mother slowly raises the cleaver again and moves it along the
 ham towards her own fingers; the girl's eyes follow the blade up (her head stays still), and she blinks once.
-(See story/animation-test.md and guides/movement.md.)"""
+(See story/animation-test.md and guides/yuletide/movement.md.)"""
 import numpy as np
 
 import os

@@ -1,7 +1,7 @@
 # Prompt: "Pee Pee" - Patriot Platform at Dover (paste into a new chat)
 
 Continue the animation project. First read CLAUDE.md, story/status.md, guides/tiktok-design.md and
-guides/pipeline.md (the animatic-first rule), and follow them: plain English for me; say how long each
+guides/yuletide/pipeline.md (the animatic-first rule), and follow them: plain English for me; say how long each
 render will take and report how long it took; a push notification when anything long finishes, fails or
 needs my decision; send pictures and videos in the chat.
 

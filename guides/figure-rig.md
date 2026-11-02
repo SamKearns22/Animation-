@@ -2,7 +2,7 @@
 
 Read this before building or animating any person in the TikTok parody series (and any film drawn with
 `source/burnham.py` people). The code is `source/figure.py`; the checks run automatically in `source/preflight.py`.
-It builds on `character-anatomy.md` and `movement.md` (written for the Yuletide trailer), translated to our
+It builds on `guides/yuletide/character-anatomy.md` and `guides/yuletide/movement.md` (written for the Yuletide trailer), translated to our
 flat 2D cartoon. Breaking a rule on purpose is fine when the script or the style asks for it: name the break in
 the code (`with figure.allow('reason'):`) so it is a decision, never an accident.
 
