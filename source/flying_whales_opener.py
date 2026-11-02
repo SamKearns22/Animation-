@@ -37,10 +37,11 @@ SIZE = (1080, 1920)
 FOCAL = 1400.0
 HOOK_BAND = (245, 460)                                # screen y: the Hook Text band, as on the rig composition sheet
 
-# timings (s): placeholders until Sam's recording; re-pinned to his word times when it arrives
-LINE = (0.3, 5.0)                                     # "This series, we will see animal behaviour we could scarcely have imagined."
-IMAGINED = 4.2                                        # the word that starts the rise
-CUT = 5.6                                             # hard cut to the rig scene
+# timings (s), pinned to Sam's recording (2 Nov, source/audio/flying-whales-1.m4a, his own pauses kept): "This series,"
+# 0.3, "we will see" 2.3, "animal behaviour" 3.15, "we could scarcely" 5.0, "have imagined." 6.45-7.1
+LINE = (0.3, 7.1)                                     # "This series, we will see animal behaviour we could scarcely have imagined."
+IMAGINED = 6.6                                        # the word that starts the rise
+CUT = 8.0                                             # hard cut to the rig scene (the rise keeps its 1.4 s)
 RISE_PITCH = 40.0                                     # degrees, nose up, reached 0.6 s after the rise starts
 
 # the pod: pattern (whale.PATTERNS), metres behind the lead along its track, to its right, above it
@@ -55,9 +56,9 @@ FORMATION = [
 # the camera round the pod: (t, angle from straight ahead towards the pod's right (deg), distance (m), height (m))
 CAM_KEYS = [
     (0.0, 20.0, 44.0, 1.0),    # in front, a little to their right: they come at us on a slight diagonal
-    (1.8, 24.0, 27.0, 0.0),    # they close on us (the lead's face and brow big)
-    (3.4, 92.0, 26.0, -1.0),   # swung round to their right side: they cross the screen left to right
-    (4.2, 98.0, 26.0, -2.0),   # alongside, pacing them (26 m: the lead whole in the frame, room ahead of its snout)
+    (2.6, 24.0, 27.0, 0.0),    # they close on us (the lead's face and brow big), on "we will see"
+    (4.8, 92.0, 26.0, -1.0),   # swung round to their right side over "animal behaviour": left to right
+    (IMAGINED, 98.0, 26.0, -2.0),  # alongside, pacing them over "we could scarcely" (26 m: the lead whole in frame)
     (CUT, 112.0, 27.0, -10.0), # dropping below them and tilting up as they race for the surface
 ]
 
@@ -188,9 +189,9 @@ def frame(t, ss=1):
 # ------------------------------------------------- the sheet --------------------------------------------------------
 MOMENTS = [
     (0.4, '1  0.4 s  "This series..."', 'they come at us on a slight diagonal'),
-    (2.0, '2  2.0 s  "...we will see..."', 'the lead close: its face and brow'),
-    (3.6, '3  3.6 s  "...animal behaviour..."', 'camera alongside: left to right'),
-    (5.3, '4  5.3 s  "...imagined."', 'up for the surface; hard cut at 5.6'),
+    (2.6, '2  2.6 s  "...we will see..."', 'the lead close: its face and brow'),
+    (5.2, '3  5.2 s  "...we could scarcely..."', 'camera alongside: left to right'),
+    (7.6, '4  7.6 s  "...imagined."', 'up for the surface; hard cut at 8.0'),
 ]
 
 

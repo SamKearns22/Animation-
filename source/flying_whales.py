@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Flying Whales: the film file (copied from source/satire_template.py, 1 Nov; no cast: no people, rule 16 of the
 brief). Two shots, hard cut between them:
-  'under'  0-5.6 s   the opener under the sea (source/flying_whales_opener.py, its camera swings round the pod);
-  'rig'    5.6-17.6  the rig scene, one locked camera (flying_whales_sea.CAM): sky and sea (flying_whales_sea), the rig
+  'under'  0-8.0 s   the opener under the sea (timed to Sam's Attenborough recording, 2 Nov) (source/flying_whales_opener.py, its camera swings round the pod);
+  'rig'    8.0-20.0  the rig scene, one locked camera (flying_whales_sea.CAM): sky and sea (flying_whales_sea), the rig
                      in 31 breakable pieces (flying_whales_rig), the whales' paths and the hits (built next).
-Then finish.py adds the Hook Text ("Blue Planet III looks 🔥🔥🔥", --y 352, the whole video) and the sign-off.
+Then finish.py adds the Hook Text ("Blue Planet III looks 🔥🔥🔥", --y 352 --until 8.0: off at the cut) and the sign-off.
 24 fps, not the house 12: the opener's camera swings round the pod and the specks in the water strobe at 12 (each
 drawing jumps several speck-widths), and the whales cross the rig scene fast; motion like this is shot on ones.
 Guide: guides/satire.md; notes: notes/flying-whales.md.
@@ -32,6 +32,7 @@ import flying_whales_rig as R    # noqa: E402  the rig
 import flying_whales_paths as PATHS  # noqa: E402  the whales' paths in the rig scene
 import flying_whales_fx as FX    # noqa: E402  the effects (burst, splashes, fire, smoke, bits)
 import flying_whales_wreck as WRECK  # noqa: E402  what breaks when, the pieces falling, the finale
+import flying_whales_sound as SOUND  # noqa: E402  the sound effects (Sam's sounds, 2 Nov)
 import whale as W                # noqa: E402
 
 FPS, SR = 24, MA.SR
@@ -45,8 +46,8 @@ LOOKS_AT = {}
 # until then: subtitles in chunks of two to five words, each on its first word (guides/satire.md, Subtitles).
 LINES = [dict(who='narrator', text='This series, we will see animal behaviour we could scarcely have imagined.',
               start=O.LINE[0], end=O.LINE[1], audio='flying-whales-1')]
-CHUNKS = [(0.3, 'This series,'), (1.3, 'we will see'), (2.2, 'animal behaviour'), (3.3, 'we could scarcely'),
-          (4.2, 'have imagined.')]       # placeholder word times; re-pinned to the recording (PINS) when it arrives
+CHUNKS = [(0.3, 'This series,'), (2.32, 'we will see'), (3.15, 'animal behaviour'), (5.03, 'we could scarcely'),
+          (6.44, 'have imagined.')]       # pinned to the recording's word times (2 Nov, from its phrases and hisses)
 CUT = O.CUT
 RIG_LEN = 12.0                                    # "Let's do the 12 second shot" (brief 19)
 SHOTS = [('under', 0.0, CUT), ('rig', CUT, CUT + RIG_LEN)]
@@ -56,7 +57,7 @@ DUR = CUT + RIG_LEN
 PLAN = dict(ROOMS={}, OPENINGS={}, THINGS={}, PEOPLE={}, CAMS={}, GROUPS={})
 BENCHMARK = []                                    # rule 3: done in the notes (B1-B10, Showstoppers) for both sets
 SHOT_CAST = {}                                    # no people
-HOOK = ('Blue Planet III looks 🔥🔥🔥', {'y': 352, 'until': 5.6})   # exactly as finish.py will be given it; off at the cut (Sam, 2 Nov: it blocked the rig scene)
+HOOK = ('Blue Planet III looks 🔥🔥🔥', {'y': 352, 'until': O.CUT})   # exactly as finish.py will be given it; off at the cut (Sam, 2 Nov: it blocked the rig scene)
 KEEP_CLEAR = []
 PROP_SIZES = []
 OUTFIT, HEIGHTS = {}, {}
@@ -86,8 +87,11 @@ for ln in LINES:                                  # time the line to its recordi
     ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
     if ln.get('audio') and os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + '.m4a')):
         v = MA.line(ln['audio'])
-        ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
-        ln['_stretches'] = MA.pauses(v, 0.12)
+        ps = MA.pauses(v, 0.12)                   # every phrase, the quiet "have imagined" too (speech() drops it)
+        a0 = ps[0][0] - 0.06                      # the line starts on its first word (the breath before is gone)
+        v = MA.gate(v, ps)[int(a0 * SR):int((ps[-1][1] + 0.12) * SR)]
+        ln['_voice'], ln['end'] = v, ln['start'] + 0.06 + ps[-1][1] - ps[0][0]
+        ln['_stretches'] = [(a - a0, b - a0) for a, b in ps]
 
 
 def shot_of(t):
@@ -178,15 +182,19 @@ def frame_image(t):
 
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.zeros(n)        # voices only (no sound effects until Sam asks)
+    voice = np.zeros(n)
+    rest = SOUND.track(n)                         # Sam's sound effects (2 Nov); no music
     for ln in LINES:
         if ln['_voice'] is not None:
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
-    mix = voice + rest
     end = int(BLACK_AT * SR)
-    if np.abs(voice).max() > 1e-6:
+    k = int(0.4 * SR)                             # the effects ease out over the last 0.4 s (the collapse runs on)
+    rest[end - k:end] *= np.linspace(1, 0, k)
+    rest[end:] = 0
+    mix = voice + rest
+    if np.abs(mix).max() > 1e-6:
         mix, g = MA.master(mix, end)
         voice, rest = voice * g, rest * g
     mix[end:] = 0
