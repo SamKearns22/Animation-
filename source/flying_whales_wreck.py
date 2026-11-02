@@ -60,7 +60,7 @@ TF = 7.62                                             # the finale starts (the l
 THROWN = {
     'brace_front_low': (0.35, 3.0, 160, 0.0), 'brace_back': (0.3, 2.0, -120, 0.0),
     'lifeboat_1': (0.16, 5.0, 320, 5.0), 'lifeboat_2': (0.16, 6.0, -360, -4.0),
-    'stair_tower': (0.2, 2.5, 75, 3.0), 'helideck_truss': (0.3, 3.0, 150, 0.0), 'helideck': (0.36, 7.0, 240, 0.0),
+    'stair_tower': (0.2, 4.0, 75, 16.0), 'helideck_truss': (0.3, 3.0, 150, 0.0), 'helideck': (0.36, 7.0, 240, 0.0),
     'crane_house': (0.28, 6.0, 95, 12.0), 'flare_boom': (0.1, 1.5, 10, 0.0), 'stack_1': (0.32, 4.0, 210, 0.0),
     'stack_2': (0.32, 5.0, -230, 0.0), 'leg_fl': (0.2, 0.0, 55, 7.0), 'brace_front_high': (0.3, 2.0, 140, 2.0),
     'brace_left': (0.25, 1.0, -100, 5.0), 'crane_boom': (0.15, 4.0, -120, 10.0)}
