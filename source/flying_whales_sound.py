@@ -57,13 +57,16 @@ def cues():
     """[(film s, label, sound)]."""
     c = []
     # ---- under the sea (0 to the cut): the whales moving, two calls, muffled; nothing over the cut
-    bed = clip('underwater-whales', -30.0)[:int(CUT * SR)].copy()
+    # (Sam, 2 Nov: lost under the dialogue, so up 5 dB; a whale sound in it at 7.0-7.4 s was cut off sharply at the
+    # cut, so the bed now fades out over the last 0.6 s)
+    bed = clip('underwater-whales', -25.0)[:int(CUT * SR)].copy()
     k = int(0.3 * SR)
     bed[:k] *= np.linspace(0, 1, k)
-    bed[-int(0.05 * SR):] *= np.linspace(1, 0, int(0.05 * SR))
+    k = int(0.6 * SR)
+    bed[-k:] *= np.linspace(1, 0, k) ** 1.5
     c.append((0.0, 'under the sea: whales moving (Sam\'s first 10 s)', bed))
-    c.append((1.75, 'whale call 1, under water', clip('whale-call-1', -29.0, low=1800)))
-    c.append((4.45, 'whale call 2, under water', clip('whale-call-2', -30.0, low=1800)))
+    c.append((1.75, 'whale call 1, under water', clip('whale-call-1', -24.0, low=1800)))
+    c.append((4.45, 'whale call 2, under water', clip('whale-call-2', -25.0, low=1800)))
     # ---- the rig scene: five whales burst out of the sea
     for k in PATHS.KEYS:
         c.append((rig(PATHS.SURFACE[k]), f'whale {k} bursts out of the sea', clip('splash-minor', -21.0 - k * 0.8)))
