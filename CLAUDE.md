@@ -110,6 +110,6 @@ I don't know how to code. Please:
 - **Sound:** no sound effects unless the script names them or I ask; voices only by default.
 - **TikTok:** follow `guides/tiktok-design.md`. No title by default (the cranberry title only when asked); Hook Text
   (the line introducing the joke) in TikTok's white-box caption style. **Every video ends with the CranbriJoos
-  sign-off** (the beaver sipping from the carton, with my slurp, 2 s; the one standing sound effect): finish with
+  sign-off** (the beaver sipping from the carton, with my slurp, 1.6 s (Sam, 2 Nov); the one standing sound effect): finish with
   `python3 source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 ["Hook Text"]` from the clean render in
   `source/data/`.

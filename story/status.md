@@ -40,6 +40,10 @@ Read this first in any new session, after CLAUDE.md.
 - 1 Nov (Opus medium): Sam approved rig clips (c)-(e); no recording, the Attenborough line as subtitles only; colour emoji in
   `hook_text.py`; brief checklists ticked; pre-flight 6 faults, all named (people-and-rooms checks, the chosen 12 s shot); check
   sheet sent (`review/flying-whales-check-sheet.jpg`). Next: Sam's yes, then the animatic (Sonnet, fresh chat).
+- 1-2 Nov (Sonnet, then Opus): animatic 1 sent (Hook Text, 1.6 s sign-off); Sam's notes 8-13 fixed (helideck, higher
+  loop, finale smoke and spray, bigger crown splash, Hook Text off at the cut); two clips sent, Sam: "Proceed". Rules
+  Q52 (sign-off 1.6 s, `finish.py` default) and Q53 (long pieces land flat) written. Next (fresh chat, Sonnet):
+  pre-flight, check sheet, Sam's yes, animatic 2: `notes/flying-whales.md`, "Where things stand".
 
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,

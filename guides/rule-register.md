@@ -78,3 +78,5 @@ every film's notes; older rules in `guides/satire.md` are added as they come up.
 | Q49 | Every famous head passes the likeness check (60%+, nothing the wrong way, 1st in the line-up) before the cast sheet | film-quality-rules 49; satire.md likeness method | Sam, 31 Oct (Halo No-No review: Damon not recognised) | `source/likeness.py check` |
 | Q50 | Every famous person gets one shot with the face at least 240 px tall | film-quality-rules 50 | Sam, 31 Oct (Damon about 30 px in Roadster) | by hand on the check sheet |
 | Q51 | Likeness pack: 3+ straight-on, close, not-smiling photos; photos beat caricatures | film-quality-rules 51; satire.md Start | Sam, 31 Oct (Musk drawn wide from the cartoons) | by hand at the brief; `likeness.py card` warns on small or turned photos |
+| Q52 | The sign-off lasts 1.6 s on every film | tiktok-design.md, Sign-off; CLAUDE.md | Sam, 2 Nov (Flying Whales) | `signoff.py` default speed 1.25 (used by `finish.py`) |
+| Q53 | Long falling pieces land flat, never on their end | best-practice 1.3 | Sam's yes, 2 Nov (Flying Whales lesson) | by hand on the check sheet (tilt at landing) |

@@ -251,3 +251,51 @@
 - **Files to open:** this file; `guides/satire.md` ("Render", "Before every render"); `guides/film-quality-rules.md`
   8, 15, 16, 29, 32, 33, 40; the docstrings of `source/flying_whales_opener.py`, `source/flying_whales_under.py`,
   `source/flying_whales_rig.py`, `source/flying_whales_sea.py`, `source/whale.py`; `source/satire_template.py`.
+
+
+## Handover moved 2 Nov (animatic 1 stage)
+- **Rules that bite at the next stage (rule 48):** the animatic waits for Sam's clear yes to the check sheet (18 Oct; a
+  note is not a yes); unattended, one animatic then stop (25 Oct); 5 (by hand: falling pieces against the pieces still
+  standing, and the braces inside the jacket); 25 (the 2-frame freezes and jolts only show in motion); 46 (frames Sam
+  names are looked at first); self-review before the send (18 Oct).
+- **Done (1 Nov, Opus medium):** Sam on clips (c)-(e): "Clips look good so far" (note 6). No recording for now: the
+  Attenborough line runs as subtitles only (note 7; placeholder times 0.42-5.25 s, proofread). The colour emoji in
+  `source/hook_text.py` (🔥 saved in `source/fonts/emoji/1f525.png`, Noto fallback; numerals stay with the word before).
+  Both brief checklists ticked (O4 marked "changed"; 18, the sign-off, comes at the final). Pre-flight ran (7.5 min):
+  6 faults, all named, none fixed: no `audits`, no `LINE_SUBJECTS`, no ROOMS, no plan cameras, no `scene(t)` (these
+  are the people-and-rooms checks: this film has no people or rooms; the whales' own checks are `check`,
+  `wreck.py check` and `paths.py contacts`, all clean); the rig shot is 12.0 s (Sam's own "12 second shot"). The check
+  sheet (19 frames, 0.5-17.4 s) is `review/flying-whales-check-sheet.jpg`, sent to Sam.
+- **Animatic sent (1 Nov, Sonnet):** Sam's yes to the check sheet; rendered 9.5 min, then Hook Text + 1.6 s sign-off (`--signoff-speed 1.25`, Sam's request), 19.2 s, 3 MB, `review/flying-whales-animatic.mp4`. Waiting for Sam's notes or a clear yes to the final. PROPOSED, awaiting Sam's yes: rule 'sign-off is 1.6 s on every film' (tiktok-design.md, CLAUDE.md, rule-register, finish.py default).
+- **Animatic 1 notes (2 Nov, Opus): notes 8-13 fixed, two clips sent; waiting for Sam on the clips, then the check sheet and his yes for animatic 2 (Hook Text `--until 5.6`, `--signoff-speed 1.25`).**
+- **Next (older plan, now partly done; fresh chat, Sonnet: a routine render):** Sam's yes to the check sheet (or his notes, which go back to Opus
+  medium). On yes: `python3 source/flying_whales.py final source/data/flying-whales-animatic.mp4 --small` (17.6 s,
+  423 frames; time it), then the Hook Text for the whole film: `python3 source/hook_text.py IN OUT "Blue Planet III
+  looks 🔥🔥🔥" --y 352 --until 17.6` (the animatic needs no sign-off). Send it with a self-review; push notification.
+  Start the new chat with: "Flying Whales: read the handover in notes/flying-whales.md; my answer to the check sheet
+  is ..." The animatic stays off GitHub (drafts stay off).
+- **Watch at the animatic:** the star test's splash and crown ages (named before: wide white water, not stars); the
+  braces brushing a standing leg; the shake and freezes; the blowhole puffs from behind; the subtitles are small and
+  low (house style) and now carry the line alone, so check they read on a phone; the whales are small in the rig
+  scene (about 20 m from 120 m) and get lost behind the smoke from about 12.6 s; from 16 s the frame is only smoke
+  and foam (the planned 0.85 s settle and the scene's end).
+- **Sam's question (1 Nov), for the end-of-film audit:** "What's the point in building a rig with over thirty parts if
+  most of it slides into the sea in a solid block anyway?" My answer: the parts carry the first 9 s of the rig scene
+  (15 thrown, holed decks, bent derrick, snapped crane and flare boom); only the last 3 s are the block. But a few
+  parts (inner braces, the far side) are barely seen, and the block finale saved work late. Lesson to weigh at the
+  audit: build pieces only to the level the camera shows, and decide how the end looks before splitting the model.
+- **Losses and my additions Sam should know about:** unchanged since the last handover (archive, 1 Nov effects stage),
+  plus my one small addition today: "III" kept on the same line as "Planet" in the Hook Text.
+- **Rule 44 reworded (Sam, 1 Nov: "Yes write into rules"):** usage asked only after a building stage, the animatic and the final; in `film-quality-rules.md` and `rule-register.md`.
+- **Lessons I'd propose (16 Oct: say the number and I'll write them in):** (1) `guides/best-practice.md` Part 1 (falling
+  things): "A long piece that falls into water or onto a floor lands flat: check its tilt at the moment it lands, and
+  choose its spin so it isn't standing on its end." (2) `guides/satire.md` (effects): "Smoke from a moving or
+  short-lived fire starts big and grows fast, or the column breaks into a string of beads." Not yet answered.
+- **Rule requests and proposals not yet in a guide:** none from Sam (searched this file); the two lessons above are mine.
+- **Usage budget (rule 44):** 37% (Sam, 1 Nov, after the check sheet: this stage cost under 1%).
+- **At the end of this film (Sam, 1 Nov; do these after the final is sent, before closing the film):** (1) an audit of
+  the project for what can be streamlined and made more efficient (include Sam's rig-parts question above); (2) an
+  audit of how my messages to Sam can be shorter, clearer and more useful. Keep this item in every handover until both
+  are done.
+- **Files to open:** this file; `guides/preflight.md` (render lines); the check sheet.
+

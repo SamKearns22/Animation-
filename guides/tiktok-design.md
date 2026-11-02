@@ -97,7 +97,9 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   (Mossad 56%, Cry Minister 47%, The Park 41%); the 50-60 s films sat at 19-35%.
 
 ## Sign-off (Sam, 15 Oct): on every video
-- The last 2 seconds of every TikTok video, after the final line: the profile picture in the middle on white, the fire
+- **1.6 seconds, on every film (Sam, 2 Nov):** the sign-off plays 25% faster than the original 2 s (first used on Halo No-No
+  and Patriots 4); `finish.py` does this by default (`--signoff-speed 1.0` gives the old 2 s only if Sam asks).
+- The last 1.6 seconds of every TikTok video, after the final line: the profile picture in the middle on white, the fire
   dancing, the beaver (never blinking) holding a white CranbriJoos carton (red trim, red balloon logo, "Cranbri" larger
   than "Joos"); as Sam's slurp plays his mouth and teeth vanish into a small black O round the straw, his eyes widen,
   and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).

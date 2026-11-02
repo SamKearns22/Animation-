@@ -2,7 +2,7 @@
 """The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled final
 render, add the Hook Text (if the film has one) and the CranbriJoos sign-off at the end.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre] [--signoff-speed 1.25]
+    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre] [--signoff-speed 1.0]
 
 Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text can change without a re-render.
 """
@@ -29,7 +29,7 @@ def main():
             i = rest.index(flag)
             extra += [flag, rest[i + 1]]
             rest = rest[:i] + rest[i + 2:]
-    if '--signoff-speed' in rest:                 # e.g. 1.25: the sign-off 25% faster (this film only unless Sam makes it a rule)
+    if '--signoff-speed' in rest:                 # the default is 1.25 (1.6 s, Sam's rule, 2 Nov); 1.0 = the old 2 s
         i = rest.index('--signoff-speed')
         os.environ['SIGNOFF_SPEED'] = rest[i + 1]
         rest = rest[:i] + rest[i + 2:]

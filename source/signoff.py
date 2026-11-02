@@ -25,7 +25,7 @@ PFP = os.path.join(ROOT, 'profile', 'cranbrijoos-tiktok-1080-eyes-open.png')   #
 FONT = os.path.join(HERE, 'fonts', 'TikTokSans-Bold.woff')
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 FPS, DUR = 12, 2.0
-SPEED = float(os.environ.get('SIGNOFF_SPEED', 1.0))   # 1.0 = the standing 2 s; 1.25 = 25% faster, 1.6 s (Sam, 31 Oct, Halo No-No)
+SPEED = float(os.environ.get('SIGNOFF_SPEED', 1.25))  # 1.25 = the standing 1.6 s (Sam's rule, 2 Nov); 1.0 = the old 2 s
 OUT_DUR = DUR / SPEED
 W, H = 1080, 1920
 SIZE = 860                                   # the profile picture in the middle of the screen, white all round (Sam)
