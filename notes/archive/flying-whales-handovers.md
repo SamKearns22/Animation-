@@ -299,3 +299,36 @@
   are done.
 - **Files to open:** this file; `guides/preflight.md` (render lines); the check sheet.
 
+
+
+# Handover replaced 2 Nov (after the final)
+## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
+- **Rules that bite at the next stage (rule 48):** new rules proposed to Sam first (16 Oct); sound effects only when
+  Sam asks (he has: 2 Nov) and Q26 (none until Sam says yes to the list); 44 (usage budget, ask at the handover);
+  loudness and clean fades (best-practice 1.4); sound reproducible (fixed seeds); sound-check file before any render.
+- **Done (2 Nov):** animatic 2 sent; notes 14-18 fixed (crane thrown clear, stair tower buckles then flung left, front
+  smoke stays in front, Blaze out of a fireball, outlines 3 px not 5: `SEA.LINE`). Clips A, B, C sent; Sam: "Good... I
+  think we are there". Animatic 3 rendered and sent (`review/flying-whales-animatic-3.mp4`, 3.1 MB). Pre-flight: the
+  same 6 faults as before, named. Branch pushed.
+- **Next (fresh chat, OPUS, high effort: building something new):** compose the score. Sam found no real Blue Planet
+  III music; he is searching sound effects himself. My plan: our own nature-documentary score (soft swelling strings and
+  a choir "ahh", sincere and majestic) that builds through the attack, peaks on the big splash (about film 14.5-16.4),
+  then cuts dead for the CranbriJoos slurp; a low underwater hum under 0-5.6 s. Start from `source/horror_trailer_music.py`
+  (the house music tool); write `source/flying_whales_music.py`; music to `music/`; send a sound-check file (the score over
+  one still) before any render; fixed seeds. Sam's sound effects list (proposed 2 Nov, awaiting his yes or edits) is in
+  the chat: sea and wind bed, whale calls, blowhole puffs, steel crunches, five booms, crane snap, finale groan and splash.
+  Start the new chat with: "Flying Whales: read the handover in notes/flying-whales.md".
+- **Watch:** the stair tower's buckle in motion; Blaze's explosion partly hidden by smoke; front smoke covers part of the
+  sinking block (flagged losses).
+- **Sam's question (1 Nov), for the end-of-film audit:** rig-parts question (answer in the archive, 1 Nov handover).
+- **Rule requests and proposals not yet in a guide:** (1) Sam asked "outlines thicker than usual, no?" (2 Nov): proposed
+  1) whale.py default outline 5 px to 3 px and correct its note; 2) a rule in film-quality-rules plus rule-register:
+  every film's outlines 3 px at 1080 wide, checked against an earlier film on the first stills sheet. Awaiting Sam's numbers.
+  (2) Proposed: the same fault as note 8 recurred in note 15 (fix every piece a whale hits, not one): not yet proposed in
+  words to Sam.
+- **Usage budget (rule 44):** ask Sam at the handover.
+- **At the end of this film (Sam, 1 Nov; after the final is sent, before closing the film):** (1) an audit of the
+  project for what can be streamlined (include the rig-parts question); (2) an audit of how my messages to Sam can be
+  shorter, clearer and more useful. Keep this item in every handover until both are done.
+- **Files to open:** this file; `music/README.md`; `guides/best-practice.md` 1.4; `source/horror_trailer_music.py`.
+

@@ -45,6 +45,11 @@ Read this first in any new session, after CLAUDE.md.
   Q52 (sign-off 1.6 s, `finish.py` default) and Q53 (long pieces land flat) written. Next (fresh chat, Sonnet):
   pre-flight, check sheet, Sam's yes, animatic 2: `notes/flying-whales.md`, "Where things stand".
 
+- 2 Nov (Sonnet and Opus): animatics 2-4; notes 14-18 fixed (crane and stair tower thrown clear, front smoke kept,
+  Blaze out of a fireball, outlines 3 px); Sam's voice and sound effects in (`source/flying_whales_sound.py`; opener
+  retimed to his line, cut at 8.0 s; no music). **FINAL SENT:** `animations/flying-whales-vertical.mp4` (8.7 MB, 21.6 s).
+  Usage: 45% of the week at the final. Next (fresh chat, Opus high): Sam's two end-of-film audits (handover in the notes).
+
 ## In progress: "Halo No-No" (TikTok satire: Musk in Master Chief's armour in a Roadster armada vs the Halo; `notes/halo-no-no.md`, `source/halo_no_no.py`)
 - 29 Oct (building, Opus): sets (`halo_sets.py`), the film file, stills and three clips sent. Next: Sam's notes (Opus,
   medium), then pre-flight wiring and the first animatic. Handover in `notes/halo-no-no.md`.
