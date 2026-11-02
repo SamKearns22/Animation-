@@ -209,7 +209,11 @@ def checks():
         print('NOTE: no recording yet for the Attenborough line (placeholder times)')
     mix, voice, rest = soundtrack(stems=True)
     if np.abs(mix).max() > 1e-6:
-        faults += filmkit.hiss_check(mix, SR, BLACK_AT)
+        # The hiss test picks the quietest fifth of the mix. Here that fifth is mostly speech (the opener is the only quiet
+        # part and Sam's underwater bed now fills its silences), so it measured his consonants (-28 to -78 dBFS,
+        # nothing steady: his gaps read -73 and below) as hiss. Test what could really be laid-under noise: the voice
+        # and the effects each alone (both pass; the effects' top end is 50 to 100 dB lower). 2 Nov; tool fix proposed.
+        faults += filmkit.hiss_check(voice, SR, BLACK_AT) + filmkit.hiss_check(rest, SR, BLACK_AT)
         for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                          cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
             print('QUESTION FOR SAM:', q)
