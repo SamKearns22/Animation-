@@ -44,9 +44,9 @@ CAST = {}                                         # no people (brief 14)
 LOOKS_AT = {}
 # Attenborough (Sam records it; 'audio' then times the line to source/audio/flying-whales-1.m4a). Placeholder times
 # until then: subtitles in chunks of two to five words, each on its first word (guides/satire.md, Subtitles).
-LINES = [dict(who='narrator', text='This series, we will see animal behaviour we could scarcely have imagined.',
+LINES = [dict(who='narrator', text='In this series, we will see animal behaviour we could scarcely have imagined.',
               start=O.LINE[0], end=O.LINE[1], audio='flying-whales-1')]
-CHUNKS = [(0.3, 'This series,'), (2.32, 'we will see animal behaviour'), (5.03, 'we could scarcely'),
+CHUNKS = [(0.3, 'In this series,'), (2.32, 'we will see animal behaviour'), (5.03, 'we could scarcely'),
           (6.44, 'have imagined.')]       # "we will see" alone was on screen 0.8 s (pre-flight: too fast to read), so it
                                           # carries "animal behaviour" with it: that appears 0.8 s before he says it       # pinned to the recording's word times (2 Nov, from its phrases and hisses)
 CUT = O.CUT
