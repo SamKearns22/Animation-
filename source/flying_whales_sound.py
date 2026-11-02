@@ -48,6 +48,56 @@ def clip(name, lufs, a=None, b=None, low=None, rate=1.0):
     return x * 10 ** ((lufs - MA.lufs(x)) / 20)
 
 
+# ---- the piano (Sam, 2 Nov: "gentle nature piano music appropriate for the first scene. No music in second.")
+# D major, soft broken chords that turn with Attenborough's phrases, a sparse tune on top; on "imagined" the
+# arpeggio climbs the keyboard with the whales racing for the surface, and it is gone with the cut.
+# (film s, bass note, the chord's broken-chord notes, the tune's notes as (s, note))
+PIANO = [
+    (0.0, 'D2', ['A2', 'D3', 'F#3', 'A3', 'E4', 'A3'], [(0.6, 'F#5'), (1.5, 'E5'), (1.8, 'A4')]),     # "This series,"
+    (2.3, 'B1', ['F#2', 'B2', 'D3', 'F#3', 'C#4', 'F#3'], [(2.4, 'D5'), (3.0, 'C#5'), (3.3, 'B4')]),  # "we will see
+    (3.9, 'G1', ['D2', 'G2', 'B2', 'D3', 'F#3', 'D3'], [(4.0, 'B4'), (4.6, 'D5')]),                   #  animal behaviour"
+    (5.0, 'A1', ['E2', 'A2', 'D3', 'E3', 'A3', 'E3'], [(5.1, 'E5'), (5.7, 'C#5')]),                   # "we could scarcely"
+    (5.9, 'A1', ['E2', 'A2', 'C#3', 'E3', 'A3', 'E3'], [(6.2, 'E5')]),
+]
+RISE = (6.55, 7.75, ['D3', 'F#3', 'A3', 'D4', 'F#4', 'A4', 'D5', 'F#5', 'A5', 'D6'])   # on "imagined": up and up
+STEP = 0.3                                            # s between the broken-chord notes
+
+
+@functools.lru_cache(None)
+def piano():
+    import deck_the_halls as D
+    D.rng = np.random.default_rng(31)                 # fixed dice: the same piano every render
+    n = int((CUT + 0.5) * D.SR)
+    x = np.zeros(n)
+
+    def note(t, name, vel, dur):
+        s = D.piano_note(D.midi(name), vel, dur)
+        i = int(t * D.SR)
+        s = s[:max(0, n - i)]
+        x[i:i + len(s)] += s
+
+    ends = [p[0] for p in PIANO[1:]] + [RISE[0]]
+    for (t0, bass, arp, tune), t1 in zip(PIANO, ends):
+        note(t0, bass, 0.42, t1 - t0 + 0.4)
+        k = 0
+        while t0 + STEP * (k + 1) < t1 - 0.05:
+            note(t0 + STEP * (k + 1), arp[k % len(arp)], 0.26 + 0.05 * (k % 2 == 0), STEP * 3)
+            k += 1
+        for tt, nm in tune:
+            note(tt, nm, 0.4, 1.4)
+    a, b, notes = RISE
+    note(a, 'D2', 0.45, CUT - a)
+    for j, nm in enumerate(notes):                    # quickening a little as it climbs
+        u = j / (len(notes) - 1)
+        note(a + (b - a) * (u ** 0.85), nm, 0.28 + 0.2 * u, 0.9)
+    x = D.reverb(x)
+    x = resample_poly(x, 160, 147)                    # 44.1 kHz -> the film's 48 kHz
+    x = x[:int(CUT * SR)]
+    k = int(0.35 * SR)                                # gone with the cut (a quick fade, not a click)
+    x[-k:] *= np.linspace(1, 0, k) ** 2
+    return x * 10 ** ((-27.0 - MA.lufs(x)) / 20)      # gentle: well under the voice (-20)
+
+
 def rig(t):
     """Film time of rig-scene story time t (the freezes on the hits push later events back)."""
     return CUT + WR.real_of(t)
@@ -65,8 +115,11 @@ def cues():
     k = int(0.6 * SR)
     bed[-k:] *= np.linspace(1, 0, k) ** 1.5
     c.append((0.0, 'under the sea: whales moving (Sam\'s first 10 s)', bed))
-    c.append((1.75, 'whale call 1, under water', clip('whale-call-1', -24.0, low=1800)))
+    # Sam, 2 Nov: "a loud whale noise at the beginning (beneath the dialogue)": the big call opens the film, under
+    # "This series," (muffled: it is under water)
+    c.append((0.0, 'whale call 1, LOUD, opening the film', clip('whale-call-1', -18.0, low=2200)))
     c.append((4.45, 'whale call 2, under water', clip('whale-call-2', -25.0, low=1800)))
+    c.append((0.0, 'piano: gentle nature music under the sea (cut with the scene)', piano()))
     # ---- the rig scene: five whales burst out of the sea
     for k in PATHS.KEYS:
         c.append((rig(PATHS.SURFACE[k]), f'whale {k} bursts out of the sea', clip('splash-minor', -21.0 - k * 0.8)))
