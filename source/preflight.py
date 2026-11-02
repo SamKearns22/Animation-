@@ -301,7 +301,7 @@ def main():
     logged = len(F.LOG)                         # the sheet's frames repeat ones already checked
     with Pool(os.cpu_count()) as pool:
         tiles = pool.map(_sheet_tile, range(int(end)))
-    cols = 10
+    cols = 5                                    # 1080 px wide: one look, not a wall of pixels
     sheet = Image.new('RGB', (cols * 216, ((len(tiles) + cols - 1) // cols) * 384), (20, 20, 20))
     for i, im in enumerate(tiles):
         sheet.paste(im, ((i % cols) * 216, (i // cols) * 384))
@@ -316,8 +316,6 @@ def main():
     log = buf.getvalue().splitlines()
     report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'),
                      notes=(['The figure guard (allowed drawings, how often):'] + log) if log else ())
-    if log:
-        print(f'(the figure guard logged {len(log)} kind(s) of allowed drawing: in the file)')
     print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final

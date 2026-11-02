@@ -62,12 +62,15 @@ I don't know how to code. Please:
   When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
   /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
   a task on the wrong model, refuse and tell me**; let me change it, or offer me the option to override.
-- **Fresh chat at every stage switch.** Every step re-reads the whole chat. The handover is the film's ONE "Where things
+- **Fresh chat when the model changes or the chat gets long** (every step re-reads the whole chat). Two stages in a row
+  on the same model with a short chat carry on in the same chat: no handover just because a stage has a new name. The handover is the film's ONE "Where things
   stand" section (old ones go to `notes/archive/NAME-handovers.md`), **15 lines at most**, in this order: Rules that
   bite next (3, by number); Done; Next (model and what to type in the new chat); Needs Sam; Read (which sections of
   which guide); Open rule requests. Code names go in a "For Claude" line at the end. Update `story/status.md` (3
   lines), commit and push. **Paste only 3 lines into the chat:** what's done, the model, and what to type in the new chat.
-- **Read little:** one labelled sheet (`sheet.py`), never an unchanged picture again; `python3 source/codemap.py
+- **Read little:** one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
+  size for faces, Hook Text and frames Sam names), never an unchanged picture again; a film's code starts with a short
+  map (`MAP` in its first lines) and only the lines a note touches are read; `python3 source/codemap.py
   FILE` and only the lines needed; only the guide sections the handover names.
 - **Push notifications** whenever a render or long process finishes, fails or needs my decision, and at every stage
   end. Say how long each render will take and how long it took.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""report: every check prints a short summary and writes its full list to a file (guides/film-quality-rules.md,
-rule 19). Why: Prepper Minister's checks printed hundreds of lines a run; reading them filled the chat (every line is
+"""report: every check prints a short summary; the full list goes to a file only when it is longer than the summary
+(guides/film-quality-rules.md, rule 19). Why: Prepper Minister's checks printed hundreds of lines a run; reading them filled the chat (every line is
 read again at every step) and the one fault that mattered was easy to miss.
 
     report.summarise('pre-flight', faults, 'OUT_DIR/film-preflight.txt')
@@ -31,8 +31,11 @@ def kind(line):
 
 
 def summarise(title, faults, path=None, first=FIRST, notes=()):
-    """Print the short summary; write every fault (and any notes) to `path`. Returns the printed text."""
+    """Print the short summary. A file is written only when there are more faults than the summary shows (Sam, 2 Nov:
+    he never reads it; the one line is enough). Returns the printed text."""
     faults = list(faults)
+    if path and len(faults) <= first:
+        path = None
     if path:
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         with open(path, 'w') as f:
@@ -45,13 +48,13 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
         counts[kind(x)] = counts.get(kind(x), 0) + 1
     where = f' (full list: {path})' if path else ''
     if not faults:
-        out = [f'{title}: clean{where}']
+        out = [f'{title}: clean']
     else:
         top = ', '.join(f'{k} {n}' for k, n in sorted(counts.items(), key=lambda kv: -kv[1]))
         out = [f'{title}: {len(faults)} fault(s) -- {top}{where}']
         out += [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in faults[:first]]
         if len(faults) > first:
-            out.append(f'   ... and {len(faults) - first} more in the file')
+            out.append(f'   ... and {len(faults) - first} more in the file named in the line above')
     text = '\n'.join(out)
     print(text)
     return text

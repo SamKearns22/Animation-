@@ -36,6 +36,8 @@ install_circle_hands(B)
 FPS, SR = 12, MA.SR
 
 # =============================================== STORY (change this) ===============================================
+# MAP (rule 61: keep it in step; a note is answered by reading only these lines): what is where, e.g.
+#   shots and lines: STORY below; smoke: line N; paths: file/line. Write it as the film grows.
 NAME = 'satire-template'
 # Rule 58: what this film contains. Pre-flight runs only the checks for these and names the ones it skips. Remove what
 # the film has none of (Flying Whales: no people, no rooms), and the lists for it below can stay empty.

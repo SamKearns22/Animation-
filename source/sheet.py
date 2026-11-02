@@ -66,7 +66,7 @@ def make(film, ts, out, crop=None, width=270, cols=None, clean=False, ss=1):
     from multiprocessing import Pool
     with Pool(min(len(ts), os.cpu_count())) as pool:
         tiles = pool.map(_tile, ts)
-    cols = cols or min(len(tiles), max(1, 2160 // width))
+    cols = cols or min(len(tiles), max(1, 1080 // width))   # sheets 1080 px wide at most: one cheap look (Sam, 2 Nov)
     w, h = tiles[0].size
     hmax = max(tl.height for tl in tiles)
     sheet = Image.new('RGB', (cols * w, ((len(tiles) + cols - 1) // cols) * hmax), (8, 8, 10))

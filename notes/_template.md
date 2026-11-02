@@ -9,7 +9,7 @@
 - **Read:** (which sections of which guide; nothing else)
 - **Lost / Added:** (what fixes took away, what I added)
 - **Open rule requests:** (CLAUDE.md, "Rules are permanent"; or "none")
-- **For Claude:** (code names, files, commands)
+- **For Claude:** (code names, files, commands; the film's `MAP` is in its first lines: rule 61)
 
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees

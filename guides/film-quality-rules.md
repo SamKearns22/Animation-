@@ -71,7 +71,7 @@ the end with their checks.
 | 16 | Direction holds across a cut unless the plan says it swaps. | `viewchecks.direction_faults` (`movers(t)`) |
 | 17 | Every figure in front of an effect hides it. | `viewchecks.hide_faults` |
 | 18 | Every joke prop at least 40 px (of 1920) at phone size. | `viewchecks.readability_faults` (`JOKE_PROPS`) |
-| 19 | Checks print a short summary; the full list goes to a file. | `report.py` |
+| 19 | Checks print a short summary; a file is written only when the list is longer than the summary shows. | `report.py` |
 | 57 | Nothing flips from in front to behind (or back) between two frames of a shot unless planned (`ORDER_SWAPS`). | `clipcheck.flip_faults` on the film's `draw_order(t)` |
 | 58 | Pre-flight runs only the checks for what the film contains (`HAS`: people, rooms, voices, effects, props); each skipped check is named in one line with why. | `preflight.py` |
 | 59 | No animatic or final render unless pre-flight passed on the code as it is now; faults Sam has been told about need `--faults-named`. | `film_engine.render` (the lock) |
@@ -89,7 +89,8 @@ the end with their checks.
 | 45 | The composition sheet is sent once; notes on it are applied, never re-sent for approval. | by hand |
 | 46 | When Sam names frames, look at exactly those first, at his size, before changing anything. | by hand |
 | 47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner and frame-count check). | by hand; `kittests.py nostamp` |
-| 48 | Look at several frames as ONE labelled sheet; a single full-size frame only for a detail. | `sheet.py` |
+| 48 | Look at several frames as ONE labelled sheet (at most 1080 px wide; a crop for a detail); full size only for faces, Hook Text and frames Sam names. | `sheet.py` (default width) |
+| 61 | Every new film's code opens with a short `MAP`: what is at which line (smoke, paths, wreck), kept in step as it changes; a note is answered by reading those lines. Finished films are not retrofitted. | by hand (handover) |
 | 52 | The sign-off lasts 1.6 s on every film. | `signoff.py` default (via `finish.py`) |
 | S3 | No added room tone. | `filmkit.hiss_check` |
 | S4 | ffmpeg joins always at fps=24. | by hand |
