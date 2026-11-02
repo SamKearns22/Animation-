@@ -11,14 +11,16 @@
   hiss check tests voice and effects separately (the mix's quietest fifth is speech here: a false alarm).
 - **Sam's answers (2 Nov):** 3 px outline rule: NEITHER (no rule, whale.py unchanged). Usage: 45% of the week at the
   final (estimate was about a third for the rig scene plus a tenth for the opener).
-- **Next (fresh chat, OPUS high): Sam's two end-of-film audits (Sam, 1 Nov; "Yes please" 2 Nov):** (1) what in the
-  project can be streamlined: checks run too often or doubled up, fewer tokens without losing quality; include Sam's
-  rig-parts question (1 Nov: "What's the point in building a rig with over thirty parts if most of it slides into the
-  sea in a solid block anyway?"; answer and lesson in the archive, 1 Nov handover); (2) how my messages to Sam can be
-  shorter, clearer and more useful (read this chat's pattern from the notes: long self-reviews, repeated open questions).
-  Report both to Sam as a short list with recommendations; propose any rules, change nothing until he gives numbers.
-  Start the new chat with: "Flying Whales: read the handover in notes/flying-whales.md".
-- **Lessons to propose in the audit (not yet in a guide):** (a) a fix for one thrown piece must be applied to every
+- **Next (fresh chat, OPUS high): Sam's two audits of the WHOLE SYSTEM, not of this film (Sam, 2 Nov: "not to do with
+  this Flying Whales project ... about the overall architecture of the systems we use to produce these videos"):**
+  (1) the architecture: CLAUDE.md, the guides (`guides/`), the rule register and checks (`guides/rule-register.md`,
+  `source/preflight.py`, `filmkit`), the kit and tools (`guides/kit-catalogue.md`, `source/`), the stages, model
+  switches and handovers: what is duplicated, slow, over-checked or token-hungry, and how to streamline it without
+  losing quality (Sam's rig-parts question, 1 Nov, is one example of building more than the film needs);
+  (2) how my messages to Sam can be shorter, clearer and more useful (in every film, not just this one).
+  Report both as a short list with recommendations; propose rules; change nothing until Sam gives numbers.
+  Start the new chat with: "Read the audit handover in notes/flying-whales.md, then audit the whole system".
+- **Lessons from this film to feed into the audit (not yet in a guide):** (a) a fix for one thrown piece must be applied to every
   piece a whale hits (note 8 fixed the helideck only; note 15 was the same fault in the stair tower); (b) a command chain
   must stop when pre-flight fails (animatic 4's first render ran on past a failed pre-flight; not sent); (c) the shared
   hiss check (`filmkit.hiss_check`) picks the quietest fifth of the mix, which can be speech in a film with a quiet
