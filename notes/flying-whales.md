@@ -1,34 +1,34 @@
 # Notes for Flying Whales (working name; untitled; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover: overwrite it at every stage switch; move the old one to notes/archive/flying-whales-handovers.md)
-- **Rules that bite at the next stage (rule 48):** pre-flight before the animatic, every fault read and named (25 Oct);
-  the check sheet, then wait for Sam's clear yes (18 Oct; a note is not a yes); unattended, one animatic then stop;
-  5 (by hand: whales against pieces, now incl. the batted helideck); 25 (freezes and jolts only show in motion); 46
-  (frames Sam names first); Q53 new (by hand: long pieces land flat); self-review before the send.
-- **Done (2 Nov, Opus):** animatic 1 sent (Sam: "brilliant work and really funny"). Notes 8-13 fixed (table below):
-  helideck batted aside, Blaze's loop up to 95 m clear of the smoke, finale smoke wholly behind the rig, finale
-  splashes and bits in front of it, a much bigger crown splash with 46 debris bits, Hook Text off at the cut. Two
-  clips sent (9.4-12.9, 14.4-17.6); Sam: "Proceed". Rules written: Q52 the sign-off is 1.6 s (now `finish.py`'s
-  default), Q53 long pieces land flat (best-practice 1.3). Lesson (2), smoke from short fires, not taken.
-- **Next (fresh chat, Sonnet: routine):** `python3 source/preflight.py flying_whales OUT_DIR` (about 7.5 min; the same 6
-  people-and-rooms faults as before are expected and named: no audits, LINE_SUBJECTS, ROOMS, plan cameras, scene(t);
-  the 12.0 s rig shot), then a check sheet (`source/sheet.py`, about 19 frames 0.5-17.4 s, including 10.2, 11.6, 12.0,
-  15.3, 16.4) to `review/flying-whales-check-sheet.jpg`; send it and wait for Sam's clear yes. On yes: `python3
-  source/flying_whales.py final source/data/flying-whales-animatic.mp4 --small` (about 9.5 min), then `python3
-  source/finish.py source/data/flying-whales-animatic.mp4 review/flying-whales-animatic.mp4 "Blue Planet III looks
-  🔥🔥🔥" --y 352 --until 5.6` (the sign-off is now 1.6 s by default). Send with a self-review; push notification.
+- **Rules that bite at the next stage (rule 48):** new rules proposed to Sam first (16 Oct); sound effects only when
+  Sam asks (he has: 2 Nov) and Q26 (none until Sam says yes to the list); 44 (usage budget, ask at the handover);
+  loudness and clean fades (best-practice 1.4); sound reproducible (fixed seeds); sound-check file before any render.
+- **Done (2 Nov):** animatic 2 sent; notes 14-18 fixed (crane thrown clear, stair tower buckles then flung left, front
+  smoke stays in front, Blaze out of a fireball, outlines 3 px not 5: `SEA.LINE`). Clips A, B, C sent; Sam: "Good... I
+  think we are there". Animatic 3 rendered and sent (`review/flying-whales-animatic-3.mp4`, 3.1 MB). Pre-flight: the
+  same 6 faults as before, named. Branch pushed.
+- **Next (fresh chat, OPUS, high effort: building something new):** compose the score. Sam found no real Blue Planet
+  III music; he is searching sound effects himself. My plan: our own nature-documentary score (soft swelling strings and
+  a choir "ahh", sincere and majestic) that builds through the attack, peaks on the big splash (about film 14.5-16.4),
+  then cuts dead for the CranbriJoos slurp; a low underwater hum under 0-5.6 s. Start from `source/horror_trailer_music.py`
+  (the house music tool); write `source/flying_whales_music.py`; music to `music/`; send a sound-check file (the score over
+  one still) before any render; fixed seeds. Sam's sound effects list (proposed 2 Nov, awaiting his yes or edits) is in
+  the chat: sea and wind bed, whale calls, blowhole puffs, steel crunches, five booms, crane snap, finale groan and splash.
   Start the new chat with: "Flying Whales: read the handover in notes/flying-whales.md".
-- **Watch at animatic 2:** Blaze's dive after the higher loop (now 98 m/s at the hit: too quick?); the helideck's
-  flight and where it lands; the crown splash hides the sinking rig about a quarter-second sooner (a loss, flagged);
-  the smoke columns' bases are hidden behind the decks in the finale (a loss, flagged); subtitles read on a phone.
-- **Sam's question (1 Nov), for the end-of-film audit:** "What's the point in building a rig with over thirty parts if
-  most of it slides into the sea in a solid block anyway?" (answer and lesson in the archive, 1 Nov handover).
-- **Rule requests and proposals not yet in a guide:** none (searched this file: Q52 and Q53 written 2 Nov).
+- **Watch:** the stair tower's buckle in motion; Blaze's explosion partly hidden by smoke; front smoke covers part of the
+  sinking block (flagged losses).
+- **Sam's question (1 Nov), for the end-of-film audit:** rig-parts question (answer in the archive, 1 Nov handover).
+- **Rule requests and proposals not yet in a guide:** (1) Sam asked "outlines thicker than usual, no?" (2 Nov): proposed
+  1) whale.py default outline 5 px to 3 px and correct its note; 2) a rule in film-quality-rules plus rule-register:
+  every film's outlines 3 px at 1080 wide, checked against an earlier film on the first stills sheet. Awaiting Sam's numbers.
+  (2) Proposed: the same fault as note 8 recurred in note 15 (fix every piece a whale hits, not one): not yet proposed in
+  words to Sam.
 - **Usage budget (rule 44):** ask Sam at the handover.
 - **At the end of this film (Sam, 1 Nov; after the final is sent, before closing the film):** (1) an audit of the
   project for what can be streamlined (include the rig-parts question); (2) an audit of how my messages to Sam can be
   shorter, clearer and more useful. Keep this item in every handover until both are done.
-- **Files to open:** this file; `guides/preflight.md` (render lines).
+- **Files to open:** this file; `music/README.md`; `guides/best-practice.md` 1.4; `source/horror_trailer_music.py`.
 
 ## Plan extras (film-quality-rules 24-26)
 **Ambition estimate (rule 24):** one long locked shot, but everything in it is new.
