@@ -119,7 +119,7 @@ def cues():
     # "This series," (muffled: it is under water)
     c.append((0.0, 'whale call 1, LOUD, opening the film', clip('whale-call-1', -18.0, low=2200)))
     c.append((4.45, 'whale call 2, under water', clip('whale-call-2', -25.0, low=1800)))
-    c.append((0.0, 'piano: gentle nature music under the sea (cut with the scene)', piano()))
+    # (the piano, piano(), is off: Sam, 2 Nov, "Please remove the piano")
     # ---- the rig scene: five whales burst out of the sea
     for k in PATHS.KEYS:
         c.append((rig(PATHS.SURFACE[k]), f'whale {k} bursts out of the sea', clip('splash-minor', -21.0 - k * 0.8)))
