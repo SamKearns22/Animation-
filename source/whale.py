@@ -394,14 +394,16 @@ def _normals(grid, outward_ref=None):
 
 
 def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, light=None, ol=None, ss=2,
-         blow=None, tint=None, phase=0.0, brow=True, cut_z=None):
+         blow=None, tint=None, phase=0.0, brow=True, cut_z=None, hide_boxes=None):
     """Draw one whale. pattern 0-4 (PATTERNS) sets the markings and size. t seconds (drives the wave and beat);
     flap 0..1 how much the flippers wave; beat 0..1 how much the tail beats; arch -1..1 (+ nose and tail down: a
     hump, - a dip). blow: seconds since the last blow (None = no spray). ol: outline width in px (default: the house
     5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. brow: the heavy, low, cross
     brow over each eye (Sam's yes, 1 Nov: they are angry about climate change). cut_z: hide every part of the whale
     below this height (m; the sea surface, 0): a whale bursting out of the sea or diving in is cut off at the waterline
-    with no outline along the cut (the splash covers the seam). Returns a Sprite."""
+    with no outline along the cut (the splash covers the seam). hide_boxes: [(origin, axes 3x3 (rows: unit directions),
+    lo 3, hi 3)] boxes in the world (a wall, a deck) that hide whatever part of the whale is inside them: a whale
+    punching into a building disappears into it (Flying Whales, note 15). Returns a Sprite."""
     pat = PATTERNS[pattern] if isinstance(pattern, int) else pattern
     sz = pat['size']
     L = (np.asarray(light, float) if light is not None else LIGHT)
@@ -616,6 +618,24 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
     edge_img = edge_img.filter(ImageFilter.MaxFilter(k if k % 2 else k + 1))
     ink = np.asarray(edge_img) > 0
     full_alpha = alpha | ink
+    if hide_boxes:                                     # each pixel's world point, from its depth along its ray
+        yy, xx = np.mgrid[0:D.shape[0], 0:D.shape[1]]
+        rx = ((xx + 0.5) / S + x0 - W / 2) / cam.focal
+        rz = -((yy + 0.5) / S + y0 - H / 2) / cam.focal
+        nrm = np.sqrt(rx * rx + 1 + rz * rz)
+        body = D > 0
+        Pw = np.stack([campos[j] + (cam.R[0, j] * rx + cam.R[1, j] + cam.R[2, j] * rz) / nrm * D / 100.0
+                       for j in range(3)], -1)
+        inside = np.zeros_like(body)
+        for org, ax, lo, hi in hide_boxes:
+            q = (Pw - np.asarray(org, float)) @ np.asarray(ax, float).T
+            inside |= body & (q >= np.asarray(lo)).all(-1) & (q <= np.asarray(hi)).all(-1)
+        if inside.any():
+            grow = np.asarray(Image.fromarray((inside * 255).astype(np.uint8)).filter(
+                ImageFilter.MaxFilter((k if k % 2 else k + 1) + 4))) > 0
+            full_alpha = full_alpha & ~(inside | (grow & ~(body & ~inside)))
+            if not full_alpha.any():
+                return None
     if cut_z is not None:                              # each pixel's world height, from its depth along its ray
         yy, xx = np.mgrid[0:D.shape[0], 0:D.shape[1]]
         rx = ((xx + 0.5) / S + x0 - W / 2) / cam.focal

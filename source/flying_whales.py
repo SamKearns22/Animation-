@@ -110,7 +110,8 @@ def rig_whales(ts):
         age = ts - PATHS.SURFACE[k]
         blow = ts - PATHS.SURFACE[k] - BLOW_AFTER
         spr = W.draw(cam, ps, pattern=k, t=ts + k * 0.37, flap=1.0, beat=1.0, tint=SEA.DUSK_TINT, phase=k * 0.9,
-                     cut_z=0.0, blow=blow if 0 <= blow <= 1.6 else None)
+                     cut_z=0.0, blow=blow if 0 <= blow <= 1.6 else None, ol=SEA.whale_ol(cam),
+                     hide_boxes=WRECK.DECK_BOXES if ts < WRECK.TF else None)
         d = float(np.linalg.norm(ps.pos - cam.pos))
         if spr:
             extra.append((d, spr))

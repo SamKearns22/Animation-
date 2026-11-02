@@ -41,7 +41,13 @@ import whale as W                                    # noqa: E402  (the Cam clas
 INK = W.INK
 SIZE = (1080, 1920)
 CAM = W.Cam(pos=(0.0, -120.0, 8.0), yaw=0.0, pitch=6.0, focal=1400.0, size=SIZE)
-OL = 5                                               # the house outline, px at 1080 wide
+LINE = 0.6                                           # Sam, 2 Nov (note 18): every outline 0.6 of the house weight
+OL = 5 * LINE                                        # the outline, px at 1080 wide (the house 5, thinned)
+
+
+def whale_ol(cam):
+    """The whales' outline (px) for this film: whale.draw's own default, thinned like everything else."""
+    return max(1.5, LINE * 5.0 * cam.size[0] / 1080)
 
 SUN_AZ = math.atan(-0.24)                            # where the sun went down: a little left of straight ahead
 DUSK_TINT = (255, 150, 170, 0.14)                    # for whale.draw(tint=...): the pink dusk light on everything
@@ -378,7 +384,8 @@ def _whales(frame, t):
     out = frame.convert('RGBA')
     sprs = []
     for pos, yaw, pitch, roll, pat in spots:
-        spr = W.draw(CAM, W.Pose(pos, yaw, pitch, roll), pattern=pat, t=t, tint=DUSK_TINT, blow=0.4 if pat == 1 else None)
+        spr = W.draw(CAM, W.Pose(pos, yaw, pitch, roll), pattern=pat, t=t, tint=DUSK_TINT, blow=0.4 if pat == 1 else None,
+                         ol=whale_ol(CAM))
         if spr:
             sprs.append(spr)
     for spr in sorted(sprs, key=lambda s: -s.depth):
@@ -397,7 +404,7 @@ def sheet(path):
     for (x, y, z), r in [((-6.0, 20.0, 34.0), 13.0), ((14.0, 8.0, 12.0), 5.0)]:
         px, py, dep = _project(CAM, np.array([x, y, z]))
         rr = CAM.focal * r / dep
-        dc.ellipse([px - rr, py - rr, px + rr, py + rr], fill=(250, 150, 60), outline=INK, width=OL)
+        dc.ellipse([px - rr, py - rr, px + rr, py + rr], fill=(250, 150, 60), outline=INK, width=max(1, round(OL)))
         dc.ellipse([px - rr * 0.5, py - rr * 0.5, px + rr * 0.5, py + rr * 0.5], fill=(255, 228, 140))
     print('three frames in %.1f s' % (time.time() - t0))
     panels = [(a, '1  dusk, t = 0 (no rig yet)'), (b, '2  five whales at real size, for scale'),

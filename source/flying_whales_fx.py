@@ -200,7 +200,7 @@ def shape_sprite(tones, depth, ss=2, ol=5.0):
     None. (Rule 15 and the house look: flat tones, one outline, no glow, no see-through.)"""
     if not tones or not tones[0][1]:
         return None
-    olp = ol * SIZE[0] / 1080
+    olp = ol * SEA.LINE * SIZE[0] / 1080
     box = _crop([p for _, ps in tones for p in ps], olp * 2 + 4)
     if box is None:
         return None
@@ -238,7 +238,7 @@ def pieces_sprite(items, depth, ss=2, ol=4.0):
     items = [it for it in items if len(it[0]) > 2]
     if not items:
         return None
-    olp = ol * SIZE[0] / 1080
+    olp = ol * SEA.LINE * SIZE[0] / 1080
     box = _crop([it[0] for it in items], olp * 2 + 4)
     if box is None:
         return None
@@ -335,7 +335,7 @@ def draw_foam(img, cam, polys, ss=2, ol=4.0):
                 holes.append(h)
     if not sil:
         return
-    olp = ol * SIZE[0] / 1080
+    olp = ol * SEA.LINE * SIZE[0] / 1080
     box = _crop(sil, olp * 2 + 4)
     if box is None:
         return
@@ -693,7 +693,7 @@ def sheet(out):
         for lay in (draw_lumps(cam, back),):
             if lay:
                 im.alpha_composite(lay)
-        spr = W.draw(cam, ps, pattern=0, t=age, cut_z=0.0, tint=SEA.DUSK_TINT)
+        spr = W.draw(cam, ps, pattern=0, t=age, cut_z=0.0, tint=SEA.DUSK_TINT, ol=SEA.whale_ol(cam))
         if spr:
             spr.paste(im)
         lay = draw_lumps(cam, front)

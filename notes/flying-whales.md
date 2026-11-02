@@ -278,6 +278,11 @@ Left out on purpose: one photo of the 9/11 attack (Sam's collapse refs); one dup
 | 11 | rig | 15.25 | "the spray of water clips behind the Jackdaw sign" | done: finale splashes and bits drawn over the whole rig; clip sent |
 | 12 | rig | | "even bigger throw up of spray and debris" when the rig hits the water | done: crown splash bigger (size 13 to 19 m, 34 to 52 lumps, height x1.4) plus 46 big bits of debris; clip sent |
 | 13 | all | | "The hook text should disappear in the rig scene, it blocks the view" | done: Hook Text off at the cut (`--until 5.6`; `HOOK` in flying_whales.py) |
+| 14 | rig | 12-14 | "The rigs crane clips through the building and jackdaw sign" (Sam, 2 Nov, animatic 2) | fixed: the crane house and boom fell straight down through the decks; now thrown out over the rig's left end (`THROWN` kicks 12 and 10 m/s), tested: no point inside the deck block; clip pending |
+| 15 | rig | 9.79 | "The impact of the leftmost whale looks too much like a clip, the piece it strikes needs to crumple around him" | fixed: Bib through the stair tower, which only tipped once he was inside it (the same fault as note 8: that fix covered the helideck only). The tower now buckles into a V round him (`BUCKLE`, creased at the bends). Also (my addition, flagged): torn, bent panels round every deck hole (`crumples`), and a whale's part inside a deck is hidden (`whale.draw(hide_boxes=)`); clip pending |
+| 16 | rig | 13.71 | "the front most ream of smoke vanishes" | fixed: my note 9 fix sent every column behind the rig at the finale's start (13.80), so the front one jumped behind the decks. Now each column stays on the side it was on (`SMOKE_FRONT`). Loss: the front columns now cover part of the sinking block; clip pending |
+| 17 | rig | 10.62 | "The whale who comes out the back, I think it should emerge out of an explosion" | done: Blaze flies up out of a new fireball behind the right decks (`EXIT_FB`, story 4.42, 15 m), with its smoke; clip pending |
+| 18 | all | | "The line work is too thick throughout. Reduce the thickness throughout except for the JACKDAW lettering" | done: every outline 0.6 of the house weight (`SEA.LINE`; 5 px to 3 px), rig, whales, sea, effects, under the sea; the lettering unchanged |
 
 Decisions made:
 - Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more

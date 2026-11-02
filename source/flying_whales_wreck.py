@@ -61,9 +61,12 @@ THROWN = {
     'brace_front_low': (0.35, 3.0, 160, 0.0), 'brace_back': (0.3, 2.0, -120, 0.0),
     'lifeboat_1': (0.16, 5.0, 320, 5.0), 'lifeboat_2': (0.16, 6.0, -360, -4.0),
     'stair_tower': (0.2, 2.5, 75, 3.0), 'helideck_truss': (0.3, 3.0, 150, 0.0), 'helideck': (0.36, 7.0, 240, 0.0),
-    'crane_house': (0.28, 5.0, 95, 0.0), 'flare_boom': (0.1, 1.5, 10, 0.0), 'stack_1': (0.32, 4.0, 210, 0.0),
+    'crane_house': (0.28, 6.0, 95, 12.0), 'flare_boom': (0.1, 1.5, 10, 0.0), 'stack_1': (0.32, 4.0, 210, 0.0),
     'stack_2': (0.32, 5.0, -230, 0.0), 'leg_fl': (0.2, 0.0, 55, 7.0), 'brace_front_high': (0.3, 2.0, 140, 2.0),
-    'brace_left': (0.25, 1.0, -100, 5.0), 'crane_boom': (0.15, 2.0, -120, 0.0)}
+    'brace_left': (0.25, 1.0, -100, 5.0), 'crane_boom': (0.15, 4.0, -120, 10.0)}
+# the crane fell straight down through the decks and the JACKDAW board (Sam, 2 Nov, note 14): its house and boom are
+# now thrown out over the rig's left end (the kicks above, m/s along the long side; tested clear of the decks: no
+# point of either inside the deck block after the hit), landing in the sea left of the rig
 BENT = {'derrick'}
 FIREBALLS = {'deck_cellar_r': 12.0, 'helideck': 10.0, 'deck_top_r': 12.0, 'flare_boom': 6.0}   # size, m
 FIRES = {'deck_cellar_r', 'deck_top_l', 'deck_top_r'}
@@ -71,10 +74,15 @@ DEBRIS_COLS = {'deck_cellar': ('grey', 'dark', 'yellow', 'clad'), 'deck_mezz': (
                'deck_top': ('clad', 'white', 'grey', 'blue'), 'brace': ('yellow',), 'lifeboat': ('orange', 'white'),
                'leg': ('yellow',), 'helideck': ('deck', 'white', 'orange'), 'stair': ('yellow', 'grey'),
                'crane': ('yellow', 'white'), 'flare': ('grey', 'dark'), 'stack': ('grey', 'dark')}
+# Blaze bursting out of the back of the rig out of an explosion (Sam, 2 Nov, note 17): (story time, where in the rig's
+# frame a, b, z m: behind the right decks at roof height, on his way up, size m). Drawn behind him, so he flies out of it.
+EXIT_FB = (4.42, (5.0, 51.5, 52.0), 15.0)
 CROWN = (19.0, 13.0, 52, 4.0)                        # the crown splash: size m, ring m, lumps, height (was 13, 9, 34, 2.8)
 CROWN_BITS = 46                                      # debris thrown up with it (note 12)
 FRONT, BACK = 60.0, 250.0                            # m: the finale's splashes and bits drawn over the whole rig,
                                                      # its smoke behind it all (notes 9, 11)
+SMOKE_FRONT_AT = 65.0                                 # m: a column that stood in front of the decks stays in front
+                                                     # through the finale, just behind the splashes (note 16)
 HELI_SIDE, HELI_UP = 16.0, 12.0                   # m/s: the helideck batted aside (note 8)
 SINK = 6.0                                            # m/s: a piece going down through the water
 
@@ -377,8 +385,141 @@ def _holed_part(name):
     return R.Part(name, p.label, items, p.pivot)
 
 
+def _deck_box(name):
+    q = np.concatenate([_to_rig(it['pts']) for it in R.PARTS[name].items if it['kind'] == 'poly'])
+    return (R.ORIGIN, np.stack([R.EU, R.EV, R.EZ]), q.min(0), q.max(0))
+
+
+# every deck as a box, for whale.draw(hide_boxes=...): a whale punching into a deck disappears into it (note 15)
+DECK_BOXES = [_deck_box(n) for n in R.PARTS if n.startswith('deck_')]
+FOLD = 0.12                                           # s: the torn wall folding in round the whale
+
+
+def _flaps(name, i, c, u, v, n, r):
+    """The torn wall round a hole (note 15: it must crumple round the whale, not let him pass through like a ghost):
+    a lip of buckled panels pushed out round the rim, and jagged teeth of the wall bent in. Rest-place polygons
+    (world m, flap angle f 0..1 -> [(pts, tone)]), tone 0 lit, 1 in shade."""
+    rng = np.random.default_rng(_seed(name, 'flaps', i))
+    m = 11
+    a = np.linspace(0, 2 * math.pi, m, endpoint=False) + rng.uniform(-0.2, 0.2, m)
+    half = math.pi / m * rng.uniform(0.75, 1.0, m)
+    reach = rng.uniform(0.35, 0.6, m)
+    lip = rng.uniform(1.25, 1.55, m)
+    skew = rng.uniform(-0.2, 0.2, m)
+    c = np.asarray(c, float) + np.asarray(n) * 0.08
+    ring = lambda ang, k: c + (u * math.cos(ang) + v * math.sin(ang) * 0.85) * r * k
+
+    def polys(f):
+        out = []
+        for j in range(m):
+            h0, h1 = ring(a[j] - half[j], 0.98), ring(a[j] + half[j], 0.98)
+            # the lip: a buckled panel standing proud of the face, its inner edge lifted towards us
+            o0, o1 = ring(a[j] - half[j] * 0.8, lip[j]), ring(a[j] + half[j] * 0.8, lip[j] * 0.95)
+            out.append(([h0 + n * 0.5 * r * f, h1 + n * 0.35 * r * f, o1, o0], 0))
+            # a tooth: the wall that was in the hole, bent in by up to 75 degrees as the whale shoves through
+            th = math.radians(75) * f
+            mid = (h0 + h1) / 2
+            inward = c - mid
+            inward /= np.linalg.norm(inward) + 1e-9
+            tip = mid + (inward * math.cos(th) - n * math.sin(th)) * r * reach[j] \
+                + (h1 - h0) * skew[j]
+            out.append(([h0, tip, h1], 1))
+        return out
+    return polys
+
+
+@functools.lru_cache(None)
+def _all_flaps():
+    return {(n, i): _flaps(n, i, *h) for n, hs in HOLES.items() for i, h in enumerate(hs)}
+
+
+def crumples(t):
+    """[(distance, Sprite)] for the torn wall round every hole: it appears at the first touch and folds in round the
+    whale over FOLD s, then rides its deck (the finale), clipped at the sea. Drawn just over its deck, so the whale's
+    near body passes in front of it and the rest of him vanishes into the deck (DECK_BOXES)."""
+    out = []
+    for (name, i), polys in _all_flaps().items():
+        t0 = BREAK[name][0]
+        if t < t0:
+            continue
+        f = min(1.0, (t - t0) / FOLD)
+        f = 1 - (1 - f) ** 2
+        A, b = world(name, t)
+        cols = DEBRIS_COLS[_kind(name)]
+        items = []
+        for j, (pts, tone) in enumerate(polys(f)):
+            P = R._clip_z([A @ p + b for p in pts])
+            if len(P) < 3:
+                continue
+            s, d = CAM.screen(np.array(P))
+            if (d < 1.0).any():
+                continue
+            col = R._tint(R.COL[cols[(j // 2) % len(cols)]][tone])
+            items.append(([(float(x), float(y)) for x, y in s], col, None, None))
+        if items:
+            spr = FX.pieces_sprite(items, 0.0, ol=3.0)
+            if spr:
+                out.append((-R._order_key(name, xf_of(name, t)) - 0.05, spr))
+    return out
+
+
+# the stair tower buckles round Bib as he hits it (Sam, 2 Nov, note 15: he passed through it like a ghost, the tower
+# only tipping once he was inside it; the same fault as the helideck, note 8): kinked into a V away from us at the
+# height he hits, its middle shoved back along his way, creased at the bends
+BUCKLE = {'stair_tower': (9.0, 7.0)}                  # piece: (how far its middle is shoved back m, half-height of the
+                                                      # bend m)
+BUCKLE_STEPS = 4                                      # it folds over FOLD s in this many steps
+
+
+def _split(a, b, levels):
+    """The points where the segment a-b crosses each height in levels, a and b included, in order."""
+    za, zb = a[2], b[2]
+    out = [a]
+    for z in sorted(levels, reverse=za > zb):
+        if min(za, zb) < z < max(za, zb):
+            out.append(a + (b - a) * (z - za) / (zb - za))
+    return out + [b]
+
+
+@functools.lru_cache(None)
+def _buckled(name, step):
+    t0, k = BREAK[name]
+    depth, half = BUCKLE[name]
+    zh = float(_contact_point(name, t0, k)[2])
+    _, f = _whale_dir(k, t0)
+    push = np.array([f[0], f[1], 0.0]) / (np.linalg.norm(f[:2]) + 1e-9) * depth * step / BUCKLE_STEPS
+    levels = [zh - half, zh, zh + half]
+    bend = lambda p: p + push * max(0.0, 1.0 - abs(p[2] - zh) / half)
+    items = []
+    for it in R.PARTS[name].items:
+        if it['kind'] in ('line', 'tube'):
+            pts = _split(it['p0'], it['p1'], levels)
+            for a, b in zip(pts[:-1], pts[1:]):
+                items.append(dict(it, p0=bend(a), p1=bend(b)))
+        elif it['kind'] in ('poly', 'spot') and len(it['pts']) == 4:
+            p = [np.asarray(q, float) for q in it['pts']]
+            dz01 = abs(p[0][2] - p[1][2]) + abs(p[2][2] - p[3][2])
+            dz12 = abs(p[1][2] - p[2][2]) + abs(p[3][2] - p[0][2])
+            if max(dz01, dz12) < 1.0:                  # a flat end: just moved
+                items.append(dict(it, pts=np.array([bend(q) for q in p])))
+                continue
+            A = _split(p[0], p[1], levels) if dz01 > dz12 else _split(p[1], p[2], levels)
+            B = _split(p[3], p[2], levels) if dz01 > dz12 else _split(p[0], p[3], levels)
+            for i in range(min(len(A), len(B)) - 1):   # a strip per bend: the crease shows as an ink line
+                items.append(dict(it, pts=np.array([bend(A[i]), bend(A[i + 1]), bend(B[i + 1]), bend(B[i])])))
+        else:
+            items.append(it)
+    p = R.PARTS[name]
+    return R.Part(name, p.label, items, p.pivot)
+
+
 def swaps(t):
-    return {n: ('holed', _holed_part(n)) for n, hs in HOLES.items() if hs and t >= BREAK[n][0]}
+    out = {n: ('holed', _holed_part(n)) for n, hs in HOLES.items() if hs and t >= BREAK[n][0]}
+    for n in BUCKLE:
+        if t >= BREAK[n][0]:
+            step = min(BUCKLE_STEPS, 1 + int((t - BREAK[n][0]) / FOLD * BUCKLE_STEPS))
+            out[n] = (('buckled', step), _buckled(n, step))
+    return out
 
 
 # ------------------------------------------------- the events -------------------------------------------------------
@@ -416,6 +557,19 @@ class Bit:
         return self.p0 + self.v0 * u + np.array([0, 0, -0.5 * G * u * u])
 
 
+def _fb_smoke(src, t0, c, size, rng):
+    """A fireball's black smoke, rising from its top as it burns out."""
+    out = []
+    for i in range(14):
+        ts_ = t0 + 0.15 + i * 0.055
+        age = ts_ - t0
+        p = c + np.array([rng.uniform(-0.4, 0.4) * size, rng.uniform(-0.3, 0.3) * size, size * 0.7 + 5.0 * age])
+        out.append(('smoke', src, FX.Puff(ts_, p, rng.normal(0, 2.0, 3), 8.5, size * rng.uniform(0.3, 0.45),
+                                          size * rng.uniform(0.6, 0.85), 5.5, 'smoke', int(rng.integers(1 << 30)),
+                                          tau=1.2)))
+    return out
+
+
 def _events():
     bits, splashes, puffs, fireballs, fires, jolts = [], [], [], [], [], []
     for t0, k, name in CONTACTS:
@@ -446,16 +600,8 @@ def _events():
             size = FIREBALLS[name]
             c = (holes[0][0] + holes[0][3] * 2.5) if holes else (
                 R.P(*R.FLARE_ROOT) if name == 'flare_boom' else at)
-            fireballs.append((t0, c, size, _seed(name, 'fb')))
-            for i in range(14):                       # its black smoke, rising from the top as it burns out
-                ts_ = t0 + 0.15 + i * 0.055
-                age = ts_ - t0
-                p = c + np.array([rng.uniform(-0.4, 0.4) * size, rng.uniform(-0.3, 0.3) * size,
-                                  size * 0.7 + 5.0 * age])
-                puffs.append(('smoke', name + '_fb', FX.Puff(ts_, p, rng.normal(0, 2.0, 3), 8.5,
-                                                             size * rng.uniform(0.3, 0.45),
-                                                             size * rng.uniform(0.6, 0.85), 5.5, 'smoke',
-                                                             int(rng.integers(1 << 30)), tau=1.2)))
+            fireballs.append((t0, c, size, _seed(name, 'fb'), -0.3 * size))
+            puffs += _fb_smoke(name + '_fb', t0, c, size, rng)
         if name in FIRES and holes:
             c, u, vv, n, r = holes[0]
             fires.append((name, t0 + 0.2, c, u, vv, n, r))
@@ -464,6 +610,10 @@ def _events():
                 bits.append(Bit(t0, at + rng.normal(0, 1.0, 3), v * rng.uniform(0.2, 0.4) + rng.normal(0, 5, 3),
                                 rng.uniform(0.4, 1.0), R._tint(R.COL['red'][i % 2]), int(rng.integers(1 << 30)),
                                 rng.uniform(-12, 12)))
+    t0, q, size = EXIT_FB                             # Blaze out of the back through a fireball (note 17)
+    c = R.P(*q)
+    fireballs.append((t0, c, size, _seed('exit', 'fb'), size * 0.9))
+    puffs += _fb_smoke('exit_fb', t0, c, size, np.random.default_rng(_seed('exit', 'smoke')))
     for t0 in MAIN:
         jolts.append((real_of(t0), 11.0))
     # the bits hitting the sea
@@ -603,6 +753,32 @@ for _kind_, _src, _pf in PUFFS:
     _GROUPS.setdefault(_src, []).append(_pf)
 
 
+
+
+def _dist(p):
+    return float(np.linalg.norm(np.asarray(p, float) - CAM.pos))
+
+
+def _smoke_front():
+    """The smoke columns drawn in front of the decks just before the finale (each nearer than its own deck, or, for a
+    fireball's smoke, nearer than the decks on average): they stay in front through it (note 16)."""
+    t = TF - 0.02
+    decks = [-R._order_key(n, xf_of(n, t)) for n in R.PARTS if n.startswith('deck_')]
+    out = set()
+    for src in SMOKE_SRCS:
+        live = [pf for pf in _GROUPS.get(src, []) if pf.at(t) is not None]
+        if not live:
+            continue
+        d = float(np.median([_dist(pf.at(t)[0]) for pf in live])) - 2.0
+        ref = -R._order_key(src, xf_of(src, t)) if src in R.PARTS else float(np.mean(decks))
+        if d < ref:
+            out.add(src)
+    return out
+
+
+SMOKE_FRONT = _smoke_front()
+
+
 # ------------------------------------------------- the frame --------------------------------------------------------
 def rig_state(t):
     """For flying_whales_rig.draw at story time t: xf (moved pieces), gone (all under), swap (holed decks)."""
@@ -620,10 +796,6 @@ def rig_state(t):
             continue
         xf[n] = m
     return xf, gone, swaps(t)
-
-
-def _dist(p):
-    return float(np.linalg.norm(np.asarray(p, float) - CAM.pos))
 
 
 def effects(t):
@@ -649,6 +821,7 @@ def effects(t):
             if spr:
                 d = float(np.median(ds))
                 extra.append((min(d, FRONT) if key * 0.2 >= TF else d, spr))
+    extra += crumples(t)                              # the torn wall round each hole (note 15)
     # splashes
     for ts_, at, size, seed, ring, n in SPLASHES:
         age = t - ts_
@@ -662,12 +835,12 @@ def effects(t):
                 foam += FX.foam_ring(cam, at, age * (0.9 if size > 8 else 1.2), seed,
                                      size * (0.9 if ring else 0.45))
     # fireballs
-    for t0, c, size, seed in FIREBALLS_AT:
+    for t0, c, size, seed, off in FIREBALLS_AT:
         age = t - t0
         if 0 <= age <= 1.0:
             spr = FX.fireball_sprite(cam, c, size, age, seed, 0.0)
             if spr:
-                extra.append((_dist(c) - size * 0.3, spr))
+                extra.append((_dist(c) + off, spr))
             glows.append((tuple(c), 1.0 - 0.5 * age, size * 2.6))
     # deck fires
     for fire in FIRES_AT:
@@ -697,8 +870,11 @@ def effects(t):
             ds = [_dist(pf.at(t)[0]) for pf in live]
             d = float(np.median(ds)) - 2.0
             # the tipping block leaned into its own smoke, half the columns in front of it and half behind (note 9):
-            # in the finale the smoke goes wholly behind the rig, so the sinking block stays in view
-            extra.append((max(d, BACK) if t > TF and src in SMOKE_SRCS else d, spr))
+            # in the finale each column goes wholly to one side of the rig, the side it was on as the finale began
+            # (note 16: sending them all behind made the front one vanish at the switch)
+            if t > TF and src in SMOKE_SRCS:
+                d = SMOKE_FRONT_AT if src in SMOKE_FRONT else max(d, BACK)
+            extra.append((d, spr))
     return extra, foam, glows
 
 

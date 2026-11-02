@@ -34,6 +34,7 @@ from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import whale as W                                     # noqa: E402
+from flying_whales_sea import LINE                    # noqa: E402  (the film's line weight, note 18)
 
 INK = W.INK
 
@@ -382,13 +383,13 @@ def _draw_small(dr, kind, data, d):
             dr.ellipse([x - r, y - r, x + r, y + r], fill=lit + (255,))
         else:
             dr.ellipse([x - r, y - r, x + r, y + r], fill=rim + (255,), outline=_mix(INK, HAZE, k * 0.8) + (255,),
-                       width=max(1, int(min(5, r * 0.28))))
+                       width=max(1, int(min(5, r * 0.28) * LINE)))
             dr.ellipse([x - r * 0.55, y - r * 0.62, x + r * 0.2, y + r * 0.05], fill=lit + (255,))
     elif kind == 'fish':
         body, tail, flash = data
         back, belly = (_mix(c, HAZE, k) for c in FISH)
         span = max(abs(body[0][0] - body[3][0]), abs(body[0][1] - body[3][1]))
-        olw = 0 if span < 7 else max(1, min(3, int(span / 9)))
+        olw = 0 if span < 7 else max(1, int(min(3, span / 9) * LINE))
         ink = _mix(INK, HAZE, k * 0.8) + (255,)
         dr.polygon(tail, fill=back + (255,), outline=ink if olw else None, width=olw or 1)
         dr.polygon(body, fill=(_mix(belly, (255, 250, 236), 0.5) if flash else belly) + (255,),

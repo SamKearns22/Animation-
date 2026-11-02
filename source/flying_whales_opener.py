@@ -31,6 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import whale as W                                     # noqa: E402
 import flying_whales_under as U                       # noqa: E402
+import flying_whales_sea as SEA                       # noqa: E402  (the film's line weight)
 
 SIZE = (1080, 1920)
 FOCAL = 1400.0
@@ -172,7 +173,8 @@ def frame(t, ss=1):
     cam = camera(t)
     sprs = []
     for k, (pat, pose) in enumerate(poses(t)):
-        spr = W.draw(cam, pose, pattern=pat, t=t + k * 0.37, flap=0.6, beat=1.0, tint=TINT, phase=k * 0.9)
+        spr = W.draw(cam, pose, pattern=pat, t=t + k * 0.37, flap=0.6, beat=1.0, tint=TINT, phase=k * 0.9,
+                     ol=SEA.whale_ol(cam))
         if spr:
             k_h = U.haze(float(np.linalg.norm(pose.pos - cam.pos)))      # fade into the water with distance (B5)
             arr = np.asarray(spr.img).astype(np.float32)

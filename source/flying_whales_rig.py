@@ -43,7 +43,8 @@ import flying_whales_sea as SEA                       # noqa: E402
 
 INK = W.INK
 CAM = SEA.CAM
-OL = 5
+OL = int(round(SEA.OL))                               # the outline, px (thinned: Sam, 2 Nov, note 18)
+THIN = 10.0                                           # px: a member thinner than this is drawn as one ink line
 SS = 2
 
 # the rig's frame in the world
@@ -514,7 +515,7 @@ def render(part, cam=CAM, xf=None, ss=SS):
             perp = np.array([-v[1], v[0]]) / L
             c3 = (seg[0] + seg[1]) / 2
             dist = float(np.linalg.norm(c3 - cam.pos))
-            if max(r0, r1) * 2 < 2.0 * OL:                       # too thin to fill: an ink member
+            if max(r0, r1) * 2 < THIN:                       # too thin to fill: an ink member
                 late.append((s0, s1, INK, max(2.0, r0 + r1)))
             else:
                 n_side = np.cross(seg[1] - seg[0], np.cross(cam.pos - c3, seg[1] - seg[0]))
@@ -680,7 +681,7 @@ def foam(img, t, gone=(), cam=CAM):
         r = np.random.default_rng(int(t * 6) + int(abs(p[0]) * 10) + 1000)
         pts = [(sx - w + 2 * w * i / 10, sy - h * (0.6 + 0.6 * r.random()) * math.sin(math.pi * i / 10)) for i in range(11)]
         pts += [(sx + w * 0.8, sy + h * 0.5), (sx - w * 0.8, sy + h * 0.5)]
-        dr.polygon(pts, fill=(240, 236, 238, 255), outline=INK + (255,), width=3)
+        dr.polygon(pts, fill=(240, 236, 238, 255), outline=INK + (255,), width=2)
     img.alpha_composite(lay)
 
 
