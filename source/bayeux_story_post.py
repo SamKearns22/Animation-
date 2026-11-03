@@ -2,7 +2,7 @@
 """MAP: story post for DLC (Bayeux Season Pass): the film's opening up to the end of the title reveal (0-14.77 s,
 cut on the last clean title frame before the glitch into NEW SKINS), with Sam's cranberry text over it.
     python3 source/bayeux_story_post.py animations/bayeux-season-pass-vertical.mp4 animations/bayeux-season-pass-story.mp4
-Text below the tapestry band, inside the safe area (y 1340-1500), on from the first frame."""
+Text at the top (Sam, 3 Nov), above the tapestry band (y 140-310), on from the first frame."""
 import os, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -10,8 +10,8 @@ from PIL import Image                       # noqa: E402
 import burnham as B                         # noqa: E402
 from hook_text import emoji_img, FF         # noqa: E402
 
-LINES = ['ACTUALLY MY BEST', 'VIDEO THO']
-END, CAP, TOP = 14.77, 78, 1320
+LINES = ['GIVE THIS ONE', 'SOME LOVE']
+END, CAP, TOP = 14.77, 78, 140
 
 
 def overlay(path):
