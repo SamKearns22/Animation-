@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """MAP: channel trailer story post (Sam, 3 Nov): nine best bits, cut on the beat of the DLC rock track (126 bpm,
 four beats a moment, six for the last), "WELCOME, / NEW FOLLOWERS" in cranberry two-thirds down, no subtitles.
-Moments come from the posted finals where they have no subtitles; Patriots 2, the D-Day beach (Patriots 3) and Mossad are re-drawn from their
+Moments come from the posted finals where they have no subtitles; Patriots 2, the Wolves chase (Cry Minister), the D-Day beach (Patriots 3) and Mossad are re-drawn from their
 own code with captions off (Mossad's blast carries on past the film's cut to black).
     python3 source/channel_trailer.py animations/channel-trailer-story.mp4"""
 import os, subprocess, sys, tempfile
@@ -23,8 +23,9 @@ CUTS = [('halo-no-no-vertical.mp4', 4.2, 4),           # roadsters heading for t
         ('power-crime-action-vertical.mp4', 14.6, 4),  # thrown into the van
         ('prepper-minister-vertical.mp4', 56.5, 4),    # the showstopper
         ('netan-yahoo-vertical.mp4', 24.6, 4),         # Darth Maul attacks
+        ('cryminister', 52.6, 4),                      # Wolves: Andy runs from the wolves (Sam), drawn clean
         ('flying-whales-vertical.mp4', 10.8, 5),       # whales destroy the Jackdaw
-        ('mossad', 28.9, 5)]                           # ends on the Mossad blast (Sam); before its second flare
+        ('mossad', 28.45, 3)]                          # ends on the Mossad blast at its thickest (Sam: no one seen under it)
 LINES, CAP, TOP = ['WELCOME,', 'NEW FOLLOWERS'], 92, 1180   # two-thirds down (centre ~1280)
 FPS = 24
 
@@ -41,7 +42,7 @@ def drawn(name, t0, dur, out):
         for i in range(int(round(dur * FPS))):
             B.SS = 2
             t = t0 + i / FPS
-            im = (mod.picture(t) if name == 'patriots3' else mod.frame_image(t, captions=False, title=False)).convert('RGB')
+            im = (mod.picture(t) if name in ('patriots3', 'cryminister') else mod.frame_image(t, captions=False, title=False)).convert('RGB')
             p.stdin.write(np.asarray(im.resize((1080, 1920), Image.LANCZOS)).tobytes())
     p.stdin.close()
     p.wait()

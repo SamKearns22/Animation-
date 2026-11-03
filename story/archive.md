@@ -708,7 +708,9 @@ Titles, dance, judges and the whole-film animatic (49 s) are done and sent; wait
 - 23 Oct: POSTED Thu 22 Oct 4:01pm. 20 h: 256 views, 6.5 s avg watch, 3.65% in full, 0 followers (`story/metrics.md`).
 
 ## Done: Channel trailer story post (Sam, 3 Nov)
-- `animations/channel-trailer-story.mp4` (6.1 MB, 18.1 s): nine best bits cut on the beat of the DLC rock track
+- v2 (Sam's notes): Wolves chase added (Andy running from the wolves, end of Cry Minister, drawn clean); the Mossad
+  shot a second shorter, ending at the blast's thickest (29.88 s, no one visible under it). Now 6.4 MB, 19.0 s.
+- `animations/channel-trailer-story.mp4` (v1: 6.1 MB, 18.1 s): nine best bits cut on the beat of the DLC rock track
   (126 bpm): Halo roadsters, DLC ghost pistol, Patriot typing "traitors", D-Day beach, van throw, Prepper
   showstopper, Maul attacks, whales smash the Jackdaw, ends on the Mossad blast. "WELCOME, / NEW FOLLOWERS" in
   cranberry two-thirds down; no subtitles (Patriots 2, Patriots 3 beach and Mossad re-drawn from their code with
