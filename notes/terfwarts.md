@@ -88,6 +88,20 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 14.15 | 9 | 74 s | Subtitle: remove "as": "Well, it's not a problem anymore, Myrtle, she's f****** dead." | done in the subtitles (the take still says "as") |
+| 14.14 | door | all | From behind, the boys' hands on hips read as hands behind their backs | done: over their shoulders the boys stand arms relaxed at their sides; gestures stay in the front shots. Lost: their poses in the door shots |
+| 14.12 | thud | 72.7 s | Blood seeps out under the door at the thud | done: `blood()`, spreads over 1.6 s, left of Myrtle's feet. Added |
+| 14.11 | 11 | 82 s | A tear down Ron's face on "I don't like them, Harry" | done: `ron_face_props`. Added |
+| 14.10 | scream | 64-73 s | Distance and muffle on the scream | done: low-pass 1.3 kHz, tiled-room echo, quieter (0.55) |
+| 14.9 | 9 | 74 s | Aggrieved stance unclear (arms wide, pointing down) | done: 'exasperated', palms up at shoulder height, head forward |
+| 14.8 | Myrtle | all | Subtitle timings sharper in Myrtle's lines | done: each subtitle starts on the syllable peak heard in the take, snapped to a pause within 0.7 s (`_chunk_times`) |
+| 14.7 | 9 | 74 s | Remove "now" from the subtitle | done |
+| 14.6 | 5 | 31 s | Ron's arm sticks out and blocks the camera on "masquerading" | done: his shrug cut (and see 14.14). Lost: Ron's shrug |
+| 14.5 | 6 | 42 s | Snot from Ron's nose on the spiders line | done: grows through the line, stays till the scream. Added |
+| 14.4 | 7 | 45 s | On "Ron, get it together" we cut behind Harry and his point flips; stay on Harry | done: Harry's lines cut only between the boys' shot and Harry's close-up (CUTAWAY) |
+| 14.3 | door | 8-12 s | The boys bob like ducks when they first speak | it was meant as panting after the run; done: bob removed, a small lean only. Lost: the panting |
+| 14.2 | run | 5-7.8 s | The front-on run drops them to their knees each step | done: own gait 'front_run' (low knees, bob 99 -> 26, gentle arm pump); kit check knows film gaits |
+| 14.1 | 1 | 0-5 s | Hat's mouth too slow; Harry happy at first; a 2 s beat of Harry staring off, annoyed | done: the Hat's mouth opens with its voice's loudness (each syllable); Harry smiles until the line ends; new shot 'hat face' 2 s. Added: the shot |
 | 13 | all | animatic | Animatic sent 3 Nov (85 s + 1.6 s sign-off, 5.1 MB, Hook Text and sign-off on it; sent on Sonnet at Sam's override of the Opus stage rule). Rule request: hook texts and sign-offs always go into animatics: propose at the end of the project | sent |
 | 12 | 1 | 0.5 s | Subtitle change: "He's a Biological Male!" | done: LINES 1 text |
 | 11 | all | all | Choppy, quick subtitles; quick transitions; no camera lingers over 3 s | done: subtitles 1-4 words, timed to the talking (pauses skipped); any hold over 3 s cut into even pieces of 2.6 s at most, speaker wide / speaker close / listener close (`_choppy`, `CUTAWAY`); longest shot 2.95 s; gaps between lines 0.25-0.35 s. Added: listener reaction close-ups inside long lines |

@@ -154,7 +154,7 @@ def red_lips(p, view, sp, hx, hy):
                       (fx - 6, my + 6)], 3), (150, 30, 44), INK, 1.6)
 
 
-def hat(p, cx, by, k=1.0, mood='rest'):
+def hat(p, cx, by, k=1.0, mood='rest', open_=1.0):
     """The Sorting Hat (refs sorting-hat-face, sorting-hat-scene): patched brown suede, a slumped point, a wide floppy
     brim; folds make a brow, two eye creases and a wide mouth near the base. mood: 'rest', 'yell'."""
     P = lambda pts: [(cx + x * k, by + y * k) for x, y in pts]        # noqa: E731
@@ -172,9 +172,12 @@ def hat(p, cx, by, k=1.0, mood='rest'):
     if mood == 'yell':
         for sgn in (-1, 1):
             p.poly(P([(sgn * 20, -168), (sgn * 60, -158), (sgn * 52, -146), (sgn * 18, -154)]), (40, 24, 16), None)
-        p.poly(curve(P([(-80, -110), (-36, -126), (36, -126), (84, -108), (62, -48), (0, -30), (-60, -48)]), 3),
+        o = 0.25 + 0.75 * max(0.0, min(1.0, open_))    # how wide (Sam's note 13.1: a syllable at a time)
+        Q = lambda pts: P([(x, -118 + (y + 118) * o) for x, y in pts])   # noqa: E731  the lower jaw drops from the top lip
+        p.poly(curve(Q([(-80, -110), (-36, -126), (36, -126), (84, -108), (62, -48), (0, -30), (-60, -48)]), 3),
                (44, 22, 16), INK, 2.6)
-        p.poly(curve(P([(-58, -60), (0, -46), (58, -60), (40, -40), (0, -34), (-40, -40)]), 3), (120, 40, 40), None)
+        if o > 0.45:
+            p.poly(curve(Q([(-58, -60), (0, -46), (58, -60), (40, -40), (0, -34), (-40, -40)]), 3), (120, 40, 40), None)
     else:
         for sgn in (-1, 1):
             p.line(P([(sgn * 18, -152), (sgn * 40, -146), (sgn * 62, -152)]), (40, 24, 16), 3.0)

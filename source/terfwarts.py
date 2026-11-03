@@ -64,7 +64,7 @@ LINES = [
     dict(n=8, audio='terfwarts-8', who='myrtle', text="When you throw open the door of a bathroom or changing room to any man so-called "
                                  "'trying to save the life' of a woman, then you throw it open to anyone wanting to "
                                  "come inside.", est=10.5),
-    dict(n=9, audio='terfwarts-9', bleep=(2.56, 2.96), who='harry', text="Well it's not a problem anymore, Myrtle, as she's f****** dead now.", est=3.8),
+    dict(n=9, audio='terfwarts-9', bleep=(2.56, 2.96), who='harry', text="Well, it's not a problem anymore, Myrtle, she's f****** dead.", est=3.8),
     dict(n=10, audio='terfwarts-10', who='myrtle', text='Dead is a thought-terminating cliché.', est=2.6),
     dict(n=11, audio='terfwarts-11', who='ron', text="I don't like them, Harry.", est=1.6),
     dict(n=12, audio='terfwarts-12', who='harry', text="I don't like you, Ron.", est=1.5),
@@ -95,8 +95,9 @@ for ln in LINES:                                  # time each line to its record
 T = {}
 T['hat_land'] = 0.45                              # McGonagall's hands bring the Hat down onto Harry's head
 L[1]['start'] = 0.55                              # the hook: "BIOLOGICAL MALE" at about half a second (note 1)
-T['annoyed'] = L[1]['start'] + L[1]['_dur'] + 0.1
-T['run'] = min(T['annoyed'] + 0.8, 2.95)         # cut: the cloister (no shot over 3 s: Sam, 3 Nov), "Later…"
+T['annoyed'] = L[1]['start'] + L[1]['_dur'] - 0.2   # Harry happy until the Hat has said it (Sam's note 13.1)
+T['stare'] = T['annoyed'] + 0.25                  # cut: Harry close, staring off into the distance, annoyed (2 s)
+T['run'] = T['stare'] + 2.0                       # cut: the cloister (no shot over 3 s: Sam, 3 Nov), "Later…"
 T['door'] = T['run'] + 2.7                        # cut: Myrtle comes out through the door; the boys skid in
 T['halt'] = T['door'] + 0.55
 
@@ -127,9 +128,9 @@ CARDS = [('Later…', T['run'] + 0.45, T['run'] + 2.05)]   # brief 5: the subtit
 
 def _speaker_shots():
     """Shot/reverse at the door: each line from the side of whoever speaks, cutting a quarter second before."""
-    out = [('hat', 0.0, T['run']), ('run', T['run'], T['door']), ('door', T['door'], L[2]['start'] - 0.25)]
+    out = [('hat', 0.0, T['stare']), ('hat face', T['stare'], T['run']), ('run', T['run'], T['door']), ('door', T['door'], L[2]['start'] - 0.25)]
     for n in range(2, 9):
-        cam = 'door' if L[n]['who'] == 'myrtle' else 'boys'
+        cam = 'door' if L[n]['who'] == 'myrtle' else 'harry close' if n == 7 else 'boys'   # 7: on Harry (note 13.4)
         a = L[n]['start'] - 0.25 if n > 2 else out[-1][2]
         b = L[n + 1]['start'] - 0.25 if n < 7 else (T['float'] - 0.25 if n == 7 else T['scream'])
         if n == 8:
@@ -149,8 +150,8 @@ def _speaker_shots():
 # Sam, 3 Nov: quick cuts, no camera held over 3 s. A long hold is cut into even pieces of 2.6 s at most, going
 # speaker wide -> speaker close -> the listener's face -> speaker close ...
 CUTAWAY = {'door': ('door', 'myrtle close', 'harry close', 'myrtle close'),
-           'boys': ('boys', 'harry close', 'myrtle close', 'harry close'),
-           'harry close': ('harry close', 'myrtle close'), 'myrtle close': ('myrtle close', 'harry close')}
+           'boys': ('boys', 'harry close'),          # Sam's note 13.4: stay on Harry (never behind his back)
+           'harry close': ('harry close', 'boys'), 'myrtle close': ('myrtle close', 'harry close')}
 MOST = 2.6
 
 
@@ -161,6 +162,9 @@ def _choppy(shots):
         for i in range(n):
             c = CUTAWAY[cam][i % len(CUTAWAY[cam])] if n > 1 else cam
             p = (c, a + (b - a) * i / n, a + (b - a) * (i + 1) / n)
+            if out and out[-1][0] == p[0] and p[2] - out[-1][1] > 3.0:   # joined, it would linger: the other angle
+                alt = CUTAWAY.get(cam, (cam, cam))
+                p = (alt[1] if p[0] == alt[0] else alt[0],) + p[1:]
             if out and out[-1][0] == p[0]:
                 out[-1] = (p[0], out[-1][1], p[2])
             else:
@@ -175,7 +179,7 @@ SHOTS = _speaker_shots()
 HANDS_OK = [(w, '*', 'no hand', a, b, 'seen from behind at the door: the hand is in front of him')
             for c, a, b in SHOTS if c == 'door' for w in ('Harry', 'Ron')]
 HANDS_OK += [('McGonagall', '*', 'in sleeve', 0.2, 0.8, 'lowering the Hat and letting go, towards us: her hands plainly on the brim, then dropping')]
-SHOT_CAST = {'hat': ['harry', 'mcg'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
+SHOT_CAST = {'hat': ['harry', 'mcg'], 'hat face': ['harry'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
              'boys': ['harry', 'ron'], 'harry close': ['harry'], 'myrtle close': ['myrtle']}
 LOOKS_AT = {'harry': 'myrtle', 'ron': None, 'myrtle': 'harry', 'mcg': 'harry'}
 PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE, CAMS=PL.CAMS, SHOT_MARKS=PL.SHOT_MARKS,
@@ -189,7 +193,7 @@ BENCHMARK = [
                 ('warm stone walls', 'stone courses in candlelight'), ('oak panelling', 'panelled dado'),
                 ('house banner', 'red and gold banner'), ('the patched Sorting Hat', 'terfwarts_cast.hat'),
                 ('the stool', 'off frame below (close-up)')]),
-    dict(place='corridor.jpg', refs=['corridor.jpg', 'trio-hbo-cloister.jpg'], at=T['run'] + 1.0,
+    dict(place='corridor', refs=['corridor.jpg', 'trio-hbo-cloister.jpg'], at=T['run'] + 1.0,
          items=[('fan vaulting', 'a fan on every shaft, ribs'), ('honey stone', 'STONE colours'),
                 ('tracery windows onto the garth', 'west wall, three lights, lawn and the far range'),
                 ('stone bench', 'east wall, the whole length'), ('flagstones', 'staggered flags'),
@@ -283,9 +287,9 @@ def _poses():
     hp = [(0.0, 'hips'), (L[2]['start'] - 0.1, 'palm_open'), (L[2]['end'] + 0.3, 'relaxed'),
           (L[4]['start'] - 0.2, 'hands_up'), (L[4]['end'] + 0.2, 'hips'), (L[6]['start'], 'relaxed'),
           (L[7]['start'] - 0.2, 'point_ron'), (L[7]['end'] + 0.3, 'relaxed'), (T['float'] + 2.0, 'arms_folded'),
-          (L[9]['start'] - 0.1, 'shrug'), (L[9]['end'] + 0.2, 'arms_folded')]
+          (L[9]['start'] - 0.1, 'exasperated'), (L[9]['end'] + 0.2, 'arms_folded')]
     rp = [(0.0, 'hips'), (L[3]['start'], 'palms_together'), (L[4]['start'], 'relaxed'),
-          (L[5]['start'] + 3.0, 'shrug'), (L[5]['end'] - 1.5, 'relaxed'), (L[6]['start'] - 0.2, 'palms_together'),
+          (L[6]['start'] - 0.2, 'palms_together'),   # (his shrug on line 5 went: Sam's note 13.6)
           (L[7]['end'] + 0.3, 'relaxed'), (T['scream'] + 0.4, 'palms_together'), (L[10]['start'], 'relaxed'),
           (L[11]['start'] - 0.2, 'palms_together')]
     return {'harry': hp, 'ron': rp}
@@ -299,6 +303,14 @@ def _pose(sp, name):
         return PG.hands_up(sp)
     if name == 'palms_together':
         return PG.palms_together(sp)
+    if name == 'exasperated':                     # Sam's note 13.9: "what more do you want?": both palms up and
+        j = V.standing(sp)                        # open at chest height, elbows bent out, shoulders up, head forward
+        sw = sp.get('shoulders', 150)
+        j['head_dy'] = -8
+        j['lean'] = 4
+        for s_, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, s_, (sg * (sw + 110), 70.0, 150.0), 'down', 'palm')
+        return j
     if name == 'point_ron':                       # the gallery's pointing pose, mirrored: his left hand at Ron
         j = V.standing(sp)
         sw = sp.get('shoulders', 150)
@@ -326,9 +338,8 @@ def harry_state(t):
     j = posed('harry', t)
     face = _face('harry', t, look=0.0)
     yaw = 0
-    if t < L[2]['end'] + 0.6:                     # panting: the body heaves, mouth open between words
-        k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)
-        j['bob'] = 7 * k * (0.5 + 0.5 * math.sin(2 * math.pi * t / 0.5))
+    if t < L[2]['end'] + 0.6:                     # out of breath: leaning in, mouth open between words (Sam's note
+        k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)   # 13.3: the heaving body read as bobbing like a duck: gone)
         j['lean'] = 7 * k
         if not talking('harry', t):
             face['mouth'] = 'agape'
@@ -352,9 +363,8 @@ def ron_state(t):
     face = _face('ron', t, look=0.6, look_v=-0.5, brow_raise=6)
     if not talking('ron', t):
         face['mouth'] = 'agape'
-    if t < L[2]['end'] + 0.6:
+    if t < L[2]['end'] + 0.6:                     # leaning in, out of breath (no bobbing: Sam's note 13.3)
         k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)
-        j['bob'] = 8 * k * (0.5 + 0.5 * math.sin(2 * math.pi * (t + 0.2) / 0.45))
         j['lean'] = 8 * k
     return 0, j, face
 
@@ -403,6 +413,28 @@ def mcg_state(t, brim):
     return j, dict(_face('mcg', t), look=0.3, look_v=0.8, mouth='set')
 
 
+def _hat_env():
+    """Sam's note 13.1: the Hat's mouth opens on every syllable. Its voice's loudness (speech band, 100 a second),
+    smoothed over 30 ms, as 0-1: peaks open the mouth wide, the dips between syllables nearly shut it."""
+    x = L[1]['_voice']
+    if x is None:
+        return np.zeros(1)
+    from scipy.signal import butter, sosfilt
+    y = sosfilt(butter(2, [250, 3000], 'band', fs=SR, output='sos'), x)
+    hop = SR // 100
+    e = np.array([np.sqrt(np.mean(y[i:i + hop] ** 2)) for i in range(0, len(y) - hop, hop)])
+    e = np.convolve(e, np.ones(3) / 3, 'same')
+    return np.clip((e / (np.percentile(e, 97) + 1e-9) - 0.18) / 0.62, 0, 1)
+
+
+HAT_ENV = _hat_env()
+
+
+def hat_open(t):
+    i = int((t - L[1]['start']) * 100)
+    return float(HAT_ENV[i]) if 0 <= i < len(HAT_ENV) else 0.0
+
+
 def hat_drop(t):
     """How far above its worn place the Hat is (pixels at Harry's scale), easing down until it lands."""
     return 150 * (1 - _ease(_ramp(t, 0.0, T['hat_land'])))
@@ -419,6 +451,8 @@ HAT_PXM, HAT_EYE_Y, HARRY_X, MCG_X, MCG_PXM = 1500.0, 1160.0, 580, 470, 1000.0
 
 def cam_for(t):
     s = shot_of(t)
+    if s == 'hat face':                           # Harry's face, the Hat above it (note 13.1)
+        return B.Cam(1.7, HARRY_X, HAT_EYE_Y - 60)
     if s == 'harry close':
         hx, hy = _boys_head('harry', t)
         return B.Cam(2.3, hx, hy + 70)
@@ -456,18 +490,22 @@ def shot_hat(img, cam, t):
     sit = MV.seated(CAST['harry'])
     s2 = s_h * C.HEIGHTS['harry'] / 1.75
     floor = HAT_EYE_Y + 158 * s2 + (928 - 2 * sit['bob']) * s2    # (the cast's person() and views both drop by bob)
-    face = _face('harry', t, look=0.0, look_v=-0.9 if t < T['annoyed'] else -0.2)
-    if t >= T['annoyed']:
+    face = _face('harry', t, look=0.0, look_v=-0.9)
+    if t < T['annoyed']:                          # happy at first, eyes up at the Hat (Sam's note 13.1)
+        face.update(mouth='smile', brow_raise=6)
+    else:
         face.update(brows='fierce', lid=2, mouth='line', look_v=-0.2)      # annoyance 3 (Sam)
+    if shot_of(t) == 'hat face':                  # the beat: staring off into the distance, visibly annoyed
+        face.update(look=0.8, look_v=0.1, lid=3)
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     drop = hat_drop(t)
     brim = {}
 
     def worn(p, view, sp, hx, hy):
         k = sp['hw'] / 120
-        yell = talking('hat', t) and mouths.at(TRACK['hat'], t) not in ('rest', 'MBP')
+        op = hat_open(t)
         by = hy - 84 - drop / s2
-        C.hat(p, hx, by, k, 'yell' if yell else 'rest')
+        C.hat(p, hx, by, k, 'yell' if op > 0.08 else 'rest', op)
         brim['ends'] = [_world(cam, p.cam.P(hx - 180 * k, by - 2 * k)), _world(cam, p.cam.P(hx + 180 * k, by - 2 * k))]
     if SOLO[0] in (None, 'harry'):
         C.person(lay, cam, HARRY_X, floor, s_h, 'harry', 0, sit, face, t=t, head_props=[worn])
@@ -494,6 +532,12 @@ def shot_hat(img, cam, t):
     p = B.Pen(img, cam)
     for tx, ty in (hands if SOLO[0] in (None, 'mcg') else ()):                          # her hands over the brim (rule S2)
         p.ell(tx, ty, 26 * s2m, 26 * s2m, CAST['mcg']['skin'], B.INK, 2.6)
+
+
+# Sam's note 2 (3 Nov): seen from the front, the kit's run drove each knee up to the chest and dropped the body on
+# every step: they looked to fall to their knees. Running at the lens: a low knee lift, a small float and bob, the
+# same quick steps, arms pumping gently.
+MV.GAITS['front_run'] = dict(MV.GAITS['run'], step=0.62, sps=3.5, kick=0.18, float=6, lift=60, swing=0.4, bend=1.3, lean=4)
 
 
 def _front_run(j):
@@ -524,7 +568,7 @@ def shot_run(img, cam, t):
     for d, who, x0 in sorted(out, reverse=True):
         pxm = v.pxm(d)
         x = v.P(v.r_of(x0), 0, d)[0]
-        j = _front_run(MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'run'))
+        j = _front_run(MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'front_run'))
         face = _face(who, t, mouth='agape' if who == 'ron' else 'set', brows='fierce' if who == 'harry' else None)
         face = {k: vv for k, vv in face.items() if vv is not None}
         _draw(img, cam, who, x, v.floor_y(d), pxm, 0, j, face, t=t)
@@ -552,13 +596,63 @@ def shot_door(img, cam, t):
         SETS.sconces(img, cam, v, t)
     if not SOLO[0]:
         SETS.plaque_text(img, v, cam)
+        blood(img, cam, v, t)
     _myrtle(img, cam, v, t, 0)
     arrive = _ease(_ramp(t, T['door'], T['halt']))
     for who in ('harry', 'ron'):
         x0, z0 = PL.PEOPLE[who]['at']
         d = v.d_of(z0) - (1 - arrive) * 0.9
         yaw, j, face = (harry_state if who == 'harry' else ron_state)(t)
+        lean = j.get('lean', 0)                   # Sam (3 Nov): from behind, hands on hips read as hands behind the
+        j = MV.pose(CAST[who], 'relaxed')         # back: seen over their shoulders the boys stand with their arms
+        j['lean'] = lean                          # relaxed at their sides (their gestures are in the front shots)
         _draw(img, cam, who, v.P(v.r_of(x0), 0, d)[0], v.floor_y(d), v.pxm(d), 180, j, face, t=t)
+
+
+def ron_face_props(t):
+    """Sam's notes 13.5 and 13.11: snot slides out of Ron's left nostril on "I don't like spiders, Harry" (and stays,
+    a glistening drip, till the scene changes), a tear rolls down his cheek on "I don't like them, Harry"."""
+    out = []
+    snot = _ease(_ramp(t, L[6]['start'] + 0.2, L[6]['end']))
+    tear = _ease(_ramp(t, L[11]['start'], L[11]['end'] + 0.4))
+
+    def draw(p, view, sp, hx, hy):
+        if view != 'front':
+            return
+        if snot > 0 and t < T['scream']:
+            x0, y0 = hx - 13, hy + 31                 # out of the nostril, down over his lip
+            n = 6 + 40 * snot
+            p.poly([(x0 - 8, y0), (x0 + 6, y0), (x0 + 7, y0 + n * 0.7), (x0 + 10, y0 + n), (x0, y0 + n + 11),
+                    (x0 - 9, y0 + n), (x0 - 6, y0 + n * 0.7)], (168, 196, 96), (96, 124, 50), 2.0)
+            p.ell(x0 - 2, y0 + n - 1, 3.2, 3.2, (240, 248, 214), None)     # the shine
+        if tear > 0 and t >= L[11]['start']:
+            x0, y0 = hx + 24, hy + 8                  # from the inner corner of his left eye down the cheek
+            y = y0 + 60 * tear
+            p.line([(x0, y0), (x0 + 2, (y0 + y) / 2), (x0 + 3, y - 6)], (120, 186, 236), 4.0)
+            p.poly([(x0 + 3, y - 14), (x0 + 11, y + 1), (x0 + 3, y + 10), (x0 - 5, y + 1)], (150, 205, 245),
+                   (70, 130, 190), 1.8)
+            p.ell(x0 + 1, y - 1, 2.4, 2.4, (255, 255, 255), None)
+    out.append(draw)
+    return out
+
+
+def blood(img, cam, v, t):
+    """Sam's note 13.12: when the thud lands, a small pool of blood seeps out under the door onto the flagstones,
+    spreading over a second and a half (on the floor, under Myrtle and the boys)."""
+    from ed import curve
+    u = _ease(_ramp(t, T['thud'] + 0.15, T['thud'] + 1.8))
+    if u <= 0:
+        return
+    zd = SETS.DOOR_Z if hasattr(SETS, 'DOOR_Z') else 25.98
+    r0, d0 = v.r_of(PL.DOOR_X), v.d_of(zd)
+    pen = B.Pen(img, cam)
+    # an uneven blob: wide along the door's foot, a tongue running out towards us
+    shape = [(-0.3, 0.0), (-0.24, 0.07), (-0.1, 0.1), (0.0, 0.2), (0.08, 0.25), (0.14, 0.16), (0.25, 0.09), (0.32, 0.0)]
+    r0 += 0.12                                    # a little to her left, clear of her feet
+    pts = [v.P(r0 + 1.5 * a * (0.5 + 0.5 * u), 0.002, d0 - 2.6 * b * u) for a, b in shape]
+    pen.poly(curve(pts, 3), (112, 14, 18), (70, 8, 10), 1.4)
+    hi = [v.P(r0 + 0.6 * a * u, 0.003, d0 - 1.3 * b * u) for a, b in shape[2:6]]
+    pen.line(hi, (168, 50, 50), 1.6)
 
 
 def _boys_head(who, t):
@@ -579,10 +673,11 @@ def shot_boys(img, cam, t):
         x0, z0 = PL.PEOPLE[who]['at']
         d = v.d_of(z0)
         yaw, j, face = (harry_state if who == 'harry' else ron_state)(t)
-        _draw(img, cam, who, v.P(v.r_of(x0), 0, d)[0], v.floor_y(d), v.pxm(d), yaw, j, face, t=t)
+        _draw(img, cam, who, v.P(v.r_of(x0), 0, d)[0], v.floor_y(d), v.pxm(d), yaw, j, face, t=t,
+              head_props=ron_face_props(t) if who == 'ron' else ())
 
 
-DRAW = {'hat': shot_hat, 'run': shot_run, 'door': shot_door, 'boys': shot_boys, 'harry close': shot_boys,
+DRAW = {'hat': shot_hat, 'hat face': shot_hat, 'run': shot_run, 'door': shot_door, 'boys': shot_boys, 'harry close': shot_boys,
         'myrtle close': shot_door}
 
 
@@ -601,7 +696,7 @@ def draw_order(t):
     if t >= BLACK_AT:
         return []
     s = shot_of(t)
-    return {'hat': ['background', 'mcg', 'harry', 'HAT'], 'run': ['background', 'ron', 'harry'],
+    return {'hat': ['background', 'mcg', 'harry', 'HAT'], 'hat face': ['background', 'mcg', 'harry', 'HAT'], 'run': ['background', 'ron', 'harry'],
             'door': ['background', 'myrtle', 'harry', 'ron'], 'myrtle close': ['background', 'myrtle', 'harry', 'ron'],
             'boys': ['background', 'ron', 'harry'], 'harry close': ['background', 'ron', 'harry']}[s]
 
@@ -631,6 +726,40 @@ def chunks(text, most=4):
     return [(' '.join(c), len(c) / n) for c in out]
 
 
+_CT = {}
+
+
+def _chunk_times(ln):
+    """Each subtitle's start (seconds into the line), from the syllables heard in Sam's take (Sam's note 13.8: the
+    talking-time share ran early and late through Myrtle's slow, uneven lines). The script's syllables are laid over
+    the syllable peaks found in the recording; a chunk comes up just before the peak of its first syllable."""
+    if ln['n'] in _CT:
+        return _CT[ln['n']]
+    ch = chunks(ln['text'])
+    out = [(ch[0][0], 0.0)]
+    if ln['_voice'] is not None and len(ch) > 1:
+        import press_secretary as PS
+        beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
+        syl = [sum(mouths._syllables(w) for w in c.split()) for c, _ in ch]
+        tot = sum(syl)
+        acc = 0
+        for (c, _), n in zip(ch[1:], syl[:-1]):
+            acc += n
+            k = min(len(beats) - 1, int(round(acc / tot * len(beats))))
+            at = beats[k] - 0.1 if beats else out[-1][1] + 1.0
+            starts = [a for a, _ in ln['_stretches'][1:] if abs(a - at) < 0.7]   # a pause close by: change on it
+            if starts:
+                at = min(starts, key=lambda a: abs(a - at)) - 0.05
+            out.append((c, max(out[-1][1] + 0.5, at)))
+    else:
+        a = 0.0
+        for c, share in ch[1:]:
+            a += share * ln['_dur']
+            out.append((c, a))
+    _CT[ln['n']] = out
+    return out
+
+
 def caption_at(t):
     for a, b, text in [(c[1], c[2], c[0]) for c in CARDS]:
         if a <= t < b:
@@ -638,19 +767,10 @@ def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
-            talk = ln['_stretches']                # each chunk takes its share of the talking time, pauses skipped
-            total = sum(q - p for p, q in talk) or 1.0
-            u, done = t - ln['start'], 0.0
-            for p, q in talk:
-                if u < q:
-                    done += max(0.0, u - p)
-                    break
-                done += q - p
-            acc = 0.0
-            for text, share in chunks(ln['text']):
-                acc += share * total
-                if done < acc - 1e-6:
-                    return text
+            u, text = t - ln['start'], None
+            for c, t0 in _chunk_times(ln):
+                if text is None or u >= t0:
+                    text = c
             return text
     return None
 
@@ -685,7 +805,16 @@ def soundtrack(stems=False):
     s0 = int(0.45 * SR)
     seg = scream[s0:s0 + int(SCREAM_LEN * SR)].copy()
     seg[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
-    filmkit.place(rest, seg, at=T['scream'], sr=SR, gain=0.8)
+    from scipy.signal import butter, sosfilt      # Sam's note 13.10: from the far side of the room, through the
+    seg = sosfilt(butter(3, 1300, 'low', fs=SR, output='sos'), seg)   # door: the highs gone, quieter, and a little
+    room = np.zeros(len(seg) + int(0.25 * SR))    # tiled-room echo trailing each cry
+    room[:len(seg)] += seg
+    for dly, g in ((0.043, 0.35), (0.071, 0.25), (0.113, 0.18), (0.167, 0.12), (0.229, 0.08)):
+        k = int(dly * SR)
+        room[k:k + len(seg)] += g * seg
+    room = room[:len(seg)]
+    room[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))      # still cut off dead by the thud
+    filmkit.place(rest, room, at=T['scream'], sr=SR, gain=0.55)
     thud = load(SFX['thud'])[:int(1.0 * SR)].copy()   # its 3 s rumble ran under Harry's "Well it's not...": the hit
     thud[-int(0.4 * SR):] *= np.linspace(1, 0, int(0.4 * SR))   # kept, the tail faded out by 1 s
     filmkit.place(rest, thud, at=T['thud'], sr=SR, gain=1.0)
@@ -734,7 +863,7 @@ def scene(t):
     import audit
     s = shot_of(t)
     out = []
-    if s == 'hat':                                 # Harry on the stool (seat 0.45 m), McGonagall behind, the Hat
+    if s in ('hat', 'hat face'):                   # Harry on the stool (seat 0.45 m), McGonagall behind, the Hat
         import clipcheck as CC
         x, z = PL.PEOPLE['harry hall']['at']
         f = C.HEIGHTS['harry'] / 1.75

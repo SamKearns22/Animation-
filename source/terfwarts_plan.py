@@ -53,10 +53,11 @@ CAMS = {   # focal in pixels for 1080 x 1920
                  why="through Myrtle's back at Harry and Ron (the door's side)"),
 }
 # the film's shot names (the composition sheet's names kept above for terfwarts_compose.py)
-CAMS.update({'hat': CAMS['hat close'], 'run': CAMS['corridor run'], 'door': CAMS['myrtle'],
+CAMS.update({'hat': CAMS['hat close'], 'hat face': dict(CAMS['hat close'], focal=2720,
+                                                        why="Harry's annoyed stare, 1.7x the hat shot (Sam's note 13.1)"), 'run': CAMS['corridor run'], 'door': CAMS['myrtle'],
              'harry close': dict(CAMS['boys'], focal=2990, why="Harry's face from Myrtle's side (2.3x the boys shot)"),
              'myrtle close': dict(CAMS['myrtle'], focal=3200, why="Myrtle's face from the boys' side (2x the door)")})
 # rule 38: who each shot holds at their marks (the run is on the move: no mark)
-SHOT_MARKS = {'hat': ['harry hall', 'mcg'], 'door': ['myrtle', 'harry', 'ron'], 'boys': ['harry', 'ron'],
+SHOT_MARKS = {'hat': ['harry hall', 'mcg'], 'hat face': ['harry hall'], 'door': ['myrtle', 'harry', 'ron'], 'boys': ['harry', 'ron'],
               'harry close': ['harry'], 'myrtle close': ['myrtle']}
 GROUPS = {}                    # no crowd: the hall is only seen behind Harry's close-up (Sam, 3 Nov)

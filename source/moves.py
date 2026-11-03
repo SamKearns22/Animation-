@@ -638,7 +638,8 @@ def check_gait(kind):
     if kind in ('run', 'sprint') and g['duty'] >= 0.5:
         faults.append(f'{kind}: no float (a run has a moment with both feet off)')
     cadence = g['sps'] * 60
-    lo, hi = {'stroll': (80, 100), 'walk': (100, 130), 'brisk': (130, 165), 'run': (160, 210), 'sprint': (200, 280)}[kind]
+    ranges = {'stroll': (80, 100), 'walk': (100, 130), 'brisk': (130, 165), 'run': (160, 210), 'sprint': (200, 280)}
+    lo, hi = ranges.get(kind, ranges['run' if g.get('kick') else 'walk'])   # a film's own gait (Terfwarts' front_run)
     if not lo <= cadence <= hi:
         faults.append(f'{kind}: {cadence:.0f} steps a minute is outside {lo}-{hi}')
     return faults
