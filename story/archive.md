@@ -304,6 +304,7 @@ NEXT: Sam's next film (planning: Opus high, fresh chat). Use the new tools from 
   final render as `animations/russiadent-evil-vertical.mp4`.
 
 ## Done: "DLC" (The Bayeux Tapestry Season Pass) (TikTok, `prompts/bayeux-season-pass.md`)
+- 3 Nov: story post `animations/bayeux-season-pass-story.mp4` (5.8 MB, 14.8 s): the opening to the end of the title reveal, cranberry text "ACTUALLY MY BEST / VIDEO THO 🔥" below the tapestry (`source/bayeux_story_post.py`).
 - Sam's references in `references/bayeux/` (list and the swap rule in its README: each original weapon deleted
   completely, the new one stitched in the same hand and place).
 - Proof-of-concept animatic sent 5 Oct 2026 (15.3 s, 1080 x 1920, 24 fps, 11.3 MB; render 70 s on 4 cores, not saved
