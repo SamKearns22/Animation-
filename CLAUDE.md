@@ -88,7 +88,8 @@ I don't know how to code. Please:
   always a plain circle with props laid over it.
 - **Yuletide horror trailer** (a separate experiment): read `guides/yuletide/yuletide-trailer.md`; next time it starts
   from the newest engine. Nothing in `guides/yuletide/` applies to the TikTok films.
-- **Sound:** no sound effects unless the script names them or I ask; voices only by default.
+- **Sound:** no sound effects unless the script names them or I ask; voices only by default. **I record every voice in
+  these films; never ask who voices them.**
 - **TikTok:** follow `guides/tiktok-design.md`. No title by default; Hook Text in TikTok's white-box caption style.
   **Every video ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): finish with
   `python3 source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 ["Hook Text"]` from the clean render in `source/data/`.

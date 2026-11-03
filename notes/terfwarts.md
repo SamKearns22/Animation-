@@ -8,7 +8,7 @@
 - **Needs Sam:** yes on the composition sheet; yes on rule wordings R1, R2; the scream and splat files.
 - **Read:** `guides/satire.md` Start; `guides/film-quality-rules.md` Planning; `guides/kit-catalogue.md`.
 - **Lost / Added:** none yet
-- **Open rule requests:** R1 Sam records every voice, never ask (CLAUDE.md, Sound); R2 bleeps always method A (rule 27 + satire.md Start step 2)
+- **Open rule requests:** none (R1 voices, R2 bleeps, rule 62 estimates: written 3 Nov)
 - **For Claude:** film file will be `source/terfwarts.py` from `source/satire_template.py`.
 
 ## The joke (Sam, 3 Nov)
@@ -96,4 +96,5 @@ Decisions made:
 - Sam's note 1 (3 Nov): the film opens on the close-up; the Hat yells at about 0.5 s; Hook Text in the space above the Hat. Lost: the hall wide and the students.
 - My picks (in the composition sheet): the Hat sits on Harry's head as the film opens (no one seen placing it); the
   boys run at the lens down the cloister; shot/reverse at the door; Myrtle's blocking glide ends arms spread.
+- Sam, 3 Nov, "Y all": the layout approved; Harry, Ron and McGonagall recognisable by costume, hair and glasses (no likeness tool); McGonagall places the Hat.
 - Rule requests (Sam, 3 Nov, "always" / "no need to ask in future"): proposed, waiting for his yes (see Open rule requests).

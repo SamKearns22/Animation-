@@ -28,8 +28,8 @@ check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections t
    Ask all questions in ONE message, each with a recommended answer. Notes go in `notes/NAME.md` (`notes/_template.md`).
    Remind Sam: leave about a second of silence after each line before stopping the recording, and turn off the
    iPhone's Voice Isolation mic mode (takes stopped mid-hiss, chopped by the phone's clean-up, crackled in Cry Minister).
-   For any bleeped word, ask: was the word said, or a gap left for the bleep? Note which per line (Prepper Minister:
-   Sam left a gap, and the bleep landed on "you" twice).
+   Bleeps (rule 27): Sam always says the word and I bleep over it; never ask. Place the bleep from the sound (Prepper
+   Minister: a gap was left, and the bleep landed on "you" twice). Sam records every voice; never ask who voices them.
    In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
 3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows **every view**
    each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key

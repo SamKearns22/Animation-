@@ -20,9 +20,10 @@ the end with their checks.
 | 11 | One rough composition sheet (the 3-4 key shots) before building. | `preflight.gates` ("Composition sheet sent:" in the notes) |
 | 14 | Pre-flight refuses to run while the brief checklist has a blank "done?" row or no composition sheet was sent; a shot missing anyone in `SHOT_CAST` fails. | `preflight.gates`, `cast_faults` |
 | 24 | Ambition estimate: the plan lists new builds and risky moves and the share of a week the film will cost. | by hand |
+| 62 | Every cost estimate is checked against what past films actually cost (`story/archive.md`, `notes/archive/`) before it is sent, naming the films compared. | by hand (the estimate names them) |
 | 25 | Eyelines and holds per shot: who looks where, how long each beat holds. | `LOOKS_AT` eyelines; holds by hand |
 | 26 | Every sound effect listed at planning and asked for in one message; placeholders named in every send. | by hand |
-| 27 | A bleep: ask whether the word was said or a gap left; place it from the sound, never the script. | by hand |
+| 27 | A bleep: Sam always says the word and I bleep over it (never ask); place it from the sound, never the script. | by hand |
 | 28 | Reuse first (`guides/kit-catalogue.md`); every new build is added to the catalogue when building ends. | `catalogue.py` sheet; updating by hand |
 | 35 | Lock the layout in planning (who sits or stands where, gaps, what must be in frame); a later change is named as a cost. | `plan.py` true-gap check; by hand |
 | 36 | Say at planning when a tool is slow here; ask Sam once to allow pypi.org. | by hand |
