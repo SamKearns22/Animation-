@@ -761,7 +761,7 @@ def _chunk_times(ln):
             acc += n
             k = min(len(beats) - 1, int(round(acc / tot * len(beats))))
             at = beats[k] - 0.1 if beats else out[-1][1] + 1.0
-            starts = [a for a, _ in ln['_stretches'][1:] if abs(a - at) < 0.7]   # a pause close by: change on it
+            starts = [a for a, _ in ln['_stretches'][1:] if abs(a - at) < 0.35]   # a pause right there: change on it
             if starts:
                 at = min(starts, key=lambda a: abs(a - at)) - 0.05
             out.append((c, max(out[-1][1] + 0.5, at)))
@@ -770,7 +770,30 @@ def _chunk_times(ln):
         for c, share in ch[1:]:
             a += share * ln['_dur']
             out.append((c, a))
+    out = _readable(out, ln['_dur'] + 0.45)
     _CT[ln['n']] = out
+    return out
+
+
+def _readable(out, end):
+    """Pre-flight's reading speed (rule: at least 0.8 s on screen and no more than 220 words a minute): a subtitle
+    that would flash by too fast is joined to its neighbour (Myrtle's quick runs of words), as long as the two still
+    fit two rows (42 characters a row)."""
+    out = list(out)
+    i = 0
+    while i < len(out):
+        a = out[i][1]
+        b = out[i + 1][1] if i + 1 < len(out) else end
+        need = max(0.82, len(out[i][0].split()) * 0.275)
+        if b - a < need and len(out) > 1:
+            j = i + 1 if i + 1 < len(out) else i - 1
+            lo, hi = sorted((i, j))
+            text = out[lo][0] + ' ' + out[hi][0]
+            if len(text) <= 62:
+                out[lo:hi + 1] = [(text, out[lo][1])]
+                i = lo                             # the joined subtitle is looked at again (up to two rows)
+                continue
+        i += 1
     return out
 
 
@@ -780,7 +803,7 @@ def caption_at(t):
             return text
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
+        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
             u, text = t - ln['start'], None
             for c, t0 in _chunk_times(ln):
                 if text is None or u >= t0:
