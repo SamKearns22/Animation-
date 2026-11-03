@@ -4,7 +4,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 `story/archive.md`; their notes: `notes/archive/`.
 
 ## Films
-- **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post.
+- **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
   Open: his two rule requests (Hook Text and sign-off in every animatic; no three-quarter views): propose wording, wait for his yes. Notes: `notes/terfwarts.md`.
 
 ## System audit (2 Nov)
