@@ -7,7 +7,7 @@
 - **Needs Sam:** Y/N on the stills; the Hook Text; the 12 voice recordings (he is reworking the dialogue).
 - **Read:** `guides/satire.md` "Before every render"; rulebook Checks table; `terfwarts.py` MAP only.
 - **Lost / Added:** see Notes 4-8.
-- **Open rule requests:** no three-quarter views (note 7, Sam: "always the worst looking one"): proposed 3 Nov, waiting for his yes.
+- **Open rule requests:** (Sam, 3 Nov) every animatic carries the Hook Text and the CranbriJoos sign-off: propose the wording at the END of this project, wait for his yes;  no three-quarter views (note 7, Sam: "always the worst looking one"): proposed 3 Nov, waiting for his yes.
 - **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`; POSES/posed for the boys); `terfwarts_sets.py` paintings, `View` cameras (RUN, BOYS = Myrtle's view, DOOR), `sconces` drawn per frame. Seated Harry: the cast's person() and views both drop by bob (hat shot passes 2 x bob). The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO) but not yet run. handcheck (3 Nov): 30 faults to fix before the animatic: the run (hands pushed into the robe sleeves every step: sleeves or hand offset), door shots seen from behind (Ron's palms_together and Harry's hands_up/hips hidden by their backs: flag as tucked or pick poses that show), McGonagall 0.25 s. When the dialogue changes, LINES text and `est` change; line numbers drive the shots and poses.
 
 ## The joke (Sam, 3 Nov)
@@ -88,6 +88,7 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 13 | all | animatic | Animatic sent 3 Nov (85 s + 1.6 s sign-off, 5.1 MB, Hook Text and sign-off on it; sent on Sonnet at Sam's override of the Opus stage rule). Rule request: hook texts and sign-offs always go into animatics: propose at the end of the project | sent |
 | 12 | 1 | 0.5 s | Subtitle change: "He's a Biological Male!" | done: LINES 1 text |
 | 11 | all | all | Choppy, quick subtitles; quick transitions; no camera lingers over 3 s | done: subtitles 1-4 words, timed to the talking (pauses skipped); any hold over 3 s cut into even pieces of 2.6 s at most, speaker wide / speaker close / listener close (`_choppy`, `CUTAWAY`); longest shot 2.95 s; gaps between lines 0.25-0.35 s. Added: listener reaction close-ups inside long lines |
 | 10 | 1 | 0-3 s | Hook Text: "Rowling left HBO some edits 😬" | done: HOOK |
