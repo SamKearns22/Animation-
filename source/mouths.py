@@ -127,6 +127,19 @@ def track(text, stretches, env=None, env_rate=100, lead=1 / 12):
     return out
 
 
+def loudness_open(voice, sr, rate=100):
+    """0-1 mouth openness, `rate` a second, from a recording's loudness (film-quality-rules 65): for a speaker with no
+    face to lip-sync, such as the Sorting Hat. The speech band, smoothed over 30 ms: each syllable opens the mouth
+    wide, the dips between them nearly shut it (Terfwarts note 14.1: a flap slower than the syllables looked wrong)."""
+    import numpy as np
+    from scipy.signal import butter, sosfilt
+    y = sosfilt(butter(2, [250, 3000], 'band', fs=sr, output='sos'), np.asarray(voice, float))
+    hop = sr // rate
+    e = np.array([np.sqrt(np.mean(y[i:i + hop] ** 2)) for i in range(0, len(y) - hop, hop)])
+    e = np.convolve(e, np.ones(3) / 3, 'same')
+    return np.clip((e / (np.percentile(e, 97) + 1e-9) - 0.18) / 0.62, 0, 1)
+
+
 def at(trk, t):
     for t0, t1, s in trk:
         if t0 <= t < t1:

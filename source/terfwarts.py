@@ -22,6 +22,7 @@ import burnham as B              # noqa: E402  people: flat shapes, black outlin
 import mossad as M               # noqa: E402  (brows, mouths, hair; patched into burnham on import)
 import figure as F               # noqa: E402  arms solved and guarded
 import mouths                    # noqa: E402  lip sync
+import subtitles as SUB          # noqa: E402  short, quick, readable subtitles timed from the recordings
 import mossad_audio as MA        # noqa: E402  recordings cleaned and levelled
 import peepee as PP              # noqa: E402  the series' caption
 import filmkit                   # noqa: E402  the general checks
@@ -442,21 +443,7 @@ def mcg_state(t, brim):
     return j, dict(_face('mcg', t), look=0.3, look_v=0.8, mouth='set')
 
 
-def _hat_env():
-    """Sam's note 13.1: the Hat's mouth opens on every syllable. Its voice's loudness (speech band, 100 a second),
-    smoothed over 30 ms, as 0-1: peaks open the mouth wide, the dips between syllables nearly shut it."""
-    x = L[1]['_voice']
-    if x is None:
-        return np.zeros(1)
-    from scipy.signal import butter, sosfilt
-    y = sosfilt(butter(2, [250, 3000], 'band', fs=SR, output='sos'), x)
-    hop = SR // 100
-    e = np.array([np.sqrt(np.mean(y[i:i + hop] ** 2)) for i in range(0, len(y) - hop, hop)])
-    e = np.convolve(e, np.ones(3) / 3, 'same')
-    return np.clip((e / (np.percentile(e, 97) + 1e-9) - 0.18) / 0.62, 0, 1)
-
-
-HAT_ENV = _hat_env()
+HAT_ENV = mouths.loudness_open(L[1]['_voice'], SR) if L[1]['_voice'] is not None else np.zeros(1)   # kit tool (rule 65)
 
 
 def hat_open(t):
@@ -563,36 +550,6 @@ def shot_hat(img, cam, t):
         p.ell(tx, ty, 26 * s2m, 26 * s2m, CAST['mcg']['skin'], B.INK, 2.6)
 
 
-# Sam's note 2 (3 Nov): seen from the front, the kit's run drove each knee up to the chest and dropped the body on
-# every step: they looked to fall to their knees. Running at the lens: a low knee lift, a small float and bob, the
-# same quick steps, arms pumping gently.
-MV.GAITS['front_run'] = dict(MV.GAITS['run'], step=0.62, sps=3.5, kick=0.18, float=6, lift=60, swing=0.4, bend=1.3, lean=4)
-
-
-def _front_run(j):
-    """Running straight at the lens (Sam's notes 2 and 15): the arms pump gently. The elbows stay bent at the sides
-    and swing a little back and forth; the forearm rises and falls (the hand from belt height up to the ribs, never
-    up past the shoulder), pointing forward and slightly out, so it is never pushed back over the shoulder on screen
-    (handcheck, rule 41). Which way each arm is in its swing comes from the kit's gait."""
-    j = dict(j)
-    for sd in 'LR':
-        sh = np.array(j['sh' + sd], float)
-        el, wr = np.array(j['el' + sd], float), np.array(j['wr' + sd], float)
-        f = wr - el
-        n = np.linalg.norm(f)
-        fwd = max(-1.0, min(1.0, f[2] / n))               # -1: arm back ... +1: arm forward
-        k = (fwd + 1) / 2                                  # 0 .. 1 through the swing
-        el2 = el.copy()
-        el2[2] = sh[2] + 0.6 * (el[2] - sh[2])             # the elbow swings back and forth beside the ribs
-        el2[0] = sh[0] + 0.8 * (el[0] - sh[0])             # tucked in at the sides, never out (Sam's note 15.3)
-        # Running at the lens an arm pumps forward and back: the forearm points forward at the lens and up, the hand
-        # coming up to the chest on the forward swing and dropping to the belt on the back swing (y is down)
-        g = np.array([-0.12 * np.sign(el[0]), 0.15 - 0.75 * k, 0.55 + 0.35 * k])
-        j['el' + sd] = tuple(el2)
-        j['wr' + sd] = tuple(el2 + g / np.linalg.norm(g) * n)
-    return j
-
-
 def shot_run(img, cam, t):
     v = SETS.RUN
     if not SOLO[0]:
@@ -607,7 +564,7 @@ def shot_run(img, cam, t):
     for d, who, x0 in sorted(out, reverse=True):
         pxm = v.pxm(d)
         x = v.P(v.r_of(x0), 0, d)[0]
-        j = _front_run(MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'front_run'))
+        j = MV.front_run_arms(MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'front_run'))
         face = _face(who, t, mouth='agape' if who == 'ron' else 'set', brows='fierce' if who == 'harry' else None)
         face = {k: vv for k, vv in face.items() if vv is not None}
         _draw(img, cam, who, x, v.floor_y(d), pxm, 0, j, face, t=t)
@@ -740,94 +697,7 @@ def draw_order(t):
             'boys': ['background', 'ron', 'harry'], 'harry close': ['background', 'ron', 'harry']}[s]
 
 
-def chunks(text, most=4):
-    """Short, quick subtitles (Sam, 3 Nov): split at sentence and comma breaks, each piece into even groups of at most
-    four words; a lone last word joins the words before it. Each chunk: (words, its share of the line)."""
-    import re
-    parts = [p.strip().split() for p in re.split(r'(?<=[.,?!])\s+', text) if p.strip()]
-    out = []
-    for w in parts:
-        k = math.ceil(len(w) / most)
-        cuts = [round(i * len(w) / k) for i in range(k + 1)]
-        groups = [w[cuts[i]:cuts[i + 1]] for i in range(k)]
-        for g in groups:
-            if len(g) == 1 and out and out[-1][-1][-1] not in '.?!' and len(out[-1]) < 5:
-                out[-1] = out[-1] + g
-            else:
-                out.append(g)
-    i = 0                                         # one or two words alone flash by too fast to read: join the next
-    while i < len(out) - 1:
-        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5 and len(' '.join(out[i] + out[i + 1])) <= 34:
-            out[i:i + 2] = [out[i] + out[i + 1]]
-        else:
-            i += 1
-    n = sum(len(c) for c in out)
-    return [(' '.join(c), len(c) / n) for c in out]
-
-
-_CT = {}
-
-
-def _chunk_times(ln):
-    """Each subtitle's start (seconds into the line), from the syllables heard in Sam's take (Sam's note 13.8: the
-    talking-time share ran early and late through Myrtle's slow, uneven lines). The script's syllables are laid over
-    the syllable peaks found in the recording; a chunk comes up just before the peak of its first syllable."""
-    if ln['n'] in _CT:
-        return _CT[ln['n']]
-    ch = chunks(ln['text'])
-    out = [(ch[0][0], 0.0)]
-    if ln['_voice'] is not None and len(ch) > 1:
-        import press_secretary as PS
-        beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
-        syl = [sum(mouths._syllables(w) for w in c.split()) for c, _ in ch]
-        tot = sum(syl)
-        acc = 0
-        for (c, _), n in zip(ch[1:], syl[:-1]):
-            acc += n
-            k = min(len(beats) - 1, int(round(acc / tot * len(beats))))
-            at = beats[k] - 0.1 if beats else out[-1][1] + 1.0
-            starts = [a for a, _ in ln['_stretches'][1:] if abs(a - at) < 0.35]   # a pause right there: change on it
-            if starts:
-                at = min(starts, key=lambda a: abs(a - at)) - 0.05
-            out.append((c, max(out[-1][1] + 0.5, at)))
-    else:
-        a = 0.0
-        for c, share in ch[1:]:
-            a += share * ln['_dur']
-            out.append((c, a))
-    out = _readable(out, ln['_dur'] + 0.45)
-    _CT[ln['n']] = out
-    return out
-
-
-def _readable(out, end):
-    """Pre-flight's reading speed (rule: at least 0.8 s on screen and no more than 220 words a minute): a subtitle
-    that would flash by too fast is joined to its neighbour (Myrtle's quick runs of words), as long as the two still
-    fit two rows (42 characters a row)."""
-    out = list(out)
-    i = 0
-    while i < len(out):
-        a = out[i][1]
-        b = out[i + 1][1] if i + 1 < len(out) else end
-        need = max(0.82, len(out[i][0].split()) * 0.275)
-        deficit = need - (b - a)
-        if 0 < deficit <= 0.3 and i + 1 < len(out):      # nearly long enough: the next subtitle comes up a touch later
-            nb = out[i + 2][1] if i + 2 < len(out) else end
-            nneed = max(0.82, len(out[i + 1][0].split()) * 0.275)
-            if nb - (out[i + 1][1] + deficit) >= nneed:
-                out[i + 1] = (out[i + 1][0], out[i + 1][1] + deficit)
-                i += 1
-                continue
-        if b - a < need and len(out) > 1:
-            j = i + 1 if i + 1 < len(out) else i - 1
-            lo, hi = sorted((i, j))
-            text = out[lo][0] + ' ' + out[hi][0]
-            if len(text) <= 62:
-                out[lo:hi + 1] = [(text, out[lo][1])]
-                i = lo                             # the joined subtitle is looked at again (up to two rows)
-                continue
-        i += 1
-    return out
+_chunk_times = SUB.chunk_times                  # the shared subtitle tool (film-quality-rules 62)
 
 
 def caption_at(t):
@@ -837,11 +707,7 @@ def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-            u, text = t - ln['start'], None
-            for c, t0 in _chunk_times(ln):
-                if text is None or u >= t0:
-                    text = c
-            return text
+            return SUB.line_caption(ln, t - ln['start'])
     return None
 
 

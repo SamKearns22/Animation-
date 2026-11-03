@@ -299,6 +299,47 @@ def render_lock():
         f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}'
 
 
+@test
+def subtitles_readable():
+    """Rule 62 (Terfwarts, 3 Nov): a fast speaker's subtitles are made readable when cut: on screen at least 0.8 s and
+    at most 220 words a minute, over a fast line and a slow one."""
+    import subtitles as SUB
+    bad = []
+    for text, dur in (("When you throw open the door of a bathroom or changing room to any man so-called trying to save "
+                       "the life of a woman then you throw it open to anyone wanting to come inside.", 12.0),
+                      ("I don't like spiders, Harry.", 2.5), ("Dead is a thought-terminating cliche.", 3.0)):
+        ln = dict(n=0, text=text + str(dur), _dur=dur, _voice=None, _stretches=[(0.0, dur)])
+        ln['text'] = text
+        ct = SUB.chunk_times(ln)
+        for i, (c, a) in enumerate(ct):
+            d = (ct[i + 1][1] if i + 1 < len(ct) else dur + 0.45) - a
+            if d < 0.8 or len(c.split()) / d * 60 > 220:
+                bad.append((c, round(d, 2)))
+    return not bad, f'too quick: {bad}' if bad else 'every piece readable'
+
+
+@test
+def render_leaves_no_old_file():
+    """Rule 66 (Terfwarts, 3 Nov): a refused, stopped or failed render leaves no file at its output path. (Run in
+    this process with no pass stamp, so the render is always refused and never starts.)"""
+    import film_engine as E
+    import tempfile
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    out = os.path.join(tempfile.mkdtemp(), 'old.mp4')
+    with open(out, 'w') as fh:
+        fh.write('an old render')
+    refused = False
+    try:
+        E.render('kittest', out, size=(10, 10), ss=1, fps=1, dur=1, picture=None, overlay=None, shot_of=None,
+                 sound=None, write_wav=None, set_ss=None)
+    except SystemExit:
+        refused = True
+    finally:
+        E.PASSES = real
+    return refused and not os.path.exists(out), f'refused: {refused}; old file gone: {not os.path.exists(out)}'
+
+
 # ------------------------------------------------------------------------------------------------ running them
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''

@@ -27,7 +27,7 @@ the end with their checks.
 | 28 | Reuse first (`guides/kit-catalogue.md`); every new build is added to the catalogue when building ends. | `catalogue.py` sheet; updating by hand |
 | 35 | Lock the layout in planning (who sits or stands where, gaps, what must be in frame); a later change is named as a cost. | `plan.py` true-gap check; by hand |
 | 36 | Say at planning when a tool is slow here; ask Sam once to allow pypi.org. | by hand |
-| 38 | Front on by default (each person within about 25 degrees of the lens); any other view listed with its reason. | `plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`) |
+| 38 | Front on by default (each person within about 25 degrees of the lens). A three-quarter view is a last resort (Sam, 3 Nov): only when no other way makes the shot work, listed with that reason. | `plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`) |
 | 39 | 3D only when needed (the camera moves round or through it, 3+ angles that must agree, turned in the hand); otherwise one flat painting per camera, in layers. Each 3D build is in the estimate with its reason. | by hand (the estimate) |
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
 | 44 | A usage budget per film; ask Sam for the week's figure only after a building stage, after the animatic and at the final; log it in the notes; over budget is trimmed before the next stage. | by hand (handover) |
@@ -62,6 +62,10 @@ the end with their checks.
 | S10 | Riding: `mounts.py`, real pace speeds, the rider's seat matches the pace. | `mounts.check` |
 | L1 | People lying down or seen from high have real depth (one 3D body, one outline, resting on the floor). | `lying.py`; the look by hand |
 
+| 63 | Running straight at the lens uses the kit's `front_run` gait and `front_run_arms` (low knees, tucked elbows, fists pumping forward at the chest and belt), never the side-on run or arms out to the side. | `moves.audit` (gait numbers); `handcheck`; the look by hand |
+| 64 | A standing person never bobs: breathing and panting are a lean only. Someone pointing or gesturing is shown from the front, never cut to from behind. Seen from behind, use a pose that reads there (`moves.reads_from_behind`): hands on hips read as hands behind the back. | by hand; `moves.READS_FROM_BEHIND` |
+| 65 | A speaker with no face of its own (the Sorting Hat) opens its mouth with the voice's loudness, one syllable at a time. | `mouths.loudness_open`; `voices.py` mouth check |
+
 ## Checks (what pre-flight and the tools must do)
 | # | Rule | Check |
 |---|---|---|
@@ -77,6 +81,9 @@ the end with their checks.
 | 58 | Pre-flight runs only the checks for what the film contains (`HAS`: people, rooms, voices, effects, props); each skipped check is named in one line with why. | `preflight.py` |
 | 59 | No animatic or final render unless pre-flight passed on the code as it is now; faults Sam has been told about need `--faults-named`. | `film_engine.render` (the lock) |
 | 60 | The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
+| 62 | Subtitles are a few words at a time, each coming up on the syllable it starts with in Sam's take, and made readable when cut: on screen at least 0.8 s, at most 220 words a minute, two rows at most. | `subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable` |
+| 66 | A render that is refused, stopped or fails leaves no file: the old output is deleted before anything else, so an old render can never be taken for the new one. | `film_engine.render`; `kittests.py render_leaves_no_old_file` |
+| 67 | One full pre-flight per round: make every fix, run the quick check (`preflight.py NAME OUT --text`, seconds) until it is clean, then the full pre-flight once, then the render in the same background chain. A background job is stopped with its own task stop, never by name. | `preflight.py --text`; by hand |
 
 ## Notes, review and sound
 | # | Rule | Check |
@@ -107,6 +114,7 @@ the end with their checks.
 | P5 | A repeated note means the first fix failed (Sending work) | by hand |
 | P6 | One handover section, 15 lines at most; old ones archived (Models and chats) | by hand |
 | 31 | Routine work on Sonnet; a round of notes stays in one Opus-medium chat (Models and chats) | by hand |
+| P7 | Every animatic carries the Hook Text and the CranbriJoos sign-off, made as the final is (Asking me) | by hand (`finish.py` on the animatic's clean render) |
 | M1 | Every message opens with what I need from Sam, or "Nothing needed" (Messages) | by hand |
 | M2 | Messages: Done / Needs you / Next, about 10 lines (Messages) | by hand |
 | M3 | No code names or file internals in messages (Messages) | by hand |

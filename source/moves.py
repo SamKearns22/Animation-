@@ -80,6 +80,33 @@ GAITS = {  # steps a second (Williams), step length (m), foot lift, time each fo
 }
 
 
+# Running straight at the lens (film-quality-rules 63; Terfwarts, three notes): the kit's run drives each knee up and
+# drops the body on every step, which head-on looks like falling to the knees. This gait keeps the same quick steps with
+# low knees and a small float; front_run_arms(j) then pumps the arms forward, never out to the side.
+GAITS['front_run'] = dict(GAITS['run'], step=0.62, sps=3.5, kick=0.18, float=6, lift=60, swing=0.4, bend=1.3, lean=4)
+
+
+def front_run_arms(j):
+    """A gait('front_run') pose seen from the front: the elbows tucked in at the ribs swinging back and forth, the
+    forearms pointing forward at the lens, one fist rising to the chest as the other drops to the belt. Which arm is
+    forward comes from the gait's own swing. (Needs numpy: the joints are tuples.)"""
+    import numpy as np
+    j = dict(j)
+    for sd in 'LR':
+        sh = np.array(j['sh' + sd], float)
+        el, wr = np.array(j['el' + sd], float), np.array(j['wr' + sd], float)
+        f = wr - el
+        n = np.linalg.norm(f)
+        k = (max(-1.0, min(1.0, f[2] / n)) + 1) / 2        # 0 .. 1 through the swing
+        el2 = el.copy()
+        el2[2] = sh[2] + 0.6 * (el[2] - sh[2])             # the elbow swings back and forth beside the ribs
+        el2[0] = sh[0] + 0.8 * (el[0] - sh[0])             # tucked in at the sides, never out
+        g = np.array([-0.12 * np.sign(el[0]), 0.15 - 0.75 * k, 0.55 + 0.35 * k])   # y is down: minus is up
+        j['el' + sd] = tuple(el2)
+        j['wr' + sd] = tuple(el2 + g / np.linalg.norm(g) * n)
+    return j
+
+
 def speed(kind):
     g = GAITS[kind]
     return g['sps'] * g['step']                               # metres a second
@@ -381,6 +408,19 @@ def pose(sp, name, beat=0.0, target=None):
 POSES = ('standing', 'relaxed', 'hips', 'arms_folded', 'pockets', 'behind_back', 'lean_on', 'slumped', 'palm_open',
          'chop', 'shrug', 'point', 'facepalm', 'head_in_hands', 'heart', 'phone_ear', 'phone_read', 'paper', 'mug',
          'mug_sip', 'mic', 'pen', 'bag', 'guard')
+
+
+# Which poses still read when the person is seen from behind (film-quality-rules 64; Terfwarts, 3 Nov: hands on hips
+# seen over the shoulders read as hands behind the back). A pose not listed does not: pick one that does, or stay on
+# the front of the person.
+READS_FROM_BEHIND = {'standing': True, 'relaxed': True, 'shrug': True, 'point': True, 'chop': True, 'hands_up': True,
+                     'exasperated': True, 'hips': False, 'arms_folded': False, 'pockets': False, 'behind_back': False,
+                     'palms_together': False, 'palm_open': False, 'heart': False, 'facepalm': False,
+                     'head_in_hands': False}
+
+
+def reads_from_behind(name):
+    return READS_FROM_BEHIND.get(name, False)
 
 
 # ------------------------------------------------------------------------------------------------ sitting

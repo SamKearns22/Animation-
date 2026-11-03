@@ -105,6 +105,8 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     film = os.path.splitext(os.path.basename(getattr(main, '__file__', '') or ''))[0]
     if lock is None:
         lock = not span and film != 'quick' and not getattr(main, 'QUICK', False)
+    if os.path.exists(out):                       # rule 66 (Sam, 3 Nov): never an old file standing in for a new render:
+        os.remove(out)                            # gone before anything else, so a refused or stopped render leaves none
     if lock:
         why = lock_fault(film, '--faults-named' in sys.argv)
         if why:
@@ -130,13 +132,25 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                           '-s', f'{size[0]}x{size[1]}', '-r', str(fps), '-i', '-', *(['-ss', f'{first / fps:.3f}'] if first else []), '-i', wav, '-map', '0:v', '-map', '1:a',
                           '-c:v', 'libx264', '-crf', str(crf), '-preset', preset, '-pix_fmt', 'yuv420p', '-c:a', 'aac',
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
-    with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
-            p.stdin.write(fr)
-            if k % 48 == 0:
-                print(f'frame {k}/{n - first}', flush=True)
-    p.stdin.close()
-    p.wait()
+    try:
+        with Pool(os.cpu_count()) as pool:
+            for k, fr in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
+                p.stdin.write(fr)
+                if k % 48 == 0:
+                    print(f'frame {k}/{n - first}', flush=True)
+        p.stdin.close()
+        p.wait()
+        if p.returncode:
+            raise RuntimeError(f'ffmpeg failed ({p.returncode})')
+    except BaseException:                         # stopped, killed by a signal's exception, or failed: delete the partial
+        try:
+            p.kill()
+        except Exception:
+            pass
+        for f in (out, wav):
+            if os.path.exists(f):
+                os.remove(f)
+        raise
     os.remove(wav)
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB)', flush=True)
 

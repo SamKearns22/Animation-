@@ -280,6 +280,9 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   fonts.gstatic.com/s/e/notoemoji/latest/<hex>/512.png).
 
 ## Before every render
+**One full pre-flight per round (rule 67):** make every fix first; run `python3 source/preflight.py NAME OUT_DIR --text`
+(the quick check: script, mouths, subtitles, shot lengths, in seconds, no frame drawn) until it is clean; then the full
+pre-flight once, with the render after it in the same background chain (`&&`). It never writes a pass stamp.
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit
 alone, seconds to minutes). It runs only the checks for what the film's `HAS` lists, and names the rest. **The render
 lock (rule 59):** an animatic or final will not start unless pre-flight passed on the code as it is now (any code
@@ -310,6 +313,9 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
   film by 4%).
 - Caption or timing note: `... final OUT --reuse` (no pictures re-rendered). Note on shot X: `... --reuse --redo X`.
 - Sound note: rebuild the sound only and attach it to the finished picture (never a re-render).
+- **Stopping a background job:** use its own task stop, never `pkill -f NAME` (it matched my own shell command and an
+  edit was lost, Terfwarts). A render that is refused, stopped or fails leaves no file (rule 66): never send a file that
+  is not newer than the code.
 - Say how long it will take; push notification when it ends; send the film in the chat; update `story/status.md`.
 
 ## If a check fails

@@ -29,6 +29,8 @@ I don't know how to code. Please:
 # Asking me before you go on
 - **Before any full render, offer me an animatic** (a quick, lower-quality version of the whole film) and wait for my
   Y or N. **Ask before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
+- **Every animatic carries the Hook Text and the CranbriJoos sign-off,** made the same way as the final
+  (`finish.py` on the animatic's clean render), and the check sheet shows the Hook Text frame (Sam, 3 Nov).
 - **Before every animatic (re-renders too), show me the check sheet and wait for a clear yes**; a note is not a yes.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
 - **"Just go" (or any override) skips waiting for my yes, never the checks:** pre-flight still runs, and every fault is

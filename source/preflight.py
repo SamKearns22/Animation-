@@ -168,6 +168,33 @@ def _sheet_tile(k):
     return im.resize((216, 384))
 
 
+def _text_only(film, problems, end, fps):
+    """`preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, reading
+    speed) and shot lengths; no frame is drawn. Fix text faults here until it is clean, then run the full pre-flight once."""
+    f = ImageFont.truetype(B.SANS, 50)
+    seen = {}
+    if hasattr(film, 'caption_at'):
+        for i in range(int(end * fps)):
+            c = film.caption_at(i / fps)
+            if c:
+                seen.setdefault(c, []).append(i / fps)
+    for c, ts in seen.items():
+        rows = B.wrap(c, f, 700)
+        wide = max(f.getbbox(r)[2] for r in rows)
+        if len(rows) > 2 or wide > 700 or max(len(r) for r in rows) > 42:
+            problems.append(f'caption "{c}": {len(rows)} rows, {wide} px wide (max 2 rows, 700 px, 42 characters)')
+        dur, words = len(ts) / fps, len(c.split())
+        if dur < 0.8 or words / max(dur, 0.01) * 60 > 220:
+            problems.append(f'caption "{c}": {dur:.1f} s on screen for {words} words (too fast to read)')
+    for s in getattr(film, 'SHOTS', []):
+        if s[2] - s[1] > MAX_SHOT:
+            problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s)')
+    print('quick check (--text):', 'clean' if not problems else f'{len(problems)} fault(s)')
+    for x in problems:
+        print(' -', x)
+    print('(no pass stamp: the render still needs the full pre-flight)')
+
+
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
@@ -249,6 +276,9 @@ def main():
     fps = getattr(film, 'FPS', 12)
     problems = list(shared)
     B.SS = 1
+    if '--text' in sys.argv:                    # rule 67: the quick check, in seconds: the plan, script, mouths, subtitles
+        _text_only(film, problems, end, fps)    # and shot lengths; no picture passes, no sheet, and never a pass stamp
+        sys.exit(1 if problems else 0)
     # 2. every 3rd frame, small: the checks inside the drawing code (all processor cores)
     global _FILM, _FPS
     _FILM, _FPS = film, fps

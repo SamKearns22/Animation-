@@ -25,6 +25,7 @@ import burnham as B              # noqa: E402  people: flat shapes, black outlin
 import mossad as M               # noqa: E402  (brows, mouths, hair; patched into burnham on import)
 import figure as F               # noqa: E402  arms solved and guarded
 import mouths                    # noqa: E402  lip sync
+import subtitles as SUB          # noqa: E402  short, quick, readable subtitles timed from the recordings (rule 62)
 import mossad_audio as MA        # noqa: E402  recordings cleaned and levelled
 import peepee as PP              # noqa: E402  the series' caption
 import filmkit                   # noqa: E402  the general checks
@@ -120,6 +121,7 @@ for ln in LINES:                                  # time each line to its record
         v = MA.line(ln['audio'])
         ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
         ln['_stretches'] = MA.pauses(v, 0.12)
+    ln['_dur'] = ln['end'] - ln['start']           # (subtitles.py times each piece from this and the recording)
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
              for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in 'AB'}
 BLINKS = {w: F.blinks(7 if w == 'A' else 11, 0.5, DUR, talking=True) for w in 'AB'}
@@ -205,8 +207,8 @@ def draw_order(t):
 def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
-            return ln['text']
+        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
+            return SUB.line_caption(ln, t - ln['start'])   # a few words at a time, on the syllable they start with
     return None
 
 
