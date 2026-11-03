@@ -88,6 +88,9 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 15.3 | run | 6-8 s | Arms still come out to the side; pump up and down in a forward motion | done: elbows tucked at the ribs, forearms point forward at the lens, fists rise to the chest and drop to the belt (`_front_run`); listed in HANDS_OK as meant (head-on) |
+| 15.2 | 6 | 42 s | Snot 50% shorter | done |
+| 15.1 | 1 | 3-5 s | No zoom on Harry in the Hat scene; the run needs pumping arms but the legs look much better | done: the 'hat face' beat keeps the Hat camera (the Hat shot now runs 5 s at Sam's word); legs kept |
 | 14.15 | 9 | 74 s | Subtitle: remove "as": "Well, it's not a problem anymore, Myrtle, she's f****** dead." | done in the subtitles (the take still says "as") |
 | 14.14 | door | all | From behind, the boys' hands on hips read as hands behind their backs | done: over their shoulders the boys stand arms relaxed at their sides; gestures stay in the front shots. Lost: their poses in the door shots |
 | 14.12 | thud | 72.7 s | Blood seeps out under the door at the thud | done: `blood()`, spreads over 1.6 s, left of Myrtle's feet. Added |
@@ -102,6 +105,7 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | 14.3 | door | 8-12 s | The boys bob like ducks when they first speak | it was meant as panting after the run; done: bob removed, a small lean only. Lost: the panting |
 | 14.2 | run | 5-7.8 s | The front-on run drops them to their knees each step | done: own gait 'front_run' (low knees, bob 99 -> 26, gentle arm pump); kit check knows film gaits |
 | 14.1 | 1 | 0-5 s | Hat's mouth too slow; Harry happy at first; a 2 s beat of Harry staring off, annoyed | done: the Hat's mouth opens with its voice's loudness (each syllable); Harry smiles until the line ends; new shot 'hat face' 2 s. Added: the shot |
+| 16 | all | animatic 2 | Animatic 2 sent 3 Nov (88 s with sign-off, 4.9 MB). One subtitle ('you to turn this', 1.1 s for 4 words) is 0.05 s over the reading-speed check; subtitles merged where Myrtle's runs were too quick to read | sent |
 | 13 | all | animatic | Animatic sent 3 Nov (85 s + 1.6 s sign-off, 5.1 MB, Hook Text and sign-off on it; sent on Sonnet at Sam's override of the Opus stage rule). Rule request: hook texts and sign-offs always go into animatics: propose at the end of the project | sent |
 | 12 | 1 | 0.5 s | Subtitle change: "He's a Biological Male!" | done: LINES 1 text |
 | 11 | all | all | Choppy, quick subtitles; quick transitions; no camera lingers over 3 s | done: subtitles 1-4 words, timed to the talking (pauses skipped); any hold over 3 s cut into even pieces of 2.6 s at most, speaker wide / speaker close / listener close (`_choppy`, `CUTAWAY`); longest shot 2.95 s; gaps between lines 0.25-0.35 s. Added: listener reaction close-ups inside long lines |
