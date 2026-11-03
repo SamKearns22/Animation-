@@ -2,13 +2,13 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 51 (likeness pack), 26 (sound effects asked once), 27 (bleep: said or gap)
-- **Done:** brief and 13 references filed (`references/terfwarts/`); brief written as a checklist below.
+- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate 80% of a week, composition sheet sent.
 - **Spent against the estimate (rule 55):** not started
-- **Next:** planning (Opus, high effort): Sam's answers to the planning questions, then the plan, estimate, composition sheet.
-- **Needs Sam:** answers to the planning questions (sent 3 Nov).
+- **Next:** on Sam's yes: building the cast sheet (Opus, high effort; new chat): "Terfwarts: build the cast sheet".
+- **Needs Sam:** yes on the composition sheet; yes on rule wordings R1, R2; the scream and splat files.
 - **Read:** `guides/satire.md` Start; `guides/film-quality-rules.md` Planning; `guides/kit-catalogue.md`.
 - **Lost / Added:** none yet
-- **Open rule requests:** none
+- **Open rule requests:** R1 Sam records every voice, never ask (CLAUDE.md, Sound); R2 bleeps always method A (rule 27 + satire.md Start step 2)
 - **For Claude:** film file will be `source/terfwarts.py` from `source/satire_template.py`.
 
 ## The joke (Sam, 3 Nov)
@@ -20,12 +20,23 @@ saving Hermione with Rowling's own rhetoric. Ron is a gibbering fool who doesn't
 ## Plan extras (rules 24-26, 54, 55)
 | build or risky move | why (3D? parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
-| (after Sam's answers) |   |   |   |
+| Great Hall: one flat painting per camera (2 cameras: wide, close), floating candles, long tables, window | painting, rule 39 | 12% | |
+| Cloister corridor and the shrunk carved door with GIRLS plaque (3 cameras) | painting, rule 39; the door is one flat piece | 12% | |
+| Sorting Hat: slumped brown hat, fold face, talking mouth | new creature, front on only | 10% | |
+| Harry and Ron: likeness heads (HBO), child proportions, robes, ties | likeness check (rule 49) on the photos sent | 15% | |
+| Myrtle: see-through pale blue ghost, floats, glides round, spreads across the door | new person; tint like Cortana's, no glow | 8% | |
+| Students seated at the long tables (varied, no repeated block) | crowd, rule 9 | 5% | |
+| Run down the cloister and panting halt (risky: rehearse as a clip, rule 8) | moves.py run | 8% | |
+| Voices, subtitles, the two effects, assembly, sign-off | kit | 10% | |
+| **Total** | | **80% of a week** | |
 
-Sound effects (rule 26): female scream (cut off suddenly), heavy splat. Bleeps (rule 27): "f******" (said or gap: asked).
+Eyelines: Hall: Harry looks up at the Hat (annoyed). Door: Harry at Myrtle; Ron at nothing (vacant, gibbering); Myrtle
+at Harry; "Ron, get it together" and "I don't like you, Ron": Harry turns to Ron.
+Sound effects (rule 26): female scream (cut off suddenly), heavy splat, from behind the door. **Sam is finding them.**
+Bleep (rule 27): "f******": Sam says the word, I bleep over it (method A, Sam: always).
 
 ## The world (rule 1)
-Composition sheet sent:
+Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 
 ## The brief as a checklist (Sam, 3 Nov), ticked before the first animatic
 | # | from the brief (word for word) | done? |
@@ -64,6 +75,11 @@ Composition sheet sent:
 | corridor | Fan-vaulted stone cloister (Gloucester): honey stone, tracery windows right, stone bench left, flagstones, arch at the far end | |
 | troll-bathroom | The film's girls' bathroom: white tiles, cubicle doors left, sinks right, troll grey and huge | |
 | myrtle-1/2/3 | Myrtle (film, Shirley Henderson look): see-through pale blue, dark bunches/pigtails with a fringe, round glasses, cardigan with buttons, striped tie | |
+| harry-ron-hbo-pair | HBO Harry straight on (glasses, black hair over brow, robe, striped tie); Ron behind (ginger, satchel strap); Ron close, talking, three-quarter, red check shirt | |
+| trio-hbo-cloister | The three in the cloister: dark plum-black robes to the shins, Ron shortest-looking with ginger crop, Hermione's long bushy hair; stone arcade, flagstones | |
+| great-hall-hbo-students | HBO Great Hall: long tables with lamps both sides, students in the aisle, chequered floor, stained window over a pointed arch, banners | |
+| great-hall-empty-candles | Empty Great Hall: hundreds of floating candles, gold walls, long tables and benches, eagle lectern | |
+| great-hall-oxford | Christ Church hall (the real one): hammerbeam roof, portraits, big window at the end, wood panelling, table lamps | |
 | door-1/2 | Great Hall door: pointed stone arch with clustered columns, carved oak double doors in square panels with faces and crests, two ring handles | |
 
 ## Notes
@@ -71,4 +87,9 @@ Composition sheet sent:
 |---|------|------|------|--------|
 
 Decisions made:
--
+- Sam, 3 Nov: Sam records all voices (always); bleeps always method A (word said, bleeped over); Sam finds the scream
+  and splat; likeness from the photos sent (HBO Harry, Ron); Myrtle from the film look; Hermione and the troll off
+  screen (may change); "it's not a problem anymore" (typo fixed); GIRLS plaque on the door: yes.
+- My picks (in the composition sheet): the Hat sits on Harry's head as the film opens (no one seen placing it); the
+  boys run at the lens down the cloister; shot/reverse at the door; Myrtle's blocking glide ends arms spread.
+- Rule requests (Sam, 3 Nov, "always" / "no need to ask in future"): proposed, waiting for his yes (see Open rule requests).
