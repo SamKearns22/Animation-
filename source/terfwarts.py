@@ -785,6 +785,14 @@ def _readable(out, end):
         a = out[i][1]
         b = out[i + 1][1] if i + 1 < len(out) else end
         need = max(0.82, len(out[i][0].split()) * 0.275)
+        deficit = need - (b - a)
+        if 0 < deficit <= 0.3 and i + 1 < len(out):      # nearly long enough: the next subtitle comes up a touch later
+            nb = out[i + 2][1] if i + 2 < len(out) else end
+            nneed = max(0.82, len(out[i + 1][0].split()) * 0.275)
+            if nb - (out[i + 1][1] + deficit) >= nneed:
+                out[i + 1] = (out[i + 1][0], out[i + 1][1] + deficit)
+                i += 1
+                continue
         if b - a < need and len(out) > 1:
             j = i + 1 if i + 1 < len(out) else i - 1
             lo, hi = sorted((i, j))
