@@ -1,15 +1,15 @@
 # Notes for Terfwarts (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 51 (likeness pack), 26 (sound effects asked once), 27 (bleep: said or gap)
-- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate about 19% of a week (first figure 69% was wrong), composition sheet sent.
-- **Spent against the estimate (rule 55):** not started
-- **Next:** on Sam's yes: building the cast sheet (Opus, high effort; new chat): "Terfwarts: build the cast sheet".
-- **Needs Sam:** yes on the composition sheet; yes on rule wordings R1, R2; the scream and splat files.
-- **Read:** `guides/satire.md` Start; `guides/film-quality-rules.md` Planning; `guides/kit-catalogue.md`.
-- **Lost / Added:** none yet
-- **Open rule requests:** none (R1 voices, R2 bleeps, rule 62 estimates: written 3 Nov)
-- **For Claude:** film file will be `source/terfwarts.py` from `source/satire_template.py`.
+- **Rules that bite next:** 41 (every arm ends in a hand), 18 (the Hat's face and GIRLS plaque readable: joke props 40 px+), 10 (Hook Text clear of the Hat's face)
+- **Done:** planning. Brief checklist (25 items), 19 references, plan in metres, layout approved (note 1: opens close on Harry + the Hat; note 2: McGonagall places it).
+- **Spent against the estimate (rule 55):** estimate about 19% (vs Netanyahu 16%, Patriots 4 15%); target 10%. Usage asked after the cast stage (rule 44).
+- **Next:** cast sheet, Opus high effort, new chat. Sam types: "Terfwarts: build the cast sheet".
+- **Needs Sam:** the scream and splat sound files (any time before the animatic).
+- **Read:** `guides/satire.md` Start step 3 and "The look"; `guides/figure-rig.md`; `guides/preflight.md`; rulebook Building table.
+- **Lost / Added:** Lost: hall wide, students. Added: GIRLS plaque, McGonagall.
+- **Open rule requests:** none (voices, bleeps, rule 62 written 3 Nov)
+- **For Claude:** cast: Harry, Ron (one child body, real heights 1.42/1.47), McGonagall (HBO tartan coat, bun, glasses), Myrtle (see-through blue tint, no glow), the Hat (talking fold face). Faces by costume/hair/glasses, no likeness tool (Sam, 3 Nov). Copy `source/satire_template.py` to `source/terfwarts.py` with a `MAP`; stand-ins in `source/terfwarts_compose.py`, plan in `source/terfwarts_plan.py`.
 
 ## The joke (Sam, 3 Nov)
 JK Rowling has spent years attacking the trans community and has put gender-exclusionary ideas into HBO's new Harry

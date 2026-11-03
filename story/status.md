@@ -4,8 +4,8 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 `story/archive.md`; their notes: `notes/archive/`.
 
 ## Films
-- **All films are finished (Sam, 2 Nov).** No film is in progress. A new film starts from `notes/_template.md` and
-  `source/satire_template.py`.
+- **Terfwarts (3 Nov):** planning done, layout approved; next the cast sheet (Opus high, new chat).
+  Notes: `notes/terfwarts.md`. Waiting on Sam for the scream and splat sounds.
 
 ## System audit (2 Nov)
 - Sam's audit of the whole system: done (A1-A14, M1-M7; A7, the doubled checks, needed no change: on a closer look they never run together on one film). The rulebook is now one file,
