@@ -78,7 +78,7 @@ def figure(img, cm, mark, j=None, lift=0.0, at=None, ghost=False):
 def hat(img, x, y, s, talk=True):
     """The Sorting Hat, rough: a slumped brown point, wide floppy brim, a fold for a brow and a mouth (refs)."""
     d = ImageDraw.Draw(img)
-    hy = y - 260 * s                                  # the brim sits low, over the eyebrows (refs sorting-hat-scene)
+    hy = y - 228 * s                                  # the brim sits low, over the eyebrows (refs sorting-hat-scene)
     br = [(x - 190 * s, hy + 30 * s), (x - 120 * s, hy - 10 * s), (x + 120 * s, hy - 10 * s), (x + 200 * s, hy + 34 * s),
           (x + 90 * s, hy + 55 * s), (x - 90 * s, hy + 55 * s)]
     cone = [(x - 100 * s, hy + 10 * s), (x - 70 * s, hy - 160 * s), (x - 10 * s, hy - 250 * s), (x + 70 * s, hy - 300 * s),
@@ -186,18 +186,16 @@ def sheet(out):
     for side, tgt in spread.items():
         V.arm_to(jm, side, tgt, 'down', 'fist')
     shots = [
-        (shot('hall wide', [('harry hall', dict(j=sit))], hall_extra),
-         'Shot 1: down the aisle, Harry on the stool,\nthe Hat on his head; long tables either\nside. Hook Text over the window'),
         (shot('hat close', [('harry hall', dict(j=sit))], hall_extra),
-         'Shot 2: the Hat\'s mouth: "BIOLOGICAL\nMALE." Harry, annoyed (eyes roll up)'),
+         'Shot 1 (the 3 s hook): Harry and the Hat\nfill the frame: "BIOLOGICAL MALE."\nHarry, annoyed. Hook Text: Hat\'s face clear'),
         (shot('corridor run', [('harry', run_h), ('ron', run_r)]),
-         'Shot 3: "Later..." From the door down the\ncloister: they race at the lens'),
+         'Shot 2: "Later..." From the door down the\ncloister: they race at the lens'),
         (shot('myrtle', [('harry', {}), ('ron', {}), ('myrtle', dict(lift=0.3, ghost=True))], door_extra),
-         "Shot 4: over the boys' shoulders: Myrtle\nfloats out through the shrunk door\n(GIRLS plaque). Her lines here"),
+         "Shot 3: over the boys' shoulders: Myrtle\nfloats out through the shrunk door\n(GIRLS plaque). Her lines here"),
         (shot('boys', [('harry', {}), ('ron', {}), ('myrtle', dict(lift=0.3, ghost=True))]),
-         "Shot 5: through Myrtle's back at Harry\nand Ron (Harry's and Ron's lines);\nscream and splat heard behind her"),
+         "Shot 4: through Myrtle's back at Harry\nand Ron (Harry's and Ron's lines);\nscream and splat heard behind her"),
         (shot('myrtle', [('harry', {}), ('ron', {}), ('myrtle', dict(lift=0.3, ghost=True, j=jm))], door_extra),
-         'Shot 6: "When you throw open the door..."\nshe floats round and spreads across\nthe doorway'),
+         'Shot 5: "When you throw open the door..."\nshe floats round and spreads across\nthe doorway'),
     ]
     tiles = [tile(im, lab) for im, lab in shots]
     top = os.path.join(os.path.dirname(os.path.abspath(out)), '_tw_plan_top.jpg')

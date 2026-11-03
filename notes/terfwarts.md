@@ -2,7 +2,7 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 51 (likeness pack), 26 (sound effects asked once), 27 (bleep: said or gap)
-- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate 80% of a week, composition sheet sent.
+- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate 69% of a week, composition sheet sent.
 - **Spent against the estimate (rule 55):** not started
 - **Next:** on Sam's yes: building the cast sheet (Opus, high effort; new chat): "Terfwarts: build the cast sheet".
 - **Needs Sam:** yes on the composition sheet; yes on rule wordings R1, R2; the scream and splat files.
@@ -20,15 +20,14 @@ saving Hermione with Rowling's own rhetoric. Ron is a gibbering fool who doesn't
 ## Plan extras (rules 24-26, 54, 55)
 | build or risky move | why (3D? parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
-| Great Hall: one flat painting per camera (2 cameras: wide, close), floating candles, long tables, window | painting, rule 39 | 12% | |
+| Great Hall: one flat painting behind Harry's close-up (staff table, window, floating candles) | painting, rule 39 | 6% | |
 | Cloister corridor and the shrunk carved door with GIRLS plaque (3 cameras) | painting, rule 39; the door is one flat piece | 12% | |
 | Sorting Hat: slumped brown hat, fold face, talking mouth | new creature, front on only | 10% | |
 | Harry and Ron: likeness heads (HBO), child proportions, robes, ties | likeness check (rule 49) on the photos sent | 15% | |
 | Myrtle: see-through pale blue ghost, floats, glides round, spreads across the door | new person; tint like Cortana's, no glow | 8% | |
-| Students seated at the long tables (varied, no repeated block) | crowd, rule 9 | 5% | |
 | Run down the cloister and panting halt (risky: rehearse as a clip, rule 8) | moves.py run | 8% | |
 | Voices, subtitles, the two effects, assembly, sign-off | kit | 10% | |
-| **Total** | | **80% of a week** | |
+| **Total** | | **69% of a week** | |
 
 Eyelines: Hall: Harry looks up at the Hat (annoyed). Door: Harry at Myrtle; Ron at nothing (vacant, gibbering); Myrtle
 at Harry; "Ron, get it together" and "I don't like you, Ron": Harry turns to Ron.
@@ -63,6 +62,8 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | 20 | Sound effects: female scream, splat (and no others) | |
 | 21 | Ron is a gibbering fool who doesn't understand what's happening | |
 | 22 | Ends with the CranbriJoos sign-off (CLAUDE.md) | |
+| 23 | Note 1: shot 1 brought forward so Harry and the Hat fill the frame; no long shots of the hall | |
+| 24 | Note 1: the 3-second hook is the first joke, "BIOLOGICAL MALE", with a clear identification of what's in the frame | |
 
 ## References as checklists (`references/terfwarts/`)
 | reference | what it shows | ours matches? |
@@ -85,11 +86,13 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 1 | 1 | comp | Bring shot 1 forward: Harry and the Hat fill the frame; no hall wide; the hook is "BIOLOGICAL MALE" in 3 s | done on the sheet: hall wide cut, the close-up opens the film (new kind) |
 
 Decisions made:
 - Sam, 3 Nov: Sam records all voices (always); bleeps always method A (word said, bleeped over); Sam finds the scream
   and splat; likeness from the photos sent (HBO Harry, Ron); Myrtle from the film look; Hermione and the troll off
   screen (may change); "it's not a problem anymore" (typo fixed); GIRLS plaque on the door: yes.
+- Sam's note 1 (3 Nov): the film opens on the close-up; the Hat yells at about 0.5 s; Hook Text in the space above the Hat. Lost: the hall wide and the students.
 - My picks (in the composition sheet): the Hat sits on Harry's head as the film opens (no one seen placing it); the
   boys run at the lens down the cloister; shot/reverse at the door; Myrtle's blocking glide ends arms spread.
 - Rule requests (Sam, 3 Nov, "always" / "no need to ask in future"): proposed, waiting for his yes (see Open rule requests).

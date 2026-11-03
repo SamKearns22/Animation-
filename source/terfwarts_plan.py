@@ -42,8 +42,8 @@ PEOPLE = {
 }
 _E = 1.45
 CAMS = {   # focal in pixels for 1080 x 1920
-    'hall wide': dict(pos=(0.0, 1.7, 9.0), look=(0.0, 1.5, 23.5), focal=1500, why='down the aisle at Harry on the stool'),
-    'hat close': dict(pos=(0.0, 1.25, 21.6), look=(0.0, 1.25, 23.5), focal=1600, why='Harry and the Hat, face height'),
+    'hat close': dict(pos=(0.0, 1.2, 22.45), look=(0.0, 1.2, 23.5), focal=1600,
+                      why='opens the film: Harry and the Hat fill the frame (Sam, 3 Nov: no long shots of the hall)'),
     'corridor run': dict(pos=(DOOR_X, 1.3, 25.4), look=(DOOR_X, 1.1, 10.0), focal=1100,
                          why='from the door down the cloister: the boys run at the lens (front on)'),
     'myrtle': dict(pos=(DOOR_X + 0.15, 1.35, 22.0), look=(DOOR_X, 1.3, 26.0), focal=1300,
@@ -51,5 +51,4 @@ CAMS = {   # focal in pixels for 1080 x 1920
     'boys': dict(pos=(DOOR_X + 0.55, 1.45, 25.9), look=(DOOR_X, 1.2, 23.5), focal=1150,
                  why="through Myrtle's back at Harry and Ron (the door's side)"),
 }
-GROUPS = {'students': dict(arriving='seated before the film starts', stopped='seated at the long tables, backs to us',
-                           leaving='not seen leaving (the hall is cut away from)')}
+GROUPS = {}                    # no crowd: the hall is only seen behind Harry's close-up (Sam, 3 Nov)
