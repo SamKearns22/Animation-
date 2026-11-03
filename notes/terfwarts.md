@@ -63,6 +63,7 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | 21 | Ron is a gibbering fool who doesn't understand what's happening | |
 | 22 | Ends with the CranbriJoos sign-off (CLAUDE.md) | |
 | 23 | Note 1: shot 1 brought forward so Harry and the Hat fill the frame; no long shots of the hall | |
+| 25 | Note 2: Professor McGonagall (HBO series) puts the Hat onto Harry | |
 | 24 | Note 1: the 3-second hook is the first joke, "BIOLOGICAL MALE", with a clear identification of what's in the frame | |
 
 ## References as checklists (`references/terfwarts/`)
@@ -86,6 +87,7 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 2 | 1 | comp | McGonagall puts the Hat onto Harry (HBO reference to come) | open: waiting for her reference (new kind) |
 | 1 | 1 | comp | Bring shot 1 forward: Harry and the Hat fill the frame; no hall wide; the hook is "BIOLOGICAL MALE" in 3 s | done on the sheet: hall wide cut, the close-up opens the film (new kind) |
 
 Decisions made:
