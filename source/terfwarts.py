@@ -623,7 +623,7 @@ def chunks(text, most=4):
                 out.append(g)
     i = 0                                         # one or two words alone flash by too fast to read: join the next
     while i < len(out) - 1:
-        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5 and len(' '.join(out[i] + out[i + 1])) <= 30:
+        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5 and len(' '.join(out[i] + out[i + 1])) <= 34:
             out[i:i + 2] = [out[i] + out[i + 1]]
         else:
             i += 1
