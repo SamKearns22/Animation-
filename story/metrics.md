@@ -140,3 +140,40 @@ reported it blocked from the algorithm (30 Oct; not confirmed; see the chat for 
 
 Total play time 50 h 47 m 34 s. Per 1,000 views: likes 103, shares 14.0, saves 8.5, comments 1.5, followers 1.1.
 Still rising (only 5 h old), so every figure can move. Reading is in the chat of 3 Nov.
+
+## Snapshot: Tue 3 Nov 2026, 22:55-22:58 (every film; Sam's TikTok Studio screens)
+
+Films older than a day show TikTok's figures as of 2 Nov. Flying Whales: only the Viewers tab was sent (91% non-followers,
+9% followers). DLC is the promoted Bayeux rework ("Plasma"); the first DLC is hidden. Halo No-No is the 30 Oct repost (34.84 s).
+
+| Film | Posted | Length | Views | Likes | Comments | Shares | Saves | Avg watch | Watched in full | New followers |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Flying Whales | 2026-11-02 16:06 | 21.59 s | 344 | 28 | 0 | 1 | 1 | - | - | - |
+| TERFwarts | 2026-11-03 17:02 | 89.34 s | 8,118 | 856 | 15 | 103 | 71 | 25.8 s | 9.44% | 9 |
+| Patriots 4 | 2026-11-01 16:07 | 51.76 s | 5,907 | 290 | 4 | 1 | 17 | 18.4 s | 12.44% | 1 |
+| Halo No-No | 2026-10-30 16:00 | 34.84 s | 412 | 24 | 1 | 0 | 1 | 9.8 s | 11.01% | 1 |
+| Patriots 3 | 2026-10-28 16:02 | 43.25 s | 14,800 | 1,706 | 17 | 471 | 158 | 20.2 s | 28.86% | 45 |
+| Netan-Yahoo! | 2026-10-26 16:48 | 35.44 s | 1,284 | 56 | 0 | 6 | 7 | 10.1 s | 8.54% | 4 |
+| Prepper Minister | 2026-10-25 09:10 | 66.43 s | 1,558 | 87 | 11 | 6 | 8 | 13.6 s | 3.39% | 6 |
+| Strictly Crabs | 2026-10-22 16:01 | 39.17 s | 337 | 15 | 6 | 1 | 0 | 5.4 s | 2.79% | 0 |
+| Power Crime Action | 2026-10-21 16:03 | 49.43 s | 9,710 | 567 | 29 | 22 | 40 | 16.5 s | 12.42% | 15 |
+| Poker Mon | 2026-10-19 21:13 | 26.92 s | 907 | 76 | 10 | 7 | 4 | 9.0 s | 7.81% | 4 |
+| Shocking Behaviour | 2026-10-18 18:03 | 29.76 s | 1,119 | 42 | 15 | 1 | 3 | 9.9 s | 11.93% | 2 |
+| Traitors | 2026-10-18 09:08 | 26.43 s | 1,124 | 64 | 2 | 0 | 9 | 10.2 s | 17.7% | 2 |
+| Roadster | 2026-10-17 09:37 | 34.01 s | 5,659 | 99 | 9 | 2 | 8 | 11.8 s | 6.3% | 1 |
+| Press Secretary | 2026-10-16 11:48 | 59.84 s | 1,117 | 37 | 2 | 0 | 6 | 8.0 s | 1.99% | 0 |
+| Bingo Bingo | 2026-10-15 18:29 | 50.88 s | 19,600 | 1,367 | 50 | 126 | 143 | 23.7 s | 28.18% | 40 |
+| DLC (promoted) | 2026-10-11 09:00 | 49.21 s | 879 | 66 | 6 | 6 | 7 | 5.6 s | 1.61% | 33 |
+| Cry Minister | 2026-10-10 09:00 | 55.08 s | 790 | 50 | 4 | 1 | 4 | 14.0 s | 9.79% | 0 |
+| The Park | 2026-10-08 13:46 | 17.08 s | 599 | 21 | 4 | 3 | 1 | 6.1 s | 16.9% | 0 |
+| Russiadent Evil | 2026-10-07 18:24 | 28.58 s | 501 | 13 | 4 | 1 | 4 | 6.0 s | 8.02% | 2 |
+| Patriots 2 | 2026-10-05 12:59 | 59.84 s | 1,592 | 129 | 4 | 5 | 14 | 20.5 s | 21.84% | 4 |
+| Mossad | 2026-10-04 09:02 | 30.08 s | 7,815 | 325 | 9 | 21 | 20 | 16.6 s | 37.28% | 12 |
+| The Salt | 2026-10-03 18:59 | 11.58 s | 646 | 40 | 8 | 3 | 7 | 7.2 s | 41.62% | 5 |
+| The Patriots | 2026-10-02 18:01 | 19.17 s | 4,714 | 399 | 27 | 19 | 27 | 11.6 s | 33.84% | 8 |
+| Hope Again | 2026-10-01 18:03 | 38.08 s | 1,352 | 41 | 3 | 3 | 3 | 10.8 s | 14.04% | 1 |
+| Dam | 2026-09-30 18:30 | 45.0 s | 684 | 38 | 8 | 1 | 5 | 3.6 s | 1.61% | 3 |
+| Listening & Learning | 2026-09-30 18:01 | 62.51 s | 649 | 20 | 1 | 3 | 1 | 6.2 s | 3.01% | 0 |
+
+Totals: 26 films, 92,217 views, 6,456 likes, 249 comments, 813 shares, 198 followers from videos (33 of them the DLC
+promotion). Reading: `story/growth-analysis-3-nov.md`.
