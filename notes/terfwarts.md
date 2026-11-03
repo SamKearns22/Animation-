@@ -2,7 +2,7 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 51 (likeness pack), 26 (sound effects asked once), 27 (bleep: said or gap)
-- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate 69% of a week, composition sheet sent.
+- **Done:** brief, 18 references filed; answers in; plan (`source/terfwarts_plan.py`), estimate about 19% of a week (first figure 69% was wrong), composition sheet sent.
 - **Spent against the estimate (rule 55):** not started
 - **Next:** on Sam's yes: building the cast sheet (Opus, high effort; new chat): "Terfwarts: build the cast sheet".
 - **Needs Sam:** yes on the composition sheet; yes on rule wordings R1, R2; the scream and splat files.
@@ -20,14 +20,12 @@ saving Hermione with Rowling's own rhetoric. Ron is a gibbering fool who doesn't
 ## Plan extras (rules 24-26, 54, 55)
 | build or risky move | why (3D? parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
-| Great Hall: one flat painting behind Harry's close-up (staff table, window, floating candles) | painting, rule 39 | 6% | |
-| Cloister corridor and the shrunk carved door with GIRLS plaque (3 cameras) | painting, rule 39; the door is one flat piece | 12% | |
-| Sorting Hat: slumped brown hat, fold face, talking mouth | new creature, front on only | 10% | |
-| Harry and Ron: likeness heads (HBO), child proportions, robes, ties | likeness check (rule 49) on the photos sent | 15% | |
-| Myrtle: see-through pale blue ghost, floats, glides round, spreads across the door | new person; tint like Cortana's, no glow | 8% | |
-| Run down the cloister and panting halt (risky: rehearse as a clip, rule 8) | moves.py run | 8% | |
-| Voices, subtitles, the two effects, assembly, sign-off | kit | 10% | |
-| **Total** | | **69% of a week** | |
+| Cast: Harry, Ron (one shared child body), McGonagall, Myrtle (see-through tint), the Hat | flat, front on; likeness by costume and hair unless Sam sends packs | 7% | |
+| Two flat paintings: Great Hall behind the close-up; cloister with the shrunk door and GIRLS plaque | rule 39, no 3D | 4% | |
+| Moves: Hat placed, the run and panting halt (one rehearsal clip), Myrtle's glide to block the door | kit moves | 3% | |
+| Voices, subtitles, two effects, bleep, assembly, renders | kit | 3% | |
+| A round of Sam's notes | | 2% | |
+| **Total** | re-estimated 3 Nov against past films (12-18%); the first figure, 69%, was not checked against them | **about 19% of a week** | |
 
 Eyelines: Hall: Harry looks up at the Hat (annoyed). Door: Harry at Myrtle; Ron at nothing (vacant, gibbering); Myrtle
 at Harry; "Ron, get it together" and "I don't like you, Ron": Harry turns to Ron.
