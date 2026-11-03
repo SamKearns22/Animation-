@@ -173,8 +173,8 @@ SHOTS = _speaker_shots()
 # hips sit in front of their bodies, hidden by their backs (staging, as anyone seen from behind); McGonagall's right
 # forearm reaches towards the lens for two frames as she lowers the Hat, the hand plainly on the brim (sheet, 3 Nov)
 HANDS_OK = [(w, '*', 'no hand', a, b, 'seen from behind at the door: the hand is in front of him')
-            for c, a, b in SHOTS if c == 'door' for w in ('harry', 'ron')]
-HANDS_OK += [('mcg', 'R', 'in sleeve', 0.2, 0.4, 'lowering the Hat towards us: her hand is on the brim')]
+            for c, a, b in SHOTS if c == 'door' for w in ('Harry', 'Ron')]
+HANDS_OK += [('McGonagall', '*', 'in sleeve', 0.2, 0.8, 'lowering the Hat and letting go, towards us: her hands plainly on the brim, then dropping')]
 SHOT_CAST = {'hat': ['harry', 'mcg'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
              'boys': ['harry', 'ron'], 'harry close': ['harry'], 'myrtle close': ['myrtle']}
 LOOKS_AT = {'harry': 'myrtle', 'ron': None, 'myrtle': 'harry', 'mcg': 'harry'}
@@ -623,7 +623,7 @@ def chunks(text, most=4):
                 out.append(g)
     i = 0                                         # one or two words alone flash by too fast to read: join the next
     while i < len(out) - 1:
-        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5:
+        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5 and len(' '.join(out[i] + out[i + 1])) <= 30:
             out[i:i + 2] = [out[i] + out[i + 1]]
         else:
             i += 1
@@ -742,8 +742,8 @@ def scene(t):
         top = 0.45 + 1.0 * f + 0.15 * (1 - _ease(_ramp(t, 0.0, T['hat_land'])))   # just above his head, easing down
         out.append(audit.Thing('HAT', [CC.sphere('HAT', 'hat', (x, top + 0.1, z), 0.12)]))
         mx, mz = PL.PEOPLE['mcg']['at']
-        hands = [CC.sphere('mcg', 'handL', (x - 0.19, top + 0.04, z + 0.02), 0.045),
-                 CC.sphere('mcg', 'handR', (x + 0.19, top + 0.04, z + 0.02), 0.045)] if t < T['hat_land'] + 0.15 else []
+        hands = [CC.sphere('mcg', 'handL', (x - 0.15, top + 0.08, z), 0.045),
+                 CC.sphere('mcg', 'handR', (x + 0.15, top + 0.08, z), 0.045)] if t < T['hat_land'] + 0.15 else []
         out.append(audit.Thing('mcg', audit.simple('mcg', mx, mz, C.HEIGHTS['mcg']) + hands))
         return out
     if s == 'run':                                 # the boys running at the lens (as shot_run places them)
