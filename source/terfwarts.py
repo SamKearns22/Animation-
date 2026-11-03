@@ -178,6 +178,10 @@ SHOTS = _speaker_shots()
 # forearm reaches towards the lens for two frames as she lowers the Hat, the hand plainly on the brim (sheet, 3 Nov)
 HANDS_OK = [(w, '*', 'no hand', a, b, 'seen from behind at the door: the hand is in front of him')
             for c, a, b in SHOTS if c == 'door' for w in ('Harry', 'Ron')]
+# the boys running at the lens: the forearms pump forward at the camera, the fists close in front of the chest and belt
+# (Sam's note 15.3: "pump arms up and down in a forward motion"); head-on, a forearm pointing at us is shortened
+HANDS_OK += [(w, '*', 'in sleeve', 0.0, 1e9, 'running head-on: the fists pump at the lens in front of the body')
+             for w in ('Harry', 'Ron')]
 HANDS_OK += [('McGonagall', '*', 'in sleeve', 0.2, 0.8, 'lowering the Hat and letting go, towards us: her hands plainly on the brim, then dropping')]
 SHOT_CAST = {'hat': ['harry', 'mcg'], 'hat face': ['harry'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
              'boys': ['harry', 'ron'], 'harry close': ['harry'], 'myrtle close': ['myrtle']}
@@ -554,11 +558,11 @@ def _front_run(j):
         fwd = max(-1.0, min(1.0, f[2] / n))               # -1: arm back ... +1: arm forward
         k = (fwd + 1) / 2                                  # 0 .. 1 through the swing
         el2 = el.copy()
-        el2[2] = sh[2] + 0.45 * (el[2] - sh[2])            # the elbow swings less deep
-        el2[0] = sh[0] + 0.95 * (el[0] - sh[0])            # elbows tucked in at the sides
-        # the forearm in the picture plane (so it reads, never foreshortened into the sleeve): up and a little out
-        # towards the chest; one hand rises to the ribs as the other drops to the belt (y is down, so minus is up)
-        g = np.array([0.55 * np.sign(el[0]), 0.1 - 0.8 * k, 0.15])
+        el2[2] = sh[2] + 0.6 * (el[2] - sh[2])             # the elbow swings back and forth beside the ribs
+        el2[0] = sh[0] + 0.8 * (el[0] - sh[0])             # tucked in at the sides, never out (Sam's note 15.3)
+        # Running at the lens an arm pumps forward and back: the forearm points forward at the lens and up, the hand
+        # coming up to the chest on the forward swing and dropping to the belt on the back swing (y is down)
+        g = np.array([-0.12 * np.sign(el[0]), 0.15 - 0.75 * k, 0.55 + 0.35 * k])
         j['el' + sd] = tuple(el2)
         j['wr' + sd] = tuple(el2 + g / np.linalg.norm(g) * n)
     return j
