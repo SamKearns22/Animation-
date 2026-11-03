@@ -706,3 +706,10 @@ Stage: building new tools = Opus, high effort, fresh chat. Order (Sam's likely f
 ## Done (Sam, 25 Oct: posted or closed, no more work): "Strictly Crabs Dancing" (two real-looking crabs dance the Strictly routine to the music, `notes/strictly-crabs.md`)
 Titles, dance, judges and the whole-film animatic (49 s) are done and sent; waiting on Sam's notes. Full handover at the end of `notes/strictly-crabs.md`.
 - 23 Oct: POSTED Thu 22 Oct 4:01pm. 20 h: 256 views, 6.5 s avg watch, 3.65% in full, 0 followers (`story/metrics.md`).
+
+## Done: Channel trailer story post (Sam, 3 Nov)
+- `animations/channel-trailer-story.mp4` (6.1 MB, 18.1 s): nine best bits cut on the beat of the DLC rock track
+  (126 bpm): Halo roadsters, DLC ghost pistol, Patriot typing "traitors", D-Day beach, van throw, Prepper
+  showstopper, Maul attacks, whales smash the Jackdaw, ends on the Mossad blast. "WELCOME, / NEW FOLLOWERS" in
+  cranberry two-thirds down; no subtitles (Patriots 2, Patriots 3 beach and Mossad re-drawn from their code with
+  captions off, older body checks set to warn so they draw as posted). Code: `source/channel_trailer.py` (~6 min).
