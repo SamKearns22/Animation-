@@ -4,7 +4,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 `story/archive.md`; their notes: `notes/archive/`.
 
 ## Films
-- **Terfwarts (3 Nov):** cast sheet sent; waiting on Sam's Y/N and annoyance number; next the stills (Opus medium,
+- **Terfwarts (3 Nov):** cast approved (annoyance 3); next the stills (Opus medium,
   new chat). Notes: `notes/terfwarts.md`. Waiting on Sam for the scream and splat sounds.
 
 ## System audit (2 Nov)

@@ -263,7 +263,7 @@ CAST = {
     'harry': dict(name='Harry', skin=(242, 216, 198), hw=80, hh=96, jaw='soft', hair='crop', hair_c=(46, 34, 28),
                   shoulders=120, brow_c=(46, 34, 28), seed=51, props=[harry_hair, round_glasses], **UNI),
     'ron': dict(name='Ron', skin=(246, 218, 200), hw=84, hh=94, jaw='round', hair='crop', hair_c=(200, 96, 42),
-                shoulders=124, brow_c=(176, 90, 46), seed=52, props=[ron_hair, freckles], body=[satchel], **UNI),
+                shoulders=124, brow_c=(176, 90, 46), seed=52, props=[ron_hair, freckles], **UNI),
     'mcg': dict(name='McGonagall', skin=(234, 208, 192), hw=66, hh=96, jaw='long', hair='crop', hair_c=(92, 88, 92),
                 glasses=True, glasses_c=(30, 28, 32), shoulders=130, brow_c=(70, 66, 70), lashes=True, outfit='suit',
                 jacket=TARTAN, sleeve=TARTAN, trousers=(40, 40, 46), shoe=(20, 20, 22), bottom=840, age=True,
