@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """MAP: channel trailer story post (Sam, 3 Nov): nine best bits, cut on the beat of the DLC rock track (126 bpm,
-four beats a moment, six for the last), "WELCOME, / NEW FOLLOWERS" in cranberry two-thirds down, no subtitles.
+four beats a moment, six for the last), "WELCOME, / NEW FOLLOWERS" in cranberry near the top, no subtitles.
 Moments come from the posted finals where they have no subtitles; Patriots 2, the Wolves chase (Cry Minister), the D-Day beach (Patriots 3) and Mossad are re-drawn from their
 own code with captions off (Mossad's blast carries on past the film's cut to black).
     python3 source/channel_trailer.py animations/channel-trailer-story.mp4"""
@@ -26,7 +26,7 @@ CUTS = [('halo-no-no-vertical.mp4', 4.2, 4),           # roadsters heading for t
         ('cryminister', 52.6, 4),                      # Wolves: Andy runs from the wolves (Sam), drawn clean
         ('flying-whales-vertical.mp4', 10.8, 5),       # whales destroy the Jackdaw
         ('mossad', 28.45, 3)]                          # ends on the Mossad blast at its thickest (Sam: no one seen under it)
-LINES, CAP, TOP = ['WELCOME,', 'NEW FOLLOWERS'], 92, 1180   # two-thirds down (centre ~1280)
+LINES, CAP, TOP = ['WELCOME,', 'NEW FOLLOWERS'], 92, 140    # near the top, a bit of space above (Sam, v3)
 FPS = 24
 
 

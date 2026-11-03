@@ -710,6 +710,7 @@ Titles, dance, judges and the whole-film animatic (49 s) are done and sent; wait
 ## Done: Channel trailer story post (Sam, 3 Nov)
 - v2 (Sam's notes): Wolves chase added (Andy running from the wolves, end of Cry Minister, drawn clean); the Mossad
   shot a second shorter, ending at the blast's thickest (29.88 s, no one visible under it). Now 6.4 MB, 19.0 s.
+- v3: "WELCOME, / NEW FOLLOWERS" moved near the top (y 140, Sam). 6.6 MB, 19.0 s.
 - `animations/channel-trailer-story.mp4` (v1: 6.1 MB, 18.1 s): nine best bits cut on the beat of the DLC rock track
   (126 bpm): Halo roadsters, DLC ghost pistol, Patriot typing "traitors", D-Day beach, van throw, Prepper
   showstopper, Maul attacks, whales smash the Jackdaw, ends on the Mossad blast. "WELCOME, / NEW FOLLOWERS" in
