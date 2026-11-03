@@ -35,7 +35,8 @@ THINGS = {
                          why="GIRLS on the door (Sam, 3 Nov: Q8 yes)"),
 }
 PEOPLE = {
-    'harry hall': dict(at=(0.0, 23.5), facing=180, who='harry', why='seated on the stool, facing the hall'),
+    'harry hall': dict(at=(0.0, 23.5), facing=180, who='harry', on='stool', why='seated on the stool, facing the hall'),
+    'mcg': dict(at=(-0.07, 24.0), facing=180, who='mcg', why='just behind Harry, putting the Hat on (note 6)'),
     'harry': dict(at=(DOOR_X - 0.35, 23.6), facing=0, who='harry', why='at the door, facing Myrtle'),
     'ron': dict(at=(DOOR_X + 0.4, 23.4), facing=0, who='ron', why='a step behind Harry, on his right'),
     'myrtle': dict(at=(DOOR_X, 25.3), facing=180, who='myrtle', why='floating out of the door, 0.3 m up'),
@@ -51,4 +52,11 @@ CAMS = {   # focal in pixels for 1080 x 1920
     'boys': dict(pos=(DOOR_X + 0.55, 1.45, 25.9), look=(DOOR_X, 1.2, 23.5), focal=1150,
                  why="through Myrtle's back at Harry and Ron (the door's side)"),
 }
+# the film's shot names (the composition sheet's names kept above for terfwarts_compose.py)
+CAMS.update({'hat': CAMS['hat close'], 'run': CAMS['corridor run'], 'door': CAMS['myrtle'],
+             'harry close': dict(CAMS['boys'], focal=2990, why="Harry's face from Myrtle's side (2.3x the boys shot)"),
+             'myrtle close': dict(CAMS['myrtle'], focal=3200, why="Myrtle's face from the boys' side (2x the door)")})
+# rule 38: who each shot holds at their marks (the run is on the move: no mark)
+SHOT_MARKS = {'hat': ['harry hall', 'mcg'], 'door': ['myrtle', 'harry', 'ron'], 'boys': ['harry', 'ron'],
+              'harry close': ['harry'], 'myrtle close': ['myrtle']}
 GROUPS = {}                    # no crowd: the hall is only seen behind Harry's close-up (Sam, 3 Nov)

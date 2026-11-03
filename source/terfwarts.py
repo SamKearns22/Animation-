@@ -122,7 +122,7 @@ e = _after(11, e, 0.35)
 e = _after(12, e, 0.3)
 DUR = e + 0.7
 BLACK_AT = DUR
-CARDS = [('Later…', T['run'] + 0.05, T['run'] + 1.6)]   # brief 5: the subtitle over the corridor
+CARDS = [('Later…', T['run'] + 0.45, T['run'] + 2.05)]   # brief 5: the subtitle over the corridor
 
 
 def _speaker_shots():
@@ -169,30 +169,38 @@ def _choppy(shots):
 
 
 SHOTS = _speaker_shots()
+# rule 41, meant: in the door shots the boys are seen from behind, over their shoulders: palms together or hands on
+# hips sit in front of their bodies, hidden by their backs (staging, as anyone seen from behind); McGonagall's right
+# forearm reaches towards the lens for two frames as she lowers the Hat, the hand plainly on the brim (sheet, 3 Nov)
+HANDS_OK = [(w, '*', 'no hand', a, b, 'seen from behind at the door: the hand is in front of him')
+            for c, a, b in SHOTS if c == 'door' for w in ('harry', 'ron')]
+HANDS_OK += [('mcg', 'R', 'in sleeve', 0.2, 0.4, 'lowering the Hat towards us: her hand is on the brim')]
 SHOT_CAST = {'hat': ['harry', 'mcg'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
              'boys': ['harry', 'ron'], 'harry close': ['harry'], 'myrtle close': ['myrtle']}
 LOOKS_AT = {'harry': 'myrtle', 'ron': None, 'myrtle': 'harry', 'mcg': 'harry'}
-PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE, CAMS=PL.CAMS,
+PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE, CAMS=PL.CAMS, SHOT_MARKS=PL.SHOT_MARKS,
             GROUPS=PL.GROUPS)
 # Rule 3: what makes each place recognisable (refs in references/terfwarts/), and how ours has it.
 BENCHMARK = [
-    dict(place='great hall', refs=['sorting-hat-scene-1', 'sorting-hat-scene-2', 'great-hall-empty-candles'], at=1.0,
+    dict(place='great hall', refs=['sorting-hat-scene-1.jpg', 'sorting-hat-scene-2.jpg', 'great-hall-empty-candles.jpg'], at=1.0,
          items=[('floating candles', 'terfwarts_sets.hall: 46 candles at many depths'),
                 ('tall leaded windows at night', 'two pointed windows, mullions, lead diamonds'),
                 ('staff table with candles and goblets', 'white cloth edge, candlesticks, gold goblets'),
                 ('warm stone walls', 'stone courses in candlelight'), ('oak panelling', 'panelled dado'),
                 ('house banner', 'red and gold banner'), ('the patched Sorting Hat', 'terfwarts_cast.hat'),
                 ('the stool', 'off frame below (close-up)')]),
-    dict(place='corridor', refs=['corridor', 'trio-hbo-cloister'], at=T['run'] + 1.0,
+    dict(place='corridor.jpg', refs=['corridor.jpg', 'trio-hbo-cloister.jpg'], at=T['run'] + 1.0,
          items=[('fan vaulting', 'a fan on every shaft, ribs'), ('honey stone', 'STONE colours'),
                 ('tracery windows onto the garth', 'west wall, three lights, lawn and the far range'),
                 ('stone bench', 'east wall, the whole length'), ('flagstones', 'staggered flags'),
                 ('arch at the far end', 'pointed arch, lit'), ('attached shafts at every bay', 'every 2.6 m'),
                 ('blind tracery panels', 'three a bay over the bench')]),
-    dict(place="girls' bathroom door", refs=['door-1', 'door-2'], at=T['door'] + 1.0,
+    dict(place="girls' bathroom door", refs=['door-1.jpg', 'door-2.jpg'], at=T['door'] + 1.0,
          items=[('pointed arch with moulded rings', 'four rings'), ('clustered shafts and capitals', 'three a side'),
                 ('carved oak double door', 'two leaves, square panels with bosses'), ('ring handles', 'two'),
-                ('shrunk to a toilet door', '1.1 m wide (brief 6)'), ('GIRLS plaque', 'brass, on the top panel')]),
+                ('shrunk to a toilet door', '1.1 m wide (brief 6)'), ('GIRLS plaque', 'brass, on the top panel'),
+                ('honey stone surround', 'STONE colours, the cloister round it'),
+                ('iron sconces either side', 'two by the door, flickering (note 5)')]),
 ]
 HOOK = ('Rowling left HBO some edits 😬', {'y': 250})   # Sam's wording, 3 Nov; sits above the Hat (note 1)
 # The joke prop must stay clear: the GIRLS plaque in every door shot
@@ -201,6 +209,9 @@ PROP_SIZES = []
 OUTFIT = {}
 HEIGHTS = dict(C.HEIGHTS)
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
+# rule 38: the door shot looks over the boys' shoulders at Myrtle (the composition sheet, Sam's yes 3 Nov)
+THREE_QUARTER_OK = [('door', 'harry', "over his shoulder at Myrtle: shot/reverse with the boys' shot"),
+                    ('door', 'ron', "over his shoulder at Myrtle: shot/reverse with the boys' shot")]
 ALLOWED_CONTACTS = [('mcg.hand*', 'HAT', 0.0, T['hat_land'] + 0.15, 'McGonagall lowers the Hat'),
                     ('HAT', 'harry', T['hat_land'], T['run'], 'the Hat sits on his head')]
 ALLOWED_POPS = [('myrtle', T['door'], T['door'] + 0.6, 'she comes out through the shut door (a ghost)')]
@@ -232,8 +243,23 @@ def _ease(u):
     return u * u * (3 - 2 * u)
 
 
+def _lively(trk, most=0.3, beat=0.16):
+    """Sam's slow, drawn-out takes (Myrtle's line 3: 26 written syllables over 10.6 s of talk) leave one mouth shape
+    held up to 0.7 s while the voice goes on: a shape held longer than `most` alternates with a half-open one every
+    `beat` seconds, so the mouth keeps moving while she speaks."""
+    out = []
+    for a, b, sh in trk:
+        if b - a <= most or sh == 'rest':
+            out.append((a, b, sh))
+            continue
+        n = max(2, round((b - a) / beat))
+        for i in range(n):
+            out.append((a + (b - a) * i / n, a + (b - a) * (i + 1) / n, sh if i % 2 == 0 else 'etc'))
+    return out
+
+
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
-             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in WHO}
+             for a, b, sh in _lively(mouths.track(ln['text'], ln['_stretches']))] for w in WHO}
 BLINKS = {w: F.blinks(11 + i, 0.5, DUR, talking=True) for i, w in enumerate(WHO)}
 
 
@@ -470,6 +496,20 @@ def shot_hat(img, cam, t):
         p.ell(tx, ty, 26 * s2m, 26 * s2m, CAST['mcg']['skin'], B.INK, 2.6)
 
 
+def _front_run(j):
+    """Running straight at the lens, the kit's pumping forearm swings up towards the camera and the fist lands back
+    over the shoulder on screen: the hand looked pushed into the sleeve (handcheck, rule 41). Seen from the front, the
+    forearm keeps its length but hangs forward and down from the elbow (fists at the waist), swinging half as deep."""
+    j = dict(j)
+    for sd in 'LR':
+        el, wr = np.array(j['el' + sd], float), np.array(j['wr' + sd], float)
+        f = wr - el
+        n = np.linalg.norm(f)
+        g = np.array([f[0], max(abs(f[1]), 0.75 * n), 0.5 * f[2]])
+        j['wr' + sd] = tuple(el + g / np.linalg.norm(g) * n)
+    return j
+
+
 def shot_run(img, cam, t):
     v = SETS.RUN
     if not SOLO[0]:
@@ -484,7 +524,7 @@ def shot_run(img, cam, t):
     for d, who, x0 in sorted(out, reverse=True):
         pxm = v.pxm(d)
         x = v.P(v.r_of(x0), 0, d)[0]
-        j = MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'run')
+        j = _front_run(MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'run'))
         face = _face(who, t, mouth='agape' if who == 'ron' else 'set', brows='fierce' if who == 'harry' else None)
         face = {k: vv for k, vv in face.items() if vv is not None}
         _draw(img, cam, who, x, v.floor_y(d), pxm, 0, j, face, t=t)
@@ -581,6 +621,12 @@ def chunks(text, most=4):
                 out[-1] = out[-1] + g
             else:
                 out.append(g)
+    i = 0                                         # one or two words alone flash by too fast to read: join the next
+    while i < len(out) - 1:
+        if len(out[i]) < 3 and len(out[i]) + len(out[i + 1]) <= 5:
+            out[i:i + 2] = [out[i] + out[i + 1]]
+        else:
+            i += 1
     n = sum(len(c) for c in out)
     return [(' '.join(c), len(c) / n) for c in out]
 
@@ -688,9 +734,23 @@ def scene(t):
     import audit
     s = shot_of(t)
     out = []
-    if s == 'hat':
+    if s == 'hat':                                 # Harry on the stool (seat 0.45 m), McGonagall behind, the Hat
+        import clipcheck as CC
         x, z = PL.PEOPLE['harry hall']['at']
-        out.append(audit.Thing('harry', audit.simple('harry', x, z, C.HEIGHTS['harry'], sitting=True)))
+        f = C.HEIGHTS['harry'] / 1.75
+        out.append(audit.Thing('harry', audit.simple('harry', x, z, C.HEIGHTS['harry'], base=0.45, sitting=True)))
+        top = 0.45 + 1.0 * f + 0.15 * (1 - _ease(_ramp(t, 0.0, T['hat_land'])))   # just above his head, easing down
+        out.append(audit.Thing('HAT', [CC.sphere('HAT', 'hat', (x, top + 0.1, z), 0.12)]))
+        mx, mz = PL.PEOPLE['mcg']['at']
+        hands = [CC.sphere('mcg', 'handL', (x - 0.19, top + 0.04, z + 0.02), 0.045),
+                 CC.sphere('mcg', 'handR', (x + 0.19, top + 0.04, z + 0.02), 0.045)] if t < T['hat_land'] + 0.15 else []
+        out.append(audit.Thing('mcg', audit.simple('mcg', mx, mz, C.HEIGHTS['mcg']) + hands))
+        return out
+    if s == 'run':                                 # the boys running at the lens (as shot_run places them)
+        v, u = SETS.RUN, t - T['run']
+        for who, x0, lag in (('ron', PL.DOOR_X + 0.4, 0.25), ('harry', PL.DOOR_X - 0.35, 0.0)):
+            d = max(2.3, 8.0 - 2.15 * u + lag * 2.15)
+            out.append(audit.Thing(who, audit.simple(who, x0, v.z + d * v.facing, C.HEIGHTS[who])))
         return out
     for who in SHOT_CAST[s]:
         if who == 'myrtle':
