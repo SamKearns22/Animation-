@@ -160,7 +160,7 @@ BENCHMARK = [
                 ('carved oak double door', 'two leaves, square panels with bosses'), ('ring handles', 'two'),
                 ('shrunk to a toilet door', '1.1 m wide (brief 6)'), ('GIRLS plaque', 'brass, on the top panel')]),
 ]
-HOOK = ('Hook Text here', {'y': 300})              # Sam's wording to come; sits above the Hat (note 1)
+HOOK = ('Hook Text here', {'y': 250})              # Sam's wording to come; sits above the Hat (note 1)
 # The joke prop must stay clear: the GIRLS plaque in every door shot
 KEEP_CLEAR = [('GIRLS plaque', lambda t: SETS.plaque_box(SETS.DOOR, cam_for(t)) if shot_of(t) in ('door',) else None)]
 PROP_SIZES = []
@@ -217,11 +217,53 @@ def talking(who, t):
 
 
 # ------------------------------------------------------------------------------------------------ the people
+# Sam's note 8: the boys' arms never just hang; each holds a pose from the gallery (rule 42) that suits the moment,
+# blended over a third of a second. (time it starts, pose)
+def _poses():
+    hp = [(0.0, 'hips'), (L[2]['start'] - 0.1, 'palm_open'), (L[2]['end'] + 0.3, 'relaxed'),
+          (L[4]['start'] - 0.2, 'hands_up'), (L[4]['end'] + 0.2, 'hips'), (L[6]['start'], 'relaxed'),
+          (L[7]['start'] - 0.2, 'point_ron'), (L[7]['end'] + 0.3, 'relaxed'), (T['float'] + 2.0, 'arms_folded'),
+          (L[9]['start'] - 0.1, 'shrug'), (L[9]['end'] + 0.2, 'arms_folded')]
+    rp = [(0.0, 'hips'), (L[3]['start'], 'palms_together'), (L[4]['start'], 'relaxed'),
+          (L[5]['start'] + 3.0, 'shrug'), (L[5]['end'] - 1.5, 'relaxed'), (L[6]['start'] - 0.2, 'palms_together'),
+          (L[7]['end'] + 0.3, 'relaxed'), (T['scream'] + 0.4, 'palms_together'), (L[10]['start'], 'relaxed'),
+          (L[11]['start'] - 0.2, 'palms_together')]
+    return {'harry': hp, 'ron': rp}
+
+
+POSES = _poses()
+
+
+def _pose(sp, name):
+    if name == 'hands_up':
+        return PG.hands_up(sp)
+    if name == 'palms_together':
+        return PG.palms_together(sp)
+    if name == 'point_ron':                       # the gallery's pointing pose, mirrored: his left hand at Ron
+        j = V.standing(sp)
+        sw = sp.get('shoulders', 150)
+        V.arm_to(j, 'L', (-(sw + 400), 60.0, 250.0), 'down', 'point')
+        V.arm_to(j, 'R', (sw - 4, 380.0, 10.0), 'out')
+        return j
+    return MV.pose(sp, name)
+
+
+def posed(who, t):
+    sched = POSES[who]
+    i = max(k for k, (a, _) in enumerate(sched) if a <= t or k == 0)
+    sp = CAST[who]
+    cur = _pose(sp, sched[i][1])
+    if i == 0:
+        return cur
+    u = _ease(_ramp(t, sched[i][0], sched[i][0] + 0.35))
+    return cur if u >= 1 else MV.mix_poses(_pose(sp, sched[i - 1][1]), cur, u)
+
+
 def harry_state(t):
-    """(yaw, joints, face) for Harry at the door. Panting on arrival, pleading (hands up) on line 4, turning to Ron on
-    lines 7 and 12, annoyed through the scream (Sam: annoyance 3)."""
-    sp = CAST['harry']
-    j = V.standing(sp)
+    """(yaw, joints, face) for Harry at the door. Panting on arrival (hands on hips), pleading (hands up) on line 4,
+    his eyes going to Ron on lines 7, 11 and 12 (Sam: never the three-quarter turn), annoyed through the scream
+    (annoyance 3)."""
+    j = posed('harry', t)
     face = _face('harry', t, look=0.0)
     yaw = 0
     if t < L[2]['end'] + 0.6:                     # panting: the body heaves, mouth open between words
@@ -231,12 +273,12 @@ def harry_state(t):
         if not talking('harry', t):
             face['mouth'] = 'agape'
     if L[4]['start'] - 0.2 <= t < L[4]['end'] + 0.2:
-        j = PG.hands_up(sp)
         face.update(brow_raise=6)
-    for n in (7, 12):
+    for n in (6, 7, 11, 12):
         if L[n]['start'] - 0.3 <= t < L[n]['end'] + 0.4:
-            yaw = 45                              # to Ron, on his left as we see them from Myrtle
-            face.update(brows='fierce', lid=2)
+            face['look'] = -0.85                  # his eyes to Ron, on his left as we see them from Myrtle
+            if n in (7, 12):
+                face.update(brows='fierce', lid=2)
     if T['thud'] - SCREAM_LEN <= t < L[9]['end'] + 0.3 or L[10]['start'] <= t:
         face.update(brows='fierce', lid=2, mouth=face['mouth'] if talking('harry', t) else 'line')
     if T['scream'] + 5.0 <= t < T['thud'] + 0.9:
@@ -246,8 +288,7 @@ def harry_state(t):
 
 def ron_state(t):
     """Ron: vacant, gibbering; looks at nothing (up and away); mouth hangs open when he isn't talking."""
-    sp = CAST['ron']
-    j = V.standing(sp)
+    j = posed('ron', t)
     face = _face('ron', t, look=0.6, look_v=-0.5, brow_raise=6)
     if not talking('ron', t):
         face['mouth'] = 'agape'
@@ -310,9 +351,10 @@ def hat_drop(t):
 # ------------------------------------------------------------------------------------------------ the shots
 CAM0 = B.Cam(1.0, 540, 960)
 # Shot 1 (hat close): Harry seated, his face 300 px tall (rule 50), the Hat over his eyebrows, McGonagall behind on
-# the left, turned to him; the space above the Hat left for the Hook Text (note 1). A flat close-up: 1500 px a metre
-# at Harry, 760 at McGonagall (a metre further back). The subtitle sits over his chest, clear of his face.
-HAT_PXM, HAT_EYE_Y, HARRY_X, MCG_X, MCG_PXM = 1500.0, 1010.0, 580, 270, 760.0
+# just behind him, facing front, a little to the left so her face clears the Hat's point (Sam's note 6); the space
+# above her left for the Hook Text (note 1). A flat close-up: 1500 px a metre at Harry, 1000 at McGonagall (half a
+# metre behind). The subtitle sits over his chest, clear of his face.
+HAT_PXM, HAT_EYE_Y, HARRY_X, MCG_X, MCG_PXM = 1500.0, 1160.0, 580, 470, 1000.0
 
 
 def cam_for(t):
@@ -366,26 +408,28 @@ def shot_hat(img, cam, t):
         yell = talking('hat', t) and mouths.at(TRACK['hat'], t) not in ('rest', 'MBP')
         by = hy - 84 - drop / s2
         C.hat(p, hx, by, k, 'yell' if yell else 'rest')
-        brim['ends'] = [_world(cam, p.cam.P(hx - 170 * k, by - 4 * k)), _world(cam, p.cam.P(hx - 30 * k, by - 120 * k))]
+        brim['ends'] = [_world(cam, p.cam.P(hx - 180 * k, by - 2 * k)), _world(cam, p.cam.P(hx + 180 * k, by - 2 * k))]
     if SOLO[0] in (None, 'harry'):
         C.person(lay, cam, HARRY_X, floor, s_h, 'harry', 0, sit, face, t=t, head_props=[worn])
     else:
         C.person(Image.new('RGBA', img.size, (0, 0, 0, 0)), cam, HARRY_X, floor, s_h, 'harry', 0, sit, face, t=t,
                  head_props=[worn])
-    # McGonagall: a metre behind him, standing, turned to him; one hand on the brim, one on the crown, until it lands
+    # McGonagall: just behind him, facing us; her hands on both sides of the brim until it lands, then down
     pm = MCG_PXM
     s_m = _scale(pm)
     mfloor = HAT_EYE_Y + 1.0 * pm
     j, mface = mcg_state(t, brim)
     s2m = s_m * C.HEIGHTS['mcg'] / 1.75
     mny = mfloor - 928 * s2m
-    hold = t < T['hat_land'] + 0.15
-    hands = []
-    if hold:
-        hands = brim['ends']
-        for side, (tx, ty) in zip(('L', 'R'), hands):
-            V.arm_to(j, side, ((tx - MCG_X) / s2m, (ty - mny) / s2m, 90.0), 'down', 'fist')
-    _draw(img, cam, 'mcg', MCG_X, mfloor, pm, 45, j, mface, t=t)
+    hold = t < T['hat_land'] + 0.1
+    hands = brim['ends'] if hold else []
+    u = _ease(_ramp(t, T['hat_land'] + 0.1, T['hat_land'] + 0.6))     # letting go: hands down to her sides
+    if u < 1:
+        for side, (tx, ty) in zip(('L', 'R'), brim['ends']):
+            rest = (-80.0 if side == 'L' else 80.0, 470.0, 40.0)
+            held = ((tx - MCG_X) / s2m, (ty - mny) / s2m, 120.0)
+            V.arm_to(j, side, tuple(a + (b - a) * u for a, b in zip(held, rest)), 'down', 'fist')
+    _draw(img, cam, 'mcg', MCG_X, mfloor, pm, 0, j, mface, t=t)
     img.alpha_composite(lay)
     p = B.Pen(img, cam)
     for tx, ty in (hands if SOLO[0] in (None, 'mcg') else ()):                          # her hands over the brim (rule S2)
@@ -396,6 +440,7 @@ def shot_run(img, cam, t):
     v = SETS.RUN
     if not SOLO[0]:
         img.alpha_composite(SETS.cached('run', cam, lambda i, c: SETS.cloister(i, c, v)))
+        SETS.sconces(img, cam, v, t)
     u = t - T['run']
     dur = T['door'] - T['run']
     out = []
@@ -430,6 +475,7 @@ def shot_door(img, cam, t):
     v = SETS.DOOR
     if not SOLO[0]:
         img.alpha_composite(SETS.cached('door', cam, lambda i, c: SETS.cloister(i, c, v)))
+        SETS.sconces(img, cam, v, t)
     if not SOLO[0]:
         SETS.plaque_text(img, v, cam)
     _myrtle(img, cam, v, t, 0)
@@ -454,6 +500,7 @@ def shot_boys(img, cam, t):
     v = SETS.BOYS
     if not SOLO[0]:
         img.alpha_composite(SETS.cached('boys', cam, lambda i, c: SETS.cloister(i, c, v)))
+        SETS.sconces(img, cam, v, t)
     for who in sorted(('harry', 'ron'), key=lambda w: -v.d_of(PL.PEOPLE[w]['at'][1])):
         x0, z0 = PL.PEOPLE[who]['at']
         d = v.d_of(z0)

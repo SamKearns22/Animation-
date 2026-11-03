@@ -23,11 +23,13 @@ from ed import INK               # noqa: E402
 from satire_style import rough   # noqa: E402
 
 FONT = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
-STONE, STONE_LT, STONE_DK = (204, 178, 132), (226, 204, 160), (168, 142, 100)
-FLAG, FLAG2 = (188, 170, 136), (172, 154, 122)
+# Night (Sam's note 5): honey stone in warm torchlight, the garth dark blue outside
+STONE, STONE_LT, STONE_DK = (150, 116, 78), (174, 138, 94), (110, 84, 56)
+FLAG, FLAG2 = (126, 106, 80), (110, 92, 70)
+CEIL_C, FAN_C = (128, 98, 68), (150, 118, 82)
 OAK, OAK_DK, OAK_LT = (104, 64, 34), (70, 42, 22), (132, 86, 48)
 BRASS = (214, 176, 84)
-GRASS, SKY = (112, 150, 78), (196, 214, 222)
+GRASS, SKY, FAR, LIT = (30, 50, 40), (22, 30, 60), (52, 48, 56), (236, 196, 110)
 W_HALF, SPRING, CROWN, BAY = 1.75, 2.9, 4.3, 2.6      # corridor half width, vault springing, crown, bay length (m)
 DOOR_W, DOOR_SQ, DOOR_TOP = 1.1, 1.95, 2.55            # the shrunk door: width, square top, arch point (m)
 PLAQUE = (2.18, 0.46, 0.15)                            # GIRLS plaque: centre height, width, height (m), on the door
@@ -155,7 +157,7 @@ def cloister(img, cam, v):
         _end_wall(p, v, d_end)
     else:
         arch = [(x, y, d_end) for x, y in _pointed(0, 0.0, 3.6, 1.1)]
-        p.poly([v.P(*q) for q in arch], (236, 222, 186), INK, 2)
+        p.poly([v.P(*q) for q in arch], (40, 40, 66), INK, 2)                  # night beyond the far arch
         _quad(p, v, [(-1.1, 0, d_end), (1.1, 0, d_end), (1.1, 0.02, d_end - 3), (-1.1, 0.02, d_end - 3)], FLAG)
         for x in (-0.55, 0.0, 0.55):                                    # a tracery window beyond the arch
             p.line([v.P(x, 1.0, d_end + 2), v.P(x, 3.0, d_end + 2)], STONE_DK, 3)
@@ -175,7 +177,7 @@ def cloister(img, cam, v):
     # the ceiling: two slopes, then a fan on every shaft
     for s in (-1, 1):
         _quad(p, v, [(s * W_HALF, SPRING, dn), (0, CROWN, dn), (0, CROWN, d_end), (s * W_HALF, SPRING, d_end)],
-              STONE_LT, INK, 2)
+              CEIL_C, INK, 2)
     shafts = [z for z in [26.0 - i * BAY for i in range(12)] if dn < v.d_of(z) <= d_end + 0.01]
     for z in sorted(shafts, key=lambda zz: -v.d_of(zz)):
         ds = v.d_of(z)
@@ -187,7 +189,7 @@ def cloister(img, cam, v):
             rim = [q for q in rim if dn < q[2] <= d_end + 0.01]
             if len(rim) > 2:
                 spr = (s * W_HALF, SPRING - 0.4, ds)
-                p.poly([v.P(*spr)] + [v.P(*q) for q in rim], (236, 216, 176), INK, 1.8)
+                p.poly([v.P(*spr)] + [v.P(*q) for q in rim], FAN_C, INK, 1.8)
                 for q in rim[1:-1:2]:
                     p.line([v.P(*spr), v.P(*q)], STONE_DK, 1.2)
     # the walls
@@ -207,7 +209,16 @@ def cloister(img, cam, v):
         out = [(r, y0, a), (r, y1, a), (r, y2, (a + b) / 2), (r, y1, b), (r, y0, b)]
         _quad(p, v, out, SKY, INK, 2.2)
         _quad(p, v, [(r, y0, a), (r, 1.25, a), (r, 1.25, b), (r, y0, b)], GRASS, None)        # the garth's lawn
-        _quad(p, v, [(r, 1.25, a), (r, 1.75, a), (r, 1.75, b), (r, 1.25, b)], (214, 190, 146), None)  # far range
+        _quad(p, v, [(r, 1.25, a), (r, 1.75, a), (r, 1.75, b), (r, 1.25, b)], FAR, None)    # the far range, dark
+        for k in (0.3, 0.7):                                                                    # its lit windows
+            dk = a + (b - a) * k
+            _quad(p, v, [(r, 1.4, dk - 0.08), (r, 1.62, dk - 0.08), (r, 1.62, dk + 0.08), (r, 1.4, dk + 0.08)], LIT,
+                  None)
+        if (a + b) / 2 > 2.0:                                                                   # a few stars
+            for k, y in ((0.2, 2.4), (0.55, 2.0), (0.8, 2.3)):
+                q = v.P(r, y, a + (b - a) * k)
+                rr = max(1.2, 0.012 * v.f / b)
+                p.ell(q[0], q[1], rr, rr, (230, 230, 210), None)
         for k in range(1, 3):
             dk = a + (b - a) * k / 3
             p.line([v.P(r, y0, dk), v.P(r, y1 + 0.18, dk)], STONE_LT, max(2, 0.06 * v.f / dk))
@@ -270,6 +281,49 @@ def _end_wall(p, v, d):
     x0, y0 = v.P(-pw / 2, pc + ph / 2, d)
     x1, y1 = v.P(pw / 2, pc - ph / 2, d)
     p.poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], BRASS, INK, 2.4)
+
+
+def _sconce_spots(v):
+    """Every wall sconce this view sees: (r, y, d), one on each wall at every shaft, two either side of the door."""
+    north = v.facing > 0
+    d_end = v.d_of(26.0) if north else v.d_of(0.0)
+    out = []
+    for i in range(12):
+        d = v.d_of(26.0 - i * BAY)
+        if 0.6 < d < d_end - 0.05:
+            out += [(-W_HALF + 0.14, 1.95, d), (W_HALF - 0.14, 1.95, d)]
+    if north:
+        out += [(-1.25, 2.0, d_end - 0.1), (1.25, 2.0, d_end - 0.1)]
+    return sorted(out, key=lambda q: -q[2])
+
+
+def sconces(img, cam, v, t):
+    """Iron sconces with live flames down the corridor (Sam's note 5): each flame and its warm glow on the stone
+    flicker on their own (two quick waves), drawn every frame over the painting."""
+    glow = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    gp = B.Pen(glow, cam)
+    p = B.Pen(img, cam)
+    spots = _sconce_spots(v)
+    for i, (r, y, d) in enumerate(spots):
+        k = 1 + 0.13 * math.sin(2 * math.pi * (7.3 * t + i * 1.7)) + 0.08 * math.sin(2 * math.pi * (12.9 * t + i * 0.6))
+        x0, y0 = v.P(r, y, d)
+        m = v.f / d
+        for rr, a in ((0.42, 26), (0.26, 40), (0.13, 64)):
+            gp.ell(x0, y0 - 0.1 * m, rr * m * k, rr * m * k * 1.15, (255, 176, 80, int(a * k)), None)
+    img.alpha_composite(glow)
+    for i, (r, y, d) in enumerate(spots):
+        k = 1 + 0.13 * math.sin(2 * math.pi * (7.3 * t + i * 1.7)) + 0.08 * math.sin(2 * math.pi * (12.9 * t + i * 0.6))
+        sway = 0.012 * math.sin(2 * math.pi * (5.1 * t + i))
+        x0, y0 = v.P(r, y, d)
+        m = v.f / d
+        p.poly([(x0 - 0.035 * m, y0), (x0 + 0.035 * m, y0), (x0 + 0.02 * m, y0 + 0.07 * m),
+                (x0 - 0.02 * m, y0 + 0.07 * m)], (40, 34, 30), INK, 1.4)                      # the iron cup
+        p.line([(x0, y0 + 0.07 * m), (x0, y0 + 0.2 * m)], (40, 34, 30), max(1.5, 0.012 * m))  # its bracket
+        h = 0.11 * m * k
+        fl = [(x0 - 0.03 * m, y0), (x0 + sway * m, y0 - h), (x0 + 0.03 * m, y0)]
+        p.poly(fl, (255, 170, 60), (200, 90, 30), 1.2)
+        p.poly([(x0 - 0.015 * m, y0), (x0 + sway * m * 0.6, y0 - h * 0.6), (x0 + 0.015 * m, y0)], (255, 236, 150),
+               None)
 
 
 def plaque_box(v, cam=None):

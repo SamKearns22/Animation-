@@ -1,15 +1,14 @@
 # Notes for Terfwarts (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 41 (every arm ends in a hand), 18 (the Hat's face and GIRLS plaque 40 px+: both pass on the stills), 10 (Hook Text clear of the Hat: 20 px on the stills, raise it)
-- **Done:** stills sent 3 Nov (`review/terfwarts-stills.jpg`, 23 frames, every shot; `review/terfwarts-shot1-hook.jpg` full size with the Hook Text). Sets painted (Great Hall, cloister both ways, the shrunk door). Sam's three sounds filed (scream, thud, run).
-- **Spent against the estimate (rule 55):** the stills (sets + staging) in one chat, within the paintings' 4% + moves' 3%.
-- **Next:** Sam's notes on the stills, then the check sheet and the animatic: Opus medium, new chat. Sam types: "Terfwarts: notes on the stills" (or "Terfwarts: animatic" if Y).
-- **Needs Sam:** Y/N on the stills; the Hook Text wording; the 12 voice recordings (before the animatic).
+- **Rules that bite next:** 41 (every arm ends in a hand: the new poses), 42 (poses from the gallery), 10 (Hook Text clear of McGonagall: 120 px on the stills)
+- **Done:** notes 5-8 on the stills, 3 Nov (two rounds), sheet re-sent (`review/terfwarts-stills.jpg`, `review/terfwarts-shot1-hook.jpg`).
+- **Next:** Sam's notes or Y on the stills, then the check sheet and the animatic: Opus medium, new chat. Sam types: "Terfwarts: animatic" (once his voices are in) or "Terfwarts: notes on the stills".
+- **Needs Sam:** Y/N on the stills; the Hook Text; the 12 voice recordings (he is reworking the dialogue).
 - **Read:** `guides/satire.md` "Before every render"; rulebook Checks table; `terfwarts.py` MAP only.
-- **Lost / Added (stills):** see Notes 3-4.
-- **Open rule requests:** none
-- **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`); `terfwarts_sets.py` paintings + `View` cameras (RUN, BOYS = Myrtle's view, DOOR); `python3 source/terfwarts.py shots` prints the timeline. Seated Harry: the cast's person() and views both drop by bob, so the hat shot passes floor with 2 x bob. The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO draws one person alone) but not yet run.
+- **Lost / Added:** see Notes 4-8.
+- **Open rule requests:** no three-quarter views (note 7, Sam: "always the worst looking one"): proposed 3 Nov, waiting for his yes.
+- **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`; POSES/posed for the boys); `terfwarts_sets.py` paintings, `View` cameras (RUN, BOYS = Myrtle's view, DOOR), `sconces` drawn per frame. Seated Harry: the cast's person() and views both drop by bob (hat shot passes 2 x bob). The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO) but not yet run. When the dialogue changes, LINES text and `est` change; line numbers drive the shots and poses.
 
 ## The joke (Sam, 3 Nov)
 JK Rowling has spent years attacking the trans community and has put gender-exclusionary ideas into HBO's new Harry
@@ -86,6 +85,10 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 8 | door | stills | Vary Harry's and Ron's standing poses: arms not always hanging straight; slight or fitting moves | done: gallery poses by moment (POSES): Harry hands on hips panting, open palm (line 2), hands up (4), hips (5), points at Ron (7), arms folded through line 8 and the scream, shrug (9); Ron hips panting, palms together (nervous, 3, 6, scream, 11), shrug at "man in a dress" (5). Added: all of these |
+| 7 | boys | stills | No three-quarter turn: Harry's pupils look over at Ron instead | done: eyes to Ron on lines 6, 7, 11, 12, body faces front. Rule request: proposed (see Open rule requests) |
+| 6 | 1 | stills | McGonagall closer, just behind Harry, facing front, putting the Hat on from just behind; part of her may be out of frame | done: half a metre behind, facing front, a little left so her face clears the Hat's point; hands on both sides of the brim, down to her sides once it lands; the shot moved down 150 px to keep the Hook Text clear of her |
+| 5 | corridor | stills | Night outside; flickering sconces down the corridor | done: night garth (dark lawn, lit windows in the far range, stars), stone in warm torchlight; iron sconces on every shaft both sides and two by the door, flames and glow flickering every frame. Added: the lit windows and stars |
 | 4 | all | stills | My choices on the stills, for Sam's yes: Myrtle drifts off bored (arms folded) while Ron and Harry talk, so she can float round back to the door (brief 14); arms folded for "Dead is a thought-terminating cliché"; Harry's hands up on line 4; McGonagall lets go once the Hat lands and stays behind him; the reverse shots are Myrtle's own view (Lost: her see-through back in them); long lines split into short subtitles; about 68 s long (estimated) | sent with the stills |
 | 3 | scream | stills | Sam's sounds: thud (troll kills Hermione behind the door), running for Harry and Ron, the drawn-out scream; lengthen the scream, cutting between Myrtle floating obstinately and Harry annoyed | done on the stills: 8.6 s of scream, six cuts (Myrtle close, Harry close, wide, Harry close, Myrtle close, wide), cut off dead by the thud on the wide; running under the run shot |
 | 2 | 1 | comp | McGonagall puts the Hat onto Harry (HBO reference sent) | open: planned as one shot, she stands behind Harry's shoulder and lowers the Hat (new kind) |
