@@ -265,6 +265,23 @@ def _bag(p, j2):
     p.poly([(x - 10, y), (x + 130, y), (x + 120, y + 120), (x, y + 120)], (120, 80, 50), INK, 2.4)
 
 
+def _clutch(sp, r=24.0):
+    """Arms folded (Sam, Terfwarts note 9): each hand clutches the other upper arm, its outer half showing past the
+    arm's edge (the fingers wrapped round). Seen from the front only; from the side and behind the body hides them."""
+    skin = sp.get('skin', (240, 214, 196))
+
+    def draw(p, j2):
+        if j2['shR'][0] - j2['shL'][0] < 0.6 * sp.get('shoulders', 150):
+            return                                            # side or back on: the hands are out of sight
+        for arm, out in (('L', -1), ('R', 1)):               # the left hand clutches the right arm and so on
+            sh, el = j2['sh' + arm], j2['el' + arm]
+            cx = sh[0] + 0.52 * (el[0] - sh[0]) + out * 14
+            cy = sh[1] + 0.52 * (el[1] - sh[1])
+            pts = [(cx + out * r * math.sin(math.pi * k / 12), cy - r * math.cos(math.pi * k / 12)) for k in range(13)]
+            p.poly(pts, skin, INK, 2.4)
+    return draw
+
+
 def pose(sp, name, beat=0.0, target=None):
     """A standing style, gesture or holding pose. `beat` (0-1) drives a gesture's stroke (a chop, a wag);
     `target`: a point for pointing or leaning (torso frame)."""
@@ -281,7 +298,8 @@ def pose(sp, name, beat=0.0, target=None):
     elif name == 'arms_folded':                              # forearms across the chest, hands tucked
         V.arm_to(j, 'L', (95.0, 262.0, 92.0), (0.4, 1.0, -0.1), 'none')        # forearms level across the chest,
         V.arm_to(j, 'R', (-95.0, 236.0, 104.0), (0.4, 1.0, -0.1), 'none')      # the right one over the left
-        j['tucked'] = 'arms folded: the hands tucked under the arms'          # handcheck: hidden on purpose
+        j['tucked'] = 'arms folded: half of each hand shows, clutching the other arm'   # handcheck: partly hidden
+        j['props'] = j.get('props', []) + [_clutch(sp)]
     elif name == 'pockets':
         for s, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, s, (sg * (sw - 16), 430.0, 16.0), 'out', 'none')

@@ -2,13 +2,13 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 41 (every arm ends in a hand: the new poses), 42 (poses from the gallery), 10 (Hook Text clear of McGonagall: 120 px on the stills)
-- **Done:** notes 5-8 on the stills, 3 Nov (two rounds), sheet re-sent (`review/terfwarts-stills.jpg`, `review/terfwarts-shot1-hook.jpg`).
+- **Done:** notes 5-9 on the stills, 3 Nov, sheets sent (`review/terfwarts-stills.jpg`, `review/terfwarts-shot1-hook.jpg`, `review/terfwarts-note9.jpg`).
 - **Next:** Sam's notes or Y on the stills, then the check sheet and the animatic: Opus medium, new chat. Sam types: "Terfwarts: animatic" (once his voices are in) or "Terfwarts: notes on the stills".
 - **Needs Sam:** Y/N on the stills; the Hook Text; the 12 voice recordings (he is reworking the dialogue).
 - **Read:** `guides/satire.md` "Before every render"; rulebook Checks table; `terfwarts.py` MAP only.
 - **Lost / Added:** see Notes 4-8.
 - **Open rule requests:** no three-quarter views (note 7, Sam: "always the worst looking one"): proposed 3 Nov, waiting for his yes.
-- **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`; POSES/posed for the boys); `terfwarts_sets.py` paintings, `View` cameras (RUN, BOYS = Myrtle's view, DOOR), `sconces` drawn per frame. Seated Harry: the cast's person() and views both drop by bob (hat shot passes 2 x bob). The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO) but not yet run. When the dialogue changes, LINES text and `est` change; line numbers drive the shots and poses.
+- **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`; POSES/posed for the boys); `terfwarts_sets.py` paintings, `View` cameras (RUN, BOYS = Myrtle's view, DOOR), `sconces` drawn per frame. Seated Harry: the cast's person() and views both drop by bob (hat shot passes 2 x bob). The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO) but not yet run. handcheck (3 Nov): 30 faults to fix before the animatic: the run (hands pushed into the robe sleeves every step: sleeves or hand offset), door shots seen from behind (Ron's palms_together and Harry's hands_up/hips hidden by their backs: flag as tucked or pick poses that show), McGonagall 0.25 s. When the dialogue changes, LINES text and `est` change; line numbers drive the shots and poses.
 
 ## The joke (Sam, 3 Nov)
 JK Rowling has spent years attacking the trans community and has put gender-exclusionary ideas into HBO's new Harry
@@ -85,6 +85,7 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 9 | all | stills | Folded arms hide the hands: show half of each hand holding the other arm, to imply clutching | done in the kit (`moves.pose` 'arms_folded', `_clutch`), so every film's folded arms get it (rule 56): the outer half of each hand shows past the other upper arm, front view only (side and back hide them); sheet `review/terfwarts-note9.jpg` |
 | 8 | door | stills | Vary Harry's and Ron's standing poses: arms not always hanging straight; slight or fitting moves | done: gallery poses by moment (POSES): Harry hands on hips panting, open palm (line 2), hands up (4), hips (5), points at Ron (7), arms folded through line 8 and the scream, shrug (9); Ron hips panting, palms together (nervous, 3, 6, scream, 11), shrug at "man in a dress" (5). Added: all of these |
 | 7 | boys | stills | No three-quarter turn: Harry's pupils look over at Ron instead | done: eyes to Ron on lines 6, 7, 11, 12, body faces front. Rule request: proposed (see Open rule requests) |
 | 6 | 1 | stills | McGonagall closer, just behind Harry, facing front, putting the Hat on from just behind; part of her may be out of frame | done: half a metre behind, facing front, a little left so her face clears the Hat's point; hands on both sides of the brim, down to her sides once it lands; the shot moved down 150 px to keep the Hook Text clear of her |
