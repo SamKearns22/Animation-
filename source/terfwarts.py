@@ -117,7 +117,7 @@ e = _after(8, T['float'], 0.2)
 T['scream'] = e + 0.6                             # Hermione's scream through the door (Sam's recording, drawn out)
 SCREAM_LEN = 8.6                                  # seconds of the scream used, cut off by the thud
 T['thud'] = T['scream'] + SCREAM_LEN
-e = _after(9, T['thud'] + 1.1, 0.0)
+e = _after(9, T['thud'] + 2.1, 0.0)           # Sam's note 17.5: a second longer on the blood
 e = _after(10, e, 0.3)
 e = _after(11, e, 0.35)
 e = _after(12, e, 0.3)
@@ -141,8 +141,8 @@ def _speaker_shots():
             out.append((cam, a, b))
     s = T['scream']                               # the scream: Myrtle obstinate / Harry annoyed, back and forth
     out += [('myrtle close', s, s + 1.8), ('harry close', s + 1.8, s + 3.5), ('door', s + 3.5, s + 5.0),
-            ('harry close', s + 5.0, s + 6.5), ('myrtle close', s + 6.5, s + 7.8), ('door', s + 7.8, T['thud'] + 0.9)]
-    out += [('boys', T['thud'] + 0.9, L[10]['start'] - 0.25), ('door', L[10]['start'] - 0.25, L[11]['start'] - 0.25),
+            ('harry close', s + 5.0, s + 6.5), ('myrtle close', s + 6.5, s + 7.8), ('door', s + 7.8, T['thud'] + 2.0)]
+    out += [('boys', T['thud'] + 2.0, L[10]['start'] - 0.25), ('door', L[10]['start'] - 0.25, L[11]['start'] - 0.25),
             ('boys', L[11]['start'] - 0.25, L[12]['start'] - 0.2), ('harry close', L[12]['start'] - 0.2, DUR)]
     return _choppy(out)
 
@@ -173,6 +173,7 @@ def _choppy(shots):
 
 
 SHOTS = _speaker_shots()
+DART = (-1.0, -1.0)
 # rule 41, meant: in the door shots the boys are seen from behind, over their shoulders: palms together or hands on
 # hips sit in front of their bodies, hidden by their backs (staging, as anyone seen from behind); McGonagall's right
 # forearm reaches towards the lens for two frames as she lowers the Hat, the hand plainly on the brim (sheet, 3 Nov)
@@ -335,6 +336,18 @@ def posed(who, t):
     return cur if u >= 1 else MV.mix_poses(_pose(sp, sched[i - 1][1]), cur, u)
 
 
+def _dart():
+    """The moment in Harry's close-up on 'you expect free license' when his eyes flick to Ron (0.5 s, back at 0.9 s)."""
+    ch = _chunk_times(L[3])
+    t0 = L[3]['start'] + ch[1][1]                 # "you expect free license" comes up
+    t1 = L[3]['start'] + (ch[2][1] if len(ch) > 2 else L[3]['_dur'])
+    for c, a, b in SHOTS:
+        if c == 'harry close' and a < t1 and b > t0:
+            a0 = max(a, t0) + 0.5
+            return (a0, a0 + 0.5)
+    return (-1.0, -1.0)
+
+
 def harry_state(t):
     """(yaw, joints, face) for Harry at the door. Panting on arrival (hands on hips), pleading (hands up) on line 4,
     his eyes going to Ron on lines 7, 11 and 12 (Sam: never the three-quarter turn), annoyed through the scream
@@ -345,10 +358,10 @@ def harry_state(t):
     if t < L[2]['end'] + 0.6:                     # out of breath: leaning in, mouth open between words (Sam's note
         k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)   # 13.3: the heaving body read as bobbing like a duck: gone)
         j['lean'] = 7 * k
-        if not talking('harry', t):
-            face['mouth'] = 'agape'
     if L[4]['start'] - 0.2 <= t < L[4]['end'] + 0.2:
         face.update(brow_raise=6)
+    if DART[0] <= t < DART[1]:                    # Sam's note 17.4: his eyes dart over to Ron and back again
+        face['look'] = -0.85
     for n in (6, 7, 11, 12):
         if L[n]['start'] - 0.3 <= t < L[n]['end'] + 0.4:
             face['look'] = -0.85                  # his eyes to Ron, on his left as we see them from Myrtle
@@ -396,12 +409,24 @@ def myrtle_state(t):
     if L[6]['start'] - 0.2 <= t < T['float']:
         j = PG.arms_folded(sp)
         face.update(look=-0.6, look_v=-0.4)        # bored, looking away
+    c0, c1 = L[8]['start'] + 0.8, L[8]['end'] - 0.8      # Sam's note 17.1: round the door, twice, arms flapping
+    uc = _ease(_ramp(t, c0, c1))
+    ang = 2 * math.pi * 2 * uc
+    if c0 <= t <= c1 + 0.01:
+        x += 0.6 * math.sin(ang)
+        z += 0.3 * (1 - math.cos(ang))
+        lift += 0.08 * math.sin(2 * ang)
     spread = _ease(_ramp(t, T['float'] + 1.2, T['float'] + 1.7))
     if t >= T['float'] + 1.2 and t < L[10]['start'] - 0.2:
         j = V.standing(sp)
         for side, tgt in {'L': (-330.0, 40.0, 60.0), 'R': (330.0, 40.0, 60.0)}.items():
             lo = {'L': (-80.0, 470.0, 40.0), 'R': (80.0, 470.0, 40.0)}[side]
-            V.arm_to(j, side, tuple(a + (b - a) * spread for a, b in zip(lo, tgt)), 'down', 'fist')
+            tgt = tuple(a + (b - a) * spread for a, b in zip(lo, tgt))
+            if c0 <= t <= c1:                      # a gentle flap, back and forth, the arms a half beat apart
+                env = min(1.0, (t - c0) / 0.6, (c1 - t) / 0.6)
+                ph = 2 * math.pi * (t - c0) / 1.3 + (0.0 if side == 'L' else math.pi * 0.5)
+                tgt = (tgt[0], tgt[1] + 90 * env * math.sin(ph), tgt[2])
+            V.arm_to(j, side, tgt, 'down', 'fist')
         if T['scream'] <= t:
             face.update(look=0.0, look_v=0.3, brows='fierce', lid=2)   # obstinate: chin up, eyes down at Harry
     if t >= L[10]['start'] - 0.2:
@@ -654,7 +679,7 @@ def blood(img, cam, v, t):
     """Sam's note 13.12: when the thud lands, a small pool of blood seeps out under the door onto the flagstones,
     spreading over a second and a half (on the floor, under Myrtle and the boys)."""
     from ed import curve
-    u = _ease(_ramp(t, T['thud'] + 0.15, T['thud'] + 1.8))
+    u = _ease(_ramp(t, T['thud'] + 0.15, T['thud'] + 2.4))
     if u <= 0:
         return
     zd = SETS.DOOR_Z if hasattr(SETS, 'DOOR_Z') else 25.98
@@ -820,11 +845,30 @@ def caption_at(t):
     return None
 
 
+DART = _dart()
+
+
+def _card(img, text):
+    """'Later…' bigger and a little left of centre (Sam's note 17.3): 84 px type, centred at x 400."""
+    from PIL import ImageDraw, ImageFont
+    S = B.SS
+    f = ImageFont.truetype(B.SANS, 84 * S)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    y = (1480 - 50) * S
+    d.text((400 * S, y), text, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=7 * S, stroke_fill=(0, 0, 0))
+    k, yc = 0.2, y
+    lay = lay.transform(lay.size, Image.AFFINE, (1, k, -k * yc, 0, 1, 0), Image.BICUBIC)
+    img.alpha_composite(lay)
+
+
 def overlay(img, t):
     if t < BLACK_AT:
         c = caption_at(t)
-        if c:
-            PP.caption(img, c, italic=c == CARDS[0][0])
+        if c == CARDS[0][0]:
+            _card(img, c)
+        elif c:
+            PP.caption(img, c)
     return img
 
 
