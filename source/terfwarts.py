@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-"""Satire-style film TEMPLATE. Copy to source/NAME.py, change NAME and the STORY section; leave the rest.
-Everything else is already wired in: the picture cache with captions and title on last, the cast sheet, the plan
-checks (mouths move for every phrase, voice above everything else, subtitles printed to proofread), and the general
-audit (each body drawn alone: in pieces, popping, stretching, frozen; every action tested on every frame; eyelines).
-Guide: guides/satire.md.
+"""Terfwarts (notes/terfwarts.md): the Sorting Hat calls Harry a BIOLOGICAL MALE; later Moaning Myrtle won't let
+Harry and Ron into the girls' bathroom to save Hermione from the troll. Built from the satire template (guides/satire.md).
 
     python3 source/NAME.py cast OUT.png              the cast on one sheet: approve it before any animation
     python3 source/NAME.py stills OUT_DIR T [T ...]  stills at these times (seconds)
@@ -29,156 +26,443 @@ import mossad_audio as MA        # noqa: E402  recordings cleaned and levelled
 import peepee as PP              # noqa: E402  the series' caption
 import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
+import terfwarts_cast as C       # noqa: E402  the cast and the Hat
+import terfwarts_plan as PL      # noqa: E402  the world in metres
+import views                     # noqa: E402
+import moves                     # noqa: E402
+import posegallery as PG         # noqa: E402
 from satire_style import rough, install_circle_hands   # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
 FPS, SR = 12, MA.SR
 
-# =============================================== STORY (change this) ===============================================
-# MAP (rule 61: keep it in step; a note is answered by reading only these lines): what is where, e.g.
-#   the cast and the Hat: terfwarts_cast.py (its own MAP); plan: terfwarts_plan.py; layout sheet: terfwarts_compose.py.
-#   STORY below is still the template's: fill it at the stills stage.
+# =============================================== STORY =============================================================
+# MAP (rule 61: keep it in step; a note is answered by reading only these lines):
+#   the cast and the Hat: terfwarts_cast.py (its own MAP); the places (paintings, cameras as sets.View): terfwarts_sets.py;
+#   plan: terfwarts_plan.py; layout sheet: terfwarts_compose.py.
+#   Here: LINES (the script, by number) and the timeline built from it (T: every beat's time); SHOTS; who is where and
+#   how they stand: harry_state / ron_state / myrtle_state / mcg_state; each shot drawn: shot_hat, shot_run,
+#   shot_door, shot_boys (and the two close-ups through zoom); sound: soundtrack (scream, thud, run).
 NAME = 'terfwarts'
-# Rule 58: what this film contains. Pre-flight runs only the checks for these and names the ones it skips. Remove what
-# the film has none of (Flying Whales: no people, no rooms), and the lists for it below can stay empty.
 HAS = {'people', 'rooms', 'voices', 'effects', 'props'}
-TITLE = ('THE TEMPLATE',)                         # Cranberry Title style, on for 2 s; one line sits highest
-TITLE_AT = dict(cap=116, top=310)                 # its size and height: checked never to cover anyone
-CAST = {   # look and build per person (skin, hair, clothes, face); the cast sheet shows them side by side
-    'A': dict(skin=B.PALE, hair='side', hair_c=(70, 56, 44), jacket=(60, 70, 90), trousers=(40, 42, 50), outfit='suit',
-              jaw='square', hw=70, hh=90),
-    'B': dict(skin=B.OLIVE, hair='bob', hair_c=(150, 56, 40), jacket=(150, 60, 70), trousers=(50, 46, 50), outfit='blouse',
-              jaw='soft', hw=64, hh=86, lashes=True),
-}
-LOOKS_AT = {'A': 'B', 'B': 'A'}                   # who each person looks at (checked)
-LINES = [   # 'audio': 'NAME-1' uses source/audio/NAME-1.m4a and times the line to it
-    dict(who='A', text='This is a template line.', start=0.3, end=2.4),
-    dict(who='B', text='And this is the reply.', start=2.8, end=4.6),
+TITLE = ()                                        # no title (CLAUDE.md: TikTok films have none by default)
+TITLE_AT = dict(cap=116, top=310)
+CAST = C.CAST
+WHO = ('harry', 'ron', 'myrtle', 'mcg', 'hat')     # 'hat' speaks; drawn by C.hat
+# The script, word for word (brief rows 3, 8-19). est: seconds until Sam's recording replaces it ('audio').
+LINES = [
+    dict(n=1, who='hat', text='BIOLOGICAL MALE.', est=1.5),
+    dict(n=2, who='harry', text='Myrtle, Hermione is under attack by a troll.', est=2.6),
+    dict(n=3, who='myrtle', text="As a penis'd individual, you expect free license to conduct predatory behaviour "
+                                 "inside a female-exclusive space.", est=6.2),
+    dict(n=4, who='harry', text="What? No, Myrtle, you don't understand. Hermione could be killed at any moment.", est=4.4),
+    dict(n=5, who='myrtle', text='Yes. By a man masquerading as a woman in a dress. I will not allow you to turn this '
+                                 'space into a chapel of wanton molestation.', est=8.0),
+    dict(n=6, who='ron', text="I don't like spiders, Harry.", est=1.8),
+    dict(n=7, who='harry', text="Ron, get it together, I'm sick of you already.", est=2.6),
+    dict(n=8, who='myrtle', text="When you throw open the door of a bathroom or changing room to any man so-called "
+                                 "'trying to save the life' of a woman, then you throw it open to anyone wanting to "
+                                 "come inside.", est=10.5),
+    dict(n=9, who='harry', text="Well it's not a problem anymore, Myrtle, as she's f****** dead now.", est=3.8),
+    dict(n=10, who='myrtle', text='Dead is a thought-terminating cliché.', est=2.6),
+    dict(n=11, who='ron', text="I don't like them, Harry.", est=1.6),
+    dict(n=12, who='harry', text="I don't like you, Ron.", est=1.5),
 ]
-SHOTS = [('two', 0.0, 3.0), ('B', 3.0, 5.6)]       # (camera: two-shot or one person's close-up, start, end)
-# Rule 1 (plan.py): the world drawn once, in metres, before any shot: every place, every door and opening (and what
-# each shows: rule 2), every thing, where each person stands and faces, every camera. Every shot reads from it (XS
-# below comes from PEOPLE). `python3 source/plan.py NAME sketch OUT.jpg` draws it for Sam; pre-flight checks it.
-PLAN = dict(   # this template's film is flat: its plan is the strip of room the frame shows (about 2 m across)
-    CEIL=2.6,
-    ROOMS={'room': (-1.6, -3.6, 1.6, 2.0)},
-    OPENINGS={'window': dict(wall=('z', 2.0), span=(-0.82, -0.21), sill=1.07, head=1.8, to='the street')},
-    THINGS={'table': dict(at=(0.0, 0.65), size=(0.61, 0.7, 0.82), facing=0)},
-    PEOPLE={'A': dict(at=(-0.38, 0.0), facing=90, who='A'), 'B': dict(at=(0.38, 0.0), facing=270, who='B')},
-    CAMS={'two': dict(pos=(0.0, 1.0, -3.0), look=(0.0, 1.0, 0.0)), 'B': dict(pos=(0.38, 1.5, -1.2), look=(0.38, 1.5, 0.0))},
-    GROUPS={},                                      # rule 9: {group: dict(arriving=, stopped=, leaving=)}
-)
-# Rule 3 (benchmark.py): before building any place, the 8-10 things that make it recognisable, each with how ours has
-# it ('' = not built: pre-flight fails); refs in references/NAME/. No references yet: stop and ask Sam.
-BENCHMARK = [dict(place='room', refs=[], at=1.0, items=[('what makes it recognisable', '')])]
-# Rule 14 (preflight.py): who the brief puts in each shot; pre-flight refuses while any of them is never on screen there
-SHOT_CAST = {'two': ['A', 'B'], 'B': ['B']}
-DUR = 5.6
-# Any action as beats (set-up, action, contact, follow-through, settle); pace by ease: 'fast' into a hit, 'slow' out.
-# The value is A's near hand target in A's own units (x right, y down from the neck). Every frame is tested.
-THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)),
-                       (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])
-# What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('Hook Text here', {'y': 880})               # exactly as finish.py will be given it (--y, --x, --until)
-KEEP_CLEAR = []                                     # [(name, box_at(t) -> (x0, y0, x1, y1) or None)]: signs, readouts
-PROP_SIZES = []                                     # [(name, sizes.SIZES kind, w, h, px_per_m or None or 0)]
-OUTFIT = {}                                         # {who: {'skirt top': y, 'jacket hem': y, ...}} person units
-HEIGHTS = {}                                        # {who: real height in metres}
-ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate contacts, hits, falls, knock-ons
-# Rules 5 and 6 (guides/film-quality-rules.md; audit.py): scene(t) below gives everyone and everything solid; list
-# here every contact that is meant (thing or thing.part, the other, from, to, why) and every meant pop-in.
-ALLOWED_CONTACTS = [('A.hand*', 'TABLE', 1.5, 2.2, 'A thumps the table')]
-ALLOWED_POPS = []                                   # [(name, from, to, why)], e.g. gone in through a door
-SET_EXCLUDE = []                                    # rule 12: [(set piece, why)]: what the audit leaves out of the set
-# Rule 13 (kitchecks.py, run by pre-flight on every film): a hand on what it moves, every frame, and seen; a prop that
-# moves has a hand on it unless it flies, falls or slides; a resting hand keeps 3 cm clear; marks on real surfaces
-# (define all_marks()); a sound tied to a thing plays only with it in frame, once per hit
-TOUCHES = []                                        # [(hand, thing, from, to, why)], e.g. ('A.handR', 'MUG', 2.0, 3.1, ...)
-FREE_MOVES = []                                     # [(thing, from, to, why)], e.g. ('MUG', 3.1, 3.6, 'knocked flying')
-SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
-# Rules 15-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
-# 'burst' must be lumpy, never a star; no motion lines); every prop a joke needs at least 40 px on screen (the sheet:
-# python3 source/viewchecks.py NAME SHEET.jpg); and, with a 3D camera, movers(t) -> [(name, (x, y, z))] for the
-# direction across each cut, effect_points(t) + EFFECT_SWITCH for effects hidden behind figures. Held props are
-# turned through every view by themselves.
-EFFECTS = []                                        # [(name, 'burst' / 'sparks' / 'trail' / 'smoke' / ..., draw(img))]
-JOKE_PROPS = []                                     # [(name, [times], (x, y, z) or fn(t), size in metres)]
-ORDER_SWAPS = []                                    # rule 57: [(a, b, from, to, why)] planned in-front/behind swaps
-# draw_order(t) below: what is drawn, back to front, for the flip check (rule 57). Define layers(t) for the full
-# drawing-order check (see clipcheck.py and shocking.py), and SPLICE = ((clip, start, end), ...) for a song joined
-# from recordings (musiccheck.py)
+L = {ln['n']: ln for ln in LINES}
+for ln in LINES:                                  # time each line to its recording when there is one
+    ln['_voice'] = None
+    dur = ln['est']
+    if ln.get('audio') and os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + '.m4a')):
+        ln['_voice'] = MA.line(ln['audio'])
+        dur = len(ln['_voice']) / SR
+    ln['_dur'] = dur
+    ln['_stretches'] = MA.pauses(ln['_voice'], 0.12) if ln['_voice'] is not None else [(0.0, dur)]
+
+# The timeline: every beat follows the one before (so a recording that runs long pushes the rest on).
+T = {}
+T['hat_land'] = 0.45                              # McGonagall's hands bring the Hat down onto Harry's head
+L[1]['start'] = 0.55                              # the hook: "BIOLOGICAL MALE" at about half a second (note 1)
+T['annoyed'] = L[1]['start'] + L[1]['_dur'] + 0.1
+T['run'] = T['annoyed'] + 1.3                     # cut: the cloister, "Later…"
+T['door'] = T['run'] + 2.7                        # cut: Myrtle comes out through the door; the boys skid in
+T['halt'] = T['door'] + 0.55
+
+
+def _after(n, prev_end, gap=0.35):
+    L[n]['start'] = prev_end + gap
+    L[n]['end'] = L[n]['start'] + L[n]['_dur']
+    return L[n]['end']
+
+
+L[1]['end'] = L[1]['start'] + L[1]['_dur']
+e = _after(2, T['door'] + 1.6, 0.0)
+for n in (3, 4, 5, 6, 7):
+    e = _after(n, e, 0.45 if n in (3, 5) else 0.35)
+T['float'] = e + 0.3                              # Myrtle floats round to block the doorway (brief 14) as she speaks
+e = _after(8, T['float'], 0.2)
+T['scream'] = e + 0.6                             # Hermione's scream through the door (Sam's recording, drawn out)
+SCREAM_LEN = 8.6                                  # seconds of the scream used, cut off by the thud
+T['thud'] = T['scream'] + SCREAM_LEN
+e = _after(9, T['thud'] + 1.1, 0.0)
+e = _after(10, e, 0.45)
+e = _after(11, e, 0.5)
+e = _after(12, e, 0.4)
+DUR = e + 0.9
+BLACK_AT = DUR
+CARDS = [('Later…', T['run'] + 0.05, T['run'] + 1.6)]   # brief 5: the subtitle over the corridor
+
+
+def _speaker_shots():
+    """Shot/reverse at the door: each line from the side of whoever speaks, cutting a quarter second before."""
+    out = [('hat', 0.0, T['run']), ('run', T['run'], T['door']), ('door', T['door'], L[2]['start'] - 0.25)]
+    for n in range(2, 9):
+        cam = 'door' if L[n]['who'] == 'myrtle' else 'boys'
+        a = L[n]['start'] - 0.25 if n > 2 else out[-1][2]
+        b = L[n + 1]['start'] - 0.25 if n < 7 else (T['float'] - 0.25 if n == 7 else T['scream'])
+        if n == 8:
+            a = T['float'] - 0.25
+        if out[-1][0] == cam:
+            out[-1] = (cam, out[-1][1], b)
+        else:
+            out.append((cam, a, b))
+    s = T['scream']                               # the scream: Myrtle obstinate / Harry annoyed, back and forth
+    out += [('myrtle close', s, s + 1.8), ('harry close', s + 1.8, s + 3.5), ('door', s + 3.5, s + 5.0),
+            ('harry close', s + 5.0, s + 6.5), ('myrtle close', s + 6.5, s + 7.8), ('door', s + 7.8, T['thud'] + 0.9)]
+    out += [('boys', T['thud'] + 0.9, L[10]['start'] - 0.25), ('door', L[10]['start'] - 0.25, L[11]['start'] - 0.25),
+            ('boys', L[11]['start'] - 0.25, DUR)]
+    return out
+
+
+SHOTS = _speaker_shots()
+SHOT_CAST = {'hat': ['harry', 'mcg'], 'run': ['harry', 'ron'], 'door': ['myrtle', 'harry', 'ron'],
+             'boys': ['harry', 'ron'], 'harry close': ['harry'], 'myrtle close': ['myrtle']}
+LOOKS_AT = {'harry': 'myrtle', 'ron': None, 'myrtle': 'harry', 'mcg': 'harry'}
+PLAN = dict(CEIL=PL.CEIL, ROOMS=PL.ROOMS, OPENINGS=PL.OPENINGS, THINGS=PL.THINGS, PEOPLE=PL.PEOPLE, CAMS=PL.CAMS,
+            GROUPS=PL.GROUPS)
+# Rule 3: what makes each place recognisable (refs in references/terfwarts/), and how ours has it.
+BENCHMARK = [
+    dict(place='great hall', refs=['sorting-hat-scene-1', 'sorting-hat-scene-2', 'great-hall-empty-candles'], at=1.0,
+         items=[('floating candles', 'terfwarts_sets.hall: 46 candles at many depths'),
+                ('tall leaded windows at night', 'two pointed windows, mullions, lead diamonds'),
+                ('staff table with candles and goblets', 'white cloth edge, candlesticks, gold goblets'),
+                ('warm stone walls', 'stone courses in candlelight'), ('oak panelling', 'panelled dado'),
+                ('house banner', 'red and gold banner'), ('the patched Sorting Hat', 'terfwarts_cast.hat'),
+                ('the stool', 'off frame below (close-up)')]),
+    dict(place='corridor', refs=['corridor', 'trio-hbo-cloister'], at=T['run'] + 1.0,
+         items=[('fan vaulting', 'a fan on every shaft, ribs'), ('honey stone', 'STONE colours'),
+                ('tracery windows onto the garth', 'west wall, three lights, lawn and the far range'),
+                ('stone bench', 'east wall, the whole length'), ('flagstones', 'staggered flags'),
+                ('arch at the far end', 'pointed arch, lit'), ('attached shafts at every bay', 'every 2.6 m'),
+                ('blind tracery panels', 'three a bay over the bench')]),
+    dict(place="girls' bathroom door", refs=['door-1', 'door-2'], at=T['door'] + 1.0,
+         items=[('pointed arch with moulded rings', 'four rings'), ('clustered shafts and capitals', 'three a side'),
+                ('carved oak double door', 'two leaves, square panels with bosses'), ('ring handles', 'two'),
+                ('shrunk to a toilet door', '1.1 m wide (brief 6)'), ('GIRLS plaque', 'brass, on the top panel')]),
+]
+HOOK = ('Hook Text here', {'y': 300})              # Sam's wording to come; sits above the Hat (note 1)
+# The joke prop must stay clear: the GIRLS plaque in every door shot
+KEEP_CLEAR = [('GIRLS plaque', lambda t: SETS.plaque_box(SETS.DOOR, cam_for(t)) if shot_of(t) in ('door',) else None)]
+PROP_SIZES = []
+OUTFIT = {}
+HEIGHTS = dict(C.HEIGHTS)
+ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
+ALLOWED_CONTACTS = [('mcg.hand*', 'HAT', 0.0, T['hat_land'] + 0.15, 'McGonagall lowers the Hat'),
+                    ('HAT', 'harry', T['hat_land'], T['run'], 'the Hat sits on his head')]
+ALLOWED_POPS = [('myrtle', T['door'], T['door'] + 0.6, 'she comes out through the shut door (a ghost)')]
+SET_EXCLUDE = [('stone bench', 'nobody goes near it'), ('brass plaque', 'flat on the door')]
+TOUCHES = [('mcg.handL', 'HAT', 0.0, T['hat_land'], 'lowers it'), ('mcg.handR', 'HAT', 0.0, T['hat_land'], 'lowers it')]
+FREE_MOVES = []
+SOUND_SOURCES = {}
+EFFECTS = []
+JOKE_PROPS = []
+ORDER_SWAPS = []
 # ====================================================================================================================
 
-S, FY = 0.8, 1420                                 # people's scale, floor line
-NECK_Y = FY - F.SOLE_Y * S
-PX_M = 1.41 / (F.SOLE_Y * S)                       # metres per pixel (neck to soles: 1.41 m)
-XS = {w: 540 + p['at'][0] / PX_M for w, p in PLAN['PEOPLE'].items()}   # where each stands, from the plan
-BLACK_AT = DUR
-for ln in LINES:                                  # time each line to its recording when there is one
-    ln['_voice'], ln['_stretches'] = None, [(0.0, ln['end'] - ln['start'])]
-    if ln.get('audio') and os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + '.m4a')):
-        v = MA.line(ln['audio'])
-        ln['_voice'], ln['end'] = v, ln['start'] + len(v) / SR
-        ln['_stretches'] = MA.pauses(v, 0.12)
-TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
-             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in 'AB'}
-BLINKS = {w: F.blinks(7 if w == 'A' else 11, 0.5, DUR, talking=True) for w in 'AB'}
+import terfwarts_sets as SETS     # noqa: E402
+V = views
+MV = moves
+FY = 1420
 
 
 def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
 
 
+def _ramp(t, a, b):
+    return min(1.0, max(0.0, (t - a) / (b - a)))
+
+
+def _ease(u):
+    u = min(1.0, max(0.0, u))
+    return u * u * (3 - 2 * u)
+
+
+TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
+             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in WHO}
+BLINKS = {w: F.blinks(11 + i, 0.5, DUR, talking=True) for i, w in enumerate(WHO)}
+
+
+def _face(who, t, **kw):
+    shape = mouths.at(TRACK[who], t)
+    f = dict(mouth='set' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]))
+    f.update(kw)
+    if shape != 'rest' and 'mouth' in kw and kw['mouth'] != 'v:' + shape:
+        f['mouth'] = 'v:' + shape                 # speaking always shows the spoken shape
+    return f
+
+
+def talking(who, t):
+    return any(a <= t < b for a, b, _ in TRACK[who])
+
+
+# ------------------------------------------------------------------------------------------------ the people
+def harry_state(t):
+    """(yaw, joints, face) for Harry at the door. Panting on arrival, pleading (hands up) on line 4, turning to Ron on
+    lines 7 and 12, annoyed through the scream (Sam: annoyance 3)."""
+    sp = CAST['harry']
+    j = V.standing(sp)
+    face = _face('harry', t, look=0.0)
+    yaw = 0
+    if t < L[2]['end'] + 0.6:                     # panting: the body heaves, mouth open between words
+        k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)
+        j['bob'] = 7 * k * (0.5 + 0.5 * math.sin(2 * math.pi * t / 0.5))
+        j['lean'] = 7 * k
+        if not talking('harry', t):
+            face['mouth'] = 'agape'
+    if L[4]['start'] - 0.2 <= t < L[4]['end'] + 0.2:
+        j = PG.hands_up(sp)
+        face.update(brow_raise=6)
+    for n in (7, 12):
+        if L[n]['start'] - 0.3 <= t < L[n]['end'] + 0.4:
+            yaw = 45                              # to Ron, on his left as we see them from Myrtle
+            face.update(brows='fierce', lid=2)
+    if T['thud'] - SCREAM_LEN <= t < L[9]['end'] + 0.3 or L[10]['start'] <= t:
+        face.update(brows='fierce', lid=2, mouth=face['mouth'] if talking('harry', t) else 'line')
+    if T['scream'] + 5.0 <= t < T['thud'] + 0.9:
+        face.update(lid=3)                        # more fed up as it goes on
+    return yaw, j, face
+
+
+def ron_state(t):
+    """Ron: vacant, gibbering; looks at nothing (up and away); mouth hangs open when he isn't talking."""
+    sp = CAST['ron']
+    j = V.standing(sp)
+    face = _face('ron', t, look=0.6, look_v=-0.5, brow_raise=6)
+    if not talking('ron', t):
+        face['mouth'] = 'agape'
+    if t < L[2]['end'] + 0.6:
+        k = 1.0 - _ramp(t, L[2]['end'], L[2]['end'] + 0.6)
+        j['bob'] = 8 * k * (0.5 + 0.5 * math.sin(2 * math.pi * (t + 0.2) / 0.45))
+        j['lean'] = 8 * k
+    return 0, j, face
+
+
+def myrtle_state(t):
+    """Myrtle: (x, z, lift, alpha, joints, face). Out through the door at T['door']; lecturing (pointing at Harry) on
+    lines 3 and 5; drifting off to the side, bored, while the boys talk (6-7); floating round to block the doorway on
+    line 8, arms spread, and holding it through the scream; arms folded for line 10."""
+    sp = CAST['myrtle']
+    x, z, lift = PL.DOOR_X, 25.3, 0.3 + 0.04 * math.sin(2 * math.pi * t / 2.2)
+    u = _ease(_ramp(t, T['door'], T['door'] + 0.6))
+    z = 25.95 - 0.65 * u
+    alpha = u
+    j = V.standing(sp)
+    face = _face('myrtle', t, look=0.0, brows='fierce' if talking('myrtle', t) else None)
+    face = {k: v for k, v in face.items() if v is not None}
+    if L[3]['start'] - 0.2 <= t < L[3]['end'] or L[5]['start'] - 0.2 <= t < L[5]['end']:
+        j = V.standing(sp)                         # the gallery's pointing pose, mirrored: her left hand at Harry
+        sw = sp.get('shoulders', 150)
+        V.arm_to(j, 'L', (-(sw + 400), 60.0, 250.0), 'down', 'point')
+        V.arm_to(j, 'R', (sw - 4, 380.0, 10.0), 'out')
+    drift = _ease(_ramp(t, L[6]['start'] - 0.2, L[7]['end'])) * (1 - _ease(_ramp(t, T['float'], T['float'] + 1.6)))
+    x -= 0.7 * drift
+    lift += 0.25 * math.sin(math.pi * _ramp(t, T['float'], T['float'] + 1.6))   # an arc up and back down
+    if L[6]['start'] - 0.2 <= t < T['float']:
+        j = PG.arms_folded(sp)
+        face.update(look=-0.6, look_v=-0.4)        # bored, looking away
+    spread = _ease(_ramp(t, T['float'] + 1.2, T['float'] + 1.7))
+    if t >= T['float'] + 1.2 and t < L[10]['start'] - 0.2:
+        j = V.standing(sp)
+        for side, tgt in {'L': (-330.0, 40.0, 60.0), 'R': (330.0, 40.0, 60.0)}.items():
+            lo = {'L': (-80.0, 470.0, 40.0), 'R': (80.0, 470.0, 40.0)}[side]
+            V.arm_to(j, side, tuple(a + (b - a) * spread for a, b in zip(lo, tgt)), 'down', 'fist')
+        if T['scream'] <= t:
+            face.update(look=0.0, look_v=0.3, brows='fierce', lid=2)   # obstinate: chin up, eyes down at Harry
+    if t >= L[10]['start'] - 0.2:
+        j = PG.arms_folded(sp)
+    return x, z, lift, alpha, j, face
+
+
+def mcg_state(t, brim):
+    """McGonagall behind Harry: her hands on the Hat's brim as she lowers it, then back to her sides; she looks
+    down at him."""
+    sp = CAST['mcg']
+    j = V.standing(sp)
+    return j, dict(_face('mcg', t), look=0.3, look_v=0.8, mouth='set')
+
+
+def hat_drop(t):
+    """How far above its worn place the Hat is (pixels at Harry's scale), easing down until it lands."""
+    return 150 * (1 - _ease(_ramp(t, 0.0, T['hat_land'])))
+
+
+# ------------------------------------------------------------------------------------------------ the shots
+CAM0 = B.Cam(1.0, 540, 960)
+# Shot 1 (hat close): Harry seated, his face 300 px tall (rule 50), the Hat over his eyebrows, McGonagall behind on
+# the left, turned to him; the space above the Hat left for the Hook Text (note 1). A flat close-up: 1500 px a metre
+# at Harry, 760 at McGonagall (a metre further back). The subtitle sits over his chest, clear of his face.
+HAT_PXM, HAT_EYE_Y, HARRY_X, MCG_X, MCG_PXM = 1500.0, 1010.0, 580, 270, 760.0
+
+
 def cam_for(t):
     s = shot_of(t)
-    return B.Cam(1.0, 540, 960) if s == 'two' else B.Cam(2.0, XS[s], NECK_Y - 150 * S + 80)
+    if s == 'harry close':
+        hx, hy = _boys_head('harry', t)
+        return B.Cam(2.3, hx, hy + 70)
+    if s == 'myrtle close':
+        x, z, lift, *_ = myrtle_state(t)
+        d = SETS.DOOR.d_of(z)
+        mx = SETS.DOOR.P(SETS.DOOR.r_of(x), 0, d)[0]
+        my = SETS.DOOR.floor_y(d, lift) - 1.32 * SETS.DOOR.pxm(d)
+        return B.Cam(2.0, mx, my + 140)
+    return CAM0
 
 
-def state(who, t):
-    """Everything about one person at time t: look, arms, mouth, blink. Logs their eyeline for the check."""
-    c = CAST[who]
-    sp = dict(c, full=True, pose='custom', name=who)
-    rig = F.Rig(sp)
-    sp['arms'] = rig.pose('sides')
-    if who == 'A' and THUMP.b[0][0] <= t <= THUMP.b[-1][0]:
-        sp['arms']['R'] = rig.arm('R', THUMP.at(t), 'grip', 'out', strict=False)
-    shape = mouths.at(TRACK[who], t)
-    sp['mouth'] = 'set' if shape == 'rest' else 'v:' + shape
-    sp['blink'] = F.blinking(t, BLINKS[who])
-    sp['look'] = F.look_at(XS[who], XS[LOOKS_AT[who]])
-    sp['breath'] = F.breath(t, 4.0, 1.5, 0.0 if who == 'A' else 0.4)
-    sp['tilt'] = filmkit.shifts(t, seed=1 if who == 'A' else 2)   # never frozen: held poses, small quick shifts (no sway)
-    eye = (XS[who], NECK_Y - 150 * S)
-    filmkit.eyeline(who, t, eye, (sp['look'], 0.0), (XS[LOOKS_AT[who]], eye[1]))
-    return sp
+def _world(cam, q):
+    """A point from screen pixels (times SS, as Pen draws) back to the world (cam's units)."""
+    return (q[0] / B.SS - 540) / cam.z + cam.cx, (q[1] / B.SS - 960) / cam.z + cam.cy
 
 
-def mouths_seen(t):
-    """Every face on screen at t with its mouth as drawn, for the script and mouth audit (voices.py, rule 7):
-    (name, mouth, view in degrees (0 facing us), head height in pixels). Add anyone else drawn with a face."""
-    cam = cam_for(t)
-    return [(who, state(who, t)['mouth'], 0.0, 2 * CAST[who].get('hh', 90) * S * cam.z)
-            for who in 'AB' if visible(who, cam)]
+def _scale(pxm):
+    return pxm * V.M_PER_UNIT
 
 
-def visible(who, cam):
-    return abs(XS[who] - cam.cx) * cam.z <= 540 + 130 * S * cam.z
+SOLO = [None]                                     # the audit draws one person alone (and no set)
 
 
-def background(img, cam):
-    """The set, in Satire style: flat colour, one outline, hand-cut corners (never ruler-straight clip-art)."""
+def _draw(img, cam, who, x, floor, pxm, yaw, j, face, lift=0.0, t=0.0, head_props=()):
+    if SOLO[0] and SOLO[0] != who:
+        return None
+    return C.person(img, cam, x, floor, _scale(pxm), who, yaw, j, face, lift=lift, t=t, head_props=head_props)
+
+
+def shot_hat(img, cam, t):
+    if not SOLO[0]:
+        img.alpha_composite(SETS.cached('hall', cam, SETS.hall))
+    s_h = _scale(HAT_PXM)
+    sit = MV.seated(CAST['harry'])
+    s2 = s_h * C.HEIGHTS['harry'] / 1.75
+    floor = HAT_EYE_Y + 158 * s2 + (928 - 2 * sit['bob']) * s2    # (the cast's person() and views both drop by bob)
+    face = _face('harry', t, look=0.0, look_v=-0.9 if t < T['annoyed'] else -0.2)
+    if t >= T['annoyed']:
+        face.update(brows='fierce', lid=2, mouth='line', look_v=-0.2)      # annoyance 3 (Sam)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    drop = hat_drop(t)
+    brim = {}
+
+    def worn(p, view, sp, hx, hy):
+        k = sp['hw'] / 120
+        yell = talking('hat', t) and mouths.at(TRACK['hat'], t) not in ('rest', 'MBP')
+        by = hy - 84 - drop / s2
+        C.hat(p, hx, by, k, 'yell' if yell else 'rest')
+        brim['ends'] = [_world(cam, p.cam.P(hx - 170 * k, by - 4 * k)), _world(cam, p.cam.P(hx - 30 * k, by - 120 * k))]
+    if SOLO[0] in (None, 'harry'):
+        C.person(lay, cam, HARRY_X, floor, s_h, 'harry', 0, sit, face, t=t, head_props=[worn])
+    else:
+        C.person(Image.new('RGBA', img.size, (0, 0, 0, 0)), cam, HARRY_X, floor, s_h, 'harry', 0, sit, face, t=t,
+                 head_props=[worn])
+    # McGonagall: a metre behind him, standing, turned to him; one hand on the brim, one on the crown, until it lands
+    pm = MCG_PXM
+    s_m = _scale(pm)
+    mfloor = HAT_EYE_Y + 1.0 * pm
+    j, mface = mcg_state(t, brim)
+    s2m = s_m * C.HEIGHTS['mcg'] / 1.75
+    mny = mfloor - 928 * s2m
+    hold = t < T['hat_land'] + 0.15
+    hands = []
+    if hold:
+        hands = brim['ends']
+        for side, (tx, ty) in zip(('L', 'R'), hands):
+            V.arm_to(j, side, ((tx - MCG_X) / s2m, (ty - mny) / s2m, 90.0), 'down', 'fist')
+    _draw(img, cam, 'mcg', MCG_X, mfloor, pm, 45, j, mface, t=t)
+    img.alpha_composite(lay)
     p = B.Pen(img, cam)
-    box = lambda x0, y0, x1, y1, f, sd: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, sd), f, (24, 20, 22), 3)
-    box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
-    box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
-    box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
-    for wx in (150, 290):                                                # fill (rule 2): the building opposite,
-        box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
-    box(110, 800, 430, 840, (176, 174, 168), 7)
-    box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
-    box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
-    box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)          # the table A thumps
+    for tx, ty in (hands if SOLO[0] in (None, 'mcg') else ()):                          # her hands over the brim (rule S2)
+        p.ell(tx, ty, 26 * s2m, 26 * s2m, CAST['mcg']['skin'], B.INK, 2.6)
+
+
+def shot_run(img, cam, t):
+    v = SETS.RUN
+    if not SOLO[0]:
+        img.alpha_composite(SETS.cached('run', cam, lambda i, c: SETS.cloister(i, c, v)))
+    u = t - T['run']
+    dur = T['door'] - T['run']
+    out = []
+    for who, x0, lag in (('ron', PL.DOOR_X + 0.4, 0.25), ('harry', PL.DOOR_X - 0.35, 0.0)):
+        d = max(2.3, 8.0 - 2.15 * u + lag * 2.15)
+        out.append((d, who, x0))
+    for d, who, x0 in sorted(out, reverse=True):
+        pxm = v.pxm(d)
+        x = v.P(v.r_of(x0), 0, d)[0]
+        j = MV.gait(dict(CAST[who]), u + (0.15 if who == 'ron' else 0.0), 'run')
+        face = _face(who, t, mouth='agape' if who == 'ron' else 'set', brows='fierce' if who == 'harry' else None)
+        face = {k: vv for k, vv in face.items() if vv is not None}
+        _draw(img, cam, who, x, v.floor_y(d), pxm, 0, j, face, t=t)
+
+
+def _myrtle(img, cam, v, t, yaw):
+    x, z, lift, alpha, j, face = myrtle_state(t)
+    d = v.d_of(z)
+    if d <= 0.2 or alpha <= 0:
+        return
+    pxm = v.pxm(d)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    _draw(lay, cam, 'myrtle', v.P(v.r_of(x), 0, d)[0], v.floor_y(d, lift), pxm, yaw, j, face, t=t)
+    if alpha < 1:
+        a = lay.getchannel('A').point(lambda q: int(q * alpha))
+        lay.putalpha(a)
+    img.alpha_composite(lay)
+
+
+def shot_door(img, cam, t):
+    """Over the boys' shoulders at Myrtle and the shrunk door (the boys' backs big in the foreground)."""
+    v = SETS.DOOR
+    if not SOLO[0]:
+        img.alpha_composite(SETS.cached('door', cam, lambda i, c: SETS.cloister(i, c, v)))
+    if not SOLO[0]:
+        SETS.plaque_text(img, v, cam)
+    _myrtle(img, cam, v, t, 0)
+    arrive = _ease(_ramp(t, T['door'], T['halt']))
+    for who in ('harry', 'ron'):
+        x0, z0 = PL.PEOPLE[who]['at']
+        d = v.d_of(z0) - (1 - arrive) * 0.9
+        yaw, j, face = (harry_state if who == 'harry' else ron_state)(t)
+        _draw(img, cam, who, v.P(v.r_of(x0), 0, d)[0], v.floor_y(d), v.pxm(d), 180, j, face, t=t)
+
+
+def _boys_head(who, t):
+    v = SETS.BOYS
+    x0, z0 = PL.PEOPLE[who]['at']
+    d = v.d_of(z0)
+    s2 = _scale(v.pxm(d)) * C.HEIGHTS[who] / 1.75
+    return v.P(v.r_of(x0), 0, d)[0], v.floor_y(d) - (928 + 150) * s2
+
+
+def shot_boys(img, cam, t):
+    """Myrtle's view: Harry and Ron in front of her, the cloister running away behind them."""
+    v = SETS.BOYS
+    if not SOLO[0]:
+        img.alpha_composite(SETS.cached('boys', cam, lambda i, c: SETS.cloister(i, c, v)))
+    for who in sorted(('harry', 'ron'), key=lambda w: -v.d_of(PL.PEOPLE[w]['at'][1])):
+        x0, z0 = PL.PEOPLE[who]['at']
+        d = v.d_of(z0)
+        yaw, j, face = (harry_state if who == 'harry' else ron_state)(t)
+        _draw(img, cam, who, v.P(v.r_of(x0), 0, d)[0], v.floor_y(d), v.pxm(d), yaw, j, face, t=t)
+
+
+DRAW = {'hat': shot_hat, 'run': shot_run, 'door': shot_door, 'boys': shot_boys, 'harry close': shot_boys,
+        'myrtle close': shot_door}
 
 
 def picture(t):
@@ -187,27 +471,55 @@ def picture(t):
         return B.canvas((0, 0, 0))
     cam = cam_for(t)
     img = B.canvas()
-    background(img, cam)
-    for who in 'AB':
-        if visible(who, cam):
-            B.person(img, cam, XS[who], NECK_Y, S, state(who, t), t)
+    DRAW[shot_of(t)](img, cam, t)
     return img
 
 
 def draw_order(t):
-    """Rule 57: the names picture(t) draws, back to front (keep it in step with picture: sort effects, smoke and people
-    here the same way). Nothing may swap places in one frame within a shot unless it is in ORDER_SWAPS."""
+    """Rule 57: the names picture(t) draws, back to front."""
     if t >= BLACK_AT:
         return []
-    cam = cam_for(t)
-    return ['background'] + [w for w in 'AB' if visible(w, cam)]
+    s = shot_of(t)
+    return {'hat': ['background', 'mcg', 'harry', 'HAT'], 'run': ['background', 'ron', 'harry'],
+            'door': ['background', 'myrtle', 'harry', 'ron'], 'myrtle close': ['background', 'myrtle', 'harry', 'ron'],
+            'boys': ['background', 'ron', 'harry'], 'harry close': ['background', 'ron', 'harry']}[s]
+
+
+def chunks(text, most=9):
+    """A long line split into subtitles of a few words, at sentence and comma breaks where it can (a 7-row block
+    covered Myrtle). Each chunk: (words, its share of the line)."""
+    import re
+    parts = [p.strip() for p in re.split(r'(?<=[.,?!])\s+', text) if p.strip()]
+    out, cur = [], []
+    for p in parts:
+        w = p.split()
+        if cur and len(cur) + len(w) > most:
+            out.append(cur)
+            cur = []
+        while len(w) > most:
+            out.append(w[:most])
+            w = w[most:]
+        cur += w
+    if cur:
+        out.append(cur)
+    n = sum(len(c) for c in out)
+    return [(' '.join(c), len(c) / n) for c in out]
 
 
 def caption_at(t):
+    for a, b, text in [(c[1], c[2], c[0]) for c in CARDS]:
+        if a <= t < b:
+            return text
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
-            return ln['text']
+            a = ln['start']
+            for text, share in chunks(ln['text']):
+                b = a + share * (ln['end'] - ln['start'])
+                if t < b:
+                    return text
+                a = b
+            return text
     return None
 
 
@@ -215,9 +527,7 @@ def overlay(img, t):
     if t < BLACK_AT:
         c = caption_at(t)
         if c:
-            PP.caption(img, c)
-        if t < 2.0:
-            B.title_lines(img, TITLE, **TITLE_AT, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
+            PP.caption(img, c, italic=c == CARDS[0][0])
     return img
 
 
@@ -225,7 +535,13 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
+SFX = {'scream': os.path.join(HERE, 'audio', 'terfwarts-scream.mp3'),   # Sam's picks (3 Nov)
+       'thud': os.path.join(HERE, 'audio', 'terfwarts-thud.mp3'),
+       'run': os.path.join(HERE, 'audio', 'terfwarts-run.mp3')}
+
+
 def soundtrack(stems=False):
+    from burnham_film import load
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)        # no room tone: white noise under a film comes up as a hiss (Sam, 19 Oct)
     for ln in LINES:
@@ -233,9 +549,15 @@ def soundtrack(stems=False):
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
-    # Sound effects go in by the moment they really start, not the start of their file, e.g.
-    #   filmkit.place(rest, load('source/audio/NAME-slam.mp3'), at=1.6, sr=SR)   (lands the slam on the contact frame)
-    # Outdoor recordings and ambience: cut wind rumble (sound_questions asks about it).
+    scream = load(SFX['scream'])                  # through the door: muffled a little, cut off dead by the thud
+    s0 = int(0.45 * SR)
+    seg = scream[s0:s0 + int(SCREAM_LEN * SR)].copy()
+    seg[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
+    filmkit.place(rest, seg, at=T['scream'], sr=SR, gain=0.8)
+    filmkit.place(rest, load(SFX['thud']), at=T['thud'], sr=SR, gain=1.0)
+    run = load(SFX['run'])[:int((T['door'] - T['run'] + 0.6) * SR)].copy()
+    run[-int(0.4 * SR):] *= np.linspace(1, 0, int(0.4 * SR))      # fades as they skid to a halt
+    filmkit.place(rest, run, at=T['run'], sr=SR, gain=0.7)
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:                              # -16 LUFS, levelled gently, never squashed by more
@@ -249,7 +571,7 @@ def checks():
     """Plan checks: seconds. Raises on the first batch of faults; prints the subtitles to proofread."""
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     windows = [(ln['start'] + a, ln['start'] + b) for ln in LINES for a, b in ln['_stretches']]
-    faults = E.check_mouths(sorted(x for w in 'AB' for x in TRACK[w]), windows)
+    faults = E.check_mouths(sorted(x for w in WHO for x in TRACK[w]), windows)
     if any(ln['_voice'] is not None for ln in LINES):
         _, voice, rest = soundtrack(stems=True)
         faults += filmkit.voice_balance(voice, rest, SR, windows)
@@ -260,7 +582,6 @@ def checks():
                 s = int(ln['start'] * SR)
                 raw[s:s + len(ln['_voice'])] += ln['_voice'][:n - s]
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
-    faults += title_check()
     mix, voice, rest = soundtrack(stems=True)
     faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice)  # no steady hiss, heard only between lines (rule 60)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
@@ -271,116 +592,70 @@ def checks():
 
 
 # ------------------------------------------------------------------------------------------------ the audit
-# audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
-# (everyone at one distance, on the floor line), so its world is the frame in metres. scene(t) gives the people and
-# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 12):
-# list only what to leave out, SET_EXCLUDE = [(name, why)]. A film with a 3D set and a
-# camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
-# copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
-# long thing with .along).
-
-
-def project(cam, P):
-    X = P[:, 0] / PX_M + 540
-    Y = FY - P[:, 1] / PX_M
-    return (X - cam.cx) * cam.z + 540, (Y - cam.cy) * cam.z + 960, np.full(len(P), 5.0)
-
-
+# audit.py (rules 5, 6): everyone where the plan puts them (Myrtle as she floats), the set from PLAN by itself.
 def scene(t):
     import audit
-    import clipcheck as CC
-    cam = cam_for(t)
+    s = shot_of(t)
     out = []
-    for who in 'AB':
-        if visible(who, cam):
-            x = (XS[who] - 540) * PX_M
-            sol = audit.simple(who, x, 0.0)
-            if who == 'A':                                # his thumping hand (its target is in his own units)
-                hx, hy = THUMP.at(t)
-                sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
-            out.append(audit.Thing(who, sol))
-    return out                                            # the walls, the table and every THING: from PLAN (rule 12)
-
-
-def title_check():
-    """The title must not cover anyone: the title and each person alone, on a frame where the title shows."""
-    t = 1.0
-    title = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-    B.title_lines(title, TITLE, **TITLE_AT)
-    people = {}
-    for who in 'AB':
-        if visible(who, cam_for(t)):
-            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
-            people[who] = lay
-    return filmkit.title_clear(title, people)
+    if s == 'hat':
+        x, z = PL.PEOPLE['harry hall']['at']
+        out.append(audit.Thing('harry', audit.simple('harry', x, z, C.HEIGHTS['harry'], sitting=True)))
+        return out
+    for who in SHOT_CAST[s]:
+        if who == 'myrtle':
+            x, z, lift, alpha, *_ = myrtle_state(t)
+            if alpha > 0.5:
+                out.append(audit.Thing('myrtle', audit.simple('myrtle', x, z, C.HEIGHTS['myrtle'], base=lift)))
+        elif s != 'run':
+            x, z = PL.PEOPLE[who]['at']
+            out.append(audit.Thing(who, audit.simple(who, x, z, C.HEIGHTS[who])))
+    return out
 
 
 def audits():
-    """The general audit: each person alone over every frame they are on screen, the actions on every frame,
-    the eyelines. Returns faults."""
+    """The general audit: each person alone over every frame they are on screen; the eyelines. Returns faults."""
     def alone(who):
         def draw(t):
-            lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
-            B.person(lay, cam_for(t), XS[who], NECK_Y, S, state(who, t), t)
-            return lay
+            SOLO[0] = who
+            try:
+                lay = Image.new('RGBA', (B.W * B.SS, B.H * B.SS), (0, 0, 0, 0))
+                DRAW[shot_of(t)](lay, cam_for(t), t)
+                return lay
+            finally:
+                SOLO[0] = None
         return draw
     actors = {}
-    for who in 'AB':
+    for who in ('harry', 'ron', 'myrtle', 'mcg'):
         for shot, a, b in SHOTS:
-            ts = [i / FPS for i in range(int(a * FPS), int(b * FPS)) if visible(who, cam_for(i / FPS))]
-            if ts:
-                actors[f'{who} [{shot}]'] = (ts, alone(who))
+            if who in SHOT_CAST[shot]:
+                ts = [i / FPS for i in range(int(a * FPS), int(b * FPS))]
+                if ts:
+                    actors[f'{who} [{shot} {a:.1f}]'] = (ts, alone(who))
     filmkit.EYES.clear()
     faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
-    faults += filmkit.check_eyelines()
-    rig = F.Rig(dict(CAST['A'], full=True, pose='custom'))
-
-    def arm_rule(target):
-        el, wr = rig.arm('R', target, 'grip', 'out', strict=False)[:2]
-        return filmkit.check_joints({'sh': rig.shoulder('R'), 'el': el, 'wr': wr, 'head': (0, -150)},
-                                    [('angle', 'sh', 'el', 'wr', 25, 180), ('apart', 'wr', 'head', 90),
-                                     ('side', 'el', 'sh', 0)])
-    faults += THUMP.audit(arm_rule, label='A thumps the table')
     faults += moves.audit()                                  # the movement library's own checks (gaits, poses)
     return faults
-
-
-def cast_sheet(out):
-    """Everyone side by side, with the body landmarks (waist, hips, knee) drawn across to check the clothes against,
-    and a 1.75 m person and a 1 m ruler for scale (sizes.scale_ref). Add every OTHER view each character appears in
-    (from above, a close-up, mid-action), any new prop beside the scale person, and for the film's key reaction a
-    numbered strength sheet (1 = slight, 6 = huge) for Sam to pick from."""
-    import landmarks
-    import sizes
-    from PIL import ImageDraw
-    img = Image.new('RGBA', (1080, 1080), (230, 226, 220, 255))
-    for i, who in enumerate('AB'):
-        sp = dict(CAST[who], full=True, pose='custom')
-        sp['arms'] = F.Rig(sp).pose('sides')
-        B.person(img, B.Cam(1.0, 540, 960), 300 + 480 * i, 260, 0.62, sp, 0.0)
-    d = ImageDraw.Draw(img)
-    landmarks.draw(d, 540, 260, 0.62, 1000)
-    sizes.scale_ref(d, 520, 260 + 928 * 0.62, 0.62 / landmarks.V.M_PER_UNIT)
-    img.convert('RGB').save(out)
 
 
 def LINE_SUBJECTS():
     """Each of the cast alone, large, for the line-work check (linecheck.py)."""
     def one(who):
         def d(im):
-            sp = dict(CAST[who], full=True, pose='custom')
-            sp['arms'] = F.Rig(sp).pose('sides')
-            B.person(im, B.Cam(1.0, 540, 960), 540, 420, 1.45, sp, 0.0)
+            C.person(im, B.Cam(1.0, 540, 960), 540, 1800, 1.45, who)
         return d
-    return [(who, one(who)) for who in CAST]
+    return [(who, one(who)) for who in C.ORDER]
 
 
 def main():
     a = sys.argv[1:]
     if a[0] == 'cast':
-        import terfwarts_cast
-        terfwarts_cast.sheet(a[1])
+        C.sheet(a[1])
+    elif a[0] == 'shots':
+        for s in SHOTS:
+            print(f'{s[0]:13s} {s[1]:6.2f} {s[2]:6.2f}')
+        for ln in LINES:
+            print(ln['n'], ln['who'], round(ln['start'], 2), round(ln['end'], 2))
+        print({k: round(v, 2) for k, v in T.items()}, 'DUR', round(DUR, 2))
     elif a[0] == 'stills':
         B.SS = 1
         os.makedirs(a[1], exist_ok=True)
@@ -406,17 +681,6 @@ def main():
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
 import limbs                     # noqa: E402
 limbs.install(B)                 # natural arms and legs: one outline at the shoulder, smooth shaped legs (Cry Minister)
-# Movement (guides/archive/movement-system-plan.md, guides/reference-pack.md), built to order: use only what the script needs.
-#   views.person(img, cam, x, y, s, sp, t, yaw, pose)   anyone from any angle (front, three-quarter, side, back)
-#   moves.gait / travel / pace, moves.pose(sp, 'arms_folded'), moves.sit_down / stand_up, moves.punch / kick / sword /
-#   hit_react / fall, moves.driving / car_in / car_out; stage.Stage(series.Room(...)) for people on a perspective floor.
-#   Turns: the straight 180 (one drawing to the other). No sound effects unless the script asks.
-#   Poses: pick from guides/pose-gallery.md (rule 42); hands: handcheck.py runs in pre-flight (rule 41); looks with
-#   views.person: filmkit.eyeline(who, t, eye, look, target, aim=YAW_TO_TARGET, drawn=j2, at=NAME) (rule 43).
-import views                     # noqa: E402,F401
-import moves                     # noqa: E402,F401
-import stage                     # noqa: E402,F401
-import perform                   # noqa: E402,F401  natural performance: follow-through, beat bounce, varied faces
 
 if __name__ == '__main__':
     main()

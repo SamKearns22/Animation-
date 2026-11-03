@@ -1,15 +1,15 @@
 # Notes for Terfwarts (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 41 (every arm ends in a hand), 18 (the Hat's face and GIRLS plaque 40 px+), 10 (Hook Text clear of the Hat's face)
-- **Done:** cast approved 3 Nov (Sam: Y, annoyance 3, strap removed; sheet (`review/terfwarts-cast.jpg`): four turnarounds at real heights, McGonagall with the Hat, the run, Myrtle blocking, Harry's annoyance 1-6, faces).
-- **Spent against the estimate (rule 55):** Sam's usage 58% at the start of the cast stage (target 10% for the film): well over; keep every step lean.
-- **Next:** stills per shot, Opus medium, new chat. Sam types: "Terfwarts: make the stills".
-- **Needs Sam:** the scream and splat sounds (before the animatic).
-- **Read:** `guides/satire.md` Start step 4; rulebook Building table; `terfwarts_cast.py` MAP only.
-- **Lost / Added:** Lost: Ron's strap (Sam). Added (cast): Myrtle's blue-and-bronze tie, a stand-in stool.
+- **Rules that bite next:** 41 (every arm ends in a hand), 18 (the Hat's face and GIRLS plaque 40 px+: both pass on the stills), 10 (Hook Text clear of the Hat: 20 px on the stills, raise it)
+- **Done:** stills sent 3 Nov (`review/terfwarts-stills.jpg`, 23 frames, every shot; `review/terfwarts-shot1-hook.jpg` full size with the Hook Text). Sets painted (Great Hall, cloister both ways, the shrunk door). Sam's three sounds filed (scream, thud, run).
+- **Spent against the estimate (rule 55):** the stills (sets + staging) in one chat, within the paintings' 4% + moves' 3%.
+- **Next:** Sam's notes on the stills, then the check sheet and the animatic: Opus medium, new chat. Sam types: "Terfwarts: notes on the stills" (or "Terfwarts: animatic" if Y).
+- **Needs Sam:** Y/N on the stills; the Hook Text wording; the 12 voice recordings (before the animatic).
+- **Read:** `guides/satire.md` "Before every render"; rulebook Checks table; `terfwarts.py` MAP only.
+- **Lost / Added (stills):** see Notes 3-4.
 - **Open rule requests:** none
-- **For Claude:** cast in `source/terfwarts_cast.py` (`person(img, cam, x, floor, s, who, yaw, j, extra, lift, head_props)`, `hat(p, cx, by, k, mood)`, `worn_hat(mood)`, Myrtle via `ghost`). Harry's annoyance in shot 1 = sheet face 3: brows='fierce', lid=2, mouth='line'. `source/terfwarts.py` is the template copy: `cast` routes to the cast file; its STORY is still the template's. Harry's eyebrows show under the Hat only with the fringe at 0.46 hh.
+- **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`); `terfwarts_sets.py` paintings + `View` cameras (RUN, BOYS = Myrtle's view, DOOR); `python3 source/terfwarts.py shots` prints the timeline. Seated Harry: the cast's person() and views both drop by bob, so the hat shot passes floor with 2 x bob. The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO draws one person alone) but not yet run.
 
 ## The joke (Sam, 3 Nov)
 JK Rowling has spent years attacking the trans community and has put gender-exclusionary ideas into HBO's new Harry
@@ -52,12 +52,12 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | 12 | Ron: "I don't like spiders, Harry." | |
 | 13 | Harry (annoyed): "Ron, get it together, I'm sick of you already." | |
 | 14 | Myrtle floats around to block the doorway: "When you throw open the door of a bathroom or changing room to any man so-called 'trying to save the life' of a woman, then you throw it open to anyone wanting to come inside" | |
-| 15 | A scream, suddenly cut off by a heavy splat | |
+| 15 | A scream, suddenly cut off by a heavy splat (Sam, 3 Nov: a thud, his recording; the scream drawn out, cutting between Myrtle and annoyed Harry) | |
 | 16 | Harry: "Well it's not problem anymore Myrtle as she's f****** dead now." (six asterisks; wording as written, typo query asked) | |
 | 17 | Myrtle: "Dead is a thought-terminating cliché" | |
 | 18 | Ron: "I don't like them, Harry." | |
 | 19 | Harry: "I don't like you, Ron." | |
-| 20 | Sound effects: female scream, splat (and no others) | |
+| 20 | Sound effects: female scream, splat (and no others) (Sam, 3 Nov: scream, thud, and running for the boys) | |
 | 21 | Ron is a gibbering fool who doesn't understand what's happening | |
 | 22 | Ends with the CranbriJoos sign-off (CLAUDE.md) | |
 | 23 | Note 1: shot 1 brought forward so Harry and the Hat fill the frame; no long shots of the hall | |
@@ -86,6 +86,8 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 4 | all | stills | My choices on the stills, for Sam's yes: Myrtle drifts off bored (arms folded) while Ron and Harry talk, so she can float round back to the door (brief 14); arms folded for "Dead is a thought-terminating cliché"; Harry's hands up on line 4; McGonagall lets go once the Hat lands and stays behind him; the reverse shots are Myrtle's own view (Lost: her see-through back in them); long lines split into short subtitles; about 68 s long (estimated) | sent with the stills |
+| 3 | scream | stills | Sam's sounds: thud (troll kills Hermione behind the door), running for Harry and Ron, the drawn-out scream; lengthen the scream, cutting between Myrtle floating obstinately and Harry annoyed | done on the stills: 8.6 s of scream, six cuts (Myrtle close, Harry close, wide, Harry close, Myrtle close, wide), cut off dead by the thud on the wide; running under the run shot |
 | 2 | 1 | comp | McGonagall puts the Hat onto Harry (HBO reference sent) | open: planned as one shot, she stands behind Harry's shoulder and lowers the Hat (new kind) |
 | 1 | 1 | comp | Bring shot 1 forward: Harry and the Hat fill the frame; no hall wide; the hook is "BIOLOGICAL MALE" in 3 s | done on the sheet: hall wide cut, the close-up opens the film (new kind) |
 

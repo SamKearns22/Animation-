@@ -4,8 +4,9 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 `story/archive.md`; their notes: `notes/archive/`.
 
 ## Films
-- **Terfwarts (3 Nov):** cast approved (annoyance 3); next the stills (Opus medium,
-  new chat). Notes: `notes/terfwarts.md`. Waiting on Sam for the scream and splat sounds.
+- **Terfwarts (3 Nov):** stills sent (sets painted, every shot staged, Sam's sounds in).
+  Next: Sam's notes on the stills, then the animatic (Opus medium, new chat). Notes: `notes/terfwarts.md`.
+  Waiting on Sam: Y/N on the stills, the Hook Text, the 12 voice recordings.
 
 ## System audit (2 Nov)
 - Sam's audit of the whole system: done (A1-A14, M1-M7; A7, the doubled checks, needed no change: on a closer look they never run together on one film). The rulebook is now one file,
