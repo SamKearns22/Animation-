@@ -7,7 +7,8 @@
 - **Needs Sam:** Y/N on the stills; the Hook Text; the 12 voice recordings (he is reworking the dialogue).
 - **Read:** `guides/satire.md` "Before every render"; rulebook Checks table; `terfwarts.py` MAP only.
 - **Lost / Added:** see Notes 4-8.
-- **Final sent 3 Nov (16:52).** Open rule requests (Sam): (a) hook texts and sign-offs always go into animatics, propose wording at project end; (b)  (Sam, 3 Nov) every animatic carries the Hook Text and the CranbriJoos sign-off: propose the wording at the END of this project, wait for his yes;  no three-quarter views (note 7, Sam: "always the worst looking one"): proposed 3 Nov, waiting for his yes.
+- **PROJECT CLOSED (Sam, 3 Nov). Final usage 67% (plan estimate was about 19% of a week: build only, no notes rounds).** Final sent 16:52, `animations/terfwarts-vertical.mp4`.
+- **Open rule requests (nothing written until Sam says yes):** (a) hook texts and sign-offs always go into animatics (Sam, 3 Nov); (b) no three-quarter views (Sam, note 7). Proposals for quality and usage rules were sent 3 Nov: waiting for his numbers.
 - **For Claude:** `terfwarts.py` STORY is the film (LINES by number with `est` until `audio`; T = beats; `_speaker_shots`; POSES/posed for the boys); `terfwarts_sets.py` paintings, `View` cameras (RUN, BOYS = Myrtle's view, DOOR), `sconces` drawn per frame. Seated Harry: the cast's person() and views both drop by bob (hat shot passes 2 x bob). The mix peaks 1.37 with no voices (unmastered): set effect gains at the animatic. `check`/audits adapted (SOLO) but not yet run. handcheck (3 Nov): 30 faults to fix before the animatic: the run (hands pushed into the robe sleeves every step: sleeves or hand offset), door shots seen from behind (Ron's palms_together and Harry's hands_up/hips hidden by their backs: flag as tucked or pick poses that show), McGonagall 0.25 s. When the dialogue changes, LINES text and `est` change; line numbers drive the shots and poses.
 
 ## The joke (Sam, 3 Nov)
