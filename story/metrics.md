@@ -131,3 +131,12 @@ Total play time 82 h 07 m. Likes are 11.5% of views and shares 3.1%, both high; 
 the "films over 45 s rarely get watched to the end" line above. For comparison, Halo No-No (posted Thu 29 Oct, 4:18pm,
 43.9 s) had 214 views, 12.3 s average watch (28%), 10% to the end, 14 likes, 6 shares after about 2.5 h, and Sam
 reported it blocked from the algorithm (30 Oct; not confirmed; see the chat for what to check in Account check).
+
+## Snapshot: Tue 3 Nov 2026, 22:06 (TERFwarts, about 5 h after posting)
+
+| Film | Posted | Length | Views | Avg watch | Watched to end | Likes | Comments | Shares | Saves | New followers |
+|---|---|---|---|---|---|---|---|---|---|---|
+| TERFwarts | Tue 3 Nov, 5:02pm | 89.34 s | 7,294 | 25.5 s (29%) | 9.34% | 750 | 11 | 102 | 62 | 8 |
+
+Total play time 50 h 47 m 34 s. Per 1,000 views: likes 103, shares 14.0, saves 8.5, comments 1.5, followers 1.1.
+Still rising (only 5 h old), so every figure can move. Reading is in the chat of 3 Nov.
