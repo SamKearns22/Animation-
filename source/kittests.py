@@ -340,6 +340,24 @@ def render_leaves_no_old_file():
     return refused and not os.path.exists(out), f'refused: {refused}; old file gone: {not os.path.exists(out)}'
 
 
+@test
+def incremental_preflight_fingerprints():
+    """Rule 59 as amended 3 Nov (Sam: a small fix should not re-check the whole film): the film's settings fingerprint is
+    the same run to run, changes when an allow-list changes, and the check-code fingerprint exists; so an incremental
+    pre-flight can trust an earlier clean run only when nothing it depends on has changed."""
+    import preflight as P
+    import types
+    film = types.SimpleNamespace(HANDS_OK=[('a', '*', 'no hand', 0, 1, 'x')], SHOTS=[('s', 0, 1)], NAME='x',
+                                 CALLBACK=lambda: 1, LINES=[{'n': 1}])
+    a, b = P._config_hash(film), P._config_hash(film)
+    film.HANDS_OK.append(('b', '*', 'no hand', 0, 1, 'y'))
+    c = P._config_hash(film)
+    film.CALLBACK = lambda: 2                        # a function's memory address never counts
+    d = P._config_hash(film)
+    return a == b and a != c and c == d and bool(P._checks_hash()), \
+        f'same twice: {a == b}; allow-list change seen: {a != c}; stable over function addresses: {c == d}'
+
+
 # ------------------------------------------------------------------------------------------------ running them
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''

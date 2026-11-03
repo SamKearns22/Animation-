@@ -283,6 +283,9 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 **One full pre-flight per round (rule 67):** make every fix first; run `python3 source/preflight.py NAME OUT_DIR --text`
 (the quick check: script, mouths, subtitles, shot lengths, in seconds, no frame drawn) until it is clean; then the full
 pre-flight once, with the render after it in the same background chain (`&&`). It never writes a pass stamp.
+**The full pre-flight is incremental (rule 59):** the first run on a film (about 2 minutes) fingerprints every frame;
+after that a small fix re-checks only the changed frames and takes about 75 seconds, nothing changed about 65.
+It says "incremental" or "full (why)" in its first lines; `--full` forces the full pass.
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit
 alone, seconds to minutes). It runs only the checks for what the film's `HAS` lists, and names the rest. **The render
 lock (rule 59):** an animatic or final will not start unless pre-flight passed on the code as it is now (any code

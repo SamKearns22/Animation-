@@ -30,7 +30,9 @@ Usage:
     python3 preflight.py patriots2 OUT_DIR --audit    list every fault (for a finished film)
 """
 import fnmatch
+import hashlib
 import importlib
+import json
 import os
 import re
 import sys
@@ -159,13 +161,77 @@ def cast_faults(film, roster):
 
 def _sheet_tile(k):
     t = k + 0.5
-    im = _FILM.frame_image(t).convert('RGB').resize((B.W, B.H))
+    try:
+        im = _FILM.frame_image(t).convert('RGB').resize((B.W, B.H))
+    except Exception:                           # a drawing the figure guard stopped: a grey tile (the pass reports it)
+        im = Image.new('RGB', (B.W, B.H), (90, 90, 90))
     d = ImageDraw.Draw(im, 'RGBA')
     for box in ((0, 0, 1080, SAFE[1]), (0, SAFE[3], 1080, 1920), (SAFE[2], 864, 1080, SAFE[3])):
         d.rectangle(box, fill=(255, 0, 0, 60))
     d.rectangle(SAFE, outline=(0, 255, 0, 255), width=5)
     d.text((20, 1840), f'{t:.1f} s', font=ImageFont.truetype(B.SANS, 60), fill=(255, 255, 255))
     return im.resize((216, 384))
+
+
+# --- incremental frame passes (rule 59 as amended 3 Nov, Sam: a small fix should not re-check the whole film) --------
+# Every frame is fingerprinted (its picture at the check size). A later run redraws and re-checks only the frames
+# whose fingerprint changed (and a few round them), and only the bodies whose shots they fall in. It falls back to the
+# full pass whenever it cannot be sure: no earlier run, an earlier run that found a frame-level fault, any change to the
+# check code, any change to the film's allow-lists and settings, or a change in length. The text and sound checks
+# (script, mouths, subtitles, plan, shared checks) always run in full: they take seconds. `--full` forces the full pass.
+CHECK_FILES = ('preflight.py', 'handcheck.py', 'audit.py', 'clipcheck.py', 'kitchecks.py', 'filmkit.py', 'figure.py',
+               'viewchecks.py', 'housestyle.py', 'plan.py', 'benchmark.py', 'sets.py', 'linecheck.py', 'landmarks.py',
+               'hookcheck.py', 'musiccheck.py', 'sizes.py', 'voices.py', 'report.py', 'mounts.py', 'collisions.py')
+
+
+def _checks_hash():
+    h = hashlib.sha1()
+    for f in CHECK_FILES:
+        path = os.path.join(ROOT, 'source', f)
+        if os.path.exists(path):
+            h.update(f.encode())
+            with open(path, 'rb') as fh:
+                h.update(fh.read())
+    return h.hexdigest()
+
+
+def _plain(v):
+    if isinstance(v, (set, frozenset)):
+        return sorted(map(repr, v))
+    if isinstance(v, dict):
+        return {repr(k): _plain(x) for k, x in sorted(v.items(), key=lambda kv: repr(kv[0]))}
+    if isinstance(v, (list, tuple)):
+        return [_plain(x) for x in v]
+    return v
+
+
+def _config_hash(film):
+    """The film's own settings and allow-lists (HANDS_OK, ALLOWED, TOUCHES, SHOTS...): a change in any of them can
+    change what a check says about a frame that did not itself change. (Pictures cover the rest; one-letter names and
+    the heavy line, mouth and blink tables are left out: pictures and the text checks cover them.)"""
+    h = hashlib.sha1()
+    for k in sorted(dir(film)):
+        if k.isupper() and len(k) > 1 and not k.startswith('_') and k not in ('LINES', 'TRACK', 'BLINKS'):
+            v = getattr(film, k)
+            if isinstance(v, (list, tuple, dict, set, frozenset, str, int, float, bool, type(None))):
+                h.update(k.encode())
+                h.update(re.sub(r' at 0x[0-9a-fA-F]+', '', repr(_plain(v))).encode()[:400000])   # (no memory addresses)
+    return h.hexdigest()
+
+
+def _frame_hash(i):
+    B.SS = 1
+    t = i / _FPS
+    try:
+        pic = _FILM.picture(t) if hasattr(_FILM, 'picture') else _FILM.frame_image(t)
+    except Exception as e:                      # the figure guard stops a bad drawing: that frame is "changed" for good,
+        return 'ERROR ' + str(e)[:60]           # and the normal pass below draws it again and reports the fault
+    return hashlib.md5(pic.tobytes()).hexdigest()[:16]
+
+
+def _frames_path(name):
+    import film_engine
+    return os.path.join(film_engine.PASSES, f'{name}-frames.json')
 
 
 def _text_only(film, problems, end, fps):
@@ -284,9 +350,39 @@ def main():
     _FILM, _FPS = film, fps
     drawn = []
     from multiprocessing import Pool
+    n_frames = int(end * fps)
+    n_text = len(problems)                      # faults after this are the frame-level ones (the stamp's "clean")
+    prev, incremental, changed = None, False, list(range(n_frames))
+    stamp_ok = not audit and '--full' not in sys.argv
     with Pool(os.cpu_count()) as pool:
+        hashes = None
+        if stamp_ok:                            # fingerprint every frame: a plain picture, a quarter of a probed one
+            hashes = pool.map(_frame_hash, range(n_frames), chunksize=4)
+            try:
+                with open(_frames_path(name)) as fh:
+                    prev = json.load(fh)
+            except (OSError, ValueError):
+                prev = None
+            chk, cfg = _checks_hash(), _config_hash(film)
+            incremental = bool(prev and prev.get('clean') and prev.get('checks') == chk and prev.get('config') == cfg
+                               and prev.get('n') == n_frames and prev.get('fps') == fps)
+            if incremental:
+                changed = [i for i in range(n_frames) if hashes[i] != prev['hashes'][i]]
+                near = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))}
+                print(f'incremental pre-flight: {len(changed)} of {n_frames} frames changed since the last clean run; '
+                      f're-checking {len(near)} (the rest were clean then and are unchanged). --full re-checks all.')
+            elif prev:
+                why = ('the last run found a frame-level fault' if not prev.get('clean') else
+                       'the check code changed' if prev.get('checks') != chk else
+                       'the film\'s settings or allow-lists changed' if prev.get('config') != cfg else
+                       'the length changed')
+                print(f'full pre-flight (not incremental: {why})')
+            else:
+                print('full pre-flight (no earlier clean run to compare with)')
+        todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))} if incremental else None
         hands = []
-        for t, err, log, dr, turned, hs in pool.imap(_check_frame, range(0, int(end * fps), 3), chunksize=4):
+        first = [i for i in range(0, n_frames, 3) if todo is None or i in todo]
+        for t, err, log, dr, turned, hs in pool.imap(_check_frame, first, chunksize=4):
             F.LOG.extend(log)
             drawn += dr
             hands += hs
@@ -295,7 +391,7 @@ def main():
                 problems.append(f'{t:6.2f} s: {err[0]}')
                 if not err[1]:
                     print(err[2])
-        rest = [i for i in range(int(end * fps)) if i % 3]
+        rest = [i for i in range(n_frames) if i % 3 and (todo is None or i in todo)]
         for hs in pool.imap(_hands_frame, rest, chunksize=4):   # the hands on every frame (rule 41)
             hands += hs
     if people:
@@ -304,7 +400,18 @@ def main():
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
-        problems += film.audits()
+        import filmkit
+        if incremental:                         # only the bodies in shots that hold a changed frame (a second round)
+            filmkit.ONLY_FRAMES = {j for i in changed for j in range(max(0, i - 12), min(n_frames, i + 13))}
+        try:
+            problems += film.audits()
+        finally:
+            filmkit.ONLY_FRAMES = None
+    if stamp_ok and hashes is not None:         # the fingerprints for the next run; "clean" = no frame-level fault
+        os.makedirs(os.path.dirname(_frames_path(name)), exist_ok=True)
+        with open(_frames_path(name), 'w') as fh:
+            json.dump({'checks': _checks_hash(), 'config': _config_hash(film), 'n': n_frames, 'fps': fps,
+                       'hashes': hashes, 'clean': len(problems) == n_text}, fh)
     # 3. captions
     f = ImageFont.truetype(B.SANS, 50)
     seen = {}

@@ -19,6 +19,7 @@ wrong place). These look at the RESULT instead, so they catch faults nobody thou
   shifts / glance    idle life as held poses with quick shifts (never a looping sway); eyes that jump, never glide.
 Used by preflight.py through a film's own audits() and checks(). See guides/preflight.md.
 """
+import os
 import math
 
 import numpy as np
@@ -53,13 +54,47 @@ def silhouette_audit(actors, fps=12, allow=None, still_ok=(), min_piece=0.03, po
     allow: [(name, t0, t1, why)] windows where it is on purpose: a fast move (a body thrown across the room) or a
     deliberate dead-still hold (a stunned stare). Never cure 'frozen' with a looping sway or tremble."""
     allow = allow or []
+    job = dict(allow=allow, still_ok=still_ok, min_piece=min_piece, pop=pop, area_jump=area_jump, frozen_s=frozen_s,
+               fps=fps)
+    names = list(actors)
+    if ONLY_FRAMES is not None:                          # an incremental pre-flight: only bodies with a changed frame
+        names = [n for n in names if any(round(t * fps) in ONLY_FRAMES for t in actors[n][0])]
+    if len(names) > 1 and (os.cpu_count() or 1) > 1:     # each body is judged alone: one processor each (Terfwarts,
+        global _SIL                                      # 3 Nov: this took 100 s on one while the others sat idle)
+        _SIL = (actors, job)
+        from multiprocessing import get_context
+        with get_context('fork').Pool(os.cpu_count()) as pool:
+            results = pool.map(_silhouette_one, names, chunksize=1)
+        _SIL = None
+        return [f for r in results for f in r]
+    return [f for name in names for f in _silhouette_actor(name, actors[name], job)]
+
+
+ONLY_FRAMES = None                                       # set by pre-flight for an incremental run
+_SIL = None
+
+
+def _silhouette_one(name):
+    actors, job = _SIL
+    return _silhouette_actor(name, actors[name], job)
+
+
+def _silhouette_actor(name, entry, job):
+    """One body's faults (see silhouette_audit)."""
+    allow, still_ok, min_piece, pop = job['allow'], job['still_ok'], job['min_piece'], job['pop']
+    area_jump, frozen_s, fps = job['area_jump'], job['frozen_s'], job['fps']
     faults = []
-    for name, (times, draw) in actors.items():
+    times, draw = entry
+    if True:
         prev = None
         frozen_run = 0.0
         flagged = set()
         for t in times:
-            m = _mask(draw(t))
+            try:
+                m = _mask(draw(t))
+            except Exception as e:                # the figure guard stops a bad drawing: a fault, not a crash
+                faults.append(f'{name} at {t:.2f} s: could not be drawn ({str(e)[:90]})')
+                break
             area = int(m.sum())
             if area == 0:
                 prev = None
