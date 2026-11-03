@@ -20,3 +20,21 @@ Data: the 3 Nov snapshot in `story/metrics.md`. Chart: `review/account-5-weeks.p
 ## Recommendations given to Sam (chat, 3 Nov)
 Series over one-offs; a follow reason on screen/in the caption; fewer, better films (3-4 a week); cross-posting to
 YouTube Shorts revisited (Sam's 18 Oct decision: revisit mid-November); weekly 24-hour check continues.
+
+## Sam's corrections and answers (3 Nov, 23:08)
+- Flying Whales (Jackdaw approval + Blue Planet III) and Halo No-No (Starlink cut-off) WERE topical, not niche. Strictly
+  Crabs was a dumb joke. Likelier cause for the two: the Hook Text didn't name the story ("Blue Planet III looks 🔥"
+  reads as a nature clip; Jackdaw unnamed). Halo was also possibly blocked (30 Oct).
+- Series only when the news allows; no flogging Patriots. Sam will follow developing stories. First joke within 3-5 s.
+- YouTube Shorts: ALREADY daily (700-1.3K views per Short, 7 subscribers). The 18 Oct "TikTok only" note is out of date.
+- Profile 3 Nov 23:08: 177 followers, 65 following, 6,550 likes. Bio: "Jokes about UK politics, global events and other
+  nonsense. Follow to 'lmao'. All opinions are your own. ..." (tiktok-design.md still says "no comment.").
+- Animation work as an end goal: Sam builds with Claude, so the sellable skill is writing, timing and voices.
+
+## Follower growth: what the outside data says (searched 3 Nov)
+- 107 (18 Oct) -> 177 (3 Nov): +65% in 16 days, about 25% a week; real followers (minus about 30 promo) 77 -> about 147.
+- Published benchmarks are for brand accounts: Swydo "follower growth 10%+ = rapid"; Socialinsider: 1-5K accounts grew
+  150% across 2025; Umbrex: about 4% a week. We are far above all of them, but growth from a tiny base is easy.
+- No published study of followers per 1,000 views. One public anecdote (Reddit r/GrowthHacking, 1-month experiment,
+  1-3 videos a day): 4.4M views -> 10.2K followers, about 2.3 per 1,000 views. Ours is about 1.8: close to normal. So the
+  3-per-1,000 target was my guess and too harsh; views, not conversion, are the main lever.
