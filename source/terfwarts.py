@@ -451,8 +451,8 @@ HAT_PXM, HAT_EYE_Y, HARRY_X, MCG_X, MCG_PXM = 1500.0, 1160.0, 580, 470, 1000.0
 
 def cam_for(t):
     s = shot_of(t)
-    if s == 'hat face':                           # Harry's face, the Hat above it (note 13.1)
-        return B.Cam(1.7, HARRY_X, HAT_EYE_Y - 60)
+    if s == 'hat face':                           # the same camera, no zoom (Sam's note 15.1)
+        return CAM0
     if s == 'harry close':
         hx, hy = _boys_head('harry', t)
         return B.Cam(2.3, hx, hy + 70)
@@ -541,16 +541,26 @@ MV.GAITS['front_run'] = dict(MV.GAITS['run'], step=0.62, sps=3.5, kick=0.18, flo
 
 
 def _front_run(j):
-    """Running straight at the lens, the kit's pumping forearm swings up towards the camera and the fist lands back
-    over the shoulder on screen: the hand looked pushed into the sleeve (handcheck, rule 41). Seen from the front, the
-    forearm keeps its length but hangs forward and down from the elbow (fists at the waist), swinging half as deep."""
+    """Running straight at the lens (Sam's notes 2 and 15): the arms pump gently. The elbows stay bent at the sides
+    and swing a little back and forth; the forearm rises and falls (the hand from belt height up to the ribs, never
+    up past the shoulder), pointing forward and slightly out, so it is never pushed back over the shoulder on screen
+    (handcheck, rule 41). Which way each arm is in its swing comes from the kit's gait."""
     j = dict(j)
     for sd in 'LR':
+        sh = np.array(j['sh' + sd], float)
         el, wr = np.array(j['el' + sd], float), np.array(j['wr' + sd], float)
         f = wr - el
         n = np.linalg.norm(f)
-        g = np.array([f[0], max(abs(f[1]), 0.75 * n), 0.5 * f[2]])
-        j['wr' + sd] = tuple(el + g / np.linalg.norm(g) * n)
+        fwd = max(-1.0, min(1.0, f[2] / n))               # -1: arm back ... +1: arm forward
+        k = (fwd + 1) / 2                                  # 0 .. 1 through the swing
+        el2 = el.copy()
+        el2[2] = sh[2] + 0.45 * (el[2] - sh[2])            # the elbow swings less deep
+        el2[0] = sh[0] + 0.95 * (el[0] - sh[0])            # elbows tucked in at the sides
+        # the forearm in the picture plane (so it reads, never foreshortened into the sleeve): up and a little out
+        # towards the chest; one hand rises to the ribs as the other drops to the belt (y is down, so minus is up)
+        g = np.array([0.55 * np.sign(el[0]), 0.1 - 0.8 * k, 0.15])
+        j['el' + sd] = tuple(el2)
+        j['wr' + sd] = tuple(el2 + g / np.linalg.norm(g) * n)
     return j
 
 
@@ -621,7 +631,7 @@ def ron_face_props(t):
             return
         if snot > 0 and t < T['scream']:
             x0, y0 = hx - 13, hy + 31                 # out of the nostril, down over his lip
-            n = 6 + 40 * snot
+            n = 3 + 20 * snot
             p.poly([(x0 - 8, y0), (x0 + 6, y0), (x0 + 7, y0 + n * 0.7), (x0 + 10, y0 + n), (x0, y0 + n + 11),
                     (x0 - 9, y0 + n), (x0 - 6, y0 + n * 0.7)], (168, 196, 96), (96, 124, 50), 2.0)
             p.ell(x0 - 2, y0 + n - 1, 3.2, 3.2, (240, 248, 214), None)     # the shine
