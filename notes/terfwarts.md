@@ -82,12 +82,13 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | great-hall-hbo-students | HBO Great Hall: long tables with lamps both sides, students in the aisle, chequered floor, stained window over a pointed arch, banners | |
 | great-hall-empty-candles | Empty Great Hall: hundreds of floating candles, gold walls, long tables and benches, eagle lectern | |
 | great-hall-oxford | Christ Church hall (the real one): hammerbeam roof, portraits, big window at the end, wood panelling, table lamps | |
+| mcgonagall-hbo | HBO McGonagall: tall, slim; dark grey hair swept up in a low bun with a side wave; thin dark rectangular glasses; dark red lips; long tailored blue-grey tartan coat, high black collar; carries a book with a white quill | |
 | door-1/2 | Great Hall door: pointed stone arch with clustered columns, carved oak double doors in square panels with faces and crests, two ring handles | |
 
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 2 | 1 | comp | McGonagall puts the Hat onto Harry (HBO reference to come) | open: waiting for her reference (new kind) |
+| 2 | 1 | comp | McGonagall puts the Hat onto Harry (HBO reference sent) | open: planned as one shot, she stands behind Harry's shoulder and lowers the Hat (new kind) |
 | 1 | 1 | comp | Bring shot 1 forward: Harry and the Hat fill the frame; no hall wide; the hook is "BIOLOGICAL MALE" in 3 s | done on the sheet: hall wide cut, the close-up opens the film (new kind) |
 
 Decisions made:
