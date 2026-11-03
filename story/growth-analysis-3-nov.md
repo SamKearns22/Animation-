@@ -38,3 +38,7 @@ YouTube Shorts revisited (Sam's 18 Oct decision: revisit mid-November); weekly 2
 - No published study of followers per 1,000 views. One public anecdote (Reddit r/GrowthHacking, 1-month experiment,
   1-3 videos a day): 4.4M views -> 10.2K followers, about 2.3 per 1,000 views. Ours is about 1.8: close to normal. So the
   3-per-1,000 target was my guess and too harsh; views, not conversion, are the main lever.
+
+## Files
+Chart: `story/charts/account-overview.png` (redraw with `source/metrics_chart.py` after updating `source/metrics_data.py`);
+TERFwarts comparison chart: `story/charts/terfwarts-3-nov.png`.

@@ -6,7 +6,7 @@ the TikTok details.
 Use these for every video made for TikTok, in any chat. They can be pasted into a prompt as they are.
 
 ## Account
-- Name **CranbriJoos**, handle **@cranbrijoos** (the same on TikTok and X). Bio: **no comment.**
+- Name **CranbriJoos**, handle **@cranbrijoos** (the same on TikTok and X). Bio (3 Nov): **"Jokes about UK politics, global events and other nonsense. Follow to 'lmao'. All opinions are your own. \"Superlative cinematography\" -- a crow I showed this to."**
 - Profile picture: the beaver close-up in white fire (`profile/`).
 - Identity: deadpan comedy animation. Comedy is set-up and payoff: never open on the punchline, and never
   put text on screen or in the post that gives the joke away.
