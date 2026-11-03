@@ -52,30 +52,42 @@ CAST = C.CAST
 WHO = ('harry', 'ron', 'myrtle', 'mcg', 'hat')     # 'hat' speaks; drawn by C.hat
 # The script, word for word (brief rows 3, 8-19). est: seconds until Sam's recording replaces it ('audio').
 LINES = [
-    dict(n=1, who='hat', text='BIOLOGICAL MALE.', est=1.5),
-    dict(n=2, who='harry', text='Myrtle, Hermione is under attack by a troll.', est=2.6),
-    dict(n=3, who='myrtle', text="As a penis'd individual, you expect free license to conduct predatory behaviour "
+    dict(n=1, audio='terfwarts-1', who='hat', text="He's a Biological Male!", est=1.5),
+    dict(n=2, audio='terfwarts-2', who='harry', text='Myrtle, Hermione is under attack by a troll.', est=2.6),
+    dict(n=3, audio='terfwarts-3', who='myrtle', text="As a penis'd individual, you expect free license to conduct predatory behaviour "
                                  "inside a female-exclusive space.", est=6.2),
-    dict(n=4, who='harry', text="What? No, Myrtle, you don't understand. Hermione could be killed at any moment.", est=4.4),
-    dict(n=5, who='myrtle', text='Yes. By a man masquerading as a woman in a dress. I will not allow you to turn this '
+    dict(n=4, audio='terfwarts-4', who='harry', text="What? No, Myrtle, you don't understand. Hermione could be killed at any moment.", est=4.4),
+    dict(n=5, audio='terfwarts-5', who='myrtle', text='Yes. By a man masquerading as a woman in a dress. I will not allow you to turn this '
                                  'space into a chapel of wanton molestation.', est=8.0),
-    dict(n=6, who='ron', text="I don't like spiders, Harry.", est=1.8),
-    dict(n=7, who='harry', text="Ron, get it together, I'm sick of you already.", est=2.6),
-    dict(n=8, who='myrtle', text="When you throw open the door of a bathroom or changing room to any man so-called "
+    dict(n=6, audio='terfwarts-6', who='ron', text="I don't like spiders, Harry.", est=1.8),
+    dict(n=7, audio='terfwarts-7', who='harry', text="Ron, get it together, I'm sick of you already.", est=2.6),
+    dict(n=8, audio='terfwarts-8', who='myrtle', text="When you throw open the door of a bathroom or changing room to any man so-called "
                                  "'trying to save the life' of a woman, then you throw it open to anyone wanting to "
                                  "come inside.", est=10.5),
-    dict(n=9, who='harry', text="Well it's not a problem anymore, Myrtle, as she's f****** dead now.", est=3.8),
-    dict(n=10, who='myrtle', text='Dead is a thought-terminating cliché.', est=2.6),
-    dict(n=11, who='ron', text="I don't like them, Harry.", est=1.6),
-    dict(n=12, who='harry', text="I don't like you, Ron.", est=1.5),
+    dict(n=9, audio='terfwarts-9', bleep=(2.56, 2.96), who='harry', text="Well it's not a problem anymore, Myrtle, as she's f****** dead now.", est=3.8),
+    dict(n=10, audio='terfwarts-10', who='myrtle', text='Dead is a thought-terminating cliché.', est=2.6),
+    dict(n=11, audio='terfwarts-11', who='ron', text="I don't like them, Harry.", est=1.6),
+    dict(n=12, audio='terfwarts-12', who='harry', text="I don't like you, Ron.", est=1.5),
 ]
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'] = None
     dur = ln['est']
     if ln.get('audio') and os.path.exists(os.path.join(HERE, 'audio', ln['audio'] + '.m4a')):
-        ln['_voice'] = MA.line(ln['audio'])
-        dur = len(ln['_voice']) / SR
+        x = MA.line(ln['audio'])                  # Sam's takes carry a second or two of room either side:
+        st = MA.pauses(x, 0.12)                   # cut only in silence, just before the first word, just after the last
+        a, b = max(0, int((st[0][0] - 0.12) * SR)), min(len(x), int((st[-1][1] + 0.25) * SR))
+        x = x[a:b].copy()
+        fade = int(0.02 * SR)
+        x[:fade] *= np.linspace(0, 1, fade)
+        x[-fade:] *= np.linspace(1, 0, fade)
+        if ln.get('bleep'):                       # rule 27: Sam says the word, a 1 kHz tone goes over it. Placed from
+            b0, b1 = (int(v * SR) for v in ln['bleep'])   # the sound (line 9: the quiet "f" at 2.56 s, the burst of
+            k = np.arange(b1 - b0)                # "uck", "ing" fading by 2.96 s; "dead" starts 2.98 s), trimmed take
+            ramp = np.minimum(1, np.minimum(k, len(k) - k) / (0.006 * SR))
+            x[b0:b1] = 0.18 * np.sin(2 * math.pi * 1000 * k / SR) * ramp
+        ln['_voice'] = x
+        dur = len(x) / SR
     ln['_dur'] = dur
     ln['_stretches'] = MA.pauses(ln['_voice'], 0.12) if ln['_voice'] is not None else [(0.0, dur)]
 
@@ -84,12 +96,12 @@ T = {}
 T['hat_land'] = 0.45                              # McGonagall's hands bring the Hat down onto Harry's head
 L[1]['start'] = 0.55                              # the hook: "BIOLOGICAL MALE" at about half a second (note 1)
 T['annoyed'] = L[1]['start'] + L[1]['_dur'] + 0.1
-T['run'] = T['annoyed'] + 1.3                     # cut: the cloister, "Later…"
+T['run'] = min(T['annoyed'] + 0.8, 2.95)         # cut: the cloister (no shot over 3 s: Sam, 3 Nov), "Later…"
 T['door'] = T['run'] + 2.7                        # cut: Myrtle comes out through the door; the boys skid in
 T['halt'] = T['door'] + 0.55
 
 
-def _after(n, prev_end, gap=0.35):
+def _after(n, prev_end, gap=0.25):
     L[n]['start'] = prev_end + gap
     L[n]['end'] = L[n]['start'] + L[n]['_dur']
     return L[n]['end']
@@ -98,17 +110,17 @@ def _after(n, prev_end, gap=0.35):
 L[1]['end'] = L[1]['start'] + L[1]['_dur']
 e = _after(2, T['door'] + 1.6, 0.0)
 for n in (3, 4, 5, 6, 7):
-    e = _after(n, e, 0.45 if n in (3, 5) else 0.35)
+    e = _after(n, e, 0.3 if n in (3, 5) else 0.25)
 T['float'] = e + 0.3                              # Myrtle floats round to block the doorway (brief 14) as she speaks
 e = _after(8, T['float'], 0.2)
 T['scream'] = e + 0.6                             # Hermione's scream through the door (Sam's recording, drawn out)
 SCREAM_LEN = 8.6                                  # seconds of the scream used, cut off by the thud
 T['thud'] = T['scream'] + SCREAM_LEN
 e = _after(9, T['thud'] + 1.1, 0.0)
-e = _after(10, e, 0.45)
-e = _after(11, e, 0.5)
-e = _after(12, e, 0.4)
-DUR = e + 0.9
+e = _after(10, e, 0.3)
+e = _after(11, e, 0.35)
+e = _after(12, e, 0.3)
+DUR = e + 0.7
 BLACK_AT = DUR
 CARDS = [('Later…', T['run'] + 0.05, T['run'] + 1.6)]   # brief 5: the subtitle over the corridor
 
@@ -130,7 +142,29 @@ def _speaker_shots():
     out += [('myrtle close', s, s + 1.8), ('harry close', s + 1.8, s + 3.5), ('door', s + 3.5, s + 5.0),
             ('harry close', s + 5.0, s + 6.5), ('myrtle close', s + 6.5, s + 7.8), ('door', s + 7.8, T['thud'] + 0.9)]
     out += [('boys', T['thud'] + 0.9, L[10]['start'] - 0.25), ('door', L[10]['start'] - 0.25, L[11]['start'] - 0.25),
-            ('boys', L[11]['start'] - 0.25, DUR)]
+            ('boys', L[11]['start'] - 0.25, L[12]['start'] - 0.2), ('harry close', L[12]['start'] - 0.2, DUR)]
+    return _choppy(out)
+
+
+# Sam, 3 Nov: quick cuts, no camera held over 3 s. A long hold is cut into even pieces of 2.6 s at most, going
+# speaker wide -> speaker close -> the listener's face -> speaker close ...
+CUTAWAY = {'door': ('door', 'myrtle close', 'harry close', 'myrtle close'),
+           'boys': ('boys', 'harry close', 'myrtle close', 'harry close'),
+           'harry close': ('harry close', 'myrtle close'), 'myrtle close': ('myrtle close', 'harry close')}
+MOST = 2.6
+
+
+def _choppy(shots):
+    out = []
+    for cam, a, b in shots:
+        n = math.ceil((b - a) / MOST - 1e-6) if cam in CUTAWAY and b - a > 3.0 else 1
+        for i in range(n):
+            c = CUTAWAY[cam][i % len(CUTAWAY[cam])] if n > 1 else cam
+            p = (c, a + (b - a) * i / n, a + (b - a) * (i + 1) / n)
+            if out and out[-1][0] == p[0]:
+                out[-1] = (p[0], out[-1][1], p[2])
+            else:
+                out.append(p)
     return out
 
 
@@ -160,7 +194,7 @@ BENCHMARK = [
                 ('carved oak double door', 'two leaves, square panels with bosses'), ('ring handles', 'two'),
                 ('shrunk to a toilet door', '1.1 m wide (brief 6)'), ('GIRLS plaque', 'brass, on the top panel')]),
 ]
-HOOK = ('Hook Text here', {'y': 250})              # Sam's wording to come; sits above the Hat (note 1)
+HOOK = ('Rowling left HBO some edits 😬', {'y': 250})   # Sam's wording, 3 Nov; sits above the Hat (note 1)
 # The joke prop must stay clear: the GIRLS plaque in every door shot
 KEEP_CLEAR = [('GIRLS plaque', lambda t: SETS.plaque_box(SETS.DOOR, cam_for(t)) if shot_of(t) in ('door',) else None)]
 PROP_SIZES = []
@@ -532,23 +566,21 @@ def draw_order(t):
             'boys': ['background', 'ron', 'harry'], 'harry close': ['background', 'ron', 'harry']}[s]
 
 
-def chunks(text, most=9):
-    """A long line split into subtitles of a few words, at sentence and comma breaks where it can (a 7-row block
-    covered Myrtle). Each chunk: (words, its share of the line)."""
+def chunks(text, most=4):
+    """Short, quick subtitles (Sam, 3 Nov): split at sentence and comma breaks, each piece into even groups of at most
+    four words; a lone last word joins the words before it. Each chunk: (words, its share of the line)."""
     import re
-    parts = [p.strip() for p in re.split(r'(?<=[.,?!])\s+', text) if p.strip()]
-    out, cur = [], []
-    for p in parts:
-        w = p.split()
-        if cur and len(cur) + len(w) > most:
-            out.append(cur)
-            cur = []
-        while len(w) > most:
-            out.append(w[:most])
-            w = w[most:]
-        cur += w
-    if cur:
-        out.append(cur)
+    parts = [p.strip().split() for p in re.split(r'(?<=[.,?!])\s+', text) if p.strip()]
+    out = []
+    for w in parts:
+        k = math.ceil(len(w) / most)
+        cuts = [round(i * len(w) / k) for i in range(k + 1)]
+        groups = [w[cuts[i]:cuts[i + 1]] for i in range(k)]
+        for g in groups:
+            if len(g) == 1 and out and out[-1][-1][-1] not in '.?!' and len(out[-1]) < 5:
+                out[-1] = out[-1] + g
+            else:
+                out.append(g)
     n = sum(len(c) for c in out)
     return [(' '.join(c), len(c) / n) for c in out]
 
@@ -560,12 +592,19 @@ def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.25, nxt):
-            a = ln['start']
+            talk = ln['_stretches']                # each chunk takes its share of the talking time, pauses skipped
+            total = sum(q - p for p, q in talk) or 1.0
+            u, done = t - ln['start'], 0.0
+            for p, q in talk:
+                if u < q:
+                    done += max(0.0, u - p)
+                    break
+                done += q - p
+            acc = 0.0
             for text, share in chunks(ln['text']):
-                b = a + share * (ln['end'] - ln['start'])
-                if t < b:
+                acc += share * total
+                if done < acc - 1e-6:
                     return text
-                a = b
             return text
     return None
 
@@ -601,7 +640,9 @@ def soundtrack(stems=False):
     seg = scream[s0:s0 + int(SCREAM_LEN * SR)].copy()
     seg[-int(0.01 * SR):] *= np.linspace(1, 0, int(0.01 * SR))
     filmkit.place(rest, seg, at=T['scream'], sr=SR, gain=0.8)
-    filmkit.place(rest, load(SFX['thud']), at=T['thud'], sr=SR, gain=1.0)
+    thud = load(SFX['thud'])[:int(1.0 * SR)].copy()   # its 3 s rumble ran under Harry's "Well it's not...": the hit
+    thud[-int(0.4 * SR):] *= np.linspace(1, 0, int(0.4 * SR))   # kept, the tail faded out by 1 s
+    filmkit.place(rest, thud, at=T['thud'], sr=SR, gain=1.0)
     run = load(SFX['run'])[:int((T['door'] - T['run'] + 0.6) * SR)].copy()
     run[-int(0.4 * SR):] *= np.linspace(1, 0, int(0.4 * SR))      # fades as they skid to a halt
     filmkit.place(rest, run, at=T['run'], sr=SR, gain=0.7)
@@ -630,7 +671,10 @@ def checks():
                 raw[s:s + len(ln['_voice'])] += ln['_voice'][:n - s]
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     mix, voice, rest = soundtrack(stems=True)
-    faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice)  # no steady hiss, heard only between lines (rule 60)
+    # no steady hiss (rule 60), heard where nothing is meant to sound: with the gaps between Sam's trimmed lines now
+    # 0.25 s, the only voice-free stretches were the running feet and the scream (their own highs, -49 dBFS); with
+    # both silent the film measures -94 dBFS (3 Nov)
+    faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice + rest)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
         print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him

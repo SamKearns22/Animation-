@@ -37,31 +37,34 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## The brief as a checklist (Sam, 3 Nov), ticked before the first animatic
 | # | from the brief (word for word) | done? |
 |---|------|------|
-| 1 | All models based on the new HBO cast where possible | |
-| 2 | Shot 1: Great Hall. Harry sits on the chair; the Sorting Hat is placed on his head | |
-| 3 | Sorting Hat yells "BIOLOGICAL MALE." | |
-| 4 | Harry reacts with annoyance | |
-| 5 | Cut to Hogwarts corridor, subtitle "Later…" | |
-| 6 | Harry and Ron race towards a Hogwarts interior door, shrunk so it looks like the entrance to a bathroom | |
-| 7 | Moaning Myrtle appears through the door; Harry and Ron come to a panting halt | |
-| 8 | Harry: "Myrtle, Hermione is under attack by a troll." | |
-| 9 | Myrtle: "As a penis'd individual, you expect free license to conduct predatory behaviour inside a female-exclusive space." | |
-| 10 | Harry: "What? No, Myrtle, you don't understand. Hermione could be killed at any moment." | |
-| 11 | Myrtle: "Yes. By a man masquerading as a woman in a dress. I will not allow you to turn this space into a chapel of wanton molestation." | |
-| 12 | Ron: "I don't like spiders, Harry." | |
-| 13 | Harry (annoyed): "Ron, get it together, I'm sick of you already." | |
-| 14 | Myrtle floats around to block the doorway: "When you throw open the door of a bathroom or changing room to any man so-called 'trying to save the life' of a woman, then you throw it open to anyone wanting to come inside" | |
-| 15 | A scream, suddenly cut off by a heavy splat (Sam, 3 Nov: a thud, his recording; the scream drawn out, cutting between Myrtle and annoyed Harry) | |
-| 16 | Harry: "Well it's not problem anymore Myrtle as she's f****** dead now." (six asterisks; wording as written, typo query asked) | |
-| 17 | Myrtle: "Dead is a thought-terminating cliché" | |
-| 18 | Ron: "I don't like them, Harry." | |
-| 19 | Harry: "I don't like you, Ron." | |
-| 20 | Sound effects: female scream, splat (and no others) (Sam, 3 Nov: scream, thud, and running for the boys) | |
-| 21 | Ron is a gibbering fool who doesn't understand what's happening | |
-| 22 | Ends with the CranbriJoos sign-off (CLAUDE.md) | |
-| 23 | Note 1: shot 1 brought forward so Harry and the Hat fill the frame; no long shots of the hall | |
-| 25 | Note 2: Professor McGonagall (HBO series) puts the Hat onto Harry | |
-| 24 | Note 1: the 3-second hook is the first joke, "BIOLOGICAL MALE", with a clear identification of what's in the frame | |
+| 1 | All models based on the new HBO cast where possible | yes: by costume, hair and glasses (Sam, 3 Nov: no likeness tool) |
+| 2 | Shot 1: Great Hall. Harry sits on the chair; the Sorting Hat is placed on his head | yes: close-up, the chair off frame below (note 1); McGonagall places the Hat |
+| 3 | Sorting Hat yells "BIOLOGICAL MALE." (Sam, 3 Nov, note 12: subtitle "He's a Biological Male!") | yes: Sam's take, subtitle "He's a Biological Male!" |
+| 4 | Harry reacts with annoyance | yes: annoyed brows after the yell |
+| 5 | Cut to Hogwarts corridor, subtitle "Later…" | yes: 2.95 s, "Later…" |
+| 6 | Harry and Ron race towards a Hogwarts interior door, shrunk so it looks like the entrance to a bathroom | yes: run shot, the shrunk door |
+| 7 | Moaning Myrtle appears through the door; Harry and Ron come to a panting halt | yes: she comes out through the door; panting halt |
+| 8 | Harry: "Myrtle, Hermione is under attack by a troll." | yes |
+| 9 | Myrtle: "As a penis'd individual, you expect free license to conduct predatory behaviour inside a female-exclusive space." | yes |
+| 10 | Harry: "What? No, Myrtle, you don't understand. Hermione could be killed at any moment." | yes |
+| 11 | Myrtle: "Yes. By a man masquerading as a woman in a dress. I will not allow you to turn this space into a chapel of wanton molestation." | yes |
+| 12 | Ron: "I don't like spiders, Harry." | yes |
+| 13 | Harry (annoyed): "Ron, get it together, I'm sick of you already." | yes: annoyed, eyes to Ron |
+| 14 | Myrtle floats around to block the doorway: "When you throw open the door of a bathroom or changing room to any man so-called 'trying to save the life' of a woman, then you throw it open to anyone wanting to come inside" | yes: the float on line 8, arms spread |
+| 15 | A scream, suddenly cut off by a heavy splat (Sam, 3 Nov: a thud, his recording; the scream drawn out, cutting between Myrtle and annoyed Harry) | yes: 8.6 s scream, six cuts, the thud |
+| 16 | Harry: "Well it's not problem anymore Myrtle as she's f****** dead now." (six asterisks; wording as written, typo query asked) | yes: bleeped over the word, six stars |
+| 17 | Myrtle: "Dead is a thought-terminating cliché" | yes: arms folded |
+| 18 | Ron: "I don't like them, Harry." | yes |
+| 19 | Harry: "I don't like you, Ron." | yes |
+| 20 | Sound effects: female scream, splat (and no others) (Sam, 3 Nov: scream, thud, and running for the boys) | yes: scream, thud, run only |
+| 21 | Ron is a gibbering fool who doesn't understand what's happening | yes: vacant, palms together, no eyeline |
+| 22 | Ends with the CranbriJoos sign-off (CLAUDE.md) | yes: finish.py adds it |
+| 23 | Note 1: shot 1 brought forward so Harry and the Hat fill the frame; no long shots of the hall | yes |
+| 25 | Note 2: Professor McGonagall (HBO series) puts the Hat onto Harry | yes |
+| 24 | Note 1: the 3-second hook is the first joke, "BIOLOGICAL MALE", with a clear identification of what's in the frame | yes: the line at 0.55 s, the Hat and Harry filling the frame |
+| 26 | Note 10: Hook Text "Rowling left HBO some edits 😬" | yes: finish.py puts it on |
+| 27 | Note 11: dialogue subtitles choppy (a few words each) and quick; quick scene transitions, no camera held over 3 s | yes: longest shot 2.95 s |
+| 28 | Note 12: the Hat's subtitle reads "He's a Biological Male!" | yes |
 
 ## References as checklists (`references/terfwarts/`)
 | reference | what it shows | ours matches? |
@@ -85,6 +88,9 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 12 | 1 | 0.5 s | Subtitle change: "He's a Biological Male!" | done: LINES 1 text |
+| 11 | all | all | Choppy, quick subtitles; quick transitions; no camera lingers over 3 s | done: subtitles 1-4 words, timed to the talking (pauses skipped); any hold over 3 s cut into even pieces of 2.6 s at most, speaker wide / speaker close / listener close (`_choppy`, `CUTAWAY`); longest shot 2.95 s; gaps between lines 0.25-0.35 s. Added: listener reaction close-ups inside long lines |
+| 10 | 1 | 0-3 s | Hook Text: "Rowling left HBO some edits 😬" | done: HOOK |
 | 9 | all | stills | Folded arms hide the hands: show half of each hand holding the other arm, to imply clutching | done in the kit (`moves.pose` 'arms_folded', `_clutch`), so every film's folded arms get it (rule 56): the outer half of each hand shows past the other upper arm, front view only (side and back hide them); sheet `review/terfwarts-note9.jpg` |
 | 8 | door | stills | Vary Harry's and Ron's standing poses: arms not always hanging straight; slight or fitting moves | done: gallery poses by moment (POSES): Harry hands on hips panting, open palm (line 2), hands up (4), hips (5), points at Ron (7), arms folded through line 8 and the scream, shrug (9); Ron hips panting, palms together (nervous, 3, 6, scream, 11), shrug at "man in a dress" (5). Added: all of these |
 | 7 | boys | stills | No three-quarter turn: Harry's pupils look over at Ron instead | done: eyes to Ron on lines 6, 7, 11, 12, body faces front. Rule request: proposed (see Open rule requests) |
