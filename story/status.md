@@ -9,6 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). Open: Sam's Y/N on the "Hook Text names the story" rule.
 
 ## Films
+- **MidTerminal (4 Nov): cast and Oval Office set built**, waiting for Sam's look, a Trump photo pack and the brief. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
   Open: his two rule requests (Hook Text and sign-off in every animatic; no three-quarter views): propose wording, wait for his yes. Notes: `notes/terfwarts.md`.
 
