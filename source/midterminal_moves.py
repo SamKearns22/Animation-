@@ -107,8 +107,7 @@ def door_open(img, cm, t_open, part='both'):
         MS.poly(img, cm, [leaf[2], back[2], back[3], leaf[3]], (214, 210, 198), None, 0)    # showed through)
         MS.lines(img, cm, [back[2], back[1]], INK, 2.0)                  # the outer outline only
     MS.poly(img, cm, leaf, (240, 238, 230), None, 0)
-    MS.lines(img, cm, [leaf[2], leaf[1], leaf[0], leaf[3]] if ang > 1.0 else [leaf[2], leaf[1], leaf[0], leaf[3], leaf[2]],
-             INK, 2.0)                           # no line along the top edge: seen from below it cuts across the thickness
+    MS.lines(img, cm, [leaf[3], leaf[0], leaf[1], leaf[2], leaf[3]], INK, 2.0)     # the leaf's whole outline, top edge too
     for y0, y1 in ((0.15, 0.9), (1.05, 1.55), (1.7, 2.3)):                      # the six panels
         for a0, a1 in ((c - h + 0.7, c - 0.5), (c + 0.5, c + h - 0.7)):
             MS.poly(img, cm, [_rot_out(MS.wp(a, y, 0.02), hinge, ang) for a, y in ((a0, y0), (a1, y0), (a1, y1), (a0, y1))],
