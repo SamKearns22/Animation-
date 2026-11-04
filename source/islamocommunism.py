@@ -616,7 +616,7 @@ def desk_arm_item(t):
     def draw(im, c):
         j = elsayed_j(t, c, x, z)
         j2 = dict(j)
-        V.arm_to(j2, 'L', (-150.0, 470.0, 40.0), 'back', 'fist')
+        V.arm_to(j2, 'L', (-200.0, -250.0, 0.0), 'out', 'fist')   # (raised clear, so only the desk arm differs)
         a = Image.new('RGBA', im.size, (0, 0, 0, 0))
         b = Image.new('RGBA', im.size, (0, 0, 0, 0))
         MS.put(a, c, sp, x, z, MS.to_cam(c, x, z), j, t)
