@@ -1,20 +1,20 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 76 (check every reference, ours beside each), 3 (benchmark the White House against refs), 11 (composition sheet before building)
-- **Done:** brief checklist, refs, cast approved 4 Nov (Sam's YY: El-Sayed, Ocasio-Cortez); rule 76 written.
-- **Spent against the estimate (rule 55):** cast about 3.5% (estimate 3%: the beard took 3 rounds); Sam's budget 8%.
-- **Next:** Opus, high effort, new chat: build the White House front (gold dome, two onion spires, flags, flying cars, families), then the composition sheet of the 4 key shots. Type: "Islamocommunism: build the White House and send the composition sheet".
-- **Needs Sam:** the voice recordings (Voice Isolation off).
-- **Read:** this file; guides/satire.md "Start" and "One set, one plan"; kit-catalogue rows 20-21.
-- **Lost / Added:** Lost: El-Sayed's full heavy beard (now his real narrow jaw beard).
+- **Rules that bite next:** 45 (the composition sheet is sent once: apply notes, never re-send), 74 (acting list before the first animatic), 14 (pre-flight gates)
+- **Done:** White House front built and benchmarked 10/10 (`review/islamocommunism-whitehouse-refs.jpg`); composition sheet sent 4 Nov.
+- **Spent against the estimate (rule 55):** front, flag, cars, families about 1.5% (estimate 3.5); film so far about 5% of Sam's 8%.
+- **Next:** Opus, medium effort, new chat: apply Sam's composition notes, then start the film code, the acting list and the stills. Type: "Islamocommunism: apply my composition notes and start the film".
+- **Needs Sam:** notes (or Y) on the composition sheet; the voice recordings (Voice Isolation off).
+- **Read:** this file; guides/satire.md "Start" and "Staging and acting"; rulebook rule 74.
+- **Lost / Added:** Lost: the right wing's windows sit behind the lawn flag; crosses on the spires (plain gold tips). Added: clouds, mowing stripes, a picnic blanket, a ball, headscarves on two mothers.
 - **Open rule requests:** none.
-- **For Claude:** cast `source/islamocommunism_cast.py` (MAP at top; `sheet`, `faces`, `head`); Oval Office `midterminal_set.py`, door/walk-in `midterminal_moves.py`; refs `references/islamocommunism/` (White House 89a1ee64, 49db6798; St Basil's f176063d; Dome of the Rock 2ab87cb9; flags 77252a6f, 9b28a4a2). Film code not started: copy `satire_template.py` to `source/islamocommunism.py`.
+- **For Claude:** set `source/islamocommunism_set.py` (MAP at top; `paint(t)`, `comp`, `refs`, `test`; drawn 90 px high then dropped, `SHIFT`; Hook Text two rows at y 410: finish.py `--y 410`; `KEEP_CLEAR`); comp cameras in its `COMP` (Oval Office via `midterminal_set.put`/`put_seated`; side-on shot 4 sorts people before the desk); cast `source/islamocommunism_cast.py`; door/walk-in `midterminal_moves.py`. Film code not started: copy `satire_template.py` to `source/islamocommunism.py`, BENCHMARK from the set's list.
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |
 |---|---|---|---|
-| White House front with Dome of the Rock gold dome and two St Basil's onion spires, lawn, fountain, red flower bed | new set, one locked camera, 3D not needed | 2.0 | |
+| White House front with Dome of the Rock gold dome and two St Basil's onion spires, lawn, fountain, red flower bed | new set, one locked camera, 3D not needed | 2.0 | 1.5 for these three rows |
 | Red/green striped flag with hammer-and-sickle, crescent and star canton; on the roof and on a lawn pole, waving | new prop | 0.5 | |
 | Flying cars in orderly queues; families and children playing on the lawn (small, far, simple loops) | new, background only | 1.0 | |
 | Abdul El-Sayed likeness (front, side, back; seated, standing, holding phone and glass) | new cast | 1.5 | |
@@ -32,11 +32,11 @@ Shots (about 40-45 s with the real voices):
 ## The brief as a checklist (CLAUDE.md, 18 Oct)
 | # | from the brief or a note (word for word) | done? |
 |---|------|------|
-| 1 | The White House front. It now has the dome of an Islamic Mosque alongside two Kremlin spires. | |
-| 2 | Two flags clearly visible, one above the entrance and one flying on a flagpole in the grounds. | |
-| 3 | Red/Green striped American flag with the stars replaced by communist hammers and sickles, Islamic crescent moons and stars. | |
-| 4 | Flying cars streak in orderly queues in the skies above | |
-| 5 | children and happy families laugh and play on the lawn | |
+| 1 | The White House front. It now has the dome of an Islamic Mosque alongside two Kremlin spires. | set: yes (4 Nov) |
+| 2 | Two flags clearly visible, one above the entrance and one flying on a flagpole in the grounds. | set: yes, both wave |
+| 3 | Red/Green striped American flag with the stars replaced by communist hammers and sickles, Islamic crescent moons and stars. | set: yes (13 stripes; navy canton, 3 of each emblem) |
+| 4 | Flying cars streak in orderly queues in the skies above | set: yes (4 lanes, even spacing, speed streaks) |
+| 5 | children and happy families laugh and play on the lawn | set: yes (6 groups, simple loops) |
 | 6 | White heading text in the lower middle left: "USA"; 1 second later revealing beneath: "THREE YEARS INTO ISLAMIC COMMUNISM" | |
 | 7 | Cut to inside the Oval Office. Abdul sat behind the desk, eyes looking sceptically at the phone he is holding to his ear. | |
 | 8 | ABDUL: "Really? All diseases? Guess I don't need to call myself 'Doctor' any more." | |
@@ -59,18 +59,20 @@ Shots (about 40-45 s with the real voices):
 ## References as checklists
 | reference | what it shows | ours matches? |
 |---|------|------|
-| White House front (2 photos) | white north portico, 4 columns + pediment, two wings of 3 windows each side at two storeys, balustrade roof, flag on roof centre, round fountain, red flower ring, hedges, big trees both sides | |
-| Hammer and sickle | gold hammer crossing sickle, gold-outlined red star above, on red | |
-| Crescent and star | pale crescent opening right, five-point star in its mouth, on green | |
+| White House front (2 photos) | white north portico, 4 columns + pediment, 4 windows each side at two storeys (my first note said 3), balustrade roof, flag on roof centre, round fountain, red flower ring, hedges, big trees both sides | yes, all (refs sheet 4 Nov) |
+| Hammer and sickle | gold hammer crossing sickle, gold-outlined red star above, on red | yes, gold on the navy canton; no star above (the crescents carry the stars) |
+| Crescent and star | pale crescent opening right, five-point star in its mouth, on green | yes, white on the navy canton |
 | Abdul El-Sayed (2 photos) | dark suit, open white shirt no tie, short dark slicked-back hair, full short beard and moustache, flag pin, white pocket square | |
 | Alexandria Ocasio-Cortez (2 photos) | long dark straight hair centre parting, black jacket, red lipstick, pearl earrings (official portrait); blush top, burgundy skirt (casual) | |
-| St Basil's (Kremlin spires) | striped and diamond onion domes, red/green/blue/gold, tented red tower | |
-| Dome of the Rock | big gold dome on a blue-tiled drum | |
+| St Basil's (Kremlin spires) | striped and diamond onion domes, red/green/blue/gold, tented red tower | yes: blue/white and green/gold/red twisted onions on red brick towers; no tented tower, no crosses |
+| Dome of the Rock | big gold dome on a blue-tiled drum | yes, crescent finial |
 
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
 | 1 |      |      |      | open   |
+
+Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
 Decisions made:
 - Hook Text: "MAGAs Worst Nightmare" (Sam, 4 Nov).
@@ -83,3 +85,6 @@ Decisions made:
 - Cast approved (Sam's YY, 4 Nov); brows then straightened and thickened to match his refs.
 - Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).
+- White House (4 Nov, my picks): one painting for the locked camera (rule 39). Wind from the right, both flags fly left. The lawn flag stands right of the fountain in front of the right wing (clearest against the white front). Hook Text two rows in the sky at y 410 (one row will not fit the safe width); the set sits 90 px lower so it clears the dome. Heading "USA" lower-left at y 1270-1490 over the lawn, white with a black edge (Anton).
+- Flag emblems drawn turned round so they read as on Sam's references (the flag is seen from its back, flying left).
+

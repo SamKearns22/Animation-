@@ -34,6 +34,7 @@ ENTRIES = [
     ('Sets', 'Hangar (Roadster)', 'roadster.py', ('frame', 'roadster', 2.0)),
     ('Sets', 'Israeli TV news studio (Newsdesk)', 'newsdesk_set.py', ('frame', 'newsdesk_set', 'wide')),
     ('Sets', 'Oval Office (MidTerminal)', 'midterminal_set.py', ('frame', 'midterminal_set', 'wide')),
+    ('Sets', 'White House front (Islamocommunism)', 'islamocommunism_set.py', ('frame', 'islamocommunism_set', 0.6)),
     ('Sets', 'Space: planet, Halo ring, blue galaxy (Halo No-No)', 'halo_sets.py', ('frame', 'halo_no_no', 9.0)),
     ('Sets', 'Halo ring close-up, armada skimming it (Halo No-No)', 'halo_sets.py', ('frame', 'halo_no_no', 33.0)),
     ('Sets', 'Roadster cabin from the windscreen (Halo No-No)', 'halo_sets.py', ('frame', 'halo_no_no', 13.0)),
