@@ -412,7 +412,7 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             cols = np.where(al[int(top):int(ny)].max(axis=0) > 0)[0]
             hx0, hx1 = (cols[0], cols[-1]) if len(cols) else (nx - 80 * s, nx + 80 * s)
             hw = hx1 - hx0
-            sk = skull(hw * (0.9 + 0.45 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # grows as it bursts through
+            sk = skull(hw * (0.85 + 0.15 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # his own head's size (Sam, 4 Nov)
             sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
             head_y = (top + ny) / 2
             over.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
