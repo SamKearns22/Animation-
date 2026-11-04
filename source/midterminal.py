@@ -270,10 +270,12 @@ def press_palm(j, t):
     if k <= 0:
         return j
     sx, sy, sz = j['shL']
-    up = dict(j)
+    wx, wy, wz = j['wrL']                         # the hand travels from where the walk has it up to by his face, the
+    tx, ty, tz = sx - 95, sy - 175, sz + 110      # arm solved on the way (a blend of two poses swung the forearm at
+    up = dict(j)                                  # the lens half way: rule 41)
     up['hand'] = dict(j.get('hand', {}))
-    V.arm_to(up, 'L', (sx - 95, sy - 175, sz + 110), 'down', 'palm')     # up by his face, forearm up (never at the lens)
-    return moves.mix_poses(j, up, k)
+    V.arm_to(up, 'L', (wx + (tx - wx) * k, wy + (ty - wy) * k, min(wz, tz) + (tz - min(wz, tz)) * k), 'down', 'palm')
+    return up
 
 
 def lift_shoulders(j, dy):
