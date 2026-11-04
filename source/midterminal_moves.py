@@ -395,7 +395,7 @@ def _melt(layer, box, k, seed=5):
     return Image.fromarray(a, 'RGBA')
 
 
-def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8):
+def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8, j=None):
     """The hellfire ghost of Epstein, floating with a slow bob; below the waist his body gives way to a flame tail.
     fade 0..1 (see-through to fully there), melt 0..1 (the face runs down and the flaming skull shows through)."""
     lift = 0.25 + 0.03 * math.sin(2 * math.pi * t / 1.4)
@@ -406,7 +406,11 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
         f = MS.to_cam(c, x, z) if facing is None else facing
         nx, ny, s = _neck_screen(c, sp, x, z, lift)
         lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
-        MS.put(lay, c, dict(sp, look=look), x, z, f, lift=lift)
+        MS.put(lay, c, dict(sp, look=look), x, z, f, j, lift=lift)
+        probe = lay                                       # the head is measured with his arms DOWN: raised arms (the
+        if j is not None and melt > 0:                    # silly-ghost wave) widened the box to arm's reach and the
+            probe = Image.new('RGBA', im.size, (0, 0, 0, 0))   # skull grew to his whole body (Sam, 4 Nov)
+            MS.put(probe, c, dict(sp, look=look), x, z, f, lift=lift)
         # the tail: the body fades out from the hips down, flames take its place
         a = np.asarray(lay).copy()
         hip, knee = int(ny + 450 * s), int(ny + 680 * s)
@@ -418,7 +422,7 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
         # the tail: flames roaring UP from below the knees to his waist (Sam, 4 Nov), where his legs fade away
         flames(ImageDraw.Draw(over), nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS, bed=True)
         if melt > 0:
-            al = np.asarray(lay.getchannel('A'))
+            al = np.asarray(probe.getchannel('A'))
             rows = np.where(al[:int(ny)].max(axis=1) > 0)[0] if ny > 0 else []
             top = rows[0] if len(rows) else ny - 200 * s
             cols = np.where(al[int(top):int(ny)].max(axis=0) > 0)[0]

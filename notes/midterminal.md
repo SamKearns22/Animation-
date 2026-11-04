@@ -81,6 +81,8 @@ Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` 
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 29 | 1 | 0-2 s | open the door from the start so we see him (viewer retention) | fixed: open at 0.1 s; he stands in the doorway talking, then strides in 1.3 s before the slam |
+| 30 | 9 | melt | the skull took over his whole body: skin sloughs off his FACE, a head-sized screaming skull (repeat of 27/28) | fixed: why the first fix failed: the head was measured from his drawing with the arms raised (the wave, new in the film), so the box spanned his arms; now measured with the arms down |
 
 Decisions made:
 - Budget cut to 9% (Sam's 10% cap): door 1, Satan float 0.5, ghost 2, skull melt 2, moves and zoom 1.5, template 2; at most one critique round each; stills sheet instead of clips where possible.

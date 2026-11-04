@@ -99,7 +99,7 @@ def _at(n, start):
 T = {}
 e = _at(1, 0.05)                                  # shot 1: talking to the press over his shoulder as he comes in
 T['slam'] = max(1.3, e - 0.1)                     # the door slams as he finishes; shut 0.25 s later = the cut
-T['open'] = max(0.1, T['slam'] - 1.2)             # (a long take: the door opens later, his voice heard through it)
+T['open'] = 0.1                                   # open from the start: we see him at once (Sam's note 1, 4 Nov)
 T['cut2'] = T['slam'] + 0.25
 e = _at(2, T['cut2'])                             # line 2 on the cut (Sam's note 26)
 T['cut3'] = e + 0.1
@@ -206,7 +206,9 @@ DOOR_WALK = 1.35                                   # m/s (the brisk gait, as the
 
 
 def door_d(t):
-    return 0.6 + DOOR_WALK * (t - (T['slam'] - 1.3))
+    """He stands just inside the open doorway talking to the press (off right) until 1.3 s before the slam, then strides
+    in (Sam's note 1: the door open from the start, so we see him)."""
+    return 0.6 + DOOR_WALK * max(0.0, t - (T['slam'] - 1.3))
 
 
 def entry_d(t):
@@ -317,30 +319,14 @@ def epstein_item(t):
     sp = dict(MC.EPSTEIN, **_face('epstein', t))
     if melt > 0:
         sp['mouth'] = 'v:o' if t < L[9]['end'] else 'set'
-    it = MV.epstein_item(t, sp, epstein_fade(t), melt, look=0.8 if shot_of(t) == 'epstein' else 0.6)
-    j = epstein_j(t)
-    if j is None:
-        return it
-    x, z, _ = it
-    # MV.epstein_item draws him standing; with the wave, draw him through MS.put's joints (same see-through ghost)
-    orig = MS.put
-
-    def put_j(im, c, s_, x_, z_, f_, jj=None, t_=0.0, head_yaw=None, lift=0.0):
-        return orig(im, c, s_, x_, z_, f_, j, t, head_yaw, lift)
-
-    def draw(im, c):
-        MS.put = put_j
-        try:
-            it[2](im, c)
-        finally:
-            MS.put = orig
-    return (x, z, draw)
+    return MV.epstein_item(t, sp, epstein_fade(t), melt, look=0.8 if shot_of(t) == 'epstein' else 0.6,
+                           j=epstein_j(t))
 
 
 def trump_item(t):
     s = shot_of(t)
     if s == 'door':
-        return MV.trump_item(t, door_d(t), trump_sp(t))
+        return MV.trump_item(t, door_d(t), trump_sp(t), walking=t >= T['slam'] - 1.3)
     sp = trump_sp(t)
     j = trump_j(t)
     point = None
