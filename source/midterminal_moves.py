@@ -228,7 +228,7 @@ SATAN_AT = (0.0, 1.45)            # forward of the desk, bigger in frame (Sam's 
 EPSTEIN_AT = (-1.8, 2.85)          # beside the desk, left; clear of Satan's wing (note 38)
 
 
-ENTRY = [(1.9, 1.0), (1.35, 1.0), WALK_TO]  # shot 2: in from frame RIGHT to his mark, short: he stops early (note 32)
+ENTRY = [(1.65, 1.0), (1.25, 1.0), WALK_TO]  # shot 2: in from frame RIGHT to his mark, short: he stops early (note 32)
 
 
 def _path_pts(pts=None):

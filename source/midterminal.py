@@ -53,18 +53,19 @@ WHO = ('trump', 'satan', 'epstein')
 LINES = [
     dict(n=1, audio='midterminal-1', who='trump', text='Thank you, everyone, no more questions.', est=1.9),
     dict(n=2, audio='midterminal-2', who='trump', text="Satan, what the f***? This isn't what you promised.", est=2.7,
-         bleep=None),
-    dict(n=3, audio='midterminal-3', who='satan', text="I said don't invade Iran, you invade Iran.", est=2.4),
-    dict(n=4, audio='midterminal-4', who='trump', text="Yeah, because Bibi told me to. I thought he was one of yours!?",
+         bleep=(1.47, 1.82)),                     # "fuck": 2.10-2.45 s in Sam's take (from the sound)
+    dict(n=3, audio='midterminal-3', who='satan', text="I said don't invade Iran, you invaded Iran.", est=2.4),
+    dict(n=4, audio='midterminal-4', who='trump', text="Yeah! Cos Bibi told me to! I thought he was one of yours?",
          est=3.0),
-    dict(n=5, audio='midterminal-5', who='satan', text="Oh, no. We've got nothing on him.", est=2.0),
-    dict(n=7, audio='midterminal-7', who='epstein', text="Don't worry, Donald. Why don't you come and join me? It's warm "
-         "here. Nobody ever gouges out your eyes on an hourly basis.", est=6.5),
-    dict(n=8, audio='midterminal-8', who='trump', text="F*** off, Jeffrey. I know it's you that keeps putting algae in "
-         "the reflecting pool.", est=4.0, bleep=None),
-    dict(n=9, audio='midterminal-9', who='epstein', text='Releeeease the filessssss', est=3.0),
-    dict(n=10, audio='midterminal-10', who='trump', text="release the fiilleees. If Satan had done his job, maybe I "
-         "wouldn't have to.", est=4.0, mock_end=1.6),   # mock_end: the mocking part ends here (from the take)
+    dict(n=5, audio='midterminal-5', who='satan', text="Ha, no. Bibi is in a league of his own.", est=2.0),
+    dict(n=7, audio='midterminal-7', who='epstein', text="Donald, don't even worry about it. Why don't you come join "
+         "me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis.", est=6.5),
+    dict(n=8, audio='midterminal-8', who='trump', text="F*** off, Jeffrey. I know it's you that keeps adding algae to "
+         "the reflecting pool.", est=4.0, bleep=(0.13, 0.30)),   # "fuck": 0.97-1.14 s in Sam's take (from the sound)
+    dict(n=9, audio='midterminal-9', who='epstein', text='Releeeaaaseee the fiiilleesss and ennndd myyy torrrmenttt',
+         est=3.0),
+    dict(n=10, audio='midterminal-10', who='trump', text="Oooo, release the files! Maybe if Satan had done his job, "
+         "maybe I wouldn't have to!", est=4.0, mock_end=3.06),   # Sam's takes 9 + 10 joined; the mock ends here
 ]
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
@@ -86,7 +87,7 @@ for ln in LINES:                                  # time each line to its record
         ln['_voice'] = x
         dur = len(x) / SR
     ln['_dur'] = dur
-    ln['_stretches'] = MA.pauses(ln['_voice'], 0.12) if ln['_voice'] is not None else [(0.0, dur)]
+    ln['_stretches'] = MA.pauses(ln['_voice'], 0.18) if ln['_voice'] is not None else [(0.0, dur)]   # (0.12 split "have to!")
 
 
 def _at(n, start):
@@ -100,12 +101,12 @@ DOOR_WALK = 1.35                                   # m/s (the brisk gait, as the
 T = {}
 CLEAR = 0.45                                      # a cut waits till the last subtitle clears (Sam's note 36)
 e = _at(1, 0.05)                                  # shot 1: talking to the press over his shoulder as he comes in
-T['slam'] = max(1.3, e - 0.1)                     # the door slams as he finishes; shut 0.25 s later = the cut
+T['slam'] = max(1.3, e - 0.45)                    # the door slams on his last word; shut 0.25 s later = the cut
 T['open'] = 0.1                                   # open from the start: we see him at once (Sam's note 1, 4 Nov)
 T['cut2'] = T['slam'] + 0.25
 T['stop'] = T['cut2'] + MV.path_length(MV.ENTRY) / DOOR_WALK   # he stops for a beat (Sam's note 32)
-T['angry'] = T['stop'] + 0.5                      # a quick breath (0.5 s), then the frown snaps on
-e = _at(2, T['angry'] + 0.1)                      # then he looks at Satan, points and speaks
+T['angry'] = T['stop'] + 0.4                      # a quick breath (0.4 s), then the frown snaps on
+e = _at(2, T['angry'])                            # then he looks at Satan, points and speaks
 T['cut3'] = e + CLEAR
 e = _at(3, T['cut3'] + 0.25)                      # Satan's shrug
 T['cut4'] = e + CLEAR
@@ -285,9 +286,21 @@ def lift_shoulders(j, dy):
 
 
 def word_at(n, words):
-    """When line n reaches `words` (estimated from the share of the text before them; close enough until the take)."""
+    """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches only
+    (not its pauses); a phrase that starts a stretch snaps to that stretch's start (from the sound)."""
     ln = L[n]
-    return ln['start'] + ln['_dur'] * ln['text'].index(words) / len(ln['text'])
+    st = ln['_stretches']
+    tot = sum(b - a for a, b in st) or 1.0
+    k = ln['text'].index(words) / len(ln['text']) * tot
+    for a, b in st:
+        if k <= b - a:
+            est = a + k
+            break
+        k -= b - a
+    else:
+        est = st[-1][1]
+    near = min((a for a, _ in st), key=lambda a: abs(a - est))
+    return ln['start'] + (near if abs(near - est) < 0.6 else est)
 
 
 def jab(t, t0, n=2, each=0.36):
@@ -417,7 +430,7 @@ def epstein_j(t):
         V.arm_to(b, 'R', (330.0, -40.0, 60.0), 'out', 'palm')
         k = _ease(_ramp(t, L[9]['start'] - 0.2, L[9]['start'] + 0.15))
         return moves.mix_poses(V.standing(sp), moves.mix_poses(a, b, _ease(u)), k)
-    a, b = word_at(7, 'Why') - 0.15, word_at(7, "It's warm") + 0.2
+    a, b = word_at(7, 'Why') - 0.15, word_at(7, "It's so warm") + 0.2
     k = _ease(_ramp(t, a, a + 0.3)) * (1 - _ease(_ramp(t, b, b + 0.4)))
     if k > 0:                                     # note 39: arms open, imploring, on "why don't you come and join me?"
         sp = MC.EPSTEIN
@@ -538,8 +551,8 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
-SFX = {'slam': os.path.join(HERE, 'audio', 'midterminal-slam.m4a'),     # Sam's recordings (brief row 21)
-       'fire': os.path.join(HERE, 'audio', 'midterminal-fire.m4a')}
+SFX = {'slam': os.path.join(HERE, 'audio', 'midterminal-slam.m4a'),     # Sam's files (4 Nov): door slam,
+       'fire': os.path.join(HERE, 'audio', 'midterminal-fire.m4a')}       # fire breath at double speed
 
 
 def soundtrack(stems=False):
@@ -553,14 +566,12 @@ def soundtrack(stems=False):
     if os.path.exists(SFX['slam']):
         slam = MA.load(SFX['slam']) if hasattr(MA, 'load') else __import__('burnham_film').load(SFX['slam'])
         filmkit.place(rest, slam[:int(1.0 * SR)], at=T['slam'] + 0.25, sr=SR, gain=0.9)
-    if os.path.exists(SFX['fire']):               # gentle, under line 9 and the melt, fading with the ghost
+    if os.path.exists(SFX['fire']):               # Sam, 4 Nov: the fire breath (double speed) as his Hell entrance
         fire = MA.load(SFX['fire']) if hasattr(MA, 'load') else __import__('burnham_film').load(SFX['fire'])
-        a, b = L[9]['start'] - 0.3, T['gone']
-        seg = np.resize(fire, int((b - a) * SR)).copy()
-        f = int(0.4 * SR)
-        seg[:f] *= np.linspace(0, 1, f)
-        seg[-f:] *= np.linspace(1, 0, f)
-        rest[int(a * SR):int(a * SR) + len(seg)] += 0.35 * seg[:n - int(a * SR)]
+        from scipy.signal import butter, sosfiltfilt
+        fire = sosfiltfilt(butter(4, 90, 'high', fs=SR, output='sos'), fire)   # its deep rumble cut (pre-flight)
+        for at in (T['ghost'] - 0.1, T['gone'] - 1.0):      # and exit, under the flame burst and the fade away
+            filmkit.place(rest, fire, at=at, sr=SR, gain=0.6)
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:

@@ -35,19 +35,20 @@
 | 7 | Trump comes into the Oval Office from the corridor through the door; pupils look right at someone we don't see: "Thank you, everyone, no more questions." | drawn: shot 1, eyes LEFT to the press (note 31 overrides 'right'), palm up, flashes from the left |
 | 8 | Eyes face forward as he crosses the threshold; the door shuts behind him | drawn: eyes forward past 1.2 m; slam on the line's end |
 | 9 | Angry face as he walks opposite the desk: "Satan, what the f***? This isn't what you promised." (1 bleep) | drawn: walks in, stops, a breath, frown, then points and speaks (note 32); bleep placed once the take is in |
-| 10 | Satan floats before the desk, a small shrug: "I said don't invade Iran, you invade Iran." | drawn: shot 3, small shrug, floating |
-| 11 | Trump, accusatory, angrier, pointing: "Yeah, because Bibi told me to. I thought he was one of yours!?" | drawn: shot 4 reverse, frown deeper, pointing |
-| 12 | Satan, chuckling: "Oh, no. We've got nothing on him." | drawn: shot 5, smirk, shoulders bobbing |
+| 10 | Satan floats before the desk, a small shrug: "I said don't invade Iran, you invaded Iran." (Sam's wording, 4 Nov) | drawn: shot 3, small shrug, floating |
+| 11 | Trump, accusatory, angrier, pointing: "Yeah! Cos Bibi told me to! I thought he was one of yours?" (Sam's wording, 4 Nov) | drawn: shot 4 reverse, frown deeper, pointing |
+| 12 | Satan, chuckling: "Ha, no. Bibi is in a league of his own." (Sam's wording, 4 Nov) | drawn: shot 5, smirk, shoulders bobbing |
 | 13 | Zoom out. The hell ghost of Epstein fades in, floating by the side of the desk. Satan's pupils look at him | drawn: shot 6 HELD (note 38: no zoom), flame burst and smoke, fade in, Satan's eyes to him |
-| 14 | Epstein: "Don't worry, Donald. Why don't you come and join me? It's warm here. Nobody ever gouges out your eyes on an hourly basis." | drawn: shot 7 |
-| 15 | Trump: "Fuck off, Jeffrey. I know it's you that keeps putting algae in the reflecting pool." (bleep: Q4) | drawn: shot 8; bleep placed once the take is in |
-| 16 | Epstein waves his arms like a silly ghost, gently fades away, face melting into a flaming skull: "Releeeease the filessssss" | drawn: shot 9, arm wave, melt, fade; fire sound once Sam's file is in |
-| 17 | Trump, childish mocking voice: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to." | drawn: shot 10, brows up, head waggle on the mock, then the last line |
+| 14 | Epstein: "Donald, don't even worry about it. Why don't you come join me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis." (Sam's wording, 4 Nov) | drawn: shot 7 |
+| 15 | Trump: "Fuck off, Jeffrey. I know it's you that keeps adding algae to the reflecting pool." (bleep "fuck"; Sam's wording, 4 Nov) | drawn: shot 8; bleep placed once the take is in |
+| 16 | Epstein waves his arms like a silly ghost, gently fades away, face melting into a flaming skull: "Releeeaaaseee the fiiilleesss and ennndd myyy torrrmenttt" (Sam's wording, 4 Nov) | drawn: shot 9, arm wave, melt, fade; fire sound once Sam's file is in |
+| 17 | Trump, childish mocking voice: "Oooo, release the files! Maybe if Satan had done his job, maybe I wouldn't have to!" (Sam's wording, 4 Nov; his takes 9 and 10 joined) | drawn: shot 10, brows up, head waggle on the mock, then the last line |
 | 18 | Characters 2D first: front, side, back; three-quarter only if the script calls for it (Sam, 4 Nov) | yes (cast sheet) |
 
 | 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | in the film (HOOK), put on by finish.py |
 | 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | 77% at the build start (stop 84%) |
 
+| 29 | Sam 4 Nov (recordings): takes 1-10 filed (his 6 = line 7, 7 = 8, 8 = 9, 9 + 10 = line 10); his door slam; the fire breath at double speed as Epstein's Hell entrance and exit (replaces the gentle fire bed); bleeps from the sound: line 2 at 2.10-2.45 s, line 8 at 0.97-1.14 s of his takes | yes |
 | 21 | Sam 4 Nov: budget stop at 84%; Trump's eyes a little more open; Satan floats, wings medium, horns small; bleep every swear; the ghost not too cartoony, in the house style; Sam supplies a gentle fire sound and a door slam | done (cast), rest in build |
 | 22 | Sam 4 Nov (test clip): Trump behind the shut door until it opens; corridor wall and carpet fill the doorway; door swings into the room, on the left | done (moves) |
 | 23 | Sam 4 Nov: in the walk-to-the-desk shot Trump right, Satan middle, Epstein left; Trump front-on and pointing at Satan as he walks in | done (moves) |
