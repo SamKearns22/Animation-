@@ -38,7 +38,7 @@ import burnham as B              # noqa: E402
 import traitors_cast as TC       # noqa: E402  (Trump; installs the head hooks into burnham)
 import patriots4_cast as P4      # noqa: E402  (the measured-face layout: layout, Face, eyes, brows, nose, lips)
 import views as V                # noqa: E402
-from ed import INK, curve, oval  # noqa: E402
+from ed import INK, curve, oval, open_curve  # noqa: E402
 
 dk, blend = TC.dk, TC.blend
 FONT = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
@@ -201,10 +201,10 @@ def _wing(p, sgn, spread, view):
     spread 0 (folded against the back) .. 1 (open, ref 2)."""
     s = 0.45 + 0.55 * spread
     root = (sgn * 60, 70)
-    wrist = (sgn * (120 + 170 * s), -60 - 90 * s)
-    tip = (sgn * (150 + 240 * s), 230 + 30 * (1 - s))
-    elbow = (sgn * (95 + 90 * s), 0 - 45 * s)
-    lead = curve([root, elbow, wrist, tip], 4)
+    wrist = (sgn * (120 + 170 * s), 30 - 25 * s)      # Sam's note 34: the wing tops sit just under the shoulder line,
+    tip = (sgn * (150 + 240 * s), 230 + 30 * (1 - s))  # no red points rising beside his neck
+    elbow = (sgn * (95 + 90 * s), 50 - 15 * s)
+    lead = open_curve([root, elbow, wrist, tip], 4)    # OPEN (note 36: closed, it doubled back and tore the wing)
     # the feather mass: under the leading edge down to a scalloped trailing edge
     n = 9
     trail = []
@@ -228,7 +228,7 @@ def _wing(p, sgn, spread, view):
     cov = curve([(root[0] + sgn * 10, root[1] - 10), (elbow[0], elbow[1] + 40), (wrist[0] - sgn * 10, wrist[1] + 70),
                  (wrist[0] - sgn * 40, wrist[1] + 120), (elbow[0] - sgn * 20, elbow[1] + 130), (root[0], root[1] + 90)], 3)
     p.poly(cov, S_WING_L, INK, 2.0)                    # the lighter coverts along the arm
-    p.line(lead, dk(S_WING_D, 0.8), 4.0)
+    p.line([(a, b + 4) for a, b in lead], dk(S_WING_D, 0.8), 4.0)   # the dark accent just inside the edge
     p.line(lead, INK, 2.2)
 
 
@@ -406,6 +406,11 @@ def trump_head(img, p, sp, t, hx, hy):
         p.line([(fx - mw * 0.55, my - 2), (fx, my), (fx + mw * 0.55, my - 2)], INK, 2.0)
     if sp.get('pout'):                                 # the rosebud pout, for a moment that wants it
         TC.talk_or(p, dict(sp, lips=True, lip_c=(196, 116, 98)), t, fx, my - 6, pout)
+    elif sp.get('sneer') and not str(sp.get('mouth', 'rest')).startswith('v:'):   # smug: one corner hitched up
+        P4.lips(p, f, L, dict(sp, smile=0.2), (196, 116, 98), (fx, my - 6))
+        cx, cy = f(L['mw'] / 2, L['lip13'] - 0.01)
+        p.line([(cx - 4, cy + 3), (cx + 9, cy - 9)], INK, 2.2)
+        p.line(curve(f.pts([(L['nw'] * 0.5, L['nose_y'] - 0.01), (L['nw'] * 0.75, L['nose_y'] + 0.04)]), 2), INK, 1.6)
     else:                                              # measured: thin lips, corners pulled down (ref 2)
         P4.lips(p, f, L, dict(sp, smile=0.0 if sp.get('average') else -0.8), (196, 116, 98), (fx, my - 6))
     # the hair: high and swept from the back of the crown forward and over to our left, the forelock curling down

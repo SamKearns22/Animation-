@@ -83,7 +83,7 @@ def _rot_out(p, hinge, ang):
     return (hx + dx * c - dz * s, y, hz + dx * s + dz * c)
 
 
-def door_open(img, cm, t_open, part='both'):
+def door_open(img, cm, t_open, part='both', flash=0):
     """The doorway (the corridor behind, filling the opening to the frame on both sides) and the leaf swung `t_open`
     (0..1 = 0..100 degrees) INTO the room about its hinge (north side: on the left seen from inside; Sam, 4 Nov); the
     knob on the free edge. The leaf is drawn even when shut, over the set's own door, so someone behind it stays
@@ -91,9 +91,7 @@ def door_open(img, cm, t_open, part='both'):
     c, h = DOOR_A, DOOR_H + DOOR_W
     if part in ('hole', 'both'):
         if t_open > 0.001:
-            MS.poly(img, cm, MS.band(c - h, c + h, 0.0, 2.45, 0.016, 1.0), CORRIDOR, INK, 2.0)   # far wall
-            MS.poly(img, cm, MS.band(c - h, c + h, 0.0, 0.22, 0.017, 1.0), RUNNER, INK, 1.4)     # runner, side to side
-            MS.poly(img, cm, MS.band(c - h, c + h, 1.95, 2.45, 0.017, 1.0), MS.dk(CORRIDOR, 0.85), INK, 1.4)
+            corridor(img, cm, flash)
     if part == 'hole':
         return
     ang = 100.0 * max(0.0, t_open)
@@ -120,12 +118,82 @@ def door_open(img, cm, t_open, part='both'):
             MS.GOLD, INK, 1.2)
 
 
-def door_items(t_open):
+CW, CD, CH = 1.25, 7.5, 2.9          # the corridor: half its width, how deep we see, its height (m)
+
+
+def _cor(s, d, y):
+    """A point in the corridor: s metres sideways (along the wall, + = towards larger wall angles), d metres out from
+    the doorway, y up."""
+    o = MS.wp(DOOR_A, 0.0, 0.0)
+    n = MS.wp(DOOR_A, 0.0, -1.0)
+    nx, nz = n[0] - o[0], n[2] - o[2]
+    tx, tz = -nz, nx                              # along the wall
+    a = MS.wp(DOOR_A + 1.0, 0.0, 0.0)
+    if (a[0] - o[0]) * tx + (a[2] - o[2]) * tz < 0:
+        tx, tz = -tx, -tz
+    return (o[0] + nx * d + tx * s, y, o[2] + nz * d + tz * s)
+
+
+def corridor(img, cm, flash=0):
+    """The West Wing corridor through the doorway, a real space in depth (Sam's note 31): side walls with a white dado
+    and gold sconces, a ceiling with hanging lights, a wooden floor with the red runner running away, a door at the
+    far end; clipped to the doorway. `flash` (0..1): a press camera flash from the left side (off-screen) this frame."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    P = lambda pts, fill, lw=1.8, line=INK: MS.poly(lay, cm, [_cor(*q) for q in pts], fill, line, lw)  # noqa: E731
+    wall, side = CORRIDOR, MS.dk(CORRIDOR, 0.9)
+    P([(-CW, 0, 0), (CW, 0, 0), (CW, CD, 0), (-CW, CD, 0)], (150, 112, 74))                        # floor boards
+    for k in range(1, 6):
+        MS.lines(lay, cm, [_cor(-CW, CD * k / 6, 0), _cor(CW, CD * k / 6, 0)], (120, 88, 58), 1.0)
+    P([(-0.6, -0.5, 0.002), (0.6, -0.5, 0.002), (0.6, CD, 0.002), (-0.6, CD, 0.002)], RUNNER, 1.4)     # the runner
+    for sg in (-1, 1):
+        P([(0.6 * sg, -0.5, 0.004), (0.53 * sg, -0.5, 0.004), (0.53 * sg, CD, 0.004), (0.6 * sg, CD, 0.004)],
+          MS.GOLD, 0, None)            # its gold edges
+    P([(-CW, CD, 0), (CW, CD, 0), (CW, CD, CH), (-CW, CD, CH)], wall)                                 # the far end
+    P([(-0.5, CD, 0), (0.5, CD, 0), (0.5, CD, 2.2), (-0.5, CD, 2.2)], MS.WHITE, 1.6)                  # its white door
+    P([(-0.12, CD, 2.3), (0.12, CD, 2.3), (0.0, CD, 2.55)], MS.WHITE, 1.2)
+    for sg in (-1, 1):                                                                                # side walls
+        P([(sg * CW, -0.5, 0), (sg * CW, CD, 0), (sg * CW, CD, CH), (sg * CW, -0.5, CH)], side)
+        P([(sg * CW, -0.5, 0), (sg * CW, CD, 0), (sg * CW, CD, 0.95), (sg * CW, -0.5, 0.95)], MS.WHITE, 1.4)  # dado
+        P([(sg * CW, -0.5, 0.95), (sg * CW, CD, 0.95), (sg * CW, CD, 1.0), (sg * CW, -0.5, 1.0)], MS.dk(MS.WHITE, 0.88), 1.0)
+        for d in (1.4, 4.0, 6.4):                                                                     # a framed picture
+            P([(sg * CW * 0.995, d - 0.45, 1.35), (sg * CW * 0.995, d + 0.45, 1.35), (sg * CW * 0.995, d + 0.45, 2.0),
+               (sg * CW * 0.995, d - 0.45, 2.0)], MS.GOLD, 1.4)
+            P([(sg * CW * 0.99, d - 0.36, 1.43), (sg * CW * 0.99, d + 0.36, 1.43), (sg * CW * 0.99, d + 0.36, 1.92),
+               (sg * CW * 0.99, d - 0.36, 1.92)], (120, 140, 120) if sg < 0 else (150, 120, 90), 1.0)
+        for d in (2.7, 5.2):                                                                          # gold sconces
+            MS.poly(lay, cm, [_cor(sg * CW * 0.98, d + 0.08 * math.cos(u), 1.75 + 0.1 * math.sin(u))
+                              for u in np.linspace(0, 6.28, 10)], (255, 236, 170), INK, 1.2)
+            MS.poly(lay, cm, [_cor(sg * CW * 0.98, d - 0.05, 1.55), _cor(sg * CW * 0.98, d + 0.05, 1.55),
+                              _cor(sg * CW * 0.98, d + 0.03, 1.68), _cor(sg * CW * 0.98, d - 0.03, 1.68)], MS.GOLD, INK, 1.0)
+    P([(-CW, -0.5, CH), (CW, -0.5, CH), (CW, CD, CH), (-CW, CD, CH)], MS.lt(CORRIDOR, 1.04))         # ceiling
+    for d in (1.8, 4.6):                                                                              # hanging lights
+        MS.lines(lay, cm, [_cor(0, d, CH), _cor(0, d, CH - 0.35)], INK, 1.2)
+        MS.poly(lay, cm, [_cor(0.16 * math.cos(u), d, CH - 0.45 + 0.1 * math.sin(u)) for u in np.linspace(0, 6.28, 10)],
+                (255, 240, 190), INK, 1.4)
+    if flash > 0:                                                                                     # a camera flash
+        box = opening_mask(img.size, cm).getbbox()            # just inside the doorway's left edge, head high
+        sx, sy = box[0] / B.SS + 25, box[1] / B.SS + 0.45 * (box[3] - box[1]) / B.SS
+        rng = np.random.default_rng(int(flash * 1000))
+        wash = Image.new('RGBA', img.size, (255, 255, 255, int(110 * flash)))
+        lay.alpha_composite(wash)
+        d = ImageDraw.Draw(lay)
+        pts = []
+        for k in range(14):                       # a lumpy starburst (house style: no glow, flat shapes)
+            r = (150 if k % 2 == 0 else 60) * rng.uniform(0.8, 1.2) * B.SS
+            u = 2 * math.pi * k / 14 + rng.uniform(-0.1, 0.1)
+            pts.append((sx * B.SS + r * math.cos(u), sy * B.SS + r * math.sin(u)))
+        d.polygon(pts, fill=(255, 255, 236, 255), outline=INK + (255,), width=int(2 * B.SS))
+    m = np.minimum(np.asarray(lay.getchannel('A')), np.asarray(opening_mask(img.size, cm)))
+    lay.putalpha(Image.fromarray(m))
+    img.alpha_composite(lay)
+
+
+def door_items(t_open, flash=0):
     """Two people-list items: the doorway (sorted as far as the corridor, so someone in it draws over it) and the
     leaf (sorted at its middle, in the room)."""
     hx, _, hz = MS.wp(DOOR_A, 0.0, -2.0)
     lx, _, lz = MS.wp(DOOR_A, 0.0, 0.6)
-    return [(hx, hz, lambda im, c: door_open(im, c, t_open, 'hole')),
+    return [(hx, hz, lambda im, c: door_open(im, c, t_open, 'hole', flash)),
             (lx, lz, lambda im, c: door_open(im, c, t_open, 'leaf'))]
 
 
@@ -156,11 +224,11 @@ def opening_mask(img_size, cm):
 
 # ---------------------------------------------------------------------------------------------- walk
 WALK_TO = (0.7, 1.0)                 # his mark (Sam, 4 Nov: Trump right, Satan middle, Epstein left)
-SATAN_AT = (0.0, 2.15)
-EPSTEIN_AT = (-1.35, 3.0)          # beside the desk, left
+SATAN_AT = (0.0, 1.45)            # forward of the desk, bigger in frame (Sam's note 33)
+EPSTEIN_AT = (-1.8, 2.85)          # beside the desk, left; clear of Satan's wing (note 38)
 
 
-ENTRY = [(2.4, 1.0), (1.6, 1.0), WALK_TO]   # shot 2: in from frame RIGHT to his mark (Sam, 4 Nov, corrected)
+ENTRY = [(1.9, 1.0), (1.35, 1.0), WALK_TO]  # shot 2: in from frame RIGHT to his mark, short: he stops early (note 32)
 
 
 def _path_pts(pts=None):
@@ -224,7 +292,7 @@ def _copy(j):
                 else v) for k, v in j.items()}
 
 
-def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None, pts=None):
+def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None, pts=None, arms=None):
     """Trump d metres along his path at time t (walking: the brisk gait; else standing). `facing` overrides; `front`
     keeps him square to the lens all the way (Sam, 4 Nov); `point`: a world point he points at. Over the last 0.5 m
     he turns square to the lens anyway (rule 38: front on at his mark)."""
@@ -245,6 +313,8 @@ def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None, pts
             f = f0 + (((MS.to_cam(c, x, z) - f0 + 180) % 360) - 180) * k
         if point is not None:
             point_at(jj, c, x, z, point)
+        if arms is not None:                      # the film's own gesture over the walk (e.g. a palm to the press)
+            jj = arms(jj, c, x, z)
         if behind_wall(x, z):
             lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
             MS.put(lay, c, sp, x, z, f, jj)
@@ -395,16 +465,126 @@ def _melt(layer, box, k, seed=5):
     return Image.fromarray(a, 'RGBA')
 
 
-def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8, j=None):
-    """The hellfire ghost of Epstein, floating with a slow bob; below the waist his body gives way to a flame tail.
-    fade 0..1 (see-through to fully there), melt 0..1 (the face runs down and the flaming skull shows through)."""
-    lift = 0.25 + 0.03 * math.sin(2 * math.pi * t / 1.4)
+BONE, BONE_D = (236, 226, 202), (206, 190, 160)
+GHOST_ALPHA = 0.9                    # Sam's note 39: half again as solid as before (0.72), still a little see-through
+
+
+def _frame_of(c, sp, x, z, facing, lift):
+    """The person's own drawing frame on the full-size canvas (as MS.put places them): a burnham Local and the drawn
+    view, so bones can be drawn on the same joints as the body."""
+    f = sp.get('height', 1.75) / 1.75
+    neck = 928 * V.M_PER_UNIT * f + lift
+    (Xn, Yn), _ = c.project((x, neck, z))
+    (Xf, Yf), _ = c.project((x, lift, z))
+    s = max(1e-3, (Yf - Yn) / 928.0)
+    fd = (math.sin(math.radians(facing)), math.cos(math.radians(facing)))
+    view_deg, mirror = V.snap(c.yaw_of((x, 0, z), fd))
+    return B.Local(MS.FLAT, Xf, Yf - 928 * s, s, -1 if mirror else 1), view_deg
+
+
+def _bone(p, a, b, w):
+    p.line([a, b], INK, w + 4.4)
+    p.line([a, b], BONE, w)
+    for q in (a, b):                                  # knobbly ends
+        p.ell(q[0], q[1], w * 0.62, w * 0.62, BONE, INK, 2.0)
+
+
+def skeleton(img, L, view_deg, j, t, burn=1.0):
+    """A burning skeleton in the house style (Sam's note 41, standard anatomy, no reference): collarbones, a spine,
+    a ribcage, the pelvis top, and both arms (upper arm, two forearm bones, a plain round bone hand), on his joints;
+    small flames licking over it. Drawn in his own frame (neck base 0, 0)."""
+    p = B.Pen(img, L)
+    P = {k: V.project(V.leaned(j[k], j.get('lean', 0.0)), view_deg)[0] for k in ('shL', 'shR', 'elL', 'elR', 'wrL', 'wrR')}
+    for y in range(20, 430, 34):                      # the spine: a column of vertebrae
+        p.poly([(-11, y), (11, y), (9, y + 26), (-9, y + 26)], BONE, INK, 2.0)
+    for k in range(6):                                # ribs: arcs either side from the spine round to the front
+        y = 70 + 30 * k
+        w = 92 - 6 * k
+        for sg in (-1, 1):
+            p.line([(sg * 10, y), (sg * w * 0.7, y - 10), (sg * w, y + 12), (sg * w * 0.85, y + 40)], INK, 13.0)
+            p.line([(sg * 10, y), (sg * w * 0.7, y - 10), (sg * w, y + 12), (sg * w * 0.85, y + 40)], BONE, 8.0)
+    p.poly([(-8, 62), (8, 62), (6, 200), (-6, 200)], BONE_D, INK, 1.8)            # the breastbone
+    for sg in (-1, 1):                                # the pelvis top: two wings of bone
+        p.poly([(sg * 12, 400), (sg * 96, 380), (sg * 112, 430), (sg * 70, 470), (sg * 14, 460)], BONE, INK, 2.2)
+    for sd in 'LR':
+        sh, el, wr = P['sh' + sd], P['el' + sd], P['wr' + sd]
+        _bone(p, (0, 4), sh, 10)                      # collarbone
+        _bone(p, sh, el, 15)                          # upper arm
+        n = (wr[1] - el[1], el[0] - wr[0])
+        m = math.hypot(*n) or 1.0
+        for sg in (-1, 1):                            # two forearm bones
+            o = (sg * n[0] / m * 5, sg * n[1] / m * 5)
+            _bone(p, (el[0] + o[0], el[1] + o[1]), (wr[0] + o[0], wr[1] + o[1]), 7)
+        d = (wr[0] - el[0], wr[1] - el[1])
+        k = math.hypot(*d) or 1.0
+        p.ell(wr[0] + d[0] / k * 14, wr[1] + d[1] / k * 14, 22, 22, BONE, INK, 2.4)   # the hand: a plain bone circle
+    if burn > 0:                                      # flames licking over the bones
+        d = ImageDraw.Draw(img)
+        for i, (bx, by) in enumerate([(0, 120), (-60, 220), (60, 260), P['elL'], P['elR'], P['shL'], P['shR']]):
+            if (i + int(t * 3)) % 3 == 0:
+                continue
+            X, Y = L.P(bx, by)
+            flames(d, X, Y + 20 * L.s * B.SS, 70 * L.s * B.SS, 120 * burn * L.s * B.SS, t, 40 + i, n=3,
+                   lw=2.0 * B.SS)
+
+
+def body_flames(d, nx, ny, s, t):
+    """Sam's note 39: now and then a small flame flickers up on his body (two at a time, each lasting 0.5 s)."""
+    spots = [(-100, 60), (110, 70), (-40, 220), (60, 300), (-70, 360), (20, 140), (90, 200)]
+    slot = int(t / 0.5)
+    for k in range(2):
+        r = np.random.default_rng(slot * 7 + k)
+        if r.random() < 0.35:                         # some slots stay quiet: "occasional"
+            continue
+        bx, by = spots[int(r.integers(len(spots)))]
+        flames(d, nx + bx * s, ny + by * s, 60 * s, 110 * s, t, 60 + slot * 2 + k, n=3, lw=2.0 * B.SS)
+
+
+def entrance(over, nx, ny, s, age, seed=21):
+    """Sam's note 38: he arrives in a burst of flames and light smoke: flames roar up the height of a man and die back
+    over 0.9 s; pale smoke clumps (each its own outline, house style) rise and shrink away over 1.1 s."""
+    d = ImageDraw.Draw(over)
+    if 0 <= age < 0.9:
+        h = 1.0 - ((age - 0.18) / 0.72) ** 2 if age > 0.18 else age / 0.18
+        flames(d, nx, ny + 820 * s, 760 * s, 1500 * s * max(0.0, h), age, seed, n=9, lw=2.6 * B.SS)
+    for i in range(9):
+        r = np.random.default_rng(seed * 13 + i)
+        t0 = r.uniform(0.0, 0.35)
+        u = (age - t0) / 1.1
+        if not 0 <= u <= 1:
+            continue
+        cx = nx + r.uniform(-300, 300) * s + r.uniform(-60, 60) * s * u
+        cy = ny + r.uniform(250, 700) * s - 650 * s * u
+        rad = (90 + 130 * min(1.0, u * 3)) * s * (1 - max(0.0, (u - 0.7) / 0.3))   # grows, then shrinks away
+        if rad < 2:
+            continue
+        pts = []
+        for k in range(10):
+            a = 2 * math.pi * k / 10
+            rr = rad * (1 + 0.18 * math.sin(3 * a + i))
+            pts.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
+        d.polygon(pts, fill=(214, 210, 206, 150), outline=INK + (150,), width=int(2 * B.SS))
+
+
+def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8, j=None,
+                 arrive=None):
+    """The hellfire ghost of Epstein, floating with a slow bob; below the waist his body gives way to a flame tail;
+    now and then a flame on his body. fade 0..1 (see-through to there), melt 0..1 (his face runs down to a flaming
+    skull, then the melt spreads over his shoulders, arms and body to a burning skeleton). arrive: seconds since the
+    burst he arrives in (None = no burst)."""
+    lift = 0.5 + 0.03 * math.sin(2 * math.pi * t / 1.4)   # high enough to float over the chair (note 38)
 
     def draw(im, c):
-        if fade <= 0.01:
-            return
         f = MS.to_cam(c, x, z) if facing is None else facing
         nx, ny, s = _neck_screen(c, sp, x, z, lift)
+        over = Image.new('RGBA', im.size, (0, 0, 0, 0))     # drawn flat over the ghost, not tinted (house style)
+        burst = Image.new('RGBA', im.size, (0, 0, 0, 0))    # the arrival burst: never faded with him
+        if arrive is not None and 0 <= arrive < 2.0:
+            entrance(burst, nx, ny, s, arrive)
+        if fade <= 0.01:
+            im.alpha_composite(burst)
+            return
+        jj = j if j is not None else V.standing(sp)
         lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
         MS.put(lay, c, dict(sp, look=look), x, z, f, j, lift=lift)
         probe = lay                                       # the head is measured with his arms DOWN: raised arms (the
@@ -418,9 +598,10 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             ramp = np.clip((np.arange(a.shape[0]) - hip) / max(1, knee - hip), 0, 1)
             a[..., 3] = (a[..., 3] * (1 - ramp[:, None])).astype(np.uint8)
         lay = Image.fromarray(a, 'RGBA')
-        over = Image.new('RGBA', im.size, (0, 0, 0, 0))     # drawn flat over the ghost, not tinted (house style)
+        dov = ImageDraw.Draw(over)
         # the tail: flames roaring UP from below the knees to his waist (Sam, 4 Nov), where his legs fade away
-        flames(ImageDraw.Draw(over), nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS, bed=True)
+        flames(dov, nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS, bed=True)
+        body = 0.0
         if melt > 0:
             al = np.asarray(probe.getchannel('A'))
             rows = np.where(al[:int(ny)].max(axis=1) > 0)[0] if ny > 0 else []
@@ -431,16 +612,35 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             sk = skull(hw * (0.85 + 0.15 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # his own head's size (Sam, 4 Nov)
             sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
             head_y = (top + ny) / 2
-            under = Image.new('RGBA', im.size, (0, 0, 0, 0))      # under the skin: the melting face runs down
+            under = Image.new('RGBA', im.size, (0, 0, 0, 0))      # under the skin: the bones the melt uncovers
+            body = min(1.0, max(0.0, (melt - 0.35) / 0.5))       # note 41: the melt spreads down his body
+            if body > 0:
+                L, vd = _frame_of(c, sp, x, z, f, lift)
+                bones = Image.new('RGBA', im.size, (0, 0, 0, 0))
+                skeleton(bones, L, vd, jj, t, burn=body)
+                bones.putalpha(bones.getchannel('A').point(lambda v: int(v * min(1.0, body * 1.6))))
+                under.alpha_composite(bones)
             under.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
-            if fade < 1:
-                under.putalpha(under.getchannel('A').point(lambda v: int(v * fade)))
-            im.alpha_composite(under)                             # over it (Sam, 4 Nov)
+            # note 41: as ghostly as he is (the skull was full strength under him)
+            under.putalpha(under.getchannel('A').point(lambda v: int(v * fade * GHOST_ALPHA)))
+            im.alpha_composite(under)
             lay = _melt(lay, (hx0 - 4, top, hx1 + 4, ny + 40 * s), melt)
-        MS.ghost(im, lambda L: L.alpha_composite(lay), alpha=0.72 * fade)
+            if body > 0:                                          # shoulders, arms, body run down after the face
+                bb = np.where(np.asarray(lay.getchannel('A')) > 0)
+                if len(bb[0]):
+                    lay = _melt(lay, (bb[1].min() - 4, bb[0].min(), bb[1].max() + 4, ny + 470 * s), body, seed=9)   # hands too
+        if melt > 0:                                  # what runs down never shows below his flame tail
+            a = np.asarray(lay).copy()
+            if hip < a.shape[0]:
+                a[..., 3] = (a[..., 3] * (1 - ramp[:, None])).astype(np.uint8)
+            lay = Image.fromarray(a, 'RGBA')
+        if body < 0.5:
+            body_flames(dov, nx, ny, s, t)
+        MS.ghost(im, lambda L: L.alpha_composite(lay), alpha=GHOST_ALPHA * fade, own=0.65)
         if fade < 1:
             over.putalpha(over.getchannel('A').point(lambda v: int(v * fade)))
         im.alpha_composite(over)
+        im.alpha_composite(burst)
     return (x, z, draw)
 
 

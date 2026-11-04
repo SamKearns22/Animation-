@@ -721,7 +721,12 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         q.setdefault('bottom', JACKET)
         if seated:
             q['bottom'] = min(q.get('bottom', 560), 470)
-        B.torso(img, B.Pen(img, up), q, t)
+        if mirror:                                # the front torso is symmetric, but its details (a pocket square, a pin)
+            Lf = B.Local(cam, x, y + j.get('bob', 0.0) * s, s, 1)    # are not: never mirror them, or they jump sides
+            Lf = Lf if squash is None else Tilted(Lf, squash, 928.0 - j.get('bob', 0.0))   # when the yaw crosses 0
+            B.torso(img, B.Pen(img, Lean(Lf, lean, view_deg)), q, t)   # (MidTerminal note 37)
+        else:
+            B.torso(img, B.Pen(img, up), q, t)
     else:
         hem = sp_draw.get('bottom', JACKET)       # bending: the hem rises to the hips, never a long tail (Sam); eased
         u = min(1.0, max(0.0, (lean - 12) / 8))   # over leans 12 to 20, never a jump (Sam, 20 Oct: his torso popped

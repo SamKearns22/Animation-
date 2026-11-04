@@ -150,11 +150,12 @@ def eyes(p, f, L, sp, iris, lid_c, liner=2.6, wide=0.0):
 
 def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
     """Filled brows from inner to outer end at the measured height and slope. raise_ lifts them (surprise);
-    frown pulls the inner ends down (narrowed, accusing)."""
+    frown pulls the inner ends down (narrowed, accusing). raise_ may be a pair (our left, our right): one brow up."""
     for sgn in (-1, 1):
         ecx, ew = L['ecx'], L['ew']
         xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew
-        y_m = L['brow_y'] - thick * 0.35 - raise_
+        up = raise_[0 if sgn < 0 else 1] if isinstance(raise_, (tuple, list)) else raise_
+        y_m = L['brow_y'] - thick * 0.35 - up
         yi = y_m + L['slope'] * (xm - xi) * 1.0 + frown
         yo = y_m - L['slope'] * (xo - xm)
         ym = y_m - 0.008

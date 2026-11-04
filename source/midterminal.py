@@ -95,41 +95,50 @@ def _at(n, start):
     return L[n]['end']
 
 
+DOOR_WALK = 1.35                                   # m/s (the brisk gait, as the test clips Sam passed)
 # The timeline: each beat follows the one before, so a take that runs long pushes the rest on.
 T = {}
+CLEAR = 0.45                                      # a cut waits till the last subtitle clears (Sam's note 36)
 e = _at(1, 0.05)                                  # shot 1: talking to the press over his shoulder as he comes in
 T['slam'] = max(1.3, e - 0.1)                     # the door slams as he finishes; shut 0.25 s later = the cut
 T['open'] = 0.1                                   # open from the start: we see him at once (Sam's note 1, 4 Nov)
 T['cut2'] = T['slam'] + 0.25
-e = _at(2, T['cut2'])                             # line 2 on the cut (Sam's note 26)
-T['cut3'] = e + 0.1
+T['stop'] = T['cut2'] + MV.path_length(MV.ENTRY) / DOOR_WALK   # he stops for a beat (Sam's note 32)
+T['angry'] = T['stop'] + 0.5                      # a quick breath (0.5 s), then the frown snaps on
+e = _at(2, T['angry'] + 0.1)                      # then he looks at Satan, points and speaks
+T['cut3'] = e + CLEAR
 e = _at(3, T['cut3'] + 0.25)                      # Satan's shrug
-T['cut4'] = e + 0.15
+T['cut4'] = e + CLEAR
 e = _at(4, T['cut4'] + 0.15)                      # the reverse on Trump, pointing
-T['cut5'] = e + 0.1
+T['cut5'] = e + CLEAR
 e = _at(5, T['cut5'] + 0.2)                       # Satan chuckles
-T['cut6'] = e + 0.3                               # zoom out; the ghost fades in; Satan's eyes go to him
+T['cut6'] = e + CLEAR                             # held (no zoom, note 38); the ghost fades in; Satan's eyes go to him
 T['ghost'] = T['cut6'] + 0.5
 T['eyes'] = T['ghost'] + 0.5
 T['cut7'] = T['ghost'] + 1.6
 e = _at(7, T['cut7'] + 0.2)
-T['cut8'] = e + 0.15
+T['cut8'] = e + CLEAR
 e = _at(8, T['cut8'] + 0.15)
-T['cut9'] = e + 0.1
+T['cut9'] = e + CLEAR
 e = _at(9, T['cut9'] + 0.25)                      # the silly-ghost arms, the melt, fading away
 T['melt'] = L[9]['start'] + 0.4
 T['gone'] = e + 0.9
 T['cut10'] = T['gone'] + 0.1
 e = _at(10, T['cut10'] + 0.2)
+T['cut11'] = L[10]['start'] + L[10]['mock_end'] + 0.05   # note 43: back to the shot 2 angle for the last sentence
+T['flinch'] = T['cut11'] + 0.3                    # Satan flinches from the jabbing finger
 DUR = e + 0.6
 BLACK_AT = DUR
 SHOTS = [('door', 0.0, T['cut2']), ('two', T['cut2'], T['cut3']), ('satan', T['cut3'], T['cut4']),
          ('trump', T['cut4'], T['cut5']), ('satan', T['cut5'], T['cut6']), ('three', T['cut6'], T['cut7']),
          ('epstein', T['cut7'], T['cut8']), ('trump', T['cut8'], T['cut9']), ('epstein', T['cut9'], T['cut10']),
-         ('trump', T['cut10'], DUR)]
+         ('trump', T['cut10'], T['cut11']), ('two', T['cut11'], DUR)]
 # Cameras (pos, look, focal): key shots 1-4 from the composition sheet (Sam's yes, 4 Nov); the singles new.
 CAMS = dict(MV.SHOT_CAMS)
-CAMS['satan'] = ((0.3, 1.8, 0.35), (0.0, 1.85, 2.15), 1350)     # Satan from Trump's side, the desk and windows behind
+CAMS['two'] = ((0.0, 1.55, -1.7), (0.05, 1.45, 2.5), 1200)        # note 33: a little tighter, Satan forward
+CAMS['three'] = ((0.0, 1.6, -1.4), (-0.25, 1.45, 2.6), 780)        # key shot 3, held (note 38), Epstein clear
+CAMS['epstein'] = ((-2.85, 1.85, 1.25), (-1.8, 1.75, 2.85), 1150)
+CAMS['satan'] = ((0.3, 1.8, -0.35), (0.0, 1.85, 1.45), 1350)     # Satan from Trump's side, the desk and windows behind
 CAMS['trump'] = ((-0.3, 1.72, 2.0), (0.7, 1.6, 1.0), 1150)      # the reverse (180): from Satan's side at Trump
 SHOT_CAST = {'door': ['trump'], 'two': ['trump', 'satan'], 'satan': ['satan'], 'trump': ['trump'],
              'three': ['trump', 'satan', 'epstein'], 'epstein': ['epstein']}
@@ -202,7 +211,6 @@ def _face(who, t):
 
 
 # ------------------------------------------------------------------------------------------------ the people
-DOOR_WALK = 1.35                                   # m/s (the brisk gait, as the test clips Sam passed)
 
 
 def door_d(t):
@@ -220,50 +228,151 @@ def trump_sp(t):
     sp = dict(MC.TRUMP, **_face('trump', t))
     s = shot_of(t)
     if s == 'door':
-        sp['look'] = 0.9 if door_d(t) < 1.2 else 0.0
+        sp['look'] = -0.9 if door_d(t) < 1.2 else 0.0    # to the press, off LEFT (Sam's note 31)
         return sp
     sp['frown'] = 0.03
-    if s == 'two':
-        sp['look'] = -0.8                         # at Satan, on his left
+    if s == 'two':                                # note 32: eyes ahead on the walk; the breath; angry, eyes to Satan
+        sp['look'] = -0.8 if t >= T['stop'] + 0.2 else -0.2
+        sp['frown'] = 0.0 if t < T['angry'] else 0.05
     elif s == 'trump':
         sp['look'] = -0.35                        # at Satan, just off the lens to our left
-        if t >= L[4]['start'] - 0.2:
-            sp['frown'] = 0.045                   # angrier (brief 11)
-        if t >= T['cut10'] and t < L[10]['start'] + L[10]['mock_end']:
-            sp['frown'] = 0.0                     # the childish mock: brows up, head waggling (brief 17)
-            sp['brow_up'] = 0.03
+        if T['cut4'] <= t < T['cut5']:            # note 35: exasperated (brows up), then accusing
+            acc = t >= word_at(4, 'I thought') - 0.1
+            sp['frown'] = 0.05 if acc else 0.0
+            sp['brow_up'] = 0.0 if acc else 0.03
+        if T['cut8'] <= t < T['cut9']:            # note 40: angry; eyes narrowed on "I know it's you"; smug at the end
+            if t >= word_at(8, "I know") - 0.1:
+                sp['lid4'], sp['frown'] = 0.42, 0.045
+            if t >= word_at(8, 'reflecting') - 0.25:
+                sp['lid4'], sp['frown'], sp['sneer'] = 0.3, 0.0, True
+                sp['brow_up'] = (0.0, 0.03)
+        if T['cut10'] <= t < T['cut11']:          # note 42: the childish mock: pout, brows up
+            sp['frown'], sp['brow_up'], sp['pout'] = 0.0, 0.035, True
+    if s == 'two' and t >= T['cut11']:            # note 43: furious at Satan
+        sp['frown'], sp['look'] = 0.06, -0.8
     elif s == 'three':
         sp['look'] = -0.8 if t < T['eyes'] else -0.9
     return sp
 
 
+FLASHES = (0.25, 0.58, 0.83, 1.25)               # press camera flashes, one frame each, from the left (note 31)
+
+
+def flash_at(t):
+    return 1.0 if any(int(f * FPS + 1e-6) == int(t * FPS + 1e-6) for f in FLASHES) else 0.0
+
+
+def press_palm(j, t):
+    """Shot 1: his hand up, palm out to the press on our left, "no, thank you" (Sam's note 31); down by the threshold."""
+    k = _ease(_ramp(t, 0.15, 0.45)) * (1 - _ease(_ramp(t, L[1]['end'] - 0.35, L[1]['end'])))
+    if k <= 0:
+        return j
+    sx, sy, sz = j['shL']
+    up = dict(j)
+    up['hand'] = dict(j.get('hand', {}))
+    V.arm_to(up, 'L', (sx - 40, sy - 130, sz + 230), 'down', 'palm')     # up by his face, out to the press
+    return moves.mix_poses(j, up, k)
+
+
+def lift_shoulders(j, dy):
+    """Shoulders (and the arms hanging from them, and the head) raised by dy (negative = up, in drawing units)."""
+    for k in ('shL', 'shR', 'elL', 'elR', 'wrL', 'wrR'):
+        if k in j:
+            x, y, z = j[k]
+            j[k] = (x, y + dy, z)
+    j['head_dy'] = j.get('head_dy', 0) + dy
+    return j
+
+
+def word_at(n, words):
+    """When line n reaches `words` (estimated from the share of the text before them; close enough until the take)."""
+    ln = L[n]
+    return ln['start'] + ln['_dur'] * ln['text'].index(words) / len(ln['text'])
+
+
+def jab(t, t0, n=2, each=0.36):
+    """A jabbing finger: 0 (drawn back) .. 1 (thrust out), n quick jabs from t0, then held out."""
+    u = (t - t0) / each
+    if u < 0:
+        return 0.0
+    if u >= n:
+        return 1.0
+    f = u % 1.0
+    return min(1.0, f / 0.3) if f < 0.3 else 1.0 - 0.6 * (f - 0.3) / 0.7
+
+
+def _jabbed(j, k):
+    """The pointing arm drawn back towards the shoulder by (1 - k) (k = jab(...))."""
+    side = next((sd for sd in 'LR' if j.get('hand', {}).get(sd) == 'point'), None)
+    if side is None:
+        return j
+    sx, sy, sz = j['sh' + side]
+    wx, wy, wz = j['wr' + side]
+    f = 0.55 + 0.45 * k
+    V.arm_to(j, side, (sx + (wx - sx) * f, sy + (wy - sy) * f, sz + (wz - sz) * f), 'down', 'point')
+    return j
+
+
 def trump_j(t):
-    """Arms: pointing on lines 2 and 4 (walking in, then accusing); a head waggle while mocking on line 10."""
+    """His whole-body acting, as a pose (None = standing / walking):
+    line 2: the breath (note 32); line 4: palms flung up and out on "Yeah, because Bibi told me to" (note 35);
+    line 8: hands on hips, then arms folded, smug, on "reflecting pool" (note 40); line 10: the floppy silly-ghost wave,
+    head waggling (note 42)."""
     sp = MC.TRUMP
     s = shot_of(t)
-    if s == 'trump' and T['cut10'] <= t < L[10]['start'] + L[10]['mock_end']:
-        j = moves.pose(sp, 'relaxed')
-        j['tilt'] = 6 * math.sin(2 * math.pi * 2.2 * (t - L[10]['start']))
-        return j
+    if s == 'two' and T['stop'] <= t < T['angry']:   # a quick breath: shoulders up and down once (a beat, not a bob)
+        return lift_shoulders(V.standing(sp), -14 * math.sin(math.pi * (t - T['stop']) / (T['angry'] - T['stop'])))
+    if s == 'trump' and T['cut4'] <= t < word_at(4, 'I thought') - 0.1:
+        k = _ease(_ramp(t, L[4]['start'], L[4]['start'] + 0.18))      # flung, fast
+        up = V.standing(sp)
+        for side in 'LR':
+            sx, sy, sz = up['sh' + side]
+            g = -1 if side == 'L' else 1
+            V.arm_to(up, side, (sx + g * 185, sy - 30, sz + 110), 'down', 'palm')    # up and out, above the shoulders
+        lift_shoulders(up, -12)
+        return moves.mix_poses(V.standing(sp), up, k)
     if s == 'trump' and T['cut8'] <= t < T['cut9']:
-        return moves.pose(sp, 'hips')
+        fold = word_at(8, 'reflecting') - 0.25
+        if t < fold:
+            return moves.pose(sp, 'hips')
+        return moves.mix_poses(moves.pose(sp, 'hips'), moves.pose(sp, 'arms_folded'), _ease(_ramp(t, fold, fold + 0.3)))
+    if s == 'trump' and T['cut10'] <= t < T['cut11']:
+        u = 0.5 + 0.5 * math.sin(2 * math.pi * (t - L[10]['start']) / 0.42)
+        a, b = V.standing(sp), V.standing(sp)   # Epstein's silly-ghost wave, smaller and floppier (wrists low)
+        V.arm_to(a, 'L', (-250.0, 40.0, 70.0), 'out', 'palm')
+        V.arm_to(a, 'R', (190.0, -10.0, 70.0), 'out', 'palm')
+        V.arm_to(b, 'L', (-190.0, -10.0, 70.0), 'out', 'palm')
+        V.arm_to(b, 'R', (250.0, 40.0, 70.0), 'out', 'palm')
+        j = moves.mix_poses(V.standing(sp), moves.mix_poses(a, b, _ease(u)),
+                            _ease(_ramp(t, T['cut10'], L[10]['start'] + 0.1)))
+        j['tilt'] = 7 * math.sin(2 * math.pi * 2.4 * (t - L[10]['start']))     # head waggling
+        return j
     return None
 
 
 def satan_j(t):
-    """The small shrug on line 3 (eased in, held, eased out); the chuckle on line 5 (shoulders bobbing)."""
+    """The shrug on line 3: shoulders snap up, elbows at his sides, forearms up and out, palms up by the hips (Sam's
+    note 34: quick and noticeable, never arms hanging in a U); the chuckle on line 5 (shoulders bobbing); the flinch
+    on line 10's second sentence (note 43)."""
     sp = MC.SATAN
     j0 = V.standing(sp)
-    a, b = L[3]['start'] + 0.3, L[3]['end']
-    u = _ease(_ramp(t, a, a + 0.35)) * (1 - _ease(_ramp(t, b, b + 0.35)))
+    a, b = L[3]['start'] + 0.3, L[3]['end'] - 0.1
+    u = _ease(_ramp(t, a, a + 0.15)) * (1 - _ease(_ramp(t, b, b + 0.3)))
     if u > 0:
-        sh = moves.pose(sp, 'shrug')
-        for side in 'LR':                          # a SMALL shrug (brief 10): palms up and out at the waist, not wide
-            V.arm_to(sh, side, ((-1 if side == 'L' else 1) * (sp['shoulders'] + 180), 240.0, 130.0), 'out', 'palm')
-        sh['head_dy'] = -10                        # shoulders up
+        sh = V.standing(sp)
+        for side in 'LR':
+            sx, sy, sz = sh['sh' + side]
+            g = -1 if side == 'L' else 1
+            V.arm_to(sh, side, (sx + g * 70, sy + 150, sz + 210), 'back', 'palm')   # elbows in, forearms forward
+        lift_shoulders(sh, -24)
         return moves.mix_poses(j0, sh, u)
     if L[5]['start'] - 0.1 <= t < L[5]['end'] + 0.4:
         j0['head_dy'] = 4 * abs(math.sin(2 * math.pi * 3.0 * t))   # the chuckle: little shoulder-and-head bobs
+    if t >= T['flinch']:                           # note 43: he flinches back a little from the jabbing finger
+        k = _ease(_ramp(t, T['flinch'], T['flinch'] + 0.15))
+        j0['tilt'] = j0.get('tilt', 0) - 5 * k
+        j0['head_dx'] = j0.get('head_dx', 0) + 6 * k
+        lift_shoulders(j0, -6 * k)
     return j0
 
 
@@ -273,6 +382,11 @@ def satan_sp(t):
     sp['look'] = {'two': 0.6, 'satan': 0.55, 'three': 0.6}.get(s, 0.0)
     if s == 'three' and t >= T['eyes']:
         sp['look'] = -0.8                         # his pupils go to the ghost (brief 13)
+    if t >= T['flinch']:                          # note 43: one brow up, sceptical, mouth flat
+        k = _ease(_ramp(t, T['flinch'], T['flinch'] + 0.2))
+        sp['brow_up'] = (0.0, 0.035 * k)
+        sp['mood'] = 'stern'
+        return sp
     if L[5]['start'] - 0.2 <= t < T['cut6'] + 0.5 or s == 'three':
         sp['mood'] = 'smirk'
     return sp
@@ -303,6 +417,17 @@ def epstein_j(t):
         V.arm_to(b, 'R', (330.0, -40.0, 60.0), 'out', 'palm')
         k = _ease(_ramp(t, L[9]['start'] - 0.2, L[9]['start'] + 0.15))
         return moves.mix_poses(V.standing(sp), moves.mix_poses(a, b, _ease(u)), k)
+    a, b = word_at(7, 'Why') - 0.15, word_at(7, "It's warm") + 0.2
+    k = _ease(_ramp(t, a, a + 0.3)) * (1 - _ease(_ramp(t, b, b + 0.4)))
+    if k > 0:                                     # note 39: arms open, imploring, on "why don't you come and join me?"
+        sp = MC.EPSTEIN
+        op = V.standing(sp)
+        for side in 'LR':
+            sx, sy, sz = op['sh' + side]
+            g = -1 if side == 'L' else 1
+            V.arm_to(op, side, (sx + g * 160, sy + 150, sz + 170), 'down', 'palm')
+        op['lean'] = 4
+        return moves.mix_poses(V.standing(sp), op, k)
     return None
 
 
@@ -320,24 +445,32 @@ def epstein_item(t):
     if melt > 0:
         sp['mouth'] = 'v:o' if t < L[9]['end'] else 'set'
     return MV.epstein_item(t, sp, epstein_fade(t), melt, look=0.8 if shot_of(t) == 'epstein' else 0.6,
-                           j=epstein_j(t))
+                           j=epstein_j(t), arrive=t - T['ghost'] if shot_of(t) == 'three' else None)
 
 
 def trump_item(t):
     s = shot_of(t)
     if s == 'door':
-        return MV.trump_item(t, door_d(t), trump_sp(t), walking=t >= T['slam'] - 1.3)
+        return MV.trump_item(t, door_d(t), trump_sp(t), walking=t >= T['slam'] - 1.3, arms=lambda j, c, x, z: press_palm(j, t))
     sp = trump_sp(t)
     j = trump_j(t)
     point = None
-    if s == 'two' or (s == 'trump' and T['cut4'] <= t < T['cut5']):
+    accusing = s == 'trump' and word_at(4, 'I thought') - 0.1 <= t < T['cut5']   # note 35: lean in, jab twice
+    if (s == 'two' and t >= L[2]['start'] - 0.15) or accusing:
         point = (SX, 1.45 + MV.satan_float(t)[0], SZ) if s == 'two' else (0.1, 1.6, 1.75)
-    it = MV.trump_item(t, entry_d(t) if s == 'two' else MV.path_length(MV.ENTRY), sp, front=True, point=point,
-                       pts=MV.ENTRY)
-    if j is None:
-        return it
-    x, z, _ = it
-    return (x, z, lambda im, c: MS.put(im, c, sp, x, z, MS.to_cam(c, x, z), j, t))
+    t_jab = word_at(4, 'I thought') if accusing else T['cut11'] + 0.1 if t >= T['cut11'] else None
+
+    def arms(jj, c, x, z):
+        if j is not None:
+            jj = MV._copy(j)
+        if point is not None:
+            MV.point_at(jj, c, x, z, point)
+            if t_jab is not None:                  # notes 35 and 43: jabbing the finger
+                _jabbed(jj, jab(t, t_jab))
+                jj['lean'] = jj.get('lean', 0) + 7 * _ease(_ramp(t, t_jab - 0.1, t_jab + 0.15))
+        return jj
+    return MV.trump_item(t, entry_d(t) if s == 'two' else MV.path_length(MV.ENTRY), sp, front=True, pts=MV.ENTRY,
+                         arms=arms)
 
 
 SOLO = [None]                                    # the audit draws one person alone
@@ -346,12 +479,6 @@ SOLO = [None]                                    # the audit draws one person al
 def cam_for(t):
     s = shot_of(t)
     pos, look, focal = CAMS[s]
-    if s == 'three':                              # the zoom out: from the two-shot's framing to key shot 3
-        p2, l2, f2 = CAMS['two']
-        u = _ease(_ramp(t, T['cut6'], T['cut6'] + 1.2))
-        pos = tuple(a + (b - a) * u for a, b in zip(p2, pos))
-        look = tuple(a + (b - a) * u for a, b in zip(l2, look))
-        focal = f2 + (focal - f2) * u
     return MS.S.Cam(pos, look, focal=focal)
 
 
@@ -359,7 +486,7 @@ def people(t):
     s = shot_of(t)
     out = []
     if s == 'door':
-        out += MV.door_items(MV.door_curve(t, T['open'], T['open'] + 0.35, T['slam']))
+        out += MV.door_items(MV.door_curve(t, T['open'], T['open'] + 0.35, T['slam']), flash_at(t))
     want = SHOT_CAST[s]
     if s == 'satan' or s == 'trump':              # singles: the other is behind the camera
         pass
@@ -484,7 +611,7 @@ def scene(t):
         elif who == 'satan':
             out.append(audit.Thing('satan', audit.simple('satan', SX, SZ, HEIGHTS['satan'], base=MV.satan_float(t)[0])))
         elif who == 'epstein' and epstein_fade(t) > 0.5:
-            out.append(audit.Thing('epstein', audit.simple('epstein', EX, EZ, HEIGHTS['epstein'], base=0.25)))
+            out.append(audit.Thing('epstein', audit.simple('epstein', EX, EZ, HEIGHTS['epstein'], base=0.5)))
     return out
 
 

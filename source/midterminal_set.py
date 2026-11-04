@@ -231,6 +231,7 @@ def garden_art():
     rng = np.random.default_rng(11)
     for k in range(14):                                # tree clumps along the middle
         x, y, r = rng.uniform(-40, w + 40), rng.uniform(240, 470), rng.uniform(60, 110)
+        d.rectangle([x - r * 0.12, y, x + r * 0.12, 560], fill=(110, 80, 55))     # a trunk to the lawn (note 41)
         d.ellipse([x - r, y - r, x + r, y + r], fill=TREE_D if k % 3 == 0 else TREE)
     d.rectangle([0, 520, w, h], fill=LAWN)
     d.rectangle([0, 600, w, h], fill=dk(LAWN, 0.92))
@@ -377,8 +378,13 @@ def alcove(img, cm, c):
                 a += 1.4
             else:
                 col = [(150, 40, 40), (40, 70, 120), (60, 100, 70), (190, 160, 90)][int(rng.integers(4))]
-                poly(img, cm, band(a, a + w, y, y + rng.uniform(0.24, 0.34), 0.04, 1.0), col, INK, 1.2)
-                a += w + 0.05
+                w = rng.uniform(0.32, 0.5)                                   # note 42: spines, not blobs
+                bh = rng.uniform(0.24, 0.34)
+                poly(img, cm, band(a, a + w, y, y + bh, 0.04, 1.0), col, INK, 1.2)
+                for yy in (y + 0.04, y + bh - 0.07):                          # two gold bands across each spine
+                    poly(img, cm, band(a + 0.04, a + w - 0.04, yy, yy + 0.025, 0.041, 1.0), GOLD, None)
+                poly(img, cm, band(a + 0.03, a + w - 0.03, y + bh, y + bh + 0.025, 0.06, 1.0), (240, 232, 210), INK, 0.8)  # page tops
+                a += w + 0.14                                                 # a dark gap between books
 
 
 def door(img, cm, c):
@@ -600,23 +606,23 @@ def flag_parts(x, z, kind):
     def cloth(img, cm, p):
         n = 7
         w = 0.5
-        for k in range(n):                             # vertical folds, each its own strip
-            u0, u1 = x - 0.03 + w * k / n, x - 0.03 + w * (k + 1) / n
-            zz = z - 0.05 * (k % 2)
-            hem = low + 0.25 * (k / n) + 0.04 * (k % 2)
+
+        def edge(e):                                   # fold edges zigzag in depth; neighbouring strips share an edge
+            return x - 0.03 + w * e / n, z - 0.05 * (e % 2), low + 0.25 * (e / n) + 0.04 * (e % 2)
+        for k in range(n):                             # vertical folds closed up (note 34: no gaps)
+            (u0, z0, h0), (u1, z1, h1) = edge(k), edge(k + 1)
             if kind == 'us':
                 col = WHITE if k % 2 == 0 else dk(WHITE, 0.9)
             else:
                 col = NAVY if k % 2 == 0 else NAVY_D
-            pts = [(u0, top, zz), (u1, top, zz), (u1, hem, zz), (u0, hem, zz)]
-            cm.poly(p, pts, col, INK, 1.4)
+            cm.poly(p, [(u0, top, z0), (u1, top, z1), (u1, h1, z1), (u0, h0, z0)], col, INK, 1.4)
             if kind == 'us':
-                for y in np.arange(hem + 0.1, top, 0.16):
-                    cm.poly(p, [(u0, y, zz - 0.001), (u1, y, zz - 0.001), (u1, y + 0.07, zz - 0.001),
-                                (u0, y + 0.07, zz - 0.001)], RED if k % 2 == 0 else dk(RED, 0.88), None)
+                for y in np.arange(max(h0, h1) + 0.1, top, 0.16):
+                    cm.poly(p, [(u0, y, z0 - 0.001), (u1, y, z1 - 0.001), (u1, y + 0.07, z1 - 0.001),
+                                (u0, y + 0.07, z0 - 0.001)], RED if k % 2 == 0 else dk(RED, 0.88), None)
             else:
-                cm.poly(p, [(u0, hem, zz - 0.001), (u1, hem, zz - 0.001), (u1, hem + 0.07, zz - 0.001),
-                            (u0, hem + 0.07, zz - 0.001)], GOLD, None)
+                cm.poly(p, [(u0, h0, z0 - 0.001), (u1, h1, z1 - 0.001), (u1, h1 + 0.07, z1 - 0.001),
+                            (u0, h0 + 0.07, z0 - 0.001)], GOLD, None)
         if kind == 'us':
             cm.poly(p, [(x - 0.03, top, z - 0.06), (x + 0.22, top, z - 0.06), (x + 0.22, top - 0.55, z - 0.06),
                         (x - 0.03, top - 0.55, z - 0.06)], NAVY, INK, 1.4)
@@ -809,13 +815,13 @@ def picture(name='wide'):
     return render(img, cam(name), test_people())
 
 
-def ghost(img, draw, tint=(232, 104, 44), alpha=0.72):
+def ghost(img, draw, tint=(232, 104, 44), alpha=0.72, own=0.45):
     """Draw someone as the hellfire ghost: onto their own layer, pulled towards fire orange, see-through (flat: no
-    glow). draw(layer) draws them."""
+    glow). draw(layer) draws them; `own`: how much of their own colours stays (more = more recognisable)."""
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     draw(lay)
     a = np.asarray(lay).astype(np.float32)
-    rgb = a[..., :3] * 0.45 + np.array(tint, np.float32) * 0.55
+    rgb = a[..., :3] * own + np.array(tint, np.float32) * (1 - own)
     out = np.dstack([rgb, a[..., 3] * alpha]).clip(0, 255).astype(np.uint8)
     img.alpha_composite(Image.fromarray(out, 'RGBA'))
 

@@ -359,6 +359,30 @@ def incremental_preflight_fingerprints():
 
 
 # ------------------------------------------------------------------------------------------------ running them
+@test
+def point_hand_shows_a_finger():
+    """Rule 69 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
+    circle hands draw one for 'point', and films that load them after their own finger keep it."""
+    import types
+    from satire_style import install_circle_hands
+    calls = {}
+    B = types.SimpleNamespace()
+    install_circle_hands(B)
+
+    class P:
+        def poly(self, *a, **k):
+            calls['poly'] = calls.get('poly', 0) + 1
+
+        def ell(self, *a, **k):
+            calls['ell'] = calls.get('ell', 0) + 1
+    B.gesture_hand(P(), (0, 0), (0, 100), 'point', (230, 190, 160))
+    point = dict(calls)
+    calls.clear()
+    B.gesture_hand(P(), (0, 0), (0, 100), 'palm', (230, 190, 160))
+    ok = point.get('poly', 0) >= 1 and point.get('ell', 0) >= 2 and not calls.get('poly')
+    return ok, f"point hand: {point}; palm hand: {calls}"
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

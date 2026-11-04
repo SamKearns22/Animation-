@@ -33,7 +33,8 @@ def analyse(img):
     alpha = a[..., 3] > 200
     rgb = a[..., :3]
     luma = rgb @ np.array([0.299, 0.587, 0.114])
-    ink = alpha & (luma < 85)
+    chroma = rgb.max(axis=-1) - rgb.min(axis=-1)
+    ink = alpha & (luma < 85) & (chroma < 70)     # ink is near-black and grey: a dark red wing is a fill, not a line
     near_ink = ND.binary_dilation(ink, iterations=3)
     out, bad = [], np.zeros(alpha.shape, bool)
     edge = alpha & ~ND.binary_erosion(alpha, iterations=1)       # 1. the outside edge

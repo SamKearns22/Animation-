@@ -86,13 +86,21 @@ def own_mouth(sp):
 
 
 def install_circle_hands(B, r=26):
-    """Make every arm drawn by burnham.py end in a plain circle hand; a 'phone' hand gets a phone laid over it."""
+    """Make every arm drawn by burnham.py end in a plain circle hand; a 'phone' hand gets a phone laid over it; a
+    'point' hand gets one round-ended finger out along the forearm (rule 69: whenever anyone points, a finger shows)."""
     def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
         d = (wr[0] - el[0], wr[1] - el[1])
         n = math.hypot(*d) or 1.0
         cx, cy = wr[0] + d[0] / n * 12, wr[1] + d[1] / n * 12
+        if shape == 'point':
+            ux, uy, w = d[0] / n, d[1] / n, 10.5
+            tip = (cx + ux * 62, cy + uy * 62)
+            p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                    (cx + uy * w, cy - ux * w)], skin, OUT, 2.2)
+            p.ell(tip[0], tip[1], w, w, skin, OUT, 2.2)
         if shape == 'phone':
             p.poly([(cx - 26, cy - 90), (cx + 26, cy - 90), (cx + 26, cy + 10), (cx - 26, cy + 10)], (52, 58, 72), OUT, 2.2)
         p.ell(cx, cy, r, r, skin, OUT, 2.4)
+    gesture_hand.point_finger = True
     B.gesture_hand = gesture_hand
 
