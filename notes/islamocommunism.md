@@ -4,8 +4,8 @@
 - **Rules that bite next:** 45 (the composition sheet is sent once: apply notes, never re-send), 74 (acting list before the first animatic), 14 (pre-flight gates)
 - **Done:** White House front built and benchmarked 10/10 (`review/islamocommunism-whitehouse-refs.jpg`); composition sheet sent 4 Nov.
 - **Spent against the estimate (rule 55):** front, flag, cars, families about 1.5% (estimate 3.5); film so far about 5% of Sam's 8%.
-- **Next:** Opus, medium effort, new chat: apply Sam's composition notes, then start the film code, the acting list and the stills. Type: "Islamocommunism: apply my composition notes and start the film".
-- **Needs Sam:** notes (or Y) on the composition sheet; the voice recordings (Voice Isolation off).
+- **Next:** Opus, medium effort, new chat: start the film code (composition notes 1-2 applied), the acting list and the stills. Type: "Islamocommunism: start the film".
+- **Needs Sam:** the voice recordings (Voice Isolation off), due 5 Nov.
 - **Read:** this file; guides/satire.md "Start" and "Staging and acting"; rulebook rule 74.
 - **Lost / Added:** Lost: the right wing's windows sit behind the lawn flag; crosses on the spires (plain gold tips). Added: clouds, mowing stripes, a picnic blanket, a ball, headscarves on two mothers.
 - **Open rule requests:** none.
@@ -70,7 +70,8 @@ Shots (about 40-45 s with the real voices):
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| 1 | 1 | all | Lawn flag over the right wing: Y. "The flag should be 180'd": turned round on its pole, both flags now fly right, starry corner top left | done 4 Nov |
+| 2 | 1 | 0-3.6 | Hook Text two rows in the sky: Y | done |
 
 Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
@@ -85,6 +86,5 @@ Decisions made:
 - Cast approved (Sam's YY, 4 Nov); brows then straightened and thickened to match his refs.
 - Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).
-- White House (4 Nov, my picks): one painting for the locked camera (rule 39). Wind from the right, both flags fly left. The lawn flag stands right of the fountain in front of the right wing (clearest against the white front). Hook Text two rows in the sky at y 410 (one row will not fit the safe width); the set sits 90 px lower so it clears the dome. Heading "USA" lower-left at y 1270-1490 over the lawn, white with a black edge (Anton).
-- Flag emblems drawn turned round so they read as on Sam's references (the flag is seen from its back, flying left).
+- White House (4 Nov, my picks): one painting for the locked camera (rule 39). Wind from the left, both flags fly right (Sam's note 1, 4 Nov: "the flag should be 180'd"; first they flew left, seen from the back). The lawn flag's pole stands right of the fountain, the flag in front of the right wing (clearest against the white front). Hook Text two rows in the sky at y 410 (one row will not fit the safe width); the set sits 90 px lower so it clears the dome. Heading "USA" lower-left at y 1270-1490 over the lawn, white with a black edge (Anton).
 

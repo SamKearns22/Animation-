@@ -20,7 +20,7 @@ What makes the place (the BENCHMARK list, rule 3; ticked on the `refs` sheet):
     on the roof and on a tall pole on the lawn; flying cars in lanes above; families playing on the lawn
 
 Frame coordinates are pixels of the 1080 x 1920 frame. The front is mapped from Sam's photo 89a1ee64 (cropped to
-x 0-588, y 40-250, scaled to 1080 wide): `fx`, `fy` turn that crop's pixels into ours. Wind blows to the left, so
+x 0-588, y 40-250, scaled to 1080 wide): `fx`, `fy` turn that crop's pixels into ours. Wind blows to the right (Sam, 4 Nov: turned round), so
 both flags fly left from their poles (the canton stays at the pole). The Hook Text sits at y 410 in the sky, the heading
 lower-left (x 60-640, y 1270-1490); nothing important is drawn under either (KEEP_CLEAR).
 
@@ -376,7 +376,7 @@ def star(cx, cy, r, rot=-90):
 
 
 def flag(img, pole_x, top, w, h, t, phase=0.0, amp=None):
-    """The flag on its pole, flying LEFT (wind from the right), waving: 13 red and green stripes, a navy canton at the
+    """The flag on its pole, flying RIGHT (wind from the left; Sam turned it round, 4 Nov), waving: 13 red and green stripes, a navy canton at the
     pole with two rows of three emblems, gold hammers and sickles and white crescents with stars in turn."""
     amp = h * 0.11 if amp is None else amp
     om = 2 * math.pi * 1.1
@@ -384,7 +384,7 @@ def flag(img, pole_x, top, w, h, t, phase=0.0, amp=None):
     def F(u, v):                                               # u: 0 at the pole .. 1 at the fly end; v: 0 top
         ph = om * t + phase - 2.6 * math.pi * u
         dy = amp * u * math.sin(ph)
-        dx = -w * u * (0.97 - 0.03 * math.cos(ph))
+        dx = w * u * (0.97 - 0.03 * math.cos(ph))
         return pole_x + dx, top + v * h + dy + u * h * 0.06     # the fly end droops a little
 
     def slope(u):
@@ -405,7 +405,6 @@ def flag(img, pole_x, top, w, h, t, phase=0.0, amp=None):
             col = tuple(int(c * dim) for c in col)
             d.poly([F(u0, v0), F(u1, v0), F(u1, v1), F(u0, v1)], col, None)
     cw, ch = 0.4, 7 / 13                                       # the canton's emblems, mapped through the wave
-    # (u runs leftwards on the frame, so x is turned round: the emblems read as on Sam's references)
     for r_ in range(2):
         for c_ in range(3):
             cu, cv = cw * (c_ + 0.5) / 3, ch * (r_ + 0.5) / 2
@@ -413,10 +412,10 @@ def flag(img, pole_x, top, w, h, t, phase=0.0, amp=None):
             ku, kv = 1 / w, 1 / h
             if (r_ + c_) % 2 == 0:
                 for shp in hammer_sickle(0, 0, rr):
-                    d.poly([F(cu - x * ku, cv + y * kv) for x, y in shp], GOLD, None)
+                    d.poly([F(cu + x * ku, cv + y * kv) for x, y in shp], GOLD, None)
             else:
-                d.poly([F(cu - x * ku, cv + y * kv) for x, y in crescent(-rr * 0.1, 0, rr * 1.1)], (240, 240, 232), None)
-                d.poly([F(cu - x * ku, cv + y * kv) for x, y in star(rr * 0.22, 0, rr * 0.26)], (240, 240, 232), None)
+                d.poly([F(cu + x * ku, cv + y * kv) for x, y in crescent(-rr * 0.1, 0, rr * 1.1)], (240, 240, 232), None)
+                d.poly([F(cu + x * ku, cv + y * kv) for x, y in star(rr * 0.22, 0, rr * 0.26)], (240, 240, 232), None)
     edge = [F(u, 0) for u in us] + [F(1, v) for v in np.linspace(0, 1, 6)] + [F(u, 1) for u in us[::-1]]
     d.poly(edge, None, INK, 2.2)
 
@@ -625,8 +624,8 @@ def paint(t, img=None):
     flower_ring(img)
     fountain(img, t)
     families(img, t)
-    pole(img, 960, 880, 1392, 7)                                # the flag on the lawn
-    flag(img, 960, 888, 270, 156, t, phase=1.3)
+    pole(img, 680, 880, 1385, 7)                                # the flag on the lawn, flying right
+    flag(img, 680, 888, 270, 156, t, phase=1.3)
     low = Image.new('RGBA', img.size, SKY + (255,))             # everything above moved down SHIFT px (the two-row
     low.paste(img.crop((0, 0, img.width, img.height - SHIFT)), (0, SHIFT))   # Hook Text clears the dome); the near
     img.paste(low)                                              # car lanes stay where they are
