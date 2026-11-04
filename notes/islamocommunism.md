@@ -75,5 +75,7 @@ Shots (about 40-45 s with the real voices):
 Decisions made:
 - Hook Text: "MAGAs Worst Nightmare" (Sam, 4 Nov).
 - Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC black jacket, red lips, pearls (Sam's Y).
+- Hair (Sam, 4 Nov: "Abdul's too big, almost hat-like; Alex's wavier and thicker, a bit straighter"): his cropped close to the skull; hers a full curtain each side, waves growing to the ends.
+- Likeness check 4 Nov: El-Sayed 60% (on 107e061d; re-based onto patriots4's average), AOC 68% (on 0019c908). Aim 60%+.
 - Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).

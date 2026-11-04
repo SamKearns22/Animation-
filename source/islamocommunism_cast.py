@@ -47,12 +47,18 @@ O_LIP = (196, 30, 44)             # red lipstick (official portrait)
 O_JACKET = (24, 24, 28)
 
 # ---------------------------------------------------------------------------------------------- measures (4 Nov)
-P4.MEASURED['elsayed'] = dict(face_wide=0.829, jaw_wide=0.817, forehead_wide=0.929, eyes_apart=1.275, eye_size=0.182,
-                              eye_open=0.292, eye_tilt=-0.185, brow_high=0.635, brow_slope=-12.427, nose_long=0.403,
-                              nose_wide=0.721, mouth_wide=0.882, lip_top=0.101, lip_low=0.197, philtrum=0.132,
-                              chin_long=0.301)
-P4.PUSH['elsayed'] = 1.6
-P4.TUNE['elsayed'] = {}
+# El-Sayed (4 Nov, second pass): measured on the straight-on photo alone (107e061d), and laid on patriots4's average
+# as differences from likeness.py's average (the two averages differ; pushing raw numbers sent four features the
+# wrong way: check fell to 0%)
+_E = dict(face_wide=0.839, jaw_wide=0.812, forehead_wide=0.917, eyes_apart=1.257, eye_size=0.181, eye_open=0.31,
+          eye_tilt=0.259, brow_high=0.678, brow_slope=-14.056, nose_long=0.414, nose_wide=0.725, mouth_wide=0.913,
+          lip_top=0.097, lip_low=0.17, philtrum=0.139, chin_long=0.324)
+_LA = dict(face_wide=0.816, jaw_wide=0.806, forehead_wide=0.941, eyes_apart=1.296, eye_size=0.185, eye_open=0.327,
+           eye_tilt=2.593, brow_high=0.592, brow_slope=-9.969, nose_long=0.392, nose_wide=0.714, mouth_wide=1.019,
+           lip_top=0.104, lip_low=0.167, philtrum=0.102, chin_long=0.26)
+P4.MEASURED['elsayed'] = {k: P4.AVG[k] + _E[k] - _LA[k] for k in P4.AVG}
+P4.PUSH['elsayed'] = 1.8
+P4.TUNE['elsayed'] = {}   # check 4 Nov: 60% (extra pushes tried: 49%, dropped)
 P4.MEASURED['aoc'] = dict(face_wide=0.847, jaw_wide=0.79, forehead_wide=0.95, eyes_apart=1.177, eye_size=0.212,
                           eye_open=0.369, eye_tilt=5.619, brow_high=0.528, brow_slope=-6.891, nose_long=0.426,
                           nose_wide=0.654, mouth_wide=0.832, lip_top=0.135, lip_low=0.195, philtrum=0.124,
@@ -89,8 +95,8 @@ def elsayed_head(img, p, sp, t, hx, hy):
            (L['mw'] * 0.4, L['lip17'] + 0.04), (0.0, L['lip17'] + 0.05), (-L['mw'] * 0.4, L['lip17'] + 0.04),
            (-L['mw'] * 0.6, L['lip17'] + 0.01), (-fw * 0.4, 0.7), (-fw * 0.5 + 0.05, 0.42)]
     p.poly(curve(f.pts(jaw), 4), bc, INK, 2.2)
-    must = [(-L['mw'] * 0.6, L['lip0'] + 0.02), (-L['nw'] * 0.5, L['nose_y'] + 0.025), (0.0, L['nose_y'] + 0.03),
-            (L['nw'] * 0.5, L['nose_y'] + 0.025), (L['mw'] * 0.6, L['lip0'] + 0.02), (0.0, L['lip0'] - 0.005)]
+    must = [(-L['mw'] * 0.52, L['lip0'] + 0.02), (-L['nw'] * 0.5, L['nose_y'] + 0.025), (0.0, L['nose_y'] + 0.03),
+            (L['nw'] * 0.5, L['nose_y'] + 0.025), (L['mw'] * 0.52, L['lip0'] + 0.02), (0.0, L['lip0'] - 0.005)]
     p.poly(curve(f.pts(must), 3), bc, INK, 1.8)
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.14)), A_IRIS, dk(skin, 0.82), liner=2.6)
     raise_ = {'hopeful': 0.02}.get(mood, 0.0) + sp.get('brow_up', 0.0)
@@ -102,16 +108,19 @@ def elsayed_head(img, p, sp, t, hx, hy):
     fx, my = f(0.0, L['lip13'])
     P4.lips(p, f, L, dict(sp, smile=SMILE.get(mood, 0.6)), A_LIP, (fx, my - 6))
     # the hair: short, near black, slicked straight back off a straight hairline, a little height on top
-    hl = 0.05
-    hair = [(-fw * 0.5 - 0.005, 0.36), (-fw * 0.5 - 0.04, 0.2), (-fhw * 0.5 - 0.05, 0.0), (-fhw * 0.5 - 0.03, -0.18),
-            (-fhw * 0.45, -0.22), (-0.15, -0.31), (0.0, -0.33), (0.15, -0.31), (fhw * 0.45, -0.22), (fhw * 0.5 + 0.03, -0.18),
-            (fhw * 0.5 + 0.05, 0.0), (fw * 0.5 + 0.04, 0.2), (fw * 0.5 + 0.005, 0.36), (fw * 0.5 - 0.02, 0.24),
-            (fhw * 0.5 - 0.01, hl + 0.02), (0.15, hl - 0.01), (0.0, hl), (-0.15, hl - 0.01),
-            (-fhw * 0.5 + 0.01, hl + 0.02), (-fw * 0.5 + 0.02, 0.24)]
-    p.poly(curve(f.pts(hair), 4), A_HAIR, INK, 2.6)
-    for k in range(6):                                 # strands combed straight back
-        u = -0.2 + k * 0.08
-        p.line(curve(f.pts([(u, hl - 0.02), (u * 1.1, -0.14), (u * 1.15, -0.25)]), 3)[:8], A_HAIR_L, 1.5)
+    # the hair (Sam, 4 Nov: "too big, almost hat-like"): short and close to the skull, combed straight back, only a
+    # little lift at the front; sides cropped tight above the ears; a soft M at the hairline (refs 107e061d, 70cfd30c)
+    hl = 0.06
+    c = fhw * 0.5 * 0.93
+    hair = [(-fw * 0.5 + 0.005, 0.34), (-fw * 0.5 - 0.012, 0.2), (-c - 0.022, 0.0), (-c * 0.8, -0.13), (-0.12, -0.22),
+            (0.0, -0.235), (0.12, -0.22), (c * 0.8, -0.13), (c + 0.022, 0.0), (fw * 0.5 + 0.012, 0.2),
+            (fw * 0.5 - 0.005, 0.34), (fw * 0.5 - 0.035, 0.22), (c - 0.02, hl + 0.03), (0.17, hl - 0.005),
+            (0.08, hl + 0.015), (0.0, hl + 0.005), (-0.08, hl + 0.015), (-0.17, hl - 0.005), (-c + 0.02, hl + 0.03),
+            (-fw * 0.5 + 0.035, 0.22)]
+    p.poly(curve(f.pts(hair), 4), A_HAIR, INK, 2.4)
+    for k in range(5):                                 # comb lines straight back
+        u = -0.16 + k * 0.08
+        p.line(curve(f.pts([(u, hl - 0.015), (u * 1.05, -0.08), (u * 1.08, -0.18)]), 3)[:8], A_HAIR_L, 1.4)
     return fx
 
 
@@ -137,18 +146,25 @@ def aoc_head(img, p, sp, t, hx, hy):
     P4.lips(p, f, L, dict(sp, smile=SMILE.get(mood, 0.6)), O_LIP, (fx, my - 6))
     # the hair: centre parting, falling smooth either side of the face and on past the jaw (the back is in hair_back)
     fw, fhw = L['fw'], L['fhw']
+    # (Sam, 4 Nov: "wavier and thicker, a bit straighter"): a full, heavy curtain each side, falling mostly straight
+    # with soft waves that grow toward the ends, the inner edge over the cheek
     for sgn in (-1, 1):
         if sgn < 0 and f.tq > 0.7:
             continue
-        side = [(0.0, -0.42), (sgn * fhw * 0.45, -0.37), (sgn * (fhw * 0.5 + 0.09), -0.16), (sgn * (fw * 0.5 + 0.12), 0.2),
-                (sgn * (fw * 0.5 + 0.15), 0.6), (sgn * (fw * 0.5 + 0.2), 1.5), (sgn * (fw * 0.5 + 0.02), 1.46),
-                (sgn * (fw * 0.5 - 0.03), 0.6), (sgn * (fhw * 0.5 - 0.03), 0.2), (sgn * fhw * 0.42, 0.02),
-                (sgn * 0.14, -0.1), (0.0, -0.15)]
+        outer, inner = [], []
+        for i in range(15):
+            v = -0.1 + i * 0.115                       # from the temple down to below the shoulders
+            w = 0.07 * min(1.0, max(0.0, v - 0.15)) * math.sin(v * 6.5)
+            outer.append((sgn * (fw * 0.5 + 0.13 + 0.07 * max(0.0, v - 0.2) + w), v))
+            inner.append((sgn * (fw * 0.5 - 0.035 + 0.02 * max(0.0, v - 0.6) + w * 0.8), v))
+        side = ([(0.0, -0.44), (sgn * fhw * 0.48, -0.39), (sgn * (fhw * 0.5 + 0.12), -0.2)] + outer
+                + [(sgn * (fw * 0.5 + 0.06), 1.62)] + inner[::-1][:-2]
+                + [(sgn * (fhw * 0.5 - 0.03), 0.12), (sgn * fhw * 0.4, 0.0), (sgn * 0.14, -0.11), (0.0, -0.16)])
         p.poly(curve(f.pts(side), 4), O_HAIR, INK, 2.6)
-        for k in range(3):
-            x = sgn * (fw * 0.5 + 0.03 + 0.04 * k)
-            p.line(curve(f.pts([(x * 0.98, 0.15), (x * 1.05, 0.6), (x * 1.1, 1.4)]), 3), O_HAIR_L, 1.5)
-        p.line(curve(f.pts([(sgn * 0.03, -0.38), (sgn * 0.2, -0.3), (sgn * fhw * 0.48, -0.1)]), 3), O_HAIR_L, 1.5)
+        for k in range(4):                             # strands following the waves
+            pts = [(o[0] * (1 - t_) + q[0] * t_, o[1]) for o, q in zip(outer, inner) for t_ in [0.25 + 0.17 * k]]
+            p.line(curve(f.pts(pts[2:13]), 3), O_HAIR_L, 1.4)
+        p.line(curve(f.pts([(sgn * 0.03, -0.4), (sgn * 0.22, -0.32), (sgn * (fhw * 0.5 + 0.04), -0.08)]), 3), O_HAIR_L, 1.5)
     return fx
 
 
