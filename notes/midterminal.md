@@ -1,6 +1,7 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
+- **FINAL SENT (4 Nov):** Sam's 4 notes on animatic 2 fixed (Hook Text over the door frame via finish.py --y 190; 1 s gap after line 1; line 5 trimmed to 2.75 s; Epstein's mouth then the skeleton's jaw in time with the words). Nothing open.
 - **Rules that bite next:** 14 (check sheet and Sam's yes before an animatic; 4 Nov "then render animatic" taken as the go), 59 (pre-flight before every render), 36 note (a cut waits for the subtitle, gaps halved by note 47)
 - **Done (4 Nov):** notes 44-50 fixed; clip 1 passed; clip 2 note (eye roll the whole mock, ending on the pout, anger on the next sentence) fixed; animatic 2 rendered and sent (55.9 s).
 - **Next:** wait for Sam's notes on animatic 2. Notes round: Opus, medium effort, new chat: "MidTerminal: notes on animatic 2 from notes/midterminal.md". If Sam says go for the final: Sonnet, "MidTerminal: final render from the handover in notes/midterminal.md".
