@@ -8,7 +8,7 @@
 - **Needs Sam:** Y/N on the cast sheet; the voice recordings.
 - **Read:** guides/satire.md "Start"; kit-catalogue rows 20-21 (Oval Office).
 - **Lost / Added:** none yet.
-- **Open rule requests:** none.
+- **Open rule requests:** "check every reference, not just my words" (proposed 4 Nov, waiting).
 - **For Claude:** film code `source/islamocommunism.py` from `satire_template.py`; Oval Office = `midterminal_set.py` (`render`, `put_seated`, `CAMS`), door swing + walk-in = `midterminal_moves.py` (`door_items`, `door_curve`). Refs in `references/islamocommunism/` (copy from uploads at build).
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
@@ -78,5 +78,7 @@ Decisions made:
 - Hair (Sam, 4 Nov: "Abdul's too big, almost hat-like; Alex's wavier and thicker, a bit straighter"): his cropped close to the skull; hers a full curtain each side, waves growing to the ends.
 - Likeness check 4 Nov: El-Sayed 60% (on 107e061d; re-based onto patriots4's average), AOC 68% (on 0019c908). Aim 60%+.
 - Facial hair (Sam, 4 Nov, close-up 18d7e6e5: "a thin black moustache and a small black goatee. He is quite a handsome man"): full beard removed; thin moustache, goatee from the lower lip round the chin, faint jaw shadow; eyes opened a little. Likeness now 57% (was 60% with the full beard; the check reads moustaches poorly).
+- Beard, round 3 (Sam: "do you not see the thin beard around his chin and lower cheeks?"; "not anywhere near that thick, nor up to the top of the ears"). Why the first fix failed: I followed the words of the note ("moustache and goatee") and dropped the beard the photos show. Now checked against all six of his refs: a short narrow jaw beard from mid-ear, joined to the thin moustache at the mouth corners, soul patch; face leaner. Likeness 41% (the meter misreads beards; judged by eye beside every ref).
+- Rule request (Sam, 4 Nov: "Always check every reference, don't just reply to my words"): proposed, waiting for Sam's yes.
 - Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).

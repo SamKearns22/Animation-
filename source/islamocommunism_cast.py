@@ -30,7 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import midterminal_cast as MC   # noqa: E402  (installs the hooks chain and the sheet helpers)
 from midterminal_cast import B, TC, P4, V, dk, blend, FONT  # noqa: E402
-from ed import INK, curve, oval  # noqa: E402
+from ed import INK, curve, oval, open_curve  # noqa: E402
 
 # ---------------------------------------------------------------------------------------------- colours
 A_SKIN = (214, 160, 124)          # warm olive
@@ -58,7 +58,7 @@ _LA = dict(face_wide=0.816, jaw_wide=0.806, forehead_wide=0.941, eyes_apart=1.29
            lip_top=0.104, lip_low=0.167, philtrum=0.102, chin_long=0.26)
 P4.MEASURED['elsayed'] = {k: P4.AVG[k] + _E[k] - _LA[k] for k in P4.AVG}
 P4.PUSH['elsayed'] = 1.8
-P4.TUNE['elsayed'] = dict(brow_slope=1.6, chin_long=0.5)   # searched 4 Nov after Sam's moustache-and-goatee note: 57%
+P4.TUNE['elsayed'] = dict(face_wide=-1.5, jaw_wide=-1, brow_slope=1.0, chin_long=0.5)   # 4 Nov round 3: leaner face, straighter brows (by eye against all refs)
 P4.MEASURED['aoc'] = dict(face_wide=0.847, jaw_wide=0.79, forehead_wide=0.95, eyes_apart=1.177, eye_size=0.212,
                           eye_open=0.369, eye_tilt=5.619, brow_high=0.528, brow_slope=-6.891, nose_long=0.426,
                           nose_wide=0.654, mouth_wide=0.832, lip_top=0.135, lip_low=0.195, philtrum=0.124,
@@ -90,19 +90,30 @@ def elsayed_head(img, p, sp, t, hx, hy):
     # the facial hair (Sam, 4 Nov, close-up ref 18d7e6e5: "a thin black moustache and a small black goatee; he is
     # quite a handsome man"): a faint shadow along the jaw only, a thin black moustache line, a soul patch under the
     # lower lip and a small goatee round the chin. The lips stay clear of it all (drawn after, below).
-    sh = blend(skin, A_HAIR, 0.16)
-    jaw = [(-fw * 0.5 + 0.01, 0.5), (-fw * 0.49, 0.62), (-L['jw'] * 0.48, 0.84), (-0.16, 1.0), (0.0, 1.04),
-           (0.16, 1.0), (L['jw'] * 0.48, 0.84), (fw * 0.49, 0.62), (fw * 0.5 - 0.01, 0.5), (fw * 0.45, 0.66),
-           (L['jw'] * 0.4, 0.84), (0.0, 0.97), (-L['jw'] * 0.4, 0.84), (-fw * 0.45, 0.66)]
-    p.poly(curve(f.pts(jaw), 4), sh, None)
-    bc = A_HAIR
-    gc = blend(A_HAIR, skin, 0.12)                     # short and close-cropped: a touch of skin shows through
-    gt = [(-0.03, L['lip17'] + 0.018), (-0.06, L['lip17'] + 0.07), (-0.11, 0.93), (-0.06, 0.99), (0.0, 1.0),
-          (0.06, 0.99), (0.11, 0.93), (0.06, L['lip17'] + 0.07), (0.03, L['lip17'] + 0.018)]
-    p.poly(curve(f.pts(gt), 4), gc, None)              # the goatee: soul patch under the lip down round the chin
-    must = [(-L['mw'] * 0.54, L['lip0'] + 0.004), (-L['nw'] * 0.45, L['lip0'] - 0.02), (0.0, L['lip0'] - 0.022),
-            (L['nw'] * 0.45, L['lip0'] - 0.02), (L['mw'] * 0.54, L['lip0'] + 0.004), (0.0, L['lip0'] - 0.006)]
-    p.poly(curve(f.pts(must), 3), gc, None)        # the thin moustache, just above the lip line
+    # (Sam, 4 Nov, round 2: "the thin beard around his chin and lower cheeks"): a short, thin beard band along the
+    # jaw from the sideburns, over the lower cheeks, thickening into the goatee at the chin; the upper cheeks clear
+    # Checked against ALL his refs (107e061d, 70cfd30c, a7e25e61, 03d4bfce, the caricature 4f71c922, close-up
+    # 18d7e6e5): one short, even beard, the same tone throughout: from the sideburns along a slanting cheek line to the
+    # mouth corners, over the lower cheeks and jaw, round the chin; the thin moustache meets it at the mouth corners;
+    # a soul patch under the lower lip, with small clear patches either side of it.
+    bb = blend(A_HAIR, skin, 0.3)
+    jw2 = L['jw'] * 0.5
+    mc = L['mw'] * 0.56
+    # (Sam, 4 Nov, round 3: "not anywhere near that thick, nor does it go up to the top of the ears"): it starts
+    # halfway down the ear and is a narrow band hugging the jaw, widening only round the chin and mouth
+    band = [(-fw * 0.5 - 0.004, 0.5), (-fw * 0.5 - 0.006, 0.62), (-jw2 * 0.98, 0.82), (-0.17, 0.99), (0.0, 1.02),
+            (0.17, 0.99), (jw2 * 0.98, 0.82), (fw * 0.5 + 0.006, 0.62), (fw * 0.5 + 0.004, 0.5),
+            (fw * 0.5 - 0.025, 0.52), (fw * 0.5 - 0.035, 0.66), (jw2 * 0.86, 0.8), (mc + 0.04, L['lip17'] + 0.01),
+            (mc + 0.01, L['lip13']), (mc * 0.55, L['lip17'] + 0.06), (0.03, L['lip17'] + 0.05), (0.0, L['lip17'] + 0.01),
+            (-0.03, L['lip17'] + 0.05), (-mc * 0.55, L['lip17'] + 0.06), (-mc - 0.01, L['lip13']),
+            (-mc - 0.04, L['lip17'] + 0.01), (-jw2 * 0.86, 0.8), (-fw * 0.5 + 0.035, 0.66), (-fw * 0.5 + 0.025, 0.52)]
+    p.poly(curve(f.pts(band), 4), bb, None)
+    p.line(open_curve(f.pts(band[:9]), 4), INK, 2.6)        # the jaw's ink line over it
+    gc = bb
+    must = [(-mc - 0.02, L['lip13']), (-mc, L['lip0'] - 0.004), (-L['nw'] * 0.45, L['lip0'] - 0.03), (0.0, L['lip0'] - 0.032),
+            (L['nw'] * 0.45, L['lip0'] - 0.03), (mc, L['lip0'] - 0.004), (mc + 0.02, L['lip13']), (mc - 0.01, L['lip0'] + 0.004),
+            (0.0, L['lip0'] - 0.012), (-mc + 0.01, L['lip0'] + 0.004)]
+    p.poly(curve(f.pts(must), 3), gc, None)              # the thin moustache, down to the beard at the corners
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.06)), A_IRIS, dk(skin, 0.82), liner=2.6)
     raise_ = {'hopeful': 0.02}.get(mood, 0.0) + sp.get('brow_up', 0.0)
     P4.brows(p, f, L, A_HAIR, 0.042, raise_, sp.get('frown', 0.0))
