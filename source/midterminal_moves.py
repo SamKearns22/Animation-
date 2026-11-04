@@ -148,20 +148,26 @@ SATAN_AT = (0.0, 2.15)
 EPSTEIN_AT = (-1.35, 3.0)          # beside the desk, left
 
 
-def _path_pts():
+ENTRY_LEFT = [(-1.9, 1.0), (-1.0, 1.0), WALK_TO]   # shot 2: in from frame left to his mark (Sam, 4 Nov)
+
+
+def _path_pts(pts=None):
+    if pts is not None:
+        return pts
     a = MS.wp(DOOR_A, 0.0, -0.9)     # in the corridor
     b = MS.wp(DOOR_A, 0.0, 1.35)     # straight in, past the open leaf (it swings in on his left)
     return [(a[0], a[2]), (b[0], b[2]), WALK_TO]
 
 
-def path_length():
-    p = _path_pts()
+def path_length(pts=None):
+    p = _path_pts(pts)
     return sum(math.dist(p[i], p[i + 1]) for i in range(len(p) - 1))
 
 
-def trump_path(d):
-    """(x, z, facing) after walking d metres along corridor -> threshold -> his mark; the facing turns smoothly."""
-    p = _path_pts()
+def trump_path(d, pts=None):
+    """(x, z, facing) after walking d metres along corridor -> threshold -> his mark (or along `pts`); the
+    facing turns smoothly."""
+    p = _path_pts(pts)
     for i in range(len(p) - 1):
         L = math.dist(p[i], p[i + 1])
         if d <= L or i == len(p) - 2:
@@ -190,11 +196,14 @@ def point_at(j, c, x, z, target):
     (Xt, Yt), _ = c.project(target)
     dx, dy = Xt - Xs, Yt - Ys
     n = math.hypot(dx, dy) or 1.0
-    sx, sy, sz = j['shL']
+    if abs(dx) < 90:                              # walking past in front of the target: arms down for that moment,
+        return j                                  # then the other arm takes up the point
+    side = 'L' if dx < 0 else 'R'                 # the arm on the target's side, never across the body
+    sx, sy, sz = j['sh' + side]
     reach = (V.F.UPPER + V.F.FORE) * 0.95
     d = (dx / n * 0.85, dy / n * 0.85 + 0.05, 0.5)
     m = math.sqrt(sum(v * v for v in d))
-    V.arm_to(j, 'L', (sx + d[0] / m * reach, sy + d[1] / m * reach, sz + d[2] / m * reach), 'down', 'point')
+    V.arm_to(j, side, (sx + d[0] / m * reach, sy + d[1] / m * reach, sz + d[2] / m * reach), 'down', 'point')
     return j
 
 
@@ -203,12 +212,12 @@ def _copy(j):
                 else v) for k, v in j.items()}
 
 
-def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None):
+def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None, pts=None):
     """Trump d metres along his path at time t (walking: the brisk gait; else standing). `facing` overrides; `front`
     keeps him square to the lens all the way (Sam, 4 Nov); `point`: a world point he points at. Over the last 0.5 m
     he turns square to the lens anyway (rule 38: front on at his mark)."""
-    x, z, f0 = trump_path(d)
-    left = path_length() - d
+    x, z, f0 = trump_path(d, pts)
+    left = path_length(pts) - d
     j = moves.gait(sp, t, 'brisk') if walking and left > 0.02 else V.standing(sp)
 
     def draw(im, c):
@@ -251,7 +260,7 @@ def satan_item(t, sp, x=SATAN_AT[0], z=SATAN_AT[1], facing=None):
 
 
 # ---------------------------------------------------------------------------------------------- flames
-def flames(d, cx, base_y, width, height, t, seed, n=5, lw=3.0):
+def flames(d, cx, base_y, width, height, t, seed, n=5, lw=3.0, bed=False):
     """Flat flame tongues on screen standing on a line (cx +- width/2 at base_y), flickering (a new shape every 2
     frames at 12 fps): dark red edge, orange, a yellow heart; one ink outline round each."""
     rng = np.random.default_rng(seed * 977 + int(t * 6))
@@ -267,6 +276,26 @@ def flames(d, cx, base_y, width, height, t, seed, n=5, lw=3.0):
                    (x0 + sway, base_y - h), (x0 + w * 0.35 + sway * 0.6, base_y - h * 0.4), (x0 + w / 2, base_y)]
             d.polygon(pts, fill=col + (255,), outline=INK + (255,) if layer == 0 else None,
                       width=int(lw) if layer == 0 else 0)
+    if bed:                       # a bed of embers over the flames' foot (Sam, 4 Nov: no hard line where they end):
+        r0 = width / n * 0.8      # glowing lumps of three sizes in a ragged heap, and a few sparks drifting up
+        N = int(n * 3)
+        for i in range(N):        # spread evenly along the whole foot (with a jitter), so no stretch of edge shows
+            r2 = np.random.default_rng(seed * 53 + i)
+            ex = cx + ((((i * 7) % N) + 0.5) / N - 0.5) * width * 1.02 + r2.uniform(-0.3, 0.3) * r0
+            ey = base_y + r2.uniform(-0.45, 0.35) * r0
+            r = r0 * r2.uniform(0.6, 1.0) * (1 - 0.35 * abs(ex - cx) / width * 2)
+            col = ((150, 34, 22), (204, 70, 28), (238, 120, 30))[i % 3]
+            d.ellipse((ex - r, ey - r * 0.75, ex + r, ey + r * 0.75), fill=col + (255,), outline=INK + (255,), width=int(lw))
+            if i % 3 == 2:
+                d.ellipse((ex - r * 0.4, ey - r * 0.3, ex + r * 0.4, ey + r * 0.3), fill=(252, 214, 80, 255))
+        for i in range(6):        # sparks: small, rising and fading out of the frame, each on its own cycle
+            r2 = np.random.default_rng(seed * 71 + i)
+            ph = (t * 0.9 + r2.uniform()) % 1.0
+            sx = cx + r2.uniform(-0.5, 0.5) * width + math.sin(ph * 6 + i) * r0 * 0.6
+            sy = base_y - ph * abs(height) * 1.2
+            rs = r0 * 0.16 * (1 - ph)
+            if rs > 0.8:
+                d.ellipse((sx - rs, sy - rs, sx + rs, sy + rs), fill=(252, 190, 60, 255), outline=INK + (255,), width=1)
     del rng
 
 
@@ -278,54 +307,50 @@ def _neck_screen(cm, sp, x, z, lift):
     return Xf * B.SS, (Yf - (Yf - Yn)) * B.SS, (Yf - Yn) / 928.0 * B.SS
 
 
-def skull(size, t, seed=3):
-    """The flaming skull (flat, house style; Sam, 4 Nov: bigger, more grotesque, plainly screaming in terror and
-    agony) in an RGBA picture `size` px wide: a cream skull, deep sockets tilted up at the middle (anguish) with tiny
-    red pupils, a cracked crown, sunken cheeks, the jaw dropped open in a long scream, broken uneven teeth top and
-    bottom; tall flames roaring up over the crown."""
+def skull(size, t, seed=3, lw=2.4):
+    """The flaming skull, in the house style (Sam, 4 Nov, ref: a full, rounded real skull wreathed in fire): flat
+    tones, the characters' line weight, no extra detail. A big round cranium; full cheekbones flush with it (no caving
+    round the mouth); the jaw dropped open in a scream, as wide as the cheeks; the mouth and the deep sockets lit by
+    fire inside; an upside-down-heart nose; one shade tone down the side; a crack; flames over the crown."""
     S = int(size)
-    im = Image.new('RGBA', (S, int(S * 2.1)), (0, 0, 0, 0))
+    im = Image.new('RGBA', (S, int(S * 2.3)), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    oy = int(S * 0.75)                                    # the top of the skull; flames above it
-    lw = max(2, int(S / 45))
-    flames(d, S / 2, oy + S * 0.35, S * 1.0, S * 1.05, t, seed, n=7, lw=lw)
-    bone, shade, dark = (236, 226, 198), (184, 168, 136), (24, 14, 12)
-    rng = np.random.default_rng(seed)
-    jaw = [(S * 0.22, oy + S * 0.72), (S * 0.30, oy + S * 1.22), (S * 0.5, oy + S * 1.32), (S * 0.70, oy + S * 1.22),
-           (S * 0.78, oy + S * 0.72)]                     # the jaw, dropped (drawn first: the cranium covers its hinge)
-    d.polygon(jaw, fill=bone, outline=INK, width=lw)
-    cr = []                                               # the cranium: wide at the temples, pinched at the cheeks
-    for u in np.linspace(0, 2 * math.pi, 40):
-        up = math.sin(u) > 0
-        cr.append((S * 0.5 + S * 0.42 * math.cos(u) * (1.0 if up else 0.82),
-                   oy + S * 0.42 - S * 0.42 * math.sin(u) * (1.0 if up else 0.75)))
-    d.polygon(cr, fill=bone, outline=INK, width=lw)
-    for sgn in (-1, 1):                                   # sunken cheeks
-        sx = 0.5 + sgn * 0.25
-        d.polygon([(S * sx, oy + S * 0.56), (S * (sx - sgn * 0.08), oy + S * 0.68), (S * sx, oy + S * 0.74)], fill=shade)
-    mouth = [(S * 0.36, oy + S * 0.74), (S * 0.5, oy + S * 0.71), (S * 0.64, oy + S * 0.74), (S * 0.62, oy + S * 1.05),
-             (S * 0.5, oy + S * 1.18), (S * 0.38, oy + S * 1.05)]
-    d.polygon(mouth, fill=dark, outline=INK, width=lw)   # the scream
-    for i in range(5):                                    # ragged teeth, two missing
-        x0 = S * (0.38 + 0.048 * i)
-        if i != 3:
-            d.polygon([(x0, oy + S * 0.73), (x0 + S * 0.044, oy + S * 0.73),
-                       (x0 + S * 0.03, oy + S * (0.80 + 0.03 * rng.uniform()))], fill=bone, outline=INK)
-        if i != 1:
-            d.polygon([(x0 + S * 0.01, oy + S * 1.1), (x0 + S * 0.046, oy + S * 1.1),
-                       (x0 + S * 0.03, oy + S * (1.03 - 0.03 * rng.uniform()))], fill=bone, outline=INK)
-    for sgn in (-1, 1):                                   # sockets: big, tilted up at the middle, pin-red pupils
-        cx = S * (0.5 + sgn * 0.17)
-        sock = [(cx - sgn * S * 0.11, oy + S * 0.36), (cx + sgn * S * 0.13, oy + S * 0.44), (cx + sgn * S * 0.11, oy + S * 0.58),
-                (cx - sgn * S * 0.02, oy + S * 0.62), (cx - sgn * S * 0.13, oy + S * 0.52)]
-        d.polygon(sock, fill=dark, outline=INK, width=lw)
-        d.ellipse((cx - S * 0.022, oy + S * 0.47, cx + S * 0.022, oy + S * 0.515), fill=(230, 40, 30))
-        d.line([(cx - sgn * S * 0.13, oy + S * 0.30), (cx + sgn * S * 0.1, oy + S * 0.36)], fill=INK, width=lw)
-    d.polygon([(S * 0.5, oy + S * 0.58), (S * 0.45, oy + S * 0.68), (S * 0.5, oy + S * 0.66), (S * 0.55, oy + S * 0.68)],
-              fill=dark, outline=INK)                     # the nose hole
-    d.line([(S * 0.56, oy + S * 0.01), (S * 0.6, oy + S * 0.1), (S * 0.55, oy + S * 0.17), (S * 0.62, oy + S * 0.26)],
-           fill=INK, width=lw)                            # cracks
-    d.line([(S * 0.22, oy + S * 0.14), (S * 0.28, oy + S * 0.2), (S * 0.26, oy + S * 0.27)], fill=INK, width=lw)
+    oy = int(S * 0.78)                                    # the top of the cranium; flames above
+    lw = max(1, int(round(lw)))
+    flames(d, S / 2, oy + S * 0.4, S * 1.05, S * 1.0, t, seed, n=7, lw=lw)
+    bone, shade = (236, 226, 202), (206, 190, 160)        # like the characters' skin: one flat tone, one shade
+    sock, fire, core = (74, 30, 22), (238, 120, 30), (252, 214, 80)
+
+    def P(pts):
+        return [(S * x, oy + S * y) for x, y in pts]
+    jaw = P([(0.17, 0.80), (0.19, 1.18), (0.29, 1.42), (0.50, 1.50), (0.71, 1.42), (0.81, 1.18), (0.83, 0.80)])
+    d.polygon(jaw, fill=bone, outline=INK, width=lw)                       # the jaw, dropped (behind the face)
+    d.polygon(P([(0.27, 1.02), (0.73, 1.02), (0.71, 1.32), (0.5, 1.38), (0.29, 1.32)]), fill=fire)   # mouth: fire
+    d.polygon(P([(0.38, 1.06), (0.62, 1.06), (0.59, 1.24), (0.5, 1.30), (0.41, 1.24)]), fill=core)
+    for i in range(6):                                                     # lower teeth, a full row
+        x0 = 0.29 + i * 0.07
+        d.rounded_rectangle((S * x0, oy + S * 1.29, S * (x0 + 0.065), oy + S * 1.38), int(S * 0.015),
+                            fill=bone, outline=INK, width=max(1, lw - 1))
+    face = [(0.5 + 0.43 * math.cos(u), 0.45 - 0.45 * math.sin(u)) for u in np.linspace(math.pi, 0, 24)]
+    face += [(0.92, 0.62), (0.88, 0.80), (0.78, 0.92), (0.74, 1.04), (0.26, 1.04), (0.22, 0.92), (0.12, 0.80),
+             (0.08, 0.62)]                                                 # cranium into broad cheekbones and a full upper jaw
+    d.polygon(P(face), fill=bone, outline=INK, width=lw)
+    d.polygon(P([(0.09, 0.45), (0.16, 0.28), (0.15, 0.62), (0.22, 0.86), (0.14, 0.80), (0.10, 0.62)]), fill=shade)
+    for i in range(6):                                                     # upper teeth, a full row
+        x0 = 0.29 + i * 0.07
+        d.rounded_rectangle((S * x0, oy + S * 0.95, S * (x0 + 0.065), oy + S * 1.05), int(S * 0.015),
+                            fill=bone, outline=INK, width=max(1, lw - 1))
+    for sgn in (-1, 1):                                                    # sockets: big, round, a little slanted
+        cx = 0.5 + sgn * 0.185
+        pts = [(cx + 0.13 * math.cos(u), 0.56 + 0.105 * math.sin(u) - sgn * 0.025 * math.cos(u))
+               for u in np.linspace(0, 2 * math.pi, 18)]
+        d.polygon(P(pts), fill=sock, outline=INK, width=lw)
+        fl = 0.03 * math.sin(t * 9 + sgn)                                  # fire flickering inside
+        d.polygon(P([(cx - 0.06, 0.62), (cx - 0.02, 0.53 + fl), (cx + 0.01, 0.58), (cx + 0.04, 0.50 - fl), (cx + 0.07, 0.62)]),
+                  fill=fire)
+    d.polygon(P([(0.5, 0.70), (0.455, 0.80), (0.47, 0.85), (0.5, 0.83), (0.53, 0.85), (0.545, 0.80)]),
+              fill=sock, outline=INK, width=max(1, lw - 1))                # the nose
+    d.line(P([(0.60, 0.02), (0.63, 0.12), (0.59, 0.20), (0.64, 0.28)]), fill=INK, width=max(1, lw - 1))   # a crack
     return im
 
 
@@ -379,7 +404,7 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
         lay = Image.fromarray(a, 'RGBA')
         over = Image.new('RGBA', im.size, (0, 0, 0, 0))     # drawn flat over the ghost, not tinted (house style)
         # the tail: flames roaring UP from below the knees to his waist (Sam, 4 Nov), where his legs fade away
-        flames(ImageDraw.Draw(over), nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS)
+        flames(ImageDraw.Draw(over), nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS, bed=True)
         if melt > 0:
             al = np.asarray(lay.getchannel('A'))
             rows = np.where(al[:int(ny)].max(axis=1) > 0)[0] if ny > 0 else []
@@ -387,7 +412,7 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             cols = np.where(al[int(top):int(ny)].max(axis=0) > 0)[0]
             hx0, hx1 = (cols[0], cols[-1]) if len(cols) else (nx - 80 * s, nx + 80 * s)
             hw = hx1 - hx0
-            sk = skull(hw * (0.9 + 0.45 * min(1.0, melt * 1.4)), t)     # grows as it bursts through
+            sk = skull(hw * (0.9 + 0.45 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # grows as it bursts through
             sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
             head_y = (top + ny) / 2
             over.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
@@ -416,7 +441,7 @@ def frame(t, cam_name, door_t=None, walk_d=None, ep_fade=0.0, ep_melt=0.0):
         else:
             sx, sz = SATAN_AT
             ppl.append(trump_item(t, walk_d, dict(MC.TRUMP, look=-0.8, frown=0.03), front=True,
-                                  point=(sx, 1.45 + satan_float(t)[0], sz)))
+                                  point=(sx, 1.45 + satan_float(t)[0], sz), pts=ENTRY_LEFT))
     if cam_name != 'door':
         ppl.append(satan_item(t, MC.SATAN))
     if ep_fade > 0:
@@ -426,20 +451,24 @@ def frame(t, cam_name, door_t=None, walk_d=None, ep_fade=0.0, ep_melt=0.0):
     return img
 
 
+SLAM = 1.3                           # the door starts to slam; shut at SLAM + 0.25, and the cut to shot 2 comes there,
+CUT = SLAM + 0.25                    # with "Satan, what the f***?" starting on the cut (Sam, 4 Nov note 2)
+
+
 def test_timeline(t):
-    """The test reel: the door and walk-in (0-2.4 s), Satan floating (2.4-4.4), the ghost fading in and melting
-    (4.4-8.4)."""
-    if t < 2.4:
-        return frame(t, "door", door_t=door_curve(t, 0.15, 0.5, 1.9), walk_d=1.35 * t)
+    """The test reel: the door and walk-in (0-1.55 s, Trump starting just behind the door), the cut on the slam to
+    Trump striding in from frame left, pointing at Satan (1.55-4.4), the ghost fading in and melting (4.4-8.4)."""
+    if t < CUT:
+        return frame(t, "door", door_t=door_curve(t, 0.1, 0.45, SLAM), walk_d=0.6 + 1.35 * t)
     if t < 4.4:
-        return frame(t, 'two', walk_d=min(path_length(), 1.35 * t))
+        return frame(t, 'two', walk_d=min(path_length(ENTRY_LEFT), 1.35 * (t - CUT)))
     fade = min(1.0, (t - 4.4) / 0.8) if t < 7.6 else max(0.0, 1 - (t - 7.6) / 0.8)
     return frame(t, 'epstein', ep_fade=fade, ep_melt=max(0.0, min(1.0, (t - 5.8) / 1.4)))
 
 
 def sheet(out):
     B.SS = 1
-    times = [0.2, 0.7, 1.3, 1.9, 3.0, 4.0, 4.8, 6.2, 6.9, 7.4]
+    times = [0.05, 0.5, 1.2, 1.5, 2.2, 3.6, 4.8, 6.2, 6.9, 7.4]
     tiles = [(t, test_timeline(t)) for t in times]
     w, h = 324, 576
     sh = Image.new('RGB', (5 * w + 6 * 12, 2 * (h + 40) + 12), (232, 228, 222))

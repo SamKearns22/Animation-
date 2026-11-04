@@ -2,7 +2,7 @@
 
 ## Where things stand
 - **Rules that bite next:** 27 (bleep both swears, from the sound), 38/68 (front on, no three-quarters), 11 (shot list below is the approved staging)
-- **Done (4 Nov, Opus):** cast approved, Oval Office set, key-shots sheet approved; rules 68 and 27 written. **4 Nov (later):** the moving parts built (door swing and slam, Trump's brisk walk in through the doorway turning front-on at his mark, Satan's float and wing beat, the ghost's fade, flame tail and melt into a flaming skull); test clip sent to Sam. **Sam's notes on it (4 Nov), all fixed, clip 2 sent:** Trump hidden behind the shut door until it opens; the corridor wall and runner fill the doorway; the door swings INTO the room on the left; staging Trump right, Satan middle, Epstein left (beside the desk); Trump front-on and pointing at Satan as he walks in; Epstein's flames burn upwards; the skull bigger, grotesque, screaming.
+- **Done (4 Nov, Opus):** cast approved, Oval Office set, key-shots sheet approved; rules 68 and 27 written. **4 Nov (later):** the moving parts built (door swing and slam, Trump's brisk walk in through the doorway turning front-on at his mark, Satan's float and wing beat, the ghost's fade, flame tail and melt into a flaming skull); test clip sent to Sam. **Sam's notes on it (4 Nov), all fixed, clip 2 sent:** Trump hidden behind the shut door until it opens; the corridor wall and runner fill the doorway; the door swings INTO the room on the left; staging Trump right, Satan middle, Epstein left (beside the desk); Trump front-on and pointing at Satan as he walks in; Epstein's flames burn upwards; the skull bigger, grotesque, screaming. **Second notes (4 Nov), fixed, clip 3 sent:** shot 2 Trump walks in from frame LEFT to his mark on the right (breaks the door's logic: Sam's call), front-on, pointing with the arm on Satan's side; the door shot cuts the moment the door shuts and line 2 starts on that cut; the skull full and rounded (Sam's ref), flat house colours and line weight, fire in the mouth and sockets; an ember bed with sparks at the foot of the flames.
 - **Spent against the estimate (rule 55):** cap 10% (stop at 84% on Sam's meter; 74% at the brief). Plan 9%; moves build about 2%.
 - **Next:** the film file from `source/satire_template.py` once Sam's recordings arrive (Opus, medium effort). New chat, type: "MidTerminal: build the film from the handover in notes/midterminal.md".
 - **Needs Sam:** the 9 lines (shot list lines 1-10), the door slam and a gentle fire sound, as voice memos in the chat; any notes on the test clip.
@@ -52,6 +52,9 @@
 | 22 | Sam 4 Nov (test clip): Trump behind the shut door until it opens; corridor wall and carpet fill the doorway; door swings into the room, on the left | done (moves) |
 | 23 | Sam 4 Nov: in the walk-to-the-desk shot Trump right, Satan middle, Epstein left; Trump front-on and pointing at Satan as he walks in | done (moves) |
 | 24 | Sam 4 Nov: Epstein's fire flames upwards; the skull larger, more grotesque, plainly screaming in terror and agony | done (moves) |
+| 25 | Sam 4 Nov: in the Satan shot Trump comes in from the left, even if it breaks logic | done (moves) |
+| 26 | Sam 4 Nov: Trump starts his accusing line (line 2) as soon as the door closes | moves: cut on the slam; film: line 2 timed to it |
+| 27 | Sam 4 Nov: the skull full (no caving at the mouth; his ref), in the house style and colours; the flames end in a bed of embers, no hard line | done (moves) |
 
 Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` (4 key shots: door, two-shot, zoom out with the ghost, Epstein close)
 
