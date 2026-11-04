@@ -1,14 +1,15 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 74 (acting list; Sam's 4 answers below), 14 (pre-flight gates), 10 (faults named before a render)
-- **Done (4 Nov):** varied cuts (close-ups, her waist up, both waist up; Sam's stills note); acting questions answered (all Y); clink fixed (glasses meet in front); rough silent animatic sent (`review/islamocommunism-animatic.mp4`, 62 s, 1.7 MB, 71 s render).
-- **Next:** Opus, medium effort, new chat: file Sam's 13 recordings, pre-flight, check sheet (with the Hook Text frame), animatic. Type: "Islamocommunism: recordings in".
-- **Needs Sam:** notes on the rough animatic; the 13 voice recordings (Voice Isolation off), due 5 Nov.
+- **Rules that bite next:** 74 (acting list; answers below), 14 (pre-flight gates), 10 (faults named before a render)
+- **Done (4 Nov):** varied cuts; Sam's animatic notes 8-15 applied; desk arm approved by Sam; rough silent animatic 3 sent (`review/islamocommunism-animatic.mp4`, 62 s, 1.8 MB). Week's usage 96% at night's end (rule 44; 93% at its start; this chat about 3%).
+- **Next:** Opus, medium effort, new chat: apply held notes 16-18 (phone base, Alex more excited on "Invade Europe?", rise 50% faster), file Sam's 13 recordings (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet with the Hook Text frame, animatic. Type: "Islamocommunism: recordings in".
+- **Needs Sam:** the 13 voice recordings (Voice Isolation off), due 5 Nov; the week's usage figure after the animatic.
 - **Read:** this file; guides/satire.md "Before every render" and "The acting list".
-- **Open rule requests:** (a) Sam (4 Nov): at the END of the project, turn the desk-arm lesson into a general rule: body weight and its relationship with surfaces (an arm or hand resting on a desk takes weight, the elbow bends slightly, the limb comes forward and turns a little, nothing dips below the surface) and limb extensions generally. Reference photo: a man leaning on a table, forearm forward and turned (Sam's upload, 4 Nov). Wording to be proposed to Sam first. (b) Sam's ask (4 Nov): the acting-list guide should plan each line's shot first time, use the quality tools and ask the questions that carry the screenplay's intent. Proposed wording not yet given a yes.
-- **Faults named to Sam (rough animatic):** silent bodies hold still 2.5 s in 6 places (no takes yet); 3 subtitles timed by estimate; touch/benchmark paperwork; the long wide shot (walk-in to sip) and the first close-up are over 8 s (chosen); the clink still flags "turned" though the frames show both front on (check it at the check sheet); his phone hand hidden (5-10 s).
-- **For Claude:** cuts are `cut_of(t)` (camera, cast), staging `shot_of(t)` = name before `_`; CAMS has `_ab/_ao/_aom/_med`; `KEEP_CLEAR` skips the hook's own sky box. Render needs `--faults-named` while the faults above stand.
+- **Open rule requests:** (a) end of project: a general rule on body weight and surfaces, limb extension (Sam, 4 Nov; photo reference; propose wording first). (b) The acting-list guide should plan each line's shot first time, use the quality tools and ask the questions that carry the script's meaning (Sam's ask, 4 Nov; wording not yet given a yes).
+- **Lesson (Sam, 4 Nov):** do not say a change "looks right" from a thumbnail or a first look; look at full size, say what is seen, and let Sam judge (it happened twice: the facial hair, the desk arm).
+- **Faults named to Sam (rough animatics):** silent bodies hold still 2.5 s in four places (no takes yet); the first close-up runs 10 s (chosen); the hand checks flag the desk arm (a separate layer; judged by Sam); the clink "turned" flag is a false alarm (frames face the lens); the handover touch check cannot find the hands. Renders need `--faults-named` while these stand.
+- **For Claude:** cuts are `cut_of(t)` (camera, cast), staging `shot_of(t)` = name before `_`; CAMS has `_ab/_ao/_aom/_med`; people are nudged 0.3 degrees off square (`MS.to_cam`) so nobody is drawn mirror-image; desk arm is `desk_arm_item` (DESK_ARM, found by a marker sleeve colour); acting beats are `BEATS`; `KEEP_CLEAR` skips the hook's own sky box.
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |

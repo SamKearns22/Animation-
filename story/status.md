@@ -9,7 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). Open: Sam's Y/N on the "Hook Text names the story" rule.
 
 ## Films
-- **Islamocommunism (4 Nov): rough silent animatic sent** (`review/islamocommunism-animatic.mp4`): varied cuts, acting questions answered. Next: Sam's recordings (5 Nov), then the real animatic (Opus medium, new chat). About 8% spent of 8%. Notes: `notes/islamocommunism.md`.
+- **Islamocommunism (4 Nov): rough silent animatic 3 sent; notes 16-18 held.** Next: Sam's recordings (5 Nov), then apply the held notes and make the real animatic (Opus medium, new chat). Week 96%. Notes: `notes/islamocommunism.md`.
 - **MidTerminal (4 Nov): done.** Final `animations/midterminal-vertical.mp4` (57.4 s, 10.5 MB) and story post `animations/midterminal-story.png`. Cost 11% of a week (Sam: the old norm was 15-25%; always aim lower). Rules 70-75 and P8-P10 written (Sam's yes). Built (4 Nov): finish.py burns in the subtitles (rule 70) and reads the film's HOOK, checking it first (rule 75): `finish.py CLEAN OUT --film NAME`. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
   Open: his two rule requests (Hook Text and sign-off in every animatic; no three-quarter views): propose wording, wait for his yes. Notes: `notes/terfwarts.md`.
