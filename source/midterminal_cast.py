@@ -360,13 +360,14 @@ def epstein_torso(img, p, sp, t):
 # traitors_cast's Trump failed the likeness check (4 Nov: -28%, 6th of 7). Rebuilt from measurements (likeness.py card
 # on trump-1 and -2; trump-3 turned 36 degrees, left out), keeping that head's big shapes: the swept blond hair and
 # forelock, the tan with pale rings round the eyes, the pout, the jowls and double chin.
-P4.MEASURED['trump'] = dict(face_wide=0.886, jaw_wide=0.808, forehead_wide=0.928, eyes_apart=1.386, eye_size=0.175,
-                            eye_open=0.216, eye_tilt=0.991, brow_high=0.578, brow_slope=-8.783, nose_long=0.41,
-                            nose_wide=0.627, mouth_wide=0.801, lip_top=0.115, lip_low=0.183, philtrum=0.137,
-                            chin_long=0.282)
+P4.MEASURED['trump'] = dict(face_wide=0.868, jaw_wide=0.811, forehead_wide=0.939, eyes_apart=1.375, eye_size=0.177,
+                            eye_open=0.213, eye_tilt=1.145, brow_high=0.553, brow_slope=-8.097, nose_long=0.401,
+                            nose_wide=0.618, mouth_wide=0.788, lip_top=0.114, lip_low=0.185, philtrum=0.139,
+                            chin_long=0.283)    # 4 Nov, second pack: trump-6 (front), -5, -2, -1
+DCHIN = True
 P4.PUSH['trump'] = 1.8
-P4.TUNE['trump'] = dict(eye_open=1.3, eye_size=1.5, forehead_wide=1.5, eye_tilt=1.5, lip_top=4.0, lip_low=4.0,
-                        philtrum=2.5, chin_long=3.0)
+P4.TUNE['trump'] = dict(eye_open=1.0, eye_size=1.0, forehead_wide=3, eye_tilt=2, lip_top=4, lip_low=4, philtrum=4,
+                        chin_long=5, brow_slope=3, face_wide=2)   # searched 4 Nov: 31% on trump-6, 22% on trump-2
 
 
 def trump_head(img, p, sp, t, hx, hy):
@@ -389,11 +390,12 @@ def trump_head(img, p, sp, t, hx, hy):
         for sgn in (-1, 1):                            # jowls from the nose wings past the mouth to the jaw
             p.line(curve(f.pts([(sgn * L['nw'] * 0.55, L['nose_y'] - 0.02), (sgn * L['mw'] * 0.66, L['lip13']),
                                 (sgn * L['jw'] * 0.42, 0.9)]), 3), sd, 2.0)
-        p.line(curve(f.pts([(-0.12, 1.04), (0.0, 1.06), (0.12, 1.04)]), 3), sd, 1.8)      # the double chin
+        if DCHIN:
+            p.line(curve(f.pts([(-0.12, 1.04), (0.0, 1.06), (0.12, 1.04)]), 3), sd, 1.8)      # the double chin
         for k in range(2):                             # forehead creases
             v = 0.1 + 0.05 * k
             p.line(curve(f.pts([(-0.16, v + 0.01), (0.0, v - 0.004), (0.16, v + 0.01)]), 3), sd, 1.5)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.35)), (104, 136, 168), blend(TC.T_RING, skin, 0.6), liner=2.4)
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.12)), (104, 136, 168), blend(TC.T_RING, skin, 0.6), liner=2.4)
     P4.brows(p, f, L, (186, 140, 86), 0.04, sp.get('brow_up', 0.0), sp.get('frown', 0.012))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
@@ -496,21 +498,21 @@ def sheet(out):
     import landmarks
     import sizes
     B.SS = 1
-    W, H = 2700, 3000
+    W, H = 1900, 2800
     img = Image.new('RGBA', (W, H), (232, 228, 222, 255))
     d = ImageDraw.Draw(img)
     big = ImageFont.truetype(FONT, 40)
     small = ImageFont.truetype(FONT, 26)
     cam = B.Cam(1.0, 540, 960)
-    d.text((40, 24), 'MIDTERMINAL: the cast (front, three-quarter, side, 3/4 back, back)', font=big, fill=(30, 30, 30))
-    names = ('front', 'three-quarter', 'side', '3/4 back', 'back')
+    d.text((40, 24), 'MIDTERMINAL: the cast (front, side, back)', font=big, fill=(30, 30, 30))
+    names = ('front', 'side', 'back')
     for r, key in enumerate(('satan', 'epstein', 'trump')):
         sp = CAST[key]
         k = sp['height'] / 1.75
         s = 0.5 * k
         y0 = 120 + r * 900
         d.text((40, y0 - 4), f"{sp['name']} ({sp['height']:.2f} m)", font=big, fill=(30, 30, 30))
-        for i, yaw in enumerate((0, 45, 90, 135, 180)):
+        for i, yaw in enumerate((0, 90, 180)):
             _tile(img, lambda im, yaw=yaw, sp=sp, s=s: V.person(im, cam, 540, 840 - 928 * s, s, dict(sp), 0.0, yaw),
                   (190, 60, 890, 880), (20 + 440 * i, y0 + 40))
             d.text((370 + 440 * i, y0 + 860), names[i], font=small, fill=(40, 40, 40), anchor='mm')
@@ -519,8 +521,8 @@ def sheet(out):
     s = 0.5
     landmarks.draw(ld, 540, 840 - 928 * s, s, 1000)
     sizes.scale_ref(ld, 640, 840, s / V.M_PER_UNIT)
-    img.alpha_composite(lay.crop((390, 60, 890, 880)), (2200, 160))
-    d.text((2450, 980), '1.75 m person', font=small, fill=(40, 40, 40), anchor='mm')
+    img.alpha_composite(lay.crop((390, 60, 890, 880)), (1360, 160))
+    d.text((1610, 980), '1.75 m person', font=small, fill=(40, 40, 40), anchor='mm')
     img.convert('RGB').save(out, quality=88)
     return out
 
