@@ -85,6 +85,10 @@ the end with their checks.
 | 60 | The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
 | 62 | Subtitles are a few words at a time, each coming up on the syllable it starts with in Sam's take, and made readable when cut: on screen at least 0.8 s, at most 220 words a minute, two rows at most. | `subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable` |
 | 66 | A render that is refused, stopped or fails leaves no file: the old output is deleted before anything else, so an old render can never be taken for the new one. | `film_engine.render`; `kittests.py render_leaves_no_old_file` |
+| 70 | Subtitles are burned in at the finish step (`finish.py`, with the Hook Text and sign-off), never in the picture render, so a note on subtitle wording, timing or Hook Text position costs seconds, not a render. | by hand until `finish.py` takes the subtitle list (to build, Opus) |
+| 71 | A subtitle's wording change never moves its timing: timing always comes from the script as spoken; the changed wording is swapped in afterwards. Each subtitle starts within 0.3 s of its first word in the take. | by hand (the check's subtitle printout against the take) until pre-flight checks it |
+| 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
+| 73 | A pre-flight fault Sam has been told about is listed once: the film keeps a named-faults list and pre-flight shows only faults not on it. | by hand (the handover's "faults named" line) until pre-flight reads the list |
 | 67 | One full pre-flight per round: make every fix, run the quick check (`preflight.py NAME OUT --text`, seconds) until it is clean, then the full pre-flight once, then the render in the same background chain. A background job is stopped with its own task stop, never by name. | `preflight.py --text`; by hand |
 
 ## Notes, review and sound
@@ -98,7 +102,7 @@ the end with their checks.
 | 43 | Looks are tested at the shot's own camera; eyes that meet shown one frame each on the check sheet. | `filmkit.eyeline(aim=, drawn=, at=)`, `look_sheet` |
 | 45 | The composition sheet is sent once; notes on it are applied, never re-sent for approval. | by hand |
 | 46 | When Sam names frames, look at exactly those first, at his size, before changing anything. | by hand |
-| 47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner and frame-count check). | by hand; `kittests.py nostamp` |
+| 47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner and frame-count check), or trimmed with ffmpeg where only silence is lost; a full re-render only when neither can do it, and Sam is told why. | by hand; `kittests.py nostamp` |
 | 48 | Look at several frames as ONE labelled sheet (at most 1080 px wide; a crop for a detail); full size only for faces, Hook Text and frames Sam names. | `sheet.py` (default width) |
 | 61 | Every new film's code opens with a short `MAP`: what is at which line (smoke, paths, wreck), kept in step as it changes; a note is answered by reading those lines. Finished films are not retrofitted. | by hand (handover) |
 | 52 | The sign-off lasts 1.6 s on every film. | `signoff.py` default (via `finish.py`) |
