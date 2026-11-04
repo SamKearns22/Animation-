@@ -37,7 +37,7 @@ A_SKIN = (214, 160, 124)          # warm olive
 A_HAIR = (34, 28, 26)
 A_HAIR_L = (70, 60, 56)
 A_IRIS = (78, 52, 36)
-A_LIP = (176, 112, 98)
+A_LIP = (188, 118, 104)
 A_SUIT = (44, 46, 54)             # charcoal (ref 1)
 O_SKIN = (226, 172, 140)
 O_HAIR = (26, 20, 20)
@@ -58,7 +58,7 @@ _LA = dict(face_wide=0.816, jaw_wide=0.806, forehead_wide=0.941, eyes_apart=1.29
            lip_top=0.104, lip_low=0.167, philtrum=0.102, chin_long=0.26)
 P4.MEASURED['elsayed'] = {k: P4.AVG[k] + _E[k] - _LA[k] for k in P4.AVG}
 P4.PUSH['elsayed'] = 1.8
-P4.TUNE['elsayed'] = {}   # check 4 Nov: 60% (extra pushes tried: 49%, dropped)
+P4.TUNE['elsayed'] = dict(brow_slope=1.6, chin_long=0.5)   # searched 4 Nov after Sam's moustache-and-goatee note: 57%
 P4.MEASURED['aoc'] = dict(face_wide=0.847, jaw_wide=0.79, forehead_wide=0.95, eyes_apart=1.177, eye_size=0.212,
                           eye_open=0.369, eye_tilt=5.619, brow_high=0.528, brow_slope=-6.891, nose_long=0.426,
                           nose_wide=0.654, mouth_wide=0.832, lip_top=0.135, lip_low=0.195, philtrum=0.124,
@@ -87,18 +87,23 @@ def elsayed_head(img, p, sp, t, hx, hy):
     list(_ears(p, f, L, skin))
     p.poly(curve(f.pts(P4.outline_uv(L, 0.42)), 4), skin, INK, 2.6)
     fw, fhw = L['fw'], L['fhw']
-    # the beard: a short trimmed shape along the jaw from the sideburns, round the chin, with the moustache
-    bc = blend(A_HAIR, skin, 0.45)
-    jaw = [(-fw * 0.5 + 0.005, 0.34), (-fw * 0.49, 0.6), (-L['jw'] * 0.48, 0.84), (-0.16, 1.0), (0.0, 1.05),
-           (0.16, 1.0), (L['jw'] * 0.48, 0.84), (fw * 0.49, 0.6), (fw * 0.5 - 0.005, 0.34),
-           (fw * 0.5 - 0.05, 0.42), (fw * 0.4, 0.7), (L['mw'] * 0.6, L['lip17'] + 0.01),
-           (L['mw'] * 0.4, L['lip17'] + 0.04), (0.0, L['lip17'] + 0.05), (-L['mw'] * 0.4, L['lip17'] + 0.04),
-           (-L['mw'] * 0.6, L['lip17'] + 0.01), (-fw * 0.4, 0.7), (-fw * 0.5 + 0.05, 0.42)]
-    p.poly(curve(f.pts(jaw), 4), bc, INK, 2.2)
-    must = [(-L['mw'] * 0.52, L['lip0'] + 0.02), (-L['nw'] * 0.5, L['nose_y'] + 0.025), (0.0, L['nose_y'] + 0.03),
-            (L['nw'] * 0.5, L['nose_y'] + 0.025), (L['mw'] * 0.52, L['lip0'] + 0.02), (0.0, L['lip0'] - 0.005)]
-    p.poly(curve(f.pts(must), 3), bc, INK, 1.8)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.14)), A_IRIS, dk(skin, 0.82), liner=2.6)
+    # the facial hair (Sam, 4 Nov, close-up ref 18d7e6e5: "a thin black moustache and a small black goatee; he is
+    # quite a handsome man"): a faint shadow along the jaw only, a thin black moustache line, a soul patch under the
+    # lower lip and a small goatee round the chin. The lips stay clear of it all (drawn after, below).
+    sh = blend(skin, A_HAIR, 0.16)
+    jaw = [(-fw * 0.5 + 0.01, 0.5), (-fw * 0.49, 0.62), (-L['jw'] * 0.48, 0.84), (-0.16, 1.0), (0.0, 1.04),
+           (0.16, 1.0), (L['jw'] * 0.48, 0.84), (fw * 0.49, 0.62), (fw * 0.5 - 0.01, 0.5), (fw * 0.45, 0.66),
+           (L['jw'] * 0.4, 0.84), (0.0, 0.97), (-L['jw'] * 0.4, 0.84), (-fw * 0.45, 0.66)]
+    p.poly(curve(f.pts(jaw), 4), sh, None)
+    bc = A_HAIR
+    gc = blend(A_HAIR, skin, 0.12)                     # short and close-cropped: a touch of skin shows through
+    gt = [(-0.03, L['lip17'] + 0.018), (-0.06, L['lip17'] + 0.07), (-0.11, 0.93), (-0.06, 0.99), (0.0, 1.0),
+          (0.06, 0.99), (0.11, 0.93), (0.06, L['lip17'] + 0.07), (0.03, L['lip17'] + 0.018)]
+    p.poly(curve(f.pts(gt), 4), gc, None)              # the goatee: soul patch under the lip down round the chin
+    must = [(-L['mw'] * 0.54, L['lip0'] + 0.004), (-L['nw'] * 0.45, L['lip0'] - 0.02), (0.0, L['lip0'] - 0.022),
+            (L['nw'] * 0.45, L['lip0'] - 0.02), (L['mw'] * 0.54, L['lip0'] + 0.004), (0.0, L['lip0'] - 0.006)]
+    p.poly(curve(f.pts(must), 3), gc, None)        # the thin moustache, just above the lip line
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.06)), A_IRIS, dk(skin, 0.82), liner=2.6)
     raise_ = {'hopeful': 0.02}.get(mood, 0.0) + sp.get('brow_up', 0.0)
     P4.brows(p, f, L, A_HAIR, 0.042, raise_, sp.get('frown', 0.0))
     if mood == 'sceptic':                              # one brow cocked up (his right, our left)
@@ -203,7 +208,7 @@ V.LONG_HAIR['aoc_long'] = 300          # her long hair in the side and back view
 
 # ---------------------------------------------------------------------------------------------- the people
 ELSAYED = dict(who='elsayed', name='Abdul El-Sayed', skin=A_SKIN, hw=66, hh=92, head_dy=10, hair='slick',
-               hair_c=A_HAIR, brow_c=A_HAIR, brow_w=4.0, beard='short', beard_c=A_HAIR, outfit='suit', jacket=A_SUIT,
+               hair_c=A_HAIR, brow_c=A_HAIR, brow_w=4.0, beard='goatee', beard_c=A_HAIR, outfit='suit', jacket=A_SUIT,
                sleeve=A_SUIT, trousers=A_SUIT, shirt=(248, 248, 250), tie=None, shoe=(18, 16, 16), shoulders=150,
                full=True, pose='custom', height=1.78, seed=71)
 AOC = dict(who='aoc', name='Alexandria Ocasio-Cortez', skin=O_SKIN, hw=62, hh=88, head_dy=10, hair='aoc_long',
