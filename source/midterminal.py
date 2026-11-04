@@ -53,7 +53,7 @@ WHO = ('trump', 'satan', 'epstein')
 LINES = [
     dict(n=1, audio='midterminal-1', who='trump', text='Thank you, everyone, no more questions.', est=1.9),
     dict(n=2, audio='midterminal-2', who='trump', text="Satan, what the f***? This isn't what you promised.", est=2.7,
-         sub="Satan, what the f***? This wasn't what you promised.",   # note 46 (the take says "isn't")
+         fix=[("isn't", "wasn't")],               # note 46: the subtitle only (the take says "isn't")
          bleep=(1.47, 1.82)),                     # "fuck": 2.10-2.45 s in Sam's take (from the sound)
     dict(n=3, audio='midterminal-3', who='satan', text="I said don't invade Iran, you invaded Iran.", est=2.4),
     dict(n=4, audio='midterminal-4', who='trump', text="Yeah! Cos Bibi told me to! I thought he was one of yours?",
@@ -62,15 +62,17 @@ LINES = [
          trim_end=2.75),                          # Sam, 4 Nov: his mouth ran on half a second past the words
     dict(n=7, audio='midterminal-7', who='epstein', text="Donald, don't even worry about it. Why don't you come join "
          "me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis.", est=6.5,
-         sub="Donald, don't even worry about it. Why don't you come and join me down here? It's so warm here, Donald. "
-         "Nobody ever gouges out your eyes on an hourly basis."),   # note 49 (the take says "come join me")
+         fix=[("come join", "come and join")]),   # note 49: the subtitle only (the take says "come join me")
     dict(n=8, audio='midterminal-8', who='trump', text="F*** off, Jeffrey. I know it's you that keeps adding algae to "
          "the reflecting pool.", est=4.0, bleep=(0.13, 0.30)),   # "fuck": 0.97-1.14 s in Sam's take (from the sound)
     dict(n=9, audio='midterminal-9', who='epstein', text='Releeeaaaseee the fiiilleesss and ennndd myyy torrrmenttt',
          est=3.0),
     dict(n=10, audio='midterminal-10', who='trump', text="Oooo, release the files! Maybe if Satan had done his job, "
          "maybe I wouldn't have to!", est=4.0, mock_end=3.06,
-         sub="Oooo, release the files! If Satan had done his job, maybe I wouldn't have to!"),   # note 50   # Sam's takes 9 + 10 joined; the mock ends here
+         fix=[("Maybe if", "If")],
+         pins=[("Oooo, release the files!", 0.0), ("Maybe if Satan had", 3.3), ("done his job,", 4.4),
+               ("maybe I wouldn't have to!", 5.45)]),   # Sam, 4 Nov: "If Satan had" came 1.5 s early; pinned to the take               # note 50: the first "Maybe" off the subtitle only; the timing
+                                                  # stays on the script as spoken (a shorter text drifted it 1.5 s early)   # Sam's takes 9 + 10 joined; the mock ends here
 ]
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
@@ -562,7 +564,13 @@ def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + TAIL, nxt):
-            return SUB.line_caption(dict(ln, text=ln.get('sub', ln['text'])), t - ln['start'])
+            c = SUB.line_caption(ln, t - ln['start'])
+            if ln.get('pins'):                    # subtitle starts pinned to the recording (seconds into the line)
+                c = [tx for tx, t0 in ln['pins'] if t - ln['start'] >= t0][-1:] or [ln['pins'][0][0]]
+                c = c[0]
+            for a, b in ln.get('fix', []):
+                c = c.replace(a, b) if c else c
+            return c
     return None
 
 
