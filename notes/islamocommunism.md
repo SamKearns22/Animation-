@@ -112,7 +112,14 @@ Decisions made:
 - Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).
 - White House (4 Nov, my picks): one painting for the locked camera (rule 39). Wind from the left, both flags fly right (Sam's note 1, 4 Nov: "the flag should be 180'd"; first they flew left, seen from the back). The lawn flag's pole stands right of the fountain, the flag in front of the right wing (clearest against the white front). Hook Text two rows in the sky at y 410 (one row will not fit the safe width); the set sits 90 px lower so it clears the dome. Heading "USA" lower-left at y 1270-1490 over the lawn, white with a black edge (Anton).
-
+| 8 | 1 | 0-5 | Heading text bigger | done 4 Nov (USA 156, rows 68) |
+| 9 | 5 | 24.5-25.5 | He took the glass with the far hand; it jumped | done: front-on people sat on the drawing's mirror line, rounding drew him mirror-image in the wide shot; fixed for everyone. Missed because the handover touch check could not find the hand ("not in the scene") and I named that as paperwork |
+| 10 | 4 | 13.4-15 | Rise: no lean and sink first | done |
+| 11 | 2 | 5-10 | Free arm forward, resting on the desk top (two notes) | done: drawn again after the desk |
+| 12 | 5 | 25-31 | Close on him for "Mashallah", then both closer for the sip | done (the upright frame limits how close a two-shot can be) |
+| 13 | 5 | 28.8-31.2 | Sip tilt halved | done |
+| 14 | 5 | line 8 | "No poverty." | done |
+| 15 | all | | Brow and head moves on key words | done (BEATS) |
 
 ## Acting questions (rule 74, Sam 4 Nov: Y to all)
 1. Tone: totally sincere and wholesome, no wink. 2. "Doctor": dry half-smile, faintly put out. 3. "Invade Europe?": bright, hopeful, like a picnic idea. 4. "Invade Europe.": instant warm agreement, then the clink in the two-shot.
