@@ -389,7 +389,7 @@ def _neck_screen(cm, sp, x, z, lift):
     return Xf * B.SS, (Yf - (Yf - Yn)) * B.SS, (Yf - Yn) / 928.0 * B.SS
 
 
-def skull(size, t, seed=3, lw=2.4):
+def skull(size, t, seed=3, lw=2.4, jaw=1.0):
     """The flaming skull, in the house style (Sam, 4 Nov, ref: a full, rounded real skull wreathed in fire): flat
     tones, the characters' line weight, no extra detail. A big round cranium; full cheekbones flush with it (no caving
     round the mouth); the jaw dropped open in a scream, as wide as the cheeks; the mouth and the deep sockets lit by
@@ -405,13 +405,16 @@ def skull(size, t, seed=3, lw=2.4):
 
     def P(pts):
         return [(S * x, oy + S * y) for x, y in pts]
-    jaw = P([(0.17, 0.80), (0.19, 1.18), (0.29, 1.42), (0.50, 1.50), (0.71, 1.42), (0.81, 1.18), (0.83, 0.80)])
-    d.polygon(jaw, fill=bone, outline=INK, width=lw)                       # the jaw, dropped (behind the face)
+    def P(pts, _P=P):                                     # the jaw opens and shuts with the words (jaw 0..1)
+        return _P([(x, y if y <= 1.02 else 1.02 + (y - 1.02) * (0.25 + 0.75 * jaw)) for x, y in pts])
+    jawp = P([(0.17, 0.80), (0.19, 1.18), (0.29, 1.42), (0.50, 1.50), (0.71, 1.42), (0.81, 1.18), (0.83, 0.80)])
+    d.polygon(jawp, fill=bone, outline=INK, width=lw)                      # the jaw, dropped (behind the face)
     d.polygon(P([(0.27, 1.02), (0.73, 1.02), (0.71, 1.32), (0.5, 1.38), (0.29, 1.32)]), fill=fire)   # mouth: fire
     d.polygon(P([(0.38, 1.06), (0.62, 1.06), (0.59, 1.24), (0.5, 1.30), (0.41, 1.24)]), fill=core)
     for i in range(6):                                                     # lower teeth, a full row
         x0 = 0.29 + i * 0.07
-        d.rounded_rectangle((S * x0, oy + S * 1.29, S * (x0 + 0.065), oy + S * 1.38), int(S * 0.015),
+        ty = 1.02 + (1.29 - 1.02) * (0.25 + 0.75 * jaw)
+        d.rounded_rectangle((S * x0, oy + S * ty, S * (x0 + 0.065), oy + S * (ty + 0.09 * (0.5 + 0.5 * jaw))), int(S * 0.015),
                             fill=bone, outline=INK, width=max(1, lw - 1))
     face = [(0.5 + 0.43 * math.cos(u), 0.45 - 0.45 * math.sin(u)) for u in np.linspace(math.pi, 0, 24)]
     face += [(0.92, 0.62), (0.88, 0.80), (0.78, 0.92), (0.74, 1.04), (0.26, 1.04), (0.22, 0.92), (0.12, 0.80),
@@ -567,7 +570,7 @@ def entrance(over, nx, ny, s, age, seed=21):
 
 
 def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8, j=None,
-                 arrive=None):
+                 arrive=None, jaw=1.0):
     """The hellfire ghost of Epstein, floating with a slow bob; below the waist his body gives way to a flame tail;
     now and then a flame on his body. fade 0..1 (see-through to there), melt 0..1 (his face runs down to a flaming
     skull, then the melt spreads over his shoulders, arms and body to a burning skeleton). arrive: seconds since the
@@ -609,7 +612,7 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             cols = np.where(al[int(top):int(ny)].max(axis=0) > 0)[0]
             hx0, hx1 = (cols[0], cols[-1]) if len(cols) else (nx - 80 * s, nx + 80 * s)
             hw = hx1 - hx0
-            sk = skull(hw * (0.85 + 0.15 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # his own head's size (Sam, 4 Nov)
+            sk = skull(hw * (0.85 + 0.15 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS, jaw=jaw)   # his own head's size (Sam, 4 Nov)
             sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
             head_y = (top + ny) / 2
             under = Image.new('RGBA', im.size, (0, 0, 0, 0))      # under the skin: the bones the melt uncovers

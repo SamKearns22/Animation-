@@ -58,7 +58,8 @@ LINES = [
     dict(n=3, audio='midterminal-3', who='satan', text="I said don't invade Iran, you invaded Iran.", est=2.4),
     dict(n=4, audio='midterminal-4', who='trump', text="Yeah! Cos Bibi told me to! I thought he was one of yours?",
          est=3.0),
-    dict(n=5, audio='midterminal-5', who='satan', text="Ha, no. Bibi is in a league of his own.", est=2.0),
+    dict(n=5, audio='midterminal-5', who='satan', text="Ha, no. Bibi is in a league of his own.", est=2.0,
+         trim_end=2.75),                          # Sam, 4 Nov: his mouth ran on half a second past the words
     dict(n=7, audio='midterminal-7', who='epstein', text="Donald, don't even worry about it. Why don't you come join "
          "me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis.", est=6.5,
          sub="Donald, don't even worry about it. Why don't you come and join me down here? It's so warm here, Donald. "
@@ -80,6 +81,8 @@ for ln in LINES:                                  # time each line to its record
         st = MA.pauses(x, 0.12)
         a, b = max(0, int((st[0][0] - 0.12) * SR)), min(len(x), int((st[-1][1] + 0.25) * SR))
         x = x[a:b].copy()
+        if ln.get('trim_end'):                    # the take's quiet tail after the last word is cut
+            x = x[:int(ln['trim_end'] * SR)].copy()
         fade = int(0.02 * SR)
         x[:fade] *= np.linspace(0, 1, fade)
         x[-fade:] *= np.linspace(1, 0, fade)
@@ -128,7 +131,9 @@ T['slam'] = max(1.3, e - 0.45)                    # the door slams on his last w
 T['open'] = 0.1                                   # open from the start: we see him at once (Sam's note 1, 4 Nov)
 T['cut2'] = T['slam'] + 0.25
 T['stop'] = T['cut2'] + MV.path_length(MV.ENTRY) / DOOR_WALK   # he reaches his mark
-e = _at(2, T['cut2'])                             # note 45: line 2 on the cut, pointing and angry as he walks
+e = _at(2, L[1]['end'] - 0.25 + 1.0 - 0.12)     # Sam, 4 Nov: one second of quiet between line 1 and line 2's first
+                                                  # word (the take's tail 0.25 s and lead-in 0.12 s allowed for); he
+                                                  # walks in pointing and angry from the cut (note 45)
 T['cut3'] = e + CLEAR
 e = _at(3, T['cut3'] + 0.125)                      # Satan's shrug
 T['cut4'] = e + CLEAR
@@ -475,9 +480,11 @@ def epstein_fade(t):
 def epstein_item(t):
     melt = _ease(_ramp(t, T['melt'], L[9]['end'] - 0.2))
     sp = dict(MC.EPSTEIN, **_face('epstein', t))
-    if melt > 0:
-        sp['mouth'] = 'v:o' if t < L[9]['end'] else 'set'
-    return MV.epstein_item(t, sp, epstein_fade(t), melt, look=0.8 if shot_of(t) == 'epstein' else 0.6,
+    shape = mouths.at(TRACK['epstein'], t)
+    jaw = 0.1 if shape in ('rest', 'MBP') else {'AI': 1.0, 'O': 0.9}.get(shape, 0.6)
+    if melt > 0.5:                                # Sam, 4 Nov: his own mouth talks until the sliding skin covers it;
+        sp['mouth'] = 'set'                       # then the skeleton's jaw works in time with the words (jaw)
+    return MV.epstein_item(t, sp, epstein_fade(t), melt, look=0.8 if shot_of(t) == 'epstein' else 0.6, jaw=jaw,
                            j=epstein_j(t), arrive=t - T['ghost'] if shot_of(t) == 'three' else None)
 
 
@@ -489,7 +496,7 @@ def trump_item(t):
     j = trump_j(t)
     point = None
     accusing = s == 'trump' and word_at(4, 'I thought') - 0.1 <= t < T['cut5']   # note 35: lean in, jab twice
-    if (s == 'two' and t >= L[2]['start'] - 0.15) or accusing:
+    if (s == 'two' and t >= T['cut2']) or accusing:
         point = (SX, 1.45 + MV.satan_float(t)[0], SZ) if s == 'two' else (0.1, 1.6, 1.75)
     t_jab = word_at(4, 'I thought') if accusing else None
 
