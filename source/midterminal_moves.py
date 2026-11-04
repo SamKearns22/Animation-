@@ -102,10 +102,13 @@ def door_open(img, cm, t_open, part='both'):
     leaf = [_rot_out(MS.wp(a, y, 0.015), hinge, ang) for a, y in corners]
     back = [_rot_out(MS.wp(a, y, 0.015 + DOOR_T), hinge, ang) for a, y in corners]
     if ang > 1.0:                                 # a real door's thickness (Sam, 4 Nov: paper thin side on): the
-        MS.poly(img, cm, back, (228, 226, 216), INK, 2.0)   # room-side face, then the free edge and top, then the
-        MS.poly(img, cm, [leaf[1], back[1], back[2], leaf[2]], (214, 210, 198), INK, 2.0)  # corridor-side face
-        MS.poly(img, cm, [leaf[2], back[2], back[3], leaf[3]], (214, 210, 198), INK, 1.6)
-    MS.poly(img, cm, leaf, (240, 238, 230), INK, 2.0)
+        MS.poly(img, cm, back, (228, 226, 216), None, 0)      # fills only: no outline inside the thickness
+        MS.poly(img, cm, [leaf[1], back[1], back[2], leaf[2]], (214, 210, 198), None, 0)    # (Sam, 4 Nov: a line
+        MS.poly(img, cm, [leaf[2], back[2], back[3], leaf[3]], (214, 210, 198), None, 0)    # showed through)
+        MS.lines(img, cm, [back[2], back[1]], INK, 2.0)                  # the outer outline only
+    MS.poly(img, cm, leaf, (240, 238, 230), None, 0)
+    MS.lines(img, cm, [leaf[2], leaf[1], leaf[0], leaf[3]] if ang > 1.0 else [leaf[2], leaf[1], leaf[0], leaf[3], leaf[2]],
+             INK, 2.0)                           # no line along the top edge: seen from below it cuts across the thickness
     for y0, y1 in ((0.15, 0.9), (1.05, 1.55), (1.7, 2.3)):                      # the six panels
         for a0, a1 in ((c - h + 0.7, c - 0.5), (c + 0.5, c + h - 0.7)):
             MS.poly(img, cm, [_rot_out(MS.wp(a, y, 0.02), hinge, ang) for a, y in ((a0, y0), (a1, y0), (a1, y1), (a0, y1))],

@@ -55,7 +55,7 @@
 | 25 | Sam 4 Nov: in the Satan shot Trump comes in from the left, even if it breaks logic | done (moves) |
 | 26 | Sam 4 Nov: Trump starts his accusing line (line 2) as soon as the door closes | moves: cut on the slam; film: line 2 timed to it |
 | 27 | Sam 4 Nov: the skull full (no caving at the mouth; his ref), in the house style and colours; the flames end in a bed of embers, no hard line | done (moves) |
-| 28 | Sam 4 Nov: Trump walks in from the RIGHT (not left); the skin melts down OVER the skull; the door has thickness side on | done (moves) |
+| 28 | Sam 4 Nov: Trump walks in from the RIGHT (not left); the skin melts down OVER the skull; the door has thickness side on; no stray line along the door top (5 Nov) | done (moves) |
 
 Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` (4 key shots: door, two-shot, zoom out with the ghost, Epstein close)
 
