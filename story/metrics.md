@@ -177,3 +177,12 @@ Films older than a day show TikTok's figures as of 2 Nov. Flying Whales: only th
 
 Totals: 26 films, 92,217 views, 6,456 likes, 249 comments, 813 shares, 198 followers from videos (33 of them the DLC
 promotion). Reading: `story/growth-analysis-3-nov.md`.
+
+## Snapshot: Wed 4 Nov 2026, 21:55 (MidTerminal, about 4 h 45 m after posting; Sam's TikTok Studio screen)
+
+| Film | Posted | Length | Views | Avg watch | Watched to end | Likes | Comments | Shares | Saves | New followers |
+|---|---|---|---|---|---|---|---|---|---|---|
+| MidTerminal | Wed 4 Nov, 5:10pm | 57.43 s | 1,769 | 23.0 s (40%) | 18.83% | 95 | 4 | 5 | 5 | 2 |
+
+Total play time 11 h 14 m 58 s. Per 1,000 views: likes 54, shares 2.8, saves 2.8, comments 2.3, followers 1.1.
+Sam: "decent enough, nothing remarkable or too disappointing". Against TERFwarts (7,294 views at 5 h): about a quarter of the views, but the watch-to-end share is twice as high (18.8% vs 9.3%), so the film itself holds people; reach is the gap. Tags used: #Trump #Midterms #BlueWave #Satire #PoliticalComedy (no #UKcomedy); can be compared with the next film's.
