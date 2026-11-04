@@ -2,14 +2,14 @@
 
 ## Where things stand
 - **Rules that bite next:** 45 (the composition sheet is sent once: apply notes, never re-send), 74 (acting list before the first animatic), 14 (pre-flight gates)
-- **Done:** White House front built and benchmarked 10/10 (`review/islamocommunism-whitehouse-refs.jpg`); composition sheet sent 4 Nov.
+- **Done:** White House front built and benchmarked 10/10; composition sheet sent 4 Nov. Office redressed (notes 5-6) and flat cameras chosen (note 4): `review/islamocommunism-office.jpg` sent 4 Nov.
 - **Spent against the estimate (rule 55):** front, flag, cars, families about 1.5% (estimate 3.5); film so far about 5% of Sam's 8%.
 - **Next:** Opus, medium effort, new chat: start the film code (composition notes 1-2 applied), the acting list and the stills. Type: "Islamocommunism: start the film".
 - **Needs Sam:** the voice recordings (Voice Isolation off), due 5 Nov.
 - **Read:** this file; guides/satire.md "Start" and "Staging and acting"; rulebook rule 74.
-- **Lost / Added:** Lost: the right wing's windows sit behind the lawn flag; crosses on the spires (plain gold tips). Added: clouds, mowing stripes, a picnic blanket, a ball, headscarves on two mothers.
+- **Lost / Added:** Lost: the right wing's windows sit behind the lawn flag; crosses on the spires (plain gold tips); the two gold chairs facing the Resolute desk (office). Added: clouds, mowing stripes, a picnic blanket, a ball, headscarves on two mothers; in the office: arched tiled window heads, star band on the valance, tiled dado, green carpet with a star-and-wheat seal, star on the desk front, two poster paintings for the portraits, a samovar and tea glasses, two brass lanterns, the new flags.
 - **Open rule requests:** none.
-- **For Claude:** set `source/islamocommunism_set.py` (MAP at top; `paint(t)`, `comp`, `refs`, `test`; drawn 90 px high then dropped, `SHIFT`; Hook Text two rows at y 410: finish.py `--y 410`; `KEEP_CLEAR`); comp cameras in its `COMP` (Oval Office via `midterminal_set.put`/`put_seated`; side-on shot 4 sorts people before the desk); cast `source/islamocommunism_cast.py`; door/walk-in `midterminal_moves.py`. Film code not started: copy `satire_template.py` to `source/islamocommunism.py`, BENCHMARK from the set's list.
+- **For Claude:** office dressing `source/islamocommunism_office.py` (import it instead of midterminal_set; `door_cam()`, `TEST_CAMS` are the flat cameras); set `source/islamocommunism_set.py` (MAP at top; `paint(t)`, `comp`, `refs`, `test`; drawn 90 px high then dropped, `SHIFT`; Hook Text two rows at y 410: finish.py `--y 410`; `KEEP_CLEAR`); comp cameras in its `COMP` (Oval Office via `midterminal_set.put`/`put_seated`; side-on shot 4 sorts people before the desk); cast `source/islamocommunism_cast.py`; door/walk-in `midterminal_moves.py`. Film code not started: copy `satire_template.py` to `source/islamocommunism.py`, BENCHMARK from the set's list.
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |
@@ -73,6 +73,9 @@ Shots (about 40-45 s with the real voices):
 | 1 | 1 | all | Lawn flag over the right wing: Y. "The flag should be 180'd": turned round on its pole, both flags now fly right, starry corner top left | done 4 Nov |
 | 2 | 1 | 0-3.6 | Hook Text two rows in the sky: Y | done |
 | 3 | 1 | all | "The back flag is too big, doesn't look proportional" (the roof flag): checked against both White House photos, the real one is small atop a tall thin pole; 150x86 px to 96x55, pole thinner | done 4 Nov |
+| 4 | 2-4 | all | "Please do flat shots only, no wide 3D views": every Oval Office shot is level and square on (front on to the desk end, square on to the door), long lens; no angled or wide views. Composition shots 2-4 re-framed this way | cameras chosen 4 Nov (office sheet); film code next |
+| 5 | 2-4 | all | "Make the MidTerminal Oval Office respectfully communist and Islamic": Islamic geometry, arches, tiles, lanterns, a samovar; red stars and wheat; no holy writing, no religious figures, no real portraits. Built as its own file so MidTerminal's room is unchanged | done 4 Nov, sheet sent |
+| 6 | 2-4 | all | "And change the flag": the room's US flag is now the film's red/green flag; the President's flag a red banner with a gold crescent and star; crescent finials | done 4 Nov |
 
 Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
