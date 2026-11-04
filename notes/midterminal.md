@@ -34,6 +34,9 @@
 | 17 | Trump, childish mocking voice: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to." | |
 | 18 | Characters 2D first: front, side, back; three-quarter only if the script calls for it (Sam, 4 Nov) | yes (cast sheet) |
 
+| 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | |
+| 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | |
+
 ## Plan extras: ambition estimate (rule 55)
 | build or risky move | why | estimate (% of a week) | spent |
 |---|---|---|---|
@@ -43,7 +46,7 @@
 | The face melting into a flaming skull | new: a skull drawing, the face sliding down in drips, flames from fire_sprite | 3 | |
 | Trump's walk to the desk, pointing; Satan's shrug and chuckle; the zoom out | reuse: moves walk, perform gestures, a camera move | 2 | |
 | Shots, voices, subtitles, Hook Text, sign-off | template | 4 | |
-| total | | 15 | |
+| total (first estimate; over Sam's 10% cap: cut to 9%, see Decisions) | | 15 | |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -59,4 +62,5 @@
 |---|------|------|------|--------|
 
 Decisions made:
+- Budget cut to 9% (Sam's 10% cap): door 1, Satan float 0.5, ghost 2, skull melt 2, moves and zoom 1.5, template 2; at most one critique round each; stills sheet instead of clips where possible.
 - Carpet texture is 1 px a cm; close-ups on the seal look a little blocky: redraw it at 2 px a cm if a shot goes close.
