@@ -1,14 +1,14 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 69 (a finger on every point), 27 (bleep both swears, from the sound), 14 (check sheet and Sam's yes before the animatic)
-- **Done (4 Nov):** notes 31-43 fixed (Notes table); moves clip reel sent; rule 69 written (kittest); kit fixes: circle hands draw the finger, front-view details never mirror, line check counts only grey-black as ink.
-- **Next:** same chat (Opus, medium): file Sam's recordings, place the 2 bleeps, re-time captions, full pre-flight, check sheet with the Hook Text frame, wait for his yes, then the voiced animatic.
-- **Needs Sam:** his look at the clips; the recordings (lines 1-5, 7-10, door slam, gentle fire sound).
+- **Rules that bite next:** 14 (check sheet and Sam's yes before every animatic), 27 (bleeps from the sound), 59 (pre-flight before every render; `--faults-named`)
+- **Done (4 Nov):** notes 31-43 fixed; Sam's takes filed (his 6 = line 7 ... 9 + 10 = line 10), his wording, bleeps, door slam, fire breath; Q1 Trump cutaway; voiced animatic sent (60.6 s, 7.4 MB, Hook Text and sign-off).
+- **Next:** Sam's notes on the animatic: a new round, Opus medium, this chat if short; then his yes for the final.
+- **Needs Sam:** notes or a yes on the animatic; Q3: he checks the subtitles of lines 4, 7, 10 against his takes.
 - **Read:** guides/satire.md 'Before every render'; only the lines a note touches in `source/midterminal*.py`.
-- **Lost / Added:** Lost: the zoom out (38); line 2 no longer starts on the cut (32 over 26). Added: corridor, flashes, the breath, flame burst and smoke, body flames, burning skeleton, the end two-shot.
+- **Lost / Added:** Lost: the zoom out (38); line 2 no longer on the cut (32); the gentle fire bed (fire breath instead). Added: corridor, flashes, breath, burst and smoke, body flames, burning skeleton, end two-shot, Trump cutaway.
 - **Open rule requests:** none.
-- **For Claude:** quick check faults left are captions only (estimated timings; line 4 three rows): re-check once takes are in. Timeline helpers `word_at`, `jab`, `lift_shoulders`, `T['stop'/'angry'/'cut11'/'flinch']`; `CLEAR`. Burst/bones: `MV.entrance`, `MV.skeleton`, `MV.body_flames`; corridor `MV.corridor`. Epstein now (-1.8, 2.85), lift 0.5; Satan (0, 1.45).
+- **For Claude:** named faults (on the stamp): syllable counts on lines 4, 7, 9 (wail), 10; two quick captions; Epstein shot 42.6-50.9 is 8.3 s. Animatic clean render `source/data/midterminal/animatic-clean.mp4` (small, upscaled; gitignored). Cutaway `T['away'/'back']`. Timeline helpers `word_at` (snaps to stretches), `jab`, `lift_shoulders`, `CLEAR`.
 
 ## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
 1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.

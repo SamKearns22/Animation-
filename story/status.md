@@ -9,7 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). Open: Sam's Y/N on the "Hook Text names the story" rule.
 
 ## Films
-- **MidTerminal (4 Nov): notes 31-43 fixed, moves clips sent.** Next: Sam's recordings, bleeps, pre-flight, check sheet, his yes, voiced animatic (same Opus-medium chat). Notes: `notes/midterminal.md`.
+- **MidTerminal (4 Nov): voiced animatic sent (60.6 s, 7.4 MB).** Next: Sam's notes or yes, then the final. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
   Open: his two rule requests (Hook Text and sign-off in every animatic; no three-quarter views): propose wording, wait for his yes. Notes: `notes/terfwarts.md`.
 
