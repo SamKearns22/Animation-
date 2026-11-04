@@ -8,7 +8,8 @@ patriots4 face layout, drawn the MidTerminal way. References: references/islamoc
              square, flag pin (Sam's Y, 4 Nov). 1.78 m.
     AOC      Alexandria Ocasio-Cortez (card on 0019c908, 445628df, 9797c588): big wide-open eyes tilted up at the
              outside, strong dark brows, a long nose, a short philtrum, full red lips (red lipstick). Long near-black
-             hair, centre parting, falling past the shoulders. Black jacket over a black top, pearl earrings (Sam's Y).
+             hair, centre parting, falling past the shoulders. White suit (jacket and trousers) over an ivory V-neck top, a gold lapel pin, small gold
+             earrings (Sam, 4 Nov: refs 436824a4, 4833f72c; was black with pearls).
              1.65 m.
 
 Moods: 'neutral' (a warm closed smile), 'sceptic' (one brow up, mouth flat), 'smile' (big), 'hopeful' (brows up) +
@@ -44,7 +45,8 @@ O_HAIR = (26, 20, 20)
 O_HAIR_L = (64, 50, 46)
 O_IRIS = (74, 46, 30)
 O_LIP = (196, 30, 44)             # red lipstick (official portrait)
-O_JACKET = (24, 24, 28)
+O_JACKET = (242, 239, 232)        # the white suit (Sam, 4 Nov: "so she stands out next to Abdul")
+O_TOP = (232, 224, 206)           # ivory top
 
 # ---------------------------------------------------------------------------------------------- measures (4 Nov)
 # El-Sayed (4 Nov, second pass): measured on the straight-on photo alone (107e061d), and laid on patriots4's average
@@ -147,8 +149,8 @@ def aoc_head(img, p, sp, t, hx, hy):
     skin, mood = O_SKIN, sp.get('mood', 'neutral')
     ears = list(_ears(p, f, L, skin))
     p.poly(curve(f.pts(P4.outline_uv(L, 0.34)), 4), skin, INK, 2.6)
-    for sgn, ex, ey in ears:                           # pearl earrings
-        p.ell(ex, ey + 22, 6, 6, (246, 242, 232), INK, 1.4)
+    for sgn, ex, ey in ears:                           # small gold earrings (Sam's white-suit photos, 4 Nov)
+        p.ell(ex, ey + 22, 6, 6, (214, 168, 64), INK, 1.4)
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.04)), O_IRIS, dk(skin, 0.8), liner=3.2, wide=0.1)
     for sgn in (-1, 1):                                # lashes flicked up at the outer corners
         if sgn < 0 and f.tq > 0.5:
@@ -199,8 +201,13 @@ def elsayed_torso(img, p, sp, t):
 
 
 def aoc_torso(img, p, sp, t):
-    """A black top inside the jacket's open neck."""
-    p.poly([(-30, -2), (30, -2), (16, 90), (0, 120), (-16, 90)], (14, 14, 16), INK, 1.6)
+    """The white suit (Sam, 4 Nov: refs 436824a4, 4833f72c): an ivory V-neck top in the jacket's open neck, a gold
+    round pin on her left lapel (our right)."""
+    sw = sp.get('shoulders', 128)
+    p.poly([(-30, -2), (30, -2), (16, 90), (0, 120), (-16, 90)], O_TOP, INK, 1.6)
+    p.line([(-14, 40), (0, 78), (14, 40)], dk(O_TOP, 0.82), 1.6)             # the top's own V neckline
+    p.ell(sw * 0.46, 92, 8, 8, (214, 168, 64), INK, 1.4)
+    p.ell(sw * 0.46, 92, 4, 4, (150, 40, 50), None, 0)
 
 
 TC.HEADS.update(elsayed=elsayed_head, aoc=aoc_head)
@@ -224,7 +231,7 @@ ELSAYED = dict(who='elsayed', name='Abdul El-Sayed', skin=A_SKIN, hw=66, hh=92, 
                full=True, pose='custom', height=1.78, seed=71)
 AOC = dict(who='aoc', name='Alexandria Ocasio-Cortez', skin=O_SKIN, hw=62, hh=88, head_dy=10, hair='aoc_long',
            hair_c=O_HAIR, brow_c=O_HAIR, brow_w=3.6, outfit='suit', jacket=O_JACKET, sleeve=O_JACKET,
-           trousers=O_JACKET, shirt=(14, 14, 16), tie=None, shoe=(16, 14, 14), shoulders=128, full=True,
+           trousers=O_JACKET, shirt=O_TOP, tie=None, shoe=(214, 190, 168), shoulders=128, full=True,
            pose='custom', height=1.65, seed=72)
 CAST = {'elsayed': ELSAYED, 'aoc': AOC}
 

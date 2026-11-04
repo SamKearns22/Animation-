@@ -7,7 +7,7 @@
 - **Next:** Opus, medium effort, new chat: Sam's notes on the stills; when his recordings land, file them (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet, animatic. Type: "Islamocommunism: stills notes".
 - **Needs Sam:** notes on the stills; the 13 voice recordings (Voice Isolation off), due 5 Nov.
 - **Read:** this file; guides/satire.md "Before every render"; rulebook rules 74, 77.
-- **Lost / Added:** Lost: the right wing's windows behind the lawn flag; crosses on the spires; the two gold chairs facing the desk. Added: outside: clouds, mowing stripes, picnic blanket, ball, headscarves; office: arched tiled windows, star valance, tiled dado, green star-and-wheat carpet, star on the desk, two posters, samovar and tea glasses, two brass lanterns, the new flags.
+- **Lost / Added:** Lost: Alex's black suit and pearl earrings (now white suit, gold earrings, note 7); the right wing's windows behind the lawn flag; crosses on the spires; the two gold chairs facing the desk. Added: outside: clouds, mowing stripes, picnic blanket, ball, headscarves; office: arched tiled windows, star valance, tiled dado, green star-and-wheat carpet, star on the desk, two posters, samovar and tea glasses, two brass lanterns, the new flags.
 - **Open rule requests:** none.
 - **For Claude:** film `source/islamocommunism.py` (MAP at top; `T` timeline, `CAMS`, `elsayed_j`/`aoc_j` poses, `KEYS` = stills sheet: `keys OUT.jpg`); room `source/islamocommunism_office.py` (patches midterminal_set on import); set `source/islamocommunism_set.py`; cast `source/islamocommunism_cast.py`. Lines have `est` until takes exist. `check` not yet run (needs takes).
 
@@ -97,12 +97,13 @@ Shots (about 40-45 s with the real voices):
 | 4 | 2-4 | all | "Please do flat shots only, no wide 3D views": every Oval Office shot is level and square on (front on to the desk end, square on to the door), long lens; no angled or wide views. Composition shots 2-4 re-framed this way | cameras chosen 4 Nov (office sheet); film code next |
 | 5 | 2-4 | all | "Make the MidTerminal Oval Office respectfully communist and Islamic": Islamic geometry, arches, tiles, lanterns, a samovar; red stars and wheat; no holy writing, no religious figures, no real portraits. Built as its own file so MidTerminal's room is unchanged | done 4 Nov, sheet sent |
 | 6 | 2-4 | all | "And change the flag": the room's US flag is now the film's red/green flag; the President's flag a red banner with a gold crescent and star; crescent finials | done 4 Nov |
+| 7 | 2-6 | all | "Change her out to this one so she stands out next to Abdul" (photos 436824a4, 4833f72c): white suit, jacket and trousers, ivory V-neck top, gold lapel pin, small gold earrings. Checked against both photos: they also show her hair pulled back (asked: Q1) | done 4 Nov, sheet sent |
 
 Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
 Decisions made:
 - Hook Text: "MAGAs Worst Nightmare" (Sam, 4 Nov).
-- Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC black jacket, red lips, pearls (Sam's Y).
+- Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC white suit, ivory top, gold pin and earrings, red lips (Sam's note 7, 4 Nov; was black with pearls).
 - Hair (Sam, 4 Nov: "Abdul's too big, almost hat-like; Alex's wavier and thicker, a bit straighter"): his cropped close to the skull; hers a full curtain each side, waves growing to the ends.
 - Likeness check 4 Nov: El-Sayed 60% (on 107e061d; re-based onto patriots4's average), AOC 68% (on 0019c908). Aim 60%+.
 - Facial hair (Sam, 4 Nov, close-up 18d7e6e5: "a thin black moustache and a small black goatee. He is quite a handsome man"): full beard removed; thin moustache, goatee from the lower lip round the chin, faint jaw shadow; eyes opened a little. Likeness now 57% (was 60% with the full beard; the check reads moustaches poorly).
