@@ -1,15 +1,14 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 27 (bleep both swears, from the sound), 38/68 (front on, no three-quarters), 11 (shot list below is the approved staging)
-- **Done (4 Nov, Opus):** cast, set, key shots approved; rules 68, 27 written. Moving parts built and passed by Sam after 5 test clips (door into the room with thickness, hiding Trump till it opens; cut on the slam; Trump in from frame RIGHT, front-on, pointing; Satan float; ghost with upward flames on an ember bed; skin melting over a head-sized house-style skull). Notes 22-28 in the checklist.
-- **Spent against the estimate (rule 55):** cap 10% (stop at 84% on Sam's meter; 74% at the brief). Plan 9%; moves about 4%: ask Sam for his meter at the start of the build.
-- **Next:** the film file from `source/satire_template.py` once Sam's recordings arrive (Opus, medium effort). New chat, type: "MidTerminal: build the film from the handover in notes/midterminal.md".
-- **Needs Sam:** the lines (shot list 1-10), the door slam and a gentle fire sound, as voice memos in the chat.
-- **Read:** guides/satire.md 'Start', 'Movement', 'Before every render'; notes/midterminal.md (this file).
-- **Lost / Added:** Added: our own simplified seal; generic portraits; a door slam and a gentle fire sound (Sam's files); a cream corridor with a red runner seen through the door.
+- **Rules that bite next:** 27 (bleep both swears, from the sound), 62 (subtitles readable: re-time from the takes), 14 (check sheet, then Sam's yes, before the animatic)
+- **Done (4 Nov, Opus, build):** the film file, every shot drawn with estimated timings (shrug, point, chuckle, zoom out, ghost wave, melt, mock); quick pre-flight clean except 6 subtitle speeds (estimates). Meter 77% at the start (stop 84%).
+- **Next:** file Sam's takes (lines 1-5, 7-10, slam, fire) as `source/audio/midterminal-N.m4a`, place both bleeps from the sound, set line 10's `mock_end`, quick pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic (Opus, medium; same chat if short, else type: "MidTerminal: time the film to my recordings, from the handover in notes/midterminal.md").
+- **Needs Sam:** the recordings (2:30-3 pm, 4 Nov).
+- **Read:** guides/satire.md 'Before every render', 'Render'.
+- **Lost / Added:** Added: Trump's hands on hips through line 8; the door opens later if line 1 runs long (his voice heard through it first).
 - **Open rule requests:** none.
-- **For Claude:** cast `source/midterminal_cast.py`; set `source/midterminal_set.py` (`render`, `put(lift=)`, `ghost()`, `to_cam`, `COMP`, shot 4 camera moved for Epstein on the left); moves `source/midterminal_moves.py` (`door_items(door_curve(t,...))`, `trump_item(t, d, sp)` with `path_length()`, `satan_item`, `epstein_item(t, sp, fade, melt)`, `test_timeline`, `ENTRY`, `SLAM`/`CUT`: line 2 starts on CUT). Still to build in the film: shrug, point, chuckle, Epstein's silly-ghost arm wave, Trump's mocking line 10.
+- **For Claude:** `source/midterminal.py` (MAP at the top): LINES est -> takes; timeline T; CAMS adds 'satan', 'trump' singles; PORTAL_OK and THREE_QUARTER_OK reasons; previous handover in notes/archive/midterminal-handovers.md.
 ## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
 1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.
 2. Wide two-shot (key shot 2): walking fast to face the desk, angry: "Satan, what the f***? This isn't what you promised." Done by 3-5 s.
@@ -31,22 +30,22 @@
 | 4 | Jeffrey Epstein (3 refs), dark polo (Sam's pick) | yes |
 | 5 | Donald Trump (3 refs) | likeness 32%: needs photos |
 
-| 6 | The joke: Trump has a go at Satan for not delivering the midterm results he wanted; the hellfire ghost of Epstein intervenes | |
-| 7 | Trump comes into the Oval Office from the corridor through the door; pupils look right at someone we don't see: "Thank you, everyone, no more questions." | |
-| 8 | Eyes face forward as he crosses the threshold; the door shuts behind him | |
-| 9 | Angry face as he walks opposite the desk: "Satan, what the f***? This isn't what you promised." (1 bleep) | |
-| 10 | Satan floats before the desk, a small shrug: "I said don't invade Iran, you invade Iran." | |
-| 11 | Trump, accusatory, angrier, pointing: "Yeah, because Bibi told me to. I thought he was one of yours!?" | |
-| 12 | Satan, chuckling: "Oh, no. We've got nothing on him." | |
-| 13 | Zoom out. The hell ghost of Epstein fades in, floating by the side of the desk. Satan's pupils look at him | |
-| 14 | Epstein: "Don't worry, Donald. Why don't you come and join me? It's warm here. Nobody ever gouges out your eyes on an hourly basis." | |
-| 15 | Trump: "Fuck off, Jeffrey. I know it's you that keeps putting algae in the reflecting pool." (bleep: Q4) | |
-| 16 | Epstein waves his arms like a silly ghost, gently fades away, face melting into a flaming skull: "Releeeease the filessssss" | |
-| 17 | Trump, childish mocking voice: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to." | |
+| 6 | The joke: Trump has a go at Satan for not delivering the midterm results he wanted; the hellfire ghost of Epstein intervenes | drawn (film 4 Nov): shots 2-10 |
+| 7 | Trump comes into the Oval Office from the corridor through the door; pupils look right at someone we don't see: "Thank you, everyone, no more questions." | drawn: shot 1, eyes right (look 0.9) until the threshold |
+| 8 | Eyes face forward as he crosses the threshold; the door shuts behind him | drawn: eyes forward past 1.2 m; slam on the line's end |
+| 9 | Angry face as he walks opposite the desk: "Satan, what the f***? This isn't what you promised." (1 bleep) | drawn: frowning, pointing as he walks in; bleep placed once the take is in |
+| 10 | Satan floats before the desk, a small shrug: "I said don't invade Iran, you invade Iran." | drawn: shot 3, small shrug, floating |
+| 11 | Trump, accusatory, angrier, pointing: "Yeah, because Bibi told me to. I thought he was one of yours!?" | drawn: shot 4 reverse, frown deeper, pointing |
+| 12 | Satan, chuckling: "Oh, no. We've got nothing on him." | drawn: shot 5, smirk, shoulders bobbing |
+| 13 | Zoom out. The hell ghost of Epstein fades in, floating by the side of the desk. Satan's pupils look at him | drawn: shot 6, zoom out, fade in, Satan's eyes to him |
+| 14 | Epstein: "Don't worry, Donald. Why don't you come and join me? It's warm here. Nobody ever gouges out your eyes on an hourly basis." | drawn: shot 7 |
+| 15 | Trump: "Fuck off, Jeffrey. I know it's you that keeps putting algae in the reflecting pool." (bleep: Q4) | drawn: shot 8; bleep placed once the take is in |
+| 16 | Epstein waves his arms like a silly ghost, gently fades away, face melting into a flaming skull: "Releeeease the filessssss" | drawn: shot 9, arm wave, melt, fade; fire sound once Sam's file is in |
+| 17 | Trump, childish mocking voice: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to." | drawn: shot 10, brows up, head waggle on the mock, then the last line |
 | 18 | Characters 2D first: front, side, back; three-quarter only if the script calls for it (Sam, 4 Nov) | yes (cast sheet) |
 
-| 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | |
-| 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | |
+| 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | in the film (HOOK), put on by finish.py |
+| 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | 77% at the build start (stop 84%) |
 
 | 21 | Sam 4 Nov: budget stop at 84%; Trump's eyes a little more open; Satan floats, wings medium, horns small; bleep every swear; the ghost not too cartoony, in the house style; Sam supplies a gentle fire sound and a door slam | done (cast), rest in build |
 | 22 | Sam 4 Nov (test clip): Trump behind the shut door until it opens; corridor wall and carpet fill the doorway; door swings into the room, on the left | done (moves) |
