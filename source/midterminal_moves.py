@@ -63,6 +63,7 @@ def _install_point_finger():
 _install_point_finger()
 
 DOOR_A, DOOR_H = 112.0, 4.7          # the door's wall angle and half-width (degrees), as midterminal_set.door
+DOOR_T = 0.05                        # the leaf's thickness (m)
 DOOR_W = 0.7                         # the opening (and our leaf) reaches this much further each side, to the frame's edge
 CORRIDOR = (236, 226, 204)           # the West Wing corridor seen through the door: cream walls, a red runner
 RUNNER = (150, 44, 40)
@@ -97,7 +98,13 @@ def door_open(img, cm, t_open, part='both'):
         return
     ang = 100.0 * max(0.0, t_open)
     hinge = MS.wp(c - h, 0.0, 0.015)
-    leaf = [_rot_out(MS.wp(a, y, 0.015), hinge, ang) for a, y in ((c - h, 0.0), (c + h, 0.0), (c + h, 2.45), (c - h, 2.45))]
+    corners = ((c - h, 0.0), (c + h, 0.0), (c + h, 2.45), (c - h, 2.45))
+    leaf = [_rot_out(MS.wp(a, y, 0.015), hinge, ang) for a, y in corners]
+    back = [_rot_out(MS.wp(a, y, 0.015 + DOOR_T), hinge, ang) for a, y in corners]
+    if ang > 1.0:                                 # a real door's thickness (Sam, 4 Nov: paper thin side on): the
+        MS.poly(img, cm, back, (228, 226, 216), INK, 2.0)   # room-side face, then the free edge and top, then the
+        MS.poly(img, cm, [leaf[1], back[1], back[2], leaf[2]], (214, 210, 198), INK, 2.0)  # corridor-side face
+        MS.poly(img, cm, [leaf[2], back[2], back[3], leaf[3]], (214, 210, 198), INK, 1.6)
     MS.poly(img, cm, leaf, (240, 238, 230), INK, 2.0)
     for y0, y1 in ((0.15, 0.9), (1.05, 1.55), (1.7, 2.3)):                      # the six panels
         for a0, a1 in ((c - h + 0.7, c - 0.5), (c + 0.5, c + h - 0.7)):
@@ -148,7 +155,7 @@ SATAN_AT = (0.0, 2.15)
 EPSTEIN_AT = (-1.35, 3.0)          # beside the desk, left
 
 
-ENTRY_LEFT = [(-1.9, 1.0), (-1.0, 1.0), WALK_TO]   # shot 2: in from frame left to his mark (Sam, 4 Nov)
+ENTRY = [(2.4, 1.0), (1.6, 1.0), WALK_TO]   # shot 2: in from frame RIGHT to his mark (Sam, 4 Nov, corrected)
 
 
 def _path_pts(pts=None):
@@ -415,7 +422,11 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], fa
             sk = skull(hw * (0.85 + 0.15 * min(1.0, melt * 1.4)), t, lw=2.4 * B.SS)   # his own head's size (Sam, 4 Nov)
             sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
             head_y = (top + ny) / 2
-            over.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
+            under = Image.new('RGBA', im.size, (0, 0, 0, 0))      # under the skin: the melting face runs down
+            under.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
+            if fade < 1:
+                under.putalpha(under.getchannel('A').point(lambda v: int(v * fade)))
+            im.alpha_composite(under)                             # over it (Sam, 4 Nov)
             lay = _melt(lay, (hx0 - 4, top, hx1 + 4, ny + 40 * s), melt)
         MS.ghost(im, lambda L: L.alpha_composite(lay), alpha=0.72 * fade)
         if fade < 1:
@@ -441,7 +452,7 @@ def frame(t, cam_name, door_t=None, walk_d=None, ep_fade=0.0, ep_melt=0.0):
         else:
             sx, sz = SATAN_AT
             ppl.append(trump_item(t, walk_d, dict(MC.TRUMP, look=-0.8, frown=0.03), front=True,
-                                  point=(sx, 1.45 + satan_float(t)[0], sz), pts=ENTRY_LEFT))
+                                  point=(sx, 1.45 + satan_float(t)[0], sz), pts=ENTRY))
     if cam_name != 'door':
         ppl.append(satan_item(t, MC.SATAN))
     if ep_fade > 0:
@@ -461,7 +472,7 @@ def test_timeline(t):
     if t < CUT:
         return frame(t, "door", door_t=door_curve(t, 0.1, 0.45, SLAM), walk_d=0.6 + 1.35 * t)
     if t < 4.4:
-        return frame(t, 'two', walk_d=min(path_length(ENTRY_LEFT), 1.35 * (t - CUT)))
+        return frame(t, 'two', walk_d=min(path_length(ENTRY), 1.35 * (t - CUT)))
     fade = min(1.0, (t - 4.4) / 0.8) if t < 7.6 else max(0.0, 1 - (t - 7.6) / 0.8)
     return frame(t, 'epstein', ep_fade=fade, ep_melt=max(0.0, min(1.0, (t - 5.8) / 1.4)))
 
