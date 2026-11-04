@@ -54,3 +54,14 @@
 - **Open rule requests:** none.
 - **For Claude:** named faults (on the stamp): syllable counts on lines 4, 7, 9 (wail), 10; two quick captions; Epstein shot 42.6-50.9 is 8.3 s. Animatic clean render `source/data/midterminal/animatic-clean.mp4` (small, upscaled; gitignored). Cutaway `T['away'/'back']`. Timeline helpers `word_at` (snaps to stretches), `jab`, `lift_shoulders`, `CLEAR`.
 
+
+## Where things stand
+- **Rules that bite next:** 36 note (a cut waits for the subtitle to clear, with note 47's halved gaps), 14 (check sheet and Sam's yes before the animatic), 59 (pre-flight before every render)
+- **Done (4 Nov):** voiced animatic 1 sent (60.6 s); Sam's notes 44-50 logged in the Notes table with the planned fixes (no questions open).
+- **Next:** Opus, medium effort, new chat: fix notes 44-50, clips for the moves (walk-in point, eye roll, Satan's cut), full pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic 2. Type: "MidTerminal: notes 44-50 from the handover in notes/midterminal.md".
+- **Needs Sam:** nothing until the clips.
+- **Read:** only the lines each note touches in `source/midterminal*.py` (MAP at the top of each); guides/satire.md 'Before every render'.
+- **Lost / Added:** Lost (Sam's notes): the stop and breath (32), the smug fold (40), the end two-shot with the jab and flinch (43).
+- **Open rule requests:** none.
+- **For Claude:** timeline T in midterminal.py ~100 (CLEAR, T['stop'/'angry'], cut11/flinch to remove); trump_sp/trump_j (word_at, jab, lift_shoulders); satan_sp/satan_j (flinch block to re-use for the end single); wings `midterminal_cast._wing` (scale s); captions tail in `subtitles.line_caption`/caption_at (0.45). Animatic clean `source/data/midterminal/animatic-clean.mp4` (small, upscaled to 1080 x 1920 before finish.py, which needs full size).
+

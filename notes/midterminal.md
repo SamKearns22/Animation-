@@ -1,14 +1,14 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 36 note (a cut waits for the subtitle to clear, with note 47's halved gaps), 14 (check sheet and Sam's yes before the animatic), 59 (pre-flight before every render)
-- **Done (4 Nov):** voiced animatic 1 sent (60.6 s); Sam's notes 44-50 logged in the Notes table with the planned fixes (no questions open).
-- **Next:** Opus, medium effort, new chat: fix notes 44-50, clips for the moves (walk-in point, eye roll, Satan's cut), full pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic 2. Type: "MidTerminal: notes 44-50 from the handover in notes/midterminal.md".
-- **Needs Sam:** nothing until the clips.
-- **Read:** only the lines each note touches in `source/midterminal*.py` (MAP at the top of each); guides/satire.md 'Before every render'.
-- **Lost / Added:** Lost (Sam's notes): the stop and breath (32), the smug fold (40), the end two-shot with the jab and flinch (43).
+- **Rules that bite next:** 14 (check sheet and Sam's yes before an animatic; 4 Nov "then render animatic" taken as the go), 59 (pre-flight before every render), 36 note (a cut waits for the subtitle, gaps halved by note 47)
+- **Done (4 Nov):** notes 44-50 fixed; clip 1 passed; clip 2 note (eye roll the whole mock, ending on the pout, anger on the next sentence) fixed; animatic 2 rendered and sent (55.9 s).
+- **Next:** wait for Sam's notes on animatic 2. Notes round: Opus, medium effort, new chat: "MidTerminal: notes on animatic 2 from notes/midterminal.md". If Sam says go for the final: Sonnet, "MidTerminal: final render from the handover in notes/midterminal.md".
+- **Needs Sam:** notes or a yes for the final on animatic 2 (deadline 5 pm, 4 Nov).
+- **Read:** only the lines each note touches in `source/midterminal*.py` (MAP at the top); guides/satire.md 'Before every render'.
+- **Faults named to Sam (render with --faults-named):** voice/script syllable mismatches on lines 4, 7, 9, 10 (Sam's own takes); the subtitle wording that differs from the takes on purpose (notes 46, 49, 50); "F*** off" mouth 4 flaps; "I know it's you that keeps adding algae" 1.8 s on screen; Epstein shot 8.2 s.
 - **Open rule requests:** none.
-- **For Claude:** timeline T in midterminal.py ~100 (CLEAR, T['stop'/'angry'], cut11/flinch to remove); trump_sp/trump_j (word_at, jab, lift_shoulders); satan_sp/satan_j (flinch block to re-use for the end single); wings `midterminal_cast._wing` (scale s); captions tail in `subtitles.line_caption`/caption_at (0.45). Animatic clean `source/data/midterminal/animatic-clean.mp4` (small, upscaled to 1080 x 1920 before finish.py, which needs full size).
+- **For Claude:** subtitle wording in LINES 'sub' (mouths use 'text'); CLEAR/TAIL 0.225; T['mock'] ends the eye-roll mock, T['cut11'] = second "maybe" (Satan single); wings MC.WING_SCALE 1.3; ANGRIER 1.5 in trump_sp. Animatic clean `source/data/midterminal/animatic-clean.mp4` (upscaled from -small).
 
 ## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
 1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.

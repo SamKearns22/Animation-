@@ -152,7 +152,6 @@ T['gone'] = e + 0.9
 T['cut10'] = T['gone'] + 0.1
 e = _at(10, T['cut10'] + 0.1)
 T['mock'] = L[10]['start'] + L[10]['mock_end'] + 0.05   # the mock ends; still on Trump (note 50)
-T['roll'] = word_at(10, 'release')                # note 50: he rolls his eyes on the mock
 T['cut11'] = word_at(10, 'maybe I')               # note 50: on the second "maybe", Satan, one brow up, irritated
 DUR = e + 0.6
 BLACK_AT = DUR
@@ -288,10 +287,12 @@ def _trump_sp(t):
             # note 48: no smug end: the frown and narrowed eyes held to the end
         if T['cut10'] <= t < T['mock']:           # note 42: the childish mock: pout, brows up
             sp['frown'], sp['brow_up'], sp['pout'] = 0.0, 0.035, True
-            u1 = _ramp(t, T['roll'], T['roll'] + 0.6)    # note 50: the eye roll, up and round (0.6 s), then
-            u2 = _ramp(t, T['roll'] + 0.6, T['roll'] + 0.85)   # back to Satan
+            # Sam, 4 Nov: the eye roll lasts the whole mock (up and round, slow), back down to finish on the pout;
+            # the mood flips the instant the next sentence starts (T['mock'])
+            u1 = _ramp(t, T['cut10'], T['mock'] - 0.35)
+            u2 = _ramp(t, T['mock'] - 0.35, T['mock'] - 0.1)
             sp['look'] = -0.35 + 0.95 * _ease(u1) * (1 - _ease(u2))
-            sp['gaze_dy'] = -4.0 * math.sin(math.pi * u1)
+            sp['gaze_dy'] = -4.5 * math.sin(math.pi * u1) * (1 - _ease(u2))
         elif T['mock'] <= t < T['cut11']:         # then furious at Satan
             sp['frown'] = 0.06
     if s == 'three':
