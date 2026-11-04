@@ -457,7 +457,7 @@ def carpet_art():
     for k in range(5):
         x = cx - 20 + k * 10
         d.line([(x, ey - 12), (x, ey + 26 - abs(k - 2) * 4)], fill=RED, width=5)
-    return im
+    return im.resize((W * 2, H * 2), Image.LANCZOS)    # smooth edges when the camera is close
 
 
 def floor(img, cm):
@@ -712,15 +712,16 @@ def render(img, cm, people=None):
 
 
 # ---------------------------------------------------------------------------------------------- people in it
-def put(img, cm, sp, x, z, facing, j=None, t=0.0, head_yaw=None):
-    """Someone standing at floor point (x, z) facing `facing` (plan degrees), through the camera (netan_yahoo's put)."""
+def put(img, cm, sp, x, z, facing, j=None, t=0.0, head_yaw=None, lift=0.0):
+    """Someone standing at floor point (x, z) facing `facing` (plan degrees), `lift` metres up (Satan floats), through
+    the camera (netan_yahoo's put)."""
     import views as V
     f = sp.get('height', 1.75) / 1.75
-    neck = 928 * V.M_PER_UNIT * f
+    neck = 928 * V.M_PER_UNIT * f + lift
     if cm.depth((x, neck, z)) < 0.3:
         return None
     (Xn, Yn), k = cm.project((x, neck, z))
-    (Xf, Yf), _ = cm.project((x, 0.0, z))
+    (Xf, Yf), _ = cm.project((x, lift, z))
     s = max(1e-3, (Yf - Yn) / 928.0)
     fd = (math.sin(math.radians(facing)), math.cos(math.radians(facing)))
     yaw = cm.yaw_of((x, 0, z), fd)
@@ -808,8 +809,65 @@ def picture(name='wide'):
     return render(img, cam(name), test_people())
 
 
+def ghost(img, draw, tint=(232, 104, 44), alpha=0.72):
+    """Draw someone as the hellfire ghost: onto their own layer, pulled towards fire orange, see-through (flat: no
+    glow). draw(layer) draws them."""
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    draw(lay)
+    a = np.asarray(lay).astype(np.float32)
+    rgb = a[..., :3] * 0.45 + np.array(tint, np.float32) * 0.55
+    out = np.dstack([rgb, a[..., 3] * alpha]).clip(0, 255).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(out, 'RGBA'))
+
+
+COMP = [   # the key shots (rule 11): name, camera (pos, look, focal), who's in it
+    ('1  Trump comes in: "Thank you, everyone, no more questions."', ((1.4, 1.6, -0.2), (4.0, 1.35, -2.0), 1050), 'door'),
+    ('2  Trump: "Satan, what the f***?"  Satan floats before the desk', ((0.0, 1.55, -1.7), (-0.05, 1.4, 2.5), 1080), 'two'),
+    ('3  Zoom out: Epstein\'s ghost fades in by the desk', ((0.2, 1.6, -1.4), (0.3, 1.4, 2.6), 780), 'three'),
+    ('4  Epstein: "It\'s warm here."', ((1.0, 1.6, 0.9), (1.6, 1.6, 3.0), 1250), 'three'),
+]
+
+
+def to_cam(cm, x, z):
+    """The plan facing that turns someone at (x, z) square to the lens (rule 38: front on)."""
+    return math.degrees(math.atan2(cm.pos[0] - x, cm.pos[2] - z))
+
+
+def comp(out):
+    """The composition sheet: the 3-4 key shots, still, before anything is built to move."""
+    import midterminal_cast as MC
+    B.SS = 1
+    dx, _, dz = wp(112.0, 0, 0.35)
+    tiles = []
+    for label, (pos, look, focal), who in COMP:
+        cm = S.Cam(pos, look, focal=focal)
+        ppl = []
+        if who == 'door':
+            ppl.append((dx, dz, lambda im, c: put(im, c, dict(MC.TRUMP, look=0.9), dx, dz, to_cam(c, dx, dz))))
+        else:
+            ppl.append((0.45, 2.15, lambda im, c: put(im, c, dict(MC.SATAN, look=-0.6 if who == 'two' else 0.8),
+                                                        0.45, 2.15, to_cam(c, 0.45, 2.15), lift=0.3)))
+            ppl.append((-0.7, 1.0, lambda im, c: put(im, c, dict(MC.TRUMP, look=0.8, frown=0.03), -0.7, 1.0, to_cam(c, -0.7, 1.0))))
+        if who == 'three':
+            ppl.append((1.6, 3.0, lambda im, c: ghost(im, lambda lay: put(lay, c, dict(MC.EPSTEIN, look=-0.8), 1.6, 3.0,
+                                                                         to_cam(c, 1.6, 3.0), lift=0.25))))
+        img = Image.new('RGBA', (1080, 1920), (0, 0, 0, 255))
+        render(img, cm, ppl)
+        tiles.append((label, img))
+    sheet = Image.new('RGB', (4 * 540 + 5 * 20, 960 + 110), (232, 228, 222))
+    d = ImageDraw.Draw(sheet)
+    f = ImageFont.truetype(FONT, 20)
+    for i, (label, img) in enumerate(tiles):
+        sheet.paste(img.convert('RGB').resize((540, 960), Image.LANCZOS), (20 + i * 560, 90))
+        d.multiline_text((20 + i * 560, 14), label.replace(': ', ':\n', 1).replace('  Satan', '\nSatan'), font=f, fill=(30, 30, 30))
+    sheet.save(out, quality=88)
+    return out
+
+
 if __name__ == '__main__':
-    if sys.argv[1] == 'test':
+    if sys.argv[1] == 'comp':
+        print(comp(sys.argv[2]))
+    elif sys.argv[1] == 'test':
         print(test(sys.argv[2], '--empty' not in sys.argv))
     elif sys.argv[1] == 'refs':
         print(refsheet(sys.argv[2]))

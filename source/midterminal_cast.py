@@ -118,7 +118,7 @@ def satan_horns(p, f, L, behind):
         if sgn < 0 and f.tq > 0.5:
             continue
         bx, by = f(sgn * fhw * 0.36, -0.12)
-        _horn(p, (bx, by), (sgn * 0.42, -1.0), -sgn * 0.95, 0.62 * P4.H, 15)
+        _horn(p, (bx, by), (sgn * 0.42, -1.0), -sgn * 0.95, 0.4 * P4.H, 12)
 
 
 def satan_head(img, p, sp, t, hx, hy):
@@ -191,7 +191,7 @@ def satan_head_view(img, p, sp, t, view, hx, hy):
             by = hy - hh * 0.92
             curl = -sgn * 0.95 if view in ('three', 'back') else 0.5
             dirx = sgn * 0.42 if view in ('three', 'back') else -0.2
-            _horn(p, (bx, by), (dirx, -1.0), curl, 0.6 * P4.H, 14)
+            _horn(p, (bx, by), (dirx, -1.0), curl, 0.4 * P4.H, 11)
 
 
 # ---------------------------------------------------------------------------------------------- the wings
@@ -366,7 +366,7 @@ P4.MEASURED['trump'] = dict(face_wide=0.868, jaw_wide=0.811, forehead_wide=0.939
                             chin_long=0.283)    # 4 Nov, second pack: trump-6 (front), -5, -2, -1
 DCHIN = True
 P4.PUSH['trump'] = 1.8
-P4.TUNE['trump'] = dict(eye_open=1.0, eye_size=1.0, forehead_wide=3, eye_tilt=2, lip_top=4, lip_low=4, philtrum=4,
+P4.TUNE['trump'] = dict(eye_open=0.4, eye_size=0.8, forehead_wide=3, eye_tilt=2, lip_top=4, lip_low=4, philtrum=4,  # Sam 4 Nov: eyes a little more open
                         chin_long=5, brow_slope=3, face_wide=2)   # searched 4 Nov: 31% on trump-6, 22% on trump-2
 
 
@@ -395,7 +395,7 @@ def trump_head(img, p, sp, t, hx, hy):
         for k in range(2):                             # forehead creases
             v = 0.1 + 0.05 * k
             p.line(curve(f.pts([(-0.16, v + 0.01), (0.0, v - 0.004), (0.16, v + 0.01)]), 3), sd, 1.5)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.12)), (104, 136, 168), blend(TC.T_RING, skin, 0.6), liner=2.4)
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.05)), (104, 136, 168), blend(TC.T_RING, skin, 0.6), liner=2.4)
     P4.brows(p, f, L, (186, 140, 86), 0.04, sp.get('brow_up', 0.0), sp.get('frown', 0.012))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
@@ -476,7 +476,7 @@ V.head_view, V.arm, V.person = head_view, arm, person
 SATAN = dict(who='satan', name='Satan', skin=S_SKIN, hw=66, hh=98, head_dy=8, hair='slick', hair_c=S_HAIR,
              brow_c=S_HAIR, brow_w=4.0, nose='long', outfit='suit', jacket=S_SUIT, sleeve=S_SUIT, trousers=S_SUIT,
              shirt=(248, 248, 250), tie=S_TIE, shoe=(14, 12, 14), shoulders=156, full=True, pose='custom',
-             height=1.88, spread=0.2, seed=61)
+             height=1.88, spread=0.5, seed=61)
 EPSTEIN = dict(who='epstein', name='Epstein', skin=E_SKIN, hw=70, hh=92, head_dy=10, hair='wavy_short', hair_c=E_HAIR,
                brow_c=(128, 116, 106), outfit='jumper', jacket=E_POLO, sleeve=E_POLO, short_sleeve=True,
                trousers=(44, 46, 54), shoe=(30, 26, 22), shoulders=152, full=True, pose='custom', height=1.83,

@@ -28,6 +28,7 @@ the end with their checks.
 | 35 | Lock the layout in planning (who sits or stands where, gaps, what must be in frame); a later change is named as a cost. | `plan.py` true-gap check; by hand |
 | 36 | Say at planning when a tool is slow here; ask Sam once to allow pypi.org. | by hand |
 | 38 | Front on by default (each person within about 25 degrees of the lens). A three-quarter view is a last resort (Sam, 3 Nov): only when no other way makes the shot work, listed with that reason. | `plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`) |
+| 68 | Characters are built in 2D first: front, side and back. A three-quarter view (or three-quarter back) is built only when the script calls for one, and named in the plan with the shot that needs it (Sam, 4 Nov). | by hand (the cast sheet shows front, side, back only) |
 | 39 | 3D only when needed (the camera moves round or through it, 3+ angles that must agree, turned in the hand); otherwise one flat painting per camera, in layers. Each 3D build is in the estimate with its reason. | by hand (the estimate) |
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
 | 44 | A usage budget per film; ask Sam for the week's figure only after a building stage, after the animatic and at the final; log it in the notes; over budget is trimmed before the next stage. | by hand (handover) |

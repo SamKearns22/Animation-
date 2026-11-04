@@ -7,7 +7,7 @@
 - **Next:** Sam's look at the cast and set; then the brief (story, lines). Planning: Opus, high effort, same chat while short.
 - **Needs Sam:** Trump likeness pack (3+ straight-on, not smiling; a three-quarter; a talking one); the story.
 - **Read:** guides/satire.md 'Start' and 'Getting it right first time'.
-- **Lost / Added:** Added: our own simplified seal (eagle in a ring, no words); generic portraits (no real face).
+- **Lost / Added:** Added: our own simplified seal (eagle in a ring, no words); generic portraits (no real face); a door slam and a gentle fire sound (Sam's files).
 - **Open rule requests:** none.
 - **For Claude:** `source/midterminal_cast.py` (MAP at top; `sheet`, `faces`, `head`), `source/midterminal_set.py` (`test`, `refs`); refs in `references/midterminal/`. Satan's wings: `spread` 0..1 (default 0.2). Trump's rosebud pout: `pout=True`.
 
@@ -36,6 +36,10 @@
 
 | 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | |
 | 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | |
+
+| 21 | Sam 4 Nov: budget stop at 84%; Trump's eyes a little more open; Satan floats, wings medium, horns small; bleep every swear; the ghost not too cartoony, in the house style; Sam supplies a gentle fire sound and a door slam | done (cast), rest in build |
+
+Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` (4 key shots: door, two-shot, zoom out with the ghost, Epstein close)
 
 ## Plan extras: ambition estimate (rule 55)
 | build or risky move | why | estimate (% of a week) | spent |

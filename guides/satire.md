@@ -31,8 +31,9 @@ check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections t
    Bleeps (rule 27): Sam always says the word and I bleep over it; never ask. Place the bleep from the sound (Prepper
    Minister: a gap was left, and the bleep landed on "you" twice). Sam records every voice; never ask who voices them.
    In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
-3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows **every view**
-   each character appears in (from above, a close-up, mid-action), not only the default one; and for the film's key
+3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows each character
+   **front, side and back** (rule 68; a three-quarter only when the script calls for one), plus any view the script
+   needs (from above, a close-up, mid-action); and for the film's key
    reaction, a **numbered strength sheet** (1 = slight, 6 = huge) for Sam to pick a number from.
 4. `python3 source/NAME.py stills OUT_DIR T T ...`: one still per shot. Sam's notes come back in one batch.
 
