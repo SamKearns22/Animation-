@@ -1,15 +1,27 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 49-51 (likeness: Trump needs a pack), 28 (reuse before building), 11 (composition sheet before shots)
-- **Done (4 Nov, Opus):** cast built (Satan new, Epstein measured 79% 1st of 7, Trump rebuilt 32% 2nd of 7: not passing); Oval Office set built, four cameras.
-- **Spent against the estimate (rule 55):** no estimate yet (no brief); cast and set about 8% of a week.
-- **Next:** Sam's look at the cast and set; then the brief (story, lines). Planning: Opus, high effort, same chat while short.
-- **Needs Sam:** Trump likeness pack (3+ straight-on, not smiling; a three-quarter; a talking one); the story.
-- **Read:** guides/satire.md 'Start' and 'Getting it right first time'.
-- **Lost / Added:** Added: our own simplified seal (eagle in a ring, no words); generic portraits (no real face); a door slam and a gentle fire sound (Sam's files).
+- **Rules that bite next:** 27 (bleep both swears, from the sound), 38/68 (front on, no three-quarters), 11 (shot list below is the approved staging)
+- **Done (4 Nov, Opus):** cast (Satan, Epstein 79%, Trump 31% approved by Sam with eyes opened), Oval Office set, key-shots sheet approved; rules 68 and 27 (every swear) written.
+- **Spent against the estimate (rule 55):** cap 10% (stop at 84% on Sam's meter; 74% at the brief). Plan 9%.
+- **Next:** build the moving parts and the film file from `source/satire_template.py` once Sam's recordings arrive: Opus, medium effort. New chat, type: "MidTerminal: build from the handover in notes/midterminal.md".
+- **Needs Sam:** the 9 lines, the door slam and a gentle fire sound (coming).
+- **Read:** guides/satire.md 'Start', 'Movement', 'Before every render'; notes/midterminal.md (this file).
+- **Lost / Added:** Added: our own simplified seal; generic portraits; a door slam and a gentle fire sound (Sam's files).
 - **Open rule requests:** none.
-- **For Claude:** `source/midterminal_cast.py` (MAP at top; `sheet`, `faces`, `head`), `source/midterminal_set.py` (`test`, `refs`); refs in `references/midterminal/`. Satan's wings: `spread` 0..1 (default 0.2). Trump's rosebud pout: `pout=True`.
+- **For Claude:** cast `source/midterminal_cast.py` (SATAN spread=0.5, TRUMP, EPSTEIN; `faces`, `sheet`); set `source/midterminal_set.py` (`render`, `put(lift=)`, `put_seated`, `ghost()` tint, `to_cam`, `COMP` cameras, door at wall angle 112); refs `references/midterminal/`. Builds left: door leaf swing, walk in, float bob + wing beat, ghost flame tail and fades, skull melt (fire from flying_whales_fx).
+
+## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
+1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.
+2. Wide two-shot (key shot 2): walking fast to face the desk, angry: "Satan, what the f***? This isn't what you promised." Done by 3-5 s.
+3. Satan floating before the desk, a small shrug: "I said don't invade Iran, you invade Iran."
+4. Reverse (180) on Trump, accusing, pointing: "Yeah, because Bibi told me to. I thought he was one of yours!?"
+5. Satan, chuckling: "Oh, no. We've got nothing on him."
+6. Zoom out (key shot 3): Epstein's ghost fades in by the side of the desk; Satan's pupils go to him.
+7. Epstein (key shot 4): "Don't worry, Donald. Why don't you come and join me? It's warm here. Nobody ever gouges out your eyes on an hourly basis."
+8. Reverse on Trump: "F*** off, Jeffrey. I know it's you that keeps putting algae in the reflecting pool."
+9. Epstein waves his arms like a silly ghost, fades, face melting into a flaming skull: "Releeeease the filessssss" (gentle fire sound).
+10. Reverse on Trump, mocking: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to."
 
 ## The brief as a checklist
 | # | from the brief or a note | done? |
