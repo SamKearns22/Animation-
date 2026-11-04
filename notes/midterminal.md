@@ -48,6 +48,7 @@
 | 19 | Hook Text: "Trump after Midterm results" (Sam's words, exactly) | in the film (HOOK), put on by finish.py |
 | 20 | Budget: 10% of a week at most for this film (Sam, 4 Nov, meter at 74%) | 77% at the build start (stop 84%) |
 
+| 30 | Sam 4 Nov (check sheet answers): Q1 Y: a 2 s cut to Trump, disgusted, on "It's so warm here, Donald."; Q2 Y: take 5 ends where the line ends; Q3: he checks the subtitles in the animatic; Q4 Y: animatic | yes (cutaway: scowl, eyes narrowed, mouth down, leans back) |
 | 29 | Sam 4 Nov (recordings): takes 1-10 filed (his 6 = line 7, 7 = 8, 8 = 9, 9 + 10 = line 10); his door slam; the fire breath at double speed as Epstein's Hell entrance and exit (replaces the gentle fire bed); bleeps from the sound: line 2 at 2.10-2.45 s, line 8 at 0.97-1.14 s of his takes | yes |
 | 21 | Sam 4 Nov: budget stop at 84%; Trump's eyes a little more open; Satan floats, wings medium, horns small; bleep every swear; the ghost not too cartoony, in the house style; Sam supplies a gentle fire sound and a door slam | done (cast), rest in build |
 | 22 | Sam 4 Nov (test clip): Trump behind the shut door until it opens; corridor wall and carpet fill the doorway; door swings into the room, on the left | done (moves) |

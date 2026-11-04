@@ -118,6 +118,9 @@ T['ghost'] = T['cut6'] + 0.5
 T['eyes'] = T['ghost'] + 0.5
 T['cut7'] = T['ghost'] + 1.6
 e = _at(7, T['cut7'] + 0.2)
+st = L[7]['_stretches'][3] if len(L[7]['_stretches']) > 3 else (L[7]['_dur'] * 0.5, L[7]['_dur'] * 0.65)
+T['away'] = L[7]['start'] + st[0] - 0.1         # Sam, 4 Nov (Q1): 2 s on Trump, disgusted, on "It's so warm here,
+T['back'] = L[7]['start'] + st[1] + 0.25        # Donald." (Epstein heard off-screen), then back to Epstein
 T['cut8'] = e + CLEAR
 e = _at(8, T['cut8'] + 0.15)
 T['cut9'] = e + CLEAR
@@ -132,7 +135,8 @@ DUR = e + 0.6
 BLACK_AT = DUR
 SHOTS = [('door', 0.0, T['cut2']), ('two', T['cut2'], T['cut3']), ('satan', T['cut3'], T['cut4']),
          ('trump', T['cut4'], T['cut5']), ('satan', T['cut5'], T['cut6']), ('three', T['cut6'], T['cut7']),
-         ('epstein', T['cut7'], T['cut8']), ('trump', T['cut8'], T['cut9']), ('epstein', T['cut9'], T['cut10']),
+         ('epstein', T['cut7'], T['away']), ('trump', T['away'], T['back']), ('epstein', T['back'], T['cut8']),
+         ('trump', T['cut8'], T['cut9']), ('epstein', T['cut9'], T['cut10']),
          ('trump', T['cut10'], T['cut11']), ('two', T['cut11'], DUR)]
 # Cameras (pos, look, focal): key shots 1-4 from the composition sheet (Sam's yes, 4 Nov); the singles new.
 CAMS = dict(MV.SHOT_CAMS)
@@ -242,6 +246,9 @@ def trump_sp(t):
             acc = t >= word_at(4, 'I thought') - 0.1
             sp['frown'] = 0.05 if acc else 0.0
             sp['brow_up'] = 0.0 if acc else 0.03
+        if T['away'] <= t < T['back']:            # Q1: disgusted at Epstein's "so warm here, Donald"
+            k = _ease(_ramp(t, T['away'], T['away'] + 0.25))
+            sp['look'], sp['frown'], sp['lid4'] = -0.6, 0.08 * k, 0.38 * k    # brows down hard, eyes narrowed, mouth down
         if T['cut8'] <= t < T['cut9']:            # note 40: angry; eyes narrowed on "I know it's you"; smug at the end
             if t >= word_at(8, "I know") - 0.1:
                 sp['lid4'], sp['frown'] = 0.42, 0.045
@@ -347,6 +354,10 @@ def trump_j(t):
             V.arm_to(up, side, (sx + g * 185, sy - 30, sz + 110), 'down', 'palm')    # up and out, above the shoulders
         lift_shoulders(up, -12)
         return moves.mix_poses(V.standing(sp), up, k)
+    if s == 'trump' and T['away'] <= t < T['back']:   # recoiling a little from the ghost
+        j = V.standing(sp)
+        j['lean'] = -5 * _ease(_ramp(t, T['away'], T['away'] + 0.3))
+        return j
     if s == 'trump' and T['cut8'] <= t < T['cut9']:
         fold = word_at(8, 'reflecting') - 0.25
         if t < fold:
