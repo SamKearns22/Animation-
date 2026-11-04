@@ -1,14 +1,14 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 14 (check sheet and Sam's yes before every animatic), 27 (bleeps from the sound), 59 (pre-flight before every render; `--faults-named`)
-- **Done (4 Nov):** notes 31-43 fixed; Sam's takes filed (his 6 = line 7 ... 9 + 10 = line 10), his wording, bleeps, door slam, fire breath; Q1 Trump cutaway; voiced animatic sent (60.6 s, 7.4 MB, Hook Text and sign-off).
-- **Next:** Sam's notes on the animatic: a new round, Opus medium, this chat if short; then his yes for the final.
-- **Needs Sam:** notes or a yes on the animatic; Q3: he checks the subtitles of lines 4, 7, 10 against his takes.
-- **Read:** guides/satire.md 'Before every render'; only the lines a note touches in `source/midterminal*.py`.
-- **Lost / Added:** Lost: the zoom out (38); line 2 no longer on the cut (32); the gentle fire bed (fire breath instead). Added: corridor, flashes, breath, burst and smoke, body flames, burning skeleton, end two-shot, Trump cutaway.
+- **Rules that bite next:** 36 note (a cut waits for the subtitle to clear, with note 47's halved gaps), 14 (check sheet and Sam's yes before the animatic), 59 (pre-flight before every render)
+- **Done (4 Nov):** voiced animatic 1 sent (60.6 s); Sam's notes 44-50 logged in the Notes table with the planned fixes (no questions open).
+- **Next:** Opus, medium effort, new chat: fix notes 44-50, clips for the moves (walk-in point, eye roll, Satan's cut), full pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic 2. Type: "MidTerminal: notes 44-50 from the handover in notes/midterminal.md".
+- **Needs Sam:** nothing until the clips.
+- **Read:** only the lines each note touches in `source/midterminal*.py` (MAP at the top of each); guides/satire.md 'Before every render'.
+- **Lost / Added:** Lost (Sam's notes): the stop and breath (32), the smug fold (40), the end two-shot with the jab and flinch (43).
 - **Open rule requests:** none.
-- **For Claude:** named faults (on the stamp): syllable counts on lines 4, 7, 9 (wail), 10; two quick captions; Epstein shot 42.6-50.9 is 8.3 s. Animatic clean render `source/data/midterminal/animatic-clean.mp4` (small, upscaled; gitignored). Cutaway `T['away'/'back']`. Timeline helpers `word_at` (snaps to stretches), `jab`, `lift_shoulders`, `CLEAR`.
+- **For Claude:** timeline T in midterminal.py ~100 (CLEAR, T['stop'/'angry'], cut11/flinch to remove); trump_sp/trump_j (word_at, jab, lift_shoulders); satan_sp/satan_j (flinch block to re-use for the end single); wings `midterminal_cast._wing` (scale s); captions tail in `subtitles.line_caption`/caption_at (0.45). Animatic clean `source/data/midterminal/animatic-clean.mp4` (small, upscaled to 1080 x 1920 before finish.py, which needs full size).
 
 ## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
 1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.
@@ -99,6 +99,13 @@ Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` 
 | 41 | 9 | 28 | the skull is not ghostly like him (apply the ghost opacity to it); the melt spreads over hands, shoulders and body revealing a burning skeleton; trees outside have no trunks | fixed (clip): skull and bones at the ghost's opacity; the melt spreads to shoulders, arms, hands and body, uncovering a burning skeleton (spine, ribs, collarbones, arm bones, bone circle hands, pelvis top); trees have trunks |
 | 42 | 10 | 31 | "release the files": mocking and childish | fixed (clip): Trump copies the silly-ghost wave, smaller and lower, pout, brows up, head waggling; books have spines, gold bands, page tops and gaps |
 | 43 | 10 | 32 | the last line cuts back to the shot 2 angle; Trump jabs his finger at Satan, furious; Satan flinches back a little, raised eyebrow, sceptical | fixed (clip): cut back to the shot 2 angle on "If Satan had done his job"; Trump furious, two jabs at Satan; Satan flinches back, one brow up, flat mouth |
+| 44 | 1 | 2.25 | Trump's hand still out (to the press) once he's in the room: nobody to wave to | to do: the press palm comes down before the threshold (by door_d about 1.2 m), arm back to the walk |
+| 45 | 2 | 2.92 | point at Satan as he walks over, clearly angry; line 2 starts the moment the shot changes; Satan's wings 30% bigger in every shot; Trump angrier | to do: undo note 32's stop and breath (line 2 on the cut again, the walk with the point and frown from the cut); wings x1.3 (MC._wing scale); Trump's frown deeper everywhere he's angry. Lost: the stop and breath (32) |
+| 46 | 2 | | subtitle: "This wasn't what you promised." | to do: LINES 2 text (subtitle only; the take says "isn't") |
+| 47 | all | | the gaps between lines halved, all through | to do: CLEAR and every lead-in between lines halved; the subtitle tail shortened to match so a cut still waits for it to clear (note 36) |
+| 48 | 8 | | still smug at "reflecting pool", and the folded arms don't work: he's still mad | to do: no sneer, no fold: hands on hips, frown and narrowed eyes held to the end. Lost: the smug fold (40) |
+| 49 | 7 | | subtitle: "Why don't you come and join me down here?" | to do: LINES 7 text (subtitle only; the take says "come join me") |
+| 50 | 10 | | stay on Trump for the last line; he rolls his eyes while childish; delete the FIRST "Maybe" from the subtitle; on the second "maybe" cut to Satan, one brow raised, intimidating and irritated (Sam: notes 5 and 8 are the same deletion) | to do: no cut back to the two-shot; eye roll (look up and round) in the mock; LINES 10 text "Oooo, release the files! If Satan had done his job, maybe I wouldn't have to!" (subtitle only); a Satan single from the second "maybe" to the end: brow up, stern, eyes narrowed. Lost: the end two-shot, Trump's jab at Satan and Satan's flinch (43) |
 
 Decisions made:
 - Budget cut to 9% (Sam's 10% cap): door 1, Satan float 0.5, ghost 2, skull melt 2, moves and zoom 1.5, template 2; at most one critique round each; stills sheet instead of clips where possible.

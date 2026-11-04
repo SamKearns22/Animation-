@@ -42,3 +42,15 @@
 - **Lost / Added:** Lost: the zoom out (note 38). Added (Sam's): a corridor in depth, camera flashes, flames and smoke on Epstein's entrance, flames on his body, a burning skeleton under the melt, Trump's breath and arm gestures.
 - **Open rule requests:** "when anyone points, the hand shows a pointing finger" (note 33; Sam's 5th answer came as "T", read as Y, ask once to confirm, then write it in the rulebook with its check and list it in the last table).
 - **For Claude:** film `source/midterminal.py` (MAP at top); audit "pops" at 2.17, 14.50, 15.58, 30.25 are the frame before each cut (audits() uses int(a*FPS); start at ceil). Point hand: `MV._install_point_finger`, `MV.point_at`. Skull: `MV.epstein_item` draws `under` straight on `im`, not through `MS.ghost`; its head box is measured with arms down. Pocket square: check `V.snap` near 13.58. Shrug: `moves.pose 'shrug'` U-shape; the film's `satan_j`. Door/corridor: `MV.door_open`, `CORRIDOR`. Wings: `MC.wings`. Flag and books: `midterminal_set.py`. Quick pre-flight: `python3 source/preflight.py midterminal OUT --text`.
+
+
+## Where things stand (4 Nov, animatic 1 sent)
+- **Rules that bite next:** 14 (check sheet and Sam's yes before every animatic), 27 (bleeps from the sound), 59 (pre-flight before every render; `--faults-named`)
+- **Done (4 Nov):** notes 31-43 fixed; Sam's takes filed (his 6 = line 7 ... 9 + 10 = line 10), his wording, bleeps, door slam, fire breath; Q1 Trump cutaway; voiced animatic sent (60.6 s, 7.4 MB, Hook Text and sign-off).
+- **Next:** Sam's notes on the animatic: a new round, Opus medium, this chat if short; then his yes for the final.
+- **Needs Sam:** notes or a yes on the animatic; Q3: he checks the subtitles of lines 4, 7, 10 against his takes.
+- **Read:** guides/satire.md 'Before every render'; only the lines a note touches in `source/midterminal*.py`.
+- **Lost / Added:** Lost: the zoom out (38); line 2 no longer on the cut (32); the gentle fire bed (fire breath instead). Added: corridor, flashes, breath, burst and smoke, body flames, burning skeleton, end two-shot, Trump cutaway.
+- **Open rule requests:** none.
+- **For Claude:** named faults (on the stamp): syllable counts on lines 4, 7, 9 (wail), 10; two quick captions; Epstein shot 42.6-50.9 is 8.3 s. Animatic clean render `source/data/midterminal/animatic-clean.mp4` (small, upscaled; gitignored). Cutaway `T['away'/'back']`. Timeline helpers `word_at` (snaps to stretches), `jab`, `lift_shoulders`, `CLEAR`.
+
