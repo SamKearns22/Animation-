@@ -2,10 +2,10 @@
 
 ## Where things stand
 - **Rules that bite next:** 51 (likeness pack), 3 (benchmark the White House against refs), 11 (composition sheet before building)
-- **Done:** brief and references filed (4 Nov); plan and questions sent to Sam.
-- **Spent against the estimate (rule 55):** planning about 0.5% (Sam's budget for the film: 8%).
+- **Done:** brief, references, likeness pack filed; Sam's answers (Hook "MAGAs Worst Nightmare", clothes Y, desk phone Y); cast sheet sent 4 Nov.
+- **Spent against the estimate (rule 55):** planning + both likenesses about 2% (estimate 3.5%; budget 8%).
 - **Next:** Sam's answers, then cast sheet + composition sheet (Opus, high: new likenesses and the White House set).
-- **Needs Sam:** questions 1-5 in chat (4 Nov).
+- **Needs Sam:** Y/N on the cast sheet; the voice recordings.
 - **Read:** guides/satire.md "Start"; kit-catalogue rows 20-21 (Oval Office).
 - **Lost / Added:** none yet.
 - **Open rule requests:** none.
@@ -73,4 +73,7 @@ Shots (about 40-45 s with the real voices):
 | 1 |      |      |      | open   |
 
 Decisions made:
+- Hook Text: "MAGAs Worst Nightmare" (Sam, 4 Nov).
+- Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC black jacket, red lips, pearls (Sam's Y).
+- Cast code: `source/islamocommunism_cast.py` (measured heads; AOC hair 'aoc_long' for side/back).
 - Phone is the desk handset (the Resolute desk already has phones).
