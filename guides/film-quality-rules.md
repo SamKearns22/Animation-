@@ -21,6 +21,7 @@ the end with their checks.
 | 14 | Pre-flight refuses to run while the brief checklist has a blank "done?" row or no composition sheet was sent; a shot missing anyone in `SHOT_CAST` fails. | `preflight.gates`, `cast_faults` |
 | 24 | Ambition estimate: the plan lists new builds and risky moves and the share of a week the film will cost. | by hand |
 | 62 | Every cost estimate is checked against what past films actually cost (`story/archive.md`, `notes/archive/`) before it is sent, naming the films compared. | by hand (the estimate names them) |
+| 76 | Every note on a person, place or prop is checked against every reference of it, not just the note's words; the sheet sent back shows ours beside each reference (Sam, 4 Nov: Islamocommunism's beard took three rounds because the fixes followed the words). | the side-by-side strip on the sheet (ours, then every reference); by eye |
 | 25 | Eyelines and holds per shot: who looks where, how long each beat holds. | `LOOKS_AT` eyelines; holds by hand |
 | 26 | Every sound effect listed at planning and asked for in one message; placeholders named in every send. | by hand |
 | 27 | A bleep: Sam always says the word and I bleep over it (never ask); place it from the sound, never the script. Every swear is bleeped, whether or not the script writes it with asterisks (Sam, 4 Nov). | by hand |

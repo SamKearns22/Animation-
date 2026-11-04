@@ -58,7 +58,7 @@ _LA = dict(face_wide=0.816, jaw_wide=0.806, forehead_wide=0.941, eyes_apart=1.29
            lip_top=0.104, lip_low=0.167, philtrum=0.102, chin_long=0.26)
 P4.MEASURED['elsayed'] = {k: P4.AVG[k] + _E[k] - _LA[k] for k in P4.AVG}
 P4.PUSH['elsayed'] = 1.8
-P4.TUNE['elsayed'] = dict(face_wide=-1.5, jaw_wide=-1, brow_slope=1.0, chin_long=0.5)   # 4 Nov round 3: leaner face, straighter brows (by eye against all refs)
+P4.TUNE['elsayed'] = dict(face_wide=-1.5, jaw_wide=-1, brow_slope=0.2, chin_long=0.5)   # 4 Nov round 3: leaner face, straighter brows (by eye against all refs)
 P4.MEASURED['aoc'] = dict(face_wide=0.847, jaw_wide=0.79, forehead_wide=0.95, eyes_apart=1.177, eye_size=0.212,
                           eye_open=0.369, eye_tilt=5.619, brow_high=0.528, brow_slope=-6.891, nose_long=0.426,
                           nose_wide=0.654, mouth_wide=0.832, lip_top=0.135, lip_low=0.195, philtrum=0.124,
@@ -116,7 +116,7 @@ def elsayed_head(img, p, sp, t, hx, hy):
     p.poly(curve(f.pts(must), 3), gc, None)              # the thin moustache, down to the beard at the corners
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.06)), A_IRIS, dk(skin, 0.82), liner=2.6)
     raise_ = {'hopeful': 0.02}.get(mood, 0.0) + sp.get('brow_up', 0.0)
-    P4.brows(p, f, L, A_HAIR, 0.042, raise_, sp.get('frown', 0.0))
+    P4.brows(p, f, L, A_HAIR, 0.05, raise_, sp.get('frown', 0.0))
     if mood == 'sceptic':                              # one brow cocked up (his right, our left)
         bx, by = f(-L['ecx'], L['brow_y'] - 0.05) if 'brow_y' in L else f(-L['ecx'], L['eye_y'] - 0.12)
         p.line(curve([(bx - 18, by + 6), (bx, by - 6), (bx + 16, by + 2)], 3), A_HAIR, 5.0)
