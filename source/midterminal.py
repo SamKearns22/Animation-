@@ -53,19 +53,23 @@ WHO = ('trump', 'satan', 'epstein')
 LINES = [
     dict(n=1, audio='midterminal-1', who='trump', text='Thank you, everyone, no more questions.', est=1.9),
     dict(n=2, audio='midterminal-2', who='trump', text="Satan, what the f***? This isn't what you promised.", est=2.7,
+         sub="Satan, what the f***? This wasn't what you promised.",   # note 46 (the take says "isn't")
          bleep=(1.47, 1.82)),                     # "fuck": 2.10-2.45 s in Sam's take (from the sound)
     dict(n=3, audio='midterminal-3', who='satan', text="I said don't invade Iran, you invaded Iran.", est=2.4),
     dict(n=4, audio='midterminal-4', who='trump', text="Yeah! Cos Bibi told me to! I thought he was one of yours?",
          est=3.0),
     dict(n=5, audio='midterminal-5', who='satan', text="Ha, no. Bibi is in a league of his own.", est=2.0),
     dict(n=7, audio='midterminal-7', who='epstein', text="Donald, don't even worry about it. Why don't you come join "
-         "me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis.", est=6.5),
+         "me down here? It's so warm here, Donald. Nobody ever gouges out your eyes on an hourly basis.", est=6.5,
+         sub="Donald, don't even worry about it. Why don't you come and join me down here? It's so warm here, Donald. "
+         "Nobody ever gouges out your eyes on an hourly basis."),   # note 49 (the take says "come join me")
     dict(n=8, audio='midterminal-8', who='trump', text="F*** off, Jeffrey. I know it's you that keeps adding algae to "
          "the reflecting pool.", est=4.0, bleep=(0.13, 0.30)),   # "fuck": 0.97-1.14 s in Sam's take (from the sound)
     dict(n=9, audio='midterminal-9', who='epstein', text='Releeeaaaseee the fiiilleesss and ennndd myyy torrrmenttt',
          est=3.0),
     dict(n=10, audio='midterminal-10', who='trump', text="Oooo, release the files! Maybe if Satan had done his job, "
-         "maybe I wouldn't have to!", est=4.0, mock_end=3.06),   # Sam's takes 9 + 10 joined; the mock ends here
+         "maybe I wouldn't have to!", est=4.0, mock_end=3.06,
+         sub="Oooo, release the files! If Satan had done his job, maybe I wouldn't have to!"),   # note 50   # Sam's takes 9 + 10 joined; the mock ends here
 ]
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
@@ -96,48 +100,67 @@ def _at(n, start):
     return L[n]['end']
 
 
+def word_at(n, words):
+    """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches only
+    (not its pauses); a phrase that starts a stretch snaps to that stretch's start (from the sound)."""
+    ln = L[n]
+    st = ln['_stretches']
+    tot = sum(b - a for a, b in st) or 1.0
+    k = ln['text'].index(words) / len(ln['text']) * tot
+    for a, b in st:
+        if k <= b - a:
+            est = a + k
+            break
+        k -= b - a
+    else:
+        est = st[-1][1]
+    near = min((a for a, _ in st), key=lambda a: abs(a - est))
+    return ln['start'] + (near if abs(near - est) < 0.6 else est)
+
+
 DOOR_WALK = 1.35                                   # m/s (the brisk gait, as the test clips Sam passed)
 # The timeline: each beat follows the one before, so a take that runs long pushes the rest on.
 T = {}
-CLEAR = 0.45                                      # a cut waits till the last subtitle clears (Sam's note 36)
+CLEAR = 0.225                                     # a cut waits till the last subtitle clears (note 36; halved, note 47)
+TAIL = CLEAR                                      # the subtitle stays this long after the line (note 47)
 e = _at(1, 0.05)                                  # shot 1: talking to the press over his shoulder as he comes in
 T['slam'] = max(1.3, e - 0.45)                    # the door slams on his last word; shut 0.25 s later = the cut
 T['open'] = 0.1                                   # open from the start: we see him at once (Sam's note 1, 4 Nov)
 T['cut2'] = T['slam'] + 0.25
-T['stop'] = T['cut2'] + MV.path_length(MV.ENTRY) / DOOR_WALK   # he stops for a beat (Sam's note 32)
-T['angry'] = T['stop'] + 0.4                      # a quick breath (0.4 s), then the frown snaps on
-e = _at(2, T['angry'])                            # then he looks at Satan, points and speaks
+T['stop'] = T['cut2'] + MV.path_length(MV.ENTRY) / DOOR_WALK   # he reaches his mark
+e = _at(2, T['cut2'])                             # note 45: line 2 on the cut, pointing and angry as he walks
 T['cut3'] = e + CLEAR
-e = _at(3, T['cut3'] + 0.25)                      # Satan's shrug
+e = _at(3, T['cut3'] + 0.125)                      # Satan's shrug
 T['cut4'] = e + CLEAR
-e = _at(4, T['cut4'] + 0.15)                      # the reverse on Trump, pointing
+e = _at(4, T['cut4'] + 0.075)                      # the reverse on Trump, pointing
 T['cut5'] = e + CLEAR
-e = _at(5, T['cut5'] + 0.2)                       # Satan chuckles
+e = _at(5, T['cut5'] + 0.1)                       # Satan chuckles
 T['cut6'] = e + CLEAR                             # held (no zoom, note 38); the ghost fades in; Satan's eyes go to him
 T['ghost'] = T['cut6'] + 0.5
 T['eyes'] = T['ghost'] + 0.5
 T['cut7'] = T['ghost'] + 1.6
-e = _at(7, T['cut7'] + 0.2)
+e = _at(7, T['cut7'] + 0.1)
 st = L[7]['_stretches'][3] if len(L[7]['_stretches']) > 3 else (L[7]['_dur'] * 0.5, L[7]['_dur'] * 0.65)
 T['away'] = L[7]['start'] + st[0] - 0.1         # Sam, 4 Nov (Q1): 2 s on Trump, disgusted, on "It's so warm here,
 T['back'] = L[7]['start'] + st[1] + 0.25        # Donald." (Epstein heard off-screen), then back to Epstein
 T['cut8'] = e + CLEAR
-e = _at(8, T['cut8'] + 0.15)
+e = _at(8, T['cut8'] + 0.075)
 T['cut9'] = e + CLEAR
-e = _at(9, T['cut9'] + 0.25)                      # the silly-ghost arms, the melt, fading away
+e = _at(9, T['cut9'] + 0.125)                      # the silly-ghost arms, the melt, fading away
 T['melt'] = L[9]['start'] + 0.4
 T['gone'] = e + 0.9
 T['cut10'] = T['gone'] + 0.1
-e = _at(10, T['cut10'] + 0.2)
-T['cut11'] = L[10]['start'] + L[10]['mock_end'] + 0.05   # note 43: back to the shot 2 angle for the last sentence
-T['flinch'] = T['cut11'] + 0.3                    # Satan flinches from the jabbing finger
+e = _at(10, T['cut10'] + 0.1)
+T['mock'] = L[10]['start'] + L[10]['mock_end'] + 0.05   # the mock ends; still on Trump (note 50)
+T['roll'] = word_at(10, 'release')                # note 50: he rolls his eyes on the mock
+T['cut11'] = word_at(10, 'maybe I')               # note 50: on the second "maybe", Satan, one brow up, irritated
 DUR = e + 0.6
 BLACK_AT = DUR
 SHOTS = [('door', 0.0, T['cut2']), ('two', T['cut2'], T['cut3']), ('satan', T['cut3'], T['cut4']),
          ('trump', T['cut4'], T['cut5']), ('satan', T['cut5'], T['cut6']), ('three', T['cut6'], T['cut7']),
          ('epstein', T['cut7'], T['away']), ('trump', T['away'], T['back']), ('epstein', T['back'], T['cut8']),
          ('trump', T['cut8'], T['cut9']), ('epstein', T['cut9'], T['cut10']),
-         ('trump', T['cut10'], T['cut11']), ('two', T['cut11'], DUR)]
+         ('trump', T['cut10'], T['cut11']), ('satan', T['cut11'], DUR)]
 # Cameras (pos, look, focal): key shots 1-4 from the composition sheet (Sam's yes, 4 Nov); the singles new.
 CAMS = dict(MV.SHOT_CAMS)
 CAMS['two'] = ((0.0, 1.55, -1.7), (0.05, 1.45, 2.5), 1200)        # note 33: a little tighter, Satan forward
@@ -180,7 +203,8 @@ THREE_QUARTER_OK = [('trump', 'trump', 'drawn turned square to the lens (MS.to_c
 # panels are the door, not a flat fill; once open the corridor shows
 PORTAL_OK = [('east door', None, T['open'] + 0.1, 'shut until it opens, then the corridor (note 22)')]
 ALLOWED_CONTACTS = []
-ALLOWED_POPS = [('epstein', T['ghost'], T['ghost'] + 0.8, 'the ghost fades in'),
+ALLOWED_POPS = [('trump', T['cut2'], T['stop'] + 0.1, 'striding in from the frame edge, pointing (note 45)'),
+                ('epstein', T['ghost'], T['ghost'] + 0.8, 'the ghost fades in'),
                 ('epstein', T['melt'], T['gone'], 'the melt: he runs down in drips to a skeleton (note 41)'),
                 ('epstein', T['gone'] - 0.9, T['gone'], 'the ghost fades away')]
 SET_EXCLUDE = []
@@ -229,7 +253,17 @@ def entry_d(t):
     return min(MV.path_length(MV.ENTRY), DOOR_WALK * (t - T['cut2']))
 
 
+ANGRIER = 1.5                                     # note 45: his frown deeper everywhere he's angry
+
+
 def trump_sp(t):
+    sp = _trump_sp(t)
+    if sp.get('frown', 0) > 0:
+        sp['frown'] *= ANGRIER
+    return sp
+
+
+def _trump_sp(t):
     """Trump's face: eyes to the press (right, off-screen) until the threshold; angry from line 2; mocking on line 10."""
     sp = dict(MC.TRUMP, **_face('trump', t))
     s = shot_of(t)
@@ -238,8 +272,7 @@ def trump_sp(t):
         return sp
     sp['frown'] = 0.03
     if s == 'two':                                # note 32: eyes ahead on the walk; the breath; angry, eyes to Satan
-        sp['look'] = -0.8 if t >= T['stop'] + 0.2 else -0.2
-        sp['frown'] = 0.0 if t < T['angry'] else 0.05
+        sp['look'], sp['frown'] = -0.8, 0.05      # note 45: angry and eyes on Satan from the cut
     elif s == 'trump':
         sp['look'] = -0.35                        # at Satan, just off the lens to our left
         if T['cut4'] <= t < T['cut5']:            # note 35: exasperated (brows up), then accusing
@@ -252,14 +285,16 @@ def trump_sp(t):
         if T['cut8'] <= t < T['cut9']:            # note 40: angry; eyes narrowed on "I know it's you"; smug at the end
             if t >= word_at(8, "I know") - 0.1:
                 sp['lid4'], sp['frown'] = 0.42, 0.045
-            if t >= word_at(8, 'reflecting') - 0.25:
-                sp['lid4'], sp['frown'], sp['sneer'] = 0.3, 0.0, True
-                sp['brow_up'] = (0.0, 0.03)
-        if T['cut10'] <= t < T['cut11']:          # note 42: the childish mock: pout, brows up
+            # note 48: no smug end: the frown and narrowed eyes held to the end
+        if T['cut10'] <= t < T['mock']:           # note 42: the childish mock: pout, brows up
             sp['frown'], sp['brow_up'], sp['pout'] = 0.0, 0.035, True
-    if s == 'two' and t >= T['cut11']:            # note 43: furious at Satan
-        sp['frown'], sp['look'] = 0.06, -0.8
-    elif s == 'three':
+            u1 = _ramp(t, T['roll'], T['roll'] + 0.6)    # note 50: the eye roll, up and round (0.6 s), then
+            u2 = _ramp(t, T['roll'] + 0.6, T['roll'] + 0.85)   # back to Satan
+            sp['look'] = -0.35 + 0.95 * _ease(u1) * (1 - _ease(u2))
+            sp['gaze_dy'] = -4.0 * math.sin(math.pi * u1)
+        elif T['mock'] <= t < T['cut11']:         # then furious at Satan
+            sp['frown'] = 0.06
+    if s == 'three':
         sp['look'] = -0.8 if t < T['eyes'] else -0.9
     return sp
 
@@ -273,7 +308,8 @@ def flash_at(t):
 
 def press_palm(j, t):
     """Shot 1: his hand up, palm out to the press on our left, "no, thank you" (Sam's note 31); down by the threshold."""
-    k = _ease(_ramp(t, 0.15, 0.45)) * (1 - _ease(_ramp(t, L[1]['end'] - 0.35, L[1]['end'])))
+    down = T['slam'] - 1.3 + (1.2 - 0.6) / DOOR_WALK    # note 44: down by the time he is 1.2 m in (door_d)
+    k = _ease(_ramp(t, 0.15, 0.45)) * (1 - _ease(_ramp(t, down - 0.3, down)))
     if k <= 0:
         return j
     sx, sy, sz = j['shL']
@@ -293,24 +329,6 @@ def lift_shoulders(j, dy):
             j[k] = (x, y + dy, z)
     j['head_dy'] = j.get('head_dy', 0) + dy
     return j
-
-
-def word_at(n, words):
-    """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches only
-    (not its pauses); a phrase that starts a stretch snaps to that stretch's start (from the sound)."""
-    ln = L[n]
-    st = ln['_stretches']
-    tot = sum(b - a for a, b in st) or 1.0
-    k = ln['text'].index(words) / len(ln['text']) * tot
-    for a, b in st:
-        if k <= b - a:
-            est = a + k
-            break
-        k -= b - a
-    else:
-        est = st[-1][1]
-    near = min((a for a, _ in st), key=lambda a: abs(a - est))
-    return ln['start'] + (near if abs(near - est) < 0.6 else est)
 
 
 def jab(t, t0, n=2, each=0.36):
@@ -343,8 +361,6 @@ def trump_j(t):
     head waggling (note 42)."""
     sp = MC.TRUMP
     s = shot_of(t)
-    if s == 'two' and T['stop'] <= t < T['angry']:   # a quick breath: shoulders up and down once (a beat, not a bob)
-        return lift_shoulders(V.standing(sp), -14 * math.sin(math.pi * (t - T['stop']) / (T['angry'] - T['stop'])))
     if s == 'trump' and T['cut4'] <= t < word_at(4, 'I thought') - 0.1:
         k = _ease(_ramp(t, L[4]['start'], L[4]['start'] + 0.18))      # flung, fast
         up = V.standing(sp)
@@ -359,11 +375,8 @@ def trump_j(t):
         j['lean'] = -5 * _ease(_ramp(t, T['away'], T['away'] + 0.3))
         return j
     if s == 'trump' and T['cut8'] <= t < T['cut9']:
-        fold = word_at(8, 'reflecting') - 0.25
-        if t < fold:
-            return moves.pose(sp, 'hips')
-        return moves.mix_poses(moves.pose(sp, 'hips'), moves.pose(sp, 'arms_folded'), _ease(_ramp(t, fold, fold + 0.3)))
-    if s == 'trump' and T['cut10'] <= t < T['cut11']:
+        return moves.pose(sp, 'hips')             # note 48: hands on hips to the end, no fold
+    if s == 'trump' and T['cut10'] <= t < T['mock']:
         u = 0.5 + 0.5 * math.sin(2 * math.pi * (t - L[10]['start']) / 0.42)
         a, b = V.standing(sp), V.standing(sp)   # Epstein's silly-ghost wave, smaller and floppier (wrists low)
         V.arm_to(a, 'L', (-260.0, 40.0, 20.0), 'down', 'palm')   # out to the sides, never at the lens (rule 41)
@@ -394,11 +407,6 @@ def satan_j(t):
         return moves.mix_poses(j0, sh, u)
     if L[5]['start'] - 0.1 <= t < L[5]['end'] + 0.4:
         j0['head_dy'] = 4 * abs(math.sin(2 * math.pi * 3.0 * t))   # the chuckle: little shoulder-and-head bobs
-    if t >= T['flinch']:                           # note 43: he flinches back a little from the jabbing finger
-        k = _ease(_ramp(t, T['flinch'], T['flinch'] + 0.15))
-        j0['tilt'] = j0.get('tilt', 0) - 5 * k
-        j0['head_dx'] = j0.get('head_dx', 0) + 6 * k
-        lift_shoulders(j0, -6 * k)
     return j0
 
 
@@ -408,10 +416,8 @@ def satan_sp(t):
     sp['look'] = {'two': 0.6, 'satan': 0.55, 'three': 0.6}.get(s, 0.0)
     if s == 'three' and t >= T['eyes']:
         sp['look'] = -0.8                         # his pupils go to the ghost (brief 13)
-    if t >= T['flinch']:                          # note 43: one brow up, sceptical, mouth flat
-        k = _ease(_ramp(t, T['flinch'], T['flinch'] + 0.2))
-        sp['brow_up'] = (0.0, 0.035 * k)
-        sp['mood'] = 'stern'
+    if t >= T['cut11']:                           # note 50: one brow up, stern, eyes narrowed: intimidating, irritated
+        sp['brow_up'], sp['mood'], sp['lid4'] = (0.0, 0.035), 'stern', 0.4
         return sp
     if L[5]['start'] - 0.2 <= t < T['cut6'] + 0.5 or s == 'three':
         sp['mood'] = 'smirk'
@@ -484,7 +490,7 @@ def trump_item(t):
     accusing = s == 'trump' and word_at(4, 'I thought') - 0.1 <= t < T['cut5']   # note 35: lean in, jab twice
     if (s == 'two' and t >= L[2]['start'] - 0.15) or accusing:
         point = (SX, 1.45 + MV.satan_float(t)[0], SZ) if s == 'two' else (0.1, 1.6, 1.75)
-    t_jab = word_at(4, 'I thought') if accusing else T['cut11'] + 0.1 if t >= T['cut11'] else None
+    t_jab = word_at(4, 'I thought') if accusing else None
 
     def arms(jj, c, x, z):
         if j is not None:
@@ -547,8 +553,8 @@ def draw_order(t):
 def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-            return SUB.line_caption(ln, t - ln['start'])
+        if ln['start'] - 0.05 <= t < min(ln['end'] + TAIL, nxt):
+            return SUB.line_caption(dict(ln, text=ln.get('sub', ln['text'])), t - ln['start'])
     return None
 
 
@@ -578,7 +584,10 @@ def soundtrack(stems=False):
             voice[s:s + len(seg)] += seg
     if os.path.exists(SFX['slam']):
         slam = MA.load(SFX['slam']) if hasattr(MA, 'load') else __import__('burnham_film').load(SFX['slam'])
-        filmkit.place(rest, slam[:int(1.0 * SR)], at=T['slam'] + 0.25, sr=SR, gain=0.9)
+        slam = slam[:int(0.25 * SR)].copy()       # note 45: line 2 now starts on the cut, so the slam's ring is
+        f0 = int(0.08 * SR)                       # faded out under his first word
+        slam[f0:] *= np.linspace(1, 0, len(slam) - f0)
+        filmkit.place(rest, slam, at=T['slam'] + 0.12, sr=SR, gain=0.9)   # as it shuts
     if os.path.exists(SFX['fire']):               # Sam, 4 Nov: the fire breath (double speed) as his Hell entrance
         fire = MA.load(SFX['fire']) if hasattr(MA, 'load') else __import__('burnham_film').load(SFX['fire'])
         from scipy.signal import butter, sosfiltfilt

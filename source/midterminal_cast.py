@@ -195,12 +195,32 @@ def satan_head_view(img, p, sp, t, view, hx, hy):
 
 
 # ---------------------------------------------------------------------------------------------- the wings
+WING_SCALE = 1.3                                       # Sam's note 45: the wings 30% bigger in every shot
+
+
+class _Scaled:
+    """A pen that draws everything scaled by k about (ox, oy) (the wing root), line widths unchanged."""
+    def __init__(self, p, k, ox, oy):
+        self.p, self.k, self.o = p, k, (ox, oy)
+
+    def _s(self, pts):
+        ox, oy = self.o
+        return [(ox + (x - ox) * self.k, oy + (y - oy) * self.k) for x, y in pts]
+
+    def poly(self, pts, *a, **kw):
+        return self.p.poly(self._s(pts), *a, **kw)
+
+    def line(self, pts, *a, **kw):
+        return self.p.line(self._s(pts), *a, **kw)
+
+
 def _wing(p, sgn, spread, view):
     """One wing in the person's own units (neck base at 0, 0): from the shoulder blade, an upper arm up and out, a
     hand down and out, and long feathers hanging from it. sgn -1 = his right (our left in a front view).
     spread 0 (folded against the back) .. 1 (open, ref 2)."""
     s = 0.45 + 0.55 * spread
     root = (sgn * 60, 70)
+    p = _Scaled(p, WING_SCALE, root[0], root[1])
     wrist = (sgn * (120 + 170 * s), 30 - 25 * s)      # Sam's note 34: the wing tops sit just under the shoulder line,
     tip = (sgn * (150 + 240 * s), 230 + 30 * (1 - s))  # no red points rising beside his neck
     elbow = (sgn * (95 + 90 * s), 50 - 15 * s)
