@@ -154,14 +154,33 @@ e = _at(13, T['chuckle'] + 0.45)
 T['clink'] = e + 0.25                             # they clink glasses
 DUR = T['clink'] + 1.2
 BLACK_AT = DUR
+# Sam (4 Nov, stills): vary the shots - singles of each, close-ups, medium two-shots. Each cut's name is its
+# staging (office / door / two / clink, which places the people) plus a camera: _ab / _ao close on him / her,
+# _aom her waist up, _med both waist up. Cuts between lines wait CLEAR after the last word.
+def _after(n):
+    return L[n]['end'] + CLEAR
+
+
 SHOTS = [('ext', 0.0, T['cut2']), ('office', T['cut2'], T['cut3']), ('door', T['cut3'], T['cut4']),
-         ('office', T['cut4'], T['cut5']), ('two', T['cut5'], T['cut6']), ('clink', T['cut6'], DUR)]
+         ('office', T['cut4'], T['cut5']), ('two', T['cut5'], T['sip_end']),
+         ('two_ab', T['sip_end'], _after(6)), ('two_ao', _after(6), _after(7)), ('two_ab', _after(7), _after(8)),
+         ('two_aom', _after(8), _after(9)), ('two_med', _after(9), T['cut6']),
+         ('clink_ab', T['cut6'], _after(11)), ('clink_ao', _after(11), _after(12)), ('clink', _after(12), DUR)]
 # Cameras (pos, look, focal), all level and square on (Sam's note 4: flat shots only, this film)
 CAMS = {'office': ((0.0, 1.45, 0.4), (0.0, 1.45, 4.4), 1350),         # the desk end, front on, flags at the edges
         'door': OF.door_cam(),                                         # square on to the east door
         'two': ((0.55, 1.45, -0.2), (0.55, 1.45, 4.4), 1350),          # closer, both at the desk
         'clink': ((0.6, 1.5, 0.9), (0.6, 1.5, 4.4), 1200)}             # closer still, waist up
-SHOT_CAST = {'ext': [], 'office': ['elsayed'], 'door': ['aoc'], 'two': ['elsayed', 'aoc'], 'clink': ['elsayed', 'aoc']}
+_AOZ = 3.15                                                            # her mark in the 'two' staging (AO)
+CAMS.update({'two_ab': ((0.0, 1.55, 3.68 - 2.0), (0.0, 1.55, 6.0), 3000),       # close on him: head and shoulders
+             'two_ao': ((1.3, 1.43, _AOZ - 2.0), (1.3, 1.43, 6.0), 3000),       # close on her
+             'two_aom': ((1.3, 1.25, _AOZ - 2.3), (1.3, 1.25, 6.0), 2100),      # her, waist up (the hand sweep)
+             'two_med': ((0.7, 1.4, 3.4 - 3.2), (0.7, 1.4, 6.0), 1700),       # both, waist up
+             'clink_ab': ((0.0, 1.55, 3.68 - 2.0), (0.0, 1.55, 6.0), 3000),
+             'clink_ao': ((1.12, 1.43, 3.25 - 2.0), (1.12, 1.43, 6.0), 3000)})
+SHOT_CAST = {'ext': [], 'office': ['elsayed'], 'door': ['aoc'], 'two': ['elsayed', 'aoc'], 'clink': ['elsayed', 'aoc'],
+             'two_ab': ['elsayed'], 'two_ao': ['aoc'], 'two_aom': ['aoc'], 'two_med': ['elsayed', 'aoc'],
+             'clink_ab': ['elsayed'], 'clink_ao': ['aoc']}
 LOOKS_AT = {'elsayed': 'aoc', 'aoc': 'elsayed'}
 CHAIR = MS.DESK_CHAIR                              # (0, 3.75): seated just in front of it
 AB = (0.0, 3.68)                                   # El-Sayed, seated and standing behind the desk
@@ -179,7 +198,9 @@ PLAN = dict(CEIL=5.6, ROOMS=dict(MS.ROOMS, corridor=(4.42, -4.5, 7.0, 0.5)),
             PEOPLE={'elsayed': dict(at=AB, facing=180, who='elsayed', why='at the desk (brief 7)'),
                     'aoc': dict(at=AO, facing=180, who='aoc', why='beside the desk, right')},
             CAMS={k: dict(pos=v[0], look=v[1], focal=v[2]) for k, v in CAMS.items()}, GROUPS={},
-            SHOT_MARKS={'office': ['elsayed'], 'two': ['elsayed', 'aoc'], 'clink': ['elsayed', 'aoc']})
+            SHOT_MARKS={'office': ['elsayed'], 'two': ['elsayed', 'aoc'], 'clink': ['elsayed', 'aoc'],
+                        'two_ab': ['elsayed'], 'two_ao': ['aoc'], 'two_aom': ['aoc'], 'two_med': ['elsayed', 'aoc'],
+                        'clink_ab': ['elsayed'], 'clink_ao': ['aoc']})
 BENCHMARK = [dict(place='oval office', refs=['oval-1-desk-gold.jpg', 'oval-3-both-ends.jpg'], at=T['cut2'] + 1.0,
                   items=[('gold swag valance and drapes', 'yes, a star band added'), ('three tall windows', 'arched heads'),
                          ('Resolute desk', 'a star on its front'), ('tufted leather chair', 'yes'),
@@ -189,7 +210,8 @@ BENCHMARK = [dict(place='oval office', refs=['oval-1-desk-gold.jpg', 'oval-3-bot
                   items=[(it, 'islamocommunism_set') for it in ('north portico', 'two floors of windows', 'balustrade',
                                                                  'fountain and red flowers', 'flags', 'lawn')])]
 HOOK = (ISET.HOOK[0], {'y': ISET.HOOK[1]})         # "MAGAs Worst Nightmare" (Sam, 4 Nov), finish.py --y 410
-KEEP_CLEAR = [(n, (lambda b: (lambda t: b if t < T['cut2'] else None))(box)) for n, box in ISET.KEEP_CLEAR]
+KEEP_CLEAR = [(n, (lambda b: (lambda t: b if t < T['cut2'] else None))(box)) for n, box in ISET.KEEP_CLEAR
+              if n != 'hook text']   # (that box is the Hook's own place in the sky, not something it must miss)
 PROP_SIZES, OUTFIT = [], {}
 HEIGHTS = {'elsayed': 1.78, 'aoc': 1.65}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
@@ -211,8 +233,14 @@ HANDS_OK = []
 # ====================================================================================================================
 
 
-def shot_of(t):
+def cut_of(t):
+    """The cut on screen at t (its camera and who is drawn)."""
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
+
+
+def shot_of(t):
+    """The staging at t (where people stand and what they do): the cut's name before any _camera."""
+    return cut_of(t).split('_')[0]
 
 
 def _ramp(t, a, b):
@@ -527,7 +555,7 @@ def aoc_item(t):
 
 
 def cam_for(t):
-    pos, look, focal = CAMS[shot_of(t)]
+    pos, look, focal = CAMS[cut_of(t) if cut_of(t) != 'ext' else 'office']   # (ext: the audit asks; unused)
     return MS.S.Cam(pos, look, focal=focal)
 
 
@@ -536,9 +564,9 @@ def people(t):
     out = []
     if s == 'door':
         out += MV.door_items(MV.door_curve(t, T['open'], T['open'] + 0.4, 1e9))
-    if 'elsayed' in SHOT_CAST[s] and SOLO[0] in (None, 'elsayed'):
+    if 'elsayed' in SHOT_CAST[cut_of(t)] and SOLO[0] in (None, 'elsayed'):
         out.append(elsayed_item(t))
-    if 'aoc' in SHOT_CAST[s] and SOLO[0] in (None, 'aoc'):
+    if 'aoc' in SHOT_CAST[cut_of(t)] and SOLO[0] in (None, 'aoc'):
         out.append(aoc_item(t))
     return out
 
@@ -565,7 +593,7 @@ def draw_order(t):
         return ['background']
     c = cam_for(t)
     pos = {'elsayed': (AB[0], AB[1] - 0.38), 'aoc': AO}
-    return ['background'] + sorted(SHOT_CAST[shot_of(t)], key=lambda w: -math.dist((pos[w][0], 1.0, pos[w][1]), c.pos))
+    return ['background'] + sorted(SHOT_CAST[cut_of(t)], key=lambda w: -math.dist((pos[w][0], 1.0, pos[w][1]), c.pos))
 
 
 def caption_at(t):
@@ -623,7 +651,7 @@ def scene(t):
     import audit
     s = shot_of(t)
     out = []
-    for who in SHOT_CAST[s]:
+    for who in SHOT_CAST[cut_of(t)]:
         if who == 'elsayed':
             out.append(audit.Thing('elsayed', audit.simple('elsayed', AB[0], AB[1], HEIGHTS['elsayed'])))
         else:
@@ -640,7 +668,7 @@ def scene(t):
 def mouths_seen(t):
     c = cam_for(t) if shot_of(t) != 'ext' else None
     out = []
-    for who in SHOT_CAST[shot_of(t)]:
+    for who in SHOT_CAST[cut_of(t)]:
         sp = elsayed_sp(t) if who == 'elsayed' else aoc_sp(t)
         out.append((who, sp['mouth'], 0.0, 120.0 if c is None else 2 * CAST[who].get('hh', 90) * 0.45))
     return out
@@ -695,12 +723,14 @@ KEYS = [   # the stills sheet: one per beat (label, time)
     ('5 he takes it, chuckles', lambda: T['take'] + 0.25),
     ('5 "Mashallah..." (5)', lambda: L[5]['start'] + 0.8),
     ('5 the sip, contented (13)', lambda: (T['sip'] + T['sip_end']) / 2),
-    ('5 "...combine..." open hand (6)', lambda: word_at(6, 'combine') + 0.3),
-    ('5 "Me neither." shrug (7)', lambda: L[7]['start'] + 0.3),
-    ('5 "...total abundance." (9)', lambda: word_at(9, 'total')),
-    ('6 "So, what\'s next...?" thinking (11)', lambda: L[11]['start'] + 0.4),
-    ('6 "Invade Europe?" hopeful (12)', lambda: L[12]['start'] + 0.5),
-    ('6 the clink', lambda: T['clink'] + 0.3),
+    ('5 close on him: "...combine..." (6)', lambda: word_at(6, 'combine') + 0.3),
+    ('5 close on her: "Me neither." (7)', lambda: L[7]['start'] + 0.3),
+    ('5 close: "No suffering." (8)', lambda: L[8]['start'] + 0.4),
+    ('5 her waist up: "...total abundance." (9)', lambda: word_at(9, 'total')),
+    ('5 both, waist up: "It\'s crazy..." (10)', lambda: L[10]['start'] + 0.6),
+    ('6 close on him: "So, what\'s next...?" (11)', lambda: L[11]['start'] + 0.4),
+    ('6 close on her: "Invade Europe?" (12)', lambda: L[12]['start'] + 0.5),
+    ('6 both: the clink', lambda: T['clink'] + 0.3),
 ]
 
 
@@ -744,7 +774,7 @@ def main():
     elif a[0] == 'final':
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
-                 picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
+                 picture=picture, overlay=overlay, shot_of=cut_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
