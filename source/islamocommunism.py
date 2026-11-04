@@ -465,7 +465,7 @@ def aoc_sp(t):
 
 
 HANDOFF = (0.66, 1.12, 3.4)                         # where the glass changes hands, over the desk's right corner
-CLINK = (0.6, 1.3, 3.42)                            # where the glasses meet
+CLINK = (0.6, 1.3, 3.05)                            # where the glasses meet
 
 
 def aoc_j(t, c, x, z, walking):
