@@ -10,3 +10,13 @@
 - **Lost / Added:** Added: our own simplified seal; generic portraits; a door slam and a gentle fire sound (Sam's files); a cream corridor with a red runner seen through the door.
 - **Open rule requests:** none.
 - **For Claude:** cast `source/midterminal_cast.py`; set `source/midterminal_set.py` (`render`, `put(lift=)`, `ghost()`, `to_cam`, `COMP`, shot 4 camera moved for Epstein on the left); moves `source/midterminal_moves.py` (`door_items(door_curve(t,...))`, `trump_item(t, d, sp)` with `path_length()`, `satan_item`, `epstein_item(t, sp, fade, melt)`, `test_timeline`, `ENTRY`, `SLAM`/`CUT`: line 2 starts on CUT). Still to build in the film: shrug, point, chuckle, Epstein's silly-ghost arm wave, Trump's mocking line 10.
+
+## Where things stand
+- **Rules that bite next:** 27 (bleep both swears, from the sound), 62 (subtitles readable: re-time from the takes), 14 (check sheet, then Sam's yes, before the animatic)
+- **Done (4 Nov, Opus, build):** the film file, every shot drawn with estimated timings (shrug, point, chuckle, zoom out, ghost wave, melt, mock); quick pre-flight clean except 6 subtitle speeds (estimates). Meter 77% at the start (stop 84%).
+- **Next:** file Sam's takes (lines 1-5, 7-10, slam, fire) as `source/audio/midterminal-N.m4a`, place both bleeps from the sound, set line 10's `mock_end`, quick pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic (Opus, medium; same chat if short, else type: "MidTerminal: time the film to my recordings, from the handover in notes/midterminal.md").
+- **Needs Sam:** the recordings (2:30-3 pm, 4 Nov).
+- **Read:** guides/satire.md 'Before every render', 'Render'.
+- **Lost / Added:** Added: Trump's hands on hips through line 8; the door opens later if line 1 runs long (his voice heard through it first).
+- **Open rule requests:** none.
+- **For Claude:** `source/midterminal.py` (MAP at the top): LINES est -> takes; timeline T; CAMS adds 'satan', 'trump' singles; PORTAL_OK and THREE_QUARTER_OK reasons; previous handover in notes/archive/midterminal-handovers.md.

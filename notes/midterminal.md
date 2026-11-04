@@ -1,14 +1,14 @@
 # Notes for MidTerminal (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 27 (bleep both swears, from the sound), 62 (subtitles readable: re-time from the takes), 14 (check sheet, then Sam's yes, before the animatic)
-- **Done (4 Nov, Opus, build):** the film file, every shot drawn with estimated timings (shrug, point, chuckle, zoom out, ghost wave, melt, mock); quick pre-flight clean except 6 subtitle speeds (estimates). Meter 77% at the start (stop 84%).
-- **Next:** file Sam's takes (lines 1-5, 7-10, slam, fire) as `source/audio/midterminal-N.m4a`, place both bleeps from the sound, set line 10's `mock_end`, quick pre-flight, check sheet with the Hook Text frame, wait for Sam's yes, animatic (Opus, medium; same chat if short, else type: "MidTerminal: time the film to my recordings, from the handover in notes/midterminal.md").
-- **Needs Sam:** the recordings (2:30-3 pm, 4 Nov).
-- **Read:** guides/satire.md 'Before every render', 'Render'.
-- **Lost / Added:** Added: Trump's hands on hips through line 8; the door opens later if line 1 runs long (his voice heard through it first).
-- **Open rule requests:** none.
-- **For Claude:** `source/midterminal.py` (MAP at the top): LINES est -> takes; timeline T; CAMS adds 'satan', 'trump' singles; PORTAL_OK and THREE_QUARTER_OK reasons; previous handover in notes/archive/midterminal-handovers.md.
+- **Rules that bite next:** 27 (bleep both swears, from the sound), 56 (a fault of its kind: every point hand, every U-shaped arm pose, every ghost layer), 14 (check sheet and Sam's yes before the animatic)
+- **Done (4 Nov, Opus):** film built; test animatic (silent, est timings) sent; Sam's notes 31-43 logged (Notes table); proposals for 35, 40, 42 and the skeleton question sent to Sam.
+- **Next:** a round of notes (Opus, medium): Sam's answers, then fix 31-43, clips for the moves, file his recordings when they come (lines 1-5, 7-10, slam, fire), bleeps, check sheet, animatic. New chat, type: "MidTerminal: notes 31-43 from the handover in notes/midterminal.md" plus the answers.
+- **Needs Sam:** answers 1-5 (sent 4 Nov), his meter, the recordings (2:30-3 pm).
+- **Read:** guides/satire.md 'Movement', 'Before every render'; guides/kit-catalogue.md 'Effects' (burst, smoke, flash).
+- **Lost / Added:** Added: camera flashes, a corridor in depth, the burst of flames and smoke, flames on Epstein, a skeleton under the melt (all Sam's). Lost: the zoom out (Sam).
+- **Open rule requests:** "when a character points, give him a pointing finger" (note 33): proposed to Sam as a rule.
+- **For Claude:** `source/midterminal.py` (MAP); audit artefact: audits() takes int(a*FPS), the frame before each cut: start at ceil. Point hand: MV._install_point_finger. Skull: MV.epstein_item draws `under` straight onto im (not through MS.ghost). Pocket square: check V.snap around 13.58 (Satan's yaw in the 'two'/'three' blend). Shrug: replace moves.pose 'shrug' arm targets (U shape) with shoulders up.
 ## Shot list (Sam, 4 Nov: the camera turns 180 to Trump when he speaks; the opening joke lands by 3-5 s)
 1. Door (key shot 1): Trump strides in, eyes right off-screen, "Thank you, everyone, no more questions." Eyes forward at the threshold; the door slams behind him. Quick: about 1.5-2 s.
 2. Wide two-shot (key shot 2): walking fast to face the desk, angry: "Satan, what the f***? This isn't what you promised." Done by 3-5 s.
@@ -83,6 +83,19 @@ Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` 
 |---|------|------|------|--------|
 | 29 | 1 | 0-2 s | open the door from the start so we see him (viewer retention) | fixed: open at 0.1 s; he stands in the doorway talking, then strides in 1.3 s before the slam |
 | 30 | 9 | melt | the skull took over his whole body: skin sloughs off his FACE, a head-sized screaming skull (repeat of 27/28) | fixed: why the first fix failed: the head was measured from his drawing with the arms raised (the wave, new in the film), so the box spanned his arms; now measured with the arms down |
+| 31 | 1 | 0.67 | corridor reads as a white void with a carpet: make it a 3D space; Trump looks LEFT, palm out "no, thank you"; a few camera flashes from the left | to do: corridor with side walls, ceiling, sconces, runner in perspective; flashes one frame each, lumpy (house style) |
+| 32 | 2 | 2.00 | he stops for a beat, a quick breath, then visibly angry, looks at Satan and points | to do: walk ends early, breath (shoulders up/down 0.5 s), frown snaps on, then the point |
+| 33 | 2 | 4.25 | Satan forward a bit, bigger in frame; a pointing finger whenever anyone points | to do: SATAN_AT nearer the lens; find why the point hand shows no finger (MV._install_point_finger) |
+| 34 | 3 | 5.83 | Satan: red horns from his shoulders not needed (the wing tops); the shrug is wrong: shoulders and arms rise quickly and noticeably, not arms hanging in a U; wary of the U shape everywhere; folded flag strips have gaps (float) | to do: wing tips lowered behind the shoulders; shrug = shoulders up, forearms up, palms up near the hips; flag folds closed |
+| 35 | 4 | 10.67 | Trump not expressive enough: arms for emphasis, exasperation, accusation | proposal sent (palms up then jabbing point) |
+| 36 | 5 | 11.08 | the cut comes too soon (Satan speaks under the old subtitle); Satan smiles coyly as he speaks; see-through tears on his wings | to do: cut after the subtitle clears; coy smile mood; wing fill gaps closed |
+| 37 | 5/6 | 13.58 | Satan's pocket square switches sides for a beat | to do: find the frame (view snap?) |
+| 38 | 6 | 13.75 | no zoom out: hold the shot; Epstein appears in a burst of flames and light smoke | to do |
+| 39 | 7 | 15.92 | occasional flames on his body; opacity up 50%; recognisable; arms open imploringly on "why don't you come and join me?" | to do |
+| 40 | 8 | 23.75 | more variety in face and body on the second sentence | proposal sent |
+| 41 | 9 | 28 | the skull is not ghostly like him (apply the ghost opacity to it); the melt spreads over hands, shoulders and body revealing a burning skeleton; trees outside have no trunks | to do (why it felt wrong: the skull was drawn under the ghost at full strength, not through MS.ghost); skeleton reference asked |
+| 42 | 10 | 31 | "release the files": mocking and childish | proposal sent; books in the background are blobs: to do (spines with gaps and tops) |
+| 43 | 10 | 32 | the last line cuts back to the shot 2 angle; Trump jabs his finger at Satan, furious; Satan flinches back a little, raised eyebrow, sceptical | to do |
 
 Decisions made:
 - Budget cut to 9% (Sam's 10% cap): door 1, Satan float 0.5, ghost 2, skull melt 2, moves and zoom 1.5, template 2; at most one critique round each; stills sheet instead of clips where possible.
