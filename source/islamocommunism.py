@@ -439,7 +439,8 @@ def _elsayed_j(t, c, x, z):
     if t < T['rise']:
         j = moves.seated(sp)
         j['seated'] = False                        # the set draws its own chair
-        V.arm_to(j, 'L', DESK_ARM, (-0.6, 1.0, 0.7), 'fist')   # Sam's notes 4 + 4b: forward, resting on the desk top
+        V.arm_to(j, 'L', DESK_ARM, (0.6, 0.5, -0.6), 'fist')   # Sam's notes 4 + 4b: forward, resting on the desk top
+        j['lean'] = 12.0                                          # a little weight on it
         if t < T['hangup']:
             V.arm_to(j, 'R', (82.0, -140.0, 16.0), (0.6, 1.0, 0.7), 'none')
             j['face_props'] = [handset('R')]
@@ -604,7 +605,7 @@ def cam_for(t):
     return MS.S.Cam(pos, look, focal=focal)
 
 
-DESK_ARM = (-160.0, 180.0, 270.0)                    # his free wrist on the desk top through the call (neck units)
+DESK_ARM = (-70.0, 230.0, 330.0)                    # his free wrist on the desk top through the call (neck units)
 
 
 def desk_arm_item(t):
@@ -614,15 +615,17 @@ def desk_arm_item(t):
     sp = elsayed_sp(t)
 
     def draw(im, c):
-        j = elsayed_j(t, c, x, z)
+        j = dict(elsayed_j(t, c, x, z), hide_legs=('L', 'R'))   # (legs are behind the desk; they'd cover the arm)
         j2 = dict(j)
         V.arm_to(j2, 'L', (-200.0, -250.0, 0.0), 'out', 'fist')   # (raised clear, so only the desk arm differs)
-        a = Image.new('RGBA', im.size, (0, 0, 0, 0))
-        b = Image.new('RGBA', im.size, (0, 0, 0, 0))
-        MS.put(a, c, sp, x, z, MS.to_cam(c, x, z), j, t)
-        MS.put(b, c, sp, x, z, MS.to_cam(c, x, z), j2, t)
-        A, Bv = np.asarray(a), np.asarray(b)
-        m = (np.abs(A.astype(int) - Bv.astype(int)).sum(axis=2) > 24) & (A[..., 3] > 0)
+        lay = []
+        for jj, spp in ((j, sp), (j2, sp), (j, dict(sp, sleeve=(255, 0, 254)))):   # the last: the sleeve in a marker
+            q = Image.new('RGBA', im.size, (0, 0, 0, 0))                         # colour, to find it over the jacket
+            MS.put(q, c, spp, x, z, MS.to_cam(c, x, z), jj, t)
+            lay.append(np.asarray(q).astype(int))
+        A = lay[0].astype(np.uint8)
+        diff = lambda u, v: np.abs(u - v).sum(axis=2) > 24
+        m = (diff(lay[0], lay[1]) | diff(lay[0], lay[2])) & (A[..., 3] > 0)   # sleeve over the jacket too
         (_, yf), _ = c.project((x, 0.76, MS.DESK[1] - 0.455))     # the desk top's front edge: nothing below it
         m[int(max(0, yf)):] = False
         A2 = A.copy()
