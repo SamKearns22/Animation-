@@ -1,15 +1,15 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 45 (the composition sheet is sent once: apply notes, never re-send), 74 (acting list before the first animatic), 14 (pre-flight gates)
-- **Done:** White House front built and benchmarked 10/10 (`review/islamocommunism-whitehouse-refs.jpg`); composition sheet sent 4 Nov.
-- **Spent against the estimate (rule 55):** front, flag, cars, families about 1.5% (estimate 3.5); film so far about 5% of Sam's 8%.
-- **Next:** Opus, medium effort, new chat: start the film code (composition notes 1-2 applied), the acting list and the stills. Type: "Islamocommunism: start the film".
-- **Needs Sam:** the voice recordings (Voice Isolation off), due 5 Nov.
-- **Read:** this file; guides/satire.md "Start" and "Staging and acting"; rulebook rule 74.
-- **Lost / Added:** Lost: the right wing's windows sit behind the lawn flag; crosses on the spires (plain gold tips). Added: clouds, mowing stripes, a picnic blanket, a ball, headscarves on two mothers.
+- **Rules that bite next:** note 4 (this film: every indoor shot flat: level, square on, long lens), 74 (acting list, below, ticked on the check sheet), 14 (pre-flight gates)
+- **Done (4 Nov):** office redressed + new flags (notes 5-6); flat cameras (note 4; for this film only: the rule written by mistake was removed, Sam 4 Nov); film code with every beat on estimated timings; acting list; brief ticked; stills sheet sent (`review/islamocommunism-stills.jpg`).
+- **Spent against the estimate (rule 55):** about 7.5% of Sam's 8% (office redress about 1%, film code about 1.5%).
+- **Next:** Opus, medium effort, new chat: Sam's notes on the stills; when his recordings land, file them (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet, animatic. Type: "Islamocommunism: stills notes".
+- **Needs Sam:** notes on the stills; the 13 voice recordings (Voice Isolation off), due 5 Nov.
+- **Read:** this file; guides/satire.md "Before every render"; rulebook rule 74.
+- **Lost / Added:** Lost: Alex's black suit and pearl earrings (now white suit, gold earrings, note 7); the right wing's windows behind the lawn flag; crosses on the spires; the two gold chairs facing the desk. Added: outside: clouds, mowing stripes, picnic blanket, ball, headscarves; office: arched tiled windows, star valance, tiled dado, green star-and-wheat carpet, star on the desk, two posters, samovar and tea glasses, two brass lanterns, the new flags.
 - **Open rule requests:** none.
-- **For Claude:** set `source/islamocommunism_set.py` (MAP at top; `paint(t)`, `comp`, `refs`, `test`; drawn 90 px high then dropped, `SHIFT`; Hook Text two rows at y 410: finish.py `--y 410`; `KEEP_CLEAR`); comp cameras in its `COMP` (Oval Office via `midterminal_set.put`/`put_seated`; side-on shot 4 sorts people before the desk); cast `source/islamocommunism_cast.py`; door/walk-in `midterminal_moves.py`. Film code not started: copy `satire_template.py` to `source/islamocommunism.py`, BENCHMARK from the set's list.
+- **For Claude:** film `source/islamocommunism.py` (MAP at top; `T` timeline, `CAMS`, `elsayed_j`/`aoc_j` poses, `KEYS` = stills sheet: `keys OUT.jpg`); room `source/islamocommunism_office.py` (patches midterminal_set on import); set `source/islamocommunism_set.py`; cast `source/islamocommunism_cast.py`. Lines have `est` until takes exist. `check` not yet run (needs takes).
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |
@@ -37,24 +37,45 @@ Shots (about 40-45 s with the real voices):
 | 3 | Red/Green striped American flag with the stars replaced by communist hammers and sickles, Islamic crescent moons and stars. | set: yes (13 stripes; navy canton, 3 of each emblem) |
 | 4 | Flying cars streak in orderly queues in the skies above | set: yes (4 lanes, even spacing, speed streaks) |
 | 5 | children and happy families laugh and play on the lawn | set: yes (6 groups, simple loops) |
-| 6 | White heading text in the lower middle left: "USA"; 1 second later revealing beneath: "THREE YEARS INTO ISLAMIC COMMUNISM" | |
-| 7 | Cut to inside the Oval Office. Abdul sat behind the desk, eyes looking sceptically at the phone he is holding to his ear. | |
-| 8 | ABDUL: "Really? All diseases? Guess I don't need to call myself 'Doctor' any more." | |
-| 9 | Alexandria comes through the door holding two champagne flutes, mimosas. ALEX: "President El-Sayed?" | |
-| 10 | El-Sayed stands. "Good morning, Also-President Ocasio-Cortez. What do you have for me?" | |
-| 11 | Alex walks to the desk. "Non-alcoholic mimosa. I figured we deserved a slow morning after we finally solved climate change." | |
-| 12 | He takes the glass and chuckles. "Mashallah, it's a fine day to be a comrade." | |
-| 13 | They both sip in the sun-dappled silence, smiling contentedly. | |
-| 14 | ABDUL: "You know, Madam President, when we decided to combine the spiritual philosophy of Islam with the Socio-Economic doctrine of communism, I didn't expect it would work so perfectly." | |
-| 15 | Alex shrugs. "Me neither. But here we are, American dream solved." | |
-| 16 | ABDUL: "No suffering." | |
-| 17 | ALEX: "Free everything paired inexplicably with total abundance." | |
-| 18 | ABDUL: "It's crazy that nobody had suggested trying it before." | |
-| 19 | A small pause. | |
-| 20 | ABDUL: "So, what's next for our great American experiment?" | |
-| 21 | ALEX (hopefully): "Invade Europe?" | |
-| 22 | Abdul chuckles. "Invade Europe." They clink glasses. | |
-| 23 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | |
+| 6 | White heading text in the lower middle left: "USA"; 1 second later revealing beneath: "THREE YEARS INTO ISLAMIC COMMUNISM" | yes: 0.6 s / 1.6 s |
+| 7 | Cut to inside the Oval Office. Abdul sat behind the desk, eyes looking sceptically at the phone he is holding to his ear. | yes: shot 2, front on, handset at his ear, eyes to it |
+| 8 | ABDUL: "Really? All diseases? Guess I don't need to call myself 'Doctor' any more." | yes (est. timing till the take) |
+| 9 | Alexandria comes through the door holding two champagne flutes, mimosas. ALEX: "President El-Sayed?" | yes: shot 3, square on to the door, two mimosas |
+| 10 | El-Sayed stands. "Good morning, Also-President Ocasio-Cortez. What do you have for me?" | yes: he rises (1.6 s), then the line |
+| 11 | Alex walks to the desk. "Non-alcoholic mimosa. I figured we deserved a slow morning after we finally solved climate change." | yes: walks in from the right to the desk end |
+| 12 | He takes the glass and chuckles. "Mashallah, it's a fine day to be a comrade." | yes: takes it from her hand, chuckle, line |
+| 13 | They both sip in the sun-dappled silence, smiling contentedly. | yes: both sip 2.4 s, eyes half shut, smiling |
+| 14 | ABDUL: "You know, Madam President, when we decided to combine the spiritual philosophy of Islam with the Socio-Economic doctrine of communism, I didn't expect it would work so perfectly." | yes |
+| 15 | Alex shrugs. "Me neither. But here we are, American dream solved." | yes: shrug on "Me neither" |
+| 16 | ABDUL: "No suffering." | yes |
+| 17 | ALEX: "Free everything paired inexplicably with total abundance." | yes |
+| 18 | ABDUL: "It's crazy that nobody had suggested trying it before." | yes |
+| 19 | A small pause. | yes: 0.9 s, then the cut |
+| 20 | ABDUL: "So, what's next for our great American experiment?" | yes: shot 6, closer |
+| 21 | ALEX (hopefully): "Invade Europe?" | yes: brows up |
+| 22 | Abdul chuckles. "Invade Europe." They clink glasses. | yes: chuckle, line, clink |
+| 23 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | finish.py on every animatic (none yet) |
+
+## Acting (rule 74; front on at their marks, rule 38; every shot flat, note 4)
+| line | who | face | body | lands on |
+|---|---|---|---|---|
+| 1 "Really? All diseases?..." | Abdul | sceptic (one brow up), eyes to the handset; dry half-smile from "Guess" | seated, handset at his right ear; small head tilt | "All"; "Guess" |
+| (hang-up) | Abdul | | handset down to the desk, 0.45 s | after line 1 |
+| 2 "President El-Sayed?" | Alex | bright smile, eyes off left to him | through the door, two flutes held up at the waist, stops a metre in | the door opening |
+| 3 "Good morning..." | Abdul | warm smile to the door side | rises (1.6 s) then speaks; open palm out | "What do you have for me?" |
+| 4 "Non-alcoholic mimosa..." | Alex | smile, eyes on him | walks in from the right to the desk end; holds his glass out | "after we finally solved..." |
+| (row 12) | Abdul | smile | takes the glass, a small chuckle (head bob) | before line 5 |
+| 5 "Mashallah..." | Abdul | smile | glass at the waist | |
+| (row 13) | both | eyes half shut, contented, looking out | both sip, 2.4 s of silence | |
+| 6 "You know, Madam President..." | Abdul | smile, eyes on her | free hand open, palm up | "when we decided ... communism" |
+| 7 "Me neither..." | Alex | flat, then smile | shrug: shoulders up, free palm out | "Me neither" |
+| 8 "No suffering." | Abdul | calm, satisfied | still | |
+| 9 "Free everything..." | Alex | smile | free hand sweeps open | "total abundance" |
+| 10 "It's crazy..." | Abdul | smile | slow small head shake of wonder | |
+| (row 19) | both | smiles | 0.9 s hold, cut | |
+| 11 "So, what's next..." | Abdul | thinking, eyes up and away, then to her | still | "great American experiment" |
+| 12 "Invade Europe?" | Alex | hopeful, brows up | glass now in the hand nearer him | |
+| 13 "Invade Europe." | Abdul | smile | chuckle, then the clink: glasses meet over the desk corner | the clink after the line |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -73,12 +94,16 @@ Shots (about 40-45 s with the real voices):
 | 1 | 1 | all | Lawn flag over the right wing: Y. "The flag should be 180'd": turned round on its pole, both flags now fly right, starry corner top left | done 4 Nov |
 | 2 | 1 | 0-3.6 | Hook Text two rows in the sky: Y | done |
 | 3 | 1 | all | "The back flag is too big, doesn't look proportional" (the roof flag): checked against both White House photos, the real one is small atop a tall thin pole; 150x86 px to 96x55, pole thinner | done 4 Nov |
+| 4 | 2-4 | all | "Please do flat shots only, no wide 3D views": every Oval Office shot is level and square on (front on to the desk end, square on to the door), long lens; no angled or wide views. Composition shots 2-4 re-framed this way | cameras chosen 4 Nov (office sheet); film code next |
+| 5 | 2-4 | all | "Make the MidTerminal Oval Office respectfully communist and Islamic": Islamic geometry, arches, tiles, lanterns, a samovar; red stars and wheat; no holy writing, no religious figures, no real portraits. Built as its own file so MidTerminal's room is unchanged | done 4 Nov, sheet sent |
+| 6 | 2-4 | all | "And change the flag": the room's US flag is now the film's red/green flag; the President's flag a red banner with a gold crescent and star; crescent finials | done 4 Nov |
+| 7 | 2-6 | all | "Change her out to this one so she stands out next to Abdul" (photos 436824a4, 4833f72c): white suit, jacket and trousers, ivory V-neck top, gold lapel pin, small gold earrings. Checked against both photos: they also show her hair pulled back (asked: Q1) | done 4 Nov, sheet sent |
 
 Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
 Decisions made:
 - Hook Text: "MAGAs Worst Nightmare" (Sam, 4 Nov).
-- Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC black jacket, red lips, pearls (Sam's Y).
+- Clothes: El-Sayed charcoal suit, open collar, pocket square, flag pin; AOC white suit, ivory top, gold pin and earrings, red lips (Sam's note 7, 4 Nov; was black with pearls).
 - Hair (Sam, 4 Nov: "Abdul's too big, almost hat-like; Alex's wavier and thicker, a bit straighter"): his cropped close to the skull; hers a full curtain each side, waves growing to the ends.
 - Likeness check 4 Nov: El-Sayed 60% (on 107e061d; re-based onto patriots4's average), AOC 68% (on 0019c908). Aim 60%+.
 - Facial hair (Sam, 4 Nov, close-up 18d7e6e5: "a thin black moustache and a small black goatee. He is quite a handsome man"): full beard removed; thin moustache, goatee from the lower lip round the chin, faint jaw shadow; eyes opened a little. Likeness now 57% (was 60% with the full beard; the check reads moustaches poorly).
