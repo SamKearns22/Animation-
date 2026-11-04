@@ -120,6 +120,9 @@ Decisions made:
 | 13 | 5 | 28.8-31.2 | Sip tilt halved | done |
 | 14 | 5 | line 8 | "No poverty." | done |
 | 15 | all | | Brow and head moves on key words | done (BEATS) |
+| 16 | 2 | 9.9-10.4 | HELD (do at the audio render): when he puts the phone down his hand goes into the table and disappears. Plan: a desk phone base on the desk top at his right; the handset lands on it with his hand above the desk top throughout. Added: the phone base | held |
+| 17 | 6 | 'Invade Europe?' | HELD: Alex even more excited. Plan: brows higher and wider eyes, bigger smile, a lift and small bounce on "Europe" (still bright and hopeful, like a picnic idea) | held |
+| 18 | 4 | rise | HELD: his rise 50% faster. Plan: 1.6 s becomes about 1.07 s; line 3 and the cuts after it move earlier by about half a second, so the film is half a second shorter | held |
 
 ## Acting questions (rule 74, Sam 4 Nov: Y to all)
 1. Tone: totally sincere and wholesome, no wink. 2. "Doctor": dry half-smile, faintly put out. 3. "Invade Europe?": bright, hopeful, like a picnic idea. 4. "Invade Europe.": instant warm agreement, then the clink in the two-shot.
