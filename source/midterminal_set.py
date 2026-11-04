@@ -824,7 +824,7 @@ COMP = [   # the key shots (rule 11): name, camera (pos, look, focal), who's in 
     ('1  Trump comes in: "Thank you, everyone, no more questions."', ((1.4, 1.6, -0.2), (4.0, 1.35, -2.0), 1050), 'door'),
     ('2  Trump: "Satan, what the f***?"  Satan floats before the desk', ((0.0, 1.55, -1.7), (-0.05, 1.4, 2.5), 1080), 'two'),
     ('3  Zoom out: Epstein\'s ghost fades in by the desk', ((0.2, 1.6, -1.4), (0.3, 1.4, 2.6), 780), 'three'),
-    ('4  Epstein: "It\'s warm here."', ((1.0, 1.6, 0.9), (1.6, 1.6, 3.0), 1250), 'three'),
+    ('4  Epstein: "It\'s warm here."', ((-2.4, 1.7, 1.4), (-1.35, 1.55, 3.0), 1150), 'three'),   # Sam 4 Nov: he's on the left
 ]
 
 
@@ -845,12 +845,12 @@ def comp(out):
         if who == 'door':
             ppl.append((dx, dz, lambda im, c: put(im, c, dict(MC.TRUMP, look=0.9), dx, dz, to_cam(c, dx, dz))))
         else:
-            ppl.append((0.45, 2.15, lambda im, c: put(im, c, dict(MC.SATAN, look=-0.6 if who == 'two' else 0.8),
-                                                        0.45, 2.15, to_cam(c, 0.45, 2.15), lift=0.3)))
-            ppl.append((-0.7, 1.0, lambda im, c: put(im, c, dict(MC.TRUMP, look=0.8, frown=0.03), -0.7, 1.0, to_cam(c, -0.7, 1.0))))
+            ppl.append((0.0, 2.15, lambda im, c: put(im, c, dict(MC.SATAN, look=-0.6 if who == 'two' else 0.8),
+                                                        0.0, 2.15, to_cam(c, 0.0, 2.15), lift=0.3)))
+            ppl.append((0.7, 1.0, lambda im, c: put(im, c, dict(MC.TRUMP, look=0.8, frown=0.03), 0.7, 1.0, to_cam(c, 0.7, 1.0))))
         if who == 'three':
-            ppl.append((1.6, 3.0, lambda im, c: ghost(im, lambda lay: put(lay, c, dict(MC.EPSTEIN, look=-0.8), 1.6, 3.0,
-                                                                         to_cam(c, 1.6, 3.0), lift=0.25))))
+            ppl.append((-1.35, 3.0, lambda im, c: ghost(im, lambda lay: put(lay, c, dict(MC.EPSTEIN, look=-0.8), -1.35, 3.0,
+                                                                         to_cam(c, -1.35, 3.0), lift=0.25))))
         img = Image.new('RGBA', (1080, 1920), (0, 0, 0, 255))
         render(img, cm, ppl)
         tiles.append((label, img))

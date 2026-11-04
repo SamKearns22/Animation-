@@ -32,8 +32,38 @@ import midterminal_cast as MC        # noqa: E402
 import moves                         # noqa: E402
 import views as V                    # noqa: E402
 from ed import INK                   # noqa: E402
+from satire_style import install_circle_hands   # noqa: E402
+
+install_circle_hands(B)
+
+
+def _install_point_finger():
+    """Power Crime Action's 'point' hand (as patriots4.install_point_finger): the plain circle with one round-ended
+    finger out along the forearm."""
+    circle = B.gesture_hand
+    if getattr(circle, 'point_finger', False):
+        return
+
+    def gesture_hand(p, el, wr, shape, skin, extra=None, t=0.0):
+        if shape == 'point':
+            dx, dy = wr[0] - el[0], wr[1] - el[1]
+            n = math.hypot(dx, dy) or 1.0
+            ux, uy = dx / n, dy / n
+            cx, cy = wr[0] + ux * 12, wr[1] + uy * 12
+            tip = (cx + ux * 62, cy + uy * 62)
+            w = 10.5
+            p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                    (cx + uy * w, cy - ux * w)], skin, INK, 2.2)
+            p.ell(tip[0], tip[1], w, w, skin, INK, 2.2)
+        return circle(p, el, wr, shape, skin, extra, t)
+    gesture_hand.point_finger = True
+    B.gesture_hand = gesture_hand
+
+
+_install_point_finger()
 
 DOOR_A, DOOR_H = 112.0, 4.7          # the door's wall angle and half-width (degrees), as midterminal_set.door
+DOOR_W = 0.7                         # the opening (and our leaf) reaches this much further each side, to the frame's edge
 CORRIDOR = (236, 226, 204)           # the West Wing corridor seen through the door: cream walls, a red runner
 RUNNER = (150, 44, 40)
 
@@ -47,24 +77,25 @@ def _rot_out(p, hinge, ang):
     c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
     # which way is 'into the room': towards the centre (0, 0)
     nx, nz = -hx, -hz
-    sg = 1 if (dx * nz - dz * nx) < 0 else -1
+    sg = -1 if (dx * nz - dz * nx) < 0 else 1
     s *= sg
     return (hx + dx * c - dz * s, y, hz + dx * s + dz * c)
 
 
 def door_open(img, cm, t_open, part='both'):
-    """The doorway (corridor behind) and the leaf swung `t_open` (0..1 = 0..100 degrees) about its hinge (the
-    north side, angle c - h; the knob on the free edge as the set draws it)."""
-    if t_open <= 0.001:
-        return
-    c, h = DOOR_A, DOOR_H
-    if part in ('hole', 'both'):                  # the corridor: its far wall, a red runner, the ceiling's shade
-        MS.poly(img, cm, MS.band(c - h, c + h, 0.0, 2.45, 0.016, 1.0), CORRIDOR, INK, 2.0)
-        MS.poly(img, cm, MS.band(c - h * 0.6, c + h * 0.6, 0.0, 0.22, 0.017, 1.0), RUNNER, INK, 1.4)
-        MS.poly(img, cm, MS.band(c - h, c + h, 1.95, 2.45, 0.017, 1.0), MS.dk(CORRIDOR, 0.85), None, 0)
+    """The doorway (the corridor behind, filling the opening to the frame on both sides) and the leaf swung `t_open`
+    (0..1 = 0..100 degrees) INTO the room about its hinge (north side: on the left seen from inside; Sam, 4 Nov); the
+    knob on the free edge. The leaf is drawn even when shut, over the set's own door, so someone behind it stays
+    hidden until it opens (Sam, 4 Nov)."""
+    c, h = DOOR_A, DOOR_H + DOOR_W
+    if part in ('hole', 'both'):
+        if t_open > 0.001:
+            MS.poly(img, cm, MS.band(c - h, c + h, 0.0, 2.45, 0.016, 1.0), CORRIDOR, INK, 2.0)   # far wall
+            MS.poly(img, cm, MS.band(c - h, c + h, 0.0, 0.22, 0.017, 1.0), RUNNER, INK, 1.4)     # runner, side to side
+            MS.poly(img, cm, MS.band(c - h, c + h, 1.95, 2.45, 0.017, 1.0), MS.dk(CORRIDOR, 0.85), INK, 1.4)
     if part == 'hole':
         return
-    ang = 100.0 * t_open
+    ang = 100.0 * max(0.0, t_open)
     hinge = MS.wp(c - h, 0.0, 0.015)
     leaf = [_rot_out(MS.wp(a, y, 0.015), hinge, ang) for a, y in ((c - h, 0.0), (c + h, 0.0), (c + h, 2.45), (c - h, 2.45))]
     MS.poly(img, cm, leaf, (240, 238, 230), INK, 2.0)
@@ -106,18 +137,20 @@ def door_curve(t, t0, t_wide, t_slam):
 def opening_mask(img_size, cm):
     """The doorway's outline on screen (for clipping someone still behind the wall)."""
     m = Image.new('L', img_size, 0)
-    pts = [cm.project(p)[0] for p in MS.band(DOOR_A - DOOR_H, DOOR_A + DOOR_H, -0.3, 2.45, 0.016, 1.0)]
+    pts = [cm.project(p)[0] for p in MS.band(DOOR_A - DOOR_H - DOOR_W, DOOR_A + DOOR_H + DOOR_W, -0.3, 2.45, 0.016, 1.0)]
     ImageDraw.Draw(m).polygon([(x * B.SS, y * B.SS) for x, y in pts], fill=255)
     return m
 
 
 # ---------------------------------------------------------------------------------------------- walk
-WALK_TO = (-0.7, 1.0)                # where he stops, facing the desk (key shot 2)
+WALK_TO = (0.7, 1.0)                 # his mark (Sam, 4 Nov: Trump right, Satan middle, Epstein left)
+SATAN_AT = (0.0, 2.15)
+EPSTEIN_AT = (-1.35, 3.0)          # beside the desk, left
 
 
 def _path_pts():
     a = MS.wp(DOOR_A, 0.0, -0.9)     # in the corridor
-    b = MS.wp(DOOR_A, 0.0, 0.6)      # just inside
+    b = MS.wp(DOOR_A, 0.0, 1.35)     # straight in, past the open leaf (it swings in on his left)
     return [(a[0], a[2]), (b[0], b[2]), WALK_TO]
 
 
@@ -150,28 +183,54 @@ def behind_wall(x, z):
     return r > 1.0
 
 
-def trump_item(t, d, sp, facing=None, walking=True):
-    """Trump d metres along his path at time t (walking: the brisk gait; else standing). `facing` overrides. Over
-    the last 0.5 m he turns square to the lens (rule 38: front on at his mark)."""
+def point_at(j, c, x, z, target):
+    """His right arm (our left, front on) thrust out at `target` (x, y, z in metres) through camera c: the screen
+    direction to it, put into his own units, nearly straight, a finger out (Sam, 4 Nov: accusing as he walks in)."""
+    (Xs, Ys), _ = c.project((x, 1.45, z))
+    (Xt, Yt), _ = c.project(target)
+    dx, dy = Xt - Xs, Yt - Ys
+    n = math.hypot(dx, dy) or 1.0
+    sx, sy, sz = j['shL']
+    reach = (V.F.UPPER + V.F.FORE) * 0.95
+    d = (dx / n * 0.85, dy / n * 0.85 + 0.05, 0.5)
+    m = math.sqrt(sum(v * v for v in d))
+    V.arm_to(j, 'L', (sx + d[0] / m * reach, sy + d[1] / m * reach, sz + d[2] / m * reach), 'down', 'point')
+    return j
+
+
+def _copy(j):
+    return {k: (set(v) if isinstance(v, set) else dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list)
+                else v) for k, v in j.items()}
+
+
+def trump_item(t, d, sp, facing=None, walking=True, front=False, point=None):
+    """Trump d metres along his path at time t (walking: the brisk gait; else standing). `facing` overrides; `front`
+    keeps him square to the lens all the way (Sam, 4 Nov); `point`: a world point he points at. Over the last 0.5 m
+    he turns square to the lens anyway (rule 38: front on at his mark)."""
     x, z, f0 = trump_path(d)
     left = path_length() - d
-    j = moves.gait(sp, t, 'brisk') if walking and left > 0.02 else None
+    j = moves.gait(sp, t, 'brisk') if walking and left > 0.02 else V.standing(sp)
 
     def draw(im, c):
         f = f0
+        jj = _copy(j)
         if facing is not None:
             f = facing
+        elif front:
+            f = MS.to_cam(c, x, z)
         elif left < 0.5:
             k = 1 - max(0.0, left) / 0.5
             k = k * k * (3 - 2 * k)
             f = f0 + (((MS.to_cam(c, x, z) - f0 + 180) % 360) - 180) * k
+        if point is not None:
+            point_at(jj, c, x, z, point)
         if behind_wall(x, z):
             lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
-            MS.put(lay, c, sp, x, z, f, j)
+            MS.put(lay, c, sp, x, z, f, jj)
             lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(opening_mask(im.size, c)))))
             im.alpha_composite(lay)
         else:
-            MS.put(im, c, sp, x, z, f, j)
+            MS.put(im, c, sp, x, z, f, jj)
     return (x, z, draw)
 
 
@@ -182,7 +241,7 @@ def satan_float(t):
     return 0.30 + 0.035 * math.sin(2 * math.pi * t / 1.6 + 0.6) - 0.012 * beat, 0.5 + 0.13 * beat
 
 
-def satan_item(t, sp, x=0.45, z=2.15, facing=None):
+def satan_item(t, sp, x=SATAN_AT[0], z=SATAN_AT[1], facing=None):
     lift, spread = satan_float(t)
 
     def draw(im, c):
@@ -220,27 +279,53 @@ def _neck_screen(cm, sp, x, z, lift):
 
 
 def skull(size, t, seed=3):
-    """A flaming skull (flat, house style) in a square RGBA picture `size` px: a cream skull, black sockets with red
-    pin pupils, a nose hole, teeth; flames over the crown."""
+    """The flaming skull (flat, house style; Sam, 4 Nov: bigger, more grotesque, plainly screaming in terror and
+    agony) in an RGBA picture `size` px wide: a cream skull, deep sockets tilted up at the middle (anguish) with tiny
+    red pupils, a cracked crown, sunken cheeks, the jaw dropped open in a long scream, broken uneven teeth top and
+    bottom; tall flames roaring up over the crown."""
     S = int(size)
-    im = Image.new('RGBA', (S, int(S * 1.6)), (0, 0, 0, 0))
+    im = Image.new('RGBA', (S, int(S * 2.1)), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    oy = int(S * 0.6)
-    lw = max(2, int(S / 60))
-    flames(d, S / 2, oy + S * 0.3, S * 0.9, S * 0.75, t, seed, n=6, lw=lw)
-    bone, shade = (238, 230, 206), (196, 184, 156)
-    d.ellipse((S * 0.12, oy + S * 0.04, S * 0.88, oy + S * 0.74), fill=bone, outline=INK, width=lw)        # cranium
-    d.rounded_rectangle((S * 0.28, oy + S * 0.6, S * 0.72, oy + S * 0.95), S * 0.08, fill=bone, outline=INK, width=lw)
-    d.ellipse((S * 0.2, oy + S * 0.04, S * 0.8, oy + S * 0.7), fill=bone)                                  # (no seam)
-    d.polygon([(S * 0.18, oy + S * 0.5), (S * 0.3, oy + S * 0.66), (S * 0.24, oy + S * 0.56)], fill=shade)
-    for sx in (0.35, 0.65):                                                                                # sockets
-        d.ellipse((S * (sx - 0.12), oy + S * 0.36, S * (sx + 0.12), oy + S * 0.58), fill=INK)
-        d.ellipse((S * (sx - 0.025), oy + S * 0.45, S * (sx + 0.025), oy + S * 0.5), fill=(220, 40, 30))
-    d.polygon([(S * 0.5, oy + S * 0.58), (S * 0.45, oy + S * 0.68), (S * 0.55, oy + S * 0.68)], fill=INK)  # nose
-    d.line([(S * 0.33, oy + S * 0.8), (S * 0.67, oy + S * 0.8)], fill=INK, width=lw)                     # teeth
-    for i in range(6):
-        x = S * (0.33 + 0.068 * i)
-        d.line([(x, oy + S * 0.72), (x, oy + S * 0.88)], fill=INK, width=max(1, lw // 2))
+    oy = int(S * 0.75)                                    # the top of the skull; flames above it
+    lw = max(2, int(S / 45))
+    flames(d, S / 2, oy + S * 0.35, S * 1.0, S * 1.05, t, seed, n=7, lw=lw)
+    bone, shade, dark = (236, 226, 198), (184, 168, 136), (24, 14, 12)
+    rng = np.random.default_rng(seed)
+    jaw = [(S * 0.22, oy + S * 0.72), (S * 0.30, oy + S * 1.22), (S * 0.5, oy + S * 1.32), (S * 0.70, oy + S * 1.22),
+           (S * 0.78, oy + S * 0.72)]                     # the jaw, dropped (drawn first: the cranium covers its hinge)
+    d.polygon(jaw, fill=bone, outline=INK, width=lw)
+    cr = []                                               # the cranium: wide at the temples, pinched at the cheeks
+    for u in np.linspace(0, 2 * math.pi, 40):
+        up = math.sin(u) > 0
+        cr.append((S * 0.5 + S * 0.42 * math.cos(u) * (1.0 if up else 0.82),
+                   oy + S * 0.42 - S * 0.42 * math.sin(u) * (1.0 if up else 0.75)))
+    d.polygon(cr, fill=bone, outline=INK, width=lw)
+    for sgn in (-1, 1):                                   # sunken cheeks
+        sx = 0.5 + sgn * 0.25
+        d.polygon([(S * sx, oy + S * 0.56), (S * (sx - sgn * 0.08), oy + S * 0.68), (S * sx, oy + S * 0.74)], fill=shade)
+    mouth = [(S * 0.36, oy + S * 0.74), (S * 0.5, oy + S * 0.71), (S * 0.64, oy + S * 0.74), (S * 0.62, oy + S * 1.05),
+             (S * 0.5, oy + S * 1.18), (S * 0.38, oy + S * 1.05)]
+    d.polygon(mouth, fill=dark, outline=INK, width=lw)   # the scream
+    for i in range(5):                                    # ragged teeth, two missing
+        x0 = S * (0.38 + 0.048 * i)
+        if i != 3:
+            d.polygon([(x0, oy + S * 0.73), (x0 + S * 0.044, oy + S * 0.73),
+                       (x0 + S * 0.03, oy + S * (0.80 + 0.03 * rng.uniform()))], fill=bone, outline=INK)
+        if i != 1:
+            d.polygon([(x0 + S * 0.01, oy + S * 1.1), (x0 + S * 0.046, oy + S * 1.1),
+                       (x0 + S * 0.03, oy + S * (1.03 - 0.03 * rng.uniform()))], fill=bone, outline=INK)
+    for sgn in (-1, 1):                                   # sockets: big, tilted up at the middle, pin-red pupils
+        cx = S * (0.5 + sgn * 0.17)
+        sock = [(cx - sgn * S * 0.11, oy + S * 0.36), (cx + sgn * S * 0.13, oy + S * 0.44), (cx + sgn * S * 0.11, oy + S * 0.58),
+                (cx - sgn * S * 0.02, oy + S * 0.62), (cx - sgn * S * 0.13, oy + S * 0.52)]
+        d.polygon(sock, fill=dark, outline=INK, width=lw)
+        d.ellipse((cx - S * 0.022, oy + S * 0.47, cx + S * 0.022, oy + S * 0.515), fill=(230, 40, 30))
+        d.line([(cx - sgn * S * 0.13, oy + S * 0.30), (cx + sgn * S * 0.1, oy + S * 0.36)], fill=INK, width=lw)
+    d.polygon([(S * 0.5, oy + S * 0.58), (S * 0.45, oy + S * 0.68), (S * 0.5, oy + S * 0.66), (S * 0.55, oy + S * 0.68)],
+              fill=dark, outline=INK)                     # the nose hole
+    d.line([(S * 0.56, oy + S * 0.01), (S * 0.6, oy + S * 0.1), (S * 0.55, oy + S * 0.17), (S * 0.62, oy + S * 0.26)],
+           fill=INK, width=lw)                            # cracks
+    d.line([(S * 0.22, oy + S * 0.14), (S * 0.28, oy + S * 0.2), (S * 0.26, oy + S * 0.27)], fill=INK, width=lw)
     return im
 
 
@@ -273,7 +358,7 @@ def _melt(layer, box, k, seed=5):
     return Image.fromarray(a, 'RGBA')
 
 
-def epstein_item(t, sp, fade=1.0, melt=0.0, x=1.6, z=3.0, facing=None, look=-0.8):
+def epstein_item(t, sp, fade=1.0, melt=0.0, x=EPSTEIN_AT[0], z=EPSTEIN_AT[1], facing=None, look=0.8):
     """The hellfire ghost of Epstein, floating with a slow bob; below the waist his body gives way to a flame tail.
     fade 0..1 (see-through to fully there), melt 0..1 (the face runs down and the flaming skull shows through)."""
     lift = 0.25 + 0.03 * math.sin(2 * math.pi * t / 1.4)
@@ -292,9 +377,9 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=1.6, z=3.0, facing=None, look=-0.8
             ramp = np.clip((np.arange(a.shape[0]) - hip) / max(1, knee - hip), 0, 1)
             a[..., 3] = (a[..., 3] * (1 - ramp[:, None])).astype(np.uint8)
         lay = Image.fromarray(a, 'RGBA')
-        tail = Image.new('RGBA', im.size, (0, 0, 0, 0))
-        flames(ImageDraw.Draw(tail), nx, ny + 500 * s, 380 * s, -460 * s, t, 11, n=5, lw=2.4 * B.SS)  # hanging down
-        lay = Image.alpha_composite(tail, lay)
+        over = Image.new('RGBA', im.size, (0, 0, 0, 0))     # drawn flat over the ghost, not tinted (house style)
+        # the tail: flames roaring UP from below the knees to his waist (Sam, 4 Nov), where his legs fade away
+        flames(ImageDraw.Draw(over), nx, ny + 790 * s, 430 * s, 600 * s, t, 11, n=6, lw=2.4 * B.SS)
         if melt > 0:
             al = np.asarray(lay.getchannel('A'))
             rows = np.where(al[:int(ny)].max(axis=1) > 0)[0] if ny > 0 else []
@@ -302,13 +387,15 @@ def epstein_item(t, sp, fade=1.0, melt=0.0, x=1.6, z=3.0, facing=None, look=-0.8
             cols = np.where(al[int(top):int(ny)].max(axis=0) > 0)[0]
             hx0, hx1 = (cols[0], cols[-1]) if len(cols) else (nx - 80 * s, nx + 80 * s)
             hw = hx1 - hx0
-            sk = skull(hw * 0.95, t)
-            sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, melt * 1.6))))
-            skl = Image.new('RGBA', im.size, (0, 0, 0, 0))
-            skl.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(ny - sk.height + hw * 0.12)))
-            head = _melt(lay, (hx0 - 4, top, hx1 + 4, ny + 40 * s), melt)
-            lay = Image.alpha_composite(skl, head) if melt < 0.6 else Image.alpha_composite(head, skl)
+            sk = skull(hw * (0.9 + 0.45 * min(1.0, melt * 1.4)), t)     # grows as it bursts through
+            sk.putalpha(sk.getchannel('A').point(lambda v: int(v * min(1.0, max(0.0, melt - 0.15) * 2.2))))
+            head_y = (top + ny) / 2
+            over.alpha_composite(sk, (int((hx0 + hx1) / 2 - sk.width / 2), int(head_y - sk.width * 1.25)))
+            lay = _melt(lay, (hx0 - 4, top, hx1 + 4, ny + 40 * s), melt)
         MS.ghost(im, lambda L: L.alpha_composite(lay), alpha=0.72 * fade)
+        if fade < 1:
+            over.putalpha(over.getchannel('A').point(lambda v: int(v * fade)))
+        im.alpha_composite(over)
     return (x, z, draw)
 
 
@@ -324,7 +411,12 @@ def frame(t, cam_name, door_t=None, walk_d=None, ep_fade=0.0, ep_melt=0.0):
     if door_t is not None:
         ppl += door_items(door_t)
     if walk_d is not None:
-        ppl.append(trump_item(t, walk_d, dict(MC.TRUMP, look=0.9 if walk_d < 1.2 else 0.0)))
+        if cam_name == 'door':
+            ppl.append(trump_item(t, walk_d, dict(MC.TRUMP, look=0.9 if walk_d < 1.2 else 0.0)))
+        else:
+            sx, sz = SATAN_AT
+            ppl.append(trump_item(t, walk_d, dict(MC.TRUMP, look=-0.8, frown=0.03), front=True,
+                                  point=(sx, 1.45 + satan_float(t)[0], sz)))
     if cam_name != 'door':
         ppl.append(satan_item(t, MC.SATAN))
     if ep_fade > 0:
@@ -338,7 +430,7 @@ def test_timeline(t):
     """The test reel: the door and walk-in (0-2.4 s), Satan floating (2.4-4.4), the ghost fading in and melting
     (4.4-8.4)."""
     if t < 2.4:
-        return frame(t, 'door', door_t=door_curve(t, 0.0, 0.35, 1.6), walk_d=1.35 * t)
+        return frame(t, "door", door_t=door_curve(t, 0.15, 0.5, 1.9), walk_d=1.35 * t)
     if t < 4.4:
         return frame(t, 'two', walk_d=min(path_length(), 1.35 * t))
     fade = min(1.0, (t - 4.4) / 0.8) if t < 7.6 else max(0.0, 1 - (t - 7.6) / 0.8)
