@@ -20,6 +20,31 @@
 | 4 | Jeffrey Epstein (3 refs), dark polo (Sam's pick) | yes |
 | 5 | Donald Trump (3 refs) | likeness 32%: needs photos |
 
+| 6 | The joke: Trump has a go at Satan for not delivering the midterm results he wanted; the hellfire ghost of Epstein intervenes | |
+| 7 | Trump comes into the Oval Office from the corridor through the door; pupils look right at someone we don't see: "Thank you, everyone, no more questions." | |
+| 8 | Eyes face forward as he crosses the threshold; the door shuts behind him | |
+| 9 | Angry face as he walks opposite the desk: "Satan, what the f***? This isn't what you promised." (1 bleep) | |
+| 10 | Satan floats before the desk, a small shrug: "I said don't invade Iran, you invade Iran." | |
+| 11 | Trump, accusatory, angrier, pointing: "Yeah, because Bibi told me to. I thought he was one of yours!?" | |
+| 12 | Satan, chuckling: "Oh, no. We've got nothing on him." | |
+| 13 | Zoom out. The hell ghost of Epstein fades in, floating by the side of the desk. Satan's pupils look at him | |
+| 14 | Epstein: "Don't worry, Donald. Why don't you come and join me? It's warm here. Nobody ever gouges out your eyes on an hourly basis." | |
+| 15 | Trump: "Fuck off, Jeffrey. I know it's you that keeps putting algae in the reflecting pool." (bleep: Q4) | |
+| 16 | Epstein waves his arms like a silly ghost, gently fades away, face melting into a flaming skull: "Releeeease the filessssss" | |
+| 17 | Trump, childish mocking voice: "release the fiilleees." Then: "If Satan had done his job, maybe I wouldn't have to." | |
+| 18 | Characters 2D first: front, side, back; three-quarter only if the script calls for it (Sam, 4 Nov) | yes (cast sheet) |
+
+## Plan extras: ambition estimate (rule 55)
+| build or risky move | why | estimate (% of a week) | spent |
+|---|---|---|---|
+| Trump's entrance: a door that swings open and shuts, him walking through it | the set's doors are painted flat; one needs to open (one door, its leaf only) | 2 | |
+| Satan floating: feet off the floor, a slow bob, the wings beating gently | small: a lift and the wings' spread over time | 1 | |
+| Epstein's hellfire ghost: see-through orange-red, legs into a flame tail, fade in and out, silly ghost arms | new look on the existing Epstein; fire from flying_whales_fx | 3 | |
+| The face melting into a flaming skull | new: a skull drawing, the face sliding down in drips, flames from fire_sprite | 3 | |
+| Trump's walk to the desk, pointing; Satan's shrug and chuckle; the zoom out | reuse: moves walk, perform gestures, a camera move | 2 | |
+| Shots, voices, subtitles, Hook Text, sign-off | template | 4 | |
+| total | | 15 | |
+
 ## References as checklists
 | reference | what it shows | ours matches? |
 |---|------|------|
