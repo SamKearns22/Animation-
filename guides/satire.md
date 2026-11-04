@@ -246,6 +246,18 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - Sound effects are placed by when they really start (`filmkit.place`), not by the start of their file.
 - Anyone in a close-up must be seen in a wide shot.
 
+## The acting list (rule 74: before the first animatic)
+Every line gets one row in the film's notes, in this layout (the Islamocommunism film's list is the example):
+
+| line | who | face | body | lands on |
+|---|---|---|---|---|
+| 1 "the line's first words..." | name | the expression (eyes, brows, mouth) | posture, hands, head | the word the move hits |
+
+Columns: **face** is the expression and where the eyes go; **body** is posture, hands and head; **lands on** is the
+word or moment the move happens on, so it can be checked against the take. Where the script's emotion leaves a move
+open, the row says "ask Sam" and the question goes in the brief questions before the first animatic. The list is shown
+to Sam with the brief questions, and ticked on the check sheet (rule 74).
+
 ## Subtitles (Sam, 16 Oct)
 - **Short chunks of two to five words**, each on its first word, so the text changes about once a second (Sam,
   17 Oct: holds second-by-second attention).
