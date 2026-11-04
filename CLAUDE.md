@@ -98,4 +98,4 @@ I don't know how to code. Please:
   these films; never ask who voices them.**
 - **TikTok:** follow `guides/tiktok-design.md`. No title by default; Hook Text in TikTok's white-box caption style.
   **Every video ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): finish with
-  `python3 source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 ["Hook Text"]` from the clean render in `source/data/`.
+  `python3 source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no `HOOK`) from the clean render in `source/data/`.

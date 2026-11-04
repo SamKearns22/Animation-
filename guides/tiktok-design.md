@@ -105,7 +105,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).
 - The carton's three cranberries sit wholly in the white space between "Joos" and the red band along the bottom (Sam, 16 Oct:
   they used to overlap the band); fixed in `signoff.py`, so every sign-off has it.
-- Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]`.
+- Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 --film NAME` (a satire film: its
+  `HOOK` and subtitles), or `python3 source/finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"]`.
 - Watch its cost: compare "watched full video" and followers per 1,000 views over the next 4-5 posts with the
   posts before it.
   Baseline before the sign-off (Bingo Bingo, 3.5 h after posting): 3,476 views, average watch 19.8 s (39%), 22% to

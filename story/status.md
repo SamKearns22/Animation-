@@ -10,7 +10,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 
 ## Films
 - **Islamocommunism (4 Nov): White House built; composition sheet sent** (`review/islamocommunism-composition.jpg`). Next: Sam's notes on it, then the film code (Opus medium, new chat). Budget 8% of a week; about 5% spent. Notes: `notes/islamocommunism.md`.
-- **MidTerminal (4 Nov): done.** Final `animations/midterminal-vertical.mp4` (57.4 s, 10.5 MB) and story post `animations/midterminal-story.png`. Cost 11% of a week (Sam: the old norm was 15-25%; always aim lower). Rules 70-75 and P8-P10 written (Sam's yes). To build (Opus, before the next satire film): subtitles burned in by finish.py (rule 70), finish.py reads the film's HOOK (rule 75). Notes: `notes/midterminal.md`.
+- **MidTerminal (4 Nov): done.** Final `animations/midterminal-vertical.mp4` (57.4 s, 10.5 MB) and story post `animations/midterminal-story.png`. Cost 11% of a week (Sam: the old norm was 15-25%; always aim lower). Rules 70-75 and P8-P10 written (Sam's yes). Built (4 Nov): finish.py burns in the subtitles (rule 70) and reads the film's HOOK, checking it first (rule 75): `finish.py CLEAN OUT --film NAME`. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
   Open: his two rule requests (Hook Text and sign-off in every animatic; no three-quarter views): propose wording, wait for his yes. Notes: `notes/terfwarts.md`.
 

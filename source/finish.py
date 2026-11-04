@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
 """The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled final
-render, add the Hook Text (if the film has one) and the CranbriJoos sign-off at the end.
+render, burn in the subtitles (rule 70), add the Hook Text (if the film has one) and the CranbriJoos sign-off.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre] [--signoff-speed 1.0]
+    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME [--faults-named]          a satire film (the usual way)
+    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
+    either way: [--signoff-speed 1.0]
 
-Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text can change without a re-render.
+--film NAME (rules 70 and 75) reads source/NAME.py:
+  * its HOOK = (text, {'y':, 'x':, 'w':, 'until':, 'centre':}): the Hook Text and where it sits, so the position is
+    never typed by hand; the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless
+    --faults-named (Sam has been told);
+  * its subtitles, when the film sets SUBTITLES_AT_FINISH = True (the template does): caption_at(t) is read on every
+    frame and drawn as the film draws them (draw_subtitle(img, text) if the film has one, else the series' caption),
+    so a subtitle wording or timing note costs seconds, not a render. The film's whole renders then leave them out.
+  Hook Text words or flags typed on the command line override HOOK (and say so).
+
+Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text and subtitles can change without a re-render.
+A --small clean render (540 x 960) works too: the subtitles are drawn at full size and scaled to fit.
 """
+import importlib
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -15,28 +29,167 @@ import imageio_ffmpeg
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FF = imageio_ffmpeg.get_ffmpeg_exe()
+HOOK_FLAGS = ('--y', '--x', '--w', '--until')
 
 
 def has_sound(path):
     return 'Audio:' in subprocess.run([FF, '-i', path], capture_output=True, text=True).stderr
 
 
+def video_info(path):
+    """(width, height, fps) of a video."""
+    err = subprocess.run([FF, '-i', path], capture_output=True, text=True).stderr
+    line = next(ln for ln in err.splitlines() if 'Video:' in ln)
+    w, h = map(int, re.search(r', (\d{2,5})x(\d{2,5})', line).groups())
+    fps = float(re.search(r'([\d.]+) fps', line).group(1))
+    return w, h, fps
+
+
+def load_film(name):
+    sys.path.insert(0, HERE)
+    print(f'reading the film ({name}.py) ...', flush=True)
+    return importlib.import_module(name)
+
+
+def film_hook(film):
+    """The film's HOOK as finish.py's own arguments: (text, [flags])."""
+    if not hasattr(film, 'HOOK'):
+        return '', []
+    text, opts = film.HOOK
+    flags = []
+    for k in ('y', 'x', 'w', 'until'):
+        if opts.get(k) is not None:
+            flags += [f'--{k}', str(opts[k])]
+    if opts.get('centre'):
+        flags.append('--centre')
+    return text, flags
+
+
+def subtitle_list(film, n, fps):
+    """[(first frame, last frame + 1, text)] from the film's caption_at, frame by frame."""
+    end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', n / fps))
+    out = []
+    for i in range(n):
+        t = i / fps
+        c = film.caption_at(t) if t < end else None
+        if out and out[-1][2] == c and out[-1][1] == i:
+            out[-1][1] = i + 1
+        elif c:
+            out.append([i, i + 1, c])
+    return out
+
+
+def burn_subtitles(film, src, dst):
+    """Every frame through Python: the film's subtitle drawn on top, exactly as its render would have."""
+    import numpy as np
+    from PIL import Image
+    w, h, fps = video_info(src)
+    n = int(round(_duration(src) * fps))
+    subs = subtitle_list(film, n, fps)
+    print(f'subtitles: {len(subs)} burned in (proofread):', flush=True)
+    for a, b, c in subs:
+        print(f'  {a / fps:6.2f}-{b / fps:6.2f} s  {c}')
+    B = sys.modules.get('burnham')
+    draw = getattr(film, 'draw_subtitle', None)
+    if draw is None:
+        import peepee as PP
+        draw = PP.caption
+    layers = {}
+
+    def layer(c):
+        if c not in layers:
+            old = B.SS if B else None
+            if B:
+                B.SS = 1
+            lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+            draw(lay, c)
+            if B:
+                B.SS = old
+            if (w, h) != (1080, 1920):
+                lay = lay.resize((w, h), Image.LANCZOS)
+            layers[c] = lay
+        return layers[c]
+
+    at = {}
+    for a, b, c in subs:
+        for i in range(a, b):
+            at[i] = c
+    dec = subprocess.Popen([FF, '-loglevel', 'error', '-i', src, '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
+                           stdout=subprocess.PIPE)
+    enc = subprocess.Popen([FF, '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{w}x{h}',
+                            '-r', f'{fps:g}', '-i', '-', '-i', src, '-map', '0:v', '-map', '1:a?', '-c:v', 'libx264',
+                            '-crf', '18', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'copy',
+                            '-movflags', '+faststart', dst], stdin=subprocess.PIPE)
+    size, i = w * h * 3, 0
+    while True:
+        raw = dec.stdout.read(size)
+        if len(raw) < size:
+            break
+        if i in at:
+            im = Image.frombuffer('RGB', (w, h), raw, 'raw', 'RGB', 0, 1).convert('RGBA')
+            im.alpha_composite(layer(at[i]))
+            raw = np.asarray(im.convert('RGB')).tobytes()
+        enc.stdin.write(raw)
+        i += 1
+    enc.stdin.close()
+    dec.wait()
+    if enc.wait() or dec.returncode:
+        sys.exit('finish: burning the subtitles failed')
+
+
+def _duration(path):
+    err = subprocess.run([FF, '-i', path], capture_output=True, text=True).stderr
+    hh, mm, ss = err.split('Duration: ')[1].split(',')[0].split(':')
+    return int(hh) * 3600 + int(mm) * 60 + float(ss)
+
+
+def take(rest, flag, n=1):
+    """Remove `flag` (and its n values) from rest; return the values (or None if absent)."""
+    if flag not in rest:
+        return None
+    i = rest.index(flag)
+    vals = rest[i + 1:i + 1 + n]
+    del rest[i:i + 1 + n]
+    return vals
+
+
 def main():
     src, dst = sys.argv[1], sys.argv[2]
     rest, extra = sys.argv[3:], []
-    for flag in ('--y', '--x', '--w', '--until'):                # passed on to hook_text.py (e.g. a lower line, clear of a face)
-        if flag in rest:
-            i = rest.index(flag)
-            extra += [flag, rest[i + 1]]
-            rest = rest[:i] + rest[i + 2:]
-    if '--signoff-speed' in rest:                 # the default is 1.25 (1.6 s, Sam's rule, 2 Nov); 1.0 = the old 2 s
-        i = rest.index('--signoff-speed')
-        os.environ['SIGNOFF_SPEED'] = rest[i + 1]
-        rest = rest[:i] + rest[i + 2:]
-    if '--centre' in rest:
-        rest.remove('--centre')
+    for flag in HOOK_FLAGS:                       # passed on to hook_text.py (e.g. a lower line, clear of a face)
+        v = take(rest, flag)
+        if v:
+            extra += [flag, v[0]]
+    v = take(rest, '--signoff-speed')             # the default is 1.25 (1.6 s, Sam's rule, 2 Nov); 1.0 = the old 2 s
+    if v:
+        os.environ['SIGNOFF_SPEED'] = v[0]
+    if take(rest, '--centre', 0) is not None:
         extra.append('--centre')
+    named = take(rest, '--faults-named', 0) is not None
+    name = take(rest, '--film')
+    film = load_film(name[0]) if name else None
     hook = ' '.join(rest)
+    subs = False
+    if film is not None:
+        ftext, fflags = film_hook(film)
+        if hook and hook != ftext:
+            print(f'Hook Text from the command line ("{hook}"), not the film\'s HOOK ("{ftext}")')
+        if extra and extra != fflags:
+            print(f'Hook Text position from the command line {extra}, not the film\'s HOOK {fflags}')
+        hook, extra = hook or ftext, extra or fflags
+        if hook:                                   # rule 75: the Hook Text check on every animatic and final
+            import hookcheck
+            faults = hookcheck.faults(film) if (hook, extra) == (ftext, fflags) else []
+            for f in faults:
+                print('HOOK TEXT FAULT: ' + f)
+            if faults and not named:
+                sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or add --faults-named once '
+                         'Sam has been told')
+            if not faults:
+                print('Hook Text check: clear of everything listed')
+        subs = getattr(film, 'SUBTITLES_AT_FINISH', False)
+        if not subs:
+            print('subtitles: in the picture already (the film has no SUBTITLES_AT_FINISH)')
     with tempfile.TemporaryDirectory() as tmp:
         step = src
         if not has_sound(step):                    # a silent film gets a silent track, so the sign-off's slurp can join on
@@ -44,6 +197,10 @@ def main():
             subprocess.run([FF, '-y', '-loglevel', 'error', '-i', step, '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=mono',
                             '-shortest', '-c:v', 'copy', '-c:a', 'aac', quiet], check=True)
             step = quiet
+        if subs:                                   # rule 70: subtitles burned in here, never in the picture render
+            subbed = os.path.join(tmp, 'subbed.mp4')
+            burn_subtitles(film, step, subbed)
+            step = subbed
         if hook:
             hooked = os.path.join(tmp, 'hooked.mp4')
             subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)

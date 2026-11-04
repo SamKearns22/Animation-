@@ -80,7 +80,9 @@ DUR = 5.6
 THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)),
                        (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('Hook Text here', {'y': 880})               # exactly as finish.py will be given it (--y, --x, --until)
+HOOK = ('Hook Text here', {'y': 880})               # finish.py --film NAME reads it (rule 75): y, x, w, until, centre
+SUBTITLES_AT_FINISH = True                          # rule 70: finish.py --film NAME burns the subtitles in; whole renders
+SUBS_IN_PICTURE = True                              # leave them out (stills and --span clips keep them)
 KEEP_CLEAR = []                                     # [(name, box_at(t) -> (x0, y0, x1, y1) or None)]: signs, readouts
 PROP_SIZES = []                                     # [(name, sizes.SIZES kind, w, h, px_per_m or None or 0)]
 OUTFIT = {}                                         # {who: {'skirt top': y, 'jacket hem': y, ...}} person units
@@ -214,7 +216,7 @@ def caption_at(t):
 
 def overlay(img, t):
     if t < BLACK_AT:
-        c = caption_at(t)
+        c = caption_at(t) if SUBS_IN_PICTURE else None
         if c:
             PP.caption(img, c)
         if t < 2.0:
@@ -396,12 +398,16 @@ def main():
         print('\n'.join(['AUDIT: ' + x for x in f]) or 'audit: clean')
     elif a[0] == 'final':
         small = '--small' in a
+        global SUBS_IN_PICTURE
+        SUBS_IN_PICTURE = not SUBTITLES_AT_FINISH or '--span' in a   # rule 70: a whole render goes on to finish.py
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
                  stamp=False if '--nostamp' in a else None)   # --nostamp: a clip to splice into a final (rule 47)
+        if not SUBS_IN_PICTURE:
+            print(f'no subtitles in this render: finish it with  python3 source/finish.py {a[1]} OUT.mp4 --film {os.path.splitext(os.path.basename(__file__))[0]}')
 
 
 F.guard(B)   # every arm drawn is measured against the rig; a wrong one stops the render
