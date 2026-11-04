@@ -1,15 +1,14 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** note 4 (this film: every indoor shot flat: level, square on, long lens), 74 (acting list, below, ticked on the check sheet), 14 (pre-flight gates)
-- **Done (4 Nov):** office redressed + new flags (notes 5-6); flat cameras (note 4; for this film only: the rule written by mistake was removed, Sam 4 Nov); film code with every beat on estimated timings; acting list; brief ticked; stills sheet sent (`review/islamocommunism-stills.jpg`).
-- **Spent against the estimate (rule 55):** about 7.5% of Sam's 8% (office redress about 1%, film code about 1.5%).
-- **Next:** Opus, medium effort, new chat: Sam's notes on the stills; when his recordings land, file them (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet, animatic. Type: "Islamocommunism: stills notes".
-- **Needs Sam:** notes on the stills; the 13 voice recordings (Voice Isolation off), due 5 Nov.
-- **Read:** this file; guides/satire.md "Before every render"; rulebook rule 74.
-- **Lost / Added:** Lost: Alex's black suit and pearl earrings (now white suit, gold earrings, note 7); the right wing's windows behind the lawn flag; crosses on the spires; the two gold chairs facing the desk. Added: outside: clouds, mowing stripes, picnic blanket, ball, headscarves; office: arched tiled windows, star valance, tiled dado, green star-and-wheat carpet, star on the desk, two posters, samovar and tea glasses, two brass lanterns, the new flags.
-- **Open rule requests:** none.
-- **For Claude:** film `source/islamocommunism.py` (MAP at top; `T` timeline, `CAMS`, `elsayed_j`/`aoc_j` poses, `KEYS` = stills sheet: `keys OUT.jpg`); room `source/islamocommunism_office.py` (patches midterminal_set on import); set `source/islamocommunism_set.py`; cast `source/islamocommunism_cast.py`. Lines have `est` until takes exist. `check` not yet run (needs takes).
+- **Rules that bite next:** 74 (acting list; Sam's 4 answers below), 14 (pre-flight gates), 10 (faults named before a render)
+- **Done (4 Nov):** varied cuts (close-ups, her waist up, both waist up; Sam's stills note); acting questions answered (all Y); clink fixed (glasses meet in front); rough silent animatic sent (`review/islamocommunism-animatic.mp4`, 62 s, 1.7 MB, 71 s render).
+- **Next:** Opus, medium effort, new chat: file Sam's 13 recordings, pre-flight, check sheet (with the Hook Text frame), animatic. Type: "Islamocommunism: recordings in".
+- **Needs Sam:** notes on the rough animatic; the 13 voice recordings (Voice Isolation off), due 5 Nov.
+- **Read:** this file; guides/satire.md "Before every render" and "The acting list".
+- **Open rule requests:** Sam's ask (4 Nov): the acting-list guide should plan each line's shot first time, use the quality tools and ask the questions that carry the screenplay's intent. Proposed wording not yet given a yes.
+- **Faults named to Sam (rough animatic):** silent bodies hold still 2.5 s in 6 places (no takes yet); 3 subtitles timed by estimate; touch/benchmark paperwork; the long wide shot (walk-in to sip) and the first close-up are over 8 s (chosen); the clink still flags "turned" though the frames show both front on (check it at the check sheet); his phone hand hidden (5-10 s).
+- **For Claude:** cuts are `cut_of(t)` (camera, cast), staging `shot_of(t)` = name before `_`; CAMS has `_ab/_ao/_aom/_med`; `KEEP_CLEAR` skips the hook's own sky box. Render needs `--faults-named` while the faults above stand.
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |
