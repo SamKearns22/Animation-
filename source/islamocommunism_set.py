@@ -617,8 +617,8 @@ def paint(t, img=None):
     spire(img, 780, 'green')
     apex = building(img)
     side_trees(img)
-    pole(img, apex[0], 640, apex[1] + 4, 4)                    # the roof flag above the entrance
-    flag(img, apex[0], 646, 150, 86, t)
+    pole(img, apex[0], 630, apex[1] + 4, 3)                    # the roof flag above the entrance: small at the top of
+    flag(img, apex[0], 635, 96, 55, t)                          # a tall pole, as on Sam's photos (note 3)
     hedges(img)
     lawn(img)
     flower_ring(img)

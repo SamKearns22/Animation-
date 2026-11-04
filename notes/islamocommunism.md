@@ -72,6 +72,7 @@ Shots (about 40-45 s with the real voices):
 |---|------|------|------|--------|
 | 1 | 1 | all | Lawn flag over the right wing: Y. "The flag should be 180'd": turned round on its pole, both flags now fly right, starry corner top left | done 4 Nov |
 | 2 | 1 | 0-3.6 | Hook Text two rows in the sky: Y | done |
+| 3 | 1 | all | "The back flag is too big, doesn't look proportional" (the roof flag): checked against both White House photos, the real one is small atop a tall thin pole; 150x86 px to 96x55, pole thinner | done 4 Nov |
 
 Composition sheet sent: 4 Nov, review/islamocommunism-composition.jpg (4 key shots: outside with Hook Text and heading; Oval Office wide, Abdul seated, Alex at the door; across the desk; side-on two-shot for the clink)
 
