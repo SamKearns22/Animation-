@@ -73,7 +73,11 @@ I don't know how to code. Please:
 - **Read little:** one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
   size for faces, Hook Text and frames Sam names), never an unchanged picture again; a film's code starts with a short
   map (`MAP` in its first lines) and only the lines a note touches are read; `python3 source/codemap.py
-  FILE` and only the lines needed; only the guide sections the handover names.
+  FILE` and only the lines needed; only the guide sections the handover names. Long check printouts are filtered
+  so only the faults are read.
+- **Fewer rounds, not cheaper rounds:** before every animatic, the moves are checked against the film's acting list
+  (rulebook 74) on the check sheet; a slip caught on a sheet costs a fraction of a re-render.
+- **One wait per render:** wait once for a render or long process to finish; never check on it repeatedly.
 - **Push notifications** whenever a render or long process finishes, fails or needs my decision, and at every stage
   end. Say how long each render will take and how long it took.
 

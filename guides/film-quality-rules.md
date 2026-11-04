@@ -33,6 +33,7 @@ the end with their checks.
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
 | 44 | A usage budget per film; ask Sam for the week's figure only after a building stage, after the animatic and at the final; log it in the notes; over budget is trimmed before the next stage. | by hand (handover) |
 | 54 | Build only what the camera shows: before splitting a model into parts, decide how its ending looks and which parts the camera sees break; build parts only there. | by hand (the plan) |
+| 74 | Before the first animatic, every line gets an acting plan in the film's notes (face, body, the word the move lands on), shown to Sam with the brief questions; where the script's emotion leaves the move open, ask him. | by hand (the notes' acting list, ticked on the check sheet) |
 | 55 | Every new build has its own cost in the estimate; each handover compares spent with estimated and names any item running over. | by hand (handover) |
 
 ## Building
@@ -85,6 +86,7 @@ the end with their checks.
 | 60 | The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
 | 62 | Subtitles are a few words at a time, each coming up on the syllable it starts with in Sam's take, and made readable when cut: on screen at least 0.8 s, at most 220 words a minute, two rows at most. | `subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable` |
 | 66 | A render that is refused, stopped or fails leaves no file: the old output is deleted before anything else, so an old render can never be taken for the new one. | `film_engine.render`; `kittests.py render_leaves_no_old_file` |
+| 75 | The Hook Text position comes from the film's brief (`HOOK`) into `finish.py`, and the Hook Text check (rule 10) runs on every animatic and final. | `hookcheck.py`; by hand until `finish.py` reads the film's `HOOK` (to build, Opus) |
 | 70 | Subtitles are burned in at the finish step (`finish.py`, with the Hook Text and sign-off), never in the picture render, so a note on subtitle wording, timing or Hook Text position costs seconds, not a render. | by hand until `finish.py` takes the subtitle list (to build, Opus) |
 | 71 | A subtitle's wording change never moves its timing: timing always comes from the script as spoken; the changed wording is swapped in afterwards. Each subtitle starts within 0.3 s of its first word in the take. | by hand (the check's subtitle printout against the take) until pre-flight checks it |
 | 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
@@ -127,6 +129,9 @@ the end with their checks.
 | M4 | One line per note; losses and additions on their own line (Messages) | by hand |
 | M5 | The self-review is one line (Messages) | by hand |
 | M6 | The handover pasted into the chat is 3 lines (Messages) | by hand |
+| P8 | Fewer rounds: moves checked against the acting list before every animatic (Models and chats) | by hand (check sheet) |
+| P9 | Long check printouts filtered to the faults (Models and chats) | by hand |
+| P10 | One wait per render, never repeated checks (Models and chats) | by hand |
 | M7 | Questions numbered, answered by number or Y/N, my pick first (Messages) | by hand |
 
 The old register gave S1 to two rules; riding is now S10. The old register and the old long rule texts are in
