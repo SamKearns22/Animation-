@@ -272,7 +272,7 @@ def press_palm(j, t):
     sx, sy, sz = j['shL']
     up = dict(j)
     up['hand'] = dict(j.get('hand', {}))
-    V.arm_to(up, 'L', (sx - 40, sy - 130, sz + 230), 'down', 'palm')     # up by his face, out to the press
+    V.arm_to(up, 'L', (sx - 95, sy - 175, sz + 110), 'down', 'palm')     # up by his face, forearm up (never at the lens)
     return moves.mix_poses(j, up, k)
 
 
@@ -357,8 +357,7 @@ def trump_j(t):
         V.arm_to(a, 'R', (230.0, -10.0, 20.0), 'down', 'palm')
         V.arm_to(b, 'L', (-230.0, -10.0, 20.0), 'down', 'palm')
         V.arm_to(b, 'R', (260.0, 40.0, 20.0), 'down', 'palm')
-        j = moves.mix_poses(V.standing(sp), moves.mix_poses(a, b, _ease(u)),
-                            _ease(_ramp(t, T['cut10'], L[10]['start'] + 0.1)))
+        j = moves.mix_poses(a, b, _ease(u))      # already waving on the cut (a blend from standing folded his elbow)
         j['tilt'] = 7 * math.sin(2 * math.pi * 2.4 * (t - L[10]['start']))     # head waggling
         return j
     return None
@@ -649,7 +648,9 @@ def audits():
                 if ts:
                     actors[f'{who} [{shot} {a:.1f}]'] = (ts, alone(who))
     filmkit.EYES.clear()
-    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=())
+    faults = filmkit.silhouette_audit(actors, fps=FPS, still_ok=(),
+                                      allow=[(k, t0, t1, why) for n, t0, t1, why in ALLOWED_POPS for k in actors
+                                             if k.startswith(n + ' [')])
     faults += moves.audit()
     return faults
 
