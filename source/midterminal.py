@@ -177,6 +177,7 @@ THREE_QUARTER_OK = [('trump', 'trump', 'drawn turned square to the lens (MS.to_c
 PORTAL_OK = [('east door', None, T['open'] + 0.1, 'shut until it opens, then the corridor (note 22)')]
 ALLOWED_CONTACTS = []
 ALLOWED_POPS = [('epstein', T['ghost'], T['ghost'] + 0.8, 'the ghost fades in'),
+                ('epstein', T['melt'], T['gone'], 'the melt: he runs down in drips to a skeleton (note 41)'),
                 ('epstein', T['gone'] - 0.9, T['gone'], 'the ghost fades away')]
 SET_EXCLUDE = []
 TOUCHES, FREE_MOVES, SOUND_SOURCES = [], [], {}
@@ -352,10 +353,10 @@ def trump_j(t):
     if s == 'trump' and T['cut10'] <= t < T['cut11']:
         u = 0.5 + 0.5 * math.sin(2 * math.pi * (t - L[10]['start']) / 0.42)
         a, b = V.standing(sp), V.standing(sp)   # Epstein's silly-ghost wave, smaller and floppier (wrists low)
-        V.arm_to(a, 'L', (-250.0, 40.0, 70.0), 'out', 'palm')
-        V.arm_to(a, 'R', (190.0, -10.0, 70.0), 'out', 'palm')
-        V.arm_to(b, 'L', (-190.0, -10.0, 70.0), 'out', 'palm')
-        V.arm_to(b, 'R', (250.0, 40.0, 70.0), 'out', 'palm')
+        V.arm_to(a, 'L', (-260.0, 40.0, 20.0), 'down', 'palm')   # out to the sides, never at the lens (rule 41)
+        V.arm_to(a, 'R', (230.0, -10.0, 20.0), 'down', 'palm')
+        V.arm_to(b, 'L', (-230.0, -10.0, 20.0), 'down', 'palm')
+        V.arm_to(b, 'R', (260.0, 40.0, 20.0), 'down', 'palm')
         j = moves.mix_poses(V.standing(sp), moves.mix_poses(a, b, _ease(u)),
                             _ease(_ramp(t, T['cut10'], L[10]['start'] + 0.1)))
         j['tilt'] = 7 * math.sin(2 * math.pi * 2.4 * (t - L[10]['start']))     # head waggling
@@ -643,7 +644,7 @@ def audits():
     for who in WHO:
         for shot, a, b in SHOTS:
             if who in SHOT_CAST[shot]:
-                ts = [i / FPS for i in range(int(a * FPS), int(b * FPS))
+                ts = [i / FPS for i in range(math.ceil(a * FPS), int(b * FPS))     # ceil: never the frame before the cut
                       if who != 'epstein' or epstein_fade(i / FPS) > 0.5]
                 if ts:
                     actors[f'{who} [{shot} {a:.1f}]'] = (ts, alone(who))
