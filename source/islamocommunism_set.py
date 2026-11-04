@@ -76,7 +76,7 @@ POOL = (150, 196, 222)
 F_RED = (196, 36, 44)
 F_GREEN = (22, 130, 70)
 F_NAVY = (34, 48, 112)
-KEEP_CLEAR = [('hook text', (180, 315, 790, 500)), ('heading', (60, 1270, 640, 1490))]   # x0, y0, x1, y1 (frame)
+KEEP_CLEAR = [('hook text', (180, 315, 790, 500)), ('heading', (60, 1270, 760, 1580))]   # x0, y0, x1, y1 (frame)
 
 
 # ---------------------------------------------------------------------------------------------- helpers
@@ -644,11 +644,11 @@ def picture(t=0.6):
 def heading(img, t_in=99.0):
     """The opening heading as the brief has it, lower-middle-left: 'USA', then a second later the line beneath."""
     d = ImageDraw.Draw(img)
-    f1 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Anton-Regular.ttf'), 120)
-    f2 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Anton-Regular.ttf'), 52)
+    f1 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Anton-Regular.ttf'), 156)
+    f2 = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Anton-Regular.ttf'), 68)
     top = 1270
-    box = d.textbbox((70, top), 'USA', font=f1, stroke_width=5)
-    d.text((70, top - (box[1] - top)), 'USA', font=f1, fill=(255, 255, 255), stroke_width=5, stroke_fill=INK)
+    box = d.textbbox((70, top), 'USA', font=f1, stroke_width=6)
+    d.text((70, top - (box[1] - top)), 'USA', font=f1, fill=(255, 255, 255), stroke_width=6, stroke_fill=INK)
     y = box[3] - box[1] + top + 12
     if t_in >= 1.0:
         for row in ('THREE YEARS INTO', 'ISLAMIC COMMUNISM'):

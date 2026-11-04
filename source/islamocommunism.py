@@ -69,7 +69,7 @@ LINES = [
          text="You know, Madam President, when we decided to combine the spiritual philosophy of Islam with the "
               "Socio-Economic doctrine of communism, I didn't expect it would work so perfectly."),
     dict(n=7, audio='islamocommunism-7', who='aoc', est=3.4, text='Me neither. But here we are, American dream solved.'),
-    dict(n=8, audio='islamocommunism-8', who='elsayed', est=1.2, text='No suffering.'),
+    dict(n=8, audio='islamocommunism-8', who='elsayed', est=1.2, text='No poverty.'),
     dict(n=9, audio='islamocommunism-9', who='aoc', est=3.5,
          text='Free everything paired inexplicably with total abundance.'),
     dict(n=10, audio='islamocommunism-10', who='elsayed', est=3.0,
@@ -162,7 +162,8 @@ def _after(n):
 
 
 SHOTS = [('ext', 0.0, T['cut2']), ('office', T['cut2'], T['cut3']), ('door', T['cut3'], T['cut4']),
-         ('office', T['cut4'], T['cut5']), ('two', T['cut5'], T['sip_end']),
+         ('office', T['cut4'], T['cut5']), ('two', T['cut5'], T['take'] + 0.45), ('two_ab', T['take'] + 0.45, _after(5)),
+         ('two_med', _after(5), T['sip_end']),
          ('two_ab', T['sip_end'], _after(6)), ('two_ao', _after(6), _after(7)), ('two_ab', _after(7), _after(8)),
          ('two_aom', _after(8), _after(9)), ('two_med', _after(9), T['cut6']),
          ('clink_ab', T['cut6'], _after(11)), ('clink_ao', _after(11), _after(12)), ('clink', _after(12), DUR)]
@@ -175,7 +176,7 @@ _AOZ = 3.15                                                            # her mar
 CAMS.update({'two_ab': ((0.0, 1.55, 3.68 - 2.0), (0.0, 1.55, 6.0), 3000),       # close on him: head and shoulders
              'two_ao': ((1.3, 1.43, _AOZ - 2.0), (1.3, 1.43, 6.0), 3000),       # close on her
              'two_aom': ((1.3, 1.25, _AOZ - 2.3), (1.3, 1.25, 6.0), 2100),      # her, waist up (the hand sweep)
-             'two_med': ((0.7, 1.4, 3.4 - 3.2), (0.7, 1.4, 6.0), 1700),       # both, waist up
+             'two_med': ((0.68, 1.4, 0.8), (0.68, 1.4, 6.0), 1350),       # both, waist up
              'clink_ab': ((0.0, 1.55, 3.68 - 2.0), (0.0, 1.55, 6.0), 3000),
              'clink_ao': ((1.12, 1.43, 3.25 - 2.0), (1.12, 1.43, 6.0), 3000)})
 SHOT_CAST = {'ext': [], 'office': ['elsayed'], 'door': ['aoc'], 'two': ['elsayed', 'aoc'], 'clink': ['elsayed', 'aoc'],
@@ -264,7 +265,49 @@ BLINKS = {w: F.blinks(17 + i, 0.5, DUR, talking=True) for i, w in enumerate(WHO)
 
 def _face(who, t):
     shape = mouths.at(TRACK[who], t)
-    return dict(mouth='set' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]))
+    b, _, _ = beat(who, t)
+    return dict(mouth='set' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]), brow_raise=b)
+
+
+# Sam's note 8 (4 Nov): moderate brow and head moves on the key words (acting list): (who, line, word, brows, nod, tilt)
+# brows = brow lift (px), nod = head dip (px, down then back), tilt = head tilt (degrees), over about 0.7 s
+BEATS = [('elsayed', 1, 'All', 6, 0, 3), ('elsayed', 1, 'Guess', 0, 5, -3),
+         ('elsayed', 3, 'Good', 4, 6, 0), ('elsayed', 3, 'What', 7, 0, 3),
+         ('aoc', 4, 'deserved', 6, 0, -3), ('aoc', 4, 'finally', 0, 6, 0), ('aoc', 4, 'climate', 5, 0, 2),
+         ('elsayed', 5, 'Mashallah', 7, 6, 0), ('elsayed', 5, 'comrade', 0, 5, 2),
+         ('elsayed', 6, 'combine', 6, 0, 3), ('elsayed', 6, 'communism', 0, 6, 0),
+         ('aoc', 7, 'neither', 5, 0, -4), ('aoc', 7, 'solved', 0, 6, 0),
+         ('elsayed', 8, 'poverty', 3, 7, 0),
+         ('aoc', 9, 'Free', 7, 0, -3), ('aoc', 9, 'abundance', 0, 6, 0),
+         ('elsayed', 10, 'crazy', 7, 0, 0),
+         ('elsayed', 11, 'great', 5, 0, 3), ('aoc', 12, 'Europe', 8, 0, -4), ('elsayed', 13, 'Europe', 3, 7, 0)]
+
+
+def beat(who, t):
+    b = n = tl = 0.0
+    for w, ln, word, db, dn, dt in BEATS:
+        if w != who:
+            continue
+        a = word_at(ln, word) - 0.1
+        if a - 0.05 <= t < a + 0.75:
+            k = _bump(t, a, a + 0.7, 0.15, 0.3)
+            b, n, tl = b + db * k, n + dn * math.sin(math.pi * min(1.0, (t - a) / 0.5)) * (t >= a), tl + dt * k
+    return b, n, tl
+
+
+def _beat_j(j, who, t):
+    _, n, tl = beat(who, t)
+    j['head_dy'] = j.get('head_dy', 0) + n
+    j['tilt'] = j.get('tilt', 0) + tl
+    return j
+
+
+def elsayed_j(t, c, x, z):
+    return _beat_j(_elsayed_j(t, c, x, z), 'elsayed', t)
+
+
+def aoc_j(t, c, x, z, walking):
+    return _beat_j(_aoc_j(t, c, x, z, walking), 'aoc', t)
 
 
 # ------------------------------------------------------------------------------------------------ props
@@ -384,11 +427,11 @@ def elsayed_sp(t):
     elif L[11]['start'] - 0.2 <= t < word_at(11, 'great') - 0.1:   # "So, what's next": thinking, eyes up and away
         sp['look'], sp['gaze_dy'], sp['mood'] = -0.4, -3.5, 'neutral'
     elif L[8]['start'] - 0.1 <= t < L[8]['end'] + 0.2:
-        sp['mood'] = 'neutral'                     # "No suffering": a calm, satisfied nod
+        sp['mood'] = 'neutral'                     # "No poverty": a calm, satisfied nod
     return sp
 
 
-def elsayed_j(t, c, x, z):
+def _elsayed_j(t, c, x, z):
     """His pose: seated on the phone (line 1), hangs up, rises (1.6 s), hands at his sides; reaches for the glass she
     holds out (row 12) and keeps it; a small open hand on line 6; sips; the clink."""
     sp = IC.ELSAYED
@@ -396,6 +439,7 @@ def elsayed_j(t, c, x, z):
     if t < T['rise']:
         j = moves.seated(sp)
         j['seated'] = False                        # the set draws its own chair
+        V.arm_to(j, 'L', DESK_ARM, (-0.6, 1.0, 0.7), 'fist')   # Sam's notes 4 + 4b: forward, resting on the desk top
         if t < T['hangup']:
             V.arm_to(j, 'R', (82.0, -140.0, 16.0), (0.6, 1.0, 0.7), 'none')
             j['face_props'] = [handset('R')]
@@ -408,7 +452,8 @@ def elsayed_j(t, c, x, z):
                 j['hand'] = dict(j.get('hand', {}), R='none')
         return j
     if t < T['rise'] + 1.6:
-        j = moves.stand_up(sp, (t - T['rise']) / 1.6)
+        j = moves.stand_up(sp, 0.18 + 0.82 * (t - T['rise']) / 1.6)   # Sam's note 3: straight up, no lean
+        j['lean'] = 0.0                                                   # and sink first
         j['seated'] = False
         return j
     j = V.standing(sp)
@@ -425,7 +470,7 @@ def elsayed_j(t, c, x, z):
         return j
     if T['sip'] <= t < T['sip_end']:
         k = _bump(t, T['sip'], T['sip_end'], 0.35, 0.4)
-        return glass_at(j, 'R', _mix(HOLD['R'], SIP['R'], k), -25 * k, face=k > 0.5)
+        return glass_at(j, 'R', _mix(HOLD['R'], SIP['R'], k), -12.5 * k, face=k > 0.5)
     if t >= T['clink'] - 0.45:
         k = _ease(_ramp(t, T['clink'] - 0.45, T['clink']))
         reach(j, c, sp, x, z, 'R', CLINK, 'grip', 1.0)
@@ -468,7 +513,7 @@ HANDOFF = (0.66, 1.12, 3.4)                         # where the glass changes ha
 CLINK = (0.6, 1.3, 3.05)                            # where the glasses meet
 
 
-def aoc_j(t, c, x, z, walking):
+def _aoc_j(t, c, x, z, walking):
     """Her pose: two glasses held up in front as she walks (door, then into the two-shot); her left hand (our left,
     towards him) holds his glass out on "Non-alcoholic mimosa" until he takes it; her own glass in her right; a
     shrug on line 7; an open hand on line 9; a sip; the clink."""
@@ -493,7 +538,7 @@ def aoc_j(t, c, x, z, walking):
         return j
     if T['sip'] <= t < T['sip_end']:
         k = _bump(t, T['sip'] + 0.1, T['sip_end'] - 0.1, 0.35, 0.4)
-        return glass_at(j, 'R', _mix(HOLD['R'], SIP['R'], k), -25 * k, face=k > 0.5)
+        return glass_at(j, 'R', _mix(HOLD['R'], SIP['R'], k), -12.5 * k, face=k > 0.5)
     if t >= T['clink'] - 0.45:
         jj = V.standing(sp)
         reach(jj, c, sp, x, z, 'L', CLINK, 'grip', 1.0)
@@ -559,9 +604,38 @@ def cam_for(t):
     return MS.S.Cam(pos, look, focal=focal)
 
 
+DESK_ARM = (-160.0, 180.0, 270.0)                    # his free wrist on the desk top through the call (neck units)
+
+
+def desk_arm_item(t):
+    """The free forearm resting on the desk top, drawn again after the desk (which is in front of him and would hide
+    it): his drawing with the arm on the desk, kept only where it differs from the same drawing with that arm down."""
+    x, z = AB
+    sp = elsayed_sp(t)
+
+    def draw(im, c):
+        j = elsayed_j(t, c, x, z)
+        j2 = dict(j)
+        V.arm_to(j2, 'L', (-150.0, 470.0, 40.0), 'back', 'fist')
+        a = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        b = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        MS.put(a, c, sp, x, z, MS.to_cam(c, x, z), j, t)
+        MS.put(b, c, sp, x, z, MS.to_cam(c, x, z), j2, t)
+        A, Bv = np.asarray(a), np.asarray(b)
+        m = (np.abs(A.astype(int) - Bv.astype(int)).sum(axis=2) > 24) & (A[..., 3] > 0)
+        (_, yf), _ = c.project((x, 0.76, MS.DESK[1] - 0.455))     # the desk top's front edge: nothing below it
+        m[int(max(0, yf)):] = False
+        A2 = A.copy()
+        A2[..., 3] = np.where(m, A[..., 3], 0)
+        im.alpha_composite(Image.fromarray(A2))
+    return (x, 2.3, draw)                          # sorted in front of the desk
+
+
 def people(t):
     s = shot_of(t)
     out = []
+    if s == 'office' and t < T['rise'] and SOLO[0] is None:
+        out.append(desk_arm_item(t))
     if s == 'door':
         out += MV.door_items(MV.door_curve(t, T['open'], T['open'] + 0.4, 1e9))
     if 'elsayed' in SHOT_CAST[cut_of(t)] and SOLO[0] in (None, 'elsayed'):
@@ -725,7 +799,7 @@ KEYS = [   # the stills sheet: one per beat (label, time)
     ('5 the sip, contented (13)', lambda: (T['sip'] + T['sip_end']) / 2),
     ('5 close on him: "...combine..." (6)', lambda: word_at(6, 'combine') + 0.3),
     ('5 close on her: "Me neither." (7)', lambda: L[7]['start'] + 0.3),
-    ('5 close: "No suffering." (8)', lambda: L[8]['start'] + 0.4),
+    ('5 close: "No poverty." (8)', lambda: L[8]['start'] + 0.4),
     ('5 her waist up: "...total abundance." (9)', lambda: word_at(9, 'total')),
     ('5 both, waist up: "It\'s crazy..." (10)', lambda: L[10]['start'] + 0.6),
     ('6 close on him: "So, what\'s next...?" (11)', lambda: L[11]['start'] + 0.4),
@@ -781,6 +855,11 @@ def main():
                  stamp=False if '--nostamp' in a else None)
 
 
+# Sam's note 2 (4 Nov): someone turned exactly to the lens sits on the drawing's mirror line, and rounding chose the
+# side: in the wide two-shot El-Sayed was drawn mirror-image, so his right hand reached away from her and the glass
+# jumped across. A hair off square keeps everyone the same way round in every shot.
+_TO_CAM = MS.to_cam
+MS.to_cam = lambda cm, x, z: _TO_CAM(cm, x, z) - 0.3
 F.guard(B)
 import limbs                     # noqa: E402
 limbs.install(B)
