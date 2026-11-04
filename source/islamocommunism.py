@@ -2,7 +2,7 @@
 """Islamocommunism (notes/islamocommunism.md): three years into Islamic communism, President El-Sayed and Also-
 President Ocasio-Cortez share non-alcoholic mimosas in the Oval Office and settle on what's next. Built from the satire
 template (guides/satire.md); the room is MidTerminal's, redressed (islamocommunism_office); outside is
-islamocommunism_set. Every indoor shot is flat (rule 77): level, square to the wall, a long lens.
+islamocommunism_set. Every indoor shot is flat (Sam's note 4, this film only): level, square to the wall, a long lens.
 
     python3 source/islamocommunism.py stills OUT_DIR T [T ...]   stills at these times (seconds)
     python3 source/islamocommunism.py keys OUT.jpg               one labelled still per beat (the stills sheet)
@@ -156,7 +156,7 @@ DUR = T['clink'] + 1.2
 BLACK_AT = DUR
 SHOTS = [('ext', 0.0, T['cut2']), ('office', T['cut2'], T['cut3']), ('door', T['cut3'], T['cut4']),
          ('office', T['cut4'], T['cut5']), ('two', T['cut5'], T['cut6']), ('clink', T['cut6'], DUR)]
-# Cameras (pos, look, focal), all level and square on (rule 77; Sam's note 4: flat shots only)
+# Cameras (pos, look, focal), all level and square on (Sam's note 4: flat shots only, this film)
 CAMS = {'office': ((0.0, 1.45, 0.4), (0.0, 1.45, 4.4), 1350),         # the desk end, front on, flags at the edges
         'door': OF.door_cam(),                                         # square on to the east door
         'two': ((0.55, 1.45, -0.2), (0.55, 1.45, 4.4), 1350),          # closer, both at the desk

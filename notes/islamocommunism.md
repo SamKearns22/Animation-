@@ -1,12 +1,12 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 77 (indoor shots flat: level, square on, long lens), 74 (acting list, below, ticked on the check sheet), 14 (pre-flight gates)
-- **Done (4 Nov):** office redressed + new flags (notes 5-6); flat cameras (note 4; rule 77 written, Sam's Y); film code with every beat on estimated timings; acting list; brief ticked; stills sheet sent (`review/islamocommunism-stills.jpg`).
+- **Rules that bite next:** note 4 (this film: every indoor shot flat: level, square on, long lens), 74 (acting list, below, ticked on the check sheet), 14 (pre-flight gates)
+- **Done (4 Nov):** office redressed + new flags (notes 5-6); flat cameras (note 4; for this film only: the rule written by mistake was removed, Sam 4 Nov); film code with every beat on estimated timings; acting list; brief ticked; stills sheet sent (`review/islamocommunism-stills.jpg`).
 - **Spent against the estimate (rule 55):** about 7.5% of Sam's 8% (office redress about 1%, film code about 1.5%).
 - **Next:** Opus, medium effort, new chat: Sam's notes on the stills; when his recordings land, file them (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet, animatic. Type: "Islamocommunism: stills notes".
 - **Needs Sam:** notes on the stills; the 13 voice recordings (Voice Isolation off), due 5 Nov.
-- **Read:** this file; guides/satire.md "Before every render"; rulebook rules 74, 77.
+- **Read:** this file; guides/satire.md "Before every render"; rulebook rule 74.
 - **Lost / Added:** Lost: Alex's black suit and pearl earrings (now white suit, gold earrings, note 7); the right wing's windows behind the lawn flag; crosses on the spires; the two gold chairs facing the desk. Added: outside: clouds, mowing stripes, picnic blanket, ball, headscarves; office: arched tiled windows, star valance, tiled dado, green star-and-wheat carpet, star on the desk, two posters, samovar and tea glasses, two brass lanterns, the new flags.
 - **Open rule requests:** none.
 - **For Claude:** film `source/islamocommunism.py` (MAP at top; `T` timeline, `CAMS`, `elsayed_j`/`aoc_j` poses, `KEYS` = stills sheet: `keys OUT.jpg`); room `source/islamocommunism_office.py` (patches midterminal_set on import); set `source/islamocommunism_set.py`; cast `source/islamocommunism_cast.py`. Lines have `est` until takes exist. `check` not yet run (needs takes).
@@ -56,7 +56,7 @@ Shots (about 40-45 s with the real voices):
 | 22 | Abdul chuckles. "Invade Europe." They clink glasses. | yes: chuckle, line, clink |
 | 23 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | finish.py on every animatic (none yet) |
 
-## Acting (rule 74; front on at their marks, rule 38; every shot flat, rule 77)
+## Acting (rule 74; front on at their marks, rule 38; every shot flat, note 4)
 | line | who | face | body | lands on |
 |---|---|---|---|---|
 | 1 "Really? All diseases?..." | Abdul | sceptic (one brow up), eyes to the handset; dry half-smile from "Guess" | seated, handset at his right ear; small head tilt | "All"; "Guess" |
