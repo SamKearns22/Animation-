@@ -20,3 +20,13 @@
 - **Lost / Added:** Added: Trump's hands on hips through line 8; the door opens later if line 1 runs long (his voice heard through it first).
 - **Open rule requests:** none.
 - **For Claude:** `source/midterminal.py` (MAP at the top): LINES est -> takes; timeline T; CAMS adds 'satan', 'trump' singles; PORTAL_OK and THREE_QUARTER_OK reasons; previous handover in notes/archive/midterminal-handovers.md.
+
+## Where things stand
+- **Rules that bite next:** 27 (bleep both swears, from the sound), 56 (a fault of its kind: every point hand, every U-shaped arm pose, every ghost layer), 14 (check sheet and Sam's yes before the animatic)
+- **Done (4 Nov, Opus):** film built; test animatic (silent, est timings) sent; Sam's notes 31-43 logged (Notes table); proposals for 35, 40, 42 and the skeleton question sent to Sam.
+- **Next:** a round of notes (Opus, medium): Sam's answers, then fix 31-43, clips for the moves, file his recordings when they come (lines 1-5, 7-10, slam, fire), bleeps, check sheet, animatic. New chat, type: "MidTerminal: notes 31-43 from the handover in notes/midterminal.md" plus the answers.
+- **Needs Sam:** answers 1-5 (sent 4 Nov), his meter, the recordings (2:30-3 pm).
+- **Read:** guides/satire.md 'Movement', 'Before every render'; guides/kit-catalogue.md 'Effects' (burst, smoke, flash).
+- **Lost / Added:** Added: camera flashes, a corridor in depth, the burst of flames and smoke, flames on Epstein, a skeleton under the melt (all Sam's). Lost: the zoom out (Sam).
+- **Open rule requests:** "when a character points, give him a pointing finger" (note 33): proposed to Sam as a rule.
+- **For Claude:** `source/midterminal.py` (MAP); audit artefact: audits() takes int(a*FPS), the frame before each cut: start at ceil. Point hand: MV._install_point_finger. Skull: MV.epstein_item draws `under` straight onto im (not through MS.ghost). Pocket square: check V.snap around 13.58 (Satan's yaw in the 'two'/'three' blend). Shrug: replace moves.pose 'shrug' arm targets (U shape) with shoulders up.
