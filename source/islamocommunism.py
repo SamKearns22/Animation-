@@ -372,11 +372,11 @@ def handset_k(side, k):
         e0, m0 = (x + 4, y - 22), (x * 0.4, y + 74)
         e1, m1 = (x - 50, y - 6), (x + 50, y - 6)
         ear, mouth = _mix(e0, e1, k), _mix(m0, m1, k)
+        p.ell(x, y + 18, 27, 27, IC.ELSAYED['skin'], INK, 2.4)          # the hand first, the handset over it (Sam, 5 Nov)
         p.line([ear, mouth], INK, 30)
         p.line([ear, mouth], (40, 40, 46), 24)
         for c in (ear, mouth):
             p.ell(c[0], c[1], 20, 16, (40, 40, 46), INK, 2.0)
-        p.ell(x, y + 18, 27, 27, IC.ELSAYED['skin'], INK, 2.4)
     return draw
 
 
