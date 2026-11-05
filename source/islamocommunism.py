@@ -105,7 +105,8 @@ def _at(n, start):
 
 # Lines whose words the mouth track spread wrongly over the take's pauses: one phrase per pause-separated stretch
 PHRASES = {6: ["You know, Madam President,", "when we decided to combine the spiritual philosophy of Islam",
-               "with the Socio-Economic doctrine of communism,", "I didn't expect it would work so perfectly."]}
+               "with the Socio-Economic doctrine of communism,", "I didn't expect it would work so perfectly."],
+           3: ["Good morning, | Also-President Ocasio-Cortez.", "What do you have for me?"]}   # '|': a subtitle break
 
 
 def word_at(n, words):
@@ -115,6 +116,7 @@ def word_at(n, words):
     ph = PHRASES.get(n)
     if ph and len(ph) == len(st):                  # one phrase per stretch of the take (see PHRASES)
         for p, (a, b) in zip(ph, st):
+            p = p.replace('| ', '')
             if words in p:
                 return ln['start'] + a + p.index(words) / len(p) * (b - a)
     tot = sum(b - a for a, b in st) or 1.0
@@ -272,7 +274,7 @@ def _bump(t, a, b, rise=0.2, fall=0.25):
 def _track(ln):
     ph = PHRASES.get(ln['n'])
     if ph and len(ph) == len(ln['_stretches']):
-        return [x for p, st in zip(ph, ln['_stretches']) for x in mouths.track(p, [st])]
+        return [x for p, st in zip(ph, ln['_stretches']) for x in mouths.track(p.replace('| ', ''), [st])]
     return mouths.track(ln['text'], ln['_stretches'])
 
 
@@ -728,13 +730,17 @@ _PCACHE = {}
 def _phrase_caption(ln, u):
     """Subtitles for a PHRASES line: each phrase's chunks inside its own stretch of the take, never ahead of it."""
     if ln['n'] not in _PCACHE:
-        out = []
-        for ph, (a, b) in zip(PHRASES[ln['n']], ln['_stretches']):
-            at = a
-            for c, share in SUB.chunks(ph):
-                out.append((c, at))
+        out, st = [], ln['_stretches']
+        for i, (ph, (a, b)) in enumerate(zip(PHRASES[ln['n']], st)):
+            at, one = a, []
+            parts = [q.strip() for q in ph.split('|')]
+            pieces = [(c, sh * len(q) / len(ph.replace('| ', ''))) for q in parts for c, sh in SUB.chunks(q)]
+            for c, share in pieces:
+                one.append((c, at))
                 at += share * (b - a)
-        _PCACHE[ln['n']] = SUB.readable(out, ln['_dur'] + 0.45)
+            nxt = st[i + 1][0] if i + 1 < len(st) else ln['_dur'] + 0.45
+            out += SUB.readable(one, nxt)          # made readable phrase by phrase: never merged across a pause
+        _PCACHE[ln['n']] = out
     text = None
     for c, t0 in _PCACHE[ln['n']]:
         if text is None or u >= t0:
