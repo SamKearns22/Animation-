@@ -877,7 +877,8 @@ KEYS = [   # the stills sheet: one per beat (label, time)
     ('2 on the phone, sceptical (line 1)', lambda: word_at(1, 'All') + 0.3),
     ('2 "Guess I don\'t need..." dry half-smile', lambda: word_at(1, 'Doctor')),
     ('3 the door: "President El-Sayed?" (2)', lambda: L[2]['start'] + 0.4),
-    ('4 he rises', lambda: T['rise'] + 0.8),
+    ('2 phone down on its base (note 16)', lambda: T['hangup'] + 0.5),
+    ('4 he rises (faster, note 18)', lambda: T['rise'] + RISE * 0.5),
     ('4 "What do you have for me?" (3)', lambda: word_at(3, 'have') + 0.2),
     ('5 she walks in (4)', lambda: T['walk'] + 0.6),
     ('5 "...solved climate change." glass out (4)', lambda: T['offer'] + 0.8),
@@ -905,7 +906,10 @@ def keys(out):
     for i, (label, at) in enumerate(KEYS):
         t = at()
         x, y = 10 + (i % cols) * (tw + 10), 10 + (i // cols) * (th + 52)
-        sheet.paste(frame_image(t).convert('RGB').resize((tw, th), Image.LANCZOS), (x, y + 42))
+        im = frame_image(t)
+        if t < T['cut2']:                          # the check sheet shows the Hook Text frame (Sam, 3 Nov)
+            im = ISET.hook(im.convert('RGBA'))
+        sheet.paste(im.convert('RGB').resize((tw, th), Image.LANCZOS), (x, y + 42))
         d.multiline_text((x, y), f'{label}\n{t:.1f} s', font=f, fill=(30, 30, 30))
     sheet.save(out, quality=86)
 
