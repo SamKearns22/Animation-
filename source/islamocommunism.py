@@ -71,7 +71,7 @@ LINES = [
     dict(n=7, audio='islamocommunism-7', who='aoc', est=3.4, text='Me neither. But here we are, American dream solved.'),
     dict(n=8, audio='islamocommunism-8', who='elsayed', est=1.2, text='No poverty.'),
     dict(n=9, audio='islamocommunism-9', who='aoc', est=3.5,
-         text='Free everything paired inexplicably with total abundance.'),
+         text='Free everything inexplicably paired with total abundance.'),
     dict(n=10, audio='islamocommunism-10', who='elsayed', est=3.0,
          text="It's crazy that nobody had suggested trying it before."),
     dict(n=11, audio='islamocommunism-11', who='elsayed', est=3.0,
@@ -103,10 +103,20 @@ def _at(n, start):
     return L[n]['end']
 
 
+# Lines whose words the mouth track spread wrongly over the take's pauses: one phrase per pause-separated stretch
+PHRASES = {6: ["You know, Madam President,", "when we decided to combine the spiritual philosophy of Islam",
+               "with the Socio-Economic doctrine of communism,", "I didn't expect it would work so perfectly."]}
+
+
 def word_at(n, words):
     """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches."""
     ln = L[n]
     st = ln['_stretches']
+    ph = PHRASES.get(n)
+    if ph and len(ph) == len(st):                  # one phrase per stretch of the take (see PHRASES)
+        for p, (a, b) in zip(ph, st):
+            if words in p:
+                return ln['start'] + a + p.index(words) / len(p) * (b - a)
     tot = sum(b - a for a, b in st) or 1.0
     k = ln['text'].index(words) / len(ln['text']) * tot
     for a, b in st:
@@ -129,9 +139,10 @@ T['open'] = T['cut3'] + 0.1
 WALK = 1.1                                        # m/s: an easy walk, two full glasses
 DOOR_PATH = None                                  # set below (needs the door's wall points)
 e = _at(2, T['cut3'] + 1.2)                       # she's through the door and says it
-T['cut4'] = e + CLEAR                             # shot 4: back to him; he stands (1.6 s), then line 3
+T['cut4'] = e + CLEAR                             # shot 4: back to him; he stands (RISE), then line 3
 T['rise'] = T['cut4'] + 0.15
-e = _at(3, T['rise'] + 1.6)
+RISE = 1.6 / 1.5                                  # Sam (4 Nov, note 18): the rise 50% faster
+e = _at(3, T['rise'] + RISE)
 T['cut5'] = e + CLEAR                             # shot 5: the two-shot; she walks in from the right
 T['walk'] = T['cut5']
 e = _at(4, T['cut5'] + 0.3)
@@ -258,15 +269,23 @@ def _bump(t, a, b, rise=0.2, fall=0.25):
     return _ease(_ramp(t, a, a + rise)) * (1 - _ease(_ramp(t, b - fall, b)))
 
 
+def _track(ln):
+    ph = PHRASES.get(ln['n'])
+    if ph and len(ph) == len(ln['_stretches']):
+        return [x for p, st in zip(ph, ln['_stretches']) for x in mouths.track(p, [st])]
+    return mouths.track(ln['text'], ln['_stretches'])
+
+
 TRACK = {w: [(a + ln['start'], b + ln['start'], sh) for ln in LINES if ln['who'] == w
-             for a, b, sh in mouths.track(ln['text'], ln['_stretches'])] for w in WHO}
+             for a, b, sh in _track(ln)] for w in WHO}
 BLINKS = {w: F.blinks(17 + i, 0.5, DUR, talking=True) for i, w in enumerate(WHO)}
+BLINKS['aoc'] = [b for b in BLINKS['aoc'] if not L[12]['start'] - 0.3 <= b <= L[12]['end'] + 0.3]   # eyes open on her question
 
 
 def _face(who, t):
     shape = mouths.at(TRACK[who], t)
     b, _, _ = beat(who, t)
-    return dict(mouth='set' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]), brow_raise=b)
+    return dict(mouth='set' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]), brow_up=b * 0.004)   # (the cast reads brow_up, a share of the face)
 
 
 # Sam's note 8 (4 Nov): moderate brow and head moves on the key words (acting list): (who, line, word, brows, nod, tilt)
@@ -280,7 +299,7 @@ BEATS = [('elsayed', 1, 'All', 6, 0, 3), ('elsayed', 1, 'Guess', 0, 5, -3),
          ('elsayed', 8, 'poverty', 3, 7, 0),
          ('aoc', 9, 'Free', 7, 0, -3), ('aoc', 9, 'abundance', 0, 6, 0),
          ('elsayed', 10, 'crazy', 7, 0, 0),
-         ('elsayed', 11, 'great', 5, 0, 3), ('aoc', 12, 'Europe', 8, 0, -4), ('elsayed', 13, 'Europe', 3, 7, 0)]
+         ('elsayed', 11, 'great', 5, 0, 3), ('aoc', 12, 'Invade', 4, -7, -3), ('aoc', 12, 'Europe', 6, -5, -5), ('elsayed', 13, 'Europe', 3, 7, 0)]
 
 
 def beat(who, t):
@@ -447,13 +466,13 @@ def _elsayed_j(t, c, x, z):
             j['tilt'] = 4.0 * _ease(_ramp(t, word_at(1, 'All') - 0.1, word_at(1, 'All') + 0.15))
         else:
             k = _ease(_ramp(t, T['hangup'], T['hangup'] + 0.45))
-            V.arm_to(j, 'R', _mix((82.0, -140.0, 16.0), (120.0, 330.0, 230.0), k), (0.6, 1.0, 0.7), 'none' if k < 1 else 'fist')
+            V.arm_to(j, 'R', _mix((82.0, -140.0, 16.0), PHONE_HAND, k), (0.6, 0.6, -0.4), 'none' if k < 1 else 'fist')
             if k < 1:
                 j['props'] = [handset('R')]
                 j['hand'] = dict(j.get('hand', {}), R='none')
         return j
-    if t < T['rise'] + 1.6:
-        j = moves.stand_up(sp, 0.18 + 0.82 * (t - T['rise']) / 1.6)   # Sam's note 3: straight up, no lean
+    if t < T['rise'] + RISE:
+        j = moves.stand_up(sp, 0.18 + 0.82 * (t - T['rise']) / RISE)   # Sam's note 3: straight up, no lean
         j['lean'] = 0.0                                                   # and sink first
         j['seated'] = False
         return j
@@ -506,7 +525,7 @@ def aoc_sp(t):
     elif L[7]['start'] - 0.1 <= t < word_at(7, 'But') - 0.05:
         sp['mood'] = 'neutral'                     # "Me neither": a shrug, mouth sideways-flat
     elif L[12]['start'] - 0.3 <= t < L[13]['end'] + 0.3:
-        sp['mood'] = 'hopeful'                     # brief 21: hopefully, brows up
+        sp['mood'] = 'excited'                     # brief 21 + Sam's note 17: bright, excited, brows high, eyes wide
     return sp
 
 
@@ -605,6 +624,33 @@ def cam_for(t):
     return MS.S.Cam(pos, look, focal=focal)
 
 
+PHONE = (0.36, 3.30)                               # the desk phone's base on the desk top, at his right (note 16)
+PHONE_HAND = (250.0, 130.0, 240.0)                 # his hand on the cradled handset (neck units, seated)
+
+
+def phone_item(t):
+    """The desk phone's base (Sam's note 16, 4 Nov: the handset goes down onto something, not into the desk): a
+    dark box on the desk top; the handset lies in its cradle once he has put it down."""
+    cradled = t >= T['hangup'] + 0.45
+
+    def draw(im, c):
+        x, z = PHONE
+        y0, y1, w, d = 0.76, 0.83, 0.12, 0.09
+        P = lambda X, Y, Z: c.project((X, Y, Z))[0]
+        p = B.Pen(im, MS.FLAT)
+        top = [P(x - w, y1, z - d), P(x + w, y1, z - d), P(x + w, y1, z + d), P(x - w, y1, z + d)]
+        front = [P(x - w, y0, z - d), P(x + w, y0, z - d), P(x + w, y1, z - d), P(x - w, y1, z - d)]
+        p.poly(front, (30, 30, 36), INK, 2.0)
+        p.poly(top, (52, 52, 60), INK, 2.0)
+        if cradled:
+            a, b = P(x - w * 0.95, y1 + 0.03, z), P(x + w * 0.95, y1 + 0.03, z)
+            p.line([a, b], INK, 13)
+            p.line([a, b], (40, 40, 46), 9)
+            for e in (a, b):
+                p.ell(e[0], e[1], 9, 7, (40, 40, 46), INK, 1.6)
+    return (PHONE[0], 2.25, draw)                  # drawn after the desk, which would hide it
+
+
 DESK_ARM = (-70.0, 230.0, 330.0)                    # his free wrist on the desk top through the call (neck units)
 
 
@@ -618,6 +664,7 @@ def desk_arm_item(t):
         j = dict(elsayed_j(t, c, x, z), hide_legs=('L', 'R'))   # (legs are behind the desk; they'd cover the arm)
         j2 = dict(j)
         V.arm_to(j2, 'L', (-200.0, -250.0, 0.0), 'out', 'fist')   # (raised clear, so only the desk arm differs)
+        V.arm_to(j2, 'R', (200.0, -250.0, 0.0), 'out', 'fist')    # (and the hand that puts the phone down)
         lay = []
         for jj, spp in ((j, sp), (j2, sp), (j, dict(sp, sleeve=(255, 0, 254)))):   # the last: the sleeve in a marker
             q = Image.new('RGBA', im.size, (0, 0, 0, 0))                         # colour, to find it over the jacket
@@ -627,11 +674,11 @@ def desk_arm_item(t):
         diff = lambda u, v: np.abs(u - v).sum(axis=2) > 24
         m = (diff(lay[0], lay[1]) | diff(lay[0], lay[2])) & (A[..., 3] > 0)   # sleeve over the jacket too
         (_, yf), _ = c.project((x, 0.76, MS.DESK[1] - 0.455))     # the desk top's front edge: nothing below it
-        m[int(max(0, yf)):] = False
+        m[int(max(0, yf * B.SS)):] = False
         A2 = A.copy()
         A2[..., 3] = np.where(m, A[..., 3], 0)
         im.alpha_composite(Image.fromarray(A2))
-    return (x, 2.3, draw)                          # sorted in front of the desk
+    return (x, 2.2, draw)                          # sorted in front of the desk and the phone
 
 
 def people(t):
@@ -639,6 +686,8 @@ def people(t):
     out = []
     if s == 'office' and t < T['rise'] and SOLO[0] is None:
         out.append(desk_arm_item(t))
+    if s != 'door' and SOLO[0] is None:
+        out.append(phone_item(t))
     if s == 'door':
         out += MV.door_items(MV.door_curve(t, T['open'], T['open'] + 0.4, 1e9))
     if 'elsayed' in SHOT_CAST[cut_of(t)] and SOLO[0] in (None, 'elsayed'):
@@ -673,10 +722,32 @@ def draw_order(t):
     return ['background'] + sorted(SHOT_CAST[cut_of(t)], key=lambda w: -math.dist((pos[w][0], 1.0, pos[w][1]), c.pos))
 
 
+_PCACHE = {}
+
+
+def _phrase_caption(ln, u):
+    """Subtitles for a PHRASES line: each phrase's chunks inside its own stretch of the take, never ahead of it."""
+    if ln['n'] not in _PCACHE:
+        out = []
+        for ph, (a, b) in zip(PHRASES[ln['n']], ln['_stretches']):
+            at = a
+            for c, share in SUB.chunks(ph):
+                out.append((c, at))
+                at += share * (b - a)
+        _PCACHE[ln['n']] = SUB.readable(out, ln['_dur'] + 0.45)
+    text = None
+    for c, t0 in _PCACHE[ln['n']]:
+        if text is None or u >= t0:
+            text = c
+    return text
+
+
 def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + CLEAR, nxt):
+            if ln['n'] in PHRASES and len(PHRASES[ln['n']]) == len(ln['_stretches']):
+                return _phrase_caption(ln, t - ln['start'])
             return SUB.line_caption(ln, t - ln['start'])
     return None
 
@@ -693,14 +764,27 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
+def _load_sfx(path):
+    import wave
+    w = wave.open(path)
+    x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(float) / 32768.0
+    if w.getframerate() != SR:
+        x = np.interp(np.arange(0, len(x), w.getframerate() / SR), np.arange(len(x)), x)
+    return x
+
+
+CLINK_SFX = _load_sfx(os.path.join(HERE, 'audio', 'sfx', 'islamocommunism-clink.wav'))
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
-    voice, rest = np.zeros(n), np.zeros(n)        # voices only (CLAUDE.md: no sound effects unless asked)
+    voice, rest = np.zeros(n), np.zeros(n)        # voices, and the clink Sam asked for (5 Nov)
     for ln in LINES:
         if ln['_voice'] is not None:
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
+    rest = filmkit.place(rest, CLINK_SFX, T['clink'], SR, gain=0.5)   # Sam (5 Nov): the clink, the file's first one
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:

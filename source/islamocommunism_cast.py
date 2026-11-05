@@ -68,7 +68,7 @@ P4.MEASURED['aoc'] = dict(face_wide=0.847, jaw_wide=0.79, forehead_wide=0.95, ey
 P4.PUSH['aoc'] = 1.5
 P4.TUNE['aoc'] = {}
 
-SMILE = {'neutral': 0.7, 'sceptic': -0.1, 'smile': 1.4, 'hopeful': 0.9}
+SMILE = {'neutral': 0.7, 'sceptic': -0.1, 'smile': 1.4, 'hopeful': 0.9, 'excited': 1.4}
 
 
 def _ears(p, f, L, skin):
@@ -151,13 +151,13 @@ def aoc_head(img, p, sp, t, hx, hy):
     p.poly(curve(f.pts(P4.outline_uv(L, 0.34)), 4), skin, INK, 2.6)
     for sgn, ex, ey in ears:                           # small gold earrings (Sam's white-suit photos, 4 Nov)
         p.ell(ex, ey + 22, 6, 6, (214, 168, 64), INK, 1.4)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.04)), O_IRIS, dk(skin, 0.8), liner=3.2, wide=0.1)
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.0 if mood == 'excited' else 0.04)), O_IRIS, dk(skin, 0.8), liner=3.2, wide=0.1)
     for sgn in (-1, 1):                                # lashes flicked up at the outer corners
         if sgn < 0 and f.tq > 0.5:
             continue
         cx, cy = f(sgn * (L['ecx'] + L['ew'] * 0.5), L['eye_y'] - L['eh'] * 0.3)
         p.line([(cx, cy), (cx + sgn * 9, cy - 7)], INK, 2.6)
-    raise_ = {'hopeful': 0.03}.get(mood, 0.0) + sp.get('brow_up', 0.0)
+    raise_ = {'hopeful': 0.03, 'excited': 0.09}.get(mood, 0.0) + sp.get('brow_up', 0.0)
     P4.brows(p, f, L, O_HAIR, 0.04, raise_, sp.get('frown', 0.0))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])

@@ -148,17 +148,24 @@ LANES = [   # y, direction (+1 right), speed px/s, spacing px, size, drawn behin
 ]
 
 
-def car(img, x, y, s, col, d):
+def car(img, x, y, s, col, d, part='both'):
     """A flying car: a rounded body with a bubble canopy, two hover pods underneath, speed streaks behind (flat)."""
     L, Hh = 130 * s, 34 * s
     back = x - d * L * 0.5
-    for k, dy in enumerate((-0.25, 0.15, 0.45)):              # streaks: short white dashes behind, in the house style
-        x0 = back - d * (14 + 10 * k) * s
-        pen(img).line([(x0, y + dy * Hh), (x0 - d * (48 - 12 * k) * s, y + dy * Hh)], CLOUD, max(1.5, 5 * s))
+    # Sam (5 Nov): the same contrail on every car: a long trail tapering from the tail, pale grey so it reads on
+    # the sky and on the clouds alike
+    x0, y0, n = x - d * L * 0.42, y + Hh * 0.2, 12
+    for k in range(n if part != 'body' else 0):
+        a0, a1 = k / n, (k + 1) / n
+        g = int(214 + 36 * a0)
+        pen(img).line([(x0 - d * a0 * 150 * s, y0), (x0 - d * a1 * 150 * s, y0)], (g, g + 3, min(255, g + 8)),
+                      max(1.0, 9 * s * (1 - 0.8 * a0)))
+    if part == 'trail':
+        return
     pts = []
     for a in np.linspace(0, 2 * math.pi, 26, endpoint=False):
         ca, sa = math.cos(a), math.sin(a)
-        r = 1.0 + (0.12 * d * ca if sa < 0 else 0)            # the nose a touch fuller
+        r = 1.0 + (0.22 * d * ca if d * ca > 0 else 0)        # the nose pointed the way it flies
         pts.append((x + ca * L * 0.5 * r, y + sa * Hh * (0.55 if sa < 0 else 0.5)))
     for sg in (-1, 1):                                         # hover pods
         ell(img, x + sg * L * 0.26, y + Hh * 0.55, L * 0.12, Hh * 0.22, (70, 74, 84), INK, 1.6)
@@ -175,7 +182,11 @@ def lane(img, ln, t):
     for i in range(n):
         x = (i * ln['gap'] + ln['dir'] * ln['speed'] * t) % span - 200
         bob = 2.5 * ln['s'] * math.sin(t * 3.1 + i * 1.7)
-        car(img, x, ln['y'] + bob, ln['s'], cols[i], ln['dir'])
+        car(img, x, ln['y'] + bob, ln['s'], cols[i], ln['dir'], 'trail')   # every trail first: never over a car
+    for i in range(n):
+        x = (i * ln['gap'] + ln['dir'] * ln['speed'] * t) % span - 200
+        bob = 2.5 * ln['s'] * math.sin(t * 3.1 + i * 1.7)
+        car(img, x, ln['y'] + bob, ln['s'], cols[i], ln['dir'], 'body')
 
 
 # ---------------------------------------------------------------------------------------------- dome, spires
