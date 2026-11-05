@@ -485,10 +485,9 @@ def _elsayed_j(t, c, x, z):
             k = _ease(_ramp(t, T['hangup'], T['hangup'] + 0.45))
             # Sam's note 5 (5 Nov): out and down to the phone in one reach, no inward fold; a slight bend at the elbow only
             w = _mix((82.0, -140.0, 16.0), PHONE_MID, k / 0.5) if k < 0.5 else _mix(PHONE_MID, PHONE_HAND, (k - 0.5) / 0.5)
-            V.arm_to(j, 'R', w, 'down', 'none' if k < 1 else 'fist')
-            if k < 1:
-                j['props'] = [handset_k('R', k)]
-                j['hand'] = dict(j.get('hand', {}), R='none')
+            V.arm_to(j, 'R', w, 'down', 'none')
+            j['props'] = [handset_k('R', k)]               # (one owner for hand and handset until he lets go, at the rise:
+            j['hand'] = dict(j.get('hand', {}), R='none')   # Sam, 5 Nov: two hands, and the handset vanished into the base)
         return j
     if t < T['rise'] + RISE:
         u = (t - T['rise']) / RISE
@@ -652,7 +651,7 @@ def cam_for(t):
 
 
 PHONE = (0.45, 3.18)                               # the desk phone's base on the desk top, at his right (note 16)
-PHONE_HAND = (320.0, 125.0, 320.0)
+PHONE_HAND = (320.0, 82.0, 320.0)
 PHONE_MID = (250.0, 20.0, 200.0)                   # on the way down: out to his side, above the desk
 #                 # his hand on the cradled handset (neck units, seated)
 
@@ -660,7 +659,7 @@ PHONE_MID = (250.0, 20.0, 200.0)                   # on the way down: out to his
 def phone_item(t):
     """The desk phone's base (Sam's note 16, 4 Nov: the handset goes down onto something, not into the desk): a
     dark box on the desk top; the handset lies in its cradle once he has put it down."""
-    cradled = t >= T['hangup'] + 0.45
+    cradled = t >= T['rise']
 
     def draw(im, c):
         x, z = PHONE
@@ -677,7 +676,7 @@ def phone_item(t):
             p.line([a, b], (40, 40, 46), 9)
             for e in (a, b):
                 p.ell(e[0], e[1], 9, 7, (40, 40, 46), INK, 1.6)
-    return (PHONE[0], 2.25, draw)                  # drawn after the desk, which would hide it
+    return (PHONE[0], 2.6, draw)                   # drawn after the desk, before the arm that rests on it
 
 
 DESK_ARM = (-70.0, 230.0, 330.0)                    # his free wrist on the desk top through the call (neck units)
@@ -691,7 +690,7 @@ def desk_arm_item(t):
 
     def draw(im, c):
         j = dict(elsayed_j(t, c, x, z), hide_legs=('L', 'R'))   # (legs are behind the desk; they'd cover the arm)
-        j2 = dict(j)
+        j2 = dict(j, hand=dict(j.get('hand', {})))        # (a copy of its own: arm_to sets the hand shape)
         V.arm_to(j2, 'L', (-200.0, -250.0, 0.0), 'out', 'fist')   # (raised clear, so only the desk arm differs)
         V.arm_to(j2, 'R', (200.0, -250.0, 0.0), 'out', 'fist')    # (and the hand that puts the phone down)
         lay = []
