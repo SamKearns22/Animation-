@@ -169,6 +169,15 @@ def draw(p, sp, fx, my, shape, ink=(24, 20, 22)):
                dark, ink, 2.4)
         p.poly([(fx - 15, my - 2), (fx + 15, my - 2), (fx + 13, my + 3), (fx - 13, my + 3)], teeth, None)
         p.ell(fx, my + 17, 9, 4, tongue, None)
+    elif shape == 'grin':     # a big happy open smile, the corners up (Sam, 5 Nov: Alex's 😀)
+        out = curve([(fx - 30, my - 8), (fx - 12, my - 3), (fx + 12, my - 3), (fx + 30, my - 8), (fx + 18, my + 14),
+                     (fx, my + 20), (fx - 18, my + 14)], 3)
+        if sp.get('lips'):
+            p.poly([(x, y + (2 if y > my else -3)) for x, y in out], lip, ink, 2.0)
+        p.poly(out, dark, ink, 2.4)
+        p.poly(curve([(fx - 25, my - 6), (fx, my - 2), (fx + 25, my - 6), (fx + 20, my + 1), (fx, my + 4), (fx - 20, my + 1)], 2),
+               teeth, None)
+        p.ell(fx, my + 13, 10, 4, tongue, None)
     elif shape == 'O':        # round and open
         p.ell(fx, my + 7, 11, 13, dark, ink, 2.4)
         p.ell(fx, my + 14, 6, 3, tongue, None)

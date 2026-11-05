@@ -158,7 +158,7 @@ def car(img, x, y, s, col, d, part='both'):
     for k in range(n if part != 'body' else 0):
         a0, a1 = k / n, (k + 1) / n
         g = int(214 + 36 * a0)
-        pen(img).line([(x0 - d * a0 * 150 * s, y0), (x0 - d * a1 * 150 * s, y0)], (g, g + 3, min(255, g + 8)),
+        pen(img).line([(x0 - d * a0 * 75 * s, y0), (x0 - d * a1 * 75 * s, y0)], (g, g + 3, min(255, g + 8)),
                       max(1.0, 9 * s * (1 - 0.8 * a0)))
     if part == 'trail':
         return
@@ -669,7 +669,7 @@ def heading(img, t_in=99.0):
     return y
 
 
-HOOK = ('MAGAs Worst Nightmare', 410, None)  # Sam's words (4 Nov); two rows in the sky above the dome: finish.py --y 410
+HOOK = ('MAGA’s Nightmare Comes True', 410, None)  # Sam's words (4 Nov); two rows in the sky above the dome: finish.py --y 410
 
 
 def hook(img, text=HOOK[0], y=HOOK[1]):

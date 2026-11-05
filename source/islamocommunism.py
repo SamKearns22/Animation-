@@ -71,9 +71,9 @@ LINES = [
     dict(n=7, audio='islamocommunism-7', who='aoc', est=3.4, text='Me neither. But here we are, American dream solved.'),
     dict(n=8, audio='islamocommunism-8', who='elsayed', est=1.2, text='No poverty.'),
     dict(n=9, audio='islamocommunism-9', who='aoc', est=3.5,
-         text='Free everything inexplicably paired with total abundance.'),
+         text='Free everything, inexplicably paired with total abundance.'),
     dict(n=10, audio='islamocommunism-10', who='elsayed', est=3.0,
-         text="It's crazy that nobody had suggested trying it before."),
+         text="It's crazy nobody had suggested trying it before."),
     dict(n=11, audio='islamocommunism-11', who='elsayed', est=3.0,
          text="So, what's next for our great American experiment?"),
     dict(n=12, audio='islamocommunism-12', who='aoc', est=1.2, text='Invade Europe?'),
@@ -179,7 +179,7 @@ SHOTS = [('ext', 0.0, T['cut2']), ('office', T['cut2'], T['cut3']), ('door', T['
          ('two_med', _after(5), T['sip_end']),
          ('two_ab', T['sip_end'], _after(6)), ('two_ao', _after(6), _after(7)), ('two_ab', _after(7), _after(8)),
          ('two_aom', _after(8), _after(9)), ('two_med', _after(9), T['cut6']),
-         ('clink_ab', T['cut6'], _after(11)), ('clink_ao', _after(11), _after(12)), ('clink', _after(12), DUR)]
+         ('clink_ab', T['cut6'], _after(11)), ('clink_ao', _after(11), L[13]['start'] - 0.1), ('clink', L[13]['start'] - 0.1, DUR)]   # (her smile held)
 # Cameras (pos, look, focal), all level and square on (Sam's note 4: flat shots only, this film)
 CAMS = {'office': ((0.0, 1.45, 0.4), (0.0, 1.45, 4.4), 1350),         # the desk end, front on, flags at the edges
         'door': OF.door_cam(),                                         # square on to the east door
@@ -365,6 +365,21 @@ def held_flute(side, tilt=0.0):
     return draw
 
 
+def handset_k(side, k):
+    """The handset on its way down (k 0-1): from upright at the ear to lying level in the hand, never dangling."""
+    def draw(p, j2):
+        x, y = j2['wr' + side]
+        e0, m0 = (x + 4, y - 22), (x * 0.4, y + 74)
+        e1, m1 = (x - 50, y - 6), (x + 50, y - 6)
+        ear, mouth = _mix(e0, e1, k), _mix(m0, m1, k)
+        p.line([ear, mouth], INK, 30)
+        p.line([ear, mouth], (40, 40, 46), 24)
+        for c in (ear, mouth):
+            p.ell(c[0], c[1], 20, 16, (40, 40, 46), INK, 2.0)
+        p.ell(x, y + 18, 27, 27, IC.ELSAYED['skin'], INK, 2.4)
+    return draw
+
+
 def handset(side):
     """The desk phone's handset at his ear: a dark curved bar, ear cup at the hand, mouthpiece by the chin, the coiled
     cord falling to the desk."""
@@ -468,14 +483,20 @@ def _elsayed_j(t, c, x, z):
             j['tilt'] = 4.0 * _ease(_ramp(t, word_at(1, 'All') - 0.1, word_at(1, 'All') + 0.15))
         else:
             k = _ease(_ramp(t, T['hangup'], T['hangup'] + 0.45))
-            V.arm_to(j, 'R', _mix((82.0, -140.0, 16.0), PHONE_HAND, k), (0.6, 0.6, -0.4), 'none' if k < 1 else 'fist')
+            # Sam's note 5 (5 Nov): out and down to the phone in one reach, no inward fold; a slight bend at the elbow only
+            w = _mix((82.0, -140.0, 16.0), PHONE_MID, k / 0.5) if k < 0.5 else _mix(PHONE_MID, PHONE_HAND, (k - 0.5) / 0.5)
+            V.arm_to(j, 'R', w, 'down', 'none' if k < 1 else 'fist')
             if k < 1:
-                j['props'] = [handset('R')]
+                j['props'] = [handset_k('R', k)]
                 j['hand'] = dict(j.get('hand', {}), R='none')
         return j
     if t < T['rise'] + RISE:
-        j = moves.stand_up(sp, 0.18 + 0.82 * (t - T['rise']) / RISE)   # Sam's note 3: straight up, no lean
-        j['lean'] = 0.0                                                   # and sink first
+        u = (t - T['rise']) / RISE
+        j = moves.stand_up(sp, 0.18 + 0.82 * u)   # Sam's note 3: straight up, no lean and sink first
+        k = _ease(min(1.0, u / 0.6))              # Sam's note 6 (5 Nov): the hands leave the desk and phone as he rises,
+        for sd, w in (('L', DESK_ARM), ('R', PHONE_HAND)):   # one fluid move, never a jump to his sides first
+            V.arm_to(j, sd, _mix(w, j['wr' + sd], k), 'down', 'fist')
+        j['lean'] = 12.0 * (1 - k)
         j['seated'] = False
         return j
     j = V.standing(sp)
@@ -528,6 +549,8 @@ def aoc_sp(t):
         sp['mood'] = 'neutral'                     # "Me neither": a shrug, mouth sideways-flat
     elif L[12]['start'] - 0.3 <= t < L[13]['end'] + 0.3:
         sp['mood'] = 'excited'                     # brief 21 + Sam's note 17: bright, excited, brows high, eyes wide
+        if t >= L[12]['end'] - 0.05:              # Sam (5 Nov): she ends on a big happy smile
+            sp['mouth'] = 'v:grin'
     return sp
 
 
@@ -623,11 +646,15 @@ def aoc_item(t):
 
 def cam_for(t):
     pos, look, focal = CAMS[cut_of(t) if cut_of(t) != 'ext' else 'office']   # (ext: the audit asks; unused)
+    if cut_of(t) == 'office' and t < T['cut3']:   # Sam (5 Nov): a slow zoom in on the opening shots
+        focal *= 1.0 + 0.12 * (t - T['cut2']) / (T['cut3'] - T['cut2'])
     return MS.S.Cam(pos, look, focal=focal)
 
 
-PHONE = (0.36, 3.30)                               # the desk phone's base on the desk top, at his right (note 16)
-PHONE_HAND = (250.0, 130.0, 240.0)                 # his hand on the cradled handset (neck units, seated)
+PHONE = (0.45, 3.18)                               # the desk phone's base on the desk top, at his right (note 16)
+PHONE_HAND = (320.0, 125.0, 320.0)
+PHONE_MID = (250.0, 20.0, 200.0)                   # on the way down: out to his side, above the desk
+#                 # his hand on the cradled handset (neck units, seated)
 
 
 def phone_item(t):
@@ -686,7 +713,7 @@ def desk_arm_item(t):
 def people(t):
     s = shot_of(t)
     out = []
-    if s == 'office' and t < T['rise'] and SOLO[0] is None:
+    if s == 'office' and t < T['rise'] + RISE and SOLO[0] is None:
         out.append(desk_arm_item(t))
     if s != 'door' and SOLO[0] is None:
         out.append(phone_item(t))
@@ -706,6 +733,10 @@ def picture(t):
     ss = B.SS
     if shot_of(t) == 'ext':
         img = ISET.paint(t)                        # (drawn at 1080 wide, sets B.SS = 1)
+        z = 1.0 + 0.08 * min(1.0, t / T['cut2'])      # Sam (5 Nov): a slow zoom in on the opening shots
+        w, h = img.size
+        cw, ch = w / z, h / z
+        img = img.crop((int((w - cw) / 2), int((h - ch) / 2), int((w + cw) / 2), int((h + ch) / 2))).resize((w, h), Image.LANCZOS)
         if t >= T['usa']:
             ISET.heading(img, t - T['usa'])
         B.SS = ss
@@ -780,6 +811,22 @@ def _load_sfx(path):
 
 
 CLINK_SFX = _load_sfx(os.path.join(HERE, 'audio', 'sfx', 'islamocommunism-clink.wav'))
+SLURP_SFX = _load_sfx(os.path.join(HERE, 'audio', 'sfx', 'islamocommunism-slurp.wav'))     # Sam (5 Nov): a small slurp
+ANTHEM = _load_sfx(os.path.join(HERE, 'audio', 'sfx', 'islamocommunism-anthem.wav'))       # Sam (5 Nov): the anthem
+
+
+def _anthem(n):
+    """The Star-Spangled Banner from the start, fading gently (in decibels) to 30 dB down by Abdul's first word and
+    to silence just after: his line is clear over it (Sam, 5 Nov)."""
+    out = np.zeros(n)
+    m = min(n, len(ANTHEM))
+    tt = np.arange(m) / SR
+    a, b = L[1]['start'] - 1.8, L[1]['start']
+    db = np.where(tt < a, 0.0, -30.0 * (tt - a) / (b - a))
+    db = np.where(tt > b, -30.0 - 40.0 * (tt - b) / 0.9, db)
+    g = 10 ** (db / 20) * (tt < b + 0.9)
+    out[:m] = ANTHEM[:m] * g * 0.45
+    return out
 
 
 def soundtrack(stems=False):
@@ -791,6 +838,8 @@ def soundtrack(stems=False):
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
     rest = filmkit.place(rest, CLINK_SFX, T['clink'], SR, gain=0.5)   # Sam (5 Nov): the clink, the file's first one
+    rest = filmkit.place(rest, SLURP_SFX, T['sip'] + 0.5, SR, gain=0.6)   # as the glasses reach their lips
+    rest += _anthem(n)
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:
@@ -883,8 +932,9 @@ KEYS = [   # the stills sheet: one per beat (label, time)
     ('2 on the phone, sceptical (line 1)', lambda: word_at(1, 'All') + 0.3),
     ('2 "Guess I don\'t need..." dry half-smile', lambda: word_at(1, 'Doctor')),
     ('3 the door: "President El-Sayed?" (2)', lambda: L[2]['start'] + 0.4),
+    ('2 reaching to put the phone down (5 Nov, 5)', lambda: T['hangup'] + 0.25),
     ('2 phone down on its base (note 16)', lambda: T['hangup'] + 0.5),
-    ('4 he rises (faster, note 18)', lambda: T['rise'] + RISE * 0.5),
+    ('4 rising, hands leave the desk (5 Nov, 6)', lambda: T['rise'] + RISE * 0.3),
     ('4 "What do you have for me?" (3)', lambda: word_at(3, 'have') + 0.2),
     ('5 she walks in (4)', lambda: T['walk'] + 0.6),
     ('5 "...solved climate change." glass out (4)', lambda: T['offer'] + 0.8),
@@ -898,6 +948,7 @@ KEYS = [   # the stills sheet: one per beat (label, time)
     ('5 both, waist up: "It\'s crazy..." (10)', lambda: L[10]['start'] + 0.6),
     ('6 close on him: "So, what\'s next...?" (11)', lambda: L[11]['start'] + 0.4),
     ('6 close on her: "Invade Europe?" (12)', lambda: L[12]['start'] + 0.5),
+    ('6 her big smile, held (5 Nov, 9)', lambda: L[12]['end'] + 0.3),
     ('6 both: the clink', lambda: T['clink'] + 0.3),
 ]
 
