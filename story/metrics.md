@@ -186,3 +186,13 @@ promotion). Reading: `story/growth-analysis-3-nov.md`.
 
 Total play time 11 h 14 m 58 s. Per 1,000 views: likes 54, shares 2.8, saves 2.8, comments 2.3, followers 1.1.
 Sam: "decent enough, nothing remarkable or too disappointing". Against TERFwarts (7,294 views at 5 h): about a quarter of the views, but the watch-to-end share is twice as high (18.8% vs 9.3%), so the film itself holds people; reach is the gap. Tags used: #Trump #Midterms #BlueWave #Satire #PoliticalComedy (no #UKcomedy); can be compared with the next film's.
+
+## Snapshot: Thu 5 Nov 2026, 10:42 (YouTube Studio, Shorts, Top content, last 28 days: 8 Oct - 4 Nov; views)
+
+Small Boats Crisis, 1944: 1.6k. Hogwarts Is A Bit TERFy This Time: 1.4k. Elon Musk Tries To Stop Zelensky: 1.3k. Trump digests the Midterm
+results: 1.3k. Tesla kills two birds with one stone: 1.2k. Blue Planet 3 Takes Extreme Action: 888. Netanyahu Is The 'Moderate' Candidate:
+716. Reform HQ: EXPOSED!: 473. (Screenshot from Sam; only eight films listed.)
+
+## Posting plan (Sam, 5 Nov): 3-4 new films a week; TikTok and YouTube 4-6 pm; Facebook and Instagram (CranbriJoos Page, Business Suite) 12:30 pm
+and 7:30 pm, only one post on a day with a new film; catch-up from the backlog on days with no new film; a Story when there is a new film.
+Check Insights after two weeks and move the times.
