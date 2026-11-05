@@ -1,15 +1,14 @@
 # Notes for Islamocommunism (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 74 (acting list; answers below), 14 (pre-flight gates), 10 (faults named before a render)
-- **Done (4 Nov):** varied cuts; Sam's animatic notes 8-15 applied; desk arm approved by Sam; rough silent animatic 3 sent (`review/islamocommunism-animatic.mp4`, 62 s, 1.8 MB). Week's usage 96% at night's end (rule 44; 93% at its start; this chat about 3%).
-- **Next:** Opus, medium effort, new chat: apply held notes 16-18 (phone base, Alex more excited on "Invade Europe?", rise 50% faster), file Sam's 13 recordings (`source/audio/islamocommunism-N.m4a`), pre-flight, check sheet with the Hook Text frame, animatic. Type: "Islamocommunism: recordings in".
-- **Needs Sam:** the 13 voice recordings (Voice Isolation off), due 5 Nov; the week's usage figure after the animatic.
-- **Read:** this file; guides/satire.md "Before every render" and "The acting list".
-- **Open rule requests:** (a) end of project: a general rule on body weight and surfaces, limb extension (Sam, 4 Nov; photo reference; propose wording first). (b) The acting-list guide should plan each line's shot first time, use the quality tools and ask the questions that carry the script's meaning (Sam's ask, 4 Nov; wording not yet given a yes).
-- **Lesson (Sam, 4 Nov):** do not say a change "looks right" from a thumbnail or a first look; look at full size, say what is seen, and let Sam judge (it happened twice: the facial hair, the desk arm).
-- **Faults named to Sam (rough animatics):** silent bodies hold still 2.5 s in four places (no takes yet); the first close-up runs 10 s (chosen); the hand checks flag the desk arm (a separate layer; judged by Sam); the clink "turned" flag is a false alarm (frames face the lens); the handover touch check cannot find the hands. Renders need `--faults-named` while these stand.
-- **For Claude:** cuts are `cut_of(t)` (camera, cast), staging `shot_of(t)` = name before `_`; CAMS has `_ab/_ao/_aom/_med`; people are nudged 0.3 degrees off square (`MS.to_cam`) so nobody is drawn mirror-image; desk arm is `desk_arm_item` (DESK_ARM, found by a marker sleeve colour); acting beats are `BEATS`; `KEEP_CLEAR` skips the hook's own sky box.
+- **Rules that bite next:** 55 (spent vs estimate), P8 (check sheet before every animatic), 74 (acting list)
+- **Done (5 Nov):** final rendered and sent: `animations/islamocommunism-vertical.mp4` (73 s, 7.8 MB, 12 fps). Week's usage 100% at the end.
+- **Next:** Sam posts it. Then the end-of-project rule write-ups below (new chat, Opus), only when credits allow.
+- **Needs Sam:** nothing.
+- **Read:** this file's notes 8-19.
+- **Open rule requests:** (a) body weight and surfaces, limb extension (Sam, 4 Nov; photo reference). (b) the acting-list guide should plan each line's shot, use the quality tools and ask the questions that carry the script's meaning (Sam, 4 Nov). (c) lesson: do not say a change "looks right" from a thumbnail; look at full size and say what is seen. (d) lesson: a shallow copy of a pose shares its nested dicts (the hand bug). (e) people exactly square to the lens sit on the drawing's mirror line: nudge them 0.3 degrees (`MS.to_cam`). Wording for each to be proposed to Sam first.
+- **Faults named to Sam (final):** three subtitles on screen about 1.1 s; the 12 s close-up on line 6 (chosen); mouth check on "You know," and "Invade Europe." (the check's syllable count); hand checks on the desk arm and phone hand; the clink "turned" flag (false); a small hop of the handset as he rises.
+- **For Claude:** film `source/islamocommunism.py`; cuts `cut_of(t)`; `PHRASES` (mouth and subtitles per pause); `desk_arm_item`, `phone_item`, `handset_k`; sound: voices + clink + slurp + anthem (`_anthem`).
 
 ## Plan extras: ambition estimate (rules 24, 62). Compared with MidTerminal (11%, same Oval Office built new) and Terfwarts (9%).
 | build or risky move | why | estimate (% of a week) | spent |
