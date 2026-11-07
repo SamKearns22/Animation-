@@ -252,14 +252,17 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 ## The acting list (rule 74: before the first animatic)
 Every line gets one row in the film's notes, in this layout (the Islamocommunism film's list is the example):
 
-| line | who | face | body | lands on |
-|---|---|---|---|---|
-| 1 "the line's first words..." | name | the expression (eyes, brows, mouth) | posture, hands, head | the word the move hits |
+| line | who | shot and why | face | body | lands on |
+|---|---|---|---|---|---|
+| 1 "the line's first words..." | name | close-up / single / two-shot / wide, and why in a few words (e.g. "close-up: the reaction is the joke") | the expression (eyes, brows, mouth) | posture, hands, head | the word the move hits |
 
-Columns: **face** is the expression and where the eyes go; **body** is posture, hands and head; **lands on** is the
-word or moment the move happens on, so it can be checked against the take. Where the script's emotion leaves a move
-open, the row says "ask Sam" and the question goes in the brief questions before the first animatic. The list is shown
-to Sam with the brief questions, and ticked on the check sheet (rule 74).
+Columns: **shot and why** is the camera for that line, chosen now so a later change of shot is named as a cost (rule 35);
+**face** is the expression and where the eyes go; **body** is posture, hands and head; **lands on** is the word or
+moment the move happens on, so it can be checked against the take.
+**Ask first, write second:** before the list is written, ask Sam what each line means wherever the tone could go two
+ways (sincere or wink, hopeful or doubtful, dry or warm), numbered, my pick first. There is no limit on questions: a
+question costs far less than a fix. His answers fill the face column. Where a move is still open the row says "ask Sam".
+The list is shown to Sam with the brief questions, and ticked on the check sheet (rule 74).
 
 ## Subtitles (Sam, 16 Oct)
 - **Short chunks of two to five words**, each on its first word, so the text changes about once a second (Sam,

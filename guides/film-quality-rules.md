@@ -34,7 +34,7 @@ the end with their checks.
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
 | 44 | A usage budget per film; ask Sam for the week's figure only after a building stage, after the animatic and at the final; log it in the notes; over budget is trimmed before the next stage. | by hand (handover) |
 | 54 | Build only what the camera shows: before splitting a model into parts, decide how its ending looks and which parts the camera sees break; build parts only there. | by hand (the plan) |
-| 74 | Before the first animatic, every line gets an acting plan in the film's notes (face, body, the word the move lands on), shown to Sam with the brief questions; where the script's emotion leaves the move open, ask him. | by hand (the notes' acting list, ticked on the check sheet); layout in `guides/satire.md`, "The acting list" |
+| 74 | Before the first animatic, every line gets an acting plan in the film's notes (shot and why, face, body, the word the move lands on), shown to Sam with the brief questions. Before the list is written, ask Sam what each line means wherever the tone could go two ways (sincere or wink, hopeful or doubtful), my pick first; there is no limit on questions, because a question costs far less than a fix (Sam, 7 Nov). | by hand (the notes' acting list, ticked on the check sheet); layout in `guides/satire.md`, "The acting list" |
 | 55 | Every new build has its own cost in the estimate; each handover compares spent with estimated and names any item running over. | by hand (handover) |
 
 ## Building
