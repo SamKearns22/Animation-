@@ -89,6 +89,10 @@ never in one frame.
   weight does not slide or sink; the wrist lies flat to the surface; the elbow bends as the body lowers and straightens as
   it pushes; a lowering is slow with a pause at the bottom, the push back up quicker. Make it a rule only after a film
   shows its real problems (rule 78 covers the resting arm now).
+- **Two lessons from Islamocommunism (Sam, 7 Nov; no rule number):** (1) copying a pose copies only the top layer: the
+  hands' settings inside it are shared with the original, so the comparison copy switched on his real hand (use a deep
+  copy, `copy.deepcopy`); (2) anyone exactly square to the lens sits on the drawing's mirror line and can be drawn
+  as a mirror image: nudge them 0.3 degrees (`MS.to_cam`, already built into the tools).
 - **Seated at a desk** (the protester): thighs under the desk, forearms over it, hands on the keyboard.
 
 ## 5. Sets and props: one plan per place (see best-practice.md, 1.3)
