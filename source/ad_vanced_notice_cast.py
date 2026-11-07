@@ -85,8 +85,9 @@ def _ears(p, f, L, skin):
 # (0.75), joining the beard at the mouth corners; a dark soul patch under the lower lip's middle (0.63) with lighter
 # patches either side (0.84); the upper edge on the cheeks soft and ragged, never a hard line; grey-blond and dark
 # flecks all over (its 90th and 10th centiles).
-B_DARK = (80, 62, 52)
-B_MID = (156, 122, 104)
+B_DARK = (116, 88, 72)
+B_MID = (116, 96, 84)             # dark-to-medium brown with a silver cast (Sam, 7 Nov)
+B_SILVER = (192, 188, 182)
 B_CHIN = (190, 152, 132)
 B_MOUST = (178, 136, 116)
 B_SOUL = (140, 104, 88)
@@ -103,58 +104,30 @@ def _ragged(rng, pts, amp):
 
 
 def scrub_beard(p, f, L, skin, seed=81):
-    import random
-    rng = random.Random(seed)
+    """Vance's beard as Sam described it (7 Nov), in flat house colour: a medium moustache from under the nose to the
+    upper lip and out to the mouth corners; a beard that covers the cheeks from the mouth corners out to the face's
+    edge, runs round the jaw and rises only halfway up the chin; a small patch of hair under the lower lip; bare skin
+    between that patch and the beard."""
     fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
-    # the outer silhouette: down the face's sides from mid-ear, round the jaw and a little below the chin
-    # (Sam's close-up: the beard bulks out round and broad below the jaw, never a pointed chin)
-    bottom = [(-fw * 0.5 - 0.004, 0.46), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.5 - 0.02, 0.83), (-jw * 0.4, 0.97),
-              (-0.2, 1.045), (0.0, 1.065), (0.2, 1.045), (jw * 0.4, 0.97), (jw * 0.5 + 0.02, 0.83),
+    half = (l17 + 1.0) / 2                                  # halfway up the chin
+    bottom = [(-fw * 0.5 - 0.004, 0.46), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.5 - 0.016, 0.83), (-jw * 0.38, 0.97),
+              (-0.18, 1.035), (0.0, 1.05), (0.18, 1.035), (jw * 0.38, 0.97), (jw * 0.5 + 0.016, 0.83),
               (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.46)]
-    # the soft upper edge (Sam's close-up): from the face's side at about the nose's base, nearly level across the
-    # cheek, dipping into the moustache beside the nostrils; ragged
-    edge = [(fw * 0.5 - 0.02, 0.46), (fw * 0.44, ny - 0.03), (fw * 0.34, ny - 0.005), (fw * 0.24, ny + 0.012),
-            (nw * 0.75, ny + 0.02)]
-    cheek_r = _ragged(rng, edge, 0.01)
-    cheek_l = [(-u, v) for u, v in _ragged(rng, edge, 0.01)][::-1]
-    lip_gap = [(nw * 0.55, ny + 0.03), (0.0, ny + 0.038), (-nw * 0.55, ny + 0.03)]     # the moustache under the nose
-    body = bottom + cheek_r + lip_gap + cheek_l           # round the jaw, in along the right cheek, under the nose, out along the left
-    poly = curve(f.pts(body), 3)
-    p.poly(poly, B_MID, None)
-    # the dark band along the underside of the jaw and chin (the photo's darkest part)
-    inner = _ragged(rng, [(fw * 0.5 - 0.05, 0.56), (jw * 0.5 - 0.06, 0.8), (jw * 0.3, 0.92), (0.14, 0.97),
-                          (0.0, 0.98), (-0.14, 0.97), (-jw * 0.3, 0.92), (-jw * 0.5 + 0.06, 0.8),
-                          (-fw * 0.5 + 0.05, 0.56)], 0.012)
-    band = bottom[1:-1] + inner
-    p.poly(curve(f.pts(band), 3), B_DARK, None)
-    # the lighter chin front, under the soul patch, and the light patches beside the soul patch
-    chin = _ragged(rng, [(-mw * 0.5, l17 + 0.05), (0.0, l17 + 0.035), (mw * 0.5, l17 + 0.05), (mw * 0.5, 0.86),
-                         (0.0, 0.9), (-mw * 0.5, 0.86)], 0.01)
-    p.poly(curve(f.pts(chin), 3), B_CHIN, None)
-    for sgn in (-1, 1):
-        p.poly(curve(f.pts([(sgn * mw * 0.12, l17 + 0.018), (sgn * mw * 0.42, l17 + 0.014),
-                            (sgn * mw * 0.38, l17 + 0.07), (sgn * mw * 0.14, l17 + 0.066)]), 3), B_CHIN, None)
-    p.poly(curve(f.pts([(-mw * 0.1, l17 + 0.016), (mw * 0.1, l17 + 0.016), (mw * 0.07, l17 + 0.075),
-                        (0.0, l17 + 0.085), (-mw * 0.07, l17 + 0.075)]), 3), B_SOUL, None)     # the soul patch
-    # the sparse moustache: a light band from under the nose to the lip, out to the beard at the corners
-    must = [(-mw * 0.6, l13 + 0.006), (-nw * 0.75, ny + 0.04), (-nw * 0.5, ny + 0.036), (0.0, ny + 0.04),
-            (nw * 0.5, ny + 0.036), (nw * 0.75, ny + 0.04), (mw * 0.6, l13 + 0.006), (0.0, l0 + 0.004)]
-    mpoly = curve(f.pts(must), 3)
-    p.poly(mpoly, B_MOUST, None)
-    # flecks: grey-blond and dark hairs all over, the moustache sparse (skin dots between), the band salt-and-pepper
-    for _ in range(1600):
-        u, v = rng.uniform(-fw * 0.52, fw * 0.52), rng.uniform(0.44, 1.06)
-        q = f(u, v)
-        if _inside(poly, q[0], q[1]) or _inside(mpoly, q[0], q[1]):
-            in_m = _inside(mpoly, q[0], q[1])
-            r = rng.random()
-            c = (blend(B_MOUST, skin, 0.6) if r < 0.5 else B_FLECK_D) if in_m else \
-                (B_FLECK_L if r < 0.28 else (B_FLECK_D if r < 0.7 else dk(B_MID, 0.8)))
-            a = rng.uniform(-0.7, 0.7)
-            ln = rng.uniform(1.4, 2.6)
-            p.line([q, (q[0] + ln * a, q[1] + ln)], c, 1.1)
-    # the ink only round the outer silhouette, lumpy (the beard's own edge below the jaw)
-    p.line(open_curve(f.pts(_ragged(rng, bottom, 0.004)), 3), INK, 2.6)
+    cheek = [(fw * 0.5 - 0.02, 0.46), (fw * 0.42, ny - 0.02), (fw * 0.32, ny + 0.01), (mw * 0.68, l0 - 0.012)]
+    corner = [(mw * 0.62, l13 + 0.01), (mw * 0.56, l17 + 0.02), (mw * 0.42, half - 0.01)]
+    chin = [(0.0, half)]
+    right = cheek + corner
+    left = [(-u, v) for u, v in right[::-1]]
+    body = bottom + right + chin + left
+    p.poly(curve(f.pts(body), 3), B_MID, None)
+    must = [(-mw * 0.64, l13 + 0.004), (-mw * 0.6, l0 - 0.02), (-nw * 0.5, ny + 0.034), (0.0, ny + 0.04),
+            (nw * 0.5, ny + 0.034), (mw * 0.6, l0 - 0.02), (mw * 0.64, l13 + 0.004), (mw * 0.4, l0 + 0.002),
+            (0.0, l0 + 0.006), (-mw * 0.4, l0 + 0.002)]
+    p.poly(curve(f.pts(must), 3), B_MID, None)                                  # the moustache, medium
+    soul = [(-mw * 0.13, l17 + 0.012), (mw * 0.13, l17 + 0.012), (mw * 0.08, l17 + 0.05), (0.0, l17 + 0.068),
+            (-mw * 0.08, l17 + 0.05)]
+    p.poly(curve(f.pts(soul), 3), B_MID, None)                                  # the patch under the lip
+    p.line(open_curve(f.pts(bottom), 3), INK, 2.6)                              # the ink round the outer edge only
 
 
 def beard_test(out, mood='neutral'):
