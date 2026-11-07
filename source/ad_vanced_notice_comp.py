@@ -261,7 +261,7 @@ def gas():
     rect(d, px - 10, top + 260, px + 10, hz + 0.0, (90, 90, 96), 2)
     rect(d, px - 150, top, px + 150, top + 270, (245, 245, 240))
     rect(d, px - 150, top, px + 150, top + 50, (30, 60, 140))
-    for i, (name, price) in enumerate((('DIESEL', '6.15'), ('REGULAR', '4.79'), ('PREMIUM', '5.39'))):
+    for i, (name, price) in enumerate((('DIESEL', '6.15'), ('REGULAR', '4.39'), ('PREMIUM', '5.25'))):   # peak war prices
         y = top + 62 + i * 68
         rect(d, px - 140, y, px + 140, y + 60, (20, 20, 22), 2)
         d.text((px - 128, y + 20), name, font=font(22), fill=(240, 240, 240))
@@ -344,7 +344,7 @@ PLACES = [
         'pumps: tall boxes with a screen, black hoses and nozzles',
         'a pylon price board by the road: a tall pole, a blank top panel',
         'prices in lit numbers, each ending in a small 9 (9/10 of a cent)',
-        'rows: DIESEL 6.15, REGULAR, PREMIUM (Sam, 7 Nov)',
+        'rows: DIESEL 6.15, REGULAR 4.39, PREMIUM 5.25 (peak war prices)',
         'a pale concrete forecourt with oil stains',
         'flat land to the horizon under a huge sky; power poles',
         'a grain elevator in the distance',

@@ -387,7 +387,10 @@ def man_torso(img, p, sp, t):
     for y in range(60, bottom - 40, 70):
         p.ell(0, y, 5, 5, (236, 232, 222), INK, 1.0)
     for sgn in (-1, 1):
-        p.poly([(sgn * 36, -6), (sgn * 64, 16), (sgn * 22, 40), (0, 10)], M_SHIRT, INK, 2.0)
+        collar = [(sgn * 36, -6), (sgn * 64, 16), (sgn * 22, 40), (0, 10)]
+        p.poly(collar, M_SHIRT, INK, 2.0)
+        _cloth(p, _grow(collar, 4), lambda pen: [pen.line([(x, -30), (x + 20, 60)], M_CHECK, 14) for x in (-48, 0, 48)] +
+               [pen.line([(-80, 18), (80, 18)], M_CHECK, 12)])     # the collar is checked too
     p.poly([(-sw * 0.98, bottom - 24), (sw * 0.98, bottom - 24), (sw * 0.96, bottom), (-sw * 0.96, bottom)],
            (60, 40, 28), INK, 2.0)                                                     # the belt
     p.poly([(-16, bottom - 22), (16, bottom - 22), (16, bottom - 2), (-16, bottom - 2)], (196, 176, 120), INK, 1.4)
@@ -406,28 +409,43 @@ def _inside(poly, x, y):
     return c
 
 
-def check_lines(p, poly, x0, x1, y0, y1, step=48, col=M_CHECK, inset=2, width=22):
-    """The shirt's check, cut to the shirt's outline (never past its edge)."""
-    def runs(a, b):
-        across = (0, inset + width / 2) if a[1] == b[1] else (inset + width / 2, 0)    # the band's thickness
-        along = (inset, 0) if a[1] == b[1] else (0, inset)
-        offs = (along, (-along[0], -along[1]), across, (-across[0], -across[1]))
-        pts = [(a[0] + (b[0] - a[0]) * k / 60, a[1] + (b[1] - a[1]) * k / 60) for k in range(61)]
-        seg = []
-        for q in pts:
-            ok = all(_inside(poly, q[0] + dx, q[1] + dy) for dx, dy in offs)
-            if ok:
-                seg.append(q)
-            elif seg:
-                if len(seg) > 1:
-                    p.line(seg, col, width)
-                seg = []
-        if len(seg) > 1:
-            p.line(seg, col, width)
-    for x in range(int(x0) // step * step, int(x1), step):
-        runs((x, y0), (x, y1))
-    for y in range(int(y0) // step * step, int(y1), step):
-        runs((x0, y), (x1, y))
+def _cloth(p, region, draw):
+    """Print a pattern onto the shirt's own cloth (Sam, 7 Nov, third note on the check: "the check doesn't go all the
+    way to the edges"). `draw(pen)` lays the bands full length on a clear layer; they are kept only on red shirt pixels
+    inside `region` (the piece's outline, pushed out a few units), so the check runs right up to the ink line like
+    printed cloth and never past it. (The old way dropped any part of a band whose full width didn't fit inside the
+    outline, which left a plain red rim round every edge.)"""
+    img = p.img
+    layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    draw(B.Pen(layer, p.cam))
+    reg = Image.new('L', img.size, 0)
+    ImageDraw.Draw(reg).polygon([p.cam.P(*q) for q in region], fill=255)
+    px = np.asarray(img.convert('RGB')).astype(int)
+    red = (px[..., 0] > 2 * px[..., 1] + 20) & (px[..., 0] > 2 * px[..., 2] + 20)    # the shirt red and its shade
+    keep = red & (np.asarray(reg) > 0) & (np.asarray(layer)[..., 3] > 0)
+    img.paste(layer, (0, 0), Image.fromarray((keep * 255).astype(np.uint8)))
+
+
+def _grow(poly, by=8):
+    """The outline pushed out `by` units from its middle (so the clip region holds the whole piece)."""
+    cx = sum(x for x, _ in poly) / len(poly)
+    cy = sum(y for _, y in poly) / len(poly)
+    out = []
+    for x, y in poly:
+        dx, dy = x - cx, y - cy
+        n = math.hypot(dx, dy) or 1
+        out.append((x + dx / n * by, y + dy / n * by))
+    return out
+
+
+def check_lines(p, poly, x0, x1, y0, y1, step=48, col=M_CHECK, width=22):
+    """The shirt's check: full-length bands every `step`, printed onto the cloth inside `poly` (_cloth)."""
+    def draw(pen):
+        for x in range(int(x0) // step * step - step, int(x1) + step, step):
+            pen.line([(x, y0 - step), (x, y1 + step)], col, width)
+        for y in range(int(y0) // step * step - step, int(y1) + step, step):
+            pen.line([(x0 - step, y), (x1 + step, y)], col, width)
+    _cloth(p, _grow(poly, 30), draw)
 
 
 def torso_view(img, p, sp, view, seated=False):
@@ -466,17 +484,29 @@ def arm(p, j2, side, sp, shape=None):
     with V.F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
         B.arm(p, sh, el, wr, sp.get('sleeve'))
     w = 30
-    for a, b, wa, wb in ((sh, el, w, w * 0.9), (el, wr, w * 0.9, w * 0.72)):
+
+    def draw(pen):                                                  # the check in the arm's own direction, cell 48
+        for a, b in ((sh, el), (el, wr)):
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            n = math.hypot(dx, dy) or 1
+            tx, ty, nx, ny = dx / n, dy / n, -dy / n, dx / n
+            for t in np.arange(-w - 24, n + w, 48):                 # bands across, wider than the sleeve
+                c = (a[0] + tx * t, a[1] + ty * t)
+                pen.line([(c[0] + nx * 2 * w, c[1] + ny * 2 * w), (c[0] - nx * 2 * w, c[1] - ny * 2 * w)], M_CHECK, 20)
+            for off in (0,):                                        # a band along its middle (the edges stay red, so
+                #                                                     the sleeve reads against the checked body), past both ends
+                pen.line([(a[0] + nx * off - tx * w, a[1] + ny * off - ty * w),
+                          (b[0] + nx * off + tx * w, b[1] + ny * off + ty * w)], M_CHECK, 20)
+    region = []                                                     # a capsule round the sleeve, just outside it
+    for a, b in ((sh, el), (el, wr)):
         dx, dy = b[0] - a[0], b[1] - a[1]
         n = math.hypot(dx, dy) or 1
         tx, ty, nx, ny = dx / n, dy / n, -dy / n, dx / n
-        for t in np.arange(14, n - 8, 48):                          # bands across the sleeve
-            wt = (wa + (wb - wa) * t / n) - 5
-            c = (a[0] + tx * t, a[1] + ty * t)
-            p.line([(c[0] + nx * wt, c[1] + ny * wt), (c[0] - nx * wt, c[1] - ny * wt)], M_CHECK, 16)
-        for off in (-0.4, 0.4):                                     # bands along it
-            p.line([(a[0] + nx * wa * off + tx * 10, a[1] + ny * wa * off + ty * 10),
-                    (b[0] + nx * wb * off - tx * 6, b[1] + ny * wb * off - ty * 6)], M_CHECK, 14)
+        r = w + 8
+        region.append([(a[0] + nx * r - tx * r, a[1] + ny * r - ty * r), (b[0] + nx * r + tx * r, b[1] + ny * r + ty * r),
+                       (b[0] - nx * r + tx * r, b[1] - ny * r + ty * r), (a[0] - nx * r - tx * r, a[1] - ny * r - ty * r)])
+    for reg in region:
+        _cloth(p, reg, draw)
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
         V.hand(p, j2, side, sp, shape)
