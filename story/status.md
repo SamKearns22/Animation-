@@ -9,8 +9,8 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). Open: Sam's Y/N on the "Hook Text names the story" rule.
 
 ## Films
-- **Ad-Vanced Notice (7 Nov): cast approved** (Vance, the driver); beard tool built (rule 77). Next: place photos and the
-  composition sheet (fresh chat, Opus high). Waiting on Sam: the rest of the script. Notes: `notes/ad-vanced-notice.md`.
+- **Ad-Vanced Notice (7 Nov): place photos filed, composition sheet sent.** Cast approved; 15 place photos with
+  9-10 things each. Next: Sam's yes, then build the sets (Opus high). Waiting on Sam: the rest of the script. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/islamocommunism.md`.
 - **MidTerminal (4 Nov): done.** Final `animations/midterminal-vertical.mp4` (57.4 s, 10.5 MB) and story post `animations/midterminal-story.png`. Cost 11% of a week (Sam: the old norm was 15-25%; always aim lower). Rules 70-75 and P8-P10 written (Sam's yes). Built (4 Nov): finish.py burns in the subtitles (rule 70) and reads the film's HOOK, checking it first (rule 75): `finish.py CLEAN OUT --film NAME`. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
