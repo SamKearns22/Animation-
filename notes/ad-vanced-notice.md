@@ -1,14 +1,14 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 3 (places: 8-10 recognisable things, references beside ours), 11 (one composition sheet of the 3-4 key shots before building), 40 (showstopper list: Sam approved it in planning, ticked at the first rehearsal clip)
-- **Done (7 Nov):** plan and answers; cast approved: Vance (likeness 62-74%, beard approved: flat shapes, tufted edges, silver grain), the driver (anger 4, black-and-red check all over, sleeves too); beard tool `beardkit` built and tested; rule 77 written. Network now allows Wikimedia (photos fetched directly, about one every 6 s).
-- **Spent against the estimate:** Vance's beard ran well over (8 notes); the tool is a one-off build outside the film. Ask Sam for the week's usage at the next stage end (rule 44).
-- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: place photos and the composition sheet. Read notes/ad-vanced-notice.md".
-- **Needs Sam:** the rest of the script (reworked for an earlier joke); the Hook Text wording later.
-- **Read:** this file (shots, showstopper list, acting list); `guides/satire.md` "Getting it right first time"; `guides/kit-catalogue.md` rows for the Flying Whales sea and effects.
+- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 11 (build only from the approved composition), 40 (showstopper list ticked at the first rehearsal clip)
+- **Done (7 Nov):** cast approved; place photos filed (15, five places) with 9-10 things each; reference sheet and rough composition sheet sent to Sam.
+- **Spent against the estimate:** Vance's beard ran well over (8 notes). Ask Sam for the week's usage at the next stage end (rule 44).
+- **Next:** on Sam's yes, build the sets (Opus, high effort; same chat if short, else type "Ad-Vanced Notice: build the sets from the composition. Read notes/ad-vanced-notice.md").
+- **Needs Sam:** yes on the composition and the place lists; the rest of the script; the Hook Text wording later.
+- **Read:** this file (shots, showstopper, acting, references); `guides/satire.md` "Start" and "Getting it right first time"; `guides/kit-catalogue.md` rows for the Flying Whales sea and effects.
 - **Open rule requests:** none.
-- **For Claude:** cast `source/ad_vanced_notice_cast.py` (sheet / faces / beard / head); references `references/ad-vanced-notice/`; Wikimedia API with a User-Agent, sleep 6 s between files, honour Retry-After; place photos still to fetch: Musandam cliffs over the Strait of Hormuz, crude tankers, a Midwest gas station with a price board, a full-size pickup, a panelled study with bookcases and fireplace.
+- **For Claude:** cast `source/ad_vanced_notice_cast.py`; comp and place lists `source/ad_vanced_notice_comp.py` (`comp`, `refs`, `PLACES`, `SHOTS`); photos `references/ad-vanced-notice/` (Wikimedia via curl, not urllib: urllib got 429s; a User-Agent with the repo URL; honour Retry-After); film file not made yet (`source/satire_template.py`).
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
@@ -68,7 +68,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 15 | Everything is enveloped in light as it erupts in a massive fireball. | |
 | 16 | Flaming bits of tanker fly through the air and smash into the waters. | |
 | 17 | Smoke vomits into the sky. | |
-| 18 | Close up on JD's face, the flaming wreck upon the sea over his right shoulder. | |
+| 18 | Close up on JD's face, the flaming wreck upon the sea over his ~~right~~ **left** shoulder (Sam, 7 Nov: the screenplay was wrong). | |
 | 19 | VANCE: "None of this is my fault." | |
 | 20 | A Midwest gas station. | |
 | 21 | A seventeen stone man in blue jeans and a checkered shirt, black goatee and a balding pate, stares up in unforgiving anger at the forecourt price board. | |
@@ -99,11 +99,16 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | reference | what it shows | ours matches? |
 |---|------|------|
 | Vance likeness pack (rule 51) | 3 official portraits straight-on (2023, 2025, 2026) and a 2022 caricature, from Wikimedia Commons; the speaking photos were too far away to use. Hair medium-dark brown swept up and over from a parting on his right (our left), receding M; brows heavy, low, near straight; narrow hooded blue eyes; broad nose tip; short full brown beard with a ginger cast joined to the moustache; thin lips; broad upper face | yes: likeness check 73% / 81% / 66%, nothing the wrong way, 1st in the line-up (7 Nov) |
-| Musandam cliffs over the Strait of Hormuz | needed (I gather) | |
-| Oil tankers at sea (crude carriers) | needed (I gather) | |
-| Midwest gas station with a price board | needed (I gather) | |
-| Full-size 4x4 pickup | needed (I gather) | |
-| Wood-panelled study with bookcases and fireplace | needed (I gather) | |
+| Cliff and strait: `cliff-musandam-plateau`, `-road`, `-fjord` | 9 things listed (layered grey-brown limestone, stony plateau and track, sheer cliffs into the sea, calm blue-teal sea, haze, far shore a grey smudge, pale sky, no plants but a thorn tree, hard high sun) | not built yet |
+| Tankers: `tanker-side-wake`, `tanker-side-dark`, `tankers-at-anchor-haze` | 10 things (long and low, dark hull with red band, white bridge block aft, funnel band, deck pipe run, cranes amidships and raised bow, no names, all pointing one way at anchor, V wake under way, far ones grey bumps) | not built yet |
+| Gas station: `gas-iowa-canopy`, `gas-price-pylon`, `gas-price-board`, `gas-nozzle-filler` | 10 things (lit canopy with band, pump islands with posts, pumps with screens and black hoses, pylon board with blank top, lit prices ending in a small 9, DIESEL/REGULAR/PREMIUM rows, concrete forecourt, flat land and power poles, grain elevator, low shop) | not built yet |
+| Pickup: `pickup-side`, `pickup-rear` | 9 things (full-size crew cab 5.9 x 1.9 m, square grille, bed and tailgate, big wheels, arches and running board, big mirrors, fuel flap driver side ahead of the rear wheel, side on facing left, white paint) | not built yet |
+| Study: `study-abbotsford`, `study-canons-ashby`, `study-oak-fireplace` | 10 things (floor-to-ceiling oak bookcases, leather books with gold bands, tall bays and cornice, lacquer shine, fireplace in the book wall on the right, black firebox and logs, mantel clock and candlesticks, gilt portrait over it, pedestal desk, warm low light) | not built yet |
+
+All lists in `source/ad_vanced_notice_comp.py` (`PLACES`), each photo's source in `references/ad-vanced-notice/sources.txt`; they become the film's `BENCHMARK` once the sets are built.
+
+Composition sheet sent: 7 Nov, `python3 source/ad_vanced_notice_comp.py comp OUT.jpg` (4 key shots, the cliff in two moments: study with the Hook Text band; cliff walk; cliff hit, Vance screen left, the tanker behind to his left; close-up, wreck over his left shoulder (screen right); gas station, arm round). Rough stand-ins: the driver faces the lens and the arm round is a hand on his shoulder; the build makes him glare up at the board.
+Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mantel, a mantel clock and candlesticks; a grain elevator, power poles and a low shop at the gas station; a white pickup.
 
 ## Questions sent to Sam (7 Nov)
 1. The rest of the script: build now (cast, sets, showstopper) and fit the rest in when it comes (Y), or wait (N)?
@@ -133,8 +138,9 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 10 | cast | | The driver's anger: 4; chequered sleeves ("checkered shirts tend to be 100% in pattern") | done: anger 4 is his default; the check runs along both sleeves. New kind |
 | 5 | cast | | Anger 6 is the first face that registers as anger | done: the scale restarts there (new 1 = old 6) and goes stronger. New kind |
 | 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
+| 11 | close-up | | The wreck goes over his LEFT shoulder: the screenplay had it wrong | done: wreck and smoke moved to screen right, Vance to screen left of centre; brief row 18 corrected. New kind |
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.
-- His right shoulder = screen left in the close-up.
+- The close-up's wreck is over his LEFT shoulder = screen right (Sam, 7 Nov, correcting the screenplay); it matches the cliff shot, where the tanker is on his left too.
 - No brand names on the gas station, the tankers or the pickup.
