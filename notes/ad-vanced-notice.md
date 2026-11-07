@@ -2,12 +2,12 @@
 
 ## Where things stand
 - **Rules that bite next:** 51 (Vance likeness pack before drawing), 40 (showstopper list approved before building), 74 (acting list)
-- **Done (7 Nov):** brief checklist, shots, acting list, showstopper list, estimate (10%); Sam's answers in; the network now allows Wikimedia, so I fetch reference photos myself.
-- **Next:** Sam's answers, the rest of the script and Vance photos; then the composition sheet (rule 11) and the cast sheet (Opus, high effort; same chat while it is short).
+- **Done (7 Nov):** plan and Sam's answers; the network now allows Wikimedia (I fetch photos myself); cast sheet sent (Vance passes the likeness check; the driver; anger scale 1-6).
+- **Next:** Sam's yes on the cast and his anger number; then place photos (Musandam cliffs, tankers, gas station, pickup, study) and the composition sheet (rule 11).
 - **Needs Sam:** the rest of the script (reworked for an earlier joke); Vance cartoons he likes; Hook Text wording later.
 - **Read:** `guides/satire.md` (Start; Getting it right first time), `guides/kit-catalogue.md` (Flying Whales sea and effects).
 - **Open rule requests:** none.
-- **For Claude:** film will be `source/ad_vanced_notice.py` (from `source/satire_template.py`). Reuse: `flying_whales_sea.py` (sea painting, re-lit for a hazy noon), `flying_whales_fx.py` (fireball, Puff smoke, fire tongues, splashes, chunks, holes), `flying_whales_wreck.py` (pieces thrown, falling, splashing; freeze and jolt on the hit).
+- **For Claude:** cast `source/ad_vanced_notice_cast.py` (sheet / faces / head); likeness card `references/ad-vanced-notice/vance-card.json`; Wikimedia: API with a User-Agent, 1 request per ~6 s (429s otherwise); kit: `views.leg` takes `leg_k` (heavier legs). Film will be `source/ad_vanced_notice.py` (from `source/satire_template.py`). Reuse: `flying_whales_sea.py` (sea painting, re-lit for a hazy noon), `flying_whales_fx.py` (fireball, Puff smoke, fire tongues, splashes, chunks, holes), `flying_whales_wreck.py` (pieces thrown, falling, splashing; freeze and jolt on the hit).
 
 ## The film so far (the script continues; about 24 s so far)
 1. **Study, front on, medium** (about 4 s). Vance behind the desk, sincere and confident. Bookcases behind, fireplace crackling on the right, crystal glass of water on the desk, US flag draped over the desk's left side. Line 1.
@@ -106,7 +106,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 ## References as checklists (never draw blind)
 | reference | what it shows | ours matches? |
 |---|------|------|
-| Vance likeness pack (rule 51) | downloading from Wikimedia Commons (7 Nov): 3 official portraits straight-on, 9 speaking photos, 1 caricature; Sam sends cartoons he likes | |
+| Vance likeness pack (rule 51) | 3 official portraits straight-on (2023, 2025, 2026) and a 2022 caricature, from Wikimedia Commons; the speaking photos were too far away to use. Hair medium-dark brown swept up and over from a parting on his right (our left), receding M; brows heavy, low, near straight; narrow hooded blue eyes; broad nose tip; short full brown beard with a ginger cast joined to the moustache; thin lips; broad upper face | yes: likeness check 73% / 81% / 66%, nothing the wrong way, 1st in the line-up (7 Nov) |
 | Musandam cliffs over the Strait of Hormuz | needed (I gather) | |
 | Oil tankers at sea (crude carriers) | needed (I gather) | |
 | Midwest gas station with a price board | needed (I gather) | |

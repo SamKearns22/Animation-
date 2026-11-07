@@ -208,7 +208,8 @@ def leg(p, j, side, yaw, sp):
     hip3, foot3 = j['hip' + side], j['foot' + side]
     knee3 = knee_of(j, side)
     pts = [project(q, yaw)[0] for q in (hip3, knee3, foot3)]
-    tube(p, pts, [48, 38, 27], sp.get('trousers', (40, 40, 46)))
+    k = sp.get('leg_k', 1.0)                                          # a heavier build (Ad-Vanced Notice, 7 Nov)
+    tube(p, pts, [48 * k, 38 * k, 27 * k], sp.get('trousers', (40, 40, 46)))
     fx, fy, fz = foot3
     a = math.radians(j.get('toe' + side, 0.0))                       # heel lifted (toe-off, a kick), degrees
 
