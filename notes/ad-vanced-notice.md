@@ -68,7 +68,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 15 | Everything is enveloped in light as it erupts in a massive fireball. | |
 | 16 | Flaming bits of tanker fly through the air and smash into the waters. | |
 | 17 | Smoke vomits into the sky. | |
-| 18 | Close up on JD's face, the flaming wreck upon the sea over his right shoulder. | |
+| 18 | Close up on JD's face, the flaming wreck upon the sea over his ~~right~~ **left** shoulder (Sam, 7 Nov: the screenplay was wrong). | |
 | 19 | VANCE: "None of this is my fault." | |
 | 20 | A Midwest gas station. | |
 | 21 | A seventeen stone man in blue jeans and a checkered shirt, black goatee and a balding pate, stares up in unforgiving anger at the forecourt price board. | |
@@ -107,7 +107,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 
 All lists in `source/ad_vanced_notice_comp.py` (`PLACES`), each photo's source in `references/ad-vanced-notice/sources.txt`; they become the film's `BENCHMARK` once the sets are built.
 
-Composition sheet sent: 7 Nov, `python3 source/ad_vanced_notice_comp.py comp OUT.jpg` (4 key shots, the cliff in two moments: study with the Hook Text band; cliff walk; cliff hit, Vance screen left, the tanker behind to his left; close-up, wreck over his right shoulder; gas station, arm round). Rough stand-ins: the driver faces the lens and the arm round is a hand on his shoulder; the build makes him glare up at the board.
+Composition sheet sent: 7 Nov, `python3 source/ad_vanced_notice_comp.py comp OUT.jpg` (4 key shots, the cliff in two moments: study with the Hook Text band; cliff walk; cliff hit, Vance screen left, the tanker behind to his left; close-up, wreck over his left shoulder (screen right); gas station, arm round). Rough stand-ins: the driver faces the lens and the arm round is a hand on his shoulder; the build makes him glare up at the board.
 Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mantel, a mantel clock and candlesticks; a grain elevator, power poles and a low shop at the gas station; a white pickup.
 
 ## Questions sent to Sam (7 Nov)
@@ -138,8 +138,9 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 10 | cast | | The driver's anger: 4; chequered sleeves ("checkered shirts tend to be 100% in pattern") | done: anger 4 is his default; the check runs along both sleeves. New kind |
 | 5 | cast | | Anger 6 is the first face that registers as anger | done: the scale restarts there (new 1 = old 6) and goes stronger. New kind |
 | 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
+| 11 | close-up | | The wreck goes over his LEFT shoulder: the screenplay had it wrong | done: wreck and smoke moved to screen right, Vance to screen left of centre; brief row 18 corrected. New kind |
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.
-- His right shoulder = screen left in the close-up.
+- The close-up's wreck is over his LEFT shoulder = screen right (Sam, 7 Nov, correcting the screenplay); it matches the cliff shot, where the tanker is on his left too.
 - No brand names on the gas station, the tankers or the pickup.

@@ -228,15 +228,16 @@ def closeup():
     d.rectangle([0, 0, W, hz], fill=(176, 198, 214))
     d.polygon([(0, hz), (0, hz - 30), (300, hz - 50), (700, hz - 30), (1080, hz - 44), (1080, hz)], fill=(170, 176, 186))
     d.rectangle([0, hz, W, H], fill=SEA)
-    # the burning wreck over his right shoulder (screen left), smoke pouring up the left of the frame
-    wx, wl = 250, hz + 40
+    # the burning wreck over his LEFT shoulder (screen right; Sam, 7 Nov: the screenplay said right by mistake), the
+    # smoke leaning right as in the cliff shot
+    wx, wl = 840, hz + 40
     d.polygon([(wx - 60, wl - 40), (wx - 220, wl - 500), (wx - 120, wl - 1000), (wx + 60, wl - 1300), (wx + 320, wl - 1250),
                (wx + 180, wl - 700), (wx + 80, wl - 40)], fill=(40, 36, 36), outline=INK)
     tanker(d, wx, wl, 420, (60, 30, 26))
     for dx in (-60, 0, 50):
         d.polygon([(wx + dx - 40, wl - 36), (wx + dx, wl - 190), (wx + dx + 40, wl - 36)], fill=(245, 140, 40), outline=INK)
     d.polygon([(wx - 300, wl + 4), (wx + 300, wl + 4), (wx + 200, wl + 90), (wx - 200, wl + 90)], fill=(170, 110, 70))
-    person(im, AC.VANCE, 660, 1920 + 1500, 1500, 0, mood='sincere', mouth='rest')
+    person(im, AC.VANCE, 430, 1920 + 1500, 1500, 0, mood='sincere', mouth='rest')
     return im
 
 
@@ -400,7 +401,7 @@ SHOTS = [
      'at his mark, screen left, clear of the tanker', lambda: cliff(False, 400, 1500, 300), False),
     ('2b  Same shot, the hit: the missile drops top left onto the tanker behind him; fireball, flying pieces, smoke; '
      'he never looks round', lambda: cliff(True), False),
-    ('3  Close-up: the burning wreck and its smoke over his right shoulder (screen left), the glow on his face. "None '
+    ('3  Close-up: the burning wreck and its smoke over his LEFT shoulder (screen right; Sam, 7 Nov), the glow on his face. "None '
      'of this is my fault."', lambda: closeup(), False),
     ('4  Gas station: the driver at his pickup, pump in hand, glaring up at the board (DIESEL 6.15); Vance in from '
      'the right, arm round him', lambda: gas(), False),
