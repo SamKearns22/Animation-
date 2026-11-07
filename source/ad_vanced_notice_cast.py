@@ -18,6 +18,7 @@ portraits, references/ad-vanced-notice/) on the patriots4 face layout, drawn the
 Map: colours 35 | measures 50 | Vance head 70 | man head 140 | torsos 175 | people 215 | sheets 235
 """
 import json
+import math
 import os
 import sys
 
@@ -85,9 +86,10 @@ def _ears(p, f, L, skin):
 # (0.75), joining the beard at the mouth corners; a dark soul patch under the lower lip's middle (0.63) with lighter
 # patches either side (0.84); the upper edge on the cheeks soft and ragged, never a hard line; grey-blond and dark
 # flecks all over (its 90th and 10th centiles).
-B_DARK = (116, 88, 72)
-B_MID = (116, 96, 84)             # dark-to-medium brown with a silver cast (Sam, 7 Nov)
-B_SILVER = (192, 188, 182)
+B_MID = (124, 100, 86)            # ash brown (Sam, 7 Nov: "dark/medium brown/silver"; his close-up's cheek beard)
+B_DARK = (90, 72, 62)             # the jaw's underside, the close-up's darkest band
+B_MOUST = (130, 102, 86)          # the moustache: grey-brown, a touch warmer, blending into the cheeks
+B_GRAIN = (170, 156, 146)         # the silver-ash grain
 B_CHIN = (190, 152, 132)
 B_MOUST = (178, 136, 116)
 B_SOUL = (140, 104, 88)
@@ -103,11 +105,37 @@ def _ragged(rng, pts, amp):
     return out
 
 
+def tufts(pts, amp, step, out=1.0, seed=0):
+    """A hair edge: the polyline resampled every `step` and every other point pushed `amp` to one side (out=+1 to the
+    left of the travel direction, -1 to the right), so the edge is a row of small pointed tufts, not a ruled line."""
+    import random
+    rng = random.Random(seed)
+    res = []
+    for (u0, v0), (u1, v1) in zip(pts, pts[1:]):
+        d = math.hypot(u1 - u0, v1 - v0)
+        n = max(1, int(d / step))
+        nu, nv = -(v1 - v0) / (d + 1e-9), (u1 - u0) / (d + 1e-9)
+        for k in range(n):
+            t = k / n
+            u, v = u0 + (u1 - u0) * t, v0 + (v1 - v0) * t
+            if k % 2:
+                a = amp * out * rng.uniform(0.6, 1.0)
+                u, v = u + nu * a, v + nv * a
+            res.append((u, v))
+    res.append(pts[-1])
+    return res
+
+
 def scrub_beard(p, f, L, skin, seed=81):
-    """Vance's beard as Sam described it (7 Nov), in flat house colour: a medium moustache from under the nose to the
-    upper lip and out to the mouth corners; a beard that covers the cheeks from the mouth corners out to the face's
-    edge, runs round the jaw and rises only halfway up the chin; a small patch of hair under the lower lip; bare skin
-    between that patch and the beard."""
+    """Vance's beard as Sam described it (7 Nov): a medium moustache from under the nose to the upper lip and out to
+    the mouth corners; a beard covering the cheeks from the mouth corners out to the face's edge, round the jaw and
+    halfway up the chin; a small patch under the lower lip; bare skin between that patch and the beard.
+    Texture and colour (Sam, 7 Nov: "now get the texture and colour right"; measured on his close-up): an ash-brown
+    body, a darker band along the jaw's underside, the moustache a touch warmer and lighter; every edge facing skin
+    is a row of small hair tufts; an even grain of short strokes in one soft ash colour following the hair's fall.
+    Flat shapes only: no random flecks (Sam, note 6)."""
+    import random
+    rng = random.Random(seed)
     fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
     half = (l17 + 1.0) / 2                                  # halfway up the chin
     bottom = [(-fw * 0.5 - 0.004, 0.46), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.5 - 0.016, 0.83), (-jw * 0.38, 0.97),
@@ -115,19 +143,45 @@ def scrub_beard(p, f, L, skin, seed=81):
               (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.46)]
     cheek = [(fw * 0.5 - 0.02, 0.46), (fw * 0.42, ny - 0.02), (fw * 0.32, ny + 0.01), (mw * 0.68, l0 - 0.012)]
     corner = [(mw * 0.62, l13 + 0.01), (mw * 0.56, l17 + 0.02), (mw * 0.42, half - 0.01)]
-    chin = [(0.0, half)]
-    right = cheek + corner
+    right = cheek + corner + [(0.0, half)]
     left = [(-u, v) for u, v in right[::-1]]
-    body = bottom + right + chin + left
-    p.poly(curve(f.pts(body), 3), B_MID, None)
-    must = [(-mw * 0.64, l13 + 0.004), (-mw * 0.6, l0 - 0.02), (-nw * 0.5, ny + 0.034), (0.0, ny + 0.04),
-            (nw * 0.5, ny + 0.034), (mw * 0.6, l0 - 0.02), (mw * 0.64, l13 + 0.004), (mw * 0.4, l0 + 0.002),
-            (0.0, l0 + 0.006), (-mw * 0.4, l0 + 0.002)]
-    p.poly(curve(f.pts(must), 3), B_MID, None)                                  # the moustache, medium
-    soul = [(-mw * 0.13, l17 + 0.012), (mw * 0.13, l17 + 0.012), (mw * 0.08, l17 + 0.05), (0.0, l17 + 0.068),
-            (-mw * 0.08, l17 + 0.05)]
-    p.poly(curve(f.pts(soul), 3), B_MID, None)                                  # the patch under the lip
-    p.line(open_curve(f.pts(bottom), 3), INK, 2.6)                              # the ink round the outer edge only
+    inner = tufts(right + left[1:], 0.012, 0.014, out=1.0, seed=seed)        # tufts reaching up into the skin
+    edge = tufts(bottom, 0.007, 0.016, out=1.0, seed=seed + 1)                  # small tufts below the jaw
+    body = f.pts(edge + inner)                    # straight joins: the tufts stay sharp
+    p.poly(body, B_MID, None)
+    # the darker underside: a band along the jaw's bottom, its upper edge tufted
+    band_top = tufts([(fw * 0.5 - 0.03, 0.6), (jw * 0.5 - 0.05, 0.8), (jw * 0.28, 0.92), (0.0, 0.965),
+                      (-jw * 0.28, 0.92), (-jw * 0.5 + 0.05, 0.8), (-fw * 0.5 + 0.03, 0.6)], 0.012, 0.014, out=1.0,
+                     seed=seed + 2)
+    n = len(edge)
+    p.poly(f.pts(edge[n // 7: n - n // 7] + band_top), B_DARK, None)
+    # the moustache: warmer and lighter, its lower edge tufts hanging just over the lip line
+    top = tufts([(-mw * 0.66, l13 + 0.006), (-mw * 0.62, ny + 0.03), (-nw * 0.5, ny + 0.026), (0.0, ny + 0.032),
+                 (nw * 0.5, ny + 0.026), (mw * 0.62, ny + 0.03), (mw * 0.66, l13 + 0.006)], 0.008, 0.014, out=1.0,
+                seed=seed + 3)
+    low = tufts([(mw * 0.66, l13 + 0.006), (mw * 0.4, l0 + 0.006), (0.0, l0 + 0.01), (-mw * 0.4, l0 + 0.006),
+                 (-mw * 0.66, l13 + 0.006)], 0.006, 0.014, out=-1.0, seed=seed + 4)
+    must = f.pts(top + low[1:-1])
+    p.poly(must, B_MOUST, None)
+    soul = tufts([(-mw * 0.13, l17 + 0.012), (-mw * 0.08, l17 + 0.05), (0.0, l17 + 0.072), (mw * 0.08, l17 + 0.05),
+                  (mw * 0.13, l17 + 0.012)], 0.008, 0.014, out=-1.0, seed=seed + 5)
+    p.poly(f.pts(soul), B_MID, None)
+    # the grain: short strokes, staggered rows, a soft ash just lighter than the hair, falling down and in towards
+    # the chin (along the jaw on the sides); none in the moustache (kept clean)
+    grain = blend(B_MID, B_GRAIN, 0.78)
+    for r, gv in enumerate(np.arange(0.5, 1.04, 0.042)):
+        for gu in np.arange(-fw * 0.5 + (0.021 if r % 2 else 0.0), fw * 0.5, 0.042):
+            u, v = gu + rng.uniform(-0.015, 0.015), gv + rng.uniform(-0.015, 0.015)
+            q = f(u, v)
+            if not _inside(body, q[0], q[1]) or (abs(u) < mw * 0.7 and l0 - 0.03 < v < half + 0.02):
+                continue
+            du, dv = -u * 0.5, 1.0
+            n = math.hypot(du, dv)
+            ln = rng.uniform(0.016, 0.024)
+            q2 = f(u + du / n * ln, v + dv / n * ln)
+            on_dark = v > 0.86 or abs(u) > jw * 0.5 - 0.04
+            p.line([q, q2], blend(grain, B_DARK, 0.3) if on_dark else grain, 1.6)
+    p.line(f.pts(edge), INK, 2.2)                               # the ink round the outer edge only
 
 
 def beard_test(out, mood='neutral'):
