@@ -68,6 +68,7 @@ the end with their checks.
 | 63 | Running straight at the lens uses the kit's `front_run` gait and `front_run_arms` (low knees, tucked elbows, fists pumping forward at the chest and belt), never the side-on run or arms out to the side. | `moves.audit` (gait numbers); `handcheck`; the look by hand |
 | 64 | A standing person never bobs: breathing and panting are a lean only. Someone pointing or gesturing is shown from the front, never cut to from behind. Seen from behind, use a pose that reads there (`moves.reads_from_behind`): hands on hips read as hands behind the back. | by hand; `moves.READS_FROM_BEHIND` |
 | 65 | A speaker with no face of its own (the Sorting Hat) opens its mouth with the voice's loudness, one syllable at a time. | `mouths.loudness_open`; `voices.py` mouth check |
+| 77 | Anyone with facial hair: run the beard tool first; Sam confirms its five plain lines (moustache, patch under the lip, chin, cheeks, colour), correcting any in a word, before the cast sheet (Sam, 7 Nov). | `beardkit.py analyse` (its five lines, sent with the empty-face sheet); by hand |
 | 69 | Whenever anyone points, the hand shows a pointing finger (one finger out along the forearm), in every shot and every film (Sam, 4 Nov). | `kittests.py point_hand_shows_a_finger` (the house circle hands draw it); the look by hand on the check sheet |
 
 ## Checks (what pre-flight and the tools must do)

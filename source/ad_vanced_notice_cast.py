@@ -454,6 +454,35 @@ def torso_view(img, p, sp, view, seated=False):
 
 
 V.torso_view = torso_view
+_arm = V.arm
+
+
+def arm(p, j2, side, sp, shape=None):
+    """The driver's sleeves in the same check (Sam, 7 Nov: "checkered shirts tend to be 100% in pattern"): black
+    bands across and along each sleeve piece, in the arm's own direction, kept inside its outline."""
+    if sp.get('who') != 'man' or V.PROBE:
+        return _arm(p, j2, side, sp, shape)
+    sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
+    with V.F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
+        B.arm(p, sh, el, wr, sp.get('sleeve'))
+    w = 30
+    for a, b, wa, wb in ((sh, el, w, w * 0.9), (el, wr, w * 0.9, w * 0.72)):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(dx, dy) or 1
+        tx, ty, nx, ny = dx / n, dy / n, -dy / n, dx / n
+        for t in np.arange(14, n - 8, 48):                          # bands across the sleeve
+            wt = (wa + (wb - wa) * t / n) - 5
+            c = (a[0] + tx * t, a[1] + ty * t)
+            p.line([(c[0] + nx * wt, c[1] + ny * wt), (c[0] - nx * wt, c[1] - ny * wt)], M_CHECK, 16)
+        for off in (-0.4, 0.4):                                     # bands along it
+            p.line([(a[0] + nx * wa * off + tx * 10, a[1] + ny * wa * off + ty * 10),
+                    (b[0] + nx * wb * off - tx * 6, b[1] + ny * wb * off - ty * 6)], M_CHECK, 14)
+    shape = shape or j2.get('hand', {}).get(side, 'fist')
+    if shape != 'none':
+        V.hand(p, j2, side, sp, shape)
+
+
+V.arm = arm
 TC.HEADS.update(vance=vance_head, man=man_head)
 TC.TORSOS.update(vance=vance_torso, man=man_torso)
 
@@ -464,7 +493,8 @@ VANCE = dict(who='vance', name='JD Vance', skin=V_SKIN, hw=72, hh=94, head_dy=10
              pose='custom', height=1.88, seed=81)
 MAN = dict(who='man', name='The driver', skin=M_SKIN, hw=80, hh=92, head_dy=12, hair='bald', hair_c=M_HAIR,
            brow_c=M_HAIR, brow_w=4.6, beard='goatee', beard_c=M_HAIR, outfit='jumper', jacket=M_SHIRT, sleeve=M_SHIRT,
-           trousers=M_JEANS, shirt=M_SHIRT, tie=None, shoe=M_BOOT, shoulders=186, leg_k=1.35, full=True, pose='custom',
+           trousers=M_JEANS, shirt=M_SHIRT, tie=None, shoe=M_BOOT, shoulders=186, leg_k=1.35, anger=4,   # Sam, 7 Nov: anger 4
+           full=True, pose='custom',
            height=1.80, seed=82)
 CAST = {'vance': VANCE, 'man': MAN}
 

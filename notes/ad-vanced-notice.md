@@ -1,22 +1,14 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 51 (Vance likeness pack before drawing), 40 (showstopper list approved before building), 74 (acting list)
-- **Done (7 Nov):** plan and Sam's answers; the network now allows Wikimedia (I fetch photos myself); cast sheet sent (Vance passes the likeness check; the driver; anger scale 1-6).
-- **Next:** Sam's yes on the cast and his anger number; then place photos (Musandam cliffs, tankers, gas station, pickup, study) and the composition sheet (rule 11).
-- **Needs Sam:** the rest of the script (reworked for an earlier joke); Vance cartoons he likes; Hook Text wording later.
-- **Read:** `guides/satire.md` (Start; Getting it right first time), `guides/kit-catalogue.md` (Flying Whales sea and effects).
+- **Rules that bite next:** 3 (places: 8-10 recognisable things, references beside ours), 11 (one composition sheet of the 3-4 key shots before building), 40 (showstopper list: Sam approved it in planning, ticked at the first rehearsal clip)
+- **Done (7 Nov):** plan and answers; cast approved: Vance (likeness 62-74%, beard approved: flat shapes, tufted edges, silver grain), the driver (anger 4, black-and-red check all over, sleeves too); beard tool `beardkit` built and tested; rule 77 written. Network now allows Wikimedia (photos fetched directly, about one every 6 s).
+- **Spent against the estimate:** Vance's beard ran well over (8 notes); the tool is a one-off build outside the film. Ask Sam for the week's usage at the next stage end (rule 44).
+- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: place photos and the composition sheet. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** the rest of the script (reworked for an earlier joke); the Hook Text wording later.
+- **Read:** this file (shots, showstopper list, acting list); `guides/satire.md` "Getting it right first time"; `guides/kit-catalogue.md` rows for the Flying Whales sea and effects.
 - **Open rule requests:** none.
-- **For Claude:** cast `source/ad_vanced_notice_cast.py` (sheet / faces / head); likeness card `references/ad-vanced-notice/vance-card.json`; Wikimedia: API with a User-Agent, 1 request per ~6 s (429s otherwise); kit: `views.leg` takes `leg_k` (heavier legs). Film will be `source/ad_vanced_notice.py` (from `source/satire_template.py`). Reuse: `flying_whales_sea.py` (sea painting, re-lit for a hazy noon), `flying_whales_fx.py` (fireball, Puff smoke, fire tongues, splashes, chunks, holes), `flying_whales_wreck.py` (pieces thrown, falling, splashing; freeze and jolt on the hit).
-
-## The film so far (the script continues; about 24 s so far)
-1. **Study, front on, medium** (about 4 s). Vance behind the desk, sincere and confident. Bookcases behind, fireplace crackling on the right, crystal glass of water on the desk, US flag draped over the desk's left side. Line 1.
-2. **Omani cliffside over the Strait of Hormuz, locked wide** (about 11 s, the showstopper included). The strait to the horizon, far shore a grey smudge, a flotilla of still tankers; the nearest one sails to the right with a wake. Vance walks calmly towards the camera, eyes to the lens. Line 2.
-3. **Showstopper, same camera** (Sam, 7 Nov: answer 5 = 2): the cliff shot holds; Vance keeps walking towards the lens, unaware, as the missile hits the tanker behind him. No line.
-4. **Close-up of Vance** (about 3 s), the burning wreck on the sea over his right shoulder (screen left). Line 3.
-5. **Midwest gas station** (about 7 s). The big man by his 4x4, pump in hand, glaring up at the price board (Diesel $6.15). Vance walks in from the right, arm round him. Lines 4-6.
-
-**Jokes early (tiktok-design):** the first laugh lands at about 11 s (the explosion, then "None of this is my fault"), later than the 5 s aim. The Hook Text and the sincere "Hello, America" carry the opening; question 2 offers a trim.
+- **For Claude:** cast `source/ad_vanced_notice_cast.py` (sheet / faces / beard / head); references `references/ad-vanced-notice/`; Wikimedia API with a User-Agent, sleep 6 s between files, honour Retry-After; place photos still to fetch: Musandam cliffs over the Strait of Hormuz, crude tankers, a Midwest gas station with a price board, a full-size pickup, a panelled study with bookcases and fireplace.
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
@@ -138,6 +130,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 7 | cast | | Beard, as Sam described it: a small patch under the lip; a medium moustache; a dark/medium brown/silver beard covering from the lip corners to the face line, round the jaw, halfway up the chin; skin between it and the patch | done: four flat shapes in one silver-brown, ink round the outer edge only; likeness 70/68/62%. Seen before (notes 1, 4, 6) |
 | 8 | cast | | Shape right; now the texture and colour | done: ash-brown body, darker jaw underside, moustache a touch warmer; edges facing skin are rows of small sharp tufts; a staggered grain of short silver-ash strokes falling down and in. Flat shapes, no random flecks. New kind |
 | 9 | (tool) | | Build a tool that nails both beards (Vance, Abdul) on first analysis | done: `source/beardkit.py`. Photo gives the shape; Sam's words set what photos can't judge. Vance (2 words) and Abdul (3 words) largely match their finals (review/beardkit-test.jpg). Sam: a sensible approximation, largely correct. New kind |
+| 10 | cast | | The driver's anger: 4; chequered sleeves ("checkered shirts tend to be 100% in pattern") | done: anger 4 is his default; the check runs along both sleeves. New kind |
 | 5 | cast | | Anger 6 is the first face that registers as anger | done: the scale restarts there (new 1 = old 6) and goes stronger. New kind |
 | 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
 
