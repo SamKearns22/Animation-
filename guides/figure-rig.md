@@ -82,6 +82,13 @@ never in one frame.
   face in profile (forehead, brow, nose, mouth, chin), never a front view turned on its side. A mask or a blanket
   is fitted to the profile. On a floor or table, or from any high camera, use `source/lying.py` (a 3D body that rests
   on the surface, checked: `contact_faults`).
+- **Arms that touch things (a starting point, not a rule; Sam, 7 Nov):** give each such arm one of three jobs. *Resting*:
+  touching lightly or hovering, no weight, never sinking in. *Bracing* (arm on a wall, a shove on a door): the body leans
+  toward the surface, the arm points along the push, the feet stay planted. *Supporting* (a leaning elbow, a push-up): the
+  body is built around the contact points, the shoulders over the hands in a push-up. For all three: a hand that carries
+  weight does not slide or sink; the wrist lies flat to the surface; the elbow bends as the body lowers and straightens as
+  it pushes; a lowering is slow with a pause at the bottom, the push back up quicker. Make it a rule only after a film
+  shows its real problems (rule 78 covers the resting arm now).
 - **Seated at a desk** (the protester): thighs under the desk, forearms over it, hands on the keyboard.
 
 ## 5. Sets and props: one plan per place (see best-practice.md, 1.3)
