@@ -133,6 +133,8 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 |---|------|------|------|--------|
 | 1 | cast | | Vance has a light scrub of beard rather than the thick beard drawn | done: a pale tint flecked with short hairs; side view 'stubble'. New kind |
 | 2 | cast | | The four emotions show an identical picture for Vance | done: each mood now moves brows, lids and mouth clearly (soft smile, open grin, one-sided smirk, earnest brows); "proud" added for "This guy". New kind |
+| 4 | cast | | Draw this beard (close-up ref) on an empty face; get it really correct | done: measured on Sam's close-up (vance-beard-sam.jpg): level cheek line at the nose's base, full sparse moustache, dark band under the jaw, lighter chin front, soul patch with light patches either side, broad round bottom, salt-and-pepper flecks; test sheet beside the ref (`beard`). Likeness 71/85/65%. New kind |
+| 5 | cast | | Anger 6 is the first face that registers as anger | done: the scale restarts there (new 1 = old 6) and goes stronger. New kind |
 | 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
 
 Decisions made:

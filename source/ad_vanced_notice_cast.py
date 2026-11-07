@@ -21,6 +21,8 @@ import json
 import os
 import sys
 
+import numpy as np
+
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -75,6 +77,114 @@ def _ears(p, f, L, skin):
         p.line([(ex - sgn * 2, ey - 10), (ex + sgn * 3, ey), (ex - sgn * 1, ey + 10)], dk(skin, 0.7), 1.4)
 
 
+# ---------------------------------------------------------------------------------------------- Vance's beard
+# (Sam, 7 Nov, close-up ref vance-beard-sam.jpg: "try to get this beard really correct"). Measured on that photo
+# against its own cheek skin (201,164,150), then scaled to ours: a salt-and-pepper short beard. Darkest in a band
+# along the underside of the jaw and chin, where it spills a little below the jawline (0.33 of the skin); mid on the
+# cheeks and sides (0.67); lighter on the chin's front (0.83); a sparse, lighter moustache the skin shows through
+# (0.75), joining the beard at the mouth corners; a dark soul patch under the lower lip's middle (0.63) with lighter
+# patches either side (0.84); the upper edge on the cheeks soft and ragged, never a hard line; grey-blond and dark
+# flecks all over (its 90th and 10th centiles).
+B_DARK = (80, 62, 52)
+B_MID = (156, 122, 104)
+B_CHIN = (190, 152, 132)
+B_MOUST = (178, 136, 116)
+B_SOUL = (140, 104, 88)
+B_FLECK_L = (204, 190, 176)
+B_FLECK_D = (58, 44, 36)
+
+
+def _ragged(rng, pts, amp):
+    """A hand-cut edge: every other point nudged in or out a little (hairs, not a ruled line)."""
+    out = []
+    for i, (u, v) in enumerate(pts):
+        out.append((u + rng.uniform(-amp, amp) * 0.5, v + (amp if i % 2 else -amp) * rng.uniform(0.3, 1.0)))
+    return out
+
+
+def scrub_beard(p, f, L, skin, seed=81):
+    import random
+    rng = random.Random(seed)
+    fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
+    # the outer silhouette: down the face's sides from mid-ear, round the jaw and a little below the chin
+    # (Sam's close-up: the beard bulks out round and broad below the jaw, never a pointed chin)
+    bottom = [(-fw * 0.5 - 0.004, 0.46), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.5 - 0.02, 0.83), (-jw * 0.4, 0.97),
+              (-0.2, 1.045), (0.0, 1.065), (0.2, 1.045), (jw * 0.4, 0.97), (jw * 0.5 + 0.02, 0.83),
+              (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.46)]
+    # the soft upper edge (Sam's close-up): from the face's side at about the nose's base, nearly level across the
+    # cheek, dipping into the moustache beside the nostrils; ragged
+    edge = [(fw * 0.5 - 0.02, 0.46), (fw * 0.44, ny - 0.03), (fw * 0.34, ny - 0.005), (fw * 0.24, ny + 0.012),
+            (nw * 0.75, ny + 0.02)]
+    cheek_r = _ragged(rng, edge, 0.01)
+    cheek_l = [(-u, v) for u, v in _ragged(rng, edge, 0.01)][::-1]
+    lip_gap = [(nw * 0.55, ny + 0.03), (0.0, ny + 0.038), (-nw * 0.55, ny + 0.03)]     # the moustache under the nose
+    body = bottom + cheek_r + lip_gap + cheek_l           # round the jaw, in along the right cheek, under the nose, out along the left
+    poly = curve(f.pts(body), 3)
+    p.poly(poly, B_MID, None)
+    # the dark band along the underside of the jaw and chin (the photo's darkest part)
+    inner = _ragged(rng, [(fw * 0.5 - 0.05, 0.56), (jw * 0.5 - 0.06, 0.8), (jw * 0.3, 0.92), (0.14, 0.97),
+                          (0.0, 0.98), (-0.14, 0.97), (-jw * 0.3, 0.92), (-jw * 0.5 + 0.06, 0.8),
+                          (-fw * 0.5 + 0.05, 0.56)], 0.012)
+    band = bottom[1:-1] + inner
+    p.poly(curve(f.pts(band), 3), B_DARK, None)
+    # the lighter chin front, under the soul patch, and the light patches beside the soul patch
+    chin = _ragged(rng, [(-mw * 0.5, l17 + 0.05), (0.0, l17 + 0.035), (mw * 0.5, l17 + 0.05), (mw * 0.5, 0.86),
+                         (0.0, 0.9), (-mw * 0.5, 0.86)], 0.01)
+    p.poly(curve(f.pts(chin), 3), B_CHIN, None)
+    for sgn in (-1, 1):
+        p.poly(curve(f.pts([(sgn * mw * 0.12, l17 + 0.018), (sgn * mw * 0.42, l17 + 0.014),
+                            (sgn * mw * 0.38, l17 + 0.07), (sgn * mw * 0.14, l17 + 0.066)]), 3), B_CHIN, None)
+    p.poly(curve(f.pts([(-mw * 0.1, l17 + 0.016), (mw * 0.1, l17 + 0.016), (mw * 0.07, l17 + 0.075),
+                        (0.0, l17 + 0.085), (-mw * 0.07, l17 + 0.075)]), 3), B_SOUL, None)     # the soul patch
+    # the sparse moustache: a light band from under the nose to the lip, out to the beard at the corners
+    must = [(-mw * 0.6, l13 + 0.006), (-nw * 0.75, ny + 0.04), (-nw * 0.5, ny + 0.036), (0.0, ny + 0.04),
+            (nw * 0.5, ny + 0.036), (nw * 0.75, ny + 0.04), (mw * 0.6, l13 + 0.006), (0.0, l0 + 0.004)]
+    mpoly = curve(f.pts(must), 3)
+    p.poly(mpoly, B_MOUST, None)
+    # flecks: grey-blond and dark hairs all over, the moustache sparse (skin dots between), the band salt-and-pepper
+    for _ in range(1600):
+        u, v = rng.uniform(-fw * 0.52, fw * 0.52), rng.uniform(0.44, 1.06)
+        q = f(u, v)
+        if _inside(poly, q[0], q[1]) or _inside(mpoly, q[0], q[1]):
+            in_m = _inside(mpoly, q[0], q[1])
+            r = rng.random()
+            c = (blend(B_MOUST, skin, 0.6) if r < 0.5 else B_FLECK_D) if in_m else \
+                (B_FLECK_L if r < 0.28 else (B_FLECK_D if r < 0.7 else dk(B_MID, 0.8)))
+            a = rng.uniform(-0.7, 0.7)
+            ln = rng.uniform(1.4, 2.6)
+            p.line([q, (q[0] + ln * a, q[1] + ln)], c, 1.1)
+    # the ink only round the outer silhouette, lumpy (the beard's own edge below the jaw)
+    p.line(open_curve(f.pts(_ragged(rng, bottom, 0.004)), 3), INK, 2.6)
+
+
+def beard_test(out, mood='neutral'):
+    """The beard alone on an empty face (no eyes, brows or hair), large, beside Sam's close-up, both cropped to the
+    same nose-to-neck framing and height."""
+    B.SS = 1
+    im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+    V.person(im, B.Cam(1.0, 540, 960), 540, 1500, 2.8, dict(VANCE, empty=True, mood=mood), 0.0, 0)
+    g = np.asarray(im.convert('RGB')).astype(int)
+    skin = np.all(np.abs(g - np.array(V_SKIN)) < 6, axis=2)
+    ys, xs = np.where(skin)
+    top, bot = ys.min(), ys.max()                          # the face (and neck) in skin colour
+    nose_y = top + int((bot - top) * 0.40)
+    cols = np.where((g[nose_y:bot] < 250).any(axis=2).any(axis=0))[0]
+    ours = im.convert('RGB').crop((cols.min() - 20, nose_y, cols.max() + 20, int(top + (bot - top) * 0.97)))
+    ref = Image.open(os.path.join(HERE, '..', 'references', 'ad-vanced-notice', 'vance-beard-sam.jpg')).convert('RGB')
+    H = 600
+    ours = ours.resize((ours.width * H // ours.height, H))
+    ref = ref.resize((ref.width * H // ref.height, H))
+    sheet = Image.new('RGB', (ref.width + ours.width + 30, H + 50), (232, 228, 222))
+    sheet.paste(ref, (0, 50))
+    sheet.paste(ours, (ref.width + 30, 50))
+    d = ImageDraw.Draw(sheet)
+    font = ImageFont.truetype(FONT, 30)
+    d.text((10, 8), "Sam's reference", font=font, fill=(30, 30, 30))
+    d.text((ref.width + 40, 8), 'ours (empty face)', font=font, fill=(30, 30, 30))
+    sheet.save(out, quality=90)
+    return out
+
+
 # ---------------------------------------------------------------------------------------------- Vance's head
 def vance_head(img, p, sp, t, hx, hy):
     L = P4.layout(P4.target('vance', sp.get('average', False)))
@@ -87,25 +197,11 @@ def vance_head(img, p, sp, t, hx, hy):
     mw = L['mw']
     # the beard: one shape, short and full, from mid-ear down the jaw and round a long chin, up the cheeks to a line
     # sloping from the sideburn to just outside the mouth corners, the moustache joined to it; the lips clear
-    beard = [(-fw * 0.5 - 0.004, 0.46), (-fw * 0.5 - 0.006, 0.6), (-jw * 0.5 - 0.004, 0.8), (-0.2, 1.0), (0.0, 1.05),
-             (0.2, 1.0), (jw * 0.5 + 0.004, 0.8), (fw * 0.5 + 0.006, 0.6), (fw * 0.5 + 0.004, 0.46),
-             (fw * 0.5 - 0.035, 0.5), (fw * 0.4, 0.66), (mw * 0.62, l13 - 0.01),               # cheek line, low
-             (mw * 0.55, l0 - 0.005), (L['nw'] * 0.5, ny + 0.03), (0.0, ny + 0.035),           # moustache, thin
-             (-L['nw'] * 0.5, ny + 0.03), (-mw * 0.55, l0 - 0.005), (-mw * 0.62, l13 - 0.01),
-             (-fw * 0.4, 0.66), (-fw * 0.5 + 0.035, 0.5)]
-    # (Sam, 7 Nov: "a light scrub of beard rather than the thick beard"): a pale tint over the skin, flecked with
-    # short dark hairs, denser on the chin and moustache; no solid mass
-    bpoly = curve(f.pts(beard), 4)
-    p.poly(bpoly, blend(V_BEARD, skin, 0.62), None)
-    import random
-    rng = random.Random(81)
-    for _ in range(260):
-        u, v = rng.uniform(-fw * 0.5, fw * 0.5), rng.uniform(0.46, 1.05)
-        q = f(u, v)
-        if MC_inside(bpoly, q) and not (abs(u) < mw * 0.42 and l13 - 0.012 < v < l17 + 0.02):
-            a = rng.uniform(-0.6, 0.6)
-            p.line([q, (q[0] + 2.2 * a, q[1] + 3.0)], dk(V_BEARD, 0.8), 1.3)
-    p.line(open_curve(f.pts(beard[:9]), 4), INK, 2.6)              # the jaw's ink line round the beard
+    scrub_beard(p, f, L, skin)
+    if sp.get('empty'):                                    # the beard test: no eyes, brows or hair
+        P4.nose(p, f, L, skin)
+        P4.lips(p, f, L, dict(sp, smile=0.4), V_LIP, f(0.0, l13))
+        return f(0.0, l13)[0]
     # the lips sit in a clear patch inside the beard (a soft gap round the lower lip, as in all three portraits)
     look = MOODS.get(mood, MOODS['neutral'])
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint'])), V_IRIS,
@@ -226,14 +322,16 @@ def man_head(img, p, sp, t, hx, hy):
               (L['nw'] * 0.45, ny + 0.014), (mw * 0.58, l0 - 0.01), (mw * 0.56, l13 + 0.02), (mw * 0.34, l17 + 0.07),
               (0.08, 0.98), (0.0, 0.99), (-0.08, 0.98), (-mw * 0.34, l17 + 0.07)]
     p.poly(curve(f.pts(goatee), 4), M_HAIR, None)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22) + 0.04 * (sp.get('anger') or 0), gaze_dy=sp.get('gaze_dy', -0.5)), (82, 60, 42),
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22) + 0.035 * ((sp.get('anger') or -5) + 5), gaze_dy=sp.get('gaze_dy', -0.5)), (82, 60, 42),
             dk(skin, 0.82), liner=2.6)
-    ang = sp.get('anger')                       # the strength scale, 1 (slight) to 6 (huge): brows down, mouth down
-    frown = (0.012 * ang if ang else {'angry': 0.05, 'glare': 0.045}.get(mood, 0.0)) + sp.get('frown', 0.0)
+    # the strength scale, 1 to 6 (Sam, 7 Nov: "6 is the first face that registers as anger"): the new 1 is the old 6
+    ang = sp.get('anger')
+    ang = ang + 5 if ang else ang
+    frown = (min(0.012 * ang, 0.13) if ang else {'angry': 0.05, 'glare': 0.045}.get(mood, 0.0)) + sp.get('frown', 0.0)
     P4.brows(p, f, L, M_HAIR, 0.05, sp.get('brow_up', 0.0), frown)
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, l13)
-    smile = -0.2 * ang if ang else SMILE.get(mood, -0.4)
+    smile = -0.3 * ang if ang else SMILE.get(mood, -0.4)
     P4.lips(p, f, L, dict(sp, smile=smile), (176, 110, 100), (fx, my - 6))
     return fx
 
@@ -420,5 +518,7 @@ if __name__ == '__main__':
         print(sheet(sys.argv[2]))
     elif sys.argv[1] == 'faces':
         print(faces_sheet(sys.argv[2]))
+    elif sys.argv[1] == 'beard':
+        print(beard_test(sys.argv[2]))
     elif sys.argv[1] == 'head':
         print(head_png(sys.argv[2], sys.argv[3], '--average' in sys.argv))
