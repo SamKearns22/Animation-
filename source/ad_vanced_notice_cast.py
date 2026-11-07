@@ -40,8 +40,8 @@ NAVY = (30, 38, 62)
 RED_TIE = (150, 26, 38)
 M_SKIN = (226, 170, 140)
 M_HAIR = (26, 22, 22)
-M_SHIRT = (60, 86, 150)           # the check's base blue
-M_CHECK = (178, 44, 48)
+M_SHIRT = (178, 30, 36)           # (Sam, 7 Nov: "thicker colours, black and red"): a red and black buffalo check
+M_CHECK = (26, 20, 22)
 M_JEANS = (58, 84, 128)
 M_BOOT = (96, 64, 40)
 
@@ -56,6 +56,13 @@ P4.MEASURED['man'] = dict(P4.AVG, face_wide=P4.AVG['face_wide'] + 0.06, jaw_wide
 P4.PUSH['man'] = 1.0
 P4.TUNE['man'] = {}
 
+# Vance's moods (Sam, 7 Nov: "the four emotions show an identical picture"): each moves the brows, the lids and the
+# mouth by a clear amount. brow: up (+) or (our left, our right); frown (+) pulls the inner ends down, (-) lifts them
+MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.13, squint=0.0, smile=0.6, mouth='lips'),
+         'sincere': dict(brow=0.02, frown=-0.035, lid=0.1, squint=0.0, smile=0.0, mouth='soft'),
+         'smile': dict(brow=0.025, frown=0.0, lid=0.18, squint=0.45, smile=0.0, mouth='grin'),
+         'teasing': dict(brow=(0.032, -0.01), frown=0.0, lid=0.16, squint=0.15, smile=0.0, mouth='smirk'),
+         'proud': dict(brow=0.04, frown=0.0, lid=0.2, squint=0.4, smile=0.0, mouth='grin')}
 SMILE = {'neutral': 0.6, 'sincere': 0.35, 'smile': 1.4, 'proud': 1.2, 'angry': -0.6, 'glare': -0.4}
 
 
@@ -86,15 +93,23 @@ def vance_head(img, p, sp, t, hx, hy):
              (mw * 0.55, l0 - 0.005), (L['nw'] * 0.5, ny + 0.03), (0.0, ny + 0.035),           # moustache, thin
              (-L['nw'] * 0.5, ny + 0.03), (-mw * 0.55, l0 - 0.005), (-mw * 0.62, l13 - 0.01),
              (-fw * 0.4, 0.66), (-fw * 0.5 + 0.035, 0.5)]
-    p.poly(curve(f.pts(beard), 4), V_BEARD, None)
-    for u, v in ((-0.22, 0.86), (-0.12, 0.95), (0.0, 0.98), (0.12, 0.95), (0.22, 0.86), (-0.3, 0.72), (0.3, 0.72)):
-        a, b = f(u, v), f(u * 1.02, v + 0.035)
-        p.line([a, b], dk(V_BEARD, 0.78), 1.6)                     # a few short strokes for texture
+    # (Sam, 7 Nov: "a light scrub of beard rather than the thick beard"): a pale tint over the skin, flecked with
+    # short dark hairs, denser on the chin and moustache; no solid mass
+    bpoly = curve(f.pts(beard), 4)
+    p.poly(bpoly, blend(V_BEARD, skin, 0.62), None)
+    import random
+    rng = random.Random(81)
+    for _ in range(260):
+        u, v = rng.uniform(-fw * 0.5, fw * 0.5), rng.uniform(0.46, 1.05)
+        q = f(u, v)
+        if MC_inside(bpoly, q) and not (abs(u) < mw * 0.42 and l13 - 0.012 < v < l17 + 0.02):
+            a = rng.uniform(-0.6, 0.6)
+            p.line([q, (q[0] + 2.2 * a, q[1] + 3.0)], dk(V_BEARD, 0.8), 1.3)
     p.line(open_curve(f.pts(beard[:9]), 4), INK, 2.6)              # the jaw's ink line round the beard
     # the lips sit in a clear patch inside the beard (a soft gap round the lower lip, as in all three portraits)
-    p.poly(curve(f.pts([(-mw * 0.4, l13), (0.0, l13 - 0.008), (mw * 0.4, l13), (mw * 0.24, l17 + 0.01),
-                        (0.0, l17 + 0.018), (-mw * 0.24, l17 + 0.01)]), 3), blend(V_BEARD, skin, 0.55), None)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.13)), V_IRIS, dk(skin, 0.82), liner=2.6)
+    look = MOODS.get(mood, MOODS['neutral'])
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint'])), V_IRIS,
+            dk(skin, 0.82), liner=2.6)
     # the hooded outer corners (card: eyes drooping at the outside): a fold of lid over each eye's outer top corner,
     # its edge sloping down and out, so the opening droops at the outside as in all three portraits
     if not sp.get('blink'):
@@ -108,12 +123,15 @@ def vance_head(img, p, sp, t, hx, hy):
             p.poly(hood, skin, None)
             p.line(curve([(ex + sgn * ww * 0.05, ey - h * 0.92), (ex + sgn * ww * 0.6, ey - h * 0.55),
                           (ex + sgn * ww * 1.12, ey + h * 0.15)], 3), INK, 2.4)
-    raise_ = {'sincere': 0.012, 'teasing': 0.03}.get(mood, 0.0) + sp.get('brow_up', 0.0)
-    frown = {'angry': 0.03}.get(mood, 0.0) + sp.get('frown', 0.0)
-    P4.brows(p, f, L, dk(V_HAIR, 0.85), 0.05, raise_, frown)
+    up = look['brow']
+    raise_ = tuple(b + sp.get('brow_up', 0.0) for b in up) if isinstance(up, tuple) else up + sp.get('brow_up', 0.0)
+    P4.brows(p, f, L, dk(V_HAIR, 0.85), 0.05, raise_, look['frown'] + sp.get('frown', 0.0))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, l13)
-    P4.lips(p, f, L, dict(sp, smile=SMILE.get(mood, 0.6)), V_LIP, (fx, my - 6))
+    if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
+        P4.lips(p, f, L, dict(sp, smile=look['smile']), V_LIP, (fx, my - 6))
+    else:
+        vance_mouth(p, f, L, look['mouth'])
     # the hair: swept up and over to our right from a parting on our left, volume on top, receding temples (an M)
     fhw = L['fhw']
     c = fhw * 0.5
@@ -136,6 +154,47 @@ def vance_head(img, p, sp, t, hx, hy):
         p.line(curve(f.pts([(sgn * (fw * 0.5 + 0.004), 0.24), (sgn * (fw * 0.5 + 0.012), 0.32)]), 2),
                (150, 142, 136), 2.2)
     return fx
+
+
+def MC_inside(poly, q):
+    return _inside(poly, q[0], q[1])
+
+
+def vance_mouth(p, f, L, kind):
+    """His mouths for the moods: 'soft' (closed, corners up a little, earnest), 'grin' (open, top teeth, corners
+    high), 'smirk' (closed, one corner up: our right)."""
+    hw, l0, l13, l17 = L['mw'] / 2, L['lip0'], L['lip13'], L['lip17']
+    if kind == 'grin':
+        hw *= 1.12
+        top = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03)]
+        bot = [(hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+        p.poly(curve(f.pts(top + bot), 3), (70, 26, 30), INK, 2.2)
+        teeth = [(-hw * 0.82, l13 - 0.022), (0.0, l13 - 0.006), (hw * 0.82, l13 - 0.022), (hw * 0.6, l13 + 0.012),
+                 (0.0, l13 + 0.02), (-hw * 0.6, l13 + 0.012)]
+        p.poly(curve(f.pts(teeth), 3), (250, 248, 240), None)
+        p.line(curve(f.pts([(-hw, l13 - 0.03), (-hw * 0.5, l0 + 0.004), (0.0, l0 + 0.008), (hw * 0.5, l0 + 0.004),
+                            (hw, l13 - 0.03)]), 3), dk(V_LIP, 0.8), 3.0)                   # the thin top lip
+        for sgn in (-1, 1):                                                                # smile creases
+            p.line(curve(f.pts([(sgn * (hw + 0.03), l13 - 0.07), (sgn * (hw + 0.05), l13 - 0.02),
+                                (sgn * (hw + 0.035), l13 + 0.03)]), 3), dk(V_SKIN, 0.75), 1.6)
+        return
+    if kind == 'soft':
+        ends = (0.014, 0.014)
+    else:                                                                                  # smirk
+        ends = (-0.002, 0.04)
+    a, b = ends
+    line = [(-hw, l13 - a), (-hw * 0.4, l13 + 0.004 - a * 0.3), (0.0, l13 + 0.004), (hw * 0.4, l13 + 0.004 - b * 0.3),
+            (hw, l13 - b)]
+    top = curve(f.pts([(-hw, l13 - a), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.01), (hw * 0.4, l0 + 0.006),
+                       (hw, l13 - b)] + line[::-1][1:-1]), 3)
+    bot = curve(f.pts(line + [(hw * 0.5, l17 - 0.012 - b * 0.3), (0.0, l17 - 0.004), (-hw * 0.5, l17 - 0.012 - a * 0.3)]), 3)
+    p.poly(top, dk(V_LIP, 0.86), INK, 1.5)
+    p.poly(bot, V_LIP, INK, 1.5)
+    p.line(curve(f.pts(line), 3), INK, 2.4)
+    for sgn, e in ((-1, a), (1, b)):                                                       # a dimple at a raised corner
+        if e > 0.01:
+            p.line(curve(f.pts([(sgn * (hw + 0.012), l13 - e - 0.02), (sgn * (hw + 0.022), l13 - e + 0.004)]), 2),
+                   dk(V_SKIN, 0.75), 1.6)
 
 
 # ---------------------------------------------------------------------------------------------- the man's head
@@ -196,8 +255,7 @@ def man_torso(img, p, sp, t):
     bottom = int(sp.get('bottom', 560))
     belly = [(-sw * 0.92, 250), (-sw * 1.06, 380), (-sw * 0.98, bottom - 20), (sw * 0.98, bottom - 20),
              (sw * 1.06, 380), (sw * 0.92, 250)]
-    belly = curve(belly, 4)
-    p.poly(belly, M_SHIRT, INK, 2.6)
+    p.poly(curve(belly, 4), M_SHIRT, INK, 2.6)
     body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200)] + belly + [(sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
     check_lines(p, body, -sw * 1.1, sw * 1.1, 0, bottom)
     p.line([(0, 0), (0, bottom - 22)], dk(M_SHIRT, 0.7), 2.2)
@@ -223,21 +281,24 @@ def _inside(poly, x, y):
     return c
 
 
-def check_lines(p, poly, x0, x1, y0, y1, step=34, col=M_CHECK, inset=4):
+def check_lines(p, poly, x0, x1, y0, y1, step=48, col=M_CHECK, inset=2, width=22):
     """The shirt's check, cut to the shirt's outline (never past its edge)."""
     def runs(a, b):
+        across = (0, inset + width / 2) if a[1] == b[1] else (inset + width / 2, 0)    # the band's thickness
+        along = (inset, 0) if a[1] == b[1] else (0, inset)
+        offs = (along, (-along[0], -along[1]), across, (-across[0], -across[1]))
         pts = [(a[0] + (b[0] - a[0]) * k / 60, a[1] + (b[1] - a[1]) * k / 60) for k in range(61)]
         seg = []
         for q in pts:
-            ok = all(_inside(poly, q[0] + dx, q[1] + dy) for dx, dy in ((inset, 0), (-inset, 0), (0, inset), (0, -inset)))
+            ok = all(_inside(poly, q[0] + dx, q[1] + dy) for dx, dy in offs)
             if ok:
                 seg.append(q)
             elif seg:
                 if len(seg) > 1:
-                    p.line(seg, col, 2.0)
+                    p.line(seg, col, width)
                 seg = []
         if len(seg) > 1:
-            p.line(seg, col, 2.0)
+            p.line(seg, col, width)
     for x in range(int(x0) // step * step, int(x1), step):
         runs((x, y0), (x, y1))
     for y in range(int(y0) // step * step, int(y1), step):
@@ -273,7 +334,7 @@ TC.TORSOS.update(vance=vance_torso, man=man_torso)
 
 # ---------------------------------------------------------------------------------------------- the people
 VANCE = dict(who='vance', name='JD Vance', skin=V_SKIN, hw=72, hh=94, head_dy=10, hair='slick', hair_c=V_HAIR,
-             brow_c=V_HAIR, brow_w=4.4, beard='trim', beard_c=V_BEARD, outfit='suit', jacket=NAVY, sleeve=NAVY,
+             brow_c=V_HAIR, brow_w=4.4, beard='stubble', beard_c=V_BEARD, outfit='suit', jacket=NAVY, sleeve=NAVY,
              trousers=NAVY, shirt=(246, 246, 248), tie=RED_TIE, shoe=(20, 16, 14), shoulders=158, full=True,
              pose='custom', height=1.88, seed=81)
 MAN = dict(who='man', name='The driver', skin=M_SKIN, hw=80, hh=92, head_dy=12, hair='bald', hair_c=M_HAIR,
@@ -320,7 +381,7 @@ def faces_sheet(out):
     """The faces large, each mood; the references beside Vance's (rule 76)."""
     B.SS = 1
     rows = {'vance': [('neutral', 'rest', 'rest'), ('sincere', 'rest', 'sincere'), ('smile', 'rest', 'big smile'),
-                      ('teasing', 'rest', 'teasing'), ('neutral', 'v:AI', 'talking')],
+                      ('teasing', 'rest', 'teasing'), ('proud', 'rest', 'proud ("This guy")'), ('neutral', 'v:AI', 'talking')],
             'man': [(k, 'rest', f'anger {k}') for k in range(1, 7)]}
     W, H = 6 * 400 + 40, 3 * 560 + 40
     img = Image.new('RGBA', (W, H), (232, 228, 222, 255))

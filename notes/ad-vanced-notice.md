@@ -131,6 +131,9 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
+| 1 | cast | | Vance has a light scrub of beard rather than the thick beard drawn | done: a pale tint flecked with short hairs; side view 'stubble'. New kind |
+| 2 | cast | | The four emotions show an identical picture for Vance | done: each mood now moves brows, lids and mouth clearly (soft smile, open grin, one-sided smirk, earnest brows); "proud" added for "This guy". New kind |
+| 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.
