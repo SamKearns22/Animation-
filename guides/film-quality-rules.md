@@ -106,6 +106,7 @@ the end with their checks.
 | 37 | Sounds and references go on GitHub; only a file over about 10 MB stays off, listed in the handover's first line. | by hand |
 | 43 | Looks are tested at the shot's own camera; eyes that meet shown one frame each on the check sheet. | `filmkit.eyeline(aim=, drawn=, at=)`, `look_sheet` |
 | 45 | The composition sheet is sent once; notes on it are applied, never re-sent for approval. | by hand |
+| 79 | Never say a change "looks right" from a small preview. Look at the frame a note touches at full size and say in plain words what is seen ("the hand sits on top of the desk, the elbow is bent"); a small preview only shows where to look. Unchanged frames are not re-read (Sam, 7 Nov). | by hand; the "Checks:" line names any fix confirmed at full size |
 | 46 | When Sam names frames, look at exactly those first, at his size, before changing anything. | by hand |
 | 47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner and frame-count check), or trimmed with ffmpeg where only silence is lost; a full re-render only when neither can do it, and Sam is told why. | by hand; `kittests.py nostamp` |
 | 48 | Look at several frames as ONE labelled sheet (at most 1080 px wide; a crop for a detail); full size only for faces, Hook Text and frames Sam names. | `sheet.py` (default width) |
