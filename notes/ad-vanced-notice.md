@@ -2,17 +2,17 @@
 
 ## Where things stand
 - **Rules that bite next:** 51 (Vance likeness pack before drawing), 40 (showstopper list approved before building), 74 (acting list)
-- **Done (7 Nov):** brief read and turned into the checklist, shots, acting list, showstopper list and estimate below; questions sent to Sam.
+- **Done (7 Nov):** brief checklist, shots, acting list, showstopper list, estimate (10%); Sam's answers in; the network now allows Wikimedia, so I fetch reference photos myself.
 - **Next:** Sam's answers, the rest of the script and Vance photos; then the composition sheet (rule 11) and the cast sheet (Opus, high effort; same chat while it is short).
-- **Needs Sam:** the numbered questions at the end of this file; the rest of the script.
+- **Needs Sam:** the rest of the script (reworked for an earlier joke); Vance cartoons he likes; Hook Text wording later.
 - **Read:** `guides/satire.md` (Start; Getting it right first time), `guides/kit-catalogue.md` (Flying Whales sea and effects).
 - **Open rule requests:** none.
 - **For Claude:** film will be `source/ad_vanced_notice.py` (from `source/satire_template.py`). Reuse: `flying_whales_sea.py` (sea painting, re-lit for a hazy noon), `flying_whales_fx.py` (fireball, Puff smoke, fire tongues, splashes, chunks, holes), `flying_whales_wreck.py` (pieces thrown, falling, splashing; freeze and jolt on the hit).
 
 ## The film so far (the script continues; about 24 s so far)
 1. **Study, front on, medium** (about 4 s). Vance behind the desk, sincere and confident. Bookcases behind, fireplace crackling on the right, crystal glass of water on the desk, US flag draped over the desk's left side. Line 1.
-2. **Omani cliffside over the Strait of Hormuz, locked wide** (about 7 s). The strait to the horizon, far shore a grey smudge, a flotilla of still tankers; the nearest one sails to the right with a wake. Vance walks calmly towards the camera, eyes to the lens. Line 2.
-3. **Showstopper** (about 4 s): the missile, the flash, the fireball, flaming pieces into the sea, smoke pouring up. No line.
+2. **Omani cliffside over the Strait of Hormuz, locked wide** (about 11 s, the showstopper included). The strait to the horizon, far shore a grey smudge, a flotilla of still tankers; the nearest one sails to the right with a wake. Vance walks calmly towards the camera, eyes to the lens. Line 2.
+3. **Showstopper, same camera** (Sam, 7 Nov: answer 5 = 2): the cliff shot holds; Vance keeps walking towards the lens, unaware, as the missile hits the tanker behind him. No line.
 4. **Close-up of Vance** (about 3 s), the burning wreck on the sea over his right shoulder (screen left). Line 3.
 5. **Midwest gas station** (about 7 s). The big man by his 4x4, pump in hand, glaring up at the price board (Diesel $6.15). Vance walks in from the right, arm round him. Lines 4-6.
 
@@ -24,18 +24,18 @@ All flat paintings, one per camera; no 3D (rule 39): no camera moves round anyth
 
 | build or risky move | why (parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
-| JD Vance likeness (front, side, back; seated, walking at the lens, close-up, arm round, pointing at himself) | new cast | 2.0 | |
-| Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass) | new set | 1.5 | |
-| Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.5 | |
-| Oil tankers (one side-on model, 6-8 copies varied in size and colour; a wake for the moving one) | new prop | 1.0 | |
-| Showstopper: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 2.5 | |
-| Close-up with the burning wreck behind | the showstopper's wreck re-framed | 0.5 | |
-| Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.5 | |
-| The big man (invented: 17 stone, goatee, balding, checked shirt, jeans; pump and hose) | new cast | 1.0 | |
-| 4x4 pickup (side-on) | new prop | 1.0 | |
-| Arm round the shoulder (new contact move) | risky move | 0.5 | |
-| Animatic rounds | | 2.0 | |
-| **Total so far** | before the rest of the script | **15** | |
+| JD Vance likeness (front, side, back; seated, walking at the lens, close-up, arm round, thumbs at himself) | new cast | 2.0 | |
+| Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass): one flat painting | new set | 1.0 | |
+| Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.0 | |
+| Oil tankers (one side-on model, copies varied in size and colour; a wake for the moving one) | new prop | 0.6 | |
+| Showstopper, in the cliff shot behind Vance: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 1.5 | |
+| Close-up with the burning wreck behind | the cliff shot's wreck re-framed | 0.3 | |
+| Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.0 | |
+| The big man (invented: 17 stone, goatee, balding, checked shirt, jeans; pump and hose) | new cast | 0.7 | |
+| 4x4 pickup (side-on only) | new prop | 0.6 | |
+| Arm round the shoulder; both thumbs at himself | risky move | 0.3 | |
+| Animatic rounds | | 1.0 | |
+| **Total so far** | Sam's target (7 Nov): about 10%, like Terfwarts (9%) and MidTerminal (11%) | **10.0** | |
 
 Sound effects (rule 26): the fireplace crackle (the script names it); the explosion and the pieces splashing (my pick). Asked in question 9.
 
@@ -45,7 +45,8 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 1 | The strait: calm sea to a hazy horizon, far shore a grey smudge | still, slow ripples |
 | 2 | The tanker flotilla, 6-8 ships at anchor at different distances | still |
 | 3 | The nearest tanker, under way to the right | slow, wake spreading behind it |
-| 4 | The missile: a black dart, small, no smoke trail | drops steeply from the sky, top left, in about 0.4 s |
+| 4 | Vance in front, walking on calmly, never looking round | as shot 2 |
+| 4b | The missile: a black dart, small, no smoke trail | drops steeply from the sky, top left, in about 0.4 s |
 | 5 | The flash: the whole frame goes white | 3 frames, then fades over 0.3 s |
 | 6 | The fireball, huge, swallowing the ship's middle | swells and climbs, burns down to fire in about 1.5 s |
 | 7 | Flaming pieces of tanker (deck plates, pipework, the funnel top) | thrown high and wide, tumbling, trailing flame |
@@ -95,17 +96,17 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 3 "That you have your concerns." | Vance | understanding, slight tilt of the head | still walking | tilt on "concerns" |
 | 4 "But there's something I need you to know." | Vance | earnest, eyes steady | stops at his mark, one open hand to chest height | stop on "need" |
 | (showstopper) | | | | |
-| 5 "None of this is my fault." | Vance | calm, sincere, a reassuring small smile; does not look round (question 6) | still, the fire's glow on his face | smile on "fault" |
+| 5 "None of this is my fault." | Vance | calm, sincere, a reassuring small smile; never looks round (Sam, 7 Nov) | still, the fire's glow on his face | smile on "fault" |
 | 6 "Aggravating, right?" | Vance | cheerful, big friendly smile | arm round the man's shoulders, a small squeeze | squeeze on "right" |
 | 6 (same) | the man | fury fixed on the board; eyes slide to Vance on "right" | rigid, pump still in his hand, doesn't return the hug | eyes on "right" |
 | 7 "You know who isn't responsible?" | Vance | eyebrows up, teasing | leans in a little | lean on "responsible" |
-| 8 "This guy." | Vance | proud grin, eyes to the lens | arm comes off; both hands point at his own chest (question 7) | points on "This" |
+| 8 "This guy." | Vance | proud grin, eyes to the lens | arm comes off; both thumbs at his own chest (Sam, 7 Nov; his call over rule 69's pointing finger) | points on "This" |
 | 8 (same) | the man | ask Sam: the script continues here | | |
 
 ## References as checklists (never draw blind)
 | reference | what it shows | ours matches? |
 |---|------|------|
-| Vance likeness pack (rule 51) | needed: 3+ straight-on, close, not smiling; one three-quarter; one smiling or talking; 1-2 caricatures Sam likes | |
+| Vance likeness pack (rule 51) | downloading from Wikimedia Commons (7 Nov): 3 official portraits straight-on, 9 speaking photos, 1 caricature; Sam sends cartoons he likes | |
 | Musandam cliffs over the Strait of Hormuz | needed (I gather) | |
 | Oil tankers at sea (crude carriers) | needed (I gather) | |
 | Midwest gas station with a price board | needed (I gather) | |
@@ -123,6 +124,9 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 8. Price board: add Regular and Premium rows under Diesel, true to a real board, no joke (Y)?
 9. Sounds: the fireplace crackle, the explosion and the splashes, nothing else (Y)?
 10. Outfit: the same navy suit and red tie in every shot (Y)?
+
+## Sam's answers (7 Nov)
+1 Y: build now, fit the rest in when it comes. 2: keep the cliff walk as written (walking on the strait like a gentle political ad is itself a joke); Sam is reworking the dialogue for an earlier joke. 3: I find the photos (network now allows Wikimedia: new "Animation-" environment); Sam finds cartoons. 4: Hook Text later. 5 = 2: the explosion happens behind Vance in the cliff shot. 6 Y: never looks round. 7 = 2: both thumbs. 8 Y: Regular and Premium rows added. 9 Y: crackle, explosion, splashes only. 10 Y: navy suit and red tie throughout. Budget: about 10% of a week.
 
 ## Notes
 | # | shot | time | note | status |
