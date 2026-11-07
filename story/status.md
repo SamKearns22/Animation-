@@ -9,7 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). The "Hook Text names the story" rule: dropped (Sam, 7 Nov).
 
 ## Films
-- **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit (Opus, high effort, new chat); (2) forearm-and-elbow check for rule 78 (Opus, medium), straight after (1). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
+- **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: planned 7 Nov (`notes/sitting-kit.md`), waiting on Sam's 8 answers, then build part 1 (Opus, high); (2) forearm-and-elbow check for rule 78 (Opus, medium), straight after (1). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (7 Nov): cast approved** (Vance, the driver); beard tool built (rule 77). Next: place photos and the
   composition sheet (fresh chat, Opus high). Waiting on Sam: the rest of the script. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/islamocommunism.md`.
