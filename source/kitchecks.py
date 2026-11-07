@@ -112,8 +112,9 @@ class SceneChecks:
             hs = [(n, s) for n, th in things.items() for s in _hands(th) if _hit(hand, n, s.part)]
             ts = [th for n, th in things.items() if _hit(target, n)]
             if not hs or not ts:
-                self._fault('touch', (hand, target), t, f'{t:.2f} s ({shot}): {hand} or {target} is not in the scene '
-                                                        f'(TOUCHES: {why})')
+                self._fault('untested', (hand, target), t, f'{t:.2f} s ({shot}): the touch check found no {hand} or no {target} '
+                                                            f'in the scene, so it checked NOTHING (TOUCHES: {why}). Look at this '
+                                                            f'moment by eye at full size, or fix the name, before the animatic')
                 continue
             gap = min(_gap(s, th) for _, s in hs for th in ts if th.name != _)
             if gap > CLEAR:
@@ -325,7 +326,7 @@ def run(film, drawn=None):
 def main():
     film = importlib.import_module(sys.argv[1])
     import audit
-    fs = run(film) + [f for f in audit.check(film) if f.split(': ', 2)[1] in ('TOUCH', 'HIDDEN', 'HELD', 'RESTING')]
+    fs = run(film) + [f for f in audit.check(film) if f.split(': ', 2)[1] in ('COULD NOT TEST', 'TOUCH', 'HIDDEN', 'HELD', 'RESTING')]
     print('\n'.join(fs) or 'kitchecks: clean')
 
 
