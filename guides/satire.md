@@ -52,6 +52,9 @@ check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections t
   OURS.png OUT.jpg --others ...`: 60%+ match, nothing the wrong way, 1st in the line-up, before Sam sees it. After
   filing a film's references, `likeness.py average` grows the crowd of real faces. (Farage took six passes; Damon
   and Musk failed the line-up when measured afterwards.)
+- **Facial hair (7 Nov: Vance's beard took eight notes, Abdul's four):** run `python3 source/beardkit.py analyse NAME
+  PHOTO` on the best straight-on photo first; send Sam its five plain lines with the empty-face sheet, take his
+  words (`--says`), then `beardkit.draw` in the head. Never copy photo texture (flecks, many tones): flat shapes only.
 - **Real sizes.** Every prop and set piece is drawn at its real size in metres through the scene's camera (sizes
   from `source/sizes.py`; add a missing one after looking it up), and listed in the film's `PROP_SIZES` so
   preflight checks it. A new prop goes on the cast sheet beside a person (`sizes.scale_ref`). (The paper, pens, lift

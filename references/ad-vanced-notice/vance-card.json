@@ -1,0 +1,195 @@
+{
+ "name": "vance-front-2023",
+ "photos": [
+  "references/ad-vanced-notice/vance-front-2023.jpg",
+  "references/ad-vanced-notice/vance-front-2025.jpg",
+  "references/ad-vanced-notice/vance-front-2026.jpg"
+ ],
+ "measures": {
+  "face_wide": 0.9065570883488085,
+  "jaw_wide": 0.8237674896515755,
+  "forehead_wide": 0.9218482232560169,
+  "eyes_apart": 1.2790361328817694,
+  "eye_size": 0.1826841311547824,
+  "eye_open": 0.2402984536115814,
+  "eye_tilt": 0.3500034193745128,
+  "brow_high": 0.4006353051784591,
+  "brow_slope": -6.185930178274984,
+  "nose_long": 0.3909346474737661,
+  "nose_wide": 0.7135244113172353,
+  "mouth_wide": 0.892605209665835,
+  "lip_top": 0.1002290097956451,
+  "lip_low": 0.16078461020484833,
+  "philtrum": 0.12795191703293843,
+  "chin_long": 0.356553275290342
+ },
+ "average": {
+  "face_wide": 0.8717709228699967,
+  "jaw_wide": 0.8197130358936273,
+  "forehead_wide": 0.9420335520221841,
+  "eyes_apart": 1.3251304134564346,
+  "eye_size": 0.18604615413389317,
+  "eye_open": 0.3134028843754331,
+  "eye_tilt": 2.4741000518286085,
+  "brow_high": 0.5858307925480619,
+  "brow_slope": -9.371461324406877,
+  "nose_long": 0.41709146436872896,
+  "nose_wide": 0.641054695644114,
+  "mouth_wide": 0.8016076904497511,
+  "lip_top": 0.12057608224727724,
+  "lip_low": 0.18286999403665744,
+  "philtrum": 0.1325448247947855,
+  "chin_long": 0.2952975630170475
+ },
+ "diffs": [
+  {
+   "key": "brow_high",
+   "dev": -1.9371611316719628,
+   "words": "brows low and heavy over the eyes",
+   "warn": "",
+   "value": 0.4006353051784591,
+   "avg": 0.5858307925480619
+  },
+  {
+   "key": "chin_long",
+   "dev": 1.6071106179130201,
+   "words": "a long chin",
+   "warn": "",
+   "value": 0.356553275290342,
+   "avg": 0.2952975630170475
+  },
+  {
+   "key": "nose_wide",
+   "dev": 1.486961508000791,
+   "words": "a wide nose",
+   "warn": "",
+   "value": 0.7135244113172353,
+   "avg": 0.641054695644114
+  },
+  {
+   "key": "brow_slope",
+   "dev": 1.2332630915886742,
+   "words": "brows rising to the outside",
+   "warn": "",
+   "value": -6.185930178274984,
+   "avg": -9.371461324406877
+  },
+  {
+   "key": "eye_open",
+   "dev": -1.1093879989433573,
+   "words": "narrow, hooded eyes",
+   "warn": "",
+   "value": 0.2402984536115814,
+   "avg": 0.3134028843754331
+  },
+  {
+   "key": "mouth_wide",
+   "dev": 1.0762003644498,
+   "words": "a wide mouth",
+   "warn": "",
+   "value": 0.892605209665835,
+   "avg": 0.8016076904497511
+  },
+  {
+   "key": "forehead_wide",
+   "dev": -0.991232201704676,
+   "words": "a narrow forehead",
+   "warn": "",
+   "value": 0.9218482232560169,
+   "avg": 0.9420335520221841
+  },
+  {
+   "key": "nose_long",
+   "dev": -0.9542016166754412,
+   "words": "a short nose",
+   "warn": "",
+   "value": 0.3909346474737661,
+   "avg": 0.41709146436872896
+  },
+  {
+   "key": "eye_tilt",
+   "dev": -0.877038758367109,
+   "words": "eyes drooping at the outer corners",
+   "warn": "",
+   "value": 0.3500034193745128,
+   "avg": 2.4741000518286085
+  },
+  {
+   "key": "lip_top",
+   "dev": -0.6752925654202437,
+   "words": "a thin upper lip",
+   "warn": "",
+   "value": 0.1002290097956451,
+   "avg": 0.12057608224727724
+  },
+  {
+   "key": "face_wide",
+   "dev": 0.5794872649910687,
+   "words": "a wide, broad face",
+   "warn": "",
+   "value": 0.9065570883488085,
+   "avg": 0.8717709228699967
+  },
+  {
+   "key": "lip_low",
+   "dev": -0.49497839822116013,
+   "words": "a thin lower lip",
+   "warn": "",
+   "value": 0.16078461020484833,
+   "avg": 0.18286999403665744
+  },
+  {
+   "key": "eyes_apart",
+   "dev": -0.378139335727474,
+   "words": "close-set eyes",
+   "warn": "",
+   "value": 1.2790361328817694,
+   "avg": 1.3251304134564346
+  },
+  {
+   "key": "eye_size",
+   "dev": -0.25008406056367766,
+   "words": "small eyes",
+   "warn": "the photos disagree",
+   "value": 0.1826841311547824,
+   "avg": 0.18604615413389317
+  },
+  {
+   "key": "philtrum",
+   "dev": -0.24275232706829114,
+   "words": "a short gap from nose to lip",
+   "warn": "",
+   "value": 0.12795191703293843,
+   "avg": 0.1325448247947855
+  },
+  {
+   "key": "jaw_wide",
+   "dev": 0.18855494224827585,
+   "words": "a broad, square jaw",
+   "warn": "",
+   "value": 0.8237674896515755,
+   "avg": 0.8197130358936273
+  }
+ ],
+ "shapes": {
+  "hair_top": 0.4157213432063129,
+  "hair_wide": 1.2059356360672768,
+  "hairline": 0.140640708396612,
+  "fringe": 0.11221922731356694,
+  "hair_rgb": [
+   62,
+   46,
+   36
+  ],
+  "hair_below_ears": 0.05406340472493745,
+  "skin_rgb": [
+   232,
+   172,
+   148
+  ],
+  "beard": 0.58,
+  "moustache": 0.39,
+  "glasses": 0.0
+ },
+ "smile": 0.31835923592249554
+}
