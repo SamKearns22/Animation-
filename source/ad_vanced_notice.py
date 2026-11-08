@@ -170,7 +170,9 @@ RESTS = [('*Vance.forearm*', 'desk', T['fold'] + 0.4, T['cut2'], 'line 1: hands 
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
 ORDER_SWAPS = []
-HANDS_OK = [('*Vance*', '*', 'no hand', 0.0, T['swivel'] + SWIVEL * 0.7, 'his back to us in the swivel chair: '
+HANDS_OK = [('*Vance*', 'L', 'no hand', T['arm'], T['off'] + 0.1, "his hand is drawn by _arm_over on the driver's far "
+             'shoulder, over the driver (looked at full size, 8 Nov: the hand shows there every frame)'),
+            ('*Vance*', '*', 'no hand', 0.0, T['swivel'] + SWIVEL * 0.7, 'his back to us in the swivel chair: '
              'his hands are in front of him; they come round with him'),
             ('*Vance*', 'R', '*sleeve*', T['stop'], L[4]['end'] + 0.6, 'the open hand rising beside his chest on '
              '"need" (acting 4): looked at full size, 8 Nov: the hand shows beside the chest, the forearm short'),
@@ -363,7 +365,8 @@ def gas_vance(t):
         x = GAS_IN + (GAS_VX - GAS_IN) * k
         return x, -90.0, moves.gait(sp, t - T['enter'], 'walk')
     j = V.standing(sp)
-    yaw = -90.0 * (1 - _ease(_ramp(t, T['arm'] - 0.25, T['arm'] + 0.1)))
+    yaw = -90.0 if t < T['arm'] - 0.12 else 0.0     # note 41: the series' standard turn: a straight snap from
+                                                    # side on to front on, no three-quarter view
     arm = _ease(_ramp(t, T['arm'], T['arm'] + 0.45)) * (1 - _ease(_ramp(t, T['off'], T['off'] + 0.35)))
     sq = _bump(t, word_at(6, 'right') - 0.1, word_at(6, 'right') + 0.5, 0.12, 0.3)
     if arm > 0.01:
@@ -466,7 +469,8 @@ def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck, vlay):
     near = [(x, _top(al, x, mneck - 20 * sm) - lift) for x in xs_near]
     sq = j.get('_sq', 0.0)
     hx, hy = far[0][0] + 4 * sq, far[0][1] + w * 1.2 + 4 * sq        # the hand over the front of his far shoulder
-    root = (vx - 48 * s, vneck + w - 4 * s)                          # note 40: straight on from his own shoulder
+    vtop = _top(np.asarray(vlay)[..., 3], vx - 70 * s, vneck - 60 * s)   # Vance's own shoulder top, measured (note 41)
+    root = (vx - 66 * s, vtop + w - 1)                               # note 40: straight on from his own shoulder
     path = [(hx, hy)] + far + [root]                                 # line at his collar, one straight run from
                                                                      # behind the driver's neck (no hump)
     ink, fill = ST.layer(), ST.layer()

@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 74 (acting list on the check sheet), 59 (pre-flight before every render; the two long shots named), 82 (Hook Text pops at 0.5 s)
-- **Done (8 Nov):** the whole film built (note 32); hellfire glow in the close-up (note 31); check sheet approved (Sam: Y); first animatic sent (31 s, 1.3 MB, silent, lines on estimates, Hook Text and sign-off on).
-- **Next:** Opus medium: Sam's notes on the animatic; then his recordings (Sonnet: file them as `source/audio/ad-vanced-notice-N.m4a`) and the sounds (crackle, explosion, splashes).
-- **Needs Sam:** notes on the animatic; recordings of lines 1-8; the rest of the script after "This guy."
-- **Read:** this file (Where things stand, notes 27-32, Acting); `source/ad_vanced_notice.py` MAP.
-- **Open rule requests:** none.
-- **For Claude:** film `source/ad_vanced_notice.py` (template; `keys`, `final --small --faults-named` for the two named long shots: cliff 12.8 s, Sam's Q5; gas 9.3 s). Finish: `finish.py CLEAN OUT --film ad_vanced_notice`. Hellfire: `fx.hellfire`. Views: `beard_turned` (Vance's side and three-quarter beard).
+- **Rules that bite next:** 74 (acting list on the check sheet), 59 (pre-flight before every render; the two long shots named), 81 (one fluid body: the arm round the driver), 82 (Hook Text pops at 0.5 s)
+- **Done (8 Nov):** the film built; animatic 1 sent, Sam: good; notes 33-41 done (cut to the close-up at 15.5 s, speaks at once; arm over the driver's shoulders; driver further right, glaring up-left, angrier, neck drawn once; pointing fingers from Power Crime Action; no three-quarter turn); animatic 2 sent.
+- **Next:** Opus medium: Sam's notes on animatic 2; then his recordings (Sonnet: file as `source/audio/ad-vanced-notice-N.m4a`) and the sounds (crackle, explosion, splashes).
+- **Needs Sam:** notes on animatic 2; recordings of lines 1-8; the rest of the script after "This guy."; whether the study swivel keeps its three-quarter frame.
+- **Read:** this file (Where things stand, notes 33-41, Acting); `source/ad_vanced_notice.py` MAP.
+- **Open rule requests:** none. (Sam keeps asking for models: he overrode to Sonnet for animatic 2.)
+- **For Claude:** film `source/ad_vanced_notice.py` (`keys`, `final --small --faults-named`: long shots cliff 11.0 s and gas 9.3 s are named). The driver's neck: `neck_lean` in views/burnham. Arm round: `_arm_over`. Finger: `_point_hand` (Power Crime Action's). Finish: `finish.py CLEAN OUT --film ad_vanced_notice`.
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -181,6 +181,9 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 39a | gas station | | Return to neutral right after the fist shake | done: his head comes back to centre as the fist comes down (it had stayed leaning until "right"); his eyes stay on the board until "right". New kind |
 | 39b | gas station | | JD still has the rude fingers; use the finger point from Power Crime Action | done: why 37e failed: I only raised the hands; the finger itself was unchanged. The house finger is a long, thick tube with its round tip outlined as a separate ring. Now Power Crime Action's finger (shorter, slimmer, the tip's join painted over: one finger), for this film; and a wider side step (0.34 m) so his left fist clears the driver. Seen before (37e) |
 | 40 | gas station | | The shoulder rises where the arm meets JD's torso (Sam's circle): not one straight, fluid torso-to-arm line | done: the sleeve followed the slope of the driver's near shoulder, then dropped to a lower point on Vance's shoulder: a hump. Now one straight run from behind the driver's neck to the edge of Vance's collar, carrying on his own shoulder line. Seen before (37c) |
+| 41a | gas station | | A few pixels of non-connection at the arm and Vance's collar | done: the sleeve's end sat a few pixels below his own shoulder top and then overlapped his white shirt. Now it ends on his jacket shoulder at the height measured from his drawing every frame, so the line is one. Seen before (40) |
+| 41b | gas station | | Remove the three-quarter pose from the turn | done: his walk-in turn is now the series' standard snap, side on to front on in one frame. (The swivel in the study is the kit's own turn, which Sam asked for: untouched; say if it should lose its three-quarter frame too.) Lost: the in-between turn frames |
+| 41c | film | | Animatic 2 | done: sent (29.5 s, 1.3 MB, silent) with its check sheet; two long shots named (cliff 11.0 s, gas 9.3 s); a meant hand exception recorded (his hand drawn on the driver's shoulder). Made on Sonnet at Sam's override (8 Nov) |
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). R2 is rule 82 (Sam: Y, 8 Nov): the Hook Text pops in 0.5 s into the film; `guides/tiktok-design.md` points at it; `hook_text.py` starts at 0.5 s with a 0.2 s pop (60% → 108% → 100%), tested on the clip. Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
