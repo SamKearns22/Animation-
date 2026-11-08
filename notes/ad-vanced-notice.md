@@ -96,6 +96,8 @@ Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he s
 | 8 "This guy." | Vance | proud grin, eyes to the lens | arm comes off; both thumbs at his own chest (Sam, 7 Nov; his call over rule 69's pointing finger) | points on "This" |
 | 8 (same) | the man | ask Sam: the script continues here | | |
 
+Resting arms (rule 78), for the film's `RESTS` when its code is built: line 1, both forearms on the study desk, `('JD Vance.forearm*', 'desk', 0.0, END_OF_STUDY, 'line 1: hands folded on the desk')` (the sitting kit's desk is in his pose, so 'desk' finds its top).
+
 ## References as checklists (never draw blind)
 | reference | what it shows | ours matches? |
 |---|------|------|

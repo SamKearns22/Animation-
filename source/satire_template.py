@@ -98,6 +98,8 @@ SET_EXCLUDE = []                                    # rule 12: [(set piece, why)
 # (define all_marks()); a sound tied to a thing plays only with it in frame, once per hit
 TOUCHES = []                                        # [(hand, thing, from, to, why)], e.g. ('A.handR', 'MUG', 2.0, 3.1, ...)
 FREE_MOVES = []                                     # [(thing, from, to, why)], e.g. ('MUG', 3.1, 3.6, 'knocked flying')
+RESTS = []                                          # rule 78, every arm the notes list as resting: [(forearm, surface,
+#                                                     from, to, why)], e.g. ('A.forearm*', 'desk', 0.0, 2.5, 'line 1')
 SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
 # Rules 15-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
 # 'burst' must be lumpy, never a star; no motion lines); every prop a joke needs at least 40 px on screen (the sheet:

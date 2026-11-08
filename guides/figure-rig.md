@@ -193,6 +193,7 @@ once floated between them.
 | Set pieces apart | `check_apart` (ward, ambulance, desk) | two listed outlines overlap |
 | Feet / seat contact | `check_feet_on`, `check_seated` | soles off the floor, hips off the seat |
 | Sitting kit | `sitting.py audit` (every pose and move) | hips off the seat, a foot off the floor or sliding while weighted, a leg that can't reach or a knee bent backwards, a resting forearm or elbow off its surface (rule 78), the chair not following a lean back, the head dipping on a rise (rule 80), hips up before the body is over the feet; a foot off what it rests on (floor, desk top, the other knee) or a dangling foot touching down; a leg or shoe through the seat, the desk or the other leg; a gap behind the back where it should rest on the chair, or a back through it; a perch off the seat's front third; the desk moving in a swivel |
+| Resting arms (rule 78) | `kitchecks.rests` (pre-flight, from the film's `RESTS`) | a listed forearm or elbow more than 1 cm below its surface, an elbow floating over it or off its edge, or an arm posed resting that `RESTS` leaves out |
 | Captions | `preflight.py` | over 2 rows, 700 px or 42 characters a row; faster than ~200 words a minute |
 | Shot length | `preflight.py` | a shot over 8 s (flagged: fine when chosen) |
 | Duplicate recordings | `voices.py` | two files hold the same take |
