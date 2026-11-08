@@ -9,7 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). The "Hook Text names the story" rule: dropped (Sam, 7 Nov).
 
 ## Films
-- **Elder Scrolls: Swindon (8 Nov): planned** (teaser parody, 31.6 s, budget 9% of a week). Answers in; waiting on the teaser recordings for stills. Next: Opus high, composition sheet. Notes: `notes/elder-swindon.md`.
+- **Elder Scrolls: Swindon (8 Nov): planned** (teaser parody, 31.6 s, budget 9% of a week). Composition sheet sent (Staffie added). Waiting on his notes and 3 questions. Next: Opus high, build. Notes: `notes/elder-swindon.md`.
 - **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: built (part 1 and part 2, 8 Nov: `source/sitting.py`, `notes/sitting-kit.md`; rule 80); part-2 sheet and moves video sent, waiting on Sam's questions 9-10; (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (8 Nov): first animatic sent** (whole film, 31 s, silent, lines on estimates). Waiting on Sam's notes, recordings of lines 1-8 and the rest of the script. Next: Opus medium, notes round. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/islamocommunism.md`.
