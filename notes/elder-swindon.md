@@ -182,3 +182,16 @@ The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
   hour. Sam: "Skip the checks. Proceed to animatic." The quick check (--text) was clean but for shot 6's length;
   the animatic rendered with `--no-lock`. Before the final: find the hang (workers waiting on a pool lock, the parent
   holding OpenMP threads) and run pre-flight in full.
+
+## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
+1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
+2. The exterior roundabouts sit on the junctions; move them further in, onto the arms. Traffic goes round each mini, not the main circle.
+3. The central lamp post is not clear, yet its shadow is huge: make the pole readable, shorten the shadow.
+4. Swindon from above goes too dark too quickly: lighter grade.
+5. "The Elder Scrolls VI" title: centre-aligned and grander in size.
+6. The drunk man looks asleep. His arm is curled off the ground. Give him a hoody and vomit nearby. Two reference photos are for inspiration only: no realistic likeness of either person. (Not copying the faces; a mugshot-style photo of a real person is not a model for a mocked character.)
+7. The zoom up from below is too fast; hold the dog attack long enough to read.
+8. The drool floats up from the ground and clips through his face: pin it to the mouth and the soil.
+9. Give the scroll swirling magic light, as in the trailer (added: a glow, an exception to the house style; pending Y).
+10. Added: a shopping bag overflowing with trash, north of the dog scene.
+11. Make it early evening (added: low golden sun, longer shadows; pending Y).
