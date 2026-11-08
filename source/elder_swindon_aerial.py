@@ -6,7 +6,7 @@ MAP
 - 30: layout in metres (screen-metres: sx right, sy down; island centre at 0, 0), the world link `W`
 - 70: the view: `View` (a sets.Cam straight down) -> px, pixels per metre, how much to enlarge people
 - 95: ground: verges, paths, tarmac, pavements, islands, markings, minis, central island, lamp post
-- 215: surroundings: houses (bottom left), flat-roofed block (right), car park, trees, the stadium's corner (top left)
+- 215: surroundings: houses (left, top left), flat-roofed block (right), car park, trees, the stadium's corner (bottom left)
 - 270: routes: cars round the minis (clockwise) and the inner ring (anticlockwise); a bus, the delivery moped
 - 340: e-bikes (two hooded teens, wrong way, weaving), walkers, the fight (two groups), the burnt-out car
 - 470: draw(pil, cam, t) and the still: python3 source/elder_swindon_aerial.py still OUT.jpg T [WIDTH]
@@ -112,7 +112,7 @@ def ground(v, t):
     v.d.rectangle([0, 0, w, h], fill=VERGE)
     # footpaths across the verges (pale), incl. the top path where the fight is
     for pts in (FIGHT_PATH,
-                [pol(58, 175), pol(80, 182), pol(110, 186)], [pol(58, 95), pol(75, 102), pol(110, 104)]):
+                [pol(58, 175), pol(80, 182), pol(110, 186)]):
         v.line(pts, (196, 190, 176), w_m=2.4)
     # the roads: pavement band, then carriageway with a centre line
     for m in MINIS:
@@ -212,7 +212,7 @@ def surroundings(v):
     rng = np.random.default_rng(4)
     # houses with brown roofs (bottom left and left), in rows along the verges
     for i in range(80):
-        ang, r = rng.choice([rng.uniform(150, 205), rng.uniform(345, 385), rng.uniform(62, 128)]), rng.uniform(60, 120)
+        ang, r = rng.choice([rng.uniform(150, 205), rng.uniform(345, 385), rng.uniform(222, 270)]), rng.uniform(60, 120)
         if min(angdist(ang, m) for m in MINIS) < (ARM_W / 2 + 9) / r * 57.3:
             continue
         x, y = pol(r, ang)
@@ -234,29 +234,30 @@ def surroundings(v):
         if min(angdist(ang, m) for m in MINIS) < (ARM_W / 2 + 6) / r * 57.3:
             continue
         x, y = pol(r, ang)
-        if (150 < ang < 205 or ang > 345 or ang < 25 or 62 < ang < 128) and r > 58:
+        if math.hypot(x - BURNT_AT[0], y - BURNT_AT[1]) < 9 or math.hypot(x - STADIUM[0], y - STADIUM[1]) < 30:
+            continue                                     # keep trees off the burnt-out car and the stadium
+        if (150 < ang < 205 or ang > 345 or ang < 25 or 222 < ang < 270) and r > 58:
             continue
         rr = rng.uniform(2.5, 4.5)
         v.circle(x + SUN[0] * 2, y + SUN[1] * 2, rr, (0, 0, 0, 60), None)
         v.circle(x, y, rr, (66, 110, 56), INK)
         v.circle(x - rr * 0.3, y - rr * 0.3, rr * 0.5, (86, 132, 66), None)
-    # the stadium's corner (the County Ground), top left, only a slice of it (Sam, 8 Nov)
+    # the stadium's corner (the County Ground), bottom left, a small piece of it (Sam, 8 Nov: "the stadium at the
+    # bottom, move up a little"): the stand's roof with the pitch beyond it, off the bottom of the frame
     sx, sy = STADIUM
-    v.poly(rrect(sx - 20, sy - 30, 110, 70, 30, 6, 4), (90, 150, 70), INK)            # the pitch beyond
-    for j in range(5):
-        v.poly(rrect(sx - 20 + j * 8 * math.cos(math.radians(30)), sy - 30 + j * 8 * math.sin(math.radians(30)),
-                     6, 70, 30, 0.1, 2), (104, 166, 82), None)
-    v.poly(rrect(sx, sy, 80, 16, 30, 1, 3), (206, 210, 214), INK, y=6.0)               # the stand's roof
+    A = -30.0
+    ca, sa = math.cos(math.radians(A)), math.sin(math.radians(A))
+    v.poly(rrect(sx - 30 * sa, sy + 30 * ca, 110, 70, A, 6, 4), (90, 150, 70), INK)       # the pitch beyond
+    for j in range(-2, 3):
+        v.poly(rrect(sx - 30 * sa + j * 14 * ca, sy + 30 * ca + j * 14 * sa, 7, 70, A, 0.1, 2), (104, 166, 82), None)
+    v.poly(rrect(sx, sy, 80, 16, A, 1, 3), (206, 210, 214), INK, y=6.0)                 # the stand's roof
     for j in range(-9, 10):
-        a = math.radians(30)
-        p = (sx + j * 4 * math.cos(a), sy + j * 4 * math.sin(a))
-        q = (p[0] - 8 * math.sin(a) * -1, p[1] - 8 * math.cos(a))
-        v.line([(p[0] + 8 * math.sin(a), p[1] - 8 * math.cos(a)), (p[0] - 8 * math.sin(a), p[1] + 8 * math.cos(a))],
-               (170, 176, 184), w_m=0.4, y=6.0)
-    v.circle(sx + 34, sy + 30, 1.4, (120, 120, 126), INK)                               # floodlight pylon foot
+        p = (sx + j * 4 * ca, sy + j * 4 * sa)
+        v.line([(p[0] + 8 * sa, p[1] - 8 * ca), (p[0] - 8 * sa, p[1] + 8 * ca)], (170, 176, 184), w_m=0.4, y=6.0)
+    v.circle(sx + 42 * ca + 6, sy + 42 * sa - 6, 1.4, (120, 120, 126), INK)              # floodlight pylon foot
 
 
-STADIUM = (-62, -112)
+STADIUM = (-40, 82)
 
 
 # ------------------------------------------------------------------------------------------------ routes
@@ -472,10 +473,9 @@ WALKERS = [  # (path points, speed m/s, offset, top colour, hair colour)
     ([pol(52, 333), pol(150, 333)], 1.3, 40, (232, 120, 160), (40, 30, 24)),
     ([pol(52, 39), pol(150, 39)], 1.2, 5, (150, 152, 158), (90, 66, 44)),
     ([pol(150, 52), pol(52, 52)], 1.3, 70, (70, 90, 150), (30, 26, 24)),
-    ([pol(52, 142), pol(150, 142)], 1.1, 20, (220, 180, 60), (120, 80, 50)),
-    ([pol(150, 155), pol(52, 155)], 1.4, 45, (150, 152, 158), (200, 170, 110)),
+    ([pol(52, 142), pol(82, 142)], 1.1, 20, (220, 180, 60), (120, 80, 50)),
+    ([pol(82, 155), pol(52, 155)], 1.4, 45, (150, 152, 158), (200, 170, 110)),
     ([pol(58, 175), pol(80, 182), pol(110, 186)], 1.2, 15, (150, 200, 230), (40, 30, 24)),
-    ([pol(110, 104), pol(75, 102), pol(58, 95)], 1.0, 0, (120, 60, 120), (220, 200, 160)),
 ]
 
 
@@ -524,7 +524,7 @@ def fight(v, t):
                arms=None if abs(al) < 0.7 else (0.4 + 0.3 * lunge, 0.4 + 0.3 * lunge))
 
 
-BURNT_AT = (-40, -70, 18)
+BURNT_AT = (-40, 42, 18)
 
 
 def burnt_car(v):
