@@ -36,7 +36,7 @@ import ad_vanced_notice_comp as CP   # noqa: E402  (the cast's setup and screen 
 import sitting                   # noqa: E402  the swivel chair, hands folded
 import moves                     # noqa: E402  the walks
 import views as V                # noqa: E402
-from satire_style import install_circle_hands   # noqa: E402
+from satire_style import install_circle_hands, OUT   # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
@@ -346,7 +346,7 @@ def close(t):
 # ---------------------------------------------------------------------------------------------- shot 4: the gas station
 MAN_X = ST.MAN_X + 0.45                           # the driver, further right (note 35): the board up to his left
 GAS_VX, GAS_VD = MAN_X + 0.24, 4.66               # Vance's mark: in close behind the driver's shoulder (note 34)
-STEP_OUT = 0.26                                   # m: the side step out for "This guy.", clear of the driver
+STEP_OUT = 0.34                                   # m: the side step out for "This guy.", clear of the driver
 STEP_FWD = 0.0                                    # (note 37: stepping forward took him through the driver)
 ARM_ROUND = (-300.0, 40.0, 60.0)                  # his left hand on the driver's far shoulder (Vance's own units)
 THUMBS = {'L': (-80.0, 115.0, 125.0), 'R': (80.0, 115.0, 125.0)}   # both index fingers up and in at his chest
@@ -421,7 +421,7 @@ def gas_man(t):
                    frown=0.06 * fury,                     # note 36: the face's frown is capped at anger 4, so the
                    lid4=0.02 - 0.035 * (4 + 2 * fury + 5),   # extra on top; the eyes kept open (the cast
                    # shuts them as anger rises) so you can see where they look
-                   head_dx=-26 * glare, head_dy=-6 * glare, neck_lean=True,   # note 38: the head up-left, the neck
+                   head_dx=-26 * up, head_dy=-6 * up, neck_lean=True,   # note 39: back to neutral as the fist comes down;   # note 38: the head up-left, the neck
                    # drawn once by the kit, leaning to follow it (no cut-out pieces)
                    gaze_dy=-1.0 * glare - 0.2 * side, look=-0.9 * glare + 0.8 * side)
 
@@ -763,6 +763,33 @@ def main():
 F.guard(B)
 import limbs                     # noqa: E402
 limbs.install(B)
+
+
+def _point_hand(prev):
+    """Power Crime Action's pointing finger (Sam, 8 Nov, note 39: ours read as something rude): short and slim, one
+    round-ended finger the way the forearm points, its tip's join painted over so it reads as one finger, not a
+    tube with a cap; drawn first so the circle hand covers its root."""
+    def hand(p, el, wr, shape, skin, extra=None, t=0.0):
+        if shape != 'point':
+            return prev(p, el, wr, shape, skin, extra, t)
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / n, dy / n
+        cx, cy = wr[0] + ux * 12, wr[1] + uy * 12
+        tip = (cx + ux * 50, cy + uy * 50)
+        w = 8.5
+        p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                (cx + uy * w, cy - ux * w)], skin, OUT, 2.2)
+        p.ell(tip[0], tip[1], w, w, skin, OUT, 2.2)
+        p.poly([(tip[0] - ux * 6 - uy * (w - 1.5), tip[1] - uy * 6 + ux * (w - 1.5)),
+                (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
+                (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
+        return prev(p, el, wr, 'fist', skin, extra, t)
+    hand.point_finger = True
+    return hand
+
+
+B.gesture_hand = _point_hand(B.gesture_hand)
 
 if __name__ == '__main__':
     main()
