@@ -246,11 +246,10 @@ def face_close(pil, cam, k, sp, t):
     x0, y0 = int(cx - R), int(cy - R)
     size = (int(2 * R), int(2 * R))
     # inverse affine: canvas (X, Y) -> texel (u, v):  [X-cx, Y-cy] = U*(u-384) + V*(v-384)
-    Mx = np.array([[U[0], V[0]], [U[1], V[1]]])
-    inv = np.linalg.inv(Mx)
+    det = U[0] * V[1] - V[0] * U[1]                      # the 2 x 2 inverse by hand: numpy's linear algebra can
+    a, b = V[1] / det, -V[0] / det                       # lock up inside pre-flight's forked workers (it hung there)
+    c, d = -U[1] / det, U[0] / det
     ox, oy = x0 - cx, y0 - cy
-    a, b = inv[0]
-    c, d = inv[1]
     coeffs = (a, b, a * ox + b * oy + 384, c, d, c * ox + d * oy + 384)
     lay = timg.transform(size, Image.AFFINE, coeffs, resample=Image.BICUBIC)
     # the cheek pressed into the soil: a soft contact shadow under the down side
@@ -562,7 +561,18 @@ def _persp_coeffs(src, dst):
         A.append([x, y, 1, 0, 0, 0, -u * x, -u * y])
         A.append([0, 0, 0, x, y, 1, -v * x, -v * y])
         bb += [u, v]
-    return np.linalg.solve(np.array(A, float), np.array(bb, float))
+    n = 8                                                # Gauss-Jordan by hand (see face_close: no numpy linalg
+    M_ = [row + [v] for row, v in zip(A, bb)]            # in the forked workers)
+    for i in range(n):
+        piv = max(range(i, n), key=lambda r: abs(M_[r][i]))
+        M_[i], M_[piv] = M_[piv], M_[i]
+        f = M_[i][i]
+        M_[i] = [x / f for x in M_[i]]
+        for r in range(n):
+            if r != i and M_[r][i]:
+                g = M_[r][i]
+                M_[r] = [x - g * y for x, y in zip(M_[r], M_[i])]
+    return [M_[i][n] for i in range(n)]
 
 
 def draw_packet(pil, cam, t):
