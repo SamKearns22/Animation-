@@ -360,6 +360,29 @@ def incremental_preflight_fingerprints():
 
 # ------------------------------------------------------------------------------------------------ running them
 @test
+def standing_legs_straight_elbows_out():
+    """Rule 81 (Sam, 8 Nov, Ad-Vanced Notice notes 15-17): standing at rest, each knee sits within 5 units of the line
+    from hip to ankle (the old solver bent it 36 units forward), and each elbow sits a little OUTSIDE the line from
+    shoulder to wrist (never inside it, never more than 40 units out), whatever the shoulder width."""
+    import views as V
+    bad = []
+    for sw in (130, 150, 186):
+        j = V.standing({'shoulders': sw})
+        for side, sg in (('L', -1), ('R', 1)):
+            hip, foot, knee = j['hip' + side], j['foot' + side], V.knee_of(j, side)
+            u = (knee[1] - hip[1]) / ((foot[1] - hip[1]) or 1)
+            dev = max(abs(knee[0] - (hip[0] + (foot[0] - hip[0]) * u)), abs(knee[2] - (hip[2] + (foot[2] - hip[2]) * u)))
+            sh, el, wr = j['sh' + side], j['el' + side], j['wr' + side]
+            v = (el[1] - sh[1]) / ((wr[1] - sh[1]) or 1)
+            out = sg * (el[0] - (sh[0] + (wr[0] - sh[0]) * v))
+            if dev > 5:
+                bad.append(f'sw {sw} {side}: knee {dev:.0f} off the line')
+            if not 0 < out < 40:
+                bad.append(f'sw {sw} {side}: elbow {out:.0f} out (wanted 0 to 40)')
+    return not bad, '; '.join(bad) or 'knees on the hip-ankle line; elbows a little out'
+
+
+@test
 def point_hand_shows_a_finger():
     """Rule 69 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
     circle hands draw one for 'point', and films that load them after their own finger keep it."""

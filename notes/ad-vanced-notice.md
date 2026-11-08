@@ -4,9 +4,9 @@
 - **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
 - **Done (8 Nov):** arms joined to the shoulders in the shared kit, every film (note 14); side-view legs stand straight (15); relaxed elbows bend a touch outward, matched to Sam's rest photos (16, 17); no tufts inside a lifted, bent elbow (18). Before/after sheet sent in chat (kept off GitHub, as a test picture).
 - **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: build the sets. Read notes/ad-vanced-notice.md".
-- **Needs Sam:** his number on R1 (now covers arms, elbows and standing legs); any notes on the before/after sheet; the rest of the script; the Hook Text later.
+- **Needs Sam:** any notes on the before/after sheet; the rest of the script; the Hook Text later.
 - **Read:** this file (Where things stand, references, composition); `guides/kit-catalogue.md` rows for sets.py, the Flying Whales sea and effects; `guides/figure-rig.md` 2-3 only if Sam has arm notes.
-- **Open rule requests:** R1 (below the notes), not yet written.
+- **Open rule requests:** none (R1 written as rule 81, 8 Nov).
 - **For Claude:** sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`). Arms: `limbs._who` (unwraps Lean/Tilted/Mirrored; body kept in screen pixels), `limbs._fillet`, `views.standing`, `views.knee_of` lock; sheet script was a scratch file (4 casts x front, side, arm lifted; old code from a git worktree).
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
@@ -149,9 +149,7 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 17 | all films | | The elbows bend inwards, and a bit too far, rather than a tiny bit outwards | done (8 Nov): why 16 went wrong: I angled the forearm out (the real carrying angle), which makes the elbow point in. Now the upper arm leans out from the shoulder and the forearm comes back in under it, about 10 degrees, matched to Sam's four rest photos (references/figure-rig/): elbow at the waist, hands beside the upper thigh, just clear of the jacket. Seen before (16) |
 | 18 | all films | | Tufts of fabric rise from the inside of the elbow when the arm is lifted and bent | done (8 Nov): the shoulder smoothing (note 14) filled every gap near the shoulder, and with the elbow bent up close to the shoulder it filled the inside of the elbow too. Now it fills only beside the body, never beside the forearm. Seen before (14) |
 
-Rule proposals (waiting for Sam's number):
-- R1 (Sam, 7 Nov: "all future character models"): rulebook rule 81 (80 went to the sitting kit), "Arms and body are one piece: the sleeve grows out of the shoulder with one outline from the collar, over the shoulder and down the arm; no line, cap or step where the arm meets the body (only an armpit crease when the arm is lifted). Every cast sheet draws the arms exactly as the film does." Check: a shoulder-seam test in `linecheck.py` that fails on any ink line across the shoulder join, run on every cast sheet.
-  Extended 8 Nov (notes 15-17, "all character models"): "... Standing at rest, legs are straight in every view and the elbows bend a touch outward (upper arm out from the shoulder, forearm back in, hands beside the upper thigh), as in references/figure-rig/." Check: the cast sheet's side view fails if a standing knee sits more than 5 units off the hip-ankle line; the front view fails if a resting elbow sits inside the shoulder-wrist line.
+Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.
