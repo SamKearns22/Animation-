@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 40 (showstopper list: Sam's notes on the rehearsal clip), 80 (seated front on: knees and lap show through the swivel), 74 (the acting list ticked on the check sheet before the first animatic)
-- **Done (8 Nov):** the showstopper built (note 28): missile, flash, freeze and jolt, huge fireball, 14 flaming pieces with splashes, black smoke column for good, the wreck burning with the sea lit orange; works through the close-up camera too. Rehearsal clip sent. Sam's swivel opening recorded (note 27, brief row 0).
-- **Next:** this chat, Opus high: Sam's notes on the clip; then the film build (film file from the template, the swivel opening, the cliff walk, the close-up, the gas station).
-- **Needs Sam:** notes on the clip; questions 11-12 (note 27, the chair; R2, the Hook Text rule); the rest of the script; the Hook Text wording.
-- **Read:** this file (Where things stand, the showstopper list, notes 27-28); `guides/kit-catalogue.md` sitting kit row.
-- **Open rule requests:** R2 (Hook Text pops in at 0.5 s), proposed 8 Nov, waiting for Sam's yes.
-- **For Claude:** showstopper in `source/ad_vanced_notice_fx.py` (MAP at the top): `near(u)`, `fx(u)` for `strait(..., fx=)`, `flash(img, u)`, `held(u)` (2-frame freeze), `jolt(u)` + `shift`; u = s from the hit; `EFFECTS` for viewchecks. Wreck state in `tanker()` now has the funnel stub. Sets as before (`source/ad_vanced_notice_sets.py`). Swivel: `sitting.swivel(sp, seat, u, 180, 0)`; the study's chair is painted in `study_back`.
+- **Rules that bite next:** 40 (showstopper list: Sam's notes on take 2), 82 (Hook Text pops in at 0.5 s), 74 (the acting list ticked on the check sheet before the first animatic)
+- **Done (8 Nov):** showstopper take 2 (note 29): no white flash, orange flame-light and a harder jolt, a blast ring and white water heaved up, the tanker torn in two, varied debris, an oil fireball climbing for 4.6 s into a lasting fire column under the smoke. Clip sent. Hook Text from Sam: "JD Vance Addresses The Nation". Rule 82 written (R2, Sam: Y). Swivel chair: yes (question 11).
+- **Next:** this chat, Opus high: Sam's notes on take 2; then the film build (film file from the template, the swivel opening, the cliff walk, the close-up, the gas station).
+- **Needs Sam:** notes on take 2; the rest of the script.
+- **Read:** this file (Where things stand, the showstopper list, notes 27-29); `guides/kit-catalogue.md` sitting kit row.
+- **Open rule requests:** none.
+- **For Claude:** showstopper in `source/ad_vanced_notice_fx.py` (MAP at the top): `near(u)` (now carries `brk(u)`), `fx(u)`, `light(img, u, cam)` (replaces `flash`), `held(u)` (2-frame freeze at 2 frames), `jolt(u)` + `shift`; u = s from the hit; `EFFECTS` for viewchecks. Wreck in two: `sets.wreck_xform`, `WRECK_FULL`, `tanker(..., brk=)`. Hook Text: `hook_text.py` now `--from 0.5` by default. Swivel: `sitting.swivel(sp, seat, u, 180, 0)`.
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -18,7 +18,7 @@ All flat paintings, one per camera; no 3D (rule 39): no camera moves round anyth
 | Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass): one flat painting | new set | 1.0 | 1.0 |
 | Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.0 | 0.9 (and the close-up's background) |
 | Oil tankers (one side-on model, copies varied in size and colour; a wake for the moving one) | new prop | 0.6 | 0.5 (the wreck hull too) |
-| Showstopper, in the cliff shot behind Vance: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 1.5 | 0.6 (Flying Whales' kit carried most of it) |
+| Showstopper, in the cliff shot behind Vance: missile, flame-light, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull torn in two (Sam, 8 Nov); hull plating, deck pieces, pipe, a jib and the funnel top fly (rule 54) | 1.5 | 1.0 (take 2: the break, new debris, the fire column) |
 | Close-up with the burning wreck behind | the cliff shot's wreck re-framed | 0.3 | 0.1 (the same effects through the close camera) |
 | Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.0 | 0.9 |
 | The big man (invented: 17 stone, goatee, balding, checked shirt, jeans; pump and hose) | new cast | 0.7 | |
@@ -39,12 +39,12 @@ Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he s
 | 3 | The nearest tanker, under way to the right | slow, wake spreading behind it |
 | 4 | Vance in front, walking on calmly, never looking round | as shot 2 |
 | 4b | The missile: a black dart, small, no smoke trail | drops steeply from the sky, top left, in about 0.4 s |
-| 5 | The flash: the whole frame goes white | 3 frames, then fades over 0.3 s |
-| 6 | The fireball, huge, swallowing the ship's middle | swells and climbs, burns down to fire in about 1.5 s |
-| 7 | Flaming pieces of tanker (deck plates, pipework, the funnel top) | thrown high and wide, tumbling, trailing flame |
+| 5 | ~~The flash: the whole frame goes white~~ (Sam, 8 Nov: too nuclear) Flame-light: a hot orange glow over the whole frame from the fireball, settling to a warm glow round the fire; a ring of spray racing out over the water and white water heaved up round the ship | peaks in 0.1 s, settles over about 1.5 s |
+| 6 | The fireball, huge, swallowing the ship's middle: an oil fireball (Sam, 8 Nov) | bursts in 0.2 s, climbs and rolls up for 4.6 s, its top turning to black smoke from 3 s, onto a column of fire rising from the break that burns for good |
+| 7 | Flaming pieces of tanker, varied in size (Sam, 8 Nov): 3 big slabs of black side plating with the red bottom on them, 4 rust-red deck plates with pipe on them, 4 lengths of flanged pipe, a white crane jib, the funnel top, 9 small scraps, 5 blobs of burning oil | thrown high and wide (big ones low and heavy, small ones highest), tumbling, flames trailing behind |
 | 8 | Splashes where each piece hits the sea | a crown and a falling column each; pieces sink |
 | 9 | Black smoke pouring up in billows | rises and leans with the wind, keeps coming (never fades) |
-| 10 | The wreck: hull whole, torn open amidships, burning | stops, fire tongues and smoke for the rest of the scene |
+| 10 | The wreck: torn in two amidships (Sam, 8 Nov), the bow and stern lifting with their red bottoms showing, the torn ends dipping into the fire | breaks in the blast, the halves keep parting and settling over 7 s; burning oil in the gap; fire column and smoke for the rest of the scene |
 | 11 | The sea lit orange under the fire | follows the fire |
 | 12 | A camera jolt and a 2-frame freeze on the hit | as Flying Whales |
 
@@ -78,7 +78,7 @@ Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he s
 | 25 | VANCE: "Aggravating, right? You know who isn't responsible?" | |
 | 26 | He points at himself with both hands/fingers. VANCE: "This guy." | |
 | 27 | The joke: Vance sincerely claims he isn't responsible for the election, prices or war, despite being Vice President. | |
-| 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | |
+| 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. Hook Text (Sam, 8 Nov): "JD Vance Addresses The Nation" (his capitals kept), popping in at 0.5 s (rule 82). | |
 | 0 | (Sam, 8 Nov) The video starts with JD swivelling round in his chair, as in our sitting kit, a big smile on his face. | |
 
 ## Acting (rule 74; front on, rule 38)
@@ -162,11 +162,10 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 26 | all sets | | Sets approved (Sam, 8 Nov: Y), thorn tree kept in reserve | done: the thorn tree is out of shot 2 but not deleted; its code is in commit eab160d (`_thorn_tree` in `source/ad_vanced_notice_sets.py`), to bring back on a note. |
 | 27 | study | 0.0 | Start with JD swivelling as in our sitting kit, big smile | understood: the kit's villain reveal (`sitting.swivel`, 0.8 s): his chair faces away, he spins round to the lens with a big grin ('grin' mood), then settles into "Hello, America". Built with the film. The painted chair can't turn, so (question 11, my pick): Lost: the buttoned oxblood armchair. Added: the kit's swivel office chair in the same buttoned oxblood leather, high back. New kind |
 | 28 | cliff | | Build the showstopper (Sam, 8 Nov) | done: `source/ad_vanced_notice_fx.py`. Missile from the top left in 0.4 s (clear of Vance's head); 3 white frames, fading 0.3 s; a 2-frame hold on the first fireball frame and a jolt; the fireball about 600 m tall over the ship's middle, burning down inside the smoke by 1.5 s; 13 deck plates and pipes and the funnel top (a beat later, from the stern) thrown high and wide trailing flame, tumbling, each with a splash, then gone; the smoke column pours from the hole for good, leaning right with the wind; the wreck stopped, torn amidships, uneven flames in the hole and on the funnel stub; broken orange streaks on the sea under it. Cartoon cheat: pieces fall at about 26 times true gravity (true gravity at 1.2 km looks like slow motion). Same effects through the close-up camera (wreck over his left shoulder). Effect shapes clean (rule 15). Silent: the explosion and splash sounds come with the film. Added: the funnel stub burning. New kind |
+| 29 | cliff | hit | No bright white flash (a bit nuclear); plenty of flame-light and force (a tanker full of oil); the ship more damaged where struck, perhaps torn in two; better, more fitting debris, more varied in size; a large oil-fire explosion rising, not one that dwindles into smoke and embers | done: take 2 clip sent. Lost: the white flash. Added: orange flame-light over the frame (Vance too), a harder jolt, a ring of spray racing over the water, white water heaved up round the ship. The tanker breaks in two (bow and stern lift, red bottoms showing; rule 54's "hull stays whole" overruled by Sam). Debris: hull plating, deck plates, flanged pipe, a crane jib, the funnel top, scraps and burning oil blobs, 3 to 40 m, flames trailing behind so the pieces read. The fireball climbs for 4.6 s (was 1.5) onto a rolling column of fire out of the break that burns for good, burning oil in the gap; the smoke pours from the fire's top. Added: burning oil on the water. Effect shapes clean (rule 15). New kind |
+| 30 | (questions) | | 11 Y: the kit's swivel chair in the oxblood leather. 12 (R2) Y: rule 82 written. Hook Text: "JD Vance Addresses The Nation" | done: noted in the brief (row 28) and note 27 |
 
-Rule requests (Sam, 8 Nov):
-- R2 (proposed, waiting for Sam's yes): the Hook Text pops in 0.5 s into the film instead of from the first frame. Wording and place in the chat reply of 8 Nov: rulebook rule 82, and `guides/tiktok-design.md` Hook Text line changed to point at it; `hook_text.py` starts at 0.5 s with a quick pop.
-
-Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
+Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). R2 is rule 82 (Sam: Y, 8 Nov): the Hook Text pops in 0.5 s into the film; `guides/tiktok-design.md` points at it; `hook_text.py` starts at 0.5 s with a 0.2 s pop (60% → 108% → 100%), tested on the clip. Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.

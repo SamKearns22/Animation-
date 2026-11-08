@@ -106,9 +106,33 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
     im.save(path)
 
 
+def _pop_frames(png, tmp, fps, scales=(0.6, 1.08, 1.0)):
+    """The card's pop-in (rule 82) as numbered frames in tmp: it grows from 60% past full size and settles, about
+    0.2 s, each frame scaled about the card's own middle."""
+    im = Image.open(png).convert('RGBA')
+    box = im.getbbox()
+    piece = im.crop(box)
+    cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+    n = max(3, int(round(0.2 * fps)))
+    names = []
+    for i in range(n):
+        g = i / (n - 1) * (len(scales) - 1)
+        j = min(int(g), len(scales) - 2)
+        s = scales[j] + (scales[j + 1] - scales[j]) * (g - j)
+        w, h = max(1, int(piece.width * s)), max(1, int(piece.height * s))
+        fr = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        fr.alpha_composite(piece.resize((w, h), Image.LANCZOS), (int(cx - w / 2), int(cy - h / 2)))
+        name = os.path.join(tmp, f'pop_{i:03d}.png')
+        fr.save(name)
+        names.append(name)
+    return names
+
+
 def main():
     a = sys.argv[1:]
-    until, y_mid = 3.6, 880
+    until, y_mid, start = 3.6, 880, 0.5           # rule 82: it pops in 0.5 s into the film
+    if '--from' in a:
+        i = a.index('--from'); start = float(a[i + 1]); del a[i:i + 2]
     centre = '--centre' in a
     if centre:
         a.remove('--centre')
@@ -129,10 +153,18 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "hook.png")
         card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid, width=width)
+        fps = next((float(t) for t, n in zip(probe.split(), probe.split()[1:]) if n.startswith('fps')
+                    and t.replace('.', '').isdigit()), 24.0)
+        pop = _pop_frames(png, tmp, fps)                       # rule 82: a quick pop (small, overshoot, settle)
+        dur = len(pop) / fps
         fade = 0.25
-        vf = (f'[1:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
-              f'[0:v][t]overlay=0:0:eof_action=pass:format=auto,format=yuv420p[v]')
-        subprocess.run([FF, '-y', '-loglevel', 'error', '-i', src, '-loop', '1', '-t', str(until), '-i', png,
+        vf = (f'[1:v]format=rgba,setpts=PTS+{start}/TB[p];'
+              f'[2:v]format=rgba,fade=t=out:st={until - fade}:d={fade}:alpha=1[t];'
+              f"[0:v][p]overlay=0:0:eof_action=pass:enable='between(t,{start},{start + dur - 0.001})'[a];"
+              f"[a][t]overlay=0:0:eof_action=pass:enable='gte(t,{start + dur})',format=yuv420p[v]")
+        subprocess.run([FF, '-y', '-loglevel', 'error', '-i', src,
+                        '-framerate', str(fps), '-i', os.path.join(tmp, 'pop_%03d.png'),
+                        '-loop', '1', '-t', str(until), '-i', png,
                         '-filter_complex', vf, '-map', '[v]', '-map', '0:a?', '-c:v', 'libx264', '-crf', '20',
                         '-preset', 'slow', '-c:a', 'copy', '-movflags', '+faststart', dst], check=True)
     print(f'{dst}: {os.path.getsize(dst) / 1e6:.1f} MB')

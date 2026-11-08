@@ -75,7 +75,8 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   concept, then the viewer stays to see where the joke goes. Never gives the punchline away.
 - **Readability first, not our title style:** TikTok's own caption look - TikTok Sans Bold, sentence case, black on
   a white rounded box (one box per row), near the middle of the safe area, over the moving picture, never over a face.
-- On from the first frame through the opening shot (about 3-4 s, a quick fade at the first cut).
+- Pops in 0.5 s into the film (rule 82: a quick pop) and stays through the opening shot (about 3-4 s, a quick fade
+  at the first cut).
 - `python3 source/hook_text.py IN.mp4 OUT.mp4 "Line" [--until 3.6] [--y 880]`, always onto an untitled render: keep
   the untitled final in `source/data/FILM/` (not on GitHub) so the line can be changed without a re-render.
 - The cranberry style stays for **titles** only (the cover and the 1-second opening title).

@@ -11,7 +11,7 @@ Map: helpers 45 | study 132 (study_pose 469) | strait (cliff + close-up) 511 | t
 
 Use in the film (each returns a 1080 x 1920 RGBA):
     study_back(t), study_front()            people go between (Vance at STUDY_VANCE: x, neck_y, s)
-    strait('wide' | 'close', t, near=('sail' | 'wreck', x_m), fx=fn)   fx(img, cam) draws the showstopper's effects
+    strait('wide' | 'close', t, near=('sail' | 'wreck', x_m[, brk]), fx=fn)   fx(img, cam) draws the showstopper's effects
                                             between the sea and the cliff top; Vance goes on top (place_cliff)
     gas_back(), gas_front()                 people go between (place_gas); HOSE_FROM, FILLER, BOARD_BOX for the cast
                                             stage and KEEP_CLEAR
@@ -625,11 +625,54 @@ TANKER_COLS = [  # hull, band (above the waterline), funnel, funnel band
 ]
 
 
-def tanker(pen, cam, x, y, L=330.0, cols=TANKER_COLS[0], state='whole', bow=1, haze=None):
+WRECK_FULL = (6.5, 44.0, 0.8)      # the broken tanker settled: each half tilted 6.5 degrees (torn ends down), 44 m apart, 0.8 m lower
+
+
+def clip_up(pts, f):
+    """The polygon (or 2-point line) pts cut to where f(p) >= 0 (Sutherland-Hodgman)."""
+    out = []
+    n = len(pts)
+    for i in range(n):
+        a, b = pts[i], pts[(i + 1) % n]
+        fa, fb_ = f(a), f(b)
+        if fa >= 0:
+            out.append(a)
+        if (fa >= 0) != (fb_ >= 0):
+            k = fa / (fa - fb_)
+            out.append(tuple(a[j] + (b[j] - a[j]) * k for j in range(len(a))))
+    return out
+
+
+def wreck_xform(u, z, L, brk=WRECK_FULL):
+    """Where a point of the broken tanker (u along the hull from its middle, z up, before the break) ends up: each
+    half turns about its own middle so the torn ends dip and the bow and stern lift (a broken back), drifts apart and
+    settles a little."""
+    ang, gap, sink = brk
+    s = -1.0 if u < 0 else 1.0
+    a = math.radians(s * ang)
+    pu = s * L / 4
+    du, dz = u - pu, z
+    return (pu + du * math.cos(a) - dz * math.sin(a) + s * gap / 2,
+            du * math.sin(a) + dz * math.cos(a) - sink)
+
+
+def _torn(s, fb, seed):
+    """A torn end (s = -1 the stern half's, +1 the bow half's): ragged from the deck down to the keel, with a strip of
+    deck plating peeled up and back at the top."""
+    r = random.Random(seed)
+    u0 = s * 4.0
+    pts = [(u0 + s * 9, fb + 0.2), (u0 + s * 4.5, fb + 5.5 + r.uniform(0, 1.5)), (u0 + s * 2.5, fb + 1.2)]
+    for i, z in enumerate(np.linspace(fb, -16, 8)):
+        pts.append((u0 + s * r.uniform(-2.5, 3.5) * (1 if i % 2 else -0.6), float(z)))
+    return pts
+
+
+def tanker(pen, cam, x, y, L=330.0, cols=TANKER_COLS[0], state='whole', bow=1, haze=None, brk=None):
     """A crude carrier side on at sea (its middle at world x, y), bow to the right (bow=1) or left (-1): long and low
     (9 m freeboard laden), a red band at the waterline, the white bridge block aft with its funnel, a pipe run and
-    catwalk down the deck, cranes amidships, a raised bow and mast. 'wreck': stopped, blackened, torn open amidships
-    down to the waterline (the hull stays whole, rule 54). Far ones fade into the haze."""
+    catwalk down the deck, cranes amidships, a raised bow and mast. 'wreck': stopped, blackened and torn in two
+    amidships (Sam, 8 Nov): the halves part, their torn ends dip and the bow and stern lift (brk = (tilt degrees,
+    gap m, sink m), WRECK_FULL settled), the red bottom showing; everything cut at the sea. Far ones fade into the haze."""
     hull, band, fun, fband = cols
     _, dep = proj(cam, [(x, y, 0.0)])
     dist = float(dep[0])
@@ -637,27 +680,56 @@ def tanker(pen, cam, x, y, L=330.0, cols=TANKER_COLS[0], state='whole', bow=1, h
     hz = lambda c: mix(c, HAZE, k)
     ink = mix(INK, HAZE, k)
     lw = max(1.0, min(2.2, 2.2 * 1200 / dist))
-    S = lambda pts: [tuple(p) for p in proj(cam, [(x + bow * u, y, z) for u, z in pts])[0]]
-    fb = 9.0 if state == 'whole' else 7.5
-    if state == 'wreck':
+    wreck = state == 'wreck'
+    brk = brk or WRECK_FULL
+    fb = 9.0
+
+    def S(pts):
+        if not wreck:
+            return [tuple(p) for p in proj(cam, [(x + bow * u, y, z) for u, z in pts])[0]]
+        side = -1 if np.mean([u for u, _ in pts]) < 0 else 1           # each shape belongs to one half
+        w = [wreck_xform(u if u * side > 0 else side * 0.01, z, L, brk) for u, z in pts]
+        w = clip_up(w, lambda p: p[1] + 0.05) if len(w) > 1 else w     # nothing below the sea
+        if len(w) < 2:
+            return []
+        return [tuple(p) for p in proj(cam, [(x + bow * u, y, z) for u, z in w])[0]]
+
+    if wreck:
         hull = mix(hull, (24, 20, 20), 0.6)
-    # hull: raked stem, raised forecastle, near-vertical transom
-    hp = [(-L / 2 + 3, 0), (-L / 2, fb + 0.5), (L / 2 - 26, fb), (L / 2 - 24, fb + 3), (L / 2 + 1, fb + 3.2),
-          (L / 2 - 5, 0)]
-    pen.poly(S(hp), hz(hull), lw, ink)
-    pen.poly(S([(-L / 2 + 3, 0), (L / 2 - 5, 0), (L / 2 - 4.6, 1.3), (-L / 2 + 2.8, 1.3)]), hz(band), 0)
-    pen.poly(S(hp), None, lw, ink)
-    if state == 'wreck':                             # the torn hole amidships, ragged, down to near the waterline
-        r = random.Random(4)
-        hole = [(-24, fb + 0.4)] + [(-20 + i * 6, r.uniform(1.4, 5.5)) for i in range(7)] + [(24, fb + 0.4)]
-        pen.poly(S(hole), (26, 16, 14), lw, ink)
+        for s in (-1, 1):
+            torn = _torn(s, fb, 4 if s < 0 else 9)
+            if s < 0:
+                hp = [(-L / 2 + 3, -16), (-L / 2 + 3, 0), (-L / 2, fb + 0.5)] + torn
+            else:
+                hp = [(L / 2 - 26, fb), (L / 2 - 24, fb + 3), (L / 2 + 1, fb + 3.2), (L / 2 - 5, 0),
+                      (L / 2 - 9, -16)] + torn[::-1]
+            pen.poly(S(hp), hz(hull), lw, ink)
+            red = clip_up(hp, lambda p: 1.3 - p[1])                        # the red bottom, up to the old waterline
+            if len(red) > 2:
+                pen.poly(S(red), hz(band), 0)
+            face = torn[2:] + [(u + s * 7, z) for u, z in torn[2:][::-1]]  # the open tank inside the torn end
+            pen.poly(S(face), (26, 16, 14), 0)
+            pen.poly(S(hp), None, lw, ink)
+    else:
+        # hull: raked stem, raised forecastle, near-vertical transom
+        hp = [(-L / 2 + 3, 0), (-L / 2, fb + 0.5), (L / 2 - 26, fb), (L / 2 - 24, fb + 3), (L / 2 + 1, fb + 3.2),
+              (L / 2 - 5, 0)]
+        pen.poly(S(hp), hz(hull), lw, ink)
+        pen.poly(S([(-L / 2 + 3, 0), (L / 2 - 5, 0), (L / 2 - 4.6, 1.3), (-L / 2 + 2.8, 1.3)]), hz(band), 0)
+        pen.poly(S(hp), None, lw, ink)
     # deck: pipe run on a catwalk, posts
-    pr = [(-L / 2 + 38, fb + 1.6), (L / 2 - 30, fb + 1.6)]
-    pen.line(S(pr), hz((196, 190, 176)), max(1.0, lw * 0.9))
+    runs = [((-L / 2 + 38, fb + 1.6), (-12, fb + 1.6)), ((12, fb + 1.6), (L / 2 - 30, fb + 1.6))] if wreck else \
+        [((-L / 2 + 38, fb + 1.6), (L / 2 - 30, fb + 1.6))]
+    for pr in runs:
+        pts = S(list(pr))
+        if len(pts) > 1:
+            pen.line(pts, hz((196, 190, 176)), max(1.0, lw * 0.9))
     for u in np.linspace(-L / 2 + 40, L / 2 - 32, 14):
-        if state == 'wreck' and abs(u) < 28:
+        if wreck and abs(u) < 16:
             continue
-        pen.line(S([(u, fb), (u, fb + 1.6)]), hz((120, 116, 108)), 1.0)
+        pts = S([(u, fb), (u, fb + 1.6)])
+        if len(pts) > 1:
+            pen.line(pts, hz((120, 116, 108)), 1.0)
     if state == 'whole':                             # cranes and the manifold amidships
         for u, sgn in ((-6, 1), (8, -1)):
             pen.line(S([(u, fb), (u, fb + 14)]), hz((226, 222, 210)), max(1.0, lw * 0.9))
@@ -672,7 +744,7 @@ def tanker(pen, cam, x, y, L=330.0, cols=TANKER_COLS[0], state='whole', bow=1, h
         pen.line(S([(b0 + 2, z), (b1 - 2, z)]), hz((120, 130, 140)), 1.0)
     # the funnel behind it with its coloured band, a mast on the bridge and one at the bow
     f0, f1 = -L / 2 + 3, -L / 2 + 13
-    if state == 'wreck':                             # the funnel top was blown off (FUNNEL_TOP flies): a torn stub
+    if wreck:                                        # the funnel top was blown off (FUNNEL_TOP flies): a torn stub
         pen.poly(S([(f0, fb + 14), (f1, fb + 14), (f1 + 0.75, fb + 21.6), (f1 - 2.5, fb + 20.6), (f0 + 5, fb + 21.8),
                     (f0 + 2.5, fb + 20.8), (f0 + 1.4, fb + 21.4)]), hz(mix(fun, (40, 34, 32), 0.55)), lw, ink)
         pen.poly(S([(f0 + 0.6, fb + 20), (f1 + 0.6, fb + 20), (f1 + 0.7, fb + 20.9), (f0 + 1.3, fb + 20.9)]),
@@ -876,7 +948,7 @@ def _cliff_top(which):
 
 def strait(which, t, near=None, fx=None, ground=True):
     """One frame of a strait shot ('wide' or 'close') at time t. near: ('sail', x) the moving tanker under way with its
-    wake, ('wreck', x) stopped and torn open, or None. fx(img, cam): the showstopper's effects, drawn after the ships
+    wake, ('wreck', x[, brk]) stopped and torn in two, or None. fx(img, cam): the showstopper's effects, drawn after the ships
     and before the cliff top."""
     cam = CAMS[which]
     im = _strait_still(which).copy()
@@ -890,7 +962,8 @@ def strait(which, t, near=None, fx=None, ground=True):
         pen = Pen(lay)
         if near[0] == 'sail':
             _wake(pen, cam, near[1], NEAR_Y, NEAR_L, t)
-        tanker(pen, cam, near[1], NEAR_Y, NEAR_L, TANKER_COLS[0], 'whole' if near[0] == 'sail' else 'wreck')
+        tanker(pen, cam, near[1], NEAR_Y, NEAR_L, TANKER_COLS[0], 'whole' if near[0] == 'sail' else 'wreck',
+               brk=near[2] if len(near) > 2 else None)
         im.alpha_composite(shrink(lay))
     if fx:
         fx(im, cam)
