@@ -452,7 +452,8 @@ def prepared(film):
 def audit(film, t0=None, t1=None, mouths=True):
     """Every fault (lines of text), plus notes and the tables behind them."""
     lines = prepared(film)
-    faults = [f for ln in lines for f in ln['_faults']]
+    ok = {n for n, *_ in getattr(film, 'SCRIPT_CONFIRMED', ())}      # lines Sam confirmed word for word (8 Nov, Ad-Vanced
+    faults = [f for ln in lines for f in ln['_faults'] if ln.get('n') not in ok]   # Notice line 9: the counter over-read)
     if hasattr(film, 'caption_at'):
         faults += caption_check(film, lines)
     notes, seen = [], {}

@@ -168,6 +168,7 @@ PLAN = dict(CEIL=3.2, ROOMS={'study': (-2.6, 0.0, 2.6, ST.D_WALL)},
                   'gas': dict(pos=(0.0, 1.5, 0.0), look=(0.0, 1.5, 5.0), focal=1300),
                   'street': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=SX.FOCAL)}, GROUPS={},
             SHOT_MARKS={'study': ['vance']})
+SCRIPT_CONFIRMED = [(9, 'Sam, 8 Nov: line 9 is said exactly as the script; the syllable count over-reads his slow, stressed take')]
 BENCHMARK = ST.BENCHMARK + SX.BENCHMARK
 HOOK = ('JD Vance Addresses The Nation', {'y': 330, 'until': 3.9})   # Sam, 8 Nov (his capitals); pops at 0.5 s
 KEEP_CLEAR = [('his face', lambda t: (300, 470, 780, 900) if t < T['cut2'] else None)]
