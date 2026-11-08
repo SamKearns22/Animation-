@@ -2,10 +2,10 @@
 
 ## Where things stand
 - **Rules that bite next:** 40 (street elements: wait for Sam's yes before building), 83 (the street's SET_BOXES), 74 (line 9's acting)
-- **Done (8 Nov):** note 44: Vance's turned faces from his own front design (`turnhead.py`), the swivel's turning frames back; street elements list, line 9 acting and questions 21-25 sent.
-- **Next:** fresh chat, Opus high, once Sam answers 21-25 and approves the elements: build the street (set, SUV, four officers, the curled man via `lying.py`, the beating via `moves.punch`/`kick`, blood, push in); then the check sheet and animatic 3 (Opus medium).
-- **Needs Sam:** yes or trims on the street elements; answers 21-25; recordings of lines 1-9.
-- **Read:** this file (Where things stand, note 44, Street elements, Acting line 9, Questions 21-25); `guides/kit-catalogue.md` people rows (Met officers in `power_crime_cast.py`, `lying.py`); rulebook 40, 74, 83.
+- **Done (8 Nov):** note 44: Vance's turned faces from his own front design (`turnhead.py`), the swivel's turning frames back; street elements approved and questions 21-25 answered (no SUV, shopfronts, snow).
+- **Next:** fresh chat, Opus high: references (Lake Street shopfronts in snow, ICE raid gear) ticked as lists, then build the street (set, SUV, four officers, the curled man via `lying.py`, the beating via `moves.punch`/`kick`, blood, push in); then the check sheet and animatic 3 (Opus medium).
+- **Needs Sam:** OK on the made-up shop signs; recordings of lines 1-9.
+- **Read:** this file (Where things stand, note 44, Street elements, Acting line 9, Sam's answers 21-25); `guides/kit-catalogue.md` people rows (Met officers in `power_crime_cast.py`, `lying.py`); rulebook 40, 74, 83.
 - **Open rule requests:** none.
 - **For Claude:** Vance's turned heads: `ad_vanced_notice_cast.vance_turned` + `VANCE_PROFILE` (hooked into `V.head_view`); sheet `ad_vanced_notice_cast.py turn OUT`; the film's `study_j` uses the kit swivel again. The street goes in `ad_vanced_notice_sets.py` (new place) and `ad_vanced_notice.py` (shot after `gas`).
 
@@ -212,8 +212,8 @@ Shot 5, straight after "This guy." About 6.5 s; the film becomes about 36 s.
 
 | # | element | how it moves |
 |---|---|---|
-| 1 | A Minneapolis residential street in winter (Q16): ploughed road with grey slush ruts, waist-high snowbanks along the kerb, a shovelled pavement, two-storey wooden houses (clapboard, front porches, steep roofs under snow), bare trees, power lines, flat grey sky | a still painting, one locked camera; light snow falling (Q22) |
-| 2 | An unmarked black SUV behind the officers: tinted windows, no badges, a back door open, red and blue lights flashing in the grille (Q21) | lights flash |
+| 1 | A Minneapolis street in winter (Q16), lined with shopfronts (Sam, 8 Nov: "you can do shopfronts"; a Lake Street kind of block): two-storey brick buildings, shops below with big windows, awnings and made-up signs (no real brands), flats above, snow on the ledges and awnings; ploughed road with grey slush ruts, waist-high snowbanks along the kerb, a shovelled pavement, bare street trees, power lines, flat grey sky | a still painting, one locked camera; light snow falling (Q22) |
+| 2 | ~~An unmarked black SUV with flashing lights~~ (Sam, Q21: N) | |
 | 3 | Four ICE officers as in real raids (Q17): dark tactical vests with POLICE and ICE patches, black masks up to the eyes, dark caps, gloves, boots; four different builds and clothes under the vests (a grey hoodie, a dark jacket, cargo trousers, jeans) | the beating |
 | 4 | The man (invented, Hispanic, about 30): curled into a ball on the snow at their feet, arms over his head, knees up; a work jacket, jeans, work boots | flinches on every blow |
 | 5 | The beating, flat cartoon (Q18): two kick, two punch down at him, taking turns, about 3 blows a second, a small jolt on each | already going at the cut; never stops |
@@ -222,9 +222,9 @@ Shot 5, straight after "This guy." About 6.5 s; the film becomes about 36 s.
 | 8 | The camera: wide on all six, then a slow push in on his face through line 9 (Q19), ending on his head and shoulders; the officers slide out of frame on the right | the push |
 | 9 | No sounds: only his voice (the script names none) | |
 
-Added (Sam to OK): the SUV and its lights (Q21). Added: falling snow (Q22).
+Added: falling snow (Sam, Q22: Y). Added: shop signs with made-up names (a taqueria, a laundromat, a hardware store) for Sam to OK. Lost: the wooden houses (shopfronts instead). Lost: the SUV (Q21: N).
 
-## Acting, line 9 (rule 74; my picks, Sam's answers to 23-24 decide)
+## Acting, line 9 (rule 74; Sam's answers 23 (1) and 24 (Y), 8 Nov)
 | line | who | face | body | lands on |
 |---|---|---|---|---|
 | 9a "I can't believe that my boss would do this." | Vance | mock shock: brows up, grin never leaves | a hand to his chest | hand on "believe" |
@@ -236,6 +236,9 @@ Added (Sam to OK): the SUV and its lights (Q21). Added: falling snow (Q22).
 23. "I can't believe my boss would do this": fake shock, still grinning, hand to chest (1), or genuinely puzzled, brows up, no grin (2)?
 24. "Between you and me": leans in towards us, hand at the side of his mouth (Y)?
 25. Is "super jerk" the last line, so the sign-off follows (Y), or does the script go on (N)?
+
+## Sam's answers (8 Nov, 21-25)
+21 N: no SUV; "you can do shopfronts" (the street is lined with shops). 22 Y: light snow falling. 23 (1): fake shock, still grinning, hand to chest. 24 Y: leans in, hand at the side of his mouth. 25 Y: "super jerk" is the last line; the sign-off follows. The street elements are approved with these changes.
 
 Rules written: R3 is rule 83 (Sam: Y, 8 Nov): no unmeant overlaps in a flat painted set; check `source/setcheck.py` from the set's `SET_BOXES` and `SET_MEANT`, run in the film's checks() (tested: it catches the old portrait position).
 
