@@ -44,6 +44,13 @@ the waist to a hem at 0.85 of the shoulder width (`burnham.HEM`), front, three-q
 `burnham.py` (Prepper's) must use the same ratio. A jacket hem rises gradually as the body leans (12 to 20 degrees),
 never in one frame.
 
+**Standing at rest (Ad-Vanced Notice notes 14-17, Sam's rest photos in `references/figure-rig/`):** arms and body are
+one piece: the sleeve grows out of the shoulder with one outline from the collar over the shoulder and down the arm
+(`limbs._fillet`; the arm finds its body through any leaning or tilted frame). The resting arm is never a straight rod:
+the upper arm leans out a little from the shoulder, the elbow sits at the waist and points a touch outward, the
+forearm comes back in and a little forward, hands beside the upper thigh just clear of the jacket (`views.standing`).
+Standing legs are straight in every view: a knee near full reach locks onto the hip-ankle line (`views.knee_of`).
+
 ## 3. Limbs are solved, never typed
 - **Say where the hand goes; the rig works out the elbow** (two-bone inverse kinematics, the way professional
   cut-out rigs such as Toon Boom Harmony work, with joint limits on elbows and knees). `rig.arm(side, target,
