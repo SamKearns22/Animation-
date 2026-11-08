@@ -59,7 +59,8 @@ WHO = ('vance', 'man')
 # The script, word for word (brief rows 7, 13, 19, 25, 26). Sam records every voice; until the takes come, each line
 # runs `est` seconds.
 LINES = [
-    dict(n=1, audio='ad-vanced-notice-1', who='vance', est=2.6, text="Hello, America. I'm J.D Vance."),
+    dict(n=1, audio='ad-vanced-notice-1', who='vance', est=2.6, text="Hello, America. I'm J.D Vance.",
+         sub="Hello, America. This is J.D Vance."),   # Sam, 8 Nov: the subtitle only
     dict(n=2, audio='ad-vanced-notice-2', who='vance', est=2.5, text="I know things haven't gone well recently."),
     dict(n=3, audio='ad-vanced-notice-3', who='vance', est=1.7, text='That you have your concerns.'),
     dict(n=4, audio='ad-vanced-notice-4', who='vance', est=2.4, text="But there's something I need you to know."),
@@ -94,7 +95,8 @@ def _at(n, start):
     return L[n]['end']
 
 
-ANCHORS = {(9, 'Between'): (1, 0.0), (9, 'jerk'): (2, 18 / 23)}   # line 9's take: three stretches, one per phrase
+ANCHORS = {(9, 'believe'): (0, 8 / 43), (9, 'my boss'): (0, 21 / 43), (9, 'do this'): (0, 34 / 43),
+           (9, 'Between'): (1, 0.0), (9, 'jerk'): (2, 18 / 23)}   # line 9's take: three stretches, one per phrase
 
 
 def word_at(n, words):
@@ -187,15 +189,12 @@ SET_EXCLUDE = [('WALL', 'every shot is a flat painting through its own camera; t
                 'outdoor shots stand in')]
 TOUCHES = []                                      # the nozzle is drawn at his fist every frame (_nozzle): it never moves
 FREE_MOVES, SOUND_SOURCES = [], {}
-RESTS = [('*Vance.forearm*', 'desk', T['fold'] + 0.4, T['cut2'], 'line 1: hands folded on the desk')]
+RESTS = [('*Vance.forearm*', 'desk', T['fold'], T['cut2'], 'line 1: hands folded on the desk (from the end of the swivel)')]
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
 ORDER_SWAPS = []
 HANDS_OK = [('*Vance*', 'L', 'no hand', T['arm'], T['off'] + 0.1, "his hand is drawn by _arm_over on the driver's far "
              'shoulder, over the driver (looked at full size, 8 Nov: the hand shows there every frame)'),
-            ('*Vance*', '*', 'no hand', T['swivel'] + SWIVEL * 0.7, T['fold'] + 0.25, 'turned to us in the swivel, his '
-             'hands rest in his lap below the painted desk top until they come up to fold on it (looked at full size, '
-             '8 Nov: desk top across the frame at his waist, 0.67-1.04 s)'),
             ('*officer 4*', 'R', '*', T['cut5'], T['shot'] + 1.0, "his punching fist passes in front of officer 3, "
              'who stands beside him almost as near the lens: they overlap on screen but do not touch (looked at full '
              'size, 8 Nov)'),
@@ -245,7 +244,7 @@ BEATS = [(1, 'America', 4, 7, 0),                 # nod on "America"
          (6, 'right', 4, 0, -3),                  # the squeeze on "right"
          (7, 'responsible', 8, 0, 4),             # eyebrows up, teasing, the lean on "responsible"
          (8, 'This', 3, 4, 0),                    # thumbs on "This"
-         (9, 'believe', 9, 0, 0),                 # mock shock on "believe": brows right up, the grin stays (9a)
+         (9, 'believe', 2, 0, 0),                 # outrage on "believe" (note 49; the mood carries the brows)
          (9, 'Between', 2, 4, 0),                 # leaning in to confide on "Between" (9b)
          (9, 'jerk', 3, 0, 0)]                    # the little shrug on "jerk"
 
@@ -265,7 +264,17 @@ def face(who, t, mood):
     d = dict(mood=mood, mouth='rest' if shape == 'rest' else 'v:' + shape, blink=F.blinking(t, BLINKS[who]))
     if who == 'vance':
         d['brow_up'] = beat(t)[0] * 0.004
+        if t >= T['cut5']:
+            d.update(outrage_eyes(t))
     return d
+
+
+def outrage_eyes(t):
+    """Note 49 (Sam, 8 Nov): his eyes in the fake outrage: rolled up in disbelief on "believe", sliding across to
+    the beating on "my boss", back to us, wide, on "do this"."""
+    up = _bump(t, word_at(9, 'believe') - 0.1, word_at(9, 'believe') + 0.45, 0.12, 0.2)
+    side = _bump(t, word_at(9, 'my boss') - 0.15, word_at(9, 'do this') - 0.05, 0.15, 0.15)
+    return dict(gaze_dy=-0.9 * up, look=0.9 * side)
 
 
 def vance_mood(t):
@@ -277,8 +286,10 @@ def vance_mood(t):
         return 'neutral'
     if t < T['cut4']:
         return 'smile' if L[5]['start'] <= t and t >= word_at(5, 'fault') - 0.1 else 'sincere'
-    if t >= T['cut5']:                            # the street: a big grin at us, mock shock still grinning (9a), then
-        return 'proud' if t < word_at(9, 'Between') - 0.15 else 'teasing'   # the confiding half-smile (9b)
+    if t >= T['cut5']:                            # the street: a big grin at us; fake outrage through 9a (Sam, 8 Nov,
+        if L[9]['start'] - 0.15 <= t < word_at(9, 'Between') - 0.15:      # note 49); the confiding half-smile (9b)
+            return 'outraged'
+        return 'proud' if t < L[9]['start'] else 'teasing'
     if t < L[7]['start'] - 0.1:
         return 'smile'
     if t < T['off']:
@@ -313,30 +324,18 @@ def _in_study(j, yaw=0.0):
     return j
 
 
-def _fists(spec):
-    """His usual round hands through the swivel (note 42: the steeple's pointing fingers showed as a finger in the
-    air at 0.33 s and two sausage fingers at 1.0 s), resting in his lap."""
-    for side, a in spec.get('arms', {}).items():
-        a['shape'] = 'fist'
-        a['hand'] = (a['hand'][0] + (40 if side == 'R' else -40), a['hand'][1] + 60, a['hand'][2] - 40)
-    return spec
-
-
 def study_j(t):
-    """(joints, yaw, head_yaw): the swivel round to us (0.8 s), then the steepled hands come down to fold on the desk
-    (0.4 s), then hands folded with his acting (line 1)."""
+    """(joints, yaw, head_yaw): the swivel round to us (0.8 s) with his hands already folded in front of him, so he
+    arrives with them resting on the desk (Sam, 8 Nov, note 47: the hands-down after the turn was too sudden); then
+    hands folded with his acting (line 1)."""
     sp = AC.VANCE
+    folded = sitting.spec_hands_folded(sp, SEAT)
     if t < T['fold']:
-        spec = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
-        _fists(spec)
-        # note 44: the kit's turn back (note 43 had snapped it until his turned faces were rebuilt, 42e): his own
-        # face carried round from behind, three-quarter and side to front (ad_vanced_notice_cast.vance_turned)
+        sw = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
+        spec = dict(folded, **{q: sw[q] for q in ('yaw', 'head_yaw', 'lean', 'swivel')})
+        # note 44: his own face carried round from behind, three-quarter and side to front (vance_turned)
         return _in_study(sitting.realize(sp, SEAT, spec), spec['yaw']), spec['yaw'], spec['head_yaw']
-    a = sitting.realize(sp, SEAT, _fists(sitting.spec_steeple(sp, SEAT)))
-    b = sitting.realize(sp, SEAT, sitting.spec_hands_folded(sp, SEAT))
-    k = _ease(_ramp(t, T['fold'], T['fold'] + 0.4))
-    j = moves.mix_poses(a, b, k)
-    j = dict(j, **{q: (b if k >= 1 else a)[q] for q in ('spec', 'seat', 'seated', 'lap')})   # resting once down
+    j = sitting.realize(sp, SEAT, folded)
     return _head(_in_study(j), t, lean=False), 0.0, None
 
 
@@ -615,11 +614,16 @@ def street_j(t):
         for q in ('sh', 'el', 'wr'):
             x, y, z = j[q + s_]
             j[q + s_] = (x, y - 22 * shrug, z)
-    chest = _ease(_ramp(t, word_at(9, 'believe') - 0.3, word_at(9, 'believe'))) * \
-        (1 - _ease(_ramp(t, word_at(9, 'Between') - 0.45, word_at(9, 'Between') - 0.15)))
+    chest = _ease(_ramp(t, word_at(9, 'believe') - 0.3, word_at(9, 'believe')))
+    fling = _ease(_ramp(t, word_at(9, 'do this') - 0.25, word_at(9, 'do this') + 0.05))
+    back = _ease(_ramp(t, word_at(9, 'Between') - 0.45, word_at(9, 'Between') - 0.1))
     rest_r, rest_l = (120.0, 330.0 - 22 * shrug, 40.0), (-120.0, 330.0 - 22 * shrug, 40.0)
-    if chest > 0.01:
-        V.arm_to(j, 'R', tuple(a + (b - a) * chest for a, b in zip(rest_r, (30.0, 165.0, 60.0))), 'down', 'palm')
+    if chest * (1 - back) > 0.01:                 # note 49: a hand to his chest on "believe" (how could he!), then
+        hand = tuple(a + (b - a) * chest for a, b in zip(rest_r, (30.0, 165.0, 60.0)))   # flung out, palm up, at the
+        hand = tuple(a + (b - a) * fling for a, b in zip(hand, (sw + 250.0, 170.0, 150.0)))   # beating on "do this"
+        hand = tuple(a + (b - a) * back for a, b in zip(hand, rest_r))
+        V.arm_to(j, 'R', hand, 'out' if fling > 0.5 else 'down', 'palm')
+    j['lean'] = j.get('lean', 0) - 4.0 * chest * (1 - fling)   # a little recoil back on "believe"
     lean = _ease(_ramp(t, word_at(9, 'Between') - 0.35, word_at(9, 'Between')))
     if lean > 0.01:
         V.arm_to(j, 'L', tuple(a + (b - a) * lean for a, b in zip(rest_l, (-80.0, -108.0, 110.0))), 'out', 'palm')
@@ -696,6 +700,20 @@ def soundtrack(stems=False):
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
+    def put(x, at, gain):
+        a = int(at * SR)
+        if 0 <= a < n:
+            seg = x[:n - a] * gain
+            rest[a:a + len(seg)] += seg
+    boom = MA.load(os.path.join(HERE, 'audio', 'ad-vanced-notice-explosion.m4a'))   # Sam's file, 8 Nov: the tanker
+    env = np.ones(len(boom))                      # dipped under line 5 (starts 3 s after the hit)
+    tt = np.arange(len(boom)) / SR
+    env *= np.where(tt < 2.0, 1.0, np.maximum(0.15, 1 - (tt - 2.0) / 0.9))
+    put(boom * env, T['hit'] - 0.02, 0.6)
+    grr = MA.line('ad-vanced-notice-grr')         # Sam's growl, 8 Nov: the driver shaking his fist at the board
+    st = MA.pauses(grr, 0.12)
+    a, b = int(max(0, st[0][0] - 0.08) * SR), int(min(len(grr) / SR, st[-1][1] + 0.15) * SR)
+    put(grr[a:b], T['cut4'] + 0.2, 1.0)
     g = SX.gunshot(SR)                            # Sam, 8 Nov: the gunshot as his last line ends
     s = int(T['shot'] * SR)
     rest[s:s + len(g)] += 0.5 * g[:max(0, n - s)]

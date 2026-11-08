@@ -622,6 +622,29 @@ def _person(img, cam, sp, x, d, yaw, j):
     return V.person(img, B.Cam(1.0, 540, 960), sx, sy - 928 * s, s, dict(sp, mood='angry'), 0.0, yaw, j)
 
 
+PLEAD = 1.9                                                       # seconds between his tries
+
+
+def plead(k, t, f=0.0):
+    """Sam, 8 Nov (note 48): he weakly tries to raise his hands to make them stop. His upper hand comes up off his
+    head, open, held out towards them, trembling; it sags and drops back as a blow lands, then tries again. The
+    lower forearm lifts a little off the snow with it. Bones keep their length (solved again each frame)."""
+    u = (t % PLEAD) / PLEAD
+    r = (0.5 - 0.5 * math.cos(2 * math.pi * min(1.0, u / 0.8))) if u < 0.8 else 0.0   # up slowly, then back
+    r *= 0.85 * (1 - 0.8 * f)                                     # a blow knocks it down
+    if r < 0.02:
+        return k
+    k = k.copy()
+    tremble = np.array([0.0, 0.012 * math.sin(t * 2 * math.pi * 7.0), 0.008 * math.sin(t * 2 * math.pi * 5.0 + 1)])
+    sh = k['shL']
+    raised = sh + np.array([-0.16, 0.46, -0.3]) + tremble         # up over his shoulder, out towards us and them
+    tgt = k['wrL'] * (1 - r) + raised * r
+    k['elL'], k['wrL'] = LY.limb(sh, tgt, LY.UPPER, LY.FORE, (0.2, -0.4, -1.0))
+    tgt = k['wrR'] + np.array([0.0, 0.08 * r, -0.04 * r])
+    k['elR'], k['wrR'] = LY.limb(k['shR'], tgt, LY.UPPER, LY.FORE, k['elR'] - (k['shR'] + k['wrR']) / 2)
+    return k
+
+
 def draw_group(img, cam, t, t0=0.0):
     """The beating: the two behind him, the blood and the man, then the two kicking from either end (far to near)."""
     order = sorted(OFFICERS, key=lambda o: -o[2])
@@ -640,6 +663,7 @@ def draw_group(img, cam, t, t0=0.0):
             k[nm] = k[nm] + np.array([0.0, 0.0, 0.02 * f])
         for nm in ('head', 'wrL', 'wrR', 'elL'):
             k[nm] = k[nm] + np.array([0.015 * f, 0.0, 0.0])
+    k = plead(k, t, f)
     LY.draw(img, scam(cam), k, MAN, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
     for o in front:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))

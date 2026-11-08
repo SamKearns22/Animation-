@@ -83,12 +83,13 @@ def readable(out, end):
 
 def chunk_times(ln, tail=0.45):
     """[(text, start)] for one line, seconds into the line, timed from its recording and made readable."""
-    key = (ln.get('n'), ln['text'], round(ln['_dur'], 3))
+    text = ln.get('sub') or ln['text']           # 'sub': the subtitle's own wording, when Sam wants it different
+    key = (ln.get('n'), text, round(ln['_dur'], 3))
     if key in _CACHE:
         return _CACHE[key]
-    ch = chunks(ln['text'])
+    ch = chunks(text)
     out = [(ch[0][0], 0.0)]
-    parts = [p.split() for p in re.split(r'(?<=[.,?!])\s+', ln['text']) if p.strip()]
+    parts = [p.split() for p in re.split(r'(?<=[.,?!])\s+', text) if p.strip()]
     st = ln.get('_stretches') or []
     if ln.get('_voice') is not None and len(ch) > 1 and len(parts) == len(st) > 1:
         # one stretch of talk per phrase (Ad-Vanced Notice line 9, 8 Nov: counted syllables put "Between you and
