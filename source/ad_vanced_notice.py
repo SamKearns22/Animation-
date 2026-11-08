@@ -297,10 +297,9 @@ def study_j(t):
     if t < T['fold']:
         spec = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
         _fists(spec)
-        u = _ramp(t, T['swivel'], T['fold'])           # note 43 (Sam, Q14): until his turned faces are rebuilt, the
-        yaw = 180.0 if u < 0.5 else 0.0                # swivel snaps from his back to his front: no side or three-
-        spec['yaw'] = spec['head_yaw'] = spec['swivel'] = yaw   # quarter frames (they don't look like him, 42e)
-        return _in_study(sitting.realize(sp, SEAT, spec), yaw), yaw, yaw
+        # note 44: the kit's turn back (note 43 had snapped it until his turned faces were rebuilt, 42e): his own
+        # face carried round from behind, three-quarter and side to front (ad_vanced_notice_cast.vance_turned)
+        return _in_study(sitting.realize(sp, SEAT, spec), spec['yaw']), spec['yaw'], spec['head_yaw']
     a = sitting.realize(sp, SEAT, _fists(sitting.spec_steeple(sp, SEAT)))
     b = sitting.realize(sp, SEAT, sitting.spec_hands_folded(sp, SEAT))
     k = _ease(_ramp(t, T['fold'], T['fold'] + 0.4))
