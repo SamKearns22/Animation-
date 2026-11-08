@@ -90,6 +90,8 @@ I don't know how to code. Please:
   building:** `guides/kit-catalogue.md`; build new only where nothing fits, and say so. `guides/best-practice.md` Part 2
   only for a scene satire.md doesn't cover.
 - **Motion-led films (stunts, action): go to a quick animatic early** after the cast sheet.
+- **Reference photos (Sam, 8 Nov):** Sam sends 2-3 photos with the brief when he has them to hand; otherwise Claude
+  searches once, slowly, and keeps 3 photos per place at most.
 - **Flat cartoon people:** read `guides/figure-rig.md`; follow `guides/preflight.md` from the first brief. Hands are
   always a plain circle with props laid over it.
 - **Yuletide horror trailer** (a separate experiment): read `guides/yuletide/yuletide-trailer.md`; next time it starts

@@ -141,6 +141,7 @@ the end with their checks.
 | P9 | Long check printouts filtered to the faults (Models and chats) | by hand |
 | P10 | One wait per render, never repeated checks (Models and chats) | by hand |
 | M7 | Questions numbered, answered by number or Y/N, my pick first (Messages) | by hand |
+| P11 | Reference photos: Sam sends 2-3 if he has them; otherwise one slow search, 3 per place at most (Making the films) | by hand |
 
 The old register gave S1 to two rules; riding is now S10. The old register and the old long rule texts are in
 `guides/archive/rule-register.md` and git history.
