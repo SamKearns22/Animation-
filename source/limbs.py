@@ -81,9 +81,15 @@ class _Shifted:
 
 
 def _who(cam):
-    """The same person's pen, even when the film makes a fresh one to redraw an arm on top."""
-    if hasattr(cam, 'ox'):
-        return (round(cam.ox, 1), round(cam.oy, 1), round(cam.k, 4), getattr(cam, 'flip', 1))
+    """The same person's pen, even when the film makes a fresh one to redraw an arm on top, and through the frames
+    views.py wraps round a person (Lean, Tilted, Mirrored: the satire figures draw the body leaned and the arms not,
+    so the arm never found its body and the one-outline shoulder silently did nothing; Ad-Vanced Notice note 14).
+    The mirror flag is left out: a front torso is drawn unmirrored under a mirrored person's arms."""
+    c = cam
+    while not hasattr(c, 'ox') and hasattr(c, 'L'):
+        c = c.L
+    if hasattr(c, 'ox'):
+        return (round(c.ox, 1), round(c.oy, 1), round(c.k, 4))
     return id(cam)
 
 
@@ -124,6 +130,38 @@ def _arm_spine(sh, el, wr, w):
     return spine, hw, fold, len(a) + 4, float(d1[0] * d2[1] - d1[1] * d2[0])
 
 
+def _fillet(img, x0, y0, arm, body, zone, fore, arm_fill, sleeve, ow, r):
+    """One outline from the collar over the shoulder and down the arm (Ad-Vanced Notice note 14, rule 80): the
+    sleeve's round top and the body's sloping shoulder met in a V-shaped notch, so the arm read as a separate piece
+    stuck on. The body and the arm are joined into one shape, the notch is filled in the sleeve's colour with a
+    rounded fillet (a closing of radius r, in pixels), and the outline is redrawn round the joined shape there. Only
+    near the shoulder (`zone`), never round the forearm; a lifted arm gets the same small rounding in the armpit."""
+    import cv2
+    ow = max(2, int(round(ow)))
+    r = max(3, int(round(r)))
+    disk = lambda k: cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * k + 1, 2 * k + 1))   # noqa: E731
+    body_out = cv2.dilate(body.astype(np.uint8), disk(max(1, ow // 2))) > 0       # the body with its ink line
+    U = (arm | body_out).astype(np.uint8)
+    pad = r + 2
+    Up = cv2.copyMakeBorder(U, pad, pad, pad, pad, cv2.BORDER_REPLICATE)
+    C = cv2.morphologyEx(Up, cv2.MORPH_CLOSE, disk(r))[pad:-pad, pad:-pad] > 0
+    notch = C & ~(U > 0) & (zone > 0.05) & ~fore
+    if notch.sum() < 4:
+        return
+    S = (U > 0) | notch
+    inner = cv2.erode(S.astype(np.uint8), disk(ow)) > 0
+    near = cv2.dilate(notch.astype(np.uint8), disk(2 * ow + 3)) > 0
+    old_ink = (body_out & ~(cv2.erode(body.astype(np.uint8), disk(max(1, ow // 2 + 1))) > 0)) | (arm & ~arm_fill)
+    H, W = U.shape
+    crop = np.asarray(img.crop((x0, y0, x0 + W, y0 + H))).copy()
+    fill = near & inner & (notch | old_ink)
+    ink = near & S & ~inner
+    crop[fill, :3] = sleeve[:3]
+    crop[ink, :3] = INK
+    crop[fill | ink, 3] = 255
+    img.paste(Image.fromarray(crop), (x0, y0))
+
+
 def install(B):
     """Swap the people library's arms and legs for the new shapes. Returns a function that puts the old ones back.
     Safe to call twice (the second call does nothing). Call it after figure.guard(B): the arm checker stays on."""
@@ -151,7 +189,7 @@ def install(B):
     def poly(self, pts, fill, line=INK, lw=4):
         pts = follow(self, pts)
         if fill is not None and len(pts) >= 6 and not busy:  # remembered, so an arm can find the body it hangs from
-            drawn.append((_who(self.cam), list(pts)))
+            drawn.append((_who(self.cam), _big(pts), [self.cam.P(*q) for q in pts]))   # in screen pixels
             del drawn[:-80]
         return orig_poly(self, pts, fill, line, lw)
 
@@ -162,7 +200,9 @@ def install(B):
         import figure
         if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
             figure.audit_arm(sh, el, wr)
-        body = next((pts for who, pts in reversed(drawn) if who == _who(p.cam) and _big(pts) and _inside(sh, pts)), None)
+        shp = p.cam.P(*sh)                                  # the body as drawn on screen (it may lean; the arm not)
+        body = next((pts for who, big, pts in reversed(drawn) if big and who == _who(p.cam) and _inside(shp, pts)),
+                    None)
         busy.append(1)
         try:
             spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)
@@ -193,10 +233,15 @@ def install(B):
                     R_ = cam.S(r_ + extra)
                     ld.ellipse([X_ - R_, Y_ - R_, X_ + R_, Y_ + R_], fill=col)
             n = _normals(spine)
-            if fold > 0.2:                                   # a small crease inside a tight bend
-                side = -1 if turn > 0 else 1
+            S_, E_, W_ = (np.asarray(v, float) for v in (sh, el, wr))
+            d1_, d2_ = E_ - S_, W_ - E_
+            cosb = float(d1_ @ d2_) / ((np.hypot(*d1_) * np.hypot(*d2_)) or 1.0)
+            bend = math.degrees(math.acos(max(-1.0, min(1.0, cosb))))
+            crease = max(fold, min(1.0, max(0.0, (bend - 10) / 25)) * 0.55)
+            if crease > 0.2:                                 # a small crease inside the bend: even a relaxed arm's
+                side = -1 if turn > 0 else 1                 # slight bend shows where the elbow is (note 16)
                 c0 = spine[k_el] + side * n[k_el] * hw[k_el] * 0.95
-                q.line([tuple(c0), tuple(c0 - side * n[k_el] * hw[k_el] * 0.6 * fold)], INK, 2.0)
+                q.line([tuple(c0), tuple(c0 - side * n[k_el] * hw[k_el] * 0.6 * crease)], INK, 2.0)
             if body is not None:
                 # One outline at the shoulder, as one piece of clothing: near the shoulder (fading out along the upper
                 # arm; never the forearm or hand), the arm is hidden where it lies over the body, and the body's own
@@ -219,7 +264,7 @@ def install(B):
                 zone[np.asarray(fore) > 0] = 0
                 pad = 8                                              # the body, a little beyond the rectangle so its
                 bm = Image.new('L', (W + 2 * pad, H + 2 * pad), 0)   # edge is found right up to the rectangle's sides
-                ImageDraw.Draw(bm).polygon([(x + pad, y + pad) for x, y in (cam.P(*v) for v in body)], fill=255)
+                ImageDraw.Draw(bm).polygon([(x - bx0 + pad, y - by0 + pad) for x, y in body], fill=255)
                 k = 2 * (q.w(2.6) // 2) + 3
                 edge = (np.asarray(bm.filter(ImageFilter.MaxFilter(k))).astype(float)
                         - np.asarray(bm.filter(ImageFilter.MinFilter(k))))[pad:pad + H, pad:pad + W]
@@ -238,6 +283,9 @@ def install(B):
                     patch.putalpha(Image.fromarray((seam * 255).astype(np.uint8)))
                     p.img.alpha_composite(patch, (bx0, by0))
             p.img.alpha_composite(lay, (bx0, by0))
+            if body is not None:                             # the notch where the sleeve's top meets the shoulder
+                _fillet(p.img, bx0, by0, a > 8, inside > 0.5, zone, np.asarray(fore) > 0,
+                        np.asarray(fill_m) > 0, sleeve, q.w(2.6), cam.S(w * 0.9))
         finally:
             busy.pop()
 

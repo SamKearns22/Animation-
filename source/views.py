@@ -142,7 +142,16 @@ def standing(sp):
         j['hip' + side] = (sg * 55, HIP_Y, 0.0)
         j['foot' + side] = (sg * 60, ANKLE_Y, 6.0)
         j['sh' + side] = (sg * (sw - 14), 60.0, 0.0)
-        arm_to(j, side, (sg * (sw + 24), 466.0, 44.0), 'back')     # hands clear of the jacket, not tucked in (Sam)
+        # A relaxed arm is never a straight rod (Sam, Ad-Vanced Notice note 16: "one long straight tube"), and the
+        # elbow points a tiny bit OUT (Sam, note 17: a forearm angled out made the elbow point in, and too far): the
+        # upper arm leans out a few degrees from the shoulder, the forearm comes back under it and a little forward,
+        # a soft bend of about 10 degrees. Hands clear of the jacket (Sam), wrists near the crotch line.
+        sh = j['sh' + side]
+        up = _unit((sg * 0.12, 0.99, -0.04))     # Sam's four rest references (8 Nov, references/figure-rig/):
+        fo = _unit((sg * -0.04, 0.99, 0.13))     # elbow at the waist, forearm back in, hands beside the upper thigh
+        el = _add(sh, _mul(up, F.UPPER * 0.98))
+        j['el' + side], j['wr' + side] = el, _add(el, _mul(fo, F.FORE * 0.98))
+        j['hand'][side] = 'fist'
     return j
 
 
@@ -201,6 +210,17 @@ def knee_of(j, side):
     hip, foot = j['hip' + side], j['foot' + side]
     sg = -1 if side == 'L' else 1
     knee, _ = ik3(hip, foot, THIGH, SHIN, j.get('knee_pole' + side, (0.12 * sg, 0.0, 1.0)))
+    # Standing, the leg is a few units short of full reach, and the solver bent every standing knee ~36 units forward:
+    # in side views everyone stood with bent knees (Sam, Ad-Vanced Notice note 15). Near full reach the knee now locks
+    # onto the hip-ankle line, eased in (no pop as a walking leg straightens); a real bend (seated, kneeling,
+    # mid-stride) is untouched.
+    d = _sub(foot, hip)
+    dist = math.sqrt(_dot(d, d))
+    u = min(1.0, max(0.0, (dist / (THIGH + SHIN) - 0.95) / 0.035))
+    lock = u * u * (3 - 2 * u)
+    if lock > 0:
+        line = _add(hip, _mul(d, THIGH / (THIGH + SHIN)))
+        knee = _add(_mul(knee, 1 - lock), _mul(line, lock))
     return knee
 
 
