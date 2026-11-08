@@ -20,6 +20,7 @@ Use in the film (u = seconds since the missile lands; the film sets its own T_HI
     near(u)        the near tanker for sets.strait(): ('sail', x) before the hit, ('wreck', X_HIT) after
     fx(u)          fn(img, cam) for sets.strait(..., fx=): every effect behind the cliff top (any camera)
     light(img, u, cam)  the fire's orange light over the finished frame (people included)
+    hellfire(layer, u)  someone's own layer lit orange from the fire's side (the close-up, note 31)
     held(u)        the 2-frame freeze on the hit: use held(u) as the time for everything in the shot
     jolt(u)        the camera jolt (px): shift the finished frame with shift(img, dx, dy)
 """
@@ -511,6 +512,31 @@ def light(img, u, cam=None):
     return Image.fromarray((out * 255 + 0.5).astype(np.uint8), 'RGBA')
 
 
+def hellfire(layer, u, strength=1.0):
+    """The burning wreck's light on someone in front of it (Sam, 8 Nov, note 31: "slightly lit by hellfire" in the
+    close-up): their own drawing (an RGBA layer, transparent round them) warmed orange, strongest on the side towards
+    the fire (screen right) and flickering with it. Returns the layer."""
+    if u < 0.3:
+        return layer
+    arr = np.asarray(layer).astype(np.float32) / 255
+    al = arr[..., 3]
+    ys, xs = np.nonzero(al > 0.01)
+    if not len(xs):
+        return layer
+    x0, x1 = xs.min(), xs.max()
+    W = arr.shape[1]
+    ramp = np.clip((np.arange(W, dtype=np.float32) - x0) / max(1, x1 - x0), 0, 1)[None, :]
+    fl = 1.0 + 0.12 * math.sin(u * 13) + 0.08 * math.sin(u * 29 + 1)
+    k = min(1.0, (u - 0.3) / 1.0) * strength * fl
+    rgb = arr[..., :3]
+    lum = rgb @ np.array([0.3, 0.55, 0.15], np.float32)
+    ink = np.clip((lum - 0.06) / 0.08, 0.15, 1.0)                    # the outlines stay dark
+    a = (0.07 + 0.4 * ramp ** 2.5) * k * ink                          # a warm wash, a rim of fire on the right
+    col = np.array([1.0, 0.5, 0.16], np.float32)
+    rgb = 1 - (1 - rgb) * (1 - a[..., None] * col)                # screen blend: warmer and brighter
+    return Image.fromarray((np.dstack([rgb, al]) * 255 + 0.5).clip(0, 255).astype(np.uint8), 'RGBA')
+
+
 def jolt(u):
     """The camera jolt on the hit (list 12): a hard kick, dying away in about 0.8 s."""
     a = u - FREEZE_AT
@@ -557,7 +583,9 @@ def close_frame(u, t0=6.0):
     CP = S._cast()
     import ad_vanced_notice_cast as AC
     im = S.strait('close', t0 + u, near(u), fx(u))
-    CP.person(im, AC.VANCE, 430, 1920 + 1500, 1500, 0, mood='sincere', mouth='rest')
+    lay = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    CP.person(lay, AC.VANCE, 430, 1920 + 1500, 1500, 0, mood='sincere', mouth='rest')
+    im.alpha_composite(hellfire(lay, u))
     return light(im, u, S.CLOSE)
 
 

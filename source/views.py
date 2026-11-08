@@ -530,6 +530,9 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
     bw = sp.get('brow_w', 3.4)
     beard = sp.get('beard')
     bfill, bedge = _beard_col(sp)
+    if view != 'front' and sp.get('beard_turned'):  # a beard drawn its own way from the front (Vance's measured one)
+        beard = sp['beard_turned']                  # takes this kind in the turned views (Ad-Vanced Notice, 8 Nov)
+        bfill, bedge = _beard_col(dict(sp, beard=beard))
     brows = sp.get('brows')
     if view == 'three':
         fx = hx + 0.4 * hw

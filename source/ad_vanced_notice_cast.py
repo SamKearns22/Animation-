@@ -522,7 +522,7 @@ TC.TORSOS.update(vance=vance_torso, man=man_torso)
 
 # ---------------------------------------------------------------------------------------------- the people
 VANCE = dict(who='vance', name='JD Vance', skin=V_SKIN, hw=72, hh=94, head_dy=10, hair='slick', hair_c=V_HAIR,
-             brow_c=V_HAIR, brow_w=4.4, beard='stubble', beard_c=V_BEARD, outfit='suit', jacket=NAVY, sleeve=NAVY,
+             brow_c=V_HAIR, brow_w=4.4, beard='stubble', beard_turned='short', beard_c=V_BEARD, outfit='suit', jacket=NAVY, sleeve=NAVY,
              trousers=NAVY, shirt=(246, 246, 248), tie=RED_TIE, shoe=(20, 16, 14), shoulders=158, full=True,
              pose='custom', height=1.88, seed=81)
 MAN = dict(who='man', name='The driver', skin=M_SKIN, hw=80, hh=92, head_dy=12, hair='bald', hair_c=M_HAIR,

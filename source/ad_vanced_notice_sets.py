@@ -348,8 +348,9 @@ def _fire(pen, t):
             pen.ell(sx, sy, 2.5, 2.5, (255, 214, 120), 0)
 
 
-def study_back(t):
-    """The study behind Vance at time t: the still painting plus the moving fire."""
+def study_back(t, chair=True):
+    """The study behind Vance at time t: the still painting plus the moving fire; chair=False leaves the painted
+    armchair out (the film seats him in the kit's swivel chair, note 27)."""
     im = _study_still().copy()
     x0, y0 = _wall(0.55, 0.85)
     x1, y1 = _wall(1.55, 0.0)
@@ -361,7 +362,8 @@ def study_back(t):
     pen._p = lambda pts: [((x + off[0]) * SS, (y + off[1]) * SS) for x, y in pts]
     _fire(pen, t)
     im.alpha_composite(fl.resize((crop[2] - crop[0], crop[3] - crop[1]), Image.LANCZOS), (crop[0], crop[1]))
-    im.alpha_composite(_chair_layer())                # the chair in front of the fire (Sam, 8 Nov: the glow cut it)
+    if chair:
+        im.alpha_composite(_chair_layer())            # the chair in front of the fire (Sam, 8 Nov: the glow cut it)
     return im
 
 

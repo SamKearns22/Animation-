@@ -51,35 +51,35 @@ Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he s
 ## The brief as a checklist (CLAUDE.md, 18 Oct)
 | # | from the brief (word for word) | done? |
 |---|------|------|
-| 1 | We are in an oak-lacquered study. | |
-| 2 | JD Vance sits behind the desk. He projects an aura of confidence. He has a friendly and sincere demeanour. | |
-| 3 | Behind him, a wall of book cases | |
-| 4 | and on the right, a fireplace crackling softly. | |
-| 5 | A crystal glass of water is before him on the desk. | |
-| 6 | An American flag is draped over the left hand side of the desk. | |
-| 7 | VANCE: "Hello, America. I'm J.D Vance." | |
-| 8 | Cut to an Omani desert cliffside. | |
-| 9 | In the background, the vast expanse of the Strait of Hormuz. The waters go on and on, the other side of the strait just a gentle grey smudge in the distance. | |
-| 10 | Upon the waters, a flotilla of oil tankers floating in the stillness. | |
-| 11 | The closest one to the scene is moving, however, sailing towards the right edge of the screen, ripples in its wake. | |
-| 12 | Upon the cliffside, J.D Vance is walking calmly and gently towards the camera. He looks at the screen with sincere eyes. | |
-| 13 | VANCE: "I know things haven't gone well recently. That you have your concerns. But there's something I need you to know." | |
-| 14 | Showstopper shot: a black object, a missile from Iran, whips from the sky and strikes the moving tanker. | |
-| 15 | Everything is enveloped in light as it erupts in a massive fireball. | |
-| 16 | Flaming bits of tanker fly through the air and smash into the waters. | |
-| 17 | Smoke vomits into the sky. | |
-| 18 | Close up on JD's face, the flaming wreck upon the sea over his ~~right~~ **left** shoulder (Sam, 7 Nov: the screenplay was wrong). | |
-| 19 | VANCE: "None of this is my fault." | |
-| 20 | A Midwest gas station. | |
-| 21 | A seventeen stone man in blue jeans and a checkered shirt, black goatee and a balding pate, stares up in unforgiving anger at the forecourt price board. | |
-| 22 | It says that the Diesel price is $6.15. | |
-| 23 | He stands next to his 4x4, holding the pump in his hand. | |
-| 24 | J.D Vance walks in from the right and cheerfully puts his arm around the man. | |
-| 25 | VANCE: "Aggravating, right? You know who isn't responsible?" | |
-| 26 | He points at himself with both hands/fingers. VANCE: "This guy." | |
-| 27 | The joke: Vance sincerely claims he isn't responsible for the election, prices or war, despite being Vice President. | |
-| 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. Hook Text (Sam, 8 Nov): "JD Vance Addresses The Nation" (his capitals kept), popping in at 0.5 s (rule 82). | |
-| 0 | (Sam, 8 Nov) The video starts with JD swivelling round in his chair, as in our sitting kit, a big smile on his face. | |
+| 1 | We are in an oak-lacquered study. | yes: oak study painting (sets approved 8 Nov) |
+| 2 | JD Vance sits behind the desk. He projects an aura of confidence. He has a friendly and sincere demeanour. | yes: seated behind the desk; warm half-smile, nods on "America" |
+| 3 | Behind him, a wall of book cases | yes: floor-to-ceiling bookcases behind him |
+| 4 | and on the right, a fireplace crackling softly. | yes: the fireplace on the right, its fire loop flickering (crackle comes with the sound) |
+| 5 | A crystal glass of water is before him on the desk. | yes: crystal tumbler on the desk, his left (our right) |
+| 6 | An American flag is draped over the left hand side of the desk. | yes: the flag draped over the desk's left side |
+| 7 | VANCE: "Hello, America. I'm J.D Vance." | yes: line 1, est 2.6 s till the take |
+| 8 | Cut to an Omani desert cliffside. | yes: cut to the cliff |
+| 9 | In the background, the vast expanse of the Strait of Hormuz. The waters go on and on, the other side of the strait just a gentle grey smudge in the distance. | yes: the strait to a hazy horizon, the far shore a grey smudge |
+| 10 | Upon the waters, a flotilla of oil tankers floating in the stillness. | yes: 7 tankers at anchor |
+| 11 | The closest one to the scene is moving, however, sailing towards the right edge of the screen, ripples in its wake. | yes: the near tanker sails right, wake behind it |
+| 12 | Upon the cliffside, J.D Vance is walking calmly and gently towards the camera. He looks at the screen with sincere eyes. | yes: walking slowly at the lens, mid-stride at the cut, eyes to us |
+| 13 | VANCE: "I know things haven't gone well recently. That you have your concerns. But there's something I need you to know." | yes: lines 2-4 while he walks; he stops on "need" |
+| 14 | Showstopper shot: a black object, a missile from Iran, whips from the sky and strikes the moving tanker. | yes: the missile drops from the top left onto the moving tanker |
+| 15 | Everything is enveloped in light as it erupts in a massive fireball. | yes: flame-light floods the frame (no white flash: Sam, 8 Nov), the fireball |
+| 16 | Flaming bits of tanker fly through the air and smash into the waters. | yes: flaming pieces fly and splash |
+| 17 | Smoke vomits into the sky. | yes: black smoke pours up for good |
+| 18 | Close up on JD's face, the flaming wreck upon the sea over his ~~right~~ **left** shoulder (Sam, 7 Nov: the screenplay was wrong). | yes: close-up, the burning wreck over his left shoulder, the fire's glow on him (note 31) |
+| 19 | VANCE: "None of this is my fault." | yes: line 5, small smile on "fault" |
+| 20 | A Midwest gas station. | yes: cut to the gas station |
+| 21 | A seventeen stone man in blue jeans and a checkered shirt, black goatee and a balding pate, stares up in unforgiving anger at the forecourt price board. | yes: the driver glares up at the board, anger 4 |
+| 22 | It says that the Diesel price is $6.15. | yes: Diesel 6.15 (Regular 4.39, Premium 5.25) |
+| 23 | He stands next to his 4x4, holding the pump in his hand. | yes: beside his white 4x4, the nozzle in his hand, its hose to the pump |
+| 24 | J.D Vance walks in from the right and cheerfully puts his arm around the man. | yes: Vance walks in from the right, arm round his shoulders |
+| 25 | VANCE: "Aggravating, right? You know who isn't responsible?" | yes: lines 6-7; squeeze on "right", lean on "responsible" |
+| 26 | He points at himself with both hands/fingers. VANCE: "This guy." | yes: side-steps clear, both thumbs at his chest, "This guy." (line 8) |
+| 27 | The joke: Vance sincerely claims he isn't responsible for the election, prices or war, despite being Vice President. | yes: played straight by Vance throughout |
+| 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. Hook Text (Sam, 8 Nov): "JD Vance Addresses The Nation" (his capitals kept), popping in at 0.5 s (rule 82). | yes: Hook Text pops at 0.5 s on the check sheet frame; finish.py adds both to the animatic |
+| 0 | (Sam, 8 Nov) The video starts with JD swivelling round in his chair, as in our sitting kit, a big smile on his face. | yes: opens with his back to us in the oxblood swivel chair; he swivels round grinning (0.1-0.9 s) |
 
 ## Acting (rule 74; front on, rule 38)
 | line | who | face | body | lands on |
@@ -164,6 +164,8 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 28 | cliff | | Build the showstopper (Sam, 8 Nov) | done: `source/ad_vanced_notice_fx.py`. Missile from the top left in 0.4 s (clear of Vance's head); 3 white frames, fading 0.3 s; a 2-frame hold on the first fireball frame and a jolt; the fireball about 600 m tall over the ship's middle, burning down inside the smoke by 1.5 s; 13 deck plates and pipes and the funnel top (a beat later, from the stern) thrown high and wide trailing flame, tumbling, each with a splash, then gone; the smoke column pours from the hole for good, leaning right with the wind; the wreck stopped, torn amidships, uneven flames in the hole and on the funnel stub; broken orange streaks on the sea under it. Cartoon cheat: pieces fall at about 26 times true gravity (true gravity at 1.2 km looks like slow motion). Same effects through the close-up camera (wreck over his left shoulder). Effect shapes clean (rule 15). Silent: the explosion and splash sounds come with the film. Added: the funnel stub burning. New kind |
 | 29 | cliff | hit | No bright white flash (a bit nuclear); plenty of flame-light and force (a tanker full of oil); the ship more damaged where struck, perhaps torn in two; better, more fitting debris, more varied in size; a large oil-fire explosion rising, not one that dwindles into smoke and embers | done: take 2 clip sent. Lost: the white flash. Added: orange flame-light over the frame (Vance too), a harder jolt, a ring of spray racing over the water, white water heaved up round the ship. The tanker breaks in two (bow and stern lift, red bottoms showing; rule 54's "hull stays whole" overruled by Sam). Debris: hull plating, deck plates, flanged pipe, a crane jib, the funnel top, scraps and burning oil blobs, 3 to 40 m, flames trailing behind so the pieces read. The fireball climbs for 4.6 s (was 1.5) onto a rolling column of fire out of the break that burns for good, burning oil in the gap; the smoke pours from the fire's top. Added: burning oil on the water. Effect shapes clean (rule 15). New kind |
 | 30 | (questions) | | 11 Y: the kit's swivel chair in the oxblood leather. 12 (R2) Y: rule 82 written. Hook Text: "JD Vance Addresses The Nation" | done: noted in the brief (row 28) and note 27 |
+| 31 | close-up | | More orange glow on him, slightly lit by hellfire in the close-up | done: his own drawing warmed orange, a fiery rim down his right side (the fire's side), flickering; outlines kept dark. New kind |
+| 32 | film | | Build the rest of the film (Sam, 8 Nov) | done: `source/ad_vanced_notice.py` from the template: swivel opening in the kit chair (oxblood), the cliff walk (stroll, stops on "need", open hand), the showstopper behind him, the close-up, the gas station (walk in from the right, arm round, squeeze, lean, side step, both thumbs). Lines run on estimates until Sam's takes. Added: the nozzle and hose in the driver's hand. Added: a small side step out before "This guy." so both thumbs show. Added: Vance's turned views now draw his beard (they showed none). Check sheet sent; pre-flight clean but two long shots (cliff 12.8 s: Sam's choice, Q5; gas 9.3 s: one continuous action) |
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). R2 is rule 82 (Sam: Y, 8 Nov): the Hook Text pops in 0.5 s into the film; `guides/tiktok-design.md` points at it; `hook_text.py` starts at 0.5 s with a 0.2 s pop (60% → 108% → 100%), tested on the clip. Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
