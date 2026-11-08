@@ -37,6 +37,12 @@ pose still passes wherever this table says it does.
 | lean back, belly | `sitting.pose(sp, 'lean back, belly')` | the kit | front, side, three-quarter back | three-quarter, behind | fingers laced on the stomach |
 | armchair | `sitting.pose(sp, 'armchair')` | the kit | front, three-quarter, side, three-quarter back | behind | low and deep, sunk in, leaning back, forearms along the arms |
 | stool | `sitting.pose(sp, 'stool')` | the kit | front, three-quarter, side, three-quarter back | behind | no back to lean on |
+| cross, knee over knee | `sitting.pose(sp, 'cross, knee over knee')` | the kit, part 2 | all 5 views | | prim, closed: the top calf over the lower knee, foot off the floor; hands side by side on the knee |
+| cross, ankle on knee | `sitting.pose(sp, 'cross, ankle on knee')` | the kit, part 2 | all 5 views | | the figure four: cocky, at ease; top knee out wide |
+| feet up | `sitting.pose(sp, 'feet up')` | the kit, part 2 | all 5 views | | heels on the desk, ankles crossed, hands behind the head; soles to us front on |
+| perch, chair edge | `sitting.pose(sp, 'perch, chair edge')` | the kit, part 2 | all 5 views | | eager, about to go: front third of the seat, hands on the knees |
+| perch, desk corner | `sitting.pose(sp, 'perch, desk corner')` | the kit, part 2 | front, side, three-quarter back, behind | three-quarter | one thigh along the desk, the other leg standing |
+| slump | `sitting.pose(sp, 'slump')` | the kit, part 2 | all 5 views | | defeated: slid down, head forward, legs out and splayed |
 
 **Adding a pose:** write it in `source/posegallery.py` (a function of `sp` returning the joints; credit the film), add
 it to `GALLERY`, run the sheet, fix it until every view passes or list the views that fail in `AVOID` with the reason,

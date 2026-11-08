@@ -1,9 +1,12 @@
 Sitting kit references (7 Nov), for reference only (never traced). Checked side by side with the kit on its sheet (rule 76).
 oval-office-armchairs-sofas.jpg      <-  Wikimedia Commons: File:P030114PS-0387 (15518108854).jpg (White House photo, public domain): armchair, forearms on the arms; a crossed leg (part 2)
 legs-dangling-from-desk-edge.jpg     <-  Wikimedia Commons: File:Resolute Desk as the President was talking with two aides in the Oval Office.jpg (public domain): sitting on a desk's edge, legs hanging (perch on a desk, part 2)
+feet-up-on-desk.jpg                  <-  Wikimedia Commons: File:George W. Bush with his feet on desk.jpg (White House photo by Tina Hager, public domain): feet up, soles at the camera, leaning back (part 2)
+feet-on-desk-soles.jpg               <-  Wikimedia Commons: File:Human feet on desk, sole exposed.jpg (a Flickr photographer, CC BY 2.0): heels on a desk top, soles facing us (part 2)
+ankle-on-knee-bench.jpg              <-  Wikimedia Commons: File:Person sitting on a bench (Unsplash).jpg (CC0): ankle on knee, from behind (part 2)
 Already in the project, used for the sitting kit:
 references/traitors/06-players-across-table.jpg        hands folded, forearms on the table, front on
 references/traitors/09-seated-close-hands.jpg          leaning in, elbows on the table, hands clasped before the face
 references/body-weight/leaning-on-table-forearm-forward.jpg   leaning in, head on a fist, the other forearm forward on the table (rule 78)
 references/newsdesk/presenter-1.jpg                    upright behind a desk, front on
-Not found yet: leaning back with hands behind the head (no free photo that could be fetched; Unsplash is blocked from the build machine).
+Not found yet: leaning back with hands behind the head; a seated slump (the one Commons photo found, a Wellcome engraving, was rate-limited, 8 Nov); a perch on a chair's edge.

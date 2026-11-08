@@ -224,28 +224,69 @@ def knee_of(j, side):
     return knee
 
 
-def leg(p, j, side, yaw, sp):
+def leg(p, j, side, yaw, sp, from_u=0.0):
+    """One leg, hip to shoe. `from_u` > 0 starts the thigh that far along it (a crossed leg's top thigh drawn again
+    over the jacket's hem: its root stays under the jacket)."""
     hip3, foot3 = j['hip' + side], j['foot' + side]
     knee3 = knee_of(j, side)
-    pts = [project(q, yaw)[0] for q in (hip3, knee3, foot3)]
+    chain = (hip3, knee3, foot3)
+    if from_u > 1:                                # starting on the shin (a leg over a desk top: only above it)
+        chain = (_add(knee3, _mul(_sub(foot3, knee3), from_u - 1)), foot3)
+    elif from_u:
+        chain = (_add(hip3, _mul(_sub(knee3, hip3), from_u)), knee3, foot3)
+    pts = [project(q, yaw)[0] for q in chain]
+    hip3 = chain[0]
     k = sp.get('leg_k', 1.0)                                          # a heavier build (Ad-Vanced Notice, 7 Nov)
     toward = project(knee3, yaw)[1] - project(hip3, yaw)[1]         # how far the knee comes at us
-    if j.get('lap') and toward > 90:              # seated, thighs at the camera (rule 80): the shin first, then the
+    if len(pts) == 2:
+        tube(p, pts, [27 * k * 1.2, 27 * k], sp.get('trousers', (40, 40, 46)))
+    elif j.get('lap') and toward > 90:              # seated, thighs at the camera (rule 80): the shin first, then the
         col = sp.get('trousers', (40, 40, 46))     # thigh over it ending in a round knee, a touch bigger (nearer)
         tube(p, pts[1:], [36 * k, 27 * k], col)
         kn = 1.0 + 0.12 * min(1.0, toward / 230)
         tube(p, pts[:2], [48 * k, 46 * k * kn], col)
         p.ell(pts[1][0], pts[1][1], 47 * k * kn, 44 * k * kn, col, INK, 2.6)
     else:
-        tube(p, pts, [48 * k, 38 * k, 27 * k], sp.get('trousers', (40, 40, 46)))
-    fx, fy, fz = foot3
-    a = math.radians(j.get('toe' + side, 0.0))                       # heel lifted (toe-off, a kick), degrees
-
-    def foot_pt(dx, dy, dz):
-        return (fx + dx, fy + dy - dz * math.sin(a), fz + dz * math.cos(a))
+        col = sp.get('trousers', (40, 40, 46))
+        a_, b_ = _sub(pts[0] + (0,), pts[1] + (0,)), _sub(pts[2] + (0,), pts[1] + (0,))
+        fold = _dot(a_, b_) / ((math.sqrt(_dot(a_, a_)) * math.sqrt(_dot(b_, b_))) or 1)
+        if fold > 0.4:                            # folded tight on screen (a figure four's leg seen three-quarter): one
+            tube(p, pts[:2], [48 * k, 38 * k], col)   # smooth outline would turn inside out at the knee, so the
+            tube(p, pts[1:], [38 * k, 27 * k], col)   # thigh, then the shin over it, joined by a round knee
+            p.ell(pts[1][0], pts[1][1], 38 * k, 38 * k, col, None)
+        else:
+            tube(p, pts, [48 * k, 38 * k, 27 * k], col)
+    foot_pt = shoe_frame(j, side)
     box = [foot_pt(sx, sy, sz) for sx in (-28, 28) for sy in (0, 36) for sz in (-28, 92)]   # the shoe starts at the ankle
     hull = _hull([project(q, yaw)[0] for q in box])
     p.poly(curve(hull, 3), sp.get('shoe', (22, 20, 22)), INK, 2.4)
+    sole = [foot_pt(sx, 36, sz) for sx, sz in ((-26, -26), (26, -26), (26, 90), (-26, 90))]
+    if j.get('sole' + side):                      # a sole turned to the camera (feet up on a desk, a figure four):
+        c, top = foot_pt(0, 36, 32), foot_pt(0, 0, 32)   # drawn lighter, with its heel, when it faces us
+        if project(c, yaw)[1] > project(top, yaw)[1] + 4:
+            sc = sp.get('sole_c', (128, 112, 96))
+            p.poly(curve(_hull([project(q, yaw)[0] for q in sole]), 3), sc, INK, 2.0)
+            heel = [foot_pt(sx, 36, sz) for sx, sz in ((-24, -24), (24, -24), (24, 14), (-24, 14))]
+            p.poly(curve(_hull([project(q, yaw)[0] for q in heel]), 2), B.dk(sc, 0.7), INK, 1.6)
+
+
+def shoe_frame(j, side):
+    """The shoe's own frame at the ankle: (dx across, dy down to the sole at 36, dz along to the toe at 92) to the body
+    frame. `toe` lifts the toes (degrees; the heel-lift of a kick); `foot_yaw` turns the foot about the shin (a figure
+    four's foot points across), `foot_roll` rolls it about its length (sitting.py)."""
+    fx, fy, fz = j['foot' + side]
+    a = math.radians(j.get('toe' + side, 0.0))
+    yw, rl = j.get('foot_yaw' + side, 0.0), j.get('foot_roll' + side, 0.0)
+    if not (yw or rl or j.get('sole' + side)):                        # every film before the sitting kit, unchanged
+        return lambda dx, dy, dz: (fx + dx, fy + dy - dz * math.sin(a), fz + dz * math.cos(a))
+    cy, sy = math.cos(math.radians(yw)), math.sin(math.radians(yw))
+    cr, sr = math.cos(math.radians(rl)), math.sin(math.radians(rl))
+
+    def pt(dx, dy, dz):
+        x, y = dx * cr - dy * sr, dx * sr + dy * cr                   # roll about the foot's length
+        y, z = y * math.cos(a) - dz * math.sin(a), y * math.sin(a) + dz * math.cos(a)   # toes up
+        return (fx + x * cy + z * sy, fy + y, fz - x * sy + z * cy)  # turned about the vertical
+    return pt
 
 
 def check_arm3(j, side, where='an arm'):
@@ -373,8 +414,9 @@ class Eyes(B.Pen):
 class Lean:
     """The drawing frame of the upper body, tipped by the pose's lean: a side view rotates about the hips; a front
     view foreshortens (the chest comes towards us and down)."""
-    def __init__(self, L, lean, yaw):
+    def __init__(self, L, lean, yaw, pivot=HIP_Y):
         self.L, self.cam, self.s, self.flip = L, L.cam, L.s, getattr(L, 'flip', 1)
+        self.piv = pivot
         a = math.radians(lean)
         cy = abs(math.cos(math.radians(yaw)))
         self.k = (math.cos(a) - _E[0] * math.sin(a)) * cy + (1 - cy)
@@ -382,8 +424,8 @@ class Lean:
         self.c, self.s_ = math.cos(self.r), math.sin(self.r)
 
     def P(self, x, y):
-        dy = (y - HIP_Y) * self.k
-        return self.L.P(x * self.c - dy * self.s_, HIP_Y + x * self.s_ + dy * self.c)
+        dy = (y - self.piv) * self.k
+        return self.L.P(x * self.c - dy * self.s_, self.piv + x * self.s_ + dy * self.c)
 
     def S(self, v):
         return self.L.S(v)
@@ -694,6 +736,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     p = B.Pen(img, L)
     up = Lean(L, lean, view_deg)
     up_head = up if squash is None else Lean(Tilted(L0, dy=L.piv * (1 - squash)), lean, view_deg)
+    if j.get('head_lean') and view not in ('front', 'back'):   # the head tipped about the neck, apart from the trunk
+        up_head = Lean(up_head, j['head_lean'], view_deg, pivot=0.0)   # (a slump: the chin drops while the back leans
+    #                                                  back); front and back on, that reads as squash: head_dy drops it
     j2, depth = {}, {}
     for k in ('hipL', 'hipR', 'footL', 'footR'):
         j2[k], depth[k] = project(j[k], view_deg)
@@ -720,7 +765,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     raised = {sd for sd in 'LR' if depth['foot' + sd] > depth['hip' + sd] + 150 and j['foot' + sd][1] < ANKLE_Y - 150
               and not j.get('lap')}                # (seated feet are forward too, but on the floor, not kicked)
     hidden = set(j.get('hide_legs', ()))         # a leg the film draws itself (a kick at the lens, foreshortened)
-    for sd in hips_far:
+    top = j.get('cross')                          # crossed legs (sitting.py): the top leg is drawn after the other
+    legs_order = sorted(hips_far, key=lambda sd: sd == top and view != 'back')
+    for sd in legs_order:
         if sd not in raised and sd not in hidden:
             leg(p, j, sd, view_deg, sp)
     for sd in 'LR':
@@ -771,18 +818,29 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
     if j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
         hem = min(sp_draw.get('bottom', JACKET), 470) + 30   # than the jacket, so they show over it (rule 80)
-        for sd in hips_far:
+        for sd in legs_order:
             kn = project(knee_of(j, sd), view_deg)[0]
             if kn[1] < hem and project(knee_of(j, sd), view_deg)[1] - depth['hip' + sd] > 90:
+                if sd == top:                     # a crossed top leg lies over the lap: all of it past the hem shows
+                    leg(p, j, sd, view_deg, sp, from_u=0.3)
+                    continue
                 k = sp.get('leg_k', 1.0) * 1.1
                 p.ell(kn[0], kn[1], 47 * k, 44 * k, sp.get('trousers', (40, 40, 46)), INK, 2.6)
+    lap_arms = set(j.get('arms_under', ())) - behind   # hands in his lap behind a desk: the desk is nearer
+    for sd in arms_far:
+        if sd in lap_arms:
+            arm(p, j2, sd, sp)
     for draw in j.get('mid', []):                 # set pieces nearer than his body but under his arms (sitting.py: a desk
         draw(p, j2, view)                          # top his forearms rest on, the near armrest)
+    if view in j.get('legs_over_views', ('front', 'three', 'side')):   # legs lying on a desk top (feet up; a thigh along a desk he perches
+        for sd in legs_order:                      # on) are over it: drawn again after it, the root under the jacket
+            if sd in j.get('legs_over', {}) and sd not in hidden:
+                leg(p, j, sd, view_deg, sp, from_u=j['legs_over'][sd])
     for sd in hips_far:
         if sd in raised and sd not in hidden:
             leg(p, j, sd, view_deg, sp)
     for sd in arms_far:
-        if sd not in behind:
+        if sd not in behind and sd not in lap_arms:
             arm(p, j2, sd, sp)
     if any(getattr(d, 'held', False) for d in j.get('props', [])) and not j.get('grip'):
         raise ValueError(f"{sp.get('name', 'someone')} holds a prop with no hand in front of it: set j['grip']")
