@@ -98,6 +98,8 @@ def lying_rev(img, cam, a, b, prof, mat, H=None, bury=0.0, seed=0):
     rmax = max(prof(t)[0] for t in np.linspace(0, 1, 200)) * k
     x0, x1 = int(max(0, min(ax, bx) - rmax - 2)), int(min(w, max(ax, bx) + rmax + 2))
     y0, y1 = int(max(0, min(ay, by) - rmax - 2)), int(min(h, max(ay, by) + rmax + 2))
+    if x1 <= x0 or y1 <= y0:                             # off the frame
+        return img
     ys, xs = np.mgrid[y0:y1, x0:x1]
     px, py = xs + 0.5 - ax, ys + 0.5 - ay
     t = (px * dx + py * dy) / Lp

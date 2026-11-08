@@ -78,33 +78,49 @@ Benchmark for the Magic Roundabout (8 things that make it, from Sam's two photos
 
 Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 source/elder_swindon_comp.py comp OUT.jpg`; 4 key shots: can and hand with the Hook Text; his face and the scroll; the Staffie as the climb starts; the roundabout with SWINDON)
 
-## Brief (Sam, 8 Nov) — checklist, tick against the film before the first animatic
-- [ ] Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s).
-- [ ] Opening: wind over **soil and patchy grass** (not sand), moody and near-real.
-- [ ] Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign). Reference: `references/elder-swindon/elder-scroll.jpg` (brass rod, scroll case in the middle, carved end caps, spiked tips, dark wrapped grips).
-- [ ] Nearby in the soil: a **discarded can of lager**, half buried.
-- [ ] A **half-unconscious man sprawled face down, drooling into the soil**.
-- [ ] A **discarded supermarket sandwich packet** ("maybe", my pick: in).
-- [ ] Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, with traffic moving round it.
-- [ ] Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**".
-- [ ] Our flat cartoon style for the roundabout; the opening as moody and realistic as possible, so the reveal lands.
-- [ ] **The joke** (Sam): Swindon is not fantastical or magical. It's drab, uninspired and full of chavs. Every shot after the zoom-out should sell that.
-- [ ] **Hook Text:** "Elder Scrolls reveals new location!" (exact wording)
-- [ ] Hook Text and the CranbriJoos sign-off (finish.py), as on every film.
-- [ ] (Q2) A patch of soil and grass on the central island, where he lies; the rest of the island paved as in the photos.
-- [ ] (Q3) The man in our usual house style.
-- [ ] (Q4) No extra shots after the title: the view from above holds to the end.
-- [ ] (Q5) The can reads "EXPORT LAGER"; the packet "EGG MAYO".
-- [ ] (Q5) A joke from the very start: the lager can and the man's splayed arm visible from the first frame; his drooling face revealed soon after.
-- [ ] (Q6) Cigarette butts and a ring-pull in the soil.
-- [ ] (Q7) The teaser's warm low sun.
-- [ ] (Q9) The zoom-out is the Showstopper Shot (elements as listed).
-- [ ] Budget 9% of a week.
-- [ ] Animatic: the trailer's sound as it is.
-- [ ] (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out.
-- [ ] (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL.
-- [ ] (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks).
-- [ ] (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze).
+## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
+| # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
+|---|------|------|
+| 1 | Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s) | yes: every cut on a hit of the sound (checked); sound as is, peak brought under full scale |
+| 2 | Opening: wind over **soil and patchy grass** (not sand), moody and near-real | yes: shots 1-3, gusts on 1.07, 2.49, 6.57, 7.37 |
+| 3 | Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign); spiked tips, dark wrapped grips, carved end caps, case | yes: shot 2, stripped from 7.37, out by 13.5 |
+| 4 | Nearby in the soil: a **discarded can of lager**, half buried | yes: shots 1-4 |
+| 5 | A **half-unconscious man sprawled face down, drooling into the soil** | yes: face down; his face on its cheek in shot 1, drool, a drip on 6.57 |
+| 6 | A **discarded supermarket sandwich packet** ("maybe", my pick: in) | yes: tumbles past the scroll (shot 3), lies there after |
+| 7 | Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, traffic moving round it | yes: shot 5 (16.50-17.45), traffic from 16.9 to the end |
+| 8 | Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**" | yes: shot 6 |
+| 9 | Our flat cartoon style for the roundabout; the opening as moody and realistic as possible | yes: near-real to 16.8 s, flat from 17.1 s |
+| 10 | **The joke:** Swindon is drab, uninspired, full of chavs; every shot after the zoom-out sells that | partly: drab estate, a CLOSING DOWN roof, the drooler and the dog stay in the middle; people too small to read from up there (Sam, Q4: no extra shots) |
+| 11 | **Hook Text:** "Elder Scrolls reveals new location!" (exact wording) | yes: `HOOK`, 0.5-4 s, y 1240 (below the can) |
+| 12 | Hook Text and the CranbriJoos sign-off (finish.py), as on every film | yes: finish.py on the clean render |
+| 13 | (Q2) A patch of soil and grass on the central island, where he lies; the rest of the island paved | yes |
+| 14 | (Q3) The man in our usual house style | yes |
+| 15 | (Q4) No extra shots after the title: the view from above holds to the end | yes: shot 6 drifts to 30.04 |
+| 16 | (Q5) The can reads "EXPORT LAGER"; the packet "EGG MAYO" | yes: label rows moved clear of the buried end (was "RT LAGER") |
+| 17 | (Q5) Lager can and splayed arm from the first frame; drooling face soon after | yes: face by 3.5 s |
+| 18 | (Q6) Cigarette butts and a ring-pull in the soil | yes |
+| 19 | (Q7) The teaser's warm low sun | yes: and its long shadows (the lamp post's crosses his legs) |
+| 20 | (Q9) The zoom-out is the Showstopper Shot (elements as listed) | yes: all 6 (see the Showstopper table) |
+| 21 | Budget 9% of a week | yes: see the estimate |
+| 22 | Animatic: the trailer's sound as it is | yes |
+| 23 | (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out | yes: charges in 15.25, clamps 15.72, tugs and shakes to the end |
+| 24 | (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL | yes: 22-27 s, cools to bronze by 29 |
+| 25 | (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks) | yes |
+| 26 | (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze) | yes |
+
+## The acting list (rule 74): no lines; every beat, the hit it lands on
+| beat | who | shot and why | face | body | lands on |
+|---|---|---|---|---|---|
+| can and splayed hand from frame one | DROOLER | 1, slant close: the joke from the start | - | arm flung out, hand limp | 0.0 |
+| his drooling face | DROOLER | 1, close: the reveal of the sleeper | eyes shut, mouth hanging open, drool | still (out cold) | by 3.5 |
+| a gust, drool drips | DROOLER | 1 | - | - | 6.57 |
+| soil stripped off the scroll | SCROLL | 2, close: the teaser's staff | - | - | 7.37; glint 7.79; case 11.43 |
+| packet tumbles past | PACKET | 3, wider: the scroll and the packet | - | end over end, lands label up | 13.86-14.95 |
+| straight down: all of it | all | 4, from above: the teaser's last staff shot | - | - | 15.08 |
+| the Staffie charges, clamps, tugs | STAFFIE | 4-6: angry, braced | eyes narrowed, ears back | legs dug in, head shaking | 15.25, 15.72 |
+| his leg jerks with the tugs; he never wakes | DROOLER | 4-6 | - | only the left leg moves | from 15.72 |
+| the climb | camera | 5: the Showstopper | - | - | starts 16.50, stops on 17.45 |
+| rings, small title, SWINDON burns, cools | title | 6 | - | - | 17.45, 18.5, 22-27, 29 |
 
 ## Reference
 - Teaser frames: sand blows (0-7 s), golden staff with a blue gem appears (7-15 s), black, gold rings, "The Elder Scrolls VI", "SENTINEL" burns in (15-30 s).
