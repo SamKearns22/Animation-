@@ -1,14 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 11 (build only from the approved composition), 40 (showstopper list ticked at the first rehearsal clip)
-- **Done (7 Nov):** cast approved; place photos filed (15, five places) with 9-10 things each; reference sheet and rough composition sheet sent to Sam.
-- **Spent against the estimate:** Vance's beard ran well over (8 notes). Ask Sam for the week's usage at the next stage end (rule 44).
-- **Next:** on Sam's yes, build the sets (Opus, high effort; same chat if short, else type "Ad-Vanced Notice: build the sets from the composition. Read notes/ad-vanced-notice.md").
-- **Needs Sam:** yes on the composition and the place lists; the rest of the script; the Hook Text wording later.
-- **Read:** this file (shots, showstopper, acting, references); `guides/satire.md` "Start" and "Getting it right first time"; `guides/kit-catalogue.md` rows for the Flying Whales sea and effects.
-- **Open rule requests:** none.
-- **For Claude:** cast `source/ad_vanced_notice_cast.py`; comp and place lists `source/ad_vanced_notice_comp.py` (`comp`, `refs`, `PLACES`, `SHOTS`); photos `references/ad-vanced-notice/` (Wikimedia via curl, not urllib: urllib got 429s; a User-Agent with the repo URL; honour Retry-After); film file not made yet (`source/satire_template.py`).
+- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
+- **Done (7 Nov):** composition approved (Sam: 1-4 yes); shirt check runs to every edge (note 12); prices set to peak war prices (note 13).
+- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: join the arms to the shoulders (note 14, all films), then build the sets. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** his number on rule proposal R1 (arms one piece with the body); the rest of the script; the Hook Text wording later.
+- **Read:** this file (notes 12-14, answers, references, composition); `guides/figure-rig.md` (arms); `guides/kit-catalogue.md` rows for sets.py, the Flying Whales sea and effects.
+- **Open rule requests:** R1 (below the notes), not yet written.
+- **For Claude:** arms: `burnham.arm` (old tube), `limbs.py` (`install`, the one-outline shoulder: no effect on these figures, find why), torsos via `patriots4`/`TC.TORSOS`; test `review/adv-arms.jpg` (top: off, bottom: on). Sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`).
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
@@ -125,6 +124,9 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 ## Sam's answers (7 Nov)
 1 Y: build now, fit the rest in when it comes. 2: keep the cliff walk as written (walking on the strait like a gentle political ad is itself a joke); Sam is reworking the dialogue for an earlier joke. 3: I find the photos (network now allows Wikimedia: new "Animation-" environment); Sam finds cartoons. 4: Hook Text later. 5 = 2: the explosion happens behind Vance in the cliff shot. 6 Y: never looks round. 7 = 2: both thumbs. 8 Y: Regular and Premium rows added. 9 Y: crackle, explosion, splashes only. 10 Y: navy suit and red tie throughout. Budget: about 10% of a week.
 
+## Sam's answers on the composition (7 Nov)
+1 Y: build the sets from these shots. 2 Y: Vance stops screen left, the tanker blows up behind him to the right. 3 Y, as long as the prices are peak Iran-war prices: Regular 4.39, Premium 5.25, Diesel 6.15 (his), each with the small 9. Source: AAA/Fortune, 6 Nov 2026: regular peaked at $4.29 national average and diesel topped $6 during the war; scaled to his $6.15 diesel, premium about 85 cents over regular. 4: white pickup. The added set dressing stands (no objection). All sets are flat 2D paintings, one per camera (rule 39), confirmed to Sam.
+
 ## Notes
 | # | shot | time | note | status |
 |---|------|------|------|--------|
@@ -139,6 +141,12 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 5 | cast | | Anger 6 is the first face that registers as anger | done: the scale restarts there (new 1 = old 6) and goes stronger. New kind |
 | 3 | cast | | Checked shirt: thicker colours, black and red | done: red with wide black bands, cut to his outline in every view; sleeves plain red. New kind |
 | 11 | close-up | | The wreck goes over his LEFT shoulder: the screenplay had it wrong | done: wreck and smoke moved to screen right, Vance to screen left of centre; brief row 18 corrected. New kind |
+| 12 | cast | | The check pattern doesn't go all the way to the edges of the clothes | done: why notes 3 and 10 didn't hold: to stay inside the outline, each band was only drawn where its whole width fitted, so every band stopped half a band short and left a plain red rim (and the sleeve bands were shortened on purpose). Now the check is printed full length and trimmed to the shirt's own red cloth (`_cloth`), so it meets the ink line on body, sleeves and collar; one band down each sleeve's middle so the sleeves still read against the body. Seen before (notes 3, 10) |
+| 13 | gas station | | Prices must be peak Iran-war prices | done: Regular 4.39, Premium 5.25, Diesel 6.15 (see answers). New kind |
+| 14 | all films | | Join the arms to the shoulders: they look like two separate parts, not one flowing body; for all future characters | to do next (kit job, Opus high): tested 7 Nov, `limbs.install` (the template's one-outline shoulder) makes no visible difference on the satire figures: each arm is still a tube with its own rounded cap sitting on the body's shoulder corner. Fix in the shared figure kit so the sleeve grows out of the shoulder: one outline from the collar over the shoulder and down the arm, no cap or line at the join (an armpit crease only when the arm lifts); cast sheets drawn with the same arms as the films. Before/after sheet across several past casts (Vance, the driver, Trump, Abdul) for Sam. Rule proposed (below). New kind |
+
+Rule proposals (waiting for Sam's number):
+- R1 (Sam, 7 Nov: "all future character models"): rulebook rule 80, "Arms and body are one piece: the sleeve grows out of the shoulder with one outline from the collar, over the shoulder and down the arm; no line, cap or step where the arm meets the body (only an armpit crease when the arm is lifted). Every cast sheet draws the arms exactly as the film does." Check: a shoulder-seam test in `linecheck.py` that fails on any ink line across the shoulder join, run on every cast sheet.
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.
