@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 40 (showstopper list: Sam's notes on take 2), 82 (Hook Text pops in at 0.5 s), 74 (the acting list ticked on the check sheet before the first animatic)
-- **Done (8 Nov):** showstopper take 2 (note 29): no white flash, orange flame-light and a harder jolt, a blast ring and white water heaved up, the tanker torn in two, varied debris, an oil fireball climbing for 4.6 s into a lasting fire column under the smoke. Clip sent. Hook Text from Sam: "JD Vance Addresses The Nation". Rule 82 written (R2, Sam: Y). Swivel chair: yes (question 11).
-- **Next:** this chat, Opus high: Sam's notes on take 2; then the film build (film file from the template, the swivel opening, the cliff walk, the close-up, the gas station).
-- **Needs Sam:** notes on take 2; the rest of the script.
-- **Read:** this file (Where things stand, the showstopper list, notes 27-29); `guides/kit-catalogue.md` sitting kit row.
+- **Rules that bite next:** 74 (acting list on the check sheet), 59 (pre-flight before every render; the two long shots named), 82 (Hook Text pops at 0.5 s)
+- **Done (8 Nov):** the whole film built (note 32); hellfire glow in the close-up (note 31); check sheet approved (Sam: Y); first animatic sent (31 s, 1.3 MB, silent, lines on estimates, Hook Text and sign-off on).
+- **Next:** Opus medium: Sam's notes on the animatic; then his recordings (Sonnet: file them as `source/audio/ad-vanced-notice-N.m4a`) and the sounds (crackle, explosion, splashes).
+- **Needs Sam:** notes on the animatic; recordings of lines 1-8; the rest of the script after "This guy."
+- **Read:** this file (Where things stand, notes 27-32, Acting); `source/ad_vanced_notice.py` MAP.
 - **Open rule requests:** none.
-- **For Claude:** showstopper in `source/ad_vanced_notice_fx.py` (MAP at the top): `near(u)` (now carries `brk(u)`), `fx(u)`, `light(img, u, cam)` (replaces `flash`), `held(u)` (2-frame freeze at 2 frames), `jolt(u)` + `shift`; u = s from the hit; `EFFECTS` for viewchecks. Wreck in two: `sets.wreck_xform`, `WRECK_FULL`, `tanker(..., brk=)`. Hook Text: `hook_text.py` now `--from 0.5` by default. Swivel: `sitting.swivel(sp, seat, u, 180, 0)`.
+- **For Claude:** film `source/ad_vanced_notice.py` (template; `keys`, `final --small --faults-named` for the two named long shots: cliff 12.8 s, Sam's Q5; gas 9.3 s). Finish: `finish.py CLEAN OUT --film ad_vanced_notice`. Hellfire: `fx.hellfire`. Views: `beard_turned` (Vance's side and three-quarter beard).
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
