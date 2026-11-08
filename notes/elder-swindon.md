@@ -1,13 +1,14 @@
 # Elder Scrolls: Swindon (parody of the Elder Scrolls VI: Sentinel name-reveal teaser)
 
 ## Where things stand
-- **Rules that bite next:** 3 (roundabout benchmark against Sam's photos), 8 (rehearse the zoom-out, the scroll reveal and the dog as short clips), 39 (3D only for the scroll and can).
-- **Done (8 Nov):** plan; answers 1-9; teaser stills taken from Sam's recordings (`references/elder-swindon/teaser-stills.jpg`); the Staffie added (Sam); composition sheet sent; lying.py's `lie` mended (two functions shared the name `place`: broken since 27 Oct).
-- **Next:** Opus high, this chat if short: Sam's notes on the composition sheet and questions 1-3, then build (ground, scroll, man's face close-up, dog, zoom-out, roundabout, traffic, title).
-- **Needs Sam:** notes on the composition sheet; answers 1-3 (title glow, the man stays out cold, brindle Staffie).
-- **Read:** this file; guides/satire.md (Start, One set, The look); kit-catalogue (Sets, Effects).
+- **Rules that bite next:** 8 (rehearse the dog and the zoom-out, the scroll reveal, the title burn as short clips first), 3 (roundabout benchmark against Sam's two photos), 39 (3D only for the scroll and can).
+- **Done (8 Nov):** plan; answers 1-9; teaser stills; the Staffie added; composition sheet sent and approved (Sam: "Y to all": glowing burn-in on SWINDON, the man stays out cold, brindle Staffie); lying.py's `lie` mended.
+- **Spent against the estimate:** 0.9 of 9.0 (ground 0.4, scroll 0.2, can 0.1, dog 0.1, roundabout 0.1); nothing over.
+- **Next:** build, Opus high, NEW chat: "Build Elder Scrolls Swindon – read notes/elder-swindon.md". Order: rehearsal clips (dog + zoom-out, scroll reveal, title burn), then the film from the template, check sheet, animatic offer.
+- **Needs Sam:** nothing until the rehearsal clips.
+- **Read:** this file (Plan, Showstopper, Brief); guides/satire.md (Start, One set, Render); kit-catalogue (Effects).
 - **Open rule requests:** none.
-- **For Claude:** comp `python3 source/elder_swindon_comp.py comp OUT.jpg` (75 s); ground `source/elder_swindon_ground.py` (soil, grass, litter, dust; world-anchored noise); film will be `source/elder_swindon.py` from the template; `HAS = {'people','effects','props'}`; sound `music/sentinel-teaser-audio.m4a` as is. lying.check: 12 old hair-into-floor faults on the test people (0.5-1 cm), not ours.
+- **For Claude:** comp `source/elder_swindon_comp.py` (cams `orbit`, `topcam`; props `lying_rev`, `scroll_mat`, `can_mat`, `packet`, `drool`, `dog`; `aerial`, `title`); ground `source/elder_swindon_ground.py`. Film: `source/elder_swindon.py` from the template, `HAS = {'people','effects','props'}`, sound `music/sentinel-teaser-audio.m4a` as is. Face close-up needed (lying.draw's face reads poorly face down). Can label reads "RT LAGER" at its end: fix the wrap.
 
 ## Plan (8 Nov, redone after Sam's answers)
 **Length:** 30.04 s (the teaser's sound, as is) + the 1.6 s sign-off = 31.6 s. No voices.
@@ -101,6 +102,9 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 - [ ] Budget 9% of a week.
 - [ ] Animatic: the trailer's sound as it is.
 - [ ] (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out.
+- [ ] (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL.
+- [ ] (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks).
+- [ ] (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze).
 
 ## Reference
 - Teaser frames: sand blows (0-7 s), golden staff with a blue gem appears (7-15 s), black, gold rings, "The Elder Scrolls VI", "SENTINEL" burns in (15-30 s).
@@ -122,7 +126,7 @@ Sam's answers (8 Nov): 1 unsure; 2 a soil-and-grass patch on the island, the res
 6 add them; 7 yes; 8 take stills from the video he sent (only the sound was filed: asked for the recordings again); 9 yes.
 Budget 9%. Audio for the animatic: the trailer's sound as it is.
 
-Composition-sheet questions (8 Nov; my pick first):
+Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3 brindle); no notes on the sheet.
 1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
 2. The man stays out cold while the dog tugs (only his leg jerks). Y/N
 3. The Staffie: 1 = brindle (brown, darker stripes, white blaze); 2 = blue-grey.
