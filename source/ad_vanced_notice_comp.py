@@ -47,10 +47,14 @@ def nts(sp):
     return 928 * V.M_PER_UNIT * sp['height'] / 1.75
 
 
+NOW = [0.0]                                    # the film's time for the drawing in hand (set by the film's picture(t)):
+                                               # the kit checks read it (they stamped every cliff and street figure 0.00 s)
+
+
 def person(im, sp, x, feet_y, ppm, yaw=0, j=None, **kw):
     """Someone of the cast at screen x, soles at feet_y, `ppm` pixels per metre at their depth."""
     s = nts(sp) * ppm / 928
-    return V.person(im, AC.B.Cam(1.0, 540, 960), x, feet_y - 928 * s, s, dict(sp, **kw), 0.0, yaw, j)
+    return V.person(im, AC.B.Cam(1.0, 540, 960), x, feet_y - 928 * s, s, dict(sp, **kw), NOW[0], yaw, j)
 
 
 def hand(d, x, y, r, skin):

@@ -189,7 +189,8 @@ SET_EXCLUDE = [('WALL', 'every shot is a flat painting through its own camera; t
                 'outdoor shots stand in')]
 TOUCHES = []                                      # the nozzle is drawn at his fist every frame (_nozzle): it never moves
 FREE_MOVES, SOUND_SOURCES = [], {}
-RESTS = [('*Vance.forearm*', 'desk', T['swivel'] + SWIVEL * 0.85, T['cut2'], 'hands folded on the desk (he arrives with them there, note 47c; while the chair is still turning the check cannot place the desk under his elbows: looked at full size, 8 Nov, forearms on the desk throughout)')]
+RESTS = [('*Vance.forearm*', 500, 0.0, T['swivel'] + SWIVEL * 0.85, 'hands folded on the desk while he swivels round to it (note 47c); the desk top is 500 person units up (the sitting kit\'s desk), checked as a height because the check cannot place the desk under his elbows while the chair turns'),
+         ('*Vance.forearm*', 'desk', T['swivel'] + SWIVEL * 0.85, T['cut2'], 'hands folded on the desk (he arrives with them there, note 47c; while the chair is still turning the check cannot place the desk under his elbows: looked at full size, 8 Nov, forearms on the desk throughout)')]
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
 ORDER_SWAPS = []
@@ -655,6 +656,7 @@ def picture(t):
     if t >= BLACK_AT:
         return B.canvas((0, 0, 0))
     B.SS = 1
+    CP.NOW[0] = t
     return DRAW[shot_of(t)](t)
 
 
@@ -788,6 +790,7 @@ def audits():
     def alone(who):
         def draw(t):
             lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+            CP.NOW[0] = t
             s = shot_of(t)
             if s == 'gas':
                 if who == 'man':
