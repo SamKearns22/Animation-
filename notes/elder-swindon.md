@@ -1,14 +1,14 @@
 # Elder Scrolls: Swindon (parody of the Elder Scrolls VI: Sentinel name-reveal teaser)
 
 ## Where things stand
-- **Rules that bite next:** 8 (rehearse the dog and the zoom-out, the scroll reveal, the title burn as short clips first), 3 (roundabout benchmark against Sam's two photos), 39 (3D only for the scroll and can).
-- **Done (8 Nov):** plan; answers 1-9; teaser stills; the Staffie added; composition sheet sent and approved (Sam: "Y to all": glowing burn-in on SWINDON, the man stays out cold, brindle Staffie); lying.py's `lie` mended.
-- **Spent against the estimate:** 0.9 of 9.0 (ground 0.4, scroll 0.2, can 0.1, dog 0.1, roundabout 0.1); nothing over.
-- **Next:** build, Opus high, NEW chat: "Build Elder Scrolls Swindon – read notes/elder-swindon.md". Order: rehearsal clips (dog + zoom-out, scroll reveal, title burn), then the film from the template, check sheet, animatic offer.
-- **Needs Sam:** nothing until the rehearsal clips.
-- **Read:** this file (Plan, Showstopper, Brief); guides/satire.md (Start, One set, Render); kit-catalogue (Effects).
+- **Rules that bite next:** 8 (clips before the rest), 3 (stadium needs a reference: Q10), 74 (acting list: the man, the dog, the fight, before the animatic).
+- **Done (8 Nov, build):** roundabout rebuilt from Sam's photos with his shot-6 additions (walkers, fight, e-bikes, moped, burnt-out car, stadium slice; roundabout lower); title burn; film file; rehearsal clips sent: scroll reveal, dog + zoom-out, title burn. Showstopper elements 1-6 all in the clip.
+- **Spent against the estimate:** about 4.3 of 10.4 (roundabout and shot-6 life 2.2, title 0.4, zoom-out 0.6, scroll reveal 0.2, earlier 0.9).
+- **Next:** Opus high, same chat if short, else NEW chat "Build Elder Scrolls Swindon – read notes/elder-swindon.md": Sam's clip notes and Q10-13; the face close-up (shot 1); the packet's flip; pre-flight wiring (scene, checks); acting list; check sheet; animatic offer.
+- **Needs Sam:** notes on the three clips; questions 10-13.
+- **Read:** this file (Build log, Brief); guides/satire.md (Before every render, Render).
 - **Open rule requests:** none.
-- **For Claude:** comp `source/elder_swindon_comp.py` (cams `orbit`, `topcam`; props `lying_rev`, `scroll_mat`, `can_mat`, `packet`, `drool`, `dog`; `aerial`, `title`); ground `source/elder_swindon_ground.py`. Film: `source/elder_swindon.py` from the template, `HAS = {'people','effects','props'}`, sound `music/sentinel-teaser-audio.m4a` as is. Face close-up needed (lying.draw's face reads poorly face down). Can label reads "RT LAGER" at its end: fix the wrap.
+- **For Claude:** film `source/elder_swindon.py` (MAP at top); roundabout `source/elder_swindon_aerial.py` (`check`: vehicle overlaps); title `source/elder_swindon_title.py`; comp parts `source/elder_swindon_comp.py`. Film still lacks `scene`, `checks`, `PLAN`, `BENCHMARK` for pre-flight. Can label "RT LAGER" wrap still to fix.
 
 ## Plan (8 Nov, redone after Sam's answers)
 **Length:** 30.04 s (the teaser's sound, as is) + the 1.6 s sign-off = 31.6 s. No voices.
@@ -49,8 +49,9 @@ no voices, no lip-sync; one new look. 3D only for the scroll (rule 39: the camer
 | Magic Roundabout from above, flat painting (benchmark below), the soil-and-grass patch on the island, the estate | new set; rough in the sheet | 1.3 | 0.1 |
 | Traffic: cars and a bus going round (clockwise round each mini, anticlockwise round the inner ring), giving way | new mover | 0.7 | |
 | Title: dim, gold rings, small line, SWINDON burning in letter by letter | new effect; rough in the sheet | 0.5 | |
+| (Sam, 8 Nov) Shot 6 life: walkers, the fight (two groups), two e-bikes, a delivery moped, a burnt-out car, the stadium's edge | flat, from above; people drawn about 2.5 times real size so they read on a phone | 1.4 | |
 | Animatic rounds | | 1.0 | |
-| **Total** | Sam's budget 9% | **9.0** | **0.9** |
+| **Total** | Sam's budget 9% (10.4 with Sam's shot-6 additions) | **10.4** | **0.9** |
 
 Rehearsal clips first (rule 8): shot 2 (soil sliding off the scroll), shots 4b-5 (the dog and the zoom-out), shot 6 (traffic and the title burn).
 Sound effects (rule 26): none; the teaser's sound as is (Sam, 8 Nov: for the animatic; how to treat it later is open). Bleeps: none.
@@ -105,6 +106,11 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 - [ ] (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL.
 - [ ] (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks).
 - [ ] (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze).
+- [ ] (Sam, 8 Nov, shot 6) Foot traffic: people walking on the paths and pavements round the roundabout.
+- [ ] (Sam, 8 Nov, shot 6) Two groups of men in a scuffle / fist fight on one of the paths.
+- [ ] (Sam, 8 Nov, shot 6) Two teenagers in hoodies on e-bikes, far too fast, riding irresponsibly.
+- [ ] (Sam, 8 Nov, shot 6) A food delivery moped.
+- [ ] (Sam, 8 Nov, shot 6) A burnt-out car on the green by the stadium (the County Ground, beside the roundabout).
 
 ## Reference
 - Teaser frames: sand blows (0-7 s), golden staff with a blue gem appears (7-15 s), black, gold rings, "The Elder Scrolls VI", "SENTINEL" burns in (15-30 s).
@@ -125,6 +131,25 @@ Sam's answers (8 Nov): 1 unsure; 2 a soil-and-grass patch on the island, the res
 4 N (no extra shots); 5 EXPORT LAGER, and a joke from the start (can and splayed arm from frame one, face soon after);
 6 add them; 7 yes; 8 take stills from the video he sent (only the sound was filed: asked for the recordings again); 9 yes.
 Budget 9%. Audio for the animatic: the trailer's sound as it is.
+
+Build log (8 Nov, build chat):
+- The roundabout rebuilt from Sam's photos as its own set (`source/elder_swindon_aerial.py`), drawn through the film's
+  camera so the zoom-out and the held shot are one set. Traffic gives way (simulated: a car waits while another is just
+  ahead); check: no vehicle passes through another in shot 6 (`python3 source/elder_swindon_aerial.py check`: 0).
+- Sam (8 Nov, mid-build): "move the roundabout down a bit and see less of the stadium", then "overshot: a small bit of the stadium": roundabout centre at about 60%
+  of the frame height; a small piece of the stadium (stand roof, pitch corner) in the top-left corner.
+- The title sits ABOVE the roundabout (centre 450 px), not in the middle as in the teaser, so the island, the e-bikes
+  and the traffic stay clear of it; the dim is 42%, not 55%, so the joke details read through it (question 13).
+- People in shot 6 drawn up to 4 times real size (question 11, my pick), shrinking back to real size as the camera
+  comes down to them during the climb.
+- Film file `source/elder_swindon.py` (from the template's structure; no voices, no rooms); title `source/elder_swindon_title.py`.
+- Rehearsal clips (rule 8): scroll reveal 7.0-11.6, dog + zoom-out 15.0-18.2, title burn 17.4-30.04.
+
+Shot-6 questions (8 Nov, after Sam's additions; my pick first):
+10. The stadium (the County Ground) is in neither roundabout photo. 1 = you send a screenshot of it from above (Apple Maps, satellite view, the stadium and the roundabout together); 2 = I find one online.
+11. People from 150 m up are specks: 1 = draw the walkers, fighters, e-bikers and moped rider about 2.5 times real size so they read on a phone; 2 = real size.
+12. Budget: your additions take it from 9.0% to about 10.4%. 1 = fine; 2 = trim (say what).
+13. The title above the roundabout (so the drooler's island, the e-bikes and the traffic stay clear), not across its middle as in the teaser: Y/N.
 
 Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3 brindle); no notes on the sheet.
 1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
