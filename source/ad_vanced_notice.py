@@ -421,7 +421,8 @@ def gas_man(t):
                    frown=0.06 * fury,                     # note 36: the face's frown is capped at anger 4, so the
                    lid4=0.02 - 0.035 * (4 + 2 * fury + 5),   # extra on top; the eyes kept open (the cast
                    # shuts them as anger rises) so you can see where they look
-                   tip=glare,                             # note 38: head and neck lean up-left together (_lean_head)
+                   head_dx=-26 * glare, head_dy=-6 * glare, neck_lean=True,   # note 38: the head up-left, the neck
+                   # drawn once by the kit, leaning to follow it (no cut-out pieces)
                    gaze_dy=-1.0 * glare - 0.2 * side, look=-0.9 * glare + 0.8 * side)
 
 
@@ -485,32 +486,6 @@ def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck, vlay):
     im.alpha_composite(Image.fromarray(m, 'RGBA'))
 
 
-def _lean_head(man, mx, mneck, sm, k):
-    """The driver's head and neck leaning up and to the left at the board (notes 36-38): everything above his collar
-    moved together, and the neck's foot joined back to the collar by a slanted piece of the same width (measured
-    from his drawing), so it stays one neck, centred under his head."""
-    if k < 0.02:
-        return man
-    dx, dy = -18 * sm * k, -5 * sm * k
-    base = int(mneck - 12 * sm)                    # clear above the collar (only the neck and head move)
-    al = np.asarray(man)[..., 3]
-    row = np.nonzero(al[base - 3, int(mx - 60 * sm):int(mx + 60 * sm)] > 128)[0]
-    if not len(row):
-        return man
-    x0, x1 = mx - 60 * sm + row[0], mx - 60 * sm + row[-1]
-    box = (int(mx - 130 * sm), 0, int(mx + 130 * sm), base)
-    top = man.crop(box)
-    m = np.asarray(man).copy()
-    m[box[1]:box[3], box[0]:box[2], 3] = 0
-    out = Image.fromarray(m, 'RGBA')
-    lay = ST.layer()
-    ST.Pen(lay).poly([(x0, base + 4 * sm), (x1, base + 4 * sm), (x1 + dx, base + dy - 6 * sm), (x0 + dx, base + dy - 6 * sm)],
-                     AC.M_SKIN, 2.4)
-    out.alpha_composite(ST.shrink(lay))
-    out.alpha_composite(top, (int(box[0] + dx), int(box[1] + dy)))
-    return out
-
-
 def vance_d(t):
     """His distance from the lens: a touch behind the driver, then forward with the side step."""
     return GAS_VD - STEP_FWD * _ease(_ramp(t, T['off'], T['off'] + 0.45))
@@ -536,8 +511,7 @@ def gas(t):
     _nozzle(ST.Pen(lay), (mx + wx * sm, mneck + wy * sm + 12 * sm))
     im.alpha_composite(ST.shrink(lay))
     man = Image.new('RGBA', im.size, (0, 0, 0, 0))
-    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
-    man = _lean_head(man, mx, mneck, sm, mk.get('tip', 0.0))
+    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
     im.alpha_composite(man)
     if j is not None:
         vs = CP.nts(AC.VANCE) * vppm * 1.01 / 928
@@ -668,7 +642,7 @@ def audits():
                 if who == 'man':
                     jm, mk = gas_man(t)
                     mx, feet, ppm = ST.place_gas(MAN_X)
-                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
+                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
                 elif t >= T['enter']:
                     x, yaw, j = gas_vance(t)
                     vx, vfeet, vppm = ST.place_gas(x, vance_d(t))
