@@ -6,7 +6,7 @@ MAP
 - 30: layout in metres (screen-metres: sx right, sy down; island centre at 0, 0), the world link `W`
 - 70: the view: `View` (a sets.Cam straight down) -> px, pixels per metre, how much to enlarge people
 - 95: ground: verges, paths, tarmac, pavements, islands, markings, minis, central island, lamp post
-- 215: surroundings: houses (left, top left), flat-roofed block (right), car park, trees, the stadium's corner (bottom left)
+- 215: surroundings: houses (left, bottom), flat-roofed block (right), car park, trees, the stadium's corner (top left)
 - 270: routes: cars round the minis (clockwise) and the inner ring (anticlockwise); a bus, the delivery moped
 - 340: e-bikes (two hooded teens, wrong way, weaving), walkers, the fight (two groups), the burnt-out car
 - 470: draw(pil, cam, t) and the still: python3 source/elder_swindon_aerial.py still OUT.jpg T [WIDTH]
@@ -212,7 +212,7 @@ def surroundings(v):
     rng = np.random.default_rng(4)
     # houses with brown roofs (bottom left and left), in rows along the verges
     for i in range(80):
-        ang, r = rng.choice([rng.uniform(150, 205), rng.uniform(345, 385), rng.uniform(222, 270)]), rng.uniform(60, 120)
+        ang, r = rng.choice([rng.uniform(150, 205), rng.uniform(345, 385), rng.uniform(62, 128)]), rng.uniform(60, 120)
         if min(angdist(ang, m) for m in MINIS) < (ARM_W / 2 + 9) / r * 57.3:
             continue
         x, y = pol(r, ang)
@@ -236,28 +236,29 @@ def surroundings(v):
         x, y = pol(r, ang)
         if math.hypot(x - BURNT_AT[0], y - BURNT_AT[1]) < 9 or math.hypot(x - STADIUM[0], y - STADIUM[1]) < 30:
             continue                                     # keep trees off the burnt-out car and the stadium
-        if (150 < ang < 205 or ang > 345 or ang < 25 or 222 < ang < 270) and r > 58:
+        if (150 < ang < 205 or ang > 345 or ang < 25 or 62 < ang < 128) and r > 58:
             continue
         rr = rng.uniform(2.5, 4.5)
         v.circle(x + SUN[0] * 2, y + SUN[1] * 2, rr, (0, 0, 0, 60), None)
         v.circle(x, y, rr, (66, 110, 56), INK)
         v.circle(x - rr * 0.3, y - rr * 0.3, rr * 0.5, (86, 132, 66), None)
-    # the stadium's corner (the County Ground), bottom left, a small piece of it (Sam, 8 Nov: "the stadium at the
-    # bottom, move up a little"): the stand's roof with the pitch beyond it, off the bottom of the frame
+    # the stadium's corner (the County Ground), top left, as in the first layout (Sam, 8 Nov: "never wanted the angle
+    # to change, just move it")
     sx, sy = STADIUM
-    A = -30.0
-    ca, sa = math.cos(math.radians(A)), math.sin(math.radians(A))
-    v.poly(rrect(sx - 30 * sa, sy + 30 * ca, 110, 70, A, 6, 4), (90, 150, 70), INK)       # the pitch beyond
-    for j in range(-2, 3):
-        v.poly(rrect(sx - 30 * sa + j * 14 * ca, sy + 30 * ca + j * 14 * sa, 7, 70, A, 0.1, 2), (104, 166, 82), None)
-    v.poly(rrect(sx, sy, 80, 16, A, 1, 3), (206, 210, 214), INK, y=6.0)                 # the stand's roof
+    v.poly(rrect(sx - 20, sy - 30, 110, 70, 30, 6, 4), (90, 150, 70), INK)            # the pitch beyond
+    for j in range(5):
+        v.poly(rrect(sx - 20 + j * 8 * math.cos(math.radians(30)), sy - 30 + j * 8 * math.sin(math.radians(30)),
+                     6, 70, 30, 0.1, 2), (104, 166, 82), None)
+    v.poly(rrect(sx, sy, 80, 16, 30, 1, 3), (206, 210, 214), INK, y=6.0)               # the stand's roof
     for j in range(-9, 10):
-        p = (sx + j * 4 * ca, sy + j * 4 * sa)
-        v.line([(p[0] + 8 * sa, p[1] - 8 * ca), (p[0] - 8 * sa, p[1] + 8 * ca)], (170, 176, 184), w_m=0.4, y=6.0)
-    v.circle(sx + 42 * ca + 6, sy + 42 * sa - 6, 1.4, (120, 120, 126), INK)              # floodlight pylon foot
+        a = math.radians(30)
+        p = (sx + j * 4 * math.cos(a), sy + j * 4 * math.sin(a))
+        v.line([(p[0] + 8 * math.sin(a), p[1] - 8 * math.cos(a)), (p[0] - 8 * math.sin(a), p[1] + 8 * math.cos(a))],
+               (170, 176, 184), w_m=0.4, y=6.0)
+    v.circle(sx + 34, sy + 30, 1.4, (120, 120, 126), INK)                               # floodlight pylon foot
 
 
-STADIUM = (-40, 82)
+STADIUM = (-62, -118)
 
 
 # ------------------------------------------------------------------------------------------------ routes
@@ -524,7 +525,7 @@ def fight(v, t):
                arms=None if abs(al) < 0.7 else (0.4 + 0.3 * lunge, 0.4 + 0.3 * lunge))
 
 
-BURNT_AT = (-40, 42, 18)
+BURNT_AT = (-52, -84, 18)
 
 
 def burnt_car(v):
@@ -600,12 +601,15 @@ def vehicle_faults(t0=17.45, t1=30.04, fps=12, gap=2.6):
     return out
 
 
+VIEW_SY = -32.0                         # the held view's centre, north-south (screen-metres; Sam's notes 8 Nov)
+
+
 def held_cam(t):
     """The held view from above (shot 6): the roundabout low in the frame (Sam, 8 Nov), a slice of the stadium top
     left, drifting slowly."""
     u = max(0.0, t - 17.45)
     width = 118.0 + 0.6 * u
-    sx, sy = -2.0 - 0.15 * u, -32.0 - 0.25 * u          # the frame centre in screen-metres: roundabout low
+    sx, sy = -2.0 - 0.15 * u, VIEW_SY - 0.25 * u        # the frame centre in screen-metres: roundabout low
     d = width * 3.0 / 2.6                                # the climb's own height for this width: no jump
     x, _, z = W(sx, sy)
     return S.Cam((x, d, z + d * math.cos(math.radians(89.6))), (x, 0.0, z), focal=1080 * d / width)

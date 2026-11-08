@@ -136,8 +136,12 @@ Build log (8 Nov, build chat):
 - The roundabout rebuilt from Sam's photos as its own set (`source/elder_swindon_aerial.py`), drawn through the film's
   camera so the zoom-out and the held shot are one set. Traffic gives way (simulated: a car waits while another is just
   ahead); check: no vehicle passes through another in shot 6 (`python3 source/elder_swindon_aerial.py check`: 0).
-- Sam (8 Nov, mid-build): "move the roundabout down a bit and see less of the stadium", then "overshot: a small bit of the stadium": roundabout centre at about 60%
-  of the frame height; a small piece of the stadium (stand roof, pitch corner) in the top-left corner.
+- Sam (8 Nov, mid-build), shot-6 framing: "move the roundabout down a bit and see less of the stadium"; "overshot, a small
+  bit of the stadium"; "never wanted the angle to change from the first attempt, just move it more north by another 20%
+  of the screen"; "return to that one as your baseline". Baseline restored: the first layout (stadium top left,
+  burnt-out car beside it, houses bottom), view centre `VIEW_SY = -32`. Why two fixes failed: I moved and later
+  re-placed the stadium itself instead of only moving the camera, and guessed which way "north" meant. Sheet of the two
+  readings sent (question 14).
 - The title sits ABOVE the roundabout (centre 450 px), not in the middle as in the teaser, so the island, the e-bikes
   and the traffic stay clear of it; the dim is 42%, not 55%, so the joke details read through it (question 13).
 - People in shot 6 drawn up to 4 times real size (question 11, my pick), shrinking back to real size as the camera
@@ -149,6 +153,7 @@ Shot-6 questions (8 Nov, after Sam's additions; my pick first):
 10. The stadium (the County Ground) is in neither roundabout photo. 1 = you send a screenshot of it from above (Apple Maps, satellite view, the stadium and the roundabout together); 2 = I find one online.
 11. People from 150 m up are specks: 1 = draw the walkers, fighters, e-bikers and moped rider about 2.5 times real size so they read on a phone; 2 = real size.
 12. Budget: your additions take it from 9.0% to about 10.4%. 1 = fine; 2 = trim (say what).
+14. Shot-6 framing, from the first layout: 1 = the roundabout 20% higher up the screen (the stadium goes out of shot); 2 = the camera 20% further north (roundabout lower, more of the stadium).
 13. The title above the roundabout (so the drooler's island, the e-bikes and the traffic stay clear), not across its middle as in the teaser: Y/N.
 
 Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3 brindle); no notes on the sheet.
