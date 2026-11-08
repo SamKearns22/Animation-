@@ -492,7 +492,8 @@ def torso_view(img, p, sp, view, seated=False):
             p.poly([(d * 0.85, 196), (d * 1.05, 196), (d * 1.05, 270), (d * 0.85, 270)], (248, 248, 248), INK, 2.0)
     else:
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
-        p.poly([(-32, -80), (32, -80), (36, 10), (-36, 10)], skin, INK, 2.6)       # the neck stays under the head
+        nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
+        p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # under the head
         p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
                 (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):

@@ -36,7 +36,7 @@ import ad_vanced_notice_comp as CP   # noqa: E402  (the cast's setup and screen 
 import sitting                   # noqa: E402  the swivel chair, hands folded
 import moves                     # noqa: E402  the walks
 import views as V                # noqa: E402
-from satire_style import install_circle_hands   # noqa: E402
+from satire_style import install_circle_hands, OUT   # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
@@ -169,8 +169,7 @@ FREE_MOVES, SOUND_SOURCES = [], {}
 RESTS = [('*Vance.forearm*', 'desk', T['fold'] + 0.4, T['cut2'], 'line 1: hands folded on the desk')]
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
-ORDER_SWAPS = [('vance', 'man', None, None, 'Vance steps forward and out from behind the driver for "This guy." '
-                '(note 34-35: the driver moved right, so both thumbs show)')]
+ORDER_SWAPS = []
 HANDS_OK = [('*Vance*', '*', 'no hand', 0.0, T['swivel'] + SWIVEL * 0.7, 'his back to us in the swivel chair: '
              'his hands are in front of him; they come round with him'),
             ('*Vance*', 'R', '*sleeve*', T['stop'], L[4]['end'] + 0.6, 'the open hand rising beside his chest on '
@@ -347,10 +346,11 @@ def close(t):
 # ---------------------------------------------------------------------------------------------- shot 4: the gas station
 MAN_X = ST.MAN_X + 0.45                           # the driver, further right (note 35): the board up to his left
 GAS_VX, GAS_VD = MAN_X + 0.24, 4.66               # Vance's mark: in close behind the driver's shoulder (note 34)
-STEP_OUT = 0.24                                   # m: the side step out for "This guy."
-STEP_FWD = 0.4                                    # m: and forward, in front of the driver
+STEP_OUT = 0.34                                   # m: the side step out for "This guy.", clear of the driver
+STEP_FWD = 0.0                                    # (note 37: stepping forward took him through the driver)
 ARM_ROUND = (-300.0, 40.0, 60.0)                  # his left hand on the driver's far shoulder (Vance's own units)
-THUMBS = {'L': (-105.0, 150.0, 150.0), 'R': (105.0, 150.0, 150.0)}   # both thumbs at his own chest (Sam, 7 Nov)
+THUMBS = {'L': (-80.0, 115.0, 125.0), 'R': (80.0, 115.0, 125.0)}   # both index fingers up and in at his chest
+# (note 37: the pointing finger from the earlier films; the elbows low, so each finger points up at his chest)
 
 
 def gas_vance(t):
@@ -375,7 +375,7 @@ def gas_vance(t):
     if th > 0.01:
         for s in 'LR':
             r = (-120.0 if s == 'L' else 120.0, 330.0, 40.0)
-            V.arm_to(j, s, tuple(a + (b - a) * th for a, b in zip(r, THUMBS[s])), 'out', 'point')
+            V.arm_to(j, s, tuple(a + (b - a) * th for a, b in zip(r, THUMBS[s])), 'down', 'point')
     j['lean'] = j.get('lean', 0) + 6.0 * _bump(t, word_at(7, 'responsible') - 0.2, L[7]['end'] + 0.3, 0.25, 0.3)
     j['_arm'], j['_sq'] = arm, sq
     if arm >= 0.85:
@@ -416,11 +416,13 @@ def gas_man(t):
     side = _ease(_ramp(t, word_at(6, 'right') - 0.05, word_at(6, 'right') + 0.25))
     glare = _ease(_ramp(t, T['cut4'], T['cut4'] + 0.2)) * (1 - side)   # looking up at the board
     j['lean'] = j.get('lean', 0) - 5.0 * glare                         # leaning back a little to glare up at it
-    return j, dict(head_yaw=-12, anger=round(4 + 2 * up),
-                   frown=0.06 * up,                       # note 36: the face's frown is capped at anger 4, so the
-                   lid4=0.02 - 0.035 * (round(4 + 2 * up) + 5),   # extra on top; the eyes kept open (the cast
+    fury = 1 if up > 0.5 else 0                    # note 37: the brows jump between the two faces, no morph
+    return j, dict(head_yaw=-12, anger=4 + 2 * fury,
+                   frown=0.06 * fury,                     # note 36: the face's frown is capped at anger 4, so the
+                   lid4=0.02 - 0.035 * (4 + 2 * fury + 5),   # extra on top; the eyes kept open (the cast
                    # shuts them as anger rises) so you can see where they look
-                   tip=9.0 * glare,                       # the head tipped up and to the left, at the board
+                   head_dx=-26 * up, head_dy=-6 * up, neck_lean=True,   # note 39: back to neutral as the fist comes down;   # note 38: the head up-left, the neck
+                   # drawn once by the kit, leaning to follow it (no cut-out pieces)
                    gaze_dy=-1.0 * glare - 0.2 * side, look=-0.9 * glare + 0.8 * side)
 
 
@@ -447,7 +449,7 @@ def _top(alpha, x, y_from):
     return int(y_from) + (int(hit[0]) if len(hit) else 0)
 
 
-def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck):
+def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck, vlay):
     """His arm round the driver's shoulders (notes 34, 36: never through his chest): one sleeve lying ALONG THE TOP
     of both his shoulders, half against the sky, from Vance's own shoulder behind him, behind the driver's neck, over
     his far shoulder, the hand cupping its front; the driver's neck and head laid back over it, so it passes behind
@@ -465,12 +467,16 @@ def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck):
     sq = j.get('_sq', 0.0)
     hx, hy = far[0][0] + 4 * sq, far[0][1] + w * 1.2 + 4 * sq        # the hand over the front of his far shoulder
     path = [(hx, hy)] + far + near + [(vx - 140 * s, vneck + 62 * s)]   # ... back to Vance's shoulder
-    lay = ST.layer()
-    pen = ST.Pen(lay)
-    pen.line(path, ST.INK, 2 * w + 5)
-    pen.line(path, AC.NAVY, 2 * w)
-    pen.ell(hx, hy + 6 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
-    im.alpha_composite(ST.shrink(lay))
+    ink, fill = ST.layer(), ST.layer()
+    ST.Pen(ink).line(path, ST.INK, 2 * w + 5)
+    pf = ST.Pen(fill)
+    pf.line(path, AC.NAVY, 2 * w)
+    pf.ell(hx, hy + 6 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
+    ink = np.asarray(ST.shrink(ink)).copy()
+    own = (np.asarray(vlay)[..., 3] > 128) & (np.asarray(man)[..., 3] < 128)   # over his own jacket: one body (rule
+    ink[..., 3] = np.where(own, 0, ink[..., 3])                                  # 81, note 37), no line at the join
+    im.alpha_composite(Image.fromarray(ink, 'RGBA'))
+    im.alpha_composite(ST.shrink(fill))
     m = np.asarray(man).copy()                                       # his neck and head back over the sleeve
     yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]
     keep = (yy < mneck + 30 * sm) & (np.abs(xx - mx) < neck_w * 1.25)
@@ -478,22 +484,6 @@ def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck):
     keep &= np.abs(xx - mx) < 110 * sm
     m[..., 3] = np.where(keep, m[..., 3], 0)
     im.alpha_composite(Image.fromarray(m, 'RGBA'))
-
-
-def _tilt_head(man, mx, mneck, sm, deg):
-    """The driver's head and neck tipped `deg` degrees about the neck's base (note 36: his head leans up and left at
-    the board): the kit has no head tilt, so his own drawing above the collar is turned."""
-    if abs(deg) < 0.3:
-        return man
-    base = (mx, mneck - 4 * sm)                    # above the collar: only the neck and head turn
-    box = (int(mx - 120 * sm), 0, int(mx + 120 * sm), int(base[1]))
-    head = man.crop(box)
-    m = np.asarray(man).copy()
-    m[box[1]:box[3], box[0]:box[2], 3] = 0
-    out = Image.fromarray(m, 'RGBA')
-    rot = head.rotate(deg, resample=Image.BICUBIC, center=(base[0] - box[0], base[1] - box[1]))
-    out.alpha_composite(rot, (box[0], box[1]))
-    return out
 
 
 def vance_d(t):
@@ -521,12 +511,11 @@ def gas(t):
     _nozzle(ST.Pen(lay), (mx + wx * sm, mneck + wy * sm + 12 * sm))
     im.alpha_composite(ST.shrink(lay))
     man = Image.new('RGBA', im.size, (0, 0, 0, 0))
-    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
-    man = _tilt_head(man, mx, mneck, sm, mk.get('tip', 0.0))
+    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
     im.alpha_composite(man)
     if j is not None:
         vs = CP.nts(AC.VANCE) * vppm * 1.01 / 928
-        _arm_over(im, man, j, mx, mneck, sm, vs, vx, vfeet + 10 - 928 * vs)
+        _arm_over(im, man, j, mx, mneck, sm, vs, vx, vfeet + 10 - 928 * vs, vlay)
     if vlay is not None and vance_front(t):
         im.alpha_composite(vlay)
     im.alpha_composite(ST.gas_front())
@@ -547,7 +536,7 @@ def picture(t):
 
 def vance_front(t):
     """Vance is in front of the driver once he has stepped forward and out for "This guy." (the step's second half)."""
-    return t >= T['off'] + 0.22
+    return False                                  # note 37: he stays behind the driver; the step only goes sideways
 
 
 def draw_order(t):
@@ -653,7 +642,7 @@ def audits():
                 if who == 'man':
                     jm, mk = gas_man(t)
                     mx, feet, ppm = ST.place_gas(MAN_X)
-                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
+                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
                 elif t >= T['enter']:
                     x, yaw, j = gas_vance(t)
                     vx, vfeet, vppm = ST.place_gas(x, vance_d(t))
@@ -774,6 +763,33 @@ def main():
 F.guard(B)
 import limbs                     # noqa: E402
 limbs.install(B)
+
+
+def _point_hand(prev):
+    """Power Crime Action's pointing finger (Sam, 8 Nov, note 39: ours read as something rude): short and slim, one
+    round-ended finger the way the forearm points, its tip's join painted over so it reads as one finger, not a
+    tube with a cap; drawn first so the circle hand covers its root."""
+    def hand(p, el, wr, shape, skin, extra=None, t=0.0):
+        if shape != 'point':
+            return prev(p, el, wr, shape, skin, extra, t)
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / n, dy / n
+        cx, cy = wr[0] + ux * 12, wr[1] + uy * 12
+        tip = (cx + ux * 50, cy + uy * 50)
+        w = 8.5
+        p.poly([(cx - uy * w, cy + ux * w), (tip[0] - uy * w, tip[1] + ux * w), (tip[0] + uy * w, tip[1] - ux * w),
+                (cx + uy * w, cy - ux * w)], skin, OUT, 2.2)
+        p.ell(tip[0], tip[1], w, w, skin, OUT, 2.2)
+        p.poly([(tip[0] - ux * 6 - uy * (w - 1.5), tip[1] - uy * 6 + ux * (w - 1.5)),
+                (tip[0] - ux * 6 + uy * (w - 1.5), tip[1] - uy * 6 - ux * (w - 1.5)),
+                (cx + uy * (w - 1.5), cy - ux * (w - 1.5)), (cx - uy * (w - 1.5), cy + ux * (w - 1.5))], skin, None)
+        return prev(p, el, wr, 'fist', skin, extra, t)
+    hand.point_finger = True
+    return hand
+
+
+B.gesture_hand = _point_hand(B.gesture_hand)
 
 if __name__ == '__main__':
     main()
