@@ -20,7 +20,7 @@
 
 
 
-## Where things stand (archived 8 Nov)
+## Where things stand (archived 8 Nov, before the arms job)
 - **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
 - **Done (7 Nov):** composition approved (Sam: 1-4 yes); shirt check runs to every edge (note 12); prices set to peak war prices (note 13).
 - **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: join the arms to the shoulders (note 14, all films), then build the sets. Read notes/ad-vanced-notice.md".
@@ -29,3 +29,14 @@
 - **Open rule requests:** R1 (below the notes), not yet written.
 - **For Claude:** arms: `burnham.arm` (old tube), `limbs.py` (`install`, the one-outline shoulder: no effect on these figures, find why), torsos via `patriots4`/`TC.TORSOS`; test `review/adv-arms.jpg` (top: off, bottom: on). Sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`).
 
+
+## Where things stand (archived 8 Nov, before the arms job)
+
+## Where things stand (archived 8 Nov, after the arms job)
+- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
+- **Done (8 Nov):** arms joined to the shoulders in the shared kit, every film (note 14); side-view legs stand straight (15); relaxed elbows bend a touch outward, matched to Sam's rest photos (16, 17); no tufts inside a lifted, bent elbow (18). Before/after sheet sent in chat (kept off GitHub, as a test picture).
+- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: build the sets. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** any notes on the before/after sheet; the rest of the script; the Hook Text later.
+- **Read:** this file (Where things stand, references, composition); `guides/kit-catalogue.md` rows for sets.py, the Flying Whales sea and effects; `guides/figure-rig.md` 2-3 only if Sam has arm notes.
+- **Open rule requests:** none (R1 written as rule 81, 8 Nov).
+- **For Claude:** sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`). Arms: `limbs._who` (unwraps Lean/Tilted/Mirrored; body kept in screen pixels), `limbs._fillet`, `views.standing`, `views.knee_of` lock; sheet script was a scratch file (4 casts x front, side, arm lifted; old code from a git worktree).

@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
-- **Done (8 Nov):** arms joined to the shoulders in the shared kit, every film (note 14); side-view legs stand straight (15); relaxed elbows bend a touch outward, matched to Sam's rest photos (16, 17); no tufts inside a lifted, bent elbow (18). Before/after sheet sent in chat (kept off GitHub, as a test picture).
-- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: build the sets. Read notes/ad-vanced-notice.md".
-- **Needs Sam:** his number on R1 (now covers arms, elbows and standing legs); any notes on the before/after sheet; the rest of the script; the Hook Text later.
-- **Read:** this file (Where things stand, references, composition); `guides/kit-catalogue.md` rows for sets.py, the Flying Whales sea and effects; `guides/figure-rig.md` 2-3 only if Sam has arm notes.
-- **Open rule requests:** R1 (below the notes), not yet written.
-- **For Claude:** sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`). Arms: `limbs._who` (unwraps Lean/Tilted/Mirrored; body kept in screen pixels), `limbs._fillet`, `views.standing`, `views.knee_of` lock; sheet script was a scratch file (4 casts x front, side, arm lifted; old code from a git worktree).
+- **Rules that bite next:** 3 (each place ticked against its photos: `benchmark.py ad_vanced_notice_sets`), 40 (showstopper list ticked at the first rehearsal clip), 54 (only deck pieces and the funnel top break off; the hull stays whole)
+- **Done (8 Nov):** arms joined to shoulders in the shared kit (notes 14-18, another chat; rule 81). All four sets built as flat paintings at real size (study, cliff and strait, close-up background, gas station) plus the tanker and pickup props; every place's list ticked; sizes check clean (notes 19-20). Sent Sam: the set sheet, the reference sheet, a 6 s clip of the fire and the sailing tanker.
+- **Next:** wait for Sam's Y/N on the sets. Then fresh chat, Opus high effort. Type: "Ad-Vanced Notice: build the showstopper. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** Y/N on the sets (note 20 lists what I added); any notes on the arms sheet; the rest of the script; the Hook Text later.
+- **Read:** this file (Where things stand, the showstopper list, notes 19-20); `guides/kit-catalogue.md` rows for the Flying Whales effects and the Ad-Vanced Notice sets.
+- **Open rule requests:** none (R1 written as rule 81, 8 Nov).
+- **For Claude:** sets in `source/ad_vanced_notice_sets.py` (MAP at the top; `BENCHMARK`, `PROP_SIZES`, `SHOTS`, `picture(t)` there for benchmark.py/sheet.py; the film file imports them). Study: `study_back(t)`, `study_pose(j)` (no kit chair or desk; desk top drawn between body and arms), `study_front()`, Vance at `STUDY_VANCE`. Strait: `strait(which, t, near=('sail'|'wreck', x), fx=fn)` (fx draws effects between the ships and the cliff top), `near_x(t, t_hit)`, `X_HIT`, `place_cliff`, `cliff_shadow`, cameras `CAMS`. Gas: `gas_back()`, `gas_front()`, `place_gas`, `MAN_X`/`VANCE_X`, `gas_points()` (filler, hose_from, board box for KEEP_CLEAR). Effects: `flying_whales_fx`.
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
@@ -16,14 +16,14 @@ All flat paintings, one per camera; no 3D (rule 39): no camera moves round anyth
 | build or risky move | why (parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
 | JD Vance likeness (front, side, back; seated, walking at the lens, close-up, arm round, thumbs at himself) | new cast | 2.0 | |
-| Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass): one flat painting | new set | 1.0 | |
-| Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.0 | |
-| Oil tankers (one side-on model, copies varied in size and colour; a wake for the moving one) | new prop | 0.6 | |
+| Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass): one flat painting | new set | 1.0 | 1.0 |
+| Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.0 | 0.9 (and the close-up's background) |
+| Oil tankers (one side-on model, copies varied in size and colour; a wake for the moving one) | new prop | 0.6 | 0.5 (the wreck hull too) |
 | Showstopper, in the cliff shot behind Vance: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 1.5 | |
 | Close-up with the burning wreck behind | the cliff shot's wreck re-framed | 0.3 | |
-| Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.0 | |
+| Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.0 | 0.9 |
 | The big man (invented: 17 stone, goatee, balding, checked shirt, jeans; pump and hose) | new cast | 0.7 | |
-| 4x4 pickup (side-on only) | new prop | 0.6 | |
+| 4x4 pickup (side-on only) | new prop | 0.6 | 0.4 |
 | Arm round the shoulder; both thumbs at himself | risky move | 0.3 | |
 | Animatic rounds | | 1.0 | |
 | **Total so far** | Sam's target (7 Nov): about 10%, like Terfwarts (9%) and MidTerminal (11%) | **10.0** | |
@@ -98,13 +98,13 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | reference | what it shows | ours matches? |
 |---|------|------|
 | Vance likeness pack (rule 51) | 3 official portraits straight-on (2023, 2025, 2026) and a 2022 caricature, from Wikimedia Commons; the speaking photos were too far away to use. Hair medium-dark brown swept up and over from a parting on his right (our left), receding M; brows heavy, low, near straight; narrow hooded blue eyes; broad nose tip; short full brown beard with a ginger cast joined to the moustache; thin lips; broad upper face | yes: likeness check 73% / 81% / 66%, nothing the wrong way, 1st in the line-up (7 Nov) |
-| Cliff and strait: `cliff-musandam-plateau`, `-road`, `-fjord` | 9 things listed (layered grey-brown limestone, stony plateau and track, sheer cliffs into the sea, calm blue-teal sea, haze, far shore a grey smudge, pale sky, no plants but a thorn tree, hard high sun) | not built yet |
-| Tankers: `tanker-side-wake`, `tanker-side-dark`, `tankers-at-anchor-haze` | 10 things (long and low, dark hull with red band, white bridge block aft, funnel band, deck pipe run, cranes amidships and raised bow, no names, all pointing one way at anchor, V wake under way, far ones grey bumps) | not built yet |
-| Gas station: `gas-iowa-canopy`, `gas-price-pylon`, `gas-price-board`, `gas-nozzle-filler` | 10 things (lit canopy with band, pump islands with posts, pumps with screens and black hoses, pylon board with blank top, lit prices ending in a small 9, DIESEL/REGULAR/PREMIUM rows, concrete forecourt, flat land and power poles, grain elevator, low shop) | not built yet |
-| Pickup: `pickup-side`, `pickup-rear` | 9 things (full-size crew cab 5.9 x 1.9 m, square grille, bed and tailgate, big wheels, arches and running board, big mirrors, fuel flap driver side ahead of the rear wheel, side on facing left, white paint) | not built yet |
-| Study: `study-abbotsford`, `study-canons-ashby`, `study-oak-fireplace` | 10 things (floor-to-ceiling oak bookcases, leather books with gold bands, tall bays and cornice, lacquer shine, fireplace in the book wall on the right, black firebox and logs, mantel clock and candlesticks, gilt portrait over it, pedestal desk, warm low light) | not built yet |
+| Cliff and strait: `cliff-musandam-plateau`, `-road`, `-fjord` | 9 things listed (layered grey-brown limestone, stony plateau and track, sheer cliffs into the sea, calm blue-teal sea, haze, far shore a grey smudge, pale sky, no plants but a thorn tree, hard high sun) | yes, all 9 ticked (8 Nov) |
+| Tankers: `tanker-side-wake`, `tanker-side-dark`, `tankers-at-anchor-haze` | 10 things (long and low, dark hull with red band, white bridge block aft, funnel band, deck pipe run, cranes amidships and raised bow, no names, all pointing one way at anchor, V wake under way, far ones grey bumps) | yes, all 10 ticked (8 Nov) |
+| Gas station: `gas-iowa-canopy`, `gas-price-pylon`, `gas-price-board`, `gas-nozzle-filler` | 10 things (lit canopy with band, pump islands with posts, pumps with screens and black hoses, pylon board with blank top, lit prices ending in a small 9, DIESEL/REGULAR/PREMIUM rows, concrete forecourt, flat land and power poles, grain elevator, low shop) | yes, all 10 ticked (8 Nov) |
+| Pickup: `pickup-side`, `pickup-rear` | 9 things (full-size crew cab 5.9 x 1.9 m, square grille, bed and tailgate, big wheels, arches and running board, big mirrors, fuel flap driver side ahead of the rear wheel, side on facing left, white paint) | yes, all 9 ticked; grille and bonnet out of the gas shot (rear half in frame) (8 Nov) |
+| Study: `study-abbotsford`, `study-canons-ashby`, `study-oak-fireplace` | 10 things (floor-to-ceiling oak bookcases, leather books with gold bands, tall bays and cornice, lacquer shine, fireplace in the book wall on the right, black firebox and logs, mantel clock and candlesticks, gilt portrait over it, pedestal desk, warm low light) | yes, all 10 ticked (8 Nov) |
 
-All lists in `source/ad_vanced_notice_comp.py` (`PLACES`), each photo's source in `references/ad-vanced-notice/sources.txt`; they become the film's `BENCHMARK` once the sets are built.
+All lists in `source/ad_vanced_notice_comp.py` (`PLACES`), each photo's source in `references/ad-vanced-notice/sources.txt`; now the ticked `BENCHMARK` in `source/ad_vanced_notice_sets.py` (8 Nov).
 
 Composition sheet sent: 7 Nov, `python3 source/ad_vanced_notice_comp.py comp OUT.jpg` (4 key shots, the cliff in two moments: study with the Hook Text band; cliff walk; cliff hit, Vance screen left, the tanker behind to his left; close-up, wreck over his left shoulder (screen right); gas station, arm round). Rough stand-ins: the driver faces the lens and the arm round is a hand on his shoulder; the build makes him glare up at the board.
 Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mantel, a mantel clock and candlesticks; a grain elevator, power poles and a low shop at the gas station; a white pickup.
@@ -148,10 +148,10 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 16 | all films | | Do the arms need a slight bend at the elbow? They are one long straight tube | done (8 Nov): the resting pose aimed the hand out of reach, so the arm was pulled dead straight. Now a soft bend; a small crease shows inside any bend over about 20 degrees. New kind |
 | 17 | all films | | The elbows bend inwards, and a bit too far, rather than a tiny bit outwards | done (8 Nov): why 16 went wrong: I angled the forearm out (the real carrying angle), which makes the elbow point in. Now the upper arm leans out from the shoulder and the forearm comes back in under it, about 10 degrees, matched to Sam's four rest photos (references/figure-rig/): elbow at the waist, hands beside the upper thigh, just clear of the jacket. Seen before (16) |
 | 18 | all films | | Tufts of fabric rise from the inside of the elbow when the arm is lifted and bent | done (8 Nov): the shoulder smoothing (note 14) filled every gap near the shoulder, and with the elbow bent up close to the shoulder it filled the inside of the elbow too. Now it fills only beside the body, never beside the forearm. Seen before (14) |
+| 19 | all sets | | Build the sets (Sam, 8 Nov) | done: one module, `source/ad_vanced_notice_sets.py`; each place ticked against its photos (rule 3), sizes clean. Changes from the composition: the study's back wall moved from 3.6 to 5 m back (at 3.6 m the desk hid the fire); the gas station looks over the pump island (its curb hides the men's feet; the man stands between the pump and his truck, as at a real pump), the board raised over the man's head, the two men a little left so the truck's rear wheel shows between them; two anchored tankers moved out from behind the headland (6 at anchor + the moving one). New kind |
+| 20 | all sets | | Things I added (Sam to OK) | Added: a buttoned oxblood leather chair behind Vance. Added: a layered limestone headland across the bay on the right. Added: a thorn tree on the cliff rim (left). Added: a yellow post at the pump island's end, a canopy column (left edge), power poles with wires, field strips. Added: the pump shows an empty holster (the nozzle is in the man's hand). The close-up's tanker is drawn as the wreck (fire and smoke come with the showstopper). |
 
-Rule proposals (waiting for Sam's number):
-- R1 (Sam, 7 Nov: "all future character models"): rulebook rule 81 (80 went to the sitting kit), "Arms and body are one piece: the sleeve grows out of the shoulder with one outline from the collar, over the shoulder and down the arm; no line, cap or step where the arm meets the body (only an armpit crease when the arm is lifted). Every cast sheet draws the arms exactly as the film does." Check: a shoulder-seam test in `linecheck.py` that fails on any ink line across the shoulder join, run on every cast sheet.
-  Extended 8 Nov (notes 15-17, "all character models"): "... Standing at rest, legs are straight in every view and the elbows bend a touch outward (upper arm out from the shoulder, forearm back in, hands beside the upper thigh), as in references/figure-rig/." Check: the cast sheet's side view fails if a standing knee sits more than 5 units off the hip-ankle line; the front view fails if a resting elbow sits inside the shoulder-wrist line.
+Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
 Decisions made:
 - Film name `ad-vanced-notice`; vertical 1080 x 1920 like the rest of the series.

@@ -45,6 +45,13 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # 1.8 m across and 25 m from the sea to the deck; an enclosed lifeboat 8.5 x 3 m; a helideck about 22 m across
     'rig deck block': (50.0, 24.0), 'rig jacket leg': (1.8, 25.0), 'enclosed lifeboat': (8.5, 3.0), 'helideck': (22.0, 1.2),
     'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
+    # Ad-Vanced Notice (8 Nov): a partners' pedestal desk ~1.8 x 0.78 m; a cut-crystal tumbler ~8.5 x 10 cm; a 2 x 3 ft
+    # desk flag; a stone fireplace surround ~1.3 m; library bookcases floor to cornice ~3.3 m, bays ~0.8 m; a VLCC
+    # 330 m long, ~9 m freeboard laden plus ~27 m of bridge and funnel; a full-size crew-cab pickup 5.9 x 1.95 m; a US
+    # dispenser ~1.17 x 2.2 m; a pylon price board ~2.6 x 2.6 m; a canopy clearance 4.9 m (16 ft); an acacia ~2.5 m
+    'pedestal desk': (1.8, 0.78), 'tumbler': (0.085, 0.1), 'desk flag': (0.915, 0.61), 'fireplace': (1.3, 1.3),
+    'bookcase': (0.8, 3.3), 'oil tanker': (330.0, 36.0), 'pickup truck': (5.9, 1.95), 'fuel pump': (1.17, 2.2),
+    'price sign': (2.6, 2.6), 'gas canopy': (8.5, 4.9), 'thorn tree': (2.5, 2.4),
 }
 
 
