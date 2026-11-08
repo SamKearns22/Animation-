@@ -1,283 +1,1569 @@
 #!/usr/bin/env python3
-"""Elder Scrolls: Swindon. A parody of the Elder Scrolls VI teaser: wind over soil uncovers a golden Elder Scroll by a
-drooling man face down by his lager; a Staffie clamps on his ankle; the camera rockets up to the Magic Roundabout,
-Swindon; SWINDON burns in. From satire_template.py (rule 58: no voices, no rooms). Notes: notes/elder-swindon.md.
+"""Elder Scrolls: Swindon. A parody of the Elder Scrolls VI: Sentinel name-reveal teaser, beat for beat to its sound.
+From the satire template (guides/satire.md). Notes: notes/elder-swindon.md.
 
-MAP (rule 61)
-- 45: STORY: shots and hits, HOOK, HAS, SHOT_CAST, the timings of every beat (gusts, scroll, packet, dog, climb)
-- 95: cameras per shot: shot 1 glide can -> face, shot 2 along the scroll, shot 3 packet, shot 4 straight down,
-      shot 5 the climb (width and centre eased; near-real hands over to flat 16.8-17.1), shot 6 held (aerial.held_cam)
-- 150: the man (leg jerks when the dog tugs), the dog (charge, clamp, tug, shake), the scroll, the packet's tumble
-- 215: picture(t): near-real (comp.near_real's parts) or flat (aerial.draw + the man layer), blended at the hand-over
-- 280: overlay (title from elder_swindon_title), draw_order, scene, checks, main
-Parts: world and props source/elder_swindon_comp.py; ground source/elder_swindon_ground.py; roundabout
-source/elder_swindon_aerial.py; title source/elder_swindon_title.py.
+MAP (rule 61: a note is answered by reading only these lines)
+- STORY (top): shots, timing, HOOK, HAS, the brief's lists
+- world: the man, scroll, can, packet, litter, lamp post, soil patch (WORLD block); roundabout geometry (AERIAL block)
+- cameras: cam_for (shot 1 glide, shot 2 glide, shot 3, shot 4, the climb, shot 6 drift)
+- the man (man_at: the leg jerked by the dog), face_close (his face on its cheek, the close shots)
+- the dog: dog_at (charge, clamp, tug and shake), draw_dog
+- the scroll: scroll_cover (soil stripped off in gusts), glint; the packet: packet_at, draw_packet (tumbling)
+- near_real: the near-real frame (ground regions, lamp shadow, props, man, dog, dust)
+- the aerial: traffic (route network, give-way sim), aerial_flat (the Magic Roundabout, flat house style)
+- title: rings, "The Elder Scrolls VI", SWINDON burning in letter by letter (overlay)
+- picture / overlay / draw_order / scene / checks / main
 
     python3 source/elder_swindon.py stills OUT_DIR T [T ...]
-    python3 source/elder_swindon.py final OUT.mp4 [--small] [--span T0 T1] [--reuse --redo SHOT]
+    python3 source/elder_swindon.py sheet OUT.jpg T [T ...]      labelled check sheet (1080 px wide)
+    python3 source/elder_swindon.py check
+    python3 source/elder_swindon.py final OUT.mp4 [--small] [--span T0 T1]
 """
+import hashlib
 import math
 import os
 import sys
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import burnham as B                    # noqa: E402
-import film_engine as E                # noqa: E402
-import mossad_audio as MA              # noqa: E402
-import lying as L                      # noqa: E402
-import elder_swindon_comp as C         # noqa: E402
-import elder_swindon_ground as G       # noqa: E402
-import elder_swindon_aerial as A       # noqa: E402
-import elder_swindon_title as T        # noqa: E402
+import burnham as B              # noqa: E402
+import mossad as M               # noqa: E402,F401  (brows, mouths, hair; patched into burnham on import)
+import figure as F               # noqa: E402
+import mossad_audio as MA        # noqa: E402
+import filmkit                   # noqa: E402
+import film_engine as E          # noqa: E402
+import sets as S                 # noqa: E402
+import lying as L                # noqa: E402
+import elder_swindon_comp as C   # noqa: E402  the composition sheet's props, dog, aerial (approved 8 Nov)
+import elder_swindon_ground as G  # noqa: E402  the near-real ground
+from satire_style import install_circle_hands   # noqa: E402
+from ed import INK               # noqa: E402
 
-FPS, SR = 12, MA.SR
+install_circle_hands(B)
+FPS, SR = 24, MA.SR              # 24, not the satire 12: slow camera glides judder at 12 (as Flying Whales)
 
 # =============================================== STORY ===============================================
-NAME = 'elder-swindon'
+NAME = 'elder_swindon'
+NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'elder-swindon.md')
 HAS = {'people', 'effects', 'props'}
-HOOK = (C.HOOK, {'y': 1240, 'until': 4.0})           # finish.py reads it (rule 75); clear of the can and his face
-SUBTITLES_AT_FINISH = True
+DUR = 30.04                                   # the teaser's sound, as is; finish.py adds the 1.6 s sign-off
+BLACK_AT = DUR
+HOOK = ('Elder Scrolls reveals new location!', {'y': 1240, 'until': 4.0})
+SUBTITLES_AT_FINISH = False                   # no voices, no subtitles
 SUBS_IN_PICTURE = False
-LINES = []                                           # no voices
-AUDIO = os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-audio.m4a')
-HITS = [1.07, 2.49, 6.57, 7.37, 7.79, 11.43, 13.86, 15.08, 17.45, 19.86, 21.93, 24.76, 27.19]
-SHOTS = [('1', 0.0, 7.37), ('2', 7.37, 13.86), ('3', 13.86, 15.08), ('4', 15.08, 16.50), ('5', 16.50, 17.45),
-         ('6', 17.45, 30.04)]
-DUR = 30.04
-SHOT_CAST = {'1': ['DROOLER'], '2': ['DROOLER'], '4': ['DROOLER', 'STAFFIE'], '5': ['DROOLER', 'STAFFIE'],
-             '6': ['DROOLER']}
-GUSTS = [1.07, 2.49, 6.57, 7.37]                    # dust blows harder on these hits
-SCROLL_T = (7.37, 9.2)                               # the gust strips the soil off it
-GLINT_T = 7.79                                       # the gold catches the sun
-DOG_IN, DOG_CLAMP = 15.30, 15.85                     # charges in; clamps on his left ankle
-CLIMB = (16.50, 17.45)                               # the camera rockets up, lands on the hit
-HANDOVER = (16.80, 17.10)                            # near-real gives way to flat (Showstopper element 5)
-W0, W1 = 2.6, 118.0                                  # frame width (metres) straight down at the start and end
-# =====================================================================================================
+LINES = []
+HITS = (1.07, 2.49, 6.57, 7.37, 7.79, 11.43, 13.86, 15.08, 17.45, 19.86, 21.93, 24.76, 27.19)   # the sound's hits
+SHOTS = [('1 can-face', 0.0, 7.37), ('2 scroll', 7.37, 13.86), ('3 packet', 13.86, 15.08),
+         ('4 above', 15.08, 16.50), ('5 climb', 16.50, 17.45), ('6 roundabout', 17.45, DUR)]
+SHOT_CAST = {'1 can-face': ['DROOLER'], '2 scroll': ['SCROLL'], '3 packet': ['PACKET', 'SCROLL'],
+             '4 above': ['DROOLER', 'STAFFIE', 'SCROLL', 'CAN', 'PACKET'], '5 climb': ['DROOLER', 'STAFFIE'],
+             '6 roundabout': ['DROOLER']}
+BENCHMARK = [dict(place='Magic Roundabout', refs=['references/elder-swindon/magic-roundabout-1.jpg',
+                                                  'references/elder-swindon/magic-roundabout-2.jpg',
+                                                  'references/elder-swindon/magic-roundabout-3-high.jpg',
+                                                  'references/elder-swindon/magic-roundabout-4-stadium.jpg',
+                                                  'references/elder-swindon/magic-roundabout-5-above.jpg'], at=24.0, items=[
+    ('one big central circle: dark paving, white kerb, tall lamp post with its long shadow', 'aerial_flat: island, kerb, LAMP, shadow'),
+    ('five mini roundabouts round it, white domes in white rings', 'MINIS: dome and ring'),
+    ('traffic: anticlockwise round the inner ring, clockwise round each mini; dozens of cars, a bus', 'traffic(): routes, sim'),
+    ('dense white markings: give-way dashes, arrows, hatching', 'aerial_flat: dashes, arrows, hatched areas'),
+    ('raised kerbed islands between the minis', 'aerial_flat: islands'),
+    ('zebra crossings on the approaches', 'aerial_flat: zebras'),
+    ('grass verges with trees, five roads fanning out', 'aerial_flat: arms, verges, trees'),
+    ('round it: terraced streets of brown and grey roofs with back gardens', '_estate: terraces, gardens'),
+    ('a big white-roofed shed and a car park', 'aerial_flat: SHED, CARPARK'),
+    ('the County Ground stadium next door: pitch, red seats, floodlights', 'aerial_flat: STADIUM'),
+    ('grass and kerbed islands between the arms, not one sheet of tarmac', 'aerial_flat: inner ring, mini rings, arms'),
+])]
+EFFECTS = []                                  # filled below the drawing code (each with its test drawing: rule 15)
+JOKE_PROPS = [('CAN', [1.0, 3.0], (-0.61, 0.03, -0.92), 0.15), ('PACKET', [14.9], lambda t: packet_at(t)[0], 0.13)]
+ALLOWED_CONTACTS = [('STAFFIE*', 'DROOLER*', 15.62, DUR, 'the Staffie clamps his ankle (Sam, 8 Nov)'),
+                    ('DROOLER*', 'DROOLER*', 0.0, DUR, 'one lying body: its own parts touch')]
+ALLOWED_POPS = [('SCROLL', 7.30, 7.80, 'uncovered by the wind: it was under the soil')]
+TOUCHES, FREE_MOVES, RESTS = [], [('PACKET', 13.86, 14.95, 'blown along by the wind, tumbling')], []
+ORDER_SWAPS = []
+KEEP_CLEAR = []
+PROP_SIZES = []
+OUTFIT = {'DROOLER': {}}                      # a tracksuit: no skirt, jacket hem or cuffs to place
+HEIGHTS = {'DROOLER': 1.78}
+LINE_OK = [('DROOLER', 'edge with no line', 578, 553)]   # the kit's flat shadow side on the cheek (guides/satire.md)
+# ====================================================================================================
+
+# ------------------------------------------------------------------------------------------------ WORLD (metres)
+MAN = dict(C.MAN, name='DROOLER')
+SCROLL, CAN, LITTER = C.SCROLL, C.CAN, C.LITTER
+PACKET_REST = (-1.02, -1.34, 35.0)              # where the packet comes to rest, past the scroll's tip (wind: -z)
+SUN_XZ = np.array([0.857, 0.514])                # shadows fall this way (away from the low sun)
+LAMP = (-2.93, -1.24)                            # the lamp post, centre of the island; its shadow passes his legs
+LAMP_H = 18.0
+SHADOW_LEN = LAMP_H / math.tan(math.radians(21))
+PATCH_C = (-0.35, -0.25)                         # the soil-and-grass patch round him (Q2)
 
 
-def sm(a, b, t):
-    u = min(1.0, max(0.0, (t - a) / (b - a)))
+def patch_r(th):
+    return 2.9 + 0.45 * np.sin(3 * th + 1.0) + 0.3 * np.sin(5 * th + 2.0) + 0.15 * np.sin(9 * th)
+
+
+def in_patch(X, Z):
+    dx, dz = X - PATCH_C[0], Z - PATCH_C[1]
+    return np.hypot(dx, dz) - patch_r(np.arctan2(dz, dx))   # < 0 inside
+
+
+def lamp_sun(X, Z):
+    """Sunlight let through at each ground point: the lamp post's long shadow (pole and head), soft-edged."""
+    px, pz = X - LAMP[0], Z - LAMP[1]
+    s = px * SUN_XZ[0] + pz * SUN_XZ[1]
+    n = -px * SUN_XZ[1] + pz * SUN_XZ[0]
+    pole = np.clip(1 - (np.abs(n) - 0.14) / 0.04, 0, 1) * (s > 0) * (s < SHADOW_LEN)
+    head = np.clip(1 - (np.hypot(s - SHADOW_LEN, n * 1.6) - 0.9) / 0.1, 0, 1)
+    return 1 - 0.78 * np.maximum(pole, head)
+
+
+# map coords (metres; mx screen right, my screen down in the top-down shots) <-> world: x = -mx, z = my
+def world(mx, my):
+    return (LAMP[0] - mx, LAMP[1] + my)
+
+
+def ease(u):
+    u = min(1.0, max(0.0, u))
     return u * u * (3 - 2 * u)
 
 
+def keys(t, ks):
+    """Eased in-between of keyframes [(t, (values...))]."""
+    if t <= ks[0][0]:
+        return ks[0][1]
+    for (a, va), (b, vb) in zip(ks, ks[1:]):
+        if t <= b:
+            u = ease((t - a) / (b - a))
+            return tuple(x + (y - x) * u for x, y in zip(va, vb))
+    return ks[-1][1]
+
+
+def gust(t):
+    """How hard the wind blows (0..1): gusts on the sound's hits (1.07, 2.49, 6.57, 7.37 strips the scroll)."""
+    g = 0.15
+    for h, a in ((1.07, 0.6), (2.49, 0.7), (6.57, 1.0), (7.37, 1.0), (9.0, 0.6), (10.4, 0.7), (11.43, 0.6),
+                 (13.86, 0.9)):
+        g = max(g, a * math.exp(-((t - h - 0.25) / 0.45) ** 2) * (t > h - 0.05))
+    return g
+
+
+# ------------------------------------------------------------------------------------------------ cameras
 def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
 
 
-# ------------------------------------------------------------------------------------------------ cameras
+SHOT1 = [(0.0, (-0.62, -0.98, 225, 70, 0.62)), (0.6, (-0.60, -0.99, 222, 70, 0.61)),     # the approved opening
+         (2.2, (-0.38, -1.00, 210, 66, 0.56)), (3.5, (-0.13, -0.92, 192, 58, 0.50)),     # along the arm, to the face
+         (7.37, (-0.12, -0.90, 186, 56, 0.43))]                                          # creeping in
+SHOT2 = [(7.37, (-0.84, -1.14, 180, 68, 0.40)), (9.6, (-0.86, -1.04, 180, 66, 0.38)),    # the tip, the end cap
+         (11.43, (-0.86, -0.86, 180, 64, 0.36)), (13.86, (-0.86, -0.76, 180, 64, 0.37))]  # the case
+SHOT3 = [(13.86, (-0.92, -0.92, 180, 66, 0.95)), (15.08, (-0.92, -0.95, 180, 66, 0.92))]
+TOP0 = (0.0, -0.25, 2.6)                          # shot 4: straight down, centre (x, z), metres across
+END_W = 168.0                                    # shot 6: the whole roundabout (1080 px = 168 m)
+END_C = world(0.0, 60.0)                         # its centre 384 px above the frame's middle (room for the title)
+
+
 def climb_u(t):
-    """0..1 through the climb: slow start (the dog reads), fast middle, eased stop on 17.45."""
-    u = min(1.0, max(0.0, (t - CLIMB[0]) / (CLIMB[1] - CLIMB[0])))
-    return u ** 2.2 * (3 - 2 * u) if u < 1 else 1.0
+    """The climb's progress 0..1: slow start (the dog reads), fast middle, eased stop on the 17.45 hit."""
+    u = min(1.0, max(0.0, (t - 16.50) / 0.95))
+    return ease(u ** 1.25)
 
 
-def top_cam(t):
-    u = climb_u(t)
-    width = W0 * (W1 / W0) ** u
-    end = A.held_cam(CLIMB[1]).at
-    g = (width - W0) / (W1 - W0)
-    x = 0.0 + (end[0] - 0.0) * g
-    z = -0.3 + (end[2] + 0.3) * g
-    d = width * 3.0 / W0
-    return C.S.Cam((x, d, z + d * math.cos(math.radians(89.6))), (x, 0.0, z), focal=1080 * d / width)
+def top_view(t):
+    """(centre x, z, width) of the straight-down camera, shots 4-6."""
+    if t < 16.50:
+        return TOP0[0], TOP0[1] + 0.03 * (t - 15.08), TOP0[2] - 0.06 * (t - 15.08)
+    if t < 17.45:                                      # the centre's offset grows with the width, so he stays
+        e = climb_u(t)                                   # in the frame all the way up
+        w0 = TOP0[2] - 0.06 * 1.42
+        w = w0 * (END_W / w0) ** e
+        c0 = np.array([TOP0[0], TOP0[1] + 0.03 * 1.42])
+        off = (np.array(END_C) - c0) / END_W * w * e ** 0.5
+        return c0[0] + off[0], c0[1] + off[1], w
+    u = (t - 17.45) / (DUR - 17.45)                    # shot 6: a slow drift, as the teaser's held end card
+    mx, my = 3.0 * u, -2.0 * u
+    x, z = world(mx, 60.0 + my)
+    return x, z, END_W * (1 - 0.06 * u)
 
 
 def cam_for(t):
     s = shot_of(t)
-    if s == '1':                                         # from the can and his splayed hand along the arm to his face
-        u = sm(0.3, 3.6, t)
-        at = (-0.62 + 0.52 * u, -0.98 + 0.30 * u)
-        return C.orbit(at, 225, 70, 0.9 + 0.1 * u, 0.62 + 0.12 * u)
-    if s == '2':                                         # along the scroll: spiked tip, grips, the case, the end cap
-        u = sm(8.2, 13.6, t)
-        return C.orbit((-0.80, -0.50 - 0.64 * u), 225 + 8 * u, 70, 0.9, 0.62)
-    if s == '3':                                         # the packet tumbling past the scroll
-        u = (t - 13.86) / 1.22
-        return C.orbit((-0.78, -0.95 + 0.25 * u), 230, 70, 1.0, 0.8)
-    if s in ('4', '5'):
-        return top_cam(t)
-    return A.held_cam(t)
+    if s[0] in '123':
+        ks = SHOT1 if s[0] == '1' else SHOT2 if s[0] == '2' else SHOT3
+        x, z, az, el, w = keys(t, ks)
+        return C.orbit((x, z), az, el, 0.9, w)
+    x, z, w = top_view(t)
+    return C.topcam(x, z, w * 3.0 / 2.6, w)
 
 
-# ------------------------------------------------------------------------------------------------ the man, the dog
+# ------------------------------------------------------------------------------------------------ the man
+_K0 = None
+
+
 def man_at(t):
-    """The man face down, out cold; only his left leg jerks as the dog tugs."""
-    k, surf = C.man()
-    k = {a: (np.array(b, float).copy() if hasattr(b, '__len__') else b) for a, b in k.items()}
-    p = dog_state(t)
-    if p and p['clamped']:
-        a = math.radians(p['heading'])
-        pull = np.array([math.cos(a), 0, math.sin(a)]) * 0.05 * p['tug']
-        k['anL'] = k['anL'] + pull
-        k['knL'] = k['knL'] + pull * 0.45
+    """His body at t: face down, out cold (Sam, 8 Nov); only the left leg jerks with the dog's tugging."""
+    global _K0
+    if _K0 is None:
+        _K0 = C.man()
+    k0, surf = _K0
+    d = dog_at(t)
+    if d is None or not d['clamped']:
+        return k0, surf
+    k = dict(k0)
+    pull = np.array([d['jaw'][0] - d['jaw0'][0], 0.0, d['jaw'][1] - d['jaw0'][1]])
+    k['anL'] = k0['anL'] + pull
+    k['knL'] = k0['knL'] + pull * 0.35
     return k, surf
 
 
-def dog_state(t):
+def face_close(pil, cam, k, sp, t):
+    """His face on its cheek, for the close shots (lying.draw's face reads poorly face down): the house-style head
+    (burnham.head: eyes shut, mouth hanging open) laid on its side at the head's place and size, its top along the
+    head's own up. Returns the mouth's lower corner on the canvas (for the drool)."""
+    ss = B.SS
+    (hx, hy), kk = cam.project(tuple(k['head']))
+    (ux, uy), _ = cam.project(tuple(k['head'] + k['hup'] * 0.1))
+    up = np.array([ux - hx, uy - hy])
+    up /= np.linalg.norm(up) + 1e-9
+    side = np.array([-up[1], up[0]])                     # the face's across, on screen
+    # which way is the ground: the cheek that is down goes towards screen down
+    if side[1] < 0:
+        side = -side
+    ppu = float(np.squeeze(kk * L.M * ss))               # canvas pixels per person unit
+    q = dict(sp, blink=True, mouth='open', look=0.0, turn=0.0)
+    tex = L._head_tex(q, t, 'front', kk * L.M)
+    timg = Image.fromarray(tex.astype(np.uint8), 'RGBA')
+    sc = ppu / L.TEX_PPU                                 # canvas pixels per texel
+    U = side * sc * 0.88                                 # texel u -> canvas (squashed a little across: foreshortened)
+    V = -up * sc                                         # texel v (down) -> canvas
+    cx, cy = hx * ss, hy * ss
+    R = 140 * ppu
+    x0, y0 = int(cx - R), int(cy - R)
+    size = (int(2 * R), int(2 * R))
+    # inverse affine: canvas (X, Y) -> texel (u, v):  [X-cx, Y-cy] = U*(u-384) + V*(v-384)
+    det = U[0] * V[1] - V[0] * U[1]                      # the 2 x 2 inverse by hand: numpy's linear algebra can
+    a, b = V[1] / det, -V[0] / det                       # lock up inside pre-flight's forked workers (it hung there)
+    c, d = -U[1] / det, U[0] / det
+    ox, oy = x0 - cx, y0 - cy
+    coeffs = (a, b, a * ox + b * oy + 384, c, d, c * ox + d * oy + 384)
+    lay = timg.transform(size, Image.AFFINE, coeffs, resample=Image.BICUBIC)
+    # the cheek pressed into the soil: a soft contact shadow under the down side
+    sh = Image.new('RGBA', size, (0, 0, 0, 0))
+    gx, gy = R + side[0] * 70 * ppu, R + side[1] * 70 * ppu
+    ImageDraw.Draw(sh).ellipse([gx - 80 * ppu, gy - 26 * ppu, gx + 80 * ppu, gy + 26 * ppu], fill=(30, 22, 16, 140))
+    sh = sh.filter(ImageFilter.GaussianBlur(8 * ppu))
+    pil.alpha_composite(sh, (x0, y0))
+    pil.alpha_composite(lay, (x0, y0))
+    # mouth: burnham draws it about 60 units below the head's centre; its lower corner is on the ground side
+    mouth = np.array([cx, cy]) + (-up) * 62 * ppu * 1.0 + side * 16 * ppu * 0.88
+    return mouth, ppu
+
+
+def drool_close(pil, mouth, ppu, t):
+    """A wet string from the corner of his mouth to a dark damp patch on the soil, sagging in the wind; a drop runs
+    down it on the 6.57 hit and the patch spreads."""
+    d = ImageDraw.Draw(pil)
+    mx, my = mouth
+    grow = 1.0 + 0.25 * ease((t - 6.6) / 0.6)
+    pool = (mx + 6 * ppu, my + 44 * ppu)
+    R = 30 * ppu * grow
+    d.ellipse([pool[0] - R, pool[1] - R * 0.45, pool[0] + R, pool[1] + R * 0.45], fill=(58, 42, 32, 190))
+    d.ellipse([pool[0] - R * 0.5, pool[1] - R * 0.25, pool[0] - R * 0.05, pool[1]], fill=(150, 150, 150, 90))
+    sway = 3 * ppu * math.sin(t * 2.3) + 6 * ppu * gust(t)
+    mid = (mx + 8 * ppu + sway, my + 22 * ppu)
+    w = max(2, int(3.5 * ppu))
+    d.line([(mx, my), mid, pool], fill=(206, 220, 226, 230), width=w, joint='curve')
+    d.line([(mx + w * 0.3, my), (mid[0] + w * 0.3, mid[1])], fill=(250, 252, 255, 200), width=max(1, w // 3))
+    if 6.57 <= t < 6.95:                                 # the drip
+        u = (t - 6.57) / 0.38
+        a, b = ((mx, my), mid) if u < 0.5 else (mid, pool)
+        v = (u * 2) % 1.0
+        px, py = a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v
+        r = 4.5 * ppu
+        d.ellipse([px - r, py - r * 1.2, px + r, py + r * 1.2], fill=(214, 228, 234, 240))
+        d.ellipse([px - r * 0.5, py - r * 0.8, px, py - r * 0.2], fill=(255, 255, 255, 230))
+
+
+# ------------------------------------------------------------------------------------------------ the dog
+DOG_IN, DOG_CLAMP = 15.25, 15.72
+DOG_HEAD = 50.0                                  # heading (degrees) from his head to his tail, braced away
+
+
+def dog_at(t):
+    """The Staffie (brindle, Sam 8 Nov): charges in from bottom left (15.25), clamps on the left ankle (15.72),
+    then tugs and shakes, braced, to the end. Returns jaw (x, z), heading, gait phase, clamped; None before."""
     if t < DOG_IN:
         return None
-    k0, _ = C.man()
-    an = np.array(k0['anL'], float)
-    heading = 50.0
-    clamp_at = (an[0] + 0.02, an[2] + 0.04)
-    if t < DOG_CLAMP:                                    # charging in head first from the bottom left
+    k0 = _K0[0] if _K0 else C.man()[0]
+    an = k0['anL']
+    jaw0 = (an[0] + 0.02, an[2] + 0.04)
+    a = math.radians(DOG_HEAD)
+    back = np.array([math.cos(a), math.sin(a)])
+    if t < DOG_CLAMP:
         u = (t - DOG_IN) / (DOG_CLAMP - DOG_IN)
-        dist = 2.6 * (1 - u) ** 1.3
-        a = math.radians(heading)
-        at = (clamp_at[0] + math.cos(a) * dist, clamp_at[1] + math.sin(a) * dist)
-        return dict(at=at, heading=heading + 6 * math.sin(t * 20), pull=0.0, run=t * 26, clamped=False, tug=0.0)
-    s = t - DOG_CLAMP                                    # clamped: tugging back, shaking its head side to side
-    tug = 0.5 + 0.5 * math.sin(s * 9.0)
-    a = math.radians(heading)
-    back = 0.05 * tug
-    at = (clamp_at[0] + math.cos(a) * back, clamp_at[1] + math.sin(a) * back)
-    return dict(at=at, heading=heading + 14 * math.sin(s * 13.0), pull=tug, run=None, clamped=True, tug=tug)
+        dist = 1.55 * (1 - u) ** 1.1                    # in from the frame's edge, flat out, a skid at the end
+        jaw = (jaw0[0] + back[0] * dist, jaw0[1] + back[1] * dist)
+        return dict(jaw=jaw, jaw0=jaw0, heading=DOG_HEAD + 6 * math.sin(u * 9), gait=(t - DOG_IN) * 7.0,
+                    clamped=False, run=1.0)
+    s = t - DOG_CLAMP
+    tug = 0.07 * (0.5 - 0.5 * math.cos(s * 2 * math.pi * 1.6)) + 0.03 * min(1, s / 0.2)   # backing off, heaving
+    shake = 13 * math.sin(s * 2 * math.pi * 4.2) * (0.6 + 0.4 * math.sin(s * 2.1) ** 2)   # head shaking side to side
+    jolt = 0.04 * math.exp(-s / 0.08)                                                       # the hit as he clamps
+    n = np.array([-back[1], back[0]])
+    side = 0.025 * math.sin(math.radians(shake) * 3)
+    jaw = (jaw0[0] + back[0] * (tug - jolt) + n[0] * side, jaw0[1] + back[1] * (tug - jolt) + n[1] * side)
+    return dict(jaw=jaw, jaw0=jaw0, heading=DOG_HEAD + shake, gait=s * 3.0, clamped=True, run=0.25)
 
 
-def draw_dog(pil, cam, t):
-    p = dog_state(t)
-    if p:
-        C.dog(pil, cam, p['at'], p['heading'], p['pull'], run=p['run'])
+ST = C.STAFFIE
 
 
-# ------------------------------------------------------------------------------------------------ props
-def scroll_bury(t):
-    if t < SCROLL_T[0]:
-        return 1.0
-    return 1.0 - 0.55 * sm(SCROLL_T[0], SCROLL_T[0] + 0.4, t) - 0.45 * sm(SCROLL_T[0] + 0.4, 11.0, t)
+def draw_dog(pil, cam, d):
+    """The Staffie from above, house style (flat colour, one outline): the comp's dog with running legs, the
+    head swinging on the clamp."""
+    hx, hz = d['jaw']
+    a = math.radians(d['heading'])
+    fx, fz = math.cos(a), math.sin(a)
+    sx, sz = -fz, fx
+    ss = B.SS
+
+    def W(u, v):
+        return (hx + fx * u + sx * v, 0.25, hz + fz * u + sz * v)
+
+    def P(u, v):
+        (x, y), _ = cam.project(W(u, v))
+        return (x * ss, y * ss)
+    (_, _), kk = cam.project(W(0.2, 0))
+    lw = max(1, int(min(2.6, max(0.6, kk / 300)) * ss))
+    dr = ImageDraw.Draw(pil)
+
+    def poly(pts, fill):
+        Q = [P(*p) for p in pts]
+        dr.polygon(Q, fill=fill)
+        dr.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
+    sh = []
+    for u, v in [(0.0, -0.12), (0.5, -0.15), (0.6, 0.0), (0.5, 0.15), (0.0, 0.12)]:
+        (x, y), _ = cam.project((W(u, v)[0] + 0.08 * 0.857, 0.0, W(u, v)[2] + 0.08 * 0.514))
+        sh.append((x * ss, y * ss))
+    dr.polygon(sh, fill=(30, 22, 16, 110))
+    g, run = d['gait'], d['run']
+    for i, (u, v, du, dv) in enumerate(((0.14, -0.10, -0.06, -0.075), (0.14, 0.10, -0.06, 0.075),
+                                        (0.45, -0.09, 0.07, -0.07), (0.45, 0.09, 0.07, 0.07))):
+        ph = g * 2 * math.pi + (0, math.pi, math.pi * 0.5, math.pi * 1.5)[i]
+        sw = 0.08 * run * math.sin(ph)                   # legs reaching and pushing (the charge), shuffling (the tug)
+        tip = (u + du + sw, v + dv)
+        poly([(u - 0.04, v * 0.8), (tip[0] - 0.028, tip[1]), (tip[0] + 0.028, tip[1]), (u + 0.04, v * 0.8)], ST['coat'])
+        poly([(tip[0] - 0.024, tip[1] - 0.008 * np.sign(v)), (tip[0] + 0.024, tip[1] - 0.008 * np.sign(v)),
+              (tip[0] + 0.02, tip[1] + 0.016 * np.sign(v)), (tip[0] - 0.02, tip[1] + 0.016 * np.sign(v))],
+             ST['chest'])                                # white paws, dug in
+    wag = 0.02 * math.sin(g * 6)
+    poly([(0.50, -0.02), (0.64, -0.006 + wag), (0.64, 0.006 + wag), (0.50, 0.02)], ST['coat'])
+    body = [(0.10, -0.10), (0.17, -0.155), (0.28, -0.13), (0.40, -0.10), (0.50, -0.11), (0.55, -0.06), (0.56, 0.0),
+            (0.55, 0.06), (0.50, 0.11), (0.40, 0.10), (0.28, 0.13), (0.17, 0.155), (0.10, 0.10)]
+    poly(body, ST['coat'])
+    for u in (0.24, 0.31, 0.38, 0.45):                   # brindle stripes across the back
+        a0, a1 = P(u, -0.08), P(u + 0.02, 0.08)
+        dr.line([a0, a1], fill=ST['dark'], width=lw)
+    head = [(-0.05, -0.07), (-0.02, -0.12), (0.05, -0.135), (0.10, -0.11), (0.12, -0.05), (0.12, 0.05), (0.10, 0.11),
+            (0.05, 0.135), (-0.02, 0.12), (-0.05, 0.07)]
+    poly(head, ST['coat'])                               # the wide head, a neck between it and the shoulders
+    for v in (-0.06, 0.06):                              # brindle on the head
+        dr.line([P(0.03, v), P(0.09, v * 1.3)], fill=ST['dark'], width=max(1, int(lw * 1.2)))
+    poly([(-0.10, -0.055), (-0.04, -0.075), (-0.04, 0.075), (-0.10, 0.055)], ST['dark'])
+    poly([(-0.02, -0.018), (0.10, -0.012), (0.10, 0.012), (-0.02, 0.018)], ST['chest'])     # the white blaze
+    for v in (-1, 1):                                    # small rose ears, folded back flat (angry)
+        poly([(0.075, v * 0.10), (0.125, v * 0.135), (0.125, v * 0.085)], ST['dark'])
+    nose = P(-0.105, 0.0)
+    r = 0.016 * kk * ss
+    dr.ellipse([nose[0] - r, nose[1] - r, nose[0] + r, nose[1] + r], fill=ST['nose'])
+    for v in (-0.05, 0.05):                              # eyes narrowed, brows down: angry
+        ex, ey = P(0.02, v)
+        r = 0.012 * kk * ss
+        dr.ellipse([ex - r, ey - r * 0.5, ex + r, ey + r * 0.5], fill=(20, 16, 14))
+        dr.line([P(-0.005, v * 0.6), P(0.0, v * 1.4)], fill=INK, width=max(1, int(lw * 1.2)))
+
+
+# ------------------------------------------------------------------------------------------------ scroll, packet
+def scroll_cover(t):
+    """How buried the scroll still is: the reveal front runs from the far tip (t=1, the camera's start) back along
+    it in gust steps, 7.37 to about 13.5 (the teaser's staff is fully out by 14 s). -1: all out; >1: all under."""
+    if t < 7.37:
+        return 2.0
+    steps = ((7.37, 0.24), (9.0, 0.18), (10.4, 0.24), (11.43, 0.20), (12.6, 0.24))
+    f = 1.05
+    for h, dv in steps:
+        f -= dv * ease((t - h) / 0.55)
+    return f
+
+
+def lying_rev(img, cam, a, b, prof, mat, cover=None, seed=0, glow=0.0, cam_along=0.0):
+    """comp.lying_rev with the soil laid in the object's own coordinates (so it never swims as the camera glides)
+    and the shine sliding with the camera along it (rule 39). cover: the reveal front (scroll_cover) or None."""
+    ss = B.SS
+    h, w, _ = img.shape
+    (ax, ay), k = cam.project((a[0], 0.02, a[1]))
+    (bx, by), _ = cam.project((b[0], 0.02, b[1]))
+    ax, ay, bx, by, k = ax * ss, ay * ss, bx * ss, by * ss, k * ss
+    Lp = math.hypot(bx - ax, by - ay)
+    if Lp < 1:
+        return img
+    Lm = math.hypot(b[0] - a[0], b[1] - a[1])
+    dx, dy = (bx - ax) / Lp, (by - ay) / Lp
+    rmax = max(prof(t)[0] for t in np.linspace(0, 1, 200)) * k
+    x0, x1 = int(max(0, min(ax, bx) - rmax - 2)), int(min(w, max(ax, bx) + rmax + 2))
+    y0, y1 = int(max(0, min(ay, by) - rmax - 2)), int(min(h, max(ay, by) + rmax + 2))
+    if x1 <= x0 or y1 <= y0:
+        return img
+    ys, xs = np.mgrid[y0:y1, x0:x1]
+    px, py = xs + 0.5 - ax, ys + 0.5 - ay
+    t = (px * dx + py * dy) / Lp
+    s = (-px * dy + py * dx)
+    tt = np.clip(t, 0, 1)
+    tab = np.array([prof(v)[0] for v in np.linspace(0, 1, 512)]) * k
+    kinds = np.array([prof(v)[1] for v in np.linspace(0, 1, 512)])
+    idx = np.clip((tt * 511).astype(int), 0, 511)
+    r = tab[idx]
+    inside = (t >= 0) & (t <= 1) & (np.abs(s) < r)
+    nrm = np.where(inside, s / np.maximum(r, 1e-6), 0)
+    if cover is not None:
+        nz = G.noise(tt * Lm, nrm * 0.03, 0.025, seed + 40)
+        under = inside & (((1 - tt) - 0.12 * nz) > (1 - cover)) | inside & (nrm > 0.62 + 0.22 * nz)
+    else:
+        under = np.zeros_like(inside)
+    vis = inside & ~under
+    sh = np.zeros((y1 - y0, x1 - x0))
+    off = 0.6
+    s2 = (-(px - r * off) * dy + (py - r * off * 0.6) * dx)
+    t2 = ((px - r * off) * dx + (py - r * off * 0.6) * dy) / Lp
+    sh[(t2 >= 0) & (t2 <= 1) & (np.abs(s2) < r * 1.05)] = 1
+    if cover is not None:                                # the soil over it casts no shadow of the scroll
+        sh *= ~((((1 - np.clip(t2, 0, 1)) > (1 - cover))))
+    sh = np.asarray(Image.fromarray((sh * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(3 * ss)), float) / 255
+    reg = img[y0:y1, x0:x1]
+    soil0 = reg.copy()
+    reg *= (1 - 0.55 * sh)[..., None]
+    out = reg.copy()
+    slide = np.exp(-((tt * Lm - cam_along) / 0.12) ** 2)   # the sun's glow on the gold slides with the camera
+    for kind in set(kinds.tolist()):
+        sel = vis & (kinds[idx] == kind)
+        if not sel.any():
+            continue
+        base, metal, spec = mat(kind, tt[sel], nrm[sel])
+        if metal:
+            spec = spec * (0.75 + 0.6 * slide[sel] + glow)
+        out[sel] = C._shade(base, nrm[sel], metal, spec)
+    if cover is not None and (inside & under).any():     # soil heaped over it: the ground, a little proud (it
+        un = inside & under                              # catches the sun), and a soft dark lip on the metal
+        out[un] = np.clip(soil0[un] * (1.06 + 0.10 * (-nrm[un])[:, None]), 0, 1)
+        edge = np.asarray(Image.fromarray(un.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(5)), bool) & vis
+        out[edge] *= 0.75
+    reg[:] = out
+    return img
+
+
+def _prof_can(t):
+    if t < 0.03 or t > 0.97:
+        return 0.029, 'rim'
+    return 0.033, 'body'
+
+
+def _can_label():
+    """The label: silver, a red band, EXPORT / LAGER on two rows in white near the top end (Sam, Q5), so the buried
+    end never cuts the words (the composition sheet read "RT LAGER")."""
+    w, h = 600, 300                                       # along the can x round the can
+    im = Image.new('RGB', (w, h), (196, 200, 206))
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 84, w, 216], fill=(176, 28, 34))
+    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 50)
+    d.text((410, 120), 'EXPORT', font=f, fill=(250, 250, 248), anchor='mm')
+    d.text((410, 180), 'LAGER', font=f, fill=(250, 250, 248), anchor='mm')
+    d.text((410, 250), '4.0% vol  440ml', font=ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'),
+                                                                 22), fill=(60, 60, 70), anchor='mm')
+    return np.asarray(im, float) / 255
+
+
+_LABEL = None
+
+
+def can_mat(kind, t, nrm):
+    global _LABEL
+    if _LABEL is None:
+        _LABEL = _can_label()
+    if kind == 'rim':
+        return np.tile(np.array([0.70, 0.72, 0.75]), (len(t), 1)), True, 0.8
+    h, w, _ = _LABEL.shape
+    u = np.clip(((t - 0.03) / 0.94) * (w - 1), 0, w - 1).astype(int)
+    v = np.clip((np.arcsin(np.clip(nrm, -1, 1)) / math.pi + 0.5) * (h - 1), 0, h - 1).astype(int)
+    dent = 0.25 * np.exp(-(((t - 0.45) / 0.08) ** 2 + ((nrm + 0.2) / 0.3) ** 2))
+    return _LABEL[v, u] * (1 - dent[:, None]), True, 0.7
+
+
+PACK_IN, PACK_LAND = 13.86, 14.86
 
 
 def packet_at(t):
-    """The sandwich packet: lying still, then tumbling end over end past the scroll (13.86-15.0) on the wind, then
-    lying where it lands."""
-    x0, z0, a0 = C.PACKET
-    if t < 13.86:
-        return (x0, z0, a0, 1.0)
-    u = min(1.0, (t - 13.86) / 1.1)
-    x, z = x0 - 0.2 * u, z0 - 1.05 * u
-    spin = a0 + 540 * u
-    flip = math.cos(u * 3 * math.pi)                      # end over end: it narrows as it flips
-    return (x, z, spin, flip)
+    """The sandwich packet: blown in from beyond his hand, tumbling end over end past the scroll on the wind (-z),
+    landing on its back... then flipped label-up by the last bounce; at rest from 14.95. Returns (centre (x, y, z),
+    tumble angle (radians), turn (degrees)); None before it blows in."""
+    if t < PACK_IN:
+        return None
+    x1, z1, turn1 = PACKET_REST
+    x0, z0 = -0.60, -0.10
+    if t >= PACK_LAND + 0.09:
+        return (x1, 0.03, z1), 2 * math.pi * 3, turn1
+    u = min(1.0, (t - PACK_IN) / (PACK_LAND - PACK_IN))
+    x = x0 + (x1 - x0) * u
+    z = z0 + (z1 - z0) * u
+    y = 0.03 + 0.16 * math.sin(math.pi * u) ** 0.8 + (0.04 * math.sin(math.pi * (t - PACK_LAND) / 0.09) if t > PACK_LAND else 0)
+    ang = 2 * math.pi * 3 * ease(u * 1.02)               # three times end over end
+    return (x, y, z), ang, turn1 - 50 * (1 - u)
 
 
-# ------------------------------------------------------------------------------------------------ picture
-def near(cam, t):
+_PACK_TEX = {}
+
+
+def _pack_tex(front):
+    """The packet's two faces as textures (0.14 m square, 1000 px a metre): front = the comp's EGG MAYO wedge."""
+    if front in _PACK_TEX:
+        return _PACK_TEX[front]
+    n = 140
+    im = Image.new('RGBA', (n, n), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+
+    def p(u, v):
+        return (n / 2 + u * 1000, n / 2 + v * 1000)
+    tri = [p(-0.065, 0.065), p(0.065, 0.065), p(-0.065, -0.065)]
+    d.polygon(tri, fill=(232, 234, 228, 255))
+    if front:
+        d.polygon([p(-0.05, 0.05), p(0.025, 0.05), p(-0.05, -0.025)], fill=(236, 214, 150, 255))
+        d.line([p(-0.05, 0.05), p(0.025, 0.05), p(-0.05, -0.025), p(-0.05, 0.05)], fill=(250, 250, 250, 255), width=2)
+        d.polygon([p(-0.065, 0.065), p(0.065, 0.065), p(0.05, 0.05), p(-0.05, 0.05)], fill=(52, 120, 70, 255))
+        f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 11)
+        d.text(p(-0.005, 0.0575), 'EGG MAYO', font=f, fill=(255, 255, 255, 255), anchor='mm')
+    else:
+        d.polygon([p(-0.065, 0.065), p(0.065, 0.065), p(0.05, 0.05), p(-0.05, 0.05)], fill=(52, 120, 70, 255))
+        for i in range(9):                               # the barcode
+            x = -0.04 + i * 0.004
+            d.line([p(x, -0.01), p(x, 0.02)], fill=(30, 30, 30, 255), width=1 + i % 2)
+    _PACK_TEX[front] = im
+    return im
+
+
+def _persp_coeffs(src, dst):
+    """PIL PERSPECTIVE coefficients mapping output points dst -> input points src (4 each)."""
+    A, bb = [], []
+    for (x, y), (u, v) in zip(dst, src):
+        A.append([x, y, 1, 0, 0, 0, -u * x, -u * y])
+        A.append([0, 0, 0, x, y, 1, -v * x, -v * y])
+        bb += [u, v]
+    n = 8                                                # Gauss-Jordan by hand (see face_close: no numpy linalg
+    M_ = [row + [v] for row, v in zip(A, bb)]            # in the forked workers)
+    for i in range(n):
+        piv = max(range(i, n), key=lambda r: abs(M_[r][i]))
+        M_[i], M_[piv] = M_[piv], M_[i]
+        f = M_[i][i]
+        M_[i] = [x / f for x in M_[i]]
+        for r in range(n):
+            if r != i and M_[r][i]:
+                g = M_[r][i]
+                M_[r] = [x - g * y for x, y in zip(M_[r], M_[i])]
+    return [M_[i][n] for i in range(n)]
+
+
+def draw_packet(pil, cam, t):
+    """The packet as a card turning end over end about the axis across the wind, its shadow on the soil."""
+    st = packet_at(t)
+    if st is None:
+        return
+    (x, y, z), ang, turn = st
     ss = B.SS
-    img, H = G.soil(cam, ss=ss, grass=0.45)
-    img = G.litter(img, cam, ss, C.LITTER)
-    img = C.lying_rev(img, cam, C.CAN[0], C.CAN[1], C._prof_can, C.can_mat, bury=0.35, seed=2)
-    b = scroll_bury(t)
-    if b < 1:
-        img = C.lying_rev(img, cam, C.SCROLL[1], C.SCROLL[0], C._prof_scroll, C.scroll_mat, bury=b, seed=3)  # uncovered from the end by his hand
+    tr = math.radians(turn)
+    ax = np.array([math.cos(tr), 0, math.sin(tr)])       # the card's across (u)
+    al = np.array([-math.sin(tr), 0, math.cos(tr)])      # its along (v), tumbling about u
+    vv = al * math.cos(ang) + np.array([0, 1, 0]) * math.sin(ang)
+    nn = np.cross(ax, vv)
+    c = np.array([x, y, z])
+    corners = [c - ax * 0.07 - vv * 0.07, c + ax * 0.07 - vv * 0.07, c + ax * 0.07 + vv * 0.07, c - ax * 0.07 + vv * 0.07]
+    scr = [tuple(v * ss for v in cam.project(tuple(p))[0]) for p in corners]
+    shad = [tuple(v * ss for v in cam.project((p[0] + p[1] * 0.857 * 2.6, 0.0, p[2] + p[1] * 0.514 * 2.6))[0])
+            for p in corners]
+    lay = Image.new('RGBA', pil.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).polygon(shad, fill=(30, 22, 16, int(150 * max(0.2, 1 - y * 3))))
+    pil.alpha_composite(lay.filter(ImageFilter.GaussianBlur(4 * ss)))
+    tocam = np.asarray(cam.pos) - c
+    front = float(np.dot(nn, tocam)) < 0                # label side: the one facing up when it lands
+    tex = _pack_tex(front)
+    n = tex.width
+    src = [(0, 0), (n, 0), (n, n), (0, n)]
+    xs = [p[0] for p in scr]
+    ys = [p[1] for p in scr]
+    bx0, by0 = int(min(xs)) - 2, int(min(ys)) - 2
+    bw, bh = int(max(xs)) - bx0 + 3, int(max(ys)) - by0 + 3
+    if bw < 2 or bh < 2 or bw > 4000 or bh > 4000:
+        return
+    e1, e2 = np.subtract(scr[1], scr[0]), np.subtract(scr[3], scr[0])
+    area = abs(e1[0] * e2[1] - e1[1] * e2[0])
+    if area < 4:                                         # edge on: a thin line of card
+        ImageDraw.Draw(pil).line([scr[0], scr[2]], fill=(214, 216, 210), width=max(2, int(3 * ss)))
+        return
+    co = _persp_coeffs(src, [(px - bx0, py - by0) for px, py in scr])
+    shade = 0.75 + 0.25 * abs(float(np.dot(nn, [-0.80, 0.36, -0.48])))
+    im = tex.transform((bw, bh), Image.PERSPECTIVE, tuple(co), resample=Image.BICUBIC)
+    arr = np.asarray(im, float)
+    arr[..., :3] *= shade
+    pil.alpha_composite(Image.fromarray(arr.clip(0, 255).astype(np.uint8), 'RGBA'), (bx0, by0))
+
+
+def packet_rest_flat(pil, cam, ss):
+    """The packet at rest, label up (shots 4 on): the comp's flat wedge."""
+    x, z, a = PACKET_REST
+    C.packet(pil, cam, x, z, a)
+
+
+# ------------------------------------------------------------------------------------------------ near-real frame
+def ground_ss():
+    return 1                                             # the ground is worked out at 1080 x 1920 and enlarged:
+    #                                                      the finished film is 1080 wide, so nothing is lost
+
+
+def near_ground(cam, t):
+    """The near-real ground under every pixel: the soil-and-grass patch, the island's dark paving round it, the
+    white kerb, the tarmac beyond; the lamp post's shadow across all of it. RGB float at the canvas size."""
+    w, h = B.W, B.H
+    rays = G.ground_rays(cam, w, h, 1)
+    X, Z, mpp = rays
+    img, _ = G.soil(cam, ss=1, grass=0.0, t=t, gust=gust(t), sun=lamp_sun, rays=rays)
+    dp = in_patch(X, Z)
+    if dp.max() > -0.05:                                 # beyond the patch is in shot: paving, kerb, tarmac
+        r = np.hypot(X - LAMP[0], Z - LAMP[1])
+        mx, my = -(X - LAMP[0]), Z - LAMP[1]
+        n1 = G.noise(X, Z, 0.4, 61)
+        slab = ((np.abs(((mx + 0.3) % 0.6) - 0.3) < 0.008) | (np.abs(((my + 0.3) % 0.6) - 0.3) < 0.008))
+        pav = np.array([0.30, 0.29, 0.28])[None, None, :] * (1 + 0.08 * n1[..., None])
+        pav = pav * (1 - 0.18 * (slab * G._lod(0.03, mpp))[..., None])
+        tar = np.array([0.24, 0.24, 0.25])[None, None, :] * (1 + 0.05 * G.noise(X, Z, 0.15, 62)[..., None])
+        kerb = np.array([0.78, 0.77, 0.74])[None, None, :]
+        ground = np.where((r < 15.0)[..., None], pav, np.where((r < 15.35)[..., None], kerb, tar))
+        sunl = lamp_sun(X, Z)[..., None]
+        ground = ground * (G.SKY_C * 0.55 + G.SUN_C * 1.05 * 0.9 * sunl)
+        edge = np.clip((dp + 0.06 * G.noise(X, Z, 0.08, 63)) / 0.05, 0, 1)[..., None]   # a ragged soil edge
+        img = img * (1 - edge) + ground * edge
+        pole = np.clip(1 - (r - 0.16) / 0.02, 0, 1)[..., None]      # the lamp post's foot, from above
+        img = img * (1 - pole) + np.array([0.20, 0.20, 0.22]) * pole
+    if B.SS != 1:
+        img = np.asarray(Image.fromarray((np.clip(img, 0, 1) * 255).astype(np.uint8)).resize(
+            (w * B.SS, h * B.SS), Image.BICUBIC), float) / 255
+    G.GRASS_MASK = lambda x, z: in_patch(x, z) < -0.08      # grass only on the soil patch
+    img = G._grass(img, X, Z, mpp / B.SS, cam, B.SS, 0.45, 3, t, gust(t)) \
+        if float(np.median(mpp)) < 0.02 else _grass_tint(img, cam)
+    return img
+
+
+def _grass_tint(img, cam):
+    hh, ww, _ = img.shape
+    X, Z, mpp = G.ground_rays(cam, ww, hh, B.SS)
+    patch = G.noise(X, Z, 0.5, 15) + 0.5 * G.noise(X, Z, 0.12, 16)
+    a = (np.clip((patch - (1.0 - 0.45 * 1.6)) * 0.8, 0, 0.5) * (in_patch(X, Z) < 0))[..., None]
+    return img * (1 - a) + np.array([0.52, 0.50, 0.28]) * a
+
+
+def close_shot(t):
+    return shot_of(t)[0] in '123'
+
+
+def near_real(t, cam):
+    ss = B.SS
+    C.SS = ss
+    img = near_ground(cam, t)
+    img = G.litter(img, cam, ss, LITTER)
+    cam_al = 0.0
+    img = lying_rev(img, cam, CAN[0], CAN[1], _prof_can, can_mat, cover=0.30, seed=2)
+    cov = scroll_cover(t)
+    if cov < 1.0:
+        p = np.asarray(cam.pos)
+        a, b = np.array(SCROLL[0]), np.array(SCROLL[1])
+        ax = (b - a) / np.linalg.norm(b - a)
+        cam_al = float(np.dot(np.array([p[0], p[2]]) - a, ax))
+        glow = 1.2 * math.exp(-((t - 7.79) / 0.18) ** 2)
+        img = lying_rev(img, cam, SCROLL[0], SCROLL[1], C._prof_scroll, C.scroll_mat, cover=cov, seed=3, glow=glow,
+                        cam_along=cam_al)
     pil = Image.fromarray((np.clip(img, 0, 1) * 255).astype(np.uint8)).convert('RGBA')
-    px, pz, pa, flip = packet_at(t)
-    C.packet(pil, cam, px, pz, pa)
+    if t >= 15.08:
+        packet_rest_flat(pil, cam, ss)
     k, surf = man_at(t)
-    L.draw(pil, cam, k, C.MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
-    C.drool(pil, cam, k)
-    draw_dog(pil, cam, t)
+    if close_shot(t):
+        prts = [q for q in L.parts(k, MAN) if q.name not in ('head', 'hair', 'ear')]
+        L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=prts)
+        if _on_screen(cam, k['head'], 0.25):
+            mouth, ppu = face_close(pil, cam, k, MAN, t)
+            drool_close(pil, mouth, ppu, t)
+    else:
+        L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
+        C.drool(pil, cam, k)
+    d = dog_at(t)
+    if d is not None:
+        draw_dog(pil, cam, d)
+    if PACK_IN <= t < 15.08:
+        draw_packet(pil, cam, t)
     out = np.asarray(pil.convert('RGB'), float) / 255
-    gust = max([math.exp(-((t - g) / 0.5) ** 2) for g in GUSTS] + [0.0])
-    out = G.dust(out, cam, ss, t, strength=0.7 + 1.2 * gust)
-    if GLINT_T - 0.2 < t < GLINT_T + 0.8 and b < 1:      # the gold catches the sun: a soft flare on the case
-        (gx, gy), _ = cam.project((C.SCROLL[0][0] * 0.8 + C.SCROLL[1][0] * 0.2, 0.03, C.SCROLL[0][1] * 0.8 + C.SCROLL[1][1] * 0.2))
-        hh, ww, _ = out.shape
-        yy, xx = np.mgrid[0:hh, 0:ww]
-        a = math.exp(-((t - GLINT_T - 0.1) / 0.25) ** 2)
-        r2 = ((xx - gx * ss) ** 2 + (yy - gy * ss) ** 2) / (60 * ss) ** 2
-        out = out + a * 0.8 * np.exp(-r2)[..., None] * np.array([1.0, 0.85, 0.5])
-    hh, ww, _ = out.shape                                # a warm, moody vignette
+    hh, ww, _ = out.shape
+    out = G.dust(out, cam, ss, t, strength=0.9, gust=gust(t))
+    if 7.6 < t < 8.3:                                    # the gold catches the sun (7.79): a soft glint on the tip
+        glint(out, cam, t)
     yy, xx = np.mgrid[0:hh, 0:ww]
     v = 1 - 0.55 * np.clip(((xx - ww / 2) / ww) ** 2 * 2.2 + ((yy - hh / 2) / hh) ** 2 * 2.2, 0, 1)
     out = out * v[..., None]
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8)).convert('RGBA')
 
 
-def flat(cam, t):
-    pil = Image.new('RGBA', (B.W * B.SS, B.H * B.SS))
+def _on_screen(cam, p, margin):
+    (x, y), k = cam.project(tuple(p))
+    m = margin * k
+    return -m < x < 1080 + m and -m < y < 1920 + m
 
-    def man_layer(p):
-        v = A.View(p, cam)
-        sx0, sy0 = A.X0 - C.SCROLL[0][0], C.SCROLL[0][1] - A.Z0
-        sx1, sy1 = A.X0 - C.SCROLL[1][0], C.SCROLL[1][1] - A.Z0
-        v.line([(sx0, sy0), (sx1, sy1)], (30, 24, 16), w_m=0.07)       # the scroll: gold, outlined
-        v.line([(sx0, sy0), (sx1, sy1)], (226, 184, 100), w_m=0.045)
-        cx, cz = (C.CAN[0][0] + C.CAN[1][0]) / 2, (C.CAN[0][1] + C.CAN[1][1]) / 2
-        v.poly(A.rrect(A.X0 - cx, cz - A.Z0, 0.16, 0.07, 90, 0.02, 2), (200, 40, 40))
-        px, pz, pa, _ = packet_at(t)
-        v.poly(A.rrect(A.X0 - px, pz - A.Z0, 0.18, 0.12, pa, 0.01, 2), (236, 236, 228))
-        k, surf = man_at(t)
-        L.draw(p, cam, k, C.MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
-        draw_dog(p, cam, t)
-    A.draw(pil, cam, t, man_layer=man_layer)
+
+def glint(out, cam, t):
+    """Near-real: the sun catching the spiked tip, a soft bloom with a faint horizontal flare (no star)."""
+    tip = SCROLL[1]
+    (x, y), k = cam.project((tip[0], 0.03, tip[1] + 0.03))
+    ss = B.SS
+    x, y = x * ss, y * ss
+    a = math.exp(-((t - 7.79) / 0.14) ** 2)
+    hh, ww, _ = out.shape
+    R = 0.05 * k * ss
+    x0, x1 = int(max(0, x - 6 * R)), int(min(ww, x + 6 * R))
+    y0, y1 = int(max(0, y - 2 * R)), int(min(hh, y + 2 * R))
+    if x1 <= x0 or y1 <= y0:
+        return
+    yy, xx = np.mgrid[y0:y1, x0:x1]
+    d2 = ((xx - x) ** 2 + (yy - y) ** 2) / R ** 2
+    bloom = np.exp(-d2 * 2.0) * 0.9 + np.exp(-((yy - y) / (0.06 * R)) ** 2 - ((xx - x) / (5 * R)) ** 2) * 0.35
+    out[y0:y1, x0:x1] += (bloom * a)[..., None] * np.array([1.0, 0.86, 0.55])
+    np.clip(out, 0, 1, out=out)
+
+
+# ------------------------------------------------------------------------------------------------ AERIAL
+MINIS = [211, 282, 339, 45, 148]                # the five minis' bearings (screen degrees, y down), as the comp
+R_MINI, RING_MINI, R_ISLAND, R_BIG = 42.0, 8.0, 15.0, 55.0
+CAR_COLS = [(240, 240, 238), (30, 30, 34), (170, 172, 178), (176, 30, 36), (40, 70, 150), (240, 240, 238),
+            (120, 124, 130), (90, 30, 34)]
+
+
+def _pol(r, a):
+    return np.array([r * math.cos(math.radians(a)), r * math.sin(math.radians(a))])
+
+
+def _arc(c, r, a0, a1, step=6.0):
+    n = max(2, int(abs(a1 - a0) / step) + 1)
+    return [np.asarray(c) + _pol(r, a) for a in np.linspace(a0, a1, n)]
+
+
+def _routes():
+    """Every car's way through, in map metres: in along an arm (the left lane: we drive on the left), give way,
+    clockwise round its mini, anticlockwise along the inner ring to the next mini or the one after, clockwise round
+    that, out along its arm. Plus a loop of cars round the central island, anticlockwise. Returns [(points, s_giveway)]."""
+    out = []
+    for i, m in enumerate(MINIS):
+        u = _pol(1, m)
+        cm = _pol(R_MINI, m)
+        lin = np.array([-u[1], u[0]]) * 2.6             # the inbound lane: left of a car heading in
+        for hop in (1, 2):
+            j = (i - hop) % 5                            # anticlockwise: the next mini at a smaller bearing
+            mj = MINIS[j]
+            uj = _pol(1, mj)
+            cj = _pol(R_MINI, mj)
+            lout = np.array([uj[1], -uj[0]]) * 2.6
+            pts = [u * 260 + lin, u * 120 + lin, u * 62 + lin, u * 54 + lin]
+            gw = len(pts) - 1
+            pts += _arc(cm, RING_MINI, m + 35, m + 180)                      # clockwise round mini i
+            a0 = m
+            a1 = mj if mj < m else mj - 360
+            pts += [_pol(R_MINI - RING_MINI, a) for a in np.linspace(a0, a1, max(3, int(abs(a1 - a0) / 5)))[1:-1]]
+            pts += _arc(cj, RING_MINI, mj + 180, mj + 325)                   # clockwise round mini j to its arm
+            pts += [uj * 54 + lout, uj * 62 + lout, uj * 120 + lout, uj * 260 + lout]
+            out.append((np.array(pts), gw))
+    loop = _arc((0, 0), 21.0, 360, 0, 4)                                     # round the island, anticlockwise
+    out.append((np.array(loop * 3), None))
+    return out
+
+
+def _resample(pts, step=0.5):
+    seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+    s = np.concatenate([[0], np.cumsum(seg)])
+    n = int(s[-1] / step)
+    q = np.linspace(0, s[-1], n)
+    xy = np.stack([np.interp(q, s, pts[:, 0]), np.interp(q, s, pts[:, 1])], 1)
+    k = 9                                                # smoothed corners (a car turns, never snaps)
+    if len(xy) > 2 * k:
+        ker = np.ones(k) / k
+        xs = np.convolve(np.pad(xy[:, 0], k, mode='edge'), ker, 'same')[k:-k]
+        ys = np.convolve(np.pad(xy[:, 1], k, mode='edge'), ker, 'same')[k:-k]
+        xy = np.stack([xs, ys], 1)
+    return xy, q
+
+
+_TRAFFIC = None
+
+
+def traffic():
+    """The traffic, worked out once: each car moves along its route at its own speed, keeps its distance from
+    anything ahead of it, and gives way at the line before joining a mini when something is coming round. Returns
+    {frame: [(x, y, heading_deg, length, width, colour)]} in map metres, for 16.4 s to the end at 24 fps."""
+    global _TRAFFIC
+    if _TRAFFIC is not None:
+        return _TRAFFIC
+    rng = np.random.default_rng(7)
+    routes = []
+    for pts, gw in _routes():
+        xy, s = _resample(pts)
+        gws = None
+        if gw is not None:
+            gws = float(np.searchsorted(s, np.sum(np.linalg.norm(np.diff(pts[:gw + 1], axis=0), axis=1))))
+        routes.append((xy, gws))
+    cars = []                                            # route, s (index in 0.5 m steps), speed, size, colour
+    for arm in range(5):                                 # each arm's cars one behind another in its lane (both
+        s0 = float(rng.uniform(-60, 120))                # routes from an arm share it), spaced like real traffic
+        for n in range(10):
+            s0 -= float(rng.uniform(22, 50))
+            cars.append(dict(r=arm * 2 + int(rng.integers(0, 2)), s=s0, v=float(rng.uniform(7, 9.5)),
+                             L=4.4, W=1.85, col=CAR_COLS[int(rng.integers(0, len(CAR_COLS)))]))
+    xy_loop = routes[-1][0]
+    nloop = len(xy_loop) // 3
+    for n in range(9):
+        cars.append(dict(r=len(routes) - 1, s=float(n * nloop / 9), v=6.0, L=4.4, W=1.85,
+                         col=CAR_COLS[(n * 3) % len(CAR_COLS)], loop=nloop))
+    cars[5].update(L=11.0, W=2.55, col=(232, 196, 40), v=6.5)    # a bus
+    cars[17].update(L=8.0, W=2.4, col=(240, 240, 238), v=6.5)    # a white van
+    dt = 1 / FPS
+    t0 = 6.0                                             # run in from 6 s so the roads are busy by 16.4
+    frames = {}
+    nsteps = int((DUR - t0) * FPS) + 2
+
+    def pose(c):
+        xy, _ = routes[c['r']]
+        i = int(c['s'])
+        if 'loop' in c:
+            i = int(c['s']) % c['loop']
+        if i < 0 or i >= len(xy) - 1:
+            return None
+        p, q = xy[i], xy[i + 1]
+        f = c['s'] - int(c['s'])
+        pos = p + (q - p) * f
+        return pos, math.degrees(math.atan2(q[1] - p[1], q[0] - p[0]))
+    for step in range(nsteps):
+        t = t0 + step * dt
+        P = [pose(c) for c in cars]
+        for ci, c in enumerate(cars):
+            if P[ci] is None:
+                c['s'] += 8.0 * dt * 2 if c['s'] < 0 else 0     # off the map: all at one speed, so none catch up
+                continue
+            pos, hd = P[ci]
+            h = np.array([math.cos(math.radians(hd)), math.sin(math.radians(hd))])
+            want = c['v']
+            for cj, o in enumerate(P):                   # anything ahead within a car's reach: slow, stop
+                if cj == ci or o is None:
+                    continue
+                dvec = o[0] - pos
+                dist = float(np.linalg.norm(dvec))
+                if dist > 16:
+                    continue
+                ahead = float(np.dot(dvec, h))
+                lat = abs(float(h[0] * dvec[1] - h[1] * dvec[0]))
+                gap = (c['L'] + cars[cj]['L']) / 2 + 2.2
+                if ahead > 0 and lat < 2.4 and ahead < gap + 4.0:
+                    ho = math.radians(o[1])                # do we both have the other ahead (crossing)? then the
+                    back = -float(np.dot(dvec, [math.cos(ho), math.sin(ho)]))   # lower number goes first
+                    if back > 0 and abs(math.cos(ho) * dvec[1] - math.sin(ho) * dvec[0]) < 2.4 and ci < cj:
+                        continue
+                    want = min(want, max(0.0, (ahead - gap) * 2.0))
+            gws = routes[c['r']][1]
+            if gws is not None and gws - 6 < c['s'] < gws + 0.5:   # give way: anything coming round the mini
+                xy, _ = routes[c['r']]
+                merge = xy[min(len(xy) - 1, int(gws) + 12)]
+                for cj, o in enumerate(P):
+                    if cj != ci and o is not None and np.linalg.norm(o[0] - merge) < 11 and \
+                            cars[cj]['r'] != c['r']:
+                        want = min(want, max(0.0, (gws - c['s']) * 1.5))
+            c['vn'] = c.get('vn', c['v']) + max(-9 * dt, min(4 * dt, want - c.get('vn', c['v'])))
+            c['s'] += max(0.0, c['vn']) * dt * 2
+        if t >= 16.4 - 1e-6:
+            fr = int(round(t * FPS))
+            frames[fr] = [(*P[ci][0], P[ci][1], c['L'], c['W'], c['col'], ci) for ci, c in enumerate(cars)
+                          if P[ci] is not None]
+    _TRAFFIC = frames
+    return frames
+
+
+def traffic_faults():
+    """No two cars pass into each other (centres closer than their half-lengths and widths allow)."""
+    out = []
+    for fr, cs in sorted(traffic().items()):
+        for i in range(len(cs)):
+            for j in range(i + 1, len(cs)):
+                a, b = cs[i], cs[j]
+                if math.hypot(a[0] - b[0], a[1] - b[1]) < (min(a[3], b[3]) + max(a[4], b[4])) / 2 * 0.9:
+                    out.append(f'TRAFFIC: two cars pass into each other at {fr / FPS:.2f} s near ({a[0]:.0f}, {a[1]:.0f}) m')
+                    break
+    return out[:5]
+
+
+_ESTATE = None
+
+
+STADIUM = (-36.0, 168.0, 36.0, 280.0)            # the County Ground's pitch box (map metres), below the title
+SHED = (-62.0, 112.0, 22.0, 140.0)               # the big white-roofed shed, CLOSING DOWN on its roof (in the safe area)
+CARPARK = (58.0, -14.0, 100.0, 34.0)
+
+
+def _free(p, margin=0.0):
+    """Room for a house here: clear of the junction, the arms, the stadium, the shed and the car park."""
+    if np.hypot(*p) < 68:
+        return False
+    for m in MINIS:
+        u = _pol(1, m)
+        if float(np.dot(p, u)) > 0 and abs(u[0] * p[1] - u[1] * p[0]) < 15 + margin:
+            return False
+    for x0, y0, x1, y1 in (STADIUM, SHED, CARPARK):
+        if x0 - 22 < p[0] < x1 + 22 and y0 - 22 < p[1] < y1 + 22:
+            return False
+    return True
+
+
+def _estate():
+    """Swindon round it, placed once (Sam's photos, 8 Nov): terraced streets (rows of brown and grey roofs with back
+    gardens), trees on the verges. Returns (rows of houses, trees)."""
+    global _ESTATE
+    if _ESTATE is None:
+        rng = np.random.default_rng(4)
+        rows, trees = [], []
+        ang = math.radians(16)
+        along = np.array([math.cos(ang), math.sin(ang)])
+        across = np.array([-along[1], along[0]])
+        for k in range(-16, 17):                         # a terrace every 15 m, back to back in pairs
+            off = k * 15.0 + (4.0 if k % 2 else 0.0)
+            face = 1 if k % 2 else -1                    # which side its street is on
+            run = []
+            roof = [(140, 92, 70), (118, 82, 66), (104, 96, 92)][k % 3]
+            for j in range(-50, 51):
+                p = across * off + along * (j * 5.2)
+                if _free(p) and _free(p + across * face * 7):
+                    run.append(p)
+                elif run:
+                    rows.append((run, face, roof))
+                    run = []
+            if run:
+                rows.append((run, face, roof))
+        for i in range(160):
+            a_ = rng.uniform(0, 360)
+            r = rng.uniform(58, 75)
+            p = _pol(r, a_)
+            inbox = any(x0 - 8 < p[0] < x1 + 8 and y0 - 8 < p[1] < y1 + 8 for x0, y0, x1, y1 in (SHED, CARPARK))
+            if not inbox and all(abs(m - a_) % 360 > 14 and abs(m - a_) % 360 < 346 for m in MINIS):
+                trees.append((p, rng.uniform(2.8, 5.0)))
+        _ESTATE = (rows, trees, along, across)
+    return _ESTATE
+
+
+def aerial_flat(pil, cam, t):
+    """The Magic Roundabout from straight above, flat house style (flat colour, one outline), drawn in map metres
+    through the shot's camera, so the climb, the hand-over and the drift all draw one place (rule 1)."""
+    ss = B.SS
+    (ox, oy), k = cam.project((LAMP[0], 0.0, LAMP[1]))
+    (ax_, ay_), _ = cam.project((LAMP[0] - 1.0, 0.0, LAMP[1]))
+    ox, oy = ox * ss, oy * ss
+    ex = np.array([ax_ * ss - ox, ay_ * ss - oy])          # one map metre to screen right
+    ey = np.array([-ex[1], ex[0]])                        # one map metre to screen down
+    s = float(np.linalg.norm(ex))
+    d = ImageDraw.Draw(pil)
+
+    def P(p):
+        return (ox + p[0] * ex[0] + p[1] * ey[0], oy + p[0] * ex[1] + p[1] * ey[1])
+
+    def lw(m):                                            # a width in metres, at least one pixel
+        return max(1, int(round(m * s)))
+    ink = max(1, int(min(2.6 * ss, max(1.0, 0.18 * s))))
+    W, H = pil.size
+
+    def poly(pts, fill, outline=True, width=None):
+        Q = [P(p) for p in pts]
+        d.polygon(Q, fill=fill)
+        if outline:
+            d.line(Q + [Q[0]], fill=INK, width=width or ink, joint='curve')
+
+    def circ(c, r, fill, outline=True, width=None, n=None):
+        n = n or int(min(240, max(24, r * s / 3)))
+        poly([np.asarray(c) + _pol(r, a) for a in np.linspace(0, 360, n, endpoint=False)], fill, outline, width)
+    d.rectangle([0, 0, W, H], fill=(118, 146, 86))                          # drab verge grass
+    rows, trees, along, across = _estate()
+    sdir = np.array([-0.857, 0.514])                                        # shadows fall this way (map)
+    for run, face, roof in rows:                                            # streets, gardens, shadows
+        a, b = run[0] - along * 2.6, run[-1] + along * 2.6
+        st = across * face * 8.5
+        poly([a + st - across * face * 3.5, b + st - across * face * 3.5, b + st + across * face * 3.5,
+              a + st + across * face * 3.5], (150, 150, 150), outline=False)
+        gd = -across * face
+        poly([a + gd * 4, b + gd * 4, b + gd * 11, a + gd * 11], (110, 136, 82), outline=False)
+        for p in run[::2]:                                                  # garden fences
+            d.line([P(p + gd * 4 - along * 2.6), P(p + gd * 11 - along * 2.6)], fill=(96, 110, 74), width=lw(0.3))
+        poly([a - across * 4 + sdir * 5, b - across * 4 + sdir * 5, b + across * 4 + sdir * 5,
+              a + across * 4 + sdir * 5], (74, 92, 58), outline=False)
+    for run, face, roof in rows:                                            # the roofs: one terrace, party walls
+        a, b = run[0] - along * 2.6, run[-1] + along * 2.6
+        poly([a - across * 4, b - across * 4, b + across * 4, a + across * 4], roof)
+        d.line([P(a), P(b)], fill=tuple(int(v * 0.72) for v in roof), width=ink)   # the ridge
+        for p in run[1:]:
+            d.line([P(p - along * 2.6 - across * 4), P(p - along * 2.6 + across * 4)],
+                   fill=tuple(int(v * 0.8) for v in roof), width=max(1, ink // 2))
+    # the big white-roofed shed (Sam's photos), CLOSING DOWN on the roof (added: drab Swindon), its car park
+    x0, y0, x1, y1 = SHED
+    poly([(x0 + 6, y0 + 4), (x1 + 6, y0 + 4), (x1 + 6, y1 + 4), (x0 + 6, y1 + 4)], (74, 92, 58), outline=False)
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (226, 228, 230))
+    for i in range(1, 8):
+        x = x0 + i * (x1 - x0) / 8
+        d.line([P((x, y0)), P((x, y1))], fill=(196, 198, 202), width=lw(0.3))
+    x0, y0, x1, y1 = CARPARK
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (104, 104, 106))
+    for row in range(3):
+        yy = y0 + 4 + row * 15
+        for i in range(int((x1 - x0) / 2.6)):
+            x = x0 + 1 + i * 2.6
+            d.line([P((x, yy)), P((x, yy + 5))], fill=(230, 230, 226), width=lw(0.12))
+            if (i * 7 + row * 3) % 5 < 3:
+                col = CAR_COLS[(i * 5 + row) % len(CAR_COLS)]
+                poly([(x + 0.4, yy + 0.3), (x + 2.2, yy + 0.3), (x + 2.2, yy + 4.7), (x + 0.4, yy + 4.7)], col)
+    if s * 4.0 > 6:
+        fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), max(6, int(5.6 * s)))
+        lay = Image.new('RGBA', (int(60 * s), int(10 * s)), (0, 0, 0, 0))
+        ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), 'CLOSING DOWN', font=fnt, fill=(196, 36, 36, 255),
+                                 anchor='mm')
+        rot = -math.degrees(math.atan2(ex[1], ex[0]))
+        lay = lay.rotate(rot, expand=True)
+        cxy = P(((SHED[0] + SHED[2]) / 2, (SHED[1] + SHED[3]) / 2))
+        pil.alpha_composite(lay, (int(cxy[0] - lay.width / 2), int(cxy[1] - lay.height / 2)))
+    # the County Ground next door (Sam's photo): striped pitch, red seats under grey roofs, floodlight pylons
+    x0, y0, x1, y1 = STADIUM
+    poly([(x0 - 16, y0 - 16), (x1 + 16, y0 - 16), (x1 + 16, y1 + 16), (x0 - 16, y1 + 16)], (186, 30, 40))
+    for x0_, y0_, x1_, y1_ in ((x0 - 16, y0 - 16, x1 + 16, y0 - 9), (x0 - 16, y1 + 9, x1 + 16, y1 + 16),
+                               (x0 - 16, y0 - 16, x0 - 10, y1 + 16), (x1 + 10, y0 - 16, x1 + 16, y1 + 16)):
+        poly([(x0_, y0_), (x1_, y0_), (x1_, y1_), (x0_, y1_)], (206, 206, 204))   # the stand roofs
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (84, 150, 70))
+    for i in range(0, 14, 2):
+        yy = y0 + i * (y1 - y0) / 14
+        poly([(x0, yy), (x1, yy), (x1, yy + (y1 - y0) / 14), (x0, yy + (y1 - y0) / 14)], (96, 164, 80), outline=False)
+    for q in ([(x0 + 2, y0 + 2), (x1 - 2, y0 + 2)], [(x1 - 2, y0 + 2), (x1 - 2, y1 - 2)], [(x0 + 2, y0 + 2), (x0 + 2, y1 - 2)],
+              [(x0 + 2, (y0 + y1) / 2), (x1 - 2, (y0 + y1) / 2)]):
+        d.line([P(q[0]), P(q[1])], fill=(236, 240, 232), width=lw(0.25))
+    for cx_, cy_ in ((x0 - 22, y0 - 22), (x1 + 22, y0 - 22)):            # floodlights and their long shadows
+        d.line([P((cx_, cy_)), P(np.array([cx_, cy_]) + sdir * 30)], fill=(60, 60, 60, 150), width=lw(1.0))
+        poly([(cx_ - 3, cy_ - 1.5), (cx_ + 3, cy_ - 1.5), (cx_ + 3, cy_ + 1.5), (cx_ - 3, cy_ + 1.5)], (220, 220, 210))
+    for p, r in trees:
+        circ(p + np.array([-0.857, 0.514]) * r * 0.9, r, (64, 84, 52), outline=False)
+    for p, r in trees:
+        circ(p, r, (70, 110, 58))
+    # the arms: pavement, kerb, tarmac; zebra crossings; give-way dashes
+    for m in MINIS:
+        u = _pol(1, m)
+        n = np.array([-u[1], u[0]])
+        a0, b0 = u * 44, u * 260
+        poly([a0 + n * 10.5, b0 + n * 10.5, b0 - n * 10.5, a0 - n * 10.5], (200, 198, 192))
+        poly([a0 + n * 7.5, b0 + n * 7.5, b0 - n * 7.5, a0 - n * 7.5], (128, 128, 130))
+    circ((0, 0), 46.5, (200, 198, 192))                                     # pavement round the inner ring
+    for m in MINIS:
+        circ(_pol(R_MINI, m), 13.5, (200, 198, 192))
+    circ((0, 0), 44.0, (128, 128, 130))                                     # the inner ring's tarmac
+    for m in MINIS:                                                          # each mini's tarmac
+        circ(_pol(R_MINI, m), 11.5, (128, 128, 130))
+    for m in MINIS:                                                          # the arms' tarmac again, over the
+        u = _pol(1, m)                                                       # pavement where they join
+        n = np.array([-u[1], u[0]])
+        poly([u * 40 + n * 7.5, u * 80 + n * 7.5, u * 80 - n * 7.5, u * 40 - n * 7.5], (128, 128, 130), outline=False)
+    for m in MINIS:
+        u = _pol(1, m)
+        n = np.array([-u[1], u[0]])
+        for j in range(8):                                                   # the zebra
+            v = -6.5 + j * 1.75
+            poly([u * 74 + n * v, u * 78 + n * v, u * 78 + n * (v + 0.9), u * 74 + n * (v + 0.9)], (240, 240, 236),
+                 outline=False)
+        for j in range(6):                                                   # the centre line
+            p = u * (82 + j * 9)
+            poly([p - n * 0.12, p + u * 4.5 - n * 0.12, p + u * 4.5 + n * 0.12, p + n * 0.12], (240, 240, 236),
+                 outline=False)
+        for side in (1,):                                                    # give-way dashes on the inbound lane
+            for j in range(5):
+                q = u * 56 + n * (1.0 + j * 1.2) * side
+                poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
+                q = u * 57 + n * (1.0 + j * 1.2) * side
+                poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
+        for k_ in range(2):                                                  # arrows on the inbound lane
+            p = u * (64 + k_ * 10) + n * 2.6
+            poly([p - u * 1.8 - n * 0.2, p - n * 0.2, p - n * 0.8, p + u * 1.5, p + n * 0.8, p + n * 0.2,
+                  p - u * 1.8 + n * 0.2], (240, 240, 236), outline=False)
+    # raised kerbed islands between the minis, hatched areas beside them
+    for i in range(5):
+        a1, a2 = MINIS[i], MINIS[(i + 1) % 5]
+        mid = (a1 + ((a2 - a1) % 360) / 2) % 360
+        pts = [_pol(40 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
+                                                     (-4, 3), (-8, 2.4))]
+        poly(pts, (96, 92, 90))
+        for j in range(5):                                                   # hatching beyond its ends
+            for sgn in (-1, 1):
+                a_ = mid + sgn * (10 + j * 1.6)
+                d.line([P(_pol(38, a_)), P(_pol(42, a_ + sgn * 1.2))], fill=(236, 236, 232), width=lw(0.3))
+    # the inner ring's dashed edge, the minis: white domes in dashed white rings, arrows round them
+    for a in range(0, 360, 10):
+        d.line([P(_pol(28.5, a)), P(_pol(28.5, a + 4))], fill=(240, 240, 236), width=lw(0.15))
+    for m in MINIS:
+        cm = _pol(R_MINI, m)
+        circ(cm, 2.4, (238, 238, 232), width=max(1, ink // 2))
+        for a in range(0, 360, 24):
+            d.line([P(cm + _pol(5.0, a)), P(cm + _pol(5.0, a + 12))], fill=(240, 240, 236), width=lw(0.2))
+    # the central island: dark paving, white kerb, the soil-and-grass patch (Q2), the lamp post and its shadow
+    circ((0, 0), R_ISLAND + 0.35, (232, 230, 224))
+    circ((0, 0), R_ISLAND, (84, 82, 82))
+    th = np.linspace(0, 2 * math.pi, 120, endpoint=False)
+    rr = patch_r(th)
+    pc = np.array([-(PATCH_C[0] - LAMP[0]), PATCH_C[1] - LAMP[1]])
+    soil = [pc + np.array([-r * math.cos(a), r * math.sin(a)]) for a, r in zip(th, rr)]
+    poly(soil, (112, 86, 62))
+    for a_, r_, rr_ in ((0.5, 1.4, 0.9), (2.3, 1.8, 1.1), (4.2, 1.2, 0.8), (5.4, 2.0, 0.7)):
+        circ(pc + np.array([-r_ * math.cos(a_), r_ * math.sin(a_)]), rr_, (120, 128, 70), outline=False)
+    sd = np.array([-SUN_XZ[0], SUN_XZ[1]])                                  # the shadow, in map axes
+    sn = np.array([-sd[1], sd[0]])
+    poly([sn * 0.15, sd * SHADOW_LEN + sn * 0.15, sd * SHADOW_LEN - sn * 0.15, -sn * 0.15], (40, 40, 44, 150),
+         outline=False)
+    circ(sd * SHADOW_LEN, 0.9, (40, 40, 44, 150), outline=False)
+    circ((0, 0), 0.25, (70, 70, 74))
+    circ(np.array([0.0, 0.0]) + sd * -0.0, 0.5, (90, 90, 96))                # the lamp's head from above
+    return s
+
+
+def draw_cars(pil, cam, t):
+    fr = int(round(t * FPS))
+    cars = traffic().get(fr)
+    if not cars:
+        return
+    ss = B.SS
+    (ox, oy), _ = cam.project((LAMP[0], 0.0, LAMP[1]))
+    (ax_, ay_), _ = cam.project((LAMP[0] - 1.0, 0.0, LAMP[1]))
+    ox, oy = ox * ss, oy * ss
+    ex = np.array([ax_ * ss - ox, ay_ * ss - oy])
+    ey = np.array([-ex[1], ex[0]])
+    s = float(np.linalg.norm(ex))
+    d = ImageDraw.Draw(pil)
+    ink = max(1, int(min(2.0 * ss, max(1.0, 0.16 * s))))
+
+    def P(p):
+        return (ox + p[0] * ex[0] + p[1] * ey[0], oy + p[0] * ex[1] + p[1] * ey[1])
+    for x, y, hd, Lc, Wc, col, _ in cars:
+        c, sn = math.cos(math.radians(hd)), math.sin(math.radians(hd))
+
+        def R(u, v):
+            return P((x + u * c - v * sn, y + u * sn + v * c))
+        sh = [P((x + u * c - v * sn - 0.857 * 1.2, y + u * sn + v * c + 0.514 * 1.2))
+              for u, v in ((-Lc / 2, -Wc / 2), (Lc / 2, -Wc / 2), (Lc / 2, Wc / 2), (-Lc / 2, Wc / 2))]
+        d.polygon(sh, fill=(60, 60, 62))
+        body = [R(-Lc / 2, -Wc / 2), R(Lc / 2 - 0.4, -Wc / 2), R(Lc / 2, -Wc / 2 + 0.3), R(Lc / 2, Wc / 2 - 0.3),
+                R(Lc / 2 - 0.4, Wc / 2), R(-Lc / 2, Wc / 2)]
+        d.polygon(body, fill=col)
+        d.line(body + [body[0]], fill=INK, width=ink, joint='curve')
+        if Lc < 6:
+            d.polygon([R(Lc * 0.12, -Wc * 0.4), R(Lc * 0.30, -Wc * 0.42), R(Lc * 0.30, Wc * 0.42), R(Lc * 0.12, Wc * 0.4)],
+                      fill=(40, 46, 56))
+            d.polygon([R(-Lc * 0.36, -Wc * 0.4), R(-Lc * 0.28, -Wc * 0.4), R(-Lc * 0.28, Wc * 0.4), R(-Lc * 0.36, Wc * 0.4)],
+                      fill=(40, 46, 56))
+        else:
+            d.polygon([R(Lc / 2 - 1.2, -Wc * 0.42), R(Lc / 2 - 0.5, -Wc * 0.42), R(Lc / 2 - 0.5, Wc * 0.42),
+                       R(Lc / 2 - 1.2, Wc * 0.42)], fill=(40, 46, 56))
+
+
+def flat_props(pil, cam, t):
+    """The scroll, can and packet in house style for the flat aerial (tiny from up here)."""
+    ss = B.SS
+    d = ImageDraw.Draw(pil)
+    (_, _), k = cam.project((0, 0, 0))
+    lw = max(1, int(k * 0.02 * ss))
+    for (a, b), col, wd in ((CAN, (180, 40, 40), 0.07), (SCROLL, (214, 170, 80), 0.05)):
+        A = [v * ss for v in cam.project((a[0], 0, a[1]))[0]]
+        Bp = [v * ss for v in cam.project((b[0], 0, b[1]))[0]]
+        d.line([tuple(A), tuple(Bp)], fill=INK, width=max(1, int(k * wd * ss) + 2))
+        d.line([tuple(A), tuple(Bp)], fill=col, width=max(1, int(k * wd * ss)))
+    C.SS = ss
+    if k * 0.13 > 3:
+        packet_rest_flat(pil, cam, ss)
+
+
+# ------------------------------------------------------------------------------------------------ the climb, shot 6
+def mix_flat(t):
+    """How far the near-real look has given way to the flat (Showstopper 5: crossed while fastest, 16.8-17.1)."""
+    return ease((t - 16.80) / 0.30)
+
+
+def flat_frame(t, cam):
+    pil = B.canvas((118, 146, 86))
+    aerial_flat(pil, cam, t)
+    draw_cars(pil, cam, t)
+    flat_props(pil, cam, t)
+    k, surf = man_at(t)
+    L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
+    d = dog_at(t)
+    if d is not None:
+        draw_dog(pil, cam, d)
     return pil
 
 
-def picture(t):
+def picture_raw(t):
     cam = cam_for(t)
-    s = shot_of(t)
-    if s in ('1', '2', '3', '4') or t < HANDOVER[0]:
-        return near(cam, t)
-    if t >= HANDOVER[1]:
-        return flat(cam, t)
-    a = sm(HANDOVER[0], HANDOVER[1], t)
-    return Image.blend(near(cam, t), flat(cam, t), a)
+    if t < 16.80:
+        return near_real(t, cam)
+    if t >= 17.10:
+        return flat_frame(t, cam)
+    a = mix_flat(t)
+    nr = near_real(t, cam)
+    fl = flat_frame(t, cam)
+    return Image.blend(nr, fl, a)
 
 
-def overlay(img, t):
-    T.title(img, t)
+_MEMO = None
+
+
+def _memo_dir():
+    """Each frame drawn once at the check size and kept (pre-flight's passes and the small animatic share it);
+    the key is all the code, so any change draws afresh. Nothing in this film's drawing logs to the drawing-pass
+    checks (no views.py people, no burnham people), so a kept frame loses no check."""
+    global _MEMO
+    if _MEMO is None:
+        base = os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache'))
+        _MEMO = os.path.join(base, f'{NAME}-memo', E.code_hash()[:12])
+        if not os.path.isdir(_MEMO):                     # older code's frames: gone (disk)
+            import shutil
+            root = os.path.dirname(_MEMO)
+            for old in (os.listdir(root) if os.path.isdir(root) else []):
+                shutil.rmtree(os.path.join(root, old), ignore_errors=True)
+        os.makedirs(_MEMO, exist_ok=True)
+    return _MEMO
+
+
+def picture(t):
+    """The frame without the title (it goes on last, in overlay)."""
+    if B.SS != 1:
+        return picture_raw(t)
+    i = int(round(t * FPS))
+    if abs(i / FPS - t) > 1e-6:
+        return picture_raw(t)
+    path = os.path.join(_memo_dir(), f'{i:04d}.png')
+    if os.path.exists(path):
+        try:
+            im = Image.open(path)
+            im.load()
+            return im.convert('RGBA')
+        except OSError:
+            pass
+    im = picture_raw(t)
+    tmp = path + f'.{os.getpid()}.tmp'
+    im.save(tmp, format='PNG', compress_level=1)
+    os.replace(tmp, path)
+    return im
+
+
+# ------------------------------------------------------------------------------------------------ title
+TITLE_Y = 1160
+TITLE_X = 480                                    # the middle of TikTok's safe area (its buttons on the right)
+RINGS = ((-150, -60, 300, 20, 230), (170, -40, 280, 200, 250), (0, 160, 330, 120, 200), (-60, -260, 230, 300, 210),
+         (120, 260, 260, 40, 190))                          # (dx, dy, radius, start angle, sweep) in frame pixels
+GOLD = (226, 184, 118)
+
+
+def _glow(layer, radius, strength):
+    a = layer.filter(ImageFilter.GaussianBlur(radius))
+    arr = np.asarray(a, float)
+    arr[..., 3] = np.clip(arr[..., 3] * strength, 0, 255)
+    return Image.fromarray(arr.astype(np.uint8), 'RGBA')
+
+
+def title(img, t):
+    """The teaser's end card over the drifting roundabout: the picture dims (17.45-18.3, half way: the teaser goes
+    to black), gold rings bloom on the 17.45 hit and drift, "The Elder Scrolls VI" and its rule fade in (18.5-19.5),
+    SWINDON burns in letter by letter with a glowing edge (22-27, Sam 8 Nov) and cools to dull bronze (29)."""
+    if t < 17.45:
+        return img
+    w, h = img.size
+    k = w / 1080
+    dim = 0.55 * ease((t - 17.45) / 0.85)
+    img.alpha_composite(Image.new('RGBA', img.size, (8, 6, 4, int(255 * dim))))
+    cy = TITLE_Y * k
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    bloom = ease((t - 17.45) / 1.0)
+    flash = math.exp(-((t - 17.75) / 0.35) ** 2)
+    for i, (ox, oy, r, a0, sw) in enumerate(RINGS):
+        rr = r * (0.72 + 0.28 * bloom) * k
+        spin = (t - 17.45) * (3 + i) * (1 if i % 2 else -1)
+        a = int(255 * min(1.0, 0.25 + 0.75 * bloom) * (0.55 + 0.45 * flash))
+        cx_, cy_ = TITLE_X * k + ox * k, cy + oy * k
+        d.arc([cx_ - rr, cy_ - rr, cx_ + rr, cy_ + rr], a0 + spin, a0 + spin + sw * (0.4 + 0.6 * bloom),
+              fill=(246, 210, 140, a), width=max(1, int(3.6 * k)))
+    img.alpha_composite(_glow(lay, 7 * k, 2.6 + 2.5 * flash))
+    img.alpha_composite(_glow(lay, 2 * k, 1.4))
+    img.alpha_composite(lay)
+    fs = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(52 * k))
+    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(150 * k))
+    try:
+        fb.set_variation_by_name('Bold')
+    except Exception:
+        pass
+    a_s = ease((t - 18.5) / 1.0)
+    if a_s > 0:
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.text((TITLE_X * k, cy - 120 * k), 'The Elder Scrolls VI', font=fs, fill=(214, 176, 112, int(255 * a_s)), anchor='mm',
+               stroke_width=max(1, int(2 * k)), stroke_fill=(24, 18, 12, int(255 * a_s)))
+        half = 240 * k * ease((t - 18.8) / 0.9)
+        d.line([TITLE_X * k - half, cy - 78 * k, TITLE_X * k + half, cy - 78 * k], fill=(214, 176, 112, int(220 * a_s)),
+               width=max(1, int(2 * k)))
+        img.alpha_composite(_glow(lay, 5 * k, 0.9))
+        img.alpha_composite(lay)
+    if t >= 22.0:
+        burn(img, t, fb, TITLE_X * k, cy + 40 * k, k)
     return img
 
 
+SWINDON = 'SWINDON'
+BURN0, BURN_STEP, BURN_LEN = 22.0, 0.62, 1.3        # letter i starts at BURN0 + i*BURN_STEP; all in by 27 s
+
+
+def burn(img, t, font, cx, cy, k):
+    """SWINDON burning in: each letter revealed left to right behind a white-hot edge, glowing, then cooling from
+    molten gold to dull bronze by 29 s (the teaser's SENTINEL)."""
+    w, h = img.size
+    full = font.getbbox(SWINDON, anchor='mm')
+    x_left = cx + full[0]
+    txt = Image.new('L', img.size, 0)
+    ImageDraw.Draw(txt).text((cx, cy), SWINDON, font=font, fill=255, anchor='mm')
+    T = np.asarray(txt, float) / 255
+    xs = np.arange(w)[None, :]
+    reveal = np.zeros((1, w))
+    front = np.zeros((1, w))
+    x = x_left
+    for i, ch in enumerate(SWINDON):
+        cw = font.getlength(ch)
+        u = (t - (BURN0 + i * BURN_STEP)) / BURN_LEN
+        if u > 0:
+            fx = x + cw * min(1.0, u) * 1.1 - cw * 0.05
+            inl = (xs >= x - 2) & (xs < x + cw + 2)
+            reveal = np.maximum(reveal, (inl & (xs <= fx)).astype(float))
+            if u < 1.1:
+                front = np.maximum(front, inl * np.exp(-((xs - fx) / (14 * k)) ** 2))
+        x += cw
+    cool = ease((t - 24.0) / 5.0)                         # the whole word cools as the last letters land
+    hot = np.array([255, 214, 140])
+    bronze = np.array([168, 120, 72])
+    col = hot * (1 - cool) + bronze * cool
+    a = T * reveal
+    rgb = np.zeros((h, w, 3)) + col
+    rgb = rgb + front[..., None] * np.array([80, 60, 40]) * T[..., None]
+    lay = np.zeros((h, w, 4))
+    lay[..., :3] = np.clip(rgb, 0, 255)
+    lay[..., 3] = a * 255
+    out = Image.fromarray(lay.astype(np.uint8), 'RGBA')
+    edge = Image.fromarray((np.clip(front * T * 255 * 1.5 + a * 80 * (1 - cool), 0, 255)).astype(np.uint8), 'L')
+    glowl = Image.new('RGBA', img.size, (255, 200, 120, 0))
+    glowl.putalpha(edge.filter(ImageFilter.GaussianBlur(10 * k)))
+    img.alpha_composite(glowl)
+    stroke = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(stroke).text((cx, cy), SWINDON, font=font, fill=(0, 0, 0, 0), anchor='mm',
+                                stroke_width=max(1, int(4 * k)), stroke_fill=(24, 16, 10, 255))
+    sa = np.asarray(stroke, float)
+    sa[..., 3] *= np.asarray(Image.fromarray((reveal.repeat(h, 0) * 255).astype(np.uint8)).filter(
+        ImageFilter.MaxFilter(3)), float) / 255
+    img.alpha_composite(Image.fromarray(sa.astype(np.uint8), 'RGBA'))
+    img.alpha_composite(out)
+    hotl = Image.new('RGBA', img.size, (255, 248, 224, 0))
+    hotl.putalpha(Image.fromarray((np.clip(front * T, 0, 1) * 255).astype(np.uint8)))
+    img.alpha_composite(hotl)
+
+
+def overlay(img, t):
+    return title(img, t)
+
+
+def frame_image(t):
+    return overlay(picture(t), t)
+
+
 def draw_order(t):
+    """Rule 57: what picture(t) draws, back to front."""
     s = shot_of(t)
-    base = ['soil', 'litter', 'can', 'scroll', 'packet', 'DROOLER', 'drool']
-    if s in ('4', '5') and t >= DOG_IN:
-        base.append('STAFFIE')
-    if s == '6':
-        return ['roundabout', 'burnt car', 'DROOLER', 'e-bikes', 'traffic', 'walkers', 'fight', 'lamp post']
-    return base
+    if s[0] in '1234' or t < 17.10:
+        out = ['ground', 'litter', 'CAN']
+        if scroll_cover(t) < 1.0:
+            out.append('SCROLL')
+        if t >= 15.08:
+            out.append('PACKET')
+        out.append('DROOLER')
+        if dog_at(t) is not None:
+            out.append('STAFFIE')
+        if PACK_IN <= t < 15.08:
+            out.append('PACKET')
+        out.append('dust')
+        return out
+    return ['aerial', 'cars', 'CAN', 'SCROLL', 'PACKET', 'DROOLER', 'STAFFIE', 'title']
 
 
+def _fx_dust(img):
+    """The dust alone (shot 2's camera, 9 s): its streaks as the alpha."""
+    cam = cam_for(9.0)
+    z = np.zeros((B.H * B.SS, B.W * B.SS, 3))
+    a = G.dust(z + 1.0, cam, B.SS, 9.0, strength=0.9, gust=gust(9.0))
+    al = np.clip((1.0 - a.mean(-1)) * 255 * 3, 0, 255).astype(np.uint8)
+    img.alpha_composite(Image.merge('RGBA', [Image.new('L', img.size, 220)] * 3 + [Image.fromarray(al)]))
+
+
+def _fx_glint(img):
+    z = np.zeros((B.H * B.SS, B.W * B.SS, 3))
+    glint(z, cam_for(7.79), 7.79)
+    al = np.clip(z.max(-1) * 255, 0, 255).astype(np.uint8)
+    al[al < 20] = 0
+    img.alpha_composite(Image.merge('RGBA', [Image.new('L', img.size, 255)] * 3 + [Image.fromarray(al)]))
+
+
+def _fx_burn(img):
+    """SWINDON mid-burn (24.3 s) alone: the letters, their hot edge and glow."""
+    k = img.width / 1080
+    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(150 * k))
+    burn(img, 24.3, fb, TITLE_X * k, (TITLE_Y + 40) * k, k)
+
+
+EFFECTS[:] = [('dust', 'trail', _fx_dust), ('glint', 'flash', _fx_glint), ('title burn', 'glow', _fx_burn)]
+
+
+# ------------------------------------------------------------------------------------------------ sound
 def soundtrack(stems=False):
-    import subprocess
-    import tempfile
-    wav = os.path.join(tempfile.mkdtemp(), 'a.wav')
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', AUDIO, '-ac', '1', '-ar', str(SR), wav], check=True)
-    import wave
-    with wave.open(wav) as w:
-        x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(float) / 32768
+    """The teaser's sound as it is (Sam, 8 Nov), only brought under full scale (its peaks went over by 1.1 dB)."""
     n = int((DUR + 0.3) * SR)
+    x = MA.load(os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-audio.m4a'))
+    x = x * (0.97 / max(1e-6, float(np.abs(x).max())))
     mix = np.zeros(n)
     mix[:min(n, len(x))] = x[:n]
     return (mix, np.zeros(n), mix) if stems else mix
 
 
+# ------------------------------------------------------------------------------------------------ checks
+def checks():
+    """Plan checks (seconds): the traffic never passes through itself; the shots follow the sound's hits."""
+    faults = traffic_faults()
+    for name, a, b in SHOTS[1:]:
+        if not any(abs(a - h) < 0.02 for h in HITS + (16.50,)):    # 16.50: the teaser's cut to black
+            faults.append(f'shot {name} starts at {a} s, off the sound\'s hits')
+    if faults:
+        raise ValueError('check: ' + '; '.join(faults))
+
+
+def scene(t):
+    """Everyone and everything solid at t, exactly where picture(t) puts them (audit.py: rules 5, 6)."""
+    import audit
+    import clipcheck as CC
+    out = []
+    k, surf = man_at(t)
+    out.append(audit.Thing('DROOLER', L.solids('DROOLER', k, MAN)))
+    out.append(audit.Thing('CAN', [CC.capsule('CAN', 'body', (CAN[0][0], 0.02, CAN[0][1]), (CAN[1][0], 0.02, CAN[1][1]), 0.033)]))
+    if scroll_cover(t) < 1.0:
+        out.append(audit.Thing('SCROLL', [CC.capsule('SCROLL', 'body', (SCROLL[0][0], 0.02, SCROLL[0][1]),
+                                                     (SCROLL[1][0], 0.02, SCROLL[1][1]), 0.025)]))
+    p = packet_at(t)
+    if p is not None:
+        out.append(audit.Thing('PACKET', [CC.sphere('PACKET', 'body', p[0], 0.05)]))
+    d = dog_at(t)
+    if d is not None:
+        a = math.radians(d['heading'])
+        f = np.array([math.cos(a), 0, math.sin(a)])
+        j = np.array([d['jaw'][0], 0.2, d['jaw'][1]])
+        out.append(audit.Thing('STAFFIE', [CC.sphere('STAFFIE', 'head', j + f * 0.04, 0.09),
+                                           CC.capsule('STAFFIE', 'body', j + f * 0.2, j + f * 0.5, 0.13)]))
+    return out
+
+
+def audits():
+    return []
+
+
+def LINE_SUBJECTS():
+    """The man and the Staffie alone, large, for the line-work check (linecheck.py)."""
+    def man_(im):
+        cam = C.topcam(0.0, -0.1, 2.4, 2.1)
+        k, surf = man_at(0.0)
+        L.draw(im, cam, k, MAN, 0.0)
+
+    def dog_(im):
+        cam = C.topcam(0.6, 0.7, 1.0, 0.9)
+        draw_dog(im, cam, dict(jaw=(0.42, 0.52), heading=DOG_HEAD, gait=0.0, run=0.25, clamped=True))
+    return [('DROOLER', man_), ('STAFFIE', dog_)]
+
+
+# ------------------------------------------------------------------------------------------------ sheets
+def check_sheet(out, times, labels=None):
+    """A labelled sheet of frames (1080 px wide, 4 across), each with its time and shot."""
+    B.SS = 1
+    from multiprocessing import Pool
+    with Pool(os.cpu_count()) as p:
+        ims = p.map(_sheet_frame, times)
+    cols = 4
+    tw, th = 270, 480
+    rows = (len(ims) + cols - 1) // cols
+    sheet = Image.new('RGB', (cols * tw, rows * (th + 28)), (20, 20, 20))
+    d = ImageDraw.Draw(sheet)
+    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 15)
+    for i, (im, t) in enumerate(zip(ims, times)):
+        x, y = (i % cols) * tw, (i // cols) * (th + 28)
+        lab = labels[i] if labels else f'{t:.2f} s  shot {shot_of(t)}'
+        d.text((x + 6, y + 6), lab, font=f, fill=(255, 230, 120))
+        sheet.paste(im, (x, y + 28))
+    sheet.save(out, quality=88)
+    print('sheet:', out)
+
+
+def _sheet_frame(t):
+    """A sheet tile; under 4 s it carries the Hook Text as finish.py lays it (HOOK: y 1240)."""
+    B.SS = 1
+    im = frame_image(t).convert('RGBA')
+    if 0.5 <= t < HOOK[1].get('until', 4.0):
+        import tempfile
+        import hook_text as HT
+        path = os.path.join(tempfile.mkdtemp(), 'hook.png')
+        HT.card(1080, 1920, HOOK[0], HOOK[1]['y'], path)
+        im.alpha_composite(Image.open(path).convert('RGBA').resize(im.size))
+    return im.convert('RGB').resize((270, 480), Image.LANCZOS)
+
+
 def main():
     a = sys.argv[1:]
-
-    def set_ss(v):
-        B.SS = v
-        C.SS = v
-        A.SS = v
     if a[0] == 'stills':
-        set_ss(1)
+        B.SS = 1
         os.makedirs(a[1], exist_ok=True)
         for x in a[2:]:
-            overlay(picture(float(x)), float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=88)
+            frame_image(float(x)).convert('RGB').save(os.path.join(a[1], f't{x}.jpg'), quality=90)
+    elif a[0] == 'sheet':
+        check_sheet(a[1], [float(x) for x in a[2:]])
+    elif a[0] == 'check':
+        B.SS = 1
+        checks()
+        import audit
+        f = [x[len('AUDIT: '):] for x in audit.check(sys.modules[__name__])]
+        print('\n'.join(['AUDIT: ' + x for x in f]) or 'audit: clean')
     elif a[0] == 'final':
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
-                 set_ss=set_ss, crf=26 if small else 20, reuse='--reuse' in a,
+                 set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
-                 stamp=False if '--nostamp' in a else None)
+                 stamp=False if '--nostamp' in a else None,
+                 lock=False if '--no-lock' in a else None)   # --no-lock: Sam, 8 Nov: "Skip the checks" (pre-flight
+#                                                              hung twice in its forked workers; notes, Decisions)
 
 
 if __name__ == '__main__':

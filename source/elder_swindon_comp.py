@@ -98,7 +98,7 @@ def lying_rev(img, cam, a, b, prof, mat, H=None, bury=0.0, seed=0):
     rmax = max(prof(t)[0] for t in np.linspace(0, 1, 200)) * k
     x0, x1 = int(max(0, min(ax, bx) - rmax - 2)), int(min(w, max(ax, bx) + rmax + 2))
     y0, y1 = int(max(0, min(ay, by) - rmax - 2)), int(min(h, max(ay, by) + rmax + 2))
-    if x1 <= x0 or y1 <= y0:                             # wholly out of shot
+    if x1 <= x0 or y1 <= y0:                             # off the frame
         return img
     ys, xs = np.mgrid[y0:y1, x0:x1]
     px, py = xs + 0.5 - ax, ys + 0.5 - ay
@@ -250,7 +250,7 @@ def drool(pil, cam, k):
 STAFFIE = dict(coat=(122, 84, 56), dark=(88, 58, 38), chest=(236, 230, 220), nose=(30, 26, 26))
 
 
-def dog(pil, cam, head_at, heading, pull=0.0, run=None):
+def dog(pil, cam, head_at, heading, pull=0.0):
     """A Staffordshire bull terrier from above, house style (flat colour, one outline): broad head with the jaws
     clamped on the trouser hem at `head_at` (x, z), body braced away along `heading` degrees, legs splayed."""
     hx, hz = head_at
@@ -270,16 +270,12 @@ def dog(pil, cam, head_at, heading, pull=0.0, run=None):
         pts = [(u + ru * math.cos(t), v + rv * math.sin(t)) for t in np.linspace(0, 2 * math.pi, n, endpoint=False)]
         poly(pts, fill)
     d = ImageDraw.Draw(pil)
-    SS = B.SS
     # shadow
     sh = [tuple(c * SS for c in cam.project((W(u, v)[0] + 0.04, 0.0, W(u, v)[2] + 0.03))[0])
           for u, v in [(0.0, -0.12), (0.5, -0.15), (0.6, 0.0), (0.5, 0.15), (0.0, 0.12)]]
     d.polygon(sh, fill=(30, 22, 16, 110))
     for u, v, du, dv in ((0.12, -0.09, -0.05, -0.07), (0.12, 0.09, -0.05, 0.07), (0.44, -0.09, 0.07, -0.06),
                          (0.44, 0.09, 0.07, 0.06)):  # short legs braced out, paws dug in
-        if run is not None:                              # running: legs reach and push in a gallop
-            sw = 0.11 * math.sin(run + (0 if u < 0.3 else math.pi) + (0.5 if v > 0 else 0))
-            du, dv = sw - 0.02, dv * 0.5
         poly([(u - 0.035, v), (u + du - 0.03, v + dv), (u + du + 0.03, v + dv), (u + 0.035, v)], STAFFIE['dark'])
     poly([(0.50, -0.02), (0.64 + pull * 0.02, -0.006), (0.64 + pull * 0.02, 0.006), (0.50, 0.02)], STAFFIE['coat'])  # tapered tail
     # one silhouette: broad shoulders, narrow waist, rump; the head as wide as the shoulders (the Staffie's)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""elder_swindon_aerial: the Magic Roundabout, Swindon, from above in flat house style, drawn through the film's camera
+"""elder_swindon_extras (kept from a duplicate build, 8 Nov; port the people and vehicles onto elder_swindon.py): the Magic Roundabout, Swindon, from above in flat house style, drawn through the film's camera
 (so the zoom-out and the held shot use one set; rule 1). Benchmark: Sam's two photos (notes, 'The world').
 
 MAP
