@@ -6,8 +6,8 @@ one ink outline, hand-cut edges), every piece at its real size in metres through
     python3 source/ad_vanced_notice_sets.py reel OUT.mp4      a few seconds of each moving set (fire, sea, tanker)
     python3 source/benchmark.py ad_vanced_notice_sets OUT.jpg the place lists ticked against the photos (rule 3)
 
-Map: helpers 45 | study 132 (desk top layer, study_pose 462) | strait (cliff + close-up) 504 | tanker 622 |
-     strait() 879 | gas station 917 | pickup 1064 | the cast in place 1200 | BENCHMARK, PROP_SIZES 1326 | sheets 1400
+Map: helpers 45 | study 132 (study_pose 469) | strait (cliff + close-up) 511 | tanker 618 |
+     strait() 871 | gas station 909 | pickup 1056 | the cast in place 1192 | BENCHMARK, PROP_SIZES 1318 | sheets 1392
 
 Use in the film (each returns a 1080 x 1920 RGBA):
     study_back(t), study_front()            people go between (Vance at STUDY_VANCE: x, neck_y, s)
@@ -299,7 +299,13 @@ def _study_still():
     _bookcases(pen)
     _fireplace(pen)
     _cornice(pen)
-    _chair(pen)
+    return shrink(im)
+
+
+@functools.lru_cache(maxsize=1)
+def _chair_layer():
+    im = layer()
+    _chair(Pen(im))
     return shrink(im)
 
 
@@ -355,6 +361,7 @@ def study_back(t):
     pen._p = lambda pts: [((x + off[0]) * SS, (y + off[1]) * SS) for x, y in pts]
     _fire(pen, t)
     im.alpha_composite(fl.resize((crop[2] - crop[0], crop[3] - crop[1]), Image.LANCZOS), (crop[0], crop[1]))
+    im.alpha_composite(_chair_layer())                # the chair in front of the fire (Sam, 8 Nov: the glow cut it)
     return im
 
 
@@ -503,16 +510,16 @@ def study_front():
 
 # ---------------------------------------------------------------------------------------------- shot 2: the strait
 # The world: x right, y out to sea, z up (metres), the sea at z 0; the cliff-top plateau at z 60, its edge about 12 m
-# out. The wide camera stands on the plateau 1.6 m up (61.6 m above the sea), looking 8 degrees down (horizon y 763),
-# focal 1400. The close-up camera stands 1.1 m in front of Vance's mark, at his eye height, turned 4 degrees left so
+# out. The wide camera stands on the plateau 1.6 m up (61.6 m above the sea), horizon y 763, focal 1890 (35% closer
+# than the composition, Sam 8 Nov); no headland or tree, only sea and the far shore behind (the eye goes to the ships). The close-up camera stands 1.1 m in front of Vance's mark, at his eye height, turned 4 degrees left so
 # the burning wreck sits over his left shoulder (screen right, Sam 7 Nov), horizon y 1010.
 PLATEAU = 60.0
-CLIFF = WH.Cam(pos=(0.0, 0.0, PLATEAU + 1.6), yaw=0.0, pitch=-8.0, focal=1400.0, size=(W, H))
-VANCE_MARK = (-0.36, 2.6)                           # where he stops (screen x 360)
-CLOSE = WH.Cam(pos=(-0.36, 1.5, PLATEAU + 1.75), yaw=3.98, pitch=-1.91, focal=1500.0, size=(W, H))
-CAMS = {'wide': CLIFF, 'close': CLOSE}
+CLIFF_F = 1890.0                                    # Sam, 8 Nov: 35% closer than the composition's 1400
+CLIFF = WH.Cam(pos=(0.0, 0.0, PLATEAU + 1.6), yaw=0.0, pitch=-math.degrees(math.atan(197.0 / CLIFF_F)),
+               focal=CLIFF_F, size=(W, H))            # the horizon stays at y 763
+VANCE_MARK = (-0.30, 3.0)                           # where he stops: screen x 360, 35% bigger than in the composition
 NEAR_Y, NEAR_L, NEAR_V = 1200.0, 330.0, 6.0        # the moving tanker: 1.2 km out, 330 m long, 6 m/s (12 knots)
-X_HIT = 153.8                                       # its middle's world x when the missile lands (screen 720, y 836)
+
 HAZE = (226, 230, 228)
 SKY_DAY = [(0.5, (226, 230, 228)), (1.4, (214, 224, 230)), (3.2, (200, 216, 230)), (6.5, (186, 208, 230)),
            (11.0, (172, 200, 228)), (17.0, (160, 192, 226)), (25.0, (148, 184, 222)), (36.0, (138, 176, 218)),
@@ -532,6 +539,26 @@ def proj(cam, P):
     """Screen (x, y) and depth of world points (N x 3)."""
     s, d = cam.screen(np.asarray(P, float))
     return s, d
+
+
+def _x_at(cam, sx, y):
+    """The world x on the sea at distance y that the camera sees at screen x."""
+    a, b = -2000.0, 2000.0
+    for _ in range(50):
+        m = (a + b) / 2
+        if proj(cam, [(m, y, 0.0)])[0][0][0] < sx:
+            a = m
+        else:
+            b = m
+    return (a + b) / 2
+
+
+X_HIT = _x_at(CLIFF, 790.0, NEAR_Y)                 # its middle when the missile lands: screen x 790, y 861
+_CU_POS = (VANCE_MARK[0], VANCE_MARK[1] - 1.1, PLATEAU + 1.75)
+CLOSE = WH.Cam(pos=_CU_POS, yaw=math.degrees(math.atan2(X_HIT - _CU_POS[0], NEAR_Y - _CU_POS[1]) - math.atan(300 / 1500.0))
+               * -1.0, pitch=-1.91, focal=1500.0, size=(W, H))
+CAMS = {'wide': CLIFF, 'close': CLOSE}
+
 
 
 def sdir(cam, az_deg, el_deg):
@@ -587,37 +614,6 @@ def _shore(pen, cam):
         pts += [sdir(cam, 40, 0.0), sdir(cam, -40, 0.0)]
         pen.poly(pts, col, 1.6, ink)
 
-
-def _headland(pen, cam, img):
-    """Musandam's bare limestone across the bay on the right: one silhouette (a sheer face to the sea, a jagged top),
-    filled with level grey-brown layers that follow the rock's distance, gullies down the face, hazed by distance."""
-    r = random.Random(17)
-    rid = []
-    for x, y, z in ((330, 1500, 0), (338, 1500, 120), (360, 1520, 210), (430, 1600, 250), (520, 1680, 300),
-                    (650, 1800, 330), (820, 1950, 390), (1000, 2100, 410), (1250, 2250, 450), (1600, 2400, 470),
-                    (2200, 2600, 500), (3200, 2800, 520)):
-        rid.append((x + 90, y, z if z < 100 else z + r.uniform(-14, 14)))
-    top, _ = proj(cam, rid)
-    foot, _ = proj(cam, [(x, y, 0.0) for x, y, _ in rid])
-    sil = [tuple(p) for p in top] + [tuple(p) for p in foot[::-1]]
-    mask = Image.new('L', (W * SS, H * SS), 0)
-    ImageDraw.Draw(mask).polygon([(x * SS, y * SS) for x, y in sil], fill=255)
-    rock = layer()
-    rp = Pen(rock)
-    hz = lambda c: mix(c, HAZE, 0.3)
-    layers = [(0, 40, (150, 130, 110)), (40, 95, (170, 150, 126)), (95, 150, (140, 120, 100)), (150, 215, (166, 146, 122)),
-              (215, 290, (136, 116, 96)), (290, 370, (160, 140, 116)), (370, 460, (144, 124, 104)), (460, 600, (166, 148, 126))]
-    for z0, z1, col in layers:
-        a, _ = proj(cam, [(x, y, z0) for x, y, _ in rid])
-        b, _ = proj(cam, [(x, y, z1) for x, y, _ in rid])
-        pts = [tuple(p) for p in b] + [tuple(p) for p in a[::-1]]
-        rp.poly(wobbly(pts, 1.0, z0, 30), hz(col), 0)
-        rp.line([tuple(p) for p in a], hz((112, 96, 80)), 1.2)
-    for x, y, zt in rid[2:-1]:                                                    # gullies down the face
-        s, _ = proj(cam, [(x, y, zt * 0.97), (x + 25, y + 10, zt * 0.5), (x + 8, y + 4, 6)])
-        rp.line([tuple(p) for p in s], hz((104, 88, 72)), 2)
-    img.alpha_composite(Image.composite(rock, Image.new('RGBA', rock.size, (0, 0, 0, 0)), mask))
-    pen.poly(sil, None, 2, mix(INK, HAZE, 0.35))
 
 # ---------------------------------------------------------------------------------------------- the tanker
 TANKER_COLS = [  # hull, band (above the waterline), funnel, funnel band
@@ -714,20 +710,21 @@ def _wake(pen, cam, x, y, L, t):
 
 
 # the flotilla at anchor: (x, y, length, colours, haze) world metres; all bows the same way (right)
-ANCHORED = [(-2570, 9000, 320, 0), (-1030, 6000, 300, 1), (-590, 7500, 330, 2),
-            (-730, 3200, 330, 4), (230, 5200, 310, 3), (-1900, 4600, 290, 2)]
+_SPREAD = [(40, 4200, 300, 0), (170, 7600, 320, 1), (330, 6000, 300, 2), (560, 9000, 330, 4), (650, 5600, 290, 3),
+           (880, 7000, 310, 2), (1000, 4300, 270, 1)]   # (screen x, metres out): spread clear of Vance and the near one
+ANCHORED = [(_x_at(CLIFF, sx, d), d, L, c) for sx, d, L, c in _SPREAD]
 
 
 @functools.lru_cache(maxsize=4)
 def _strait_still(which):
-    """The still part of a strait shot: sky, wisps, far shore, headland, sea bands, the anchored flotilla."""
+    """The still part of a strait shot: sky, wisps, far shore, sea bands (no headland: Sam, 8 Nov, the eye goes to the
+    tankers)."""
     cam = CAMS[which]
     im = _bands(cam)
     lay = layer()
     pen = Pen(lay)
     _wisps(pen, cam)
     _shore(pen, cam)
-    _headland(pen, cam, lay)
     im.alpha_composite(shrink(lay))
     return im
 
@@ -808,22 +805,6 @@ def _rock(pen, cam, x, y, r, seed, col=None):
     pen.poly(pts, col or rr.choice([ROCK_D, (146, 122, 98), (110, 94, 80), (160, 140, 116)]), max(1.2, min(LW, rx / 6)))
 
 
-def _thorn_tree(pen, cam, x, y):
-    """The odd thorn tree: a thin forked trunk and a flat, wide, wind-shaped crown (2.4 m tall)."""
-    P, d = proj(cam, [(x, y, PLATEAU), (x + 0.1, y, PLATEAU + 1.4), (x - 0.5, y, PLATEAU + 1.9), (x + 0.6, y, PLATEAU + 2.0)])
-    ppm = cam.focal / float(d[0])
-    b, f, l, rgt = [tuple(p) for p in P]
-    pen.line([b, f, l], (92, 70, 50), 0.09 * ppm)
-    pen.line([f, rgt], (92, 70, 50), 0.07 * ppm)
-    cy = (l[1] + rgt[1]) / 2 - 0.15 * ppm
-    r = random.Random(3)
-    pts = [(b[0] - 1.25 * ppm + i * 2.5 * ppm / 12, cy - 0.28 * ppm * math.sin(math.pi * i / 12) - r.uniform(0, 0.08) * ppm)
-           for i in range(13)]
-    pts += [(px, cy + 0.12 * ppm + r.uniform(-0.04, 0.04) * ppm) for px, _ in pts[::-1]]
-    pen.poly(pts, (118, 124, 74), LW)
-    pen.poly(pts[2:5] + [(pts[4][0], cy + 0.04 * ppm), (pts[2][0], cy + 0.04 * ppm)], (98, 104, 60), 0)
-
-
 @functools.lru_cache(maxsize=4)
 def _cliff_top(which):
     """The plateau in front: pale sand, darker patches, the dirt track Vance walks, scattered stones, the rim, the odd
@@ -852,13 +833,24 @@ def _cliff_top(which):
         sp, dp = proj(cam, ring)
         if (dp > 0.5).all():
             pen.poly([tuple(p) for p in sp], SAND_D, 0)
-    ys = np.linspace(y_cam + 0.7, 11.6, 60)                    # the dirt track and its two ruts
-    sp, _ = proj(cam, [(_track_x(y) - 1.3, y, PLATEAU) for y in ys] + [(_track_x(y) + 1.3, y, PLATEAU) for y in ys[::-1]])
+    def run(off):                                              # one line along the track, out to the cliff edge
+        ys = list(np.linspace(y_cam + 0.7, 16.0, 200))
+        pts = []
+        for y in ys:
+            x = _track_x(y) + off
+            if y >= _edge_y(x):
+                pts.append((x, _edge_y(x), PLATEAU))
+                break
+            pts.append((x, y, PLATEAU))
+        return pts
+    left, right = run(-1.3), run(1.3)                         # the dirt track runs right up to the edge (Sam, 8 Nov)
+    rim = [(x, _edge_y(x), PLATEAU) for x in np.linspace(left[-1][0], right[-1][0], 12)]
+    sp, _ = proj(cam, left + rim + right[::-1])
     pen.poly([tuple(p) for p in sp], SAND_L, LW)
     for off in (-0.75, 0.75):
-        sp, _ = proj(cam, [(_track_x(y) + off, y, PLATEAU) for y in ys])
+        sp, _ = proj(cam, run(off))
         pen.line([tuple(p) for p in sp], (200, 182, 146), 3.0)
-    _thorn_tree(pen, cam, -3.9, 11.9)
+    pen.line(pts, INK, LW)                                     # the rim's ink over the track's end
     rocks = []
     for i in range(260):
         py = y_cam + 1.0 + (11.6 - y_cam - 1.0) * r.random() ** 1.3
@@ -991,11 +983,25 @@ def _sky_land(pen):
         x0 = k * 6.0
         pen.poly(_ground_quad(x0, x0 + 3, 38.9, 39.1), (236, 200, 60), 0)
     # far off: a grain elevator, a farmstead's trees
-    gx, gd = 176.0, 1500.0                                                 # right of Vance's head
-    for k, (dx, hgt, wd) in enumerate(((0, 40, 9), (10, 40, 9), (20, 34, 9), (-8, 52, 5))):
-        pen.poly(_gbox(gx + dx, gx + dx + wd, gd, 0, hgt), mix((214, 210, 200), (204, 228, 244), 0.35), 1.6,
-                 mix(INK, (204, 228, 244), 0.4))
-    pen.poly(_gbox(gx - 2, gx + 28, gd, 40, 46), mix((180, 176, 168), (204, 228, 244), 0.35), 1.6, mix(INK, (204, 228, 244), 0.4))
+    gx, gd = 163.0, 1500.0                                                 # right of Vance's head
+    sky = (204, 228, 244)
+    hz_ = lambda c: mix(c, sky, 0.3)
+    ink = mix(INK, sky, 0.35)
+    ppm = GAS.ppm(gd)
+    # a farm grain site, not a monument (Sam, 8 Nov: pillars with a bar across read as Stonehenge): three round
+    # steel bins with cone roofs, ribbed, touching; a tall thin elevator leg beside them; spouts down to each bin
+    for k, (dx, wd, hgt) in enumerate(((0, 13, 16), (13.5, 13, 16), (27, 10, 12))):
+        x0, x1 = gx + dx, gx + dx + wd
+        pen.poly(_gbox(x0, x1, gd, 0, hgt), hz_((196, 198, 200)), 1.4, ink)
+        for z in np.arange(2.0, hgt, 2.5):
+            pen.line([_gp(x0, gd, z), _gp(x1, gd, z)], hz_((168, 170, 174)), 1.0)
+        pen.poly([_gp(x0 - 0.4, gd, hgt), _gp(x1 + 0.4, gd, hgt), _gp((x0 + x1) / 2, gd, hgt + wd * 0.42)],
+                 hz_((176, 178, 182)), 1.4, ink)
+    lx = gx + 38.0
+    pen.poly(_gbox(lx, lx + 3.2, gd, 0, 38), hz_((214, 210, 200)), 1.4, ink)
+    pen.poly([_gp(lx - 0.8, gd, 38), _gp(lx + 4.0, gd, 38), _gp(lx + 1.6, gd, 41)], hz_((170, 60, 50)), 1.2, ink)
+    for dx, wd, hgt in ((0, 13, 16), (13.5, 13, 16), (27, 10, 12)):
+        pen.line([_gp(lx, gd, 35), _gp(gx + dx + wd / 2, gd, hgt + wd * 0.42)], ink, 1.0)
     for x in (180.0, 210.0, 240.0):
         cx, cy = _gp(x, 1200, 0)
         pen.ell(cx, cy - 9, 14, 10, mix((86, 110, 60), (204, 228, 244), 0.3), 1.4, mix(INK, (204, 228, 244), 0.4))
@@ -1338,14 +1344,14 @@ BENCHMARK = [
                 ('warm, low light; the fire glows on the nearby wood', 'done: warm oak; flat glow on the jambs')]),
     dict(place='The cliff and the strait', refs=['cliff-musandam-plateau.jpg', 'cliff-musandam-road.jpg',
                                                   'cliff-musandam-fjord.jpg'], at=2.0,
-         items=[('bare limestone mountains, grey-brown, in level layers', 'done: the headland, 6 layers'),
-                ('a stony plateau: pale sand, scattered dark rocks, a dirt track', 'done: track with ruts, 260 stones, grit'),
-                ('sheer cliff faces dropping straight into the sea', 'done: the headland face, gullies'),
+         items=[('bare limestone mountains, grey-brown, in level layers', 'left out: Sam, 8 Nov: the eye goes to the tankers'),
+                ('a stony plateau: pale sand, scattered dark rocks, a dirt track', 'done: track to the cliff edge, ruts, stones'),
+                ('sheer cliff faces dropping straight into the sea', 'done: the track runs to a sheer edge; the sea far below'),
                 ('calm deep blue-teal sea, fine ripples, no waves', 'done: Flying Whales sea re-lit, ripples drift'),
                 ('haze: the farther, the paler and bluer', 'done: ships and hills fade by distance'),
                 ('the far shore: flat grey hill shapes on the horizon', 'done: two grey hill bands'),
                 ('a pale washed-out blue sky, a few thin wisps', 'done: pale bands, three wisps'),
-                ('no plants but the odd thorn tree', 'done: one thorn tree on the rim'),
+                ('no plants but the odd thorn tree', 'left out: none in shot; nothing to pull the eye from the tankers'),
                 ('high sun: short, hard shadows', 'done: stone shadows; cliff_shadow for Vance')]),
     dict(place='The tankers', refs=['tanker-side-wake.jpg', 'tanker-side-dark.jpg', 'tankers-at-anchor-haze.jpg'], at=3.0,
          items=[('very long and low: 330 m long, about 10 m above the water', 'done: 330 m, 9 m freeboard'),
@@ -1355,7 +1361,7 @@ BENCHMARK = [
                 ('a flat deck: a pipe run and catwalk down the middle', 'done: pipe run on posts'),
                 ('cranes and a manifold amidships; a raised bow and mast', 'done'),
                 ('no names or logos (decision: no brands)', 'done: none'),
-                ('at anchor: still, all pointing the same way', 'done: 6 at anchor + the near one, all bows right'),
+                ('at anchor: still, all pointing the same way', 'done: 7 at anchor + the near one, all bows right'),
                 ('under way: a white bow wave and a spreading V wake', 'done: V arms, churn, ripples'),
                 ('far ones: grey shapes in the haze, the bridge the tallest bump', 'done: haze by distance')]),
     dict(place='The gas station', refs=['gas-iowa-canopy.jpg', 'gas-price-pylon.jpg', 'gas-price-board.jpg'], at=4.0,
@@ -1367,7 +1373,7 @@ BENCHMARK = [
                 ('rows: DIESEL 6.15, REGULAR 4.39, PREMIUM 5.25 (peak war prices)', 'done'),
                 ('a pale concrete forecourt with oil stains', 'done: joints and stains'),
                 ('flat land to the horizon under a huge sky; power poles', 'done: field strips, poles, wires'),
-                ('a grain elevator in the distance', 'done: on the horizon, right of Vance'),
+                ('a grain elevator in the distance', 'done: steel bins and a leg tower, right of Vance'),
                 ('a low shop with a glass front behind', 'done: on the right, no name')]),
     dict(place='The pickup', refs=['pickup-side.jpg', 'pickup-rear.jpg', 'gas-nozzle-filler.jpg'], at=5.0,
          items=[('a full-size 4x4 crew cab: 4 doors, 5.9 m long, 1.9 m tall', 'done: 5.9 x 1.96 m'),
