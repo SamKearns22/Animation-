@@ -3,9 +3,9 @@
 ## Where things stand
 - **Rules that bite next:** 3 (each place ticked against its photos: `benchmark.py ad_vanced_notice_sets`), 40 (showstopper list ticked at the first rehearsal clip), 54 (only deck pieces and the funnel top break off; the hull stays whole)
 - **Done (8 Nov):** arms joined to shoulders in the shared kit (notes 14-18, another chat; rule 81). All four sets built as flat paintings at real size, plus the tanker and pickup props (notes 19-20); Sam's first set notes fixed (21-25: shot 2 35% closer, headland and tree out, road to the edge, chair glitch, grain bins). Sheets and clip re-sent.
-- **Next:** wait for Sam's Y/N on the sets. Then fresh chat, Opus high effort. Type: "Ad-Vanced Notice: build the showstopper. Read notes/ad-vanced-notice.md".
-- **Needs Sam:** Y/N on the sets (notes 20, 22 list what I added and took out); any notes on the arms sheet; the rest of the script; the Hook Text later.
-- **Read:** this file (Where things stand, the showstopper list, notes 19-25); `guides/kit-catalogue.md` rows for the Flying Whales effects and the Ad-Vanced Notice sets.
+- **Next:** fresh chat, Opus high effort (the showstopper is new building). Type: "Ad-Vanced Notice: build the showstopper. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** nothing on the sets (Y, 8 Nov: notes 20-25 stand; the thorn tree is in reserve, its code is in commit eab160d, `_thorn_tree`); any notes on the arms sheet; the rest of the script; the Hook Text later.
+- **Read:** this file (Where things stand, the showstopper list, notes 19-26); `guides/kit-catalogue.md` rows for the Flying Whales effects and the Ad-Vanced Notice sets.
 - **Open rule requests:** none (R1 written as rule 81, 8 Nov).
 - **For Claude:** sets in `source/ad_vanced_notice_sets.py` (MAP at the top; `BENCHMARK`, `PROP_SIZES`, `SHOTS`, `picture(t)` there for benchmark.py/sheet.py; the film file imports them). Study: `study_back(t)`, `study_pose(j)` (no kit chair or desk; desk top drawn between body and arms), `study_front()`, Vance at `STUDY_VANCE`. Strait: `strait(which, t, near=('sail'|'wreck', x), fx=fn)` (fx draws effects between the ships and the cliff top), `near_x(t, t_hit)`, `X_HIT`, `place_cliff`, `cliff_shadow`, cameras `CAMS`. Gas: `gas_back()`, `gas_front()`, `place_gas`, `MAN_X`/`VANCE_X`, `gas_points()` (filler, hose_from, board box for KEEP_CLEAR). Effects: `flying_whales_fx`.
 
@@ -157,6 +157,7 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 23 | cliff | | Connect the dirt road to the edge of the cliff | done: the track now runs right up to the rim, its end following the edge line, the ruts too. New kind |
 | 24 | study | | A light brown line clips through the chair and moves up and down, and a bit of flame | done: the fire's moving layer (its flat glow on the stone jamb and the left flame) was laid over the whole painting, chair included. The chair is now drawn after the fire. New kind |
 | 25 | gas station | | The grain elevator looks like Stonehenge | done: separate pillars with a flat bar across read as standing stones. Now three round steel bins with cone roofs and ribs, touching, a tall thin leg tower with a red cap, spouts down to each bin. New kind |
+| 26 | all sets | | Sets approved (Sam, 8 Nov: Y), thorn tree kept in reserve | done: the thorn tree is out of shot 2 but not deleted; its code is in commit eab160d (`_thorn_tree` in `source/ad_vanced_notice_sets.py`), to bring back on a note. |
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
