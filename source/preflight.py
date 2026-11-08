@@ -236,10 +236,30 @@ def _frames_path(name):
 
 def _in_child(fn, *args):
     """Run fn(*args) in a forked child and return its result (a list of fault strings): whatever libraries it loads
-    (GNU OpenMP) stay out of this process, which later forks the drawing workers."""
-    from multiprocessing import get_context
-    with get_context('fork').Pool(1) as one:
-        return one.apply(fn, args)
+    (GNU OpenMP) stay out of this process, which later forks the drawing workers. Forked, not pickled: the film is a
+    module."""
+    import pickle
+    r, w = os.pipe()
+    pid = os.fork()
+    if pid == 0:
+        code = 0
+        try:
+            os.close(r)
+            out = ('ok', fn(*args))
+        except BaseException:
+            out = ('err', traceback.format_exc())
+            code = 1
+        with os.fdopen(w, 'wb') as fh:
+            pickle.dump(out, fh)
+        os._exit(code)
+    os.close(w)
+    with os.fdopen(r, 'rb') as fh:
+        data = fh.read()
+    os.waitpid(pid, 0)
+    kind, val = pickle.loads(data) if data else ('err', 'the child produced nothing')
+    if kind == 'err':
+        raise RuntimeError('check failed in its child process:\n' + str(val))
+    return val
 
 
 def _text_only(film, problems, end, fps):

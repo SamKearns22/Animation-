@@ -219,7 +219,9 @@ The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
   lines, stains (sick, lager, mud) fixed to his joints.
 - The opening camera nudged towards his hand (the arm now lies further out) so his face stays out of shot until the
   glide reaches it; the Hook Text moved to y 1265, x 600 (the can glides through where it was).
-- People from above drawn up to 4x real size (pending Sam's Y), mopeds 2x.
+- People from above drawn up to 4x real size, mopeds 2x: Sam said Y (8 Nov). Budget raised to about 10.4% of a week: Sam said Y.
+- Pre-flight hang found and fixed (8 Nov): linecheck loaded GNU OpenMP into the main process, so the drawing workers forked
+  after it froze. linecheck, landmarks and sizes now run in a forked child (`_in_child` in `source/preflight.py`).
 
 ## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
 1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
