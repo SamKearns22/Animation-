@@ -129,7 +129,7 @@ the end with their checks.
 | P4 | Unattended runs stop after one animatic (Asking me) | by hand |
 | P5 | A repeated note means the first fix failed (Sending work) | by hand |
 | P6 | One handover section, 15 lines at most; old ones archived (Models and chats) | by hand |
-| 31 | Routine work on Sonnet; a round of notes stays in one Opus-medium chat (Models and chats) | by hand |
+| 31 | Deciding and applying a round of notes (and the clips): Opus, medium; the checks, the check sheet, the animatic and the final render, filing and sending: Sonnet (Models and chats; Sam, 8 Nov: put back) | by hand |
 | P7 | Every animatic carries the Hook Text and the CranbriJoos sign-off, made as the final is (Asking me) | by hand (`finish.py` on the animatic's clean render) |
 | M1 | Every message opens with what I need from Sam, or "Nothing needed" (Messages) | by hand |
 | M2 | Messages: Done / Needs you / Next, about 10 lines (Messages) | by hand |

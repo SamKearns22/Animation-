@@ -57,9 +57,11 @@ I don't know how to code. Please:
 - Each stage has a model:
   - planning (the brief, staging, questions for me) and building anything new (a character, creature, set or tool):
     Opus, high effort;
-  - **a round of my notes** (deciding the fixes, applying them, clips, pre-flight, the check sheet, the animatic):
-    **one chat, Opus, medium effort**, start to finish; building from a clear plan or sound: Opus, medium effort;
-  - routine work on its own (filing recordings, a final render, sending, saving) and quick videos: Sonnet.
+  - **a round of my notes** (deciding the fixes, applying them, the clips): **Opus, medium effort**; building from a
+    clear plan or sound: Opus, medium effort;
+  - routine work (the pre-flight and other checks, the check sheet, the animatic render, filing recordings, a final
+    render, sending, saving) and quick videos: **Sonnet** (Sam, 8 Nov: put back; once the fixes are made, the checks
+    and the animatic go to Sonnet).
 
   When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
   /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
