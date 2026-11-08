@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 74 (acting list), 81 (one fluid body), 40 (new scene: list its elements before building), 51 (likeness pack for new faces? none: the officers are masked)
-- **Done (8 Nov):** notes 42a-d, f (flag whole, portrait clear and detailed, swivel hands and chair, his usual hands, walk acting); new scene's brief rows 29-33 written; turned-heads plan written (42e).
-- **Next:** Sam's answers; then Opus high: the turned-heads build (own chat), and the Minnesota street scene (set, four officers, the man) planned and built; then animatic 3.
-- **Needs Sam:** questions 13-19 (chat of 8 Nov, copied below); recordings of lines 1-9; R3.
-- **Read:** this file (Where things stand, notes 42, Turned heads, Screenplay continues); `guides/kit-catalogue.md` people rows.
-- **Open rule requests:** R3 (no unmeant overlaps in a flat set).
-- **For Claude:** film `source/ad_vanced_notice.py`; study swivel `_fists`, `_in_study(j, yaw)`; walk gestures `WALK_ACTING`; portrait and flag in `ad_vanced_notice_sets.py` (`_fireplace`, `_flag`).
+- **Rules that bite next:** 40 (the street scene: list its elements for Sam before building), 83 (no unmeant overlaps in a flat set: give the street SET_BOXES), 81 (one fluid body), 74 (acting list)
+- **Done (8 Nov):** notes 42-43 (flag, portrait, swivel hands and chair, walk acting, swivel snaps back-to-front); rule 83 written and tested; Sam's answers to 13-20 recorded (note 43).
+- **Next:** fresh chat, Opus high: (1) Vance's side and three-quarter faces drawn from his own front design (Turned heads, below; just Vance, Sam Q13); (2) the Minnesota street scene: elements list for Sam (rule 40), then the set, four masked ICE officers, the man curled up (some blood, Q18), Vance left smiling, push in on line 9; then the check sheet and animatic 3.
+- **Needs Sam:** the street's element list when it comes; recordings of lines 1-9.
+- **Read:** this file (Where things stand, notes 42-43, Turned heads, Screenplay continues); `guides/kit-catalogue.md` people rows; `source/views.py` head_view and `source/ad_vanced_notice_cast.py` (Vance's head).
+- **Open rule requests:** none.
+- **For Claude:** film `source/ad_vanced_notice.py` (swivel snap in study_j, note 43); `setcheck.py` (rule 83); turned-head build goes in views.head_view via the cast's own face for Vance (`beard_turned` is the stopgap).
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -190,6 +190,7 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 42d | study | 1.00 | Two sausage fingers: just his usual hands | done: the same steeple, its pointing hands now Power Crime's finger. Plain round hands now. New kind |
 | 42e | all films | 0.50 | Neither the side nor the three-quarter view looks like him: a different draw style, the eyes different in each pose; a problem throughout the project: needs a serious fix | proposed: a build of its own (below, "Turned heads"). Not done in this round |
 | 42f | cliff | | Hand and arm acting for the walk: his arms hang static | done: an open hand out, palm up, on "haven't gone well"; a hand to his heart on "concerns"; the open hand on "need" as before. Added: both gestures (acting list rows 2-3) |
+| 43 | (questions) | | Sam's answers (8 Nov): 13 the turned faces just for Vance; 14 snap the swivel first; 15 Y the street after "This guy."; 16 Y Minneapolis winter street; 17 Y officers as in real raids (POLICE ICE vests, masks, caps); 18 Y flat cartoon beating, SOME BLOOD; 19 Y a slow push in on his face during the line; 20 Y rule 83 | done: the swivel snaps from his back to his front (Lost: the turning frames, until his turned faces are rebuilt); rule 83 written with its check. Next: Vance's turned faces, the street scene |
 
 ## Turned heads (note 42e): the plan, for Sam's yes
 Why they fail: the front head is each person's own measured face (patriots4 layout: their eyes, brows, nose, beard, drawn the cast's way); the side and three-quarter heads come from one generic drawing in `views.head_view` that only borrows the hair colour and beard kind, with its own eye shape. So turning him swaps in a different face. The fix: draw the side and three-quarter heads FROM the same face design (the same eye shape, lids, brows, beard shapes, nose and mouth, moved and foreshortened round the head), for every cast built on the measured faces, checked side by side against the front on a turnaround sheet (and photos of the person in profile where we have them). A build of its own: Opus, high effort, its own chat; then this film's swivel and walk-in use it.
@@ -203,7 +204,7 @@ Why they fail: the front head is each person's own measured face (patriots4 layo
 | 32 | We zoom in on his face. | |
 | 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | |
 
-Rule requests: R3 (proposed 8 Nov, waiting for Sam): in a flat painted set, no painted object may overlap another unless it is meant to (a clock in front of a portrait, a chair against a wall), checked from each object's box; the set file lists its meant overlaps.
+Rules written: R3 is rule 83 (Sam: Y, 8 Nov): no unmeant overlaps in a flat painted set; check `source/setcheck.py` from the set's `SET_BOXES` and `SET_MEANT`, run in the film's checks() (tested: it catches the old portrait position).
 
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). R2 is rule 82 (Sam: Y, 8 Nov): the Hook Text pops in 0.5 s into the film; `guides/tiktok-design.md` points at it; `hook_text.py` starts at 0.5 s with a 0.2 s pop (60% → 108% → 100%), tested on the clip. Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).

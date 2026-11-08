@@ -297,7 +297,10 @@ def study_j(t):
     if t < T['fold']:
         spec = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
         _fists(spec)
-        return _in_study(sitting.realize(sp, SEAT, spec), spec['yaw']), spec['yaw'], spec['head_yaw']
+        u = _ramp(t, T['swivel'], T['fold'])           # note 43 (Sam, Q14): until his turned faces are rebuilt, the
+        yaw = 180.0 if u < 0.5 else 0.0                # swivel snaps from his back to his front: no side or three-
+        spec['yaw'] = spec['head_yaw'] = spec['swivel'] = yaw   # quarter frames (they don't look like him, 42e)
+        return _in_study(sitting.realize(sp, SEAT, spec), yaw), yaw, yaw
     a = sitting.realize(sp, SEAT, _fists(sitting.spec_steeple(sp, SEAT)))
     b = sitting.realize(sp, SEAT, sitting.spec_hands_folded(sp, SEAT))
     k = _ease(_ramp(t, T['fold'], T['fold'] + 0.4))
@@ -628,6 +631,8 @@ def checks():
     for t in np.arange(T['swivel'], T['cut2'], 1 / FPS):           # the sitting kit's own checks, every frame seated
         j, _, _ = study_j(float(t))
         faults += [f'{t:.2f} s: {f}' for f in sitting.check_frame(j, float(t), 'Vance in the study')]
+    import setcheck
+    faults += setcheck.faults(ST.SET_BOXES, ST.SET_MEANT)      # rule 83: no unmeant overlaps in a flat set
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 

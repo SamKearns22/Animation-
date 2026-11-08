@@ -299,6 +299,20 @@ def _fireplace(pen):
     pen.ell(c2[0], c2[1], 0.012 * k, 0.008 * k, (226, 160, 140), 0)
 
 
+# Rule 83: every painted object on the fireplace wall, its box in wall metres (x along the wall, z up), and the
+# overlaps that are meant (setcheck.py; the film's checks() runs it)
+SET_BOXES = [('chimney breast', (0.3, 0.0, 1.95, 3.32)), ('stone surround', (0.4, 0.0, 1.7, 1.3)),
+             ('mantel shelf', (0.32, 1.24, 1.78, 1.39)), ('clock', (0.93, 1.39, 1.17, 1.70)),
+             ('candlestick L', (0.505, 1.39, 0.595, 1.77)), ('candlestick R', (1.505, 1.39, 1.595, 1.77)),
+             ('portrait', (0.72, 1.80, 1.38, 2.86)), ('panel L', (0.38, 1.52, 0.62, 3.2)),
+             ('panel R', (1.48, 1.52, 1.86, 3.2))]
+SET_MEANT = [('chimney breast', b, 'it stands on the chimney breast') for b in
+             ('stone surround', 'mantel shelf', 'clock', 'candlestick L', 'candlestick R', 'portrait', 'panel L', 'panel R')]
+SET_MEANT += [('stone surround', 'mantel shelf', 'the shelf sits on the surround'),
+              ('panel L', 'candlestick L', 'the candlestick stands in front of the panel'),
+              ('panel R', 'candlestick R', 'the candlestick stands in front of the panel')]
+
+
 def _chair(pen):
     """His high-backed oxblood leather chair, buttoned, behind him (the film draws him over it, no kit chair)."""
     v = STUDY_VANCE
