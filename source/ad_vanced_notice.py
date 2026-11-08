@@ -466,7 +466,9 @@ def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck, vlay):
     near = [(x, _top(al, x, mneck - 20 * sm) - lift) for x in xs_near]
     sq = j.get('_sq', 0.0)
     hx, hy = far[0][0] + 4 * sq, far[0][1] + w * 1.2 + 4 * sq        # the hand over the front of his far shoulder
-    path = [(hx, hy)] + far + near + [(vx - 140 * s, vneck + 62 * s)]   # ... back to Vance's shoulder
+    root = (vx - 48 * s, vneck + w - 4 * s)                          # note 40: straight on from his own shoulder
+    path = [(hx, hy)] + far + [root]                                 # line at his collar, one straight run from
+                                                                     # behind the driver's neck (no hump)
     ink, fill = ST.layer(), ST.layer()
     ST.Pen(ink).line(path, ST.INK, 2 * w + 5)
     pf = ST.Pen(fill)
