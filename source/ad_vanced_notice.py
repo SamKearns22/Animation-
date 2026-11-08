@@ -193,6 +193,12 @@ JOKE_PROPS = []
 ORDER_SWAPS = []
 HANDS_OK = [('*Vance*', 'L', 'no hand', T['arm'], T['off'] + 0.1, "his hand is drawn by _arm_over on the driver's far "
              'shoulder, over the driver (looked at full size, 8 Nov: the hand shows there every frame)'),
+            ('*Vance*', '*', 'no hand', T['swivel'] + SWIVEL * 0.7, T['fold'] + 0.25, 'turned to us in the swivel, his '
+             'hands rest in his lap below the painted desk top until they come up to fold on it (looked at full size, '
+             '8 Nov: desk top across the frame at his waist, 0.67-1.04 s)'),
+            ('*officer 4*', 'R', '*', T['cut5'], T['shot'] + 1.0, "his punching fist passes in front of officer 3, "
+             'who stands beside him almost as near the lens: they overlap on screen but do not touch (looked at full '
+             'size, 8 Nov)'),
             ('*Vance*', '*', 'no hand', 0.0, T['swivel'] + SWIVEL * 0.7, 'his back to us in the swivel chair: '
              'his hands are in front of him; they come round with him'),
             ('*Vance*', 'R', '*sleeve*', T['stop'], L[4]['end'] + 0.6, 'the open hand rising beside his chest on '
