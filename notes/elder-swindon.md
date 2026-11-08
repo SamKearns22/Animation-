@@ -178,3 +178,7 @@ The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
 - The trailer's peaks went over full scale by 1.1 dB: brought just under (nothing else changed).
 - Pre-flight keeps each drawn frame (`~/.cache/filmcache/elder_swindon-memo/`, keyed by the code): the checks and the
   small animatic share it. Nothing in this film draws through the people checks (no views or burnham people).
+- Pre-flight hung twice (8 Nov, 15:47 and before): its four workers locked up after frames 180-332, idle for an
+  hour. Sam: "Skip the checks. Proceed to animatic." The quick check (--text) was clean but for shot 6's length;
+  the animatic rendered with `--no-lock`. Before the final: find the hang (workers waiting on a pool lock, the parent
+  holding OpenMP threads) and run pre-flight in full.

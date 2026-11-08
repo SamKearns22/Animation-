@@ -1561,7 +1561,9 @@ def main():
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
-                 stamp=False if '--nostamp' in a else None)
+                 stamp=False if '--nostamp' in a else None,
+                 lock=False if '--no-lock' in a else None)   # --no-lock: Sam, 8 Nov: "Skip the checks" (pre-flight
+#                                                              hung twice in its forked workers; notes, Decisions)
 
 
 if __name__ == '__main__':
