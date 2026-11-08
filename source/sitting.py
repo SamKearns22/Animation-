@@ -1017,11 +1017,15 @@ def spec_steeple(sp, seat):
     return sp_
 
 
-def swivel(sp, seat, u, frm=180.0, to=0.0):
+def swivel(sp, seat, u, frm=180.0, to=0.0, hands=None):
     """The swivel-chair turn (0.8 s; the villain's reveal): he and the chair turn together, the head a beat ahead
     (the eyes lead: figure-rig s.6), a small wind-up first and a lean-in settle; the desk stays put in the room.
-    Returns the spec; spec['yaw'] and spec['head_yaw'] are the angles to draw him at."""
-    s = spec_steeple(sp, seat)
+    Returns the spec; spec['yaw'] and spec['head_yaw'] are the angles to draw him at.
+    hands: 'folded' (the default at a desk: he arrives with his hands already folded on it, so there is no hands-down
+    move after the turn; Sam, 8 Nov, Ad-Vanced Notice note 47c: "the perfect swivel") or 'steeple' (fingertips together
+    in front of his chest; the default away from a desk)."""
+    hands = hands or ('folded' if getattr(seat, 'desk', None) is not None else 'steeple')
+    s = spec_hands_folded(sp, seat) if hands == 'folded' else spec_steeple(sp, seat)
     k = seg(u, 0.12, 0.85)
     yaw = frm + (to - frm) * k - 8.0 * math.sin(math.pi * seg(u, 0.0, 0.12)) * (1 if to < frm else -1)
     head = frm + (to - frm) * seg(u, 0.05, 0.7)

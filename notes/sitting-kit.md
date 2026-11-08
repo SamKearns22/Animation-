@@ -10,6 +10,7 @@ cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 - **Needs Sam:** a look at the part-2 sheet and moves video; questions 9-10.
 - **Read (next time):** `guides/figure-rig.md` s.4 (sitting line) and s.8; `source/sitting.py` MAP.
 - **Open rule requests:** none.
+- **Swivel (8 Nov, Sam: "the perfect swivel"):** `sitting.swivel` now arrives with the hands folded on the desk (`hands='folded'`, the default at a desk; `'steeple'` otherwise or on request); Ad-Vanced Notice uses it directly.
 - **For Claude:** part-2 hooks: spec keys `ankle` {side: (x, height, chair z)}, `on`, `knee_pole`, `toe`, `foot_yaw`, `foot_roll`, `sole`, `hip_dy`, `cross`, `contact`, `roll` (chair travel), `give` (how much the chair back follows), `tail`, `head_lean`, `swivel`, `legs_over`; views: `shoe_frame`, j['cross'] (top leg drawn last and over the lap), j['legs_over'] (+ `legs_over_views`), j['arms_under'] (hands under a desk), j['head_lean'] (side views only; front uses head_dy); a leg folded tight on screen is drawn as thigh + shin + round knee (was inside out). `Desk(turn, x, z)`, `Desk.xf` (+inverse), `Desk.boxes`; `Seat('desk')`. Clips: `sitting.py clips2 OUT.mp4`; `sitting.py sheet OUT 2`, `refs OUT 2`.
 
 ## Sam's list (the brief, ticked when built and tested)
@@ -90,7 +91,7 @@ with a lean back and turns with a swivel. Films that already draw their own chai
 | cross legs | 0.7 s; uncross 0.5 s | weight shifts to one hip, the knee lifts, swings over, settles | |
 | scoot to perch | 0.4 s | two small hip shuffles forward | |
 | slump | 1.5 s slow deflate, or 0.4 s collapse (comic) | an exhale, shoulders drop first, hips slide forward, head last | overlapping action (Williams) |
-| swivel turn | 0.5-1 s | the chair and body turn together, head leads a beat; the classic "reveal" turn | eyes lead (figure-rig s.6) |
+| swivel turn | 0.5-1 s | the chair and body turn together, head leads a beat; the classic "reveal" turn; at a desk he arrives with his hands already folded on it (Sam, 8 Nov: "the perfect swivel"; `hands='steeple'` for the old steepled fingertips) | eyes lead (figure-rig s.6) |
 | seated acting | the line's own timing | the standing gestures (open palm, point, chop, shrug) on top of any seated pose; leaning in on a point, back on a punchline | the gesture library (moves.pose) |
 | moving hold | always | breathing every ~4 s and blinks (exist); a small weight shift every 4-8 s; never a frozen statue | figure-rig s.6 |
 

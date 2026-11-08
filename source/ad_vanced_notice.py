@@ -331,8 +331,7 @@ def study_j(t):
     sp = AC.VANCE
     folded = sitting.spec_hands_folded(sp, SEAT)
     if t < T['fold']:
-        sw = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
-        spec = dict(folded, **{q: sw[q] for q in ('yaw', 'head_yaw', 'lean', 'swivel')})
+        spec = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))    # the kit's own: arrives hands folded
         # note 44: his own face carried round from behind, three-quarter and side to front (vance_turned)
         return _in_study(sitting.realize(sp, SEAT, spec), spec['yaw']), spec['yaw'], spec['head_yaw']
     j = sitting.realize(sp, SEAT, folded)
