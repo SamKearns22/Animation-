@@ -409,7 +409,7 @@ def _inside(poly, x, y):
     return c
 
 
-def _cloth(p, region, draw):
+def _cloth(p, region, draw, mask=None):
     """Print a pattern onto the shirt's own cloth (Sam, 7 Nov, third note on the check: "the check doesn't go all the
     way to the edges"). `draw(pen)` lays the bands full length on a clear layer; they are kept only on red shirt pixels
     inside `region` (the piece's outline, pushed out a few units), so the check runs right up to the ink line like
@@ -423,6 +423,8 @@ def _cloth(p, region, draw):
     px = np.asarray(img.convert('RGB')).astype(int)
     red = (px[..., 0] > 2 * px[..., 1] + 20) & (px[..., 0] > 2 * px[..., 2] + 20)    # the shirt red and its shade
     keep = red & (np.asarray(reg) > 0) & (np.asarray(layer)[..., 3] > 0)
+    if mask is not None:                                   # only where this piece itself was painted
+        keep &= mask
     img.paste(layer, (0, 0), Image.fromarray((keep * 255).astype(np.uint8)))
 
 
@@ -481,9 +483,11 @@ def arm(p, j2, side, sp, shape=None):
     if sp.get('who') != 'man' or V.PROBE:
         return _arm(p, j2, side, sp, shape)
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
+    before = np.asarray(p.img).copy()
     with V.F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
         B.arm(p, sh, el, wr, sp.get('sleeve'))
-    w = 30
+    own = (np.asarray(p.img) != before).any(axis=2)      # the sleeve as it shows: where it joins the body at the
+    w = 30                                                # shoulder (note 14) the body's own check carries on
 
     def draw(pen):                                                  # the check in the arm's own direction, cell 48
         for a, b in ((sh, el), (el, wr)):
@@ -506,7 +510,7 @@ def arm(p, j2, side, sp, shape=None):
         region.append([(a[0] + nx * r - tx * r, a[1] + ny * r - ty * r), (b[0] + nx * r + tx * r, b[1] + ny * r + ty * r),
                        (b[0] - nx * r + tx * r, b[1] - ny * r + ty * r), (a[0] - nx * r - tx * r, a[1] - ny * r - ty * r)])
     for reg in region:
-        _cloth(p, reg, draw)
+        _cloth(p, reg, draw, own)
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
         V.hand(p, j2, side, sp, shape)

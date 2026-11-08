@@ -19,3 +19,13 @@
 **Jokes early (tiktok-design):** the first laugh lands at about 11 s (the explosion, then "None of this is my fault"), later than the 5 s aim. The Hook Text and the sincere "Hello, America" carry the opening; question 2 offers a trim.
 
 
+
+## Where things stand (archived 8 Nov)
+- **Rules that bite next:** 3 (each place's list ticked against our set, `benchmark.py`), 39 (flat paintings, one per camera, no 3D), 40 (showstopper list ticked at the first rehearsal clip)
+- **Done (7 Nov):** composition approved (Sam: 1-4 yes); shirt check runs to every edge (note 12); prices set to peak war prices (note 13).
+- **Next:** fresh chat, Opus high effort. Type: "Ad-Vanced Notice: join the arms to the shoulders (note 14, all films), then build the sets. Read notes/ad-vanced-notice.md".
+- **Needs Sam:** his number on rule proposal R1 (arms one piece with the body); the rest of the script; the Hook Text wording later.
+- **Read:** this file (notes 12-14, answers, references, composition); `guides/figure-rig.md` (arms); `guides/kit-catalogue.md` rows for sets.py, the Flying Whales sea and effects.
+- **Open rule requests:** R1 (below the notes), not yet written.
+- **For Claude:** arms: `burnham.arm` (old tube), `limbs.py` (`install`, the one-outline shoulder: no effect on these figures, find why), torsos via `patriots4`/`TC.TORSOS`; test `review/adv-arms.jpg` (top: off, bottom: on). Sets: one module `source/ad_vanced_notice_sets.py`; cliff reuses `flying_whales_sea` re-lit (patch SKY/SEA/CLOUDS/CAM, sun off frame, `_caps` off; camera 61.6 m up, pitch -8, focal 1400, horizon about y 760, plateau edge 12 m out, Vance's mark 2.6 m, near tanker 1.2 km); comp layout and the `PLACES` lists in `source/ad_vanced_notice_comp.py`; BENCHMARK and PROP_SIZES go in the film file (from `satire_template.py`).
+
