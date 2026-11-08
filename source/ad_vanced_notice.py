@@ -117,7 +117,8 @@ def word_at(n, words):
 # The timeline: each beat follows the one before, so a take that runs long pushes the rest on.
 T = {}
 GAP = 0.3                                         # between one line's last word and the next one's first
-CLEAR = 0.225                                     # a cut waits till the last subtitle clears
+CLEAR = 0.3                                       # a cut waits till the last subtitle clears (0.3: "need you to
+                                                  # know." read too fast at 0.225 with Sam's take)
 SWIVEL = 0.8                                      # the kit's swivel turn (note 27)
 T['swivel'] = 0.1                                 # brief row 0: the film opens on him swivelling round
 T['fold'] = T['swivel'] + SWIVEL                  # his hands come down onto the desk, folded (0.4 s)
@@ -164,7 +165,8 @@ PLAN = dict(CEIL=3.2, ROOMS={'study': (-2.6, 0.0, 2.6, ST.D_WALL)},
             CAMS={'study': dict(pos=(0.0, 1.45, 0.0), look=(0.0, 1.45, 5.0), focal=1600),
                   'cliff': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=ST.CLIFF_F),    # (its own world:
                   'close': dict(pos=(0.0, 1.7, 0.0), look=(0.0, 1.7, 5.0), focal=1500),          # sets, strait)
-                  'gas': dict(pos=(0.0, 1.5, 0.0), look=(0.0, 1.5, 5.0), focal=1300)}, GROUPS={},
+                  'gas': dict(pos=(0.0, 1.5, 0.0), look=(0.0, 1.5, 5.0), focal=1300),
+                  'street': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=SX.FOCAL)}, GROUPS={},
             SHOT_MARKS={'study': ['vance']})
 BENCHMARK = ST.BENCHMARK + SX.BENCHMARK
 HOOK = ('JD Vance Addresses The Nation', {'y': 330, 'until': 3.9})   # Sam, 8 Nov (his capitals); pops at 0.5 s
@@ -833,12 +835,12 @@ KEYS = [   # the check sheet: one per beat (label, time); the first carries the 
     ('4 squeeze; his eyes slide (6)', lambda: word_at(6, 'right') + 0.3),
     ('4 leans in, "responsible?" (7)', lambda: word_at(7, 'responsible') + 0.25),
     ('4 both thumbs: "This guy." (8)', lambda: L[8]['start'] + 0.25),
-    ('5 the street: the beating; Vance grins at us', lambda: T['cut5'] + 0.4),
-    ('5 a kick lands; the push starts', lambda: T['push'] + 0.2),
+    ('5 street: beating; his grin', lambda: T['cut5'] + 0.4),
+    ('5 the push starts', lambda: T['push'] + 0.2),
     ('5 hand to chest on "believe" (9a)', lambda: word_at(9, 'believe') + 0.3),
-    ('5 leans in, hand at mouth: "Between" (9b)', lambda: word_at(9, 'Between') + 0.35),
+    ('5 leans in: "Between" (9b)', lambda: word_at(9, 'Between') + 0.35),
     ('5 shrug on "jerk" (9b)', lambda: word_at(9, 'jerk') + 0.2),
-    ('5 the gunshot: the flash (Sam, 8 Nov)', lambda: T['shot'] + 0.01),
+    ('5 the gunshot flash', lambda: T['shot'] + 0.01),
     ('5 the end: head and shoulders', lambda: DUR - 0.1),
 ]
 
