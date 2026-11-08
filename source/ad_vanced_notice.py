@@ -119,7 +119,8 @@ e = _at(4, e + GAP)
 T['stop'] = word_at(4, 'need') - 0.15             # acting 4: he stops at his mark on "need"
 T['hit'] = e + 0.75                               # the missile lands (it drops for 0.4 s before)
 T['cut3'] = T['hit'] + 2.6                        # shot 3: the close-up (Sam, 8 Nov, note 33: cut at 15.5 s and
-e = _at(5, T['hit'] + 4.85)                       # carry on the showstopper from there; line 5 where it was)                      # "None of this is my fault." (smile on "fault")
+e = _at(5, T['cut3'] + 0.45)                      # carry on the showstopper from there); line 5 within half a
+                                                  # second of the cut (note 36)                      # "None of this is my fault." (smile on "fault")
 T['cut4'] = e + 0.7                               # shot 4: the gas station; the driver glares at the board
 T['enter'] = T['cut4'] + 0.9                      # Vance walks in from the right (brief 24)
 WALK_IN = 1.5                                     # seconds from the frame edge to his mark beside the driver
@@ -413,8 +414,14 @@ def gas_man(t):
         p1 = tuple(r + (m - r) * k1 for r, m in zip(rest, mid))
         V.arm_to(j, 'R', tuple(a + (f - a) * k2 for a, f in zip(p1, fist)), 'out', 'fist')
     side = _ease(_ramp(t, word_at(6, 'right') - 0.05, word_at(6, 'right') + 0.25))
-    return j, dict(head_yaw=-12, anger=round(4 + 2 * up), gaze_dy=-1.0 * (1 - side) - 0.2 * side,
-                   look=-0.6 * (1 - side) + 0.8 * side)
+    glare = _ease(_ramp(t, T['cut4'], T['cut4'] + 0.2)) * (1 - side)   # looking up at the board
+    j['lean'] = j.get('lean', 0) - 5.0 * glare                         # leaning back a little to glare up at it
+    return j, dict(head_yaw=-12, anger=round(4 + 2 * up),
+                   frown=0.06 * up,                       # note 36: the face's frown is capped at anger 4, so the
+                   lid4=0.02 - 0.035 * (round(4 + 2 * up) + 5),   # extra on top; the eyes kept open (the cast
+                   # shuts them as anger rises) so you can see where they look
+                   tip=9.0 * glare,                       # the head tipped up and to the left, at the board
+                   gaze_dy=-1.0 * glare - 0.2 * side, look=-0.9 * glare + 0.8 * side)
 
 
 NOZZLE = (40, 40, 44)
@@ -433,31 +440,60 @@ def _nozzle(pen, hand):
     pen.poly([(hx + 26, hy - 4), (hx + 74, hy + 22), (hx + 70, hy + 32), (hx + 24, hy + 10)], (150, 150, 156), 2.4)
 
 
-def _arm_over(im, man, j, mx, mneck, sm, jm, s):
-    """His arm round the driver (note 34: not through his chest): the sleeve comes out from behind the driver's neck
-    and lies along the top of his far shoulder, the hand cupping the front of it; the driver's head and neck are laid
-    back over the sleeve, so it passes behind them. The rest of the arm runs behind his back."""
+def _top(alpha, x, y_from):
+    """The first drawn pixel going down column x from y_from (the top of the driver's shoulder there)."""
+    col = alpha[int(y_from):, int(x)]
+    hit = np.nonzero(col > 128)[0]
+    return int(y_from) + (int(hit[0]) if len(hit) else 0)
+
+
+def _arm_over(im, man, j, mx, mneck, sm, s, vx, vneck):
+    """His arm round the driver's shoulders (notes 34, 36: never through his chest): one sleeve lying ALONG THE TOP
+    of both his shoulders, half against the sky, from Vance's own shoulder behind him, behind the driver's neck, over
+    his far shoulder, the hand cupping its front; the driver's neck and head laid back over it, so it passes behind
+    them. Measured from the driver's drawing every frame, so it follows him."""
     if j.get('_arm', 0.0) < 0.85:
         return
-    sx, sy, _ = jm['shL']                                          # the driver's far shoulder (his left: screen left)
-    top = mneck + (sy - 30) * sm                                   # the top of his shoulder
+    al = np.asarray(man)[..., 3]
+    neck_w = 34 * sm
+    xs_far = np.linspace(mx - 175 * sm, mx - neck_w * 1.4, 6)      # over the far shoulder, to the neck
+    xs_near = np.linspace(mx + neck_w * 1.4, min(vx - 120 * s, mx + 170 * sm), 5)
+    w = 19 * s                                                       # the sleeve's half width
+    lift = w * 0.45                                                  # its middle a little above his outline
+    far = [(x, _top(al, x, mneck - 20 * sm) - lift) for x in xs_far]
+    near = [(x, _top(al, x, mneck - 20 * sm) - lift) for x in xs_near]
     sq = j.get('_sq', 0.0)
-    hx, hy = mx + sx * sm * 0.92 + 6 * sq, top + 16 * sm + 6 * sq  # the hand over the shoulder's front
-    a = (mx + 20 * sm, mneck + 8 * sm)                             # out from behind his neck
+    hx, hy = far[0][0] + 4 * sq, far[0][1] + w * 1.2 + 4 * sq        # the hand over the front of his far shoulder
+    path = [(hx, hy)] + far + near + [(vx - 140 * s, vneck + 62 * s)]   # ... back to Vance's shoulder
     lay = ST.layer()
     pen = ST.Pen(lay)
-    w = 20 * s
-    d = np.array([hx - a[0], hy - a[1]])
-    n = np.array([-d[1], d[0]]) / (np.linalg.norm(d) + 1e-6) * w
-    pen.poly([(a[0] + n[0], a[1] + n[1]), (hx + n[0], hy + n[1]), (hx - n[0], hy - n[1]), (a[0] - n[0], a[1] - n[1])],
-             AC.NAVY, 2.4)
-    pen.ell(hx, hy + 8 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
+    pen.line(path, ST.INK, 2 * w + 5)
+    pen.line(path, AC.NAVY, 2 * w)
+    pen.ell(hx, hy + 6 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
     im.alpha_composite(ST.shrink(lay))
-    m = np.asarray(man).copy()                                     # the head and neck back over the sleeve
+    m = np.asarray(man).copy()                                       # his neck and head back over the sleeve
     yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]
-    keep = (yy < mneck + 14 * sm) & (np.abs(xx - mx) < 120 * sm)
+    keep = (yy < mneck + 30 * sm) & (np.abs(xx - mx) < neck_w * 1.25)
+    keep |= yy < mneck - 2 * sm                                      # (everything above the neck's base: the head)
+    keep &= np.abs(xx - mx) < 110 * sm
     m[..., 3] = np.where(keep, m[..., 3], 0)
     im.alpha_composite(Image.fromarray(m, 'RGBA'))
+
+
+def _tilt_head(man, mx, mneck, sm, deg):
+    """The driver's head and neck tipped `deg` degrees about the neck's base (note 36: his head leans up and left at
+    the board): the kit has no head tilt, so his own drawing above the collar is turned."""
+    if abs(deg) < 0.3:
+        return man
+    base = (mx, mneck - 4 * sm)                    # above the collar: only the neck and head turn
+    box = (int(mx - 120 * sm), 0, int(mx + 120 * sm), int(base[1]))
+    head = man.crop(box)
+    m = np.asarray(man).copy()
+    m[box[1]:box[3], box[0]:box[2], 3] = 0
+    out = Image.fromarray(m, 'RGBA')
+    rot = head.rotate(deg, resample=Image.BICUBIC, center=(base[0] - box[0], base[1] - box[1]))
+    out.alpha_composite(rot, (box[0], box[1]))
+    return out
 
 
 def vance_d(t):
@@ -485,10 +521,12 @@ def gas(t):
     _nozzle(ST.Pen(lay), (mx + wx * sm, mneck + wy * sm + 12 * sm))
     im.alpha_composite(ST.shrink(lay))
     man = Image.new('RGBA', im.size, (0, 0, 0, 0))
-    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
+    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
+    man = _tilt_head(man, mx, mneck, sm, mk.get('tip', 0.0))
     im.alpha_composite(man)
     if j is not None:
-        _arm_over(im, man, j, mx, mneck, sm, jm, CP.nts(AC.VANCE) * vppm * 1.01 / 928)
+        vs = CP.nts(AC.VANCE) * vppm * 1.01 / 928
+        _arm_over(im, man, j, mx, mneck, sm, vs, vx, vfeet + 10 - 928 * vs)
     if vlay is not None and vance_front(t):
         im.alpha_composite(vlay)
     im.alpha_composite(ST.gas_front())
@@ -615,7 +653,7 @@ def audits():
                 if who == 'man':
                     jm, mk = gas_man(t)
                     mx, feet, ppm = ST.place_gas(MAN_X)
-                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
+                    CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **{k: v for k, v in mk.items() if k != 'tip'}))
                 elif t >= T['enter']:
                     x, yaw, j = gas_vance(t)
                     vx, vfeet, vppm = ST.place_gas(x, vance_d(t))
