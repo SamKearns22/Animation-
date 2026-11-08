@@ -672,9 +672,15 @@ def tanker(pen, cam, x, y, L=330.0, cols=TANKER_COLS[0], state='whole', bow=1, h
         pen.line(S([(b0 + 2, z), (b1 - 2, z)]), hz((120, 130, 140)), 1.0)
     # the funnel behind it with its coloured band, a mast on the bridge and one at the bow
     f0, f1 = -L / 2 + 3, -L / 2 + 13
-    pen.poly(S([(f0, fb + 14), (f1, fb + 14), (f1 + 1, fb + 27), (f0 + 2, fb + 27)]), hz(fun), lw, ink)
-    pen.poly(S([(f0 + 0.6, fb + 20), (f1 + 0.6, fb + 20), (f1 + 0.8, fb + 23), (f0 + 1.3, fb + 23)]), hz(fband), 0)
-    pen.poly(S([(f0 + 2, fb + 25.5), (f1 + 1, fb + 25.5), (f1 + 1, fb + 27), (f0 + 2, fb + 27)]), hz((30, 30, 32)), 0)
+    if state == 'wreck':                             # the funnel top was blown off (FUNNEL_TOP flies): a torn stub
+        pen.poly(S([(f0, fb + 14), (f1, fb + 14), (f1 + 0.75, fb + 21.6), (f1 - 2.5, fb + 20.6), (f0 + 5, fb + 21.8),
+                    (f0 + 2.5, fb + 20.8), (f0 + 1.4, fb + 21.4)]), hz(mix(fun, (40, 34, 32), 0.55)), lw, ink)
+        pen.poly(S([(f0 + 0.6, fb + 20), (f1 + 0.6, fb + 20), (f1 + 0.7, fb + 20.9), (f0 + 1.3, fb + 20.9)]),
+                 hz(mix(fband, (40, 34, 32), 0.55)), 0)
+    else:
+        pen.poly(S([(f0, fb + 14), (f1, fb + 14), (f1 + 1, fb + 27), (f0 + 2, fb + 27)]), hz(fun), lw, ink)
+        pen.poly(S([(f0 + 0.6, fb + 20), (f1 + 0.6, fb + 20), (f1 + 0.8, fb + 23), (f0 + 1.3, fb + 23)]), hz(fband), 0)
+        pen.poly(S([(f0 + 2, fb + 25.5), (f1 + 1, fb + 25.5), (f1 + 1, fb + 27), (f0 + 2, fb + 27)]), hz((30, 30, 32)), 0)
     pen.line(S([(b0 + 14, fb + 18), (b0 + 14, fb + 26)]), hz((60, 60, 64)), 1.0)
     pen.line(S([(L / 2 - 14, fb + 3), (L / 2 - 14, fb + 14)]), hz((60, 60, 64)), 1.0)
     return dist

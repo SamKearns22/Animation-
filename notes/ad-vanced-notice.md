@@ -1,14 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 3 (each place ticked against its photos: `benchmark.py ad_vanced_notice_sets`), 40 (showstopper list ticked at the first rehearsal clip), 54 (only deck pieces and the funnel top break off; the hull stays whole)
-- **Done (8 Nov):** arms joined to shoulders in the shared kit (notes 14-18, another chat; rule 81). All four sets built as flat paintings at real size, plus the tanker and pickup props (notes 19-20); Sam's first set notes fixed (21-25: shot 2 35% closer, headland and tree out, road to the edge, chair glitch, grain bins). Sheets and clip re-sent.
-- **Next:** fresh chat, Opus high effort (the showstopper is new building). Type: "Ad-Vanced Notice: build the showstopper. Read notes/ad-vanced-notice.md".
-- **Needs Sam:** nothing on the sets (Y, 8 Nov: notes 20-25 stand; the thorn tree is in reserve, its code is in commit eab160d, `_thorn_tree`); any notes on the arms sheet; the rest of the script; the Hook Text later.
-- **Read:** this file (Where things stand, the showstopper list, notes 19-26); `guides/kit-catalogue.md` rows for the Flying Whales effects and the Ad-Vanced Notice sets.
-- **Open rule requests:** none (R1 written as rule 81, 8 Nov).
-- **For Claude:** sets in `source/ad_vanced_notice_sets.py` (MAP at the top; `BENCHMARK`, `PROP_SIZES`, `SHOTS`, `picture(t)` there for benchmark.py/sheet.py; the film file imports them). Study: `study_back(t)`, `study_pose(j)` (no kit chair or desk; desk top drawn between body and arms), `study_front()`, Vance at `STUDY_VANCE`. Strait: `strait(which, t, near=('sail'|'wreck', x), fx=fn)` (fx draws effects between the ships and the cliff top), `near_x(t, t_hit)`, `X_HIT`, `place_cliff`, `cliff_shadow`, cameras `CAMS`. Gas: `gas_back()`, `gas_front()`, `place_gas`, `MAN_X`/`VANCE_X`, `gas_points()` (filler, hose_from, board box for KEEP_CLEAR). Effects: `flying_whales_fx`.
-
+- **Rules that bite next:** 40 (showstopper list: Sam's notes on the rehearsal clip), 80 (seated front on: knees and lap show through the swivel), 74 (the acting list ticked on the check sheet before the first animatic)
+- **Done (8 Nov):** the showstopper built (note 28): missile, flash, freeze and jolt, huge fireball, 14 flaming pieces with splashes, black smoke column for good, the wreck burning with the sea lit orange; works through the close-up camera too. Rehearsal clip sent. Sam's swivel opening recorded (note 27, brief row 0).
+- **Next:** this chat, Opus high: Sam's notes on the clip; then the film build (film file from the template, the swivel opening, the cliff walk, the close-up, the gas station).
+- **Needs Sam:** notes on the clip; questions 11-12 (note 27, the chair; R2, the Hook Text rule); the rest of the script; the Hook Text wording.
+- **Read:** this file (Where things stand, the showstopper list, notes 27-28); `guides/kit-catalogue.md` sitting kit row.
+- **Open rule requests:** R2 (Hook Text pops in at 0.5 s), proposed 8 Nov, waiting for Sam's yes.
+- **For Claude:** showstopper in `source/ad_vanced_notice_fx.py` (MAP at the top): `near(u)`, `fx(u)` for `strait(..., fx=)`, `flash(img, u)`, `held(u)` (2-frame freeze), `jolt(u)` + `shift`; u = s from the hit; `EFFECTS` for viewchecks. Wreck state in `tanker()` now has the funnel stub. Sets as before (`source/ad_vanced_notice_sets.py`). Swivel: `sitting.swivel(sp, seat, u, 180, 0)`; the study's chair is painted in `study_back`.
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -19,8 +18,8 @@ All flat paintings, one per camera; no 3D (rule 39): no camera moves round anyth
 | Study (bookcases, fireplace with a fire loop, desk, draped flag, crystal glass): one flat painting | new set | 1.0 | 1.0 |
 | Cliff and strait (rock and sand foreground, sea from the Flying Whales painting re-lit for hazy daylight, far-shore smudge) | new set, sea reused | 1.0 | 0.9 (and the close-up's background) |
 | Oil tankers (one side-on model, copies varied in size and colour; a wake for the moving one) | new prop | 0.6 | 0.5 (the wreck hull too) |
-| Showstopper, in the cliff shot behind Vance: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 1.5 | |
-| Close-up with the burning wreck behind | the cliff shot's wreck re-framed | 0.3 | |
+| Showstopper, in the cliff shot behind Vance: missile, flash, fireball, flaming pieces, splashes, smoke column, the wreck burning | effects reused; the hull stays whole with a torn hole amidships; only deck pieces and the funnel top fly (rule 54) | 1.5 | 0.6 (Flying Whales' kit carried most of it) |
+| Close-up with the burning wreck behind | the cliff shot's wreck re-framed | 0.3 | 0.1 (the same effects through the close camera) |
 | Gas station (canopy, pumps, price board, shop, flat Midwest land) | new set | 1.0 | 0.9 |
 | The big man (invented: 17 stone, goatee, balding, checked shirt, jeans; pump and hose) | new cast | 0.7 | |
 | 4x4 pickup (side-on only) | new prop | 0.6 | 0.4 |
@@ -31,6 +30,8 @@ All flat paintings, one per camera; no 3D (rule 39): no camera moves round anyth
 Sound effects (rule 26): the fireplace crackle (the script names it); the explosion and the pieces splashing (my pick). Asked in question 9.
 
 ## Showstopper elements (rule 40: Sam approves or trims before building; ticked at the first rehearsal clip)
+Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he stops on "need" before the hit (acting line 4); the walk comes with the film.
+
 | # | element | how it moves |
 |---|---|---|
 | 1 | The strait: calm sea to a hazy horizon, far shore a grey smudge | still, slow ripples |
@@ -78,6 +79,7 @@ Sound effects (rule 26): the fireplace crackle (the script names it); the explos
 | 26 | He points at himself with both hands/fingers. VANCE: "This guy." | |
 | 27 | The joke: Vance sincerely claims he isn't responsible for the election, prices or war, despite being Vice President. | |
 | 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | |
+| 0 | (Sam, 8 Nov) The video starts with JD swivelling round in his chair, as in our sitting kit, a big smile on his face. | |
 
 ## Acting (rule 74; front on, rule 38)
 | line | who | face | body | lands on |
@@ -156,6 +158,11 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 24 | study | | A light brown line clips through the chair and moves up and down, and a bit of flame | done: the fire's moving layer (its flat glow on the stone jamb and the left flame) was laid over the whole painting, chair included. The chair is now drawn after the fire. New kind |
 | 25 | gas station | | The grain elevator looks like Stonehenge | done: separate pillars with a flat bar across read as standing stones. Now three round steel bins with cone roofs and ribs, touching, a tall thin leg tower with a red cap, spouts down to each bin. New kind |
 | 26 | all sets | | Sets approved (Sam, 8 Nov: Y), thorn tree kept in reserve | done: the thorn tree is out of shot 2 but not deleted; its code is in commit eab160d (`_thorn_tree` in `source/ad_vanced_notice_sets.py`), to bring back on a note. |
+| 27 | study | 0.0 | Start with JD swivelling as in our sitting kit, big smile | understood: the kit's villain reveal (`sitting.swivel`, 0.8 s): his chair faces away, he spins round to the lens with a big grin ('grin' mood), then settles into "Hello, America". Built with the film. The painted chair can't turn, so (question 11, my pick): Lost: the buttoned oxblood armchair. Added: the kit's swivel office chair in the same buttoned oxblood leather, high back. New kind |
+| 28 | cliff | | Build the showstopper (Sam, 8 Nov) | done: `source/ad_vanced_notice_fx.py`. Missile from the top left in 0.4 s (clear of Vance's head); 3 white frames, fading 0.3 s; a 2-frame hold on the first fireball frame and a jolt; the fireball about 600 m tall over the ship's middle, burning down inside the smoke by 1.5 s; 13 deck plates and pipes and the funnel top (a beat later, from the stern) thrown high and wide trailing flame, tumbling, each with a splash, then gone; the smoke column pours from the hole for good, leaning right with the wind; the wreck stopped, torn amidships, uneven flames in the hole and on the funnel stub; broken orange streaks on the sea under it. Cartoon cheat: pieces fall at about 26 times true gravity (true gravity at 1.2 km looks like slow motion). Same effects through the close-up camera (wreck over his left shoulder). Effect shapes clean (rule 15). Silent: the explosion and splash sounds come with the film. Added: the funnel stub burning. New kind |
+
+Rule requests (Sam, 8 Nov):
+- R2 (proposed, waiting for Sam's yes): the Hook Text pops in 0.5 s into the film instead of from the first frame. Wording and place in the chat reply of 8 Nov: rulebook rule 82, and `guides/tiktok-design.md` Hook Text line changed to point at it; `hook_text.py` starts at 0.5 s with a quick pop.
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 
