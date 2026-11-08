@@ -74,7 +74,10 @@ Benchmark for the Magic Roundabout (8 things that make it, from Sam's two photos
 5. Raised kerbed islands (long rounded blocks, dark paving) between the minis.
 6. Zebra crossings on the approaches.
 7. Grass verges with trees round the edges; five roads fanning out.
-8. Round it: houses with brown roofs (bottom left), a flat-roofed block (top right), a car park.
+8. Round it: terraced streets (rows of brown and grey roofs, back gardens), a big white-roofed shed, a car park.
+9. (Sam's three new photos, 8 Nov: `magic-roundabout-3-high`, `-4-stadium`, `-5-above`) The County Ground stadium next
+   door (pitch, red seats, floodlights).
+10. Grass and kerbed islands between the arms: the tarmac is the inner ring, the minis and the arms, not one big disc.
 
 Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 source/elder_swindon_comp.py comp OUT.jpg`; 4 key shots: can and hand with the Hook Text; his face and the scroll; the Staffie as the climb starts; the roundabout with SWINDON)
 

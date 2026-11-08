@@ -62,7 +62,10 @@ SHOT_CAST = {'1 can-face': ['DROOLER'], '2 scroll': ['SCROLL'], '3 packet': ['PA
              '4 above': ['DROOLER', 'STAFFIE', 'SCROLL', 'CAN', 'PACKET'], '5 climb': ['DROOLER', 'STAFFIE'],
              '6 roundabout': ['DROOLER']}
 BENCHMARK = [dict(place='Magic Roundabout', refs=['references/elder-swindon/magic-roundabout-1.jpg',
-                                                  'references/elder-swindon/magic-roundabout-2.jpg'], at=24.0, items=[
+                                                  'references/elder-swindon/magic-roundabout-2.jpg',
+                                                  'references/elder-swindon/magic-roundabout-3-high.jpg',
+                                                  'references/elder-swindon/magic-roundabout-4-stadium.jpg',
+                                                  'references/elder-swindon/magic-roundabout-5-above.jpg'], at=24.0, items=[
     ('one big central circle: dark paving, white kerb, tall lamp post with its long shadow', 'aerial_flat: island, kerb, LAMP, shadow'),
     ('five mini roundabouts round it, white domes in white rings', 'MINIS: dome and ring'),
     ('traffic: anticlockwise round the inner ring, clockwise round each mini; dozens of cars, a bus', 'traffic(): routes, sim'),
@@ -70,7 +73,10 @@ BENCHMARK = [dict(place='Magic Roundabout', refs=['references/elder-swindon/magi
     ('raised kerbed islands between the minis', 'aerial_flat: islands'),
     ('zebra crossings on the approaches', 'aerial_flat: zebras'),
     ('grass verges with trees, five roads fanning out', 'aerial_flat: arms, verges, trees'),
-    ('round it: brown-roofed houses, a flat-roofed block, a car park', 'aerial_flat: estate, block, car park'),
+    ('round it: terraced streets of brown and grey roofs with back gardens', '_estate: terraces, gardens'),
+    ('a big white-roofed shed and a car park', 'aerial_flat: SHED, CARPARK'),
+    ('the County Ground stadium next door: pitch, red seats, floodlights', 'aerial_flat: STADIUM'),
+    ('grass and kerbed islands between the arms, not one sheet of tarmac', 'aerial_flat: inner ring, mini rings, arms'),
 ])]
 EFFECTS = []                                  # filled below the drawing code (each with its test drawing: rule 15)
 JOKE_PROPS = [('CAN', [1.0, 3.0], (-0.61, 0.03, -0.92), 0.15), ('PACKET', [14.9], lambda t: packet_at(t)[0], 0.13)]
@@ -812,14 +818,14 @@ def traffic():
     cars = []                                            # route, s (index in 0.5 m steps), speed, size, colour
     for arm in range(5):                                 # each arm's cars one behind another in its lane (both
         s0 = float(rng.uniform(-60, 120))                # routes from an arm share it), spaced like real traffic
-        for n in range(7):
-            s0 -= float(rng.uniform(26, 70))
+        for n in range(10):
+            s0 -= float(rng.uniform(22, 50))
             cars.append(dict(r=arm * 2 + int(rng.integers(0, 2)), s=s0, v=float(rng.uniform(7, 9.5)),
                              L=4.4, W=1.85, col=CAR_COLS[int(rng.integers(0, len(CAR_COLS)))]))
     xy_loop = routes[-1][0]
     nloop = len(xy_loop) // 3
-    for n in range(7):
-        cars.append(dict(r=len(routes) - 1, s=float(n * nloop / 7), v=6.0, L=4.4, W=1.85,
+    for n in range(9):
+        cars.append(dict(r=len(routes) - 1, s=float(n * nloop / 9), v=6.0, L=4.4, W=1.85,
                          col=CAR_COLS[(n * 3) % len(CAR_COLS)], loop=nloop))
     cars[5].update(L=11.0, W=2.55, col=(232, 196, 40), v=6.5)    # a bus
     cars[17].update(L=8.0, W=2.4, col=(240, 240, 238), v=6.5)    # a white van
@@ -899,30 +905,57 @@ def traffic_faults():
 _ESTATE = None
 
 
+STADIUM = (-36.0, 168.0, 36.0, 280.0)            # the County Ground's pitch box (map metres), below the title
+SHED = (-62.0, 112.0, 22.0, 140.0)               # the big white-roofed shed, CLOSING DOWN on its roof (in the safe area)
+CARPARK = (58.0, -14.0, 100.0, 34.0)
+
+
+def _free(p, margin=0.0):
+    """Room for a house here: clear of the junction, the arms, the stadium, the shed and the car park."""
+    if np.hypot(*p) < 68:
+        return False
+    for m in MINIS:
+        u = _pol(1, m)
+        if float(np.dot(p, u)) > 0 and abs(u[0] * p[1] - u[1] * p[0]) < 15 + margin:
+            return False
+    for x0, y0, x1, y1 in (STADIUM, SHED, CARPARK):
+        if x0 - 22 < p[0] < x1 + 22 and y0 - 22 < p[1] < y1 + 22:
+            return False
+    return True
+
+
 def _estate():
-    """The estate round it, placed once: houses (brown roofs), trees, the flat-roofed block, the car park."""
+    """Swindon round it, placed once (Sam's photos, 8 Nov): terraced streets (rows of brown and grey roofs with back
+    gardens), trees on the verges. Returns (rows of houses, trees)."""
     global _ESTATE
     if _ESTATE is None:
         rng = np.random.default_rng(4)
-        houses, trees = [], []
-        for i in range(260):
-            ang = rng.uniform(0, 360)
-            r = rng.uniform(78, 175)
-            if min(abs((ang - m + 180) % 360 - 180) for m in MINIS) < 1300 / r ** 1.0 / 1.2:
-                continue
-            p = _pol(r, ang)
-            if 30 < p[0] < 120 and -150 < p[1] < -95:   # the block and car park go there
-                continue
-            row = rng.integers(0, 3)
-            roof = [(150, 96, 70), (128, 84, 64), (110, 92, 84)][row]
-            houses.append((p, rng.uniform(9, 13), rng.uniform(6, 8), (ang + 90) % 180 + rng.normal(0, 5), roof))
-        for i in range(110):
-            ang = rng.uniform(0, 360)
-            r = rng.uniform(58, 180)
-            if min(abs((ang - m + 180) % 360 - 180) for m in MINIS) < 600 / r:
-                continue
-            trees.append((_pol(r, ang), rng.uniform(2.8, 5.5)))
-        _ESTATE = (houses, trees)
+        rows, trees = [], []
+        ang = math.radians(16)
+        along = np.array([math.cos(ang), math.sin(ang)])
+        across = np.array([-along[1], along[0]])
+        for k in range(-16, 17):                         # a terrace every 15 m, back to back in pairs
+            off = k * 15.0 + (4.0 if k % 2 else 0.0)
+            face = 1 if k % 2 else -1                    # which side its street is on
+            run = []
+            roof = [(140, 92, 70), (118, 82, 66), (104, 96, 92)][k % 3]
+            for j in range(-50, 51):
+                p = across * off + along * (j * 5.2)
+                if _free(p) and _free(p + across * face * 7):
+                    run.append(p)
+                elif run:
+                    rows.append((run, face, roof))
+                    run = []
+            if run:
+                rows.append((run, face, roof))
+        for i in range(160):
+            a_ = rng.uniform(0, 360)
+            r = rng.uniform(58, 75)
+            p = _pol(r, a_)
+            inbox = any(x0 - 8 < p[0] < x1 + 8 and y0 - 8 < p[1] < y1 + 8 for x0, y0, x1, y1 in (SHED, CARPARK))
+            if not inbox and all(abs(m - a_) % 360 > 14 and abs(m - a_) % 360 < 346 for m in MINIS):
+                trees.append((p, rng.uniform(2.8, 5.0)))
+        _ESTATE = (rows, trees, along, across)
     return _ESTATE
 
 
@@ -956,38 +989,68 @@ def aerial_flat(pil, cam, t):
         n = n or int(min(240, max(24, r * s / 3)))
         poly([np.asarray(c) + _pol(r, a) for a in np.linspace(0, 360, n, endpoint=False)], fill, outline, width)
     d.rectangle([0, 0, W, H], fill=(118, 146, 86))                          # drab verge grass
-    houses, trees = _estate()
-    for p, w_, h_, a, roof in houses:                                       # shadows first (the low sun)
-        c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
-        q = [p + np.array([u * c - v * sn, u * sn + v * c]) for u, v in
-             ((-w_ / 2, -h_ / 2), (w_ / 2, -h_ / 2), (w_ / 2, h_ / 2), (-w_ / 2, h_ / 2))]
-        off = np.array([-0.857, 0.514]) * 6
-        poly([x + off for x in q], (74, 92, 58), outline=False)
-    for p, w_, h_, a, roof in houses:
-        c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
-        q = [p + np.array([u * c - v * sn, u * sn + v * c]) for u, v in
-             ((-w_ / 2, -h_ / 2), (w_ / 2, -h_ / 2), (w_ / 2, h_ / 2), (-w_ / 2, h_ / 2))]
-        poly(q, roof)
-        d.line([P(p + np.array([-w_ / 2 * c, -w_ / 2 * sn])), P(p + np.array([w_ / 2 * c, w_ / 2 * sn]))],
-               fill=tuple(int(v * 0.72) for v in roof), width=ink)        # the ridge
-    # the flat-roofed block and its car park (benchmark 8), CLOSING DOWN on the roof (added: drab Swindon)
-    poly([(35, -150), (115, -150), (115, -118), (35, -118)], (176, 172, 166))
-    poly([(35, -112), (115, -112), (115, -96), (35, -96)], (96, 96, 98))
-    for i in range(12):
-        x = 39 + i * 6.4
-        d.line([P((x, -112)), P((x, -104))], fill=(230, 230, 226), width=lw(0.15))
-        if i % 3 != 1:
-            col = CAR_COLS[(i * 5) % len(CAR_COLS)]
-            poly([(x + 1.2, -111), (x + 3.0, -111), (x + 3.0, -106.6), (x + 1.2, -106.6)], col)
+    rows, trees, along, across = _estate()
+    sdir = np.array([-0.857, 0.514])                                        # shadows fall this way (map)
+    for run, face, roof in rows:                                            # streets, gardens, shadows
+        a, b = run[0] - along * 2.6, run[-1] + along * 2.6
+        st = across * face * 8.5
+        poly([a + st - across * face * 3.5, b + st - across * face * 3.5, b + st + across * face * 3.5,
+              a + st + across * face * 3.5], (150, 150, 150), outline=False)
+        gd = -across * face
+        poly([a + gd * 4, b + gd * 4, b + gd * 11, a + gd * 11], (110, 136, 82), outline=False)
+        for p in run[::2]:                                                  # garden fences
+            d.line([P(p + gd * 4 - along * 2.6), P(p + gd * 11 - along * 2.6)], fill=(96, 110, 74), width=lw(0.3))
+        poly([a - across * 4 + sdir * 5, b - across * 4 + sdir * 5, b + across * 4 + sdir * 5,
+              a + across * 4 + sdir * 5], (74, 92, 58), outline=False)
+    for run, face, roof in rows:                                            # the roofs: one terrace, party walls
+        a, b = run[0] - along * 2.6, run[-1] + along * 2.6
+        poly([a - across * 4, b - across * 4, b + across * 4, a + across * 4], roof)
+        d.line([P(a), P(b)], fill=tuple(int(v * 0.72) for v in roof), width=ink)   # the ridge
+        for p in run[1:]:
+            d.line([P(p - along * 2.6 - across * 4), P(p - along * 2.6 + across * 4)],
+                   fill=tuple(int(v * 0.8) for v in roof), width=max(1, ink // 2))
+    # the big white-roofed shed (Sam's photos), CLOSING DOWN on the roof (added: drab Swindon), its car park
+    x0, y0, x1, y1 = SHED
+    poly([(x0 + 6, y0 + 4), (x1 + 6, y0 + 4), (x1 + 6, y1 + 4), (x0 + 6, y1 + 4)], (74, 92, 58), outline=False)
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (226, 228, 230))
+    for i in range(1, 8):
+        x = x0 + i * (x1 - x0) / 8
+        d.line([P((x, y0)), P((x, y1))], fill=(196, 198, 202), width=lw(0.3))
+    x0, y0, x1, y1 = CARPARK
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (104, 104, 106))
+    for row in range(3):
+        yy = y0 + 4 + row * 15
+        for i in range(int((x1 - x0) / 2.6)):
+            x = x0 + 1 + i * 2.6
+            d.line([P((x, yy)), P((x, yy + 5))], fill=(230, 230, 226), width=lw(0.12))
+            if (i * 7 + row * 3) % 5 < 3:
+                col = CAR_COLS[(i * 5 + row) % len(CAR_COLS)]
+                poly([(x + 0.4, yy + 0.3), (x + 2.2, yy + 0.3), (x + 2.2, yy + 4.7), (x + 0.4, yy + 4.7)], col)
     if s * 4.0 > 6:
-        fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), max(6, int(5.0 * s)))
-        lay = Image.new('RGBA', (int(80 * s), int(9 * s)), (0, 0, 0, 0))
-        ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), 'CLOSING DOWN', font=fnt, fill=(200, 40, 40, 255),
+        fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), max(6, int(5.6 * s)))
+        lay = Image.new('RGBA', (int(60 * s), int(10 * s)), (0, 0, 0, 0))
+        ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), 'CLOSING DOWN', font=fnt, fill=(196, 36, 36, 255),
                                  anchor='mm')
         rot = -math.degrees(math.atan2(ex[1], ex[0]))
         lay = lay.rotate(rot, expand=True)
-        cxy = P((75, -134))
+        cxy = P(((SHED[0] + SHED[2]) / 2, (SHED[1] + SHED[3]) / 2))
         pil.alpha_composite(lay, (int(cxy[0] - lay.width / 2), int(cxy[1] - lay.height / 2)))
+    # the County Ground next door (Sam's photo): striped pitch, red seats under grey roofs, floodlight pylons
+    x0, y0, x1, y1 = STADIUM
+    poly([(x0 - 16, y0 - 16), (x1 + 16, y0 - 16), (x1 + 16, y1 + 16), (x0 - 16, y1 + 16)], (186, 30, 40))
+    for x0_, y0_, x1_, y1_ in ((x0 - 16, y0 - 16, x1 + 16, y0 - 9), (x0 - 16, y1 + 9, x1 + 16, y1 + 16),
+                               (x0 - 16, y0 - 16, x0 - 10, y1 + 16), (x1 + 10, y0 - 16, x1 + 16, y1 + 16)):
+        poly([(x0_, y0_), (x1_, y0_), (x1_, y1_), (x0_, y1_)], (206, 206, 204))   # the stand roofs
+    poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (84, 150, 70))
+    for i in range(0, 14, 2):
+        yy = y0 + i * (y1 - y0) / 14
+        poly([(x0, yy), (x1, yy), (x1, yy + (y1 - y0) / 14), (x0, yy + (y1 - y0) / 14)], (96, 164, 80), outline=False)
+    for q in ([(x0 + 2, y0 + 2), (x1 - 2, y0 + 2)], [(x1 - 2, y0 + 2), (x1 - 2, y1 - 2)], [(x0 + 2, y0 + 2), (x0 + 2, y1 - 2)],
+              [(x0 + 2, (y0 + y1) / 2), (x1 - 2, (y0 + y1) / 2)]):
+        d.line([P(q[0]), P(q[1])], fill=(236, 240, 232), width=lw(0.25))
+    for cx_, cy_ in ((x0 - 22, y0 - 22), (x1 + 22, y0 - 22)):            # floodlights and their long shadows
+        d.line([P((cx_, cy_)), P(np.array([cx_, cy_]) + sdir * 30)], fill=(60, 60, 60, 150), width=lw(1.0))
+        poly([(cx_ - 3, cy_ - 1.5), (cx_ + 3, cy_ - 1.5), (cx_ + 3, cy_ + 1.5), (cx_ - 3, cy_ + 1.5)], (220, 220, 210))
     for p, r in trees:
         circ(p + np.array([-0.857, 0.514]) * r * 0.9, r, (64, 84, 52), outline=False)
     for p, r in trees:
@@ -999,8 +1062,16 @@ def aerial_flat(pil, cam, t):
         a0, b0 = u * 44, u * 260
         poly([a0 + n * 10.5, b0 + n * 10.5, b0 - n * 10.5, a0 - n * 10.5], (200, 198, 192))
         poly([a0 + n * 7.5, b0 + n * 7.5, b0 - n * 7.5, a0 - n * 7.5], (128, 128, 130))
-    circ((0, 0), R_BIG + 3.0, (200, 198, 192))
-    circ((0, 0), R_BIG, (128, 128, 130))
+    circ((0, 0), 46.5, (200, 198, 192))                                     # pavement round the inner ring
+    for m in MINIS:
+        circ(_pol(R_MINI, m), 13.5, (200, 198, 192))
+    circ((0, 0), 44.0, (128, 128, 130))                                     # the inner ring's tarmac
+    for m in MINIS:                                                          # each mini's tarmac
+        circ(_pol(R_MINI, m), 11.5, (128, 128, 130))
+    for m in MINIS:                                                          # the arms' tarmac again, over the
+        u = _pol(1, m)                                                       # pavement where they join
+        n = np.array([-u[1], u[0]])
+        poly([u * 40 + n * 7.5, u * 80 + n * 7.5, u * 80 - n * 7.5, u * 40 - n * 7.5], (128, 128, 130), outline=False)
     for m in MINIS:
         u = _pol(1, m)
         n = np.array([-u[1], u[0]])
@@ -1026,13 +1097,13 @@ def aerial_flat(pil, cam, t):
     for i in range(5):
         a1, a2 = MINIS[i], MINIS[(i + 1) % 5]
         mid = (a1 + ((a2 - a1) % 360) / 2) % 360
-        pts = [_pol(37 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
+        pts = [_pol(40 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
                                                      (-4, 3), (-8, 2.4))]
         poly(pts, (96, 92, 90))
         for j in range(5):                                                   # hatching beyond its ends
             for sgn in (-1, 1):
                 a_ = mid + sgn * (10 + j * 1.6)
-                d.line([P(_pol(35, a_)), P(_pol(39, a_ + sgn * 1.2))], fill=(236, 236, 232), width=lw(0.3))
+                d.line([P(_pol(38, a_)), P(_pol(42, a_ + sgn * 1.2))], fill=(236, 236, 232), width=lw(0.3))
     # the inner ring's dashed edge, the minis: white domes in dashed white rings, arrows round them
     for a in range(0, 360, 10):
         d.line([P(_pol(28.5, a)), P(_pol(28.5, a + 4))], fill=(240, 240, 236), width=lw(0.15))
