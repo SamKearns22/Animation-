@@ -1,24 +1,25 @@
-# Sitting kit: the plan (7 Nov, waiting on Sam's answers before building)
+# Sitting kit (plan 7 Nov; part 1 built 8 Nov, part 2 to come)
 
 Sam, 7 Nov: "the full gamut of sitting animation": sit down, seated acting, stand up, feet up on a desk, lean back,
-cross legs, perch, slump. This file is the plan; nothing is built yet.
+cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 
 ## Where things stand
-- **Rules that bite next:** 42 (poses tested from every view before use), 78 (resting arms show weight, never sink), 38 (front on).
-- **Done (7 Nov):** read what exists, drew it (sheet sent to Sam), researched timings, wrote this plan.
-- **Next:** Sam answers the questions below; then build part 1 (Opus, high effort; this chat if short, else a new one: "Build the sitting kit, part 1, from notes/sitting-kit.md").
-- **Needs Sam:** the numbered questions at the end of this file.
-- **Open rule requests:** proposed rule 80 (question 8), not written until Sam says yes.
-- **For Claude:** `moves.seated` / `stand_up` / `sit_down` (moves.py 426-463), `views.chair` (views.py 258), `figure.check_seated`, `moves.check_feet` / `check_on_floor`; the films that drew their own seats: `midterminal_set.put_seated`, `newsdesk_props.round_chair`, `poker_mon_room`, `series.seated_legs`, `patriots2.seated_legs`.
+- **Rules that bite next:** 80 (front on: knees and lap show; no head dip on a rise), 78 (resting arms show weight), 42 (poses tested from every view).
+- **Done (8 Nov): part 1 built and checked** (`source/sitting.py`): measured seats (office chair that reclines, low armchair, stool) and desk from all 5 views; poses upright, hands folded, lean in, lean back (2), armchair, stool; moves stand up (1.1 s, quick, weary), sit down (1.3 s), plonk, lean back, seated gestures, the moving hold; checks (`sitting.py audit`: clean). Rule 80 written. Sheet, photo comparison and a moves video sent to Sam.
+- **Next:** Sam's look at part 1; then part 2 (Opus, high effort, new chat): "Build the sitting kit, part 2, from notes/sitting-kit.md" (cross legs both kinds, feet up, perch on chair and desk, slump, swivel turn; through-things checks).
+- **Needs Sam:** a look at the sheet and the moves video; any notes.
+- **Read (part 2):** this file's sections C-E; `guides/figure-rig.md` s.4 (sitting line); `source/sitting.py` MAP.
+- **Open rule requests:** none.
+- **For Claude:** views hooks added: `j['dz']` (body travel), `j['chair_draw']`, `j['pre']`/`j['mid']` layers, `j['lap']` (thigh over shin, knee cap; knees over the jacket in a low seat); seated feet are never "raised" kicks. Swivel needs the desk in the world frame (it is in the body frame now). Gesture hands over a desk are lifted 55 above its top. No photo yet for lean back hands behind the head (Unsplash blocked; Commons search flaky).
 
 ## Sam's list (the brief, ticked when built and tested)
 | # | item | what it means here | built? | tested from every view? |
 |---|---|---|---|---|
-| 1 | sit down | from standing in front of the seat, down onto it, settled | | |
-| 2 | seated acting | talking, gesturing, reacting from a seat; the moving hold | | |
-| 3 | stand up | from seated to standing, ready to walk | | |
+| 1 | sit down | from standing in front of the seat, down onto it, settled | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
+| 2 | seated acting | talking, gesturing, reacting from a seat; the moving hold | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
+| 3 | stand up | from seated to standing, ready to walk | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
 | 4 | feet up on a desk | leaning back, heels on the desk top | | |
-| 5 | lean back | trunk back against a reclining chair back | | |
+| 5 | lean back | trunk back against a reclining chair back | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
 | 6 | cross legs | one leg over the other | | |
 | 7 | perch | sitting on the very edge (of a chair; of a desk: question 3) | | |
 | 8 | slump | sliding down in the seat, deflated | | |
@@ -127,6 +128,8 @@ of each move, sent in the chat; the pose gallery and kit catalogue get their row
 - Cost: each half is building, Opus high. Budget asked for after part 1 (rule 44).
 
 ## Questions for Sam (7 Nov; answers go here)
+**Sam, 7 Nov: "Y go": yes to all eight.** Rule 80 written. Building part 1 now.
+
 1. Stand up in about 1.1 s with only a small lean front on (your Islamocommunism notes)? Y/N
 2. Cross legs: both kinds, knee over knee (prim) and ankle on knee (cocky)? Y, or 1 = knee over knee only, 2 = ankle on knee only
 3. Perch: both, on a chair's front edge (eager) and on a desk corner (casual boss)? Y, or 1 = chair only, 2 = desk only

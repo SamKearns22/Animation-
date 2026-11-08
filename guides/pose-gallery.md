@@ -26,6 +26,18 @@ pose still passes wherever this table says it does.
 | hands on table | `posegallery.hands_on_table(sp, h)` | Patriots 4, 1 Nov | front, three-quarter, side | three-quarter back, behind | both palms on a table edge `h` metres high in front; from behind the table is beyond him, so the hands are hidden |
 | pointing both ways | `posegallery.point_both(sp)` | Patriots 4, 1 Nov | all 5 views | | both arms flung out, one finger at each of two people |
 
+**Seated poses (the sitting kit, `source/sitting.py`; plan and notes `notes/sitting-kit.md`).** Sheet: `python3 source/sitting.py sheet OUT.jpg`; photos beside them: `sitting.py refs OUT.jpg`; checks: `sitting.py audit`.
+
+| pose | call | from | passes (rule 41) | avoid | notes |
+|---|---|---|---|---|---|
+| upright | `sitting.pose(sp, 'upright')` | the kit, 8 Nov | front, three-quarter, side, three-quarter back | behind | hands on the thighs; knees and lap show front on (rule 80) |
+| hands folded | `sitting.pose(sp, 'hands folded')` | the kit (Vance, line 1) | front, side, three-quarter back | three-quarter, behind | forearms on the desk, elbows bent, hands meeting (rule 78) |
+| lean in | `sitting.pose(sp, 'lean in')` | the kit | front, side, three-quarter back, behind | three-quarter | elbows on the desk, hands together before the chin |
+| lean back | `sitting.pose(sp, 'lean back')` | the kit | all 5 views | | chair reclines with him; hands cup the back of the head, fingers showing at its sides |
+| lean back, belly | `sitting.pose(sp, 'lean back, belly')` | the kit | front, side, three-quarter back | three-quarter, behind | fingers laced on the stomach |
+| armchair | `sitting.pose(sp, 'armchair')` | the kit | front, three-quarter, side, three-quarter back | behind | low and deep, sunk in, leaning back, forearms along the arms |
+| stool | `sitting.pose(sp, 'stool')` | the kit | front, three-quarter, side, three-quarter back | behind | no back to lean on |
+
 **Adding a pose:** write it in `source/posegallery.py` (a function of `sp` returning the joints; credit the film), add
 it to `GALLERY`, run the sheet, fix it until every view passes or list the views that fail in `AVOID` with the reason,
 then add its row here.

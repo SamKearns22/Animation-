@@ -209,7 +209,15 @@ def leg(p, j, side, yaw, sp):
     knee3 = knee_of(j, side)
     pts = [project(q, yaw)[0] for q in (hip3, knee3, foot3)]
     k = sp.get('leg_k', 1.0)                                          # a heavier build (Ad-Vanced Notice, 7 Nov)
-    tube(p, pts, [48 * k, 38 * k, 27 * k], sp.get('trousers', (40, 40, 46)))
+    toward = project(knee3, yaw)[1] - project(hip3, yaw)[1]         # how far the knee comes at us
+    if j.get('lap') and toward > 90:              # seated, thighs at the camera (rule 80): the shin first, then the
+        col = sp.get('trousers', (40, 40, 46))     # thigh over it ending in a round knee, a touch bigger (nearer)
+        tube(p, pts[1:], [36 * k, 27 * k], col)
+        kn = 1.0 + 0.12 * min(1.0, toward / 230)
+        tube(p, pts[:2], [48 * k, 46 * k * kn], col)
+        p.ell(pts[1][0], pts[1][1], 47 * k * kn, 44 * k * kn, col, INK, 2.6)
+    else:
+        tube(p, pts, [48 * k, 38 * k, 27 * k], sp.get('trousers', (40, 40, 46)))
     fx, fy, fz = foot3
     a = math.radians(j.get('toe' + side, 0.0))                       # heel lifted (toe-off, a kick), degrees
 
@@ -658,6 +666,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     view = VIEWS[view_deg]
     j = joints or standing(sp)
     lean = j.get('lean', 0.0)
+    if j.get('dz'):                              # the whole body moved forward (+) or back in its own frame (sitting.py:
+        (ox, oy), _ = project((0.0, 0.0, j['dz']), view_deg)   # rising off a seat carries the hips over the feet)
+        x, y = x + ox * s * (-1 if mirror else 1), y + oy * s
     L0 = B.Local(cam, x, y + j.get('bob', 0.0) * s, s, -1 if mirror else 1)
     L = L0 if squash is None else Tilted(L0, squash, 928.0 - j.get('bob', 0.0))
     p = B.Pen(img, L)
@@ -681,10 +692,13 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     if view == 'back':
         behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands in front of him: hidden by his back (Sam)
     if seated:
-        chair(p, view, j2, sp, under=True)
+        (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
+    for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)
+        draw(p, j2, view)
     # A leg raised and kicked out in front (a front kick) is nearer than the jacket: drawn over the torso, never
     # hidden behind it (Sam, 25 Oct: Prepper Minister's kick read as a leg wrapped behind his body)
-    raised = {sd for sd in 'LR' if depth['foot' + sd] > depth['hip' + sd] + 150 and j['foot' + sd][1] < ANKLE_Y - 150}
+    raised = {sd for sd in 'LR' if depth['foot' + sd] > depth['hip' + sd] + 150 and j['foot' + sd][1] < ANKLE_Y - 150
+              and not j.get('lap')}                # (seated feet are forward too, but on the floor, not kicked)
     hidden = set(j.get('hide_legs', ()))         # a leg the film draws itself (a kick at the lens, foreshortened)
     for sd in hips_far:
         if sd not in raised and sd not in hidden:
@@ -735,6 +749,15 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         torso_view(img, B.Pen(img, up), bent, view, seated)
     for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
+    if j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
+        hem = min(sp_draw.get('bottom', JACKET), 470) + 30   # than the jacket, so they show over it (rule 80)
+        for sd in hips_far:
+            kn = project(knee_of(j, sd), view_deg)[0]
+            if kn[1] < hem and project(knee_of(j, sd), view_deg)[1] - depth['hip' + sd] > 90:
+                k = sp.get('leg_k', 1.0) * 1.1
+                p.ell(kn[0], kn[1], 47 * k, 44 * k, sp.get('trousers', (40, 40, 46)), INK, 2.6)
+    for draw in j.get('mid', []):                 # set pieces nearer than his body but under his arms (sitting.py: a desk
+        draw(p, j2, view)                          # top his forearms rest on, the near armrest)
     for sd in hips_far:
         if sd in raised and sd not in hidden:
             leg(p, j, sd, view_deg, sp)
