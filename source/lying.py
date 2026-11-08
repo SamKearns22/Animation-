@@ -245,7 +245,7 @@ def mirror(k):
     return out
 
 
-def place(k, x, z, yaw, ground=0.0):
+def place_body(k, x, z, yaw, ground=0.0):
     """A pose's frame put into the room: turned `yaw` degrees about the vertical (0: its head towards +x... as
     built; 90: towards -z), its origin at floor point (x, z), the floor `ground` high (a table top)."""
     a = math.radians(yaw)
@@ -1028,7 +1028,7 @@ def lie(sp, pose, x, z, yaw, ground=0.0, flip=1):
     """A lying pose ready to draw: built, placed at floor point (x, z) turned `yaw`, settled onto the floor (and a
     slump's wall). Returns (Body, surfaces)."""
     k = POSES[pose](sp)
-    k = place(k if flip > 0 else mirror(k), x, z, yaw, ground)
+    k = place_body(k if flip > 0 else mirror(k), x, z, yaw, ground)
     surf = surfaces_of(pose, k, ground, yaw, x, z)
     return rest(k, sp, pose, surf, flip), surf
 

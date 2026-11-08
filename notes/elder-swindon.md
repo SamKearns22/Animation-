@@ -1,13 +1,14 @@
 # Elder Scrolls: Swindon (parody of the Elder Scrolls VI: Sentinel name-reveal teaser)
 
 ## Where things stand
-- **Rules that bite next:** 11 (composition sheet before building), 3 (roundabout benchmark against Sam's photos), 8 (rehearse the zoom-out and the scroll reveal as short clips).
-- **Done (8 Nov):** plan; Sam's answers 1-9; shot list redone for a joke from the first frame; estimate cut to Sam's 9%.
-- **Next:** Opus high, this chat: stills from the teaser recordings (Sam re-sends them), then the composition sheet (shots 1, 2, 5, 6).
-- **Needs Sam:** the three teaser screen recordings again (only their sound was filed, in the planning chat).
-- **Read:** this file; guides/satire.md (Start, One set, The look); kit-catalogue (Sets, Effects).
+- **Rules that bite next:** 8 (rehearse the dog and the zoom-out, the scroll reveal, the title burn as short clips first), 3 (roundabout benchmark against Sam's two photos), 39 (3D only for the scroll and can).
+- **Done (8 Nov):** plan; answers 1-9; teaser stills; the Staffie added; composition sheet sent and approved (Sam: "Y to all": glowing burn-in on SWINDON, the man stays out cold, brindle Staffie); lying.py's `lie` mended.
+- **Spent against the estimate:** 0.9 of 9.0 (ground 0.4, scroll 0.2, can 0.1, dog 0.1, roundabout 0.1); nothing over.
+- **Next:** build, Opus high, NEW chat: "Build Elder Scrolls Swindon – read notes/elder-swindon.md". Order: rehearsal clips (dog + zoom-out, scroll reveal, title burn), then the film from the template, check sheet, animatic offer.
+- **Needs Sam:** nothing until the rehearsal clips.
+- **Read:** this file (Plan, Showstopper, Brief); guides/satire.md (Start, One set, Render); kit-catalogue (Effects).
 - **Open rule requests:** none.
-- **For Claude:** film will be `source/elder_swindon.py` from the template; `HAS = {'people','effects','props'}`; the man: `lying.py` face_down from above, house-style head turned on its cheek at ground level; sound `music/sentinel-teaser-audio.m4a` as is under the whole film (Sam: for the animatic).
+- **For Claude:** comp `source/elder_swindon_comp.py` (cams `orbit`, `topcam`; props `lying_rev`, `scroll_mat`, `can_mat`, `packet`, `drool`, `dog`; `aerial`, `title`); ground `source/elder_swindon_ground.py`. Film: `source/elder_swindon.py` from the template, `HAS = {'people','effects','props'}`, sound `music/sentinel-teaser-audio.m4a` as is. Face close-up needed (lying.draw's face reads poorly face down). Can label reads "RT LAGER" at its end: fix the wrap.
 
 ## Plan (8 Nov, redone after Sam's answers)
 **Length:** 30.04 s (the teaser's sound, as is) + the 1.6 s sign-off = 31.6 s. No voices.
@@ -18,12 +19,19 @@ From the zoom-out on, everything flat house style.
 **Shot list, timed to the sound's hits** (1.07, 2.49, 6.57, 7.37, 7.79, 11.43, 13.86, 15.08, 17.45, 19.86, 21.93, 24.76, 27.19)
 | # | time (s) | shot | teaser beat it copies |
 |---|---|---|---|
-| 1 | 0.00-7.37 | Ground level, warm low sun, dust blowing in gusts (1.07, 2.49, 6.57). From the first frame: the half-buried EXPORT LAGER can in front, the man's splayed arm and limp hand behind it, cigarette butts and a ring-pull. The camera glides along the arm and reaches his drooling face by about 3.5 s; a gust blows dust over him as the drool drips (6.57). Hook Text 0.5 s to about 4 s | sand blowing |
+Teaser stills (Sam's recordings, 8 Nov): the camera looks down on the sand the whole way (a ridge half in shadow, sand
+streaming); gold glints show through from 7.4 s; the staff lies across the frame, fully out by about 14 s, its blue gem
+flares gold arcs at 16.1 s; black at 16.5 s with gold rings blooming; "The Elder Scrolls VI" fades in 18.5-19.5 s with a
+thin rule under it; "SENTINEL" burns in letter by letter with glowing edges 22-27 s and cools to dull bronze by 29 s.
+Our camera looks down at a slant (70 degrees) in shots 1-3 so his face and the can read, and straight down from shot 4.
+
+| 1 | 0.00-7.37 | Looking down at a slant, warm low sun, dust blowing in gusts (1.07, 2.49, 6.57). From the first frame: the half-buried EXPORT LAGER can in front, the man's splayed arm and limp hand behind it, cigarette butts and a ring-pull. The camera glides along the arm and reaches his drooling face by about 3.5 s; a gust blows dust over him as the drool drips (6.57). Hook Text 0.5 s to about 4 s | sand blowing |
 | 2 | 7.37-13.86 | Just past his outstretched hand, a gust strips the soil off the scroll (7.37); the gold catches the sun (7.79); the camera glides along it, spiked tip, carved end cap, the case (11.43) | the staff appearing |
 | 3 | 13.86-15.08 | The sandwich packet (EGG MAYO) tumbles end over end past the scroll | (staff, continued) |
 | 4 | 15.08-16.50 | Straight down from 1.5 m: the man face down, the scroll by his hand, the can, the packet, litter, on the soil-and-grass patch | (staff, last shot) |
-| 5 | 16.50-17.45 | **Showstopper:** the camera rockets straight up to the whole Magic Roundabout, traffic going round; lands on the 17.45 hit | the cut to black |
-| 6 | 17.45-30.04 | From above, drifting slowly, traffic going round, to the end (Sam, Q4: no extra shots); the title burns in: gold rings (17.45), "The Elder Scrolls VI" (19.86), "SWINDON" (21.93); exact timing from the teaser's stills | rings, title, held |
+| 4b | 15.30-16.50 | (Sam, 8 Nov) A Staffordshire bull terrier charges in and clamps on his ankle, growling, tugging and shaking his leg; he stays out cold | |
+| 5 | 16.50-17.45 | **Showstopper:** the camera rockets straight up to the whole Magic Roundabout, the dog still tugging as he shrinks away, traffic going round; lands on the 17.45 hit | the cut to black |
+| 6 | 17.45-30.04 | From above, drifting slowly, traffic going round, to the end (Sam, Q4: no extra shots); the picture dims halfway (the teaser goes to black); gold rings bloom (17.45), "The Elder Scrolls VI" fades in (18.5-19.5), "SWINDON" burns in letter by letter (22-27) and cools (29) | rings, title, held |
 | - | 30.04-31.64 | CranbriJoos sign-off | |
 
 ## Plan extras: ambition estimate (rules 24, 39, 54, 55, 62)
@@ -32,24 +40,25 @@ no voices, no lip-sync; one new look. 3D only for the scroll (rule 39: the camer
 
 | build or risky move | why (3D? parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|
-| Near-real ground: soil, patchy grass, stones, cigarette butts, ring-pull, wind-blown dust, warm low sun, depth of field | new look, shots 1-4 | 1.6 | |
-| The Elder Scroll, near-real gold (spiked tips, dark wrapped grips, carved end caps, the case) | 3D: the camera glides along it; soil slides off it | 1.4 | |
-| Lager can (dented, half buried), sandwich packet (tumbles) | new props, flat paintings | 0.5 | |
-| The man in house style: lying with his cheek on the soil (ground level), face down from above; drool | lying.py reused; the cheek-down head new | 0.7 | |
-| The zoom-out: one camera straight down, rising 1.5 m to about 200 m; near-real handing over to flat on the way | Showstopper, risky move | 0.9 | |
-| Magic Roundabout from above, flat painting (benchmark below), the soil-and-grass patch on the island, the estate round it | new set | 1.4 | |
-| Traffic: cars and a bus going round (clockwise round each mini, anticlockwise round the inner ring), giving way | new mover | 0.8 | |
-| Title burn-in (gold rings, small line, big SWINDON) | new effect | 0.5 | |
-| Animatic rounds | | 1.2 | |
-| **Total** | | **9.0** | |
+| Near-real ground: soil, patchy grass, stones, cigarette butts, ring-pull, wind-blown dust, warm low sun, depth of field | new look, shots 1-4; started in the composition sheet | 1.4 | 0.4 |
+| The Elder Scroll, near-real gold (spiked tips, dark wrapped grips, carved end caps, the case); soil blowing off it | 3D: the camera glides along it and the shine must move; started in the sheet | 1.0 | 0.2 |
+| Lager can (dented, half buried), sandwich packet (tumbles) | new props, can as the scroll, packet flat | 0.5 | 0.1 |
+| The man in house style: lying.py face down; a new close-up of his face on its cheek (slack mouth, drool) | the kit's face reads poorly face down: the close-up is new | 0.9 | |
+| The Staffie (Sam, 8 Nov): from above and at a slant, house style; charges in, clamps, tugs and shakes | new creature | 0.8 | 0.1 |
+| The zoom-out: the camera swings to straight down and rises 1.5 m to about 200 m; near-real hands over to flat | Showstopper, risky move | 0.9 | |
+| Magic Roundabout from above, flat painting (benchmark below), the soil-and-grass patch on the island, the estate | new set; rough in the sheet | 1.3 | 0.1 |
+| Traffic: cars and a bus going round (clockwise round each mini, anticlockwise round the inner ring), giving way | new mover | 0.7 | |
+| Title: dim, gold rings, small line, SWINDON burning in letter by letter | new effect; rough in the sheet | 0.5 | |
+| Animatic rounds | | 1.0 | |
+| **Total** | Sam's budget 9% | **9.0** | **0.9** |
 
-Rehearsal clips first (rule 8): shot 2 (soil sliding off the scroll), shot 5 (the zoom-out), shot 6 (traffic and the title burn).
+Rehearsal clips first (rule 8): shot 2 (soil sliding off the scroll), shots 4b-5 (the dog and the zoom-out), shot 6 (traffic and the title burn).
 Sound effects (rule 26): none; the teaser's sound as is (Sam, 8 Nov: for the animatic; how to treat it later is open). Bleeps: none.
 
 ## Showstopper elements (rule 40: approved by Sam, 8 Nov, Q9)
 | # | element | how it moves |
 |---|---|---|
-| 1 | Straight down over the man's head, the scroll by his hand, the can, the packet | still for 2 frames, then the climb starts |
+| 1 | Straight down over the man, the scroll by his hand, the can, the packet, the Staffie on his ankle (Sam, 8 Nov) | the dog tugging and shaking; the climb starts slowly so the dog reads |
 | 2 | The soil patch round them, then the island's soil-and-grass patch (Q2), the lamp post's shadow | shrinks away as the camera climbs |
 | 3 | The inner ring, then the five mini roundabouts, the arms, the verges and the estate | come into frame as it climbs |
 | 4 | Traffic going round | keeps going the whole time, never stops |
@@ -67,7 +76,7 @@ Benchmark for the Magic Roundabout (8 things that make it, from Sam's two photos
 7. Grass verges with trees round the edges; five roads fanning out.
 8. Round it: houses with brown roofs (bottom left), a flat-roofed block (top right), a car park.
 
-Composition sheet sent: (not yet: after Sam's answers)
+Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 source/elder_swindon_comp.py comp OUT.jpg`; 4 key shots: can and hand with the Hook Text; his face and the scroll; the Staffie as the climb starts; the roundabout with SWINDON)
 
 ## Brief (Sam, 8 Nov) — checklist, tick against the film before the first animatic
 - [ ] Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s).
@@ -92,6 +101,10 @@ Composition sheet sent: (not yet: after Sam's answers)
 - [ ] (Q9) The zoom-out is the Showstopper Shot (elements as listed).
 - [ ] Budget 9% of a week.
 - [ ] Animatic: the trailer's sound as it is.
+- [ ] (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out.
+- [ ] (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL.
+- [ ] (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks).
+- [ ] (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze).
 
 ## Reference
 - Teaser frames: sand blows (0-7 s), golden staff with a blue gem appears (7-15 s), black, gold rings, "The Elder Scrolls VI", "SENTINEL" burns in (15-30 s).
@@ -112,3 +125,8 @@ Sam's answers (8 Nov): 1 unsure; 2 a soil-and-grass patch on the island, the res
 4 N (no extra shots); 5 EXPORT LAGER, and a joke from the start (can and splayed arm from frame one, face soon after);
 6 add them; 7 yes; 8 take stills from the video he sent (only the sound was filed: asked for the recordings again); 9 yes.
 Budget 9%. Audio for the animatic: the trailer's sound as it is.
+
+Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3 brindle); no notes on the sheet.
+1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
+2. The man stays out cold while the dog tugs (only his leg jerks). Y/N
+3. The Staffie: 1 = brindle (brown, darker stripes, white blaze); 2 = blue-grey.
