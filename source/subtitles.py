@@ -88,7 +88,22 @@ def chunk_times(ln, tail=0.45):
         return _CACHE[key]
     ch = chunks(ln['text'])
     out = [(ch[0][0], 0.0)]
-    if ln.get('_voice') is not None and len(ch) > 1:
+    parts = [p.split() for p in re.split(r'(?<=[.,?!])\s+', ln['text']) if p.strip()]
+    st = ln.get('_stretches') or []
+    if ln.get('_voice') is not None and len(ch) > 1 and len(parts) == len(st) > 1:
+        # one stretch of talk per phrase (Ad-Vanced Notice line 9, 8 Nov: counted syllables put "Between you and
+        # me," two seconds early): each piece is timed inside its own phrase's stretch, by its share of the words
+        bounds = [0]
+        for p in parts:
+            bounds.append(bounds[-1] + len(p))
+        w = len(ch[0][0].split())
+        for c, _ in ch[1:]:
+            k = max(i for i in range(len(parts)) if bounds[i] <= w)
+            a0, a1 = st[k]
+            at = a0 + (w - bounds[k]) / len(parts[k]) * (a1 - a0) - (0.05 if w == bounds[k] else 0.0)
+            out.append((c, max(out[-1][1] + 0.5, at)))
+            w += len(c.split())
+    elif ln.get('_voice') is not None and len(ch) > 1:
         import press_secretary as PS
         beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
         syl = [sum(mouths._syllables(w) for w in c.split()) for c, _ in ch]

@@ -41,27 +41,28 @@ Pen, layer, shrink, cut, box, wobbly, mix = ST.Pen, ST.layer, ST.shrink, ST.cut,
 LW = ST.LW
 
 # ---------------------------------------------------------------------------------------------- camera, zoom
-# A level camera 1.6 m up on the near pavement, horizon y 900, focal 1300. Vance 5.0 m out, the officers and the man
-# 6.8-7.5 m, the near kerb's snowbank 8.3 m, the road to 15.4 m, the far snowbank, the shopfronts 18 m away.
-H_CAM, HZ, FOCAL = 1.6, 900.0, 1300.0
+# A level camera 1.6 m up on the near pavement, horizon y 800, focal 1625 (Sam, 8 Nov: 25% closer than the first
+# build's 1300), its middle a little right of the frame's so the group and Vance both fit. Vance 5.0 m out, the
+# officers and the man 6.9-7.6 m, the near kerb's snowbank 8.4 m, the road to 15 m, the far snowbank, the shopfronts.
+H_CAM, HZ, FOCAL, CX = 1.6, 800.0, 1625.0, 572.0
 D_FACADE, D_FAR_BANK, D_ROAD, D_NEAR_BANK = 18.0, 15.3, (9.0, 15.0), 8.4
-VANCE_AT = (-1.35, 5.0)                  # world x, d (brief 31: to the left of them)
-MAN_AT = (0.72, 6.95)                    # the man's middle on the snow
-# The officers: (x, d, yaw, move, offset s): two kick from either end of him, side on; two behind him, front on,
-# hammer their fists down at him; each strikes every 1.36 s, a quarter period apart (about 3 blows a second, Q18).
+VANCE_AT = (-1.2, 5.0)                   # world x, d (brief 31: to the left of them)
+MAN_AT = (0.62, 6.95)                    # the man's middle on the snow
+# The officers: (x, d, yaw, move, offset s): one kicks from his head end, side on; one stamps on his back from
+# behind, facing us (his vest reads); two punch down from his feet end, side on, bent over him; each strikes every 1.36 s, a quarter period apart (about 3 blows a second, Q18).
 PERIOD = 1.36
-OFFICERS = [('O1', -0.22, 6.95, 90, 'kick', 0.0),
-            ('O3', 0.36, 7.55, 0, 'hammer', PERIOD * 0.25),
-            ('O2', 1.66, 6.95, -90, 'kick', PERIOD * 0.5),
-            ('O4', 1.16, 7.6, 0, 'hammer', PERIOD * 0.75)]
+OFFICERS = [('O1', -0.32, 6.95, 90, 'kick', 0.0),
+            ('O3', 0.22, 7.65, 0, 'stomp', PERIOD * 0.25),
+            ('O2', 1.4, 6.9, -90, 'punch', PERIOD * 0.5),
+            ('O4', 0.88, 7.6, -90, 'punch', PERIOD * 0.75)]
 
 
 def cam_at(z=1.0, focus=None, to=None):
     """The camera zoomed z times about `focus` (a screen point at z = 1), that point moved to `to`."""
     if z == 1.0 or focus is None:
-        return ST.Level(H_CAM, HZ, FOCAL)
+        return ST.Level(H_CAM, HZ, FOCAL, CX)
     tx, ty = to or focus
-    return ST.Level(H_CAM, ty + z * (HZ - focus[1]), FOCAL * z, tx + z * (540.0 - focus[0]))
+    return ST.Level(H_CAM, ty + z * (HZ - focus[1]), FOCAL * z, tx + z * (CX - focus[0]))
 
 
 def place(cam, x, d):
@@ -297,9 +298,9 @@ def _painted(f, cx, hz):
     _wires(pen, cam)
     for i, b in enumerate(BLOCK):
         _building(pen, cam, i, b)
-    _tree(pen, cam, -3.4, 16.6, 801)
-    _tree(pen, cam, 6.4, 16.6, 802)
-    _lamp(pen, cam, 1.4, 16.2)
+    _tree(pen, cam, -6.2, 16.6, 801)                  # between the shopfronts, clear of the signs
+    _tree(pen, cam, 9.2, 16.6, 802)
+    _lamp(pen, cam, 3.9, 16.2)
     _lamp(pen, cam, -9.0, 16.2)
     _street(pen, cam)
     return shrink(lay)
@@ -354,14 +355,16 @@ SET_MEANT = [(f'{b[5].split()[0].lower()} awning', f'{b[5].split()[0].lower()} {
 
 
 # ---------------------------------------------------------------------------------------------- the officers' gear
-# ICE officers as in real raids (Q17; refs ice-*): dark plate carriers with POLICE across the chest and ICE under it,
+# ICE officers as in real raids (Q17; refs ice-surge-1..3): coyote-tan or olive plate carriers, black patches with
+# yellow POLICE and ICE (big on the back, smaller on the chest),
 # black face masks (gaiters) up to the eyes, dark baseball caps, gloves, boots; a different build and different
 # clothes under each vest.
-VEST_BLACK, VEST_OLIVE = (28, 29, 33), (64, 68, 52)
+VEST_TAN, VEST_OLIVE = (150, 132, 96), (92, 96, 70)          # (refs ice-surge-*: coyote tan and olive drab)
+PATCH, PATCH_INK = (30, 30, 32), (236, 196, 54)               # black patches, yellow letters
 
 
 def ice_vest(p, view, sp):
-    col = sp.get('vest', VEST_BLACK)
+    col = sp.get('vest', VEST_TAN)
     dark = mix(col, (0, 0, 0), 0.35)
     l, r = PC._torso_box(view, sp)
     l2, r2 = PC._torso_box(view, sp, 470)
@@ -374,15 +377,15 @@ def ice_vest(p, view, sp):
         for k in range(3):                                                                    # pouches
             x = l + 34 + k * (r - l - 68) / 3
             p.poly([(x, 340), (x + (r - l - 90) / 3, 340), (x + (r - l - 90) / 3, 445), (x, 445)], dark, INK, 1.6)
-        PC._patch(p, o, 132, (r - l) * 0.62, 50, 'POLICE', (20, 20, 22), (246, 246, 242))
-        PC._patch(p, o, 210, (r - l) * 0.3, 40, 'ICE', (20, 20, 22), (246, 246, 242))
+        PC._patch(p, o, 132, (r - l) * 0.62, 50, 'POLICE', PATCH, PATCH_INK)
+        PC._patch(p, o, 210, (r - l) * 0.3, 40, 'ICE', PATCH, PATCH_INK)
         PC.body_cam(p, o + (r - l) * 0.26, 270)
     elif view in ('back', 'three_back'):
-        PC._patch(p, (l + r) / 2, 170, (r - l) * 0.66, 56, 'POLICE', (20, 20, 22), (246, 246, 242))
-        PC._patch(p, (l + r) / 2, 240, (r - l) * 0.36, 46, 'ICE', (20, 20, 22), (246, 246, 242))
+        PC._patch(p, (l + r) / 2, 170, (r - l) * 0.66, 56, 'POLICE', PATCH, PATCH_INK)
+        PC._patch(p, (l + r) / 2, 240, (r - l) * 0.36, 46, 'ICE', PATCH, PATCH_INK)
     else:
         p.poly([(r - 54, 330), (r + 6, 330), (r + 6, 440), (r - 54, 440)], dark, INK, 1.6)
-        PC._patch(p, -10, 150, 90, 40, 'ICE', (20, 20, 22), (246, 246, 242))               # the side panel
+        PC._patch(p, -10, 150, 90, 40, 'ICE', PATCH, PATCH_INK)               # the side panel
 
 
 def mask(p, view, sp, hx, hy):
@@ -437,12 +440,12 @@ def _officer(name, skin, top, legs, vest, mask_c, shoulders, height, hw=72, hh=9
                 height=height, full=True, pose='custom', seed=hash(name) % 97, **kw)
 
 
-CAST = {'O1': _officer('ICE officer 1', B.PALE, (124, 126, 132), (96, 96, 78), VEST_BLACK, (26, 26, 30), 170, 1.88,
+CAST = {'O1': _officer('ICE officer 1', B.PALE, (124, 126, 132), (96, 96, 78), VEST_TAN, (26, 26, 30), 170, 1.88,
                        hw=76),                                     # big; a grey hoodie, cargo trousers
         'O2': _officer('ICE officer 2', B.PINK, (44, 48, 58), (52, 72, 112), VEST_OLIVE, (150, 128, 96), 150, 1.80,
                        hw=68),                                     # lean; a dark jacket, jeans
-        'O3': _officer('ICE officer 3', B.OLIVE, (30, 30, 34), (74, 74, 62), VEST_OLIVE, (26, 26, 30), 160, 1.83),
-        'O4': _officer('ICE officer 4', B.PALE, (40, 46, 72), (40, 52, 84), VEST_BLACK, (72, 74, 80), 178, 1.86,
+        'O3': _officer('ICE officer 3', B.OLIVE, (74, 76, 82), (74, 74, 62), VEST_OLIVE, (26, 26, 30), 160, 1.83),
+        'O4': _officer('ICE officer 4', B.PALE, (40, 46, 72), (40, 52, 84), VEST_TAN, (72, 74, 80), 178, 1.86,
                        hw=78, hh=92)}                              # heavy; a navy hoodie, dark jeans
 # The man (invented, Hispanic, about 30): a tan canvas work jacket, jeans, work boots, short black hair.
 MAN = dict(name='The man on the ground', skin=(184, 128, 88), hw=70, hh=90, jaw='soft', hair='crop', hair_c=(28, 22, 20),
@@ -472,7 +475,7 @@ def balled(sp):
 
 
 LY.POSES['ball'] = balled
-LY.RESTS['ball'] = ['chest', 'pelvis', 'head', 'thighR']
+LY.RESTS['ball'] = ['chest', 'pelvis', 'head', 'hair', 'thighR']
 
 
 @functools.lru_cache(maxsize=1)
@@ -510,29 +513,67 @@ def kick_pose(sp, t, off):
     return dress(j, sp)
 
 
-def hammer_pose(sp, t, off):
-    """A fist brought down on him from overhead, bent at the waist (brief 30: punch): wind up high, drive down, a held
-    impact, back up; the other hand braced on his knee."""
+def _unlean(y, z, lean):
+    """The torso-frame point (y, z) that the pose's `lean` (degrees forward about the hips) carries to (y, z)."""
+    L = math.radians(lean)
+    dy = y - V.HIP_Y
+    return V.HIP_Y + dy * math.cos(L) - z * math.sin(L), dy * math.sin(L) + z * math.cos(L)
+
+
+CROUCH = 160.0                                                    # person units (0.24 m)
+
+
+def punch_pose(sp, t, off):
+    """Bent over him, punching down (brief 30: punch; side on, where a downward blow reads): the fist pulled back
+    by the shoulder, driven down into his side, a held impact, back; the other hand braced on his own knee."""
     th, _ = _phase(t, off)
-    up = V.standing(sp)
-    V.arm_to(up, 'R', (60.0, -230.0, 40.0), 'out', 'fist')
-    up['lean'] = 10
-    hit = V.standing(sp)
-    V.arm_to(hit, 'R', (40.0, 420.0, 300.0), 'down', 'fist')
-    hit['lean'] = 32
-    j = moves.keyed(t, [(th - 0.75, hit), (th - 0.32, up), (th - 0.18, up), (th, hit), (th + 0.18, hit), (th + 0.62, hit)],
-                    curve='fast' if th - 0.18 <= t < th else 'ease')
-    j = moves.mix_poses(j, j, 1.0)
-    V.arm_to(j, 'L', (-70.0, 520.0, 150.0), 'out', 'fist')        # braced on his own knee
-    j['footL'] = (-70, V.ANKLE_Y, 30.0)
-    j['footR'] = (60, V.ANKLE_Y, -20.0)
+    sw = sp.get('shoulders', 150)
+
+    def bent(lean, fist):
+        j = V.standing(sp)
+        j['lean'] = lean
+        y, z = _unlean(*fist, lean)
+        V.arm_to(j, 'R', (40.0, y, z), 'down', 'fist')
+        y, z = _unlean(640.0, 120.0, lean)
+        V.arm_to(j, 'L', (-40.0, y, z), 'out', 'fist')            # braced on his own knee
+        j['bob'] = CROUCH                                         # knees bent, down over him
+        j['footR'] = (60, V.ANKLE_Y - CROUCH, -60.0)              # the back foot planted behind
+        j['footL'] = (-60, V.ANKLE_Y - CROUCH, 110.0)
+        return j
+    back = bent(24, (200.0, -110.0))                              # (leaned y, z: up by the shoulder, pulled back)
+    hit = bent(48, (560.0, 330.0))                                # straight down from the shoulder onto him
+    j = moves.keyed(t, [(th - 0.75, hit), (th - 0.36, back), (th - 0.2, back), (th, hit), (th + 0.2, hit), (th + 0.62, hit)],
+                    curve='fast' if th - 0.2 <= t < th else 'ease')
     return dress(j, sp)
+
+
+def stomp_pose(sp, t, off):
+    """Facing us from behind him, stamping down on his back (brief 30: kick): the knee lifted high, the boot driven
+    down onto him, held, back; arms out for balance. Front on, his POLICE ICE vest reads."""
+    th, _ = _phase(t, off)
+    sw = sp.get('shoulders', 150)
+    rest = V.standing(sp)
+    lift = V.standing(sp)
+    lift['footR'] = (50.0, 600.0, 170.0)
+    lift['lean'] = -4
+    down = V.standing(sp)
+    down['footR'] = (40.0, V.ANKLE_Y - 40, 430.0)                  # onto his back, 0.65 m in front
+    down['lean'] = 8
+    for j in (rest, lift, down):
+        V.arm_to(j, 'L', (-(sw + 90), 300.0, 40.0), 'out', 'fist')
+        V.arm_to(j, 'R', (sw + 90, 300.0, 40.0), 'out', 'fist')
+    j = moves.keyed(t, [(th - 0.8, down), (th - 0.32, lift), (th - 0.18, lift), (th, down), (th + 0.2, down), (th + 0.62, down)],
+                    curve='fast' if th - 0.18 <= t < th else 'ease')
+    return dress(j, sp)
+
+
+MOVES = {'kick': lambda sp, t, off: kick_pose(sp, t, off), 'punch': punch_pose, 'stomp': stomp_pose}
 
 
 def officer_pose(o, t):
     name, x, d, yaw, move, off = o
     sp = CAST[name]
-    return (kick_pose if move == 'kick' else hammer_pose)(sp, t, off)
+    return MOVES[move](sp, t, off)
 
 
 def flinch(t):
@@ -575,6 +616,7 @@ def _shadow(img, cam, x, d, w=0.36):
 
 
 def _person(img, cam, sp, x, d, yaw, j):
+    B.SS = 1                                                       # (the film's drawing size: 1 = full frame)
     sx, sy, ppm = place(cam, x, d)
     s = 928 * V.M_PER_UNIT * sp['height'] / 1.75 * ppm / 928
     return V.person(img, B.Cam(1.0, 540, 960), sx, sy - 928 * s, s, dict(sp, mood='angry'), 0.0, yaw, j)
@@ -601,6 +643,44 @@ def draw_group(img, cam, t, t0=0.0):
     LY.draw(img, scam(cam), k, MAN, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
     for o in front:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
+
+
+# ---------------------------------------------------------------------------------------------- the gunshot
+# Sam, 8 Nov: a gunshot flash and sound at the end of Vance's last line: off screen right, where the officers are.
+def flash(img, u):
+    """The muzzle flash's light, u frames after the shot (0, 1): a flat warm-white wash over the frame, stronger on
+    the right (the side the shot comes from), gone after two drawings (no gradient: two flat washes, a ragged edge)."""
+    k = (1.0, 0.45)[u] if u in (0, 1) else 0.0
+    if k <= 0:
+        return img
+    from PIL import ImageChops
+    glow = Image.new('RGB', img.size, tuple(int(c * k) for c in (170, 130, 70)))   # light added to everything
+    hot = Image.new('L', img.size, 0)                                             # more on the right, a ragged edge
+    ImageDraw.Draw(hot).polygon(wobbly([(W * 0.7, -20), (W + 20, -20), (W + 20, H + 20), (W * 0.8, H + 20)], 30, 990, 90),
+                                fill=255)
+    glow.paste(Image.new('RGB', img.size, tuple(int(c * k) for c in (230, 190, 120))), mask=hot)
+    rgb = ImageChops.screen(img.convert('RGB'), glow)
+    img.paste(rgb)
+    return img
+
+
+def gunshot(sr, seed=3):
+    """A pistol shot out in the street: a sharp crack, a short low thump, a slap of echo off the shopfronts (18 m:
+    0.1 s there and back) and a short tail. Made here (the kit had none)."""
+    from scipy.signal import butter, sosfilt
+    n = int(1.4 * sr)
+    t = np.arange(n) / sr
+    rng = np.random.default_rng(seed)
+    crack = sosfilt(butter(2, [700, 9000], 'band', fs=sr, output='sos'), rng.standard_normal(n)) * np.exp(-t * 55)
+    thump = np.sin(2 * np.pi * np.cumsum(60 + 140 * np.exp(-t * 40)) / sr) * np.exp(-t * 14)
+    tail = sosfilt(butter(2, [300, 3500], 'band', fs=sr, output='sos'), rng.standard_normal(n)) * np.exp(-t * 6) * 0.12
+    x = crack / (np.abs(crack).max() + 1e-9) + 0.8 * thump + tail
+    d = int(0.105 * sr)
+    echo = np.zeros(n)
+    echo[d:] = x[:n - d] * 0.32
+    x = x + sosfilt(butter(2, 2500, 'low', fs=sr, output='sos'), echo)
+    x[:int(0.001 * sr)] *= np.linspace(0, 1, int(0.001 * sr))
+    return x / (np.abs(x).max() + 1e-9)
 
 
 # ---------------------------------------------------------------------------------------------- rule 3: the references

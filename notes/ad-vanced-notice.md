@@ -200,11 +200,11 @@ Why they fail: the front head is each person's own measured face (patriots4 layo
 ## Screenplay continues (Sam, 8 Nov): the brief as a checklist
 | # | from the brief (word for word) | done? |
 |---|------|------|
-| 29 | A Minnesota street. | |
-| 30 | Four ICE officers kick and punch a Hispanic man curled up into a ball at their feet. | |
-| 31 | Vance stands to the left of them. Smiling at us. | |
-| 32 | We zoom in on his face. | |
-| 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | |
+| 29 | A Minnesota street. | yes: a Lake Street kind of block in Minneapolis, winter: brick shopfronts, snowbanks, slush, light snow falling |
+| 30 | Four ICE officers kick and punch a Hispanic man curled up into a ball at their feet. | yes: four officers (tan or olive vests, black patches, yellow POLICE / ICE; masks, caps, gloves); one kicks, one stamps, two punch down; the man curled on his side, arms over his head, flinching on every blow; some blood |
+| 31 | Vance stands to the left of them. Smiling at us. | yes: front on, left of them, a big grin at us |
+| 32 | We zoom in on his face. | yes: a slow push in through line 9, ending on his head and shoulders; the officers slide out on the right |
+| 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | yes: line 9 (Sam's take, 7.6 s); hand to chest on "believe", leans in with a hand by his mouth on "Between", shrug on "jerk" |
 
 
 ## Street elements (rule 40: for Sam to approve or trim before building, 8 Nov)
@@ -223,6 +223,13 @@ Shot 5, straight after "This guy." About 6.5 s; the film becomes about 36 s.
 | 9 | No sounds: only his voice (the script names none) | |
 
 Added: falling snow (Sam, Q22: Y). Added: shop signs with made-up names (a taqueria, a laundromat, a hardware store) for Sam to OK. Lost: the wooden houses (shopfronts instead). Lost: the SUV (Q21: N).
+
+## Street build (8 Nov, note 45)
+- `source/ad_vanced_notice_street.py`: the street (one locked camera, a zoom for the push, repainted at each zoom so it stays sharp), the officers' gear, the man (`lying.py`, a new curled-up pose with both arms over his head), the beating, blood, falling snow; the film's shot 5 is `street` in `ad_vanced_notice.py`.
+- References (rule 3; P11: one slow search, 3 per place): `street-lake-800`, `street-uptown-winter`, `street-lake-bloomington`; `ice-surge-1..3` (vests coyote tan or olive, black patches, yellow letters: POLICE ICE big on the back, smaller on the chest). The street list (10 things) is ticked in `BENCHMARK`.
+- Changed from the approved elements: Lost: two front-on officers punching (a downward punch towards the lens doesn't read). Added: one officer facing us, stamping on the man's back (so a POLICE / ICE chest reads); the two punchers side on, crouched and bent over him. So: one kick, one stamp, two punches.
+- Added: shop signs with made-up names (TAQUERIA LA PALMA, LAVANDERIA COIN LAUNDRY, HARDWARE, BARBER, GROCERY), two black street lamps, two bare trees, two wires. Added: a soft grey smudge under each person on the snow.
+- Recordings (8 Nov): Sam's 7 files filed as lines 1-9 (Concerns = lines 2 and 3, This guy = lines 7 and 8, cut at the pause). Line 9's acting is pinned to the take's own pauses (`ANCHORS`).
 
 ## Acting, line 9 (rule 74; Sam's answers 23 (1) and 24 (Y), 8 Nov)
 | line | who | face | body | lands on |

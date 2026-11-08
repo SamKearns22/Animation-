@@ -33,6 +33,7 @@ import ad_vanced_notice_sets as ST   # noqa: E402  the study, the cliff and stra
 import ad_vanced_notice_fx as X      # noqa: E402  the showstopper
 import ad_vanced_notice_cast as AC   # noqa: E402  Vance, the driver
 import ad_vanced_notice_comp as CP   # noqa: E402  (the cast's setup and screen placing)
+import ad_vanced_notice_street as SX # noqa: E402  shot 5: the street, the officers, the man on the ground
 import sitting                   # noqa: E402  the swivel chair, hands folded
 import moves                     # noqa: E402  the walks
 import views as V                # noqa: E402
@@ -66,6 +67,8 @@ LINES = [
     dict(n=6, audio='ad-vanced-notice-6', who='vance', est=1.5, text='Aggravating, right?'),
     dict(n=7, audio='ad-vanced-notice-7', who='vance', est=1.9, text="You know who isn't responsible?"),
     dict(n=8, audio='ad-vanced-notice-8', who='vance', est=1.0, text='This guy.'),
+    dict(n=9, audio='ad-vanced-notice-9', who='vance', est=7.7,
+         text="I can't believe that my boss would do this. Between you and me, he can be a super jerk."),
 ]
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
@@ -91,10 +94,17 @@ def _at(n, start):
     return L[n]['end']
 
 
+ANCHORS = {(9, 'Between'): (1, 0.0), (9, 'jerk'): (2, 18 / 23)}   # line 9's take: three stretches, one per phrase
+
+
 def word_at(n, words):
-    """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches."""
+    """When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches (or,
+    where the take pauses between phrases, pinned to that stretch: ANCHORS = {(line, words): (stretch, share)})."""
     ln = L[n]
     st = ln['_stretches']
+    if (n, words) in ANCHORS and ln['_voice'] is not None and len(st) > ANCHORS[(n, words)][0]:
+        i, f = ANCHORS[(n, words)]
+        return ln['start'] + st[i][0] + f * (st[i][1] - st[i][0])
     tot = sum(b - a for a, b in st) or 1.0
     k = ln['text'].index(words) / len(ln['text']) * tot
     for a, b in st:
@@ -129,12 +139,18 @@ e = _at(6, T['arm'] + 0.35)                       # "Aggravating, right?" (squee
 e = _at(7, e + GAP)                               # "You know who isn't responsible?" (leans in)
 T['off'] = e + 0.1                                # the arm comes off (0.35 s), thumbs to his chest
 e = _at(8, T['off'] + 0.4)                        # "This guy." (thumbs on "This")
-DUR = e + 1.4                                     # (the script continues here: Sam, brief row 26)
+T['cut5'] = e + 0.6                               # shot 5: the street (brief 29-33); the beating already going
+T['push'] = T['cut5'] + 0.8                       # brief 32: "We zoom in on his face" (a slow push, Q19)
+e = _at(9, T['cut5'] + 1.2)                       # "I can't believe... super jerk." (acting 9a, 9b)
+T['push_end'] = e - 0.4                           # ending on his head and shoulders
+T['shot'] = e + 0.12                              # Sam, 8 Nov: a gunshot (flash and sound) as his last line ends
+DUR = T['shot'] + 0.9                             # the last line (Sam, Q25); the sign-off follows (finish.py)
 BLACK_AT = DUR
 
 SHOTS = [('study', 0.0, T['cut2']), ('cliff', T['cut2'], T['cut3']), ('close', T['cut3'], T['cut4']),
-         ('gas', T['cut4'], DUR)]
-SHOT_CAST = {'study': ['vance'], 'cliff': ['vance'], 'close': ['vance'], 'gas': ['vance', 'man']}
+         ('gas', T['cut4'], T['cut5']), ('street', T['cut5'], DUR)]
+SHOT_CAST = {'study': ['vance'], 'cliff': ['vance'], 'close': ['vance'], 'gas': ['vance', 'man'],
+             'street': ['vance', 'O1', 'O2', 'O3', 'O4', 'ground man']}   # brief 30-31: four officers, the man, Vance
 LOOKS_AT = {'vance': 'lens', 'man': 'board'}
 # Marks, in each set's own metres (ad_vanced_notice_sets): the study's chair; the cliff walk to his mark; the gas
 # station's two marks on the forecourt, 4.5 m from the lens
@@ -150,14 +166,16 @@ PLAN = dict(CEIL=3.2, ROOMS={'study': (-2.6, 0.0, 2.6, ST.D_WALL)},
                   'close': dict(pos=(0.0, 1.7, 0.0), look=(0.0, 1.7, 5.0), focal=1500),          # sets, strait)
                   'gas': dict(pos=(0.0, 1.5, 0.0), look=(0.0, 1.5, 5.0), focal=1300)}, GROUPS={},
             SHOT_MARKS={'study': ['vance']})
-BENCHMARK = ST.BENCHMARK
+BENCHMARK = ST.BENCHMARK + SX.BENCHMARK
 HOOK = ('JD Vance Addresses The Nation', {'y': 330, 'until': 3.9})   # Sam, 8 Nov (his capitals); pops at 0.5 s
 KEEP_CLEAR = [('his face', lambda t: (300, 470, 780, 900) if t < T['cut2'] else None)]
 PROP_SIZES, OUTFIT = [], {}
 HEIGHTS = {'vance': 1.88, 'man': 1.80}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 THREE_QUARTER_OK = []
-ALLOWED_CONTACTS = [('vance*', 'man*', T['arm'] - 0.3, T['off'] + 0.5, "his arm round the driver's shoulders, "
+ALLOWED_CONTACTS = [('O*', 'ground man', 0.0, 99.0, 'the beating (brief 30): their boots and fists land on him'),
+                    ('O*', 'O*', 0.0, 99.0, 'four officers crowded round him, shoulder to shoulder'),
+('vance*', 'man*', T['arm'] - 0.3, T['off'] + 0.5, "his arm round the driver's shoulders, "
                       'standing close beside him')]
 ALLOWED_POPS = [('vance', T['enter'], T['enter'] + 0.6, 'walking in from the frame edge'),
                 ('vance', T['enter'] + 0.6, T['arm'] + 0.15, 'side on, walking across the frame at 0.5 m a frame, then '
@@ -217,7 +235,10 @@ BEATS = [(1, 'America', 4, 7, 0),                 # nod on "America"
          (4, 'need', 2, 3, 0),                    # earnest, the stop on "need"
          (6, 'right', 4, 0, -3),                  # the squeeze on "right"
          (7, 'responsible', 8, 0, 4),             # eyebrows up, teasing, the lean on "responsible"
-         (8, 'This', 3, 4, 0)]                    # thumbs on "This"
+         (8, 'This', 3, 4, 0),                    # thumbs on "This"
+         (9, 'believe', 9, 0, 0),                 # mock shock on "believe": brows right up, the grin stays (9a)
+         (9, 'Between', 2, 4, 0),                 # leaning in to confide on "Between" (9b)
+         (9, 'jerk', 3, 0, 0)]                    # the little shrug on "jerk"
 
 
 def beat(t):
@@ -247,6 +268,8 @@ def vance_mood(t):
         return 'neutral'
     if t < T['cut4']:
         return 'smile' if L[5]['start'] <= t and t >= word_at(5, 'fault') - 0.1 else 'sincere'
+    if t >= T['cut5']:                            # the street: a big grin at us, mock shock still grinning (9a), then
+        return 'proud' if t < word_at(9, 'Between') - 0.15 else 'teasing'   # the confiding half-smile (9b)
     if t < L[7]['start'] - 0.1:
         return 'smile'
     if t < T['off']:
@@ -555,8 +578,64 @@ def gas(t):
     return im
 
 
+# ---------------------------------------------------------------------------------------------- shot 5: the street
+STREET_Z = 4.8                                    # the push ends on his head and shoulders (Q19; the wide shot is 25%
+                                                  # closer since Sam's note, so the same end)
+STREET_TO = (540.0, 800.0)                        # where his face ends up on screen
+
+
+def street_cam(t):
+    """The slow push in on his face through line 9 (brief 32, Q19): a zoom about his face, eased, at an even rate
+    (zoom = STREET_Z ** k), his face drifting to the middle; the officers slide out on the right."""
+    k = _ease(_ramp(t, T['push'], T['push_end']))
+    cam1 = SX.cam_at(1.0)
+    sx, sy, ppm = SX.place(cam1, *SX.VANCE_AT)
+    focus = (sx, sy - CP.nts(AC.VANCE) * ppm - 0.12 * ppm)
+    to = (focus[0] + (STREET_TO[0] - focus[0]) * k, focus[1] + (STREET_TO[1] - focus[1]) * k)
+    return SX.cam_at(STREET_Z ** k, focus, to)
+
+
+def street_j(t):
+    """Vance in the street (acting 9a, 9b): standing front on, grinning at us; a hand to his chest on "believe"
+    (mock shock); on "Between" he leans in to the lens, his other hand at the side of his mouth; a little shrug on
+    "jerk"."""
+    j = V.standing(AC.VANCE)
+    sw = AC.VANCE.get('shoulders', 150)
+    shrug = _bump(t, word_at(9, 'jerk') - 0.1, word_at(9, 'jerk') + 0.45, 0.15, 0.25)
+    for s_ in 'LR':                               # the whole arm rides up with the shoulder (bones keep their length)
+        for q in ('sh', 'el', 'wr'):
+            x, y, z = j[q + s_]
+            j[q + s_] = (x, y - 22 * shrug, z)
+    chest = _ease(_ramp(t, word_at(9, 'believe') - 0.3, word_at(9, 'believe'))) * \
+        (1 - _ease(_ramp(t, word_at(9, 'Between') - 0.45, word_at(9, 'Between') - 0.15)))
+    rest_r, rest_l = (120.0, 330.0 - 22 * shrug, 40.0), (-120.0, 330.0 - 22 * shrug, 40.0)
+    if chest > 0.01:
+        V.arm_to(j, 'R', tuple(a + (b - a) * chest for a, b in zip(rest_r, (30.0, 165.0, 60.0))), 'down', 'palm')
+    lean = _ease(_ramp(t, word_at(9, 'Between') - 0.35, word_at(9, 'Between')))
+    if lean > 0.01:
+        V.arm_to(j, 'L', tuple(a + (b - a) * lean for a, b in zip(rest_l, (-80.0, -108.0, 110.0))), 'out', 'palm')
+        if lean > 0.6:
+            j['on_face'] = {'L'}                  # the hand beside his mouth, drawn in front of his face
+    j['lean'] = j.get('lean', 0) + 7.0 * lean
+    return _head(j, t)
+
+
+def street(t):
+    cam = street_cam(t)
+    im = SX.paint(cam)
+    SX.snow(im, cam, t, (7.6, 17.0))
+    if cam.p(-0.7, SX.MAN_AT[1], 0.0)[0] < SX.W + 60:   # the group until it has slid out of frame
+        SX.draw_group(im, cam, t, T['cut5'] - 3.0)
+    sx, sy, ppm = SX.place(cam, *SX.VANCE_AT)
+    SX._shadow(im, cam, *SX.VANCE_AT)
+    CP.person(im, AC.VANCE, sx, sy, ppm, 0, street_j(t), **face('vance', t, vance_mood(t)))
+    SX.snow(im, cam, t, (3.0, 7.6))
+    u = math.floor((t - T['shot']) * FPS + 1e-6)          # the gunshot's flash: two drawings from off screen right
+    return SX.flash(im, u) if u in (0, 1) else im
+
+
 # ---------------------------------------------------------------------------------------------- picture, captions, sound
-DRAW = {'study': study, 'cliff': cliff, 'close': close, 'gas': gas}
+DRAW = {'study': study, 'cliff': cliff, 'close': close, 'gas': gas, 'street': street}
 
 
 def picture(t):
@@ -608,6 +687,9 @@ def soundtrack(stems=False):
             s = int(ln['start'] * SR)
             seg = ln['_voice'][:max(0, n - s)]
             voice[s:s + len(seg)] += seg
+    g = SX.gunshot(SR)                            # Sam, 8 Nov: the gunshot as his last line ends
+    s = int(T['shot'] * SR)
+    rest[s:s + len(g)] += 0.5 * g[:max(0, n - s)]
     mix = voice + rest
     end = int(BLACK_AT * SR)
     if np.abs(voice).max() > 1e-6:
@@ -632,6 +714,8 @@ def checks():
         faults += [f'{t:.2f} s: {f}' for f in sitting.check_frame(j, float(t), 'Vance in the study')]
     import setcheck
     faults += setcheck.faults(ST.SET_BOXES, ST.SET_MEANT)      # rule 83: no unmeant overlaps in a flat set
+    faults += setcheck.faults(SX.SET_BOXES, SX.SET_MEANT)      # (the street's shop fronts)
+    faults += SX.man_faults()                                  # the man rests on the snow, nothing through it
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
@@ -653,6 +737,12 @@ def scene(t):
     elif s == 'cliff':
         x, y, _ = cliff_at(t)
         out.append(audit.Thing('vance', audit.simple('vance', x, y, HEIGHTS['vance'])))
+    elif s == 'street':
+        out.append(audit.Thing('vance', audit.simple('vance', *SX.VANCE_AT, HEIGHTS['vance'])))
+        if street_cam(t).p(-0.7, SX.MAN_AT[1], 0.0)[0] < SX.W + 60:
+            for o in SX.OFFICERS:
+                out.append(audit.Thing(o[0], audit.simple(o[0], o[1], o[2], SX.CAST[o[0]]['height'])))
+            out.append(audit.Thing('ground man', SX.LY.solids('ground man', SX.man_body()[0], SX.MAN)))
     else:
         out.append(audit.Thing('vance', audit.simple('vance', 0.0, 0.0, HEIGHTS['vance'], sitting=s == 'study')))
     return out
@@ -660,7 +750,7 @@ def scene(t):
 
 def mouths_seen(t):
     s = shot_of(t)
-    hh = {'study': 120.0, 'cliff': 90.0, 'close': 420.0, 'gas': 110.0}[s]
+    hh = {'study': 120.0, 'cliff': 90.0, 'close': 420.0, 'gas': 110.0}.get(s) or 60.0 * street_cam(t).f / SX.FOCAL
     out = [('vance', face('vance', t, vance_mood(t))['mouth'], 0.0, hh)]
     if s == 'gas':
         out.append(('man', face('man', t, None)['mouth'], 0.0, hh))
@@ -687,6 +777,10 @@ def audits():
                 v = ST.STUDY_VANCE
                 V.person(lay, AC.B.Cam(1.0, 540, 960), v['x'], v['neck_y'], v['s'],
                          dict(AC.VANCE, **face('vance', t, vance_mood(t))), t, yaw, j, head_yaw=hy)
+            elif s == 'street':
+                cam = street_cam(t)
+                sx, sy, ppm = SX.place(cam, *SX.VANCE_AT)
+                CP.person(lay, AC.VANCE, sx, sy, ppm, 0, street_j(t), **face('vance', t, vance_mood(t)))
             elif s == 'cliff':
                 x, y, j = cliff_at(t)
                 sx, sy, ppm = ST.place_cliff(x, y)
@@ -739,6 +833,13 @@ KEYS = [   # the check sheet: one per beat (label, time); the first carries the 
     ('4 squeeze; his eyes slide (6)', lambda: word_at(6, 'right') + 0.3),
     ('4 leans in, "responsible?" (7)', lambda: word_at(7, 'responsible') + 0.25),
     ('4 both thumbs: "This guy." (8)', lambda: L[8]['start'] + 0.25),
+    ('5 the street: the beating; Vance grins at us', lambda: T['cut5'] + 0.4),
+    ('5 a kick lands; the push starts', lambda: T['push'] + 0.2),
+    ('5 hand to chest on "believe" (9a)', lambda: word_at(9, 'believe') + 0.3),
+    ('5 leans in, hand at mouth: "Between" (9b)', lambda: word_at(9, 'Between') + 0.35),
+    ('5 shrug on "jerk" (9b)', lambda: word_at(9, 'jerk') + 0.2),
+    ('5 the gunshot: the flash (Sam, 8 Nov)', lambda: T['shot'] + 0.01),
+    ('5 the end: head and shoulders', lambda: DUR - 0.1),
 ]
 
 

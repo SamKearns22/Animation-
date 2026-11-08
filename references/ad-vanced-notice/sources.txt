@@ -14,3 +14,9 @@ pickup-rear.jpg  <-  Wikimedia Commons: File:Chevrolet Silverado 2017 Pickup Tru
 study-abbotsford.jpg  <-  Wikimedia Commons: File:Abbotsford House Study Room.jpg
 study-canons-ashby.jpg  <-  Wikimedia Commons: File:The Book Room at Canons Ashby.jpg
 study-oak-fireplace.jpg  <-  Wikimedia Commons: File:Stinkwood room paneling and fireplace at the residence of the ambassador of South Afr
+street-lake-800.jpg  <-  Wikimedia Commons: File:800 East Lake Street-2007.jpg
+street-uptown-winter.jpg  <-  Wikimedia Commons: File:Winter in Uptown, Minneapolis - 26th and Lyndale Avenue South (49194026302).jpg
+street-lake-bloomington.jpg  <-  Wikimedia Commons: File:Lake Street at Bloomington Avenue, Minneapolis, Minnesota Abt.1993.jpg
+ice-surge-1.jpg  <-  Wikimedia Commons: File:20260117 ICE Minneapolis Enforcement Surge CB IMG 001-2 (1) (55357575387).jpg
+ice-surge-2.jpg  <-  Wikimedia Commons: File:Minneapolis Surge Op - Jan 14, 2026 00 01 15 13 Still005 (1) (55358668883).jpg
+ice-surge-3.jpg  <-  Wikimedia Commons: File:Minneapolis Surge Op - Jan 16, 2026 00 01 25 05 Still003 (2) (55358668903).jpg
