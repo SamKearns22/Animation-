@@ -231,7 +231,7 @@ def caption_check(film, lines):
             continue
         per[id(max(near, key=lambda ln: ln['start']))].append(c)
     for ln in lines:
-        scr = [_norm(w) for w in ln['text'].split() if _norm(w)]
+        scr = [_norm(w) for w in (ln['sub'] if isinstance(ln.get('sub'), str) else ln['text']).split() if _norm(w)]   # 'sub': Sam's own subtitle wording
         cap = [_norm(w) for c in per[id(ln)] for w in c.split() if _norm(w)]
         cap = [w if w in scr else next((s for s in scr if _match(w, s)), w) if '*' in w else w for w in cap]
         if not cap and ln.get('sub', True) is False:   # a line meant to have no subtitles (Patriots 3's German barks)

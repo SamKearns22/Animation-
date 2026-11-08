@@ -189,7 +189,7 @@ SET_EXCLUDE = [('WALL', 'every shot is a flat painting through its own camera; t
                 'outdoor shots stand in')]
 TOUCHES = []                                      # the nozzle is drawn at his fist every frame (_nozzle): it never moves
 FREE_MOVES, SOUND_SOURCES = [], {}
-RESTS = [('*Vance.forearm*', 'desk', T['fold'], T['cut2'], 'line 1: hands folded on the desk (from the end of the swivel)')]
+RESTS = [('*Vance.forearm*', 'desk', 0.0, T['cut2'], 'hands folded on the desk from the first frame (the swivel arrives with them there: note 47c)')]
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
 ORDER_SWAPS = []
