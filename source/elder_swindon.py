@@ -97,7 +97,7 @@ LINE_OK = [('DROOLER', 'edge with no line', 578, 553)]   # the kit's flat shadow
 # ------------------------------------------------------------------------------------------------ WORLD (metres)
 MAN = dict(C.MAN, name='DROOLER', jacket=(132, 134, 140), trousers=(84, 88, 100), belt=(78, 82, 94),
            beard='stubble', heavy_stubble=True, beard_c=(150, 104, 66),
-           skin=(222, 178, 150), harrow=0.85, age=True, creases=2, blush=True)   # (Sam: "make him look like shit")
+           skin=(222, 178, 150), harrow=0.85, age=True, creases=2)   # (Sam: "make him look like shit")
 #                                    sallow, blotchy red cheeks, dark bags under the eyes, lined   # (Sam, note 6) a grey hoody, gingery stubble, short crop: general traits only
 #                                    from Sam's reference photos, no likeness of anyone (house-style face)
 SCROLL, CAN, LITTER = C.SCROLL, C.CAN, C.LITTER
@@ -944,7 +944,8 @@ def glint(out, cam, t):
 
 # ------------------------------------------------------------------------------------------------ AERIAL
 MINIS = [211, 282, 339, 45, 148]                # the five minis' bearings (screen degrees, y down), as the comp
-R_MINI, RING_MINI, R_ISLAND, R_BIG = 56.0, 9.0, 15.0, 55.0     # minis out on the arms (Sam, note 2; were at 42)
+R_MINI, RING_MINI, R_ISLAND, R_BIG = 56.0, 5.6, 15.0, 55.0     # minis out on the arms (Sam, note 2; were at 42)
+R_DISC = 7.5                                     # a mini's grey disc: as wide as its arm (note 2)
 R_RING = 49.0                                    # the inner ring's tarmac edge
 CAR_COLS = [(240, 240, 238), (30, 30, 34), (170, 172, 178), (176, 30, 36), (40, 70, 150), (240, 240, 238),
             (120, 124, 130), (90, 30, 34)]
@@ -1271,23 +1272,22 @@ def aerial_flat(pil, cam, t):
         circ(p + np.array([-0.857, 0.514]) * r * 0.9, r, (64, 84, 52), outline=False)
     for p, r in trees:
         circ(p, r, (70, 110, 58))
-    # the arms: pavement, kerb, tarmac; zebra crossings; give-way dashes
-    for m in MINIS:
-        u = _pol(1, m)
-        n = np.array([-u[1], u[0]])
-        a0, b0 = u * R_RING, u * 260
-        poly([a0 + n * 10.5, b0 + n * 10.5, b0 - n * 10.5, a0 - n * 10.5], (200, 198, 192))
-        poly([a0 + n * 7.5, b0 + n * 7.5, b0 - n * 7.5, a0 - n * 7.5], (128, 128, 130))
-    circ((0, 0), R_RING + 2.5, (200, 198, 192))                             # pavement round the inner ring
-    for m in MINIS:
-        circ(_pol(R_MINI, m), 13.5, (200, 198, 192))
-    circ((0, 0), R_RING, (128, 128, 130))                                   # the inner ring's tarmac
-    for m in MINIS:                                                          # each mini's tarmac
-        circ(_pol(R_MINI, m), 11.5, (128, 128, 130))
-    for m in MINIS:                                                          # the arms' tarmac again, over the
-        u = _pol(1, m)                                                       # pavement where they join
-        n = np.array([-u[1], u[0]])
-        poly([u * 44 + n * 7.5, u * 90 + n * 7.5, u * 90 - n * 7.5, u * 44 - n * 7.5], (128, 128, 130), outline=False)
+    # the carriageway: ONE grey surface (Sam, note 2 again, from his aerial photo: the minis sit inside the grey, not
+    # in circles of their own): the inner ring, the five arms and a mini's disc (as wide as the arm) all merged, then a
+    # kerb and one outline round the whole of it. Drawn in three passes (outline, kerb, grey), each over every shape.
+    def surface(grow, fill, outline=False):
+        for m in MINIS:
+            u = _pol(1, m)
+            n = np.array([-u[1], u[0]])
+            g = grow if grow == 0 else grow + 0.5          # the arms' pavements are wider than the ring's
+            poly([u * 40 + n * (7.5 + g), u * 260 + n * (7.5 + g), u * 260 - n * (7.5 + g), u * 40 - n * (7.5 + g)],
+                 fill, outline=False)
+        circ((0, 0), R_RING + grow, fill, outline=False)
+        for m in MINIS:
+            circ(_pol(R_MINI, m), R_DISC + grow * 0.3, fill, outline=False)
+    surface(2.7, INK)
+    surface(2.4, (200, 198, 192))
+    surface(0.0, (128, 128, 130))
     for m in MINIS:
         u = _pol(1, m)
         n = np.array([-u[1], u[0]])
@@ -1325,9 +1325,9 @@ def aerial_flat(pil, cam, t):
         d.line([P(_pol(28.5, a)), P(_pol(28.5, a + 4))], fill=(240, 240, 236), width=lw(0.15))
     for m in MINIS:
         cm = _pol(R_MINI, m)
-        circ(cm, 2.4, (238, 238, 232), width=max(1, ink // 2))
+        circ(cm, 2.0, (238, 238, 232), width=max(1, ink // 2))
         for a in range(0, 360, 24):
-            d.line([P(cm + _pol(5.0, a)), P(cm + _pol(5.0, a + 12))], fill=(240, 240, 236), width=lw(0.2))
+            d.line([P(cm + _pol(3.7, a)), P(cm + _pol(3.7, a + 12))], fill=(240, 240, 236), width=lw(0.2))
     # the central island: dark paving, white kerb, the soil-and-grass patch (Q2), the lamp post and its shadow
     circ((0, 0), R_ISLAND + 0.35, (232, 230, 224))
     circ((0, 0), R_ISLAND, (84, 82, 82))
