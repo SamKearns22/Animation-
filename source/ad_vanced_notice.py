@@ -118,8 +118,8 @@ e = _at(3, e + GAP)
 e = _at(4, e + GAP)
 T['stop'] = word_at(4, 'need') - 0.15             # acting 4: he stops at his mark on "need"
 T['hit'] = e + 0.75                               # the missile lands (it drops for 0.4 s before)
-T['cut3'] = T['hit'] + 4.4                        # shot 3: the close-up, the fire climbing behind him
-e = _at(5, T['cut3'] + 0.45)                      # "None of this is my fault." (smile on "fault")
+T['cut3'] = T['hit'] + 2.6                        # shot 3: the close-up (Sam, 8 Nov, note 33: cut at 15.5 s and
+e = _at(5, T['hit'] + 4.85)                       # carry on the showstopper from there; line 5 where it was)                      # "None of this is my fault." (smile on "fault")
 T['cut4'] = e + 0.7                               # shot 4: the gas station; the driver glares at the board
 T['enter'] = T['cut4'] + 0.9                      # Vance walks in from the right (brief 24)
 WALK_IN = 1.5                                     # seconds from the frame edge to his mark beside the driver
@@ -168,7 +168,8 @@ FREE_MOVES, SOUND_SOURCES = [], {}
 RESTS = [('*Vance.forearm*', 'desk', T['fold'] + 0.4, T['cut2'], 'line 1: hands folded on the desk')]
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
-ORDER_SWAPS = []
+ORDER_SWAPS = [('vance', 'man', None, None, 'Vance steps forward and out from behind the driver for "This guy." '
+                '(note 34-35: the driver moved right, so both thumbs show)')]
 HANDS_OK = [('*Vance*', '*', 'no hand', 0.0, T['swivel'] + SWIVEL * 0.7, 'his back to us in the swivel chair: '
              'his hands are in front of him; they come round with him'),
             ('*Vance*', 'R', '*sleeve*', T['stop'], L[4]['end'] + 0.6, 'the open hand rising beside his chest on '
@@ -343,9 +344,11 @@ def close(t):
 
 
 # ---------------------------------------------------------------------------------------------- shot 4: the gas station
-GAS_VX, GAS_VD = 0.125, 4.62                     # his mark: close beside the driver, a touch behind him
+MAN_X = ST.MAN_X + 0.45                           # the driver, further right (note 35): the board up to his left
+GAS_VX, GAS_VD = MAN_X + 0.24, 4.66               # Vance's mark: in close behind the driver's shoulder (note 34)
 STEP_OUT = 0.24                                   # m: the side step out for "This guy."
-ARM_ROUND = (-340.0, 75.0, 60.0)                  # his left hand on the driver's far shoulder (Vance's own units)
+STEP_FWD = 0.4                                    # m: and forward, in front of the driver
+ARM_ROUND = (-300.0, 40.0, 60.0)                  # his left hand on the driver's far shoulder (Vance's own units)
 THUMBS = {'L': (-105.0, 150.0, 150.0), 'R': (105.0, 150.0, 150.0)}   # both thumbs at his own chest (Sam, 7 Nov)
 
 
@@ -373,7 +376,9 @@ def gas_vance(t):
             r = (-120.0 if s == 'L' else 120.0, 330.0, 40.0)
             V.arm_to(j, s, tuple(a + (b - a) * th for a, b in zip(r, THUMBS[s])), 'out', 'point')
     j['lean'] = j.get('lean', 0) + 6.0 * _bump(t, word_at(7, 'responsible') - 0.2, L[7]['end'] + 0.3, 0.25, 0.3)
-    j['_arm'] = arm
+    j['_arm'], j['_sq'] = arm, sq
+    if arm >= 0.85:
+        j['hand'] = dict(j.get('hand', {}), L='none')   # his hand is drawn over the driver's shoulder (_arm_over)
     x = GAS_VX
     k = _ramp(t, T['off'], T['off'] + 0.45)        # a side step out to his right, clear of the driver, for the thumbs
     if k > 0:
@@ -389,12 +394,27 @@ def gas_vance(t):
     return x, yaw, _head(j, t)
 
 
+SHAKE = 4.5                                       # fist shakes a second (note 35)
+
+
 def gas_man(t):
-    """The driver: rigid, fury fixed on the board, the pump in his hand; his eyes slide to Vance on "right" and stay."""
+    """The driver: glaring up and left at the board, shaking his free fist at it, 50% angrier while he does (anger 6,
+    Sam's note 35); the fist comes down as Vance's arm goes round him, and he stands rigid, the pump in his other
+    hand; his eyes slide to Vance on "right" and stay."""
     j = _head(V.standing(AC.MAN), t, seed=5)
     V.arm_to(j, 'L', (-250, 330, 60), 'down', 'fist')
+    up = _ease(_ramp(t, T['cut4'] + 0.15, T['cut4'] + 0.45)) * (1 - _ease(_ramp(t, T['enter'] + 0.3, T['enter'] + 0.7)))   # down as Vance comes in
+    if up > 0.01:
+        w = 2 * math.pi * SHAKE * t
+        rest = (170.0, 330.0, 40.0)
+        fist = (200.0 + 22 * math.sin(w), -190.0 + 30 * math.sin(w + 1.2), 90.0)   # raised up beside his head
+        mid = (300.0, 120.0, 170.0)                  # the lift swings out and forward, clear of the shoulder
+        k1, k2 = min(1.0, up * 2), max(0.0, up * 2 - 1)
+        p1 = tuple(r + (m - r) * k1 for r, m in zip(rest, mid))
+        V.arm_to(j, 'R', tuple(a + (f - a) * k2 for a, f in zip(p1, fist)), 'out', 'fist')
     side = _ease(_ramp(t, word_at(6, 'right') - 0.05, word_at(6, 'right') + 0.25))
-    return j, dict(head_yaw=-8, anger=4, gaze_dy=-1.0 * (1 - side) - 0.2 * side, look=0.8 * side)
+    return j, dict(head_yaw=-12, anger=round(4 + 2 * up), gaze_dy=-1.0 * (1 - side) - 0.2 * side,
+                   look=-0.6 * (1 - side) + 0.8 * side)
 
 
 NOZZLE = (40, 40, 44)
@@ -413,44 +433,64 @@ def _nozzle(pen, hand):
     pen.poly([(hx + 26, hy - 4), (hx + 74, hy + 22), (hx + 70, hy + 32), (hx + 24, hy + 10)], (150, 150, 156), 2.4)
 
 
-def _arm_over(im, t, vx, vneck, s, j, mx, mneck, sm):
-    """His arm round the driver: the forearm lying over the driver's far shoulder and his hand on it, drawn over the
-    driver (the rest of the arm runs behind his back)."""
+def _arm_over(im, man, j, mx, mneck, sm, jm, s):
+    """His arm round the driver (note 34: not through his chest): the sleeve comes out from behind the driver's neck
+    and lies along the top of his far shoulder, the hand cupping the front of it; the driver's head and neck are laid
+    back over the sleeve, so it passes behind them. The rest of the arm runs behind his back."""
     if j.get('_arm', 0.0) < 0.85:
         return
-    wx, wy, _ = j['wrL']
-    hx, hy = vx + wx * s, vneck + wy * s
+    sx, sy, _ = jm['shL']                                          # the driver's far shoulder (his left: screen left)
+    top = mneck + (sy - 30) * sm                                   # the top of his shoulder
+    sq = j.get('_sq', 0.0)
+    hx, hy = mx + sx * sm * 0.92 + 6 * sq, top + 16 * sm + 6 * sq  # the hand over the shoulder's front
+    a = (mx + 20 * sm, mneck + 8 * sm)                             # out from behind his neck
     lay = ST.layer()
     pen = ST.Pen(lay)
-    a = (mx - 34 * sm * 1.6, mneck + 62 * sm)                     # from behind his neck, along the shoulder
-    w = 22 * s
+    w = 20 * s
     d = np.array([hx - a[0], hy - a[1]])
     n = np.array([-d[1], d[0]]) / (np.linalg.norm(d) + 1e-6) * w
     pen.poly([(a[0] + n[0], a[1] + n[1]), (hx + n[0], hy + n[1]), (hx - n[0], hy - n[1]), (a[0] - n[0], a[1] - n[1])],
              AC.NAVY, 2.4)
-    pen.ell(hx - 6 * s, hy + 4 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
+    pen.ell(hx, hy + 8 * s, 26 * s, 26 * s, AC.V_SKIN, 2.4)
     im.alpha_composite(ST.shrink(lay))
+    m = np.asarray(man).copy()                                     # the head and neck back over the sleeve
+    yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]
+    keep = (yy < mneck + 14 * sm) & (np.abs(xx - mx) < 120 * sm)
+    m[..., 3] = np.where(keep, m[..., 3], 0)
+    im.alpha_composite(Image.fromarray(m, 'RGBA'))
+
+
+def vance_d(t):
+    """His distance from the lens: a touch behind the driver, then forward with the side step."""
+    return GAS_VD - STEP_FWD * _ease(_ramp(t, T['off'], T['off'] + 0.45))
 
 
 def gas(t):
     im = ST.gas_back()
-    mx, feet, ppm = ST.place_gas(ST.MAN_X)
+    mx, feet, ppm = ST.place_gas(MAN_X)
     sm = CP.nts(AC.MAN) * ppm / 928
     mneck = feet - 928 * sm
     jm, mk = gas_man(t)
     j = None
+    vlay = None
     if t >= T['enter']:
         x, yaw, j = gas_vance(t)
-        vx, vfeet, vppm = ST.place_gas(x, GAS_VD)
-        CP.person(im, AC.VANCE, vx, vfeet + 10, vppm * 1.01, yaw, j, **face('vance', t, vance_mood(t)))
+        vx, vfeet, vppm = ST.place_gas(x, vance_d(t))
+        vlay = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        CP.person(vlay, AC.VANCE, vx, vfeet + 10, vppm * 1.01, yaw, j, **face('vance', t, vance_mood(t)))
+        if not vance_front(t):
+            im.alpha_composite(vlay)
     wx, wy, _ = jm['wrL']
     lay = ST.layer()
     _nozzle(ST.Pen(lay), (mx + wx * sm, mneck + wy * sm + 12 * sm))
     im.alpha_composite(ST.shrink(lay))
-    CP.person(im, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
+    man = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    CP.person(man, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
+    im.alpha_composite(man)
     if j is not None:
-        s = CP.nts(AC.VANCE) * vppm * 1.01 / 928
-        _arm_over(im, t, vx, vfeet + 10 - 928 * s, s, j, mx, mneck, sm)
+        _arm_over(im, man, j, mx, mneck, sm, jm, CP.nts(AC.VANCE) * vppm * 1.01 / 928)
+    if vlay is not None and vance_front(t):
+        im.alpha_composite(vlay)
     im.alpha_composite(ST.gas_front())
     return im
 
@@ -467,7 +507,14 @@ def picture(t):
     return DRAW[shot_of(t)](t)
 
 
+def vance_front(t):
+    """Vance is in front of the driver once he has stepped forward and out for "This guy." (the step's second half)."""
+    return t >= T['off'] + 0.22
+
+
 def draw_order(t):
+    if cut_of(t) == 'gas' and t >= T['enter']:
+        return ['background'] + (['man', 'vance'] if vance_front(t) else ['vance', 'man'])
     return ['background'] + SHOT_CAST[cut_of(t)]
 
 
@@ -538,9 +585,9 @@ def scene(t):
     s = shot_of(t)
     out = []
     if s == 'gas':
-        out.append(audit.Thing('man', audit.simple('man', ST.MAN_X, ST.D_MEN, HEIGHTS['man'])))
+        out.append(audit.Thing('man', audit.simple('man', MAN_X, ST.D_MEN, HEIGHTS['man'])))
         if t >= T['enter']:
-            out.append(audit.Thing('vance', audit.simple('vance', gas_vance(t)[0], GAS_VD, HEIGHTS['vance'])))
+            out.append(audit.Thing('vance', audit.simple('vance', gas_vance(t)[0], vance_d(t), HEIGHTS['vance'])))
     elif s == 'cliff':
         x, y, _ = cliff_at(t)
         out.append(audit.Thing('vance', audit.simple('vance', x, y, HEIGHTS['vance'])))
@@ -567,11 +614,11 @@ def audits():
             if s == 'gas':
                 if who == 'man':
                     jm, mk = gas_man(t)
-                    mx, feet, ppm = ST.place_gas(ST.MAN_X)
+                    mx, feet, ppm = ST.place_gas(MAN_X)
                     CP.person(lay, AC.MAN, mx, feet, ppm, 0, jm, **dict(face('man', t, None), **mk))
                 elif t >= T['enter']:
                     x, yaw, j = gas_vance(t)
-                    vx, vfeet, vppm = ST.place_gas(x, GAS_VD)
+                    vx, vfeet, vppm = ST.place_gas(x, vance_d(t))
                     CP.person(lay, AC.VANCE, vx, vfeet + 10, vppm * 1.01, yaw, j, **face('vance', t, vance_mood(t)))
             elif s == 'study':
                 j, yaw, hy = study_j(t)
