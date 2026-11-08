@@ -84,6 +84,10 @@ I don't know how to code. Please:
 # Making the films
 - **One main line of work:** `claude/create-claude-md-oe8z4g` (GitHub's default branch) holds everything. Start from
   the newest copy on GitHub, merge in any newer work from other branches, and push back at the end.
+  **At the start of every chat, list every branch (`git fetch --all; git branch -r`) and look for newer work on the
+  film or tool being worked on before building anything** (Elder Scrolls: Swindon, 8 Nov: a chat started from the
+  main line, never saw the other chat's finished film and animatic, and rebuilt parts of it). **At the end of every
+  chat, push to the main line as well as the chat's own branch,** so the next chat cannot start from an old picture.
 - **Quick video (short two-person film): read only `guides/quick-video.md`.** Sonnet, medium effort.
 - **Satire-style film (the TikTok series, beyond two people talking): read `guides/satire.md`**, start from
   `source/satire_template.py` (always), and follow the rulebook, `guides/film-quality-rules.md`. **Reuse before
