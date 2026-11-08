@@ -111,6 +111,24 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 24 | (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL | yes: 22-27 s, cools to bronze by 29 |
 | 25 | (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks) | yes |
 | 26 | (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze) | yes |
+| 27 | (Notes 1, 18) No CLOSING DOWN sign, no lettering on the building | yes: plain roof |
+| 28 | (Note 2) Minis moved out onto the arms; traffic goes round each mini, not the main circle | yes: minis at 56 m (were 42); no car circles the island; cars go mini to next mini |
+| 29 | (Note 3) Lamp post readable, its shadow shorter | yes: pole leaning out, double-armed head; shadow 14 m (was 47) |
+| 30 | (Note 4) Shot 6 lighter, not dark so fast | yes: dims to 26% (was 55%) over 2.5 s (was 0.85) |
+| 31 | (Note 5) "The Elder Scrolls VI" centre-aligned and grander | yes: centred on the frame, 66 px semibold (was 52), rule with diamond ends; SWINDON 132 px so it ends before x 900 |
+| 32 | (Note 6) Arm flat on the ground (not curled up), a hoody, vomit nearby; an amalgam of the reference photos, no likeness | yes: arm laid out near straight; grey hoody with the hood down; sick by his face; general traits only (grey hoody, gingery stubble, crop) |
+| 33 | (Sam, 8 Nov) "Make him just look like shit in general" | yes: sallow skin, blotchy red cheeks, eye bags, lines, stains on hoody and trackies |
+| 34 | (Note 7) The climb slower; the dog attack held long enough to read | yes: climb 16.90-19.86 (was 16.50-17.45), lands on the 19.86 hit |
+| 35 | (Note 8) Drool pinned to the mouth and the soil | yes: string from the mouth corner over the cheek to the pool, pool under the face's edge |
+| 36 | (Note 9) Swirling magic light round the scroll | yes: gold wisps from 7.6 s, glowing, to the climb |
+| 37 | (Note 10) A shopping bag overflowing with rubbish, north of the dog scene | yes: above his head in shot 4 |
+| 38 | (Note 11) Early evening: low golden sun, longer shadows | yes: sun 15 deg (was 21), warmer light, bluer shade (lamp shadow kept short: note 3) |
+| 39 | (Note 12) Shot 6: people walking on the paths and pavements | yes: pavements, the ring's pavement, a new footpath round the green |
+| 40 | (Note 13) Shot 6: two groups of men scuffling on a path | yes: on the footpath, top left |
+| 41 | (Note 14) Two hooded teenagers on e-bikes, far too fast, irresponsible | yes: the wrong way round inside the ring, weaving, 14 m/s |
+| 42 | (Note 15) A food delivery moped, plain box | yes: one of the traffic, red, no logo |
+| 43 | (Note 16) A burnt-out car on the green by the stadium | yes: by the stadium's corner |
+| 44 | (Note 17) Framing: the 19.83 s view moved north by 8% of the frame (blue line at the bottom) | yes: END_MY 60 -> 35.1 |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |
@@ -183,6 +201,25 @@ The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
   hour. Sam: "Skip the checks. Proceed to animatic." The quick check (--text) was clean but for shot 6's length;
   the animatic rendered with `--no-lock`. Before the final: find the hang (workers waiting on a pool lock, the parent
   holding OpenMP threads) and run pre-flight in full.
+
+## Decisions (round 1 fixes, 8 Nov: notes 1-18)
+- Note 2 read as: the minis sit out on the arms (centre 56 m from the middle, the ring's tarmac to 49 m), and no car
+  circles the central island. Cars go: in along an arm, round its mini, along the ring to the NEXT mini, round it,
+  out. Rules added so they never jam or pass through each other: at most 10 cars past the give-way lines; cars from
+  the ring give way to cars already on a mini; arm cars wait while anything is on or coming to their mini; a slower
+  car lets a faster crossing one go. Traffic runs in from -30 s so the minis are busy from the start.
+- Note 3 vs note 11: the evening sun would lengthen shadows, but the lamp's shadow is kept short (14 m) as Sam asked.
+- Note 7: the climb now 16.90-19.86 (lands on the 19.86 hit); the rings bloom as it lands (were 17.45, mid-climb
+  now); the small title fades in 20.3-21.3; SWINDON unchanged (22-27). Shots: 4 to 16.90, 5 to 19.86, 6 to the end
+  (10.2 s, over pre-flight's 8 s: Sam's Q4).
+- Note 17: the view's centre moved north by 8% of 1920 px at 168 m wide (23.9 m); the title moved down to fit under
+  the roundabout (TITLE_Y 1330).
+- Note 6 and Sam's photos (re-sent 8 Nov): general traits only (grey hoody, gingery stubble, short crop); the face is
+  the house-style head, nobody's likeness. Sam: "make him look like shit": sallow skin, blotchy cheeks, eye bags,
+  lines, stains (sick, lager, mud) fixed to his joints.
+- The opening camera nudged towards his hand (the arm now lies further out) so his face stays out of shot until the
+  glide reaches it; the Hook Text moved to y 1265, x 600 (the can glides through where it was).
+- People from above drawn up to 4x real size (pending Sam's Y), mopeds 2x.
 
 ## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
 1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).

@@ -23,10 +23,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import burnham as B  # noqa: E402
 
-SUN = np.array([-0.80, 0.36, -0.48])                    # low warm sun from screen left and above (elevation ~21 deg)
+SUN = np.array([-0.80, 0.25, -0.48])                    # early evening (Sam, note 11): low golden sun, ~15 deg up
 SUN = SUN / np.linalg.norm(SUN)
-SUN_C = np.array([1.00, 0.80, 0.58])                     # warm sunlight
-SKY_C = np.array([0.42, 0.40, 0.44])                     # cool fill in the shadows
+SUN_C = np.array([1.00, 0.70, 0.42])                     # golden evening sunlight (note 11)
+SKY_C = np.array([0.38, 0.38, 0.48])                     # cool blue evening fill in the shadows
 
 # ------------------------------------------------------------------------------------------------ noise
 _TEX = {}

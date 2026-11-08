@@ -51,13 +51,15 @@ NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'elder-swindon.md')
 HAS = {'people', 'effects', 'props'}
 DUR = 30.04                                   # the teaser's sound, as is; finish.py adds the 1.6 s sign-off
 BLACK_AT = DUR
-HOOK = ('Elder Scrolls reveals new location!', {'y': 1240, 'until': 4.0})
+HOOK = ('Elder Scrolls reveals new location!', {'y': 1265, 'x': 600, 'until': 4.0})   # right of the can's path
 SUBTITLES_AT_FINISH = False                   # no voices, no subtitles
 SUBS_IN_PICTURE = False
 LINES = []
 HITS = (1.07, 2.49, 6.57, 7.37, 7.79, 11.43, 13.86, 15.08, 17.45, 19.86, 21.93, 24.76, 27.19)   # the sound's hits
 SHOTS = [('1 can-face', 0.0, 7.37), ('2 scroll', 7.37, 13.86), ('3 packet', 13.86, 15.08),
-         ('4 above', 15.08, 16.50), ('5 climb', 16.50, 17.45), ('6 roundabout', 17.45, DUR)]
+         ('4 above', 15.08, 16.90), ('5 climb', 16.90, 19.86), ('6 roundabout', 19.86, DUR)]
+CLIMB0, CLIMB1 = 16.90, 19.86                 # the climb (Sam, note 7: was 16.50-17.45, too fast; the dog held longer)
+MIX0, MIX1 = 17.85, 18.35                     # near-real gives way to flat while the climb is fastest
 SHOT_CAST = {'1 can-face': ['DROOLER'], '2 scroll': ['SCROLL'], '3 packet': ['PACKET', 'SCROLL'],
              '4 above': ['DROOLER', 'STAFFIE', 'SCROLL', 'CAN', 'PACKET'], '5 climb': ['DROOLER', 'STAFFIE'],
              '6 roundabout': ['DROOLER']}
@@ -93,13 +95,17 @@ LINE_OK = [('DROOLER', 'edge with no line', 578, 553)]   # the kit's flat shadow
 # ====================================================================================================
 
 # ------------------------------------------------------------------------------------------------ WORLD (metres)
-MAN = dict(C.MAN, name='DROOLER')
+MAN = dict(C.MAN, name='DROOLER', jacket=(132, 134, 140), trousers=(84, 88, 100), belt=(78, 82, 94),
+           beard='stubble', heavy_stubble=True, beard_c=(150, 104, 66),
+           skin=(222, 178, 150), harrow=0.85, age=True, creases=2, blush=True)   # (Sam: "make him look like shit")
+#                                    sallow, blotchy red cheeks, dark bags under the eyes, lined   # (Sam, note 6) a grey hoody, gingery stubble, short crop: general traits only
+#                                    from Sam's reference photos, no likeness of anyone (house-style face)
 SCROLL, CAN, LITTER = C.SCROLL, C.CAN, C.LITTER
 PACKET_REST = (-1.02, -1.34, 35.0)              # where the packet comes to rest, past the scroll's tip (wind: -z)
 SUN_XZ = np.array([0.857, 0.514])                # shadows fall this way (away from the low sun)
 LAMP = (-2.93, -1.24)                            # the lamp post, centre of the island; its shadow passes his legs
 LAMP_H = 18.0
-SHADOW_LEN = LAMP_H / math.tan(math.radians(21))
+SHADOW_LEN = 14.0                                # (Sam, note 3: the shadow was huge, 47 m) kept short: it still crosses his legs
 PATCH_C = (-0.35, -0.25)                         # the soil-and-grass patch round him (Q2)
 
 
@@ -157,7 +163,8 @@ def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
 
 
-SHOT1 = [(0.0, (-0.62, -0.98, 225, 70, 0.62)), (0.6, (-0.60, -0.99, 222, 70, 0.61)),     # the approved opening
+SHOT1 = [(0.0, (-0.74, -1.16, 225, 70, 0.62)), (0.6, (-0.71, -1.16, 222, 70, 0.61)),     # the approved opening
+         #                                    (nudged to follow the hand, laid further out: note 6)
          (2.2, (-0.38, -1.00, 210, 66, 0.56)), (3.5, (-0.13, -0.92, 192, 58, 0.50)),     # along the arm, to the face
          (7.37, (-0.12, -0.90, 186, 56, 0.43))]                                          # creeping in
 SHOT2 = [(7.37, (-0.84, -1.14, 180, 68, 0.40)), (9.6, (-0.86, -1.04, 180, 66, 0.38)),    # the tip, the end cap
@@ -165,29 +172,30 @@ SHOT2 = [(7.37, (-0.84, -1.14, 180, 68, 0.40)), (9.6, (-0.86, -1.04, 180, 66, 0.
 SHOT3 = [(13.86, (-0.92, -0.92, 180, 66, 0.95)), (15.08, (-0.92, -0.95, 180, 66, 0.92))]
 TOP0 = (0.0, -0.25, 2.6)                          # shot 4: straight down, centre (x, z), metres across
 END_W = 168.0                                    # shot 6: the whole roundabout (1080 px = 168 m)
-END_C = world(0.0, 60.0)                         # its centre 384 px above the frame's middle (room for the title)
+END_MY = 60.0 - 0.08 * 1920 * END_W / 1080      # Sam's note 17: the animatic's 19.83 s view moved north by 8% of
+END_C = world(0.0, END_MY)                       # the frame, so his blue line (across the pitch) is the bottom
 
 
 def climb_u(t):
-    """The climb's progress 0..1: slow start (the dog reads), fast middle, eased stop on the 17.45 hit."""
-    u = min(1.0, max(0.0, (t - 16.50) / 0.95))
-    return ease(u ** 1.25)
+    """The climb's progress 0..1: slow start (the dog reads), fast middle, eased stop on the 19.86 hit."""
+    u = min(1.0, max(0.0, (t - CLIMB0) / (CLIMB1 - CLIMB0)))
+    return ease(u)
 
 
 def top_view(t):
     """(centre x, z, width) of the straight-down camera, shots 4-6."""
-    if t < 16.50:
+    if t < CLIMB0:
         return TOP0[0], TOP0[1] + 0.03 * (t - 15.08), TOP0[2] - 0.06 * (t - 15.08)
-    if t < 17.45:                                      # the centre's offset grows with the width, so he stays
+    if t < CLIMB1:                                     # the centre's offset grows with the width, so he stays
         e = climb_u(t)                                   # in the frame all the way up
-        w0 = TOP0[2] - 0.06 * 1.42
+        w0 = TOP0[2] - 0.06 * (CLIMB0 - 15.08)
         w = w0 * (END_W / w0) ** e
-        c0 = np.array([TOP0[0], TOP0[1] + 0.03 * 1.42])
+        c0 = np.array([TOP0[0], TOP0[1] + 0.03 * (CLIMB0 - 15.08)])
         off = (np.array(END_C) - c0) / END_W * w * e ** 0.5
         return c0[0] + off[0], c0[1] + off[1], w
-    u = (t - 17.45) / (DUR - 17.45)                    # shot 6: a slow drift, as the teaser's held end card
+    u = (t - CLIMB1) / (DUR - CLIMB1)                  # shot 6: a slow drift, as the teaser's held end card
     mx, my = 3.0 * u, -2.0 * u
-    x, z = world(mx, 60.0 + my)
+    x, z = world(mx, END_MY + my)
     return x, z, END_W * (1 - 0.06 * u)
 
 
@@ -205,11 +213,59 @@ def cam_for(t):
 _K0 = None
 
 
+def man_base():
+    """The comp's face-down man with the flung arm laid flat on the soil (Sam, note 6: it curled up off the ground):
+    reaching out past his head, near straight, the elbow out to the side along the ground."""
+    k, surf = C.man()
+    k = dict(k)
+    tgt = np.array([-0.40, 0.05, -1.13])
+    k['elR'], k['wrR'] = L._limb_clear(k['shR'], tgt, L.UPPER, L.FORE, np.array([-1.0, 0.0, 0.0]), 0.05, 0.0)
+    return k, surf
+
+
+def man_parts(k):
+    """His body's volumes plus the hoody's hood, down and bunched at the nape (note 6)."""
+    prts = L.parts(k, MAN)
+    X_ = k['shR'] - k['shL']
+    X_ = X_ / np.linalg.norm(X_)
+    up = np.array([0.0, 1.0, 0.0])
+    al = np.cross(X_, up)
+    back = k['neck'] + up * 0.075 + (k['pelvis'] - k['neck']) / np.linalg.norm(k['pelvis'] - k['neck']) * 0.05
+    prts.append(L.Part('hood', L.ELL, back, axes=np.array([X_, up, al]), radii=(0.125, 0.05, 0.085), mat='top',
+                       group=1))
+    return prts
+
+
+STAINS = [('chest', 0.5, 0.115, 0.045, (96, 84, 52)), ('chest', 0.15, 0.11, 0.035, (120, 96, 50)),
+          ('forearmR', 0.45, 0.045, 0.03, (110, 84, 50)), ('thighL', 0.55, 0.075, 0.04, (70, 54, 38)),
+          ('shinR', 0.3, 0.06, 0.035, (74, 58, 40)), ('upperR', 0.6, 0.05, 0.028, (150, 110, 60))]
+
+
+def draw_stains(pil, cam, k):
+    """Grubby stains on his hoody and trackies (spilt lager, sick, mud), on the side the camera sees (his back),
+    fixed to his joints so they move with him."""
+    d = ImageDraw.Draw(pil, 'RGBA')
+    ss = B.SS
+    seg = {'chest': ('waist', 'neck'), 'forearmR': ('elR', 'wrR'), 'thighL': ('hipL', 'knL'), 'shinR': ('knR', 'anR'),
+           'upperR': ('shR', 'elR')}
+    for i, (part, u, lift, r, col) in enumerate(STAINS):
+        a, b = seg[part]
+        p = k[a] + (k[b] - k[a]) * u + np.array([0.0, lift, 0.0])
+        (x, y), kk = cam.project(tuple(p))
+        R = r * kk * ss
+        if R < 1.5:
+            continue
+        pts = [(x * ss + R * (1 + 0.25 * math.sin(3 * t_ + i)) * math.cos(t_),
+                y * ss + R * 0.8 * (1 + 0.25 * math.sin(3 * t_ + i)) * math.sin(t_))
+               for t_ in np.linspace(0, 2 * math.pi, 18, endpoint=False)]
+        d.polygon(pts, fill=col + (120,))
+
+
 def man_at(t):
     """His body at t: face down, out cold (Sam, 8 Nov); only the left leg jerks with the dog's tugging."""
     global _K0
     if _K0 is None:
-        _K0 = C.man()
+        _K0 = man_base()
     k0, surf = _K0
     d = dog_at(t)
     if d is None or not d['clamped']:
@@ -258,30 +314,45 @@ def face_close(pil, cam, k, sp, t):
     ImageDraw.Draw(sh).ellipse([gx - 80 * ppu, gy - 26 * ppu, gx + 80 * ppu, gy + 26 * ppu], fill=(30, 22, 16, 140))
     sh = sh.filter(ImageFilter.GaussianBlur(8 * ppu))
     pil.alpha_composite(sh, (x0, y0))
+    # mouth: burnham draws it about 66 units below the head's centre; its lower corner is on the ground side
+    mouth = np.array([cx, cy]) + (-up) * 66 * ppu + side * 6 * ppu * 0.88
+    drool_pool(pil, mouth, side, ppu, t)                 # the pool on the soil goes UNDER the face (note 8)
     pil.alpha_composite(lay, (x0, y0))
-    # mouth: burnham draws it about 60 units below the head's centre; its lower corner is on the ground side
-    mouth = np.array([cx, cy]) + (-up) * 62 * ppu * 1.0 + side * 16 * ppu * 0.88
-    return mouth, ppu
+    return mouth, ppu, side
 
 
-def drool_close(pil, mouth, ppu, t):
-    """A wet string from the corner of his mouth to a dark damp patch on the soil, sagging in the wind; a drop runs
-    down it on the 6.57 hit and the patch spreads."""
+DROOL_EDGE, DROOL_POOL = 82, 100                 # person units from the mouth corner (towards the ground) to the
+#                                                  face's edge, and to the pool's middle on the soil
+
+
+def drool_pool(pil, mouth, side, ppu, t):
+    """The dark damp patch on the soil just past his down cheek, spreading after the drip (6.57)."""
+    d = ImageDraw.Draw(pil, 'RGBA')
+    grow = 1.0 + 0.25 * ease((t - 6.6) / 0.6)
+    px, py = mouth + side * DROOL_POOL * ppu
+    R = 34 * ppu * grow
+    d.ellipse([px - R, py - R * 0.5, px + R, py + R * 0.5], fill=(58, 42, 32, 190))
+    d.ellipse([px - R * 0.5, py - R * 0.1, px - R * 0.05, py + R * 0.25], fill=(160, 160, 160, 90))
+
+
+def drool_close(pil, mouth, ppu, side, t):
+    """A wet string from the corner of his mouth, lying on his cheek down to the face's edge (pinned there: it
+    never floats, note 8), then a short sag to the pool on the soil; a drop runs down it on the 6.57 hit."""
     d = ImageDraw.Draw(pil)
     mx, my = mouth
-    grow = 1.0 + 0.25 * ease((t - 6.6) / 0.6)
-    pool = (mx + 6 * ppu, my + 44 * ppu)
-    R = 30 * ppu * grow
-    d.ellipse([pool[0] - R, pool[1] - R * 0.45, pool[0] + R, pool[1] + R * 0.45], fill=(58, 42, 32, 190))
-    d.ellipse([pool[0] - R * 0.5, pool[1] - R * 0.25, pool[0] - R * 0.05, pool[1]], fill=(150, 150, 150, 90))
-    sway = 3 * ppu * math.sin(t * 2.3) + 6 * ppu * gust(t)
-    mid = (mx + 8 * ppu + sway, my + 22 * ppu)
+    m = np.array([mx, my])
+    edge = m + side * DROOL_EDGE * ppu
+    pool = m + side * DROOL_POOL * ppu
+    sway = (1.5 * ppu * math.sin(t * 2.3) + 3 * ppu * gust(t)) * np.array([1.0, 0.0])
+    mid = tuple((edge + pool) / 2 + sway)
     w = max(2, int(3.5 * ppu))
-    d.line([(mx, my), mid, pool], fill=(206, 220, 226, 230), width=w, joint='curve')
-    d.line([(mx + w * 0.3, my), (mid[0] + w * 0.3, mid[1])], fill=(250, 252, 255, 200), width=max(1, w // 3))
+    pts = [(mx, my), tuple(m + side * DROOL_EDGE * 0.5 * ppu + np.array([1.0, 0]) * 2 * ppu), tuple(edge), mid,
+           tuple(pool)]
+    d.line(pts, fill=(206, 220, 226, 230), width=w, joint='curve')
+    d.line([(p[0] + w * 0.3, p[1]) for p in pts[:3]], fill=(250, 252, 255, 200), width=max(1, w // 3))
     if 6.57 <= t < 6.95:                                 # the drip
         u = (t - 6.57) / 0.38
-        a, b = ((mx, my), mid) if u < 0.5 else (mid, pool)
+        a, b = ((mx, my), tuple(edge)) if u < 0.5 else (tuple(edge), tuple(pool))
         v = (u * 2) % 1.0
         px, py = a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v
         r = 4.5 * ppu
@@ -299,7 +370,7 @@ def dog_at(t):
     then tugs and shakes, braced, to the end. Returns jaw (x, z), heading, gait phase, clamped; None before."""
     if t < DOG_IN:
         return None
-    k0 = _K0[0] if _K0 else C.man()[0]
+    k0 = _K0[0] if _K0 else man_base()[0]
     an = k0['anL']
     jaw0 = (an[0] + 0.02, an[2] + 0.04)
     a = math.radians(DOG_HEAD)
@@ -695,15 +766,19 @@ def near_real(t, cam):
     pil = Image.fromarray((np.clip(img, 0, 1) * 255).astype(np.uint8)).convert('RGBA')
     if t >= 15.08:
         packet_rest_flat(pil, cam, ss)
+    draw_vomit(pil, cam)
+    draw_bag(pil, cam)
     k, surf = man_at(t)
     if close_shot(t):
-        prts = [q for q in L.parts(k, MAN) if q.name not in ('head', 'hair', 'ear')]
+        prts = [q for q in man_parts(k) if q.name not in ('head', 'hair', 'ear')]
         L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=prts)
+        draw_stains(pil, cam, k)
         if _on_screen(cam, k['head'], 0.25):
-            mouth, ppu = face_close(pil, cam, k, MAN, t)
-            drool_close(pil, mouth, ppu, t)
+            mouth, ppu, side = face_close(pil, cam, k, MAN, t)
+            drool_close(pil, mouth, ppu, side, t)
     else:
-        L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
+        L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=man_parts(k))
+        draw_stains(pil, cam, k)
         C.drool(pil, cam, k)
     d = dog_at(t)
     if d is not None:
@@ -715,16 +790,136 @@ def near_real(t, cam):
     out = G.dust(out, cam, ss, t, strength=0.9, gust=gust(t))
     if 7.6 < t < 8.3:                                    # the gold catches the sun (7.79): a soft glint on the tip
         glint(out, cam, t)
+    magic(out, cam, t)
     yy, xx = np.mgrid[0:hh, 0:ww]
     v = 1 - 0.55 * np.clip(((xx - ww / 2) / ww) ** 2 * 2.2 + ((yy - hh / 2) / hh) ** 2 * 2.2, 0, 1)
     out = out * v[..., None]
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8)).convert('RGBA')
 
 
+VOMIT = (-0.16, -0.80)                           # (Sam, note 6) a pool of sick by his face, on the soil
+BAG = (0.45, -1.50, 200.0)                       # (note 10) a carrier bag spilling rubbish, north of the dog scene
+
+
+def _ground_poly(cam, c, pts, rot=0.0, h=0.004):
+    """Local ground points (metres; u along `rot` degrees, v across) round c=(x, z) -> canvas points."""
+    ss = B.SS
+    a = math.radians(rot)
+    ca, sa = math.cos(a), math.sin(a)
+    out = []
+    for u, v in pts:
+        x, z = c[0] + u * ca - v * sa, c[1] + u * sa + v * ca
+        (px, py), _ = cam.project((x, h, z))
+        out.append((px * ss, py * ss))
+    return out
+
+
+def _blob(r, n, seed, wob=0.25):
+    rng = np.random.default_rng(seed)
+    ph = rng.uniform(0, 6.3, 3)
+    return [(r * (1 + wob * (0.5 * math.sin(3 * a + ph[0]) + 0.3 * math.sin(5 * a + ph[1]) + 0.2 * math.sin(7 * a + ph[2])))
+             * math.cos(a), r * (1 + wob * (0.5 * math.sin(3 * a + ph[0]) + 0.3 * math.sin(5 * a + ph[1])
+                                            + 0.2 * math.sin(7 * a + ph[2]))) * math.sin(a))
+            for a in np.linspace(0, 2 * math.pi, n, endpoint=False)]
+
+
+def draw_vomit(pil, cam, flat=False):
+    """A splash of sick on the soil by his face: beige-orange, darker wet rim, carrot-coloured bits, a shine."""
+    d = ImageDraw.Draw(pil, 'RGBA')
+    (_, _), kk = cam.project((VOMIT[0], 0, VOMIT[1]))
+    lw = max(1, int(min(2.2 * B.SS, kk * 0.004 * B.SS)))
+    d.polygon(_ground_poly(cam, VOMIT, _blob(0.115, 40, 3, 0.3)), fill=(120, 92, 44, 150))   # the damp rim
+    body = _ground_poly(cam, VOMIT, _blob(0.09, 40, 4, 0.28))
+    d.polygon(body, fill=(206, 168, 92, 255))
+    if flat:
+        d.line(body + [body[0]], fill=INK, width=lw)
+    rng = np.random.default_rng(5)
+    for _ in range(14):                                  # bits
+        u, v = rng.uniform(-0.06, 0.06, 2)
+        r = rng.uniform(0.006, 0.013)
+        col = [(226, 120, 40), (240, 214, 150), (170, 126, 60)][int(rng.integers(0, 3))]
+        d.polygon(_ground_poly(cam, (VOMIT[0] + u, VOMIT[1] + v), _blob(r, 8, int(rng.integers(0, 99)), 0.2)), fill=col)
+    if not flat:
+        d.polygon(_ground_poly(cam, (VOMIT[0] - 0.03, VOMIT[1] - 0.02), _blob(0.025, 12, 9, 0.2), rot=30),
+                  fill=(255, 246, 220, 120))         # wet shine
+
+
+def draw_bag(pil, cam, flat=False):
+    """A white carrier bag on its side, overflowing: cans, a crisp packet, a chip box, a bottle, wrappers (house
+    style: flat colour, one outline, a soft shadow)."""
+    d = ImageDraw.Draw(pil, 'RGBA')
+    x0, z0, rot = BAG
+    (_, _), kk = cam.project((x0, 0, z0))
+    lw = max(1, int(min(2.2 * B.SS, kk * 0.004 * B.SS)))
+
+    def shape(pts, col, c=(0.0, 0.0), r=0.0, h=0.01, outline=True):
+        a = math.radians(rot)
+        cx, cz = x0 + c[0] * math.cos(a) - c[1] * math.sin(a), z0 + c[0] * math.sin(a) + c[1] * math.cos(a)
+        Q = _ground_poly(cam, (cx, cz), pts, rot + r, h)
+        d.polygon(Q, fill=col)
+        if outline:
+            d.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
+
+    def rect(L_, W_):
+        return [(-L_ / 2, -W_ / 2), (L_ / 2, -W_ / 2), (L_ / 2, W_ / 2), (-L_ / 2, W_ / 2)]
+    shape(_blob(0.24, 30, 11, 0.15), (30, 22, 16, 55), c=(0.08, 0.05), h=0.002, outline=False)   # shadow
+    shape([(-0.20, -0.13), (0.05, -0.15), (0.14, -0.10), (0.16, 0.0), (0.14, 0.10), (0.05, 0.15), (-0.20, 0.13),
+           (-0.24, 0.0)], (238, 238, 232), h=0.06)                                   # the bag, opening at +u
+    shape([(-0.26, -0.04), (-0.32, -0.02), (-0.32, 0.02), (-0.26, 0.04)], (238, 238, 232), h=0.06)  # handles
+    shape(rect(0.13, 0.065), (176, 30, 36), c=(0.24, 0.07), r=40)                    # a crushed can
+    shape(rect(0.03, 0.06), (200, 200, 204), c=(0.30, 0.12), r=40)
+    shape(rect(0.16, 0.11), (40, 90, 190), c=(0.26, -0.08), r=-25)                   # a crisp packet
+    shape(rect(0.15, 0.10), (236, 236, 228), c=(0.40, 0.02), r=10)                    # a chip box, red stripe
+    shape(rect(0.15, 0.03), (196, 36, 36), c=(0.40, 0.02), r=10, outline=False)
+    shape([(-0.11, -0.035), (0.06, -0.035), (0.11, -0.015), (0.11, 0.015), (0.06, 0.035), (-0.11, 0.035)],
+          (60, 120, 60), c=(0.34, 0.20), r=70)                                       # a green bottle
+    shape(rect(0.07, 0.05), (240, 200, 60), c=(0.18, -0.20), r=15)                   # wrappers
+    shape(rect(0.06, 0.04), (232, 232, 232), c=(0.48, -0.10), r=-40)
+
+
 def _on_screen(cam, p, margin):
     (x, y), k = cam.project(tuple(p))
     m = margin * k
     return -m < x < 1080 + m and -m < y < 1920 + m
+
+
+def magic(out, cam, t):
+    """(Sam, note 9) Swirling magic light round the scroll, as in the trailer: gold wisps spiralling along it,
+    each with a fading trail, glowing. Grows in after the glint (7.79) as the soil comes off, to the climb."""
+    amt = ease((t - 7.6) / 1.2) * min(1.0, max(0.0, 1.2 - scroll_cover(t)))
+    if amt <= 0.01:
+        return
+    ss = B.SS
+    hh, ww, _ = out.shape
+    a, b = np.array(SCROLL[0]), np.array(SCROLL[1])
+    ax = b - a
+    n2 = np.array([-ax[1], ax[0]]) / np.linalg.norm(ax)
+    lay = Image.new('L', (ww, hh), 0)
+    d = ImageDraw.Draw(lay)
+    (_, _), kk = cam.project((float((a[0] + b[0]) / 2), 0.03, float((a[1] + b[1]) / 2)))
+    w = max(1, int(0.006 * kk * ss))
+    rng = np.random.default_rng(31)
+    for i in range(22):
+        s0, sp, th0, om, r0 = rng.uniform(0, 1), rng.uniform(0.05, 0.12), rng.uniform(0, 6.3), \
+            rng.uniform(3.0, 5.5) * (1 if i % 2 else -1), rng.uniform(0.04, 0.08)
+        pts = []
+        for j in range(10):                              # the trail: where it was a moment ago
+            tt = t - j * 0.03
+            u = (s0 + sp * tt) % 1.0
+            th = th0 + om * tt
+            r = r0 * (1 + 0.3 * math.sin(tt * 2.1 + i))
+            p = a + ax * (0.05 + 0.9 * u) + n2 * r * math.cos(th)
+            y = 0.03 + abs(r * math.sin(th)) * 1.4
+            (px, py), _ = cam.project((float(p[0]), y, float(p[1])))
+            pts.append((px * ss, py * ss))
+        for j in range(len(pts) - 1):
+            d.line([pts[j], pts[j + 1]], fill=int(255 * (1 - j / 9)), width=w)
+    sharp = np.asarray(lay, float) / 255
+    soft = np.asarray(lay.filter(ImageFilter.GaussianBlur(5 * w)), float) / 255
+    halo = np.asarray(lay.filter(ImageFilter.GaussianBlur(14 * w)), float) / 255
+    g = (sharp * 0.9 + soft * 3.0 + halo * 3.5) * amt
+    out += g[..., None] * np.array([1.0, 0.80, 0.42])
+    np.clip(out, 0, 1, out=out)
 
 
 def glint(out, cam, t):
@@ -749,7 +944,8 @@ def glint(out, cam, t):
 
 # ------------------------------------------------------------------------------------------------ AERIAL
 MINIS = [211, 282, 339, 45, 148]                # the five minis' bearings (screen degrees, y down), as the comp
-R_MINI, RING_MINI, R_ISLAND, R_BIG = 42.0, 8.0, 15.0, 55.0
+R_MINI, RING_MINI, R_ISLAND, R_BIG = 56.0, 9.0, 15.0, 55.0     # minis out on the arms (Sam, note 2; were at 42)
+R_RING = 49.0                                    # the inner ring's tarmac edge
 CAR_COLS = [(240, 240, 238), (30, 30, 34), (170, 172, 178), (176, 30, 36), (40, 70, 150), (240, 240, 238),
             (120, 124, 130), (90, 30, 34)]
 
@@ -765,30 +961,29 @@ def _arc(c, r, a0, a1, step=6.0):
 
 def _routes():
     """Every car's way through, in map metres: in along an arm (the left lane: we drive on the left), give way,
-    clockwise round its mini, anticlockwise along the inner ring to the next mini or the one after, clockwise round
-    that, out along its arm. Plus a loop of cars round the central island, anticlockwise. Returns [(points, s_giveway)]."""
+    clockwise round its mini, anticlockwise along the inner ring to the next mini, clockwise round
+    that, out along its arm. No car circles the central island (Sam, note 2). Returns [(points, s_giveway)]."""
     out = []
     for i, m in enumerate(MINIS):
         u = _pol(1, m)
         cm = _pol(R_MINI, m)
         lin = np.array([-u[1], u[0]]) * 2.6             # the inbound lane: left of a car heading in
-        for hop in (1, 2):
+        for hop in (1,):                                 # mini to the next mini (lanes never merge)
             j = (i - hop) % 5                            # anticlockwise: the next mini at a smaller bearing
             mj = MINIS[j]
             uj = _pol(1, mj)
             cj = _pol(R_MINI, mj)
             lout = np.array([uj[1], -uj[0]]) * 2.6
-            pts = [u * 260 + lin, u * 120 + lin, u * 62 + lin, u * 54 + lin]
+            pts = [u * 260 + lin, u * 120 + lin, u * 76 + lin, u * 68 + lin]
             gw = len(pts) - 1
             pts += _arc(cm, RING_MINI, m + 35, m + 180)                      # clockwise round mini i
             a0 = m
             a1 = mj if mj < m else mj - 360
             pts += [_pol(R_MINI - RING_MINI, a) for a in np.linspace(a0, a1, max(3, int(abs(a1 - a0) / 5)))[1:-1]]
-            pts += _arc(cj, RING_MINI, mj + 180, mj + 325)                   # clockwise round mini j to its arm
-            pts += [uj * 54 + lout, uj * 62 + lout, uj * 120 + lout, uj * 260 + lout]
-            out.append((np.array(pts), gw))
-    loop = _arc((0, 0), 21.0, 360, 0, 4)                                     # round the island, anticlockwise
-    out.append((np.array(loop * 3), None))
+            gw2 = len(pts)                                                   # gives way again, to anything
+            pts += _arc(cj, RING_MINI, mj + 180, mj + 325)                   # already going round mini j
+            pts += [uj * 68 + lout, uj * 76 + lout, uj * 120 + lout, uj * 260 + lout]
+            out.append((np.array(pts), gw, gw2, cm))
     return out
 
 
@@ -810,6 +1005,9 @@ def _resample(pts, step=0.5):
 _TRAFFIC = None
 
 
+JUNCTION_CAP = 10                                 # most cars past the give-way lines at once (keeps the ring moving)
+
+
 def traffic():
     """The traffic, worked out once: each car moves along its route at its own speed, keeps its distance from
     anything ahead of it, and gives way at the line before joining a mini when something is coming round. Returns
@@ -819,33 +1017,28 @@ def traffic():
         return _TRAFFIC
     rng = np.random.default_rng(7)
     routes = []
-    for pts, gw in _routes():
+    for pts, gw, gw2, cm in _routes():
         xy, s = _resample(pts)
-        gws = None
-        if gw is not None:
-            gws = float(np.searchsorted(s, np.sum(np.linalg.norm(np.diff(pts[:gw + 1], axis=0), axis=1))))
-        routes.append((xy, gws))
+        gws, gws2 = (float(np.searchsorted(s, np.sum(np.linalg.norm(np.diff(pts[:g + 1], axis=0), axis=1))))
+                     for g in (gw, gw2))
+        routes.append((xy, gws, gws2, cm))
     cars = []                                            # route, s (index in 0.5 m steps), speed, size, colour
     for arm in range(5):                                 # each arm's cars one behind another in its lane (both
         s0 = float(rng.uniform(-60, 120))                # routes from an arm share it), spaced like real traffic
-        for n in range(10):
-            s0 -= float(rng.uniform(22, 50))
-            cars.append(dict(r=arm * 2 + int(rng.integers(0, 2)), s=s0, v=float(rng.uniform(7, 9.5)),
+        for n in range(9):
+            s0 -= float(rng.uniform(40, 80))
+            cars.append(dict(r=arm, s=s0, v=float(rng.uniform(7, 9.5)),
                              L=4.4, W=1.85, col=CAR_COLS[int(rng.integers(0, len(CAR_COLS)))]))
-    xy_loop = routes[-1][0]
-    nloop = len(xy_loop) // 3
-    for n in range(9):
-        cars.append(dict(r=len(routes) - 1, s=float(n * nloop / 9), v=6.0, L=4.4, W=1.85,
-                         col=CAR_COLS[(n * 3) % len(CAR_COLS)], loop=nloop))
     cars[5].update(L=11.0, W=2.55, col=(232, 196, 40), v=6.5)    # a bus
     cars[17].update(L=8.0, W=2.4, col=(240, 240, 238), v=6.5)    # a white van
     dt = 1 / FPS
-    t0 = 6.0                                             # run in from 6 s so the roads are busy by 16.4
+    t0 = -30.0                                           # run in early so the minis are busy by 16.4 (no cars
+    #                                                      circle the island to fill the middle now: note 2)
     frames = {}
     nsteps = int((DUR - t0) * FPS) + 2
 
     def pose(c):
-        xy, _ = routes[c['r']]
+        xy = routes[c['r']][0]
         i = int(c['s'])
         if 'loop' in c:
             i = int(c['s']) % c['loop']
@@ -858,6 +1051,8 @@ def traffic():
     for step in range(nsteps):
         t = t0 + step * dt
         P = [pose(c) for c in cars]
+        busy = sum(1 for ci, o in enumerate(P) if o is not None and np.hypot(*o[0]) < 66
+                   and cars[ci]['s'] > routes[cars[ci]['r']][1] + 0.5)
         for ci, c in enumerate(cars):
             if P[ci] is None:
                 c['s'] += 8.0 * dt * 2 if c['s'] < 0 else 0     # off the map: all at one speed, so none catch up
@@ -875,19 +1070,35 @@ def traffic():
                 ahead = float(np.dot(dvec, h))
                 lat = abs(float(h[0] * dvec[1] - h[1] * dvec[0]))
                 gap = (c['L'] + cars[cj]['L']) / 2 + 2.2
+                if 0 < ahead and dist < gap + 3.0 and ahead > 0.3 * dist and \
+                        abs((o[1] - hd + 180) % 360 - 180) > 25 and cars[cj].get('vn', 9) > c.get('vn', 9):
+                    want = 0.0                           # something cutting across in front, faster: let it go
                 if ahead > 0 and lat < 2.4 and ahead < gap + 4.0:
                     ho = math.radians(o[1])                # do we both have the other ahead (crossing)? then the
                     back = -float(np.dot(dvec, [math.cos(ho), math.sin(ho)]))   # lower number goes first
                     if back > 0 and abs(math.cos(ho) * dvec[1] - math.sin(ho) * dvec[0]) < 2.4 and ci < cj:
                         continue
                     want = min(want, max(0.0, (ahead - gap) * 2.0))
-            gws = routes[c['r']][1]
-            if gws is not None and gws - 6 < c['s'] < gws + 0.5:   # give way: anything coming round the mini
-                xy, _ = routes[c['r']]
-                merge = xy[min(len(xy) - 1, int(gws) + 12)]
+            gws, gws2 = routes[c['r']][1], routes[c['r']][2]
+            if gws2 - 24 < c['s'] < gws2 + 0.5:            # into mini j from the ring: give way to anything already
+                xy = routes[c['r']][0]                         # coming round it (not to cars following on the ring)
+                merge = xy[min(len(xy) - 1, int(gws2) + 4)]
                 for cj, o in enumerate(P):
-                    if cj != ci and o is not None and np.linalg.norm(o[0] - merge) < 11 and \
-                            cars[cj]['r'] != c['r']:
+                    if cj != ci and o is not None and np.linalg.norm(o[0] - merge) < 10 and \
+                            abs((o[1] - hd + 180) % 360 - 180) > 25 and cars[cj].get('vn', 9) > 1.5:
+                        want = min(want, max(0.0, (gws2 - 4 - c['s']) * 1.5))
+            if gws is not None and gws - 6 < c['s'] < gws + 0.5 and busy >= JUNCTION_CAP:   # the junction is
+                want = min(want, max(0.0, (gws - c['s']) * 1.5))     # full: wait at the line (no gridlock)
+            if gws is not None and gws - 6 < c['s'] < gws + 0.5:   # give way: anything coming round the mini
+                xy = routes[c['r']][0]
+                merge = xy[min(len(xy) - 1, int(gws) + 12)]
+                cm = routes[c['r']][3]
+                for cj, o in enumerate(P):
+                    if cj == ci or o is None or cars[cj]['r'] == c['r']:
+                        continue
+                    rel = o[0] - cm                          # anything on the mini or coming along the ring to it
+                    out_ = float(np.dot(rel, [math.cos(math.radians(o[1])), math.sin(math.radians(o[1]))])) > 3
+                    if np.linalg.norm(o[0] - merge) < 11 or (np.linalg.norm(rel) < RING_MINI + 17 and not out_):
                         want = min(want, max(0.0, (gws - c['s']) * 1.5))
             c['vn'] = c.get('vn', c['v']) + max(-9 * dt, min(4 * dt, want - c.get('vn', c['v'])))
             c['s'] += max(0.0, c['vn']) * dt * 2
@@ -916,13 +1127,13 @@ _ESTATE = None
 
 
 STADIUM = (-36.0, 168.0, 36.0, 280.0)            # the County Ground's pitch box (map metres), below the title
-SHED = (-62.0, 112.0, 22.0, 140.0)               # the big white-roofed shed, CLOSING DOWN on its roof (in the safe area)
+SHED = (-62.0, 112.0, 22.0, 140.0)               # the big white-roofed shed (plain roof: Sam, notes 1 and 18)
 CARPARK = (58.0, -14.0, 100.0, 34.0)
 
 
 def _free(p, margin=0.0):
     """Room for a house here: clear of the junction, the arms, the stadium, the shed and the car park."""
-    if np.hypot(*p) < 68:
+    if np.hypot(*p) < 80:
         return False
     for m in MINIS:
         u = _pol(1, m)
@@ -960,7 +1171,7 @@ def _estate():
                 rows.append((run, face, roof))
         for i in range(160):
             a_ = rng.uniform(0, 360)
-            r = rng.uniform(58, 75)
+            r = rng.uniform(73, 88)
             p = _pol(r, a_)
             inbox = any(x0 - 8 < p[0] < x1 + 8 and y0 - 8 < p[1] < y1 + 8 for x0, y0, x1, y1 in (SHED, CARPARK))
             if not inbox and all(abs(m - a_) % 360 > 14 and abs(m - a_) % 360 < 346 for m in MINIS):
@@ -1019,7 +1230,7 @@ def aerial_flat(pil, cam, t):
         for p in run[1:]:
             d.line([P(p - along * 2.6 - across * 4), P(p - along * 2.6 + across * 4)],
                    fill=tuple(int(v * 0.8) for v in roof), width=max(1, ink // 2))
-    # the big white-roofed shed (Sam's photos), CLOSING DOWN on the roof (added: drab Swindon), its car park
+    # the big white-roofed shed (Sam's photos), no lettering (Sam, notes 1 and 18), its car park
     x0, y0, x1, y1 = SHED
     poly([(x0 + 6, y0 + 4), (x1 + 6, y0 + 4), (x1 + 6, y1 + 4), (x0 + 6, y1 + 4)], (74, 92, 58), outline=False)
     poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], (226, 228, 230))
@@ -1036,15 +1247,6 @@ def aerial_flat(pil, cam, t):
             if (i * 7 + row * 3) % 5 < 3:
                 col = CAR_COLS[(i * 5 + row) % len(CAR_COLS)]
                 poly([(x + 0.4, yy + 0.3), (x + 2.2, yy + 0.3), (x + 2.2, yy + 4.7), (x + 0.4, yy + 4.7)], col)
-    if s * 4.0 > 6:
-        fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), max(6, int(5.6 * s)))
-        lay = Image.new('RGBA', (int(60 * s), int(10 * s)), (0, 0, 0, 0))
-        ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), 'CLOSING DOWN', font=fnt, fill=(196, 36, 36, 255),
-                                 anchor='mm')
-        rot = -math.degrees(math.atan2(ex[1], ex[0]))
-        lay = lay.rotate(rot, expand=True)
-        cxy = P(((SHED[0] + SHED[2]) / 2, (SHED[1] + SHED[3]) / 2))
-        pil.alpha_composite(lay, (int(cxy[0] - lay.width / 2), int(cxy[1] - lay.height / 2)))
     # the County Ground next door (Sam's photo): striped pitch, red seats under grey roofs, floodlight pylons
     x0, y0, x1, y1 = STADIUM
     poly([(x0 - 16, y0 - 16), (x1 + 16, y0 - 16), (x1 + 16, y1 + 16), (x0 - 16, y1 + 16)], (186, 30, 40))
@@ -1061,6 +1263,10 @@ def aerial_flat(pil, cam, t):
     for cx_, cy_ in ((x0 - 22, y0 - 22), (x1 + 22, y0 - 22)):            # floodlights and their long shadows
         d.line([P((cx_, cy_)), P(np.array([cx_, cy_]) + sdir * 30)], fill=(60, 60, 60, 150), width=lw(1.0))
         poly([(cx_ - 3, cy_ - 1.5), (cx_ + 3, cy_ - 1.5), (cx_ + 3, cy_ + 1.5), (cx_ - 3, cy_ + 1.5)], (220, 220, 210))
+    pth = [_pol(FOOTPATH_R + 1.4, a) for a in np.linspace(0, 360, 240, endpoint=False)]   # the footpath round
+    pin = [_pol(FOOTPATH_R - 1.4, a) for a in np.linspace(0, 360, 240, endpoint=False)]   # the green (walkers,
+    poly(pth, (206, 202, 190), outline=False)                                             # the fight: note 13)
+    poly(pin, (118, 146, 86), outline=False)
     for p, r in trees:
         circ(p + np.array([-0.857, 0.514]) * r * 0.9, r, (64, 84, 52), outline=False)
     for p, r in trees:
@@ -1069,45 +1275,45 @@ def aerial_flat(pil, cam, t):
     for m in MINIS:
         u = _pol(1, m)
         n = np.array([-u[1], u[0]])
-        a0, b0 = u * 44, u * 260
+        a0, b0 = u * R_RING, u * 260
         poly([a0 + n * 10.5, b0 + n * 10.5, b0 - n * 10.5, a0 - n * 10.5], (200, 198, 192))
         poly([a0 + n * 7.5, b0 + n * 7.5, b0 - n * 7.5, a0 - n * 7.5], (128, 128, 130))
-    circ((0, 0), 46.5, (200, 198, 192))                                     # pavement round the inner ring
+    circ((0, 0), R_RING + 2.5, (200, 198, 192))                             # pavement round the inner ring
     for m in MINIS:
         circ(_pol(R_MINI, m), 13.5, (200, 198, 192))
-    circ((0, 0), 44.0, (128, 128, 130))                                     # the inner ring's tarmac
+    circ((0, 0), R_RING, (128, 128, 130))                                   # the inner ring's tarmac
     for m in MINIS:                                                          # each mini's tarmac
         circ(_pol(R_MINI, m), 11.5, (128, 128, 130))
     for m in MINIS:                                                          # the arms' tarmac again, over the
         u = _pol(1, m)                                                       # pavement where they join
         n = np.array([-u[1], u[0]])
-        poly([u * 40 + n * 7.5, u * 80 + n * 7.5, u * 80 - n * 7.5, u * 40 - n * 7.5], (128, 128, 130), outline=False)
+        poly([u * 44 + n * 7.5, u * 90 + n * 7.5, u * 90 - n * 7.5, u * 44 - n * 7.5], (128, 128, 130), outline=False)
     for m in MINIS:
         u = _pol(1, m)
         n = np.array([-u[1], u[0]])
         for j in range(8):                                                   # the zebra
             v = -6.5 + j * 1.75
-            poly([u * 74 + n * v, u * 78 + n * v, u * 78 + n * (v + 0.9), u * 74 + n * (v + 0.9)], (240, 240, 236),
+            poly([u * 84 + n * v, u * 88 + n * v, u * 88 + n * (v + 0.9), u * 84 + n * (v + 0.9)], (240, 240, 236),
                  outline=False)
         for j in range(6):                                                   # the centre line
-            p = u * (82 + j * 9)
+            p = u * (92 + j * 9)
             poly([p - n * 0.12, p + u * 4.5 - n * 0.12, p + u * 4.5 + n * 0.12, p + n * 0.12], (240, 240, 236),
                  outline=False)
         for side in (1,):                                                    # give-way dashes on the inbound lane
             for j in range(5):
-                q = u * 56 + n * (1.0 + j * 1.2) * side
+                q = u * 70 + n * (1.0 + j * 1.2) * side
                 poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
-                q = u * 57 + n * (1.0 + j * 1.2) * side
+                q = u * 71 + n * (1.0 + j * 1.2) * side
                 poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
         for k_ in range(2):                                                  # arrows on the inbound lane
-            p = u * (64 + k_ * 10) + n * 2.6
+            p = u * (76 + k_ * 6) + n * 2.6
             poly([p - u * 1.8 - n * 0.2, p - n * 0.2, p - n * 0.8, p + u * 1.5, p + n * 0.8, p + n * 0.2,
                   p - u * 1.8 + n * 0.2], (240, 240, 236), outline=False)
     # raised kerbed islands between the minis, hatched areas beside them
     for i in range(5):
         a1, a2 = MINIS[i], MINIS[(i + 1) % 5]
         mid = (a1 + ((a2 - a1) % 360) / 2) % 360
-        pts = [_pol(40 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
+        pts = [_pol(38.2 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
                                                      (-4, 3), (-8, 2.4))]
         poly(pts, (96, 92, 90))
         for j in range(5):                                                   # hatching beyond its ends
@@ -1134,12 +1340,51 @@ def aerial_flat(pil, cam, t):
         circ(pc + np.array([-r_ * math.cos(a_), r_ * math.sin(a_)]), rr_, (120, 128, 70), outline=False)
     sd = np.array([-SUN_XZ[0], SUN_XZ[1]])                                  # the shadow, in map axes
     sn = np.array([-sd[1], sd[0]])
-    poly([sn * 0.15, sd * SHADOW_LEN + sn * 0.15, sd * SHADOW_LEN - sn * 0.15, -sn * 0.15], (40, 40, 44, 150),
+    poly([sn * 0.2, sd * SHADOW_LEN + sn * 0.2, sd * SHADOW_LEN - sn * 0.2, -sn * 0.2], (60, 58, 56),
          outline=False)
-    circ(sd * SHADOW_LEN, 0.9, (40, 40, 44, 150), outline=False)
-    circ((0, 0), 0.25, (70, 70, 74))
-    circ(np.array([0.0, 0.0]) + sd * -0.0, 0.5, (90, 90, 96))                # the lamp's head from above
+    poly([sd * SHADOW_LEN + sn * 2.6, sd * SHADOW_LEN - sn * 2.6, sd * (SHADOW_LEN + 0.6) - sn * 2.6,
+          sd * (SHADOW_LEN + 0.6) + sn * 2.6], (60, 58, 56), outline=False)       # the head's shadow
+    lamp_post(d, cam, P, s, ink)
     return s
+
+
+def lamp_post(d, cam, P, s, ink):
+    """The lamp post from above (Sam, note 3: make the pole readable): its foot, the pole leaning out from the middle of
+    the frame as a tall thing does seen from high up (the lean drawn 2.5 times the true one so it reads), and a
+    double-armed head across its top. Flat house style, one outline."""
+    ss = B.SS
+    (fx, fy), _ = cam.project((LAMP[0], 0.0, LAMP[1]))
+    (tx, ty), _ = cam.project((LAMP[0], LAMP_H, LAMP[1]))
+    foot = np.array([fx * ss, fy * ss])
+    lean = (np.array([tx * ss, ty * ss]) - foot) * 2.5
+    if np.linalg.norm(lean) < 2.0 * s:                    # straight overhead: a short lean still shows it is a pole
+        lean = np.array([0.0, -2.0 * s])
+    top = foot + lean
+    u = lean / (np.linalg.norm(lean) + 1e-9)
+    n = np.array([-u[1], u[0]])
+    wd = max(3.0 * ss, 0.7 * s)
+    grey = (196, 196, 190)
+    d.ellipse([foot[0] - wd, foot[1] - wd, foot[0] + wd, foot[1] + wd], fill=(70, 70, 74), outline=INK, width=ink)
+    d.line([tuple(foot), tuple(top)], fill=INK, width=int(wd + 2 * ink))
+    d.line([tuple(foot), tuple(top)], fill=grey, width=int(wd))
+    arm = max(4.0 * ss, 2.6 * s)
+    a, b = top - n * arm, top + n * arm
+    d.line([tuple(a), tuple(b)], fill=INK, width=int(wd * 0.8 + 2 * ink))
+    d.line([tuple(a), tuple(b)], fill=grey, width=int(wd * 0.8))
+    hr = max(2.5 * ss, 0.9 * s)
+    for c in (a, b, top):                                 # the two lamp heads and the cap
+        r = hr if c is not top else hr * 0.8
+        d.ellipse([c[0] - r, c[1] - r, c[0] + r, c[1] + r], fill=(236, 228, 196), outline=INK, width=ink)
+
+
+def _map_axes(cam):
+    """The aerial's map metres on the canvas: origin (the lamp post) and one metre right / down."""
+    ss = B.SS
+    (ox, oy), _ = cam.project((LAMP[0], 0.0, LAMP[1]))
+    (ax_, ay_), _ = cam.project((LAMP[0] - 1.0, 0.0, LAMP[1]))
+    ox, oy = ox * ss, oy * ss
+    ex = np.array([ax_ * ss - ox, ay_ * ss - oy])
+    return ox, oy, ex, np.array([-ex[1], ex[0]])
 
 
 def draw_cars(pil, cam, t):
@@ -1159,7 +1404,9 @@ def draw_cars(pil, cam, t):
 
     def P(p):
         return (ox + p[0] * ex[0] + p[1] * ey[0], oy + p[0] * ex[1] + p[1] * ey[1])
-    for x, y, hd, Lc, Wc, col, _ in cars:
+    for x, y, hd, Lc, Wc, col, cid in cars:
+        if cid == MOPED_ID:                              # the delivery moped: drawn with the people
+            continue
         c, sn = math.cos(math.radians(hd)), math.sin(math.radians(hd))
 
         def R(u, v):
@@ -1181,6 +1428,130 @@ def draw_cars(pil, cam, t):
                        R(Lc / 2 - 1.2, Wc * 0.42)], fill=(40, 46, 56))
 
 
+# ------------------------------------------------------------------------------------------------ shot 6's people
+# Sam's notes 12-16 (8 Nov): walkers, a scuffle on a path, two hooded teens on e-bikes, a delivery moped, a burnt-out
+# car by the stadium. Drawn with the duplicate build's figures (elder_swindon_extras: person, ebike, moped, fight,
+# burnt_car), placed on this roundabout. People and bikes drawn up to 4 times real size so they read on a phone
+# (a liberty: named to Sam); they grow into it as the camera climbs.
+import elder_swindon_extras as X   # noqa: E402
+
+FOOTPATH_R = 64.0                                # the footpath round the green, between the ring and the trees
+MOPED_ID = 23                                    # which car in the traffic is the delivery moped (note 15)
+FIGHT_AT, FIGHT_DIR = tuple(_pol(FOOTPATH_R, 246)), 246 + 90      # on the footpath, top left (note 13)
+BURNT_AT = (-56.0, 165.0, 75.0)                  # on the green by the stadium's corner (note 16)
+EBIKE_R = 23.5                                   # the teens' line: inside the ring, the wrong way (note 14)
+
+
+class _MapView:
+    """elder_swindon_extras' View, but on this film's map (metres right, metres down from the lamp post)."""
+    def __init__(self, pil, cam, enl_cap=4.0):
+        self.pil = pil
+        self.d = ImageDraw.Draw(pil, 'RGBA')
+        self.ox, self.oy, self.ex, self.ey = _map_axes(cam)
+        self.k = float(np.linalg.norm(self.ex))
+        self.enl = float(np.clip(1080 / (self.k / B.SS) / 30.0, 1.0, enl_cap))
+        self.lw = max(1, int(min(2.2 * B.SS, max(1.0, 0.18 * self.k))))
+
+    def P(self, sx, sy, y=0.0):
+        return (self.ox + sx * self.ex[0] + sy * self.ey[0], self.oy + sx * self.ex[1] + sy * self.ey[1])
+
+    def poly(self, pts, fill, outline=INK, lw=None, y=0.0):
+        Q = [self.P(x, z) for x, z in pts]
+        self.d.polygon(Q, fill=fill)
+        if outline is not None:
+            self.d.line(Q + [Q[0]], fill=outline, width=lw or self.lw, joint='curve')
+
+    def circle(self, cx, cy, r, fill, outline=INK, lw=None, n=None, y=0.0):
+        n = n or int(np.clip(r * self.k / 3, 10, 90))
+        self.poly([(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, n, endpoint=False)],
+                  fill, outline, lw)
+
+    def line(self, pts, fill, w_m=None, w_px=None, y=0.0):
+        Q = [self.P(x, z) for x, z in pts]
+        self.d.line(Q, fill=fill, width=int(max(1, w_px * B.SS if w_px else w_m * self.k)), joint='curve')
+
+    def visible(self, sx, sy, r):
+        x, y = self.P(sx, sy)
+        rr = r * self.k
+        w, h = self.pil.size
+        return -rr < x < w + rr and -rr < y < h + rr
+
+
+def _walk_paths():
+    """Where people walk: both pavements of every arm, the ring's pavement between the minis, the footpath."""
+    out = []
+    for i, m in enumerate(MINIS):
+        u, n = _pol(1, m), _pol(1, m + 90)
+        for side in (-1, 1):
+            a, b = u * 74 + n * 9.0 * side, u * 170 + n * 9.0 * side
+            out.append([a, b] if (i + side) % 2 else [b, a])
+        a1, a2 = m + 16, MINIS[(i + 1) % 5] - 16 + (360 if MINIS[(i + 1) % 5] < m else 0)
+        arc = [_pol(R_RING + 1.25, a) for a in np.linspace(a1, a2, 12)]
+        out.append(arc if i % 2 else arc[::-1])
+    for k_ in range(5):                                  # the footpath round the green, both ways
+        a0 = MINIS[k_] + 20
+        arc = [_pol(FOOTPATH_R, a) for a in np.linspace(a0, a0 + 50, 10)]
+        out.append(arc if k_ % 2 else arc[::-1])
+    return out
+
+
+_WALK = None
+TOPS = [(236, 236, 232), (200, 60, 60), (90, 120, 60), (232, 120, 160), (150, 152, 158), (70, 90, 150),
+        (220, 180, 60), (150, 200, 230), (40, 40, 44)]
+HAIRS = [(60, 44, 30), (30, 26, 24), (180, 150, 90), (80, 60, 40), (200, 170, 110)]
+
+
+def walkers_on(v, t):
+    global _WALK
+    if _WALK is None:
+        rng = np.random.default_rng(12)
+        _WALK = []
+        for pts in _walk_paths():
+            p = np.array(pts, float)
+            for j in range(int(rng.integers(1, 3))):
+                _WALK.append((p, float(rng.uniform(1.0, 1.5)), float(rng.uniform(0, 200)),
+                              TOPS[int(rng.integers(0, len(TOPS)))], HAIRS[int(rng.integers(0, len(HAIRS)))],
+                              int(rng.integers(0, 3)) == 0))
+    for p, sp, off, top, hair, hood in _WALK:
+        seg = np.hypot(*(p[1:] - p[:-1]).T)
+        cum = np.concatenate([[0], np.cumsum(seg)])
+        d_ = (off + sp * t) % (2 * cum[-1])              # there and back
+        s_ = d_ if d_ < cum[-1] else 2 * cum[-1] - d_
+        k = max(0, min(int(np.searchsorted(cum, s_) - 1), len(p) - 2))
+        x, y = p[k] + (p[k + 1] - p[k]) * (s_ - cum[k]) / seg[k]
+        h = math.degrees(math.atan2(*(p[k + 1] - p[k])[::-1])) + (0 if d_ < cum[-1] else 180)
+        if v.visible(x, y, 3):
+            X.person(v, x, y, h, top, None if hood else hair, t + off, hood=top if hood else None)
+
+
+def ebike_at(n, t):
+    """The two teens: clockwise round the inside of the ring (the wrong way), weaving, far too fast (14 m/s)."""
+    a = 200 + math.degrees(t * 14.0 / EBIKE_R) + n * 22
+    w = 2.6 * math.sin(t * 2.7 + n * 1.9)
+    r = EBIKE_R + w
+    dr = 2.6 * 2.7 * math.cos(t * 2.7 + n * 1.9)        # weaving: the heading turns with it
+    x, y = _pol(r, a)
+    return x, y, a + 90 - math.degrees(math.atan2(dr, 14.0))
+
+
+def draw_people(pil, cam, t):
+    v = _MapView(pil, cam)
+    if v.enl < 1.05 and v.k / B.SS > 40:                # still close: the climb's start shows only the island
+        return
+    X.BURNT_AT = BURNT_AT
+    X.burnt_car(v)
+    walkers_on(v, t)
+    X.FIGHT_AT, X.FIGHT_DIR = FIGHT_AT, FIGHT_DIR
+    X.fight(v, t)
+    fr = int(round(t * FPS))
+    for x, y, hd, *_r, cid in traffic().get(fr, []):
+        if cid == MOPED_ID:
+            X.moped(_MapView(pil, cam, enl_cap=2.0), x, y, hd)
+    for n, (hood, top) in enumerate((((40, 40, 44), (40, 40, 44)), ((150, 152, 158), (150, 152, 158)))):
+        x, y, h = ebike_at(n, t)
+        X.ebike(v, x, y, h, hood, top, t)
+
+
 def flat_props(pil, cam, t):
     """The scroll, can and packet in house style for the flat aerial (tiny from up here)."""
     ss = B.SS
@@ -1199,17 +1570,20 @@ def flat_props(pil, cam, t):
 
 # ------------------------------------------------------------------------------------------------ the climb, shot 6
 def mix_flat(t):
-    """How far the near-real look has given way to the flat (Showstopper 5: crossed while fastest, 16.8-17.1)."""
-    return ease((t - 16.80) / 0.30)
+    """How far the near-real look has given way to the flat (Showstopper 5: crossed while fastest, MIX0-MIX1)."""
+    return ease((t - MIX0) / (MIX1 - MIX0))
 
 
 def flat_frame(t, cam):
     pil = B.canvas((118, 146, 86))
     aerial_flat(pil, cam, t)
     draw_cars(pil, cam, t)
+    draw_people(pil, cam, t)
     flat_props(pil, cam, t)
+    draw_vomit(pil, cam, flat=True)
+    draw_bag(pil, cam, flat=True)
     k, surf = man_at(t)
-    L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf])
+    L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=man_parts(k))
     d = dog_at(t)
     if d is not None:
         draw_dog(pil, cam, d)
@@ -1218,9 +1592,9 @@ def flat_frame(t, cam):
 
 def picture_raw(t):
     cam = cam_for(t)
-    if t < 16.80:
+    if t < MIX0:
         return near_real(t, cam)
-    if t >= 17.10:
+    if t >= MIX1:
         return flat_frame(t, cam)
     a = mix_flat(t)
     nr = near_real(t, cam)
@@ -1271,11 +1645,12 @@ def picture(t):
 
 
 # ------------------------------------------------------------------------------------------------ title
-TITLE_Y = 1160
-TITLE_X = 480                                    # the middle of TikTok's safe area (its buttons on the right)
+TITLE_Y = 1330                                   # below the roundabout now the view moved north (note 17)
+TITLE_X = 540                                    # centred on the frame (Sam, note 5); SWINDON sized to end before x 900
 RINGS = ((-150, -60, 300, 20, 230), (170, -40, 280, 200, 250), (0, 160, 330, 120, 200), (-60, -260, 230, 300, 210),
          (120, 260, 260, 40, 190))                          # (dx, dy, radius, start angle, sweep) in frame pixels
 GOLD = (226, 184, 118)
+BIG_PX = 132                                     # SWINDON's size: 706 px wide, centred, so it ends before x 900
 
 
 def _glow(layer, radius, strength):
@@ -1286,23 +1661,24 @@ def _glow(layer, radius, strength):
 
 
 def title(img, t):
-    """The teaser's end card over the drifting roundabout: the picture dims (17.45-18.3, half way: the teaser goes
-    to black), gold rings bloom on the 17.45 hit and drift, "The Elder Scrolls VI" and its rule fade in (18.5-19.5),
+    """The teaser's end card over the drifting roundabout: the picture dims a little, slowly (Sam, note 4: it went too
+    dark too fast), gold rings bloom as the camera lands (19.86 hit) and drift, "The Elder Scrolls VI" and its rule fade
+    in (20.3-21.3), centred and grander (note 5),
     SWINDON burns in letter by letter with a glowing edge (22-27, Sam 8 Nov) and cools to dull bronze (29)."""
-    if t < 17.45:
+    if t < CLIMB1:
         return img
     w, h = img.size
     k = w / 1080
-    dim = 0.55 * ease((t - 17.45) / 0.85)
+    dim = 0.26 * ease((t - CLIMB1) / 2.5)
     img.alpha_composite(Image.new('RGBA', img.size, (8, 6, 4, int(255 * dim))))
     cy = TITLE_Y * k
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
-    bloom = ease((t - 17.45) / 1.0)
-    flash = math.exp(-((t - 17.75) / 0.35) ** 2)
+    bloom = ease((t - CLIMB1) / 1.0)
+    flash = math.exp(-((t - CLIMB1 - 0.3) / 0.35) ** 2)
     for i, (ox, oy, r, a0, sw) in enumerate(RINGS):
         rr = r * (0.72 + 0.28 * bloom) * k
-        spin = (t - 17.45) * (3 + i) * (1 if i % 2 else -1)
+        spin = (t - CLIMB1) * (3 + i) * (1 if i % 2 else -1)
         a = int(255 * min(1.0, 0.25 + 0.75 * bloom) * (0.55 + 0.45 * flash))
         cx_, cy_ = TITLE_X * k + ox * k, cy + oy * k
         d.arc([cx_ - rr, cy_ - rr, cx_ + rr, cy_ + rr], a0 + spin, a0 + spin + sw * (0.4 + 0.6 * bloom),
@@ -1310,21 +1686,30 @@ def title(img, t):
     img.alpha_composite(_glow(lay, 7 * k, 2.6 + 2.5 * flash))
     img.alpha_composite(_glow(lay, 2 * k, 1.4))
     img.alpha_composite(lay)
-    fs = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(52 * k))
-    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(150 * k))
+    fs = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(66 * k))   # grander (note 5)
+    try:
+        fs.set_variation_by_name('SemiBold')
+    except Exception:
+        pass
+    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(BIG_PX * k))
     try:
         fb.set_variation_by_name('Bold')
     except Exception:
         pass
-    a_s = ease((t - 18.5) / 1.0)
+    a_s = ease((t - 20.3) / 1.0)
     if a_s > 0:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         d = ImageDraw.Draw(lay)
-        d.text((TITLE_X * k, cy - 120 * k), 'The Elder Scrolls VI', font=fs, fill=(214, 176, 112, int(255 * a_s)), anchor='mm',
-               stroke_width=max(1, int(2 * k)), stroke_fill=(24, 18, 12, int(255 * a_s)))
-        half = 240 * k * ease((t - 18.8) / 0.9)
-        d.line([TITLE_X * k - half, cy - 78 * k, TITLE_X * k + half, cy - 78 * k], fill=(214, 176, 112, int(220 * a_s)),
-               width=max(1, int(2 * k)))
+        d.text((TITLE_X * k, cy - 126 * k), 'The Elder Scrolls VI', font=fs, fill=(226, 188, 120, int(255 * a_s)),
+               anchor='mm', stroke_width=max(1, int(3 * k)), stroke_fill=(24, 18, 12, int(255 * a_s)))
+        half = 330 * k * ease((t - 20.6) / 0.9)
+        d.line([TITLE_X * k - half, cy - 80 * k, TITLE_X * k + half, cy - 80 * k], fill=(214, 176, 112, int(220 * a_s)),
+               width=max(1, int(3 * k)))
+        for sg in (-1, 1):                               # small diamonds at the rule's ends
+            ex_, ey_, r_ = TITLE_X * k + sg * half, cy - 80 * k, 7 * k
+            if half > r_:
+                d.polygon([(ex_ - r_, ey_), (ex_, ey_ - r_), (ex_ + r_, ey_), (ex_, ey_ + r_)],
+                          fill=(226, 188, 120, int(230 * a_s)))
         img.alpha_composite(_glow(lay, 5 * k, 0.9))
         img.alpha_composite(lay)
     if t >= 22.0:
@@ -1398,7 +1783,7 @@ def frame_image(t):
 def draw_order(t):
     """Rule 57: what picture(t) draws, back to front."""
     s = shot_of(t)
-    if s[0] in '1234' or t < 17.10:
+    if s[0] in '1234' or t < MIX1:
         out = ['ground', 'litter', 'CAN']
         if scroll_cover(t) < 1.0:
             out.append('SCROLL')
@@ -1434,7 +1819,7 @@ def _fx_glint(img):
 def _fx_burn(img):
     """SWINDON mid-burn (24.3 s) alone: the letters, their hot edge and glow."""
     k = img.width / 1080
-    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(150 * k))
+    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Cinzel-Variable.ttf'), int(BIG_PX * k))
     burn(img, 24.3, fb, TITLE_X * k, (TITLE_Y + 40) * k, k)
 
 
@@ -1457,7 +1842,7 @@ def checks():
     """Plan checks (seconds): the traffic never passes through itself; the shots follow the sound's hits."""
     faults = traffic_faults()
     for name, a, b in SHOTS[1:]:
-        if not any(abs(a - h) < 0.02 for h in HITS + (16.50,)):    # 16.50: the teaser's cut to black
+        if not any(abs(a - h) < 0.02 for h in HITS + (CLIMB0,)):   # CLIMB0: no cut, the camera starts to climb
             faults.append(f'shot {name} starts at {a} s, off the sound\'s hits')
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
@@ -1527,14 +1912,14 @@ def check_sheet(out, times, labels=None):
 
 
 def _sheet_frame(t):
-    """A sheet tile; under 4 s it carries the Hook Text as finish.py lays it (HOOK: y 1240)."""
+    """A sheet tile; under 4 s it carries the Hook Text as finish.py lays it (HOOK's y and x)."""
     B.SS = 1
     im = frame_image(t).convert('RGBA')
     if 0.5 <= t < HOOK[1].get('until', 4.0):
         import tempfile
         import hook_text as HT
         path = os.path.join(tempfile.mkdtemp(), 'hook.png')
-        HT.card(1080, 1920, HOOK[0], HOOK[1]['y'], path)
+        HT.card(1080, 1920, HOOK[0], HOOK[1]['y'], path, x_mid=HOOK[1].get('x'))
         im.alpha_composite(Image.open(path).convert('RGBA').resize(im.size))
     return im.convert('RGB').resize((270, 480), Image.LANCZOS)
 
