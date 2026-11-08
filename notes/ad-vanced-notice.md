@@ -1,13 +1,13 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 74 (acting list on the check sheet), 59 (pre-flight before every render; the two long shots named), 81 (one fluid body: the arm round the driver), 82 (Hook Text pops at 0.5 s)
-- **Done (8 Nov):** the film built; animatic 1 sent, Sam: good; notes 33-41 done (cut to the close-up at 15.5 s, speaks at once; arm over the driver's shoulders; driver further right, glaring up-left, angrier, neck drawn once; pointing fingers from Power Crime Action; no three-quarter turn); animatic 2 sent.
-- **Next:** Opus medium: Sam's notes on animatic 2; then his recordings (Sonnet: file as `source/audio/ad-vanced-notice-N.m4a`) and the sounds (crackle, explosion, splashes).
-- **Needs Sam:** notes on animatic 2; recordings of lines 1-8; the rest of the script after "This guy."; whether the study swivel keeps its three-quarter frame.
-- **Read:** this file (Where things stand, notes 33-41, Acting); `source/ad_vanced_notice.py` MAP.
-- **Open rule requests:** none. (Sam keeps asking for models: he overrode to Sonnet for animatic 2.)
-- **For Claude:** film `source/ad_vanced_notice.py` (`keys`, `final --small --faults-named`: long shots cliff 11.0 s and gas 9.3 s are named). The driver's neck: `neck_lean` in views/burnham. Arm round: `_arm_over`. Finger: `_point_hand` (Power Crime Action's). Finish: `finish.py CLEAN OUT --film ad_vanced_notice`.
+- **Rules that bite next:** 74 (acting list), 81 (one fluid body), 40 (new scene: list its elements before building), 51 (likeness pack for new faces? none: the officers are masked)
+- **Done (8 Nov):** notes 42a-d, f (flag whole, portrait clear and detailed, swivel hands and chair, his usual hands, walk acting); new scene's brief rows 29-33 written; turned-heads plan written (42e).
+- **Next:** Sam's answers; then Opus high: the turned-heads build (own chat), and the Minnesota street scene (set, four officers, the man) planned and built; then animatic 3.
+- **Needs Sam:** questions 13-19 (chat of 8 Nov, copied below); recordings of lines 1-9; R3.
+- **Read:** this file (Where things stand, notes 42, Turned heads, Screenplay continues); `guides/kit-catalogue.md` people rows.
+- **Open rule requests:** R3 (no unmeant overlaps in a flat set).
+- **For Claude:** film `source/ad_vanced_notice.py`; study swivel `_fists`, `_in_study(j, yaw)`; walk gestures `WALK_ACTING`; portrait and flag in `ad_vanced_notice_sets.py` (`_fireplace`, `_flag`).
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -184,6 +184,27 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 41a | gas station | | A few pixels of non-connection at the arm and Vance's collar | done: the sleeve's end sat a few pixels below his own shoulder top and then overlapped his white shirt. Now it ends on his jacket shoulder at the height measured from his drawing every frame, so the line is one. Seen before (40) |
 | 41b | gas station | | Remove the three-quarter pose from the turn | done: his walk-in turn is now the series' standard snap, side on to front on in one frame. (The swivel in the study is the kit's own turn, which Sam asked for: untouched; say if it should lose its three-quarter frame too.) Lost: the in-between turn frames |
 | 41c | film | | Animatic 2 | done: sent (29.5 s, 1.3 MB, silent) with its check sheet; two long shots named (cliff 11.0 s, gas 9.3 s); a meant hand exception recorded (his hand drawn on the driver's shoulder). Made on Sonnet at Sam's override (8 Nov) |
+| 42a | study | 0.00 | The flag is chopped in places: should be a complete flag folded over the desk | done: its see-through fold shadows were drawn straight onto the flag, which cut see-through holes in it, so the desk showed in brown slits. Now the shadows are laid over the cloth: one whole flag. New kind |
+| 42b | study | 0.00 | The portrait clips into the clock: why did that pass? Add detail | done: why: the clock's top is 1.70 m up the wall, the frame started at 1.56 m; no check tests one painted thing against another in a flat set, and my tick of the set list didn't look. Now the frame starts at 1.80 m; the gentleman has a face (eyes, brows, nose, mouth, cheeks), a curled wig, cravat, lapels, gilt buttons, a red drape. Rule proposal R3 below. New kind |
+| 42c | study | 0.33 | His arm twisted round his back, a finger in the air, the chair gone: why? | done: why: the kit's swivel holds a steeple (pointing hands), so from behind the near arm showed as a finger in the air; and in the back three-quarter view the kit sorts the chair back behind him, so it vanished. Now plain round hands in his lap through the swivel, and with his back to us the whole chair is drawn in front of him. New kind |
+| 42d | study | 1.00 | Two sausage fingers: just his usual hands | done: the same steeple, its pointing hands now Power Crime's finger. Plain round hands now. New kind |
+| 42e | all films | 0.50 | Neither the side nor the three-quarter view looks like him: a different draw style, the eyes different in each pose; a problem throughout the project: needs a serious fix | proposed: a build of its own (below, "Turned heads"). Not done in this round |
+| 42f | cliff | | Hand and arm acting for the walk: his arms hang static | done: an open hand out, palm up, on "haven't gone well"; a hand to his heart on "concerns"; the open hand on "need" as before. Added: both gestures (acting list rows 2-3) |
+
+## Turned heads (note 42e): the plan, for Sam's yes
+Why they fail: the front head is each person's own measured face (patriots4 layout: their eyes, brows, nose, beard, drawn the cast's way); the side and three-quarter heads come from one generic drawing in `views.head_view` that only borrows the hair colour and beard kind, with its own eye shape. So turning him swaps in a different face. The fix: draw the side and three-quarter heads FROM the same face design (the same eye shape, lids, brows, beard shapes, nose and mouth, moved and foreshortened round the head), for every cast built on the measured faces, checked side by side against the front on a turnaround sheet (and photos of the person in profile where we have them). A build of its own: Opus, high effort, its own chat; then this film's swivel and walk-in use it.
+
+## Screenplay continues (Sam, 8 Nov): the brief as a checklist
+| # | from the brief (word for word) | done? |
+|---|------|------|
+| 29 | A Minnesota street. | |
+| 30 | Four ICE officers kick and punch a Hispanic man curled up into a ball at their feet. | |
+| 31 | Vance stands to the left of them. Smiling at us. | |
+| 32 | We zoom in on his face. | |
+| 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | |
+
+Rule requests: R3 (proposed 8 Nov, waiting for Sam): in a flat painted set, no painted object may overlap another unless it is meant to (a clock in front of a portrait, a chair against a wall), checked from each object's box; the set file lists its meant overlaps.
+
 
 Rules written: R1 is rule 81 in the rulebook (Sam: yes, 8 Nov). R2 is rule 82 (Sam: Y, 8 Nov): the Hook Text pops in 0.5 s into the film; `guides/tiktok-design.md` points at it; `hook_text.py` starts at 0.5 s with a 0.2 s pop (60% → 108% → 100%), tested on the clip. Its check is a kit test for knees and elbows; the shoulder join is looked at by hand on the cast sheet (an automatic seam test is not built).
 

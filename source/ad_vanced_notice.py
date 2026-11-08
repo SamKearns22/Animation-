@@ -268,13 +268,26 @@ SEAT = sitting.Seat('office', desk=sitting.Desk(), back_top=440, col=ST.CHAIR,
                     top=ST.mix(ST.CHAIR, (255, 255, 255), 0.12))   # note 27: the kit's swivel chair, oxblood leather
 
 
-def _in_study(j):
+def _in_study(j, yaw=0.0):
     """The kit chair drawn, the kit desk not (the set paints its own); the painted desk top between his body and his
-    forearms, so they rest on it (rule 78)."""
+    forearms, so they rest on it (rule 78). With his back to us the whole chair goes in front of him (note 42: at 0.33 s
+    the kit sorted its back behind him and it vanished; its seat and base are behind the desk anyway)."""
     j['pre'] = []
-    j['mid'] = [lambda p, j2, view: SEAT.draw(p, view, j, 'mid'),
+    away = abs(((yaw + 180) % 360) - 180) > 95
+    if away:
+        j['chair_draw'] = lambda *a, **k: None
+    j['mid'] = [lambda p, j2, view: (SEAT.draw(p, view, j, 'pre') if away else None, SEAT.draw(p, view, j, 'mid')),
                 lambda p, j2, view: p.img.alpha_composite(ST.study_desktop())]
     return j
+
+
+def _fists(spec):
+    """His usual round hands through the swivel (note 42: the steeple's pointing fingers showed as a finger in the
+    air at 0.33 s and two sausage fingers at 1.0 s), resting in his lap."""
+    for side, a in spec.get('arms', {}).items():
+        a['shape'] = 'fist'
+        a['hand'] = (a['hand'][0] + (40 if side == 'R' else -40), a['hand'][1] + 60, a['hand'][2] - 40)
+    return spec
 
 
 def study_j(t):
@@ -283,8 +296,9 @@ def study_j(t):
     sp = AC.VANCE
     if t < T['fold']:
         spec = sitting.swivel(sp, SEAT, _ramp(t, T['swivel'], T['fold']))
-        return _in_study(sitting.realize(sp, SEAT, spec)), spec['yaw'], spec['head_yaw']
-    a = sitting.realize(sp, SEAT, sitting.spec_steeple(sp, SEAT))
+        _fists(spec)
+        return _in_study(sitting.realize(sp, SEAT, spec), spec['yaw']), spec['yaw'], spec['head_yaw']
+    a = sitting.realize(sp, SEAT, _fists(sitting.spec_steeple(sp, SEAT)))
     b = sitting.realize(sp, SEAT, sitting.spec_hands_folded(sp, SEAT))
     k = _ease(_ramp(t, T['fold'], T['fold'] + 0.4))
     j = moves.mix_poses(a, b, k)
@@ -303,6 +317,12 @@ def study(t):
 
 
 # ---------------------------------------------------------------------------------------------- shot 2: the cliff
+WALK_ACTING = [   # (arm, line, word, until, hand target in his own units): the acting list's walk, lines 2-3
+    ('R', 2, "haven't", lambda: L[2]['end'] + 0.1, (150.0, 250.0, 110.0)),   # an open hand out, palm up: "I know..."
+    ('L', 3, 'concerns', lambda: L[3]['end'] + 0.35, (-25.0, 175.0, 95.0)),  # a hand to his heart: "your concerns"
+]
+
+
 def cliff_at(t):
     """(world x, y, joints): walking slowly at the lens from CLIFF_FROM (already mid-stride at the cut), stopping at
     his mark on "need" (acting 4), one open hand coming up to chest height; then still, never looking round."""
@@ -316,6 +336,11 @@ def cliff_at(t):
         j = moves.mix_poses(moves.gait(sp, T['stop'] - T['cut2'] + 0.37, STROLL), V.standing(sp),
                             _ease(_ramp(t, T['stop'], T['stop'] + 0.35)))
         x, y = ST.VANCE_MARK
+    for side, ln, word, until, tgt in WALK_ACTING:       # note 42: hand and arm acting as he walks (not hanging)
+        g = _bump(t, word_at(ln, word) - 0.35, until(), 0.35, 0.4)
+        if g > 0.01:
+            w0 = j['wr' + side]
+            V.arm_to(j, side, tuple(a + (b - a) * g for a, b in zip(w0, tgt)), 'down', 'palm')
     h = _bump(t, word_at(4, 'need') - 0.2, L[4]['end'] + 0.5, 0.35, 0.4)   # the open hand, chest height
     if h > 0.01:
         V.arm_to(j, 'R', (60 + 70 * h, 330 - 150 * h, 40 + 50 * h), 'down', 'palm')   # beside his chest, not at us

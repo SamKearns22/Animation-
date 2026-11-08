@@ -58,7 +58,7 @@ def shrink(im):
 class Pen:
     """Draws in 1080 x 1920 coordinates onto an SS-sized image: flat fills, one ink line."""
     def __init__(self, im, ss=SS):
-        self.d, self.ss = ImageDraw.Draw(im, 'RGBA'), ss
+        self.d, self.ss, self.im = ImageDraw.Draw(im, 'RGBA'), ss, im
 
     def _p(self, pts):
         return [(x * self.ss, y * self.ss) for x, y in pts]
@@ -260,17 +260,43 @@ def _fireplace(pen):
         pen.poly(_wall_box(x - 0.014, top + 0.025, x + 0.014, top + 0.22), (196, 160, 70), 2)
         pen.poly(_wall_box(x - 0.03, top + 0.2, x + 0.03, top + 0.23), (196, 160, 70), 2)
         pen.poly(_wall_box(x - 0.012, top + 0.23, x + 0.012, top + 0.38), (244, 240, 226), 2)
-    # a portrait in a gilt frame over it (an anonymous gentleman: nobody real)
-    pen.poly(cut(_wall_box(0.7, 1.56, 1.4, 2.62), 1.2, 60), GOLD, LW)
-    pen.poly(cut(_wall_box(0.75, 1.61, 1.35, 2.57), 1.0, 61), GOLD_D, 2)
-    pen.poly(cut(_wall_box(0.78, 1.64, 1.32, 2.54), 1.0, 62), (58, 46, 36), 2)
-    sx, sy = _wall(1.05, 1.64)
+    # a portrait in a gilt frame over it (an anonymous gentleman: nobody real), its foot clear above the clock's top
+    # (1.70 m: Sam, 8 Nov, it clipped into the clock), painted in some detail (Sam: "add some detail")
+    f0, f1 = 1.80, 2.86
+    pen.poly(cut(_wall_box(0.72, f0, 1.38, f1), 1.2, 60), GOLD, LW)
+    pen.poly(cut(_wall_box(0.77, f0 + 0.05, 1.33, f1 - 0.05), 1.0, 61), GOLD_D, 2)
+    pen.poly(cut(_wall_box(0.8, f0 + 0.08, 1.30, f1 - 0.08), 1.0, 62), (58, 46, 36), 2)
     k = WALL_PPM
-    pen.poly([(sx - 0.24 * k, sy), (sx - 0.2 * k, sy - 0.36 * k), (sx - 0.08 * k, sy - 0.46 * k), (sx + 0.08 * k, sy - 0.46 * k),
-              (sx + 0.2 * k, sy - 0.36 * k), (sx + 0.24 * k, sy)], (40, 32, 44), 2)            # dark coat
-    pen.poly([(sx - 0.05 * k, sy - 0.46 * k), (sx + 0.05 * k, sy - 0.46 * k), (sx, sy - 0.3 * k)], (236, 230, 214), 2)
-    pen.ell(sx, sy - 0.58 * k, 0.1 * k, 0.13 * k, (232, 226, 214), 2)                          # powdered wig
-    pen.ell(sx, sy - 0.56 * k, 0.065 * k, 0.09 * k, (214, 170, 140), 2)                        # face
+    pen.poly([_wall(0.8, f0 + 0.08), _wall(0.8, f1 - 0.08), _wall(0.98, f1 - 0.08), _wall(0.86, f0 + 0.5),
+              _wall(0.9, f0 + 0.08)], (120, 34, 34), 2)                                  # a red drape behind him
+    for gx, gy in ((0.84, f1 - 0.12), (1.26, f1 - 0.12), (0.84, f0 + 0.12), (1.26, f0 + 0.12)):   # the frame's corners
+        cx_, cy_ = _wall(gx, gy)
+        pen.ell(cx_, cy_, 0.018 * k, 0.018 * k, (232, 196, 96), 1.2)
+    sx, sy = _wall(1.05, f0 + 0.08)
+    P = lambda x, y: (sx + x * k, sy - y * k)
+    pen.poly([P(-0.22, 0), P(-0.19, 0.32), P(-0.08, 0.42), P(0.08, 0.42), P(0.19, 0.32), P(0.22, 0)], (40, 32, 44), 2)  # coat
+    pen.poly([P(-0.08, 0.42), P(-0.03, 0.42), P(-0.06, 0.0), P(-0.12, 0.0)], (60, 50, 66), 1.4)        # its lapels
+    pen.poly([P(0.08, 0.42), P(0.03, 0.42), P(0.06, 0.0), P(0.12, 0.0)], (60, 50, 66), 1.4)
+    for by in (0.08, 0.16, 0.24):                                                         # gilt buttons
+        bx_, by_ = P(-0.075, by)
+        pen.ell(bx_, by_, 0.012 * k, 0.012 * k, (220, 180, 80), 1.0)
+    pen.poly([P(-0.06, 0.43), P(0.06, 0.43), P(0.04, 0.3), P(0.0, 0.26), P(-0.04, 0.3)], (240, 236, 222), 1.6)  # cravat
+    for side in (-1, 1):                                                                   # the wig's side curls
+        for j in range(3):
+            cx_, cy_ = P(side * 0.105, 0.5 - j * 0.045)
+            pen.ell(cx_, cy_, 0.035 * k, 0.026 * k, (228, 222, 210), 1.4)
+    hx_, hy_ = P(0, 0.58)
+    pen.ell(hx_, hy_ - 0.04 * k, 0.095 * k, 0.07 * k, (232, 226, 214), 1.8)                   # the wig's crown
+    pen.ell(hx_, hy_, 0.065 * k, 0.088 * k, (222, 182, 150), 1.8)                            # the face
+    for ex in (-0.025, 0.025):
+        e = P(ex, 0.6)
+        pen.ell(e[0], e[1], 0.008 * k, 0.006 * k, (40, 34, 30), 0)                             # eyes
+        pen.line([P(ex - 0.016, 0.618), P(ex + 0.016, 0.62)], (110, 90, 80), 1.4)               # brows
+    pen.line([P(0.0, 0.595), P(0.006, 0.56), P(-0.004, 0.555)], (150, 100, 80), 1.4)            # nose
+    pen.line([P(-0.018, 0.535), P(0.0, 0.53), P(0.018, 0.535)], (150, 70, 70), 1.6)             # a thin, stern mouth
+    c1, c2 = P(-0.035, 0.555), P(0.035, 0.555)
+    pen.ell(c1[0], c1[1], 0.012 * k, 0.008 * k, (226, 160, 140), 0)                           # rosy cheeks
+    pen.ell(c2[0], c2[1], 0.012 * k, 0.008 * k, (226, 160, 140), 0)
 
 
 def _chair(pen):
@@ -420,9 +446,14 @@ def _flag(pen):
                 sx, sy = front(x, v)
                 pen.poly(star(sx, sy, 0.019 * ppm), WHITE, 0)
     # fold shadows: flat darker wedges in the valleys, widening to the hem
-    for x in (-0.52, -0.34, -0.17):
+    shade = Image.new('RGBA', pen.im.size, (0, 0, 0, 0))   # (Sam, 8 Nov: drawn straight onto the flag, the see-
+    sp = Pen(shade, pen.ss)                                  # through shadows cut holes in it: the desk showed
+    for x in (-0.52, -0.34, -0.17):                          # through. Now laid OVER the cloth, one whole flag)
         a, b = front(x, 0.2), front(x, hoist - 0.03)
-        pen.poly([(a[0] - 3, a[1]), (a[0] + 3, a[1]), (b[0] + 26, b[1]), (b[0] - 26, b[1])], (40, 0, 20, 34), 0)
+        sp.poly([(a[0] - 3, a[1]), (a[0] + 3, a[1]), (b[0] + 26, b[1]), (b[0] - 26, b[1])], (40, 0, 20, 255), 0)
+    sh = np.asarray(shade).copy()
+    sh[..., 3] = (sh[..., 3].astype(np.uint16) * 40 // 255).astype(np.uint8)
+    pen.im.alpha_composite(Image.fromarray(sh, 'RGBA'))
     # one outline round the whole drape
     outline = [top(x, 0) for x in xs] + [front(x_end, on_top)] + \
               [front(x, hem[i]) for i, x in list(enumerate(xs))[::-1]] + [front(x_hoist, on_top)]
