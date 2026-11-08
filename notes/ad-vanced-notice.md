@@ -1,13 +1,14 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 40 (the street scene: list its elements for Sam before building), 83 (no unmeant overlaps in a flat set: give the street SET_BOXES), 81 (one fluid body), 74 (acting list)
-- **Done (8 Nov):** notes 42-43 (flag, portrait, swivel hands and chair, walk acting, swivel snaps back-to-front); rule 83 written and tested; Sam's answers to 13-20 recorded (note 43).
-- **Next:** fresh chat, Opus high: (1) Vance's side and three-quarter faces drawn from his own front design (Turned heads, below; just Vance, Sam Q13); (2) the Minnesota street scene: elements list for Sam (rule 40), then the set, four masked ICE officers, the man curled up (some blood, Q18), Vance left smiling, push in on line 9; then the check sheet and animatic 3.
-- **Needs Sam:** the street's element list when it comes; recordings of lines 1-9.
-- **Read:** this file (Where things stand, notes 42-43, Turned heads, Screenplay continues); `guides/kit-catalogue.md` people rows; `source/views.py` head_view and `source/ad_vanced_notice_cast.py` (Vance's head).
+- **Rules that bite next:** 40 (street elements: wait for Sam's yes before building), 83 (the street's SET_BOXES), 74 (line 9's acting)
+- **Done (8 Nov):** note 44: Vance's turned faces from his own front design (`turnhead.py`), the swivel's turning frames back; street elements list, line 9 acting and questions 21-25 sent.
+- **Next:** fresh chat, Opus high, once Sam answers 21-25 and approves the elements: build the street (set, SUV, four officers, the curled man via `lying.py`, the beating via `moves.punch`/`kick`, blood, push in); then the check sheet and animatic 3 (Opus medium).
+- **Needs Sam:** yes or trims on the street elements; answers 21-25; recordings of lines 1-9.
+- **Read:** this file (Where things stand, note 44, Street elements, Acting line 9, Questions 21-25); `guides/kit-catalogue.md` people rows (Met officers in `power_crime_cast.py`, `lying.py`); rulebook 40, 74, 83.
 - **Open rule requests:** none.
-- **For Claude:** film `source/ad_vanced_notice.py` (swivel snap in study_j, note 43); `setcheck.py` (rule 83); turned-head build goes in views.head_view via the cast's own face for Vance (`beard_turned` is the stopgap).
+- **For Claude:** Vance's turned heads: `ad_vanced_notice_cast.vance_turned` + `VANCE_PROFILE` (hooked into `V.head_view`); sheet `ad_vanced_notice_cast.py turn OUT`; the film's `study_j` uses the kit swivel again. The street goes in `ad_vanced_notice_sets.py` (new place) and `ad_vanced_notice.py` (shot after `gas`).
+
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
 All flat paintings, one per camera; no 3D (rule 39): no camera moves round anything.
@@ -204,6 +205,37 @@ Why they fail: the front head is each person's own measured face (patriots4 layo
 | 31 | Vance stands to the left of them. Smiling at us. | |
 | 32 | We zoom in on his face. | |
 | 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | |
+
+
+## Street elements (rule 40: for Sam to approve or trim before building, 8 Nov)
+Shot 5, straight after "This guy." About 6.5 s; the film becomes about 36 s.
+
+| # | element | how it moves |
+|---|---|---|
+| 1 | A Minneapolis residential street in winter (Q16): ploughed road with grey slush ruts, waist-high snowbanks along the kerb, a shovelled pavement, two-storey wooden houses (clapboard, front porches, steep roofs under snow), bare trees, power lines, flat grey sky | a still painting, one locked camera; light snow falling (Q22) |
+| 2 | An unmarked black SUV behind the officers: tinted windows, no badges, a back door open, red and blue lights flashing in the grille (Q21) | lights flash |
+| 3 | Four ICE officers as in real raids (Q17): dark tactical vests with POLICE and ICE patches, black masks up to the eyes, dark caps, gloves, boots; four different builds and clothes under the vests (a grey hoodie, a dark jacket, cargo trousers, jeans) | the beating |
+| 4 | The man (invented, Hispanic, about 30): curled into a ball on the snow at their feet, arms over his head, knees up; a work jacket, jeans, work boots | flinches on every blow |
+| 5 | The beating, flat cartoon (Q18): two kick, two punch down at him, taking turns, about 3 blows a second, a small jolt on each | already going at the cut; never stops |
+| 6 | Some blood (Q18): a small red patch on the snow by his head and a few drops | grows a little |
+| 7 | Vance to the left of them, front on, hands loose, big grin at us | still, then acts line 9 |
+| 8 | The camera: wide on all six, then a slow push in on his face through line 9 (Q19), ending on his head and shoulders; the officers slide out of frame on the right | the push |
+| 9 | No sounds: only his voice (the script names none) | |
+
+Added (Sam to OK): the SUV and its lights (Q21). Added: falling snow (Q22).
+
+## Acting, line 9 (rule 74; my picks, Sam's answers to 23-24 decide)
+| line | who | face | body | lands on |
+|---|---|---|---|---|
+| 9a "I can't believe that my boss would do this." | Vance | mock shock: brows up, grin never leaves | a hand to his chest | hand on "believe" |
+| 9b "Between you and me, he can be a super jerk." | Vance | confiding, a wink-free half-smile | leans towards the lens, a hand at the side of his mouth | lean on "between"; a little shrug on "jerk" |
+
+## Questions sent to Sam (8 Nov)
+21. The black SUV with flashing lights behind the officers (Y), or no vehicle (N)?
+22. Light snow falling (Y), or a still grey day (N)?
+23. "I can't believe my boss would do this": fake shock, still grinning, hand to chest (1), or genuinely puzzled, brows up, no grin (2)?
+24. "Between you and me": leans in towards us, hand at the side of his mouth (Y)?
+25. Is "super jerk" the last line, so the sign-off follows (Y), or does the script go on (N)?
 
 Rules written: R3 is rule 83 (Sam: Y, 8 Nov): no unmeant overlaps in a flat painted set; check `source/setcheck.py` from the set's `SET_BOXES` and `SET_MEANT`, run in the film's checks() (tested: it catches the old portrait position).
 
