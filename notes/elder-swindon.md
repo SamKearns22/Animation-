@@ -3,7 +3,7 @@
 ## Where things stand
 - **Rules that bite next:** 8 (rehearse the dog and the zoom-out, the scroll reveal, the title burn as short clips first), 3 (roundabout benchmark against Sam's two photos), 39 (3D only for the scroll and can).
 - **Done (8 Nov):** plan; answers 1-9; teaser stills; the Staffie added; composition sheet sent and approved (Sam: "Y to all": glowing burn-in on SWINDON, the man stays out cold, brindle Staffie); lying.py's `lie` mended.
-- **Spent against the estimate:** 0.9 of 9.0 (ground 0.4, scroll 0.2, can 0.1, dog 0.1, roundabout 0.1); nothing over.
+- **Spent against the estimate:** 6.0 of 9.0 (ground 1.2, scroll 0.6, can and packet 0.4, face 0.5, dog 0.5, zoom-out 0.6, roundabout 1.1, traffic 0.7, title 0.4); nothing over yet.
 - **Next:** build, Opus high, NEW chat: "Build Elder Scrolls Swindon – read notes/elder-swindon.md". Order: rehearsal clips (dog + zoom-out, scroll reveal, title burn), then the film from the template, check sheet, animatic offer.
 - **Needs Sam:** nothing until the rehearsal clips.
 - **Read:** this file (Plan, Showstopper, Brief); guides/satire.md (Start, One set, Render); kit-catalogue (Effects).
@@ -149,3 +149,32 @@ Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3
 1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
 2. The man stays out cold while the dog tugs (only his leg jerks). Y/N
 3. The Staffie: 1 = brindle (brown, darker stripes, white blaze); 2 = blue-grey.
+
+## Sound for the final (Sam, 8 Nov: "how do we manage the audio?")
+The trailer's own recording is what TikTok's automatic matching listens for: any copy of it (cut, sped up, pitched)
+is still that recording, and making a copy slip past the matcher is not something I'll do. Proposed, my pick first:
+1. **Our own score, built on the same hits** (wind and a low drone; a swell and a bell on the glint, 7.79; deep booms
+   on each hit; a big hit as the camera stops, 17.45; a choir-like pad under the title; a metallic shimmer as
+   SWINDON burns; the last boom 27.19). Original notes, no tune copied, so nothing to match. About 0.6% of a week
+   (the Yuletide trailer's score tool, `horror_trailer_music.py`, as the start).
+2. Post with our score, and in the TikTok app swap in the official teaser sound from TikTok's own library, if it is
+   there (TikTok licenses its library for use on TikTok): only on TikTok, and lined up by hand on the phone.
+3. Keep the trailer's sound in the file: likely muted or blocked by the automatic check.
+The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
+
+## Decisions (build, 8 Nov)
+- 24 frames a second (not the satire 12): the slow glides judder at 12 (as Flying Whales).
+- Grass blades live in the world (were re-scattered on screen each frame: they would have shimmered once the camera moved).
+- His face in the close shots: the house-style head laid on its cheek over the body (lying.draw's face read poorly face down).
+- Shot 2 looks at the scroll from the side, so it lies across the frame as the teaser's staff does.
+- The packet comes to rest past the scroll's tip (the wind blows that way); it was by his side on the composition sheet.
+- The can's words on two rows near its top end (the buried end cut "EXPORT" to "RT").
+- The lamp post's long shadow (low sun) crosses his legs in shot 4 and leads the eye in the climb.
+- The roundabout redrawn from Sam's three new photos: grass and kerbed islands between the arms, terraced streets,
+  a white-roofed shed (CLOSING DOWN on its roof, inside TikTok's safe area), a car park, the County Ground.
+- The title moved left to the middle of TikTok's safe area and made smaller (SWINDON ran under the buttons).
+- The dog's charge starts 1.5 m out (it came from 2.3 m and was on screen for only a few frames before it bit).
+- Shot 6 is 12.6 s, over pre-flight's 8 s: chosen (Sam, Q4: no extra shots). Named to Sam.
+- The trailer's peaks went over full scale by 1.1 dB: brought just under (nothing else changed).
+- Pre-flight keeps each drawn frame (`~/.cache/filmcache/elder_swindon-memo/`, keyed by the code): the checks and the
+  small animatic share it. Nothing in this film draws through the people checks (no views or burnham people).
