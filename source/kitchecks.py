@@ -13,9 +13,18 @@ From what the audit already sees (scene(t) and the set; run inside audit.py's pa
               FREE_MOVES = [(thing, t0, t1, why)] says it flies, falls or slides (Poker Mon: the pot slid by itself)
   resting     a hand held still for half a second keeps 3 cm clear of everything it is not meant to touch
               (TOUCHES, ALLOWED_CONTACTS) (Poker Mon: the resting hand in the chip stacks)
+  rests       RESTS = [(forearm, surface, t0, t1, why)] (rule 78), copied from the arms the film's notes list as
+              resting: the forearm ('Andy.forearmL', * wildcards) and its elbow never go more than 1 cm below the
+              surface (a thing's name: 'desk'), the elbow lies on it (no more than 3 cm above) and over it (not off
+              its edge). Flat films test the same list on the drawing (below)
 From the drawing (pre-flight's pass over every 3rd frame; every views.py person drawn is logged):
   facing      a head turned no more than 95 degrees from its body; seen from behind, nothing held out in front
               drawn over the back (Prepper notes 11, 12, 16)
+  rests       rule 78 for flat films: each RESTS arm, as drawn, against 'desk' (the sitting kit's desk in the
+              pose), 'armrest', 'seat' or a number (a height above the floor, person units: Ad-Vanced Notice's
+              painted desk is 500): the forearm and elbow never more than 4 units (about 1 cm) below the surface,
+              the elbow on it (no more than 12 units above) and, on a desk, over its top. An arm the sitting kit
+              poses resting that RESTS leaves out is named, so it is never left unchecked in silence
 From the film's lists:
   marks       all_marks() -> [dict(at=(x, y, z), t=, kind=)]: every bullet hole and scorch on a real surface (a
               wall, a thing, the floor or ceiling of a room), never in an opening (Prepper note 18)
@@ -40,6 +49,14 @@ STILL = 0.01                  # metres a frame: a hand moving less than this is 
 REST = 0.5                    # seconds still before a hand counts as resting
 MOVED = 0.002                 # metres a frame: a prop moving more than this is moving
 MAX_TURN = 95                 # degrees: a head turned further from its body looks backwards
+SINK = 0.01                   # metres: a resting forearm or elbow this far below its surface has sunk into it (rule 78)
+SINK_U = 4.0                  # the same in person units (flat films; about 1 cm)
+FLOAT_U = 12.0                # person units: a resting elbow further above its surface than this is not resting on it
+SURFACES = ('desk', 'armrest', 'seat')   # flat films' surfaces, found in the pose (a number: a height above the floor)
+
+
+def _flat_surface(x):
+    return isinstance(x, (int, float)) or x in SURFACES
 
 
 def _hit(pattern, thing, part=None):
@@ -73,6 +90,7 @@ class SceneChecks:
         self.film = film
         self.touches = list(getattr(film, 'TOUCHES', ()))
         self.free = list(getattr(film, 'FREE_MOVES', ()))
+        self.rests = [r for r in getattr(film, 'RESTS', ()) if not _flat_surface(r[1])]
         self.fps = film.FPS
         self.found = {}                    # (kind, names) -> [(t, text)]
         self.last_props = {}               # prop name -> (frame, pos)
@@ -168,6 +186,53 @@ class SceneChecks:
                                     f'{t:.2f} s ({shot}): {n}\'s resting {s.part} sits {max(g, 0) * 100:.0f} cm from '
                                     f'{o} (keep 3 cm clear, or list the touch in TOUCHES)')
 
+        # rests (rule 78): a listed resting forearm and elbow never below the surface, the elbow on it and over it
+        for arm, surf, t0, t1, why, *_ in self.rests:
+            if not _in(t, t0, t1):
+                continue
+            fs = [(n, s) for n, th in things.items() for s in th.solids
+                  if s.part.startswith('forearm') and _hit(arm, n, s.part)]
+            ts = [th for n, th in things.items() if _hit(surf, n)]
+            if not fs or not ts:
+                self._fault('untested', ('RESTS', arm, surf), t,
+                            f'{t:.2f} s ({shot}): the resting-arm check found no {arm} or no {surf} in the scene, so '
+                            f'it checked NOTHING (RESTS: {why}). Look at this moment by eye at full size, or fix '
+                            f'the name, before the animatic')
+                continue
+            for n, s in fs:
+                deep, top_el = self._under(s, ts)
+                if deep > SINK:
+                    self._fault('rests', (f'{n}.{s.part}', surf), t,
+                                f'{t:.2f} s ({shot}): {n}\'s resting {s.part} goes {deep * 100:.0f} cm below the '
+                                f'top of {surf} (rule 78: never below the surface; RESTS: {why})')
+                if top_el is None:
+                    self._fault('rests', (f'{n}.{s.part}', surf, 'off'), t,
+                                f'{t:.2f} s ({shot}): {n}\'s resting elbow ({s.part}) is off the edge of {surf}, '
+                                f'with nothing under it (rule 78; RESTS: {why})')
+                elif s.a[1] - s.r - top_el > CLEAR:
+                    self._fault('rests', (f'{n}.{s.part}', surf, 'up'), t,
+                                f'{t:.2f} s ({shot}): {n}\'s resting elbow ({s.part}) floats '
+                                f'{(s.a[1] - s.r - top_el) * 100:.0f} cm above {surf} (rule 78: the weight on it; '
+                                f'RESTS: {why})')
+
+    @staticmethod
+    def _under(s, surfaces):
+        """How far a forearm capsule (a: the elbow, b: the wrist; y up) goes below the top of the surfaces' solids
+        under it (metres, 0 if never), and the top under the elbow (None: nothing under it)."""
+        import clipcheck as CC
+        L = float(np.linalg.norm(s.b - s.a))
+        n = max(2, int(L / 0.02) + 1)
+        deep, top_el = 0.0, None
+        for k in range(n):
+            p = s.a + (s.b - s.a) * (k / (n - 1))
+            for th in surfaces:
+                for lo, hi in zip(th.slo, th.shi):
+                    if lo[0] <= p[0] <= hi[0] and lo[2] <= p[2] <= hi[2]:
+                        deep = max(deep, hi[1] - (p[1] - s.r))
+                        if k == 0:
+                            top_el = hi[1] if top_el is None else max(top_el, hi[1])
+        return deep, top_el
+
     def _hidden(self, s, owner, targets, things, cam):
         """What stands between a hand and the lens (a 3D camera), or None."""
         import clipcheck as CC
@@ -229,7 +294,11 @@ def install():
         except Exception:
             where = ''
         if isinstance(j2, dict) and '_drawn' in j2:
-            DRAWN.append((where, sp.get('name', 'someone'), dict(j2['_drawn'])))
+            d = dict(j2['_drawn'])
+            r = _rest_record(joints, t)
+            if r:
+                d['_rest'] = r            # rule 78: the arms' heights against the surfaces in the pose (rests())
+            DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
             POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
         return j2
@@ -256,6 +325,103 @@ def facing(records):
             seen.add((name, 'back'))
             out.append(f'FACING: {where}: seen from behind, what {name} holds is drawn over the back (first of these)')
     return out
+
+
+def _rest_record(j, t):
+    """For rests(): where each elbow and wrist is (body frame, y down, after the lean) and the tops of the surfaces
+    the pose knows of (the sitting kit's desk, armrests, seat), as plain numbers (pre-flight's workers send them back).
+    None for a pose with no arms to test."""
+    if not isinstance(j, dict) or not all(k in j for k in ('elL', 'wrL', 'elR', 'wrR')):
+        return None
+    try:
+        import views as V
+        import sitting as SK
+        lean, bob = j.get('lean', 0.0) or 0.0, j.get('bob', 0.0) or 0.0
+        rec = dict(t=t, bob=bob, floor=SK.FLOOR, arms={}, tops={}, posed={}, on_desk={})
+        for s in 'LR':
+            rec['arms'][s] = (tuple(V.leaned(j['el' + s], lean)), tuple(V.leaned(j['wr' + s], lean)))
+        seat = j.get('seat')
+        if seat is not None:
+            rec['tops']['seat'] = SK.FLOOR - seat.h - bob
+            if getattr(seat, 'arms', None):
+                rec['tops']['armrest'] = SK.FLOOR - seat.h - bob - seat.arms
+            desk = getattr(seat, 'desk', None)
+            if desk is not None:
+                rec['tops']['desk'] = desk.surface(bob)
+                _, inv = desk.xf(j)
+                for s in 'LR':                           # the elbow over the desk's top, not off its edge
+                    x, _, z = inv(*rec['arms'][s][0])
+                    rec['on_desk'][s] = abs(x) <= desk.width and desk.front <= z <= desk.front + desk.depth
+        for s, a in ((j.get('spec') or {}).get('arms') or {}).items():
+            if a and (a.get('rest') is not None or a.get('elbow_rest') is not None):
+                rec['posed'][s] = True                   # the kit posed this forearm resting on something
+        return rec
+    except Exception:
+        return None
+
+
+def rests(film, records):
+    """Rule 78 on flat films, from DRAWN records: each RESTS arm whose surface is 'desk', 'armrest', 'seat' or a
+    height (person units above the floor): its forearm and elbow never below the surface, the elbow on it and (a
+    desk) over it. An arm the sitting kit posed resting that RESTS leaves out is named."""
+    listed = [r for r in getattr(film, 'RESTS', ()) if _flat_surface(r[1])]
+    found, seen, unlisted = {}, set(), {}
+    cm = lambda u: u * _unit_m() * 100
+    for where, name, d in records:
+        r = d.get('_rest')
+        if not r:
+            continue
+        t = r['t']
+        where = where or f'{t:.2f} s'
+        for s in 'LR':
+            covered = [e for e in listed if _in(t, e[2], e[3]) and _hit(e[0], name, 'forearm' + s)]
+            if r['posed'].get(s) and not covered and not any(
+                    _in(t, e[2], e[3]) and _hit(e[0], name, 'forearm' + s) for e in getattr(film, 'RESTS', ())):
+                unlisted.setdefault((name, s), where)
+            for arm, surf, t0, t1, why, *_ in covered:
+                seen.add((arm, surf, t0, t1))
+                top = (r['floor'] - surf - r['bob']) if isinstance(surf, (int, float)) else r['tops'].get(surf)
+                if top is None:
+                    found.setdefault(('none', name, s, surf), []).append(
+                        (t, f'{where}: the resting-arm check found no {surf} in {name}\'s pose, so it checked '
+                            f'NOTHING (RESTS: {why}). Give the height as a number, or check by eye at full size'))
+                    continue
+                import sitting as SK
+                line = top - SK.SLEEVE                   # where a forearm's centre line lies when it rests on it
+                el, wr = r['arms'][s]
+                deep = max(el[1], wr[1]) - line          # y is down: more is lower
+                if deep > SINK_U:
+                    part = 'elbow' if el[1] >= wr[1] else 'wrist end of the forearm'
+                    found.setdefault(('below', name, s, surf), []).append(
+                        (t, f'{where}: {name}\'s resting {s} {part} goes {cm(deep):.0f} cm below the {surf} top '
+                            f'(rule 78: never below the surface; RESTS: {why})'))
+                if line - el[1] > FLOAT_U:
+                    found.setdefault(('up', name, s, surf), []).append(
+                        (t, f'{where}: {name}\'s resting {s} elbow floats {cm(line - el[1]):.0f} cm above the '
+                            f'{surf} (rule 78: the weight on it; RESTS: {why})'))
+                if surf == 'desk' and r['on_desk'].get(s) is False:
+                    found.setdefault(('off', name, s, surf), []).append(
+                        (t, f'{where}: {name}\'s resting {s} elbow is off the desk\'s edge, with nothing under it '
+                            f'(rule 78; RESTS: {why})'))
+    out = []
+    for hs in found.values():
+        span = f'{len(hs)} frames, to {max(h[0] for h in hs):.2f} s' if len(hs) > 1 else 'one frame'
+        out.append(f'RESTS: {hs[0][1]} ({span})')
+    if not hasattr(film, 'scene'):                       # a 3D film's scene checks test its own entries
+        for arm, surf, t0, t1, why, *_ in listed:
+            if (arm, surf, t0, t1) not in seen:
+                out.append(f'RESTS: COULD NOT TEST: no drawn frame between {t0} and {t1} s showed {arm} in a pose '
+                           f'the check can read, so it checked NOTHING (RESTS: {why}). Fix the name, or look by eye '
+                           f'at full size before the animatic')
+    for (name, s), where in unlisted.items():
+        out.append(f'RESTS: {where}: {name}\'s {s} forearm is posed resting on a surface, but RESTS does not list '
+                   f'it, so nothing checks it never sinks (rule 78): copy it in from the film\'s notes (first of these)')
+    return out
+
+
+def _unit_m():
+    import views as V
+    return V.M_PER_UNIT
 
 
 # ------------------------------------------------------------------------------------------------ from the lists
@@ -320,13 +486,14 @@ def run(film, drawn=None):
             F.CONTEXT['where'] = f'{shot} {t:.2f}s'
             draw(t)
         drawn = DRAWN[n0:]
-    return facing(drawn) + marks(film) + sounds(film)
+    return facing(drawn) + rests(film, drawn) + marks(film) + sounds(film)
 
 
 def main():
     film = importlib.import_module(sys.argv[1])
     import audit
-    fs = run(film) + [f for f in audit.check(film) if f.split(': ', 2)[1] in ('COULD NOT TEST', 'TOUCH', 'HIDDEN', 'HELD', 'RESTING')]
+    fs = run(film) + [f for f in audit.check(film) if f.split(': ', 2)[1] in ('COULD NOT TEST', 'TOUCH', 'HIDDEN', 'HELD', 'RESTING',
+                                                                                 'RESTING ARM')]
     print('\n'.join(fs) or 'kitchecks: clean')
 
 

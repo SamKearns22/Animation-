@@ -6,7 +6,7 @@ cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 ## Where things stand
 - **Rules that bite next:** 80 (front on: knees and lap show; no head dip on a rise), 78 (resting arms show weight), 42 (poses tested from every view).
 - **Done (8 Nov): part 2 built and checked** (`source/sitting.py`): cross legs both kinds, feet up and down (and a caught-out snap), perch on a chair's edge and on a desk's corner, slump (slow and a collapse), the swivel turn with the desk staying put; the through-things, back-on-the-chair and feet-on-their-surface checks (`sitting.py audit`: clean). Part-2 sheet, photo comparison and a moves video sent to Sam. The whole sitting kit is built.
-- **Next:** Sam's look at part 2 and his two questions (below, "Part 2: questions"); then the forearm-and-elbow check for rule 78 (next job B in `notes/next-jobs.md`: Opus, medium, new chat; type "Build the rule 78 check in kitchecks.py: forearm and elbow never below the surface the film's notes list as resting.").
+- **Next:** Sam's look at part 2 and his two questions (below, "Part 2: questions") (the rule 78 check is built: `kitchecks.rests`).
 - **Needs Sam:** a look at the part-2 sheet and moves video; questions 9-10.
 - **Read (next time):** `guides/figure-rig.md` s.4 (sitting line) and s.8; `source/sitting.py` MAP.
 - **Open rule requests:** none.
@@ -105,7 +105,7 @@ with a lean back and turns with a swivel. Films that already draw their own chai
 | no sink on a rise | front on, the head goes lower than its seated height while rising or sitting (Sam's note) | new |
 | balance on a rise | the hips leave the seat before the shoulders are over the feet (side on) | new |
 | the chair follows | the chair's recline or turn doesn't match the person's lean or facing | new |
-| hands and resting arms | rule 41 (a hand in every view) and rule 78 (forearms on the desk show weight, never sink) | exist / rule 78 check is next job B |
+| hands and resting arms | rule 41 (a hand in every view) and rule 78 (forearms on the desk show weight, never sink) | exist / rule 78 check built 8 Nov (`kitchecks.rests`) |
 | no twins | two seated people shift or blink in the same drawing | by hand on the check sheet |
 
 Proof for Sam: one labelled sheet of every pose from all five views (plus the chair types), and a short small clip

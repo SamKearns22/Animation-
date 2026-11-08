@@ -445,7 +445,7 @@ def report(film, recs, faults, offscreen, nframes, sub, secs, used=None):
 
 
 HEAD = {'untested': 'COULD NOT TEST', 'collision': 'PASSES THROUGH', 'pop': 'POPS', 'change': 'CHANGES DRAWING', 'jump': 'JUMPS',
-        'touch': 'TOUCH', 'hidden': 'HIDDEN', 'held': 'HELD', 'resting': 'RESTING'}
+        'touch': 'TOUCH', 'hidden': 'HIDDEN', 'held': 'HELD', 'resting': 'RESTING', 'rests': 'RESTING ARM'}
 
 
 def check_lines(faults):

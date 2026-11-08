@@ -9,7 +9,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). The "Hook Text names the story" rule: dropped (Sam, 7 Nov).
 
 ## Films
-- **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: built (part 1 and part 2, 8 Nov: `source/sitting.py`, `notes/sitting-kit.md`; rule 80); part-2 sheet and moves video sent, waiting on Sam's questions 9-10; (2) forearm-and-elbow check for rule 78 (Opus, medium), straight after (1). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
+- **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: built (part 1 and part 2, 8 Nov: `source/sitting.py`, `notes/sitting-kit.md`; rule 80); part-2 sheet and moves video sent, waiting on Sam's questions 9-10; (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (8 Nov): arms joined for every film (rule 81); sets built** (study, cliff and strait, close-up, gas
   station, tanker, pickup); sheets sent. Waiting on Sam: Y/N on the sets, the rest of the script. Next (fresh chat,
   Opus high): the showstopper. Notes: `notes/ad-vanced-notice.md`.

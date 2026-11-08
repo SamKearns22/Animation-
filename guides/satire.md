@@ -156,7 +156,9 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
 - **Checks (shared kit, `source/kitchecks.py`, run by pre-flight on every film; film-quality rule 13, 25 Oct):** a
   hand on what it touches every frame of the touch, and seen (nothing between it and the lens): list each touch in
   `TOUCHES = [(hand, thing, from, to, why)]`; a prop that moves has a hand on it unless `FREE_MOVES` says it flies,
-  falls or slides; a resting hand keeps 3 cm clear of everything it is not meant to touch (Poker Mon, note 62). They
+  falls or slides; a resting hand keeps 3 cm clear of everything it is not meant to touch (Poker Mon, note 62); every
+  arm the notes list as resting goes in `RESTS = [(forearm, surface, from, to, why)]` (rule 78: never below the
+  surface; flat films name 'desk', 'armrest', 'seat' or a height in person units; 3D films a thing). They
   run on the film's `scene(t)`, so a prop or hand a joke depends on must be in it (Prepper's tin and Andy's hand in
   shot 11). Never copy a check from a film file (Poker Mon's own `contact_check`, `hands_check`, `clearance_check` are
   for Poker Mon only: it has no `scene(t)`).

@@ -399,6 +399,7 @@ def main():
     F.CONTEXT['where'] = ''
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
+        problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
         import filmkit
         if incremental:                         # only the bodies in shots that hold a changed frame (a second round)
