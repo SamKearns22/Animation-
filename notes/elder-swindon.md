@@ -3,13 +3,15 @@
 ## Brief (Sam, 8 Nov) — checklist, tick against the film before the first animatic
 - [ ] Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s).
 - [ ] Opening: wind over **soil and patchy grass** (not sand), moody and near-real.
-- [ ] Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign). Sam is sending a reference picture (not received yet).
+- [ ] Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign). Reference: `references/elder-swindon/elder-scroll.jpg` (brass rod, scroll case in the middle, carved end caps, spiked tips, dark wrapped grips).
 - [ ] Nearby in the soil: a **discarded can of lager**, half buried.
 - [ ] A **half-unconscious man sprawled face down, drooling into the soil**.
 - [ ] A **discarded supermarket sandwich packet** ("maybe", my pick: in).
 - [ ] Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, with traffic moving round it.
 - [ ] Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**".
 - [ ] Our flat cartoon style for the roundabout; the opening as moody and realistic as possible, so the reveal lands.
+- [ ] **The joke** (Sam): Swindon is not fantastical or magical. It's drab, uninspired and full of chavs. Every shot after the zoom-out should sell that.
+- [ ] **Hook Text:** "Elder Scrolls reveals new location!" (exact wording)
 - [ ] Hook Text and the CranbriJoos sign-off (finish.py), as on every film.
 
 ## Reference
@@ -20,4 +22,4 @@
 - Where the soil patch is: likely the central island's grass, so the zoom-out reveals the drunk man is in the middle of the roundabout.
 
 ## Where things stand
-Rules that bite next: TBC at planning. Done: brief taken. Next: Opus, HIGH effort, new chat: "Plan Elder Scrolls Swindon — read notes/elder-swindon.md". Needs Sam: the Elder Scroll reference picture. Read: guides/satire.md, kit-catalogue.md. Open rule requests: none.
+Rules that bite next: TBC at planning. Done: brief taken. Next: Opus, HIGH effort, new chat: "Plan Elder Scrolls Swindon — read notes/elder-swindon.md". Needs Sam: switch to high effort. Read: guides/satire.md, kit-catalogue.md. Open rule requests: none.
