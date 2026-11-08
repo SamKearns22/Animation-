@@ -1,16 +1,16 @@
-# Sitting kit (plan 7 Nov; part 1 built 8 Nov, part 2 to come)
+# Sitting kit (plan 7 Nov; part 1 built 8 Nov, part 2 built 8 Nov)
 
 Sam, 7 Nov: "the full gamut of sitting animation": sit down, seated acting, stand up, feet up on a desk, lean back,
 cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 
 ## Where things stand
 - **Rules that bite next:** 80 (front on: knees and lap show; no head dip on a rise), 78 (resting arms show weight), 42 (poses tested from every view).
-- **Done (8 Nov): part 1 built and checked** (`source/sitting.py`): measured seats (office chair that reclines, low armchair, stool) and desk from all 5 views; poses upright, hands folded, lean in, lean back (2), armchair, stool; moves stand up (1.1 s, quick, weary), sit down (1.3 s), plonk, lean back, seated gestures, the moving hold; checks (`sitting.py audit`: clean). Rule 80 written. Sheet, photo comparison and a moves video sent to Sam.
-- **Next:** Sam's look at part 1; then part 2 (Opus, high effort, new chat): "Build the sitting kit, part 2, from notes/sitting-kit.md" (cross legs both kinds, feet up, perch on chair and desk, slump, swivel turn; through-things checks).
-- **Needs Sam:** a look at the sheet and the moves video; any notes.
-- **Read (part 2):** this file's sections C-E; `guides/figure-rig.md` s.4 (sitting line); `source/sitting.py` MAP.
+- **Done (8 Nov): part 2 built and checked** (`source/sitting.py`): cross legs both kinds, feet up and down (and a caught-out snap), perch on a chair's edge and on a desk's corner, slump (slow and a collapse), the swivel turn with the desk staying put; the through-things, back-on-the-chair and feet-on-their-surface checks (`sitting.py audit`: clean). Part-2 sheet, photo comparison and a moves video sent to Sam. The whole sitting kit is built.
+- **Next:** Sam's look at part 2 and his two questions (below, "Part 2: questions"); then the forearm-and-elbow check for rule 78 (next job B in `notes/next-jobs.md`: Opus, medium, new chat; type "Build the rule 78 check in kitchecks.py: forearm and elbow never below the surface the film's notes list as resting.").
+- **Needs Sam:** a look at the part-2 sheet and moves video; questions 9-10.
+- **Read (next time):** `guides/figure-rig.md` s.4 (sitting line) and s.8; `source/sitting.py` MAP.
 - **Open rule requests:** none.
-- **For Claude:** views hooks added: `j['dz']` (body travel), `j['chair_draw']`, `j['pre']`/`j['mid']` layers, `j['lap']` (thigh over shin, knee cap; knees over the jacket in a low seat); seated feet are never "raised" kicks. Swivel needs the desk in the world frame (it is in the body frame now). Gesture hands over a desk are lifted 55 above its top. No photo yet for lean back hands behind the head (Unsplash blocked; Commons search flaky).
+- **For Claude:** part-2 hooks: spec keys `ankle` {side: (x, height, chair z)}, `on`, `knee_pole`, `toe`, `foot_yaw`, `foot_roll`, `sole`, `hip_dy`, `cross`, `contact`, `roll` (chair travel), `give` (how much the chair back follows), `tail`, `head_lean`, `swivel`, `legs_over`; views: `shoe_frame`, j['cross'] (top leg drawn last and over the lap), j['legs_over'] (+ `legs_over_views`), j['arms_under'] (hands under a desk), j['head_lean'] (side views only; front uses head_dy); a leg folded tight on screen is drawn as thigh + shin + round knee (was inside out). `Desk(turn, x, z)`, `Desk.xf` (+inverse), `Desk.boxes`; `Seat('desk')`. Clips: `sitting.py clips2 OUT.mp4`; `sitting.py sheet OUT 2`, `refs OUT 2`.
 
 ## Sam's list (the brief, ticked when built and tested)
 | # | item | what it means here | built? | tested from every view? |
@@ -18,11 +18,12 @@ cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 | 1 | sit down | from standing in front of the seat, down onto it, settled | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
 | 2 | seated acting | talking, gesturing, reacting from a seat; the moving hold | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
 | 3 | stand up | from seated to standing, ready to walk | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
-| 4 | feet up on a desk | leaning back, heels on the desk top | | |
+| 4 | feet up on a desk | leaning back, heels on the desk top | part 2, 8 Nov (and feet down, caught-out snap) | yes (front, side clips; pose 5 views) |
 | 5 | lean back | trunk back against a reclining chair back | part 1, 8 Nov | yes (front, side clips; poses 5 views) |
-| 6 | cross legs | one leg over the other | | |
-| 7 | perch | sitting on the very edge (of a chair; of a desk: question 3) | | |
-| 8 | slump | sliding down in the seat, deflated | | |
+| 6 | cross legs | one leg over the other | part 2, 8 Nov: knee over knee, ankle on knee; cross and uncross | yes (front, side clips; poses 5 views) |
+| 7 | perch | sitting on the very edge (of a chair; of a desk: question 3) | part 2, 8 Nov: chair edge (and the scoot to it); desk corner (see question 9) | yes (front, side clips; poses 5 views) |
+| 8 | slump | sliding down in the seat, deflated | part 2, 8 Nov: slow (1.5 s) and collapse (0.4 s) | yes (front, side clips; pose 5 views) |
+| + | swivel turn | question 5 (Y): the villain's reveal | part 2, 8 Nov (0.8 s; the desk stays put, the head leads) | yes (front clip; the desk-still check) |
 
 ## What we have now (drawn on the sheet sent 7 Nov)
 - **One seated pose:** upright on a plain knee-height office chair, thighs level, feet flat, hands on the thighs.
@@ -138,3 +139,41 @@ of each move, sent in the chat; the pose gallery and kit catalogue get their row
 6. Build in two halves, the first being what Vance needs now? Y/N
 7. Reference photos: I find free photos of each pose; you send any you'd rather use? Y/N
 8. New rule 80, in the rulebook: "Anyone seated front on shows knees and lap, and rising or sitting never makes the head dip below its seated height." Y/N
+
+## Part 2 (8 Nov): what was built, and the choices made
+- **Knee over knee** (prim): the top thigh lies on the lower one just past its knee, the top calf hangs over the lower knee,
+  the top foot off the floor; both hands on the top knee. Front on the top leg is drawn over the lap.
+- **Ankle on knee** (the figure four, cocky): the top ankle on the lower thigh behind its knee, the top knee out wide,
+  the foot turned across, its sole forward; one hand on the raised shin, one on the lower knee.
+- **Feet up**: the chair pushed back 9 cm and reclined, hands behind the head, the left heel on the desk top, the right
+  ankle crossed over it; front on the soles face us. Our people's legs are short for a desk this high, so the knees stay
+  up a little to keep the calves clear of the desk's edge (the photo's legs are straight).
+- **Perch on the chair's edge** (eager): hips on the seat's front third, leaning in, feet drawn back, hands on the knees;
+  the back clear of the chair back. **Scoot to perch**: two hip shuffles (0.4 s).
+- **Perch on the desk's corner** (casual boss): see question 9. Built as: standing beside the desk's front end, the left
+  thigh up along the desk top, the knee just past its end, the shin hanging in front of it; the right leg standing; left
+  hand flat on the desk, right hand on the raised knee.
+- **Slump** (defeated): hips slid forward and down onto the tailbone, the back leaning against the chair (shoulders on
+  it, the lower back off it), the chair back giving less than the trunk leans, the head forward and down, hands limp
+  in the lap, legs out and splayed (the splay is what makes it read front on). Slow 1.5 s (breath out, shoulders drop
+  first, hips slide, head last) or a 0.4 s collapse with a bounce off the chair back.
+- **Swivel turn** (0.8 s): back to us, a small wind-up, he and the chair turn together through the drawn views, the head
+  a beat ahead, a lean-in settle facing us, fingers steepled. The desk stays put on screen (checked every drawing).
+- **Checks added** (every drawing of every pose and move): each foot on what it rests on (floor, desk top, the other
+  knee or shin, or clear of everything when dangling); no leg or shoe through the seat, the desk or the other leg (a
+  thigh may press the seat's front edge a little); the back resting on the chair back where the pose says (lean back,
+  feet up, slump, armchair), clear of it on a perch, never through it; a perch on the seat's front third; a slide down
+  the seat no deeper than the thigh allows; the chair back following the lean by the pose's amount; knees bending the
+  right way (now tested on the knee's hinge, so a raised or turned-out knee is judged fairly); the desk still in a swivel.
+- **Drawing fixes for every film:** a leg folded tight on screen (a figure four seen three-quarter) was drawn inside out
+  (a hollow outline); now thigh, shin and a round knee. Soles can be drawn (lighter, with a heel) when they face us.
+  Hands in the lap behind a desk are now under the desk, not over its front.
+- **Photos (rule 76):** feet up (two), ankle on knee (from behind), the desk-edge perch, the armchair crossed leg; none
+  found for the slump or a chair-edge perch (Wikimedia rate-limited the slump engraving).
+
+## Part 2: questions for Sam (8 Nov)
+9. Perch on a desk: our desk is higher than our people's hips (it's sized for seated arms), so sitting a bottom on its
+   edge would make him taller than when standing. I built it as one thigh up along the desk and the other leg standing
+   (it reads as perched side on, less so front on). Keep it? Y, or 1 = lower the desk for this pose only (a meeting table
+   height), 2 = I'll send a photo of what I want.
+10. Feet up: the knees stay a little bent (short legs, high desk). Fine? Y/N

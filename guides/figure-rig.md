@@ -101,7 +101,7 @@ Standing legs are straight in every view: a knee near full reach locks onto the 
   copy, `copy.deepcopy`); (2) anyone exactly square to the lens sits on the drawing's mirror line and can be drawn
   as a mirror image: nudge them 0.3 degrees (`MS.to_cam`, already built into the tools).
 - **Seated at a desk** (the protester): thighs under the desk, forearms over it, hands on the keyboard.
-- **Sitting (the sitting kit, 8 Nov): use `source/sitting.py` for anyone seated in a new film** (old films keep `moves.seated`). The seat and desk are measured once (`Seat`, `Desk`); poses and moves fit them. Front on, the knees and lap show and rising or sitting never dips the head below its seated height (rule 80). Standing up 1.1 s (feet step back first, hips lift into the lean); sitting down 1.3 s (bottom leads, slows before the seat, settles); a plonk 0.55 s. Plan, timings and references: `notes/sitting-kit.md`.
+- **Sitting (the sitting kit, 8 Nov): use `source/sitting.py` for anyone seated in a new film** (old films keep `moves.seated`). The seat and desk are measured once (`Seat`, `Desk`); poses and moves fit them. Front on, the knees and lap show and rising or sitting never dips the head below its seated height (rule 80). Standing up 1.1 s (feet step back first, hips lift into the lean); sitting down 1.3 s (bottom leads, slows before the seat, settles); a plonk 0.55 s. Part 2 (8 Nov): cross legs (knee over knee; ankle on knee), feet up on the desk (soles to us front on) and down, perch on a chair's edge or a desk's corner, slump, the swivel turn (the desk stays put: draw him at `spec['yaw']`). Legs are placed by their ankles (`ankle`, `on`: what each foot rests on) and checked against the seat, the desk and each other. Plan, timings and references: `notes/sitting-kit.md`.
 
 ## 5. Sets and props: one plan per place (see best-practice.md, 1.3)
 - Every location is built once and every shot is that set from another camera; props are part of the set, with
@@ -192,7 +192,7 @@ once floated between them.
 | Fingertips on the keyboard | patriots2 `check_on_keys` | a typing fingertip misses the keys |
 | Set pieces apart | `check_apart` (ward, ambulance, desk) | two listed outlines overlap |
 | Feet / seat contact | `check_feet_on`, `check_seated` | soles off the floor, hips off the seat |
-| Sitting kit | `sitting.py audit` (every pose and move) | hips off the seat, a foot off the floor or sliding while weighted, a leg that can't reach or a knee bent backwards, a resting forearm or elbow off its surface (rule 78), the chair not following a lean back, the head dipping on a rise (rule 80), hips up before the body is over the feet |
+| Sitting kit | `sitting.py audit` (every pose and move) | hips off the seat, a foot off the floor or sliding while weighted, a leg that can't reach or a knee bent backwards, a resting forearm or elbow off its surface (rule 78), the chair not following a lean back, the head dipping on a rise (rule 80), hips up before the body is over the feet; a foot off what it rests on (floor, desk top, the other knee) or a dangling foot touching down; a leg or shoe through the seat, the desk or the other leg; a gap behind the back where it should rest on the chair, or a back through it; a perch off the seat's front third; the desk moving in a swivel |
 | Captions | `preflight.py` | over 2 rows, 700 px or 42 characters a row; faster than ~200 words a minute |
 | Shot length | `preflight.py` | a shot over 8 s (flagged: fine when chosen) |
 | Duplicate recordings | `voices.py` | two files hold the same take |
