@@ -820,7 +820,13 @@ def man_draw(img, cam, t, beg_from=None, face=None):
     n = int(1500 * s) + 40
     c = Image.new('RGBA', (n, n), (0, 0, 0, 0))
     ny = n * 0.28                                                # his neck on the canvas
-    V.person(c, B.Cam(1.0, 540, 960), n / 2, ny, s, sp, 0.0, -90, man_j(t, e, beg))
+    import handcheck
+    was = handcheck.ACTIVE[0]
+    handcheck.ACTIVE[0] = False       # he is drawn on his own small canvas, turned afterwards: the hand check expects
+    try:                              # every person on the full frame; his hands looked at full size by hand (9 Nov)
+        V.person(c, B.Cam(1.0, 540, 960), n / 2, ny, s, sp, 0.0, -90, man_j(t, e, beg))
+    finally:
+        handcheck.ACTIVE[0] = was
     r = c.rotate(90, resample=Image.BICUBIC)                     # a quarter turn about the canvas middle:
     # (x, y) goes to (n/2 + y - n/2, n/2 - x + n/2). Placed by his BODY, not by whatever is lowest (Sam, 9 Nov: he
     # hovered: a hand reaching below him was set on the snow): the front of his chest (0.66 of the shoulders out, the
