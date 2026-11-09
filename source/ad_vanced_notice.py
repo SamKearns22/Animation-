@@ -71,6 +71,7 @@ LINES = [
     dict(n=9, audio='ad-vanced-notice-9', who='vance', est=7.7,
          text="I can't believe that my boss would do this. Between you and me, he can be a super jerk."),
 ]
+MA.RESTORE_TAIL |= {'ad-vanced-notice-5', 'ad-vanced-notice-9'}   # Sam, 9 Nov: the "t" of fault and the "k" of jerk were cut
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # time each line to its recording when there is one
     ln['_voice'] = None
@@ -286,6 +287,11 @@ def vance_mood(t):
     if t < T['cut2']:
         return 'neutral'
     if t < T['cut4']:
+        end5 = L[5]['start'] + L[5]['_stretches'][-1][1]      # the last sound of "fault" (Sam, 9 Nov, note 52): then his
+        if t >= end5 + 0.3:                                   # mouth closes (sincere: lips together) for 0.3 s, and then
+            return 'proud'                                    # he breaks into a wide smile
+        if t >= end5:
+            return 'sincere'
         return 'smile' if L[5]['start'] <= t and t >= word_at(5, 'fault') - 0.1 else 'sincere'
     if t >= T['cut5']:                            # the street: a big grin at us; fake outrage through 9a (Sam, 8 Nov,
         if L[9]['start'] - 0.15 <= t < word_at(9, 'Between') - 0.15:      # note 49); the confiding half-smile (9b)

@@ -588,6 +588,19 @@ def flinch(t):
     return out
 
 
+def knock(t):
+    """How far a blow has pushed his raised hand down (0-1): a ramp up over 0.14 s after each blow, easing off over
+    0.35 s (Sam, 9 Nov: the arm snapped; the body's own jolt, flinch(), stays instant)."""
+    out = 0.0
+    for o in OFFICERS:
+        th, last = _phase(t, o[5])
+        for h in (th, last):
+            u = t - h
+            if 0 <= u < 0.49:
+                out = max(out, u / 0.14 if u < 0.14 else math.exp(-(u - 0.14) / 0.15))
+    return out
+
+
 def blood(img, cam, t, t0):
     """Some blood (Q18): a small red patch on the snow by his head and a few drops, growing a little."""
     k, _ = man_body()
@@ -639,7 +652,11 @@ def plead(k, t, f=0.0):
     sh = k['shL']
     raised = sh + np.array([-0.16, 0.46, -0.3]) + tremble         # up over his shoulder, out towards us and them
     tgt = k['wrL'] * (1 - r) + raised * r
-    k['elL'], k['wrL'] = LY.limb(sh, tgt, LY.UPPER, LY.FORE, (0.2, -0.4, -1.0))
+    pole0 = k['elL'] - (sh + k['wrL']) / 2                        # which way his elbow points now, curled up:
+    pole0 = pole0 / (np.linalg.norm(pole0) + 1e-9)                # blended into the lifting arm's, so the bend never
+    pole1 = np.array([0.2, -0.4, -1.0]) / 1.1                     # flips (Sam, 9 Nov: the arm twisted impossibly)
+    pole = (1 - min(1.0, 3 * r)) * pole0 + min(1.0, 3 * r) * pole1
+    k['elL'], k['wrL'] = LY.limb(sh, tgt, LY.UPPER, LY.FORE, pole)
     tgt = k['wrR'] + np.array([0.0, 0.08 * r, -0.04 * r])
     k['elR'], k['wrR'] = LY.limb(k['shR'], tgt, LY.UPPER, LY.FORE, k['elR'] - (k['shR'] + k['wrR']) / 2)
     return k
@@ -663,7 +680,7 @@ def draw_group(img, cam, t, t0=0.0):
             k[nm] = k[nm] + np.array([0.0, 0.0, 0.02 * f])
         for nm in ('head', 'wrL', 'wrR', 'elL'):
             k[nm] = k[nm] + np.array([0.015 * f, 0.0, 0.0])
-    k = plead(k, t, f)
+    k = plead(k, t, knock(t))
     LY.draw(img, scam(cam), k, MAN, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
     for o in front:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))

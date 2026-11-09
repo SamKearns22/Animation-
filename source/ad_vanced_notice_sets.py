@@ -280,6 +280,8 @@ def _fireplace(pen):
     for by in (0.08, 0.16, 0.24):                                                         # gilt buttons
         bx_, by_ = P(-0.075, by)
         pen.ell(bx_, by_, 0.012 * k, 0.012 * k, (220, 180, 80), 1.0)
+    pen.poly([P(-0.036, 0.52), P(0.036, 0.52), P(0.05, 0.4), P(-0.05, 0.4)], (222, 182, 150), 1.8)       # his neck (Sam, 9 Nov)
+    pen.poly([P(0.01, 0.52), P(0.036, 0.52), P(0.05, 0.4), P(0.022, 0.4)], (200, 158, 128), 0)           # its shaded side
     pen.poly([P(-0.06, 0.43), P(0.06, 0.43), P(0.04, 0.3), P(0.0, 0.26), P(-0.04, 0.3)], (240, 236, 222), 1.6)  # cravat
     for side in (-1, 1):                                                                   # the wig's side curls
         for j in range(3):

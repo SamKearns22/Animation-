@@ -268,14 +268,45 @@ def smooth_tail(y):
 CACHE = {}
 
 
+RESTORE_TAIL = set()      # recordings whose last consonant the clean-up ate (a film adds its names; Sam, 9 Nov)
+
+
+def restore_tail(raw, x):
+    """The last consonant back: where the clean-up (smooth_tail, denoise) pressed the hiss or burst of a final "k" or
+    "t" down to nothing, the original is put back (cross-faded over 5 ms), then the last 0.45 s of speech has its
+    high band (above 3 kHz) doubled, so the consonant reads on a phone speaker (Ad-Vanced Notice, Sam, 9 Nov:
+    "the k in jerk is cut off", "the t at the end of fault")."""
+    from scipy.signal import butter, sosfiltfilt
+    hop = SR // 100
+    end = pauses(raw, 0.12)[-1][1]
+    a0, a1 = int(max(0.0, end - 0.45) * SR), min(len(x), int((end + 0.3) * SR))
+    hi = butter(2, 3000, 'high', fs=SR, output='sos')
+    out = x.copy()
+    rh, xh = sosfiltfilt(hi, raw[:len(x)]), sosfiltfilt(hi, x)
+    w = np.zeros(len(x))
+    for i in range(a0, a1 - hop, hop):                    # 10 ms frames where the original has much more than ours
+        r, c = np.sqrt(np.mean(rh[i:i + hop] ** 2)), np.sqrt(np.mean(xh[i:i + hop] ** 2))
+        if r > 0.004 and r > 3.0 * c:
+            w[i:i + hop] = 1.0
+    k = int(0.005 * SR)
+    w = np.convolve(w, np.ones(k) / k, 'same')
+    out = out * (1 - w) + raw[:len(x)] * w
+    lift = np.zeros(len(x))
+    lift[int(max(0.0, end - 0.25) * SR):int((end + 0.15) * SR)] = 1.0
+    lift = np.convolve(lift, np.ones(k * 4) / (k * 4), 'same')
+    return out + 1.0 * lift * sosfiltfilt(hi, out)
+
+
 def line(name):
     """A recording, cleaned and set to the shared line loudness."""
     if name not in CACHE:
-        x = load(os.path.join(HERE, 'audio', name + '.m4a'))
-        x = debird(dehum(x))
+        raw = load(os.path.join(HERE, 'audio', name + '.m4a'))
+        x = debird(dehum(raw))
         if name in LOW_BIRDS:
             x = debird_low(x)
         x = edges(smooth_tail(denoise(x)))
+        if name in RESTORE_TAIL:
+            x = restore_tail(raw, x)
         CACHE[name] = x * 10 ** ((LINE_LUFS - lufs(x)) / 20)
     return CACHE[name]
 
