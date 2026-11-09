@@ -5,10 +5,10 @@
   by how bright the take is, a de-esser on s-sounds), and long loud stretches (Ad-Vanced Notice's explosion, 4 dB over)
   are evened in the master. Before/after clip of Ad-Vanced Notice line 9 sent to Sam (17 s, 3.5 MB, not on GitHub).
 - **Sam, 9 Nov, on the clip: "It's better, definitely."** Kept as built. Job D closed.
-- **Next:** write S10 on Sam's Y (Sonnet). No other job queued.
-- **Needs Sam:** rule S10 below: Y or N.
+- **Next:** nothing queued.
+- **Needs Sam:** nothing.
 - **Read:** this file's Job D section only.
-- **Open rule requests:** S10 (below), waiting for Sam.
+- **Open rule requests:** none (S10 was already the riding rule, so the voices rule is S11, written 9 Nov).
 - **For Claude:** `mossad_audio.polish` (in `line()`, before `restore_tail`) and `even_out` (in `master` and
   `limit_check`), both under `MA.POLISH` (True). Strength knobs at the top of the softer-voices block: WARMTH_DB,
   EDGE_TARGET, EDGE_CUT, SHELF_DB, DEESS_MAX_DB. `python3 source/mossad_audio.py soft NAME...` prints each take's edge and
@@ -31,7 +31,7 @@
   sits about 1.5 dB over the rest (was 4); the whole film comes out about 1 dB quieter (-17.7 LUFS, limiting still
   under 3 dB). Word timing moves 0.05 s at most (under a frame at 12 fps); `ad_vanced_notice.py check`: audit clean.
   Ad-Vanced Notice is posted, so it is not re-made; the polish applies from the next film (and any re-render).
-- **Rule proposal S10 (waiting for Sam, goes in the rulebook's "Notes, review and sound"):** "Every film's voices get the
+- **Rule S11 (written 9 Nov; was proposed as S10, goes in the rulebook's "Notes, review and sound"):** "Every film's voices get the
   softer polish (a little warmth; the 2-5 kHz edge and the treble eased, more on a bright take; the s-sounds tamed),
   and long loud stretches are evened in the master; it is turned off only if Sam asks (Sam, 9 Nov, Ad-Vanced Notice:
   'too brash and abrasive'). | automatic (`mossad_audio.POLISH`, on by default; `mossad_audio.py soft` shows each take

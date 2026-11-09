@@ -109,6 +109,7 @@ the end by section.
 | S3 | No added room tone. The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
 | S4 | ffmpeg joins always at fps=24. | by hand |
 | S9 | One sound per hit, only with it in frame. | `kitchecks.sounds` |
+| S11 | Every film's voices get the softer polish (a little warmth; the 2-5 kHz edge and the treble eased, more on a bright take; the s-sounds tamed), and long loud stretches are evened in the master; turned off only if Sam asks (Sam, 9 Nov, Ad-Vanced Notice: "too brash and abrasive"). | automatic: `mossad_audio.POLISH` (on by default); `mossad_audio.py soft NAME` shows each take before and after |
 
 ## Working with Sam (written in CLAUDE.md, by section; listed here for their checks)
 | CLAUDE.md section | Rules (old numbers) | Check |
