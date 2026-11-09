@@ -7,8 +7,10 @@
   check is the busiest catcher on record (4 films), found only in commit messages; no check sheet is ever kept.
 - **Next:** Job F (film ledger), new chat, **Opus, medium effort** (build plan table). Type: "Job F: build the film
   ledger. Read notes/next-jobs.md Where things stand and Build plan F, and the cut list in notes/job-e-measurements.md."
-- **Needs Sam:** Q1 move finished films' notes to the archive (Y?); Q2 Job G order: hands, shoulder seam, every view
-  (behind, three-quarter, mirrored), then lying (Y?); Q3 the ledger keeps every round's check results and check sheet text (Y?).
+- **Sam's answers (9 Nov): Y Y Y.** Q1 done: Terfwarts, MidTerminal, Islamocommunism and sitting-kit notes moved to
+  `notes/archive/` (Elder Swindon stays until Sam says posted). Q2: Job G order is hands, shoulder seam, every view
+  (behind, three-quarter, mirrored), then lying. Q3: Job F's ledger keeps every round's check results and check sheet text.
+- **Needs Sam:** nothing.
 - **Read:** this file's Build plan (F row); `notes/job-e-measurements.md` cut list.
 - **Open rule requests:** none.
 - **For Claude:** costwatch WEEK_USD still to calibrate; FRESH 90k fits the measured 80k start. Job E scripts were

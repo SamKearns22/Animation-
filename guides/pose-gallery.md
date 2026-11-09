@@ -26,7 +26,7 @@ pose still passes wherever this table says it does.
 | hands on table | `posegallery.hands_on_table(sp, h)` | Patriots 4, 1 Nov | front, three-quarter, side | three-quarter back, behind | both palms on a table edge `h` metres high in front; from behind the table is beyond him, so the hands are hidden |
 | pointing both ways | `posegallery.point_both(sp)` | Patriots 4, 1 Nov | all 5 views | | both arms flung out, one finger at each of two people |
 
-**Seated poses (the sitting kit, `source/sitting.py`; plan and notes `notes/sitting-kit.md`).** Sheet: `python3 source/sitting.py sheet OUT.jpg`; photos beside them: `sitting.py refs OUT.jpg`; checks: `sitting.py audit`.
+**Seated poses (the sitting kit, `source/sitting.py`; plan and notes `notes/archive/sitting-kit.md`).** Sheet: `python3 source/sitting.py sheet OUT.jpg`; photos beside them: `sitting.py refs OUT.jpg`; checks: `sitting.py audit`.
 
 | pose | call | from | passes (rule 41) | avoid | notes |
 |---|---|---|---|---|---|
