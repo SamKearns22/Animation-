@@ -1297,13 +1297,18 @@ def aerial_flat(pil, cam, t):
             d.line([P(p + gd * 4 - along * 2.6), P(p + gd * 11 - along * 2.6)], fill=(96, 110, 74), width=lw(0.3))
         poly([a - across * 4 + sdir * 5, b - across * 4 + sdir * 5, b + across * 4 + sdir * 5,
               a + across * 4 + sdir * 5], (74, 92, 58), outline=False)
-    for run, face, roof in rows:                                            # the roofs: one terrace, party walls
-        a, b = run[0] - along * 2.6, run[-1] + along * 2.6
-        poly([a - across * 4, b - across * 4, b + across * 4, a + across * 4], roof)
-        d.line([P(a), P(b)], fill=tuple(int(v * 0.72) for v in roof), width=ink)   # the ridge
-        for p in run[1:]:
-            d.line([P(p - along * 2.6 - across * 4), P(p - along * 2.6 + across * 4)],
-                   fill=tuple(int(v * 0.8) for v in roof), width=max(1, ink // 2))
+    for ri, (run, face, roof) in enumerate(rows):                           # the roofs (Sam, animatic 3: not one
+        for hi, p in enumerate(run):                                         # long block): each house its own roof,
+            if (hi + ri) % 7 == 6:                                           # a little different in tone, outlined,
+                continue                                                     # an alley every 7th, a chimney each
+            tone = 0.88 + 0.12 * (((hi * 7 + ri * 3) % 5) / 4)
+            col = tuple(int(min(255, v * tone)) for v in roof)
+            a, b = p - along * 2.5, p + along * 2.5
+            poly([a - across * 4, b - across * 4, b + across * 4, a + across * 4], col)
+            d.line([P(a), P(b)], fill=tuple(int(v * 0.72) for v in col), width=ink)        # the ridge
+            ch = p - along * 2.1 + across * 1.6 * face
+            poly([ch - along * 0.5 - across * 0.4, ch + along * 0.5 - across * 0.4, ch + along * 0.5 + across * 0.4,
+                  ch - along * 0.5 + across * 0.4], (96, 74, 64))                          # a chimney
     # the big white-roofed shed (Sam's photos), no lettering (Sam, notes 1 and 18), its car park
     x0, y0, x1, y1 = SHED
     poly([(x0 + 6, y0 + 4), (x1 + 6, y0 + 4), (x1 + 6, y1 + 4), (x0 + 6, y1 + 4)], (74, 92, 58), outline=False)
@@ -1631,8 +1636,7 @@ def draw_people(pil, cam, t):
     v = _MapView(pil, cam)
     if v.enl < 1.05 and v.k / B.SS > 40:                # still close: the climb's start shows only the island
         return
-    X.BURNT_AT = BURNT_AT
-    X.burnt_car(v)
+    # (the burnt-out car, note 16, removed: Sam, animatic 3: it doesn't register)
     walkers_on(v, t)
     X.FIGHT_AT, X.FIGHT_DIR = FIGHT_AT, FIGHT_DIR
     X.fight(v, t)
@@ -1762,7 +1766,7 @@ def title(img, t):
         return img
     w, h = img.size
     k = w / 1080
-    dim = 0.26 * ease((t - CLIMB1) / 2.5)
+    dim = 0.10 * ease((t - CLIMB1) / 2.5)               # (Sam, animatic 3: less greying out; was 0.26, first 0.55)
     img.alpha_composite(Image.new('RGBA', img.size, (8, 6, 4, int(255 * dim))))
     cy = TITLE_Y * k
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))

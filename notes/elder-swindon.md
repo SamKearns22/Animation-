@@ -127,13 +127,16 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 40 | (Note 13) Shot 6: two groups of men scuffling on a path | yes: on the footpath, top left |
 | 41 | (Note 14) Two hooded teenagers on e-bikes, far too fast, irresponsible | yes: the wrong way round inside the ring, weaving, 14 m/s |
 | 42 | (Note 15) A food delivery moped, plain box | yes: one of the traffic, red, no logo |
-| 43 | (Note 16) A burnt-out car on the green by the stadium | yes: by the stadium's corner |
+| 43 | (Note 16) A burnt-out car on the green by the stadium | removed (Sam, animatic 3: it doesn't register) |
 | 44 | (Note 17) Framing: the 19.83 s view moved north by 8% of the frame (blue line at the bottom) | yes: END_MY 60 -> 35.1 |
 | 45 | (Animatic 2) No pink cheek blotches | yes |
 | 46 | (Animatic 2) Shot 1: less time on his face | yes: face reached by 4.4, cut at 6.57 (about 2.5 s on it; was 3.9) |
 | 47 | (Animatic 2) Shot 3 a few beats longer; the EGG MAYO packet lands near the scroll | yes: 11.43-15.08 (was 1.2 s, now 3.65 s); lands beside the scroll on the 13.86 hit |
 | 48 | (Animatic 2) The dog shot a beat longer | yes: the climb starts 17.45 (was 16.90): 1.7 s of the dog clamped before it |
 | 49 | (Animatic 2, and notes 2 before it) The roundabout as in Sam's photo and drone videos: minis inside one grey carriageway round the central island, splitter islands between them, cars on the road round the minis | yes: rebuilt from the video; every car checked on the road, every frame |
+| 50 | (Animatic 3) Less greying out of the aerial | yes: dims to 10% (was 26%) |
+| 51 | (Animatic 3) Lines in the housing so the terraces aren't one long block | yes: each house its own roof, tone varied, an alley every 7th, chimneys |
+| 52 | (Animatic 3) Hold on the aerial view a few more seconds | asked Sam how (9 Nov) |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |
