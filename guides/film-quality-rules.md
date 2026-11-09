@@ -1,157 +1,126 @@
 # The rulebook: every rule once, with the check that holds it
 
+**Contents:** Planning (1-86) · Building (2-83, S, L) · Checks (5-85) · Notes, review and sound (29-88, S) ·
+Working with Sam (the CLAUDE.md rules, by section) · Merged numbers (where an old number now lives).
+
 Every film (not quick videos) follows this page. Each rule is written here once; other guides say *how* (the tools,
 the method) and point here by number. **A rule only holds if a check enforces it:** "check" names the tool that
 pre-flight runs, or "by hand" (ticked on the check sheet before every animatic, or searched for at the handover).
-When Sam approves a rule, it gets a row here in the same chat. Why each rule exists (the film and note that taught it)
-is in git's history and `story/archive.md`, not here.
+When Sam approves a rule, it gets a row here in the same chat, with the next free number (the next is 89). Numbers
+are never reused or changed: a merged rule's number is listed at the end with the rule that now holds it. Why each
+rule exists (the film and note that taught it) is in git's history and `story/archive.md`, not here.
 
 Working-with-Sam rules (asking, approvals, messages, handovers, models) live in `CLAUDE.md` only; they are listed at
-the end with their checks.
+the end by section.
 
 ## Planning
 | # | Rule | Check |
 |---|---|---|
-| 1 | One plan of the world in metres per film: every place, opening, camera and facing; every shot reads from it. | `plan.py` (pre-flight; skipped for a film with no rooms: `HAS`) |
-| 3 | Before building any place: 8-10 things that make it recognisable, our picture beside Sam's references on one sheet, each ticked. No references: stop and ask; never draw from memory. | `benchmark.py` (pre-flight); the sheet by eye |
-| 8 | Rehearse the 3-4 riskiest moves as 2-3 s clips before building the rest. | by hand |
+| 1 | One plan of the world in metres per film: every place, opening, camera and facing; every shot reads from it. The layout is locked in planning (who sits or stands where, gaps, what must be in frame); a later change is named as a cost. | `plan.py` (pre-flight, with its true-gap check; skipped for a film with no rooms: `HAS`); the layout by hand |
+| 3 | Before building any place: 8-10 things that make it recognisable, our picture beside Sam's references on one sheet, each ticked. No references: stop and ask; never draw from memory. Before every animatic, any real place in the film (a landmark, a junction, a building) is shown on the check sheet beside Sam's reference photo or video frame and compared point by point; anything moving through it (cars, people) stays where the real thing allows (on the road, on the path) (Elder Scrolls: Swindon, 9 Nov). | `benchmark.py` (pre-flight); the sheets by eye; the film's own route check (e.g. `traffic_faults`: every car on the road) |
+| 8 | Rehearse the 3-4 riskiest moves as 2-3 s clips before building the rest. Anything that falls or piles up always counts as risky: it is tested on a short close clip before the animatic. | by hand |
 | 9 | Every group (crowd, police) has a plan for arriving, stopped and leaving. | by hand |
 | 10 | Framing planned up front: the Hook Text's empty area, each key beat's hold (about 0.3 s per readable stage) and camera distance; no diagonal cameras unless the models hold up. | `hookcheck.py`; holds by hand |
-| 11 | One rough composition sheet (the 3-4 key shots) before building. | `preflight.gates` ("Composition sheet sent:" in the notes) |
+| 11 | One rough composition sheet (the 3-4 key shots) before building. It is sent once: notes on it are applied, never re-sent for approval. | `preflight.gates` ("Composition sheet sent:" in the notes); by hand |
 | 14 | Pre-flight refuses to run while the brief checklist has a blank "done?" row or no composition sheet was sent; a shot missing anyone in `SHOT_CAST` fails. | `preflight.gates`, `cast_faults` |
-| 24 | Ambition estimate: the plan lists new builds and risky moves and the share of a week the film will cost. | by hand |
-| 62 | Every cost estimate is checked against what past films actually cost (`story/archive.md`, `notes/archive/`) before it is sent, naming the films compared. | by hand (the estimate names them) |
-| 76 | Every note on a person, place or prop is checked against every reference of it, not just the note's words; the sheet sent back shows ours beside each reference (Sam, 4 Nov: Islamocommunism's beard took three rounds because the fixes followed the words). | the side-by-side strip on the sheet (ours, then every reference); by eye |
+| 24 | The estimate, before Sam says go: the new builds (each with its own cost) and risky moves, and the share of a week the film will cost; it is checked against what past films actually cost (`story/archive.md`, `notes/archive/`), naming the films compared. Something built for one film only stays in that film's estimate. | by hand (the estimate names each build's cost and the films compared) |
 | 25 | Eyelines and holds per shot: who looks where, how long each beat holds. | `LOOKS_AT` eyelines; holds by hand |
 | 26 | Every sound effect listed at planning and asked for in one message; placeholders named in every send. | by hand |
 | 27 | A bleep: Sam always says the word and I bleep over it (never ask); place it from the sound, never the script. Every swear is bleeped, whether or not the script writes it with asterisks (Sam, 4 Nov). | by hand |
 | 28 | Reuse first (`guides/kit-catalogue.md`); every new build is added to the catalogue when building ends. | `catalogue.py` sheet; updating by hand |
-| 35 | Lock the layout in planning (who sits or stands where, gaps, what must be in frame); a later change is named as a cost. | `plan.py` true-gap check; by hand |
-| 36 | Say at planning when a tool is slow here; ask Sam once to allow pypi.org. | by hand |
-| 38 | Front on by default (each person within about 25 degrees of the lens). A three-quarter view is a last resort (Sam, 3 Nov): only when no other way makes the shot work, listed with that reason. | `plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`) |
-| 68 | Characters are built in 2D first: front, side and back. A three-quarter view (or three-quarter back) is built only when the script calls for one, and named in the plan with the shot that needs it (Sam, 4 Nov). | by hand (the cast sheet shows front, side, back only) |
+| 36 | Say at planning when a tool is slow here. | by hand |
+| 38 | Front on by default (each person within about 25 degrees of the lens). A three-quarter view is a last resort (Sam, 3 Nov): only when no other way makes the shot work, listed with that reason. Characters are built in 2D first: front, side and back; a three-quarter view (or three-quarter back) is built only when the script calls for one, and named in the plan with the shot that needs it (Sam, 4 Nov). | `plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`); the cast sheet shows front, side, back only |
 | 39 | 3D only when needed (the camera moves round or through it, 3+ angles that must agree, turned in the hand); otherwise one flat painting per camera, in layers. Each 3D build is in the estimate with its reason. | by hand (the estimate) |
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
-| 44 | A usage budget per film: 12% of a week at most, aiming for 8-12% (Sam, 9 Nov). The plan works out how to make the film within 12% (what to reuse, which shots to keep simple, how many rounds to expect) and, where our way of working stands in the way, proposes a change to it. Quality is never cut to fit the budget: if the film can't be made well within 12%, Sam is told before building, with the cost and a cheaper option. The estimate names anything expensive that can't be avoided, with its cost and a cheaper option, before Sam says go. Each handover logs the chat's measured cost (`python3 .claude/hooks/costwatch.py --report`) in the film's 'spent' column without asking Sam, and adds up the film's total so far. As soon as the total plus what's left of the estimate would pass 12% (or the film's own estimate, if lower), the first line to Sam says so, with a plan to get back within it that keeps the quality. | by hand (the plan and the handover), from the cost watch's figure |
+| 44 | A usage budget per film: 12% of a week at most, aiming for 8-12% (Sam, 9 Nov). The plan works out how to make the film within 12% (what to reuse, which shots to keep simple, how many rounds to expect) and, where our way of working stands in the way, proposes a change to it. Quality is never cut to fit the budget: if the film can't be made well within 12%, Sam is told before building, with the cost and a cheaper option. The estimate names anything expensive that can't be avoided, with its cost and a cheaper option, before Sam says go. Each handover logs the chat's measured cost (`python3 .claude/hooks/costwatch.py --report`) in the film's 'spent' column without asking Sam, adds up the film's total so far, compares it with the estimate (rule 24) and names any item running over. As soon as the total plus what's left of the estimate would pass 12% (or the film's own estimate, if lower), the first line to Sam says so, with a plan to get back within it that keeps the quality. | by hand (the plan and the handover), from the cost watch's figure |
 | 54 | Build only what the camera shows: before splitting a model into parts, decide how its ending looks and which parts the camera sees break; build parts only there. | by hand (the plan) |
 | 74 | Before the first animatic, every line gets an acting plan in the film's notes (shot and why, face, body, the word the move lands on), shown to Sam with the brief questions. Before the list is written, ask Sam what each line means wherever the tone could go two ways (sincere or wink, hopeful or doubtful), my pick first; there is no limit on questions, because a question costs far less than a fix (Sam, 7 Nov). | by hand (the notes' acting list, ticked on the check sheet); layout in `guides/satire.md`, "The acting list" |
-| 55 | Every new build has its own cost in the estimate; each handover compares the measured spend (rule 44) with the estimate and names any item running over. | by hand (handover), from the cost watch's figure |
-| 86 | Tools (anything built for every film: a check, a kit, a helper) get their own chat and their own estimate, outside any film's 12%. The estimate comes first, and building starts only on Sam's yes. If a film needs a new tool, the film's chat stops and asks. Something built for one film only stays in that film's estimate (rule 55) (Sam, 9 Nov). | by hand (the tool's estimate and Sam's yes in its notes) |
+| 76 | Every note on a person, place or prop is checked against every reference of it, not just the note's words; the sheet sent back shows ours beside each reference (Sam, 4 Nov: Islamocommunism's beard took three rounds because the fixes followed the words). | the side-by-side strip on the sheet (ours, then every reference); by eye |
+| 86 | Tools (anything built for every film: a check, a kit, a helper) get their own chat and their own estimate, outside any film's 12%. The estimate comes first, and building starts only on Sam's yes. If a film needs a new tool, the film's chat stops and asks. Something built for one film only stays in that film's estimate (rule 24) (Sam, 9 Nov). | by hand (the tool's estimate and Sam's yes in its notes) |
 
 ## Building
 | # | Rule | Check |
 |---|---|---|
 | 2 | Doorways and windows show the real next room (from the plan), never a flat colour. | `sets.house`; `sets.portal_faults` |
 | 4 | Every set has layers (front, middle, back), a textured ground, and life. | by hand |
-| 12 | Every person, prop, wall, door and piece of furniture is in the collision audit automatically; a film lists only what to leave out, with reasons (`SET_EXCLUDE`). | `sets.solids` in `audit.py` |
 | 13 | Every check lives in the shared kit and runs on every film; never copy a check from a film file. | `kitchecks.py` |
 | 20 | Held things aim in 3D with the holder's body, never at a fixed screen angle. | `viewchecks.turn_faults` |
 | 21 | A limb pointing at the lens is foreshortened and drawn over the body. | by hand |
 | 22 | My set dressing is shown on the cast or composition sheet, clear of every action spot, and in the audit. | `audit.py`; shown by hand |
-| 23 | A film file over about 1,000 lines is split, one file per group of shots. | by hand |
-| 32 | Falling pieces settle broadest side down, never overlap or rest on another piece, shadow only where they touch; a saved drawing records its camera. | `lying.py contact_faults` (bodies); pieces by hand |
-| 41 | Every arm ends in a visible hand, every frame, every view. | `handcheck.py` (every frame) |
+| 32 | Falling pieces settle broadest side down, never overlap or rest on another piece, shadow only where they touch; long pieces land flat, never on their end; a saved drawing records its camera. | `lying.py contact_faults` (bodies); pieces by hand (tilt at landing) |
+| 41 | Every arm ends in a visible hand, every frame, every view. Whenever anyone points, the hand shows a pointing finger (one finger out along the forearm), in every shot and every film (Sam, 4 Nov). | `handcheck.py` (every frame); `kittests.py point_hand_shows_a_finger` (the house circle hands draw it); the look by hand on the check sheet |
 | 42 | Poses come from the tested gallery (`guides/pose-gallery.md`); a new pose is tested front, side and back first. | `posegallery.py`; picking by hand |
-| 49 | Every famous head passes the likeness check (60%+, nothing pushed the wrong way, 1st in the line-up) before the cast sheet. | `likeness.py check` |
+| 49 | Every famous head passes the likeness check (60%+, nothing pushed the wrong way, 1st in the line-up) before the cast sheet. It is built from the likeness pack: 3+ straight-on, close, not-smiling photos (plus three-quarter, talking, caricatures); photos beat caricatures. | `likeness.py check`; `likeness.py card` warns on a thin pack |
 | 50 | Every famous person gets one shot with the face at least 240 px tall (of 1920). | by hand |
-| 51 | The likeness pack: 3+ straight-on, close, not-smiling photos (plus three-quarter, talking, caricatures); photos beat caricatures. | by hand; `likeness.py card` warns |
-| 53 | Long falling pieces land flat, never on their end. | by hand (tilt at landing) |
 | 56 | A fault found in one piece is a fault of its kind: fix and test every piece of that kind (every piece a whale hits, not only the one Sam named). | by hand (check sheet) |
-| S1 | People react before a hit lands. | by hand |
-| S2 | A hand moves the object, drawn over it; a resting hand keeps 3 cm clear. | `kitchecks` (`TOUCHES`, `FREE_MOVES`) |
-| S5 | Pupils are cut to the eye's outline. | built into `burnham.face` |
-| S6 | Hips 15% narrower; a hem rises gradually on a lean. | built into `burnham.HEM`, `views.py` |
-| S7 | No off-style shorthand (stars, sweat drops, motion lines). | `viewchecks.shape_faults`; sweat drops by hand |
-| S8 | Bullet holes and marks only on real surfaces. | `kitchecks.marks` |
-| S10 | Riding: `mounts.py`, real pace speeds, the rider's seat matches the pace. | `mounts.check` |
-| L1 | People lying down or seen from high have real depth (one 3D body, one outline, resting on the floor). | `lying.py`; the look by hand |
-
 | 63 | Running straight at the lens uses the kit's `front_run` gait and `front_run_arms` (low knees, tucked elbows, fists pumping forward at the chest and belt), never the side-on run or arms out to the side. | `moves.audit` (gait numbers); `handcheck`; the look by hand |
 | 64 | A standing person never bobs: breathing and panting are a lean only. Someone pointing or gesturing is shown from the front, never cut to from behind. Seen from behind, use a pose that reads there (`moves.reads_from_behind`): hands on hips read as hands behind the back. | by hand; `moves.READS_FROM_BEHIND` |
 | 65 | A speaker with no face of its own (the Sorting Hat) opens its mouth with the voice's loudness, one syllable at a time. | `mouths.loudness_open`; `voices.py` mouth check |
 | 77 | Anyone with facial hair: run the beard tool first; Sam confirms its five plain lines (moustache, patch under the lip, chin, cheeks, colour), correcting any in a word, before the cast sheet (Sam, 7 Nov). | `beardkit.py analyse` (its five lines, sent with the empty-face sheet); by hand |
-| 69 | Whenever anyone points, the hand shows a pointing finger (one finger out along the forearm), in every shot and every film (Sam, 4 Nov). | `kittests.py point_hand_shows_a_finger` (the house circle hands draw it); the look by hand on the check sheet |
 | 78 | Anyone resting on a surface (desk, table, wall, rail) shows the weight: the elbow bends slightly, the forearm comes forward and turns a little, and no part of the arm, hand or body goes below the surface; a limb reaching out ends in a clear shape, never half hidden inside something (Sam, 7 Nov). | by hand on the check sheet, full size, beside the reference photo (`references/body-weight/leaning-on-table-forearm-forward.jpg`: head on one fist, other forearm forward and turned on the table, elbow bent); and `kitchecks` (rests, 8 Nov): every arm the film's notes list as resting goes in the film's `RESTS = [(forearm, surface, from, to, why)]`; pre-flight flags a forearm or elbow more than 1 cm below the surface, an elbow floating over it or off its edge, a listed arm it cannot find (COULD NOT TEST), and an arm the sitting kit poses resting that `RESTS` leaves out |
 | 80 | Anyone seated front on shows knees and lap, and rising or sitting never makes the head dip below its seated height (Sam, 7 Nov; Islamocommunism note 10). | `sitting.py` checks (`check_no_sink`, the lap drawn when `j['lap']`); the look by hand on the sitting sheet |
 | 81 | Arms and body are one piece, for every character (Sam, 7-8 Nov, Ad-Vanced Notice notes 14-17): the sleeve grows out of the shoulder with one outline from the collar, over the shoulder and down the arm, with no line, cap, notch or step where the arm meets the body (only an armpit crease when the arm is lifted, and nothing filled inside a bent elbow). Standing at rest, the legs are straight in every view, and the elbows bend a touch outward (upper arm out from the shoulder, forearm back in, hands beside the upper thigh just clear of the jacket), as in `references/figure-rig/`. Every cast sheet draws the arms exactly as the film does. | `kittests.py standing_legs_straight_elbows_out` (knees on the hip-ankle line, elbows a little out); the shoulder join and the lifted-arm elbow by hand on the cast sheet, side by side with the rest photos (no automatic seam test yet) |
-| 82 | The Hook Text pops in 0.5 s into the film, not on the first frame (Sam, 8 Nov, Ad-Vanced Notice R2): nothing for the first half second, then a quick pop (small, a touch past full size, settling, about 0.2 s), held through the opening shot. | `hook_text.py` (starts at 0.5 s, `--from` only on Sam's say-so) |
 | 83 | In a flat painted set, no painted object overlaps another unless the set lists it as meant (Sam, 8 Nov, Ad-Vanced Notice note 42b: the portrait clipped into the mantel clock). Each set lists its objects' boxes (`SET_BOXES`) and its meant overlaps with why (`SET_MEANT`). | `setcheck.py` (the film's checks(), so pre-flight) |
+| S1 | People react before a hit lands. | by hand |
+| S2 | A hand moves the object, drawn over it; a resting hand keeps 3 cm clear. | `kitchecks` (`TOUCHES`, `FREE_MOVES`) |
+| S5 | Pupils are cut to the eye's outline. | built into `burnham.face` |
+| S6 | Hips 15% narrower; a hem rises gradually on a lean. | built into `burnham.HEM`, `views.py` |
+| S7 | No off-style shorthand (stars, sweat drops, motion lines); effect shapes are checked: no star, regular spike or motion line. | `viewchecks.shape_faults` (`EFFECTS`); sweat drops by hand |
+| S8 | Bullet holes and marks only on real surfaces. | `kitchecks.marks` |
+| S10 | Riding: `mounts.py`, real pace speeds, the rider's seat matches the pace. | `mounts.check` |
+| L1 | People lying down or seen from high have real depth (one 3D body, one outline, resting on the floor). | `lying.py`; the look by hand |
 
 ## Checks (what pre-flight and the tools must do)
 | # | Rule | Check |
 |---|---|---|
-| 5 | One automatic collision test on every frame, swept areas included; only listed contacts allowed. | `audit.py` (`scene(t)`, `ALLOWED_CONTACTS`) |
+| 5 | One automatic collision test on every frame, swept areas included; only listed contacts allowed. Every person, prop, wall, door and piece of furniture is in it automatically; a film lists only what to leave out, with reasons (`SET_EXCLUDE`). | `audit.py` (`scene(t)`, `ALLOWED_CONTACTS`; `sets.solids`) |
 | 6 | One automatic pop-in test: anything appearing, vanishing or jumping away from the frame edge is flagged. | `audit.py` (`ALLOWED_POPS`) |
 | 7 | Script and mouth audit: recordings against script and subtitles; a mouth opens once a syllable, shut in silence. | `voices.py --film` |
-| 15 | Effect shapes are checked: no star, regular spike or motion line. | `viewchecks.shape_faults` (`EFFECTS`) |
 | 16 | Direction holds across a cut unless the plan says it swaps. | `viewchecks.direction_faults` (`movers(t)`) |
 | 17 | Every figure in front of an effect hides it. | `viewchecks.hide_faults` |
 | 18 | Every joke prop at least 40 px (of 1920) at phone size. | `viewchecks.readability_faults` (`JOKE_PROPS`) |
-| 19 | Checks print a short summary; a file is written only when the list is longer than the summary shows. | `report.py` |
+| 19 | Checks print a short summary; a file is written only when the list is longer than the summary shows. Long check printouts are filtered so only the faults are read. | `report.py` |
 | 57 | Nothing flips from in front to behind (or back) between two frames of a shot unless planned (`ORDER_SWAPS`). | `clipcheck.flip_faults` on the film's `draw_order(t)` |
 | 58 | Pre-flight runs only the checks for what the film contains (`HAS`: people, rooms, voices, effects, props); each skipped check is named in one line with why. | `preflight.py` |
-| 59 | No animatic or final render unless pre-flight passed on the code as it is now; faults Sam has been told about need `--faults-named`. Pre-flight is incremental (Sam, 3 Nov): after a clean run it re-checks only the frames whose picture changed (and a few round them) and the bodies in their shots, and runs the text and sound checks in full; it runs in full when there is no earlier clean run, the last run found a frame-level fault, the check code or the film's allow-lists changed, or with `--full`. | `film_engine.render` (the lock); `preflight.py` (`-frames.json` fingerprints); `kittests.py incremental_preflight_fingerprints` |
-| 60 | The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
-| 62 | Subtitles are a few words at a time, each coming up on the syllable it starts with in Sam's take, and made readable when cut: on screen at least 0.8 s, at most 220 words a minute, two rows at most. | `subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable` |
+| 59 | No animatic or final render unless pre-flight passed on the code as it is now; faults Sam has been told about need `--faults-named`, and each is listed once: the film keeps a named-faults list and pre-flight shows only faults not on it. Pre-flight is incremental (Sam, 3 Nov): after a clean run it re-checks only the frames whose picture changed (and a few round them) and the bodies in their shots, and runs the text and sound checks in full; it runs in full when there is no earlier clean run, the last run found a frame-level fault, the check code or the film's allow-lists changed, or with `--full`. | `film_engine.render` (the lock); `preflight.py` (`-frames.json` fingerprints); `kittests.py incremental_preflight_fingerprints`; the named-faults list by hand (the handover's "faults named" line) until pre-flight reads it |
+| 62 | Subtitles are a few words at a time, each coming up on the syllable it starts with in Sam's take (within 0.3 s of its first word), and made readable when cut: on screen at least 0.8 s, at most 220 words a minute, two rows at most. A wording change never moves the timing: timing always comes from the script as spoken; the changed wording is swapped in afterwards. | `subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable`; the 0.3 s start by hand (the check's subtitle printout against the take) until pre-flight checks it |
 | 66 | A render that is refused, stopped or fails leaves no file: the old output is deleted before anything else, so an old render can never be taken for the new one. | `film_engine.render`; `kittests.py render_leaves_no_old_file` |
-| 75 | The Hook Text position comes from the film's brief (`HOOK`) into `finish.py`, and the Hook Text check (rule 10) runs on every animatic and final. | `finish.py CLEAN OUT --film NAME`: reads `HOOK` and runs `hookcheck.py` first (refuses on a fault unless `--faults-named`) |
-| 70 | Subtitles are burned in at the finish step (`finish.py`, with the Hook Text and sign-off), never in the picture render, so a note on subtitle wording, timing or Hook Text position costs seconds, not a render. | `finish.py --film NAME` burns in the film's `caption_at` when it sets `SUBTITLES_AT_FINISH = True` (the template does; its whole renders leave subtitles out, stills and `--span` clips keep them) |
-| 71 | A subtitle's wording change never moves its timing: timing always comes from the script as spoken; the changed wording is swapped in afterwards. Each subtitle starts within 0.3 s of its first word in the take. | by hand (the check's subtitle printout against the take) until pre-flight checks it |
-| 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
-| 73 | A pre-flight fault Sam has been told about is listed once: the film keeps a named-faults list and pre-flight shows only faults not on it. | by hand (the handover's "faults named" line) until pre-flight reads the list |
 | 67 | One full pre-flight per round: make every fix, run the quick check (`preflight.py NAME OUT --text`, seconds) until it is clean, then the full pre-flight once, then the render in the same background chain. A background job is stopped with its own task stop, never by name. | `preflight.py --text`; by hand |
-| 84 | Before every animatic, any real place in the film (a landmark, a junction, a building) is shown on the check sheet beside Sam's reference photo or video frame, and compared point by point; anything moving through it (cars, people) is checked to stay where the real thing allows (on the road, on the path). (Elder Scrolls: Swindon, 9 Nov: the Magic Roundabout went wrong twice and cars drove on the pavements.) | the check sheet by eye; the film's own route check (e.g. `traffic_faults`: every car on the road) |
+| 70 | Subtitles are burned in at the finish step (`finish.py`, with the Hook Text and sign-off), never in the picture render, so a note on subtitle wording, timing or Hook Text position costs seconds, not a render. | `finish.py --film NAME` burns in the film's `caption_at` when it sets `SUBTITLES_AT_FINISH = True` (the template does; its whole renders leave subtitles out, stills and `--span` clips keep them) |
+| 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
+| 75 | The Hook Text position comes from the film's brief (`HOOK`) into `finish.py`, and the Hook Text check (rule 10) runs on every animatic and final. It pops in 0.5 s into the film, not on the first frame (Sam, 8 Nov, Ad-Vanced Notice R2): nothing for the first half second, then a quick pop (small, a touch past full size, settling, about 0.2 s), held through the opening shot. | `finish.py CLEAN OUT --film NAME`: reads `HOOK` and runs `hookcheck.py` first (refuses on a fault unless `--faults-named`); `hook_text.py` (starts at 0.5 s, `--from` only on Sam's say-so) |
 | 85 | Cost watch (Sam, 9 Nov): every chat is measured after each step. Amber at 200k tokens of history or 3% of the week; red at 300k or 5%. Amber: finish the step, then hand over. Red: hand over now (unless Sam types 'override'). Every reply on amber or red opens with a 'Cost:' line. | automatic (`.claude/hooks/costwatch.py`, every step and every message) |
 
 ## Notes, review and sound
 | # | Rule | Check |
 |---|---|---|
 | 29 | Every review copy (clip, animatic) shows the film time and shot in a corner. | `film_engine.render` stamp |
-| 30 | The notes table stays short (one line per note, no "Was:"); each note "new kind" or "seen before"; seen before means a check is missing: add it. | by hand |
-| 33 | Anything that falls or piles up is tested on a short close clip before the animatic. | by hand |
+| 30 | The notes table stays short (one line per note, no "Was:"); each note "new kind" or "seen before"; seen before means the first fix failed and a check is missing: find why before changing anything, tell Sam, and add the check. | by hand |
 | 34 | Mirror test: cast-sheet tiles against their sources; every shot checked for flipped faces, lettering, props and glances. | by hand |
 | 37 | Sounds and references go on GitHub; only a file over about 10 MB stays off, listed in the handover's first line. | by hand |
 | 43 | Looks are tested at the shot's own camera; eyes that meet shown one frame each on the check sheet. | `filmkit.eyeline(aim=, drawn=, at=)`, `look_sheet` |
-| 45 | The composition sheet is sent once; notes on it are applied, never re-sent for approval. | by hand |
-| 79 | Never say a change "looks right" from a small preview. Look at the frame a note touches at full size and say in plain words what is seen ("the hand sits on top of the desk, the elbow is bent"); a small preview only shows where to look. Unchanged frames are not re-read (Sam, 7 Nov). | by hand; the "Checks:" line names any fix confirmed at full size |
-| 46 | When Sam names frames, look at exactly those first, at his size, before changing anything. | by hand |
 | 47 | A small fix to a finished film is spliced in (`--nostamp`, exact frames, original sound, corner and frame-count check), or trimmed with ffmpeg where only silence is lost; a full re-render only when neither can do it, and Sam is told why. | by hand; `kittests.py nostamp` |
-| 48 | Look at several frames as ONE labelled sheet (at most 1080 px wide; a crop for a detail); full size only for faces, Hook Text and frames Sam names. | `sheet.py` (default width) |
+| 48 | Look at several frames as ONE labelled sheet (at most 1080 px wide; a crop for a detail); full size only for faces, Hook Text and frames Sam names. Never look at an unchanged picture again. | `sheet.py` (default width) |
+| 52 | The sign-off lasts 1.6 s on every film. | `signoff.py` default (via `finish.py`) |
+| 61 | Every new film's code opens with a short `MAP`: what is at which line (smoke, paths, wreck), kept in step as it changes; a note is answered by reading those lines (`python3 source/codemap.py FILE` and only the lines needed). A film file over about 1,000 lines is split, one file per group of shots. Finished films are not retrofitted. | by hand (handover) |
+| 79 | When Sam names frames, look at exactly those first, at his size, before changing anything. Never say a change "looks right" from a small preview: look at the frame a note touches at full size and say in plain words what is seen ("the hand sits on top of the desk, the elbow is bent"); a small preview only shows where to look. Unchanged frames are not re-read (Sam, 7 Nov). | by hand; the "Checks:" line names any fix confirmed at full size |
 | 87 | Before fixing, each of Sam's notes is restated in one line with how it will be fixed; where it's about something you can see, a still of that frame comes with it, marked where the change goes. Then the fix goes ahead without waiting, unless the note could be read two ways: that is asked first, my pick first. A fix that fails twice stops rendering: the next send is one still sheet of 2-3 options for Sam to pick from. New ideas from Sam or me are welcome, but each one has its cost (share of a week) said before it's built (Sam, 9 Nov). | by hand (the reply to the notes; 'fails twice' from the seen-before mark, rule 30) |
 | 88 | One check sheet per round of Sam's notes. Any re-check after that is in words, with a picture only of what visibly changed (just those frames, cropped), never the whole sheet again (Sam, 9 Nov). | by hand |
-| 61 | Every new film's code opens with a short `MAP`: what is at which line (smoke, paths, wreck), kept in step as it changes; a note is answered by reading those lines. Finished films are not retrofitted. | by hand (handover) |
-| 52 | The sign-off lasts 1.6 s on every film. | `signoff.py` default (via `finish.py`) |
-| S3 | No added room tone. | `filmkit.hiss_check` |
+| S3 | No added room tone. The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
 | S4 | ffmpeg joins always at fps=24. | by hand |
 | S9 | One sound per hit, only with it in frame. | `kitchecks.sounds` |
 
-## Working with Sam (written in CLAUDE.md; listed here for their checks)
-| # | Rule (CLAUDE.md section) | Check |
+## Working with Sam (written in CLAUDE.md, by section; listed here for their checks)
+| CLAUDE.md section | Rules (old numbers) | Check |
 |---|---|---|
-| P1 | "I want a rule" means permanent, written in the same chat (Rules are permanent) | by hand; handover search |
-| P2 | "Just go" skips the wait, never the checks (Asking me) | by hand |
-| P3 | No animatic with a shot missing its people (Asking me) | `preflight.cast_faults` |
-| P4 | Unattended runs stop after one animatic (Asking me) | by hand |
-| P5 | A repeated note means the first fix failed (Sending work) | by hand |
-| P6 | One handover section, 15 lines at most; old ones archived (Models and chats) | by hand |
-| 31 | Routine work on Sonnet, always in its own new chat; never switch models inside a chat (Models and chats; Sam, 9 Nov) | by hand |
-| P7 | Every animatic carries the Hook Text and the CranbriJoos sign-off, made as the final is (Asking me) | by hand (`finish.py` on the animatic's clean render) |
-| M1 | Every message opens with what I need from Sam, or "Nothing needed" (Messages) | by hand |
-| M2 | Messages: Done / Needs you / Next, about 10 lines (Messages) | by hand |
-| M3 | No code names or file internals in messages (Messages) | by hand |
-| M4 | One line per note; losses and additions on their own line (Messages) | by hand |
-| M5 | The self-review is one line (Messages) | by hand |
-| M6 | The handover pasted into the chat is 3 lines (Messages) | by hand |
-| P8 | Fewer rounds: moves checked against the acting list before every animatic (Models and chats) | by hand (check sheet) |
-| P9 | Long check printouts filtered to the faults (Models and chats) | by hand |
-| P10 | One wait per render, never repeated checks (Models and chats) | by hand |
-| M7 | Questions numbered, answered by number or Y/N, my pick first (Messages) | by hand |
-| P11 | Every chat starts by listing all branches for newer work on the film, and ends with a push to the main line too (Making the films) | by hand |
-| P12 | Reference photos: Sam sends 2-3 if he has them; otherwise one slow search, 3 per place at most (Making the films) | by hand |
-| P13 | Every chat starts with the Animation- project selected (Making the films; Sam, 9 Nov) | automatic: no cost-watch line means it isn't |
-| P14 | Status questions and quick answers on Sonnet (Models and chats; Sam, 9 Nov) | by hand |
-| P15 | A film's notes move to the archive the day Sam says it's posted (Models and chats; Sam, 9 Nov) | by hand |
-| P16 | Every open decision, across all jobs, asked in one message (Messages; Sam, 9 Nov) | by hand |
+| Messages to me | First line says what's needed, or "Nothing needed" (M1); Done / Needs you / Next, about 10 lines (M2); no code names (M3); one line per note, losses and additions on their own line (M4); questions numbered, my pick first (M7); every open decision across all jobs in one message (P16); the self-review is one line (M5); a repeated note is a warning (P5, also rule 30); the 3 pasted handover lines go at the bottom of the message (P17, Sam, 9 Nov) | by hand |
+| Asking me before you go on | "Just go" skips the wait, never the checks (P2); no animatic with someone missing (P3, checked by rule 14); unattended runs stop after one animatic (P4); every animatic carries the Hook Text and sign-off, made as the final is (P7) | by hand; `preflight.cast_faults`; `finish.py` on the animatic's clean render |
+| Rules are permanent | "I want a rule" means permanent, written in the same chat (P1) | by hand; handover search |
+| Models and chats | Routine work, status questions and quick answers on Sonnet, in its own new chat; never switch models inside a chat (31, P14); one wait per render (P10); fewer rounds: moves checked against the acting list (P8, rule 74); long printouts filtered (P9, rule 19) | by hand |
+| The handover | One section, 15 lines at most, old ones archived (P6); 3 lines pasted into the chat (M6); a film's notes move to the archive the day Sam says it's posted (P15) | by hand |
+| Making the films | Start with the Animation- project selected (P13); list all branches at the start, push to the main line at the end (P11); reference photos: 2-3 from Sam, else one slow search, 3 per place at most (P12) | P13 automatic (no cost-watch line means it isn't); the rest by hand |
 
-The old register gave S1 to two rules; riding is now S10. The old register and the old long rule texts are in
-`guides/archive/rule-register.md` and git history.
+## Merged numbers (Job C, 9 Nov: the same rule written twice became one; nothing was dropped)
+12 → 5 · 15 → S7 · 23 → 61 · 33 → 8 · 35 → 1 · 45 → 11 · 46 → 79 · 51 → 49 · 53 → 32 · 55 → 24 and 44 ·
+the old second 62 (estimates checked against past films) → 24 · 60 → S3 · 68 → 38 · 69 → 41 · 71 → 62 · 73 → 59 ·
+82 → 75 · 84 → 3. Old long rule texts are in `guides/archive/rule-register.md` and git history.

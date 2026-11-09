@@ -1,5 +1,9 @@
 # Working with me
 
+**Contents:** Working with me · Messages to me · Files · Asking me before you go on · Rules are permanent ·
+Models and chats · Fresh chats and the handover · Reading little · Making the films. The film rules are in
+`guides/film-quality-rules.md` (the rulebook).
+
 I don't know how to code. Please:
 
 - **Explain everything in plain English.** Avoid jargon; if you must use a technical word, say what it means.
@@ -19,7 +23,9 @@ I don't know how to code. Please:
   (all jobs, not just the current one), so no chat is spent waiting on a single answer (Sam, 9 Nov).
 - **Self-review is one line before every send:** "Checks: all clean except X (looked: fine because …)". Name only
   by-hand rules that slipped or were at risk. Never send something a check flagged without saying so.
-- **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me.
+- **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me
+  (rulebook 30).
+- **The handover's 3 pasted lines always go at the bottom of the message** (Sam, 9 Nov).
 
 # Files
 - Every file **under 50 MB**; aim for **a few MB per animation**. Tell me the final size.
@@ -67,27 +73,32 @@ I don't know how to code. Please:
   When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
   /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
   a task on the wrong model, refuse and tell me**; let me change it, or offer me the option to override.
-- **Fresh chat at every round and every cost warning** (every step re-reads the whole chat). Each round of my notes (one
-  animatic, or one batch of clips) ends with the handover, and the next round starts a new chat. The cost watch (rule 85)
-  decides 'long': on amber, finish the step and hand over; on red, hand over at once unless I type 'override'. Change
-  model only by starting a new chat, never inside one. If I come back after more than an hour to a chat on amber or red,
-  the reply is the handover only (Sam, 9 Nov: two chats ran 18 and 22 hours and cost about 37% of a week). The handover is the film's ONE "Where things
-  stand" section (old ones go to `notes/archive/NAME-handovers.md`), **15 lines at most**, in this order: Rules that
-  bite next (3, by number); Done; Next (model and what to type in the new chat); Needs Sam; Read (which sections of
-  which guide); Open rule requests. Code names go in a "For Claude" line at the end. Update `story/status.md` (3
-  lines), commit and push. **Paste only 3 lines into the chat:** what's done, the model, and what to type in the new chat.
-- **Read little:** at each handover, finished notes move to `notes/archive/`; **a film's whole notes file moves there the
-  day Sam says it's posted** (Sam, 9 Nov); the film's notes file keeps only the brief
-  checklist, the estimate, open notes and 'Where things stand' (under 4,000 words). one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
-  size for faces, Hook Text and frames Sam names), never an unchanged picture again; a film's code starts with a short
-  map (`MAP` in its first lines) and only the lines a note touches are read; `python3 source/codemap.py
-  FILE` and only the lines needed; only the guide sections the handover names. Long check printouts are filtered
-  so only the faults are read.
-- **Fewer rounds, not cheaper rounds:** before every animatic, the moves are checked against the film's acting list
-  (rulebook 74) on the check sheet; a slip caught on a sheet costs a fraction of a re-render.
 - **One wait per render:** wait once for a render or long process to finish; never check on it repeatedly.
 - **Push notifications** whenever a render or long process finishes, fails or needs my decision, and at every stage
   end. Say how long each render will take and how long it took.
+
+# Fresh chats and the handover
+- **Fresh chat at every round and every cost warning** (every step re-reads the whole chat). Each round of my notes (one
+  animatic, or one batch of clips) ends with the handover, and the next round starts a new chat. Change model only by
+  starting a new chat, never inside one.
+- **The cost watch (rule 85) decides 'long':** on amber, finish the step and hand over; on red, hand over at once unless
+  I type 'override'. If I come back after more than an hour to a chat on amber or red, the reply is the handover only
+  (Sam, 9 Nov: two chats ran 18 and 22 hours and cost about 37% of a week).
+- **The handover** is the film's ONE "Where things stand" section (old ones go to `notes/archive/NAME-handovers.md`),
+  **15 lines at most**, in this order: Rules that bite next (3, by number); Done; Next (model and what to type in the
+  new chat); Needs Sam; Read (which sections of which guide); Open rule requests. Code names go in a "For Claude" line
+  at the end. Update `story/status.md` (3 lines), commit and push. **Paste only 3 lines into the chat** (at the bottom
+  of the message): what's done, the model, and what to type in the new chat.
+
+# Reading little
+- **Notes:** at each handover, finished notes move to `notes/archive/`; **a film's whole notes file moves there the day
+  Sam says it's posted** (Sam, 9 Nov). The film's notes file keeps only the brief checklist, the estimate, open notes
+  and 'Where things stand' (under 4,000 words).
+- **Pictures:** one labelled sheet, full size only where it counts, never an unchanged picture again (rulebook 48, 79).
+- **Code and guides:** a film's code starts with a short map and only the lines a note touches are read (rulebook 61);
+  only the guide sections the handover names. Long check printouts are filtered so only the faults are read (rulebook 19).
+- **Fewer rounds, not cheaper rounds:** before every animatic, the moves are checked against the film's acting list
+  (rulebook 74) on the check sheet; a slip caught on a sheet costs a fraction of a re-render.
 
 # Making the films
 - **Every chat starts with the Animation- project selected** (Sam, 9 Nov): without it the cost watch and the tools never

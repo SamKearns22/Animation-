@@ -10,7 +10,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 
 ## Films
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
-Next: Job C, tidy the rules and guides (Sam: Y, 9 Nov; Opus high, own chat), then Job D, softer voices (estimate first).
+Job C chat 1 done 9 Nov (rulebook 99 to 81 rules, CLAUDE.md re-sectioned). Next: Job C chat 2 (the guides), Job D (softer voices, approved).
 Read notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.

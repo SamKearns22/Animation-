@@ -1,13 +1,12 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
 - **Rules that bite next:** 86 (tools: own chat, estimate first), 44 (12% a film), 85 (cost watch).
-- **Done (9 Nov):** Ad-Vanced Notice posted (notes archived); Elder Scrolls Swindon final sent; sitting kit closed (Sam); Job C approved (Sam: Y).
-- **Next:** Job C, chat 1 of 2: Opus high, new chat: "Tidy the rules and guides, chat 1 (Job C in notes/next-jobs.md)". Job D (below) APPROVED (Sam: Y, 9 Nov): its own chat, after Job C or alongside it.
-- **Needs Sam:** Y/N on the handovers-at-the-bottom rule wording (below).
-- **Read:** this file only; then the rulebook and CLAUDE.md in full (Job C chat 1 needs them).
-- **Open rule requests:** handovers always at the bottom of a message (Sam, 9 Nov; wording proposed, waiting); Job D's rule comes with its build. E1-E4 WRITTEN 9 Nov (CLAUDE.md; P13-P16).
-- **For Claude:** sitting kit `source/sitting.py` (closed); cost watch `.claude/hooks/costwatch.py` (WEEK_USD still to calibrate).
-
+- **Done (9 Nov):** Job C chat 1: rulebook 99 rules to 81 by merging repeats (nothing dropped but the pypi.org line), contents lists, CLAUDE.md re-sectioned (Sam: Y to all 26 points). Handovers-at-the-bottom rule written (Sam: Y).
+- **Next:** Job C chat 2, the guides: Opus high, new chat: "Tidy the guides, chat 2 (Job C in notes/next-jobs.md)". Job D (APPROVED) in its own chat, any time.
+- **Needs Sam:** nothing.
+- **Read:** this file; the rulebook's "Merged numbers" (last section); then the guides as listed in Job C below.
+- **Open rule requests:** Job D's rule comes with its build.
+- **For Claude:** chat 2 also points the 63 old-number mentions (e.g. "rule 55", "rule 73", "rule 84") in guides/, source/ and notes/ at their new homes, using the rulebook's "Merged numbers"; `git grep -nE "[Rr]ules? (12|15|23|33|35|45|46|51|53|55|60|68|69|71|73|82|84)\b"`. Cost watch WEEK_USD still to calibrate.
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
   and the 6 kHz+ s-sounds are no stronger than in those films; Sam's raw takes are clean (peaks -2.5 to -11 dB, no clipping).
@@ -28,6 +27,8 @@
   three times the 4,000 limit, and was read by every chat that touched the project).
 - E4 Batch quick decisions: Sam's yes/no answers on several jobs are taken in one message at the start of a chat, so no chat
   is spent waiting for one answer.
+
+## Job C chat 1 done 9 Nov (rulebook and CLAUDE.md); chat 2 (guides) still to do
 
 ## Efficiency rules: written 9 Nov (rules 44, 86, 87, 88; Sam: Y)
 - **Job C, tidy the rules and guides** without losing film quality: merge rules that say the same thing, drop dead ones, a contents
