@@ -137,6 +137,12 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 50 | (Animatic 3) Less greying out of the aerial | yes: dims to 10% (was 26%) |
 | 51 | (Animatic 3) Lines in the housing so the terraces aren't one long block | yes: each house its own roof, tone varied, an alley every 7th, chimneys |
 | 52 | (Animatic 3) Hold on the aerial view a few more seconds: 5 s more of the track (Sam's second recording) | yes: the film now 35.04 s (+1.6 sign-off); the recording starts at 0:41 of the video, where the first ends; joined with a 20 ms crossfade, faded over the last 0.8 s |
+| 53 | (Sam, 9 Nov) Bikes a third smaller, smaller trails, a bit faster | yes: drawn at 2/3 the size, trails shorter and finer, 17 m/s (was 14) |
+| 54 | (Sam, 9 Nov) More traffic | yes: 13 cars an arm (was 9), junction limit 14, mix 8: about 38 cars in view (was 28); checked clean |
+| 55 | (Sam, 9 Nov) Walkers off the inner circle onto the outer, none next to the road | yes: walkers only on the footpath round the greens (lost: the pavement walkers) |
+| 56 | (Sam, 9 Nov) Two women walking with a pram | yes: on the footpath, top right |
+| 57 | (Sam, 9 Nov) Pigeons in the central circle | yes: a dozen on the island's paving, pecking |
+| 58 | (Sam, 9 Nov) One white van driving like an absolute twat | yes: from 24.1 s: down the centre line past the queue, straight over the mini's dome, weaving inside the splitter, out flat out; never touches anything (`van_faults`) |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |

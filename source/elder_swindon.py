@@ -1181,7 +1181,7 @@ def traffic_faults():
     """No two cars pass into each other (centres closer than their half-lengths and widths allow), and every car
     stays on the carriageway: off the pavements, the island, the splitters and the domes (Sam, animatic 2: cars drove
     on the pavements; nothing checked it)."""
-    out = []
+    out = list(van_faults())
     for fr, cs in sorted(traffic().items())[::6]:
         for x, y, hd, Lc, Wc, *_r in cs:
             if math.hypot(x, y) > 150:
@@ -1490,9 +1490,113 @@ def _map_axes(cam):
     return ox, oy, ex, np.array([-ex[1], ex[0]])
 
 
+# ------------------------------------------------------------------------------------------------ the white van
+# (Sam, 9 Nov: "make one white van drive like an absolute twat") In from the bottom-left arm squeezing down the white
+# centre line, flat out between the queue and the oncoming cars; straight over the mini's dome instead of round it; cuts inside the splitter
+# island, weaving across the lanes; out down the bottom-right arm, flat out. It is not in the give-way traffic: its
+# start time is picked so it never touches anything (the cars, the moped, the e-bikes): `van_faults`.
+VAN_L, VAN_W = 6.0, 2.1
+VAN_T0 = 24.1                                    # when it appears (chosen by `van_faults`)
+_VAN = None
+
+
+def _van_path():
+    m, mj = 148, 45
+    u, uj = np.array(_pol(1, m)), np.array(_pol(1, mj))
+    wrong = np.array(_pol(0.0, m - 90))                  # down the white centre line, between the queue and the
+    #                                                      oncoming cars (no gap is ever clear to be fully wrong-side)
+    out = np.array(_pol(2.6, mj - 90))                   # the outbound lane of the exit arm (the right side)
+    pts = [u * 130 + wrong, u * 80 + wrong, u * 52 + wrong * 0.6, np.array(_pol(R_MINI, m)),   # over the dome
+           np.array(_pol(27.5, m - 22)), np.array(_pol(24.5, m - 45)), np.array(_pol(25.5, m - 75)),
+           np.array(_pol(29.0, mj + 14)), uj * 47 + out, uj * 70 + out, uj * 130 + out]
+    xy, sarr = _resample(np.array(pts), 0.25)
+    return xy, sarr
+
+
+def van_at(t):
+    """(x, y, heading) of the van at t, or None: flat out (18 m/s) in, a stab of the brakes over the dome (12), 15
+    across the middle, flat out out (22), weaving side to side as it goes."""
+    global _VAN
+    if _VAN is None:
+        xy, sarr = _van_path()
+        dt = 1 / FPS
+        sp, s_, ts = [], 0.0, []
+        L_ = sarr[-1]
+        tt = 0.0
+        while s_ < L_ and tt < 30:
+            k = int(np.searchsorted(sarr, s_))
+            r = float(np.hypot(*xy[min(k, len(xy) - 1)]))
+            v = 18.0 if r > 70 else 12.0 + 6.0 * min(1.0, max(0.0, (r - 40) / 30)) if s_ < L_ * 0.45 else \
+                (15.0 if r < 46 else min(22.0, 15.0 + (r - 46) * 0.5))
+            ts.append((tt, s_))
+            s_ += v * dt
+            tt += dt
+        _VAN = (xy, sarr, np.array(ts))
+    xy, sarr, ts = _VAN
+    tl = t - VAN_T0
+    if tl < 0 or tl > ts[-1, 0]:
+        return None
+    s_ = float(np.interp(tl, ts[:, 0], ts[:, 1]))
+    k = min(len(xy) - 2, int(np.searchsorted(sarr, s_)))
+    p, q = xy[k], xy[k + 1]
+    hd = math.degrees(math.atan2(q[1] - p[1], q[0] - p[0]))
+    n = np.array([-(q[1] - p[1]), q[0] - p[0]]) / (np.hypot(*(q - p)) + 1e-9)
+    amp = 0.12 if math.hypot(*p) > 40 else 0.9          # a twitch on the centre line, a full weave inside
+    weave = amp * math.sin(tl * 3.4)
+    pos = p + n * weave
+    return float(pos[0]), float(pos[1]), hd + math.degrees(math.atan2(amp * 3.4 * math.cos(tl * 3.4), 15.0))
+
+
+def _boxes_touch(a, b, gap=0.05):
+    """Do two vehicles (x, y, heading, length, width) overlap (oriented boxes, a small gap allowed)?"""
+    def corners(x, y, h, L_, W_):
+        c_, s_ = math.cos(math.radians(h)), math.sin(math.radians(h))
+        return [np.array([x + u * c_ - w * s_, y + u * s_ + w * c_]) for u, w in
+                ((L_ / 2 + gap, W_ / 2 + gap), (L_ / 2 + gap, -W_ / 2 - gap), (-L_ / 2 - gap, -W_ / 2 - gap),
+                 (-L_ / 2 - gap, W_ / 2 + gap))]
+    A, Bc = corners(*a), corners(*b)
+    for P_ in (A, Bc):
+        for k in range(2):
+            e_ = P_[k + 1] - P_[k]
+            ax = np.array([-e_[1], e_[0]])
+            pa, pb = [float(np.dot(q, ax)) for q in A], [float(np.dot(q, ax)) for q in Bc]
+            if max(pa) < min(pb) or max(pb) < min(pa):
+                return False
+    return True
+
+
+def van_faults(t0=None):
+    """The van never touches a car, the moped or an e-bike, and stays on the road (its dome run excepted)."""
+    out = []
+    f = traffic()
+    for fr in range(int(19.86 * FPS), int(DUR * FPS)):
+        t = fr / FPS
+        v_ = van_at(t)
+        if v_ is None:
+            continue
+        x, y, hd = v_
+        for c in f.get(fr, []):
+            if math.hypot(c[0] - x, c[1] - y) < 9 and _boxes_touch((x, y, hd, VAN_L, VAN_W), c[:5]):
+                out.append(f'VAN: touches a car at {t:.2f} s near ({x:.0f}, {y:.0f}) m')
+                break
+        for nb in range(2):
+            bx, by, _ = ebike_at(nb, t)
+            if math.hypot(bx - x, by - y) < 3.4:
+                out.append(f'VAN: touches an e-bike at {t:.2f} s')
+        c_, s_ = math.cos(math.radians(hd)), math.sin(math.radians(hd))
+        for u_, w_ in ((VAN_L / 2, VAN_W / 2), (VAN_L / 2, -VAN_W / 2), (-VAN_L / 2, VAN_W / 2), (-VAN_L / 2, -VAN_W / 2)):
+            if math.hypot(x, y) < 150 and not on_road((x + u_ * c_ - w_ * s_, y + u_ * s_ + w_ * c_), domes=False):
+                out.append(f'VAN: off the road at {t:.2f} s near ({x:.0f}, {y:.0f}) m')
+                break
+    return out[:6]
+
+
 def draw_cars(pil, cam, t):
     fr = int(round(t * FPS))
-    cars = traffic().get(fr)
+    cars = list(traffic().get(fr) or [])
+    v_ = van_at(t)
+    if v_ is not None:                                   # the white van (Sam, 9 Nov), drawn like the others
+        cars.append((v_[0], v_[1], v_[2], VAN_L, VAN_W, (246, 246, 242), -1))
     if not cars:
         return
     ss = B.SS
