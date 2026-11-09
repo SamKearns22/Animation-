@@ -28,7 +28,8 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
 - **Chat 2 (about 1.5-2%), in order:** (1) the shoulder-seam check, automatic (rule 81; the gap shows at the near
   shoulder in three-quarter pointing, guides/pose-gallery.jpg); (2) phone at the ear: rework (the phone sits on top of
   the head and the arm wraps over it, front and three-quarter; not yet in the gallery); (3) a screen check that a
-  hand meets its prop on the picture (only 3D is checked now); (4) lying: gallery rows and checks (both arms on one
+  hand meets its prop on the picture (only 3D is checked now); phone reading from three-quarter back: phone and
+  hand may still sit over his back at its edge (critique, not yet measured); sheet labels overlap the next column; (4) lying: gallery rows and checks (both arms on one
   side, arm curled, neck); (5) pre-flight flags a pose not from the gallery or seen from an AVOID view; new poses
   priced at planning; (6) rules 41, 42 and 81 merged, by-hand parts automatic (propose wording to Sam first).
 - Not done in chat 1, on purpose: old films' own finger copies are unchanged; the kit's cup and phone (moves.py, also
