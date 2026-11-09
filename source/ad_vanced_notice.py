@@ -604,7 +604,7 @@ def gas(t):
 
 
 # ---------------------------------------------------------------------------------------------- shot 5: the street
-STREET_Z = 4.8                                    # the push ends on his head and shoulders (Q19; the wide shot is 25%
+STREET_Z = 6.6                                    # the push ends on his head and shoulders (Q19; the wide shot is 25%
                                                   # closer since Sam's note, so the same end)
 STREET_TO = (540.0, 800.0)                        # where his face ends up on screen
 
@@ -668,14 +668,21 @@ def street(t):
 # me."); Vance looks down at him and leans back in mild disgust: "Ew. God, no." The officers carry on.
 def ending_j(t):
     """Vance (acting 10-11): grinning at us at the cut; his eyes go down to the man as he begs; on the plea's end he
-    leans back (recoil), chin tucked, his near hand coming up a little, palm out, keeping him off."""
+    leans back (recoil), chin tucked, and puts his hands on his hips (Sam, 9 Nov)."""
     j = V.standing(AC.VANCE)
-    k = _ease(_ramp(t, T['recoil'], T['recoil'] + 0.3))
+    k = _ease(_ramp(t, T['recoil'], T['recoil'] + 0.35))
     j['lean'] = j.get('lean', 0) - 9.0 * k
     j['head_dy'] = j.get('head_dy', 0) + 8.0 * k
     if k > 0.01:
-        V.arm_to(j, 'R', tuple(a + (b - a) * k for a, b in zip((120.0, 330.0, 40.0), (140.0, 150.0, 170.0))), 'down', 'palm')
+        sw = AC.VANCE.get('shoulders', 150)
+        for side, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, side, _lerp3((sg * 120.0, 330.0, 40.0), (sg * (sw - 4), 380.0, 10.0), k), 'out',
+                     'fist')
     return _head(j, t)
+
+
+def _lerp3(a, b, u):
+    return tuple(x + (y - x) * u for x, y in zip(a, b))
 
 
 def ending_eyes(t):
@@ -684,11 +691,24 @@ def ending_eyes(t):
     return dict(look=0.85 * k, gaze_dy=0.55 * k)
 
 
+ENDING_Z = 1.6                                    # Sam, 9 Nov: closer, so his eyes read
+
+
+def ending_cam():
+    """The ending's medium shot (Sam, 9 Nov): closer than the opening wide, framing Vance and the man on the ground
+    between them, so Vance's eyes and the man's face read."""
+    cam1 = SX.cam_at(1.0)
+    vx, vy, ppm = SX.place(cam1, *SX.VANCE_AT)
+    mx, my, _ = SX.place(cam1, *SX.MAN_AT)
+    focus = ((vx + mx) / 2 - 10, vy - 0.9 * ppm)
+    return SX.cam_at(ENDING_Z, focus, (540.0, 980.0))
+
+
 def ending(t):
-    cam = SX.cam_at(1.0)
+    cam = ending_cam()
     im = SX.paint(cam)
     SX.snow(im, cam, t, (7.6, 17.0))
-    SX.draw_group(im, cam, t, T['cut5'] - 3.0, man=lambda k, tt, kn: SX.beg(k, tt, T['cut6'], face('ground', tt, None)))
+    SX.draw_group(im, cam, t, T['cut5'] - 3.0, man=('beg', T['cut6'], face('ground', t, None)))
     sx, sy, ppm = SX.place(cam, *SX.VANCE_AT)
     SX._shadow(im, cam, *SX.VANCE_AT)
     CP.person(im, AC.VANCE, sx, sy, ppm, 0, ending_j(t), **face('vance', t, vance_mood(t)))
@@ -791,7 +811,6 @@ def checks():
     import setcheck
     faults += setcheck.faults(ST.SET_BOXES, ST.SET_MEANT)      # rule 83: no unmeant overlaps in a flat set
     faults += setcheck.faults(SX.SET_BOXES, SX.SET_MEANT)      # (the street's shop fronts)
-    faults += SX.man_faults()                                  # the man rests on the snow, nothing through it
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
@@ -818,7 +837,7 @@ def scene(t):
         if s == 'ending' or street_cam(t).p(-0.7, SX.MAN_AT[1], 0.0)[0] < SX.W + 60:
             for o in SX.OFFICERS:
                 out.append(audit.Thing(o[0], audit.simple(o[0], o[1], o[2], SX.CAST[o[0]]['height'])))
-            out.append(audit.Thing('ground man', SX.LY.solids('ground man', SX.man_body()[0], SX.MAN)))
+            out.append(audit.Thing('ground man', audit.simple('ground man', *SX.MAN_AT, 0.9, sitting=True)))
     else:
         out.append(audit.Thing('vance', audit.simple('vance', 0.0, 0.0, HEIGHTS['vance'], sitting=s == 'study')))
     return out
@@ -858,7 +877,7 @@ def audits():
                 V.person(lay, AC.B.Cam(1.0, 540, 960), v['x'], v['neck_y'], v['s'],
                          dict(AC.VANCE, **face('vance', t, vance_mood(t))), t, yaw, j, head_yaw=hy)
             elif s == 'ending':
-                cam = SX.cam_at(1.0)
+                cam = ending_cam()
                 sx, sy, ppm = SX.place(cam, *SX.VANCE_AT)
                 CP.person(lay, AC.VANCE, sx, sy, ppm, 0, ending_j(t), **face('vance', t, vance_mood(t)))
             elif s == 'street':

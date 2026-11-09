@@ -46,15 +46,15 @@ LW = ST.LW
 # officers and the man 6.9-7.6 m, the near kerb's snowbank 8.4 m, the road to 15 m, the far snowbank, the shopfronts.
 H_CAM, HZ, FOCAL, CX = 1.6, 800.0, 1625.0, 572.0
 D_FACADE, D_FAR_BANK, D_ROAD, D_NEAR_BANK = 18.0, 15.3, (9.0, 15.0), 8.4
-VANCE_AT = (-1.2, 5.0)                   # world x, d (brief 31: to the left of them)
+VANCE_AT = (-1.1, 6.85)                  # world x, d (brief 31: to the left of them; Sam, 9 Nov: level with them)
 MAN_AT = (0.62, 6.95)                    # the man's middle on the snow
 # The officers: (x, d, yaw, move, offset s): one kicks from his head end, side on; one stamps on his back from
 # behind, facing us (his vest reads); two punch down from his feet end, side on, bent over him; each strikes every 1.36 s, a quarter period apart (about 3 blows a second, Q18).
 PERIOD = 1.36
 OFFICERS = [('O1', -0.32, 6.95, 90, 'kick', 0.0),
             ('O3', 0.22, 7.65, 0, 'stomp', PERIOD * 0.25),
-            ('O2', 1.4, 6.9, -90, 'punch', PERIOD * 0.5),
-            ('O4', 0.88, 7.6, -90, 'punch', PERIOD * 0.75)]
+            ('O2', 1.5, 6.9, -90, 'punch', PERIOD * 0.5),       # (Sam, 9 Nov: the blows on the right didn't land:
+            ('O4', 1.08, 7.6, -90, 'punch', PERIOD * 0.75)]     # fists now come down on his hips and back)
 
 
 def cam_at(z=1.0, focus=None, to=None):
@@ -603,8 +603,7 @@ def knock(t):
 
 def blood(img, cam, t, t0):
     """Some blood (Q18): a small red patch on the snow by his head and a few drops, growing a little."""
-    k, _ = man_body()
-    hx, _, hz = k['head']
+    hx, hz = MAN_AT[0] - 0.36, MAN_AT[1] + 0.1                      # by his head on the snow
     g = 0.7 + 0.3 * min(1.0, max(0.0, (t - t0) / 6.0))
     lay = layer()
     pen = Pen(lay)
@@ -694,6 +693,68 @@ def beg(k, t, t0, face=None):
     return k
 
 
+# ---- the man on the ground, flat (Sam, 9 Nov: the 3D body read as "a nightmarish balloon creature"): the same flat
+# cartoon person as everyone else, drawn side on facing left in a seated pose (thighs level, shins down) and turned a
+# quarter turn, so he kneels curled face down, his head to our left (towards Vance), knees under him, shins flat on
+# the snow behind: the turtle a man being beaten curls into. Arms wrapped over the back of his head, elbows by his face.
+GUARD_POLE = (0.0, 0.6, 1.0)
+GUARD = {'L': (-10.0, -230.0, -40.0), 'R': (10.0, -215.0, -50.0)}
+
+
+def _lerp3(a, b, u):
+    return tuple(x + (y - x) * u for x, y in zip(a, b))
+
+
+def man_j(t, beg_from=None, kn=0.0, fl=0.0):
+    """His pose (views joints, before the quarter turn). While they beat him (note 48) his near hand keeps weakly
+    lifting towards them, trembling, and is knocked down by the blows; begging (the ending) his head comes up and
+    that hand reaches up to Vance."""
+    sp = MAN
+    j = moves.seated(sp)
+    j['chair_draw'] = lambda *a, **k: None
+    lean = 30.0 + 5.0 * fl                                         # a blow folds him tighter
+    tr = (0.0, 10.0 * math.sin(t * 2 * math.pi * 6.0), 6.0 * math.sin(t * 2 * math.pi * 5.0 + 1.0))
+    tgt_r, shape = GUARD['R'], 'fist'
+    if beg_from is None:
+        u = (t % PLEAD) / PLEAD
+        r = (0.5 - 0.5 * math.cos(2 * math.pi * min(1.0, u / 0.8))) if u < 0.8 else 0.0
+        r *= 0.85 * (1 - 0.8 * kn)
+        tgt_r = _lerp3(GUARD['R'], tuple(a + b for a, b in zip((30.0, -300.0, -190.0), tr)), r)
+        shape = 'palm' if r > 0.3 else 'fist'
+    else:
+        u = min(1.0, max(0.0, (t - beg_from) / 0.5))
+        u = u * u * (3 - 2 * u)
+        lean = 30.0 - 18.0 * u + 5.0 * fl
+        tgt_r = _lerp3(GUARD['R'], tuple(a + b for a, b in zip((40.0, -300.0, -260.0), tr)), u)
+        shape = 'palm' if u > 0.3 else 'fist'
+    V.arm_to(j, 'L', GUARD['L'], GUARD_POLE, 'fist')
+    V.arm_to(j, 'R', tgt_r, GUARD_POLE, shape)
+    j['lean'] = lean
+    j['on_face'] = {'R'}
+    return j
+
+
+def man_draw(img, cam, t, beg_from=None, face=None, fl=0.0, kn=0.0):
+    """Draw him at MAN_AT through `cam`: the flat drawing turned a quarter turn, its lowest point on the snow."""
+    d = MAN_AT[1]
+    ppm = cam.ppm(d)
+    s = 928 * V.M_PER_UNIT * MAN['height'] / 1.75 * ppm / 928
+    n = int(1500 * s) + 40
+    c = Image.new('RGBA', (n, n), (0, 0, 0, 0))
+    sp = dict(MAN, **{q: v for q, v in (face or {}).items() if q in ('mouth', 'blink')})
+    sp['mood'] = 'scared'
+    B.SS = 1
+    V.person(c, B.Cam(1.0, 540, 960), n / 2, n * 0.28, s, sp, 0.0, -90, man_j(t, beg_from, kn, fl))
+    r = c.rotate(90)
+    bb = r.getbbox()
+    if not bb:
+        return
+    r = r.crop(bb)
+    gx, gy = cam.p(MAN_AT[0] + 0.04 * fl, d, 0.0)
+    _shadow(img, cam, MAN_AT[0], d, 0.6)
+    img.alpha_composite(r, (int(round(gx - r.width / 2)), int(round(gy - r.height + 0.02 * ppm))))
+
+
 def draw_group(img, cam, t, t0=0.0, man=None):
     """The beating: the two behind him, the blood and the man, then the two kicking from either end (far to near)."""
     order = sorted(OFFICERS, key=lambda o: -o[2])
@@ -704,22 +765,8 @@ def draw_group(img, cam, t, t0=0.0, man=None):
     for o in back:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
     blood(img, cam, t, t0)
-    k, surf = man_body()
-    f = flinch(t)
-    if f > 0.01:                                                    # a jolt: pushed a little, curled a touch tighter
-        k = k.copy()
-        for nm in LY.POINTS:
-            k[nm] = k[nm] + np.array([0.0, 0.0, 0.02 * f])
-        for nm in ('head', 'wrL', 'wrR', 'elL'):
-            k[nm] = k[nm] + np.array([0.015 * f, 0.0, 0.0])
-    sp = MAN
-    if man is None:
-        k = plead(k, t, knock(t))
-    else:                                                           # the ending: begging Vance, his mouth talking
-        k = man(k, t, knock(t))
-    if man is not None and MAN_FACE[0]:
-        sp = dict(MAN, **MAN_FACE[0])
-    LY.draw(img, scam(cam), k, sp, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
+    beg_from, face = (man[1], man[2]) if man else (None, None)   # man=('beg', from, face): the ending
+    man_draw(img, cam, t, beg_from, face, flinch(t), knock(t))
     for o in front:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
 
