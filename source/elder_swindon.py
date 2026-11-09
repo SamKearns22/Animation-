@@ -1067,8 +1067,8 @@ _TRAFFIC = None
 
 
 N_PER_ARM = 13                                   # cars queued on each arm (more traffic: Sam, 9 Nov; was 9)
-TRAFFIC_SEED = 10                                # the mix of cars (chosen: no jams, no touching)
-JUNCTION_CAP = 10                                 # most cars past the give-way lines at once (keeps the ring moving)
+TRAFFIC_SEED = 8                                 # the mix of cars (chosen: no jams, no touching)
+JUNCTION_CAP = 14                                 # most cars past the give-way lines at once (keeps the ring moving)
 
 
 def traffic():
@@ -1539,7 +1539,7 @@ def draw_cars(pil, cam, t):
 import elder_swindon_extras as X   # noqa: E402
 
 FOOTPATH_R = 64.0                                # the footpath round the green, between the ring and the trees
-MOPED_ID = 42                                    # which car in the traffic is the delivery moped (note 15)
+MOPED_ID = 55                                    # which car in the traffic is the delivery moped (note 15)
 FIGHT_AT, FIGHT_DIR = tuple(_pol(FOOTPATH_R, 246)), 246 + 90      # on the footpath, top left (note 13)
 BURNT_AT = (-56.0, 165.0, 75.0)                  # on the green by the stadium's corner (note 16)
 EBIKE_R = 20.5                                   # the teens' line: inside the ring, the wrong way (note 14)
