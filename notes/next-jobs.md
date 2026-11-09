@@ -8,6 +8,9 @@
   one-piece finger is the house finger; front-on and from-behind people never draw mirrored (Islamocommunism 9).
 - **Next:** Job G chat 2, new chat, **Opus, high effort**. Type: "Job G chat 2: read notes/next-jobs.md Where things
   stand and the Job G section." No new estimate: chat 2 was priced (1.5-2%).
+  **After G: Job H (critique helper, about 2%)**, only once G chat 2 has handed over. First chat: the checklist
+  design, **Opus, max effort**, short (Sam's 9 Nov table); then building, Opus high. Type: "Job H: critique helper.
+  Read notes/next-jobs.md Where things stand and Build plan H. Estimate first (rule 86)." 
 - **Needs Sam:** nothing.
 - **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph; `notes/job-e-measurements.md` cut list.
 - **Open rule requests:** none. Chat 2 proposes merging rules 41, 42 and 81 (by-hand parts now automatic).
