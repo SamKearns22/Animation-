@@ -239,8 +239,8 @@ Ad-Vanced Notice at 6.5 h: 47.0 s, 232 views, avg watch 10.4 s (22%), 7.5% in fu
 1 save, 0 followers. Patriots 4 (5.9K on 3 Nov) not in this set.
 
 Reading (Claude, 9 Nov): in `story/growth-analysis-3-nov.md` style, by topic, median views: UK politics 1.6K (10 films,
-lowest 797, 4 over 4.5K); World politics 1.1K (10 films, 4 under 700); Other 670 (10 films, 2 over 5K, both riding a big
-TV/culture story). #UKComedy is on 25 of 30 films, hits and flops alike: no signal. #Animation is on 3 hits and 7 low
+lowest 797, 4 over 4.5K); World politics 1.1K (10 films, 4 under 700); Other 670 (10 films, 2 over 5K:
+Celebrity Traitors and TERFwarts; Sam: TERFwarts tied to no news story). #UKComedy is on 25 of 30 films, hits and flops alike: no signal. #Animation is on 3 hits and 7 low
 films; Sam has ruled it out (hostile to AI-built films). Hits spend every tag on a real search term (a person, party,
 show, fandom or event); the low films spend 1-3 tags on words nobody searches (#paranoia #antique #brave #rocket #Crabs
 #Nonsense #FirstDay #Abdul #Claudia #Halo #Plague). Ad-Vanced Notice had the most generic set of any politics film: three
