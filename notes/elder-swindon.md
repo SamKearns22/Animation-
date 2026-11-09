@@ -143,6 +143,11 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 56 | (Sam, 9 Nov) Two women walking with a pram | yes: on the footpath, top right |
 | 57 | (Sam, 9 Nov) Pigeons in the central circle | yes: a dozen on the island's paving, pecking |
 | 58 | (Sam, 9 Nov) One white van driving like an absolute twat | yes: from 24.1 s: down the centre line past the queue, straight over the mini's dome, weaving inside the splitter, out flat out; never touches anything (`van_faults`) |
+| 59 | (Animatic 4) Drool clipped in shots 3 and 4 | yes: from shot 2 the pool lies on the soil under him (drawn before his body); the strand stays on his cheek (shot 1's fix had never reached the other shots) |
+| 60 | (Animatic 4) EGG MAYO backwards | yes: the front face was shown from behind; mirrored |
+| 61 | (Animatic 4) The shopping bag and items too plain to identify | yes: carrier bag with a stripe and creases, lager can, crisp packet, chicken box with bones, pop bottle, banana skin, coffee cup |
+| 62 | (Animatic 4) Pigeons in shots 2-4 so we know what they are from above; they popped in late on the zoom out | yes: four by him from shot 2 (one flies off as the packet lands), a dozen on the island, drawn through every camera and grown smoothly |
+| 63 | (Sam, 9 Nov) Pigeon heads had no neck; poor shaping in shot 3; the neck stretch looked weird | yes: rebuilt after a critique (short fixed neck under the body and head, curved body, dark folded wings, feathered wingbeats, grey and eyeless when small); Sam: Y |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |
@@ -246,7 +251,7 @@ neither fix was checked side by side with the photo; nothing checked that cars s
 the pavement corners where the arms met the ring. Fixed: the layout rebuilt from the video frame (minis at 35 m round a
 15 m island inside one 46 m grey, splitters between), routes A (clockwise to the next mini, outside the splitters) and
 B (anticlockwise to the mini before, inside them), and `traffic_faults` now fails any car corner off the road.
-Rule 84 written (Sam: Y, 9 Nov): a real place is compared side by side with its reference on the check sheet before every animatic. Animatic 3 sent 9 Nov. Animatic 4 sent 9 Nov (36.6 s, the extra track, the van).
+Rule 84 written (Sam: Y, 9 Nov): a real place is compared side by side with its reference on the check sheet before every animatic. Animatic 3 sent 9 Nov. Animatic 4 sent 9 Nov (36.6 s, the extra track, the van). Animatic 5 sent 9 Nov.
 
 ## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
 1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
