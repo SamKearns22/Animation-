@@ -136,7 +136,7 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 49 | (Animatic 2, and notes 2 before it) The roundabout as in Sam's photo and drone videos: minis inside one grey carriageway round the central island, splitter islands between them, cars on the road round the minis | yes: rebuilt from the video; every car checked on the road, every frame |
 | 50 | (Animatic 3) Less greying out of the aerial | yes: dims to 10% (was 26%) |
 | 51 | (Animatic 3) Lines in the housing so the terraces aren't one long block | yes: each house its own roof, tone varied, an alley every 7th, chimneys |
-| 52 | (Animatic 3) Hold on the aerial view a few more seconds | asked Sam how (9 Nov) |
+| 52 | (Animatic 3) Hold on the aerial view a few more seconds: 5 s more of the track (Sam's second recording) | yes: the film now 35.04 s (+1.6 sign-off); the recording starts at 0:41 of the video, where the first ends; joined with a 20 ms crossfade, faded over the last 0.8 s |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |

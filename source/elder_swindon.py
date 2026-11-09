@@ -49,7 +49,9 @@ FPS, SR = 24, MA.SR              # 24, not the satire 12: slow camera glides jud
 NAME = 'elder_swindon'
 NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'elder-swindon.md')
 HAS = {'people', 'effects', 'props'}
-DUR = 30.04                                   # the teaser's sound, as is; finish.py adds the 1.6 s sign-off
+SOUND_END = 30.04                             # the teaser's sound (Sam's first recording) ends here
+EXTRA = 5.0                                   # (Sam, animatic 3) 5 s more of the track, from his second recording,
+DUR = SOUND_END + EXTRA                       # the aerial held for them; finish.py adds the 1.6 s sign-off
 BLACK_AT = DUR
 HOOK = ('Elder Scrolls reveals new location!', {'y': 1265, 'x': 600, 'until': 4.0})   # right of the can's path
 SUBTITLES_AT_FINISH = False                   # no voices, no subtitles
@@ -955,7 +957,7 @@ MINIS = [211, 282, 339, 45, 148]                # the five minis' bearings (scre
 R_MINI, RING_MINI, R_ISLAND = 35.0, 5.5, 15.0   # minis' centres; the lane round each; the central island
 R_GREY = 46.0                                    # the grey's edge (the arms join it)
 R_GIVE = 16.5                                    # the dashed give-way ring round the island
-SPLIT_R, SPLIT_HL, SPLIT_HW = 30.5, 9.0, 2.6     # the splitter islands: radius, half length, half width
+SPLIT_R, SPLIT_HL, SPLIT_HW = 30.5, 8.0, 2.6     # the splitter islands: radius, half length, half width
 R_RING = R_GREY                                  # (the walkers' pavement runs round this edge)
 
 
@@ -982,7 +984,7 @@ def _inside(p, poly_):
     return c
 
 
-def on_road(p):
+def on_road(p, domes=True):
     """Is this map point on the carriageway (the grey or an arm), clear of the island, the splitters and the domes?"""
     p = np.asarray(p, float)
     r = float(np.hypot(*p))
@@ -993,7 +995,7 @@ def on_road(p):
         u = _pol(1, m)
         if float(np.dot(p, u)) > 36 and abs(u[0] * p[1] - u[1] * p[0]) <= 7.5:
             ok = True
-        if np.hypot(*(p - _pol(R_MINI, m))) < 2.0:
+        if domes and np.hypot(*(p - _pol(R_MINI, m))) < 2.0:
             return False
     return ok and not any(_inside(p, q) for q in splitters())
 CAR_COLS = [(240, 240, 238), (30, 30, 34), (170, 172, 178), (176, 30, 36), (40, 70, 150), (240, 240, 238),
@@ -1184,7 +1186,8 @@ def traffic_faults():
                 continue
             c_, s_ = math.cos(math.radians(hd)), math.sin(math.radians(hd))
             for u_, v_ in ((Lc / 2, Wc / 2), (Lc / 2, -Wc / 2), (-Lc / 2, Wc / 2), (-Lc / 2, -Wc / 2)):
-                if not on_road((x + u_ * c_ - v_ * s_, y + u_ * s_ + v_ * c_)):
+                if not on_road((x + u_ * c_ - v_ * s_, y + u_ * s_ + v_ * c_), domes=Lc < 6):   # a bus or van may
+                    #                                     overrun a mini's dome as it turns (they are built for it)
                     out.append(f'TRAFFIC: a car off the road at {fr / FPS:.2f} s near ({x:.0f}, {y:.0f}) m')
                     break
     for fr, cs in sorted(traffic().items()):
@@ -1928,6 +1931,16 @@ def soundtrack(stems=False):
     """The teaser's sound as it is (Sam, 8 Nov), only brought under full scale (its peaks went over by 1.1 dB)."""
     n = int((DUR + 0.3) * SR)
     x = MA.load(os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-audio.m4a'))
+    # the track's next 5 s (Sam's second recording starts at 0:41 of the video, where the first ends), joined with a
+    # 20 ms crossfade, faded out over the last 0.8 s into the sign-off
+    y = MA.load(os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-end.m4a'))
+    cut, xf = int(SOUND_END * SR), int(0.02 * SR)
+    x = x[:cut]
+    y = y[:int(EXTRA * SR) + xf] * (np.sqrt(np.mean(x[-SR:] ** 2)) / max(1e-6, np.sqrt(np.mean(y[:SR] ** 2))))
+    ramp = np.linspace(0, 1, xf)
+    x = np.concatenate([x[:-xf], x[-xf:] * (1 - ramp) + y[:xf] * ramp, y[xf:]])
+    fo = int(0.8 * SR)
+    x[-fo:] *= np.linspace(1, 0, fo) ** 1.5
     x = x * (0.97 / max(1e-6, float(np.abs(x).max())))
     mix = np.zeros(n)
     mix[:min(n, len(x))] = x[:n]
