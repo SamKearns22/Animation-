@@ -435,9 +435,9 @@ def ebike(v, x, y, h, hood, top, t):
 
     def L(u, w):
         return (x + (u * ca - w * sa) * e, y + (u * sa + w * ca) * e)
-    for k in range(3):                                   # speed lines behind
-        a, b = L(-1.0 - k * 0.15, (k - 1) * 0.25), L(-2.2 - k * 0.4, (k - 1) * 0.25)
-        v.line([a, b], (255, 255, 255, 170), w_m=0.07 * e)
+    for k in range(3):                                   # speed lines behind (shorter, finer: Sam, 9 Nov)
+        a, b = L(-0.95 - k * 0.1, (k - 1) * 0.2), L(-1.55 - k * 0.2, (k - 1) * 0.2)
+        v.line([a, b], (255, 255, 255, 140), w_m=0.045 * e)
     v.line([L(-0.85, 0), L(0.85, 0)], INK, w_m=0.16 * e)        # wheels and frame
     v.line([L(0.55, -0.32), L(0.55, 0.32)], INK, w_m=0.08 * e)  # handlebars
     person(v, *L(-0.05, 0), h, top, None, t, walk=0.0, hood=hood, arms=(0.55, 0.55), lean=0.15)

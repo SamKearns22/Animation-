@@ -1066,6 +1066,7 @@ def _resample(pts, step=0.5):
 _TRAFFIC = None
 
 
+N_PER_ARM = 13                                   # cars queued on each arm (more traffic: Sam, 9 Nov; was 9)
 TRAFFIC_SEED = 10                                # the mix of cars (chosen: no jams, no touching)
 JUNCTION_CAP = 10                                 # most cars past the give-way lines at once (keeps the ring moving)
 
@@ -1087,7 +1088,7 @@ def traffic():
     cars = []                                            # route, s (index in 0.5 m steps), speed, size, colour
     for arm in range(5):                                 # each arm's cars one behind another in its lane (both
         s0 = float(rng.uniform(-60, 120))                # routes from an arm share it), spaced like real traffic
-        for n in range(9):
+        for n in range(N_PER_ARM):
             s0 -= float(rng.uniform(40, 80))
             cars.append(dict(r=arm * 2 + int(rng.integers(0, 2)), s=s0, v=float(rng.uniform(7, 9.5)),
                              L=4.4, W=1.85, col=CAR_COLS[int(rng.integers(0, len(CAR_COLS)))]))
@@ -1580,20 +1581,13 @@ class _MapView:
 
 
 def _walk_paths():
-    """Where people walk: both pavements of every arm, the ring's pavement between the minis, the footpath."""
+    """Where people walk: only the footpath round the green, away from the road (Sam, 9 Nov: none next to the road;
+    the pavements by the ring and the arms are left empty). Each green's stretch, clear of the arms, both ways."""
     out = []
-    for i, m in enumerate(MINIS):
-        u, n = _pol(1, m), _pol(1, m + 90)
-        for side in (-1, 1):
-            a, b = u * 74 + n * 9.0 * side, u * 170 + n * 9.0 * side
-            out.append([a, b] if (i + side) % 2 else [b, a])
-        a1, a2 = m + 16, MINIS[(i + 1) % 5] - 16 + (360 if MINIS[(i + 1) % 5] < m else 0)
-        arc = [_pol(R_RING + 1.25, a) for a in np.linspace(a1, a2, 12)]
-        out.append(arc if i % 2 else arc[::-1])
-    for k_ in range(5):                                  # the footpath round the green, both ways
-        a0 = MINIS[k_] + 20
-        arc = [_pol(FOOTPATH_R, a) for a in np.linspace(a0, a0 + 50, 10)]
-        out.append(arc if k_ % 2 else arc[::-1])
+    for k_ in range(5):
+        a0 = MINIS[k_] + 13
+        arc = [_pol(FOOTPATH_R, a) for a in np.linspace(a0, a0 + 46, 10)]
+        out += [arc, arc[::-1]]
     return out
 
 
@@ -1610,7 +1604,7 @@ def walkers_on(v, t):
         _WALK = []
         for pts in _walk_paths():
             p = np.array(pts, float)
-            for j in range(int(rng.integers(1, 3))):
+            for j in range(2):
                 _WALK.append((p, float(rng.uniform(1.0, 1.5)), float(rng.uniform(0, 200)),
                               TOPS[int(rng.integers(0, len(TOPS)))], HAIRS[int(rng.integers(0, len(HAIRS)))],
                               int(rng.integers(0, 3)) == 0))
@@ -1627,13 +1621,13 @@ def walkers_on(v, t):
 
 
 def ebike_at(n, t):
-    """The two teens: clockwise round the inside of the ring (the wrong way), weaving, far too fast (14 m/s)."""
-    a = 200 + math.degrees(t * 14.0 / EBIKE_R) + n * 22
+    """The two teens: clockwise round the inside of the ring (the wrong way), weaving, far too fast (17 m/s)."""
+    a = 200 + math.degrees(t * 17.0 / EBIKE_R) + n * 22    # a bit faster (Sam, 9 Nov: was 14 m/s)
     w = 1.2 * math.sin(t * 2.7 + n * 1.9)
     r = EBIKE_R + w
     dr = 1.2 * 2.7 * math.cos(t * 2.7 + n * 1.9)        # weaving: the heading turns with it
     x, y = _pol(r, a)
-    return x, y, a + 90 - math.degrees(math.atan2(dr, 14.0))
+    return x, y, a + 90 - math.degrees(math.atan2(dr, 17.0))
 
 
 def draw_people(pil, cam, t):
@@ -1648,9 +1642,63 @@ def draw_people(pil, cam, t):
     for x, y, hd, *_r, cid in traffic().get(fr, []):
         if cid == MOPED_ID:
             X.moped(_MapView(pil, cam, enl_cap=2.0), x, y, hd)
+    vb = _MapView(pil, cam, enl_cap=4.0 * 2 / 3)       # the bikes a third smaller (Sam, 9 Nov)
     for n, (hood, top) in enumerate((((40, 40, 44), (40, 40, 44)), ((150, 152, 158), (150, 152, 158)))):
         x, y, h = ebike_at(n, t)
-        X.ebike(v, x, y, h, hood, top, t)
+        X.ebike(vb, x, y, h, hood, top, t)
+    pram_walk(v, t)
+    pigeons(v, t)
+
+
+PRAM_ARC = (292.0, 332.0)                        # the two women with a pram: the footpath, top right (Sam, 9 Nov)
+
+
+def pram_walk(v, t):
+    """Two women walking side by side along the footpath, one pushing a pram (house style, from above)."""
+    a = PRAM_ARC[0] + (PRAM_ARC[1] - PRAM_ARC[0]) * ((t - 19.0) * 0.9 / (FOOTPATH_R * math.radians(PRAM_ARC[1] - PRAM_ARC[0])))
+    h = a + 90                                           # walking clockwise round the green
+    e = v.enl
+    p = np.array(_pol(FOOTPATH_R - 0.45 * e, a)); q = np.array(_pol(FOOTPATH_R + 0.45 * e, a))
+    if not v.visible(*p, 6):
+        return
+    fw = np.array(_pol(1, h))
+    for c_, top, hair in ((p, (230, 150, 180), (196, 160, 96)), (q, (120, 150, 200), (70, 46, 34))):
+        X.person(v, c_[0], c_[1], h, top, hair, t)
+        pt = c_ - fw * 0.17 * e                            # a ponytail behind the head
+        v.circle(pt[0], pt[1], 0.065 * e, hair, INK)
+    pr = p + fw * 0.85 * e                                 # the pram ahead of the first: body, hood, handle
+    v.poly(X.rrect(pr[0], pr[1], 0.8 * e, 0.5 * e, h, 0.15 * e, 3), (60, 70, 110), INK)
+    hd_ = pr + fw * 0.22 * e
+    v.circle(hd_[0], hd_[1], 0.22 * e, (40, 46, 80), INK)
+    v.line([tuple(p + fw * 0.35 * e), tuple(pr - fw * 0.38 * e)], INK, w_m=0.05 * e)
+
+
+_PIGEONS = None
+
+
+def pigeons(v, t):
+    """A dozen pigeons on the central island's paving, pecking and shuffling (Sam, 9 Nov); clear of the soil patch,
+    the man and the lamp post. Grey bodies, dark heads, drawn as large as the people so they read."""
+    global _PIGEONS
+    if _PIGEONS is None:
+        rng = np.random.default_rng(21)
+        pc = np.array([-(PATCH_C[0] - LAMP[0]), PATCH_C[1] - LAMP[1]])
+        _PIGEONS = []
+        while len(_PIGEONS) < 12:
+            p = np.array(_pol(rng.uniform(6.5, 13.0), rng.uniform(0, 360)))
+            if np.hypot(*(p - pc)) > 5.0 and all(np.hypot(*(p - q)) > 2.2 for q, *_ in _PIGEONS):
+                _PIGEONS.append((p, rng.uniform(0, 360), rng.uniform(0, 6.3)))
+    e = min(v.enl * 1.4, 5.0)                           # a bit larger than life even among the people
+    for p, h0, ph in _PIGEONS:
+        h = h0 + 40 * math.sin(t * 0.7 + ph)               # turning about as they pick at the ground
+        pos = p + np.array(_pol(0.4, t * 20 + ph * 57)) * 0.5
+        fw = np.array(_pol(1, h))
+        bob = 0.06 * max(0.0, math.sin(t * 6 + ph * 3))     # pecking
+        v.poly(X.rrect(pos[0], pos[1], 0.32 * e, 0.17 * e, h, 0.08 * e, 3), (150, 154, 166), INK)
+        hp = pos + fw * (0.17 + bob) * e
+        v.circle(hp[0], hp[1], 0.065 * e, (70, 84, 96), INK)
+        tl = pos - fw * 0.2 * e
+        v.circle(tl[0], tl[1], 0.05 * e, (90, 92, 104), None)
 
 
 def flat_props(pil, cam, t):
