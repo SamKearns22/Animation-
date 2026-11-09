@@ -2,10 +2,10 @@
 
 - **Rules that bite next:** 86 (tools: own chat, estimate first), 44 (12% a film), 85 (cost watch).
 - **Done (9 Nov):** Ad-Vanced Notice posted (notes archived); Elder Scrolls Swindon final sent; sitting kit closed (Sam); Job C approved (Sam: Y).
-- **Next:** Job C, chat 1 of 2: Opus high, new chat: "Tidy the rules and guides, chat 1 (Job C in notes/next-jobs.md)". Then Job D (below): estimate first.
-- **Needs Sam:** Y/N on Job D's estimate; numbers for the efficiency proposals E1-E4 (below).
+- **Next:** Job C, chat 1 of 2: Opus high, new chat: "Tidy the rules and guides, chat 1 (Job C in notes/next-jobs.md)". Job D (below) APPROVED (Sam: Y, 9 Nov): its own chat, after Job C or alongside it.
+- **Needs Sam:** Y/N on the handovers-at-the-bottom rule wording (below).
 - **Read:** this file only; then the rulebook and CLAUDE.md in full (Job C chat 1 needs them).
-- **Open rule requests:** E1-E4 below (proposed 9 Nov, waiting for Sam's numbers); Job D's rule comes with its build.
+- **Open rule requests:** handovers always at the bottom of a message (Sam, 9 Nov; wording proposed, waiting); Job D's rule comes with its build. E1-E4 WRITTEN 9 Nov (CLAUDE.md; P13-P16).
 - **For Claude:** sitting kit `source/sitting.py` (closed); cost watch `.claude/hooks/costwatch.py` (WEEK_USD still to calibrate).
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
@@ -18,9 +18,9 @@
 - Plan: a gentle voice polish in `mossad_audio` used by every film: a soft treble shelf and a de-esser (s-sounds), a light
   warmth lift, the loud stretches evened; then a before/after clip of Ad-Vanced Notice's line 9 for Sam to judge by ear on
   his phone. Nothing about the voices' timing or pitch changes. Rule proposal comes with it.
-- Estimate: about 1% of a week, own chat (rule 86), Opus high. Type: "Build the softer voices tool (Job D in notes/next-jobs.md)".
+- Estimate: about 1% of a week, own chat (rule 86), Opus high. **Sam: Y (9 Nov).** Type: "Build the softer voices tool (Job D in notes/next-jobs.md)".
 
-## Efficiency proposals, 9 Nov (waiting for Sam's numbers)
+## Efficiency proposals, 9 Nov (Sam: Y to all; written in CLAUDE.md, P13-P16)
 - E1 Start every chat with the Animation- repository selected (the session's own folder). On 9 Nov a chat started in an empty
   folder: the cost watch and the tool install never ran until the repository was added by hand.
 - E2 Status questions, quick answers and filing jobs run on Sonnet, not Opus (about half the price per step).

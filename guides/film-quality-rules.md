@@ -148,6 +148,10 @@ the end with their checks.
 | M7 | Questions numbered, answered by number or Y/N, my pick first (Messages) | by hand |
 | P11 | Every chat starts by listing all branches for newer work on the film, and ends with a push to the main line too (Making the films) | by hand |
 | P12 | Reference photos: Sam sends 2-3 if he has them; otherwise one slow search, 3 per place at most (Making the films) | by hand |
+| P13 | Every chat starts with the Animation- project selected (Making the films; Sam, 9 Nov) | automatic: no cost-watch line means it isn't |
+| P14 | Status questions and quick answers on Sonnet (Models and chats; Sam, 9 Nov) | by hand |
+| P15 | A film's notes move to the archive the day Sam says it's posted (Models and chats; Sam, 9 Nov) | by hand |
+| P16 | Every open decision, across all jobs, asked in one message (Messages; Sam, 9 Nov) | by hand |
 
 The old register gave S1 to two rules; riding is now S10. The old register and the old long rule texts are in
 `guides/archive/rule-register.md` and git history.

@@ -15,7 +15,8 @@ I don't know how to code. Please:
 - **One line per note:** "8: fixed – the whale now knocks the helideck away. Clip sent." Anything a fix takes away
   (a prop, a person, a joke, a landing in shot) and anything you add (a sign, a joke, a sound, set dressing) gets its
   own line, "Lost: …" / "Added: …", so I can say no before it costs a round.
-- **Questions are numbered,** each answered by a number or Y/N, your pick first.
+- **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision goes in one message**
+  (all jobs, not just the current one), so no chat is spent waiting on a single answer (Sam, 9 Nov).
 - **Self-review is one line before every send:** "Checks: all clean except X (looked: fine because …)". Name only
   by-hand rules that slipped or were at risk. Never send something a check flagged without saying so.
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me.
@@ -60,7 +61,7 @@ I don't know how to code. Please:
   - **a round of my notes** (deciding the fixes, applying them, the clips): **Opus, medium effort**; building from a
     clear plan or sound: Opus, medium effort;
   - routine work (the pre-flight and other checks, the check sheet, the animatic render, filing recordings, a final
-    render, sending, saving) and quick videos: **Sonnet** (Sam, 8 Nov: put back; once the fixes are made, the checks
+    render, sending, saving), quick videos, **status questions and quick answers**: **Sonnet** (Sam, 8 Nov: put back; once the fixes are made, the checks
     and the animatic go to Sonnet).
 
   When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
@@ -75,7 +76,8 @@ I don't know how to code. Please:
   bite next (3, by number); Done; Next (model and what to type in the new chat); Needs Sam; Read (which sections of
   which guide); Open rule requests. Code names go in a "For Claude" line at the end. Update `story/status.md` (3
   lines), commit and push. **Paste only 3 lines into the chat:** what's done, the model, and what to type in the new chat.
-- **Read little:** at each handover, finished notes move to `notes/archive/`; the film's notes file keeps only the brief
+- **Read little:** at each handover, finished notes move to `notes/archive/`; **a film's whole notes file moves there the
+  day Sam says it's posted** (Sam, 9 Nov); the film's notes file keeps only the brief
   checklist, the estimate, open notes and 'Where things stand' (under 4,000 words). one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
   size for faces, Hook Text and frames Sam names), never an unchanged picture again; a film's code starts with a short
   map (`MAP` in its first lines) and only the lines a note touches are read; `python3 source/codemap.py
@@ -88,6 +90,8 @@ I don't know how to code. Please:
   end. Say how long each render will take and how long it took.
 
 # Making the films
+- **Every chat starts with the Animation- project selected** (Sam, 9 Nov): without it the cost watch and the tools never
+  start. If a chat finds itself without it, add the project before any work and say so.
 - **One main line of work:** `claude/create-claude-md-oe8z4g` (GitHub's default branch) holds everything. Start from
   the newest copy on GitHub, merge in any newer work from other branches, and push back at the end.
   **At the start of every chat, list every branch (`git fetch --all; git branch -r`) and look for newer work on the
