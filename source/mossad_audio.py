@@ -9,11 +9,14 @@ Each recording is cleaned gently, then every line is set to the same loudness:
 - hiss and room noise: spectral noise reduction learnt from the file's own quiet parts, limited to about 10 dB
   and smoothed over time and pitch, so the voice never sounds underwater or watery;
 - loudness: measured the broadcast way (ITU-R BS.1770, K-weighted, gated), every line set to the same level.
-Nothing else: no echo, no pitch change, no compression. The voices play as recorded.
+- polish (Job D, Sam, 9 Nov: "too brash and abrasive to listen to"): a little warmth, the 2-5 kHz edge and the treble
+  eased by how bright the take is, and the s-sounds tamed only while they hiss (see `polish`).
+No echo, no pitch change, no change to the timing. The voices play as recorded, only softer-edged.
 
 Usage:
     python3 mossad_audio.py report        loudness, noise and pauses of each file, before and after
     python3 mossad_audio.py wavs OUT_DIR  cleaned, levelled copies to listen to
+    python3 mossad_audio.py soft NAME [NAME ...]   how much edge and hiss each take has, before and after the polish
 """
 import math
 import os
@@ -177,6 +180,27 @@ def gentle_level(x, ratio=3.0, above=4.0):
 
 
 
+def even_out(x, above=2.0, ratio=3.0):
+    """Long loud stretches (an explosion, a run of shouting) eased toward the rest of the film: wherever the level over
+    400 ms sits more than `above` dB over the film's typical level (the median of its sounding moments, so the loud
+    stretch can't raise the bar itself), it comes down by two-thirds of the excess, easing in over 200 ms and back
+    over 1 s, slow enough that no single word is squashed (Job D, Ad-Vanced Notice: 11-17 s ran 4 dB over the rest)."""
+    from scipy.ndimage import uniform_filter1d
+    blk = int(0.01 * SR)
+    nb = -(-len(x) // blk)
+    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
+    lv = 10 * np.log10(uniform_filter1d(p, 40) + 1e-12)                # 400 ms
+    on = lv > lv.max() - 30
+    if not on.any():
+        return x
+    ref = np.median(lv[on])
+    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)
+    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 20), 1 - math.exp(-1 / 100)
+    for i in range(1, nb):
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * (att if want[i] < g[i - 1] else rel)
+    return x * np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
+
+
 def smooth_limit(x, ceiling_db):
     """A last guard on the few bursts left over (at most 3 dB of them): the volume eases down over 10 ms just ahead of
     a peak and recovers over about 150 ms."""
@@ -200,7 +224,7 @@ def master(mix, end=None, lufs_target=MASTER_LUFS):
     """The whole film's sound: levelled gently, set to -16 LUFS (or quieter if the loudest burst would need more than
     3 dB of limiting), then the few bursts left eased under -1 dB. Returns (mastered, the gain applied before limiting)."""
     end = len(mix) if end is None else end
-    x = gentle_level(mix)
+    x = gentle_level(even_out(mix) if POLISH else mix)
     if np.abs(x).max() < 1e-9:
         return x, 1.0
     g = min(10 ** ((lufs_target - lufs(x[:end])) / 20), 10 ** ((MAX_LIMIT_DB - 1.0) / 20) / np.abs(x).max())
@@ -209,7 +233,7 @@ def master(mix, end=None, lufs_target=MASTER_LUFS):
 
 def limit_check(mix, end=None):
     """Faults for the plan checks: limiting deeper than 3 dB anywhere (it sounds like crackle on a phone)."""
-    x = gentle_level(mix)
+    x = gentle_level(even_out(mix) if POLISH else mix)
     out, g = master(mix, end)
     d = limit_db(x * g, out)
     return [f'the sound is limited by {d:.1f} dB somewhere (most allowed {MAX_LIMIT_DB:.0f}): master quieter'] \
@@ -297,6 +321,60 @@ def restore_tail(raw, x):
     return out + 1.0 * lift * sosfiltfilt(hi, out)
 
 
+# ------------------------------------------------------------------------------------------------ softer voices (Job D, 9 Nov)
+# Ad-Vanced Notice (Sam, 9 Nov): "the audio of my dialogue was too brash and abrasive to listen to". Nothing was broken
+# (loudness and brightness like the films before); nothing softened the voice at all, and a phone speaker exaggerates
+# exactly the 2-5 kHz edge and the s-sounds. So every line gets the gentle polish a studio would give it:
+POLISH = True               # a film can turn it off (MA.POLISH = False) to hear the old sound
+WARMTH_DB = 1.5             # a broad lift round 220 Hz: body, so the edge isn't all there is
+EDGE_TARGET = -11.0         # the 2-5 kHz band against the 200-1000 Hz body (dB) a comfortable take sits at
+EDGE_CUT = (1.5, 4.5)       # the 2-5 kHz dip: always this much at least, at most this much (for the brightest takes)
+SHELF_DB = -2.5             # the treble above about 7 kHz, eased
+DEESS_MAX_DB = 5.0          # the most an s-sound is turned down, and only while it hisses
+
+
+def _bands(x):
+    """(edge, hiss): the 2-5 kHz band and the 6-16 kHz band, each against the 200-1000 Hz body, in dB."""
+    from scipy.signal import welch
+    f, p = welch(x, SR, nperseg=4096)
+    def b(a, c):
+        return 10 * np.log10(p[(f >= a) & (f < c)].sum() + 1e-20)
+    body = b(200, 1000)
+    return b(2000, 5000) - body, b(6000, 16000) - body
+
+
+def polish(x):
+    """The softer voice: one smooth tone curve (warmth up, the 2-5 kHz edge and the high treble eased; the edge
+    eased more on a bright take, never less than 1.5 dB), then a de-esser that turns the band above 4.5 kHz down
+    only in the moments an "s" or "sh" hisses about as loud as the voice under it (up to 5 dB, easing in over 5 ms and
+    out over 60 ms, so the s is softened, never lisped). Loudness is set afterwards, so the line's level is unchanged."""
+    from scipy.ndimage import uniform_filter1d
+    if np.abs(x).max() < 1e-9:
+        return x
+    nper = 1024
+    f, t, X = stft(x, SR, nperseg=nper, noverlap=nper * 3 // 4)
+    lf = np.log2(np.maximum(f, 20.0))
+    edge, _ = _bands(x)
+    cut = float(np.clip(EDGE_CUT[0] + 0.5 * (edge - EDGE_TARGET), *EDGE_CUT))
+    curve = (WARMTH_DB * np.exp(-0.5 * ((lf - np.log2(220)) / 0.9) ** 2)            # warmth, about two octaves wide
+             - cut * np.exp(-0.5 * ((lf - np.log2(3200)) / 0.6) ** 2)                # the edge, 2-5 kHz
+             + SHELF_DB / (1 + np.exp(-(f - 7000) / 900)))                          # the treble shelf
+    hi, body = f >= 4500, (f >= 150) & (f < 3000)
+    mag2 = np.abs(X) ** 2
+    excess = 10 * np.log10(mag2[hi].sum(0) + 1e-20) - 10 * np.log10(mag2[body].sum(0) + 1e-20)   # hiss over voice
+    loud = 10 * np.log10(mag2.sum(0) + 1e-20)
+    want = -np.clip(excess + 1.5, 0, DEESS_MAX_DB) * (loud > loud.max() - 45)          # only where it's sound at all
+    g, hop = np.zeros(len(want)), (nper // 4) / SR
+    att, rel = 1 - math.exp(-hop / 0.005), 1 - math.exp(-hop / 0.06)
+    for i in range(1, len(want)):
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * (att if want[i] < g[i - 1] else rel)
+    g = uniform_filter1d(g, 3)
+    ramp = np.clip((f - 3500) / 1000, 0, 1)[:, None]                                   # eased in from 3.5 to 4.5 kHz
+    gain = 10 ** ((curve[:, None] + ramp * g[None, :]) / 20)
+    _, y = istft(X * gain, SR, nperseg=nper, noverlap=nper * 3 // 4)
+    return y[:len(x)]
+
+
 def line(name):
     """A recording, cleaned and set to the shared line loudness."""
     if name not in CACHE:
@@ -305,6 +383,8 @@ def line(name):
         if name in LOW_BIRDS:
             x = debird_low(x)
         x = edges(smooth_tail(denoise(x)))
+        if POLISH:
+            x = polish(x)                 # before restore_tail, so the de-esser never eats a restored "k" or "t"
         if name in RESTORE_TAIL:
             x = restore_tail(raw, x)
         CACHE[name] = x * 10 ** ((LINE_LUFS - lufs(x)) / 20)
@@ -397,6 +477,17 @@ def main():
             print(f'{name}: {len(raw) / SR:.2f} s | before {lufs(raw):.1f} LUFS, noise {noise_floor_db(raw):.0f} dB | '
                   f'after {lufs(x):.1f} LUFS, noise {noise_floor_db(x):.0f} dB, peak {true_peak_db(x):.1f} dBTP')
             print('   talk:', ' '.join(f'{a:.2f}-{b:.2f}' for a, b in pauses(x)))
+    elif sys.argv[1] == 'soft':
+        global POLISH
+        for name in sys.argv[2:]:
+            POLISH = False
+            a = line(name)
+            CACHE.pop(name)
+            POLISH = True
+            b = line(name)
+            (e0, h0), (e1, h1) = _bands(a), _bands(b)
+            print(f'{name}: edge {e0:.1f} -> {e1:.1f} dB, hiss {h0:.1f} -> {h1:.1f} dB, '
+                  f'loudness {lufs(a):.1f} -> {lufs(b):.1f} LUFS, peak {true_peak_db(a):.1f} -> {true_peak_db(b):.1f} dBTP')
     elif sys.argv[1] == 'wavs':
         os.makedirs(sys.argv[2], exist_ok=True)
         for name in FILES:

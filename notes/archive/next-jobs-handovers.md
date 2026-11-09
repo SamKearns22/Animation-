@@ -21,3 +21,20 @@
 - **Read:** this file; the rulebook's "Merged numbers" (last section); then the guides as listed in Job C below.
 - **Open rule requests:** Job D's rule comes with its build.
 - **For Claude:** chat 2 also points the 63 old-number mentions (e.g. "rule 55", "rule 73", "rule 84") in guides/, source/ and notes/ at their new homes, using the rulebook's "Merged numbers"; `git grep -nE "[Rr]ules? (12|15|23|33|35|45|46|51|53|55|60|68|69|71|73|82|84)\b"`. Cost watch WEEK_USD still to calibrate.
+
+# Where things stand (project, 9 Nov; no film in progress)
+
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 44 (12% a film), 85 (cost watch).
+- **Done (9 Nov):** Job C finished. Chat 2 (the guides, about 0.6% of a week): research and roadmap pages moved from
+  guides/ to `research/`; quick-video's "Added 8 Oct" tail folded into its steps and fix table; best-practice Part 2 and
+  Part 5 cut to what isn't written elsewhere (7,500 to 6,000 words; repeats of satire.md, tiktok-design.md, preflight.md,
+  CLAUDE.md and the rulebook removed, nothing else dropped); contents lists on every guide; stale lines fixed (preflight's
+  model sheet now front/side/back per rule 38; tiktok-design says no title by default; its "Working" section was a copy of
+  CLAUDE.md); every old rule number in guides/, source/ and notes/ points at its new home.
+- **Next:** Job D (APPROVED), new chat, Opus high: "Build the softer voices tool (Job D in notes/next-jobs.md)".
+- **Needs Sam:** nothing.
+- **Read:** this file's Job D section only.
+- **Open rule requests:** Job D's rule comes with its build.
+- **For Claude:** archives (`notes/archive/`, `guides/archive/`) keep old numbers on purpose (history). Cost watch
+  WEEK_USD still to calibrate.
+

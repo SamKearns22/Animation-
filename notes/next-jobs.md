@@ -1,18 +1,18 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (tools: own chat, estimate first), 44 (12% a film), 85 (cost watch).
-- **Done (9 Nov):** Job C finished. Chat 2 (the guides, about 0.6% of a week): research and roadmap pages moved from
-  guides/ to `research/`; quick-video's "Added 8 Oct" tail folded into its steps and fix table; best-practice Part 2 and
-  Part 5 cut to what isn't written elsewhere (7,500 to 6,000 words; repeats of satire.md, tiktok-design.md, preflight.md,
-  CLAUDE.md and the rulebook removed, nothing else dropped); contents lists on every guide; stale lines fixed (preflight's
-  model sheet now front/side/back per rule 38; tiktok-design says no title by default; its "Working" section was a copy of
-  CLAUDE.md); every old rule number in guides/, source/ and notes/ points at its new home.
-- **Next:** Job D (APPROVED), new chat, Opus high: "Build the softer voices tool (Job D in notes/next-jobs.md)".
-- **Needs Sam:** nothing.
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 87 (notes restated before fixing).
+- **Done (9 Nov):** Job D built: every film's voices now get a gentle polish (warmth, the 2-5 kHz edge and treble eased
+  by how bright the take is, a de-esser on s-sounds), and long loud stretches (Ad-Vanced Notice's explosion, 4 dB over)
+  are evened in the master. Before/after clip of Ad-Vanced Notice line 9 sent to Sam (17 s, 3.5 MB, not on GitHub).
+- **Next:** Sam's ear on the clip. Y: nothing more to build; write S10 if he says Y. "Softer still" or "too dull": new
+  chat, Opus medium, type "Adjust the softer voices (Job D notes in notes/next-jobs.md)".
+- **Needs Sam:** (1) the clip: keep / softer still / less; (2) rule S10 below: Y or N.
 - **Read:** this file's Job D section only.
-- **Open rule requests:** Job D's rule comes with its build.
-- **For Claude:** archives (`notes/archive/`, `guides/archive/`) keep old numbers on purpose (history). Cost watch
-  WEEK_USD still to calibrate.
+- **Open rule requests:** S10 (below), waiting for Sam.
+- **For Claude:** `mossad_audio.polish` (in `line()`, before `restore_tail`) and `even_out` (in `master` and
+  `limit_check`), both under `MA.POLISH` (True). Strength knobs at the top of the softer-voices block: WARMTH_DB,
+  EDGE_TARGET, EDGE_CUT, SHELF_DB, DEESS_MAX_DB. `python3 source/mossad_audio.py soft NAME...` prints each take's edge and
+  hiss before and after. Cost watch WEEK_USD still to calibrate.
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
@@ -25,6 +25,17 @@
   warmth lift, the loud stretches evened; then a before/after clip of Ad-Vanced Notice's line 9 for Sam to judge by ear on
   his phone. Nothing about the voices' timing or pitch changes. Rule proposal comes with it.
 - Estimate: about 1% of a week, own chat (rule 86), Opus high. **Sam: Y (9 Nov).** Type: "Build the softer voices tool (Job D in notes/next-jobs.md)".
+- **Built 9 Nov (Opus).** Measured on Ad-Vanced Notice: each take's 2-5 kHz edge down 2-4.5 dB (most on the brightest,
+  lines 1, 3, 8), the 6 kHz+ hiss down about 8 dB (shelf plus de-esser; the de-esser acts on about 1 frame in 10, the
+  s-sounds only, at most 5 dB), warmth +1.5 dB round 220 Hz; every line still -20 LUFS. The 11-17 s explosion stretch now
+  sits about 1.5 dB over the rest (was 4); the whole film comes out about 1 dB quieter (-17.7 LUFS, limiting still
+  under 3 dB). Word timing moves 0.05 s at most (under a frame at 12 fps); `ad_vanced_notice.py check`: audit clean.
+  Ad-Vanced Notice is posted, so it is not re-made; the polish applies from the next film (and any re-render).
+- **Rule proposal S10 (waiting for Sam, goes in the rulebook's "Notes, review and sound"):** "Every film's voices get the
+  softer polish (a little warmth; the 2-5 kHz edge and the treble eased, more on a bright take; the s-sounds tamed),
+  and long loud stretches are evened in the master; it is turned off only if Sam asks (Sam, 9 Nov, Ad-Vanced Notice:
+  'too brash and abrasive'). | automatic (`mossad_audio.POLISH`, on by default; `mossad_audio.py soft` shows each take
+  before and after)"
 
 ## Efficiency proposals, 9 Nov (Sam: Y to all; written in CLAUDE.md, P13-P16)
 - E1 Start every chat with the Animation- repository selected (the session's own folder). On 9 Nov a chat started in an empty
