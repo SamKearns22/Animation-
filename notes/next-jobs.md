@@ -1,18 +1,16 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 87 (notes restated before fixing).
-- **Done (9 Nov):** Job D built: every film's voices now get a gentle polish (warmth, the 2-5 kHz edge and treble eased
-  by how bright the take is, a de-esser on s-sounds), and long loud stretches (Ad-Vanced Notice's explosion, 4 dB over)
-  are evened in the master. Before/after clip of Ad-Vanced Notice line 9 sent to Sam (17 s, 3.5 MB, not on GitHub).
-- **Sam, 9 Nov, on the clip: "It's better, definitely."** Kept as built. Job D closed.
-- **Next:** nothing queued.
-- **Needs Sam:** nothing.
-- **Read:** this file's Job D section only.
-- **Open rule requests:** none (S10 was already the riding rule, so the voices rule is S11, written 9 Nov).
-- **For Claude:** `mossad_audio.polish` (in `line()`, before `restore_tail`) and `even_out` (in `master` and
-  `limit_check`), both under `MA.POLISH` (True). Strength knobs at the top of the softer-voices block: WARMTH_DB,
-  EDGE_TARGET, EDGE_CUT, SHELF_DB, DEESS_MAX_DB. `python3 source/mossad_audio.py soft NAME...` prints each take's edge and
-  hiss before and after. Cost watch WEEK_USD still to calibrate.
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 81 (arm join, by hand: failed 4 times).
+- **Done (9 Nov):** Job E measured: a chat starts at 79k tokens (76k the app itself); only 3 "Checks:" lines and 12 rules'
+  catches were ever written down; Sam's body notes (47, last ten films) are 62% arms and hands, the top group hands on
+  props. Results and cut list: `notes/job-e-measurements.md`.
+- **Next:** Job F (film ledger), Opus medium, new chat. Type: "Job F: film ledger. Read notes/next-jobs.md, Build plan,
+  and notes/job-e-measurements.md, cut list."
+- **Needs Sam:** Q1 move finished films' notes to the archive (Y?); Q2 Job G order hands, shoulder seam, lying (Y?);
+  Q3 the ledger logs every check's result (Y?).
+- **Read:** this file's Build plan; `notes/job-e-measurements.md` cut list.
+- **Open rule requests:** none.
+- **For Claude:** costwatch WEEK_USD still to calibrate. Job E scripts were scratch only (not kept).
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band

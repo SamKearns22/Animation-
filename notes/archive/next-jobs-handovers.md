@@ -38,3 +38,22 @@
 - **For Claude:** archives (`notes/archive/`, `guides/archive/`) keep old numbers on purpose (history). Cost watch
   WEEK_USD still to calibrate.
 
+
+
+## Archived 9 Nov (Job E chat)
+### Where things stand (project, 9 Nov; no film in progress)
+
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 87 (notes restated before fixing).
+- **Done (9 Nov):** Job D built: every film's voices now get a gentle polish (warmth, the 2-5 kHz edge and treble eased
+  by how bright the take is, a de-esser on s-sounds), and long loud stretches (Ad-Vanced Notice's explosion, 4 dB over)
+  are evened in the master. Before/after clip of Ad-Vanced Notice line 9 sent to Sam (17 s, 3.5 MB, not on GitHub).
+- **Sam, 9 Nov, on the clip: "It's better, definitely."** Kept as built. Job D closed.
+- **Next:** nothing queued.
+- **Needs Sam:** nothing.
+- **Read:** this file's Job D section only.
+- **Open rule requests:** none (S10 was already the riding rule, so the voices rule is S11, written 9 Nov).
+- **For Claude:** `mossad_audio.polish` (in `line()`, before `restore_tail`) and `even_out` (in `master` and
+  `limit_check`), both under `MA.POLISH` (True). Strength knobs at the top of the softer-voices block: WARMTH_DB,
+  EDGE_TARGET, EDGE_CUT, SHELF_DB, DEESS_MAX_DB. `python3 source/mossad_audio.py soft NAME...` prints each take's edge and
+  hiss before and after. Cost watch WEEK_USD still to calibrate.
+
