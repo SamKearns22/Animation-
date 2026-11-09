@@ -950,7 +950,7 @@ def draw_bag(pil, cam, flat=False):
 # in the world through every camera (close shots and the aerial alike), grown as the camera climbs exactly as the
 # people are, so none pops in. Four by him (world x, z; one by the sick, one hops off when the packet lands), a dozen
 # on the island's paving.
-PIGEONS_NEAR = [(-1.22, -0.70, 200.0), (-0.42, -1.42, 20.0), (0.06, -1.06, 260.0), (0.82, -1.18, 120.0)]
+PIGEONS_NEAR = [(-1.22, -0.70, 95.0), (-0.42, -1.42, 20.0), (0.06, -1.06, 260.0), (0.82, -1.18, 120.0)]
 _PIG_ALL = None
 
 
@@ -979,7 +979,7 @@ def draw_pigeons(pil, cam, t, flat=False):
         if not (-200 < sx < 1280 and -200 < sy < 2120):
             continue
         e = float(np.clip(1080 / max(kk, 1e-6) / 30.0, 1.0, 4.0)) * (1.25 if kk < 200 else 1.0)
-        h = h0 + 35 * math.sin(t * 0.6 + ph)
+        h = h0 + (18 if i < len(PIGEONS_NEAR) else 35) * math.sin(t * 0.6 + ph)   # near ones stay side-on
         x_, z_ = x + 0.04 * math.sin(t * 0.5 + ph), z + 0.04 * math.cos(t * 0.4 + ph)
         hop, wings = 0.0, 0.0
         if i == 0 and t > PACK_LAND - 0.05:              # startled when the packet lands beside it
@@ -991,46 +991,81 @@ def draw_pigeons(pil, cam, t, flat=False):
         away = np.array([x - PACKET_REST[0], z - PACKET_REST[1]])          # hops AWAY from the packet (and the
         away /= np.linalg.norm(away) + 1e-9                                 # scroll): it hopped onto the scroll
         x_, z_ = x_ + away[0] * hop, z_ + away[1] * hop
-        peck = 0.03 * max(0.0, math.sin(t * 5 + ph * 3)) * e
+        bob = math.sin(t * 5 + ph * 3)                     # walking head-bob forward/back, then a peck down
+        hf = 0.015 * bob                                   # head forward of its rest place (metres, before e)
+        hdn = 0.07 * max(0.0, math.sin(t * 1.7 + ph)) ** 6  # now and then right down to the ground
         lw = max(1, int(min(2.2 * ss, kk * 0.006 * ss * e)))
+        ca_, sa_ = math.cos(a), math.sin(a)
 
-        def shp(pts, col, outline=True, hh=0.01):
-            Q = _ground_poly(cam, (x_, z_), [(u_ * e, v_ * e) for u_, v_ in pts], rot=h, h=hh)
+        def P3(u_, v_, h_):
+            wx = x_ + (u_ * ca_ - v_ * sa_) * e
+            wz = z_ + (u_ * sa_ + v_ * ca_) * e
+            (px, py), _ = cam.project((wx, h_ * e, wz))
+            return (px * ss, py * ss)
+
+        def shp(pts, col, outline=True):
+            Q = [P3(*q) for q in pts]
             d.polygon(Q, fill=col)
             if outline:
                 d.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
 
-        def ell(cu, cv, ru, rv, col, outline=True, n=14, hh=0.012):
-            shp([(cu + ru * math.cos(q), cv + rv * math.sin(q)) for q in np.linspace(0, 2 * math.pi, n, endpoint=False)],
-                col, outline, hh)
-        ell(-0.02, 0.02, 0.14, 0.07, (24, 20, 16, 60), False, hh=0.001)          # shadow
-        fan = [(-0.10, -0.025), (-0.19, -0.04)] + [(-0.19 - 0.02 * math.cos(q), 0.04 * math.sin(q))
-                                                  for q in np.linspace(-math.pi / 2, math.pi / 2, 7)] + \
-              [(-0.19, 0.04), (-0.10, 0.025)]
-        shp(fan, (128, 132, 146))                                                  # the tail, a rounded fan
-        shp([(-0.185, -0.04), (-0.205, -0.025), (-0.21, 0.0), (-0.205, 0.025), (-0.185, 0.04), (-0.19, 0.0)],
-            (40, 42, 50), False)                                                   # its dark band
-        if wings > 0:                                                              # wings out as it hops off
-            for sg in (-1, 1):
-                shp([(0.04, sg * 0.04), (-0.02, sg * (0.07 + 0.17 * wings)), (-0.10, sg * (0.06 + 0.15 * wings)),
-                     (-0.07, sg * 0.04)], (150, 154, 168))
-        body = [(0.07, 0.0), (0.06, -0.045), (0.02, -0.07), (-0.05, -0.065), (-0.12, -0.035), (-0.13, 0.0),
-                (-0.12, 0.035), (-0.05, 0.065), (0.02, 0.07), (0.06, 0.045)]
-        shp(body, (164, 168, 180))                                                 # the plump body, tapering back
-        for sg in (-1, 1):                                                         # folded wings: two dark bars,
-            shp([(0.01, sg * 0.062), (-0.10, sg * 0.04), (-0.155, sg * 0.012), (-0.11, sg * 0.02), (0.0, sg * 0.03)],
-                (140, 144, 158), False)                                            # dark wingtips at the back
-            shp([(-0.02, sg * 0.058), (-0.035, sg * 0.03), (-0.025, sg * 0.03), (-0.008, sg * 0.058)], (52, 56, 66), False)
-            shp([(-0.055, sg * 0.05), (-0.07, sg * 0.026), (-0.06, sg * 0.026), (-0.043, sg * 0.05)], (52, 56, 66), False)
-            shp([(-0.11, sg * 0.03), (-0.165, sg * 0.006), (-0.15, sg * 0.004), (-0.10, sg * 0.018)], (40, 42, 50), False)
-        ell(0.07, 0.0, 0.035, 0.04, (96, 132, 112))                               # the green-purple neck
-        ell(0.075, 0.0, 0.018, 0.03, (128, 96, 140), False)
-        hu = 0.11 + peck / e
-        ell(hu, 0.0, 0.03, 0.027, (112, 118, 134))                               # head
-        shp([(hu + 0.026, -0.007), (hu + 0.052, 0.0), (hu + 0.026, 0.007)], (54, 48, 46), False)   # beak
-        ell(hu + 0.027, 0.0, 0.006, 0.008, (236, 236, 236), False)               # the white cere
+        def ring(cu, cv, ch, ru, rv, n=14):
+            return [(cu + ru * math.cos(q), cv + rv * math.sin(q), ch) for q in np.linspace(0, 2 * math.pi, n,
+                                                                                            endpoint=False)]
+        shp(ring(-0.02, 0.0, 0.0, 0.14, 0.07), (24, 20, 16, 60), False)                 # shadow on the ground
+        for sg in (-1, 1):                                                              # little pink legs, feet
+            d.line([P3(0.0, sg * 0.025, 0.0), P3(0.0, sg * 0.025, 0.05)], fill=(200, 110, 120),
+                   width=max(1, int(lw * 1.2)))
+            shp([(0.025, sg * 0.025, 0.0), (-0.01, sg * 0.035, 0.0), (-0.01, sg * 0.015, 0.0)], (200, 110, 120), False)
+        H = 0.07                                                                        # the body's height
+
+        def oval(cu, cv, ru, rv, hh, n=22):
+            return [(cu + ru * math.cos(q), cv + rv * math.sin(q), hh) for q in np.linspace(0, 2 * math.pi, n,
+                                                                                            endpoint=False)]
+        tail = [(-0.10, -0.022, H - 0.01)] + [(-0.205 + 0.018 * math.cos(q), 0.034 * math.sin(q), H - 0.015)
+                                              for q in np.linspace(-math.pi / 2, math.pi / 2, 9)][::-1][::-1] + \
+               [(-0.10, 0.022, H - 0.01)]
+        tail = [tail[0]] + sorted(tail[1:-1], key=lambda q: q[1]) + [tail[-1]]
+        shp(tail, (112, 116, 130))                                                      # the tail, a rounded fan
+        shp([(-0.19, -0.03, H - 0.014)] + [(-0.205 + 0.018 * math.cos(q), 0.034 * math.sin(q), H - 0.015)
+                                           for q in np.linspace(-1.1, 1.1, 7)] + [(-0.19, 0.03, H - 0.014)],
+            (36, 38, 46), False)                                                         # its dark tip
+        shp(oval(-0.025, 0.0, 0.098, 0.064, H - 0.03), (118, 122, 136))                  # the belly, in shade
+        if wings > 0:                                                                   # wings out as it flaps off:
+            for sg in (-1, 1):                                                          # curved leading edge,
+                span = 0.07 + 0.17 * wings                                              # feathered trailing edge
+                lead = [(0.03 - 0.06 * (k / 8) ** 1.5, sg * (0.04 + span * k / 8), H + 0.04 * wings * k / 8)
+                        for k in range(9)]
+                trail = [(-0.02 - 0.09 * (1 - k / 8) - (0.01 if k % 2 else 0.0), sg * (0.04 + span * k / 8),
+                          H + 0.04 * wings * k / 8) for k in range(8, -1, -1)]
+                shp(lead + trail, (150, 154, 168))
+                shp([(q[0] - 0.005, q[1], q[2] + 0.002) for q in trail[:4]] + [(trail[3][0] + 0.03, trail[3][1], trail[3][2]),
+                     (trail[0][0] + 0.03, trail[0][1], trail[0][2])], (44, 46, 56), False)   # dark primaries
+        shp(oval(-0.025, 0.0, 0.098, 0.066, H), (166, 170, 182))                         # the back: a plump oval
+        for sg in (-1, 1):                                                              # folded wings: crescents
+            wing = [(0.03, sg * 0.064, H + 0.003)] + \
+                   [(0.03 - 0.19 * k / 10, sg * (0.066 - 0.05 * (k / 10) ** 1.6), H + 0.003) for k in range(1, 11)] + \
+                   [(-0.13 + 0.15 * k / 10, sg * (0.018 + 0.03 * (k / 10) ** 0.7), H + 0.004) for k in range(1, 10)]
+            shp(wing, (146, 150, 164), False)
+            for bu in (-0.03, -0.065):                                                  # the two black wing bars
+                shp([(bu + 0.008, sg * 0.064, H + 0.005), (bu - 0.004, sg * 0.040, H + 0.005),
+                     (bu - 0.012, sg * 0.030, H + 0.005), (bu - 0.004, sg * 0.030, H + 0.005),
+                     (bu + 0.004, sg * 0.040, H + 0.005), (bu + 0.016, sg * 0.064, H + 0.005)], (40, 42, 52), False)
+            shp([(-0.115, sg * 0.022, H + 0.006), (-0.16, sg * 0.006, H + 0.006), (-0.14, sg * 0.004, H + 0.006),
+                 (-0.10, sg * 0.014, H + 0.006)], (44, 46, 56), False)                  # dark wingtips
+        # the neck: from the shoulders to wherever the head is, so it never comes away from the body
+        hu, hh_ = 0.105 + hf, 0.115 - hdn
+        nk = [(0.02 + (hu - 0.03) * k / 6, -(0.046 - 0.02 * k / 6), H + (hh_ - H) * k / 6) for k in range(7)]
+        shp(nk + [(q[0], -q[1], q[2]) for q in nk[::-1]], (98, 132, 114))               # the neck, green
+        shp([(0.04 + (hu - 0.05) * k / 6, -(0.024 - 0.012 * k / 6), H + 0.004 + (hh_ - H) * k / 6) for k in range(7)] +
+            [(0.04 + (hu - 0.05) * k / 6, (0.024 - 0.012 * k / 6), H + 0.004 + (hh_ - H) * k / 6) for k in range(6, -1, -1)],
+            (130, 98, 142), False)                                                       # its purple sheen
+        shp(ring(hu, 0.0, hh_, 0.031, 0.026, 18), (112, 118, 134))                     # head
+        shp([(hu + 0.026, -0.007, hh_ - 0.004), (hu + 0.055, 0.0, hh_ - 0.01), (hu + 0.026, 0.007, hh_ - 0.004)],
+            (54, 48, 46), False)                                                         # beak
+        shp(ring(hu + 0.027, 0.0, hh_ + 0.002, 0.006, 0.008, 8), (236, 236, 236), False)  # the white cere
         for sg in (-1, 1):
-            ell(hu + 0.008, sg * 0.016, 0.006, 0.006, (226, 120, 40), False)     # eyes
+            shp(ring(hu + 0.008, sg * 0.017, hh_ + 0.004, 0.006, 0.006, 8), (226, 120, 40), False)   # eyes
 
 
 def _on_screen(cam, p, margin):
