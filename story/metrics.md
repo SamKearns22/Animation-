@@ -196,3 +196,52 @@ results: 1.3k. Tesla kills two birds with one stone: 1.2k. Blue Planet 3 Takes E
 ## Posting plan (Sam, 5 Nov): 3-4 new films a week; TikTok and YouTube 4-6 pm; Facebook and Instagram (CranbriJoos Page, Business Suite) 12:30 pm
 and 7:30 pm, only one post on a day with a new film; catch-up from the backlog on days with no new film; a Story when there is a new film.
 Check Insights after two weeks and move the times.
+
+## Snapshot: Mon 9 Nov 2026, 23:17-23:19 (views, Hook Text and hashtags for 30 films; Sam's TikTok screens)
+
+First record of every film's tags. Views only (no watch data on these screens). Topic: UK = UK politics/news, World = US
+or foreign politics, Other = not politics.
+
+| Film | Posted | Topic | Views | Hook Text | Hashtags |
+|---|---|---|---|---|---|
+| Bingo Bingo (Polanski) | 15 Oct | UK | 20.2K | Zack Polanski this week | #GreenParty #UKPolitics #UKComedy #ZackPolanski #politicalsatire |
+| Patriots 3 | 28 Oct | UK | 15.3K | Small Boats Crisis, June 1944 | #UKComedy #UKPolitics #WW2 #Patriot #Satire |
+| TERFwarts | 3 Nov | Other (culture) | 10.9K | Rowling left HBO some edits 😬 | #UKComedy #harrypottertiktok #jkrowling #HBO #transrights |
+| Power Crime Action (Met) | 21 Oct | UK | 9,878 | Met Police: Getting Priorities Right 🚔 | #UKComedy #UKPolitics #Satire #protest #Animation |
+| Mossad | 4 Oct | World | 7,829 | (none) | #Satire #UKpolitics #Animation #Geopolitics #UKcomedy |
+| MidTerminal | 4 Nov | World | 6,147 | Trump after Midterm results | #Midterms #bluewave #politicalcomedy #Trump #Satire |
+| Celebrity Traitors charities | after 4 Nov | Other (TV) | 6,039 | Celebrity Traitors winners reveal their charities | #celebritytraitors #traitors #UkTV #UKComedy #satire |
+| Roadster (Tesla) | 17 Oct | World | 5,674 | Tesla Kills Two Birds With One Stone 🚀 | #Tesla #Roadster #ElonMusk #Satire #Animation |
+| The Patriots | 2 Oct | UK | 4,796 | (none) | #UKpolitics #ukcomedy #Patriot #boats #dover |
+| Patriots 2 | 5 Oct | UK | 1,599 | (none) | #UKpolitics #UKcomedy #RNLI #satire #Patriot |
+| Prepper Minister (Burnham) | 25 Oct | UK | 1,584 | Andy asks the UK to stockpile | #UKComedy #UKPolitics #PrimeMinister #AI #Satire |
+| Hope Again | 1 Oct | UK | 1,354 | (none) | #Burnham #UKPolitics #Labour #ukcomedy #conference |
+| Netan-Yahoo! | 26 Oct | World | 1,310 | Israeli Prime Ministerial Debate 😅 | #Netanyahu #Election #UKComedy #Satire #Israel |
+| Prince Andrew telling-off | 9 Oct | UK | 1,261 | (none) | #princeandrew #epstein #ukcomedy #UKnews #satire |
+| Press Secretary | 16 Oct | World | 1,136 | Your first day as Press Secretary | #WhiteHouse #USPolitics #Satire #Animation #FirstDay |
+| Shocking Behaviour (Reform HQ) | 18 Oct | UK | 1,136 | Reform HQ: EXPOSED! | #UKComedy #Reform #Farage #UKPolitics #ITV |
+| Traitors (final three) | 18 Oct | World | 1,136 | The Traitors: the final three | #Traitors #Zelensky #Trump #UKComedy #Claudia |
+| Poker Mon | 19 Oct | Other | 925 | Poker Mon Cards ♦♣♥♠ | #pokemontiktok #tcg #poker #comedy #parody |
+| DLC (Bayeux) | 11 Oct | Other | 889 | (none) | #ukcomedy #historytok #gamingmemes #animation #parody |
+| Cry Minister (Burnham high street) | 10 Oct | UK | 797 | (none) | #Burnham #Labour #UKPolitics #UKcomedy #UKnews |
+| Dam | 30 Sep | Other | 685 | DAM (title) | #Animals #beavers #spacetok #animation #rocket |
+| Listening & Learning | 30 Sep | Other | 651 | (title) | #Sheeran #Macklemore #brave #animation #parody |
+| The Salt | 3 Oct | Other | 648 | (none) | #ukcomedy #animation #slapstick #dinner #antique |
+| Islamocommunism | 5 Nov | World | 636 | MAGA's Nightmare Comes True | #Midterms #politicalcomedy #Democrats #Abdul #Satire |
+| The Park | 8 Oct | Other | 604 | THE PARK (title) | #Pigeon #ukcomedy #animation #Cartoon #paranoia |
+| Russiadent Evil | 7 Oct | World | 506 | (title) | #Russia #Plague #ResidentEvil #UKcomedy #Animation |
+| Halo No-No (repost) | 30 Oct | World | 441 | Elon Finishes The Fight | #Starlink #Elonmusk #Halo #UKComedy #Zelensky |
+| Flying Whales (Blue Planet) | 2 Nov | Other | 411 | Blue Planet III looks 🔥🔥🔥 | #NorthSea #Jackdaw #BluePlanet #attenborough #UKComedy |
+| Strictly Crabs | 22 Oct | Other | 357 | BBC keeps things fresh 🦀 | #UKComedy #Strictly #Crabs #Dancing #Nonsense |
+| Ad-Vanced Notice (JD Vance) | 9 Nov, 4:22pm | World | 233 (7 h) | JD Vance Addresses The Nation | #UKcomedy #Satire #politicalcomedy #JDvance #Republican |
+
+Ad-Vanced Notice at 6.5 h: 47.0 s, 232 views, avg watch 10.4 s (22%), 7.5% in full, 13 likes, 2 comments, 1 share,
+1 save, 0 followers. Patriots 4 (5.9K on 3 Nov) not in this set.
+
+Reading (Claude, 9 Nov): in `story/growth-analysis-3-nov.md` style, by topic, median views: UK politics 1.6K (10 films,
+lowest 797, 4 over 4.5K); World politics 1.1K (10 films, 4 under 700); Other 670 (10 films, 2 over 5K, both riding a big
+TV/culture story). #UKComedy is on 25 of 30 films, hits and flops alike: no signal. #Animation is on 3 hits and 7 low
+films; Sam has ruled it out (hostile to AI-built films). Hits spend every tag on a real search term (a person, party,
+show, fandom or event); the low films spend 1-3 tags on words nobody searches (#paranoia #antique #brave #rocket #Crabs
+#Nonsense #FirstDay #Abdul #Claudia #Halo #Plague). Ad-Vanced Notice had the most generic set of any politics film: three
+category tags, one person, one party, nothing naming the story (Hormuz, the war, fuel prices).
