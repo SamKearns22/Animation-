@@ -4,9 +4,9 @@
 - **Done (9 Nov):** Job D built: every film's voices now get a gentle polish (warmth, the 2-5 kHz edge and treble eased
   by how bright the take is, a de-esser on s-sounds), and long loud stretches (Ad-Vanced Notice's explosion, 4 dB over)
   are evened in the master. Before/after clip of Ad-Vanced Notice line 9 sent to Sam (17 s, 3.5 MB, not on GitHub).
-- **Next:** Sam's ear on the clip. Y: nothing more to build; write S10 if he says Y. "Softer still" or "too dull": new
-  chat, Opus medium, type "Adjust the softer voices (Job D notes in notes/next-jobs.md)".
-- **Needs Sam:** (1) the clip: keep / softer still / less; (2) rule S10 below: Y or N.
+- **Sam, 9 Nov, on the clip: "It's better, definitely."** Kept as built. Job D closed.
+- **Next:** write S10 on Sam's Y (Sonnet). No other job queued.
+- **Needs Sam:** rule S10 below: Y or N.
 - **Read:** this file's Job D section only.
 - **Open rule requests:** S10 (below), waiting for Sam.
 - **For Claude:** `mossad_audio.polish` (in `line()`, before `restore_tail`) and `even_out` (in `master` and
