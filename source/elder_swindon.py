@@ -988,7 +988,9 @@ def draw_pigeons(pil, cam, t, flat=False):
             wings = math.sin(math.pi * u)
         a = math.radians(h)
         fw = np.array([math.cos(a), math.sin(a)])
-        x_, z_ = x_ - fw[0] * hop, z_ - fw[1] * hop
+        away = np.array([x - PACKET_REST[0], z - PACKET_REST[1]])          # hops AWAY from the packet (and the
+        away /= np.linalg.norm(away) + 1e-9                                 # scroll): it hopped onto the scroll
+        x_, z_ = x_ + away[0] * hop, z_ + away[1] * hop
         peck = 0.03 * max(0.0, math.sin(t * 5 + ph * 3)) * e
         lw = max(1, int(min(2.2 * ss, kk * 0.006 * ss * e)))
 
