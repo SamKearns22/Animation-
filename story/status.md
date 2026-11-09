@@ -5,7 +5,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 
 ## Hashtags (9 Nov)
 - 30 films' views, Hook Text and tags logged (`story/metrics.md`, 9 Nov). Topic and tags don't explain the flops (Jackdaw, Halo, Vance were current; TERFwarts named no news); the first-10-s drop does.
-- Waiting on Sam: Y/N write the hashtag rule (real search terms only; no #animation, #fyp, joke tags) in place of tiktok-design.md lines 130-136.
+- Hashtag rule written (Sam said Y, 9 Nov): `guides/tiktok-design.md`, Posting.
 - Sam, 9 Nov: Claude suggests five tags at every final, only if they are decent (each a real, used search term; say if unchecked). Sam names the news story with each screenplay; record it in the film's brief checklist.
 
 ## TikTok results (3 Nov)

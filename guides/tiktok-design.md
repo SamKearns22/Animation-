@@ -127,12 +127,12 @@ No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sa
   4pm, ahead of the 4-9pm peak (busiest hours were 5pm Fri, 7pm Thu, 8pm Wed); weekends post about 10am, ahead of the
   11am peak (Sat and Sun both peaked at 11am). Never 1am-6am (dead every day). Bigger or smaller days follow what was
   posted, not just the clock. The wider evidence on timing is weak and mixed: see `research/tiktok-posting-research.md`.
-- Post text: short and dry, with the title, a few specific hashtags (the people or topic being parodied,
-  #animation, #parody or #satire), and a question that invites replies. Pin that question as a comment.
+- Post text: short and dry, with the title and a question that invites replies. Pin that question as a comment.
 - **The director writes the post text and the pinned question himself. Claude never suggests lines or wording
-  for them** (it can still suggest a cover frame and point out if a hashtag would spoil the joke).
-- **Hashtags: Claude may always suggest the best ones (Sam, 16 Oct), but always in the context of the TikTok algorithm and
-  what the evidence says about reach** (`research/tiktok-posting-research.md` section 7): few and specific, matched to the
-  caption's search words, none that give away the twist.
+  for them** (it can still suggest a cover frame).
+- **Hashtags (Sam, 9 Nov):** at every final Claude suggests five, only if each is decent: a real search term people use
+  (the person, place or news story), said as checked or unchecked. No #animation, #fyp or joke tags, none that give
+  away the twist. Sam names the news story with each screenplay (recorded in the brief checklist). Evidence:
+  `research/tiktok-posting-research.md` section 7; why (views log): `story/metrics.md`.
 - Reply to comments in the first hour. Keep the next video ready within 24-48 hours.
 - X gets the original widescreen version.
