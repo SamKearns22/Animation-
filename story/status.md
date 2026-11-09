@@ -9,8 +9,8 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). The "Hook Text names the story" rule: dropped (Sam, 7 Nov).
 
 ## Films
-Elder Scrolls: Swindon: animatic 5 sent 9 Nov (36.6 s); all notes to date fixed; rule 84 added; pre-flight hang fixed.
-Next: Sam's notes on animatic 5 (Opus medium, new chat) or, on his Y, the final render (Sonnet, new chat).
+Elder Scrolls: Swindon: animatic 5 notes fixed 9 Nov (no pigeons until shot 3).
+Next: check sheet and animatic 6 (Sonnet, new chat).
 Read notes/elder-swindon.md "Where things stand".
 - **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: built (part 1 and part 2, 8 Nov: `source/sitting.py`, `notes/sitting-kit.md`; rule 80); part-2 sheet and moves video sent, waiting on Sam's questions 9-10; (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.

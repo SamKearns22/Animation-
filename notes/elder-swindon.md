@@ -2,13 +2,13 @@
 
 ## Where things stand
 - **Rules that bite next:** 84 (a real place beside its reference on the sheet), 56 (a fault of a kind: every shot), 67 (one full pre-flight per round).
-- **Done:** notes 1-18 and every note on animatics 2-4 (brief rows 27-63); animatic 5 sent 9 Nov (36.6 s, 6.5 MB). Rule 84 written. Pre-flight hang fixed.
-- **Next:** if Sam sends notes: Opus, medium effort, NEW chat: "Fix Elder Scrolls Swindon animatic 5 notes - read notes/elder-swindon.md". If Sam says Y to the final: Sonnet, NEW chat: "Final render of Elder Scrolls Swindon - read notes/elder-swindon.md".
-- **Needs Sam:** notes on animatic 5, or a clear Y for the final render.
-- **Read:** this section, the brief checklist (rows 27-63), "Notes on animatic 2 ... why the roundabout failed twice"; guides/satire.md (Before every render, Render).
+- **Done:** notes on animatic 5 (brief row 64: no pigeons until shot 3). Checked on a sheet: shots 1-2 clear, shot 3 as before.
+- **Next:** Sonnet, NEW chat: "Check sheet and animatic 6 of Elder Scrolls Swindon - read notes/elder-swindon.md". Pre-flight, check sheet to Sam, wait for his Y, then the animatic (with Hook Text and sign-off).
+- **Needs Sam:** Y on the check sheet; then notes on animatic 6, or a clear Y for the final.
+- **Read:** this section, brief checklist rows 27-64; guides/satire.md (Before every render, Render).
 - **Open rule requests:** none.
 - **Faults named to Sam:** shot 6 is 15.2 s (his hold; over pre-flight's 8 s). Render with `--faults-named`.
-- **For Claude:** `source/elder_swindon.py` (`_routes`, `traffic`, `traffic_faults`, `on_road`, `splitters`, `van_at`/`van_faults`, `draw_pigeons`, `draw_bag`, `drool_ground`, `soundtrack` with `REC2_AT`); people from `source/elder_swindon_extras.py`. Final: `python3 source/elder_swindon.py final source/data/elder_swindon-clean.mp4 --faults-named` then `python3 source/finish.py source/data/elder_swindon-clean.mp4 animations/elder-swindon-vertical.mp4 --film elder_swindon`. Animatic: same with `--small`. Pre-flight runs clean in about 15 min (`source/preflight.py elder_swindon OUT`).
+- **For Claude:** `source/elder_swindon.py` (`draw_pigeons` now returns before `SHOTS[2][1]`; `_routes`, `traffic`, `van_at`, `draw_bag`, `drool_ground`, `soundtrack` with `REC2_AT`); people from `source/elder_swindon_extras.py`. Animatic: `python3 source/elder_swindon.py final source/data/elder_swindon-clean.mp4 --faults-named --small` then `python3 source/finish.py source/data/elder_swindon-clean.mp4 animations/elder-swindon-vertical.mp4 --film elder_swindon` (final: same without `--small`). Pre-flight about 15 min (`source/preflight.py elder_swindon OUT`).
 
 ## Plan (8 Nov, redone after Sam's answers)
 **Length:** 30.04 s (the teaser's sound, as is) + the 1.6 s sign-off = 31.6 s. No voices.
@@ -147,6 +147,7 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 61 | (Animatic 4) The shopping bag and items too plain to identify | yes: carrier bag with a stripe and creases, lager can, crisp packet, chicken box with bones, pop bottle, banana skin, coffee cup |
 | 62 | (Animatic 4) Pigeons in shots 2-4 so we know what they are from above; they popped in late on the zoom out | yes: four by him from shot 2 (one flies off as the packet lands), a dozen on the island, drawn through every camera and grown smoothly |
 | 63 | (Sam, 9 Nov) Pigeon heads had no neck; poor shaping in shot 3; the neck stretch looked weird | yes: rebuilt after a critique (short fixed neck under the body and head, curved body, dark folded wings, feathered wingbeats, grey and eyeless when small); Sam: Y |
+| 64 | (Sam, animatic 5) A pigeon too close to his head in shot 1; no pigeons in any shot until shot 3 | yes: none drawn before shot 3 starts (11.43 s); the cut hides their arrival. Why row 62's "from shot 2" failed: the pigeons were drawn through every camera with no start time, so shot 1's glide to his face found one |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |

@@ -946,7 +946,7 @@ def draw_bag(pil, cam, flat=False):
     shape(rect(0.035, 0.072), (150, 104, 66), c=(0.05, -0.28), r=-60, outline=False)
 
 
-# (Sam, animatic 4) Pigeons by him from shot 2, so we know what the dots on the island are once we are up high; drawn
+# (Sam, animatic 4) Pigeons by him (from shot 3: Sam, animatic 5), so we know what the dots on the island are once we are up high; drawn
 # in the world through every camera (close shots and the aerial alike), grown as the camera climbs exactly as the
 # people are, so none pops in. Four by him (world x, z; one by the sick, one hops off when the packet lands), a dozen
 # on the island's paving.
@@ -972,6 +972,8 @@ def _pigeons_world():
 def draw_pigeons(pil, cam, t, flat=False):
     """Grey town pigeons, house style from above: a pale body, two dark wing bars, a green-purple neck, a dark grey
     head pecking at the ground, a little beak, a dark tail; a soft shadow under each."""
+    if t < SHOTS[2][1]:                                  # (Sam, animatic 5: one too close to his head in shot 1)
+        return                                           # no pigeons until shot 3; the cut hides their arrival
     d = ImageDraw.Draw(pil, 'RGBA')
     ss = B.SS
     for i, (x, z, h0, ph) in enumerate(_pigeons_world()):
