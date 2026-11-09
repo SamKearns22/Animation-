@@ -34,6 +34,11 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
     """Print the short summary. A file is written only when there are more faults than the summary shows (Sam, 2 Nov:
     he never reads it; the one line is enough). Returns the printed text."""
     faults = list(faults)
+    try:  # the film ledger keeps every round's full result, clean ones too (Job F, Sam 9 Nov)
+        import ledger
+        ledger.record(title, faults, notes)
+    except ImportError:
+        pass
     if path and len(faults) <= first:
         path = None
     if path:

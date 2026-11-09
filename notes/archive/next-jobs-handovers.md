@@ -76,3 +76,23 @@
 - **Open rule requests:** none.
 - **For Claude:** costwatch WEEK_USD still to calibrate. Job E scripts were scratch only (not kept).
 
+
+
+## Where things stand (Job E handover) (project, 9 Nov; no film in progress)
+
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 81 (arm join, by hand: failed 4 times).
+- **Done (9 Nov, rerun on Opus high):** Job E checked and deepened in `notes/job-e-measurements.md`: files cost about
+  70% more tokens than first said (2.35 characters a token; satire.md 16k, rulebook 11k, CLAUDE.md 5k); 60 body notes
+  (was 47), 57% arms and hands, and 9 caused by a turned, from-behind or mirrored view (a new group); rule 41's hand
+  check is the busiest catcher on record (4 films), found only in commit messages; no check sheet is ever kept.
+- **Next:** Job F (film ledger), new chat, **Opus, medium effort** (build plan table). Type: "Job F: build the film
+  ledger. Read notes/next-jobs.md Where things stand and Build plan F, and the cut list in notes/job-e-measurements.md."
+- **Sam's answers (9 Nov): Y Y Y.** Q1 done: Terfwarts, MidTerminal, Islamocommunism and sitting-kit notes moved to
+  `notes/archive/` (Elder Swindon stays until Sam says posted). Q2: Job G order is hands, shoulder seam, every view
+  (behind, three-quarter, mirrored), then lying. Q3: Job F's ledger keeps every round's check results and check sheet text.
+- **Needs Sam:** nothing.
+- **Read:** this file's Build plan (F row); `notes/job-e-measurements.md` cut list.
+- **Open rule requests:** none.
+- **For Claude:** costwatch WEEK_USD still to calibrate; FRESH 90k fits the measured 80k start. Job E scripts were
+  scratch only. Not read in full (amber): the ten films' handover files, Flying Whales, Newsdesk (keyword search only).
+

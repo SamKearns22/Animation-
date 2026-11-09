@@ -1,20 +1,17 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 81 (arm join, by hand: failed 4 times).
-- **Done (9 Nov, rerun on Opus high):** Job E checked and deepened in `notes/job-e-measurements.md`: files cost about
-  70% more tokens than first said (2.35 characters a token; satire.md 16k, rulebook 11k, CLAUDE.md 5k); 60 body notes
-  (was 47), 57% arms and hands, and 9 caused by a turned, from-behind or mirrored view (a new group); rule 41's hand
-  check is the busiest catcher on record (4 films), found only in commit messages; no check sheet is ever kept.
-- **Next:** Job F (film ledger), new chat, **Opus, medium effort** (build plan table). Type: "Job F: build the film
-  ledger. Read notes/next-jobs.md Where things stand and Build plan F, and the cut list in notes/job-e-measurements.md."
-- **Sam's answers (9 Nov): Y Y Y.** Q1 done: Terfwarts, MidTerminal, Islamocommunism and sitting-kit notes moved to
-  `notes/archive/` (Elder Swindon stays until Sam says posted). Q2: Job G order is hands, shoulder seam, every view
-  (behind, three-quarter, mirrored), then lying. Q3: Job F's ledger keeps every round's check results and check sheet text.
+- **Rules that bite next:** 44 (now the film ledger), 86 (tools: own chat, estimate first), 81 (arm join, by hand: failed 4 times).
+- **Done (9 Nov, Job F, Opus):** the film ledger, `source/ledger.py`. Sam's Y Y N: built (about 0.4% of a week, estimate
+  0.5%); rule 44 rewritten to use it (shorter than before); no back-filling of old films. Every check's full result
+  (clean ones too) now lands in `notes/ledger/FILM/round-N.txt` once a round is opened; `log` at each handover sums
+  cost per film; `audit` gives the 10 lines when a film is posted. Tested on a pretend film, then removed.
+- **Next:** Job G (bodies), new chat, **Opus, high effort**. Type: "Job G: bodies, hands first. Read notes/next-jobs.md
+  Where things stand and Build plan G, and the cut list in notes/job-e-measurements.md." Estimate first (rule 86).
 - **Needs Sam:** nothing.
-- **Read:** this file's Build plan (F row); `notes/job-e-measurements.md` cut list.
+- **Read:** this file's Build plan (G row); `notes/job-e-measurements.md` section 3 and the cut list.
 - **Open rule requests:** none.
-- **For Claude:** costwatch WEEK_USD still to calibrate; FRESH 90k fits the measured 80k start. Job E scripts were
-  scratch only. Not read in full (amber): the ten films' handover files, Flying Whales, Newsdesk (keyword search only).
+- **For Claude:** next film's plan runs `ledger.py estimate FILM N`; each round `ledger.py round FILM N`; each handover
+  `ledger.py log FILM --stage .. --notes N --repeat "note | catcher"`. costwatch WEEK_USD still to calibrate.
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
@@ -73,7 +70,7 @@ Order: E, F, G, H, I (each its own chat; fresh chat each; Sam's iPhone only).
 | H | Opus **max**, the checklist design only (one short chat) | Opus high | Sonnet |
 | I | Opus **high** (what to cut, rewrite, retire) | Opus medium | Sonnet |
 - **E. Measure and diagnose** (~0.7%, Opus high): tokens a new chat loads, by file; which rules ever caught anything; every body note in the last ten films grouped by joint or action (neck, shoulder, elbow, hand-on-prop, lying, seated, mouth, clipping). Output: numbers and a cut list, no building.
-- **F. Film ledger** (~0.5%, Opus medium): the cost watch tags each chat with its film and sums per film; writes cost, chats, rounds, notes and repeated notes to a ledger; a 10-line audit at the end of each film (what repeated, what would have caught it, which rules never fired); estimate versus actual closed out.
+- **F. Film ledger** (DONE 9 Nov, 0.4%; `source/ledger.py`) (~0.5%, Opus medium): the cost watch tags each chat with its film and sums per film; writes cost, chats, rounds, notes and repeated notes to a ledger; a 10-line audit at the end of each film (what repeated, what would have caught it, which rules never fired); estimate versus actual closed out.
 - **G. Bodies** (~3-5%, Opus high, likely two chats): a pose acceptance test (every gallery pose, every view, automatic seam/gap/hover/clip checks; a film may only use passing poses; new poses are priced at planning); grip points and contacts for picking up, resting and lying; one fix goes into the gallery for every film.
 - **H. Critique helper** (~2%, Opus high; Max only for the checklist design): a living checklist (people, creatures, props, sets, movement; each note of Sam's adds one line); a fresh helper with a small context reads the sheet, references and checklist cold; the "same kind everywhere" list per note; the before/after crop beside Sam's marked picture. First trial: the next new thing.
 - **I. Consolidation** (~2-3%, Opus high): three layers of reading (one-page core, one job pack per job, rulebook and kit looked up only when named); each of the by-hand rules turned into a check, folded into the critique checklist, or retired (56, 76, 79 fold into 89); a library of new things that passed the critique (views, references, critique) so the next film reuses them; planning splits every film into known (almost free) and new (priced).

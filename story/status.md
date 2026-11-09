@@ -10,8 +10,8 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 
 ## Films
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
-Job E rerun done 9 Nov (Opus high): notes/job-e-measurements.md corrected (tokens 70% higher; 60 body notes, 57% arms and hands, 9 from turned views).
-Next: Job F, film ledger (new chat, Opus medium). Sam's Q1-Q3 in notes/next-jobs.md "Where things stand".
+Job F done 9 Nov: the film ledger (`source/ledger.py`, notes/ledger/) keeps each film's cost, notes and check results; rule 44 uses it.
+Next: Job G, bodies, hands first (new chat, Opus high). Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.
