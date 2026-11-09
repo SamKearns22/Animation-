@@ -85,7 +85,7 @@ BENCHMARK = [dict(place='Magic Roundabout', refs=['references/elder-swindon/magi
     ('the County Ground stadium next door: pitch, red seats, floodlights', 'aerial_flat: STADIUM'),
     ('grass and kerbed islands between the arms, not one sheet of tarmac', 'aerial_flat: inner ring, mini rings, arms'),
 ])]
-EFFECTS = []                                  # filled below the drawing code (each with its test drawing: rule 15)
+EFFECTS = []                                  # filled below the drawing code (each with its test drawing: rule S7)
 JOKE_PROPS = [('CAN', [1.0, 3.0], (-0.61, 0.03, -0.92), 0.15), ('PACKET', [14.9], lambda t: packet_at(t)[0], 0.13)]
 ALLOWED_CONTACTS = [('STAFFIE*', 'DROOLER*', 15.62, DUR, 'the Staffie clamps his ankle (Sam, 8 Nov)'),
                     ('DROOLER*', 'DROOLER*', 0.0, DUR, 'one lying body: its own parts touch')]

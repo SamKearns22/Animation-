@@ -140,7 +140,7 @@ SET_EXCLUDE = []
 TOUCHES = []
 FREE_MOVES = []
 SOUND_SOURCES = {}
-EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule 15)
+EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule S7)
 JOKE_PROPS = []                                   # the poppy is a line, not a prop (it is on him: 'ain't even wearing')
 # Rule 38: front on by default; these views the shot demands (plan.py checks the rest face the lens)
 THREE_QUARTER_OK = [
@@ -625,7 +625,7 @@ def checks():
 # ------------------------------------------------------------------------------------------------ the audit
 def scene(t, faces=None):
     """Everyone and everything solid at time t, as picture(t) places them (audit.py, rules 5 and 6); the set's walls
-    and things join by themselves (sets.solids, rule 12). `faces` collects each face drawn for voices.py."""
+    and things join by themselves (sets.solids, rule 5). `faces` collects each face drawn for voices.py."""
     import audit
     cam = cam_for(t) if shot_of(t) != 's1' else None
     out = []

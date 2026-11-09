@@ -66,7 +66,7 @@ OUTFIT, HEIGHTS = {}, {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
 TOUCHES, FREE_MOVES, SOUND_SOURCES = [], [], {}
-EFFECTS = [('water burst', 'burst', FX.test_draw(0.3)),          # rule 15: lumpy, never a star (viewchecks)
+EFFECTS = [('water burst', 'burst', FX.test_draw(0.3)),          # rule S7: lumpy, never a star (viewchecks)
            ('water burst falling back', 'splash', FX.test_draw(1.1)),
            ('foam ring', 'foam', FX.test_draw(0.8, 'foam')),
            ('fireball bursting', 'burst', FX.test_draw(0.12, 'fireball')),

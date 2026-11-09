@@ -4,6 +4,9 @@ Every lesson moved to the start, where a fix costs minutes. Use it for every fil
 and movement) and the rulebook, `guides/film-quality-rules.md`. (The Patriots 2 table of where each lesson came from
 is in git history.)
 
+**Contents:** Stage 1 the brief · Stage 2 the model sheet and storyboard · Stage 3 before the first animatic
+(automatic) · Stage 4 recordings · Stage 5 the final render.
+
 ## Stage 1: the brief (one message of questions, each with a recommended answer)
 - **Timing:** natural pace from Sam's own (3.0-3.6 words a second); estimate the length from the script and say
   plainly if it will run long (The Patriots 2 was briefed at 38 s and came to 60 s).
@@ -24,7 +27,7 @@ is in git history.)
 - **Anything to avoid** (people, symbols, jokes).
 
 ## Stage 2: the model sheet and storyboard
-- A **model sheet** of each new character (front, three-quarter, profile; seated or lying if the script needs it)
+- A **model sheet** of each new character (front, side and back, rule 38; seated or lying if the script needs it)
   at the series' proportions, alongside the storyboard; approved together.
 - The storyboard shows each set from its main camera and each reverse angle, drawn from the same plan.
 - Look at the sheet for: legs and feet on everyone; hands on things (keys, rails); faces readable at phone size;
@@ -69,4 +72,4 @@ flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` 
 
 ## Stage 5: the final render
 - One final render, checked against the safe-area guides (title, widest caption, busiest frame).
-- Deliver in the chat, save in `animations/`, update `story/status.md`, add new lessons to the master file.
+- Deliver in the chat, save in `animations/`, update `story/status.md`, propose new lessons to Sam (a rule goes in the rulebook on his yes).

@@ -446,7 +446,7 @@ def hiss_check(mix, sr, end=None, limit=-62.0, voice=None):
     """A steady hiss is a FAULT, never a question: white noise laid under a film as "room tone" comes up with the
     mastering and hisses through every quiet moment. The sound above 4 kHz in the quiet stretches must stay under
     `limit` dBFS. Returns a list of faults.
-    voice (rule 60): the voice track alone. Given it, the check listens only in the gaps between lines (0.25 s
+    voice (rule S3): the voice track alone. Given it, the check listens only in the gaps between lines (0.25 s
     windows where the voice is silent), so the "s" sounds of speech are never taken for hiss (Flying Whales: the
     quietest fifth of the mix was the narration). Without it (older films), the quietest fifth of the mix."""
     from scipy.signal import butter, sosfilt

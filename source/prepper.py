@@ -142,7 +142,7 @@ SHOT_CAST = {   # rule 14: who the brief puts in each shot (pre-flight checks ea
 }
 PLAN = PL                                           # rule 1: the world in metres (plan.py checks it)
 PORTAL_OK = [('kitchen door', T['s11'], T['s12'], 'its open leaf fills the doorway behind robot 5 (shot 11)')]
-SET_EXCLUDE = [   # rule 12: the set's solids the collision audit leaves out (everything else in the plan is in)
+SET_EXCLUDE = [   # rule 5: the set's solids the collision audit leaves out (everything else in the plan is in)
     ('ALEXA', 'the film draws it, shatters it (shot 6) and walks its remains (shot 12) itself (prepper_fx)'),
 ]
 BENCHMARK = [   # rule 3 (benchmark.py): what makes each place recognisable, and how ours has it
@@ -1980,7 +1980,7 @@ def flying_head(img, cam, t, piece):
 
 
 def door_angles(t):
-    """How far each door stands open (degrees) for the collision audit's door leaves (sets.solids, rule 12)."""
+    """How far each door stands open (degrees) for the collision audit's door leaves (sets.solids, rule 5)."""
     return house_state(t)['doors']
 
 
@@ -2481,7 +2481,7 @@ def scene(t, faces=None):
             rec.add(sp.get('name', 'robot'), _robot_solids(sp.get('name', 'robot'), p, sp))
             return {}
 
-        def house_(img, cam, t_, actors=(), state=None):   # the walls, doors and furniture: sets.solids (rule 12)
+        def house_(img, cam, t_, actors=(), state=None):   # the walls, doors and furniture: sets.solids (rule 5)
             for a in actors:
                 a['draw'](img)
         rec.patch(me, 'put', put_)
@@ -2551,7 +2551,7 @@ def effect_points(t):
 EFFECT_SWITCH = [(sys.modules[__name__], 'effects')]   # what draws the flat effects (switched off to find them)
 DIRECTION_SWAPS = []                                 # [(mover, cut time, why)]: a planned swap across a cut
 _FX_CAM = S.Cam((0.0, 1.2, -2.5), (0.0, 1.2, 0.0))
-EFFECTS = [   # rule 15: each effect with its shape, drawn alone and tested (no stars, no regular spikes, no motion lines)
+EFFECTS = [   # rule S7: each effect with its shape, drawn alone and tested (no stars, no regular spikes, no motion lines)
     ('impact flash', 'burst', lambda img: X.flash(img, _FX_CAM, (0.0, 1.2, 0.0), 0.3, seed=4)),
     ('blue impact flash', 'burst', lambda img: X.flash(img, _FX_CAM, (0.0, 1.2, 0.0), 0.3, seed=7, col='blue')),
     ('muzzle flash', 'burst', lambda img: C.muzzle_flash(B.Pen(img, FLAT), (540, 960), (1.0, 0.0), 140, seed=2)),

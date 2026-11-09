@@ -16,7 +16,7 @@ one got through. This tests the RESULT, on every frame:
               than in the frames either side), unless the film's ALLOWED_POPS names it (gone in through a door).
   roster      who is on screen in each shot (the rule's "list of who is in each shot").
   the set     a film with a PLAN gets every wall (cut round its openings; pieces by an opening named as its frame),
-              every THING and every door leaf (at film.door_angles(t)) as solids by itself (sets.solids, rule 12):
+              every THING and every door leaf (at film.door_angles(t)) as solids by itself (sets.solids, rule 5):
               the film lists only what to leave out, SET_EXCLUDE = [(name pattern, why)]. Set pieces touching each
               other are never a fault; they are left out of the roster.
 
@@ -281,7 +281,7 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
                     nm, n = f'{th.name}~{n}', n + 1
                 th.name = nm
                 things[nm] = th
-            for th in set_solids(t):      # rule 12: the set's walls, frames, doors and furniture, from the plan
+            for th in set_solids(t):      # rule 5: the set's walls, frames, doors and furniture, from the plan
                 if th.name not in things:
                     things[th.name] = th
             names = list(things)

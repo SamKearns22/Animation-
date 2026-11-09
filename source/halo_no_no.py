@@ -132,7 +132,7 @@ SET_EXCLUDE = [('driver seat', 'Musk sits in it (the cabin is one flat painting,
 TOUCHES = [('musk.handL', 'YOKE', 8.5, 34.4, 'turning the yoke'), ('musk.handR', 'YOKE', 8.5, 34.4, 'turning the yoke')]
 FREE_MOVES = [('ARMADA', 3.8, 8.5, 'the cars fly'), ('ARMADA', 34.4, 42.3, 'the cars fly')]
 SOUND_SOURCES = {}
-EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule 15)
+EFFECTS = []                                      # filled in below the drawing code (each drawn alone, rule S7)
 JOKE_PROPS = []
 THREE_QUARTER_OK = [('s4', 'cortana thrust', 'the brief: shoving her chest at him (side on, facing him)'),
                     ('s4', 'cortana turn', 'the brief: showing her behind (from the back, looking back at him)')]

@@ -367,7 +367,7 @@ def desk_items():
 
 
 def desk_plan_things(n=24):
-    """The desk for a film's PLAN THINGS (rule 12): n straight blocks, each wholly covering its stretch of the ring
+    """The desk for a film's PLAN THINGS (rule 5): n straight blocks, each wholly covering its stretch of the ring
     (its inside face is the chord, so the blocks reach a little nearer the centre than the real desk: on the safe
     side for clearance checks)."""
     out = {}

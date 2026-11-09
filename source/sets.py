@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """sets: the shared 3D set, built from the film's plan (plan.py): the camera and shapes every set uses, the portal
-(rule 2) and the set's solids for the collision audit (rule 12).
+(rule 2) and the set's solids for the collision audit (rule 5).
 
 Why: each film built its rooms on its own (power_crime_set, poker_mon_room, prepper_set), so a doorway could show a
 flat colour (Power Crime), and the collision audit only knew what a film remembered to hand it (Prepper note 47: Wes
@@ -16,7 +16,7 @@ backed through a door frame the audit had never heard of). Built once here, from
                                   contents; plain_room() is the default (LOOKS colours, every THING as a box: enough
                                   for the rough composition sheet, rule 11)
   solids(film)                    every wall (cut round its openings), door frame, door leaf (at film.door_angles(t))
-                                  and THING as audit Things: audit.py adds them to every frame by itself (rule 12);
+                                  and THING as audit Things: audit.py adds them to every frame by itself (rule 5);
                                   a film lists only what to leave out: SET_EXCLUDE = [(name pattern, why)]
   portal_faults(film)             each opening on screen in each shot must show something, never one flat colour
                                   (people in front of it left out); PORTAL_OK = [(opening, t0, t1, why)] for a
@@ -541,7 +541,7 @@ def portal_faults(film, per_shot=2):
     return out
 
 
-# ------------------------------------------------------------------------------------------------ solids (rule 12)
+# ------------------------------------------------------------------------------------------------ solids (rule 5)
 _STATIC = {}
 
 
@@ -593,7 +593,7 @@ def _door_leaf_solid(CC, P, name, angle):
 
 
 def solids(film, t=0.0):
-    """Rule 12: the set's solids at time t as audit Things (kind 'set'): every wall cut round its openings (pieces by
+    """Rule 5: the set's solids at time t as audit Things (kind 'set'): every wall cut round its openings (pieces by
     an opening named as its frame), every THING, every door leaf at film.door_angles(t) ({name: degrees}, 0 = shut).
     Leaves out what SET_EXCLUDE names (each with its reason) and anything solid=False in the plan."""
     import audit as A
@@ -632,17 +632,17 @@ def solids(film, t=0.0):
 
 
 def solids_faults(film):
-    """What rule 12 needs and a film lacks, said out loud (never skipped in silence)."""
+    """What rule 5 needs and a film lacks, said out loud (never skipped in silence)."""
     P = _plan(film)
     if P is None:
         return []
     out = []
     if any('hinge' in o for o in P.openings.values()) and not hasattr(film, 'door_angles'):
-        out.append('collision audit (rule 12): the plan has hinged doors but the film has no door_angles(t) '
+        out.append('collision audit (rule 5): the plan has hinged doors but the film has no door_angles(t) '
                    '({door: degrees open}); their leaves are not tested')
     for pat, *why in getattr(film, 'SET_EXCLUDE', ()):
         if not why or not str(why[0]).strip():
-            out.append(f'collision audit (rule 12): SET_EXCLUDE {pat} gives no reason')
+            out.append(f'collision audit (rule 5): SET_EXCLUDE {pat} gives no reason')
     return out
 
 

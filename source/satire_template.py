@@ -92,7 +92,7 @@ ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []   # clipcheck: deliberate c
 # here every contact that is meant (thing or thing.part, the other, from, to, why) and every meant pop-in.
 ALLOWED_CONTACTS = [('A.hand*', 'TABLE', 1.5, 2.2, 'A thumps the table')]
 ALLOWED_POPS = []                                   # [(name, from, to, why)], e.g. gone in through a door
-SET_EXCLUDE = []                                    # rule 12: [(set piece, why)]: what the audit leaves out of the set
+SET_EXCLUDE = []                                    # rule 5: [(set piece, why)]: what the audit leaves out of the set
 # Rule 13 (kitchecks.py, run by pre-flight on every film): a hand on what it moves, every frame, and seen; a prop that
 # moves has a hand on it unless it flies, falls or slides; a resting hand keeps 3 cm clear; marks on real surfaces
 # (define all_marks()); a sound tied to a thing plays only with it in frame, once per hit
@@ -101,7 +101,7 @@ FREE_MOVES = []                                     # [(thing, from, to, why)], 
 RESTS = []                                          # rule 78, every arm the notes list as resting: [(forearm, surface,
 #                                                     from, to, why)], e.g. ('A.forearm*', 'desk', 0.0, 2.5, 'line 1')
 SOUND_SOURCES = {}                                  # {sound name: (x, y, z) or fn(t)}, for sound_events()
-# Rules 15-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
+# Rules S7, 16-18 and 20 (viewchecks.py, run by pre-flight): every effect listed with its shape and a test drawing (a
 # 'burst' must be lumpy, never a star; no motion lines); every prop a joke needs at least 40 px on screen (the sheet:
 # python3 source/viewchecks.py NAME SHEET.jpg); and, with a 3D camera, movers(t) -> [(name, (x, y, z))] for the
 # direction across each cut, effect_points(t) + EFFECT_SWITCH for effects hidden behind figures. Held props are
@@ -267,7 +267,7 @@ def checks():
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     faults += title_check()
     mix, voice, rest = soundtrack(stems=True)
-    faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice)  # no steady hiss, heard only between lines (rule 60)
+    faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice)  # no steady hiss, heard only between lines (rule S3)
     for q in filmkit.sound_questions({'voice': voice, 'background': rest, 'mix': mix}, SR,
                                      cuts=[a for _, a, _ in SHOTS[1:]], end=BLACK_AT):
         print('QUESTION FOR SAM:', q)        # may be meant: ask, never change it without him
@@ -278,7 +278,7 @@ def checks():
 # ------------------------------------------------------------------------------------------------ the audit
 # audit.py: rule 5 (nothing passes through anything) and rule 6 (nothing pops in or out). This template's film is flat
 # (everyone at one distance, on the floor line), so its world is the frame in metres. scene(t) gives the people and
-# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 12):
+# props; the set (every wall, door frame, door and THING in PLAN) joins the audit by itself (sets.solids, rule 5):
 # list only what to leave out, SET_EXCLUDE = [(name, why)]. A film with a 3D set and a
 # camera (Cam3) instead runs its own picture(t) with the drawing switched off and records where everyone is put:
 # copy power_crime.scene(), which gets every person and prop exactly as drawn (props too: a card with .quad, a
@@ -304,7 +304,7 @@ def scene(t):
                 hx, hy = THUMP.at(t)
                 sol.append(CC.sphere('A', 'handR', (x + hx * S * PX_M, (FY - NECK_Y - hy * S) * PX_M, 0.35), 0.05))
             out.append(audit.Thing(who, sol))
-    return out                                            # the walls, the table and every THING: from PLAN (rule 12)
+    return out                                            # the walls, the table and every THING: from PLAN (rule 5)
 
 
 def title_check():

@@ -8,7 +8,7 @@ smoke pouring from the fire's top and leaning with the wind, and the tanker torn
 
 Everything is laid out in metres in the strait's world (x right, y out to sea, z up; the near tanker 1.2 km out) and
 drawn through whichever camera is given, so the close-up shows the same burning wreck and smoke. Flat house style:
-flat tones, one ink outline, lumpy shapes (rule 15). The effects reuse Flying Whales' kit (flying_whales_fx: the
+flat tones, one ink outline, lumpy shapes (rule S7). The effects reuse Flying Whales' kit (flying_whales_fx: the
 fireball lumps, smoke clumps, deck fire, splashes, flat-shape drawing), re-coloured for hazy daylight.
 
     python3 source/ad_vanced_notice_fx.py sheet OUT.jpg            key moments of the hit + the close-up's wreck
@@ -164,7 +164,7 @@ def _jag(r, w, h, n, seed, squash=1.0):
 
 
 def _piece_shape(kind, x, y, r, ang, seed):
-    """A piece on screen, (body, inner) in local shapes turned by ang: never a stick or a line (rule 15).
+    """A piece on screen, (body, inner) in local shapes turned by ang: never a stick or a line (rule S7).
     hull: a big bent slab of black side plating with the red bottom along one edge; deck: a rust-red deck plate with
     a stub of pale pipe across it; pipe: a fat length of pale pipe with a dark flange; crane: a white tapered jib with
     its dark hook block; funnel: the white drum with its black rim; scrap: a small dark jagged bit."""
@@ -589,7 +589,7 @@ def close_frame(u, t0=6.0):
     return light(im, u, S.CLOSE)
 
 
-EFFECTS = [  # rule 15: each effect alone, shape-tested (viewchecks.shape_faults)
+EFFECTS = [  # rule S7: each effect alone, shape-tested (viewchecks.shape_faults)
     ('fireball', 'burst', lambda img: _fireball(S.CLIFF, 0.25).paste(img)),
     ('fireball climbing', 'burst', lambda img: _fireball(S.CLIFF, 2.4).paste(img)),
     ('blaze', 'burst', lambda img: [sp.paste(img) for sp in blaze_sprites(S.CLIFF, 4.0) if sp is not None]),

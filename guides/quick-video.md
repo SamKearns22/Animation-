@@ -4,6 +4,8 @@ For a short TikTok film with two people talking, made by `source/quick.py` from 
 the series' look (flat shapes, black outlines, plain circle hands), Sam's recordings, the standard title and
 captions, and the pre-flight checks. **Do not open** `burnham.py`, `russiadent.py`, `patriots2.py` or other guides.
 
+**Contents:** 1. Ask Sam · 2. Steps · 3. If a check fails.
+
 ## 1. Ask Sam, in ONE message (skip what he already sent; pick the rest yourself and say what you chose)
 - The script: who says what (A or B), the exact words, short lines (a caption is at most 2 rows of 42 characters).
 - His recordings, one file per line, saved as `source/audio/NAME-1.m4a`, `NAME-2.m4a`... in script order.
@@ -19,7 +21,11 @@ Estimate the length (words / 3.3 a second, plus pauses) and say plainly if it wi
 2. `python3 source/quick.py check prompts/NAME.json` (2 seconds). Fix every FAIL (table below), run it again.
 3. `python3 source/quick.py sheet prompts/NAME.json /tmp/sheet` (about 3 s per second of film). It checks every
    body (arms, legs, hands) and makes ONE contact sheet, `/tmp/sheet/quick-preflight.jpg`, with the safe area
-   drawn on. It must say `0 problem(s)`. Look at the sheet once; if it is wrong, fix the brief and run step 3 again.
+   drawn on. It also runs the Satire checks: mouths move for every phrase, the voice sits at least 6 dB above the
+   effects, the subtitles printed as text (proofread them there), each person drawn alone over the whole film (in
+   pieces, popping, stretching, frozen), and the eyelines (A and B look at each other). It must say `0 problem(s)`.
+   Look at the sheet once; if it is wrong, fix the brief and run step 3 again. (Backgrounds come out in Satire style,
+   hand-cut corners and flat colour, and listeners sway slightly, never frozen.)
 4. Tell Sam what you chose and the render time (about 3 minutes per 20 s of film); get his notes in ONE message and
    apply them all at once.
 5. `python3 source/quick.py final prompts/NAME.json source/data/NAME-clean.mp4` in the background, then
@@ -28,6 +34,7 @@ Estimate the length (words / 3.3 a second, plus pauses) and say plainly if it wi
 6. Send the file in the chat, suggest a cover (the frame at 0:00.5), add 3 lines to `story/status.md`, and commit
    only the video, the brief and the recordings. Sam writes the post text himself.
 Test any change cheaply first: `final ... /tmp/t.mp4 --scale 0.5 --secs 3` (10 seconds).
+After a caption or timing note: `final ... --reuse` (no pictures re-rendered, about a minute).
 
 ## 3. If a check fails
 | Message | Fix |
@@ -42,17 +49,7 @@ Test any change cheaply first: `final ... /tmp/t.mp4 --scale 0.5 --secs 3` (10 s
 | `hand cannot reach` / `figure check` (sheet) | Change that line's `gesture` to `talk` or `rest`. |
 | `too fast to read` (note) | Add 0.5 s before the next line. |
 | `no recording` (note) | Fine only if Sam meant a silent line. |
-If anything still fails twice, or the fault is inside `quick.py`, stop and tell Sam in plain words: do not rewrite it.
-
-## Added 8 Oct: the Satire checks run here too
-- The `sheet` step now also runs: mouths move for every phrase, the voice sits at least 6 dB above the effects, the
-  subtitles printed as text (proofread them there), each person drawn alone over the whole film (in pieces, popping,
-  stretching, frozen), and the eyelines (A and B look at each other). It must still say `0 problem(s)`.
-- Backgrounds are drawn in Satire style (hand-cut corners, flat colour); listeners sway slightly (never frozen).
-- After a caption or timing note: `final ... --reuse` (no pictures re-rendered, about a minute).
-| Message | Fix |
-|---|---|
 | `frozen` | Give that line a `gesture` or a `react` face. |
 | `only N dB above the rest` | Lower that sound effect's `gain`. |
 | `no mouth movement` | The recording and the text don't match: ask Sam. |
-
+If anything still fails twice, or the fault is inside `quick.py`, stop and tell Sam in plain words: do not rewrite it.

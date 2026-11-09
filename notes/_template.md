@@ -3,7 +3,7 @@
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
 - **Rules that bite next:** (3, by number from guides/film-quality-rules.md)
 - **Done:**
-- **Spent against the estimate (rule 55):** (each build: estimated / spent; name any running over)
+- **Spent against the estimate (rules 24 and 44):** (each build: estimated / spent; name any running over)
 - **Next:** (stage, model, and what Sam types in the new chat)
 - **Needs Sam:** (numbered, my pick first; or "nothing")
 - **Read:** (which sections of which guide; nothing else)

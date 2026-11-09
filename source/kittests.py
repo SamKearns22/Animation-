@@ -266,7 +266,7 @@ def order_flip_mid_shot():
 
 @test
 def hiss_heard_only_between_lines():
-    """Rule 60 (Flying Whales): speech full of "s" sounds is not hiss; noise in the gaps between lines still is."""
+    """Rule S3 (Flying Whales): speech full of "s" sounds is not hiss; noise in the gaps between lines still is."""
     import numpy as np
     import filmkit
     sr, rng = 48000, np.random.default_rng(1)
@@ -384,7 +384,7 @@ def standing_legs_straight_elbows_out():
 
 @test
 def point_hand_shows_a_finger():
-    """Rule 69 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
+    """Rule 41 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
     circle hands draw one for 'point', and films that load them after their own finger keep it."""
     import types
     from satire_style import install_circle_hands

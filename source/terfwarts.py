@@ -801,7 +801,7 @@ def checks():
                 raw[s:s + len(ln['_voice'])] += ln['_voice'][:n - s]
         faults += MA.limit_check(raw, int(BLACK_AT * SR))     # more than 3 dB of limiting crackles on a phone
     mix, voice, rest = soundtrack(stems=True)
-    # no steady hiss (rule 60), heard where nothing is meant to sound: with the gaps between Sam's trimmed lines now
+    # no steady hiss (rule S3), heard where nothing is meant to sound: with the gaps between Sam's trimmed lines now
     # 0.25 s, the only voice-free stretches were the running feet and the scream (their own highs, -49 dBFS); with
     # both silent the film measures -94 dBFS (3 Nov)
     faults += filmkit.hiss_check(mix, SR, BLACK_AT, voice=voice + rest)

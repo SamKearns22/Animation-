@@ -1,9 +1,11 @@
 # TikTok design rules (CranbriJoos)
 
-The lessons from every film are collected in `guides/best-practice.md` (the master file); this guide holds
-the TikTok details.
+The TikTok details: use these for every video made for TikTok, in any chat. Every rule, with its check, is in the
+rulebook (`guides/film-quality-rules.md`); how we work with Sam is in `CLAUDE.md`. The research behind the posting
+advice is in `research/`.
 
-Use these for every video made for TikTok, in any chat. They can be pasted into a prompt as they are.
+**Contents:** Account · The video file (size, safe area, captions) · The title card (only when Sam asks) · Hook Text ·
+Strategy · Sign-off · Cover · Posting.
 
 ## Account
 - Name **CranbriJoos**, handle **@cranbrijoos** (the same on TikTok and X). Bio (3 Nov): **"Jokes about UK politics, global events and other nonsense. Follow to 'lmao'. All opinions are your own. "Superlative cinematography" -- a crow I showed this to."**
@@ -37,6 +39,7 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
     centred on the frame (x = 540), just below the picture or the faces (director's choice on The Patriots).
 
 ## The title card
+No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sam asks for a title:
 - Bold Impact-style capitals (Anton), **cranberry red (178, 24, 52)**, letters widened 20%, thick black
   outline (`source/add_title.py`).
 - **Never a held title card on TikTok.** Our first two posts (Sept 30) lost most viewers in the first 3
@@ -75,7 +78,7 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
   concept, then the viewer stays to see where the joke goes. Never gives the punchline away.
 - **Readability first, not our title style:** TikTok's own caption look - TikTok Sans Bold, sentence case, black on
   a white rounded box (one box per row), near the middle of the safe area, over the moving picture, never over a face.
-- Pops in 0.5 s into the film (rule 82: a quick pop) and stays through the opening shot (about 3-4 s, a quick fade
+- Pops in 0.5 s into the film (rule 75: a quick pop) and stays through the opening shot (about 3-4 s, a quick fade
   at the first cut).
 - `python3 source/hook_text.py IN.mp4 OUT.mp4 "Line" [--until 3.6] [--y 880]`, always onto an untitled render: keep
   the untitled final in `source/data/FILM/` (not on GitHub) so the line can be changed without a re-render.
@@ -123,23 +126,13 @@ Use these for every video made for TikTok, in any chat. They can be pasted into 
 - **Timing (Sam's TikTok Analytics, 14-19 Oct, UK time; one week only, so re-check next week):** weekdays post about
   4pm, ahead of the 4-9pm peak (busiest hours were 5pm Fri, 7pm Thu, 8pm Wed); weekends post about 10am, ahead of the
   11am peak (Sat and Sun both peaked at 11am). Never 1am-6am (dead every day). Bigger or smaller days follow what was
-  posted, not just the clock. The wider evidence on timing is weak and mixed: see `guides/tiktok-posting-research.md`.
+  posted, not just the clock. The wider evidence on timing is weak and mixed: see `research/tiktok-posting-research.md`.
 - Post text: short and dry, with the title, a few specific hashtags (the people or topic being parodied,
   #animation, #parody or #satire), and a question that invites replies. Pin that question as a comment.
 - **The director writes the post text and the pinned question himself. Claude never suggests lines or wording
   for them** (it can still suggest a cover frame and point out if a hashtag would spoil the joke).
 - **Hashtags: Claude may always suggest the best ones (Sam, 16 Oct), but always in the context of the TikTok algorithm and
-  what the evidence says about reach** (`guides/tiktok-posting-research.md` section 7): few and specific, matched to the
+  what the evidence says about reach** (`research/tiktok-posting-research.md` section 7): few and specific, matched to the
   caption's search words, none that give away the twist.
 - Reply to comments in the first hour. Keep the next video ready within 24-48 hours.
 - X gets the original widescreen version.
-
-## Working (for Claude)
-- **Say how long each render will take before starting it, and report how long it took.**
-- **Send a push notification to the director's phone whenever a render or any other long process
-  finishes** - full renders, animatics, storyboard or mock-up sheets, sound builds, uploads to GitHub,
-  research: anything that takes more than a couple of minutes, since the director is often away from the
-  chat. Say what is ready, its size or result, and how long it took. Also send one if a long process fails
-  or stops to wait for a decision, saying what is needed.
-- Send finished videos in the chat so they can be saved to Photos; save finished versions in
-  `animations/` with `-vertical` in the name for TikTok versions.

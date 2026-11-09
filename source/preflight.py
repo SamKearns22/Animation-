@@ -21,7 +21,7 @@ DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing an
 against the audit's roster). It prints a short summary; the full list goes to OUT_DIR/NAME-preflight.txt (rule 19).
 The shared kit's checks (kitchecks.py, rule 13) run here on every film: facing on the drawing pass, marks, sounds,
 and (inside the audit) hands on what they touch, props held, resting hands clear. handcheck.py (rule 41) probes
-everyone drawn, on every frame: every arm ends in a visible hand. So do viewchecks.py's (rules 15-18,
+everyone drawn, on every frame: every arm ends in a visible hand. So do viewchecks.py's (rules S7, 16-18,
 20): effect shapes, readability, direction across a cut, effects hidden behind figures, and on the drawing pass every
 held prop turned through every view.
 
@@ -328,7 +328,7 @@ def main():
             shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot
         shared += benchmark.faults(film)        # rule 3: each place benchmarked against its references, all decided
     if rooms:
-        shared += sets.solids_faults(film)      # rule 12: what the set's solids need (door angles, reasons)
+        shared += sets.solids_faults(film)      # rule 5: what the set's solids need (door angles, reasons)
         if getattr(film, 'PLAN', None) is not None and hasattr(film, 'cam_for'):
             shared += sets.portal_faults(film)  # rule 2: every opening shows the space beyond, never a flat colour
     roster = None
@@ -349,7 +349,7 @@ def main():
         import voices
         shared += voices.check(film)
     if every_film:
-        import viewchecks                       # rules 15-18: effect shapes, readability, direction across a cut,
+        import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
         shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     if 'mounts' in sys.modules:                 # riding (Sam, 25 Oct): a film with a mount gets the mount checks
         import mounts

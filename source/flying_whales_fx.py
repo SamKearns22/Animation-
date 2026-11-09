@@ -2,7 +2,7 @@
 """Flying Whales, the rig scene's effects (1 Nov: the water burst; the fireballs, smoke, deck fires, steam, crown
 splash and dust join this file in the effects stage).
 
-The water burst (Showstopper U12 and rule 16: they burst out of the sea heading up and to the right; rule 15: an
+The water burst (Showstopper U12 and rule 16: they burst out of the sea heading up and to the right; rule S7: an
 effect is lumpy, never regular spikes; the house look: flat colour, a lit and a shadow tone, one ink outline round the
 whole shape, no glows or gradients, no motion lines):
 - a collar of lumpy water hugging the whale at the waterline for as long as its body is crossing the surface (it
@@ -197,7 +197,7 @@ def _sprite(img, x0, y0, depth):
 def shape_sprite(tones, depth, ss=2, ol=5.0):
     """One flat shape in a few tones, cropped to its box: tones = [(colour, [screen polygons])]; the first tone is the
     whole silhouette, each later one is painted over it (inside); one ink outline round the silhouette. A Sprite or
-    None. (Rule 15 and the house look: flat tones, one outline, no glow, no see-through.)"""
+    None. (Rule S7 and the house look: flat tones, one outline, no glow, no see-through.)"""
     if not tones or not tones[0][1]:
         return None
     olp = ol * SEA.LINE * SIZE[0] / 1080
@@ -368,7 +368,7 @@ WIND = np.array([3.0, 0.0, 0.0])                          # m/s: the flare's fla
 
 
 def _blob(x, y, r, seed, n=11, squash=1.0, rough=0.22):
-    """A lumpy round outline (screen): n soft lobes of different sizes, hand-cut, never points (rule 15)."""
+    """A lumpy round outline (screen): n soft lobes of different sizes, hand-cut, never points (rule S7)."""
     rng = np.random.default_rng(int(seed) % (1 << 31))
     a0 = rng.uniform(0, 2 * math.pi)
     rad = rng.uniform(1 - rough, 1.0, n)
@@ -630,7 +630,7 @@ TEST_FAR = W.Cam(pos=(0.0, -120.0, 8.0), yaw=0.0, pitch=8.0, focal=1400.0, size=
 
 
 def test_draw(age, what='burst'):
-    """One effect alone at `age` for the film's EFFECTS list (viewchecks tests its shape, rule 15): 'burst' (the
+    """One effect alone at `age` for the film's EFFECTS list (viewchecks tests its shape, rule S7): 'burst' (the
     collar, column and spray) or 'foam' (the flat ring on the sea: tested apart, since its long flat ellipse round the
     burst would read to the star test as two long points)."""
     def draw(img):

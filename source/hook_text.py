@@ -107,7 +107,7 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
 
 
 def _pop_frames(png, tmp, fps, scales=(0.6, 1.08, 1.0)):
-    """The card's pop-in (rule 82) as numbered frames in tmp: it grows from 60% past full size and settles, about
+    """The card's pop-in (rule 75) as numbered frames in tmp: it grows from 60% past full size and settles, about
     0.2 s, each frame scaled about the card's own middle."""
     im = Image.open(png).convert('RGBA')
     box = im.getbbox()
@@ -130,7 +130,7 @@ def _pop_frames(png, tmp, fps, scales=(0.6, 1.08, 1.0)):
 
 def main():
     a = sys.argv[1:]
-    until, y_mid, start = 3.6, 880, 0.5           # rule 82: it pops in 0.5 s into the film
+    until, y_mid, start = 3.6, 880, 0.5           # rule 75: it pops in 0.5 s into the film
     if '--from' in a:
         i = a.index('--from'); start = float(a[i + 1]); del a[i:i + 2]
     centre = '--centre' in a
@@ -155,7 +155,7 @@ def main():
         card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid, width=width)
         fps = next((float(t) for t, n in zip(probe.split(), probe.split()[1:]) if n.startswith('fps')
                     and t.replace('.', '').isdigit()), 24.0)
-        pop = _pop_frames(png, tmp, fps)                       # rule 82: a quick pop (small, overshoot, settle)
+        pop = _pop_frames(png, tmp, fps)                       # rule 75: a quick pop (small, overshoot, settle)
         dur = len(pop) / fps
         fade = 0.25
         vf = (f'[1:v]format=rgba,setpts=PTS+{start}/TB[p];'

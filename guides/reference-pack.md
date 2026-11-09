@@ -5,6 +5,9 @@ only made when a script needs it, but when it is made it follows this page. Timi
 second; "on twos" means each drawing is held for two of those frames' worth of film time at 24 fps, which is what our
 12 fps already is.
 
+**Contents:** 0 The style target · 1 Walking, running · 2 Turning · 3 Standing · 4 Sitting · 5 Talking gestures ·
+6 Holding things · 7 Combat and falls · 8 Cars · 9 Perspective.
+
 ## 0. The style target: limited animation, not realism
 - **South Park** (the closest model): animator Lucas Walker describes every character rig as having "no less than four
   views: left, right, front, back", plus special poses done as **replacement animation**: "you can hit a slider that

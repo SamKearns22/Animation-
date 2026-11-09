@@ -1,9 +1,11 @@
-# Best practice: the master file
+# Best practice: general principles and scene lessons
 
 - **Part 1, general principles** for any animation we make, from recognised sources (listed at the end), written as
-  principles. Breaking one on purpose (a comic pose, a horror beat) is fine; by accident is not.
-- **Part 2:** the TikTok parody series (flat Satire style).
-- **Part 5:** how we work and deliver, every project.
+  principles. Breaking one on purpose (a comic pose, a horror beat) is fine; by accident is not. Sections: 1.1 Story
+  and intent · 1.2 Movement and acting · 1.3 Staging, continuity and layering · 1.3b Keeping old films working ·
+  1.4 Sound · 1.5 Look and art direction · 1.6 Subtitles and on-screen text.
+- **Part 2:** the TikTok parody series: scene lessons by film (read `guides/satire.md` first).
+- **Part 5:** how we work and deliver: the few lessons not written elsewhere.
 - Every rule, once, with its check: `guides/film-quality-rules.md` (the rulebook). If a guide disagrees with the
   rulebook, the rulebook wins; then fix the guide.
 - Archived: the coloured-pencil shorts (`guides/archive/best-practice-pencil.md`). The Yuletide trailer, a separate
@@ -233,8 +235,14 @@ Sources: BBC Subtitle Guidelines; Netflix Timed Text Style Guide.
 ---
 
 # Part 2. The TikTok parody series (flat, Satire style, FilmCow-influenced cartoon)
-For Listening & Learning, Hope Again, The Patriots and future topical parodies. These rules apply only to
-this series. Full details in `tiktok-design.md`.
+Scene lessons for the series, by the film that taught them. `guides/satire.md` is the method and comes first; this
+part is only for a kind of scene satire.md doesn't cover (creatures, fights, chaos, a real artwork, a hospital). The
+TikTok format (safe area, title, captions, Hook Text, sign-off) is in `guides/tiktok-design.md`; every rule, with its
+check, is in the rulebook.
+
+**Contents:** The comedy · The look · What we learned · Big creatures and tableaux · Fights and set pieces · Chaos
+scenes · Straight to the animatic · A Professional · The Patriots 2 · Captions and endings · Redrawing a real artwork ·
+Cry Minister.
 
 **The comedy**
 - **Deadpan:** a sincere character, a still camera, hard cuts, absurdity played completely straight; the
@@ -243,43 +251,31 @@ this series. Full details in `tiktok-design.md`.
 - Topical parody must be out within 24-48 hours of the news, so the look is quick to make.
 
 **The look**
-- Flat shapes, clean black outlines, almond eyes with small pupils, soft shading. Developed from
-  Listening & Learning's FilmCow look, but it must stay clearly our own (no dot eyes, uniform outlines or
-  FilmCow construction).
-- Reuse `burnham.py` and the film code of the latest parody, so people, captions and titles match across
-  the series.
+- The look itself is in `guides/satire.md`, "The look" (built into `source/satire_style.py`; every film starts from
+  `source/satire_template.py`). Developed from Listening & Learning's FilmCow look, but it must stay clearly our own
+  (no dot eyes, uniform outlines or FilmCow construction).
 - Real people as simple, affectionate-to-sharp caricatures. Costume and makeup carry character (the
   royal king's crown, fur and chain; the reporter's lipstick).
 
 **What we learned**
-- **Voices:**
-  - Sam's recordings play exactly as recorded, with volume changes only, no echo and no pitch change;
-  - mouths follow each voice (Hope Again);
-  - crowd sound only for what is on screen, with natural, uneven clapping;
-  - music made in code, never the parodied show's (Hope Again).
+- **Sound:** crowd sound only for what is on screen, with natural, uneven clapping; music made in code, never the
+  parodied show's (Hope Again).
 - **Gestures carry the speech:** pointing, air quotes, a wagging finger, a hand on the hip. Keep fists and
   props steady, and give each character a different salute or reaction (Hope Again).
-- **One shared set for every camera:** the single shot is the two-shot camera zoomed in, so positions
-  never jump between shots (The Patriots).
 - **Layering:**
   - the reporter's microphone arm goes in front of the protester's arm;
   - his accusing point goes in front of the reporter;
   - lettering and badges stay clear of arms (The Patriots).
 - **Props and costume on everyone, in every shot:** lanyards on the whole audience (Hope Again).
-
 - **Background sound (Mossad):** no constant noise beds. A café murmur or street rumble made from filtered noise
   sounds like wind on the microphone and irritates from the first second; use only distinct, motivated sounds (clinks,
   typing, a machine, a passing car).
-- **Every background person has a clear, readable action** (the barista pouring milk), never vague arm-waving.
 - **Even a deadpan character acts with the face, beat by beat** (the cashier: serious, wide-eyed, hand on heart), while
   the camera stays still.
-- **Everyone has legs and feet,** including people seated or standing behind counters (draw them; let the set hide them).
-  Never switch legs off to save drawing, even where something "should" hide them: in The Patriots 2 the people at the
-  edges of a close-up ended at the waist. `person()` in patriots2.py now always draws legs (standing, seated or walking).
 - **Urgency before the deadpan (The Patriots 2):** a sudden decision to do nothing is funnier straight after urgent
   movement (doors banging open, staff running the trolley into the ward), so build the rush, then stop dead.
-- **Props at real size and used the real way:** a 12 oz takeaway cup is about half a head tall; stacks sit wide end
-  down; an order pager is a small upright block, not a disc.
+- **Props used the real way:** stacks sit wide end down; an order pager is a small upright block, not a disc (sizes
+  themselves: `source/sizes.py`, satire.md "Real sizes").
 - **Analytics (Mossad, 4 Oct):** with movement and the first line from frame one and the title gone by 1 s, average
   watch time rose to 17.1 s of 30 (first posts: 3.6-4.6 s) and 37% watched to the end. Likely next gain: no single
   shot longer than about 6-8 s; break a long speech with a cut to the listener's reaction (to be confirmed on the
@@ -308,13 +304,6 @@ this series. Full details in `tiktok-design.md`.
   would have caught it (`figure.audit_arm` now does), test it on the good poses too, and fix every copy of the code.
 - **A swing (whip pan) is one camera turning in one set:** build the room as a strip of walls and slide the camera
   along it with motion blur (9 drawings averaged per frame), so both ends are the same room.
-
-**Hands (Russiadent Evil, 7 Oct; replaces the MakeHuman close-up hands)**
-- **Every hand is a plain circle at the end of the arm** (South Park: Butters, the hunters with rifles). No fingers,
-  no nails, at any size. To hold something, lay the prop over the circle so it reads as a grip; to pick it up, the
-  circle touches it and it moves with the circle. (Code: `chand`, `phone_prop`, `gesture_hand` in russiadent.py.)
-- Why: three rounds of freehand fingers failed and the 3D hand (`hands3d.py`) cost many renders; the circle reads
-  instantly, fits the style and costs nothing. Reach for the simplest device the style references use first.
 
 **Fights and set pieces (Russiadent Evil, 7 Oct)**
 - **Fighters look at each other and act on each other:** a victim's eyes and free hand go to the attacker (shoving its
@@ -350,92 +339,39 @@ this series. Full details in `tiktok-design.md`.
 - **Card and sign close-ups:** frame the item being read high in the picture, so the captions below never cover
   writing the audience must read.
 - **A caption never spills into the next shot;** it stops at the cut.
-- **Big fast moves are held poses, not a slide between them** (Sam, 14 Oct): routing a hand through a stop-off point to
-  dodge the arm checker produced a scarecrow frame (arms straight out, forearms dangling) on a drawn frame. Use two or
-  three real key poses (hands on the desk, hands rising beside the head, flung up), each held, checked by the arm
-  guard; and no blink on the frames of a big reaction.
 - **A gesture's direction is its meaning:** "no, no" is a sideways wag; a vertical bob of the same hand reads as pumping
   (Sam, 14 Oct). Write each gesture's direction into the beat, and time it to the words it goes with.
 - **Stand-in voices are for timing only: never on anything sent to Sam** (his note, 14 Oct). The animatic carries the
   effects and captions; the robot lines stay inside the code.
 - **Hiding what's written further down a card or sign:** a 9:16 frame wide enough to read a line always shows the whole
   card, so framing can't hide it; keep the unread lines out of focus and rack focus to each as it is read.
-- **Work from the newest branch:** before a new film, check the other branches (`git branch -r`) for tools built in
-  other chats (the new limbs lived only on the Cry Minister branch, and this film first started without them).
 
 **Lessons from A Professional (stage 2, 5 Oct)**
 - **Props at the cartoon body's heights, not real-world metres:** our figure is about 6 heads tall, so its elbow is
   0.41 m below the neck. A lectern at a real 1.12 m reached the spokesperson's chest and her hands tangled across it;
   at her elbow height (1.0 m) the forearms rest on it naturally. Take working heights from the rig's landmarks.
-- **Seated people must show their laps:** with the jacket reaching mid-thigh as when standing, seated journalists read
-  as short people standing. End the clothes at the lap and let the seat's edge show either side.
-- **One set, one plan, a real camera:** `series.Room` projects the press room's plan (metres) for every camera, so the
-  reverse angle shows the same room and sizes follow distance; anything at or behind the camera is skipped.
 - **Name who is wrong:** `series.person` tells the arm guard whose arm failed (it caught a TV operator's, a phone
   holder's and a sipping arm whose path passed too close to the shoulder before anything was rendered).
 
-**Lessons from The Patriots 2 (4 Oct)** - each is now caught at the start by `preflight.md` and `figure-rig.md`:
-- **Bodies:** arms built by the figure system (`figure.py`: one length per character, solved from targets, the
-  guard measures every arm); legs and feet on everyone, always; a person lying on a bed is drawn side-on, on their
-  back, face up, with a face profile; people pushing a trolley lean into it; a heard letter is not spoken (no mouth
-  movement while typing).
-- **Sets:** one plan per location and per desk or table, drawn by every camera; set pieces that must stay apart are
-  listed and checked; uniform details are part of the garment, drawn before the arms; props at real size and
-  working height (a trolley's mattress at the staff's waist, a keyboard under the fingertips).
-- **Detail that sells a place:** generic set dressing proposed in the brief (the ambulance's oxygen cylinder,
-  labelled drawers, kit bags, sharps bin, drip bag, blue lights through a frosted window; the ward's whiteboard,
-  dispensers, oxygen and suction outlets, clinical waste bin); an urgent rush (doors banging open, staff running)
-  before a deadpan stop makes the stop funnier.
-- **People from real groups:** check sources before drawing (small-boat arrivals: about 13% adult women, mostly
-  from countries where women cover their hair: draw headscarves); design each person's hair and clothes
-  deliberately (a greying man's hair on young men read as beads).
+**Lessons from The Patriots 2 (4 Oct)** (the rest is now in `preflight.md`, `figure-rig.md` and the rulebook):
+- **Bodies:** a person lying on a bed is drawn side-on, on their back, face up, with a face profile (now `lying.py`,
+  rule L1); people pushing a trolley lean into it; a heard letter is not spoken (no mouth movement while typing).
+- **Sets:** uniform details (reflective bands, badges) are part of the garment, drawn before the arms, so arms always
+  pass in front of them; a trolley's mattress sits at the staff's waist, a keyboard under the fingertips, and a typing
+  fingertip lands on the keyboard.
+- **Detail that sells a place:** an ambulance's oxygen cylinder, labelled drawers, kit bags, sharps bin, drip bag, blue
+  lights through a frosted window; the ward's whiteboard, dispensers, oxygen and suction outlets, clinical waste bin.
+- **People from real groups:** small-boat arrivals are about 13% adult women, mostly from countries where women cover
+  their hair: draw headscarves. Design each person's hair and clothes deliberately (a greying man's hair on young men
+  read as beads).
 - **Caricature by accident:** compare a new invented character with the series' real-person caricatures (the
   doctor first resembled our Andy Burnham).
-- **Recordings:** files named by script line number; `voices.py` catches duplicates (two names, one take) at once;
-  shortening the silences between phrases (never the words) tightened the film by 2 s.
 - **No unexplained movement:** a prop that moves needs a visible cause (the wobbling can).
 
-**TikTok format (the account's standard; it also applies to TikTok versions of the other films)**
-- Native 1080 x 1920; the safe area is x 60-900, y 310-1500, measured on a real post.
-- **The opening:**
-  - sound and movement from the first frame, with the first line almost at once;
-  - never a held title card: our first posts lost most viewers in the first 3 seconds while a title sat
-    over a still scene;
-  - the standard title shows for about 1 second (1.6 at most) over moving picture, and that frame doubles
-    as the cover.
-- **Set-ups:** 15-30 seconds in all, with the first payoff within about 8-10 seconds.
-- **The title:**
-  - Anton capitals, letters widened 20%, cranberry red (178, 24, 52) with a thick black outline;
-  - capitals about 148 pixels tall, top edge at about 330 pixels;
-  - drawn fresh at full size.
-- **Captions:**
-  - bold white with a black outline, centred on the frame;
-  - wrapped to at most 700 pixels, in balanced rows;
-  - just below the faces;
-  - big Anton capitals for shouts, plain italics for a childish aside (The Patriots).
-- **Endings:** a hard cut to black.
-
-**Efficiency and quality kit (Russiadent Evil and The Park, 8 Oct)** (general tools in `source/filmkit.py`, look in `source/satire_style.py`)
-- **Start every film from the style kit** (`satire_style.py`: flat colour, one outline weight, lumpy `blob` shapes, rounded `limb`,
-  circle hands). Never "draw clean, then fix the style": The Park had to be redrawn. Vary every copy (palettes, sizes,
-  facing). Deadpan faces: heavy lids, one brow up, flat mouth. Hard cuts and a close-up for the reaction that matters.
-- **Cast sheet first** (`python3 source/FILM.py cast OUT.png`, one cheap render): approve faces, builds and outfits
-  before any animation.
-- **Pictures are cached; captions and the title go on last.** `final OUT` renders and caches the pictures. A wording
-  or timing note: `final OUT --reuse --redo none` (about a minute). A note on one shot: `--reuse --redo reverse`
-  re-renders only that shot. The cache is only trusted when asked for, because it cannot know what code changed.
-- **Sound is separate from the picture:** a sound note means rebuilding the sound and attaching it, never a re-render.
-- **Run every check before any render** (pre-flight, all cores): plan checks (overlaps, unique outfits, close-up people
-  seen in the wides, every speech stretch has mouth movement) and the general body/movement audit. It also prints the
-  subtitles as text with times: proofread them there, not in a render.
-- **After any edit to an action, run the audit (about 2 minutes), not an animatic.** An animatic only when the movement
-  of a shot changed; review a changed shot with a stills strip first.
-- **Map before you search:** `python3 source/codemap.py FILE.py` lists every function with its line number
-  (`guides/archive/russiadent-map.md` is the map of the biggest film).
-- **Notes go in one batch, numbered, each with shot and time** ("shot 2, 10.3 s, left"): see `notes/_template.md`.
-  Lock subtitle wording and sound-mix levels in the brief (`prompts/_brief-skeleton.md`).
-- Known limit: a speech-to-text model cannot be downloaded on this machine (the network blocks it), so word timing from a
-  recording is still set by hand; ask for one recording per script line to make that easy.
+**Captions and endings (The Patriots)** (everything else on format: `guides/tiktok-design.md`)
+- Big Anton capitals for shouts, plain italics for a childish aside.
+- The film ends on a hard cut to black, then the sign-off.
+- Notes from Sam come in one batch, numbered, each with shot and time ("shot 2, 10.3 s, left"): `notes/_template.md`.
 
 **Redrawing a real artwork from photos (The Bayeux Tapestry Season Pass, 5 Oct)**
 - Trace the photo into the artwork's own small palette, then re-render every area in code (stitches, weave); no
@@ -451,60 +387,18 @@ this series. Full details in `tiktok-design.md`.
 - To shorten a moment, re-render it shorter; never cut frames out of a finished render. Anything still moving (a
   camera drift, flickering flames) jumps at the cut (DLC's title hold).
 
----
-
-### Lessons from "The Park" (8 Oct; now rules in `guides/satire.md`, most of them checked)
-- Every one of Sam's notes traced back to a missing rule or check. Each became one: the title clear of everyone; sound
-  questions (wind rumble, dead silence, a jump at a cut), asked and never fixed without Sam; effects placed by their real
-  start; elbows on their own side; eyes that jump; held poses instead of wobble loops; background characters behaving
-  normally; every view on the cast sheet; a strength sheet for the key reaction; one of each facial feature; remakes
-  keep the original's cameras and start from the template; thrown things land and stay.
-- The new checks, run on The Park's old faults, caught all of them, and two more in the template itself (its title over
-  both heads, its example arm bent across the chest).
-
-### Lesson from "Cry Minister" (8 Oct, approved by Sam)
+**Cry Minister (8 Oct)** (its sound lessons and The Park's are now in `guides/satire.md`)
 - A mouth seen from the side is see-through between the jaws; only a mouth seen from the front shows the dark throat.
-- (8 Oct, later) Every crackle Sam heard came from the voice: hard limiting to reach -14 LUFS, then the phone's own
-  chopped hiss at line ends, then lines cut apart mid-sound. Now rules in `guides/satire.md` ("Sound"), with the tools
-  in `source/mossad_audio.py`. Also new there: selfie arms, whole-body background reactions, no blank surfaces, one
-  mouth at a time, lines looked up by number.
 
 # Part 5. How we work and deliver (every project)
-1. **Brief:** ask all questions in one message, with a recommended answer for each.
-   - **Set dressing goes in the brief.** For every location in the script, list the everyday items such a place
-     usually has, so the place reads as real (a business meeting: laptops, pens and paper, glasses of water, a
-     digital whiteboard, cabinets; an ambulance: oxygen cylinder, labelled drawers, kit bags, sharps bin). Keep it
-     generic (no logos or brands) and say where each item would sit. Sam accepts or rejects them with the other
-     answers, so they are decided before the storyboard and never added in later editorial renders.
-2. **Stills or a storyboard** (with a model sheet of each new character), then **pre-flight**
-   (`python3 source/preflight.py FILM OUT_DIR`: bodies, contacts, sets, captions and shot lengths checked on every
-   third frame, plus a contact sheet with the safe area drawn on), then an **animatic** (a quick rough version with
-   sound) before the final render. Sam may skip steps to save usage. Full checklist: `preflight.md`.
-3. **Final render,** checked against the safe-area guides on the title, the widest caption and the busiest
-   frame.
-4. **Deliver:**
-   - send the film in the chat;
-   - save only finished films in `animations/` (under 50 MB, a few MB where possible);
-   - update `story/status.md`;
-   - suggest a cover frame.
-   Sam writes the post text and the pinned question himself.
-- **Timing and notifications:** say how long each render will take, report how long it took, and send a
-  push notification when anything long finishes, fails or needs a decision.
+The steps (brief, sheets, pre-flight, animatic, final, delivery), the asking and the messages are in `CLAUDE.md`,
+`guides/preflight.md` and the rulebook. What is left here is not written anywhere else:
 - **Rules are not optional.** Never skip a step because a tool doesn't fit the film yet: fix the tool, or say so
   before going on. (Russiadent Evil: preflight was skipped, then silently checked zero frames because the film had no
   `BLACK_AT`; it now refuses such a film and runs the film's own `checks()`.)
-- **Budget:** one round of notes, one animatic, one final where possible; check stills of the changed moments
-  before any full render; never build heavy tech when a simpler device in the style references will do.
-- **Fixes:**
-  - apply every note;
-  - check that a fix hasn't broken anything else;
-  - where possible, add an automatic check so a fault can't return.
+- **Never build heavy tech when a simpler device in the style references will do** (the circle hands replaced three
+  rounds of fingers and the 3D hand).
 - **Lessons from Bingo Bingo (15 Oct):**
-  - **Ask before every final render** and wait for a clear yes; "fix this before the final" is not one (CLAUDE.md).
-  - **Keep the clean final.** Save the untitled render in `source/data/FILM/` before adding any title or Hook Text,
-    so text changes take seconds; never overwrite it with a titled copy.
-  - **Re-render only what changed.** A change to the first few seconds (text, a fix) is redrawn for those frames
-    and spliced onto the finished film with its sound untouched (90 s instead of 18 min). Check the join.
   - **Recordings with two lines in one file:** measure with `voices.py`, match each file to script lines by its
     phrases and syllables, and split at the pause between lines (`source/audio/FILM-KEY.m4a`). A later retake
     replaces both pieces of its file, so the two lines match.
@@ -514,14 +408,9 @@ this series. Full details in `tiktok-design.md`.
     fixed spot, and checked on one sheet of every shape.
   - **Sam sees every picture Claude opens.** When a film is meant to be a surprise, open no stills of it at all
     before the render.
-  - **Titles vs Hook Text:** titles are cranberry; the line introducing the joke is Hook Text in TikTok's own
-    caption style, for readability (`guides/tiktok-design.md`).
-- **Automatic clip checks (The Patriots 2):** every set piece that must stay separate (a wall monitor and a curtain, a
-  dispenser and a cupboard) is listed with its outline, and the render stops if any two overlap; a typing fingertip
-  must land on the keyboard. Uniform details (reflective bands, badges) are drawn as part of the jacket, before the
-  arms, so arms always pass in front of them. The checks only know what they are told: keep the fresh-eyes review too.
-- **Record every new lesson here, in the right part:** general only if it is truly general and backed by a
-  good source; otherwise under its project.
+- **The checks only know what they are told:** keep the fresh-eyes review too.
+- **Where a lesson goes:** a rule (with its check) goes in the rulebook, on Sam's yes; a scene lesson for the series
+  goes in Part 2 here, under its film; general only if it is truly general and backed by a good source (Part 1).
 
 ---
 

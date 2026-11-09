@@ -52,7 +52,7 @@ cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 
 ## The design
 ### A. The seat is measured, the pose fits it
-Every seat pose takes the seat from the film's set plan (one place, rule 35): seat height and depth, whether it has a
+Every seat pose takes the seat from the film's set plan (one place, rule 1): seat height and depth, whether it has a
 back (and how far it reclines), arms, and the desk height if there is one. Defaults: office chair 0.45 m seat, desk
 0.74 m (standard heights). Seats in the kit: office chair (swivels, reclines), armchair or sofa (low, deep; the body
 sinks a little into the cushion), stool or bench (no back), desk edge. The chair follows the person: it reclines

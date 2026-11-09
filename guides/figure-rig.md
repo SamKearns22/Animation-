@@ -6,6 +6,10 @@ It builds on `guides/yuletide/character-anatomy.md` and `guides/yuletide/movemen
 flat 2D cartoon. Breaking a rule on purpose is fine when the script or the style asks for it: name the break in
 the code (`with figure.allow('reason'):`) so it is a decision, never an accident.
 
+**Contents:** 1 Why it exists · 2 The body · 3 Limbs are solved · 4 Contacts · 5 Sets and props · 5b Shadows and
+hands · 5c Hands: a plain circle (pupils, which side a prop goes) · 6 Movement and timing · 7 The satirical style ·
+8 The checks · 9 What is still missing.
+
 ## 1. Why it exists
 In The Patriots 2 every arm was typed in by hand, shot by shot, as an elbow point and a wrist point. Nothing tied
 those points to the body:

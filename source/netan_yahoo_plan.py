@@ -41,7 +41,7 @@ P, M, N = spot('presenter'), spot('maul'), spot('netanyahu')
 CEIL = 4.2
 ROOMS = dict(NS.ROOMS)
 OPENINGS = {'newsroom glass': dict(NS.OPENINGS['newsroom glass'], to='the newsroom')}
-THINGS = dict(NS.desk_plan_things())        # the ring desk as 24 solid blocks (rule 12)
+THINGS = dict(NS.desk_plan_things())        # the ring desk as 24 solid blocks (rule 5)
 for who, p in (('presenter', P), ('maul', M), ('netanyahu', N)):
     cx, cz, cf = chair_of(p)
     THINGS[f'chair_{who}'] = dict(at=(cx, cz), size=(2 * CHAIR_R, 2 * CHAIR_R, NP.RAIL_TOP), facing=cf, round=True,

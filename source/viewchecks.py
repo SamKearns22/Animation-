@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""viewchecks: the checks of what the camera shows (guides/film-quality-rules.md rules 15-18 and 20), for any film.
+"""viewchecks: the checks of what the camera shows (guides/film-quality-rules.md rules S7, 16-18 and 20), for any film.
 
 Why: Prepper Minister's notes 11-16, 20, 45 and 48 (props across a back, star flashes), 13 (effects drawn over people),
 57 (the plasma swapped sides of Wes across a cut) and 2, 27, 41, 46 (props too small to read on a phone) were all things
@@ -8,7 +8,7 @@ a computer can find. Each is tested on the result:
   props turned (rule 20)   every person drawn holding something (views.py, logged by kitchecks) is redrawn alone at
                            every 30 degrees: from behind nothing held is drawn over the back; from the side the prop
                            stays on the side they face (a prop at a fixed screen angle ends up behind them)
-  effect shapes (rule 15)  EFFECTS = [(name, kind, draw(img))]: each effect drawn alone; a 'burst' must be a lumpy,
+  effect shapes (rule S7)  EFFECTS = [(name, kind, draw(img))]: each effect drawn alone; a 'burst' must be a lumpy,
                            uneven blob (a star or regular spikes fail); nothing but 'sparks' may be motion lines
                            (three or more thin parallel streaks)
   direction (rule 16)      movers(t) -> [(name, (x, y, z))] (bolts, plasma, thrown things) and everyone in scene(t): at
@@ -111,7 +111,7 @@ def turn_faults(poses, tested=None):
     return out
 
 
-# ------------------------------------------------------------------------------------------------ rule 15
+# ------------------------------------------------------------------------------------------------ rule S7
 def _radial(mask):
     ys, xs = np.nonzero(mask)
     cy, cx = ys.mean(), xs.mean()
@@ -166,9 +166,9 @@ def lines_fault(mask):
 
 
 def shape_faults(film):
-    """Rule 15: each listed effect drawn alone and its shape tested (the off-style list in guides/satire.md)."""
+    """Rule S7: each listed effect drawn alone and its shape tested (the off-style list in guides/satire.md)."""
     if not hasattr(film, 'EFFECTS'):
-        return ['EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule 15']
+        return ['EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7']
     import burnham as B
     out = []
     keep = B.SS

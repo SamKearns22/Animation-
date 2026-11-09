@@ -5,18 +5,23 @@ For a full Satire-style TikTok film (more than two people talking, or any action
 check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections the handover names. Open
 `guides/best-practice.md` Part 2 only for a kind of scene this page doesn't cover.
 
+**Contents:** Start · Getting it right first time (references, likeness, beards, sizes, landmarks, line work) · The
+look · Movement (walking, turning, poses, riding) · One set, one plan, real contact (lying down, things on tables,
+the shared checks) · Staging and acting (the audit, viewchecks, voices, clipcheck) · The acting list · Subtitles ·
+Sound · Overlays and Hook Text · Before every render (pre-flight) · Render · If a check fails.
+
 ## Start
 1. Copy `source/satire_template.py` to `source/NAME.py`; set `NAME`, and change only its STORY section (title, cast,
    where people stand, who looks at whom, lines, shots, actions as beats). Everything else is already wired in. Set
    `HAS` to what the film contains (people, rooms, voices, effects, props; rule 58): pre-flight then runs only the
    checks for those, and the lists for the rest stay empty.
-   **Build only what the camera shows (rules 54, 55):** before splitting anything into parts, decide how its ending
+   **Build only what the camera shows (rules 54, 24):** before splitting anything into parts, decide how its ending
    looks and which parts the camera sees break; give each new build its own cost in the estimate.
    **A remake** of an older film starts from the template too (bring over only the story, recordings and timing, never
    the old code), and keeps the original's camera angles, shot order and timing unless Sam says otherwise.
    **References (Sam, 16 Oct):** when Sam sends reference photos, say which are still missing for the best quality (the
    room from several angles incl. empty and from above, the person front and side, props), before drawing.
-   **A likeness pack for anyone famous (18 Oct; 31 Oct, film-quality-rules 51):** ask at the start for 3 or more
+   **A likeness pack for anyone famous (18 Oct; 31 Oct, rule 49):** ask at the start for 3 or more
    straight-on, close, not-smiling photos, one three-quarter, one smiling or talking, and one or two caricatures Sam
    likes (the caricatures show what to exaggerate; where they disagree with the measured photos, the photos win).
    **Reuse before building (18 Oct):** the plan names the kit part for each person, movement and prop (views, moves:
@@ -32,7 +37,7 @@ check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections t
    Minister: a gap was left, and the bleep landed on "you" twice). Sam records every voice; never ask who voices them.
    In code, look lines up by their number, never their position, so cutting a line never breaks the shots after it.
 3. `python3 source/NAME.py cast OUT.png`: the cast sheet. Sam approves it before anything moves. It shows each character
-   **front, side and back** (rule 68; a three-quarter only when the script calls for one), plus any view the script
+   **front, side and back** (rule 38; a three-quarter only when the script calls for one), plus any view the script
    needs (from above, a close-up, mid-action); and for the film's key
    reaction, a **numbered strength sheet** (1 = slight, 6 = huge) for Sam to pick a number from.
 4. `python3 source/NAME.py stills OUT_DIR T T ...`: one still per shot. Sam's notes come back in one batch.
@@ -44,7 +49,7 @@ check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections t
 - **A reference is a checklist.** Before drawing anything from a photo, write down what it shows: how many, colours,
   positions, which way they face, brands, proportions. Then `python3 source/compare.py REF OURS OUT.jpg` (side by
   side, same height, guide lines across) and tick each one off before sending. (The scooters took three goes.)
-- **Likeness method (31 Oct: measured by the tool, not by eye; film-quality-rules 49-51).**
+- **Likeness method (31 Oct: measured by the tool, not by eye; rules 49-50).**
   `python3 source/likeness.py card PHOTO PHOTO PHOTO OUT.jpg` measures the straight-on photos against 109 real faces
   and lists what is distinctive, strongest first, plus the big shapes (hair, beard, glasses) that read first at phone
   size. `likeness.py head PHOTO OUT.png --push 1.6` draws a starter head with those differences pushed (and its
@@ -162,7 +167,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   run on the film's `scene(t)`, so a prop or hand a joke depends on must be in it (Prepper's tin and Andy's hand in
   shot 11). Never copy a check from a film file (Poker Mon's own `contact_check`, `hands_check`, `clearance_check` are
   for Poker Mon only: it has no `scene(t)`).
-- **The plan and the set (film-quality rules 1, 2, 3, 12; 25 Oct):** the film's `PLAN` (rooms, openings, things,
+- **The plan and the set (rules 1, 2, 3, 5; 25 Oct):** the film's `PLAN` (rooms, openings, things,
   people, cameras in metres; `source/plan.py` checks it and `python3 source/plan.py FILM sketch OUT.jpg` draws it) is
   the one source for every shot. The shared set code (`source/sets.py`: the camera, the house style's shapes) draws
   each room with the real next room through every doorway and window (`sets.house`, the portal; an opening onto the
@@ -210,7 +215,7 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   (about 4 minutes for a 48 s film with a 2,000-person crowd; Prepper Minister 15 s). It prints a short summary; the
   whole report goes to `review/FILM-audit.txt` (rule 19). It does not judge drawing order (someone drawn over a
   door that should hide him): that is `layers(t)` below.
-- **What the camera shows: `source/viewchecks.py`** (film-quality rules 15-18 and 20, 25 Oct; pre-flight runs it):
+- **What the camera shows: `source/viewchecks.py`** (rules S7, 16-18 and 20, 25 Oct; pre-flight runs it):
   every held prop turned through every view (never across the back, never left behind them); every effect listed in
   `EFFECTS` with its shape and drawn alone (a 'burst' must be lumpy, never a star or regular spikes; no motion lines);
   `movers(t)` (bolts, plasma, thrown things) keep their screen direction and their side of each person across every
@@ -258,7 +263,7 @@ Every line gets one row in the film's notes, in this layout (the Islamocommunism
 |---|---|---|---|---|---|
 | 1 "the line's first words..." | name | close-up / single / two-shot / wide, and why in a few words (e.g. "close-up: the reaction is the joke") | the expression (eyes, brows, mouth) | posture, hands, head | the word the move hits |
 
-Columns: **shot and why** is the camera for that line, chosen now so a later change of shot is named as a cost (rule 35);
+Columns: **shot and why** is the camera for that line, chosen now so a later change of shot is named as a cost (rule 1);
 **face** is the expression and where the eyes go; **body** is posture, hands and head; **lands on** is the word or
 moment the move happens on, so it can be checked against the take.
 **Ask first, write second:** before the list is written, ask Sam what each line means wherever the tone could go two
@@ -280,7 +285,7 @@ The list is shown to Sam with the brief questions, and ticked on the check sheet
 - **Cut a recording only in a moment of silence** (Sam, 16 Oct): find the quiet gap before the first wanted word (loudness in
   20 ms steps), cut there and lay silence in front; never start earlier to be safe (a scrap of the word before is heard).
 - **No added room tone** (The Traitors): the levelling lifts it into audible static. Silence between lines stays silent.
-  The hiss check listens only in those silences (`filmkit.hiss_check(mix, SR, end, voice=voice)`, rule 60): it looks
+  The hiss check listens only in those silences (`filmkit.hiss_check(mix, SR, end, voice=voice)`, rule S3): it looks
   for a steady high "sss" (noise laid under the film), never the "s" sounds in speech.
 - Never squash the voice to make it loud: `MA.master` evens out loud stretches gently (down over 30 ms, back over
   300 ms), masters at -16 LUFS and limits by 3 dB at most (checked: `MA.limit_check`). Phone takes peak about 20 dB over

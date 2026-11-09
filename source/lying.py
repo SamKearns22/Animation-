@@ -18,7 +18,7 @@ above eye level, so from a high camera a person stayed an upright flat picture.
   the head) laid onto the head, so the face turns with it through the camera. A flat contact shadow on the floor
   (and the wall) where the body rests on it.
 - Checks (`contact_faults`): every part a pose rests on touches the surface (within 1.5 cm), nothing passes
-  through it (more than 0.5 cm). `solids` hands the body to the collision audit (clipcheck capsules; rule 12).
+  through it (more than 0.5 cm). `solids` hands the body to the collision audit (clipcheck capsules; rule 5).
 - `fall`: moves.fall's knees and hips stages (the flat drawing), then from the moment the hips land the 3D body
   takes over from that exact pose (`from_views`) and settles into the lying pose: no pop (checked: `check`).
 - `stand`: anyone from a 3D set camera at its real tilt: up to views.HIGH (40 degrees) the flat drawing

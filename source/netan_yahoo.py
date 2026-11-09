@@ -129,7 +129,7 @@ ALLOWED_POPS = [('PRESENTER', FALL - 0.05, FALL + 0.1, 'cut into four pieces: PI
 SET_EXCLUDE = []
 TOUCHES, FREE_MOVES = [], [('PIECE*', FALL, None, 'cut free: they fall under gravity and stay')]
 SOUND_SOURCES = {}
-EFFECTS = []                    # filled below (rule 15: each drawn alone on the cast sheet)
+EFFECTS = []                    # filled below (rule S7: each drawn alone on the cast sheet)
 JOKE_PROPS = []
 BENCHMARK = [dict(place='studio', refs=['../newsdesk/set-1-wide-desk.jpg', 'debate-layout.jpg'], at=T['s4'] + 1.0,
                   items=[('glossy black floor', 'done (newsdesk_set)'),
@@ -1081,7 +1081,7 @@ def scene(t, faces=None):
     msp, mj, mx, mz, ml, mf, mr = maul(t, cam)
     msp['mouth'] = 'set'
     add('MAUL', msp, mj, mx, mz, mf, ml, mr)
-    return things                                     # the desk and chairs: from PLAN (rule 12)
+    return things                                     # the desk and chairs: from PLAN (rule 5)
 
 
 def mouths_seen(t):

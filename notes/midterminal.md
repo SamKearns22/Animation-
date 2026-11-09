@@ -62,7 +62,7 @@
 
 Composition sheet sent: 4 Nov, `python3 source/midterminal_set.py comp OUT.jpg` (4 key shots: door, two-shot, zoom out with the ghost, Epstein close)
 
-## Plan extras: ambition estimate (rule 55)
+## Plan extras: ambition estimate (rule 24)
 | build or risky move | why | estimate (% of a week) | spent |
 |---|---|---|---|
 | Trump's entrance: a door that swings open and shuts, him walking through it | the set's doors are painted flat; one needs to open (one door, its leaf only) | 2 | |
