@@ -66,13 +66,17 @@ I don't know how to code. Please:
   When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
   /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
   a task on the wrong model, refuse and tell me**; let me change it, or offer me the option to override.
-- **Fresh chat when the model changes or the chat gets long** (every step re-reads the whole chat). Two stages in a row
-  on the same model with a short chat carry on in the same chat: no handover just because a stage has a new name. The handover is the film's ONE "Where things
+- **Fresh chat at every round and every cost warning** (every step re-reads the whole chat). Each round of my notes (one
+  animatic, or one batch of clips) ends with the handover, and the next round starts a new chat. The cost watch (rule 85)
+  decides 'long': on amber, finish the step and hand over; on red, hand over at once unless I type 'override'. Change
+  model only by starting a new chat, never inside one. If I come back after more than an hour to a chat on amber or red,
+  the reply is the handover only (Sam, 9 Nov: two chats ran 18 and 22 hours and cost about 37% of a week). The handover is the film's ONE "Where things
   stand" section (old ones go to `notes/archive/NAME-handovers.md`), **15 lines at most**, in this order: Rules that
   bite next (3, by number); Done; Next (model and what to type in the new chat); Needs Sam; Read (which sections of
   which guide); Open rule requests. Code names go in a "For Claude" line at the end. Update `story/status.md` (3
   lines), commit and push. **Paste only 3 lines into the chat:** what's done, the model, and what to type in the new chat.
-- **Read little:** one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
+- **Read little:** at each handover, finished notes move to `notes/archive/`; the film's notes file keeps only the brief
+  checklist, the estimate, open notes and 'Where things stand' (under 4,000 words). one labelled sheet (`sheet.py`, 1080 px wide at most; zoom on a crop only for a detail, and full
   size for faces, Hook Text and frames Sam names), never an unchanged picture again; a film's code starts with a short
   map (`MAP` in its first lines) and only the lines a note touches are read; `python3 source/codemap.py
   FILE` and only the lines needed; only the guide sections the handover names. Long check printouts are filtered
@@ -86,6 +90,10 @@ I don't know how to code. Please:
 # Making the films
 - **One main line of work:** `claude/create-claude-md-oe8z4g` (GitHub's default branch) holds everything. Start from
   the newest copy on GitHub, merge in any newer work from other branches, and push back at the end.
+  **At the start of every chat, list every branch (`git fetch --all; git branch -r`) and look for newer work on the
+  film or tool being worked on before building anything** (Elder Scrolls: Swindon, 8 Nov: a chat started from the
+  main line, never saw the other chat's finished film and animatic, and rebuilt parts of it). **At the end of every
+  chat, push to the main line as well as the chat's own branch,** so the next chat cannot start from an old picture.
 - **Quick video (short two-person film): read only `guides/quick-video.md`.** Sonnet, medium effort.
 - **Satire-style film (the TikTok series, beyond two people talking): read `guides/satire.md`**, start from
   `source/satire_template.py` (always), and follow the rulebook, `guides/film-quality-rules.md`. **Reuse before

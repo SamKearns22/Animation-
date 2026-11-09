@@ -23,10 +23,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import burnham as B  # noqa: E402
 
-SUN = np.array([-0.80, 0.36, -0.48])                    # low warm sun from screen left and above (elevation ~21 deg)
+SUN = np.array([-0.80, 0.25, -0.48])                    # early evening (Sam, note 11): low golden sun, ~15 deg up
 SUN = SUN / np.linalg.norm(SUN)
-SUN_C = np.array([1.00, 0.80, 0.58])                     # warm sunlight
-SKY_C = np.array([0.42, 0.40, 0.44])                     # cool fill in the shadows
+SUN_C = np.array([1.00, 0.70, 0.42])                     # golden evening sunlight (note 11)
+SKY_C = np.array([0.38, 0.38, 0.48])                     # cool blue evening fill in the shadows
 
 # ------------------------------------------------------------------------------------------------ noise
 _TEX = {}
@@ -77,19 +77,28 @@ def ground_rays(cam, w, h, ss):
 
 
 # ------------------------------------------------------------------------------------------------ soil
-def soil(cam, ss=2, w=None, h=None, grass=0.55, seed=3, wet=None):
+def _lod(scale, mpp):
+    """How much of a noise octave to keep: features under about 3 pixels across fade out (no shimmer as the camera
+    climbs)."""
+    return np.clip((scale / np.maximum(mpp, 1e-9) - 3.0) / 4.0, 0, 1)
+
+
+def soil(cam, ss=2, w=None, h=None, grass=0.55, seed=3, wet=None, t=0.0, gust=0.0, sun=None, rays=None):
     """The ground: dry brown soil, crumbs and clods, small stones, patchy dry grass, lit by a low warm sun.
-    Returns an RGB float array (h, w, 3) in 0..1 and the height field (for things half buried)."""
+    Returns an RGB float array (h, w, 3) in 0..1 and the height field (for things half buried).
+    sun(X, Z) -> 0..1: how much sunlight reaches each point (a cast shadow, e.g. the lamp post's); rays: ground_rays
+    already worked out for this frame; t, gust: the grass leaning in the wind."""
     w = w or B.W * ss
     h = h or B.H * ss
-    X, Z, mpp = ground_rays(cam, w, h, ss)
-    # height: big swells, clods, crumbs, grain (metres)
+    X, Z, mpp = rays if rays is not None else ground_rays(cam, w, h, ss)
+    # height: big swells, clods, crumbs, grain (metres); the octaves too fine for the pixels fade out
     H = (0.012 * noise(X, Z, 0.9, seed) + 0.006 * noise(X, Z, 0.22, seed + 1)
-         + 0.0025 * np.abs(noise(X, Z, 0.06, seed + 2)) + 0.0009 * noise(X, Z, 0.015, seed + 3)
-         + 0.0004 * noise(X, Z, 0.004, seed + 4))
+         + 0.0025 * _lod(0.06, mpp) * np.abs(noise(X, Z, 0.06, seed + 2))
+         + 0.0009 * _lod(0.015, mpp) * noise(X, Z, 0.015, seed + 3)
+         + 0.0004 * _lod(0.004, mpp) * noise(X, Z, 0.004, seed + 4))
     # stones: bumps where a fine noise peaks
     st = noise(X, Z, 0.05, seed + 7)
-    stones = np.clip((st - 2.1) * 3.0, 0, 1)
+    stones = np.clip((st - 2.1) * 3.0, 0, 1) * _lod(0.02, mpp)
     H = H + 0.008 * stones
     gy, gx = np.gradient(H)
     mp = np.maximum(mpp, 1e-6)
@@ -115,46 +124,96 @@ def soil(cam, ss=2, w=None, h=None, grass=0.55, seed=3, wet=None):
     alb = alb * (1 - stones[..., None]) + stone_c * stones[..., None]
     if wet is not None:                                  # a darker damp patch (the drool)
         alb = alb * (1 - 0.45 * wet[..., None])
-    col = alb * (SKY_C * 0.55 + SUN_C * 1.25 * (lam * sh)[..., None])
+    lit = lam * sh * (sun(X, Z) if sun is not None else 1.0)
+    col = alb * (SKY_C * 0.55 + SUN_C * 1.25 * lit[..., None])
     img = np.clip(col, 0, 1)
     if grass > 0:
-        img = _grass(img, X, Z, mpp, cam, ss, grass, seed)
+        img = _grass(img, X, Z, mpp, cam, ss, grass, seed, t, gust)
     return img, H
 
 
-def _grass(img, X, Z, mpp, cam, ss, amount, seed):
-    """Patchy dry grass: blades lying mostly with the wind, olive to straw, a lit side and a shadow on the soil."""
+_BLADES = {}
+GRASS_MASK = None                                        # f(x, z) -> where grass may grow (the film sets it)
+GRASS_AREA = (-5.0, -5.0, 5.0, 5.0)                      # the world area grass can grow in (x0, z0, x1, z1), metres
+
+
+def _blades(amount, seed):
+    """Every blade of grass in the world, made once (so a moving camera never re-scatters them): base (x, z), length,
+    lean (radians from the wind, -z), bend, straw shade, all in metres; kept where the patch noise allows."""
+    key = (round(amount, 3), seed)
+    if key not in _BLADES:
+        rng = np.random.default_rng(seed + 11)
+        x0, z0, x1, z1 = GRASS_AREA
+        n = int((x1 - x0) * (z1 - z0) * 0.9 * amount / 0.012 ** 2)
+        x = rng.uniform(x0, x1, n)
+        z = rng.uniform(z0, z1, n)
+        patch = noise(x, z, 0.5, seed + 12) + 0.5 * noise(x, z, 0.12, seed + 13)
+        keep = patch > (1.0 - amount * 1.6)
+        if GRASS_MASK is not None:
+            keep &= GRASS_MASK(x, z)
+        m = int(keep.sum())
+        _BLADES[key] = dict(x=x[keep], z=z[keep], L=rng.uniform(0.025, 0.08, m), ang=rng.normal(0.0, 0.5, m),
+                            bend=rng.normal(0, 0.25, m), g=rng.uniform(0, 1, m), ph=rng.uniform(0, 6.28, m))
+    return _BLADES[key]
+
+
+def project_many(cam, P):
+    """sets.Cam.project for many world points (N x 3): frame x, y (1080 x 1920 units) and pixels per metre."""
+    d = P - np.asarray(cam.pos, float)
+    z = np.maximum(cam.NEAR, d @ np.asarray(cam.f, float))
+    k = cam.focal / z
+    return 540 + (d @ np.asarray(cam.r, float)) * k, 960 - (d @ np.asarray(cam.u, float)) * k, k
+
+
+def _grass(img, X, Z, mpp, cam, ss, amount, seed, t=0.0, gust=0.0):
+    """Patchy dry grass: blades lying mostly with the wind, olive to straw, a lit side and a shadow on the soil.
+    The blades live in the world (_blades), so they stay put as the camera moves; they sway a little in the gusts.
+    Too small to see (under 2 pixels long): left as a tint of the patch instead."""
     h, w, _ = img.shape
-    rng = np.random.default_rng(seed + 11)
-    patch = noise(X, Z, 0.5, seed + 12) + 0.5 * noise(X, Z, 0.12, seed + 13)
+    bl = _blades(amount, seed)
+    xa, xb, za, zb = X.min(), X.max(), Z.min(), Z.max()
+    sel = (bl['x'] > xa - 0.1) & (bl['x'] < xb + 0.1) & (bl['z'] > za - 0.1) & (bl['z'] < zb + 0.1)
+    idx = np.nonzero(sel)[0]
     m_med = float(np.median(mpp))
-    n = int(min(60000, (w * h) * amount / max(1.0, (0.012 / m_med) ** 2) * 0.9))
-    ys = rng.integers(0, h, n)
-    xs = rng.integers(0, w, n)
-    keep = patch[ys, xs] > (1.0 - amount * 1.6)
-    ys, xs = ys[keep], xs[keep]
+    if len(idx) == 0:
+        return img
+    if 0.05 / m_med < 2.0 or len(idx) > 150000:         # too small to draw blade by blade: a straw tint
+        patch = noise(X, Z, 0.5, seed + 12) + 0.5 * noise(X, Z, 0.12, seed + 13)
+        a = np.clip((patch - (1.0 - amount * 1.6)) * 0.8, 0, 0.55)
+        if a.shape != (h, w):
+            a = np.asarray(Image.fromarray((a * 255).astype(np.uint8)).resize((w, h)), float) / 255
+        return img * (1 - a[..., None]) + np.array([0.52, 0.50, 0.28]) * a[..., None]
+    x, z, L = bl['x'][idx], bl['z'][idx], bl['L'][idx]
+    sway = 0.25 * gust * np.sin(t * 6.0 + bl['ph'][idx]) + 0.35 * gust
+    ang = bl['ang'][idx]
+    dx, dz = np.sin(ang), -np.cos(ang)                   # leaning with the wind (-z), some every way
+    bend = bl['bend'][idx]
+    tipx = x + dx * L - dz * bend * L * 0.3
+    tipz = z + dz * L + dx * bend * L * 0.3 - sway * L * 0.4
+    midx, midz = x + dx * L * 0.5 - dz * bend * L * 0.25, z + dz * L * 0.5 + dx * bend * L * 0.25 - sway * L * 0.15
+    y0, y1, y2 = np.full_like(x, 0.002), np.full_like(x, 0.006), np.full_like(x, 0.004)
+    P = np.concatenate([np.stack([x, y0, z], 1), np.stack([midx, y1, midz], 1), np.stack([tipx, y2, tipz], 1)])
+    sx, sy, kk = project_many(cam, P)
+    n = len(x)
+    sx, sy, kk = sx * ss, sy * ss, kk * ss
+    sun_xz = np.array([-0.857, -0.514])
+    lit = 0.75 + 0.5 * np.maximum(0.0, dx * sun_xz[0] + dz * sun_xz[1])
+    g = bl['g'][idx]
+    c0 = np.array([0.42, 0.44, 0.20])[None, :] * (1 - g)[:, None] + np.array([0.78, 0.68, 0.40])[None, :] * g[:, None]
+    cols = (np.clip(c0 * lit[:, None], 0, 1) * 255).astype(int)
+    wd = np.maximum(1, np.round(0.0022 * kk[:n])).astype(int)
+    off = 0.006 * kk[:n]
     lay = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     shd = Image.new('L', (w, h), 0)
     d = ImageDraw.Draw(lay)
     ds = ImageDraw.Draw(shd)
-    for x, y in zip(xs, ys):
-        L_m = rng.uniform(0.025, 0.08)
-        L = L_m / mpp[y, x]
-        ang = rng.normal(0.25, 0.5)                      # leaning with the wind (to screen right), some every way
-        dx, dy = math.cos(ang) * L, math.sin(ang) * L
-        bend = rng.normal(0, 0.25) * L
-        mid = (x + dx * 0.5 - dy * bend / L * 0.3, y + dy * 0.5 + dx * bend / L * 0.3)
-        tip = (x + dx, y + dy)
-        g = rng.uniform(0, 1)
-        c0 = np.array([0.42, 0.44, 0.20]) * (1 - g) + np.array([0.78, 0.68, 0.40]) * g
-        lit = 0.75 + 0.5 * max(0.0, -math.cos(ang))      # blades facing the sun catch it
-        c = tuple(int(255 * min(1, v * lit)) for v in c0) + (255,)
-        wd = max(1, int(round(0.0022 / mpp[y, x])))
-        d.line([(x, y), mid, tip], fill=c, width=wd)
-        off = 0.006 / mpp[y, x]
-        ds.line([(x + off, y + off * 0.6), (mid[0] + off, mid[1] + off * 0.6), (tip[0] + off, tip[1] + off * 0.6)],
-                fill=150, width=wd + 1)
-    shd = np.asarray(shd.filter(ImageFilter.GaussianBlur(1.5)), float)[..., None] / 255
+    onscr = (sx[:n] > -50) & (sx[:n] < w + 50) & (sy[:n] > -50) & (sy[:n] < h + 50)
+    for j in np.nonzero(onscr)[0]:
+        pts = [(sx[j], sy[j]), (sx[n + j], sy[n + j]), (sx[2 * n + j], sy[2 * n + j])]
+        o = off[j]
+        ds.line([(px + o, py + o * 0.6) for px, py in pts], fill=150, width=int(wd[j]) + 1)
+        d.line(pts, fill=(int(cols[j, 0]), int(cols[j, 1]), int(cols[j, 2]), 255), width=int(wd[j]))
+    shd = np.asarray(shd.filter(ImageFilter.GaussianBlur(1.5 * ss)), float)[..., None] / 255
     img = img * (1 - 0.45 * shd)
     la = np.asarray(lay, float) / 255
     a = la[..., 3:4]
@@ -192,14 +251,15 @@ def litter(img, cam, ss, items):
 
 
 # ------------------------------------------------------------------------------------------------ dust
-def dust(img, cam, ss, t, strength=1.0, seed=21):
-    """Wind-blown dust: fine streaks drifting to screen right with the wind, brighter in the sun (the teaser's sand)."""
+def dust(img, cam, ss, t, strength=1.0, seed=21, rays=None, gust=None):
+    """Wind-blown dust: fine streaks drifting with the wind (-z), brighter in the sun (the teaser's sand).
+    gust: 0..1 how hard the wind blows now (None: a gentle swell); a gust thickens and speeds the streaks."""
     h, w, _ = img.shape
-    X, Z, mpp = ground_rays(cam, w, h, ss)
-    wind = 0.9                                           # metres a second, towards -z (screen right in the low shots)
+    X, Z, mpp = rays if rays is not None else ground_rays(cam, w, h, ss)
+    wind = 0.9                                           # metres a second, towards -z
     s = noise(X * 16.0, Z + wind * t, 0.30, seed) + 0.7 * noise(X * 28.0, Z + wind * 1.7 * t, 0.12, seed + 1)
-    gust = 0.6 + 0.4 * math.sin(t * 1.3) ** 2
-    a = np.clip((s - 1.0) * 0.22, 0, 0.32) * gust * strength
+    g = (0.6 + 0.4 * math.sin(t * 1.3) ** 2) if gust is None else 0.55 + 0.8 * gust
+    a = np.clip((s - 1.0 + 0.4 * (g - 0.6)) * 0.20, 0, 0.30 + 0.08 * max(0.0, g - 1.0)) * min(g, 1.1) * strength
     c = np.array([0.86, 0.72, 0.52])
     return img * (1 - a[..., None]) + c * a[..., None]
 

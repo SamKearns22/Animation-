@@ -1,14 +1,14 @@
 # Elder Scrolls: Swindon (parody of the Elder Scrolls VI: Sentinel name-reveal teaser)
 
 ## Where things stand
-- **Rules that bite next:** 8 (rehearse the dog and the zoom-out, the scroll reveal, the title burn as short clips first), 3 (roundabout benchmark against Sam's two photos), 39 (3D only for the scroll and can).
-- **Done (8 Nov):** plan; answers 1-9; teaser stills; the Staffie added; composition sheet sent and approved (Sam: "Y to all": glowing burn-in on SWINDON, the man stays out cold, brindle Staffie); lying.py's `lie` mended.
-- **Spent against the estimate:** 0.9 of 9.0 (ground 0.4, scroll 0.2, can 0.1, dog 0.1, roundabout 0.1); nothing over.
-- **Next:** build, Opus high, NEW chat: "Build Elder Scrolls Swindon – read notes/elder-swindon.md". Order: rehearsal clips (dog + zoom-out, scroll reveal, title burn), then the film from the template, check sheet, animatic offer.
-- **Needs Sam:** nothing until the rehearsal clips.
-- **Read:** this file (Plan, Showstopper, Brief); guides/satire.md (Start, One set, Render); kit-catalogue (Effects).
+- **Rules that bite next:** 84 (a real place beside its reference on the sheet), 56 (a fault of a kind: every shot), 67 (one full pre-flight per round).
+- **Done:** notes 1-18 and every note on animatics 2-4 (brief rows 27-63); animatic 5 sent 9 Nov (36.6 s, 6.5 MB). Rule 84 written. Pre-flight hang fixed.
+- **Next:** if Sam sends notes: Opus, medium effort, NEW chat: "Fix Elder Scrolls Swindon animatic 5 notes - read notes/elder-swindon.md". If Sam says Y to the final: Sonnet, NEW chat: "Final render of Elder Scrolls Swindon - read notes/elder-swindon.md".
+- **Needs Sam:** notes on animatic 5, or a clear Y for the final render.
+- **Read:** this section, the brief checklist (rows 27-63), "Notes on animatic 2 ... why the roundabout failed twice"; guides/satire.md (Before every render, Render).
 - **Open rule requests:** none.
-- **For Claude:** comp `source/elder_swindon_comp.py` (cams `orbit`, `topcam`; props `lying_rev`, `scroll_mat`, `can_mat`, `packet`, `drool`, `dog`; `aerial`, `title`); ground `source/elder_swindon_ground.py`. Film: `source/elder_swindon.py` from the template, `HAS = {'people','effects','props'}`, sound `music/sentinel-teaser-audio.m4a` as is. Face close-up needed (lying.draw's face reads poorly face down). Can label reads "RT LAGER" at its end: fix the wrap.
+- **Faults named to Sam:** shot 6 is 15.2 s (his hold; over pre-flight's 8 s). Render with `--faults-named`.
+- **For Claude:** `source/elder_swindon.py` (`_routes`, `traffic`, `traffic_faults`, `on_road`, `splitters`, `van_at`/`van_faults`, `draw_pigeons`, `draw_bag`, `drool_ground`, `soundtrack` with `REC2_AT`); people from `source/elder_swindon_extras.py`. Final: `python3 source/elder_swindon.py final source/data/elder_swindon-clean.mp4 --faults-named` then `python3 source/finish.py source/data/elder_swindon-clean.mp4 animations/elder-swindon-vertical.mp4 --film elder_swindon`. Animatic: same with `--small`. Pre-flight runs clean in about 15 min (`source/preflight.py elder_swindon OUT`).
 
 ## Plan (8 Nov, redone after Sam's answers)
 **Length:** 30.04 s (the teaser's sound, as is) + the 1.6 s sign-off = 31.6 s. No voices.
@@ -74,37 +74,93 @@ Benchmark for the Magic Roundabout (8 things that make it, from Sam's two photos
 5. Raised kerbed islands (long rounded blocks, dark paving) between the minis.
 6. Zebra crossings on the approaches.
 7. Grass verges with trees round the edges; five roads fanning out.
-8. Round it: houses with brown roofs (bottom left), a flat-roofed block (top right), a car park.
+8. Round it: terraced streets (rows of brown and grey roofs, back gardens), a big white-roofed shed, a car park.
+9. (Sam's three new photos, 8 Nov: `magic-roundabout-3-high`, `-4-stadium`, `-5-above`) The County Ground stadium next
+   door (pitch, red seats, floodlights).
+10. Grass and kerbed islands between the arms: the tarmac is the inner ring, the minis and the arms, not one big disc.
 
 Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 source/elder_swindon_comp.py comp OUT.jpg`; 4 key shots: can and hand with the Hook Text; his face and the scroll; the Staffie as the climb starts; the roundabout with SWINDON)
 
-## Brief (Sam, 8 Nov) — checklist, tick against the film before the first animatic
-- [ ] Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s).
-- [ ] Opening: wind over **soil and patchy grass** (not sand), moody and near-real.
-- [ ] Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign). Reference: `references/elder-swindon/elder-scroll.jpg` (brass rod, scroll case in the middle, carved end caps, spiked tips, dark wrapped grips).
-- [ ] Nearby in the soil: a **discarded can of lager**, half buried.
-- [ ] A **half-unconscious man sprawled face down, drooling into the soil**.
-- [ ] A **discarded supermarket sandwich packet** ("maybe", my pick: in).
-- [ ] Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, with traffic moving round it.
-- [ ] Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**".
-- [ ] Our flat cartoon style for the roundabout; the opening as moody and realistic as possible, so the reveal lands.
-- [ ] **The joke** (Sam): Swindon is not fantastical or magical. It's drab, uninspired and full of chavs. Every shot after the zoom-out should sell that.
-- [ ] **Hook Text:** "Elder Scrolls reveals new location!" (exact wording)
-- [ ] Hook Text and the CranbriJoos sign-off (finish.py), as on every film.
-- [ ] (Q2) A patch of soil and grass on the central island, where he lies; the rest of the island paved as in the photos.
-- [ ] (Q3) The man in our usual house style.
-- [ ] (Q4) No extra shots after the title: the view from above holds to the end.
-- [ ] (Q5) The can reads "EXPORT LAGER"; the packet "EGG MAYO".
-- [ ] (Q5) A joke from the very start: the lager can and the man's splayed arm visible from the first frame; his drooling face revealed soon after.
-- [ ] (Q6) Cigarette butts and a ring-pull in the soil.
-- [ ] (Q7) The teaser's warm low sun.
-- [ ] (Q9) The zoom-out is the Showstopper Shot (elements as listed).
-- [ ] Budget 9% of a week.
-- [ ] Animatic: the trailer's sound as it is.
-- [ ] (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out.
-- [ ] (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL.
-- [ ] (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks).
-- [ ] (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze).
+## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
+| # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
+|---|------|------|
+| 1 | Copies the Sentinel teaser beat for beat, using its sound (`music/sentinel-teaser-audio.m4a`, 30 s) | yes: every cut on a hit of the sound (checked); sound as is, peak brought under full scale |
+| 2 | Opening: wind over **soil and patchy grass** (not sand), moody and near-real | yes: shots 1-3, gusts on 1.07, 2.49, 6.57, 7.37 |
+| 3 | Wind uncovers a golden **Elder Scroll** (keep it a scroll, not a sign); spiked tips, dark wrapped grips, carved end caps, case | yes: shot 2, stripped from 7.37, out by 13.5 |
+| 4 | Nearby in the soil: a **discarded can of lager**, half buried | yes: shots 1-4 |
+| 5 | A **half-unconscious man sprawled face down, drooling into the soil** | yes: face down; his face on its cheek in shot 1, drool, a drip on 6.57 |
+| 6 | A **discarded supermarket sandwich packet** ("maybe", my pick: in) | yes: tumbles past the scroll (shot 3), lies there after |
+| 7 | Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, traffic moving round it | yes: shot 5 (16.50-17.45), traffic from 16.9 to the end |
+| 8 | Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**" | yes: shot 6 |
+| 9 | Our flat cartoon style for the roundabout; the opening as moody and realistic as possible | yes: near-real to 16.8 s, flat from 17.1 s |
+| 10 | **The joke:** Swindon is drab, uninspired, full of chavs; every shot after the zoom-out sells that | partly: drab estate, a CLOSING DOWN roof, the drooler and the dog stay in the middle; people too small to read from up there (Sam, Q4: no extra shots) |
+| 11 | **Hook Text:** "Elder Scrolls reveals new location!" (exact wording) | yes: `HOOK`, 0.5-4 s, y 1240 (below the can) |
+| 12 | Hook Text and the CranbriJoos sign-off (finish.py), as on every film | yes: finish.py on the clean render |
+| 13 | (Q2) A patch of soil and grass on the central island, where he lies; the rest of the island paved | yes |
+| 14 | (Q3) The man in our usual house style | yes |
+| 15 | (Q4) No extra shots after the title: the view from above holds to the end | yes: shot 6 drifts to 30.04 |
+| 16 | (Q5) The can reads "EXPORT LAGER"; the packet "EGG MAYO" | yes: label rows moved clear of the buried end (was "RT LAGER") |
+| 17 | (Q5) Lager can and splayed arm from the first frame; drooling face soon after | yes: face by 3.5 s |
+| 18 | (Q6) Cigarette butts and a ring-pull in the soil | yes |
+| 19 | (Q7) The teaser's warm low sun | yes: and its long shadows (the lamp post's crosses his legs) |
+| 20 | (Q9) The zoom-out is the Showstopper Shot (elements as listed) | yes: all 6 (see the Showstopper table) |
+| 21 | Budget 9% of a week | yes: see the estimate |
+| 22 | Animatic: the trailer's sound as it is | yes |
+| 23 | (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out | yes: charges in 15.25, clamps 15.72, tugs and shakes to the end |
+| 24 | (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL | yes: 22-27 s, cools to bronze by 29 |
+| 25 | (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks) | yes |
+| 26 | (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze) | yes |
+| 27 | (Notes 1, 18) No CLOSING DOWN sign, no lettering on the building | yes: plain roof |
+| 28 | (Note 2) Minis moved out onto the arms; traffic goes round each mini, not the main circle | yes: minis at 56 m (were 42); no car circles the island; cars go mini to next mini |
+| 29 | (Note 3) Lamp post readable, its shadow shorter | yes: pole leaning out, double-armed head; shadow 14 m (was 47) |
+| 30 | (Note 4) Shot 6 lighter, not dark so fast | yes: dims to 26% (was 55%) over 2.5 s (was 0.85) |
+| 31 | (Note 5) "The Elder Scrolls VI" centre-aligned and grander | yes: centred on the frame, 66 px semibold (was 52), rule with diamond ends; SWINDON 132 px so it ends before x 900 |
+| 32 | (Note 6) Arm flat on the ground (not curled up), a hoody, vomit nearby; an amalgam of the reference photos, no likeness | yes: arm laid out near straight; grey hoody with the hood down; sick by his face; general traits only (grey hoody, gingery stubble, crop) |
+| 33 | (Sam, 8 Nov) "Make him just look like shit in general" | yes: sallow skin, blotchy red cheeks, eye bags, lines, stains on hoody and trackies |
+| 34 | (Note 7) The climb slower; the dog attack held long enough to read | yes: climb 16.90-19.86 (was 16.50-17.45), lands on the 19.86 hit |
+| 35 | (Note 8) Drool pinned to the mouth and the soil | yes: string from the mouth corner over the cheek to the pool, pool under the face's edge |
+| 36 | (Note 9) Swirling magic light round the scroll | yes: gold wisps from 7.6 s, glowing, to the climb |
+| 37 | (Note 10) A shopping bag overflowing with rubbish, north of the dog scene | yes: above his head in shot 4 |
+| 38 | (Note 11) Early evening: low golden sun, longer shadows | yes: sun 15 deg (was 21), warmer light, bluer shade (lamp shadow kept short: note 3) |
+| 39 | (Note 12) Shot 6: people walking on the paths and pavements | yes: pavements, the ring's pavement, a new footpath round the green |
+| 40 | (Note 13) Shot 6: two groups of men scuffling on a path | yes: on the footpath, top left |
+| 41 | (Note 14) Two hooded teenagers on e-bikes, far too fast, irresponsible | yes: the wrong way round inside the ring, weaving, 14 m/s |
+| 42 | (Note 15) A food delivery moped, plain box | yes: one of the traffic, red, no logo |
+| 43 | (Note 16) A burnt-out car on the green by the stadium | removed (Sam, animatic 3: it doesn't register) |
+| 44 | (Note 17) Framing: the 19.83 s view moved north by 8% of the frame (blue line at the bottom) | yes: END_MY 60 -> 35.1 |
+| 45 | (Animatic 2) No pink cheek blotches | yes |
+| 46 | (Animatic 2) Shot 1: less time on his face | yes: face reached by 4.4, cut at 6.57 (about 2.5 s on it; was 3.9) |
+| 47 | (Animatic 2) Shot 3 a few beats longer; the EGG MAYO packet lands near the scroll | yes: 11.43-15.08 (was 1.2 s, now 3.65 s); lands beside the scroll on the 13.86 hit |
+| 48 | (Animatic 2) The dog shot a beat longer | yes: the climb starts 17.45 (was 16.90): 1.7 s of the dog clamped before it |
+| 49 | (Animatic 2, and notes 2 before it) The roundabout as in Sam's photo and drone videos: minis inside one grey carriageway round the central island, splitter islands between them, cars on the road round the minis | yes: rebuilt from the video; every car checked on the road, every frame |
+| 50 | (Animatic 3) Less greying out of the aerial | yes: dims to 10% (was 26%) |
+| 51 | (Animatic 3) Lines in the housing so the terraces aren't one long block | yes: each house its own roof, tone varied, an alley every 7th, chimneys |
+| 52 | (Animatic 3) Hold on the aerial view a few more seconds: 5 s more of the track (Sam's second recording) | yes: the film now 35.04 s (+1.6 sign-off); the recording starts at 0:41 of the video, where the first ends; joined with a 20 ms crossfade, faded over the last 0.8 s |
+| 53 | (Sam, 9 Nov) Bikes a third smaller, smaller trails, a bit faster | yes: drawn at 2/3 the size, trails shorter and finer, 17 m/s (was 14) |
+| 54 | (Sam, 9 Nov) More traffic | yes: 13 cars an arm (was 9), junction limit 14, mix 8: about 38 cars in view (was 28); checked clean |
+| 55 | (Sam, 9 Nov) Walkers off the inner circle onto the outer, none next to the road | yes: walkers only on the footpath round the greens (lost: the pavement walkers) |
+| 56 | (Sam, 9 Nov) Two women walking with a pram | yes: on the footpath, top right |
+| 57 | (Sam, 9 Nov) Pigeons in the central circle | yes: a dozen on the island's paving, pecking |
+| 58 | (Sam, 9 Nov) One white van driving like an absolute twat | yes: from 24.1 s: down the centre line past the queue, straight over the mini's dome, weaving inside the splitter, out flat out; never touches anything (`van_faults`) |
+| 59 | (Animatic 4) Drool clipped in shots 3 and 4 | yes: from shot 2 the pool lies on the soil under him (drawn before his body); the strand stays on his cheek (shot 1's fix had never reached the other shots) |
+| 60 | (Animatic 4) EGG MAYO backwards | yes: the front face was shown from behind; mirrored |
+| 61 | (Animatic 4) The shopping bag and items too plain to identify | yes: carrier bag with a stripe and creases, lager can, crisp packet, chicken box with bones, pop bottle, banana skin, coffee cup |
+| 62 | (Animatic 4) Pigeons in shots 2-4 so we know what they are from above; they popped in late on the zoom out | yes: four by him from shot 2 (one flies off as the packet lands), a dozen on the island, drawn through every camera and grown smoothly |
+| 63 | (Sam, 9 Nov) Pigeon heads had no neck; poor shaping in shot 3; the neck stretch looked weird | yes: rebuilt after a critique (short fixed neck under the body and head, curved body, dark folded wings, feathered wingbeats, grey and eyeless when small); Sam: Y |
+
+## The acting list (rule 74): no lines; every beat, the hit it lands on
+| beat | who | shot and why | face | body | lands on |
+|---|---|---|---|---|---|
+| can and splayed hand from frame one | DROOLER | 1, slant close: the joke from the start | - | arm flung out, hand limp | 0.0 |
+| his drooling face | DROOLER | 1, close: the reveal of the sleeper | eyes shut, mouth hanging open, drool | still (out cold) | by 3.5 |
+| a gust, drool drips | DROOLER | 1 | - | - | 6.57 |
+| soil stripped off the scroll | SCROLL | 2, close: the teaser's staff | - | - | 7.37; glint 7.79; case 11.43 |
+| packet tumbles past | PACKET | 3, wider: the scroll and the packet | - | end over end, lands label up | 13.86-14.95 |
+| straight down: all of it | all | 4, from above: the teaser's last staff shot | - | - | 15.08 |
+| the Staffie charges, clamps, tugs | STAFFIE | 4-6: angry, braced | eyes narrowed, ears back | legs dug in, head shaking | 15.25, 15.72 |
+| his leg jerks with the tugs; he never wakes | DROOLER | 4-6 | - | only the left leg moves | from 15.72 |
+| the climb | camera | 5: the Showstopper | - | - | starts 16.50, stops on 17.45 |
+| rings, small title, SWINDON burns, cools | title | 6 | - | - | 17.45, 18.5, 22-27, 29 |
 
 ## Reference
 - Teaser frames: sand blows (0-7 s), golden staff with a blue gem appears (7-15 s), black, gold rings, "The Elder Scrolls VI", "SENTINEL" burns in (15-30 s).
@@ -130,3 +186,99 @@ Composition-sheet questions (8 Nov; my pick first). Sam: "Y to all" (1 Y, 2 Y, 3
 1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
 2. The man stays out cold while the dog tugs (only his leg jerks). Y/N
 3. The Staffie: 1 = brindle (brown, darker stripes, white blaze); 2 = blue-grey.
+
+## Sound for the final (Sam, 8 Nov: "how do we manage the audio?")
+The trailer's own recording is what TikTok's automatic matching listens for: any copy of it (cut, sped up, pitched)
+is still that recording, and making a copy slip past the matcher is not something I'll do. Proposed, my pick first:
+1. **Our own score, built on the same hits** (wind and a low drone; a swell and a bell on the glint, 7.79; deep booms
+   on each hit; a big hit as the camera stops, 17.45; a choir-like pad under the title; a metallic shimmer as
+   SWINDON burns; the last boom 27.19). Original notes, no tune copied, so nothing to match. About 0.6% of a week
+   (the Yuletide trailer's score tool, `horror_trailer_music.py`, as the start).
+2. Post with our score, and in the TikTok app swap in the official teaser sound from TikTok's own library, if it is
+   there (TikTok licenses its library for use on TikTok): only on TikTok, and lined up by hand on the phone.
+3. Keep the trailer's sound in the file: likely muted or blocked by the automatic check.
+The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
+
+## Decisions (build, 8 Nov)
+- 24 frames a second (not the satire 12): the slow glides judder at 12 (as Flying Whales).
+- Grass blades live in the world (were re-scattered on screen each frame: they would have shimmered once the camera moved).
+- His face in the close shots: the house-style head laid on its cheek over the body (lying.draw's face read poorly face down).
+- Shot 2 looks at the scroll from the side, so it lies across the frame as the teaser's staff does.
+- The packet comes to rest past the scroll's tip (the wind blows that way); it was by his side on the composition sheet.
+- The can's words on two rows near its top end (the buried end cut "EXPORT" to "RT").
+- The lamp post's long shadow (low sun) crosses his legs in shot 4 and leads the eye in the climb.
+- The roundabout redrawn from Sam's three new photos: grass and kerbed islands between the arms, terraced streets,
+  a white-roofed shed (CLOSING DOWN on its roof, inside TikTok's safe area), a car park, the County Ground.
+- The title moved left to the middle of TikTok's safe area and made smaller (SWINDON ran under the buttons).
+- The dog's charge starts 1.5 m out (it came from 2.3 m and was on screen for only a few frames before it bit).
+- Shot 6 is 12.6 s, over pre-flight's 8 s: chosen (Sam, Q4: no extra shots). Named to Sam.
+- The trailer's peaks went over full scale by 1.1 dB: brought just under (nothing else changed).
+- Pre-flight keeps each drawn frame (`~/.cache/filmcache/elder_swindon-memo/`, keyed by the code): the checks and the
+  small animatic share it. Nothing in this film draws through the people checks (no views or burnham people).
+- Pre-flight hung twice (8 Nov, 15:47 and before): its four workers locked up after frames 180-332, idle for an
+  hour. Sam: "Skip the checks. Proceed to animatic." The quick check (--text) was clean but for shot 6's length;
+  the animatic rendered with `--no-lock`. Before the final: find the hang (workers waiting on a pool lock, the parent
+  holding OpenMP threads) and run pre-flight in full.
+
+## Decisions (round 1 fixes, 8 Nov: notes 1-18)
+- Note 2 read as: the minis sit out on the arms (centre 56 m from the middle, the ring's tarmac to 49 m), and no car
+  circles the central island. Cars go: in along an arm, round its mini, along the ring to the NEXT mini, round it,
+  out. Rules added so they never jam or pass through each other: at most 10 cars past the give-way lines; cars from
+  the ring give way to cars already on a mini; arm cars wait while anything is on or coming to their mini; a slower
+  car lets a faster crossing one go. Traffic runs in from -30 s so the minis are busy from the start.
+- Note 3 vs note 11: the evening sun would lengthen shadows, but the lamp's shadow is kept short (14 m) as Sam asked.
+- Note 7: the climb now 16.90-19.86 (lands on the 19.86 hit); the rings bloom as it lands (were 17.45, mid-climb
+  now); the small title fades in 20.3-21.3; SWINDON unchanged (22-27). Shots: 4 to 16.90, 5 to 19.86, 6 to the end
+  (10.2 s, over pre-flight's 8 s: Sam's Q4).
+- Note 17: the view's centre moved north by 8% of 1920 px at 168 m wide (23.9 m); the title moved down to fit under
+  the roundabout (TITLE_Y 1330).
+- Note 6 and Sam's photos (re-sent 8 Nov): general traits only (grey hoody, gingery stubble, short crop); the face is
+  the house-style head, nobody's likeness. Sam: "make him look like shit": sallow skin, blotchy cheeks, eye bags,
+  lines, stains (sick, lager, mud) fixed to his joints.
+- The opening camera nudged towards his hand (the arm now lies further out) so his face stays out of shot until the
+  glide reaches it; the Hook Text moved to y 1265, x 600 (the can glides through where it was).
+- People from above drawn up to 4x real size, mopeds 2x: Sam said Y (8 Nov). Budget raised to about 10.4% of a week: Sam said Y.
+- Pre-flight hang found and fixed (8 Nov): linecheck loaded GNU OpenMP into the main process, so the drawing workers forked
+  after it froze. linecheck, landmarks and sizes now run in a forked child (`_in_child` in `source/preflight.py`).
+
+## Notes on animatic 2 (Sam, 8-9 Nov) and why the roundabout failed twice
+Notes: no cheek blotches; minis inside the grey; shot 1 shorter on the face; shot 3 longer, packet landing by the
+scroll; the dog shot a beat longer; the roundabout (third time) with the cars on the pavements. Sam sent his aerial
+photo again and two drone videos.
+Why it failed: note 2 ("move them further in, onto the arms") was read as moving the minis OUT along the arms, and
+neither fix was checked side by side with the photo; nothing checked that cars stay on the road, so cars cut across
+the pavement corners where the arms met the ring. Fixed: the layout rebuilt from the video frame (minis at 35 m round a
+15 m island inside one 46 m grey, splitters between), routes A (clockwise to the next mini, outside the splitters) and
+B (anticlockwise to the mini before, inside them), and `traffic_faults` now fails any car corner off the road.
+Rule 84 written (Sam: Y, 9 Nov): a real place is compared side by side with its reference on the check sheet before every animatic. Animatic 3 sent 9 Nov. Animatic 4 sent 9 Nov (36.6 s, the extra track, the van). Animatic 5 sent 9 Nov.
+
+## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
+1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
+2. The exterior roundabouts sit on the junctions; move them further in, onto the arms. Traffic goes round each mini, not the main circle.
+3. The central lamp post is not clear, yet its shadow is huge: make the pole readable, shorten the shadow.
+4. Swindon from above goes too dark too quickly: lighter grade.
+5. "The Elder Scrolls VI" title: centre-aligned and grander in size.
+6. The drunk man looks asleep. His arm is curled off the ground. Give him a hoody and vomit nearby. Two reference photos are for inspiration only: no realistic likeness of either person. (Not copying the faces; a mugshot-style photo of a real person is not a model for a mocked character.)
+7. The zoom up from below is too fast; hold the dog attack long enough to read.
+8. The drool floats up from the ground and clips through his face: pin it to the mouth and the soil.
+9. Give the scroll swirling magic light, as in the trailer (added: a glow, an exception to the house style; pending Y).
+10. Added: a shopping bag overflowing with trash, north of the dog scene.
+11. Make it early evening (added: low golden sun, longer shadows; pending Y).
+
+## More notes on animatic 1 (Sam, 8 Nov, later chat) — same round
+12. Shot 6: foot traffic: people walking on the paths and pavements.
+13. Shot 6: two groups of men in a scuffle / fist fight on one of the paths.
+14. Shot 6: two teenagers in hoodies on e-bikes, far too fast, riding irresponsibly.
+15. Shot 6: a food delivery moped (plain box, no brand).
+16. Shot 6: a burnt-out car on the green by the stadium.
+17. Shot 6 framing: keep the animatic's angle (19.83 s, `references/elder-swindon/shot6-framing-sam.jpg`), only move the
+    view so Sam's blue line (about 92% down the frame, across the stadium's pitch) becomes the bottom of the screen:
+    the camera moves north by about 8% of the frame height. Everything else in the angle unchanged.
+18. Remove the lettering on the building (the same as note 1: the CLOSING DOWN sign).
+How: people and bikes from above drawn up to 4 times real size so they read on a phone (a liberty; tell Sam); walkers,
+the fight, e-bikes, moped and burnt-out car are already written for another roundabout in `source/elder_swindon_extras.py`
+(`person`, `fight`, `ebike`, `moped`, `burnt_car`, `walkers`): port them onto this film's `aerial_flat`, re-placing
+paths and positions on this film's roundabout. Cost: about 1.4% of a week (budget 9 -> about 10.4; ask Sam).
+Why a duplicate build happened (8 Nov): a later chat started from the main line, which did not have this branch's work
+(`claude/wizardly-goodall-lvk9mb` was never merged back), and rebuilt the roundabout and title; that work is set aside
+(only the extras file is kept). Merged 8 Nov.

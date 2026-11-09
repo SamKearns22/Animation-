@@ -32,10 +32,10 @@ the end with their checks.
 | 68 | Characters are built in 2D first: front, side and back. A three-quarter view (or three-quarter back) is built only when the script calls for one, and named in the plan with the shot that needs it (Sam, 4 Nov). | by hand (the cast sheet shows front, side, back only) |
 | 39 | 3D only when needed (the camera moves round or through it, 3+ angles that must agree, turned in the hand); otherwise one flat painting per camera, in layers. Each 3D build is in the estimate with its reason. | by hand (the estimate) |
 | 40 | Showstopper Shots (Sam names them): before building, list the elements the screenplay implies (terrain, vehicles, props, how each moves, the action around, the effects); Sam approves or trims; ticked at the first rehearsal clip. | by hand |
-| 44 | A usage budget per film; ask Sam for the week's figure only after a building stage, after the animatic and at the final; log it in the notes; over budget is trimmed before the next stage. | by hand (handover) |
+| 44 | A usage budget per film. Each handover logs the chat's measured cost (`python3 .claude/hooks/costwatch.py --report`) in the film's 'spent' column, without asking Sam. When a film's spending passes its estimate, the first line to Sam says so and names what gets cut (Sam, 9 Nov). | by hand (handover), from the cost watch's figure |
 | 54 | Build only what the camera shows: before splitting a model into parts, decide how its ending looks and which parts the camera sees break; build parts only there. | by hand (the plan) |
 | 74 | Before the first animatic, every line gets an acting plan in the film's notes (shot and why, face, body, the word the move lands on), shown to Sam with the brief questions. Before the list is written, ask Sam what each line means wherever the tone could go two ways (sincere or wink, hopeful or doubtful), my pick first; there is no limit on questions, because a question costs far less than a fix (Sam, 7 Nov). | by hand (the notes' acting list, ticked on the check sheet); layout in `guides/satire.md`, "The acting list" |
-| 55 | Every new build has its own cost in the estimate; each handover compares spent with estimated and names any item running over. | by hand (handover) |
+| 55 | Every new build has its own cost in the estimate; each handover compares the measured spend (rule 44) with the estimate and names any item running over. | by hand (handover), from the cost watch's figure |
 
 ## Building
 | # | Rule | Check |
@@ -99,6 +99,8 @@ the end with their checks.
 | 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
 | 73 | A pre-flight fault Sam has been told about is listed once: the film keeps a named-faults list and pre-flight shows only faults not on it. | by hand (the handover's "faults named" line) until pre-flight reads the list |
 | 67 | One full pre-flight per round: make every fix, run the quick check (`preflight.py NAME OUT --text`, seconds) until it is clean, then the full pre-flight once, then the render in the same background chain. A background job is stopped with its own task stop, never by name. | `preflight.py --text`; by hand |
+| 84 | Before every animatic, any real place in the film (a landmark, a junction, a building) is shown on the check sheet beside Sam's reference photo or video frame, and compared point by point; anything moving through it (cars, people) is checked to stay where the real thing allows (on the road, on the path). (Elder Scrolls: Swindon, 9 Nov: the Magic Roundabout went wrong twice and cars drove on the pavements.) | the check sheet by eye; the film's own route check (e.g. `traffic_faults`: every car on the road) |
+| 85 | Cost watch (Sam, 9 Nov): every chat is measured after each step. Amber at 200k tokens of history or 3% of the week; red at 300k or 5%. Amber: finish the step, then hand over. Red: hand over now (unless Sam types 'override'). Every reply on amber or red opens with a 'Cost:' line. | automatic (`.claude/hooks/costwatch.py`, every step and every message) |
 
 ## Notes, review and sound
 | # | Rule | Check |
@@ -129,7 +131,7 @@ the end with their checks.
 | P4 | Unattended runs stop after one animatic (Asking me) | by hand |
 | P5 | A repeated note means the first fix failed (Sending work) | by hand |
 | P6 | One handover section, 15 lines at most; old ones archived (Models and chats) | by hand |
-| 31 | Deciding and applying a round of notes (and the clips): Opus, medium; the checks, the check sheet, the animatic and the final render, filing and sending: Sonnet (Models and chats; Sam, 8 Nov: put back) | by hand |
+| 31 | Routine work on Sonnet, always in its own new chat; never switch models inside a chat (Models and chats; Sam, 9 Nov) | by hand |
 | P7 | Every animatic carries the Hook Text and the CranbriJoos sign-off, made as the final is (Asking me) | by hand (`finish.py` on the animatic's clean render) |
 | M1 | Every message opens with what I need from Sam, or "Nothing needed" (Messages) | by hand |
 | M2 | Messages: Done / Needs you / Next, about 10 lines (Messages) | by hand |
@@ -141,7 +143,8 @@ the end with their checks.
 | P9 | Long check printouts filtered to the faults (Models and chats) | by hand |
 | P10 | One wait per render, never repeated checks (Models and chats) | by hand |
 | M7 | Questions numbered, answered by number or Y/N, my pick first (Messages) | by hand |
-| P11 | Reference photos: Sam sends 2-3 if he has them; otherwise one slow search, 3 per place at most (Making the films) | by hand |
+| P11 | Every chat starts by listing all branches for newer work on the film, and ends with a push to the main line too (Making the films) | by hand |
+| P12 | Reference photos: Sam sends 2-3 if he has them; otherwise one slow search, 3 per place at most (Making the films) | by hand |
 
 The old register gave S1 to two rules; riding is now S10. The old register and the old long rule texts are in
 `guides/archive/rule-register.md` and git history.

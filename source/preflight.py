@@ -234,6 +234,34 @@ def _frames_path(name):
     return os.path.join(film_engine.PASSES, f'{name}-frames.json')
 
 
+def _in_child(fn, *args):
+    """Run fn(*args) in a forked child and return its result (a list of fault strings): whatever libraries it loads
+    (GNU OpenMP) stay out of this process, which later forks the drawing workers. Forked, not pickled: the film is a
+    module."""
+    import pickle
+    r, w = os.pipe()
+    pid = os.fork()
+    if pid == 0:
+        code = 0
+        try:
+            os.close(r)
+            out = ('ok', fn(*args))
+        except BaseException:
+            out = ('err', traceback.format_exc())
+            code = 1
+        with os.fdopen(w, 'wb') as fh:
+            pickle.dump(out, fh)
+        os._exit(code)
+    os.close(w)
+    with os.fdopen(r, 'rb') as fh:
+        data = fh.read()
+    os.waitpid(pid, 0)
+    kind, val = pickle.loads(data) if data else ('err', 'the child produced nothing')
+    if kind == 'err':
+        raise RuntimeError('check failed in its child process:\n' + str(val))
+    return val
+
+
 def _text_only(film, problems, end, fps):
     """`preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, reading
     speed) and shot lengths; no frame is drawn. Fix text faults here until it is clean, then run the full pre-flight once."""
@@ -330,11 +358,11 @@ def main():
     shared += kitchecks.sounds(film)            # rule 13: a sound tied to a thing only with it in frame, once a hit
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
-    if people:
-        shared += linecheck.faults(film)        # every shape outlined, one line weight (the cast)
-        shared += landmarks.faults(film)        # clothes start and end where real ones do
+    if people:                                  # (in a throwaway child: linecheck loads GNU OpenMP, and forking the
+        shared += _in_child(linecheck.faults, film)   # drawing workers from a process that has used it freezes them
+        shared += _in_child(landmarks.faults, film)   # after about 330 frames: the Elder Swindon hang, 8 Nov)
     if 'props' in has:
-        shared += sizes.faults(film)            # props and set pieces at their real size
+        shared += _in_child(sizes.faults, film)  # props and set pieces at their real size
     print('shared checks:', 'clean' if not shared else f'{len(shared)} fault(s)')
     end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
     if not end:                                 # a film without an end time would pass having checked nothing
