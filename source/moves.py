@@ -268,11 +268,16 @@ def cup(sp, side='R'):
     return draw
 
 
+def _held(j, side, sp, draw):
+    import grips
+    return grips.held(j, side, sp, draw)
+
+
 def hold_cup(j, sp, side='R', face=False):
     """Put the cup in a hand already placed (shape 'grip'); `face`: the hand is at the face, drawn over it."""
     j.setdefault('hand', {})[side] = 'grip'
-    j.setdefault('face_props' if face else 'props', []).append(cup(sp, side))
-    return j
+    return _held(j, side, sp, cup(sp, side))      # Job G: hidden by his back or head where it is behind them (from
+    #                                               behind, the cup was drawn over his back); `face` is now worked out
 
 
 def _mic(p, j2, side='R'):
@@ -372,11 +377,11 @@ def pose(sp, name, beat=0.0, target=None):
         V.arm_to(j, 'R', (40.0, 160.0, 46.0), 'down', 'palm')
     elif name == 'phone_ear':
         V.arm_to(j, 'R', (82.0, -140.0, 16.0), (0.6, 1.0, 0.7), 'phone')       # elbow down and forward, forearm up
-        j['face_props'] = [lambda p, j2: _phone(p, j2, 'R', ear=True)]
+        _held(j, 'R', sp, lambda p, j2: _phone(p, j2, 'R', ear=True))   # in the right order from every view (Job G)
     elif name == 'phone_read':
         j['head_dy'] = 8
         V.arm_to(j, 'R', (30.0, 230.0, 180.0), 'down', 'phone')
-        j['props'] = [lambda p, j2: _phone(p, j2, 'R')]
+        _held(j, 'R', sp, lambda p, j2: _phone(p, j2, 'R'))
     elif name == 'paper':
         for s, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, s, (sg * 100, 250.0, 160.0), 'down', 'fist')

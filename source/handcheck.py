@@ -136,7 +136,8 @@ def probe(img, args):
     pt = {q + sd: np.array(L.P(*j2[q + sd])) - (x0, y0) for q in ('sh', 'el', 'wr') for sd in 'LR'}
     wr = {sd: pt['wr' + sd] for sd in 'LR'}
     out = dict(name=sp.get('name', 'someone'), body=body, k=k, expect=EXPECT * k * k, arms={}, at=(x0, y0, x1, y1),
-               size=size,
+               size=size, j3=joints or V.standing(sp), view=V.VIEWS[V.snap(yaw)[0]], yaw=V.snap(yaw)[0],
+               sw=sp.get('shoulders', 150), hem=sp.get('bottom', V.JACKET),
                ink=B.Pen(lay, L).w(2.6), tucked=(joints or {}).get('tucked'))
     hand_px = {sd: m(KEYS[sd][1]) for sd in 'LR'}
     full_px = {sd: _key(full[sd])[1](KEYS[sd][1]) for sd in 'LR'}
@@ -153,7 +154,7 @@ def probe(img, args):
         out['arms'][sd] = dict(fold=fold, fore=float(np.hypot(*v)) / (F.FORE * 0.98),
                                sleeve=m(KEYS[sd][0]), hand=hand_px[sd], full=full_px[sd],
                                shape=(j2.get('hand') or {}).get(sd, 'fist'), sh=pt['sh' + sd], el=pt['el' + sd],
-                               reach=F.UPPER * k)
+                               wr=pt['wr' + sd], reach=F.UPPER * k)
     return out
 
 
@@ -210,6 +211,7 @@ def frame_faults(people):
                                 text=f"the hand pushed back into its own sleeve (the forearm points at the lens and "
                                      f"doubles back: shown at {a['fore'] * 100:.0f}% of its length, the hand "
                                      f"{back * 100:.0f}% of a forearm back towards the shoulder)"))
+            out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in body_faults(pp, sd, a, expect)]
             # in the frame (everyone stacked in drawing order): a hand over the body of someone at about the same
             # distance. (A hand hidden behind someone nearer the lens is ordinary staging: not a fault.)
             vis_hand = hand & mine
@@ -219,6 +221,99 @@ def frame_faults(people):
                             (vis_hand & _part(pp, other)).sum() > OVER * vis_hand.sum():
                         out.append(dict(who=pp['name'], side=sd, kind=f"over {other['name']}", box=box,
                                         text=f"the hand over {other['name']}'s body (a touch not listed)"))
+    return out
+
+
+# ------------------------------------------------------------------------------------------------ Job G: the body checks
+RX, RZ = 0.92, 0.42           # the torso as an upright oval cylinder: half its width and depth, times the shoulders
+FLOAT = 0.12                  # a seen hand touching the body or its sleeve over less than this share of the ring round it
+BENT = 40.0                   # a pointing arm's elbow bent past this many degrees aims the finger off the target
+READ = 0.45                   # a pointing forearm shown at under this share of its length points at or away from the lens
+FINGER = 0.5                  # a pointing finger must show at least this share of itself
+
+
+def _hand_centre(j, sd):
+    """The circle hand's centre in the body frame: 12 units past the wrist along the forearm (satire_style)."""
+    el, wr = np.array(j['el' + sd], float), np.array(j['wr' + sd], float)
+    u = wr - el
+    return wr + u / (np.linalg.norm(u) or 1.0) * 12.0
+
+
+def _torso_in(pp, x, y, z):
+    """How deep (x, y, z) is inside the torso (under 1: inside the oval; None: above or below the torso)."""
+    if not 40.0 <= y <= pp['hem'] - 20:
+        return None
+    return (x / (RX * pp['sw'])) ** 2 + (z / (RZ * pp['sw'])) ** 2
+
+
+def behind_torso(pp, c):
+    """Is the body-frame point c hidden by the torso from this view? (the ray from it to the camera crosses the oval)"""
+    a = math.radians(pp['yaw'])
+    d = np.array([-math.sin(a), math.cos(a)])          # the camera's direction in the body's (x, z) plane
+    rx, rz = RX * pp['sw'] * 0.9, RZ * pp['sw'] * 0.9   # a little inside the edge: only a hand clearly behind counts
+    if _torso_in(pp, c[0], c[1], c[2]) is None:
+        return False
+    # (x + t dx)^2/rx^2 + (z + t dz)^2/rz^2 = 1, for some t > 0
+    A = d[0] ** 2 / rx ** 2 + d[1] ** 2 / rz ** 2
+    Bq = 2 * (c[0] * d[0] / rx ** 2 + c[2] * d[1] / rz ** 2)
+    C = c[0] ** 2 / rx ** 2 + c[2] ** 2 / rz ** 2 - 1
+    disc = Bq * Bq - 4 * A * C
+    if disc < 0:
+        return False
+    return (-Bq + math.sqrt(disc)) / (2 * A) > 0 and C > -0.5   # (a hand deep inside is the clip fault, not this)
+
+
+def body_faults(pp, sd, a, expect):
+    """Job G (9 Nov): faults the hand-visibility test let through (the pose gallery passed all of them as OK).
+    - through the body: the hand is behind his torso from this view but drawn over it (palms together, three-quarter
+      back, showed a hand on his back);
+    - inside the body: the hand's centre is inside the torso;
+    - a hand off its arm: a gap all round it, touching neither its sleeve nor the body;
+    - a point that doesn't read: the pointing forearm aims at or away from the lens (Patriots 4 note 6);
+    - the pointing finger hidden or missing (rule 41: whenever anyone points, a finger shows)."""
+    out = []
+    j = pp.get('j3')
+    if not j:
+        return out
+    import grips
+    out += [(kd, tx) for s_, kd, tx in grips.contact_faults(j) if s_ == sd]
+    if a['shape'] == 'none' or pp['tucked']:
+        return out
+    hand, sleeve, full = a['hand'], a['sleeve'], a['full']
+    shown = hand.sum() >= SHOWN * expect
+    c = _hand_centre(j, sd)
+    deep = _torso_in(pp, *c)
+    if deep is not None and deep < 0.55:
+        out.append(('inside body', 'the hand inside his own body (its centre is in the torso)'))
+    elif shown and hand.sum() > 0.6 * full.sum() and behind_torso(pp, c):
+        out.append(('through body', f"the hand drawn over his body, but from {pp['view'].replace('_', ' ')} it is "
+                                    "behind it (draw the arm before the torso)"))
+    if shown:                                         # a hand off its arm: a gap all round it (its own arm hidden
+        from scipy.ndimage import binary_dilation     # behind the body is fine: then it meets the body's edge)
+        ring = binary_dilation(full, iterations=max(4, int(round(11 * pp['k'])))) & ~full
+        if (ring & pp['body']).sum() < FLOAT * ring.sum():
+            out.append(('floating', 'a hand off its arm: a gap all round it (it touches neither its sleeve nor the body)'))
+    if a['shape'] == 'point':
+        k = pp['k']
+        wr, el = np.array(a['wr'], float), np.array(a['el'], float)
+        u = wr - el
+        cen = wr + u / (np.linalg.norm(u) or 1.0) * 12 * k
+        ys, xs = np.mgrid[0:full.shape[0], 0:full.shape[1]]
+        beyond = np.hypot(xs - cen[0], ys - cen[1]) > 28 * k
+        whole, seen = (full & beyond).sum(), (hand & beyond).sum()
+        el3, sh3 = np.array(j['el' + sd], float), np.array(j['sh' + sd], float)
+        up3, fo3 = el3 - sh3, np.array(j['wr' + sd], float) - el3
+        bend = math.degrees(math.acos(max(-1.0, min(1.0, up3 @ fo3 / (np.linalg.norm(up3) * np.linalg.norm(fo3) or 1)))))
+        if bend > BENT and not j.get('point_bent'):
+            out.append(('bent point', f'pointing with the elbow bent {bend:.0f} degrees: the finger aims off the '
+                                      'target (views.aim straightens it; set j["point_bent"] for a point at himself)'))
+        if a['fore'] < READ:
+            out.append(('point unreadable', f"the point doesn't read from here: the pointing forearm shows at "
+                                            f"{a['fore'] * 100:.0f}% of its length (it points at or away from the lens)"))
+        elif whole < 300 * k * k:
+            out.append(('no finger', 'pointing with no finger drawn (rule 41)'))
+        elif seen < FINGER * whole:
+            out.append(('finger hidden', f'the pointing finger hidden ({seen * 100 // max(whole, 1)}% shows; rule 41)'))
     return out
 
 

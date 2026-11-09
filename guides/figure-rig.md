@@ -192,6 +192,7 @@ once floated between them.
 |---|---|---|
 | Arm guard | every arm drawn (`figure.guard`) | a segment is >6% too long, <40%, or the elbow folds past 25° |
 | Elbow across the body | every arm drawn (`figure.guard`) | the elbow sits on the chest's centre line while the forearm points back out to the hand's own side (Andrew the Hutt) |
+| Body checks (Job G) | every person `handcheck.py` probes (gallery and pre-flight) | a hand drawn over the body while behind it, inside it, or off its arm; a point that doesn't read, a bent point, a hidden finger; a resting hand hovering, sinking or off the edge, or a hand off its grip (`grips.contact_faults`) |
 | Unreachable target | `Rig.arm` | the hand can't reach without stretching |
 | Fingertips on the keyboard | patriots2 `check_on_keys` | a typing fingertip misses the keys |
 | Set pieces apart | `check_apart` (ward, ambulance, desk) | two listed outlines overlap |

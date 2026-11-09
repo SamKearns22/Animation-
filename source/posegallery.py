@@ -30,7 +30,9 @@ from ed import INK           # noqa: E402
 
 MODEL = dict(name='Model', skin=(236, 196, 166), hair='crop', hair_c=(84, 62, 44), jacket=(64, 92, 132),
              sleeve=(64, 92, 132), trousers=(52, 54, 62), shoe=(30, 28, 30), hw=70, hh=90, jaw='round')
-VIEWS = [(0, 'front'), (45, 'three-quarter'), (90, 'side'), (135, 'three-quarter back'), (180, 'behind')]
+VIEWS = [(0, 'front'), (45, 'three-quarter'), (90, 'side'), (135, 'three-quarter back'), (180, 'behind'),
+         (-45, 'mirrored')]   # facing left (Job G: 9 of Sam's 60 body notes came from turned or mirrored views)
+BG = (226, 222, 214, 255)
 
 
 def _sw(sp):
@@ -176,12 +178,28 @@ def hands_on_table(sp, h=0.95, reach=120.0):
     return j
 
 
+def hands_on_table_drawn(sp, h=0.95):
+    """Both palms on a table drawn with him (Job G, grips.Table): the same numbers place the hands and draw the table,
+    so a hand can't hover or sink, and the table is beyond him from behind."""
+    import grips
+    j = V.standing(sp)
+    t = grips.Table(h=h, z0=95.0, w=230.0, depth=240.0)
+    for side, sg in (('L', -1), ('R', 1)):
+        grips.on_table(j, side, t, sg * 112.0)
+    return j
+
+
+def _kit(name):
+    import moves
+    return lambda sp: moves.pose(sp, name)
+
+
 def point_both(sp, spread=470.0):
     """Both arms flung out, a finger pointing each way (Patriots 4, the Patriot's "Traitors.": one at each of the
     two winners)."""
     j = V.standing(sp)
     for side, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, side, (sg * spread, 30.0, 220.0), "down", "point")
+        V.aim(j, side, (sg * spread, 30.0, 220.0))
     return j
 
 
@@ -197,10 +215,21 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
     ('palms together', palms_together, 'Patriots 4, 1 Nov'),
     ('hands on table', hands_on_table, 'Patriots 4, 1 Nov'),
     ('pointing both ways', point_both, 'Patriots 4, 1 Nov'),
+    ('hands on a table (drawn)', hands_on_table_drawn, 'Job G, 9 Nov'),
+    ('phone, reading', _kit('phone_read'), 'kit, fixed Job G'),
+    ('cup in hand', _kit('mug'), 'kit, fixed Job G'),
+    ('cup, sipping', _kit('mug_sip'), 'kit, fixed Job G'),
 ]
 
 
 AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses it from there
+    'hands on a table (drawn)': {'three-quarter back': 'the far hand is on the table beyond his body',
+                                 'behind': 'both hands are on the table beyond his body'},
+    'cup in hand': {'behind': 'the cup and hand are in front of him, hidden by his back'},
+    'pointing': {'three-quarter back': 'the arm points away from us: the point does not read'},
+    'pointing both ways': {'three-quarter': 'the far arm points away from us: the point does not read',
+                           'three-quarter back': 'the near arm points away from us: the point does not read',
+                           'mirrored': 'the far arm points away from us: the point does not read'},
     'hands on a gun': {'behind': 'both hands hidden by his back: show him three-quarter back instead'},
     'hands on table': {'three-quarter back': 'the far hand is on the table beyond his body: seen from the front only',
                        'behind': 'both hands are on the table beyond his body: seen from the front only'},
@@ -214,16 +243,43 @@ def pose(name, sp):
 
 # ------------------------------------------------------------------------------------------------ the sheet
 def test(name, build, sp=MODEL):
-    """Draw one pose from every view with the hand check on: [(view name, picture, faults)]."""
+    """Draw one pose from every view with the hand and body checks on: [(view name, picture, faults)]. The last entry
+    is the front-on flip test: drawn just either side of front on, the hands must not swap sides (Islamocommunism
+    note 9: a front-on man on the drawing's mirror line took the glass with the far hand)."""
     import handcheck as H
     out = []
     for deg, label in VIEWS:
-        im = Image.new('RGBA', (600, 900), (226, 222, 214, 255))
+        im = Image.new('RGBA', (1200, 1100), BG)
         H.begin()
-        V.person(im, B.Cam(1.0, 540, 960), 300, 230, 0.62, sp, 0.0, float(deg), build(sp))   # world = canvas pixels
+        V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, sp, 0.0, float(deg), build(sp))   # world = canvas pixels
         faults = H.end(0.0, f'{name}, {label}')
         out.append((label, im, faults))
+    for a, b, at in ((0.4, -0.4, 0), (179.6, -179.6, 4)):
+        flip = []
+        for deg in (a, b):
+            im = Image.new('RGBA', (1200, 1100), BG)
+            V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, sp, 0.0, deg, build(sp))
+            flip.append(np.asarray(im.convert('L'), np.int16))
+        diff = (np.abs(flip[0] - flip[1]) > 40).mean()
+        if diff > 0.002:
+            out[at][2].append(dict(side='both', kind='flips', text=f'the pose flips sides as he turns through '
+                                   f"{out[at][0]} ({diff * 100:.1f}% of the picture changes)"))
     return out
+
+
+def box(im, pad=20):
+    """The box round everything drawn in a picture."""
+    a = np.asarray(im.convert('RGB'), np.int16)
+    ys, xs = np.nonzero(np.abs(a - np.array(BG[:3])).sum(axis=2) > 12)
+    return max(0, xs.min() - pad), max(0, ys.min() - pad), xs.max() + pad, ys.max() + pad
+
+
+def tiles(ims, tw, th):
+    """Each view cropped round itself (no arm runs off the sheet), all at one scale so the views compare."""
+    bs = [box(im) for im in ims]
+    k = min(min(tw / (b[2] - b[0]), th / (b[3] - b[1])) for b in bs)
+    return [im.convert('RGB').crop(b).resize((max(1, int((b[2] - b[0]) * k)), max(1, int((b[3] - b[1]) * k))))
+            for im, b in zip(ims, bs)]
 
 
 results = {}                  # the last run: {pose: views that failed}
@@ -253,7 +309,7 @@ def main():
     kitchecks.install()
     H.install()
     font = ImageFont.truetype(B.SANS, 22)
-    tw, th = 220, 330
+    tw, th = 180, 300
     sheet = Image.new('RGB', (190 + tw * len(VIEWS), (th + 56) * len(gallery)), (16, 16, 20))
     d = ImageDraw.Draw(sheet)
     bad = 0
@@ -264,19 +320,20 @@ def main():
         d.text((10, y + 40), src[:18], font=ImageFont.truetype(B.SANS, 16), fill=(170, 170, 170))
         res = test(name, build)
         results[name] = {label for label, _, fs in res if fs}
+        tl = tiles([im for _, im, _ in res], tw - 6, th)
         for c, (label, im, faults) in enumerate(res):
-            tile = im.convert('RGB').crop((60, 40, 540, 760)).resize((tw, th))
+            tile = tl[c]
             x = 190 + c * tw
-            sheet.paste(tile, (x, y))
+            sheet.paste(tile, (x + (tw - tile.width) // 2, y + th - tile.height))
             msg = 'OK' if not faults else ('AVOID: ' if label in AVOID.get(name, {}) else '') + \
                 '; '.join(f"{f['side']}: {f['kind']}" for f in faults)
             d.text((x + 6, y + th + 4), label, font=ImageFont.truetype(B.SANS, 16), fill=(200, 200, 200))
-            d.text((x + 6, y + th + 26), msg[:24], font=ImageFont.truetype(B.SANS, 17),
+            d.text((x + 6, y + th + 26), msg[:26], font=ImageFont.truetype(B.SANS, 16),
                    fill=(140, 230, 140) if not faults else (255, 160, 110))
         fails = [(label, f) for label, _, fs in res for f in fs]
         new = {label for label, _ in fails} - set(AVOID.get(name, {}))
         bad += bool(new)
-        print(f"{name}: " + ('tested clean from all 5 views' if not fails else
+        print(f"{name}: " + ('tested clean from all 6 views' if not fails else
                              '; '.join(f"{label}: {f['side']} {f['text']}" for label, f in fails) +
                              ('' if not new else ' -- NOT in AVOID: fix the pose or list the view')))
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)

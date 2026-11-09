@@ -96,3 +96,17 @@
 - **For Claude:** costwatch WEEK_USD still to calibrate; FRESH 90k fits the measured 80k start. Job E scripts were
   scratch only. Not read in full (amber): the ten films' handover files, Flying Whales, Newsdesk (keyword search only).
 
+# Where things stand (project, 9 Nov; no film in progress)
+
+- **Rules that bite next:** 44 (now the film ledger), 86 (tools: own chat, estimate first), 81 (arm join, by hand: failed 4 times).
+- **Done (9 Nov, Job F, Opus):** the film ledger, `source/ledger.py`. Sam's Y Y N: built (about 0.4% of a week, estimate
+  0.5%); rule 44 rewritten to use it (shorter than before); no back-filling of old films. Every check's full result
+  (clean ones too) now lands in `notes/ledger/FILM/round-N.txt` once a round is opened; `log` at each handover sums
+  cost per film; `audit` gives the 10 lines when a film is posted. Tested on a pretend film, then removed.
+- **Next:** Job G (bodies), new chat, **Opus, high effort**. Type: "Job G: bodies, hands first. Read notes/next-jobs.md
+  Where things stand and Build plan G, and the cut list in notes/job-e-measurements.md." Estimate first (rule 86).
+- **Needs Sam:** Y or N on the Job G estimate (section below).
+- **Read:** this file's Build plan (G row); `notes/job-e-measurements.md` section 3 and the cut list.
+- **Open rule requests:** none.
+- **For Claude:** next film's plan runs `ledger.py estimate FILM N`; each round `ledger.py round FILM N`; each handover
+  `ledger.py log FILM --stage .. --notes N --repeat "note | catcher"`. costwatch WEEK_USD still to calibrate.

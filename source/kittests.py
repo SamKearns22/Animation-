@@ -406,6 +406,25 @@ def point_hand_shows_a_finger():
     return ok, f"point hand: {point}; palm hand: {calls}"
 
 
+@test
+def grips_contacts_and_carry():
+    """Job G (9 Nov): a hand that can't reach the table hovers and is caught (views.arm_to stops at full reach without
+    a word); a hand on the top passes; a cup handed over before the hand reaches it jumps and is caught."""
+    import grips
+    import posegallery as G
+    import views as V
+    j = V.standing(G.MODEL)
+    near, far = grips.Table(z0=95.0), grips.Table(z0=520.0)
+    grips.on_table(j, 'R', near, 112.0)
+    grips.on_table(j, 'L', far, -112.0)
+    fs = grips.contact_faults(j)
+    ok1 = [f[:2] for f in fs] == [('L', 'hovers'), ('L', 'off edge')]
+    hand = lambda t: (100.0 * t, 0.0)                     # the hand moves in from 0 to 100 over a second
+    good = grips.Carry([(0.0, lambda t: (100.0, 0.0)), (1.0, hand)]).faults()
+    bad = grips.Carry([(0.0, lambda t: (100.0, 0.0)), (0.5, hand)]).faults()
+    return ok1 and not good and len(bad) == 1, f"contacts {fs}; carry on time {good}; early {bad}"
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

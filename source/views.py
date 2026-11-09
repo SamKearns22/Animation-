@@ -134,6 +134,14 @@ def arm_to(j, side, target, pole='down', shape='fist'):
     return j
 
 
+def aim(j, side, target, pole='down'):
+    """Point at `target` (torso frame): the arm nearly straight along the line from the shoulder, so the finger aims
+    at it (Patriots 4 note 6: "the pointing must look like pointing"; a bent elbow aims the finger at the sky)."""
+    sh = j['sh' + side]
+    u = _unit(_sub(target, sh))
+    return arm_to(j, side, _add(sh, _mul(u, (F.UPPER + F.FORE) * 0.97 + F.HAND['point'])), pole, 'point')
+
+
 def standing(sp):
     """Standing relaxed: feet a little apart, arms hanging just in front of the body, hands loose fists."""
     sw = sp.get('shoulders', 150)
@@ -729,6 +737,9 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None)
 
 def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     view_deg, mirror = snap(yaw)
+    if view_deg in (0, 180):                      # front on and from behind the body is never mirrored: either side of
+        mirror = False                            # 0 (or 180) degrees his right hand stays where it was (Islamocommunism
+    #                                               note 9, Job G's flip test; the head still turns its own way)
     view = VIEWS[view_deg]
     j = joints or standing(sp)
     lean = j.get('lean', 0.0)
@@ -758,8 +769,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     behind = set(j.get('behind', set()))
     if view in ('three', 'side', 'three_back'):
         behind.add(arms_far[0])
-    if view == 'back':
-        behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # hands in front of him: hidden by his back (Sam)
+    if view in ('back', 'three_back'):            # hands in front of him: hidden by his back (Sam); three-quarter back
+        behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # too (Job G: palms together
+        #                                           showed a hand on his back)
     if seated:
         (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
     for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)
@@ -874,6 +886,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
+        if view in ('back', 'three_back') and depth['wr' + sd] < -10:
+            continue                               # (from behind, a hand at his face is behind his head: Job G)
         arm(p, j2, sd, sp)
     for draw in j.get('face_props', []):
         draw(p, j2)

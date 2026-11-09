@@ -1,35 +1,38 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
-- **Rules that bite next:** 44 (now the film ledger), 86 (tools: own chat, estimate first), 81 (arm join, by hand: failed 4 times).
-- **Done (9 Nov, Job F, Opus):** the film ledger, `source/ledger.py`. Sam's Y Y N: built (about 0.4% of a week, estimate
-  0.5%); rule 44 rewritten to use it (shorter than before); no back-filling of old films. Every check's full result
-  (clean ones too) now lands in `notes/ledger/FILM/round-N.txt` once a round is opened; `log` at each handover sums
-  cost per film; `audit` gives the 10 lines when a film is posted. Tested on a pretend film, then removed.
-- **Next:** Job G (bodies), new chat, **Opus, high effort**. Type: "Job G: bodies, hands first. Read notes/next-jobs.md
-  Where things stand and Build plan G, and the cut list in notes/job-e-measurements.md." Estimate first (rule 86).
-- **Needs Sam:** Y or N on the Job G estimate (section below).
-- **Read:** this file's Build plan (G row); `notes/job-e-measurements.md` section 3 and the cut list.
-- **Open rule requests:** none.
-- **For Claude:** next film's plan runs `ledger.py estimate FILM N`; each round `ledger.py round FILM N`; each handover
-  `ledger.py log FILM --stage .. --notes N --repeat "note | catcher"`. costwatch WEEK_USD still to calibrate.
+- **Rules that bite next:** 86 (tools: own chat, estimate first; Sam said Y to Job G at about 4%), 81 (arm join, by
+  hand: the seam check is chat 2's first job), 41 (every point must read: now checked).
+- **Done (9 Nov, Job G chat 1, Opus high, about 1.7% of the 2% estimate):** pose test shows 6 views (mirrored added),
+  whole body in each picture; new automatic body checks in the hand check (so films get them too); props in hands
+  and tables right from every view; four kit poses fixed (phone read, cup, cup sip; pointing straightened); the
+  one-piece finger is the house finger; front-on and from-behind people never draw mirrored (Islamocommunism 9).
+- **Next:** Job G chat 2, new chat, **Opus, high effort**. Type: "Job G chat 2: read notes/next-jobs.md Where things
+  stand and the Job G section." No new estimate: chat 2 was priced (1.5-2%).
+- **Needs Sam:** nothing.
+- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph; `notes/job-e-measurements.md` cut list.
+- **Open rule requests:** none. Chat 2 proposes merging rules 41, 42 and 81 (by-hand parts now automatic).
+- **For Claude:** checks in `handcheck.body_faults`; `grips.py` (held, Table, on_table, contact_faults, Carry);
+  `views.aim`; views `_person` (no mirror at 0/180; three_back reach hands behind; on_face skipped from behind);
+  `posegallery.py` (VIEWS 6, flip test, tiles); kittest `grips_contacts_and_carry`. Sheet: `guides/pose-gallery.jpg`.
 
-## Job G estimate (9 Nov, Opus high; waiting for Sam's Y, rule 86)
-Found first: the gallery's "OK" only means "a hand is visible". Run today, it passes faults Sam would flag: the
-pointing arms run off the sheet's picture (front, three-quarter, behind), a gap where the far arm meets the shoulder
-(three-quarter), palms together shows a hand drawn on his back (three-quarter back), "hands on table" has no table (so
-hover can't be judged), "pointing both ways" has a hand with no arm (three-quarter). Sheet sent to Sam.
-- **Chat 1 (this one), about 2%:** (1) the sheet fits the whole body and adds a 6th view, mirrored; (2) automatic checks
-  on every gallery drawing: hand through the body (drawn over the torso while behind it), hand or finger with no arm,
-  hover/sink against a grip (over 1.5 cm off, or in), the pointing finger seen, joined and along the forearm;
-  (3) grip points: props carry named grips (table edge, glass, handset, mug, rifle, door handle); a pose names which
-  hand is on which grip; the test draws the prop from every view with the order arm-behind/hand-over; new poses: hold
-  a glass, phone at the ear, put down and pick up from a desk, hand something over (one owner a frame, no jump), hands
-  on table with the table; (4) fix every gallery pose that fails.
-- **Chat 2, about 1.5-2%:** (5) the shoulder-seam check, automatic (rule 81, failed 4 times by hand); (6) lying: gallery
-  rows and checks (both arms on one side, arm curled, neck); (7) pre-flight flags a pose not from the gallery, or seen
-  from a view it fails in; new poses priced at planning; (8) rules 41, 42 and 81 merged and their by-hand parts made
-  automatic (the rulebook doesn't grow).
-- **Total about 3.5-4% of a week** (the build plan said 3-5%). Neck, mouth and seated wait (cut list).
+## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
+Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
+- **Chat 1 DONE (9 Nov, about 1.7%):** 6 views (mirrored) cropped round the whole body; checks: hand through the body,
+  inside it, off its arm; point unreadable, bent, finger hidden; resting hand hovering/sinking/off the edge, hand off
+  its grip; flip through front on and behind (fixed in views: never mirrored there). Grips: `grips.held` (any held prop
+  in the right order for each view; hand over it), `Table` + `on_table`, `Carry` (a handed-over prop never jumps).
+  Fixed in the kit: phone read, cup, cup sip (from behind they were drawn over his back), three-quarter back hands
+  behind the body (palms together showed a hand on his back), points straightened (`views.aim`), the one-piece finger
+  (Ad-Vanced 39b) is now the house finger. New gallery rows: hands on a table (drawn), phone reading, cup in hand,
+  cup sipping. AVOID lists updated (pointing three-quarter back, pointing both ways three views, cup behind).
+- **Chat 2 (about 1.5-2%), in order:** (1) the shoulder-seam check, automatic (rule 81; the gap shows at the near
+  shoulder in three-quarter pointing, guides/pose-gallery.jpg); (2) phone at the ear: rework (the phone sits on top of
+  the head and the arm wraps over it, front and three-quarter; not yet in the gallery); (3) a screen check that a
+  hand meets its prop on the picture (only 3D is checked now); (4) lying: gallery rows and checks (both arms on one
+  side, arm curled, neck); (5) pre-flight flags a pose not from the gallery or seen from an AVOID view; new poses
+  priced at planning; (6) rules 41, 42 and 81 merged, by-hand parts automatic (propose wording to Sam first).
+- Not done in chat 1, on purpose: old films' own finger copies are unchanged; the kit's cup and phone (moves.py, also
+  used by duel.py) now go through `grips.held`; `Carry` is a tool and a test, not yet wired into any film.
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
