@@ -203,8 +203,12 @@ RESTS = [('*Vance.forearm*', 500, 0.0, T['swivel'] + SWIVEL * 0.85, 'hands folde
 EFFECTS = X.EFFECTS
 JOKE_PROPS = []
 ORDER_SWAPS = []
+_W = lambda w: word_at(9, w.split(':', 1)[1]) + (-0.3 if w == 'word:do this' else 0.0)
 HANDS_OK = [('*Vance*', 'L', 'no hand', T['arm'], T['off'] + 0.1, "his hand is drawn by _arm_over on the driver's far "
              'shoulder, over the driver (looked at full size, 8 Nov: the hand shows there every frame)'),
+            ('*Vance*', 'R', '*', _W('word:do this'), _W('word:Between'), "his flung arm on \"would do this\" (note 49) passes in front "
+             "of an officer on screen: Vance stands 2.5 m nearer the lens, so they overlap but cannot touch (looked at "
+             "full size, 9 Nov)"),
             ('*officer 4*', 'R', '*', T['cut5'], DUR, "his punching fist passes in front of officer 3, "
              'who stands beside him almost as near the lens: they overlap on screen but do not touch (looked at full '
              'size, 8 Nov)'),
