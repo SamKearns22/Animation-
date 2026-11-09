@@ -56,10 +56,12 @@ SUBTITLES_AT_FINISH = False                   # no voices, no subtitles
 SUBS_IN_PICTURE = False
 LINES = []
 HITS = (1.07, 2.49, 6.57, 7.37, 7.79, 11.43, 13.86, 15.08, 17.45, 19.86, 21.93, 24.76, 27.19)   # the sound's hits
-SHOTS = [('1 can-face', 0.0, 7.37), ('2 scroll', 7.37, 13.86), ('3 packet', 13.86, 15.08),
-         ('4 above', 15.08, 16.90), ('5 climb', 16.90, 19.86), ('6 roundabout', 19.86, DUR)]
-CLIMB0, CLIMB1 = 16.90, 19.86                 # the climb (Sam, note 7: was 16.50-17.45, too fast; the dog held longer)
-MIX0, MIX1 = 17.85, 18.35                     # near-real gives way to flat while the climb is fastest
+SHOTS = [('1 can-face', 0.0, 6.57), ('2 scroll', 6.57, 11.43), ('3 packet', 11.43, 15.08),
+         ('4 above', 15.08, 17.45), ('5 climb', 17.45, 19.86), ('6 roundabout', 19.86, DUR)]
+# (Sam, animatic 2: less time on his face; shot 3 a few beats longer, the packet landing by the scroll; the dog held
+# a beat longer before the climb.) Every cut still on a hit of the sound.
+CLIMB0, CLIMB1 = 17.45, 19.86                 # the climb (was 16.50-17.45 in animatic 1, 16.90-19.86 in animatic 2)
+MIX0, MIX1 = 18.20, 18.60                     # near-real gives way to flat while the climb is fastest
 SHOT_CAST = {'1 can-face': ['DROOLER'], '2 scroll': ['SCROLL'], '3 packet': ['PACKET', 'SCROLL'],
              '4 above': ['DROOLER', 'STAFFIE', 'SCROLL', 'CAN', 'PACKET'], '5 climb': ['DROOLER', 'STAFFIE'],
              '6 roundabout': ['DROOLER']}
@@ -101,7 +103,7 @@ MAN = dict(C.MAN, name='DROOLER', jacket=(132, 134, 140), trousers=(84, 88, 100)
 #                                    sallow, blotchy red cheeks, dark bags under the eyes, lined   # (Sam, note 6) a grey hoody, gingery stubble, short crop: general traits only
 #                                    from Sam's reference photos, no likeness of anyone (house-style face)
 SCROLL, CAN, LITTER = C.SCROLL, C.CAN, C.LITTER
-PACKET_REST = (-1.02, -1.34, 35.0)              # where the packet comes to rest, past the scroll's tip (wind: -z)
+PACKET_REST = (-1.01, -0.90, 35.0)              # where the packet lands: beside the scroll (Sam, animatic 2)
 SUN_XZ = np.array([0.857, 0.514])                # shadows fall this way (away from the low sun)
 LAMP = (-2.93, -1.24)                            # the lamp post, centre of the island; its shadow passes his legs
 LAMP_H = 18.0
@@ -152,8 +154,8 @@ def keys(t, ks):
 def gust(t):
     """How hard the wind blows (0..1): gusts on the sound's hits (1.07, 2.49, 6.57, 7.37 strips the scroll)."""
     g = 0.15
-    for h, a in ((1.07, 0.6), (2.49, 0.7), (6.57, 1.0), (7.37, 1.0), (9.0, 0.6), (10.4, 0.7), (11.43, 0.6),
-                 (13.86, 0.9)):
+    for h, a in ((1.07, 0.6), (2.49, 0.7), (5.3, 0.8), (6.57, 0.7), (7.37, 1.0), (8.2, 0.6), (9.0, 0.7),
+                 (9.9, 0.6), (10.6, 0.7), (12.3, 0.9), (13.86, 0.6)):
         g = max(g, a * math.exp(-((t - h - 0.25) / 0.45) ** 2) * (t > h - 0.05))
     return g
 
@@ -165,11 +167,11 @@ def shot_of(t):
 
 SHOT1 = [(0.0, (-0.74, -1.16, 225, 70, 0.62)), (0.6, (-0.71, -1.16, 222, 70, 0.61)),     # the approved opening
          #                                    (nudged to follow the hand, laid further out: note 6)
-         (2.2, (-0.38, -1.00, 210, 66, 0.56)), (3.5, (-0.13, -0.92, 192, 58, 0.50)),     # along the arm, to the face
-         (7.37, (-0.12, -0.90, 186, 56, 0.43))]                                          # creeping in
-SHOT2 = [(7.37, (-0.84, -1.14, 180, 68, 0.40)), (9.6, (-0.86, -1.04, 180, 66, 0.38)),    # the tip, the end cap
-         (11.43, (-0.86, -0.86, 180, 64, 0.36)), (13.86, (-0.86, -0.76, 180, 64, 0.37))]  # the case
-SHOT3 = [(13.86, (-0.92, -0.92, 180, 66, 0.95)), (15.08, (-0.92, -0.95, 180, 66, 0.92))]
+         (2.8, (-0.38, -1.00, 210, 66, 0.56)), (4.4, (-0.13, -0.92, 192, 58, 0.50)),     # along the arm, to the face
+         (6.57, (-0.12, -0.90, 186, 56, 0.45))]                                          # (2 s on it: was 3.9)
+SHOT2 = [(6.57, (-0.84, -1.14, 180, 68, 0.40)), (7.37, (-0.84, -1.14, 180, 68, 0.40)),   # the tip, stripped on 7.37
+         (9.0, (-0.86, -1.04, 180, 66, 0.38)), (11.43, (-0.86, -0.82, 180, 64, 0.36))]   # the end cap, the case
+SHOT3 = [(11.43, (-0.92, -0.86, 180, 66, 0.98)), (15.08, (-0.92, -0.94, 180, 66, 0.90))]
 TOP0 = (0.0, -0.25, 2.6)                          # shot 4: straight down, centre (x, z), metres across
 END_W = 168.0                                    # shot 6: the whole roundabout (1080 px = 168 m)
 END_MY = 60.0 - 0.08 * 1920 * END_W / 1080      # Sam's note 17: the animatic's 19.83 s view moved north by 8% of
@@ -321,6 +323,7 @@ def face_close(pil, cam, k, sp, t):
     return mouth, ppu, side
 
 
+DRIP = 5.30                                      # a drop runs down the drool on a gust (6.57 is now the cut)
 DROOL_EDGE, DROOL_POOL = 82, 100                 # person units from the mouth corner (towards the ground) to the
 #                                                  face's edge, and to the pool's middle on the soil
 
@@ -328,7 +331,7 @@ DROOL_EDGE, DROOL_POOL = 82, 100                 # person units from the mouth c
 def drool_pool(pil, mouth, side, ppu, t):
     """The dark damp patch on the soil just past his down cheek, spreading after the drip (6.57)."""
     d = ImageDraw.Draw(pil, 'RGBA')
-    grow = 1.0 + 0.25 * ease((t - 6.6) / 0.6)
+    grow = 1.0 + 0.25 * ease((t - DRIP - 0.03) / 0.6)
     px, py = mouth + side * DROOL_POOL * ppu
     R = 34 * ppu * grow
     d.ellipse([px - R, py - R * 0.5, px + R, py + R * 0.5], fill=(58, 42, 32, 190))
@@ -350,8 +353,8 @@ def drool_close(pil, mouth, ppu, side, t):
            tuple(pool)]
     d.line(pts, fill=(206, 220, 226, 230), width=w, joint='curve')
     d.line([(p[0] + w * 0.3, p[1]) for p in pts[:3]], fill=(250, 252, 255, 200), width=max(1, w // 3))
-    if 6.57 <= t < 6.95:                                 # the drip
-        u = (t - 6.57) / 0.38
+    if DRIP <= t < DRIP + 0.38:                          # the drip
+        u = (t - DRIP) / 0.38
         a, b = ((mx, my), tuple(edge)) if u < 0.5 else (tuple(edge), tuple(pool))
         v = (u * 2) % 1.0
         px, py = a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v
@@ -465,7 +468,7 @@ def scroll_cover(t):
     it in gust steps, 7.37 to about 13.5 (the teaser's staff is fully out by 14 s). -1: all out; >1: all under."""
     if t < 7.37:
         return 2.0
-    steps = ((7.37, 0.24), (9.0, 0.18), (10.4, 0.24), (11.43, 0.20), (12.6, 0.24))
+    steps = ((7.37, 0.24), (8.2, 0.18), (9.0, 0.24), (9.9, 0.20), (10.6, 0.24))   # all out by about 11.2
     f = 1.05
     for h, dv in steps:
         f -= dv * ease((t - h) / 0.55)
@@ -574,7 +577,7 @@ def can_mat(kind, t, nrm):
     return _LABEL[v, u] * (1 - dent[:, None]), True, 0.7
 
 
-PACK_IN, PACK_LAND = 13.86, 14.86
+PACK_IN, PACK_LAND = 12.30, 13.86                # blown in on a gust, lands by the scroll on the 13.86 hit
 
 
 def packet_at(t):
@@ -944,9 +947,55 @@ def glint(out, cam, t):
 
 # ------------------------------------------------------------------------------------------------ AERIAL
 MINIS = [211, 282, 339, 45, 148]                # the five minis' bearings (screen degrees, y down), as the comp
-R_MINI, RING_MINI, R_ISLAND, R_BIG = 56.0, 5.6, 15.0, 55.0     # minis out on the arms (Sam, note 2; were at 42)
-R_DISC = 7.5                                     # a mini's grey disc: as wide as its arm (note 2)
-R_RING = 49.0                                    # the inner ring's tarmac edge
+# The layout from Sam's aerial photo and his two drone videos (9 Nov): ONE big grey carriageway; the central island
+# (dark, a dashed white give-way ring round it); the five minis INSIDE the grey, round the island at about 2.3 times its
+# radius, each on its arm's line where the arm comes in; long kerbed splitter islands between the minis; the arms
+# join the grey's edge. (Animatic 1 had the minis inside but each in its own kerbed circle; animatic 2 moved them out
+# onto the arms: both wrong.)
+R_MINI, RING_MINI, R_ISLAND = 35.0, 5.5, 15.0   # minis' centres; the lane round each; the central island
+R_GREY = 46.0                                    # the grey's edge (the arms join it)
+R_GIVE = 16.5                                    # the dashed give-way ring round the island
+SPLIT_R, SPLIT_HL, SPLIT_HW = 30.5, 9.0, 2.6     # the splitter islands: radius, half length, half width
+R_RING = R_GREY                                  # (the walkers' pavement runs round this edge)
+
+
+def splitters():
+    """The five kerbed splitter islands (map points), one between each pair of minis, lying round the island."""
+    out = []
+    for i in range(5):
+        a1, a2 = MINIS[i], MINIS[(i + 1) % 5]
+        mid = (a1 + ((a2 - a1) % 360) / 2) % 360
+        c, tg, rd = _pol(SPLIT_R, mid), _pol(1, mid + 90), _pol(1, mid)
+        out.append([c + tg * a + rd * b * SPLIT_HW / 2.6 for a, b in
+                    ((-SPLIT_HL, 0), (-SPLIT_HL * 0.6, -2.6), (SPLIT_HL * 0.6, -2.6), (SPLIT_HL, 0),
+                     (SPLIT_HL * 0.6, 2.6), (-SPLIT_HL * 0.6, 2.6))])
+    return out
+
+
+def _inside(p, poly_):
+    x, y = p
+    n, c = len(poly_), False
+    for k in range(n):
+        (x0, y0), (x1, y1) = poly_[k], poly_[(k + 1) % n]
+        if (y0 > y) != (y1 > y) and x < x0 + (y - y0) * (x1 - x0) / (y1 - y0):
+            c = not c
+    return c
+
+
+def on_road(p):
+    """Is this map point on the carriageway (the grey or an arm), clear of the island, the splitters and the domes?"""
+    p = np.asarray(p, float)
+    r = float(np.hypot(*p))
+    if r < R_ISLAND + 0.4:
+        return False
+    ok = r <= R_GREY
+    for m in MINIS:
+        u = _pol(1, m)
+        if float(np.dot(p, u)) > 36 and abs(u[0] * p[1] - u[1] * p[0]) <= 7.5:
+            ok = True
+        if np.hypot(*(p - _pol(R_MINI, m))) < 2.0:
+            return False
+    return ok and not any(_inside(p, q) for q in splitters())
 CAR_COLS = [(240, 240, 238), (30, 30, 34), (170, 172, 178), (176, 30, 36), (40, 70, 150), (240, 240, 238),
             (120, 124, 130), (90, 30, 34)]
 
@@ -961,29 +1010,37 @@ def _arc(c, r, a0, a1, step=6.0):
 
 
 def _routes():
-    """Every car's way through, in map metres: in along an arm (the left lane: we drive on the left), give way,
-    clockwise round its mini, anticlockwise along the inner ring to the next mini, clockwise round
-    that, out along its arm. No car circles the central island (Sam, note 2). Returns [(points, s_giveway)]."""
+    """Every car's way through, in map metres (Sam's drone videos): in along an arm in the left lane, give way at the
+    grey's edge, clockwise round its mini (a left turn onto it), then either
+      A: clockwise to the next mini (a larger bearing), outside the splitter island, round it, out along its arm, or
+      B: anticlockwise to the mini before (a smaller bearing), inside the splitter island, round it, out.
+    Returns [(points, giveway index, index entering the second mini, first mini's centre)]."""
     out = []
     for i, m in enumerate(MINIS):
         u = _pol(1, m)
         cm = _pol(R_MINI, m)
-        lin = np.array([-u[1], u[0]]) * 2.6             # the inbound lane: left of a car heading in
-        for hop in (1,):                                 # mini to the next mini (lanes never merge)
-            j = (i - hop) % 5                            # anticlockwise: the next mini at a smaller bearing
+        lin = _pol(2.6, m + 90)                          # the inbound lane: left of a car heading in
+        for kind in ('A', 'B'):
+            j = (i + 1) % 5 if kind == 'A' else (i - 1) % 5
             mj = MINIS[j]
             uj = _pol(1, mj)
             cj = _pol(R_MINI, mj)
-            lout = np.array([uj[1], -uj[0]]) * 2.6
-            pts = [u * 260 + lin, u * 120 + lin, u * 76 + lin, u * 68 + lin]
+            lout = _pol(2.6, mj - 90)                    # the outbound lane: left of a car heading out
+            d_ = ((mj - m + 180) % 360) - 180            # +72 (A) or -72 (B)
+            mid = m + d_ / 2
+            pts = [u * 260 + lin, u * 120 + lin, u * 56 + lin, u * 47 + lin]
             gw = len(pts) - 1
-            pts += _arc(cm, RING_MINI, m + 35, m + 180)                      # clockwise round mini i
-            a0 = m
-            a1 = mj if mj < m else mj - 360
-            pts += [_pol(R_MINI - RING_MINI, a) for a in np.linspace(a0, a1, max(3, int(abs(a1 - a0) / 5)))[1:-1]]
-            gw2 = len(pts)                                                   # gives way again, to anything
-            pts += _arc(cj, RING_MINI, mj + 180, mj + 325)                   # already going round mini j
-            pts += [uj * 68 + lout, uj * 76 + lout, uj * 120 + lout, uj * 260 + lout]
+            if kind == 'A':
+                pts += _arc(cm, RING_MINI, m + 28, m + 75)
+                pts += [_pol(40.5, mid - 12), _pol(41.0, mid), _pol(40.5, mid + 12)]
+                gw2 = len(pts)
+                pts += _arc(cj, RING_MINI, mj - 105 + 360, mj + 290)
+            else:
+                pts += _arc(cm, RING_MINI, m + 28, m + 215)
+                pts += [_pol(23.5, mid + 10), _pol(23.0, mid), _pol(23.5, mid - 10)]
+                gw2 = len(pts)
+                pts += _arc(cj, RING_MINI, mj + 150, mj + 290)
+            pts += [uj * 47 + lout, uj * 56 + lout, uj * 120 + lout, uj * 260 + lout]
             out.append((np.array(pts), gw, gw2, cm))
     return out
 
@@ -1006,6 +1063,7 @@ def _resample(pts, step=0.5):
 _TRAFFIC = None
 
 
+TRAFFIC_SEED = 10                                # the mix of cars (chosen: no jams, no touching)
 JUNCTION_CAP = 10                                 # most cars past the give-way lines at once (keeps the ring moving)
 
 
@@ -1016,7 +1074,7 @@ def traffic():
     global _TRAFFIC
     if _TRAFFIC is not None:
         return _TRAFFIC
-    rng = np.random.default_rng(7)
+    rng = np.random.default_rng(TRAFFIC_SEED)
     routes = []
     for pts, gw, gw2, cm in _routes():
         xy, s = _resample(pts)
@@ -1028,7 +1086,7 @@ def traffic():
         s0 = float(rng.uniform(-60, 120))                # routes from an arm share it), spaced like real traffic
         for n in range(9):
             s0 -= float(rng.uniform(40, 80))
-            cars.append(dict(r=arm, s=s0, v=float(rng.uniform(7, 9.5)),
+            cars.append(dict(r=arm * 2 + int(rng.integers(0, 2)), s=s0, v=float(rng.uniform(7, 9.5)),
                              L=4.4, W=1.85, col=CAR_COLS[int(rng.integers(0, len(CAR_COLS)))]))
     cars[5].update(L=11.0, W=2.55, col=(232, 196, 40), v=6.5)    # a bus
     cars[17].update(L=8.0, W=2.4, col=(240, 240, 238), v=6.5)    # a white van
@@ -1099,8 +1157,12 @@ def traffic():
                         continue
                     rel = o[0] - cm                          # anything on the mini or coming along the ring to it
                     out_ = float(np.dot(rel, [math.cos(math.radians(o[1])), math.sin(math.radians(o[1]))])) > 3
-                    if np.linalg.norm(o[0] - merge) < 11 or (np.linalg.norm(rel) < RING_MINI + 17 and not out_):
+                    if c.get('wait', 0) > 2.5:               # waited long enough: take any gap that is clear now
+                        if np.linalg.norm(o[0] - merge) < 6 and cars[cj].get('vn', 9) > 0.5:
+                            want = min(want, max(0.0, (gws - c['s']) * 1.5))
+                    elif np.linalg.norm(o[0] - merge) < 11 or (np.linalg.norm(rel) < RING_MINI + 9 and not out_):
                         want = min(want, max(0.0, (gws - c['s']) * 1.5))
+                c['wait'] = c.get('wait', 0) + dt if c.get('vn', 9) < 0.5 else 0.0
             c['vn'] = c.get('vn', c['v']) + max(-9 * dt, min(4 * dt, want - c.get('vn', c['v'])))
             c['s'] += max(0.0, c['vn']) * dt * 2
         if t >= 16.4 - 1e-6:
@@ -1112,8 +1174,19 @@ def traffic():
 
 
 def traffic_faults():
-    """No two cars pass into each other (centres closer than their half-lengths and widths allow)."""
+    """No two cars pass into each other (centres closer than their half-lengths and widths allow), and every car
+    stays on the carriageway: off the pavements, the island, the splitters and the domes (Sam, animatic 2: cars drove
+    on the pavements; nothing checked it)."""
     out = []
+    for fr, cs in sorted(traffic().items())[::6]:
+        for x, y, hd, Lc, Wc, *_r in cs:
+            if math.hypot(x, y) > 150:
+                continue
+            c_, s_ = math.cos(math.radians(hd)), math.sin(math.radians(hd))
+            for u_, v_ in ((Lc / 2, Wc / 2), (Lc / 2, -Wc / 2), (-Lc / 2, Wc / 2), (-Lc / 2, -Wc / 2)):
+                if not on_road((x + u_ * c_ - v_ * s_, y + u_ * s_ + v_ * c_)):
+                    out.append(f'TRAFFIC: a car off the road at {fr / FPS:.2f} s near ({x:.0f}, {y:.0f}) m')
+                    break
     for fr, cs in sorted(traffic().items()):
         for i in range(len(cs)):
             for j in range(i + 1, len(cs)):
@@ -1282,9 +1355,7 @@ def aerial_flat(pil, cam, t):
             g = grow if grow == 0 else grow + 0.5          # the arms' pavements are wider than the ring's
             poly([u * 40 + n * (7.5 + g), u * 260 + n * (7.5 + g), u * 260 - n * (7.5 + g), u * 40 - n * (7.5 + g)],
                  fill, outline=False)
-        circ((0, 0), R_RING + grow, fill, outline=False)
-        for m in MINIS:
-            circ(_pol(R_MINI, m), R_DISC + grow * 0.3, fill, outline=False)
+        circ((0, 0), R_GREY + grow, fill, outline=False)
     surface(2.7, INK)
     surface(2.4, (200, 198, 192))
     surface(0.0, (128, 128, 130))
@@ -1293,41 +1364,60 @@ def aerial_flat(pil, cam, t):
         n = np.array([-u[1], u[0]])
         for j in range(8):                                                   # the zebra
             v = -6.5 + j * 1.75
-            poly([u * 84 + n * v, u * 88 + n * v, u * 88 + n * (v + 0.9), u * 84 + n * (v + 0.9)], (240, 240, 236),
+            poly([u * 64 + n * v, u * 68 + n * v, u * 68 + n * (v + 0.9), u * 64 + n * (v + 0.9)], (240, 240, 236),
                  outline=False)
         for j in range(6):                                                   # the centre line
-            p = u * (92 + j * 9)
+            p = u * (72 + j * 9)
             poly([p - n * 0.12, p + u * 4.5 - n * 0.12, p + u * 4.5 + n * 0.12, p + n * 0.12], (240, 240, 236),
                  outline=False)
         for side in (1,):                                                    # give-way dashes on the inbound lane
-            for j in range(5):
-                q = u * 70 + n * (1.0 + j * 1.2) * side
+            for j in range(6):
+                q = u * 47.6 + n * (0.4 + j * 1.2) * side
                 poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
-                q = u * 71 + n * (1.0 + j * 1.2) * side
+                q = u * 48.6 + n * (0.4 + j * 1.2) * side
                 poly([q, q + n * 0.7, q + n * 0.7 + u * 0.4, q + u * 0.4], (240, 240, 236), outline=False)
         for k_ in range(2):                                                  # arrows on the inbound lane
-            p = u * (76 + k_ * 6) + n * 2.6
+            p = u * (53 + k_ * 6) + n * 2.6
             poly([p - u * 1.8 - n * 0.2, p - n * 0.2, p - n * 0.8, p + u * 1.5, p + n * 0.8, p + n * 0.2,
                   p - u * 1.8 + n * 0.2], (240, 240, 236), outline=False)
-    # raised kerbed islands between the minis, hatched areas beside them
+    # the splitter islands: dark paving in a pale kerb (Sam's video), dashed lane lines round their ends
+    for q in splitters():
+        poly(q, (196, 190, 176))
+        c_ = np.mean(q, axis=0)
+        poly([c_ + (np.asarray(v) - c_) * 0.82 for v in q], (88, 86, 84), outline=False)
+    # the dashed give-way ring round the central island; dashed rings at the grey's edge where each arm comes in
+    for a in range(0, 360, 8):
+        d.line([P(_pol(R_GIVE, a)), P(_pol(R_GIVE, a + 4))], fill=(240, 240, 236), width=lw(0.35))
+    # lane lines (Sam's video: dense white markings): dashed lines from the island's ring out between each mini and
+    # its splitters, and arrows anticlockwise on the inner lanes
+    def dash(p0, p1, step=2.2):
+        L_ = float(np.hypot(*(np.asarray(p1) - p0)))
+        for k_ in range(int(L_ / step)):
+            q0 = np.asarray(p0) + (np.asarray(p1) - p0) * (k_ * step / L_)
+            q1 = np.asarray(p0) + (np.asarray(p1) - p0) * (min(L_, k_ * step + 1.1) / L_)
+            d.line([P(q0), P(q1)], fill=(240, 240, 236), width=lw(0.3))
+    for m in MINIS:
+        for sg in (-1, 1):
+            dash(_pol(R_GIVE + 0.6, m + sg * 20), _pol(R_MINI - RING_MINI - 1.6, m + sg * 13))
     for i in range(5):
         a1, a2 = MINIS[i], MINIS[(i + 1) % 5]
         mid = (a1 + ((a2 - a1) % 360) / 2) % 360
-        pts = [_pol(38.2 + dv, mid + du) for du, dv in ((-8, -2.4), (-4, -3), (4, -3), (8, -2.4), (8, 2.4), (4, 3),
-                                                     (-4, 3), (-8, 2.4))]
-        poly(pts, (96, 92, 90))
-        for j in range(5):                                                   # hatching beyond its ends
-            for sgn in (-1, 1):
-                a_ = mid + sgn * (10 + j * 1.6)
-                d.line([P(_pol(38, a_)), P(_pol(42, a_ + sgn * 1.2))], fill=(236, 236, 232), width=lw(0.3))
-    # the inner ring's dashed edge, the minis: white domes in dashed white rings, arrows round them
-    for a in range(0, 360, 10):
-        d.line([P(_pol(28.5, a)), P(_pol(28.5, a + 4))], fill=(240, 240, 236), width=lw(0.15))
+        for da in (-6, 6):
+            c_ = _pol(22.0, mid + da)
+            fw = _pol(1, mid + da - 90)                  # anticlockwise: towards a smaller bearing
+            sd_ = np.array([-fw[1], fw[0]])
+            poly([c_ - fw * 1.8 - sd_ * 0.2, c_ - sd_ * 0.2, c_ - sd_ * 0.8, c_ + fw * 1.5, c_ + sd_ * 0.8,
+                  c_ + sd_ * 0.2, c_ - fw * 1.8 + sd_ * 0.2], (240, 240, 236), outline=False)
+    # the minis: a white dome, three curved white arrows round it, clockwise (Sam's video)
     for m in MINIS:
         cm = _pol(R_MINI, m)
-        circ(cm, 2.0, (238, 238, 232), width=max(1, ink // 2))
-        for a in range(0, 360, 24):
-            d.line([P(cm + _pol(3.7, a)), P(cm + _pol(3.7, a + 12))], fill=(240, 240, 236), width=lw(0.2))
+        for k_ in range(3):
+            a0 = m + k_ * 120 + 20
+            arc = [cm + _pol(3.6, a) for a in np.linspace(a0, a0 + 70, 10)]
+            d.line([P(p_) for p_ in arc], fill=(240, 240, 236), width=lw(0.35))
+            tip, back = cm + _pol(3.6, a0 + 82), cm + _pol(3.6, a0 + 66)
+            poly([tip, back + _pol(0.9, a0 + 66), back - _pol(0.9, a0 + 66)], (240, 240, 236), outline=False)
+        circ(cm, 1.8, (238, 238, 232), width=max(1, ink // 2))
     # the central island: dark paving, white kerb, the soil-and-grass patch (Q2), the lamp post and its shadow
     circ((0, 0), R_ISLAND + 0.35, (232, 230, 224))
     circ((0, 0), R_ISLAND, (84, 82, 82))
@@ -1436,10 +1526,10 @@ def draw_cars(pil, cam, t):
 import elder_swindon_extras as X   # noqa: E402
 
 FOOTPATH_R = 64.0                                # the footpath round the green, between the ring and the trees
-MOPED_ID = 23                                    # which car in the traffic is the delivery moped (note 15)
+MOPED_ID = 42                                    # which car in the traffic is the delivery moped (note 15)
 FIGHT_AT, FIGHT_DIR = tuple(_pol(FOOTPATH_R, 246)), 246 + 90      # on the footpath, top left (note 13)
 BURNT_AT = (-56.0, 165.0, 75.0)                  # on the green by the stadium's corner (note 16)
-EBIKE_R = 23.5                                   # the teens' line: inside the ring, the wrong way (note 14)
+EBIKE_R = 20.5                                   # the teens' line: inside the ring, the wrong way (note 14)
 
 
 class _MapView:
@@ -1527,9 +1617,9 @@ def walkers_on(v, t):
 def ebike_at(n, t):
     """The two teens: clockwise round the inside of the ring (the wrong way), weaving, far too fast (14 m/s)."""
     a = 200 + math.degrees(t * 14.0 / EBIKE_R) + n * 22
-    w = 2.6 * math.sin(t * 2.7 + n * 1.9)
+    w = 1.2 * math.sin(t * 2.7 + n * 1.9)
     r = EBIKE_R + w
-    dr = 2.6 * 2.7 * math.cos(t * 2.7 + n * 1.9)        # weaving: the heading turns with it
+    dr = 1.2 * 2.7 * math.cos(t * 2.7 + n * 1.9)        # weaving: the heading turns with it
     x, y = _pol(r, a)
     return x, y, a + 90 - math.degrees(math.atan2(dr, 14.0))
 

@@ -129,6 +129,11 @@ Composition sheet sent: 8 Nov, review/elder-swindon-composition.jpg (`python3 so
 | 42 | (Note 15) A food delivery moped, plain box | yes: one of the traffic, red, no logo |
 | 43 | (Note 16) A burnt-out car on the green by the stadium | yes: by the stadium's corner |
 | 44 | (Note 17) Framing: the 19.83 s view moved north by 8% of the frame (blue line at the bottom) | yes: END_MY 60 -> 35.1 |
+| 45 | (Animatic 2) No pink cheek blotches | yes |
+| 46 | (Animatic 2) Shot 1: less time on his face | yes: face reached by 4.4, cut at 6.57 (about 2.5 s on it; was 3.9) |
+| 47 | (Animatic 2) Shot 3 a few beats longer; the EGG MAYO packet lands near the scroll | yes: 11.43-15.08 (was 1.2 s, now 3.65 s); lands beside the scroll on the 13.86 hit |
+| 48 | (Animatic 2) The dog shot a beat longer | yes: the climb starts 17.45 (was 16.90): 1.7 s of the dog clamped before it |
+| 49 | (Animatic 2, and notes 2 before it) The roundabout as in Sam's photo and drone videos: minis inside one grey carriageway round the central island, splitter islands between them, cars on the road round the minis | yes: rebuilt from the video; every car checked on the road, every frame |
 
 ## The acting list (rule 74): no lines; every beat, the hit it lands on
 | beat | who | shot and why | face | body | lands on |
@@ -222,6 +227,17 @@ The animatic keeps the trailer's sound as it is (Sam, 8 Nov) for the timing.
 - People from above drawn up to 4x real size, mopeds 2x: Sam said Y (8 Nov). Budget raised to about 10.4% of a week: Sam said Y.
 - Pre-flight hang found and fixed (8 Nov): linecheck loaded GNU OpenMP into the main process, so the drawing workers forked
   after it froze. linecheck, landmarks and sizes now run in a forked child (`_in_child` in `source/preflight.py`).
+
+## Notes on animatic 2 (Sam, 8-9 Nov) and why the roundabout failed twice
+Notes: no cheek blotches; minis inside the grey; shot 1 shorter on the face; shot 3 longer, packet landing by the
+scroll; the dog shot a beat longer; the roundabout (third time) with the cars on the pavements. Sam sent his aerial
+photo again and two drone videos.
+Why it failed: note 2 ("move them further in, onto the arms") was read as moving the minis OUT along the arms, and
+neither fix was checked side by side with the photo; nothing checked that cars stay on the road, so cars cut across
+the pavement corners where the arms met the ring. Fixed: the layout rebuilt from the video frame (minis at 35 m round a
+15 m island inside one 46 m grey, splitters between), routes A (clockwise to the next mini, outside the splitters) and
+B (anticlockwise to the mini before, inside them), and `traffic_faults` now fails any car corner off the road.
+Rule proposal to Sam (Q, 9 Nov): a real place is compared side by side with its reference photo on the check sheet.
 
 ## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
 1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
