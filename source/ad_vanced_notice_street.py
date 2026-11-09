@@ -55,7 +55,7 @@ PERIOD = 1.36
 # lies in front of their feet; the kicker and one puncher stand nearer us, clear of him at either end, the stamper
 # and the other puncher behind him; every blow is aimed at the height where it meets his outline on screen.
 # (Sam, 9 Nov, later: he lies flat on his front, 1.7 m long, head to our left.)
-OFFICERS = [('O1', -0.4, 6.35, 90, 'kick', 0.0),               # at his head end, kicking his shoulder
+OFFICERS = [('O1', -0.3, 6.35, 90, 'kick', 0.0),               # at his head end, kicking his upper back
             ('O3', 0.45, 7.2, 0, 'stomp', PERIOD * 0.25),      # behind him, facing us: stamps on his back
             ('O2', 1.32, 6.2, -90, 'punch', PERIOD * 0.5),     # kneeling beside his hips, punching down on them
             ('O4', 1.2, 7.25, 0, 'stomp', PERIOD * 0.75)]      # behind him, facing us: stamps on his legs
@@ -539,7 +539,7 @@ def kick_pose(sp, t, off):
     """A low kick down into him (brief 30: kick): the knee chambers, the boot drives forward and down into his back,
     held a beat, back; arms out for balance, gloved fists."""
     th, _ = _phase(t, off)
-    j, _ = moves.kick(sp, t, th, height=757.0, side='R')       # his shoulder, 0.26 m up (he lies flat)
+    j, _ = moves.kick(sp, t, th, height=810.0, side='R')       # his upper back, 0.18 m up (he lies flat)
     sw = sp.get('shoulders', 150)
     V.arm_to(j, 'L', (-(sw + 60), 300.0, 60.0), 'out', 'fist')
     V.arm_to(j, 'R', (sw + 20, 320.0, -90.0), 'out', 'fist')
@@ -787,13 +787,13 @@ def man_j(t, squash=0.0, beg=0.0):
     j['footL'] = (-60.0, V.ANKLE_Y, -30.0)                       # legs a little apart
     # (Sam, 9 Nov, twice: both arms on one side.) A hand each side of his head: the near one by his face (on the snow
     # side, drawn over the face), the far one over the back of his head (the sky side, behind it)
-    V.arm_to(j, 'L', (-20.0, -200.0, 125.0 - 20.0 * squash), (0.0, 1.0, 0.6), 'fist')
+    V.arm_to(j, 'L', (-20.0, -200.0, 70.0), (0.0, 1.0, 0.6), 'fist')   # (on the snow, never below it)
     V.arm_to(j, 'R', (20.0, -235.0, -70.0), (0.0, 0.5, -1.0), 'fist')
     j['on_face'] = {'L'}
     j['head_dy'] = -18.0                                          # his neck shows
     tr = 8.0 * math.sin(t * 2 * math.pi * 6.0)
     if beg > 0.01:                                                # the face-side arm reaches out along the snow towards
-        V.arm_to(j, 'L', _lerp3((-20.0, -200.0, 125.0), (-30.0, -340.0 + tr, 150.0), beg), (0.0, 1.0, 0.6),
+        V.arm_to(j, 'L', _lerp3((-20.0, -200.0, 70.0), (-30.0, -340.0 + tr, 60.0 - 40.0 * beg), beg), (0.0, 1.0, 0.6),
                  'palm')                                          # Vance, below his face, lifted a little, trembling
         if beg > 0.4:
             j['on_face'] = set()                                  # (under his face now: his mouth must show)
@@ -810,7 +810,7 @@ def man_draw(img, cam, t, beg_from=None, face=None):
     B.SS = 1
     sp = dict(MAN, **{q: v for q, v in (face or {}).items() if q in ('mouth', 'blink')})
     sp['mood'] = 'scared'
-    dx, dz, e = (0.0, 0.0, 0.0) if beg_from is not None else impacts(t)
+    dx, dz, e = impacts(t)                                      # (Sam, 9 Nov: they keep attacking in the ending too)
     if e > 0.35:
         sp['blink'] = True                                      # eyes squeezed shut as it lands
     beg = 0.0
@@ -819,15 +819,17 @@ def man_draw(img, cam, t, beg_from=None, face=None):
         beg = 0.8 * u * u * (3 - 2 * u)                          # weakly: never the whole way
     n = int(1500 * s) + 40
     c = Image.new('RGBA', (n, n), (0, 0, 0, 0))
-    V.person(c, B.Cam(1.0, 540, 960), n / 2, n * 0.28, s, sp, 0.0, -90, man_j(t, e, beg))
-    r = c.rotate(90, resample=Image.BICUBIC)
-    bb = r.getbbox()
-    if not bb:
-        return
-    r = r.crop(bb)
-    gx, gy = cam.p(MAN_AT[0] + dx, d - dz, 0.0)
+    ny = n * 0.28                                                # his neck on the canvas
+    V.person(c, B.Cam(1.0, 540, 960), n / 2, ny, s, sp, 0.0, -90, man_j(t, e, beg))
+    r = c.rotate(90, resample=Image.BICUBIC)                     # a quarter turn about the canvas middle:
+    # (x, y) goes to (n/2 + y - n/2, n/2 - x + n/2). Placed by his BODY, not by whatever is lowest (Sam, 9 Nov: he
+    # hovered: a hand reaching below him was set on the snow): the front of his chest (0.66 of the shoulders out, the
+    # side view's torso) lies on the snow, his hips at MAN_AT.
+    ground = n / 2 + 0.66 * MAN['shoulders'] * s
+    hip_x = n / 2 + (ny + 460.0 * s - n / 2)
+    gx, gy = cam.p(MAN_AT[0] + dx + 0.12, d - dz, 0.0)
     _shadow(img, cam, MAN_AT[0], d, 0.9)
-    img.alpha_composite(r, (int(round(gx - r.width / 2)), int(round(gy - r.height + 0.01 * ppm))))
+    img.alpha_composite(r, (int(round(gx - hip_x)), int(round(gy - ground))))
 
 
 def draw_group(img, cam, t, t0=0.0, man=None):
@@ -835,14 +837,9 @@ def draw_group(img, cam, t, t0=0.0, man=None):
     order = sorted(OFFICERS, key=lambda o: -o[2])
     back = [o for o in order if o[2] > MAN_AT[1] + 0.2]
     front = [o for o in order if o not in back]
-    if man is not None:                                         # the ending: they pause and watch while he begs, the
-        back = [(o[0], o[1], o[2] + (0.9 if o[2] < MAN_AT[1] else 0.0), *o[3:]) for o in order]   # near two stepped
-        back.sort(key=lambda o: -o[2])                          # back behind him, so nothing stands between him and Vance
-        front = []
     for o in back + front:
         _shadow(img, cam, o[1], o[2])
-    pose = (lambda o: officer_pose(o, t)) if man is None else \
-        (lambda o: dress(V.standing(CAST[o[0]]), CAST[o[0]]))
+    pose = lambda o: officer_pose(o, t)                       # (they keep at it in the ending too: Sam, 9 Nov)
     for o in back:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], pose(o))
     blood(img, cam, t, t0)
