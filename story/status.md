@@ -3,6 +3,10 @@
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
 
+## Hashtags (9 Nov)
+- 30 films' views, Hook Text and tags logged (`story/metrics.md`, 9 Nov). Topic and tags don't explain the flops (Jackdaw, Halo, Vance were current; TERFwarts named no news); the first-10-s drop does.
+- Waiting on Sam: Y/N write the hashtag rule (real search terms only; no #animation, #fyp, joke tags) in place of tiktok-design.md lines 130-136; Y/N Claude suggests five tags at every final.
+
 ## TikTok results (3 Nov)
 - 26 films, 92K views, 177 followers (+65% since 18 Oct). Typical film last week 5,900 views (earlier weeks 700-1,400).
 - Numbers: `story/metrics.md`; reading and benchmarks: `story/growth-analysis-3-nov.md`; chart: `story/charts/account-overview.png`
