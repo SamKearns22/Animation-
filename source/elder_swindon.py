@@ -981,39 +981,45 @@ def draw_pigeons(pil, cam, t, flat=False):
         e = float(np.clip(1080 / max(kk, 1e-6) / 30.0, 1.0, 4.0)) * (1.25 if kk < 200 else 1.0)
         h = h0 + (18 if i < len(PIGEONS_NEAR) else 35) * math.sin(t * 0.6 + ph)   # near ones stay side-on
         x_, z_ = x + 0.04 * math.sin(t * 0.5 + ph), z + 0.04 * math.cos(t * 0.4 + ph)
-        hop, wings = 0.0, 0.0
-        if i == 0 and t > PACK_LAND - 0.05:              # startled when the packet lands beside it
-            u = min(1.0, (t - PACK_LAND + 0.05) / 0.45)
-            hop = 0.16 * ease(u)
-            wings = math.sin(math.pi * u)
+        hop, wings, lift = 0.0, 0.0, 0.0
+        if i == 0 and t > PACK_LAND - 0.05:              # startled when the packet lands beside it: it takes off
+            u = (t - PACK_LAND + 0.05) / 0.8             # and flies right out of shot, wings beating
+            if u > 1.0:
+                continue                                  # gone (it was left cropped at the frame's edge)
+            away = np.array([x - PACKET_REST[0], z - PACKET_REST[1]])
+            away /= np.linalg.norm(away) + 1e-9           # away from the packet and the scroll
+            hop = 1.1 * u ** 1.6
+            lift = 0.35 * u
+            wings = 0.55 + 0.45 * abs(math.sin(u * math.pi * 4))     # four wingbeats
+            h = math.degrees(math.atan2(away[1], away[0]))
+            x_, z_ = x_ + away[0] * hop, z_ + away[1] * hop
         a = math.radians(h)
-        fw = np.array([math.cos(a), math.sin(a)])
-        away = np.array([x - PACKET_REST[0], z - PACKET_REST[1]])          # hops AWAY from the packet (and the
-        away /= np.linalg.norm(away) + 1e-9                                 # scroll): it hopped onto the scroll
-        x_, z_ = x_ + away[0] * hop, z_ + away[1] * hop
-        bob = math.sin(t * 5 + ph * 3)                     # walking head-bob forward/back, then a peck down
-        hf = 0.015 * bob                                   # head forward of its rest place (metres, before e)
-        hdn = 0.07 * max(0.0, math.sin(t * 1.7 + ph)) ** 6  # now and then right down to the ground
-        lw = max(1, int(min(2.2 * ss, kk * 0.006 * ss * e)))
+        bob = math.sin(t * 6 + ph * 3)                     # walking head-bob forward/back, and pecks down
+        hf = 0.006 * bob                                   # (Sam: the stretching neck looked weird) the neck keeps its
+        dip = max(0.0, math.sin(t * 2.3 + ph)) ** 4        # length: the head only nods a touch, and dips to peck by
+        hdn = 0.035 * dip                                  # swinging the whole neck down, not by stretching it
+        far = e > 1.5                                      # small on screen: grey outlines, no eyes (they were
+        lw = 1 if far else max(1, int(min(2.2 * ss, kk * 0.006 * ss * e)))    # dark smudges with orange specks)
+        ink_ = (70, 72, 82) if far else INK
         ca_, sa_ = math.cos(a), math.sin(a)
 
         def P3(u_, v_, h_):
             wx = x_ + (u_ * ca_ - v_ * sa_) * e
             wz = z_ + (u_ * sa_ + v_ * ca_) * e
-            (px, py), _ = cam.project((wx, h_ * e, wz))
+            (px, py), _ = cam.project((wx, (h_ + (lift if h_ > 0.001 else 0.0)) * e, wz))   # the shadow stays down
             return (px * ss, py * ss)
 
         def shp(pts, col, outline=True):
             Q = [P3(*q) for q in pts]
             d.polygon(Q, fill=col)
             if outline:
-                d.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
+                d.line(Q + [Q[0]], fill=ink_, width=lw, joint='curve')
 
         def ring(cu, cv, ch, ru, rv, n=14):
             return [(cu + ru * math.cos(q), cv + rv * math.sin(q), ch) for q in np.linspace(0, 2 * math.pi, n,
                                                                                             endpoint=False)]
         shp(ring(-0.02, 0.0, 0.0, 0.14, 0.07), (24, 20, 16, 60), False)                 # shadow on the ground
-        for sg in (-1, 1):                                                              # little pink legs, feet
+        for sg in (-1, 1) if lift < 0.02 else ():                                       # little pink legs, feet
             d.line([P3(0.0, sg * 0.025, 0.0), P3(0.0, sg * 0.025, 0.05)], fill=(200, 110, 120),
                    width=max(1, int(lw * 1.2)))
             shp([(0.025, sg * 0.025, 0.0), (-0.01, sg * 0.035, 0.0), (-0.01, sg * 0.015, 0.0)], (200, 110, 120), False)
@@ -1030,23 +1036,43 @@ def draw_pigeons(pil, cam, t, flat=False):
         shp([(-0.19, -0.03, H - 0.014)] + [(-0.205 + 0.018 * math.cos(q), 0.034 * math.sin(q), H - 0.015)
                                            for q in np.linspace(-1.1, 1.1, 7)] + [(-0.19, 0.03, H - 0.014)],
             (36, 38, 46), False)                                                         # its dark tip
+        hu, hh_ = 0.115 + hf - 0.4 * hdn, 0.115 - hdn
+        # (drawn UNDER the body and head, whose curves round off its ends) the neck: a rounded column from the shoulders to the head, narrower than the body, shimmering green and
+        # purple (it read as a flat bib before)
+        nk = []
+        for k in range(9):
+            f_ = k / 8
+            wdt = 0.036 - 0.012 * f_ + 0.006 * math.sin(f_ * math.pi)
+            nk.append((0.035 + (hu - 0.035) * f_, -wdt, H + (hh_ - H) * f_))
+        neck = nk + [(q[0], -q[1], q[2]) for q in nk[::-1]]
+        shp(neck, (96, 130, 112))
+        mid = nk[4]
+        shp(ring(mid[0] - 0.005, 0.0, mid[2] + 0.004, 0.022, 0.018, 12), (132, 100, 146), False)   # purple sheen
         shp(oval(-0.025, 0.0, 0.098, 0.064, H - 0.03), (118, 122, 136))                  # the belly, in shade
         if wings > 0:                                                                   # wings out as it flaps off:
             for sg in (-1, 1):                                                          # curved leading edge,
-                span = 0.07 + 0.17 * wings                                              # feathered trailing edge
-                lead = [(0.03 - 0.06 * (k / 8) ** 1.5, sg * (0.04 + span * k / 8), H + 0.04 * wings * k / 8)
-                        for k in range(9)]
-                trail = [(-0.02 - 0.09 * (1 - k / 8) - (0.01 if k % 2 else 0.0), sg * (0.04 + span * k / 8),
-                          H + 0.04 * wings * k / 8) for k in range(8, -1, -1)]
-                shp(lead + trail, (150, 154, 168))
-                shp([(q[0] - 0.005, q[1], q[2] + 0.002) for q in trail[:4]] + [(trail[3][0] + 0.03, trail[3][1], trail[3][2]),
-                     (trail[0][0] + 0.03, trail[0][1], trail[0][2])], (44, 46, 56), False)   # dark primaries
-        shp(oval(-0.025, 0.0, 0.098, 0.066, H), (166, 170, 182))                         # the back: a plump oval
+                span = 0.08 + 0.20 * wings                                              # rounded feathers
+                lead = [(0.035 - 0.05 * (k / 10) ** 1.4, sg * (0.04 + span * math.sin(k / 10 * math.pi / 2)),
+                         H + 0.05 * wings * k / 10) for k in range(11)]
+                tip = lead[-1]
+                trail = []
+                for k in range(10, -1, -1):                                             # scalloped trailing edge
+                    f_ = k / 10
+                    base = -0.03 - 0.07 * (1 - f_) ** 0.8
+                    trail.append((base - 0.012 * abs(math.sin(f_ * math.pi * 3)), sg * (0.04 + span * f_ * 0.98),
+                                  H + 0.05 * wings * f_))
+                shp(lead + trail, (148, 152, 166))
+                shp([tip, lead[-3], (lead[-3][0] - 0.05, lead[-3][1], lead[-3][2]), trail[1], trail[0]], (52, 54, 64),
+                    False)                                                                # the dark primaries
+        shp(oval(-0.025, 0.0, 0.098, 0.066, H), (180, 184, 196))                         # the back: a plump oval
         for sg in (-1, 1):                                                              # folded wings: crescents
             wing = [(0.03, sg * 0.064, H + 0.003)] + \
                    [(0.03 - 0.19 * k / 10, sg * (0.066 - 0.05 * (k / 10) ** 1.6), H + 0.003) for k in range(1, 11)] + \
                    [(-0.13 + 0.15 * k / 10, sg * (0.018 + 0.03 * (k / 10) ** 0.7), H + 0.004) for k in range(1, 10)]
-            shp(wing, (146, 150, 164), False)
+            if wings == 0:
+                Q = [P3(*q) for q in wing]
+                d.polygon(Q, fill=(136, 140, 154))
+                d.line(Q, fill=(92, 94, 106), width=max(1, lw // 2), joint='curve')
             for bu in (-0.03, -0.065):                                                  # the two black wing bars
                 shp([(bu + 0.008, sg * 0.064, H + 0.005), (bu - 0.004, sg * 0.040, H + 0.005),
                      (bu - 0.012, sg * 0.030, H + 0.005), (bu - 0.004, sg * 0.030, H + 0.005),
@@ -1054,18 +1080,14 @@ def draw_pigeons(pil, cam, t, flat=False):
             shp([(-0.115, sg * 0.022, H + 0.006), (-0.16, sg * 0.006, H + 0.006), (-0.14, sg * 0.004, H + 0.006),
                  (-0.10, sg * 0.014, H + 0.006)], (44, 46, 56), False)                  # dark wingtips
         # the neck: from the shoulders to wherever the head is, so it never comes away from the body
-        hu, hh_ = 0.105 + hf, 0.115 - hdn
-        nk = [(0.02 + (hu - 0.03) * k / 6, -(0.046 - 0.02 * k / 6), H + (hh_ - H) * k / 6) for k in range(7)]
-        shp(nk + [(q[0], -q[1], q[2]) for q in nk[::-1]], (98, 132, 114))               # the neck, green
-        shp([(0.04 + (hu - 0.05) * k / 6, -(0.024 - 0.012 * k / 6), H + 0.004 + (hh_ - H) * k / 6) for k in range(7)] +
-            [(0.04 + (hu - 0.05) * k / 6, (0.024 - 0.012 * k / 6), H + 0.004 + (hh_ - H) * k / 6) for k in range(6, -1, -1)],
-            (130, 98, 142), False)                                                       # its purple sheen
-        shp(ring(hu, 0.0, hh_, 0.031, 0.026, 18), (112, 118, 134))                     # head
-        shp([(hu + 0.026, -0.007, hh_ - 0.004), (hu + 0.055, 0.0, hh_ - 0.01), (hu + 0.026, 0.007, hh_ - 0.004)],
+        hu, hh_ = 0.115 + hf - 0.4 * hdn, 0.115 - hdn     # dipping swings it down and a little back: length kept
+        shp(ring(hu, 0.0, hh_, 0.038, 0.031, 18), (112, 118, 134))                     # the head, rounder, larger
+        shp([(hu + 0.032, -0.007, hh_ - 0.004), (hu + 0.06, 0.0, hh_ - 0.01), (hu + 0.032, 0.007, hh_ - 0.004)],
             (54, 48, 46), False)                                                         # beak
-        shp(ring(hu + 0.027, 0.0, hh_ + 0.002, 0.006, 0.008, 8), (236, 236, 236), False)  # the white cere
-        for sg in (-1, 1):
-            shp(ring(hu + 0.008, sg * 0.017, hh_ + 0.004, 0.006, 0.006, 8), (226, 120, 40), False)   # eyes
+        if not far:
+            shp(ring(hu + 0.03, 0.0, hh_ + 0.002, 0.006, 0.008, 8), (236, 236, 236), False)   # the white cere
+            for sg in (-1, 1):                                                            # eyes, at the sides
+                shp(ring(hu + 0.012, sg * 0.024, hh_ + 0.004, 0.006, 0.006, 8), (226, 120, 40), False)
 
 
 def _on_screen(cam, p, margin):
