@@ -785,13 +785,19 @@ def man_j(t, squash=0.0, beg=0.0):
     beg (0-1): his head lifts to look at Vance and his near arm rises weakly towards him, trembling."""
     j = V.standing(MAN)
     j['footL'] = (-60.0, V.ANKLE_Y, -30.0)                       # legs a little apart
-    V.arm_to(j, 'L', (-40.0, -300.0, 60.0 + 20.0 * squash), 'up', 'fist')  # the near arm up over his head
-    V.arm_to(j, 'R', (30.0, 330.0, 20.0), 'down', 'fist')         # the far one down his side, behind him (Sam, 9 Nov:
-    j['head_dy'] = -18.0                                          # both arms showed on one side); his neck shows
+    # (Sam, 9 Nov, twice: both arms on one side.) A hand each side of his head: the near one by his face (on the snow
+    # side, drawn over the face), the far one over the back of his head (the sky side, behind it)
+    V.arm_to(j, 'L', (-20.0, -200.0, 125.0 - 20.0 * squash), (0.0, 1.0, 0.6), 'fist')
+    V.arm_to(j, 'R', (20.0, -235.0, -70.0), (0.0, 0.5, -1.0), 'fist')
+    j['on_face'] = {'L'}
+    j['head_dy'] = -18.0                                          # his neck shows
     tr = 8.0 * math.sin(t * 2 * math.pi * 6.0)
-    if beg > 0.01:
-        V.arm_to(j, 'L', _lerp3((-40.0, -300.0, 60.0), (-30.0, -100.0 + tr, -260.0), beg), 'down', 'palm')
-    j['head_lean'] = -32.0 * beg + 6.0 * squash                    # a blow drives his face down
+    if beg > 0.01:                                                # the face-side arm reaches out along the snow towards
+        V.arm_to(j, 'L', _lerp3((-20.0, -200.0, 125.0), (-30.0, -340.0 + tr, 150.0), beg), (0.0, 1.0, 0.6),
+                 'palm')                                          # Vance, below his face, lifted a little, trembling
+        if beg > 0.4:
+            j['on_face'] = set()                                  # (under his face now: his mouth must show)
+    j['head_lean'] = -46.0 * beg + 6.0 * squash                    # a blow drives his face down
     j['head_props'] = [tache]
     return j
 
