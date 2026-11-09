@@ -22,3 +22,15 @@
 - **Open rule requests:** none.
 - **For Claude:** `source/elder_swindon.py` (cam_for, man_at, face_close, dog_at, draw_dog, draw_packet, near_real, aerial_flat, _estate, traffic, title, burn, scene, checks); ground in `source/elder_swindon_ground.py`; composition in `source/elder_swindon_comp.py`. Animatic: `python3 source/elder_swindon.py final OUT.mp4 --small --no-lock`, then `source/finish.py`. Frames memoised in `~/.cache/filmcache/elder_swindon-memo/`. Pre-flight hang: workers freeze (futex, libgomp) after frame ~332 (gdb: idle semaphore waits); numpy linalg calls removed from the drawing, not yet fixed; try `OMP_NUM_THREADS=1` and a worker-free run first.
 
+
+
+## Where things stand (8 Nov, before notes 1-18)
+- **Rules that bite next:** 56 (a fault of a kind: every mini, every sign), 59 (no animatic without a clean pre-flight; fix the hang), 67 (one full pre-flight per round).
+- **Done:** animatic 1 sent; Sam's notes 1-11, then 12-18 (shot-6 people and vehicles, framing, the sign) saved below. A duplicate build from another chat merged out (see "More notes").
+- **Spent against the estimate:** 6.0 of 9.0 (plus about 1.4 for notes 12-16 if Sam agrees).
+- **Next:** Opus, medium effort, NEW chat: "Fix Elder Scrolls Swindon notes 1-18 – read notes/elder-swindon.md". Order: notes 1-18 in one round (clips first), the pre-flight hang, full pre-flight, check sheet, animatic 2 offer.
+- **Needs Sam:** Y/N early evening (note 11); Y/N scroll glow (note 9); Y/N people drawn up to 4 times real size in shot 6; budget about 10.4%.
+- **Read:** this file (Where things stand, Brief checklist, both "Notes on animatic 1" sections); guides/satire.md (Before every render, Render).
+- **Lost / Added:** Lost: the CLOSING DOWN sign. Added: scroll glow, shopping bag, early evening (pending Y); people up to 4x size (pending Y).
+- **Open rule requests:** none.
+- **For Claude:** `source/elder_swindon.py` (cam_for, aerial_flat, _estate, traffic, title, burn, scene, checks); shot-6 extras to port in `source/elder_swindon_extras.py`. Animatic: `python3 source/elder_swindon.py final OUT.mp4 --small --no-lock`, then `source/finish.py`. Pre-flight hang: workers freeze after frame ~332; try `OMP_NUM_THREADS=1` and a worker-free run first.
