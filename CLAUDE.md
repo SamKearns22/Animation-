@@ -91,7 +91,10 @@ I don't know how to code. Please:
   **15 lines at most**, in this order: Rules that bite next (3, by number); Done; Next (model and what to type in the
   new chat); Needs Sam; Read (which sections of which guide); Open rule requests. Code names go in a "For Claude" line
   at the end. Update `story/status.md` (3 lines), commit and push. **Paste only 3 lines into the chat** (at the bottom
-  of the message): what's done, the model, and what to type in the new chat.
+  of the message): what's done, the model, and what to type in the new chat. **Every handover, and every message that
+  sends Sam to a new chat, names the model AND the effort level** ("Opus, high effort"), matching the build plan or the
+  stage list above; a stage not listed gets my pick and one line of why (Sam, 9 Nov: a handover that said only "Opus"
+  started Job E on medium).
 
 # Reading little
 - **Notes:** at each handover, finished notes move to `notes/archive/`; **a film's whole notes file moves there the day
