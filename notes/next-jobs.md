@@ -1,19 +1,18 @@
 # Where things stand (project, 9 Nov; no film in progress)
 
 - **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 81 (arm join, by hand: failed 4 times).
-- **Done (9 Nov):** Job E measured: a chat starts at 79k tokens (76k the app itself); only 3 "Checks:" lines and 12 rules'
-  catches were ever written down; Sam's body notes (47, last ten films) are 62% arms and hands, the top group hands on
-  props. Results and cut list: `notes/job-e-measurements.md`.
-- **Next:** rerun Job E on Opus high (Sam, 9 Nov: the first pass may have run on medium), new chat. Check and deepen
-  `notes/job-e-measurements.md`, don't redo it blind: (1) read every film's notes in full, not only lines in note
-  sections, for body notes the keyword sort missed; (2) look for rule catches in commit messages and check sheets too,
-  not only in notes; (3) count tokens properly where possible. Then Job F. Type: "Rerun Job E on Opus high. Read
-  notes/next-jobs.md, Where things stand, and notes/job-e-measurements.md."
-- **Needs Sam:** (after the rerun) Q1 move finished films' notes to the archive (Y?); Q2 Job G order hands, shoulder seam, lying (Y?);
-  Q3 the ledger logs every check's result (Y?).
-- **Read:** this file's Build plan; `notes/job-e-measurements.md` cut list.
+- **Done (9 Nov, rerun on Opus high):** Job E checked and deepened in `notes/job-e-measurements.md`: files cost about
+  70% more tokens than first said (2.35 characters a token; satire.md 16k, rulebook 11k, CLAUDE.md 5k); 60 body notes
+  (was 47), 57% arms and hands, and 9 caused by a turned, from-behind or mirrored view (a new group); rule 41's hand
+  check is the busiest catcher on record (4 films), found only in commit messages; no check sheet is ever kept.
+- **Next:** Job F (film ledger), new chat, **Opus, medium effort** (build plan table). Type: "Job F: build the film
+  ledger. Read notes/next-jobs.md Where things stand and Build plan F, and the cut list in notes/job-e-measurements.md."
+- **Needs Sam:** Q1 move finished films' notes to the archive (Y?); Q2 Job G order: hands, shoulder seam, every view
+  (behind, three-quarter, mirrored), then lying (Y?); Q3 the ledger keeps every round's check results and check sheet text (Y?).
+- **Read:** this file's Build plan (F row); `notes/job-e-measurements.md` cut list.
 - **Open rule requests:** none.
-- **For Claude:** costwatch WEEK_USD still to calibrate. Job E scripts were scratch only (not kept).
+- **For Claude:** costwatch WEEK_USD still to calibrate; FRESH 90k fits the measured 80k start. Job E scripts were
+  scratch only. Not read in full (amber): the ten films' handover files, Flying Whales, Newsdesk (keyword search only).
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band

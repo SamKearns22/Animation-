@@ -57,3 +57,22 @@
   EDGE_TARGET, EDGE_CUT, SHELF_DB, DEESS_MAX_DB. `python3 source/mossad_audio.py soft NAME...` prints each take's edge and
   hiss before and after. Cost watch WEEK_USD still to calibrate.
 
+
+
+## Handover replaced 9 Nov (Job E rerun)
+
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 85 (cost watch), 81 (arm join, by hand: failed 4 times).
+- **Done (9 Nov):** Job E measured: a chat starts at 79k tokens (76k the app itself); only 3 "Checks:" lines and 12 rules'
+  catches were ever written down; Sam's body notes (47, last ten films) are 62% arms and hands, the top group hands on
+  props. Results and cut list: `notes/job-e-measurements.md`.
+- **Next:** rerun Job E on Opus high (Sam, 9 Nov: the first pass may have run on medium), new chat. Check and deepen
+  `notes/job-e-measurements.md`, don't redo it blind: (1) read every film's notes in full, not only lines in note
+  sections, for body notes the keyword sort missed; (2) look for rule catches in commit messages and check sheets too,
+  not only in notes; (3) count tokens properly where possible. Then Job F. Type: "Rerun Job E on Opus high. Read
+  notes/next-jobs.md, Where things stand, and notes/job-e-measurements.md."
+- **Needs Sam:** (after the rerun) Q1 move finished films' notes to the archive (Y?); Q2 Job G order hands, shoulder seam, lying (Y?);
+  Q3 the ledger logs every check's result (Y?).
+- **Read:** this file's Build plan; `notes/job-e-measurements.md` cut list.
+- **Open rule requests:** none.
+- **For Claude:** costwatch WEEK_USD still to calibrate. Job E scripts were scratch only (not kept).
+
