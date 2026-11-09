@@ -50,3 +50,14 @@
 - **Open rule requests:** none (R1 written as rule 81, 8 Nov).
 - **For Claude:** sets in `source/ad_vanced_notice_sets.py` (MAP at the top; `BENCHMARK`, `PROP_SIZES`, `SHOTS`, `picture(t)` there for benchmark.py/sheet.py; the film file imports them). Study: `study_back(t)`, `study_pose(j)` (no kit chair or desk; desk top drawn between body and arms), `study_front()`, Vance at `STUDY_VANCE`. Strait: `strait(which, t, near=('sail'|'wreck', x), fx=fn)` (fx draws effects between the ships and the cliff top), `near_x(t, t_hit)`, `X_HIT`, `place_cliff`, `cliff_shadow`, cameras `CAMS`. Gas: `gas_back()`, `gas_front()`, `place_gas`, `MAN_X`/`VANCE_X`, `gas_points()` (filler, hose_from, board box for KEEP_CLEAR). Effects: `flying_whales_fx`.
 
+
+
+## Where things stand
+- **Rules that bite next:** 40 (street elements: wait for Sam's yes before building), 83 (the street's SET_BOXES), 74 (line 9's acting)
+- **Done (8 Nov):** note 44: Vance's turned faces from his own front design (`turnhead.py`), the swivel's turning frames back; street elements approved and questions 21-25 answered (no SUV, shopfronts, snow).
+- **Next:** fresh chat, Opus high: references (Lake Street shopfronts in snow, ICE raid gear) ticked as lists, then build the street (set, SUV, four officers, the curled man via `lying.py`, the beating via `moves.punch`/`kick`, blood, push in); then the check sheet and animatic 3 (Opus medium).
+- **Needs Sam:** OK on the made-up shop signs; recordings of lines 1-9.
+- **Read:** this file (Where things stand, note 44, Street elements, Acting line 9, Sam's answers 21-25); `guides/kit-catalogue.md` people rows (Met officers in `power_crime_cast.py`, `lying.py`); rulebook 40, 74, 83.
+- **Open rule requests:** none.
+- **For Claude:** Vance's turned heads: `ad_vanced_notice_cast.vance_turned` + `VANCE_PROFILE` (hooked into `V.head_view`); sheet `ad_vanced_notice_cast.py turn OUT`; the film's `study_j` uses the kit swivel again. The street goes in `ad_vanced_notice_sets.py` (new place) and `ad_vanced_notice.py` (shot after `gas`).
+

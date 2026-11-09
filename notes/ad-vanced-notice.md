@@ -1,13 +1,12 @@
 # Notes for Ad-Vanced Notice (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand
-- **Rules that bite next:** 40 (street elements: wait for Sam's yes before building), 83 (the street's SET_BOXES), 74 (line 9's acting)
-- **Done (8 Nov):** note 44: Vance's turned faces from his own front design (`turnhead.py`), the swivel's turning frames back; street elements approved and questions 21-25 answered (no SUV, shopfronts, snow).
-- **Next:** fresh chat, Opus high: references (Lake Street shopfronts in snow, ICE raid gear) ticked as lists, then build the street (set, SUV, four officers, the curled man via `lying.py`, the beating via `moves.punch`/`kick`, blood, push in); then the check sheet and animatic 3 (Opus medium).
-- **Needs Sam:** OK on the made-up shop signs; recordings of lines 1-9.
-- **Read:** this file (Where things stand, note 44, Street elements, Acting line 9, Sam's answers 21-25); `guides/kit-catalogue.md` people rows (Met officers in `power_crime_cast.py`, `lying.py`); rulebook 40, 74, 83.
-- **Open rule requests:** none.
-- **For Claude:** Vance's turned heads: `ad_vanced_notice_cast.vance_turned` + `VANCE_PROFILE` (hooked into `V.head_view`); sheet `ad_vanced_notice_cast.py turn OUT`; the film's `study_j` uses the kit swivel again. The street goes in `ad_vanced_notice_sets.py` (new place) and `ad_vanced_notice.py` (shot after `gas`).
+- **Rules that bite next:** 40 (street elements), 74 (acting list), P11 (reference photos: Sam's if he has them, else one slow search, 3 per place)
+- **Done (9 Nov): FINAL sent and saved** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). Street scene, the beating, line 9 outrage, the new ending (no gunshot: the man begs, "Ew. God, no."), the man redrawn flat (older, thin, moustached), subtitle "This is J.D Vance.", growl and explosion sounds, the kit's swivel arrives with hands folded.
+- **Next:** wait for Sam's notes on the final (if any); nothing else planned.
+- **Needs Sam:** his notes on the final; the posting.
+- **Open rule requests:** none. Rule 31 put back and P11 written (8 Nov).
+- **For Claude:** the street is `ad_vanced_notice_street.py` (the man: `man_j`, `man_draw`, placed by his body; he is kept out of the hand check because he is drawn on his own canvas); the ending is shot 6 (`ending`, `ending_cam`); `MA.RESTORE_TAIL` (lines 5 and 9), `SCRIPT_CONFIRMED`, `sub` wording and `CP.NOW` are kit additions from this film.
 
 ## Plan extras: ambition estimate (rules 24, 54, 55, 62)
 Compared with MidTerminal (11%: one new room, two people), Islamocommunism (estimate 7.8%: one new set, two likenesses) and Flying Whales (45%: a whale and a 31-piece rig wreck built from nothing). This film reuses Flying Whales' sea and effects, so the showstopper costs a fraction of that.
