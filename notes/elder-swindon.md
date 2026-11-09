@@ -237,7 +237,7 @@ neither fix was checked side by side with the photo; nothing checked that cars s
 the pavement corners where the arms met the ring. Fixed: the layout rebuilt from the video frame (minis at 35 m round a
 15 m island inside one 46 m grey, splitters between), routes A (clockwise to the next mini, outside the splitters) and
 B (anticlockwise to the mini before, inside them), and `traffic_faults` now fails any car corner off the road.
-Rule proposal to Sam (Q, 9 Nov): a real place is compared side by side with its reference photo on the check sheet.
+Rule 84 written (Sam: Y, 9 Nov): a real place is compared side by side with its reference on the check sheet before every animatic. Animatic 3 sent 9 Nov.
 
 ## Notes on animatic 1 (Sam, 8 Nov) — a round, to fix once the model is Opus
 1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).

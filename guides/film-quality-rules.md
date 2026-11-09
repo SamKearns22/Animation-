@@ -99,6 +99,7 @@ the end with their checks.
 | 72 | No pose returns to rest in the last 0.4 s before a cut (cut before the return); no hand or arm passes behind the person's own wings, cape or body. | by hand (the last frames of each shot on the check sheet) until the audit checks it |
 | 73 | A pre-flight fault Sam has been told about is listed once: the film keeps a named-faults list and pre-flight shows only faults not on it. | by hand (the handover's "faults named" line) until pre-flight reads the list |
 | 67 | One full pre-flight per round: make every fix, run the quick check (`preflight.py NAME OUT --text`, seconds) until it is clean, then the full pre-flight once, then the render in the same background chain. A background job is stopped with its own task stop, never by name. | `preflight.py --text`; by hand |
+| 84 | Before every animatic, any real place in the film (a landmark, a junction, a building) is shown on the check sheet beside Sam's reference photo or video frame, and compared point by point; anything moving through it (cars, people) is checked to stay where the real thing allows (on the road, on the path). (Elder Scrolls: Swindon, 9 Nov: the Magic Roundabout went wrong twice and cars drove on the pavements.) | the check sheet by eye; the film's own route check (e.g. `traffic_faults`: every car on the road) |
 
 ## Notes, review and sound
 | # | Rule | Check |
