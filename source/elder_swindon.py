@@ -50,6 +50,7 @@ NAME = 'elder_swindon'
 NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'elder-swindon.md')
 HAS = {'people', 'effects', 'props'}
 SOUND_END = 30.04                             # the teaser's sound (Sam's first recording) ends here
+REC2_AT = 28.7701                             # where Sam's second recording starts, in the first one's time
 EXTRA = 5.0                                   # (Sam, animatic 3) 5 s more of the track, from his second recording,
 DUR = SOUND_END + EXTRA                       # the aerial held for them; finish.py adds the 1.6 s sign-off
 BLACK_AT = DUR
@@ -1931,12 +1932,17 @@ def soundtrack(stems=False):
     """The teaser's sound as it is (Sam, 8 Nov), only brought under full scale (its peaks went over by 1.1 dB)."""
     n = int((DUR + 0.3) * SR)
     x = MA.load(os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-audio.m4a'))
-    # the track's next 5 s (Sam's second recording starts at 0:41 of the video, where the first ends), joined with a
-    # 20 ms crossfade, faded out over the last 0.8 s into the sign-off
+    # the track's next 5 s from Sam's second recording. It starts 1.27 s before the first ends (at 28.7701 s of it,
+    # matched sample for sample: Sam heard a beat repeat in animatic 4's clip), so that much is skipped; joined with a
+    # 20 ms crossfade over identical sound, level matched on the overlap, faded out over the last 0.8 s
     y = MA.load(os.path.join(os.path.dirname(HERE), 'music', 'sentinel-teaser-end.m4a'))
     cut, xf = int(SOUND_END * SR), int(0.02 * SR)
     x = x[:cut]
-    y = y[:int(EXTRA * SR) + xf] * (np.sqrt(np.mean(x[-SR:] ** 2)) / max(1e-6, np.sqrt(np.mean(y[:SR] ** 2))))
+    cut = len(x)                                        # its true end (30.0358 s, a hair before SOUND_END)
+    k0 = int(round(cut - REC2_AT * SR))                 # the recording's sample that matches the track's end
+    ov = slice(int((REC2_AT + 0.1) * SR), cut)          # the overlap, in the track
+    g = np.sqrt(np.mean(x[ov] ** 2)) / max(1e-6, np.sqrt(np.mean(y[int(0.1 * SR):k0] ** 2)))
+    y = y[k0 - xf:k0 + int(EXTRA * SR)] * g
     ramp = np.linspace(0, 1, xf)
     x = np.concatenate([x[:-xf], x[-xf:] * (1 - ramp) + y[:xf] * ramp, y[xf:]])
     fo = int(0.8 * SR)
