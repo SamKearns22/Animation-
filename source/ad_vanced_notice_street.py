@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MAP  Ad-Vanced Notice (8 Nov): shot 5, the Minneapolis street (notes/ad-vanced-notice.md, "Street elements";
+"""MAP  Ad-Vanced Notice (8 Nov): shot 5, the Minneapolis street (notes/archive/ad-vanced-notice.md, "Street elements";
 brief rows 29-33). A Lake Street kind of block in winter, one locked camera on the near pavement; four ICE officers
 beat a man curled up on the snow while Vance stands to their left, smiling at us; a slow push in on his face through
 line 9. Flat painting (rule 39), every piece at its real size in metres; the push in is a zoom (for a flat painting

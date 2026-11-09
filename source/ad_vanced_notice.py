@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ad-Vanced Notice (notes/ad-vanced-notice.md): JD Vance's campaign ad. He swivels round in his study to say hello,
+"""Ad-Vanced Notice (notes/archive/ad-vanced-notice.md): JD Vance's campaign ad. He swivels round in his study to say hello,
 walks calmly at us along a cliff over the Strait of Hormuz while a missile turns the tanker behind him into an oil
 fire, tells us in close-up none of this is his fault, then puts his arm round a furious driver at a Midwest gas
 station. Built from the satire template (guides/satire.md); every place is a flat painting, one per camera
@@ -221,7 +221,7 @@ HANDS_OK = [('*Vance*', 'L', 'no hand', T['arm'], T['off'] + 0.1, "his hand is d
 LINE_OK = [('vance', 'edge with no line', 538, 313),     # the beard: inked round its outer edge only (Sam's note 7)
            ('man', 'line weight', 505, 230), ('man', 'line weight', 575, 230),   # his angry brows (anger 4): solid
            ('man', 'line weight', 509, 245), ('man', 'line weight', 571, 245)]   # shapes, not lines
-# The acting list (rule 74) is in notes/ad-vanced-notice.md, "Acting"; each beat below names its line.
+# The acting list (rule 74) is in notes/archive/ad-vanced-notice.md, "Acting"; each beat below names its line.
 # ====================================================================================================================
 
 

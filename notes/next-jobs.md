@@ -1,13 +1,33 @@
-# Where things stand (project, 7 Nov; the last film is finished)
+# Where things stand (project, 9 Nov; no film in progress)
 
-- **Rules that bite next:** 78 (resting arms show weight, never sink), 79 (full-size looks before "looks right"), 74 (acting list: shot and why, meaning questions first, no limit).
-- **Done (7 Nov):** the touch check prints COULD NOT TEST when it finds no hand or object (`audit.py`, `kitchecks.py`); rules 74, 78, 79 written; two tips in `guides/figure-rig.md` s.4; reference photo `references/body-weight/leaning-on-table-forearm-forward.jpg`. Hook Text rule dropped. All on the main line.
-- **Next job A, sitting kit: part 1 BUILT 8 Nov** (`source/sitting.py`, notes `notes/sitting-kit.md`); sheet and moves video sent to Sam. Part 2 after his look: Opus, high effort, new chat. Type: "Build the sitting kit, part 2, from notes/sitting-kit.md".
-- **Job B, rule 78 check: BUILT 8 Nov** (`kitchecks.rests`, run by pre-flight; films list resting arms in `RESTS`; tested on the sitting kit's desk and armchair poses and planted faults).
-- **Needs Sam:** a look at the sitting kit's sheet and moves video.
-- **Read:** `guides/figure-rig.md` s.2 body, s.3 limbs, s.4 contacts, s.6 movement; `guides/pose-gallery.md`; `source/kitchecks.py` (touches, resting); rule 78 and 32 and L1 in the rulebook.
-- **Open rule requests:** none (rule 80 written 7 Nov). New rules from A or B are proposed to Sam first.
-- **For Claude:** existing seat support is only `check_seated` (hips on the seat) and the desk-seated note in figure-rig s.4; no stand-up, feet-up or seat-change poses exist yet. Check `source/moves.py`, `posegallery.py`, `figure.py` before building.
+- **Rules that bite next:** 86 (tools: own chat, estimate first), 44 (12% a film), 85 (cost watch).
+- **Done (9 Nov):** Ad-Vanced Notice posted (notes archived); Elder Scrolls Swindon final sent; sitting kit closed (Sam); Job C approved (Sam: Y).
+- **Next:** Job C, chat 1 of 2: Opus high, new chat: "Tidy the rules and guides, chat 1 (Job C in notes/next-jobs.md)". Then Job D (below): estimate first.
+- **Needs Sam:** Y/N on Job D's estimate; numbers for the efficiency proposals E1-E4 (below).
+- **Read:** this file only; then the rulebook and CLAUDE.md in full (Job C chat 1 needs them).
+- **Open rule requests:** E1-E4 below (proposed 9 Nov, waiting for Sam's numbers); Job D's rule comes with its build.
+- **For Claude:** sitting kit `source/sitting.py` (closed); cost watch `.claude/hooks/costwatch.py` (WEEK_USD still to calibrate).
+
+## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
+- Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
+  and the 6 kHz+ s-sounds are no stronger than in those films; Sam's raw takes are clean (peaks -2.5 to -11 dB, no clipping).
+  So nothing is broken; what's missing is any softening at all. `mossad_audio.line` only de-hums, de-hisses and sets every
+  line to the same loudness (-20 LUFS): quiet takes (lines 2, 5, 10, 11 at -26 to -28 LUFS) are lifted 6-8 dB with their
+  mouth and room noise, shouted lines stay as loud as calm ones, and nothing tames the 2-5 kHz edge or the s-sounds that a
+  phone speaker exaggerates. The film also has one stretch (14-17 s) about 4 dB louder than the rest.
+- Plan: a gentle voice polish in `mossad_audio` used by every film: a soft treble shelf and a de-esser (s-sounds), a light
+  warmth lift, the loud stretches evened; then a before/after clip of Ad-Vanced Notice's line 9 for Sam to judge by ear on
+  his phone. Nothing about the voices' timing or pitch changes. Rule proposal comes with it.
+- Estimate: about 1% of a week, own chat (rule 86), Opus high. Type: "Build the softer voices tool (Job D in notes/next-jobs.md)".
+
+## Efficiency proposals, 9 Nov (waiting for Sam's numbers)
+- E1 Start every chat with the Animation- repository selected (the session's own folder). On 9 Nov a chat started in an empty
+  folder: the cost watch and the tool install never ran until the repository was added by hand.
+- E2 Status questions, quick answers and filing jobs run on Sonnet, not Opus (about half the price per step).
+- E3 Finished films' notes move to notes/archive/ on the day Sam says posted (Ad-Vanced Notice's was 11,000 words, nearly
+  three times the 4,000 limit, and was read by every chat that touched the project).
+- E4 Batch quick decisions: Sam's yes/no answers on several jobs are taken in one message at the start of a chat, so no chat
+  is spent waiting for one answer.
 
 ## Efficiency rules: written 9 Nov (rules 44, 86, 87, 88; Sam: Y)
 - **Job C, tidy the rules and guides** without losing film quality: merge rules that say the same thing, drop dead ones, a contents

@@ -6,8 +6,8 @@ cross legs, perch, slump. Sam said yes to all eight questions ("Y go", 7 Nov).
 ## Where things stand
 - **Rules that bite next:** 80 (front on: knees and lap show; no head dip on a rise), 78 (resting arms show weight), 42 (poses tested from every view).
 - **Done (8 Nov): part 2 built and checked** (`source/sitting.py`): cross legs both kinds, feet up and down (and a caught-out snap), perch on a chair's edge and on a desk's corner, slump (slow and a collapse), the swivel turn with the desk staying put; the through-things, back-on-the-chair and feet-on-their-surface checks (`sitting.py audit`: clean). Part-2 sheet, photo comparison and a moves video sent to Sam. The whole sitting kit is built.
-- **Next:** Sam's look at part 2 and his two questions (below, "Part 2: questions") (the rule 78 check is built: `kitchecks.rests`).
-- **Needs Sam:** a look at the part-2 sheet and moves video; questions 9-10.
+- **CLOSED (Sam, 9 Nov: "part 2 was finished").** Questions 9-10 taken as Y (desk perch and feet-up kept as built); a film that needs them otherwise says so in its own notes.
+- **Needs Sam:** nothing.
 - **Read (next time):** `guides/figure-rig.md` s.4 (sitting line) and s.8; `source/sitting.py` MAP.
 - **Open rule requests:** none.
 - **Swivel (8 Nov, Sam: "the perfect swivel"):** `sitting.swivel` now arrives with the hands folded on the desk (`hands='folded'`, the default at a desk; `'steeple'` otherwise or on request); Ad-Vanced Notice uses it directly.

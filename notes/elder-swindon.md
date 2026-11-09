@@ -3,8 +3,8 @@
 ## Where things stand
 - **Rules that bite next:** 84 (a real place beside its reference on the sheet), 56 (a fault of a kind: every shot), 67 (one full pre-flight per round).
 - **Done (9 Nov): FINAL rendered and sent (Sam: "skip animatic, render final"), animations/elder-swindon-vertical.mp4, 17.9 MB, 36.6 s.** Before that: notes on animatic 5 (brief row 64: no pigeons until shot 3). Checked on a sheet: shots 1-2 clear, shot 3 as before.
-- **Next:** Sonnet, NEW chat: "Check sheet and animatic 6 of Elder Scrolls Swindon - read notes/elder-swindon.md". Pre-flight, check sheet to Sam, wait for his Y, then the animatic (with Hook Text and sign-off).
-- **Needs Sam:** Y on the check sheet; then notes on animatic 6, or a clear Y for the final.
+- **Next:** nothing planned: the final is made (animatic 6 skipped on Sam's word). Notes on the final, if any: Opus medium, new chat.
+- **Needs Sam:** notes on the final, or posting it.
 - **Read:** this section, brief checklist rows 27-64; guides/satire.md (Before every render, Render).
 - **Open rule requests:** none.
 - **Faults named to Sam:** shot 6 is 15.2 s (his hold; over pre-flight's 8 s). Render with `--faults-named`.

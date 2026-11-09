@@ -4,7 +4,7 @@ moving tanker: orange flame-light and a hard jolt (no white flash: Sam, 8 Nov), 
 oil fireball climbing for 4.6 s onto a column of fire that burns for good, flaming pieces (hull plating, deck plates,
 pipe, a crane jib, the funnel top, scraps, burning oil) of many sizes tumbling into the sea with a splash each, black
 smoke pouring from the fire's top and leaning with the wind, and the tanker torn in two, burning, the sea lit orange
-(the showstopper list in notes/ad-vanced-notice.md, items 4b-12; note 29).
+(the showstopper list in notes/archive/ad-vanced-notice.md, items 4b-12; note 29).
 
 Everything is laid out in metres in the strait's world (x right, y out to sea, z up; the near tanker 1.2 km out) and
 drawn through whichever camera is given, so the close-up shows the same burning wreck and smoke. Flat house style:

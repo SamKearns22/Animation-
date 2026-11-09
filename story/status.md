@@ -9,11 +9,11 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
   (redraw: edit `source/metrics_data.py`, run `python3 source/metrics_chart.py`). The "Hook Text names the story" rule: dropped (Sam, 7 Nov).
 
 ## Films
-Elder Scrolls: Swindon: animatic 5 notes fixed 9 Nov (no pigeons until shot 3).
-Next: check sheet and animatic 6 (Sonnet, new chat).
-Read notes/elder-swindon.md "Where things stand".
-- **Next jobs (7 Nov, handover in `notes/next-jobs.md`):** (1) sitting-animation kit: built (part 1 and part 2, 8 Nov: `source/sitting.py`, `notes/sitting-kit.md`; rule 80); part-2 sheet and moves video sent, waiting on Sam's questions 9-10; (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
-- **Ad-Vanced Notice (9 Nov): FINAL sent** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
+Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
+Next: Job C, tidy the rules and guides (Sam: Y, 9 Nov; Opus high, own chat), then Job D, softer voices (estimate first).
+Read notes/next-jobs.md "Where things stand".
+- **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
+- **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/islamocommunism.md`.
 - **MidTerminal (4 Nov): done.** Final `animations/midterminal-vertical.mp4` (57.4 s, 10.5 MB) and story post `animations/midterminal-story.png`. Cost 11% of a week (Sam: the old norm was 15-25%; always aim lower). Rules 70-75 and P8-P10 written (Sam's yes). Built (4 Nov): finish.py burns in the subtitles (rule 70) and reads the film's HOOK, checking it first (rule 75): `finish.py CLEAN OUT --film NAME`. Notes: `notes/midterminal.md`.
 - **Terfwarts (3 Nov): final sent** (`animations/terfwarts-vertical.mp4`, 89 s, 11.8 MB), for Sam's 5 pm post. Cost 9% of a week (58% to 67%): under the 19% estimate and the 10% target.
