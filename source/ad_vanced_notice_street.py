@@ -47,14 +47,18 @@ LW = ST.LW
 H_CAM, HZ, FOCAL, CX = 1.6, 800.0, 1625.0, 572.0
 D_FACADE, D_FAR_BANK, D_ROAD, D_NEAR_BANK = 18.0, 15.3, (9.0, 15.0), 8.4
 VANCE_AT = (-1.1, 6.85)                  # world x, d (brief 31: to the left of them; Sam, 9 Nov: level with them)
-MAN_AT = (0.62, 6.95)                    # the man's middle on the snow
+MAN_AT = (0.62, 6.55)                    # the man's middle on the snow (Sam, 9 Nov: in front of their feet, all of him)
 # The officers: (x, d, yaw, move, offset s): one kicks from his head end, side on; one stamps on his back from
 # behind, facing us (his vest reads); two punch down from his feet end, side on, bent over him; each strikes every 1.36 s, a quarter period apart (about 3 blows a second, Q18).
 PERIOD = 1.36
-OFFICERS = [('O1', -0.32, 6.95, 90, 'kick', 0.0),
-            ('O3', 0.22, 7.65, 0, 'stomp', PERIOD * 0.25),
-            ('O2', 1.5, 6.9, -90, 'punch', PERIOD * 0.5),       # (Sam, 9 Nov: the blows on the right didn't land:
-            ('O4', 1.08, 7.6, -90, 'punch', PERIOD * 0.75)]     # fists now come down on his hips and back)
+# (Sam, 9 Nov: he was buried behind their legs, a blow landed on his head, the blows on the right missed.) Now he
+# lies in front of their feet; the kicker and one puncher stand nearer us, clear of him at either end, the stamper
+# and the other puncher behind him; every blow is aimed at the height where it meets his outline on screen.
+OFFICERS = [('O1', -0.3, 6.35, 90, 'kick', 0.0),               # at his head end, kicking his shoulder and back
+            ('O3', 0.32, 7.25, 0, 'stomp', PERIOD * 0.25),     # behind him, facing us: stamps on his back
+            ('O2', 1.42, 6.35, -90, 'punch', PERIOD * 0.5),    # at his feet end, punching down on his hips
+            ('O4', 1.0, 7.3, -90, 'punch_hi', PERIOD * 0.75)]  # behind him: punching down on his back
+PUSH = {'O1': (0.06, 0.0), 'O3': (0.0, -0.05), 'O2': (-0.06, 0.0), 'O4': (0.0, -0.05)}   # (m right, m nearer us)
 
 
 def cam_at(z=1.0, focus=None, to=None):
@@ -505,7 +509,7 @@ def kick_pose(sp, t, off):
     """A low kick down into him (brief 30: kick): the knee chambers, the boot drives forward and down into his back,
     held a beat, back; arms out for balance, gloved fists."""
     th, _ = _phase(t, off)
-    j, _ = moves.kick(sp, t, th, height=700.0, side='R')
+    j, _ = moves.kick(sp, t, th, height=640.0, side='R')       # his shoulder, 0.44 m up
     sw = sp.get('shoulders', 150)
     V.arm_to(j, 'L', (-(sw + 60), 300.0, 60.0), 'out', 'fist')
     V.arm_to(j, 'R', (sw + 20, 320.0, -90.0), 'out', 'fist')
@@ -523,7 +527,7 @@ def _unlean(y, z, lean):
 CROUCH = 160.0                                                    # person units (0.24 m)
 
 
-def punch_pose(sp, t, off):
+def punch_pose(sp, t, off, h=0.58):
     """Bent over him, punching down (brief 30: punch; side on, where a downward blow reads): the fist pulled back
     by the shoulder, driven down into his side, a held impact, back; the other hand braced on his own knee."""
     th, _ = _phase(t, off)
@@ -541,7 +545,7 @@ def punch_pose(sp, t, off):
         j['footL'] = (-60, V.ANKLE_Y - CROUCH, 110.0)
         return j
     back = bent(24, (200.0, -110.0))                              # (leaned y, z: up by the shoulder, pulled back)
-    hit = bent(48, (560.0, 330.0))                                # straight down from the shoulder onto him
+    hit = bent(48, ((928 - CROUCH) - h / V.M_PER_UNIT, 330.0))   # straight down onto him, h metres off the snow
     j = moves.keyed(t, [(th - 0.75, hit), (th - 0.36, back), (th - 0.2, back), (th, hit), (th + 0.2, hit), (th + 0.62, hit)],
                     curve='fast' if th - 0.2 <= t < th else 'ease')
     return dress(j, sp)
@@ -557,7 +561,7 @@ def stomp_pose(sp, t, off):
     lift['footR'] = (50.0, 600.0, 170.0)
     lift['lean'] = -4
     down = V.standing(sp)
-    down['footR'] = (40.0, V.ANKLE_Y - 40, 430.0)                  # onto his back, 0.65 m in front
+    down['footR'] = (40.0, 580.0, 430.0)                           # onto his back: 0.65 m in front, 0.53 m up
     down['lean'] = 8
     for j in (rest, lift, down):
         V.arm_to(j, 'L', (-(sw + 90), 300.0, 40.0), 'out', 'fist')
@@ -567,7 +571,8 @@ def stomp_pose(sp, t, off):
     return dress(j, sp)
 
 
-MOVES = {'kick': lambda sp, t, off: kick_pose(sp, t, off), 'punch': punch_pose, 'stomp': stomp_pose}
+MOVES = {'kick': lambda sp, t, off: kick_pose(sp, t, off), 'punch': punch_pose, 'stomp': stomp_pose,
+         'punch_hi': lambda sp, t, off: punch_pose(sp, t, off, h=0.47)}
 
 
 def officer_pose(o, t):
@@ -586,6 +591,21 @@ def flinch(t):
             if 0 <= u < 0.35:
                 out = max(out, math.exp(-u / 0.1))
     return out
+
+
+def impacts(t):
+    """Each blow's shove on him (Sam, 9 Nov: he barely reacted): (metres right, metres nearer us, 0-1 strength),
+    summed: up in two drawings, easing off over 0.3 s, the way the blow came."""
+    dx = dz = e = 0.0
+    for o in OFFICERS:
+        th, last = _phase(t, o[5])
+        for h in (th, last):
+            u = t - h
+            if 0 <= u < 0.45:
+                k = min(1.0, u / 0.08) * math.exp(-max(0.0, u - 0.08) / 0.14)
+                px, pz = PUSH[o[0]]
+                dx, dz, e = dx + px * k, dz + pz * k, max(e, k)
+    return dx, dz, e
 
 
 def knock(t):
@@ -705,52 +725,78 @@ def _lerp3(a, b, u):
     return tuple(x + (y - x) * u for x, y in zip(a, b))
 
 
-def man_j(t, beg_from=None, kn=0.0, fl=0.0):
-    """His pose (views joints, before the quarter turn). While they beat him (note 48) his near hand keeps weakly
-    lifting towards them, trembling, and is knocked down by the blows; begging (the ending) his head comes up and
-    that hand reaches up to Vance."""
+TURN = 70.0                                                       # turned 70 degrees, not 90: his back near level,
+                                                                  # his shins flat on the snow (a ball, not a slope)
+BALL_LEAN = 36.0                                                  # curled over his knees, face to the snow
+
+
+def man_j(t, kn=0.0, squash=0.0):
+    """Curled up (before the quarter turn). Each blow squashes him tighter (squash 0-1). While they beat him (note 48)
+    his near hand keeps weakly lifting up off his head, trembling, and is knocked down by the blows."""
     sp = MAN
     j = moves.seated(sp)
     j['chair_draw'] = lambda *a, **k: None
-    lean = 30.0 + 5.0 * fl                                         # a blow folds him tighter
     tr = (0.0, 10.0 * math.sin(t * 2 * math.pi * 6.0), 6.0 * math.sin(t * 2 * math.pi * 5.0 + 1.0))
-    tgt_r, shape = GUARD['R'], 'fist'
-    if beg_from is None:
-        u = (t % PLEAD) / PLEAD
-        r = (0.5 - 0.5 * math.cos(2 * math.pi * min(1.0, u / 0.8))) if u < 0.8 else 0.0
-        r *= 0.85 * (1 - 0.8 * kn)
-        tgt_r = _lerp3(GUARD['R'], tuple(a + b for a, b in zip((30.0, -300.0, -190.0), tr)), r)
-        shape = 'palm' if r > 0.3 else 'fist'
-    else:
-        u = min(1.0, max(0.0, (t - beg_from) / 0.5))
-        u = u * u * (3 - 2 * u)
-        lean = 30.0 - 18.0 * u + 5.0 * fl
-        tgt_r = _lerp3(GUARD['R'], tuple(a + b for a, b in zip((40.0, -300.0, -260.0), tr)), u)
-        shape = 'palm' if u > 0.3 else 'fist'
+    u = (t % PLEAD) / PLEAD
+    r = (0.5 - 0.5 * math.cos(2 * math.pi * min(1.0, u / 0.8))) if u < 0.8 else 0.0
+    r *= 0.85 * (1 - 0.8 * kn)
+    tgt_r = _lerp3(GUARD['R'], tuple(a + b for a, b in zip((20.0, -260.0, -300.0), tr)), r)   # up into clear air
     V.arm_to(j, 'L', GUARD['L'], GUARD_POLE, 'fist')
-    V.arm_to(j, 'R', tgt_r, GUARD_POLE, shape)
-    j['lean'] = lean
+    V.arm_to(j, 'R', tgt_r, GUARD_POLE, 'palm' if r > 0.3 else 'fist')
+    j['lean'] = BALL_LEAN + 8.0 * squash
     j['on_face'] = {'R'}
     return j
 
 
-def man_draw(img, cam, t, beg_from=None, face=None, fl=0.0, kn=0.0):
-    """Draw him at MAN_AT through `cam`: the flat drawing turned a quarter turn, its lowest point on the snow."""
+def kneel_j(t, u):
+    """The ending (Sam, 9 Nov, Y to the critique): up on his knees facing Vance, leaning in, one hand reaching out to
+    him, the other at his chest, imploring; u eases him up from a crouch (0) to the full kneel (1)."""
+    sp = MAN
+    j = V.standing(sp)
+    bob = 218.0 + 140.0 * (1 - u)
+    j['bob'] = bob
+    fl = 928 - bob
+    for s_, sg in (('L', -1), ('R', 1)):
+        j['foot' + s_] = (sg * 55, fl - 38, -230.0)
+        j['knee_pole' + s_] = (0.0, 1.0, 1.0)
+        j['toe' + s_] = 0.0
+    j['lean'] = 25.0 + 20.0 * (1 - u)
+    tr = (0.0, 8.0 * math.sin(t * 2 * math.pi * 6.0), 0.0)
+    V.arm_to(j, 'R', _lerp3((40.0, 200.0, 160.0), tuple(a + b for a, b in zip((40.0, -60.0, 330.0), tr)), u), 'down',
+             'palm')
+    V.arm_to(j, 'L', (-30.0, 200.0, 120.0), 'down', 'palm')
+    return j
+
+
+def man_draw(img, cam, t, beg_from=None, face=None):
+    """Draw him at MAN_AT through `cam`. Beaten: the flat drawing turned a quarter turn (curled face down), shoved
+    and squashed by each blow, eyes squeezed shut on the impact. Begging (beg_from: the ending): upright on his knees
+    facing Vance, his face, eyes and talking mouth the right way up."""
     d = MAN_AT[1]
     ppm = cam.ppm(d)
     s = 928 * V.M_PER_UNIT * MAN['height'] / 1.75 * ppm / 928
-    n = int(1500 * s) + 40
-    c = Image.new('RGBA', (n, n), (0, 0, 0, 0))
+    B.SS = 1
     sp = dict(MAN, **{q: v for q, v in (face or {}).items() if q in ('mouth', 'blink')})
     sp['mood'] = 'scared'
-    B.SS = 1
-    V.person(c, B.Cam(1.0, 540, 960), n / 2, n * 0.28, s, sp, 0.0, -90, man_j(t, beg_from, kn, fl))
-    r = c.rotate(90)
+    if beg_from is not None:
+        u = min(1.0, max(0.0, (t - beg_from) / 0.45))
+        u = u * u * (3 - 2 * u)
+        gx, gy = cam.p(MAN_AT[0], d, 0.0)
+        _shadow(img, cam, MAN_AT[0], d, 0.45)
+        V.person(img, B.Cam(1.0, 540, 960), gx, gy - 928 * s, s, sp, 0.0, -90, kneel_j(t, u))
+        return
+    dx, dz, e = impacts(t)
+    if e > 0.35:
+        sp['blink'] = True                                      # eyes squeezed shut as it lands
+    n = int(1500 * s) + 40
+    c = Image.new('RGBA', (n, n), (0, 0, 0, 0))
+    V.person(c, B.Cam(1.0, 540, 960), n / 2, n * 0.28, s, sp, 0.0, -90, man_j(t, knock(t), e))
+    r = c.rotate(TURN, resample=Image.BICUBIC)
     bb = r.getbbox()
     if not bb:
         return
     r = r.crop(bb)
-    gx, gy = cam.p(MAN_AT[0] + 0.04 * fl, d, 0.0)
+    gx, gy = cam.p(MAN_AT[0] + dx, d - dz, 0.0)
     _shadow(img, cam, MAN_AT[0], d, 0.6)
     img.alpha_composite(r, (int(round(gx - r.width / 2)), int(round(gy - r.height + 0.02 * ppm))))
 
@@ -760,53 +806,21 @@ def draw_group(img, cam, t, t0=0.0, man=None):
     order = sorted(OFFICERS, key=lambda o: -o[2])
     back = [o for o in order if o[2] > MAN_AT[1] + 0.2]
     front = [o for o in order if o not in back]
+    if man is not None:                                         # the ending: they pause and watch while he begs, the
+        back = [(o[0], o[1], o[2] + (0.9 if o[2] < MAN_AT[1] else 0.0), *o[3:]) for o in order]   # near two stepped
+        back.sort(key=lambda o: -o[2])                          # back behind him, so nothing stands between him and Vance
+        front = []
     for o in back + front:
         _shadow(img, cam, o[1], o[2])
+    pose = (lambda o: officer_pose(o, t)) if man is None else \
+        (lambda o: dress(V.standing(CAST[o[0]]), CAST[o[0]]))
     for o in back:
-        _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
+        _person(img, cam, CAST[o[0]], o[1], o[2], o[3], pose(o))
     blood(img, cam, t, t0)
     beg_from, face = (man[1], man[2]) if man else (None, None)   # man=('beg', from, face): the ending
-    man_draw(img, cam, t, beg_from, face, flinch(t), knock(t))
+    man_draw(img, cam, t, beg_from, face)
     for o in front:
-        _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
-
-
-# ---------------------------------------------------------------------------------------------- the gunshot
-# Sam, 8 Nov: a gunshot flash and sound at the end of Vance's last line: off screen right, where the officers are.
-def flash(img, u):
-    """The muzzle flash's light, u frames after the shot (0, 1): a flat warm-white wash over the frame, stronger on
-    the right (the side the shot comes from), gone after two drawings (no gradient: two flat washes, a ragged edge)."""
-    k = (1.0, 0.45)[u] if u in (0, 1) else 0.0
-    if k <= 0:
-        return img
-    from PIL import ImageChops
-    glow = Image.new('RGB', img.size, tuple(int(c * k) for c in (170, 130, 70)))   # light added to everything
-    hot = Image.new('L', img.size, 0)                                             # more on the right, a ragged edge
-    ImageDraw.Draw(hot).polygon(wobbly([(W * 0.7, -20), (W + 20, -20), (W + 20, H + 20), (W * 0.8, H + 20)], 30, 990, 90),
-                                fill=255)
-    glow.paste(Image.new('RGB', img.size, tuple(int(c * k) for c in (230, 190, 120))), mask=hot)
-    rgb = ImageChops.screen(img.convert('RGB'), glow)
-    img.paste(rgb)
-    return img
-
-
-def gunshot(sr, seed=3):
-    """A pistol shot out in the street: a sharp crack, a short low thump, a slap of echo off the shopfronts (18 m:
-    0.1 s there and back) and a short tail. Made here (the kit had none)."""
-    from scipy.signal import butter, sosfilt
-    n = int(1.4 * sr)
-    t = np.arange(n) / sr
-    rng = np.random.default_rng(seed)
-    crack = sosfilt(butter(2, [700, 9000], 'band', fs=sr, output='sos'), rng.standard_normal(n)) * np.exp(-t * 55)
-    thump = np.sin(2 * np.pi * np.cumsum(60 + 140 * np.exp(-t * 40)) / sr) * np.exp(-t * 14)
-    tail = sosfilt(butter(2, [300, 3500], 'band', fs=sr, output='sos'), rng.standard_normal(n)) * np.exp(-t * 6) * 0.12
-    x = crack / (np.abs(crack).max() + 1e-9) + 0.8 * thump + tail
-    d = int(0.105 * sr)
-    echo = np.zeros(n)
-    echo[d:] = x[:n - d] * 0.32
-    x = x + sosfilt(butter(2, 2500, 'low', fs=sr, output='sos'), echo)
-    x[:int(0.001 * sr)] *= np.linspace(0, 1, int(0.001 * sr))
-    return x / (np.abs(x).max() + 1e-9)
+        _person(img, cam, CAST[o[0]], o[1], o[2], o[3], pose(o))
 
 
 # ---------------------------------------------------------------------------------------------- rule 3: the references
