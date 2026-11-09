@@ -200,6 +200,7 @@ Added (set dressing, from the photos, Sam to OK): a gilt portrait over the mante
 | 51 | study | 1.0 | The portrait needs a neck | done: a neck with a shaded side between his chin and cravat. Still sent. New kind |
 | 52a | street | | The man on the ground's arm sometimes twists into motions no human arm should | done: why: when his hand started to lift, the new arm solution chose its elbow direction without regard to the curled arm it replaced, so the elbow jumped 32 cm and flipped in one frame; a blow also knocked it down in a single frame. Now the elbow direction blends from the old arm to the new, and a blow pushes the arm down over 0.14 s. Measured every frame for 8 s: no flips, no snap; bend never past 133 degrees. Clip sent. New kind |
 | 52b | close-up | 18.64 | After "fault" he closes his mouth, then smiles wide | done: the word ends, lips together for 0.3 s, then the wide smile until the cut. Lost: the small smile through the end of the word's last sound. Clip sent. New kind |
+| 53 | ending | 38.3 | Remove the gunshot; back to the medium shot; the man implores Vance ("Please, sir, help me."); Vance leans back in mild disgust, looking at him: "Ew. God, no." (lines to come) | done: shot 6 cuts back to the opening framing; lines 10-11 on estimates until the takes. Lost: the gunshot flash and sound. Added: his hand up palm out on the recoil; the man's reaching hand. New kind |
 | 47a | study | 1.33 | Subtitle: "This is J.D Vance." (the subtitle only, Sam) | done: line 1's subtitle reads "Hello, America. This is J.D Vance."; the voice and mouths unchanged (subtitles take a line's own `sub` wording). New kind |
 | 47b | sound | 13.4, 19.8 | Sam's files: the growl for the driver shaking his fist; the explosion for the tanker | done: the growl from 0.2 s into the gas shot (1.45 s, over the fist shake); the explosion on the hit, dipped under line 5 from 2 s after. Clip sent. New kind |
 | 47c | study | 0.1-1.3 | The hands-down after the swivel too sudden: arrive with hands on the table | done: he swivels with his hands already folded in front of him, so they land on the desk as he comes round; no hands-down move after. Lost: the steeple through the swivel (hidden anyway). Clip sent. New kind |
@@ -217,7 +218,11 @@ Why they fail: the front head is each person's own measured face (patriots4 layo
 | 31 | Vance stands to the left of them. Smiling at us. | yes: front on, left of them, a big grin at us |
 | 32 | We zoom in on his face. | yes: a slow push in through line 9, ending on his head and shoulders; the officers slide out on the right |
 | 33 | VANCE: "I can't believe that my boss would do this. Between you and me, he can be a super jerk." | yes: line 9 (Sam's take, 7.6 s); hand to chest on "believe", leans in with a hand by his mouth on "Between", shrug on "jerk" |
-| 34 | (Sam, 8 Nov) A gunshot flash and sound at the end of Vance's last sentence. | yes: note 46b |
+| 34 | ~~(Sam, 8 Nov) A gunshot flash and sound at the end of Vance's last sentence.~~ (Sam, 9 Nov: removed) | removed (note 53) |
+| 35 | (Sam, 9 Nov) We return to the medium shot of the scene. | yes: cut back to the opening street framing after line 9 |
+| 36 | The man on the ground implores Vance from the ground: "Please, sir, help me." | yes: line 10 (est until Sam's take); he lifts his head to Vance and reaches up, trembling; the officers carry on |
+| 37 | Vance leans back in mild disgust, looking at the man. "Ew. God, no." | yes: line 11 (est until Sam's take); leans back, chin tucked, eyes down on the man, hand up palm out |
+| 38 | A less macabre ending; reinforces the joke of him doing nothing to stop the bad things. | yes: he does nothing; the beating goes on behind |
 
 
 ## Street elements (rule 40: for Sam to approve or trim before building, 8 Nov)
@@ -249,6 +254,13 @@ Added: falling snow (Sam, Q22: Y). Added: shop signs with made-up names (a taque
 |---|---|---|---|---|
 | 9a "I can't believe that my boss would do this." | Vance | fake outrage (note 49): aggrieved brows, wide eyes; eyes up on "believe", to the beating on "my boss", back on "do this" | hand to chest on "believe", then flung out at the beating | hand on "believe"; fling on "do this" |
 | 9b "Between you and me, he can be a super jerk." | Vance | confiding, a wink-free half-smile | leans towards the lens, a hand at the side of his mouth | lean on "between"; a little shrug on "jerk" |
+
+## Acting, the ending (rule 74; Sam, 9 Nov)
+| line | who | face | body | lands on |
+|---|---|---|---|---|
+| 10 "Please, sir, help me." | the man | his face turned up to Vance, mouth talking | head lifted off the snow, his upper hand reaching up to Vance, trembling | reach on "Please" |
+| 10 (same) | Vance | the big grin at us, then his eyes slide down to the man | still, front on | eyes on "help" |
+| 11 "Ew. God, no." | Vance | mild disgust: brows down, lids lowered, mouth turned down; eyes on the man | leans back, chin tucked, his near hand up by his chest, palm out | recoil just before "Ew" |
 
 ## Questions sent to Sam (8 Nov)
 21. The black SUV with flashing lights behind the officers (Y), or no vehicle (N)?

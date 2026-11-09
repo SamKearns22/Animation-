@@ -69,7 +69,10 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.13, squint=0.0, smile=0.6, m
          'proud': dict(brow=0.04, frown=0.0, lid=0.2, squint=0.4, smile=0.0, mouth='grin'),
          # Sam, 8 Nov (note 49): fake outrage on "I can't believe": the inner ends of the brows lifted (aggrieved), eyes
          # wide open; the brows stay low (at the street's sizes his hairline covers raised brows)
-         'outraged': dict(brow=0.004, frown=-0.05, lid=0.0, squint=0.0, smile=-0.2, mouth='soft')}
+         'outraged': dict(brow=0.004, frown=-0.05, lid=0.0, squint=0.0, smile=-0.2, mouth='soft'),
+         # Sam, 9 Nov: mild disgust at the man begging ("Ew. God, no."): brows drawn down, lids lowered, the mouth turned
+         # down at the corners
+         'disgust': dict(brow=-0.006, frown=0.03, lid=0.26, squint=0.25, smile=-0.7, mouth='lips')}
 SMILE = {'neutral': 0.6, 'sincere': 0.35, 'smile': 1.4, 'proud': 1.2, 'angry': -0.6, 'glare': -0.4}
 
 

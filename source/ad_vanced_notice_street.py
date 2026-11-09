@@ -662,7 +662,39 @@ def plead(k, t, f=0.0):
     return k
 
 
-def draw_group(img, cam, t, t0=0.0):
+MAN_FACE = [None]                                                 # the man's face for this drawing (mouth, blink)
+
+
+def beg(k, t, t0, face=None):
+    """Sam, 9 Nov (the ending): he lifts his head off the snow and turns it up to Vance (to our left), the upper arm
+    reaching out towards him, open hand: "Please, sir, help me." Eased in over 0.5 s from t0; the bend blended from
+    the curled arm (no flip: note 52a)."""
+    u = min(1.0, max(0.0, (t - t0) / 0.5))
+    u = u * u * (3 - 2 * u)
+    MAN_FACE[0] = {q: face[q] for q in ('mouth', 'blink') if q in face} if face else None
+    if u <= 0:
+        return k
+    k = k.copy()
+    to = np.array([-0.47, 0.5, -0.71])                            # from his head towards Vance's face
+    hf0 = k['hfwd']
+    hf = hf0 * (1 - u) + to * u
+    hf = hf / np.linalg.norm(hf)
+    up = np.array([0.0, 1.0, 0.0])
+    hu = k['hup'] * (1 - u) + (up - hf * (up @ hf)) * u
+    k['hfwd'], k['hup'] = hf, hu / np.linalg.norm(hu)
+    lift = np.array([0.0, 0.07 * u, 0.0])                         # the head raised a little off the snow
+    k['head'] = k['head'] + lift
+    sh = k['shL']
+    tremble = np.array([0.0, 0.01 * math.sin(t * 2 * math.pi * 6.0), 0.0])
+    tgt = k['wrL'] * (1 - u) + (sh + np.array([-0.18, 0.46, -0.3]) + tremble) * u   # up towards him, clear of the boots
+    pole0 = k['elL'] - (sh + k['wrL']) / 2
+    pole0 = pole0 / (np.linalg.norm(pole0) + 1e-9)
+    pole = pole0 * (1 - u) + np.array([0.0, -0.6, -0.8]) * u
+    k['elL'], k['wrL'] = LY.limb(sh, tgt, LY.UPPER, LY.FORE, pole)
+    return k
+
+
+def draw_group(img, cam, t, t0=0.0, man=None):
     """The beating: the two behind him, the blood and the man, then the two kicking from either end (far to near)."""
     order = sorted(OFFICERS, key=lambda o: -o[2])
     back = [o for o in order if o[2] > MAN_AT[1] + 0.2]
@@ -680,8 +712,14 @@ def draw_group(img, cam, t, t0=0.0):
             k[nm] = k[nm] + np.array([0.0, 0.0, 0.02 * f])
         for nm in ('head', 'wrL', 'wrR', 'elL'):
             k[nm] = k[nm] + np.array([0.015 * f, 0.0, 0.0])
-    k = plead(k, t, knock(t))
-    LY.draw(img, scam(cam), k, MAN, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
+    sp = MAN
+    if man is None:
+        k = plead(k, t, knock(t))
+    else:                                                           # the ending: begging Vance, his mouth talking
+        k = man(k, t, knock(t))
+    if man is not None and MAN_FACE[0]:
+        sp = dict(MAN, **MAN_FACE[0])
+    LY.draw(img, scam(cam), k, sp, 0.0, surfaces=[(p0, n) for _, p0, n in surf])
     for o in front:
         _person(img, cam, CAST[o[0]], o[1], o[2], o[3], officer_pose(o, t))
 
