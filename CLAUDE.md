@@ -13,16 +13,17 @@ I don't know how to code. Please:
   to Photos. Never give me steps that need a computer.
 
 # Messages to me
-- **The first line says what you need from me** ("Need: Y or N for the animatic") or "Nothing needed".
-- **Then three parts: Done** (3 lines at most) / **Needs you** / **Next**. About 10 lines, unless I ask for more.
+- **Say only what matters (Sam, 9 Nov).** If you need something from me, the first line says what ("Need: Y or N for
+  the animatic"). If you need nothing, there is no first line. **Done / Needs you / Next appear only when they have
+  something in them:** never an empty heading, "nothing needed" or "nothing was done". About 10 lines, unless I ask for more.
 - **No code names or file internals.** Those go in the film's notes. Name only files I'll open (and send them).
 - **One line per note:** "8: fixed – the whale now knocks the helideck away. Clip sent." Anything a fix takes away
   (a prop, a person, a joke, a landing in shot) and anything you add (a sign, a joke, a sound, set dressing) gets its
   own line, "Lost: …" / "Added: …", so I can say no before it costs a round.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision goes in one message**
   (all jobs, not just the current one), so no chat is spent waiting on a single answer (Sam, 9 Nov).
-- **Self-review is one line before every send:** "Checks: all clean except X (looked: fine because …)". Name only
-  by-hand rules that slipped or were at risk. Never send something a check flagged without saying so.
+- **A "Checks:" line only when a check slipped or was at risk:** "Checks: X slipped (looked: fine because …)". A clean
+  result says nothing. Never send something a check flagged without saying so.
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me
   (rulebook 30).
 - **The handover's 3 pasted lines always go at the bottom of the message** (Sam, 9 Nov).
@@ -58,6 +59,8 @@ I don't know how to code. Please:
   the exact wording and where it goes; on my yes, write it in that same chat. Every rule is written once, in
   `guides/film-quality-rules.md` (the rulebook) with the check that tests it, or in this file if it's about working
   with me (and listed in the rulebook's last table).
+- **Every new rule replaces or merges an old one, or turns a by-hand rule into an automatic check** (Sam, 9 Nov): the
+  rulebook never gets longer, because every rule is re-read in every new chat.
 - **Before every handover, search the film's notes for rule requests and proposals not yet written** and list them.
 
 # Models and chats (to save money)
@@ -108,7 +111,9 @@ I don't know how to code. Please:
   **At the start of every chat, list every branch (`git fetch --all; git branch -r`) and look for newer work on the
   film or tool being worked on before building anything** (Elder Scrolls: Swindon, 8 Nov: a chat started from the
   main line, never saw the other chat's finished film and animatic, and rebuilt parts of it). **At the end of every
-  chat, push to the main line as well as the chat's own branch,** so the next chat cannot start from an old picture.
+  chat, push to the main line as well as the chat's own branch,** so the next chat cannot start from an old picture
+  (this file is Sam's standing permission for that). If the cloud session refuses the main-line push, say so, and the
+  handover's first line names the branch with the newest work; the next chat's first step is to merge it (Sam, 9 Nov).
 - **Quick video (short two-person film): read only `guides/quick-video.md`.** Sonnet, medium effort.
 - **Satire-style film (the TikTok series, beyond two people talking): read `guides/satire.md`**, start from
   `source/satire_template.py` (always), and follow the rulebook, `guides/film-quality-rules.md`. **Reuse before
@@ -116,7 +121,10 @@ I don't know how to code. Please:
   only for a scene satire.md doesn't cover.
 - **Motion-led films (stunts, action): go to a quick animatic early** after the cast sheet.
 - **Reference photos (Sam, 8 Nov):** Sam sends 2-3 photos with the brief when he has them to hand; otherwise Claude
-  searches once, slowly, and keeps 3 photos per place at most.
+  searches once, slowly, and keeps 3 photos per place at most. **One failed try per source, then stop** (a network that
+  says it is connected may not be): give Sam one numbered list of what to find, which angle and why, to fetch by hand.
+  At the start of each film, try the other sources (Geograph for UK places, Openverse, Pexels, Unsplash, Library of
+  Congress, NASA) and note which work here (Sam, 9 Nov).
 - **Flat cartoon people:** read `guides/figure-rig.md`; follow `guides/preflight.md` from the first brief. Hands are
   always a plain circle with props laid over it.
 - **Yuletide horror trailer** (a separate experiment): read `guides/yuletide/yuletide-trailer.md`; next time it starts

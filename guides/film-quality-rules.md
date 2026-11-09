@@ -6,7 +6,7 @@ Working with Sam (the CLAUDE.md rules, by section) · Merged numbers (where an o
 Every film (not quick videos) follows this page. Each rule is written here once; other guides say *how* (the tools,
 the method) and point here by number. **A rule only holds if a check enforces it:** "check" names the tool that
 pre-flight runs, or "by hand" (ticked on the check sheet before every animatic, or searched for at the handover).
-When Sam approves a rule, it gets a row here in the same chat, with the next free number (the next is 89). Numbers
+When Sam approves a rule, it gets a row here in the same chat, with the next free number (the next is 90). Numbers
 are never reused or changed: a merged rule's number is listed at the end with the rule that now holds it. Why each
 rule exists (the film and note that taught it) is in git's history and `story/archive.md`, not here.
 
@@ -106,6 +106,7 @@ the end by section.
 | 79 | When Sam names frames, look at exactly those first, at his size, before changing anything. Never say a change "looks right" from a small preview: look at the frame a note touches at full size and say in plain words what is seen ("the hand sits on top of the desk, the elbow is bent"); a small preview only shows where to look. Unchanged frames are not re-read (Sam, 7 Nov). | by hand; the "Checks:" line names any fix confirmed at full size |
 | 87 | Before fixing, each of Sam's notes is restated in one line with how it will be fixed; where it's about something you can see, a still of that frame comes with it, marked where the change goes. Then the fix goes ahead without waiting, unless the note could be read two ways: that is asked first, my pick first. A fix that fails twice stops rendering: the next send is one still sheet of 2-3 options for Sam to pick from. New ideas from Sam or me are welcome, but each one has its cost (share of a week) said before it's built (Sam, 9 Nov). | by hand (the reply to the notes; 'fails twice' from the seen-before mark, rule 30) |
 | 88 | One check sheet per round of Sam's notes. Any re-check after that is in words, with a picture only of what visibly changed (just those frames, cropped), never the whole sheet again (Sam, 9 Nov). | by hand |
+| 89 | Critique before every send (Sam, 9 Nov: "you see the faults the moment you're asked, but it takes rounds to get you to look"). Everything new (a person, creature, prop, set or movement) is drawn alone at full size beside its reference, and critiqued as if Sam had sent it back: anatomy, shape, size, joins, how it reads at phone size. Fix, then critique the fixed version again (two passes); a third only if pass two found something real; a fault that survives three goes to an options sheet (rule 87). Stop when a pass finds nothing Sam would flag. New things are shown on a sheet before the first animatic, not found in his notes. The "Checks:" line names what the critique caught. It absorbs the by-hand rules 56, 76 and 79 when the consolidation job rewrites them. | by hand now; the helper-run critique checklist is in the build plan (`notes/next-jobs.md`) |
 | S3 | No added room tone. The hiss check listens only in the gaps between lines (where the voice is silent), never in speech. | `filmkit.hiss_check(voice=)` |
 | S4 | ffmpeg joins always at fps=24. | by hand |
 | S9 | One sound per hit, only with it in frame. | `kitchecks.sounds` |
