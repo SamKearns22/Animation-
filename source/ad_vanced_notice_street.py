@@ -461,10 +461,24 @@ MAN = dict(name='The man on the ground', skin=(176, 122, 84), hw=62, hh=94, jaw=
 TACHE = (120, 112, 104)                                            # a grey-brown moustache
 
 
+OPEN = {'AI': 20.0, 'O': 16.0, 'E': 12.0, 'etc': 10.0, 'L': 10.0, 'U': 8.0, 'WQ': 8.0, 'FV': 4.0}   # side-on mouth
+# opening by sound (Sam, 9 Nov: "better mouth movement": the kit's side-on head draws one small square for every sound)
+
+
 def tache(p, view, sp, hx, hy):
-    """His moustache (the kit has none for a plain face): a full one over the upper lip, front and side on."""
+    """His moustache (the kit has none for a plain face): a full one over the upper lip, front and side on. Side on it
+    comes with his own mouth, drawn first: open by the sound being said (OPEN), teeth showing; closed, a line."""
     hw = sp.get('hw', 70)
     if view == 'side':
+        m = str(sp.get('mouth', 'rest'))
+        h = OPEN.get(m[2:], 0.0) if m.startswith('v:') else 0.0
+        if h > 0:
+            y0 = hy + 50
+            p.poly(curve([(hx + 40, y0), (hx + 70, y0 - 2), (hx + 68, y0 + h), (hx + 52, y0 + h + 3), (hx + 40, y0 + h * 0.6)], 3),
+                   (110, 28, 36), INK, 2.0)
+            p.poly([(hx + 50, y0 + 1), (hx + 68, y0), (hx + 67, y0 + 4), (hx + 50, y0 + 5)], (244, 240, 230), None)
+        else:
+            p.line([(hx + 44, hy + 56), (hx + 66, hy + 54)], INK, 2.4)
         p.poly(curve([(hx + hw * 0.35, hy + 34), (hx + hw * 0.98, hy + 30), (hx + hw * 1.04, hy + 40),
                       (hx + hw * 0.9, hy + 50), (hx + hw * 0.4, hy + 46)], 3), TACHE, INK, 1.6)
     elif view in ('front', 'three'):
@@ -771,11 +785,12 @@ def man_j(t, squash=0.0, beg=0.0):
     beg (0-1): his head lifts to look at Vance and his near arm rises weakly towards him, trembling."""
     j = V.standing(MAN)
     j['footL'] = (-60.0, V.ANKLE_Y, -30.0)                       # legs a little apart
-    for s_, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, s_, (sg * 40.0, -300.0, 60.0 + 20.0 * squash), 'up', 'fist')
+    V.arm_to(j, 'L', (-40.0, -300.0, 60.0 + 20.0 * squash), 'up', 'fist')  # the near arm up over his head
+    V.arm_to(j, 'R', (30.0, 330.0, 20.0), 'down', 'fist')         # the far one down his side, behind him (Sam, 9 Nov:
+    j['head_dy'] = -18.0                                          # both arms showed on one side); his neck shows
     tr = 8.0 * math.sin(t * 2 * math.pi * 6.0)
     if beg > 0.01:
-        V.arm_to(j, 'R', _lerp3((40.0, -300.0, 60.0), (30.0, -100.0 + tr, -260.0), beg), 'down', 'palm')
+        V.arm_to(j, 'L', _lerp3((-40.0, -300.0, 60.0), (-30.0, -100.0 + tr, -260.0), beg), 'down', 'palm')
     j['head_lean'] = -32.0 * beg + 6.0 * squash                    # a blow drives his face down
     j['head_props'] = [tache]
     return j
