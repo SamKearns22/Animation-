@@ -176,7 +176,8 @@ PLAN = dict(CEIL=3.2, ROOMS={'study': (-2.6, 0.0, 2.6, ST.D_WALL)},
                   'cliff': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=ST.CLIFF_F),    # (its own world:
                   'close': dict(pos=(0.0, 1.7, 0.0), look=(0.0, 1.7, 5.0), focal=1500),          # sets, strait)
                   'gas': dict(pos=(0.0, 1.5, 0.0), look=(0.0, 1.5, 5.0), focal=1300),
-                  'street': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=SX.FOCAL)}, GROUPS={},
+                  'street': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=SX.FOCAL),
+                  'ending': dict(pos=(0.0, 1.6, 0.0), look=(0.0, 1.6, 5.0), focal=SX.FOCAL * 1.6)}, GROUPS={},
             SHOT_MARKS={'study': ['vance']})
 SCRIPT_CONFIRMED = [(9, 'Sam, 8 Nov: line 9 is said exactly as the script; the syllable count over-reads his slow, stressed take')]
 BENCHMARK = ST.BENCHMARK + SX.BENCHMARK
