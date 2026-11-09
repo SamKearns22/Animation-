@@ -282,7 +282,7 @@ def man_at(t):
     return k, surf
 
 
-def face_close(pil, cam, k, sp, t):
+def face_close(pil, cam, k, sp, t, pool=True):
     """His face on its cheek, for the close shots (lying.draw's face reads poorly face down): the house-style head
     (burnham.head: eyes shut, mouth hanging open) laid on its side at the head's place and size, its top along the
     head's own up. Returns the mouth's lower corner on the canvas (for the drool)."""
@@ -321,9 +321,21 @@ def face_close(pil, cam, k, sp, t):
     pil.alpha_composite(sh, (x0, y0))
     # mouth: burnham draws it about 66 units below the head's centre; its lower corner is on the ground side
     mouth = np.array([cx, cy]) + (-up) * 66 * ppu + side * 6 * ppu * 0.88
-    drool_pool(pil, mouth, side, ppu, t)                 # the pool on the soil goes UNDER the face (note 8)
+    if pool:
+        drool_pool(pil, mouth, side, ppu, t)             # the pool on the soil goes UNDER the face (note 8)
     pil.alpha_composite(lay, (x0, y0))
     return mouth, ppu, side
+
+
+def drool_ground(pil, cam, k):
+    """The damp drool patch on the soil at his mouth, drawn before his body so his head and arm lie over it."""
+    head, fwd, up = np.asarray(k['head']), np.asarray(k['hfwd']), np.asarray(k['hup'])
+    mouth = head + fwd * 0.085 - up * 0.045
+    f2 = np.array([fwd[0], fwd[2]]) / (np.hypot(fwd[0], fwd[2]) + 1e-9)
+    c = (mouth[0] + f2[0] * 0.03, mouth[2] + f2[1] * 0.03)
+    d = ImageDraw.Draw(pil, 'RGBA')
+    d.polygon(_ground_poly(cam, c, _blob(0.05, 24, 7, 0.2), h=0.002), fill=(58, 42, 32, 190))
+    d.polygon(_ground_poly(cam, (c[0] + 0.01, c[1] - 0.01), _blob(0.015, 12, 8, 0.2), h=0.003), fill=(170, 170, 170, 90))
 
 
 DRIP = 5.30                                      # a drop runs down the drool on a gust (6.57 is now the cut)
@@ -341,7 +353,7 @@ def drool_pool(pil, mouth, side, ppu, t):
     d.ellipse([px - R * 0.5, py - R * 0.1, px - R * 0.05, py + R * 0.25], fill=(160, 160, 160, 90))
 
 
-def drool_close(pil, mouth, ppu, side, t):
+def drool_close(pil, mouth, ppu, side, t, full=True):
     """A wet string from the corner of his mouth, lying on his cheek down to the face's edge (pinned there: it
     never floats, note 8), then a short sag to the pool on the soil; a drop runs down it on the 6.57 hit."""
     d = ImageDraw.Draw(pil)
@@ -354,6 +366,8 @@ def drool_close(pil, mouth, ppu, side, t):
     w = max(2, int(3.5 * ppu))
     pts = [(mx, my), tuple(m + side * DROOL_EDGE * 0.5 * ppu + np.array([1.0, 0]) * 2 * ppu), tuple(edge), mid,
            tuple(pool)]
+    if not full:                                         # from shot 2 on: only the strand on his cheek, to the face's
+        pts = pts[:3]                                    # edge; the pool is on the ground under him (drool_ground)
     d.line(pts, fill=(206, 220, 226, 230), width=w, joint='curve')
     d.line([(p[0] + w * 0.3, p[1]) for p in pts[:3]], fill=(250, 252, 255, 200), width=max(1, w // 3))
     if DRIP <= t < DRIP + 0.38:                          # the drip
@@ -622,6 +636,8 @@ def _pack_tex(front):
         d.polygon([p(-0.065, 0.065), p(0.065, 0.065), p(0.05, 0.05), p(-0.05, 0.05)], fill=(52, 120, 70, 255))
         f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 11)
         d.text(p(-0.005, 0.0575), 'EGG MAYO', font=f, fill=(255, 255, 255, 255), anchor='mm')
+        im = im.transpose(Image.FLIP_LEFT_RIGHT)         # the front is seen from behind the texture: mirror it so
+        #                                                  EGG MAYO reads (Sam, animatic 4: it was backwards)
     else:
         d.polygon([p(-0.065, 0.065), p(0.065, 0.065), p(0.05, 0.05), p(-0.05, 0.05)], fill=(52, 120, 70, 255))
         for i in range(9):                               # the barcode
@@ -774,18 +790,21 @@ def near_real(t, cam):
         packet_rest_flat(pil, cam, ss)
     draw_vomit(pil, cam)
     draw_bag(pil, cam)
+    draw_pigeons(pil, cam, t)
     k, surf = man_at(t)
-    if close_shot(t):
+    first = shot_of(t)[0] == '1'
+    if not first:
+        drool_ground(pil, cam, k)                        # (Sam, animatic 4: the drool clipped in shots 3 and 4) the
+    if close_shot(t):                                    # pool lies on the soil UNDER him from shot 2 on
         prts = [q for q in man_parts(k) if q.name not in ('head', 'hair', 'ear')]
         L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=prts)
         draw_stains(pil, cam, k)
         if _on_screen(cam, k['head'], 0.25):
-            mouth, ppu, side = face_close(pil, cam, k, MAN, t)
-            drool_close(pil, mouth, ppu, side, t)
+            mouth, ppu, side = face_close(pil, cam, k, MAN, t, pool=first)
+            drool_close(pil, mouth, ppu, side, t, full=first)
     else:
         L.draw(pil, cam, k, MAN, t, surfaces=[(p0, n) for _, p0, n in surf], prts=man_parts(k))
         draw_stains(pil, cam, k)
-        C.drool(pil, cam, k)
     d = dog_at(t)
     if d is not None:
         draw_dog(pil, cam, d)
@@ -851,36 +870,165 @@ def draw_vomit(pil, cam, flat=False):
 
 
 def draw_bag(pil, cam, flat=False):
-    """A white carrier bag on its side, overflowing: cans, a crisp packet, a chip box, a bottle, wrappers (house
-    style: flat colour, one outline, a soft shadow)."""
+    """(Sam, animatic 4: too plain to tell what anything was) A white carrier bag on its side, crumpled, its handles
+    looped out, a blue stripe; spilling: a crushed red lager can, a torn blue crisp packet with crimped ends, an open
+    red-and-white chicken box with bones, a green pop bottle with a label and red cap, a banana skin, a coffee cup.
+    House style: flat colour, one outline, a soft shadow."""
     d = ImageDraw.Draw(pil, 'RGBA')
     x0, z0, rot = BAG
     (_, _), kk = cam.project((x0, 0, z0))
     lw = max(1, int(min(2.2 * B.SS, kk * 0.004 * B.SS)))
+    S_ = 1.25                                            # a touch larger, so it reads from above
 
     def shape(pts, col, c=(0.0, 0.0), r=0.0, h=0.01, outline=True):
         a = math.radians(rot)
-        cx, cz = x0 + c[0] * math.cos(a) - c[1] * math.sin(a), z0 + c[0] * math.sin(a) + c[1] * math.cos(a)
-        Q = _ground_poly(cam, (cx, cz), pts, rot + r, h)
+        cx, cz = x0 + S_ * (c[0] * math.cos(a) - c[1] * math.sin(a)), z0 + S_ * (c[0] * math.sin(a) + c[1] * math.cos(a))
+        Q = _ground_poly(cam, (cx, cz), [(u * S_, v * S_) for u, v in pts], rot + r, h)
         d.polygon(Q, fill=col)
         if outline:
             d.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
 
+    def line(pts, col, c=(0.0, 0.0), r=0.0, h=0.02, w=1.0):
+        a = math.radians(rot)
+        cx, cz = x0 + S_ * (c[0] * math.cos(a) - c[1] * math.sin(a)), z0 + S_ * (c[0] * math.sin(a) + c[1] * math.cos(a))
+        Q = _ground_poly(cam, (cx, cz), [(u * S_, v * S_) for u, v in pts], rot + r, h)
+        d.line(Q, fill=col, width=max(1, int(lw * w)), joint='curve')
+
     def rect(L_, W_):
         return [(-L_ / 2, -W_ / 2), (L_ / 2, -W_ / 2), (L_ / 2, W_ / 2), (-L_ / 2, W_ / 2)]
-    shape(_blob(0.24, 30, 11, 0.15), (30, 22, 16, 55), c=(0.08, 0.05), h=0.002, outline=False)   # shadow
-    shape([(-0.20, -0.13), (0.05, -0.15), (0.14, -0.10), (0.16, 0.0), (0.14, 0.10), (0.05, 0.15), (-0.20, 0.13),
-           (-0.24, 0.0)], (238, 238, 232), h=0.06)                                   # the bag, opening at +u
-    shape([(-0.26, -0.04), (-0.32, -0.02), (-0.32, 0.02), (-0.26, 0.04)], (238, 238, 232), h=0.06)  # handles
-    shape(rect(0.13, 0.065), (176, 30, 36), c=(0.24, 0.07), r=40)                    # a crushed can
-    shape(rect(0.03, 0.06), (200, 200, 204), c=(0.30, 0.12), r=40)
-    shape(rect(0.16, 0.11), (40, 90, 190), c=(0.26, -0.08), r=-25)                   # a crisp packet
-    shape(rect(0.15, 0.10), (236, 236, 228), c=(0.40, 0.02), r=10)                    # a chip box, red stripe
-    shape(rect(0.15, 0.03), (196, 36, 36), c=(0.40, 0.02), r=10, outline=False)
-    shape([(-0.11, -0.035), (0.06, -0.035), (0.11, -0.015), (0.11, 0.015), (0.06, 0.035), (-0.11, 0.035)],
-          (60, 120, 60), c=(0.34, 0.20), r=70)                                       # a green bottle
-    shape(rect(0.07, 0.05), (240, 200, 60), c=(0.18, -0.20), r=15)                   # wrappers
-    shape(rect(0.06, 0.04), (232, 232, 232), c=(0.48, -0.10), r=-40)
+
+    def ellp(ru, rv, n=16):
+        return [(ru * math.cos(q), rv * math.sin(q)) for q in np.linspace(0, 2 * math.pi, n, endpoint=False)]
+    # the carrier bag: crumpled outline, a blue stripe, creases, the handles looped out behind
+    for sg in (-1, 1):
+        line([(-0.21, sg * 0.05), (-0.31, sg * 0.09), (-0.34, sg * 0.03), (-0.24, sg * 0.01)], INK, h=0.05, w=2.6)
+        line([(-0.21, sg * 0.05), (-0.31, sg * 0.09), (-0.34, sg * 0.03), (-0.24, sg * 0.01)], (240, 240, 236),
+             h=0.05, w=1.4)
+    bag = [(-0.22, -0.12), (-0.12, -0.15), (-0.02, -0.13), (0.07, -0.16), (0.15, -0.11), (0.13, -0.04),
+           (0.16, 0.03), (0.13, 0.11), (0.05, 0.15), (-0.05, 0.13), (-0.14, 0.15), (-0.23, 0.10), (-0.25, 0.0)]
+    shape(bag, (242, 242, 238), h=0.06)
+    shape([(-0.10, -0.145), (-0.06, -0.14), (-0.06, 0.135), (-0.10, 0.14)], (60, 110, 200), h=0.061, outline=False)
+    for cu in (-0.17, 0.02, 0.09):                                                 # creases
+        line([(cu, -0.10), (cu + 0.03, 0.0), (cu - 0.01, 0.09)], (200, 200, 196), h=0.062, w=0.8)
+    shape([(0.11, -0.06), (0.15, -0.04), (0.15, 0.05), (0.11, 0.07), (0.09, 0.0)], (176, 174, 168), h=0.061)  # mouth
+    # spilling out: a crushed lager can (red, silver ends, white band)
+    shape([(-0.075, -0.034), (0.02, -0.03), (0.03, -0.02), (0.075, -0.034), (0.075, 0.034), (0.03, 0.025),
+           (0.02, 0.032), (-0.075, 0.034)], (196, 32, 40), c=(0.26, 0.10), r=35)
+    shape(rect(0.02, 0.068), (210, 212, 216), c=(0.26 + 0.07, 0.10 + 0.05), r=35)
+    shape(rect(0.018, 0.068), (210, 212, 216), c=(0.26 - 0.06, 0.10 - 0.04), r=35)
+    shape(rect(0.03, 0.068), (250, 250, 248), c=(0.26, 0.10), r=35, outline=False)
+    # a crisp packet: blue foil, crimped ends, a yellow oval, torn at one end
+    crisp = [(-0.08, -0.05)] + [(-0.09 + 0.01 * (i % 2), -0.05 + 0.0125 * i) for i in range(9)] + \
+            [(0.06, 0.05), (0.075, 0.03), (0.065, 0.0), (0.08, -0.025), (0.06, -0.05)]
+    shape(crisp, (36, 84, 196), c=(0.30, -0.10), r=-25)
+    shape(ellp(0.032, 0.022), (250, 210, 40), c=(0.30, -0.10), r=-25, outline=False)
+    # an open chicken box: red and white stripes, the lid flipped open, bones
+    shape(rect(0.13, 0.10), (240, 240, 236), c=(0.45, 0.04), r=10)
+    for j in range(3):
+        shape(rect(0.13, 0.016), (204, 34, 34), c=(0.45 - 0.01 * j * 0, 0.04 - 0.035 + j * 0.035), r=10, outline=False)
+    shape(rect(0.13, 0.10), (232, 228, 220), c=(0.45, 0.15), r=10)                # the lid, open
+    for bu, bv in ((0.42, 0.13), (0.48, 0.17)):
+        line([(-0.03, 0.0), (0.03, 0.0)], (246, 236, 210), c=(bu, bv), r=40, h=0.03, w=2.2)
+    # a green pop bottle: label, red cap
+    shape([(-0.11, -0.032), (0.04, -0.032), (0.08, -0.014), (0.10, -0.012), (0.10, 0.012), (0.08, 0.014),
+           (0.04, 0.032), (-0.11, 0.032)], (70, 150, 80), c=(0.36, 0.26), r=70)
+    shape(rect(0.06, 0.066), (240, 236, 220), c=(0.36, 0.26), r=70, outline=False)
+    shape(rect(0.016, 0.03), (200, 30, 30), c=(0.36 + 0.105 * math.cos(math.radians(70)) * 0 , 0.26), r=70, outline=False)
+    # a banana skin: a curved yellow skin, three floppy peel strips, a brown stalk end
+    arc = [(0.09 * math.cos(q), 0.05 * math.sin(q) - 0.03) for q in np.linspace(0.3, math.pi - 0.3, 9)]
+    shape(arc + [(x_, y_ - 0.022) for x_, y_ in arc[::-1]], (246, 206, 50), c=(0.22, -0.26), r=20)
+    for k_, aa in enumerate((150, 200, 245)):
+        shape([(0.0, -0.01), (0.06, -0.016), (0.075, -0.004), (0.06, 0.008), (0.0, 0.01)], (236, 196, 46),
+              c=(0.22 + 0.075, -0.26 + 0.01), r=aa)
+    shape(ellp(0.012, 0.009, 8), (110, 74, 30), c=(0.22 - 0.085, -0.26 - 0.005), r=20, outline=False)
+    # a coffee cup on its side: white, a brown sleeve, its lid
+    shape(rect(0.11, 0.07), (246, 246, 242), c=(0.05, -0.28), r=-60)
+    shape(rect(0.035, 0.072), (150, 104, 66), c=(0.05, -0.28), r=-60, outline=False)
+
+
+# (Sam, animatic 4) Pigeons by him from shot 2, so we know what the dots on the island are once we are up high; drawn
+# in the world through every camera (close shots and the aerial alike), grown as the camera climbs exactly as the
+# people are, so none pops in. Four by him (world x, z; one by the sick, one hops off when the packet lands), a dozen
+# on the island's paving.
+PIGEONS_NEAR = [(-1.22, -0.70, 200.0), (-0.42, -1.42, 20.0), (0.06, -1.06, 260.0), (0.82, -1.18, 120.0)]
+_PIG_ALL = None
+
+
+def _pigeons_world():
+    global _PIG_ALL
+    if _PIG_ALL is None:
+        rng = np.random.default_rng(21)
+        pc = np.array([-(PATCH_C[0] - LAMP[0]), PATCH_C[1] - LAMP[1]])
+        isl = []
+        while len(isl) < 12:
+            p = np.array(_pol(rng.uniform(6.5, 13.0), rng.uniform(0, 360)))
+            if np.hypot(*(p - pc)) > 5.0 and all(np.hypot(*(p - q)) > 2.2 for q in isl):
+                isl.append(p)
+        _PIG_ALL = [(x, z, h, rng.uniform(0, 6.3)) for x, z, h in PIGEONS_NEAR] + \
+                   [(*world(*p), rng.uniform(0, 360), rng.uniform(0, 6.3)) for p in isl]
+    return _PIG_ALL
+
+
+def draw_pigeons(pil, cam, t, flat=False):
+    """Grey town pigeons, house style from above: a pale body, two dark wing bars, a green-purple neck, a dark grey
+    head pecking at the ground, a little beak, a dark tail; a soft shadow under each."""
+    d = ImageDraw.Draw(pil, 'RGBA')
+    ss = B.SS
+    for i, (x, z, h0, ph) in enumerate(_pigeons_world()):
+        (sx, sy), kk = cam.project((x, 0.0, z))
+        if not (-200 < sx < 1280 and -200 < sy < 2120):
+            continue
+        e = float(np.clip(1080 / max(kk, 1e-6) / 30.0, 1.0, 4.0)) * (1.25 if kk < 200 else 1.0)
+        h = h0 + 35 * math.sin(t * 0.6 + ph)
+        x_, z_ = x + 0.04 * math.sin(t * 0.5 + ph), z + 0.04 * math.cos(t * 0.4 + ph)
+        hop, wings = 0.0, 0.0
+        if i == 0 and t > PACK_LAND - 0.05:              # startled when the packet lands beside it
+            u = min(1.0, (t - PACK_LAND + 0.05) / 0.45)
+            hop = 0.16 * ease(u)
+            wings = math.sin(math.pi * u)
+        a = math.radians(h)
+        fw = np.array([math.cos(a), math.sin(a)])
+        x_, z_ = x_ - fw[0] * hop, z_ - fw[1] * hop
+        peck = 0.03 * max(0.0, math.sin(t * 5 + ph * 3)) * e
+        lw = max(1, int(min(2.2 * ss, kk * 0.006 * ss * e)))
+
+        def shp(pts, col, outline=True, hh=0.01):
+            Q = _ground_poly(cam, (x_, z_), [(u_ * e, v_ * e) for u_, v_ in pts], rot=h, h=hh)
+            d.polygon(Q, fill=col)
+            if outline:
+                d.line(Q + [Q[0]], fill=INK, width=lw, joint='curve')
+
+        def ell(cu, cv, ru, rv, col, outline=True, n=14, hh=0.012):
+            shp([(cu + ru * math.cos(q), cv + rv * math.sin(q)) for q in np.linspace(0, 2 * math.pi, n, endpoint=False)],
+                col, outline, hh)
+        ell(-0.02, 0.02, 0.14, 0.07, (24, 20, 16, 60), False, hh=0.001)          # shadow
+        fan = [(-0.10, -0.025), (-0.19, -0.04)] + [(-0.19 - 0.02 * math.cos(q), 0.04 * math.sin(q))
+                                                  for q in np.linspace(-math.pi / 2, math.pi / 2, 7)] + \
+              [(-0.19, 0.04), (-0.10, 0.025)]
+        shp(fan, (128, 132, 146))                                                  # the tail, a rounded fan
+        shp([(-0.185, -0.04), (-0.205, -0.025), (-0.21, 0.0), (-0.205, 0.025), (-0.185, 0.04), (-0.19, 0.0)],
+            (40, 42, 50), False)                                                   # its dark band
+        if wings > 0:                                                              # wings out as it hops off
+            for sg in (-1, 1):
+                shp([(0.04, sg * 0.04), (-0.02, sg * (0.07 + 0.17 * wings)), (-0.10, sg * (0.06 + 0.15 * wings)),
+                     (-0.07, sg * 0.04)], (150, 154, 168))
+        body = [(0.07, 0.0), (0.06, -0.045), (0.02, -0.07), (-0.05, -0.065), (-0.12, -0.035), (-0.13, 0.0),
+                (-0.12, 0.035), (-0.05, 0.065), (0.02, 0.07), (0.06, 0.045)]
+        shp(body, (164, 168, 180))                                                 # the plump body, tapering back
+        for sg in (-1, 1):                                                         # folded wings: two dark bars,
+            shp([(0.01, sg * 0.062), (-0.10, sg * 0.04), (-0.155, sg * 0.012), (-0.11, sg * 0.02), (0.0, sg * 0.03)],
+                (140, 144, 158), False)                                            # dark wingtips at the back
+            shp([(-0.02, sg * 0.058), (-0.035, sg * 0.03), (-0.025, sg * 0.03), (-0.008, sg * 0.058)], (52, 56, 66), False)
+            shp([(-0.055, sg * 0.05), (-0.07, sg * 0.026), (-0.06, sg * 0.026), (-0.043, sg * 0.05)], (52, 56, 66), False)
+            shp([(-0.11, sg * 0.03), (-0.165, sg * 0.006), (-0.15, sg * 0.004), (-0.10, sg * 0.018)], (40, 42, 50), False)
+        ell(0.07, 0.0, 0.035, 0.04, (96, 132, 112))                               # the green-purple neck
+        ell(0.075, 0.0, 0.018, 0.03, (128, 96, 140), False)
+        hu = 0.11 + peck / e
+        ell(hu, 0.0, 0.03, 0.027, (112, 118, 134))                               # head
+        shp([(hu + 0.026, -0.007), (hu + 0.052, 0.0), (hu + 0.026, 0.007)], (54, 48, 46), False)   # beak
+        ell(hu + 0.027, 0.0, 0.006, 0.008, (236, 236, 236), False)               # the white cere
+        for sg in (-1, 1):
+            ell(hu + 0.008, sg * 0.016, 0.006, 0.006, (226, 120, 40), False)     # eyes
 
 
 def _on_screen(cam, p, margin):
@@ -1751,7 +1899,6 @@ def draw_people(pil, cam, t):
         x, y, h = ebike_at(n, t)
         X.ebike(vb, x, y, h, hood, top, t)
     pram_walk(v, t)
-    pigeons(v, t)
 
 
 PRAM_ARC = (292.0, 332.0)                        # the two women with a pram: the footpath, top right (Sam, 9 Nov)
@@ -1775,34 +1922,6 @@ def pram_walk(v, t):
     hd_ = pr + fw * 0.22 * e
     v.circle(hd_[0], hd_[1], 0.22 * e, (40, 46, 80), INK)
     v.line([tuple(p + fw * 0.35 * e), tuple(pr - fw * 0.38 * e)], INK, w_m=0.05 * e)
-
-
-_PIGEONS = None
-
-
-def pigeons(v, t):
-    """A dozen pigeons on the central island's paving, pecking and shuffling (Sam, 9 Nov); clear of the soil patch,
-    the man and the lamp post. Grey bodies, dark heads, drawn as large as the people so they read."""
-    global _PIGEONS
-    if _PIGEONS is None:
-        rng = np.random.default_rng(21)
-        pc = np.array([-(PATCH_C[0] - LAMP[0]), PATCH_C[1] - LAMP[1]])
-        _PIGEONS = []
-        while len(_PIGEONS) < 12:
-            p = np.array(_pol(rng.uniform(6.5, 13.0), rng.uniform(0, 360)))
-            if np.hypot(*(p - pc)) > 5.0 and all(np.hypot(*(p - q)) > 2.2 for q, *_ in _PIGEONS):
-                _PIGEONS.append((p, rng.uniform(0, 360), rng.uniform(0, 6.3)))
-    e = min(v.enl * 1.4, 5.0)                           # a bit larger than life even among the people
-    for p, h0, ph in _PIGEONS:
-        h = h0 + 40 * math.sin(t * 0.7 + ph)               # turning about as they pick at the ground
-        pos = p + np.array(_pol(0.4, t * 20 + ph * 57)) * 0.5
-        fw = np.array(_pol(1, h))
-        bob = 0.06 * max(0.0, math.sin(t * 6 + ph * 3))     # pecking
-        v.poly(X.rrect(pos[0], pos[1], 0.32 * e, 0.17 * e, h, 0.08 * e, 3), (150, 154, 166), INK)
-        hp = pos + fw * (0.17 + bob) * e
-        v.circle(hp[0], hp[1], 0.065 * e, (70, 84, 96), INK)
-        tl = pos - fw * 0.2 * e
-        v.circle(tl[0], tl[1], 0.05 * e, (90, 92, 104), None)
 
 
 def flat_props(pil, cam, t):
@@ -1832,6 +1951,7 @@ def flat_frame(t, cam):
     aerial_flat(pil, cam, t)
     draw_cars(pil, cam, t)
     draw_people(pil, cam, t)
+    draw_pigeons(pil, cam, t, flat=True)
     flat_props(pil, cam, t)
     draw_vomit(pil, cam, flat=True)
     draw_bag(pil, cam, flat=True)
