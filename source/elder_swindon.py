@@ -1449,19 +1449,22 @@ def lamp_post(d, cam, P, s, ink):
     lean = (np.array([tx * ss, ty * ss]) - foot) * 2.5
     if np.linalg.norm(lean) < 2.0 * s:                    # straight overhead: a short lean still shows it is a pole
         lean = np.array([0.0, -2.0 * s])
+    cap = min(9.0 * s, 64.0 * ss)                        # never longer than this (mid-climb it was a huge pale bar)
+    if np.linalg.norm(lean) > cap:
+        lean = lean / np.linalg.norm(lean) * cap
     top = foot + lean
     u = lean / (np.linalg.norm(lean) + 1e-9)
     n = np.array([-u[1], u[0]])
-    wd = max(3.0 * ss, 0.7 * s)
+    wd = min(max(3.0 * ss, 0.7 * s), 5.0 * ss)
     grey = (196, 196, 190)
     d.ellipse([foot[0] - wd, foot[1] - wd, foot[0] + wd, foot[1] + wd], fill=(70, 70, 74), outline=INK, width=ink)
     d.line([tuple(foot), tuple(top)], fill=INK, width=int(wd + 2 * ink))
     d.line([tuple(foot), tuple(top)], fill=grey, width=int(wd))
-    arm = max(4.0 * ss, 2.6 * s)
+    arm = min(max(4.0 * ss, 2.6 * s), 18.0 * ss)
     a, b = top - n * arm, top + n * arm
     d.line([tuple(a), tuple(b)], fill=INK, width=int(wd * 0.8 + 2 * ink))
     d.line([tuple(a), tuple(b)], fill=grey, width=int(wd * 0.8))
-    hr = max(2.5 * ss, 0.9 * s)
+    hr = min(max(2.5 * ss, 0.9 * s), 6.0 * ss)
     for c in (a, b, top):                                 # the two lamp heads and the cap
         r = hr if c is not top else hr * 0.8
         d.ellipse([c[0] - r, c[1] - r, c[0] + r, c[1] + r], fill=(236, 228, 196), outline=INK, width=ink)
