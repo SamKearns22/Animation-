@@ -9,18 +9,13 @@
 - **Open rule requests:** none (rule 80 written 7 Nov). New rules from A or B are proposed to Sam first.
 - **For Claude:** existing seat support is only `check_seated` (hips on the seat) and the desk-seated note in figure-rig s.4; no stand-up, feet-up or seat-change poses exist yet. Check `source/moves.py`, `posegallery.py`, `figure.py` before building.
 
-## Efficiency rules: Sam's answers (9 Nov), to write in a fresh chat
-Background: the 7-9 Nov weekend used about 90% of a week (Ad-Vanced Notice about 55%, Elder Scrolls Swindon about 27%, tools about 12%);
-the cause was long chats re-read at every step. Rules 31, 44, 55, 85 and the "Fresh chat" rule are already written. Still to word
-(show Sam the exact wording; write on his yes):
-1. **Each film: 12% of a week at most; aim 8-12%** (two films last week came in at 8-12%). The plan's estimate warns Sam in
-   advance of anything inescapably expensive, with its cost and a cheaper option. Each handover adds up the film's measured total
-   (`costwatch.py --report` per chat, rule 44); the first line to Sam warns as soon as the total is on course to pass 12%.
-2. **Rounds went wrong because fixes missed the request, or new ideas came.** Proposal to word: before fixing, each note is
-   restated in one line with the plan (and a still where it's visual) and fixed only once understood; a fix that fails twice
-   stops rendering and goes to a still sheet of 2-3 options. New ideas are welcome, but each one gets its cost said first.
-3. **Tools get their own chats and their own estimates**, separate from any film's 12%; estimate first, build only on Sam's yes.
-4. **Streamline and condense the rules and guides without losing film quality**: merge duplicates, drop dead rules, contents
-   list at the top of each guide, handovers name sections to read. Its own chat (Opus high), estimate first (about 1-2%).
-5. One check sheet per round; re-checks in words with no picture unless something visible changed.
-6. Calibrate the cost watch (WEEK_USD in `.claude/hooks/costwatch.py`) the next time Sam gives his weekly % figure.
+## Efficiency rules: written 9 Nov (rules 44, 86, 87, 88; Sam: Y)
+- **Job C, tidy the rules and guides** without losing film quality: merge rules that say the same thing, drop dead ones, a contents
+  list at the top of each guide, handovers name sections to read. Own chat, Opus high effort; estimate first (about 1-2% of a week),
+  build on Sam's yes (rule 86). Type: "Tidy the rules and guides (Job C in notes/next-jobs.md)".
+- **Job C estimate (9 Nov, waiting for Sam's yes, rule 86):** about 2% of a week, in two chats of about 1% each so neither
+  goes amber. Chat 1: the rulebook (90 rules) and CLAUDE.md: a list of merges and drops goes to Sam first (dropping a rule
+  removes something he agreed), then applied, plus a contents list. Chat 2: the guides: satire.md vs best-practice.md
+  Part 2 overlap, the "Added 8 Oct" tail of quick-video.md folded in, contents lists, research/roadmap pages moved out of
+  guides/. Nothing about how a film looks is changed. Sam said "92%" at the start (taken as: 92% of this week used).
+- **To do:** next time Sam gives his weekly % figure, calibrate WEEK_USD in `.claude/hooks/costwatch.py` to match.
