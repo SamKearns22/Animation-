@@ -13,4 +13,9 @@
 - **Job C, tidy the rules and guides** without losing film quality: merge rules that say the same thing, drop dead ones, a contents
   list at the top of each guide, handovers name sections to read. Own chat, Opus high effort; estimate first (about 1-2% of a week),
   build on Sam's yes (rule 86). Type: "Tidy the rules and guides (Job C in notes/next-jobs.md)".
+- **Job C estimate (9 Nov, waiting for Sam's yes, rule 86):** about 2% of a week, in two chats of about 1% each so neither
+  goes amber. Chat 1: the rulebook (90 rules) and CLAUDE.md: a list of merges and drops goes to Sam first (dropping a rule
+  removes something he agreed), then applied, plus a contents list. Chat 2: the guides: satire.md vs best-practice.md
+  Part 2 overlap, the "Added 8 Oct" tail of quick-video.md folded in, contents lists, research/roadmap pages moved out of
+  guides/. Nothing about how a film looks is changed. Sam said "92%" at the start (taken as: 92% of this week used).
 - **To do:** next time Sam gives his weekly % figure, calibrate WEEK_USD in `.claude/hooks/costwatch.py` to match.
