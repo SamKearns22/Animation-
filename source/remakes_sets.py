@@ -838,33 +838,18 @@ def forest_front(img, cam, view, t=0.0):
     if view == 'down':
         clump(p, 1120, 1960, 260, 160, LEAF_D, 170)
     if view == 'up' and OPT['up'] == 'cap':
-        _link_cap(p)
+        _link_cap(img, cam, t)
 
 
-def _link_cap(p):
-    """Option (rule 87): the back of Link's head in the near corner looking up (ref 01), so KG towers over him: his
-    woven green cap with its spiral, its tip flopping back, a fringe of gold hair, an ear tip."""
+def _link_cap(img, cam, t=0.0):
+    """The back of Link's head and shoulders in the near corner looking up (ref 01), so KG towers over him. It is
+    the cast's own Link seen from behind (note 30: a separate hand-drawn cap with loose hair spikes and a floating
+    ear read as broken pieces; the real back view cannot come apart)."""
     import remakes_cast as RC
-    c = RC.CAST['link']
-    cap, cap_d, hair = c['jacket'], dk(c['jacket'], 0.75), c['hair_c']
-    for k in range(12):                                                 # the hair: locks hanging from under the
-        x = -150 + k * 58                                               # cap, each a pointed tuft (it read as a
-        ln = 260 + 70 * math.sin(k * 1.7)                               # flat yellow block)
-        p.poly(curve([(x - 40, 1600), (x + 40, 1600), (x + 30, 1600 + ln * 0.6), (x + 8, 1600 + ln),
-                      (x - 26, 1600 + ln * 0.55)], 3), hair if k % 2 else dk(hair, 0.9), INK, 2.0)
-    p.poly(curve([(560, 1720), (650, 1560), (690, 1450), (640, 1600), (590, 1760)], 3), c['skin'], INK, 2.6)   # ear tip
-    dome = curve([(-160, 1700), (-150, 1350), (0, 1140), (220, 1080), (420, 1160), (520, 1400), (500, 1640)], 5)
-    p.poly(dome, cap, INK, 3.2)
-    for k in range(9):                                                  # the weave: rows of short strokes
-        y = 1180 + k * 55
-        for i in range(10):
-            x = -120 + i * 70 + (k % 2) * 35
-            p.line([(x, y), (x + 26, y + 10)], cap_d, 2.0)
-    sp = [(180 + math.cos(a) * r, 1360 + math.sin(a) * r * 0.9) for a, r in
-          ((a_, 20 + 22 * a_) for a_ in np.linspace(0, 4.6 * math.pi / 2, 30))]
-    p.line(sp, mix(cap, (200, 220, 120), 0.4), 9.0)                     # the spiral (ref 01)
-    p.line(sp, cap_d, 2.0)
-    p.poly(ribbon(open_curve([(-120, 1500), (-260, 1640), (-300, 1900)], 6), 120, 50), cap, INK, 3.0)   # the tip
+    sp = dict(RC.CAST['link'])
+    s = s_for(1500.0)
+    k = RC.scale_for(sp, s)
+    RC.person(img, cam, 230, 3110 - 928 * k + 5 * math.sin(t * 1.3), s, sp, t, 180)
 
 
 # ================================================================================================ the camp
@@ -1990,17 +1975,19 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_close': {'link': (540, 2300, 1100.0)},            # a close-up: his feet well below the frame
     'forest_edge': {'gunman': (140, 2950, 1250.0)},       # pass 3: a close-up (he was small, lower left); left
                                                           # so his muzzle stays in frame
-    'camp': {'kg': _camp_mark(0.75, 4.2), 'link': _camp_mark(-0.3, 3.5), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
-             'gunman2': _camp_mark(2.4, 6.2), 'gunman3': _camp_mark(2.9, 8.9)},   # pass 3: clear of the gatepost
-                                                                    # and the gate leaves   # pass 2: all three aim left into
-                                                                    # the yard (they aimed at each other), one up in the
-                                                                    # tower; the gate clear
+    'camp': {'kg': _camp_mark(0.0, 4.6), 'link': _camp_mark(-0.95, 5.2), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
+             'gunman2': _camp_mark(1.2, 4.2), 'gunman3': _camp_mark(-0.95, 3.3)},   # note 32 (Sam): nobody behind
+                                                                    # KG. He comes in through the gate; the lookout is
+                                                                    # up in the tower, one man runs in lower left
+                                                                    # (nearest the lens), one middle right, level
+                                                                    # with him; Link follows through the gate
     'town_square': {n: _town_mark(x, d) for n, x, d in (('zelda', -0.40, 4.0), ('malon', 0.08, 4.2), ('ruto', 0.55, 3.95),
                                                           ('goron', 1.15, 4.3), ('saria', 1.68, 4.05))},
                                                                     # pass 2: right and staggered, KG wholly in front
     'town_wall': {'link': (400, WALL_VIEW['base'], WALL_VIEW['ppm']),       # on the cobbles: the shot lifts him
                   'kg': (720, WALL_VIEW['base'], WALL_VIEW['ppm'])},      # pass 2: closer, not cut by the edge
 }
+CAMP_MARKS = {'kg': (0.0, 4.6), 'link': (-0.95, 5.2)}   # the same marks in metres (x, depth), for the moves
 STAGE['camp_open'] = dict(STAGE['camp'])               # S8-S9: the same yard, the gate blown in
 ON_HIGH = {('camp', 'gunman1'), ('camp_open', 'gunman1')}   # the tower lookout: no ground shadow
 STAGE['town_square']['kg'] = _town_mark(-0.88, 2.55)   # in front, below the line, presenting it (pass 2: whole)

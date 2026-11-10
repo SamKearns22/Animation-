@@ -93,10 +93,17 @@ L = {ln['n']: ln for ln in LINES}
 # the action beats, from the lines
 SNAP = L[5]['end'] + 0.12                         # the neck snap, just after "MOVE"
 GATE = L[6]['end'] + 0.3                          # the gate bursts in: S7 starts
-FIRE0 = L[7]['start'] + 0.5                       # firing from "enemy"
-FIRE1 = L[7]['end'] + 0.15
-HIT1, HIT3 = L[7]['start'] + 1.4, L[7]['start'] + 2.5   # KG guns down the tower lookout, then the far gunman
-SCUTTLE = (L[8]['start'] - 0.7, L[8]['start'] + 0.3)
+# the camp (note 32): KG storms in through the gate, shoots the tower lookout on his way, then the man who runs in
+# lower left; Link scuttles in through the gate behind him; the last man comes in middle right
+KG_T = (GATE + 0.08, L[7]['start'] + 0.45, L[7]['start'] + 1.6, L[7]['start'] + 2.3)   # in, stop, on, at his mark
+BURST1 = (L[7]['start'] + 0.5, L[7]['start'] + 1.55)             # up at the tower, from "enemy"
+HIT1 = BURST1[0] + 0.85
+G3_IN = (L[7]['start'] + 1.75, L[7]['start'] + 2.35)             # the lower-left man runs in
+BURST2 = (L[7]['start'] + 2.45, L[7]['start'] + 3.2)
+HIT3 = BURST2[0] + 0.4
+FIRE0, FIRE1 = BURST1[0], BURST2[1]
+SCUTTLE = (L[7]['start'] + 2.3, L[8]['start'] - 0.15)            # Link in through the gate, at his mark for line 8
+G2_IN = (L[8]['start'] + 0.1, L[8]['start'] + 0.75)              # the middle-right man runs in
 S8_AT = L[9]['start'] + 0.42 * (L[9]['end'] - L[9]['start'])   # the push to Navi on "GRENADES"
 ZIP = L[9]['end'] + 0.1                           # Navi zips at the gunman
 BOOM = ZIP + 0.35
@@ -374,72 +381,179 @@ def _camp_cam(z=1.0, cx=W / 2, cy=H / 2):
     return B.Cam(z, cx, cy)
 
 
+def _lerp(a, b, u):
+    return a + (b - a) * u
+
+
+def _kg_camp(t):
+    """KG in the camp (note 32): (x, d, mode). He storms in through the gate, stops to shoot the tower lookout
+    ('tower'), storms on to his mark, turns his gun on the man who runs in lower left ('low'), then stands."""
+    kx, kd = RS.CAMP_MARKS['kg']
+    if t < KG_T[0]:
+        return None
+    if t < KG_T[1]:
+        u = (t - KG_T[0]) / (KG_T[1] - KG_T[0])
+        return _lerp(0.0, 0.1, u), _lerp(RS.WALL_D + 0.6, 7.6, u), 'run'
+    if t < KG_T[2]:
+        return 0.1, 7.6, 'tower'
+    if t < KG_T[3]:
+        u = ease((t - KG_T[2]) / (KG_T[3] - KG_T[2]))
+        return _lerp(0.1, kx, u), _lerp(7.6, kd, u), 'run'
+    if t < BURST2[1] + 0.25:
+        return kx, kd, 'low'
+    return kx, kd, 'stand'
+
+
+def _link_camp(t):
+    """Link in the camp: (x, d, u) with u 0-1 through his scuttle in through the gate behind KG; None before it."""
+    if t < SCUTTLE[0]:
+        return None
+    lx, ld = RS.CAMP_MARKS['link']
+    u = min(1.0, (t - SCUTTLE[0]) / (SCUTTLE[1] - SCUTTLE[0]))
+    v = 1 - (1 - u) ** 1.6                                            # quick in, settling at his mark
+    return _lerp(-0.15, lx, v), _lerp(RS.WALL_D + 0.4, ld, v), u
+
+
+def _scuttle_pose(tt, u):
+    """Note 37b: a crouched front-on run (the kit's front_run with the hips dropped), hands clamped over his ears;
+    returns the pose and how far the crouch drops him (person units)."""
+    import moves
+    sp = RC.CAST['link']
+    j = moves.gait(sp, tt, 'front_run') if u < 1.0 else V.standing(sp)
+    c = 84 if u < 1.0 else 56                                         # the crouch: knees bent, hips low
+    for sd in 'LR':
+        fx, fy, fz = j['foot' + sd]
+        j['foot' + sd] = (fx * 1.5, fy - c, fz)                       # feet apart, a scuttle
+    sw = sp['shoulders']
+    for s_, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, s_, (sg * (sw + 10), -150.0, 40.0), 'down', 'palm')
+    j['head_dy'] = 26
+    return j, c
+
+
+def _kg_draw(img, cam, x, y, s, t, view, flip=1, rot=0.0, mood='war', firing=False):
+    """KG with the MG42 at his body's middle (x, y), tipped rot degrees about it (side on: leaning back to fire up
+    at the tower). Returns the muzzle and its direction (world px)."""
+    rec = 6 * s if firing else 0.0
+    a = math.radians(rot)
+    dx, dy = flip * math.cos(a), -math.sin(a)
+    tgt = _lay(img) if rot else img
+    hands = CR.kg(tgt, cam, x - rec * dx, y - rec * dy, s, view=view, perched=False, stand=True, wings='gun', band=True,
+                  mood=mood, t=t, flip=flip, talk=_talk('kg', t))
+    if rot:
+        img.alpha_composite(tgt.rotate(rot * flip, center=cam.P(x, y), resample=Image.BICUBIC))
+    hx = sum(h[0] for h in hands.values()) / 2 / B.SS
+    hy = sum(h[1] for h in hands.values()) / 2 / B.SS
+    wx = (hx - W / 2) / cam.z + cam.cx                                # hands are screen px through cam: back to world
+    wy = (hy - H / 2) / cam.z + cam.cy
+    ox, oy = wx - x, wy - 20 * s - y                                  # the barrel line, turned with him
+    ca, sa = math.cos(-a * flip), math.sin(-a * flip)
+    bx, by = x + ox * ca - oy * sa, y + ox * sa + oy * ca
+    return (bx + dx * 400 * s, by + dy * 400 * s), (dx, dy)
+
+
 def _camp(t, cam, draw_navi=True, boom_view=False):
-    """The camp at t through cam: the gate (blown in at GATE), the three gunmen (two gunned down, one blown up),
-    KG firing, Link scuttling in, Navi by Link until she goes."""
+    """The camp at t through cam (note 32's staging): the gate blown in at GATE; KG storms in through it, shoots the
+    tower lookout on his way, then the man who runs in lower left; Link scuttles in through the gate behind him; the
+    last man comes in middle right and Navi blows him up. Nobody is behind KG."""
+    import moves
     img = B.canvas((0, 0, 0))
     gate = ease((t - GATE) / 0.25)
     RS.camp(img, cam, t, gate)
     st = RS.STAGE['camp']
-    kx, ky, kppm = st['kg']
+    C = RS.CAMP
     lx, ly, lppm = st['link']
-    firing = FIRE0 <= t < FIRE1 and int(t * FPS) % 2 == 0
-    marks = []
-    for who in ('gunman1', 'gunman3', 'gunman2'):
-        x, y, ppm = st[who]
-        hit = {'gunman1': HIT1, 'gunman3': HIT3, 'gunman2': BOOM}[who]
-        if t >= hit and who == 'gunman2':
-            continue                                                  # blown apart
-        rot = 0.0
-        if t >= hit:
-            rot = 80 * ease((t - hit) / 0.35)
-        if (st[who][0], st[who][1]) and who != 'gunman1':
+    kg = _kg_camp(t)
+    burst = next((k for k, (b0, b1) in enumerate((BURST1, BURST2)) if b0 <= t < b1), None)
+    firing = burst is not None and int(t * FPS) % 2 == 0
+
+    def gunman(who, x, y, ppm, flip, hit, j=None, fall=1):
+        rot = fall * 82 * ease((t - hit) / 0.35) if t >= hit else 0.0
+        if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
-        _kid(img, cam, who, x, y, ppm, t, j=_gun_pose(), yaw=90, flip=-1 if x > 540 else 1, rot=rot, talk=False)
-        if hit <= t < hit + 0.3 and who != 'gunman2':
-            _splat(img, cam, x - 0.1 * ppm, y - 1.3 * ppm, 0.28 * ppm, seed=len(who))
-        if who == 'gunman2' and L[8]['start'] <= t < BOOM and int(t * FPS) % 3 == 0:   # he fires back
+        _kid(img, cam, who, x, y, ppm, t, j=j or _gun_pose(), yaw=90, flip=flip, rot=rot, talk=False)
+        if hit <= t < hit + 0.3:
+            _splat(img, cam, x + flip * 0.1 * ppm, y - 1.3 * ppm, 0.28 * ppm, seed=len(who) + int(hit))
+
+    def run_in(who, u, tt):
+        """The aiming pose on running legs while he comes in (u < 1)."""
+        j = _gun_pose()
+        if u < 1.0:
+            g = moves.gait(RC.CAST['gunman'], tt, 'run')
+            for k_ in ('footL', 'footR', 'toeL', 'toeR'):
+                j[k_] = g[k_]
+        return j
+
+    # the tower lookout (far, up in his box), aiming down at the gate
+    x, y, ppm = st['gunman1']
+    gunman('gunman1', x, y, ppm, -1, HIT1, fall=-1)
+    targets = {0: (x - 0.05 * ppm, y - 1.25 * ppm)}
+    # far to near: Link (behind KG, in through the gate), KG, the middle-right man, the lower-left man
+    lk = _link_camp(t)
+    link_at = None
+    if lk:
+        x_, d_, u = lk
+        sx, sy = C.p(x_, d_)
+        ppm = C.ppm(d_)
+        j, c = _scuttle_pose(t - SCUTTLE[0], u)
+        k = RC.scale_for(RC.CAST['link'], RS.s_for(ppm))
+        RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['link'])
+        _kid(img, cam, 'link', sx, sy + c * k, ppm, t, 'aghast' if t < L[8]['start'] - 0.1 else 'wince', j=j)
+        link_at = (sx, sy, ppm)
+    muzzle = None
+    if kg:
+        x_, d_, mode = kg
+        sx, sy = C.p(x_, d_)
+        ppm = C.ppm(d_)
+        s = RS.s_for(ppm)
+        stomp = 0.0
+        if mode == 'run':
+            stomp = 26 * s * abs(math.sin((t - KG_T[0]) * math.pi * 4.0))       # four stamping steps a second
+            sx += 10 * s * math.sin((t - KG_T[0]) * math.pi * 4.0)
+        RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['kg'])
+        if mode == 'tower':
+            turn = ease((t - KG_T[1]) / 0.12)
+            muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, 50 * turn, firing=firing)
+        else:
+            muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', -1 if mode == 'low' else 1,
+                              firing=firing)
+    # the middle-right man: runs in from the right, level with KG, and opens fire
+    x, y, ppm = st['gunman2']
+    if G2_IN[0] <= t < BOOM:
+        u = min(1.0, (t - G2_IN[0]) / (G2_IN[1] - G2_IN[0]))
+        x2 = x + (1 - ease(u)) * 1.6 * ppm
+        gunman('gunman2', x2, y, ppm, -1, 1e9, run_in('gunman2', u, t - G2_IN[0]))
+        if u >= 1.0 and int(t * FPS) % 3 == 0:                        # he fires at them
             _flash(img, cam, x - 1.05 * ppm, y - 1.32 * ppm, 0.16 * ppm, seed=int(t * 12))
-        marks.append((who, x, y, ppm))
-    # Link scuttles in from the left, front on, low (hands over ears), wince
-    if t >= SCUTTLE[0]:
-        u = ease((t - SCUTTLE[0]) / (SCUTTLE[1] - SCUTTLE[0]))
-        x = -150 + (lx + 150) * u
-        bob = 18 * abs(math.sin((t - SCUTTLE[0]) * 14)) * (1 - u)
-        j = V.standing(RC.CAST['link'])
-        sw = RC.CAST['link']['shoulders']
-        for s_, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, s_, (sg * (sw + 10), -150.0, 40.0), 'down', 'palm')
-        j['head_dy'] = 20
-        RS.foot_shadow(img, cam, x, ly, lppm, RS.SHADOW_W['link'])
-        _kid(img, cam, 'link', x, ly - bob, lppm, t, 'wince', j=j)
-    # KG standing, the MG42 furled in his wings, war face, bandana
-    s = RS.s_for(kppm)
-    RS.foot_shadow(img, cam, kx, ky, kppm, RS.SHADOW_W['kg'])
-    rec = 6 if firing else 0
-    hands = CR.kg(img, cam, kx - rec, ky - 272 * s, s, view='front', perched=False, stand=True, wings='gun', band=True,
-                  mood='war', t=t, talk=_talk('kg', t))
-    hx = max(h[0] for h in hands.values()) / B.SS
-    hy = sum(h[1] for h in hands.values()) / 2 / B.SS
-    # hands are screen px through cam; back to world for the flash
-    mx = (hx - W / 2) / cam.z + cam.cx + 330 * s
-    my = (hy - H / 2) / cam.z + cam.cy - 20 * s
-    if firing:
-        _flash(img, cam, mx + 30 * s, my, 46 * s, seed=int(t * FPS))
+    # the lower-left man: runs in from the bottom left, nearest the lens, and is cut down
+    x, y, ppm = st['gunman3']
+    if t >= G3_IN[0]:
+        u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
+        x3 = x - (1 - ease(u)) * 1.5 * ppm
+        gunman('gunman3', x3, y, ppm, 1, HIT3, run_in('gunman3', u, t - G3_IN[0]))
+        targets[1] = (x3 + 0.1 * ppm, y - 1.25 * ppm)
+    if firing and muzzle:
+        (mx, my), (dx, dy) = muzzle
+        s = RS.s_for(C.ppm(kg[1]))
+        _flash(img, cam, mx + dx * 30 * s, my + dy * 30 * s, 50 * s, seed=int(t * FPS))
         d = ImageDraw.Draw(img)
-        for who, x, y, ppm in marks:
-            if who != 'gunman2':
-                d.line([cam.P(mx + 60 * s, my), cam.P(x - 0.1 * ppm, y - 1.3 * ppm)], fill=(255, 230, 120), width=int(3 * cam.z * B.SS))
+        tx, ty = targets[burst]
+        if burst == 0:
+            d.line([cam.P(mx, my), cam.P(tx, ty)], fill=(255, 230, 120), width=int(3 * cam.z * B.SS))
+        else:                                                         # the near man: tracers down past the lens
+            d.line([cam.P(mx, my), cam.P(tx, ty)], fill=(255, 230, 120), width=int(4 * cam.z * B.SS))
         for k in range(3):                                            # cases falling
-            cx = mx - 240 * s + 30 * k
+            cx = mx - dx * 300 * s + 30 * s * k
             ay = (t * 5 + k * 0.3) % 1
-            d.rectangle([cam.P(cx, my + 40 * s + ay * 200 * s), cam.P(cx + 8, my + 52 * s + ay * 200 * s)], fill=(210, 170, 70))
+            d.rectangle([cam.P(cx, my + 40 * s + ay * 200 * s), cam.P(cx + 8 * s + 2, my + 52 * s + ay * 200 * s + 2)],
+                        fill=(210, 170, 70))
     if GATE <= t < GATE + 0.18:
-        g0, g1 = RS.CAMP.p(0, RS.WALL_D, 1.2)
+        g0, g1 = C.p(0, RS.WALL_D, 1.2)
         _flash(img, cam, g0, g1, 220, seed=11)
-    # Navi: by Link, then red, then zip, then the blast
-    if draw_navi and t < BOOM:
-        nx, ny = (lx + 90, ly - 1.25 * lppm) if t >= SCUTTLE[1] else (kx - 1.0 * kppm, ky - 1.6 * kppm)
+    # Navi: at Link's shoulder as he comes in, then red, then zip, then the blast
+    if draw_navi and t < BOOM and link_at:
+        sx, sy, ppm = link_at
+        nx, ny = sx + 0.42 * ppm, sy - 1.12 * ppm
         heat = ease((t - S8_AT) / 0.5)
         if t >= ZIP:
             gx, gy, gppm = st['gunman2']
@@ -457,12 +571,13 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             _splat(img, cam, gx, gy, 0.35 * gppm, seed=4)
     RS.camp_front(img, cam, t)
     if t >= L[9]['start']:
-        _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05)
+        _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05)   # screen px, not through cam
     return img
 
 
 def s7_camp(t):
-    return _camp(t, B.Cam(1.0))
+    return _camp(t, B.Cam(1.4, 565, 790))                              # note 32: in on the action (the cast were small
+                                                                      # in the top half over an empty yard)
 
 
 def s8_navi(t):
@@ -640,10 +755,11 @@ def soundtrack(stems=False):
         seg = seg[:max(0, n - s)]
         voice[s:s + len(seg)] += seg
     mg = _sfx('mg42.mp3', 2.8, 5.0)
-    k = int((FIRE1 - FIRE0) * SR)
-    burst = np.tile(mg, k // len(mg) + 1)[:k].copy()
-    burst[-int(0.03 * SR):] *= np.linspace(1, 0, int(0.03 * SR))
-    filmkit.place(rest, burst, at=FIRE0, sr=SR, gain=0.35)
+    for b0, b1 in (BURST1, BURST2):                                   # two bursts: the tower, then the near man
+        k = int((b1 - b0) * SR)
+        burst = np.tile(mg, k // len(mg) + 1)[:k].copy()
+        burst[-int(0.03 * SR):] *= np.linspace(1, 0, int(0.03 * SR))
+        filmkit.place(rest, burst, at=b0, sr=SR, gain=0.35)
     filmkit.place(rest, _crack(), at=SNAP, sr=SR, gain=0.9)
     filmkit.place(rest, _sfx('explosion.mp3'), at=BOOM, sr=SR, gain=0.6)
     end = int(BLACK_AT * SR)

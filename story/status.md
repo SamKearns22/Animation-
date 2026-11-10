@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): animatic 1 sent; Sam's notes 30-40 in. Next: the notes round (Opus, medium). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): animatic 1's notes round part 1 done (notes 30, 31, 32, 37, 37b; camp clip sent). Next: notes 33-40, critique, check sheet (Fable, medium; Sam asked). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

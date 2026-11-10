@@ -271,3 +271,19 @@
 - **For Claude:** source/remakes.py (MAP at top); timing from _L gaps; SNAP/GATE/BOOM/SLAM beats; LIFT wing pose;
   bleeps in recording seconds in _L.
 
+
+### Archived 10 Nov (before the notes round, part 1)
+- **Rules that bite next:** 30 (note 1 is a repeat-kind fault: find why the cap broke before changing it), 8
+  (rehearsal clips of the 4 risky moves before the full animatic), 85 (week at 71%; estimate below).
+- **Done:** animatic 1 sent 10 Nov (3.3 MB). Sam's notes on it are below in "Open notes: animatic 1".
+- **Next (Opus, medium): all of "Open notes: animatic 1"**, in its order. Clips (`final OUT --small --span T0 T1`) of
+  each moved beat, sent as made (no yes needed); one critique round of the changed shots; check sheet; Sam's yes;
+  animatic 2. Then the final only on Sam's clear yes.
+- **Needs Sam:** nothing until the check sheet.
+- **Estimate (Sam asked, 10 Nov):** about 6% of a week to finished (range 5-7%): this round 3-3.5, check sheet and
+  animatic 2 0.5, one more round of Sam's notes 1.5, final and posting 0.5. Hand over on amber.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** none.
+- **For Claude:** source/remakes.py (MAP); camp marks in RS.STAGE['camp']; KG side view CR.kg(view='side'); the cap
+  in the S1/S3 foreground is RS forest_front 'up' with OPT['up']='cap' (RS._link_cap).
+

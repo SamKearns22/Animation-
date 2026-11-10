@@ -139,11 +139,13 @@ def _eye(p, ex, ey, sgn, w, h, iris, lid=0.0, low=0.0, look=0.0, gaze_dy=0.0, pu
             p.line([(o[0] - sgn * 4, o[1] + k * 3), (o[0] + sgn * dx, o[1] + dy)], INK, 2.6)
 
 
-def _brows(p, fx, ey, gap, h, c, inner, outer, w=3.6, length=30, one=None):
+def _brows(p, fx, ey, gap, h, c, inner, outer, w=3.6, length=30, one=None, each=None):
     """Two short arched brows. inner/outer: how far each end rises (+) or drops (-) in units; one = (side, rise)
     lifts a single brow (sceptical)."""
     for sgn in (-1, 1):
         x0, x1 = fx + sgn * (gap - length * 0.45), fx + sgn * (gap + length * 0.55)
+        if each:                                                      # each brow its own (inner, outer) rise
+            inner, outer = each[sgn]
         y0, y1 = ey - h - 18 - inner, ey - h - 14 - outer
         if one and one[0] == sgn:
             y0, y1 = y0 - one[1], y1 - one[1] * 1.2
@@ -228,9 +230,11 @@ def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
         p.ell(fx, my + 3, 9, 2.5, (250, 248, 244), None)               # a glimpse of top teeth
         p.poly(shape, None, INK, 2.6)
         return
-    if mood == 'sceptical':                                           # a flat line pulled to one side
-        p.line(open_curve([(fx - 16, my + 2), (fx + 2, my + 2), (fx + 20, my - 4)], 4), INK, 3.2)
-        return
+    if mood == 'sceptical':                                           # note 31 (Sam: "uuuuuh, okay?"): a small
+        p.line(open_curve([(fx - 20, my + 5), (fx - 8, my + 1), (fx + 4, my + 5), (fx + 14, my + 1), (fx + 24, my - 7)], 5),
+               INK, 3.6)                                              # wavering line hitched up at one corner: an
+        p.line(open_curve([(fx + 22, my - 13), (fx + 28, my - 7), (fx + 25, my)], 4), INK, 2.4)   # awkward half-smile
+        return                                                        # he doesn't mean
     if mood == 'deadpan':
         p.line([(fx - 18, my + 2), (fx + 14, my + 2), (fx + 20, my + 5)], INK, 3.6)
         return
@@ -247,7 +251,10 @@ MOODS = {   # child faces: lids, pupils, brows (inner, outer rise; one = a singl
     'neutral': dict(),
     'smile': dict(brows=(4, 0), mouth='smile'),
     'unsure': dict(brows=(20, -8), mouth='unsure', look=0.0),                      # line 2: "I think so?"
-    'sceptical': dict(lid=(0.42, 0.3), one=(1, 14), brows=(-4, 2), mouth='sceptical', look=-0.55),   # line 4: "Ok?"
+    'sceptical': dict(lid=(0.2, 0.0), each={-1: (16, -6), 1: (40, 34)}, mouth='sceptical', look=0.7, turn=-0.7,
+                      wide=1.04),   # line 4: "Ok?" (note 31; Sam: "a look that conveys: uuuuuh, okay?"): bemused and
+                    # uneasy, not hostile: one brow hiked high, the other tilted up at its inner end (worry), eyes
+                    # wide and slid sideways at KG, head turned a little off, the mouth an awkward hitched line
     'aghast': dict(pupil=0.55, brows=(22, 14), mouth='aghast', wide=1.12),         # line 6: "Oh my god!"
     'wince': dict(lid=(0.5, 0.5), low=0.3, brows=(14, -6), mouth='wince'),         # line 8: "I can't do this"
     'horror': dict(pupil=0.42, low=0.15, brows=(24, -6), mouth='horror', wide=1.06),          # line 10: "This is horrible"
@@ -269,7 +276,7 @@ def kid_head(img, p, sp, t, hx, hy):
     hw, hh, skin = sp['hw'], sp['hh'], sp['skin']
     who = sp['who']
     mood = MOODS[sp.get('mood', 'neutral')]
-    fx = hx + sp.get('turn', 0.0) * hw * 0.16
+    fx = hx + sp.get('turn', mood.get('turn', 0.0)) * hw * 0.16
     HAIR_BACK.get(who, lambda *a: None)(p, sp, hx, hy, hw, hh)
     if sp.get('ears', True):
         for sgn in (-1, 1):                                          # long pointed Hylian ears, out and a little up
@@ -295,7 +302,8 @@ def kid_head(img, p, sp, t, hx, hy):
             closed = mood['closed'][1]
         if sp.get('blink'):
             closed = 'shut'
-        _eye(p, fx + sgn * gap, ey, sgn, ew, eh, sp.get('iris', BLUE_EYE), lids[k], mood.get('low', 0.0),
+        _eye(p, fx + sgn * gap, ey, sgn, ew, eh, sp.get('iris', BLUE_EYE), lids[k],
+             mood['lows'][k] if 'lows' in mood else mood.get('low', 0.0),
              sp.get('look', mood.get('look', 0.0)), sp.get('gaze_dy', mood.get('gaze_dy', 0.0)), mood.get('pupil', 1.0),
              closed, sp.get('lashes', False))
     if mood.get('tears'):                                            # wet eyes: a tear welling at each lower lid
@@ -309,7 +317,7 @@ def kid_head(img, p, sp, t, hx, hy):
     HAIR_FRONT.get(who, lambda *a: None)(p, sp, hx, hy, hw, hh)
     inner, outer = mood.get('brows', (0, 0))                         # brows over the fringe, as the remake's cartoon
     _brows(p, fx, ey, gap, eh, sp.get('brow_c', dk(sp.get('hair_c', L_HAIR), 0.5)), inner * 1.35, outer * 1.35,
-           w=4.4, length=40, one=mood.get('one'))                    # does: they must read at phone size (Link 5)
+           w=4.4, length=40, one=mood.get('one'), each=mood.get('each'))                    # does: they must read at phone size (Link 5)
     return fx
 
 
