@@ -21,7 +21,8 @@
   only the arms: a miss. Plan, Opus high: side-by-side sheet (standing cast vs lying) first, then the build. About 2-3%.
   **Sam, 10 Nov: Y, for the overnight chat. Test on the newest Vance (Ad-Vanced Notice's cast, as in the posted
   final), standing beside his lying versions; the old test trio (P1, LADY, MAGNATE) only after he looks right.**
-  The side-by-side sheet needs Sam's yes before the build (a taste call).
+  Sam, 10 Nov: no yes needed before the build: make the side-by-side sheet, then build straight on, and send him
+  the sheet with the result.
 - **Needs Sam:** nothing (10 Nov: Y to Job I and to merging rules 41, 42, 81: written). Was: 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
 - **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
