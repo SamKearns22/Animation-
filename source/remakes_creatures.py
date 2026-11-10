@@ -693,7 +693,9 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
 
 
 # ================================================================================================ the Goron
-GORON_HEIGHT_U = 1280    # about Link x 1.6 (ref 11)
+GORON_HEIGHT_U = 1280    # the drawing's height in units at size 1
+GORON_SIZE = 0.82        # build chat 8: x 1.6 Link was too big in the line-up; ref 11 (Link nearer the lens yet as
+                         # tall) puts him nearer x 1.3 Link, about 1.6 m
 
 
 def _ruffle(p, y0, w0, y1, w1, col, n=11, seed=0, sag=0.0):
@@ -723,6 +725,7 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     dome of a head flowing into a BIG round belly (a pear, not a bell), the face on the upper third, stubby thick
     arms and legs, grey rocks on his back peeking past his shoulders, a pale tuft on top; in a frilly pink dress
     with gathered ruffles (line 11: happily absent, a vacant smile, drooling)."""
+    s = s * GORON_SIZE
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
     for sgn, (cx, cy, rx, ry) in ((-1, (-330, -900, 72, 56)), (-1, (-280, -990, 60, 46)), (1, (335, -880, 76, 58)),
