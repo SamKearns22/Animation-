@@ -15,6 +15,7 @@ MAP (rule 61)
   sheets ............... alone(WHO, OUT) one creature beside its references, its poses and faces
 
     python3 source/remakes_creatures.py alone kg|navi|goron OUT.jpg
+    python3 source/remakes_creatures.py talk OUT.mp4      (note 29: KG speaking lines 1 and 13, the beak moving)
 """
 import math
 import os
@@ -53,7 +54,6 @@ KG_BEAK = (226, 176, 62)
 KG_FOOT, KG_TALON = (234, 196, 74), (52, 42, 34)
 KG_TAIL, KG_TAIL_TIP = (112, 90, 72), (190, 176, 156)
 KG_WING_EDGE = (168, 128, 92)
-MOUTH_IN, TONGUE = (110, 34, 40), (214, 104, 110)
 BANDANA, BANDANA_D = (192, 38, 40), (140, 24, 28)
 
 GORON, GORON_D, GORON_L = (246, 190, 64), (214, 150, 40), (252, 214, 110)
@@ -244,37 +244,127 @@ def _kg_brow(p, ex, ey, r, sgn, tilt, lift):
     p.poly(_ribbon(path, r * 0.5, r * 0.22), KG_BROW, INK, 2.0)
 
 
-def _kg_beak(p, bx, by, w, kind, spit=False, side=False):
-    """The small gold hooked beak; 'grin' opens it wide into a smile, 'roar' wide and square, 'smile' a closed curl."""
-    if kind in ('grin', 'roar'):                                       # Q3: a BIG grin, corners high, wide open
-        drop = w * (2.3 if kind == 'roar' else 2.0)
-        if kind == 'grin':
-            mouth = curve([(bx - w * 3.1, by - w * 0.5), (bx - w * 1.4, by + w * 0.4), (bx, by + w * 0.6),
-                           (bx + w * 1.4, by + w * 0.4), (bx + w * 3.1, by - w * 0.5), (bx + w * 2.0, by + drop * 0.8),
-                           (bx, by + drop + w * 0.3), (bx - w * 2.0, by + drop * 0.8)], 4)
-        else:
-            mouth = curve([(bx - w * 2.2, by + w * 0.1), (bx, by + w * 0.5), (bx + w * 2.2, by + w * 0.1),
-                           (bx + w * 1.7, by + drop), (bx, by + drop + w * 0.4), (bx - w * 1.7, by + drop)], 4)
-        p.poly(mouth, MOUTH_IN, INK, 2.8)
-        p.ell(bx, by + drop * 0.8, w * 1.2, w * 0.45, TONGUE, None)
-        p.poly(curve([(bx - w * 1.1, by + drop - 6), (bx, by + drop + w * 0.45), (bx + w * 1.1, by + drop - 6),
-                      (bx, by + drop + w * 0.1)], 3), KG_BEAK, INK, 2.2)   # the lower beak, dropped
-        p.poly(mouth, None, INK, 2.8)
-        if kind == 'grin':                                              # the cheeks pushed up at the corners
-            for sgn in (-1, 1):
-                p.line(open_curve([(bx + sgn * w * 3.0, by - w * 0.1), (bx + sgn * w * 3.5, by - w * 0.7),
-                                   (bx + sgn * w * 3.4, by - w * 1.3)], 4), KG_FACE_RIM, 2.4)
-        if spit:                                                        # flecks of spit flying off (no hiss sound)
-            for k, (dx, dy, r) in enumerate(((-2.4, 0.6, 5), (2.6, 0.2, 6), (-3.2, -0.2, 4), (3.4, 1.0, 4), (0.4, 2.6, 5))):
-                p.ell(bx + w * dx * 1.2, by + w * dy, r * 2.2, r * 2.8, (236, 244, 250), INK, 1.6)
-    up = curve([(bx - w * 0.6, by - w * 1.0), (bx + w * 0.6, by - w * 1.0), (bx + w * 0.5, by + w * 0.2),
-                (bx, by + w * 0.9), (bx - w * 0.5, by + w * 0.2)], 4)
-    p.poly(up, KG_BEAK, INK, 2.4)                                       # the upper beak, hooking down
-    p.line([(bx - w * 0.2, by - w * 0.6), (bx - w * 0.1, by + w * 0.2)], dk(KG_BEAK, 0.75), 1.6)
-    if kind == 'smile':
+# Note 29 (Sam, 11 Nov): one real beak, which IS his mouth: a hooked upper half and a lower half hinged at the
+# corners that drops open on each syllable (no lips, no tongue-mouth under it). Each mood's beak: (still opening,
+# talking low, talking high, corners up). The grin and fury are the eyes, brows and the beak's angle and corners.
+BEAK = {'smile': (0.0, 0.0, 0.55, 1.0), 'grin': (0.55, 0.3, 0.9, 1.0), 'roar': (0.9, 0.5, 1.0, -0.4)}
+GAPE = (74, 30, 30)
+KG_BEAK_D = (182, 132, 40)
+
+
+def beak_open(kind, talk=None):
+    """How far the beak is open, 0-1: the mood's still opening, or `talk` (0-1, one syllable at a time, from
+    mouths.loudness_open) laid between the mood's talking low and high."""
+    still, lo, hi, _ = BEAK[kind]
+    return still if talk is None else lo + (hi - lo) * float(talk)
+
+
+SPIT = 'now'    # rule 87 (the spit read as flowers he offers): 'now', 'spray', 'foam', 'glob' (options sheet)
+SPIT_C = (226, 238, 246)
+
+
+def _spit_cone(p, ox, oy, ang, k=1.0):
+    """Hissing spit (line 13): a spray of teardrop drops flung forward in a cone from the open beak."""
+    import random
+    rr = random.Random(13)
+    if SPIT == 'spray':                                                 # a fine spray: many tiny drops in a
+        for i in range(34):                                             # narrow cone, a few streaks
+            a, d = ang + rr.uniform(-0.28, 0.28), rr.uniform(30, 300) * k
+            r_ = rr.uniform(2.5, 6.5) * k * (1.2 - d / (360 * k))
+            p.ell(ox + math.cos(a) * d, oy + math.sin(a) * d, r_, r_, SPIT_C, INK, 1.0)
+        for i in range(5):
+            a, d = ang + rr.uniform(-0.2, 0.2), rr.uniform(40, 200) * k
+            p.line([(ox + math.cos(a) * d, oy + math.sin(a) * d), (ox + math.cos(a) * (d + 40 * k), oy + math.sin(a) * (d + 40 * k))],
+                   SPIT_C, 3.0)
+        return
+    if SPIT == 'foam':                                                  # foamy flecks at the beak, a string of
+        for i in range(8):                                              # drool swinging from it
+            a, d = ang + rr.uniform(-0.6, 0.6), rr.uniform(10, 120) * k
+            x, y = ox + math.cos(a) * d, oy + math.sin(a) * d
+            p.poly(curve([(x + math.cos(j * 1.3) * 9 * k * rr.uniform(0.6, 1.2), y + math.sin(j * 1.3) * 7 * k * rr.uniform(0.6, 1.2))
+                          for j in range(5)], 2), SPIT_C, INK, 1.2)
+        drool = open_curve([(ox - 20 * k, oy + 10 * k), (ox - 10 * k, oy + 70 * k), (ox + 6 * k, oy + 120 * k)], 5)
+        p.poly(_ribbon(drool, 7 * k, 4 * k), SPIT_C, INK, 1.2)
+        p.ell(ox + 6 * k, oy + 132 * k, 10 * k, 13 * k, SPIT_C, INK, 1.2)
+        return
+    if SPIT == 'glob':                                                  # one gob flung out in an arc, speed
+        gx, gy = ox + math.cos(ang) * 200 * k, oy + math.sin(ang) * 200 * k - 30 * k   # lines behind it, two drops
+        for j in (-1, 0, 1):
+            p.line([(ox + math.cos(ang) * 60 * k, oy + j * 12 * k - 10 * k), (gx - 40 * k, gy + j * 12 * k)], SPIT_C, 3.0)
+        p.poly(curve([(gx + 26 * k, gy), (gx, gy + 18 * k), (gx - 54 * k, gy + 4 * k), (gx, gy - 18 * k)], 3), SPIT_C, INK, 1.8)
+        for d, dy, r_ in ((110, 30, 7), (150, -24, 6), (250, 16, 5)):
+            p.ell(ox + math.cos(ang) * d * k, oy + dy * k, r_ * k, r_ * k, SPIT_C, INK, 1.2)
+        return
+    for d, da, rr in ((60, -0.05, 20), (120, 0.25, 16), (100, -0.4, 14), (170, -0.2, 14), (210, 0.15, 12),
+                      (160, 0.5, 11), (260, -0.05, 11), (240, -0.45, 9), (60, 0.45, 12)):
+        a = ang + da
+        x, y, rr = ox + math.cos(a) * d * k, oy + math.sin(a) * d * k, rr * k
+        p.poly(curve([(x + math.cos(a) * rr * 1.1, y + math.sin(a) * rr * 1.1),
+                      (x - math.sin(a) * rr, y + math.cos(a) * rr),
+                      (x - math.cos(a) * rr * 2.6, y - math.sin(a) * rr * 2.6),
+                      (x + math.sin(a) * rr, y - math.cos(a) * rr)], 3), (236, 244, 250), INK, 1.8)
+
+
+def _kg_beak(p, bx, by, w, kind, spit=False, talk=None):
+    """Front view: the beak's root at (bx, by) between the eyes. The upper half hooks down to a point; the lower half
+    hangs from the corners and drops open (beak_open), the dark gape between; corners up for a grin, down for fury."""
+    o = beak_open(kind, talk)
+    up_c = BEAK[kind][3]
+    cy = by + w * 0.95 - up_c * w * 0.25 * (0.4 + o)                    # the corners (the hinge), up in a grin
+    cw = w * (1.05 + 0.45 * o + (0.2 if kind == 'roar' else 0))
+    L, R = (bx - cw, cy), (bx + cw, cy)
+    tip = (bx, by + w * 2.35)                                           # the upper half's hooked point
+    drop = o * w * 2.6
+    low_tip = (bx, by + w * 1.9 + drop)                                # the lower half's point (hidden when shut)
+    lower = curve([L, (bx - cw * 0.95, cy + w * 0.4 + drop * 0.6), low_tip, (bx + cw * 0.95, cy + w * 0.4 + drop * 0.6),
+                   R, (bx, cy + w * 0.3)], 3)
+    p.poly(lower, KG_BEAK_D, INK, 2.4)
+    if o > 0.05:                                                        # the gape: dark inside the open beak
+        gin = curve([(L[0] + w * 0.22, L[1] + w * 0.08), (bx - cw * 0.72, cy + w * 0.3 + drop * 0.55),
+                     (bx, low_tip[1] - w * 0.38), (bx + cw * 0.55, cy + w * 0.35 + drop * 0.5),
+                     (R[0] - w * 0.22, R[1] + w * 0.08), (bx, cy)], 3)
+        gin[:] = [(x, y) for x, y in gin]
+        p.poly(gin, GAPE, None)
+    upper = curve([(bx - w * 0.62, by - w * 0.5), (bx, by - w * 0.72), (bx + w * 0.62, by - w * 0.5),
+                   (bx + w * 0.9, by + w * 0.35), R, (bx + w * 0.42, by + w * 1.6), tip,
+                   (bx - w * 0.42, by + w * 1.6), L, (bx - w * 0.9, by + w * 0.35)], 4)
+    p.poly(upper, KG_BEAK, INK, 2.6)
+    p.line(open_curve([(bx - w * 0.22, by - w * 0.35), (bx - w * 0.3, by + w * 0.7), (bx - w * 0.08, by + w * 1.9)], 4),
+           SHINE, 2.2)                                                  # one highlight down the ridge
+    for sgn in (-1, 1):                                                 # the gape line runs on past each corner:
+        c = L if sgn < 0 else R                                         # up into the cheek for a smile or grin,
+        p.line(open_curve([c, (c[0] + sgn * w * 0.3, c[1] - up_c * w * 0.2),      # down for fury
+                           (c[0] + sgn * w * 0.5, c[1] - up_c * w * 0.5)], 4), INK, 2.2)
+    if spit and o > 0.2 and (talk is None or talk > 0.55):
         for sgn in (-1, 1):
-            p.line(open_curve([(bx + sgn * w * 0.5, by + w * 0.2), (bx + sgn * w * 1.1, by + w * 0.3),
-                               (bx + sgn * w * 1.4, by - w * 0.1)], 4), INK, 2.6)
+            _spit_cone(p, bx + sgn * w * 0.8, low_tip[1] - w * 0.6, math.pi / 2 - sgn * 1.0, 0.6)
+
+
+def _kg_beak_side(p, bx, by, w, kind, spit=False, talk=None):
+    """Side on facing right: the root at (bx, by) on the face disc. The upper half hooks forward and down; the lower
+    half swings down about the gape corner at the back (beak_open), the dark gape between; the corner curls up for a
+    grin, down for fury."""
+    o = beak_open(kind, talk)
+    up_c = BEAK[kind][3]
+    hinge = (bx - w * 0.2, by + w * 1.05)
+    ang = math.radians(50) * o
+    rot = lambda x, y: (hinge[0] + (x - hinge[0]) * math.cos(ang) - (y - hinge[1]) * math.sin(ang),
+                        hinge[1] + (x - hinge[0]) * math.sin(ang) + (y - hinge[1]) * math.cos(ang))
+    lower = [rot(*q) for q in curve([hinge, (bx + w * 0.9, by + w * 1.05), (bx + w * 1.55, by + w * 1.2),
+                                     (bx + w * 1.2, by + w * 1.55), (bx + w * 0.2, by + w * 1.6)], 3)]
+    if o > 0.05:
+        p.poly(curve([hinge, (bx + w * 1.7, by + w * 1.05), rot(bx + w * 1.5, by + w * 1.15)], 2), GAPE, None)
+    p.poly(lower, KG_BEAK_D, INK, 2.4)
+    upper = curve([(bx - w * 0.1, by - w * 0.55), (bx + w * 0.9, by - w * 0.35), (bx + w * 1.7, by + w * 0.3),
+                   (bx + w * 2.05, by + w * 1.1), (bx + w * 1.75, by + w * 1.55), (bx + w * 1.45, by + w * 1.05),
+                   hinge, (bx - w * 0.25, by + w * 0.4)], 4)
+    p.poly(upper, KG_BEAK, INK, 2.6)
+    p.line(open_curve([(bx + w * 0.2, by - w * 0.3), (bx + w * 1.1, by - w * 0.1), (bx + w * 1.7, by + w * 0.55)], 4),
+           SHINE, 2.2)
+    p.line(open_curve([hinge, (hinge[0] - w * 0.45, hinge[1] - up_c * w * 0.3),
+                       (hinge[0] - w * 0.75, hinge[1] - up_c * w * 0.75)], 4), INK, 2.6)
+    if spit and o > 0.2 and (talk is None or talk > 0.55):
+        _spit_cone(p, bx + w * 1.9, by + w * 1.4, math.radians(10), 1.0)
 
 
 def _crest_plume(p, root, pts, w0=72, seed=1, out=1):
@@ -382,7 +472,12 @@ def _kg_feet(p, x, y, sgn, perched):
     talons on each."""
     toes = []
     for k, dx in enumerate((-34, 0, 34)):
-        if perched:                                                     # forward and curling down over the branch
+        if perched == 'stand':                                          # pass 3: standing on the ground (he
+            toes.append([(x + dx * 0.3, y - 6), (x + dx * 1.0, y + 16), (x + dx * 1.6, y + 26), (x + dx * 2.0, y + 30)])
+        elif perched == 'stand_side':                                   # floated): toes flat, splayed on it
+            f = (0.5, 0.9, 1.3)[k]
+            toes.append([(x, y - 6), (x + 30 * f, y + 18), (x + 60 * f, y + 26), (x + 86 * f, y + 30)])
+        elif perched:                                                   # forward and curling down over the branch
             toes.append([(x + dx * 0.3, y - 6), (x + dx * 0.9, y + 18), (x + dx * 1.15, y + 46), (x + dx * 1.0, y + 66)])
         else:                                                           # dangling, spread open
             toes.append([(x + dx * 0.3, y - 6), (x + dx * 1.0, y + 34), (x + dx * 1.5, y + 62), (x + dx * 1.7, y + 88)])
@@ -435,7 +530,7 @@ def _kg_tail(p, root, ang0, n, step, length):
         p.poly(f, None, INK, 2.2)
 
 
-def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all'):
+def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all', talk=None):
     """Facing us (S1, S3, S5, S10): tail behind, the far halves of the wings, the body (rust chest, ochre belly, the
     white bib with its two gold eye-spots), feet, the head with its face disc, eyes, brows, beak, the two crests."""
     m = KG_MOODS[mood]
@@ -490,11 +585,11 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all'):
     for sgn in (-1, 1):
         _kg_eye(p, hx + sgn * 64, hy + 2, 38, m, sgn, look)
         _kg_brow(p, hx + sgn * 64, hy + 2, 38, sgn, *m['brows'])
-    _kg_beak(p, hx, hy + 56, 28, m['beak'], m.get('spit', False))
+    _kg_beak(p, hx, hy + 16, 34, m['beak'], m.get('spit', False), talk)
     return (hx, hy)
 
 
-def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
+def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None):
     """Side on facing right (S5 the swoop, S7 the burst, S12 the wall): tail back, the far wing, the body leaning
     `lean` degrees forward, the near wing in front, the head in profile with its half face disc, one eye, the beak
     forward, the crests sweeping back."""
@@ -506,7 +601,9 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8), taper=True)
     _kg_tail(p, rot(-140, 70), math.radians(146) + r, 5, 0.07, 480)    # the tail back and down: long, narrow,
                                                                         # pointed (ref 02; pass 2: a stub)
-    if not perched:
+    if perched == 'stand_side':
+        _kg_feet(p, *rot(30, 230), 1, 'stand_side')
+    elif not perched:
         _kg_feet(p, *rot(30, 220), 1, False)
     body = R(curve([(-20, -230), (120, -190), (180, -40), (150, 120), (60, 220), (-80, 220), (-170, 120), (-190, -20),
                     (-140, -170)], 5))
@@ -519,7 +616,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
         p.ell(*c, 16, 20, KG_FACE_RIM, INK, 1.6)
         p.ell(*c, 9, 12, KG_FACE, None)
     p.poly(body, None, INK, 2.8)
-    if perched:
+    if perched is True:
         _kg_feet(p, *rot(20, 230), 1, True)
     hx, hy, hw = (*rot(40, -250), 150.0)
     _crest(p, (hx - 70, hy - 90), [(hx - 200, hy - 170), (hx - 320, hy - 250), (hx - 400, hy - 220),
@@ -537,27 +634,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     ex, ey = hx + 82, hy - 6
     _kg_eye(p, ex, ey, 34, m, 1, 0.6)
     _kg_brow(p, ex, ey, 34, 1, *m['brows'])
-    bx, by = hx + hw * 0.98, hy + 46
-    if m['beak'] in ('grin', 'roar'):                                   # open: the lower beak dropped
-        drop = 64 if m['beak'] == 'roar' else 54                        # Q3: big; the grin runs back into his cheek
-        p.poly(curve([(bx - 96, by - 30), (bx - 40, by - 4), (bx + 30, by + 4), (bx + 4, by + drop),
-                      (bx - 50, by + drop - 6), (bx - 86, by - 8)], 3), MOUTH_IN, INK, 2.6)
-        p.ell(bx - 30, by + drop - 16, 30, 12, TONGUE, None)
-        p.poly(curve([(bx - 40, by + drop - 10), (bx + 6, by + drop), (bx - 24, by + drop + 12)], 2), KG_BEAK, INK, 2.0)
-        if m['beak'] == 'grin':
-            p.line(open_curve([(bx - 92, by - 26), (bx - 104, by - 48), (bx - 100, by - 66)], 4), KG_FACE_RIM, 2.4)
-        if m.get('spit'):
-            # pass 2 (town): the flecks read as bubbles: now a spray of drops flung forward in a cone, each
-            # a teardrop
-            for dx, dy, rr in ((80, -6, 22), (140, 30, 18), (110, 70, 15), (180, -36, 16), (230, 40, 14), (180, 96, 12),
-                               (280, 0, 12), (260, -70, 10), (66, 50, 13)):
-                ang = math.atan2(dy - 10, dx)                           # a teardrop, its tail back at the beak
-                p.poly(curve([(bx + dx + math.cos(ang) * rr * 1.1, by + dy + math.sin(ang) * rr * 1.1),
-                              (bx + dx - math.sin(ang) * rr, by + dy + math.cos(ang) * rr),
-                              (bx + dx - math.cos(ang) * rr * 2.6, by + dy - math.sin(ang) * rr * 2.6),
-                              (bx + dx + math.sin(ang) * rr, by + dy - math.cos(ang) * rr)], 3), (236, 244, 250), INK, 1.8)
-    p.poly(curve([(bx - 34, by - 40), (bx + 10, by - 34), (bx + 40, by + 6), (bx + 18, by + 14), (bx - 30, by + 8)], 3),
-           KG_BEAK, INK, 2.4)                                           # the hooked upper beak
+    _kg_beak_side(p, hx + hw * 0.86, hy - 4, 42, m['beak'], m.get('spit', False), talk)   # note 29: one real beak
     el, hd, shape = wings['L']                                          # the near wing, in front
     _kg_wing(p, rot(10, -140), el, hd, shape, 1, taper=True)
     return (hx, hy)
@@ -589,23 +666,39 @@ def kg_gun(p, hands, view):
     p.poly([(x0, y - 22), (ax - 40, y - 34), (ax - 40, y + 26), (x0 + 30, y + 70), (x0 - 6, y + 62)], GUN_C, INK, 2.6)
     p.poly([(ax - 50, y - 40), (bx + 30, y - 40), (bx + 30, y + 22), (ax - 50, y + 22)], GUN_C, INK, 2.6)   # receiver
     p.poly([(ax - 10, y - 52), (ax + 70, y - 52), (ax + 70, y - 40), (ax - 10, y - 40)], GUN_D, INK, 2.0)   # top cover
-    p.poly([(bx + 30, y - 30), (x1 - 40, y - 30), (x1 - 40, y + 8), (bx + 30, y + 8)], GUN_C, INK, 2.4)    # jacket
-    for k in range(int((x1 - 70 - bx) / 34)):
-        p.ell(bx + 56 + k * 34, y - 11, 8, 8, GUN_D, None)                  # the cooling holes
-    p.poly([(x1 - 40, y - 20), (x1 + 10, y - 20), (x1 + 10, y - 2), (x1 - 40, y - 2)], GUN_D, INK, 2.0)    # flash hider
-    p.line([(x1 - 80, y + 8), (x1 - 170, y + 30)], GUN_D, 6.0)               # the bipod, folded
-    p.line([(x1 - 90, y + 8), (x1 - 186, y + 22)], GUN_D, 6.0)
-    belt = open_curve([(ax + 20, y + 22), (ax - 10, y + 80), (ax - 70, y + 120), (ax - 140, y + 130)], 8)  # trails to his side
-    p.poly(_ribbon(belt, 34, 30), (150, 120, 60), INK, 2.0)                  # the ammo belt hanging
+    # pass 3: it read as a rifle. The barrel jacket now fat and paler with two rows of big slots, a carry handle over
+    # it, a pistol grip, and the olive belt box hanging under the receiver, the belt looping out of it
+    jac = mix(GUN_C, (200, 204, 206), 0.32)
+    p.poly([(bx + 30, y - 38), (x1 - 40, y - 38), (x1 - 40, y + 16), (bx + 30, y + 16)], jac, INK, 2.4)    # jacket
+    n = int((x1 - 80 - bx) / 40)
+    for k in range(n):
+        for yy in (y - 22, y + 2):
+            p.ell(bx + 62 + k * 40, yy, 13, 7, GUN_D, None)                 # the cooling slots
+    p.line(open_curve([(bx + 70, y - 38), (bx + 90, y - 80), (bx + 170, y - 80), (bx + 190, y - 38)], 4), GUN_D, 7.0)
+    p.poly([(x1 - 40, y - 26), (x1 + 14, y - 26), (x1 + 14, y + 4), (x1 - 40, y + 4)], GUN_D, INK, 2.0)    # flash hider
+    p.poly([(x1 - 20, y - 54), (x1 - 8, y - 54), (x1 - 8, y - 38), (x1 - 20, y - 38)], GUN_D, None)        # front sight
+    p.line([(x1 - 80, y + 16), (x1 - 170, y + 38)], GUN_D, 6.0)              # the bipod, folded
+    p.line([(x1 - 90, y + 16), (x1 - 186, y + 30)], GUN_D, 6.0)
+    p.poly([(ax - 34, y + 20), (ax - 6, y + 20), (ax - 16, y + 84), (ax - 46, y + 80)], GUN_D, INK, 2.0)  # pistol grip
+    BOX = (92, 100, 60)
+    p.poly([(ax + 10, y + 22), (ax + 100, y + 22), (ax + 104, y + 112), (ax + 6, y + 112)], BOX, INK, 2.4)  # belt box
+    p.line([(ax + 10, y + 46), (ax + 102, y + 46)], dk(BOX, 0.7), 2.0)
+    p.ell(ax + 56, y + 80, 14, 8, (196, 186, 140), INK, 1.2)                  # its stencil
+    belt = open_curve([(ax + 100, y + 30), (ax + 150, y + 70), (ax + 130, y + 130), (ax + 70, y + 150),
+                       (ax + 10, y + 140), (ax - 40, y + 168)], 8)         # looping out of the box, sagging
+    p.poly(_ribbon(belt, 30, 26), (150, 120, 60), INK, 2.0)
     for q in belt[1::2]:
-        p.ell(q[0], q[1], 10, 6, (206, 170, 80), INK, 1.2)
+        p.ell(q[0], q[1], 9, 6, (206, 170, 80), INK, 1.2)
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
-       lean=0.0, look=0.0, tail=1.0, part='all'):
+       lean=0.0, look=0.0, tail=1.0, part='all', talk=None, stand=False):
     """Kaepora Gaebora at world (x, y) (his body's middle), scale s (as for a 1.75 m adult). wings: a WING_POSES name
     (front) or SIDE_WINGS name (side), or a dict {'L': (elbow, hand, shape), 'R': ...} in his own units (front:
     the L wing on screen right). tail < 1 shortens the tail (front: lying back along the ground when he stands).
+    stand: on the ground (camp, town; pass 3: he floated): toes flat on it and, facing us, the tail cut short so
+    it no longer hangs below his talons. His talons then touch y + 270 units.
+    talk: 0-1 beak opening while he speaks (mouths.loudness_open, one syllable at a time); None for the mood's still.
     Returns his wing hands in world coordinates, for what he holds."""
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
@@ -618,7 +711,9 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
             if name_ in ('teach', 'present'):                         # ONE wing raised, like a teacher
                 fe, fh, fs = WING_POSES['fold']
                 wings['R'] = ((-fe[0], fe[1]), (-fh[0], fh[1]), fs)
-        _kg_front(p, mood, wings, perched, band, t, look, tail, part)
+        if stand:
+            perched, tail = 'stand', min(tail, 0.3)
+        _kg_front(p, mood, wings, perched, band, t, look, tail, part, talk)
         if part == 'tail':
             return {}
         if wings_name == 'gun':
@@ -628,7 +723,7 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
         if isinstance(wings, str):
             far, near = SIDE_WINGS[wings]
             wings = {'R': far, 'L': near}
-        _kg_side(p, mood, wings, perched, band, t, lean)
+        _kg_side(p, mood, wings, 'stand_side' if stand else perched, band, t, lean, talk)
         if wings_name == 'gun':
             _gun_over(p, wings, 'side')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
@@ -877,14 +972,22 @@ def tiles(who):
     return out
 
 
+def _head(view, mood, talk=None):
+    lay = Image.new('RGBA', (B.W, B.H), (236, 232, 224, 255))
+    kg(lay, B.Cam(1.0, 540, 960), 540, 1210, 1.0, view=view, mood=mood, talk=talk)   # the head lands near (540, 960)
+    box = (330, 740, 750, 1244) if view == 'front' else (450, 700, 870, 1204)
+    return lay.crop(box).resize((380, 456))
+
+
 def faces(who):
+    """KG's heads (note 29: the beak is his mouth): every mood front and side, then talking (shut, half, wide)."""
     if who != 'kg':
         return []
-    out = []
-    for m in ('kindly', 'hype', 'glee', 'war', 'show', 'fury'):
-        lay = Image.new('RGBA', (B.W, B.H), (236, 232, 224, 255))
-        kg(lay, B.Cam(1.0, 540, 960), 540, 1210, 1.0, mood=m)        # the head's middle lands at (540, 960)
-        out.append((m, lay.crop((330, 740, 750, 1244)).resize((380, 456))))
+    out = [(m, _head('front', m)) for m in KG_MOODS]
+    out += [(m + ', side', _head('side', m)) for m in KG_MOODS]
+    for m in ('kindly', 'hype', 'fury'):
+        for tk in (0.0, 0.5, 1.0):
+            out.append((f'{m} talking {tk:g}', _head('front' if m != 'fury' else 'side', m, tk)))
     return out
 
 
@@ -905,7 +1008,7 @@ def alone(who, out):
         w += t.width + 30
     rows.append(row)
     W = max(3060, sum(int(r.width * 600 / r.height) + 30 for r in refs) + 60)
-    H = 80 + len(rows) * (th + 60) + 660 + (520 if fs else 0)
+    H = 80 + len(rows) * (th + 60) + 660 + 520 * ((len(fs) + 6) // 7)
     img = Image.new('RGB', (W, H), (250, 248, 244))
     d = ImageDraw.Draw(img)
     d.text((30, 20), f'{NAMES[who]} (Remakes): drawn alone beside the references', font=_font(40), fill=(30, 30, 30))
@@ -925,12 +1028,48 @@ def alone(who, out):
         x += r.width + 30
     y += 660
     for i, (m, t) in enumerate(fs):
-        img.paste(t.convert('RGB'), (30 + 420 * i, y))
-        d.text((30 + 420 * i + 190, y + 480), m, font=_font(28), fill=(40, 40, 40), anchor='mm')
+        fx, fy = 30 + 420 * (i % 7), y + 520 * (i // 7)
+        img.paste(t.convert('RGB'), (fx, fy))
+        d.text((fx + 190, fy + 480), m, font=_font(28), fill=(40, 40, 40), anchor='mm')
     img.save(out, quality=88)
+    return out
+
+
+def talkclip(out, lines=(('01', 'front', 'hype', 'wide'), ('13', 'side', 'fury', 'fold')), fps=25):
+    """Note 29: KG speaking his recordings, the beak opening one syllable at a time (mouths.loudness_open), each
+    line's head and mood; a small clip for Sam (540 x 720)."""
+    import subprocess
+    import tempfile
+    import mouths
+    B.SS = 1
+    tmp = tempfile.mkdtemp()
+    n, wavs = 0, []
+    for rec, view, mood, wings in lines:
+        wav = os.path.join(tmp, rec + '.wav')
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', os.path.join(HERE, 'audio', f'remakes-{rec}.m4a'),
+                        '-ac', '1', '-ar', '16000', wav], check=True)
+        wavs.append(wav)
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', wav, '-f', 's16le', '-'], capture_output=True).stdout
+        v = np.frombuffer(raw, np.int16).astype(float)
+        op = mouths.loudness_open(v, 16000)
+        for i in range(int(len(v) / 16000 * fps)):
+            tk = float(op[min(len(op) - 1, int(i / fps * 100))])
+            lay = Image.new('RGBA', (B.W, B.H), (236, 232, 224, 255))
+            kg(lay, B.Cam(1.0, 540, 960), 540, 1210 if view == 'front' else 1260, 1.0, view=view, mood=mood,
+               wings=wings, perched=False, band=(view == 'side'), t=i / fps, talk=tk)
+            box = (170, 470, 910, 1457) if view == 'front' else (300, 540, 960, 1420)
+            lay.crop(box).convert('RGB').resize((540, 720)).save(os.path.join(tmp, f'f{n:05d}.png'))
+            n += 1
+    lst = os.path.join(tmp, 'a.txt')
+    open(lst, 'w').write(''.join(f"file '{w}'\n" for w in wavs))
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-framerate', str(fps), '-i', os.path.join(tmp, 'f%05d.png'),
+                    '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '24',
+                    '-c:a', 'aac', '-b:a', '96k', '-shortest', out], check=True)
     return out
 
 
 if __name__ == '__main__':
     if sys.argv[1] == 'alone':
         print(alone(sys.argv[2], sys.argv[3]))
+    elif sys.argv[1] == 'talk':
+        print(talkclip(sys.argv[2]))

@@ -1,41 +1,19 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 87 (a fault that survives three passes goes on ONE options sheet for Sam), 89 (fix every
-  pass-3 FAULT or name it), 83 (setcheck after each move).
-- **Done (build chat 10, Opus high; stopped on the amber cost watch):** the town's pass-2 faults fixed (list in the
-  commit); critique pass 3 of all three sets recorded (forest 25 faults, camp 22, town 14). Triage below. setcheck clean.
-- **Next (Opus, high):** fix the pass-3 "Fix" list; build ONE options sheet (2-3 drawn options each) for the
-  "Survivors" (rule 87); send it to Sam with the "Name to Sam" list; wait for his picks. No pass 4 before his picks.
-- **Needs Sam:** nothing yet (the options sheet will).
-- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O; the triage below.
+- **Rules that bite next:** 85 (cost watch: Sam, 10 Nov: the week is at 69%, over budget since 58%; get to the
+  animatic ASAP, no more critique passes or options), 87 (Sam's picks from the options sheet), 83 (setcheck).
+- **Done (build chat 11, Opus high):** note 29: KG's beak is his mouth (hinged lower half, opens per syllable from the
+  recording; every mood front and side; clip sent in chat (`python3 source/remakes_creatures.py talk OUT.mp4`); Lost: the wide smiling mouth and
+  tongue). KG stands on the ground in camp and town (no float). All pass-3 Fix items fixed (list in the commit).
+  Options sheet for the six survivors sent in chat (`python3 source/remakes_sets.py options OUT.jpg`) (A = my pick). setcheck clean.
+- **Next (Opus, medium):** set Sam's six picks (OPT in remakes_sets.py, SPIT in remakes_creatures.py; add a picked
+  lean-to to SET_BOXES), then straight to the shots and the animatic. No pass 4.
+- **Needs Sam:** his six letters (or "all A").
+- **Named, not fixed:** in S8-S9 the near gunman's rifle passes in front of the far one (layered right).
 - **Open rule requests:** none.
-- **For Claude:** `source/remakes_sets.py`: `_flagstones` (perspective slabs, any Level), `_house(**build)` +
-  SQUARE_HOUSES, `_crest`/`_banner`, `_townsfolk`, `_palm_bed`, `_planter`, WALL_LEV, `_stone_block`; KG wing pose
-  'present' (remakes_creatures WING_POSES); spit in `_kg_side`. Packs: `source/data/critique/spec_r1/2/3.json` (r1
-  forest, r2 camp, r3 town; panels are `one VIEW` stills in `source/data/critique/remakes_sets/sheets/`; empty
-  r*-p1/p2 folders stand in so `pack` numbers the next pass right).
-
-## Open notes: the sets' pass-3 faults (build chat 10; results in notes/ledger/remakes_sets/round-1/2/3.txt)
-- **Survivors (three passes) -> the options sheet:** forest S1 the up-shot still reads level and KG doesn't tower
-  (canopy below him, open sky "treetop above clouds", trunk barely wider than him); S4/S6 no light shafts read;
-  S5 trunks still even poles, not staggered, and a grey forest unlike the others; camp walls read as a plank fence
-  not corrugated tin, and no shacks (no middle layer); town fountain pale and statue-less (ref 21: dark stone,
-  statues); KG's spit (now reads as flowers he is offering; also comes from a closed beak).
-- **Sam's note 29 (first, before the options sheet):** KG's mouth-and-beaky-nose becomes one real beak that opens and shuts as he talks (brief item 29); his front and side heads, every mood; a clip of him talking.
-- **Fix (new in pass 3):** KG floats in camp and town (his fanned tail hangs below his talons and the shadow sits
-  at his belly: shorten the tail when standing, shadow at the talons); forest door shorter than Link; the path
-  even patio bricks; the lantern reads as a hand bell; the lower half of S1 pale cloud blobs; S5 gunman small in the
-  lower left, not a close-up; camp: ammo box bigger than Link, a gunman's rifle crosses the gatepost and two
-  stand through the open leaf, gate_open's leaves whole (splinter it, a leaf off its hinge, debris) and the gateway
-  a blank olive block (road and jungle beyond), the MG42 reads as a rifle (perforated jacket, belt box), the tower
-  gunman a smudge, the ammo belt stiff, the puddle; town: the trough's flowers bulge off it, barrels and statue
-  unreadable at phone size, bunting louder than the line-up's faces, the banner tassel reads as a yellow blob by
-  Link's knee, the S12 wall is like nothing in the square (put the same rough stone in the square, e.g. the
-  ground floors or a wall stretch).
-- **Name to Sam (not set faults):** Link reads as a girl (camp, forest); Saria as a boy, Goron as a chick; the
-  sheets show neutral faces at the marks, so the acting beats (grin, shrug, wince, doubt) aren't on them; KG's
-  tufts read as horns (Sam: they stay); the gunman's mask reads as a gas mask; Navi reads as a star, not a ball.
+- **For Claude:** CR.kg(talk=0-1, stand=True); CR.beak_open/BEAK; CR.talkclip; RS.OPT/SURVIVORS/options();
+  _flag_rows, _lantern, _gate_fallen/_gate_debris, _lean_to, _statue_robed/_statue_bird, EDGE_OPTS.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
@@ -103,7 +81,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 26 | Budget ideally 12%, stretch to 15% for quality | |
 | 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | |
 | 28 | Sam, 11 Nov: Link has the Kokiri Sword and its sheath | drawn (sheathed; no shot draws it) |
-| 29 | Sam, 11 Nov: KG has a mouth and a beaky nose; he needs a real beak, and the beak moves when he talks | open: build chat 11 (the beak IS the mouth: upper and lower halves, the lower hinges open on each syllable; no lips or tongue-mouth under it; the grin and fury carried by the eyes, brows and beak angle) |
+| 29 | Sam, 11 Nov: KG has a mouth and a beaky nose; he needs a real beak, and the beak moves when he talks | done, build chat 11 (the beak IS the mouth: upper and lower halves, the lower hinges open on each syllable; no lips or tongue-mouth under it; the grin and fury carried by the eyes, brows and beak angle) |
 
 ## References as checklists (Sam's round one, 10 Nov; `references/remakes/`). Ours matches? is ticked at the cast sheet
 | reference | what it shows (count, colours, positions, facing, proportions) | ours matches? |
