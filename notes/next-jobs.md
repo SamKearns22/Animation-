@@ -8,19 +8,21 @@
   `guides/job-packs.md`); job packs live. Job G finished (hidden props flagged).
 - **Next: Job L, five checks (Sam: Y, about 1%), Opus, medium effort:** "Job L: read notes/next-jobs.md, Where things
   stand, and notes/job-j-proposals.md question 5." Rules 72, 62, 50, 27 (now 26), 37.
-- **Job I round 2 done (chat 3, Opus medium):** Sam's 12-14, 17 and faces. Round 1's one-piece leg failed because a
-  leg nearer than the trunk was still split (thigh under the shirt, knee to shoe on its own); now one piece after the
-  trunk (past the hem only what shows; drawn up, from the hip). Lying faces use the face-on drawing when facing us.
-  **Next (chat 4, Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round2-closeup.jpg`.
-  Still open: slumped shirt a box; back hair a blindfold; side-on face (11); no critique pass this round.
+- **Job I round 3 done (chat 3, Opus medium):** 12 knee (second note: the raised knee pointed at the camera, so
+  no bend showed; it now falls out to the side), 14 neck redrawn over an arm in front, 16 near legs come from under
+  the hem. Faces: face-on head stared at us (12, 15), so the turned head is back with his angry brows and dark goatee.
+  **Next (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round3-closeup.jpg`, and his
+  pick on question 1 (a proper turned face in his style is new drawing: Opus, high effort). Still open: slumped shirt
+  a box; back hair a blindfold; no critique pass yet.
 - **Job K next (overnight build, Opus, high effort, about 2.5%):** "Job K build: read notes/next-jobs.md, the Job K
   line in notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
-- **Needs Sam:** I: the round 2 sheets; K: Y/N on proposal 5 once its example is seen.
+- **Needs Sam:** I: the round 3 sheets and question 1; K: Y/N on proposal 5 once its example is seen.
 - **Read:** the pack in `guides/job-packs.md` ("A tool job" for L and K).
 - **Open rule requests:** none.
 - **For Claude:** `preflight.gate_warnings` (refuses when the notes have the template's 'KNOWN (where) or NEW');
   `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`. I: `lying_flat._leg` (front:
-  whole leg after trunk, `keep` past `sc.hem`), `_head` 'three' to 'front'; goatee dark; `no_shine` in burnham too.
+  whole leg after trunk, `keep` past `sc.hem`), goatee dark; `no_shine` in burnham;
+  `on_back` R knee out; `_neck(foot=-6)` after a front arm; views 'three' brows fierce at anger 3+.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

@@ -546,6 +546,9 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         beard = sp['beard_turned']                  # takes this kind in the turned views (Ad-Vanced Notice, 8 Nov)
         bfill, bedge = _beard_col(dict(sp, beard=beard))
     brows = sp.get('brows')
+    if brows is None and sp.get('anger', 0) >= 3:  # the face-on head's angry brows, turned too (Sam, 10 Nov: the
+        brows = 'fierce'                           # turned faces looked cruder than his face-on one)
+        bw = max(bw, 5.2)
     if view == 'three':
         fx = hx + 0.4 * hw
         if kind == 'long':

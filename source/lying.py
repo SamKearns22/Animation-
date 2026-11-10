@@ -191,7 +191,8 @@ def on_back(sp):
     X = (0, 0, flip)
     arms = {'R': ((0.82, 0.066, flip * 0.56), (0.0, 0.0, flip * 1.0)),      # elbows out along the floor
             'L': ((0.22, 0.066, -flip * 0.52), (-0.3, 0.0, -flip * 1.0))}
-    legs = {'R': ((-0.4, 0.06, flip * 0.16), (-0.3, 1.0, flip * 0.3), (-1, 0, 0.1), (0, 1, 0)),
+    legs = {'R': ((-0.4, 0.06, flip * 0.16), (-0.1, 0.75, flip * 1.0), (-1, 0, 0.1), (0, 1, 0)),  # the knee
+    #                     fallen out to the side (Sam, 10 Nov: straight up at the camera, the bend never showed)
             'L': ((-0.68, 0.07, -flip * 0.17), (0.0, 1.0, -flip * 0.1), (-0.25, 0.9, -flip * 0.35), (1, 0, 0))}
     return _head_down(_build((0, 0.105, 0), (0.22, 0.11, 0), (0.66, 0.12, 0), X, (1, 0, 0),
                              (0.1, 1, -flip * 0.35), arms, legs, sp, hips_off=(0, -0.028, 0)), sp)

@@ -152,6 +152,14 @@ def _limb_piece(p, pts, widths, col, lw=2.6, keep=None):
         h = Image.new('L', img.size, 0)
         ImageDraw.Draw(h).polygon([tuple(a + tt), tuple(a - tt), tuple(a - tt + nn * 1e5), tuple(a + tt + nn * 1e5)],
                                   fill=255)
+        hd = ImageDraw.Draw(h)                        # the knee and shin always show (Sam, round 3: cut at
+        for a2, b2, ra, rb in zip(P[1:], P[2:], R[1:], R[2:]):   # the hem, the bent knee didn't read)
+            t2 = b2 - a2
+            n2 = np.array([-t2[1], t2[0]]) / (np.linalg.norm(t2) or 1)
+            ra, rb = ra + w + 1, rb + w + 1
+            hd.polygon([tuple(a2 + n2 * ra), tuple(b2 + n2 * rb), tuple(b2 - n2 * rb), tuple(a2 - n2 * ra)], fill=255)
+        for c, r in zip(P[1:], R[1:]):
+            hd.ellipse([c[0] - r - w - 1, c[1] - r - w - 1, c[0] + r + w + 1, c[1] + r + w + 1], fill=255)
         m, ring = ImageChops.multiply(m, h), ImageChops.multiply(ring, h)
     img.paste(INK, (0, 0), ring)
     img.paste(tuple(col), (0, 0), m)
@@ -213,8 +221,6 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     a = yaw_seen(d, Xh, hfwd)
     vd, _ = V.snap(a)
     hv = V.VIEWS[vd]
-    if hv == 'three':                                 # Sam, 10 Nov round 2: the turned faces looked cruder than his
-        hv = 'front'                                  # own face-on one; lying, a face towards us is the face-on one
     neck = np.asarray(aff.P(0, 0)) / B.SS
     hs = _proj(cam, k['head'])
     u = hs - neck
@@ -236,6 +242,8 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
         xr = _proj(cam, k['head'] + Xh * 0.1) - hs
         if np.dot(xr, rvec) > 0:
             rvec = -rvec
+    turn = 0.0               # Sam, 10 Nov round 3: the face-on head stared straight at us (12, 15); the
+    #                          turned head is kept, its brows and goatee now drawn as on his face-on one (views)
     # its size (Sam, 10 Nov, second note on "balloon heads": the head stayed full standing size beside a body the
     # camera foreshortens, so it read swollen): at the head's own depth, and shrunk with the trunk, at most 22%
     sw = sp.get('shoulders', 150)
@@ -246,6 +254,7 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     hk *= 0.9 * float(np.clip(0.7 + 0.3 * area, 0.8, 1.0))   # lying, a tenth smaller; less again beside a trunk the
     #                                                          camera squashes (whole: 0.9, squashed flat: 0.72)
     hcam = HeadCam(neck, rvec, dvec, sc.s * hk, tag)
+    hcam.turn = turn
     # the head sits where it really shows (Job I chat 2: always 150 units out, a neck pointing at or away from us
     # showed as a long loose block), from 100 (the head's foot on the collar) to the rig's 150
 
@@ -255,7 +264,7 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     return hcam, hv
 
 
-def _neck(img, hc, sp):
+def _neck(img, hc, sp, foot=40):
     """The rig's neck, turned with the head (Job I chat 2: drawn with the trunk it poked out beside a tipped head
     as a loose block); drawn before the trunk so the collar covers its foot."""
     hcam, hv = hc
@@ -266,7 +275,7 @@ def _neck(img, hc, sp):
         q = [(-26, -80), (24, -80), (34, 8), (-30, 8)]
     else:
         q = [(-32, -80), (32, -80), (36, 10), (-36, 10)]
-    q = [(x, 40 if y > 0 else y) for x, y in q]       # its foot well under the shirt (the trunk is tipped to it)
+    q = [(x, foot if y > 0 else y) for x, y in q]     # its foot well under the shirt (the trunk is tipped to it)
     lift = 150.0 + hcam.hy                            # a nearer head: the neck shorter by as much
     q = [(x, y + lift * (y < 0)) for x, y in q]
     p.poly(q, sp['skin'], INK, 2.6)
@@ -274,7 +283,7 @@ def _neck(img, hc, sp):
 
 def _head_draw(img, hc, sp, t):
     hcam, hv = hc
-    q = dict(sp, neck_to=-14.0, no_shine=True)       # the back-of-head's own neck ends at the collar; no shine
+    q = dict(sp, neck_to=-14.0, no_shine=True, turn=getattr(hcam, 'turn', 0.0))       # the back-of-head's own neck ends at the collar; no shine
     #                                                   on a bald crown seen lying (it read as a balloon, Sam 10 Nov)
     V.head_view(img, B.Pen(img, hcam), q, t, hv, q.get('head_dx', 0.0), hcam.hy + q.get('head_dy', 0))
 
@@ -327,7 +336,8 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     dep.update({('leg', sd): cam.depth(tuple(k['kn' + sd])) for sd in 'LR'})
     first, last = [], []
     for key, dd in dep.items():
-        lim = 0.2 if key[0] == 'leg' else -0.03       # legs go under the jacket unless clearly in front of it
+        lim = 0.05 if key[0] == 'leg' else -0.03      # a knee in front: the leg comes out from under the hem
+        #                                               (Sam, round 3: a slumped thigh out of the shirt's side)
         (last if dd < dt - lim else first).append((dd, key))
     sp_draw = dict(sp)
 
@@ -355,6 +365,8 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     for _, key in sorted(last, key=lambda v: -v[0]):
         piece(key, front=True)
     sp_draw.pop('neck_off')
+    if not head_behind and any(kk[0] == 'arm' for _, kk in last):
+        _neck(img, hc, sp_draw, foot=-6)              # an arm in front passes behind the neck, never through it
     if not head_behind:
         _head_draw(img, hc, sp_draw, t)
     return {n: cam.project(tuple(k[n]))[0] for n in L.POINTS}
