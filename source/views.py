@@ -543,7 +543,7 @@ def _hair(sp):
 
 def _beard_col(sp):
     skin, c = sp['skin'], sp.get('beard_c', sp.get('hair_c', (90, 80, 74)))
-    light = sp.get('beard') in ('short', 'stubble', 'goatee')
+    light = sp.get('beard') in ('short', 'stubble')   # a goatee as dark as the face-on one (Sam, 10 Nov)
     return blend(skin, c, 0.55 if light else 0.9), blend(skin, c, 0.85 if light else 1.0)
 
 

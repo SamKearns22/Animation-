@@ -121,6 +121,20 @@ def probe(img, args):
     n_draw = limbs.DRAW[0]                          # an arm the film redraws after this still finds its own body
     try:
         j2 = _draw(lay, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt)
+        bare = None
+        if any(im.getbbox() for im in held.values()):  # Job J: drawn again without the props he holds; where the two
+            bare = Image.new('RGBA', size, (0, 0, 0, 0))  # differ is the prop as the picture shows it (colour keys
+            n_props, junk = len(props), Image.new('RGBA', size, (0, 0, 0, 0))   # came back lightened: Job G chat 4)
+            V.PROBE.update(skip_held=True, full={sd: (lambda p: B.Pen(junk, p.cam)) for sd in 'LR'})
+            limbs.DRAW[0] = n_draw
+            del F.LOG[n_log:]
+            hands = dict((joints or {}).get('hand') or {})   # a 'phone' hand lays its own phone over the circle:
+            for sd in 'LR':                                   # it goes too, so the phone the picture shows counts
+                if held[sd].getbbox() and hands.get(sd) == 'phone':
+                    hands[sd] = 'grip'
+            _draw(bare, cam, x, y, s, sp, t, yaw, {**(joints or {}), 'hand': hands} if hands else joints, head_yaw,
+                  tilt)
+            del props[n_props:]
     except Exception:
         return None
     finally:
@@ -136,6 +150,11 @@ def probe(img, args):
     cut = lambda im: im.crop((x0, y0, x1, y1))
     lay, full, props = cut(lay), {sd: cut(im) for sd, im in full.items()}, [(q, cut(o)) for q, o in props]
     held = {sd: np.asarray(cut(im))[:, :, 3] > 40 for sd, im in held.items()}
+    if bare is not None:                            # the prop's pixels that show in the real picture
+        d = np.abs(np.asarray(lay).astype(np.int16) - np.asarray(cut(bare)).astype(np.int16)).max(axis=2) > 12
+        shown = {sd: held[sd] & d for sd in 'LR'}
+    else:
+        shown = {sd: held[sd] for sd in 'LR'}
     body, m = _key(lay)
     k = B.Local(cam, x, y, s).S(1.0)                # screen pixels per person unit
     bob = (joints or {}).get('bob', 0.0)
@@ -172,7 +191,7 @@ def probe(img, args):
         out['arms'][sd] = dict(fold=fold, fore=float(np.hypot(*v)) / (F.FORE * 0.98),
                                sleeve=m(KEYS[sd][0]), hand=hand_px[sd], full=full_px[sd],
                                shape=(j2.get('hand') or {}).get(sd, 'fist'), sh=pt['sh' + sd], el=pt['el' + sd],
-                               wr=pt['wr' + sd], reach=F.UPPER * k, prop=held[sd])
+                               wr=pt['wr' + sd], reach=F.UPPER * k, prop=held[sd], prop_shown=shown[sd])
     return out
 
 
@@ -340,6 +359,7 @@ def body_faults(pp, sd, a, expect):
 SEAM = 3                      # of the 7 lines walked across a shoulder, this many crossing a line or gap is a seam
 
 
+PROP_SHOWN = 0.3              # Job J: under this share of a held prop showing, it is hidden (behind his back or head)
 TOUCH = 0.12                  # a hand must come within this share of a hand's width of what it holds, on the picture
 
 
@@ -358,6 +378,10 @@ def held_faults(pp, sd, a):
     if gap > TOUCH * width:
         out.append(('off its prop', f"the hand doesn't touch what it holds on the picture (a gap of "
                                     f"{gap / width:.1f} hand-widths)"))
+    shown = a.get('prop_shown')
+    if shown is not None and prop.sum() >= SHOWN * pp['expect'] and shown.sum() < PROP_SHOWN * prop.sum():
+        out.append(('prop hidden', f"what the hand holds is hidden (only {100 * shown.sum() / prop.sum():.0f}% of "
+                                   f"it shows): the action doesn't read from this view"))
     return out
 
 

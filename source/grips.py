@@ -89,8 +89,11 @@ def held(j, side, sp, draw, at=None, hand_over=True):
         return 'face' if c[1] < 20.0 else 'props'
 
     def go(p, j2):
-        draw(p, j2)
-        if V.PROBE.get('held'):                     # handcheck: the prop alone on its own layer, so the hand can be
+        if V.PROBE.get('skip_held'):                # handcheck redraws him without his props to see what shows
+            pass
+        else:
+            draw(p, j2)
+        if V.PROBE.get('held') and not V.PROBE.get('skip_held'):                   # handcheck: the prop alone on its own layer, so the hand can be
             draw(V.PROBE['held'][side](p), j2)      # checked against it on the picture (Job G chat 3)
         if hand_over:                                # the fingers wrap the side we see: the hand over the prop
             V.hand(p, j2, side, sp, j2.get('hand', {}).get(side, 'fist'))
