@@ -8,9 +8,11 @@
   rounder nose (was a spike), the goatee standing off the chin, seen side on (was a stripe). Lying 12, 15 now turned
   (the shot names the head's roll). Vance pixel-identical (kittest). Sheets sent: `notes/sheets/job-i-driver-sheet-numbered.jpg`
   (1-18) and `notes/sheets/job-i-driver-turnaround.jpg` (19-23).
-- **Next:** nothing approved. Open Job I items, each waiting on Sam's Y: the slumped shirt; the back hair (lying 18:
-  the neck block over the back of the head). Both a notes-round size: Opus, medium effort.
-- **Needs Sam:** Y or N to the two open Job I items. (Start each chat with Animation- selected.)
+- **Next, Job I lying fixes (Opus, medium effort; Sam: Y, 11 Nov, for every character, both in one chat):** (1) slumped
+  against a wall, the shirt drawn as a stiff box (lying 16); (2) lying with the back of the head to us, the neck drawn
+  as a square block over it (lying 18; on the driver it reads as a blindfold with his hair band). Both are shared kit
+  (`lying_flat`, `turnhead.neck_over`): check on Vance's lying sheet too; send Sam the remade sheets, numbered.
+- **Needs Sam:** the remade lying sheets when that chat sends them.
 - **Read:** the pack in `guides/job-packs.md` ("A tool job"); `turnhead.py` MAP, section "people".
 - **Open rule requests:** none.
 - **For Claude:** I faces: `turnhead.Person`/`register`/`install`/`draw`/`fitted`/`turnaround`/`SEEN`/`MISSING`,

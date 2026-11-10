@@ -2,8 +2,8 @@
 
 ## Now (11 Nov)
 - Job K finished; Job I finished: bodies and faces (Sam: "It seems good"); one shared turned head for anyone.
-- Needs Sam: Y or N to the two open Job I items (the slumped shirt; the back of the head lying).
-- Next: nothing approved; those two would be Opus, medium effort.
+- Sam: Y (11 Nov) to two lying fixes for every character: the slumped shirt, the back of the head.
+- Next: Opus, medium effort, chat opened 11 Nov.
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
