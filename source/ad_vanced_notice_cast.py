@@ -604,9 +604,14 @@ def torso_view(img, p, sp, view, seated=False):
         check_lines(p, body, -d * 1.1, d * 1.5, 0, bottom)
         p.poly([(-d * 0.92, bottom - 20), (d * 1.24, bottom - 20), (d * 1.22, bottom), (-d * 0.92, bottom)],
                (60, 40, 28), INK, 2.0)
-    elif view == 'back':
-        body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-(sw + 6), 200), (-sw * B.HEM, bottom),
-                (sw * B.HEM, bottom), (sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
+    elif view in ('back', 'three_back'):                  # Job I, 10 Nov: three-quarter back was plain red
+        k = 0.9 if view == 'three_back' else 1.0
+        body = [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
+                (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
+        check_lines(p, body, -sw - 10, sw + 10, 0, bottom)
+    elif view == 'three':                                 # Job I, 10 Nov: three-quarter front was plain red
+        body = [(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom),
+                (sw * 0.78 * B.HEM, bottom), (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)]
         check_lines(p, body, -sw - 10, sw + 10, 0, bottom)
 
 

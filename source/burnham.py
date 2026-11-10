@@ -611,9 +611,10 @@ def torso(img, p, sp, t):
         p.poly([(-sw - 20, 20), (sw + 20, 20), (sw + 60, bottom + 40), (-sw - 60, bottom + 40)], CLOAK, INK, 2.6)
     # neck
     nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
-    p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
-    soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
-         (150, 90, 80), 0.35, 4)                    # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
+    if not sp.get('neck_off'):                   # lying_flat draws the neck with the head (Job I)
+        p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
+        soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
+             (150, 90, 80), 0.35, 4)                # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
     body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200), (-sw * HEM, bottom), (sw * HEM, bottom),
             (sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
     if out == 'suit':

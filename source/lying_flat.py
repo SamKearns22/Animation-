@@ -166,7 +166,7 @@ def _arm(p, sc, cam, k, side, sp):
     V.arm(p, j2, side, sp)
 
 
-def _head(img, cam, k, sp, t, sc, aff, tag, M):
+def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     """The rig's head, turned about the neck base towards the projected head; its view from where the face points."""
     hup, hfwd = _unit(k['hup']), _unit(k['hfwd'])
     Xh = _unit(np.cross(hup, hfwd))
@@ -196,8 +196,33 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):
         if np.dot(xr, rvec) > 0:
             rvec = -rvec
     hcam = HeadCam(neck, rvec, dvec, sc.s, tag)
-    q = dict(sp)
-    V.head_view(img, B.Pen(img, hcam), q, t, hv, q.get('head_dx', 0.0), -150.0 + q.get('head_dy', 0))
+    # the head sits where it really shows (Job I chat 2: always 150 units out, a neck pointing at or away from us
+    # showed as a long loose block), from 100 (the head's foot on the collar) to the rig's 150
+    hcam.hy = -float(np.clip(np.linalg.norm(hs - neck) / sc.s, 100.0, 150.0))
+    return hcam, hv
+
+
+def _neck(img, hc, sp):
+    """The rig's neck, turned with the head (Job I chat 2: drawn with the trunk it poked out beside a tipped head
+    as a loose block); drawn before the trunk so the collar covers its foot."""
+    hcam, hv = hc
+    p = B.Pen(img, hcam)
+    if hv == 'three':
+        q = [(-24, -80), (40, -80), (46, 10), (-20, 10)]
+    elif hv == 'side':
+        q = [(-26, -80), (24, -80), (34, 8), (-30, 8)]
+    else:
+        q = [(-32, -80), (32, -80), (36, 10), (-36, 10)]
+    q = [(x, 40 if y > 0 else y) for x, y in q]       # its foot well under the shirt (the trunk is tipped to it)
+    lift = 150.0 + hcam.hy                            # a nearer head: the neck shorter by as much
+    q = [(x, y + lift * (y < 0)) for x, y in q]
+    p.poly(q, sp['skin'], INK, 2.6)
+
+
+def _head_draw(img, hc, sp, t):
+    hcam, hv = hc
+    q = dict(sp, neck_to=-14.0)                       # the back-of-head's own neck ends at the collar
+    V.head_view(img, B.Pen(img, hcam), q, t, hv, q.get('head_dx', 0.0), hcam.hy + q.get('head_dy', 0))
 
 
 # ---------------------------------------------------------------------------------------------- draw
@@ -247,11 +272,14 @@ def draw(img, cam, k, sp, t=0.0, M=None):
         else:
             _arm(p, sc, cam, k, sd, sp_draw)
     head_behind = cam.depth(tuple(k['head'])) > dt + 0.3
+    hc = _head(img, cam, k, sp_draw, t, sc, aff, tag, M)
+    _neck(img, hc, sp_draw)
     if head_behind:
-        _head(img, cam, k, sp_draw, t, sc, aff, tag, M)
+        _head_draw(img, hc, sp_draw, t)
     for _, key in sorted(first, key=lambda v: -v[0]):
         piece(key)
     tp = B.Pen(img, aff)
+    sp_draw['neck_off'] = True
     if view == 'front':
         q = dict(sp_draw, pose='none', full=False)
         q.setdefault('bottom', V.JACKET)
@@ -260,13 +288,14 @@ def draw(img, cam, k, sp, t=0.0, M=None):
         V.torso_view(img, tp, sp_draw, view, False)
     for _, key in sorted(last, key=lambda v: -v[0]):
         piece(key)
+    sp_draw.pop('neck_off')
     if not head_behind:
-        _head(img, cam, k, sp_draw, t, sc, aff, tag, M)
+        _head_draw(img, hc, sp_draw, t)
     return {n: cam.project(tuple(k[n]))[0] for n in L.POINTS}
 
 
 # ---------------------------------------------------------------------------------------------- the sheet
-def sheet(out, who='vance'):
+def sheet(out, who='vance', extra=()):
     """Vance standing (the flat rig, front and side) beside his lying versions: before (the 3D volumes) and now."""
     import ad_vanced_notice_cast as AC
     import lying as L
@@ -280,7 +309,7 @@ def sheet(out, who='vance'):
         V.person(im, B.Cam(1.0, 540, 960), 540, 700, 1.0, sp, 0.0, yaw)
         cells.append(im.convert('RGB').crop((140, 450, 940, 1750)))
     shots = [('back', None, 0.0), ('back', 60, 0.0), ('face_down', 30, 0.0), ('side', 30, 0.0),
-             ('back', 30, 90.0), ('slump', None, -60.0)]
+             ('back', 30, 90.0), ('slump', None, -60.0)] + list(extra)
     rows = []
     B.SS = 2
     for mode in ('volumes', 'flat'):
@@ -308,7 +337,8 @@ def sheet(out, who='vance'):
     H = 70 + 2 * (cw + 40) + 20
     sh = Image.new('RGB', (W, H), (246, 244, 238))
     d = ImageDraw.Draw(sh)
-    d.text((14, 12), 'Job I: Vance standing (our usual drawing) beside Vance lying: top, the old drawing; '
+    nm = sp.get('name', who)
+    d.text((14, 12), f'Job I: {nm} standing (our usual drawing) beside {nm} lying: top, the old drawing; '
                      'bottom, the new', fill=(20, 20, 20), font=font)
     for i, im in enumerate(cells):
         im = im.copy()
@@ -316,7 +346,8 @@ def sheet(out, who='vance'):
         sh.paste(im, (14 + i * 245, 90))
     d.text((14, 60), 'standing (front, side)', fill=(20, 20, 20), font=small)
     names = ['on the back, eye level', 'on the back, 60 down', 'face down, 30 down', 'curled, 30 down',
-             'on the back, head away', 'slumped, eye level']
+             'on the back, head away', 'slumped, eye level'] + \
+        [f'{p_} {a_ or 0} down, turned {int(y_)}' for p_, a_, y_ in extra]
     x0 = 2 * 245 + 30
     for r, (label, row) in enumerate((('OLD', rows[0]), ('NEW', rows[1]))):
         y = 70 + r * (cw + 40)
@@ -332,6 +363,7 @@ def sheet(out, who='vance'):
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a and a[0] == 'sheet':
-        sheet(a[1] if len(a) > 1 else 'lying-flat-sheet.jpg')
+        sheet(a[1] if len(a) > 1 else 'lying-flat-sheet.jpg', *(a[2:3] or ['vance']),
+              extra=[('ball', 30, 0.0), ('ball', 30, 180.0)] if 'ball' in a else ())
     else:
         print(__doc__)

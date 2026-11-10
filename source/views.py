@@ -450,7 +450,8 @@ def torso_view(img, p, sp, view, seated=False):
     tie = sp.get('tie')
     if view == 'three':
         o = sp.get('v_at', 0.32 * sw)                     # where the shirt's V sits (a person may set it)
-        p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
+        if not sp.get('neck_off'):
+            p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
         p.poly([(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom), (sw * 0.78 * B.HEM, bottom),
                 (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):
@@ -481,7 +482,8 @@ def torso_view(img, p, sp, view, seated=False):
             p.poly([(o - 30, 196), (o + 24, 196), (o + 24, 270), (o - 30, 270)], (248, 248, 248), INK, 2.0)
     elif view == 'side':
         d = 0.6 * sw
-        p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
+        if not sp.get('neck_off'):
+            p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
         p.poly(curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
                       (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3), jc, INK, 2.6)
         if out in ('suit', 'blouse'):
@@ -501,7 +503,8 @@ def torso_view(img, p, sp, view, seated=False):
     else:
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
         nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
-        p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # under the head
+        if not sp.get('neck_off'):
+            p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # under the head
         p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
                 (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
         if out in ('suit', 'blouse'):
@@ -696,9 +699,10 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
                          (hx - hw * 0.66, hy + hh * 0.72), (hx - hw * 0.92, hy + hh * 0.42)], 4)
         p.poly(outline, skin, INK, 2.6)
         nw, ny = 32.0, hy + hh * 0.55               # the same neck the body draws
-        p.poly([(hx - nw, ny), (hx + nw, ny), (hx + nw, hy + 132), (hx - nw, hy + 132)], skin, None)
+        nf = min(hy + 132, sp.get('neck_to', hy + 132))  # lying_flat: stop at the collar (Job I, a nearer head)
+        p.poly([(hx - nw, ny), (hx + nw, ny), (hx + nw, nf), (hx - nw, nf)], skin, None)
         for sg in (-1, 1):
-            p.line([(hx + sg * nw, hy + hh * 0.66), (hx + sg * nw, hy + 132)], INK, 2.6)
+            p.line([(hx + sg * nw, hy + hh * 0.66), (hx + sg * nw, nf)], INK, 2.6)
         if bt > 0:                                  # the near ear, come round towards us
             p.poly(oval(hx + hw * (1 - 0.42 * bt), hy + 6, 12, 22), skin, INK, 2.4)
         if kind == 'bald':
