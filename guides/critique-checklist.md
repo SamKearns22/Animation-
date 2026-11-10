@@ -66,7 +66,7 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 - M3 (7) Parts and faces keep their shape through a move and across views: no neck, arm or wing stretching, no head snapping to profile, the same eyes, brows and glasses style, no line flickering, a flight path that doesn't jump at a cut. Look: each strip, frame to frame.
 - M5 (5) Every hit shows: the thing hit jolts, dents, sparks or breaks, and the damage stays for the rest of the film. Look: frames just after each hit and the shot's last frame.
 - M4 (1) Scrolling or repeating backgrounds move smoothly: no loop jumps back. Look: frames across each scroll.
-- Tools already hold (look only if you see it plainly): nothing flips from in front to behind between frames (rule 57, clipcheck). No tool holds rule 72 yet (Job J): under M2, look at each shot's last frames for a pose dropping back to rest in the last 0.4 s before the cut.
+- Tools already hold (look only if you see it plainly): nothing flips from in front to behind between frames (rule 57, clipcheck). Rule 72's drop back to rest before a cut is checked for standing people (kitchecks.cut_rests, Job L); under M2, look at the last frames only for seated people, creatures, and anything not drawn by views.py.
 
 ## Came from (for Claude; the helper never sees this)
 Harvest, 10 Nov (Job H chat 2: the notes tables of Ad-Vanced, Cry Minister, Islamocommunism, MidTerminal, Patriots 3 and 4, Terfwarts, Halo, Prepper, Netan-Yahoo; notes found by the checks themselves not counted; P9 merged into P7, rule 3 of the header). Short names: AV Ad-Vanced, CM Cry Minister, IC Islamocommunism, MT MidTerminal, P3/P4 Patriots, TW Terfwarts, PM Prepper, NY Netan-Yahoo.

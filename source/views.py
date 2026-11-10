@@ -894,6 +894,13 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
     j2['_drawn']['head_mirror'] = head_mirror
     j2['_drawn']['behind'] = set(behind)          # arms drawn before the torso (the seam check skips them: rule 81)
+    try:                                          # the face's height on a 1920-tall frame, and whether it is in the
+        H = img.size[1]                           # picture (kitchecks.faces: rule 50, a famous face 240 px once; Job L)
+        cx, cy = L0.P(hdx, -150.0 + sp_draw['head_dy'])
+        j2['_drawn']['face_px'] = abs(L0.S(2.1 * sp_draw.get('hh', 90))) * 1920.0 / H
+        j2['_drawn']['face_in'] = 0 <= cx < img.size[0] and 0 <= cy < H
+    except Exception:
+        pass
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull

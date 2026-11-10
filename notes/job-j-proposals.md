@@ -1,4 +1,4 @@
-# Job J proposals (10 Nov). Sam: Y to 1-6 and 8; 7 "do that yourself". ALL WRITTEN the same day (5 is Job L, queued).
+# Job J proposals (10 Nov). Sam: Y to 1-6 and 8; 7 "do that yourself". ALL WRITTEN the same day (5 is Job L, built 10 Nov).
 
 Every by-hand rule was sorted: CHECK (a tool holds it), FOLD (the critique checklist looks for it, rule 89), MERGE
 (said once, inside another rule) or KEEP (a way of working no tool can hold: 11, 30, 44, 47, 67, 77, 86, 87, 88, S4,
@@ -51,7 +51,7 @@ react before a hit) becomes part of critique M2.
 - **Pre-flight warns now** on rule 74 (no acting list), 8 (no "Rehearsal clips sent:") and 61 (no MAP, or a film
   file over 1,000 lines). My pick: 74 and 8 refuse on new films from the next film; 61 stays a warning.
 
-## 5. Next checks, one tool chat (Job L, about 1%, Opus medium) — my pick: Y
+## 5. Next checks, one tool chat (Job L, about 1%, Opus medium) — my pick: Y. BUILT 10 Nov (Job L, about 1.1%)
 72 (no pose back to rest in the last 0.4 s before a cut; the checklist wrongly says a tool already holds it: put
 right in this chat), 62 (each subtitle within 0.3 s of its first word), 50 (each famous face 240 px tall once),
 27 (every swear in the script bleeped), 37 (sounds and references on GitHub, checked at the handover).

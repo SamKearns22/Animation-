@@ -19,7 +19,8 @@ Job H FINISHED 10 Nov (overnight, Sam's "just go"): the critique checklist (37 l
 Job J FINISHED 10 Nov (about 1.5%): rulebook 15 rows shorter, CLAUDE.md shorter, reading packs (`guides/job-packs.md`), hidden props flagged (Job G finished).
 Job I round 1 of Sam's notes done 10 Nov: legs one piece, smaller heads, no lying shadows, face-up-away flagged; sheet sent.
 Job K done 10 Nov (overnight): the 'AI ick' review; 8 proposals wait for Sam's Y/N (`notes/job-k-ai-tells.md`).
-Next: Job L (five checks), Job I's sheet, Job K's build; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
+Job L FINISHED 10 Nov (about 1.1%): five by-hand rules now checked in pre-flight (bleeps, subtitle timing, drop to rest before a cut, famous faces, files on GitHub).
+Next: Job I's sheet, Job K's build; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.

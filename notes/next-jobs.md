@@ -1,21 +1,23 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 89 (now holds old 56, 76, 79), 24 (every thing KNOWN or NEW in the estimate), 41.
-- **Done: Job J FINISHED (10 Nov, Opus high, about 1.5% of the week, cap 3%).** Sam: Y to 1-6 and 8; 7 "do it
-  yourself". Written: 15 rulebook rows merged or retired (list under "Merged numbers"); critique lines S5, M2, O1 took
-  old 4, S1, 34; pre-flight refuses a film from the 10 Nov template with no acting list or rehearsal line (rules 74,
-  8), warns on 61; CLAUDE.md rewritten shorter (2,180 to 1,540 words, every rule kept; film types moved to
-  `guides/job-packs.md`); job packs live. Job G finished (hidden props flagged).
-- **Next: Job L, five checks (Sam: Y, about 1%), Opus, medium effort:** "Job L: read notes/next-jobs.md, Where things
-  stand, and notes/job-j-proposals.md question 5." Rules 72, 62, 50, 27 (now 26), 37.
-- **Job I next (chat 3, Opus, medium effort):** Sam's look at `notes/sheets/job-i-driver-sheet.jpg` (panel numbers).
-- **Job K next (overnight build, Opus, high effort, about 2.5%):** "Job K build: read notes/next-jobs.md, the Job K
-  line in notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
+- **Rules that bite next:** 62 (subtitle pieces now timed against the take: Terfwarts' fallback timing is 2.3 s off on
+  line 8), 50 (every film needs a `FAMOUS` list), 89.
+- **Done: Job L FINISHED (10 Nov, Opus, about 1.1% of the week, cap 1.5%).** Five by-hand rules now checked in
+  pre-flight: 26 every swear has a bleep; 62 each subtitle piece within 0.3 s of its first word (0.6 s inside a phrase);
+  72 a standing person's arm dropping back to rest in the last 0.4 s before a cut; 50 each FAMOUS face 240 px once;
+  37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns
+  and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback (used when a line's
+  phrases don't match its commas) puts pieces up to 2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
+- **Next:** Job I chat 3 (Opus, medium effort): Sam's look at `notes/sheets/job-i-driver-sheet.jpg`. Job K build
+  (Opus, high effort, about 2.5%): "Job K build: read notes/next-jobs.md, the Job K line in
+  notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
 - **Needs Sam:** I: the sheet; K: Y/N on proposal 5 once its example is seen.
-- **Read:** the pack in `guides/job-packs.md` ("A tool job" for L and K).
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
 - **Open rule requests:** none.
-- **For Claude:** `preflight.gate_warnings` (refuses when the notes have the template's 'KNOWN (where) or NEW');
-  `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`.
+- **For Claude:** `voices.caption_start_check`, `voices.word_times` (phrase starts from pauses; inside, from syllable
+  peaks), `voices.bleep_check` (SWEARS_OK); `kitchecks.cut_rests` (CUT_RESTS_OK; seated left out),
+  `kitchecks.faces` (views `_drawn['face_px']`, or mouths_seen; FAMOUS names are fnmatch patterns, e.g. '*vance*';
+  only refuses on 10 Nov template films), `ledger.kept`. Old films: no FAMOUS list is a printed warning.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

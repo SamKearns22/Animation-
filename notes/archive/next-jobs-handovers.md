@@ -223,3 +223,25 @@
   `handcheck.held_faults` (PROBE['held'] layer per side, TOUCH 0.12), kittest `held_prop_touches`. Unfinished: a
   "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
   from behind in the dict too); `posegallery._wrap`.
+
+
+## Archived 10 Nov (Job L chat)
+### Where things stand (before Job L) (project, 10 Nov; no film in progress)
+
+- **Rules that bite next:** 89 (now holds old 56, 76, 79), 24 (every thing KNOWN or NEW in the estimate), 41.
+- **Done: Job J FINISHED (10 Nov, Opus high, about 1.5% of the week, cap 3%).** Sam: Y to 1-6 and 8; 7 "do it
+  yourself". Written: 15 rulebook rows merged or retired (list under "Merged numbers"); critique lines S5, M2, O1 took
+  old 4, S1, 34; pre-flight refuses a film from the 10 Nov template with no acting list or rehearsal line (rules 74,
+  8), warns on 61; CLAUDE.md rewritten shorter (2,180 to 1,540 words, every rule kept; film types moved to
+  `guides/job-packs.md`); job packs live. Job G finished (hidden props flagged).
+- **Next: Job L, five checks (Sam: Y, about 1%), Opus, medium effort:** "Job L: read notes/next-jobs.md, Where things
+  stand, and notes/job-j-proposals.md question 5." Rules 72, 62, 50, 27 (now 26), 37.
+- **Job I next (chat 3, Opus, medium effort):** Sam's look at `notes/sheets/job-i-driver-sheet.jpg` (panel numbers).
+- **Job K next (overnight build, Opus, high effort, about 2.5%):** "Job K build: read notes/next-jobs.md, the Job K
+  line in notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
+- **Needs Sam:** I: the sheet; K: Y/N on proposal 5 once its example is seen.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for L and K).
+- **Open rule requests:** none.
+- **For Claude:** `preflight.gate_warnings` (refuses when the notes have the template's 'KNOWN (where) or NEW');
+  `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`.
+
