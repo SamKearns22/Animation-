@@ -22,15 +22,17 @@ INK = (24, 20, 22)
 
 # ------------------------------------------------------------------------------------------- shadows
 def contact_shadow(img, cam, x, y, w, h=None, alpha=0.28, colr=(0, 0, 0)):
-    """A soft, flat shadow where something meets the ground (world units): x, y the contact point, w its width.
-    Feet, chair castors, bins and boxes all get one, so nothing floats."""
+    """A flat shadow where something meets the ground (world units): x, y the contact point, w its width.
+    Feet, chair castors, bins and boxes all get one, so nothing floats. Hard-edged (ed.HARD, Job K); soft when off."""
+    import ed
     h = h if h is not None else w * 0.18
     X, Y = cam.P(x, y)
     W, H = cam.S(w), cam.S(h)
     pad = int(H * 2 + 4)
     lay = Image.new('RGBA', (int(W) + 2 * pad, int(H) + 2 * pad), (0, 0, 0, 0))
     ImageDraw.Draw(lay).ellipse([pad, pad, pad + W, pad + H], fill=colr + (int(255 * alpha),))
-    lay = lay.filter(ImageFilter.GaussianBlur(max(1, H * 0.35)))
+    if not ed.HARD:
+        lay = lay.filter(ImageFilter.GaussianBlur(max(1, H * 0.35)))
     img.alpha_composite(lay, (int(X - W / 2 - pad), int(Y - H / 2 - pad)))
 
 

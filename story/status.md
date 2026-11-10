@@ -17,10 +17,10 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
 Job H FINISHED 10 Nov (overnight, Sam's "just go"): the critique checklist (37 lines from Sam's past notes) and `source/critique.py`, the fresh-eye critique every film now runs before an animatic (pre-flight refuses without it); calibrated on Elder Swindon.
 Job J FINISHED 10 Nov (about 1.5%): rulebook 15 rows shorter, CLAUDE.md shorter, reading packs (`guides/job-packs.md`), hidden props flagged (Job G finished).
-Job I round 1 of Sam's notes done 10 Nov: legs one piece, smaller heads, no lying shadows, face-up-away flagged; sheet sent.
-Job K done 10 Nov (overnight): the 'AI ick' review; 8 proposals wait for Sam's Y/N (`notes/job-k-ai-tells.md`).
+Job I round 2 of Sam's notes done 10 Nov: near legs one piece from the hip, lying faces match his face-on face; sheets sent, Sam's look next.
+Job K build 1 done 10 Nov: head acting built into the kit, hard-edged shading built but off (a spill to fix), a copy check in pre-flight; 5's example sent (`notes/job-k-ai-tells.md`).
 Job L FINISHED 10 Nov (about 1.1%): five by-hand rules now checked in pre-flight (bleeps, subtitle timing, drop to rest before a cut, famous faces, files on GitHub).
-Next: Job I's sheet, Job K's build; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
+Next: Job I's sheets, Job K build 2; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.

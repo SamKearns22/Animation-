@@ -6,18 +6,18 @@
   pre-flight: 26 every swear has a bleep; 62 each subtitle piece within 0.3 s of its first word (0.6 s inside a phrase);
   72 a standing person's arm dropping back to rest in the last 0.4 s before a cut; 50 each FAMOUS face 240 px once;
   37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns
-  and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback (used when a line's
-  phrases don't match its commas) puts pieces up to 2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
-- **Next:** Job I chat 3 (Opus, medium effort): Sam's look at `notes/sheets/job-i-driver-sheet.jpg`. Job K build
-  (Opus, high effort, about 2.5%): "Job K build: read notes/next-jobs.md, the Job K line in
-  notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
-- **Needs Sam:** I: the sheet; K: Y/N on proposal 5 once its example is seen.
+  and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback puts pieces up to
+  2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
+- **Next, Job I chat 4 (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`,
+  `job-i-round2-closeup.jpg`. Still open: slumped shirt a box; back hair a blindfold; side-on face (11).
+- **Next, Job K build 2 (Opus, medium effort, about 0.5%):** "Job K build 2: read notes/job-k-ai-tells.md 'Build chat
+  1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 if Sam says Y.
+- **Needs Sam:** I: the round 2 sheets; K: Y/N on proposal 5 (the driver sheet is sent).
 - **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
 - **Open rule requests:** none.
-- **For Claude:** `voices.caption_start_check`, `voices.word_times` (phrase starts from pauses; inside, from syllable
-  peaks), `voices.bleep_check` (SWEARS_OK); `kitchecks.cut_rests` (CUT_RESTS_OK; seated left out),
-  `kitchecks.faces` (views `_drawn['face_px']`, or mouths_seen; FAMOUS names are fnmatch patterns, e.g. '*vance*';
-  only refuses on 10 Nov template films), `ledger.kept`. Old films: no FAMOUS list is a printed warning.
+- **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check` (SWEARS_OK); `kitchecks.cut_rests`
+  (CUT_RESTS_OK; seated left out), `kitchecks.faces` (FAMOUS = fnmatch patterns, '*vance*'; refuses only on 10 Nov
+  template films), `ledger.kept`. I: `lying_flat._leg`, `_head` 'three' to 'front'. K: `ed.HARD` off.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

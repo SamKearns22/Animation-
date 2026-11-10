@@ -328,7 +328,8 @@ def hair_front(p, sp, hx, hy, hw, hh, fx):
             p.poly(curve([(hx + sgn * hw, hy + 14), (hx + sgn * (hw + 4), hy - 40), (hx + sgn * hw * 0.8, hy - hh * 0.7),
                           (hx + sgn * hw * 0.7, hy - hh * 0.6), (hx + sgn * (hw - 12), hy - 30),
                           (hx + sgn * (hw - 10), hy + 10)], 4), c, INK, 2.2)
-        p.ell(hx + hw * 0.25, hy - hh * 0.72, hw * 0.22, hh * 0.08, (255, 240, 230), None, rot=0.2)
+        if not sp.get('no_shine'):                    # none lying (it read as a balloon, Sam 10 Nov)
+            p.ell(hx + hw * 0.25, hy - hh * 0.72, hw * 0.22, hh * 0.08, (255, 240, 230), None, rot=0.2)
     elif st == 'wisps':  # an old man's thin white hair round a bald crown
         for sgn in (-1, 1):
             p.poly(curve([(hx + sgn * (hw + 2), hy + 10), (hx + sgn * (hw + 16), hy - 36),

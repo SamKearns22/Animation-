@@ -772,6 +772,34 @@ def sounds_and_references_kept():
     return caught and not any(p.endswith('zz-kittest.txt') for p, _ in after), f'untracked file caught: {caught}'
 
 
+@test
+def copies_in_a_group():
+    """Job K (Sam: Y, 10 Nov): two people drawn from one copy in one frame are flagged (Ad-Vanced Notice's officers
+    before they were varied); a varied pair passes; COPIES_OK lets a meant pair through."""
+    import types
+    from PIL import Image
+    import burnham as B
+    import figure as F
+    import kitchecks as K
+    import views as V
+    import ad_vanced_notice_street as ST
+    B.SS = 1
+    K.install()
+    person = sys.modules['views'].person
+    im, cam, n0 = Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), len(K.DRAWN)
+    for t, same in ((1.0, True), (2.0, False)):
+        F.CONTEXT['where'] = f'kittest {t}'
+        a = dict(ST.CAST['O1'])
+        b = dict(a, name='ICE officer 9') if same else dict(ST.CAST['O2'])
+        person(im, cam, 300, 800, 0.4, a, t, 0)
+        person(im, cam, 700, 800, 0.4, b, t, 0)
+    F.CONTEXT['where'] = ''
+    rec = K.DRAWN[n0:]
+    flags = K.copies(types.SimpleNamespace(), rec)
+    ok = K.copies(types.SimpleNamespace(COPIES_OK=[('ICE officer 1', 'ICE officer 9', 'twins')]), rec)
+    return len(flags) == 1 and 'kittest 1.0' in flags[0] and not ok, f'flags: {flags}; with COPIES_OK: {ok}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
