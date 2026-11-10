@@ -15,7 +15,10 @@
   eyes, neck grip covers his face; Navi's wings-down points up; the Goron's cone reads as a hat, smiles, loose sleeves.
 - **Next:** wait for Sam's look at the cast sheet; then Build, Opus high: his notes first, the options sheets for the
   survivors, the new pass-3 faults, a pass 4 only on what changed.
-- **Needs Sam:** his look at the cast sheet; crest pick (3 in use); recordings any time (01-14).
+- **Needs Sam:** his look at the cast sheet; crest pick (3 in use); the recording of line 6 ("Oh my god!"), the only
+  one missing; bleep "shit" in line 13 or let it be heard (Claude: heard, like "god-damn").
+- **Recordings filed** (Sam, 10 Nov): `source/audio/remakes-01..14.m4a` with 13 split into 13 and 13b; no 06 yet;
+  no duplicates; lengths and syllables match the script (`voices.py`). Link's takes are quieter (-23 to -26 LUFS).
 - **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
 - **Open rule requests:** none (pass 3 suggested two checklist lines: "no empty cells", "a line-up against Link").
 - **For Claude:** pass 3 spec `source/data/critique/remakes_cast/r1-p3.spec.json`, panels in `panels-p3/` (git-ignored).
@@ -63,7 +66,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 1 | All references from the 2026 remake, not the N64 game | |
 | 2 | Cast: Young Link, Kaepora Gaebora (KG), Navi, militarised masked terrorists from generic Ubisoft games, Young Zelda, Malon, Princess Ruto, a Goron in a frilly dress | |
 | 3 | Scene: Kokori Forest. The camera looks up where KG sits on a branch. | |
-| 4 | KG: "Hey, Link, are you ready for a f******* adventure?" (bleep) | |
+| 4 | KG: "Hello, Link! Are you ready for a f******* adventure!" (bleep; Sam, with the recordings: was "Hey, Link, are you ready...") | |
 | 5 | Camera: looking down from KG's perspective at Link and Navi. Link: "Uh, yeah, I think so?" | |
 | 6 | Camera: on KG. KG: "Great, here's some wisdom!" | |
 | 7 | Link close up. He looks sceptical. Navi is gently nuzzling his cheek. Link: "Ok?" | |
@@ -72,7 +75,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 10 | KG snaps the terrorist's neck using his wings with hostile glee. | |
 | 11 | Camera back on Link, aghast, Navi floating: "Oh my god!" | |
 | 12 | KG bursts into a walled compound in the forest, similar to an enemy encampment in Far Cry. Already opening up with a heavy machine gun furled in his wings. Warlike Rambo bandana. | |
-| 13 | KG: "clear enemy encampments to control parts of the map!" | |
+| 13 | KG: "Clear enemy encampments to clear segments of the map." (Sam, with the recordings: was "...to control parts of the map!") | |
 | 14 | Link scuttling in beside him: "I don't think I can do this." | |
 | 15 | KG: "R2 FOR GRENADES." | |
 | 16 | Navi goes danger-red and zips into a firing terrorist's torso, exploding on impact like a frag grenade, sending dirt and body parts flying. | |
@@ -82,7 +85,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 19 | KG: "FIVE ROMANCE OPTIONS TO CHOOSE FROM" (Sam, 10 Nov: was FOUR) | |
 | 20 | Close up of Link, deadpan: "I am 9 years old." | |
 | 21 | KG picks him up with his wings like a tough guy by the lapels, shoves him hard against a town square wall. KG furious, Link terrified. KG hissing and spitting. Navi watches, growing redder into grenade mode. | |
-| 22 | KG: "Trust me, you're gonna grow up real f****** fast. And you've got some god-damn CHOICES to make." (bleep the f-word; "god-damn" heard) | |
+| 22 | KG: "Now listen here, you shit. You're gonna grow up really f****** fast." then "And you've got some god-damn CHOICES to make." (two recordings, 13 and 13b; bleep the f-word; "god-damn" heard; Sam, with the recordings: was "Trust me, you're gonna grow up real f****** fast...") | |
 | 23 | Close up on Link against the wall: "I want to go home." | |
 | 24 | Energetic pace, exaggerated movements and enthusiasm, very little time between lines | |
 | 25 | Navi always cutely floating, nuzzling, etc., depending on context | |
@@ -125,19 +128,19 @@ Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + 
 
 | line | who | shot and why | face | body | lands on |
 |---|---|---|---|---|---|
-| 1 "Hey, Link, are you ready..." | KG | S1 low angle up at the branch: he towers, wise old owl | big hype grin (Q3) | wings flung wide, bobbing on the branch | "adventure" |
+| 1 "Hello, Link! Are you ready..." | KG | S1 low angle up at the branch: he towers, wise old owl | big hype grin (Q3) | wings flung wide, bobbing on the branch | "adventure" |
 | 2 "Uh, yeah, I think so?" | Link | S2 high angle from KG's eyes: small and unsure | eyebrows up, half smile | shrug, Navi circling | "think" |
 | 3 "Great, here's some wisdom!" | KG | S3 single on the branch | kindly, eyes closed in a smile (Q3) | one wing raised like a teacher | "wisdom" |
 | 4 "Ok?" | Link | S4 close-up: the doubt is the beat | one brow up, side-eye | still; Navi nuzzles his cheek | "Ok" |
 | 5 "Press R1 for an EXECUTION MOVE." | KG | S5 close-up on the gunman, KG rises behind him | gunman: narrow suspicious eyes; KG: glee | KG's wings round the head, twist; R1 prompt (Q5) | "EXECUTION", snap after "MOVE" |
 | 6 "Oh my god!" | Link | S6 close-up: the reaction | eyes huge, mouth wide | hands to cheeks, jolt back; Navi startled bob | "god" |
-| 7 "clear enemy encampments..." | KG | S7 wide: gate bursts, firing; the set is the joke | war face, teeth bared | MG42 in wings, recoil, bandana ties flutter | gate on "clear", flash from "enemy" |
+| 7 "Clear enemy encampments to clear segments..." | KG | S7 wide: gate bursts, firing; the set is the joke | war face, teeth bared | MG42 in wings, recoil, bandana ties flutter | gate on "clear", flash from "enemy" |
 | 8 "I don't think I can do this." | Link | S7 same wide: scuttles in at KG's side, facing forward, in from off camera (Sam, 10 Nov) | wince | crouched front-on scuttle (`GAITS['front_run']`, low), hands over ears | "this" |
 | 9 "R2 FOR GRENADES." | KG | S7 then S8 push to Navi going red | glee | wing points at a gunman; R2 prompt (Q5) | "GRENADES": Navi goes |
 | 10 "This is horrible." | Link | S9 close-up, dirt falling past | flat horror | frozen, a bit of debris lands on his cap | "horrible" |
 | 11 "FIVE ROMANCE OPTIONS..." | KG | S10 wide line-up: everyone must read | game-show grin | wing sweeps along the line | each reacts on "ROMANCE"; Saria winks at Link, already sure |
 | 12 "I am 9 years old." | Link | S11 close-up: deadpan is the joke | dead flat, half-lidded | still | "9" |
-| 13 "Trust me, you're gonna..." | KG | S12 two-shot side on at the wall | fury, hiss, spit flecks | grabs the collar, lifts, slams on "Trust"; shakes on "CHOICES"; Navi reddening behind | slam on "Trust", shake on "CHOICES" |
+| 13 "Now listen here, you shit. You're gonna..." + 13b "And you've got some god-damn CHOICES..." | KG | S12 two-shot side on at the wall | fury, hiss, spit flecks | grabs the collar, lifts, slams on "Now" (was "Trust"); jabs his face on "shit"; shakes on "CHOICES"; Navi reddening behind | slam on "Now", shake on "CHOICES" |
 | 14 "I want to go home." | Link | S13 close-up pinned to the wall | terrified, wobbling lip | feet off the ground, held | "home" |
 
 Decisions made (Sam, 10 Nov):
