@@ -1,6 +1,8 @@
 # Where the project stands
 
 ## Now (11 Nov)
+- Remakes (Ocarina of Time remake satire): planned 10 Nov, estimate 14%. Waiting on Sam's answers and screenshots. Notes: `notes/remakes.md`.
+
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.
 - Next: Sam's yes, then his next pick from the job list.
