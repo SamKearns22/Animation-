@@ -1,9 +1,9 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Job K finished; Job I finished: bodies and faces (Sam: "It seems good"); one shared turned head for anyone.
-- Sam: Y (11 Nov) to two lying fixes for every character: the slumped shirt, the back of the head.
-- Next: Opus, medium effort, chat opened 11 Nov.
+- Job I lying fixes built for every character: the slumped shirt sags as cloth; no neck block over the back of the head.
+- Sheets sent to Sam (driver and Vance, numbered; 16 and 18). Waiting for his look.
+- Next: his notes, if any (Opus, medium effort); otherwise the next film.
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.

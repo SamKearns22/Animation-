@@ -330,3 +330,25 @@
   `ed.HARD` on, `ed.soft(clip=)`, `ed.bent_check`, `ad_vanced_notice_cast.BENT`, `patriots4_cast.lop`,
   kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
 
+## Where things stand (replaced by Job I lying fixes, 11 Nov) (project, 11 Nov; no film in progress)
+
+- **Rules that bite next:** 30 (a repeated note is a warning), 48 (one labelled sheet), 86 (estimate before building).
+- **Done: Job I faces FINISHED (Sam, 11 Nov: "It seems good", no notes; Opus high, about 1.9%: over the 1.2% stop).** One shared turned
+  head for anyone with a measured front design (`turnhead.py`), built only when a shot draws that direction; pre-flight
+  lists the (person, view) pairs the shots need, flags a person drawn turned without one, and puts their turnaround on
+  the check sheet. The driver is the first user: hair a horseshoe with an uneven top and strands (was a slab), a
+  rounder nose (was a spike), the goatee standing off the chin, seen side on (was a stripe). Lying 12, 15 now turned
+  (the shot names the head's roll). Vance pixel-identical (kittest). Sheets sent: `notes/sheets/job-i-driver-sheet-numbered.jpg`
+  (1-18) and `notes/sheets/job-i-driver-turnaround.jpg` (19-23).
+- **Next, Job I lying fixes (Opus, medium effort; Sam: Y, 11 Nov, for every character, both in one chat):** (1) slumped
+  against a wall, the shirt drawn as a stiff box (lying 16); (2) lying with the back of the head to us, the neck drawn
+  as a square block over it (lying 18; on the driver it reads as a blindfold with his hair band). Both are shared kit
+  (`lying_flat`, `turnhead.neck_over`): check on Vance's lying sheet too; send Sam the remade sheets, numbered.
+- **Needs Sam:** the remade lying sheets when that chat sends them.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `turnhead.py` MAP, section "people".
+- **Open rule requests:** none.
+- **For Claude:** I faces: `turnhead.Person`/`register`/`install`/`draw`/`fitted`/`turnaround`/`SEEN`/`MISSING`,
+  `TEMPLATE` (Vance's head); `ad_vanced_notice_cast.man_profile`/`_man_over` (swept goatee)/`_man_strands`;
+  `lying_flat.ROLLED`, sp `head_roll`, `lying_flat.numbers`; preflight `heads_seen` (incremental runs list only the
+  redrawn frames). Kittest `turned_heads_for_anyone` (VANCE_TURNED_MD5). Earlier: see `notes/archive/next-jobs-handovers.md`.
+

@@ -1,24 +1,20 @@
 # Where things stand (project, 11 Nov; no film in progress)
 
 - **Rules that bite next:** 30 (a repeated note is a warning), 48 (one labelled sheet), 86 (estimate before building).
-- **Done: Job I faces FINISHED (Sam, 11 Nov: "It seems good", no notes; Opus high, about 1.9%: over the 1.2% stop).** One shared turned
-  head for anyone with a measured front design (`turnhead.py`), built only when a shot draws that direction; pre-flight
-  lists the (person, view) pairs the shots need, flags a person drawn turned without one, and puts their turnaround on
-  the check sheet. The driver is the first user: hair a horseshoe with an uneven top and strands (was a slab), a
-  rounder nose (was a spike), the goatee standing off the chin, seen side on (was a stripe). Lying 12, 15 now turned
-  (the shot names the head's roll). Vance pixel-identical (kittest). Sheets sent: `notes/sheets/job-i-driver-sheet-numbered.jpg`
-  (1-18) and `notes/sheets/job-i-driver-turnaround.jpg` (19-23).
-- **Next, Job I lying fixes (Opus, medium effort; Sam: Y, 11 Nov, for every character, both in one chat):** (1) slumped
-  against a wall, the shirt drawn as a stiff box (lying 16); (2) lying with the back of the head to us, the neck drawn
-  as a square block over it (lying 18; on the driver it reads as a blindfold with his hair band). Both are shared kit
-  (`lying_flat`, `turnhead.neck_over`): check on Vance's lying sheet too; send Sam the remade sheets, numbered.
-- **Needs Sam:** the remade lying sheets when that chat sends them.
-- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `turnhead.py` MAP, section "people".
+- **Done: Job I lying fixes built (Opus medium), for every character.** (1) Slumped against a wall the shirt now sags as
+  cloth: shoulders slope, sides bow at the belly, hem curves up over the lap, soft waist folds (was a stiff box).
+  (2) Back of the head lying: no neck drawn over the head (was a square block, a blindfold with the driver's hair);
+  the head inked all round. Standing views unchanged. All kittests pass (new: `lying_shirt_and_nape`).
+  Sheets sent: `notes/sheets/job-i-lying-fixes-driver.jpg` (1-18: 16 slump, 18 back of head) and
+  `notes/sheets/job-i-lying-fixes-vance.jpg` (the same panels, ball added so 18 shows his back of head).
+- **Next:** Sam's reply on the sheets. Notes on them: Opus, medium effort, "Job I lying notes (notes/next-jobs.md)".
+  No notes: nothing queued; the next film (Opus, high effort) starts from its brief.
+- **Needs Sam:** a look at the two sheets (16 and 18 on each).
+- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `lying_flat.py` MAP.
 - **Open rule requests:** none.
-- **For Claude:** I faces: `turnhead.Person`/`register`/`install`/`draw`/`fitted`/`turnaround`/`SEEN`/`MISSING`,
-  `TEMPLATE` (Vance's head); `ad_vanced_notice_cast.man_profile`/`_man_over` (swept goatee)/`_man_strands`;
-  `lying_flat.ROLLED`, sp `head_roll`, `lying_flat.numbers`; preflight `heads_seen` (incremental runs list only the
-  redrawn frames). Kittest `turned_heads_for_anyone` (VANCE_TURNED_MD5). Earlier: see `notes/archive/next-jobs-handovers.md`.
+- **For Claude:** `lying_flat.Slump` (layer bend; `_sat` trigger: trunk upright, thighs forward; sleeves join
+  `bend.moved` shoulders), `lying_flat.BACKS`; `turnhead.outline(whole=)`, sp `nape_in_head` (set by
+  `lying_flat._head_draw`) skips `neck_over`. Kittest `lying_shirt_and_nape`. Earlier: `notes/archive/next-jobs-handovers.md`.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
