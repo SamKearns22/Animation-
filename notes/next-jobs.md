@@ -2,7 +2,7 @@
 
 - **Rules that bite next:** 62 (subtitle pieces now timed against the take: Terfwarts' fallback timing is 2.3 s off on
   line 8), 50 (every film needs a `FAMOUS` list), 89.
-- **Done: Job L FINISHED (10 Nov, Opus, about 1.1% of the week, cap 1.5%).** Five by-hand rules now checked in
+- **Done: Job L FINISHED (10 Nov, Opus, about 1.3% of the week, cap 1.5%).** Five by-hand rules now checked in
   pre-flight: 26 every swear has a bleep; 62 each subtitle piece within 0.3 s of its first word (0.6 s inside a phrase);
   72 a standing person's arm dropping back to rest in the last 0.4 s before a cut; 50 each FAMOUS face 240 px once;
   37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns

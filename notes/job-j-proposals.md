@@ -51,7 +51,7 @@ react before a hit) becomes part of critique M2.
 - **Pre-flight warns now** on rule 74 (no acting list), 8 (no "Rehearsal clips sent:") and 61 (no MAP, or a film
   file over 1,000 lines). My pick: 74 and 8 refuse on new films from the next film; 61 stays a warning.
 
-## 5. Next checks, one tool chat (Job L, about 1%, Opus medium) — my pick: Y. BUILT 10 Nov (Job L, about 1.1%)
+## 5. Next checks, one tool chat (Job L, about 1%, Opus medium) — my pick: Y. BUILT 10 Nov (Job L, about 1.3%)
 72 (no pose back to rest in the last 0.4 s before a cut; the checklist wrongly says a tool already holds it: put
 right in this chat), 62 (each subtitle within 0.3 s of its first word), 50 (each famous face 240 px tall once),
 27 (every swear in the script bleeped), 37 (sounds and references on GitHub, checked at the handover).

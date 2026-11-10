@@ -19,7 +19,7 @@ Job H FINISHED 10 Nov (overnight, Sam's "just go"): the critique checklist (37 l
 Job J FINISHED 10 Nov (about 1.5%): rulebook 15 rows shorter, CLAUDE.md shorter, reading packs (`guides/job-packs.md`), hidden props flagged (Job G finished).
 Job I round 2 of Sam's notes done 10 Nov: near legs one piece from the hip, lying faces match his face-on face; sheets sent, Sam's look next.
 Job K build 1 done 10 Nov: head acting built into the kit, hard-edged shading built but off (a spill to fix), a copy check in pre-flight; 5's example sent (`notes/job-k-ai-tells.md`).
-Job L FINISHED 10 Nov (about 1.1%): five by-hand rules now checked in pre-flight (bleeps, subtitle timing, drop to rest before a cut, famous faces, files on GitHub).
+Job L FINISHED 10 Nov (about 1.3%): five by-hand rules now checked in pre-flight (bleeps, subtitle timing, drop to rest before a cut, famous faces, files on GitHub).
 Next: Job I's sheets, Job K build 2; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
