@@ -17,6 +17,7 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
 Job H chat 1 done 10 Nov (overnight, Sam's "just go" for H only): the critique checklist written (`guides/critique-checklist.md`, 33 lines from Sam's past notes) and the critique helper designed; 3 rule requests wait for Sam.
 Job G chat 4 done 10 Nov: lying checks and the pre-flight pose check built; Job G now waits only for Sam's Y/N on merging rules 41, 42, 81.
+Job I chat 1 done 10 Nov: lying people redrawn in our usual style (Vance right; the driver and old trio next, Opus medium).
 Job K done 10 Nov (overnight): the 'AI ick' review; 8 proposals wait for Sam's Y/N (`notes/job-k-ai-tells.md`).
 Next: Job H chat 2, the build (Opus high, started automatically). Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.

@@ -13,16 +13,17 @@
   into the air: Elder Swindon 6's cause); pre-flight now stops a pose seen from an "avoid" view or with no gallery row,
   and checks every lying body; 12 everyday kit poses added to the gallery (hands on hips, pockets, shrug...). Rules
   that bite: 42, 41. **Next for G:** nothing; Job G is finished once Sam numbers the step 6 proposal.
-- **Job I proposed (Sam, 10 Nov: "the lying down people don't look right at all ... squiggly balloon people with
-  inflated heads, not at all like how our characters look usually"):** rebuild how lying people are DRAWN so they match
-  the flat figure rig (views.person: its head size, outlines, jacket, sleeves, circle hands), keeping lying.py's 3D
-  skeleton, contacts and the chat 4 checks underneath. Cause: lying.draw paints its own rounded 3D volumes (tubes and
-  ellipsoids, a 3D head), a second look nobody compared against the cast. Chat 4 looked at a lying sheet and checked
-  only the arms: a miss. Plan, Opus high: side-by-side sheet (standing cast vs lying) first, then the build. About 2-3%.
-  **Sam, 10 Nov: Y, for the overnight chat. Test on the newest Vance (Ad-Vanced Notice's cast, as in the posted
-  final), standing beside his lying versions; the old test trio (P1, LADY, MAGNATE) only after he looks right.**
-  Sam, 10 Nov: no yes needed before the build: make the side-by-side sheet, then build straight on, and send him
-  the sheet with the result.
+- **Job I (chat 1 done, 10 Nov, Opus high, about 1.1%, stopped on amber):** lying people now drawn in the house style:
+  the 3D skeleton (poses, contacts, checks, floor shadow) kept; the flat rig's own torso drawing, sleeves, circle
+  hands, legs, shoes and head laid along the projected joints (head at the rig's size, never squashed, tipped at most
+  35 degrees off the trunk). Vance looks right in every pose (sheet `notes/sheets/job-i-vance-lying-sheet.jpg`, sent).
+  **Next for I (chat 2, Opus medium):** "Job I chat 2: read notes/next-jobs.md Where things stand, the Job I line."
+  (1) the driver: his 'ball' pose from behind still shows the neck as a loose block, and his shirt's checks are
+  missing on every non-front torso view (standing too: check the standing rig first); (2) the old trio (P1, LADY,
+  MAGNATE: `python3 source/lying.py sheet`); (3) `lying.py check`, posecheck and handcheck on lying bodies (not run
+  yet); (4) Elder Swindon's close shot (elder_swindon.py 2333) re-drawn now: look once. Rules that bite: 41, 30.
+  For Claude: `source/lying_flat.py` (map at top); lying.draw calls it, `draw_volumes` = the old look (still used
+  for cut pieces `prts` and steep standing views).
 - **Job K, the "AI ick" review (done 10 Nov overnight, Opus high, about 1.5% of 2%):** report, sheet and clip in
   `notes/job-k-ai-tells.md`; the test bench `source/ai_tells_lab.py` (changes no film or kit). Nothing in the kit or
   rulebook changed. **Needs Sam:** Y/N on proposals 1-8 there (my picks: 1-7 Y, 8 N). **Next for K:** on his
