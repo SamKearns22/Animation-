@@ -73,8 +73,11 @@ I don't know how to code. Please:
     render, sending, saving), quick videos, **status questions and quick answers**: **Sonnet** (Sam, 8 Nov: put back; once the fixes are made, the checks
     and the animatic go to Sonnet).
 
-  When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
-  /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
+  **Stages chain themselves (Sam, 10 Nov):** when a stage ends and the next needs no yes from me, the chat I started
+  begins the next stage's chat itself (create_session: the right model and effort, the handover's line as its prompt)
+  and checks on it once per stage (send_later, under an hour); chats it starts cannot start chats, so they hand over
+  and stop. Anything that needs my yes (an animatic, a final, a rule, a taste call) still stops and waits. Never carry
+  on into a stage that needs a stronger model inside one chat. **If I start
   a task on the wrong model, refuse and tell me**; let me change it, or offer me the option to override.
 - **One wait per render:** wait once for a render or long process to finish; never check on it repeatedly.
 - **Push notifications** whenever a render or long process finishes, fails or needs my decision, and at every stage
