@@ -287,3 +287,21 @@
 - **For Claude:** source/remakes.py (MAP); camp marks in RS.STAGE['camp']; KG side view CR.kg(view='side'); the cap
   in the S1/S3 foreground is RS forest_front 'up' with OPT['up']='cap' (RS._link_cap).
 
+
+
+### Handover replaced 10 Nov (notes round part 2)
+- **Rules that bite next:** 8 (clips of the snap and the wall lift before animatic 2), 89 (one critique round of
+  every changed shot before the check sheet), 85 (this chat handed over on amber).
+- **Done (10 Nov, notes round part 1):** notes 30, 31, 32, 37, 37b fixed (table below). Clip of the camp and a
+  picture of 30 and 31 sent to Sam. Not rendered since: no full animatic.
+- **Next (Fable, medium; Sam asked for Fable, 10 Nov): notes 33-36, 37c, 38, 39, 40** in order, a clip of each moved
+  beat sent as made; one critique round of all changed shots (camp included); check sheet; Sam's yes; animatic 2.
+  Type: "Remakes: read notes/remakes.md Where things stand and Open notes: animatic 1. Do the notes not marked DONE."
+- **Needs Sam:** nothing until the check sheet (any reaction to the camp clip or the "Ok?" face is a note).
+- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** none.
+- **For Claude:** camp: _kg_camp / _link_camp / _scuttle_pose / _kg_draw, times KG_T BURST1/2 G3_IN G2_IN, marks
+  RS.STAGE['camp'] + RS.CAMP_MARKS, S7 cam B.Cam(1.4, 565, 790). The corner Link: RS._link_cap (the cast's back view).
+  'sceptical' in RC.MOODS (each=, lows=, turn=). For 34: KG is drawn BEHIND the gunman in s5_edge, so the grip
+  hands must be drawn again over him; the gunman's neck base is (gx, gy - 928 * k). For 35: SIDE_WINGS['swoop'].
+

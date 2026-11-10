@@ -1,20 +1,22 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 8 (clips of the snap and the wall lift before animatic 2), 89 (one critique round of
-  every changed shot before the check sheet), 85 (this chat handed over on amber).
-- **Done (10 Nov, notes round part 1):** notes 30, 31, 32, 37, 37b fixed (table below). Clip of the camp and a
-  picture of 30 and 31 sent to Sam. Not rendered since: no full animatic.
-- **Next (Fable, medium; Sam asked for Fable, 10 Nov): notes 33-36, 37c, 38, 39, 40** in order, a clip of each moved
-  beat sent as made; one critique round of all changed shots (camp included); check sheet; Sam's yes; animatic 2.
-  Type: "Remakes: read notes/remakes.md Where things stand and Open notes: animatic 1. Do the notes not marked DONE."
-- **Needs Sam:** nothing until the check sheet (any reaction to the camp clip or the "Ok?" face is a note).
+- **Rules that bite next:** 89 (one critique round of every changed shot before the check sheet), 8 (Sam's reaction
+  to any clip is a note), 85 (this chat handed over on amber).
+- **Done (10 Nov, notes round part 2):** notes 33, 34, 35, 36, 37c, 38, 39 fixed (table below); clips of the
+  execution and "Oh my god!", the line-up and the wall sent to Sam. Checks clean. Not rendered since: no full animatic.
+- **Next (Fable, medium; Sam asked for Fable this round):** note 40's rest: one critique round of every changed shot
+  (S5, S6, S7 camp, S10, S12, S12b, S13, the corner Link, the "Ok?" face), fix what it finds; then the Sonnet chat:
+  check sheet; Sam's yes; animatic 2 (watch and listen first: bleeps and gunfire against the voices).
+  Type: "Remakes: read notes/remakes.md Where things stand. Do the critique round, then hand to Sonnet for the check sheet."
+- **Needs Sam:** nothing until the check sheet (any reaction to the clips is a note).
 - **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
 - **Open rule requests:** none.
-- **For Claude:** camp: _kg_camp / _link_camp / _scuttle_pose / _kg_draw, times KG_T BURST1/2 G3_IN G2_IN, marks
-  RS.STAGE['camp'] + RS.CAMP_MARKS, S7 cam B.Cam(1.4, 565, 790). The corner Link: RS._link_cap (the cast's back view).
-  'sceptical' in RC.MOODS (each=, lows=, turn=). For 34: KG is drawn BEHIND the gunman in s5_edge, so the grip
-  hands must be drawn again over him; the gunman's neck base is (gx, gy - 928 * k). For 35: SIDE_WINGS['swoop'].
+- **For Claude:** look at first in the critique: (a) S12's first 0.25 s (the lift: wings cross Link's head); (b) S5's
+  switch from the side-on swoop to the front view at S5_SWOOP[1]; (c) Navi near the frame edge in S12b / S13;
+  (d) KG's wing tip by Malon's feet in S10; (e) Link has no tears in profile in S13 ('terrified', yaw 90).
+  Wall: LIFT, WALL_DX, WALL_TILT, _wall_marks, CR.kg(head_tilt=), mood 'rage'. S5: NECK_GRIP, _s5_wings, CR.kg_grips.
+  Checks added: s5_contact, wall_contact. The film is 0.45 s longer (44.5 s): line 9's gap 0.15 -> 0.6.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
@@ -22,16 +24,16 @@
 | 30 (Sam 1) | Link's image bottom left in S1 and S3 is completely fractured | the foreground cap (RS._link_cap): find why it breaks up (rule 30), redraw it whole and readable as the back of Link's capped head | **DONE 10 Nov:** new kind; why it broke (rule 30): the corner head was a separate hand-drawn set piece (a cap dome, 12 loose outlined hair spikes, an ear not joined to anything), not Link. Now the cast's own Link from behind (head, ears, cap tail, shoulders, sword hilt). Critique line: A2 (reads at phone size) |
 | 31 (Sam 2) | Link's face at "Ok?" far more sceptical and concerned | a stronger 'sceptical' for S4: one brow high, the other low and pinched, eyes side-on to KG, mouth pulled to one side; face sheet first | **DONE 10 Nov:** Sam's steer mid-round: "a look that conveys: uuuuuh, okay?" (bemused and uneasy, not hostile). One brow hiked high, the other tilted up at its inner end, eyes wide and slid sideways, head a little off, an awkward hitched half-smile |
 | 32 (Sam 3) | camp staging wrong: the men are behind KG | KG storms in through the gate; he shoots the tower lookout on his way in, turning towards him; victim 2 comes in from camera lower left; the grenade victim from camera middle right; no gunman behind KG; Link follows him in through the gate, aghast (crouched, front-on scuttle). Lost: the three gunmen standing in the yard behind him | **DONE 10 Nov:** KG stamps in through the gate, stops and leans back to shoot the tower lookout, storms on to his mark, turns the gun on a man who runs in lower left; Link runs in through the gate behind him; the last man runs in middle right, level with KG, and is Navi's. Camera moved in on the action (the cast were small over an empty yard). Two gun bursts, not one. Lost: the three gunmen standing behind him; the wide view of the whole yard |
-| 33 (Sam 4) | at the wall: KG lifts his face so his expression and beak are seen; Link side on | KG's head raised (face and beak clear, talking and spit visible); Link drawn side on (yaw 90) facing KG, lifted, back near the wall; no bandana in S12, S12b, S13 (bandana only in the camp). Lost: the bandana at the wall |
-| 34 (Sam 6) | the execution wings don't make accurate contact with the neck | KG's wing tips land on the gunman's neck and jaw (both sides) before the twist; check by the hand points against the neck |
-| 35 (Claude 2) | KG swoops in behind the gunman (not a rise) | a short swoop down from top right into place behind him |
-| 36 (Claude 2) | Link's hands to his cheeks on "Oh my god!" | S6 arms up, palms to cheeks |
+| 33 (Sam 4) | at the wall: KG lifts his face so his expression and beak are seen; Link side on | KG's head raised (face and beak clear, talking and spit visible); Link drawn side on (yaw 90) facing KG, lifted, back near the wall; no bandana in S12, S12b, S13 (bandana only in the camp). Lost: the bandana at the wall || **DONE 10 Nov:** KG's head tips up at Link (his eye, brow and open beak clear, spit flying; a new glaring face, since the old narrowed eye read sleepy once tilted); Link side on facing him, hands on the wings, feet kicking; no bandana; the pair moved right so Link is off the frame edge, and the two closer shots reframed on the faces. Lost: the bandana at the wall; Link's front-on crying face in the last shot (he is in profile now) |
+| 34 (Sam 6) | the execution wings don't make accurate contact with the neck | KG's wing tips land on the gunman's neck and jaw (both sides) before the twist; check by the hand points against the neck || **DONE 10 Nov:** why it missed (rule 30): the wings were aimed at the top of his helmet, and were drawn behind him. Now one wing hand closes on the back of his neck and one under his jaw, drawn over him, held from "MOVE", wrenched across on the snap, then flung open. Checked by the hand points (s5_contact) |
+| 35 (Claude 2) | KG swoops in behind the gunman (not a rise) | a short swoop down from top right into place behind him || **DONE 10 Nov:** he dives in side on from top right, wings swept back, and lands behind the gunman facing us |
+| 36 (Claude 2) | Link's hands to his cheeks on "Oh my god!" | S6 arms up, palms to cheeks || **DONE 10 Nov:** both palms fly up onto his cheeks as he says it |
 | 37 (Claude 2) | the near gunman's rifle over the far one | goes with note 32's restage | **DONE 10 Nov:** no rifles overlap now (32) |
 | 37b (Claude 2) | Link scuttles in crouched, front-on, running (not a slide with a bob) | a crouched front-on run cycle (`GAITS['front_run']`, low) through the gate behind KG (with note 32) | **DONE 10 Nov:** crouched front-on run cycle, hands over his ears, aghast, through the gate behind KG |
-| 37c (Claude 2) | at the wall KG's wings grip Link's collar, not cross his chest | wing tips closed on the collar at his neck, both sides; check by the hand points against the collar (with note 33) |
-| 38 (Claude 4) | "I don't think I can do this." on screen 1.5 s | split into two readable pieces or hold longer |
-| 39 (Claude 6) | the line-up reacts more on "ROMANCE" | Zelda shrinks, Malon steps forward with the bottle, Ruto preens, the Goron drools more, Saria winks |
-| 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices |
+| 37c (Claude 2) | at the wall KG's wings grip Link's collar, not cross his chest | wing tips closed on the collar at his neck, both sides; check by the hand points against the collar (with note 33) || **DONE 10 Nov:** both wing hands closed on his collar under his chin; checked by the hand points (wall_contact) |
+| 38 (Claude 4) | "I don't think I can do this." on screen 1.5 s | split into two readable pieces or hold longer || **DONE 10 Nov:** held longer: 1.9 s on screen. Added: 0.45 s of pause before "R2 FOR GRENADES" (film now 44.5 s) |
+| 39 (Claude 6) | the line-up reacts more on "ROMANCE" | Zelda shrinks, Malon steps forward with the bottle, Ruto preens, the Goron drools more, Saria winks || **DONE 10 Nov:** Zelda hunches and edges back, Malon hops forward and thrusts the bottle up, Ruto lifts a hand to her head-fin with her chin up, the Goron's drool doubles, Saria winks. KG's presenting wing kept lower so it clears Malon |
+| 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices | | **PART DONE 10 Nov:** clips made and sent (snap, wall lift; camp earlier). Still to do: the critique round; watching and listening to animatic 2 before it is sent |
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),

@@ -107,6 +107,8 @@ KG_MOODS = {
     'show': dict(eyes='smile', brows=(-0.5, 26), beak='grin'),            # line 11: the game-show grin, eyes
                                                                           # squeezed shut in it (pass 2: faces alike)
     'fury': dict(eyes='narrow', pupil=0.5, brows=(0.85, -8), beak='roar', spit=True),   # line 13: hissing, spitting
+    'rage': dict(eyes='open', pupil=0.3, low=0.26, brows=(1.0, -24), beak='roar', spit=True),   # the wall, head up:
+                                    # a wide glaring eye with a pin pupil, the brow jammed down on it (remakes 33)
 }
 
 # Each wing as an arm (rule 41): (elbow, hand, hand shape) in his own units, for his left (screen right, front view)
@@ -187,11 +189,7 @@ def _kg_wing(p, sh, el, hd, shape, side, colour=KG_BROWN, taper=False):
             q = path[int(u * (n - 1))]
             p.line(open_curve([(q[0] - 26, q[1] - 10), (q[0], q[1] + 8), (q[0] + 26, q[1] - 10)], 4), dk(colour, 0.7), 1.6)
     if shape == 'grip':                                                 # hooked fingers, bent round the thing held
-        for k in range(4):
-            u = k / 3 - 0.5
-            p.poly(_curl(hd, ang + u * 0.7 * side - side * 0.2, 130 - 20 * abs(u), side * 2.0, 34, 14),
-                   dk(colour, 0.88 + 0.05 * (k % 2)), INK, 2.2)
-        p.ell(hd[0], hd[1], 40, 36, colour, INK, 2.4)                   # the wrist, a knuckle of feathers
+        _kg_grip(p, hd, ang, side, colour)
         return
     n_f, spread, length = {'fold': (5, 0.18, 120), 'spread': (5, 1.0, 180), 'point': (4, 0.35, 120)}[shape]
     for k in range(n_f):
@@ -204,6 +202,26 @@ def _kg_wing(p, sh, el, hd, shape, side, colour=KG_BROWN, taper=False):
         p.poly(f, dk(colour, 0.86 + 0.04 * (k % 2)), INK, 2.2)
         p.line([hd, (hd[0] + math.cos(a) * ln * 0.8, hd[1] + math.sin(a) * ln * 0.8)], dk(colour, 0.66), 1.4)
     p.ell(hd[0], hd[1], 36, 32, colour, None)                           # the wrist covers the feather roots
+
+
+def _kg_grip(p, hd, ang, side, colour=KG_BROWN):
+    """The gripping wing hand alone: four hooked finger feathers and the wrist knuckle (also drawn again over what
+    he holds, so the fingers are seen closed ON it: remakes notes 34, 37c)."""
+    for k in range(4):
+        u = k / 3 - 0.5
+        p.poly(_curl(hd, ang + u * 0.7 * side - side * 0.2, 130 - 20 * abs(u), side * 2.0, 34, 14),
+               dk(colour, 0.88 + 0.05 * (k % 2)), INK, 2.2)
+    p.ell(hd[0], hd[1], 40, 36, colour, INK, 2.4)                       # the wrist, a knuckle of feathers
+
+
+def kg_grips(img, cam, x, y, s, wings, flip=1, sides='LR', view='front'):
+    """Draw only the grip hands of `wings` (a dict as for kg()) again, over whatever was drawn since."""
+    p = B.Pen(img, B.Local(cam, x, y, s, flip))
+    for sd in sides:
+        el, hd, _ = wings[sd]
+        sgn = 1 if view == 'side' else (-1 if sd == 'R' else 1)
+        col = dk(KG_BROWN, 0.8) if (view == 'side' and sd == 'R') else KG_BROWN
+        _kg_grip(p, hd, math.atan2(hd[1] - el[1], hd[0] - el[0]), sgn, col)
 
 
 def _kg_eye(p, ex, ey, r, mood, sgn, look=0.0):
@@ -589,7 +607,7 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all', 
     return (hx, hy)
 
 
-def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None):
+def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None, part='all'):
     """Side on facing right (S5 the swoop, S7 the burst, S12 the wall): tail back, the far wing, the body leaning
     `lean` degrees forward, the near wing in front, the head in profile with its half face disc, one eye, the beak
     forward, the crests sweeping back."""
@@ -597,46 +615,50 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None):
     r = math.radians(lean)
     rot = lambda x, y: (x * math.cos(r) - y * math.sin(r), x * math.sin(r) + y * math.cos(r))
     R = lambda pts: [rot(*q) for q in pts]
-    el, hd, shape = wings['R']                                          # the far wing, darker, behind
-    _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8), taper=True)
-    _kg_tail(p, rot(-140, 70), math.radians(146) + r, 5, 0.07, 480)    # the tail back and down: long, narrow,
-                                                                        # pointed (ref 02; pass 2: a stub)
-    if perched == 'stand_side':
-        _kg_feet(p, *rot(30, 230), 1, 'stand_side')
-    elif not perched:
-        _kg_feet(p, *rot(30, 220), 1, False)
-    body = R(curve([(-20, -230), (120, -190), (180, -40), (150, 120), (60, 220), (-80, 220), (-170, 120), (-190, -20),
-                    (-140, -170)], 5))
-    p.poly(body, KG_BROWN, INK, 2.8)
-    p.poly(R(curve([(60, -190), (150, -90), (166, 40), (130, 160), (60, 200), (40, 60), (30, -80)], 5)), KG_RUST, None)
-    p.poly(R(curve([(70, 40), (150, 70), (130, 160), (60, 200), (30, 120)], 4)), KG_OCHRE, None)
-    p.poly(R(curve([(40, -170), (120, -150), (150, -60), (100, -20), (50, -60)], 4)), KG_FACE, INK, 2.2)   # the bib
-    for bx, by in ((86, -40), (124, -70)):                               # the eye-spot rings, side on
-        c = rot(bx, by)
-        p.ell(*c, 16, 20, KG_FACE_RIM, INK, 1.6)
-        p.ell(*c, 9, 12, KG_FACE, None)
-    p.poly(body, None, INK, 2.8)
-    if perched is True:
-        _kg_feet(p, *rot(20, 230), 1, True)
+    if part in ('all', 'back'):                                         # part: back / head / near, so kg() can
+                                                                        # tilt the head alone (remakes note 33)
+        el, hd, shape = wings['R']                                          # the far wing, darker, behind
+        _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8), taper=True)
+        _kg_tail(p, rot(-140, 70), math.radians(146) + r, 5, 0.07, 480)    # the tail back and down: long, narrow,
+                                                                            # pointed (ref 02; pass 2: a stub)
+        if perched == 'stand_side':
+            _kg_feet(p, *rot(30, 230), 1, 'stand_side')
+        elif not perched:
+            _kg_feet(p, *rot(30, 220), 1, False)
+        body = R(curve([(-20, -230), (120, -190), (180, -40), (150, 120), (60, 220), (-80, 220), (-170, 120), (-190, -20),
+                        (-140, -170)], 5))
+        p.poly(body, KG_BROWN, INK, 2.8)
+        p.poly(R(curve([(60, -190), (150, -90), (166, 40), (130, 160), (60, 200), (40, 60), (30, -80)], 5)), KG_RUST, None)
+        p.poly(R(curve([(70, 40), (150, 70), (130, 160), (60, 200), (30, 120)], 4)), KG_OCHRE, None)
+        p.poly(R(curve([(40, -170), (120, -150), (150, -60), (100, -20), (50, -60)], 4)), KG_FACE, INK, 2.2)   # the bib
+        for bx, by in ((86, -40), (124, -70)):                               # the eye-spot rings, side on
+            c = rot(bx, by)
+            p.ell(*c, 16, 20, KG_FACE_RIM, INK, 1.6)
+            p.ell(*c, 9, 12, KG_FACE, None)
+        p.poly(body, None, INK, 2.8)
+        if perched is True:
+            _kg_feet(p, *rot(20, 230), 1, True)
     hx, hy, hw = (*rot(40, -250), 150.0)
-    _crest(p, (hx - 70, hy - 90), [(hx - 200, hy - 170), (hx - 320, hy - 250), (hx - 400, hy - 220),
-                                    (hx - 420, hy - 130)], 56, seed=2, out=1)     # the far one, lower, behind
-    _crest(p, (hx - 30, hy - 110), [(hx - 120, hy - 250), (hx - 210, hy - 350), (hx - 310, hy - 380),
-                                    (hx - 380, hy - 320), (hx - 400, hy - 220)], 70, seed=1, out=1)
-    head = curve([(hx - hw, hy), (hx - hw * 0.8, hy - 110), (hx, hy - 146), (hx + hw * 0.7, hy - 110), (hx + hw, hy - 10),
-                  (hx + hw * 0.86, hy + 80), (hx, hy + 112), (hx - hw * 0.8, hy + 84)], 5)
-    p.poly(head, KG_BROWN, INK, 2.8)
-    p.poly(curve([(hx + 20, hy - 100), (hx + hw * 0.84, hy - 80), (hx + hw * 1.0, hy + 10), (hx + hw * 0.8, hy + 90),
-                  (hx + 30, hy + 96), (hx - 10, hy)], 4), KG_FACE, None)  # the half face disc
-    p.line(open_curve([(hx + 20, hy - 100), (hx - 12, hy), (hx + 30, hy + 96)], 6), KG_FACE_RIM, 2.6)
-    if band:
-        bandana(p, hx, hy - 80, hw * 0.95, t, 'side')
-    ex, ey = hx + 82, hy - 6
-    _kg_eye(p, ex, ey, 34, m, 1, 0.6)
-    _kg_brow(p, ex, ey, 34, 1, *m['brows'])
-    _kg_beak_side(p, hx + hw * 0.86, hy - 4, 42, m['beak'], m.get('spit', False), talk)   # note 29: one real beak
-    el, hd, shape = wings['L']                                          # the near wing, in front
-    _kg_wing(p, rot(10, -140), el, hd, shape, 1, taper=True)
+    if part in ('all', 'head'):
+        _crest(p, (hx - 70, hy - 90), [(hx - 200, hy - 170), (hx - 320, hy - 250), (hx - 400, hy - 220),
+                                        (hx - 420, hy - 130)], 56, seed=2, out=1)     # the far one, lower, behind
+        _crest(p, (hx - 30, hy - 110), [(hx - 120, hy - 250), (hx - 210, hy - 350), (hx - 310, hy - 380),
+                                        (hx - 380, hy - 320), (hx - 400, hy - 220)], 70, seed=1, out=1)
+        head = curve([(hx - hw, hy), (hx - hw * 0.8, hy - 110), (hx, hy - 146), (hx + hw * 0.7, hy - 110), (hx + hw, hy - 10),
+                      (hx + hw * 0.86, hy + 80), (hx, hy + 112), (hx - hw * 0.8, hy + 84)], 5)
+        p.poly(head, KG_BROWN, INK, 2.8)
+        p.poly(curve([(hx + 20, hy - 100), (hx + hw * 0.84, hy - 80), (hx + hw * 1.0, hy + 10), (hx + hw * 0.8, hy + 90),
+                      (hx + 30, hy + 96), (hx - 10, hy)], 4), KG_FACE, None)  # the half face disc
+        p.line(open_curve([(hx + 20, hy - 100), (hx - 12, hy), (hx + 30, hy + 96)], 6), KG_FACE_RIM, 2.6)
+        if band:
+            bandana(p, hx, hy - 80, hw * 0.95, t, 'side')
+        ex, ey = hx + 82, hy - 6
+        _kg_eye(p, ex, ey, 34, m, 1, 0.6)
+        _kg_brow(p, ex, ey, 34, 1, *m['brows'])
+        _kg_beak_side(p, hx + hw * 0.86, hy - 4, 42, m['beak'], m.get('spit', False), talk)   # note 29: one real beak
+    if part in ('all', 'near'):
+        el, hd, shape = wings['L']                                          # the near wing, in front
+        _kg_wing(p, rot(10, -140), el, hd, shape, 1, taper=True)
     return (hx, hy)
 
 
@@ -692,7 +714,7 @@ def kg_gun(p, hands, view):
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
-       lean=0.0, look=0.0, tail=1.0, part='all', talk=None, stand=False):
+       lean=0.0, look=0.0, tail=1.0, part='all', talk=None, stand=False, head_tilt=0.0):
     """Kaepora Gaebora at world (x, y) (his body's middle), scale s (as for a 1.75 m adult). wings: a WING_POSES name
     (front) or SIDE_WINGS name (side), or a dict {'L': (elbow, hand, shape), 'R': ...} in his own units (front:
     the L wing on screen right). tail < 1 shortens the tail (front: lying back along the ground when he stands).
@@ -723,7 +745,17 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
         if isinstance(wings, str):
             far, near = SIDE_WINGS[wings]
             wings = {'R': far, 'L': near}
-        _kg_side(p, mood, wings, 'stand_side' if stand else perched, band, t, lean, talk)
+        per = 'stand_side' if stand else perched
+        if head_tilt:                                # side on: the head alone tipped up (+) about the neck, on its
+            _kg_side(p, mood, wings, per, band, t, lean, talk, 'back')     # own layer (remakes note 33)
+            lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+            _kg_side(B.Pen(lay, loc), mood, wings, per, band, t, lean, talk, 'head')
+            r_ = math.radians(lean)
+            nx_, ny_ = 10 * math.cos(r_) + 190 * math.sin(r_), 10 * math.sin(r_) - 190 * math.cos(r_)
+            img.alpha_composite(lay.rotate(head_tilt * flip, center=loc.P(nx_, ny_), resample=Image.BICUBIC))
+            _kg_side(p, mood, wings, per, band, t, lean, talk, 'near')
+        else:
+            _kg_side(p, mood, wings, per, band, t, lean, talk)
         if wings_name == 'gun':
             _gun_over(p, wings, 'side')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
@@ -910,14 +942,17 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     for k in (-12, 0, 12):                                              # on the chin, hair strands down it
         p.line([(k, -912), (k * 0.3, -866)], (170, 188, 204), 1.6)      # (pass 2: the frilly one read as a jabot)
     if drool:                                                           # a fat string from the corner, swelling and stretching
-        u = (t * 0.6) % 1.0
-        ln = 60 + 120 * u
-        dx0, dy0 = 150, -968
-        wet = (176, 218, 246)
-        drop = [(dx0 - 9, dy0), (dx0 + 9, dy0), (dx0 + 5, dy0 + ln * 0.8), (dx0 + 14, dy0 + ln + 6),
-                (dx0, dy0 + ln + 26), (dx0 - 14, dy0 + ln + 6), (dx0 - 5, dy0 + ln * 0.8)]
-        p.poly(curve(drop, 2), wet, INK, 2.0)                           # a thin string to a small drop (pass 2: the
-        p.line([(dx0 - 1, dy0 + 8), (dx0 - 1, dy0 + ln * 0.8)], (240, 250, 255), 2.0)   # wide end read as a spoon)
+        kd = float(drool)                                               # drool > 1: more of it (remakes note 39): a longer,
+        wet = (176, 218, 246)                                           # fatter string and a second one beside it
+        for dx0, ph, kk in ([(150, 0.0, kd)] + ([(118, 0.45, kd * 0.6)] if kd > 1.3 else [])):
+            u = (t * 0.6 + ph) % 1.0
+            ln = (60 + 120 * u) * kk
+            w = 9 * min(1.5, 0.6 + 0.4 * kk)
+            dy0 = -968
+            drop = [(dx0 - w, dy0), (dx0 + w, dy0), (dx0 + w * 0.55, dy0 + ln * 0.8), (dx0 + w * 1.55, dy0 + ln + 6),
+                    (dx0, dy0 + ln + 26), (dx0 - w * 1.55, dy0 + ln + 6), (dx0 - w * 0.55, dy0 + ln * 0.8)]
+            p.poly(curve(drop, 2), wet, INK, 2.0)                       # a thin string to a small drop (pass 2: the
+            p.line([(dx0 - 1, dy0 + 8), (dx0 - 1, dy0 + ln * 0.8)], (240, 250, 255), 2.0)   # wide end read as a spoon)
 
 
 # ================================================================================================ the sheets

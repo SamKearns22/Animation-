@@ -62,7 +62,7 @@ _L = [
     (6, '06', 'link', 'Oh my god!', 'S6', 1.0, []),
     (7, '07', 'kg', 'Clear enemy encampments to clear segments of the map.', 'S7', 0.9, []),
     (8, '08', 'link', "I don't think I can do this.", 'S7', 0.2, []),
-    (9, '09', 'kg', 'R2 FOR GRENADES.', 'S7', 0.15, []),
+    (9, '09', 'kg', 'R2 FOR GRENADES.', 'S7', 0.6, []),      # note 38: line 8's subtitle now reads for 2 s
     (10, '10', 'link', 'This is horrible.', 'S9', 1.75, []),
     (11, '11', 'kg', 'FIVE ROMANCE OPTIONS TO CHOOSE FROM', 'S10', 0.4, []),
     (12, '12', 'link', 'I am 9 years old.', 'S11', 0.6, []),
@@ -308,13 +308,13 @@ def s2_down(t):
     return _forest('down', t, cast)
 
 
-def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None):
+def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None, j=None):
     """Link's close-up: the set, Link big at the close mark, Navi near his cheek."""
     img = B.canvas((0, 0, 0))
     cam = B.Cam(1.0)
     view_fn(img, cam_bg or cam, t)
     x, y, ppm = RS.STAGE['forest_close']['link']
-    _kid(img, cam, 'link', x, y - 40 * jolt, ppm * (1 - 0.04 * jolt), t, mood)
+    _kid(img, cam, 'link', x, y - 40 * jolt, ppm * (1 - 0.04 * jolt), t, mood, j=j)
     if navi:
         nx, ny, heat = navi
         CR.navi(img, cam, nx, ny, 1.25, t=t, heat=heat)
@@ -335,10 +335,62 @@ def s4_ok(t):
 def s6_god(t):
     u = t - SHOTS[5][1]
     jolt = ease(u / 0.15) if u < 0.6 else 1.0
+    sp = RC.CAST['link']
+    j = V.standing(sp)                                               # note 36: both hands fly up to his cheeks
+    up = ease((u - 0.02) / 0.22)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, (sg * _lerp(sp['shoulders'] + 30, 92, up), _lerp(330.0, -118.0, up),
+                         _lerp(40.0, 80.0, up) + 150 * math.sin(math.pi * up)),
+                 'down', 'palm')
+    if up > 0.7:
+        j['on_face'] = {'L', 'R'}                                     # palms on his cheeks, in front of his face
     img = _close(lambda im, c, tt: RS.forest(im, c, 'close', tt), t, 'aghast', jolt=jolt,
-                 navi=(800, 900 - 120 * ease(u / 0.2) + 20 * math.sin(u * 8), 0.0))
+                 navi=(800, 900 - 120 * ease(u / 0.2) + 20 * math.sin(u * 8), 0.0), j=j)
     RS.forest_front(img, B.Cam(1.0), 'close', t)
     return img
+
+
+NECK_GRIP = ((66, 1128), (236, 1122))                                 # screen: the back of the gunman's neck, and
+                                                                      # under his jaw (note 34; check: s5_contact)
+
+
+def _s5_wings(t, kx, ky, ks):
+    """KG's wings in S5, his own units: up as he lands, closing on the gunman's neck and jaw before the twist
+    (note 34), wrenching across on the snap, then flung open."""
+    snap = t - SNAP
+    up = {'R': ((-300, -260), (-520, -420)), 'L': ((300, -260), (520, -420))}
+    tg = {'R': ((NECK_GRIP[0][0] - kx) / ks, (NECK_GRIP[0][1] - ky) / ks),
+          'L': ((NECK_GRIP[1][0] - kx) / ks, (NECK_GRIP[1][1] - ky) / ks)}
+    el = {'R': (-290, 20), 'L': (60, 60)}                             # elbows out and down, reaching forward to him
+    g = ease((snap + 0.9) / 0.45)                                     # on by "MOVE": held there before the twist
+    tw = ease(snap / 0.1) if snap >= 0 else 0.0                       # the wrench: one hand back, one forward
+    out = ease((snap - 0.22) / 0.3)                                   # and let go, wings flung open
+    w = {}
+    for sd, sg in (('R', -1), ('L', 1)):
+        e = (_lerp(up[sd][0][0], el[sd][0], g), _lerp(up[sd][0][1], el[sd][1], g))
+        h = (_lerp(up[sd][1][0], tg[sd][0] + sg * 70 * tw, g), _lerp(up[sd][1][1], tg[sd][1] - 20 * tw, g))
+        e = (_lerp(e[0], up[sd][0][0], out), _lerp(e[1], up[sd][0][1], out))
+        h = (_lerp(h[0], up[sd][1][0], out), _lerp(h[1], up[sd][1][1], out))
+        w[sd] = (e, h, 'grip' if (g > 0.5 and out < 0.5) else 'spread')
+    return w, (g >= 1.0 and out <= 0.0)
+
+
+def s5_contact():
+    """Note 34's check: at the twist both wing hands are on the gunman's neck (within a hand of his neck base)."""
+    gx, gy, gppm = RS.STAGE['forest_edge']['gunman']
+    k = RC.scale_for(RC.CAST['gunman'], RS.s_for(gppm))
+    nx, ny = gx, gy - 928 * k
+    w, held = _s5_wings(SNAP - 0.05, *S5_KG)
+    bad = []
+    for sd in 'LR':
+        hx, hy = S5_KG[0] + w[sd][1][0] * S5_KG[2], S5_KG[1] + w[sd][1][1] * S5_KG[2]
+        if not held or abs(hy - ny) > 70 or abs(hx - nx) > 150:
+            bad.append('S5: wing %s is at (%d, %d), the neck at (%d, %d)' % (sd, hx, hy, nx, ny))
+    return bad
+
+
+S5_KG = (470, 940, 1.05)                                              # where he lands behind the gunman
+S5_SWOOP = (0.1, 0.8)                                                 # seconds into the shot: in from top right
 
 
 def s5_edge(t):
@@ -348,17 +400,7 @@ def s5_edge(t):
     cam = B.Cam(1.0)
     RS.forest(img, cam, 'edge', t)
     snap = t - SNAP
-    rise = ease((u - 0.2) / 0.8)
-    # KG rises behind the gunman (drawn first: he is behind), glee from "Press R1"
-    kx, ky, ks = 470, 1500 - 560 * rise, 1.05
-    head = (190, 760)                                                 # the gunman's head on screen
-    if snap > -0.5:                                                   # the wings close round the head
-        hx, hy = (head[0] - kx) / ks, (head[1] - ky) / ks
-        g = ease((snap + 0.5) / 0.35)
-        wings = {'R': ((-160 - 40 * g, -200), (-180 + (hx - 60 + 180) * g, -300 + (hy + 300) * g), 'grip'),
-                 'L': ((170 - 120 * g, -160), (200 + (hx + 80 - 200) * g, -180 + (hy - 20 + 180) * g), 'grip')}
-    else:
-        wings = 'up'
+    kx, ky, ks = S5_KG
     j = _gun_pose()
     rot, hy_ = 0.0, None
     drop = 0.0
@@ -366,12 +408,24 @@ def s5_edge(t):
         hy_ = 180                                                     # the head turned right round
         rot = -14 * ease((snap - 0.15) / 0.4)
         drop = 60 * ease((snap - 0.15) / 0.4)
-    if rise > 0:
-        CR.kg(img, cam, kx, ky, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
+    wings, held = None, False
+    v = (u - S5_SWOOP[0]) / (S5_SWOOP[1] - S5_SWOOP[0])
+    if 0 <= v < 1:                                                    # note 35: a swoop down from top right, side on,
+        e = 1 - (1 - v) ** 2                                          # wings swept back, levelling out as he arrives
+        x = _lerp(1330, kx + 40, e)
+        y = _lerp(120, ky, e) - 150 * math.sin(math.pi * e) * (1 - e)
+        CR.kg(img, cam, x, y, ks, view='side', mood='glee', wings='swoop', perched=False, t=t,
+              flip=-1, lean=_lerp(62, 10, ease((v - 0.45) / 0.55)), talk=_talk('kg', t))
+    elif v >= 1:                                                      # landed behind him (drawn first), facing us
+        wings, held = _s5_wings(t, kx, ky, ks)
+        flare = 1 - ease((u - S5_SWOOP[1]) / 0.3)                     # the landing: a last beat of the wings, settling
+        CR.kg(img, cam, kx, ky - 26 * flare, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
               talk=_talk('kg', t), part='all')
     _kid(img, cam, 'gunman', gx, gy + drop, gppm, t, j=j, yaw=90, head_yaw=hy_, rot=rot, talk=False)
+    if wings and wings['L'][2] == 'grip':                             # his wing hands again OVER the gunman: seen
+        CR.kg_grips(img, cam, kx, ky, ks, wings)                      # closed on the neck and jaw (note 34)
     if 0 <= snap < 0.12:
-        _flash(img, cam, head[0] + 30, head[1] + 60, 50, seed=3)
+        _flash(img, cam, 170, 1150, 50, seed=3)
     if L[5]['start'] <= t:
         _prompt(img, 'R1', 'EXECUTION', 640, 330, t - L[5]['start'] - 0.05)
     return img
@@ -613,6 +667,7 @@ def s10_square(t):
     RS.town(img, cam, 'square', t)
     st = RS.STAGE['town_square']
     romance = L[11]['start'] + 0.55
+    re_ = ease((t - romance) / 0.35)                                  # note 39: the line-up reacts on "ROMANCE"
     for who, (x, y, ppm) in st.items():
         if who != 'kg':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W.get(who, 0.55))
@@ -620,21 +675,40 @@ def s10_square(t):
         s = RS.s_for(ppm)
         if who == 'kg':
             sweep = ease((t - L[11]['start']) / 1.5)
-            wing = {'L': ((300, -120 - 80 * sweep), (480 + 40 * sweep, -200 - 240 * sweep), 'spread'),
+            wing = {'L': ((300, -120 - 50 * sweep), (470 - 10 * sweep, -200 - 30 * sweep), 'spread'),   # (kept
+                                                                      # below Malon, who steps forward: note 39)
                     'R': ((-192, -30), (-172, 90), 'fold')}
             CR.kg(img, cam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood='show', t=t,
                   talk=_talk('kg', t))
         elif who == 'goron':
-            CR.goron(img, cam, x, y, s, t=t)
+            CR.goron(img, cam, x, y, s, t=t, drool=1.0 + 1.3 * re_)    # note 39: he drools more
         else:
             jj = dict(next(iter(RC.poses(who).values())))
             mood = jj.get('_mood')
+            sw = RC.CAST[who]['shoulders']
+            dx = dy = 0.0
+            zoom = 1.0
             if who == 'saria' and t >= romance:
                 mood = 'wink'
-            if who == 'zelda':
-                mood = 'down'
-            bounce = 10 if (romance <= t < romance + 0.25 and who in ('malon', 'ruto')) else 0
-            _kid(img, cam, who, x, y - bounce, ppm, t, mood, j=jj, talk=False)
+            if who == 'zelda':                                        # she shrinks: shoulders up round her ears,
+                mood = 'down'                                         # head sunk, a small step back and away
+                for sd in 'LR':
+                    hx_, hy_, hz_ = jj['sh' + sd]
+                    jj['sh' + sd] = (hx_ * (1 - 0.08 * re_), hy_ - 26 * re_, hz_)
+                V.arm_to(jj, 'L', (-8.0, 330.0 - 60 * re_, 70.0), 'down', 'fist')
+                V.arm_to(jj, 'R', (8.0, 330.0 - 60 * re_, 74.0), 'down', 'fist')
+                jj['head_dy'] = jj.get('head_dy', 0) + 30 * re_
+                dx, dy, zoom = 14 * re_, -16 * re_, 1 - 0.05 * re_
+            if who == 'malon':                                        # she steps forward, the bottle thrust up at us
+                V.arm_to(jj, 'R', (70.0 - 20 * re_, 170.0 - 90 * re_, 230.0 + 50 * re_), 'down', 'grip')
+                hop = math.sin(math.pi * min(1.0, max(0.0, (t - romance) / 0.3)))
+                dy, zoom = 52 * re_ - 14 * hop, 1 + 0.09 * re_
+            if who == 'ruto':                                         # she preens: a hand up to smooth her head-fin,
+                V.arm_to(jj, 'L', (_lerp(-sw * 0.72, -112.0, re_), _lerp(345.0, -150.0, re_),   # chin lifted
+                                   _lerp(0.0, 20.0, re_) + 150 * math.sin(math.pi * re_)), 'out', 'palm')
+                jj['head_dy'] = jj.get('head_dy', 0) - 10 * re_
+                jj['head_roll'] = 7 * re_
+            _kid(img, cam, who, x + dx, y + dy, ppm * zoom, t, mood, j=jj, talk=False)
     return img
 
 
@@ -644,47 +718,83 @@ def s11_nine(t):
     return _close(bg, t, 'deadpan')
 
 
+# the wall (notes 33, 37c): KG side on, head tipped up so his face and beak are seen; both wings out in front of
+# him and up, below his beak, closed on Link's collar; Link side on facing him, held off the cobbles. No bandana.
+LIFT = {'R': ((230, -180), (430, -510), 'grip'), 'L': ((245, -125), (455, -465), 'grip')}
+WALL_DX = 150                                                         # the pair moved right, off the frame's edge
+WALL_TILT = 24                                                        # degrees his head is tipped up at Link
+
+
 def _wall_scene(t, cam, shake=0.0):
     img = B.canvas((0, 0, 0))
     RS.town(img, cam, 'wall', t)
     st = RS.STAGE['town_wall']
-    lx, base, ppm = st['link']
-    kx = st['kg'][0]
+    _, base, ppm = st['link']
+    kx = st['kg'][0] + WALL_DX
     s = RS.s_for(ppm)
     u = ease((t - S12_AT) / (SLAM - S12_AT))
-    hand_y = base - 272 * s - 485 * s                                 # his wings up high, holding Link off the cobbles
-    k = RC.scale_for(RC.CAST['link'], s)
-    lift = (base - 928 * k) - (hand_y - 70 * s)                       # his collar up at KG's grip
     sx = shake * 14 * math.sin(t * 60)
     ldx = 60 * (1 - u)
+    k = RC.scale_for(RC.CAST['link'], s)
+    ky = base - 272 * s
+    grip = [((LIFT[sd][1][0]), LIFT[sd][1][1]) for sd in 'LR']        # the two wing hands, his own units
+    gx_ = sum(g[0] for g in grip) / 2 + 30                            # the collar: between them, just past the tips
+    gy_ = sum(g[1] for g in grip) / 2 - 95                            # (his chin clear above the knuckles)
+    cx, cy = kx - gx_ * s, ky + gy_ * s                               # (he faces screen left)
+    lift = (base - 928 * k) - cy                                      # how far his collar is hauled up
     j = V.standing(RC.CAST['link'])
-    lx = kx - 335 * s                                                 # at KG's grip
-    _kid(img, cam, 'link', lx + ldx + sx * 0.6, base - lift * u, ppm, t, 'terrified', j=j, talk=True)
-    CR.navi(img, cam, 180, 760 + 20 * math.sin(t * 6), s * 1.2, t=t, heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))
-    CR.kg(img, cam, kx + ldx + sx, base - 272 * s, s, view='side', perched=False, stand=True, wings=LIFT, band=True,
-          mood='fury', t=t, flip=-1, talk=_talk('kg', t))
+    kick = math.sin(t * 9.0) * (1.0 if u >= 1 else 0.0)               # his feet dangle and kick a little
+    for sd, sg in (('L', -1), ('R', 1)):
+        fx, fy, fz = j['foot' + sd]
+        j['foot' + sd] = (fx, fy - 14, fz + sg * 34 * kick)
+        V.arm_to(j, sd, (sg * 24.0, 120.0, 120.0), 'down', 'grip')     # both hands up on the wings that hold him
+    lxx, lyy = cx + ldx + sx * 0.6, base - lift * u + (cy - (base - 928 * k) + lift) * 0
+    _kid(img, cam, 'link', lxx, lyy, ppm, t, 'terrified', j=j, yaw=90, talk=True)
+    CR.navi(img, cam, cx - 130, cy - 400 * s + 20 * math.sin(t * 6), s * 1.2, t=t,   # above his cap's tail, clear
+            heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))                              # of it in all three framings
+    yk = ky + (1 - u) * 0
+    CR.kg(img, cam, kx + ldx + sx, yk, s, view='side', perched=False, stand=True, wings=LIFT, band=False,
+          mood='rage', t=t, flip=-1, talk=_talk('kg', t), head_tilt=WALL_TILT)
     return img
 
 
-LIFT = {'R': ((150, -300), (300, -500), 'grip'), 'L': ((170, -260), (330, -470), 'grip')}   # side: both wings up at
-                                                                  # Link's collar, lifting him
+def wall_contact():
+    """Note 37c's check: at the wall both wing hands are at Link's collar (his neck base), not across his chest."""
+    st = RS.STAGE['town_wall']
+    _, base, ppm = st['link']
+    s = RS.s_for(ppm)
+    kx, ky = st['kg'][0] + WALL_DX, base - 272 * s
+    hs = [(kx - LIFT[sd][1][0] * s, ky + LIFT[sd][1][1] * s) for sd in 'LR']
+    cx = kx - (sum(LIFT[sd][1][0] for sd in 'LR') / 2 + 30) * s      # his neck base, as _wall_scene puts it
+    cy = ky + (sum(LIFT[sd][1][1] for sd in 'LR') / 2 - 95) * s
+    k = RC.scale_for(RC.CAST['link'], s)
+    return ['S12: wing hand at (%d, %d), the collar at (%d, %d)' % (hx, hy, cx, cy) for hx, hy in hs
+            if not (0 <= hy - cy <= 190 * k and abs(hx - cx) <= 90 * k)]
+
+
+def _wall_marks():
+    """Link's collar and scale at the wall, and KG's x (as _wall_scene places them)."""
+    st = RS.STAGE['town_wall']
+    _, base, ppm = st['link']
+    s = RS.s_for(ppm)
+    kx, ky = st['kg'][0] + WALL_DX, base - 272 * s
+    cx = kx - (sum(LIFT[sd][1][0] for sd in 'LR') / 2 + 30) * s
+    cy = ky + (sum(LIFT[sd][1][1] for sd in 'LR') / 2 - 95) * s
+    return cx, cy, RC.scale_for(RC.CAST['link'], s), kx, ky, s
 
 
 def s12_wall(t):
     choices = L[14]['start'] + 1.2
     shake = 1.0 if (choices <= t < choices + 0.8 or SLAM <= t < SLAM + 0.15) else 0.0
-    if shot_of(t) == 'S12b':                                          # 13b: a cut in closer for the shake
-        st = RS.STAGE['town_wall']
-        return _wall_scene(t, B.Cam(1.3, st['kg'][0] - 160, st['kg'][1] - 520), shake)
+    if shot_of(t) == 'S12b':                                          # 13b: a cut in closer for the shake, the two
+        cx, cy, k, kx, ky, s = _wall_marks()                          # faces either side of the middle
+        return _wall_scene(t, B.Cam(1.3, (cx + kx) / 2 + 20, cy + 150 * s), shake)
     return _wall_scene(t, B.Cam(1.0), shake)
 
 
 def s13_pinned(t):
-    st = RS.STAGE['town_wall']
-    lx, base, ppm = st['link']
-    s = RS.s_for(ppm)
-    head = base - 272 * s - 485 * s - 230 * s                         # his face, held up at KG's grip
-    return _wall_scene(t, B.Cam(2.1, st['kg'][0] - 300 * s, head + 120))
+    cx, cy, k, kx, ky, s = _wall_marks()                              # his face, held up at KG's grip, with the
+    return _wall_scene(t, B.Cam(2.1, cx + 150 * s, cy + 40 * k))      # wings on his collar and KG's beak below
 
 
 SHOT_FN = {'S1': s1_branch, 'S2': s2_down, 'S3': s3_branch, 'S4': s4_ok, 'S5': s5_edge, 'S6': s6_god,
@@ -774,7 +884,7 @@ def soundtrack(stems=False):
 def checks():
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     import voices
-    faults = voices.bleep_check(sys.modules[__name__], [])
+    faults = voices.bleep_check(sys.modules[__name__], []) + s5_contact() + wall_contact()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 
