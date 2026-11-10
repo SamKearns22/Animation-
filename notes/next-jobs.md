@@ -1,55 +1,32 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 89 (critique before every send: now `critique.py`, and pre-flight refuses an animatic without
-  a clean last pass or `--faults-named`), 30 (each fault note names its checklist line), 56 (`critique.py where`).
-- **Job H (chat 2, the build, done 10 Nov, Opus high, about 1.9%; Job H in all about 3.4% of the 5% cap): FINISHED.**
-  Harvest: about 70 of Sam's non-body fault notes from ten films filed into the checklist (now 37 lines: new P13
-  clothes, O5 props resting, O6 effects, S5 set detail, S6 same set every shot, M5 hits show; P9 merged into P7).
-  `source/critique.py` (pack, record, false, where, before, status) with 3 kittests (pass); pre-flight prints the
-  critique line and refuses the animatic without a clean last pass. Calibration, two fresh helpers on Elder Swindon
-  stills plus two old faults put back: both caught the mirrored label and the hand off its phone, no false alarm on
-  the clean panels, and the before/after note judged right. Both also flagged, on Elder Swindon's current frames: the
-  scroll lost in glare (9 s), the drool reading as a straw (3.5 s), the dog a brown lump and his raised arm reading
-  awake (16.5 s), the roundabout an even wheel (25 s): for that film's next round. The first real trial is the next film.
-- **Job G (chat 4 done, 10 Nov, steps 4-6, Opus high, about 1.3%, stopped on amber):** lying checks: a neck shows,
-  no arm held up in the air, each arm on its own side (Sam's lying notes); the kit's lying arms laid flat (elbows bent up
-  into the air: Elder Swindon 6's cause); pre-flight now stops a pose seen from an "avoid" view or with no gallery row,
-  and checks every lying body; 12 everyday kit poses added to the gallery (hands on hips, pockets, shrug...). Rules
-  that bite: 42, 41. **Next for G:** nothing; Job G is finished once Sam numbers the step 6 proposal.
-- **Job I (chat 2 done, 10 Nov, Opus medium):** the driver's check now shows on every side standing (three-quarter
-  front and back were plain red) and lying; the neck of every lying person now turns with the head and stops at the
-  collar (the 'ball' from behind showed a loose block: the back-of-head drawing's own neck ran a fixed length past the
-  collar). Trio sheet looked at (fine); `lying.py check` OK; Elder Swindon's close man redrawn and looked at (fine;
-  his shoe soles have a slightly doubled outline). Sheet `notes/sheets/job-i-driver-sheet.jpg` (sent).
-  **Round 1 of Sam's notes DONE (10 Nov, same chat, stopped on amber):** (a) each leg one shape with one outline
-  (`_limb_piece`); a leg in front of the body has its thigh drawn under the shirt hem first; (b) heads a tenth smaller
-  lying, smaller again beside a squashed trunk, at the head's own depth; no shine on a bald crown; (c) no floor
-  shadow under lying people (floor only; shirt shading kept, my pick on Q1); (d) face-up-away can't be drawn by the
-  rig: pre-flight now flags it (`lying_flat.face_up_away`, posecheck 'lying: face up away'); sheet shows 'head left'.
-  Soles now the shoe's own colour, darker. One fresh critique pass run (found 7; 3 fixed above).
-  **Round 2 DONE (10 Nov, chat 3, Opus medium):** Sam: 12 knee bend wrong, 13 a knee segment still shows, 14/17 a
-  leg through the chest not joined to the hips, faces cruder than his face-on one. Why round 1's one-piece leg failed:
-  a leg nearer than the trunk was still split (thigh under the shirt, knee to shoe drawn on its own over it). Now a
-  near leg is one piece drawn after the trunk: past the hem only what shows below it; drawn up, from the hip over the
-  shirt. Lying faces use the face-on drawing wherever they face us (the turned drawing only side on and from behind);
-  turned goatees as dark as the face-on one; no crown shine on the face-on head lying. Checks: lying OK, kittests pass.
-  Sheets `notes/sheets/job-i-driver-sheet-numbered.jpg`, `job-i-round2-closeup.jpg` (sent).
-  **Next for I (chat 4, Opus medium):** Sam's look at the round 2 sheets. Still named, not fixed: the slumped shirt as
-  a wide box with the arm lost in the check; from behind the hair ring as a blindfold; side-on face (11) still the
-  turned drawing; handcheck can't see lying bodies; no critique pass this round. Rules that bite: 41, 30, 89.
-  For Claude: `lying_flat._leg` (front: whole leg after trunk, `keep` half-plane past `sc.hem`), `_head` maps
-  'three' to 'front'; `views._beard_col` goatee dark; `burnham.hair_front` bald shine obeys `no_shine`. Sheet:
-  `lying_flat.py sheet OUT man ball`; `_head` returns (HeadCam, view); `_neck` before the trunk (`neck_off`).
-- **Job K, the "AI ick" fixes (chat 1 done 10 Nov, Opus high, about 2%):** Sam: 1 Y, 2 Y, 4 Y, 6 dropped, 8 N, 3 dropped,
-  7 N; 5 waits for an example. **Next for K (overnight build, Opus, high effort, about 2.5%, cap 3%):** "Job K build:
-  read notes/next-jobs.md, the Job K line, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K." Example
-  for 5 first (sent), then 2, 1, 4; one sheet or clip each, sent to Sam. Rules that bite: 86, 48, 79. For Claude:
-  `source/ai_tells_lab.py` (cel(), HeadLife). Open rule requests: none.
-- **Needs Sam:** nothing for H. K: Y/N on proposals 1-8 (above).
-- **Read:** `source/critique.py`'s map (top of file) the first time a film runs a critique; `guides/critique-checklist.md`.
-- **Open rule requests:** none from H. Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
-- **For Claude:** packs in `source/data/critique/FILM/rR-pN` (git-ignored; the spec sits beside the pack, never in it);
-  results in the ledger (`critique` in FILM.json, both answers in the round file). Job G's own notes: Job G section.
+- **Rules that bite next:** 89 (now holds old 56, 76, 79), 24 (every thing KNOWN or NEW in the estimate), 41.
+- **Done: Job J FINISHED (10 Nov, Opus high, about 1.5% of the week, cap 3%).** Sam: Y to 1-6 and 8; 7 "do it
+  yourself". Written: 15 rulebook rows merged or retired (list under "Merged numbers"); critique lines S5, M2, O1 took
+  old 4, S1, 34; pre-flight refuses a film from the 10 Nov template with no acting list or rehearsal line (rules 74,
+  8), warns on 61; CLAUDE.md rewritten shorter (2,180 to 1,540 words, every rule kept; film types moved to
+  `guides/job-packs.md`); job packs live. Job G finished (hidden props flagged).
+- **Next: Job L, five checks (Sam: Y, about 1%), Opus, medium effort:** "Job L: read notes/next-jobs.md, Where things
+  stand, and notes/job-j-proposals.md question 5." Rules 72, 62, 50, 27 (now 26), 37.
+- **Job I round 2 done (chat 3, Opus medium):** Sam's 12-14, 17 and faces. Round 1's one-piece leg failed because a
+  leg nearer than the trunk was still split (thigh under the shirt, knee to shoe on its own); now one piece after the
+  trunk (past the hem only what shows; drawn up, from the hip). Lying faces use the face-on drawing when facing us.
+  **Next (chat 4, Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round2-closeup.jpg`.
+  Still open: slumped shirt a box; back hair a blindfold; side-on face (11); no critique pass this round.
+- **Job K next (overnight build, Opus, high effort, about 2.5%):** "Job K build: read notes/next-jobs.md, the Job K
+  line in notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
+- **Needs Sam:** I: the round 2 sheets; K: Y/N on proposal 5 once its example is seen.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for L and K).
+- **Open rule requests:** none.
+- **For Claude:** `preflight.gate_warnings` (refuses when the notes have the template's 'KNOWN (where) or NEW');
+  `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`. I: `lying_flat._leg` (front:
+  whole leg after trunk, `keep` past `sc.hem`), `_head` 'three' to 'front'; goatee dark; `no_shine` in burnham too.
+
+## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
+- **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
+  0.4%; the by-hand rules audited (check built, folded into the critique checklist, or retired) 0.8%; reading layers
+  (one-page core and job packs, drafted for Sam's yes) 0.6%; the library of passed things and the known/new planning
+  split 0.4%; handover 0.3%. Cap 3%: past it, stop and leave a note. Rule changes are proposals only (Sam's numbers).
 
 ## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
 Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
@@ -92,8 +69,7 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
 - **For chat 4 (from the 10 Nov handover):** `moves.phone_at_ear` (3D slab, `V._hull`); `grips.hidden_by` adds depth tests (head: beyond 0.25 hw;
   torso: beyond half its depth and within 1.25x its screen width); views skips an `on_face` arm hidden by the head;
   `handcheck.held_faults` (PROBE['held'] layer per side, TOUCH 0.12), kittest `held_prop_touches`. Unfinished: a
-  "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
-  from behind in the dict too); `posegallery._wrap`.
+  "prop hidden" check: DONE in Job J (10 Nov); `posegallery._wrap`.
 
 ## Job H, critique helper (build plan H; Sam: Y to about 2%; 10 Nov overnight run, his "just go" for H only; cap raised to 5% the same night)
 **Estimate (rule 86, firmed 10 Nov):** about 3% of a week; Sam (10 Nov) raised the cap from 2.5% to 5%: stop past 5%. Chat 1, the design (Opus max): about

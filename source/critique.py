@@ -31,6 +31,8 @@ with no face reference always gets CAN'T TELL P4; tiny props get named loosely i
 SPEC: {"round": R, "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO",
 "refs": [PATH...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...", "line": "O3", "marked": PATH
 or null, "t": 20.1, "box": [x0,y0,x1,y1]}]}. A panel with a crop is a detail (540 px); without, a phone-size frame.
+A panel showing something built new for the film adds "new": "NAME" (and "drawn": "file.function"): a clean pass
+files it in guides/kit-catalogue.md, "Passed the critique" (library(); Job J).
 """
 import glob
 import importlib
@@ -418,10 +420,41 @@ def record(film_name, pack_dir):
     for _, lid, _ in faults:
         c['lines'].setdefault(lid, {'faults': 0, 'false': 0})['faults'] += 1
     ledger.store(d)
+    if not faults and not cant:
+        library(film_name, spec, rnd, pas)
     print(f'critique: round {rnd} pass {pas} recorded: {len(faults)} fault(s), {len(cant)} can\'t tell')
     for i, lid, w in faults + cant:
         print(f'  panel {i} {lid}: {w}')
     return faults, cant
+
+
+LIBRARY = os.path.join(ROOT, 'guides', 'kit-catalogue.md')
+LIB_HEAD = '## Passed the critique'
+
+
+def library(film_name, spec, rnd, pas, path=LIBRARY):
+    """Job J: a clean pass files each panel marked "new": NAME (a person, prop, set or move built for this film) in
+    the catalogue's "Passed the critique" table, so the next film's plan counts it as KNOWN (guides/job-packs.md)."""
+    new = [p for p in spec['panels'] if p.get('new')]
+    if not new or not os.path.exists(path):
+        return []
+    text = open(path).read()
+    if LIB_HEAD not in text:
+        text = text.rstrip('\n') + f'\n\n{LIB_HEAD} (filed by `critique.py record` on a clean pass: reuse as KNOWN)\n' \
+                                   '| thing | what it is | film, round, pass, date | where it is drawn |\n|---|---|---|---|\n'
+    head = text.index(LIB_HEAD)
+    added = []
+    for p in new:
+        if f'| {p["new"]} |' in text[head:]:
+            continue
+        row = (f'| {p["new"]} | {p.get("is", "")[:80]} | {film_name}, r{rnd} p{pas}, {date.today()} | '
+               f'{p.get("drawn", p.get("img", "t=%s" % p.get("t")))} |\n')
+        text = text.rstrip('\n') + '\n' + row
+        added.append(p['new'])
+    open(path, 'w').write(text)
+    if added:
+        print('critique: filed in the catalogue (Passed the critique):', ', '.join(added))
+    return added
 
 
 def false_alarm(film_name, lid, why):

@@ -496,7 +496,8 @@ def shoulder_seam_caught():
 def held_prop_touches():
     """Job G chat 3: a hand meets what it holds on the picture (handcheck.held_faults), not only in 3D. The phone at
     the ear (redone: the phone sat on top of his head) and the cup are clean from every view; the same phone drawn a
-    hand's width and more away from the hand is caught."""
+    hand's width and more away from the hand is caught. Job J: a prop hidden on the picture (behind his back or head)
+    is flagged, and the views it is flagged in are exactly the gallery's avoid views for it."""
     import burnham as B
     import figure as F
     import handcheck as H
@@ -524,19 +525,41 @@ def held_prop_touches():
         return [f for sd in 'LR' for f in H.held_faults(pp, sd, pp['arms'][sd])], \
             sum(int(pp['arms'][sd]['prop'].any()) for sd in 'LR')
 
-    clean, seen = [], 0
+    clean, seen, hid = [], 0, set()
+    rows = {'phone_ear': 'phone at the ear', 'phone_read': 'phone, reading', 'mug': 'cup in hand', 'mug_sip': 'cup, sipping'}
     for name in ('phone_ear', 'phone_read', 'mug', 'mug_sip'):
-        for deg, _ in G.VIEWS:
+        for deg, label in G.VIEWS:
             fs, n = faults(moves.pose(G.MODEL, name), float(deg))
-            clean += fs
+            clean += [f for f in fs if f[0] != 'prop hidden']
+            hid |= {(rows[name], label) for f in fs if f[0] == 'prop hidden'}
             seen += n
+    avoid = {(r, lb) for r in rows.values() for lb in G.AVOID.get(r, {})}
+    hid_ok = hid == {(r, lb) for r, lb in avoid if 'hidden' in G.AVOID[r][lb]}   # Job J: every hidden prop is avoided
     far = V.standing(G.MODEL)
     V.arm_to(far, 'R', (120.0, 300.0, 120.0), 'down', 'grip')
     moves._held(far, 'R', G.MODEL, lambda p, j2: moves._phone(p, {**j2, 'wrR': (j2['wrR'][0] + 90, j2['wrR'][1] - 90)},
                                                               'R'))
     caught = faults(far, 0.0)[0]
-    return not clean and seen == 24 and bool(caught), f"kit poses: {clean or 'clean'} ({seen} of 24 props seen); " \
-                                                       f"phone moved off the hand: {caught}"
+    return not clean and seen == 24 and bool(caught) and hid_ok, \
+        f"kit poses: {clean or 'clean'} ({seen} of 24 props seen); phone moved off the hand: {caught}; " \
+        f"props hidden: {sorted(hid)} ({'= the avoid list' if hid_ok else 'NOT the avoid list'})"
+
+
+@test
+def critique_library():
+    """Job J: a clean critique pass files each panel marked "new" in the catalogue's "Passed the critique" table,
+    once (a second clean pass adds nothing), and panels not marked new are not filed."""
+    import tempfile
+    import critique as C
+    path = os.path.join(tempfile.mkdtemp(), 'cat.md')
+    open(path, 'w').write('# Kit catalogue\n')
+    spec = {'panels': [{'is': 'a pigeon, side on', 'new': 'Swindon pigeon', 'drawn': 'elder_swindon.pigeon'},
+                       {'is': 'shot 3, wide'}]}
+    a = C.library('test', spec, 1, 2, path)
+    b = C.library('test', spec, 1, 3, path)
+    text = open(path).read()
+    ok = a == ['Swindon pigeon'] and b == [] and text.count('Swindon pigeon') == 1 and 'shot 3' not in text
+    return ok, f"first pass filed {a}; second {b}; rows: {text.count('| Swindon pigeon |')}"
 
 
 @test

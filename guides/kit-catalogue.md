@@ -5,7 +5,8 @@ set, person, prop or effect adds it here when its building stage ends, and to `s
 section, name, file, how to draw it). See the lot on one sheet: `python3 source/catalogue.py OUT.jpg [Sets People
 Creatures Props Effects]` (about 30 s; each tile from its film's own picture, cast sheet or prop code).
 
-**Contents:** Sets · People · Creatures and machines · Props · Effects · Movement and checks (the kit tools).
+**Contents:** Sets · People · Creatures and machines · Props · Effects · Movement and checks (the kit tools) · Passed
+the critique (new things a clean critique pass filed: a plan counts them as KNOWN, `guides/job-packs.md`).
 
 ## Sets (each built once in 3D, metres, y up; every shot is a camera on it)
 | set | file | see it | notes |
@@ -129,3 +130,7 @@ Creatures Props Effects]` (about 30 s; each tile from its film's own picture, ca
 | Running straight at the lens: the front-on gait (low knees, small float) with tucked, forward-pumping arms (rule 63); which poses read from behind (rule 64) | `moves.py` (`GAITS['front_run']`, `front_run_arms`, `READS_FROM_BEHIND`) |
 | A mouth with no face to lip-sync (the Sorting Hat): openness 0-1 from the voice's loudness, one syllable at a time (rule 65) | `mouths.py` (`loudness_open`) |
 | The quick check in seconds (script, mouths, subtitles, shot lengths) before the full pre-flight (rule 67) | `preflight.py NAME OUT --text` |
+
+## Passed the critique (filed by `critique.py record` on a clean pass: reuse as KNOWN)
+| thing | what it is | film, round, pass, date | where it is drawn |
+|---|---|---|---|

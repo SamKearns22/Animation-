@@ -238,7 +238,11 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
 AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses it from there
     'hands on a table (drawn)': {'three-quarter back': 'the far hand is on the table beyond his body',
                                  'behind': 'both hands are on the table beyond his body'},
-    'cup in hand': {'behind': 'the cup and hand are in front of him, hidden by his back'},
+    'cup in hand': {'three-quarter back': 'the cup is in front of him, hidden by his back (Job J: prop hidden)',
+                    'behind': 'the cup and hand are in front of him, hidden by his back'},
+    'cup, sipping': {'behind': 'the cup at his lips is hidden by his head: a sliver shows (Job J: prop hidden)'},
+    'phone, reading': {'three-quarter back': 'the phone is in front of him, hidden by his body (Job J: prop hidden)',
+                       'behind': 'the phone is in front of him, hidden by his body (Job J: prop hidden)'},
     'pointing': {'three-quarter back': 'the arm points away from us: the point does not read'},
     'pointing both ways': {'three-quarter': 'the far arm points away from us: the point does not read',
                            'three-quarter back': 'the near arm points away from us: the point does not read',
