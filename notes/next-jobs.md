@@ -45,6 +45,12 @@
 - **For Claude:** packs in `source/data/critique/FILM/rR-pN` (git-ignored; the spec sits beside the pack, never in it);
   results in the ledger (`critique` in FILM.json, both answers in the round file). Job G's own notes: Job G section.
 
+## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
+- **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
+  0.4%; the by-hand rules audited (check built, folded into the critique checklist, or retired) 0.8%; reading layers
+  (one-page core and job packs, drafted for Sam's yes) 0.6%; the library of passed things and the known/new planning
+  split 0.4%; handover 0.3%. Cap 3%: past it, stop and leave a note. Rule changes are proposals only (Sam's numbers).
+
 ## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
 Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
 - **Chat 1 DONE (9 Nov, about 1.7%):** 6 views (mirrored) cropped round the whole body; checks: hand through the body,

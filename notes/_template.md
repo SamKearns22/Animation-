@@ -22,6 +22,9 @@ break; eyelines and holds per shot; every sound effect (what, when, needed by); 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places
 benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
 
+Rehearsal clips sent: (rule 8: the 3-4 riskiest moves as 2-3 s clips, before building the rest; the date and file,
+or "none: why". Pre-flight warns until this line is filled)
+
 Composition sheet sent: (rule 11: the 3-4 key shots, before building; write the date and file here once Sam has it.
 Pre-flight refuses to run until this line has them, and while any "done?" box below is blank: rule 14)
 

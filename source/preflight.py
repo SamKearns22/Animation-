@@ -144,6 +144,31 @@ def gates(film, name):
     return out
 
 
+def gate_warnings(film, name, has):
+    """Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting
+    list row per line), rule 8 (risky moves rehearsed: a "Rehearsal clips sent:" line, or "none: why"), rule 61 (the
+    film's code opens with its MAP and stays under about 1,000 lines a file)."""
+    out = []
+    path = notes_path(film, name)
+    text = open(path).read() if os.path.exists(path) else ''
+    if 'voices' in has:
+        m = re.search(r'^##+ *(The )?acting list.*?$(.*?)(?=^## |\Z)', text, re.M | re.S | re.I)
+        rows = [ln for ln in (m.group(2).splitlines() if m else []) if ln.strip().startswith('|')][2:]
+        if not rows:
+            out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
+    if not re.search(r'^\s*[-*]?\s*\**Rehearsal clips sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):
+        out.append('no "Rehearsal clips sent: DATE, FILE" (or "none: why") line in the notes (rule 8: the 3-4 riskiest '
+                   'moves as 2-3 s clips before the rest)')
+    src = getattr(film, '__file__', '') or ''
+    if src.endswith('.py') and os.path.exists(src):
+        lines = open(src).read().splitlines()
+        if not any('MAP' in ln for ln in lines[:40]):
+            out.append(f'{os.path.basename(src)} has no MAP in its first lines (rule 61; python3 source/codemap.py)')
+        if len(lines) > 1000:
+            out.append(f'{os.path.basename(src)} is {len(lines)} lines: split it, one file per group of shots (rule 61)')
+    return out
+
+
 def cast_faults(film, roster):
     """Rule 14 / CLAUDE.md (25 Oct): every shot has everyone the brief puts in it, on screen at some point (SHOT_CAST:
     {shot: [name or pattern]}, against the audit's roster of who is on screen)."""
@@ -307,6 +332,8 @@ def main():
     if skipped:
         print('skipped (the film has no ' + ', '.join(k for k in KINDS if k not in has) + '; HAS): ' + '; '.join(skipped))
     stop = gates(film, name) if every_film else []   # rule 14: refuse while the brief or the sheet is not done
+    for x in (gate_warnings(film, name, has) if every_film else []):   # Job J: rules 8, 61, 74 (warnings for now)
+        print('WARNING:', x)
     if stop and not audit:
         print('pre-flight REFUSES to run (guides/film-quality-rules.md, rule 14):')
         for x in stop:
