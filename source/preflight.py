@@ -430,6 +430,7 @@ def main():
     F.CONTEXT['where'] = ''
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
+        problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
         import filmkit

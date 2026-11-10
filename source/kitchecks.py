@@ -20,6 +20,9 @@ From what the audit already sees (scene(t) and the set; run inside audit.py's pa
 From the drawing (pre-flight's pass over every 3rd frame; every views.py person drawn is logged):
   facing      a head turned no more than 95 degrees from its body; seen from behind, nothing held out in front
               drawn over the back (Prepper notes 11, 12, 16)
+  copies      no two people in one frame drawn from one copy (Job K, Sam: Y, 10 Nov; the crowds-from-behind rule made
+              automatic): the same build, height, hair, skin and clothes is flagged; meant copies (twins, a reflection)
+              in the film's COPIES_OK = [(name, name, why)]. The fix: each one a different build, height and kit detail
   rests       rule 78 for flat films: each RESTS arm, as drawn, against 'desk' (the sitting kit's desk in the
               pose), 'armrest', 'seat' or a number (a height above the floor, person units: Ad-Vanced Notice's
               painted desk is 500): the forearm and elbow never more than 4 units (about 1 cm) below the surface,
@@ -298,6 +301,7 @@ def install():
             r = _rest_record(joints, t)
             if r:
                 d['_rest'] = r            # rule 78: the arms' heights against the surfaces in the pose (rests())
+            d['_look'] = look(sp)
             DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
             POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
@@ -324,6 +328,35 @@ def facing(records):
         if d.get('held_over_back') and (name, 'back') not in seen:
             seen.add((name, 'back'))
             out.append(f'FACING: {where}: seen from behind, what {name} holds is drawn over the back (first of these)')
+    return out
+
+
+LOOK_KEYS = ('height', 'shoulders', 'hw', 'hh', 'leg_k', 'skin', 'hair', 'hair_c', 'beard', 'beard_c', 'outfit',
+             'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'who')
+
+
+def look(sp):
+    """What someone looks like, as one string (everything that tells two people apart at a glance; not the name)."""
+    return repr(tuple((k, sp.get(k)) for k in LOOK_KEYS))
+
+
+def copies(film, records):
+    """Job K (Sam: Y, 10 Nov): two people in one frame with the same look are one copy pasted twice (the ICE
+    officers' identical vests, builds and masks). Once per pair of names."""
+    ok = {frozenset(r[:2]) for r in getattr(film, 'COPIES_OK', [])}
+    frames, out, seen = {}, [], set()
+    for where, name, d in records:
+        if d.get('_look'):
+            frames.setdefault(where, []).append((name, d['_look']))
+    for where, ppl in frames.items():
+        for i, (a, la) in enumerate(ppl):
+            for b, lb in ppl[i + 1:]:
+                pair = frozenset((a, b))
+                if la == lb and pair not in ok and (len(pair) == 2 or a == b) and (a, b) not in seen:
+                    seen.add((a, b))
+                    out.append(f"COPIES: {where}: {a} and {b} are drawn from one copy (same build, height, hair and "
+                               f"clothes): give each a different build, height and kit detail, or list them in "
+                               f"COPIES_OK (first of these)")
     return out
 
 

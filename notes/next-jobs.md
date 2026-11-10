@@ -34,12 +34,12 @@
   For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
   trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
   man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.
-- **Job K, the "AI ick" fixes (chat 1 done 10 Nov, Opus high, about 2%):** Sam: 1 Y, 2 Y, 4 Y, 6 dropped, 8 N, 3 dropped,
-  7 N; 5 waits for an example. **Next for K (overnight build, Opus, high effort, about 2.5%, cap 3%):** "Job K build:
-  read notes/next-jobs.md, the Job K line, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K." Example
-  for 5 first (sent), then 2, 1, 4; one sheet or clip each, sent to Sam. Rules that bite: 86, 48, 79. For Claude:
-  `source/ai_tells_lab.py` (cel(), HeadLife). Open rule requests: none.
-- **Needs Sam:** nothing for H. K: Y/N on proposals 1-8 (above).
+- **Job K, the "AI ick" fixes (build chat 1 done 10 Nov, Opus high, about 1.4%; stopped on amber):** sent to Sam:
+  the 5 example (driver sheet; nothing built), 2 built (hard-edged shading, sheet), 1 built (head acting in the rig,
+  clip), 4 half built (pre-flight's copy check, with a kittest). **Next for K (Opus, medium effort, about 0.4%):** type
+  "Job K build 2: read the Job K line, then notes/job-k-ai-tells.md 'Build chat 1'": the shirt check that bends round the body (4's second half), its sheet sent to Sam; then 5 if
+  Sam said Y. Rules that bite: 48, 79, 86. For Claude: notes/job-k-ai-tells.md 'Build chat 1'.
+- **Needs Sam:** K: Y/N on 5 (the driver sheet).
 - **Read:** `source/critique.py`'s map (top of file) the first time a film runs a critique; `guides/critique-checklist.md`.
 - **Open rule requests:** none from H. Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
 - **For Claude:** packs in `source/data/critique/FILM/rR-pN` (git-ignored; the spec sits beside the pack, never in it);
