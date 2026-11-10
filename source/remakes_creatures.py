@@ -99,10 +99,13 @@ def _feather(base, ang, length, width):
 # Faces: brows (tilt: + is the inner end down, an angry V; lift: both up), eyes, beak (Q3: a big hype grin)
 KG_MOODS = {
     'kindly': dict(eyes='smile', brows=(-0.25, 10), beak='smile'),        # line 3: eyes closed in a smile
-    'hype': dict(eyes='open', brows=(-0.35, 16), beak='grin'),            # line 1: the big hype grin
-    'glee': dict(eyes='open', pupil=0.55, brows=(0.45, 0), beak='grin'),  # the execution: hostile glee
+    'hype': dict(eyes='open', pupil=1.2, shine2=True, brows=(-0.4, 24), beak='grin'),   # line 1: the big hype grin,
+                                                                          # eyes wide and sparkling
+    'glee': dict(eyes='open', pupil=0.32, low=0.42, brows=(0.6, 0), beak='grin'),   # the execution: hostile glee, a
+                                                                          # crazed squint from below, pinprick pupils
     'war': dict(eyes='narrow', brows=(0.7, -4), beak='roar'),             # the camp: war face
-    'show': dict(eyes='open', brows=(-0.45, 22), beak='grin'),            # line 11: the game-show grin
+    'show': dict(eyes='smile', brows=(-0.5, 26), beak='grin'),            # line 11: the game-show grin, eyes
+                                                                          # squeezed shut in it (pass 2: faces alike)
     'fury': dict(eyes='narrow', pupil=0.5, brows=(0.85, -8), beak='roar', spit=True),   # line 13: hissing, spitting
 }
 
@@ -131,7 +134,7 @@ def _curl(base, ang, ln, bend, w0, w1):
     return _ribbon(open_curve(pts, 4), w0, w1)
 
 
-def _kg_wing(p, sh, el, hd, shape, side, colour=KG_BROWN):
+def _kg_wing(p, sh, el, hd, shape, side, colour=KG_BROWN, taper=False):
     """A wing used as an arm (rule 41): a broad feathered limb shoulder to elbow to wrist, a row of secondary
     feathers hanging off its trailing edge (so it reads as a wing, not a stick), the pale leading edge, and the
     primaries at the end as its fingers: 'fold' together, 'spread' fanned, 'grip' bent round what it holds like
@@ -158,13 +161,27 @@ def _kg_wing(p, sh, el, hd, shape, side, colour=KG_BROWN):
             sec.append((path[i], fa, 70 + 60 * (1 - abs(u - 0.6)) * max(0.3, gy), 72))
     for base, fa, ln, wd in sec:
         p.poly(_feather(base, fa, ln, wd), dk(colour, 0.82), INK, 2.0)
-    p.poly(_ribbon(path, 120, 70, notch=0.12, seed=3), colour, INK, 2.8)
-    p.line(open_curve([(sh[0] + side * 8, sh[1] + 30), (el[0], el[1] + 18), (hd[0], hd[1] + 14)], 6),
-           KG_WING_EDGE, 4.0)                                           # the pale leading edge
-    for k in range(3):                                                  # the covert rows: a few strokes only
-        u = 0.3 + k * 0.2
-        q = path[int(u * (n - 1))]
-        p.line(open_curve([(q[0] - 26, q[1] - 10), (q[0], q[1] + 8), (q[0] + 26, q[1] - 10)], 4), dk(colour, 0.7), 1.6)
+    if taper:                                       # side on (pass 2: an even tube with a pale stripe read as a coat
+        p.poly(_ribbon(path, 170, 46, notch=0.2, seed=3), colour, INK, 2.8)    # sleeve): broad at the shoulder,
+        for k in range(5):                          # narrowing to the wrist, rows of scalloped coverts, no stripe
+            u = 0.12 + k * 0.16
+            i0 = int(u * (n - 1))
+            q, q2 = path[i0], path[min(n - 1, i0 + 2)]
+            L = math.hypot(q2[0] - q[0], q2[1] - q[1]) or 1.0
+            tx, ty = (q2[0] - q[0]) / L, (q2[1] - q[1]) / L
+            hw = 70 * (1 - u * 0.7)
+            for v in (-0.5, 0.0, 0.5):
+                c = (q[0] - ty * hw * v, q[1] + tx * hw * v)
+                p.line(open_curve([(c[0] - ty * 16 - tx * 4, c[1] + tx * 16 - ty * 4), (c[0] + tx * 12, c[1] + ty * 12),
+                                   (c[0] + ty * 16 - tx * 4, c[1] - tx * 16 - ty * 4)], 4), dk(colour, 0.68), 1.8)
+    else:
+        p.poly(_ribbon(path, 120, 70, notch=0.12, seed=3), colour, INK, 2.8)
+        p.line(open_curve([(sh[0] + side * 8, sh[1] + 30), (el[0], el[1] + 18), (hd[0], hd[1] + 14)], 6),
+               KG_WING_EDGE, 4.0)                                       # the pale leading edge
+        for k in range(3):                                              # the covert rows: a few strokes only
+            u = 0.3 + k * 0.2
+            q = path[int(u * (n - 1))]
+            p.line(open_curve([(q[0] - 26, q[1] - 10), (q[0], q[1] + 8), (q[0] + 26, q[1] - 10)], 4), dk(colour, 0.7), 1.6)
     if shape == 'grip':                                                 # hooked fingers, bent round the thing held
         for k in range(4):
             u = k / 3 - 0.5
@@ -203,7 +220,13 @@ def _kg_eye(p, ex, ey, r, mood, sgn, look=0.0):
     p.poly([(x, max(y, lid)) for x, y in oval(cx, ey + 2, pr, pr, 28)], INK, None)
     if eyes != 'narrow':
         p.ell(cx - r * 0.3, ey - r * 0.32, r * 0.16, r * 0.16, SHINE, None)
+        if mood.get('shine2'):
+            p.ell(cx + r * 0.28, ey + r * 0.26, r * 0.09, r * 0.09, SHINE, None)
     p.poly(pts, None, INK, 3.0)
+    if mood.get('low'):                                                 # the lower lid pushed up: a squint
+        lo = ey + r * (1.0 - 2 * mood['low'])
+        p.poly([(x, max(y, lo)) for x, y in oval(ex, ey, r * 1.02, r * 1.02, 40)], KG_FACE, None)
+        p.line(open_curve([(ex - r * 1.02, lo + r * 0.2), (ex, lo - r * 0.06), (ex + r * 1.02, lo + r * 0.2)], 4), INK, 4.0)
     if eyes == 'narrow':
         p.line([(ex - r * 1.05, lid), (ex + r * 1.05, lid)], INK, 5.0)
 
@@ -470,8 +493,9 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     rot = lambda x, y: (x * math.cos(r) - y * math.sin(r), x * math.sin(r) + y * math.cos(r))
     R = lambda pts: [rot(*q) for q in pts]
     el, hd, shape = wings['R']                                          # the far wing, darker, behind
-    _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8))
-    _kg_tail(p, rot(-140, 70), math.radians(140) + r, 6, 0.14, 330)    # the tail back and down
+    _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8), taper=True)
+    _kg_tail(p, rot(-140, 70), math.radians(146) + r, 5, 0.07, 480)    # the tail back and down: long, narrow,
+                                                                        # pointed (ref 02; pass 2: a stub)
     if not perched:
         _kg_feet(p, *rot(30, 220), 1, False)
     body = R(curve([(-20, -230), (120, -190), (180, -40), (150, 120), (60, 220), (-80, 220), (-170, 120), (-190, -20),
@@ -518,7 +542,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     p.poly(curve([(bx - 34, by - 40), (bx + 10, by - 34), (bx + 40, by + 6), (bx + 18, by + 14), (bx - 30, by + 8)], 3),
            KG_BEAK, INK, 2.4)                                           # the hooked upper beak
     el, hd, shape = wings['L']                                          # the near wing, in front
-    _kg_wing(p, rot(10, -140), el, hd, shape, 1)
+    _kg_wing(p, rot(10, -140), el, hd, shape, 1, taper=True)
     return (hx, hy)
 
 
@@ -526,11 +550,38 @@ SIDE_WINGS = {                                                          # side o
     'fold': (((-10, -10), (-70, 100), 'fold'), ((20, 0), (-40, 110), 'fold')),
     'up': (((-40, -360), (-120, -560), 'spread'), ((60, -340), (40, -560), 'spread')),
     'down': (((-60, 0), (-200, 160), 'spread'), ((40, 20), (-60, 240), 'spread')),
-    'swoop': (((-160, -260), (-360, -380), 'spread'), ((-60, -260), (-260, -420), 'spread')),
+    'swoop': (((-200, -200), (-420, -260), 'spread'), ((-120, -180), (-360, -300), 'spread')),   # swept back
+                                                         # in the dive, body tipped near level (pass 2: upright)
     'grab': (((180, -120), (300, -180), 'grip'), ((200, -80), (330, -140), 'grip')),     # the lapels (S12)
     'gun': (((150, -20), (260, -10), 'grip'), ((170, 40), (290, 60), 'grip')),           # the MG42 (S7)
     'snap': (((170, -220), (290, -200), 'grip'), ((190, -170), (320, -150), 'grip')),    # round the head (S5)
 }
+
+
+GUN_C, GUN_D = (40, 40, 44), (24, 24, 28)
+
+
+def kg_gun(p, hands, view):
+    """A belt-fed machine gun furled in his wings (S7; pass 2: the war pose had no gun), drawn in his own units
+    through the two wing hands, pointing to screen right: a wooden-free black stock, the receiver with its ammo belt
+    hanging, a perforated barrel jacket, a bipod folded under it, a flash hider."""
+    (ax, ay), (bx, by) = sorted(hands, key=lambda q: q[0])
+    y = (ay + by) / 2 - 10
+    x0 = ax - 220
+    x1 = bx + (330 if view == 'front' else 300)
+    p.poly([(x0, y - 22), (ax - 40, y - 34), (ax - 40, y + 26), (x0 + 30, y + 70), (x0 - 6, y + 62)], GUN_C, INK, 2.6)
+    p.poly([(ax - 50, y - 40), (bx + 30, y - 40), (bx + 30, y + 22), (ax - 50, y + 22)], GUN_C, INK, 2.6)   # receiver
+    p.poly([(ax - 10, y - 52), (ax + 70, y - 52), (ax + 70, y - 40), (ax - 10, y - 40)], GUN_D, INK, 2.0)   # top cover
+    p.poly([(bx + 30, y - 30), (x1 - 40, y - 30), (x1 - 40, y + 8), (bx + 30, y + 8)], GUN_C, INK, 2.4)    # jacket
+    for k in range(int((x1 - 70 - bx) / 34)):
+        p.ell(bx + 56 + k * 34, y - 11, 8, 8, GUN_D, None)                  # the cooling holes
+    p.poly([(x1 - 40, y - 20), (x1 + 10, y - 20), (x1 + 10, y - 2), (x1 - 40, y - 2)], GUN_D, INK, 2.0)    # flash hider
+    p.line([(x1 - 80, y + 8), (x1 - 170, y + 30)], GUN_D, 6.0)               # the bipod, folded
+    p.line([(x1 - 90, y + 8), (x1 - 186, y + 22)], GUN_D, 6.0)
+    belt = open_curve([(ax + 20, y + 22), (ax + 10, y + 90), (ax + 40, y + 160), (ax + 20, y + 220)], 8)
+    p.poly(_ribbon(belt, 34, 30), (150, 120, 60), INK, 2.0)                  # the ammo belt hanging
+    for q in belt[1::2]:
+        p.ell(q[0], q[1], 10, 6, (206, 170, 80), INK, 1.2)
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
@@ -541,6 +592,7 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
     Returns his wing hands in world coordinates, for what he holds."""
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
+    wings_name = wings if isinstance(wings, str) else None
     if view == 'front':
         if isinstance(wings, str):
             name_ = wings
@@ -550,14 +602,29 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
                 fe, fh, fs = WING_POSES['fold']
                 wings['R'] = ((-fe[0], fe[1]), (-fh[0], fh[1]), fs)
         _kg_front(p, mood, wings, perched, band, t, look, tail)
+        if wings_name == 'gun':
+            _gun_over(p, wings, 'front')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
     else:
         if isinstance(wings, str):
             far, near = SIDE_WINGS[wings]
             wings = {'R': far, 'L': near}
         _kg_side(p, mood, wings, perched, band, t, lean)
+        if wings_name == 'gun':
+            _gun_over(p, wings, 'side')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
     return hands
+
+
+def _gun_over(p, wings, view):
+    """The gun, then the wing wrists over it (the curled feathers hold it from behind)."""
+    kg_gun(p, [wings['L'][1], wings['R'][1]], view)
+    for sd in 'LR':
+        hx, hy = wings[sd][1]
+        p.ell(hx, hy, 40, 36, KG_BROWN, INK, 2.4)
+        for k in (-1, 0, 1):
+            p.line(open_curve([(hx - 30, hy + k * 14 - 6), (hx, hy + k * 14 + 4), (hx + 30, hy + k * 14 - 6)], 4),
+                   KG_BROWN_D, 1.8)
 
 
 KG_HEIGHT_U = 1050       # crest tips to tail tip, in person units (about 1.6 m: he towers over Link, S1)
@@ -771,7 +838,7 @@ def tiles(who):
                          ('gesture at the line-up (line 11)', dict(mood='show', wings='gesture', perched=False)),
                          ('bandana, gun grip, war (S7)', dict(mood='war', wings='gun', band=True, perched=False))):
             out.append((name, tile(lambda img, cam, **a: kg(img, cam, 700, 950, **a), at=(700, 800), **k, **kw)))
-        for name, kw in (('side: swoop (S5)', dict(mood='glee', wings='swoop', perched=False, lean=20)),
+        for name, kw in (('side: swoop (S5)', dict(mood='glee', wings='swoop', perched=False, lean=58)),
                          ('side: neck snap grip (S5)', dict(mood='glee', wings='snap', perched=False)),
                          ('side: lapel grab, fury (S12)', dict(mood='fury', wings='grab', perched=False, band=True)),
                          ('side: flap up', dict(mood='hype', wings='up', perched=False)),
