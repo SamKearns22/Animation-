@@ -72,8 +72,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **The handover** is the film's ONE "Where things stand" (old ones to `notes/archive/NAME-handovers.md`), **15 lines at
   most**, in order: Rules that bite next (3, by number); Done; Next (model, effort and what to type); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
-  Update `story/status.md` (3 lines), commit and push. **Paste 3 lines at the bottom:** what's done, the model, and
-  which chat was opened (what to type only if none could be). **Every handover and every message sending me to a new
+  Update `story/status.md` (3 lines), commit and push. **Paste up to 3 lines at the bottom:** what's done, the model, and
+  which chat was opened (what to type only if none could be). **Never say no chat was opened when Next already
+  says why (e.g. waiting on my look or my yes):** leave that line out. **Every handover and every message sending me to a new
   chat names the model AND the effort level**; a stage not listed above gets your pick and one line why.
 
 # Reading little
