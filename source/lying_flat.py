@@ -179,9 +179,8 @@ def _leg(p, sc, cam, k, side, sp, M, front=False):
     keep = None
     if front and sc.hem is not None:
         a, b, up = sc.hem
-        n = np.array([-(b - a)[1], (b - a)[0]])
-        if np.dot(n, up) > 0:
-            n = -n                                     # n points out of the shirt, past the hem
+        a = (a + b) / 2                               # the hem across the trunk's own up (seen side on, its two
+        n = -np.asarray(up, float)                    # ends meet: Sam, round 4, a thigh from mid-shirt in 11)
         if np.dot(pts[1] - a, n) > 0:                  # the knee is past the hem
             keep = (a, _unit(n))
     _limb_piece(p, [tuple(q) for q in pts], [48 * lk, 38 * lk, 27 * lk], col, keep=keep)

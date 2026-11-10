@@ -8,13 +8,15 @@
   37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns
   and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback puts pieces up to
   2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
-- **Job I round 3 done (chat 3):** 12 knee falls out to the side (it pointed at the camera: no bend showed), 14 neck
-  over an arm in front, 16 near legs from under the hem; turned head back (face-on one stared at us) with his brows.
-  **Next, Job I (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round3-closeup.jpg`
-  and his pick on question 1 (a proper turned face: Opus, high effort). Open: slumped shirt a box; back hair a blindfold.
+- **Job I bodies DONE (chat 3, rounds 2-4, Opus medium):** Sam: "seems good". 12 knee falls out to the side; 14 neck
+  over an arm in front; near legs one piece from the end of the shirt (11, 16: the hem line was lost side on).
+- **Next, Job I faces (Opus, high effort; chat opened):** the driver's turned and lying faces drawn from his own
+  face-on design, as Vance's were in Ad-Vanced note 44 (`notes/archive/ad-vanced-notice.md` "Turned heads";
+  `ad_vanced_notice_cast.py turn`). Sam: lying 12, 15 must be turned, not straight on; reuse what is built.
+  Sheet `notes/sheets/job-i-driver-sheet-numbered.jpg`. Open after: slumped shirt a box; back hair a blindfold.
 - **Next, Job K build 2 (Opus, medium effort, about 0.5%):** "Job K build 2: read notes/job-k-ai-tells.md 'Build chat
   1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 if Sam says Y.
-- **Needs Sam:** I: the round 3 sheets and question 1; K: Y/N on proposal 5 (the driver sheet is sent).
+- **Needs Sam:** I: the faces sheet when the faces chat sends it; K: Y/N on proposal 5 (the driver sheet is sent).
 - **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
 - **Open rule requests:** none.
 - **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check` (SWEARS_OK); `kitchecks.cut_rests`
