@@ -133,3 +133,34 @@
   keeps numbering); false alarms to `critique.py false`: P13 bare arms (refs have short sleeves), KG's empty neck-grip
   talons (the victim is in the shot). Crest look `remakes_creatures.CREST` ('fan', 'plume', 'layered'); drop the two
   unpicked after Sam's answer. Sword: `remakes_cast.kokiri_hilt/kokiri_sheath/link_hilt` (a head prop, so over the cap).
+
+
+## Build chat 6 handover, full (10 Nov)
+- **Rules that bite next:** 87 (options sheets for the faults that survived three passes), 89, 41 (hands).
+- **Done (build chat 6, Opus high):** the rest of pass 2 fixed (Link's shrug lower with elbows in, his side-view ear
+  over the hair; Zelda's shy face, bold gold trim; Malon's hair to the waist; Saria's ocarina shown clear of her hand;
+  Ruto's head a flat-topped fish head with fan ear-fins, a thicker neck, cocked shoulder and one leg out; the gunman's
+  smooth mask with a respirator, rifle raised to his eye, near arm on the trigger hand; KG's machine gun in his war
+  pose, tapered feathered side wings, a diving swoop, a long pointed side tail, distinct hype/glee/show faces).
+  Pass 3 by a new helper: 31 faults (ledger). Cast sheet sent to Sam with crest 3 (layered; he hadn't picked).
+- **Three-pass survivors (rule 87, options sheets next):** Link's shrug; Ruto's head reads as a hat; Malon's bottle
+  height; the gunman's aim; KG's faces alike; KG's crests (Sam's pick). **New in pass 3:** Link's side view shows no
+  shield; Zelda's shy head level; Saria's ocarina reads as a pouch; Ruto's fins float, no weight shift; the gunman's
+  eyes show and trousers plain; KG's fold reads as a hug, gesture repeats wide, gun on talons, side bandana over the
+  eyes, neck grip covers his face; Navi's wings-down points up; the Goron's cone reads as a hat, smiles, loose sleeves.
+- **Sam's look (cast sheet): "It looks excellent."** Fixed his two notes: the gunman glares (brows pulled down hard,
+  heavy lids); the Goron's neckline is a deep round scoop clear of his goatee. His yes settles the six three-pass
+  survivors (no options sheets); crest 3 stays unless he says otherwise.
+- **Next:** Build, Opus high: the clear pass-3 faults (Link's side view shield; Navi's wings-down; KG's side bandana
+  on his brow; the gun held in his wings, not on his talons), then the sets (forest, camp, town square), each alone
+  and critiqued (rule 89).
+- **Needs Sam:** the recording of line 6 ("Oh my god!"), the only
+  one missing; bleep "shit" in line 13 or let it be heard (Claude: heard, like "god-damn").
+- **Recordings filed** (Sam, 10 Nov): `source/audio/remakes-01..14.m4a` with 13 split into 13 and 13b; no 06 yet;
+  no duplicates; lengths and syllables match the script (`voices.py`). Link's takes are quieter (-23 to -26 LUFS).
+- **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
+- **Open rule requests:** none (pass 3 suggested two checklist lines: "no empty cells", "a line-up against Link").
+- **For Claude:** pass 3 spec `source/data/critique/remakes_cast/r1-p3.spec.json`, panels in `panels-p3/` (git-ignored).
+  Possible false alarms to weigh before fixing: the swoop "body level" (it tips 58 degrees), Malon "bottle at belt"
+  (hand at y 170). Gunman mask `remakes_cast.gun_mask`; KG gun `remakes_creatures.kg_gun/_gun_over`; side wings
+  `_kg_wing(taper=True)`; KG glee lower lid `low`.
