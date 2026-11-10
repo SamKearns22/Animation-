@@ -1,5 +1,10 @@
 # Where the project stands
 
+## Now (11 Nov)
+- Job K finished; Job I bodies signed off (Sam: "seems good").
+- Job I faces: Sam said Y to one shared turned-head tool, built per shot only when the screenplay needs a direction; draft on `claude/job-i-faces-wip`.
+- Next: Opus, high effort, chat opened; then the faces sheet to Sam.
+
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
 

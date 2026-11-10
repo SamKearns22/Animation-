@@ -7,14 +7,23 @@
   weight-on-one-leg stand removed: Sam, awkward), the driver first (sheet `review/job-k/driver-lopsided-built.jpg`). All kittests pass. Found: the
   old blur had hidden a real fault (gun hands from three-quarter back: the far hand hidden); that view is now avoided.
 - **Job I bodies DONE (chat 3, rounds 2-4, Opus medium):** Sam: "seems good" (near legs from the end of the shirt).
-- **Next, Job I faces (Opus, high effort; chat opened):** the driver's turned and lying faces drawn from his own
-  face-on design, as Vance's were (Ad-Vanced note 44, `notes/archive/ad-vanced-notice.md` "Turned heads";
-  `ad_vanced_notice_cast.py turn`). Lying 12, 15 turned, not straight on. Open after: slumped shirt; back hair.
+- **Next, Job I faces (Opus, high effort; chat opened 11 Nov): Sam said Y (about 0.8%; stop at 1.2% and leave a note).**
+  Sam's design: a turned head for ANY character, but built only when a shot needs it (the screenplay says which person
+  faces which way, lying included); otherwise planning and check sheets as usual. So: (1) the turning tool lives in the
+  kit, not in one film's cast file, and switches on for any person with a front design (today `views.head_view` is
+  patched for Vance alone: why the lying driver got the old generic head); (2) the head measurements a person needs are
+  taken from their own front layout where possible, not copied from Vance's; (3) planning/pre-flight lists each
+  (person, direction) a film's shots need and builds and checks only those, the turnaround going on the check sheet;
+  (4) the driver is the first user: draft on branch `claude/job-i-faces-wip` (merge it first; NOT on the main line:
+  his hair is a black slab, the nose a spike, the goatee a stripe; Vance's turned heads come out pixel-identical).
+  Lying 12, 15 turned, not straight on. Send Sam a turnaround sheet beside the lying driver sheet (`lying_flat.py sheet
+  OUT man ball`, numbered as `notes/sheets/job-i-driver-sheet-numbered.jpg`), a kittest, then hand over. Open after:
+  slumped shirt; back hair.
 - **Needs Sam:** I: the faces sheet when that chat sends it. K: a look at the two sheets (nothing waits on it).
 - **Read:** the pack in `guides/job-packs.md` ("A tool job" for tools; the film's type for the next film).
 - **Open rule requests:** none.
 - **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check`, `kitchecks.cut_rests`/`faces`,
-  `ledger.kept`. I: `lying_flat._leg`, `_neck(foot=-6)`, `lying.on_back` R knee out, views 'three' brows. K:
+  `ledger.kept`. I: `lying_flat._leg`, `_neck(foot=-6)`, `lying.on_back` R knee out, views 'three' brows. I faces: `ad_vanced_notice_cast.man_turned`/`turned_eyes`/`turned_brows`/`turned_mouth`, `turnhead.TurnFace` (`hair_top`). K:
   `ed.HARD` on, `ed.soft(clip=)`, `ed.bent_check`, `ad_vanced_notice_cast.BENT`, `patriots4_cast.lop`,
   kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
 
