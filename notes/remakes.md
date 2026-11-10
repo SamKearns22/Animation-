@@ -26,6 +26,8 @@
 | 35 (Claude 2) | KG swoops in behind the gunman (not a rise) | a short swoop down from top right into place behind him |
 | 36 (Claude 2) | Link's hands to his cheeks on "Oh my god!" | S6 arms up, palms to cheeks |
 | 37 (Claude 2) | the near gunman's rifle over the far one | goes with note 32's restage |
+| 37b (Claude 2) | Link scuttles in crouched, front-on, running (not a slide with a bob) | a crouched front-on run cycle (`GAITS['front_run']`, low) through the gate behind KG (with note 32) |
+| 37c (Claude 2) | at the wall KG's wings grip Link's collar, not cross his chest | wing tips closed on the collar at his neck, both sides; check by the hand points against the collar (with note 33) |
 | 38 (Claude 4) | "I don't think I can do this." on screen 1.5 s | split into two readable pieces or hold longer |
 | 39 (Claude 6) | the line-up reacts more on "ROMANCE" | Zelda shrinks, Malon steps forward with the bottle, Ruto preens, the Goron drools more, Saria winks |
 | 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices |
