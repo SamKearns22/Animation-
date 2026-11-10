@@ -100,7 +100,9 @@ def _panel(film, p):
     return im.crop(tuple(p['crop'])) if p.get('crop') else im
 
 
-def _numbered(im, n, width):
+def _numbered(im, n, width, box=False):
+    if box and im.height > im.width:          # a tall detail fits a width x width box, not a 1200 px column
+        width = max(1, int(round(im.width * width / im.height)))
     h = max(1, int(round(im.height * width / im.width)))
     tile = Image.new('RGB', (width, h + 34), (18, 18, 22))
     tile.paste(im.resize((width, h)), (0, 34))
@@ -112,7 +114,7 @@ def look_sheets(pics, specs, out_dir, per=12):
     """1-look.jpg (and 1-look-2.jpg...): numbers only, frames 270 px, details 540 px, rows at most 1080 px wide."""
     paths = []
     for k in range(0, len(pics), per):
-        tiles = [_numbered(pics[i], i + 1, 540 if specs[i].get('crop') else 270) for i in range(k, min(k + per, len(pics)))]
+        tiles = [_numbered(pics[i], i + 1, 540 if specs[i].get('crop') else 270, bool(specs[i].get('crop'))) for i in range(k, min(k + per, len(pics)))]
         rows, row, w = [], [], 0
         for tl in tiles:
             if row and w + tl.width > 1080:
@@ -309,7 +311,7 @@ def pack(film_name, spec_path):
     open(os.path.join(out, 'step2.md'), 'w').write(STEP2.format(
         opening=OPENING, checks=names(checks), n=len(specs),
         extra=(', notes.md and beforeafter.jpg' if ba else ''), notes_part=(NOTES_PART if notes else '')))
-    json.dump(spec, open(os.path.join(out, 'spec.json'), 'w'), indent=1)
+    json.dump(spec, open(out + '.spec.json', 'w'), indent=1)   # beside the pack: the helper never sees it
     print(out)
     print(f'Agent (general-purpose, model opus, a NEW one): "Read {out}/step1.md and follow it exactly; '
           f'write only into {out}."')
@@ -348,7 +350,7 @@ def parse(text):
 def check_answer(pack_dir):
     """The reasons record refuses (empty: whole). look.md before result.md; every panel looked at; every line that
     applies answered; the notes answered in a notes round."""
-    spec = json.load(open(os.path.join(pack_dir, 'spec.json')))
+    spec = json.load(open(pack_dir.rstrip('/') + '.spec.json'))
     look, res = os.path.join(pack_dir, 'look.md'), os.path.join(pack_dir, 'result.md')
     why = []
     if not os.path.exists(look) or not os.path.exists(res):
@@ -385,7 +387,7 @@ def record(film_name, pack_dir):
         for w in why:
             print(' -', w)
         sys.exit(1)
-    spec = json.load(open(os.path.join(pack_dir, 'spec.json')))
+    spec = json.load(open(pack_dir.rstrip('/') + '.spec.json'))
     faults = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k == 'FAULT']
     cant = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k != 'ok'
             and k != 'FAULT']

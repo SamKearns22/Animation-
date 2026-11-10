@@ -604,7 +604,7 @@ def critique_record():
     import critique as C
     d = tempfile.mkdtemp(prefix='kt-crit-r1-p1')
     spec = {'round': 1, 'panels': [{'img': 'x', 'is': 'a man', 'parts': 'P'}, {'img': 'x', 'is': 'a sign', 'parts': 'O'}]}
-    json.dump(spec, open(os.path.join(d, 'spec.json'), 'w'))
+    json.dump(spec, open(d + '.spec.json', 'w'))
     p1, p2 = C.applies(spec['panels'][0]), C.applies(spec['panels'][1])
     look, res = os.path.join(d, 'look.md'), os.path.join(d, 'result.md')
     whole = (f"## Panel 1\nok: {' '.join(p1[1:])}\nFAULT {p1[0]}: left hand - hovers\n"
