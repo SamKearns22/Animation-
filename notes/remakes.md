@@ -7,10 +7,8 @@
   above KG's beak), S10 wing tip short of Zelda's hem. Sam's notes 11 Nov: 41 Link at the wall stares, terrified,
   down into KG's eyes (profile: huge eye, pinprick pupil, tear, sweat, wailing mouth); 42 R1/R2 flash silver at the
   snap and at Navi's zip. Checks clean. Clips sent (wall, execution, grenade). No fresh-eye helper pass (budget).
-- **Next (Sonnet): animatic 2 NOW** (Sam, 11 Nov: "we need sonnet animatic asap": that is his go). Run the checks,
-  render, finish.py (Hook Text, sign-off), listen once for bleeps and gunfire against the voices, send it with the
-  check sheet in the same message. Then stop and wait for Sam.
-- **Needs Sam:** his notes on animatic 2; a clear yes before the final.
+- **Next:** animatic 2 sent 11 Nov (3.5 MB). Wait for Sam's notes (a round on Opus, medium); the final only on his clear yes.
+- **Needs Sam:** his notes on animatic 2; a clear yes before the final. Animatic 2 went out with the check sheet skipped, the fresh-eye critique not run, and 16 pre-flight faults named (Sam: 'skip it, just render'): 9 PROP TURN (Malon and Saria have no 30-degree view in S10, they are drawn front-on), 5 script/mouth (recordings say more syllables than the script: probably 'R one', 'five' read aloud; not listened to), 1 no critique recorded, 1 no scene(t).
 - **Read:** this section only; source/remakes.py MAP if a check fails.
 - **Open rule requests:** none.
 - **For Claude:** not done, say so if asked: KG does not point a wing at the gunman on "GRENADES" (acting list line
