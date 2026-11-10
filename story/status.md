@@ -1,9 +1,9 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Job I lying fixes: slumped shirt done; the neck in 14 now bends from the collar (picture sent).
-- Open: 18, the back of the head still sits on the collar with no neck showing (cause found, fix in the next chat).
-- Next: Opus, medium effort, chat opened 11 Nov.
+- Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
+- Open: Sam's look at 14 and 18.
+- Next: Sam's yes, then his next pick from the job list.
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.

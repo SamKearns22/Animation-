@@ -970,6 +970,42 @@ def lying_shirt_and_nape():
         B.SS = 1
     return bool(ok), '; '.join(out)
 
+@test
+def lying_neck_from_behind():
+    """Job I lying 18 (Sam, 11 Nov, "fix the neck in 14 and 18", a repeated note): curled up and seen from behind,
+    the head sat straight on the collar with no neck (the shirt's back and the arm round the head were drawn over
+    it) and the back collar stood up beside the head like a block. Now the neck rises out of the collar, which
+    wraps its foot. Measured: the neck's own pixels left showing (drawn in a test colour), and the collar's turn."""
+    import numpy as np
+    import burnham as B
+    import lying as L
+    import lying_flat as LF
+    import ad_vanced_notice_cast as AC
+    real = LF._neck
+    out, ok = [], True
+
+    def green(img, hc, sp, aff, view, foot=40):
+        return real(img, hc, dict(sp, skin=(0, 255, 0)), aff, view, foot)
+    LF._neck = green
+    B.SS = 2
+    try:
+        for who in ('vance', 'man'):
+            sp = dict(AC.CAST[who])
+            img = B.canvas((214, 206, 188))
+            kk, surf = L.lie(sp, 'ball', 0.0, 0.0, 180.0)
+            cam = L._fit(L._cam_for(30, 4.5, (0, 0.1, 0)), [kk[n] for n in L.POINTS] + [kk['head'] + 0.15 * kk['hup']],
+                         fill=0.7)
+            L.draw(img, cam, kk, dict(sp, blink=True), 0.0, surfaces=[(p0, n) for _, p0, n in surf])
+            a = np.asarray(img.convert('RGB')).astype(int)
+            n = int(((a[:, :, 1] > 200) & (a[:, :, 0] < 60) & (a[:, :, 2] < 60)).sum())
+            ok &= n > 2000                            # before: 0 (all of it covered)
+            out.append(f'{who} curled from behind: neck showing {n} px (was 0)')
+    finally:
+        LF._neck = real
+        B.SS = 1
+    return bool(ok), '; '.join(out)
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

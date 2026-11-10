@@ -296,6 +296,26 @@ def _neck(img, hc, sp, aff, view, foot=40):
     w = B.Pen(img, hcam).w(2.6)
     for sd in sides:
         d.line(sd, fill=INK, width=w, joint='curve')
+    return sides
+
+
+def _collar(img, hc, sp, sides):
+    """The shirt collar and the jacket's collar seen from behind, wrapped round the neck's foot and turned with it
+    (Sam, 11 Nov, 18: the trunk's own collar bands stood up beside the head like a block). Each band is a strip
+    across the neck's foot, its thickness laid along the neck, a little wider than the neck."""
+    hcam = hc[0]
+    a0, b0 = np.asarray(sides[0][0], float), np.asarray(sides[1][0], float)
+    a1, b1 = np.asarray(sides[0][-1], float), np.asarray(sides[1][-1], float)
+    c0 = (a0 + b0) / 2
+    up = _unit((a1 + b1) / 2 - c0)
+    u = hcam.s * B.SS                                   # frame pixels per person unit at the head
+    d = ImageDraw.Draw(img)
+    w = B.Pen(img, hcam).w(2.0)
+    jc = sp.get('jacket', (40, 40, 46))
+    for lo, hi, wide, col in ((-14, 6, 1.22, B.dk(jc, 0.85)), (2, 18, 1.1, sp.get('shirt', (244, 244, 240)))):
+        a, b = c0 + (a0 - c0) * wide, c0 + (b0 - c0) * wide
+        q = [a + up * lo * u, a + up * hi * u, b + up * hi * u, b + up * lo * u]
+        d.polygon([tuple(v) for v in q], fill=tuple(col), outline=INK, width=w)
 
 
 def _head_draw(img, hc, sp, t):
@@ -455,6 +475,7 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     def trunk(on):
         tp = B.Pen(on, aff)
         sp_draw['neck_off'] = True
+        sp_draw['collar_off'] = view in BACKS and not head_behind
         if view == 'front':
             q = dict(sp_draw, pose='none', full=False)
             q.setdefault('bottom', V.JACKET)
@@ -475,9 +496,14 @@ def draw(img, cam, k, sp, t=0.0, M=None):
         bend.paste(img)
     else:
         trunk(img)
+    if not head_behind and view in BACKS:             # seen from behind, the neck is nearer than the shirt's back
+        ns = _neck(img, hc, sp_draw, aff, view, foot=-10)  # and the arms beyond it: it rises out of the collar (18)
+        if sp_draw.get('outfit', 'suit') in ('suit', 'blouse'):
+            _collar(img, hc, sp_draw, ns)
     for _, key in sorted(last, key=lambda v: -v[0]):
         piece(key, front=True)
     sp_draw.pop('neck_off')
+    sp_draw.pop('collar_off', None)
     if not head_behind and view not in BACKS and any(kk[0] == 'arm' for _, kk in last):
         _neck(img, hc, sp_draw, aff, view, foot=-6)              # an arm in front passes behind the neck, never through it
         #                                               (from behind the collar is nearer: the neck stays under it)

@@ -528,8 +528,10 @@ def torso_view(img, p, sp, view, seated=False):
                 (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
-            p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)            # the collar round the neck
-            p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
+            if not sp.get('collar_off'):              # lying_flat draws it round the neck's foot instead (Job I, 18)
+                p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)        # the collar round the neck
+            if not sp.get('collar_off'):
+                p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
         soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10,

@@ -372,3 +372,26 @@
   `bend.moved` shoulders), `lying_flat.BACKS`; `turnhead.outline(whole=)`, sp `nape_in_head` (set by
   `lying_flat._head_draw`) skips `neck_over`. Kittest `lying_shirt_and_nape`. Earlier: `notes/archive/next-jobs-handovers.md`.
 
+
+
+## Where things stand (archived) (project, 11 Nov; no film in progress)
+
+- **Branch with the newest work:** `claude/job-i-lying-fixes` (also pushed to the main line).
+- **Rules that bite next:** 30 (18 is a repeated note), 48 (one labelled sheet), 86 (estimate before building).
+- **Done:** Slump shirt (16) and the first 18 fix sent on both sheets. Sam: "Fix the neck in 14 and 18" (both sheets).
+  14 fixed: the neck now bends from the collar to the head (was one rigid block turned with the head); clip
+  `notes/sheets/job-i-lying-14-neck.jpg` sent. Kittests: lying and turned-head tests pass.
+- **Open, 18 (rule 30, why the first fix failed):** fix 1 removed the block drawn over the head, but the head then sat
+  straight on the collar with NO neck. Found: the head lies about 85 px from the collar, and the new bending neck
+  is drawn there, but the upper arm (drawn after it, round the top of the head) and the head cover it all; on Vance,
+  the back collar (white strip in a dark band) stands up beside the head like a block. Try next: draw the neck after
+  the 'first' arms when the head is seen from behind (or push the head out along the neck to the rig's 150), and turn
+  the back collar band with the neck's foot; then remake both sheets, numbered.
+- **Next:** Opus, medium effort: "Job I lying 18 neck (notes/next-jobs.md, Where things stand)".
+- **Needs Sam:** a look at the 14 picture.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `lying_flat.py` MAP, `_neck`, `draw`.
+- **Open rule requests:** none.
+- **For Claude:** `lying_flat._neck(img, hc, sp, aff, view, foot)` (bezier sides: foot in the trunk's frame, top in
+  the head's; tops swapped when the head is mirrored); `lying_flat.Slump`, `_sat`, `BACKS`; sp `nape_in_head` skips
+  `turnhead.neck_over`. Debug renders: one shot via `L.lie`/`L._fit`/`L.draw` as in `lying_flat.sheet`.
+
