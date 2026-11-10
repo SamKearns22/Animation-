@@ -152,3 +152,27 @@
   handcheck.probe restores DRAW); `handcheck.seam_faults` (7 lines walked out along the upper arm: jacket, ink or
   gap, sleeve = seam; arms in `j2['_drawn']['behind']` only a gap); probe adds inkpx/other/cloth/behind; kittest
   `shoulder_seam_caught`. Sheet `guides/pose-gallery.jpg` redrawn.
+
+
+## (archived 10 Nov, Job H chat 1) Where things stand (project, 10 Nov; no film in progress)
+
+- **Rules that bite next:** 85 (cost watch: chat 3 went amber after step 3, so it handed over), 41 (the hand check now
+  also tests a hand against what it holds, on the picture), 86 (Job G stays inside its 3.5-4%).
+- **Done (10 Nov, Job G chat 3, steps 2-3, Opus high, about 1.5%):** phone at the ear redone (hand at the cheek, the
+  phone flat along the side of the head, elbow forward; passes all 6 views; the left hand by default); a hand at the
+  far cheek is now hidden behind the head (it was drawn across his face side on); phone reading from three-quarter back
+  no longer sits over his back (hidden by it: the gallery notes say avoid that view); new automatic check: a hand must
+  touch its prop on the picture (a test proves it catches a gap); sheet labels no longer run into the next column.
+- **Next:** Job G chat 4, new chat, **Opus, high effort**. Type: "Job G chat 4: read notes/next-jobs.md Where things
+  stand and the Job G section." Steps 4-6, about 1%. After G: Job H (critique helper, about 2%): first chat Opus, max
+  effort; type "Job H: critique helper. Read notes/next-jobs.md Where things stand and Build plan H. Estimate first
+  (rule 86)."
+- **Needs Sam:** nothing.
+- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph.
+- **Open rule requests:** none. Step 6 proposes merging rules 41, 42 and 81 (81's check column still says "no
+  automatic seam test yet": put right in that proposal).
+- **For Claude:** `moves.phone_at_ear` (3D slab, `V._hull`); `grips.hidden_by` adds depth tests (head: beyond 0.25 hw;
+  torso: beyond half its depth and within 1.25x its screen width); views skips an `on_face` arm hidden by the head;
+  `handcheck.held_faults` (PROBE['held'] layer per side, TOUCH 0.12), kittest `held_prop_touches`. Unfinished: a
+  "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
+  from behind in the dict too); `posegallery._wrap`.
