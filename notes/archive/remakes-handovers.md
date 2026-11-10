@@ -251,3 +251,23 @@
 - **For Claude:** CR.kg(talk=0-1, stand=True); CR.beak_open/BEAK; CR.talkclip; RS.OPT/SURVIVORS/options();
   _flag_rows, _lantern, _gate_fallen/_gate_debris, _lean_to, _statue_robed/_statue_bird, EDGE_OPTS.
 
+
+## Where things stand (shots chat, archived 10 Nov)
+- **Rules that bite next:** 85 (cost watch: the week near 76%; no extra rounds), 59 (render lock: run pre-flight,
+  then render with `--faults-named`), 75 (Hook Text checked by finish.py).
+- **Done (shots chat, Opus):** the film file built, all 14 lines, 14 shots (S12 split in two, under 8 s), about 44 s
+  plus sign-off; simplest staging (holds, cuts, one move per beat); voices with both f-words bleeped; MG42, neck crack
+  and Navi's blast. Brief checklist ticked. Check sheet sent to Sam (Hook Text moved below KG's face).
+- **Next (Opus, medium): Sam's notes on the animatic** (sent 10 Nov, 3.3 MB; render 1 min 37 s + finish 38 s); clips for
+  movement notes, one full animatic after; no final until Sam's clear yes.
+- **Needs Sam:** his notes on the animatic.
+- **Named, not fixed (all told to Sam):** pre-flight's 16: the syllable counter misreads "R1", "9", "Ok?" and capitals
+  (5); a 30-degree prop-turn test on Malon and Saria, who never turn (8); no scene(t) for the pop-in test (1); "I
+  don't think I can do this." 1.5 s on screen (1); no critique round (Sam: none) (1). Staging: Link slides in with a
+  bob, hands at his ears (not a crouched run); no hands to cheeks in S6; KG rises behind the gunman (no swoop); KG's
+  wings cross Link's chest at the wall; near gunman's rifle over the far one (S7-S8).
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
+- **Open rule requests:** none.
+- **For Claude:** source/remakes.py (MAP at top); timing from _L gaps; SNAP/GATE/BOOM/SLAM beats; LIFT wing pose;
+  bleeps in recording seconds in _L.
+

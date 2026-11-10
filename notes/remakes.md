@@ -1,23 +1,34 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch: the week near 76%; no extra rounds), 59 (render lock: run pre-flight,
-  then render with `--faults-named`), 75 (Hook Text checked by finish.py).
-- **Done (shots chat, Opus):** the film file built, all 14 lines, 14 shots (S12 split in two, under 8 s), about 44 s
-  plus sign-off; simplest staging (holds, cuts, one move per beat); voices with both f-words bleeped; MG42, neck crack
-  and Navi's blast. Brief checklist ticked. Check sheet sent to Sam (Hook Text moved below KG's face).
-- **Next (Opus, medium): Sam's notes on the animatic** (sent 10 Nov, 3.3 MB; render 1 min 37 s + finish 38 s); clips for
-  movement notes, one full animatic after; no final until Sam's clear yes.
-- **Needs Sam:** his notes on the animatic.
-- **Named, not fixed (all told to Sam):** pre-flight's 16: the syllable counter misreads "R1", "9", "Ok?" and capitals
-  (5); a 30-degree prop-turn test on Malon and Saria, who never turn (8); no scene(t) for the pop-in test (1); "I
-  don't think I can do this." 1.5 s on screen (1); no critique round (Sam: none) (1). Staging: Link slides in with a
-  bob, hands at his ears (not a crouched run); no hands to cheeks in S6; KG rises behind the gunman (no swoop); KG's
-  wings cross Link's chest at the wall; near gunman's rifle over the far one (S7-S8).
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
+- **Rules that bite next:** 30 (note 1 is a repeat-kind fault: find why the cap broke before changing it), 8
+  (rehearsal clips of the 4 risky moves before the full animatic), 85 (week at 71%; estimate below).
+- **Done:** animatic 1 sent 10 Nov (3.3 MB). Sam's notes on it are below in "Open notes: animatic 1".
+- **Next (Opus, medium): all of "Open notes: animatic 1"**, in its order. Clips (`final OUT --small --span T0 T1`) of
+  each moved beat, sent as made (no yes needed); one critique round of the changed shots; check sheet; Sam's yes;
+  animatic 2. Then the final only on Sam's clear yes.
+- **Needs Sam:** nothing until the check sheet.
+- **Estimate (Sam asked, 10 Nov):** about 6% of a week to finished (range 5-7%): this round 3-3.5, check sheet and
+  animatic 2 0.5, one more round of Sam's notes 1.5, final and posting 0.5. Hand over on amber.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
 - **Open rule requests:** none.
-- **For Claude:** source/remakes.py (MAP at top); timing from _L gaps; SNAP/GATE/BOOM/SLAM beats; LIFT wing pose;
-  bleeps in recording seconds in _L.
+- **For Claude:** source/remakes.py (MAP); camp marks in RS.STAGE['camp']; KG side view CR.kg(view='side'); the cap
+  in the S1/S3 foreground is RS forest_front 'up' with OPT['up']='cap' (RS._link_cap).
+
+## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
+| # | note | plan |
+|---|------|------|
+| 30 (Sam 1) | Link's image bottom left in S1 and S3 is completely fractured | the foreground cap (RS._link_cap): find why it breaks up (rule 30), redraw it whole and readable as the back of Link's capped head |
+| 31 (Sam 2) | Link's face at "Ok?" far more sceptical and concerned | a stronger 'sceptical' for S4: one brow high, the other low and pinched, eyes side-on to KG, mouth pulled to one side; face sheet first |
+| 32 (Sam 3) | camp staging wrong: the men are behind KG | KG storms in through the gate; he shoots the tower lookout on his way in, turning towards him; victim 2 comes in from camera lower left; the grenade victim from camera middle right; no gunman behind KG; Link follows him in through the gate, aghast (crouched, front-on scuttle). Lost: the three gunmen standing in the yard behind him |
+| 33 (Sam 4) | at the wall: KG lifts his face so his expression and beak are seen; Link side on | KG's head raised (face and beak clear, talking and spit visible); Link drawn side on (yaw 90) facing KG, lifted, back near the wall; no bandana in S12, S12b, S13 (bandana only in the camp). Lost: the bandana at the wall |
+| 34 (Sam 6) | the execution wings don't make accurate contact with the neck | KG's wing tips land on the gunman's neck and jaw (both sides) before the twist; check by the hand points against the neck |
+| 35 (Claude 2) | KG swoops in behind the gunman (not a rise) | a short swoop down from top right into place behind him |
+| 36 (Claude 2) | Link's hands to his cheeks on "Oh my god!" | S6 arms up, palms to cheeks |
+| 37 (Claude 2) | the near gunman's rifle over the far one | goes with note 32's restage |
+| 38 (Claude 4) | "I don't think I can do this." on screen 1.5 s | split into two readable pieces or hold longer |
+| 39 (Claude 6) | the line-up reacts more on "ROMANCE" | Zelda shrinks, Malon steps forward with the bottle, Ruto preens, the Goron drools more, Saria winks |
+| 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices |
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
