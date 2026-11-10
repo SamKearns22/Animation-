@@ -2,22 +2,24 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 89 (each new character alone beside its references, critiqued cold), 41 (every arm ends
-  in a hand; KG's wings are arms), 38 (only the views the shots use: Link front, side, back; gunman front, side).
-- **Done (10 Nov, build chat 1, Opus high; stopped on cost amber):** `source/remakes_cast.py` started: all five
-  children (head, hair, outfit, sleeves, boots, faces), the gunman (Patriot balaclava + helmet, goggles, plate vest),
-  milk bottle, ocarina, rifle; `alone WHO OUT.jpg` sheet. Only Link has been looked at.
-- **Link's faults from my own look (fix before the critique):** 1 head too small for a 9-year-old, legs too long
-  (aim about 4 heads tall: bigger hh or shorter legs); 2 long thin neck, and side on the head floats off the body;
-  3 brows hidden under the fringe (draw them over it); 4 cap too small and flat, its tail reads as a leaf (ref 04:
-  big floppy cap hanging to his left); 5 faces too alike at phone size (unsure, horror, deadpan need bigger brows and
-  mouths); 6 side view shield sticks out like a slab; 7 the sheet's figure tiles are mostly empty (crop tighter).
-- **Next:** Build, Opus high: fix Link's 7, check the same faults in Zelda, Malon, Saria, Ruto and the gunman
-  (`alone` each), then `remakes_creatures.py` (KG, Navi, Goron), critique each (`critique.py pack`), cast sheet.
+  in a hand; KG's wing feathers are his fingers), 38 (only the views the shots use).
+- **Done (11 Nov, build chat 2, Opus high; stopped on cost amber):** Link's 7 faults fixed; the same checks on Zelda,
+  Malon (hair now behind her body), Saria, Ruto (head fin no longer a hat; a waist) and the gunman (goggles). Sam's
+  note "not too chibi": heads a bit smaller, longer jaw, almond eyes with one shine, faint cheeks. NEW
+  `source/remakes_creatures.py`: KG (front and side, 8 wing poses, 6 faces, bandana), Navi (glow, wings, heat), the
+  Goron (frilly dress, drool); `alone kg|navi|goron OUT.jpg`. First look only, nothing critiqued yet.
+- **My first look at the creatures (fix before the critique):** KG 1 crests are thin wavy worms (ref: broad swept
+  feather fans curling out); 2 hype/show grins too small; 3 front feet read as blocks; 4 side wings are sticks, grip
+  hands stumps; 5 folded wings hang below his body like sausages; 6 the tail reads as a comb between his feet.
+  Navi 1 the top wings merge into one heart (ref: a V, apart); 2 lower wings hidden; 3 red ring reads as a donut.
+  Goron 1 reads as a bell (ref: big round belly, face lower); 2 drool too faint; 3 the dress is flat stripes (ruffles).
+- **Next:** Build, Opus high: fix those, then one critique pack of all nine (`critique.py pack remakes SPEC.json`, a
+  new helper), fix, then the cast sheet (all nine at true heights, Link's front for scale) to Sam; wait for his look.
 - **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
-- **Read:** `guides/job-packs.md` Build; this file's references and Decisions; `source/remakes_cast.py` MAP.
+- **Read:** `guides/job-packs.md` Build; this file's references and Decisions; both files' MAPs.
 - **Open rule requests:** none.
-- **For Claude:** refs `references/remakes/`; MG42 `patriots3_cast.py`; fx `prepper_fx.py`; pieces `lying.py`;
-  wall throw `patriots3_act.py`; `moves.GAITS['front_run']`. Kids draw at `height` via `scale_for`.
+- **For Claude:** refs `references/remakes/`; kids draw at `height` via `scale_for`; creatures in person units
+  (`KG_HEIGHT_U`, `GORON_HEIGHT_U`), `kg()` returns wing hands for props; MG42 `patriots3_cast.py`.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
@@ -83,6 +85,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 24 | Energetic pace, exaggerated movements and enthusiasm, very little time between lines | |
 | 25 | Navi always cutely floating, nuzzling, etc., depending on context | |
 | 26 | Budget ideally 12%, stretch to 15% for quality | |
+| 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | |
 
 ## References as checklists (Sam's round one, 10 Nov; `references/remakes/`). Ours matches? is ticked at the cast sheet
 | reference | what it shows (count, colours, positions, facing, proportions) | ours matches? |
