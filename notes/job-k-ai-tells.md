@@ -137,3 +137,17 @@ merges into satire.md's "The look" and rule S3.
 - Build 2 does 5 as on the driver sheet (`ai_tells_lab.lopsided` and `driver_pose` moved into the kit as options for
   invented people: a brow pair, the side hair higher on one side, one mouth corner up, `views.standing` weight on one
   leg); Vance's measured face untouched. Order: shading fix, shirt check, then 5. Estimate about 0.8% in all.
+
+## Build chat 2 (11 Nov, Opus medium, about 0.6% of a week)
+- [x] 2 switched ON: `ed.soft(clip=)` keeps a shading shape inside the shape it shades (views.torso_view's three
+      bands pass the torso outline). pose_gallery passes. Found: the old blur had darkened the far sleeve of 'hands
+      on a gun' seen three-quarter back, so the check never saw that its hand is hidden by his back; that view is now
+      in AVOID with the reason (it was a real fault, hidden). Seen, not changed: the driver's front shading band
+      stops halfway down his chest (the belly is drawn over it), as in the posted film.
+- [x] 4's bend: `ed.bent_check` (bands spaced round a cylinder, crowding at the edges; cross bands sag 8; two fronts
+      half a step apart at the placket); `ad_vanced_notice_cast.BENT` (on). Sheet sent: review/job-k/shirt-bent.jpg.
+- [x] 5 built: `patriots4_cast.lop`/`lop_raise`/`LOPSIDED` (brow pair, mouth corner; P4.lips reads it), the side
+      hair in `man_head`, `views.standing` weight on one leg (`sp['weight_leg']`, `views._weight_on`); the driver
+      has both on. Same as the driver sheet. kittest `lopsided_invented_only`. Sheet sent:
+      review/job-k/driver-lopsided-built.jpg. The lab's own copies (`lopsided`, `driver_pose`) removed.
+- Job K: all Sam's Ys built (1, 2, 4, 5). Open: Sam's look at the two sheets.

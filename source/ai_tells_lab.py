@@ -11,13 +11,12 @@ MAP
   head_life        proposal: a talking head that tilts, settles and nods on the voice's stresses (pose to pose)
   sheet OUT.jpg    the before/after check sheet (three rows: shading, head, background lines)
   clip OUT.mp4     Islamocommunism 36-42 s (one unbroken close-up): today | with head acting, side by side, with the film's sound
-  lopsided         proposal 5 (example only, Sam's Y/N first): the driver's head a touch uneven (one brow higher, the
-                   side hair higher on one side, one mouth corner up) and his weight on one leg (driver_pose)
   shading OUT.jpg  proposal 2's check (built, ed.HARD): the old airbrushed shading vs the hard-edged shapes, crops
   rigclip OUT.mp4  proposal 1's check (built, headlife.py + views.Rolled): Islamocommunism 36-42 s, today | the rig's
                    own head acting from the voice, side by side, with the film's sound
   shirt OUT.jpg    proposal 4's check (built, ad_vanced_notice_cast.BENT): the check shirt flat vs bent, four views
-  driver OUT.jpg   proposal 5's sheet: the pump driver today | proposed, whole body, then the face full size
+  driver OUT.jpg   proposal 5's sheet (built: patriots4_cast.lop, views.standing's weight_leg): the pump driver
+                   with the options off | on, whole body, then the face full size
 
   python3 source/ai_tells_lab.py sheet review/job-k/before-after.jpg
   python3 source/ai_tells_lab.py clip review/job-k/talking-head.mp4
@@ -305,75 +304,9 @@ def _clip_frame(i, t, life, tmp, font):
     S.save(os.path.join(tmp, f'{i + 1:04d}.png'))
 
 
-# ------------------------------------------------------------------------------------------------ proposal 5
-def lopsided():
-    """The driver's head drawn a touch uneven (lab only; the cast file is untouched): his right brow (our left) sits
-    higher, the side hair is higher on our right (balding: no parting, so the hairline does the job), and the mouth's
-    corner on our right lifts while the other stays down."""
-    import patriots4_cast as P4
-    import traitors_cast as TC
-    import ad_vanced_notice_cast as AC
-    from ed import INK, curve
-    o_brows, o_lips = P4.brows, P4.lips
-
-    def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
-        r = raise_ if not isinstance(raise_, (tuple, list)) else raise_[0]
-        return o_brows(p, f, L, c, thick, (r + 0.032, r - 0.004), frown)
-
-    def lips(p, f, L, sp, lip_c, fx_my):
-        fx, my = fx_my
-        mw, l0, l13, l17 = L['mw'], L['lip0'], L['lip13'], L['lip17']
-        s = sp.get('smile', 0.0)
-        sl, sr = s, s + 3.2                   # our right corner up (a lopsided set to the mouth), our left as before
-
-        def rest():
-            hw = mw / 2
-            top = curve(f.pts([(-hw, l13 - 0.004 * sl), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.012),
-                               (hw * 0.4, l0 + 0.004), (hw, l13 - 0.004 * sr), (0.0, l13 + 0.004)]), 3)
-            bot = curve(f.pts([(-hw, l13 - 0.004 * sl), (0.0, l13 + 0.004), (hw, l13 - 0.004 * sr),
-                               (hw * 0.5, l17 - 0.012), (0.0, l17), (-hw * 0.5, l17 - 0.01)]), 3)
-            p.poly(top, AC.dk(lip_c, 0.86), INK, 1.5)
-            p.poly(bot, lip_c, INK, 1.5)
-            p.line(curve(f.pts([(-hw, l13 - 0.006 * sl), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.001),
-                                (hw, l13 - 0.006 * sr)]), 3), INK, 2.2)
-        TC.talk_or(p, dict(sp, lips=True, lip_c=lip_c), 0.0, fx, my, rest)
-
-    Base = P4.Face
-
-    class Face(Base):
-        """The side hair on our right reaches higher up the skull (it keeps its distance from the head's outline)."""
-        def pts(self, uvs):
-            if len(uvs) == 5 and all(0.38 < u < 0.52 and 0.09 < v < 0.41 for u, v in uvs):
-                L = P4.layout(P4.target('man'))
-                edge = lambda v: float(np.interp(v, [0.0, 0.16, 0.43], [L['fhw'] * 0.465, L['fhw'] * 0.5, L['fw'] * 0.5]))
-                uvs = [(edge(v - 0.075) + u - edge(v), v - 0.075) if v < 0.25 else (u, v) for u, v in uvs]
-            return Base.pts(self, uvs)
-    return swapped([(P4, 'brows', brows), (P4, 'lips', lips), (P4, 'Face', Face)])
-
-
-def driver_pose(sp):
-    """Weight on his left leg (our right, as he faces us): that hip up, the hips pushed over that foot, the other knee
-    soft with its foot turned out a little; the shoulders tip the other way; one arm hangs, the other a touch more bent."""
-    import views as V
-    j = V.standing(sp)
-    hx, hy, hz = j['hipR']
-    j['hipR'] = (hx + 18, hy - 14, hz)
-    hx, hy, hz = j['hipL']
-    j['hipL'] = (hx + 18, hy + 14, hz)
-    fx, fy, fz = j['footR']
-    j['footR'] = (fx - 4, fy, fz)
-    fx, fy, fz = j['footL']
-    j['footL'] = (fx - 34, fy, fz + 26)
-    for side, dy in (('L', -9), ('R', 9)):
-        for k in ('sh', 'el', 'wr'):
-            x, y, z = j[k + side]
-            j[k + side] = (x, y + dy, z)
-    V.set_arm(j, 'L', 0.06, 0.42, 0.16)
-    return j
-
-
+# ------------------------------------------------------------------------------------------------ proposal 5 (built)
 def driver(out):
-    """Proposal 5's example sheet: the pump driver today and proposed, whole body, then his face full size."""
+    """Proposal 5's sheet: the pump driver with the kit's options off and on, whole body, then his face full size."""
     import burnham as B
     import views as V
     import ad_vanced_notice_cast as AC
@@ -381,25 +314,19 @@ def driver(out):
     sp = dict(AC.MAN)
     bg = (238, 234, 228, 255)
 
+    plain = dict(sp, lopsided=None, weight_leg=None)      # today: the kit's options off
+
     def body(prop):
         im = Image.new('RGBA', (1080, 1920), bg)
         cam = B.Cam(1.0, 540, 960)
         s = 0.62 * sp['height'] / 1.75
-        if prop:
-            with lopsided():
-                V.person(im, cam, 540, 1560 - 928 * s, s, dict(sp), 0.0, 0, driver_pose(sp))
-        else:
-            V.person(im, cam, 540, 1560 - 928 * s, s, dict(sp), 0.0, 0)
+        V.person(im, cam, 540, 1560 - 928 * s, s, dict(sp if prop else plain), 0.0, 0)
         return im.convert('RGB').crop((240, 820, 840, 1620))
 
     def face(prop):
         im = Image.new('RGBA', (1080, 1920), bg)
         cam = B.Cam(1.0, 540, 960)
-        if prop:
-            with lopsided():
-                V.person(im, cam, 540, 1150, 2.2, dict(sp), 0.0, 0)
-        else:
-            V.person(im, cam, 540, 1150, 2.2, dict(sp), 0.0, 0)
+        V.person(im, cam, 540, 1150, 2.2, dict(sp if prop else plain), 0.0, 0)
         return im.convert('RGB').crop((190, 420, 890, 1180))
 
     tiles = [body(False), body(True), face(False), face(True)]
@@ -407,7 +334,7 @@ def driver(out):
     S = Image.new('RGB', (W, 60 + 800 + 50 + 760 + 20), (245, 242, 236))
     d = ImageDraw.Draw(S)
     f = ImageFont.truetype(SANS, 30)
-    d.text((10, 14), 'Proposal 5: the pump driver, today (left) vs proposed (right)', font=f, fill=(0, 0, 0))
+    d.text((10, 14), 'Proposal 5, built: the pump driver, before (left) vs now (right)', font=f, fill=(0, 0, 0))
     for k, im in enumerate(tiles[:2]):
         S.paste(im, (10 + k * 720 + 50, 60))
     for k, im in enumerate(tiles[2:]):
@@ -415,7 +342,7 @@ def driver(out):
     for k in range(2):
         x = 10 + k * 720
         d.rectangle([x, 60, x + 200, 96], fill=(20, 20, 20) if k == 0 else (190, 30, 30))
-        d.text((x + 8, 64), 'TODAY' if k == 0 else 'PROPOSED', font=f, fill=(255, 255, 255))
+        d.text((x + 8, 64), 'BEFORE' if k == 0 else 'NOW', font=f, fill=(255, 255, 255))
     d.text((10, 870), 'The face at full size', font=f, fill=(0, 0, 0))
     S.save(out, quality=90)
     print(out, S.size)

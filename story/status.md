@@ -18,9 +18,9 @@ Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 
 Job H FINISHED 10 Nov (overnight, Sam's "just go"): the critique checklist (37 lines from Sam's past notes) and `source/critique.py`, the fresh-eye critique every film now runs before an animatic (pre-flight refuses without it); calibrated on Elder Swindon.
 Job J FINISHED 10 Nov (about 1.5%): rulebook 15 rows shorter, CLAUDE.md shorter, reading packs (`guides/job-packs.md`), hidden props flagged (Job G finished).
 Job I round 3 of Sam's notes done 10 Nov: knee bend, neck, slumped leg fixed; turned faces wait on Sam's question 1.
-Job K build 1 done 10 Nov: head acting built into the kit, hard-edged shading built but off (a spill to fix), a copy check in pre-flight; Sam: Y to 5 (11 Nov), built in build 2 (`notes/job-k-ai-tells.md`).
+Job K FINISHED 11 Nov (two build chats): head acting, hard-edged shading (on), a copy check, check shirts bent round the body, invented people a touch uneven and on one leg (`notes/job-k-ai-tells.md`).
 Job L FINISHED 10 Nov (about 1.3%): five by-hand rules now checked in pre-flight (bleeps, subtitle timing, drop to rest before a cut, famous faces, files on GitHub).
-Next: Job I's sheets, Job K build 2; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
+Next: Job I's sheets and question 1; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.

@@ -160,7 +160,30 @@ def standing(sp):
         el = _add(sh, _mul(up, F.UPPER * 0.98))
         j['el' + side], j['wr' + side] = el, _add(el, _mul(fo, F.FORE * 0.98))
         j['hand'][side] = 'fist'
+    w = sp.get('weight_leg')
+    if w in ('L', 'R'):
+        _weight_on(j, w)
     return j
+
+
+def _weight_on(j, w):
+    """Weight on one leg, for invented people (Job K 5, Sam: Y, 11 Nov; sp['weight_leg'] 'L' or 'R', the joints'
+    side): that hip up and the hips pushed over its foot; the other knee soft, its foot out a little and forward; the
+    shoulders tip the other way; the free side's arm a touch more bent."""
+    sg = 1 if w == 'R' else -1
+    o = 'L' if w == 'R' else 'R'
+    for side, dy in ((w, -14), (o, 14)):
+        x, y, z = j['hip' + side]
+        j['hip' + side] = (x + sg * 18, y + dy, z)
+    x, y, z = j['foot' + w]
+    j['foot' + w] = (x - sg * 4, y, z)
+    x, y, z = j['foot' + o]
+    j['foot' + o] = (x - sg * 34, y, z + 26)
+    for side, dy in ((o, -9), (w, 9)):
+        for k in ('sh', 'el', 'wr'):
+            x, y, z = j[k + side]
+            j[k + side] = (x, y + dy, z)
+    set_arm(j, o, 0.06, 0.42, 0.16)
 
 
 def set_arm(j, side, swing, bend, out=0.12):

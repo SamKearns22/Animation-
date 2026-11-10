@@ -464,13 +464,21 @@ def man_head(img, p, sp, t, hx, hy):
     skin, mood = M_SKIN, sp.get('mood', 'glare')
     _ears(p, f, L, skin)
     fw, fhw, ny, l0, l13, l17 = L['fw'], L['fhw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17']
+    hair_up = P4.lop(sp).get('hair', 0.0)                   # lopsided (Job K 5): our right side hair reaches higher
+
+    def up(pts):
+        """The side hair on our right moved up the head's edge by hair_up (its top points only)."""
+        if not hair_up:
+            return pts
+        edge = lambda v: float(np.interp(v, [0.0, 0.16, 0.43], [fhw * 0.465, fhw * 0.5, fw * 0.5]))
+        return [(edge(v - hair_up) + u - edge(v), v - hair_up) if u > 0 and v < 0.25 else (u, v) for u, v in pts]
     # balding: dark hair only round the sides and back, the pate bare and shiny (drawn under the skin outline)
     for sgn in (-1, 1):
         if sgn < 0 and f.tq > 0.5:
             continue
         side = [(sgn * (fw * 0.5 - 0.01), 0.4), (sgn * (fw * 0.5 + 0.03), 0.22), (sgn * (fw * 0.5 + 0.02), 0.1),
                 (sgn * (fw * 0.5 - 0.03), 0.12), (sgn * (fw * 0.5 - 0.035), 0.38)]
-        p.poly(curve(f.pts(side), 3), M_HAIR, INK, 2.2)
+        p.poly(curve(f.pts(up(side)), 3), M_HAIR, INK, 2.2)
     out = curve(f.pts(P4.outline_uv(L, 0.46, crown=-0.2)), 4)
     p.poly(out, skin, INK, 2.6)
     for sgn in (-1, 1):                                         # the side hair over the outline at the temples
@@ -478,7 +486,7 @@ def man_head(img, p, sp, t, hx, hy):
             continue
         side = [(sgn * (fw * 0.5 + 0.008), 0.4), (sgn * (fw * 0.5 + 0.02), 0.22), (sgn * (fw * 0.5 + 0.004), 0.12),
                 (sgn * (fw * 0.5 - 0.035), 0.16), (sgn * (fw * 0.5 - 0.035), 0.38)]
-        p.poly(curve(f.pts(side), 3), M_HAIR, INK, 2.0)
+        p.poly(curve(f.pts(up(side)), 3), M_HAIR, INK, 2.0)
     p.line(curve(f.pts([(-0.12, -0.14), (-0.04, -0.17), (0.04, -0.16)]), 3), (246, 214, 196), 3.0)   # pate shine
     # the black goatee: moustache joined round the mouth to a short block on the chin
     mw = L['mw']
@@ -492,7 +500,7 @@ def man_head(img, p, sp, t, hx, hy):
     ang = sp.get('anger')
     ang = ang + 5 if ang else ang
     frown = (min(0.012 * ang, 0.13) if ang else {'angry': 0.05, 'glare': 0.045}.get(mood, 0.0)) + sp.get('frown', 0.0)
-    P4.brows(p, f, L, M_HAIR, 0.05, sp.get('brow_up', 0.0), frown)
+    P4.brows(p, f, L, M_HAIR, 0.05, P4.lop_raise(sp, sp.get('brow_up', 0.0)), frown)
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, l13)
     smile = -0.3 * ang if ang else SMILE.get(mood, -0.4)
@@ -687,7 +695,7 @@ VANCE = dict(who='vance', name='JD Vance', skin=V_SKIN, hw=72, hh=94, head_dy=10
 MAN = dict(who='man', name='The driver', skin=M_SKIN, hw=80, hh=92, head_dy=12, hair='bald', hair_c=M_HAIR,
            brow_c=M_HAIR, brow_w=4.6, beard='goatee', beard_c=M_HAIR, outfit='jumper', jacket=M_SHIRT, sleeve=M_SHIRT,
            trousers=M_JEANS, shirt=M_SHIRT, tie=None, shoe=M_BOOT, shoulders=186, leg_k=1.35, anger=4,   # Sam, 7 Nov: anger 4
-           full=True, pose='custom',
+           full=True, pose='custom', lopsided=True, weight_leg='R',      # Job K 5 (Sam: Y, 11 Nov): invented, so uneven
            height=1.80, seed=82)
 CAST = {'vance': VANCE, 'man': MAN}
 
