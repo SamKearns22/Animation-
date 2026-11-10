@@ -50,7 +50,7 @@ flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` 
   film's `HANDS_OK` [(who, side, kind, t0, t1, why)]. Alone: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]`.
 - **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; meant looks
   away in `LOOKS_OK`, passed as `check_eyelines(allow=LOOKS_OK)`; `filmkit.look_sheet(picture, records, OUT)`.
-- **Poses (rule 42):** pick from `guides/pose-gallery.md`; a new pose goes through `source/posegallery.py` first.
+- **Poses (rule 41):** pick from `guides/pose-gallery.md`; a new pose goes through `source/posegallery.py` first.
 - **In front and behind (rule 57):** the film's `draw_order(t)` (names, back to front); planned swaps in `ORDER_SWAPS`.
 - **After an edit to one action:** `python3 source/FILM.py check` (seconds to minutes), then ONE small sheet
   (`python3 source/sheet.py FILM TIMES...`, rule 48).

@@ -22,9 +22,9 @@
   **Sam, 10 Nov: Y, for the overnight chat. Test on the newest Vance (Ad-Vanced Notice's cast, as in the posted
   final), standing beside his lying versions; the old test trio (P1, LADY, MAGNATE) only after he looks right.**
   The side-by-side sheet needs Sam's yes before the build (a taste call).
-- **Needs Sam:** 2. Job I: Y (10 Nov). 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
+- **Needs Sam:** nothing (10 Nov: Y to Job I and to merging rules 41, 42, 81: written). Was: 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
-- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: merge 41, 42, 81 (Needs Sam 1).
+- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
 - **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
   `source/data/critique/` (git-ignored); results into the ledger's round files. Job G's own notes: Job G section.
 
@@ -51,7 +51,7 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
   views.person and lying.draw; its faults ride on handcheck's frames, "POSE:" lines); kittest `lying_and_pose_checks`.
   New gallery rows passed the automatic check only (not looked at by eye). Still untested kit poses (a film using one
   is stopped): chop, heart, paper, head in hands (real faults in front views).
-- **Step 6 proposal (for Sam's numbers; NOT written in the rulebook):** replace rows 41, 42 and 81 with one row 41
+- **Step 6 (Sam: Y, 10 Nov; WRITTEN as rule 41, rows 42 and 81 removed):** replace rows 41, 42 and 81 with one row 41
   (the rulebook gets two rows shorter):
   "41 | Bodies and hands (Sam, 4-10 Nov). Poses come from the tested gallery (`guides/pose-gallery.md`) and are never
   shown from a view its row says to avoid; a new pose is tested from every view first (standing 6, seated 5, lying 12)
