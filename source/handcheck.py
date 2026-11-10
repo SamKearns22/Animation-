@@ -48,6 +48,7 @@ from ed import INK           # noqa: E402
 
 KEYS = {'L': ((255, 0, 255), (0, 255, 255)), 'R': ((255, 128, 0), (0, 255, 0))}   # (sleeve, hand) per arm
 PROP_HAND = (255, 255, 0)     # a hand drawn by a prop (gesture_hand called from outside views.hand)
+
 SEEN = 1.0                    # an arm is seen when this many hands' worth of its sleeve shows
 SHOWN = 0.35                  # ... and its hand must show at least this share of itself
 SHORT, BACK = 0.6, 0.25       # a forearm shown at under this share of its length (pointing at the lens) whose hand comes
@@ -111,7 +112,9 @@ def probe(img, args):
         finally:
             inside.pop()
 
-    V.PROBE.update({'L': KEYS['L'], 'R': KEYS['R'], 'full': {sd: (lambda p, sd=sd: B.Pen(full[sd], p.cam)) for sd in 'LR'}})
+    held = {sd: Image.new('RGBA', size, (0, 0, 0, 0)) for sd in 'LR'}   # a prop in each hand, alone (grips.held)
+    V.PROBE.update({'L': KEYS['L'], 'R': KEYS['R'], 'full': {sd: (lambda p, sd=sd: B.Pen(full[sd], p.cam)) for sd in 'LR'},
+                    'held': {sd: (lambda p, sd=sd: B.Pen(held[sd], p.cam)) for sd in 'LR'}})
     B.gesture_hand, V.hand = prop_hand, vhand
     n_log = len(F.LOG)
     import limbs
@@ -132,6 +135,7 @@ def probe(img, args):
     x1, y1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
     cut = lambda im: im.crop((x0, y0, x1, y1))
     lay, full, props = cut(lay), {sd: cut(im) for sd, im in full.items()}, [(q, cut(o)) for q, o in props]
+    held = {sd: np.asarray(cut(im))[:, :, 3] > 40 for sd, im in held.items()}
     body, m = _key(lay)
     k = B.Local(cam, x, y, s).S(1.0)                # screen pixels per person unit
     bob = (joints or {}).get('bob', 0.0)
@@ -168,7 +172,7 @@ def probe(img, args):
         out['arms'][sd] = dict(fold=fold, fore=float(np.hypot(*v)) / (F.FORE * 0.98),
                                sleeve=m(KEYS[sd][0]), hand=hand_px[sd], full=full_px[sd],
                                shape=(j2.get('hand') or {}).get(sd, 'fist'), sh=pt['sh' + sd], el=pt['el' + sd],
-                               wr=pt['wr' + sd], reach=F.UPPER * k)
+                               wr=pt['wr' + sd], reach=F.UPPER * k, prop=held[sd])
     return out
 
 
@@ -227,6 +231,7 @@ def frame_faults(people):
                                      f"{back * 100:.0f}% of a forearm back towards the shoulder)"))
             out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in body_faults(pp, sd, a, expect)]
             out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in seam_faults(pp, sd, a)]
+            out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in held_faults(pp, sd, a)]
             # in the frame (everyone stacked in drawing order): a hand over the body of someone at about the same
             # distance. (A hand hidden behind someone nearer the lens is ordinary staging: not a fault.)
             vis_hand = hand & mine
@@ -333,6 +338,27 @@ def body_faults(pp, sd, a, expect):
 
 
 SEAM = 3                      # of the 7 lines walked across a shoulder, this many crossing a line or gap is a seam
+
+
+TOUCH = 0.12                  # a hand must come within this share of a hand's width of what it holds, on the picture
+
+
+def held_faults(pp, sd, a):
+    """Job G (chat 3): a hand meets what it holds ON THE PICTURE, not only in 3D (grips.contact_faults). The prop
+    (grips.held: a phone, a cup) is drawn alone on its own layer and the hand alone on another; their nearest pixels
+    must be within TOUCH of a hand's width. Hidden or not does not matter here (that is 'no hand'): a gap between
+    them reads as a prop floating beside the hand from every view."""
+    prop = a.get('prop')
+    if prop is None or not prop.any() or not a['full'].any():
+        return []
+    out = []
+    from scipy import ndimage
+    gap = ndimage.distance_transform_edt(~prop)[a['full']].min()
+    width = 2 * math.sqrt(pp['expect'] / math.pi)
+    if gap > TOUCH * width:
+        out.append(('off its prop', f"the hand doesn't touch what it holds on the picture (a gap of "
+                                    f"{gap / width:.1f} hand-widths)"))
+    return out
 
 
 def seam_faults(pp, sd, a):

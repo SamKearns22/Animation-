@@ -241,6 +241,28 @@ def _phone(p, j2, side, ear=False):
                (150, 190, 230), None)
 
 
+def phone_at_ear(j, sp, side='R'):
+    """A phone held to the ear (Job G chat 3; Sam's note: the phone sat on top of his head and the arm wrapped over
+    it). The hand is at the cheek, below the ear; the phone is a flat slab in 3D lying along the side of the head from
+    the ear down towards the mouth, so side on it covers the ear, front on it is a thin edge beside the face, and from
+    the far side the head hides it. The elbow goes forward and out (with this rig's long arms it sits about chin
+    height: the forearm cannot reach the cheek from lower)."""
+    sg = -1 if side == 'L' else 1
+    hw = sp.get('hw', 70)
+    V.arm_to(j, side, (sg * (hw + 20), -98.0, 12.0), (1.0, 0.35, 0.6), 'phone')
+    lean = j.get('lean', 0.0)
+    top, bot = (-162.0, -40.0), (-88.0, 10.0)               # (y, z): the ear (side view, z ~ -18) down towards the jaw
+    ay, az = bot[0] - top[0], bot[1] - top[1]
+    n = math.hypot(ay, az)
+    wy, wz = -az / n * 20, ay / n * 20                     # half the phone's width, across it in the head's side plane
+    box = [(sg * x, y + k * wy, z + k * wz) for x in (hw + 2, hw + 14) for y, z in (top, bot) for k in (-1, 1)]
+
+    def draw(p, j2):
+        pts = [V.project(V.leaned(q, lean), j2['yaw'])[0] for q in box]
+        p.poly(V._hull(pts), (40, 44, 54), INK, 2.2)
+    return _held(j, side, sp, draw)
+
+
 def _paper(p, j2):
     a, b = j2['wrL'], j2['wrR']
     x0, x1 = min(a[0], b[0]) - 10, max(a[0], b[0]) + 10
@@ -375,9 +397,8 @@ def pose(sp, name, beat=0.0, target=None):
         j['on_face'] = {'L', 'R'}
     elif name == 'heart':
         V.arm_to(j, 'R', (40.0, 160.0, 46.0), 'down', 'palm')
-    elif name == 'phone_ear':
-        V.arm_to(j, 'R', (82.0, -140.0, 16.0), (0.6, 1.0, 0.7), 'phone')       # elbow down and forward, forearm up
-        _held(j, 'R', sp, lambda p, j2: _phone(p, j2, 'R', ear=True))   # in the right order from every view (Job G)
+    elif name == 'phone_ear':                               # the left hand: the ear nearer us side on facing right
+        phone_at_ear(j, sp, 'L')                             # (and three-quarter back); facing left, use 'R'
     elif name == 'phone_read':
         j['head_dy'] = 8
         V.arm_to(j, 'R', (30.0, 230.0, 180.0), 'down', 'phone')
@@ -421,7 +442,7 @@ POSES = ('standing', 'relaxed', 'hips', 'arms_folded', 'pockets', 'behind_back',
 READS_FROM_BEHIND = {'standing': True, 'relaxed': True, 'shrug': True, 'point': True, 'chop': True, 'hands_up': True,
                      'exasperated': True, 'hips': False, 'arms_folded': False, 'pockets': False, 'behind_back': False,
                      'palms_together': False, 'palm_open': False, 'heart': False, 'facepalm': False,
-                     'head_in_hands': False}
+                     'head_in_hands': False, 'phone_ear': True, 'phone_read': False}
 
 
 def reads_from_behind(name):

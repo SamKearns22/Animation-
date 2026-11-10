@@ -219,6 +219,7 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
     ('phone, reading', _kit('phone_read'), 'kit, fixed Job G'),
     ('cup in hand', _kit('mug'), 'kit, fixed Job G'),
     ('cup, sipping', _kit('mug_sip'), 'kit, fixed Job G'),
+    ('phone at the ear', _kit('phone_ear'), 'kit, redone Job G'),
 ]
 
 
@@ -282,6 +283,22 @@ def tiles(ims, tw, th):
             for im, b in zip(ims, bs)]
 
 
+def _wrap(text, font, width):
+    """Words in lines no wider than `width` pixels (a word too long alone is cut to fit)."""
+    lines, cur = [], ''
+    for w in text.split():
+        t = (cur + ' ' + w).strip()
+        if font.getlength(t) <= width:
+            cur = t
+            continue
+        if cur:
+            lines.append(cur)
+        while font.getlength(w) > width and len(w) > 1:
+            w = w[:-1]
+        cur = w
+    return lines + ([cur] if cur else [])
+
+
 results = {}                  # the last run: {pose: views that failed}
 
 
@@ -294,7 +311,7 @@ def main():
     gallery = list(GALLERY)
     if '--all' in args:
         import moves
-        have = {'arms_folded', 'point'}
+        have = {'arms_folded', 'point', 'phone_read', 'mug', 'mug_sip', 'phone_ear'}
         gallery += [(n.replace('_', ' '), (lambda sp, n=n: moves.pose(sp, n)), 'moves.pose') for n in moves.POSES
                     if n not in have and n != 'standing']
     if '--only' in args:
@@ -310,12 +327,12 @@ def main():
     H.install()
     font = ImageFont.truetype(B.SANS, 22)
     tw, th = 180, 300
-    sheet = Image.new('RGB', (190 + tw * len(VIEWS), (th + 56) * len(gallery)), (16, 16, 20))
+    sheet = Image.new('RGB', (190 + tw * len(VIEWS), (th + 66) * len(gallery)), (16, 16, 20))
     d = ImageDraw.Draw(sheet)
     bad = 0
     results.clear()
     for r, (name, build, src) in enumerate(gallery):
-        y = r * (th + 56)
+        y = r * (th + 66)
         d.text((10, y + 10), name, font=font, fill=(255, 255, 255))
         d.text((10, y + 40), src[:18], font=ImageFont.truetype(B.SANS, 16), fill=(170, 170, 170))
         res = test(name, build)
@@ -325,11 +342,14 @@ def main():
             tile = tl[c]
             x = 190 + c * tw
             sheet.paste(tile, (x + (tw - tile.width) // 2, y + th - tile.height))
-            msg = 'OK' if not faults else ('AVOID: ' if label in AVOID.get(name, {}) else '') + \
-                '; '.join(f"{f['side']}: {f['kind']}" for f in faults)
-            d.text((x + 6, y + th + 4), label, font=ImageFont.truetype(B.SANS, 16), fill=(200, 200, 200))
-            d.text((x + 6, y + th + 26), msg[:26], font=ImageFont.truetype(B.SANS, 16),
-                   fill=(140, 230, 140) if not faults else (255, 160, 110))
+            avoid = AVOID.get(name, {}).get(label)
+            msg = ('OK' if not avoid else 'AVOID: ' + avoid.split(':')[-1].split('(')[0].strip()) if not faults else \
+                ('AVOID: ' if avoid else '') + '; '.join(f"{f['side']}: {f['kind']}" for f in faults)
+            small = ImageFont.truetype(B.SANS, 15)
+            d.text((x + 6, y + th + 4), label.replace('three-quarter', '3/4'), font=small, fill=(200, 200, 200))
+            for n, line in enumerate(_wrap(msg, small, tw - 10)[:2]):   # kept inside its own column (Job G chat 3:
+                d.text((x + 6, y + th + 24 + 18 * n), line, font=small,   # labels ran into the next one)
+                       fill=(140, 230, 140) if msg == 'OK' else (255, 160, 110))
         fails = [(label, f) for label, _, fs in res for f in fs]
         new = {label for label, _ in fails} - set(AVOID.get(name, {}))
         bad += bool(new)

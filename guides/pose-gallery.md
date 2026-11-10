@@ -35,9 +35,10 @@ pose still passes wherever this table says it does.
 | hands on table | `posegallery.hands_on_table(sp, h)` | Patriots 4, 1 Nov | front, three-quarter, side | three-quarter back, behind | both palms on a table edge `h` metres high in front; from behind the table is beyond him, so the hands are hidden |
 | pointing both ways | `posegallery.point_both(sp)` | Patriots 4, 1 Nov | front, side, behind | three-quarter, three-quarter back, mirrored | both arms flung out straight (`views.aim`), one finger at each of two people; side on, one arm points away and the point doesn't read |
 | hands on a table (drawn) | `posegallery.hands_on_table_drawn(sp, h)` | Job G, 9 Nov | front, three-quarter, side, mirrored | three-quarter back, behind | `grips.Table` drawn with him; prefer it to "hands on table" |
-| phone, reading | `moves.pose(sp, 'phone_read')` | kit, fixed Job G | all 6 views | | phone held up to read, the hand over its bottom |
+| phone, reading | `moves.pose(sp, 'phone_read')` | kit, fixed Job G | front, three-quarter, side, mirrored | three-quarter back, behind | phone held up to read, the hand over its bottom; from behind his back hides it (it was drawn over his back at its edge until Job G chat 3), so the pose doesn't read there |
 | cup in hand | `moves.pose(sp, 'mug')` | kit, fixed Job G | front, three-quarter, side, three-quarter back, mirrored | behind | takeaway cup at the hip |
 | cup, sipping | `moves.pose(sp, 'mug_sip')` | kit, fixed Job G | all 6 views | | cup at the lips; from behind it is hidden by his head |
+| phone at the ear | `moves.pose(sp, 'phone_ear')` (`moves.phone_at_ear(j, sp, side)`) | kit, redone Job G chat 3 | all 6 views | | the left hand: hand at the cheek, the phone flat along the side of the head from the ear down, elbow forward and out. Side on or three-quarter back facing left, use `side='R'` (the phone must be at the ear nearer us there: at the far ear the head hides the hand) |
 
 **Seated poses (the sitting kit, `source/sitting.py`; plan and notes `notes/archive/sitting-kit.md`).** Sheet: `python3 source/sitting.py sheet OUT.jpg`; photos beside them: `sitting.py refs OUT.jpg`; checks: `sitting.py audit`.
 

@@ -491,6 +491,53 @@ def shoulder_seam_caught():
             f"line painted (near arm): {line}")
 
 
+@test
+def held_prop_touches():
+    """Job G chat 3: a hand meets what it holds on the picture (handcheck.held_faults), not only in 3D. The phone at
+    the ear (redone: the phone sat on top of his head) and the cup are clean from every view; the same phone drawn a
+    hand's width and more away from the hand is caught."""
+    import burnham as B
+    import figure as F
+    import handcheck as H
+    import kitchecks
+    import limbs
+    import moves
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    from satire_style import install_circle_hands
+    B.SS = 1
+    F.guard(B)
+    F._ALLOW.append('the pose gallery')
+    install_circle_hands(B)
+    limbs.install(B)
+    kitchecks.install()
+    H.install()
+
+    def faults(j, deg):
+        im = Image.new('RGBA', (1200, 1100), G.BG)
+        H.begin()
+        V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, G.MODEL, 0.0, deg, j)
+        pp = H.FRAME[-1]
+        H.end(0.0)
+        return [f for sd in 'LR' for f in H.held_faults(pp, sd, pp['arms'][sd])], \
+            sum(int(pp['arms'][sd]['prop'].any()) for sd in 'LR')
+
+    clean, seen = [], 0
+    for name in ('phone_ear', 'phone_read', 'mug', 'mug_sip'):
+        for deg, _ in G.VIEWS:
+            fs, n = faults(moves.pose(G.MODEL, name), float(deg))
+            clean += fs
+            seen += n
+    far = V.standing(G.MODEL)
+    V.arm_to(far, 'R', (120.0, 300.0, 120.0), 'down', 'grip')
+    moves._held(far, 'R', G.MODEL, lambda p, j2: moves._phone(p, {**j2, 'wrR': (j2['wrR'][0] + 90, j2['wrR'][1] - 90)},
+                                                              'R'))
+    caught = faults(far, 0.0)[0]
+    return not clean and seen == 24 and bool(caught), f"kit poses: {clean or 'clean'} ({seen} of 24 props seen); " \
+                                                       f"phone moved off the hand: {caught}"
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

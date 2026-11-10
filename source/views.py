@@ -892,6 +892,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
         if view in ('back', 'three_back') and depth['wr' + sd] < -10:
             continue                               # (from behind, a hand at his face is behind his head: Job G)
+        import grips                               # a hand at the far cheek (a phone at the ear seen side on) is
+        if grips.hidden_by(grips.hand_centre(j, sd), view_deg, sp) == 'head':   # beyond the head: the head hides it
+            continue                               # (Job G chat 3: the arm was drawn across his face)
         arm(p, j2, sd, sp)
     for draw in j.get('face_props', []):
         draw(p, j2)

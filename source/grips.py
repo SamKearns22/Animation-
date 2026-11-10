@@ -52,10 +52,20 @@ def _ray_hits(c, yaw, rx, rz, cx=0.0, cz=0.0):
 def hidden_by(c, yaw, sp):
     """'torso', 'head' or None: what of his own body hides the body-frame point c from this view."""
     sw, hw = sp.get('shoulders', 150), sp.get('hw', 70)
-    if -5.0 <= c[1] <= sp.get('bottom', V.JACKET) - 20 and _ray_hits(c, yaw, RX * sw * 0.95, RZ * sw * 0.95):
-        return 'torso'
-    if -250.0 <= c[1] <= -40.0 and _ray_hits(c, yaw, hw * 0.95, hw * 0.95):
-        return 'head'
+    a = math.radians(yaw)
+    depth = -c[0] * math.sin(a) + c[2] * math.cos(a)
+    rx, rz = RX * sw * 0.95, RZ * sw * 0.95
+    if -5.0 <= c[1] <= sp.get('bottom', V.JACKET) - 20 and (
+            _ray_hits(c, yaw, rx, rz) or (depth < -0.5 * math.hypot(rx * math.sin(a), rz * math.cos(a)) and
+                                          abs(c[0] * math.cos(a) + c[2] * math.sin(a)) <
+                                          1.25 * math.hypot(rx * math.cos(a), rz * math.sin(a)))):
+        return 'torso'             # (or beyond his body's middle, just past its edge: the drawn jacket is wider than
+    #                                this oval, so a phone read in front of him, seen three-quarter back, sat over
+    #                                his back at its edge: Job G chat 3)
+    if -250.0 <= c[1] <= -40.0:
+        if _ray_hits(c, yaw, hw * 0.95, hw * 0.95) or depth < -0.25 * hw:
+            return 'head'          # (or beyond the head's middle: a phone at the far ear, three-quarter on, peeks out
+    #                                from behind the face; drawn over it, it lay across his eye: Job G chat 3)
     return None
 
 
@@ -80,6 +90,8 @@ def held(j, side, sp, draw, at=None, hand_over=True):
 
     def go(p, j2):
         draw(p, j2)
+        if V.PROBE.get('held'):                     # handcheck: the prop alone on its own layer, so the hand can be
+            draw(V.PROBE['held'][side](p), j2)      # checked against it on the picture (Job G chat 3)
         if hand_over:                                # the fingers wrap the side we see: the hand over the prop
             V.hand(p, j2, side, sp, j2.get('hand', {}).get(side, 'fist'))
 
