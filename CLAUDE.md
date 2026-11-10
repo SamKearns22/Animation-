@@ -55,9 +55,10 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), quick videos, status questions: **Sonnet**.
-- **Chats chain themselves:** at every handover the chat I started opens the next (create_session with the right model
-  and effort, the handover line as its prompt), checks on it once per stage (send_later, under an hour) and tells me
-  which chat to open; chats it starts cannot start chats, so they hand over and stop. A notes round chains too: the
+- **Chats chain themselves:** at every handover every chat, including one another chat opened, opens the next
+  (create_session with the right model and effort, the handover line as its prompt), checks on it once per stage
+  (send_later, under an hour) and tells me which chat it opened (tested 10 Nov: a chat two levels down opened one;
+  the system allows 8 levels). Only if create_session fails: say so and give what to type. A notes round chains too: the
   Opus medium chat fixes, then opens the Sonnet chat for checks and the animatic. **A task started on the wrong model
   opens the right chat itself** and says so. Anything needing my yes still stops and waits. Never carry on into a
   stage that needs a stronger model inside one chat.
