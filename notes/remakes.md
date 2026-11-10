@@ -8,7 +8,7 @@
   Wikimedia, Zelda wikis): Sam asked for screenshots.
 - **Spent against the estimate:** planning about 0.7% of 14.5%.
 - **Next:** on Sam's answers and screenshots: build the cast (Opus, high), new chat.
-- **Needs Sam:** questions 1 and 3-12; the last three references (forest wide, Castle Town market wide, Link from the side). Round one filed 10 Nov.
+- **Needs Sam:** questions 1 and 3-12. All references in (rounds one and two, 10 Nov); Link's side view optional.
 - **Read:** `guides/job-packs.md` Build; this file.
 - **Lost / Added:** Lost: Ruto's "over-sexual" preening (she is a child in this part of the game): vain and pushy
   instead. Added (if Sam says Y): R1/R2 button prompts on screen; gunfire, snap and blast sounds.
@@ -100,8 +100,16 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 14-malon (RIGHT HALF only: the left is the N64 game) | long red-orange hair, blue eyes; yellow neckerchief with a brooch; grey-brown knit blouse with blue embroidered short sleeves; brown belt; brown patterned apron over a purple skirt with a blue meander hem | |
 | 15-saria | sitting on a stump playing the ocarina, eyes closed; green fairy beside her; green hair, green outfit, boots | |
 | 16-saria (MAIN) | front: bright lime-green bob with a fringe, blue eyes, pointed ears; dark green high-collar top, lighter green tunic with a swirl pattern, a fringed shoulder; pendant; a brown belt with a bead; green shorts; holds a wooden ocarina; soft confident smile | |
+| 17-soldiers | two masked soldiers in a grey-green woodland: dark balaclavas with goggle or glasses eyes; one in a tan boonie hat kneeling with a black rifle (scope, long magazine) aimed into the trees; one in a grey helmet with a gas-mask face; grey-black plate vests with pouches, camo trousers, knee pads, gloves | |
+| 18-soldiers | three in a row in profile: dark helmets, black full-face masks with goggles, olive-grey jackets, sling straps, rifles held across the chest; a red star patch on the sleeve (ours: no real insignia, a plain invented patch) | |
+| 19-forest | Kokiri Forest wide: huge rounded canopy trees in soft green-gold, misty light shafts, layered forest depths, a tree-house trunk lower right | |
+| 20-forest | the forest floor: a pale stone path winding back through mist, mossy roots and rocks either side, a tree house in a giant mossy stump on the right with a round door and orange lanterns, purple flowers in the near corner, a big glowing orange bell flower on the right, tall dark trees behind | |
+| 21-town | Castle Town square: grey cobbles, a stone fountain with statues in the middle, timber-framed houses with red-orange tiled roofs and balconies, a palm-like tree left, a red-striped market tent, barrels and sacks, townsfolk; the castle pale and hazy far behind | |
+| 22-town | the town entrance: stone balustrades with blue-and-gold drapes, tall blue banners with a gold crest, flower boxes (red and purple), bunting across the street, pale stone walls left and right (the wall for KG's slam) | |
+| 23-outpost | a Far Cry outpost from above: a dirt yard ringed by grey corrugated walls, blue and orange shipping containers, wooden shacks with tin roofs, crates, a flagpole, parked old cars; jungle round it | |
+| 24-outpost | the same at ground level: a dirt track in, a plank-and-tin shack left, a watch post, rocks and palms, a blue flag far off; bright midday sun | |
 | Look across all of them | the remake's puppet-theatre materials: woven, knitted, carved. In our flat style, kept as a few weave or feather strokes on the big areas (cap, tunic, KG's chest), not textures | |
-| Still missing | Kokiri Forest wide (01 covers the branch shot); Castle Town market wide; Link side view (03-04 are front and three-quarter) | |
+| Still missing | Link side view only (optional; worked out from 03-04 if not) | |
 
 ## Shots and the acting list (rule 74; faces wait on Sam's answers where marked)
 Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + sign-off: **about 38 s**.
