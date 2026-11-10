@@ -1,4 +1,4 @@
-# Job J proposals (10 Nov): the by-hand rules sorted, and the reading layers. Nothing written until Sam's numbers.
+# Job J proposals (10 Nov). Sam: Y to 1-6 and 8; 7 "do that yourself". ALL WRITTEN the same day (5 is Job L, queued).
 
 Every by-hand rule was sorted: CHECK (a tool holds it), FOLD (the critique checklist looks for it, rule 89), MERGE
 (said once, inside another rule) or KEEP (a way of working no tool can hold: 11, 30, 44, 47, 67, 77, 86, 87, 88, S4,

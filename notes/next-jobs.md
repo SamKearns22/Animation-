@@ -1,23 +1,21 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 89 (critique before every send), 41 (bodies and hands: now props hidden too), 30.
-- **Done: Job J (10 Nov overnight, Opus high, about 1.1% of the week, cap 3%):** Job G's last check (a held phone or
-  cup the picture hides is flagged; Job G FINISHED); pre-flight warns on rules 8, 61, 74; reading layers drafted
-  (`guides/job-packs.md`); the critique library (a clean pass files new things in the catalogue); KNOWN/NEW column
-  in the estimate table; the checklist's rule 72 line put right. Kit tests all pass.
-- **Next for J:** Sam's numbers on `notes/job-j-proposals.md` 1-8 (15 rulebook rows fewer if all Y). Then a fresh
-  chat, **Sonnet, medium effort**: "Job J rules: write Sam's answers from notes/job-j-proposals.md." Q7 (CLAUDE.md
-  draft) and Q5 (Job L checks) are Opus, medium effort, each its own chat.
-- **Job I next (chat 3, Opus, medium effort):** Sam's look at `notes/sheets/job-i-driver-sheet.jpg`; named, not fixed:
-  slumped shirt a wide box, turned goatee a spike, hair ring from behind, handcheck blind to lying bodies.
+- **Rules that bite next:** 89 (now holds old 56, 76, 79), 24 (every thing KNOWN or NEW in the estimate), 41.
+- **Done: Job J FINISHED (10 Nov, Opus high, about 1.5% of the week, cap 3%).** Sam: Y to 1-6 and 8; 7 "do it
+  yourself". Written: 15 rulebook rows merged or retired (list under "Merged numbers"); critique lines S5, M2, O1 took
+  old 4, S1, 34; pre-flight refuses a film from the 10 Nov template with no acting list or rehearsal line (rules 74,
+  8), warns on 61; CLAUDE.md rewritten shorter (2,180 to 1,540 words, every rule kept; film types moved to
+  `guides/job-packs.md`); job packs live. Job G finished (hidden props flagged).
+- **Next: Job L, five checks (Sam: Y, about 1%), Opus, medium effort:** "Job L: read notes/next-jobs.md, Where things
+  stand, and notes/job-j-proposals.md question 5." Rules 72, 62, 50, 27 (now 26), 37.
+- **Job I next (chat 3, Opus, medium effort):** Sam's look at `notes/sheets/job-i-driver-sheet.jpg` (panel numbers).
 - **Job K next (overnight build, Opus, high effort, about 2.5%):** "Job K build: read notes/next-jobs.md, the Job K
   line in notes/archive/next-jobs-handovers.md, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K."
-- **Needs Sam:** J 1-8 (Y/N each); I: the sheet; K: Y/N on proposal 5 once its example is seen.
-- **Read:** `notes/job-j-proposals.md`; `guides/job-packs.md`.
-- **Open rule requests:** Job J 1-8 (proposals file). None else.
-- **For Claude:** `handcheck.probe` redraws a prop holder with `V.PROBE['skip_held']` (phone hand -> grip) and
-  diffs: `prop_shown`, `PROP_SHOWN` 0.3, kind 'prop hidden'; `preflight.gate_warnings`; `critique.library` (spec
-  panel "new"/"drawn"); kittests `held_prop_touches` (hidden = AVOID), `critique_library`.
+- **Needs Sam:** I: the sheet; K: Y/N on proposal 5 once its example is seen.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for L and K).
+- **Open rule requests:** none.
+- **For Claude:** `preflight.gate_warnings` (refuses when the notes have the template's 'KNOWN (where) or NEW');
+  `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

@@ -50,19 +50,19 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 - O4 (6) Everything is its real size against the people and the set (bikes, phones, tables, flags, animals, vehicles), and people the right size against each other. Look: a frame with a person beside it.
 - O3 (5) Each prop can be named at phone size from any angle it is seen at: shape, colour and one detail (a stripe, a label, a string) say what it is; nothing is a flat line. Look: phone-size frames.
 - O6 (4) Effects suit the house style and read at phone size: no cartoon stars or white nuclear flash; sparks, smoke and trails big enough to see and shaped like the real thing. Look: frames at each effect.
-- O1 (3) Every word, label and badge reads left to right as the brief spells it, in every view: nothing mirrored; flags fly the right way round. Look: every word and flag on the sheet, full size.
+- O1 (3) Every word, label and badge reads left to right as the brief spells it, in every view: nothing mirrored; flags fly the right way round; no face, prop or glance flipped against its cast-sheet tile (old rule 34). Look: every word and flag on the sheet, full size.
 
 ## S. Sets
 - S1 (6) The eye goes to the action: nothing competes with it, nothing that matters is dimmed or lost, and what the beat needs (the thing about to blow up, the faces reacting, the eyes) is in shot and big enough. Look: phone-size frames.
 - S2 (6) Everything is where it would be in the real place: people on paths, cars in lanes, roads that lead somewhere, chairs at tables, boats at sea, the street up to the feet; nothing inside a wall. Look: the widest frame of each set.
-- S5 (3) Every wall and building has the detail its real one has (windows, doors, signs, texture): no blank block, no white void. Look: the widest frame of each set.
+- S5 (3) Every wall and building has the detail its real one has (windows, doors, signs, texture): no blank block, no white void; every set has front, middle and back layers, a textured ground and life (old rule 4). Look: the widest frame of each set.
 - S6 (3) A set is the same set in every shot: sizes, walls and where people and furniture stand match from shot to shot. Look: one frame per shot of the set, side by side.
 - S3 (1) The place matches its references: layout, how many of each key feature, colours; repeated things (houses, windows) broken up as in the real place, not one flat block. Look: check sheet. Tool: benchmark.py (rule 3).
 - S4 (1) No edge of the set shows at any camera move or zoom: the painting fills every corner. Look: the first and last frame of each camera move.
 
 ## M. Movement (strips of frames with their times)
 - M1 (8) A fix made in one shot is in every shot the thing appears in, and nothing pops in, vanishes or jumps mid-shot unless planned: things enter from outside the frame or through a door. Look: first and last frames of each shot; the where-list. Tool: critique.py where.
-- M2 (8) Every move takes a natural time: rises, turns, pauses, cuts and reactions neither slow nor rushed; vehicles and creatures at the brief's speed (whales speed up into a hit). Look: the times across each strip.
+- M2 (8) Every move takes a natural time (people react before a hit lands: old rule S1): rises, turns, pauses, cuts and reactions neither slow nor rushed; vehicles and creatures at the brief's speed (whales speed up into a hit). Look: the times across each strip.
 - M3 (7) Parts and faces keep their shape through a move and across views: no neck, arm or wing stretching, no head snapping to profile, the same eyes, brows and glasses style, no line flickering, a flight path that doesn't jump at a cut. Look: each strip, frame to frame.
 - M5 (5) Every hit shows: the thing hit jolts, dents, sparks or breaks, and the damage stays for the rest of the film. Look: frames just after each hit and the shot's last frame.
 - M4 (1) Scrolling or repeating backgrounds move smoothly: no loop jumps back. Look: frames across each scroll.

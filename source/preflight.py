@@ -332,8 +332,14 @@ def main():
     if skipped:
         print('skipped (the film has no ' + ', '.join(k for k in KINDS if k not in has) + '; HAS): ' + '; '.join(skipped))
     stop = gates(film, name) if every_film else []   # rule 14: refuse while the brief or the sheet is not done
-    for x in (gate_warnings(film, name, has) if every_film else []):   # Job J: rules 8, 61, 74 (warnings for now)
-        print('WARNING:', x)
+    warn = gate_warnings(film, name, has) if every_film else []      # Job J: rules 8, 61, 74
+    path = notes_path(film, name)
+    new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
+    for x in warn:
+        if new_template and ('rule 74' in x or 'rule 8:' in x):
+            stop.append(x)                                           # Sam, 10 Nov (Job J Q4): refuse on new films
+        else:
+            print('WARNING:', x)
     if stop and not audit:
         print('pre-flight REFUSES to run (guides/film-quality-rules.md, rule 14):')
         for x in stop:

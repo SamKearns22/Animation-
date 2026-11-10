@@ -1,4 +1,4 @@
-# Job packs: what each stage reads (Job J, 10 Nov; a draft until Sam says Y)
+# Job packs: what each stage reads (Job J, 10 Nov; Sam: Y)
 
 Three layers of reading. **1. The core** (CLAUDE.md, loaded by itself). **2. One pack below**, for the stage the
 handover names: only the sections it lists (`grep -n '^## ' FILE`, then read those lines). **3. Look-ups**: a rule
@@ -36,4 +36,12 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Read: the job's own section in `notes/next-jobs.md`; the tool's MAP; `source/kittests.py` for its tests.
 - Bite: 86, 13, 85. Every tool gets a kittest; its rule's check column names it (on Sam's yes).
 
-## Quick video (Sonnet, medium): `guides/quick-video.md` only.
+## Film types (moved from CLAUDE.md, 10 Nov; the rules unchanged)
+- **Quick video** (short two-person film): read only `guides/quick-video.md`. Sonnet, medium effort.
+- **Satire-style film** (the TikTok series, beyond two people talking): `guides/satire.md`, always starting from
+  `source/satire_template.py`, and the rulebook. `guides/best-practice.md` Part 2 only for a scene satire.md doesn't cover.
+- **Motion-led films** (stunts, action): a quick animatic early, after the cast sheet.
+- **Flat cartoon people:** `guides/figure-rig.md`; follow `guides/preflight.md` from the first brief. Hands are always
+  a plain circle with props laid over it.
+- **Yuletide horror trailer** (a separate experiment): `guides/yuletide/yuletide-trailer.md`, starting from the newest
+  engine. Nothing in `guides/yuletide/` applies to the TikTok films.
