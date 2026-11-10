@@ -3,8 +3,8 @@
 - **Rules that bite next:** 62 (subtitle pieces timed against the take: Terfwarts' fallback is 2.3 s off on line 8),
   50 (every film needs a `FAMOUS` list), 89.
 - **Done: Job K FINISHED (build 2, 11 Nov, Opus medium, about 0.6%).** Hard-edged shading now ON, kept inside the
-  body; the check shirt bends round the body (sheet `review/job-k/shirt-bent.jpg`); invented people a touch uneven and
-  standing on one leg, the driver first (sheet `review/job-k/driver-lopsided-built.jpg`). All kittests pass. Found: the
+  body; the check shirt bends round the body (sheet `review/job-k/shirt-bent.jpg`); invented people a touch uneven (the
+  weight-on-one-leg stand removed: Sam, awkward), the driver first (sheet `review/job-k/driver-lopsided-built.jpg`). All kittests pass. Found: the
   old blur had hidden a real fault (gun hands from three-quarter back: the far hand hidden); that view is now avoided.
 - **Job I round 3 done (chat 3):** knee, neck, slumped leg fixed; turned head back with his brows.
 - **Next, Job I (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round3-closeup.jpg`
@@ -15,7 +15,7 @@
 - **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check`, `kitchecks.cut_rests`/`faces`,
   `ledger.kept`. I: `lying_flat._leg`, `_neck(foot=-6)`, `lying.on_back` R knee out, views 'three' brows. K:
   `ed.HARD` on, `ed.soft(clip=)`, `ed.bent_check`, `ad_vanced_notice_cast.BENT`, `patriots4_cast.lop`,
-  `views._weight_on` (`sp['weight_leg']`), kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
+  kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
