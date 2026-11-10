@@ -73,6 +73,7 @@ def _check_frame(i):
     t = i / _FPS
     shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
     F.CONTEXT['where'] = f'{shot} {t:.2f}s'
+    F.CONTEXT['t'] = t                              # the film's time, for kitchecks' cut and face checks (Job L)
     n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
     err = None
     handcheck.begin()
@@ -463,7 +464,11 @@ def main():
     F.CONTEXT['where'] = ''
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
+        problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
+        problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
+        if every_film:
+            problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
         import filmkit
         if incremental:                         # only the bodies in shots that hold a changed frame (a second round)

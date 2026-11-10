@@ -172,7 +172,8 @@ def script_check(ln, voice):
     for (a, b), c, (k0, k1) in zip(ph, counts, spans):
         said = ' '.join(w[0] for w in words[k0:k1])
         s = sum(w[1] for w in words[k0:k1])
-        rows.append(dict(a=a, b=b, heard=c, script=s, words=said))
+        rows.append(dict(a=a, b=b, heard=c, script=s, words=said, k0=k0, k1=k1,
+                         nuc=[x for x in nuc if a <= x <= b]))
         tol = max(2.5, 0.3 * max(s, c))
         at = f"line {ln.get('n', '?')} ({ln['who']}), {a:.1f}-{b:.1f} s into the recording"
         if not said and c >= 2:
@@ -248,6 +249,111 @@ def caption_check(film, lines):
                     'insert': f'in the subtitles, not the script: "{b}"',
                     'replace': f'script "{a}", subtitles "{b}"'}[op]
             faults.append(f"line {ln.get('n', '?')} ({ln['who']}): {what}")
+    return faults
+
+
+# ================================================================================================= word times (Job L)
+def word_times(ln):
+    """When each script word starts, seconds into the recording, from the phrases the words were laid over: a phrase's
+    first word at the phrase's start, the rest at the syllable peak their place in the phrase points to, a little
+    before it (a syllable's onset comes about 0.06 s before its loudest moment). None for a word no phrase covers."""
+    words = words_of(ln['text'])
+    out = [None] * len(words)
+    ln['_phrase_first'] = {r['k0'] for r in ln.get('_rows', ()) if r['k1'] > r['k0']}
+    for r in ln.get('_rows', ()):
+        k0, k1, nuc = r['k0'], r['k1'], r['nuc']
+        tot = sum(w[1] for w in words[k0:k1]) or 1
+        acc = 0
+        for k in range(k0, k1):
+            if k == k0 or not nuc:
+                out[k] = r['a'] if k == k0 else r['a'] + acc / tot * (r['b'] - r['a'])
+            else:
+                i = min(len(nuc) - 1, int(round(acc / tot * len(nuc))))
+                out[k] = max(r['a'], nuc[i] - 0.06)
+            acc += words[k][1]
+    return out
+
+
+START_TOL = 0.3      # rule 62: a subtitle piece comes up within 0.3 s of its first word
+INNER_TOL = 0.6      # a word inside a phrase is placed from counted syllables, good to about 0.3 s itself
+
+
+def caption_start_check(film, lines):
+    """Rule 62's timing (Job L; was by hand): each subtitle piece comes up within 0.3 s of when its first word is said
+    in Sam's take. The word's time comes from the take's own syllable peaks (word_times), not from the subtitle code,
+    so the two are measured independently. A word that starts a phrase (after a pause) is timed by the pause itself and
+    held to 0.3 s; a word inside a phrase is placed from counted syllables (about 0.3 s good on its own), so it is held
+    to 0.6 s, and not at all on a line Sam confirmed word for word (SCRIPT_CONFIRMED: the counter over-read it).
+    There is no speech recognition: a fault means "listen at this time"."""
+    faults = []
+    caps = captions(film)
+    ok = {n for n, *_ in getattr(film, 'SCRIPT_CONFIRMED', ())}
+    for ln in lines:
+        if ln.get('_placeholder') or not ln.get('_words') or isinstance(ln.get('sub'), str) or ln.get('sub') is False:
+            continue                                      # no take yet, or Sam's own wording (timing from the script)
+        ws = words_of(ln['text'])
+        idx = [i for i, w in enumerate(ws) if _norm(w[0])]
+        scr = [(_norm(ws[i][0]), ln['_words'][i]) for i in idx]
+        a, b = ln['start'] + ln['_speech'][0] - 0.4, ln['start'] + ln['_speech'][1] + 0.7
+        k = 0
+        for t0, t1, c in caps:
+            if not a <= t0 <= b:
+                continue
+            first = next((_norm(w) for w in c.split() if _norm(w)), None)
+            hit = next((i for i in range(k, min(k + 12, len(scr))) if first and _match(first, scr[i][0])), None)
+            if hit is None:
+                continue
+            k = hit + len([w for w in c.split() if _norm(w)])
+            said = scr[hit][1]
+            first_of_phrase = idx[hit] in ln['_phrase_first']
+            if said is None or (not first_of_phrase and ln.get('n') in ok):
+                continue
+            off = t0 - (ln['start'] + said)
+            if abs(off) > (START_TOL if first_of_phrase else INNER_TOL):
+                why = '' if first_of_phrase else ' (inside a phrase: placed from counted syllables)'
+                faults.append(f"line {ln.get('n', '?')} ({ln['who']}): subtitle \"{c}\" comes up at {t0:.2f} s, "
+                              f"{abs(off):.2f} s {'after' if off > 0 else 'before'} \"{scr[hit][0]}\" is said (about "
+                              f"{ln['start'] + said:.2f} s; rule 62: within {START_TOL if first_of_phrase else INNER_TOL} s here; listen there){why}")
+    return faults
+
+
+# ================================================================================================= bleeps (Job L)
+SWEARS = re.compile(r"^(\w*fuck\w*|f\*+\w*|shit\w*|s\*+t?|bullshit|cunt\w*|c\*+t|wank\w*|twat\w*|bastard\w*|"
+                    r"bitch\w*|bollock\w*|dickhead\w*|prick\w*|cock(sucker|head)\w*|pussy|pussies|arsehole\w*|"
+                    r"asshole\w*|motherf\w*|\w+\*+\w*)$")
+
+
+def swears_in(text):
+    """The swear words in a line (rule 26: every swear is bleeped, written out or starred). '[bleep]' is a bleep
+    already, not a swear."""
+    return [w for w in (re.sub(r"[^a-z*]", '', x.lower()) for x in text.replace('[bleep]', ' ').split())
+            if w and SWEARS.match(w)]
+
+
+def bleep_spans(ln):
+    """The line's bleeps, (start, end) in the take: 'bleep' (one pair or a list of pairs) or 'bleep_at'."""
+    out = []
+    for key in ('bleep', 'bleep_at'):
+        v = ln.get(key)
+        if isinstance(v, (tuple, list)) and v:
+            out += [tuple(v)] if isinstance(v[0], (int, float)) else [tuple(x) for x in v]
+    return out
+
+
+def bleep_check(film, lines):
+    """Rule 26 (Job L; was by hand): every swear in the script has a bleep on that line. Where the bleep sits stays
+    by the sound (Sam sometimes leaves a gap instead of the word, so the take cannot place it). SWEARS_OK = [(line n, word, why)] lets a word
+    through (a film Sam asked to leave unbleeped)."""
+    allowed = {(n, w.lower()) for n, w, *_ in getattr(film, 'SWEARS_OK', ())}
+    faults = []
+    for raw in film.LINES:
+        sw = [w for w in swears_in(raw['text']) if (raw.get('n'), w) not in allowed]
+        sp = bleep_spans(raw)
+        sp = sp or (list(getattr(film, 'BLEEPS', ())) if '[bleep]' in raw['text'] else [])
+        at = f"line {raw.get('n', '?')} ({raw.get('who', '?')})"
+        if len(sw) > len(sp) and not (sp and getattr(film, 'BLEEPS', None)):
+            faults.append(f'{at}: {len(sw)} swear(s) ({", ".join(sw)}) but {len(sp)} bleep(s) (rule 26: every swear '
+                          f'is bleeped, asterisks or not; give the line bleep=(start, end) from the sound)')
     return faults
 
 
@@ -442,6 +548,7 @@ def prepared(film):
         else:
             ln['_stretches'] = ln.get('_stretches') or MA.pauses(v, 0.12)
             ln['_rows'], ln['_faults'] = script_check(ln, v)
+            ln['_words'] = word_times(ln)
         if not ln['_stretches']:
             continue
         ln['_speech'] = (ln['_stretches'][0][0], ln['_stretches'][-1][1])
@@ -456,6 +563,8 @@ def audit(film, t0=None, t1=None, mouths=True):
     faults = [f for ln in lines for f in ln['_faults'] if ln.get('n') not in ok]   # Notice line 9: the counter over-read)
     if hasattr(film, 'caption_at'):
         faults += caption_check(film, lines)
+        faults += caption_start_check(film, lines)       # rule 62: each piece within 0.3 s of its first word (Job L)
+    faults += bleep_check(film, lines)                   # rule 26: every swear bleeped (Job L)
     notes, seen = [], {}
     if any(ln.get('_placeholder') for ln in lines):
         notes.append('no recording yet for line(s) ' + ', '.join(str(ln.get('n', ln['text'][:20])) for ln in lines

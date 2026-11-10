@@ -104,3 +104,27 @@ merges into satire.md's "The look" and rule S3.
   ground shadows flat), checked on one sheet; (c) 1, head acting in the rig (tilt and nod inside views.person, from
   the voice), checked with one short clip; (d) 4, a copy check for groups in pre-flight, and checked patterns that
   bend at the body's edges. Fold the look changes into satire.md 'The look' (no new rule lines). Stop at amber.
+
+## Build chat 1 (10 Nov overnight, Opus high, about 1.4% of a week; stopped on cost-watch amber)
+- [x] (a) 5's example, sent (review/job-k/driver-lopsided.jpg): brow on his right up 0.032, side hair on our right
+      reaching 0.075 higher (he is bald on top: no parting), mouth corner on our right up, weight on his left leg with
+      the shoulders tipped. Lab only (`ai_tells_lab.lopsided`, `driver_pose`). **Waits for Sam's Y/N; nothing built.**
+- [x] (b) 2 built: `ed.HARD = True` (ed.soft, limbs._shade, kit.contact_shadow draw hard-edged; a parody sets it
+      False). Sheet sent (review/job-k/shading.jpg): Vance's suit, El-Sayed's jacket, the driver's shirt and neck.
+      Dark suits read fine with the band as it is; no change to its strength. **Switched OFF (ed.HARD = False)
+      before pushing:** kittests pose_gallery fails with it on: unclipped hard shapes (views.torso_view's soft()
+      bands, burnham's) darken a hand seen from behind ('hands on a gun' and 'cup in hand' three-quarter back,
+      'phone, reading' behind). Build 2, first: clip soft() to the shape it shades (or draw it before the arms),
+      pose_gallery passes, then HARD = True.
+- [x] (c) 1 built: `source/headlife.py` (envelope, accents, phrase starts, HeadLife.at_time) and `views.Rolled`; in
+      views.person `sp['head_life']` (or j['head_roll'] / j['nod']) tips the head about the top of the neck (pivot
+      y -50 + head_dy), a nod drops it 5 units and adds 0.35 to sp['down']. Shoulders do not follow (the arms are
+      solved outside the torso frame; a rolled torso would split them). Clip sent (review/job-k/head-acting-rig.mp4,
+      Islamocommunism 36-42 s). Checked at full size: tilts change on phrases, the face dips on stresses, no gap at
+      the neck.
+- [~] (d) 4: `kitchecks.copies` (look() of LOOK_KEYS per person drawn, per frame; COPIES_OK) run in pre-flight,
+      kittest `copies_in_a_group` passes. Ad-Vanced Notice's officers were already varied in the final: no flag.
+      **Not done:** the check pattern bending at the body's edges (`ad_vanced_notice_cast.check_lines`: map the
+      vertical bands through a cylinder, x = cx + hw*sin(a*v)/sin(a), a about 1.1, width by the slope; horizontal
+      bands sag about 8 units in the middle; offset one side at the placket); one before/after sheet to Sam.
+- satire.md 'The look' carries 1, 2 and 4's check (no new rule lines). Open rule requests: none.

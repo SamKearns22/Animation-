@@ -95,7 +95,9 @@ def _who(cam):
 
 
 def _shade(lay, cam, pts, alpha, blur):
-    """The film's soft shading (a blurred dark band), kept inside the shape already drawn on `lay`."""
+    """The film's shading (a dark band: hard-edged, or blurred when ed.HARD is False), kept inside the shape already
+    drawn on `lay`."""
+    import ed
     q = [cam.P(*v) for v in pts]
     pad = int(cam.S(blur) * 3) + 2
     x0, y0 = max(0, int(min(v[0] for v in q)) - pad), max(0, int(min(v[1] for v in q)) - pad)
@@ -104,7 +106,8 @@ def _shade(lay, cam, pts, alpha, blur):
         return
     sh = Image.new('RGBA', (x1 - x0, y1 - y0), (0, 0, 0, 0))
     ImageDraw.Draw(sh).polygon([(a - x0, b - y0) for a, b in q], fill=(0, 0, 0, int(255 * alpha)))
-    sh = sh.filter(ImageFilter.GaussianBlur(float(cam.S(blur))))
+    if not ed.HARD:
+        sh = sh.filter(ImageFilter.GaussianBlur(float(cam.S(blur))))
     keep = lay.crop((x0, y0, x1, y1)).getchannel('A')
     sh.putalpha(Image.fromarray(np.minimum(np.asarray(sh.getchannel('A')), np.asarray(keep))))
     lay.alpha_composite(sh, (x0, y0))

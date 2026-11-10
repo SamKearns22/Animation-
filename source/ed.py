@@ -148,9 +148,16 @@ def mouth_shape(t):
     return [2, 1, 3, 1, 2, 0][int(p * 11) % 6]
 
 
+HARD = False  # Job K (Sam, 10 Nov): shading as one hard-edged shape, never an airbrushed band (an "AI" tell). OFF until
+#               Job K build 2 keeps the hard shapes inside the body (kittests pose_gallery: they darken a hand seen
+#               from behind in 3 poses; the blur hid it); then True, and a parody quoting the airbrush sets it False
+
+
 def soft(img, cam, pts, colr, alpha, blur=6):
-    """A soft painted shadow or highlight. Blurred on a small layer round the shape only (the same picture as
-    blurring the whole frame, many times faster)."""
+    """A painted shadow or highlight: one flat, hard-edged shape (ed.HARD); blurred only when ed.HARD is False, on a
+    small layer round the shape (the same picture as blurring the whole frame, many times faster)."""
+    if HARD:
+        blur = 0
     q = [cam.P(*p) for p in pts]
     r = float(cam.S(blur)) if blur else 0.0               # a plain number (a numpy one confuses PIL)
     pad = int(3 * r) + 3

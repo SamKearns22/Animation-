@@ -20,6 +20,9 @@ From what the audit already sees (scene(t) and the set; run inside audit.py's pa
 From the drawing (pre-flight's pass over every 3rd frame; every views.py person drawn is logged):
   facing      a head turned no more than 95 degrees from its body; seen from behind, nothing held out in front
               drawn over the back (Prepper notes 11, 12, 16)
+  copies      no two people in one frame drawn from one copy (Job K, Sam: Y, 10 Nov; the crowds-from-behind rule made
+              automatic): the same build, height, hair, skin and clothes is flagged; meant copies (twins, a reflection)
+              in the film's COPIES_OK = [(name, name, why)]. The fix: each one a different build, height and kit detail
   rests       rule 78 for flat films: each RESTS arm, as drawn, against 'desk' (the sitting kit's desk in the
               pose), 'armrest', 'seat' or a number (a height above the floor, person units: Ad-Vanced Notice's
               painted desk is 500): the forearm and elbow never more than 4 units (about 1 cm) below the surface,
@@ -290,14 +293,17 @@ def install():
         j2 = real(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt=tilt)            # real tilt (Patriots 3)
         try:
             import figure as F
-            where = F.CONTEXT.get('where', '')
+            where, ft = F.CONTEXT.get('where', ''), F.CONTEXT.get('t')
         except Exception:
-            where = ''
+            where, ft = '', None
         if isinstance(j2, dict) and '_drawn' in j2:
             d = dict(j2['_drawn'])
             r = _rest_record(joints, t)
             if r:
                 d['_rest'] = r            # rule 78: the arms' heights against the surfaces in the pose (rests())
+            if ft is not None:
+                d['_t'] = ft              # the film's time (pre-flight's drawing pass), for cut_rests and faces
+            d['_look'] = look(sp)
             DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
             POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
@@ -327,6 +333,35 @@ def facing(records):
     return out
 
 
+LOOK_KEYS = ('height', 'shoulders', 'hw', 'hh', 'leg_k', 'skin', 'hair', 'hair_c', 'beard', 'beard_c', 'outfit',
+             'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'who')
+
+
+def look(sp):
+    """What someone looks like, as one string (everything that tells two people apart at a glance; not the name)."""
+    return repr(tuple((k, sp.get(k)) for k in LOOK_KEYS))
+
+
+def copies(film, records):
+    """Job K (Sam: Y, 10 Nov): two people in one frame with the same look are one copy pasted twice (the ICE
+    officers' identical vests, builds and masks). Once per pair of names."""
+    ok = {frozenset(r[:2]) for r in getattr(film, 'COPIES_OK', [])}
+    frames, out, seen = {}, [], set()
+    for where, name, d in records:
+        if d.get('_look'):
+            frames.setdefault(where, []).append((name, d['_look']))
+    for where, ppl in frames.items():
+        for i, (a, la) in enumerate(ppl):
+            for b, lb in ppl[i + 1:]:
+                pair = frozenset((a, b))
+                if la == lb and pair not in ok and (len(pair) == 2 or a == b) and (a, b) not in seen:
+                    seen.add((a, b))
+                    out.append(f"COPIES: {where}: {a} and {b} are drawn from one copy (same build, height, hair and "
+                               f"clothes): give each a different build, height and kit detail, or list them in "
+                               f"COPIES_OK (first of these)")
+    return out
+
+
 def _rest_record(j, t):
     """For rests(): where each elbow and wrist is (body frame, y down, after the lean) and the tops of the surfaces
     the pose knows of (the sitting kit's desk, armrests, seat), as plain numbers (pre-flight's workers send them back).
@@ -340,6 +375,8 @@ def _rest_record(j, t):
         rec = dict(t=t, bob=bob, floor=SK.FLOOR, arms={}, tops={}, posed={}, on_desk={})
         for s in 'LR':
             rec['arms'][s] = (tuple(V.leaned(j['el' + s], lean)), tuple(V.leaned(j['wr' + s], lean)))
+            if 'sh' + s in j:                            # the shoulder too (cut_rests: how far from hanging at rest)
+                rec.setdefault('sh', {})[s] = tuple(V.leaned(j['sh' + s], lean))
         seat = j.get('seat')
         if seat is not None:
             rec['tops']['seat'] = SK.FLOOR - seat.h - bob
@@ -484,10 +521,107 @@ def run(film, drawn=None):
             t = i / film.FPS
             shot = next((s[0] for s in film.SHOTS if s[1] <= t < s[2]), '')
             F.CONTEXT['where'] = f'{shot} {t:.2f}s'
+            F.CONTEXT['t'] = t
             draw(t)
         drawn = DRAWN[n0:]
-    return facing(drawn) + rests(film, drawn) + marks(film) + sounds(film)
+    return (facing(drawn) + rests(film, drawn) + cut_rests(film, drawn) + faces(film, drawn) + marks(film) +
+            sounds(film))
 
+
+
+# ------------------------------------------------------------------------------------------------ cuts and faces (Job L)
+CUT_TAIL = 0.4          # rule 72: no pose returns to rest in the last 0.4 s before a cut
+NEAR_REST, FAR_REST = 0.2, 0.45   # wrist from its hanging place, in arm lengths: at rest / clearly posed
+
+
+def _rest_gap(r, s):
+    """How far an arm's wrist is from where it hangs at rest (views.standing), in arm lengths; None if unknown."""
+    sh = (r.get('sh') or {}).get(s)
+    if sh is None:
+        return None
+    import figure as Fg
+    sg = -1 if s == 'L' else 1
+    up = np.array((sg * 0.12, 0.99, -0.04)); up /= np.linalg.norm(up)
+    fo = np.array((sg * -0.04, 0.99, 0.13)); fo /= np.linalg.norm(fo)
+    rest = np.array(sh) + up * Fg.UPPER * 0.98 + fo * Fg.FORE * 0.98
+    return float(np.linalg.norm(np.array(r['arms'][s][1]) - rest) / (Fg.UPPER + Fg.FORE))
+
+
+def cut_rests(film, records):
+    """Rule 72 (Job L; was by hand on the check sheet): from the drawing pass, a standing person's arm that is clearly
+    posed (wrist over FAR_REST arm lengths from hanging) and then hangs at rest (under NEAR_REST) within the last
+    CUT_TAIL s of a shot: the shot shows the pose dropping back; cut before the return. People seated (their pose
+    knows a seat or desk) are left out: their rest is on the lap or desk. CUT_RESTS_OK = [(name, shot, why)] lets one
+    through (a shrug meant to land)."""
+    shots = getattr(film, 'SHOTS', [])
+    ok = [(n, sh) for n, sh, *_ in getattr(film, 'CUT_RESTS_OK', ())]
+    seen = {}
+    for where, name, d in records:
+        r, t = d.get('_rest'), d.get('_t')
+        if not r or t is None or r.get('tops'):
+            continue
+        shot = next((x for x in shots if x[1] <= t < x[2]), None)
+        if shot is None or shot[2] >= getattr(film, 'BLACK_AT', getattr(film, 'DUR', 1e9)) - 1e-6:
+            continue                                      # the film's last shot ends on black, not a cut
+        for s in 'LR':
+            g = _rest_gap(r, s)
+            if g is not None:
+                seen.setdefault((name, shot, s), []).append((t, g))
+    out, told = [], set()
+    for (name, shot, s), ts in seen.items():
+        if any(fnmatch.fnmatch(name, n) and fnmatch.fnmatch(shot[0], sh) for n, sh in ok) or (name, shot) in told:
+            continue
+        ts.sort()
+        tail = [(t, g) for t, g in ts if t >= shot[2] - CUT_TAIL]
+        landed = next((t for t, g in tail if g < NEAR_REST), None)
+        if landed is None:
+            continue
+        before = [(t, g) for t, g in ts if landed - 0.8 <= t < landed]
+        if any(g > FAR_REST for _, g in before):
+            told.add((name, shot))
+            out.append(f'CUT: shot {shot[0]} (cut at {shot[2]:.2f} s): {name}\'s {s} arm drops back to rest by '
+                       f'{landed:.2f} s, in the last {CUT_TAIL} s before the cut (rule 72: cut before the return, or '
+                       f'hold the pose; CUT_RESTS_OK if meant)')
+    return out
+
+
+FACE_MIN = 240          # rule 50: px tall on a 1920-tall frame, once per famous person
+
+
+def faces(film, records, ask=True):
+    """Rule 50 (Job L; was by hand): every name in the film's FAMOUS list gets at least one drawn frame with the face
+    on screen and at least FACE_MIN px tall. Faces come from mouths_seen(t)'s head height when the film has it (any
+    kind of drawing), else from the drawing pass's views.py people. A film with people and no FAMOUS is asked for one
+    (FAMOUS = [] when nobody is famous); with ask=False (a film from before the 10 Nov template) only printed."""
+    if not hasattr(film, 'FAMOUS'):
+        if 'people' in set(getattr(film, 'HAS', ('people',))) and not ask:
+            print('WARNING: no FAMOUS list: rule 50 (a famous face 240 px tall once) not checked')
+        elif 'people' in set(getattr(film, 'HAS', ('people',))):
+            return ['FACES: the film has people but no FAMOUS list, so nothing checks rule 50 (a famous face 240 px '
+                    'tall once): FAMOUS = [names as drawn], or [] for nobody famous']
+        return []
+    best = {n: 0.0 for n in film.FAMOUS}
+    for where, name, d in records:
+        if d.get('face_in') is False:
+            continue
+        for n in best:
+            if fnmatch.fnmatch(str(name).lower(), n.lower()):
+                best[n] = max(best[n], d.get('face_px') or 0.0)
+    if hasattr(film, 'mouths_seen') and any(v < FACE_MIN for v in best.values()):
+        end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
+        fps = getattr(film, 'FPS', 12)
+        for i in range(0, int(end * fps), 3):
+            try:
+                seen = film.mouths_seen(i / fps)
+            except Exception:
+                break
+            for name, _m, _yaw, px, *_ in seen or ():
+                for n in best:
+                    if fnmatch.fnmatch(str(name).lower(), n.lower()):
+                        best[n] = max(best[n], px or 0.0)
+    return [f'FACES: {n}\'s face is never {FACE_MIN} px tall (largest {v:.0f} px; rule 50: one shot close enough to '
+            f'know them)' if v else f'FACES: {n} (FAMOUS) was never found drawn: check the name as drawn'
+            for n, v in best.items() if v < FACE_MIN]
 
 def main():
     film = importlib.import_module(sys.argv[1])

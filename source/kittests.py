@@ -673,6 +673,133 @@ def critique_where_pops():
     return caught and len(flags) == 2 and len(planned) == 1, f'flags: {flags}; with DOG planned: {planned}'
 
 
+@test
+def bleeps_every_swear():
+    """Rule 26 (Sam, 4 Nov; Job L): every swear in the script is bleeped, asterisks or not: a line with a swear and no
+    bleep is caught; with its bleep, a '[bleep]' gap, or a SWEARS_OK entry it passes."""
+    import types
+    import voices
+    film = types.SimpleNamespace(LINES=[dict(n=9, who='harry', text="Well, she's f****** dead.")])
+    caught = voices.bleep_check(film, [])
+    film.LINES[0]['bleep'] = (2.56, 2.96)
+    fixed = voices.bleep_check(film, [])
+    film.LINES = [dict(n=1, who='far', text="I swear to [bleep] I'll have your [bleep] ass deported."),
+                  dict(n=2, who='a', text='Fucking shit, mate.', bleep=[(0.1, 0.4), (0.6, 0.8)]),
+                  dict(n=3, who='b', text='What a prick.')]
+    film.SWEARS_OK = [(3, 'prick', 'Sam: leave it')]
+    rest = voices.bleep_check(film, [])
+    ok = len(caught) == 1 and not fixed and not rest
+    return ok, f'unbleeped caught: {len(caught)}; bleeped / gaps / allowed: {len(fixed) + len(rest)} fault(s)'
+
+
+@test
+def subtitle_starts_on_its_word():
+    """Rule 62's 0.3 s (Terfwarts line 8, Job L): a subtitle piece up 2.3 s before its phrase is said is caught (the
+    subtitle code's syllable fallback, still live); Ad-Vanced Notice's hand-timed subtitles pass."""
+    import importlib
+    import voices
+    out = {}
+    for name in ('terfwarts', 'ad_vanced_notice'):
+        film = importlib.import_module(name)
+        out[name] = voices.caption_start_check(film, voices.prepared(film))
+    caught = any('line 8' in f and 'to any man' in f for f in out['terfwarts'])
+    return caught and not out['ad_vanced_notice'], \
+        f"Terfwarts line 8 caught: {caught}; Ad-Vanced Notice: {len(out['ad_vanced_notice'])} fault(s)"
+
+
+@test
+def cut_before_the_return():
+    """Rule 72 (Job L): an arm posed out, then hanging at rest in the last 0.4 s before a cut, is caught; the same arm
+    held out to the cut, or the film's last shot ending on black, passes."""
+    import types
+    import kitchecks as K
+    import views as V
+    sp = {'shoulders': 150}
+    rest = V.standing(sp)
+    up = V.standing(sp)
+    V.set_arm(up, 'R', 1.4, 0.6)                 # the right arm swung forward and up, bent
+    rec = lambda j, t: ('', 'ANDY', {'_rest': K._rest_record(j, t), '_t': t})
+    film = types.SimpleNamespace(SHOTS=[('a', 0.0, 2.0), ('b', 2.0, 4.0)], DUR=4.0)
+    drop = [rec(up, 1.0), rec(up, 1.25), rec(rest, 1.75)]
+    held = [rec(up, 1.0), rec(up, 1.25), rec(up, 1.75)]
+    last = [rec(up, 3.0), rec(up, 3.25), rec(rest, 3.75)]
+    a, b, c = K.cut_rests(film, drop), K.cut_rests(film, held), K.cut_rests(film, last)
+    gap = K._rest_gap(drop[0][2]['_rest'], 'R')
+    return len(a) == 1 and not b and not c, f'raised arm {gap:.2f} arm lengths from rest; dropped: {len(a)}, ' \
+                                           f'held: {len(b)}, last shot: {len(c)}'
+
+
+@test
+def famous_face_size():
+    """Rule 50 (Job L): a famous person's face is measured as drawn (1920-tall frame): a close-up passes 240 px, a wide
+    shot alone is caught, a name never drawn is caught, and a film with people but no FAMOUS list is asked for one."""
+    import types
+    from PIL import Image
+    import burnham as B
+    import kitchecks as K
+    import patriots3_cast as C
+    import views as V
+    B.SS = 1
+    px = {}
+    for s in (0.3, 1.6):
+        im = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        j2 = V.person(im, B.Cam(1.0, 540, 960), 540, 700, s, dict(C.GUNNER), 0.0, 5.0)
+        px[s] = j2['_drawn']['face_px']
+    film = types.SimpleNamespace(FAMOUS=['gunner'], HAS=('people',))
+    wide = K.faces(film, [('', 'GUNNER', {'face_px': px[0.3], 'face_in': True})])
+    close = K.faces(film, [('', 'GUNNER', {'face_px': px[0.3], 'face_in': True}),
+                           ('', 'GUNNER', {'face_px': px[1.6], 'face_in': True})])
+    film.FAMOUS = ['gunner', 'trump']
+    missing = K.faces(film, [('', 'GUNNER', {'face_px': px[1.6], 'face_in': True})])
+    asked = K.faces(types.SimpleNamespace(HAS=('people',)), [])
+    ok = len(wide) == 1 and not close and len(missing) == 1 and 'never found' in missing[0] and len(asked) == 1
+    return ok, f'face {px[0.3]:.0f} px wide, {px[1.6]:.0f} px close; wide caught {len(wide)}, close {len(close)}, ' \
+               f'missing name {len(missing)}, no list {len(asked)}'
+
+
+@test
+def sounds_and_references_kept():
+    """Rule 37 (Job L): a reference or sound file git does not hold is listed at the handover (ledger log / kept)."""
+    import ledger
+    path = os.path.join(ledger.ROOT, 'refs', 'zz-kittest.txt')
+    open(path, 'w').write('test')
+    try:
+        add, _ = ledger.kept()
+    finally:
+        os.remove(path)
+    after, _ = ledger.kept()
+    caught = any(p.endswith('zz-kittest.txt') for p, _ in add)
+    return caught and not any(p.endswith('zz-kittest.txt') for p, _ in after), f'untracked file caught: {caught}'
+
+
+@test
+def copies_in_a_group():
+    """Job K (Sam: Y, 10 Nov): two people drawn from one copy in one frame are flagged (Ad-Vanced Notice's officers
+    before they were varied); a varied pair passes; COPIES_OK lets a meant pair through."""
+    import types
+    from PIL import Image
+    import burnham as B
+    import figure as F
+    import kitchecks as K
+    import views as V
+    import ad_vanced_notice_street as ST
+    B.SS = 1
+    K.install()
+    person = sys.modules['views'].person
+    im, cam, n0 = Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), len(K.DRAWN)
+    for t, same in ((1.0, True), (2.0, False)):
+        F.CONTEXT['where'] = f'kittest {t}'
+        a = dict(ST.CAST['O1'])
+        b = dict(a, name='ICE officer 9') if same else dict(ST.CAST['O2'])
+        person(im, cam, 300, 800, 0.4, a, t, 0)
+        person(im, cam, 700, 800, 0.4, b, t, 0)
+    F.CONTEXT['where'] = ''
+    rec = K.DRAWN[n0:]
+    flags = K.copies(types.SimpleNamespace(), rec)
+    ok = K.copies(types.SimpleNamespace(COPIES_OK=[('ICE officer 1', 'ICE officer 9', 'twins')]), rec)
+    return len(flags) == 1 and 'kittest 1.0' in flags[0] and not ok, f'flags: {flags}; with COPIES_OK: {ok}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

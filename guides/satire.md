@@ -81,8 +81,8 @@ Sound · Overlays and Hook Text · Before every render (pre-flight) · Render ·
   checker, the general audit) or a check is missing what it needs from the film.
 
 ## The look (all built in: `source/satire_style.py`)
-Flat colour, one outline weight, no gradients or glows; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
-or ruler-straight boxes; every copy different (colours, sizes, facing); circle hands with props laid over them; deadpan
+Flat colour, one outline weight, no gradients or glows; shading is one hard-edged shape, never an airbrushed band, and ground shadows are flat (`ed.HARD`, Job K: off until build 2 fixes a spill; a parody quoting the airbrush sets it off); talking heads tilt and nod on the voice (`headlife.from_voice`, given as `sp['head_life']`), never a still "talking photo"; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
+or ruler-straight boxes; every copy different (colours, sizes, facing; pre-flight's `copies` check flags two people drawn from one copy); circle hands with props laid over them; deadpan
 faces; hard cuts; a close-up for the reaction that matters; no title by default (Sam, 15 Oct); the Cranberry Title style (on 2 s) only when asked for.
 **Crowds seen from behind are never one repeated block** (Sam, 15 Oct: it 'screams drawn with AI'): each person
 gets their own shoulder width, slope and a higher shoulder, a lumpy head, a haircut with a low nape, and real clothing

@@ -9,6 +9,7 @@ MAP
   log .............. at every handover: this chat's cost (from the cost watch), model, stage, notes, repeated notes
   estimate ......... the film's estimate (% of a week), for estimate versus actual
   audit ............ the 10-line end-of-film audit, also written into FILM.md
+  kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
     python3 source/ledger.py estimate FILM 10
     python3 source/ledger.py round FILM 2
@@ -16,6 +17,7 @@ MAP
     python3 source/ledger.py note FILM "false alarm: handcheck 12.3 s, the hand is behind the mug on purpose"
     python3 source/ledger.py log FILM --stage "round 2 notes" --notes 9 --repeat "arm join at 4 s | shoulder test"
     python3 source/ledger.py audit FILM
+    python3 source/ledger.py kept                       (also run by every log)
 
 A chat is tagged by its transcript; logging the same chat again replaces its row, so nothing is counted twice.
 """
@@ -163,6 +165,40 @@ def audit(d):
     return lines
 
 
+
+KEEP_DIRS = ('source/audio', 'music', 'references', 'refs', 'sounds')   # rule 37: these go on GitHub
+BIG_MB = 10
+
+
+def kept():
+    """Rule 37 (Job L; was by hand): every sound and reference file goes on GitHub; one over about BIG_MB stays off
+    and is named in the handover's first line. Returns (to add, too big): files git does not hold, in KEEP_DIRS."""
+    import subprocess
+    dirs = [d for d in KEEP_DIRS if os.path.isdir(os.path.join(ROOT, d))]
+    if not dirs:
+        return [], []
+    out = subprocess.run(['git', 'status', '--porcelain', '--ignored', '--untracked-files=all', '--', *dirs],
+                         cwd=ROOT, capture_output=True, text=True).stdout
+    add, big = [], []
+    for ln in out.splitlines():
+        if ln[:2] not in ('??', '!!'):
+            continue
+        path = ln[3:].strip().strip('"')
+        full = os.path.join(ROOT, path)
+        if not os.path.isfile(full) or os.path.basename(path).startswith('.') or path.endswith('.pyc'):
+            continue
+        mb = os.path.getsize(full) / 1e6
+        (big if mb > BIG_MB else add).append((path, mb))
+    return add, big
+
+
+def kept_lines():
+    add, big = kept()
+    out = [f'NOT ON GITHUB (rule 37): {p} ({mb:.1f} MB): git add it (or -f if ignored) and push' for p, mb in add]
+    out += [f'STAYS OFF (rule 37, over {BIG_MB} MB): {p} ({mb:.0f} MB): name it in the handover\'s first line'
+            for p, mb in big]
+    return out or ['rule 37: every sound and reference file is on GitHub']
+
 def main():
     a = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     s = a.add_subparsers(dest='cmd', required=True)
@@ -174,7 +210,11 @@ def main():
     p.add_argument('--notes', type=int, default=0)
     p.add_argument('--repeat', action='append', default=[], help='"the note | what would have caught it"')
     p = s.add_parser('audit'); p.add_argument('film')
+    s.add_parser('kept')
     o = a.parse_args()
+    if o.cmd == 'kept':
+        print('\n'.join(kept_lines()))
+        return
     d = load(o.film)
     film, rnd = current()
     rnd = rnd if film == o.film else None
@@ -213,6 +253,7 @@ def main():
         print(f'ledger: {o.film}: this chat {cost}% ({model}); film so far {spent}%'
               + (f' of {est}% estimated' + (' -- OVER: tell Sam in the first line' if spent > est else '')
                  if est is not None else ' (no estimate set)'))
+        print('\n'.join(kept_lines()))           # rule 37: sounds and references on GitHub, checked at the handover
     elif o.cmd == 'audit':
         d['audit'] = audit(d)
         print('\n'.join(d['audit']))

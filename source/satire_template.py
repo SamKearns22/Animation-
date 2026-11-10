@@ -52,6 +52,8 @@ CAST = {   # look and build per person (skin, hair, clothes, face); the cast she
               jaw='soft', hw=64, hh=86, lashes=True),
 }
 LOOKS_AT = {'A': 'B', 'B': 'A'}                   # who each person looks at (checked)
+FAMOUS = []                                         # rule 50: famous people (names as drawn): each face 240 px once
+CUT_RESTS_OK = []                                   # rule 72: [(name, shot, why)] an arm meant to land at rest by a cut
 LINES = [   # 'audio': 'NAME-1' uses source/audio/NAME-1.m4a and times the line to it
     dict(who='A', text='This is a template line.', start=0.3, end=2.4),
     dict(who='B', text='And this is the reply.', start=2.8, end=4.6),
