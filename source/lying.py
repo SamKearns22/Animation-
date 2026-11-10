@@ -811,8 +811,21 @@ def shadow(img, cam, k, sp, surfaces, alpha=60, prts=None, reach=None):
 
 
 def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
+    """Draw the Body k through cam (sets.Cam) in the house style (Job I, Sam 10 Nov: the flat rig's own torso,
+    sleeves, circle hands, legs, shoes and head laid along the projected skeleton: lying_flat.draw), after its
+    contact shadow. A body cut into pieces (`prts`) keeps the 3D volumes (draw_volumes)."""
+    if prts is not None:
+        return draw_volumes(img, cam, k, sp, t, light, surfaces, prts)
+    if surfaces:
+        shadow(img, cam, k, sp, surfaces)
+    import lying_flat
+    return lying_flat.draw(img, cam, k, sp, t)
+
+
+def draw_volumes(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
     """Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, a flat shadow side, the
-    person's own face and clothes. `surfaces`: [(point, normal)] it rests on, for the contact shadow (drawn
+    person's own face and clothes (the look before Job I: still used for a body cut into pieces and for someone
+    standing seen from a steep camera). `surfaces`: [(point, normal)] it rests on, for the contact shadow (drawn
     first). Returns {joint: frame point} for props and checks, or None if off camera."""
     if surfaces:
         shadow(img, cam, k, sp, surfaces, prts=prts)
@@ -1204,7 +1217,7 @@ def stand(img, cam, sp, x, z, facing, j, t, ground=0.0, head_facing=None, shadow
     tilt = math.degrees(math.atan2(-d[1], math.hypot(d[0], d[2])))
     if tilt >= V.HIGH:
         k = from_views(j, sp, x, z, facing, ground, head_facing)
-        return ('3d', draw(img, cam, k, sp, t, surfaces=[(_v(0, ground, 0), _v(0, 1, 0))]))
+        return ('3d', draw_volumes(img, cam, k, sp, t, surfaces=[(_v(0, ground, 0), _v(0, 1, 0))]))
     ring = [(x + 0.3 * math.cos(u), ground + 0.004, z + 0.22 * math.sin(u)) for u in np.linspace(0, 2 * math.pi, 18)]
     if all(cam.depth(q) > 0.2 for q in ring):
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
