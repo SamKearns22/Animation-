@@ -1,21 +1,22 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (every new character drawn alone beside its references and critiqued), 38 (front on;
-  front/side/back only where the camera needs them), 8 (rehearse the 4 risky moves as clips first).
-- **Done (10 Nov):** brief read; the brief checklist, the estimate, shots and acting list below; questions sent to Sam.
-  Reference sites all blocked from the cloud (news sites, Openverse, Geograph, Pexels, Unsplash, LoC, NASA,
-  Wikimedia, Zelda wikis): Sam asked for screenshots.
-- **Spent against the estimate:** planning about 0.7% of 14.5%.
-- **Next:** on Sam's answers and screenshots: build the cast (Opus, high), new chat.
-- **Needs Sam:** questions 1 and 3-12. All references in (rounds one and two, 10 Nov); Link's scuttle faces forward.
-- **Read:** `guides/job-packs.md` Build; this file.
-- **Lost / Added:** Lost: Ruto's "over-sexual" preening (she is a child in this part of the game): vain and pushy
-  instead. Added (if Sam says Y): R1/R2 button prompts on screen; gunfire, snap and blast sounds.
+- **Rules that bite next:** 89 (each new character drawn alone beside its references, critiqued cold), 38 (front
+  on; build only the views the shots use), 41 (every arm ends in a hand: KG's wings act as arms, decide his "hand").
+- **Done (10 Nov, planning, Opus high):** brief checklist, estimate 14.5% (Sam: the full version), shots and acting
+  list, Sam's answers (Decisions below), all 24 references filed and written up as checklists.
+- **Spent against the estimate:** planning about 1% of 14.5%. Week at 43% at the start.
+- **Next:** Build, Opus high: the cast, each new character alone beside its references and critiqued
+  (`critique.py`), then the cast sheet (front/side/back where shots need them) for Sam's look. Then the
+  composition sheet (rule 11) and the 4 rehearsal clips (rule 8).
+- **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
+- **Read:** `guides/job-packs.md` Build; this file's estimate, references, acting list and Decisions.
+- **Lost / Added:** Lost: Ruto's over-sexual preening (a child: vain and pushy instead; Sam: "100% correct").
+  Added: Saria; R1/R2 prompts; gunfire, neck crack and blast sounds.
 - **Open rule requests:** none.
-- **For Claude:** film `remakes`, code `source/remakes.py` from `source/satire_template.py`; MG42 + belt + flash
-  from `patriots3_cast.py`; balaclava from `patriots3_cast.balaclava`; effects `prepper_fx.py`; body pieces
-  `lying.py`; thrown against a wall `patriots3_act.py`.
+- **For Claude:** film `remakes`, `source/remakes.py` from `source/satire_template.py`; refs `references/remakes/`;
+  MG42 + belt + flash + cases `patriots3_cast.py`; balaclava `patriots3_cast.balaclava`; fx `prepper_fx.py`;
+  body pieces `lying.py`; thrown against a wall `patriots3_act.py`; front run `moves.GAITS['front_run']`.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
@@ -53,6 +54,7 @@ Composition sheet sent: (rule 11: not yet)
 News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: modern gaming tropes in the charming classic.
 | # | from the brief (word for word) | done? |
 |---|------|------|
+| 0 | Hook Text: "Ocarina of Time, remade for 2026" (Sam, Q9) | |
 | 1 | All references from the 2026 remake, not the N64 game | |
 | 2 | Cast: Young Link, Kaepora Gaebora (KG), Navi, militarised masked terrorists from generic Ubisoft games, Young Zelda, Malon, Princess Ruto, a Goron in a frilly dress | |
 | 3 | Scene: Kokori Forest. The camera looks up where KG sits on a branch. | |
@@ -130,3 +132,13 @@ Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + 
 | 12 "I am 9 years old." | Link | S11 close-up: deadpan is the joke | dead flat, half-lidded | still | "9" |
 | 13 "Trust me, you're gonna..." | KG | S12 two-shot side on at the wall | fury, hiss, spit flecks | grabs the collar, lifts, slams on "Trust"; shakes on "CHOICES"; Navi reddening behind | slam on "Trust", shake on "CHOICES" |
 | 14 "I want to go home." | Link | S13 close-up pinned to the wall | terrified, wobbling lip | feet off the ground, held | "home" |
+
+Decisions made (Sam, 10 Nov):
+- 1 the full version (14.5%). 2 Ruto vain and pushy, not sexual. 3 KG warm wise-owl for lines 1-3, war mode from "Press R1".
+- 4 Navi has a soft glow (style exception, like Cortana). 5 R1 / R2 button prompts pop up on screen ("lol yes").
+- 6 Sound effects: gunfire, the neck crack, Navi's blast. NO hiss sound (KG still hisses and spits in the drawing).
+- 7 Gore option 3: splattier (flat house-style splats and pieces, plenty of red). 8 Three gunmen in the camp: Navi blows one up, KG guns down the other two.
+- 9 Hook Text: "Ocarina of Time, remade for 2026". 10 Our flat style with the remake's designs, not its puppet look.
+- 11 Line-up: Zelda hands clasped in front, eyes down, unsure; the Goron happily absent (vacant smile, drool); Malon holds out a milk bottle, hopeful; Saria posing nonchalantly with her ocarina ("he's already picked me"); Ruto vain and pushy.
+- 12 Showstopper: the camp burst (gate blown in, watchtower, tracers, gun flash, falling cases).
+- Link's scuttle faces forward, in from off camera.
