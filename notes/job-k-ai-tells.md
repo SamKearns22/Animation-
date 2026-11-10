@@ -91,3 +91,11 @@ person" signal the films have.
 8. Hand-wobbled sign lettering. **N**
 If all Y: about 3% of a week over two build chats (rule 86), Opus high. No new rule lines: each Y becomes a check or
 merges into satire.md's "The look" and rule S3.
+
+## Sam's answers, round 1 (10 Nov)
+- 3: dropped. Elder Swindon's grain and glow were on purpose for that parody, not our usual way of working.
+- 5: wants an example first. Next chat: the invented petrol-pump driver (Ad-Vanced Notice cast), today vs proposed:
+  one brow a touch higher, parting off-centre, one mouth corner lifted, weight on one leg; one sheet, full-size face.
+- 6: Sam can't see the difference. Claude's pick: drop it (if a phone doesn't show it, it isn't a tell). Ask Y/N.
+- 7: N. Dialogue holds only Sam's words; silence between lines stays.
+- 1, 2, 4, 8: not yet answered (picks: 1 Y, 2 Y, 4 Y, 8 N).
