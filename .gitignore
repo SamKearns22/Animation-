@@ -40,3 +40,4 @@ source/data/midterminal/
 
 # critique packs (critique.py): drafts, never on GitHub; the record lives in the ledger
 source/data/critique/
+source/data/remakes-*.mp4
