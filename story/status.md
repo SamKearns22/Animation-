@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): animatic 1's notes all fixed bar the critique round (33-39 done 10 Nov; clips of the execution, line-up and wall sent). Next: critique round (Fable, medium; Sam asked), then check sheet (Sonnet), Sam's yes, animatic 2. Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): critique round done 11 Nov; Sam's notes 41 (Link's terrified stare at the wall) and 42 (R1/R2 silver flash) fixed, clips sent. Next: animatic 2 (Sonnet; Sam asked for it asap), then Sam's notes. Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

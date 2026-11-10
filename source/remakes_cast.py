@@ -543,26 +543,52 @@ def link_head_side(img, p, sp, t, hx, hy):
     p.ell(hx + hw * 0.5, hy + hh * 0.56, hw * 0.12, hh * 0.05, BLUSH, None)
     ex, ey = hx + hw * 0.6, hy + hh * 0.2
     w, h = hw * 0.13, hh * 0.27 * mood.get('wide', 1.0)
+    fear = sp.get('mood') == 'terrified'                             # Sam, 11 Nov: staring, absolutely terrified,
+    if fear:                                                         # down into KG's eyes: the eye huge, white all
+        w, h = hw * 0.21, hh * 0.36                                  # round a pinprick pupil aimed down at him
     lid = mood.get('lid', (0, 0))[1]
     us = np.linspace(-1, 1, 13)
     top = [(ex + w * u, ey - h * (1 - u * u) ** 0.5 * (1 - lid)) for u in us]
     bot = [(ex + w * u, ey + h * (1 - u * u) ** 0.5 * 0.9) for u in us]
     opening = top + bot[::-1][1:-1]
     p.poly(opening, WHITE, None)
-    ring = clip_convex(opening[::-1], oval(ex + w * 0.3, ey + 4, w * 0.9, h * 0.7, 24)[::-1][::-1])
-    if len(ring) >= 3:
-        p.poly(ring, sp.get('iris', BLUE_EYE), None)
-    pu = clip_convex(opening[::-1], oval(ex + w * 0.4, ey + 4, w * 0.45 * mood.get('pupil', 1.0), h * 0.36 * mood.get('pupil', 1.0), 20))
-    if len(pu) >= 3:
-        p.poly(pu, INK, None)
-    p.ell(ex + w * 0.1, ey - h * 0.3, w * 0.24, w * 0.24, SHINE, None)
-    p.line(top, INK, 4.2)
+    if fear:
+        gx, gy = sp.get('stare', (0.5, 0.86))                        # unit direction to KG's eyes (right and down)
+        ix, iy = ex + w * 0.42 * gx, ey + h * 0.42 * gy
+        p.poly(oval(ix, iy, w * 0.46, h * 0.36, 24), sp.get('iris', BLUE_EYE), None)
+        p.poly(oval(ix + w * 0.06 * gx, iy + h * 0.05 * gy, w * 0.17, h * 0.13, 16), INK, None)
+        p.ell(ix - w * 0.16, iy - h * 0.14, w * 0.1, w * 0.1, SHINE, None)
+        p.line(top + bot[::-1], INK, 3.4)
+        p.line(top, INK, 4.6)
+    else:
+        ring = clip_convex(opening[::-1], oval(ex + w * 0.3, ey + 4, w * 0.9, h * 0.7, 24)[::-1][::-1])
+        if len(ring) >= 3:
+            p.poly(ring, sp.get('iris', BLUE_EYE), None)
+        pu = clip_convex(opening[::-1], oval(ex + w * 0.4, ey + 4, w * 0.45 * mood.get('pupil', 1.0), h * 0.36 * mood.get('pupil', 1.0), 20))
+        if len(pu) >= 3:
+            p.poly(pu, INK, None)
+        p.ell(ex + w * 0.1, ey - h * 0.3, w * 0.24, w * 0.24, SHINE, None)
+        p.line(top, INK, 4.2)
     inner, outer = mood.get('brows', (0, 0))
+    if fear:
+        inner, outer = 30, -16                                       # the brow steep: hiked at the nose, pinched down
     p.line(open_curve([(ex - w * 1.2, ey - h - 14 - outer), (ex, ey - h - 22 - (inner + outer) / 2),
                        (ex + w * 1.0, ey - h - 16 - inner)], 4), dk(sp['hair_c'], 0.7), 5.6)
     my = hy + hh * 0.72
     m = mood.get('mouth', 'rest')
-    if m in ('aghast', 'terrified', 'horror'):
+    if fear:                                                         # a tear welling and running, sweat flying,
+        tw = 3 * math.sin(t * 22)                                    # the mouth a wide wobbling wail with teeth
+        p.poly(curve([(ex - w * 0.2, ey + h * 0.9), (ex + w * 0.2, ey + h * 1.05), (ex + w * 0.15, ey + h * 1.9),
+                      (ex - w * 0.3, ey + h * 1.8)], 3), (170, 214, 246), INK, 1.8)
+        for k, (dx, dy) in enumerate(((-0.5, -1.25), (-0.15, -1.5), (-0.95, -0.9))):
+            p.poly(curve([(hx + hw * dx, hy + hh * dy - 16), (hx + hw * dx + 9, hy + hh * dy + 6),
+                          (hx + hw * dx - 9, hy + hh * dy + 6)], 3), (170, 214, 246), INK, 1.6)
+        mo = [(hx + hw * 0.5, my - 16), (hx + hw * 0.74, my - 22 + tw), (hx + hw * 0.88, my - 12),
+              (hx + hw * 0.86, my + 8 - tw), (hx + hw * 0.68, my + 14), (hx + hw * 0.5, my + 6 + tw)]
+        p.poly(curve(mo, 4), (96, 34, 40), INK, 2.6)
+        p.poly([(hx + hw * 0.6, my - 18), (hx + hw * 0.84, my - 16), (hx + hw * 0.84, my - 9), (hx + hw * 0.6, my - 11)],
+               WHITE, INK, 1.4)
+    elif m in ('aghast', 'terrified', 'horror'):
         p.poly(curve([(hx + hw * 0.8, my - 6), (hx + hw * 0.92, my), (hx + hw * 0.86, my + 18), (hx + hw * 0.72, my + 10)], 3),
                (96, 34, 40), INK, 2.4)
     else:

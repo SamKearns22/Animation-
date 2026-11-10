@@ -201,12 +201,36 @@ def _font(n):
     return ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(n))
 
 
-def _prompt(img, label, text, x, y, age):
+def _prompt(img, label, text, x, y, age, press=None):
     """A game button prompt (Decision 5): a dark rounded pill, the button in a white ring, the action in caps; it
-    pops in over 0.15 s."""
+    pops in over 0.15 s. press = seconds since the action is taken (Sam, 11 Nov): the whole prompt flashes silver
+    at that moment (a white-silver pill with a bright halo, a small punch in size), fading back over 0.35 s."""
     if age < 0:
         return
     k = (0.6 + 0.55 * ease(age / 0.1) - 0.15 * ease((age - 0.1) / 0.08)) * B.SS
+    fl = 0.0 if press is None or press < 0 else max(0.0, 1 - press / 0.35)
+    if fl > 0:
+        k *= 1 + 0.22 * fl
+        d = ImageDraw.Draw(img)
+        f2 = _font(40 * k)
+        w, h = 110 * k + d.textlength(text, font=f2) + 50 * k, 96 * k
+        X, Y = x * B.SS - w / 2, y * B.SS - h / 2
+        lay = _lay(img)
+        dl = ImageDraw.Draw(lay)
+        for g in (34, 20, 9):                                         # the halo
+            dl.rounded_rectangle((X - g * k, Y - g * k, X + w + g * k, Y + h + g * k), radius=h / 2 + g * k,
+                                 fill=(255, 255, 255, int(70 * fl)))
+        mix = lambda c0, c1: tuple(int(a_ + (b_ - a_) * fl) for a_, b_ in zip(c0, c1)) + (255,)
+        dl.rounded_rectangle((X, Y, X + w, Y + h), radius=h / 2, fill=mix((20, 22, 30), (214, 220, 230)),
+                             outline=(255, 255, 255), width=int(5 * k))
+        dl.rounded_rectangle((X + 8 * k, Y + 8 * k, X + w - 8 * k, Y + h * 0.45), radius=h / 4,
+                             fill=(255, 255, 255, int(200 * fl)))       # the silver's shine along the top
+        cx, cy = X + 52 * k, Y + h / 2
+        dl.ellipse((cx - 36 * k, cy - 36 * k, cx + 36 * k, cy + 36 * k), fill=(255, 255, 255), outline=INK, width=int(3 * k))
+        dl.text((cx, cy), label, font=_font(46 * k), fill=(20, 22, 30), anchor='mm')
+        dl.text((X + 104 * k, cy), text, font=f2, fill=mix((255, 255, 255), (20, 22, 30)), anchor='lm')
+        img.alpha_composite(lay)
+        return
     d = ImageDraw.Draw(img)
     f1, f2 = _font(46 * k), _font(40 * k)
     tw = d.textlength(text, font=f2)
@@ -412,7 +436,7 @@ def s5_edge(t):
     v = (u - S5_SWOOP[0]) / (S5_SWOOP[1] - S5_SWOOP[0])
     if 0 <= v < 1:                                                    # note 35: a swoop down from top right, side on,
         e = 1 - (1 - v) ** 2                                          # wings swept back, levelling out as he arrives
-        x = _lerp(1330, kx + 40, e)
+        x = _lerp(1330, kx - 170, e)
         y = _lerp(120, ky, e) - 150 * math.sin(math.pi * e) * (1 - e)
         CR.kg(img, cam, x, y, ks, view='side', mood='glee', wings='swoop', perched=False, t=t,
               flip=-1, lean=_lerp(62, 10, ease((v - 0.45) / 0.55)), talk=_talk('kg', t))
@@ -427,7 +451,7 @@ def s5_edge(t):
     if 0 <= snap < 0.12:
         _flash(img, cam, 170, 1150, 50, seed=3)
     if L[5]['start'] <= t:
-        _prompt(img, 'R1', 'EXECUTION', 640, 330, t - L[5]['start'] - 0.05)
+        _prompt(img, 'R1', 'EXECUTION', 640, 330, t - L[5]['start'] - 0.05, press=t - SNAP)
     return img
 
 
@@ -625,7 +649,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             _splat(img, cam, gx, gy, 0.35 * gppm, seed=4)
     RS.camp_front(img, cam, t)
     if t >= L[9]['start']:
-        _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05)   # screen px, not through cam
+        _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05, press=t - ZIP)   # screen px, not through cam
     return img
 
 
@@ -675,7 +699,7 @@ def s10_square(t):
         s = RS.s_for(ppm)
         if who == 'kg':
             sweep = ease((t - L[11]['start']) / 1.5)
-            wing = {'L': ((300, -120 - 50 * sweep), (470 - 10 * sweep, -200 - 30 * sweep), 'spread'),   # (kept
+            wing = {'L': ((300, -120 - 50 * sweep), (400 - 10 * sweep, -250 - 30 * sweep), 'spread'),   # (kept
                                                                       # below Malon, who steps forward: note 39)
                     'R': ((-192, -30), (-172, 90), 'fold')}
             CR.kg(img, cam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood='show', t=t,
@@ -750,10 +774,13 @@ def _wall_scene(t, cam, shake=0.0):
         V.arm_to(j, sd, (sg * 24.0, 120.0, 120.0), 'down', 'grip')     # both hands up on the wings that hold him
     lxx, lyy = cx + ldx + sx * 0.6, base - lift * u + (cy - (base - 928 * k) + lift) * 0
     _kid(img, cam, 'link', lxx, lyy, ppm, t, 'terrified', j=j, yaw=90, talk=True)
-    CR.navi(img, cam, cx - 130, cy - 400 * s + 20 * math.sin(t * 6), s * 1.2, t=t,   # above his cap's tail, clear
-            heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))                              # of it in all three framings
+    CR.navi(img, cam, cx + 330 * s, cy - 330 * s + 14 * math.sin(t * 6), s * 1.2, t=t,   # above KG's beak, between
+            heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))                              # the faces: whole in all 3 framings
     yk = ky + (1 - u) * 0
-    CR.kg(img, cam, kx + ldx + sx, yk, s, view='side', perched=False, stand=True, wings=LIFT, band=False,
+    dn = lift * (1 - u) / s                                           # the lift: his wing hands stay on the collar
+    wl = {sd: ((LIFT[sd][0][0], LIFT[sd][0][1] + dn * 0.45), (LIFT[sd][1][0], LIFT[sd][1][1] + dn), 'grip')
+          for sd in 'LR'}                                             # as it rises (they crossed Link's head before)
+    CR.kg(img, cam, kx + ldx + sx, yk, s, view='side', perched=False, stand=True, wings=wl, band=False,
           mood='rage', t=t, flip=-1, talk=_talk('kg', t), head_tilt=WALL_TILT)
     return img
 
