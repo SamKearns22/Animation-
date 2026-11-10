@@ -1,22 +1,23 @@
-# Where things stand (project, 9 Nov; no film in progress)
+# Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (tools: own chat, estimate first; Sam said Y to Job G at about 4%), 81 (arm join, by
-  hand: the seam check is chat 2's first job), 41 (every point must read: now checked).
-- **Done (9 Nov, Job G chat 1, Opus high, about 1.7% of the 2% estimate):** pose test shows 6 views (mirrored added),
-  whole body in each picture; new automatic body checks in the hand check (so films get them too); props in hands
-  and tables right from every view; four kit poses fixed (phone read, cup, cup sip; pointing straightened); the
-  one-piece finger is the house finger; front-on and from-behind people never draw mirrored (Islamocommunism 9).
-- **Next:** Job G chat 2, new chat, **Opus, high effort**. Type: "Job G chat 2: read notes/next-jobs.md Where things
-  stand and the Job G section." No new estimate: chat 2 was priced (1.5-2%).
-  **After G: Job H (critique helper, about 2%)**, only once G chat 2 has handed over. First chat: the checklist
-  design, **Opus, max effort**, short (Sam's 9 Nov table); then building, Opus high. Type: "Job H: critique helper.
-  Read notes/next-jobs.md Where things stand and Build plan H. Estimate first (rule 86)." 
+- **Rules that bite next:** 85 (cost watch: chat 2 went amber after step 1, so it handed over), 81 (seam now
+  checked automatically), 86 (Job G stays inside its 3.5-4%).
+- **Done (10 Nov, Job G chat 2, step 1, Opus high, about 0.6%):** the shoulder gap found and fixed at its cause: an
+  arm joined the body left over from the last drawing (the last view, or the last frame as someone turned), cutting
+  a gap or leaving dark ticks at the shoulder. Every pose redrawn and compared: only cleaner. New automatic seam
+  check in the hand check (films get it in pre-flight), and a test that proves it catches a gap and a line.
+- **Next:** Job G chat 3, new chat, **Opus, high effort**. Type: "Job G chat 3: read notes/next-jobs.md Where things
+  stand and the Job G section." No new estimate: steps 2-6 fit in the rest of chat 2's price (about 1-1.4%).
+  After G: Job H (critique helper, about 2%): first chat Opus, max effort; type "Job H: critique helper. Read
+  notes/next-jobs.md Where things stand and Build plan H. Estimate first (rule 86)."
 - **Needs Sam:** nothing.
-- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph; `notes/job-e-measurements.md` cut list.
-- **Open rule requests:** none. Chat 2 proposes merging rules 41, 42 and 81 (by-hand parts now automatic).
-- **For Claude:** checks in `handcheck.body_faults`; `grips.py` (held, Table, on_table, contact_faults, Carry);
-  `views.aim`; views `_person` (no mirror at 0/180; three_back reach hands behind; on_face skipped from behind);
-  `posegallery.py` (VIEWS 6, flip test, tiles); kittest `grips_contacts_and_carry`. Sheet: `guides/pose-gallery.jpg`.
+- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph.
+- **Open rule requests:** none. Step 6 proposes merging rules 41, 42 and 81 (81's check column still says "no
+  automatic seam test yet": put right in that proposal).
+- **For Claude:** `limbs.DRAW/NEXT` (views._person counts drawings; an arm's body key is cam, id(img), drawing;
+  handcheck.probe restores DRAW); `handcheck.seam_faults` (7 lines walked out along the upper arm: jacket, ink or
+  gap, sleeve = seam; arms in `j2['_drawn']['behind']` only a gap); probe adds inkpx/other/cloth/behind; kittest
+  `shoulder_seam_caught`. Sheet `guides/pose-gallery.jpg` redrawn.
 
 ## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
 Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
@@ -28,8 +29,8 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
   behind the body (palms together showed a hand on his back), points straightened (`views.aim`), the one-piece finger
   (Ad-Vanced 39b) is now the house finger. New gallery rows: hands on a table (drawn), phone reading, cup in hand,
   cup sipping. AVOID lists updated (pointing three-quarter back, pointing both ways three views, cup behind).
-- **Chat 2 (about 1.5-2%), in order:** (1) the shoulder-seam check, automatic (rule 81; the gap shows at the near
-  shoulder in three-quarter pointing, guides/pose-gallery.jpg); (2) phone at the ear: rework (the phone sits on top of
+- **Chat 2 (about 1.5-2%), in order:** (1) DONE 10 Nov (chat 2; the rest moves to chat 3): the shoulder-seam check,
+  automatic, and the gap's cause fixed (a leftover body); (2) phone at the ear: rework (the phone sits on top of
   the head and the arm wraps over it, front and three-quarter; not yet in the gallery); (3) a screen check that a
   hand meets its prop on the picture (only 3D is checked now); phone reading from three-quarter back: phone and
   hand may still sit over his back at its edge (critique, not yet measured); sheet labels overlap the next column; (4) lying: gallery rows and checks (both arms on one

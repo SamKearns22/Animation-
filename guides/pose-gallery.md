@@ -10,7 +10,8 @@ and saves one labelled sheet (rule 48). Since Job G (9 Nov) the hand check also 
 when it is behind it; a hand inside the body; a hand off its arm (a gap all round); a point that doesn't read (the
 forearm aims at or away from the lens), a bent pointing arm (`views.aim` straightens it) or a hidden finger; a hand
 hovering over, sinking into or off the edge of what it rests on, or off its grip (`grips.py`); and the pose
-flipping sides as he turns through front on or behind (fixed in `views.py`: never mirrored there).
+flipping sides as he turns through front on or behind (fixed in `views.py`: never mirrored there). Since Job G chat 2 (10 Nov) it
+also stops a seam where the arm meets the body (rule 81: a line or gap across the shoulder; behind the body, a gap).
 **Props in hands:** `grips.held(j, side, sp, draw)` puts any held prop in the right drawing order for every view
 (behind his back or head when it is; the hand over it); `grips.Table` and `grips.on_table` draw a table and rest
 hands on it from the same numbers; `grips.Carry` checks a prop handed over never jumps. The last sheet is `guides/pose-gallery.jpg`. `--all` adds every other pose in

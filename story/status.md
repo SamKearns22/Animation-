@@ -15,8 +15,8 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 
 ## Films
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
-Job G chat 1 done 9 Nov (about 1.7%): the pose test now draws 6 views and catches hands through the body, floating hands, unreadable points, hovering or sinking hands; props in hands and tables drawn right from every view (`source/grips.py`).
-Next: Job G chat 2 (new chat, Opus high): shoulder seam check, phone-at-ear pose, lying, gallery-only poses in pre-flight. Handover: notes/next-jobs.md "Where things stand".
+Job G chat 2 step 1 done 10 Nov: the shoulder gap Sam kept seeing was fixed at its cause (an arm joining a body left over from the last drawing); the seam is now checked automatically.
+Next: Job G chat 3 (new chat, Opus high): phone-at-ear pose, hand-meets-prop on screen, lying, gallery-only poses in pre-flight, rules 41/42/81 merge proposal. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.

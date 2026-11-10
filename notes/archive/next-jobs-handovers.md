@@ -110,3 +110,24 @@
 - **Open rule requests:** none.
 - **For Claude:** next film's plan runs `ledger.py estimate FILM N`; each round `ledger.py round FILM N`; each handover
   `ledger.py log FILM --stage .. --notes N --repeat "note | catcher"`. costwatch WEEK_USD still to calibrate.
+
+
+## Where things stand (Job G chat 1 handover, 9 Nov)
+
+- **Rules that bite next:** 86 (tools: own chat, estimate first; Sam said Y to Job G at about 4%), 81 (arm join, by
+  hand: the seam check is chat 2's first job), 41 (every point must read: now checked).
+- **Done (9 Nov, Job G chat 1, Opus high, about 1.7% of the 2% estimate):** pose test shows 6 views (mirrored added),
+  whole body in each picture; new automatic body checks in the hand check (so films get them too); props in hands
+  and tables right from every view; four kit poses fixed (phone read, cup, cup sip; pointing straightened); the
+  one-piece finger is the house finger; front-on and from-behind people never draw mirrored (Islamocommunism 9).
+- **Next:** Job G chat 2, new chat, **Opus, high effort**. Type: "Job G chat 2: read notes/next-jobs.md Where things
+  stand and the Job G section." No new estimate: chat 2 was priced (1.5-2%).
+  **After G: Job H (critique helper, about 2%)**, only once G chat 2 has handed over. First chat: the checklist
+  design, **Opus, max effort**, short (Sam's 9 Nov table); then building, Opus high. Type: "Job H: critique helper.
+  Read notes/next-jobs.md Where things stand and Build plan H. Estimate first (rule 86)." 
+- **Needs Sam:** nothing.
+- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph; `notes/job-e-measurements.md` cut list.
+- **Open rule requests:** none. Chat 2 proposes merging rules 41, 42 and 81 (by-hand parts now automatic).
+- **For Claude:** checks in `handcheck.body_faults`; `grips.py` (held, Table, on_table, contact_faults, Carry);
+  `views.aim`; views `_person` (no mirror at 0/180; three_back reach hands behind; on_face skipped from behind);
+  `posegallery.py` (VIEWS 6, flip test, tiles); kittest `grips_contacts_and_carry`. Sheet: `guides/pose-gallery.jpg`.
