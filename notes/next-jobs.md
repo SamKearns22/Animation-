@@ -1,13 +1,13 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (Job H stays inside 2.5% of a week: about 1.5% spent, so the build has 1.0% at most), 89 (the critique the helper
+- **Rules that bite next:** 86 (Job H stays inside 5% of a week: Sam, 10 Nov, raised it from 2.5%; about 1.5% spent), 89 (the critique the helper
   will run), 85 (cost watch: on amber, finish the step and hand over).
 - **Done (10 Nov, Job H chat 1, design, Opus max, about 1.5%: max effort cost more than the 0.9% planned):** the critique checklist,
   `guides/critique-checklist.md` (33 lines from Sam's past notes, in six parts: every sheet, people, creatures,
   props, sets, movement; how each new note adds or strengthens a line); the helper's design and the build list (this
   file's Job H section). Job G not touched.
 - **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand
-  and Build plan H." 1.0% at most (H's cap 2.5%, 1.5% spent): one calibration run, not two. Sam's overnight chat opens it (chats it starts can't).
+  and Build plan H." About 1.5% (Sam, 10 Nov: Job H may go to 5% of a week; 1.5% spent). Sam's overnight chat opens it (chats it starts can't).
 - **Job G:** chat 4 (steps 4-6) is running alongside, started overnight; its own handover replaces this line.
 - **Needs Sam (morning):** (1) Y/N: the helper runs on Opus even inside a Sonnet chat (about 0.1% a pass); my pick
   Y, it is the eye and a missed fault costs a round. (2) Open rule requests 1-3 (Job H section): your numbers.
@@ -41,10 +41,10 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
   "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
   from behind in the dict too); `posegallery._wrap`.
 
-## Job H, critique helper (build plan H; Sam: Y to about 2%; 10 Nov overnight run, his "just go" for H only)
-**Estimate (rule 86, firmed 10 Nov):** about 2.5% of a week, stop past it. Chat 1, the design (Opus max): about 1.5%
-(0.9% planned; max effort cost more). Chat 2, the build (Opus high): 1.0% at most (one tool of about 300 lines, its tests, one helper calibration run at about
-0.1%). No Sonnet stage planned; if chat 2 goes amber, its leftovers go to one. The first trial (the next new
+## Job H, critique helper (build plan H; Sam: Y to about 2%; 10 Nov overnight run, his "just go" for H only; cap raised to 5% the same night)
+**Estimate (rule 86, firmed 10 Nov):** about 3% of a week; Sam (10 Nov) raised the cap from 2.5% to 5%: stop past 5%. Chat 1, the design (Opus max): about
+1.5% (0.9% planned; max effort cost more). Chat 2, the build (Opus high): about 1.5% (the harvest, about 0.4%; one tool
+of about 300 lines, its tests, two helper calibration runs at about 0.1% each). No Sonnet stage planned; if chat 2 goes amber, its leftovers go to one. The first trial (the next new
 thing) waits for the next film.
 
 **Design (chat 1, DONE 10 Nov):**
@@ -78,7 +78,11 @@ thing) waits for the next film.
    Claude marks) are tallied in the film's ledger, so Job I sees which lines catch and which only cry wolf.
 
 **Build (chat 2, Opus high), in order:**
-1. `source/critique.py`, with a MAP:
+1. Harvest (about 0.4%; added with the higher cap): read only the notes tables of the last ten films (the archive and
+   Elder Swindon) for Sam's fault notes outside Job E's body groups (creatures, props and text, sets, movement,
+   faces, acting). File each under a checklist line (count, Came from) or a new line, by the header's rules: parts
+   C, O, S and M rest on one or two notes a line now.
+2. `source/critique.py`, with a MAP:
    - `pack FILM SPEC.json`: renders the panels (sheet.py's clean picture), makes `1-look.jpg` (phone-size frames 270 px,
      detail crops 540 px, numbers only, at most 1080 px wide, a second image past 12 panels), `check.jpg` (compare.py:
      each panel beside its references), `brief.md`, `checklist.md` (A plus the parts asked, no "Came from"),
@@ -89,16 +93,16 @@ thing) waits for the next film.
    - `record FILM PACK`: refuses unless look.md was written before result.md, every panel has a look line and every
      line that applies to each panel is answered; saves both into the ledger; tallies per line id.
    - `where FILM NAME...` and `before FILM SPEC`. Packs live in `source/data/critique/` (add it to `.gitignore`).
-2. kittests: record refuses a half answer and a look written after the result, passes a whole one; checklist.md holds
+3. kittests: record refuses a half answer and a look written after the result, passes a whole one; checklist.md holds
    only the parts asked and no "Came from"; where flags a thing that pops in mid-shot (a small made-up film module).
-3. Calibration, one helper run (a second only if the budget allows), no film rendered (stills only): current Elder Swindon frames plus two of Sam's
+4. Calibration, two helper runs (a third only to recheck a reworded line), no film rendered (stills only): current Elder Swindon frames plus two of Sam's
    old faults put back (the EGG MAYO box mirrored with PIL; a gallery hand moved off its phone the way kittest
    `held_prop_touches` does) beside clean panels. It must flag O1 and P1 and nothing on the clean panels. A miss:
    reword that line or the prompt once and rerun; a second miss is written here as a limit.
-4. Pre-flight prints one line: "critique: round R, pass N clean / N faults open / none recorded" (a warning only; a
+5. Pre-flight prints one line: "critique: round R, pass N clean / N faults open / none recorded" (a warning only; a
    refusal waits for Sam's yes to request 1).
-5. A kit-catalogue row. The notes template is unchanged until Sam's yes to request 2.
-6. Handover: a Next line Sam's overnight chat can start, or "Job H finished" (that chat tells Sam). Fetch and merge
+6. A kit-catalogue row. The notes template is unchanged until Sam's yes to request 2.
+7. Handover: a Next line Sam's overnight chat can start, or "Job H finished" (that chat tells Sam). Fetch and merge
    before every push (Job G's chat pushes to the main line too) and keep Job G's line in Where things stand.
 
 **Open rule requests (Sam's numbers; none written):**
