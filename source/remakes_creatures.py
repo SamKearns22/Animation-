@@ -117,7 +117,8 @@ WING_POSES = {
     'wide': ((300, -150), (470, -260), 'spread'),          # line 1: flung wide
     'teach': ((250, -170), (290, -380), 'point'),          # line 3: one wing raised like a teacher
     'gesture': ((300, -40), (500, -60), 'spread'),         # line 11: the sweep along the line-up
-    'gun': ((210, 80), (90, 120), 'grip'),                 # the MG42 furled in his wings
+    'gun': ((210, -10), (90, 20), 'grip'),                 # the MG42 furled in his wings, up at his chest (pass 3:
+                                                           # held low it sat on his talons)
     'grab': ((230, -40), (110, -120), 'grip'),             # the lapels (front)
     'up': ((300, -260), (520, -420), 'spread'),            # a flap, up
     'down': ((300, 40), (480, 200), 'spread'),             # a flap, down
@@ -358,9 +359,12 @@ def bandana(p, hx, hy, hw, t, view='front'):
         band = [(hx - hw * 1.0, hy - 30), (hx, hy - 44), (hx + hw * 1.0, hy - 30), (hx + hw * 1.0, hy + 8), (hx, hy - 6),
                 (hx - hw * 1.0, hy + 8)]
         kx, ky = hx - hw * 1.02, hy - 12
-    else:
-        band = [(hx - hw * 0.9, hy - 26), (hx + hw * 0.9, hy - 40), (hx + hw * 0.92, hy), (hx - hw * 0.9, hy + 12)]
-        kx, ky = hx - hw * 0.92, hy - 8
+    else:                                                               # pass 3: a straight bar overhanging his face
+        # read as a blindfold; now it wraps the skull, bowed like the head, ending inside the head's front edge
+        top = [(hx - hw * 0.88, hy - 10), (hx - hw * 0.2, hy - 34), (hx + hw * 0.5, hy - 26), (hx + hw * 0.74, hy - 6)]
+        bot = [(hx + hw * 0.8, hy + 26), (hx + hw * 0.5, hy + 12), (hx - hw * 0.2, hy + 6), (hx - hw * 0.9, hy + 30)]
+        band = open_curve(top, 5) + open_curve(bot, 5)
+        kx, ky = hx - hw * 0.92, hy + 10
     for k in (0, 1):                                                    # the ties, behind the knot
         ph = t * 9.0 + k * 1.7
         pts = [(kx - 40 * i, ky + (14 + k * 26) * i * 0.5 + 12 * math.sin(ph - i * 1.3) * i * 0.6) for i in range(5)]
@@ -578,7 +582,7 @@ def kg_gun(p, hands, view):
     p.poly([(x1 - 40, y - 20), (x1 + 10, y - 20), (x1 + 10, y - 2), (x1 - 40, y - 2)], GUN_D, INK, 2.0)    # flash hider
     p.line([(x1 - 80, y + 8), (x1 - 170, y + 30)], GUN_D, 6.0)               # the bipod, folded
     p.line([(x1 - 90, y + 8), (x1 - 186, y + 22)], GUN_D, 6.0)
-    belt = open_curve([(ax + 20, y + 22), (ax + 10, y + 90), (ax + 40, y + 160), (ax + 20, y + 220)], 8)
+    belt = open_curve([(ax + 20, y + 22), (ax - 10, y + 80), (ax - 70, y + 120), (ax - 140, y + 130)], 8)  # trails to his side
     p.poly(_ribbon(belt, 34, 30), (150, 120, 60), INK, 2.0)                  # the ammo belt hanging
     for q in belt[1::2]:
         p.ell(q[0], q[1], 10, 6, (206, 170, 80), INK, 1.2)
@@ -654,10 +658,11 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
     for sgn in (-1, 1):
         for big in (True, False):
             if big:
-                ang = -math.pi / 2 + sgn * (0.32 + 0.22 * flap)
+                ang = -math.pi / 2 + sgn * (0.8 + 0.7 * flap)         # pass 3: the down beat was still up; now
+                # the top pair sweeps from upright (0.1 rad off) to out and about level (1.5 rad)
                 ln, wd, root = 130, 44, (sgn * 20, -20)
             else:
-                ang = math.pi / 2 - sgn * (0.6 + 0.15 * flap)
+                ang = math.pi / 2 - sgn * (0.7 - 0.3 * flap)           # the small pair tucks in as the top swings down
                 ln, wd, root = 58, 46, (sgn * 18, 20)
             wing = _feather(root, ang, ln, wd)
             p.poly(wing, mix((236, 236, 250), glow_c, 0.15), dk(glow_c, 0.7), 1.4)
@@ -845,7 +850,7 @@ def tiles(who):
             out.append((name, tile(lambda img, cam, **a: kg(img, cam, 700, 950, view='side', **a), at=(700, 800), **k, **kw)))
     elif who == 'navi':
         for name, kw in (('calm, wings up', dict(heat=0.0, t=0.107)), ('calm, wings down', dict(heat=0.0, t=0.036)),
-                         ('reddening', dict(heat=0.5, t=0.02)), ('grenade red', dict(heat=1.0, t=0.05))):
+                         ('reddening', dict(heat=0.5, t=0.1)), ('grenade red', dict(heat=1.0, t=0.112))):
             out.append((name, tile(lambda img, cam, **a: navi(img, cam, 300, 300, 2.2, **a), at=(300, 300),
                                    bg=(60, 70, 64), **kw)))
     elif who == 'goron':

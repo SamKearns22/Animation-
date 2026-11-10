@@ -838,8 +838,15 @@ def kid_torso_view(img, p, sp, view, seated=False):
         p.ell(x1 - 10, 322, 14, 26, SILVER, INK, 2.0)
         p.poly([(x0 * 0.9, 20), (x1 * 0.7, 300), (x1 * 0.4, 300), (x0 * 0.9, 50)], LEATHER, INK, 2.0)
         kokiri_sheath(p, (x0 + 8, 30), (-0.06, -1.0), 330)                 # the sheath down his back, its tip under the shield
-        p.poly(curve([(x0 + 2, 50), (x0 - 18, 70), (x0 - 26, 200), (x0 - 16, 330), (x0 + 4, 340), (x0 + 6, 200)], 3),
-               WOOD, INK, 2.4)                                       # the shield edge-on: thin, hugging his back
+        # the shield seen from the side but turned a little to us (pass 3: edge-on read as no shield): its face shows
+        # as a broad wooden slab standing off his back, planks, a rim and a sliver of the red mark
+        sh = curve([(x0 + 4, 40), (x0 - 40, 52), (x0 - 64, 190), (x0 - 52, 320), (x0 - 22, 372), (x0 + 6, 340),
+                    (x0 + 8, 190)], 3)
+        p.poly(sh, WOOD, INK, 2.6)
+        for k in (0.33, 0.66):
+            p.line([(x0 + 4 - 52 * k, 50 + 6 * k), (x0 + 2 - 40 * k, 350 - 10 * k)], WOOD_D, 2.0)
+        p.poly(curve([(x0 - 34, 150), (x0 - 12, 148), (x0 - 20, 250)], 2), (196, 60, 48), INK, 1.8)
+        p.line([(x0 + 6, 40), (x0 + 8, 340)], WOOD_D, 3.0)            # its thickness, the edge nearest his back
     if view == 'back':                                                    # the wooden Kokiri shield on his back
         shield = curve([(-sw * 0.7, 40), (sw * 0.7, 40), (sw * 0.76, 200), (sw * 0.5, 330), (0, 380), (-sw * 0.5, 330),
                         (-sw * 0.76, 200)], 3)
