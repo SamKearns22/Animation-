@@ -34,10 +34,11 @@
   For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
   trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
   man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.
-- **Job K, the "AI ick" review (done 10 Nov overnight, Opus high, about 1.5% of 2%):** report, sheet and clip in
-  `notes/job-k-ai-tells.md`; the test bench `source/ai_tells_lab.py` (changes no film or kit). Nothing in the kit or
-  rulebook changed. **Needs Sam:** Y/N on proposals 1-8 there (my picks: 1-7 Y, 8 N). **Next for K:** on his
-  numbers, a build plan and estimate (rule 86), Opus high. Open rule requests: none.
+- **Job K, the "AI ick" review (chat 1 done 10 Nov, Opus high, about 1.9%, stopped on amber):** report, sheet, clip
+  and Sam's round-1 answers in `notes/job-k-ai-tells.md` (3 dropped, 7 N). **Next for K (chat 2, Opus medium):**
+  "Job K chat 2: read notes/next-jobs.md, the Job K line, then notes/job-k-ai-tells.md 'Sam's answers'." Build the
+  example for 5 (the pump driver, one sheet); ask Sam 6 (pick: drop) and 1, 2, 4, 8 again in one message. Rules
+  that bite: 48, 79, 86. For Claude: `source/ai_tells_lab.py` (map at top; add a `face` command). Open rule requests: none.
 - **Needs Sam:** nothing for H. K: Y/N on proposals 1-8 (above).
 - **Read:** `source/critique.py`'s map (top of file) the first time a film runs a critique; `guides/critique-checklist.md`.
 - **Open rule requests:** none from H. Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
