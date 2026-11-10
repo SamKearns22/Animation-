@@ -19,7 +19,10 @@
   skeleton, contacts and the chat 4 checks underneath. Cause: lying.draw paints its own rounded 3D volumes (tubes and
   ellipsoids, a 3D head), a second look nobody compared against the cast. Chat 4 looked at a lying sheet and checked
   only the arms: a miss. Plan, Opus high: side-by-side sheet (standing cast vs lying) first, then the build. About 2-3%.
-- **Needs Sam:** 2. Job I (redraw lying people in our usual style, about 2-3%, Opus high)? Y/N. 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
+  **Sam, 10 Nov: Y, for the overnight chat. Test on the newest Vance (Ad-Vanced Notice's cast, as in the posted
+  final), standing beside his lying versions; the old test trio (P1, LADY, MAGNATE) only after he looks right.**
+  The side-by-side sheet needs Sam's yes before the build (a taste call).
+- **Needs Sam:** 2. Job I: Y (10 Nov). 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
 - **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: merge 41, 42, 81 (Needs Sam 1).
 - **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
