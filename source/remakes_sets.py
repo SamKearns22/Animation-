@@ -1099,101 +1099,225 @@ def camp_front(img, cam, t=0.0):
 
 # ================================================================================================ Castle Town
 TOWN = Level(h=2.4, hz=600.0, f=1100.0)   # build chat 8: raised, so KG stands below the line-up, not over it
-COBBLE, COBBLE_D, COBBLE_L = (148, 148, 156), (118, 118, 128), (176, 176, 182)
-PLASTER = [(236, 224, 196), (240, 216, 176), (232, 206, 196), (226, 226, 210)]
+PLASTER = [(236, 224, 196), (240, 216, 176), (232, 206, 196), (226, 226, 210), (226, 190, 180)]
 BEAM, ROOF, ROOF_D = (98, 66, 44), (196, 92, 56), (156, 68, 42)
-BANNER, BANNER_D, GOLD = (44, 80, 160), (30, 56, 120), (226, 186, 70)
-WALLSTONE, WALLSTONE_D = (222, 212, 192), (186, 176, 156)
+ROOFS = [(196, 92, 56), (178, 76, 52), (206, 110, 66), (150, 84, 70)]
+BANNER, BANNER_D, GOLD = (86, 126, 190), (56, 88, 150), (226, 186, 70)     # pass 2: pale blue, gold frame (ref 22)
+WALLSTONE, WALLSTONE_D, WALLSTONE_L, MORTAR = (170, 168, 162), (136, 134, 130), (196, 194, 186), (104, 100, 96)
+FLAG, FLAG_D, FLAG_L, FLAG_J = (150, 156, 168), (118, 124, 138), (176, 182, 192), (88, 92, 104)
 CASTLE = (196, 206, 222)
 TENT_R = (198, 54, 50)
 
 
-def _cobbles(p, y0, y1, ppm_at, seed, x0=-200, x1=W + 200):
-    """Rows of rounded grey cobbles that grow nearer the lens."""
-    p.poly(quad(x0, y0, x1, y1), COBBLE_D, None)
+def _flagstones(p, lev, d_far, seed, slab_d=0.55, slab_w=(0.5, 1.05)):
+    """Grey-blue paving slabs (refs 21, 22) in true perspective: the side joints run to the vanishing point and the
+    rows shrink with distance (pass 2: oval cobbles that did not shrink)."""
+    d_near = lev.d_at(H + 80)
+    y_far = lev.p(0, d_far)[1]
+    p.poly(quad(-300, y_far, W + 300, H + 300), mix(FLAG, FLAG_D, 0.5), None)
     rr = random.Random(seed)
-    y = y0
-    row = 0
-    while y < y1:
-        h = max(5.0, ppm_at(y) * 0.16)
-        x = x0 + (row % 2) * h * 0.7
-        while x < x1:
-            w = h * rr.uniform(1.1, 1.6)
-            c = rr.choice([COBBLE, COBBLE, COBBLE_L, mix(COBBLE, COBBLE_D, 0.4)])
-            p.poly(curve([(x + 2, y + h * 0.5), (x + w * 0.5, y + 2), (x + w - 2, y + h * 0.5), (x + w * 0.5, y + h - 2)],
-                         3), c, INK if h > 9 else None, 1.2)
+    d = d_near
+    while d < d_far:
+        da, db = min(d_far, d + slab_d * rr.uniform(0.85, 1.15)), d
+        ya, yb = lev.p(0, da)[1], lev.p(0, db)[1]
+        lw = max(0.8, min(2.8, (yb - ya) * 0.05))
+        x = (-300 - lev.cx) * da / lev.f - rr.uniform(0, 0.9)
+        x_hi = (W + 300 - lev.cx) * da / lev.f
+        while x < x_hi:
+            w = rr.uniform(*slab_w)
+            c = rr.choice([FLAG, FLAG, FLAG_L, mix(FLAG, FLAG_D, 0.4), mix(FLAG, (168, 158, 146), 0.45)])
+            p.poly([lev.p(x, da), lev.p(x + w, da), lev.p(x + w, db), lev.p(x, db)], c, FLAG_J, lw)
+            if yb - ya > 26 and rr.random() < 0.25:                    # a worn chip or crack on the near slabs
+                cx_, cy_ = lev.p(x + w * rr.uniform(0.3, 0.7), db + (da - db) * rr.uniform(0.3, 0.7))
+                p.line([(cx_ - (yb - ya) * 0.3, cy_), (cx_, cy_ + (yb - ya) * 0.12), (cx_ + (yb - ya) * 0.25, cy_ - 3)],
+                       FLAG_J, 1.4)
             x += w
-        y += h
-        row += 1
+        d = da
 
 
-def _house(img, p, x0, x1, base, top, roof_h, col, seed, balcony=True):
-    """A Castle Town house front (ref 21): cream plaster in dark timber framing, two floors of shuttered windows,
-    a door, a balcony with flower boxes, a steep red-orange tiled gable."""
-    w = x1 - x0
-    p.poly(quad(x0, top, x1, base), col, INK, 2.6)
-    cx = (x0 + x1) / 2
-    roof = ([(x0 - w * 0.06, top + 4), (cx, top - roof_h), (x1 + w * 0.06, top + 4)] if seed % 2 == 0 else
-            [(x0 - w * 0.06, top + 4), (x0 + w * 0.12, top - roof_h * 0.7), (x1 - w * 0.12, top - roof_h * 0.7),
-             (x1 + w * 0.06, top + 4)])                                 # pass 1: a side-on roof every other house
-    p.poly(roof, ROOF, INK, 2.6)
-    for k in range(1, 5):                                               # the tile rows
-        u = k / 5
-        p.line([(x0 - w * 0.06 + (cx - x0 + w * 0.06) * u, top + 4 - roof_h * u),
-                (x1 + w * 0.06 - (x1 + w * 0.06 - cx) * u, top + 4 - roof_h * u)], ROOF_D, 1.6)
-    fl = (base - top) / 3
-    for k in range(1, 3):                                               # timber beams: floors, posts, braces
-        p.line([(x0, top + fl * k), (x1, top + fl * k)], BEAM, 6.0)
-    for u in (0.02, 0.5, 0.98):
-        p.line([(x0 + w * u, top), (x0 + w * u, base)], BEAM, 6.0)
-    for k in range(2):                                                  # braces on both floors (pass 1: unseen)
-        p.line([(x0, top + fl * (k + 1)), (x0 + w * 0.22, top + fl * k)], BEAM, 4.5)
-        p.line([(x1, top + fl * (k + 1)), (x1 - w * 0.22, top + fl * k)], BEAM, 4.5)
+def _house(img, p, x0, x1, base, top, roof_h, col, seed, floors=3, wins=2, roof='gable', stone=False, frame='brace',
+           jetty=False, balcony=False, sign=None, chimney=False, shut=None):
+    """A Castle Town house front (ref 21): plaster in dark timber framing, shuttered windows, a door, a tiled roof.
+    Pass 2: each house its own build (floors, windows, roof shape, stone or plaster ground floor, jetty, framing,
+    balcony, shop sign, chimney), not one repeated block."""
     r = random.Random(seed)
-    for row in range(2):                                                # windows with shutters
-        for u in (0.25, 0.75):
-            wx, wy = x0 + w * u, top + fl * (row + 0.45)
-            ww, wh = w * 0.13, fl * 0.42
-            p.poly(quad(wx - ww, wy - wh / 2, wx + ww, wy + wh / 2), (70, 90, 120), INK, 2.0)
+    w = x1 - x0
+    fl = (base - top) / floors
+    ov = w * 0.05 if jetty else 0.0                                     # the jettied upper floors stand out
+    rc = ROOFS[seed % len(ROOFS)]
+    cx = (x0 + x1) / 2
+    ux0, ux1 = x0 - ov, x1 + ov
+    if roof == 'gable':
+        rpts = [(ux0 - w * 0.06, top + 4), (cx, top - roof_h), (ux1 + w * 0.06, top + 4)]
+    elif roof == 'side':
+        rpts = [(ux0 - w * 0.06, top + 4), (ux0 + w * 0.1, top - roof_h * 0.6), (ux1 - w * 0.1, top - roof_h * 0.6),
+                (ux1 + w * 0.06, top + 4)]
+    else:                                                               # 'tower': a tall pointed spire
+        rpts = [(ux0 - w * 0.08, top + 4), (cx, top - roof_h * 1.6), (ux1 + w * 0.08, top + 4)]
+    if chimney:
+        chx = cx + w * (0.22 if seed % 2 else -0.22)
+        p.poly(quad(chx - w * 0.05, top - roof_h * 0.75, chx + w * 0.05, top - roof_h * 0.2), (150, 100, 80), INK, 2.0)
+        p.poly(quad(chx - w * 0.065, top - roof_h * 0.8, chx + w * 0.065, top - roof_h * 0.72), (120, 80, 64), INK, 1.6)
+    p.poly(rpts, rc, INK, 2.6)
+    ytop = min(q[1] for q in rpts)
+    for k in range(1, 6):                                               # tile rows, each a run of small scallops
+        yy = top + 4 - (top + 4 - ytop) * k / 6
+        xs_ = [q[0] for q in rpts]
+        # where the roof's sides cross this row
+        lft = ux0 - w * 0.06 + (cx - ux0) * (k / 6) * (1 if roof != 'side' else 0.6)
+        rgt = ux1 + w * 0.06 - (ux1 - cx) * (k / 6) * (1 if roof != 'side' else 0.6)
+        if rgt - lft < 8:
+            continue
+        p.line([(lft, yy), (rgt, yy)], dk(rc, 0.78), 1.5)
+        n = max(2, int((rgt - lft) / 14))
+        for i in range(n):
+            xx = lft + (rgt - lft) * (i + (k % 2) * 0.5) / n
+            if lft < xx < rgt:
+                p.line([(xx, yy), (xx, yy + (top + 4 - ytop) / 6 * 0.8)], dk(rc, 0.85), 1.0)
+    if roof == 'gable':                                                 # a round attic window in the gable
+        p.ell(cx, top - roof_h * 0.35, w * 0.06, w * 0.06, (70, 90, 120), INK, 1.8)
+    if roof == 'side' and w > 160:                                      # a dormer
+        p.poly([(cx - w * 0.1, top - roof_h * 0.12), (cx - w * 0.1, top - roof_h * 0.42), (cx, top - roof_h * 0.6),
+                (cx + w * 0.1, top - roof_h * 0.42), (cx + w * 0.1, top - roof_h * 0.12)], col, INK, 2.0)
+        p.poly(quad(cx - w * 0.05, top - roof_h * 0.4, cx + w * 0.05, top - roof_h * 0.16), (70, 90, 120), INK, 1.6)
+    # the walls: the ground floor (stone or plaster), the upper floors (jettied over it)
+    p.poly(quad(ux0, top, ux1, base - fl), col, INK, 2.6)
+    gcol = (178, 176, 170) if stone else col
+    p.poly(quad(x0, base - fl, x1, base), gcol, INK, 2.6)
+    if stone:                                                           # rough blocks on the stone ground floor
+        for rw in range(3):
+            yy = base - fl + fl * rw / 3
+            p.line([(x0, yy), (x1, yy)], (130, 128, 124), 1.4)
+            off = (rw % 2) * 0.5
+            for k in range(int(w / 34) + 1):
+                xx = x0 + (k + off) * 34
+                if x0 < xx < x1:
+                    p.line([(xx, yy), (xx, yy + fl / 3)], (130, 128, 124), 1.4)
+    if jetty:
+        p.poly(quad(ux0, base - fl - 6, ux1, base - fl + 4), BEAM, INK, 1.8)
+        for k in range(6):                                              # the joist ends under the jetty
+            xx = ux0 + (ux1 - ux0) * (k + 0.5) / 6
+            p.poly(quad(xx - 3, base - fl + 4, xx + 3, base - fl + 10), BEAM, None)
+    for k in range(1, floors - 1):                                      # the timber frame on the upper floors
+        p.line([(ux0, top + fl * k), (ux1, top + fl * k)], BEAM, 6.0)
+    if frame:
+        for u in (0.02, 0.5, 0.98):
+            p.line([(ux0 + (ux1 - ux0) * u, top), (ux0 + (ux1 - ux0) * u, base - fl)], BEAM, 5.0)
+        for k in range(floors - 1):
+            ya_, yb_ = top + fl * k, top + fl * (k + 1)
+            if frame == 'brace':
+                p.line([(ux0, yb_), (ux0 + w * 0.2, ya_)], BEAM, 4.0)
+                p.line([(ux1, yb_), (ux1 - w * 0.2, ya_)], BEAM, 4.0)
+            elif frame == 'x':
+                m = (ux0 + ux1) / 2
+                for xa, xb in ((ux0, m), (m, ux1)):
+                    p.line([(xa, ya_), (xb, yb_)], BEAM, 3.6)
+                    p.line([(xa, yb_), (xb, ya_)], BEAM, 3.6)
+            elif frame == 'studs':
+                for kk in range(1, 6):
+                    xx = ux0 + (ux1 - ux0) * kk / 6
+                    p.line([(xx, ya_), (xx, yb_)], BEAM, 3.0)
+    sc = shut or r.choice([(70, 120, 90), (60, 90, 140), (150, 60, 50), (120, 90, 60)])
+    for row in range(floors - 1):                                       # upper windows
+        for i in range(wins):
+            u = (i + 0.5) / wins
+            wx, wy = ux0 + (ux1 - ux0) * u, top + fl * (row + 0.48)
+            ww, wh = min(w * 0.1, 0.32 * w / wins), fl * 0.42
+            arch = seed % 3 == 0
+            pts = (curve([(wx - ww, wy + wh / 2), (wx - ww, wy - wh * 0.2), (wx, wy - wh / 2 - ww * 0.4),
+                          (wx + ww, wy - wh * 0.2), (wx + ww, wy + wh / 2)], 2) if arch else
+                   quad(wx - ww, wy - wh / 2, wx + ww, wy + wh / 2))
+            p.poly(pts, (70, 90, 120), INK, 2.0)
             p.line([(wx, wy - wh / 2), (wx, wy + wh / 2)], BEAM, 1.6)
-            sc = r.choice([(70, 120, 90), (60, 90, 140), (150, 60, 50)])
             for sg in (-1, 1):
                 p.poly(quad(wx + sg * ww, wy - wh / 2, wx + sg * ww * 1.7, wy + wh / 2), sc, INK, 1.8)
-            if row == 1 or r.random() > 0.5:                          # a flower box
-                p.poly(quad(wx - ww * 1.1, wy + wh / 2, wx + ww * 1.1, wy + wh / 2 + fl * 0.08), BEAM, INK, 1.6)
+            if (row + i + seed) % 2 == 0:                               # a flower box under some
+                p.poly(quad(wx - ww * 1.1, wy + wh / 2, wx + ww * 1.1, wy + wh / 2 + fl * 0.09), BEAM, INK, 1.6)
                 for kk in range(4):
-                    p.ell(wx - ww + ww * 0.66 * kk, wy + wh / 2 - 3, ww * 0.22, ww * 0.18,
+                    p.ell(wx - ww + ww * 0.66 * kk, wy + wh / 2 - 3, ww * 0.24, ww * 0.2,
                           (210, 50, 60) if kk % 2 else (150, 80, 180), INK, 1.2)
-    dx = x0 + w * r.choice([0.25, 0.75])
-    p.poly(curve([(dx - w * 0.1, base), (dx - w * 0.1, base - fl * 0.7), (dx, base - fl * 0.85), (dx + w * 0.1, base - fl * 0.7),
-                  (dx + w * 0.1, base)], 2), (110, 70, 44), INK, 2.2)
+    dx = x0 + w * (0.3 if seed % 2 else 0.7)                            # the door, arched
+    dw = min(w * 0.12, 30)
+    p.poly(curve([(dx - dw, base), (dx - dw, base - fl * 0.62), (dx, base - fl * 0.86), (dx + dw, base - fl * 0.62),
+                  (dx + dw, base)], 2), (110, 70, 44), INK, 2.2)
+    p.line([(dx, base - fl * 0.84), (dx, base)], dk((110, 70, 44), 0.7), 1.4)
+    if sign:                                                            # a shop: a wide window and a hanging sign
+        sx0 = x0 + w * (0.5 if seed % 2 else 0.12)
+        p.poly(quad(sx0, base - fl * 0.7, sx0 + w * 0.36, base - fl * 0.18), (90, 110, 130), INK, 2.0)
+        for k in range(1, 3):
+            p.line([(sx0 + w * 0.12 * k, base - fl * 0.7), (sx0 + w * 0.12 * k, base - fl * 0.18)], BEAM, 1.6)
+        bx_ = x1 - 4 if seed % 2 else x0 + 4
+        sg = 1 if seed % 2 else -1
+        p.line([(bx_, base - fl * 0.95), (bx_ + sg * w * 0.22, base - fl * 0.95)], (50, 46, 44), 3.0)
+        p.poly(quad(min(bx_ + sg * w * 0.05, bx_ + sg * w * 0.2), base - fl * 0.9,
+                    max(bx_ + sg * w * 0.05, bx_ + sg * w * 0.2), base - fl * 0.62), sign, INK, 1.8)
+    else:
+        wx = x0 + w * (0.7 if seed % 2 else 0.3)
+        ww, wh = min(w * 0.1, 26), fl * 0.36
+        p.poly(quad(wx - ww, base - fl * 0.72, wx + ww, base - fl * 0.72 + wh), (70, 90, 120), INK, 2.0)
     if balcony:
-        by = top + fl * 2 - 2
-        p.poly(quad(x0 + w * 0.12, by, x1 - w * 0.12, by + fl * 0.1), BEAM, INK, 2.0)
+        by = base - fl - 2
+        p.poly(quad(ux0 + w * 0.12, by, ux1 - w * 0.12, by + fl * 0.1), BEAM, INK, 2.0)
         for kk in range(9):
-            xx = x0 + w * 0.14 + (w * 0.72) * kk / 8
+            xx = ux0 + w * 0.14 + (w * 0.72) * kk / 8
             p.line([(xx, by - fl * 0.25), (xx, by)], BEAM, 2.0)
-        p.line([(x0 + w * 0.12, by - fl * 0.25), (x1 - w * 0.12, by - fl * 0.25)], BEAM, 2.4)
+        p.line([(ux0 + w * 0.12, by - fl * 0.25), (ux1 - w * 0.12, by - fl * 0.25)], BEAM, 2.4)
+
+
+def _feather(p, root, tip, wd, col):
+    (ax, ay), (bx, by) = root, tip
+    L = math.hypot(bx - ax, by - ay) or 1.0
+    nx, ny = -(by - ay) / L * wd, (bx - ax) / L * wd
+    mx, my = ax + (bx - ax) * 0.45, ay + (by - ay) * 0.45
+    p.poly(curve([(ax, ay), (mx + nx, my + ny), (bx, by), (mx - nx, my - ny)], 3), col, INK, 1.2)
 
 
 def _crest(p, x, y, r):
-    """An invented gold crest for the banners: a bird with spread wings over a small triangle (not the game's)."""
-    p.poly([(x, y - r * 0.3), (x - r, y - r * 0.6), (x - r * 0.5, y), (x, y + r * 0.2), (x + r * 0.5, y), (x + r, y - r * 0.6)],
-           GOLD, INK, 1.8)
-    p.poly([(x, y + r * 0.3), (x - r * 0.35, y + r * 0.9), (x + r * 0.35, y + r * 0.9)], GOLD, INK, 1.8)
+    """An invented gold crest (not the game's): a gold-edged shield holding a bird with spread wings, a round head
+    and a fanned tail (pass 2: it read as a V over a triangle)."""
+    shield = curve([(x - r, y - r), (x + r, y - r), (x + r, y + r * 0.15), (x + r * 0.55, y + r * 0.9), (x, y + r * 1.25),
+                    (x - r * 0.55, y + r * 0.9), (x - r, y + r * 0.15)], 2)
+    p.poly(shield, BANNER_D, None)
+    p.line(shield + shield[:1], GOLD, max(2.0, r * 0.12))
+    for sg in (-1, 1):                                                  # the wings: three feathers each, fanned up
+        for k, (ang, ln) in enumerate(((10, 0.78), (35, 0.8), (62, 0.7))):
+            a = math.radians(ang)
+            _feather(p, (x + sg * r * 0.12, y - r * 0.05),
+                     (x + sg * r * ln * math.cos(a), y - r * 0.05 - r * ln * math.sin(a)), r * 0.1, GOLD)
+    for ang in (-20, 0, 20):                                            # the tail
+        a = math.radians(90 + ang)
+        _feather(p, (x, y + r * 0.3), (x + r * 0.55 * math.cos(a), y + r * 0.3 + r * 0.55 * math.sin(a)), r * 0.09, GOLD)
+    p.ell(x, y + r * 0.1, r * 0.17, r * 0.3, GOLD, INK, 1.2)            # body
+    p.ell(x, y - r * 0.38, r * 0.15, r * 0.15, GOLD, INK, 1.2)          # head
+    p.poly([(x + r * 0.12, y - r * 0.4), (x + r * 0.3, y - r * 0.34), (x + r * 0.12, y - r * 0.3)], GOLD, INK, 1.0)
 
 
 def _banner(p, x, top, w, h, t=0.0):
-    p.line([(x - w * 0.6, top), (x + w * 0.6, top)], (60, 50, 40), 4.0)
+    """A tall pale-blue banner (ref 22): a gold frame all round, a pointed foot with a tassel, a small diamond
+    pattern, the gold crest; hung from a rod with round finials."""
     sway = 6 * math.sin(t * 1.4 + x)
-    p.poly([(x - w / 2, top), (x + w / 2, top), (x + w / 2 + sway, top + h), (x + sway, top + h * 1.12),
-            (x - w / 2 + sway, top + h)], BANNER, INK, 2.4)
-    p.poly(quad(x - w / 2 + 6, top + 4, x + w / 2 - 6, top + h * 0.08), GOLD, None)
-    p.line([(x - w / 2 + 5, top + h * 0.08), (x - w / 2 + 5 + sway, top + h - 4)], GOLD, max(2.0, w * 0.04))   # gold trim
-    p.line([(x + w / 2 - 5, top + h * 0.08), (x + w / 2 - 5 + sway, top + h - 4)], GOLD, max(2.0, w * 0.04))
-    p.line([(x - w / 2 + sway, top + h), (x + sway, top + h * 1.12), (x + w / 2 + sway, top + h)], GOLD, max(2.0, w * 0.05))
-    _crest(p, x + sway * 0.5, top + h * 0.42, w * 0.32)
-    p.line([(x - w / 2 + 8, top + h * 0.08), (x - w / 2 + 8 + sway, top + h - 6)], BANNER_D, 2.0)
+    outer = [(x - w / 2, top), (x + w / 2, top), (x + w / 2 + sway, top + h), (x + sway, top + h * 1.12),
+             (x - w / 2 + sway, top + h)]
+    b = max(4.0, w * 0.08)
+    inner = [(x - w / 2 + b, top + b), (x + w / 2 - b, top + b), (x + w / 2 + sway - b, top + h - b * 0.5),
+             (x + sway, top + h * 1.12 - b * 1.5), (x - w / 2 + sway + b, top + h - b * 0.5)]
+    p.poly(outer, GOLD, INK, 2.4)
+    p.poly(inner, BANNER, None)
+    p.line(inner + inner[:1], dk(GOLD, 0.75), 1.4)
+    for i in range(4):                                                  # the woven diamond pattern
+        for j in range(9):
+            u, v = (i + 0.5) / 4, (j + 0.5) / 9
+            if 0.32 < v < 0.62:
+                continue                                                # leave the crest clear
+            cx_, cy_ = x - w / 2 + b + (w - 2 * b) * u + sway * v, top + b + (h - 2 * b) * v
+            dd = w * 0.045
+            p.poly([(cx_, cy_ - dd), (cx_ + dd, cy_), (cx_, cy_ + dd), (cx_ - dd, cy_)], BANNER_D, None)
+    _crest(p, x + sway * 0.5, top + h * 0.44, w * 0.3)
+    p.line([(x + sway, top + h * 1.12), (x + sway, top + h * 1.12 + h * 0.06)], GOLD, 2.0)   # the tassel
+    p.ell(x + sway, top + h * 1.12 + h * 0.08, w * 0.06, w * 0.08, GOLD, INK, 1.4)
+    p.line([(x - w * 0.62, top), (x + w * 0.62, top)], (60, 50, 40), 4.0)  # the rod and its finials
+    for sg in (-1, 1):
+        p.ell(x + sg * w * 0.64, top, w * 0.05, w * 0.05, GOLD, INK, 1.4)
 
 
 def _bunting(p, xa, ya, xb, yb, sag, n, t=0.0):
@@ -1227,14 +1351,15 @@ def _fountain(p, x, d, t):
             p.poly(ribbon(open_curve([(bx + sg * rr * ppm, ty), (bx + sg * (rr + 0.25) * ppm, ty + 0.4 * ppm),
                                       (bx + sg * (rr + 0.35) * ppm, by - 0.75 * ppm)], 5), 0.08 * ppm, 0.14 * ppm),
                    (180, 214, 240), None)
+    sp = 1.5 * ppm                                                      # pass 2: the statue too small to read
     fx, fy = bx, col_top
-    p.poly([(fx - 0.18 * ppm, fy), (fx + 0.18 * ppm, fy), (fx + 0.14 * ppm, fy - 0.9 * ppm),
-            (fx - 0.14 * ppm, fy - 0.9 * ppm)], (210, 208, 210), INK, 2.0)  # the figure's robe
-    p.ell(fx, fy - 1.02 * ppm, 0.12 * ppm, 0.13 * ppm, (210, 208, 210), INK, 2.0)
-    p.poly([(fx + 0.12 * ppm, fy - 0.8 * ppm), (fx + 0.4 * ppm, fy - 0.9 * ppm), (fx + 0.42 * ppm, fy - 0.7 * ppm),
-            (fx + 0.3 * ppm, fy - 0.62 * ppm)], (200, 198, 200), INK, 1.8)  # the jug on her shoulder
-    p.poly(ribbon(open_curve([(fx + 0.42 * ppm, fy - 0.72 * ppm), (fx + 0.6 * ppm, fy - 0.5 * ppm),
-                              (fx + 0.75 * ppm, fy + 0.4 * ppm)], 5), 0.05 * ppm, 0.1 * ppm), (180, 214, 240), None)
+    p.poly([(fx - 0.18 * sp, fy), (fx + 0.18 * sp, fy), (fx + 0.14 * sp, fy - 0.9 * sp),
+            (fx - 0.14 * sp, fy - 0.9 * sp)], (210, 208, 210), INK, 2.0)  # the figure's robe
+    p.ell(fx, fy - 1.02 * sp, 0.12 * sp, 0.13 * sp, (210, 208, 210), INK, 2.0)
+    p.poly([(fx + 0.12 * sp, fy - 0.8 * sp), (fx + 0.4 * sp, fy - 0.9 * sp), (fx + 0.42 * sp, fy - 0.7 * sp),
+            (fx + 0.3 * sp, fy - 0.62 * sp)], (200, 198, 200), INK, 1.8)  # the jug on her shoulder
+    p.poly(ribbon(open_curve([(fx + 0.42 * sp, fy - 0.72 * sp), (fx + 0.6 * sp, fy - 0.5 * sp),
+                              (fx + 0.75 * sp, fy + 0.4 * sp)], 5), 0.05 * sp, 0.1 * sp), (180, 214, 240), None)
 
 
 def _tent(p, x, d, w=2.6):
@@ -1283,17 +1408,59 @@ def _sack(p, x, d):
            (206, 186, 140), INK, 2.0)
 
 
-def _townsfolk(p, x, d, col, seed):
-    """A small far-off townsperson: a simple robe, head and hat, no face at this size (ref 21's crowd)."""
-    ppm = TOWN.ppm(d)
-    bx, by = TOWN.p(x, d, 0)
-    h = 1.65 * ppm
-    p.poly([(bx - 0.22 * ppm, by), (bx + 0.22 * ppm, by), (bx + 0.16 * ppm, by - h * 0.78), (bx - 0.16 * ppm, by - h * 0.78)],
-           col, INK, 1.6)
-    p.ell(bx, by - h * 0.87, 0.11 * ppm, 0.12 * ppm, (240, 206, 180), INK, 1.4)
-    if seed % 2:
-        p.poly([(bx - 0.16 * ppm, by - h * 0.93), (bx + 0.16 * ppm, by - h * 0.93), (bx, by - h * 1.06)], (90, 70, 50),
-               INK, 1.2)
+def _townsfolk(p, x, d, col, seed, lev=None):
+    """A townsperson in the house style (pass 2: capsules that read as bollards): legs and shoes or a long skirt,
+    a tunic with a belt, two arms with hands, a head with hair, and for some a hat, a headscarf or a basket."""
+    lev = lev or TOWN
+    r = random.Random(seed)
+    ppm = lev.ppm(d)
+    bx, by = lev.p(x, d, 0)
+    h = r.uniform(1.55, 1.78) * ppm
+    skin = r.choice([(240, 206, 180), (214, 170, 130), (180, 130, 96)])
+    hair = r.choice([(90, 60, 40), (200, 150, 70), (60, 40, 30), (150, 70, 40)])
+    kind = seed % 3                                                     # 0 a woman in a long skirt, 1 a man, 2 a man in a hat
+    lw = max(1.0, min(1.8, ppm / 60))
+    sh_y, hip_y = by - h * 0.8, by - h * 0.47
+    p.ell(bx, by, 0.3 * ppm, 0.06 * ppm, mix(FLAG_D, (60, 60, 70), 0.4), None)
+    if kind == 0:
+        p.poly(curve([(bx - 0.13 * ppm, hip_y), (bx + 0.13 * ppm, hip_y), (bx + 0.26 * ppm, by - 0.02 * ppm),
+                      (bx - 0.26 * ppm, by - 0.02 * ppm)], 2), dk(col, 0.8), INK, lw)
+    else:
+        for sg in (-1, 1):                                              # legs and shoes
+            p.poly(quad(bx + sg * 0.03 * ppm - (sg < 0) * 0.08 * ppm, hip_y, bx + sg * 0.03 * ppm + (sg > 0) * 0.08 * ppm,
+                        by - 0.04 * ppm), (88, 72, 60), INK, lw)
+            p.ell(bx + sg * 0.08 * ppm, by - 0.03 * ppm, 0.07 * ppm, 0.035 * ppm, (60, 44, 34), INK, lw)
+    body = [(bx - 0.15 * ppm, sh_y), (bx + 0.15 * ppm, sh_y), (bx + 0.17 * ppm, hip_y + 0.08 * ppm),
+            (bx - 0.17 * ppm, hip_y + 0.08 * ppm)]
+    p.poly(body, col, INK, lw)
+    p.line([(bx - 0.165 * ppm, hip_y), (bx + 0.165 * ppm, hip_y)], (90, 66, 44), max(1.5, 0.035 * ppm))
+    wave = seed % 4 == 1
+    for sg in (-1, 1):                                                  # arms and hands
+        if wave and sg > 0:
+            pts = [(bx + 0.15 * ppm, sh_y + 0.03 * ppm), (bx + 0.3 * ppm, sh_y - 0.12 * ppm), (bx + 0.34 * ppm, sh_y - 0.32 * ppm)]
+        else:
+            pts = [(bx + sg * 0.15 * ppm, sh_y + 0.03 * ppm), (bx + sg * 0.2 * ppm, sh_y + 0.2 * ppm),
+                   (bx + sg * 0.21 * ppm, hip_y + 0.06 * ppm)]
+        p.poly(ribbon(pts, 0.05 * ppm, 0.04 * ppm), col, INK, lw)
+        p.ell(pts[-1][0], pts[-1][1], 0.04 * ppm, 0.04 * ppm, skin, INK, lw * 0.8)
+    if seed % 5 == 3:                                                   # a basket on the arm
+        p.poly(curve([(bx - 0.36 * ppm, hip_y - 0.02 * ppm), (bx - 0.14 * ppm, hip_y - 0.02 * ppm),
+                      (bx - 0.17 * ppm, hip_y + 0.14 * ppm), (bx - 0.33 * ppm, hip_y + 0.14 * ppm)], 2), (180, 140, 80), INK, lw)
+        p.ell(bx - 0.25 * ppm, hip_y - 0.04 * ppm, 0.07 * ppm, 0.04 * ppm, (220, 70, 50), None)
+    hy = by - h * 0.89
+    p.poly(quad(bx - 0.035 * ppm, sh_y - 0.06 * ppm, bx + 0.035 * ppm, sh_y + 0.01 * ppm), skin, None)   # neck
+    p.ell(bx, hy, 0.1 * ppm, 0.115 * ppm, skin, INK, lw)
+    if kind == 0:                                                       # a headscarf
+        p.poly(curve([(bx - 0.12 * ppm, hy + 0.04 * ppm), (bx - 0.11 * ppm, hy - 0.1 * ppm), (bx, hy - 0.15 * ppm),
+                      (bx + 0.11 * ppm, hy - 0.1 * ppm), (bx + 0.12 * ppm, hy + 0.04 * ppm), (bx + 0.14 * ppm, hy + 0.14 * ppm),
+                      (bx - 0.14 * ppm, hy + 0.14 * ppm)], 3), r.choice([(230, 220, 200), (200, 80, 70), (90, 120, 170)]),
+               INK, lw)
+    else:
+        p.poly(curve([(bx - 0.1 * ppm, hy), (bx - 0.09 * ppm, hy - 0.1 * ppm), (bx, hy - 0.13 * ppm),
+                      (bx + 0.09 * ppm, hy - 0.1 * ppm), (bx + 0.1 * ppm, hy)], 3), hair, INK, lw)
+        if kind == 2:                                                   # a brimmed hat
+            p.ell(bx, hy - 0.09 * ppm, 0.17 * ppm, 0.035 * ppm, (110, 80, 50), INK, lw)
+            p.poly(quad(bx - 0.08 * ppm, hy - 0.2 * ppm, bx + 0.08 * ppm, hy - 0.09 * ppm), (110, 80, 50), INK, lw)
 
 
 def _castle(p, cx, base, s):
@@ -1309,105 +1476,190 @@ def _castle(p, cx, base, s):
             p.poly(quad(x - 5 * s, base - (h - 40 - 60 * k) * s, x + 5 * s, base - (h - 70 - 60 * k) * s), r, None)
 
 
+def _palm_bed(p, x, d, seed):
+    """The palm's grass bed in a stone kerb (ref 21), drawn over the trunk's foot so the palm stands in it."""
+    ppm = TOWN.ppm(d)
+    bx, by = TOWN.p(x, d)
+    rx, ry = 1.0 * ppm, 1.0 * ppm * TOWN.h / d
+    p.ell(bx, by, rx + 0.12 * ppm, ry + 0.06 * ppm, FLAG_L, INK, 2.2)
+    p.ell(bx, by - 0.05 * ppm, rx, ry, LEAF, INK, 1.8)
+    rr = random.Random(seed)
+    for k in range(14):
+        a = rr.uniform(0, 2 * math.pi)
+        rad = rr.uniform(0.1, 0.85)
+        tuft(p, bx + math.cos(a) * rx * rad, by - 0.05 * ppm + math.sin(a) * ry * rad, 0.35 * ppm, LEAF_D, seed + k, 5, 2.0)
+    for k in range(6):
+        tuft(p, bx + (k - 2.5) * 0.12 * ppm, by - 0.02 * ppm, 0.45 * ppm, LEAF_L, seed + 40 + k, 6, 2.2)
+
+
+def _planter(p, lev, x, d, w, seed):
+    """A stone flower trough (ref 22): rough grey stone, red and purple flowers, trailing leaves."""
+    ppm = lev.ppm(d)
+    bx, by = lev.p(x, d)
+    x0, x1 = bx - w / 2 * ppm, bx + w / 2 * ppm
+    top = by - 0.62 * ppm
+    p.poly(quad(x0, top, x1, by), (166, 164, 158), INK, 2.6)
+    p.poly(quad(x0 - 0.05 * ppm, top - 0.06 * ppm, x1 + 0.05 * ppm, top + 0.04 * ppm), (190, 188, 180), INK, 2.4)
+    p.line([(x0, by - 0.1 * ppm), (x1, by - 0.1 * ppm)], (130, 128, 124), 2.0)
+    rr = random.Random(seed)
+    p.poly(blob(bx, top - 0.12 * ppm, (x1 - x0) * 0.52, 0.2 * ppm, 14, 0.2, seed, flat_bottom=True), LEAF, INK, 1.8)
+    for k in range(int(w * 6)):
+        xx = x0 + (x1 - x0) * (k + 0.5) / (w * 6)
+        p.poly(curve([(xx - 0.06 * ppm, top), (xx + rr.uniform(-0.05, 0.05) * ppm, top - 0.22 * ppm), (xx + 0.06 * ppm, top)], 3),
+               LEAF, INK, 1.4)
+    for k in range(int(w * 16)):
+        flower(p, x0 + (x1 - x0) * rr.uniform(0.04, 0.96), top - rr.uniform(0.06, 0.3) * ppm, 0.07 * ppm,
+               (210, 50, 60) if k % 2 else PURPLE)
+    for k in range(int(w * 3)):                                         # leaves trailing over the lip
+        xx = x0 + (x1 - x0) * rr.uniform(0.05, 0.95)
+        p.poly(ribbon([(xx, top), (xx + 0.03 * ppm, top + 0.12 * ppm), (xx - 0.02 * ppm, top + 0.22 * ppm)],
+                      0.04 * ppm, 0.015 * ppm), LEAF_D, INK, 1.2)
+
+
+SQUARE_HOUSES = [   # the far row (pass 2: one block repeated): x0, x1, wall top, roof height, colour, build
+    (-170, 90, 470, 150, 0, dict(floors=3, wins=2, roof='gable', frame='brace', balcony=True)),
+    (96, 300, 520, 110, 1, dict(floors=2, wins=2, roof='side', stone=True, frame='studs', sign=(200, 60, 50), chimney=True)),
+    (306, 440, 380, 120, 4, dict(floors=3, wins=1, roof='tower', frame='x', jetty=True)),
+    (690, 800, 500, 90, 3, dict(floors=2, wins=1, roof='gable', frame=None, shut=(60, 90, 140))),
+    (806, 1000, 430, 140, 2, dict(floors=3, wins=3, roof='side', stone=True, frame='x', balcony=True, chimney=True)),
+    (1006, 1260, 480, 160, 4, dict(floors=3, wins=2, roof='gable', jetty=True, frame='brace', sign=(60, 110, 70))),
+]
+
+
 def town_square(img, p, cam, t):
-    """S10, the line-up (ref 21, 22): Castle Town square: blue sky, the hazy castle behind the rooftops, timber-framed
-    houses with red-orange roofs, the fountain, a palm, the red-striped stall, barrels and sacks, banners, bunting,
-    a few townsfolk, grey cobbles to the lens."""
+    """S10, the line-up (ref 21, 22): Castle Town square: blue sky, the hazy castle behind the rooftops, six different
+    timber-framed houses with red-orange roofs, the fountain and its statue, a palm in a grass bed, the red-striped
+    stall, barrels and sacks, banners, two strings of bunting high overhead, townsfolk, paving slabs to the lens,
+    a stone flower trough in the near right corner."""
     _sky(p, -400, 950, 2.0)
     for x, y, w, sd in ((180, 200, 180, 401), (860, 300, 200, 402)):
         _cloud(p, x, y, w, sd)
     _castle(p, 560, 640, 1.0)
     haze(img, cam, 300, 700, (230, 236, 244), 0.25)
-    xs = [-140, 150, 400, 680, 940, 1220]                                # the far row of houses, varied widths
-    tops = [420, 470, 400, 450, 430]
-    roofs = [160, 120, 180, 140, 150]
     base = TOWN.p(0, 24.0)[1]
-    for k in range(5):
-        _house(img, p, xs[k] + 6, xs[k + 1] - 6, base, tops[k] + 120, roofs[k], PLASTER[k % 4], 410 + k, k % 2 == 0)
-    _cobbles(p, base, 2400, lambda y: (y - TOWN.hz) / TOWN.h, 420)
-    for x, d, c, sd in ((-1.8, 20.0, (120, 90, 150), 1), (2.6, 21.0, (90, 120, 90), 2), (-4.2, 19.0, (170, 110, 70), 3)):
+    for k, (x0, x1, top, rh, ci, kw) in enumerate(SQUARE_HOUSES):
+        _house(img, p, x0, x1, base, top, rh, PLASTER[ci], 410 + k, **kw)
+    _flagstones(p, TOWN, 24.0, 420, 0.42, (0.4, 0.8))
+    _bunting(p, -40, 470, 1120, 450, 40, 22, t)                         # the far string, across the square's back
+    for x, d, c, sd in ((-1.8, 20.0, (120, 90, 150), 1), (2.6, 21.0, (90, 120, 90), 2), (-4.2, 19.0, (170, 110, 70), 3),
+                        (4.6, 18.5, (190, 160, 90), 6), (-0.9, 21.5, (160, 70, 70), 8)):
         _townsfolk(p, x, d, c, sd)
     _fountain(p, 0.2, 15.0, t)
-    _bunting(p, -40, 760, 1120, 700, 70, 14, t)
-    # the near sides: a palm on the left, the stall, barrels and sacks on the right; banners on poles
+    # the near sides: a palm in its bed on the left, the stall, barrels and sacks on the right; banners on poles
     q = TOWN.p(-3.4, 11.0)
     _palm(p, q[0], q[1], 7.0 * TOWN.ppm(11.0), 431)
+    _palm_bed(p, -3.4, 11.0, 433)
     _tent(p, 3.3, 10.0)
     for x, d in ((1.9, 10.2), (2.25, 10.4)):                            # pass 1: barrels and sacks AT the stall
         _barrel_t(p, x, d)
     for x, d in ((4.7, 10.1), (4.95, 10.3)):
         _sack(p, x, d)
-    for k, (x, d, c) in enumerate(((-3.0, 12.0, (110, 80, 140)), (3.1, 12.5, (80, 110, 150)), (-1.2, 13.0, (150, 100, 60)))):
+    for k, (x, d, c) in enumerate(((-3.0, 12.6, (110, 80, 140)), (2.5, 11.4, (80, 110, 150)), (-1.4, 13.0, (150, 100, 60)),
+                                   (4.0, 11.0, (170, 70, 60)))):
         _townsfolk(p, x, d, c, 10 + k)                                  # pass 1: townsfolk nearer, so they show
+    tops = []
     for x, d in ((-2.9, 8.0), (3.4, 7.6)):
         a, b = TOWN.p(x, d, 0), TOWN.p(x, d, 4.4)
         p.line([a, b], (70, 60, 50), 4.0)
+        p.ell(b[0], b[1] - 4, 7, 7, GOLD, INK, 1.4)
         _banner(p, b[0] + 46 * (1 if x < 0 else -1), b[1] + 20, 0.8 * TOWN.ppm(d), 2.2 * TOWN.ppm(d), t)
+        tops.append(b)
+    (xa, ya), (xb, yb) = tops                                           # pass 2: the near string high, pole top to top
+    _bunting(p, xa, ya + 6, xb, yb + 6, 90, 14, t)
+    _planter(p, TOWN, 1.5, 2.35, 1.6, 441)                              # the near right corner (pass 2: empty)
 
 
 WALL_VIEW = dict(base=1640, ppm=560.0)         # S12, S13: the wall's foot on screen and pixels per metre there
+WALL_LEV = Level(h=1.0, hz=1080.0, f=1680.0)   # the ground in front of it: at d = 3 m, y = 1640 and 560 px a metre
+
+
+def _stone_block(p, x0, y0, x1, y1, seed, c):
+    """One rough grey block: a hand-cut edge, a lit top edge, a shadowed foot, a chip or two (pass 2: neat beige
+    rectangles)."""
+    rr = random.Random(seed)
+    pts = wob(quad(x0, y0, x1, y1), 4.0, seed, 22)
+    p.poly(pts, c, INK, 2.0)
+    hgt = y1 - y0
+    p.poly(wob([(x0 + 6, y0 + 5), (x1 - 6, y0 + 5), (x1 - 12, y0 + hgt * 0.16), (x0 + 10, y0 + hgt * 0.16)], 2.0, seed + 1, 30),
+           mix(c, WALLSTONE_L, 0.6), None)
+    p.poly(wob([(x0 + 8, y1 - hgt * 0.18), (x1 - 5, y1 - hgt * 0.22), (x1 - 5, y1 - 5), (x0 + 6, y1 - 5)], 2.0, seed + 2, 30),
+           mix(c, WALLSTONE_D, 0.7), None)
+    for k in range(rr.randint(0, 2)):
+        cx_, cy_ = rr.uniform(x0 + 20, x1 - 20), rr.uniform(y0 + 20, y1 - 20)
+        if rr.random() < 0.5:
+            p.line(open_curve([(cx_, cy_), (cx_ + rr.uniform(-18, 18), cy_ + 16), (cx_ + rr.uniform(-24, 24), cy_ + 34)], 3),
+                   WALLSTONE_D, 1.6)
+        else:
+            p.poly(curve([(cx_, cy_), (cx_ + 12, cy_ - 5), (cx_ + 18, cy_ + 6), (cx_ + 6, cy_ + 10)], 3), WALLSTONE_D, None)
 
 
 def town_wall(img, p, cam, t):
-    """S12 and S13, the slam (ref 22): a pale stone wall filling the frame: big hand-cut blocks, a shuttered window
-    with a flower box (red and purple), a tall blue banner with the gold crest on an iron bracket, a strip of
-    bunting, cobbles at its foot."""
+    """S12 and S13, the slam (ref 22): a rough grey stone wall filling the frame (pass 2: neat beige blocks, no
+    depth): uneven hand-cut blocks with lit tops and shadowed feet; a stepped-out plinth at the foot and a moulded
+    ledge above head height, both casting a shadow; a shuttered window set deep in its reveal on a stone sill with
+    a flower box (red and purple); a tall pale-blue banner with the gold crest on an iron bracket; bunting; a
+    stone flower trough; paving slabs at its foot."""
     ppm = WALL_VIEW['ppm']
     base = WALL_VIEW['base']
-    p.poly(quad(-200, -400, W + 200, base), WALLSTONE, None)
+    p.poly(quad(-200, -400, W + 200, base), MORTAR, None)
     rr = random.Random(501)
-    bh = 0.42 * ppm
+    y = base - 0.55 * ppm                                               # above the plinth
     row = 0
-    y = base
-    while y > -400:                                                     # the blocks, row by row
-        x = -200 - (row % 2) * bh
+    while y > -400:                                                     # the blocks, row by row, uneven
+        bh = 0.36 * ppm * rr.uniform(0.8, 1.25)
+        x = -200 - rr.uniform(0, 0.4) * ppm
         while x < W + 200:
-            bw = bh * rr.uniform(1.4, 2.2)
-            c = mix(WALLSTONE, WALLSTONE_D, rr.uniform(0, 0.45))
-            p.poly(wob(quad(x + 3, y - bh + 3, x + bw - 3, y - 3), 2.0, row * 41 + int(x), 30), c, INK, 2.0)
+            bw = 0.36 * ppm * rr.uniform(1.2, 2.4)
+            c = mix(WALLSTONE, rr.choice([WALLSTONE_D, WALLSTONE_L, (176, 170, 156)]), rr.uniform(0, 0.5))
+            _stone_block(p, x + 3, y - bh + 3, x + bw - 3, y - 3, row * 97 + int(x), c)
             x += bw
         y -= bh
         row += 1
-    wx, wy = 820, 300                                                   # the window, high right
+    ly = 520                                                            # the moulded ledge, with its shadow below
+    p.poly(quad(-200, ly + 22, W + 200, ly + 56), mix(MORTAR, WALLSTONE_D, 0.3), None)
+    p.poly(quad(-200, ly - 26, W + 200, ly + 22), WALLSTONE_L, INK, 2.6)
+    p.line([(-200, ly + 4), (W + 200, ly + 4)], WALLSTONE_D, 3.0)
+    wx, wy = 820, 260                                                   # the window, high right, set deep in the wall
+    p.poly(quad(wx - 250, wy - 200, wx + 250, wy + 190), (92, 88, 84), INK, 3.0)       # the reveal (its depth)
+    p.poly([(wx - 250, wy - 200), (wx + 250, wy - 200), (wx + 226, wy - 176), (wx - 226, wy - 176)], (70, 66, 64), None)
+    p.poly([(wx - 250, wy - 200), (wx - 226, wy - 176), (wx - 226, wy + 190), (wx - 250, wy + 190)], (120, 116, 110), None)
     p.poly(quad(wx - 130, wy - 170, wx + 130, wy + 170), (70, 90, 120), INK, 3.0)
     p.line([(wx, wy - 170), (wx, wy + 170)], BEAM, 3.0)
     p.line([(wx - 130, wy), (wx + 130, wy)], BEAM, 3.0)
     for sg in (-1, 1):
-        p.poly(quad(wx + sg * 130, wy - 170, wx + sg * 230, wy + 170), (60, 90, 140), INK, 2.6)
+        p.poly(quad(wx + sg * 130, wy - 170, wx + sg * 224, wy + 170), (60, 90, 140), INK, 2.6)
         for k in range(1, 12):                                          # louvres (pass 1: flat panels)
             yy = wy - 170 + 340 * k / 12
-            p.poly(quad(wx + sg * 136 - (sg < 0) * 88, yy - 9, wx + sg * 136 + (sg > 0) * 88, yy),
-                   (82, 112, 160), None)
-            p.line([(wx + sg * 136, yy), (wx + sg * 224, yy)], (36, 58, 100), 2.2)
+            p.poly(quad(wx + sg * 136 - (sg < 0) * 82, yy - 9, wx + sg * 136 + (sg > 0) * 82, yy), (82, 112, 160), None)
+            p.line([(wx + sg * 136, yy), (wx + sg * 218, yy)], (36, 58, 100), 2.2)
         for yy in (wy - 120, wy + 120):                                 # the iron hinges
             p.poly(quad(wx + sg * 130 - (sg < 0) * 40, yy - 6, wx + sg * 130 + (sg > 0) * 40, yy + 6), (40, 40, 40), INK, 1.2)
-    p.poly(quad(wx - 170, wy + 170, wx + 170, wy + 240), BEAM, INK, 2.6)   # the flower box
+    p.poly(quad(wx - 280, wy + 190, wx + 280, wy + 226), WALLSTONE_L, INK, 2.6)        # the stone sill, stepped out
+    p.poly(quad(wx - 270, wy + 226, wx + 270, wy + 250), mix(MORTAR, WALLSTONE_D, 0.3), None)
+    p.poly(quad(wx - 170, wy + 140, wx + 170, wy + 196), BEAM, INK, 2.6)   # the flower box on the sill
     for k in range(8):
-        flower(p, wx - 150 + 43 * k, wy + 160 - 18 * (k % 2), 30, (210, 50, 60) if k % 2 else PURPLE)
+        flower(p, wx - 150 + 43 * k, wy + 132 - 18 * (k % 2), 30, (210, 50, 60) if k % 2 else PURPLE)
     for k in range(5):
-        p.poly(curve([(wx - 140 + 70 * k, wy + 175), (wx - 120 + 70 * k, wy + 240), (wx - 100 + 70 * k, wy + 175)], 3), LEAF,
+        p.poly(curve([(wx - 140 + 70 * k, wy + 196), (wx - 120 + 70 * k, wy + 262), (wx - 100 + 70 * k, wy + 196)], 3), LEAF,
                INK, 1.6)
-    for k in range(40):                                                 # stone texture: chips, cracks, weathering
-        cx_, cy_ = rr.uniform(-20, 1100), rr.uniform(-20, base - 20)
-        if k % 3 == 0:
-            p.line(open_curve([(cx_, cy_), (cx_ + rr.uniform(-30, 30), cy_ + 25), (cx_ + rr.uniform(-40, 40), cy_ + 55)], 3),
-                   WALLSTONE_D, 1.6)
-        else:
-            p.poly(curve([(cx_, cy_), (cx_ + 14, cy_ - 6), (cx_ + 22, cy_ + 6), (cx_ + 8, cy_ + 12)], 3), WALLSTONE_D, None)
-    sx_ = [wx - 230 + 460 * u for u in np.linspace(0, 1, 9)]             # a blue drape with gold fringe under the sill
-    sw_ = [(xx, wy + 250 + 70 * math.sin(math.pi * ((i % 4) / 4))) for i, xx in enumerate(sx_)]
-    p.poly([(wx - 230, wy + 240), (wx + 230, wy + 240)] + sw_[::-1], BANNER, INK, 2.4)
-    p.line(sw_, GOLD, 5.0)
-    p.poly(quad(30, base - 300, 190, base), (150, 90, 60), INK, 2.6)     # a planter at the wall's foot
-    p.line([(30, base - 250), (190, base - 250)], (110, 64, 40), 3.0)
-    for k in range(5):
-        flower(p, 50 + 30 * k, base - 320 - 20 * (k % 2), 26, (210, 50, 60) if k % 2 else PURPLE)
-    p.poly(quad(120, 120, 175, 140), (50, 46, 44), INK, 2.0)              # the iron bracket
+    pt = base - 0.55 * ppm                                              # the plinth: big blocks stepped out
+    p.poly(quad(-200, pt - 30, W + 200, pt + 4), WALLSTONE_L, INK, 2.6)
+    x = -200
+    k = 0
+    while x < W + 200:
+        bw = 0.7 * ppm * rr.uniform(0.8, 1.2)
+        _stone_block(p, x + 3, pt + 6, x + bw - 3, base - 3, 900 + k, mix(WALLSTONE, WALLSTONE_D, rr.uniform(0.2, 0.5)))
+        x += bw
+        k += 1
+    p.poly(quad(-200, pt + 4, W + 200, pt + 22), mix(MORTAR, WALLSTONE_D, 0.2), None)   # the ledge's shadow
+    p.poly(quad(120, 120, 175, 140), (50, 46, 44), INK, 2.0)            # the iron bracket
     p.line([(130, 130), (330, 130)], (50, 46, 44), 6.0)
+    p.line([(140, 140), (250, 220)], (50, 46, 44), 4.0)
     _banner(p, 240, 140, 0.7 * ppm, 2.0 * ppm, t)
     _bunting(p, -40, -20, 1120, 30, 60, 8, t)
-    _cobbles(p, base, 2400, lambda y: ppm * (1 + (y - base) / 600.0), 502)
+    _flagstones(p, WALL_LEV, 3.0, 502, 0.34, (0.35, 0.7))
     p.line([(-200, base), (W + 200, base)], INK, 3.0)
+    _planter(p, WALL_LEV, -0.78, 2.6, 0.6, 503)                         # a trough at the wall's foot, left
 
 
 TOWN_VIEWS = {'square': town_square, 'wall': town_wall}
@@ -1438,14 +1690,15 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
              'gunman2': _camp_mark(2.0, 7.6), 'gunman3': _camp_mark(3.3, 8.6)},   # pass 2: all three aim left into
                                                                     # the yard (they aimed at each other), one up in the
                                                                     # tower; the gate clear
-    'town_square': {n: _town_mark(x, 4.0) for n, x in (('zelda', -0.72), ('malon', -0.22), ('ruto', 0.27),
-                                                       ('goron', 0.92), ('saria', 1.55))},
+    'town_square': {n: _town_mark(x, d) for n, x, d in (('zelda', -0.40, 4.0), ('malon', 0.08, 4.2), ('ruto', 0.55, 3.95),
+                                                          ('goron', 1.15, 4.3), ('saria', 1.68, 4.05))},
+                                                                    # pass 2: right and staggered, KG wholly in front
     'town_wall': {'link': (400, WALL_VIEW['base'], WALL_VIEW['ppm']),       # on the cobbles: the shot lifts him
-                  'kg': (860, WALL_VIEW['base'], WALL_VIEW['ppm'])},
+                  'kg': (720, WALL_VIEW['base'], WALL_VIEW['ppm'])},      # pass 2: closer, not cut by the edge
 }
 STAGE['camp_open'] = dict(STAGE['camp'])               # S8-S9: the same yard, the gate blown in
 ON_HIGH = {('camp', 'gunman1'), ('camp_open', 'gunman1')}   # the tower lookout: no ground shadow
-STAGE['town_square']['kg'] = _town_mark(-0.95, 2.3)    # in front, below the line, presenting it
+STAGE['town_square']['kg'] = _town_mark(-0.88, 2.55)   # in front, below the line, presenting it (pass 2: whole)
 
 
 # ================================================================================================ boxes (rule 83)
@@ -1524,24 +1777,25 @@ BENCHMARK = [
                 ('bright midday sun', 'done: clear blue sky, clouds'),
                 ('parked old cars', 'left out: the narrow vertical frame has no room; the containers say "camp"')]),
     dict(place='Castle Town square (S10)', refs=['21-town.jpg', '22-town.jpg'], at='town_square',
-         items=[('grey cobbles', 'done: rows growing to the lens'),
-                ('a stone fountain with a statue in the middle', 'done: basin, two tiers, an invented figure'),
-                ('timber-framed houses with red-orange tiled roofs', 'done: five, varied'),
+         items=[('grey-blue paving slabs', 'done: in perspective, rows shrinking away'),
+                ('a stone fountain with a statue in the middle', 'done: basin, two tiers, an invented statue with a jug'),
+                ('timber-framed houses with red-orange tiled roofs', 'done: six, each its own build'),
                 ('balconies and flower boxes', 'done'),
-                ('a palm-like tree left', 'done'),
+                ('a palm-like tree left', 'done: in a grass bed with a stone kerb'),
                 ('a red-striped market tent', 'done: with a counter of fruit'),
                 ('barrels and sacks', 'done'),
-                ('townsfolk', 'done: three small, far back'),
+                ('townsfolk', 'done: nine, with arms, legs, hats, a basket'),
                 ('the castle pale and hazy far behind', 'done'),
-                ('blue banners with a gold crest, bunting', 'done: an invented crest')]),
+                ('pale blue banners with a gold frame and crest, bunting high', 'done: an invented crest (a bird in a shield)')]),
     dict(place='The town wall (S12, S13)', refs=['22-town.jpg'], at='town_wall',
-         items=[('pale stone walls', 'done: hand-cut blocks'),
+         items=[('stone walls', 'done: rough grey blocks, a plinth and a ledge for depth'),
                 ('tall blue banners with a gold crest', 'done: one on a bracket'),
                 ('flower boxes, red and purple', 'done: under the window'),
                 ('bunting across', 'done'),
-                ('cobbles at the foot', 'done'),
+                ('paving slabs at the foot', 'done'),
                 ('shuttered window', 'done: blue shutters'),
                 ('stone balustrades with blue-and-gold drapes', 'left out: the wall shot is tight; the banner carries it'),
+                ('stone flower troughs', 'done: one at the foot'),
                 ('bright daylight', 'done')]),
 ]
 
@@ -1618,7 +1872,7 @@ def with_cast(at, t=0.0, gate=0.0):
     return img.resize((W, H), Image.LANCZOS)
 
 
-KG_BEAT = {'forest_up': ('wide', 'hype'), 'camp': ('gun', 'war'), 'camp_open': ('gun', 'war'), 'town_square': ('gesture', 'show'),
+KG_BEAT = {'forest_up': ('wide', 'hype'), 'camp': ('gun', 'war'), 'camp_open': ('gun', 'war'), 'town_square': ('present', 'show'),
            'town_wall': ('fold', 'fury')}       # each set sheet shows KG as his shot has him (line 1, 7, 11, 13)
 
 SETS = {'forest': ('forest_up', 'forest_down', 'forest_close', 'forest_edge'), 'camp': ('camp', 'camp_open'),

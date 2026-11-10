@@ -117,6 +117,9 @@ WING_POSES = {
     'wide': ((300, -150), (470, -260), 'spread'),          # line 1: flung wide
     'teach': ((250, -170), (290, -380), 'point'),          # line 3: one wing raised like a teacher
     'gesture': ((300, -40), (500, -60), 'spread'),         # line 11: the sweep along the line-up
+    'present': ((290, -200), (500, -440), 'spread'),       # line 11 on the set sheet: one wing up at the line-up
+                                                           # behind him, the other on his hip (pass 2: both wide,
+                                                           # pointing at empty cobbles)
     'gun': ((210, -10), (90, 20), 'grip'),                 # the MG42 furled in his wings, up at his chest (pass 3:
                                                            # held low it sat on his talons)
     'grab': ((230, -40), (110, -120), 'grip'),             # the lapels (front)
@@ -544,8 +547,15 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
         if m['beak'] == 'grin':
             p.line(open_curve([(bx - 92, by - 26), (bx - 104, by - 48), (bx - 100, by - 66)], 4), KG_FACE_RIM, 2.4)
         if m.get('spit'):
-            for dx, dy, rr in ((60, 0, 6), (90, 24, 5), (70, 44, 4), (110, -8, 4)):
-                p.ell(bx + dx, by + dy, rr * 2.2, rr * 2.8, (236, 244, 250), INK, 1.6)
+            # pass 2 (town): the flecks read as bubbles: now a spray of drops flung forward in a cone, each
+            # a teardrop
+            for dx, dy, rr in ((80, -6, 22), (140, 30, 18), (110, 70, 15), (180, -36, 16), (230, 40, 14), (180, 96, 12),
+                               (280, 0, 12), (260, -70, 10), (66, 50, 13)):
+                ang = math.atan2(dy - 10, dx)                           # a teardrop, its tail back at the beak
+                p.poly(curve([(bx + dx + math.cos(ang) * rr * 1.1, by + dy + math.sin(ang) * rr * 1.1),
+                              (bx + dx - math.sin(ang) * rr, by + dy + math.cos(ang) * rr),
+                              (bx + dx - math.cos(ang) * rr * 2.6, by + dy - math.sin(ang) * rr * 2.6),
+                              (bx + dx + math.sin(ang) * rr, by + dy - math.cos(ang) * rr)], 3), (236, 244, 250), INK, 1.8)
     p.poly(curve([(bx - 34, by - 40), (bx + 10, by - 34), (bx + 40, by + 6), (bx + 18, by + 14), (bx - 30, by + 8)], 3),
            KG_BEAK, INK, 2.4)                                           # the hooked upper beak
     el, hd, shape = wings['L']                                          # the near wing, in front
@@ -605,7 +615,7 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
             name_ = wings
             el, hd, sh_ = WING_POSES[wings]
             wings = {'L': (el, hd, sh_), 'R': ((-el[0], el[1]), (-hd[0], hd[1]), sh_)}
-            if name_ == 'teach':                                       # ONE wing raised, like a teacher
+            if name_ in ('teach', 'present'):                         # ONE wing raised, like a teacher
                 fe, fh, fs = WING_POSES['fold']
                 wings['R'] = ((-fe[0], fe[1]), (-fh[0], fh[1]), fs)
         _kg_front(p, mood, wings, perched, band, t, look, tail, part)
