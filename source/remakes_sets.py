@@ -285,7 +285,8 @@ PURPLE, PURPLE_L = (138, 82, 186), (176, 126, 214)
 BELL, BELL_L = (240, 136, 40), (255, 196, 90)
 LANTERN = (255, 170, 60)
 # Rule 87: the three-pass survivors, each drawn two or three ways for Sam (options(); 'now' = as built)
-OPT = {'up': 'now', 'shafts': 'now', 'edge': 'now', 'wall': 'now', 'fountain': 'now'}
+OPT = {'up': 'cap', 'shafts': 'dark', 'edge': 'warm', 'wall': 'shelter', 'fountain': 'dark'}   # all A (Claude's
+# picks, set 10 Nov so the animatic isn't held up; Sam can swap any letter)
 MIST = (232, 236, 206)
 
 
@@ -2020,6 +2021,7 @@ SET_BOXES = [   # the camp's solid things, screen px (the S7 camera); nothing ma
     ('tyres', _box(CAMP, 4.34, 5.06, 9.3, 0, 0.72)),
     ('gate', _box(CAMP, -GATE_HALF, GATE_HALF, WALL_D, 0, 2.4)),
     ('watchtower', _box(CAMP, TOWER[0] - 1.1, TOWER[0] + 1.1, TOWER[1], 0, 6.9)),
+    ('lean-to', _box(CAMP, -2.9, -0.7, 6.0, 0, 2.7)),
 ]
 SET_MEANT = [
     ('blue container', 'orange container', 'the orange one sits stacked on top of the blue (ref 23)'),
@@ -2028,6 +2030,10 @@ SET_MEANT = [
     ('camo net', 'watchtower', 'the net hangs on the wall 1 m behind the tower'),
     ('tyres', 'camo net', 'the tyres stand at the wall foot in front of the net'),
     ('tyres', 'watchtower', 'the tyres stand right of the tower, 0.3 m nearer'),
+    ('lean-to', 'crates', 'the crates stand under it'), ('lean-to', 'barrels', 'the barrels stand under it'),
+    ('lean-to', 'blue container', 'it stands against the container, 1.4 m nearer'),
+    ('lean-to', 'orange container', 'its roof meets the stacked container behind'),
+    ('lean-to', 'gate', 'its right post stands 4 m nearer than the gate'),
 ]
 
 

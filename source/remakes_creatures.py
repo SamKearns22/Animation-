@@ -259,7 +259,7 @@ def beak_open(kind, talk=None):
     return still if talk is None else lo + (hi - lo) * float(talk)
 
 
-SPIT = 'now'    # rule 87 (the spit read as flowers he offers): 'now', 'spray', 'foam', 'glob' (options sheet)
+SPIT = 'spray'  # (A, Claude's pick, 10 Nov) rule 87 (the spit read as flowers he offers): 'now', 'spray', 'foam', 'glob' (options sheet)
 SPIT_C = (226, 238, 246)
 
 

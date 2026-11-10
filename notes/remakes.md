@@ -7,9 +7,12 @@
   recording; every mood front and side; clip sent in chat (`python3 source/remakes_creatures.py talk OUT.mp4`); Lost: the wide smiling mouth and
   tongue). KG stands on the ground in camp and town (no float). All pass-3 Fix items fixed (list in the commit).
   Options sheet for the six survivors sent in chat (`python3 source/remakes_sets.py options OUT.jpg`) (A = my pick). setcheck clean.
-- **Next (Opus, medium):** set Sam's six picks (OPT in remakes_sets.py, SPIT in remakes_creatures.py; add a picked
-  lean-to to SET_BOXES), then straight to the shots and the animatic. No pass 4.
-- **Needs Sam:** his six letters (or "all A").
+- **Next (Opus, medium): the animatic before the week hits 100% (Sam, 10 Nov: at 75%).** Picks are set (all A;
+  Sam may swap a letter: one line in OPT/SPIT). Build the shots from "Shots and the acting list" with the simplest
+  staging that tells each beat (holds and cuts over full moves; no rehearsal clips, no critique passes: name
+  faults, pre-flight `--faults-named`); check sheet, Sam's yes, one animatic. Watch the cost after every step;
+  hand over on amber.
+- **Needs Sam:** nothing (letters optional).
 - **Named, not fixed:** in S8-S9 the near gunman's rifle passes in front of the far one (layered right).
 - **Open rule requests:** none.
 - **For Claude:** CR.kg(talk=0-1, stand=True); CR.beak_open/BEAK; CR.talkclip; RS.OPT/SURVIVORS/options();
