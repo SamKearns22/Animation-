@@ -239,7 +239,7 @@ def _kg_beak(p, bx, by, w, kind, spit=False, side=False):
                                    (bx + sgn * w * 3.4, by - w * 1.3)], 4), KG_FACE_RIM, 2.4)
         if spit:                                                        # flecks of spit flying off (no hiss sound)
             for k, (dx, dy, r) in enumerate(((-2.4, 0.6, 5), (2.6, 0.2, 6), (-3.2, -0.2, 4), (3.4, 1.0, 4), (0.4, 2.6, 5))):
-                p.ell(bx + w * dx, by + w * dy, r, r * 1.3, (236, 244, 250), INK, 1.2)
+                p.ell(bx + w * dx * 1.2, by + w * dy, r * 2.2, r * 2.8, (236, 244, 250), INK, 1.6)
     up = curve([(bx - w * 0.6, by - w * 1.0), (bx + w * 0.6, by - w * 1.0), (bx + w * 0.5, by + w * 0.2),
                 (bx, by + w * 0.9), (bx - w * 0.5, by + w * 0.2)], 4)
     p.poly(up, KG_BEAK, INK, 2.4)                                       # the upper beak, hooking down
@@ -332,7 +332,7 @@ def _kg_tail(p, root, ang0, n, step, length):
         ln = length - abs(off) * 26
         ux, uy, nx, ny = math.cos(a), math.sin(a), -math.sin(a), math.cos(a)
         bx, by = root
-        w = 66
+        w = 58
         pts = [(bx + nx * w * 0.35, by + ny * w * 0.35), (bx + ux * ln * 0.55 + nx * w * 0.55, by + uy * ln * 0.55 + ny * w * 0.55),
                (bx + ux * ln * 0.92 + nx * w * 0.42, by + uy * ln * 0.92 + ny * w * 0.42), (bx + ux * ln, by + uy * ln),
                (bx + ux * ln * 0.92 - nx * w * 0.42, by + uy * ln * 0.92 - ny * w * 0.42),
@@ -347,14 +347,15 @@ def _kg_tail(p, root, ang0, n, step, length):
             p.line([(c[0] + nx * hw, c[1] + ny * hw), (c[0] + ux * 10, c[1] + uy * 10), (c[0] - nx * hw, c[1] - ny * hw)],
                    dk(KG_TAIL, 0.62), 5.0)
         p.line([(bx + ux * ln * 0.3, by + uy * ln * 0.3), (bx + ux * ln * 0.95, by + uy * ln * 0.95)], dk(KG_TAIL, 0.7), 1.4)
+        p.ell(bx + ux * ln * 0.95, by + uy * ln * 0.95, w * 0.26, w * 0.2, KG_TAIL_TIP, None, rot=a)
         p.poly(f, None, INK, 2.2)
 
 
-def _kg_front(p, mood, wings, perched, band, t, look=0.0):
+def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0):
     """Facing us (S1, S3, S5, S10): tail behind, the far halves of the wings, the body (rust chest, ochre belly, the
     white bib with its two gold eye-spots), feet, the head with its face disc, eyes, brows, beak, the two crests."""
     m = KG_MOODS[mood]
-    _kg_tail(p, (0, 90), math.pi / 2, 7, 0.15, 430)                   # the long fanned tail hanging below
+    _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)                  # the long fanned tail hanging below
     hx, hy, hw = 0.0, -250.0, 168.0
     _crest(p, (hx - 60, hy - 100), [(-140, hy - 230), (-210, hy - 360), (-310, hy - 420), (-390, hy - 370),
                                     (-400, hy - 290)], seed=1, out=1)   # sweeping up and out, curling over
@@ -401,7 +402,7 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0):
     for sgn in (-1, 1):
         _kg_eye(p, hx + sgn * 64, hy + 2, 38, m, sgn, look)
         _kg_brow(p, hx + sgn * 64, hy + 2, 38, sgn, *m['brows'])
-    _kg_beak(p, hx, hy + 58, 22, m['beak'], m.get('spit', False))
+    _kg_beak(p, hx, hy + 56, 28, m['beak'], m.get('spit', False))
     return (hx, hy)
 
 
@@ -415,7 +416,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     R = lambda pts: [rot(*q) for q in pts]
     el, hd, shape = wings['R']                                          # the far wing, darker, behind
     _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8))
-    _kg_tail(p, rot(-140, 70), math.radians(140) + r, 5, 0.06, 320)    # the tail back and down
+    _kg_tail(p, rot(-140, 70), math.radians(140) + r, 6, 0.14, 330)    # the tail back and down
     if not perched:
         _kg_feet(p, *rot(30, 220), 1, False)
     body = R(curve([(-20, -230), (120, -190), (180, -40), (150, 120), (60, 220), (-80, 220), (-170, 120), (-190, -20),
@@ -455,7 +456,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
             p.line(open_curve([(bx - 92, by - 26), (bx - 104, by - 48), (bx - 100, by - 66)], 4), KG_FACE_RIM, 2.4)
         if m.get('spit'):
             for dx, dy, rr in ((60, 0, 6), (90, 24, 5), (70, 44, 4), (110, -8, 4)):
-                p.ell(bx + dx, by + dy, rr, rr * 1.3, (236, 244, 250), INK, 1.2)
+                p.ell(bx + dx, by + dy, rr * 2.2, rr * 2.8, (236, 244, 250), INK, 1.6)
     p.poly(curve([(bx - 34, by - 40), (bx + 10, by - 34), (bx + 40, by + 6), (bx + 18, by + 14), (bx - 30, by + 8)], 3),
            KG_BEAK, INK, 2.4)                                           # the hooked upper beak
     el, hd, shape = wings['L']                                          # the near wing, in front
@@ -475,17 +476,22 @@ SIDE_WINGS = {                                                          # side o
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
-       lean=0.0, look=0.0):
+       lean=0.0, look=0.0, tail=1.0):
     """Kaepora Gaebora at world (x, y) (his body's middle), scale s (as for a 1.75 m adult). wings: a WING_POSES name
     (front) or SIDE_WINGS name (side), or a dict {'L': (elbow, hand, shape), 'R': ...} in his own units (front:
-    the L wing on screen right). Returns his wing hands in world coordinates, for what he holds."""
+    the L wing on screen right). tail < 1 shortens the tail (front: lying back along the ground when he stands).
+    Returns his wing hands in world coordinates, for what he holds."""
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
     if view == 'front':
         if isinstance(wings, str):
+            name_ = wings
             el, hd, sh_ = WING_POSES[wings]
             wings = {'L': (el, hd, sh_), 'R': ((-el[0], el[1]), (-hd[0], hd[1]), sh_)}
-        _kg_front(p, mood, wings, perched, band, t, look)
+            if name_ == 'teach':                                       # ONE wing raised, like a teacher
+                fe, fh, fs = WING_POSES['fold']
+                wings['R'] = ((-fe[0], fe[1]), (-fh[0], fh[1]), fs)
+        _kg_front(p, mood, wings, perched, band, t, look, tail)
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
     else:
         if isinstance(wings, str):
@@ -523,11 +529,11 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
     for sgn in (-1, 1):
         for big in (True, False):
             if big:
-                ang = -math.pi / 2 + sgn * (0.38 + 0.14 * flap)
+                ang = -math.pi / 2 + sgn * (0.32 + 0.22 * flap)
                 ln, wd, root = 118, 40, (sgn * 16, -16)
             else:
-                ang = math.pi / 2 - sgn * (0.85 + 0.1 * flap)
-                ln, wd, root = 66, 40, (sgn * 18, 14)
+                ang = math.pi / 2 - sgn * (0.6 + 0.15 * flap)
+                ln, wd, root = 50, 42, (sgn * 14, 16)
             wing = _feather(root, ang, ln, wd)
             p.poly(wing, mix((236, 236, 250), glow_c, 0.15), dk(glow_c, 0.7), 1.4)
             ux, uy = math.cos(ang), math.sin(ang)
@@ -581,9 +587,13 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     with gathered ruffles (line 11: happily absent, a vacant smile, drooling)."""
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
-    for sgn in (-1, 1):                                                 # the rocks on his back, past the shoulders
-        p.poly(curve([(sgn * 200, -1040), (sgn * 320, -980), (sgn * 360, -860), (sgn * 280, -800)], 3), ROCK, INK, 2.6)
-        p.line([(sgn * 270, -980), (sgn * 300, -880)], ROCK_D, 2.0)
+    for sgn, (cx, cy, rx, ry) in ((-1, (-210, -1110, 120, 90)), (1, (220, -1080, 130, 96)), (1, (60, -1230, 100, 70))):
+        rock = [(cx + rx * math.cos(a) * (0.82 + 0.18 * ((k * 3) % 2)), cy + ry * math.sin(a) * (0.86 + 0.14 * (k % 2)))
+                for k, a in enumerate(np.linspace(0, 2 * math.pi, 9, endpoint=False))]   # lumpy grey boulders
+        p.poly(rock, ROCK, INK, 2.6)                                    # on his back, peeking over his shoulders
+        p.line([(cx - rx * 0.3, cy - ry * 0.4), (cx, cy), (cx + rx * 0.1, cy + ry * 0.5)], ROCK_D, 2.4)   # a crack
+        p.poly([(cx - rx * 0.5, cy - ry * 0.6), (cx - rx * 0.1, cy - ry * 0.8), (cx - rx * 0.2, cy - ry * 0.4)],
+               mix(ROCK, (255, 255, 255), 0.3), None)
     for sgn in (-1, 1):                                                 # stubby legs, flat round feet
         p.poly(curve([(sgn * 60, -280), (sgn * 210, -280), (sgn * 215, -60), (sgn * 70, -60)], 3), GORON, INK, 2.6)
         p.poly(curve([(sgn * 40, -70), (sgn * 250, -70), (sgn * 260, 0), (sgn * 30, 0)], 3), GORON_D, INK, 2.6)
@@ -610,10 +620,11 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     p.poly(curve([(-60, -880), (0, -840), (60, -880), (84, -800), (0, -828), (-84, -800)], 2), DRESS_D, INK, 2.2)  # the bow
     p.ell(0, -846, 24, 22, DRESS, INK, 2.0)
     for sgn in (-1, 1):                                                 # stubby thick arms, puffed sleeves, round fists
-        p.poly(curve([(sgn * 290, -900), (sgn * 410, -780), (sgn * 450, -620), (sgn * 380, -590), (sgn * 320, -720)], 3),
-               GORON, INK, 2.6)
-        p.ell(sgn * 430, -590, 62, 56, GORON_D, INK, 2.6)
-        p.line([(sgn * 410, -620), (sgn * 450, -600)], dk(GORON_D, 0.8), 1.8)
+        arm = curve([(sgn * 310, -910), (sgn * 450, -820), (sgn * 520, -660), (sgn * 450, -620), (sgn * 380, -760)], 3)
+        p.poly(arm, GORON, INK, 3.0)                                     # out from his side, a gap under it
+        p.line(open_curve([(sgn * 360, -860), (sgn * 430, -760), (sgn * 470, -660)], 4), GORON_D, 3.0)   # its shade
+        p.ell(sgn * 500, -620, 64, 58, GORON_D, INK, 2.8)
+        p.line([(sgn * 476, -652), (sgn * 520, -632)], dk(GORON_D, 0.8), 1.8)
         p.ell(sgn * 300, -880, 96, 70, DRESS_L, INK, 2.4)
         for k in (-1, 0, 1):                                            # the sleeve's puff folds
             p.line(open_curve([(sgn * 300 + k * 40, -940), (sgn * 296 + k * 46, -880), (sgn * 300 + k * 40, -820)], 4),
@@ -635,7 +646,10 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     p.line(open_curve(sm, 6), INK, 4.6)                                 # the wide smile line
     for sgn in (-1, 1):
         p.line([(sgn * 186, -996), (sgn * 200, -980)], INK, 3.0)        # its dimpled corners
-    p.poly(curve([(-30, -918), (30, -918), (6, -860), (0, -840), (-6, -860)], 2), (248, 246, 240), INK, 2.0)   # goatee
+    beard = (226, 236, 244)                                             # the goatee: a pale tuft of strands on his chin
+    p.poly(curve([(-34, -916), (34, -916), (22, -880), (8, -846), (-4, -862), (-14, -850), (-24, -884)], 2), beard, INK, 2.0)
+    for k in (-14, 0, 14):
+        p.line([(k, -910), (k * 0.6, -866)], (170, 188, 204), 1.6)
     if drool:                                                           # a fat string from the corner, swelling and stretching
         u = (t * 0.6) % 1.0
         ln = 60 + 120 * u
@@ -691,12 +705,12 @@ def tiles(who):
                          ('side: flap down', dict(mood='hype', wings='down', perched=False))):
             out.append((name, tile(lambda img, cam, **a: kg(img, cam, 700, 950, view='side', **a), at=(700, 800), **k, **kw)))
     elif who == 'navi':
-        for name, kw in (('calm, wings up', dict(heat=0.0, t=0.0)), ('calm, wings down', dict(heat=0.0, t=0.07)),
+        for name, kw in (('calm, wings up', dict(heat=0.0, t=0.107)), ('calm, wings down', dict(heat=0.0, t=0.036)),
                          ('reddening', dict(heat=0.5, t=0.02)), ('grenade red', dict(heat=1.0, t=0.05))):
             out.append((name, tile(lambda img, cam, **a: navi(img, cam, 300, 300, 2.2, **a), at=(300, 300),
                                    bg=(60, 70, 64), **kw)))
     elif who == 'goron':
-        for name, kw in (('front, vacant, drooling', dict(t=0.0)), ('drool later', dict(t=1.2))):
+        for name, kw in (('front, vacant, drooling', dict(t=1.2)),):
             out.append((name, tile(lambda img, cam, **a: goron(img, cam, 700, 1600, 0.85, **a), at=(700, 1060), **kw)))
     return out
 

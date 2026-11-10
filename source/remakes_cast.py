@@ -1116,6 +1116,49 @@ def alone(who, out):
     return out
 
 
+def cast_sheet(out):
+    """All nine at their true heights on one ground line (Link's front for scale), a metre ruler at the left, names
+    and heights under them; Navi floats at Link's shoulder. The look Sam signs off before the shots are built."""
+    import remakes_creatures as CR
+    B.SS = 1
+    W_, H_, G = 4250, 1900, 1640                                        # canvas, the ground line
+    img = Image.new('RGBA', (W_, H_), (242, 238, 230, 255))
+    cam = B.Cam(1.0, B.W / 2, B.H / 2)                                  # world units are canvas pixels
+    d = ImageDraw.Draw(img)
+    px_m = (928 + 150 + 92 * 1.06) / 1.75                               # pixels per metre at s = 1 (scale_for's adult)
+    for k in range(0, 5):                                               # the ruler: a line every half metre
+        y = G - k * 0.5 * px_m
+        d.line([(110, y), (W_ - 40, y)], fill=(222, 216, 204), width=2)
+        d.text((40, y - 16), f'{k * 0.5:.1f} m', font=_font(26), fill=(120, 112, 100))
+    d.line([(110, G), (W_ - 40, G)], fill=(150, 140, 124), width=4)
+    labels = []
+    gx = 300                                                            # the gunman (1.8 m), front
+    sp = CAST['gunman']
+    person(img, cam, gx, G - 928 * scale_for(sp, 1.0), 1.0, sp)
+    labels.append((gx, f'gunman {sp["height"]:.2f} m'))
+    kx = 1060                                                           # KG, standing, wings folded, kindly
+    CR.kg(img, cam, kx, G - 328, 1.0, mood='kindly', tail=0.55)
+    labels.append((kx, 'Kaepora Gaebora'))
+    gox = 1990                                                          # the Goron in his dress
+    CR.goron(img, cam, gox, G, 1.0)
+    labels.append((gox, 'Goron'))
+    for i, who in enumerate(('link', 'zelda', 'malon', 'saria', 'ruto')):
+        x = 2700 + i * 340
+        sp = CAST[who]
+        person(img, cam, x, G - 928 * scale_for(sp, 1.0), 1.0, sp)
+        labels.append((x, f'{CAST[who]["name"]} {sp["height"]:.2f} m'))
+    CR.navi(img, cam, 2700 + 170, G - 1.05 * px_m, 1.0)                 # Navi at Link's shoulder
+    labels.append((2700 + 170, 'Navi'))
+    d = ImageDraw.Draw(img)
+    for x, name in labels:
+        d.text((x, G + 50 + (40 if name == 'Navi' else 0)), name, font=_font(30), fill=(40, 40, 40), anchor='mm')
+    d.text((40, 30), 'Remakes: the cast at true heights', font=_font(44), fill=(30, 30, 30))
+    img.convert('RGB').save(out, quality=88)
+    return out
+
+
 if __name__ == '__main__':
     if sys.argv[1] == 'alone':
         print(alone(sys.argv[2], sys.argv[3]))
+    elif sys.argv[1] == 'castsheet':
+        print(cast_sheet(sys.argv[2]))

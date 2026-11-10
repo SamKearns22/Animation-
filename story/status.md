@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): cast build chat 2 (11 Nov): Link's faults fixed, the girls and gunman checked, all less chibi (Sam); KG, Navi and the Goron drawn (`source/remakes_creatures.py`), first look found faults. Next: fix, critique all nine, cast sheet to Sam (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): build chat 3 (11 Nov): KG, Navi and the Goron fixed and critiqued (pass 1, all nine); the cast sheet tool built. Next: the children's pass-1 faults (hands, poses), pass 2, cast sheet to Sam (Opus high). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

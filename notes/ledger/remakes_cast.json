@@ -1,0 +1,103 @@
+{
+ "film": "remakes_cast",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "date": "2026-11-10",
+    "faults": 39,
+    "cant_tell": 3,
+    "open": [
+     "1 A2: cap - no beads.",
+     "1 P2: shrug - smiling T-pose.",
+     "1 P6: dot hands.",
+     "2 A2: collar grey, tabard gold.",
+     "2 P2: not looking down.",
+     "2 P6: dot hands.",
+     "3 P2: bottle low, not up.",
+     "3 P6: dot hands.",
+     "4 A2: no shorts.",
+     "4 P2: no hand on hip.",
+     "4 P6: dot hands.",
+     "5 A2: head-fin a helmet; no hip fins.",
+     "5 P4: head-fin a helmet; no hip fins.",
+     "5 P5: arm fins loose.",
+     "5 P2: stiff, not vain.",
+     "5 P6: dot hands.",
+     "6 P2: rifle low, eyes at us.",
+     "6 P6: dot hands.",
+     "7 A1: crests read as antlers.",
+     "7 C3: crests read as antlers.",
+     "7 C2: no beak; tail-feet blob.",
+     "7 A2: both wings raised.",
+     "7 P2: fury no spit; faces alike.",
+     "7 P4: fury no spit; faces alike.",
+     "7 P6: no wing-fingers.",
+     "8 A1: paddle tail - reads beaver.",
+     "8 C2: paddle tail - reads beaver.",
+     "8 C3: paddle tail - reads beaver.",
+     "8 A2: paddle tail - reads beaver.",
+     "8 P8: crests front-on.",
+     "8 P2: stiff, mitten wings.",
+     "8 P6: stiff, mitten wings.",
+     "9 A2: X wings; flutter tiles identical.",
+     "10 A1: rocks read as wings; goatee as tooth.",
+     "10 C2: rocks read as wings; goatee as tooth.",
+     "10 A2: tile 2 repeats 1.",
+     "10 P5: hands float, no arms.",
+     "10 P13: hands float, no arms.",
+     "10 P6: hands float, no arms.",
+     "1 P5: full-size shoulders.",
+     "6 P5: shoulders under vest.",
+     "10 C3: phone-size shot."
+    ]
+   }
+  ],
+  "lines": {
+   "A2": {
+    "faults": 8,
+    "false": 0
+   },
+   "P2": {
+    "faults": 8,
+    "false": 0
+   },
+   "P6": {
+    "faults": 9,
+    "false": 0
+   },
+   "P4": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 2,
+    "false": 0
+   },
+   "A1": {
+    "faults": 3,
+    "false": 0
+   },
+   "C3": {
+    "faults": 2,
+    "false": 0
+   },
+   "C2": {
+    "faults": 3,
+    "false": 0
+   },
+   "P8": {
+    "faults": 1,
+    "false": 0
+   },
+   "P13": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
+}

@@ -1,0 +1,86 @@
+== critique, round 1 pass 1 (2026-11-10): 39 fault(s), 3 can't tell
+-- look.md --
+1: Blond elf boy, green cap and tunic, shield on back; turnaround plus eight faces.
+2: Blonde elf girl, white hood, purple-gold dress; front views, two faces; no side view.
+3: Red-haired girl, purple skirt, brown apron, holds white bottle; two faces, no side.
+4: Green-haired elf girl, green sweater, brown belt, holds small ocarina; one face winks.
+5: Pale bald blue-finned girl, purple eyes, hands on hips; side fins detached-looking.
+6: Masked soldier, goggles, body armour, rifle; front, side, aiming. Faceless, no expression sheet.
+7: Brown owl with huge antler-like feather tufts; flapping poses, red headband, angry faces.
+8: Owl side views with flat beaver-like tail, wing up, headband; body looks lumpy.
+9: Glowing white-blue fairy with wings, then pink, then red; no face or body.
+10: Round yellow creature, pink frilly dress, drool from mouth; two nearly identical poses.
+-- result.md --
+## Panel 1
+ok: A1 A3 P7 P1 P8 P3 P4 P10 P12 P11 P13
+FAULT A2: cap - no beads.
+FAULT P2: shrug - smiling T-pose.
+FAULT P6: dot hands.
+CAN'T TELL P5: full-size shoulders.
+
+## Panel 2
+ok: A1 A3 P7 P1 P8 P3 P4 P5 P10 P12 P11 P13
+FAULT A2: collar grey, tabard gold.
+FAULT P2: not looking down.
+FAULT P6: dot hands.
+
+## Panel 3
+ok: A1 A2 A3 P7 P1 P8 P3 P4 P5 P10 P12 P11 P13
+FAULT P2: bottle low, not up.
+FAULT P6: dot hands.
+
+## Panel 4
+ok: A1 A3 P7 P1 P8 P3 P4 P5 P10 P12 P11 P13
+FAULT A2: no shorts.
+FAULT P2: no hand on hip.
+FAULT P6: dot hands.
+
+## Panel 5
+ok: A1 A3 P7 P1 P8 P3 P10 P12 P11 P13
+FAULT A2/P4: head-fin a helmet; no hip fins.
+FAULT P5: arm fins loose.
+FAULT P2: stiff, not vain.
+FAULT P6: dot hands.
+
+## Panel 6
+ok: A1 A2 A3 P7 P1 P8 P3 P4 P10 P12 P11 P13 O5 O2 O4 O3 O6 O1
+FAULT P2: rifle low, eyes at us.
+FAULT P6: dot hands.
+CAN'T TELL P5: shoulders under vest.
+
+## Panel 7
+ok: A3 P7 P1 P8 P3 P5 P10 P12 P11 P13 C1 C4
+FAULT A1/C3: crests read as antlers.
+FAULT C2: no beak; tail-feet blob.
+FAULT A2: both wings raised.
+FAULT P2/P4: fury no spit; faces alike.
+FAULT P6: no wing-fingers.
+
+## Panel 8
+ok: A3 P7 P1 P3 P4 P5 P10 P12 P11 P13 C1 C4
+FAULT A1/C2/C3/A2: paddle tail - reads beaver.
+FAULT P8: crests front-on.
+FAULT P2/P6: stiff, mitten wings.
+
+## Panel 9
+ok: A1 A3 C1 C2 C3 C4
+FAULT A2: X wings; flutter tiles identical.
+
+## Panel 10
+ok: A3 P2 P7 P1 P8 P3 P4 P10 P12 P11 C1 C4
+FAULT A1/C2: rocks read as wings; goatee as tooth.
+FAULT A2: tile 2 repeats 1.
+FAULT P5/P13/P6: hands float, no arms.
+CAN'T TELL C3: phone-size shot.
+
+## Cold look
+Missed 1's shrug, 10's rocks. Misread: ocarina (biscuit), fin (helmet), crests (antlers), tail (beaver).
+
+## Same fault elsewhere
+P6: 1-6, 10. P2: 1-8. P5: 5, 10. A2: 1-2, 4-5, 7-10. P8: 8.
+
+## Not on the list
+1. Heights untestable. suggested line: "Height line-up."
+2. Duplicate tiles. suggested line: "Tiles differ."
+3. No forest (9). suggested line: "Named backgrounds drawn."
+
