@@ -6,11 +6,9 @@
 - **Done (shots chat, Opus):** the film file built, all 14 lines, 14 shots (S12 split in two, under 8 s), about 44 s
   plus sign-off; simplest staging (holds, cuts, one move per beat); voices with both f-words bleeped; MG42, neck crack
   and Navi's blast. Brief checklist ticked. Check sheet sent to Sam (Hook Text moved below KG's face).
-- **Next (Sonnet): on Sam's yes, the animatic:** `python3 source/preflight.py remakes OUT_DIR`, then
-  `python3 source/remakes.py final source/data/remakes-clean-small.mp4 --small --faults-named`, then
-  `python3 source/finish.py source/data/remakes-clean-small.mp4 OUT/remakes-animatic.mp4 --film remakes --faults-named`;
-  send it in chat with its size and render time. No fixes before it unless Sam asks.
-- **Needs Sam:** Y or N for the animatic (check sheet in the chat).
+- **Next (Opus, medium): Sam's notes on the animatic** (sent 10 Nov, 3.3 MB; render 1 min 37 s + finish 38 s); clips for
+  movement notes, one full animatic after; no final until Sam's clear yes.
+- **Needs Sam:** his notes on the animatic.
 - **Named, not fixed (all told to Sam):** pre-flight's 16: the syllable counter misreads "R1", "9", "Ok?" and capitals
   (5); a 30-degree prop-turn test on Malon and Saria, who never turn (8); no scene(t) for the pop-in test (1); "I
   don't think I can do this." 1.5 s on screen (1); no critique round (Sam: none) (1). Staging: Link slides in with a
