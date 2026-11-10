@@ -1,6 +1,5 @@
 # Where things stand (project, 11 Nov; no film in progress)
 
-- **Newest work:** `claude/job-i-faces` (this chat could not push: see Needs Sam). The next chat merges it first.
 - **Rules that bite next:** 30 (a repeated note is a warning), 48 (one labelled sheet), 86 (estimate before building).
 - **Done: Job I faces BUILT (Opus high, about 1.8%: over the 1.2% stop, so no critique rounds).** One shared turned
   head for anyone with a measured front design (`turnhead.py`), built only when a shot draws that direction; pre-flight
@@ -11,8 +10,8 @@
   (1-18) and `notes/sheets/job-i-driver-turnaround.jpg` (19-23).
 - **Next:** Sam's notes on those two sheets, then a notes round (Opus, medium effort): "Job I faces notes: (Sam's
   numbers)". Open after: slumped shirt; back hair (lying 18: the neck block over the back of the head).
-- **Needs Sam:** I: a look at sheets 1-23. Push: this chat started without the project attached (it was cloned by
-  hand), so pushing was refused; start the next chat with Animation- selected.
+- **Needs Sam:** I: a look at sheets 1-23. (This chat started without the project attached; Sam said Y to attaching it,
+  then the push went through. Start each chat with Animation- selected.)
 - **Read:** the pack in `guides/job-packs.md` ("A tool job"); `turnhead.py` MAP, section "people".
 - **Open rule requests:** none.
 - **For Claude:** I faces: `turnhead.Person`/`register`/`install`/`draw`/`fitted`/`turnaround`/`SEEN`/`MISSING`,

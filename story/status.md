@@ -3,7 +3,7 @@
 ## Now (11 Nov)
 - Job K finished; Job I bodies signed off; Job I faces built (one shared turned head for anyone; the driver first).
 - Needs Sam: notes on the driver's lying sheet and turnaround (numbers 1-23).
-- Next: a notes round, Opus, medium effort; newest work on `claude/job-i-faces`.
+- Next: a notes round, Opus, medium effort, once Sam's notes are in (all work on the main line).
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
