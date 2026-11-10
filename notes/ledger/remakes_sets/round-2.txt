@@ -1,0 +1,31 @@
+== critique, round 2 pass 1 (2026-11-10): 8 fault(s), 3 can't tell
+-- look.md --
+1: glaring horned goat-faced creature with rifle floats above shadow; green-clad elf girl, masked guards, gate.
+-- result.md --
+## Panel 1
+ok: A3 O4 O1 S2
+FAULT A1: centre - the owl's ear tufts read as horns, the owl as a goat; the cold look missed gate details, containers, tower, flag.
+FAULT A2: walls, flag - references have rusty patched blue-grey tin, tin-roofed sheds, a blue flag; ours: clean grey panels, black-white flag, no sheds.
+FAULT O5: top right - tower roof floats above the cabin, no posts; owl hovers with no contact shadow; three dark ground blobs belong to nothing.
+FAULT O2: tower foot - middle gunman drawn over a red-green box whose base is nearer camera than his feet.
+FAULT O3: that red-green box can't be named; dashed rut bands read as rail track; pale ovals at right read as boulders, not sandbags.
+FAULT S1: whole frame - gate shut and whole, no gunfire: the beat is missing; bottom 40% empty dirt, action small mid-frame.
+FAULT S5: containers have no doors, ribs or corner fittings; tower cabin a blank brown box; bushes one flat row of lumps.
+FAULT S3: no barbed wire, no barrels; wall is one straight back strip, not a ring; the three palms are copies.
+CAN'T TELL O6: no blast or gunfire drawn; a frame of the gate blowing in.
+CAN'T TELL S6: one frame of S7-S9; one frame per shot side by side.
+CAN'T TELL S4: a still; first and last frame of each camera move.
+
+## Cold look
+I called the owl a "horned goat-faced creature": its tufts read as horns at phone size. "Floats above shadow" is the O5 fault. I missed containers, crates, tower, flag, walls and ruts; nothing said "outpost".
+
+## Same fault elsewhere
+Only panel 1 exists; every fault is on panel 1 only.
+
+## Not on the list
+1. Gunmen hold no visible guns. suggested line: Every armed character's weapon reads at phone size.
+2. No character casts a shadow. suggested line: Every person and animal has a contact shadow matching the set's light.
+3. Link stands far left, not beside the owl. suggested line: Cast marks match the brief's staging, even in a set check.
+4. Flag says nothing "enemy". suggested line: An enemy flag carries one hostile mark readable at phone size.
+5. Sky is as bright as the yard; nothing pulls the eye to the gate. suggested line: The action area is the brightest, highest-contrast part of the set.
+

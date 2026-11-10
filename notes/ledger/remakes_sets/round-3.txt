@@ -1,0 +1,47 @@
+== critique, round 3 pass 1 (2026-11-10): 22 fault(s), 3 can't tell
+-- look.md --
+1: Horned owl spreads wings, eyes shut, smiling; town square, fountain; five onlookers incl. pink-tutu blob.
+2: Elf boy in green stands calm beside white-headed eagle-bird, red headband, long plumes; banner.
+-- result.md --
+## Panel 1
+ok: O6 S6
+FAULT A1: Goron reads as a blob, tufts as horns
+FAULT A2: banners flat navy, no gold trim; fountain pale, reference dark
+FAULT A3: see Same fault elsewhere
+FAULT O5: stall awning on back houses, crates far forward, unjoined
+FAULT O2: front left - owl's tufts cover Zelda's and Malon's feet
+FAULT O4: back houses - doors and windows tiny against the cast
+FAULT O3: stall reads as two crates
+FAULT O1: banners - small triangle under the wings; Triforce belongs above
+FAULT S1: line-up tiny; owl's wings spread sideways, not presenting
+FAULT S2: right - banner pole stands through the stall crates
+FAULT S5: houses - no timber beams, blob doors; no townsfolk
+FAULT S3: one gable repeated; reference houses vary
+CAN'T TELL S4: first and last frame of the S10 camera move
+
+## Panel 2
+ok: O4 O6 S2
+FAULT A1: owl read as eagle, Link as "calm"; window, flower box unnamed
+FAULT A2: banner - flat navy, no gold trim or pole
+FAULT A3: see Same fault elsewhere
+FAULT O5: centre - Link's boots float above the cobbles; nothing pins him
+FAULT O2: centre - owl's tufts cross Link's face
+FAULT O3: window - shutters flat blue panels, no slats or hinges
+FAULT O1: banner - Triforce under the wings
+FAULT S1: owl faces away from Link, smiling; no slam reads
+FAULT S5: wall flat beige, no stone texture
+FAULT S3: no blue drapes or planters as in reference
+CAN'T TELL S6: S12 and S13 frames side by side
+CAN'T TELL S4: first and last frame of the S12/S13 camera move
+
+## Cold look
+1: "pink-tutu blob" (Goron fails as a flat blob), "horned owl"; set barely named. 2: owl reads as eagle; "calm" means the beat failed.
+
+## Same fault elsewhere
+A1, A2, O5, O2, O3, O1, S1, S5, S3: on panels 1 and 2. O4, S2: panel 1 only.
+
+## Not on the list
+- No contact shadows. suggested line: everyone casts a shadow matching the set's light.
+- Owl gains a red headband in panel 2. suggested line: cast keep one design across set panels.
+- Smiles where fury and terror are briefed. suggested line: each set panel's acting beat reads at phone size.
+

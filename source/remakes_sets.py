@@ -259,10 +259,18 @@ def _door(p, x, y, r, lw=2.6):
 
 
 def _lantern(img, p, cam, x, y, r):
-    p.line([(x, y - r * 2.2), (x, y - r)], INK, 1.8)
-    p.poly([(x - r * 0.7, y - r), (x + r * 0.7, y - r), (x + r, y + r * 0.6), (x - r, y + r * 0.6)], LANTERN, INK, 2.0)
-    p.poly([(x - r * 0.5, y + r * 0.6), (x + r * 0.5, y + r * 0.6), (x + r * 0.3, y + r * 0.95), (x - r * 0.3, y + r * 0.95)],
-           (120, 70, 40), INK, 1.6)
+    """A round paper lantern hung from a crooked wooden arm pegged into the bark (pass 1: flat squares, unhung)."""
+    p.line(open_curve([(x - r * 2.2, y - r * 2.6), (x - r * 1.0, y - r * 2.9), (x, y - r * 2.6)], 4), (84, 62, 44), 4.0)
+    p.ell(x - r * 2.2, y - r * 2.6, r * 0.3, r * 0.3, (60, 44, 34), INK, 1.4)           # the peg in the bark
+    p.line([(x, y - r * 2.6), (x, y - r * 1.2)], INK, 1.8)
+    p.poly([(x - r * 0.45, y - r * 1.25), (x + r * 0.45, y - r * 1.25), (x + r * 0.4, y - r * 1.0), (x - r * 0.4, y - r * 1.0)],
+           (120, 70, 40), INK, 1.4)
+    p.ell(x, y - r * 0.1, r * 0.95, r * 0.9, LANTERN, INK, 2.0)
+    for u in (-0.45, 0.0, 0.45):                                        # the paper ribs
+        p.line(open_curve([(x + r * u * 0.6, y - r * 0.95), (x + r * u * 1.05, y - r * 0.1), (x + r * u * 0.6, y + r * 0.75)], 4),
+               (214, 120, 40), 1.4)
+    p.poly([(x - r * 0.4, y + r * 0.75), (x + r * 0.4, y + r * 0.75), (x + r * 0.3, y + r * 1.0), (x - r * 0.3, y + r * 1.0)],
+           (120, 70, 40), INK, 1.4)
     glow(img, cam, x, y, r * 4, (255, 190, 90), 0.45)
 
 
@@ -276,9 +284,12 @@ def _stump_house(img, p, cam, x, y, w, h, seed=3, door=True):
         u = (k + 0.5) / 6
         xx = x - w * 0.45 + w * 0.9 * u
         p.line(open_curve([(xx, y - h * 0.96), (xx + 8 * math.sin(k), y - h * 0.5), (xx - 6, y - 6)], 4), TRUNK_D, 2.0)
-    for k, (rx, rw) in enumerate(((-0.6, 0.18), (-0.2, 0.14), (0.4, 0.2))):   # roots at the foot
-        p.poly(curve([(x + w * rx, y - 10), (x + w * (rx - rw), y + 8), (x + w * (rx + rw * 0.3), y + 10)], 3),
-               TRUNK, INK, 2.4)
+    for k, (rx, dx_, dy_) in enumerate(((-0.42, -0.34, 0.05), (-0.18, -0.12, 0.08), (0.22, 0.1, 0.07), (0.5, 0.3, 0.04))):
+        bark(p, [(x + w * rx, y - h * 0.16), (x + w * (rx + dx_ * 0.5), y - h * 0.02), (x + w * (rx + dx_), y + h * dy_)],
+             w * 0.13, w * 0.04, TRUNK, seed + 40 + k, None, 2)        # gnarled roots spreading at the foot
+    for kx, ky, kr in ((0.3, 0.75, 0.05), (-0.36, 0.38, 0.04)):         # knots in the bark
+        p.ell(x + w * kx, y - h * ky, w * kr, w * kr * 1.4, TRUNK_D, INK, 2.0)
+        p.ell(x + w * kx, y - h * ky, w * kr * 0.45, w * kr * 0.7, (60, 44, 34), None)
     rr = random.Random(seed + 9)
     for k in range(7):                                                  # moss hanging down from the cap, joined to it
         xx = x - w * 0.36 + w * 0.12 * k + rr.uniform(-8, 8)
@@ -293,8 +304,13 @@ def _stump_house(img, p, cam, x, y, w, h, seed=3, door=True):
                MOSS, INK, 2.0)
     if door:
         _door(p, x + w * 0.05, y - h * 0.24, w * 0.15)
-        p.ell(x - w * 0.24, y - h * 0.62, w * 0.07, w * 0.07, (60, 44, 34), INK, 2.2)  # the round window, dark
-        p.ell(x - w * 0.24, y - h * 0.62, w * 0.04, w * 0.04, (255, 200, 110), None)   # lamp-lit
+        wx_, wy_, ww_ = x - w * 0.24, y - h * 0.62, w * 0.07                # an arched window, lamp-lit, barred
+        arch = curve([(wx_ - ww_, wy_ + ww_ * 1.1), (wx_ - ww_, wy_ - ww_ * 0.4), (wx_, wy_ - ww_ * 1.2),
+                      (wx_ + ww_, wy_ - ww_ * 0.4), (wx_ + ww_, wy_ + ww_ * 1.1)], 3)
+        p.poly(arch, (255, 196, 110), INK, 2.4)
+        p.line([(wx_, wy_ - ww_ * 1.2), (wx_, wy_ + ww_ * 1.1)], (84, 62, 44), 3.0)
+        p.line([(wx_ - ww_, wy_ + ww_ * 0.1), (wx_ + ww_, wy_ + ww_ * 0.1)], (84, 62, 44), 3.0)
+        p.poly(quad(wx_ - ww_ * 1.25, wy_ + ww_ * 1.1, wx_ + ww_ * 1.25, wy_ + ww_ * 1.35), (84, 62, 44), INK, 1.8)   # the sill
         _lantern(img, p, cam, x + w * 0.32, y - h * 0.46, w * 0.04)
         _lantern(img, p, cam, x - w * 0.18, y - h * 0.3, w * 0.035)
 
@@ -358,26 +374,34 @@ def forest_up(img, p, cam, t):
                                 (980, -40, 400, 260, LEAF_D, 13), (1160, 300, 220, 260, LEAF, 14),
                                 (160, 210, 300, 170, LEAF, 15), (720, 90, 260, 150, LEAF_L, 16)):   # the canopy
         clump(p, x, y, rx, ry, c, sd)
-    bark(p, [(130, 2100), (150, 1500), (120, 900), (90, 300), (70, -200)], 330, 170, TRUNK, 21, MOSS, 6)   # the trunk
+    haze(img, cam, 1350, 1700, (236, 240, 236), 0.5)                    # mist among the far trees (ref 19)
+    for pts, w0, sd in (([(110, 600), (260, 380), (420, 240)], 90, 26), ([(90, 360), (40, 160), (-20, 60)], 80, 27),
+                        ([(120, 900), (420, 760), (700, 640), (980, 520)], 70, 28)):   # boughs up into the canopy
+        bark(p, pts, w0, w0 * 0.35, TRUNK, sd, MOSS, 2)
+    for x, y, rx, ry, c, sd in ((430, 240, 220, 140, LEAF, 17), (1000, 520, 200, 150, LEAF_D, 18)):
+        clump(p, x, y, rx, ry, c, sd)
     branch = BRANCH_UP
-    bark(p, branch, 150, 70, TRUNK, 22, MOSS, 4)                       # the branch: thick at the trunk, thinner out
-    bark(p, [(940, 1052), (1010, 980), (1060, 930)], 40, 18, TRUNK, 23)        # a twig at its end
-    clump(p, 1060, 900, 120, 90, LEAF, 24)
-    clump(p, 990, 1010, 70, 50, LEAF_L, 25)
+    bark(p, [(940, BRANCH_UP[-1][1] - 18), (1010, BRANCH_UP[-1][1] - 90), (1060, BRANCH_UP[-1][1] - 140)], 40, 18, TRUNK, 23)
+    bark(p, [(40, BRANCH_UP[0][1] + 30)] + branch, 170, 60, TRUNK, 22, MOSS, 4)   # the branch, its root inside the trunk
+    p.ell(branch[-1][0] + 4, branch[-1][1], 30, 34, TRUNK_D, INK, 2.4)         # its broken end, not a squared plank
+    p.ell(branch[-1][0] + 4, branch[-1][1], 16, 20, (150, 118, 84), None)
+    clump(p, 1060, BRANCH_UP[-1][1] - 170, 120, 90, LEAF, 24)
+    clump(p, 990, BRANCH_UP[-1][1] - 60, 70, 50, LEAF_L, 25)
+    bark(p, [(130, 2100), (150, 1500), (120, 900), (90, 300), (70, -200)], 330, 170, TRUNK, 21, MOSS, 6)   # the trunk
     for k, x in enumerate((330, 470, 860)):                             # moss hanging under the branch
         y = branch_y(x) + 60
         p.poly(ribbon(open_curve([(x, y - 10), (x + 6, y + 50), (x - 4, y + 100 + 20 * k)], 5), 22, 4), MOSS_L, INK,
                1.6)
 
 
-BRANCH_UP = [(150, 1270), (420, 1210), (700, 1150), (940, 1070)]
+BRANCH_UP = [(150, 960), (420, 900), (700, 840), (940, 760)]    # pass 1: higher, so KG towers over the lens
 
 
 def branch_y(x):
     """The top of the branch at screen x (S1), for KG's feet."""
     xs = [q[0] for q in BRANCH_UP]
     ys = [q[1] for q in BRANCH_UP]
-    w = 150 + (70 - 150) * (x - 150) / (940 - 150)
+    w = 170 + (60 - 170) * (x + 40 - 40) / (940 - 40)
     return float(np.interp(x, xs, ys)) - w * 0.5
 
 
@@ -389,7 +413,8 @@ def down_ppm(y):
 
 
 def _path_x(y):
-    return 560 + 110 * math.sin((y - 640) / 380.0)
+    """The path's middle: winding, and at the top bending right to the tree house door (pass 1: it hit its side)."""
+    return 560 + 110 * math.sin((y - 640) / 380.0) + 300 * max(0.0, (900 - y) / 340.0) ** 1.5
 
 
 def _path_w(y):
@@ -414,7 +439,7 @@ def forest_down(img, p, cam, t):
     ys = np.linspace(560, 2000, 40)
     left = [(_path_x(y) - _path_w(y), y) for y in ys]
     right = [(_path_x(y) + _path_w(y), y) for y in ys[::-1]]
-    p.poly(left + right, STONE_D, INK, 2.6)
+    p.poly(left + right, mix(STONE_D, GROUND_D, 0.3), INK, 2.6)
     y = 560.0
     row = 0
     while y < 2000:
@@ -426,7 +451,8 @@ def forest_down(img, p, cam, t):
             xa, xb = max(x, x0 + 4), min(x + sw, x1 - 4)
             if xb - xa > hgt * 0.4:
                 st = wob(quad(xa + 3, y + 3, xb - 3, y + hgt - 3), hgt * 0.05, row * 31 + int(x), 18)
-                p.poly(st, mix(STONE, STONE_L, rr.uniform(0, 1)) if rr.random() > 0.3 else STONE, INK, 1.8)
+                c_ = mix(STONE, STONE_L, rr.uniform(0, 1)) if rr.random() > 0.3 else STONE
+                p.poly(st, mix(c_, MOSS, 0.22), INK, 1.8)                # toned into the moss: Link, not the path, leads
             x += sw
         y += hgt
         row += 1
@@ -435,10 +461,15 @@ def forest_down(img, p, cam, t):
     bark(p, [(1180, 1180), (1000, 1150), (880, 1210)], 80, 34, TRUNK, 42, MOSS, 3)
     _rock(p, 150, 1180, 120, 110, 43)
     _rock(p, 990, 1600, 150, 120, 44)
-    for k in range(14):
-        y = rr.uniform(800, 1880)
-        x = rr.choice([rr.uniform(0, 260), rr.uniform(840, 1080)])
-        tuft(p, x, y, down_ppm(y) * 0.18, LEAF_D, k + 60)
+    for k in range(40):                                                 # grass and moss texture (pass 1: a flat fill)
+        y = rr.uniform(560, 1900)
+        x = rr.choice([rr.uniform(-20, _path_x(y) - _path_w(y)), rr.uniform(_path_x(y) + _path_w(y), 1100)])
+        tuft(p, x, y, down_ppm(y) * 0.16, LEAF_D if k % 3 else MOSS_L, k + 60)
+    for k in range(30):
+        y = rr.uniform(600, 1900)
+        x = rr.choice([rr.uniform(-20, _path_x(y) - _path_w(y)), rr.uniform(_path_x(y) + _path_w(y), 1100)])
+        p.ell(x, y, down_ppm(y) * 0.05, down_ppm(y) * 0.025, rr.choice([(196, 150, 60), (176, 104, 46), (120, 140, 50)]),
+              None, rot=rr.uniform(0, 3))
     for k in range(10):                                                 # fallen leaves on the path and moss
         y = rr.uniform(800, 1880)
         x = _path_x(y) + rr.uniform(-1, 1) * _path_w(y)
@@ -473,16 +504,32 @@ def forest_close(img, p, cam, t):
     p.poly(quad(-200, 1180, W + 200, 2400), mix(GROUND, MIST, 0.4), None)
     for k, (x, rx) in enumerate(((-60, 280), (330, 240), (1100, 260))):  # mid canopy
         clump(p, x, 140, rx, 220, mix(LEAF, MIST, 0.2), 80 + k)
+    haze(img, cam, 200, 1250, MIST, 0.35)                                # mist between the far and mid layers
     for x, w in ((60, 150), (330, 110)):                                 # mid trunks
-        bark(p, [(x, 1400), (x + 10, 700), (x - 6, 100)], w, w * 0.8, mix(TRUNK, MIST, 0.25), 90 + int(x), MOSS, 3)
+        bark(p, [(x, 1400), (x + 10, 700), (x - 6, 100)], w, w * 0.8, mix(TRUNK, MIST, 0.25), 90 + int(x), None, 3)
     _stump_house(img, p, cam, 820, 1330, 560, 820, seed=95)
     p.poly(quad(-200, 1300, W + 200, 2400), GROUND, None)
     ys = np.linspace(1300, 2000, 12)
-    p.poly([(430 + (y - 1300) * -0.25, y) for y in ys] + [(620 + (y - 1300) * 0.3, y) for y in ys[::-1]], STONE,
-           INK, 2.0)                                                     # the path going back
+    p.poly([(430 + (y - 1300) * -0.25, y) for y in ys] + [(620 + (y - 1300) * 0.3, y) for y in ys[::-1]],
+           mix(STONE, MOSS, 0.22), INK, 2.0)                             # the path going back, flagstones as in S2
+    yy, row = 1310.0, 0
+    while yy < 2000:
+        hh = 18 + (yy - 1300) * 0.12
+        xa, xb = 430 + (yy - 1300) * -0.25, 620 + (yy - 1300) * 0.3
+        p.line([(xa, yy), (xb, yy)], STONE_D, 1.6)
+        for k in range(1, 3 + row % 2):
+            xx = xa + (xb - xa) * (k - 0.5 * (row % 2)) / (2 + row % 2)
+            p.line([(xx, yy), (xx, yy + hh)], STONE_D, 1.6)
+        yy += hh
+        row += 1
+    rr = random.Random(96)
+    for k in range(26):
+        y = rr.uniform(1320, 1900)
+        x = rr.choice([rr.uniform(-20, 400 - (y - 1300) * 0.25), rr.uniform(650 + (y - 1300) * 0.3, 1100)])
+        tuft(p, x, y, 20 + (y - 1300) * 0.08, LEAF_D if k % 2 else MOSS_L, k + 300)
     shafts(img, cam, [[(200, -200), (380, -200), (700, 1700), (420, 1700)], [(560, -200), (640, -200), (980, 1500),
                                                                              (880, 1500)]], a=0.18)
-    _bell_flower(img, p, cam, 980, 1520, 70)
+    _bell_flower(img, p, cam, 1040, 1640, 48)                            # pass 1: smaller, further out from his face
     clump(p, -40, 1750, 300, 220, LEAF_D, 97)
     clump(p, 1120, 1820, 280, 200, LEAF, 98)
     _purple_patch(p, 140, 1820, 160, 99, 8)
@@ -497,21 +544,24 @@ def forest_edge(img, p, cam, t):
     p.poly(quad(-200, -400, W + 200, 2400), EDGE_SKY, None)
     for k, (x, rx) in enumerate(((100, 320), (520, 300), (980, 330))):
         p.poly(blob(x, 560 + 60 * (k % 2), rx, 300, 12, 0.2, 110 + k), mix(EDGE_LEAF, EDGE_SKY, 0.4), INK, 2.0)
-    for x, w, lean in ((80, 46, 30), (300, 34, -20), (640, 40, 10), (880, 52, -30), (1020, 30, 14)):   # thin trunks
-        bark(p, [(x, 1500), (x + lean * 0.5, 900), (x + lean, 200)], w, w * 0.6, (92, 84, 74), 120 + x, None, 2)
+    EDGE_TRUNK = mix(TRUNK, EDGE_SKY, 0.25)                             # pass 1: the forest's own bark, gone grey
+    for x, w, lean in ((80, 90, 30), (300, 60, -20), (640, 70, 10), (880, 100, -30), (1020, 56, 14)):   # gnarled trunks
+        bark(p, [(x, 1500), (x + lean * 0.5 + 12, 1100), (x + lean * 0.5 - 10, 700), (x + lean, 200)], w, w * 0.6,
+             EDGE_TRUNK, 120 + x, mix(MOSS, EDGE_SKY, 0.3), 4)
+        p.ell(x + lean * 0.4, 1000, w * 0.18, w * 0.26, dk(EDGE_TRUNK, 0.7), INK, 1.8)   # a knot
         for k in range(2):                                              # bare side branches (ref 17)
             y = 500 + 260 * k
             sg = 1 if (x + k) % 2 else -1
             p.line(open_curve([(x + lean * 0.6, y), (x + lean * 0.6 + sg * 90, y - 60), (x + sg * 150, y - 70)], 4),
-                   (92, 84, 74), 5.0)
-    for k, (x, rx) in enumerate(((-40, 260), (420, 220), (1120, 280))):
-        clump(p, x, 260 + 80 * k % 160, rx, 180, EDGE_LEAF, 130 + k)
+                   EDGE_TRUNK, 7.0)
+    for k, (x, rx) in enumerate(((-40, 260), (420, 220), (1120, 280), (760, 200), (200, 180))):   # canopy across the sky
+        clump(p, x, (260, 340, 180, 60, -20)[k], rx, 180, EDGE_LEAF if k % 2 == 0 else EDGE_LEAF_D, 130 + k)
     p.poly(quad(-200, 1360, W + 200, 2400), (110, 124, 92), None)
     rr = random.Random(141)
     for k in range(40):                                                 # long grass across the ground
         x, y = rr.uniform(-40, 1120), rr.uniform(1340, 1900)
         tuft(p, x, y, 50 + (y - 1300) * 0.25, EDGE_LEAF_D if k % 2 else (128, 144, 98), k + 150, 6, 2.4)
-    _rock(p, 140, 1520, 160, 140, 160)
+    _rock(p, 230, 1560, 200, 160, 160)                                  # pass 1: whole, not a sliver at the edge
     for x, y, sd in ((900, 1600, 161), (240, 1820, 162), (1000, 1880, 163)):    # ferns
         for k in range(7):
             a = -math.pi / 2 + (k - 3) * 0.38
@@ -537,14 +587,14 @@ def forest_front(img, cam, view, t=0.0):
 
 
 # ================================================================================================ the camp
-CAMP = Level(h=1.6, hz=760.0, f=1100.0)
+CAMP = Level(h=1.6, hz=860.0, f=1100.0)   # pass 1: the horizon lower, less empty yard below the action
 DIRT, DIRT_D, DIRT_L = (198, 166, 116), (170, 138, 92), (218, 192, 146)
 TIN, TIN_D, TIN_L = (138, 142, 144), (108, 112, 116), (166, 168, 166)
 RUST = (168, 96, 52)
 PLANK, PLANK_D = (150, 112, 72), (112, 82, 52)
 CONT_BLUE, CONT_ORANGE = (46, 96, 150), (214, 110, 40)
 SAND, SAND_D = (186, 168, 120), (150, 132, 92)
-FLAG_C = (40, 44, 40)
+FLAG_C = (40, 80, 150)            # pass 1: blue as ref 24's, an invented white mark
 WALL_D, WALL_H = 10.0, 2.6        # the back wall: depth and height (m)
 GATE_HALF = 1.8                   # the gate opening's half width (m)
 TOWER = (3.0, 9.0)                # the watchtower's middle (x, d), inside the wall on the right
@@ -571,7 +621,8 @@ def _wire(p, x0, x1, y, r):
     """A coil of barbed wire along a wall top."""
     x = x0
     while x < x1:
-        p.ell(x, y - r * 0.8, r, r * 0.8, None, (60, 60, 60), 1.4)
+        p.ell(x, y - r * 0.8, r, r * 0.8, None, (50, 50, 50), 2.4)
+        p.line([(x - r * 0.3, y - r * 1.6), (x + r * 0.3, y - r * 1.4)], (50, 50, 50), 2.0)   # a barb
         x += r * 1.3
 
 
@@ -611,7 +662,11 @@ def _container(p, x0, x1, d, depth, col, seed, z0=0.0):
     p.line([(cx, f1[1]), (cx, f0[1])], dk(col, 0.6), 2.0)               # the two doors
     for k in range(1, 8):
         xx = f0[0] + (f1[0] - f0[0]) * k / 8
-        p.line([(xx, f1[1] + 8), (xx, f0[1] - 8)], dk(col, 0.82), 1.2)
+        p.line([(xx, f1[1] + 8), (xx, f0[1] - 8)], dk(col, 0.72), 2.4)
+    cs = (f1[0] - f0[0]) * 0.06                                         # the corner castings
+    for cx_, cy_ in ((f0[0], f1[1]), (f1[0], f1[1]), (f0[0], f0[1]), (f1[0], f0[1])):
+        p.poly(quad(cx_ - cs * (cx_ == f1[0]), cy_ - cs * (cy_ == f0[1]), cx_ + cs * (cx_ == f0[0]), cy_ + cs * (cy_ == f1[1])),
+               (60, 60, 60), INK, 1.2)
     for xx in (cx - (f1[0] - f0[0]) * 0.12, cx + (f1[0] - f0[0]) * 0.12):  # the lock bars
         p.line([(xx, f1[1] + 10), (xx, f0[1] - 10)], (60, 60, 60), 2.4)
     r = random.Random(seed)
@@ -654,14 +709,16 @@ def _sandbags(p, x0, x1, d, rows=3, seed=0):
             c = SAND if r.random() > 0.3 else mix(SAND, SAND_D, 0.5)
             p.poly(curve([(x, y), (x + bw * 0.5, y - bh * 0.62), (x + bw, y), (x + bw * 0.5, y + bh * 0.55)], 4), c,
                    INK, 2.2)
-            p.line([(x + bw * 0.5, y - bh * 0.3), (x + bw * 0.52, y + bh * 0.3)], SAND_D, 1.4)
+            p.line([(x + bw * 0.12, y - bh * 0.05), (x + bw * 0.88, y - bh * 0.05)], SAND_D, 1.4)   # the stitched seam
+            for e in (0.06, 0.94):                                                                  # the tied ends
+                p.line([(x + bw * e, y - bh * 0.25), (x + bw * e, y + bh * 0.22)], SAND_D, 1.6)
             x += bw * 0.96
 
 
-def _palm(p, x, y, h, seed, col=LEAF_D):
+def _palm(p, x, y, h, seed, col=LEAF_D, lean=0.12):
     """A palm (ref 23, 24): a thin leaning trunk with ring marks, a crown of drooping fronds."""
-    top = (x + h * 0.12, y - h)
-    p.poly(ribbon(open_curve([(x, y), (x + h * 0.08, y - h * 0.5), top], 6), h * 0.06, h * 0.035), (140, 116, 82),
+    top = (x + h * lean, y - h)
+    p.poly(ribbon(open_curve([(x, y), (x + h * lean * 0.66, y - h * 0.5), top], 6), h * 0.06, h * 0.035), (140, 116, 82),
            INK, 2.0)
     r = random.Random(seed)
     for k in range(7):
@@ -684,8 +741,8 @@ def camp(img, cam, t=0.0, gate=0.0):
     p.poly(blob(540, 820, 900, 220, 16, 0.12, 204), mix(LEAF_D, SKY_LO, 0.4), INK, 2.0)   # far hills of trees
     for k, (x, rx, ry) in enumerate(((60, 220, 210), (330, 200, 180), (700, 210, 200), (1010, 230, 220))):
         clump(p, x, 700 - 40 * (k % 2), rx, ry, LEAF if k % 2 else LEAF_D, 210 + k)
-    for x, h, sd in ((180, 520, 221), (560, 600, 222), (880, 480, 223)):
-        _palm(p, x, 760, h, sd)
+    for x, h, sd, lean in ((180, 520, 221, -0.1), (560, 640, 222, 0.14), (900, 420, 223, -0.22)):
+        _palm(p, x, 760, h, sd, lean=lean)
     p.poly(quad(-200, 760, W + 200, 2400), DIRT, None)                  # the yard
     # the flag and the watchtower stand behind the wall's line, drawn before it
     fp0, fp1 = CAMP.p(-0.6, 12.0, 0), CAMP.p(-0.6, 12.0, 7.0)
@@ -701,7 +758,7 @@ def camp(img, cam, t=0.0, gate=0.0):
             x += 1.0
             continue
         a, b = CAMP.p(x, WALL_D, 0), CAMP.p(x + 1.0, WALL_D, WALL_H + 0.15 * math.sin(k * 2.1))
-        _tin_sheet(p, quad(a[0], b[1], b[0], a[1]), TIN if k % 3 else TIN_L, 240 + k)
+        _tin_sheet(p, quad(a[0], b[1], b[0], a[1]), (TIN, TIN_L, RUST, TIN, (92, 112, 122))[k % 5], 240 + k)
         x += 1.0
         k += 1
     o0, o1 = CAMP.p(-GATE_HALF, WALL_D + 0.05, 0), CAMP.p(GATE_HALF, WALL_D + 0.05, 2.4)
@@ -723,10 +780,13 @@ def camp(img, cam, t=0.0, gate=0.0):
         p.line([CAMP.p(tx + 0.85, td, z0), CAMP.p(tx - 0.75, td, z1)], PLANK_D, 3.0)
     pa, pb = CAMP.p(tx - 1.1, td, 4.4), CAMP.p(tx + 1.1, td, 5.4)
     p.poly(quad(pa[0], pb[1], pb[0], pa[1]), PLANK, INK, 2.4)
-    for u in (0.33, 0.66):
-        p.line([(pa[0] + (pb[0] - pa[0]) * u, pb[1]), (pa[0] + (pb[0] - pa[0]) * u, pa[1])], PLANK_D, 1.6)
-    for lx in (tx - 1.0, tx + 1.0):
-        p.line([CAMP.p(lx, td, 5.4), CAMP.p(lx, td, 6.3)], PLANK_D, 3.0)
+    for u in np.linspace(0.1, 0.9, 7):                                 # planks (pass 1: a blank box)
+        p.line([(pa[0] + (pb[0] - pa[0]) * u, pb[1] + 3), (pa[0] + (pb[0] - pa[0]) * u, pa[1] - 3)], PLANK_D, 2.0)
+    p.poly(quad(pa[0] + (pb[0] - pa[0]) * 0.3, pb[1] + 10, pa[0] + (pb[0] - pa[0]) * 0.7, pb[1] + 26), (40, 34, 30), INK, 1.6)
+    for lx in (tx - 1.0, tx + 1.0):                                     # the roof posts (pass 1: the roof floated)
+        a_, b_ = CAMP.p(lx, td, 5.4), CAMP.p(lx, td, 6.3)
+        p.poly(quad(a_[0] - 5, b_[1], a_[0] + 5, a_[1]), PLANK_D, INK, 1.8)
+    p.line([CAMP.p(tx - 1.1, td, 5.75), CAMP.p(tx + 1.1, td, 5.75)], PLANK_D, 3.0)   # the rail
     ra, rb = CAMP.p(tx - 1.4, td, 6.2), CAMP.p(tx + 1.4, td, 6.2)
     rt = CAMP.p(tx, td, 6.9)
     _tin_sheet(p, [(ra[0], rb[1]), (rb[0], rb[1]), (rb[0] - 20, rt[1]), (ra[0] + 20, rt[1])][::1], TIN_D, 251, 6)
@@ -736,16 +796,12 @@ def camp(img, cam, t=0.0, gate=0.0):
                CAMP.p(sx * 1.3 - 0.35, 1.4, 0)]
         p.poly(rut, DIRT_D, None)
     rr = random.Random(261)
-    for kk in range(4):                                                 # the near yard (first look: an empty field):
-        d = rr.uniform(1.6, 3.2)                                        # dark oil stains and tread marks
+    for kk in range(0):                                                 # (pass 1: the oil stains read as shadows)
+        d = rr.uniform(1.6, 3.2)
         q = CAMP.p(rr.uniform(-1.4, 1.4), d, 0)
         s_ = CAMP.ppm(d)
         p.poly(blob(q[0], q[1], s_ * rr.uniform(0.25, 0.45), s_ * 0.08, 10, 0.25, 265 + kk), mix(DIRT_D, (90, 80, 70), 0.35),
                None)
-    for sx in (-1, 1):
-        for d in np.arange(1.6, 9.5, 0.45):                             # tyre tread ticks along each rut
-            a, b = CAMP.p(sx * 1.3 * (1 - (d - 1.4) / 8.6 * 0.3) - 0.2, d, 0), CAMP.p(sx * 1.3 * (1 - (d - 1.4) / 8.6 * 0.3) + 0.2, d, 0)
-            p.line([a, b], mix(DIRT_D, (90, 80, 70), 0.3), max(1.2, 0.03 * CAMP.ppm(d)))
     for kk in range(40):
         d = 1.8 + (rr.random() ** 1.6) * 8.0
         q = CAMP.p(rr.uniform(-4, 4), d, 0)
@@ -764,10 +820,24 @@ def camp(img, cam, t=0.0, gate=0.0):
     _container(p, *CONTAINERS['orange container'], CONT_ORANGE, 282, z0=2.6)
     _crate(p, -2.2, 6.6, 0.9, 0, 283)
     _crate(p, -2.15, 6.6, 0.7, 0.9, 284)
-    _barrel(p, 1.6, 7.0)
-    _barrel(p, 1.95, 7.5, (150, 60, 44))
+    _barrel(p, 1.05, 6.6)                                               # pass 1: clear of the gunman's feet
+    _barrel(p, 1.35, 7.2, (150, 60, 44))
     for x, d in ((2.2, 8.2), (3.9, 8.0)):                               # sandbags round the tower's foot
         _sandbags(p, x - 0.7, x + 0.7, d, 2, 300 + int(x * 10))
+    for x, d, sd in ((-1.6, 2.9, 0), (1.5, 3.1, 1), (-0.4, 6.0, 2), (2.6, 4.4, 3)):   # the near yard: spent cases,
+        q = CAMP.p(x, d, 0)                                             # a dropped helmet, a tyre (pass 1: empty)
+        u = CAMP.ppm(d)
+        if sd == 3:
+            p.ell(q[0], q[1] - u * 0.18, u * 0.36, u * 0.18, (40, 40, 40), INK, 2.4)
+            p.ell(q[0], q[1] - u * 0.18, u * 0.18, u * 0.08, DIRT_D, INK, 1.8)
+        elif sd == 2:
+            p.poly(curve([(q[0] - u * 0.16, q[1]), (q[0] - u * 0.14, q[1] - u * 0.14), (q[0] + u * 0.14, q[1] - u * 0.14),
+                          (q[0] + u * 0.16, q[1])], 3), (70, 80, 64), INK, 2.0)
+        else:
+            for kk in range(6):
+                p.poly(ribbon([(q[0] + kk * u * 0.07, q[1] - kk % 2 * u * 0.03),
+                               (q[0] + kk * u * 0.07 + u * 0.05, q[1] - kk % 2 * u * 0.03 - u * 0.01)], u * 0.018, u * 0.016),
+                       (206, 160, 60), INK, 1.0)
 
 
 def camp_front(img, cam, t=0.0):
@@ -812,7 +882,9 @@ def _house(img, p, x0, x1, base, top, roof_h, col, seed, balcony=True):
     w = x1 - x0
     p.poly(quad(x0, top, x1, base), col, INK, 2.6)
     cx = (x0 + x1) / 2
-    roof = [(x0 - w * 0.06, top + 4), (cx, top - roof_h), (x1 + w * 0.06, top + 4)]
+    roof = ([(x0 - w * 0.06, top + 4), (cx, top - roof_h), (x1 + w * 0.06, top + 4)] if seed % 2 == 0 else
+            [(x0 - w * 0.06, top + 4), (x0 + w * 0.12, top - roof_h * 0.7), (x1 - w * 0.12, top - roof_h * 0.7),
+             (x1 + w * 0.06, top + 4)])                                 # pass 1: a side-on roof every other house
     p.poly(roof, ROOF, INK, 2.6)
     for k in range(1, 5):                                               # the tile rows
         u = k / 5
@@ -820,11 +892,12 @@ def _house(img, p, x0, x1, base, top, roof_h, col, seed, balcony=True):
                 (x1 + w * 0.06 - (x1 + w * 0.06 - cx) * u, top + 4 - roof_h * u)], ROOF_D, 1.6)
     fl = (base - top) / 3
     for k in range(1, 3):                                               # timber beams: floors, posts, braces
-        p.line([(x0, top + fl * k), (x1, top + fl * k)], BEAM, 4.0)
+        p.line([(x0, top + fl * k), (x1, top + fl * k)], BEAM, 6.0)
     for u in (0.02, 0.5, 0.98):
-        p.line([(x0 + w * u, top), (x0 + w * u, base)], BEAM, 4.0)
-    p.line([(x0, top + fl), (x0 + w * 0.22, top)], BEAM, 3.0)
-    p.line([(x1, top + fl), (x1 - w * 0.22, top)], BEAM, 3.0)
+        p.line([(x0 + w * u, top), (x0 + w * u, base)], BEAM, 6.0)
+    for k in range(2):                                                  # braces on both floors (pass 1: unseen)
+        p.line([(x0, top + fl * (k + 1)), (x0 + w * 0.22, top + fl * k)], BEAM, 4.5)
+        p.line([(x1, top + fl * (k + 1)), (x1 - w * 0.22, top + fl * k)], BEAM, 4.5)
     r = random.Random(seed)
     for row in range(2):                                                # windows with shutters
         for u in (0.25, 0.75):
@@ -865,6 +938,9 @@ def _banner(p, x, top, w, h, t=0.0):
     p.poly([(x - w / 2, top), (x + w / 2, top), (x + w / 2 + sway, top + h), (x + sway, top + h * 1.12),
             (x - w / 2 + sway, top + h)], BANNER, INK, 2.4)
     p.poly(quad(x - w / 2 + 6, top + 4, x + w / 2 - 6, top + h * 0.08), GOLD, None)
+    p.line([(x - w / 2 + 5, top + h * 0.08), (x - w / 2 + 5 + sway, top + h - 4)], GOLD, max(2.0, w * 0.04))   # gold trim
+    p.line([(x + w / 2 - 5, top + h * 0.08), (x + w / 2 - 5 + sway, top + h - 4)], GOLD, max(2.0, w * 0.04))
+    p.line([(x - w / 2 + sway, top + h), (x + sway, top + h * 1.12), (x + w / 2 + sway, top + h)], GOLD, max(2.0, w * 0.05))
     _crest(p, x + sway * 0.5, top + h * 0.42, w * 0.32)
     p.line([(x - w / 2 + 8, top + h * 0.08), (x - w / 2 + 8 + sway, top + h - 6)], BANNER_D, 2.0)
 
@@ -885,13 +961,13 @@ def _fountain(p, x, d, t):
     bx, by = TOWN.p(x, d, 0)
     R = 2.4 * ppm
     p.ell(bx, by, R, R * 0.2, (180, 180, 186), INK, 2.4)                # the basin floor
-    p.poly(quad(bx - R, by - 0.7 * ppm, bx + R, by), (196, 194, 196), INK, 2.4)   # its wall
+    p.poly(quad(bx - R, by - 0.7 * ppm, bx + R, by), (150, 146, 140), INK, 2.4)   # its wall (pass 1: darker, ref 21)
     p.ell(bx, by - 0.7 * ppm, R, R * 0.2, (120, 170, 210), INK, 2.4)     # the water
     p.ell(bx, by - 0.7 * ppm, R * 0.8, R * 0.13, (160, 200, 230), None)
     for k in range(-5, 6):
         p.line([(bx + R * k / 5.5, by - 0.62 * ppm), (bx + R * k / 5.5, by - 0.05 * ppm)], (170, 168, 172), 1.4)
     col_top = by - 3.0 * ppm
-    p.poly(quad(bx - 0.25 * ppm, col_top, bx + 0.25 * ppm, by - 0.7 * ppm), (204, 202, 204), INK, 2.2)
+    p.poly(quad(bx - 0.25 * ppm, col_top, bx + 0.25 * ppm, by - 0.7 * ppm), (160, 156, 150), INK, 2.2)
     for z, rr in ((1.7, 1.0), (2.6, 0.6)):                              # two tiers
         ty = by - z * ppm
         p.poly([(bx - rr * ppm, ty), (bx + rr * ppm, ty), (bx + rr * 0.6 * ppm, ty + 0.25 * ppm),
@@ -1006,11 +1082,13 @@ def town_square(img, p, cam, t):
     q = TOWN.p(-3.4, 11.0)
     _palm(p, q[0], q[1], 7.0 * TOWN.ppm(11.0), 431)
     _tent(p, 3.3, 10.0)
-    for x, d in ((2.0, 9.0), (2.4, 9.4)):
+    for x, d in ((1.9, 10.2), (2.25, 10.4)):                            # pass 1: barrels and sacks AT the stall
         _barrel_t(p, x, d)
-    for x, d in ((4.6, 9.0), (4.9, 9.4), (1.7, 8.6)):
+    for x, d in ((4.7, 10.1), (4.95, 10.3)):
         _sack(p, x, d)
-    for x, d in ((-2.6, 8.0), (2.9, 7.6)):
+    for k, (x, d, c) in enumerate(((-3.0, 12.0, (110, 80, 140)), (3.1, 12.5, (80, 110, 150)), (-1.2, 13.0, (150, 100, 60)))):
+        _townsfolk(p, x, d, c, 10 + k)                                  # pass 1: townsfolk nearer, so they show
+    for x, d in ((-2.9, 8.0), (3.4, 7.6)):
         a, b = TOWN.p(x, d, 0), TOWN.p(x, d, 4.4)
         p.line([a, b], (70, 60, 50), 4.0)
         _banner(p, b[0] + 46 * (1 if x < 0 else -1), b[1] + 20, 0.8 * TOWN.ppm(d), 2.2 * TOWN.ppm(d), t)
@@ -1045,15 +1123,34 @@ def town_wall(img, p, cam, t):
     p.line([(wx - 130, wy), (wx + 130, wy)], BEAM, 3.0)
     for sg in (-1, 1):
         p.poly(quad(wx + sg * 130, wy - 170, wx + sg * 230, wy + 170), (60, 90, 140), INK, 2.6)
-        for k in range(1, 6):
-            yy = wy - 170 + 340 * k / 6
-            p.line([(wx + sg * 136, yy), (wx + sg * 224, yy)], (44, 70, 116), 2.0)
+        for k in range(1, 12):                                          # louvres (pass 1: flat panels)
+            yy = wy - 170 + 340 * k / 12
+            p.poly(quad(wx + sg * 136 - (sg < 0) * 88, yy - 9, wx + sg * 136 + (sg > 0) * 88, yy),
+                   (82, 112, 160), None)
+            p.line([(wx + sg * 136, yy), (wx + sg * 224, yy)], (36, 58, 100), 2.2)
+        for yy in (wy - 120, wy + 120):                                 # the iron hinges
+            p.poly(quad(wx + sg * 130 - (sg < 0) * 40, yy - 6, wx + sg * 130 + (sg > 0) * 40, yy + 6), (40, 40, 40), INK, 1.2)
     p.poly(quad(wx - 170, wy + 170, wx + 170, wy + 240), BEAM, INK, 2.6)   # the flower box
     for k in range(8):
         flower(p, wx - 150 + 43 * k, wy + 160 - 18 * (k % 2), 30, (210, 50, 60) if k % 2 else PURPLE)
     for k in range(5):
         p.poly(curve([(wx - 140 + 70 * k, wy + 175), (wx - 120 + 70 * k, wy + 240), (wx - 100 + 70 * k, wy + 175)], 3), LEAF,
                INK, 1.6)
+    for k in range(40):                                                 # stone texture: chips, cracks, weathering
+        cx_, cy_ = rr.uniform(-20, 1100), rr.uniform(-20, base - 20)
+        if k % 3 == 0:
+            p.line(open_curve([(cx_, cy_), (cx_ + rr.uniform(-30, 30), cy_ + 25), (cx_ + rr.uniform(-40, 40), cy_ + 55)], 3),
+                   WALLSTONE_D, 1.6)
+        else:
+            p.poly(curve([(cx_, cy_), (cx_ + 14, cy_ - 6), (cx_ + 22, cy_ + 6), (cx_ + 8, cy_ + 12)], 3), WALLSTONE_D, None)
+    sx_ = [wx - 230 + 460 * u for u in np.linspace(0, 1, 9)]             # a blue drape with gold fringe under the sill
+    sw_ = [(xx, wy + 250 + 70 * math.sin(math.pi * ((i % 4) / 4))) for i, xx in enumerate(sx_)]
+    p.poly([(wx - 230, wy + 240), (wx + 230, wy + 240)] + sw_[::-1], BANNER, INK, 2.4)
+    p.line(sw_, GOLD, 5.0)
+    p.poly(quad(30, base - 300, 190, base), (150, 90, 60), INK, 2.6)     # a planter at the wall's foot
+    p.line([(30, base - 250), (190, base - 250)], (110, 64, 40), 3.0)
+    for k in range(5):
+        flower(p, 50 + 30 * k, base - 320 - 20 * (k % 2), 26, (210, 50, 60) if k % 2 else PURPLE)
     p.poly(quad(120, 120, 175, 140), (50, 46, 44), INK, 2.0)              # the iron bracket
     p.line([(130, 130), (330, 130)], (50, 46, 44), 6.0)
     _banner(p, 240, 140, 0.7 * ppm, 2.0 * ppm, t)
@@ -1086,14 +1183,14 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_down': {'link': (560, 1330, down_ppm(1330)), 'navi': (700, 1050, down_ppm(1330))},
     'forest_close': {'link': (540, 2300, 1100.0)},            # a close-up: his feet well below the frame
     'forest_edge': {'gunman': (520, 2500, 900.0)},
-    'camp': {'kg': _camp_mark(0.75, 4.4), 'link': _camp_mark(-1.25, 3.8), 'gunman1': _camp_mark(-2.2, 9.2),
+    'camp': {'kg': _camp_mark(0.75, 4.2), 'link': _camp_mark(-0.3, 3.5), 'gunman1': _camp_mark(-2.2, 9.2),
              'gunman2': _camp_mark(2.0, 7.6), 'gunman3': _camp_mark(3.3, 8.6)},   # the gunmen aside, the gate clear
-    'town_square': {n: _town_mark(x, 4.6) for n, x in (('zelda', -0.75), ('malon', -0.15), ('ruto', 0.42),
-                                                       ('goron', 1.12), ('saria', 1.8))},
-    'town_wall': {'link': (460, WALL_VIEW['base'] - 90, WALL_VIEW['ppm']),
-                  'kg': (820, WALL_VIEW['base'], WALL_VIEW['ppm'])},
+    'town_square': {n: _town_mark(x, 4.0) for n, x in (('zelda', -0.72), ('malon', -0.22), ('ruto', 0.27),
+                                                       ('goron', 0.92), ('saria', 1.55))},
+    'town_wall': {'link': (400, WALL_VIEW['base'], WALL_VIEW['ppm']),       # on the cobbles: the shot lifts him
+                  'kg': (860, WALL_VIEW['base'], WALL_VIEW['ppm'])},
 }
-STAGE['town_square']['kg'] = _town_mark(-0.75, 2.7)    # in front, below the line, presenting it
+STAGE['town_square']['kg'] = _town_mark(-0.95, 2.3)    # in front, below the line, presenting it
 
 
 # ================================================================================================ boxes (rule 83)
@@ -1106,7 +1203,7 @@ SET_BOXES = [   # the camp's solid things, screen px (the S7 camera); nothing ma
     ('blue container', _box(CAMP, -5.0, -2.6, 7.4, 0, 2.6)),
     ('orange container', _box(CAMP, -5.0, -2.6, 7.6, 2.6, 5.2)),
     ('crates', _box(CAMP, -2.65, -1.75, 6.6, 0, 1.6)),
-    ('barrels', _box(CAMP, 1.3, 2.25, 7.0, 0, 0.9)),
+    ('barrels', _box(CAMP, 0.75, 1.65, 6.6, 0, 0.9)),
     ('gate', _box(CAMP, -GATE_HALF, GATE_HALF, WALL_D, 0, 2.4)),
     ('watchtower', _box(CAMP, TOWER[0] - 1.1, TOWER[0] + 1.1, TOWER[1], 0, 6.9)),
 ]
@@ -1114,6 +1211,7 @@ SET_MEANT = [
     ('blue container', 'orange container', 'the orange one sits stacked on top of the blue (ref 23)'),
     ('crates', 'blue container', 'the crates stand in front of it, 0.8 m nearer the lens'),
     ('barrels', 'watchtower', 'the barrels stand 2 m nearer the lens, in front of its legs'),
+    ('barrels', 'gate', 'the barrels stand 3 m nearer the lens, below the gate on screen'),
 ]
 
 
@@ -1228,9 +1326,9 @@ def with_cast(at, t=0.0, gate=0.0):
         if who == 'kg':
             # his feet: about 230 units below his middle when perched (remakes_creatures._kg_feet at y + 230)
             view = 'side' if at in ('town_wall',) else 'front'
-            CR.kg(img, cam, x, y - 240 * s, s, view=view, perched=(at == 'forest_up'),
-                  wings='gesture' if at == 'town_square' else ('gun' if at == 'camp' else 'fold'),
-                  band=at in ('camp', 'town_wall'), mood='war' if at == 'camp' else 'kindly')
+            wings, mood = KG_BEAT.get(at, ('fold', 'kindly'))
+            CR.kg(img, cam, x, y - 240 * s, s, view=view, perched=(at == 'forest_up'), wings=wings,
+                  band=at in ('camp', 'town_wall'), mood=mood, flip=-1 if at == 'town_wall' else 1)
         elif who == 'navi':
             CR.navi(img, cam, x, y, s * 1.2)
         elif who == 'goron':
@@ -1239,13 +1337,22 @@ def with_cast(at, t=0.0, gate=0.0):
             key = 'gunman' if who.startswith('gunman') else who
             sp = dict(RC.CAST[key])
             k = RC.scale_for(sp, s)
-            RC.person(img, cam, x, y - 928 * k, s, sp)
+            if key == 'gunman':                                          # every gunman aims (ref 17), as in the shots
+                j = RC.poses('gunman')['aiming']
+                fl = -1 if (at == 'camp' and x > 540) else 1
+                RC.person(img, B.Local(cam, x, 0, 1.0, fl) if fl < 0 else cam, (0 if fl < 0 else x), y - 928 * k, s, sp,
+                          yaw=j['_yaw'], j=j)
+            else:
+                RC.person(img, cam, x, y - 928 * k, s, sp)
     if at.startswith('forest'):
         forest_front(img, cam, at.split('_')[1], t)
     elif at == 'camp':
         camp_front(img, cam, t)
     return img.resize((W, H), Image.LANCZOS)
 
+
+KG_BEAT = {'forest_up': ('wide', 'hype'), 'camp': ('gun', 'war'), 'town_square': ('gesture', 'show'),
+           'town_wall': ('fold', 'fury')}       # each set sheet shows KG as his shot has him (line 1, 7, 11, 13)
 
 SETS = {'forest': ('forest_up', 'forest_down', 'forest_close', 'forest_edge'), 'camp': ('camp',),
         'town': ('town_square', 'town_wall')}

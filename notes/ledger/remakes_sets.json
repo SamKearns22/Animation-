@@ -1,0 +1,175 @@
+{
+ "film": "remakes_sets",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 2,
+    "pass": 1,
+    "date": "2026-11-10",
+    "faults": 8,
+    "cant_tell": 3,
+    "open": [
+     "1 A1: centre - the owl's ear tufts read as horns, the owl as a goat; the cold look missed gate details, containers, tower, flag.",
+     "1 A2: walls, flag - references have rusty patched blue-grey tin, tin-roofed sheds, a blue flag; ours: clean grey panels, black-white flag, no sheds.",
+     "1 O5: top right - tower roof floats above the cabin, no posts; owl hovers with no contact shadow; three dark ground blobs belong to nothing.",
+     "1 O2: tower foot - middle gunman drawn over a red-green box whose base is nearer camera than his feet.",
+     "1 O3: that red-green box can't be named; dashed rut bands read as rail track; pale ovals at right read as boulders, not sandbags.",
+     "1 S1: whole frame - gate shut and whole, no gunfire: the beat is missing; bottom 40% empty dirt, action small mid-frame.",
+     "1 S5: containers have no doors, ribs or corner fittings; tower cabin a blank brown box; bushes one flat row of lumps.",
+     "1 S3: no barbed wire, no barrels; wall is one straight back strip, not a ring; the three palms are copies.",
+     "1 O6: no blast or gunfire drawn; a frame of the gate blowing in.",
+     "1 S6: one frame of S7-S9; one frame per shot side by side.",
+     "1 S4: a still; first and last frame of each camera move."
+    ]
+   },
+   {
+    "round": 3,
+    "pass": 1,
+    "date": "2026-11-10",
+    "faults": 22,
+    "cant_tell": 3,
+    "open": [
+     "1 A1: Goron reads as a blob, tufts as horns",
+     "1 A2: banners flat navy, no gold trim; fountain pale, reference dark",
+     "1 A3: see Same fault elsewhere",
+     "1 O5: stall awning on back houses, crates far forward, unjoined",
+     "1 O2: front left - owl's tufts cover Zelda's and Malon's feet",
+     "1 O4: back houses - doors and windows tiny against the cast",
+     "1 O3: stall reads as two crates",
+     "1 O1: banners - small triangle under the wings; Triforce belongs above",
+     "1 S1: line-up tiny; owl's wings spread sideways, not presenting",
+     "1 S2: right - banner pole stands through the stall crates",
+     "1 S5: houses - no timber beams, blob doors; no townsfolk",
+     "1 S3: one gable repeated; reference houses vary",
+     "2 A1: owl read as eagle, Link as \"calm\"; window, flower box unnamed",
+     "2 A2: banner - flat navy, no gold trim or pole",
+     "2 A3: see Same fault elsewhere",
+     "2 O5: centre - Link's boots float above the cobbles; nothing pins him",
+     "2 O2: centre - owl's tufts cross Link's face",
+     "2 O3: window - shutters flat blue panels, no slats or hinges",
+     "2 O1: banner - Triforce under the wings",
+     "2 S1: owl faces away from Link, smiling; no slam reads",
+     "2 S5: wall flat beige, no stone texture",
+     "2 S3: no blue drapes or planters as in reference",
+     "1 S4: first and last frame of the S10 camera move",
+     "2 S6: S12 and S13 frames side by side",
+     "2 S4: first and last frame of the S12/S13 camera move"
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 1,
+    "date": "2026-11-10",
+    "faults": 35,
+    "cant_tell": 9,
+    "open": [
+     "1 A1: tail reads as claws, tufts as horns.",
+     "1 A2: owl eyes shut.",
+     "1 O3: branch is a plank.",
+     "1 O2: branch laid on trunk face.",
+     "1 O5: top canopy floats.",
+     "1 S1: level camera; owl doesn't tower.",
+     "1 S3: no mist.",
+     "2 A1: stump window reads as eye.",
+     "2 A2: tree house plain, not gnarled.",
+     "2 S1: white path outshouts Link.",
+     "2 S2: path ends at stump side, not door.",
+     "2 O2: path edge cuts stump base.",
+     "2 S3: path a straight brick staircase.",
+     "2 O3: lanterns flat squares.",
+     "2 O5: lanterns unhung.",
+     "2 O6: Navi a cartoon star.",
+     "2 S5: ground flat fill.",
+     "2 S6: flagstone path; smooth in 3.",
+     "3 A1: window reads as eye.",
+     "3 A2: tree house plain.",
+     "3 O6: shafts read as vines.",
+     "3 S3: flat bands, no misty depth.",
+     "3 S1: flower pulls from face.",
+     "3 O3: lantern flat square.",
+     "3 O5: lantern unhung.",
+     "3 S6: path smooth; left lantern gone.",
+     "3 S5: ground flat fill.",
+     "4 A1: no gun; arms don't read.",
+     "4 A2: reference crouches with rifle.",
+     "4 S1: faces camera, not peering.",
+     "4 S2: upright in open, not creeping.",
+     "4 O3: rock a sliver.",
+     "4 S5: flat trunks, void sky.",
+     "4 S3: bare poles, not gnarled trunks.",
+     "4 S6: not 1-3's trunks.",
+     "1 O4: owl beside Link.",
+     "1 O1: cast tile.",
+     "1 S4: move end frames.",
+     "2 O1: cast tiles.",
+     "2 S4: move end frames.",
+     "3 O1: cast tile.",
+     "3 S4: move end frames.",
+     "4 O1: cast tile.",
+     "4 S4: move end frames."
+    ]
+   }
+  ],
+  "lines": {
+   "A1": {
+    "faults": 7,
+    "false": 0
+   },
+   "A2": {
+    "faults": 7,
+    "false": 0
+   },
+   "O5": {
+    "faults": 6,
+    "false": 0
+   },
+   "O2": {
+    "faults": 5,
+    "false": 0
+   },
+   "O3": {
+    "faults": 7,
+    "false": 0
+   },
+   "S1": {
+    "faults": 7,
+    "false": 0
+   },
+   "S5": {
+    "faults": 6,
+    "false": 0
+   },
+   "S3": {
+    "faults": 7,
+    "false": 0
+   },
+   "A3": {
+    "faults": 2,
+    "false": 0
+   },
+   "O4": {
+    "faults": 1,
+    "false": 0
+   },
+   "O1": {
+    "faults": 2,
+    "false": 1
+   },
+   "S2": {
+    "faults": 3,
+    "false": 0
+   },
+   "O6": {
+    "faults": 2,
+    "false": 0
+   },
+   "S6": {
+    "faults": 3,
+    "false": 0
+   }
+  }
+ }
+}

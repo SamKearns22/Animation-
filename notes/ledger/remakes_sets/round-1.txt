@@ -1,0 +1,74 @@
+== critique, round 1 pass 1 (2026-11-10): 35 fault(s), 9 can't tell
+-- look.md --
+1: Horned owl, eyes closed, perched on mossy branch; tangled claws dangling oddly. Calm. No words.
+2: Small green-clad elf walks stone path, glowing blue fairy beside; tree-door house. No words.
+3: Close elf boy smiling, sword hilt over shoulder, round tree door, lanterns. No words.
+4: Masked soldier, goggles, gas mask, black vest, armless stiff stance, grey forest. Menacing. No words.
+-- result.md --
+## Panel 1
+ok: A3 O6 S2 S5 S6
+FAULT A1: tail reads as claws, tufts as horns.
+FAULT A2: owl eyes shut.
+FAULT O3: branch is a plank.
+FAULT O2: branch laid on trunk face.
+FAULT O5: top canopy floats.
+FAULT S1: level camera; owl doesn't tower.
+FAULT S3: no mist.
+CAN'T TELL O4: owl beside Link.
+CAN'T TELL O1: cast tile.
+CAN'T TELL S4: move end frames.
+
+## Panel 2
+ok: A3 O4
+FAULT A1: stump window reads as eye.
+FAULT A2: tree house plain, not gnarled.
+FAULT S1: white path outshouts Link.
+FAULT S2: path ends at stump side, not door.
+FAULT O2: path edge cuts stump base.
+FAULT S3: path a straight brick staircase.
+FAULT O3: lanterns flat squares.
+FAULT O5: lanterns unhung.
+FAULT O6: Navi a cartoon star.
+FAULT S5: ground flat fill.
+FAULT S6: flagstone path; smooth in 3.
+CAN'T TELL O1: cast tiles.
+CAN'T TELL S4: move end frames.
+
+## Panel 3
+ok: A3 O2 O4 S2
+FAULT A1: window reads as eye.
+FAULT A2: tree house plain.
+FAULT O6: shafts read as vines.
+FAULT S3: flat bands, no misty depth.
+FAULT S1: flower pulls from face.
+FAULT O3: lantern flat square.
+FAULT O5: lantern unhung.
+FAULT S6: path smooth; left lantern gone.
+FAULT S5: ground flat fill.
+CAN'T TELL O1: cast tile.
+CAN'T TELL S4: move end frames.
+
+## Panel 4
+ok: A3 O5 O2 O4 O6
+FAULT A1: no gun; arms don't read.
+FAULT A2: reference crouches with rifle.
+FAULT S1: faces camera, not peering.
+FAULT S2: upright in open, not creeping.
+FAULT O3: rock a sliver.
+FAULT S5: flat trunks, void sky.
+FAULT S3: bare poles, not gnarled trunks.
+FAULT S6: not 1-3's trunks.
+CAN'T TELL O1: cast tile.
+CAN'T TELL S4: move end frames.
+
+## Cold look
+1: "horned", "claws" are tufts, tail. 2: lanterns, flowers missed, too small. 3: shafts, mist missed, don't read. 4: "soldier": no gun.
+
+## Same fault elsewhere
+Eye: 2, 3. Unhung: 1, 2, 3. Flat fills: 2, 3, 4. No mist: 1, 2, 3. Beat lost: 1, 3, 4. Effects: 2, 3. Cut-out overlaps: 1, 2. Set mismatch: 2, 3, 4.
+
+## Not on the list
+1. Panels 1, 2: wrong camera angle. suggested line: camera matches brief.
+2. Flat light. suggested line: one light direction per set.
+3. Panel 4: no room for rising owl. suggested line: room for next action.
+
