@@ -1083,7 +1083,8 @@ RUTO = dict(KID, who='ruto', name='Ruto', skin=R_SKIN, glove=R_SKIN, hair_c=R_FI
             brow_c=(120, 140, 150), lip_c=(150, 120, 170), height=1.22,
             head_dy=-2)       # her head sits lower on a short thick neck (pass 2: a stalk neck)
 GUNMAN = dict(P3.PATRIOT, name='Gunman', who='gunman', patches=False, belly=False, jacket=GUN_JACKET,
-              sleeve=GUN_JACKET, trousers=GUN_CAMO, shoe=(30, 28, 26), glove=(36, 36, 38), height=1.8)
+              sleeve=GUN_JACKET, trousers=GUN_CAMO, shoe=(30, 28, 26), glove=(36, 36, 38), height=1.8,
+              brows='fierce', brow_w=5.4, lid=6)    # an aggressive glare: brows pulled down hard, heavy lids (Sam)
 CAST = {'link': LINK, 'zelda': ZELDA, 'malon': MALON, 'saria': SARIA, 'ruto': RUTO, 'gunman': GUNMAN}
 KIDS = ('link', 'zelda', 'malon', 'saria', 'ruto')
 

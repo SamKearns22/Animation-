@@ -745,12 +745,11 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     for k, (y0, w0, y1, w1, sg) in enumerate(((-470, 430, -330, 420, 70), (-620, 420, -470, 470, 60),
                                               (-770, 380, -620, 455, 50))):
         _ruffle(p, y0, w0, y1, w1, DRESS if k % 2 == 0 else DRESS_L, n=11 - k, seed=k, sag=sg)
-    p.poly(curve([(-300, -880), (0, -896), (300, -880), (360, -800), (390, -750), (0, -730), (-390, -750),
-                  (-360, -800)], 3), DRESS, INK, 2.6)
-    p.line(open_curve([(-300, -870), (0, -884), (300, -870)], 6), DRESS_D, 2.0)   # the lace at its neckline
-    for i in range(13):
-        xx = -280 + i * 560 / 12
-        p.ell(xx, -884 + abs(xx) * 0.01, 14, 10, DRESS_L, INK, 1.4)
+    neck = open_curve([(-310, -900), (-220, -830), (0, -770), (220, -830), (310, -900)], 10)   # a deep round scoop
+    p.poly(neck + [(360, -800), (390, -750), (0, -730), (-390, -750), (-360, -800)], DRESS, INK, 2.6)   # (Sam: a curved
+    p.line([(x, y + 12) for x, y in neck], DRESS_D, 2.0)                # neckline, clear of the goatee's point)
+    for q in neck[::max(1, len(neck) // 12)]:                           # the lace along it
+        p.ell(q[0], q[1] + 2, 14, 10, DRESS_L, INK, 1.4)
     # (no bow at the neckline: pass 2, it and the goatee read as one frilly jabot)
     for sgn in (-1, 1):                                                 # stubby thick arms, puffed sleeves, round fists
         arm = curve([(sgn * 310, -910), (sgn * 450, -820), (sgn * 520, -660), (sgn * 450, -620), (sgn * 380, -760)], 3)

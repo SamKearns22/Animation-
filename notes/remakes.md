@@ -13,9 +13,13 @@
   shield; Zelda's shy head level; Saria's ocarina reads as a pouch; Ruto's fins float, no weight shift; the gunman's
   eyes show and trousers plain; KG's fold reads as a hug, gesture repeats wide, gun on talons, side bandana over the
   eyes, neck grip covers his face; Navi's wings-down points up; the Goron's cone reads as a hat, smiles, loose sleeves.
-- **Next:** wait for Sam's look at the cast sheet; then Build, Opus high: his notes first, the options sheets for the
-  survivors, the new pass-3 faults, a pass 4 only on what changed.
-- **Needs Sam:** his look at the cast sheet; crest pick (3 in use); the recording of line 6 ("Oh my god!"), the only
+- **Sam's look (cast sheet): "It looks excellent."** Fixed his two notes: the gunman glares (brows pulled down hard,
+  heavy lids); the Goron's neckline is a deep round scoop clear of his goatee. His yes settles the six three-pass
+  survivors (no options sheets); crest 3 stays unless he says otherwise.
+- **Next:** Build, Opus high: the clear pass-3 faults (Link's side view shield; Navi's wings-down; KG's side bandana
+  on his brow; the gun held in his wings, not on his talons), then the sets (forest, camp, town square), each alone
+  and critiqued (rule 89).
+- **Needs Sam:** the recording of line 6 ("Oh my god!"), the only
   one missing; bleep "shit" in line 13 or let it be heard (Claude: heard, like "god-damn").
 - **Recordings filed** (Sam, 10 Nov): `source/audio/remakes-01..14.m4a` with 13 split into 13 and 13b; no 06 yet;
   no duplicates; lengths and syllables match the script (`voices.py`). Link's takes are quieter (-23 to -26 LUFS).

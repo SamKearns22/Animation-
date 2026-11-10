@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): build chat 6 (10 Nov): pass 2 faults fixed, critique pass 3 done (31 faults; six survived three passes and go to options sheets); cast sheet sent to Sam with crest 3. Next: Sam's look, then Build (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): build chat 6 (10 Nov): Sam approved the cast sheet ("excellent"); his two notes fixed (gunman glare, Goron neckline); recordings filed (line 6 missing). Next: clear pass-3 faults, then the sets (Opus high). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.
