@@ -135,6 +135,28 @@ def glow(img, cam, x, y, r, col, a=0.55):
     img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(R * 0.45)))
 
 
+SHADOW_W = {'link': 0.55, 'zelda': 0.55, 'malon': 0.55, 'ruto': 0.55, 'saria': 0.55, 'gunman': 0.75, 'kg': 0.6,
+            'goron': 1.1}      # metres across each character's foot shadow (Sam, 11 Nov Q3)
+
+
+def foot_shadow(img, cam, x, y, ppm, w=0.55, a=0.46, flat=0.24, lift=0.0, clip=None, col=(24, 30, 18)):
+    """Sam's soft shadow under a character's feet (11 Nov Q3): a blurred dark oval on the ground at (x, y), w metres
+    across; lift (m off the ground: a jump, the slam) shrinks and fades it; clip (a polygon) keeps it on a branch."""
+    k = 1.0 / (1.0 + 0.9 * max(0.0, lift))
+    lay = Image.new('RGBA', img.size, col + (0,))
+    d = ImageDraw.Draw(lay)
+    X, Y = cam.P(x, y)
+    rx = cam.S(w * ppm * 0.5 * k)
+    ry = rx * flat
+    d.ellipse([X - rx, Y - ry, X + rx, Y + ry], fill=col + (int(255 * a * k),))
+    lay = lay.filter(ImageFilter.GaussianBlur(max(1.0, ry * 0.55)))
+    if clip is not None:
+        m = Image.new('L', img.size, 0)
+        ImageDraw.Draw(m).polygon([cam.P(*q) for q in clip], fill=255)
+        lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay)[..., 3], np.asarray(m))))
+    img.alpha_composite(lay)
+
+
 def shafts(img, cam, rays, col=(255, 248, 210), a=0.16):
     """Misty light shafts (ref 19, 20): soft translucent bands, no outline."""
     lay = Image.new('RGBA', img.size, col + (0,))
@@ -204,7 +226,9 @@ def bark(p, pts, w0, w1, col, seed, moss=None, lines=4):
         i1 = r.randint(len(seg) * 2 // 3, len(seg))
         if i1 - i0 > 2:
             p.line(seg[i0:i1], dk(col, 0.7), 1.8)
-    if moss:
+    if moss and abs(pts[-1][1] - pts[0][1]) > 1.5 * abs(pts[-1][0] - pts[0][0]):   # a trunk: moss in patches (pass 2:
+        moss_patches(p, path, w0, w1, moss, seed)                              # a band up it read as tape)
+    elif moss:
         top = []
         for i, q in enumerate(path):
             a, b = np.asarray(path[max(0, i - 1)]), np.asarray(path[min(len(path) - 1, i + 1)])
@@ -217,6 +241,34 @@ def bark(p, pts, w0, w1, col, seed, moss=None, lines=4):
         under = [(x, y + 18 + 8 * math.sin(i * 1.7)) for i, (x, y) in enumerate(top)]
         bumps = [(x, y - 10 - 8 * abs(math.sin(i * 1.3))) for i, (x, y) in enumerate(top)]
         p.poly(bumps + under[::-1], moss, INK, 2.2)
+
+
+def moss_patches(p, path, w0, w1, moss, seed):
+    """Moss on a standing trunk: soft irregular clumps hugging one side, thickest at the foot, a few strands hanging
+    from each (pass 2: one long ruled band read as tape)."""
+    r = random.Random(seed + 500)
+    n = len(path)
+    lo = 0 if path[0][1] > path[-1][1] else n - 1                       # the foot: the lowest end
+    side = r.choice((-1, 1))
+    us = (0.06, 0.2, 0.42, 0.66) if w0 >= 140 else (0.05,)              # a thin trunk: only at its foot (pass 3
+    for k, u in enumerate(us):                                          # check: spaced lumps read as cotton balls)
+        i = int(round(lo + (u if lo == 0 else -u) * (n - 1)))
+        i = min(n - 1, max(0, i))
+        q = path[i]
+        w = w0 + (w1 - w0) * i / (n - 1)
+        size = (1.0 - 0.75 * u) * r.uniform(0.75, 1.1)
+        sg = side if k % 2 == 0 else -side                                # hugging an edge, over its outline
+        cx = q[0] + sg * w * 0.44
+        rx, ry = w * 0.16 * size + 6, w * 0.38 * size + 10
+        p.poly(blob(cx, q[1], rx, ry, 9, 0.28, seed + 510 + k), moss, INK, 2.0)
+        p.poly(blob(cx - rx * 0.15, q[1] - ry * 0.25, rx * 0.55, ry * 0.4, 7, 0.25, seed + 520 + k),
+               mix(moss, (230, 236, 160), 0.15), None)                  # its lit top
+        for j in range(2):                                              # strands hanging from it
+            x0 = cx + rx * r.uniform(-0.6, 0.6)
+            y0 = q[1] + ry * 0.7
+            p.poly(ribbon(open_curve([(x0, y0), (x0 + r.uniform(-4, 4), y0 + ry * 0.4),
+                                      (x0 + r.uniform(-6, 6), y0 + ry * r.uniform(0.6, 1.0))], 4), 9, 2), moss, INK,
+                   1.4)
 
 
 # ================================================================================================ Kokiri Forest
@@ -249,13 +301,21 @@ def _cloud(p, x, y, w, seed):
 
 
 def _door(p, x, y, r, lw=2.6):
-    """A round wooden tree-house door (ref 20): planks in a round frame, an iron ring."""
-    p.ell(x, y, r * 1.18, r * 1.18, TRUNK_D, INK, lw)
-    p.ell(x, y, r, r, (124, 82, 48), INK, lw)
-    for k in (-0.5, 0.0, 0.5):
-        p.line([(x + r * k, y - r * math.sqrt(1 - k * k) * 0.98), (x + r * k, y + r * math.sqrt(1 - k * k) * 0.98)],
-               (92, 60, 36), 2.0)
-    p.ell(x + r * 0.55, y + r * 0.1, r * 0.1, r * 0.1, None, (60, 50, 46), 2.0)
+    """The tree-house door (ref 20), standing on the stump's foot at (x, y): a dark arched doorway, a round-topped
+    plank door in it, iron straps, a ring handle, a flat stone step (pass 2: a round door read as a magnifying glass)."""
+    hgt = r * 3.2
+    def arch(rw, top, base):
+        return curve([(x - rw, base), (x - rw, top + rw), (x - rw * 0.7, top + rw * 0.3), (x, top),
+                      (x + rw * 0.7, top + rw * 0.3), (x + rw, top + rw), (x + rw, base)], 4)
+    p.poly(arch(r * 1.22, y - hgt - r * 0.22, y), (52, 36, 26), INK, lw)            # the dark doorway in the bark
+    p.poly(arch(r, y - hgt, y), (132, 88, 52), INK, lw)                             # the door
+    for k in (-0.5, 0.0, 0.5):                                                       # its planks
+        p.line([(x + r * k, y - hgt + r * (0.55 if k else 0.05)), (x + r * k, y - 2)], (96, 62, 38), 2.0)
+    for v in (0.28, 0.7):                                                            # iron straps
+        yy = y - hgt * v
+        p.line([(x - r * 0.96, yy), (x + r * 0.96, yy)], (62, 56, 54), 4.0)
+    p.ell(x + r * 0.55, y - hgt * 0.45, r * 0.13, r * 0.13, None, (60, 50, 46), 2.4)  # the ring
+    p.poly(wob(quad(x - r * 1.5, y - r * 0.06, x + r * 1.5, y + r * 0.22), 2, int(x)), STONE_D, INK, 2.0)   # the step
 
 
 def _lantern(img, p, cam, x, y, r):
@@ -303,7 +363,7 @@ def _stump_house(img, p, cam, x, y, w, h, seed=3, door=True):
         p.poly(blob(x + w * rx_, y - h * 0.02, w * rw, h * 0.05, 10, 0.2, seed + 20 + int(rw * 50), flat_bottom=True),
                MOSS, INK, 2.0)
     if door:
-        _door(p, x + w * 0.05, y - h * 0.24, w * 0.15)
+        _door(p, x + w * 0.05, y - h * 0.01, w * 0.12)
         wx_, wy_, ww_ = x - w * 0.24, y - h * 0.62, w * 0.07                # an arched window, lamp-lit, barred
         arch = curve([(wx_ - ww_, wy_ + ww_ * 1.1), (wx_ - ww_, wy_ - ww_ * 0.4), (wx_, wy_ - ww_ * 1.2),
                       (wx_ + ww_, wy_ - ww_ * 0.4), (wx_ + ww_, wy_ + ww_ * 1.1)], 3)
@@ -316,21 +376,34 @@ def _stump_house(img, p, cam, x, y, w, h, seed=3, door=True):
 
 
 def _bell_flower(img, p, cam, x, y, r):
-    """The big glowing orange bell flower (ref 20): a curved stem, two leaves, a hanging bell, a soft glow."""
-    p.poly(ribbon(open_curve([(x - r * 0.6, y + r * 3.0), (x - r * 0.3, y + r * 1.2), (x, y - r * 0.6)], 6), r * 0.16,
-                  r * 0.1), LEAF, INK, 2.0)
-    for sg in (-1, 1):
-        p.poly(curve([(x - r * 0.4, y + r * 1.8), (x - r * 0.4 + sg * r * 0.9, y + r * 1.4),
-                      (x - r * 0.4 + sg * r * 1.3, y + r * 1.7), (x - r * 0.4 + sg * r * 0.6, y + r * 2.0)], 4),
-               LEAF_L, INK, 2.0)
-    glow(img, cam, x + r * 0.3, y + r * 0.2, r * 2.2, (255, 170, 60), 0.5)
-    bell = curve([(x - r * 0.2, y - r * 0.6), (x + r * 0.5, y - r * 0.5), (x + r * 1.1, y + r * 0.4),
-                  (x + r * 1.0, y + r * 0.9), (x + r * 0.2, y + r * 0.9), (x - r * 0.3, y + r * 0.2)], 4)
+    """The big glowing orange bell flower (ref 20): a tall stem arching over like a crook, the bell hanging from its
+    tip mouth down, flared and scalloped, glowing from inside; long leaves at its foot (pass 2: it read as a paddle).
+    (x, y) is the bell's middle."""
+    base = (x - r * 1.3, y + r * 3.4)
+    stem = open_curve([base, (x - r * 1.5, y + r * 1.2), (x - r * 1.1, y - r * 1.5), (x - r * 0.2, y - r * 1.9),
+                       (x + r * 0.15, y - r * 1.0)], 8)
+    for sg, ln in ((-1, 1.9), (1, 1.5)):                                 # long leaves at its foot
+        tip = (base[0] + sg * r * ln, base[1] - r * 1.3)
+        p.poly(curve([base, (base[0] + sg * r * ln * 0.5, base[1] - r * 1.15), tip,
+                      (base[0] + sg * r * ln * 0.45, base[1] - r * 0.45)], 4), LEAF_L if sg > 0 else LEAF, INK, 2.0)
+    p.poly(ribbon(stem, r * 0.2, r * 0.11), LEAF, INK, 2.0)
+    glow(img, cam, x, y + r * 0.5, r * 2.6, (255, 170, 60), 0.55)
+    top = (x + r * 0.15, y - r * 1.0)
+    mouth = []
+    for k in range(11):                                                  # the flared, scalloped mouth
+        u = k / 10
+        mouth.append((x - r * 1.05 + r * 2.3 * u, y + r * (0.95 + (0.22 if k % 2 else 0.0))))
+    bell = curve([top, (x + r * 0.7, y - r * 0.7), (x + r * 0.8, y + r * 0.3), (x + r * 1.25, y + r * 0.95)], 4) + \
+        mouth[::-1] + curve([(x - r * 1.05, y + r * 0.95), (x - r * 0.55, y + r * 0.3), (x - r * 0.4, y - r * 0.7),
+                             top], 4)
     p.poly(bell, BELL, INK, 2.4)
-    p.poly(curve([(x + r * 0.1, y - r * 0.3), (x + r * 0.5, y - r * 0.2), (x + r * 0.7, y + r * 0.6),
-                  (x + r * 0.3, y + r * 0.6)], 3), BELL_L, None)
-    for k in range(3):
-        p.line([(x + r * (0.2 + 0.3 * k), y + r * 0.9), (x + r * (0.3 + 0.3 * k), y + r * 1.15)], BELL, 2.0)
+    p.poly(curve([(x - r * 0.15, y - r * 0.7), (x + r * 0.3, y - r * 0.55), (x + r * 0.4, y + r * 0.5),
+                  (x - r * 0.1, y + r * 0.6)], 3), BELL_L, None)        # its lit side
+    p.ell(x + r * 0.1, y + r * 1.0, r * 0.95, r * 0.2, (255, 226, 150), INK, 1.8)   # the glowing inside of the mouth
+    p.line(open_curve([(x + r * 0.1, y + r * 0.95), (x + r * 0.2, y + r * 1.35), (x + r * 0.1, y + r * 1.6)], 3),
+           (200, 110, 30), 2.4)                                         # the stamen hanging out
+    p.ell(x + r * 0.1, y + r * 1.62, r * 0.1, r * 0.1, (255, 220, 120), INK, 1.2)
+    p.ell(x + r * 0.15, y - r * 1.0, r * 0.18, r * 0.12, LEAF_D, INK, 1.6)   # the green cap where it hangs
 
 
 def _purple_patch(p, x, y, r, seed, n=7):
@@ -363,6 +436,8 @@ def forest_up(img, p, cam, t):
     for x, y, rx, ry, sd in ((-40, 1500, 340, 260, 5), (300, 1560, 300, 200, 6), (640, 1520, 320, 220, 7),
                              (1000, 1480, 320, 260, 8)):                # the far trees, low and hazy
         p.poly(blob(x, y, rx, ry, 12, 0.18, sd), mix(LEAF_L, SKY_LO, 0.45), INK, 2.4)
+    bark(p, [(1200, 2000), (1110, 900), (1000, -200)], 120, 50, mix(TRUNK, (150, 170, 150), 0.4), 29, None, 2)
+    # (a far trunk leaning in to the top, pass 2: S1 read level)
     # the foot (first look: a flat sage block): treetops in rows, each nearer one greener and darker, a light shaft
     p.poly(quad(-200, 1700, W + 200, 2400), mix(LEAF, SKY_LO, 0.3), None)
     for k, x in enumerate((-60, 250, 560, 860, 1160)):                  # the middle row, a little hazy
@@ -383,11 +458,13 @@ def forest_up(img, p, cam, t):
     branch = BRANCH_UP
     bark(p, [(940, BRANCH_UP[-1][1] - 18), (1010, BRANCH_UP[-1][1] - 90), (1060, BRANCH_UP[-1][1] - 140)], 40, 18, TRUNK, 23)
     bark(p, [(40, BRANCH_UP[0][1] + 30)] + branch, 170, 60, TRUNK, 22, MOSS, 4)   # the branch, its root inside the trunk
+    _branch_under(p)
     p.ell(branch[-1][0] + 4, branch[-1][1], 30, 34, TRUNK_D, INK, 2.4)         # its broken end, not a squared plank
     p.ell(branch[-1][0] + 4, branch[-1][1], 16, 20, (150, 118, 84), None)
     clump(p, 1060, BRANCH_UP[-1][1] - 170, 120, 90, LEAF, 24)
     clump(p, 990, BRANCH_UP[-1][1] - 60, 70, 50, LEAF_L, 25)
-    bark(p, [(130, 2100), (150, 1500), (120, 900), (90, 300), (70, -200)], 330, 170, TRUNK, 21, MOSS, 6)   # the trunk
+    # the trunk (pass 2: it stood level): wide at the foot and leaning in as it climbs, as looking up makes it
+    bark(p, [(10, 2100), (90, 1500), (170, 900), (240, 300), (300, -200)], 400, 140, TRUNK, 21, MOSS, 6)
     for k, x in enumerate((330, 470, 860)):                             # moss hanging under the branch
         y = branch_y(x) + 60
         p.poly(ribbon(open_curve([(x, y - 10), (x + 6, y + 50), (x - 4, y + 100 + 20 * k)], 5), 22, 4), MOSS_L, INK,
@@ -395,6 +472,46 @@ def forest_up(img, p, cam, t):
 
 
 BRANCH_UP = [(150, 960), (420, 900), (700, 840), (940, 760)]    # pass 1: higher, so KG towers over the lens
+
+
+def _branch_under(p):
+    """The branch's underside, seen from below (pass 2: S1 read level): its lower half in shadow, and bark rings."""
+    path = open_curve([(40, BRANCH_UP[0][1] + 30)] + BRANCH_UP, 6)
+    n = len(path)
+    lo = []
+    for i, q in enumerate(path):
+        a, b = np.asarray(path[max(0, i - 1)]), np.asarray(path[min(n - 1, i + 1)])
+        t_ = (b - a) / (np.linalg.norm(b - a) + 1e-9)
+        w = 170 + (60 - 170) * i / (n - 1)
+        nx, ny = -t_[1], t_[0]
+        if ny < 0:
+            nx, ny = -nx, -ny
+        lo.append(((q[0] + nx * w * 0.5, q[1] + ny * w * 0.5), (q[0] - nx * w * 0.05, q[1] - ny * w * 0.05)))
+    i0 = n // 6
+    p.poly([e for e, _ in lo[i0:]] + [m for _, m in lo[i0:]][::-1], TRUNK_D, None)
+    for i in range(i0 + 2, n - 2, 4):                                    # rings round the underside
+        (ex, ey), (mx, my) = lo[i]
+        p.line(open_curve([(mx, my), ((ex + mx) / 2 + 6, (ey + my) / 2 + 4), (ex, ey)], 3), dk(TRUNK_D, 0.75), 1.6)
+    p.poly(ribbon(path, 170, 60), None, INK, 3.2)
+
+
+def kg_on_branch(img, cam, x, s, mood='hype', wings='wide', t=0.0, **kw):
+    """KG perched on the S1/S3 branch (pass 2: his talons floated in front of it): his tail hangs BEHIND the branch,
+    the branch is laid back over it, then his body sits on top with the toes curling over its front edge."""
+    import remakes_creatures as CR
+    y = branch_y(x) - 236 * s - 4 * s                                    # his toe roots on the branch's top
+    before = img.copy()
+    CR.kg(img, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='tail', **kw)
+    m = Image.new('L', img.size, 0)
+    ImageDraw.Draw(m).polygon([cam.P(*q) for q in branch_poly()], fill=255)
+    img.paste(before, (0, 0), m)
+    foot_shadow(img, cam, x, branch_y(x) + 14, 420.0, SHADOW_W['kg'], clip=branch_poly())
+    CR.kg(img, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='body', **kw)
+
+
+def branch_poly():
+    """The S1 branch's outline (the shadow under KG's talons stays on it)."""
+    return ribbon(open_curve([(40, BRANCH_UP[0][1] + 30)] + BRANCH_UP, 6), 170, 60)
 
 
 def branch_y(x):
@@ -414,7 +531,12 @@ def down_ppm(y):
 
 def _path_x(y):
     """The path's middle: winding, and at the top bending right to the tree house door (pass 1: it hit its side)."""
-    return 560 + 110 * math.sin((y - 640) / 380.0) + 300 * max(0.0, (900 - y) / 340.0) ** 1.5
+    return 560 + 110 * math.sin((y - 640) / 380.0) + 400 * max(0.0, (900 - y) / 300.0) ** 1.5
+
+
+STUMP_DOWN = (820, 700, 520, 520)     # S2's tree house: the middle of its foot, width, height (px)
+STUMP_SEED = 34                        # S4/S6 draw the same stump (pass 2: they differed)
+PATH_TOP = 688                         # the path starts at the door's foot
 
 
 def _path_w(y):
@@ -434,13 +556,13 @@ def forest_down(img, p, cam, t):
     clump(p, 200, 220, 360, 300, LEAF_D, 31)
     clump(p, 820, 180, 380, 260, LEAF, 32)
     bark(p, [(160, 760), (170, 300), (190, -200)], 190, 150, TRUNK, 33, MOSS, 5)
-    _stump_house(img, p, cam, 820, 700, 520, 520, seed=34)
-    # the path: a winding band, then its stones in rows that grow nearer the lens
-    ys = np.linspace(560, 2000, 40)
+    # the path: a winding band from the door's foot (pass 2: it climbed the stump like stairs), then its stones in
+    # rows that grow nearer the lens
+    ys = np.linspace(PATH_TOP, 2000, 40)
     left = [(_path_x(y) - _path_w(y), y) for y in ys]
     right = [(_path_x(y) + _path_w(y), y) for y in ys[::-1]]
     p.poly(left + right, mix(STONE_D, GROUND_D, 0.3), INK, 2.6)
-    y = 560.0
+    y = PATH_TOP + 4
     row = 0
     while y < 2000:
         hgt = down_ppm(y) * 0.32
@@ -456,6 +578,7 @@ def forest_down(img, p, cam, t):
             x += sw
         y += hgt
         row += 1
+    _stump_house(img, p, cam, *STUMP_DOWN, seed=STUMP_SEED)          # over the path's far end: it ends at the door
     # roots crossing from the sides, rocks, tufts
     bark(p, [(-80, 1500), (120, 1460), (280, 1520), (360, 1600)], 90, 40, TRUNK, 41, MOSS, 3)
     bark(p, [(1180, 1180), (1000, 1150), (880, 1210)], 80, 34, TRUNK, 42, MOSS, 3)
@@ -505,33 +628,44 @@ def forest_close(img, p, cam, t):
     for k, (x, rx) in enumerate(((-60, 280), (330, 240), (1100, 260))):  # mid canopy
         clump(p, x, 140, rx, 220, mix(LEAF, MIST, 0.2), 80 + k)
     haze(img, cam, 200, 1250, MIST, 0.35)                                # mist between the far and mid layers
+    for x, w in ((760, 60), (1010, 74)):                                  # two nearer trunks, darker, behind the
+        bark(p, [(x, 1310), (x + 6, 700), (x - 4, 100)], w, w * 0.85, mix(TRUNK, MIST, 0.4), 70 + x, None, 2)  # shafts
     for x, w in ((60, 150), (330, 110)):                                 # mid trunks
         bark(p, [(x, 1400), (x + 10, 700), (x - 6, 100)], w, w * 0.8, mix(TRUNK, MIST, 0.25), 90 + int(x), None, 3)
-    _stump_house(img, p, cam, 820, 1330, 560, 820, seed=95)
-    p.poly(quad(-200, 1300, W + 200, 2400), GROUND, None)
-    ys = np.linspace(1300, 2000, 12)
-    p.poly([(430 + (y - 1300) * -0.25, y) for y in ys] + [(620 + (y - 1300) * 0.3, y) for y in ys[::-1]],
-           mix(STONE, MOSS, 0.22), INK, 2.0)                             # the path going back, flagstones as in S2
-    yy, row = 1310.0, 0
-    while yy < 2000:
-        hh = 18 + (yy - 1300) * 0.12
-        xa, xb = 430 + (yy - 1300) * -0.25, 620 + (yy - 1300) * 0.3
+    edge = [(x, 1300 + 14 * math.sin(x * 0.031) + 8 * math.sin(x * 0.11)) for x in range(-200, W + 240, 40)]
+    p.poly(edge + [(W + 200, 2400), (-200, 2400)], GROUND, None)       # the grass's far edge rolls (pass 2: ruled)
+    for k, x in enumerate(range(-60, W + 80, 95)):                       # low ferns and bushes along it
+        if 520 < x < 1180:
+            continue                                                    # (the stump stands there)
+        clump(p, x, 1300 + 6 * (k % 3), 70 + 18 * (k % 2), 38, mix(GROUND, LEAF_D, 0.4), 400 + k, marks=False, lw=2.0)
+    haze(img, cam, 1230, 1360, MIST, 0.55)                               # mist lying on the ground (ref 19)
+    def pl(y):                                    # the path's edges at row y: from under the door, widening to
+        u = ((y - 1300) / 700.0) ** 0.8           # the lens and curving left under Link (pass 2: it led nowhere)
+        return 818 + (180 - 818) * u, 930 + (820 - 930) * u
+    ys = np.linspace(1300, 2000, 16)
+    p.poly([(pl(y)[0], y) for y in ys] + [(pl(y)[1], y) for y in ys[::-1]], mix(STONE, MOSS, 0.22), INK, 2.0)
+    yy, row = 1306.0, 0
+    while yy < 2000:                                                     # flagstones as in S2
+        hh = 14 + (yy - 1300) * 0.14
+        xa, xb = pl(yy)
         p.line([(xa, yy), (xb, yy)], STONE_D, 1.6)
-        for k in range(1, 3 + row % 2):
-            xx = xa + (xb - xa) * (k - 0.5 * (row % 2)) / (2 + row % 2)
+        n_ = 2 + row % 2
+        for k in range(1, n_ + 1):
+            xx = xa + (xb - xa) * (k - 0.5 * (row % 2)) / (n_ + 0.5)
             p.line([(xx, yy), (xx, yy + hh)], STONE_D, 1.6)
         yy += hh
         row += 1
-    rr = random.Random(96)
+    _stump_house(img, p, cam, 840, 1310, 620, 620, seed=STUMP_SEED)   # S2's stump, nearer (pass 2: it differed); on
+    rr = random.Random(96)                                               # the grass, the path running to its door
     for k in range(26):
         y = rr.uniform(1320, 1900)
-        x = rr.choice([rr.uniform(-20, 400 - (y - 1300) * 0.25), rr.uniform(650 + (y - 1300) * 0.3, 1100)])
+        x = rr.choice([rr.uniform(-20, pl(y)[0] - 10), rr.uniform(pl(y)[1] + 10, 1120)])
         tuft(p, x, y, 20 + (y - 1300) * 0.08, LEAF_D if k % 2 else MOSS_L, k + 300)
-    shafts(img, cam, [[(200, -200), (380, -200), (700, 1700), (420, 1700)], [(560, -200), (640, -200), (980, 1500),
-                                                                             (880, 1500)]], a=0.18)
-    _bell_flower(img, p, cam, 1040, 1640, 48)                            # pass 1: smaller, further out from his face
+    shafts(img, cam, [[(160, -200), (330, -200), (640, 1700), (380, 1700)], [(560, -200), (650, -200), (990, 1500),
+                                                                             (880, 1500)]], col=(255, 244, 190), a=0.34)
     clump(p, -40, 1750, 300, 220, LEAF_D, 97)
-    clump(p, 1120, 1820, 280, 200, LEAF, 98)
+    clump(p, 1120, 1840, 260, 180, LEAF, 98)
+    _bell_flower(img, p, cam, 950, 1560, 46)     # pass 2: its glow showed but the flower hid behind the bush
     _purple_patch(p, 140, 1820, 160, 99, 8)
 
 
@@ -545,23 +679,41 @@ def forest_edge(img, p, cam, t):
     for k, (x, rx) in enumerate(((100, 320), (520, 300), (980, 330))):
         p.poly(blob(x, 560 + 60 * (k % 2), rx, 300, 12, 0.2, 110 + k), mix(EDGE_LEAF, EDGE_SKY, 0.4), INK, 2.0)
     EDGE_TRUNK = mix(TRUNK, EDGE_SKY, 0.25)                             # pass 1: the forest's own bark, gone grey
-    for x, w, lean in ((80, 90, 30), (300, 60, -20), (640, 70, 10), (880, 100, -30), (1020, 56, 14)):   # gnarled trunks
-        bark(p, [(x, 1500), (x + lean * 0.5 + 12, 1100), (x + lean * 0.5 - 10, 700), (x + lean, 200)], w, w * 0.6,
-             EDGE_TRUNK, 120 + x, mix(MOSS, EDGE_SKY, 0.3), 4)
-        p.ell(x + lean * 0.4, 1000, w * 0.18, w * 0.26, dk(EDGE_TRUNK, 0.7), INK, 1.8)   # a knot
+    p.poly(quad(-200, 1300, W + 200, 2400), (110, 124, 92), None)
+    # gnarled trunks at staggered depths (pass 2: all in one row): far ones thin, pale and footed high, near ones
+    # thick, darker, footed low; the far ones first
+    for x, w, lean, foot, fade in ((470, 40, 8, 1330, 0.55), (760, 46, -10, 1345, 0.5), (180, 52, 12, 1360, 0.45),
+                                   (980, 60, -14, 1380, 0.35), (620, 74, 10, 1420, 0.22), (300, 92, -20, 1470, 0.12),
+                                   (40, 130, 30, 1560, 0.0), (1040, 120, -26, 1540, 0.0)):
+        col = mix(EDGE_TRUNK, EDGE_SKY, fade) if fade else dk(EDGE_TRUNK, 0.9)
+        bark(p, [(x, foot), (x + lean * 0.5 + 12, foot - 400), (x + lean * 0.5 - 10, foot - 800), (x + lean, 200)],
+             w, w * 0.6, col, 120 + x, mix(MOSS, EDGE_SKY, 0.3 + fade), 4)
+        p.ell(x + lean * 0.4, foot - 500, w * 0.18, w * 0.26, dk(col, 0.7), INK, 1.8)   # a knot
         for k in range(2):                                              # bare side branches (ref 17)
             y = 500 + 260 * k
             sg = 1 if (x + k) % 2 else -1
             p.line(open_curve([(x + lean * 0.6, y), (x + lean * 0.6 + sg * 90, y - 60), (x + sg * 150, y - 70)], 4),
-                   EDGE_TRUNK, 7.0)
+                   col, max(4.0, w * 0.08))
+        p.poly(blob(x, foot + 8, w * 0.9, 18 + w * 0.12, 9, 0.3, 170 + x), mix((96, 112, 80), EDGE_SKY, fade * 0.6),
+               None)                                                    # the grass round its foot
     for k, (x, rx) in enumerate(((-40, 260), (420, 220), (1120, 280), (760, 200), (200, 180))):   # canopy across the sky
         clump(p, x, (260, 340, 180, 60, -20)[k], rx, 180, EDGE_LEAF if k % 2 == 0 else EDGE_LEAF_D, 130 + k)
-    p.poly(quad(-200, 1360, W + 200, 2400), (110, 124, 92), None)
-    rr = random.Random(141)
-    for k in range(40):                                                 # long grass across the ground
-        x, y = rr.uniform(-40, 1120), rr.uniform(1340, 1900)
-        tuft(p, x, y, 50 + (y - 1300) * 0.25, EDGE_LEAF_D if k % 2 else (128, 144, 98), k + 150, 6, 2.4)
     _rock(p, 230, 1560, 200, 160, 160)                                  # pass 1: whole, not a sliver at the edge
+    rr = random.Random(141)
+    # long grass, not lawn (pass 2): bands of tall arching blades, the further rows paler and shorter, back to front
+    for band, (y0, y1, hmin, hmax, n) in enumerate(((1300, 1450, 50, 90, 70), (1420, 1650, 90, 170, 80),
+                                                    (1600, 1950, 160, 300, 70))):
+        for k in range(n):
+            x, y = rr.uniform(-40, 1120), rr.uniform(y0, y1)
+            hh = rr.uniform(hmin, hmax)
+            c_ = rr.choice((EDGE_LEAF_D, (128, 144, 98), (104, 124, 84), (146, 156, 108)))
+            c_ = mix(c_, EDGE_SKY, 0.3 - 0.15 * band)
+            for b in range(rr.randint(3, 6)):
+                lean_ = rr.uniform(-0.5, 0.5) * hh
+                tip = (x + lean_ + rr.uniform(-8, 8), y - hh * rr.uniform(0.7, 1.0))
+                mid = (x + lean_ * 0.25, y - hh * 0.55)
+                p.poly(ribbon(open_curve([(x + b * 3, y), mid, tip], 5), 5 + band * 2.5, 1), c_,
+                       INK if band == 2 else None, 1.0)
     for x, y, sd in ((900, 1600, 161), (240, 1820, 162), (1000, 1880, 163)):    # ferns
         for k in range(7):
             a = -math.pi / 2 + (k - 3) * 0.38
@@ -1182,7 +1334,7 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_up': {'kg': (640, branch_y(640), 420.0)},
     'forest_down': {'link': (560, 1330, down_ppm(1330)), 'navi': (700, 1050, down_ppm(1330))},
     'forest_close': {'link': (540, 2300, 1100.0)},            # a close-up: his feet well below the frame
-    'forest_edge': {'gunman': (520, 2500, 900.0)},
+    'forest_edge': {'gunman': (300, 2500, 900.0)},        # pass 2: left, so his muzzle stays in frame
     'camp': {'kg': _camp_mark(0.75, 4.2), 'link': _camp_mark(-0.3, 3.5), 'gunman1': _camp_mark(-2.2, 9.2),
              'gunman2': _camp_mark(2.0, 7.6), 'gunman3': _camp_mark(3.3, 8.6)},   # the gunmen aside, the gate clear
     'town_square': {n: _town_mark(x, 4.0) for n, x in (('zelda', -0.72), ('malon', -0.22), ('ruto', 0.27),
@@ -1321,9 +1473,16 @@ def with_cast(at, t=0.0, gate=0.0):
         camp(img, cam, t, gate)
     else:
         town(img, cam, at.split('_')[1], t)
+    for who, (x, y, ppm) in st.items():                                 # the soft foot shadows first (Sam Q3)
+        if who != 'navi' and at != 'forest_up':      # Navi is a flying light: none; KG's branch: kg_on_branch
+            foot_shadow(img, cam, x, y, ppm, SHADOW_W['gunman' if who.startswith('gunman') else who],
+                        clip=branch_poly() if at == 'forest_up' else None)
     for who, (x, y, ppm) in sorted(st.items(), key=lambda kv: kv[1][1]):
         s = s_for(ppm)
-        if who == 'kg':
+        if who == 'kg' and at == 'forest_up':
+            wings, mood = KG_BEAT[at]
+            kg_on_branch(img, cam, x, s, mood=mood, wings=wings, t=t)
+        elif who == 'kg':
             # his feet: about 230 units below his middle when perched (remakes_creatures._kg_feet at y + 230)
             view = 'side' if at in ('town_wall',) else 'front'
             wings, mood = KG_BEAT.get(at, ('fold', 'kindly'))

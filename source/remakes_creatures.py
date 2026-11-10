@@ -432,11 +432,14 @@ def _kg_tail(p, root, ang0, n, step, length):
         p.poly(f, None, INK, 2.2)
 
 
-def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0):
+def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all'):
     """Facing us (S1, S3, S5, S10): tail behind, the far halves of the wings, the body (rust chest, ochre belly, the
     white bib with its two gold eye-spots), feet, the head with its face disc, eyes, brows, beak, the two crests."""
     m = KG_MOODS[mood]
-    _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)                  # the long fanned tail hanging below
+    if part != 'body':
+        _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)              # the long fanned tail hanging below
+    if part == 'tail':                                                  # (part: tail alone, or all but it, so a
+        return                                                          # branch can go between: remakes_sets)
     hx, hy, hw = 0.0, -250.0, 168.0
     _crest(p, (hx - 50, hy - 110), [(-120, hy - 250), (-200, hy - 350), (-290, hy - 380), (-360, hy - 320),
                                     (-380, hy - 210), (-360, hy - 120)], seed=1, out=1)   # arching up, out, drooping
@@ -589,7 +592,7 @@ def kg_gun(p, hands, view):
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
-       lean=0.0, look=0.0, tail=1.0):
+       lean=0.0, look=0.0, tail=1.0, part='all'):
     """Kaepora Gaebora at world (x, y) (his body's middle), scale s (as for a 1.75 m adult). wings: a WING_POSES name
     (front) or SIDE_WINGS name (side), or a dict {'L': (elbow, hand, shape), 'R': ...} in his own units (front:
     the L wing on screen right). tail < 1 shortens the tail (front: lying back along the ground when he stands).
@@ -605,7 +608,9 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
             if name_ == 'teach':                                       # ONE wing raised, like a teacher
                 fe, fh, fs = WING_POSES['fold']
                 wings['R'] = ((-fe[0], fe[1]), (-fh[0], fh[1]), fs)
-        _kg_front(p, mood, wings, perched, band, t, look, tail)
+        _kg_front(p, mood, wings, perched, band, t, look, tail, part)
+        if part == 'tail':
+            return {}
         if wings_name == 'gun':
             _gun_over(p, wings, 'front')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
