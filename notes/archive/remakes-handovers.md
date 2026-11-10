@@ -164,3 +164,17 @@
   Possible false alarms to weigh before fixing: the swoop "body level" (it tips 58 degrees), Malon "bottle at belt"
   (hand at y 170). Gunman mask `remakes_cast.gun_mask`; KG gun `remakes_creatures.kg_gun/_gun_over`; side wings
   `_kg_wing(taper=True)`; KG glee lower lid `low`.
+
+## Build chat 6 handover (archived 11 Nov by build chat 7)
+- **Rules that bite next:** 89 (each set alone and critiqued), 41 (hands), 38 (only the views the shots use).
+- **Done (build chat 6, Opus high):** pass 2's faults fixed; critique pass 3 recorded (31 faults, ledger); cast sheet
+  sent; **Sam: "It looks excellent"** (settles the three-pass survivors; crest 3 stays); his notes fixed: the gunman
+  glares, the Goron's neckline is a round scoop. 13 of 14 recordings filed (13 split into 13 and 13b); dialogue
+  changes to lines 1, 7, 13 in the brief and acting list (slam now on "Now").
+- **Next:** Build, Opus high: the clear pass-3 faults (Link's side-view shield; Navi's wings-down; KG's side bandana
+  on his brow; the gun in his wings, not on his talons), then the sets (forest, camp, town square), each critiqued.
+- **Needs Sam:** line 6's recording ("Oh my god!"); "shit" heard or bleeped (Claude: heard).
+- **Read:** `guides/job-packs.md` Build; this file's references and shots; `notes/ledger/remakes_cast/round-1.txt`.
+- **Open rule requests:** none (pass 3 suggested two checklist lines: "no empty cells", "a line-up against Link").
+- **For Claude:** pass 3 in `source/data/critique/remakes_cast/r1-p3` (git-ignored); maybe false alarms: swoop "level",
+  Malon "bottle at belt". `remakes_cast.gun_mask`; `remakes_creatures.kg_gun/_gun_over`, `_kg_wing(taper=True)`.
