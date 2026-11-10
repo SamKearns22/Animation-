@@ -546,6 +546,23 @@ def held_prop_touches():
 
 
 @test
+def critique_library():
+    """Job J: a clean critique pass files each panel marked "new" in the catalogue's "Passed the critique" table,
+    once (a second clean pass adds nothing), and panels not marked new are not filed."""
+    import tempfile
+    import critique as C
+    path = os.path.join(tempfile.mkdtemp(), 'cat.md')
+    open(path, 'w').write('# Kit catalogue\n')
+    spec = {'panels': [{'is': 'a pigeon, side on', 'new': 'Swindon pigeon', 'drawn': 'elder_swindon.pigeon'},
+                       {'is': 'shot 3, wide'}]}
+    a = C.library('test', spec, 1, 2, path)
+    b = C.library('test', spec, 1, 3, path)
+    text = open(path).read()
+    ok = a == ['Swindon pigeon'] and b == [] and text.count('Swindon pigeon') == 1 and 'shot 3' not in text
+    return ok, f"first pass filed {a}; second {b}; rows: {text.count('| Swindon pigeon |')}"
+
+
+@test
 def lying_and_pose_checks():
     """Job G chat 4: Sam's lying notes caught (Ad-Vanced 57-58: both arms on one side, no neck; Elder Swindon 6: the
     arm curled up off the ground) and every kit lying pose clean from every view; and pre-flight's pose check
