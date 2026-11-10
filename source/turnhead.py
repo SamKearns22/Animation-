@@ -237,7 +237,7 @@ def inside(img, p, poly, draw):
     img.alpha_composite(layer)
 
 
-def outline(p, f, view, skin, lw=2.6, fill=True, ink=True, whole=False):
+def outline(p, f, view, skin, lw=2.6, fill=True, ink=True):
     """Fill the head in skin and ink its edge, except where the edge only crosses the neck (from the side the neck
     carries on down from the nape and the throat; from behind it rises into the head)."""
     sil = silhouette(f)
@@ -246,7 +246,7 @@ def outline(p, f, view, skin, lw=2.6, fill=True, ink=True, whole=False):
         p.poly(poly, skin, None)
     if not ink:
         return poly
-    n0, n1 = (0, 0) if whole else NECK.get(view, (0, 0))   # whole: inked all round (no neck runs into it)
+    n0, n1 = NECK.get(view, (0, 0))
     hx = f.hx
 
     def inked(q):
@@ -520,10 +520,10 @@ def draw(img, p, sp, t, view, hx, hy):
     head = outline(p, f, view, skin, ink=False)
     if P.face and view != 'back':                             # from straight behind a beard is hidden
         inside(img, p, head, lambda pen: P.face(pen, f, L, sp))
-    lying = bool(sp.get('nape_in_head'))              # lying (lying_flat): the collar, not a neck, meets the nape
-    outline(p, f, view, skin, fill=False, whole=lying)    # (Sam, 11 Nov, lying 18: the neck drawn over the head,
-    if view in ('three_back', 'back') and not lying:      # tipped off its neck, was a square block, a blindfold
-        neck_over(p, f, view, skin)                       # with his hair band): the head inked all round, no neck
+    outline(p, f, view, skin, fill=False)
+    if view in ('three_back', 'back') and not sp.get('nape_in_head'):   # lying (lying_flat): its own neck bends up
+        neck_over(p, f, view, skin)                   # from the collar; drawn again over a tipped head it was a
+        #                                               square block, a blindfold with his hair band (Sam, 11 Nov, 18)
     if P.over:
         P.over(img, p, f, L, sp, view)
     fx, my = f(0.0, L['lip13'])

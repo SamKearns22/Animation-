@@ -270,21 +270,32 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     return hcam, hv
 
 
-def _neck(img, hc, sp, foot=40):
-    """The rig's neck, turned with the head (Job I chat 2: drawn with the trunk it poked out beside a tipped head
-    as a loose block); drawn before the trunk so the collar covers its foot."""
+def _neck(img, hc, sp, aff, view, foot=40):
+    """The neck, bending from the collar to the head (Sam, 11 Nov, lying 14 and 18: drawn as one rigid block turned
+    with the head, it stood off the collar as a square block (14) or hid under it, the head stuck straight on the
+    shoulder (18)). Its foot is in the trunk's drawing (under the collar, `foot` below the neck point), its top in
+    the head's (up into the head); the two sides curve between them, so a head tipped off the trunk bends the neck
+    instead of swinging a block. Only the sides are inked (the collar and the head cover its ends)."""
+    import turnhead as TH
     hcam, hv = hc
-    p = B.Pen(img, hcam)
-    if hv == 'three':
-        q = [(-24, -80), (40, -80), (46, 10), (-20, 10)]
-    elif hv == 'side':
-        q = [(-26, -80), (24, -80), (34, 8), (-30, 8)]
-    else:
-        q = [(-32, -80), (32, -80), (36, 10), (-36, 10)]
-    q = [(x, foot if y > 0 else y) for x, y in q]     # its foot well under the shirt (the trunk is tipped to it)
-    lift = 150.0 + hcam.hy                            # a nearer head: the neck shorter by as much
-    q = [(x, y + lift * (y < 0)) for x, y in q]
-    p.poly(q, sp['skin'], INK, 2.6)
+    top = {'three': (-24, 40), 'side': (-26, 24)}.get(hv, (-32, 32))
+    bot = {'three': (-20, 46), 'side': (-30, 34)}.get(view, (-36, 36))
+    yt = -80.0 + (150.0 + hcam.hy)                    # a nearer head: the neck shorter by as much
+    H = lambda x, y: np.asarray(hcam.P(x, y), float)
+    T = lambda x, y: np.asarray(aff.P(x, y), float)
+    tops = [H(top[0], yt), H(top[1], yt)]
+    if np.dot(tops[1] - tops[0], T(bot[1], foot) - T(bot[0], foot)) < 0:   # the head drawn mirrored to the trunk:
+        tops, top = tops[::-1], top[::-1]                                  # its sides would cross (a bow tie)
+    sides = []
+    for i in (0, 1):
+        p0, p2 = T(bot[i], foot), tops[i]
+        p1 = (H(top[i], (yt + 0) / 2 + 10) + T(bot[i], min(foot, 0) - 25)) / 2   # the bend between the two
+        sides.append([tuple((1 - u) ** 2 * p0 + 2 * u * (1 - u) * p1 + u * u * p2) for u in np.linspace(0, 1, 12)])
+    d = ImageDraw.Draw(img)
+    d.polygon(sides[0] + sides[1][::-1], fill=tuple(sp['skin']))
+    w = B.Pen(img, hcam).w(2.6)
+    for sd in sides:
+        d.line(sd, fill=INK, width=w, joint='curve')
 
 
 def _head_draw(img, hc, sp, t):
@@ -438,7 +449,7 @@ def draw(img, cam, k, sp, t=0.0, M=None):
             _arm(p, sc, cam, k, sd, sp_draw)
     head_behind = cam.depth(tuple(k['head'])) > dt + 0.3
     hc = _head(img, cam, k, sp_draw, t, sc, aff, tag, M)
-    _neck(img, hc, sp_draw)
+    _neck(img, hc, sp_draw, aff, view)
     if head_behind:
         _head_draw(img, hc, sp_draw, t)
     def trunk(on):
@@ -468,7 +479,7 @@ def draw(img, cam, k, sp, t=0.0, M=None):
         piece(key, front=True)
     sp_draw.pop('neck_off')
     if not head_behind and view not in BACKS and any(kk[0] == 'arm' for _, kk in last):
-        _neck(img, hc, sp_draw, foot=-6)              # an arm in front passes behind the neck, never through it
+        _neck(img, hc, sp_draw, aff, view, foot=-6)              # an arm in front passes behind the neck, never through it
         #                                               (from behind the collar is nearer: the neck stays under it)
     if not head_behind:
         _head_draw(img, hc, sp_draw, t)

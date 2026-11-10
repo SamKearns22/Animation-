@@ -352,3 +352,23 @@
   `lying_flat.ROLLED`, sp `head_roll`, `lying_flat.numbers`; preflight `heads_seen` (incremental runs list only the
   redrawn frames). Kittest `turned_heads_for_anyone` (VANCE_TURNED_MD5). Earlier: see `notes/archive/next-jobs-handovers.md`.
 
+
+
+## Where things stand (replaced 11 Nov, Sam: "Fix the neck in 14 and 18") (project, 11 Nov; no film in progress)
+
+- **Rules that bite next:** 30 (a repeated note is a warning), 48 (one labelled sheet), 86 (estimate before building).
+- **Done: Job I lying fixes built (Opus medium), for every character.** (1) Slumped against a wall the shirt now sags as
+  cloth: shoulders slope, sides bow at the belly, hem curves up over the lap, soft waist folds (was a stiff box).
+  (2) Back of the head lying: no neck drawn over the head (was a square block, a blindfold with the driver's hair);
+  the head inked all round. Standing views unchanged. All kittests pass (new: `lying_shirt_and_nape`).
+  Sheets sent: `notes/sheets/job-i-lying-fixes-driver.jpg` (1-18: 16 slump, 18 back of head) and
+  `notes/sheets/job-i-lying-fixes-vance.jpg` (the same panels, ball added so 18 shows his back of head).
+- **Next:** Sam's reply on the sheets. Notes on them: Opus, medium effort, "Job I lying notes (notes/next-jobs.md)".
+  No notes: nothing queued; the next film (Opus, high effort) starts from its brief.
+- **Needs Sam:** a look at the two sheets (16 and 18 on each).
+- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `lying_flat.py` MAP.
+- **Open rule requests:** none.
+- **For Claude:** `lying_flat.Slump` (layer bend; `_sat` trigger: trunk upright, thighs forward; sleeves join
+  `bend.moved` shoulders), `lying_flat.BACKS`; `turnhead.outline(whole=)`, sp `nape_in_head` (set by
+  `lying_flat._head_draw`) skips `neck_over`. Kittest `lying_shirt_and_nape`. Earlier: `notes/archive/next-jobs-handovers.md`.
+

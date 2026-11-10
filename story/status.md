@@ -1,9 +1,9 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Job I lying fixes built for every character: the slumped shirt sags as cloth; no neck block over the back of the head.
-- Sheets sent to Sam (driver and Vance, numbered; 16 and 18). Waiting for his look.
-- Next: his notes, if any (Opus, medium effort); otherwise the next film.
+- Job I lying fixes: slumped shirt done; the neck in 14 now bends from the collar (picture sent).
+- Open: 18, the back of the head still sits on the collar with no neck showing (cause found, fix in the next chat).
+- Next: Opus, medium effort, chat opened 11 Nov.
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
