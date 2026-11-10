@@ -13,6 +13,7 @@ MAP
   clip OUT.mp4     Islamocommunism 36-42 s (one unbroken close-up): today | with head acting, side by side, with the film's sound
   lopsided         proposal 5 (example only, Sam's Y/N first): the driver's head a touch uneven (one brow higher, the
                    side hair higher on one side, one mouth corner up) and his weight on one leg (driver_pose)
+  shading OUT.jpg  proposal 2's check (built, ed.HARD): the old airbrushed shading vs the hard-edged shapes, crops
   driver OUT.jpg   proposal 5's sheet: the pump driver today | proposed, whole body, then the face full size
 
   python3 source/ai_tells_lab.py sheet review/job-k/before-after.jpg
@@ -417,7 +418,59 @@ def driver(out):
     print(out, S.size)
 
 
+# ------------------------------------------------------------------------------------------------ proposal 2 (built)
+SHADE_ROWS = [  # (label, film, time, crop box on the 1080 x 1920 frame)
+    ('Vance walking in (navy suit)', 'av', 10.5, (250, 800, 610, 1440)),
+    ('El-Sayed close-up (jacket, neck)', 'ic', 31.0, (300, 600, 780, 1453)),
+    ('The driver at the pump (check shirt, jeans)', 'av', 22.0, (420, 640, 960, 1600)),
+]
+
+
+def _film_frame(film, t):
+    import burnham as B
+    B.SS = SS
+    if film == 'av':
+        import ad_vanced_notice as AV
+        return small(AV.picture(t).convert('RGB'), 1080)
+    return ic_frame(t)
+
+
+def shading(out, rows=None):
+    """Today's airbrushed shading (ed.HARD off) beside the hard-edged shapes, each a crop at the same place."""
+    import ed
+    rows = rows or SHADE_ROWS
+    cw = 528
+    pics = []
+    for label, film, t, box in rows:
+        ed.HARD = False
+        a = _film_frame(film, t)
+        ed.HARD = True
+        b = _film_frame(film, t)
+        a.save(os.path.join(OUT, f'shade-{film}-{t}-today.png'))
+        b.save(os.path.join(OUT, f'shade-{film}-{t}-hard.png'))
+        ca, cb = a.crop(box), b.crop(box)
+        h = int(ca.height * cw / ca.width)
+        pics.append((label, ca.resize((cw, h), Image.LANCZOS), cb.resize((cw, h), Image.LANCZOS)))
+    f = ImageFont.truetype(SANS, 22)
+    H = 50 + sum(p[1].height + 40 for p in pics)
+    S = Image.new('RGB', (2 * cw + 24, H), (245, 242, 236))
+    d = ImageDraw.Draw(S)
+    d.text((8, 12), 'Proposal 2: shading, airbrushed (left, before) vs hard-edged (right, now)', font=f, fill=(0, 0, 0))
+    y = 50
+    for label, a, b in pics:
+        d.text((8, y + 4), label, font=f, fill=(0, 0, 0))
+        y += 34
+        for k, im in enumerate((a, b)):
+            x = 8 + k * (cw + 8)
+            S.paste(im, (x, y))
+            d.rectangle([x, y, x + 110, y + 28], fill=(20, 20, 20) if k == 0 else (190, 30, 30))
+            d.text((x + 6, y + 2), 'BEFORE' if k == 0 else 'NOW', font=f, fill=(255, 255, 255))
+        y += a.height + 6
+    S.save(out, quality=90)
+    print(out, S.size)
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     cmd = sys.argv[1]
-    {'sheet': sheet, 'clip': clip, 'driver': driver}[cmd](sys.argv[2])
+    {'sheet': sheet, 'clip': clip, 'driver': driver, 'shading': shading}[cmd](sys.argv[2])

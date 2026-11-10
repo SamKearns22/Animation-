@@ -148,9 +148,15 @@ def mouth_shape(t):
     return [2, 1, 3, 1, 2, 0][int(p * 11) % 6]
 
 
+HARD = True   # Job K (Sam, 10 Nov): shading is one hard-edged shape, never an airbrushed band (an "AI" tell); a film
+#               that quotes the airbrushed look on purpose (a parody) sets ed.HARD = False before drawing
+
+
 def soft(img, cam, pts, colr, alpha, blur=6):
-    """A soft painted shadow or highlight. Blurred on a small layer round the shape only (the same picture as
-    blurring the whole frame, many times faster)."""
+    """A painted shadow or highlight: one flat, hard-edged shape (ed.HARD); blurred only when ed.HARD is False, on a
+    small layer round the shape (the same picture as blurring the whole frame, many times faster)."""
+    if HARD:
+        blur = 0
     q = [cam.P(*p) for p in pts]
     r = float(cam.S(blur)) if blur else 0.0               # a plain number (a numpy one confuses PIL)
     pad = int(3 * r) + 3
