@@ -88,3 +88,24 @@
   (then a spec: crop = the whole image, so each is a detail); KG
   `tail=` shortens his tail for standing; creatures in person units; MG42 `patriots3_cast.py`.
 
+
+## Handover: build chat 4 (11 Nov)
+- **Rules that bite next:** 89 (pass 2 by a NEW helper), 41 (hands read as hands), 38 (only the views the shots use).
+- **Done (11 Nov, build chat 4, Opus high; stopped on cost amber):** every open pass-1 fault on the children and the
+  gunman fixed and looked at full size: kids' circle hands sized to their big heads (36, was 26); Link's beads bigger
+  with shines, the shrug now shoulders up, elbows in, palms out at the chest; Zelda's veil ends at the neck so the gold
+  collar shows, the tabard purple with gold trim, scrolls and crest, "down" tips the head and drops the eyes; Malon's
+  bottle up at her chest, over her sleeve; Saria's hand on hip (elbow out) and green shorts; Ruto a broad
+  mushroom head-fin growing from her pale skull (no brim line), hip fins rooted on the hips, forearm fins under the
+  arm's edge, a vain pose (weight on one leg, chin up, one brow); the gunman side on, rifle at the shoulder, looking
+  along it; the hems no longer dip below the ground.
+- **Next:** Build, Opus high: critique pass 2 of all nine (`remakes_panels.py OUTDIR`, then `critique.py pack
+  remakes_cast SPEC.json`, a NEW helper; say in each kid panel's "is" that circle hands are the house style), fix,
+  then the cast sheet (`remakes_cast.py castsheet OUT.jpg`) to Sam; wait for his look.
+- **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
+- **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
+- **Open rule requests:** none.
+- **For Claude:** poses carry `_mood` and `_yaw` (panels and `alone` read them); kids' hands `remakes_cast.hand`
+  (`KID_HAND_R`); Malon's bottle uses `wrap`; KG crests ("antlers" to a cold eye) and his side grip mittens: judge at
+  pass 2. Packs `source/data/critique/remakes_cast/` (git-ignored: pass 1 is only in the ledger).
+

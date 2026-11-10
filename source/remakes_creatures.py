@@ -250,7 +250,33 @@ def _kg_beak(p, bx, by, w, kind, spit=False, side=False):
                                (bx + sgn * w * 1.4, by - w * 0.1)], 4), INK, 2.6)
 
 
-def _crest(p, root, pts, w0=150, seed=1, out=1):
+def _crest_plume(p, root, pts, w0=72, seed=1, out=1):
+    """One of the two big swept horn crests (refs 01, 02): a NARROW plume of gold-tan feathers arching up and out from
+    the head and drooping at the end, like a curled moustache (pass 2: the broad fans read as wheat sheaves or
+    antlers). A tapering core with a ragged feathery edge, short feather tips off its outer side, a dark shaft."""
+    path = open_curve([root] + pts, 8)
+    n = len(path)
+    tips = []
+    for i in range(3, n - 2, 5):                                        # short feather tips off the outer edge
+        a, b = np.asarray(path[i], float), np.asarray(path[min(n - 1, i + 2)], float)
+        ang = math.atan2(*(b - a)[::-1])
+        u = i / (n - 1)
+        wide = w0 * (1.0 - 0.7 * u)
+        tips.append((path[i], ang + out * (0.5 + 0.1 * ((i + seed) % 2)), 24 + wide * 0.7, 10 + wide * 0.22))
+    for base, ang, ln, wd in tips:                                      # behind the core: a darker underlayer
+        p.poly(_feather(base, ang, ln, wd), KG_CREST_D, INK, 1.8)
+    p.poly(_ribbon(path, w0, 10, notch=0.3, seed=seed), KG_CREST, INK, 2.6)
+    p.line(path[1:-4], KG_CREST_D, 2.2)                                 # the shaft
+    for i in range(4, n - 6, 4):                                        # a few barbs across it, angled to the tip
+        a, b = np.asarray(path[i], float), np.asarray(path[i + 2], float)
+        ang = math.atan2(*(b - a)[::-1])
+        wd = w0 * (1.0 - 0.7 * i / (n - 1)) * 0.42
+        for sg in (-1, 1):
+            p.line([path[i], (path[i][0] + math.cos(ang + sg * 2.2) * -wd, path[i][1] + math.sin(ang + sg * 2.2) * -wd)],
+                   KG_CREST_D, 1.4)
+
+
+def _crest_fan(p, root, pts, w0=150, seed=1, out=1):
     """One of the two big swept horn crests (refs 01, 02): a broad fan of long gold-tan feathers sweeping up and out
     from the head and curling over at the tip. A broad tapering core, then single feathers splaying off its outer
     (convex) side, each a pointed leaf with a dark shaft; `out` (+1 or -1) is the side they splay to."""
@@ -272,6 +298,34 @@ def _crest(p, root, pts, w0=150, seed=1, out=1):
         p.poly(f, mix(KG_CREST, KG_OCHRE_L, 0.25), INK, 2.0)
         p.line([base, (base[0] + math.cos(ang) * ln * 0.8, base[1] + math.sin(ang) * ln * 0.8)], KG_CREST_D, 1.6)
     p.line(path[:-3], KG_CREST_D, 2.2)                                  # the core's shaft
+
+
+def _crest_layered(p, root, pts, w0=72, seed=1, out=1):
+    """Option C: a plume of overlapping long feathers, each pointing along to the tip (a flame of feathers), thick at
+    the root; the path is cut short so it arches out without drooping to the shoulders."""
+    path = open_curve([root] + pts[:-1], 8)
+    n = len(path)
+    W = w0 * 1.5
+    p.poly(_ribbon(path, W * 0.8, 10, notch=0.2, seed=seed), KG_CREST_D, INK, 2.2)
+    for i in range(n - 3, 0, -3):                                      # from the tip back, so root feathers lie on top
+        a, b = np.asarray(path[i], float), np.asarray(path[min(n - 1, i + 3)], float)
+        ang = math.atan2(*(b - a)[::-1])
+        u = i / (n - 1)
+        wide = W * (1.0 - 0.7 * u)
+        for sg, k in ((out, 0.22), (-out, 0.12)):
+            f = _feather(path[i], ang + sg * k, 60 + wide * 0.9, 12 + wide * 0.3)
+            p.poly(f, mix(KG_CREST, KG_OCHRE_L, 0.2 if sg == out else 0.0), INK, 1.8)
+            p.line([path[i], (path[i][0] + math.cos(ang + sg * k) * (50 + wide * 0.7),
+                              path[i][1] + math.sin(ang + sg * k) * (50 + wide * 0.7))], KG_CREST_D, 1.4)
+
+
+CREST = 'layered'        # the look Sam picks (Claude's pick: layered, pending Sam) from the options sheet (fan: pass 1, plume: pass 2, layered)
+
+
+def _crest(p, root, pts, w0=72, seed=1, out=1):
+    if CREST == 'fan':
+        return _crest_fan(p, root, pts, int(w0 * 150 / 72), seed, out)
+    return (_crest_layered if CREST == 'layered' else _crest_plume)(p, root, pts, w0, seed, out)
 
 
 def bandana(p, hx, hy, hw, t, view='front'):
@@ -357,10 +411,10 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0):
     m = KG_MOODS[mood]
     _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)                  # the long fanned tail hanging below
     hx, hy, hw = 0.0, -250.0, 168.0
-    _crest(p, (hx - 60, hy - 100), [(-140, hy - 230), (-210, hy - 360), (-310, hy - 420), (-390, hy - 370),
-                                    (-400, hy - 290)], seed=1, out=1)   # sweeping up and out, curling over
-    _crest(p, (hx + 60, hy - 100), [(150, hy - 220), (230, hy - 340), (330, hy - 390), (400, hy - 330),
-                                    (395, hy - 250)], seed=2, out=-1)
+    _crest(p, (hx - 50, hy - 110), [(-120, hy - 250), (-200, hy - 350), (-290, hy - 380), (-360, hy - 320),
+                                    (-380, hy - 210), (-360, hy - 120)], seed=1, out=1)   # arching up, out, drooping
+    _crest(p, (hx + 50, hy - 110), [(130, hy - 240), (210, hy - 340), (300, hy - 365), (365, hy - 295),
+                                    (380, hy - 190), (395, hy - 140)], seed=2, out=-1)
     body = curve([(0, -230), (150, -190), (196, -40), (186, 110), (110, 210), (0, 236), (-110, 210), (-186, 110),
                   (-196, -40), (-150, -190)], 5)
     p.poly(body, KG_BROWN, INK, 2.8)
@@ -381,9 +435,10 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0):
     p.poly(bib, KG_FACE, INK, 2.4)                                      # the white bib, scalloped at its foot
     for k in range(-2, 3):
         p.line(oval(k * 40, -10 + abs(k) * -14, 20, 12, 8, 0.2, math.pi - 0.2), KG_FACE_RIM, 1.6)
-    for sgn in (-1, 1):                                                 # the two gold eye-spots on it
-        p.ell(sgn * 52, -90, 30, 30, KG_OCHRE, INK, 2.0)
-        p.ell(sgn * 52, -90, 14, 14, dk(KG_OCHRE, 0.6), None)
+    for x, y, r in ((-74, -40, 30), (0, -40, 30), (74, -40, 30)):        # its eye-spots (ref 01): pale rings in a row
+        p.ell(x, y, r, r, KG_FACE_RIM, INK, 1.8)                         # along the bib's foot, never two filled dots
+        p.ell(x, y, r * 0.62, r * 0.62, KG_FACE, None)                    # (pass 2: those read as breasts)
+        p.ell(x, y, r * 0.26, r * 0.26, KG_CREST, None)
     for sd, sgn in (('R', -1), ('L', 1)):                               # the wings, as arms, over the body's sides
         el, hd, shape = wings[sd]
         _kg_wing(p, (sgn * 150, -150), el, hd, shape, sgn)
@@ -425,15 +480,18 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0):
     p.poly(R(curve([(60, -190), (150, -90), (166, 40), (130, 160), (60, 200), (40, 60), (30, -80)], 5)), KG_RUST, None)
     p.poly(R(curve([(70, 40), (150, 70), (130, 160), (60, 200), (30, 120)], 4)), KG_OCHRE, None)
     p.poly(R(curve([(40, -170), (120, -150), (150, -60), (100, -20), (50, -60)], 4)), KG_FACE, INK, 2.2)   # the bib
-    p.ell(*rot(110, -90), 22, 26, KG_OCHRE, INK, 1.8)
+    for bx, by in ((86, -40), (124, -70)):                               # the eye-spot rings, side on
+        c = rot(bx, by)
+        p.ell(*c, 16, 20, KG_FACE_RIM, INK, 1.6)
+        p.ell(*c, 9, 12, KG_FACE, None)
     p.poly(body, None, INK, 2.8)
     if perched:
         _kg_feet(p, *rot(20, 230), 1, True)
     hx, hy, hw = (*rot(40, -250), 150.0)
-    _crest(p, (hx - 70, hy - 90), [(hx - 230, hy - 150), (hx - 350, hy - 250), (hx - 420, hy - 220),
-                                    (hx - 430, hy - 150)], 100, seed=2, out=1)     # the far one, lower, behind
-    _crest(p, (hx - 30, hy - 110), [(hx - 140, hy - 240), (hx - 220, hy - 370), (hx - 330, hy - 410),
-                                    (hx - 400, hy - 350), (hx - 400, hy - 270)], seed=1, out=1)
+    _crest(p, (hx - 70, hy - 90), [(hx - 200, hy - 170), (hx - 320, hy - 250), (hx - 400, hy - 220),
+                                    (hx - 420, hy - 130)], 56, seed=2, out=1)     # the far one, lower, behind
+    _crest(p, (hx - 30, hy - 110), [(hx - 120, hy - 250), (hx - 210, hy - 350), (hx - 310, hy - 380),
+                                    (hx - 380, hy - 320), (hx - 400, hy - 220)], 70, seed=1, out=1)
     head = curve([(hx - hw, hy), (hx - hw * 0.8, hy - 110), (hx, hy - 146), (hx + hw * 0.7, hy - 110), (hx + hw, hy - 10),
                   (hx + hw * 0.86, hy + 80), (hx, hy + 112), (hx - hw * 0.8, hy + 84)], 5)
     p.poly(head, KG_BROWN, INK, 2.8)
@@ -514,7 +572,7 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
     p = B.Pen(img, loc)
     glow_c = mix((150, 200, 255), (255, 60, 36), heat)
     core = mix((250, 252, 255), (255, 214, 190), heat)
-    R = 30.0
+    R = 40.0                                                            # pass 2: the ball read small
     X, Y = loc.P(0, 0)
     rad = abs(loc.S(R))
     lay = Image.new('RGBA', img.size, glow_c + (0,))                 # the glow: two soft pools
@@ -530,10 +588,10 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
         for big in (True, False):
             if big:
                 ang = -math.pi / 2 + sgn * (0.32 + 0.22 * flap)
-                ln, wd, root = 118, 40, (sgn * 16, -16)
+                ln, wd, root = 130, 44, (sgn * 20, -20)
             else:
                 ang = math.pi / 2 - sgn * (0.6 + 0.15 * flap)
-                ln, wd, root = 50, 42, (sgn * 14, 16)
+                ln, wd, root = 58, 46, (sgn * 18, 20)
             wing = _feather(root, ang, ln, wd)
             p.poly(wing, mix((236, 236, 250), glow_c, 0.15), dk(glow_c, 0.7), 1.4)
             ux, uy = math.cos(ang), math.sin(ang)
@@ -541,7 +599,15 @@ def navi(img, cam, x, y, s, t=0.0, heat=0.0, flip=1):
                 c = (root[0] + ux * ln * (0.3 + k * 0.17), root[1] + uy * ln * (0.3 + k * 0.17))
                 p.ell(c[0], c[1], wd * 0.2, wd * 0.13, mix((226, 200, 236), (200, 236, 214), k / 3.0), None,
                       rot=ang)
-            p.line([root, (root[0] + ux * ln * 0.9, root[1] + uy * ln * 0.9)], dk(glow_c, 0.8), 1.2)
+            p.line([root, (root[0] + ux * ln * 0.9, root[1] + uy * ln * 0.9)], dk(glow_c, 0.8), 1.4)
+            vx, vy = -uy, ux                                            # the veins: side ribs off the spine (refs 05, 06)
+            for k in range(1, 6 if big else 3):
+                u = k / (6.0 if big else 3.0)
+                b0 = (root[0] + ux * ln * u * 0.9, root[1] + uy * ln * u * 0.9)
+                w = wd * 0.42 * math.sin(math.pi * min(0.95, u + 0.1))
+                for sg in (-1, 1):
+                    p.line([b0, (b0[0] + (vx * sg * w + ux * w * 0.6), b0[1] + (vy * sg * w + uy * w * 0.6))],
+                           mix(dk(glow_c, 0.8), (226, 160, 210), 0.4), 1.1)
     # the ball: white-hot at the middle, shading smoothly to her tint at a soft edge (no hard ring)
     rim = mix(core, glow_c, 0.55)
     lay = Image.new('RGBA', img.size, rim + (0,))                     # clear in her own colour: no dark fringe
@@ -587,7 +653,8 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     with gathered ruffles (line 11: happily absent, a vacant smile, drooling)."""
     loc = B.Local(cam, x, y, s, flip)
     p = B.Pen(img, loc)
-    for sgn, (cx, cy, rx, ry) in ((-1, (-210, -1110, 120, 90)), (1, (220, -1080, 130, 96)), (1, (60, -1230, 100, 70))):
+    for sgn, (cx, cy, rx, ry) in ((-1, (-330, -900, 72, 56)), (-1, (-280, -990, 60, 46)), (1, (335, -880, 76, 58)),
+                                  (1, (285, -985, 58, 44)), (1, (130, -1255, 66, 44))):   # pass 2: two big ones read as ears
         rock = [(cx + rx * math.cos(a) * (0.82 + 0.18 * ((k * 3) % 2)), cy + ry * math.sin(a) * (0.86 + 0.14 * (k % 2)))
                 for k, a in enumerate(np.linspace(0, 2 * math.pi, 9, endpoint=False))]   # lumpy grey boulders
         p.poly(rock, ROCK, INK, 2.6)                                    # on his back, peeking over his shoulders
@@ -617,8 +684,7 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
     for i in range(13):
         xx = -280 + i * 560 / 12
         p.ell(xx, -884 + abs(xx) * 0.01, 14, 10, DRESS_L, INK, 1.4)
-    p.poly(curve([(-60, -880), (0, -840), (60, -880), (84, -800), (0, -828), (-84, -800)], 2), DRESS_D, INK, 2.2)  # the bow
-    p.ell(0, -846, 24, 22, DRESS, INK, 2.0)
+    # (no bow at the neckline: pass 2, it and the goatee read as one frilly jabot)
     for sgn in (-1, 1):                                                 # stubby thick arms, puffed sleeves, round fists
         arm = curve([(sgn * 310, -910), (sgn * 450, -820), (sgn * 520, -660), (sgn * 450, -620), (sgn * 380, -760)], 3)
         p.poly(arm, GORON, INK, 3.0)                                     # out from his side, a gap under it
@@ -636,31 +702,38 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
         ex, ey = sgn * 120, -1080
         p.ell(ex, ey, 40, 46, G_EYE, INK, 2.6)
         px = ex + (10 if vac else 0)
-        p.ell(px - 10, ey - 16, 11, 11, SHINE, None)
-        p.line(open_curve([(ex - 34, ey - 72 - (8 if vac else 0)), (ex, ey - 82 - (10 if vac else 0)), (ex + 34, ey - 72)], 4),
-               INK, 6.0)
+        p.ell(px - 10, ey + (6 if vac else -16), 11, 11, SHINE, None)
+        if vac:                                                         # heavy half-shut lids: absent, not happy (pass 2)
+            lid = [(ex + 43 * math.cos(a), ey + 49 * math.sin(a)) for a in np.linspace(math.pi * 1.06, math.pi * 1.94, 14)]
+            p.poly(lid, GORON, INK, 2.6)
+        if vac:                                                         # raised, flat, blank brows (an arch read sly)
+            p.line([(ex - 30, ey - 100), (ex + 30, ey - 102)], INK, 6.0)
+        else:
+            p.line(open_curve([(ex - 34, ey - 72), (ex, ey - 82), (ex + 34, ey - 72)], 4), INK, 6.0)
     p.ell(0, -1010, 18, 13, GORON_D, None)                             # the nose
     p.ell(-8, -1004, 4, 3, dk(GORON_D, 0.7), None)
     p.ell(8, -1004, 4, 3, dk(GORON_D, 0.7), None)
     sm = [(-190, -990), (-110, -952), (0, -940), (110, -952), (190, -990)]
+    if vac:                                                             # slack: a softer smile, the jaw just hanging open
+        sm = [(-170, -972), (-100, -954), (0, -948), (100, -954), (170, -972)]
+        p.poly(curve([(-46, -950), (46, -950), (26, -922), (-26, -922)], 3), (120, 50, 60), INK, 2.4)
     p.line(open_curve(sm, 6), INK, 4.6)                                 # the wide smile line
     for sgn in (-1, 1):
-        p.line([(sgn * 186, -996), (sgn * 200, -980)], INK, 3.0)        # its dimpled corners
+        p.line([(sgn * (166 if vac else 186), -978 if vac else -996), (sgn * (180 if vac else 200), -962 if vac else -980)],
+               INK, 3.0)                                                # its dimpled corners
     beard = (226, 236, 244)                                             # the goatee: a pale tuft of strands on his chin
-    p.poly(curve([(-34, -916), (34, -916), (22, -880), (8, -846), (-4, -862), (-14, -850), (-24, -884)], 2), beard, INK, 2.0)
-    for k in (-14, 0, 14):
-        p.line([(k, -910), (k * 0.6, -866)], (170, 188, 204), 1.6)
+    p.poly([(-30, -916), (30, -916), (6, -868), (0, -852), (-6, -868)], beard, INK, 2.0)   # one small point, high
+    for k in (-12, 0, 12):                                              # on the chin, hair strands down it
+        p.line([(k, -912), (k * 0.3, -866)], (170, 188, 204), 1.6)      # (pass 2: the frilly one read as a jabot)
     if drool:                                                           # a fat string from the corner, swelling and stretching
         u = (t * 0.6) % 1.0
         ln = 60 + 120 * u
         dx0, dy0 = 150, -968
         wet = (176, 218, 246)
-        drop = curve([(dx0 - 14, dy0), (dx0 + 14, dy0 - 2), (dx0 + 10, dy0 + ln * 0.7), (dx0 + 22, dy0 + ln),
-                      (dx0 + 4, dy0 + ln + 30), (dx0 - 16, dy0 + ln), (dx0 - 6, dy0 + ln * 0.7)], 3)
-        p.poly(drop, wet, INK, 2.2)
-        p.line([(dx0 - 2, dy0 + 10), (dx0 - 2, dy0 + ln * 0.7)], (240, 250, 255), 3.0)   # the shine down it
-        p.ell(dx0 - 4, dy0 + ln + 6, 6, 8, (240, 250, 255), None)
-        p.ell(dx0 - 20, dy0 - 6, 26, 10, wet, INK, 1.6)                 # wet at the mouth's corner
+        drop = [(dx0 - 9, dy0), (dx0 + 9, dy0), (dx0 + 5, dy0 + ln * 0.8), (dx0 + 14, dy0 + ln + 6),
+                (dx0, dy0 + ln + 26), (dx0 - 14, dy0 + ln + 6), (dx0 - 5, dy0 + ln * 0.8)]
+        p.poly(curve(drop, 2), wet, INK, 2.0)                           # a thin string to a small drop (pass 2: the
+        p.line([(dx0 - 1, dy0 + 8), (dx0 - 1, dy0 + ln * 0.8)], (240, 250, 255), 2.0)   # wide end read as a spoon)
 
 
 # ================================================================================================ the sheets

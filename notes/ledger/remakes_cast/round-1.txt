@@ -84,3 +84,82 @@ P6: 1-6, 10. P2: 1-8. P5: 5, 10. A2: 1-2, 4-5, 7-10. P8: 8.
 2. Duplicate tiles. suggested line: "Tiles differ."
 3. No forest (9). suggested line: "Named backgrounds drawn."
 
+== critique, round 1 pass 2 (2026-11-10): 52 fault(s), 26 can't tell
+-- look.md --
+1: Green-capped elf boy turnaround, shield on back; eight small faces, mostly same expression.
+2: Elf princess, white-purple gown, hood; two near-identical poses; two faces, one worried.
+3: Red-haired girl, brown apron, purple skirt; second holds white bottle, smiling; two faces.
+4: Green-haired elf girl, green scarf outfit, hand on hip; two faces, one winking.
+5: Pale teal-capped fishlike girl, fin arms, hands on hips; faces blank, washed-out grey.
+6: Masked soldier, black tactical armour, aiming rifle; no faces, out of style with rest.
+7: Brown owl, antler-like feather crest, wings spread; red headband; row of owl faces.
+8: Same owl side views flying, bowing, red headband; crest looks like antlers, odd.
+9: Four glowing fairy-wing lights: blue, pale blue, pink, red; no body, dark backgrounds.
+10: Huge yellow round creature, pink frilly dress, bow, drooling; one pose only, no faces.
+-- result.md --
+## Panel 1
+ok: A3 P7 P1 P3 P5 P6 P11
+FAULT A1 P2: shrug reads "ta-da"
+FAULT A2 P13 P4 P8: bare arms; neutral smiles; side earless
+CAN'T TELL P10 P12: animatic
+
+## Panel 2
+ok: A1 A3 P7 P1 P3 P5 P6 P8 P13 P4
+FAULT A2 P2 P11: trim pink; shy face startled; no neck
+CAN'T TELL P10 P12: animatic
+
+## Panel 3
+ok: A1 A3 P7 P1 P3 P5 P6 P8 P11 P13
+FAULT A2 P2 P4: bottle at hip; short hair
+CAN'T TELL P10 P12: animatic
+
+## Panel 4
+ok: A3 P2 P7 P3 P5 P8 P11 P13 P4
+FAULT A1 A2 P1 P6: ocarina hidden blob
+CAN'T TELL P10 P12: animatic
+
+## Panel 5
+ok: A3 P1 P6 P8 P13 P4
+FAULT A1 A2 P11: fin a helmet; stalk neck
+FAULT P2 P7 P3 P5: brows down; weight even; arms inside chest
+CAN'T TELL P10 P12: animatic
+
+## Panel 6
+ok: A3 P7 P8 P13 P3 O2 O4 O3 O6 O1
+FAULT A1 A2 P4 P11: beard-like balaclava; no camo; tiny head
+FAULT P2 P1 O5 P5 P6: scope below eye; stock floats; armless hand
+CAN'T TELL P10 P12: animatic
+
+## Panel 7
+ok: A3 P7 P1 P3 P5 P6 P8 P11 P13
+FAULT A1 A2: breast-like rosettes; no gun
+FAULT P2 P4 C2 C3: duplicate tiles; tear-like spit; antlers
+CAN'T TELL P10 P12 C1 C4: shots
+
+## Panel 8
+ok: A3 P7 P3 P8 P11 P13 P4
+FAULT A1 A2 C3: nipple; stub tail; wheat crest
+FAULT P2 P1 P5 P6 C2: upright swoop; empty talons; sleeve wings
+CAN'T TELL P10 P12 C1 C4: shots
+
+## Panel 9
+ok: A1 A3 C2 C3
+FAULT A2: small ball, no veins
+CAN'T TELL C1 C4: shots
+
+## Panel 10
+ok: A3 P7 P1 P3 P5 P6 P8 P11 P13 C2
+FAULT A1 C3 A2 P4: spoon drool; ear boulders; jabot goatee
+FAULT P2: happy, not vacant
+CAN'T TELL P10 P12 C1 C4: shots; line-up
+
+## Cold look
+Missed props and rude shapes: read outfits only.
+
+## Same fault elsewhere
+Props: 3 4 7 8. Beat: 1 3 5 6 8 10. Nipple: 7 8. Neck: 2 5 6. Arm: 5 6 8.
+
+## Not on list
+- Soldier off style. suggested line: one head-body ratio.
+- Duplicate tiles. suggested line: poses differ.
+

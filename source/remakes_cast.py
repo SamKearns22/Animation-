@@ -8,10 +8,10 @@ MAP (rule 61)
   kid head (front) ..... _kid_outline, _eye, _brows, _kid_mouth, kid_head; hair and headgear per child: _hair_*
   Link's turned heads .. link_head_side, link_head_back
   kid torsos (front) ... _tunic_link, _dress_zelda, _dress_malon, _tunic_saria, _body_ruto; kid_torso
-  kid side/back ........ kid_torso_view (Link: tunic fringe, belt, strap, shield)
+  kid side/back ........ kid_torso_view (Link: tunic fringe, belt, strap, sheath, shield)
   sleeves .............. _arm (short or puffed sleeves over a bare arm; Ruto's forearm fins)
   legs ................. _leg (boots with folded cuffs, Ruto's bare feet)
-  props ................ milk_bottle, ocarina, rifle
+  props ................ milk_bottle, ocarina, rifle; the Kokiri Sword: kokiri_hilt, kokiri_sheath, link_hilt
   gunman ............... GUNMAN (the Patriot's balaclava, a helmet, a plate vest), vest, helmet
   the people ........... LINK, ZELDA, MALON, SARIA, RUTO, GUNMAN; MOODS; person(); poses()
   sheets ............... alone(WHO, OUT) one character beside its references; faces(OUT)
@@ -624,7 +624,8 @@ def _tunic_link(img, p, sp):
     p.poly(curve([(-70, -10), (70, -10), (78, 30), (0, 74), (-78, 30)], 3), L_SHIRT, INK, 2.4)   # the knit shirt's neck
     for sgn in (-1, 1):                                                   # its collar points
         p.poly([(sgn * 6, 6), (sgn * 62, -8), (sgn * 50, 40)], L_SHIRT, INK, 2.0)
-    p.poly([(-sw * 0.5, 10), (sw * 0.2, 290), (sw * 0.36, 280), (-sw * 0.34, 4)], LEATHER, INK, 2.2)   # the chest strap
+    p.poly([(sw * 0.5, 10), (-sw * 0.2, 290), (-sw * 0.36, 280), (sw * 0.34, 4)], LEATHER, INK, 2.2)   # the chest strap
+    # over his left shoulder (screen right), as from behind and in refs 03, 04 (it carries the sword)
     for k in range(4):
         y = 300 + k * 40
         x = -sw * 0.5 + (sw * 0.7) * (y - 10) / 280 if y < 290 else 0
@@ -733,6 +734,73 @@ def _body_ruto(img, p, sp):
 TORSO = {'link': _tunic_link, 'zelda': _dress_zelda, 'malon': _dress_malon, 'saria': _tunic_saria, 'ruto': _body_ruto}
 
 
+SHEATH, SHEATH_D = (104, 68, 42), (72, 46, 28)
+GRIP, POMMEL = (92, 58, 34), (70, 44, 26)
+STEEL = (168, 174, 184)
+SWORD_U = (0.57, -0.82)         # the sheath's line up his back, towards the hilt (front view; mirrored from behind)
+
+
+def _unit(u):
+    n = math.hypot(*u) or 1.0
+    return u[0] / n, u[1] / n
+
+
+def kokiri_hilt(p, m, u):
+    """The Kokiri Sword's hilt (Sam, 10 Nov; ref 03): a small steel guard with curled ends at the sheath's mouth `m`,
+    a short brown wrapped grip along `u`, a round flat wooden pommel cap."""
+    ux, uy = _unit(u)
+    vx, vy = -uy, ux
+    g, L = 30.0, 96.0
+    p.poly(curve([(m[0] + vx * g, m[1] + vy * g), (m[0] + vx * g + ux * 14, m[1] + vy * g + uy * 14),
+                  (m[0] - vx * g + ux * 14, m[1] - vy * g + uy * 14), (m[0] - vx * g, m[1] - vy * g)], 2), STEEL, INK, 2.2)
+    for sg in (-1, 1):                                                # the guard's curled ends
+        cx, cy = m[0] + sg * vx * (g + 6) + ux * 4, m[1] + sg * vy * (g + 6) + uy * 4
+        p.ell(cx, cy, 8, 8, STEEL, INK, 1.8)
+    a = (m[0] + ux * 14, m[1] + uy * 14)
+    b = (m[0] + ux * L, m[1] + uy * L)
+    w = 11.0
+    p.poly([(a[0] + vx * w, a[1] + vy * w), (b[0] + vx * w, b[1] + vy * w), (b[0] - vx * w, b[1] - vy * w),
+            (a[0] - vx * w, a[1] - vy * w)], GRIP, INK, 2.2)
+    for k in range(1, 5):                                             # the wrap: a few slanted turns
+        t0, t1 = 14 + (L - 14) * (k - 0.6) / 5, 14 + (L - 14) * k / 5
+        p.line([(m[0] + ux * t0 + vx * w, m[1] + uy * t0 + vy * w), (m[0] + ux * t1 - vx * w, m[1] + uy * t1 - vy * w)],
+               dk(GRIP, 0.7), 1.8)
+    p.ell(b[0] + ux * 8, b[1] + uy * 8, 20, 12, POMMEL, INK, 2.2, rot=math.atan2(vy, vx))   # the round flat cap
+    p.ell(b[0] + ux * 6, b[1] + uy * 6, 10, 5, dk(POMMEL, 1.3), None, rot=math.atan2(vy, vx))
+
+
+def kokiri_sheath(p, m, u, length=400.0):
+    """Its carved wooden sheath (ref 03) from the mouth `m` down against `u`: wide at the mouth, tapering to a
+    rounded tip, a carved line down it and two leather bands."""
+    ux, uy = _unit(u)
+    vx, vy = -uy, ux
+    tip = (m[0] - ux * length, m[1] - uy * length)
+    w0, w1 = 26.0, 16.0
+    end = [(tip[0] + vx * w1 * math.cos(a) - ux * w1 * math.sin(a), tip[1] + vy * w1 * math.cos(a) - uy * w1 * math.sin(a))
+           for a in np.linspace(0, math.pi, 9)]                           # the rounded tip, a half circle
+    p.poly([(m[0] + vx * w0, m[1] + vy * w0)] + end + [(m[0] - vx * w0, m[1] - vy * w0)], SHEATH, INK, 2.4)
+    p.line([(m[0] - ux * 30, m[1] - uy * 30), (tip[0] + ux * 20, tip[1] + uy * 20)], SHEATH_D, 2.0)
+    for t in (40.0, length - 70):
+        w = w0 + (w1 - w0) * t / length + 2
+        c = (m[0] - ux * t, m[1] - uy * t)
+        p.poly([(c[0] + vx * w + ux * 9, c[1] + vy * w + uy * 9), (c[0] + vx * w - ux * 9, c[1] + vy * w - uy * 9),
+                (c[0] - vx * w - ux * 9, c[1] - vy * w - uy * 9), (c[0] - vx * w + ux * 9, c[1] - vy * w + uy * 9)],
+               LEATHER_D, INK, 1.8)
+
+
+# where the hilt leaves the body, per view (torso units: the sheath runs from his right hip up to his left shoulder)
+HILT_AT = {'front': ((92.0, 2.0), SWORD_U), 'back': ((-92.0, 2.0), (-SWORD_U[0], SWORD_U[1])),
+           'side': ((-58.0, 0.0), (-0.42, -0.91))}
+
+
+def link_hilt(p, hv, sp, hdx, hy):
+    """Drawn after his head (a head prop), so the hilt shows over the cap's tail as in ref 03; its guard sits on the
+    shoulder line, so it reads as coming from behind him."""
+    if hv in HILT_AT:
+        m, u = HILT_AT[hv]
+        kokiri_hilt(p, m, u)
+
+
 def kid_torso_view(img, p, sp, view, seated=False):
     """Link turned (the wall shot side on; the opening shot from behind): the plain torso in his tunic, then the
     fringe, belt, chest strap and, from behind, the wooden shield on his back."""
@@ -749,12 +817,15 @@ def kid_torso_view(img, p, sp, view, seated=False):
     if view == 'side':
         p.ell(x1 - 10, 322, 14, 26, SILVER, INK, 2.0)
         p.poly([(x0 * 0.9, 20), (x1 * 0.7, 300), (x1 * 0.4, 300), (x0 * 0.9, 50)], LEATHER, INK, 2.0)
+        kokiri_sheath(p, (x0 + 8, 30), (-0.06, -1.0), 330)                 # the sheath down his back, its tip under the shield
         p.poly(curve([(x0 + 2, 50), (x0 - 18, 70), (x0 - 26, 200), (x0 - 16, 330), (x0 + 4, 340), (x0 + 6, 200)], 3),
                WOOD, INK, 2.4)                                       # the shield edge-on: thin, hugging his back
     if view == 'back':                                                    # the wooden Kokiri shield on his back
         shield = curve([(-sw * 0.7, 40), (sw * 0.7, 40), (sw * 0.76, 200), (sw * 0.5, 330), (0, 380), (-sw * 0.5, 330),
                         (-sw * 0.76, 200)], 3)
         p.poly([(-sw * 0.5, 0), (sw * 0.7, 290), (sw * 0.6, 310), (-sw * 0.6, 14)], LEATHER, INK, 2.0)
+        m, u = HILT_AT['back']
+        kokiri_sheath(p, (m[0] + 6, m[1] + 14), u, 360)                   # the sheath across his back, tip at his right hip
         p.poly(shield, WOOD, INK, 2.6)
         for x in (-0.3, 0.0, 0.3):
             p.line([(sw * x, 50), (sw * x * 0.9, 360)], WOOD_D, 2.0)
@@ -1048,6 +1119,8 @@ def person(img, cam, x, y, s, sp, t=0.0, yaw=0, j=None, head_yaw=None):
     j = j or V.standing(sp)
     if sp.get('who') == 'gunman' and not j.get('_dressed'):
         gunman_dress(j)
+    if sp.get('who') == 'link' and link_hilt not in j.get('head_props', []):
+        j['head_props'] = j.get('head_props', []) + [link_hilt]       # the Kokiri Sword's hilt over his left shoulder
     return V.person(img, cam, x, y, scale_for(sp, s), dict(sp), t, yaw, j, head_yaw)
 
 

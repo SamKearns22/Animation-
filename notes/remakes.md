@@ -1,24 +1,27 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (pass 2 by a NEW helper), 41 (hands read as hands), 38 (only the views the shots use).
-- **Done (11 Nov, build chat 4, Opus high; stopped on cost amber):** every open pass-1 fault on the children and the
-  gunman fixed and looked at full size: kids' circle hands sized to their big heads (36, was 26); Link's beads bigger
-  with shines, the shrug now shoulders up, elbows in, palms out at the chest; Zelda's veil ends at the neck so the gold
-  collar shows, the tabard purple with gold trim, scrolls and crest, "down" tips the head and drops the eyes; Malon's
-  bottle up at her chest, over her sleeve; Saria's hand on hip (elbow out) and green shorts; Ruto a broad
-  mushroom head-fin growing from her pale skull (no brim line), hip fins rooted on the hips, forearm fins under the
-  arm's edge, a vain pose (weight on one leg, chin up, one brow); the gunman side on, rifle at the shoulder, looking
-  along it; the hems no longer dip below the ground.
-- **Next:** Build, Opus high: critique pass 2 of all nine (`remakes_panels.py OUTDIR`, then `critique.py pack
-  remakes_cast SPEC.json`, a NEW helper; say in each kid panel's "is" that circle hands are the house style), fix,
-  then the cast sheet (`remakes_cast.py castsheet OUT.jpg`) to Sam; wait for his look.
-- **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
+- **Rules that bite next:** 89 (pass 3 by a NEW helper), 87 (KG's crests: options sheet sent, Sam picks), 41 (hands).
+- **Done (11 Nov, build chat 5, Opus high; stopped on cost amber):** critique pass 2 recorded (52 faults, many real).
+  Sam's ask: Link carries the Kokiri Sword (hilt over his left shoulder, carved wooden sheath behind the shield,
+  ref 03); the front chest strap now crosses his left shoulder like the back and refs. Fixed from pass 2: KG's bib
+  spots (read as breasts) now three pale rings in a row; KG's crests are on an options sheet (1 fan, 2 narrow plume,
+  3 layered feathers; 3 is in use, Claude's pick); the Goron's rocks five small lumps (two read as ears), thin drool
+  (read as a spoon), small goatee point and no neckline bow (read as a jabot), vacant face (half lids, flat brows,
+  slack jaw); Navi's ball bigger, veins on her wings.
+- **Next:** Build, Opus high: fix the rest of pass 2 (Link's shrug reads "ta-da", his side view has no ear; Zelda's
+  shy face reads startled, her trim pink; Malon's bottle at chest, hair to the waist; Saria's ocarina shows clear of
+  her hand; Ruto's head-fin still a mushroom helmet, stalk neck, not vain; gunman's scope to his eye, stock on the
+  shoulder, an arm to the trigger hand, mask reads beard side on; KG war pose has no gun, side wings read as
+  sleeves, swoop upright, stub side tail, faces alike), then pass 3 (`remakes_panels.py OUTDIR`, spec as in pass 2),
+  then the cast sheet to Sam with Sam's crest pick.
+- **Needs Sam:** crest pick 1/2/3; recordings any time (01-14, a second of silence after each).
 - **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
 - **Open rule requests:** none.
-- **For Claude:** poses carry `_mood` and `_yaw` (panels and `alone` read them); kids' hands `remakes_cast.hand`
-  (`KID_HAND_R`); Malon's bottle uses `wrap`; KG crests ("antlers" to a cold eye) and his side grip mittens: judge at
-  pass 2. Packs `source/data/critique/remakes_cast/` (git-ignored: pass 1 is only in the ledger).
+- **For Claude:** pass 2 spec: `source/data/critique/remakes_cast/r1-p2.spec.json` (git-ignored; the empty r1-p1 dir
+  keeps numbering); false alarms to `critique.py false`: P13 bare arms (refs have short sleeves), KG's empty neck-grip
+  talons (the victim is in the shot). Crest look `remakes_creatures.CREST` ('fan', 'plume', 'layered'); drop the two
+  unpicked after Sam's answer. Sword: `remakes_cast.kokiri_hilt/kokiri_sheath/link_hilt` (a head prop, so over the cap).
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
@@ -85,6 +88,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 25 | Navi always cutely floating, nuzzling, etc., depending on context | |
 | 26 | Budget ideally 12%, stretch to 15% for quality | |
 | 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | |
+| 28 | Sam, 11 Nov: Link has the Kokiri Sword and its sheath | drawn (sheathed; no shot draws it) |
 
 ## References as checklists (Sam's round one, 10 Nov; `references/remakes/`). Ours matches? is ticked at the cast sheet
 | reference | what it shows (count, colours, positions, facing, proportions) | ours matches? |

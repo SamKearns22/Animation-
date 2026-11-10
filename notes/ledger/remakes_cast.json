@@ -55,46 +55,153 @@
      "6 P5: shoulders under vest.",
      "10 C3: phone-size shot."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "date": "2026-11-10",
+    "faults": 52,
+    "cant_tell": 26,
+    "open": [
+     "1 A1: shrug reads \"ta-da\"",
+     "1 P2: shrug reads \"ta-da\"",
+     "1 A2: bare arms; neutral smiles; side earless",
+     "1 P13: bare arms; neutral smiles; side earless",
+     "1 P4: bare arms; neutral smiles; side earless",
+     "1 P8: bare arms; neutral smiles; side earless",
+     "2 A2: trim pink; shy face startled; no neck",
+     "2 P2: trim pink; shy face startled; no neck",
+     "2 P11: trim pink; shy face startled; no neck",
+     "3 A2: bottle at hip; short hair",
+     "3 P2: bottle at hip; short hair",
+     "3 P4: bottle at hip; short hair",
+     "4 A1: ocarina hidden blob",
+     "4 A2: ocarina hidden blob",
+     "4 P1: ocarina hidden blob",
+     "4 P6: ocarina hidden blob",
+     "5 A1: fin a helmet; stalk neck",
+     "5 A2: fin a helmet; stalk neck",
+     "5 P11: fin a helmet; stalk neck",
+     "5 P2: brows down; weight even; arms inside chest",
+     "5 P7: brows down; weight even; arms inside chest",
+     "5 P3: brows down; weight even; arms inside chest",
+     "5 P5: brows down; weight even; arms inside chest",
+     "6 A1: beard-like balaclava; no camo; tiny head",
+     "6 A2: beard-like balaclava; no camo; tiny head",
+     "6 P4: beard-like balaclava; no camo; tiny head",
+     "6 P11: beard-like balaclava; no camo; tiny head",
+     "6 P2: scope below eye; stock floats; armless hand",
+     "6 P1: scope below eye; stock floats; armless hand",
+     "6 O5: scope below eye; stock floats; armless hand",
+     "6 P5: scope below eye; stock floats; armless hand",
+     "6 P6: scope below eye; stock floats; armless hand",
+     "7 A1: breast-like rosettes; no gun",
+     "7 A2: breast-like rosettes; no gun",
+     "7 P2: duplicate tiles; tear-like spit; antlers",
+     "7 P4: duplicate tiles; tear-like spit; antlers",
+     "7 C2: duplicate tiles; tear-like spit; antlers",
+     "7 C3: duplicate tiles; tear-like spit; antlers",
+     "8 A1: nipple; stub tail; wheat crest",
+     "8 A2: nipple; stub tail; wheat crest",
+     "8 C3: nipple; stub tail; wheat crest",
+     "8 P2: upright swoop; empty talons; sleeve wings",
+     "8 P1: upright swoop; empty talons; sleeve wings",
+     "8 P5: upright swoop; empty talons; sleeve wings",
+     "8 P6: upright swoop; empty talons; sleeve wings",
+     "8 C2: upright swoop; empty talons; sleeve wings",
+     "9 A2: small ball, no veins",
+     "10 A1: spoon drool; ear boulders; jabot goatee",
+     "10 C3: spoon drool; ear boulders; jabot goatee",
+     "10 A2: spoon drool; ear boulders; jabot goatee",
+     "10 P4: spoon drool; ear boulders; jabot goatee",
+     "10 P2: happy, not vacant",
+     "1 P10: animatic",
+     "1 P12: animatic",
+     "2 P10: animatic",
+     "2 P12: animatic",
+     "3 P10: animatic",
+     "3 P12: animatic",
+     "4 P10: animatic",
+     "4 P12: animatic",
+     "5 P10: animatic",
+     "5 P12: animatic",
+     "6 P10: animatic",
+     "6 P12: animatic",
+     "7 P10: shots",
+     "7 P12: shots",
+     "7 C1: shots",
+     "7 C4: shots",
+     "8 P10: shots",
+     "8 P12: shots",
+     "8 C1: shots",
+     "8 C4: shots",
+     "9 C1: shots",
+     "9 C4: shots",
+     "10 P10: shots; line-up",
+     "10 P12: shots; line-up",
+     "10 C1: shots; line-up",
+     "10 C4: shots; line-up"
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 8,
+    "faults": 18,
     "false": 0
    },
    "P2": {
-    "faults": 8,
+    "faults": 16,
     "false": 0
    },
    "P6": {
-    "faults": 9,
+    "faults": 12,
     "false": 0
    },
    "P4": {
-    "faults": 2,
+    "faults": 7,
     "false": 0
    },
    "P5": {
-    "faults": 2,
+    "faults": 5,
     "false": 0
    },
    "A1": {
-    "faults": 3,
+    "faults": 10,
     "false": 0
    },
    "C3": {
-    "faults": 2,
+    "faults": 5,
     "false": 0
    },
    "C2": {
-    "faults": 3,
+    "faults": 5,
     "false": 0
    },
    "P8": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P13": {
+    "faults": 2,
+    "false": 0
+   },
+   "P11": {
+    "faults": 3,
+    "false": 0
+   },
+   "P1": {
+    "faults": 3,
+    "false": 0
+   },
+   "P7": {
+    "faults": 1,
+    "false": 0
+   },
+   "P3": {
+    "faults": 1,
+    "false": 0
+   },
+   "O5": {
     "faults": 1,
     "false": 0
    }
