@@ -22,6 +22,7 @@
   S5 trunks still even poles, not staggered, and a grey forest unlike the others; camp walls read as a plank fence
   not corrugated tin, and no shacks (no middle layer); town fountain pale and statue-less (ref 21: dark stone,
   statues); KG's spit (now reads as flowers he is offering; also comes from a closed beak).
+- **Sam's note 29 (first, before the options sheet):** KG's mouth-and-beaky-nose becomes one real beak that opens and shuts as he talks (brief item 29); his front and side heads, every mood; a clip of him talking.
 - **Fix (new in pass 3):** KG floats in camp and town (his fanned tail hangs below his talons and the shadow sits
   at his belly: shorten the tail when standing, shadow at the talons); forest door shorter than Link; the path
   even patio bricks; the lantern reads as a hand bell; the lower half of S1 pale cloud blobs; S5 gunman small in the
@@ -102,6 +103,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 26 | Budget ideally 12%, stretch to 15% for quality | |
 | 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | |
 | 28 | Sam, 11 Nov: Link has the Kokiri Sword and its sheath | drawn (sheathed; no shot draws it) |
+| 29 | Sam, 11 Nov: KG has a mouth and a beaky nose; he needs a real beak, and the beak moves when he talks | open: build chat 11 (the beak IS the mouth: upper and lower halves, the lower hinges open on each syllable; no lips or tongue-mouth under it; the grin and fury carried by the eyes, brows and beak angle) |
 
 ## References as checklists (Sam's round one, 10 Nov; `references/remakes/`). Ours matches? is ticked at the cast sheet
 | reference | what it shows (count, colours, positions, facing, proportions) | ours matches? |
