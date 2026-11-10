@@ -73,9 +73,13 @@ I don't know how to code. Please:
     render, sending, saving), quick videos, **status questions and quick answers**: **Sonnet** (Sam, 8 Nov: put back; once the fixes are made, the checks
     and the animatic go to Sonnet).
 
-  When the next stage needs a different model, stop, send me a push notification ("Time to switch to Sonnet: type
-  /model") and wait for me to say I've switched. Never carry on into a stage that needs a stronger model. **If I start
-  a task on the wrong model, refuse and tell me**; let me change it, or offer me the option to override.
+  **Chats chain themselves (Sam, 10 Nov):** at every handover (a stage's end, a round's end, amber or red) the chat I
+  started opens the next chat itself (create_session: the right model and effort, the handover's line as its prompt),
+  checks on it once per stage (send_later, under an hour) and tells me which chat to open; chats it starts cannot
+  start chats, so they hand over and stop. A round of my notes chains too: once I say go, the notes chat (Opus medium)
+  fixes, then opens the Sonnet chat for the checks and the animatic. **If I start a task on the wrong model, the chat
+  opens the right one itself** and says which to open. Anything that needs my yes (an animatic, a final, a rule, a
+  taste call) still stops and waits. Never carry on into a stage that needs a stronger model inside one chat.
 - **One wait per render:** wait once for a render or long process to finish; never check on it repeatedly.
 - **Push notifications** whenever a render or long process finishes, fails or needs my decision, and at every stage
   end. Say how long each render will take and how long it took.
@@ -91,7 +95,7 @@ I don't know how to code. Please:
   **15 lines at most**, in this order: Rules that bite next (3, by number); Done; Next (model and what to type in the
   new chat); Needs Sam; Read (which sections of which guide); Open rule requests. Code names go in a "For Claude" line
   at the end. Update `story/status.md` (3 lines), commit and push. **Paste only 3 lines into the chat** (at the bottom
-  of the message): what's done, the model, and what to type in the new chat. **Every handover, and every message that
+  of the message): what's done, the model, and which chat was opened for it (what to type only if none could be). **Every handover, and every message that
   sends Sam to a new chat, names the model AND the effort level** ("Opus, high effort"), matching the build plan or the
   stage list above; a stage not listed gets my pick and one line of why (Sam, 9 Nov: a handover that said only "Opus"
   started Job E on medium).
