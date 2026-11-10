@@ -21,17 +21,16 @@
   collar (the 'ball' from behind showed a loose block: the back-of-head drawing's own neck ran a fixed length past the
   collar). Trio sheet looked at (fine); `lying.py check` OK; Elder Swindon's close man redrawn and looked at (fine;
   his shoe soles have a slightly doubled outline). Sheet `notes/sheets/job-i-driver-sheet.jpg` (sent).
-  **Sam's notes on the driver sheet (10 Nov, round 1; balloon head is a repeat of his first note: rule 30, find why
-  the first fix failed first):** (a) legs clip and aren't one fluid piece: draw each leg as one tube, hip to ankle,
-  a round knee, its top under the shirt hem; (b) balloon heads remain: likely cause, the head is drawn full size at
-  the body's middle scale while the trunk is foreshortened, so beside a squashed body it reads big: scale the head
-  with the trunk's foreshortening and at the head's own depth, check against the standing cast; (c) all floor
-  shadows under lying people removed; (d) 'on the back, head away': the head sits up and stares at us, because the
-  head only has turned views, none seen from above: the face looking at the sky should show crown-first, lying on
-  the floor (a top-of-head view, or the head kept flat on the floor, never tipped up off it).
-  **Next for I (chat 3, Opus medium): Sam's notes (a)-(d), then the driver sheet again; then, if Sam wants,** handcheck can't see lying bodies yet (lying.draw now
-  draws hands with views.arm/hand, so it could); a thin plain-red patch where the driver's sleeve meets his shoulder
-  in three-quarter views; the shoe-sole outline. Rules that bite: 41, 30.
+  **Round 1 of Sam's notes DONE (10 Nov, same chat, stopped on amber):** (a) each leg one shape with one outline
+  (`_limb_piece`); a leg in front of the body has its thigh drawn under the shirt hem first; (b) heads a tenth smaller
+  lying, smaller again beside a squashed trunk, at the head's own depth; no shine on a bald crown; (c) no floor
+  shadow under lying people (floor only; shirt shading kept, my pick on Q1); (d) face-up-away can't be drawn by the
+  rig: pre-flight now flags it (`lying_flat.face_up_away`, posecheck 'lying: face up away'); sheet shows 'head left'.
+  Soles now the shoe's own colour, darker. One fresh critique pass run (found 7; 3 fixed above).
+  **Next for I (chat 3, Opus medium):** Sam's look at the new sheet. Named, not fixed: the slumped shirt reads as a
+  wide box and the arm across it is lost (check on check); the turned goatee reads as a spike (the standing rig's own
+  side view); from behind the hair ring can read as a blindfold and the neck as a block; handcheck can't see lying
+  bodies; second critique pass not run yet. Rules that bite: 41, 30, 89.
   For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
   trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
   man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.

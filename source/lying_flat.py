@@ -31,7 +31,6 @@ import burnham as B          # noqa: E402
 import views as V            # noqa: E402
 from ed import INK, curve    # noqa: E402
 
-SOLE_C = (128, 112, 96)
 HEAD_TILT = 35.0                                       # degrees the head may tip off the trunk's line
 _N = [0]
 
@@ -125,20 +124,40 @@ def _torso_fit(cam, k, sp, view_deg, X, up, fwd, M):
 
 
 # ---------------------------------------------------------------------------------------------- pieces
-def _leg(p, sc, cam, k, side, sp, M):
+def _limb_piece(p, pts, widths, col, lw=2.6):
+    """One limb as ONE shape (Sam, 10 Nov: legs "clipping and not one fluid part"): the thigh and shin as tapered
+    pieces with round joints, filled together on a mask, one ink outline round the whole (no lines inside at the knee,
+    however tightly it folds)."""
+    from PIL import ImageFilter
+    img = p.img
+    m = Image.new('L', img.size, 0)
+    d = ImageDraw.Draw(m)
+    P = [np.asarray(p.cam.P(*q), float) for q in pts]
+    R = [abs(p.cam.S(w)) for w in widths]
+    for a, b, ra, rb in zip(P, P[1:], R, R[1:]):
+        t = b - a
+        n = np.array([-t[1], t[0]]) / (np.linalg.norm(t) or 1)
+        d.polygon([tuple(a + n * ra), tuple(b + n * rb), tuple(b - n * rb), tuple(a - n * ra)], fill=255)
+    for c, r in zip(P, R):
+        d.ellipse([c[0] - r, c[1] - r, c[0] + r, c[1] + r], fill=255)
+    w = max(1, int(round(p.w(lw))))
+    ring = m.filter(ImageFilter.MaxFilter(2 * w + 1))
+    img.paste(INK, (0, 0), ring)
+    img.paste(tuple(col), (0, 0), m)
+
+
+def _leg(p, sc, cam, k, side, sp, M, front=False):
+    """`front`: the knee is nearer than the trunk, drawn after it. The thigh is drawn whole before the trunk (so it
+    comes out from under the hem, never from mid-shirt: the critique, 10 Nov) and only the knee to the shoe here."""
     s = sc.s
     pts = [_proj(cam, k[n + side]) / s for n in ('hip', 'kn', 'an')]
     pts[0] = sc.hips[side]
     lk = sp.get('leg_k', 1.0)
     col = sp.get('trousers', (40, 40, 46))
-    a_, b_ = pts[0] - pts[1], pts[2] - pts[1]
-    fold = np.dot(a_, b_) / ((np.linalg.norm(a_) * np.linalg.norm(b_)) or 1)
-    if fold > 0.4:                                   # folded tight on screen: thigh, shin over it, a round knee
-        V.tube(p, [tuple(pts[0]), tuple(pts[1])], [48 * lk, 38 * lk], col)
-        V.tube(p, [tuple(pts[1]), tuple(pts[2])], [38 * lk, 27 * lk], col)
-        p.ell(pts[1][0], pts[1][1], 38 * lk, 38 * lk, col, None)
+    if front:
+        _limb_piece(p, [tuple(pts[1]), tuple(pts[2])], [38 * lk, 27 * lk], col)
     else:
-        V.tube(p, [tuple(q) for q in pts], [48 * lk, 38 * lk, 27 * lk], col)
+        _limb_piece(p, [tuple(q) for q in pts], [48 * lk, 38 * lk, 27 * lk], col)
     _shoe(p, sc, cam, k, side, sp, M)
 
 
@@ -156,7 +175,8 @@ def _shoe(p, sc, cam, k, side, sp, M):
     to_cam = _unit(np.asarray(cam.pos, float) - w(0, 36, 32))
     if np.dot(-su, to_cam) > 0.35:
         sole = [_proj(cam, w(dx, 36, dz)) / sc.s for dx, dz in ((-24, -24), (24, -24), (24, 88), (-24, 88))]
-        p.poly(curve([tuple(q) for q in sole], 3), sp.get('sole_c', SOLE_C), INK, 2.0)
+        p.poly(curve([tuple(q) for q in sole], 3), sp.get('sole_c', B.dk(sp.get('shoe', (22, 20, 22)), 0.72)), INK, 2.0)
+        #                                    the shoe's own colour, darker (the critique: grey soles read as other shoes)
 
 
 def _arm(p, sc, cam, k, side, sp):
@@ -195,10 +215,22 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
         xr = _proj(cam, k['head'] + Xh * 0.1) - hs
         if np.dot(xr, rvec) > 0:
             rvec = -rvec
-    hcam = HeadCam(neck, rvec, dvec, sc.s, tag)
+    # its size (Sam, 10 Nov, second note on "balloon heads": the head stayed full standing size beside a body the
+    # camera foreshortens, so it read swollen): at the head's own depth, and shrunk with the trunk, at most 22%
+    sw = sp.get('shoulders', 150)
+    a_, b_, c_ = (np.asarray(aff.P(*q)) / B.SS for q in ((-sw, 60), (sw, 60), (0, V.HIP_Y)))
+    e1, e2 = b_ - a_, c_ - (a_ + b_) / 2
+    area = abs(e1[0] * e2[1] - e1[1] * e2[0]) / (2 * sw * (V.HIP_Y - 60) * sc.s ** 2)   # the trunk as seen / face on
+    hk = cam.depth(tuple((k['neck'] + k['pelvis']) / 2)) / max(cam.NEAR, cam.depth(tuple(k['head'])))
+    hk *= 0.9 * float(np.clip(0.7 + 0.3 * area, 0.8, 1.0))   # lying, a tenth smaller; less again beside a trunk the
+    #                                                          camera squashes (whole: 0.9, squashed flat: 0.72)
+    hcam = HeadCam(neck, rvec, dvec, sc.s * hk, tag)
     # the head sits where it really shows (Job I chat 2: always 150 units out, a neck pointing at or away from us
     # showed as a long loose block), from 100 (the head's foot on the collar) to the rig's 150
-    hcam.hy = -float(np.clip(np.linalg.norm(hs - neck) / sc.s, 100.0, 150.0))
+
+    lo = 70.0 if cam.depth(tuple(k['head'])) > cam.depth(tuple(k['neck'])) + 0.05 else 100.0
+    hcam.hy = -float(np.clip(np.linalg.norm(hs - neck) / hcam.s, lo, 150.0))
+    #                                                   a head further off may tuck its chin under the collar
     return hcam, hv
 
 
@@ -221,8 +253,18 @@ def _neck(img, hc, sp):
 
 def _head_draw(img, hc, sp, t):
     hcam, hv = hc
-    q = dict(sp, neck_to=-14.0)                       # the back-of-head's own neck ends at the collar
+    q = dict(sp, neck_to=-14.0, no_shine=True)       # the back-of-head's own neck ends at the collar; no shine
+    #                                                   on a bald crown seen lying (it read as a balloon, Sam 10 Nov)
     V.head_view(img, B.Pen(img, hcam), q, t, hv, q.get('head_dx', 0.0), hcam.hy + q.get('head_dy', 0))
+
+
+def face_up_away(cam, k):
+    """True when the camera sees a face turned up to the ceiling from beyond the shoulders (Sam, 10 Nov, 'on the back,
+    head away': "the head raised and staring dead on at us"). The rig's heads turn but never tip back, so this view
+    can only be drawn as a head sat up facing us: pre-flight flags it (posecheck.lying_drawn); choose another camera."""
+    d = _unit(np.asarray(cam.pos, float) - k['head'])
+    beyond = cam.depth(tuple(k['head'])) > cam.depth(tuple(k['neck'])) + 0.05
+    return bool(beyond and 0.0 < float(np.dot(_unit(k['hfwd']), d)) < 0.9 and float(np.dot(_unit(k['hup']), d)) < -0.3)
 
 
 # ---------------------------------------------------------------------------------------------- draw
@@ -265,10 +307,10 @@ def draw(img, cam, k, sp, t=0.0, M=None):
         (last if dd < dt - lim else first).append((dd, key))
     sp_draw = dict(sp)
 
-    def piece(key):
+    def piece(key, front=False):
         kind, sd = key
         if kind == 'leg':
-            _leg(p, sc, cam, k, sd, sp_draw, M)
+            _leg(p, sc, cam, k, sd, sp_draw, M, front)
         else:
             _arm(p, sc, cam, k, sd, sp_draw)
     head_behind = cam.depth(tuple(k['head'])) > dt + 0.3
@@ -276,8 +318,8 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     _neck(img, hc, sp_draw)
     if head_behind:
         _head_draw(img, hc, sp_draw, t)
-    for _, key in sorted(first, key=lambda v: -v[0]):
-        piece(key)
+    for _, key in sorted(first + [v for v in last if v[1][0] == 'leg'], key=lambda v: -v[0]):
+        piece(key)                                    # a leg in front: its thigh first, under the hem
     tp = B.Pen(img, aff)
     sp_draw['neck_off'] = True
     if view == 'front':
@@ -287,7 +329,7 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     else:
         V.torso_view(img, tp, sp_draw, view, False)
     for _, key in sorted(last, key=lambda v: -v[0]):
-        piece(key)
+        piece(key, front=True)
     sp_draw.pop('neck_off')
     if not head_behind:
         _head_draw(img, hc, sp_draw, t)
@@ -309,7 +351,7 @@ def sheet(out, who='vance', extra=()):
         V.person(im, B.Cam(1.0, 540, 960), 540, 700, 1.0, sp, 0.0, yaw)
         cells.append(im.convert('RGB').crop((140, 450, 940, 1750)))
     shots = [('back', None, 0.0), ('back', 60, 0.0), ('face_down', 30, 0.0), ('side', 30, 0.0),
-             ('back', 30, 90.0), ('slump', None, -60.0)] + list(extra)
+             ('back', 30, 180.0), ('slump', None, -60.0)] + list(extra)
     rows = []
     B.SS = 2
     for mode in ('volumes', 'flat'):
@@ -346,7 +388,7 @@ def sheet(out, who='vance', extra=()):
         sh.paste(im, (14 + i * 245, 90))
     d.text((14, 60), 'standing (front, side)', fill=(20, 20, 20), font=small)
     names = ['on the back, eye level', 'on the back, 60 down', 'face down, 30 down', 'curled, 30 down',
-             'on the back, head away', 'slumped, eye level'] + \
+             'on the back, head left', 'slumped, eye level'] + \
         [f'{p_} {a_ or 0} down, turned {int(y_)}' for p_, a_, y_ in extra]
     x0 = 2 * 245 + 30
     for r, (label, row) in enumerate((('OLD', rows[0]), ('NEW', rows[1]))):

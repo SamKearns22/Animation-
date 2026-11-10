@@ -619,7 +619,8 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         if kind == 'bald':
             p.poly(curve([(hx - hw * 0.98, hy - 20), (hx - hw * 0.92, hy - hh * 0.55), (hx - hw * 0.5, hy - hh * 0.6),
                           (hx - hw * 0.62, hy + 4), (hx - hw * 0.95, hy + 24)], 4), c, INK, 2.0)
-            p.ell(hx + hw * 0.1, hy - hh * 0.74, hw * 0.24, hh * 0.08, (255, 240, 230), None, rot=0.2)
+            if not sp.get('no_shine'):
+                p.ell(hx + hw * 0.1, hy - hh * 0.74, hw * 0.24, hh * 0.08, (255, 240, 230), None, rot=0.2)
         else:
             p.poly(curve([(hx - hw * 0.98, hy - 20), (hx - hw * 0.84, hy - hh * 0.7), (hx - hw * 0.3, hy - hh * 1.04),
                           (hx + hw * 0.2, hy - hh * 1.0), (hx - hw * 0.05, hy - hh * 0.6), (hx - hw * 0.32, hy - 10),
@@ -679,7 +680,8 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         if kind == 'bald':
             p.poly(curve([(hx - 66, hy - 30), (hx - 64, hy - 70), (hx - 40, hy - 56), (hx - 34, hy - 20), (hx - 40, hy + 30),
                           (hx - 62, hy + 24)], 3), c, INK, 2.0)
-            p.ell(hx, hy - hh * 0.8, 20, 6, (255, 240, 230), None)
+            if not sp.get('no_shine'):
+                p.ell(hx, hy - hh * 0.8, 20, 6, (255, 240, 230), None)
         else:
             p.poly(curve([(hx - 66, hy - 30), (hx - 70, hy - 76), (hx - 34, hy - hh - 16), (hx + 24, hy - hh - 14),
                           (hx + 44, hy - hh + 8), (hx + 20, hy - hh + 14), (hx - 6, hy - 56), (hx - 34, hy - 20), (hx - 40, hy + 30),
@@ -708,7 +710,8 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         if kind == 'bald':
             p.poly(curve([(hx - hw, hy - 10), (hx - hw * 0.9, hy + hh * 0.5), (hx, hy + hh * 0.62), (hx + hw * 0.9, hy + hh * 0.5),
                           (hx + hw, hy - 10), (hx, hy + 10)], 4), c, None)
-            p.ell(hx, hy - hh * 0.6, hw * 0.3, hh * 0.1, (255, 240, 230), None)
+            if not sp.get('no_shine'):
+                p.ell(hx, hy - hh * 0.6, hw * 0.3, hh * 0.1, (255, 240, 230), None)
         else:
             p.poly(curve([(hx - hw * 0.99, hy - 30), (hx - hw * 0.97, hy + 20), (hx - hw * 0.8, hy + hh * 0.5), (hx, hy + hh * 0.66),
                           (hx + hw * 0.8, hy + hh * 0.5), (hx + hw * 0.97, hy + 20), (hx + hw * 0.99, hy - 30), (hx, hy - hh * 0.5)], 4),

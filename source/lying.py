@@ -816,8 +816,7 @@ def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
     contact shadow. A body cut into pieces (`prts`) keeps the 3D volumes (draw_volumes)."""
     if prts is not None:
         return draw_volumes(img, cam, k, sp, t, light, surfaces, prts)
-    if surfaces:
-        shadow(img, cam, k, sp, surfaces)
+    # no floor shadow under a lying person (Sam, 10 Nov: "all the shadows should be removed")
     import lying_flat
     return lying_flat.draw(img, cam, k, sp, t)
 

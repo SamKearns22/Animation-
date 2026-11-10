@@ -112,6 +112,10 @@ def lying_drawn(cam, k, sp, surfaces):
     if name is not None and name not in gallery()['lying']:
         _note(sp, 'both', 'untested pose', f"the lying pose '{name}' has no row in the pose gallery: test it "
               '(lying.py check) and add its row', 42)
+    import lying_flat
+    if lying_flat.face_up_away(cam, k):
+        _note(sp, 'both', 'lying: face up away', 'lying on the back, head away from the camera: the face can only be '
+              'drawn sat up staring at us (Sam, 10 Nov); move the camera to the side or above', 42)
     surf = [('floor', surfaces[0][0], surfaces[0][1])] if surfaces else None
     for text in lying.body_faults(k, sp, surf, cam, who=''):
         text = text[2:] if text.startswith(': ') else text
