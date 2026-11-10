@@ -29,3 +29,35 @@ Only panel 1 exists; every fault is on panel 1 only.
 4. Flag says nothing "enemy". suggested line: An enemy flag carries one hostile mark readable at phone size.
 5. Sky is as bright as the yard; nothing pulls the eye to the gate. suggested line: The action area is the brightest, highest-contrast part of the set.
 
+== critique, round 2 pass 2 (2026-11-10): 9 fault(s), 3 can't tell
+-- look.md --
+1: Grey soldiers aim rifles by jungle gate; horned masked creature holds rifle; green-clad girl smiles.
+-- result.md --
+## Panel 1
+ok: A3 O1 O2
+FAULT A1: whole panel - owl read as "horned masked creature", Link as a girl, machine gun as rifle.
+FAULT A2: flag - reference is dark blue with white emblem on a tall pole; ours is a short blue-white saltire.
+FAULT O5: top left - palm trunk ends on the orange container roof; looks planted on it.
+FAULT O4: foreground - ruts half a person wide and ~3 m apart; read as road edges, not tyre tracks.
+FAULT O3: wall top, wall base, gate - barbed wire a hairline; sandbags read as pebbles; red gate bars and green slab beside owl unnameable.
+FAULT S1: whole panel - gate shut and whole, no gunfire; grey gunmen lost on grey wall; bottom third empty dirt.
+FAULT S2: wall - gunmen aim along the wall at each other, not at the yard; gate closed behind a cast who burst through it.
+FAULT S3: whole set - reference is a scattered ring of rusty blue tin, shacks, vehicles, grass; ours is one straight pale fence on bare dirt; no barrels.
+FAULT S5: lower third, right wall - flat tan ground, near-blank grey wall, no life.
+CAN'T TELL O6: the gate-burst and firing frame.
+CAN'T TELL S6: one frame each of S7, S8, S9 side by side.
+CAN'T TELL S4: first and last frame of each camera move.
+
+## Cold look
+Called the owl a "horned masked creature": ear tufts read as horns, hat and bandana hide the bird. Link read as a girl. Gun read as a rifle (no drum, no fire). Containers, tower, flag, crates, gate and ruts unnamed: the cast ate all 15 words. "Smiles" was a guess.
+
+## Same fault elsewhere
+One panel only; nothing to check.
+
+## Not on the list
+- Gunmen's legs are thin sticks under bulky torsos. suggested line: "Background figures' legs as thick as their arms."
+- Watchtower legs uneven (upright, slant, upright); looks unstable. suggested line: "Structures stand on a believable, symmetric frame."
+- Pale outlined rock at right edge reads as a stain. suggested line: "Ground objects get shading and a contact shadow."
+- No shadows under a bright sun. suggested line: "Under a stated sun, everything casts one-way shadows."
+- Gate has no hinges, weak point or debris ready to blow. suggested line: "A breaking set piece is drawn with its break parts."
+

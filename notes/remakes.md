@@ -1,21 +1,31 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (each set critiqued by a NEW helper), 83 (two camp overlaps to settle), 3 (benchmark).
-- **Done (build chat 7, Opus high):** the four pass-3 cast faults fixed and checked at full size (Link's side shield
-  now a broad slab; Navi's wing beat sweeps to level; KG's side bandana wraps his brow; the gun up at his chest,
-  belt to his side). First draft of all three sets, one painting per camera: forest (up, down, close, edge), the
-  camp (gate opens 0-1), town (square, wall), the cast at their marks; BENCHMARK filled. Stopped on cost amber.
-- **Next:** Build, Opus high: fix the faults seen on the first look (below), then each set alone beside its
-  references, critiqued by a NEW helper (`critique.py pack`, parts S, O), fix, pass 2; file passes in the catalogue.
-  Seen: forest up's foot is a flat sage block; forest close's moss blobs read as leaves stuck on; the camp's gate is
-  hidden behind KG and the gunmen (move the gunmen aside), tower and shack crowd the right; the Goron too big in the
-  line-up (check his scale); setcheck: blue container x crates, orange container x gate.
-- **Needs Sam:** "shit" heard or bleeped (Claude: heard). All 14 recordings are in (line 6 filed by another chat).
-- **Read:** `guides/job-packs.md` Build; this file's references; `guides/critique-checklist.md` S and O.
+- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 3 (benchmark: the shack is out).
+- **Done (build chat 8, Opus high):** first-look faults fixed (forest foot, stump moss, camp gate clear, Goron x 0.82
+  so about 1.3 x Link, the town camera raised); critique passes 1 and 2 of all three sets, each by NEW helpers; the
+  pass-1 faults fixed (list in the commits). Pass 2 still found real faults, so no set is filed in the catalogue yet.
+- **Next (Opus, high), once Sam answers Q1:** fix the pass-2 faults below, then pass 3 (`critique.py pack` on
+  `spec_r1/2/3.json`, a NEW helper each); a fault surviving three goes to an options sheet (rule 87).
+  The faults: "Open notes: the sets' pass-2 faults" below.
+- **Needs Sam:** Q1 budget (the week went 43% to 58%: the 15% stretch is spent before shots are built); Q2 KG's ear
+  tufts read as horns to all six critics (they match refs 01 and 02); Q3 soft shadows under feet (every critic).
+- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O.
 - **Open rule requests:** none.
-- **For Claude:** `source/remakes_sets.py` (MAP at the top): `alone forest|camp|town OUT`, `one VIEW OUT`; `STAGE`
-  marks, `s_for(ppm)`; `with_cast` places KG's feet at y - 240 s (check on the branch).
+- **For Claude:** `source/remakes_sets.py` (MAP): KG_BEAT poses KG per sheet, gunmen aim (flipped right of centre),
+  TOWER, CONTAINERS; packs `source/data/critique/remakes_sets/r1..3-p2/result.md` (git-ignored); ledger remakes_sets.
+
+## Open notes: the sets' pass-2 faults (build chat 8)
+- Forest: up still reads level (converge the trunk, show the branch's underside), KG's talons float in front of the
+  branch, the trunk's moss band reads as tape (also edge trunks); down: path climbs the stump like stairs and is drawn
+  over the door's foot (end it at the stump's base), the bell flower reads as a paddle; close: no shafts or mist read,
+  door like a magnifying glass, a glow with no source, the grass ends in a ruled line, stump differs from S2 (door,
+  window, lanterns); edge: long grass not lawn, trunks at staggered depths, the muzzle cut off (move him left).
+- Camp: a palm grows out of the orange container, the ruts too wide, wire a hairline, sandbags like pebbles, red bars
+  on the gate mean nothing, the barrels hidden, gunmen grey on the grey wall and aiming at each other (aim at the
+  yard), show the gate blown in (gate=1) on the sheet, blank right wall, still empty dirt at the foot.
+- Town: the palm floats behind the bunting, bunting too low, KG cut off with his wing pointing at empty cobbles,
+  houses one repeated block, flagstones not oval cobbles, the wall too neat (rough grey stone, depth), the spit tiny.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),

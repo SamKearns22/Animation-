@@ -111,39 +111,131 @@
      "4 O1: cast tile.",
      "4 S4: move end frames."
     ]
+   },
+   {
+    "round": 2,
+    "pass": 2,
+    "date": "2026-11-10",
+    "faults": 9,
+    "cant_tell": 3,
+    "open": [
+     "1 A1: whole panel - owl read as \"horned masked creature\", Link as a girl, machine gun as rifle.",
+     "1 A2: flag - reference is dark blue with white emblem on a tall pole; ours is a short blue-white saltire.",
+     "1 O5: top left - palm trunk ends on the orange container roof; looks planted on it.",
+     "1 O4: foreground - ruts half a person wide and ~3 m apart; read as road edges, not tyre tracks.",
+     "1 O3: wall top, wall base, gate - barbed wire a hairline; sandbags read as pebbles; red gate bars and green slab beside owl unnameable.",
+     "1 S1: whole panel - gate shut and whole, no gunfire; grey gunmen lost on grey wall; bottom third empty dirt.",
+     "1 S2: wall - gunmen aim along the wall at each other, not at the yard; gate closed behind a cast who burst through it.",
+     "1 S3: whole set - reference is a scattered ring of rusty blue tin, shacks, vehicles, grass; ours is one straight pale fence on bare dirt; no barrels.",
+     "1 S5: lower third, right wall - flat tan ground, near-blank grey wall, no life.",
+     "1 O6: the gate-burst and firing frame.",
+     "1 S6: one frame each of S7, S8, S9 side by side.",
+     "1 S4: first and last frame of each camera move."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "date": "2026-11-10",
+    "faults": 27,
+    "cant_tell": 6,
+    "open": [
+     "1 A1: owl - reads startled, not wise.",
+     "1 A2: owl - open mouth, flung wings; reference folded, beak shut.",
+     "1 O5: branch - talons float in front.",
+     "1 O3: trunk - lime band reads as tape.",
+     "1 O4: centre - owl small, not giant.",
+     "1 S1: camera level; owl doesn't tower.",
+     "2 A2: path - brick stairs, not dirt.",
+     "2 O3: lower right - bell flower a flat paddle.",
+     "2 O2: door - bricks over its bottom.",
+     "2 S2: top - path climbs the stump.",
+     "2 S3: camera at standing height, not branch.",
+     "2 S6: tree house - arched door, two lanterns.",
+     "3 A1: background - no mist depth.",
+     "3 A2: tree house - smooth, not gnarled.",
+     "3 O3: right - door reads as a magnifying glass.",
+     "3 O4: door - barely head-wide.",
+     "3 O6: lower right - sourceless glow smudge.",
+     "3 S3: no light shafts.",
+     "3 S5: grass ends in a ruled line.",
+     "3 S6: tree house - window moved, one lantern.",
+     "4 A1: reads aiming, not peering.",
+     "4 A2: ground - short lawn, not long grass.",
+     "4 O3: trunks - lime bands read as tape.",
+     "4 O5: right edge - muzzle chopped off.",
+     "4 S5: flat ground, trunks on one line.",
+     "4 S3: lollipop trees, not Kokiri.",
+     "4 S6: not forest 1-3.",
+     "1 S6: panel 2 from this branch.",
+     "1 S4: move end frames.",
+     "2 O5: Link's soles, full size.",
+     "2 S4: move end frames.",
+     "3 S4: move end frames.",
+     "4 S4: move end frames."
+    ]
+   },
+   {
+    "round": 3,
+    "pass": 2,
+    "date": "2026-11-10",
+    "faults": 14,
+    "cant_tell": 6,
+    "open": [
+     "1 A1: bottom left - straw ear tufts read as horns; owl reads \"horned bird\"",
+     "1 A2: banners - flat dark blue, yellow V; references pale blue, gold-framed crest",
+     "1 O5: palm, left - trunk ends at bunting, no base; floats",
+     "1 O3: by fountain - townsfolk are capsules, read as bollards",
+     "1 S1: owl cut by edges, eyes shut, wing points at empty cobbles not line-up; bottom third empty",
+     "1 S2: middle - bunting waist-high across the square; references hang it high",
+     "1 S3: repeated houses, no timber; cobbles not flagstones; fountain lacks statue",
+     "2 A1: owl reads horned bird; Link blank, free-standing, not terrified or pinned",
+     "2 A2: banner - flat dark blue; references pale blue, gold frame, crest",
+     "2 O3: crest reads as V over triangle",
+     "2 O6: by beak - spit is tiny dots, reads as bubbles",
+     "2 S1: no slam - owl a body-length from Link, cut by right edge; top half empty wall",
+     "2 S5: flat beige blocks; no texture, depth, life",
+     "2 S3: references rough grey stone; ours neat sandy rectangles",
+     "1 O1: cast-sheet tiles beside frame",
+     "1 S6: wide frame placing the S12 wall",
+     "1 S4: each camera move's end frames",
+     "2 O1: cast-sheet tiles beside frame",
+     "2 S6: wide frame showing this wall",
+     "2 S4: each camera move's end frames"
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 7,
+    "faults": 13,
     "false": 0
    },
    "A2": {
-    "faults": 7,
+    "faults": 14,
     "false": 0
    },
    "O5": {
-    "faults": 6,
+    "faults": 10,
     "false": 0
    },
    "O2": {
-    "faults": 5,
-    "false": 0
-   },
-   "O3": {
-    "faults": 7,
-    "false": 0
-   },
-   "S1": {
-    "faults": 7,
-    "false": 0
-   },
-   "S5": {
     "faults": 6,
     "false": 0
    },
+   "O3": {
+    "faults": 14,
+    "false": 0
+   },
+   "S1": {
+    "faults": 11,
+    "false": 0
+   },
+   "S5": {
+    "faults": 10,
+    "false": 0
+   },
    "S3": {
-    "faults": 7,
+    "faults": 13,
     "false": 0
    },
    "A3": {
@@ -151,7 +243,7 @@
     "false": 0
    },
    "O4": {
-    "faults": 1,
+    "faults": 4,
     "false": 0
    },
    "O1": {
@@ -159,15 +251,15 @@
     "false": 1
    },
    "S2": {
-    "faults": 3,
+    "faults": 6,
     "false": 0
    },
    "O6": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "S6": {
-    "faults": 3,
+    "faults": 6,
     "false": 0
    }
   }

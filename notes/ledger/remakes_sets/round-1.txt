@@ -72,3 +72,66 @@ Eye: 2, 3. Unhung: 1, 2, 3. Flat fills: 2, 3, 4. No mist: 1, 2, 3. Beat lost: 1,
 2. Flat light. suggested line: one light direction per set.
 3. Panel 4: no room for rising owl. suggested line: room for next action.
 
+== critique, round 1 pass 2 (2026-11-10): 27 fault(s), 6 can't tell
+-- look.md --
+1: Brown owl, huge curled horn-like tufts, wings spread, talons dangling off branch; startled stare. No words.
+2: Small green-clad elf boy on stone path, glowing blue fairy, tree-door house, orange flower.
+3: Close-up blond elf, green cap, blue eyes, sword strap; tree house, purple flowers; blank calm.
+4: Masked helmeted soldier aiming scoped rifle in grey, desaturated forest; menacing. No words anywhere.
+-- result.md --
+## Panel 1
+ok: A3 O2 O6 O1 S2 S5 S3
+FAULT A1: owl - reads startled, not wise.
+FAULT A2: owl - open mouth, flung wings; reference folded, beak shut.
+FAULT O5: branch - talons float in front.
+FAULT O3: trunk - lime band reads as tape.
+FAULT O4: centre - owl small, not giant.
+FAULT S1: camera level; owl doesn't tower.
+CAN'T TELL S6: panel 2 from this branch.
+CAN'T TELL S4: move end frames.
+
+## Panel 2
+ok: A1 A3 O4 O6 O1 S1 S5
+FAULT A2: path - brick stairs, not dirt.
+FAULT O3: lower right - bell flower a flat paddle.
+FAULT O2: door - bricks over its bottom.
+FAULT S2: top - path climbs the stump.
+FAULT S3: camera at standing height, not branch.
+FAULT S6: tree house - arched door, two lanterns.
+CAN'T TELL O5: Link's soles, full size.
+CAN'T TELL S4: move end frames.
+
+## Panel 3
+ok: A3 O5 O2 O1 S1 S2
+FAULT A1: background - no mist depth.
+FAULT A2: tree house - smooth, not gnarled.
+FAULT O3: right - door reads as a magnifying glass.
+FAULT O4: door - barely head-wide.
+FAULT O6: lower right - sourceless glow smudge.
+FAULT S3: no light shafts.
+FAULT S5: grass ends in a ruled line.
+FAULT S6: tree house - window moved, one lantern.
+CAN'T TELL S4: move end frames.
+
+## Panel 4
+ok: A3 O2 O4 O6 O1 S1 S2
+FAULT A1: reads aiming, not peering.
+FAULT A2: ground - short lawn, not long grass.
+FAULT O3: trunks - lime bands read as tape.
+FAULT O5: right edge - muzzle chopped off.
+FAULT S5: flat ground, trunks on one line.
+FAULT S3: lollipop trees, not Kokiri.
+FAULT S6: not forest 1-3.
+CAN'T TELL S4: move end frames.
+
+## Cold look
+1: "startled", not towering; missed moss. 2: missed bell, lanterns, flowers. 3: no mist, shafts (undrawn). 4: aiming, not peering; missed ferns, rock.
+
+## Same fault elsewhere
+Tape trunks (O3): 1, 4. Ruled ground (S5): 3, 4. Wrong camera: 1, 2. House mismatch (S6): 2, 3. Chopped muzzle (O5): 4 only.
+
+## Not on the list
+1. Wrong camera angle. suggested line: S7 Camera angle matches the brief.
+2. Owl chest rings read as buttons. suggested line: A1 lists "buttons".
+3. No room for the owl rising in 4. suggested line: S8 Space left for the next entrance.
+

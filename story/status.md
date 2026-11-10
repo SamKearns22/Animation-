@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): build chat 7 (11 Nov): pass-3 cast faults fixed; first draft of the three sets (forest, camp, town). Next: fix the first-look faults, critique each set (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): build chat 8 (11 Nov): sets' first-look faults fixed; critique passes 1-2 of all three sets, pass-1 faults fixed. Next: pass-2 fixes and pass 3 (Opus high), after Sam's budget answer. Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

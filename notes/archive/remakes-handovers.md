@@ -178,3 +178,22 @@
 - **Open rule requests:** none (pass 3 suggested two checklist lines: "no empty cells", "a line-up against Link").
 - **For Claude:** pass 3 in `source/data/critique/remakes_cast/r1-p3` (git-ignored); maybe false alarms: swoop "level",
   Malon "bottle at belt". `remakes_cast.gun_mask`; `remakes_creatures.kg_gun/_gun_over`, `_kg_wing(taper=True)`.
+
+
+## Build chat 7 handover (archived by build chat 8)
+- **Rules that bite next:** 89 (each set critiqued by a NEW helper), 83 (two camp overlaps to settle), 3 (benchmark).
+- **Done (build chat 7, Opus high):** the four pass-3 cast faults fixed and checked at full size (Link's side shield
+  now a broad slab; Navi's wing beat sweeps to level; KG's side bandana wraps his brow; the gun up at his chest,
+  belt to his side). First draft of all three sets, one painting per camera: forest (up, down, close, edge), the
+  camp (gate opens 0-1), town (square, wall), the cast at their marks; BENCHMARK filled. Stopped on cost amber.
+- **Next:** Build, Opus high: fix the faults seen on the first look (below), then each set alone beside its
+  references, critiqued by a NEW helper (`critique.py pack`, parts S, O), fix, pass 2; file passes in the catalogue.
+  Seen: forest up's foot is a flat sage block; forest close's moss blobs read as leaves stuck on; the camp's gate is
+  hidden behind KG and the gunmen (move the gunmen aside), tower and shack crowd the right; the Goron too big in the
+  line-up (check his scale); setcheck: blue container x crates, orange container x gate.
+- **Needs Sam:** "shit" heard or bleeped (Claude: heard). All 14 recordings are in (line 6 filed by another chat).
+- **Read:** `guides/job-packs.md` Build; this file's references; `guides/critique-checklist.md` S and O.
+- **Open rule requests:** none.
+- **For Claude:** `source/remakes_sets.py` (MAP at the top): `alone forest|camp|town OUT`, `one VIEW OUT`; `STAGE`
+  marks, `s_for(ppm)`; `with_cast` places KG's feet at y - 240 s (check on the branch).
+

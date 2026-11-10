@@ -45,3 +45,54 @@ A1, A2, O5, O2, O3, O1, S1, S5, S3: on panels 1 and 2. O4, S2: panel 1 only.
 - Owl gains a red headband in panel 2. suggested line: cast keep one design across set panels.
 - Smiles where fury and terror are briefed. suggested line: each set panel's acting beat reads at phone size.
 
+== critique, round 3 pass 2 (2026-11-10): 14 fault(s), 6 can't tell
+-- look.md --
+1: Town square, fountain; laughing horned bird cropped at left edge; five figures stand stiffly behind.
+2: Blank-faced green-capped elf by blue banner; glaring red-headbanded horned bird sputters, cropped right.
+-- result.md --
+## Panel 1
+ok: A3 O2 O4 O6 S5
+FAULT A1: bottom left - straw ear tufts read as horns; owl reads "horned bird"
+FAULT A2: banners - flat dark blue, yellow V; references pale blue, gold-framed crest
+FAULT O5: palm, left - trunk ends at bunting, no base; floats
+FAULT O3: by fountain - townsfolk are capsules, read as bollards
+FAULT S1: owl cut by edges, eyes shut, wing points at empty cobbles not line-up; bottom third empty
+FAULT S2: middle - bunting waist-high across the square; references hang it high
+FAULT S3: repeated houses, no timber; cobbles not flagstones; fountain lacks statue
+CAN'T TELL O1: cast-sheet tiles beside frame
+CAN'T TELL S6: wide frame placing the S12 wall
+CAN'T TELL S4: each camera move's end frames
+
+## Panel 2
+ok: A3 O5 O2 O4 S2
+FAULT A1: owl reads horned bird; Link blank, free-standing, not terrified or pinned
+FAULT A2: banner - flat dark blue; references pale blue, gold frame, crest
+FAULT O3: crest reads as V over triangle
+FAULT O6: by beak - spit is tiny dots, reads as bubbles
+FAULT S1: no slam - owl a body-length from Link, cut by right edge; top half empty wall
+FAULT S5: flat beige blocks; no texture, depth, life
+FAULT S3: references rough grey stone; ours neat sandy rectangles
+CAN'T TELL O1: cast-sheet tiles beside frame
+CAN'T TELL S6: wide frame showing this wall
+CAN'T TELL S4: each camera move's end frames
+
+## Cold look
+Called the owl "horned bird" twice: tufts dominate. Panel 1: missed palm, banners, bunting, stall, houses, castle, romance line-up. Panel 2: "blank-faced" is the fault; nothing reads pinned.
+
+## Same fault elsewhere
+- A1 horned bird: 1, 2.
+- A2 banners: 1, 2.
+- O5 floating palm: 1 only.
+- O3 crest: 1, 2; bollards: 1 only.
+- O6 tiny spit: 2 only.
+- S1 action unframed: 1, 2.
+- S2 low bunting: 1 only.
+- S5 flat walls: 2; house fronts 1.
+- S3 off-reference stone: 1, 2.
+
+## Not on the list
+1. No shadows; everyone floats. suggested line: every person and prop has a contact shadow.
+2. Panel 1 cobbles don't shrink with distance. suggested line: ground recedes in perspective.
+3. Owl near Link's height in 2, dwarfs line-up in 1. suggested line: character sizes match across shots.
+4. Line-up evenly spaced on one baseline. suggested line: groups stagger.
+
