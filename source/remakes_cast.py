@@ -41,7 +41,7 @@ from ed import INK, curve, open_curve, oval   # noqa: E402
 REF = os.path.join(ROOT, 'references', 'remakes')
 WHITE = V.WHITE                  # eye whites (the look check finds them by this colour)
 SHINE = (255, 255, 255)
-BLUSH = (246, 170, 160)
+BLUSH = (244, 196, 184)                 # a faint warmth, not cartoon circles (Sam: not chibi)
 
 # ------------------------------------------------------------------------------------------------ colours
 KID_SKIN = (250, 216, 192)
@@ -111,7 +111,7 @@ def _eye(p, ex, ey, sgn, w, h, iris, lid=0.0, low=0.0, look=0.0, gaze_dy=0.0, pu
         if lashes:
             p.line([pts[-1 if sgn > 0 else 0], (ex + sgn * (w + 10), ey - h * 0.2)], INK, 2.6)
         return
-    top = [(ex + w * u, ey - h * (1 - u * u) ** 0.5 * (1 - lid) * 0.98 + h * 0.06 * sgn * u) for u in us]
+    top = [(ex + w * u, ey - h * (1 - u * u) ** 0.7 * (1 - lid) * 0.98 - h * 0.1 * sgn * u) for u in us]
     bot = [(ex + w * u, ey + h * (1 - u * u) ** 0.5 * 0.92 * (1 - low)) for u in us]
     opening = top + bot[::-1][1:-1]
     p.poly(opening, WHITE, None)
@@ -130,8 +130,7 @@ def _eye(p, ex, ey, sgn, w, h, iris, lid=0.0, low=0.0, look=0.0, gaze_dy=0.0, pu
     if len(pu) >= 3:
         p.poly(pu, INK, None)
     if pupil > 0.6:                                               # two shines: the life in a cartoon child's eye
-        p.ell(cx - ri * 0.36, cy - ri * 0.38, ri * 0.24, ri * 0.24, SHINE, None)
-        p.ell(cx + ri * 0.34, cy + ri * 0.3, ri * 0.1, ri * 0.1, SHINE, None)
+        p.ell(cx - ri * 0.34, cy - ri * 0.36, ri * 0.19, ri * 0.19, SHINE, None)   # one shine: less doll-like
     p.line(bot[3:-3], dk(KID_SKIN, 0.6), 1.6)
     p.line(top, INK, 4.2)                                         # the heavy upper lid line
     if lashes:                                                    # girls: two lashes flicked out at the outer corner
@@ -276,9 +275,9 @@ def kid_head(img, p, sp, t, hx, hy):
     outline = _kid_outline(hx, hy, hw, hh, sp.get('chin', 1.0))
     p.poly(outline, skin, INK, 2.8)
     ey = hy + hh * 0.2
-    gap, ew, eh = hw * 0.4, hw * 0.25, hh * 0.27 * mood.get('wide', 1.0)
+    gap, ew, eh = hw * 0.4, hw * 0.22, hh * 0.22 * mood.get('wide', 1.0)   # big, but not anime-huge (Sam)
     for sgn in (-1, 1):                                              # cheeks: a soft flush
-        p.ell(fx + sgn * hw * 0.6, ey + hh * 0.36, hw * 0.16, hh * 0.08, BLUSH, None)
+        p.ell(fx + sgn * hw * 0.58, ey + hh * 0.38, hw * 0.12, hh * 0.05, BLUSH, None)
     lids = mood.get('lid', (0.0, 0.0))
     for k, sgn in enumerate((-1, 1)):
         closed = None
@@ -501,7 +500,7 @@ def link_head_side(img, p, sp, t, hx, hy):
                   (hx + hw * 0.7, hy + hh * 0.94), (hx + hw * 0.3, hy + hh * 1.0), (hx - hw * 0.2, hy + hh * 0.86),
                   (hx - hw * 0.6, hy + hh * 0.5)], 4)
     p.poly(head, skin, INK, 2.8)
-    p.ell(hx + hw * 0.5, hy + hh * 0.56, hw * 0.16, hh * 0.08, BLUSH, None)
+    p.ell(hx + hw * 0.5, hy + hh * 0.56, hw * 0.12, hh * 0.05, BLUSH, None)
     ex, ey = hx + hw * 0.6, hy + hh * 0.2
     w, h = hw * 0.13, hh * 0.27 * mood.get('wide', 1.0)
     lid = mood.get('lid', (0, 0))[1]
@@ -906,7 +905,7 @@ def rifle(side='R'):
 
 
 # ================================================================================================ the people
-KID = dict(skin=KID_SKIN, hw=136, hh=150, head_dy=-12, shoulders=118, outfit='custom', full=True, pose='custom',
+KID = dict(skin=KID_SKIN, hw=124, hh=138, head_dy=-22, shoulders=118, chin=1.08, outfit='custom', full=True, pose='custom',
            glove=KID_SKIN, shoe=BOOT, iris=BLUE_EYE, mouth='rest')
 LINK = dict(KID, who='link', name='Link', hair_c=L_HAIR, jacket=L_TUNIC, sleeve=L_SHIRT, sleeves='short',
             sleeve_c=L_SHIRT, fray=True, trousers=KID_SKIN, bottom=600, boot_cuff=BOOT_CUFF, height=1.22)
