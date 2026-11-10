@@ -195,7 +195,7 @@ template's status column names the checklist line):**
 
 ## Build plan (Sam, 9 Nov: everything proposed in the audit chat is a Y except the bill estimate and the extra-ideas question)
 Done in that chat: shorter replies, branch wording, reference fallback and "every new rule replaces one" (CLAUDE.md); rule 89 critique before every send (rulebook). Estimates below are first cuts; each job's chat firms its own estimate and waits for Sam's yes (rule 86). Outside any film's 12%. Total about 8-12% of a week, including about 0.25% to start each chat.
-Order: E, F, G, H, I (each its own chat; fresh chat each; Sam's iPhone only).
+Order: E, F, G, H, I (the lying redraw), J (each its own chat; fresh chat each; Sam's iPhone only).
 **Models (Sam, 9 Nov; type /model to change; a chat on the wrong model stops and says so):**
 | Job | Design and diagnosis | Building | Routine (checks, sheets, filing, commit) |
 |---|---|---|---|
@@ -203,9 +203,9 @@ Order: E, F, G, H, I (each its own chat; fresh chat each; Sam's iPhone only).
 | F | Opus medium | Opus medium | Sonnet |
 | G | Opus **high** | Opus high | Sonnet |
 | H | Opus **max**, the checklist design only (one short chat) | Opus high | Sonnet |
-| I | Opus **high** (what to cut, rewrite, retire) | Opus medium | Sonnet |
+| J | Opus **high** (what to cut, rewrite, retire) | Opus medium | Sonnet |
 - **E. Measure and diagnose** (~0.7%, Opus high): tokens a new chat loads, by file; which rules ever caught anything; every body note in the last ten films grouped by joint or action (neck, shoulder, elbow, hand-on-prop, lying, seated, mouth, clipping). Output: numbers and a cut list, no building.
 - **F. Film ledger** (DONE 9 Nov, 0.4%; `source/ledger.py`) (~0.5%, Opus medium): the cost watch tags each chat with its film and sums per film; writes cost, chats, rounds, notes and repeated notes to a ledger; a 10-line audit at the end of each film (what repeated, what would have caught it, which rules never fired); estimate versus actual closed out.
 - **G. Bodies** (~3-5%, Opus high, likely two chats): a pose acceptance test (every gallery pose, every view, automatic seam/gap/hover/clip checks; a film may only use passing poses; new poses are priced at planning); grip points and contacts for picking up, resting and lying; one fix goes into the gallery for every film.
 - **H. Critique helper** (design DONE 10 Nov: `guides/critique-checklist.md`; the build list is in the Job H section above) (~2%, Opus high; Max only for the checklist design): a living checklist (people, creatures, props, sets, movement; each note of Sam's adds one line); a fresh helper with a small context reads the sheet, references and checklist cold; the "same kind everywhere" list per note; the before/after crop beside Sam's marked picture. First trial: the next new thing.
-- **I. Consolidation** (~2-3%, Opus high): three layers of reading (one-page core, one job pack per job, rulebook and kit looked up only when named); each of the by-hand rules turned into a check, folded into the critique checklist, or retired (56, 76, 79 fold into 89); a library of new things that passed the critique (views, references, critique) so the next film reuses them; planning splits every film into known (almost free) and new (priced).
+- **J. Consolidation** (was I; renamed, Sam 10 Nov: Y; runs after H and I; also finishes Job G's one leftover, the "prop hidden" check: see Job G, "For chat 4") (~2-3%, Opus high): three layers of reading (one-page core, one job pack per job, rulebook and kit looked up only when named); each of the by-hand rules turned into a check, folded into the critique checklist, or retired (56, 76, 79 fold into 89); a library of new things that passed the critique (views, references, critique) so the next film reuses them; planning splits every film into known (almost free) and new (priced).
