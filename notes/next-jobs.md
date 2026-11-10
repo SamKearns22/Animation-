@@ -1,25 +1,21 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 85 (cost watch: chat 3 went amber after step 3, so it handed over), 41 (the hand check now
-  also tests a hand against what it holds, on the picture), 86 (Job G stays inside its 3.5-4%).
-- **Done (10 Nov, Job G chat 3, steps 2-3, Opus high, about 1.5%):** phone at the ear redone (hand at the cheek, the
-  phone flat along the side of the head, elbow forward; passes all 6 views; the left hand by default); a hand at the
-  far cheek is now hidden behind the head (it was drawn across his face side on); phone reading from three-quarter back
-  no longer sits over his back (hidden by it: the gallery notes say avoid that view); new automatic check: a hand must
-  touch its prop on the picture (a test proves it catches a gap); sheet labels no longer run into the next column.
-- **Next:** Job G chat 4, new chat, **Opus, high effort**. Type: "Job G chat 4: read notes/next-jobs.md Where things
-  stand and the Job G section." Steps 4-6, about 1%. After G: Job H (critique helper, about 2%): first chat Opus, max
-  effort; type "Job H: critique helper. Read notes/next-jobs.md Where things stand and Build plan H. Estimate first
-  (rule 86)."
-- **Needs Sam:** nothing.
-- **Read:** this file's Job G section; `guides/pose-gallery.md` top paragraph.
-- **Open rule requests:** none. Step 6 proposes merging rules 41, 42 and 81 (81's check column still says "no
-  automatic seam test yet": put right in that proposal).
-- **For Claude:** `moves.phone_at_ear` (3D slab, `V._hull`); `grips.hidden_by` adds depth tests (head: beyond 0.25 hw;
-  torso: beyond half its depth and within 1.25x its screen width); views skips an `on_face` arm hidden by the head;
-  `handcheck.held_faults` (PROBE['held'] layer per side, TOUCH 0.12), kittest `held_prop_touches`. Unfinished: a
-  "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
-  from behind in the dict too); `posegallery._wrap`.
+- **Rules that bite next:** 86 (Job H stays inside 2.5% of a week: about 1.5% spent, so the build has 1.0% at most), 89 (the critique the helper
+  will run), 85 (cost watch: on amber, finish the step and hand over).
+- **Done (10 Nov, Job H chat 1, design, Opus max, about 1.5%: max effort cost more than the 0.9% planned):** the critique checklist,
+  `guides/critique-checklist.md` (33 lines from Sam's past notes, in six parts: every sheet, people, creatures,
+  props, sets, movement; how each new note adds or strengthens a line); the helper's design and the build list (this
+  file's Job H section). Job G not touched.
+- **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand
+  and Build plan H." 1.0% at most (H's cap 2.5%, 1.5% spent): one calibration run, not two. Sam's overnight chat opens it (chats it starts can't).
+- **Job G:** chat 4 (steps 4-6) is running alongside, started overnight; its own handover replaces this line.
+- **Needs Sam (morning):** (1) Y/N: the helper runs on Opus even inside a Sonnet chat (about 0.1% a pass); my pick
+  Y, it is the eye and a missed fault costs a round. (2) Open rule requests 1-3 (Job H section): your numbers.
+- **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
+- **Open rule requests:** Job H section, 1-3 (rule 89's check becomes the helper; rule 30 merged so each fault note
+  names or adds a checklist line; rule 56's check becomes `critique.py where`). Job G step 6 (41, 42, 81) to come.
+- **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
+  `source/data/critique/` (git-ignored); results into the ledger's round files. Job G's own notes: Job G section.
 
 ## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
 Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
@@ -39,6 +35,80 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
   priced at planning; (6) rules 41, 42 and 81 merged, by-hand parts automatic (propose wording to Sam first).
 - Not done in chat 1, on purpose: old films' own finger copies are unchanged; the kit's cup and phone (moves.py, also
   used by duel.py) now go through `grips.held`; `Carry` is a tool and a test, not yet wired into any film.
+- **For chat 4 (from the 10 Nov handover):** `moves.phone_at_ear` (3D slab, `V._hull`); `grips.hidden_by` adds depth tests (head: beyond 0.25 hw;
+  torso: beyond half its depth and within 1.25x its screen width); views skips an `on_face` arm hidden by the head;
+  `handcheck.held_faults` (PROBE['held'] layer per side, TOUCH 0.12), kittest `held_prop_touches`. Unfinished: a
+  "prop hidden" check (keyed prop pixels came back lightened, ~x1.3, in the probe: find why, then AVOID phone reading
+  from behind in the dict too); `posegallery._wrap`.
+
+## Job H, critique helper (build plan H; Sam: Y to about 2%; 10 Nov overnight run, his "just go" for H only)
+**Estimate (rule 86, firmed 10 Nov):** about 2.5% of a week, stop past it. Chat 1, the design (Opus max): about 1.5%
+(0.9% planned; max effort cost more). Chat 2, the build (Opus high): 1.0% at most (one tool of about 300 lines, its tests, one helper calibration run at about
+0.1%). No Sonnet stage planned; if chat 2 goes amber, its leftovers go to one. The first trial (the next new
+thing) waits for the next film.
+
+**Design (chat 1, DONE 10 Nov):**
+1. **The checklist:** `guides/critique-checklist.md`. Six parts (A every sheet; P people; C creatures; O props, text and
+   signs; S sets; M movement), 33 lines seeded from Job E's 60 body notes and Sam's other fault notes. Each line is a
+   statement the helper confirms on a picture, with Look (what the sheet must show) and Tool (a check that also holds
+   it). Its header says how each of Sam's notes adds or strengthens a line (a note a line already covered is a miss:
+   say why), at most 12 lines a part.
+2. **The helper:** a NEW agent every pass (Agent tool, general-purpose, model opus whatever the chat's model; about
+   0.1% a pass). It sees no chat, no code, no claim of what was fixed. Two steps, the second hidden until the first is
+   written:
+   - Step 1, the cold look: only the numbered panels (no captions). Per panel, 15 words at most: the things, actions
+     and feelings it sees and every word exactly as written; never a real person's name. It writes look.md; only
+     then does step1.md send it to step2.md (so it cannot read the brief first).
+   - Step 2, the check: brief.md (each panel's intent, its acting beat, the views the film uses, its parts of the
+     list), the check sheet (each panel beside its references) and checklist.md (A plus the parts on the sheet). Per
+     panel: "ok:" with the line ids it confirmed, then each FAULT (panel, where, what) or CAN'T TELL (what picture
+     would show it). Then its cold look against brief.md (A1). For each FAULT, the same fault looked for on every
+     other panel (A3). In a notes round, per note of Sam's: fixed in AFTER? worse anywhere? the same fault elsewhere?
+     Then up to 5 things Sam would flag that no line covers, each with a suggested line. Under 400 words, no praise.
+   - The prompt opens: "Someone else made these pictures for a director who has sent back faults in almost every
+     first look. Assume there are some: find what he would flag. Don't reassure."
+3. **Passes (rule 89):** fix every FAULT or name it to Sam; remake the sheet so every CAN'T TELL is shown; pass 2 is a
+   NEW helper; a third only if pass 2 found something real; a fault that survives three goes to an options sheet (87).
+4. **Same kind (rule 56):** each of Sam's notes gets its line id and every instance in the film (shot, time, who or
+   what). `critique.py where` lists named things per shot from the film's `draw_order(t)` and flags any that start or
+   stop mid-shot (it would have caught Elder Swindon 59, 62 and 64). The sheet has a panel per instance.
+5. **Before and after:** at the start of a notes round, before any fix, the frames each note touches are saved; after
+   the fix, one panel per note: Sam's marked picture (if sent), before, after, the same box at the same scale.
+6. **The record:** each pass's look and result go into the ledger's round file; FAULTs per line id (and false alarms
+   Claude marks) are tallied in the film's ledger, so Job I sees which lines catch and which only cry wolf.
+
+**Build (chat 2, Opus high), in order:**
+1. `source/critique.py`, with a MAP:
+   - `pack FILM SPEC.json`: renders the panels (sheet.py's clean picture), makes `1-look.jpg` (phone-size frames 270 px,
+     detail crops 540 px, numbers only, at most 1080 px wide, a second image past 12 panels), `check.jpg` (compare.py:
+     each panel beside its references), `brief.md`, `checklist.md` (A plus the parts asked, no "Came from"),
+     `step1.md`, `step2.md`, and in a notes round `notes.md` and `beforeafter.jpg`; prints the one-line Agent prompt.
+     SPEC: `{"round": R, "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...",
+     "parts": "PO", "refs": [...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...",
+     "line": "O3", "marked": PATH or null, "t": 20.1, "box": [...]}]}`.
+   - `record FILM PACK`: refuses unless look.md was written before result.md, every panel has a look line and every
+     line that applies to each panel is answered; saves both into the ledger; tallies per line id.
+   - `where FILM NAME...` and `before FILM SPEC`. Packs live in `source/data/critique/` (add it to `.gitignore`).
+2. kittests: record refuses a half answer and a look written after the result, passes a whole one; checklist.md holds
+   only the parts asked and no "Came from"; where flags a thing that pops in mid-shot (a small made-up film module).
+3. Calibration, one helper run (a second only if the budget allows), no film rendered (stills only): current Elder Swindon frames plus two of Sam's
+   old faults put back (the EGG MAYO box mirrored with PIL; a gallery hand moved off its phone the way kittest
+   `held_prop_touches` does) beside clean panels. It must flag O1 and P1 and nothing on the clean panels. A miss:
+   reword that line or the prompt once and rerun; a second miss is written here as a limit.
+4. Pre-flight prints one line: "critique: round R, pass N clean / N faults open / none recorded" (a warning only; a
+   refusal waits for Sam's yes to request 1).
+5. A kit-catalogue row. The notes template is unchanged until Sam's yes to request 2.
+6. Handover: a Next line Sam's overnight chat can start, or "Job H finished" (that chat tells Sam). Fetch and merge
+   before every push (Job G's chat pushes to the main line too) and keep Job G's line in Where things stand.
+
+**Open rule requests (Sam's numbers; none written):**
+1. Rule 89's check column becomes: "`critique.py`: a fresh helper reads the sheet, references and
+   `guides/critique-checklist.md` cold; each pass is saved in the ledger; pre-flight refuses an animatic until the
+   round's last pass is clean or its faults are named (`--faults-named`)." A by-hand rule turned into a check.
+2. Rule 30, merged (no new rule), adds: "each fault note names its checklist line; a fault no line covers adds one; a
+   fault a line already covered is a miss: say why (line unclear, sheet didn't show it, no critique) and fix that."
+3. Rule 56's check column: "by hand (check sheet)" becomes "`critique.py where` lists every instance; the critique
+   sheet shows each".
 
 ## Job D, softer voices (Sam, 9 Nov: "the audio of my dialogue was too brash and abrasive to listen to", Ad-Vanced Notice)
 - Measured 9 Nov: whole-film loudness -16.9 LUFS (same as Islamocommunism -17.4, MidTerminal -17.3); the 2-5 kHz "harsh" band
@@ -99,5 +169,5 @@ Order: E, F, G, H, I (each its own chat; fresh chat each; Sam's iPhone only).
 - **E. Measure and diagnose** (~0.7%, Opus high): tokens a new chat loads, by file; which rules ever caught anything; every body note in the last ten films grouped by joint or action (neck, shoulder, elbow, hand-on-prop, lying, seated, mouth, clipping). Output: numbers and a cut list, no building.
 - **F. Film ledger** (DONE 9 Nov, 0.4%; `source/ledger.py`) (~0.5%, Opus medium): the cost watch tags each chat with its film and sums per film; writes cost, chats, rounds, notes and repeated notes to a ledger; a 10-line audit at the end of each film (what repeated, what would have caught it, which rules never fired); estimate versus actual closed out.
 - **G. Bodies** (~3-5%, Opus high, likely two chats): a pose acceptance test (every gallery pose, every view, automatic seam/gap/hover/clip checks; a film may only use passing poses; new poses are priced at planning); grip points and contacts for picking up, resting and lying; one fix goes into the gallery for every film.
-- **H. Critique helper** (~2%, Opus high; Max only for the checklist design): a living checklist (people, creatures, props, sets, movement; each note of Sam's adds one line); a fresh helper with a small context reads the sheet, references and checklist cold; the "same kind everywhere" list per note; the before/after crop beside Sam's marked picture. First trial: the next new thing.
+- **H. Critique helper** (design DONE 10 Nov: `guides/critique-checklist.md`; the build list is in the Job H section above) (~2%, Opus high; Max only for the checklist design): a living checklist (people, creatures, props, sets, movement; each note of Sam's adds one line); a fresh helper with a small context reads the sheet, references and checklist cold; the "same kind everywhere" list per note; the before/after crop beside Sam's marked picture. First trial: the next new thing.
 - **I. Consolidation** (~2-3%, Opus high): three layers of reading (one-page core, one job pack per job, rulebook and kit looked up only when named); each of the by-hand rules turned into a check, folded into the critique checklist, or retired (56, 76, 79 fold into 89); a library of new things that passed the critique (views, references, critique) so the next film reuses them; planning splits every film into known (almost free) and new (priced).
