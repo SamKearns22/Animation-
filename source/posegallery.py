@@ -247,7 +247,9 @@ AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses 
     'pointing both ways': {'three-quarter': 'the far arm points away from us: the point does not read',
                            'three-quarter back': 'the near arm points away from us: the point does not read',
                            'mirrored': 'the far arm points away from us: the point does not read'},
-    'hands on a gun': {'behind': 'both hands hidden by his back: show him three-quarter back instead'},
+    'hands on a gun': {'behind': 'both hands hidden by his back: show him three-quarter or side on instead',
+                       'three-quarter back': 'the far sleeve shows at his side, its hand hidden by his back (Job K '
+                                             'build 2: the blurred shading had hidden that sleeve from the check)'},
     'hands on hips': {'three-quarter back': 'the far hand is behind his body'},
     'slumped': {'behind': 'the far hand hangs in front of him, hidden by his back'},
     'palm open': {'behind': 'the open palm is in front of him, hidden by his back'},

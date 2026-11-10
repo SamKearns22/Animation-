@@ -31,7 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import midterminal_cast as MC   # noqa: E402  (installs the hooks chain and the sheet helpers)
 from midterminal_cast import B, TC, P4, V, dk, blend, FONT  # noqa: E402
-from ed import INK, curve, oval, open_curve  # noqa: E402
+from ed import INK, bent_check, curve, oval, open_curve  # noqa: E402
 
 # ---------------------------------------------------------------------------------------------- colours
 V_SKIN = (232, 178, 152)          # fair, pink (card: 232, 172, 148)
@@ -519,7 +519,7 @@ def man_torso(img, p, sp, t):
              (sw * 1.06, 380), (sw * 0.92, 250)]
     p.poly(curve(belly, 4), M_SHIRT, INK, 2.6)
     body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200)] + belly + [(sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
-    check_lines(p, body, -sw * 1.1, sw * 1.1, 0, bottom)
+    check_lines(p, body, -sw * 1.1, sw * 1.1, 0, bottom, split=0)
     p.line([(0, 0), (0, bottom - 22)], dk(M_SHIRT, 0.7), 2.2)
     for y in range(60, bottom - 40, 70):
         p.ell(0, y, 5, 5, (236, 232, 222), INK, 1.0)
@@ -577,9 +577,15 @@ def _grow(poly, by=8):
     return out
 
 
-def check_lines(p, poly, x0, x1, y0, y1, step=48, col=M_CHECK, width=22):
-    """The shirt's check: full-length bands every `step`, printed onto the cloth inside `poly` (_cloth)."""
+BENT = True     # Job K build 2: the check bends round his body (ed.bent_check); False: the flat grid as filmed
+
+
+def check_lines(p, poly, x0, x1, y0, y1, step=48, col=M_CHECK, width=22, split=None):
+    """The shirt's check, printed onto the cloth inside `poly` (_cloth): bent round the body (BENT, ed.bent_check;
+    split: the placket's x), or full-length flat bands every `step`."""
     def draw(pen):
+        if BENT:
+            return bent_check(pen, poly, step, col, width, y0, y1, split=split)
         for x in range(int(x0) // step * step - step, int(x1) + step, step):
             pen.line([(x, y0 - step), (x, y1 + step)], col, width)
         for y in range(int(y0) // step * step - step, int(y1) + step, step):

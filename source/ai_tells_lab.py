@@ -16,6 +16,7 @@ MAP
   shading OUT.jpg  proposal 2's check (built, ed.HARD): the old airbrushed shading vs the hard-edged shapes, crops
   rigclip OUT.mp4  proposal 1's check (built, headlife.py + views.Rolled): Islamocommunism 36-42 s, today | the rig's
                    own head acting from the voice, side by side, with the film's sound
+  shirt OUT.jpg    proposal 4's check (built, ad_vanced_notice_cast.BENT): the check shirt flat vs bent, four views
   driver OUT.jpg   proposal 5's sheet: the pump driver today | proposed, whole body, then the face full size
 
   python3 source/ai_tells_lab.py sheet review/job-k/before-after.jpg
@@ -509,7 +510,40 @@ def _rig_frame(i, t, life, tmp):
     S.save(os.path.join(tmp, f'{i + 1:04d}.png'))
 
 
+def shirt(out):
+    """Proposal 4's check (built, ad_vanced_notice_cast.BENT): the driver's shirt from four views, the flat grid as
+    filmed (top) vs the check bent round his body (bottom)."""
+    import burnham as B
+    import views as V
+    import ad_vanced_notice_cast as AC
+    B.SS = 1
+    sp = dict(AC.MAN)
+    views = [(0, 'front'), (45, 'three-quarter'), (90, 'side'), (180, 'back')]
+    f = ImageFont.truetype(SANS, 30)
+    tw, th = 420, 650
+    S = Image.new('RGB', (len(views) * tw + 20, 2 * (th + 50) + 70), (245, 242, 236))
+    d = ImageDraw.Draw(S)
+    d.text((10, 14), 'The driver\'s check shirt: as filmed (top) vs bent round his body (bottom)', font=f, fill=(0, 0, 0))
+    s_ = 0.62 * sp['height'] / 1.75 * 1.6
+    for r, bent in enumerate((False, True)):
+        y = 70 + r * (th + 50)
+        d.rectangle([10, y, 230, y + 36], fill=(20, 20, 20) if not bent else (190, 30, 30))
+        d.text((18, y + 3), 'AS FILMED' if not bent else 'BENT', font=f, fill=(255, 255, 255))
+        for c, (deg, name) in enumerate(views):
+            im = Image.new('RGBA', (1080, 1920), (238, 234, 228, 255))
+            with swapped([(AC, 'BENT', bent)]):
+                V.person(im, B.Cam(1.0, 540, 960), 540, 1500 - 928 * s_, s_, dict(sp), 0.0, float(deg))
+            top = 1500 - 928 * s_
+            box = (540 - int(300 * s_), int(top - 280 * s_), 540 + int(300 * s_), int(top + 640 * s_))
+            t = im.convert('RGB').crop(box).resize((tw - 10, th - 10))
+            S.paste(t, (10 + c * tw, y + 46))
+            if r == 0:
+                d.text((20 + c * tw, y + 46), name, font=f, fill=(0, 0, 0))
+    S.save(out, quality=90)
+    print(out, S.size)
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     cmd = sys.argv[1]
-    {'sheet': sheet, 'clip': clip, 'driver': driver, 'shading': shading, 'rigclip': rigclip}[cmd](sys.argv[2])
+    {'sheet': sheet, 'clip': clip, 'driver': driver, 'shading': shading, 'rigclip': rigclip, 'shirt': shirt}[cmd](sys.argv[2])
