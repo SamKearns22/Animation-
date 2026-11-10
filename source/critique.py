@@ -21,6 +21,13 @@ MAP
     python3 source/critique.py before FILM SPEC.json
     python3 source/critique.py status FILM
 
+A round: `before` (notes round, before any fix) -> fix -> `pack` -> a NEW helper with the printed prompt -> `record`
+-> fix every FAULT or name it to Sam; remake the sheet so each CAN'T TELL shows -> pack again (pass 2, a new helper);
+a third pass only if pass 2 found something real; a fault surviving three goes to an options sheet (rule 87).
+Calibration (10 Nov, two helpers on Elder Swindon stills plus two old faults put back): both caught the mirrored
+label (O1) and the hand off its phone (P1), and neither flagged them on the clean panels. Limits: a person panel
+with no face reference always gets CAN'T TELL P4; tiny props get named loosely in the cold look.
+
 SPEC: {"round": R, "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO",
 "refs": [PATH...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...", "line": "O3", "marked": PATH
 or null, "t": 20.1, "box": [x0,y0,x1,y1]}]}. A panel with a crop is a detail (540 px); without, a phone-size frame.
@@ -86,7 +93,8 @@ def checklist_for(parts, path=CHECKLIST):
 def applies(panel):
     """The line ids the helper must answer on this panel: A plus its parts."""
     want = 'A' + panel.get('parts', '')
-    return [i for i, (sec, _) in lines().items() if sec in want]
+    return [i for i, (sec, _) in lines().items() if sec in want and (i != 'A4' or panel.get('hook'))
+            and (i != 'A2' or panel.get('refs'))]      # A2 needs a reference beside it; A4 the Hook Text frame
 
 
 # ---- pictures ------------------------------------------------------------------------------------------------------
@@ -294,6 +302,9 @@ def pack(film_name, spec_path):
         bad = [p_ for p_ in p.get('parts', '') if p_ not in PARTS]
         if bad or ('t' not in p and 'img' not in p) or not p.get('is'):
             sys.exit(f'critique: panel {p} needs "t" or "img", "is", and parts from {PARTS}')
+    for i, p in enumerate(specs, 1):
+        if 'P' in p.get('parts', '') and not p.get('refs'):
+            print(f'critique: panel {i} shows a person with no reference: P4 (the face) will come back CAN\'T TELL')
     out = os.path.join(PACKS, film_name, f'r{rnd}-p{_next_pass(film_name, rnd)}')
     os.makedirs(out)
     pics = [_panel(film, p) for p in specs]
@@ -340,10 +351,12 @@ def parse(text):
             for i in re.findall(r'\b([APCOSM]\d+)\b', s):
                 panels[cur].setdefault(i, ('ok', ''))
             continue
-        m = re.match(r"^(FAULT|CAN'?T TELL|CAN’T TELL)\s+([APCOSM]\d+)\s*:?\s*(.*)$", s, re.I)
-        if m:
+        m = re.match(r"^(FAULT|CAN'?T TELL|CAN’T TELL)\s+((?:[APCOSM]\d+[\s,/&]*)+)\s*:?\s*(.*)$", s, re.I)
+        if m:                                    # one fault may name several lines: "FAULT A1 O3: ..."
             kind = 'FAULT' if m.group(1).upper() == 'FAULT' else "CAN'T TELL"
-            panels[cur][m.group(2)] = (kind, m.group(3))
+            for lid in re.findall(r'[APCOSM]\d+', m.group(2)):
+                if panels[cur].get(lid, ('ok',))[0] != 'FAULT':
+                    panels[cur][lid] = (kind, m.group(3))
     return {'panels': panels, 'sections': sections}
 
 
@@ -389,8 +402,9 @@ def record(film_name, pack_dir):
         sys.exit(1)
     spec = json.load(open(pack_dir.rstrip('/') + '.spec.json'))
     faults = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k == 'FAULT']
+    asked = {i: set(applies(p)) for i, p in enumerate(spec['panels'], 1)}
     cant = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k != 'ok'
-            and k != 'FAULT']
+            and k != 'FAULT' and lid in asked.get(i, ())]      # a CAN'T TELL on a line not asked is dropped
     rnd, pas = spec['round'], int(re.search(r'-p(\d+)$', pack_dir.rstrip('/')).group(1))
     body = (f'== critique, round {rnd} pass {pas} ({date.today()}): {len(faults)} fault(s), {len(cant)} can\'t tell\n'
             + '-- look.md --\n' + open(os.path.join(pack_dir, 'look.md')).read().rstrip()
@@ -432,10 +446,10 @@ def status(film_name):
     if not mine:
         return False, f'critique: round {rnd if rnd is not None else "?"}: none recorded'
     last = mine[-1]
-    n = last['faults'] + last['cant_tell']
-    if n == 0:
+    if last['faults'] + last['cant_tell'] == 0:
         return True, f'critique: round {rnd}, pass {last["pass"]} clean'
-    return False, f'critique: round {rnd}, pass {last["pass"]}: {n} fault(s) open'
+    return False, (f'critique: round {rnd}, pass {last["pass"]}: {last["faults"]} fault(s), '
+                   f'{last["cant_tell"]} can\'t tell open')
 
 
 # ---- where (rule 56, line M1) --------------------------------------------------------------------------------------

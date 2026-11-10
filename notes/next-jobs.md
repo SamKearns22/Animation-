@@ -1,13 +1,16 @@
 # Where things stand (project, 10 Nov; no film in progress)
 
-- **Rules that bite next:** 86 (Job H stays inside 5% of a week: Sam, 10 Nov, raised it from 2.5%; about 1.5% spent), 89 (the critique the helper
-  will run), 85 (cost watch: on amber, finish the step and hand over).
-- **Done (10 Nov, Job H chat 1, design, Opus max, about 1.5%: max effort cost more than the 0.9% planned):** the critique checklist,
-  `guides/critique-checklist.md` (37 lines from Sam's past notes, in six parts: every sheet, people, creatures,
-  props, sets, movement; how each new note adds or strengthens a line); the helper's design and the build list (this
-  file's Job H section). Job G not touched.
-- **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand
-  and Build plan H." About 1.5% (Sam, 10 Nov: Job H may go to 5% of a week; 1.5% spent). Sam's overnight chat opens it (chats it starts can't).
+- **Rules that bite next:** 89 (critique before every send: now `critique.py`, and pre-flight refuses an animatic without
+  a clean last pass or `--faults-named`), 30 (each fault note names its checklist line), 56 (`critique.py where`).
+- **Job H (chat 2, the build, done 10 Nov, Opus high, about 1.9%; Job H in all about 3.4% of the 5% cap): FINISHED.**
+  Harvest: about 70 of Sam's non-body fault notes from ten films filed into the checklist (now 37 lines: new P13
+  clothes, O5 props resting, O6 effects, S5 set detail, S6 same set every shot, M5 hits show; P9 merged into P7).
+  `source/critique.py` (pack, record, false, where, before, status) with 3 kittests (pass); pre-flight prints the
+  critique line and refuses the animatic without a clean last pass. Calibration, two fresh helpers on Elder Swindon
+  stills plus two old faults put back: both caught the mirrored label and the hand off its phone, no false alarm on
+  the clean panels, and the before/after note judged right. Both also flagged, on Elder Swindon's current frames: the
+  scroll lost in glare (9 s), the drool reading as a straw (3.5 s), the dog a brown lump and his raised arm reading
+  awake (16.5 s), the roundabout an even wheel (25 s): for that film's next round. The first real trial is the next film.
 - **Job G (chat 4 done, 10 Nov, steps 4-6, Opus high, about 1.3%, stopped on amber):** lying checks: a neck shows,
   no arm held up in the air, each arm on its own side (Sam's lying notes); the kit's lying arms laid flat (elbows bent up
   into the air: Elder Swindon 6's cause); pre-flight now stops a pose seen from an "avoid" view or with no gallery row,
@@ -28,11 +31,11 @@
   `notes/job-k-ai-tells.md`; the test bench `source/ai_tells_lab.py` (changes no film or kit). Nothing in the kit or
   rulebook changed. **Needs Sam:** Y/N on proposals 1-8 there (my picks: 1-7 Y, 8 N). **Next for K:** on his
   numbers, a build plan and estimate (rule 86), Opus high. Open rule requests: none.
-- **Needs Sam:** nothing (10 Nov: Y to Job I and to merging rules 41, 42, 81: written). Was: 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
-- **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
-- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
-- **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
-  `source/data/critique/` (git-ignored); results into the ledger's round files. Job G's own notes: Job G section.
+- **Needs Sam:** nothing for H. K: Y/N on proposals 1-8 (above).
+- **Read:** `source/critique.py`'s map (top of file) the first time a film runs a critique; `guides/critique-checklist.md`.
+- **Open rule requests:** none from H. Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
+- **For Claude:** packs in `source/data/critique/FILM/rR-pN` (git-ignored; the spec sits beside the pack, never in it);
+  results in the ledger (`critique` in FILM.json, both answers in the round file). Job G's own notes: Job G section.
 
 ## Job G (Sam: Y, 9 Nov, about 3.5-4% over two chats)
 Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults Sam would flag (sheet sent 9 Nov).
@@ -114,7 +117,13 @@ thing) waits for the next film.
 6. **The record:** each pass's look and result go into the ledger's round file; FAULTs per line id (and false alarms
    Claude marks) are tallied in the film's ledger, so Job I sees which lines catch and which only cry wolf.
 
-**Build (chat 2, Opus high), in order:**
+**Build (chat 2, Opus high): DONE 10 Nov** (all 7 steps; calibration packs r0-p1 and r1-p1 in Elder Swindon's
+critique folder, not on GitHub; recorded only in a scratch ledger). Fixes the calibration taught: a fault line may
+name several line ids; A2 is asked only beside a reference, A4 only on the Hook Text frame (`"hook": true`); a person
+panel without a face reference is warned at pack time (P4 can't be told). Helper suggestions not added (the checklist
+grows from Sam's notes only): "nothing on screen the brief doesn't name" (pigeons, a sick puddle), "props keep their
+colour from shot to shot", "a turnaround sits on the film's set colour".
+**Build plan, in order:**
 1. Harvest (about 0.4%; added with the higher cap): read only the notes tables of the last ten films (the archive and
    Elder Swindon) for Sam's fault notes outside Job E's body groups (creatures, props and text, sets, movement,
    faces, acting). File each under a checklist line (count, Came from) or a new line, by the header's rules: parts
