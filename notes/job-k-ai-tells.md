@@ -98,4 +98,9 @@ merges into satire.md's "The look" and rule S3.
   one brow a touch higher, parting off-centre, one mouth corner lifted, weight on one leg; one sheet, full-size face.
 - 6: Sam can't see the difference. Claude's pick: drop it (if a phone doesn't show it, it isn't a tell). Ask Y/N.
 - 7: N. Dialogue holds only Sam's words; silence between lines stays.
-- 1, 2, 4, 8: not yet answered (picks: 1 Y, 2 Y, 4 Y, 8 N).
+- Sam, 10 Nov: "Handover your suggested Y for the overnight chat": **1 Y, 2 Y, 4 Y, 6 Y (dropped), 8 N.**
+- Build plan K (overnight, Opus high, about 2.5% of a week, cap 3%): (a) the example for 5 (pump driver sheet), sent;
+  5 waits for Sam's Y/N, nothing built for it; (b) 2, hard-edged shading (kit soft() and limbs' shading, no blur;
+  ground shadows flat), checked on one sheet; (c) 1, head acting in the rig (tilt and nod inside views.person, from
+  the voice), checked with one short clip; (d) 4, a copy check for groups in pre-flight, and checked patterns that
+  bend at the body's edges. Fold the look changes into satire.md 'The look' (no new rule lines). Stop at amber.
