@@ -13,7 +13,13 @@
   into the air: Elder Swindon 6's cause); pre-flight now stops a pose seen from an "avoid" view or with no gallery row,
   and checks every lying body; 12 everyday kit poses added to the gallery (hands on hips, pockets, shrug...). Rules
   that bite: 42, 41. **Next for G:** nothing; Job G is finished once Sam numbers the step 6 proposal.
-- **Needs Sam:** 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
+- **Job I proposed (Sam, 10 Nov: "the lying down people don't look right at all ... squiggly balloon people with
+  inflated heads, not at all like how our characters look usually"):** rebuild how lying people are DRAWN so they match
+  the flat figure rig (views.person: its head size, outlines, jacket, sleeves, circle hands), keeping lying.py's 3D
+  skeleton, contacts and the chat 4 checks underneath. Cause: lying.draw paints its own rounded 3D volumes (tubes and
+  ellipsoids, a 3D head), a second look nobody compared against the cast. Chat 4 looked at a lying sheet and checked
+  only the arms: a miss. Plan, Opus high: side-by-side sheet (standing cast vs lying) first, then the build. About 2-3%.
+- **Needs Sam:** 2. Job I (redraw lying people in our usual style, about 2-3%, Opus high)? Y/N. 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
 - **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: merge 41, 42, 81 (Needs Sam 1).
 - **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
