@@ -8,7 +8,7 @@
   Wikimedia, Zelda wikis): Sam asked for screenshots.
 - **Spent against the estimate:** planning about 0.7% of 14.5%.
 - **Next:** on Sam's answers and screenshots: build the cast (Opus, high), new chat.
-- **Needs Sam:** questions 1 and 3-12. All references in (rounds one and two, 10 Nov); Link's side view optional.
+- **Needs Sam:** questions 1 and 3-12. All references in (rounds one and two, 10 Nov); Link's scuttle faces forward.
 - **Read:** `guides/job-packs.md` Build; this file.
 - **Lost / Added:** Lost: Ruto's "over-sexual" preening (she is a child in this part of the game): vain and pushy
   instead. Added (if Sam says Y): R1/R2 button prompts on screen; gunfire, snap and blast sounds.
@@ -24,7 +24,7 @@ No likenesses (game characters, from the remake's screenshots), no 3D bodies (fl
 
 | thing, build or risky move | KNOWN (where) or NEW | why (parts the camera sees) | estimate (% of a week) | spent |
 |---|---|---|---|---|
-| Young Link (remake design) | NEW | front, side (scuttle), back not needed; faces: unsure, sceptical, aghast, deadpan, terrified | 1.1 | |
+| Young Link (remake design) | NEW | front only (scuttle faces forward, Sam), side for the wall shot; faces: unsure, sceptical, aghast, deadpan, terrified | 1.1 | |
 | Kaepora Gaebora | NEW creature | perched front, flying side, wings used as arms (gun, neck snap, lapel grab, gesture); faces: kindly, glee, fury, hiss | 1.9 | |
 | Navi | NEW | glowing ball and wings; blue to red; float, nuzzle, zip | 0.5 | |
 | Masked gunman (one design, 3 uses) | part KNOWN (Patriot's balaclava) | front and side; one blown apart (pieces from `lying.py`) | 0.6 | |
@@ -109,7 +109,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 23-outpost | a Far Cry outpost from above: a dirt yard ringed by grey corrugated walls, blue and orange shipping containers, wooden shacks with tin roofs, crates, a flagpole, parked old cars; jungle round it | |
 | 24-outpost | the same at ground level: a dirt track in, a plank-and-tin shack left, a watch post, rocks and palms, a blue flag far off; bright midday sun | |
 | Look across all of them | the remake's puppet-theatre materials: woven, knitted, carved. In our flat style, kept as a few weave or feather strokes on the big areas (cap, tunic, KG's chest), not textures | |
-| Still missing | Link side view only (optional; worked out from 03-04 if not) | |
+| Still missing | nothing: Link's scuttle faces forward (Sam, 10 Nov), so no side view is needed | |
 
 ## Shots and the acting list (rule 74; faces wait on Sam's answers where marked)
 Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + sign-off: **about 38 s**.
@@ -123,7 +123,7 @@ Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + 
 | 5 "Press R1 for an EXECUTION MOVE." | KG | S5 close-up on the gunman, KG rises behind him | gunman: narrow suspicious eyes; KG: glee | KG's wings round the head, twist; R1 prompt (Q5) | "EXECUTION", snap after "MOVE" |
 | 6 "Oh my god!" | Link | S6 close-up: the reaction | eyes huge, mouth wide | hands to cheeks, jolt back; Navi startled bob | "god" |
 | 7 "clear enemy encampments..." | KG | S7 wide: gate bursts, firing; the set is the joke | war face, teeth bared | MG42 in wings, recoil, bandana ties flutter | gate on "clear", flash from "enemy" |
-| 8 "I don't think I can do this." | Link | S7 same wide: scuttles in at KG's side | wince | crouched scuttle, hands over ears | "this" |
+| 8 "I don't think I can do this." | Link | S7 same wide: scuttles in at KG's side, facing forward, in from off camera (Sam, 10 Nov) | wince | crouched front-on scuttle (`GAITS['front_run']`, low), hands over ears | "this" |
 | 9 "R2 FOR GRENADES." | KG | S7 then S8 push to Navi going red | glee | wing points at a gunman; R2 prompt (Q5) | "GRENADES": Navi goes |
 | 10 "This is horrible." | Link | S9 close-up, dirt falling past | flat horror | frozen, a bit of debris lands on his cap | "horrible" |
 | 11 "FIVE ROMANCE OPTIONS..." | KG | S10 wide line-up: everyone must read | game-show grin | wing sweeps along the line | each reacts on "ROMANCE"; Saria winks at Link, already sure |
