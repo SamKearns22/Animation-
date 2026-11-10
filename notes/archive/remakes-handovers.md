@@ -232,3 +232,22 @@
   `_camo_net`, `_tyres`, BARRELS, WALL_TINS; view `camp_open` (gate=1). Watch in pass 3: the ammo belt in the near
   yard, the stump's plank-like roots, the S1 trunk's moss.
 
+
+## Where things stand (build chat 11, archived 10 Nov)
+- **Rules that bite next:** 85 (cost watch: Sam, 10 Nov: the week is at 69%, over budget since 58%; get to the
+  animatic ASAP, no more critique passes or options), 87 (Sam's picks from the options sheet), 83 (setcheck).
+- **Done (build chat 11, Opus high):** note 29: KG's beak is his mouth (hinged lower half, opens per syllable from the
+  recording; every mood front and side; clip sent in chat (`python3 source/remakes_creatures.py talk OUT.mp4`); Lost: the wide smiling mouth and
+  tongue). KG stands on the ground in camp and town (no float). All pass-3 Fix items fixed (list in the commit).
+  Options sheet for the six survivors sent in chat (`python3 source/remakes_sets.py options OUT.jpg`) (A = my pick). setcheck clean.
+- **Next (Opus, medium): the animatic before the week hits 100% (Sam, 10 Nov: at 75%).** Picks are set (all A;
+  Sam may swap a letter: one line in OPT/SPIT). Build the shots from "Shots and the acting list" with the simplest
+  staging that tells each beat (holds and cuts over full moves; no rehearsal clips, no critique passes: name
+  faults, pre-flight `--faults-named`); check sheet, Sam's yes, one animatic. Watch the cost after every step;
+  hand over on amber.
+- **Needs Sam:** nothing (letters optional).
+- **Named, not fixed:** in S8-S9 the near gunman's rifle passes in front of the far one (layered right).
+- **Open rule requests:** none.
+- **For Claude:** CR.kg(talk=0-1, stand=True); CR.beak_open/BEAK; CR.talkclip; RS.OPT/SURVIVORS/options();
+  _flag_rows, _lantern, _gate_fallen/_gate_debris, _lean_to, _statue_robed/_statue_bird, EDGE_OPTS.
+

@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): build chat 10 (11 Nov): town pass-2 faults fixed; critique pass 3 of all three sets recorded and triaged. Next: fix the new faults, then one options sheet for the three-pass survivors (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): shots chat (10 Nov): the film built, all 14 lines and 14 shots; check sheet sent. Next: on Sam's yes, the animatic (Sonnet). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

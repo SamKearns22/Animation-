@@ -1,22 +1,25 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch: Sam, 10 Nov: the week is at 69%, over budget since 58%; get to the
-  animatic ASAP, no more critique passes or options), 87 (Sam's picks from the options sheet), 83 (setcheck).
-- **Done (build chat 11, Opus high):** note 29: KG's beak is his mouth (hinged lower half, opens per syllable from the
-  recording; every mood front and side; clip sent in chat (`python3 source/remakes_creatures.py talk OUT.mp4`); Lost: the wide smiling mouth and
-  tongue). KG stands on the ground in camp and town (no float). All pass-3 Fix items fixed (list in the commit).
-  Options sheet for the six survivors sent in chat (`python3 source/remakes_sets.py options OUT.jpg`) (A = my pick). setcheck clean.
-- **Next (Opus, medium): the animatic before the week hits 100% (Sam, 10 Nov: at 75%).** Picks are set (all A;
-  Sam may swap a letter: one line in OPT/SPIT). Build the shots from "Shots and the acting list" with the simplest
-  staging that tells each beat (holds and cuts over full moves; no rehearsal clips, no critique passes: name
-  faults, pre-flight `--faults-named`); check sheet, Sam's yes, one animatic. Watch the cost after every step;
-  hand over on amber.
-- **Needs Sam:** nothing (letters optional).
-- **Named, not fixed:** in S8-S9 the near gunman's rifle passes in front of the far one (layered right).
+- **Rules that bite next:** 85 (cost watch: the week near 76%; no extra rounds), 59 (render lock: run pre-flight,
+  then render with `--faults-named`), 75 (Hook Text checked by finish.py).
+- **Done (shots chat, Opus):** the film file built, all 14 lines, 14 shots (S12 split in two, under 8 s), about 44 s
+  plus sign-off; simplest staging (holds, cuts, one move per beat); voices with both f-words bleeped; MG42, neck crack
+  and Navi's blast. Brief checklist ticked. Check sheet sent to Sam (Hook Text moved below KG's face).
+- **Next (Sonnet): on Sam's yes, the animatic:** `python3 source/preflight.py remakes OUT_DIR`, then
+  `python3 source/remakes.py final source/data/remakes-clean-small.mp4 --small --faults-named`, then
+  `python3 source/finish.py source/data/remakes-clean-small.mp4 OUT/remakes-animatic.mp4 --film remakes --faults-named`;
+  send it in chat with its size and render time. No fixes before it unless Sam asks.
+- **Needs Sam:** Y or N for the animatic (check sheet in the chat).
+- **Named, not fixed (all told to Sam):** pre-flight's 16: the syllable counter misreads "R1", "9", "Ok?" and capitals
+  (5); a 30-degree prop-turn test on Malon and Saria, who never turn (8); no scene(t) for the pop-in test (1); "I
+  don't think I can do this." 1.5 s on screen (1); no critique round (Sam: none) (1). Staging: Link slides in with a
+  bob, hands at his ears (not a crouched run); no hands to cheeks in S6; KG rises behind the gunman (no swoop); KG's
+  wings cross Link's chest at the wall; near gunman's rifle over the far one (S7-S8).
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
 - **Open rule requests:** none.
-- **For Claude:** CR.kg(talk=0-1, stand=True); CR.beak_open/BEAK; CR.talkclip; RS.OPT/SURVIVORS/options();
-  _flag_rows, _lantern, _gate_fallen/_gate_debris, _lean_to, _statue_robed/_statue_bird, EDGE_OPTS.
+- **For Claude:** source/remakes.py (MAP at top); timing from _L gaps; SNAP/GATE/BOOM/SLAM beats; LIFT wing pose;
+  bleeps in recording seconds in _L.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),
@@ -47,42 +50,42 @@ No likenesses (game characters, from the remake's screenshots), no 3D bodies (fl
 12% version (Sam to choose): the encampment as a fence and tower in the forest painting (-0.5), the line-up waist up
 only (-0.5), one notes round fewer (-1.0).
 
-Rehearsal clips sent: (rule 8: the 4 risky moves above; not yet)
-Composition sheet sent: (rule 11: not yet)
+Rehearsal clips sent: none: Sam, 10 Nov, the week at 75%: straight to the animatic, simplest staging (holds and cuts), no rehearsals
+Composition sheet sent: 10 Nov, the check sheet (every shot) with the animatic yes
 
 ## The brief as a checklist (CLAUDE.md): every detail, ticked before the first animatic
 News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: modern gaming tropes in the charming classic.
 | # | from the brief (word for word) | done? |
 |---|------|------|
-| 0 | Hook Text: "Ocarina of Time, remade for 2026" (Sam, Q9) | |
-| 1 | All references from the 2026 remake, not the N64 game | |
-| 2 | Cast: Young Link, Kaepora Gaebora (KG), Navi, militarised masked terrorists from generic Ubisoft games, Young Zelda, Malon, Princess Ruto, a Goron in a frilly dress | |
-| 3 | Scene: Kokori Forest. The camera looks up where KG sits on a branch. | |
-| 4 | KG: "Hello, Link! Are you ready for a f******* adventure!" (bleep; Sam, with the recordings: was "Hey, Link, are you ready...") | |
-| 5 | Camera: looking down from KG's perspective at Link and Navi. Link: "Uh, yeah, I think so?" | |
-| 6 | Camera: on KG. KG: "Great, here's some wisdom!" | |
-| 7 | Link close up. He looks sceptical. Navi is gently nuzzling his cheek. Link: "Ok?" | |
-| 8 | Close up on a masked Ubisoft terrorist looking into the forest with suspicious eyes. He holds a rifle into the trees. KG sweeps in behind him | |
-| 9 | KG: "Press R1 for an EXECUTION MOVE." | |
-| 10 | KG snaps the terrorist's neck using his wings with hostile glee. | |
-| 11 | Camera back on Link, aghast, Navi floating: "Oh my god!" | |
-| 12 | KG bursts into a walled compound in the forest, similar to an enemy encampment in Far Cry. Already opening up with a heavy machine gun furled in his wings. Warlike Rambo bandana. | |
-| 13 | KG: "Clear enemy encampments to clear segments of the map." (Sam, with the recordings: was "...to control parts of the map!") | |
-| 14 | Link scuttling in beside him: "I don't think I can do this." | |
-| 15 | KG: "R2 FOR GRENADES." | |
-| 16 | Navi goes danger-red and zips into a firing terrorist's torso, exploding on impact like a frag grenade, sending dirt and body parts flying. | |
-| 17 | Link: "This is horrible." | |
-| 18 | KG gesturing at a line-up in Hyrule town square: Young Zelda (unsure), Malon (dutiful, 'pick-me', kind), Princess Ruto (preening: see Lost), a slightly drooling Goron in a frilly dress. | |
-| 18b | Sam, 10 Nov: add Saria to the line-up (spunky, confident, 'he's already picked me') | |
-| 19 | KG: "FIVE ROMANCE OPTIONS TO CHOOSE FROM" (Sam, 10 Nov: was FOUR) | |
-| 20 | Close up of Link, deadpan: "I am 9 years old." | |
-| 21 | KG picks him up with his wings like a tough guy by the lapels, shoves him hard against a town square wall. KG furious, Link terrified. KG hissing and spitting. Navi watches, growing redder into grenade mode. | |
-| 22 | KG: "Now listen here, you shit. You're gonna grow up really f****** fast." then "And you've got some god-damn CHOICES to make." (two recordings, 13 and 13b; bleep the f-word; "god-damn" heard; Sam, with the recordings: was "Trust me, you're gonna grow up real f****** fast...") | |
-| 23 | Close up on Link against the wall: "I want to go home." | |
-| 24 | Energetic pace, exaggerated movements and enthusiasm, very little time between lines | |
-| 25 | Navi always cutely floating, nuzzling, etc., depending on context | |
-| 26 | Budget ideally 12%, stretch to 15% for quality | |
-| 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | |
+| 0 | Hook Text: "Ocarina of Time, remade for 2026" (Sam, Q9) | yes: HOOK; finish.py adds it |
+| 1 | All references from the 2026 remake, not the N64 game | yes: the remake designs (cast sheets) |
+| 2 | Cast: Young Link, Kaepora Gaebora (KG), Navi, militarised masked terrorists from generic Ubisoft games, Young Zelda, Malon, Princess Ruto, a Goron in a frilly dress | yes: all in the film (S1-S13) |
+| 3 | Scene: Kokori Forest. The camera looks up where KG sits on a branch. | yes: S1 |
+| 4 | KG: "Hello, Link! Are you ready for a f******* adventure!" (bleep; Sam, with the recordings: was "Hey, Link, are you ready...") | yes: S1, the f-word bleeped |
+| 5 | Camera: looking down from KG's perspective at Link and Navi. Link: "Uh, yeah, I think so?" | yes: S2 |
+| 6 | Camera: on KG. KG: "Great, here's some wisdom!" | yes: S3 |
+| 7 | Link close up. He looks sceptical. Navi is gently nuzzling his cheek. Link: "Ok?" | yes: S4 (Navi bobs in to his cheek) |
+| 8 | Close up on a masked Ubisoft terrorist looking into the forest with suspicious eyes. He holds a rifle into the trees. KG sweeps in behind him | yes: S5 (KG rises up behind him: simplest staging, not a swoop) |
+| 9 | KG: "Press R1 for an EXECUTION MOVE." | yes: S5, the R1 prompt |
+| 10 | KG snaps the terrorist's neck using his wings with hostile glee. | yes: S5 (wings close round the head, head turned right round, crack; he slumps) |
+| 11 | Camera back on Link, aghast, Navi floating: "Oh my god!" | yes: S6, Navi bobs up startled (named: no hands to cheeks) |
+| 12 | KG bursts into a walled compound in the forest, similar to an enemy encampment in Far Cry. Already opening up with a heavy machine gun furled in his wings. Warlike Rambo bandana. | yes: S7 (gate blown in, MG42 firing, bandana) |
+| 13 | KG: "Clear enemy encampments to clear segments of the map." (Sam, with the recordings: was "...to control parts of the map!") | yes: S7 |
+| 14 | Link scuttling in beside him: "I don't think I can do this." | yes: S7 (named: slides in with a bob, hands at his ears, not a crouched run) |
+| 15 | KG: "R2 FOR GRENADES." | yes: S7, the R2 prompt |
+| 16 | Navi goes danger-red and zips into a firing terrorist's torso, exploding on impact like a frag grenade, sending dirt and body parts flying. | yes: S8 (red, zip, blast, pieces, splat) |
+| 17 | Link: "This is horrible." | yes: S9 (bits falling, one onto his cap) |
+| 18 | KG gesturing at a line-up in Hyrule town square: Young Zelda (unsure), Malon (dutiful, 'pick-me', kind), Princess Ruto (preening: see Lost), a slightly drooling Goron in a frilly dress. | yes: S10 |
+| 18b | Sam, 10 Nov: add Saria to the line-up (spunky, confident, 'he's already picked me') | yes: S10, Saria winks on "ROMANCE" |
+| 19 | KG: "FIVE ROMANCE OPTIONS TO CHOOSE FROM" (Sam, 10 Nov: was FOUR) | yes: S10 |
+| 20 | Close up of Link, deadpan: "I am 9 years old." | yes: S11 |
+| 21 | KG picks him up with his wings like a tough guy by the lapels, shoves him hard against a town square wall. KG furious, Link terrified. KG hissing and spitting. Navi watches, growing redder into grenade mode. | yes: S12 (lifted to the wall by the collar; fury, spit; Navi reddening) |
+| 22 | KG: "Now listen here, you shit. You're gonna grow up really f****** fast." then "And you've got some god-damn CHOICES to make." (two recordings, 13 and 13b; bleep the f-word; "god-damn" heard; Sam, with the recordings: was "Trust me, you're gonna grow up real f****** fast...") | yes: S12, the f-word bleeped |
+| 23 | Close up on Link against the wall: "I want to go home." | yes: S13 |
+| 24 | Energetic pace, exaggerated movements and enthusiasm, very little time between lines | yes: gaps 0.15-0.6 s |
+| 25 | Navi always cutely floating, nuzzling, etc., depending on context | yes: she floats and bobs in each of her shots |
+| 26 | Budget ideally 12%, stretch to 15% for quality | noted (cost watch) |
+| 27 | Sam, 11 Nov: the detail is excellent; keep the models from looking too chibi | yes: the cast as drawn |
 | 28 | Sam, 11 Nov: Link has the Kokiri Sword and its sheath | drawn (sheathed; no shot draws it) |
 | 29 | Sam, 11 Nov: KG has a mouth and a beaky nose; he needs a real beak, and the beak moves when he talks | done, build chat 11 (the beak IS the mouth: upper and lower halves, the lower hinges open on each syllable; no lips or tongue-mouth under it; the grin and fury carried by the eyes, brows and beak angle) |
 
@@ -116,7 +119,7 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | Look across all of them | the remake's puppet-theatre materials: woven, knitted, carved. In our flat style, kept as a few weave or feather strokes on the big areas (cap, tunic, KG's chest), not textures | |
 | Still missing | nothing: Link's scuttle faces forward (Sam, 10 Nov), so no side view is needed | |
 
-## Shots and the acting list (rule 74; faces wait on Sam's answers where marked)
+## The acting list: shots (rule 74)
 Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + sign-off: **about 38 s**.
 
 | line | who | shot and why | face | body | lands on |
