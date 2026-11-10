@@ -179,8 +179,8 @@ def _sheet_tile(k):
 # full pass whenever it cannot be sure: no earlier run, an earlier run that found a frame-level fault, any change to the
 # check code, any change to the film's allow-lists and settings, or a change in length. The text and sound checks
 # (script, mouths, subtitles, plan, shared checks) always run in full: they take seconds. `--full` forces the full pass.
-CHECK_FILES = ('preflight.py', 'handcheck.py', 'audit.py', 'clipcheck.py', 'kitchecks.py', 'filmkit.py', 'figure.py',
-               'viewchecks.py', 'housestyle.py', 'plan.py', 'benchmark.py', 'sets.py', 'linecheck.py', 'landmarks.py',
+CHECK_FILES = ('preflight.py', 'handcheck.py', 'posecheck.py', 'lying.py', 'audit.py', 'clipcheck.py', 'kitchecks.py',
+               'filmkit.py', 'figure.py', 'viewchecks.py', 'housestyle.py', 'plan.py', 'benchmark.py', 'sets.py', 'linecheck.py', 'landmarks.py',
                'hookcheck.py', 'musiccheck.py', 'sizes.py', 'voices.py', 'report.py', 'mounts.py', 'collisions.py')
 
 
@@ -314,6 +314,8 @@ def main():
     F.guard(B)
     import kitchecks
     kitchecks.install()                         # every views.py person drawn is logged for the facing check
+    import posecheck
+    posecheck.install()                         # rule 42: named poses against the gallery's avoid views; lying bodies
     handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()

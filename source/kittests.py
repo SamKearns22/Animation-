@@ -538,6 +538,64 @@ def held_prop_touches():
                                                        f"phone moved off the hand: {caught}"
 
 
+@test
+def lying_and_pose_checks():
+    """Job G chat 4: Sam's lying notes caught (Ad-Vanced 57-58: both arms on one side, no neck; Elder Swindon 6: the
+    arm curled up off the ground) and every kit lying pose clean from every view; and pre-flight's pose check
+    (posecheck.py) flags a gallery pose seen from an avoid view and a pose with no gallery row."""
+    import numpy as np
+    import burnham as B
+    import handcheck as H
+    import lying as L
+    import moves
+    import posecheck as P
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    kit = {p: sum(len(v) for v in vs.values()) for p, vs in L.gallery().items()}
+    sp = L._cast()[0]
+    old = L.POSES['face_down']
+
+    def face_down_1(sp):                                 # the kit's arms before chat 4: elbows bent up in the air
+        k = old(sp)
+        for side, pole in (('R', (0.2, 1.0, -0.6)), ('L', (0.3, 1.0, 0.8))):
+            k['el' + side], k['wr' + side] = L.limb(k['sh' + side], k['wr' + side], L.UPPER, L.FORE, pole)
+        return k
+    L.POSES['face_down'] = face_down_1
+    try:
+        k, surf = L.lie(sp, 'face_down', 0.0, 0.0, 0.0)
+    finally:
+        L.POSES['face_down'] = old
+    curled = [f for f in L.body_faults(k, sp, surf) if 'held up' in f]
+    k, surf = L.lie(sp, 'ball', 0.0, 0.0, 0.0)          # Ad-Vanced 57: both arms over the head off one shoulder
+    for side in 'LR':
+        k['el' + side], k['wr' + side] = L.limb(k['sh' + side], k['neck'] + np.array([0.28, -0.12, 0.3]),
+                                                L.UPPER, L.FORE, (0.1, 0.3, 1.0))
+    one_side = [f for ang in (None, 30, 60) for f in L.body_faults(k, sp, surf, L._cam_for(ang, 4.6, (0, 0.2, 0)))
+                if 'crosses' in f]
+    k, surf = L.lie(sp, 'side', 0.0, 0.0, 0.0)           # 57: the head sat on the shoulders
+    k['head'] = k['neck'] + (k['head'] - k['neck']) * 0.45
+    no_neck = [f for f in L.body_faults(k, sp, surf) if 'neck' in f]
+
+    P.install()
+    H.install()
+    P.ON[0] = True
+    got = {}
+    try:
+        for label, name, deg in (('cup from behind', 'mug', 180.0), ('cup from the front', 'mug', 0.0),
+                                 ('untested', 'chop', 0.0)):
+            im = Image.new('RGBA', (1200, 1100), G.BG)
+            H.begin()
+            V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, G.MODEL, 0.0, deg, moves.pose(G.MODEL, name))
+            got[label] = sorted({f['kind'] for f in H.end(0.0) if f.get('rule') == 42})
+    finally:
+        P.ON[0] = False
+    ok = (not any(kit.values()) and bool(curled) and bool(one_side) and bool(no_neck)
+          and got == {'cup from behind': ['avoid view'], 'cup from the front': [], 'untested': ['untested pose']})
+    return ok, f"kit lying poses (faults per pose, every view): {kit}; old face-down arm caught: {bool(curled)}; " \
+               f"arms off one shoulder caught: {bool(one_side)}; no neck caught: {bool(no_neck)}; pose check: {got}"
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

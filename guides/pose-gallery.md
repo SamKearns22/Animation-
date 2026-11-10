@@ -39,6 +39,18 @@ pose still passes wherever this table says it does.
 | cup in hand | `moves.pose(sp, 'mug')` | kit, fixed Job G | front, three-quarter, side, three-quarter back, mirrored | behind | takeaway cup at the hip |
 | cup, sipping | `moves.pose(sp, 'mug_sip')` | kit, fixed Job G | all 6 views | | cup at the lips; from behind it is hidden by his head |
 | phone at the ear | `moves.pose(sp, 'phone_ear')` (`moves.phone_at_ear(j, sp, side)`) | kit, redone Job G chat 3 | all 6 views | | the left hand: hand at the cheek, the phone flat along the side of the head from the ear down, elbow forward and out. Side on or three-quarter back facing left, use `side='R'` (the phone must be at the ear nearer us there: at the far ear the head hides the hand) |
+| hands on hips | `moves.pose(sp, 'hips')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, behind, mirrored | three-quarter back | the far hand is behind his body |
+| hands in pockets | `moves.pose(sp, 'pockets')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
+| hands behind the back | `moves.pose(sp, 'behind_back')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
+| leaning on something | `moves.pose(sp, 'lean_on')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
+| slumped | `moves.pose(sp, 'slumped')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, three-quarter back, mirrored | behind | the far hand hangs in front, hidden by his back |
+| palm open | `moves.pose(sp, 'palm_open')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, three-quarter back, mirrored | behind | the palm is in front of him, hidden by his back |
+| shrug | `moves.pose(sp, 'shrug')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
+| facepalm | `moves.pose(sp, 'facepalm')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, mirrored | three-quarter back, behind | the hand is on his face, hidden by his head |
+| microphone | `moves.pose(sp, 'mic')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
+| pen in hand | `moves.pose(sp, 'pen')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, three-quarter back, mirrored | behind | the pen hand is hidden by his back |
+| bag in hand | `moves.pose(sp, 'bag')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | front, three-quarter, side, mirrored | three-quarter back, behind | the bag hand is beyond his body |
+| fists up (guard) | `moves.pose(sp, 'guard')` | kit, tested Job G chat 4 (by the check only; not yet looked at by eye) | all 6 views |  |  |
 
 **Seated poses (the sitting kit, `source/sitting.py`; plan and notes `notes/archive/sitting-kit.md`).** Sheet: `python3 source/sitting.py sheet OUT.jpg`; photos beside them: `sitting.py refs OUT.jpg`; checks: `sitting.py audit`.
 
@@ -57,6 +69,27 @@ pose still passes wherever this table says it does.
 | perch, chair edge | `sitting.pose(sp, 'perch, chair edge')` | the kit, part 2 | all 5 views | | eager, about to go: front third of the seat, hands on the knees |
 | perch, desk corner | `sitting.pose(sp, 'perch, desk corner')` | the kit, part 2 | front, side, three-quarter back, behind | three-quarter | one thigh along the desk, the other leg standing |
 | slump | `sitting.pose(sp, 'slump')` | the kit, part 2 | all 5 views | | defeated: slid down, head forward, legs out and splayed |
+
+**Lying poses (the lying kit, `source/lying.py`: one 3D body).** Call: `lying.lie(sp, 'face_down', x, z, yaw)` (yaw
+turns the head's way; `flip=-1` lies the other way round), then `lying.draw`. Tested from 12 views: eye level, 30 and
+60 degrees down, each with the head to the right, away, to the left and towards us, three people, both ways round
+(`python3 source/lying.py check`). Since Job G chat 4 (10 Nov) the check also stops Sam's lying notes: no neck
+showing (Ad-Vanced 57); an elbow or hand held up in the air with nothing under it (Elder Swindon 6: a limp arm
+lies flat); and an arm crossing to the other shoulder's side, so both arms read as one side (Ad-Vanced 57-58).
+
+| pose | call | from | passes | avoid | notes |
+|---|---|---|---|---|---|
+| face down | `lying.lie(sp, 'face_down', x, z, yaw)` | Poker Mon, fixed Job G chat 4 | all 12 views | | cheek on the floor, one arm flung past the head, one by the hip, elbows out flat along the floor (they bent up into the air until 10 Nov) |
+| on the back | `lying.lie(sp, 'back', x, z, yaw)` | the kit, fixed Job G chat 4 | all 12 views | | arms flung out, elbows flat on the floor; one knee up |
+| on the side, curled | `lying.lie(sp, 'side', x, z, yaw)` | the kit, fixed Job G chat 4 | all 12 views | | knees up, the lower arm under the head, the upper arm limp in front with its hand by the face |
+| slumped against a wall | `lying.lie(sp, 'slump', x, z, yaw)` | the kit | all 12 views | | sat on the floor, back on the wall, head dropped |
+| curled in a ball, guarding the head | `lying.lie(sp, 'ball', x, z, yaw)` | Ad-Vanced Notice, note 58 | all 12 views | | a hand each side of the head (the upper arm over it, held up on purpose), knees to the chest |
+
+**Pre-flight checks the poses (Job G, 10 Nov; `source/posecheck.py`):** every pose a film takes by name
+(`posegallery.pose`, `moves.pose`, `sitting.pose`, `lying.lie`) is followed to the frames it is drawn on. A pose seen
+from a view its row lists under "avoid", or one with no row in these tables, stops pre-flight ("POSE: ..."), and every
+lying body drawn gets the lying checks above. A pose a film builds by hand (its own joints) is not seen there: list it
+in the plan as new, and price building and testing it in the film's estimate (rule 86) at planning.
 
 **Adding a pose:** write it in `source/posegallery.py` (a function of `sp` returning the joints; credit the film), add
 it to `GALLERY`, run the sheet, fix it until every view passes or list the views that fail in `AVOID` with the reason,

@@ -446,6 +446,8 @@ def end(t, where=''):
     """The frame is drawn: its faults, noted (and returned)."""
     ACTIVE[0] = False
     got = [dict(f, t=t, where=where) for f in frame_faults(FRAME)]
+    if 'posecheck' in sys.modules:                  # the poses drawn against the gallery (rule 42; posecheck.py)
+        got += [dict(f, t=t, where=where) for f in sys.modules['posecheck'].take()]
     del FRAME[:]
     FOUND.extend(got)
     return got
@@ -488,8 +490,9 @@ def summary(film, found=None, fps=12):
                 continue                            # (checked on every frame) too brief to be seen
             a, b = r[0]['t'], r[-1]['t']
             span = f'{a:.2f} s' if len(r) == 1 else f'{a:.2f}-{b:.2f} s, {len(r)} frames checked'
-            out.append((a, f"HANDS: {r[0]['where'] or f'{a:.2f} s'}: {who}'s {'left' if side == 'L' else 'right'} arm: "
-                           f"{r[0]['text']} ({span}; rule 41)", r[0]))
+            part = {'L': 'left arm', 'R': 'right arm'}.get(side, 'pose')
+            out.append((a, f"{'POSE' if 'rule' in r[0] else 'HANDS'}: {r[0]['where'] or f'{a:.2f} s'}: "
+                           f"{who}'s {part}: {r[0]['text']} ({span}; rule {r[0].get('rule', 41)})", r[0]))
     out.sort(key=lambda x: x[0])
     return out
 

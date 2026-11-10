@@ -220,6 +220,18 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
     ('cup in hand', _kit('mug'), 'kit, fixed Job G'),
     ('cup, sipping', _kit('mug_sip'), 'kit, fixed Job G'),
     ('phone at the ear', _kit('phone_ear'), 'kit, redone Job G'),
+    ('hands on hips', _kit('hips'), 'kit, tested Job G chat 4'),
+    ('hands in pockets', _kit('pockets'), 'kit, tested Job G chat 4'),
+    ('hands behind the back', _kit('behind_back'), 'kit, tested Job G chat 4'),
+    ('leaning on something', _kit('lean_on'), 'kit, tested Job G chat 4'),
+    ('slumped', _kit('slumped'), 'kit, tested Job G chat 4'),
+    ('palm open', _kit('palm_open'), 'kit, tested Job G chat 4'),
+    ('shrug', _kit('shrug'), 'kit, tested Job G chat 4'),
+    ('facepalm', _kit('facepalm'), 'kit, tested Job G chat 4'),
+    ('microphone', _kit('mic'), 'kit, tested Job G chat 4'),
+    ('pen in hand', _kit('pen'), 'kit, tested Job G chat 4'),
+    ('bag in hand', _kit('bag'), 'kit, tested Job G chat 4'),
+    ('fists up (guard)', _kit('guard'), 'kit, tested Job G chat 4'),
 ]
 
 
@@ -232,6 +244,13 @@ AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses 
                            'three-quarter back': 'the near arm points away from us: the point does not read',
                            'mirrored': 'the far arm points away from us: the point does not read'},
     'hands on a gun': {'behind': 'both hands hidden by his back: show him three-quarter back instead'},
+    'hands on hips': {'three-quarter back': 'the far hand is behind his body'},
+    'slumped': {'behind': 'the far hand hangs in front of him, hidden by his back'},
+    'palm open': {'behind': 'the open palm is in front of him, hidden by his back'},
+    'facepalm': {'three-quarter back': 'the hand is on his face, hidden by his head',
+                 'behind': 'the hand is on his face, hidden by his head'},
+    'pen in hand': {'behind': 'the pen hand is in front of him, hidden by his back'},
+    'bag in hand': {'three-quarter back': 'the bag hand is beyond his body', 'behind': 'the bag hand is beyond his body'},
     'hands on table': {'three-quarter back': 'the far hand is on the table beyond his body: seen from the front only',
                        'behind': 'both hands are on the table beyond his body: seen from the front only'},
 }

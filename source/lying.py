@@ -155,7 +155,7 @@ def _build(pelvis, waist, neck, X, hup, hfwd, arms, legs, sp, floor=0.0, shrug=N
 def _head_down(k, sp, floor=0.0):
     """The head let down onto the floor (or up off it): turned about the neck until it just rests on it."""
     def gap(kk):
-        return [q for q in parts(kk, sp) if q.name == 'head'][0].low(_v(0, 1, 0), _v(0, floor, 0))
+        return min(q.low(_v(0, 1, 0), _v(0, floor, 0)) for q in parts(kk, sp) if q.name in ('head', 'hair'))
     up = _unit(k['neck'] - k['pelvis'])
     for _ in range(60):
         g = gap(k)
@@ -176,8 +176,8 @@ def face_down(sp):
     flip = 1
     X = (0, 0, -flip)                                    # the body's right side: front down means fwd = -y
     turn = (0, 0, -flip)                                 # face turned towards its right, left cheek down
-    arms = {'R': ((1.02, 0.066, -flip * 0.34), (0.2, 1.0, -flip * 0.6)),
-            'L': ((0.12, 0.066, flip * 0.34), (0.3, 1.0, flip * 0.8))}
+    arms = {'R': ((1.02, 0.066, -flip * 0.34), (0.0, 0.0, -flip * 1.0)),    # elbows out along the floor, never
+            'L': ((0.12, 0.066, flip * 0.34), (-0.3, 0.0, flip * 1.0))}     # up in the air (Elder Swindon 6)
     legs = {'R': ((-0.665, 0.042, -flip * 0.13), (0.0, 0.2, -flip * 1.0), (-1, -0.12, 0), (0, -1, 0)),
             'L': ((-0.48, 0.042, flip * 0.4), (0.15, 0.0, flip * 1.0), (-0.9, -0.12, flip * 0.3), (0, -1, 0))}
     return _head_down(_build((0, 0.105, 0), (0.22, 0.11, 0), (0.66, 0.12, 0), X, (1, 0, 0), turn, arms, legs, sp,
@@ -189,8 +189,8 @@ def on_back(sp):
     foot flat, the other leg out straight on its heel, toes up."""
     flip = 1
     X = (0, 0, flip)
-    arms = {'R': ((0.82, 0.066, flip * 0.56), (0.3, 1.0, flip * 0.2)),
-            'L': ((0.22, 0.066, -flip * 0.52), (-0.2, 1.0, -flip * 0.3))}
+    arms = {'R': ((0.82, 0.066, flip * 0.56), (0.0, 0.0, flip * 1.0)),      # elbows out along the floor
+            'L': ((0.22, 0.066, -flip * 0.52), (-0.3, 0.0, -flip * 1.0))}
     legs = {'R': ((-0.4, 0.06, flip * 0.16), (-0.3, 1.0, flip * 0.3), (-1, 0, 0.1), (0, 1, 0)),
             'L': ((-0.68, 0.07, -flip * 0.17), (0.0, 1.0, -flip * 0.1), (-0.25, 0.9, -flip * 0.35), (1, 0, 0))}
     return _head_down(_build((0, 0.105, 0), (0.22, 0.11, 0), (0.66, 0.12, 0), X, (1, 0, 0),
@@ -203,7 +203,7 @@ def curled(sp):
     X = (0, -1, 0)                                       # the right side down: fwd = +z
     f = 1
     arms = {'R': ((0.86, 0.066, f * 0.3), (0.0, 0.2, f * 1.0)),
-            'L': ((0.42, 0.066, f * 0.42), (0.2, 1.0, f * 0.3))}
+            'L': ((0.55, 0.066, f * 0.26), (0.5, -1.0, f * 0.3))}   # limp: the elbow drops in front, not up
     legs = {'R': ((-0.16, 0.055, f * 0.5), (0.3, 0.0, f * 1.0), (-0.9, 0, f * 0.3), (0, 0, -f)),
             'L': ((-0.02, 0.2, f * 0.5), (0.4, 0.4, f * 1.0), (-0.9, -0.2, f * 0.4), (0, 0.3, -f))}
     hc = 0.82 * sp.get('shoulders', 150) * M            # the chest's half width: what it lies on
@@ -226,11 +226,27 @@ def slump(sp):
                   (0.8, -0.55, -flip * 0.1), arms, legs, sp)
 
 
-POSES = {'face_down': face_down, 'back': on_back, 'side': curled, 'slump': slump}
+def ball(sp):
+    """Curled into a ball on the right side, guarding the head (Ad-Vanced Notice, the man on the ground, Sam's note
+    58): knees drawn up to the chest, a hand each side of the head: the upper arm over the top of it, the lower one
+    along the floor round the face; the head tucked down between them. The arms are held on purpose (HELD_ARMS)."""
+    X = (0, -1, 0)
+    hc = 0.82 * sp.get('shoulders', 150) * M
+    arms = {'R': ((0.74, 0.07, 0.2), (0.0, 0.3, 1.0)),
+            'L': ((0.78, 0.3, 0.06), (0.1, 1.0, 0.5))}
+    legs = {'R': ((-0.02, 0.055, 0.42), (0.4, 0.0, 1.0), (-0.9, 0, 0.3), (0, 0, -1)),
+            'L': ((0.06, 0.2, 0.44), (0.5, 0.4, 1.0), (-0.9, -0.2, 0.4), (0, 0.3, -1))}
+    k = _build((0, hc * B.HEM, 0), (0.22, hc * 0.95, 0.07), (0.58, hc, 0.1), X, (1, -0.3, 0.6),
+               (-0.1, -0.2, 1), arms, legs, sp, shrug={'R': (0.115, 0.07)})
+    return _head_down(k, sp)
+
+
+POSES = {'face_down': face_down, 'back': on_back, 'side': curled, 'slump': slump, 'ball': ball}
 RESTS = {'face_down': ['chest', 'pelvis', 'head', 'thighL', 'thighR', 'handL', 'handR', 'shoeL', 'shoeR'],
          'back': ['chest', 'pelvis', 'head', 'handL', 'handR', 'shoeL', 'shoeR'],
          'side': ['chest', 'pelvis', 'head', 'thighR', 'handL', 'handR'],
-         'slump': ['pelvis', 'handR', 'shoeL', 'shoeR']}
+         'slump': ['pelvis', 'handR', 'shoeL', 'shoeR'],
+         'ball': ['head', 'hair', 'thighR']}               # held up by the head and the hip: the trunk just clear
 WALL_RESTS = {'slump': ['chest', 'hair']}             # any one of these (long hair between the back and the wall)
 SLUMP_WALL = -0.17                                       # the wall behind a slumped body (its own frame)
 
@@ -1026,11 +1042,13 @@ def rest(k, sp, pose, surf, flip=1):
 
 def lie(sp, pose, x, z, yaw, ground=0.0, flip=1):
     """A lying pose ready to draw: built, placed at floor point (x, z) turned `yaw`, settled onto the floor (and a
-    slump's wall). Returns (Body, surfaces)."""
+    slump's wall). Returns (Body, surfaces); the Body knows its pose (`k.pose`, for body_faults)."""
     k = POSES[pose](sp)
     k = place_body(k if flip > 0 else mirror(k), x, z, yaw, ground)
     surf = surfaces_of(pose, k, ground, yaw, x, z)
-    return rest(k, sp, pose, surf, flip), surf
+    k = rest(k, sp, pose, surf, flip)
+    k.pose = pose
+    return k, surf
 
 
 def contact_faults(k, sp, pose, surf, who='someone', flip=1):
@@ -1052,6 +1070,77 @@ def contact_faults(k, sp, pose, surf, who='someone', flip=1):
             g = min((q.low(n, p0) for q in prts if q.name in want), default=None)
             if g is not None and g > 0.015:
                 out.append(f"{who} ({pose}): the {' or '.join(want)} floats {g * 100:.1f} cm off the {name}")
+    return out
+
+
+# ---- the body checks from Sam's lying notes (Job G step 4): Ad-Vanced 57-58 (both arms on one side; he needs a
+# neck), Elder Swindon 6 (the arm curled up off the ground). Geometry only: run on every lying body drawn.
+NECK_MIN = 0.02      # metres of neck showing between the head and the chest and shoulders
+HANG = 0.10          # an elbow or wrist this high over the floor with nothing under it is held up in the air
+PROP = 0.035         # resting on another part: within this of its surface
+CROSS = 0.25         # of the shoulders' screen width: past the body's middle line by more than this
+HELD_ARMS = {'ball'}  # poses whose arms are held up on purpose (Ad-Vanced's man guarding his head, Sam's note 58)
+
+
+def _out(q, p):
+    """How far point p lies outside part q (metres, near enough; < 0: inside)."""
+    if q.kind == ROUND:
+        ab = q.b - q.a
+        u = min(1.0, max(0.0, float(np.dot(p - q.a, ab) / max(np.dot(ab, ab), 1e-9))))
+        return float(np.linalg.norm(p - (q.a + ab * u))) - (q.ra + (q.rb - q.ra) * u)
+    d = p - q.a
+    s = float(np.linalg.norm((q.axes @ d) / q.radii))
+    return float(np.linalg.norm(d)) * (1.0 - 1.0 / max(s, 1e-9))
+
+
+def body_faults(k, sp, surf=None, cam=None, who='someone'):
+    """Sam's lying notes as checks, in words: (1) a neck shows (at least NECK_MIN of it outside the head, chest
+    and shoulders); (2) no arm held up in the air: an elbow or wrist more than HANG over the floor rests on some
+    other part of the body (a limp arm lies flat); (3) with a camera: each arm on its own side of the body as
+    drawn (an arm whose elbow and hand both cross the body's middle line to the other shoulder's side reads as two
+    arms coming off one shoulder). Sat up against a wall (the neck upright) only (1) and (3) apply."""
+    out = []
+    prts = parts(k, sp)
+    by = {q.name: q for q in prts}
+    trunk = [by[n] for n in ('chest', 'belly', 'shoulderL', 'shoulderR', 'head') if n in by]
+    nk = by['neck']
+    pts = [nk.a + (nk.b - nk.a) * u for u in np.linspace(0.0, 1.0, 41)]
+    shown = np.mean([all(_out(q, p) > 0 for q in trunk) for p in pts]) * float(np.linalg.norm(nk.b - nk.a))
+    if shown < NECK_MIN:
+        out.append(f'{who}: no neck shows ({shown * 100:.1f} cm; at least {NECK_MIN * 100:.0f}): the head sits on '
+                   f'the shoulders (Ad-Vanced 57: lift the head off them)')
+    if surf:
+        p0, n = surf[0][1], surf[0][2]
+    else:
+        p0, n = _v(0, min(q.low(_v(0, 1, 0), _v(0, 0, 0)) for q in prts), 0), _v(0, 1, 0)
+    upright = np.dot(_unit(k['neck'] - k['pelvis']), n) > 0.6
+    for side in 'LR':
+        own = {'arm' + side, 'forearm' + side, 'hand' + side}
+        for joint, r, what in (('el' + side, 0.05, 'elbow'), ('wr' + side, 0.044, 'hand')):
+            p = k[joint]
+            h = float(np.dot(p - p0, n)) - r
+            if upright or h <= HANG or getattr(k, 'pose', None) in HELD_ARMS:
+                continue
+            if any(_out(q, p) < r + PROP for q in prts if q.name not in own and q.name not in SOFT):
+                continue
+            out.append(f'{who}: the {"left" if side == "L" else "right"} {what} is held up {h * 100:.0f} cm off '
+                       f'the floor with nothing under it: a limp arm lies flat (Elder Swindon 6)')
+    if cam is not None:
+        P = {nm: np.asarray(cam.project(tuple(k[nm]))[0], float) for nm in POINTS}
+        ax = _unit(P['neck'] - P['pelvis'])
+        nrm = np.array([-ax[1], ax[0]])
+        W = cam.focal / max(cam.NEAR, cam.depth(tuple(k['neck']))) * 2 * (sp.get('shoulders', 150) - 14) * M
+
+        def off(nm):
+            return float(np.dot(P[nm] - P['pelvis'], nrm))
+        for side in 'LR':
+            s = off('sh' + side)
+            if abs(s) < CROSS * W:                      # the shoulders edge on: no sides to tell
+                continue
+            sg = math.copysign(1.0, s)
+            if off('el' + side) * sg < -CROSS * W and off('wr' + side) * sg < -CROSS * W:
+                out.append(f'{who}: the {"left" if side == "L" else "right"} arm crosses to the other shoulder\'s '
+                           f'side of the body: both arms read as one side (Ad-Vanced 57-58: a hand each side)')
     return out
 
 
@@ -1293,6 +1382,28 @@ def sheet(out_path, cell=430):
     return faults
 
 
+LVIEWS = [(f'{h}, {d}', ang, dist, yaw) for h, ang, dist in (('eye level', None, 6.2), ('30 down', 30, 4.6),
+                                                              ('60 down', 60, 4.3))
+          for d, yaw in (('head right', 0.0), ('head away', 90.0), ('head left', 180.0), ('head to us', 270.0))]
+GALLERY_AVOID = {}   # pose: {view: why} where body_faults fails on purpose (none since Job G chat 4)
+
+
+def gallery():
+    """Every lying pose from every view (LVIEWS: three camera heights, the head four ways), each person, both
+    ways round: {pose: {view: [body_faults]}} (the pose gallery's lying rows)."""
+    out = {}
+    for pose in POSES:
+        out[pose] = {}
+        for label, ang, dist, yaw in LVIEWS:
+            fs = []
+            for sp in _cast():
+                for fl in (1, -1):
+                    k, surf = lie(sp, pose, 0.0, 0.0, yaw, flip=fl)
+                    fs += body_faults(k, sp, surf, _cam_for(ang, dist, (0.0, 0.2, 0.0)), sp['name'])
+            out[pose][label] = fs
+    return out
+
+
 def check():
     """Every pose for every test person: contacts; and the fall's hand-over: the body's centre and every joint
     move smoothly across the switch from the flat drawing to the 3D body (the pop-in audit's jump test)."""
@@ -1303,6 +1414,10 @@ def check():
             for yaw, fl in ((0.0, 1), (90.0, -1), (215.0, 1), (300.0, -1)):
                 k, surf = lie(sp, pose, 0.3, -0.2, yaw, flip=fl)
                 faults += contact_faults(k, sp, pose, surf, sp['name'], fl)
+    for pose, views in gallery().items():                  # Sam's lying notes, every view (body_faults)
+        for label, fs in views.items():
+            faults += [f'{pose}, {label}: {f}' for f in fs if pose not in GALLERY_AVOID or
+                       label not in GALLERY_AVOID[pose]]
     import audit
     sp = cast[0]
     t0, fps = 1.0, 24
