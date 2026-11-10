@@ -274,3 +274,29 @@
   `handcheck` 'prop hidden' (`V.PROBE['skip_held']`, `PROP_SHOWN`); `critique.library`. I: `lying_flat._leg` (front:
   whole leg after trunk, `keep` past `sc.hem`), `_head` 'three' to 'front'; goatee dark; `no_shine` in burnham too.
 
+
+
+## Where things stand (archived 11 Nov) (project, 10 Nov; no film in progress)
+
+- **Rules that bite next:** 62 (subtitle pieces now timed against the take: Terfwarts' fallback timing is 2.3 s off on
+  line 8), 50 (every film needs a `FAMOUS` list), 89.
+- **Done: Job L FINISHED (10 Nov, Opus, about 1.3% of the week, cap 1.5%).** Five by-hand rules now checked in
+  pre-flight: 26 every swear has a bleep; 62 each subtitle piece within 0.3 s of its first word (0.6 s inside a phrase);
+  72 a standing person's arm dropping back to rest in the last 0.4 s before a cut; 50 each FAMOUS face 240 px once;
+  37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns
+  and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback puts pieces up to
+  2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
+- **Job I round 3 done (chat 3):** 12 knee falls out to the side (it pointed at the camera: no bend showed), 14 neck
+  over an arm in front, 16 near legs from under the hem; turned head back (face-on one stared at us) with his brows.
+  **Next, Job I (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round3-closeup.jpg`
+  and his pick on question 1 (a proper turned face: Opus, high effort). Open: slumped shirt a box; back hair a blindfold.
+- **Next, Job K build 2 (Opus, medium effort, about 0.5%):** "Job K build 2: read notes/job-k-ai-tells.md 'Build chat
+  1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 (Sam: Y, 11 Nov) as on the driver sheet, about 0.3% more.
+- **Needs Sam:** I: the round 3 sheets and question 1
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
+- **Open rule requests:** none.
+- **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check` (SWEARS_OK); `kitchecks.cut_rests`
+  (CUT_RESTS_OK; seated left out), `kitchecks.faces` (FAMOUS = fnmatch patterns, '*vance*'; refuses only on 10 Nov
+  template films), `ledger.kept`. I: `lying_flat._leg` (`keep` past `sc.hem`), `_neck(foot=-6)`
+  after a front arm, `lying.on_back` R knee out, views 'three' brows fierce at anger 3+. K: `ed.HARD` off.
+

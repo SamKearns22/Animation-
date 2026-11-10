@@ -160,7 +160,30 @@ def standing(sp):
         el = _add(sh, _mul(up, F.UPPER * 0.98))
         j['el' + side], j['wr' + side] = el, _add(el, _mul(fo, F.FORE * 0.98))
         j['hand'][side] = 'fist'
+    w = sp.get('weight_leg')
+    if w in ('L', 'R'):
+        _weight_on(j, w)
     return j
+
+
+def _weight_on(j, w):
+    """Weight on one leg, for invented people (Job K 5, Sam: Y, 11 Nov; sp['weight_leg'] 'L' or 'R', the joints'
+    side): that hip up and the hips pushed over its foot; the other knee soft, its foot out a little and forward; the
+    shoulders tip the other way; the free side's arm a touch more bent."""
+    sg = 1 if w == 'R' else -1
+    o = 'L' if w == 'R' else 'R'
+    for side, dy in ((w, -14), (o, 14)):
+        x, y, z = j['hip' + side]
+        j['hip' + side] = (x + sg * 18, y + dy, z)
+    x, y, z = j['foot' + w]
+    j['foot' + w] = (x - sg * 4, y, z)
+    x, y, z = j['foot' + o]
+    j['foot' + o] = (x - sg * 34, y, z + 26)
+    for side, dy in ((o, -9), (w, 9)):
+        for k in ('sh', 'el', 'wr'):
+            x, y, z = j[k + side]
+            j[k + side] = (x, y + dy, z)
+    set_arm(j, o, 0.06, 0.42, 0.16)
 
 
 def set_arm(j, side, swing, bend, out=0.12):
@@ -468,8 +491,9 @@ def torso_view(img, p, sp, view, seated=False):
         o = sp.get('v_at', 0.32 * sw)                     # where the shirt's V sits (a person may set it)
         if not sp.get('neck_off'):
             p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
-        p.poly([(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom), (sw * 0.78 * B.HEM, bottom),
-                (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)], jc, INK, 2.6)
+        body = [(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom),
+                (sw * 0.78 * B.HEM, bottom), (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)]
+        p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
             if tie:
@@ -487,7 +511,8 @@ def torso_view(img, p, sp, view, seated=False):
         else:
             p.line(oval(o - 4, -2, 40, 18, 20, 0.2, math.pi - 0.2), INK, 2.4)
         p.line([(-sw * 0.6, 60), (-sw * 0.72, bottom - 10)], jd, 2.0)
-        soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.86 * B.HEM, bottom)], (0, 0, 0), 0.25, 10)
+        soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.86 * B.HEM, bottom)], (0, 0, 0), 0.25, 10,
+             clip=body)
         if sp.get('rosette'):
             p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 2.4)
             p.ell(o - 70, 120, 8, 8, (248, 248, 240), INK, 1.4)
@@ -500,8 +525,9 @@ def torso_view(img, p, sp, view, seated=False):
         d = 0.6 * sw
         if not sp.get('neck_off'):
             p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
-        p.poly(curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
-                      (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3), jc, INK, 2.6)
+        body = curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
+                      (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3)
+        p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(4, -14), (36, -6), (34, 24), (16, 12)], sc, INK, 2.0)
             if tie:
@@ -509,7 +535,7 @@ def torso_view(img, p, sp, view, seated=False):
             p.line([(34, 0), (d * 0.86, 120), (d * 1.0, 290)], jd, 2.2)
         elif out == 'dress':
             p.poly([(10, -10), (40, -4), (36, 40), (14, 24)], skin, None)
-        soft(img, p.cam, [(-d * 1.02, 60), (-d * 0.5, 60), (-d * 0.5, bottom), (-d * 0.92, bottom)], (0, 0, 0), 0.25, 10)
+        soft(img, p.cam, [(-d * 1.02, 60), (-d * 0.5, 60), (-d * 0.5, bottom), (-d * 0.92, bottom)], (0, 0, 0), 0.25, 10, clip=body)
         if sp.get('rosette'):
             p.ell(d * 0.7, 120, 16, 20, (40, 156, 72), INK, 2.4)
         if sp.get('lanyard'):
@@ -521,14 +547,16 @@ def torso_view(img, p, sp, view, seated=False):
         nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
         if not sp.get('neck_off'):
             p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # under the head
-        p.poly([(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
-                (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)], jc, INK, 2.6)
+        body = [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
+                (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
+        p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)            # the collar round the neck
             p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
-        soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10)
+        soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10,
+             clip=body)
 
 
 # ------------------------------------------------------------------------------------------------ head views

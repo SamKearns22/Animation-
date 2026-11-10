@@ -165,6 +165,23 @@ def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
         p.poly(curve(f.pts([(sgn * u, v) for u, v in uv]), 3), c, None)
 
 
+LOPSIDED = dict(brow=0.032, mouth=3.2, hair=0.075)   # Job K proposal 5 (Sam: Y, 11 Nov), the driver sheet's amounts
+
+
+def lop(sp):
+    """A face a touch uneven, for INVENTED people only (a likeness head stays as measured): sp['lopsided'] True for
+    LOPSIDED, or a dict of its keys. brow: our left brow that much higher; mouth: our right corner lifted (smile
+    units); hair: the side hair on our right reaching that much higher (the head's own drawing reads it)."""
+    v = sp.get('lopsided')
+    return dict(LOPSIDED) if v is True else dict(v or {})
+
+
+def lop_raise(sp, r):
+    """brows()' raise_ for this person: a pair (our left, our right) when lopsided."""
+    b = lop(sp).get('brow', 0.0)
+    return (r + b, r - 0.004) if b else r
+
+
 def nose(p, f, L, skin):
     """The bridge as one line down one side, the tip and the nostril wings at the measured width."""
     nw, y = L['nw'], L['nose_y']
@@ -184,17 +201,18 @@ def lips(p, f, L, sp, lip_c, fx_my):
     fx, my = fx_my
     mw, l0, l13, l17 = L['mw'], L['lip0'], L['lip13'], L['lip17']
     smile = sp.get('smile', 0.0)
+    sr = smile + lop(sp).get('mouth', 0.0)              # our right corner (lifted on a lopsided face)
 
     def rest():
         hw = mw / 2
         top = curve(f.pts([(-hw, l13 - 0.004 * smile), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.012), (hw * 0.4, l0 + 0.006),
-                           (hw, l13 - 0.004 * smile), (0.0, l13 + 0.004)]), 3)
-        bot = curve(f.pts([(-hw, l13 - 0.004 * smile), (0.0, l13 + 0.004), (hw, l13 - 0.004 * smile), (hw * 0.5, l17 - 0.01),
+                           (hw, l13 - 0.004 * sr), (0.0, l13 + 0.004)]), 3)
+        bot = curve(f.pts([(-hw, l13 - 0.004 * smile), (0.0, l13 + 0.004), (hw, l13 - 0.004 * sr), (hw * 0.5, l17 - 0.01),
                            (0.0, l17), (-hw * 0.5, l17 - 0.01)]), 3)
         p.poly(top, dk(lip_c, 0.86), INK, 1.5)
         p.poly(bot, lip_c, INK, 1.5)
         p.line(curve(f.pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.004),
-                            (hw, l13 - 0.006 * smile)]), 3), INK, 2.2)
+                            (hw, l13 - 0.006 * sr)]), 3), INK, 2.2)
     TC.talk_or(p, dict(sp, lips=True, lip_c=lip_c), 0.0, fx, my, rest)
 
 

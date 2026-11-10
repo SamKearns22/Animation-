@@ -148,14 +148,15 @@ def mouth_shape(t):
     return [2, 1, 3, 1, 2, 0][int(p * 11) % 6]
 
 
-HARD = False  # Job K (Sam, 10 Nov): shading as one hard-edged shape, never an airbrushed band (an "AI" tell). OFF until
-#               Job K build 2 keeps the hard shapes inside the body (kittests pose_gallery: they darken a hand seen
-#               from behind in 3 poses; the blur hid it); then True, and a parody quoting the airbrush sets it False
+HARD = True   # Job K (Sam, 10 Nov): shading as one hard-edged shape, never an airbrushed band (an "AI" tell); kept
+#               inside the shape it shades by soft(clip=); a parody quoting the airbrush sets it False
 
 
-def soft(img, cam, pts, colr, alpha, blur=6):
+def soft(img, cam, pts, colr, alpha, blur=6, clip=None):
     """A painted shadow or highlight: one flat, hard-edged shape (ed.HARD); blurred only when ed.HARD is False, on a
-    small layer round the shape (the same picture as blurring the whole frame, many times faster)."""
+    small layer round the shape (the same picture as blurring the whole frame, many times faster). clip: the outline
+    of the shape it shades (same units as pts); the shading stays inside it (Job K build 2: a hard band past a
+    torso's edge darkened a hand seen from behind)."""
     if HARD:
         blur = 0
     q = [cam.P(*p) for p in pts]
@@ -171,7 +172,41 @@ def soft(img, cam, pts, colr, alpha, blur=6):
     ImageDraw.Draw(lay).polygon([(x - x0, y - y0) for x, y in q], fill=colr + (int(255 * alpha),))
     if blur:
         lay = lay.filter(ImageFilter.GaussianBlur(r))
+    if clip is not None:
+        m = Image.new('L', lay.size, 0)
+        ImageDraw.Draw(m).polygon([(x - x0, y - y0) for x, y in (cam.P(*c) for c in clip)], fill=255)
+        a = lay.getchannel('A')
+        lay.putalpha(Image.composite(a, m, m))
     img.alpha_composite(lay, (x0, y0))
+
+
+def bent_check(pen, poly, step, col, width, y0, y1, a=1.1, sag=8.0, split=None, pad=None):
+    """A check (or stripes) printed on cloth round a body, not flat on the screen (Job K, proposal 4: a flat grid
+    reads as a pasted texture). The upright bands are spaced evenly round a cylinder as wide as `poly`, so they bunch
+    and thin towards its edges (x = cx + hw*sin(a*v)/sin(a)); the cross bands sag `sag` units in the middle. split:
+    an x (a shirt's placket) right of which the upright bands sit half a step over, as two fronts buttoned. The
+    bands run past the cloth; the caller keeps only what lies on the cloth."""
+    xs = [q[0] for q in poly]
+    cx, hw = (min(xs) + max(xs)) / 2, (max(xs) - min(xs)) / 2 or 1.0
+    pad = step if pad is None else pad
+    k = math.sin(a) / a                                  # v per unit at the middle
+    dv = step / hw * k
+    for half in ((None,) if split is None else ('L', 'R')):
+        shift = 0.5 if half == 'R' else 0.0
+        n = int(1 / dv) + 2
+        for i in range(-n, n + 1):
+            v = (i + shift) * dv
+            if abs(v) > 1.0:
+                continue
+            x = cx + hw * math.sin(a * v) / math.sin(a)
+            if half == 'L' and x > split + width or half == 'R' and x < split - width:
+                continue
+            w = max(1.0, width * math.cos(a * v))
+            pen.line([(x, y0 - pad), (x, y1 + pad)], col, w)
+    xx = np.linspace(cx - hw - pad, cx + hw + pad, 24)
+    yy = sag * np.clip(1 - ((xx - cx) / hw) ** 2, 0, 1)
+    for y in range(int(y0) // step * step - step, int(y1) + step, step):
+        pen.line([(float(x), y + float(d)) for x, d in zip(xx, yy)], col, width)
 
 
 def curve(pts, n=6):

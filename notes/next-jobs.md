@@ -1,28 +1,22 @@
-# Where things stand (project, 10 Nov; no film in progress)
+# Where things stand (project, 11 Nov; no film in progress)
 
-- **Rules that bite next:** 62 (subtitle pieces now timed against the take: Terfwarts' fallback timing is 2.3 s off on
-  line 8), 50 (every film needs a `FAMOUS` list), 89.
-- **Done: Job L FINISHED (10 Nov, Opus, about 1.3% of the week, cap 1.5%).** Five by-hand rules now checked in
-  pre-flight: 26 every swear has a bleep; 62 each subtitle piece within 0.3 s of its first word (0.6 s inside a phrase);
-  72 a standing person's arm dropping back to rest in the last 0.4 s before a cut; 50 each FAMOUS face 240 px once;
-  37 sounds and references not on GitHub listed at every `ledger.py log`. Five kittests pass; rulebook check columns
-  and the critique checklist's rule 72 line put right. Found: the subtitle code's syllable fallback puts pieces up to
-  2.3 s early (Terfwarts 8, 4, 5): the next film's pre-flight flags it.
-- **Job I bodies DONE (chat 3, rounds 2-4, Opus medium):** Sam: "seems good". 12 knee falls out to the side; 14 neck
-  over an arm in front; near legs one piece from the end of the shirt (11, 16: the hem line was lost side on).
+- **Rules that bite next:** 62 (subtitle pieces timed against the take: Terfwarts' fallback is 2.3 s off on line 8),
+  50 (every film needs a `FAMOUS` list), 89.
+- **Done: Job K FINISHED (build 2, 11 Nov, Opus medium, about 0.6%).** Hard-edged shading now ON, kept inside the
+  body; the check shirt bends round the body (sheet `review/job-k/shirt-bent.jpg`); invented people a touch uneven and
+  standing on one leg, the driver first (sheet `review/job-k/driver-lopsided-built.jpg`). All kittests pass. Found: the
+  old blur had hidden a real fault (gun hands from three-quarter back: the far hand hidden); that view is now avoided.
+- **Job I bodies DONE (chat 3, rounds 2-4, Opus medium):** Sam: "seems good" (near legs from the end of the shirt).
 - **Next, Job I faces (Opus, high effort; chat opened):** the driver's turned and lying faces drawn from his own
-  face-on design, as Vance's were in Ad-Vanced note 44 (`notes/archive/ad-vanced-notice.md` "Turned heads";
-  `ad_vanced_notice_cast.py turn`). Sam: lying 12, 15 must be turned, not straight on; reuse what is built.
-  Sheet `notes/sheets/job-i-driver-sheet-numbered.jpg`. Open after: slumped shirt a box; back hair a blindfold.
-- **Next, Job K build 2 (Opus, medium effort, about 0.5%):** "Job K build 2: read notes/job-k-ai-tells.md 'Build chat
-  1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 if Sam says Y.
-- **Needs Sam:** I: the faces sheet when the faces chat sends it; K: Y/N on proposal 5 (the driver sheet is sent).
-- **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
+  face-on design, as Vance's were (Ad-Vanced note 44, `notes/archive/ad-vanced-notice.md` "Turned heads";
+  `ad_vanced_notice_cast.py turn`). Lying 12, 15 turned, not straight on. Open after: slumped shirt; back hair.
+- **Needs Sam:** I: the faces sheet when that chat sends it. K: a look at the two sheets (nothing waits on it).
+- **Read:** the pack in `guides/job-packs.md` ("A tool job" for tools; the film's type for the next film).
 - **Open rule requests:** none.
-- **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check` (SWEARS_OK); `kitchecks.cut_rests`
-  (CUT_RESTS_OK; seated left out), `kitchecks.faces` (FAMOUS = fnmatch patterns, '*vance*'; refuses only on 10 Nov
-  template films), `ledger.kept`. I: `lying_flat._leg` (`keep` past `sc.hem`), `_neck(foot=-6)`
-  after a front arm, `lying.on_back` R knee out, views 'three' brows fierce at anger 3+. K: `ed.HARD` off.
+- **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check`, `kitchecks.cut_rests`/`faces`,
+  `ledger.kept`. I: `lying_flat._leg`, `_neck(foot=-6)`, `lying.on_back` R knee out, views 'three' brows. K:
+  `ed.HARD` on, `ed.soft(clip=)`, `ed.bent_check`, `ad_vanced_notice_cast.BENT`, `patriots4_cast.lop`,
+  `views._weight_on` (`sp['weight_leg']`), kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
