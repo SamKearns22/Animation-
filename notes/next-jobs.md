@@ -24,6 +24,10 @@
   For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
   trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
   man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.
+- **Job K, the "AI ick" review (done 10 Nov overnight, Opus high, about 1.5% of 2%):** report, sheet and clip in
+  `notes/job-k-ai-tells.md`; the test bench `source/ai_tells_lab.py` (changes no film or kit). Nothing in the kit or
+  rulebook changed. **Needs Sam:** Y/N on proposals 1-8 there (my picks: 1-7 Y, 8 N). **Next for K:** on his
+  numbers, a build plan and estimate (rule 86), Opus high. Open rule requests: none.
 - **Needs Sam:** nothing (10 Nov: Y to Job I and to merging rules 41, 42, 81: written). Was: 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
 - **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: rules 41, 42, 81 merged into 41 (Sam: Y, 10 Nov; written).
