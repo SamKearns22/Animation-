@@ -8,10 +8,14 @@
   file's Job H section). Job G not touched.
 - **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand
   and Build plan H." About 1.5% (Sam, 10 Nov: Job H may go to 5% of a week; 1.5% spent). Sam's overnight chat opens it (chats it starts can't).
-- **Job G:** chat 4 (steps 4-6) is running alongside, started overnight; its own handover replaces this line.
-- **Needs Sam:** nothing (10 Nov: Y to the helper always on Opus and to requests 1-3, now written).
+- **Job G (chat 4 done, 10 Nov, steps 4-6, Opus high, about 1.3%, stopped on amber):** lying checks: a neck shows,
+  no arm held up in the air, each arm on its own side (Sam's lying notes); the kit's lying arms laid flat (elbows bent up
+  into the air: Elder Swindon 6's cause); pre-flight now stops a pose seen from an "avoid" view or with no gallery row,
+  and checks every lying body; 12 everyday kit poses added to the gallery (hands on hips, pockets, shrug...). Rules
+  that bite: 42, 41. **Next for G:** nothing; Job G is finished once Sam numbers the step 6 proposal.
+- **Needs Sam:** 1. Merge rules 41, 42 and 81 into one rule (wording in the Job G section, "Step 6 proposal")? Y/N.
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
-- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6 (41, 42, 81) to come.
+- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6: merge 41, 42, 81 (Needs Sam 1).
 - **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
   `source/data/critique/` (git-ignored); results into the ledger's round files. Job G's own notes: Job G section.
 
@@ -28,9 +32,29 @@ Found first: the gallery's "OK" meant only "a hand is visible"; it passed faults
 - **Chat 2 (about 1.5-2%), in order:** (1) DONE 10 Nov (chat 2): the shoulder-seam check, automatic, and the gap's
   cause fixed (a leftover body); (2) DONE 10 Nov (chat 3): phone at the ear redone, in the gallery; (3) DONE 10 Nov
   (chat 3): the on-picture hand-meets-prop check; phone reading from three-quarter back fixed (now hidden: avoid);
-  sheet labels; (4) lying: gallery rows and checks (both arms on one
-  side, arm curled, neck); (5) pre-flight flags a pose not from the gallery or seen from an AVOID view; new poses
-  priced at planning; (6) rules 41, 42 and 81 merged, by-hand parts automatic (propose wording to Sam first).
+  sheet labels; (4) DONE 10 Nov (chat 4): lying: gallery rows and checks (both arms on one
+  side, arm curled, neck); (5) DONE (chat 4) pre-flight flags a pose not from the gallery or seen from an AVOID view; new poses
+  priced at planning; (6) PROPOSED (chat 4, below) rules 41, 42 and 81 merged, by-hand parts automatic (propose wording to Sam first).
+- **Chat 4 (10 Nov):** `lying.body_faults` (neck shown 2 cm+, elbow or hand over 10 cm up with nothing under it, an
+  arm crossing to the other shoulder's side on the picture); `lying.gallery` (12 views x 3 people x both ways) in
+  `lying.py check`; kit arms laid flat (face down, on the back, curled), `ball` (Ad-Vanced's guard) in the kit,
+  `_head_down` rests on the hair too (P1's hair was 1 cm into the floor); `posecheck.py` (wraps the named pose calls,
+  views.person and lying.draw; its faults ride on handcheck's frames, "POSE:" lines); kittest `lying_and_pose_checks`.
+  New gallery rows passed the automatic check only (not looked at by eye). Still untested kit poses (a film using one
+  is stopped): chop, heart, paper, head in hands (real faults in front views).
+- **Step 6 proposal (for Sam's numbers; NOT written in the rulebook):** replace rows 41, 42 and 81 with one row 41
+  (the rulebook gets two rows shorter):
+  "41 | Bodies and hands (Sam, 4-10 Nov). Poses come from the tested gallery (`guides/pose-gallery.md`) and are never
+  shown from a view its row says to avoid; a new pose is tested from every view first (standing 6, seated 5, lying 12)
+  and its build priced at planning. Every arm ends in a visible hand, every frame, every view; a point shows one
+  finger out along the forearm. Arms and body are one piece: one outline from the collar over the shoulder and down
+  the arm, no line, cap, notch or step at the join (an armpit crease only when the arm is lifted). Standing at rest
+  the legs are straight and the elbows bend a touch outward (`references/figure-rig/`). Lying, a neck shows, a limp
+  arm lies flat, and each arm stays on its own side. Every cast sheet draws the arms exactly as the film does. |
+  `handcheck.py` every frame (hands, points, hands meeting props, the shoulder seam); `posecheck.py` in pre-flight
+  (avoid views, poses with no gallery row, lying bodies); `posegallery.py`, `sitting.py audit`, `lying.py check`;
+  `kittests.py` (gallery, point, legs and elbows, seam, held props, lying); by hand: the look on the check sheet."
+  This also puts right 81's old check column ("no automatic seam test yet": there is one since chat 2).
 - Not done in chat 1, on purpose: old films' own finger copies are unchanged; the kit's cup and phone (moves.py, also
   used by duel.py) now go through `grips.held`; `Carry` is a tool and a test, not yet wired into any film.
 - **For chat 4 (from the 10 Nov handover):** `moves.phone_at_ear` (3D slab, `V._hull`); `grips.hidden_by` adds depth tests (head: beyond 0.25 hw;
