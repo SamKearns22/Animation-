@@ -16,10 +16,10 @@ Read only the section you need (`grep -n '^## ' story/status.md`). Finished film
 ## Films
 Elder Scrolls: Swindon: FINAL sent 9 Nov (36.6 s, 17.9 MB; Sam skipped animatic 6). Waiting for his notes or posting.
 Job H FINISHED 10 Nov (overnight, Sam's "just go"): the critique checklist (37 lines from Sam's past notes) and `source/critique.py`, the fresh-eye critique every film now runs before an animatic (pre-flight refuses without it); calibrated on Elder Swindon.
-Job G chat 4 done 10 Nov: lying checks and the pre-flight pose check built; Job G now waits only for Sam's Y/N on merging rules 41, 42, 81.
+Job J done 10 Nov (overnight, about 1.1%): Job G finished (hidden props flagged); pre-flight warns on rules 8, 61, 74; reading packs drafted; 8 proposals wait for Sam (`notes/job-j-proposals.md`).
 Job I round 1 of Sam's notes done 10 Nov: legs one piece, smaller heads, no lying shadows, face-up-away flagged; sheet sent.
 Job K done 10 Nov (overnight): the 'AI ick' review; 8 proposals wait for Sam's Y/N (`notes/job-k-ai-tells.md`).
-Next: Sam's Y/N on Job K's proposals; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
+Next: Sam's numbers on Job J's 8 proposals; Job K's build; the next film is the critique's first real trial. Handover: notes/next-jobs.md "Where things stand".
 - **Next jobs (handover in `notes/next-jobs.md`):** (1) sitting-animation kit: CLOSED 9 Nov (Sam: finished; questions 9-10 kept as built); (2) forearm-and-elbow check for rule 78: built 8 Nov (`kitchecks.rests`; films list resting arms in `RESTS`). Rules 74, 78, 79 written 7 Nov; the touch check now says COULD NOT TEST.
 - **Ad-Vanced Notice (9 Nov): FINAL sent and POSTED** (`animations/ad-vanced-notice-vertical.mp4`, 47 s, 8.1 MB). New ending (the man begs, "Ew. God, no."), street scene, line 9 outrage. Notes: `notes/ad-vanced-notice.md`.
 - **Islamocommunism (5 Nov): FINAL sent** (`animations/islamocommunism-vertical.mp4`, 73 s, 7.8 MB). Week 100%. Open rule requests in `notes/archive/islamocommunism.md`.
