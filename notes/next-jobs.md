@@ -1,31 +1,24 @@
 # Where things stand (project, 11 Nov; no film in progress)
 
-- **Rules that bite next:** 62 (subtitle pieces timed against the take: Terfwarts' fallback is 2.3 s off on line 8),
-  50 (every film needs a `FAMOUS` list), 89.
-- **Done: Job K FINISHED (build 2, 11 Nov, Opus medium, about 0.6%).** Hard-edged shading now ON, kept inside the
-  body; the check shirt bends round the body (sheet `review/job-k/shirt-bent.jpg`); invented people a touch uneven (the
-  weight-on-one-leg stand removed: Sam, awkward), the driver first (sheet `review/job-k/driver-lopsided-built.jpg`). All kittests pass. Found: the
-  old blur had hidden a real fault (gun hands from three-quarter back: the far hand hidden); that view is now avoided.
-- **Job I bodies DONE (chat 3, rounds 2-4, Opus medium):** Sam: "seems good" (near legs from the end of the shirt).
-- **Next, Job I faces (Opus, high effort; chat opened 11 Nov): Sam said Y (about 0.8%; stop at 1.2% and leave a note).**
-  Sam's design: a turned head for ANY character, but built only when a shot needs it (the screenplay says which person
-  faces which way, lying included); otherwise planning and check sheets as usual. So: (1) the turning tool lives in the
-  kit, not in one film's cast file, and switches on for any person with a front design (today `views.head_view` is
-  patched for Vance alone: why the lying driver got the old generic head); (2) the head measurements a person needs are
-  taken from their own front layout where possible, not copied from Vance's; (3) planning/pre-flight lists each
-  (person, direction) a film's shots need and builds and checks only those, the turnaround going on the check sheet;
-  (4) the driver is the first user: draft on branch `claude/job-i-faces-wip` (merge it first; NOT on the main line:
-  his hair is a black slab, the nose a spike, the goatee a stripe; Vance's turned heads come out pixel-identical).
-  Lying 12, 15 turned, not straight on. Send Sam a turnaround sheet beside the lying driver sheet (`lying_flat.py sheet
-  OUT man ball`, numbered as `notes/sheets/job-i-driver-sheet-numbered.jpg`), a kittest, then hand over. Open after:
-  slumped shirt; back hair.
-- **Needs Sam:** I: the faces sheet when that chat sends it. K: a look at the two sheets (nothing waits on it).
-- **Read:** the pack in `guides/job-packs.md` ("A tool job" for tools; the film's type for the next film).
+- **Newest work:** `claude/job-i-faces` (this chat could not push: see Needs Sam). The next chat merges it first.
+- **Rules that bite next:** 30 (a repeated note is a warning), 48 (one labelled sheet), 86 (estimate before building).
+- **Done: Job I faces BUILT (Opus high, about 1.8%: over the 1.2% stop, so no critique rounds).** One shared turned
+  head for anyone with a measured front design (`turnhead.py`), built only when a shot draws that direction; pre-flight
+  lists the (person, view) pairs the shots need, flags a person drawn turned without one, and puts their turnaround on
+  the check sheet. The driver is the first user: hair a horseshoe with an uneven top and strands (was a slab), a
+  rounder nose (was a spike), the goatee standing off the chin, seen side on (was a stripe). Lying 12, 15 now turned
+  (the shot names the head's roll). Vance pixel-identical (kittest). Sheets sent: `notes/sheets/job-i-driver-sheet-numbered.jpg`
+  (1-18) and `notes/sheets/job-i-driver-turnaround.jpg` (19-23).
+- **Next:** Sam's notes on those two sheets, then a notes round (Opus, medium effort): "Job I faces notes: (Sam's
+  numbers)". Open after: slumped shirt; back hair (lying 18: the neck block over the back of the head).
+- **Needs Sam:** I: a look at sheets 1-23. Push: this chat started without the project attached (it was cloned by
+  hand), so pushing was refused; start the next chat with Animation- selected.
+- **Read:** the pack in `guides/job-packs.md` ("A tool job"); `turnhead.py` MAP, section "people".
 - **Open rule requests:** none.
-- **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check`, `kitchecks.cut_rests`/`faces`,
-  `ledger.kept`. I: `lying_flat._leg`, `_neck(foot=-6)`, `lying.on_back` R knee out, views 'three' brows. I faces: `ad_vanced_notice_cast.man_turned`/`turned_eyes`/`turned_brows`/`turned_mouth`, `turnhead.TurnFace` (`hair_top`). K:
-  `ed.HARD` on, `ed.soft(clip=)`, `ed.bent_check`, `ad_vanced_notice_cast.BENT`, `patriots4_cast.lop`,
-  kittest `lopsided_invented_only`; posegallery AVOID gun three-quarter back.
+- **For Claude:** I faces: `turnhead.Person`/`register`/`install`/`draw`/`fitted`/`turnaround`/`SEEN`/`MISSING`,
+  `TEMPLATE` (Vance's head); `ad_vanced_notice_cast.man_profile`/`_man_over` (swept goatee)/`_man_strands`;
+  `lying_flat.ROLLED`, sp `head_roll`, `lying_flat.numbers`; preflight `heads_seen` (incremental runs list only the
+  redrawn frames). Kittest `turned_heads_for_anyone` (VANCE_TURNED_MD5). Earlier: see `notes/archive/next-jobs-handovers.md`.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

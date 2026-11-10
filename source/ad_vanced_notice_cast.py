@@ -368,114 +368,48 @@ def vance_mouth(p, f, L, kind):
 
 # ---------------------------------------------------------------------------------------------- Vance turned
 # (Sam, 8 Nov, note 42e: "neither the side nor the three-quarter view looks like him ... the eyes different in each
-# pose"). His side and three-quarter heads are now his own front face carried round a 3D head (turnhead.py): the same
-# eyes, hoods, brows, beard, mouth and hair shapes, foreshortened; only the outline, the nose's bridge, the ear and the
-# back of the hair are drawn from the head's rings. Measured as a head 1.15 face heights deep (brow to the back of
-# the skull), the ear at its middle, the brow ridge heavy (his card: low, heavy brows), a long chin.
-VANCE_PROFILE = dict(
-    front=[(-0.42, -0.08), (-0.38, 0.1), (-0.3, 0.22), (-0.2, 0.31), (-0.1, 0.37), (0.0, 0.42), (0.15, 0.46),
-           (0.265, 0.495), (0.34, 0.445), (0.45, 0.46), (0.552, 0.47), (0.62, 0.49), (0.65, 0.475), (0.70, 0.485),
-           (0.76, 0.44), (0.84, 0.455), (0.92, 0.47), (0.97, 0.44), (1.0, 0.40), (1.06, 0.30)],
-    back=[(-0.42, -0.08), (-0.38, -0.28), (-0.3, -0.39), (-0.2, -0.47), (-0.1, -0.52), (0.0, -0.55), (0.15, -0.57),
-          (0.3, -0.56), (0.45, -0.5), (0.55, -0.44), (0.62, -0.31), (0.68, -0.21), (0.76, -0.16), (0.82, -0.14),
-          (0.9, -0.03), (1.0, 0.14), (1.06, 0.25)],
-    crown=[(-0.43, 0.000), (-0.425, 0.088), (-0.415, 0.138), (-0.4, 0.182), (-0.38, 0.222), (-0.36, 0.252), (-0.32, 0.296), (-0.28, 0.326), (-0.24, 0.348), (-0.2, 0.365), (-0.15, 0.379), (-0.1, 0.387), (-0.05, 0.391), (0.0, 0.392)],   # a round dome to the temples' width
-    back_w=[(0.5, 0.5), (0.62, 0.36), (0.72, 0.2), (1.06, 0.18)],
-    point=[(-0.42, 0.8), (0.2, 0.9), (0.34, 1.2), (0.5, 1.5), (0.7, 1.6), (0.9, 1.4), (1.06, 1.2)],
-    chin=[(0.965, 0.193), (1.0, 0.15), (1.035, 0.09), (1.06, 0.0)],
-    sockets=0.07, nose_tip=0.15, nose_v=0.03, bottom=1.06, nape=0.7, hair_low=0.36, volume=0.03)
-TURN_YAW = {'three': 45, 'side': 90, 'three_back': 135, 'back': 180}
+# pose"). His side and three-quarter heads are his own front face carried round a 3D head by the shared kit
+# (turnhead.py, Job I faces: any person with a front design turns the same way). His head is the kit's standard one
+# (measured on him: 1.15 face heights deep, the ear at its middle, the brow ridge heavy, a long chin); only his
+# mood, beard, hair and hooded eyes are registered here.
+import turnhead as TH  # noqa: E402
+VANCE_PROFILE = TH.TEMPLATE
+TURN_YAW = TH.YAW
+turned_eyes, turned_brows, turned_mouth = TH.eyes, TH.brows, TH.mouth     # the shared pieces (kept by these names)
 
 
-def turned_eyes(p, f, L, st, iris, skin, hood=False):
-    """A turned face's eyes (TC.eye, as its front design draws them), each narrowed as it turns; the far one hidden
-    behind the bridge of the nose once it turns away. hood: Vance's hooded outer corners."""
-    import turnhead as TH
-    w, h = L['ew'] * P4.H / 2, L['eh'] * P4.H / 1.8
-    for sgn in (-1, 1):
-        u = sgn * L['ecx']
-        k = f.k(u, L['eye_y'])
-        if k < 0.3:                                           # turned away: hidden behind the bridge of the nose
-            continue
-        k = max(k, 0.55) if sgn < 0 else k                    # an eye is a ball: from the side it still shows
-        ex, ey = f(u, L['eye_y'])
-        with TH.squashed(p, ex, k):
-            TC.eye(p, ex, ey, sgn, w, h, iris, st, dk(skin, 0.82), liner=2.6)
-            if hood:                                          # Vance's hooded outer corners, as in his front design
-                hd = [(ex + sgn * w * 0.05, ey - h * 1.25), (ex + sgn * w * 1.2, ey - h * 1.0),
-                      (ex + sgn * w * 1.12, ey + h * 0.15), (ex + sgn * w * 0.6, ey - h * 0.55),
-                      (ex + sgn * w * 0.05, ey - h * 0.92)]
-                p.poly(hd, skin, None)
-                p.line(curve([(ex + sgn * w * 0.05, ey - h * 0.92), (ex + sgn * w * 0.6, ey - h * 0.55),
-                              (ex + sgn * w * 1.12, ey + h * 0.15)], 3), INK, 2.4)
+def _vance_mood(sp, f):
+    look = MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
+    st = dict(lid=sp.get('lid4', look['lid']), look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s),
+              squint=sp.get('squint', look['squint']), closed=sp.get('blink', False), gaze_dy=sp.get('gaze_dy', 0.0))
+    up = look['brow']
+    raise_ = tuple(b + sp.get('brow_up', 0.0) for b in up) if isinstance(up, tuple) else up + sp.get('brow_up', 0.0)
+    return st, raise_, look['frown'] + sp.get('frown', 0.0)
 
 
-def turned_brows(p, f, L, col, raise_, frown, thick=0.05):
-    """patriots4.brows on a turned face: the far brow only while it is seen."""
-    for sgn in (-1, 1):
-        if f.k(sgn * L['ecx'], L['brow_y']) < 0.3:
-            continue
-        ecx, ew = L['ecx'], L['ew']
-        xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew
-        up_ = raise_[0 if sgn < 0 else 1] if isinstance(raise_, (tuple, list)) else raise_
-        y_m = L['brow_y'] - thick * 0.35 - up_
-        yi, yo, ym = y_m + L['slope'] * (xm - xi) + frown, y_m - L['slope'] * (xo - xm), y_m - 0.008
-        uv = [(xi, yi - thick * 0.45), (xm, ym - thick * 0.6), (xo, yo - thick * 0.2), (xo + 0.01, yo + thick * 0.15),
-              (xm, ym + thick * 0.45), (xi, yi + thick * 0.55)]
-        p.poly(curve(f.pts([(sgn * u, v) for u, v in uv]), 3), col, None)
+def _vance_rest(p, f, L, sp, fx, my):
+    look = MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
+    if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
+        P4.lips(p, f, L, dict(sp, smile=look['smile'], mouth='rest'), V_LIP, (fx, my - 6))
+    else:
+        vance_mouth(p, f, L, look['mouth'])
 
 
-def turned_mouth(p, f, L, sp, lip_c, rest):
-    """A turned face's mouth: a talking shape (mouths.draw) narrowed round the head, else rest() (its own lips)."""
-    import turnhead as TH
-    m = sp.get('mouth', 'rest')
-    if isinstance(m, str) and m.startswith('v:') and m != 'v:rest':
-        import mouths
-        u = -L['mw'] * 0.22 * f.s                             # the mouth's middle, nearer the corner we see
-        cx, my2 = f(u, L['lip13'])
-        with TH.squashed(p, cx, max(0.4, f.k(u, L['lip13']))):
-            mouths.draw(p, dict(sp, lips=True, lip_c=lip_c), cx, my2 - 6, m[2:])
-        return True
-    rest()
-    return False
+def _vance_turned_hair(img, p, f, L, sp):
+    hair, strokes, parting, c = vance_hair(L)
+    mask = TH.hair(img, p, f, [f.pts(TH.dense(curve(hair, 4)))], V_HAIR, VANCE_PROFILE)
+    TH.clipped(img, p, mask, lambda pen: vance_hair_lines(pen, f, L, strokes, parting))
+
+
+TH.register(TH.Person(
+    'vance', lambda sp: P4.layout(P4.target('vance', sp.get('average', False))), -0.42, 0.4, lambda L: VANCE_PROFILE,
+    V_SKIN, V_IRIS, dk(V_HAIR, 0.85), V_LIP, _vance_mood, _vance_rest, _vance_turned_hair,
+    face=lambda pen, f, L, sp: scrub_beard(pen, f, L, V_SKIN), hood=True, sheet=lambda: VANCE))
 
 
 def vance_turned(img, p, sp, t, view, hx, hy):
     """Vance's head from three-quarter (45), the side (90) or three-quarter behind (135), facing our right."""
-    import turnhead as TH
-    L = P4.layout(P4.target('vance', sp.get('average', False)))
-    f = TH.TurnFace(hx, hy, TURN_YAW[view], L, VANCE_PROFILE, TH.half_widths(P4.outline_uv(L, 0.4, crown=-0.42)),
-                    sp.get('down', 0.0), sp.get('turn', 0.0))
-    skin, mood = V_SKIN, sp.get('mood', 'neutral')
-    look = MOODS.get(mood, MOODS['neutral'])
-    head = TH.outline(p, f, view, skin, ink=False)
-    if view != 'back':                                        # from straight behind the beard is hidden
-        TH.inside(img, p, head, lambda pen: scrub_beard(pen, f, L, skin))
-    TH.outline(p, f, view, skin, fill=False)
-    if view in ('three_back', 'back'):
-        TH.neck_over(p, f, view, skin)
-    fx, my = f(0.0, L['lip13'])
-    if view not in ('three_back', 'back'):
-        st = dict(lid=sp.get('lid4', look['lid']), look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s),
-                  squint=sp.get('squint', look['squint']), closed=sp.get('blink', False), gaze_dy=sp.get('gaze_dy', 0.0))
-        turned_eyes(p, f, L, st, V_IRIS, skin, hood=not sp.get('blink'))
-        up = look['brow']
-        raise_ = tuple(b + sp.get('brow_up', 0.0) for b in up) if isinstance(up, tuple) else up + sp.get('brow_up', 0.0)
-        turned_brows(p, f, L, dk(V_HAIR, 0.85), raise_, look['frown'] + sp.get('frown', 0.0))
-        TH.nose(p, f, L, skin, VANCE_PROFILE)
-        def rest():
-            if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
-                P4.lips(p, f, L, dict(sp, smile=look['smile'], mouth='rest'), V_LIP, (fx, my - 6))
-            else:
-                vance_mouth(p, f, L, look['mouth'])
-        turned_mouth(p, f, L, sp, V_LIP, rest)
-    hair, strokes, parting, c = vance_hair(L)
-    mask = TH.hair(img, p, f, [f.pts(TH.dense(curve(hair, 4)))], V_HAIR, VANCE_PROFILE)
-    TH.clipped(img, p, mask, lambda pen: vance_hair_lines(pen, f, L, strokes, parting))
-    TH.ear(p, f, skin)
-    if view == 'back':                                        # straight from behind: both ears
-        TH.ear(p, f, skin, deg=91)
-    return fx
+    return TH.draw(img, p, dict(sp, who='vance'), t, view, hx, hy)
 
 
 # ---------------------------------------------------------------------------------------------- the man's head
@@ -551,64 +485,102 @@ def man_mood(sp):
 
 
 # ---------------------------------------------------------------------------------------------- the man turned
-# (Job I faces, Sam 10 Nov: his lying faces looked cruder than his face-on one). Vance's way (note 44): his own front
-# face carried round the 3D head (turnhead.py): the same eyes, brows, goatee, mouth and side hair, foreshortened; the
-# outline, the nose's bridge, the ear and the band of hair round the back drawn from the head's rings. Vance's head
-# measures, moved to the driver's features (his brows, nose and mouth sit lower; a bald dome, no beard below the chin).
-def _remap(pts, keys=((-0.42, -0.2), (0.0, 0.0), (0.265, 0.214), (0.32, 0.32), (0.552, 0.582), (0.646, 0.718),
-                      (1.06, 1.0))):
-    a, b = zip(*keys)
-    return [(float(np.interp(v, a, b)), z) for v, z in pts]
+# (Job I faces, Sam 10 Nov: his lying faces looked cruder than his face-on one; 11 Nov: one shared tool for anyone.)
+# His own front face carried round the kit's head (turnhead.py), the head moved to the rows of his own front layout
+# (turnhead.fitted: brows, nose and mouth lower than Vance's, his narrower nose reaching less far), with what is his
+# alone: a round bald dome, a rounder nose, his chin; the goatee standing off the chin (seen side on it is the chin's
+# outline, never a stripe); the dark hair a horseshoe round the back at the height of his front design's side hair,
+# its top edge uneven and its mass broken by strands (the draft's flat black slab).
+M_HAIR_L = (86, 76, 72)           # the strands in his dark hair
+M_HAIR_TOP, M_HAIR_TOP_BACK = 0.12, 0.27  # the horseshoe's top: at the temples (his front side hair), and behind
 
 
-MAN_PROFILE = dict(
-    VANCE_PROFILE, front=_remap(VANCE_PROFILE['front']), back=_remap(VANCE_PROFILE['back']),
-    point=_remap(VANCE_PROFILE['point']), back_w=_remap(VANCE_PROFILE['back_w']),
-    crown=[(-0.2 * math.cos(a), 0.41 * math.sin(a)) for a in np.linspace(0.0, math.pi / 2, 12)],   # a round bald dome
-    chin=[(0.94, 0.27), (0.965, 0.233), (0.985, 0.17), (1.0, 0.0)],
-    bottom=1.0, hair_low=0.42, nape=0.66, hair_top=0.1, hair_front=70, volume=0.015)
+def man_profile(L):
+    return TH.fitted(
+        L, -0.2, 1.0,
+        crown=[(-0.2 * math.cos(a), 0.41 * math.sin(a)) for a in np.linspace(0.0, math.pi / 2, 12)],   # bald dome
+        chin=[(0.94, 0.27), (0.965, 0.233), (0.985, 0.17), (1.0, 0.0)], nose_ball=1.0,
+        hair_low=0.42, nape=0.58, hair_top=M_HAIR_TOP, hair_top_back=M_HAIR_TOP_BACK, hair_ragged=0.018,
+        hair_front=70, volume=0.012)
 
 
-def man_turned(img, p, sp, t, view, hx, hy):
-    """The driver's head from three-quarter (45), the side (90), three-quarter behind (135) or behind, facing our
-    right: his own front face carried round."""
-    import turnhead as TH
-    L = P4.layout(P4.target('man'))
-    f = TH.TurnFace(hx, hy, TURN_YAW[view], L, MAN_PROFILE, TH.half_widths(P4.outline_uv(L, 0.46, crown=-0.2)),
-                    sp.get('down', 0.0), sp.get('turn', 0.0))
-    skin = M_SKIN
+def _man_mood(sp, f):
     lid, gaze, frown, smile = man_mood(sp)
-    hair_up = P4.lop(sp).get('hair', 0.0)                   # lopsided: our right side hair reaches higher
-    head = TH.outline(p, f, view, skin, ink=False)
-    if view != 'back':                                        # from straight behind the goatee is hidden
-        TH.inside(img, p, head, lambda pen: pen.poly(curve(f.pts(TH.dense(curve(man_goatee(L), 4))), 2), M_HAIR, None))
-    TH.outline(p, f, view, skin, fill=False)
-    if view in ('three_back', 'back'):
-        TH.neck_over(p, f, view, skin)
-    if not sp.get('no_shine'):                                # the pate's shine, where it faces us
+    st = dict(lid=lid, look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s), squint=sp.get('squint', 0.0),
+              closed=sp.get('blink', False), gaze_dy=gaze)
+    return st, P4.lop_raise(sp, sp.get('brow_up', 0.0)), frown
+
+
+def _man_rest(p, f, L, sp, fx, my):
+    P4.lips(p, f, L, dict(sp, smile=man_mood(sp)[3], mouth='rest'), M_LIP, (fx, my - 6))
+
+
+def _man_over(img, p, f, L, sp, view):
+    """After the outline: the pate's shine where it faces us, and the goatee standing off the chin and lip."""
+    if not sp.get('no_shine'):
         run = [f(u, v) for u, v in curve([(-0.12, -0.14), (-0.04, -0.17), (0.04, -0.16)], 3) if f.k(u, v) > 0.3]
         if len(run) > 1:
             p.line(run, (246, 214, 196), 3.0)
-    fx, my = f(0.0, L['lip13'])
-    if view not in ('three_back', 'back'):
-        st = dict(lid=lid, look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s), squint=sp.get('squint', 0.0),
-                  closed=sp.get('blink', False), gaze_dy=gaze)
-        turned_eyes(p, f, L, st, M_IRIS, skin)
-        turned_brows(p, f, L, M_HAIR, P4.lop_raise(sp, sp.get('brow_up', 0.0)), frown)
-        TH.nose(p, f, L, skin, MAN_PROFILE)
-        turned_mouth(p, f, L, sp, M_LIP,
-                     lambda: P4.lips(p, f, L, dict(sp, smile=smile, mouth='rest'), M_LIP, (fx, my - 6)))
+    if view in ('three_back', 'back'):                        # from behind the goatee is hidden
+        return
+    l13 = L['lip13']
+    lift = lambda v: 0.012 + 0.085 * min(1.0, max(0.0, (v - l13) / (1.0 - l13)))   # thicker towards the chin
+    hang = lambda v: 0.03 * min(1.0, max(0.0, (v - 0.85) / 0.14))                    # and hangs under it a little
+    uv = TH.dense(curve(man_goatee(L), 4), 0.008)
+    on = [f.at(u, v, 0.0) for u, v in uv]                   # on the skin
+    off = [f.at(u, v + hang(v), lift(v)) for u, v in uv]    # its outer surface: the hair between is solid (the
+    for i in range(len(uv)):                                # swept shape), so side on it is the chin's outline
+        j = (i + 1) % len(uv)
+        p.poly([on[i], on[j], off[j], off[i]], M_HAIR, None)
+    p.poly(on, M_HAIR, None)
+    p.poly(curve(off, 2), M_HAIR, None)
+
+
+def _man_turned_hair(img, p, f, L, sp):
+    hair_up = P4.lop(sp).get('hair', 0.0)                   # lopsided: our right side hair reaches higher
     sides = []
     for sgn in (-1, 1):
         side = man_side(L, sgn, under=True)
         if sgn > 0 and hair_up:
             side = [(u, v - hair_up) if v < 0.25 else (u, v) for u, v in side]
         sides.append(f.pts(TH.dense(curve(side, 3))))
-    TH.hair(img, p, f, sides, M_HAIR, MAN_PROFILE)
-    TH.ear(p, f, skin)
-    if view == 'back':                                        # straight from behind: both ears
-        TH.ear(p, f, skin, deg=91)
-    return fx
+    prof = TH.PEOPLE['man'].build(sp)[1]
+    mask = TH.hair(img, p, f, sides, M_HAIR, prof)
+    TH.clipped(img, p, mask, lambda pen: _man_strands(pen, f, prof))
+
+
+def _man_strands(pen, f, prof):
+    """Short strands combed back and down over the horseshoe, so it reads as hair, not a slab."""
+    rng = np.random.default_rng(83)
+    for psi in np.arange(-176, 180, 9.0):
+        ap = abs(psi)
+        if ap < 70:
+            continue
+        top = TH.hair_top(prof, ap, psi)
+        bot = prof['hair_low'] if ap < 100 else prof['hair_low'] + (prof['nape'] - prof['hair_low']) * min(1, (ap - 100) / 30)
+        for v0 in np.arange(top + 0.03, bot - 0.04, 0.09):
+            v0 = v0 + rng.uniform(-0.02, 0.02)
+            d = rng.uniform(5, 9) * (1 if psi > 0 else -1)
+            run = []
+            for k in np.linspace(0, 1, 5):
+                x, z = f.ring(psi + d * k, v0 + 0.07 * k)
+                X, Z = f.view(float(x), float(z))
+                if Z < 0:
+                    run = []
+                    break
+                run.append((f.cx + X * TH.H, f.top + (v0 + 0.07 * k) * TH.H))
+            if len(run) > 1:
+                pen.line(run, M_HAIR_L, 1.8)
+
+
+TH.register(TH.Person(
+    'man', lambda sp: P4.layout(P4.target('man')), -0.2, 0.46, man_profile, M_SKIN, M_IRIS, M_HAIR, M_LIP,
+    _man_mood, _man_rest, _man_turned_hair, over=_man_over, sheet=lambda: MAN))
+
+
+def man_turned(img, p, sp, t, view, hx, hy):
+    """The driver's head from three-quarter (45), the side (90), three-quarter behind (135) or behind."""
+    return TH.draw(img, p, dict(sp, who='man'), t, view, hx, hy)
 
 
 # ---------------------------------------------------------------------------------------------- torsos
@@ -777,17 +749,7 @@ def arm(p, j2, side, sp, shape=None):
 
 V.arm = arm
 TC.HEADS.update(vance=vance_head, man=man_head)
-_head_view = V.head_view
-
-
-def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
-    """Vance and the driver turned: their own faces carried round (note 42e, Job I faces); everyone else as before."""
-    if view in TURN_YAW and sp.get('who') in ('vance', 'man'):
-        return (vance_turned if sp['who'] == 'vance' else man_turned)(img, p, sp, t, view, hx, hy)
-    return _head_view(img, p, sp, t, view, hx, hy)
-
-
-V.head_view = head_view
+TH.install(V)       # Vance and the driver turned: their own faces carried round (note 42e, Job I faces)
 TC.TORSOS.update(vance=vance_torso, man=man_torso)
 
 # ---------------------------------------------------------------------------------------------- the people

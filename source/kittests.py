@@ -824,6 +824,84 @@ def lopsided_invented_only():
         f'face pixels changed {changed * 100:.2f}%; likeness heads uneven: {likeness or "none"}'
 
 
+# ------------------------------------------------------------------------------------------------ Job I faces
+@test
+def turned_heads_for_anyone():
+    """Job I faces (Sam, 11 Nov): any person with a front design turns with their own face (turnhead.register), built
+    only when a shot needs it; old faults: views.head_view patched for Vance alone (the lying driver got the old
+    generic head, and pre-flight never said), and the driver's draft (his goatee clipped inside the chin: a stripe,
+    gone side on; his hair a flat slab round the back). Vance's turned heads stay exactly as before."""
+    import hashlib
+    from PIL import Image
+    import numpy as np
+    import burnham as B
+    import views as V
+    import ad_vanced_notice_cast as C
+    import turnhead as TH
+    from ed import curve
+    B.SS = 1
+
+    def head(sp, yaw):
+        im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(im, B.Cam(1.0, 540, 960), 540, 1060, 1.25, dict(sp), 0.0, yaw)
+        return np.asarray(im.crop((375, 620, 705, 1020)).convert('RGB')).astype(int)
+    out = []
+    # 1. a person with a measured front design but no turned head: recorded (pre-flight names it), then built
+    keep = TH.PEOPLE.pop('man')
+    del TH.MISSING[:], TH.SEEN[:]
+    try:
+        head(C.MAN, 90)
+    finally:
+        TH.PEOPLE['man'] = keep
+    caught = ('man', 'side') in TH.MISSING
+    del TH.MISSING[:]
+    side = head(C.MAN, 90)
+    fixed = ('man', 'side') in TH.SEEN and not TH.MISSING
+    out.append(f'no turned head: {"caught" if caught else "NOT caught"}, built: {fixed}')
+    # 2. the goatee side on: its hair reaches the chin's front (the draft clipped it inside: never past the skin)
+    def goatee_front(px):                                   # solid goatee (the ink lines opened away), px
+        from scipy.ndimage import binary_opening
+        dark = (abs(px - np.array(C.M_HAIR)).sum(2) < 40)[280:, 220:]   # the mouth and chin, side on
+        return int(binary_opening(dark, np.ones((5, 5), bool)).any(1).sum())   # rows it covers, mouth to chin
+    P = TH.PEOPLE['man']
+
+    def old_over(img, p, f, L, sp, view):                   # the draft (619856d): clipped to the head, no volume
+        if view != 'back':
+            hd = TH.outline(p, f, view, P.skin, ink=False)
+            TH.inside(img, p, hd, lambda pen: pen.poly(curve(f.pts(TH.dense(curve(C.man_goatee(L), 4))), 2),
+                                                       C.M_HAIR, None))
+            TH.outline(p, f, view, P.skin, fill=False)
+    new_over, P.over = P.over, old_over
+    try:
+        old_g = goatee_front(head(C.MAN, 90))
+    finally:
+        P.over = new_over
+    new_g = goatee_front(side)
+    out.append(f'goatee seen side on, rows from the mouth down: old {old_g}, now {new_g}')
+    # 3. the hair from behind: a band round the back, not a slab (the draft: from the temples' row to the nape)
+    def hair_share(px):
+        dark = (abs(px - np.array(C.M_HAIR)).sum(2) < 60) | (abs(px - np.array(C.M_HAIR_L)).sum(2) < 60)
+        head_ = dark | (abs(px - np.array(C.M_SKIN)).sum(2) < 40)
+        return dark[:300].sum() / max(1, head_[:300].sum())
+    prof = P.build({})[1]
+    old_prof = dict(prof, hair_top=0.1, hair_top_back=0.1, hair_ragged=0.0, nape=0.66)
+    P.built[False] = P.built[False][:1] + (old_prof,) + P.built[False][2:]
+    try:
+        old_h = hair_share(head(C.MAN, 180))
+    finally:
+        P.built.clear()
+    new_h = hair_share(head(C.MAN, 180))
+    out.append(f'hair share of the head from behind: old {old_h:.2f}, now {new_h:.2f}')
+    # 4. Vance's turned heads unchanged (pixel for pixel, as drawn before the shared tool, 8 Nov note 44)
+    vh = hashlib.md5(b''.join(head(C.VANCE, y).astype(np.uint8).tobytes() for y in (45, 90, 135, 180))).hexdigest()
+    out.append(f'Vance unchanged: {vh == VANCE_TURNED_MD5}')
+    ok = caught and fixed and new_g >= old_g + 15 and new_h < old_h - 0.06 and vh == VANCE_TURNED_MD5
+    return ok, '; '.join(out)
+
+
+VANCE_TURNED_MD5 = 'f17956f352af1555f79635c0fdf11811'   # main line c6b007a, before the shared tool
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

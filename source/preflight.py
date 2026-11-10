@@ -74,7 +74,9 @@ def _check_frame(i):
     shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
     F.CONTEXT['where'] = f'{shot} {t:.2f}s'
     F.CONTEXT['t'] = t                              # the film's time, for kitchecks' cut and face checks (Job L)
+    import turnhead
     n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
+    s0, m0 = len(turnhead.SEEN), len(turnhead.MISSING)
     err = None
     handcheck.begin()
     try:
@@ -84,7 +86,9 @@ def _check_frame(i):
     hands = handcheck.end(t, F.CONTEXT['where'])    # rule 41: every arm ends in a visible hand
     turned = viewchecks.turn_faults(kitchecks.POSES[p0:], _TURNED)   # rule 20: every held prop through every view
     del kitchecks.POSES[p0:]
-    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands
+    heads = (sorted(set(turnhead.SEEN[s0:])), sorted(set(turnhead.MISSING[m0:])))   # Job I faces: turned heads drawn
+    del turnhead.SEEN[s0:], turnhead.MISSING[m0:]
+    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands, heads
 
 
 def _hands_frame(i):
@@ -447,7 +451,11 @@ def main():
         todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))} if incremental else None
         hands = []
         first = [i for i in range(0, n_frames, 3) if todo is None or i in todo]
-        for t, err, log, dr, turned, hs in pool.imap(_check_frame, first, chunksize=4):
+        heads_seen, heads_missing = set(), {}
+        for t, err, log, dr, turned, hs, (seen, miss) in pool.imap(_check_frame, first, chunksize=4):
+            heads_seen.update(seen)
+            for who, view in miss:
+                heads_missing.setdefault((who, view), t)
             F.LOG.extend(log)
             drawn += dr
             hands += hs
@@ -461,6 +469,13 @@ def main():
             hands += hs
     if people:
         problems += [row[1] for row in handcheck.summary(film, hands, fps)]
+    heads_seen = locals().get('heads_seen', set())
+    heads_missing = locals().get('heads_missing', {})
+    for (who, view), t in sorted(heads_missing.items()):   # Job I faces: built only when a shot needs it
+        problems.append(f'{t:6.2f} s: {who} is drawn turned ({view}) with the old generic head: their front design is '
+                        'measured, so give them a turned head (turnhead.register, as the Ad-Vanced Notice cast does)')
+    if heads_seen or heads_missing:
+        print('turned heads the shots need:', ', '.join(f'{w} {v}' for w, v in sorted(heads_seen | set(heads_missing))))
     F.CONTEXT['where'] = ''
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
@@ -512,6 +527,14 @@ def main():
     sheet = Image.new('RGB', (cols * 216, ((len(tiles) + cols - 1) // cols) * 384), (20, 20, 20))
     for i, im in enumerate(tiles):
         sheet.paste(im, ((i % cols) * 216, (i // cols) * 384))
+    import turnhead                             # Job I faces: the turnaround of each (person, view) the shots need
+    turn = turnhead.turnaround(sorted(heads_seen | set(heads_missing)))
+    if turn is not None:
+        turn.thumbnail((sheet.width, 10 ** 5))
+        both = Image.new('RGB', (sheet.width, sheet.height + turn.height), (20, 20, 20))
+        both.paste(sheet, (0, 0))
+        both.paste(turn, (0, sheet.height))
+        sheet = both
     sheet.save(os.path.join(out, f'{name}-preflight.jpg'), quality=85)
     del F.LOG[logged:]
     import contextlib

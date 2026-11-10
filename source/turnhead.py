@@ -19,9 +19,10 @@ drawing (the head's outline, the nose's bridge, the ear, the back of the hair) i
     ear(p, f, skin)  nose(p, f, L, skin, prof)  hair(img, p, f, front_polys, colour, prof) -> mask, clipped(...)
     inside(img, p, head_poly, draw)           draw kept inside the head (a beard held round from behind)
     neck_over(p, f, view, skin)               from behind, the neck drawn again over the jaw
+    register(Person(...)); install(views)     any person with a front design turns (built when a shot needs it)
     squashed(p, cx, k)                        a pen that narrows a screen-drawn feature (an eye, a talking mouth)
 
-Map: rings 38 | frame 54 | outline 206 | features 271 | hair 315
+Map: rings 38 | frame 54 | outline 206 | features 271 | hair 315 | people 420 (register, draw, install, fitted)
 """
 import math
 from contextlib import contextmanager
@@ -292,12 +293,13 @@ def nose(p, f, L, skin, prof):
     ny, ey, nw = L['nose_y'], L['eye_y'], L['nw']
     tip, length = prof.get('nose_tip', 0.2), prof.get('nose_v', 0.03)
     sd = tuple(int(c * 0.72) for c in skin)
-    nas = f.at(0.0, ey + 0.01, 0.0)
-    mid = f.at(0.0, (ey + ny) / 2, tip * 0.55)
-    top = f.at(0.0, ny - length - 0.06, tip * 0.9)         # the tip is a ball, not a point (a wide nose: his card)
+    ball = prof.get('nose_ball', 0.0)                      # a rounder nose: the bridge fuller, the tip a bigger
+    nas = f.at(0.0, ey + 0.01, 0.0)                         # ball that turns back under more gently (the driver)
+    mid = f.at(0.0, (ey + ny) / 2, tip * (0.55 + 0.17 * ball))
+    top = f.at(0.0, ny - length - 0.06 - 0.02 * ball, tip * (0.9 - 0.04 * ball))   # the tip is a ball, not a point
     tp = f.at(0.0, ny - length - 0.015, tip)
-    low = f.at(0.0, ny - length + 0.025, tip * 0.9)
-    und = f.at(0.0, ny + 0.002, tip * 0.5)
+    low = f.at(0.0, ny - length + 0.025 + 0.012 * ball, tip * (0.9 - 0.04 * ball))
+    und = f.at(0.0, ny + 0.002, tip * (0.5 + 0.2 * ball))
     base = f.at(0.0, ny + 0.01, 0.02)
     back = [f.at(-0.06, ny + 0.01, 0.0), f.at(-0.06, ey + 0.04, 0.0)]
     bridge = curve([nas, mid, top, tp], 4)
@@ -314,6 +316,18 @@ def nose(p, f, L, skin, prof):
 
 
 # ------------------------------------------------------------------------------------------------ hair
+def hair_top(prof, ap, psi):
+    """The highest row with hair at angle psi (ap: its distance from the face, degrees): none set, no limit. A bald
+    pate's horseshoe: 'hair_top' at the temples falling to 'hair_top_back' behind, its edge uneven by 'hair_ragged'."""
+    top = prof.get('hair_top')
+    if top is None:
+        return -9.0
+    back = prof.get('hair_top_back', top)
+    top = top + (back - top) * min(1.0, max(0.0, (ap - 90) / 90))
+    rag = prof.get('hair_ragged', 0.0)
+    return top + rag * (math.sin(math.radians(psi) * 11) + 0.5 * math.sin(math.radians(psi) * 23 + 1.0))
+
+
 def hair(img, p, f, fronts, colour, prof, lw=2.4):
     """The hair as one mass: the person's own front hair shapes (carried round by f) and the back of the head
     (sampled over the rings behind the front hair, down to the nape), filled and inked round as one shape (no line
@@ -331,7 +345,7 @@ def hair(img, p, f, fronts, colour, prof, lw=2.4):
             vb = bottom_side if ap < 100 else bottom_side + (prof.get('nape', 0.64) - bottom_side) * min(1, (ap - 100) / 30)
             if v > vb or (ap < prof.get('hair_front', 84) and v > -0.2):
                 continue
-            if v < prof.get('hair_top', -9):       # a bald pate: hair only in a band round the sides and back
+            if v < hair_top(prof, ap, psi):        # a bald pate: hair only in a band round the sides and back
                 continue
             x, z = f.ring(psi, v)
             puff = 1.0 + prof.get('volume', 0.03) * (1 - max(0.0, v) / 0.7)
@@ -413,3 +427,245 @@ def dense(uv, step=0.01):
         n = max(1, int(math.hypot(u1 - u0, v1 - v0) / step))
         out += [(u0 + (u1 - u0) * i / n, v0 + (v1 - v0) * i / n) for i in range(n)]
     return out
+
+
+# ------------------------------------------------------------------------------------------------ people
+# (Job I faces, Sam 11 Nov: "a turned head for ANY character, but built only when a shot needs it".) Any person whose
+# front head is a measured patriots4 layout can turn: their cast file registers a Person (the few pieces only they
+# have: hair, beard, mood) and install(views) sends views.head_view's turned views to it. A person's head is built (its
+# layout, rings and measures) the first time a shot draws it turned, never before; every (person, view) drawn is
+# recorded in SEEN, and one a shot asks for that has no Person yet in MISSING, so pre-flight lists both and puts the
+# turnaround of exactly those on the check sheet.
+YAW = {'three': 45, 'side': 90, 'three_back': 135, 'back': 180}
+
+# The standard head (Vance's, measured for Ad-Vanced Notice note 44: 1.15 face heights deep, brow to the back of the
+# skull, the ear at its middle), at the rows of his own front layout. fitted() moves it to anyone else's rows.
+TEMPLATE = dict(
+    front=[(-0.42, -0.08), (-0.38, 0.1), (-0.3, 0.22), (-0.2, 0.31), (-0.1, 0.37), (0.0, 0.42), (0.15, 0.46),
+           (0.265, 0.495), (0.34, 0.445), (0.45, 0.46), (0.552, 0.47), (0.62, 0.49), (0.65, 0.475), (0.70, 0.485),
+           (0.76, 0.44), (0.84, 0.455), (0.92, 0.47), (0.97, 0.44), (1.0, 0.40), (1.06, 0.30)],
+    back=[(-0.42, -0.08), (-0.38, -0.28), (-0.3, -0.39), (-0.2, -0.47), (-0.1, -0.52), (0.0, -0.55), (0.15, -0.57),
+          (0.3, -0.56), (0.45, -0.5), (0.55, -0.44), (0.62, -0.31), (0.68, -0.21), (0.76, -0.16), (0.82, -0.14),
+          (0.9, -0.03), (1.0, 0.14), (1.06, 0.25)],
+    crown=[(-0.43, 0.000), (-0.425, 0.088), (-0.415, 0.138), (-0.4, 0.182), (-0.38, 0.222), (-0.36, 0.252),
+           (-0.32, 0.296), (-0.28, 0.326), (-0.24, 0.348), (-0.2, 0.365), (-0.15, 0.379), (-0.1, 0.387),
+           (-0.05, 0.391), (0.0, 0.392)],   # a round dome to the temples' width
+    back_w=[(0.5, 0.5), (0.62, 0.36), (0.72, 0.2), (1.06, 0.18)],
+    point=[(-0.42, 0.8), (0.2, 0.9), (0.34, 1.2), (0.5, 1.5), (0.7, 1.6), (0.9, 1.4), (1.06, 1.2)],
+    chin=[(0.965, 0.193), (1.0, 0.15), (1.035, 0.09), (1.06, 0.0)],
+    sockets=0.07, nose_tip=0.15, nose_v=0.03, bottom=1.06, nape=0.7, hair_low=0.36, volume=0.03)
+TEMPLATE_ROWS = dict(crown=-0.42, brow_y=0.265, eye_y=0.32, nose_y=0.552, lip13=0.646, bottom=1.06, nw=0.332)
+
+
+def fitted(L, crown_v, bottom, **own):
+    """The standard head moved to a person's own front layout L: its rows (crown, brow, eyes, nose, mouth, chin) slid
+    to theirs, the nose's reach scaled by their nose's width; `own` overrides any measure (a bald dome, their chin)."""
+    T = TEMPLATE_ROWS
+    a = (T['crown'], 0.0, T['brow_y'], T['eye_y'], T['nose_y'], T['lip13'], T['bottom'])
+    b = (crown_v, 0.0, L['brow_y'], L['eye_y'], L['nose_y'], L['lip13'], bottom)
+    rows = lambda pts: [(float(np.interp(v, a, b)), z) for v, z in pts]
+    prof = dict(TEMPLATE, bottom=bottom, nose_tip=TEMPLATE['nose_tip'] * L['nw'] / T['nw'])
+    for key in ('front', 'back', 'point', 'back_w', 'chin'):
+        prof[key] = rows(TEMPLATE[key])
+    prof['crown'] = [(float(np.interp(v, a, b)), z) for v, z in TEMPLATE['crown']]
+    prof.update(own)
+    return prof
+
+
+class Person:
+    """What one person's turned head needs from their cast file (front design pieces only they have).
+    layout(sp) -> L; crown: the outline's crown (patriots4.outline_uv); widths_pad: outline_uv's padding;
+    profile(L) -> PROFILE (usually fitted(L, ...)); skin, iris, brow and lip colours; mood(sp, f) -> (eye state, brow
+    raise, frown);
+    face(pen, f, L, sp): drawn on the skin inside the head (a beard); over(img, p, f, L, sp, view): after the outline
+    (a shine, a goatee that stands off the chin); mouth(p, f, L, sp, fx, my): the resting lips; hair(img, p, f, L, sp);
+    hood: hooded outer eye corners; brow_thick; sheet: the cast entry the turnaround draws."""
+
+    def __init__(self, who, layout, crown, pad, profile, skin, iris, brow_c, lip_c, mood, mouth, hair, face=None,
+                 over=None, hood=False, brow_thick=0.05, sheet=None):
+        self.who, self.layout, self.crown, self.pad, self.profile = who, layout, crown, pad, profile
+        self.lip_c = lip_c
+        self.skin, self.iris, self.brow_c, self.mood, self.mouth, self.hair = skin, iris, brow_c, mood, mouth, hair
+        self.face, self.over, self.hood, self.brow_thick, self.sheet = face, over, hood, brow_thick, sheet
+        self.built = {}
+
+    def build(self, sp):
+        """(L, profile, widths): made the first time a shot needs this person turned, then kept."""
+        key = bool(sp.get('average', False))
+        if key not in self.built:
+            import patriots4_cast as P4
+            L = self.layout(sp)
+            self.built[key] = (L, self.profile(L), half_widths(P4.outline_uv(L, self.pad, crown=self.crown)))
+        return self.built[key]
+
+
+PEOPLE = {}
+SEEN, MISSING = [], []          # (who, view) drawn turned; (who, view) asked for with no Person (pre-flight reads)
+
+
+def register(person):
+    PEOPLE[person.who] = person
+    return person
+
+
+def draw(img, p, sp, t, view, hx, hy):
+    """A registered person's head from three-quarter (45), the side (90), three-quarter behind (135) or behind,
+    facing our right: their own front face carried round the head."""
+    P = PEOPLE[sp['who']]
+    L, prof, widths = P.build(sp)
+    SEEN.append((P.who, view))
+    f = TurnFace(hx, hy, YAW[view], L, prof, widths, sp.get('down', 0.0), sp.get('turn', 0.0))
+    skin = P.skin
+    st, raise_, frown = P.mood(sp, f)
+    head = outline(p, f, view, skin, ink=False)
+    if P.face and view != 'back':                             # from straight behind a beard is hidden
+        inside(img, p, head, lambda pen: P.face(pen, f, L, sp))
+    outline(p, f, view, skin, fill=False)
+    if view in ('three_back', 'back'):
+        neck_over(p, f, view, skin)
+    if P.over:
+        P.over(img, p, f, L, sp, view)
+    fx, my = f(0.0, L['lip13'])
+    if view not in ('three_back', 'back'):
+        eyes(p, f, L, st, P.iris, skin, hood=P.hood and not sp.get('blink'))
+        brows(p, f, L, P.brow_c, raise_, frown, P.brow_thick)
+        nose(p, f, L, skin, prof)
+        mouth(p, f, L, sp, P.lip_c, lambda: P.mouth(p, f, L, sp, fx, my))
+    P.hair(img, p, f, L, sp)
+    ear(p, f, skin)
+    if view == 'back':                                        # straight from behind: both ears
+        ear(p, f, skin, deg=91)
+    return fx
+
+
+def install(V):
+    """views.head_view's turned views go to the person's own turned head when they have one; a person with a measured
+    front design but no Person yet is recorded (pre-flight: build it) and drawn the old way. Installed once."""
+    if getattr(V.head_view, 'turnhead', False):
+        return
+    old = V.head_view
+
+    def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
+        who = sp.get('who')
+        if view in YAW and who in PEOPLE:
+            return draw(img, p, sp, t, view, hx, hy)
+        if view in YAW and who:
+            import patriots4_cast as P4
+            if who in P4.MEASURED:
+                MISSING.append((who, view))
+        return old(img, p, sp, t, view, hx, hy)
+    head_view.turnhead = True
+    V.head_view = head_view
+
+
+def eyes(p, f, L, st, iris, skin, hood=False):
+    """A turned face's eyes (traitors_cast.eye, as the front design draws them), each narrowed as it turns; the far one
+    hidden behind the bridge of the nose once it turns away. hood: hooded outer corners (Vance)."""
+    import patriots4_cast as P4
+    import traitors_cast as TC
+    dk = lambda c, k: tuple(int(x * k) for x in c)
+    w, h = L['ew'] * P4.H / 2, L['eh'] * P4.H / 1.8
+    for sgn in (-1, 1):
+        u = sgn * L['ecx']
+        k = f.k(u, L['eye_y'])
+        if k < 0.3:                                           # turned away: hidden behind the bridge of the nose
+            continue
+        k = max(k, 0.55) if sgn < 0 else k                    # an eye is a ball: from the side it still shows
+        ex, ey = f(u, L['eye_y'])
+        with squashed(p, ex, k):
+            TC.eye(p, ex, ey, sgn, w, h, iris, st, dk(skin, 0.82), liner=2.6)
+            if hood:
+                hd = [(ex + sgn * w * 0.05, ey - h * 1.25), (ex + sgn * w * 1.2, ey - h * 1.0),
+                      (ex + sgn * w * 1.12, ey + h * 0.15), (ex + sgn * w * 0.6, ey - h * 0.55),
+                      (ex + sgn * w * 0.05, ey - h * 0.92)]
+                p.poly(hd, skin, None)
+                p.line(curve([(ex + sgn * w * 0.05, ey - h * 0.92), (ex + sgn * w * 0.6, ey - h * 0.55),
+                              (ex + sgn * w * 1.12, ey + h * 0.15)], 3), INK, 2.4)
+
+
+def brows(p, f, L, col, raise_, frown, thick=0.05):
+    """patriots4.brows on a turned face: the far brow only while it is seen."""
+    for sgn in (-1, 1):
+        if f.k(sgn * L['ecx'], L['brow_y']) < 0.3:
+            continue
+        ecx, ew = L['ecx'], L['ew']
+        xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew
+        up_ = raise_[0 if sgn < 0 else 1] if isinstance(raise_, (tuple, list)) else raise_
+        y_m = L['brow_y'] - thick * 0.35 - up_
+        yi, yo, ym = y_m + L['slope'] * (xm - xi) + frown, y_m - L['slope'] * (xo - xm), y_m - 0.008
+        uv = [(xi, yi - thick * 0.45), (xm, ym - thick * 0.6), (xo, yo - thick * 0.2), (xo + 0.01, yo + thick * 0.15),
+              (xm, ym + thick * 0.45), (xi, yi + thick * 0.55)]
+        p.poly(curve(f.pts([(sgn * u, v) for u, v in uv]), 3), col, None)
+
+
+def mouth(p, f, L, sp, lip_c, rest):
+    """A turned face's mouth: a talking shape (mouths.draw) narrowed round the head, else rest() (its own lips)."""
+    m = sp.get('mouth', 'rest')
+    if isinstance(m, str) and m.startswith('v:') and m != 'v:rest':
+        import mouths
+        u = -L['mw'] * 0.22 * f.s                             # the mouth's middle, nearer the corner we see
+        cx, my2 = f(u, L['lip13'])
+        with squashed(p, cx, max(0.4, f.k(u, L['lip13']))):
+            mouths.draw(p, dict(sp, lips=True, lip_c=lip_c), cx, my2 - 6, m[2:])
+        return True
+    rest()
+    return False
+
+
+NAMES = {'front': 'front', 'three': 'three-quarter', 'side': 'side', 'three_back': 'three-quarter behind',
+         'back': 'behind'}
+
+
+def turnaround(pairs, moods=None, first=None):
+    """The turnaround of exactly these (who, view) pairs: each person's front beside the views a shot needs (pre-flight
+    puts it on the check sheet; Sam's faces sheet). moods: {who: [sp overrides per row]}; a person with no Person
+    (MISSING) shows the old drawing, labelled. -> PIL image, or None for no pairs."""
+    from PIL import Image, ImageDraw, ImageFont
+    import burnham as B
+    import views as V
+    who_views = {}
+    for who, view in pairs:
+        who_views.setdefault(who, set()).add(view)
+    if not who_views:
+        return None
+    order = ('front', 'three', 'side', 'three_back', 'back')
+    yaw = dict(YAW, front=0)
+    tw, th = 330, 400
+    rows = [(who, m) for who in who_views for m in (moods or {}).get(who, [{}])]
+    cols = max(1 + len(v - {'front'}) for v in who_views.values())
+    img = Image.new('RGB', (tw * cols, (th + 40) * len(rows)), (232, 228, 222))
+    d = ImageDraw.Draw(img)
+    font = ImageFont.truetype(B.SANS, 22)
+    ss = B.SS
+    B.SS = 1
+    try:
+        for r, (who, extra) in enumerate(rows):
+            P = PEOPLE.get(who)
+            sp = dict(P.sheet() if P and P.sheet else {'who': who}, **extra)
+            views = ['front'] + [v for v in order if v in who_views[who] and v != 'front']
+            for c, view in enumerate(views):
+                im = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
+                V.person(im, B.Cam(1.0, 540, 960), 540, 1060, 1.25, sp, 0.0, yaw[view])
+                img.paste(im.crop((375, 620, 705, 1020)).convert('RGB'), (tw * c, (th + 40) * r + 40))
+                n = f'{first + r * cols + c}: ' if first else ''   # numbered on from another sheet (Sam answers by number)
+                lab = f"{n}{sp.get('name', who)}, {NAMES[view]}" + ('' if P or view == 'front' else ' (OLD: no turned head)')
+                d.text((tw * c + 8, (th + 40) * r + 10), lab + (f" {extra.get('label', '')}" if extra else ''),
+                       font=font, fill=(40, 40, 40))
+    finally:
+        B.SS = ss
+    return img
+
+
+if __name__ == '__main__':
+    # python3 source/turnhead.py sheet OUT.jpg CAST_MODULE WHO [VIEW ...] [--from N]   a person all the way round
+    # (or these views), the panels numbered from N
+    import importlib
+    import sys
+    a = sys.argv[1:]
+    if a and a[0] == 'sheet':
+        importlib.import_module(a[2])               # the cast registers its people on the module 'turnhead'
+        T = importlib.import_module('turnhead')       # (run as a script this file is also '__main__')
+        first = int(a[a.index('--from') + 1]) if '--from' in a else None
+        vs = [v for v in a[4:] if v in YAW] or list(YAW)
+        T.turnaround([(a[3], v) for v in vs], first=first).save(a[1], quality=90)
+        print(a[1])

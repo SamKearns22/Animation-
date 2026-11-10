@@ -215,6 +215,12 @@ def _arm(p, sc, cam, k, side, sp):
 def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     """The rig's head, turned about the neck base towards the projected head; its view from where the face points."""
     hup, hfwd = _unit(k['hup']), _unit(k['hfwd'])
+    roll = math.radians(sp.get('head_roll', 0.0))     # Job I faces (Sam, 11 Nov: 12, 15 turned, not straight on):
+    if roll:                                          # the shot says which way the face looks; + rolls it towards
+        r = k['shR'] - k['shL']                       # the person's right shoulder, - the left
+        r = r - hup * np.dot(r, hup)
+        r = _unit(r - hfwd * np.dot(r, hfwd))
+        hfwd = _unit(hfwd * math.cos(roll) + r * math.sin(roll))
     Xh = _unit(np.cross(hup, hfwd))
     d = _unit(np.asarray(cam.pos, float) - k['head'])
     a = yaw_seen(d, Xh, hfwd)
@@ -372,6 +378,19 @@ def draw(img, cam, k, sp, t=0.0, M=None):
 
 
 # ---------------------------------------------------------------------------------------------- the sheet
+ROLLED = {('back', 60): -40.0, ('back', 30): 40.0}     # the sheet's heads on the back rolled to one side (12, 15)
+
+
+def numbers(sh, corners, r=26):
+    """Each panel's number in a black disc at its top right corner (Sam answers by number)."""
+    d = ImageDraw.Draw(sh)
+    f = ImageFont.truetype(B.SANS, 34)
+    for n, (x, y) in enumerate(corners, 1):
+        cx, cy = x - r - 6, y + r + 6
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(20, 20, 20))
+        d.text((cx, cy), str(n), fill=(255, 255, 255), font=f, anchor='mm')
+
+
 def sheet(out, who='vance', extra=()):
     """Vance standing (the flat rig, front and side) beside his lying versions: before (the 3D volumes) and now."""
     import ad_vanced_notice_cast as AC
@@ -401,6 +420,8 @@ def sheet(out, who='vance', extra=()):
             q = dict(sp)
             if pose != 'back':
                 q['blink'] = True
+            if (pose, ang) in ROLLED:                 # on the back, the head rolled to one side (Sam, 11 Nov)
+                q['head_roll'] = ROLLED[(pose, ang)]
             surfs = [(p0, n) for _, p0, n in surf]
             if mode == 'volumes':
                 L.draw_volumes(img, cam, kk, q, 0.0, surfaces=surfs)
@@ -433,6 +454,9 @@ def sheet(out, who='vance', extra=()):
                 d.text((x0 + c * cw + 4, 46), names[c], fill=(20, 20, 20), font=small)
             sh.paste(im.resize((cw - 8, cw - 8), Image.LANCZOS), (x0 + c * cw + 4, y + 20))
         d.text((x0 + 6, y + 22), label, fill=(170, 20, 20) if r == 0 else (20, 110, 40), font=font)
+    boxes = [(14 + i * 245 + 230, 90) for i in range(len(cells))] + \
+        [(x0 + c * cw + cw - 4, 70 + r * (cw + 40) + 20) for r in range(2) for c in range(len(shots))]
+    numbers(sh, boxes)
     sh.save(out, quality=88)
     return out
 
