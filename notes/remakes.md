@@ -11,7 +11,7 @@
   Seen: forest up's foot is a flat sage block; forest close's moss blobs read as leaves stuck on; the camp's gate is
   hidden behind KG and the gunmen (move the gunmen aside), tower and shack crowd the right; the Goron too big in the
   line-up (check his scale); setcheck: blue container x crates, orange container x gate.
-- **Needs Sam:** line 6's recording ("Oh my god!"); "shit" heard or bleeped (Claude: heard).
+- **Needs Sam:** "shit" heard or bleeped (Claude: heard). All 14 recordings are in (line 6 filed by another chat).
 - **Read:** `guides/job-packs.md` Build; this file's references; `guides/critique-checklist.md` S and O.
 - **Open rule requests:** none.
 - **For Claude:** `source/remakes_sets.py` (MAP at the top): `alone forest|camp|town OUT`, `one VIEW OUT`; `STAGE`
