@@ -21,7 +21,15 @@
   collar (the 'ball' from behind showed a loose block: the back-of-head drawing's own neck ran a fixed length past the
   collar). Trio sheet looked at (fine); `lying.py check` OK; Elder Swindon's close man redrawn and looked at (fine;
   his shoe soles have a slightly doubled outline). Sheet `notes/sheets/job-i-driver-sheet.jpg` (sent).
-  **Next for I (chat 3, Opus medium, only if Sam wants it):** handcheck can't see lying bodies yet (lying.draw now
+  **Sam's notes on the driver sheet (10 Nov, round 1; balloon head is a repeat of his first note: rule 30, find why
+  the first fix failed first):** (a) legs clip and aren't one fluid piece: draw each leg as one tube, hip to ankle,
+  a round knee, its top under the shirt hem; (b) balloon heads remain: likely cause, the head is drawn full size at
+  the body's middle scale while the trunk is foreshortened, so beside a squashed body it reads big: scale the head
+  with the trunk's foreshortening and at the head's own depth, check against the standing cast; (c) all floor
+  shadows under lying people removed; (d) 'on the back, head away': the head sits up and stares at us, because the
+  head only has turned views, none seen from above: the face looking at the sky should show crown-first, lying on
+  the floor (a top-of-head view, or the head kept flat on the floor, never tipped up off it).
+  **Next for I (chat 3, Opus medium): Sam's notes (a)-(d), then the driver sheet again; then, if Sam wants,** handcheck can't see lying bodies yet (lying.draw now
   draws hands with views.arm/hand, so it could); a thin plain-red patch where the driver's sleeve meets his shoulder
   in three-quarter views; the shoe-sole outline. Rules that bite: 41, 30.
   For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
