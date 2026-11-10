@@ -18,7 +18,7 @@ drawing (the head's outline, the nose's bridge, the ear, the back of the hair) i
     outline(p, f, view, skin)                 the head's silhouette, inked except where it sits on the neck
     ear(p, f, skin)  nose(p, f, L, skin, prof)  hair(img, p, f, front_polys, colour, prof) -> mask, clipped(...)
     inside(img, p, head_poly, draw)           draw kept inside the head (a beard held round from behind)
-    neck_over(p, f, view, skin)               from behind, the neck drawn again over the jaw
+    neck_over(p, f, view, skin)               from behind, the neck drawn again over the jaw (standing only)
     register(Person(...)); install(views)     any person with a front design turns (built when a shot needs it)
     squashed(p, cx, k)                        a pen that narrows a screen-drawn feature (an eye, a talking mouth)
 
@@ -237,7 +237,7 @@ def inside(img, p, poly, draw):
     img.alpha_composite(layer)
 
 
-def outline(p, f, view, skin, lw=2.6, fill=True, ink=True):
+def outline(p, f, view, skin, lw=2.6, fill=True, ink=True, whole=False):
     """Fill the head in skin and ink its edge, except where the edge only crosses the neck (from the side the neck
     carries on down from the nape and the throat; from behind it rises into the head)."""
     sil = silhouette(f)
@@ -246,7 +246,7 @@ def outline(p, f, view, skin, lw=2.6, fill=True, ink=True):
         p.poly(poly, skin, None)
     if not ink:
         return poly
-    n0, n1 = NECK.get(view, (0, 0))
+    n0, n1 = (0, 0) if whole else NECK.get(view, (0, 0))   # whole: inked all round (no neck runs into it)
     hx = f.hx
 
     def inked(q):
@@ -520,9 +520,10 @@ def draw(img, p, sp, t, view, hx, hy):
     head = outline(p, f, view, skin, ink=False)
     if P.face and view != 'back':                             # from straight behind a beard is hidden
         inside(img, p, head, lambda pen: P.face(pen, f, L, sp))
-    outline(p, f, view, skin, fill=False)
-    if view in ('three_back', 'back'):
-        neck_over(p, f, view, skin)
+    lying = bool(sp.get('nape_in_head'))              # lying (lying_flat): the collar, not a neck, meets the nape
+    outline(p, f, view, skin, fill=False, whole=lying)    # (Sam, 11 Nov, lying 18: the neck drawn over the head,
+    if view in ('three_back', 'back') and not lying:      # tipped off its neck, was a square block, a blindfold
+        neck_over(p, f, view, skin)                       # with his hair band): the head inked all round, no neck
     if P.over:
         P.over(img, p, f, L, sp, view)
     fx, my = f(0.0, L['lip13'])

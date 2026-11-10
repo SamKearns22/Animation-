@@ -902,6 +902,74 @@ def turned_heads_for_anyone():
 VANCE_TURNED_MD5 = 'f17956f352af1555f79635c0fdf11811'   # main line c6b007a, before the shared tool
 
 
+@test
+def lying_shirt_and_nape():
+    """Job I lying fixes (Sam, 11 Nov, for every character): slumped against a wall the shirt was a stiff box (lying
+    16: square shoulders, straight sides), now bent as cloth (lying_flat.Slump); lying with the back of the head to
+    us, the neck was drawn again over the head as a square block (18, a blindfold with the driver's hair band), now
+    the head is inked all round with no neck over it (turnhead, nape_in_head). Standing views are untouched."""
+    import numpy as np
+    from PIL import Image
+    import burnham as B
+    import lying as L
+    import lying_flat as LF
+    import turnhead as TH
+    import views as V
+    import ad_vanced_notice_cast as AC
+
+    def corners(a):                                   # the share of the shirt's top corners filled (a box: ~1)
+        ys, xs = np.nonzero(a > 8)
+        x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+        h, w = int((y1 - y0) * 0.12), int((x1 - x0) * 0.12)
+        return float(np.mean([(a[y0:y0 + h, x0:x0 + w] > 8).mean(), (a[y0:y0 + h, x1 - w:x1] > 8).mean()]))
+    made, calls, out, ok = [], [], [], True
+    real, real_over = LF.Slump, TH.neck_over
+
+    class Spy(real):
+        def __init__(self, *a, **k):
+            super().__init__(*a, **k)
+            made.append(self)
+    LF.Slump = Spy
+    TH.neck_over = lambda *a, **k: (calls.append(1), real_over(*a, **k))[1]
+    B.SS = 2
+    try:
+        for who in ('vance', 'man'):
+            sp = dict(AC.CAST[who])
+            for pose, ang, yaw in (('slump', None, -60.0), ('back', 60, 0.0), ('ball', 30, 180.0)):
+                del made[:], calls[:]
+                img = B.canvas((214, 206, 188))
+                kk, surf = L.lie(sp, pose, 0.0, 0.0, yaw)
+                cam = L._fit(L._cam_for(ang, 4.5, (0, 0.35 if pose == 'slump' else 0.1, 0)),
+                             [kk[n] for n in L.POINTS] + [kk['head'] + 0.15 * kk['hup']], fill=0.7)
+                L.draw(img, cam, kk, dict(sp, blink=True), 0.0, surfaces=[(p0, n) for _, p0, n in surf])
+                if pose == 'slump':
+                    if not made:
+                        ok = False
+                        out.append(f'{who} slumped: shirt NOT bent')
+                        continue
+                    sl = made[0]
+                    bent = Image.new('RGBA', img.size, (0, 0, 0, 0))
+                    sl.paste(bent)
+                    a0, a1 = corners(np.asarray(sl.layer)[:, :, 3]), corners(np.asarray(bent)[:, :, 3])
+                    ok &= a1 < 0.8 * a0
+                    out.append(f'{who} slumped: shoulder corners filled {a0:.2f} (box) -> {a1:.2f}')
+                elif made:
+                    ok = False
+                    out.append(f'{who} {pose}: shirt bent though not sitting')
+                if pose == 'ball':
+                    ok &= not calls
+                    out.append(f'{who} back of head lying: neck over it {len(calls)}x')
+        del calls[:]
+        B.SS = 1
+        im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(im, B.Cam(1.0, 540, 960), 540, 1060, 1.25, dict(AC.MAN), 0.0, 180)
+        ok &= bool(calls)
+        out.append(f'standing from behind: neck over the nape kept ({len(calls)}x)')
+    finally:
+        LF.Slump, TH.neck_over = real, real_over
+        B.SS = 1
+    return bool(ok), '; '.join(out)
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

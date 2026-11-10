@@ -31,6 +31,7 @@ import burnham as B          # noqa: E402
 import views as V            # noqa: E402
 from ed import INK, curve    # noqa: E402
 
+BACKS = ('three_back', 'back')                         # trunk views seen from behind
 HEAD_TILT = 35.0                                       # degrees the head may tip off the trunk's line
 _N = [0]
 
@@ -288,9 +289,92 @@ def _neck(img, hc, sp, foot=40):
 
 def _head_draw(img, hc, sp, t):
     hcam, hv = hc
-    q = dict(sp, neck_to=-14.0, no_shine=True, turn=getattr(hcam, 'turn', 0.0))       # the back-of-head's own neck ends at the collar; no shine
+    q = dict(sp, neck_to=-14.0, no_shine=True, nape_in_head=True, turn=getattr(hcam, 'turn', 0.0))       # the back-of-head's own neck ends at the collar; no shine
     #                                                   on a bald crown seen lying (it read as a balloon, Sam 10 Nov)
     V.head_view(img, B.Pen(img, hcam), q, t, hv, q.get('head_dx', 0.0), hcam.hy + q.get('head_dy', 0))
+
+
+def _sat(k, up):
+    """Sitting up (the trunk upright, the thighs forward along the floor): slumped against a wall."""
+    thigh = _unit((k['knL'] + k['knR']) / 2 - (k['hipL'] + k['hipR']) / 2)
+    return float(up[1]) > 0.6 and float(np.dot(thigh, up)) < 0.5
+
+
+class Slump:
+    """The shirt of a body slumped sitting (Sam, 11 Nov, lying 16: "the shirt drawn as a stiff box"): the standing
+    drawing (drawn alone on `layer`) bent as cloth on a slumped body: the shoulders slope and round off (no square
+    corners), the sides bow out at the belly, the hem curves up at the sides over the lap, and soft folds cross the
+    waist where the trunk bends. Bent as a finished picture, so the plaid, buttons and outline all bend with it.
+    `moved(q)`: where a drawing point goes (the sleeves join the sloped shoulders); `paste(img)` puts it down."""
+    def __init__(self, layer, aff, sag=1.0):
+        self.layer, self.sag = layer, sag
+        self.A = np.asarray(aff.A, float) * B.SS
+        self.t = np.asarray(aff.t, float) * B.SS
+        self.Ai = np.linalg.inv(self.A)
+        a = np.asarray(layer)
+        ys, xs = np.nonzero(a[:, :, 3] > 8)
+        self.box = (xs.min(), ys.min(), xs.max(), ys.max()) if len(xs) else None
+        if self.box is None:
+            return
+        uv = (np.c_[xs, ys] - self.t) @ self.Ai.T
+        u0, u1 = np.percentile(uv[:, 0], [1, 99])
+        self.xc, self.hw = (u0 + u1) / 2, max(1.0, (u1 - u0) / 2)
+        self.bot = max(1.0, float(np.percentile(uv[:, 1], 99)))
+        self._folds(aff)
+
+    def disp(self, u, v):
+        x = (u - self.xc) / self.hw
+        s2 = np.clip(x * x, 0, 1.2)
+        vn = v / self.bot
+        du = (u - self.xc) * (0.08 * np.exp(-((vn - 0.72) / 0.22) ** 2) - 0.05 * np.clip(1 - vn / 0.35, 0, 1))
+        dv = 26 * s2 * np.clip(1 - vn / 0.45, 0, 1) - 40 * s2 ** 1.5 * np.clip((vn - 0.72) / 0.28, 0, 1)
+        return du * self.sag, dv * self.sag
+
+    def moved(self, q):
+        if self.box is None:
+            return np.asarray(q, float)
+        du, dv = self.disp(np.array([q[0]], float), np.array([q[1]], float))
+        return np.array([q[0] + du[0], q[1] + dv[0]])
+
+    def _folds(self, aff):
+        """Soft folds across the waist, drawn on the shirt before it bends (kept inside it, clear of its edge)."""
+        import cv2
+        a = np.asarray(self.layer).copy()
+        w = max(1, int(round(1.6 * B.SS * max(0.25, aff.s) ** 0.6)))
+        fm = Image.new('L', self.layer.size, 0)
+        d = ImageDraw.Draw(fm)
+        for vn, f0, f1, sd in ((0.62, -0.95, -0.15, 1), (0.7, 0.2, 0.92, -1), (0.79, -0.7, 0.05, 1)):
+            v = vn * self.bot
+            pts = [(self.xc + self.hw * (f0 + (f1 - f0) * i / 8), v + sd * 9 * math.sin(math.pi * i / 8))
+                   for i in range(9)]
+            d.line([tuple(self.A @ q + self.t) for q in pts], fill=255, width=w, joint='curve')
+        fm = np.minimum(np.asarray(fm), cv2.erode(a[:, :, 3], np.ones((2 * w + 1, 2 * w + 1), np.uint8)))
+        k = fm[:, :, None] / 255.0
+        a[:, :, :3] = (np.asarray(INK[:3]) * k + a[:, :, :3] * (1 - k)).astype(np.uint8)
+        self.layer = Image.fromarray(a, 'RGBA')
+
+    def paste(self, img):
+        from scipy import ndimage
+        if self.box is None:
+            return
+        a = np.asarray(self.layer).astype(float)
+        a[:, :, :3] *= a[:, :, 3:4] / 255.0           # premultiplied: the edges blend cleanly
+        x0, y0 = max(0, self.box[0] - 80), max(0, self.box[1] - 80)
+        x1, y1 = min(a.shape[1], self.box[2] + 80), min(a.shape[0], self.box[3] + 80)
+        gy, gx = np.mgrid[y0:y1, x0:x1].astype(float)
+        tgt = (np.stack([gx.ravel(), gy.ravel()], 1) - self.t) @ self.Ai.T
+        src = tgt.copy()
+        for _ in range(5):                            # the drawing point that bends onto each pixel
+            du, dv = self.disp(src[:, 0], src[:, 1])
+            src = tgt - np.c_[du, dv]
+        pix = src @ self.A.T + self.t
+        out = np.zeros((y1 - y0, x1 - x0, 4))
+        for c in range(4):
+            out[:, :, c] = ndimage.map_coordinates(a[:, :, c], [pix[:, 1], pix[:, 0]], order=1,
+                                                   cval=0.0).reshape(gx.shape)
+        al = out[:, :, 3:4]
+        out[:, :, :3] = np.where(al > 0, out[:, :, :3] * 255.0 / np.maximum(al, 1e-6), 0)
+        img.alpha_composite(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA'), (int(x0), int(y0)))
 
 
 def face_up_away(cam, k):
@@ -357,21 +441,35 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     _neck(img, hc, sp_draw)
     if head_behind:
         _head_draw(img, hc, sp_draw, t)
+    def trunk(on):
+        tp = B.Pen(on, aff)
+        sp_draw['neck_off'] = True
+        if view == 'front':
+            q = dict(sp_draw, pose='none', full=False)
+            q.setdefault('bottom', V.JACKET)
+            B.torso(on, tp, q, t)
+        else:
+            V.torso_view(on, tp, sp_draw, view, False)
+    bend = None
+    if _sat(k, up):                                   # slumped sitting: the shirt drawn first on its own, bent as
+        layer = Image.new('RGBA', img.size, (0, 0, 0, 0))     # cloth; the sleeves join its sloped shoulders
+        trunk(layer)
+        bend = Slump(layer, aff)
+        for sd in 'LR':
+            q = np.linalg.solve(A, np.asarray(sc.shoulders[sd], float) * s - tt)
+            sc.shoulders[sd] = (A @ bend.moved(q) + tt) / s
     for _, key in sorted(first, key=lambda v: -v[0]):
         piece(key)
-    tp = B.Pen(img, aff)
-    sp_draw['neck_off'] = True
-    if view == 'front':
-        q = dict(sp_draw, pose='none', full=False)
-        q.setdefault('bottom', V.JACKET)
-        B.torso(img, tp, q, t)
+    if bend:
+        bend.paste(img)
     else:
-        V.torso_view(img, tp, sp_draw, view, False)
+        trunk(img)
     for _, key in sorted(last, key=lambda v: -v[0]):
         piece(key, front=True)
     sp_draw.pop('neck_off')
-    if not head_behind and any(kk[0] == 'arm' for _, kk in last):
+    if not head_behind and view not in BACKS and any(kk[0] == 'arm' for _, kk in last):
         _neck(img, hc, sp_draw, foot=-6)              # an arm in front passes behind the neck, never through it
+        #                                               (from behind the collar is nearer: the neck stays under it)
     if not head_behind:
         _head_draw(img, hc, sp_draw, t)
     return {n: cam.project(tuple(k[n]))[0] for n in L.POINTS}
