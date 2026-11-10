@@ -1,32 +1,40 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 87 (a fault surviving 3 passes goes to an options sheet).
-- **Done (build chat 9, Opus high; stopped on the amber cost watch):** soft foot shadows under every character (Sam Q3;
-  Navi has none: she is a flying light); the forest's and the camp's pass-2 faults fixed (list below, in the commit);
-  the set sheet now shows the camp with the gate blown in. setcheck clean.
-- **Next (Opus, high):** the town's pass-2 faults (below), then critique pass 3 of all three sets, a NEW helper each
-  (rule 89, parts S and O). The spec files are git-ignored and gone with the old container: write
-  `source/data/critique/spec_r1/2/3.json` again (one panel per set: the `alone` sheet as `img`, refs 01/17/19/20,
-  23/24, 21/22, parts "SO"), then `critique.py pack` each.
-- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O.
+- **Rules that bite next:** 87 (a fault that survives three passes goes on ONE options sheet for Sam), 89 (fix every
+  pass-3 FAULT or name it), 83 (setcheck after each move).
+- **Done (build chat 10, Opus high; stopped on the amber cost watch):** the town's pass-2 faults fixed (list in the
+  commit); critique pass 3 of all three sets recorded (forest 25 faults, camp 22, town 14). Triage below. setcheck clean.
+- **Next (Opus, high):** fix the pass-3 "Fix" list; build ONE options sheet (2-3 drawn options each) for the
+  "Survivors" (rule 87); send it to Sam with the "Name to Sam" list; wait for his picks. No pass 4 before his picks.
+- **Needs Sam:** nothing yet (the options sheet will).
+- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O; the triage below.
 - **Open rule requests:** none.
-- **For Claude:** `source/remakes_sets.py` (MAP): `foot_shadow`, SHADOW_W, ON_HIGH; `kg_on_branch` (tail behind the
-  branch); STUMP_DOWN/STUMP_SEED (one stump for S2, S4/S6); `_near_yard`, `_tower_box` (lookout in the tower),
-  `_camo_net`, `_tyres`, BARRELS, WALL_TINS; view `camp_open` (gate=1). Watch in pass 3: the ammo belt in the near
-  yard, the stump's plank-like roots, the S1 trunk's moss.
+- **For Claude:** `source/remakes_sets.py`: `_flagstones` (perspective slabs, any Level), `_house(**build)` +
+  SQUARE_HOUSES, `_crest`/`_banner`, `_townsfolk`, `_palm_bed`, `_planter`, WALL_LEV, `_stone_block`; KG wing pose
+  'present' (remakes_creatures WING_POSES); spit in `_kg_side`. Packs: `source/data/critique/spec_r1/2/3.json` (r1
+  forest, r2 camp, r3 town; panels are `one VIEW` stills in `source/data/critique/remakes_sets/sheets/`; empty
+  r*-p1/p2 folders stand in so `pack` numbers the next pass right).
 
-## Open notes: the sets' pass-2 faults (build chat 8; forest and camp FIXED in build chat 9, town open)
-- Forest (fixed): up still reads level (converge the trunk, show the branch's underside), KG's talons float in front of the
-  branch, the trunk's moss band reads as tape (also edge trunks); down: path climbs the stump like stairs and is drawn
-  over the door's foot (end it at the stump's base), the bell flower reads as a paddle; close: no shafts or mist read,
-  door like a magnifying glass, a glow with no source, the grass ends in a ruled line, stump differs from S2 (door,
-  window, lanterns); edge: long grass not lawn, trunks at staggered depths, the muzzle cut off (move him left).
-- Camp (fixed; the gunmen all aim left into the yard now, one as a lookout in the tower): a palm grows out of the orange container, the ruts too wide, wire a hairline, sandbags like pebbles, red bars
-  on the gate mean nothing, the barrels hidden, gunmen grey on the grey wall and aiming at each other (aim at the
-  yard), show the gate blown in (gate=1) on the sheet, blank right wall, still empty dirt at the foot.
-- Town (OPEN): the palm floats behind the bunting, bunting too low, KG cut off with his wing pointing at empty cobbles,
-  houses one repeated block, flagstones not oval cobbles, the wall too neat (rough grey stone, depth), the spit tiny.
+## Open notes: the sets' pass-3 faults (build chat 10; results in notes/ledger/remakes_sets/round-1/2/3.txt)
+- **Survivors (three passes) -> the options sheet:** forest S1 the up-shot still reads level and KG doesn't tower
+  (canopy below him, open sky "treetop above clouds", trunk barely wider than him); S4/S6 no light shafts read;
+  S5 trunks still even poles, not staggered, and a grey forest unlike the others; camp walls read as a plank fence
+  not corrugated tin, and no shacks (no middle layer); town fountain pale and statue-less (ref 21: dark stone,
+  statues); KG's spit (now reads as flowers he is offering; also comes from a closed beak).
+- **Fix (new in pass 3):** KG floats in camp and town (his fanned tail hangs below his talons and the shadow sits
+  at his belly: shorten the tail when standing, shadow at the talons); forest door shorter than Link; the path
+  even patio bricks; the lantern reads as a hand bell; the lower half of S1 pale cloud blobs; S5 gunman small in the
+  lower left, not a close-up; camp: ammo box bigger than Link, a gunman's rifle crosses the gatepost and two
+  stand through the open leaf, gate_open's leaves whole (splinter it, a leaf off its hinge, debris) and the gateway
+  a blank olive block (road and jungle beyond), the MG42 reads as a rifle (perforated jacket, belt box), the tower
+  gunman a smudge, the ammo belt stiff, the puddle; town: the trough's flowers bulge off it, barrels and statue
+  unreadable at phone size, bunting louder than the line-up's faces, the banner tassel reads as a yellow blob by
+  Link's knee, the S12 wall is like nothing in the square (put the same rough stone in the square, e.g. the
+  ground floors or a wall stretch).
+- **Name to Sam (not set faults):** Link reads as a girl (camp, forest); Saria as a boy, Goron as a chick; the
+  sheets show neutral faces at the marks, so the acting beats (grin, shrug, wince, doubt) aren't on them; KG's
+  tufts read as horns (Sam: they stay); the gunman's mask reads as a gas mask; Navi reads as a star, not a ball.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),

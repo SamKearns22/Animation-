@@ -203,47 +203,148 @@
      "2 S6: wide frame showing this wall",
      "2 S4: each camera move's end frames"
     ]
+   },
+   {
+    "round": 2,
+    "pass": 3,
+    "date": "2026-11-10",
+    "faults": 22,
+    "cant_tell": 3,
+    "open": [
+     "1 A1: elf reads as a girl, not boy",
+     "1 A2: walls - plank fence, not corrugated tin; no shacks",
+     "1 A3: boy - blank, no wince",
+     "1 O5: owl hovers, shadowless; box shadows float",
+     "1 O2: first gunman - rifle crosses gatepost",
+     "1 O4: owl as tall as boy; ammo box bigger than him",
+     "1 O3: owl's gun - rifle, not machine gun",
+     "1 S1: straw horns compete with gunmen",
+     "1 S5: no shacks, no middle layer",
+     "1 S3: one flat fence; references show scattered shacks, vehicles",
+     "2 A1: gate reads \"opened onto a wall\", not blown in",
+     "2 A2: gateway - olive block, not road and jungle",
+     "2 A3: boy and owl unchanged - no reaction",
+     "2 O5: gate leaves intact, neat; no debris",
+     "2 O2: right gunmen stand through the open leaf",
+     "2 O4: owl, ammo box oversize",
+     "2 O3: still not a machine gun",
+     "2 O6: no smoke, splinters or muzzle flash",
+     "2 S1: the burst and firing aren't shown",
+     "2 S2: gateway leads to a wall",
+     "2 S5: gateway a blank block",
+     "2 S3: no tin walls or shacks",
+     "1 S2: wider frame past the gate",
+     "1 S4: first and last frame of any camera move",
+     "2 S4: first and last frame of the move"
+    ]
+   },
+   {
+    "round": 3,
+    "pass": 3,
+    "date": "2026-11-10",
+    "faults": 13,
+    "cant_tell": 3,
+    "open": [
+     "1 A1: line-up - fifth figure is the green elf boy, not a fourth girl; tutu creature reads as yellow chick, not rock",
+     "1 A2: fountain - pale tiers; reference is dark stone with statues",
+     "1 O5: owl's talons dangle grasping nothing; planter flowers bulge sideways into mid-air",
+     "1 O3: right of fountain - barrels are brown dots; fountain statue unreadable",
+     "1 S1: centre - line-up faces tiny behind huge owl; loud bunting competes",
+     "2 A1: centre - spit reads as flowers the boy offers; headbanded bird doesn't read as the owl",
+     "2 A2: planter is a tall pillar of red/purple flowers; reference is a long lavender trough; banner on wall, reference hangs from a post",
+     "2 O5: bottom left - planter flowers stick out sideways in mid-air",
+     "2 O3: left of boy's knee - unexplained yellow blob",
+     "2 O6: boy's chest - spit is static petals resting on him, not flying droplets",
+     "2 S1: left third - bright flowers beside the spit muddle the action",
+     "2 S3: wall - grey block wall; references show timber/plaster houses, balustrades, blue swags",
+     "2 S6: whole panel - no grey stone wall in panel 1's square",
+     "1 O2: full-size crop where owl's wing tip meets the red-haired girl",
+     "2 O4: owl must lift the boy but is his height; needs size chart",
+     "2 S4: first/last frames of the grab-lift-slam move"
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 3,
+    "date": "2026-11-10",
+    "faults": 25,
+    "cant_tell": 8,
+    "open": [
+     "1 A1: owl startled, no grin.",
+     "1 A2: ram-horn tufts; bead tail.",
+     "1 O4: trunk barely wider than owl; tree not huge.",
+     "1 S1: camera level, canopy below; he doesn't tower.",
+     "1 S5: lower half flat pale cloud-blobs.",
+     "1 S3: open sky, not dense forest.",
+     "1 S6: treetop above clouds.",
+     "2 A1: boy straight, arms down; no shrug.",
+     "2 A2: boy lacks woven back-shield.",
+     "2 O4: door shorter than boy.",
+     "2 O6: fairy a cartoon star, not glowing orb.",
+     "2 O3: lantern reads as a hand bell.",
+     "2 S1: orange lantern pulls eye off boy.",
+     "2 S3: even patio bricks.",
+     "3 A1: face blank, arms limp; no doubt, shock.",
+     "3 A2: hat bead band (absent panel 2); no back-shield.",
+     "3 O3: lantern reads as bell.",
+     "3 S1: face, the beat, does nothing.",
+     "3 S3: no light shafts; trunks even parallel columns.",
+     "3 S5: forest floor hidden.",
+     "4 A1: eyes hidden by gas mask; no suspicion.",
+     "4 A2: gas mask, no camo.",
+     "4 S1: man small lower-left, not close-up.",
+     "4 S3: even grey poles, not staggered.",
+     "4 S6: different grey forest.",
+     "1 O1: owl cast tile.",
+     "1 S4: move end-frames.",
+     "2 O1: boy cast tile.",
+     "2 S4: move end-frames.",
+     "3 O1: boy cast tile.",
+     "3 S4: move end-frames.",
+     "4 O1: gunman cast tile.",
+     "4 S4: move end-frames."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 13,
+    "faults": 21,
     "false": 0
    },
    "A2": {
-    "faults": 14,
+    "faults": 22,
     "false": 0
    },
    "O5": {
-    "faults": 10,
-    "false": 0
-   },
-   "O2": {
-    "faults": 6,
-    "false": 0
-   },
-   "O3": {
     "faults": 14,
     "false": 0
    },
+   "O2": {
+    "faults": 8,
+    "false": 0
+   },
+   "O3": {
+    "faults": 20,
+    "false": 0
+   },
    "S1": {
-    "faults": 11,
+    "faults": 19,
     "false": 0
    },
    "S5": {
-    "faults": 10,
+    "faults": 14,
     "false": 0
    },
    "S3": {
-    "faults": 13,
+    "faults": 20,
     "false": 0
    },
    "A3": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "O4": {
-    "faults": 4,
+    "faults": 8,
     "false": 0
    },
    "O1": {
@@ -251,15 +352,15 @@
     "false": 1
    },
    "S2": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "O6": {
-    "faults": 4,
+    "faults": 7,
     "false": 0
    },
    "S6": {
-    "faults": 6,
+    "faults": 9,
     "false": 0
    }
   }

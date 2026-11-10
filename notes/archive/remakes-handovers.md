@@ -214,3 +214,21 @@
 - **For Claude:** `source/remakes_sets.py` (MAP): KG_BEAT poses KG per sheet, gunmen aim (flipped right of centre),
   TOWER, CONTAINERS; packs `source/data/critique/remakes_sets/r1..3-p2/result.md` (git-ignored); ledger remakes_sets.
 
+
+# 11 Nov (build chat 9, before build chat 10)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 87 (a fault surviving 3 passes goes to an options sheet).
+- **Done (build chat 9, Opus high; stopped on the amber cost watch):** soft foot shadows under every character (Sam Q3;
+  Navi has none: she is a flying light); the forest's and the camp's pass-2 faults fixed (list below, in the commit);
+  the set sheet now shows the camp with the gate blown in. setcheck clean.
+- **Next (Opus, high):** the town's pass-2 faults (below), then critique pass 3 of all three sets, a NEW helper each
+  (rule 89, parts S and O). The spec files are git-ignored and gone with the old container: write
+  `source/data/critique/spec_r1/2/3.json` again (one panel per set: the `alone` sheet as `img`, refs 01/17/19/20,
+  23/24, 21/22, parts "SO"), then `critique.py pack` each.
+- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O.
+- **Open rule requests:** none.
+- **For Claude:** `source/remakes_sets.py` (MAP): `foot_shadow`, SHADOW_W, ON_HIGH; `kg_on_branch` (tail behind the
+  branch); STUMP_DOWN/STUMP_SEED (one stump for S2, S4/S6); `_near_yard`, `_tower_box` (lookout in the tower),
+  `_camo_net`, `_tyres`, BARRELS, WALL_TINS; view `camp_open` (gate=1). Watch in pass 3: the ammo belt in the near
+  yard, the stump's plank-like roots, the S1 trunk's moss.
+

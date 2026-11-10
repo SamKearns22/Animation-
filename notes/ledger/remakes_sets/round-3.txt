@@ -96,3 +96,43 @@ Called the owl "horned bird" twice: tufts dominate. Panel 1: missed palm, banner
 3. Owl near Link's height in 2, dwarfs line-up in 1. suggested line: character sizes match across shots.
 4. Line-up evenly spaced on one baseline. suggested line: groups stagger.
 
+== critique, round 3 pass 3 (2026-11-10): 13 fault(s), 3 can't tell
+-- look.md --
+1: Festive town square; laughing horned owl-bird flaps foreground; five odd friends stand stiffly behind. No words.
+2: Elf boy offers flowers; scowling red-headbanded bird pecks them; tail cropped at edge. No words.
+-- result.md --
+## Panel 1
+ok: A3 O4 O6 O1 S2 S5 S6 S3 S4
+FAULT A1: line-up - fifth figure is the green elf boy, not a fourth girl; tutu creature reads as yellow chick, not rock
+FAULT A2: fountain - pale tiers; reference is dark stone with statues
+FAULT O5: owl's talons dangle grasping nothing; planter flowers bulge sideways into mid-air
+FAULT O3: right of fountain - barrels are brown dots; fountain statue unreadable
+FAULT S1: centre - line-up faces tiny behind huge owl; loud bunting competes
+CAN'T TELL O2: full-size crop where owl's wing tip meets the red-haired girl
+
+## Panel 2
+ok: A3 O2 O1 S2 S5
+FAULT A1: centre - spit reads as flowers the boy offers; headbanded bird doesn't read as the owl
+FAULT A2: planter is a tall pillar of red/purple flowers; reference is a long lavender trough; banner on wall, reference hangs from a post
+FAULT O5: bottom left - planter flowers stick out sideways in mid-air
+FAULT O3: left of boy's knee - unexplained yellow blob
+FAULT O6: boy's chest - spit is static petals resting on him, not flying droplets
+FAULT S1: left third - bright flowers beside the spit muddle the action
+FAULT S3: wall - grey block wall; references show timber/plaster houses, balustrades, blue swags
+FAULT S6: whole panel - no grey stone wall in panel 1's square
+CAN'T TELL O4: owl must lift the boy but is his height; needs size chart
+CAN'T TELL S4: first/last frames of the grab-lift-slam move
+
+## Cold look
+Missed: elf boy replaces a fourth girl; rock creature unnamed. Panel 2: spit read as flowers; owl read as another bird (headband).
+
+## Same fault elsewhere
+A1: both panels. A2: fountain 1, planter/banner 2. O5 floating flowers: 1 and 2. O3 unreadable props: 1 and 2. O6: 2 only. S1: both. S3: 2 only. S6: 2.
+
+## Not on the list
+- Owl's design changes (headband, eye, face disc) in panel 2. suggested line: each character matches its cast tile in every panel.
+- Owl's eyes shut laughing, not a host's grin to camera. suggested line: the beat's expression reads at phone size.
+- Line-up stiff and blank, no reaction. suggested line: bystanders react to the beat.
+- Paving chevrons read as birds. suggested line: ground marks read as stone.
+- Spit leaves a closed beak. suggested line: an effect starts from its source.
+

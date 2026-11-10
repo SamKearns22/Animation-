@@ -61,3 +61,57 @@ One panel only; nothing to check.
 - No shadows under a bright sun. suggested line: "Under a stated sun, everything casts one-way shadows."
 - Gate has no hinges, weak point or debris ready to blow. suggested line: "A breaking set piece is drawn with its break parts."
 
+== critique, round 2 pass 3 (2026-11-10): 22 fault(s), 3 can't tell
+-- look.md --
+1: Closed gate, soldiers aiming rifles; elf girl stands; horned owl-creature with rifle stares, startled.
+2: Same, gate opened onto olive wall; soldiers overlap gatepost; girl, owl-creature unchanged, blank. No words.
+-- result.md --
+## Panel 1
+ok: O1 O6 S6
+FAULT A1: elf reads as a girl, not boy
+FAULT A2: walls - plank fence, not corrugated tin; no shacks
+FAULT A3: boy - blank, no wince
+FAULT O5: owl hovers, shadowless; box shadows float
+FAULT O2: first gunman - rifle crosses gatepost
+FAULT O4: owl as tall as boy; ammo box bigger than him
+FAULT O3: owl's gun - rifle, not machine gun
+FAULT S1: straw horns compete with gunmen
+FAULT S5: no shacks, no middle layer
+FAULT S3: one flat fence; references show scattered shacks, vehicles
+CAN'T TELL S2: wider frame past the gate
+CAN'T TELL S4: first and last frame of any camera move
+
+## Panel 2
+ok: O1 S6
+FAULT A1: gate reads "opened onto a wall", not blown in
+FAULT A2: gateway - olive block, not road and jungle
+FAULT A3: boy and owl unchanged - no reaction
+FAULT O5: gate leaves intact, neat; no debris
+FAULT O2: right gunmen stand through the open leaf
+FAULT O4: owl, ammo box oversize
+FAULT O3: still not a machine gun
+FAULT O6: no smoke, splinters or muzzle flash
+FAULT S1: the burst and firing aren't shown
+FAULT S2: gateway leads to a wall
+FAULT S5: gateway a blank block
+FAULT S3: no tin walls or shacks
+CAN'T TELL S4: first and last frame of the move
+
+## Cold look
+I called the boy a girl and missed the wince (there is none). "Rifle" was right, which is the fault: brief wants a machine gun. Panel 2 read "gate opened" since nothing breaks or fires. I missed the absent shacks and tin.
+
+## Same fault elsewhere
+- Boy reads girl, no wince: 1, 2.
+- Not a machine gun: 1, 2.
+- Owl floating, oversized props: 1, 2.
+- Gunmen clipping gate: 1, 2.
+- No tin walls or shacks: 1, 2.
+- Blank gateway to nowhere, no effects: 2 only.
+
+## Not on the list
+- Gunmen aim along the fence, not into the yard. suggested line: guns point where the brief says.
+- Puddle in a dry yard. suggested line: wet and dry agree across the set.
+- Tower gunman a smudge at phone size. suggested line: every named person reads at phone size.
+- Straw "horns" read as antlers. suggested line: costume matches cast sheet.
+- Ammo belt a stiff stick. suggested line: belts and ropes sag.
+
