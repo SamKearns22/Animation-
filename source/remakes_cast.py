@@ -250,11 +250,13 @@ MOODS = {   # child faces: lids, pupils, brows (inner, outer rise; one = a singl
     'horror': dict(pupil=0.42, low=0.15, brows=(24, -6), mouth='horror', wide=1.06),          # line 10: "This is horrible"
     'deadpan': dict(lid=(0.6, 0.6), brows=(-10, -8), mouth='deadpan'),            # line 12: "I am 9 years old"
     'terrified': dict(pupil=0.6, brows=(22, -8), mouth='terrified', wide=1.1, tears=True),   # line 14: "go home"
-    'down': dict(gaze_dy=1.0, lid=(0.3, 0.3), brows=(10, -4), mouth='pout'),        # Zelda: eyes down, unsure
+    'down': dict(gaze_dy=1.5, lid=(0.55, 0.55), brows=(16, -6), mouth='pout', tip=0.12),   # Zelda: head and eyes
+                                                                                    # down, lids heavy (pass 1)
     'hopeful': dict(brows=(12, 2), mouth='hopeful'),                              # Malon
     'smug': dict(lid=(0.36, 0.36), brows=(-2, 6), mouth='smug'),                   # Saria, Ruto
     'wink': dict(lid=(0.2, 0.2), closed=(1, 'smile'), brows=(0, 6), mouth='wink'),   # Saria winks at Link
-    'vain': dict(lid=(0.56, 0.56), brows=(-8, 18), one=(1, 10), mouth='smug', look=0.7, gaze_dy=0.5),        # Ruto: chin up, looking down her nose
+    'vain': dict(lid=(0.56, 0.56), brows=(-8, 18), one=(1, 10), mouth='smug', look=0.7, gaze_dy=0.5,
+                 tip=-0.07),        # Ruto: chin up, looking down her nose
 }
 
 
@@ -274,7 +276,8 @@ def kid_head(img, p, sp, t, hx, hy):
                    dk(skin, 0.76), 1.8)
     outline = _kid_outline(hx, hy, hw, hh, sp.get('chin', 1.0))
     p.poly(outline, skin, INK, 2.8)
-    ey = hy + hh * 0.2
+    tip = hh * mood.get('tip', 0.0)                                  # the head tipped down (+) or chin up (-): the
+    ey = hy + hh * 0.2 + tip                                         # features slide on the face
     gap, ew, eh = hw * 0.4, hw * 0.22, hh * 0.22 * mood.get('wide', 1.0)   # big, but not anime-huge (Sam)
     for sgn in (-1, 1):                                              # cheeks: a soft flush
         p.ell(fx + sgn * hw * 0.58, ey + hh * 0.38, hw * 0.12, hh * 0.05, BLUSH, None)
@@ -292,9 +295,9 @@ def kid_head(img, p, sp, t, hx, hy):
         for sgn in (-1, 1):
             p.poly(curve([(fx + sgn * (gap + ew * 0.5), ey + eh * 0.8), (fx + sgn * (gap + ew * 0.7), ey + eh * 1.5),
                           (fx + sgn * (gap + ew * 0.4), ey + eh * 1.6)], 3), (170, 214, 246), INK, 1.6)
-    ny = hy + hh * 0.5                                               # a small button nose
+    ny = hy + hh * 0.5 + tip * 0.9                                   # a small button nose
     p.line(open_curve([(fx - 4, ny - 8), (fx + 6, ny), (fx - 2, ny + 6)], 4), dk(skin, 0.62), 2.4)
-    _kid_mouth(p, sp, fx, hy + hh * 0.7, mood.get('mouth', 'rest'), sp.get('lip_c', (176, 84, 84)))
+    _kid_mouth(p, sp, fx, hy + hh * 0.7 + tip * 0.75, mood.get('mouth', 'rest'), sp.get('lip_c', (176, 84, 84)))
     p.poly(outline, None, INK, 2.8)
     HAIR_FRONT.get(who, lambda *a: None)(p, sp, hx, hy, hw, hh)
     inner, outer = mood.get('brows', (0, 0))                         # brows over the fringe, as the remake's cartoon
@@ -332,6 +335,12 @@ def _link_hair_back(p, sp, hx, hy, hw, hh):
     p.poly(hair, L_HAIR_D, INK, 2.6)
 
 
+def _bead(p, x, y, r=11):
+    """One red wooden bead on Link's cap band (ref 04), with a shine."""
+    p.ell(x, y, r, r, BEAD, INK, 1.8)
+    p.ell(x - r * 0.35, y - r * 0.35, r * 0.3, r * 0.3, (230, 130, 110), None)
+
+
 def _link_hair_front(p, sp, hx, hy, hw, hh):
     """The fringe over the forehead in pointed locks, side locks over the cheeks, and the woven green cap on top
     with its band of red beads (ref 04)."""
@@ -357,17 +366,18 @@ def _link_hair_front(p, sp, hx, hy, hw, hh):
             (hx + hw * 1.18, hy - hh * 0.46), (hx + hw * 1.18, hy - hh * 0.6), (hx + hw * 0.6, hy - hh * 0.76),
             (hx - hw * 0.4, hy - hh * 0.78), (hx - hw * 1.04, hy - hh * 0.64)]
     p.poly(band, L_CAP_D, INK, 2.2)
-    for k in range(9):                                               # the red beads along the band
-        u = -0.95 + k * 0.25
+    for k in range(8):                                               # the red beads along the band: big enough to
+        u = -0.9 + k * 0.28                                          # read on a phone (pass 1: "cap - no beads")
         yb = hy - hh * (0.6 + 0.08 * (1 - (u - 0.1) ** 2)) + 2
-        p.ell(hx + hw * u, yb, 7, 7, BEAD, INK, 1.4)
+        _bead(p, hx + hw * u, yb)
 
 
 def _zelda_back(p, sp, hx, hy, hw, hh):
-    """The white cloth veil hanging to her shoulders behind the head (ref 10)."""
-    p.poly(curve([(hx - hw * 1.12, hy - hh * 0.5), (hx - hw * 1.2, hy + hh * 0.6), (hx - hw * 1.3, hy + hh * 1.5),
-                  (hx + hw * 1.3, hy + hh * 1.5), (hx + hw * 1.2, hy + hh * 0.6), (hx + hw * 1.12, hy - hh * 0.5),
-                  (hx, hy - hh * 1.12)], 4), Z_VEIL_D, INK, 2.6)
+    """The white cloth veil behind the head, ending at the neck so her gold collar shows (ref 10; pass 1: the veil's
+    grey drop read as a grey collar)."""
+    p.poly(curve([(hx - hw * 1.12, hy - hh * 0.5), (hx - hw * 1.2, hy + hh * 0.5), (hx - hw * 1.16, hy + hh * 1.02),
+                  (hx + hw * 1.16, hy + hh * 1.02), (hx + hw * 1.2, hy + hh * 0.5), (hx + hw * 1.12, hy - hh * 0.5),
+                  (hx, hy - hh * 1.12)], 4), dk(Z_VEIL, 0.93), INK, 2.6)
     p.poly(curve([(hx - hw * 0.98, hy - hh * 0.2), (hx - hw * 1.02, hy + hh * 0.6), (hx - hw * 0.8, hy + hh * 0.9),
                   (hx + hw * 0.8, hy + hh * 0.9), (hx + hw * 1.02, hy + hh * 0.6), (hx + hw * 0.98, hy - hh * 0.2)], 4),
            Z_HAIR, INK, 2.2)                                         # blond hair under the veil
@@ -454,28 +464,34 @@ def _saria_front(p, sp, hx, hy, hw, hh):
                  S_HAIR_D)
 
 
+def _fin_pts(hx, hy, hw, hh, pts):
+    return [(hx + hw * u, hy + hh * v) for u, v in pts]
+
+
 def _ruto_back(p, sp, hx, hy, hw, hh):
-    """The Zora head-fin: a big teal dome sweeping back and down behind her head into a tail (refs 07, 08)."""
-    p.poly(curve([(hx - hw * 0.9, hy - hh * 0.4), (hx - hw * 1.2, hy - hh * 0.7), (hx - hw * 1.12, hy - hh * 1.3),
-                  (hx, hy - hh * 1.6), (hx + hw * 1.12, hy - hh * 1.3), (hx + hw * 1.2, hy - hh * 0.7),
-                  (hx + hw * 0.9, hy - hh * 0.6)], 4), R_FIN_D, INK, 2.6)
+    """The Zora head-fin's underside: a broad mushroom dome wider than her face, its lobes drooping past the temples
+    (refs 07, 08; pass 1: the old dome sat on the brow like a helmet)."""
+    p.poly(curve(_fin_pts(hx, hy, hw, hh, [(-0.9, -0.3), (-1.3, -0.16), (-1.58, -0.02), (-1.66, -0.5), (-1.38, -1.12),
+                                           (-0.72, -1.62), (0, -1.76), (0.72, -1.62), (1.38, -1.12), (1.66, -0.5),
+                                           (1.58, -0.02), (1.3, -0.16), (0.9, -0.3)]), 4), R_FIN_D, INK, 2.6)
 
 
 def _ruto_front(p, sp, hx, hy, hw, hh):
-    """The dome's front: a smooth teal cap over the brow with a pale rim, and two small fin flicks at the temples."""
-    for sgn in (-1, 1):
-        p.poly(curve([(hx + sgn * hw * 0.92, hy - hh * 0.1), (hx + sgn * hw * 1.36, hy - hh * 0.2),
-                      (hx + sgn * hw * 1.24, hy + hh * 0.16), (hx + sgn * hw * 0.98, hy + hh * 0.2)], 3), R_FIN, INK, 2.2)
-    dome = curve([(hx - hw * 1.04, hy - hh * 0.34), (hx - hw * 1.1, hy - hh * 0.9), (hx - hw * 0.6, hy - hh * 1.44),
-                  (hx, hy - hh * 1.54), (hx + hw * 0.6, hy - hh * 1.44), (hx + hw * 1.1, hy - hh * 0.9),
-                  (hx + hw * 1.04, hy - hh * 0.34), (hx + hw * 0.6, hy - hh * 0.44), (hx, hy - hh * 0.4),
-                  (hx - hw * 0.6, hy - hh * 0.44)], 4)
-    p.poly(dome, R_SKIN, None)                              # the skull swelling up: no rim, no hat line
-    crown = curve([(hx - hw * 1.08, hy - hh * 0.8), (hx - hw * 0.6, hy - hh * 1.44), (hx, hy - hh * 1.54),
-                   (hx + hw * 0.6, hy - hh * 1.44), (hx + hw * 1.08, hy - hh * 0.8), (hx, hy - hh * 0.94)], 4)
-    p.poly(crown, R_FIN, None)                                         # teal deepening towards the crown
-    p.line(dome[:len(dome) * 7 // 10], INK, 2.8)
-    p.ell(hx - hw * 0.4, hy - hh * 1.2, hw * 0.16, hh * 0.08, (176, 236, 228), None, rot=-0.5)   # a shine
+    """The dome's top: teal growing out of her skull, no brim. Its lower edge is a soft colour line dipping to a point
+    over the brow, not an inked hat line; only the outer edge is inked; a long shine."""
+    top = _fin_pts(hx, hy, hw, hh, [(-1.56, -0.4), (-1.34, -1.08), (-0.7, -1.58), (0, -1.7), (0.7, -1.58),
+                                    (1.34, -1.08), (1.56, -0.4)])
+    edge = _fin_pts(hx, hy, hw, hh, [(1.22, -0.5), (0.86, -0.7), (0.46, -0.8), (0.16, -0.66), (0, -0.56),
+                                     (-0.16, -0.66), (-0.46, -0.8), (-0.86, -0.7), (-1.22, -0.5)])
+    dome = curve(top + edge, 4)
+    p.poly(dome, R_FIN, None)
+    mid = tuple(int(a * 0.55 + b * 0.45) for a, b in zip(R_SKIN, R_FIN))      # pale skin growing up into the teal
+    p.poly(curve(_fin_pts(hx, hy, hw, hh, [(0.9, -0.72), (0.5, -1.06), (0, -1.16), (-0.5, -1.06), (-0.9, -0.72),
+                                            (-0.46, -0.8), (-0.16, -0.66), (0, -0.56), (0.16, -0.66), (0.46, -0.8)]), 4),
+           mid, None)                                                          # (ref 08: the dome is part of her head)
+    p.line(open_curve(top, 6), INK, 2.8)
+    p.ell(hx - hw * 0.5, hy - hh * 1.28, hw * 0.3, hh * 0.08, (176, 236, 228), None, rot=-0.45)   # shines
+    p.ell(hx + hw * 0.62, hy - hh * 1.2, hw * 0.12, hh * 0.05, (176, 236, 228), None, rot=0.5)
 
 
 HAIR_BACK = {'link': _link_hair_back, 'zelda': _zelda_back, 'malon': _malon_back, 'saria': _saria_back,
@@ -543,7 +559,7 @@ def link_head_side(img, p, sp, t, hx, hy):
     p.poly(curve([(hx - hw * 1.04, hy - hh * 0.4), (hx + hw * 0.84, hy - hh * 0.5), (hx + hw * 0.82, hy - hh * 0.64),
                   (hx - hw * 1.0, hy - hh * 0.56)], 2), L_CAP_D, INK, 2.0)
     for k in range(6):
-        p.ell(hx - hw * 0.8 + k * hw * 0.32, hy - hh * (0.48 + 0.03 * k), 7, 7, BEAD, INK, 1.4)
+        _bead(p, hx - hw * 0.8 + k * hw * 0.32, hy - hh * (0.48 + 0.03 * k))
 
 
 def link_head_back(img, p, sp, t, hx, hy):
@@ -574,7 +590,7 @@ def link_head_back(img, p, sp, t, hx, hy):
     p.poly([(hx - hw * 1.1, hy - hh * 0.4), (hx + hw * 1.1, hy - hh * 0.4), (hx + hw * 1.08, hy - hh * 0.54),
             (hx - hw * 1.08, hy - hh * 0.54)], L_CAP_D, INK, 2.0)
     for k in range(9):
-        p.ell(hx - hw * 0.96 + k * hw * 0.24, hy - hh * 0.47, 7, 7, BEAD, INK, 1.4)
+        _bead(p, hx - hw * 0.96 + k * hw * 0.24, hy - hh * 0.47)
 
 
 # ================================================================================================ the kids' bodies
@@ -625,7 +641,7 @@ def _tunic_link(img, p, sp):
 def _dress_zelda(img, p, sp):
     sw, bottom = sp['shoulders'], sp['bottom']
     _neck(p, sp)
-    skirt = curve([(-sw * 0.9, 300), (-sw * 1.5, bottom), (sw * 1.5, bottom), (sw * 0.9, 300)], 2)
+    skirt = [(-sw * 0.9, 300), (-sw * 1.5, bottom), (sw * 1.5, bottom), (sw * 0.9, 300)]   # no curve: it bowed
     p.poly(skirt, Z_SKIRT, INK, 2.6)
     p.poly([(-sw * 1.5, bottom - 50), (sw * 1.5, bottom - 50), (sw * 1.52, bottom), (-sw * 1.52, bottom)], Z_PURPLE, INK, 2.2)
     for x in (-0.9, -0.4, 0.4, 0.9):
@@ -633,12 +649,18 @@ def _dress_zelda(img, p, sp):
     p.poly(_body(sw, 330), Z_SLEEVE, INK, 2.6)                             # the pale blue bodice
     tab = [(-sw * 0.5, 40), (sw * 0.5, 40), (sw * 0.56, 300), (sw * 0.6, bottom - 70), (-sw * 0.6, bottom - 70),
            (-sw * 0.56, 300)]
-    p.poly(tab, Z_PURPLE, INK, 2.6)                                       # the purple tabard to below the knee
-    p.poly(rough_band(sw * 0.4, 120, bottom - 110), GOLD, None)
-    for y in np.linspace(140, bottom - 140, 6):                           # its gold embroidery, a simple scroll
-        p.line(open_curve([(-sw * 0.3, y), (-sw * 0.12, y - 14), (0, y), (sw * 0.12, y + 14), (sw * 0.3, y)], 4), Z_PURPLE_D, 2.0)
-    p.poly(curve([(-sw * 0.84, 4), (sw * 0.84, 4), (sw * 0.6, 60), (0, 80), (-sw * 0.6, 60)], 3), GOLD, INK, 2.4)  # gold collar
-    p.ell(0, 52, 12, 12, (90, 150, 220), INK, 1.6)
+    p.poly(tab, Z_PURPLE, INK, 2.6)                                       # the purple tabard to below the knee: purple
+    inset = [(-sw * 0.42, 70), (sw * 0.42, 70), (sw * 0.5, bottom - 96), (-sw * 0.5, bottom - 96)]   # with gold
+    p.poly(inset, None, GOLD, 3.0)                                        # trim and embroidery (pass 1: read gold)
+    for y in np.linspace(150, bottom - 170, 5):                           # its gold scrolls, small on the purple
+        p.line(open_curve([(-sw * 0.26, y), (-sw * 0.1, y - 12), (0, y), (sw * 0.1, y + 12), (sw * 0.26, y)], 4), GOLD, 2.6)
+    ey = bottom - 150                                                     # the royal crest low on it (ref 10)
+    p.poly([(-30, ey + 24), (0, ey - 30), (30, ey + 24)], GOLD, INK, 1.8)
+    collar = curve([(-sw * 1.0, 6), (-sw * 0.5, -14), (sw * 0.5, -14), (sw * 1.0, 6), (sw * 0.7, 70), (0, 96),
+                    (-sw * 0.7, 70)], 4)
+    p.poly(collar, GOLD, INK, 2.6)                                        # the gold collar over the shoulders
+    p.line(open_curve([(-sw * 0.74, 40), (0, 70), (sw * 0.74, 40)], 4), GOLD_D, 2.0)
+    p.ell(0, 62, 13, 13, (90, 150, 220), INK, 1.8)
 
 
 def rough_band(half, y0, y1):
@@ -648,7 +670,7 @@ def rough_band(half, y0, y1):
 def _dress_malon(img, p, sp):
     sw, bottom = sp['shoulders'], sp['bottom']
     _neck(p, sp)
-    skirt = curve([(-sw * 0.9, 300), (-sw * 1.36, bottom), (sw * 1.36, bottom), (sw * 0.9, 300)], 2)
+    skirt = [(-sw * 0.9, 300), (-sw * 1.36, bottom), (sw * 1.36, bottom), (sw * 0.9, 300)]  # the hem below ground
     p.poly(skirt, M_SKIRT, INK, 2.6)
     p.poly([(-sw * 1.36, bottom - 44), (sw * 1.36, bottom - 44), (sw * 1.38, bottom), (-sw * 1.38, bottom)], M_HEM, INK, 2.2)
     for k in range(9):                                                    # the blue meander along the hem (ref 14)
@@ -672,6 +694,9 @@ def _dress_malon(img, p, sp):
 def _tunic_saria(img, p, sp):
     sw, bottom = sp['shoulders'], sp['bottom']
     _neck(p, sp)
+    w = sw * B.HEM * 1.02                                                 # green shorts showing under the hem (ref 16)
+    p.poly([(-w, bottom - 60), (w, bottom - 60), (w * 0.98, bottom + 64), (w * 0.12, bottom + 64), (0, bottom + 30),
+            (-w * 0.12, bottom + 64), (-w * 0.98, bottom + 64)], S_SHORTS, INK, 2.4)
     p.poly(_body(sw, bottom, 1.08), S_TUNIC, INK, 2.6)
     for k in range(3):                                                    # the swirl pattern on the tunic
         cx, cy = (-sw * 0.45 + k * sw * 0.45), 200 + (k % 2) * 60
@@ -691,14 +716,16 @@ def _body_ruto(img, p, sp):
     """Bare Zora skin with the teal fin top at the chest and fins hanging from the hips."""
     sw = sp['shoulders']
     p.poly([(-30, -70), (30, -70), (34, 14), (-34, 14)], R_SKIN, INK, 2.4)
-    for sgn in (-1, 1):                                                   # hip fins (drawn behind the body's edge)
-        p.poly(curve([(sgn * sw * 0.8, 380), (sgn * (sw + 50), 460), (sgn * (sw + 40), 560), (sgn * (sw + 4), 470)], 3),
-               R_FIN, INK, 2.2)
     body = curve([(-30, -4), (-sw * 0.72, 8), (-sw * 0.92, 46), (-sw * 0.82, 200), (-sw * 0.6, 300), (-sw * 0.96, 430),
                   (-sw * 0.82, 500), (sw * 0.82, 500), (sw * 0.96, 430), (sw * 0.6, 300), (sw * 0.82, 200), (sw * 0.92, 46),
                   (sw * 0.72, 8), (30, -4)], 3)
     p.poly(body, R_SKIN, INK, 2.6)
     p.poly(curve([(-sw * 0.8, 90), (0, 110), (sw * 0.8, 90), (sw * 0.7, 170), (0, 196), (-sw * 0.7, 170)], 3), R_FIN, INK, 2.2)
+    for sgn in (-1, 1):                                                   # the fins hanging from her hips (ref 07):
+        fin = curve([(sgn * sw * 0.78, 392), (sgn * (sw + 30), 410), (sgn * (sw + 78), 470), (sgn * (sw + 66), 600),
+                     (sgn * (sw + 30), 540), (sgn * sw * 0.86, 470)], 4)     # rooted on the hip, flaring out and down
+        p.poly(fin, R_FIN, INK, 2.2)
+        p.line(open_curve([(sgn * sw * 0.9, 420), (sgn * (sw + 40), 480), (sgn * (sw + 60), 570)], 4), R_FIN_D, 1.8)
     p.line(open_curve([(-sw * 0.5, 470), (0, 500), (sw * 0.5, 470)], 4), R_SKIN_D, 1.8)
     p.line(open_curve([(-sw * 0.3, 240), (0, 260), (sw * 0.3, 240)], 4), R_SKIN_D, 1.6)
 
@@ -767,6 +794,8 @@ def _arm(p, j2, side, sp, shape=None):
     if not kind or V.PROBE:
         return _ARM(p, j2, side, sp, shape)
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
+    if kind == 'bare' and sp.get('who') == 'ruto':                # her forearm fins, under the arm's edge
+        _ruto_arm_fin(p, el, wr, side)
     if kind in ('short', 'puff_short', 'bare'):
         _ARM(p, j2, side, dict(sp, sleeve=sp['skin'], jacket=sp['skin']), shape)
     else:
@@ -775,11 +804,23 @@ def _arm(p, j2, side, sp, shape=None):
         _sleeve_cap(p, sh, el, sp['sleeve_c'], 0.62, 36, fray=sp.get('fray', False))
     elif kind in ('puff_short', 'puff_long'):
         _sleeve_cap(p, sh, el, sp['sleeve_c'], 0.66, 38, puff=True)
-    if kind == 'bare' and sp.get('who') == 'ruto':                # the fins hanging from her forearms (ref 07)
-        mx, my = (el[0] + wr[0]) / 2, (el[1] + wr[1]) / 2
-        out = -1 if side == 'L' else 1
-        p.poly(curve([(el[0], el[1]), (mx + out * 40, my + 10), (wr[0] + out * 50, wr[1] + 50), (mx + out * 6, my + 20)], 3),
-               R_FIN, INK, 2.2)
+
+
+def _ruto_arm_fin(p, el, wr, side):
+    """A fin rooted along the outer edge of Ruto's forearm, hanging out and down from it (ref 07; pass 1: the old
+    ones floated off the arm). Drawn before the arm, so the arm overlaps its root."""
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / n, dx / n
+    out = -1 if side == 'L' else 1
+    if nx * out < 0:
+        nx, ny = -nx, -ny
+    at = lambda u, k=0.0: (el[0] + dx * u + nx * k, el[1] + dy * u + ny * k)
+    b0, b1 = at(0.12, 6), at(0.78, 6)
+    tip = (at(0.3)[0] + nx * 70 + out * 20, at(0.3)[1] + ny * 70 + 90)
+    fin = curve([b0, b1, (at(0.7)[0] + nx * 40, at(0.7)[1] + ny * 40 + 30), tip, (at(0.1)[0] + nx * 30, at(0.1)[1] + ny * 30 + 20)], 4)
+    p.poly(fin, R_FIN, INK, 2.2)
+    p.line(open_curve([at(0.45, 10), (tip[0] * 0.6 + at(0.45)[0] * 0.4, tip[1] * 0.6 + at(0.45)[1] * 0.4)], 3), R_FIN_D, 1.8)
 
 
 def _leg(p, j, side, yaw, sp):
@@ -928,7 +969,7 @@ KIDS = ('link', 'zelda', 'malon', 'saria', 'ruto')
 
 def _drawn_height(sp):
     """The drawing's height in person units: soles at 928 up to the top of the head (or headgear)."""
-    top = -150 + sp.get('head_dy', 0) - sp.get('hh', 90) * {'ruto': 1.6, 'link': 1.46}.get(sp.get('who'), 1.1)
+    top = -150 + sp.get('head_dy', 0) - sp.get('hh', 90) * {'ruto': 1.76, 'link': 1.46}.get(sp.get('who'), 1.1)
     return 928 - top
 
 
@@ -940,7 +981,7 @@ def scale_for(sp, s):
 
 # ------------------------------------------------------------------------------------------------ the hooks
 _head, _torso, _head_view, _torso_view = B.head, B.torso, V.head_view, V.torso_view
-_ARM, _LEG = V.arm, V.leg
+_ARM, _LEG, _HAND = V.arm, V.leg, V.hand
 
 
 def head(img, p, sp, t, hx, hy):
@@ -976,8 +1017,23 @@ def torso_view(img, p, sp, view, seated=False):
     return _torso_view(img, p, sp, view, seated)
 
 
+KID_HAND_R = 36        # the house circle hand, sized to a child's big head (26 on an adult with a 92 head; pass 1 P6:
+                       # at 26 the children's hands read as dots)
+
+
+def hand(p, j2, side, sp, shape):
+    """The children's hands: the house circle, at a child's size against the head; a point keeps the house finger."""
+    if sp.get('who') not in KIDS or V.PROBE or shape in ('point', 'point_up', 'none'):
+        return _HAND(p, j2, side, sp, shape)
+    el, wr = j2['el' + side], j2['wr' + side]
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1.0
+    cx, cy = wr[0] + dx / n * 20, wr[1] + dy / n * 20
+    p.ell(cx, cy, KID_HAND_R, KID_HAND_R * 0.94, sp.get('glove', sp['skin']), INK, 2.6)
+
+
 B.head, B.torso, V.head_view, V.torso_view = head, torso, head_view, torso_view
-V.arm, V.leg = _arm, _leg
+V.arm, V.leg, V.hand = _arm, _leg, hand
 
 
 def gunman_dress(j):
@@ -1004,31 +1060,47 @@ def poses(who):
         V.arm_to(j, 'L', (-8.0, 330.0, 70.0), 'down', 'fist')
         V.arm_to(j, 'R', (8.0, 330.0, 74.0), 'down', 'fist')
         return {'clasped': j}
-    if who == 'malon':                                      # holding out the milk bottle, hopeful
-        j = V.standing(sp)
-        V.arm_to(j, 'R', (60.0, 210.0, 200.0), 'down', 'grip')
+    if who == 'malon':                                      # holding the milk bottle up in front of her chest
+        j = V.standing(sp)                                  # to us, hopeful (pass 1: it sat at her waist)
+        V.arm_to(j, 'R', (70.0, 170.0, 230.0), 'down', 'grip')
         j['props'] = [milk_bottle('R')]
-        j['grip'] = {'R'}
+        j['grip'], j['wrap'] = {'R'}, {'R'}                 # the bottle over her sleeve, her hand over the bottle
+        j['_mood'] = 'hopeful'
         return {'bottle': j}
-    if who == 'saria':                                      # nonchalant: hand on hip, ocarina at her chest
+    if who == 'saria':                                      # nonchalant: hand on hip, elbow out; ocarina at her chest
         j = V.standing(sp)
-        V.arm_to(j, 'L', (-(sw - 4), 380.0, 10.0), 'out')
+        V.arm_to(j, 'L', (-(sw + 6), 300.0, 0.0), 'out')
         V.arm_to(j, 'R', (40.0, 190.0, 120.0), 'down', 'grip')
         j['props'] = [ocarina('R')]
         j['grip'] = {'R'}
         j['footL'] = (-70, V.ANKLE_Y - 6, 30.0)
+        j['_mood'] = 'smug'
         return {'nonchalant': j}
-    if who == 'ruto':
-        return {'hips': moves.pose(sp, 'hips')}
-    if who == 'link':
-        return {'shrug': moves.pose(sp, 'shrug')}
-    if who == 'gunman':                                     # the rifle held up into the trees (ref 17)
-        j = V.standing(sp)
-        V.arm_to(j, 'R', (120.0, 150.0, 140.0), 'down', 'grip')
-        V.arm_to(j, 'L', (-40.0, 200.0, 150.0), 'down', 'grip')
-        j['props'] = [rifle('L')]
+    if who == 'ruto':                                       # vain: hands on hips, weight on one leg, chin up
+        j = moves.pose(sp, 'hips')
+        for s_, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, s_, (sg * (sw * 0.78), 320.0, 0.0), 'out')   # at the waist, clear of the hip fins
+        j['footR'] = (30, V.ANKLE_Y, 0.0)
+        j['footL'] = (-96, V.ANKLE_Y - 10, 30.0)
+        j['_mood'] = 'vain'
+        return {'hips': j}
+    if who == 'link':                                       # the shrug: shoulders up, elbows in at his sides, forearms
+        j = V.standing(sp)                                  # out, palms up (pass 1: arms out wide read as a T-pose)
+        for s_, sg in (('L', -1), ('R', 1)):
+            x, y, z = j['sh' + s_]
+            j['sh' + s_] = (x, y - 26, z)
+            V.arm_to(j, s_, (sg * (sw + 120), 150.0, 140.0), 'down', 'palm')
+        j['_mood'] = 'unsure'
+        return {'shrug': j}
+    if who == 'gunman':                                     # aiming into the trees (ref 17; line 5): side on, the
+        j = V.standing(sp)                                  # rifle up at the shoulder, cheek down to it, looking
+        V.arm_to(j, 'R', (30.0, 40.0, 150.0), 'down', 'grip')    # along it (pass 1: rifle low, eyes at us)
+        V.arm_to(j, 'L', (-30.0, 34.0, 330.0), 'down', 'grip')
+        j['props'] = [rifle('R')]
         j['grip'] = {'L', 'R'}
-        return {'rifle': j}
+        j['head_dy'] = 14
+        j['_yaw'] = 90
+        return {'aiming': j}
     return {}
 
 
@@ -1086,7 +1158,7 @@ def alone(who, out):
     tiles = [(f'{who} {("front", "", "", "side", "", "", "back")[[0, 0, 0, 90, 0, 0, 180].index(y)]}'.strip(),
               figure_tile(who, y)) for y in VIEWS_NEEDED.get(who, (0,))]
     for name, j in poses(who).items():
-        tiles.append((name, figure_tile(who, 0, j)))
+        tiles.append((name, figure_tile(who, j.get('_yaw', 0), j, j.get('_mood'))))
     refs = [Image.open(os.path.join(REF, f)).convert('RGB') for f in REFS[who]]
     faces = [(m, face_tile(who, m)) for m in FACES_NEEDED.get(who, ())]
     th = max(t.height for _, t in tiles)

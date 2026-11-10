@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): build chat 3 (11 Nov): KG, Navi and the Goron fixed and critiqued (pass 1, all nine); the cast sheet tool built. Next: the children's pass-1 faults (hands, poses), pass 2, cast sheet to Sam (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): build chat 4 (11 Nov): every open pass-1 fault on the children and the gunman fixed (hands, beads, shrug, Zelda's collar and tabard, Malon's bottle, Saria's hip and shorts, Ruto's fins, the gunman aiming). Next: critique pass 2 of all nine, fix, the cast sheet to Sam (Opus high). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

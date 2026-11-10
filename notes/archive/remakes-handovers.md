@@ -61,3 +61,30 @@
 - **For Claude:** refs `references/remakes/`; kids draw at `height` via `scale_for`; creatures in person units
   (`KG_HEIGHT_U`, `GORON_HEIGHT_U`), `kg()` returns wing hands for props; MG42 `patriots3_cast.py`.
 
+
+
+## Build chat 3 handover (archived 11 Nov by build chat 4)
+- **Rules that bite next:** 89 (pass 2 by a NEW helper after the fixes), 41 (every arm ends in a hand: the kids' hands
+  are dots), 38 (only the views the shots use).
+- **Done (11 Nov, build chat 3, Opus high; stopped on cost amber):** all 12 creature faults fixed (KG: feather-fan
+  crests, big grins, toes and talons, wings with hanging feathers, folded wings on his sides, a barred fanned tail;
+  Navi: V wings apart, lower pair showing, a soft white-hot ball; Goron: a pear with a round belly, thick drool,
+  gathered ruffles). Critique pass 1 of all nine (`r1-p1`), then the creature faults it found fixed (one teacher
+  wing, bigger beak and spit, tails fanned with pale tips, Navi's flutter tiles differ, boulders on the Goron's back,
+  arms clear of his body, a tuft goatee). NEW `cast_sheet` (all nine at true heights, ruler).
+- **Pass 1 faults still open (the children, from build chat 1-2):** every kid and the gunman: dot hands (P6, rule 41).
+  Link: cap's bead band not showing; the shrug reads as a smiling T-pose. Zelda: collar grey (ref gold), tabard reads
+  gold (ref purple); "down" face doesn't look down. Malon: bottle at her waist, not held up. Saria: no hand on hip, no
+  shorts showing. Ruto: head-fin reads as a helmet, no hip fins, arm fins float off the arms, stiff not vain. Gunman:
+  rifle low, eyes at us (beat: into the trees). Cast sheet: Zelda's and Malon's hem points dip below the ground.
+  KG: crests still read "antlers" to a cold eye (the ref's are horn-like: judge at pass 2); side grip hands mittens.
+- **Next:** Build, Opus high: fix those, pass 2 (`critique.py pack remakes_cast SPEC.json`, a NEW helper; panels from
+  `source/remakes_cast.py` alone sheets, no names), fix, then the cast sheet (`remakes_cast.py castsheet OUT.jpg`) to
+  Sam; wait for his look.
+- **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
+- **Read:** `guides/job-packs.md` Build; this file's references; `r1-p1/result.md`; both files' MAPs.
+- **Open rule requests:** none (the helper suggested "tiles must differ" and "named backgrounds drawn": not Sam's).
+- **For Claude:** packs `source/data/critique/remakes_cast/` (film name `remakes_cast`); panels `remakes_panels.py OUTDIR`
+  (then a spec: crop = the whole image, so each is a detail); KG
+  `tail=` shortens his tail for standing; creatures in person units; MG42 `patriots3_cast.py`.
+

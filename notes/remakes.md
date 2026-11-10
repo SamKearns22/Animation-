@@ -1,29 +1,24 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (pass 2 by a NEW helper after the fixes), 41 (every arm ends in a hand: the kids' hands
-  are dots), 38 (only the views the shots use).
-- **Done (11 Nov, build chat 3, Opus high; stopped on cost amber):** all 12 creature faults fixed (KG: feather-fan
-  crests, big grins, toes and talons, wings with hanging feathers, folded wings on his sides, a barred fanned tail;
-  Navi: V wings apart, lower pair showing, a soft white-hot ball; Goron: a pear with a round belly, thick drool,
-  gathered ruffles). Critique pass 1 of all nine (`r1-p1`), then the creature faults it found fixed (one teacher
-  wing, bigger beak and spit, tails fanned with pale tips, Navi's flutter tiles differ, boulders on the Goron's back,
-  arms clear of his body, a tuft goatee). NEW `cast_sheet` (all nine at true heights, ruler).
-- **Pass 1 faults still open (the children, from build chat 1-2):** every kid and the gunman: dot hands (P6, rule 41).
-  Link: cap's bead band not showing; the shrug reads as a smiling T-pose. Zelda: collar grey (ref gold), tabard reads
-  gold (ref purple); "down" face doesn't look down. Malon: bottle at her waist, not held up. Saria: no hand on hip, no
-  shorts showing. Ruto: head-fin reads as a helmet, no hip fins, arm fins float off the arms, stiff not vain. Gunman:
-  rifle low, eyes at us (beat: into the trees). Cast sheet: Zelda's and Malon's hem points dip below the ground.
-  KG: crests still read "antlers" to a cold eye (the ref's are horn-like: judge at pass 2); side grip hands mittens.
-- **Next:** Build, Opus high: fix those, pass 2 (`critique.py pack remakes_cast SPEC.json`, a NEW helper; panels from
-  `source/remakes_cast.py` alone sheets, no names), fix, then the cast sheet (`remakes_cast.py castsheet OUT.jpg`) to
-  Sam; wait for his look.
+- **Rules that bite next:** 89 (pass 2 by a NEW helper), 41 (hands read as hands), 38 (only the views the shots use).
+- **Done (11 Nov, build chat 4, Opus high; stopped on cost amber):** every open pass-1 fault on the children and the
+  gunman fixed and looked at full size: kids' circle hands sized to their big heads (36, was 26); Link's beads bigger
+  with shines, the shrug now shoulders up, elbows in, palms out at the chest; Zelda's veil ends at the neck so the gold
+  collar shows, the tabard purple with gold trim, scrolls and crest, "down" tips the head and drops the eyes; Malon's
+  bottle up at her chest, over her sleeve; Saria's hand on hip (elbow out) and green shorts; Ruto a broad
+  mushroom head-fin growing from her pale skull (no brim line), hip fins rooted on the hips, forearm fins under the
+  arm's edge, a vain pose (weight on one leg, chin up, one brow); the gunman side on, rifle at the shoulder, looking
+  along it; the hems no longer dip below the ground.
+- **Next:** Build, Opus high: critique pass 2 of all nine (`remakes_panels.py OUTDIR`, then `critique.py pack
+  remakes_cast SPEC.json`, a NEW helper; say in each kid panel's "is" that circle hands are the house style), fix,
+  then the cast sheet (`remakes_cast.py castsheet OUT.jpg`) to Sam; wait for his look.
 - **Needs Sam:** nothing until the cast sheet; his recordings any time (01-14, a second of silence after each).
-- **Read:** `guides/job-packs.md` Build; this file's references; `r1-p1/result.md`; both files' MAPs.
-- **Open rule requests:** none (the helper suggested "tiles must differ" and "named backgrounds drawn": not Sam's).
-- **For Claude:** packs `source/data/critique/remakes_cast/` (film name `remakes_cast`); panels `remakes_panels.py OUTDIR`
-  (then a spec: crop = the whole image, so each is a detail); KG
-  `tail=` shortens his tail for standing; creatures in person units; MG42 `patriots3_cast.py`.
+- **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
+- **Open rule requests:** none.
+- **For Claude:** poses carry `_mood` and `_yaw` (panels and `alone` read them); kids' hands `remakes_cast.hand`
+  (`KID_HAND_R`); Malon's bottle uses `wrap`; KG crests ("antlers" to a cold eye) and his side grip mittens: judge at
+  pass 2. Packs `source/data/critique/remakes_cast/` (git-ignored: pass 1 is only in the ledger).
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),

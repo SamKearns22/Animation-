@@ -40,7 +40,7 @@ panels = []
 B.SS = 1
 for who in ('link', 'zelda', 'malon', 'saria', 'ruto', 'gunman'):
     tiles = [RC.figure_tile(who, y) for y in RC.VIEWS_NEEDED.get(who, (0,))]
-    tiles += [RC.figure_tile(who, 0, j) for j in RC.poses(who).values()]
+    tiles += [RC.figure_tile(who, j.get('_yaw', 0), j, j.get('_mood')) for j in RC.poses(who).values()]
     faces = [RC.face_tile(who, m) for m in RC.FACES_NEEDED.get(who, ())]
     p = os.path.join(OUT, who + '.jpg'); sheet(tiles, faces).save(p, quality=90)
     panels.append((who, p, [os.path.join(REF, f) for f in RC.REFS[who] if 'kg' not in f]))
