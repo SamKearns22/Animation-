@@ -57,7 +57,8 @@ class TurnFace:
     'front' [(v, z)]: the face's centre line from the side (forehead, brow ridge, the dip at the eyes, lips, chin);
     'back' [(v, z)]: the back of the head (skull, the nape, the jaw's back under the ear);
     'point' [(v, p)]: how pointed the face is in plan at that height (1 = round, more = a muzzle);
-    'sockets': how far the eyes sit back from the face's surface; 'bottom': the lowest row (the chin with its beard)."""
+    'sockets': how far the eyes sit back from the face's surface; 'bottom': the lowest row (the chin with its beard);
+    'hair_top' (hair): no hair above this row (a bald pate), 'hair_front' the angle the hair starts round from the face."""
 
     def __init__(self, hx, hy, yaw, L, prof, widths, down=0.0, turn=0.0):
         self.cx, self.top = hx + turn * 12, hy - 72 + 10 * down
@@ -329,6 +330,8 @@ def hair(img, p, f, fronts, colour, prof, lw=2.4):
             ap = abs((psi + 180) % 360 - 180)
             vb = bottom_side if ap < 100 else bottom_side + (prof.get('nape', 0.64) - bottom_side) * min(1, (ap - 100) / 30)
             if v > vb or (ap < prof.get('hair_front', 84) and v > -0.2):
+                continue
+            if v < prof.get('hair_top', -9):       # a bald pate: hair only in a band round the sides and back
                 continue
             x, z = f.ring(psi, v)
             puff = 1.0 + prof.get('volume', 0.03) * (1 - max(0.0, v) / 0.7)
