@@ -124,7 +124,7 @@ def _torso_fit(cam, k, sp, view_deg, X, up, fwd, M):
 
 
 # ---------------------------------------------------------------------------------------------- pieces
-def _limb_piece(p, pts, widths, col, lw=2.6):
+def _limb_piece(p, pts, widths, col, lw=2.6, keep=None):
     """One limb as ONE shape (Sam, 10 Nov: legs "clipping and not one fluid part"): the thigh and shin as tapered
     pieces with round joints, filled together on a mask, one ink outline round the whole (no lines inside at the knee,
     however tightly it folds)."""
@@ -142,22 +142,41 @@ def _limb_piece(p, pts, widths, col, lw=2.6):
         d.ellipse([c[0] - r, c[1] - r, c[0] + r, c[1] + r], fill=255)
     w = max(1, int(round(p.w(lw))))
     ring = m.filter(ImageFilter.MaxFilter(2 * w + 1))
+    if keep is not None:                              # only the part past the hem shows (its cut has no outline:
+        from PIL import ImageChops                    # the hem's own line is there)
+        a, n = (np.asarray(v, float) for v in keep)
+        a = np.asarray(p.cam.P(*a), float)
+        b = np.asarray(p.cam.P(*(np.asarray(keep[0], float) + n)), float)
+        nn = _unit(b - a)
+        tt = np.array([-nn[1], nn[0]]) * 1e5
+        h = Image.new('L', img.size, 0)
+        ImageDraw.Draw(h).polygon([tuple(a + tt), tuple(a - tt), tuple(a - tt + nn * 1e5), tuple(a + tt + nn * 1e5)],
+                                  fill=255)
+        m, ring = ImageChops.multiply(m, h), ImageChops.multiply(ring, h)
     img.paste(INK, (0, 0), ring)
     img.paste(tuple(col), (0, 0), m)
 
 
 def _leg(p, sc, cam, k, side, sp, M, front=False):
-    """`front`: the knee is nearer than the trunk, drawn after it. The thigh is drawn whole before the trunk (so it
-    comes out from under the hem, never from mid-shirt: the critique, 10 Nov) and only the knee to the shoe here."""
+    """One piece from hip to ankle, one outline (Sam, 10 Nov). `front`: the knee is nearer than the trunk, so the
+    whole leg is drawn after it (Sam, 10 Nov round 2: the knee to the shoe drawn on its own over a thigh under the
+    shirt showed a seam at the knee (13), a ball for a knee (12) and a shin out of the chest (14, 17)). A knee past
+    the hem: only the part past the hem shows, so the leg comes out from under the shirt; a knee drawn up over the
+    shirt: the thigh shows over it from the hip."""
     s = sc.s
     pts = [_proj(cam, k[n + side]) / s for n in ('hip', 'kn', 'an')]
     pts[0] = sc.hips[side]
     lk = sp.get('leg_k', 1.0)
     col = sp.get('trousers', (40, 40, 46))
-    if front:
-        _limb_piece(p, [tuple(pts[1]), tuple(pts[2])], [38 * lk, 27 * lk], col)
-    else:
-        _limb_piece(p, [tuple(q) for q in pts], [48 * lk, 38 * lk, 27 * lk], col)
+    keep = None
+    if front and sc.hem is not None:
+        a, b, up = sc.hem
+        n = np.array([-(b - a)[1], (b - a)[0]])
+        if np.dot(n, up) > 0:
+            n = -n                                     # n points out of the shirt, past the hem
+        if np.dot(pts[1] - a, n) > 0:                  # the knee is past the hem
+            keep = (a, _unit(n))
+    _limb_piece(p, [tuple(q) for q in pts], [48 * lk, 38 * lk, 27 * lk], col, keep=keep)
     _shoe(p, sc, cam, k, side, sp, M)
 
 
@@ -194,6 +213,8 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     a = yaw_seen(d, Xh, hfwd)
     vd, _ = V.snap(a)
     hv = V.VIEWS[vd]
+    if hv == 'three':                                 # Sam, 10 Nov round 2: the turned faces looked cruder than his
+        hv = 'front'                                  # own face-on one; lying, a face towards us is the face-on one
     neck = np.asarray(aff.P(0, 0)) / B.SS
     hs = _proj(cam, k['head'])
     u = hs - neck
@@ -294,6 +315,9 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     V._E[0] = 0.0
     try:
         sc.shoulders = {sd: (A @ V.project((g * (sw - 14), 60, 0), vd)[0] + tt) / s for sd, g in (('L', -1), ('R', 1))}
+        hy = V.JACKET - 8
+        sc.hem = tuple(np.asarray((A @ V.project(q, vd)[0] + tt) / s, float) for q in ((-sw, hy, 0), (sw, hy, 0)))
+        sc.hem = sc.hem + ((A @ V.project((0, 60, 0), vd)[0] + tt) / s - (sc.hem[0] + sc.hem[1]) / 2,)
         sc.hips = {sd: (A @ V.project((g * 55, V.HIP_Y, 0), vd)[0] + tt) / s for sd, g in (('L', -1), ('R', 1))}
     finally:
         V._E[0] = old
@@ -318,8 +342,8 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     _neck(img, hc, sp_draw)
     if head_behind:
         _head_draw(img, hc, sp_draw, t)
-    for _, key in sorted(first + [v for v in last if v[1][0] == 'leg'], key=lambda v: -v[0]):
-        piece(key)                                    # a leg in front: its thigh first, under the hem
+    for _, key in sorted(first, key=lambda v: -v[0]):
+        piece(key)
     tp = B.Pen(img, aff)
     sp_draw['neck_off'] = True
     if view == 'front':

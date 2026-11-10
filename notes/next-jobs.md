@@ -27,13 +27,19 @@
   shadow under lying people (floor only; shirt shading kept, my pick on Q1); (d) face-up-away can't be drawn by the
   rig: pre-flight now flags it (`lying_flat.face_up_away`, posecheck 'lying: face up away'); sheet shows 'head left'.
   Soles now the shoe's own colour, darker. One fresh critique pass run (found 7; 3 fixed above).
-  **Next for I (chat 3, Opus medium):** Sam's look at the new sheet. Named, not fixed: the slumped shirt reads as a
-  wide box and the arm across it is lost (check on check); the turned goatee reads as a spike (the standing rig's own
-  side view); from behind the hair ring can read as a blindfold and the neck as a block; handcheck can't see lying
-  bodies; second critique pass not run yet. Rules that bite: 41, 30, 89.
-  For Claude: `lying_flat._head` returns (HeadCam, view), `_neck` draws before the trunk (`neck_off` skips the
-  trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
-  man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.
+  **Round 2 DONE (10 Nov, chat 3, Opus medium):** Sam: 12 knee bend wrong, 13 a knee segment still shows, 14/17 a
+  leg through the chest not joined to the hips, faces cruder than his face-on one. Why round 1's one-piece leg failed:
+  a leg nearer than the trunk was still split (thigh under the shirt, knee to shoe drawn on its own over it). Now a
+  near leg is one piece drawn after the trunk: past the hem only what shows below it; drawn up, from the hip over the
+  shirt. Lying faces use the face-on drawing wherever they face us (the turned drawing only side on and from behind);
+  turned goatees as dark as the face-on one; no crown shine on the face-on head lying. Checks: lying OK, kittests pass.
+  Sheets `notes/sheets/job-i-driver-sheet-numbered.jpg`, `job-i-round2-closeup.jpg` (sent).
+  **Next for I (chat 4, Opus medium):** Sam's look at the round 2 sheets. Still named, not fixed: the slumped shirt as
+  a wide box with the arm lost in the check; from behind the hair ring as a blindfold; side-on face (11) still the
+  turned drawing; handcheck can't see lying bodies; no critique pass this round. Rules that bite: 41, 30, 89.
+  For Claude: `lying_flat._leg` (front: whole leg after trunk, `keep` half-plane past `sc.hem`), `_head` maps
+  'three' to 'front'; `views._beard_col` goatee dark; `burnham.hair_front` bald shine obeys `no_shine`. Sheet:
+  `lying_flat.py sheet OUT man ball`; `_head` returns (HeadCam, view); `_neck` before the trunk (`neck_off`).
 - **Job K, the "AI ick" fixes (chat 1 done 10 Nov, Opus high, about 2%):** Sam: 1 Y, 2 Y, 4 Y, 6 dropped, 8 N, 3 dropped,
   7 N; 5 waits for an example. **Next for K (overnight build, Opus, high effort, about 2.5%, cap 3%):** "Job K build:
   read notes/next-jobs.md, the Job K line, then notes/job-k-ai-tells.md 'Sam's answers' and Build plan K." Example
