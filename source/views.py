@@ -383,6 +383,22 @@ class Mirrored:
         return self.L.S(v)
 
 
+class Rolled:
+    """A head's frame tipped `deg` degrees about the top of the neck (pivot) and dropped `dy` units (a nod): the
+    head acting of headlife.py (Job K, Sam: Y, 10 Nov), drawn inside the rig so every line stays sharp."""
+    def __init__(self, L, deg, pivot, dy=0.0):
+        self.L, self.cam, self.s, self.flip = L, L.cam, L.s, getattr(L, 'flip', 1)
+        a = math.radians(deg)
+        self.c, self.sn, (self.px, self.py), self.dy = math.cos(a), math.sin(a), pivot, dy
+
+    def P(self, x, y):
+        dx, dy = x - self.px, y - self.py
+        return self.L.P(self.px + dx * self.c - dy * self.sn, self.py + dx * self.sn + dy * self.c + self.dy)
+
+    def S(self, v):
+        return self.L.S(v)
+
+
 WHITE = (250, 250, 248)                       # the whites of the eyes, in every head the kit draws
 
 
@@ -884,6 +900,12 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     head_mirror = snap(head_yaw)[1] if head_yaw is not None and hv != 'front' else mirror
     if head_mirror != mirror:
         up_head = Mirrored(up_head, hdx)          # the head faces its own way (a front-on body looking either side)
+    life = sp.get('head_life')                    # head acting from the voice (headlife.py) or set by hand in the pose
+    roll, nod = life.at_time(t) if life is not None and t is not None else (0.0, 0.0)
+    roll, nod = roll + j.get('head_roll', 0.0), nod + j.get('nod', 0.0)
+    if roll or nod:                               # tipped about the top of the neck; a nod drops the head and looks down
+        up_head = Rolled(up_head, roll, (hdx, -50.0 + sp_draw['head_dy']), nod * 5.0)
+        sp_draw['down'] = sp_draw.get('down', 0.0) + 0.35 * nod
     head_pen = Eyes(B.Pen(img, up_head))
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
     # nothing he holds out in front of him is drawn over his back

@@ -14,6 +14,8 @@ MAP
   lopsided         proposal 5 (example only, Sam's Y/N first): the driver's head a touch uneven (one brow higher, the
                    side hair higher on one side, one mouth corner up) and his weight on one leg (driver_pose)
   shading OUT.jpg  proposal 2's check (built, ed.HARD): the old airbrushed shading vs the hard-edged shapes, crops
+  rigclip OUT.mp4  proposal 1's check (built, headlife.py + views.Rolled): Islamocommunism 36-42 s, today | the rig's
+                   own head acting from the voice, side by side, with the film's sound
   driver OUT.jpg   proposal 5's sheet: the pump driver today | proposed, whole body, then the face full size
 
   python3 source/ai_tells_lab.py sheet review/job-k/before-after.jpg
@@ -470,7 +472,44 @@ def shading(out, rows=None):
     print(out, S.size)
 
 
+# ------------------------------------------------------------------------------------------------ proposal 1 (built)
+def rigclip(out, t0=36.0, t1=42.0, fps=12):
+    import headlife
+    film = os.path.join(ROOT, 'animations', 'islamocommunism-vertical.mp4')
+    life = headlife.from_voice(film, t0, t1)
+    tmp = os.path.join(OUT, 'rigframes')
+    os.makedirs(tmp, exist_ok=True)
+    n = int(round((t1 - t0) * fps))
+    from multiprocessing import Pool
+    with Pool(os.cpu_count()) as pool:
+        pool.starmap(_rig_frame, [(i, t0 + i / fps, life, tmp) for i in range(n)])
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-framerate', str(fps), '-i', os.path.join(tmp, '%04d.png'),
+                    '-ss', str(t0), '-t', str(t1 - t0), '-i', film, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264',
+                    '-crf', '26', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k',
+                    '-shortest', out], check=True)
+    print(out, os.path.getsize(out) // 1024, 'KB', 'accents at drawings', headlife.accents(headlife.envelope(film, t0, t1)))
+
+
+def _rig_frame(i, t, life, tmp):
+    import islamocommunism as IC
+    a = small(ic_frame(t), 540)
+    orig = IC.elsayed_sp
+    IC.elsayed_sp = lambda tt: dict(orig(tt), head_life=life)
+    try:
+        b = small(ic_frame(t), 540)
+    finally:
+        IC.elsayed_sp = orig
+    S = Image.new('RGB', (1080, 840), (245, 242, 236))
+    S.paste(a.crop((0, 140, 540, 940)), (0, 40))
+    S.paste(b.crop((0, 140, 540, 940)), (540, 40))
+    d = ImageDraw.Draw(S)
+    f = ImageFont.truetype(SANS, 30)
+    d.text((270, 20), 'BEFORE', font=f, fill=(20, 20, 20), anchor='mm')
+    d.text((810, 20), 'NOW: head acting', font=f, fill=(190, 30, 30), anchor='mm')
+    S.save(os.path.join(tmp, f'{i + 1:04d}.png'))
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     cmd = sys.argv[1]
-    {'sheet': sheet, 'clip': clip, 'driver': driver, 'shading': shading}[cmd](sys.argv[2])
+    {'sheet': sheet, 'clip': clip, 'driver': driver, 'shading': shading, 'rigclip': rigclip}[cmd](sys.argv[2])
