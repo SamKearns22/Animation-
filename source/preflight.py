@@ -28,6 +28,7 @@ held prop turned through every view.
 Usage:
     python3 preflight.py patriots2 OUT_DIR            before the animatic: stops at the first fault
     python3 preflight.py patriots2 OUT_DIR --audit    list every fault (for a finished film)
+    ... --faults-named    the round's critique faults are named to Sam (rule 89): the animatic may go ahead
 """
 import fnmatch
 import hashlib
@@ -482,6 +483,13 @@ def main():
     with contextlib.redirect_stdout(buf):       # the figure guard's log (what it allowed, how often): the file only
         F.report()
     log = buf.getvalue().splitlines()
+    if every_film and not audit:                 # rule 89: the fresh-eye critique of this round, from the ledger
+        import critique
+        ok, line = critique.status(name)
+        print(line)
+        if not ok and '--faults-named' not in sys.argv:
+            problems.append(f'{line}: pre-flight refuses the animatic (rule 89) until the round\'s last critique pass '
+                            'is clean, or its faults are named to Sam (then add --faults-named)')
     report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'),
                      notes=(['The figure guard (allowed drawings, how often):'] + log) if log else ())
     print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))

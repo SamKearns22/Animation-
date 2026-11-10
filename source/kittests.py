@@ -7,6 +7,7 @@ check catches the old version AND passes the fixed one.
     python3 source/kittests.py hands      only the tests whose name contains 'hands'
 """
 import math
+import re
 import os
 import sys
 
@@ -594,6 +595,59 @@ def lying_and_pose_checks():
           and got == {'cup from behind': ['avoid view'], 'cup from the front': [], 'untested': ['untested pose']})
     return ok, f"kit lying poses (faults per pose, every view): {kit}; old face-down arm caught: {bool(curled)}; " \
                f"arms off one shoulder caught: {bool(one_side)}; no neck caught: {bool(no_neck)}; pose check: {got}"
+
+
+@test
+def critique_record():
+    """Job H (rule 89): critique.py record refuses a half answer and a look written after the result; passes a whole one."""
+    import json, tempfile, time
+    import critique as C
+    d = tempfile.mkdtemp(prefix='kt-crit-r1-p1')
+    spec = {'round': 1, 'panels': [{'img': 'x', 'is': 'a man', 'parts': 'P'}, {'img': 'x', 'is': 'a sign', 'parts': 'O'}]}
+    json.dump(spec, open(os.path.join(d, 'spec.json'), 'w'))
+    p1, p2 = C.applies(spec['panels'][0]), C.applies(spec['panels'][1])
+    look, res = os.path.join(d, 'look.md'), os.path.join(d, 'result.md')
+    whole = (f"## Panel 1\nok: {' '.join(p1[1:])}\nFAULT {p1[0]}: left hand - hovers\n"
+             f"## Panel 2\nok: {' '.join(p2[:-1])}\nCAN'T TELL {p2[-1]}: a full-size crop of the sign\n## Cold look\nfine\n")
+    half = f"## Panel 1\nok: {' '.join(p1)}\n## Panel 2\nok: {' '.join(p2[:3])}\n"
+    out = {}
+    for name, l_first, body in (('half', True, half), ('late look', False, whole), ('whole', True, whole)):
+        if l_first:
+            open(look, 'w').write('1: a man waving\n2: a sign saying EGG MAYO\n'); time.sleep(0.05)
+            open(res, 'w').write(body)
+        else:
+            open(res, 'w').write(body); time.sleep(0.05)
+            open(look, 'w').write('1: a man waving\n2: a sign saying EGG MAYO\n')
+        out[name] = C.check_answer(d)[0]
+    r = C.parse(whole)['panels']
+    ok = bool(out['half']) and bool(out['late look']) and not out['whole'] and r[1][p1[0]][0] == 'FAULT' \
+        and r[2][p2[-1]][0] == "CAN'T TELL"
+    return ok, f"half: {len(out['half'])} reason(s); late look: {len(out['late look'])}; whole: {out['whole'] or 'recorded'}"
+
+
+@test
+def critique_checklist_parts():
+    """Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools."""
+    import critique as C
+    s = C.checklist_for('PO')
+    secs = set(re.findall(r'^## ([A-Z])\.', s, re.M))
+    bad = [x for x in ('Came from', 'Tool:', 'Islamocommunism', '(10)') if x in s]
+    return secs == {'A', 'P', 'O'} and not bad, f'sections {sorted(secs)}; leaks: {bad or "none"}'
+
+
+@test
+def critique_where_pops():
+    """Job H (rule 56, line M1): critique.py where flags a thing that pops in mid-shot (Elder Swindon 59, 62, 64)."""
+    import types
+    import critique as C
+    film = types.SimpleNamespace(FPS=12, SHOTS=[('1 street', 0.0, 4.0), ('2 shop', 4.0, 8.0)],
+                                 draw_order=lambda t: ['set', 'MAN'] + (['DOG'] if t >= 5.0 else [])
+                                 + (['PIGEON'] if t < 2.0 else []), ENTRANCES={})
+    _, flags = C.where('made-up', film=film)
+    film.ENTRANCES = {'DOG': 'runs in from the left'}
+    _, planned = C.where('made-up', film=film)
+    caught = any('DOG in at 5.00' in f for f in flags) and any('PIGEON out at' in f for f in flags)
+    return caught and len(flags) == 2 and len(planned) == 1, f'flags: {flags}; with DOG planned: {planned}'
 
 
 def main():

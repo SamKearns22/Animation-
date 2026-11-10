@@ -38,12 +38,13 @@ Pre-flight refuses to run until this line has them, and while any "done?" box be
 ## Notes
 Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10.3 s, left: the man never looks at the zombie".
 
-Status: one line of what was done (no "Was:"; git keeps the history), and "new kind" or "seen before"
-(a "seen before" note means a check is missing: add it).
+Status: one line of what was done (no "Was:"; git keeps the history), "new kind" or "seen before" (a "seen
+before" note means a check is missing: add it), and the note's line in `guides/critique-checklist.md` (rule 30):
+a new line's id, or an old one and why it missed (line unclear, sheet didn't show it, no critique).
 
-| # | shot | time | note | status |
-|---|------|------|------|--------|
-| 1 |      |      |      | open   |
+| # | shot | time | note | line | status |
+|---|------|------|------|------|--------|
+| 1 |      |      |      |      | open   |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 

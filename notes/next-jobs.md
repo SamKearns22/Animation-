@@ -3,7 +3,7 @@
 - **Rules that bite next:** 86 (Job H stays inside 5% of a week: Sam, 10 Nov, raised it from 2.5%; about 1.5% spent), 89 (the critique the helper
   will run), 85 (cost watch: on amber, finish the step and hand over).
 - **Done (10 Nov, Job H chat 1, design, Opus max, about 1.5%: max effort cost more than the 0.9% planned):** the critique checklist,
-  `guides/critique-checklist.md` (33 lines from Sam's past notes, in six parts: every sheet, people, creatures,
+  `guides/critique-checklist.md` (37 lines from Sam's past notes, in six parts: every sheet, people, creatures,
   props, sets, movement; how each new note adds or strengthens a line); the helper's design and the build list (this
   file's Job H section). Job G not touched.
 - **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand

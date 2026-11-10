@@ -37,3 +37,6 @@ source/data/p4a2/
 source/data/flying-whales-animatic.mp4*
 source/data/terfwarts/
 source/data/midterminal/
+
+# critique packs (critique.py): drafts, never on GitHub; the record lives in the ledger
+source/data/critique/
