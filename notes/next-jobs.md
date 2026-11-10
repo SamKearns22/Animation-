@@ -13,8 +13,8 @@
   **Next, Job I (Opus, medium effort):** Sam's look at `job-i-driver-sheet-numbered.jpg`, `job-i-round3-closeup.jpg`
   and his pick on question 1 (a proper turned face: Opus, high effort). Open: slumped shirt a box; back hair a blindfold.
 - **Next, Job K build 2 (Opus, medium effort, about 0.5%):** "Job K build 2: read notes/job-k-ai-tells.md 'Build chat
-  1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 if Sam says Y.
-- **Needs Sam:** I: the round 3 sheets and question 1; K: Y/N on proposal 5 (the driver sheet is sent).
+  1'": hard shapes kept inside the body and switched on, then the shirt check, its sheet to Sam; then 5 (Sam: Y, 11 Nov) as on the driver sheet, about 0.3% more.
+- **Needs Sam:** I: the round 3 sheets and question 1
 - **Read:** the pack in `guides/job-packs.md` ("A tool job" for K).
 - **Open rule requests:** none.
 - **For Claude:** L: `voices.caption_start_check`/`word_times`/`bleep_check` (SWEARS_OK); `kitchecks.cut_rests`

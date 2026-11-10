@@ -128,3 +128,12 @@ merges into satire.md's "The look" and rule S3.
       vertical bands through a cylinder, x = cx + hw*sin(a*v)/sin(a), a about 1.1, width by the slope; horizontal
       bands sag about 8 units in the middle; offset one side at the placket); one before/after sheet to Sam.
 - satire.md 'The look' carries 1, 2 and 4's check (no new rule lines). Open rule requests: none.
+
+## Sam, 11 Nov
+- 5: **Y.** "The pump driver really isn't the ideal model to test these things on, I explicitly asked for Vance at the
+  beginning, but if it is already built then proceed with what you had." Why the driver: chat 1 wrote "the invented
+  petrol-pump driver" into Sam's answers because proposal 5 keeps likeness faces measured; Sam's ask for Vance was lost
+  there. Lesson: an example goes on the person Sam names, and a swap is asked, never written in silently.
+- Build 2 does 5 as on the driver sheet (`ai_tells_lab.lopsided` and `driver_pose` moved into the kit as options for
+  invented people: a brow pair, the side hair higher on one side, one mouth corner up, `views.standing` weight on one
+  leg); Vance's measured face untouched. Order: shading fix, shirt check, then 5. Estimate about 0.8% in all.
