@@ -1,9 +1,9 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Job K finished; Job I bodies signed off; Job I faces built (one shared turned head for anyone; the driver first).
-- Needs Sam: notes on the driver's lying sheet and turnaround (numbers 1-23).
-- Next: a notes round, Opus, medium effort, once Sam's notes are in (all work on the main line).
+- Job K finished; Job I finished: bodies and faces (Sam: "It seems good"); one shared turned head for anyone.
+- Needs Sam: Y or N to the two open Job I items (the slumped shirt; the back of the head lying).
+- Next: nothing approved; those two would be Opus, medium effort.
 
 Read only the section you need (`grep -n '^## ' story/status.md`). Finished films and their history:
 `story/archive.md`; their notes: `notes/archive/`.
