@@ -9,11 +9,9 @@
 - **Next (Job H):** chat 2, the build, **Opus, high effort**: "Job H build: read notes/next-jobs.md Where things stand
   and Build plan H." About 1.5% (Sam, 10 Nov: Job H may go to 5% of a week; 1.5% spent). Sam's overnight chat opens it (chats it starts can't).
 - **Job G:** chat 4 (steps 4-6) is running alongside, started overnight; its own handover replaces this line.
-- **Needs Sam (morning):** (1) Y/N: the helper runs on Opus even inside a Sonnet chat (about 0.1% a pass); my pick
-  Y, it is the eye and a missed fault costs a round. (2) Open rule requests 1-3 (Job H section): your numbers.
+- **Needs Sam:** nothing (10 Nov: Y to the helper always on Opus and to requests 1-3, now written).
 - **Read:** this file's Job H section; `guides/critique-checklist.md` (header only).
-- **Open rule requests:** Job H section, 1-3 (rule 89's check becomes the helper; rule 30 merged so each fault note
-  names or adds a checklist line; rule 56's check becomes `critique.py where`). Job G step 6 (41, 42, 81) to come.
+- **Open rule requests:** none from H (rules 30, 56, 89 written 10 Nov). Job G step 6 (41, 42, 81) to come.
 - **For Claude:** build `source/critique.py` (pack, record, where, before) as the Job H section says; packs in
   `source/data/critique/` (git-ignored); results into the ledger's round files. Job G's own notes: Job G section.
 
@@ -99,13 +97,14 @@ thing) waits for the next film.
    old faults put back (the EGG MAYO box mirrored with PIL; a gallery hand moved off its phone the way kittest
    `held_prop_touches` does) beside clean panels. It must flag O1 and P1 and nothing on the clean panels. A miss:
    reword that line or the prompt once and rerun; a second miss is written here as a limit.
-5. Pre-flight prints one line: "critique: round R, pass N clean / N faults open / none recorded" (a warning only; a
-   refusal waits for Sam's yes to request 1).
-6. A kit-catalogue row. The notes template is unchanged until Sam's yes to request 2.
+5. Pre-flight prints one line: "critique: round R, pass N clean / N faults open / none recorded" (it refuses the
+   animatic, rule 89).
+6. A kit-catalogue row; the notes template's status column asks for the checklist line (rule 30).
 7. Handover: a Next line Sam's overnight chat can start, or "Job H finished" (that chat tells Sam). Fetch and merge
    before every push (Job G's chat pushes to the main line too) and keep Job G's line in Where things stand.
 
-**Open rule requests (Sam's numbers; none written):**
+**Rule requests (Sam: Y to all, 10 Nov; written in the rulebook, so the build makes pre-flight refuse, and the notes
+template's status column names the checklist line):**
 1. Rule 89's check column becomes: "`critique.py`: a fresh helper reads the sheet, references and
    `guides/critique-checklist.md` cold; each pass is saved in the ledger; pre-flight refuses an animatic until the
    round's last pass is clean or its faults are named (`--faults-named`)." A by-hand rule turned into a check.
