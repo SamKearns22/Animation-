@@ -8,7 +8,7 @@
   Wikimedia, Zelda wikis): Sam asked for screenshots.
 - **Spent against the estimate:** planning about 0.7% of 14.5%.
 - **Next:** on Sam's answers and screenshots: build the cast (Opus, high), new chat.
-- **Needs Sam:** questions 1 and 3-12 (sent 10 Nov; 2 answered Y) and the screenshots (now with Saria).
+- **Needs Sam:** questions 1 and 3-12; the last three references (forest wide, Castle Town market wide, Link from the side). Round one filed 10 Nov.
 - **Read:** `guides/job-packs.md` Build; this file.
 - **Lost / Added:** Lost: Ruto's "over-sexual" preening (she is a child in this part of the game): vain and pushy
   instead. Added (if Sam says Y): R1/R2 button prompts on screen; gunfire, snap and blast sounds.
@@ -80,6 +80,28 @@ News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: mod
 | 24 | Energetic pace, exaggerated movements and enthusiasm, very little time between lines | |
 | 25 | Navi always cutely floating, nuzzling, etc., depending on context | |
 | 26 | Budget ideally 12%, stretch to 15% for quality | |
+
+## References as checklists (Sam's round one, 10 Nov; `references/remakes/`). Ours matches? is ticked at the cast sheet
+| reference | what it shows (count, colours, positions, facing, proportions) | ours matches? |
+|---|------|------|
+| 01-kg (THE OPENING SHOT, Sam) | KG on a mossy branch, low camera, blue sky and white clouds; Link's woven green cap back-of-head in the left foreground, spiral pattern on it, orange hair edge. KG faces us: chunky round body, rust-brown chest, ochre-gold belly, two big swept "horn" crests of gold-tan feathers curling up and outwards, white face disc, big round blue-grey eyes in white rings with dark brows, small gold beak, white bib with two gold eye-spot circles, yellow taloned feet gripping the branch, long fanned brown tail hanging below | |
+| 02-kg | full body three-quarter on white: same colours; wings folded at the sides, dark brown with paler edges; tail long, grey-brown, pointed; legs gold-feathered, yellow claws; the crest horns are long (about the body's height), one curling forward, one back. Kindly, tolerant eyes | |
+| 03-link | crouching, arm up to a light; big blue eyes, blond bowl-cut hair to the jaw, long pointed ears; green woven tunic with frayed fringes at hem and sleeves, short sleeves; brown leather strap across the chest, belt with a round silver buckle; green floppy cap with a red/brown bead band; brown boots with folded tan cuffs; wooden shield on his back. (Possibly fan art: 04 wins where they differ) | |
+| 04-link (MAIN) | front, in-game: very big blue eyes, small nose and mouth, a toddler-ish round face; blond hair over the forehead; cap with red beads and a woven band; green knit shirt with a collar under a darker green tunic; chest strap, belt, buckle | |
+| 05-navi | a white-hot ball with a soft white glow, four wings like dragonfly wings, pale with pink-green shimmer and vein pattern, top pair long and upright, lower pair small | |
+| 06-navi | the same: pink-white ball, glow, sparkles round it; wings with a feather-cell pattern | |
+| 07-ruto | full body: pale grey-white smooth skin, a big teal domed fish head-fin sweeping back, purple eyes with lashes, small smile; teal fin "top" at the chest, teal fins hanging from forearms and hips; hands on hips; bare feet, pink toes. Child proportions | |
+| 08-ruto | front, hands on hips, the same; confident, smug | |
+| 09-zelda | with Link: white dress with purple hem band, purple tabard, blue sleeves, white head-cloth with purple band | |
+| 10-zelda (MAIN) | seated three-quarter: green eyes, blond hair, pointed ears; white cloth veil and purple padded headband with a gold triforce plate; gold collar; purple tabard with embroidery; puffed pale-blue sleeves; white skirt; holds the blue ocarina. Gentle half smile | |
+| 11-goron | full body: smooth, bright yellow-orange, egg-shaped head and body in one, short stubby arms and legs, rocky grey patches on the back, a small pale tuft on top of the head, big grin. About Link's height x 1.6 | |
+| 12-goron (MAIN face) | close: round dark purple eyes, small black brows, a small nose, a wide smile line, a white goatee point under the chin, round belly | |
+| 13-malon | white dress with a blue horse-pattern hem, yellow neckerchief, long red hair, hands clasped, kind face, slightly shorter than Link | |
+| 14-malon (RIGHT HALF only: the left is the N64 game) | long red-orange hair, blue eyes; yellow neckerchief with a brooch; grey-brown knit blouse with blue embroidered short sleeves; brown belt; brown patterned apron over a purple skirt with a blue meander hem | |
+| 15-saria | sitting on a stump playing the ocarina, eyes closed; green fairy beside her; green hair, green outfit, boots | |
+| 16-saria (MAIN) | front: bright lime-green bob with a fringe, blue eyes, pointed ears; dark green high-collar top, lighter green tunic with a swirl pattern, a fringed shoulder; pendant; a brown belt with a bead; green shorts; holds a wooden ocarina; soft confident smile | |
+| Look across all of them | the remake's puppet-theatre materials: woven, knitted, carved. In our flat style, kept as a few weave or feather strokes on the big areas (cap, tunic, KG's chest), not textures | |
+| Still missing | Kokiri Forest wide (01 covers the branch shot); Castle Town market wide; Link side view (03-04 are front and three-quarter) | |
 
 ## Shots and the acting list (rule 74; faces wait on Sam's answers where marked)
 Length: about 83 words at Sam's pace (25 s) + action beats (8 s) + tight gaps + sign-off: **about 38 s**.
