@@ -109,3 +109,27 @@
   (`KID_HAND_R`); Malon's bottle uses `wrap`; KG crests ("antlers" to a cold eye) and his side grip mittens: judge at
   pass 2. Packs `source/data/critique/remakes_cast/` (git-ignored: pass 1 is only in the ledger).
 
+
+
+## Build chat 5 handover (10 Nov)
+- **Rules that bite next:** 89 (pass 3 by a NEW helper), 87 (KG's crests: options sheet sent, Sam picks), 41 (hands).
+- **Done (11 Nov, build chat 5, Opus high; stopped on cost amber):** critique pass 2 recorded (52 faults, many real).
+  Sam's ask: Link carries the Kokiri Sword (hilt over his left shoulder, carved wooden sheath behind the shield,
+  ref 03); the front chest strap now crosses his left shoulder like the back and refs. Fixed from pass 2: KG's bib
+  spots (read as breasts) now three pale rings in a row; KG's crests are on an options sheet (1 fan, 2 narrow plume,
+  3 layered feathers; 3 is in use, Claude's pick); the Goron's rocks five small lumps (two read as ears), thin drool
+  (read as a spoon), small goatee point and no neckline bow (read as a jabot), vacant face (half lids, flat brows,
+  slack jaw); Navi's ball bigger, veins on her wings.
+- **Next:** Build, Opus high: fix the rest of pass 2 (Link's shrug reads "ta-da", his side view has no ear; Zelda's
+  shy face reads startled, her trim pink; Malon's bottle at chest, hair to the waist; Saria's ocarina shows clear of
+  her hand; Ruto's head-fin still a mushroom helmet, stalk neck, not vain; gunman's scope to his eye, stock on the
+  shoulder, an arm to the trigger hand, mask reads beard side on; KG war pose has no gun, side wings read as
+  sleeves, swoop upright, stub side tail, faces alike), then pass 3 (`remakes_panels.py OUTDIR`, spec as in pass 2),
+  then the cast sheet to Sam with Sam's crest pick.
+- **Needs Sam:** crest pick 1/2/3; recordings any time (01-14, a second of silence after each).
+- **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
+- **Open rule requests:** none.
+- **For Claude:** pass 2 spec: `source/data/critique/remakes_cast/r1-p2.spec.json` (git-ignored; the empty r1-p1 dir
+  keeps numbering); false alarms to `critique.py false`: P13 bare arms (refs have short sleeves), KG's empty neck-grip
+  talons (the victim is in the shot). Crest look `remakes_creatures.CREST` ('fan', 'plume', 'layered'); drop the two
+  unpicked after Sam's answer. Sword: `remakes_cast.kokiri_hilt/kokiri_sheath/link_hilt` (a head prop, so over the cap).

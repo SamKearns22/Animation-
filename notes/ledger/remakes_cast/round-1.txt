@@ -163,3 +163,89 @@ Props: 3 4 7 8. Beat: 1 3 5 6 8 10. Nipple: 7 8. Neck: 2 5 6. Arm: 5 6 8.
 - Soldier off style. suggested line: one head-body ratio.
 - Duplicate tiles. suggested line: poses differ.
 
+== critique, round 1 pass 3 (2026-11-10): 29 fault(s), 11 can't tell
+-- look.md --
+1: Blond elf boy, green cap and tunic, sword, shield; four turns; eight faces, one shocked.
+2: Blond elf girl, white hood, purple tabard; arms stiff, then hands clasped; calm, shy blush.
+3: Red-haired girl, purple skirt, brown apron; second pose holds white bottle, grinning; no words.
+4: Green-haired elf girl, green scarf; hand on hip, brown ocarina pressed flat; smiles, winks.
+5: Pale teal-headed fish girl, floating fins and ears; hands on hips, arms bent oddly; smug.
+6: Masked soldier, gas mask, dark armour; front, side, aiming rifle with hand under barrel.
+7: Brown owl, wheat-like horns, hugging, waving; one red headband with rifle; empty grid slot.
+8: Same owl side views: flying, wing over face, red blindfold, wings raised, cringing.
+9: Four glowing winged fairy lights on dark green: two blue, one pink, one red.
+10: Yellow round creature, pink frilly dress, rocks on back, sleepy eyes, long drool string.
+-- result.md --
+## Panel 1
+ok: A2 A3 P7 P1 P3 P4 P5 P6 P10 P12 P11 P13
+FAULT A1: shrug unreadable.
+FAULT P2: shrug flat; faces alike.
+FAULT P8: side view no shield.
+
+## Panel 2
+ok: A1 A2 A3 P7 P1 P8 P3 P4 P5 P6 P10 P12 P11 P13
+FAULT P2: shy head level.
+
+## Panel 3
+ok: A1 A2 A3 P7 P1 P8 P3 P4 P5 P10 P12 P11 P13
+FAULT P2: bottle at belt.
+FAULT P6: bottle arm hidden.
+
+## Panel 4
+ok: A2 A3 P7 P1 P8 P3 P4 P5 P6 P10 P12 P11 P13
+FAULT A1: ocarina reads as pouch.
+FAULT P2: ocarina at waist.
+
+## Panel 5
+ok: A3 P7 P1 P8 P3 P4 P5 P6 P10 P12 P11 P13
+FAULT A1: reads as hat.
+FAULT A2: fins float detached.
+FAULT P2: no weight shift.
+
+## Panel 6
+ok: A1 A3 P7 P1 P8 P3 P5 P4 P12 P11 P13 O2 O4 O3 O6 O1
+FAULT A2: eyes show; no camo.
+FAULT P2: aim eye off scope.
+FAULT P6: aim no trigger hand.
+FAULT O5: rifle no stock.
+FAULT P10: rifle into respirator.
+
+## Panel 7
+ok: A3 P7 P8 P3 P4 P5 P6 P10 P12 P11 P13 C2 C3
+FAULT A1: reads as hug.
+FAULT A2: crests uncurled.
+FAULT P2: repeats; no spit.
+FAULT P1: war gun on talons.
+CAN'T TELL C1 C4: needs Link.
+
+## Panel 8
+ok: A3 P7 P8 P3 P4 P5 P12 P11 P13 C3
+FAULT A1: grip reads face-cover.
+FAULT A2: bandana over eyes.
+FAULT C2: tail round.
+FAULT P2: swoop body level.
+CAN'T TELL P1 P6 P10 C1 C4: needs victim.
+
+## Panel 9
+ok: A2 A3 C2 C3
+FAULT A1: wings-down still up.
+CAN'T TELL C1 C4: needs Link.
+
+## Panel 10
+ok: A2 A3 P7 P1 P8 P3 P4 P6 P10 P12 P11 C2 C3
+FAULT A1: cone reads hat.
+FAULT P2: smiling, not vacant.
+FAULT P5: arms behind sleeves.
+FAULT P13: puff sleeves loose.
+CAN'T TELL C1 C4: needs Link.
+
+## Cold look
+Missed shrug, wings-down; misread hug, blindfold.
+
+## Same fault elsewhere
+Beat: 1-8, 10. Prop: 3, 4, 6, 7. Hand: 3, 6. Floating: 5, 10. Hat: 5, 10. Repeats: 1, 7, 9. Bandana: 7, 8.
+
+## Not on the list
+1. Empty cell, 7. Suggested line: "No empty cells."
+2. No height lineup. Suggested line: "Lineup against Link."
+

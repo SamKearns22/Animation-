@@ -1,27 +1,27 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (pass 3 by a NEW helper), 87 (KG's crests: options sheet sent, Sam picks), 41 (hands).
-- **Done (11 Nov, build chat 5, Opus high; stopped on cost amber):** critique pass 2 recorded (52 faults, many real).
-  Sam's ask: Link carries the Kokiri Sword (hilt over his left shoulder, carved wooden sheath behind the shield,
-  ref 03); the front chest strap now crosses his left shoulder like the back and refs. Fixed from pass 2: KG's bib
-  spots (read as breasts) now three pale rings in a row; KG's crests are on an options sheet (1 fan, 2 narrow plume,
-  3 layered feathers; 3 is in use, Claude's pick); the Goron's rocks five small lumps (two read as ears), thin drool
-  (read as a spoon), small goatee point and no neckline bow (read as a jabot), vacant face (half lids, flat brows,
-  slack jaw); Navi's ball bigger, veins on her wings.
-- **Next:** Build, Opus high: fix the rest of pass 2 (Link's shrug reads "ta-da", his side view has no ear; Zelda's
-  shy face reads startled, her trim pink; Malon's bottle at chest, hair to the waist; Saria's ocarina shows clear of
-  her hand; Ruto's head-fin still a mushroom helmet, stalk neck, not vain; gunman's scope to his eye, stock on the
-  shoulder, an arm to the trigger hand, mask reads beard side on; KG war pose has no gun, side wings read as
-  sleeves, swoop upright, stub side tail, faces alike), then pass 3 (`remakes_panels.py OUTDIR`, spec as in pass 2),
-  then the cast sheet to Sam with Sam's crest pick.
-- **Needs Sam:** crest pick 1/2/3; recordings any time (01-14, a second of silence after each).
+- **Rules that bite next:** 87 (options sheets for the faults that survived three passes), 89, 41 (hands).
+- **Done (build chat 6, Opus high):** the rest of pass 2 fixed (Link's shrug lower with elbows in, his side-view ear
+  over the hair; Zelda's shy face, bold gold trim; Malon's hair to the waist; Saria's ocarina shown clear of her hand;
+  Ruto's head a flat-topped fish head with fan ear-fins, a thicker neck, cocked shoulder and one leg out; the gunman's
+  smooth mask with a respirator, rifle raised to his eye, near arm on the trigger hand; KG's machine gun in his war
+  pose, tapered feathered side wings, a diving swoop, a long pointed side tail, distinct hype/glee/show faces).
+  Pass 3 by a new helper: 31 faults (ledger). Cast sheet sent to Sam with crest 3 (layered; he hadn't picked).
+- **Three-pass survivors (rule 87, options sheets next):** Link's shrug; Ruto's head reads as a hat; Malon's bottle
+  height; the gunman's aim; KG's faces alike; KG's crests (Sam's pick). **New in pass 3:** Link's side view shows no
+  shield; Zelda's shy head level; Saria's ocarina reads as a pouch; Ruto's fins float, no weight shift; the gunman's
+  eyes show and trousers plain; KG's fold reads as a hug, gesture repeats wide, gun on talons, side bandana over the
+  eyes, neck grip covers his face; Navi's wings-down points up; the Goron's cone reads as a hat, smiles, loose sleeves.
+- **Next:** wait for Sam's look at the cast sheet; then Build, Opus high: his notes first, the options sheets for the
+  survivors, the new pass-3 faults, a pass 4 only on what changed.
+- **Needs Sam:** his look at the cast sheet; crest pick (3 in use); recordings any time (01-14).
 - **Read:** `guides/job-packs.md` Build; this file's references; `notes/ledger/remakes_cast/round-1.txt`; both MAPs.
-- **Open rule requests:** none.
-- **For Claude:** pass 2 spec: `source/data/critique/remakes_cast/r1-p2.spec.json` (git-ignored; the empty r1-p1 dir
-  keeps numbering); false alarms to `critique.py false`: P13 bare arms (refs have short sleeves), KG's empty neck-grip
-  talons (the victim is in the shot). Crest look `remakes_creatures.CREST` ('fan', 'plume', 'layered'); drop the two
-  unpicked after Sam's answer. Sword: `remakes_cast.kokiri_hilt/kokiri_sheath/link_hilt` (a head prop, so over the cap).
+- **Open rule requests:** none (pass 3 suggested two checklist lines: "no empty cells", "a line-up against Link").
+- **For Claude:** pass 3 spec `source/data/critique/remakes_cast/r1-p3.spec.json`, panels in `panels-p3/` (git-ignored).
+  Possible false alarms to weigh before fixing: the swoop "body level" (it tips 58 degrees), Malon "bottle at belt"
+  (hand at y 170). Gunman mask `remakes_cast.gun_mask`; KG gun `remakes_creatures.kg_gun/_gun_over`; side wings
+  `_kg_wing(taper=True)`; KG glee lower lid `low`.
 
 ## Plan extras: the estimate (rules 24, 44)
 Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTerminal 11% (3 likenesses, one room),

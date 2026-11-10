@@ -142,19 +142,68 @@
      "10 C1: shots; line-up",
      "10 C4: shots; line-up"
     ]
+   },
+   {
+    "round": 1,
+    "pass": 3,
+    "date": "2026-11-10",
+    "faults": 29,
+    "cant_tell": 11,
+    "open": [
+     "1 A1: shrug unreadable.",
+     "1 P2: shrug flat; faces alike.",
+     "1 P8: side view no shield.",
+     "2 P2: shy head level.",
+     "3 P2: bottle at belt.",
+     "3 P6: bottle arm hidden.",
+     "4 A1: ocarina reads as pouch.",
+     "4 P2: ocarina at waist.",
+     "5 A1: reads as hat.",
+     "5 A2: fins float detached.",
+     "5 P2: no weight shift.",
+     "6 A2: eyes show; no camo.",
+     "6 P2: aim eye off scope.",
+     "6 P6: aim no trigger hand.",
+     "6 O5: rifle no stock.",
+     "6 P10: rifle into respirator.",
+     "7 A1: reads as hug.",
+     "7 A2: crests uncurled.",
+     "7 P2: repeats; no spit.",
+     "7 P1: war gun on talons.",
+     "8 A1: grip reads face-cover.",
+     "8 A2: bandana over eyes.",
+     "8 C2: tail round.",
+     "8 P2: swoop body level.",
+     "9 A1: wings-down still up.",
+     "10 A1: cone reads hat.",
+     "10 P2: smiling, not vacant.",
+     "10 P5: arms behind sleeves.",
+     "10 P13: puff sleeves loose.",
+     "7 C1: needs Link.",
+     "7 C4: needs Link.",
+     "8 P1: needs victim.",
+     "8 P6: needs victim.",
+     "8 P10: needs victim.",
+     "8 C1: needs victim.",
+     "8 C4: needs victim.",
+     "9 C1: needs Link.",
+     "9 C4: needs Link.",
+     "10 C1: needs Link.",
+     "10 C4: needs Link."
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 18,
+    "faults": 22,
     "false": 0
    },
    "P2": {
-    "faults": 16,
+    "faults": 25,
     "false": 0
    },
    "P6": {
-    "faults": 12,
+    "faults": 14,
     "false": 0
    },
    "P4": {
@@ -162,11 +211,11 @@
     "false": 0
    },
    "P5": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "A1": {
-    "faults": 10,
+    "faults": 17,
     "false": 0
    },
    "C3": {
@@ -174,15 +223,15 @@
     "false": 0
    },
    "C2": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "P8": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P13": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P11": {
@@ -190,7 +239,7 @@
     "false": 0
    },
    "P1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P7": {
@@ -202,6 +251,10 @@
     "false": 0
    },
    "O5": {
+    "faults": 2,
+    "false": 0
+   },
+   "P10": {
     "faults": 1,
     "false": 0
    }
