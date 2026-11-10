@@ -803,8 +803,8 @@ def copies_in_a_group():
 
 @test
 def lopsided_invented_only():
-    """Job K 5 (Sam: Y, 11 Nov): an invented person can be drawn a touch uneven (brow, mouth corner, side hair) and
-    stand with weight on one leg; a likeness head never is (Vance stays as measured)."""
+    """Job K 5 (Sam: Y, 11 Nov): an invented person can be drawn a touch uneven (brow, mouth corner, side hair);
+    a likeness head never is (Vance stays as measured)."""
     import numpy as np
     from PIL import Image
     import burnham as B
@@ -817,12 +817,11 @@ def lopsided_invented_only():
         im = Image.new('RGBA', (1080, 1920), (238, 234, 228, 255))
         V.person(im, B.Cam(1.0, 540, 960), 540, 1150, 2.2, dict(sp), 0.0, 0)
         return np.asarray(im.convert('L'), np.int16)
-    plain = dict(AC.MAN, lopsided=None, weight_leg=None)
+    plain = dict(AC.MAN, lopsided=None)
     changed = float((np.abs(face(AC.MAN) - face(plain)) > 40).mean())
-    hips = V.standing(AC.MAN)['hipR'][1] - V.standing(plain)['hipR'][1]
-    likeness = [n for n, sp in AC.CAST.items() if n != 'man' and (P4.lop(sp) or sp.get('weight_leg'))]
-    return 0.0005 < changed < 0.08 and hips < 0 and not likeness, \
-        f'face pixels changed {changed * 100:.2f}%; weight hip up {-hips:.0f} units; likeness heads uneven: {likeness or "none"}'
+    likeness = [n for n, sp in AC.CAST.items() if n != 'man' and P4.lop(sp)]
+    return 0.0005 < changed < 0.02 and not likeness, \
+        f'face pixels changed {changed * 100:.2f}%; likeness heads uneven: {likeness or "none"}'
 
 
 def main():

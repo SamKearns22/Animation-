@@ -147,7 +147,8 @@ merges into satire.md's "The look" and rule S3.
 - [x] 4's bend: `ed.bent_check` (bands spaced round a cylinder, crowding at the edges; cross bands sag 8; two fronts
       half a step apart at the placket); `ad_vanced_notice_cast.BENT` (on). Sheet sent: review/job-k/shirt-bent.jpg.
 - [x] 5 built: `patriots4_cast.lop`/`lop_raise`/`LOPSIDED` (brow pair, mouth corner; P4.lips reads it), the side
-      hair in `man_head`, `views.standing` weight on one leg (`sp['weight_leg']`, `views._weight_on`); the driver
-      has both on. Same as the driver sheet. kittest `lopsided_invented_only`. Sheet sent:
+      hair in `man_head`; the driver has it on. Same as the driver sheet. kittest `lopsided_invented_only`. Sheet sent:
       review/job-k/driver-lopsided-built.jpg. The lab's own copies (`lopsided`, `driver_pose`) removed.
 - Job K: all Sam's Ys built (1, 2, 4, 5). Open: Sam's look at the two sheets.
+- Sam, 11 Nov: weight on one leg removed ("it just makes an awkward looking model"): `views._weight_on` and
+  `sp['weight_leg']` deleted; the uneven face stays. Sheet resent.

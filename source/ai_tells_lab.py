@@ -15,7 +15,7 @@ MAP
   rigclip OUT.mp4  proposal 1's check (built, headlife.py + views.Rolled): Islamocommunism 36-42 s, today | the rig's
                    own head acting from the voice, side by side, with the film's sound
   shirt OUT.jpg    proposal 4's check (built, ad_vanced_notice_cast.BENT): the check shirt flat vs bent, four views
-  driver OUT.jpg   proposal 5's sheet (built: patriots4_cast.lop, views.standing's weight_leg): the pump driver
+  driver OUT.jpg   proposal 5's sheet (built: patriots4_cast.lop): the pump driver
                    with the options off | on, whole body, then the face full size
 
   python3 source/ai_tells_lab.py sheet review/job-k/before-after.jpg
@@ -314,7 +314,7 @@ def driver(out):
     sp = dict(AC.MAN)
     bg = (238, 234, 228, 255)
 
-    plain = dict(sp, lopsided=None, weight_leg=None)      # today: the kit's options off
+    plain = dict(sp, lopsided=None)      # today: the kit's options off
 
     def body(prop):
         im = Image.new('RGBA', (1080, 1920), bg)

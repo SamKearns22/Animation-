@@ -695,7 +695,7 @@ VANCE = dict(who='vance', name='JD Vance', skin=V_SKIN, hw=72, hh=94, head_dy=10
 MAN = dict(who='man', name='The driver', skin=M_SKIN, hw=80, hh=92, head_dy=12, hair='bald', hair_c=M_HAIR,
            brow_c=M_HAIR, brow_w=4.6, beard='goatee', beard_c=M_HAIR, outfit='jumper', jacket=M_SHIRT, sleeve=M_SHIRT,
            trousers=M_JEANS, shirt=M_SHIRT, tie=None, shoe=M_BOOT, shoulders=186, leg_k=1.35, anger=4,   # Sam, 7 Nov: anger 4
-           full=True, pose='custom', lopsided=True, weight_leg='R',      # Job K 5 (Sam: Y, 11 Nov): invented, so uneven
+           full=True, pose='custom', lopsided=True,   # Job K 5 (Sam: Y, 11 Nov): invented, so uneven (no weight on one leg: Sam, 11 Nov, awkward)
            height=1.80, seed=82)
 CAST = {'vance': VANCE, 'man': MAN}
 
