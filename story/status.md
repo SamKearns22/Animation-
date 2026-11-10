@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): planned 10 Nov, estimate 14.5%. Planned (answers, 24 references in); next: build the cast (Opus high). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): cast build started 10 Nov (`source/remakes_cast.py`: five children and the gunman drawn; Link's first look found 7 faults). Next: fix them, then the creatures and the critique (Opus high). Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.
