@@ -425,6 +425,72 @@ def grips_contacts_and_carry():
     return ok1 and not good and len(bad) == 1, f"contacts {fs}; carry on time {good}; early {bad}"
 
 
+@test
+def shoulder_seam_caught():
+    """Rule 81 (Sam, 7-8 Nov; Job G, 9 Nov): the shoulder-seam check. Drawn front on and then three-quarter at the same
+    spot (as the gallery and a turning film do), the pointing arm joins its own body, not the one left over from the
+    last drawing (that cut a wedge of background into the shoulder: the gap Sam saw, failed four times by hand). Then
+    a gap painted across the far arm's join, and a line painted across the near arm's, must both be caught."""
+    import itertools
+    import burnham as B
+    import figure as F
+    import handcheck as H
+    import kitchecks
+    import limbs
+    import numpy as np
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    from satire_style import install_circle_hands
+    B.SS = 1
+    F.guard(B)
+    F._ALLOW.append('the pose gallery')
+    install_circle_hands(B)
+    limbs.install(B)
+    kitchecks.install()
+    H.install()
+
+    def probe(name, deg):
+        im = Image.new('RGBA', (1200, 1100), G.BG)
+        H.begin()
+        V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, G.MODEL, 0.0, deg, G.pose(name, G.MODEL))
+        pp = H.FRAME[-1]
+        H.end(0.0)
+        return pp
+
+    def paint(pp, sd, kind):                        # 4 pixels just before the sleeve on each walked line
+        a, k = pp['arms'][sd], pp['k']
+        sh, el = np.array(a['sh'], float), np.array(a['el'], float)
+        u = (el - sh) / np.linalg.norm(el - sh)
+        v = np.array([-u[1], u[0]])
+        for off in np.linspace(-0.6, 0.6, 7):
+            ts = np.arange(-0.35 * F.UPPER * k, 0.45 * F.UPPER * k)
+            pts = (sh + off * 30 * 1.15 * k * v + ts[:, None] * u).round().astype(int)
+            on = [a['sleeve'][y, x] for x, y in pts]
+            i = next((i for i in range(1, len(on)) if on[i] and not on[i - 1]), None)
+            for x, y in ([] if i is None else pts[max(0, i - 4):i]):
+                for dx, dy in itertools.product((-1, 0, 1), repeat=2):
+                    q = (y + dy, x + dx)
+                    pp['other'][q] = pp['cloth'][q] = a['sleeve'][q] = False
+                    if kind == 'gap':
+                        pp['body'][q] = pp['inkpx'][q] = False
+                    else:
+                        pp['inkpx'][q] = True
+
+    probe('pointing', 0.0)
+    three = probe('pointing', 45.0)
+    clean = H.seam_faults(three, 'R', three['arms']['R']) + H.seam_faults(three, 'L', three['arms']['L'])
+    paint(three, 'R', 'gap')
+    gap = H.seam_faults(three, 'R', three['arms']['R'])
+    front = probe('hands up', 0.0)
+    near = next(sd for sd in 'LR' if sd not in front['behind'])
+    paint(front, near, 'line')
+    line = H.seam_faults(front, near, front['arms'][near])
+    return (not clean and gap and line and 'R' in three['behind'],
+            f"three-quarter pointing after front on: {clean or 'clean'}; gap painted (far arm): {gap}; "
+            f"line painted (near arm): {line}")
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

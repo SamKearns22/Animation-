@@ -29,6 +29,7 @@ from ed import curve  # noqa: E402
 
 INK = (24, 20, 22)
 LENS = {}                                                   # {'side': 'L'}: that arm reaches towards the camera
+DRAW, NEXT = [0], [0]   # which person is being drawn (views.person counts up): an arm joins only the body drawn with it
 
 
 def _resample(P, step):
@@ -193,7 +194,7 @@ def install(B):
     def poly(self, pts, fill, line=INK, lw=4):
         pts = follow(self, pts)
         if fill is not None and len(pts) >= 6 and not busy:  # remembered, so an arm can find the body it hangs from
-            drawn.append((_who(self.cam), _big(pts), [self.cam.P(*q) for q in pts]))   # in screen pixels
+            drawn.append(((_who(self.cam), id(self.img), DRAW[0]), _big(pts), [self.cam.P(*q) for q in pts]))
             del drawn[:-80]
         return orig_poly(self, pts, fill, line, lw)
 
@@ -205,8 +206,10 @@ def install(B):
         if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
             figure.audit_arm(sh, el, wr)
         shp = p.cam.P(*sh)                                  # the body as drawn on screen (it may lean; the arm not)
-        body = next((pts for who, big, pts in reversed(drawn) if big and who == _who(p.cam) and _inside(shp, pts)),
-                    None)
+        # only the body drawn in this same drawing: a leftover one (the last view, the last frame) cut a gap into the
+        # shoulder (Job G, 9 Nov: rule 81's seam, failed four times, was an arm joining a body no longer there)
+        me = (_who(p.cam), id(p.img), DRAW[0])
+        body = next((pts for who, big, pts in reversed(drawn) if big and who == me and _inside(shp, pts)), None)
         busy.append(1)
         try:
             spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)

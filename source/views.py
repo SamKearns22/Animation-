@@ -736,6 +736,9 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None)
 
 
 def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
+    import limbs
+    limbs.NEXT[0] += 1                            # a new drawing: his arms join only the body drawn now (rule 81)
+    limbs.DRAW[0] = limbs.NEXT[0]
     view_deg, mirror = snap(yaw)
     if view_deg in (0, 180):                      # front on and from behind the body is never mirrored: either side of
         mirror = False                            # 0 (or 180) degrees his right hand stays where it was (Islamocommunism
@@ -883,6 +886,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
     j2['_drawn']['head_mirror'] = head_mirror
+    j2['_drawn']['behind'] = set(behind)          # arms drawn before the torso (the seam check skips them: rule 81)
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull

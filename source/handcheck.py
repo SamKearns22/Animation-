@@ -30,6 +30,7 @@ draws every Nth frame (default 1: every frame), prints the faults and saves OUT_
 frame, cropped round the person, the hands circled.
 """
 import fnmatch
+import itertools
 import math
 import os
 import sys
@@ -43,6 +44,7 @@ sys.path.insert(0, HERE)
 import burnham as B          # noqa: E402
 import figure as F           # noqa: E402
 import views as V            # noqa: E402
+from ed import INK           # noqa: E402
 
 KEYS = {'L': ((255, 0, 255), (0, 255, 255)), 'R': ((255, 128, 0), (0, 255, 0))}   # (sleeve, hand) per arm
 PROP_HAND = (255, 255, 0)     # a hand drawn by a prop (gesture_hand called from outside views.hand)
@@ -112,11 +114,14 @@ def probe(img, args):
     V.PROBE.update({'L': KEYS['L'], 'R': KEYS['R'], 'full': {sd: (lambda p, sd=sd: B.Pen(full[sd], p.cam)) for sd in 'LR'}})
     B.gesture_hand, V.hand = prop_hand, vhand
     n_log = len(F.LOG)
+    import limbs
+    n_draw = limbs.DRAW[0]                          # an arm the film redraws after this still finds its own body
     try:
         j2 = _draw(lay, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt)
     except Exception:
         return None
     finally:
+        limbs.DRAW[0] = n_draw
         V.PROBE.clear()
         B.gesture_hand, V.hand = real_hand, real_vhand
         del F.LOG[n_log:]
@@ -138,7 +143,14 @@ def probe(img, args):
     out = dict(name=sp.get('name', 'someone'), body=body, k=k, expect=EXPECT * k * k, arms={}, at=(x0, y0, x1, y1),
                size=size, j3=joints or V.standing(sp), view=V.VIEWS[V.snap(yaw)[0]], yaw=V.snap(yaw)[0],
                sw=sp.get('shoulders', 150), hem=sp.get('bottom', V.JACKET),
-               ink=B.Pen(lay, L).w(2.6), tucked=(joints or {}).get('tucked'))
+               ink=B.Pen(lay, L).w(2.6), tucked=(joints or {}).get('tucked'),
+               behind=set(j2.get('_drawn', {}).get('behind', ())))
+    a_ = np.asarray(lay).astype(np.int16)                       # for the seam check (rule 81): the ink lines, and
+    out['inkpx'] = body & (np.abs(a_[:, :, :3] - INK).sum(axis=2) < 60)   # what is neither ink nor his own sleeves
+    out['other'] = body & ~out['inkpx'] & ~m(KEYS['L'][1]) & ~m(KEYS['R'][1]) & ~m(PROP_HAND)
+    J = np.array(sp.get('jacket') or sp.get('sleeve') or (0, 0, 0), float)   # his jacket, lit or in its shading
+    f = np.clip((a_[:, :, :3] @ J) / (J @ J or 1.0), 0.5, 1.15)
+    out['cloth'] = body & (np.abs(a_[:, :, :3] - f[:, :, None] * J).sum(axis=2) < 45)
     hand_px = {sd: m(KEYS[sd][1]) for sd in 'LR'}
     full_px = {sd: _key(full[sd])[1](KEYS[sd][1]) for sd in 'LR'}
     shown_prop = m(PROP_HAND)
@@ -147,6 +159,8 @@ def probe(img, args):
         mask = _key(one)[1](PROP_HAND)
         full_px[sd] |= mask
         hand_px[sd] |= shown_prop & mask
+    for sd in 'LR':
+        out['other'] &= ~m(KEYS[sd][0])
     for sd in 'LR':
         sh2, el2, wr2 = (np.array(j2[q + sd][:2], float) for q in ('sh', 'el', 'wr'))
         u, v = sh2 - el2, wr2 - el2
@@ -212,6 +226,7 @@ def frame_faults(people):
                                      f"doubles back: shown at {a['fore'] * 100:.0f}% of its length, the hand "
                                      f"{back * 100:.0f}% of a forearm back towards the shoulder)"))
             out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in body_faults(pp, sd, a, expect)]
+            out += [dict(who=pp['name'], side=sd, box=box, kind=kd, text=tx) for kd, tx in seam_faults(pp, sd, a)]
             # in the frame (everyone stacked in drawing order): a hand over the body of someone at about the same
             # distance. (A hand hidden behind someone nearer the lens is ordinary staging: not a fault.)
             vis_hand = hand & mine
@@ -315,6 +330,59 @@ def body_faults(pp, sd, a, expect):
         elif seen < FINGER * whole:
             out.append(('finger hidden', f'the pointing finger hidden ({seen * 100 // max(whole, 1)}% shows; rule 41)'))
     return out
+
+
+SEAM = 3                      # of the 7 lines walked across a shoulder, this many crossing a line or gap is a seam
+
+
+def seam_faults(pp, sd, a):
+    """Rule 81 (Sam, 7-8 Nov, Ad-Vanced Notice notes 14-17; by hand until Job G, failed four times): the arm and body
+    are one piece. Seven lines are walked out from inside the body along the upper arm, side by side across its width.
+    Going out, his jacket must run straight into the sleeve: a line or a gap between them (jacket, then ink or nothing,
+    then sleeve) on three lines or more is a seam (a line, cap or notch where the arm meets the body). An arm drawn
+    before the torso (behind it from this view) rightly has the body's edge line across it there: only a gap counts
+    (Job G, 9 Nov: the far arm, three-quarter pointing, joined a body left over from the last drawing: a wedge of
+    background between them). Coming back in (sleeve, line, jacket) is the arm lying over him, and a prop over the
+    shoulder is not his jacket: neither is a seam."""
+    if 'other' not in pp or a['sleeve'].sum() < 50:
+        return []
+    k = pp['k']
+    sh, el = np.array(a['sh'], float), np.array(a['el'], float)
+    u = el - sh
+    n = np.linalg.norm(u)
+    if n < 0.3 * F.UPPER * k:                       # the upper arm points at the lens: no join to walk across
+        return []
+    u /= n
+    v = np.array([-u[1], u[0]])
+    sleeve, other, cloth, ink, body = a['sleeve'], pp['other'], pp['cloth'], pp['inkpx'], pp['body']
+    behind = sd in pp.get('behind', ())
+    H, W = sleeve.shape
+    half = 30 * 1.15 * k                            # the sleeve's half-width at the shoulder (limbs._arm_spine)
+    ts = np.arange(-0.35 * F.UPPER * k, 0.45 * F.UPPER * k)
+    hits = 0
+    for off in np.linspace(-0.6, 0.6, 7):
+        pts = sh + off * half * v + ts[:, None] * u
+        xs, ys = pts[:, 0].round().astype(int), pts[:, 1].round().astype(int)
+        ok = (xs >= 0) & (xs < W) & (ys >= 0) & (ys < H)
+        xs, ys = xs[ok], ys[ok]
+        cls = np.where(sleeve[ys, xs], 2, np.where(other[ys, xs], 1, 0))   # 0 ink or nothing, 1 the body, 2 sleeve
+        gap, jk = ~body[ys, xs], cloth[ys, xs]
+        runs, at = [], 0
+        for c, g in itertools.groupby(cls):
+            ln = len(list(g))
+            runs.append((c, at, ln))
+            at += ln
+        for i in range(1, len(runs) - 1):
+            (c0, a0, l0), (c1, a1, ln), (c2, _, _) = runs[i - 1], runs[i], runs[i + 1]
+            if c0 == 1 and c1 == 0 and c2 == 2 and ln <= half and jk[a0:a0 + l0].mean() > 0.5 and \
+                    (not behind or gap[a1:a1 + ln].sum() >= 2):
+                hits += 1
+                break
+    if hits >= SEAM:
+        what = 'a gap' if behind else 'a line or gap'
+        return [('seam', f'{what} where the arm meets the body ({hits} of 7 lines across the shoulder cross one; '
+                         'rule 81: one piece, one outline)')]
+    return []
 
 
 # ------------------------------------------------------------------------------------------------ hooking in
