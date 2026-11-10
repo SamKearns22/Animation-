@@ -111,7 +111,11 @@ merges into satire.md's "The look" and rule S3.
       the shoulders tipped. Lab only (`ai_tells_lab.lopsided`, `driver_pose`). **Waits for Sam's Y/N; nothing built.**
 - [x] (b) 2 built: `ed.HARD = True` (ed.soft, limbs._shade, kit.contact_shadow draw hard-edged; a parody sets it
       False). Sheet sent (review/job-k/shading.jpg): Vance's suit, El-Sayed's jacket, the driver's shirt and neck.
-      Dark suits read fine with the band as it is; no change to its strength.
+      Dark suits read fine with the band as it is; no change to its strength. **Switched OFF (ed.HARD = False)
+      before pushing:** kittests pose_gallery fails with it on: unclipped hard shapes (views.torso_view's soft()
+      bands, burnham's) darken a hand seen from behind ('hands on a gun' and 'cup in hand' three-quarter back,
+      'phone, reading' behind). Build 2, first: clip soft() to the shape it shades (or draw it before the arms),
+      pose_gallery passes, then HARD = True.
 - [x] (c) 1 built: `source/headlife.py` (envelope, accents, phrase starts, HeadLife.at_time) and `views.Rolled`; in
       views.person `sp['head_life']` (or j['head_roll'] / j['nod']) tips the head about the top of the neck (pivot
       y -50 + head_dy), a nod drops it 5 units and adds 0.35 to sp['down']. Shoulders do not follow (the arms are

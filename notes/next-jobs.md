@@ -35,9 +35,9 @@
   trunk's neck in burnham.torso / views.torso_view); `neck_to` stops views' back-head neck; `lying_flat.py sheet OUT
   man ball`. Driver's three/three_back check: ad_vanced_notice_cast.torso_view.
 - **Job K, the "AI ick" fixes (build chat 1 done 10 Nov, Opus high, about 1.4%; stopped on amber):** sent to Sam:
-  the 5 example (driver sheet; nothing built), 2 built (hard-edged shading, sheet), 1 built (head acting in the rig,
+  the 5 example (driver sheet; nothing built), 2 built but switched off (hard shapes spill over hands from behind; kittest fails with it on), 1 built (head acting in the rig,
   clip), 4 half built (pre-flight's copy check, with a kittest). **Next for K (Opus, medium effort, about 0.4%):** type
-  "Job K build 2: read the Job K line, then notes/job-k-ai-tells.md 'Build chat 1'": the shirt check that bends round the body (4's second half), its sheet sent to Sam; then 5 if
+  "Job K build 2: read the Job K line, then notes/job-k-ai-tells.md 'Build chat 1'": first make 2's hard shading stay inside the body and switch it on (kittests pose_gallery passes), then the shirt check that bends round the body (4's second half), its sheet sent to Sam; then 5 if
   Sam said Y. Rules that bite: 48, 79, 86. For Claude: notes/job-k-ai-tells.md 'Build chat 1'.
 - **Needs Sam:** K: Y/N on 5 (the driver sheet).
 - **Read:** `source/critique.py`'s map (top of file) the first time a film runs a critique; `guides/critique-checklist.md`.

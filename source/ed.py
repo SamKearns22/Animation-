@@ -148,8 +148,9 @@ def mouth_shape(t):
     return [2, 1, 3, 1, 2, 0][int(p * 11) % 6]
 
 
-HARD = True   # Job K (Sam, 10 Nov): shading is one hard-edged shape, never an airbrushed band (an "AI" tell); a film
-#               that quotes the airbrushed look on purpose (a parody) sets ed.HARD = False before drawing
+HARD = False  # Job K (Sam, 10 Nov): shading as one hard-edged shape, never an airbrushed band (an "AI" tell). OFF until
+#               Job K build 2 keeps the hard shapes inside the body (kittests pose_gallery: they darken a hand seen
+#               from behind in 3 poses; the blur hid it); then True, and a parody quoting the airbrush sets it False
 
 
 def soft(img, cam, pts, colr, alpha, blur=6):
