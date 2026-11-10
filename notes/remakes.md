@@ -1,30 +1,31 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 3 (benchmark: the shack is out).
-- **Done (build chat 8, Opus high):** first-look faults fixed (forest foot, stump moss, camp gate clear, Goron x 0.82
-  so about 1.3 x Link, the town camera raised); critique passes 1 and 2 of all three sets, each by NEW helpers; the
-  pass-1 faults fixed (list in the commits). Pass 2 still found real faults, so no set is filed in the catalogue yet.
-- **Next (Opus, high):** the soft foot shadows (Sam Q3), fix the pass-2 faults below, then pass 3 (`critique.py pack` on
-  `spec_r1/2/3.json`, a NEW helper each); a fault surviving three goes to an options sheet (rule 87).
-  The faults: "Open notes: the sets' pass-2 faults" below.
-- **Sam, 11 Nov (Y Y Y):** 1 carry on with the full version past 15%; 2 KG's ear tufts stay as they are (they match
-  refs 01, 02: mark A1 "horns" a false alarm); 3 add a soft shadow under every character's feet (all sets, all shots).
+- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 87 (a fault surviving 3 passes goes to an options sheet).
+- **Done (build chat 9, Opus high; stopped on the amber cost watch):** soft foot shadows under every character (Sam Q3;
+  Navi has none: she is a flying light); the forest's and the camp's pass-2 faults fixed (list below, in the commit);
+  the set sheet now shows the camp with the gate blown in. setcheck clean.
+- **Next (Opus, high):** the town's pass-2 faults (below), then critique pass 3 of all three sets, a NEW helper each
+  (rule 89, parts S and O). The spec files are git-ignored and gone with the old container: write
+  `source/data/critique/spec_r1/2/3.json` again (one panel per set: the `alone` sheet as `img`, refs 01/17/19/20,
+  23/24, 21/22, parts "SO"), then `critique.py pack` each.
 - **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O.
 - **Open rule requests:** none.
-- **For Claude:** `source/remakes_sets.py` (MAP): KG_BEAT poses KG per sheet, gunmen aim (flipped right of centre),
-  TOWER, CONTAINERS; packs `source/data/critique/remakes_sets/r1..3-p2/result.md` (git-ignored); ledger remakes_sets.
+- **For Claude:** `source/remakes_sets.py` (MAP): `foot_shadow`, SHADOW_W, ON_HIGH; `kg_on_branch` (tail behind the
+  branch); STUMP_DOWN/STUMP_SEED (one stump for S2, S4/S6); `_near_yard`, `_tower_box` (lookout in the tower),
+  `_camo_net`, `_tyres`, BARRELS, WALL_TINS; view `camp_open` (gate=1). Watch in pass 3: the ammo belt in the near
+  yard, the stump's plank-like roots, the S1 trunk's moss.
 
-## Open notes: the sets' pass-2 faults (build chat 8)
-- Forest: up still reads level (converge the trunk, show the branch's underside), KG's talons float in front of the
+## Open notes: the sets' pass-2 faults (build chat 8; forest and camp FIXED in build chat 9, town open)
+- Forest (fixed): up still reads level (converge the trunk, show the branch's underside), KG's talons float in front of the
   branch, the trunk's moss band reads as tape (also edge trunks); down: path climbs the stump like stairs and is drawn
   over the door's foot (end it at the stump's base), the bell flower reads as a paddle; close: no shafts or mist read,
   door like a magnifying glass, a glow with no source, the grass ends in a ruled line, stump differs from S2 (door,
   window, lanterns); edge: long grass not lawn, trunks at staggered depths, the muzzle cut off (move him left).
-- Camp: a palm grows out of the orange container, the ruts too wide, wire a hairline, sandbags like pebbles, red bars
+- Camp (fixed; the gunmen all aim left into the yard now, one as a lookout in the tower): a palm grows out of the orange container, the ruts too wide, wire a hairline, sandbags like pebbles, red bars
   on the gate mean nothing, the barrels hidden, gunmen grey on the grey wall and aiming at each other (aim at the
   yard), show the gate blown in (gate=1) on the sheet, blank right wall, still empty dirt at the foot.
-- Town: the palm floats behind the bunting, bunting too low, KG cut off with his wing pointing at empty cobbles,
+- Town (OPEN): the palm floats behind the bunting, bunting too low, KG cut off with his wing pointing at empty cobbles,
   houses one repeated block, flagstones not oval cobbles, the wall too neat (rough grey stone, depth), the spit tiny.
 
 ## Plan extras: the estimate (rules 24, 44)

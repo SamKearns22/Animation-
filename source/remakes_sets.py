@@ -6,12 +6,14 @@ zoomed camera on the same painting.
 
 MAP (rule 61)
   helpers ............. Level (a level pinhole in metres), blob (a scalloped clump), hand-cut edges, leaves, glow,
-                        shafts, flowers, s_for (cast scale from pixels per metre)
+                        foot_shadow + SHADOW_W (Sam's soft shadows), shafts, flowers, moss_patches, s_for
   Kokiri Forest ....... forest(img, cam, view, t): 'up' (S1 up at KG's branch, S3 on him), 'down' (S2 from KG's eyes
                         on Link and Navi), 'close' (S4, S6 Link's close-ups), 'edge' (S5 the gunman's patch);
-                        forest_front(img, cam, view) the near leaves over the cast
+                        forest_front(img, cam, view) the near leaves over the cast; kg_on_branch (S1/S3: his
+                        tail behind the branch); STUMP_DOWN / STUMP_SEED (one tree house for S2, S4, S6)
   the camp ............ camp(img, cam, t, gate=k): the walled Far Cry yard, one 3D-metre layout (CAMP), the gate
-                        k 0 shut to 1 blown in; camp_front(img, cam) the sandbags in front of everyone
+                        k 0 shut to 1 blown in ('camp_open' on the sheet); _near_yard, _tower_box (the lookout
+                        stands in it), _camo_net, _tyres, BARRELS; camp_front(img, cam) the tower box and sandbags
   Castle Town ......... town(img, cam, view, t): 'square' (S10 the line-up), 'wall' (S12, S13 the slam)
   stage ............... STAGE: per view, where the cast stand (screen x, ground y, pixels per metre)
   boxes ............... SET_BOXES / SET_MEANT per set (rule 83), BENCHMARK (rule 3)
@@ -747,9 +749,12 @@ PLANK, PLANK_D = (150, 112, 72), (112, 82, 52)
 CONT_BLUE, CONT_ORANGE = (46, 96, 150), (214, 110, 40)
 SAND, SAND_D = (186, 168, 120), (150, 132, 92)
 FLAG_C = (40, 80, 150)            # pass 1: blue as ref 24's, an invented white mark
+WALL_TINS = ((176, 150, 112), (150, 108, 72), (184, 176, 150), (128, 140, 100), (166, 124, 84))   # pass 2: warm
+# bleached and rusted tin, faded green: the dark gunmen read against it (they were grey on grey)
 WALL_D, WALL_H = 10.0, 2.6        # the back wall: depth and height (m)
 GATE_HALF = 1.8                   # the gate opening's half width (m)
-TOWER = (3.0, 9.0)                # the watchtower's middle (x, d), inside the wall on the right
+TOWER = (3.0, 9.0)
+BARRELS = ((-1.4, 7.3, (60, 96, 70)), (-1.3, 6.4, (150, 60, 44)))   # x, d, colour                # the watchtower's middle (x, d), inside the wall on the right
 CONTAINERS = {'blue container': (-5.0, -2.6, 7.4, 2.4), 'orange container': (-5.0, -2.6, 7.6, 2.2)}   # x0, x1, d, depth
 
 
@@ -770,12 +775,18 @@ def _tin_sheet(p, pts, col, seed, ribs=8, rust=True):
 
 
 def _wire(p, x0, x1, y, r):
-    """A coil of barbed wire along a wall top."""
+    """A coil of barbed wire along a wall top, on short iron posts (pass 2: a hairline)."""
+    xp = x0
+    while xp < x1:                                                       # the posts, one each metre or so
+        p.line([(xp, y + 2), (xp + 3, y - r * 2.6)], (56, 50, 46), 4.0)
+        xp += r * 7
     x = x0
     while x < x1:
-        p.ell(x, y - r * 0.8, r, r * 0.8, None, (50, 50, 50), 2.4)
-        p.line([(x - r * 0.3, y - r * 1.6), (x + r * 0.3, y - r * 1.4)], (50, 50, 50), 2.0)   # a barb
-        x += r * 1.3
+        p.ell(x, y - r * 1.1, r, r * 1.0, None, (44, 44, 44), 3.6)
+        p.ell(x + r * 0.6, y - r * 1.2, r * 0.8, r * 0.85, None, (70, 70, 70), 2.2)
+        for dx, dy in ((-0.3, -2.0), (0.4, -0.15)):                     # barbs
+            p.line([(x + r * dx - 5, y + r * dy - 3), (x + r * dx + 5, y + r * dy + 3)], (44, 44, 44), 2.6)
+        x += r * 1.25
 
 
 def _gate_leaf(p, hinge_x, side, k, d=WALL_D):
@@ -795,7 +806,6 @@ def _gate_leaf(p, hinge_x, side, k, d=WALL_D):
                       a1[1] + (b1[1] - a1[1]) * u + ((a0[1] + (b0[1] - a0[1]) * u) - (a1[1] + (b1[1] - a1[1]) * u)) * v)
     _tin_sheet(p, [m(0.1, 0.1), m(0.9, 0.1), m(0.9, 0.45), m(0.1, 0.45)], TIN, int(hinge_x * 10) + 3, 6)
     p.poly([m(0.05, 0.55), m(0.95, 0.85), m(0.95, 0.92), m(0.05, 0.62)], PLANK_D, INK, 1.8)     # a cross brace
-    p.poly([m(0.3, 0.6), m(0.7, 0.6), m(0.7, 0.66), m(0.3, 0.66)], (180, 40, 36), None)         # a painted red stripe
 
 
 def _container(p, x0, x1, d, depth, col, seed, z0=0.0):
@@ -850,7 +860,7 @@ def _barrel(p, x, d, col=(60, 96, 70)):
 def _sandbags(p, x0, x1, d, rows=3, seed=0):
     """A sandbag wall: rows of fat rounded bags, staggered."""
     ppm = CAMP.ppm(d)
-    bw, bh = 0.6 * ppm, 0.24 * ppm
+    bw, bh = 0.75 * ppm, 0.3 * ppm                                      # pass 2: they read as pebbles
     r = random.Random(seed)
     base = CAMP.p(0, d, 0)[1]
     for row in range(rows):
@@ -859,8 +869,9 @@ def _sandbags(p, x0, x1, d, rows=3, seed=0):
         xe = CAMP.p(x1, d)[0]
         while x < xe - bw * 0.3:
             c = SAND if r.random() > 0.3 else mix(SAND, SAND_D, 0.5)
-            p.poly(curve([(x, y), (x + bw * 0.5, y - bh * 0.62), (x + bw, y), (x + bw * 0.5, y + bh * 0.55)], 4), c,
-                   INK, 2.2)
+            p.poly(curve([(x + bw * 0.05, y - bh * 0.1), (x + bw * 0.15, y - bh * 0.48), (x + bw * 0.5, y - bh * 0.55),
+                          (x + bw * 0.85, y - bh * 0.48), (x + bw * 0.97, y - bh * 0.1), (x + bw * 0.88, y + bh * 0.45),
+                          (x + bw * 0.5, y + bh * 0.52), (x + bw * 0.12, y + bh * 0.45)], 4), c, INK, 2.2)   # a pillow
             p.line([(x + bw * 0.12, y - bh * 0.05), (x + bw * 0.88, y - bh * 0.05)], SAND_D, 1.4)   # the stitched seam
             for e in (0.06, 0.94):                                                                  # the tied ends
                 p.line([(x + bw * e, y - bh * 0.25), (x + bw * e, y + bh * 0.22)], SAND_D, 1.6)
@@ -881,6 +892,87 @@ def _palm(p, x, y, h, seed, col=LEAF_D, lean=0.12):
         p.poly(ribbon(open_curve([top, mid, tip], 6), h * 0.06, h * 0.01), col if k % 2 else LEAF, INK, 1.8)
 
 
+def _tower_box(p):
+    """The watchtower's plank platform box (drawn again over the cast: the lookout stands in it, waist deep)."""
+    tx, td = TOWER
+    pa, pb = CAMP.p(tx - 1.1, td, 4.4), CAMP.p(tx + 1.1, td, 5.4)
+    p.poly(quad(pa[0], pb[1], pb[0], pa[1]), PLANK, INK, 2.4)
+    for u in np.linspace(0.1, 0.9, 7):                                 # planks (pass 1: a blank box)
+        p.line([(pa[0] + (pb[0] - pa[0]) * u, pb[1] + 3), (pa[0] + (pb[0] - pa[0]) * u, pa[1] - 3)], PLANK_D, 2.0)
+    p.poly(quad(pa[0] + (pb[0] - pa[0]) * 0.3, pb[1] + 10, pa[0] + (pb[0] - pa[0]) * 0.7, pb[1] + 26), (40, 34, 30),
+           INK, 1.6)
+
+
+def _camo_net(p, x0, x1, d, z0, z1, seed):
+    """A camouflage net hung over the wall (pass 2: the right wall was blank): a sagging mesh, leaf scraps tied in."""
+    r = random.Random(seed)
+    top = [CAMP.p(x0 + (x1 - x0) * u, d - 0.05, z1 - 0.25 * math.sin(u * math.pi * 2) ** 2) for u in np.linspace(0, 1, 9)]
+    hem = [CAMP.p(x0 + (x1 - x0) * u, d - 0.05, z0 + 0.3 * r.random()) for u in np.linspace(1, 0, 9)]
+    p.poly(top + hem, (92, 104, 70), INK, 2.2)
+    for k in range(26):                                                 # the leaf scraps
+        u, v = r.random(), r.uniform(0.1, 0.9)
+        q = CAMP.p(x0 + (x1 - x0) * u, d - 0.05, z0 + (z1 - z0) * v)
+        rr_ = CAMP.ppm(d) * r.uniform(0.08, 0.14)
+        p.poly(blob(q[0], q[1], rr_, rr_ * 0.7, 6, 0.3, seed + k), r.choice(((70, 84, 52), (126, 118, 76), (60, 70, 44))),
+               None)
+    for u in np.linspace(0.05, 0.95, 8):                                # the mesh cords
+        a, b = CAMP.p(x0 + (x1 - x0) * u, d - 0.05, z1), CAMP.p(x0 + (x1 - x0) * (u + 0.06), d - 0.05, z0 + 0.2)
+        p.line([a, b], (60, 66, 46), 1.4)
+
+
+def _tyres(p, x, d, n=3):
+    """A stack of old tyres."""
+    u = CAMP.ppm(d)
+    for k in range(n):
+        q = CAMP.p(x, d, 0.24 * k)
+        p.poly(quad(q[0] - u * 0.36, q[1] - u * 0.24, q[0] + u * 0.36, q[1]), (44, 44, 44), INK, 2.0)
+        p.ell(q[0], q[1] - u * 0.24, u * 0.36, u * 0.1, (36, 36, 36), INK, 2.0)
+        p.ell(q[0], q[1] - u * 0.24, u * 0.18, u * 0.05, DIRT_D, None)
+
+
+def _near_yard(p):
+    """The yard nearest the lens (pass 2: still empty dirt at the foot): an open ammo box spilling a belt, spent cases,
+    boot prints along the ruts, a shallow puddle with the sky in it, a broken pallet, weeds."""
+    r = random.Random(294)
+    for k in range(4):                                                  # weeds, clear of the box and pallet
+        d = r.uniform(2.4, 2.9)
+        wq = CAMP.p(r.choice((-1, 1)) * r.uniform(0.25, 0.5), d, 0)
+        tuft(p, wq[0], wq[1], 0.2 * CAMP.ppm(d), (120, 136, 72), 296 + k, 7, 2.4)
+    q = CAMP.p(-0.62, 2.05, 0)                                          # the ammo box, bottom left
+    u = CAMP.ppm(2.05)
+    p.poly(quad(q[0] - u * 0.3, q[1] - u * 0.2, q[0] + u * 0.3, q[1]), (88, 98, 62), INK, 2.4)
+    p.poly([(q[0] - u * 0.3, q[1] - u * 0.2), (q[0] + u * 0.3, q[1] - u * 0.2), (q[0] + u * 0.36, q[1] - u * 0.36),
+            (q[0] - u * 0.24, q[1] - u * 0.36)], (70, 80, 50), INK, 2.0)  # its lid, flipped open
+    p.poly(quad(q[0] - u * 0.06, q[1] - u * 0.14, q[0] + u * 0.06, q[1] - u * 0.1), (200, 190, 150), INK, 1.2)   # stencil
+    belt = [(q[0] + u * (0.2 + 0.09 * k), q[1] - u * 0.18 + u * 0.05 * k + 6 * math.sin(k)) for k in range(9)]
+    p.poly(ribbon([(bx, by - u * 0.02) for bx, by in belt], u * 0.03, u * 0.03), (58, 54, 44), INK, 1.2)   # the belt
+    for k, (bx, by) in enumerate(belt):                                 # its rounds, spilling out over the box side
+        p.poly(quad(bx - u * 0.012, by - u * 0.045, bx + u * 0.012, by), (206, 160, 60), INK, 1.0)
+    q2 = CAMP.p(0.42, 2.35, 0)                                          # a shallow puddle, the sky in it
+    u2 = CAMP.ppm(2.35)
+    p.poly(blob(q2[0], q2[1], u2 * 0.42, u2 * 0.1, 10, 0.2, 291), (150, 170, 176), INK, 1.8)
+    p.poly(blob(q2[0] - u2 * 0.08, q2[1] - u2 * 0.02, u2 * 0.22, u2 * 0.04, 8, 0.2, 292), (196, 216, 236), None)
+    for k in range(7):                                                  # boot prints along the left rut
+        d = 1.9 + 0.55 * k
+        bq = CAMP.p(-0.35 + 0.12 * (k % 2), d, 0)
+        bu = CAMP.ppm(d)
+        p.ell(bq[0], bq[1], bu * 0.06, bu * 0.025, dk(DIRT, 0.86), None)
+        p.ell(bq[0], bq[1] - bu * 0.045, bu * 0.05, bu * 0.02, dk(DIRT, 0.86), None)
+    pq = CAMP.p(1.15, 2.2, 0)                                           # a broken pallet, bottom right
+    pu = CAMP.ppm(2.2)
+    for k in range(4):
+        yy = pq[1] - pu * 0.12 * k
+        p.poly(wob(quad(pq[0] - pu * 0.45 + k * 6, yy - pu * 0.08, pq[0] + pu * (0.45 - 0.08 * (k == 2)), yy), 2, 293 + k),
+               PLANK if k % 2 else PLANK_D, INK, 1.8)
+    for k in range(12):                                                 # spent cases
+        d = r.uniform(1.8, 2.8)
+        cq = CAMP.p(r.uniform(-0.5, 0.9), d, 0)
+        cu = CAMP.ppm(d)
+        a = r.uniform(0, math.pi)
+        p.poly(ribbon([(cq[0], cq[1]), (cq[0] + math.cos(a) * cu * 0.03, cq[1] + math.sin(a) * cu * 0.01)], cu * 0.01,
+                      cu * 0.009), (206, 160, 60), INK, 0.8)
+
+
 def camp(img, cam, t=0.0, gate=0.0):
     """S7-S9: the walled enemy encampment in the forest (ref 23, 24): bright midday sky, jungle behind a ring of grey
     corrugated walls topped with wire, the plank-and-tin gate (gate 0 shut to 1 blown in), a blue and an orange
@@ -893,7 +985,8 @@ def camp(img, cam, t=0.0, gate=0.0):
     p.poly(blob(540, 820, 900, 220, 16, 0.12, 204), mix(LEAF_D, SKY_LO, 0.4), INK, 2.0)   # far hills of trees
     for k, (x, rx, ry) in enumerate(((60, 220, 210), (330, 200, 180), (700, 210, 200), (1010, 230, 220))):
         clump(p, x, 700 - 40 * (k % 2), rx, ry, LEAF if k % 2 else LEAF_D, 210 + k)
-    for x, h, sd, lean in ((180, 520, 221, -0.1), (560, 640, 222, 0.14), (900, 420, 223, -0.22)):
+    for x, h, sd, lean in ((300, 520, 221, -0.06), (580, 640, 222, 0.14), (900, 420, 223, -0.22)):   # pass 2: one
+                                                                        # grew out of the orange container
         _palm(p, x, 760, h, sd, lean=lean)
     p.poly(quad(-200, 760, W + 200, 2400), DIRT, None)                  # the yard
     # the flag and the watchtower stand behind the wall's line, drawn before it
@@ -910,7 +1003,7 @@ def camp(img, cam, t=0.0, gate=0.0):
             x += 1.0
             continue
         a, b = CAMP.p(x, WALL_D, 0), CAMP.p(x + 1.0, WALL_D, WALL_H + 0.15 * math.sin(k * 2.1))
-        _tin_sheet(p, quad(a[0], b[1], b[0], a[1]), (TIN, TIN_L, RUST, TIN, (92, 112, 122))[k % 5], 240 + k)
+        _tin_sheet(p, quad(a[0], b[1], b[0], a[1]), WALL_TINS[k % 5], 240 + k)
         x += 1.0
         k += 1
     o0, o1 = CAMP.p(-GATE_HALF, WALL_D + 0.05, 0), CAMP.p(GATE_HALF, WALL_D + 0.05, 2.4)
@@ -920,8 +1013,10 @@ def camp(img, cam, t=0.0, gate=0.0):
         p.poly(quad(q0[0], q1[1], q1[0], q0[1]), PLANK_D, INK, 2.4)
     for sx in (-1, 1):
         _gate_leaf(p, sx * GATE_HALF, sx, gate)
-    _wire(p, CAMP.p(-6, WALL_D)[0], CAMP.p(-GATE_HALF - 0.2, WALL_D)[0], CAMP.p(0, WALL_D, WALL_H)[1], 12)
-    _wire(p, CAMP.p(GATE_HALF + 0.2, WALL_D)[0], CAMP.p(6, WALL_D)[0], CAMP.p(0, WALL_D, WALL_H)[1], 12)
+    _wire(p, CAMP.p(-6, WALL_D)[0], CAMP.p(-GATE_HALF - 0.2, WALL_D)[0], CAMP.p(0, WALL_D, WALL_H)[1], 16)
+    _wire(p, CAMP.p(GATE_HALF + 0.2, WALL_D)[0], CAMP.p(6, WALL_D)[0], CAMP.p(0, WALL_D, WALL_H)[1], 16)
+    _camo_net(p, 3.7, 6.2, WALL_D, 0.3, 2.4, 255)                     # over the right wall (pass 2: blank)
+    _tyres(p, 4.7, 9.3, 3)
     # the watchtower (inside, right): four legs, cross braces, a plank platform, a tin roof, a ladder
     tx, td = TOWER
     for lx in (tx - 0.9, tx + 0.9):
@@ -930,11 +1025,7 @@ def camp(img, cam, t=0.0, gate=0.0):
     for z0, z1 in ((0.4, 2.4), (2.4, 4.4)):
         p.line([CAMP.p(tx - 0.85, td, z0), CAMP.p(tx + 0.75, td, z1)], PLANK_D, 3.0)
         p.line([CAMP.p(tx + 0.85, td, z0), CAMP.p(tx - 0.75, td, z1)], PLANK_D, 3.0)
-    pa, pb = CAMP.p(tx - 1.1, td, 4.4), CAMP.p(tx + 1.1, td, 5.4)
-    p.poly(quad(pa[0], pb[1], pb[0], pa[1]), PLANK, INK, 2.4)
-    for u in np.linspace(0.1, 0.9, 7):                                 # planks (pass 1: a blank box)
-        p.line([(pa[0] + (pb[0] - pa[0]) * u, pb[1] + 3), (pa[0] + (pb[0] - pa[0]) * u, pa[1] - 3)], PLANK_D, 2.0)
-    p.poly(quad(pa[0] + (pb[0] - pa[0]) * 0.3, pb[1] + 10, pa[0] + (pb[0] - pa[0]) * 0.7, pb[1] + 26), (40, 34, 30), INK, 1.6)
+    _tower_box(p)
     for lx in (tx - 1.0, tx + 1.0):                                     # the roof posts (pass 1: the roof floated)
         a_, b_ = CAMP.p(lx, td, 5.4), CAMP.p(lx, td, 6.3)
         p.poly(quad(a_[0] - 5, b_[1], a_[0] + 5, a_[1]), PLANK_D, INK, 1.8)
@@ -944,9 +1035,15 @@ def camp(img, cam, t=0.0, gate=0.0):
     _tin_sheet(p, [(ra[0], rb[1]), (rb[0], rb[1]), (rb[0] - 20, rt[1]), (ra[0] + 20, rt[1])][::1], TIN_D, 251, 6)
     # the yard floor: tyre ruts from the gate, stones, a dark patch, weeds at the wall's foot
     for sx in (-1, 1):
-        rut = [CAMP.p(sx * 0.9 - 0.25, WALL_D, 0), CAMP.p(sx * 0.9 + 0.25, WALL_D, 0), CAMP.p(sx * 1.3 + 0.35, 1.4, 0),
-               CAMP.p(sx * 1.3 - 0.35, 1.4, 0)]
+        rut = [CAMP.p(sx * 0.8 - 0.1, WALL_D, 0), CAMP.p(sx * 0.8 + 0.1, WALL_D, 0), CAMP.p(sx * 0.95 + 0.1, 1.0, 0),
+               CAMP.p(sx * 0.95 - 0.1, 1.0, 0)]                           # tyre ruts (pass 2: far too wide)
         p.poly(rut, DIRT_D, None)
+        for kk in range(14):                                            # tread marks across each
+            d = 1.2 + kk ** 1.35 * 0.32
+            if d > WALL_D:
+                break
+            xm = sx * (0.95 + (0.8 - 0.95) * (d - 1.0) / (WALL_D - 1.0))
+            p.line([CAMP.p(xm - 0.1, d, 0), CAMP.p(xm + 0.1, d, 0)], dk(DIRT_D, 0.85), 1.6)
     rr = random.Random(261)
     for kk in range(0):                                                 # (pass 1: the oil stains read as shadows)
         d = rr.uniform(1.6, 3.2)
@@ -967,13 +1064,14 @@ def camp(img, cam, t=0.0, gate=0.0):
         d = rr.uniform(1.8, 5.0)
         q = CAMP.p(rr.choice((-1, 1)) * rr.uniform(1.2, 2.6) * d / 4, d, 0)
         tuft(p, q[0], q[1], 0.25 * CAMP.ppm(d), (120, 136, 72), kk + 280, 6, 2.0)
+    _near_yard(p)
     # containers (left), the orange one stacked on the blue (ref 23), both inside the wall; crates and barrels
     _container(p, *CONTAINERS['blue container'], CONT_BLUE, 281)
     _container(p, *CONTAINERS['orange container'], CONT_ORANGE, 282, z0=2.6)
     _crate(p, -2.2, 6.6, 0.9, 0, 283)
     _crate(p, -2.15, 6.6, 0.7, 0.9, 284)
-    _barrel(p, 1.05, 6.6)                                               # pass 1: clear of the gunman's feet
-    _barrel(p, 1.35, 7.2, (150, 60, 44))
+    for bx, bd, bc in BARRELS:                                          # pass 2: KG hid them; now left of Link
+        _barrel(p, bx, bd, bc)
     for x, d in ((2.2, 8.2), (3.9, 8.0)):                               # sandbags round the tower's foot
         _sandbags(p, x - 0.7, x + 0.7, d, 2, 300 + int(x * 10))
     for x, d, sd in ((-1.6, 2.9, 0), (1.5, 3.1, 1), (-0.4, 6.0, 2), (2.6, 4.4, 3)):   # the near yard: spent cases,
@@ -995,7 +1093,8 @@ def camp(img, cam, t=0.0, gate=0.0):
 def camp_front(img, cam, t=0.0):
     """The sandbags nearest the lens, over the cast (they hide nobody's feet in S7: they sit in the corners)."""
     p = B.Pen(img, cam)
-    _sandbags(p, 1.2, 2.3, 3.4, 2, 302)                                # a low emplacement, the bottom right corner
+    _tower_box(p)                                                       # the lookout stands in it, waist deep
+    _sandbags(p, 1.25, 2.4, 3.4, 2, 302)                               # a low emplacement, the bottom right corner
 
 
 # ================================================================================================ Castle Town
@@ -1320,8 +1419,8 @@ def town(img, cam, view, t=0.0):
 
 
 # ================================================================================================ stage
-def _camp_mark(x, d):
-    sx, sy = CAMP.p(x, d)
+def _camp_mark(x, d, z=0.0):
+    sx, sy = CAMP.p(x, d, z)
     return sx, sy, CAMP.ppm(d)
 
 
@@ -1335,13 +1434,17 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_down': {'link': (560, 1330, down_ppm(1330)), 'navi': (700, 1050, down_ppm(1330))},
     'forest_close': {'link': (540, 2300, 1100.0)},            # a close-up: his feet well below the frame
     'forest_edge': {'gunman': (300, 2500, 900.0)},        # pass 2: left, so his muzzle stays in frame
-    'camp': {'kg': _camp_mark(0.75, 4.2), 'link': _camp_mark(-0.3, 3.5), 'gunman1': _camp_mark(-2.2, 9.2),
-             'gunman2': _camp_mark(2.0, 7.6), 'gunman3': _camp_mark(3.3, 8.6)},   # the gunmen aside, the gate clear
+    'camp': {'kg': _camp_mark(0.75, 4.2), 'link': _camp_mark(-0.3, 3.5), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
+             'gunman2': _camp_mark(2.0, 7.6), 'gunman3': _camp_mark(3.3, 8.6)},   # pass 2: all three aim left into
+                                                                    # the yard (they aimed at each other), one up in the
+                                                                    # tower; the gate clear
     'town_square': {n: _town_mark(x, 4.0) for n, x in (('zelda', -0.72), ('malon', -0.22), ('ruto', 0.27),
                                                        ('goron', 0.92), ('saria', 1.55))},
     'town_wall': {'link': (400, WALL_VIEW['base'], WALL_VIEW['ppm']),       # on the cobbles: the shot lifts him
                   'kg': (860, WALL_VIEW['base'], WALL_VIEW['ppm'])},
 }
+STAGE['camp_open'] = dict(STAGE['camp'])               # S8-S9: the same yard, the gate blown in
+ON_HIGH = {('camp', 'gunman1'), ('camp_open', 'gunman1')}   # the tower lookout: no ground shadow
 STAGE['town_square']['kg'] = _town_mark(-0.95, 2.3)    # in front, below the line, presenting it
 
 
@@ -1355,15 +1458,19 @@ SET_BOXES = [   # the camp's solid things, screen px (the S7 camera); nothing ma
     ('blue container', _box(CAMP, -5.0, -2.6, 7.4, 0, 2.6)),
     ('orange container', _box(CAMP, -5.0, -2.6, 7.6, 2.6, 5.2)),
     ('crates', _box(CAMP, -2.65, -1.75, 6.6, 0, 1.6)),
-    ('barrels', _box(CAMP, 0.75, 1.65, 6.6, 0, 0.9)),
+    ('barrels', _box(CAMP, -1.65, -1.0, 6.4, 0, 0.9)),
+    ('camo net', _box(CAMP, 3.7, 6.2, WALL_D, 0.3, 2.4)),
+    ('tyres', _box(CAMP, 4.34, 5.06, 9.3, 0, 0.72)),
     ('gate', _box(CAMP, -GATE_HALF, GATE_HALF, WALL_D, 0, 2.4)),
     ('watchtower', _box(CAMP, TOWER[0] - 1.1, TOWER[0] + 1.1, TOWER[1], 0, 6.9)),
 ]
 SET_MEANT = [
     ('blue container', 'orange container', 'the orange one sits stacked on top of the blue (ref 23)'),
     ('crates', 'blue container', 'the crates stand in front of it, 0.8 m nearer the lens'),
-    ('barrels', 'watchtower', 'the barrels stand 2 m nearer the lens, in front of its legs'),
-    ('barrels', 'gate', 'the barrels stand 3 m nearer the lens, below the gate on screen'),
+    ('barrels', 'gate', 'the barrels stand 3.6 m nearer the lens, below the gate on screen'),
+    ('camo net', 'watchtower', 'the net hangs on the wall 1 m behind the tower'),
+    ('tyres', 'camo net', 'the tyres stand at the wall foot in front of the net'),
+    ('tyres', 'watchtower', 'the tyres stand right of the tower, 0.3 m nearer'),
 ]
 
 
@@ -1448,8 +1555,8 @@ def painting(at, t=0.0, cam=None, gate=0.0):
         v = at.split('_')[1]
         forest(img, cam, v, t)
         forest_front(img, cam, v, t)
-    elif at == 'camp':
-        camp(img, cam, t, gate)
+    elif at.startswith('camp'):
+        camp(img, cam, t, 1.0 if at == 'camp_open' else gate)
         camp_front(img, cam, t)
     else:
         town(img, cam, at.split('_')[1], t)
@@ -1469,12 +1576,13 @@ def with_cast(at, t=0.0, gate=0.0):
     st = STAGE[at]
     if at.startswith('forest'):
         forest(img, cam, at.split('_')[1], t)
-    elif at == 'camp':
-        camp(img, cam, t, gate)
+    elif at.startswith('camp'):
+        camp(img, cam, t, 1.0 if at == 'camp_open' else gate)
     else:
         town(img, cam, at.split('_')[1], t)
     for who, (x, y, ppm) in st.items():                                 # the soft foot shadows first (Sam Q3)
-        if who != 'navi' and at != 'forest_up':      # Navi is a flying light: none; KG's branch: kg_on_branch
+        if who != 'navi' and at != 'forest_up' and (at, who) not in ON_HIGH:   # Navi is a flying light: none;
+                                                                         # KG's branch: kg_on_branch
             foot_shadow(img, cam, x, y, ppm, SHADOW_W['gunman' if who.startswith('gunman') else who],
                         clip=branch_poly() if at == 'forest_up' else None)
     for who, (x, y, ppm) in sorted(st.items(), key=lambda kv: kv[1][1]):
@@ -1487,7 +1595,7 @@ def with_cast(at, t=0.0, gate=0.0):
             view = 'side' if at in ('town_wall',) else 'front'
             wings, mood = KG_BEAT.get(at, ('fold', 'kindly'))
             CR.kg(img, cam, x, y - 240 * s, s, view=view, perched=(at == 'forest_up'), wings=wings,
-                  band=at in ('camp', 'town_wall'), mood=mood, flip=-1 if at == 'town_wall' else 1)
+                  band=at in ('camp', 'camp_open', 'town_wall'), mood=mood, flip=-1 if at == 'town_wall' else 1)
         elif who == 'navi':
             CR.navi(img, cam, x, y, s * 1.2)
         elif who == 'goron':
@@ -1498,22 +1606,22 @@ def with_cast(at, t=0.0, gate=0.0):
             k = RC.scale_for(sp, s)
             if key == 'gunman':                                          # every gunman aims (ref 17), as in the shots
                 j = RC.poses('gunman')['aiming']
-                fl = -1 if (at == 'camp' and x > 540) else 1
+                fl = -1 if (at.startswith('camp') and x > 540) else 1
                 RC.person(img, B.Local(cam, x, 0, 1.0, fl) if fl < 0 else cam, (0 if fl < 0 else x), y - 928 * k, s, sp,
                           yaw=j['_yaw'], j=j)
             else:
                 RC.person(img, cam, x, y - 928 * k, s, sp)
     if at.startswith('forest'):
         forest_front(img, cam, at.split('_')[1], t)
-    elif at == 'camp':
+    elif at.startswith('camp'):
         camp_front(img, cam, t)
     return img.resize((W, H), Image.LANCZOS)
 
 
-KG_BEAT = {'forest_up': ('wide', 'hype'), 'camp': ('gun', 'war'), 'town_square': ('gesture', 'show'),
+KG_BEAT = {'forest_up': ('wide', 'hype'), 'camp': ('gun', 'war'), 'camp_open': ('gun', 'war'), 'town_square': ('gesture', 'show'),
            'town_wall': ('fold', 'fury')}       # each set sheet shows KG as his shot has him (line 1, 7, 11, 13)
 
-SETS = {'forest': ('forest_up', 'forest_down', 'forest_close', 'forest_edge'), 'camp': ('camp',),
+SETS = {'forest': ('forest_up', 'forest_down', 'forest_close', 'forest_edge'), 'camp': ('camp', 'camp_open'),
         'town': ('town_square', 'town_wall')}
 
 

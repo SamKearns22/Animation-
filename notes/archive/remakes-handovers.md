@@ -197,3 +197,20 @@
 - **For Claude:** `source/remakes_sets.py` (MAP at the top): `alone forest|camp|town OUT`, `one VIEW OUT`; `STAGE`
   marks, `s_for(ppm)`; `with_cast` places KG's feet at y - 240 s (check on the branch).
 
+
+
+## Handover to build chat 9 (archived 11 Nov)
+- **Rules that bite next:** 89 (pass 3, a NEW helper per set), 83 (setcheck after each move), 3 (benchmark: the shack is out).
+- **Done (build chat 8, Opus high):** first-look faults fixed (forest foot, stump moss, camp gate clear, Goron x 0.82
+  so about 1.3 x Link, the town camera raised); critique passes 1 and 2 of all three sets, each by NEW helpers; the
+  pass-1 faults fixed (list in the commits). Pass 2 still found real faults, so no set is filed in the catalogue yet.
+- **Next (Opus, high):** the soft foot shadows (Sam Q3), fix the pass-2 faults below, then pass 3 (`critique.py pack` on
+  `spec_r1/2/3.json`, a NEW helper each); a fault surviving three goes to an options sheet (rule 87).
+  The faults: "Open notes: the sets' pass-2 faults" below.
+- **Sam, 11 Nov (Y Y Y):** 1 carry on with the full version past 15%; 2 KG's ear tufts stay as they are (they match
+  refs 01, 02: mark A1 "horns" a false alarm); 3 add a soft shadow under every character's feet (all sets, all shots).
+- **Read:** `guides/job-packs.md` Build; `guides/critique-checklist.md` S and O.
+- **Open rule requests:** none.
+- **For Claude:** `source/remakes_sets.py` (MAP): KG_BEAT poses KG per sheet, gunmen aim (flipped right of centre),
+  TOWER, CONTAINERS; packs `source/data/critique/remakes_sets/r1..3-p2/result.md` (git-ignored); ledger remakes_sets.
+
