@@ -1,6 +1,6 @@
-# Where the project stands
-
-## Now (11 Nov)
+remakes: final render done 11 Nov, animations/remakes-vertical.mp4 sent.
+Next: wait for Sam to say it is posted, then archive notes.
+Model: Sonnet.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
   Tool job (11 Nov rules for every film): Sam said Y at 2.5%; build chat (Opus medium) opened; finish.py and
   remakes.py parts wait for the Remakes final. Handover: notes/tool-job-universal-handover.md.

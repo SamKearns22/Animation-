@@ -180,3 +180,6 @@ Decisions made (Sam, 10 Nov):
 - 11 Line-up: Zelda hands clasped in front, eyes down, unsure; the Goron happily absent (vacant smile, drool); Malon holds out a milk bottle, hopeful; Saria posing nonchalantly with her ocarina ("he's already picked me"); Ruto vain and pushy.
 - 12 Showstopper: the camp burst (gate blown in, watchtower, tracers, gun flash, falling cases).
 - Link's scuttle faces forward, in from off camera.
+
+## Where things stand (11 Nov, final render)
+Done: final render (6 min), finished, 1.1x; animations/remakes-vertical.mp4 (11.9 MB, 41.4 s) sent to Sam. Sign-off speed 1.12 (1.136 gave 20 frames not 21; sign-off now 1.59 s). Next: wait for Sam to say it's posted, then archive the film's notes. Named faults: 8 prop-turn (Malon/Saria no side view, S10), script/mouth wording differences (lines 4, 5, 11, 13), subtitle "you s***" 1.45 s early, caption "I don't think I" 0.9 s, critique round 3 faults/can't-tell open. Hook Text lands 0.45 s.
