@@ -167,8 +167,12 @@ def auto(transcript):
     j, md, _ = _paths(film)
     git('add', j, md)
     if git('commit', '-q', '-m', f'Ledger: {film}, chat {chat} at {cost}% of a week (automatic)', '--', j,
-           md).returncode == 0:
-        git('push', '-q', 'origin', 'HEAD')
+           md).returncode == 0 and git('push', '-q', 'origin', 'HEAD').returncode != 0:
+        br = git('rev-parse', '--abbrev-ref', 'HEAD').stdout.strip()      # another chat pushed first: merge its
+        if git('pull', '-q', '--no-rebase', 'origin', br).returncode == 0:  # work (git refuses if it would touch
+            git('push', '-q', 'origin', 'HEAD')                              # this chat's unsaved files)
+        elif os.path.exists(os.path.join(ROOT, '.git', 'MERGE_HEAD')):
+            git('merge', '--abort')                                          # a clash: leave it to the chat
 
 
 def totals(d):
