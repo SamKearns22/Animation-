@@ -1,0 +1,17 @@
+{
+ "film": "tool-job-universal-handover",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "6c88df0b",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.19
+  }
+ ],
+ "checks": {}
+}
