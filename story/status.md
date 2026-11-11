@@ -3,7 +3,7 @@
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
-- Budget job (11 Nov): both trials done; re-forecast about 26% for a Remakes-sized film; proposals 1-11 sent, waiting for Sam's Y/N. Next: Fable high writes up his yeses. Handover: notes/budget-job.md.
+- Budget job (11 Nov): Sam said Y; rules 24, 85, 89 written, the cost watch now counts helpers and Fable; three tool changes still to build (model waits on Sam). Handover: notes/budget-job.md.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
   Tool job (11 Nov rules for every film): built, all six pieces (captions by default, 1.1x in finish.py, Hook Text
   gate, eyes for every cast, set check in the kit, quick.py gone); kittests and remakes check clean. Open: Sam's look

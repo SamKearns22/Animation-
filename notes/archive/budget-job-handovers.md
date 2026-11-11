@@ -24,3 +24,19 @@
 - **Read:** this file; `notes/trial_link.md` Results and Cost breakdown; `notes/trial_lineup.md` Results.
 - **For Claude:** trial sessions: session_01J1JB7XiZASWyXBqe8TwFbT (trial 2). Do not read their events (huge).
 
+
+## Where things stand (11 Nov, 17:45 UTC; budget chat 2: both trials read, proposals sent, waiting for Sam)
+- **Rules that bite next:** 24 (the estimate: honest prices), 85 (cost watch), 89 (critique: both hunts stay).
+- **Done:** both trials read; the savings list, the re-forecast (about 26%; 30 before the two tool changes prove
+  themselves) and proposals 1-11 are in "5. After both trials" below, and sent to Sam in one message.
+- **Next (Fable, high effort; Sam set Fable for this job):** on Sam's numbers, write each yes ONCE: the rulebook
+  (rules 24, 85, 89), CLAUDE.md, the Build pack's order, and the tools (`critique.py`, `costwatch.py`,
+  `ledger.py`, the one-command draw-check-sheet). Type: "Budget job: write up my yeses" with the numbers.
+- **Needs Sam:** Y/N on 1-11 (his "Do you need to test the sets too?" is number 9: my pick N).
+- **Read:** this file's section 5 only; the rule, tool or pack section each yes names.
+- **Open rule requests:** none beyond the proposals.
+- **For Claude:** helper unit 0.48 (0.44-0.51, start-up 0.16-0.18 of it); a step 0.02; Remakes' helpers counted from
+  `notes/ledger/remakes*.json` critique passes (cast 3, sets 9, animatic 2). The "before" row of the Remakes ledger
+  is Sam's app figure, so helpers ARE in Remakes' 60%; the cost watch's own figures leave them out
+  (`isSidechain`). This chat's cost sits in whichever ledger the hook picked; check before quoting it.
+
