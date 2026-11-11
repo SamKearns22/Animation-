@@ -27,4 +27,16 @@ Run the kittests and `remakes.py check` at the end; Remakes' picture must not ch
 About 2.5% of a week, one build chat (Opus, medium: the plan above is clear), cap 3.5%.
 Stages: captions 0.5, 1.1x 0.4, Hook Text 0.2, eyes 0.6, camp check 0.5, quick.py removal 0.1, kittests and
 `remakes.py check` 0.2. Pieces 1, 2, 3 and 5 touch finish.py or remakes.py, so the build starts only once
-animations/remakes-vertical.mp4 is on the main line. Sam's answer: (waiting)
+animations/remakes-vertical.mp4 is on the main line. Sam's answer: Y (11 Nov, "override my yes, proceed").
+
+## Where things stand (11 Nov)
+- Rules that bite next: 86, 13, 85.
+- Done: estimate 2.5% (cap 3.5%); Sam said Y. Nothing built yet.
+- Next: Opus, medium effort, build chat (opened by the planning chat). Order: 6 (quick.py removal), 4 (eyes),
+  3 (hookcheck.py and preflight only), the setcheck.py half of 5 now; then, once `git fetch` shows
+  animations/remakes-vertical.mp4 on the main line, 1, 2 and Remakes' half of 5 (finish.py, subtitles.py,
+  remakes.py). If the final isn't there after the free pieces, send_later one check (under an hour), don't poll.
+- Needs Sam: nothing until the end (Remakes' picture must not change bar KG's eye: show him the eye on one sheet).
+- Read: job-packs "A tool job"; this file; each tool's MAP; source/kittests.py.
+- Open rule requests: none.
+- For Claude: piece names as in the list above; ledger name tool-job-universal-handover.

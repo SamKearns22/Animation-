@@ -2,7 +2,8 @@
 
 ## Now (11 Nov)
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
-  Tool job (Opus, high) making the 11 Nov rules hold for every film: estimate to Sam first.
+  Tool job (11 Nov rules for every film): Sam said Y at 2.5%; build chat (Opus medium) opened; finish.py and
+  remakes.py parts wait for the Remakes final. Handover: notes/tool-job-universal-handover.md.
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
   and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).
