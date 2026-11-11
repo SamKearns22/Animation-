@@ -1,8 +1,8 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): animatic 3 sent 11 Nov; barrel fix done 11 Nov (Link runs round the barrels, new camp check), clip sent.
-  Waiting on Sam's look and his number on the 1.1x rule. Next: trim-the-pace round (Opus, medium) or a 1.1x animatic.
+- Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
+  Tool job (Opus, high) making the 11 Nov rules hold for every film: estimate to Sam first.
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
   and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).

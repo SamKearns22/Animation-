@@ -1,24 +1,17 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 8 (Sam's reaction to a clip is a note), 56 (a fault of its kind: check every case), 62
-  (captions on the voice; re-check at 1.1x if Sam says yes).
-- **Done (11 Nov, Opus medium):** barrel fix. Link (S7, 18.1-18.9 s) ran in a straight line through both barrels and
-  was drawn over them while behind them (confirmed on stills). Now he runs down the clear lane right of the barrels and
-  the lean-to's post, then curves left in front of them to his mark; same start, same ease, same arrival. Every other
-  camp mover checked: KG, the lower-left gunman clear; the tower man and the kneeling man don't move; S8's debris is in
-  the air. New check `camp_paths` (in `remakes.py check`) walks every mover against the camp's solid things each frame;
-  it flags the old route. Clip of 17.8-19.9 s sent. Lost: none. Added: none (Link half behind KG's crest mid-run: KG
-  is nearer, so that is the right order).
-- **Next:** wait for Sam's look at the clip and his numbers (1.1x rule; trim round still wanted?). Then the trim-the-pace
-  round (Opus, medium: notes/trim-speedup-handover.md) or, if 1.1x replaces it, a 1.1x animatic (Sonnet).
-- **Needs Sam:** his look at the clip; his numbers on the 1.1x rule.
-- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
-- **Open rule requests:** 1.1x delivery for EVERY film (Sam, 11 Nov: no rule is one film's); wording proposed, awaiting his Y.
-- **Captions (11 Nov, Sam):** Gotham Black look, white, black outline and shadow; Montserrat Black (free, OFL, in source/fonts) stands in for the paid Gotham.
-- **Also done (11 Nov, Sonnet):** stone-wall thump (`_thump`) on the first push (SLAM), softer on each re-slam; Sam's yes. Trim round dropped (Sam).
-- **For Claude:** `LINK_ROUTE`/`LINK_LANE_X` (-0.5) in remakes.py; `RS.SET_FEET` (camp footprints, 'under'/'over');
-  `camp_paths()` in `checks()`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first.
+- **Rules that bite next:** 59 (no final unless the checks pass), 70 (1.1x on delivery), 62 (captions).
+- **Done (11 Nov):** barrel fix + camp check; stone-wall thump (soft on re-slams); captions in Montserrat Black with
+  outline and shadow; rules 62, 70, 75, 10, S5 rewritten for every film, S6 retired (Sam: Y); quick-video guide deleted;
+  trim round dropped.
+- **Next:** the final render (Sonnet, medium: notes/remakes-final-handover.md), Sam's clear yes given, no check sheets.
+  In parallel, the tool job (Opus, high: notes/tool-job-universal-handover.md), estimate to Sam first.
+- **Needs Sam:** the tool job's estimate (yes or no) when it arrives.
+- **Read:** pack "Final and posting" in `guides/job-packs.md`; notes/remakes-final-handover.md.
+- **Open rule requests:** none.
+- **For Claude:** `draw_subtitle` uses source/fonts/Montserrat-Black.ttf; `_thump(soft)`; 1.1x by hand
+  (`--signoff-speed 1.136`, then ffmpeg setpts/atempo) until the tool job. Merge the main line first.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |

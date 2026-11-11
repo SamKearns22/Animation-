@@ -374,3 +374,24 @@
 - **Open rule requests:** none.
 - **For Claude:** `remakes.py final source/data/remakes-clean.mp4 --small --faults-named`, then `finish.py ... --film remakes
   --faults-named`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first (a stale copy cost a wasted render).
+
+
+## (replaced 11 Nov, rules written)
+- **Rules that bite next:** 8 (Sam's reaction to a clip is a note), 56 (a fault of its kind: check every case), 62
+  (captions on the voice; re-check at 1.1x if Sam says yes).
+- **Done (11 Nov, Opus medium):** barrel fix. Link (S7, 18.1-18.9 s) ran in a straight line through both barrels and
+  was drawn over them while behind them (confirmed on stills). Now he runs down the clear lane right of the barrels and
+  the lean-to's post, then curves left in front of them to his mark; same start, same ease, same arrival. Every other
+  camp mover checked: KG, the lower-left gunman clear; the tower man and the kneeling man don't move; S8's debris is in
+  the air. New check `camp_paths` (in `remakes.py check`) walks every mover against the camp's solid things each frame;
+  it flags the old route. Clip of 17.8-19.9 s sent. Lost: none. Added: none (Link half behind KG's crest mid-run: KG
+  is nearer, so that is the right order).
+- **Next:** wait for Sam's look at the clip and his numbers (1.1x rule; trim round still wanted?). Then the trim-the-pace
+  round (Opus, medium: notes/trim-speedup-handover.md) or, if 1.1x replaces it, a 1.1x animatic (Sonnet).
+- **Needs Sam:** his look at the clip; his numbers on the 1.1x rule.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** 1.1x delivery for EVERY film (Sam, 11 Nov: no rule is one film's); wording proposed, awaiting his Y.
+- **Captions (11 Nov, Sam):** Gotham Black look, white, black outline and shadow; Montserrat Black (free, OFL, in source/fonts) stands in for the paid Gotham.
+- **Also done (11 Nov, Sonnet):** stone-wall thump (`_thump`) on the first push (SLAM), softer on each re-slam; Sam's yes. Trim round dropped (Sam).
+- **For Claude:** `LINK_ROUTE`/`LINK_LANE_X` (-0.5) in remakes.py; `RS.SET_FEET` (camp footprints, 'under'/'over');
+  `camp_paths()` in `checks()`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first.
