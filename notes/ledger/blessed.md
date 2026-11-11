@@ -10,6 +10,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 |---|---|---|---|
 | plan | 1 |  |  |
 | cast | 4 | 2026-11-11 | 2.41 |
+| cast (unplanned) | 0 | 2026-11-11 | 2.41 |
 | sets | 5 |  |  |
 | moves | 1.5 |  |  |
 | animatic1 | 2 |  |  |

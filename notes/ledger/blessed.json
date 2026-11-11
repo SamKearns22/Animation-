@@ -39,6 +39,15 @@
    }
   },
   {
+   "name": "cast",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-11",
+    "spent": 2.41
+   },
+   "unplanned": true
+  },
+  {
    "name": "sets",
    "pct": 5.0,
    "done": null

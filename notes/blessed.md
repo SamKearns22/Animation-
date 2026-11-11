@@ -2,10 +2,10 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 89 (fresh-eye critique once the film draws frames), 41 (arms end in hands), 74 (acting list before animatic 1).
-- **Done (11 Nov, build chat 2, Opus high):** the cast in `source/blessed_cast.py` (Vance pattern). Brand: measured face, beard, long curls, topknot, aviators (on / lowered), 10 moods, three looks (trial, stand/dock, prison), turned heads. Likeness check 71% on b01, 60% on b03 (pass). Judge (invented, wig front only), prison officer, newsreader. Two by-eye critique passes: fixed the judge's missing wig, the officer's lab-coat look, the topknot cone, the lowered shades, the turned hair's spikes and the strip across his face. Cast sheet, faces sheet, likeness sheet in `notes/sheets/blessed-*.jpg`, sent to Sam.
+- **Done (11 Nov, build chat 2, Opus high):** the cast in `source/blessed_cast.py` (Vance pattern). Brand: measured face, beard, long curls, topknot, aviators (on / lowered), 10 moods, three looks (trial, stand/dock, prison), turned heads. Likeness check 66% on b01 (pass) after Sam's note 1 (bigger head, smaller beard; b10 is now the usual reference). Judge (invented, wig front only), prison officer, newsreader. Two by-eye critique passes: fixed the judge's missing wig, the officer's lab-coat look, the topknot cone, the lowered shades, the turned hair's spikes and the strip across his face. Cast sheet, faces sheet, likeness sheet in `notes/sheets/blessed-*.jpg`, sent to Sam.
 - **Spent against the estimate:** plan ~1%; cast stage 2.41% of 4% planned (ledger: lands at 11.4%).
 - **Next:** on Sam's Y to the cast sheet: build chat 3 (Opus, high effort): the sets (court outside, courtroom x2, prison cell + phone, van, TV room, BBC-style studio, gates), then `source/blessed.py` from `satire_template.py`.
-- **Needs Sam:** Y/N on the cast sheet (questions in the message).
+- **Needs Sam:** Y/N on the re-sent cast sheet (note 1 fixed).
 - **Read:** `guides/job-packs.md` Build; this file; `source/blessed_cast.py` MAP only.
 - **Lost / Added:** Lost: prayer beads on his chest (read as dots; can go in his hand). Added: none.
 - **Open rule requests:** none.
@@ -102,7 +102,7 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
-| 1 |      |      |      |      | open   |
+| 1 | cast sheet | - | "small-looking head, a double-sized chin/beard area"; use Sam's photo b10 as the usual reference | Brand | fixed 11 Nov: face drawn 15% bigger (HEAD_K), beard cut to just below the chin and tapered, hairline raised (tall forehead), hair slimmer and to just past the shoulders; likeness 66% on b01, 48% on b10 (three-quarter with sunglasses: the tool reads its forehead wide and jaw narrow, against b01) |
 
 Decisions made:
 - References fetched through the press sites' own image servers after Sam's network approval (11 Nov); Wikimedia's API rate-limited us once.

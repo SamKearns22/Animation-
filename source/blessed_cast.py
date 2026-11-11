@@ -63,7 +63,7 @@ _BM, _BA = _card['measures'], _card['average']
 P4.MEASURED['brand'] = {k: P4.AVG[k] + _BM[k] - _BA[k] for k in P4.AVG}
 P4.PUSH['brand'] = 1.6
 P4.TUNE['brand'] = dict(eyes_apart=2.0, nose_wide=2.0, brow_slope=3.0, brow_high=3.0, eye_tilt=8.0, chin_long=22.0,
-                        forehead_wide=10.0, eye_open=3.0, jaw_wide=5.0, nose_long=3.0)   # 11 Nov, likeness check rounds
+                        forehead_wide=4.0, eye_open=3.0, jaw_wide=25.0, nose_long=5.0)   # 11 Nov, likeness check rounds
 
 # ---------------------------------------------------------------------------------------------- moods
 # brow: up (+); frown (+) pulls the inner ends down, (-) lifts them (worry); lid: upper lid down; mouth: his shapes
@@ -92,10 +92,10 @@ def brand_beard(p, f, L, skin, seed=91):
     fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
     wrap = getattr(f, 'wrap', None)
     nb = [(wrap(0.44, -95), 0.44), (wrap(0.62, -98), 0.62), (wrap(0.83, -96), 0.83)] if wrap else \
-        [(-fw * 0.5 - 0.006, 0.44), (-fw * 0.5 - 0.006, 0.62), (-jw * 0.5 - 0.024, 0.84)]
-    bottom = nb + [(-jw * 0.42, 1.03), (-0.16, 1.15), (0.0, 1.19), (0.16, 1.15), (jw * 0.42, 1.03), (jw * 0.5 + 0.024, 0.84),
-                   (fw * 0.5 + 0.006, 0.62), (fw * 0.5 + 0.006, 0.44)]
-    cheek = [(fw * 0.5 - 0.02, 0.44), (fw * 0.4, ny - 0.04), (fw * 0.3, ny - 0.01), (mw * 0.7, l0 - 0.02)]
+        [(-fw * 0.5 - 0.004, 0.44), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.46, 0.84)]
+    bottom = nb + [(-jw * 0.32, 0.98), (-0.12, 1.04), (0.0, 1.06), (0.12, 1.04), (jw * 0.32, 0.98), (jw * 0.46, 0.84),
+                   (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.44)]
+    cheek = [(fw * 0.5 - 0.015, 0.47), (fw * 0.41, ny - 0.01), (fw * 0.3, ny + 0.01), (mw * 0.7, l0 - 0.015)]
     corner = [(mw * 0.64, l13 + 0.01), (mw * 0.58, l17 + 0.02), (mw * 0.3, l17 + 0.04)]
     right = cheek + corner + [(0.0, l17 + 0.045)]
     left = [(-u, v) for u, v in right[::-1]]
@@ -120,7 +120,7 @@ def brand_beard(p, f, L, skin, seed=91):
     must = f.pts(top + AV.tufts(down, 0.008, 0.014, out=-1.0, seed=seed + 4))
     p.poly(must, BD_MOUST, None)
     # the grain: short light strokes falling down and in over the grey parts (none in the dark horseshoe)
-    for r, gv in enumerate(np.arange(0.5, 1.12, 0.04)):
+    for r, gv in enumerate(np.arange(0.5, 1.06, 0.04)):
         for gu in np.arange(-fw * 0.5 - (0.12 if wrap else 0.0) + (0.02 if r % 2 else 0.0), fw * 0.5, 0.04):
             u, v = gu + rng.uniform(-0.014, 0.014), gv + rng.uniform(-0.014, 0.014)
             q = f(u, v)
@@ -187,7 +187,7 @@ def brand_hair(L, knot=False, seed=3):
     locks a wavy lock over each cheek's edge (hiding the ears). Topknot (b08): pulled back tight; no mass or locks."""
     fw, fhw = L['fw'], L['fhw']
     c = fhw * 0.5
-    hl = -0.02                                                   # a high hairline
+    hl = -0.17                                                   # a high hairline (Sam's photo b10: a tall forehead)
     if knot:
         e = fw * 0.5                             # pulled back flat over a round skull, out to the ears
         cap = [(-e - 0.01, 0.3), (-e - 0.03, 0.02), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.42), (0.24, -0.38),
@@ -197,20 +197,20 @@ def brand_hair(L, knot=False, seed=3):
     e = fw * 0.5
 
     def side(sgn, sd):
-        outer = [(sgn * 0.02, -0.4), (sgn * (c + 0.04), -0.36), (sgn * (e + 0.2), -0.1), (sgn * (e + 0.3), 0.3),
-                 (sgn * (e + 0.34), 0.8), (sgn * (e + 0.33), 1.3), (sgn * (e + 0.28), 1.7)]
+        outer = [(sgn * 0.02, -0.4), (sgn * (c + 0.04), -0.36), (sgn * (e + 0.14), -0.1), (sgn * (e + 0.22), 0.3),
+                 (sgn * (e + 0.26), 0.8), (sgn * (e + 0.25), 1.2), (sgn * (e + 0.2), 1.5)]
         ends = []                                                # the ends: four locks of different lengths
-        for k, (du, dv) in enumerate(((0.28, 1.7), (0.22, 1.86), (0.16, 1.74), (0.1, 1.84), (0.04, 1.68))):
+        for k, (du, dv) in enumerate(((0.2, 1.5), (0.16, 1.62), (0.11, 1.53), (0.07, 1.6), (0.03, 1.48))):
             u = sgn * (e + du)
             ends += [(u, dv), (u - sgn * 0.03, dv - 0.08)] if k % 2 == 0 else [(u + sgn * 0.01, dv - 0.02), (u, dv)]
-        inner = [(sgn * (e + 0.02), 1.6), (sgn * (e - 0.02), 1.15), (sgn * (e - 0.05), 0.7)]
+        inner = [(sgn * (e + 0.01), 1.4), (sgn * (e - 0.02), 1.05), (sgn * (e - 0.05), 0.7)]
         return waves(outer, 0.03, 0.34, out=-sgn, seed=sd) + ends + waves(inner, 0.02, 0.3, out=sgn, seed=sd + 1)
     right, left = side(1, seed), side(-1, seed + 10)
     mass = left[::-1] + [(-0.05, 0.2), (0.05, 0.2)] + right
     cap = waves([(-c - 0.1, 0.06), (-c - 0.02, -0.26), (-0.22, -0.44), (0.0, -0.49), (0.22, -0.44), (c + 0.02, -0.26),
                  (c + 0.1, 0.06)], 0.012, 0.2, out=1.0, seed=seed + 4)
-    cap += [(c - 0.02, 0.1), (c * 0.86, -0.03), (c * 0.5, hl), (0.12, hl - 0.03), (0.0, hl - 0.015), (-0.12, hl - 0.03),
-            (-c * 0.5, hl), (-c * 0.86, -0.03), (-c + 0.02, 0.1)]
+    cap += [(c - 0.02, 0.04), (c * 0.86, -0.12), (c * 0.5, hl), (0.12, hl - 0.03), (0.0, hl - 0.015), (-0.12, hl - 0.03),
+            (-c * 0.5, hl), (-c * 0.86, -0.12), (-c + 0.02, 0.04)]
     locks = []
     for sgn in (-1, 1):                                          # a lock over the face's edge, temple to below the jaw
         inner = waves([(sgn * c, 0.04), (sgn * (e - 0.04), 0.3), (sgn * (e - 0.045), 0.62), (sgn * (e - 0.01), 0.9)],
@@ -244,11 +244,11 @@ def _texture(p, f, poly_uv, n, seed, length=0.2):
 def _top_strokes(p, f, L, knot):
     c = L['fhw'] * 0.5
     if knot:                                          # pulled back: a few lines sweeping back to the bun, low
-        for a, b in (((-0.14, -0.04), (-0.06, -0.38)), ((0.14, -0.04), (0.06, -0.38))):
+        for a, b in (((-0.14, -0.2), (-0.06, -0.38)), ((0.14, -0.2), (0.06, -0.38))):
             p.line(curve(f.pts([a, ((a[0] + b[0]) / 2 * 1.2, (a[1] + b[1]) / 2), b]), 3), BR_HAIR_L, 1.6)
         return
-    strokes = (((-0.08, -0.03), (-0.2, -0.34)), ((0.08, -0.03), (0.2, -0.34)), ((-0.24, 0.02), (-c - 0.02, -0.22)),
-               ((0.24, 0.02), (c + 0.02, -0.22)), ((0.0, -0.05), (0.0, -0.4)))
+    strokes = (((-0.08, -0.21), (-0.2, -0.4)), ((0.08, -0.21), (0.2, -0.4)), ((-0.22, -0.17), (-c - 0.04, -0.3)),
+               ((0.22, -0.17), (c + 0.04, -0.3)), ((0.0, -0.22), (0.0, -0.44)))
     for i, (a, b) in enumerate(strokes):
         mid = ((a[0] + b[0]) / 2 + (0.03 if i % 2 else -0.03), (a[1] + b[1]) / 2)
         p.line(curve(f.pts([a, mid, b]), 3), BR_GREY if i == 1 else BR_HAIR_L, 1.8)
@@ -346,7 +346,30 @@ def look_of(sp):
     return MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
 
 
+HEAD_K = 1.15        # Sam, 11 Nov (cast sheet): "a small-looking head": his face drawn 15% bigger, grown up from the chin
+
+
+class _Big:
+    """While drawing his head, the face height (patriots4's and turnhead's H) is HEAD_K times the house size."""
+    def __enter__(self):
+        self.old = (P4.H, TH.H)
+        P4.H = TH.H = 172.0 * HEAD_K
+
+    def __exit__(self, *a):
+        P4.H, TH.H = self.old
+
+
+def _lift(hy):
+    """The head's anchor moved up so the bigger face grows upwards: the chin drops only a little onto the neck."""
+    return hy - (HEAD_K - 1) * 172.0 * 0.85
+
+
 def brand_head(img, p, sp, t, hx, hy):
+    with _Big():
+        return _brand_head(img, p, sp, t, hx, _lift(hy))
+
+
+def _brand_head(img, p, sp, t, hx, hy):
     L = P4.layout(P4.target('brand', sp.get('average', False)))
     f = P4.Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
     skin, look = BR_SKIN, look_of(sp)
@@ -457,6 +480,17 @@ def _brand_turned_hair(img, p, f, L, sp):
         shades(p, f, L, lowered=sp['shades'] == 'lowered')
 
 
+_th_draw = TH.draw
+
+
+def _th_draw_big(img, p, sp, t, view, hx, hy):
+    if sp.get('who') != 'brand':
+        return _th_draw(img, p, sp, t, view, hx, hy)
+    with _Big():
+        return _th_draw(img, p, sp, t, view, hx, _lift(hy))
+
+
+TH.draw = _th_draw_big
 TH.register(TH.Person(
     'brand', lambda sp: P4.layout(P4.target('brand', sp.get('average', False))), -0.42, 0.4,
     lambda L: BRAND_PROFILE, BR_SKIN, BR_IRIS, BR_BROW, BR_LIP, _brand_mood, _brand_rest, _brand_turned_hair,
@@ -545,7 +579,7 @@ TC.HEADS.update(brand=brand_head, judge=judge_head)
 TC.TORSOS.update(brand=brand_torso, judge=judge_torso, officer=officer_torso)
 _hair_back = B.hair_back
 B.hair_back = hair_back
-V.LONG_HAIR['brand_long'] = 280          # his curls in the side and back views
+V.LONG_HAIR['brand_long'] = 230          # his curls in the side and back views
 
 # ---------------------------------------------------------------------------------------------- the people
 BRAND = dict(who='brand', name='Russell Brand', skin=BR_SKIN, hw=66, hh=96, head_dy=10, hair='brand_long',
