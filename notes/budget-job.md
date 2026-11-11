@@ -18,6 +18,18 @@
   in place of a third pass.
 - **Forecast now about 20%** (cast 7.5, sets 3.5; the rest as the table). The trial measures the cast figure.
 
+## Trial 1 result (11 Nov): Link rebuilt as a Lead, two critique hunts, batch fixing
+- **Cost 2.0% of a week** (two Opus high chats; the helpers' 200k tokens may be on top), against 1.1% planned and
+  about 1.9% a character in the real film. **Batch fixing did not make a Lead cheaper.**
+- Read-in 0.3 a chat; first drawing 0.7; own look 0.3; hunt 1 0.5; hunt 2 0.2. The first chat went amber (history
+  size) at 1.0%.
+- Hunt 1: 34 listed, 13 distinct, 8 real. Hunt 2: 37 listed, 15 distinct, 11 real (5 were hunt-1 fixes that had not
+  landed, 6 new). **Both hunts earn their place (Sam was right).** About 60% of what a helper lists is repeats.
+- Quality (the trial chat's view; Sam has the sheet): the real Link's costume is more polished; the trial has all
+  five poses where the real cast file had one. The repeat faults were all poses, not the design.
+- **A Lead at this quality costs about 2%.** Forecast for Remakes stays about 20-21%: 15% is not reachable for 9 new
+  characters and 3 places. Untested lines: Glimpses (trial 2, `notes/trial_lineup.md`), sets, the notes rounds.
+
 ## 1. Where Remakes' 60% went
 The early chats were recorded as one lump, so these are rebuilt from the handovers (good to a few points each).
 
