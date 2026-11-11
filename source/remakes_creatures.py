@@ -756,6 +756,7 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
             rt = lambda q: (q[0] * math.cos(A) + (q[1] + 145) * math.sin(A),
                             -q[0] * math.sin(A) + (q[1] + 145) * math.cos(A) - 145)
             wings = {sd: (rt(w[0]), rt(w[1]), w[2]) for sd, w in wings.items()}
+            lean = lean + 10                         # critique r3: still read as leaning back: stood forward
         per = 'stand_side' if stand else perched
         if head_tilt:                                # side on: the head alone tipped up (+) about the neck, on its
             _kg_side(p, mood, wings, per, band, t, lean, talk, 'back')     # own layer (remakes note 33)

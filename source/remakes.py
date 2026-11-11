@@ -125,10 +125,10 @@ FIRE0, FIRE1 = BURST1[0], BURST2[1]
 SCUTTLE = (L[7]['start'] + 2.3, L[8]['start'] - 0.15)            # Link in through the gate, at his mark for line 8
 S8_AT = L[9]['start'] + 0.42 * (L[9]['end'] - L[9]['start'])   # the push to Navi on "GRENADES"
 ZIP = L[9]['end'] + 0.1                           # Navi zips at the gunman
-BOOM = ZIP + 0.35
-G2_IN = (ZIP - 0.55, ZIP - 0.15)                  # note 47: the middle-right man fires from off screen (INCOMING) and
-INCOMING = (L[8]['start'] + 0.15, G2_IN[0])       # is seen only when he steps in, as Navi zips at him
-S9_AT = BOOM + 1.1
+BOOM = ZIP + 0.55                                 # note 63: a zip the camera can follow
+INCOMING = (L[8]['start'] + 0.15, BOOM - 0.05)    # notes 47, 63: the right-hand man, kneeling just off the right of
+                                                  # S7's frame, fires on them until Navi reaches him; S8 follows her
+S9_AT = min(BOOM + 1.1, L[10]['start'] - 0.1)
 S10_AT = L[10]['end'] + 0.2
 S11_AT = L[12]['start'] - 0.15
 S12_AT = L[12]['end'] + 0.3
@@ -784,7 +784,7 @@ def _kg_camp_face(t, firing, mode):
         name = 'glee' if int(t * 5) % 3 == 2 else 'war'
     elif _talk('kg', t) is not None:
         name = 'glee' if L[9]['start'] <= t < L[9]['end'] + 0.2 else ('fury' if nod > 0.45 else 'war')
-    elif INCOMING[0] <= t < G2_IN[1]:
+    elif INCOMING[0] <= t < INCOMING[1]:
         name, look = 'fury', 2.2                                      # glaring hard off right at the shooter
     m = dict(CR.KG_MOODS[name])
     m['brows'] = (m['brows'][0] + 0.25 * math.sin(t * 7.3), m['brows'][1] + 6 * nod)
@@ -818,8 +818,10 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         rot = fall * 82 * ease((t - hit) / 0.35) if t >= hit else 0.0
         if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
+        if t >= hit:                                                  # critique r3: the hit jolts him back
+            x += -flip * 0.14 * ppm * math.sin(math.pi * min(1.0, (t - hit) / 0.2))
         _kid(img, cam, who, x, y, ppm, t, j=j or _gun_pose(), yaw=90, flip=flip, rot=rot, talk=False)
-        _hit(img, cam, x + flip * 0.05 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
+        _hit(img, cam, x - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
              ground=None if who == 'gunman1' else y + 0.1 * ppm)       # note 48
 
     def run_in(who, u, tt):
@@ -868,27 +870,35 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
                 rock += 6 * math.sin((t - KG_T[0]) * math.pi * 4.0)      # rolling side to side as he stamps
             muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', -1 if mode == 'low' else 1,
                               rot=rock, firing=firing, mood=face, look=look * (-1 if mode == 'low' else 1))
-    # the middle-right man: runs in from the right, level with KG, and opens fire
-    x, y, ppm = st['gunman2']
-    if G2_IN[0] <= t < BOOM:
-        u = min(1.0, (t - G2_IN[0]) / (G2_IN[1] - G2_IN[0]))
-        x2 = x + (1 - ease(u)) * 1.6 * ppm
-        gunman('gunman2', x2, y, ppm, -1, 1e9, run_in('gunman2', u, t - G2_IN[0]))
-        if u >= 1.0 and int(t * FPS) % 3 == 0:                        # he fires at them
-            _flash(img, cam, x - 1.05 * ppm, y - 1.32 * ppm, 0.16 * ppm, seed=int(t * 12))
+    # the right-hand man (note 63): kneeling just off the right of S7's frame, firing on them till Navi gets him
+    x, y, ppm = _g2()
+    if t < BOOM:
+        drop = 215.0 * RC.scale_for(RC.CAST['gunman'], RS.s_for(ppm))
+        j = _gun_pose()
+        j['footR'] = (60.0, 890.0 - 215 + 40, 6.0 - 190)              # down on his right knee, the left foot
+        j['footL'] = (-70.0, 890.0 - 215, 6.0 + 200)                  # planted forward (prepper.kneel)
+        j['knee_poleR'] = (0.1, 0.4, 1.0)
+        j['knee_poleL'] = (-0.1, -0.3, 1.0)
+        for k_ in ('toeL', 'toeR'):
+            j.pop(k_, None)
+        gunman('gunman2', x, y + drop, ppm, -1, 1e9, j)
+        if INCOMING[0] <= t and int(t * FPS) % 2 == 0:               # he fires at them
+            _flash(img, cam, x - 1.05 * ppm, y + drop - 1.32 * ppm, 0.16 * ppm, seed=int(t * 12))
     # the lower-left man: runs in from the bottom left, nearest the lens, and is cut down
     x, y, ppm = st['gunman3']
     if t >= G3_IN[0]:
         u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
         x3 = x - (1 - ease(u)) * 1.5 * ppm
-        gunman('gunman3', x3, y, ppm, 1, HIT3, run_in('gunman3', u, t - G3_IN[0]))
+        gunman('gunman3', x3, y, ppm, 1, HIT3, run_in('gunman3', u, t - G3_IN[0]), fall=-1)   # critique r3: he
+                                                                      # crumples forward, into frame (he fell out of it)
         targets[1] = (x3 + 0.1 * ppm, y - 1.25 * ppm)
-    if INCOMING[0] <= t < G2_IN[0] + 0.25 and kg:                   # note 47: the middle-right man fires from off
+    if INCOMING[0] <= t < INCOMING[1] and kg:                   # note 47: the middle-right man fires from off
         kx_, ky_ = C.p(kg[0], kg[1])                                  # screen: rounds whip past KG and Link, kicking
         kp = C.ppm(kg[1])                                             # up dirt and sparking off the barrels
         lay = _lay(img)
         dl = ImageDraw.Draw(lay)
-        rx = cam.cx + (W / 2) / cam.z + 60
+        g2x, g2y, g2p = _g2()
+        rx = g2x - 1.1 * g2p                                          # from his muzzle
         for k in range(2):
             rng = np.random.default_rng(int(t * FPS) * 3 + k)
             if rng.random() < 0.3:
@@ -901,7 +911,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 214, 110, 150), width=int(cam.S(9)))
             dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 250, 220, 255), width=max(1, int(cam.S(3.5))))
         img.alpha_composite(lay)
-        for j in range(int((G2_IN[0] + 0.25 - INCOMING[0]) / 0.15)):
+        for j in range(int((INCOMING[1] - INCOMING[0]) / 0.15)):
             te = INCOMING[0] + 0.15 * j + 0.05 * (j % 3)
             rng = np.random.default_rng(100 + j)
             if j % 4 == 3:                                            # a spark off the barrels left of Link
@@ -933,17 +943,17 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         nx, ny = sx + 0.42 * ppm, sy - 1.12 * ppm
         heat = ease((t - S8_AT) / 0.5)
         if t >= ZIP:
-            gx, gy, gppm = st['gunman2']
+            gx, gy, gppm = _g2()
             u = ease((t - ZIP) / (BOOM - ZIP))
-            nx, ny = nx + (gx - nx) * u, ny + (gy - 1.25 * gppm - ny) * u
+            nx, ny = nx + (gx - nx) * u, ny + (gy - 0.95 * gppm - ny) * u
         CR.navi(img, cam, nx, ny + 12 * math.sin(t * 9), RS.s_for(lppm) * 1.3, t=t, heat=heat)
     if t >= BOOM:                                                     # note 46: the grenade blast, the same as the
-        gx, gy, gppm = st['gunman2']                                  # gate's, with his pieces in it
+        gx, gy, gppm = _g2()                                          # gate's, with his pieces in it
         a = t - BOOM
         if a > 0.25:
             _splat(img, cam, gx, gy, 0.35 * gppm * min(1.0, (a - 0.25) / 0.3 + 0.4), seed=4)
-        _explosion(img, cam, gx, gy - 1.0 * gppm, a, 0.75 * gppm, seed=21, gy=gy + 0.1 * gppm)
-        _bits(img, cam, gx, gy - 1.2 * gppm, a, 0.5 * gppm, ground=gy + 0.3 * gppm)
+        _explosion(img, cam, gx, gy - 0.8 * gppm, a, 0.75 * gppm, seed=21, gy=gy + 0.1 * gppm)
+        _bits(img, cam, gx, gy - 0.9 * gppm, a, 0.5 * gppm, ground=gy + 0.3 * gppm)
     RS.camp_front(img, cam, t)
     if t >= L[9]['start']:
         _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05, press=t - ZIP)   # screen px, not through cam
@@ -956,11 +966,21 @@ def s7_camp(t):
                                                                       # in the top half over an empty yard)
 
 
+def _g2():
+    """The right-hand man's mark (note 63): just past the right of S7's frame, level with KG."""
+    C = RS.CAMP
+    x, y = C.p(G2_X, RS.CAMP_MARKS['kg'][1] - 0.4)
+    return x, y, C.ppm(RS.CAMP_MARKS['kg'][1] - 0.4)
+
+
+G2_X = 2.15
+
+
 def s8_navi(t):
     st = RS.STAGE['camp']
     lx, ly, _ = st['link']
-    gx, gy, _ = st['gunman2']
-    u = 0.85 * ease((t - G2_IN[0]) / (ZIP + 0.1 - G2_IN[0]))       # note 47: the pan finds him as he steps in
+    gx, gy, _ = _g2()
+    u = ease((t - ZIP) / (BOOM - ZIP + 0.1))                          # note 63: the camera follows Navi to him
     dx, dy = _shake(t, BOOM, 40)
     return _camp(t, B.Cam(1.7, (lx + 90) + (gx - lx - 90) * u + dx, (ly - 160) + (gy - ly) * u * 0.6 + dy))
 

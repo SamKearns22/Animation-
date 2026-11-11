@@ -113,56 +113,159 @@
      "12 M5: strip",
      "12 M4: strip"
     ]
+   },
+   {
+    "round": 3,
+    "pass": 2,
+    "date": "2026-11-11",
+    "faults": 29,
+    "cant_tell": 65,
+    "open": [
+     "3 S1: KG speck",
+     "4 A2: KG leaning, turkey-shaped",
+     "4 C2: KG leaning, turkey-shaped",
+     "4 M3: KG leaning, turkey-shaped",
+     "5 A2: front blood; faceless; clipping",
+     "5 P2: front blood; faceless; clipping",
+     "5 P7: front blood; faceless; clipping",
+     "5 P10: front blood; faceless; clipping",
+     "6 P2: gunman unhit; KG misaimed",
+     "6 C1: gunman unhit; KG misaimed",
+     "6 M5: gunman unhit; KG misaimed",
+     "7 P2: wrong gaze; boot; dirt",
+     "7 M1: wrong gaze; boot; dirt",
+     "7 M5: wrong gaze; boot; dirt",
+     "8 A1: Navi offscreen; gunman static; pegleg",
+     "8 P2: Navi offscreen; gunman static; pegleg",
+     "8 P7: Navi offscreen; gunman static; pegleg",
+     "9 A1: no Navi; KG cropped",
+     "9 S1: no Navi; KG cropped",
+     "10 A1: Goron blob; Malon; wide",
+     "10 A2: Goron blob; Malon; wide",
+     "10 S1: Goron blob; Malon; wide",
+     "11 A2: no castle; nubs",
+     "11 S3: no castle; nubs",
+     "11 P6: no castle; nubs",
+     "12 A1: wings=bow; nubs",
+     "12 C2: wings=bow; nubs",
+     "12 C3: wings=bow; nubs",
+     "12 P6: wings=bow; nubs",
+     "1 S4: strip",
+     "1 M2: strip",
+     "1 M4: strip",
+     "2 S4: strip",
+     "2 M2: strip",
+     "2 M3: strip",
+     "2 M4: strip",
+     "3 S4: strip",
+     "3 M2: strip",
+     "3 M3: strip",
+     "3 M4: strip",
+     "4 M2: strip",
+     "4 M4: strip",
+     "5 P1: strip",
+     "5 P3: strip",
+     "5 P4: strip",
+     "5 P5: strip",
+     "5 P6: strip",
+     "5 P13: strip",
+     "5 M2: strip",
+     "5 M3: strip",
+     "5 M5: strip",
+     "5 M4: strip",
+     "6 A2: strip",
+     "6 P7: strip",
+     "6 P1: strip",
+     "6 P3: strip",
+     "6 P4: strip",
+     "6 P5: strip",
+     "6 P6: strip",
+     "6 P10: strip",
+     "6 P13: strip",
+     "6 M1: strip",
+     "6 M2: strip",
+     "6 M4: strip",
+     "7 P12: strip",
+     "7 S4: strip",
+     "7 M2: strip",
+     "7 M4: strip",
+     "8 M1: strip",
+     "8 M2: strip",
+     "8 M3: strip",
+     "8 M5: strip",
+     "8 M4: strip",
+     "9 S4: strip",
+     "9 M1: strip",
+     "9 M2: strip",
+     "9 M3: strip",
+     "9 M4: strip",
+     "10 P1: crops",
+     "10 P3: crops",
+     "10 P4: crops",
+     "10 P5: crops",
+     "10 P6: crops",
+     "10 P10: crops",
+     "10 P13: crops",
+     "10 S4: crops",
+     "11 P12: strip",
+     "11 S4: strip",
+     "12 P12: strip",
+     "12 M1: strip",
+     "12 M2: strip",
+     "12 M3: strip",
+     "12 M5: strip",
+     "12 M4: strip"
+    ]
    }
   ],
   "lines": {
    "C3": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "A1": {
-    "faults": 6,
+    "faults": 10,
     "false": 1
    },
    "A2": {
-    "faults": 3,
+    "faults": 7,
     "false": 0
    },
    "P7": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "C1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "M5": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "P2": {
-    "faults": 4,
+    "faults": 8,
     "false": 0
    },
    "S1": {
-    "faults": 4,
+    "faults": 7,
     "false": 1
    },
    "M1": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P6": {
-    "faults": 2,
-    "false": 0
+    "faults": 4,
+    "false": 1
    },
    "P3": {
     "faults": 2,
     "false": 0
    },
    "S3": {
-    "faults": 1,
-    "false": 0
+    "faults": 2,
+    "false": 1
    },
    "S5": {
     "faults": 1,
@@ -173,6 +276,18 @@
     "false": 0
    },
    "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "C2": {
+    "faults": 2,
+    "false": 0
+   },
+   "M3": {
+    "faults": 1,
+    "false": 0
+   },
+   "P10": {
     "faults": 1,
     "false": 0
    }

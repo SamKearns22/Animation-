@@ -65,3 +65,85 @@ Facing camera 6-8; stubs 11-12.
 ## Not on the list
 5: mountains. suggested line: inserts match wides.
 
+== critique, round 3 pass 2 (2026-11-11): 29 fault(s), 65 can't tell
+-- look.md --
+1: Jungle camp gate, blue-white flag, sniper in watchtower, barrels, sandbags; empty, quiet, tense.
+2: Gate explodes in orange fireball, splinters flying, scene washed pale; sniper still aiming.
+3: Horned owl with red headband bursts through fireball holding gun; fierce entrance.
+4: Owl crouches firing rifle up at tower; yellow tracer; grey smoke cloud behind.
+5: Close-up: tower sniper hit, red blood blobs spray; sniper falls back, boot dangling.
+6: Soldier at left edge fires at owl; tiny elf boy and glowing fairy behind owl.
+7: Elf boy runs scared, hands on head; owl fires beam right; lone boot on ground.
+8: Masked soldier aims rifle beside smug owl; pink glow at edge; label "R2 GRENADES".
+9: Explosion with red blobs where soldier stood; owl at edge squinting; "R2 GRENADES".
+10: Medieval town square: owl waves eyes shut; elf girl, redhead, teal girl, yellow blob, elf.
+11: Elf boy alone in bannered medieval street, blank calm face, sword on back.
+12: Elf boy close-up crying, mouth open in shock; pink fairy; brown bow arcs around.
+-- result.md --
+## Panel 1
+ok: A1 A2 A3 S1 S2 S5 S6 S3 M1 M3 M5
+CAN'T TELL S4 M2 M4: strip
+
+## Panel 2
+ok: A1 A2 A3 S1 S2 S5 S6 S3 M1 M5
+CAN'T TELL S4 M2 M3 M4: strip
+
+## Panel 3
+ok: A1 A2 A3 C1 C2 C3 C4 S2 S5 S6 S3 M1 M5
+FAULT S1: KG speck
+CAN'T TELL S4 M2 M3 M4: strip
+
+## Panel 4
+ok: A1 A3 C1 C3 C4 M1 M5
+FAULT A2 C2 M3: KG leaning, turkey-shaped
+CAN'T TELL M2 M4: strip
+
+## Panel 5
+ok: A1 A3 P8 P11 P12 M1
+FAULT A2 P2 P7 P10: front blood; faceless; clipping
+CAN'T TELL P1 P3 P4 P5 P6 P13 M2 M3 M5 M4: strip
+
+## Panel 6
+ok: A1 A3 P8 P11 P12 C2 C3 C4 M3
+FAULT P2 C1 M5: gunman unhit; KG misaimed
+CAN'T TELL A2 P7 P1 P3 P4 P5 P6 P10 P13 M1 M2 M4: strip
+
+## Panel 7
+ok: A1 A2 A3 P7 P1 P8 P3 P4 P5 P6 P10 P11 P13 C1 C2 C3 C4 S1 S2 S5 S6 S3 M3
+FAULT P2 M1 M5: wrong gaze; boot; dirt
+CAN'T TELL P12 S4 M2 M4: strip
+
+## Panel 8
+ok: A2 A3 P1 P8 P3 P4 P5 P6 P10 P11 P12 P13 C1 C2 C3 C4
+FAULT A1 P2 P7: Navi offscreen; gunman static; pegleg
+CAN'T TELL M1 M2 M3 M5 M4: strip
+
+## Panel 9
+ok: A3 S2 S5 S6 S3 M5
+FAULT A1 S1: no Navi; KG cropped
+CAN'T TELL S4 M1 M2 M3 M4: strip
+
+## Panel 10
+ok: A3 P2 P7 P8 P11 P12 C1 C2 C3 C4 S2 S5 S6 S3
+FAULT A1 A2 S1: Goron blob; Malon; wide
+CAN'T TELL P1 P3 P4 P5 P6 P10 P13 S4: crops
+
+## Panel 11
+ok: A1 A3 P1 P2 P7 P8 P3 P4 P5 P10 P11 P13 S1 S2 S5 S6
+FAULT A2 S3 P6: no castle; nubs
+CAN'T TELL P12 S4: strip
+
+## Panel 12
+ok: A2 A3 P1 P2 P7 P8 P3 P4 P5 P10 P11 P13 C1 C4
+FAULT A1 C2 C3 P6: wings=bow; nubs
+CAN'T TELL P12 M1 M2 M3 M5 M4: strip
+
+## Cold look
+Misread wings, Goron, Navi.
+
+## Same fault elsewhere
+Cropped: 5,6,8,9. Gaze: 6,7. Nubs: 10-12.
+
+## Not on list
+Snowpeaks (5). suggested line: inserts match wide.
+

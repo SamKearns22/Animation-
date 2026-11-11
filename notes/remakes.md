@@ -1,18 +1,19 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (one critique round of every changed shot, with the fresh-eye helper: still not run),
-  30 (note 58 is a changed decision; 44/57 missed the Job K head-acting rule), 85 (Sam's usage resets 3:41).
-- **Done (11 Nov, Opus):** notes 43, 44, 45, 50, 51, 52, 57, 58 fixed; 3 clips sent (S1-S4, the snap, the wall).
-- **Next (Opus, medium): notes 46, 47, 48, 49, 53, 54, 56 in order**, clips of each moved beat, then the critique round
-  (fresh-eye helper), then open the Sonnet chat for the animatic. Type: "Remakes: read notes/remakes.md Where things
-  stand. Do the open notes, then hand to Sonnet."
-- **Needs Sam:** his look at the 3 clips; rule request below.
-- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
-- **Open rule requests:** none (11 Nov: Sam Y to the head-acting check; written into rule 74, preflight.head_life_faults).
-- **For Claude:** HL['kg'/'link'] (headlife from the takes) in remakes.py; Link gets it in _kid; KG mood may be a dict
-  (CR.kg); eyes='shut' blinks; RS.kg_on_branch(sway=); draw_subtitle/_pieces (note 51); camp work: _camp, _kg_camp.
-  Note 54 (KG in the camp) should use HL['kg'] too. Clips in clips/ are drafts (not on GitHub).
+- **Rules that bite next:** 89 (critique r3 passes 1-2 done; any new change gets one more pass), 88 (one check sheet
+  this round), 85.
+- **Done (11 Nov, Opus):** notes 46-49, 53, 54, 56, 60-64 fixed, clips sent for each; critique r3 two passes, fixed.
+- **Next (Sonnet, medium): the check sheet** (every shot), send it, wait for Sam's clear yes. On his yes: the Sonnet
+  chat messages the Opus chat that opened it (send_message) and stops; that Opus chat runs note 59 (opens a Fable chat,
+  claude-fable-5-2 high, cold critique of the check sheet and clips; one send_later check; findings to the ledger),
+  then opens a Sonnet chat to render animatic 3 (watch and listen first: note 40). Sam's pending answer: are Fable's
+  findings fixed before the render (pick: yes); ask only if still open then.
+- **Needs Sam:** his look at the clips; then the check sheet's yes.
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
+- **Open rule requests:** none. (The helper's "close-up matches its wide" line suggestion: not proposed; one case.)
+- **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
+  RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C. Clips: clips/.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
@@ -39,6 +40,8 @@
 | 60 (Sam, 11 Nov) | model S11's background on his picture (ref 25: a Castle Town street, balustrades with blue drapes, banners, planters) | **DONE 11 Nov** (clip sent): the street in one-point perspective, steps, drapes, banners framing Link, planters |
 | 61 (Sam, 11 Nov) | no Hyrule Castle in the 180 shot (it suggests two castles); critique and clean up this background in the critique stage | castle **DONE 11 Nov** (a far row of houses closes the street); the clean-up goes with the critique round |
 | 62 (Sam, 11 Nov, with a still) | the tower shot: KG's whole body tips off the ground; he should aim only his gun and head up | **DONE 11 Nov** (clip sent): CR.kg(gun_aim=): body planted, wings and gun swing about the shoulder, head tipped 0.7 x the aim. Seen before? new kind (the tip was the build's own staging, note 32) |
+| 63 (Sam, 11 Nov) | 47 again: the right-hand soldier needn't step in; he fires from just right of the main shot, kneeling; the camera follows Navi to him | **DONE 11 Nov** (clip sent): _g2() mark off S7's right, kneeling (prepper.kneel's legs) behind the sandbags, firing from line 8 to the blast; BOOM = ZIP + 0.55 and S8 follows her. Seen before: a changed decision (47's reveal), not a failed fix |
+| 64 (critique r3) | passes 1 and 2 (fresh-eye helper): S13 arms lost under the claws; line-up still small; tracers high; KG's glare faint; wounds at the head; KG leans at the tower; the street mirrored and empty; G3 no jolt and falls out of frame | **DONE 11 Nov**: arms hang limp; line-up 1.55 and KG smaller; tracers from his muzzle at chest height; glare look 2.2; wounds at the chest, back side; side KG stood 10 deg forward when aiming; the street each side its own build; hit jolt; G3 falls forward. Left (named): KG faces the camera in the 'low' turn (front view only); G2 side-on legs; the far hills read as snowy peaks in the S7 detail (clouds behind them) |
 | 57 (Sam, 11 Nov) | KG too still holding Link up at the wall (S12, S12b, S13) | head moves (jabs, tilts, shakes on the words), brow and eye changes, beak snaps per syllable, body heaving; the wings stay on the collar | **DONE 11 Nov** (clip sent): head tilts and jabs from headlife, rage/fury face on the stresses, a lean in after his last word |
 
 
