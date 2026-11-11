@@ -1960,7 +1960,73 @@ def town_wall(img, p, cam, t):
     _planter(p, WALL_LEV, -0.78, 2.6, 0.6, 503)                         # a trough at the wall's foot, left
 
 
-TOWN_VIEWS = {'square': town_square, 'wall': town_wall}
+
+REVERSE_HOUSES = [  # note 56: the square's other side, behind Link in S11 (the line-up's side turned 180): its own row
+    (-170, 120, 440, 150, 2, dict(floors=3, wins=2, roof='side', stone=True, frame='x', balcony=True, chimney=True)),
+    (126, 330, 500, 120, 0, dict(floors=2, wins=2, roof='gable', frame='brace', sign=(150, 60, 120))),
+    (750, 940, 470, 130, 3, dict(floors=3, wins=2, roof='gable', stone=True, frame='studs', jetty=True)),
+    (946, 1260, 420, 150, 1, dict(floors=3, wins=3, roof='side', frame='brace', balcony=True, chimney=True)),
+]
+
+
+def town_reverse(img, p, cam, t):
+    """S11 (note 56, Sam: the camera turns 180 to Link, further into the square): the square's near side, the side
+    the line-up faces. No castle and no fountain (they are behind the line-up): the town gate (ref 22), a pale stone
+    gatehouse with a round arch onto the road out, blue banners with the gold crest either side of it, a stone
+    balustrade along its top; its own row of houses left and right; bunting; townsfolk; barrels and a planter."""
+    _sky(p, -400, 950, 7)
+    for x, y, w, sd in ((300, 160, 200, 471), (900, 240, 170, 472)):
+        _cloud(p, x, y, w, sd)
+    haze(img, cam, 300, 700, (230, 236, 244), 0.2)
+    base = TOWN.p(0, 24.0)[1]
+    for k, (x0, x1, top, rh, ci, kw) in enumerate(REVERSE_HOUSES):
+        _house(img, p, x0, x1, base, top, rh, PLASTER[ci], 470 + k, **kw)
+    gx0, gx1, gtop = 330, 750, 330                                      # the gatehouse
+    p.poly(quad(gx0, gtop, gx1, base), WALLSTONE_L, INK, 2.6)
+    rr = random.Random(480)
+    y = base
+    row = 0
+    while y > gtop + 30:
+        bh = rr.uniform(26, 34)
+        x = gx0 + (0 if row % 2 else -20)
+        while x < gx1:
+            bw = rr.uniform(40, 70)
+            p.line([(max(gx0, x), y), (min(gx1, x + bw), y)], WALLSTONE_D, 1.2)
+            if x > gx0:
+                p.line([(x, y), (x, y - bh)], WALLSTONE_D, 1.2)
+            x += bw
+        y -= bh
+        row += 1
+    for k in range(7):                                                  # the balustrade along the top
+        bx = gx0 + 20 + k * (gx1 - gx0 - 40) / 6
+        p.poly(quad(bx - 12, gtop - 46, bx + 12, gtop), WALLSTONE, INK, 1.6)
+    p.poly(quad(gx0 - 10, gtop - 60, gx1 + 10, gtop - 44), WALLSTONE_L, INK, 2.0)
+    ax, aw, ah = (gx0 + gx1) / 2, 120, 250                              # the arch onto the road out
+    arch = [(ax - aw, base)] + [(ax - aw * math.cos(a), base - ah + aw - aw * math.sin(a))
+                                for a in np.linspace(0, math.pi, 16)] + [(ax + aw, base)]
+    p.poly(arch, (150, 186, 120), INK, 3.0)                             # fields and sky through it
+    p.poly([(ax - aw, base), (ax - aw, base - 70), (ax + aw, base - 70), (ax + aw, base)], (196, 176, 130), None)
+    p.poly(quad(ax - aw, base - ah - 6, ax + aw, base - ah + 40), (176, 214, 236), None)
+    p.line(arch, INK, 3.0)
+    for k in range(9):                                                  # the arch's voussoirs
+        a = math.pi * (k + 0.5) / 9
+        c, s_ = math.cos(a), math.sin(a)
+        p.line([(ax - aw * c, base - ah + aw - aw * s_), (ax - (aw + 30) * c, base - ah + aw - (aw + 30) * s_)],
+               WALLSTONE_D, 1.6)
+    for bx in (gx0 + 50, gx1 - 50):                                     # banners either side
+        p.line([(bx - 40, gtop + 30), (bx + 40, gtop + 30)], (70, 60, 50), 4.0)
+        _banner(p, bx, gtop + 34, 70, 190, t)
+    _flagstones(p, TOWN, 24.0, 481, 0.42, (0.4, 0.8))
+    _bunting(p, -40, 420, 1120, 400, 40, 22, t)
+    for x, d, c, sd in ((-1.2, 20.0, (90, 120, 150), 21), (1.0, 19.0, (150, 90, 80), 22), (-4.0, 18.0, (120, 140, 90), 23),
+                        (3.9, 17.5, (170, 140, 100), 24)):
+        _townsfolk(p, x, d, c, sd)
+    for x, d in ((-3.1, 12.0), (-2.8, 12.3)):
+        _barrel_t(p, x, d)
+    _sack(p, 3.0, 12.0)
+
+
+TOWN_VIEWS = {'square': town_square, 'wall': town_wall, 'reverse': town_reverse}
 
 
 def town(img, cam, view, t=0.0):

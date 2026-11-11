@@ -952,10 +952,14 @@ def s9_horrible(t):
     return _close(bg, t, 'horror', debris=debris)
 
 
+LINEUP_Z, LINEUP_C = 1.4, (720, 1150)
+
+
 def s10_square(t):
     img = B.canvas((0, 0, 0))
-    cam = B.Cam(1.0)
-    RS.town(img, cam, 'square', t)
+    cam = B.Cam(LINEUP_Z, *LINEUP_C)                                  # note 49: in on the five, less square
+    kcam = B.Cam(1.0, W / 2, H / 2 - 70)                              # KG, the presenter, near the lens: kept as he
+    RS.town(img, cam, 'square', t)                                    # was, a little lower
     st = RS.STAGE['town_square']
     romance = L[11]['start'] + 0.55
     re_ = ease((t - romance) / 0.35)                                  # note 39: the line-up reacts on "ROMANCE"
@@ -969,7 +973,7 @@ def s10_square(t):
             wing = {'L': ((300, -120 - 50 * sweep), (400 - 10 * sweep, -250 - 30 * sweep), 'spread'),   # (kept
                                                                       # below Malon, who steps forward: note 39)
                     'R': ((-192, -30), (-172, 90), 'fold')}
-            CR.kg(img, cam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood='show', t=t,
+            CR.kg(img, kcam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood='show', t=t,
                   talk=_talk('kg', t))
         elif who == 'goron':
             CR.goron(img, cam, x, y, s, t=t, drool=1.0 + 1.3 * re_)    # note 39: he drools more
@@ -1005,7 +1009,7 @@ def s10_square(t):
 
 def s11_nine(t):
     def bg(im, c, tt):
-        RS.town(im, B.Cam(2.0, 540, 600), 'square', tt)
+        RS.town(im, B.Cam(2.0, 540, 600), 'reverse', tt)               # note 56: the reverse angle
     return _close(bg, t, 'deadpan')
 
 
