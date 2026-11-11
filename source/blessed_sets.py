@@ -194,7 +194,7 @@ def court_out(img, cam, t=0.0):
     p.poly(quad(a[0] - 6, a[1] - 2, a[0] + 6, a[1] + 2), (246, 246, 246), None)
     # the forecourt and its low brick walls with planted beds, the steps and rails on the left
     p.poly(quad(-300, L.p(0, d, z0)[1], W + 300, L.p(0, PLAZA_D0, PLAZA_Z)[1]), (196, 190, 180), None)
-    for (xa, xb) in ((-14, -5.2), (-1.6, 14)):
+    for (xa, xb) in ((-14, -0.9), (3.9, 14)):
         a, b = L.p(xa, PLAZA_D0, PLAZA_Z + 0.55), L.p(xb, PLAZA_D0, 0.0)
         for k, xc in enumerate(np.arange(xa + 0.6, xb, 1.15)):                              # the shrubs in the bed
             c = L.p(xc, PLAZA_D0 + 0.8, PLAZA_Z + 0.75)
@@ -206,9 +206,9 @@ def court_out(img, cam, t=0.0):
     for k in range(6):                                                                     # the steps
         z = PLAZA_Z * (k + 1) / 6
         dd = PLAZA_D0 - 1.8 + 0.3 * k
-        a, b = L.p(-5.2, dd, z), L.p(-1.6, dd - 0.3, z - PLAZA_Z / 6)
+        a, b = L.p(-0.9, dd, z), L.p(3.9, dd - 0.3, z - PLAZA_Z / 6)
         p.poly(quad(a[0], a[1], b[0], b[1]), mix(PAVE, (255, 255, 255), 0.1 * (k % 2)), INK, 1.6)
-    for xr in (-4.9, -1.9):                                                                # the rails
+    for xr in (-0.6, 3.6):                                                                 # the rails
         pts = [L.p(xr, PLAZA_D0 - 1.8 + 0.3 * k, PLAZA_Z * k / 6 + 0.95) for k in range(7)]
         p.line(pts, (210, 214, 218), 3.4)
         p.line(pts, INK, 1.0)
@@ -217,7 +217,7 @@ def court_out(img, cam, t=0.0):
             g = L.p(xr, PLAZA_D0 - 1.8 + 0.3 * k, PLAZA_Z * k / 6)
             p.line([q, g], (210, 214, 218), 2.6)
     # the trees at both ends (autumn, 13 Oct), the lamp post
-    for k, (x, dd) in enumerate(((-7.6, 12.5), (8.2, 13.0), (-10.5, 14.0))):
+    for k, (x, dd) in enumerate(((-5.4, 12.5), (6.6, 13.0), (-9.0, 14.0))):
         base, topp = L.p(x, dd, 0.0), L.p(x, dd, 7.5)
         p.poly(wob(quad(base[0] - 9, topp[1], base[0] + 9, base[1]), 1.5, 40 + k), (92, 74, 58), INK, 2.2)
         for j, (ox, oz, rr) in enumerate(((0, 8.2, 2.6), (-1.6, 6.6, 1.9), (1.7, 6.9, 2.0), (0.4, 5.6, 1.5))):
@@ -293,9 +293,31 @@ def _arms(p, img, cam, cx, cy, s):
     p.poly(cr, (222, 178, 60), INK, 2.2)                                                  # the crown
     p.poly(quad(cx - 62 * s, cy - 152 * s, cx + 62 * s, cy - 136 * s), (180, 40, 46), INK, 1.8)
     p.ell(cx, cy - 214 * s, 8 * s, 8 * s, (222, 178, 60), INK, 1.4)
+    for sg, col, mane in ((-1, (222, 178, 60), (190, 140, 40)), (1, (246, 244, 236), (210, 206, 196))):
+        _beast(p, cx + sg * 150 * s, cy + 10 * s, s, sg, col, mane, horn=sg > 0)
     p.poly([(cx - 130 * s, cy + 150 * s), (cx + 130 * s, cy + 150 * s), (cx + 118 * s, cy + 186 * s),
             (cx - 118 * s, cy + 186 * s)], (240, 232, 214), INK, 1.8)                     # the motto scroll
     p.line([(cx - 90 * s, cy + 168 * s), (cx + 90 * s, cy + 168 * s)], (150, 140, 120), 1.4)
+
+
+def _beast(p, x, y, s, sg, col, mane, horn=False):
+    """A supporter of the arms, rearing on its hind legs and facing the shield (sg: -1 the lion on the left, +1 the
+    unicorn on the right): body, a raised foreleg on the shield, hind legs on the scroll, head, mane, tail, a horn."""
+    q = lambda u, v: (x - sg * u * s, y + v * s)                  # u towards the shield
+    p.poly([q(-30, 120), q(-34, 150), q(-14, 152), q(-10, 120)], col, INK, 1.6)       # hind legs
+    p.poly([q(10, 120), q(12, 152), q(30, 150), q(26, 118)], col, INK, 1.6)
+    p.poly([q(-36, -10), q(20, -40), q(44, 20), q(30, 124), q(-34, 124), q(-44, 40)], col, INK, 2.0)   # body
+    p.poly([q(18, -30), q(66, -60), q(74, -44), q(30, -6)], col, INK, 1.6)           # foreleg on the shield
+    p.line([q(-40, 100), q(-76, 70), q(-70, 20)], col, 5.0)                          # tail
+    p.line([q(-40, 100), q(-76, 70), q(-70, 20)], INK, 1.0)
+    p.ell(q(-70, 18)[0], q(-70, 18)[1], 9 * s, 9 * s, mane, INK, 1.0)
+    p.poly([q(-24, -40), q(16, -96), q(52, -76), q(40, -36), q(0, -16)], mane, INK, 1.8)   # mane
+    p.poly([q(4, -92), q(48, -96), q(62, -70), q(30, -60)], col, INK, 1.8)            # head
+    p.ell(q(36, -82)[0], q(36, -82)[1], 3 * s, 3 * s, INK, None)
+    if horn:
+        p.poly([q(30, -96), q(62, -140), q(42, -92)], (236, 210, 120), INK, 1.4)
+    else:
+        p.poly([q(-4, -100), q(8, -120), q(20, -98)], (222, 178, 60), INK, 1.2)      # the lion's crown
 
 
 def _mic(p, base, tip, lw=2.4):
@@ -329,6 +351,16 @@ def court_box(img, cam, t=0.0):
     _panels(p, -300, -400, W + 300, 1250, 120, 3)
     p.poly(quad(-300, 120, W + 300, 136), dk(WALL, 0.88), INK, 1.4)                         # a picture rail
     _arms(p, img, cam, 300, 360, 0.95)
+    p.ell(860, 330, 70, 70, (246, 244, 236), INK, 2.6)                                      # the clock
+    for k in range(12):
+        a = 2 * math.pi * k / 12
+        p.line([(860 + 56 * math.cos(a), 330 + 56 * math.sin(a)), (860 + 64 * math.cos(a), 330 + 64 * math.sin(a))], INK, 2.0)
+    p.line([(860, 330), (860, 286)], INK, 3.0)
+    p.line([(860, 330), (894, 344)], INK, 3.0)
+    p.poly(wob(quad(700, 620, 1000, 1250), 1.4, 12), OAK_D, INK, 2.6)                       # a door in the panelling
+    p.poly(quad(730, 660, 970, 900), mix(OAK, OAK_D, 0.4), INK, 1.6)
+    p.poly(quad(730, 940, 970, 1210), mix(OAK, OAK_D, 0.4), INK, 1.6)
+    p.ell(720, 960, 9, 9, (200, 170, 90), INK, 1.2)
     p.poly(wob(quad(130, 640, 470, 1080), 2, 11), JUDGE_CHAIR, INK, 2.8)                    # the judge's chair back
     p.poly(quad(150, 664, 450, 1080), dk(JUDGE_CHAIR, 0.82), None)
     for k in range(3):                                                                     # its buttoned leather
@@ -352,6 +384,8 @@ def court_box_front(img, cam, t=0.0):
     """The witness box's front and ledge, drawn over Brand's lower body, with his microphone (ref 07)."""
     p = B.Pen(img, cam)
     p.poly(wob(quad(470, 1690, W + 300, 2400), 1.6, 21), OAK, INK, 3.2)
+    p.poly([(400, 1500), (470, 1520), (470, 2400), (400, 2400)], OAK_D, INK, 2.8)            # the box's near side
+    p.poly([(386, 1478), (480, 1500), (480, 1530), (386, 1508)], OAK_L, INK, 2.2)            # and its rail
     p.poly(quad(452, 1668, W + 300, 1706), OAK_L, INK, 2.6)                                 # the ledge
     p.poly(quad(530, 1760, 1000, 2000), OAK_D, INK, 1.8)
     p.poly(quad(540, 1770, 990, 1990), mix(OAK, OAK_D, 0.45), None)
@@ -376,9 +410,36 @@ def court_bench_front(img, cam, t=0.0):
     _bench(p, img, cam, -200, W + 200, 1460, 2400, papers=False)
     for k, (x, y, w) in enumerate(((150, 1420, 230), (200, 1404, 210))):                   # papers
         p.poly([(x, y + 40), (x + w, y + 40), (x + w + 16, y), (x + 14, y)], (248, 246, 238), INK, 1.4)
-    p.ell(760, 1430, 70, 18, (110, 70, 44), INK, 2.0)                                      # the sound block
-    p.poly(quad(690, 1412, 830, 1430), (124, 80, 50), None)
+    gavel_block(p, 760, 1440)
+    if t < GAVEL_LIFT[0] or t > GAVEL_LIFT[1]:
+        gavel(p, 700, 1404, 0.0)                                                            # resting on the block
     _mic(p, (330, 1446), (450, 1270), 3.0)
+
+
+GAVEL_LIFT = (-1.0, -1.0)      # the film sets when the judge holds it (blessed.py); otherwise it rests here
+
+
+def gavel_block(p, x, y):
+    """The round sound block: a thick disc of dark wood, its top and its side."""
+    p.poly(quad(x - 90, y - 10, x + 90, y + 22), (100, 62, 38), INK, 2.2)
+    p.ell(x, y + 22, 90, 20, (100, 62, 38), INK, 2.2)
+    p.ell(x, y - 10, 90, 20, (136, 88, 54), INK, 2.2)
+
+
+def gavel(p, x, y, ang, s=1.0):
+    """A gavel: a barrel head with two pale bands, a turned handle; (x, y) the head's middle, ang the handle's
+    direction (radians, 0 = to the left)."""
+    c, si = math.cos(ang), math.sin(ang)
+    hx, hy = x - 150 * s * c, y + 150 * s * si
+    p.line([(x, y), (hx, hy)], (120, 76, 44), 12 * s)
+    p.line([(x, y), (hx, hy)], INK, 1.4)
+    p.ell(hx, hy, 9 * s, 9 * s, (120, 76, 44), INK, 1.4)
+    k = lambda u, v: (x + u * s * si + v * s * c, y + u * s * c - v * s * si)      # u along the head, v across
+    p.poly([k(-56, -24), k(56, -24), k(56, 24), k(-56, 24)], (110, 66, 40), INK, 2.2)
+    for u in (-40, 40):
+        p.poly([k(u - 5, -25), k(u + 5, -25), k(u + 5, 25), k(u - 5, 25)], (200, 170, 110), INK, 1.2)
+    p.poly([k(-62, -20), k(-56, -20), k(-56, 20), k(-62, 20)], (90, 54, 32), INK, 1.4)
+    p.poly([k(56, -20), k(62, -20), k(62, 20), k(56, 20)], (90, 54, 32), INK, 1.4)
 
 
 def court_dock(img, cam, t=0.0):
@@ -392,6 +453,16 @@ def court_dock(img, cam, t=0.0):
         x = -60 + k * 180
         p.poly(quad(x, 1270, x + 170, 1330), OAK_D, INK, 1.8)
     p.poly(quad(-300, 1330, W + 300, 2400), (176, 150, 116), None)                          # the dock's floor
+
+
+def court_dock_mid(img, cam, t=0.0):
+    """The dock's back bench front, in front of the seated officers' legs, behind Brand."""
+    p = B.Pen(img, cam)
+    p.poly(wob(quad(-300, 1300, W + 300, 1760), 1.2, 43), OAK_D, INK, 2.6)
+    p.poly(quad(-300, 1290, W + 300, 1312), OAK_L, INK, 2.0)
+    for k in range(6):
+        x = -40 + k * 200
+        p.poly(quad(x, 1340, x + 170, 1530), mix(OAK, OAK_D, 0.5), INK, 1.4)
 
 
 def court_dock_front(img, cam, t=0.0):
@@ -458,8 +529,8 @@ def van(img, cam, t=0.0):
     p.poly(win, None, INK, 2.6)
     p.line([(990, 390), (990, 700)], (60, 64, 70), 3.0)                                     # the bars in it
     # the moulded seat across the back
-    p.poly(wob(quad(150, 1180, 930, 1290), 1.2, 61), mix(VAN_W, VAN_D, 0.5), INK, 2.6)
-    p.poly([(150, 1290), (930, 1290), (980, 1600), (100, 1600)], dk(VAN_W, 0.78), INK, 2.4)
+    p.poly(wob(quad(150, 1150, 930, 1330), 1.2, 61), mix(VAN_W, VAN_D, 0.5), INK, 2.6)
+    p.poly([(150, 1330), (930, 1330), (960, 1560), (120, 1560)], dk(VAN_W, 0.78), INK, 2.4)
     p.poly([(-300, 2400), (100, 1600), (980, 1600), (W + 300, 2400)], (84, 88, 96), INK, 2.4)   # the floor
     for k in range(6):                                                                     # its ribbed rubber
         u = k / 6
@@ -467,11 +538,23 @@ def van(img, cam, t=0.0):
 
 
 def van_front(img, cam, t=0.0):
-    """Dim cold light over everyone in the van, and the window's passing lights sweeping over them."""
+    """Dim cold light over everyone in the van, the window's passing lights sweeping over them, and the cubicle's
+    open steel door frame round the lens (the door leaf on the right with its mesh hatch)."""
     lay = Image.new('RGBA', img.size, (30, 40, 70, 60))
     img.alpha_composite(lay)
     u = (t / 1.6) % 1.0
     soft(img, cam, (900 - 700 * u, 300, 1300 - 700 * u, 1500), (240, 210, 150), 0.10, 120)
+    p = B.Pen(img, cam)
+    p.poly(quad(-300, -400, 40, 2400), (120, 126, 134), INK, 3.0)                           # the frame, left
+    p.poly(quad(-300, -400, W + 300, -40), (120, 126, 134), INK, 3.0)                       # and top
+    p.poly([(1010, -40), (W + 300, -400), (W + 300, 2400), (1010, 2100)], (138, 144, 152), INK, 3.0)  # the door leaf
+    p.poly([(1030, 500), (W + 300, 440), (W + 300, 820), (1030, 800)], (60, 64, 70), INK, 2.4)        # its hatch
+    for k in range(7):
+        y = 520 + 42 * k
+        p.line([(1030, y), (W + 300, y - 8)], (110, 116, 124), 1.6)
+    for k in range(4):
+        p.line([(1050 + 18 * k, 500), (1050 + 18 * k, 800)], (110, 116, 124), 1.6)
+    p.ell(1060, 1200, 14, 30, (90, 96, 104), INK, 1.6)                                      # the lock
 
 
 # ================================================================================================ the prison
@@ -579,10 +662,18 @@ def phone(img, cam, t=0.0):
         p.line([(860 + 24 * k, 1200), (880 + 24 * k, 1700)], (170, 170, 168), 1.0)
         p.line([(860, 1200 + 50 * k), (W + 300, 1210 + 50 * k)], (170, 170, 168), 1.0)
     p.poly(quad(840, -400, 880, 2400), (60, 120, 160), INK, 2.2)                            # the railing post
+    for y in (1080, 1180):                                                                  # its handrails
+        p.poly(quad(860, y, W + 300, y + 22), (60, 120, 160), INK, 2.0)
+    for k in range(5):                                                                      # balusters
+        x = 900 + 46 * k
+        p.line([(x, 1100), (x, 1400)], (60, 120, 160), 5.0)
     # the hood, the phone, its cord, the notices (all PHONE_DY lower: beside his head)
     p = B.Pen(img, B.Local(cam, 0, PHONE_DY, 1.0))
-    p.poly([(250, 380), (760, 380), (800, 1040), (210, 1040)], (60, 96, 150), INK, 3.0)     # the acoustic hood
-    p.poly([(280, 410), (730, 410), (764, 1010), (246, 1010)], (220, 220, 214), None)
+    p.poly(quad(250, 380, 760, 1040), (214, 214, 208), INK, 2.4)                            # the hood's back
+    p.poly([(250, 380), (180, 300), (180, 1120), (250, 1040)], (50, 84, 136), INK, 2.8)      # its side cheeks, coming
+    p.poly([(760, 380), (830, 300), (830, 1120), (760, 1040)], (60, 96, 150), INK, 2.8)      # out towards us
+    p.poly([(180, 300), (830, 300), (760, 380), (250, 380)], (44, 76, 126), INK, 2.8)        # its canopy
+    p.poly(quad(250, 380, 760, 430), (180, 180, 176), None)                                 # the shadow under it
     for k in range(9):                                                                     # its perforations
         for j in range(5):
             p.ell(300 + k * 50, 450 + j * 120, 3, 3, (186, 186, 180), None)
@@ -594,8 +685,8 @@ def phone(img, cam, t=0.0):
     p.poly(quad(400, 540, 430, 760), (40, 40, 44), INK, 1.6)                                 # the handset cradle
     p.poly(quad(500, 860, 520, 900), (150, 156, 160), INK, 1.4)                              # where the cord leaves
     sign(img, cam, 'PIN PHONE', 510, 486 + PHONE_DY, 150, (40, 40, 44))
-    for k, (x, y, w_, h_, c, txt) in enumerate(((10, 440, 190, 300, (250, 250, 246), 'NOTICE'),
-                                                 (20, 830, 180, 250, (250, 236, 120), 'SAMARITANS'),
+    for k, (x, y, w_, h_, c, txt) in enumerate(((-40, 440, 190, 300, (250, 250, 246), 'NOTICE'),
+                                                 (-30, 830, 180, 250, (250, 236, 120), 'SAMARITANS'),
                                                  (820, 440, 60, 90, (246, 246, 246), ''))):
         p.poly(wob(quad(x, y, x + w_, y + h_), 1.0, 70 + k), c, INK, 1.6)
         if txt:
@@ -619,10 +710,21 @@ def tvroom(img, cam, t=0.0):
     bricks(p, (-300, -400, W + 300, 1240), TV_CREAM, 99, cw=60, ch=26, n=50, lw=0.9)
     p.poly(quad(-300, 1000, W + 300, 1240), TV_GREEN, INK, 2.2)                              # the green dado
     p.poly(quad(-300, 990, W + 300, 1006), dk(TV_GREEN, 0.7), INK, 1.4)
-    window(p, (90, 420, 330, 760), (90, 96, 104), (40, 52, 90), 11, bars=4, lw=2.4)         # night outside
-    p.poly(quad(700, 360, 1000, 600), (160, 120, 80), INK, 2.0)                              # the noticeboard
-    for k, (x, y) in enumerate(((720, 380), (800, 400), (880, 376), (760, 480), (870, 490))):
-        p.poly(quad(x, y, x + 64, y + 80), (246, 246, 238) if k % 2 else (240, 228, 150), INK, 1.0)
+    for k in range(3):                                                                     # a high strip of small
+        x = 40 + 130 * k                                                                   # barred windows, night
+        window(p, (x, 260, x + 100, 380), (90, 96, 104), (40, 52, 90), 11 + k, bars=3, lw=2.0)
+    p.poly(quad(720, 380, 1000, 420), (120, 84, 56), INK, 2.0)                              # the cue rack
+    for k in range(6):
+        x = 740 + 44 * k
+        p.line([(x, 400), (x + 6, 900)], (196, 160, 110), 6.0)
+        p.line([(x, 400), (x + 6, 900)], INK, 1.0)
+        p.ell(x, 398, 5, 5, (60, 60, 120), INK, 1.0)
+    p.poly(quad(720, 880, 1000, 910), (120, 84, 56), INK, 2.0)
+    p.ell(220, 620, 60, 60, (240, 238, 230), INK, 2.4)                                      # a caged wall clock
+    p.line([(220, 620), (220, 584)], INK, 2.6)
+    p.line([(220, 620), (248, 628)], INK, 2.6)
+    for k in range(5):
+        p.line([(160 + 30 * k, 562), (160 + 30 * k, 678)], (90, 96, 104), 1.6)
     p.poly(quad(420, 470, 600, 1240), (110, 112, 116), INK, 2.4)                             # the door
     p.poly(quad(450, 520, 570, 700), (60, 70, 86), INK, 1.6)                                 # its wired glass
     for k in range(6):
@@ -637,8 +739,8 @@ def tvroom(img, cam, t=0.0):
     p.poly(quad(600, 1210, 1080, 1260), (90, 60, 40), INK, 2.0)
     for x in (630, 1050):
         p.poly(quad(x - 10, 1260, x + 10, 1320), (90, 60, 40), INK, 1.6)
-    p.line([(840, -400), (840, 880)], (40, 40, 44), 2.0)
-    p.poly([(770, 880), (910, 880), (940, 940), (740, 940)], (40, 70, 50), INK, 2.0)
+    p.line([(840, 940), (840, 1000)], (40, 40, 44), 2.0)
+    p.poly([(770, 1000), (910, 1000), (940, 1050), (740, 1050)], (40, 70, 50), INK, 2.0)
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
     # rows of moulded plastic chairs (the seated men are cast: the film draws them on these)
@@ -661,9 +763,9 @@ def tv_flicker(img, cam, t, strength=1.0):
     picture cuts (a fixed, irregular pattern; never a smooth pulse)."""
     r = random.Random(int(t * 4))
     k = strength * (0.55 + 0.45 * r.random())
-    lay = Image.new('RGBA', img.size, (14, 18, 40, int(110 * strength)))
+    lay = Image.new('RGBA', img.size, (10, 14, 34, int(120 * strength)))
     img.alpha_composite(lay)
-    soft(img, cam, (-200, -300, 1280, 1500), (150, 180, 255), 0.22 * k, 260)
+    soft(img, cam, (-100, 600, 1180, 1500), (170, 200, 255), 0.30 * k, 220)                # the glow on their faces
 
 
 def tv(img, cam, t=0.0, feed=None):
@@ -707,7 +809,7 @@ def studio_feed(t=0.0, reader=None, size=(960, 540)):
         people = [(px, pz + 0.05, lambda im, c: ND.put_seated(im, c, reader, px, pz, 180.0, t))]
     ND.render(img, cm, people)
     B.SS = keep
-    y0 = 960 - 300
+    y0 = 960 - 200
     crop = img.crop((0, y0, 1080, y0 + 608)).resize(size, Image.LANCZOS)
     a = np.asarray(crop).astype(np.int16).copy()                 # the studio's remaining blues (the swirl, the
     r, g, b = a[..., 0], a[..., 1], a[..., 2]                    # newsroom screens) turned BBC red
@@ -790,6 +892,13 @@ def gates(img, cam, t=0.0):
         a, b = L.p(x0, d, 15.5), L.p(x1, d, 0)
         bricks(p, (a[0], a[1], b[0], b[1]), SOOT, 20 + sx, cw=12, ch=5, n=150, lw=0.6)
         p.poly(face(L, x0 - 0.2, x1 + 0.2, d - 0.05, 14.7, 15.5), STONE, INK, 2.2)          # the cornice
+        for xq in (x0, x1 - 0.35):                                                          # stone quoins
+            for zq in np.arange(0.8, 14.6, 0.7):
+                w_ = 0.35 if int(zq / 0.7) % 2 else 0.5
+                xs = xq if xq == x0 else x1 - w_
+                p.poly(face(L, xs, xs + w_, d - 0.03, zq, zq + 0.6), STONE, INK, 1.0)
+        for xb in np.arange(x0 - 0.1, x1, 0.55):                                            # the parapet's blocks
+            p.poly(face(L, xb, xb + 0.35, d - 0.05, 15.5, 16.1), STONE, INK, 1.6)
         p.poly(face(L, x0 - 0.1, x1 + 0.1, d - 0.05, 0, 0.8), STONE, INK, 2.0)              # the plinth
         for zb in (3.4, 7.6, 11.2):                                                         # the arched windows
             xc = (x0 + x1) / 2
@@ -828,9 +937,16 @@ def gates(img, cam, t=0.0):
     for z in (1.2, 3.6):                                                                    # iron straps, studs
         y = L.p(0, d + 0.38, z)[1]
         p.line([(a[0] + 4, y), (b[0] - 4, y)], (50, 46, 44), 3.0)
+    for k in range(1, 6):                                                                    # the grille in the
+        u = math.pi * k / 6                                                                  # arch's top
+        p.line([(a[0] + r_, spring), (a[0] + r_ + r_ * 0.96 * math.cos(u), spring - r_ * 0.96 * math.sin(u))],
+               (40, 36, 34), 2.4)
+    p.line([(a[0], spring), (b[0], spring)], (40, 36, 34), 3.0)
     wx0, wx1 = L.p(0.15, d + 0.37, 2.1), L.p(1.15, d + 0.37, 0)
-    p.poly(quad(wx0[0], wx0[1], wx1[0], wx1[1]), dk(TIMBER, 0.86), INK, 2.4)                 # the wicket door
-    p.ell(wx1[0] - 10, (wx0[1] + wx1[1]) / 2, 4, 4, (180, 170, 140), INK, 1.0)
+    p.poly(quad(wx0[0], wx0[1], wx1[0], wx1[1]), (24, 22, 22), INK, 2.4)                     # the wicket door, open:
+    p.poly(quad(wx0[0] + 4, wx1[1] - 26, wx1[0] - 4, wx1[1]), (70, 66, 60), None)            # the yard beyond
+    p.poly([(wx1[0], wx0[1]), (wx1[0] + 22, wx0[1] + 10), (wx1[0] + 22, wx1[1] + 4), (wx1[0], wx1[1])],
+           dk(TIMBER, 0.86), INK, 2.2)                                                       # its leaf, swung out
     # the sign on the wall, left (ref 20), the forecourt, a bollard, a kerb
     a, b = L.p(-10.4, d + 2.9, 3.2), L.p(-6.6, d + 2.9, 1.6)
     p.poly(quad(a[0], a[1], b[0], b[1]), (250, 250, 248), INK, 2.0)
@@ -861,16 +977,16 @@ def _mark(L, x, d):
 STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); the shots take these
     'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': [(-1.15, 2.5), (-0.45, 2.3), (0.35, 2.45), (1.1, 2.35),
                                                            (1.7, 2.7), (-1.75, 2.8), (-0.8, 3.1), (0.95, 3.2)]},
-    'court_box': {'brand': (730, 2140, 520.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
+    'court_box': {'brand': (720, 2240, 600.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
     'court_bench': {'judge': (540, 1780, 620.0)},
-    'court_dock': {'brand': (560, 2240, 600.0), 'guard1': (190, 1400, 300.0), 'guard2': (900, 1400, 300.0)},
+    'court_dock': {'brand': (560, 2240, 600.0), 'guard1': (170, 1540, 400.0), 'guard2': (910, 1540, 400.0)},
     'van': {'brand': (540, 1600, 760.0)},                                        # seated, bent over
-    'cell': {'brand': (760, 1820, 520.0), 'officer': (990, 1760, 500.0)},
+    'cell': {'brand': (640, 1820, 520.0), 'officer': (880, 1700, 480.0)},
     'cell_cot': {'brand': (230, 1700, 560.0)},
-    'phone': {'brand': (520, 2500, 820.0)},
+    'phone': {'brand': (730, 2500, 820.0)},
     'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 600.0), 'inmate2': (870, 1560, 600.0),
                'inmate3': (60, 1560, 560.0)},
-    'gates': {'brand': _mark(GATE, 0.6, 4.6), 'press': [(-1.2, 2.3), (-0.4, 2.15), (0.45, 2.4), (1.25, 2.25),
+    'gates': {'brand': _mark(GATE, 0.6, 4.6), 'press': [(-1.2, 2.3), (-0.4, 2.15), (-0.05, 2.45), (1.35, 2.25),
                                                          (1.85, 2.6), (-1.85, 2.7), (-0.9, 3.0), (1.0, 3.1)]},
 }
 CAMS = {   # a camera on a painting: (view, zoom, centre x, centre y). cell_cot is the cell painting, closer.
@@ -890,15 +1006,17 @@ def _out_boxes(off):
                                         for i, v in enumerate(_box_from(face(L, x0, x1, d, z0, z1))))
     return [('court_out sign band', b(-2.3, 5.3, FACADE_D - 0.7, PLAZA_Z + 2.75, PLAZA_Z + 3.55)),
             ('court_out lamp post', b(-3.95, -3.85, 8.5, 0, 8.0)),
-            ('court_out left tree', b(-7.7, -7.5, 12.5, 0, 7.5)),
-            ('court_out right tree', b(8.1, 8.3, 13.0, 0, 7.5))]
+            ('court_out left tree', b(-5.5, -5.3, 12.5, 0, 7.5)),
+            ('court_out right tree', b(6.5, 6.7, 13.0, 0, 7.5))]
 
 
 SET_BOXES = _out_boxes(0) + [
     ('court_box arms', (300 - 124 + 4000, 360 - 210, 300 + 124 + 4000, 360 + 190)),
     ('court_box chair', (130 + 4000, 640, 470 + 4000, 1080)),
     ('court_box bench', (-120 + 4000, 1004, 760 + 4000, 1300)),
-    ('court_box witness box', (452 + 4000, 1648, 1080 + 4000, 1920)),
+    ('court_box witness box', (386 + 4000, 1478, 1080 + 4000, 1920)),
+    ('court_box clock', (790 + 4000, 260, 930 + 4000, 400)),
+    ('court_box door', (700 + 4000, 620, 1000 + 4000, 1250)),
     ('cell window', (440 + 8000, 420, 670 + 8000, 656)),
     ('cell pinboard', (500 + 8000, 700, 690 + 8000, 840)),
     ('cell desk', (470 + 8000, 858, 700 + 8000, 1060)),
@@ -906,15 +1024,16 @@ SET_BOXES = _out_boxes(0) + [
     ('cell toilet', (730 + 8000, 1178, 850 + 8000, 1262)),
     ('cell bed', (-300 + 8000, 1110, 380 + 8000, 1800)),
     ('cell door', (890 + 8000, 470, 1140 + 8000, 1800)),
-    ('phone hood', (210 + 12000, 380 + PHONE_DY, 800 + 12000, 1040 + PHONE_DY)),
-    ('phone notice', (10 + 12000, 440 + PHONE_DY, 200 + 12000, 740 + PHONE_DY)),
-    ('phone samaritans', (20 + 12000, 830 + PHONE_DY, 200 + 12000, 1080 + PHONE_DY)),
+    ('phone hood', (180 + 12000, 300 + PHONE_DY, 830 + 12000, 1120 + PHONE_DY)),
+    ('phone notice', (-40 + 12000, 440 + PHONE_DY, 150 + 12000, 740 + PHONE_DY)),
+    ('phone samaritans', (-30 + 12000, 830 + PHONE_DY, 150 + 12000, 1080 + PHONE_DY)),
     ('phone railing', (840 + 12000, -400, 880 + 12000, 2400)),
-    ('tvroom window', (90 + 16000, 420, 330 + 16000, 770)),
+    ('tvroom windows', (40 + 16000, 260, 400 + 16000, 390)),
+    ('tvroom clock', (160 + 16000, 560, 280 + 16000, 680)),
     ('tvroom door', (420 + 16000, 470, 600 + 16000, 1240)),
-    ('tvroom noticeboard', (700 + 16000, 360, 1000 + 16000, 600)),
+    ('tvroom cue rack', (720 + 16000, 380, 1000 + 16000, 910)),
     ('tvroom pool table', (600 + 16000, 1120, 1080 + 16000, 1320)),
-    ('tvroom pool lamp', (740 + 16000, 880, 940 + 16000, 940)),
+    ('tvroom pool lamp', (740 + 16000, 1000, 940 + 16000, 1050)),
 ]
 SET_MEANT = [
     ('court_box chair', 'court_box bench', 'the bench stands in front of the judge\'s chair'),
@@ -924,6 +1043,7 @@ SET_MEANT = [
     ('cell bed', 'cell door', 'never: (the bed is on the left wall, the door on the right)'),
     ('tvroom door', 'tvroom pool lamp', 'never'),
     ('tvroom pool table', 'tvroom pool lamp', 'the lamp hangs over the table'),
+    ('tvroom cue rack', 'tvroom pool lamp', 'the lamp hangs 3 m nearer than the rack on the back wall'),
     ('phone railing', 'phone hood', 'never'),
 ]
 SET_MEANT = [m for m in SET_MEANT if not m[2].startswith('never')]
@@ -981,10 +1101,11 @@ BENCHMARK = [
     dict(place='Prison gates', refs=['18-gate-wandsworth-sky.jpg', '20-gate-wandsworth-sign-bbc.jpg',
                                      '19-gate-release-guardian.jpg'], at='gates',
          items=[('Victorian gatehouse in dark sooty brick', 'done'),
-                ('two square towers either side', 'done: with cornices and plinths'),
+                ('two square towers either side', 'done: cornices, quoins, parapet blocks, plinths'),
                 ('tall round arch with a stone ring', 'done: voussoirs'),
                 ('timber double gate filling the arch', 'done: planks, iron straps'),
-                ('small wicket door cut in the gate (he steps out of it)', 'done: right leaf'),
+                ('small wicket door cut in the gate (he steps out of it)', 'done: right leaf, open'),
+                ('an iron grille in the arch\'s top', 'done'),
                 ('arched barred windows with stone dressings', 'done: three per tower'),
                 ('the long brick wall running off both ways', 'done'),
                 ('white "HM Prison" sign on the wall', 'done: neutral, no prison named'),
@@ -1002,8 +1123,8 @@ BENCHMARK = [
          items=[('dim association room, two-tone walls', 'done: green dado, cream above; no photo (Sam\'s list)'),
                 ('moulded plastic chairs in a row', 'done: four'),
                 ('a pool table under its lamp', 'done'),
-                ('barred window, dark outside', 'done'),
-                ('noticeboard, a door with wired glass', 'done'),
+                ('high barred windows, dark outside', 'done: a strip of three'),
+                ('a cue rack, a caged clock, a door with wired glass', 'done'),
                 ('the TV high on a bracket (the reverse shot)', 'done: tv()'),
                 ('TV light flickering over everyone', 'done: tv_flicker, a jumping level'),
                 ('the BBC-style news on the screen', 'done: studio_feed')]),
@@ -1015,7 +1136,7 @@ VIEWS = ('court_out', 'court_box', 'court_bench', 'court_dock', 'van', 'cell', '
          'gates')
 BACK = {'court_out': court_out, 'court_box': court_box, 'court_bench': court_bench, 'court_dock': court_dock,
         'van': van, 'cell': cell, 'phone': phone, 'tvroom': tvroom, 'gates': gates}
-MID = {'court_box': court_box_mid}
+MID = {'court_box': court_box_mid, 'court_dock': court_dock_mid}
 FRONT = {'court_box': court_box_front, 'court_bench': court_bench_front, 'court_dock': court_dock_front,
          'van': van_front, 'tvroom': lambda img, cam, t: tv_flicker(img, cam, t)}
 

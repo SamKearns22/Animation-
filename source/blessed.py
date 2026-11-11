@@ -36,6 +36,7 @@ import press_secretary as PS     # noqa: E402  the press pack from behind
 import views as V                # noqa: E402
 import moves                     # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
+from ed import INK               # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
@@ -195,8 +196,43 @@ def press(img, cam, L, spots, t, seed=0):
                             jacket=PRESS_JKT[(i * 3 + seed) % 7], skin=[B.PALE, B.PINK, B.OLIVE, B.BROWN][i % 4],
                             style=PRESS_STYLE[(i + 2 * seed) % 8], hand=False, side=1, up_at=0.0,
                             seed=int(rng.integers(1e6)), empty=False, phone=False, pad=i % 3 == 1, typing=False)))
-    for d, r in sorted(out, key=lambda q: -q[0]):
+    for i, (d, r) in enumerate(sorted(out, key=lambda q: -q[0])):
+        kit = PRESS_KIT[(i + seed) % len(PRESS_KIT)]
+        if kit == 'boom':
+            _boom(img, cam, r, t)                          # the pole rises from hands hidden in front of him
         PS.reporter(img, cam, r, t)
+        if kit == 'tv':
+            _tv_camera(img, cam, r)
+
+
+PRESS_KIT = ['tv', 'pad', 'boom', 'none', 'tv', 'pad', 'none', 'boom']
+
+
+def _tv_camera(img, cam, r):
+    """A TV camera on the right shoulder, seen from behind: the body beside the head, the battery on its back,
+    the carry handle, the lens hood just showing past it (O3: the press must read as press)."""
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    p.poly([(56, -150), (250, -160), (256, -30), (60, -24)], (44, 46, 52), INK, 2.6)
+    p.poly([(70, -132), (150, -136), (150, -44), (72, -40)], (24, 24, 28), INK, 1.8)         # the battery
+    p.poly([(110, -186), (220, -190), (224, -160), (114, -156)], (60, 62, 68), INK, 2.0)     # the handle
+    p.poly([(180, -176), (196, -176), (196, -150), (180, -150)], (60, 62, 68), None)
+    p.ell(236, -96, 28, 34, (30, 30, 34), INK, 2.0)                                          # the lens hood
+    p.ell(176, -60, 8, 8, (200, 40, 40), None)                                               # the tally light
+
+
+def _boom(img, cam, r, t):
+    """A boom microphone held up over the scrum: the pole from his hands (in front of him, hidden) up and forward,
+    the furry grey windshield at its tip."""
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    sw = 1.0 + 0.02 * math.sin(t * 1.7 + r['seed'] % 7)
+    tip = (-60 * sw, -640)
+    p.line([(30, 60), tip], (70, 72, 78), 9)
+    p.line([(30, 60), tip], INK, 1.2)
+    p.ell(tip[0] - 10, tip[1] - 30, 46, 82, (150, 150, 146), INK, 2.4, rot=0.2)
+    for k in range(10):
+        a = 2 * math.pi * k / 10
+        p.line([(tip[0] - 10 + 44 * math.cos(a), tip[1] - 30 + 80 * math.sin(a)),
+                (tip[0] - 10 + 54 * math.cos(a), tip[1] - 30 + 92 * math.sin(a))], (150, 150, 146), 3.0)
 
 
 # ---------------------------------------------------------------------------------------------- faces and moods
@@ -254,15 +290,16 @@ def draw_people(img, cam, shot, t):
         sj = _s(BC.JUDGE, ppm)
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), (x, y, ppm), t)
         ST.mid(view, img, cam, t)
-        put(img, cam, brand_sp(t, 'stand'), st['brand'], t, yaw=-90)
+        put(img, cam, brand_sp(t, 'stand'), st['brand'], t, yaw=-45)
     elif shot == 'gavel':
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), st['judge'], t)
     elif shot == 'dock':
         for g in ('guard1', 'guard2'):
             put_seated(img, cam, dict(BC.OFFICER, **face('officer', t, 'neutral')), st[g], t)
+        ST.mid(view, img, cam, t)
         put(img, cam, brand_sp(t, 'dock'), st['brand'], t)
     elif shot == 'van':
-        put_seated(img, cam, brand_sp(t, 'prison'), st['brand'], t)
+        put_seated(img, cam, brand_sp(t, 'prison'), st['brand'], t, yaw=35)
     elif shot == 'escort':
         put(img, cam, brand_sp(t, 'prison'), st['brand'], t, yaw=-30)
         put(img, cam, dict(BC.OFFICER, **face('officer', t, 'neutral')), st['officer'], t, yaw=-45)
@@ -270,14 +307,56 @@ def draw_people(img, cam, shot, t):
         put_seated(img, cam, brand_sp(t, 'prison'), ST.STAGE['cell_cot']['brand'], t, yaw=30)
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
-        put(img, cam, sp, st['brand'], t, yaw=-45, j=moves.pose(sp, 'phone_ear'))
+        pts = put(img, cam, sp, st['brand'], t, yaw=-45, j=handset_pose(sp))
+        phone_cord(img, cam, pts, st['brand'], sp)
     elif shot in ('tvroom', 'push'):
+        up = dict(gaze_dy=-0.7)                    # everyone watches the TV, high above the lens
         for w in ('inmate3', 'inmate1', 'inmate2'):
-            put_seated(img, cam, dict(CAST[w], **face(w, t, 'neutral')), st[w], t)
-        put_seated(img, cam, brand_sp(t, 'prison'), st['brand'], t)
+            put_seated(img, cam, dict(CAST[w], **face(w, t, 'neutral', **up)), st[w], t)
+        sp = brand_sp(t, 'prison')
+        if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
+            sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
+        else:
+            sp['gaze_dy'] = -0.7
+        put_seated(img, cam, sp, st['brand'], t)
     elif shot == 'gates':
         put(img, cam, brand_sp(t, 'trial'), st['brand'], t)
         press(img, cam, ST.GATE, st['press'], t, seed=3)
+
+
+def handset_pose(sp, side='L'):
+    """The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
+    drawn mirrored, so 'L' is the side nearer us); the cord is drawn by phone_cord."""
+    j = V.standing(sp)
+    sg = 1 if side == 'R' else -1
+    hw = sp.get('hw', 70)
+    V.arm_to(j, side, (sg * (hw + 22), -96.0, 12.0), (1.0, 0.35, 0.6), 'grip')
+    top, bot = (-176.0, -40.0), (-60.0, 24.0)
+    ay, az = bot[0] - top[0], bot[1] - top[1]
+    n = math.hypot(ay, az)
+    wy, wz = -az / n * 24, ay / n * 24
+    box = [(sg * x, y + k * wy, z + k * wz) for x in (hw + 2, hw + 22) for y, z in (top, bot) for k in (-1, 1)]
+
+    def draw(p, j2):
+        pts = [V.project(V.leaned(q, j2.get('lean', 0.0)), j2['yaw'])[0] for q in box]
+        p.poly(V._hull(pts), (176, 182, 188), INK, 2.4)              # brushed steel, chunkier than a mobile
+    import grips
+    return grips.held(j, side, sp, draw)
+
+
+def phone_cord(img, cam, pts, mark, sp, side='L'):
+    """The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
+    Facing left he is drawn mirrored: screen x = mark x - s * x."""
+    from ed import open_curve
+    x0, y0, ppm = mark
+    s = _s(sp, ppm)
+    wx, wy = pts['wr' + side]
+    a = (x0 - s * wx, y0 - 928 * s + s * (wy + 70))
+    b = ST.PHONE_CORD
+    cord = open_curve([a, ((a[0] + b[0]) / 2, max(a[1], b[1]) + 160), b], 8)
+    p = B.Pen(img, cam)
+    p.line(cord, (150, 156, 162), 7.0)
+    p.line(cord, INK, 1.0)
 
 
 def picture(t):
@@ -288,7 +367,7 @@ def picture(t):
     img = B.canvas((0, 0, 0))
     feed = ST.studio_feed(t, dict(BC.NEWSREADER, **face('newsreader', t, 'neutral'))) if view == 'tv' else None
     ST.back(view, img, cam, t, feed)
-    if view != 'court_box':
+    if view not in ('court_box', 'court_dock'):     # those two put the mid layer between their people
         ST.mid(view, img, cam, t)
     draw_people(img, cam, shot, t)
     ST.front(view, img, cam, t)
