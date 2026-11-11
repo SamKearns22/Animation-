@@ -134,10 +134,5 @@ No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sa
   (the person, place or news story), said as checked or unchecked. No #animation, #fyp or joke tags, none that give
   away the twist. Sam names the news story with each screenplay (recorded in the brief checklist). Evidence:
   `research/tiktok-posting-research.md` section 7; why (views log): `story/metrics.md`.
-- **Niche tag test (Sam, 11 Nov: Y):** one of the five is `#satire` on every film for the next 4-5 posts, the other four
-  are story tags (at least three about the person, place or news story). It is a test, not proven: the evidence that a fixed
-  tag teaches the algorithm a niche is vendor claims only (research file section 7). After 4-5 posts compare views and
-  followers per 1,000 views with the posts before (`story/metrics.md`); if nothing moves, back to five story tags.
-  `#UKcomedy` is the alternative if Sam's analytics show a mostly UK audience.
 - Reply to comments in the first hour. Keep the next video ready within 24-48 hours.
 - X gets the original widescreen version.
