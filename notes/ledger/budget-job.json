@@ -19,8 +19,8 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 0.5
+   "model": "fable",
+   "cost": 1.13
   }
  ],
  "checks": {}
