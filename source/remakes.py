@@ -1147,7 +1147,7 @@ def s9_horrible(t):
     return _close(bg, t, 'horror', debris=debris)
 
 
-LINEUP_Z, LINEUP_C = 1.55, (715, 1110)   # critique r3: still small at phone size
+LINEUP_Z, LINEUP_C = 1.24, (715, 1110)   # critique r3: 1.55; note 71 (Sam): 25% further out
 
 
 def s10_square(t):
