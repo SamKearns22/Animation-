@@ -2130,7 +2130,7 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_close': {'link': (540, 2300, 1100.0)},            # a close-up: his feet well below the frame
     'forest_edge': {'gunman': (140, 2950, 1250.0)},       # pass 3: a close-up (he was small, lower left); left
                                                           # so his muzzle stays in frame
-    'camp': {'kg': _camp_mark(0.0, 4.6), 'link': _camp_mark(-0.95, 5.2), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
+    'camp': {'kg': _camp_mark(0.0, 4.6), 'link': _camp_mark(-1.25, 5.0), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
              'gunman2': _camp_mark(1.2, 4.2), 'gunman3': _camp_mark(-0.95, 3.3)},   # note 32 (Sam): nobody behind
                                                                     # KG. He comes in through the gate; the lookout is
                                                                     # up in the tower, one man runs in lower left
@@ -2142,7 +2142,7 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'town_wall': {'link': (400, WALL_VIEW['base'], WALL_VIEW['ppm']),       # on the cobbles: the shot lifts him
                   'kg': (720, WALL_VIEW['base'], WALL_VIEW['ppm'])},      # pass 2: closer, not cut by the edge
 }
-CAMP_MARKS = {'kg': (0.0, 4.6), 'link': (-0.95, 5.2)}   # the same marks in metres (x, depth), for the moves
+CAMP_MARKS = {'kg': (0.0, 4.6), 'link': (-1.25, 5.0)}   # the same marks in metres (x, depth), for the moves
 STAGE['camp_open'] = dict(STAGE['camp'])               # S8-S9: the same yard, the gate blown in
 ON_HIGH = {('camp', 'gunman1'), ('camp_open', 'gunman1')}   # the tower lookout: no ground shadow
 STAGE['town_square']['kg'] = _town_mark(-0.88, 2.55)   # in front, below the line, presenting it (pass 2: whole)

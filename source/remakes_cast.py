@@ -174,7 +174,27 @@ class _Grown:
         return self.p.ell(x, y, rx * self.k, ry * self.k, *a, **kw)
 
 
-MOUTH_K = {'smug': 1.35, 'unsure': 1.5, 'horror': 1.6, 'deadpan': 1.45, 'sceptical': 1.35}   # Link 5: these must read on a phone
+class _Flip:
+    """Fable r3 #4: a pen that turns a talking shape upside down about cy, so the shared shapes (drawn as happy D's)
+    talk with the corners pulled down and the lower teeth showing on an unhappy line."""
+    def __init__(self, p, cy):
+        self.p, self.cy = p, cy
+
+    def _q(self, pts):
+        return [(x, 2 * self.cy - y) for x, y in pts]
+
+    def poly(self, pts, *a, **kw):
+        return self.p.poly(self._q(pts), *a, **kw)
+
+    def line(self, pts, *a, **kw):
+        return self.p.line(self._q(pts), *a, **kw)
+
+    def ell(self, cx, cy, rx, ry, *a, **kw):
+        return self.p.ell(cx, 2 * self.cy - cy, rx, ry, *a, **kw)
+
+
+UNHAPPY = {'doubt', 'doubtful', 'sceptical', 'unsure', 'aghast', 'wince', 'horror', 'deadpan', 'terrified'}
+MOUTH_K = {'smug': 1.35, 'unsure': 1.5, 'doubt': 1.4, 'horror': 1.6, 'deadpan': 1.45, 'sceptical': 1.35}   # Link 5: these must read on a phone
 
 
 def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
@@ -185,6 +205,8 @@ def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
     if isinstance(m, str) and m.startswith('v:') and m != 'v:rest':
         if sp.get('mouth_k'):                                         # Remakes note 53: fuller talking shapes
             p = _Grown(p, fx, my, sp['mouth_k'])
+        if mood in UNHAPPY:                                           # Fable r3 #4: no happy grin on "go home"
+            p = _Flip(p, my + 8)
         mouths.draw(p, dict(sp, lips=False), fx, my, m[2:])
         return
     inside, teeth, tongue = (96, 34, 40), (250, 248, 244), (214, 104, 110)
@@ -237,6 +259,9 @@ def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
                INK, 3.6)                                              # wavering line hitched up at one corner: an
         p.line(open_curve([(fx + 22, my - 13), (fx + 28, my - 7), (fx + 25, my)], 4), INK, 2.4)   # awkward half-smile
         return                                                        # he doesn't mean
+    if mood == 'doubt':                                               # Fable r3 #8 ("Ok?"): lips pressed flat,
+        p.line(open_curve([(fx - 20, my + 2), (fx - 4, my + 3), (fx + 10, my + 4), (fx + 22, my + 9)], 4), INK, 3.6)
+        return                                                        # one corner dragged down: not a cat-smile
     if mood == 'deadpan':
         p.line([(fx - 18, my + 2), (fx + 14, my + 2), (fx + 20, my + 5)], INK, 3.6)
         return
@@ -257,7 +282,7 @@ MOODS = {   # child faces: lids, pupils, brows (inner, outer rise; one = a singl
                       wide=1.04),   # line 4: "Ok?" (note 31; Sam: "a look that conveys: uuuuuh, okay?"): bemused and
                     # uneasy, not hostile: one brow hiked high, the other tilted up at its inner end (worry), eyes
                     # wide and slid sideways at KG, head turned a little off, the mouth an awkward hitched line
-    'doubtful': dict(lid=(0.38, 0.38), brows=(-18, -18), brow_w=9.0, brow_len=46, mouth='unsure', look=0.45),   # note 58 (Sam,
+    'doubtful': dict(lid=(0.38, 0.38), brows=(-18, -18), brow_w=9.0, brow_len=46, mouth='doubt', look=0.45),   # note 58 (Sam,
                     # 11 Nov, replaces note 31's look; Sam: brows level, low, close over the eyes): head straight on, heavy flat brows (not
                     # arched or worried), lids a little heavy, eyes slid slightly aside: unsure, sceptical, doubtful
     'aghast': dict(pupil=0.55, brows=(22, 14), mouth='aghast', wide=1.12),         # line 6: "Oh my god!"

@@ -276,11 +276,31 @@ def _blob(cam, x, y, r, n=11, seed=0, bump=0.3):
     return pts
 
 
-def _flash(img, cam, x, y, r, seed=0):
-    """A flat lumpy flash, never a star: yellow round white."""
+def _flash(img, cam, x, y, r, seed=0, dirx=None, diry=0.0):
+    """A flat lumpy flash, never a star: yellow round white. With a direction (dirx, diry) it is a muzzle flash
+    (Fable r3 #26: not a round octagon floating off the gun): a flame cone out of the muzzle at (x, y), wide at
+    its mouth, ragged, with a short back-blast, its length flickering per frame."""
     d = ImageDraw.Draw(img)
-    d.polygon(_blob(cam, x, y, r, 12, seed), fill=(255, 196, 60), outline=INK)
-    d.polygon(_blob(cam, x, y, r * 0.6, 10, seed + 1), fill=(255, 244, 190))
+    if dirx is None:
+        d.polygon(_blob(cam, x, y, r, 12, seed), fill=(255, 196, 60), outline=INK)
+        d.polygon(_blob(cam, x, y, r * 0.6, 10, seed + 1), fill=(255, 244, 190))
+        return
+    n = math.hypot(dirx, diry) or 1.0
+    ux, uy = dirx / n, diry / n
+    px, py = -uy, ux
+    rng = np.random.default_rng(seed)
+    ln = r * (2.2 + 0.9 * rng.random())
+
+    def cone(k):
+        pts = [(x + px * r * 0.18 * k, y + py * r * 0.18 * k)]
+        for i, (f, w) in enumerate(((0.35, 0.55), (0.6, 0.95), (0.8, 0.6), (1.0, 0.0), (0.8, -0.6), (0.6, -0.95),
+                                    (0.35, -0.55))):
+            j = 1 + 0.25 * (rng.random() - 0.5)
+            pts.append((x + ux * ln * f * k * j + px * r * w * k, y + uy * ln * f * k * j + py * r * w * k))
+        pts.append((x - px * r * 0.18 * k, y - py * r * 0.18 * k))
+        return [cam.P(*q) for q in pts]
+    d.polygon(cone(1.0), fill=(255, 196, 60), outline=INK)
+    d.polygon(cone(0.55), fill=(255, 244, 190))
 
 
 def _splat(img, cam, x, y, r, seed=0):
@@ -417,8 +437,8 @@ def _explosion(img, cam, x, y, a, size, seed=0, planks=False, gy=None):
         else:
             d.polygon(_blob(cam, bx, by, size * 0.07 * near * (0.7 + 0.6 * rng.random()), 7, seed + 70 + i, 0.6),
                       fill=(122, 92, 60), outline=INK)
-    if a < 0.17:                                                      # the white-out: one frame hard, one soft
-        img.alpha_composite(Image.new('RGBA', img.size, (255, 250, 236, 200 if a < 0.083 else 80)))
+    if a < 0.17:                                                      # Fable r3 #21 (O6: no white flash): a warm
+        img.alpha_composite(Image.new('RGBA', img.size, (255, 170, 70, 70 if a < 0.083 else 30)))   # glow, not a white-out
 
 
 def _hit(img, cam, x, y, a, ppm, dirx, seed=0, ground=None):
@@ -742,7 +762,8 @@ def _scuttle_pose(tt, u):
         j['foot' + sd] = (fx * 1.5, fy - c, fz)                       # feet apart, a scuttle
     sw = sp['shoulders']
     for s_, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, s_, (sg * (sw + 10), -150.0, 40.0), 'down', 'palm')
+        V.arm_to(j, s_, (sg * (sw - 14), -98.0, 60.0), 'down', 'palm')   # Fable r3 #6: both palms on his ears,
+                                                                      # elbows out (the old target read as a salute)
     j['head_dy'] = 26
     return j, c
 
@@ -874,6 +895,10 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         ppm = C.ppm(d_)
         j, c = _scuttle_pose(t - SCUTTLE[0], u)
         k = RC.scale_for(RC.CAST['link'], RS.s_for(ppm))
+        if u >= 1.0:                                                  # Fable r3 #6: at his mark he cowers, not
+            duck = 1.0 if (INCOMING[0] <= t < INCOMING[1] and int(t * FPS) % 3 == 0) or firing else 0.0   # frozen:
+            c += 18 + 26 * duck                                       # trembling, ducking at each burst
+            sx += 3 * math.sin(t * 47)
         RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['link'])
         _kid(img, cam, 'link', sx, sy + c * k, ppm, t, 'aghast' if t < L[8]['start'] - 0.1 else 'wince', j=j)
         link_at = (sx, sy, ppm)
@@ -910,8 +935,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         for k_ in ('toeL', 'toeR'):
             j.pop(k_, None)
         gunman('gunman2', x, y + drop, ppm, -1, 1e9, j)
-        if INCOMING[0] <= t and int(t * FPS) % 2 == 0:               # he fires at them
-            _flash(img, cam, x - 1.05 * ppm, y + drop - 1.32 * ppm, 0.16 * ppm, seed=int(t * 12))
+        if INCOMING[0] <= t and int(t * FPS) % 2 == 0 and cam.P(x - G2_MUZZLE[0] * ppm, y)[0] < W * B.SS:
+            _flash(img, cam, x - G2_MUZZLE[0] * ppm, y + drop - G2_MUZZLE[1] * ppm, 0.12 * ppm, seed=int(t * 12),
+                   dirx=-1.0)
     # the lower-left man: runs in from the bottom left, nearest the lens, and is cut down
     x, y, ppm = st['gunman3']
     if t >= G3_IN[0]:
@@ -931,8 +957,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             rng = np.random.default_rng(int(t * FPS) * 3 + k)
             if rng.random() < 0.3:
                 continue
-            p0 = (rx, ky_ - kp * (0.5 + 0.9 * rng.random()))           # critique r3: at head and chest height
-            p1 = (kx_ - kp * 3.0, ky_ - kp * (0.3 + 1.1 * rng.random()))
+            hy = (-0.3 + 0.2 * rng.random()) if k == 0 else (1.8 + 0.25 * rng.random())   # Fable r3 #7: low past
+            p0 = (rx, ky_ - kp * hy)                                  # their legs or high over their heads, never
+            p1 = (kx_ - kp * 3.0, ky_ - kp * (hy + 0.15 * (rng.random() - 0.5)))   # through a face
             f = rng.random() * 0.55
             q0 = (_lerp(p0[0], p1[0], f), _lerp(p0[1], p1[1], f))
             q1 = (_lerp(p0[0], p1[0], f + 0.4), _lerp(p0[1], p1[1], f + 0.4))
@@ -953,7 +980,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     if firing and muzzle:
         (mx, my), (dx, dy) = muzzle
         s = RS.s_for(C.ppm(kg[1]))
-        _flash(img, cam, mx + dx * 30 * s, my + dy * 30 * s, 50 * s, seed=int(t * FPS))
+        _flash(img, cam, mx, my, 40 * s, seed=int(t * FPS), dirx=dx, diry=dy)
         d = ImageDraw.Draw(img)
         tx, ty = targets[burst]
         if burst == 0:
@@ -968,7 +995,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     # Navi: at Link's shoulder as he comes in, then red, then zip, then the blast
     if draw_navi and t < BOOM and link_at:
         sx, sy, ppm = link_at
-        nx, ny = sx + 0.42 * ppm, sy - 1.12 * ppm
+        nx, ny = sx - 0.5 * ppm, sy - 1.3 * ppm                        # Fable r3 #6: clear of his hands (one hidden
+                                                                      # read as a salute)
         heat = ease((t - S8_AT) / 0.5)
         if t >= ZIP:
             gx, gy, gppm = _g2()
@@ -1002,6 +1030,7 @@ def _g2():
 
 
 G2_X = 2.15
+G2_MUZZLE = (1.05, 1.32)                                              # his muzzle from his feet (ppm)
 
 
 def s8_navi(t):
@@ -1010,7 +1039,11 @@ def s8_navi(t):
     gx, gy, _ = _g2()
     u = ease((t - ZIP) / (BOOM - ZIP + 0.1))                          # note 63: the camera follows Navi to him
     dx, dy = _shake(t, BOOM, 40)
-    return _camp(t, B.Cam(1.7, (lx + 90) + (gx - lx - 90) * u + dx, (ly - 160) + (gy - ly) * u * 0.6 + dy))
+    cx = min((lx + 90) + (gx - lx - 90) * u, S8_CX_MAX - 40) + dx       # Fable r3 #1: the pan stops where the
+    return _camp(t, B.Cam(1.7, cx, (ly - 160) + (gy - ly) * u * 0.6 + dy))   # painting ends (the wall's last sheet)
+
+
+S8_CX_MAX = RS.CAMP.p(6, RS.WALL_D, 0)[0] - W / 2 / 1.7                # the right edge of the frame on the wall's end
 
 
 def s9_horrible(t):
