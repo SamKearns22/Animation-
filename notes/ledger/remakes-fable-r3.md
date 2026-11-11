@@ -91,3 +91,34 @@ terrified front-on face at 43.0-43.4; the back of Link's cap in the opening (who
 | 31 | KG's eyes open and on the line-up while his wing sweeps, then the shut-eyed grin |
 | 33 | the lids never changed (pixel test); the open mouth made them read wide: deadpan now talks in a flat mumble |
 | 40 | no spark at the neck on the snap |
+
+## Fixed (11 Nov, Opus chat, part 2: 26 more; 19, 35, 45 wait for Sam; 44, 48 left (low))
+| # | what changed |
+|---|---|
+| 10 | S7 opens tight on the gate and the tower (zoom 2.0) and eases out to the old framing as KG storms to his mark |
+| 11 | hands to cheeks from his hanging hands (not the hips), elbows out so the upper arms and sleeves show |
+| 12 | KG at the wall at 0.85 of the shared scale (KG_WALL), moved so Link's collar stays; Link still held clear of the ground |
+| 13 | the far wing darker (0.64) from the far shoulder, its elbow higher: two wings, not one log |
+| 14 | S13: the back of KG's head and both crests in the foreground over the wings: his grip reads as KG |
+| 15 | the lower-left man crumples over ~1 s (slower slide, sinks, a 30 degree tip), no tracers into the air after he drops |
+| 16 | S5: KG hovers on beating wings with a bob; tail tucked up out of the rifle and arm |
+| 17 | S2 in closer (zoom 2.0); Navi circles behind his head, never across his face; the shrug rises and drops on the line |
+| 20 | a squeezed mid-turn frame at each side/front change; he stays turned to the low man (no gun flip back) |
+| 24 | S13's wall is the patch at his back in S12 (banner one side, stones the other; no window box at his ear) |
+| 25 | the grenade throws a rifle, a helmet and a boot; a scorch on the dirt |
+| 27 | the lower-left man aims down at KG (tipped 11 degrees), not level over his head |
+| 28 | Link runs in through the gate's left half after the lower-left man is hit, clear of KG's crest; Navi over his head |
+| 29 | Ruto: a taller dome and a long head-fin sweeping back past her shoulder |
+| 30 | the square behind the five softened and hazed (stallholder no longer on the Goron's shoulder) |
+| 32 | the Goron: one short drool string; the goatee a rounded tuft lower on the chin |
+| 34 | Link's four close-ups (S4, S6, S9, S11) cropped in to the chest (CLOSE_IN, zoom 1.7) |
+| 36 | S9: clods and scraps fall either side of his face; one scrap lands on his cap and stays; the red barrel off his head |
+| 37 | S3's raised wing out clear of his crest |
+| 38 | the far trunks behind KG run up out of frame, tapering (cut flat they read as chimneys) |
+| 39 | (part) the gunman's vest side on: webbing, a strap, two pouches. Left: the trigger hand ball and eye line |
+| 41 | S11's paving the square's blue-grey |
+| 42 | S11: the planters down by his shoulders; the street softened behind him |
+| 43 | with KG smaller, Link's boots hang clear above the ledge line |
+| 46 | the track beyond the gate bends away into the trees (the point read as a pyramid); the snowy peak left (note 64) |
+| 47 | the kneeling man recoils as Navi lands on him |
+Left on purpose: 44 (the cut suits the pace), 48 (the wings carry the hype). Waiting on Sam: 19, 35, 45.

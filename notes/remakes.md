@@ -1,19 +1,18 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 30 (a "Sam N" finding: check that note before changing), 87, 89.
-- **Done (11 Nov, Fable r3 part 1):** 17 of the 48 fixed, the worst first: 1-9, 18, 21-23, 26, 31, 33, 40 (what each
-  did: `notes/ledger/remakes-fable-r3.md`, "Fixed"). No clips yet (the next chat sends one sheet of all moved beats).
-- **Next (Opus, medium): the other 31 findings, worst first** (10-17, 20, 24, 25, 27-30, 32, 34, 36-39, 41-48; skip
-  19, 35, 45 till Sam answers); one clip per moved beat; then open the Sonnet chat (medium): check sheet (subtitles,
-  Hook Text, sign-off, sound), Sam's yes, animatic 3.
-- **Needs Sam (questions, pick first):** 1 KG's bib keeps three ring spots (Fable: refs show two; two dots read as
-  breasts in pass 2): Y/N. 2 The R1/R2 labels can't go higher (the app's top bar): leave them over the crest and flag
-  (pick) or move them aside: Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N.
-- **Read:** pack "Notes round" in `guides/job-packs.md`; `notes/ledger/remakes-fable-r3.md`.
+- **Rules that bite next:** 89 (the critique gate), 59, 67.
+- **Done (11 Nov, Fable r3 part 2, Opus medium):** 26 more fixed (10-17, 20, 24, 25, 27-30, 32, 34, 36-39, 41-43,
+  46, 47; 39 in part), 43 of 48 in all; 44, 48 left (low). Four clips of the moved beats sent (forest, camp, town,
+  wall). What each did: `notes/ledger/remakes-fable-r3.md`, "Fixed" part 2. `remakes.py check` clean.
+- **Next (Sonnet, medium): the check sheet** (subtitles, Hook Text, sign-off, sound; watch and listen per note 40),
+  Sam's yes, then animatic 3 and send it.
+- **Needs Sam (questions, pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest
+  and flag (the app's top bar stops them going higher): Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N.
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
 - **Open rule requests:** none.
-- **For Claude:** _flash(dirx=) muzzle cones; G2_MUZZLE (the gunmen's muzzle); S8_CX_MAX; S5_DX, _rifle_fall; GRAB,
-  PIER_GAP, _pier (the wall); RC._Flip/_Squash/UNHAPPY (talking mouths); 'doubt' mouth; CAMP_MARKS link (-1.25, 5.0).
+- **For Claude:** CLOSE_IN (crop zoom for S4/S6/S9/S11 in picture()); KG_WALL, _wall_kg; s7_camp zoom lerp;
+  SCUTTLE now from HIT3; the S13 head (hb) over the wings; s10/s11 haze; _bits named parts (2, 9, 13).
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |

@@ -531,7 +531,16 @@ def _fin_pts(hx, hy, hw, hh, pts):
 
 
 def _ruto_back(p, sp, hx, hy, hw, hh):
-    """Her small fan fins where ears would be (refs 07, 08): teal, pink at the root, ribbed."""
+    """Her small fan fins where ears would be (refs 07, 08): teal, pink at the root, ribbed; behind them the long
+    head-fin sweeping back off her crown and down past her shoulder (remakes Fable r3 #29: refs 07, 08 show a big
+    domed fin sweeping back; she read as wearing a small teal hat)."""
+    tail = curve([(hx - hw * 0.5, hy - hh * 1.3), (hx + hw * 0.6, hy - hh * 1.5), (hx + hw * 1.5, hy - hh * 1.0),
+                  (hx + hw * 1.9, hy - hh * 0.1), (hx + hw * 1.85, hy + hh * 0.9), (hx + hw * 1.55, hy + hh * 1.35),
+                  (hx + hw * 1.35, hy + hh * 0.7), (hx + hw * 1.2, hy - hh * 0.1), (hx + hw * 0.4, hy - hh * 0.6)], 4)
+    p.poly(tail, R_FIN, INK, 2.4)
+    for a in (0.2, 0.5, 0.8):                                        # its ribs, along the sweep
+        p.line(open_curve([(hx + hw * (0.3 + a), hy - hh * (1.2 - a * 0.4)), (hx + hw * (1.2 + a * 0.4), hy - hh * (0.6 - a * 1.2)),
+                           (hx + hw * (1.4 + a * 0.2), hy + hh * (0.2 + a * 0.6))], 4), R_FIN_D, 1.6)
     for sgn in (-1, 1):
         x, y = hx + sgn * hw * 0.9, hy + hh * 0.06
         fan = curve([(x, y - hh * 0.16), (x + sgn * hw * 0.3, y - hh * 0.3), (x + sgn * hw * 0.42, y - hh * 0.04),
@@ -547,8 +556,8 @@ def _ruto_front(p, sp, hx, hy, hw, hh):
     and narrowing down into her temples (refs 07, 08). No brim, no underside, no lobes past the face (passes 1-2:
     the domes with a rim read as a mushroom helmet). One inked outline that runs on into the face's sides; its
     lower edge on the forehead is a soft colour change dipping to a point over the brow."""
-    side = [(0.97, -0.12), (1.04, -0.44), (1.24, -0.74), (1.44, -0.96), (1.46, -1.16), (1.2, -1.3), (0.6, -1.38),
-            (0, -1.4)]
+    side = [(0.97, -0.12), (1.04, -0.44), (1.24, -0.78), (1.44, -1.04), (1.46, -1.28), (1.2, -1.46), (0.6, -1.58),
+            (0, -1.62)]                                                 # Fable r3 #29: a taller dome
     top = _fin_pts(hx, hy, hw, hh, side + [(-u, v) for u, v in side[::-1][1:]])
     edge = _fin_pts(hx, hy, hw, hh, [(-0.97, -0.24), (-0.8, -0.56), (-0.46, -0.72), (-0.16, -0.6), (0, -0.48),
                                      (0.16, -0.6), (0.46, -0.72), (0.8, -0.56), (0.97, -0.24)])
@@ -1080,8 +1089,13 @@ def vest(p, view, sp):
         for y in (110, 150, 190):                                  # the webbing loops
             p.line([(x0 + 20, y), (x1 - 20, y)], GUN_VEST_D, 2.4)
         p.poly([(x1 - 90, 60), (x1 - 30, 60), (x1 - 30, 100), (x1 - 90, 100)], (150, 140, 110), INK, 1.6)   # a plain patch
-    if view == 'side':
+    if view == 'side':                                             # Fable r3 #39: side on it was one flat slab:
+        for y in (90, 130, 170):                                   # webbing loops, a shoulder strap, two pouches
+            p.line([(x0 + 14, y), (x1 - 10, y)], GUN_VEST_D, 3.0)
+        p.poly([(x0 + 30, 10), (x0 + 70, 10), (x0 + 70, 240), (x0 + 30, 240)], GUN_VEST_D, INK, 1.8)
         p.poly([(x1 - 10, 230), (x1 + 34, 230), (x1 + 34, 360), (x1 - 10, 360)], GUN_VEST_D, INK, 2.0)
+        p.poly([(x1 - 70, 240), (x1 - 20, 240), (x1 - 20, 360), (x1 - 70, 360)], GUN_VEST_D, INK, 2.0)
+        p.line([(x1 - 70, 270), (x1 - 20, 270)], INK, 1.6)
 
 
 def gun_mask(p, view, sp, hx, hy):

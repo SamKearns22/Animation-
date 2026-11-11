@@ -339,3 +339,19 @@
 - **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
   RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C; G3's fall in
   _camp's gunman() (note 65). Clips are drafts in clips/ (not on GitHub; gone after a container restart).
+3:## Where things stand (the ONE handover)
+4-- **Rules that bite next:** 30 (a "Sam N" finding: check that note before changing), 87, 89.
+5-- **Done (11 Nov, Fable r3 part 1):** 17 of the 48 fixed, the worst first: 1-9, 18, 21-23, 26, 31, 33, 40 (what each
+6-  did: `notes/ledger/remakes-fable-r3.md`, "Fixed"). No clips yet (the next chat sends one sheet of all moved beats).
+7-- **Next (Opus, medium): the other 31 findings, worst first** (10-17, 20, 24, 25, 27-30, 32, 34, 36-39, 41-48; skip
+8-  19, 35, 45 till Sam answers); one clip per moved beat; then open the Sonnet chat (medium): check sheet (subtitles,
+9-  Hook Text, sign-off, sound), Sam's yes, animatic 3.
+10-- **Needs Sam (questions, pick first):** 1 KG's bib keeps three ring spots (Fable: refs show two; two dots read as
+11-  breasts in pass 2): Y/N. 2 The R1/R2 labels can't go higher (the app's top bar): leave them over the crest and flag
+12-  (pick) or move them aside: Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N.
+13-- **Read:** pack "Notes round" in `guides/job-packs.md`; `notes/ledger/remakes-fable-r3.md`.
+14-- **Open rule requests:** none.
+15-- **For Claude:** _flash(dirx=) muzzle cones; G2_MUZZLE (the gunmen's muzzle); S8_CX_MAX; S5_DX, _rifle_fall; GRAB,
+16-  PIER_GAP, _pier (the wall); RC._Flip/_Squash/UNHAPPY (talking mouths); 'doubt' mouth; CAMP_MARKS link (-1.25, 5.0).
+17-
+18-## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)

@@ -629,7 +629,8 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None, part='all'):
     if part in ('all', 'back'):                                         # part: back / head / near, so kg() can
                                                                         # tilt the head alone (remakes note 33)
         el, hd, shape = wings['R']                                          # the far wing, darker, behind
-        _kg_wing(p, rot(-10, -150), el, hd, shape, 1, dk(KG_BROWN, 0.8), taper=True)
+        _kg_wing(p, rot(-40, -165), el, hd, shape, 1, dk(KG_BROWN, 0.64), taper=True)   # remakes Fable r3 #13:
+                                                                            # darker, from the far shoulder (the two read as one log)
         _kg_tail(p, rot(-140, 70), math.radians(146) + r, 5, 0.07, 480)    # the tail back and down: long, narrow,
                                                                             # pointed (ref 02; pass 2: a stub)
         if perched == 'stand_side':
@@ -960,15 +961,16 @@ def goron(img, cam, x, y, s, mood='vacant', t=0.0, flip=1, drool=True):
         p.line([(sgn * (166 if vac else 186), -978 if vac else -996), (sgn * (180 if vac else 200), -962 if vac else -980)],
                INK, 3.0)                                                # its dimpled corners
     beard = (226, 236, 244)                                             # the goatee: a pale tuft of strands on his chin
-    p.poly([(-30, -916), (30, -916), (6, -868), (0, -852), (-6, -868)], beard, INK, 2.0)   # one small point, high
-    for k in (-12, 0, 12):                                              # on the chin, hair strands down it
-        p.line([(k, -912), (k * 0.3, -866)], (170, 188, 204), 1.6)      # (pass 2: the frilly one read as a jabot)
+    p.poly(curve([(-42, -892), (42, -892), (36, -864), (16, -842), (-16, -842), (-36, -864)], 3), beard, INK, 2.0)
+    for k in (-20, 0, 20):                                              # remakes Fable r3 #32: a soft rounded tuft
+        p.line([(k, -888), (k * 0.6, -846)], (170, 188, 204), 1.6)      # lower on the chin (the point read as a fang
+                                                                        # in his open mouth)
     if drool:                                                           # a fat string from the corner, swelling and stretching
         kd = float(drool)                                               # drool > 1: more of it (remakes note 39): a longer,
         wet = (176, 218, 246)                                           # fatter string and a second one beside it
-        for dx0, ph, kk in ([(150, 0.0, kd)] + ([(118, 0.45, kd * 0.6)] if kd > 1.3 else [])):
-            u = (t * 0.6 + ph) % 1.0
-            ln = (60 + 120 * u) * kk
+        for dx0, ph, kk in [(150, 0.0, min(kd, 1.0))]:                  # remakes Fable r3 #32: one string, about
+            u = (t * 0.6 + ph) % 1.0                                    # half his face (two as long as his face read
+            ln = (40 + 70 * u) * kk                                     # as a blue tie; brief: "slightly")
             w = 9 * min(1.5, 0.6 + 0.4 * kk)
             dy0 = -968
             drop = [(dx0 - w, dy0), (dx0 + w, dy0), (dx0 + w * 0.55, dy0 + ln * 0.8), (dx0 + w * 1.55, dy0 + ln + 6),

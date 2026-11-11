@@ -464,8 +464,10 @@ def _forest_up_steep(img, p, cam, t):
     vx, vy = 640, -1400                                                 # where every trunk leans to
     for fx, w0, fade, sd in ((1250, 330, 0.0, 41), (520, 110, 0.45, 42), (830, 140, 0.35, 43), (330, 160, 0.3, 44),
                              (1010, 210, 0.15, 45)):
-        pts = [(fx, 2200)] + [(fx + (vx - fx) * u, 2200 + (vy - 2200) * u) for u in (0.3, 0.55)]
-        bark(p, pts, w0, w0 * 0.45, mix(TRUNK, (40, 60, 40), fade), sd, MOSS, 3)
+        far = fade >= 0.3                                               # remakes Fable r3 #38: the far trunks run on
+        us = (0.3, 0.55, 0.95) if far else (0.3, 0.55)                  # up out of frame, tapering (cut off flat in
+        pts = [(fx, 2200)] + [(fx + (vx - fx) * u, 2200 + (vy - 2200) * u) for u in us]   # the sky they read as
+        bark(p, pts, w0, w0 * (0.2 if far else 0.45), mix(TRUNK, (40, 60, 40), fade), sd, MOSS, 3)   # chimneys)
     for ang, rx, ry, c, sd in ((200, 330, 230, LEAF_D, 11), (240, 300, 210, LEAF, 12), (285, 320, 220, LEAF_D, 13),
                                (330, 300, 210, LEAF, 14), (10, 320, 240, LEAF_D, 15), (60, 340, 260, LEAF, 16),
                                (110, 360, 240, LEAF_D, 17), (150, 300, 220, LEAF, 18)):   # the canopy round the hole
@@ -1220,7 +1222,9 @@ def camp(img, cam, t=0.0, gate=0.0):
         p.poly(blob(o0[0] + (o1[0] - o0[0]) * u_, gy - 10, 26, 18, 7, 0.3, int(u_ * 40)), (78, 110, 58), None)
     ta, tb = CAMP.p(-0.9, WALL_D + 0.05, 0), CAMP.p(0.9, WALL_D + 0.05, 0)
     tf = CAMP.p(0.3, 40.0, 0)
-    p.poly([ta, tb, (tf[0] + 6, gy + 4), (tf[0] - 6, gy + 4)], DIRT_D, None)
+    ym = o0[1] - (o0[1] - gy) * 0.7                                     # remakes Fable r3 #46: the track bends away
+    p.poly([ta, tb, (tf[0] + 90, ym), (tf[0] + 20, ym)], DIRT_D, None)  # into the trees (a point read as a pyramid)
+    p.poly(blob(tf[0] + 55, ym - 4, 70, 16, 7, 0.3, 77), (78, 110, 58), None)
     for sx in (-1, 1):                                                  # the gate posts
         q0, q1 = CAMP.p(sx * GATE_HALF - 0.12, WALL_D, 0), CAMP.p(sx * GATE_HALF + 0.12, WALL_D, 2.9)
         p.poly(quad(q0[0], q1[1], q1[0], q0[1]), PLANK_D, INK, 2.4)
@@ -2070,13 +2074,14 @@ def town_reverse(img, p, cam, t):
         _house(img, p, x0, x1, 520, top, rh, PLASTER[ci], 495 + k, **kw)
     haze(img, cam, 300, 560, (230, 236, 244), 0.3)
     p.poly([(-200, 1100), (230, 1000), (470, 520), (610, 520), (850, 1000), (1280, 1100), (1280, 2000), (-200, 2000)],
-           (206, 200, 188), None)                                       # the paving, pale stone
+           mix((206, 200, 188), FLAG, 0.65), None)                      # the paving: Fable r3 #41, the square's
+                                                                        # blue-grey slabs (it was cream here only)
     for k in range(9):                                                  # joints running away to the vanishing point
         bx = -100 + k * 160
-        p.line([(bx, 1300), (540 + (bx - 540) * 0.12, 540)], (176, 170, 160), 1.6)
+        p.line([(bx, 1300), (540 + (bx - 540) * 0.12, 540)], FLAG_J, 1.6)
     y = 540
     while y < 1300:
-        p.line([(-200, y), (1280, y)], (176, 170, 160), 1.4)
+        p.line([(-200, y), (1280, y)], FLAG_J, 1.4)
         y += 10 + (y - 520) * 0.18
     for k in range(4):                                                  # shallow steps up the street
         y0 = 600 + 22 * k

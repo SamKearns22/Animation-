@@ -122,7 +122,7 @@ G3_IN = (L[7]['start'] + 1.75, L[7]['start'] + 2.35)             # the lower-lef
 BURST2 = (L[7]['start'] + 2.45, L[7]['start'] + 3.2)
 HIT3 = BURST2[0] + 0.4
 FIRE0, FIRE1 = BURST1[0], BURST2[1]
-SCUTTLE = (L[7]['start'] + 2.3, L[8]['start'] - 0.15)            # Link in through the gate, at his mark for line 8
+SCUTTLE = (HIT3 + 0.05, L[8]['start'] - 0.15)            # Link in through the gate, at his mark for line 8
 S8_AT = L[9]['start'] + 0.42 * (L[9]['end'] - L[9]['start'])   # the push to Navi on "GRENADES"
 ZIP = L[9]['end'] + 0.1                           # Navi zips at the gunman
 BOOM = ZIP + 0.55                                 # note 63: a zip the camera can follow
@@ -326,6 +326,20 @@ def _bits(img, cam, x, y, age, size, seed=5, g=2600.0, ground=None):
         if ground is not None and by > ground:
             by = ground
         r = size * 0.22 * sz
+        spin = age * (6 + 4 * rng.random()) + i
+        if i in (2, 9, 13):                                           # Fable r3 #25: parts that can be named: the
+            c_, s_ = math.cos(spin), math.sin(spin)                   # rifle, the helmet, a boot
+            R_ = lambda pts: [cam.P(bx + (px * c_ - py * s_) * r, by + (px * s_ + py * c_) * r) for px, py in pts]
+            if i == 2:
+                d.polygon(R_([(-2.6, -0.18), (2.6, -0.18), (2.6, 0.18), (-0.6, 0.2), (-0.8, 0.8), (-1.2, 0.8),
+                              (-1.1, 0.25), (-2.6, 0.3)]), fill=(30, 30, 34), outline=INK)
+            elif i == 9:
+                d.polygon(R_([(-1.1, 0.3)] + [(1.1 * math.cos(math.pi + k * math.pi / 8), 0.3 + 1.0 * math.sin(math.pi + k * math.pi / 8))
+                                              for k in range(9)] + [(1.25, 0.45), (-1.25, 0.45)]), fill=(66, 72, 58), outline=INK)
+            else:
+                d.polygon(R_([(-0.4, -1.0), (0.3, -1.0), (0.3, 0.2), (1.1, 0.3), (1.1, 0.7), (-0.4, 0.7)]),
+                          fill=(34, 30, 28), outline=INK)
+            continue
         d.polygon(_blob(cam, bx, by, r, 7, seed + i, 0.7), fill=col, outline=INK)
 
 
@@ -553,7 +567,7 @@ def s3_branch(t):
     wis = L[3]['start'] + 0.9                                         # "wisdom!": eyes closed in the smile
     m = 'kindly' if wis <= t < wis + 0.9 else (dict(KIND, eyes='shut') if shut else KIND)
     wag = math.sin(t * 7.0)                                           # the teacher's raised wing wagging
-    L_ = ((250, -170 - 15 * wag), (290 + 20 * wag, -380 - 45 * wag), 'point')
+    L_ = ((300, -150 - 15 * wag), (430 + 20 * wag, -330 - 45 * wag), 'point')   # Fable r3 #37: out clear of his crest
     br = 0.5 + 0.5 * math.sin(t * 3.0)                                # the folded wing breathing on his side
     R_ = ((192 + 8 * br, -30), (172 + 12 * br, 90 - 10 * br), 'fold')
     return _forest('up', t, lambda img, cam: RS.kg_on_branch(img, cam, x, RS.s_for(ppm), mood=m,
@@ -564,12 +578,31 @@ def s3_branch(t):
 def s2_down(t):
     x, y, ppm = RS.STAGE['forest_down']['link']
 
+    import copy
+    j = copy.deepcopy(RC.poses('link')['shrug'])                      # Fable r3 #17: the shrug moves: shoulders and
+    sh = ease((t - L[2]['start'] - 0.25) / 0.25) - ease((t - L[2]['end'] + 0.1) / 0.3)   # palms rise on "I think
+    for sd in 'LR':                                                   # so?" and drop after
+        px, py, pz = j['sh' + sd]
+        j['sh' + sd] = (px, py - 22 * sh, pz)
+        wx, wy, wz = j['wr' + sd]
+        V.arm_to(j, sd, (wx * (1 + 0.1 * sh), wy - 60 * sh, wz), 'back', 'palm')
+    j['head_dy'] = 14 + 10 * sh
+    a = t * 3.2                                                       # Navi circling him: round BEHIND his head
+    nav = (x + 0.7 * ppm * math.cos(a), y - 1.55 * ppm + 0.12 * ppm * math.sin(a))   # (she crossed his face)
+
     def cast(img, cam):
         RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['link'])
-        _kid(img, cam, 'link', x, y, ppm, t, 'unsure', j=RC.poses('link')['shrug'])
-        a = t * 3.2                                                   # Navi circling him
-        CR.navi(img, cam, x + 150 * math.cos(a), y - 1.05 * ppm + 40 * math.sin(a), RS.s_for(ppm) * 1.2, t=t)
-    return _forest('down', t, cast)
+        if math.sin(a) < 0:
+            CR.navi(img, cam, *nav, RS.s_for(ppm) * 1.2, t=t)
+        _kid(img, cam, 'link', x, y, ppm, t, 'unsure', j=j)
+        if math.sin(a) >= 0:
+            CR.navi(img, cam, *nav, RS.s_for(ppm) * 1.2, t=t)
+    img = B.canvas((0, 0, 0))
+    cam = B.Cam(2.0, x + 30, y - 0.66 * ppm)                          # Fable r3 #17: in closer (his face read small)
+    RS.forest(img, cam, 'down', t)
+    cast(img, cam)
+    RS.forest_front(img, cam, 'down', t)
+    return img
 
 
 def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None, j=None, sp_extra=None):
@@ -620,10 +653,12 @@ def s6_god(t):
     sp = RC.CAST['link']
     j = V.standing(sp)                                               # note 36: both hands fly up to his cheeks
     up = ease((u - 0.02) / 0.22)
-    for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, (sg * _lerp(sp['shoulders'] + 30, 92, up), _lerp(330.0, -118.0, up),
-                         _lerp(40.0, 80.0, up) + 150 * math.sin(math.pi * up)),
-                 'down', 'palm')
+    for sd, sg in (('L', -1), ('R', 1)):                              # Fable r3 #11: from his hanging hands (not
+        if up <= 0.0:                                                 # the hips), elbows out so the upper arms show
+            continue
+        x0, y0, z0 = j['wr' + sd]
+        V.arm_to(j, sd, (_lerp(x0, sg * 92, up), _lerp(y0, -118.0, up), _lerp(z0, 80.0, up) + 150 * math.sin(math.pi * up)),
+                 'out', 'palm')
     if up > 0.7:
         j['on_face'] = {'L', 'R'}                                     # palms on his cheeks, in front of his face
     img = _close(lambda im, c, tt: RS.forest(im, c, 'close', tt), t, 'aghast', jolt=jolt,
@@ -640,7 +675,8 @@ def _s5_wings(t, kx, ky, ks):
     """KG's wings in S5, his own units: up as he lands, closing on the gunman's neck and jaw before the twist
     (note 34), wrenching across on the snap, then flung open."""
     snap = t - SNAP
-    up = {'R': ((-300, -260), (-520, -420)), 'L': ((300, -260), (520, -420))}
+    fl = 70 * math.sin(t * 15.0) * (1 - ease((snap + 1.2) / 0.3))   # Fable r3 #16: hovering, the wings beat (they
+    up = {'R': ((-300, -260 + fl * 0.5), (-520, -420 + fl)), 'L': ((300, -260 + fl * 0.5), (520, -420 + fl))}   # hung still)
     tg = {'R': ((NECK_GRIP[0][0] - kx) / ks, (NECK_GRIP[0][1] - ky) / ks),
           'L': ((NECK_GRIP[1][0] - kx) / ks, (NECK_GRIP[1][1] - ky) / ks)}
     el = {'R': (-290, 20), 'L': (60, 60)}                             # elbows out and down, reaching forward to him
@@ -726,8 +762,10 @@ def s5_edge(t):
     elif v >= 1:                                                      # landed behind him (drawn first), facing us
         wings, held = _s5_wings(t, kx, ky, ks)
         flare = 1 - ease((u - S5_SWOOP[1]) / 0.3)                     # the landing: a last beat of the wings, settling
-        CR.kg(img, cam, kx, ky - 26 * flare, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
-              talk=_talk('kg', t), part='all')
+        bob = 18 * math.sin(t * 15.0 - 0.8) * (1 - ease((t - SNAP + 1.2) / 0.3))   # rising and dipping on each beat
+        CR.kg(img, cam, kx, ky - 26 * flare + bob, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
+              talk=_talk('kg', t), part='all', tail=0.35)                # Fable r3 #16: tail tucked up (it hung in
+                                                                      # among the rifle and arm)
     _kid(img, cam, 'gunman', gx, gy + drop, gppm, t, j=j, yaw=90, head_yaw=hy_, rot=rot, talk=False)
     if rifle:
         _rifle_fall(*rifle)
@@ -774,7 +812,8 @@ def _link_camp(t):
     lx, ld = RS.CAMP_MARKS['link']
     u = min(1.0, (t - SCUTTLE[0]) / (SCUTTLE[1] - SCUTTLE[0]))
     v = 1 - (1 - u) ** 1.6                                            # quick in, settling at his mark
-    return _lerp(-0.15, lx, v), _lerp(RS.WALL_D + 0.4, ld, v), u
+    return _lerp(-0.8, lx, v), _lerp(RS.WALL_D + 0.4, ld, v), u      # Fable r3 #28: in through the gate's left
+                                                                      # half, clear of KG's crest (hidden behind it)
 
 
 def _scuttle_pose(tt, u):
@@ -864,6 +903,12 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
 
     def gunman(who, x, y, ppm, flip, hit, j=None, fall=1):
         rot = fall * 82 * ease((t - hit) / 0.35) if t >= hit else 0.0
+        if who == 'gunman2' and t >= BOOM - 0.28:                     # Fable r3 #47: he recoils from Navi on his
+            rot = -14 * ease((t - BOOM + 0.28) / 0.12)                # chest (he sat unmoved)
+        if who == 'gunman3' and t < hit:                              # Fable r3 #27: aiming down at KG, not level
+            rot = -11.0                                               # over his head at Link and Navi
+        if who == 'gunman3' and t >= hit:                             # Fable r3 #15: a slower crumple (he popped
+            rot = -fall * 30 * ease((t - hit) / 0.6)                 # out in three frames)
         if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
         hx = x
@@ -871,12 +916,12 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         if t >= hit:                                                  # critique r3: the hit jolts him back
             x += -flip * 0.14 * ppm * math.sin(math.pi * min(1.0, (t - hit) / 0.2))
         if who == 'gunman3' and t >= hit:                             # note 65 (Sam): no stiff model laid flat:
-            k = ease((t - hit) / 0.3)                                 # he crumples, knees buckling, arms flung,
-            if t - hit > 0.55:                                        # the rifle flying, and goes off screen left
+            k = ease((t - hit) / 0.45)                                # he crumples, knees buckling, arms flung,
+            if t - hit > 1.0:                                        # the rifle flying, and goes off screen left
                 _hit(img, cam, hx - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
                      ground=y + 0.1 * ppm)
                 return
-            x -= 1.9 * ppm * ease((t - hit) / 0.5)
+            x -= 0.35 * ppm * ease((t - hit) / 0.8)
             j = V.standing(RC.CAST['gunman'])
             sw = RC.CAST['gunman']['shoulders']
             V.arm_to(j, 'L', (-sw - 60 * k, -120.0 - 160 * k, 60.0), 'up', 'palm')
@@ -888,7 +933,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             ra = math.radians(140 * k)                                # the rifle spins away
             _rifle_spin(img, cam, x - flip * 0.6 * ppm * k, y - (1.3 - 0.4 * k) * ppm, ppm, ra)
             y -= 0.0
-        _kid(img, cam, who, x, y + (0.9 * ppm * ease((t - hit) / 0.3) if who == 'gunman3' and t >= hit else 0),
+        _kid(img, cam, who, x, y + (1.7 * ppm * ease((t - hit - 0.1) / 0.85) if who == 'gunman3' and t >= hit else 0),
              ppm, t, j=j, yaw=90, flip=flip, rot=rot, talk=False)
         _hit(img, cam, x - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
              ground=y + 0.1 * ppm)                                    # note 48; Fable r3 #22: the tower man's
@@ -945,6 +990,10 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             sx += 10 * s * math.sin((t - KG_T[0]) * math.pi * 4.0)
         RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['kg'])
         face, look, rock = _kg_camp_face(t, burst, mode)             # note 54
+        sw_ = min((abs(t - ts) for ts in KG_T[1:]), default=1.0)      # Fable r3 #20: a turn, not a snap: on the
+        kg_img = None                                                 # frame either side of a view change he is
+        if sw_ < 1.0 / FPS:                                           # drawn squeezed narrow (mid-turn)
+            kg_img, img = img, _lay(img)
         if mode == 'tower':
             turn = ease((t - KG_T[1]) / 0.12)
             muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, 0.0, firing=firing,
@@ -952,8 +1001,15 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         else:
             if mode == 'run':
                 rock += 6 * math.sin((t - KG_T[0]) * math.pi * 4.0)      # rolling side to side as he stamps
-            muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', -1 if mode == 'low' else 1,
-                              rot=rock, firing=firing, mood=face, look=look * (-1 if mode == 'low' else 1))
+            fl_ = -1 if mode in ('low', 'stand') else 1               # Fable r3 #20: he stays turned to the low man
+            muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', fl_,   # (the gun flipped back)
+                              rot=rock, firing=firing, mood=face, look=look * fl_)
+        if kg_img is not None:
+            px_ = cam.P(sx, sy)[0]
+            q = 0.55
+            sq = img.transform(img.size, Image.AFFINE, (1 / q, 0, px_ * (1 - 1 / q), 0, 1, 0), Image.BICUBIC)
+            kg_img.alpha_composite(sq)
+            img = kg_img
     # the right-hand man (note 63): kneeling just off the right of S7's frame, firing on them till Navi gets him
     x, y, ppm = _g2()
     if t < BOOM:
@@ -1014,7 +1070,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         _flash(img, cam, mx, my, 40 * s, seed=int(t * FPS), dirx=dx, diry=dy)
         d = ImageDraw.Draw(img)
         tx, ty = targets[burst]
-        if burst == 0:
+        if burst == 1 and t > HIT3 + 0.12:                            # Fable r3 #15: no tracers into empty air
+            pass
+        elif burst == 0:
             d.line([cam.P(mx, my), cam.P(tx, ty)], fill=(255, 230, 120), width=int(3 * cam.z * B.SS))
         else:                                                         # the near man: tracers down past the lens
             d.line([cam.P(mx, my), cam.P(tx, ty)], fill=(255, 230, 120), width=int(4 * cam.z * B.SS))
@@ -1026,7 +1084,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     # Navi: at Link's shoulder as he comes in, then red, then zip, then the blast
     if draw_navi and t < BOOM and link_at:
         sx, sy, ppm = link_at
-        nx, ny = sx - 0.5 * ppm, sy - 1.3 * ppm                        # Fable r3 #6: clear of his hands (one hidden
+        uu = ease(_link_camp(t)[2]) if _link_camp(t) else 1.0        # Fable r3 #28: over his head as he runs in
+        nx, ny = sx + _lerp(0.25, -0.5, uu) * ppm, sy - _lerp(1.75, 1.3, uu) * ppm   # Fable r3 #6: clear of his hands (one hidden
                                                                       # read as a salute)
         heat = ease((t - S8_AT) / 0.5)
         if t >= ZIP:
@@ -1037,6 +1096,10 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     if t >= BOOM:                                                     # note 46: the grenade blast, the same as the
         gx, gy, gppm = _g2()                                          # gate's, with his pieces in it
         a = t - BOOM
+        lay = _lay(img)                                               # Fable r3 #25: a scorch on the dirt and the
+        ImageDraw.Draw(lay).ellipse([cam.P(gx - 1.1 * gppm, gy - 0.12 * gppm), cam.P(gx + 1.1 * gppm, gy + 0.32 * gppm)],
+                                    fill=(30, 26, 22, int(170 * min(1.0, a / 0.2))))   # sandbags beside him
+        img.alpha_composite(lay)
         if a > 0.25:
             _splat(img, cam, gx, gy, 0.35 * gppm * min(1.0, (a - 0.25) / 0.3 + 0.4), seed=4)
         _explosion(img, cam, gx, gy - 0.8 * gppm, a, 0.75 * gppm, seed=21, gy=gy + 0.1 * gppm)
@@ -1049,7 +1112,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
 
 def s7_camp(t):
     dx, dy = _shake(t, BLAST, 34)                                     # note 46: the blast kicks the camera
-    return _camp(t, B.Cam(1.4, 565 + dx, 790 + dy))                              # note 32: in on the action (the cast were small
+    u = ease(min(1.0, max(0.0, (t - KG_T[2]) / (KG_T[3] - KG_T[2] + 0.25))))   # Fable r3 #10: tight on the gate
+    z, cx, cy = _lerp(2.0, 1.4, u), _lerp(690, 565, u), _lerp(760, 790, u)   # and the tower as he bursts in (he
+    return _camp(t, B.Cam(z, cx + dx, cy + dy))                       # was 1/14 of the frame), out as he storms on                              # note 32: in on the action (the cast were small
                                                                       # in the top half over an empty yard)
 
 
@@ -1082,17 +1147,19 @@ def s9_horrible(t):
 
     def bg(im, c, tt):
         lx, ly, _ = RS.STAGE['camp']['link']
-        cam = B.Cam(2.4, lx, ly - 250)
+        cam = B.Cam(2.4, lx - 140, ly - 250)                          # Fable r3 #36: the red barrel off his head
         RS.camp(im, cam, tt, 1.0)
 
-    def debris(img, cam):
-        d = ImageDraw.Draw(img)
-        for i in range(9):
-            x = 120 + i * 113
-            y = -100 + ((u * 700 + i * 260) % 2100)
-            d.polygon(_blob(cam, x, y, 14 + (i % 3) * 6, 7, i, 0.7), fill=[(130, 92, 60), (178, 22, 30), (92, 96, 70)][i % 3], outline=INK)
-        land = ease(u / 0.5)                                         # one bit lands on his cap
-        d.polygon(_blob(cam, 560, -60 + 690 * land, 22, 7, 31, 0.7), fill=(178, 22, 30), outline=INK)
+    def debris(img, cam):                                             # Fable r3 #36: clods and scraps either side
+        d = ImageDraw.Draw(img)                                       # of his face (one crossed his mouth like a
+        for i in range(8):                                            # tongue; red ones read as petals)
+            x = [150, 270, 330, 760, 830, 940, 220, 880][i]
+            y = 600 + ((u * 700 + i * 260) % 1700)
+            col = [(118, 84, 56), (92, 96, 70), (150, 20, 26), (118, 84, 56), (70, 66, 60), (150, 20, 26),
+                   (92, 96, 70), (118, 84, 56)][i]
+            d.polygon(_blob(cam, x, y, 20 + (i % 3) * 8, 7, i, 0.5), fill=col, outline=INK)
+        land = ease(u / 0.5)                                         # one scrap lands on his cap and stays
+        d.polygon(_blob(cam, 600, 560 + 440 * land, 34, 8, 31, 0.5), fill=(150, 20, 26), outline=INK)
     return _close(bg, t, 'horror', debris=debris)
 
 
@@ -1104,6 +1171,10 @@ def s10_square(t):
     cam = B.Cam(LINEUP_Z, *LINEUP_C)                                  # note 49: in on the five, less square
     kcam = B.Cam(0.85, 595, 553)                                      # KG, the presenter, near the lens: a little
     RS.town(img, cam, 'square', t)                                    # smaller and lower so the five lead
+    from PIL import ImageFilter                                       # Fable r3 #30: the square softened and hazed
+    img = img.filter(ImageFilter.GaussianBlur(2.5 * B.SS))            # back behind the five (a stallholder seemed to
+    img.alpha_composite(Image.new('RGBA', img.size, (236, 232, 222, 70)))   # stand on the Goron's shoulder; the
+                                                                      # stalls crowded their heads)
     st = RS.STAGE['town_square']
     romance = L[11]['start'] + 0.55
     re_ = ease((t - romance) / 0.35)                                  # note 39: the line-up reacts on "ROMANCE"
@@ -1156,13 +1227,16 @@ def s10_square(t):
 
 def s11_nine(t):
     def bg(im, c, tt):
-        RS.town(im, B.Cam(2.0, 540, 600), 'reverse', tt)               # note 56: the reverse angle
+        RS.town(im, B.Cam(2.0, 540, 530), 'reverse', tt)               # note 56: the reverse angle; Fable r3 #42:
+        from PIL import ImageFilter                                   # the planters down below his ears, the busy
+        im.paste(im.filter(ImageFilter.GaussianBlur(3 * B.SS)))       # street softened behind the deadpan
+        im.alpha_composite(Image.new('RGBA', im.size, (236, 232, 222, 60)))
     return _close(bg, t, 'deadpan', sp_extra={'mouth_k': 0.7})       # critique r3: deadpan talks small
 
 
 # the wall (notes 33, 37c): KG side on, head tipped up so his face and beak are seen; both wings out in front of
 # him and up, below his beak, closed on Link's collar; Link side on facing him, held off the cobbles. No bandana.
-LIFT = {'R': ((230, -180), (430, -510), 'grip'), 'L': ((245, -125), (455, -465), 'grip')}
+LIFT = {'R': ((190, -300), (420, -540), 'grip'), 'L': ((245, -125), (455, -465), 'grip')}
 WALL_DX = 150                                                         # the pair moved right, off the frame's edge
 WALL_TILT = 24                                                        # degrees his head is tipped up at Link
 
@@ -1172,14 +1246,13 @@ def _wall_scene(t, cam, shake=0.0):
     RS.town(img, cam, 'wall', t)
     st = RS.STAGE['town_wall']
     _, base, ppm = st['link']
-    kx = st['kg'][0] + WALL_DX
-    s = RS.s_for(ppm)
+    kx, _, s, _ = _wall_kg()
     g = ease((t - S12_AT) / GRAB)                                     # Fable r3 #9: a grab, a lift and a slam:
     u = ease((t - S12_AT - GRAB) / (SLAM - S12_AT - GRAB))            # the wings shoot out to his collar, haul him
     sx = shake * 14 * math.sin(t * 60)                                # up and drive him back into the pier
     hit = t - SLAM
     ldx = 150 * (1 - u) - (14 * math.sin(math.pi * min(1.0, hit / 0.14)) if hit >= 0 else 0.0)
-    k = RC.scale_for(RC.CAST['link'], s)
+    k = RC.scale_for(RC.CAST['link'], RS.s_for(ppm))                  # Link at his own scale (KG's is smaller)
     ky = base - 272 * s
     grip = [((LIFT[sd][1][0]), LIFT[sd][1][1]) for sd in 'LR']        # the two wing hands, his own units
     gx_ = sum(g[0] for g in grip) / 2 + 30                            # the collar: between them, just past the tips
@@ -1238,29 +1311,36 @@ def _pier(img, cam, x1, base, ppm, hit):
         _puff(img, cam, x1 + 0.05 * ppm, base - 0.6 * ppm, hit * 0.66, 0.4 * ppm, seed=8)
 
 
+KG_WALL = 0.85                                                        # Fable r3 #12: KG at the wall at 0.85 of the
+                                                                      # shared scale (side on he was four Links wide;
+                                                                      # in the camp he stands about Link's height)
+
+
+def _wall_kg():
+    """KG at the wall: his x (moved so Link's collar stays where it was), feet y, scale, and Link's scale k."""
+    _, base, ppm = RS.STAGE['town_wall']['link']
+    s0 = RS.s_for(ppm)
+    s = s0 * KG_WALL
+    gx_ = sum(LIFT[sd][1][0] for sd in 'LR') / 2 + 30
+    return RS.STAGE['town_wall']['kg'][0] + WALL_DX - gx_ * (s0 - s), base - 272 * s, s, RC.scale_for(RC.CAST['link'], s0)
+
+
 def wall_contact():
     """Note 37c's check: at the wall both wing hands are at Link's collar (his neck base), not across his chest."""
-    st = RS.STAGE['town_wall']
-    _, base, ppm = st['link']
-    s = RS.s_for(ppm)
-    kx, ky = st['kg'][0] + WALL_DX, base - 272 * s
+    kx, ky, s, k = _wall_kg()
     hs = [(kx - LIFT[sd][1][0] * s, ky + LIFT[sd][1][1] * s) for sd in 'LR']
     cx = kx - (sum(LIFT[sd][1][0] for sd in 'LR') / 2 + 30) * s      # his neck base, as _wall_scene puts it
     cy = ky + (sum(LIFT[sd][1][1] for sd in 'LR') / 2 - 95) * s
-    k = RC.scale_for(RC.CAST['link'], s)
     return ['S12: wing hand at (%d, %d), the collar at (%d, %d)' % (hx, hy, cx, cy) for hx, hy in hs
             if not (0 <= hy - cy <= 190 * k and abs(hx - cx) <= 90 * k)]
 
 
 def _wall_marks():
     """Link's collar and scale at the wall, and KG's x (as _wall_scene places them)."""
-    st = RS.STAGE['town_wall']
-    _, base, ppm = st['link']
-    s = RS.s_for(ppm)
-    kx, ky = st['kg'][0] + WALL_DX, base - 272 * s
+    kx, ky, s, k = _wall_kg()
     cx = kx - (sum(LIFT[sd][1][0] for sd in 'LR') / 2 + 30) * s
     cy = ky + (sum(LIFT[sd][1][1] for sd in 'LR') / 2 - 95) * s
-    return cx, cy, RC.scale_for(RC.CAST['link'], s), kx, ky, s
+    return cx, cy, k, kx, ky, s
 
 
 def s12_wall(t):
@@ -1281,7 +1361,9 @@ def s13_pinned(t):
     from the line (mouths.track), drawn bigger; KG's two wings reach in from the bottom corners and grip his collar;
     Navi, nearly red, at his shoulder."""
     img = B.canvas((0, 0, 0))
-    RS.town(img, B.Cam(1.7, 560, 520), 'wall', t)
+    wcx, wcy = _wall_marks()[:2]                                     # Fable r3 #24: the same patch of wall as at
+    zb = 2.6                                                          # his back in S12 (stones, not the window box
+    RS.town(img, B.Cam(zb, wcx - 40, wcy - 250 / zb), 'wall', t)     # and banner from the far end of the wall)
     x, y, ppm = RS.STAGE['forest_close']['link']
     s = RS.s_for(ppm)
     k = RC.scale_for(RC.CAST['link'], s)
@@ -1304,6 +1386,17 @@ def s13_pinned(t):
         el = (x + sg * 300 + 5 * roll, ny + 330 + 8 * nod)
         sh_ = (x + sg * 380, ny + 900)
         CR._kg_wing(p, (sh_[0] / ws, sh_[1] / ws), (el[0] / ws, el[1] / ws), (hx / ws, hy / ws), 'grip', sd)
+    hb = (x + 6 * roll, ny + 540 + 10 * nod)                          # Fable r3 #14: the back of KG's head in the
+    for sg in (-1, 1):                                                # foreground (over the wings), his crests sweeping up either
+        CR._crest(p, ((hb[0] + sg * 120) / ws, (hb[1] - 170) / ws),   # side of Link (the bare wings read as straps)
+                  [((hb[0] + sg * 250) / ws, (hb[1] - 400) / ws), ((hb[0] + sg * 320) / ws, (hb[1] - 640) / ws),
+                   ((hb[0] + sg * 300) / ws, (hb[1] - 840) / ws), ((hb[0] + sg * 230) / ws, (hb[1] - 900) / ws)],
+                  80, seed=2 if sg < 0 else 1, out=sg)
+    p.ell(hb[0] / ws, hb[1] / ws, 300 / ws, 230 / ws, CR.KG_BROWN, INK, 3.0)
+    for k_ in range(3):                                               # the feather tufts on the crown
+        a_ = -0.7 + 0.7 * k_
+        p.line([((hb[0] + 220 * math.sin(a_)) / ws, (hb[1] - 150 * math.cos(a_)) / ws),
+                ((hb[0] + 120 * math.sin(a_)) / ws, (hb[1] - 60 * math.cos(a_)) / ws)], CR.dk(CR.KG_BROWN, 0.7), 3.0)
     CR.navi(img, cam, x - 290, y - 928 * k - 380 + 14 * math.sin(t * 6), 1.0, t=t,   # Fable r3 #23: on the banner side
             heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))
     return img
@@ -1314,10 +1407,19 @@ SHOT_FN = {'S1': s1_branch, 'S2': s2_down, 'S3': s3_branch, 'S4': s4_ok, 'S5': s
            'S13': s13_pinned}
 
 
+CLOSE_IN = {'S4': (1.7, 1150), 'S6': (1.7, 1250), 'S9': (1.7, 1250), 'S11': (1.7, 1250)}   # zoom, centre y (px)
+
+
 def picture(t):
     if t >= BLACK_AT:
         return Image.new('RGB', (W, H), (0, 0, 0))
-    img = SHOT_FN[shot_of(t)](t)
+    sh = shot_of(t)
+    img = SHOT_FN[sh](t)
+    if sh in CLOSE_IN:                                                # Fable r3 #34: Link's close-ups in to the chest
+        z, cy = CLOSE_IN[sh]                                          # (they were waist-up, his face a quarter of the
+        w, h = img.size[0] / z, img.size[1] / z                       # width); cropped from the full-size picture
+        cx, cy = img.size[0] / 2, cy * img.size[1] / H
+        img = img.crop((int(cx - w / 2), int(cy - h / 2), int(cx + w / 2), int(cy + h / 2)))
     return img.convert('RGB').resize((W, H), Image.LANCZOS) if img.size != (W, H) else img.convert('RGB')
 
 
