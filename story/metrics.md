@@ -197,6 +197,11 @@ results: 1.3k. Tesla kills two birds with one stone: 1.2k. Blue Planet 3 Takes E
 and 7:30 pm, only one post on a day with a new film; catch-up from the backlog on days with no new film; a Story when there is a new film.
 Check Insights after two weeks and move the times.
 
+**Posting notes (Sam, 11 Nov): do not advise these again.** Sam already replies to every comment as soon as it arrives, on every
+platform. He posts to Instagram, TikTok and YouTube Shorts at the same time (Instagram is where Elder Swindon passed 700 views;
+the others have not). He does not repeat a joke: a follow-up only comes with new news. The caption is the hook for the joke, and
+he keeps his hashtags. Growth advice must be specific to the film (Elder Swindon: the Swindon audience), never general.
+
 ## Snapshot: Mon 9 Nov 2026, 23:17-23:19 (views, Hook Text and hashtags for 30 films; Sam's TikTok screens)
 
 First record of every film's tags. Views only (no watch data on these screens). Topic: UK = UK politics/news, World = US
