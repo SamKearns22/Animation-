@@ -531,7 +531,11 @@ def main():
     for i, im in enumerate(tiles):
         sheet.paste(im, ((i % cols) * 216, (i // cols) * 384))
     import turnhead                             # Job I faces: the turnaround of each (person, view) the shots need
-    turn = turnhead.turnaround(sorted(heads_seen | set(heads_missing)))
+    try:
+        turn = turnhead.turnaround(sorted(heads_seen | set(heads_missing)))
+    except KeyError as e:                       # 11 Nov (Blessed): a person with no turnaround entry crashed the run
+        turn = None                             # before it wrote its stamp; the sheet is only a picture, the checks stand
+        problems.append(f'turnaround sheet skipped: a person it draws has no {e} (film has no PEOPLE entry)')
     if turn is not None:
         turn.thumbnail((sheet.width, 10 ** 5))
         both = Image.new('RGB', (sheet.width, sheet.height + turn.height), (20, 20, 20))
