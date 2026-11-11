@@ -27,7 +27,6 @@ import figure as F               # noqa: E402  arms solved and guarded
 import mouths                    # noqa: E402  lip sync
 import subtitles as SUB          # noqa: E402  short, quick, readable subtitles timed from the recordings (rule 62)
 import mossad_audio as MA        # noqa: E402  recordings cleaned and levelled
-import peepee as PP              # noqa: E402  the series' caption
 import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
 from satire_style import rough, install_circle_hands   # noqa: E402
@@ -83,8 +82,9 @@ THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)
                        (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
 HOOK = ('Hook Text here', {'y': 880})               # finish.py --film NAME reads it (rule 75): y, x, w, until, centre
-SUBTITLES_AT_FINISH = True                          # rule 70: finish.py --film NAME burns the subtitles in; whole renders
-SUBS_IN_PICTURE = True                              # leave them out (stills and --span clips keep them)
+SUBS_IN_PICTURE = True                              # rule 70: finish.py --film NAME burns the captions in (whole renders
+                                                    # leave them out; stills and --span clips keep them)
+PIECE_FIX = {}                                      # {line n: {piece index: seconds}}: only where a take fools the timing
 KEEP_CLEAR = []                                     # [(name, box_at(t) -> (x0, y0, x1, y1) or None)]: signs, readouts
 PROP_SIZES = []                                     # [(name, sizes.SIZES kind, w, h, px_per_m or None or 0)]
 OUTFIT = {}                                         # {who: {'skirt top': y, 'jacket hem': y, ...}} person units
@@ -211,18 +211,14 @@ def draw_order(t):
 
 
 def caption_at(t):
-    for i, ln in enumerate(LINES):
-        nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-            return SUB.line_caption(ln, t - ln['start'])   # a few words at a time, on the syllable they start with
-    return None
+    return SUB.caption_at(LINES, t, PIECE_FIX)      # rule 62: 3-5 words a piece, each on its syllable, never joined
 
 
 def overlay(img, t):
     if t < BLACK_AT:
         c = caption_at(t) if SUBS_IN_PICTURE else None
         if c:
-            PP.caption(img, c)
+            SUB.draw(img, c)                        # the kit's look (rule 62): Montserrat Black, outline and shadow
         if t < 2.0:
             B.title_lines(img, TITLE, **TITLE_AT, alpha=1.0 if t < 1.75 else max(0.0, 1.0 - (t - 1.75) / 0.25))
     return img
@@ -403,7 +399,7 @@ def main():
     elif a[0] == 'final':
         small = '--small' in a
         global SUBS_IN_PICTURE
-        SUBS_IN_PICTURE = not SUBTITLES_AT_FINISH or '--span' in a   # rule 70: a whole render goes on to finish.py
+        SUBS_IN_PICTURE = '--span' in a              # rule 70: a whole render goes on to finish.py
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=overlay, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,

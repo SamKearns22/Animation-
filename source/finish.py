@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-"""The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled final
-render, burn in the subtitles (rule 70), add the Hook Text (if the film has one) and the CranbriJoos sign-off.
+"""The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled render,
+burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitch (rule 70), add the Hook Text (rule
+75) and the CranbriJoos sign-off (rule 52), in that order.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME [--faults-named]          a satire film (the usual way)
-    python3 finish.py CLEAN.mp4 OUT.mp4 ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
+    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME [--faults-named]
+    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
     either way: [--signoff-speed 1.0]
 
---film NAME (rules 70 and 75) reads source/NAME.py:
-  * its HOOK = (text, {'y':, 'x':, 'w':, 'until':, 'centre':}): the Hook Text and where it sits, so the position is
-    never typed by hand; the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless
-    --faults-named (Sam has been told);
-  * its subtitles, when the film sets SUBTITLES_AT_FINISH = True (the template does): caption_at(t) is read on every
-    frame and drawn as the film draws them (draw_subtitle(img, text) if the film has one, else the series' caption),
-    so a subtitle wording or timing note costs seconds, not a render. The film's whole renders then leave them out.
-  Hook Text words or flags typed on the command line override HOOK (and say so).
+--film NAME reads source/NAME.py (refused without it, or without the film's captions):
+  * its caption_at(t): the captions, read on every frame and drawn in the kit's style (subtitles.draw: Montserrat
+    Black, white, black outline and shadow; a film's own draw_subtitle only if it has one), so a caption wording or
+    timing note costs seconds, not a render. The film's whole renders leave them out. A film with no caption_at is
+    refused (rule 62: captions on every animatic and final; tool job, 11 Nov: no more SUBTITLES_AT_FINISH opt-in).
+    Films finished before 11 Nov drew their captions in the picture: they are never finished again.
+  * then the whole film is sped to SPEED (1.1x, subtitles.SPEED) with the voices kept at their pitch, so the Hook
+    Text's 0.5 s pop and the sign-off's 1.6 s, added after, stay as they are on the delivered file;
+  * its HOOK = (text, {'y':, 'x':, 'w':, 'until':, 'centre':}): the Hook Text and where it sits ('until' in seconds of
+    the delivered file); the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless
+    --faults-named (Sam has been told). Hook Text words or flags typed on the command line override HOOK (and say so).
 
-Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text and subtitles can change without a re-render.
-A --small clean render (540 x 960) works too: the subtitles are drawn at full size and scaled to fit.
+Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text and captions can change without a re-render.
+A --small clean render (540 x 960) works too: the captions are drawn at full size and scaled to fit.
 """
 import importlib
 import os
@@ -89,11 +93,9 @@ def burn_subtitles(film, src, dst):
     print(f'subtitles: {len(subs)} burned in (proofread):', flush=True)
     for a, b, c in subs:
         print(f'  {a / fps:6.2f}-{b / fps:6.2f} s  {c}')
+    import subtitles as SUB
     B = sys.modules.get('burnham')
-    draw = getattr(film, 'draw_subtitle', None)
-    if draw is None:
-        import peepee as PP
-        draw = PP.caption
+    draw = getattr(film, 'draw_subtitle', None) or SUB.draw      # rule 62: the kit's style unless the film has its own
     layers = {}
 
     def layer(c):
@@ -137,6 +139,16 @@ def burn_subtitles(film, src, dst):
         sys.exit('finish: burning the subtitles failed')
 
 
+def speed_up(src, dst, speed):
+    """Rule 70: the picture and the sound played `speed` times faster, the voices at their own pitch (atempo keeps
+    pitch); the frame rate stays the film's own."""
+    w, h, fps = video_info(src)
+    subprocess.run([FF, '-y', '-loglevel', 'error', '-i', src, '-filter_complex',
+                    f'[0:v]setpts=PTS/{speed}[v];[0:a]atempo={speed}[a]', '-map', '[v]', '-map', '[a]', '-r', f'{fps:g}',
+                    '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                    '-b:a', '192k', '-movflags', '+faststart', dst], check=True)
+
+
 def _duration(path):
     err = subprocess.run([FF, '-i', path], capture_output=True, text=True).stderr
     hh, mm, ss = err.split('Duration: ')[1].split(',')[0].split(':')
@@ -167,29 +179,30 @@ def main():
         extra.append('--centre')
     named = take(rest, '--faults-named', 0) is not None
     name = take(rest, '--film')
-    film = load_film(name[0]) if name else None
+    if not name:
+        sys.exit('finish REFUSED (rule 62): give --film NAME: the captions come from the film\'s caption_at')
+    film = load_film(name[0])
+    if not hasattr(film, 'caption_at'):
+        sys.exit(f'finish REFUSED (rule 62): {name[0]}.py has no caption_at(t), so the film would go out with no '
+                 'captions (start from the template: subtitles.caption_at)')
+    import subtitles as SUB
     hook = ' '.join(rest)
-    subs = False
-    if film is not None:
-        ftext, fflags = film_hook(film)
-        if hook and hook != ftext:
-            print(f'Hook Text from the command line ("{hook}"), not the film\'s HOOK ("{ftext}")')
-        if extra and extra != fflags:
-            print(f'Hook Text position from the command line {extra}, not the film\'s HOOK {fflags}')
-        hook, extra = hook or ftext, extra or fflags
-        if hook:                                   # rule 75: the Hook Text check on every animatic and final
-            import hookcheck
-            faults = hookcheck.faults(film) if (hook, extra) == (ftext, fflags) else []
-            for f in faults:
-                print('HOOK TEXT FAULT: ' + f)
-            if faults and not named:
-                sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or add --faults-named once '
-                         'Sam has been told')
-            if not faults:
-                print('Hook Text check: clear of everything listed')
-        subs = getattr(film, 'SUBTITLES_AT_FINISH', False)
-        if not subs:
-            print('subtitles: in the picture already (the film has no SUBTITLES_AT_FINISH)')
+    ftext, fflags = film_hook(film)
+    if hook and hook != ftext:
+        print(f'Hook Text from the command line ("{hook}"), not the film\'s HOOK ("{ftext}")')
+    if extra and extra != fflags:
+        print(f'Hook Text position from the command line {extra}, not the film\'s HOOK {fflags}')
+    hook, extra = hook or ftext, extra or fflags
+    if hook:                                       # rule 75: the Hook Text check on every animatic and final
+        import hookcheck
+        faults = hookcheck.faults(film) if (hook, extra) == (ftext, fflags) else []
+        for f in faults:
+            print('HOOK TEXT FAULT: ' + f)
+        if faults and not named:
+            sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or add --faults-named once '
+                     'Sam has been told')
+        if not faults:
+            print('Hook Text check: clear of everything listed')
     with tempfile.TemporaryDirectory() as tmp:
         step = src
         if not has_sound(step):                    # a silent film gets a silent track, so the sign-off's slurp can join on
@@ -197,10 +210,13 @@ def main():
             subprocess.run([FF, '-y', '-loglevel', 'error', '-i', step, '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=mono',
                             '-shortest', '-c:v', 'copy', '-c:a', 'aac', quiet], check=True)
             step = quiet
-        if subs:                                   # rule 70: subtitles burned in here, never in the picture render
-            subbed = os.path.join(tmp, 'subbed.mp4')
-            burn_subtitles(film, step, subbed)
-            step = subbed
+        subbed = os.path.join(tmp, 'subbed.mp4')   # rule 62: captions burned in here, never in the picture render
+        burn_subtitles(film, step, subbed)
+        step = subbed
+        fast = os.path.join(tmp, 'fast.mp4')       # rule 70: 1.1x, voices at their pitch; Hook Text and sign-off after,
+        speed_up(step, fast, SUB.SPEED)            # so the 0.5 s pop and the 1.6 s sign-off keep their own timing
+        step = fast
+        print(f'delivered at {SUB.SPEED:g}x (rule 70)')
         if hook:
             hooked = os.path.join(tmp, 'hooked.mp4')
             subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)

@@ -326,21 +326,9 @@ def _in_child(fn, *args):
 def _text_only(film, problems, end, fps):
     """`preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, reading
     speed) and shot lengths; no frame is drawn. Fix text faults here until it is clean, then run the full pre-flight once."""
-    f = ImageFont.truetype(B.SANS, 50)
-    seen = {}
-    if hasattr(film, 'caption_at'):
-        for i in range(int(end * fps)):
-            c = film.caption_at(i / fps)
-            if c:
-                seen.setdefault(c, []).append(i / fps)
-    for c, ts in seen.items():
-        rows = B.wrap(c, f, 700)
-        wide = max(f.getbbox(r)[2] for r in rows)
-        if len(rows) > 2 or wide > 700 or max(len(r) for r in rows) > 42:
-            problems.append(f'caption "{c}": {len(rows)} rows, {wide} px wide (max 2 rows, 700 px, 42 characters)')
-        dur, words = len(ts) / fps, len(c.split())
-        if dur < 0.8 or words / max(dur, 0.01) * 60 > 220:
-            problems.append(f'caption "{c}": {dur:.1f} s on screen for {words} words (too fast to read)')
+    if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
+        import subtitles as SUB
+        problems += SUB.readable_faults(film.caption_at, end, fps)
     for s in getattr(film, 'SHOTS', []):
         if s[2] - s[1] > MAX_SHOT:
             problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s)')
@@ -526,22 +514,9 @@ def main():
             json.dump({'checks': _checks_hash(), 'config': _config_hash(film), 'n': n_frames, 'fps': fps,
                        'hashes': hashes, 'clean': len(problems) == n_text}, fh)
     # 3. captions
-    f = ImageFont.truetype(B.SANS, 50)
-    seen = {}
-    if hasattr(film, 'caption_at'):
-        for i in range(int(end * fps)):
-            c = film.caption_at(i / fps)
-            if c:
-                seen.setdefault(c, []).append(i / fps)
-    for c, ts in seen.items():
-        rows = B.wrap(c, f, 700)
-        wide = max(f.getbbox(r)[2] for r in rows)
-        if len(rows) > 2 or wide > 700 or max(len(r) for r in rows) > 42:
-            problems.append(f'caption "{c}": {len(rows)} rows, {wide} px wide (max 2 rows, 700 px, 42 characters)')
-        dur = len(ts) / fps
-        words = len(c.split())
-        if dur < 0.8 or words / max(dur, 0.01) * 60 > 220:   # BBC/Netflix aim at 160-180 words a minute (verbatim speech may run faster)
-            problems.append(f'caption "{c}": {dur:.1f} s on screen for {words} words (too fast to read)')
+    if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
+        import subtitles as SUB
+        problems += SUB.readable_faults(film.caption_at, end, fps)
     # 4. shot lengths
     for s in getattr(film, 'SHOTS', []):
         if s[2] - s[1] > MAX_SHOT:

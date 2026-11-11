@@ -1394,43 +1394,30 @@ def wall_contact():
 CAMP_BODY = {'link': (0.5, 1.35), 'kg': (1.0, 2.0), 'gunman3': (0.6, 1.8)}   # width, height (m) for camp_paths
 
 
+def _camp_movers(t):
+    """Every figure moving through the camp (S7) at t: (who, x, d, (body w, h)) in the camp's metres."""
+    who = []
+    lk, kg = _link_camp(t), _kg_camp(t)
+    if lk:
+        who.append(('link', lk[0], lk[1], CAMP_BODY['link']))
+    if kg:
+        who.append(('kg', kg[0], kg[1], CAMP_BODY['kg']))
+    if t >= G3_IN[0]:
+        g3 = RS.STAGE['camp']['gunman3']                              # his mark back in metres
+        u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
+        who.append(('gunman3', (g3[0] - RS.CAMP.cx) / g3[2] - (1 - ease(u)) * 1.5, RS.CAMP.f / g3[2],
+                    CAMP_BODY['gunman3']))
+    return who
+
+
 def camp_paths():
-    """The barrel fix's check (rule 56, 11 Nov): every figure that moves through the camp (S7), every frame, against
-    RS.SET_FEET: no feet inside a solid thing; nobody further than something the set paints under the cast yet
-    overlapping it on screen (he would show in front of what hides him); nobody nearer than the front sandbags and
+    """The barrel fix's check (rule 56, 11 Nov), now the kit's (setcheck.moving_faults, rule 13): every figure that
+    moves through the camp (S7), every frame, against RS.SET_FEET: no feet inside a solid thing; nobody further than
+    something the set paints under the cast yet overlapping it on screen; nobody nearer than the front sandbags and
     under them. The tower lookout and the kneeling right-hand man do not move; S8's debris is flat, in the air."""
-    C = RS.CAMP
-    g3 = RS.STAGE['camp']['gunman3']                                  # his mark back in metres
-    d3 = C.f / g3[2]
-    x3 = (g3[0] - C.cx) / g3[2]
-    faults = []
-    for fr in range(int(GATE * FPS), int(S8_AT * FPS) + 1):
-        t = fr / FPS
-        who = []
-        lk, kg = _link_camp(t), _kg_camp(t)
-        if lk:
-            who.append(('link', lk[0], lk[1]))
-        if kg:
-            who.append(('kg', kg[0], kg[1]))
-        if t >= G3_IN[0]:
-            u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
-            who.append(('gunman3', x3 - (1 - ease(u)) * 1.5, d3))
-        for w, x, d in who:
-            bw, bh = CAMP_BODY[w]
-            sx, sy = C.p(x, d)
-            fig = (sx - bw / 2 * C.ppm(d), sy - bh * C.ppm(d), sx + bw / 2 * C.ppm(d), sy)
-            for n, x0, x1, d0, d1, z1, layer in RS.SET_FEET:
-                if x0 - 0.15 < x < x1 + 0.15 and d0 - 0.15 < d < d1 + 0.15:
-                    faults.append('S7 %.2fs: %s stands in the %s' % (t, w, n))
-                    continue
-                pts = [C.p(xx, dd, zz) for xx in (x0, x1) for dd in (d0, d1) for zz in (0, z1)]
-                box = (min(q[0] for q in pts), min(q[1] for q in pts), max(q[0] for q in pts), max(q[1] for q in pts))
-                over = fig[0] < box[2] and box[0] < fig[2] and fig[1] < box[3] and box[1] < fig[3]
-                if over and layer == 'under' and d > d0:
-                    faults.append('S7 %.2fs: %s is behind the %s but drawn over it' % (t, w, n))
-                if over and layer == 'over' and d < d0:
-                    faults.append('S7 %.2fs: %s is in front of the %s but drawn under it' % (t, w, n))
-    return faults[:6]
+    import setcheck
+    return setcheck.moving_faults(_camp_movers, RS.SET_FEET, RS.CAMP, GATE, S8_AT, FPS, label='S7')[:6]
+
 
 def _wall_marks():
     """Link's collar and scale at the wall, and KG's x (as _wall_scene places them)."""
@@ -1530,51 +1517,16 @@ PIECE_FIX = {13: {2: 2.30, 3: 3.50}}
 
 
 def _pieces(ln):
-    """Note 51 (Sam, 11 Nov): 3-5 words at a time, each up on the syllable it starts with (the take's syllable
-    beats), never joined into longer rows; a piece shorter than 0.45 s pushes the next one a touch later."""
-    if '_pieces' in ln:
-        return ln['_pieces']
-    import press_secretary as PS
-    ch = [c for c, _ in SUB.chunks(ln.get('sub') or ln['text'], most=4)]
-    out = [[ch[0], 0.0]]
-    if len(ch) > 1:
-        beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
-        syl = [sum(mouths._syllables(w) for w in c.split()) for c in ch]
-        acc = 0
-        for c, n in zip(ch[1:], syl[:-1]):
-            acc += n
-            k = min(len(beats) - 1, int(round(acc / sum(syl) * len(beats))))
-            out.append([c, max(out[-1][1] + 0.45, beats[k] - 0.06 if len(beats) else out[-1][1] + 0.8)])
-    for i, at in PIECE_FIX.get(ln['n'], {}).items():
-        out[i][1] = at
-    ln['_pieces'] = [tuple(p) for p in out]
-    return ln['_pieces']
+    """Note 51 (Sam, 11 Nov): the kit's caption timing (subtitles.pieces, made from this film's): 3-5 words at a
+    time, each on the syllable it starts with, never joined."""
+    return SUB.pieces(ln, PIECE_FIX)
 
 
 def caption_at(t):
-    for i, ln in enumerate(LINES):
-        nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-        if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-            u = t - ln['start']
-            return [c for c, a in _pieces(ln) if a <= u or a == 0.0][-1]
-    return None
+    return SUB.caption_at(LINES, t, PIECE_FIX)
 
 
-def draw_subtitle(img, text):
-    """Note 51: large, lower third, at most two rows. Sam, 11 Nov: the Gotham Black look, white with a black outline
-    and shadow; Gotham is a paid font, so Montserrat Black (free, its closest match) stands in."""
-    S = B.SS
-    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Montserrat-Black.ttf'), int(64 * S))
-    rows = B.wrap(text, f, 900 * S)
-    lay = _lay(img)
-    d = ImageDraw.Draw(lay)
-    for i, row in enumerate(rows):
-        y = (1450 - 84 * (len(rows) - 1 - i)) * S
-        d.text((540 * S + 6 * S, y + 7 * S), row, font=f, fill=(0, 0, 0, 150), anchor='mm', stroke_width=int(7 * S),
-               stroke_fill=(0, 0, 0, 150))                            # the shadow, down and right
-        d.text((540 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=int(7 * S),
-               stroke_fill=(0, 0, 0))
-    img.alpha_composite(lay)
+draw_subtitle = SUB.draw    # note 51's look, now the kit's default (subtitles.draw): Montserrat Black, outline, shadow
 
 
 def overlay(img, t):

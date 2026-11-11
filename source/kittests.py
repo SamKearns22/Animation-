@@ -1074,35 +1074,113 @@ def hook_text_planned():
 
 @test
 def moving_figures_against_the_set():
-    """Rule 13 (tool job, 11 Nov): Remakes' camp check moved into the kit (setcheck.moving_faults) gives the same
-    answer on Remakes' camp, and catches a figure walked into a barrel and one drawn over what hides him."""
+    """Rule 13 (tool job, 11 Nov): Remakes' camp check moved into the kit (setcheck.moving_faults); Remakes calls it.
+    Clean on Remakes' camp as built; Link put back into a barrel is caught, and so is a figure drawn over what hides him."""
     import remakes as R
     import remakes_sets as RS
     import setcheck
-    C = RS.CAMP
-    g3 = RS.STAGE['camp']['gunman3']
-    d3, x3 = C.f / g3[2], (g3[0] - C.cx) / g3[2]
-
-    def movers(t):
-        who = []
-        lk, kg = R._link_camp(t), R._kg_camp(t)
-        if lk:
-            who.append(('link', lk[0], lk[1], R.CAMP_BODY['link']))
-        if kg:
-            who.append(('kg', kg[0], kg[1], R.CAMP_BODY['kg']))
-        if t >= R.G3_IN[0]:
-            u = min(1.0, (t - R.G3_IN[0]) / (R.G3_IN[1] - R.G3_IN[0]))
-            who.append(('gunman3', x3 - (1 - R.ease(u)) * 1.5, d3, R.CAMP_BODY['gunman3']))
-        return who
-    kit = setcheck.moving_faults(movers, RS.SET_FEET, C, R.GATE, R.S8_AT, R.FPS, label='S7')[:6]
-    same = kit == R.camp_paths()
+    clean = not R.camp_paths()
     n, x0, x1, d0, d1, z1, layer = RS.SET_FEET[0]
-    walk_in = setcheck.moving_faults(lambda t: [('test', (x0 + x1) / 2, (d0 + d1) / 2, (0.5, 1.8))],
-                                     RS.SET_FEET, C, 0, 0, label='S7')
+    real = R._link_camp
+    R._link_camp = lambda t: ((x0 + x1) / 2, (d0 + d1) / 2) + tuple(real(t)[2:] if real(t) else ())
+    try:
+        walk_in = R.camp_paths()
+    finally:
+        R._link_camp = real
     behind = setcheck.moving_faults(lambda t: [('test', (x0 + x1) / 2, d1 + 0.6, (0.5, 1.8))],
-                                    [RS.SET_FEET[0]], C, 0, 0, label='S7')
-    caught = any('stands in' in f for f in walk_in) and any('drawn over' in f for f in behind)
-    return same and caught, f'same as Remakes: {same} ({len(kit)} faults); caught walk-in and behind: {caught}'
+                                    [RS.SET_FEET[0]], RS.CAMP, 0, 0, label='S7')
+    caught = any('link stands in' in f for f in walk_in) and any('drawn over' in f for f in behind)
+    return clean and caught, f'Remakes clean: {clean}; walk-in caught: {walk_in[:1]}; behind caught: {bool(behind)}'
+
+
+def _finish_fake(tmp, caption=True):
+    """A 3 s made-up film (12 fps, a 440 Hz tone, one caption, a Hook Text) run through finish.py in this process."""
+    import subprocess
+    import types
+    import finish
+    clean = os.path.join(tmp, 'clean.mp4')
+    subprocess.run([finish.FF, '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=0x203040:s=540x960:r=12:d=3',
+                    '-f', 'lavfi', '-i', 'sine=frequency=440:sample_rate=48000:duration=3', '-c:v', 'libx264',
+                    '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-shortest', clean], check=True)
+    m = types.ModuleType('kt_film')
+    m.FPS, m.DUR, m.HOOK, m.KEEP_CLEAR = 12, 3.0, ('Hook here', {'y': 880}), []
+    if caption:
+        m.caption_at = lambda t: 'One two three' if 0.2 <= t < 1.5 else None
+    sys.modules['kt_film'] = m
+    out = os.path.join(tmp, 'out.mp4')
+    argv = sys.argv
+    sys.argv = ['finish.py', clean, out, '--film', 'kt_film']
+    try:
+        finish.main()
+    except SystemExit as e:
+        return None, str(e)
+    finally:
+        sys.argv = argv
+    return out, ''
+
+
+def _frame(path, t):
+    import subprocess
+    import numpy as np
+    import finish
+    w, h, _ = finish.video_info(path)
+    raw = subprocess.run([finish.FF, '-loglevel', 'error', '-ss', f'{t}', '-i', path, '-frames:v', '1', '-f', 'rawvideo',
+                          '-pix_fmt', 'rgb24', '-'], capture_output=True).stdout
+    return np.frombuffer(raw, np.uint8).reshape(h, w, 3)
+
+
+@test
+def finish_captions_by_default():
+    """Rule 62 (tool job, 11 Nov): captions were opt-in (SUBTITLES_AT_FINISH) and a film could go out without them;
+    finish.py now refuses a film with no caption_at and burns the kit's style (Remakes') into every film that has one."""
+    import tempfile
+    import subtitles as SUB
+    with tempfile.TemporaryDirectory() as tmp:
+        none, why = _finish_fake(tmp, caption=False)
+        out, _ = _finish_fake(tmp)
+        lit = (_frame(out, 0.9)[700:740, :, :].min(2) > 200).sum() if out else 0     # white caption letters, lower third
+    import remakes
+    same = remakes.draw_subtitle is SUB.draw
+    ok = none is None and 'caption' in why and lit > 50 and same
+    return ok, f'no captions refused: {none is None}; caption drawn: {lit} white px; Remakes on the kit style: {same}'
+
+
+@test
+def finish_delivers_at_one_point_one():
+    """Rule 70 (tool job, 11 Nov): 1.1x was done by hand; finish.py now speeds the film after the captions with the
+    voice at its pitch, then adds the Hook Text (still popping at 0.5 s) and the sign-off (still 1.6 s)."""
+    import subprocess
+    import tempfile
+    import numpy as np
+    import finish
+    import hookcheck
+    with tempfile.TemporaryDirectory() as tmp:
+        out, _ = _finish_fake(tmp)
+        fast = os.path.join(tmp, 'fast.mp4')
+        finish.speed_up(os.path.join(tmp, 'clean.mp4'), fast, 1.1)
+        film_s = finish._duration(fast)
+        signoff = finish._duration(out) - film_s
+        raw = subprocess.run([finish.FF, '-loglevel', 'error', '-i', fast, '-f', 's16le', '-ac', '1', '-ar', '48000', '-'],
+                             capture_output=True).stdout
+        x = np.frombuffer(raw, np.int16).astype(float)[4800:-4800]
+        hz = np.argmax(np.abs(np.fft.rfft(x))) * 48000 / len(x)
+        x0, y0, x1, y1 = hookcheck.hook_box('Hook here', y=880)
+        box = lambda t: _frame(out, t)[y0 // 2 + 4:y1 // 2 - 4, x0 // 2 + 4:x1 // 2 - 4].mean()   # 540 wide: half
+        before, after = box(0.35), box(0.85)
+    ok = abs(film_s - 3 / 1.1) < 0.12 and abs(signoff - 1.6) < 0.06 and abs(hz - 440) < 5 and before < 120 < after
+    return ok, (f'film {film_s:.2f} s (3 s at 1.1x: {3 / 1.1:.2f}); sign-off {signoff:.2f} s; tone {hz:.0f} Hz; '
+                f'Hook Text box brightness {before:.0f} at 0.35 s, {after:.0f} at 0.85 s')
+
+
+@test
+def caption_check_at_delivered_speed():
+    """Rule 70: the caption readability check runs at 1.1x: a 3-word piece on for 0.85 s of film time passes at 1x
+    but is caught at 1.1x (0.77 s delivered)."""
+    import subtitles as SUB
+    cap = lambda t: 'Not too fast here' if t < 1.1 else ('Just long enough' if t < 1.95 else None)
+    at1 = [f for f in SUB.readable_faults(cap, 3, 100, 1.0) if 'Just long' in f]
+    at11 = [f for f in SUB.readable_faults(cap, 3, 100) if 'Just long' in f]
+    return not at1 and bool(at11) and SUB.SPEED == 1.1, f'at 1x: {len(at1)} fault; at 1.1x: {at11[:1]}'
 
 
 def main():

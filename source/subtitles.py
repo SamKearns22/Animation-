@@ -9,25 +9,40 @@ screen at least 0.8 s and no more than 220 words a minute (pre-flight's own limi
 makes the next one wait a touch; one that is too quick is joined to its neighbour, as long as the two still fit two
 rows (62 characters).
 
-In a film (the template's caption_at does this):
+The kit's style for every film (rule 62, tool job 11 Nov; set on Remakes): pieces of 3-5 words, each up on the
+syllable it starts with, never joined into longer rows (`pieces`), drawn large in the lower third in Montserrat Black,
+white with a black outline and shadow (`draw`). finish.py burns them in from the film's caption_at and refuses a film
+without one. `line_caption` / `chunk_times` (joined pieces, the old white caption) stay only for films finished before.
+
+MAP
+  chunks ........... the words cut into pieces at sentence and comma breaks
+  pieces ........... the kit's timing: each piece on its syllable, never joined (fix: {piece index: seconds})
+  caption_at ....... the piece on screen at t, from the film's LINES (what a film's caption_at returns)
+  draw ............. the kit's caption look, on an RGBA layer or picture
+  readable_faults .. rule 62's check at the delivered speed (SPEED, rule 70): rows, width, time on screen
+  readable / chunk_times / line_caption ... the old joined style (finished films only)
+
+In a film (the template does this):
 
     import subtitles as SUB
+    PIECE_FIX = {}                                   # {line n: {piece index: seconds}} only where a take needs it
     def caption_at(t):
-        for i, ln in enumerate(LINES):
-            nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
-            if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-                return SUB.line_caption(ln, t - ln['start'])
-        return None
+        return SUB.caption_at(LINES, t, PIECE_FIX)
 
 A line is a dict with 'n', 'text', '_dur' (seconds), and for a recording '_voice' (samples) and '_stretches'
 ([(start, end)] of talk, seconds into the line).
 """
 import math
+import os
 import re
 
 import mouths
 
 _CACHE = {}
+HERE = os.path.dirname(os.path.abspath(__file__))
+FONT = os.path.join(HERE, 'fonts', 'Montserrat-Black.ttf')   # Gotham Black's free stand-in (Sam, 11 Nov)
+SPEED = 1.1                    # rule 70: every animatic and final is delivered at 1.1x (finish.py)
+SIZE, WIDE, BASE, ROW = 64, 900, 1450, 84   # the look on the 1080 x 1920 frame: px size, row width, last row's y, row gap
 
 
 def chunks(text, most=4):
@@ -135,3 +150,101 @@ def line_caption(ln, u):
         if text is None or u >= t0:
             text = c
     return text
+
+
+# ------------------------------------------------------------------------------- the kit's style (rule 62, 11 Nov)
+
+def pieces(ln, fix=None, most=4):
+    """[(text, start)] seconds into the line: 3-5 words at a time, each up on the syllable it starts with (the take's
+    syllable beats), never joined into longer rows; a piece shorter than 0.45 s pushes the next a touch later.
+    fix: {line n: {piece index: seconds}} where a take's pause fools the syllable count. A line with no recording is
+    timed by each piece's share of the words."""
+    if '_pieces' in ln:
+        return ln['_pieces']
+    ch = chunks(ln.get('sub') or ln['text'], most=most)
+    out = [[ch[0][0], 0.0]]
+    if len(ch) > 1 and ln.get('_voice') is not None:
+        import press_secretary as PS
+        beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
+        syl = [sum(mouths._syllables(w) for w in c.split()) for c, _ in ch]
+        acc = 0
+        for (c, _), n in zip(ch[1:], syl[:-1]):
+            acc += n
+            k = min(len(beats) - 1, int(round(acc / sum(syl) * len(beats))))
+            out.append([c, max(out[-1][1] + 0.45, beats[k] - 0.06 if len(beats) else out[-1][1] + 0.8)])
+    elif len(ch) > 1:
+        a = 0.0
+        for (c, _), (_, share) in zip(ch[1:], ch[:-1]):
+            a += share * ln.get('_dur', ln.get('end', 0) - ln.get('start', 0))
+            out.append([c, max(out[-1][1] + 0.45, a)])
+    for i, at in ((fix or {}).get(ln.get('n'), {}) or {}).items():
+        out[i][1] = at
+    ln['_pieces'] = [tuple(p) for p in out]
+    return ln['_pieces']
+
+
+def caption_at(lines, t, fix=None, lead=0.05, tail=0.45):
+    """The piece on screen at t (or None): each line's pieces from just before it starts to `tail` after it ends,
+    never running into the next line."""
+    for i, ln in enumerate(lines):
+        nxt = lines[i + 1]['start'] - lead if i + 1 < len(lines) else 1e9
+        if ln['start'] - lead <= t < min(ln['end'] + tail, nxt):
+            u = t - ln['start']
+            return [c for c, a in pieces(ln, fix) if a <= u or a == 0.0][-1]
+    return None
+
+
+def _font(ss=1):
+    from PIL import ImageFont
+    return ImageFont.truetype(FONT, int(SIZE * ss))
+
+
+def rows(text, ss=1):
+    import burnham as B
+    return B.wrap(text, _font(ss), WIDE * ss)
+
+
+def draw(img, text, ss=None):
+    """The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
+    with a black outline and a shadow down and right. ss: the picture's supersampling (burnham.SS when not given)."""
+    from PIL import Image, ImageDraw
+    if ss is None:
+        import sys
+        B = sys.modules.get('burnham')
+        ss = B.SS if B else 1
+    f = _font(ss)
+    rs = rows(text, ss)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for i, row in enumerate(rs):
+        y = (BASE - ROW * (len(rs) - 1 - i)) * ss
+        d.text((540 * ss + 6 * ss, y + 7 * ss), row, font=f, fill=(0, 0, 0, 150), anchor='mm',
+               stroke_width=int(7 * ss), stroke_fill=(0, 0, 0, 150))                 # the shadow, down and right
+        d.text((540 * ss, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=int(7 * ss),
+               stroke_fill=(0, 0, 0))
+    if img.mode == 'RGBA':
+        img.alpha_composite(lay)
+    else:
+        img.paste(lay, (0, 0), lay)
+
+
+def readable_faults(caption_at, end, fps, speed=SPEED):
+    """Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit
+    the width, on screen at least 0.8 s and at most 220 words a minute AT THAT SPEED. Returns faults."""
+    seen = {}
+    for i in range(int(end * fps)):
+        c = caption_at(i / fps)
+        if c:
+            seen.setdefault(c, []).append(i / fps)
+    f = _font()
+    out = []
+    for c, ts in seen.items():
+        rs = rows(c)
+        wide = max(f.getbbox(r)[2] for r in rs)
+        if len(rs) > 2 or wide > WIDE or len(c.split()) > 5:
+            out.append(f'caption "{c}": {len(c.split())} words, {len(rs)} rows, {wide} px wide (max 5 words, 2 rows, '
+                       f'{WIDE} px)')
+        dur, words = len(ts) / fps / speed, len(c.split())
+        if dur < 0.8 or words / max(dur, 0.01) * 60 > 220:
+            out.append(f'caption "{c}": {dur:.2f} s on screen at {speed:g}x for {words} words (too fast to read)')
+    return out

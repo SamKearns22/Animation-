@@ -49,11 +49,12 @@ def faults(film):
                 'faces, action and signs it must not cover [(name, box_at)]']
     text, opts = film.HOOK
     hb = hook_box(text, **opts)
-    until = opts.get('until', 3.6)
+    until = opts.get('until', 3.6)                  # seconds of the delivered file (rule 70: played at 1.1x),
+    import subtitles as SUB                         # so the film's own clock runs SPEED times as far
     fps = getattr(film, 'FPS', 12)
     out = []
     for name, box_at in film.KEEP_CLEAR:
-        for i in range(int(until * fps)):
+        for i in range(int(until * SUB.SPEED * fps) + 1):
             b = box_at(i / fps)
             if b and min(hb[2], b[2]) - max(hb[0], b[0]) > 0 and min(hb[3], b[3]) - max(hb[1], b[1]) > 0:
                 out.append(f'{i / fps:.2f} s: the Hook Text {hb} covers {name} {tuple(int(v) for v in b)}')
