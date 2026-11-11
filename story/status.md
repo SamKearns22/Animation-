@@ -1,5 +1,5 @@
-- Blessed (11 Nov, chat 9): backup applied; set faults fixed; press pack at the gate, all facing Brand (Sam's
-  notes 7-8); checks clean; stills sent. Next: animatic 1 prep, Opus medium, Sam opens the chat by hand.
+- Blessed (11 Nov, chat 10, Opus high): Brand's pre-scandal manner researched; his moves rebuilt to it (clips sent);
+  Hook Text placed; brief ticked; critique hunt 1: 15 faults. Next: Opus medium chat fixes them, hunt 2, check sheet.
   Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.

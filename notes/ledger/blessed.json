@@ -146,30 +146,6 @@
   "passes": [
    {
     "round": 1,
-    "pass": 1,
-    "stage": "cast",
-    "date": "2026-11-11",
-    "hunt": 1,
-    "faults": 13,
-    "cant_tell": 0,
-    "open": [
-     "1-4 A1 O5: boom mics: poles end in journalists' heads; nobody holds them.",
-     "1-2 A1: arrival - no TV camera; reads as fans, not press.",
-     "1-2,4-5,7 P6 P1: every hand is a flat disc; phone hands hide the phone.",
-     "1-2 P8 O2: back-view phone-holders - phone and hand drawn over the back of the hair.",
-     "5-6 A1 S2: TV room - wall bar with hanging strings reads as a marionette rig; inmates look like puppets.",
-     "5-6 P2: all four stare at the lens, not up at a TV; the lead bares fanged teeth, not tearful.",
-     "5-7 S1 S5: flat grey haze; no blue TV glow, faces dimmed, floor a dark void.",
-     "5 A1: four coloured stools, not one bench.",
-     "3 P2 S1: the lead is pixel-sized in the doorway; arms flung up unreadable.",
-     "3-4 A2 S3: gatehouse - reference has wide rusticated towers, deep arch, portcullis grille; ours narrow towers, plain door.",
-     "3 O1 O5: sign chopped to \"ON\"; TV camera sliced by frame edge.",
-     "1-2,4 P4: sunglasses a thin black bar, not big dark lenses.",
-     "7 P2: amazement weak, brows flat."
-    ]
-   },
-   {
-    "round": 1,
     "pass": 2,
     "stage": "cast",
     "date": "2026-11-11",
@@ -192,35 +168,61 @@
      "5 P7: no bench; thighs vanish, bodies hang over coloured blocks."
     ],
     "fixed": "press: same pack at the gates, booms in raised hands, phones held up clear of hair, TV camera seen from behind (eyepiece, lens away), turned journalists glance aside in profile; inmates and Brand: gaz"
+   },
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-11",
+    "hunt": 1,
+    "faults": 15,
+    "cant_tell": 0,
+    "open": [
+     "1,7 P2: Brand - no swagger; stiff walk (1), frozen in doorway (7).",
+     "2 P2 P1 P8: RIGHT fist (brief: left) hovers over unlowered glasses; no lean.",
+     "3,10 P2: no knee dip, chin level (10 knees splay sideways); 3 beads hidden.",
+     "4 P2 P5: no bow; hand pasted on right chest, no forearm.",
+     "5 P2: oath hand a fist; twisted, not upright.",
+     "6 P2: Brand sobs at lens; no upward glance, no TV.",
+     "8-9 P2 P6: ball hands, no palms out; chin level; 9 still in doorway.",
+     "1,5-6 P4 M3 P8: hair a plait in profile (1, 5), a bun (6); scarf vanishes (1).",
+     "1-4,7-10 P4 A2: glasses a thin gold bar, not big dark wraps.",
+     "6 P4 A1: fang teeth read vampire, not Brand.",
+     "6 P7 S2: no bench; men hover seated over nothing.",
+     "6-8 S1: 6 drowned in blue; 7-8 Brand tiny at phone size.",
+     "7-10 S3 S5: gatehouse a blank wall; no towers, windows, cornice, rustication.",
+     "1-4 S3: orange three-storey grid; real court low buff brick.",
+     "5 O3: royal arms read as dog and goat."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 20,
+    "faults": 21,
     "false": 0
    },
    "O3": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "A2": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "S3": {
-    "faults": 10,
+    "faults": 12,
     "false": 0
    },
    "S2": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "S1": {
-    "faults": 13,
+    "faults": 14,
     "false": 0
    },
    "S5": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "O5": {
@@ -248,26 +250,34 @@
     "false": 0
    },
    "P6": {
-    "faults": 2,
+    "faults": 3,
     "false": 2
    },
    "P1": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P8": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "P2": {
-    "faults": 7,
+    "faults": 14,
     "false": 0
    },
    "P4": {
-    "faults": 2,
+    "faults": 5,
     "false": 0
    },
    "P7": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "M3": {
     "faults": 1,
     "false": 0
    }

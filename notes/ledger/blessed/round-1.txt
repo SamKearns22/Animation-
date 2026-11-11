@@ -273,3 +273,44 @@ Missed tears in 5-6 (tiny drips), TV and upward gaze (none shown), arms up in 3 
 
 critique, pass 2: faults fixed as one list: press: same pack at the gates, booms in raised hands, phones held up clear of hair, TV camera seen from behind (eyepiece, lens away), turned journalists glance aside in profile; inmates and Brand: gaze in eye units so eyes look up; set faults (TV room rack, glow, bench; gatehouse) left for the sets, outside notes 4-5
 
+== critique, round 1 pass 1 (2026-11-11): 15 fault(s), 0 can't tell
+-- look.md --
+1: "CROWN COURT SOUTHWARK"; long-haired sunglassed man strides past press, beads in hand; calm.
+2: "CROWN COURT SOUTHWARK"; same man faces cameras, hand at sunglasses, white scarf now; smug.
+3: Close: sunglassed long-haired man grins, arm out, ponytailed cameraman films; cocky, pleased.
+4: "CROWN COURT SOUTHWARK"; man stands still, beads dangling, press filming; near-copy of panel 2.
+5: Courtroom: wigged judge, lion-unicorn crest; man in dock, no sunglasses, fist raised, cross book; defiant.
+6: Blue-tinted cell: four grey-clad men sit slumped; bun-haired bearded man cries open-mouthed; misery.
+7: Stone arch, big wooden gate; small figure in doorway, press with cameras; release, tiny.
+8: Wider stone arch; man in doorway lifts arms, press and boom mic; triumphant, small.
+9: Closer gate; sunglassed man spreads arms wide, press filming from behind; triumphant.
+10: Close: grinning sunglassed man, arms flung wide, yellow bollard, onlooker's back; jubilant, gloating.
+-- result.md --
+## Faults
+FAULT P2 [1, 7]: Brand - no swagger; stiff walk (1), frozen in doorway (7).
+FAULT P2 P1 P8 [2]: RIGHT fist (brief: left) hovers over unlowered glasses; no lean.
+FAULT P2 [3, 10]: no knee dip, chin level (10 knees splay sideways); 3 beads hidden.
+FAULT P2 P5 [4]: no bow; hand pasted on right chest, no forearm.
+FAULT P2 [5]: oath hand a fist; twisted, not upright.
+FAULT P2 [6]: Brand sobs at lens; no upward glance, no TV.
+FAULT P2 P6 [8, 9]: ball hands, no palms out; chin level; 9 still in doorway.
+FAULT P4 M3 P8 [1, 5, 6]: hair a plait in profile (1, 5), a bun (6); scarf vanishes (1).
+FAULT P4 A2 [1-4, 7-10]: glasses a thin gold bar, not big dark wraps.
+FAULT P4 A1 [6]: fang teeth read vampire, not Brand.
+FAULT P7 S2 [6]: no bench; men hover seated over nothing.
+FAULT S1 [6, 7, 8]: 6 drowned in blue; 7-8 Brand tiny at phone size.
+FAULT S3 S5 [7-10]: gatehouse a blank wall; no towers, windows, cornice, rustication.
+FAULT S3 [1-4]: orange three-storey grid; real court low buff brick.
+FAULT O3 [5]: royal arms read as dog and goat.
+
+## Checked
+1-10
+
+## Cold look
+Missed: 1 strut ("calm"); 2 lowering, lean; 3 beads, dip; 4 hand-to-heart, bow ("near-copy of 2"); 5 oath (saw fist); 6 not Brand (bun, fangs), "cell" not TV room, crying not dejected; 7 stepping out ("tiny"). Why: poses don't play beats; his look changes in 6.
+
+## Not on the list
+- 2 and 4 near-identical. suggested line: each beat a clearly different pose.
+- Same open grin throughout. suggested line: the face changes each beat.
+- No shadows; 10 looks pasted on. suggested line: standing figures cast contact shadows.
+
