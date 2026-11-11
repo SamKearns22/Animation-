@@ -719,7 +719,7 @@ def kg_gun(p, hands, view):
 
 
 def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=True, band=False, t=0.0, flip=1,
-       lean=0.0, look=0.0, tail=1.0, part='all', talk=None, stand=False, head_tilt=0.0):
+       lean=0.0, look=0.0, tail=1.0, part='all', talk=None, stand=False, head_tilt=0.0, gun_aim=0.0):
     """Kaepora Gaebora at world (x, y) (his body's middle), scale s (as for a 1.75 m adult). wings: a WING_POSES name
     (front) or SIDE_WINGS name (side), or a dict {'L': (elbow, hand, shape), 'R': ...} in his own units (front:
     the L wing on screen right). tail < 1 shortens the tail (front: lying back along the ground when he stands).
@@ -750,6 +750,12 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
         if isinstance(wings, str):
             far, near = SIDE_WINGS[wings]
             wings = {'R': far, 'L': near}
+        flat = wings
+        if gun_aim:                                  # remakes note 59 (Sam): the body stays planted; only the wings
+            A = math.radians(gun_aim)                # and the gun swing up about the shoulder (they tipped him over)
+            rt = lambda q: (q[0] * math.cos(A) + (q[1] + 145) * math.sin(A),
+                            -q[0] * math.sin(A) + (q[1] + 145) * math.cos(A) - 145)
+            wings = {sd: (rt(w[0]), rt(w[1]), w[2]) for sd, w in wings.items()}
         per = 'stand_side' if stand else perched
         if head_tilt:                                # side on: the head alone tipped up (+) about the neck, on its
             _kg_side(p, mood, wings, per, band, t, lean, talk, 'back')     # own layer (remakes note 33)
@@ -761,7 +767,11 @@ def kg(img, cam, x, y, s, view='front', mood='kindly', wings='fold', perched=Tru
             _kg_side(p, mood, wings, per, band, t, lean, talk, 'near')
         else:
             _kg_side(p, mood, wings, per, band, t, lean, talk)
-        if wings_name == 'gun':
+        if wings_name == 'gun' and gun_aim:
+            lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+            _gun_over(B.Pen(lay, loc), flat, 'side')
+            img.alpha_composite(lay.rotate(gun_aim * flip, center=loc.P(0, -145), resample=Image.BICUBIC))
+        elif wings_name == 'gun':
             _gun_over(p, wings, 'side')
         hands = {sd: loc.P(*wings[sd][1]) for sd in 'LR'}
     return hands
