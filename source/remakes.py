@@ -111,10 +111,11 @@ HEAD_LIFE = HL = {'kg': headlife.HeadLife(_voice_env('kg'), 0.0, seed=5), 'link'
 # the action beats, from the lines
 SNAP = L[5]['start'] + 2.86                       # note 45: the snap ON "move" (its syllable beat in the take);
                                                   # the grip lands on "ex-" of "execution" (1.74 into the line)
-GATE = L[6]['end'] + 0.3                          # the gate bursts in: S7 starts
+GATE = L[6]['end'] + 0.3                          # S7 starts on the camp quiet, the gate shut
+BLAST = GATE + 0.25                               # note 46: then the gate blows (3 frames of 'everything fine' first)
 # the camp (note 32): KG storms in through the gate, shoots the tower lookout on his way, then the man who runs in
 # lower left; Link scuttles in through the gate behind him; the last man comes in middle right
-KG_T = (GATE + 0.08, L[7]['start'] + 0.45, L[7]['start'] + 1.6, L[7]['start'] + 2.3)   # in, stop, on, at his mark
+KG_T = (BLAST + 0.3, L[7]['start'] + 0.45, L[7]['start'] + 1.6, L[7]['start'] + 2.3)   # in, stop, on, at his mark
 BURST1 = (L[7]['start'] + 0.5, L[7]['start'] + 1.55)             # up at the tower, from "enemy"
 HIT1 = BURST1[0] + 0.85
 G3_IN = (L[7]['start'] + 1.75, L[7]['start'] + 2.35)             # the lower-left man runs in
@@ -122,10 +123,11 @@ BURST2 = (L[7]['start'] + 2.45, L[7]['start'] + 3.2)
 HIT3 = BURST2[0] + 0.4
 FIRE0, FIRE1 = BURST1[0], BURST2[1]
 SCUTTLE = (L[7]['start'] + 2.3, L[8]['start'] - 0.15)            # Link in through the gate, at his mark for line 8
-G2_IN = (L[8]['start'] + 0.1, L[8]['start'] + 0.75)              # the middle-right man runs in
 S8_AT = L[9]['start'] + 0.42 * (L[9]['end'] - L[9]['start'])   # the push to Navi on "GRENADES"
 ZIP = L[9]['end'] + 0.1                           # Navi zips at the gunman
 BOOM = ZIP + 0.35
+G2_IN = (ZIP - 0.55, ZIP - 0.15)                  # note 47: the middle-right man fires from off screen (INCOMING) and
+INCOMING = (L[8]['start'] + 0.15, G2_IN[0])       # is seen only when he steps in, as Navi zips at him
 S9_AT = BOOM + 1.1
 S10_AT = L[10]['end'] + 0.2
 S11_AT = L[12]['start'] - 0.15
@@ -316,6 +318,164 @@ def _smoke(img, cam, x, y, age, size, seed=9):
         r = size * (0.4 + 0.5 * min(1, age / 0.8)) * (0.8 + 0.1 * i % 3)
         d.polygon(_blob(cam, x + ox, y - size * 0.3 * i % 2 - age * size * 0.6, r, 10, seed + i, 0.3),
                   fill=(120, 116, 110, a))
+    img.alpha_composite(lay)
+
+
+def _shake(t, t0, amp, dur=0.45):
+    """Note 46: the camera kicked by a blast at t0, dying away over dur (world px)."""
+    a = t - t0
+    if a < 0 or a > dur:
+        return 0.0, 0.0
+    k = amp * (1 - a / dur) ** 2
+    i = int(a * FPS)
+    return k * (1 if i % 2 else -1) * (0.6 + 0.4 * math.sin(i * 2.3)), k * (0.5 if i % 3 else -0.7)
+
+
+def _explosion(img, cam, x, y, a, size, seed=0, planks=False, gy=None):
+    """Note 46 (Sam: one frame fine, the next all on the ground): a real blast over many frames. A white-out frame,
+    a fireball that swells and burns down into black smoke, a shockwave ring along the ground, sparks, dust rolling
+    out low, and the gate's planks (planks=True) or dirt clods flung out tumbling. (x, y) its heart, size its
+    fireball's radius, gy the ground under it (world px); a seconds since it went off."""
+    if a < 0:
+        return
+    gy = y + size * 0.6 if gy is None else gy
+    rng = np.random.default_rng(seed)
+    lay = _lay(img)
+    d = ImageDraw.Draw(lay)
+    for i in range(10):                                               # the smoke: dark billows rising and spreading
+        a0 = 0.12 + 0.05 * i
+        u = a - a0
+        if u < 0 or u > 2.6:
+            continue
+        px = x + (rng.random() - 0.5) * size * 1.3 + (rng.random() - 0.3) * size * 0.4 * u
+        py = y - size * 0.15 - u * size * (1.0 + 0.6 * rng.random())
+        r = size * (0.32 + 0.2 * rng.random()) * (0.6 + 0.9 * min(1.0, u / 0.9))
+        g = int(52 + 70 * min(1.0, u / 2.0))
+        al = int(235 * max(0.0, 1 - u / 2.6))
+        d.polygon(_blob(cam, px, py, r, 11, seed + 30 + i, 0.3), fill=(g, g - 4, g - 8, al))
+    for i in range(10):                                               # dust rolling out low along the ground
+        sd = -1 if i % 2 else 1
+        f = 0.5 + 0.6 * rng.random()
+        u = a - 0.03
+        if u < 0 or u > 1.8:
+            continue
+        px = x + sd * size * (0.3 + 2.4 * f * ease(u / 0.9))
+        py = gy - size * (0.12 + 0.25 * rng.random()) - size * 0.2 * u
+        r = size * (0.22 + 0.12 * rng.random()) * (0.7 + 0.8 * min(1.0, u / 0.7))
+        d.polygon(_blob(cam, px, py, r, 9, seed + 50 + i, 0.35), fill=(198, 172, 128, int(220 * max(0.0, 1 - u / 1.8))))
+    img.alpha_composite(lay)
+    lay = _lay(img)
+    d = ImageDraw.Draw(lay)
+    if a < 0.32:                                                      # the shockwave: a pale ring out along the ground
+        u = a / 0.32
+        rx = size * (0.6 + 4.2 * u)
+        (X0, Y0), (X1, Y1) = cam.P(x - rx, gy - rx * 0.3), cam.P(x + rx, gy + rx * 0.3)
+        d.ellipse((X0, Y0, X1, Y1), outline=(255, 248, 226, int(230 * (1 - u))),
+                  width=max(1, int(cam.S(size * 0.1 * (1 - u)))))
+    if a < 0.62:                                                      # the fireball: swells, then burns down to smoke
+        k = ease(a / 0.16)
+        fade = int(255 * (1 - ease((a - 0.36) / 0.26)))
+        r = size * (0.45 + 0.6 * k) * (1 + 0.25 * a)
+        lift = size * 0.5 * a
+        for rr, col, sd in ((1.0, (196, 58, 28), 1), (0.8, (242, 120, 34), 2), (0.6, (255, 186, 60), 3),
+                            (0.42 * max(0.0, 1 - a / 0.42), (255, 246, 206), 4)):
+            if rr * r < 2:
+                continue
+            dk = min(1.0, a / 0.5) * (1.0 if sd == 1 else 0.6)            # the outside goes sooty first
+            c = tuple(int(v * (1 - 0.55 * dk) + 40 * 0.55 * dk) for v in col)
+            d.polygon(_blob(cam, x, y - lift * rr, r * rr, 13, seed + sd + int(a * FPS) * 7, 0.32),
+                      fill=c + (fade,), outline=INK + (fade,) if sd == 1 else None)
+    if a < 0.5:                                                       # sparks: streaks flying out
+        for i in range(16):
+            ang = -math.pi * rng.random() * 1.15 + 0.08
+            sp = size * (4 + 6 * rng.random())
+            u0, u1 = max(0.0, a - 0.05), a
+            p0 = (x + math.cos(ang) * sp * u0, y + math.sin(ang) * sp * u0 + 2.5 * size * u0 * u0)
+            p1 = (x + math.cos(ang) * sp * u1, y + math.sin(ang) * sp * u1 + 2.5 * size * u1 * u1)
+            d.line([cam.P(*p0), cam.P(*p1)], fill=(255, 226, 130, int(255 * (1 - a / 0.5))),
+                   width=max(1, int(cam.S(size * 0.035))))
+    img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    for i in range(9 if planks else 8):                               # planks (or clods) flung out, tumbling
+        if a > 1.3:
+            break
+        ang = -math.pi * (0.12 + 0.76 * rng.random())
+        sp = size * (3.2 + 3.5 * rng.random())
+        near = 1 + (2.2 * rng.random() if planks else 0.6) * a    # flying at the lens: bigger as they come
+        bx = x + math.cos(ang) * sp * a
+        by = y + math.sin(ang) * sp * a + 3.2 * size * a * a
+        if by > gy + size * 3:
+            continue
+        if planks:
+            ln_, wd = size * (0.35 + 0.35 * rng.random()) * near, size * 0.09 * near
+            th = rng.random() * 3 + (rng.random() - 0.5) * 14 * a
+            c, s_ = math.cos(th), math.sin(th)
+            pts = [(bx + c * px_ - s_ * py_, by + s_ * px_ + c * py_)
+                   for px_, py_ in ((-ln_ / 2, -wd / 2), (ln_ / 2, -wd / 2), (ln_ / 2 - wd, wd / 2), (-ln_ / 2, wd / 2))]
+            col = (150, 156, 160) if i % 4 == 3 else ((142, 102, 62) if i % 2 else (118, 84, 52))
+            d.polygon([cam.P(*p) for p in pts], fill=col, outline=INK)
+        else:
+            d.polygon(_blob(cam, bx, by, size * 0.07 * near * (0.7 + 0.6 * rng.random()), 7, seed + 70 + i, 0.6),
+                      fill=(122, 92, 60), outline=INK)
+    if a < 0.17:                                                      # the white-out: one frame hard, one soft
+        img.alpha_composite(Image.new('RGBA', img.size, (255, 250, 236, 200 if a < 0.083 else 80)))
+
+
+def _hit(img, cam, x, y, a, ppm, dirx, seed=0, ground=None):
+    """Note 48 (Sam: hits very rudimentary): a man hit by a burst. Three wounds land one after another, each with a
+    red mist puff, a spray of drops flung out of his back (away from the gun, dirx) arcing down, and the drops
+    splat where they land (ground, world y)."""
+    if a < 0:
+        return
+    rng = np.random.default_rng(seed)
+    lay = _lay(img)
+    dl = ImageDraw.Draw(lay)
+    d = ImageDraw.Draw(img)
+    for w in range(3):
+        u = a - 0.08 * w
+        if u < 0:
+            continue
+        wx, wy = x + (rng.random() - 0.5) * 0.18 * ppm, y + (w - 1) * 0.12 * ppm
+        if u < 0.3:                                                   # the mist
+            dl.polygon(_blob(cam, wx + dirx * 0.2 * ppm * u / 0.3, wy, 0.1 * ppm * (1 + 2.5 * u / 0.3), 9, seed + w, 0.5),
+                       fill=(196, 30, 36, int(170 * (1 - u / 0.3))))
+        for k in range(7):                                            # the spray
+            ang = (rng.random() - 0.6) * 1.1
+            sp = ppm * (2.2 + 2.6 * rng.random())
+            bx = wx + dirx * math.cos(ang) * sp * u
+            by = wy + math.sin(ang) * sp * u + 4.5 * ppm * u * u
+            r = 0.035 * ppm * (0.6 + 0.8 * rng.random())
+            if ground is not None and by > ground:
+                if u < 1.4:
+                    d.polygon(_blob(cam, bx, ground, r * 2.2, 8, seed + 9 * w + k, 0.5), fill=(160, 18, 26))
+                continue
+            if u < 0.9:
+                d.polygon(_blob(cam, bx, by, r, 7, seed + 9 * w + k, 0.4), fill=(190, 24, 32), outline=INK)
+        if u < 1.2:                                                   # the wound
+            d.polygon(_blob(cam, wx, wy, 0.06 * ppm, 8, seed + 40 + w, 0.6), fill=(150, 14, 22), outline=INK)
+    img.alpha_composite(lay)
+
+
+def _puff(img, cam, x, y, a, r, spark=False, seed=0):
+    """A bullet striking near someone (notes 47, 48): a dirt kick on the ground, or a spark off tin and wood."""
+    if a < 0 or a > 0.33:
+        return
+    u = a / 0.33
+    lay = _lay(img)
+    d = ImageDraw.Draw(lay)
+    if spark:
+        if u < 0.4:                                                   # a lumpy flash, never a star
+            d.polygon(_blob(cam, x, y, r * 0.35, 9, seed, 0.5), fill=(255, 226, 120, 255))
+        for k in range(3):                                            # chips flying off it
+            ang = -2.4 + 0.9 * k + 0.3 * math.sin(seed)
+            p0 = (x + math.cos(ang) * r * 0.4 * (1 + 2 * u), y + math.sin(ang) * r * 0.4 * (1 + 2 * u))
+            d.line([cam.P(*p0), cam.P(p0[0] + math.cos(ang) * r * 0.3, p0[1] + math.sin(ang) * r * 0.3)],
+                   fill=(255, 232, 140, int(255 * (1 - u))), width=max(1, int(cam.S(r * 0.1))))
+    else:
+        d.polygon(_blob(cam, x, y - r * u, r * (0.5 + 0.8 * u), 9, seed, 0.4), fill=(186, 158, 116, int(230 * (1 - u))))
+        for k in range(4):
+            d.polygon(_blob(cam, x + (k - 1.5) * r * 0.5 * u, y - r * 2.2 * math.sin(math.pi * min(1, u * 1.3)) * (0.6 + 0.2 * k),
+                            r * 0.14, 6, seed + k, 0.5), fill=(120, 92, 60, 255))
     img.alpha_composite(lay)
 
 
@@ -614,10 +774,13 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     last man comes in middle right and Navi blows him up. Nobody is behind KG."""
     import moves
     img = B.canvas((0, 0, 0))
-    gate = ease((t - GATE) / 0.25)
+    gate = ease((t - BLAST) / 0.12)                                   # flat open under the fireball (note 46)
     RS.camp(img, cam, t, gate)
     st = RS.STAGE['camp']
     C = RS.CAMP
+    gx0, gy0 = C.p(0, RS.WALL_D, 1.1)
+    _explosion(img, cam, gx0, gy0, t - BLAST, 1.5 * C.ppm(RS.WALL_D), seed=11, planks=True,
+               gy=C.p(0, RS.WALL_D, 0)[1])
     lx, ly, lppm = st['link']
     kg = _kg_camp(t)
     burst = next((k for k, (b0, b1) in enumerate((BURST1, BURST2)) if b0 <= t < b1), None)
@@ -628,8 +791,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
         _kid(img, cam, who, x, y, ppm, t, j=j or _gun_pose(), yaw=90, flip=flip, rot=rot, talk=False)
-        if hit <= t < hit + 0.3:
-            _splat(img, cam, x + flip * 0.1 * ppm, y - 1.3 * ppm, 0.28 * ppm, seed=len(who) + int(hit))
+        _hit(img, cam, x + flip * 0.05 * ppm, y - 1.3 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
+             ground=None if who == 'gunman1' else y + 0.1 * ppm)       # note 48
 
     def run_in(who, u, tt):
         """The aiming pose on running legs while he comes in (u < 1)."""
@@ -688,6 +851,35 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         x3 = x - (1 - ease(u)) * 1.5 * ppm
         gunman('gunman3', x3, y, ppm, 1, HIT3, run_in('gunman3', u, t - G3_IN[0]))
         targets[1] = (x3 + 0.1 * ppm, y - 1.25 * ppm)
+    if INCOMING[0] <= t < G2_IN[0] + 0.25 and kg:                   # note 47: the middle-right man fires from off
+        kx_, ky_ = C.p(kg[0], kg[1])                                  # screen: rounds whip past KG and Link, kicking
+        kp = C.ppm(kg[1])                                             # up dirt and sparking off the barrels
+        lay = _lay(img)
+        dl = ImageDraw.Draw(lay)
+        rx = cam.cx + (W / 2) / cam.z + 60
+        for k in range(2):
+            rng = np.random.default_rng(int(t * FPS) * 3 + k)
+            if rng.random() < 0.3:
+                continue
+            p0 = (rx, ky_ - kp * (0.9 + 1.0 * rng.random()))
+            p1 = (kx_ - kp * 3.0, ky_ - kp * (0.5 + 1.6 * rng.random()))
+            f = rng.random() * 0.55
+            q0 = (_lerp(p0[0], p1[0], f), _lerp(p0[1], p1[1], f))
+            q1 = (_lerp(p0[0], p1[0], f + 0.4), _lerp(p0[1], p1[1], f + 0.4))
+            dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 214, 110, 150), width=int(cam.S(9)))
+            dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 250, 220, 255), width=max(1, int(cam.S(3.5))))
+        img.alpha_composite(lay)
+        for j in range(int((G2_IN[0] + 0.25 - INCOMING[0]) / 0.15)):
+            te = INCOMING[0] + 0.15 * j + 0.05 * (j % 3)
+            rng = np.random.default_rng(100 + j)
+            if j % 4 == 3:                                            # a spark off the barrels left of Link
+                bx, by = C.p(-1.7 + 0.4 * rng.random(), RS.CAMP_MARKS['link'][1] - 0.6, 0.5 + 0.4 * rng.random())
+                _puff(img, cam, bx, by, t - te, 0.25 * kp, spark=True, seed=j)
+            else:
+                ex = kg[0] + (rng.random() - 0.5) * 3.0
+                ed = kg[1] + (rng.random() - 0.3) * 1.5
+                px_, py_ = C.p(ex, ed)
+                _puff(img, cam, px_, py_, t - te, 0.3 * C.ppm(ed), seed=j)
     if firing and muzzle:
         (mx, my), (dx, dy) = muzzle
         s = RS.s_for(C.ppm(kg[1]))
@@ -703,9 +895,6 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             ay = (t * 5 + k * 0.3) % 1
             d.rectangle([cam.P(cx, my + 40 * s + ay * 200 * s), cam.P(cx + 8 * s + 2, my + 52 * s + ay * 200 * s + 2)],
                         fill=(210, 170, 70))
-    if GATE <= t < GATE + 0.18:
-        g0, g1 = C.p(0, RS.WALL_D, 1.2)
-        _flash(img, cam, g0, g1, 220, seed=11)
     # Navi: at Link's shoulder as he comes in, then red, then zip, then the blast
     if draw_navi and t < BOOM and link_at:
         sx, sy, ppm = link_at
@@ -716,15 +905,13 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             u = ease((t - ZIP) / (BOOM - ZIP))
             nx, ny = nx + (gx - nx) * u, ny + (gy - 1.25 * gppm - ny) * u
         CR.navi(img, cam, nx, ny + 12 * math.sin(t * 9), RS.s_for(lppm) * 1.3, t=t, heat=heat)
-    if t >= BOOM:
-        gx, gy, gppm = st['gunman2']
+    if t >= BOOM:                                                     # note 46: the grenade blast, the same as the
+        gx, gy, gppm = st['gunman2']                                  # gate's, with his pieces in it
         a = t - BOOM
+        if a > 0.25:
+            _splat(img, cam, gx, gy, 0.35 * gppm * min(1.0, (a - 0.25) / 0.3 + 0.4), seed=4)
+        _explosion(img, cam, gx, gy - 1.0 * gppm, a, 0.75 * gppm, seed=21, gy=gy + 0.1 * gppm)
         _bits(img, cam, gx, gy - 1.2 * gppm, a, 0.5 * gppm, ground=gy + 0.3 * gppm)
-        if a < 0.3:
-            _flash(img, cam, gx, gy - 1.1 * gppm, (0.6 + 1.2 * a) * gppm, seed=21)
-        _smoke(img, cam, gx, gy - 1.0 * gppm, a, 0.8 * gppm)
-        if a > 0.3:
-            _splat(img, cam, gx, gy, 0.35 * gppm, seed=4)
     RS.camp_front(img, cam, t)
     if t >= L[9]['start']:
         _prompt(img, 'R2', 'GRENADES', 540, 330, t - L[9]['start'] - 0.05, press=t - ZIP)   # screen px, not through cam
@@ -732,7 +919,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
 
 
 def s7_camp(t):
-    return _camp(t, B.Cam(1.4, 565, 790))                              # note 32: in on the action (the cast were small
+    dx, dy = _shake(t, BLAST, 34)                                     # note 46: the blast kicks the camera
+    return _camp(t, B.Cam(1.4, 565 + dx, 790 + dy))                              # note 32: in on the action (the cast were small
                                                                       # in the top half over an empty yard)
 
 
@@ -740,8 +928,9 @@ def s8_navi(t):
     st = RS.STAGE['camp']
     lx, ly, _ = st['link']
     gx, gy, _ = st['gunman2']
-    u = ease((t - ZIP) / 0.5)
-    return _camp(t, B.Cam(1.7, (lx + 90) + (gx - lx - 90) * u, (ly - 160) + (gy - ly) * u * 0.6))
+    u = 0.85 * ease((t - G2_IN[0]) / (ZIP + 0.1 - G2_IN[0]))       # note 47: the pan finds him as he steps in
+    dx, dy = _shake(t, BOOM, 40)
+    return _camp(t, B.Cam(1.7, (lx + 90) + (gx - lx - 90) * u + dx, (ly - 160) + (gy - ly) * u * 0.6 + dy))
 
 
 def s9_horrible(t):
@@ -1018,6 +1207,10 @@ def soundtrack(stems=False):
         burst[-int(0.03 * SR):] *= np.linspace(1, 0, int(0.03 * SR))
         filmkit.place(rest, burst, at=b0, sr=SR, gain=0.35)
     filmkit.place(rest, _crack(), at=SNAP, sr=SR, gain=0.9)
+    filmkit.place(rest, _sfx('explosion.mp3'), at=BLAST, sr=SR, gain=0.6)   # note 46: the gate blows
+    k = int(0.35 * SR)                                                # note 47: his short bursts from off screen
+    for b0 in np.arange(INCOMING[0], BOOM - 0.3, 0.7):
+        filmkit.place(rest, mg[:k] * np.linspace(1, 0.2, k), at=float(b0), sr=SR, gain=0.16)
     filmkit.place(rest, _sfx('explosion.mp3'), at=BOOM, sr=SR, gain=0.6)
     end = int(BLACK_AT * SR)
     rest[end:] = 0
