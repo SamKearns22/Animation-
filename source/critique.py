@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""critique: rule 89's fresh-eye critique (Job H, 10 Nov). A NEW helper (Agent tool, general-purpose, model opus) sees
+"""critique: rule 89's fresh-eye critique (Job H, 10 Nov). A NEW helper (Agent tool, HELPER below, model opus) sees
 only the pictures, the brief and the checklist, never the chat or the code, and answers in two steps (cold look first).
 
 MAP
@@ -57,6 +57,14 @@ CHECKLIST = os.path.join(ROOT, 'guides', 'critique-checklist.md')
 PARTS = 'APCOSM'
 OPENING = ('Someone else made these pictures for a director who has sent back faults in almost every first look. '
            'Assume there are some: find what he would flag. Don\'t reassure.')
+# The helper's kind. Timed 11 Nov (budget chat 3; a one-line job on one picture, Opus, % of a week, almost all of it
+# start-up): general-purpose 0.19 and claude 0.19 (64k tokens loaded before the first word); Explore 0.15 and Plan
+# 0.15 (51k) but both are read-only: they cannot write look.md, so the cold-look-first check would be lost and the chat
+# would pay a step to write their answer out. So no built-in kind is usefully lighter. `critic`
+# (.claude/agents/critic.md: Read and Write only, so far less to load) is NOT yet timed: a chat learns its helper
+# kinds when it starts, so the chat that wrote it could not use it. Change HELPER only with a timing beside it.
+HELPER = 'general-purpose'
+READ_ONLY = ('Explore', 'Plan')
 LINE_RE = re.compile(r'^- ([APCOSM]\d+) \((\d+)\) (.*)$')
 
 
@@ -330,6 +338,15 @@ judged on beforeafter.jpg (marked, before, after) and the panels. A fault alread
 '''
 
 
+def agent_line(out, kind=None):
+    """The one line the chat hands to the Agent tool: the lightest kind that sees pictures AND writes its answer."""
+    kind = kind or HELPER
+    if kind in READ_ONLY:
+        sys.exit(f'critique: a {kind} helper cannot write look.md (read-only): the cold look could not be checked')
+    return (f'Agent ({kind}, model opus, a NEW one, ONE for the whole stage): "Read {out}/step1.md and follow it '
+            f'exactly; write only into {out}."')
+
+
 def pack(film_name, spec_path):
     spec = json.load(open(spec_path))
     film = importlib.import_module(film_name)
@@ -367,8 +384,7 @@ def pack(film_name, spec_path):
         extra=(', notes.md and beforeafter.jpg' if ba else ''), notes_part=(NOTES_PART if notes else '')))
     json.dump(spec, open(out + '.spec.json', 'w'), indent=1)   # beside the pack: the helper never sees it
     print(out)
-    print(f'Agent (general-purpose, model opus, a NEW one): "Read {out}/step1.md and follow it exactly; '
-          f'write only into {out}."')
+    print(agent_line(out))
     return out
 
 

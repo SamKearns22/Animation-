@@ -716,6 +716,25 @@ def critique_two_hunts_then_sam():
 
 
 @test
+def critique_helper_kind():
+    """Budget job (d), 11 Nov: the pack names one helper kind, never a read-only one (it could not write the cold look);
+    a home-made kind must exist with only Read and Write."""
+    import critique as C
+    line = C.agent_line('/x/r1-p1')
+    refused = []
+    for k in C.READ_ONLY:
+        try:
+            C.agent_line('/x/r1-p1', k)
+        except SystemExit:
+            refused.append(k)
+    builtin = C.HELPER in ('general-purpose', 'claude')
+    path = os.path.join(C.ROOT, '.claude', 'agents', C.HELPER + '.md')
+    own = os.path.exists(path) and bool(re.search(r'^tools: Read, Write$', open(path).read(), re.M))
+    ok = f'({C.HELPER}, model opus' in line and refused == list(C.READ_ONLY) and (builtin or own)
+    return ok, f"names '{C.HELPER}' ({'built in' if builtin else 'own definition'}); read-only kinds refused: {refused}"
+
+
+@test
 def critique_checklist_parts():
     """Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools."""
     import critique as C
