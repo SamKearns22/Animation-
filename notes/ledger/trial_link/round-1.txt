@@ -1,0 +1,78 @@
+== critique, round 1 pass 1 (2026-11-11): 29 fault(s), 1 can't tell
+-- look.md --
+1: Elf boy turnaround, green cap and tunic; grey silhouette; words "front", "side", "back".
+2: Elf boy stands straight, arms down, nub hands, calm faint smile.
+3: Elf boy shrugs, arms spread wide, open palms, cheerful smile.
+4: Elf boy clutches cheeks, eyes wide, mouth open, shocked.
+5: Elf boy covers ears, eyes squeezed, teeth gritted, legs bent mid-air, distressed.
+6: Elf boy side view, leaping above ground line, fists raised, startled, nervous.
+7: Nine head-and-shoulder busts: calm, smiling, gasping, wincing, worried, frowning, side, back views.
+-- result.md --
+## Panel 1
+ok: A1 A3 P2 P7 P1 P8 P3 P4 P6 P10 P12 P11 P13 P14
+FAULT A2: cap - no red beads
+CAN'T TELL P5: full-size shoulder crops
+
+## Panel 2
+ok: A1 A3 P7 P1 P8 P3 P4 P6 P10 P12 P11 P13 P14
+FAULT A2: cap - no beads
+FAULT P2: arms - stiff, not relaxed
+FAULT P5: shoulders - stray ticks
+
+## Panel 3
+ok: A3 P4 P7 P1 P8 P6 P10 P12 P11 P13 P14
+FAULT A1: face - reads cheerful
+FAULT A2: cap - no beads
+FAULT P2: face/arms - grin, "ta-da"
+FAULT P3: arms - no elbow bend
+FAULT P5: shoulders - stray ticks
+
+## Panel 4
+ok: A3 P4 P7 P1 P8 P6 P10 P12 P11 P14
+FAULT A1: body - no jolt reads
+FAULT A2: cap - no beads
+FAULT P2: body - upright, no lean back
+FAULT P3: arms - no elbow, upper arm gone
+FAULT P5: arms start inside tunic
+FAULT P13: sleeves vanished
+
+## Panel 5
+ok: A3 P4 P1 P8 P3 P5 P6 P10 P12 P11 P13 P14
+FAULT A1: legs - read floating
+FAULT A2: cap - no beads
+FAULT P2: body - upright, no crouch
+FAULT P7: feet - float, no ground
+
+## Panel 6
+ok: A3 P4 P8 P3 P5 P6 P12 P13 P14
+FAULT A1: reads as a jump
+FAULT A2: cap - no beads
+FAULT P2: limbs - fists up, not limp
+FAULT P7: hangs from nothing
+FAULT P1: no hand at collar
+FAULT P10: collar - no pull
+FAULT P11: neck - missing
+
+## Panel 7
+ok: A3 P4 P7 P1 P8 P3 P5 P6 P10 P12 P11 P13 P14
+FAULT A1: faces 1, 2, 7 misread
+FAULT A2: cap - no beads
+FAULT P2: faces 1, 2, 8 - beats unreadable; tears tiny
+
+## Cold look
+Wrong because the drawing is: 3 "cheerful", 5 "mid-air", 6 "leaping", 7 faces. Missed: 4 lean (none drawn), tears.
+
+## Same fault elsewhere
+- No beads: 1-7.
+- Shoulder ticks: 2, 3.
+- No elbow: 3, 4.
+- Floating: 5, 6.
+- Hidden brows: 2, 4, 5, 7.
+
+## Not on the list
+1. Panel 1 edge bar. suggested line: no stray marks.
+2. Boot cropped, panel 5. suggested line: bodies fit panels.
+3. No floor, 2-5. suggested line: full-body poses show floor.
+4. Fringe hides brows. suggested line: brows show when acting.
+5. Tunic length varies (4, 6). suggested line: costume matches turnaround.
+
