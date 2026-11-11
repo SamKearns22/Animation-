@@ -996,7 +996,10 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
 }
 CAMS = {   # a camera on a painting: (view, zoom, centre x, centre y). cell_cot is the cell painting, closer.
     'cell_cot': ('cell', 1.55, 330, 1240),
+    'gates2': ('gates', 1.7, 0.0, 0.0),           # closer on his mark (set below, from STAGE)
 }
+
+CAMS['gates2'] = ('gates', 1.7, STAGE['gates']['brand'][0], STAGE['gates']['brand'][1] - 0.95 * STAGE['gates']['brand'][2])
 
 
 # ================================================================================================ checks
