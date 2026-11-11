@@ -62,7 +62,7 @@ _card = json.load(open(os.path.join(HERE, '..', 'references', 'blessed', 'likene
 _BM, _BA = _card['measures'], _card['average']
 P4.MEASURED['brand'] = {k: P4.AVG[k] + _BM[k] - _BA[k] for k in P4.AVG}
 P4.PUSH['brand'] = 1.6
-P4.TUNE['brand'] = dict(eyes_apart=2.0, nose_wide=2.0, brow_slope=3.0, brow_high=3.0, eye_tilt=8.0, chin_long=22.0,
+P4.TUNE['brand'] = dict(eyes_apart=2.0, nose_wide=2.0, brow_slope=3.0, brow_high=3.0, eye_tilt=8.0, chin_long=4.0,
                         forehead_wide=4.0, eye_open=3.0, jaw_wide=25.0, nose_long=5.0)   # 11 Nov, likeness check rounds
 
 # ---------------------------------------------------------------------------------------------- moods
@@ -93,7 +93,7 @@ def brand_beard(p, f, L, skin, seed=91):
     wrap = getattr(f, 'wrap', None)
     nb = [(wrap(0.44, -95), 0.44), (wrap(0.62, -98), 0.62), (wrap(0.83, -96), 0.83)] if wrap else \
         [(-fw * 0.5 - 0.004, 0.44), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.46, 0.84)]
-    bottom = nb + [(-jw * 0.32, 0.98), (-0.12, 1.04), (0.0, 1.06), (0.12, 1.04), (jw * 0.32, 0.98), (jw * 0.46, 0.84),
+    bottom = nb + [(-jw * 0.32, 0.97), (-0.12, 1.02), (0.0, 1.035), (0.12, 1.02), (jw * 0.32, 0.97), (jw * 0.46, 0.84),
                    (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.44)]
     cheek = [(fw * 0.5 - 0.015, 0.47), (fw * 0.41, ny - 0.01), (fw * 0.3, ny + 0.01), (mw * 0.7, l0 - 0.015)]
     corner = [(mw * 0.64, l13 + 0.01), (mw * 0.58, l17 + 0.02), (mw * 0.3, l17 + 0.04)]
@@ -112,11 +112,12 @@ def brand_beard(p, f, L, skin, seed=91):
     n = len(edge)
     p.poly(f.pts(edge[n // 5: n - n // 5] + low_top), BD_LOW, None)
     # the dark moustache: from under the nose, over the lip, down past the corners (a horseshoe) to the chin patch
-    top = AV.tufts([(-mw * 0.7, l13 + 0.004), (-mw * 0.62, ny + 0.03), (-nw * 0.5, ny + 0.022), (0.0, ny + 0.03),
-                    (nw * 0.5, ny + 0.022), (mw * 0.62, ny + 0.03), (mw * 0.7, l13 + 0.004)], 0.008, 0.013, out=1.0,
+    mt = max(ny + 0.03, l0 - 0.06)                       # a band over the lip (b10), not the whole philtrum
+    top = AV.tufts([(-mw * 0.7, l13 + 0.02), (-mw * 0.6, mt + 0.01), (-nw * 0.5, mt), (0.0, mt + 0.006),
+                    (nw * 0.5, mt), (mw * 0.6, mt + 0.01), (mw * 0.7, l13 + 0.02)], 0.008, 0.013, out=1.0,
                    seed=seed + 3)
-    down = [(mw * 0.7, l13 + 0.03), (mw * 0.56, l17 + 0.0), (mw * 0.1, l17 + 0.016), (0.0, l17 + 0.03),
-            (-mw * 0.1, l17 + 0.016), (-mw * 0.56, l17 + 0.0), (-mw * 0.7, l13 + 0.03)]
+    down = [(mw * 0.62, l13 + 0.012), (mw * 0.12, l17 - 0.004), (mw * 0.08, l17 + 0.03), (0.0, l17 + 0.045),
+            (-mw * 0.08, l17 + 0.03), (-mw * 0.12, l17 - 0.004), (-mw * 0.62, l13 + 0.012)]   # the drooping ends, a soul patch
     must = f.pts(top + AV.tufts(down, 0.008, 0.014, out=-1.0, seed=seed + 4))
     p.poly(must, BD_MOUST, None)
     # the grain: short light strokes falling down and in over the grey parts (none in the dark horseshoe)
