@@ -193,6 +193,18 @@ class _Flip:
         return self.p.ell(cx, 2 * self.cy - cy, rx, ry, *a, **kw)
 
 
+class _Squash(_Flip):
+    """Fable r3 #33: a pen that flattens a talking shape to k of its height about cy (deadpan barely opens)."""
+    def __init__(self, p, cy, k):
+        self.p, self.cy, self.k = p, cy, k
+
+    def _q(self, pts):
+        return [(x, self.cy + (y - self.cy) * self.k) for x, y in pts]
+
+    def ell(self, cx, cy, rx, ry, *a, **kw):
+        return self.p.ell(cx, self.cy + (cy - self.cy) * self.k, rx, ry * self.k, *a, **kw)
+
+
 UNHAPPY = {'doubt', 'doubtful', 'sceptical', 'unsure', 'aghast', 'wince', 'horror', 'deadpan', 'terrified'}
 MOUTH_K = {'smug': 1.35, 'unsure': 1.5, 'doubt': 1.4, 'horror': 1.6, 'deadpan': 1.45, 'sceptical': 1.35}   # Link 5: these must read on a phone
 
@@ -205,7 +217,9 @@ def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
     if isinstance(m, str) and m.startswith('v:') and m != 'v:rest':
         if sp.get('mouth_k'):                                         # Remakes note 53: fuller talking shapes
             p = _Grown(p, fx, my, sp['mouth_k'])
-        if mood in UNHAPPY:                                           # Fable r3 #4: no happy grin on "go home"
+        if mood == 'deadpan':                                         # Fable r3 #33: the eyes never change, but an
+            p = _Squash(p, my + 4, 0.45)                              # open mouth made them read wide: a bored mumble
+        elif mood in UNHAPPY:                                         # Fable r3 #4: no happy grin on "go home"
             p = _Flip(p, my + 8)
         mouths.draw(p, dict(sp, lips=False), fx, my, m[2:])
         return

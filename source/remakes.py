@@ -891,7 +891,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         _kid(img, cam, who, x, y + (0.9 * ppm * ease((t - hit) / 0.3) if who == 'gunman3' and t >= hit else 0),
              ppm, t, j=j, yaw=90, flip=flip, rot=rot, talk=False)
         _hit(img, cam, x - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
-             ground=None if who == 'gunman1' else y + 0.1 * ppm)       # note 48
+             ground=y + 0.1 * ppm)                                    # note 48; Fable r3 #22: the tower man's
+                                                                      # blood lands on his box, never hangs in the air
 
     def _rifle_spin(img_, cam_, rx, ry, rp, a):
         d_ = ImageDraw.Draw(img_)
@@ -912,6 +913,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     # the tower lookout (far, up in his box), aiming down at the gate
     x, y, ppm = st['gunman1']
     gunman('gunman1', x, y, ppm, -1, HIT1, fall=-1)
+    if BLAST + 0.35 <= t < HIT1 and int(t * FPS) % 3 == 0:            # Fable r3 #22: not frozen: he fires down at
+        _flash(img, cam, x - G2_MUZZLE[0] * ppm, y - G2_MUZZLE[1] * ppm, 0.12 * ppm, seed=int(t * 12), dirx=-1.0,
+               diry=0.5)                                              # the gate till KG cuts him down
     targets = {0: (x - 0.05 * ppm, y - 1.25 * ppm)}
     # far to near: Link (behind KG, in through the gate), KG, the middle-right man, the lower-left man
     lk = _link_camp(t)
@@ -1057,7 +1061,7 @@ def _g2():
 
 
 G2_X = 2.15
-G2_MUZZLE = (1.05, 1.32)                                              # his muzzle from his feet (ppm)
+G2_MUZZLE = (0.68, 1.39)                                              # his muzzle from his feet (ppm)
 
 
 def s8_navi(t):
@@ -1113,8 +1117,11 @@ def s10_square(t):
             wing = {'L': ((300, -120 - 50 * sweep), (400 - 10 * sweep, -250 - 30 * sweep), 'spread'),   # (kept
                                                                       # below Malon, who steps forward: note 39)
                     'R': ((-192, -30), (-172, 90), 'fold')}
-            CR.kg(img, kcam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood='show', t=t,
-                  talk=_talk('kg', t))
+            mood = dict(CR.KG_MOODS['show'])                          # Fable r3 #31: eyes open on the line as the
+            if t < L[11]['start'] + 1.7:                              # wing sweeps along it, then the shut-eyed
+                mood.update(eyes='open', pupil=1.1, shine2=True)      # game-show grin at us
+            CR.kg(img, kcam, x, y - 272 * s, s, view='front', perched=False, stand=True, wings=wing, mood=mood, t=t,
+                  talk=_talk("kg", t), look=-(0.9 * (1 - sweep) + 0.3))
         elif who == 'goron':
             CR.goron(img, cam, x, y, s, t=t, drool=1.0 + 1.3 * re_)    # note 39: he drools more
         else:
@@ -1297,7 +1304,7 @@ def s13_pinned(t):
         el = (x + sg * 300 + 5 * roll, ny + 330 + 8 * nod)
         sh_ = (x + sg * 380, ny + 900)
         CR._kg_wing(p, (sh_[0] / ws, sh_[1] / ws), (el[0] / ws, el[1] / ws), (hx / ws, hy / ws), 'grip', sd)
-    CR.navi(img, cam, x + 300, y - 928 * k - 430 + 14 * math.sin(t * 6), 1.0, t=t,
+    CR.navi(img, cam, x - 290, y - 928 * k - 380 + 14 * math.sin(t * 6), 1.0, t=t,   # Fable r3 #23: on the banner side
             heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))
     return img
 
