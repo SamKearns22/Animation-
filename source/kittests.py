@@ -1038,6 +1038,73 @@ def lying_neck_from_behind():
     return bool(ok), '; '.join(out)
 
 
+@test
+def eyes_cut_to_the_outline():
+    """Rule S5 (tool job, 11 Nov): KG's owl pupil at a hard glance spilled past his eye; eyekit cuts it, and the
+    house-style check names a cast file that draws pupils without cutting them."""
+    import types
+    import eyekit
+    import housestyle
+    from ed import oval
+    import shocking_cast  # noqa: F401  (an old cast that draws uncut pupils)
+    r, look, pr = 38, 2.4, 38 * 0.5 * 1.2
+    outline = oval(0, 0, r, r, 40)
+    old = oval(look * r * 0.3, 2, pr, pr, 28)                  # the old pupil: never cut to the outline
+    new = eyekit.inside(outline, old)
+    caught = eyekit.spill(outline, old) > 0.05 and eyekit.spill(outline, new) < 1e-3
+    flagged = bool(housestyle.eye_faults(types.SimpleNamespace(__name__='shocking')))
+    import remakes_creatures  # noqa: F401
+    clean = not housestyle.eye_faults(types.SimpleNamespace(__name__='remakes'))
+    return caught and flagged and clean, (f'old pupil spills {eyekit.spill(outline, old):.0%}, cut '
+                                          f'{eyekit.spill(outline, new):.1%}; old cast flagged {flagged}; Remakes clean {clean}')
+
+
+@test
+def hook_text_planned():
+    """Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and
+    pre-flight's gate stops an animatic with no Hook Text plan."""
+    import types
+    import hookcheck
+    no_keep = types.SimpleNamespace(HOOK=('Hook', {'y': 880}))
+    no_plan = types.SimpleNamespace()
+    planned = types.SimpleNamespace(HOOK=('Hook', {'y': 880}), KEEP_CLEAR=[('face', lambda t: (0, 0, 50, 50))])
+    a, b, c = hookcheck.faults(no_keep), hookcheck.plan_faults(no_plan), hookcheck.faults(planned) + hookcheck.plan_faults(planned)
+    return bool(a) and len(b) == 2 and not c, f'no KEEP_CLEAR: {len(a)} fault; no plan: {len(b)} gate(s); planned: {len(c)}'
+
+
+@test
+def moving_figures_against_the_set():
+    """Rule 13 (tool job, 11 Nov): Remakes' camp check moved into the kit (setcheck.moving_faults) gives the same
+    answer on Remakes' camp, and catches a figure walked into a barrel and one drawn over what hides him."""
+    import remakes as R
+    import remakes_sets as RS
+    import setcheck
+    C = RS.CAMP
+    g3 = RS.STAGE['camp']['gunman3']
+    d3, x3 = C.f / g3[2], (g3[0] - C.cx) / g3[2]
+
+    def movers(t):
+        who = []
+        lk, kg = R._link_camp(t), R._kg_camp(t)
+        if lk:
+            who.append(('link', lk[0], lk[1], R.CAMP_BODY['link']))
+        if kg:
+            who.append(('kg', kg[0], kg[1], R.CAMP_BODY['kg']))
+        if t >= R.G3_IN[0]:
+            u = min(1.0, (t - R.G3_IN[0]) / (R.G3_IN[1] - R.G3_IN[0]))
+            who.append(('gunman3', x3 - (1 - R.ease(u)) * 1.5, d3, R.CAMP_BODY['gunman3']))
+        return who
+    kit = setcheck.moving_faults(movers, RS.SET_FEET, C, R.GATE, R.S8_AT, R.FPS, label='S7')[:6]
+    same = kit == R.camp_paths()
+    n, x0, x1, d0, d1, z1, layer = RS.SET_FEET[0]
+    walk_in = setcheck.moving_faults(lambda t: [('test', (x0 + x1) / 2, (d0 + d1) / 2, (0.5, 1.8))],
+                                     RS.SET_FEET, C, 0, 0, label='S7')
+    behind = setcheck.moving_faults(lambda t: [('test', (x0 + x1) / 2, d1 + 0.6, (0.5, 1.8))],
+                                    [RS.SET_FEET[0]], C, 0, 0, label='S7')
+    caught = any('stands in' in f for f in walk_in) and any('drawn over' in f for f in behind)
+    return same and caught, f'same as Remakes: {same} ({len(kit)} faults); caught walk-in and behind: {caught}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

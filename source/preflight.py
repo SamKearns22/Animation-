@@ -119,7 +119,7 @@ def notes_path(film, name):
 
 def gates(film, name):
     """Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, no record of the
-    composition sheet being sent. Returns the reasons (empty: go)."""
+    composition sheet being sent; rule 75: no Hook Text plan (HOOK and KEEP_CLEAR). Returns the reasons (empty: go)."""
     path = notes_path(film, name)
     if not os.path.exists(path):
         return [f'no notes file ({os.path.relpath(path, ROOT)}): the brief checklist lives there (notes/_template.md)']
@@ -146,6 +146,8 @@ def gates(film, name):
     if not re.search(r'^\s*[-*]?\s*\**Composition sheet sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):   # not the (...)
         out.append('no record of the composition sheet being sent (rule 11): send Sam the 3-4 key shots, then add '
                    '"Composition sheet sent: DATE, FILE" to the notes file')
+    import hookcheck
+    out += hookcheck.plan_faults(film)                      # rule 75: the Hook Text planned at the first animatic
     return out
 
 
@@ -355,7 +357,6 @@ def main():
     if audit:
         F._ALLOW.append('audit of a finished film')
     film = importlib.import_module(name)        # module-level checks (set plans, overlaps) run on import
-    every_film = not (name == 'quick' or getattr(film, 'QUICK', False))   # film-quality-rules: not quick videos
     has = set(getattr(film, 'HAS', KINDS))      # rule 58: only the checks for what the film contains
     unknown = has - set(KINDS)
     if unknown:
@@ -364,8 +365,8 @@ def main():
     skipped = [c for c, on in runs.items() if not on]
     if skipped:
         print('skipped (the film has no ' + ', '.join(k for k in KINDS if k not in has) + '; HAS): ' + '; '.join(skipped))
-    stop = gates(film, name) if every_film else []   # rule 14: refuse while the brief or the sheet is not done
-    warn = gate_warnings(film, name, has) if every_film else []      # Job J: rules 8, 61, 74
+    stop = gates(film, name)   # rule 14: refuse while the brief or the sheet is not done
+    warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
     for x in warn:
@@ -392,10 +393,9 @@ def main():
     import plan, benchmark, sets
     people, rooms = 'people' in has, 'rooms' in has
     shared += housestyle.faults(film, B, has)   # the template's house style is on, and each check has its inputs
-    if every_film:
-        if rooms:
-            shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot
-        shared += benchmark.faults(film)        # rule 3: each place benchmarked against its references, all decided
+    if rooms:
+        shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot
+    shared += benchmark.faults(film)        # rule 3: each place benchmarked against its references, all decided
     if rooms:
         shared += sets.solids_faults(film)      # rule 5: what the set's solids need (door angles, reasons)
         if getattr(film, 'PLAN', None) is not None and hasattr(film, 'cam_for'):
@@ -412,20 +412,21 @@ def main():
     if 'effects' in has and getattr(film, 'EFFECTS', None) and not any(hasattr(film, a) for a in ('draw_order', 'layers')):
         shared.append('rule 57: the film has effects but no draw_order(t) (names back to front), so nothing checks '
                       'that a thing never flips from in front to behind mid-shot')
-    if every_film and people:
+    if people:
         shared += cast_faults(film, roster or {})   # rule 14: no shot missing anyone the brief puts in it
     if hasattr(film, 'LINES') and 'voices' in has:   # rule 7: script v recordings v subtitles, and the mouths drawn
         import voices
         shared += voices.check(film)
-    if every_film:
-        import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
-        shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
+    import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
+    shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     if 'mounts' in sys.modules:                 # riding (Sam, 25 Oct): a film with a mount gets the mount checks
         import mounts
         shared += mounts.check()
     shared += kitchecks.marks(film)             # rule 13: marks on real surfaces
     shared += kitchecks.sounds(film)            # rule 13: a sound tied to a thing only with it in frame, once a hit
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
+    import setcheck
+    shared += setcheck.film_faults(film)        # rule 13: figures moving through the set, against its solid things
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
     if people:                                  # (in a throwaway child: linecheck loads GNU OpenMP, and forking the
         shared += _in_child(linecheck.faults, film)   # drawing workers from a process that has used it freezes them
@@ -510,8 +511,7 @@ def main():
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
-        if every_film:
-            problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
+        problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
         import filmkit
         if incremental:                         # only the bodies in shots that hold a changed frame (a second round)
@@ -572,7 +572,7 @@ def main():
     with contextlib.redirect_stdout(buf):       # the figure guard's log (what it allowed, how often): the file only
         F.report()
     log = buf.getvalue().splitlines()
-    if every_film and not audit:                 # rule 89: the fresh-eye critique of this round, from the ledger
+    if not audit:                                # rule 89: the fresh-eye critique of this round, from the ledger
         import critique
         ok, line = critique.status(name)
         print(line)

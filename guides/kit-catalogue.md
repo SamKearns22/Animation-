@@ -109,6 +109,7 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 
 | what | file |
 |---|---|
+| Eyes for any new cast (rule S5): iris, pupil and shine cut to the eye's outline at any size or glance; pre-flight names a cast file that draws pupils without it | `source/eyekit.py` (`iris_and_pupil`, `inside`, `spill`); used by KG (`remakes_creatures._kg_eye`) |
 | A held 3D prop through any 3D camera with the holder's hands put on its grips where the camera sees them (screen point turned back into a hand target), and the MG42 drawn in true perspective (end on, beside the lens) | now in the kit: `source/held3d.py` (28 Oct); the film's own: `source/patriots3.py` (`hold_gun`, `draw_gun3d`) |
 | The salute (an arm swung up round the shoulder in an arc), arms darting about (flapping, pointing round, finger wag), leaning in a doorway (figure tipped onto the post), thrown back against a wall, staggering backwards | `source/patriots3_act.py` (`salute`, `flapping`, `leaning`, `gunner`, `loader`); the salute, flapping and binoculars are now in the pose gallery |
 | The pose gallery: arms folded, hands up, pointing, binoculars, salute, hands on a gun (rifle at port arms), flapping (up, pat), each tested from five views; one sheet | `source/posegallery.py`, `guides/pose-gallery.md`, `guides/pose-gallery.jpg` |

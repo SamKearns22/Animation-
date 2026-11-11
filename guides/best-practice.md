@@ -179,7 +179,7 @@ design as storytelling: Walter Murch and the film-sound literature.
   handling noise and fumbling before, between and after the words. Find each phrase of speech in the recording
   (`mossad_audio.pauses`), keep only from 0.06 s before each phrase to 0.12 s after it, fade each edge over 25 ms, and
   leave true silence everywhere else; then check the mix is exactly silent outside the phrases. One call does it:
-  `mossad_audio.gate(x)` (used by `hutt.py` and `quick.py`). The words themselves are never touched.
+  `mossad_audio.gate(x)` (used by `hutt.py`). The words themselves are never touched.
   Only count a stretch as speech if it reaches about a third of the take's loudest moment, measured over 50 ms
   (`mossad_audio.speech`): a quiet second of mumbling before "Yes" was once taken for the word and the caption and
   mouth ran a second early. Then confirm by measurement that sound, mouth and caption start together.
