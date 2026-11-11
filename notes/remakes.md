@@ -1,24 +1,28 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (the critique gate), 59, 67.
-- **Done (11 Nov, Sonnet):** check sheet for animatic 3 made and sent (every shot, Hook Text frame, sign-off,
-  subtitles, sound). Sound fix: the effects now duck about 15 dB under every voice (the gate blast and gunfire were
-  as loud as "Clear enemy", the grenade tail as loud as "This is"); `remakes.py check` clean. Not rendered.
-- **Next:** WAIT for Sam's clear yes to the sheet (and his answers below). Then Sonnet, medium: full pre-flight,
-  animatic 3, send. Note 59 (Fable trial) already ran: findings in `notes/ledger/remakes-fable-r3.md`.
-- **Needs Sam (pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest and flag:
-  Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N. Plus Y/N on the sheet and animatic 3.
-- **Flagged, looked at:** preflight "script/mouth" syllable counts (lines 4, 5, 11, 13) are the check miscounting
-  drawn-out takes; "I don't think I" 0.9 s and "you s***." 0.7 s are short pieces (speech itself is fast).
+- **Rules that bite next:** 30, 87, 89.
+- **Done (11 Nov, Opus medium):** Fable r3 part 2 (43 of 48 fixed; see the ledger) and Sam's clip notes 66-69 (clips
+  sent: the execution, the camp, "nine", the wall). `remakes.py check` clean. (The
+  Sonnet chat's sound fix stays: effects duck ~15 dB under every voice; its check sheet is out of date.)
+- **Next:** Sam looks at the 4 clips. Once they look right: Sonnet, medium: the check sheet (subtitles, Hook Text,
+  sign-off, sound; watch and listen per note 40), Sam's yes, animatic 3. Preflight's
+  syllable-count flags on lines 4, 5, 11, 13 are drawn-out takes (looked at by Sonnet).
+- **Needs Sam (pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest and flag: Y/N.
+  3 Link's ball hands and tube arms stay: Y/N. 4 the rule below: Y/N.
 - **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
-- **Open rule requests:** none.
-- **For Claude:** CLOSE_IN (crop zoom for S4/S6/S9/S11 in picture()); KG_WALL, _wall_kg; s7_camp zoom lerp;
-  SCUTTLE now from HIT3; the S13 head (hb) over the wings; s10/s11 haze; _bits named parts (2, 9, 13).
+- **Open rule requests:** note 67 (Sam: "never do that in these films"): merge into rule 72: "A turn between views
+  jumps straight to the other drawing (South Park); never a squeezed or stretched 2D swivel." Waiting for Sam's Y.
+- **For Claude:** RESLAMS/_reslam, vy in _wall_scene; _pier(hit=[(age, y)]); CLOSE_IN; G2_X 3.3, S8 cy on the
+  strike; camp to x 11 m and sky/yard to W + 900; line 6 gap 0.25.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
 |---|------|------|
+| 66 (Sam, 11 Nov, clip 1) | remove the beat of silence after the execution move | **DONE 11 Nov** (clip sent): line 6's gap 1.0 to 0.25 s; S6 cuts in 0.1 s after "move" ends (everything after moves 0.75 s earlier) |
+| 67 (Sam, 11 Nov, clip 2) | the grenaded man's rifle and flash showed: off screen; enemy rounds steadier and closer past KG; no 2D swivel on KG's turns (jump to the other view, South Park); the grenade strike in the middle of the frame (clear of the app's buttons); no dirt kicks where nothing lands | **DONE 11 Nov** (clip sent): G2_X 3.3 (off S7); tracers every frame, at his toes and just over his head; the squeezed turn frames removed (they were my Fable #20 fix: rule 30's lesson, the reference pack already says jump); the camp painted 5 m further right so S8's pan centres him, the camera there before Navi strikes; dirt kicks and barrel sparks removed; his flash stops as he recoils |
+| 68 (Sam, 11 Nov, clip 3) | S11: zoom out halfway back; townsfolk stood in the house walls: move or delete; zoom out on Link by 50% | **DONE 11 Nov** (clip sent): S11 crop 1.7 to 1.3 (background and Link both halfway back; read as one); four townsfolk on the paving, two removed |
+| 69 (Sam, 11 Nov, clip 4) | a gentle grey puff instead of the dust burst; the bleep covers "in", should cover "ucki"; KG presses Link firmly to the wall, working him up and down, re-slamming him from close on his words | **DONE 11 Nov** (clip sent): grey puff off the stone on every slam; bleep 4.67-4.94 (the u from 4.68, the k gap at 4.78, the i to 4.94); Link shoved up and down with KG's voice, pulled off and slammed back 5 times on his strongest stresses (RESLAMS), a jolt each |
 | 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices | | **PART DONE 10 Nov:** clips made and sent (snap, wall lift; camp earlier). Critique round done 11 Nov. Still to do: watching and listening to animatic 2 before it is sent |
 | 41 (Sam, 11 Nov) | at the wall Link stares, absolutely terrified, into KG's eyes | **DONE 11 Nov** (clip sent) |
 | 42 (Sam, 11 Nov) | R1 and R2 flash silver at the exact moment of the action | **DONE 11 Nov** (at the snap; at Navi's zip; clips sent) |

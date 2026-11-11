@@ -59,7 +59,7 @@ _L = [
     (3, '03', 'kg', "Great, here's some wisdom!", 'S3', 0.2, []),
     (4, '04', 'link', 'Ok?', 'S4', 0.2, []),
     (5, '05', 'kg', 'Press R1 for an EXECUTION MOVE.', 'S5', 0.45, []),
-    (6, '06', 'link', 'Oh my god!', 'S6', 1.0, []),
+    (6, '06', 'link', 'Oh my god!', 'S6', 0.25, []),      # note 66: no beat of silence after the move
     (7, '07', 'kg', 'Clear enemy encampments to clear segments of the map.', 'S7', 0.9, []),
     (8, '08', 'link', "I don't think I can do this.", 'S7', 0.2, []),
     (9, '09', 'kg', 'R2 FOR GRENADES.', 'S7', 0.6, []),      # note 38: line 8's subtitle now reads for 2 s
@@ -67,7 +67,8 @@ _L = [
     (11, '11', 'kg', 'FIVE ROMANCE OPTIONS TO CHOOSE FROM', 'S10', 0.4, []),
     (12, '12', 'link', 'Um, I am 9 years old.', 'S11', 0.6, []),
     (13, '13', 'kg', "Now listen here, you s***. You're gonna grow up real f****** fast.", 'S12', 0.6,
-     [(2.08, 2.40), (4.87, 4.99)]),                    # notes 43, 52: the "it" of shit, the "uck"
+     [(2.08, 2.40), (4.67, 4.94)]),                    # notes 43, 52: the "it" of shit; note 69: "ucki" (the
+                                                       # u 4.68, the k gap 4.78, the i to 4.94; it sat on "in")
     (14, '13b', 'kg', "And you've got some god-damn CHOICES to make.", 'S12', 0.25, []),
     (15, '14', 'link', 'I want to go home.', 'S13', 0.45, []),
 ]
@@ -990,10 +991,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             sx += 10 * s * math.sin((t - KG_T[0]) * math.pi * 4.0)
         RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['kg'])
         face, look, rock = _kg_camp_face(t, burst, mode)             # note 54
-        sw_ = min((abs(t - ts) for ts in KG_T[1:]), default=1.0)      # Fable r3 #20: a turn, not a snap: on the
-        kg_img = None                                                 # frame either side of a view change he is
-        if sw_ < 1.0 / FPS:                                           # drawn squeezed narrow (mid-turn)
-            kg_img, img = img, _lay(img)
+        # note 67 (Sam): a turn JUMPS to the other view (South Park); never a squeezed 2D swivel
         if mode == 'tower':
             turn = ease((t - KG_T[1]) / 0.12)
             muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, 0.0, firing=firing,
@@ -1004,12 +1002,6 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             fl_ = -1 if mode in ('low', 'stand') else 1               # Fable r3 #20: he stays turned to the low man
             muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', fl_,   # (the gun flipped back)
                               rot=rock, firing=firing, mood=face, look=look * fl_)
-        if kg_img is not None:
-            px_ = cam.P(sx, sy)[0]
-            q = 0.55
-            sq = img.transform(img.size, Image.AFFINE, (1 / q, 0, px_ * (1 - 1 / q), 0, 1, 0), Image.BICUBIC)
-            kg_img.alpha_composite(sq)
-            img = kg_img
     # the right-hand man (note 63): kneeling just off the right of S7's frame, firing on them till Navi gets him
     x, y, ppm = _g2()
     if t < BOOM:
@@ -1022,7 +1014,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         for k_ in ('toeL', 'toeR'):
             j.pop(k_, None)
         gunman('gunman2', x, y + drop, ppm, -1, 1e9, j)
-        if INCOMING[0] <= t and int(t * FPS) % 2 == 0 and cam.P(x - G2_MUZZLE[0] * ppm, y)[0] < W * B.SS:
+        if INCOMING[0] <= t < BOOM - 0.28 and int(t * FPS) % 2 == 0 and cam.P(x - G2_MUZZLE[0] * ppm, y)[0] < W * B.SS:
             _flash(img, cam, x - G2_MUZZLE[0] * ppm, y + drop - G2_MUZZLE[1] * ppm, 0.12 * ppm, seed=int(t * 12),
                    dirx=-1.0)
     # the lower-left man: runs in from the bottom left, nearest the lens, and is cut down
@@ -1040,30 +1032,18 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         dl = ImageDraw.Draw(lay)
         g2x, g2y, g2p = _g2()
         rx = g2x - 1.1 * g2p                                          # from his muzzle
-        for k in range(2):
-            rng = np.random.default_rng(int(t * FPS) * 3 + k)
-            if rng.random() < 0.3:
-                continue
-            hy = (-0.3 + 0.2 * rng.random()) if k == 0 else (1.8 + 0.25 * rng.random())   # Fable r3 #7: low past
-            p0 = (rx, ky_ - kp * hy)                                  # their legs or high over their heads, never
-            p1 = (kx_ - kp * 3.0, ky_ - kp * (hy + 0.15 * (rng.random() - 0.5)))   # through a face
-            f = rng.random() * 0.55
+        fr = int(t * FPS)                                             # note 67 (Sam): steady bursts, every round
+        for k in range(2):                                            # whipping close past KG (inconsistent before):
+            hy = (0.04, 1.5, 0.1, 1.4)[(fr * 2 + k) % 4]              # skimming the dirt at his toes, just over his
+            p0 = (rx, ky_ - kp * hy)                                  # head between the crests (never through him)
+            p1 = (kx_ - kp * 3.0, ky_ - kp * (hy + 0.03 * k))
+            f = ((fr * 0.37 + k * 0.5) % 1.0) * 0.55
             q0 = (_lerp(p0[0], p1[0], f), _lerp(p0[1], p1[1], f))
             q1 = (_lerp(p0[0], p1[0], f + 0.4), _lerp(p0[1], p1[1], f + 0.4))
             dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 214, 110, 150), width=int(cam.S(9)))
             dl.line([cam.P(*q0), cam.P(*q1)], fill=(255, 250, 220, 255), width=max(1, int(cam.S(3.5))))
         img.alpha_composite(lay)
-        for j in range(int((INCOMING[1] - INCOMING[0]) / 0.15)):
-            te = INCOMING[0] + 0.15 * j + 0.05 * (j % 3)
-            rng = np.random.default_rng(100 + j)
-            if j % 4 == 3:                                            # a spark off the barrels left of Link
-                bx, by = C.p(-1.7 + 0.4 * rng.random(), RS.CAMP_MARKS['link'][1] - 0.6, 0.5 + 0.4 * rng.random())
-                _puff(img, cam, bx, by, t - te, 0.25 * kp, spark=True, seed=j)
-            else:
-                ex = kg[0] + (rng.random() - 0.5) * 3.0
-                ed = kg[1] + (rng.random() - 0.3) * 1.5
-                px_, py_ = C.p(ex, ed)
-                _puff(img, cam, px_, py_, t - te, 0.3 * C.ppm(ed), seed=j)
+        # note 67 (Sam): no dirt kicks or sparks where no round lands
     if firing and muzzle:
         (mx, my), (dx, dy) = muzzle
         s = RS.s_for(C.ppm(kg[1]))
@@ -1125,21 +1105,25 @@ def _g2():
     return x, y, C.ppm(RS.CAMP_MARKS['kg'][1] - 0.4)
 
 
-G2_X = 2.15
+G2_X = 3.3                                                            # note 67: right off S7's frame (his rifle
+                                                                      # and flash showed at its edge)
 G2_MUZZLE = (0.68, 1.39)                                              # his muzzle from his feet (ppm)
 
 
 def s8_navi(t):
     st = RS.STAGE['camp']
     lx, ly, _ = st['link']
-    gx, gy, _ = _g2()
-    u = ease((t - ZIP) / (BOOM - ZIP + 0.1))                          # note 63: the camera follows Navi to him
+    gx, gy, gp = _g2()
+    u = ease((t - ZIP) / (BOOM - ZIP - 0.12))                         # note 63: the camera follows Navi to him,
+                                                                      # there before she strikes (note 67)
     dx, dy = _shake(t, BOOM, 40)
     cx = min((lx + 90) + (gx - lx - 90) * u, S8_CX_MAX - 40) + dx       # Fable r3 #1: the pan stops where the
-    return _camp(t, B.Cam(1.7, cx, (ly - 160) + (gy - ly) * u * 0.6 + dy))   # painting ends (the wall's last sheet)
+    cy = _lerp(ly - 160, gy - 0.75 * gp, u)                           # painting ends; note 67: the strike lands in
+    return _camp(t, B.Cam(1.7, cx, cy + dy))                          # the middle of the frame (clear of the app's
+                                                                      # buttons down the right)
 
 
-S8_CX_MAX = RS.CAMP.p(6, RS.WALL_D, 0)[0] - W / 2 / 1.7                # the right edge of the frame on the wall's end
+S8_CX_MAX = RS.CAMP.p(11, RS.WALL_D, 0)[0] - W / 2 / 1.7               # the right edge of the frame on the wall's end
 
 
 def s9_horrible(t):
@@ -1252,6 +1236,14 @@ def _wall_scene(t, cam, shake=0.0):
     sx = shake * 14 * math.sin(t * 60)                                # up and drive him back into the pier
     hit = t - SLAM
     ldx = 150 * (1 - u) - (14 * math.sin(math.pi * min(1.0, hit / 0.14)) if hit >= 0 else 0.0)
+    rs = _reslam(t)                                                   # note 69 (Sam): he works Link against the
+    ldx += 0.16 * ppm * rs                                            # wall: pulled off it and slammed back on his
+    if hit >= 0:                                                      # stresses, and shoved up and down in time
+        ws = ease(min(1.0, hit / 0.4))                                # with his words
+        roll_, nod_ = HL['kg'].at_time(t)
+        vy = ws * (0.07 * ppm * math.sin(t * 5.2) - 0.09 * ppm * nod_)
+    else:
+        vy = 0.0
     k = RC.scale_for(RC.CAST['link'], RS.s_for(ppm))                  # Link at his own scale (KG's is smaller)
     ky = base - 272 * s
     grip = [((LIFT[sd][1][0]), LIFT[sd][1][1]) for sd in 'LR']        # the two wing hands, his own units
@@ -1265,13 +1257,14 @@ def _wall_scene(t, cam, shake=0.0):
         fx, fy, fz = j['foot' + sd]
         j['foot' + sd] = (fx, fy - 14, fz + sg * 34 * kick)
         V.arm_to(j, sd, (sg * 24.0, 120.0, 120.0), 'down', 'grip')     # both hands up on the wings that hold him
-    lxx, lyy = cx + ldx + sx * 0.6, base - lift * u + (cy - (base - 928 * k) + lift) * 0
-    _pier(img, cam, cx - PIER_GAP * ppm, base, ppm, hit)               # Fable r3 #2: something at his back
+    lxx, lyy = cx + ldx + sx * 0.6, base - lift * u + vy
+    hits = [(t - ts, lyy - 0.7 * ppm) for ts in [SLAM] + RESLAMS]
+    _pier(img, cam, cx - PIER_GAP * ppm, base, ppm, hits)              # Fable r3 #2: something at his back
     _kid(img, cam, 'link', lxx, lyy, ppm, t, 'terrified', j=j, yaw=90, talk=True)
     CR.navi(img, cam, cx + 330 * s, cy - 330 * s + 14 * math.sin(t * 6), s * 1.2, t=t,   # above KG's beak, between
             heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))                              # the faces: whole in all 3 framings
     yk = ky + (1 - u) * 0
-    dn = lift * (1 - u) / s                                           # the lift: his wing hands stay on the collar
+    dn = (lift * (1 - u) + vy) / s                                    # the lift: his wing hands stay on the collar
     rc = 170 * (1 - g)                                                # the reach: hands from his chest to the collar
     wl = {sd: ((LIFT[sd][0][0] - rc * 0.5, LIFT[sd][0][1] + dn * 0.45 + rc * 0.3),
                (LIFT[sd][1][0] - rc, LIFT[sd][1][1] + dn + rc * 0.4), 'grip' if g > 0.7 else 'spread')
@@ -1288,13 +1281,37 @@ def _wall_scene(t, cam, shake=0.0):
     return img
 
 
+def _reslams():
+    """Note 69: the moments KG re-slams Link into the wall: his strongest stressed beats (headlife nods) after the
+    first slam, at least 1.1 s apart, none in the last half second of his lines."""
+    out, last = [], SLAM
+    tt = SLAM + 0.9
+    while tt < L[14]['end'] - 0.5:
+        n0, n1, n2 = (HL['kg'].at_time(tt + d_)[1] for d_ in (-1.0 / FPS, 0.0, 1.0 / FPS))
+        if n1 > 0.5 and n1 >= n0 and n1 >= n2 and tt - last >= 1.1:
+            out.append(tt)
+            last = tt
+        tt += 1.0 / FPS
+    return out
+
+
+def _reslam(t):
+    """0-1: how far Link is pulled off the wall for the next re-slam (0.18 s back, then slammed in 0.06 s)."""
+    for ts in RESLAMS:
+        if ts - 0.24 <= t < ts - 0.06:
+            return math.sin(0.5 * math.pi * (t - ts + 0.24) / 0.18)
+        if ts - 0.06 <= t < ts:
+            return 1 - (t - ts + 0.06) / 0.06
+    return 0.0
+
+
 GRAB = 0.1                                                            # seconds the wings take to reach his collar
 PIER_GAP = 0.07                                                       # the pier's face behind Link's soles (ppm)
 
 
 def _pier(img, cam, x1, base, ppm, hit):
     """Fable r3 #2: a stone pier jutting out of the wall at Link's back (he was held in mid-air against a flat
-    backdrop): its face at x1, from the ground up out of frame; dust bursts off it on the slam (hit s after)."""
+    backdrop): its face at x1, from the ground up out of frame; hit: (seconds since a slam, Link's back y) for each."""
     p = B.Pen(img, cam)
     w = 0.4 * ppm
     stone, dark = (168, 164, 156), (128, 124, 118)
@@ -1306,9 +1323,15 @@ def _pier(img, cam, x1, base, ppm, hit):
         xo = x1 - w * (0.45 if k % 2 else 0.75)
         p.line([(xo, y), (xo, y - 0.32 * ppm)], INK, 1.4)
     p.poly([(x1 - w, -200), (x1, -200), (x1, base + 30), (x1 - w, base + 30)], None, INK, 2.6)
-    if 0 <= hit < 0.5:
-        _puff(img, cam, x1 + 0.05 * ppm, base - 1.0 * ppm, hit * 0.66, 0.5 * ppm, seed=3)
-        _puff(img, cam, x1 + 0.05 * ppm, base - 0.6 * ppm, hit * 0.66, 0.4 * ppm, seed=8)
+    for h_, hy_ in hit:                                               # note 69 (Sam): a gentle puff of grey dust
+        if 0 <= h_ < 0.7:                                             # off the stone on each slam (no flying clods)
+            u_ = h_ / 0.7
+            lay = _lay(img)
+            d_ = ImageDraw.Draw(lay)
+            for k in range(3):
+                d_.polygon(_blob(cam, x1 + (0.04 + 0.1 * u_) * ppm, hy_ + (k - 1) * 0.22 * ppm - 0.05 * ppm * u_,
+                                 (0.07 + 0.12 * u_) * ppm, 9, 3 + k, 0.35), fill=(196, 194, 190, int(120 * (1 - u_))))
+            img.alpha_composite(lay)
 
 
 KG_WALL = 0.85                                                        # Fable r3 #12: KG at the wall at 0.85 of the
@@ -1346,12 +1369,15 @@ def _wall_marks():
 def s12_wall(t):
     choices = L[14]['start'] + 1.2
     shake = 1.0 if (choices <= t < choices + 0.8 or SLAM <= t < SLAM + 0.3) else 0.0
+    if any(ts <= t < ts + 0.15 for ts in RESLAMS):                    # note 69: a jolt on each re-slam
+        shake = max(shake, 0.6)
     if shot_of(t) == 'S12b':                                          # 13b: a cut in closer for the shake, the two
         cx, cy, k, kx, ky, s = _wall_marks()                          # faces either side of the middle
         return _wall_scene(t, B.Cam(1.3, (cx + kx) / 2 + 20, cy + 150 * s), shake)
     return _wall_scene(t, B.Cam(1.0), shake)
 
 
+RESLAMS = _reslams()
 S13_TRACK = mouths.track(L[15]['text'], L[15]['_stretches'], L[15]['_open'])   # note 53: the full mouth set
 
 
@@ -1407,7 +1433,7 @@ SHOT_FN = {'S1': s1_branch, 'S2': s2_down, 'S3': s3_branch, 'S4': s4_ok, 'S5': s
            'S13': s13_pinned}
 
 
-CLOSE_IN = {'S4': (1.7, 1150), 'S6': (1.7, 1250), 'S9': (1.7, 1250), 'S11': (1.7, 1250)}   # zoom, centre y (px)
+CLOSE_IN = {'S4': (1.7, 1150), 'S6': (1.7, 1250), 'S9': (1.7, 1250), 'S11': (1.3, 1150)}   # note 68: S11 halfway back out   # zoom, centre y (px)
 
 
 def picture(t):

@@ -292,10 +292,10 @@ MIST = (232, 236, 206)
 
 def _sky(p, y0, y1, seed=0):
     """Three flat bands, deep overhead to pale low, with hand-cut wavy edges."""
-    p.poly(quad(-200, y0, W + 200, y1), SKY_LO, None)
+    p.poly(quad(-200, y0, W + 900, y1), SKY_LO, None)                  # (to W + 900: remakes note 67's camp pan)
     for col, yy in ((SKY_MID, y0 + (y1 - y0) * 0.55), (SKY_HI, y0 + (y1 - y0) * 0.25)):
-        edge = [(x, yy + 14 * math.sin(x / 130 + seed)) for x in np.linspace(-200, W + 200, 24)]
-        p.poly([(-200, y0)] + edge + [(W + 200, y0)], col, None)
+        edge = [(x, yy + 14 * math.sin(x / 130 + seed)) for x in np.linspace(-200, W + 900, 34)]
+        p.poly([(-200, y0)] + edge + [(W + 900, y0)], col, None)
 
 
 def _cloud(p, x, y, w, seed):
@@ -1190,12 +1190,15 @@ def camp(img, cam, t=0.0, gate=0.0):
     for x, y, w, sd in ((220, 260, 200, 201), (820, 140, 240, 202), (640, 520, 150, 203)):
         _cloud(p, x, y, w, sd)
     p.poly(blob(540, 820, 900, 220, 16, 0.12, 204), mix(LEAF_D, SKY_LO, 0.4), INK, 2.0)   # far hills of trees
-    for k, (x, rx, ry) in enumerate(((60, 220, 210), (330, 200, 180), (700, 210, 200), (1010, 230, 220))):
+    p.poly(blob(1500, 800, 600, 200, 14, 0.12, 205), mix(LEAF_D, SKY_LO, 0.4), INK, 2.0)  # (note 67: wider)
+    for k, (x, rx, ry) in enumerate(((60, 220, 210), (330, 200, 180), (700, 210, 200), (1010, 230, 220),
+                                     (1300, 220, 200), (1560, 240, 220), (1820, 220, 200))):
         clump(p, x, 700 - 40 * (k % 2), rx, ry, LEAF if k % 2 else LEAF_D, 210 + k)
-    for x, h, sd, lean in ((300, 520, 221, -0.06), (580, 640, 222, 0.14), (900, 420, 223, -0.22)):   # pass 2: one
+    for x, h, sd, lean in ((300, 520, 221, -0.06), (580, 640, 222, 0.14), (900, 420, 223, -0.22),
+                           (1480, 560, 224, 0.1)):                      # pass 2: one
                                                                         # grew out of the orange container
         _palm(p, x, 760, h, sd, lean=lean)
-    p.poly(quad(-200, 760, W + 200, 2400), DIRT, None)                  # the yard
+    p.poly(quad(-200, 760, W + 900, 2400), DIRT, None)                  # the yard
     # the flag and the watchtower stand behind the wall's line, drawn before it
     fp0, fp1 = CAMP.p(-0.6, 12.0, 0), CAMP.p(-0.6, 12.0, 7.0)
     p.line([fp0, fp1], (70, 70, 70), 4.0)
@@ -1205,7 +1208,7 @@ def camp(img, cam, t=0.0, gate=0.0):
     # the back wall, sheet by sheet, the gate's posts and the opening
     x = -6.0
     k = 0
-    while x < 6.0:
+    while x < 11.0:                                                     # (to 11 m: remakes note 67's camp pan)
         if abs(x + 0.5) < GATE_HALF + 0.5:
             x += 1.0
             continue
@@ -2092,8 +2095,9 @@ def town_reverse(img, p, cam, t):
     _street_side(p, 1, [(0.0, 0.34, PLASTER[2], 2, 4), (0.34, 0.6, PLASTER[4], 3, 5), (0.6, 0.82, PLASTER[3], 2, 6),
                         (0.82, 1.0, PLASTER[1], 3, 7)], t, style='stone')   # critique r3: each side its own build
     _bunting(p, 440, 440, 640, 440, 22, 9, t)
-    for x, d, c, sd in ((-1.6, 22.0, (90, 120, 150), 21), (1.5, 25.0, (150, 90, 80), 22), (0.3, 30.0, (120, 140, 90), 23),
-                        (-0.6, 15.0, (170, 110, 70), 24), (1.4, 13.0, (110, 80, 140), 25), (-1.9, 12.0, (80, 110, 90), 26)):
+    for x, d, c, sd in ((-0.9, 21.0, (90, 120, 150), 21), (0.4, 30.0, (120, 140, 90), 23),   # remakes note 68: on
+                        (-0.5, 15.0, (170, 110, 70), 24), (0.9, 12.5, (110, 80, 140), 25)):   # the paving, not in the
+                                                                        # house fronts; two fewer (it was busy)
         _townsfolk(p, x, d, c, sd, lev=STREET_LEV)
     _swag_wall(p, 200, 400, 800, 900, t)
     _swag_wall(p, 680, 880, 800, 900, t)
