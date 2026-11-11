@@ -3,7 +3,8 @@
 
 MAP
   prices/limits ..... PRICE, WEEK_USD, CTX_AMBER/RED, CHAT_AMBER/RED, GAP_MIN
-  read_usage() ...... sums this chat's cost from the transcript (cached by byte offset)
+  read_usage() ...... sums this chat's cost from the transcript (cached by byte offset), and its helpers'
+                      (helper_files: the records beside the chat's own); Fable has its own price row
   level() ........... green / amber / red from history size and chat cost
   main() ............ hook entry (UserPromptSubmit, PostToolUse); --report for handovers
 
@@ -13,10 +14,11 @@ dearer write price. Prices are list $ per million tokens, fitted to this account
 own chat records (Nov 2026); WEEK_USD is a week's allowance at list price, fitted to
 the 7-9 Nov weekend (about $260 = 90%). Both are estimates: good to about +-20%.
 """
-import json, os, sys, time
+import glob, json, os, sys, time
 from datetime import datetime
 
 PRICE = {  # read, write(1h cache), input, output
+    "fable":  (0.18, 16.0, 10.0, 50.0),  # list price: twice Opus, the same to re-read (11 Nov)
     "opus":   (0.18, 8.0, 5.0, 25.0),
     "sonnet": (0.10, 4.0, 3.0, 15.0),
     "haiku":  (0.03, 1.3, 1.0, 5.0),
@@ -32,13 +34,21 @@ STATE_DIR = os.path.expanduser("~/.claude/costwatch")
 
 def fam(model):
     m = (model or "").lower()
-    return "sonnet" if "sonnet" in m else "haiku" if "haiku" in m else "opus"
+    return ("sonnet" if "sonnet" in m else "haiku" if "haiku" in m else
+            "fable" if "fable" in m or "mythos" in m else "opus")
 
 
-def read_usage(path):
-    """Running totals for the transcript, re-reading only the new bytes."""
+def helper_files(path):
+    """A chat's helpers (critique and other agents) keep their own records beside it; rule 85 counts them."""
+    return sorted(glob.glob(os.path.join(os.path.splitext(path)[0], "**", "*.jsonl"), recursive=True))
+
+
+def read_usage(path, helper_of=None):
+    """Running totals for the transcript, re-reading only the new bytes. A chat's total takes in its helpers'
+    (st["helpers_usd"]); a helper's own state is saved here, the chat's by main()."""
     os.makedirs(STATE_DIR, exist_ok=True)
-    sp = os.path.join(STATE_DIR, os.path.basename(path) + ".json")
+    name = (os.path.basename(helper_of)[:8] + "-" if helper_of else "") + os.path.basename(path)
+    sp = os.path.join(STATE_DIR, name + ".json")
     st = {"offset": 0, "usd": 0.0, "ctx": 0, "last_ts": None, "seen": [], "said": "green",
           "model": ""}
     try:
@@ -73,11 +83,20 @@ def read_usage(path):
                 st["last_ts"] = d.get("timestamp")
                 st["model"] = m.get("model", "")
     st["seen"] = list(seen)[-3000:]
+    if helper_of:
+        json.dump(st, open(sp, "w"))
+    else:
+        st["helpers_usd"] = 0.0
+        for h in helper_files(path):
+            try:
+                st["helpers_usd"] += read_usage(h, helper_of=path)[0]["usd"]
+            except Exception:
+                pass  # a helper record that cannot be read never breaks the chat
     return st, sp
 
 
 def level(st):
-    pct = 100 * st["usd"] / WEEK_USD
+    pct = 100 * (st["usd"] + st.get("helpers_usd", 0.0)) / WEEK_USD
     lv = 0
     if st["ctx"] >= CTX_AMBER or pct >= CHAT_AMBER:
         lv = 1
@@ -89,7 +108,10 @@ def level(st):
 def describe(st, pct):
     words = int(st["ctx"] * 0.75)
     times = max(1.0, st["ctx"] / FRESH)
-    return (f"this chat has cost about {pct:.1f}% of the week; its history is about "
+    extra = ""
+    if st.get("helpers_usd"):
+        extra = f" ({100 * st['helpers_usd'] / WEEK_USD:.1f} of it its helpers)"
+    return (f"this chat has cost about {pct:.1f}% of the week{extra}; its history is about "
             f"{words // 1000}k words, so every step costs about {times:.1f}x a fresh chat's")
 
 

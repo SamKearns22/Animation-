@@ -1,28 +1,24 @@
 # The budget job: Remakes at 15% (11 Nov; proposals only, nothing changed yet)
 
-## Where things stand (11 Nov, 17:10 UTC; budget chat 1 handed over on amber)
-- **Rules that bite next:** 85 (cost watch), 24 (the estimate: honest prices), 89 (critique: both hunts stay).
-- **Done:** Remakes' 60% traced; trial 1 (Link, a Lead) measured; `source/costbreak.py` built (where a chat's cost
-  goes by kind of step, helpers included). Trial 2 (the line-up five as Glimpses, `notes/trial_lineup.md`) stopped
-  after 8 minutes when the usage limit ran out; restarted 17:10 on Sam's "try again".
-- **The big new fact:** the critique helpers are NOT in the cost watch's figure. Link's true cost is about 3.2% of a
-  week (chats 1.0 + 1.22, helpers 0.51 + 0.46), not 2.0%. Every film's helper cost has been invisible the same way.
-  Breakdown: `notes/trial_link.md`, "Cost breakdown".
-- **Next (Fable, high effort; Sam set Fable for this job):** read trial 2's Results and Cost breakdown in
-  `notes/trial_lineup.md` (if empty, one check in 30 minutes, no more). Then write the stage-by-stage savings list
-  with a measured figure on each, re-forecast Remakes, and send Sam every proposal in one message for Y/N.
-  Nothing is written into the rulebook or tools before his yes.
-- **Savings already seen in the breakdown (to price):** a helper's start-up is 0.16 of its 0.5; 60% of a helper's
-  listed faults are repeats (its writing is 0.12-0.18); the build chat took 59 steps, 20 running tools, 12 shell,
-  11 looking at pictures, 7 saving (draw and look in one step; save once); the cost watch and ledger must count
-  helpers.
-- **Sam's answers so far:** test = Remakes with its starting information; any spend; the animatic stays as clean as
-  Remakes'; both critique hunts stay; chats stay short; acting in the first animatic is settled (no trial); tool
-  improvements (script checks, reference tick-list, child poses in the kit) go in the proposals: Y; no Fable trial.
-- **Needs Sam:** nothing until the proposals. Open: this chat's cost sits in the Remakes ledger (about 1.6%; the
-  guard refused the move); the cost watch prices Fable as Opus.
-- **Read:** this file; `notes/trial_link.md` Results and Cost breakdown; `notes/trial_lineup.md` Results.
-- **For Claude:** trial sessions: session_01J1JB7XiZASWyXBqe8TwFbT (trial 2). Do not read their events (huge).
+## Where things stand (11 Nov, 18:20 UTC; budget chat 2: Sam said Y to my picks; rules written, tools half built)
+- **Rules that bite next:** 24 (stage-share stop), 89 (two hunts, each fault once), 85 (helpers counted).
+- **Done:** Sam's "Y" (taken as my picks: no sets trial, no further cuts yet). Written: rule 24 (tiers, the brief's
+  must-haves, starting units, the moves' share, the stage-share stop, budget by size), rule 89 (Glimpses in the shot;
+  two hunts a stage, one helper each, each fault once, no third hunt), rule 85 (helpers counted, Fable priced). Built
+  and tested: the cost watch counts helpers and prices Fable at twice Opus (so the ledger does too).
+- **Next (model waits on Sam's answer to question 1: Opus high is my pick, Fable high if he says N):** build the
+  three tool changes the rules now promise: (a) `critique.py`: the helper lists each fault once; `status` not blocked
+  by CAN'T TELL; one pack per stage; no third pass. (b) `ledger.py auto`: stop when a stage reaches its share (now
+  only a quarter over the estimate); update rule 24's check column. (c) one command that draws, runs the checks and
+  builds the sheet (look in the kit first, rule: reuse before building). Kittests for each. Type: "Budget job:
+  build the three tool changes".
+- **Needs Sam:** question 1 (the builds on Opus high, half Fable's price) and 2 (at the brief, name any new
+  character an existing one could play, with the saving).
+- **Read:** this file's section 5; `critique.py` and `ledger.py` MAPs, then only the functions named.
+- **Open rule requests:** none.
+- **For Claude:** Fable 5.2 lists at $8/$40 a million (Opus 5.5 $4/$20), re-reading the same; the cost watch's
+  fable row is its opus row doubled except the re-read. The Build pack in `guides/job-packs.md` still says "drawn
+  alone and critiqued" for every new thing: add the Glimpse exception when (a) is built.
 
 ## Corrections after Sam's challenge (11 Nov): these override anything below that disagrees
 - **Chats:** the last audit was right; short chats with good handovers stay. My "0.4% to start a chat" was wrong: a
@@ -125,6 +121,48 @@ they are built once. The least certain line is the notes rounds (3.5): it assume
 - Rough sheet, then moves, then detail; one critique hunt per stage, ranked.
 - Batch fixing, one chat per stage, the acting in the first animatic.
 - The forecast line at every stage end (already built, Job M).
+
+## 5. After both trials (11 Nov): these figures override sections 1-3 where they disagree
+**Measured units (% of a week, critique helpers counted):** a Lead through two hunts 3.2 (trial 1); five Glimpses in
+one frame through two hunts 3.7, 0.74 each (trial 2; 0.3 of it a 2-hour stop that re-read the chat); a critique helper
+0.48 (0.44-0.51), 0.16-0.18 of it start-up; one step of a fixing chat 0.02 (1.35 over 70 steps, 1.22 over 59); a fresh
+chat's read-in 0.2-0.3; a Sonnet finishing chat 0.34. The cost watch under-read both trials by 0.9-1.0 (the helpers).
+
+**Savings, stage by stage (Remakes real, then new):**
+| Stage | Real | New | The saving and its measured figure |
+|---|---|---|---|
+| Plan | 1 | 1.5 | none: more is asked at the brief |
+| Cast: the line-up five | about 9 | 3.7 | Glimpse tier, measured (trial 2). Needs Sam's yes on the sheet |
+| Cast: Link, KG (Leads) | about 5 | 6.4 | none: a Lead at this quality is 3.2, measured (trial 1) |
+| Cast: Navi, the gunman (Support) | about 3 | 2.5 | not measured |
+| Sets, 3 places | about 8 | 4.5 | 9 critique helpers (4.3) become 2 (1.0): the helper figure is measured, the rest is not |
+| KG's beak rebuilt | 1.5 | 0 | asked at the brief |
+| Shots and animatic 1 | about 5 | 5 | none: the acting now goes in, so no cheaper (not measured) |
+| Notes rounds | about 25 | 5.5 | two rounds at about 2.7 (a fixing chat 1-2, a Sonnet chat 0.34, two helpers 1.0) |
+| Final | 2.5 | 0.5 | one Sonnet chat, measured 0.34 |
+| **Total** | **about 60** | **about 30** | |
+| Two tool changes, if they work | | **about 26** | fewer steps: 70 to about 40 a fixing chat, 0.4-0.5 a pass, 8 passes; each fault listed once: 0.08 a helper, 16 helpers |
+
+**Why the forecast rose from 20:** the helpers (a quarter of every build) were invisible to the cost watch, and a Lead
+costs 3.2, not the 1.2 planned. The cost follows the process (two chats and two helpers, 3.2-3.7), not what is drawn.
+15% fits a film the size of MidTerminal (3 characters, one room), not Remakes (9 new characters, 3 places).
+
+**Proposals sent to Sam (11 Nov), my pick in brackets:**
+1. Tiers in the estimate: Lead, Support, Glimpse (one view, one pose, judged only in its shot at phone size). (Y)
+2. Critique: two hunts a stage; Sam's look at the sheet replaces the third; one helper per hunt for the whole stage,
+   not one per set; each fault listed once; "can't tell" no longer blocks. (Y)
+3. One command that draws, checks and makes the sheet; faults fixed as one list; only the sheet is looked at. (Y)
+4. The cost watch and ledger count the helpers, and price Fable as Fable. (Y)
+5. Movement's share ring-fenced; rehearsal clips before detail; animatic 1 always carries the acting. (Y)
+6. A hard stop at each stage's share (now a quarter over). (Y)
+7. Estimates in the measured units above, replaced by real figures film by film. (Y)
+8. At the brief: per new character a picture and up to three must-haves; 2-4 showstopper moments named; anything
+   added after "go" gets a price first. (Y)
+9. No sets trial: the next film's sets are the measurement, under the hard stop. (N to a trial)
+10. The trial line-up is good enough at the shot's size, so the Glimpse tier stands. (Y)
+11. Accept about 26% for a Remakes-sized film, 15% for a MidTerminal-sized one. Further cuts, both untested:
+    (a) a Lead's poses judged in the rehearsal clips, not on a pose sheet; (b) the second hunt on Sonnet (0.2 a
+    helper cheaper). (Y to the target; N to a and b until a film has shown the 26)
 
 ## For Claude
 Sources: `notes/archive/remakes-handovers.md`, `notes/ledger/remakes*.json`, `notes/job-e-measurements.md`,

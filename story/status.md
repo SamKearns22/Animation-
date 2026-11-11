@@ -1,10 +1,9 @@
 - Blessed (11 Nov, build 2): the cast built and approved by Sam (Brand: bigger head, short chin; likeness 64%); Sam's 6
   recordings filed. Next: build chat 3 (Opus high), the sets. Notes: notes/blessed.md.
-- Line-up trial (budget trial 2, 11 Nov): finished at C4, 3.7% of a week in all (helpers 0.9 of it); comparison sheet sent to Sam. Next: the budget chat reads notes/trial_lineup.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
-- Budget job (11 Nov): trial 1 done (a Lead costs about 3.2% with the critics counted); trial 2 (line-up five) running; proposals next. Handover: notes/budget-job.md.
+- Budget job (11 Nov): Sam said Y; rules 24, 85, 89 written, the cost watch now counts helpers and Fable; three tool changes still to build (model waits on Sam). Handover: notes/budget-job.md.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
   Tool job (11 Nov rules for every film): built, all six pieces (captions by default, 1.1x in finish.py, Hook Text
   gate, eyes for every cast, set check in the kit, quick.py gone); kittests and remakes check clean. Open: Sam's look
