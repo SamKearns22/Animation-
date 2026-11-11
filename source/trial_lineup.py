@@ -15,7 +15,8 @@ MAP
   poses .............. pose(who, react)
   the Goron .......... goron(img, cam, x, floor, k, react): drawn whole in its own units (no views.person)
   person ............. person(img, cam, who, x, floor, s, react): s the scale of a 1.75 m adult; heights from HEIGHTS
-  the frame .......... lineup(react, scale): 1080 x 1920 (scale 2: 2160 x 3840), the flat backdrop and ground line
+  the frame .......... layout (the scale and x's from each figure's width, MARGIN and GAP), lineup(react, scale):
+                       1080 x 1920 (scale 2: 2160 x 3840), the flat backdrop and ground line
   sheets ............. frame(out), crop(out), compare(out, real)
 
     python3 source/trial_lineup.py frame OUT.png [idle]     (phone-size frame, on "ROMANCE" unless idle)
@@ -82,13 +83,13 @@ MINE = ('zelda', 'malon', 'saria', 'ruto')
 # brows (inner_dy, outer_dy) per side (negative = up), lid, look (-1 .. 1 across), mouth, plus: wink, blush, nod, roll
 MOODS = {
     ('zelda', 0): dict(brows=((-18, -2), (-18, -2)), lid=0.0, look=-0.55, gaze_dy=0.3, mouth='unsure', blush=0.3),
-    ('zelda', 1): dict(brows=((-26, -6), (-26, -6)), lid=0.0, look=0.15, mouth='unsure', blush=0.8),
+    ('zelda', 1): dict(brows=((-36, 6), (-36, 6)), lid=0.05, look=-0.6, gaze_dy=0.2, mouth='unsure', blush=0.8),
     ('malon', 0): dict(brows=((-8, -4), (-8, -4)), lid=0.04, mouth='smile', blush=0.35),
     ('malon', 1): dict(brows=((-18, -12), (-18, -12)), lid=0.0, scale=1.06, mouth='beam', blush=0.6),
     ('saria', 0): dict(brows=((4, -6), (-6, -12)), lid=0.12, look=0.1, mouth='smirk', blush=0.25),
     ('saria', 1): dict(brows=((4, -6), (-8, -16)), lid=0.1, look=0.0, mouth='smirk_big', wink='R', blush=0.4),
     ('ruto', 0): dict(brows=((2, -22), (2, -22)), lid=0.3, look=0.7, mouth='smug', blush=0.3),
-    ('ruto', 1): dict(brows=((0, -26), (0, -26)), lid=0.3, look=0.0, mouth='smug_big', wink='both', blush=0.5),
+    ('ruto', 1): dict(brows=((-2, -30), (-2, -30)), lid=0.42, look=0.0, mouth='smug_big', blush=0.5),
 }
 
 
@@ -256,16 +257,16 @@ def hair_malon(p, sp, hx, hy):
 def hair_saria(p, sp, hx, hy):
     """A bright lime bob: a full straight-ish fringe, the ends flipped out at the jaw (16)."""
     hw, hh = sp['hw'], sp['hh']
-    top = hy - hh * 1.2
-    bob = curve([(hx - hw * 1.36, hy + hh * 0.66), (hx - hw * 1.06, hy + hh * 0.5), (hx - hw * 1.14, hy - hh * 0.3),
+    top = hy - hh * 1.32
+    bob = curve([(hx - hw * 1.5, hy + hh * 0.86), (hx - hw * 1.06, hy + hh * 0.5), (hx - hw * 1.3, hy - hh * 0.3),
                  (hx - hw * 1.0, hy - hh * 0.86), (hx - hw * 0.5, top + 6), (hx, top), (hx + hw * 0.5, top + 6),
-                 (hx + hw * 1.0, hy - hh * 0.86), (hx + hw * 1.14, hy - hh * 0.3), (hx + hw * 1.06, hy + hh * 0.5),
-                 (hx + hw * 1.36, hy + hh * 0.66), (hx + hw * 1.1, hy + hh * 0.72), (hx + hw * 0.9, hy + hh * 0.5),
+                 (hx + hw * 1.0, hy - hh * 0.86), (hx + hw * 1.3, hy - hh * 0.3), (hx + hw * 1.06, hy + hh * 0.5),
+                 (hx + hw * 1.5, hy + hh * 0.86), (hx + hw * 1.16, hy + hh * 0.9), (hx + hw * 0.9, hy + hh * 0.5),
                  (hx + hw * 0.86, hy - hh * 0.2),
                  (hx + hw * 0.7, hy - hh * 0.3), (hx + hw * 0.5, hy - hh * 0.22), (hx + hw * 0.28, hy - hh * 0.34),
                  (hx, hy - hh * 0.24), (hx - hw * 0.28, hy - hh * 0.34), (hx - hw * 0.5, hy - hh * 0.22),
                  (hx - hw * 0.7, hy - hh * 0.3),
-                 (hx - hw * 0.86, hy - hh * 0.2), (hx - hw * 0.9, hy + hh * 0.5), (hx - hw * 1.1, hy + hh * 0.72)], 2)
+                 (hx - hw * 0.86, hy - hh * 0.2), (hx - hw * 0.9, hy + hh * 0.5), (hx - hw * 1.16, hy + hh * 0.9)], 2)
     p.poly(bob, S_HAIR, INK, 2.4)
     _strands(p, [((hx - hw * 0.5, top + 30), (hx - hw * 0.4, hy - hh * 0.36)),
                  ((hx + hw * 0.1, top + 20), (hx + hw * 0.16, hy - hh * 0.36)),
@@ -294,6 +295,11 @@ def back_hair(p, j2, view):
         back = curve([(hx - hw * 1.1, hy - hh * 0.6), (hx - hw * 1.4, hy + hh * 1.4), (hx - hw * 1.3, hy + hh * 2.0),
                       (hx + hw * 1.3, hy + hh * 2.0), (hx + hw * 1.4, hy + hh * 1.4), (hx + hw * 1.1, hy - hh * 0.6)], 3)
         p.poly(back, dk(VEIL, 0.9), INK, 2.4)
+    elif who == 'saria':                                  # the bob's full round back, so it reads as a girl's bob
+        back = curve([(hx - hw * 1.2, hy - hh * 0.9), (hx - hw * 1.5, hy + hh * 0.1), (hx - hw * 1.46, hy + hh * 0.8),
+                      (hx - hw * 1.1, hy + hh * 0.96), (hx + hw * 1.1, hy + hh * 0.96), (hx + hw * 1.46, hy + hh * 0.8),
+                      (hx + hw * 1.5, hy + hh * 0.1), (hx + hw * 1.2, hy - hh * 0.9)], 3)
+        p.poly(back, S_HAIR_D, INK, 2.4)
 
 
 def child_head(img, p, sp, t, hx, hy):
@@ -317,27 +323,25 @@ def ruto_head(img, p, sp, t, hx, hy):
     """Ruto: pale smooth skin, a big teal domed head-fin sweeping back, small side fins, purple lashed eyes (07, 08)."""
     hw, hh = sp['hw'], sp['hh']
     m = dict(MOODS[('ruto', sp.get('react', 0))])
-    for sg in (-1, 1):                                    # the small side fins where ears would be
-        fin = curve([(hx + sg * hw * 0.9, hy - hh * 0.1), (hx + sg * hw * 1.4, hy - hh * 0.5),
-                     (hx + sg * hw * 1.32, hy - hh * 0.06), (hx + sg * hw * 1.42, hy + hh * 0.14),
-                     (hx + sg * hw * 0.94, hy + hh * 0.3)], 3)
-        p.poly(fin, FIN, INK, 2.4)
-        p.line([(hx + sg * hw * 1.0, hy + hh * 0.06), (hx + sg * hw * 1.3, hy - hh * 0.36)], FIN_D, 1.6)
-    sweep = curve([(hx + hw * 0.6, hy - hh * 1.5), (hx + hw * 1.5, hy - hh * 1.9), (hx + hw * 2.0, hy - hh * 1.84),
-                   (hx + hw * 1.7, hy - hh * 1.4), (hx + hw * 1.3, hy - hh * 1.0)], 3)
-    p.poly(sweep, FIN_D, INK, 2.4)                        # the fin sweeping back, seen past the dome
+    # the fin sweeping back behind the head, seen past the dome on her left, falling to the shoulder (07)
+    sweep = curve([(hx - hw * 0.9, hy - hh * 1.9), (hx - hw * 1.9, hy - hh * 1.5), (hx - hw * 2.0, hy - hh * 0.4),
+                   (hx - hw * 1.8, hy + hh * 1.3), (hx - hw * 1.45, hy + hh * 0.7), (hx - hw * 1.2, hy - hh * 0.2)], 3)
+    p.poly(sweep, FIN_D, INK, 2.4)
+    p.line(curve([(hx - hw * 1.5, hy - hh * 1.3), (hx - hw * 1.8, hy - hh * 0.3), (hx - hw * 1.7, hy + hh * 0.9)], 3),
+           FIN, 2.2)
     _face(p, sp, hx, hy, R_SKIN, chin=0.86)
-    # the dome: a wide mushroom cap over the brow, wider than the face, a pale band under its rim
-    dome = curve([(hx - hw * 1.86, hy - hh * 0.56), (hx - hw * 1.8, hy - hh * 1.06), (hx - hw * 1.2, hy - hh * 1.66),
-                  (hx, hy - hh * 1.86), (hx + hw * 1.2, hy - hh * 1.66), (hx + hw * 1.8, hy - hh * 1.06),
-                  (hx + hw * 1.86, hy - hh * 0.56), (hx + hw * 1.1, hy - hh * 0.56), (hx + hw * 0.6, hy - hh * 0.6),
-                  (hx, hy - hh * 0.64), (hx - hw * 0.6, hy - hh * 0.6), (hx - hw * 1.1, hy - hh * 0.56)], 3)
+    # the dome: one big smooth teal head, taller than the face, coming down the sides like a hood; no brim
+    dome = curve([(hx - hw * 1.12, hy + hh * 0.05), (hx - hw * 1.5, hy - hh * 0.7), (hx - hw * 1.5, hy - hh * 1.5),
+                  (hx - hw * 0.9, hy - hh * 2.24), (hx, hy - hh * 2.42), (hx + hw * 0.9, hy - hh * 2.24),
+                  (hx + hw * 1.5, hy - hh * 1.5), (hx + hw * 1.5, hy - hh * 0.7), (hx + hw * 1.12, hy + hh * 0.05),
+                  (hx + hw * 0.92, hy - hh * 0.42), (hx + hw * 0.5, hy - hh * 0.62), (hx, hy - hh * 0.66),
+                  (hx - hw * 0.5, hy - hh * 0.62), (hx - hw * 0.92, hy - hh * 0.42)], 3)
     p.poly(dome, FIN, INK, 2.6)
-    p.poly(curve([(hx - hw * 1.3, hy - hh * 1.2), (hx - hw * 0.5, hy - hh * 1.66), (hx + hw * 0.4, hy - hh * 1.68),
-                  (hx - hw * 0.3, hy - hh * 1.5), (hx - hw * 1.0, hy - hh * 1.1)], 3), FIN_L, None)
-    p.line(curve([(hx - hw * 1.7, hy - hh * 0.66), (hx, hy - hh * 0.8), (hx + hw * 1.7, hy - hh * 0.66)], 3)[:-6],
-           FIN_D, 2.0)
-    p.ell(hx, hy - hh * 1.04, 9, 9, R_IRIS, INK, 1.6)    # the small mark on the dome's front (07)
+    p.poly(curve([(hx - hw * 1.1, hy - hh * 1.3), (hx - hw * 0.5, hy - hh * 2.06), (hx + hw * 0.3, hy - hh * 2.16),
+                  (hx - hw * 0.3, hy - hh * 1.86), (hx - hw * 0.9, hy - hh * 1.1)], 3), FIN_L, None)
+    for k in (-0.55, 0.0, 0.55):                          # a few soft ridges running back over the dome
+        p.line(curve([(hx + hw * k * 1.4, hy - hh * 0.9), (hx + hw * k * 1.2, hy - hh * 1.7),
+                      (hx + hw * k * 0.6, hy - hh * 2.2)], 3), FIN_D, 1.8)
     _features(p, sp, hx, hy, m, R_IRIS, (120, 140, 150), R_SKIN, eye_k=1.04)
     return hx
 
@@ -477,8 +481,9 @@ ocarina_wood.held = False                                 # over her hand (shown
 
 
 def milk_bottle(p, j2):
-    x, y = _mid(j2)
-    y -= 20
+    up = 'wrL' in j2 and j2['wrR'][1] < j2['wrL'][1] - 60      # raised in one hand: most of it above the fist
+    x, y = j2['wrR'] if up else _mid(j2)
+    y -= 66 if up else 20
     bot = curve([(x - 34, y + 70), (x - 36, y - 10), (x - 22, y - 46), (x - 16, y - 70), (x + 16, y - 70),
                  (x + 22, y - 46), (x + 36, y - 10), (x + 34, y + 70)], 2)
     p.poly(bot, MILK, INK, 2.4)
@@ -488,6 +493,7 @@ def milk_bottle(p, j2):
 
 
 milk_bottle.held = True
+
 
 
 # ------------------------------------------------------------------------------------------------ arms, legs (hooks)
@@ -609,12 +615,16 @@ def pose(who, react=0):
         for sd, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, sd, (sg * 38, 250.0 - lift, 150.0), 'down', 'fist')
         j['props'], j['grip'] = [ocarina_blue], {'L', 'R'}
-        j['head_roll'] = -5 if react else -7
+        j['head_roll'] = -11 if react else -7
     elif who == 'malon':                                  # dutiful, pick-me: the milk bottle offered; on "ROMANCE"
-        lift = 80 if react else 0                         # she lifts it up to us and rises a touch
-        for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 40, 310.0 - lift, 170.0), 'down', 'fist')
-        j['props'], j['grip'] = [milk_bottle], {'L', 'R'}
+        if react:                                         # she lifts it up to us in one hand, beside her face
+            V.arm_to(j, 'R', (sw * 1.9, 150.0, 120.0), 'out', 'fist')    # out past her hair
+            V.arm_to(j, 'L', (-20.0, 330.0, 150.0), 'down', 'fist')
+            j['props'], j['grip'], j['wrap'] = [milk_bottle], {'R'}, {'R'}   # the arm behind it, the fist over
+        else:
+            for sd, sg in (('L', -1), ('R', 1)):
+                V.arm_to(j, sd, (sg * 40, 310.0, 170.0), 'down', 'fist')
+            j['props'], j['grip'] = [milk_bottle], {'L', 'R'}
         j['head_roll'] = 4 if react else 2
         if react:
             j['bob'] = -8
@@ -627,7 +637,7 @@ def pose(who, react=0):
         for sd, sg in (('L', -1), ('R', 1)):              # pats her head-fin
             V.arm_to(j, sd, (sg * sw * 0.86, 360.0, 0.0), 'out', 'fist')
         if react:
-            V.arm_to(j, 'R', (hw * 1.3, hy - 60, 30.0), 'out', 'palm')
+            V.arm_to(j, 'R', (hw * 2.02, hy - 84, 30.0), 'out', 'palm')
         j['nod'] = -1.2 if react else -0.8
         j['head_roll'] = 6 if react else 4
     j['body_props'] = [BODIES[who]]
@@ -642,17 +652,16 @@ def goron(img, cam, x, floor, k, react=0):
     L = B.Local(cam, x, floor, k)
     p = B.Pen(img, L)
     kit.contact_shadow(img, cam, x, floor, 700 * k)
-    for sg in (-1, 1):                                    # rocky grey patches on the back, peeking past the shoulders
-        p.poly(curve([(sg * 250, -1200), (sg * 360, -1150), (sg * 400, -1020), (sg * 330, -980)], 2), ROCK, INK, 2.6)
-        p.line([(sg * 320, -1140), (sg * 370, -1040)], ROCK_D, 2.4)
+    # (the rocky patches on its back read as headphones from the front: left out)
     for sg in (-1, 1):                                    # stubby legs and wide round feet
         p.poly(curve([(sg * 90, -330), (sg * 250, -330), (sg * 260, -120), (sg * 230, -50), (sg * 110, -50),
                       (sg * 90, -140)], 3), G_SKIN, INK, 2.6)
         p.poly(curve([(sg * 70, 0), (sg * 80, -70), (sg * 180, -96), (sg * 280, -70), (sg * 300, 0)], 3), G_SKIN, INK, 2.6)
         for t in range(3):
             p.line([(sg * (140 + 50 * t), -2), (sg * (140 + 50 * t), -24)], G_SKIN_D, 2.4)
-    egg = curve([(0, -1400), (240, -1356), (330, -1190), (380, -960), (410, -660), (390, -440), (300, -290),
-                 (0, -240), (-300, -290), (-390, -440), (-410, -660), (-380, -960), (-330, -1190), (-240, -1356)], 4)
+    egg = curve([(0, -1400), (200, -1372), (290, -1250), (340, -1060), (384, -820), (410, -600), (392, -420),
+                 (320, -290), (0, -250), (-320, -290), (-392, -420), (-410, -600), (-384, -820), (-340, -1060),
+                 (-290, -1250), (-200, -1372)], 4)                      # a pear: narrow crown, round low belly
     p.poly(egg, G_SKIN, INK, 3.0)
     p.poly(curve([(-250, -1240), (-180, -1330), (-60, -1362), (-160, -1250), (-236, -1090)], 3), G_SKIN_L, None)
     p.poly(curve([(0, -1394), (-30, -1440), (-10, -1470), (16, -1452), (40, -1470), (44, -1420), (24, -1390)], 2),
@@ -660,20 +669,20 @@ def goron(img, cam, x, floor, k, react=0):
     # the dress: a frilly pink pinafore with straps, a lace-edged bodice, two ruffled tiers and a bow
     for sg in (-1, 1):
         p.poly([(sg * 150, -930), (sg * 220, -940), (sg * 250, -760), (sg * 180, -750)], FRILL, INK, 2.2)
-    p.poly([(-396, -770), (396, -770), (410, -560), (-410, -560)], FRILL, INK, 2.4)
+    p.poly([(-372, -770), (372, -770), (408, -560), (-408, -560)], FRILL, INK, 2.4)
     for i in range(11):                                   # lace along the bodice top
-        p.ell(-360 + i * 72, -772, 32, 20, LACE, INK, 1.8)
+        p.ell(-340 + i * 68, -772, 30, 20, LACE, INK, 1.8)
     sk_top, hem = -570, -260
-    p.poly([(-410, sk_top), (410, sk_top), (450, hem), (-450, hem)], FRILL, INK, 2.4)
+    p.poly([(-408, sk_top), (408, sk_top), (440, hem), (-440, hem)], FRILL, INK, 2.4)
     for tier, y in enumerate((-450, hem)):
-        half = 420 + 36 * tier
+        half = 418 + 26 * tier
         n = 9 + tier
         for i in range(n):                                # the ruffles: a row of scallops
             xx = -half + (i + 0.5) * 2 * half / n
             p.ell(xx, y + 10, half / n + 8, 40, FRILL_L, INK, 2.0)
             p.line([(xx, y - 6), (xx, y + 34)], FRILL_D, 1.6)
     for i in range(12):                                   # lace at the hem
-        p.ell(-440 + (i + 0.5) * 73, hem + 52, 24, 15, LACE, INK, 1.6)
+        p.ell(-432 + (i + 0.5) * 72, hem + 52, 24, 15, LACE, INK, 1.6)
     for sg in (-1, 1):                                    # the bow at the bodice
         p.poly([(0, -712), (sg * 100, -762), (sg * 108, -660)], FRILL_D, INK, 2.2)
     p.ell(0, -712, 30, 28, FRILL_D, INK, 2.2)
@@ -681,10 +690,12 @@ def goron(img, cam, x, floor, k, react=0):
     # "ROMANCE" they squeeze together and lift a little
     hy = -470 - (30 if react else 0)
     for sg in (-1, 1):
-        ar = curve([(sg * 330, -900), (sg * 420, -800), (sg * 410, -640), (sg * 300, hy - 30), (sg * 100, hy - 50),
-                    (sg * 100, hy + 60), (sg * 270, hy + 60), (sg * 300, -620), (sg * 280, -820)], 3)
+        ar = curve([(sg * 290, -1000), (sg * 400, -950), (sg * 452, -790), (sg * 440, -600), (sg * 350, hy - 16),
+                    (sg * 120, hy - 50), (sg * 110, hy + 60), (sg * 320, hy + 72), (sg * 376, -600), (sg * 372, -770),
+                    (sg * 340, -880)], 3)                 # a round shoulder outside the body, the arm hanging from it
         p.poly(ar, G_SKIN, INK, 2.6)
-        p.line([(sg * 340, -700), (sg * 360, -620)], G_SKIN_D, 2.2)
+        p.line(curve([(sg * 300, -990), (sg * 356, -900), (sg * 372, -800)], 3), INK, 2.4)   # the shoulder's crease
+        p.line([(sg * 410, -700), (sg * 412, -620)], G_SKIN_D, 2.2)
     p.ell(46, hy, 78, 74, G_SKIN, INK, 2.6)              # two round hands, one over the other
     p.ell(-46, hy + 6, 78, 74, G_SKIN, INK, 2.6)
     p.line([(-30, hy - 40), (-6, hy - 10)], G_SKIN_D, 2.2)
@@ -709,7 +720,7 @@ def goron(img, cam, x, floor, k, react=0):
     for sg in (-1, 1):
         p.line([(sg * w, -1020), (sg * (w + 20), -1040)], INK, 3.4)
     p.poly([(-26, -896), (26, -896), (0, -836)], (250, 250, 250), INK, 2.0)      # the goatee point
-    dl = 170 if react else 90                             # the drool from the corner of the grin
+    dl = 30 if react else 18                              # a small drip from the corner of the grin
     dx0, dy0 = -w * 0.66, -948
     p.poly(curve([(dx0 - 14, dy0), (dx0 + 14, dy0), (dx0 + 10, dy0 + dl), (dx0 + 24, dy0 + dl + 30),
                   (dx0, dy0 + dl + 52), (dx0 - 24, dy0 + dl + 30), (dx0 - 10, dy0 + dl)], 2), DROOL, INK, 2.2)
@@ -757,8 +768,37 @@ def _patch_pre(j, sp):
 
 
 # ------------------------------------------------------------------------------------------------ the frame
-ORDER = [('zelda', 106), ('malon', 268), ('saria', 432), ('ruto', 610), ('goron', 870)]
-FLOOR = 1520
+ORDER = ['zelda', 'malon', 'saria', 'ruto', 'goron']
+FLOOR, MARGIN, GAP = 1520, 14, 10                         # the ground line; side margin and gap between, at scale 1
+_EXT = {}
+
+
+def _extent(who, react):
+    """(left, right, top) of one figure drawn at s=1 about x=0 on a floor at 0, in pixels (soft shadows left out)."""
+    if (who, react) not in _EXT:
+        im = Image.new('RGBA', (3000, 3000), (0, 0, 0, 0))
+        keep = kit.contact_shadow, kit.feet_shadow
+        kit.contact_shadow = kit.feet_shadow = lambda *a, **k: None       # shadows left out of the width
+        try:
+            person(im, TL._flat(), who, 1500, 2800, 1.0, react)
+        finally:
+            kit.contact_shadow, kit.feet_shadow = keep
+        x0, y0, x1, _ = im.getbbox()
+        _EXT[(who, react)] = (x0 - 1500, x1 - 1500, y0 - 2800)
+    return _EXT[(who, react)]
+
+
+def layout(react=1):
+    """The scale s and each centre x (scale 1): as big as the frame's width allows, nobody touching."""
+    ext = [_extent(w, react) for w in ORDER]
+    span = sum(r - l for l, r, _ in ext)
+    s = (1080 - 2 * MARGIN - GAP * (len(ORDER) - 1)) / span
+    xs, x = [], MARGIN
+    for l, r, _ in ext:
+        xs.append(x - l * s)
+        x += (r - l) * s + GAP
+    top = FLOOR + min(t for _, _, t in ext) * s
+    return s, xs, top
 
 
 def lineup(react=1, scale=1):
@@ -770,9 +810,9 @@ def lineup(react=1, scale=1):
     d.rectangle([0, FLOOR * scale, W, H], fill=(196, 186, 160))
     d.line([(0, FLOOR * scale), (W, FLOOR * scale)], fill=(150, 140, 118), width=3 * scale)
     cam = TL._flat()
-    s = 0.48 * scale
-    for who, x in sorted(ORDER, key=lambda o: o[0] != 'goron'):    # the big Goron stands a half step back
-        person(img, cam, who, x * scale, FLOOR * scale, s, react)
+    s, xs, _ = layout(react)
+    for who, x in sorted(zip(ORDER, xs), key=lambda o: o[0] != 'goron'):    # the big Goron stands a half step back
+        person(img, cam, who, x * scale, FLOOR * scale, s * scale, react)
     return img
 
 
@@ -782,13 +822,12 @@ def frame(out, react=1):
     return out
 
 
-CROP = (0, 1020, 1080, 1560)                             # heads to feet of the children, the Goron's face and tummy
-
-
 def crop(out, react=1):
+    """The 2x crop: all five, the Goron's tuft to everyone's feet."""
     img = lineup(react, 2)
-    x0, y0, x1, y1 = CROP
-    img.crop((x0 * 2, y0 * 2, x1 * 2, y1 * 2)).convert('RGB').save(out)
+    _, _, top = layout(react)
+    y0, y1 = int(top) - 24, FLOOR + 44
+    img.crop((0, y0 * 2, 2160, y1 * 2)).convert('RGB').save(out)
     return out
 
 
@@ -816,8 +855,8 @@ def spec(rnd):
     sp = {'round': rnd, 'panels': [
         dict(img=f, crop=None, parts='P', refs=refs, beat=BEAT, views=['front'],
              **{'is': 'the whole line-up frame at phone size (1080 x 1920). ' + BRIEF}),
-        dict(img=c, crop=[0, 0, 2160, 1080], parts='P', refs=refs, beat=BEAT, views=['front'],
-             **{'is': 'a 2x crop of the SAME frame (all five, heads to feet; the Goron face to knees), to confirm '
+        dict(img=c, crop=[0, 0] + list(Image.open(c).size), parts='P', refs=refs, beat=BEAT, views=['front'],
+             **{'is': 'a 2x crop of the SAME frame (all five, heads to feet, the Goron tuft included), to confirm '
                       'faces and joins. ' + BRIEF})]}
     out = os.path.join(d, f'spec{rnd}.json')
     json.dump(sp, open(out, 'w'), indent=1)
