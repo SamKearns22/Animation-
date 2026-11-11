@@ -1,15 +1,13 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 59 (no final unless the checks pass), 70 (1.1x on delivery), 62 (captions).
-- **Done (11 Nov):** note 75, S13's blue banner removed (camera centred as S12b; still checked, clip sent).
-- **Next:** the final render again (Sonnet, medium: notes/remakes-final-handover.md); Sam's clear yes given
-  ("Y then redo final render", 11 Nov), no check sheet needed. Send the new film in chat.
-- **Needs Sam:** nothing until the new final arrives.
-- **Read:** pack "Final and posting" in `guides/job-packs.md`; notes/remakes-final-handover.md.
+- **Rules that bite next:** 70 (1.1x on delivery), 62 (captions), 59 (checks before a final).
+- **Done (11 Nov, pm):** note 75 fixed; final re-rendered (6 min 54 s), finished, 1.1x: animations/remakes-vertical.mp4 (11.6 MB, 41.5 s) sent to Sam.
+- **Next:** wait for Sam to say it's posted, then the film's notes go to `notes/archive/`.
+- **Needs Sam:** nothing.
+- **Read:** nothing until Sam answers.
 - **Open rule requests:** none.
-- **For Claude:** s13_pinned's wall camera now (wcx + kx_)/2 + 20 (was wcx - 40, which caught _banner at x 44-436).
-  1.1x by hand (`--signoff-speed 1.12`, then ffmpeg setpts/atempo). Merge the main line first.
+- **For Claude:** finish.py already does the 1.1x (Hook Text 0.5 s, sign-off 1.6 s with its default speed): do NOT also run the ffmpeg setpts step or pass --signoff-speed (that double-sped the film to 37.9 s); only `fps=24` after. Preflight needs a folder as OUT_DIR (a file path becomes a folder and blocks the render). Named faults: 9 prop-turn lines (Malon/Saria no side view, S10); script/mouth wording (lines 4, 5, 11, 13); "you s***" 1.45 s early; captions "Uh, yeah, I think so?" 1.36 s, "I don't think I" 0.83 s, "You're gonna grow up" 1.06 s (too fast at 1.1x); critique round 3 faults/can't-tell open.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
@@ -180,7 +178,3 @@ Decisions made (Sam, 10 Nov):
 - 12 Showstopper: the camp burst (gate blown in, watchtower, tracers, gun flash, falling cases).
 - Link's scuttle faces forward, in from off camera.
 
-## Where things stand (11 Nov, final render)
-Done: final render (6 min), finished, 1.1x; animations/remakes-vertical.mp4 (11.9 MB, 41.4 s) sent to Sam. Sign-off speed 1.12 (1.136 gave 20 frames not 21; sign-off now 1.59 s). Next: wait for Sam to say it's posted, then archive the film's notes. Named faults: 8 prop-turn (Malon/Saria no side view, S10), script/mouth wording differences (lines 4, 5, 11, 13), subtitle "you s***" 1.45 s early, caption "I don't think I" 0.9 s, critique round 3 faults/can't-tell open. Hook Text lands 0.45 s.
-
-Update 11 Nov (pm): re-rendered with the eye cut-outs (rule S5) and Hook Text "Link's New Adventure… 👀". Housestyle eye check now reads cast files only (it flagged remakes.py for a setting name). 11.9 MB, 41.4 s, render 6 min. Next: wait for Sam to say posted.

@@ -1,4 +1,4 @@
-remakes: S13 banner fixed 11 Nov (clip sent); final render redone next (Sam: yes).
+remakes: final re-rendered 11 Nov (note 75 in), 1.1x, animations/remakes-vertical.mp4 sent to Sam; next: wait for "posted", then archive notes.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
