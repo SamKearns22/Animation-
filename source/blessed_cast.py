@@ -94,7 +94,8 @@ def brand_beard(p, f, L, skin, seed=91):
     wrap = getattr(f, 'wrap', None)
     nb = [(wrap(0.44, -95), 0.44), (wrap(0.62, -98), 0.62), (wrap(0.83, -96), 0.83)] if wrap else \
         [(-fw * 0.5 - 0.004, 0.44), (-fw * 0.5 - 0.004, 0.62), (-jw * 0.46, 0.84)]
-    bottom = nb + [(-jw * 0.32, 0.97), (-0.12, 1.02), (0.0, 1.035), (0.12, 1.02), (jw * 0.32, 0.97), (jw * 0.46, 0.84),
+    cb = 0.015 if wrap else 0.0                        # turned: past the chin outline, so no skin flecks under it
+    bottom = nb + [(-jw * 0.32, 0.97 + cb), (-0.12, 1.02 + cb), (0.0, 1.035 + cb), (0.12, 1.02 + cb), (jw * 0.32, 0.97 + cb), (jw * 0.46, 0.84),
                    (fw * 0.5 + 0.004, 0.62), (fw * 0.5 + 0.004, 0.44)]
     cheek = [(fw * 0.5 - 0.015, 0.47), (fw * 0.41, ny - 0.01), (fw * 0.3, ny + 0.01), (mw * 0.7, l0 - 0.015)]
     corner = [(mw * 0.64, l13 + 0.01), (mw * 0.58, l17 + 0.02), (mw * 0.3, l17 + 0.04)]
@@ -102,13 +103,17 @@ def brand_beard(p, f, L, skin, seed=91):
     left = [(-u, v) for u, v in right[::-1]]
     if wrap:
         left[-1] = (wrap(0.42, -90), 0.4)
-    inner = AV.tufts(right + left[1:], 0.012, 0.014, out=1.0, seed=seed)
-    edge = AV.tufts(bottom, 0.012, 0.018, out=1.0, seed=seed + 1)
+    # turned (oath, phone, gates) the far half narrows and the tufts turn into stair steps (Sam, 11 Nov: "ridges on
+    # the left side"): smaller tufts the more he turns
+    turned = abs(getattr(f, 's', 0.0)) if hasattr(f, 'th') else (getattr(f, 'tq', 0.0) or 0.0)   # TurnFace: sin(yaw)
+    ta = 1.0 - 0.6 * min(1.0, turned)
+    inner = AV.tufts(right + left[1:], 0.012 * ta, 0.014, out=1.0, seed=seed)
+    edge = AV.tufts(bottom, 0.012 * ta, 0.018, out=1.0, seed=seed + 1)
     body = f.pts(edge + inner)
     p.poly(body, BD_MID, None)
     # grey-white over the chin and the jaw: everything below a tufted line from the jaw corner under the mouth
     low_top = AV.tufts([(fw * 0.5 + 0.01, 0.66), (jw * 0.42, 0.8), (mw * 0.5, l17 + 0.08), (0.0, l17 + 0.1),
-                        (-mw * 0.5, l17 + 0.08), (-jw * 0.42, 0.8), (-fw * 0.5 - 0.01, 0.66)], 0.016, 0.016,
+                        (-mw * 0.5, l17 + 0.08), (-jw * 0.42, 0.8), (-fw * 0.5 - 0.01, 0.66)], 0.016 * ta, 0.016,
                        out=1.0, seed=seed + 2)
     n = len(edge)
     p.poly(f.pts(edge[n // 5: n - n // 5] + low_top), BD_LOW, None)
@@ -252,6 +257,8 @@ def _top_strokes(p, f, L, knot):
     strokes = (((-0.08, -0.21), (-0.2, -0.4)), ((0.08, -0.21), (0.2, -0.4)), ((-0.22, -0.17), (-c - 0.04, -0.3)),
                ((0.22, -0.17), (c + 0.04, -0.3)), ((0.0, -0.22), (0.0, -0.44)))
     for i, (a, b) in enumerate(strokes):
+        if i == 2 and f.tq > 0.4:                     # the far side narrows: its outer stroke would leave the hair
+            continue
         mid = ((a[0] + b[0]) / 2 + (0.03 if i % 2 else -0.03), (a[1] + b[1]) / 2)
         p.line(curve(f.pts([a, mid, b]), 3), BR_GREY if i == 1 else BR_HAIR_L, 1.8)
 
@@ -331,9 +338,12 @@ def brand_mouth(p, f, L, kind):
         p.poly(curve(f.pts(teeth), 3), (250, 248, 240), None)
         return
     if kind == 'gasp':
-        x, y = f(0.0, (l13 + l17) / 2 + 0.01)
-        p.poly(oval(x, y, hw * P4.H * 0.55, (l17 - l0) * P4.H * 0.95, 20), (70, 26, 30), INK, 2.2)
-        p.poly(oval(x, y - (l17 - l0) * P4.H * 0.7, hw * P4.H * 0.4, 4, 12), (250, 248, 240), None)
+        # a round O inside the moustache: a long narrow one hanging below it read as a tongue (critique, 11 Nov)
+        x, y = f(0.0, (l13 + l17) / 2 - 0.004)
+        rx, ry = hw * P4.H * 0.72, (l17 - l0) * P4.H * 0.72
+        p.poly(oval(x, y, rx, ry, 24), (70, 26, 30), INK, 2.4)
+        p.poly(oval(x, y + ry * 0.25, rx * 0.62, ry * 0.55, 20), (40, 14, 18), None)          # the dark throat
+        p.poly(oval(x, y - ry * 0.72, rx * 0.66, ry * 0.16, 14), (250, 248, 240), None)       # top teeth
         return
     # cry: a wide, low, square-ish opening, the corners dragged down
     pts = [(-hw * 1.05, l13 + 0.03), (-hw * 0.5, l13 - 0.006), (0.0, l13 - 0.01), (hw * 0.5, l13 - 0.006),
@@ -366,6 +376,18 @@ def _lift(hy):
     return hy - (HEAD_K - 1) * 172.0 * 0.85
 
 
+def _outline(L):
+    """P4.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
+    temple point, so the smoothing folds the left forehead into a notch (Sam, 11 Nov: "strange ridges on the left
+    side"). Here: once round, crown first, both temples alike."""
+    pts = P4.outline_uv(L, 0.4, crown=-0.42)[2:]               # from the crown: right side, chin, left side
+    out = []
+    for q in pts:
+        if not out or abs(q[0] - out[-1][0]) + abs(q[1] - out[-1][1]) > 1e-6:
+            out.append(q)
+    return [out[0], (-pts[-1][0], pts[-1][1])] + out[1:]       # the right upper temple, as the left has
+
+
 def brand_head(img, p, sp, t, hx, hy):
     with _Big():
         return _brand_head(img, p, sp, t, hx, _lift(hy))
@@ -381,7 +403,7 @@ def _brand_head(img, p, sp, t, hx, hy):
         p.poly(curve(f.pts(mass), 2), BR_HAIR, INK, 2.4)
         _texture(p, f, mass, 46, 7)
     AV._ears(p, f, L, skin)
-    p.poly(curve(f.pts(P4.outline_uv(L, 0.4, crown=-0.42)), 4), skin, INK, 2.6)
+    p.poly(curve(f.pts(_outline(L)), 4), skin, INK, 2.6)
     brand_beard(p, f, L, skin)
     if sp.get('empty'):
         P4.nose(p, f, L, skin)

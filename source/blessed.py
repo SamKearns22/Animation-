@@ -438,7 +438,7 @@ def arrive(sp, t):
                              word_at(1, 'blessed.'))
     sw = sp.get('shoulders', 150)
     heart = ((-30.0, 135.0, 78.0), 'in', 'palm')
-    shades = ((-14.0, -194.0, 100.0), 'in', 'palm')
+    shades = ((-88.0, -204.0, 70.0), 'in', 'palm')       # at the frame's side: the nose stays clear
     wide = lambda sg: ((sg * (sw + 120), 200.0, 110.0), 'out', 'palm')
     arm_keys(j, sp, 'L', t, [(feel - 0.35, None), (feel, heart), (mate - 0.35, heart), (mate - 0.05, shades),
                              (mate + 0.1, shades), (sup + 0.05, wide(-1)), (last - 0.15, wide(-1)), (last + 0.2, heart),
@@ -455,31 +455,47 @@ def arrive(sp, t):
     return mark, yaw, j
 
 
-# --- oath: side-on in the box; Bible in the far hand, the near hand raised palm out; eyes up on "Almighty God"
+OATH_BIBLE = ((-6.0, 120.0, 128.0), 'down', 'fist')     # far hand (L) at the shirt opening
+OATH_RAISE = (40.0, -140.0, 100.0, (1.0, 0.8, 0.3))                  # near hand (R) up beside the head, palm out
+OATH_BOOK = [(x, y, z) for x in (-52.0, 40.0) for y in (40.0, 168.0) for z in (122.0, 150.0)]
+
+
+# --- oath: side-on in the box (facing left, so his R is the near side): the near hand raised palm out, the Bible
+#     in the far hand held up on the white shirt; eyes up on "Almighty God"
 def oath(sp, t):
     j = V.standing(sp)
     sw = sp.get('shoulders', 150)
     a = T['s2']
     up0, up1, dn0, dn1 = a + 0.15, a + 0.65, L[2]['end'] + 0.1, L[2]['end'] + 0.5
-    bible = ((46.0, 172.0, 112.0), 'down', 'fist')
-    raised = ((-(sw + 70), -40.0, 60.0), 'out', 'palm')
-    arm_keys(j, sp, 'R', t, [(up0, None), (up1, bible), (dn0, bible), (dn1, None)])
-    arm_keys(j, sp, 'L', t, [(up0, None), (up1, raised), (dn0, raised), (dn1, None)])
+    bible = OATH_BIBLE
+    raised = ((sw + OATH_RAISE[0], OATH_RAISE[1], OATH_RAISE[2]), OATH_RAISE[3], 'palm')
+    arm_keys(j, sp, 'L', t, [(up0, None), (up1, bible), (dn0, bible), (dn1, None)])
+    arm_keys(j, sp, 'R', t, [(up0, None), (up1, raised), (dn0, raised), (dn1, None)])
     for w in ('blessed evidence', 'blessed truth'):
         k = word_at(2, w)
         b = _bump(t, k - 0.05, k + 0.55, 0.15, 0.3)
         j['lean'] = j.get('lean', 0.0) + 4 * b
         j['nod'] = j.get('nod', 0.0) + 1.0 * b
-    if t < dn0 + 0.05:
+    if up0 + 0.2 < t < dn1 - 0.1:
         import grips
-        box = [(x, y, z) for x in (-34.0, 58.0) for y in (100.0, 236.0) for z in (100.0, 130.0)]
+        lift = moves.lerp((0.0, 160.0, 0.0), (0.0, 0.0, 0.0), _ease(_ramp(t, up0, up1)))
+        lift = moves.lerp(lift, (0.0, 160.0, 0.0), _ease(_ramp(t, dn0, dn1)))
+        box = [V._add(q, lift) for q in OATH_BOOK]
 
-        def cross(p, j2):
-            c = V.project(V.leaned((12.0, 150.0, 131.0), j.get('lean', 0.0)), j2['yaw'])[0]
+        def marks(p, j2):
+            pr = lambda q: V.project(V.leaned(V._add(q, lift), j.get('lean', 0.0)), j2['yaw'])[0]
+            x0, x1 = OATH_BOOK[0][0], OATH_BOOK[-1][0]
+            y0, y1 = OATH_BOOK[0][1], OATH_BOOK[-1][1]
+            zf = OATH_BOOK[-1][2]
+            # the pale page edge along the far (spine-less) side, seen past the cover
+            e = [pr((x0, y0 + 6, zf - 4)), pr((x0, y1 - 6, zf - 4)), pr((x0, y1 - 6, OATH_BOOK[0][2] + 4)),
+                 pr((x0, y0 + 6, OATH_BOOK[0][2] + 4))]
+            p.poly(e, (236, 228, 204), INK, 1.4)
+            c = pr(((x0 + x1) / 2, (y0 + y1) / 2, zf + 1))
             g = (214, 176, 70)
             p.poly([(c[0] - 4, c[1] - 26), (c[0] + 4, c[1] - 26), (c[0] + 4, c[1] + 26), (c[0] - 4, c[1] + 26)], g, None)
             p.poly([(c[0] - 15, c[1] - 12), (c[0] + 15, c[1] - 12), (c[0] + 15, c[1] - 4), (c[0] - 15, c[1] - 4)], g, None)
-        grips.held(j, 'R', sp, _box_prop(j, box, (28, 26, 30), cross))
+        grips.held(j, 'L', sp, _box_prop(j, box, (40, 30, 34), marks))
     return j
 
 
@@ -488,8 +504,8 @@ def oath_gaze(t):
 
 
 # --- gavel: the judge takes the gavel, raises it to the shoulder, strikes on the bang, a small rebound, rests
-GAVEL_HAND = [(T['s3'] + 0.11, (930.0, 1500.0, 0.0)), (T['s3'] + 0.36, (910.0, 1404.0, math.pi)),
-              (T['s3'] + 0.71, (900.0, 1150.0, 2.25)), (T['bang'] - 0.15, (910.0, 1135.0, 2.35)),
+GAVEL_HAND = [(T['s3'] + 0.11, (985.0, 1392.0, 0.0)), (T['s3'] + 0.36, (910.0, 1404.0, math.pi)),   # from the bench top
+              (T['s3'] + 0.71, (900.0, 1000.0, 2.2)), (T['bang'] - 0.15, (910.0, 985.0, 2.3)),
               (T['bang'], (910.0, 1404.0, math.pi)), (T['bang'] + 0.12, (912.0, 1376.0, math.pi - 0.18)),
               (T['bang'] + 0.3, (910.0, 1404.0, math.pi))]
 
@@ -516,23 +532,18 @@ def gavel_pose(sp, t, mark):
     px, py = _world_to_person(hx, hy, mark, s, 1, j['bob'])
     z = 150.0
     tgt = (px, py - V.ELEV * z, z)
-    if t >= GAVEL_HAND[1][0] - 0.25:
-        a = _ramp(t, GAVEL_HAND[0][0], GAVEL_HAND[1][0])
-        r = _rest_spec(sp, 'R', j)
-        _arm(j, 'R', moves.lerp(r[0], tgt, _ease(a)), moves.lerp(r[1], V.POLES['out'], _ease(a)), 14.0, 'fist')
+    _arm(j, 'R', tgt, V.POLES['out'], 14.0, 'fist')    # the hand on the bench top from the cut: never under it
     j['nod'] = 0.6 * _bump(t, T['bang'], T['bang'] + 0.25, 0.04, 0.2)
     return j
 
 
 def gavel_draw(img, cam, t, pts, mark, sp, j):
     """The held gavel over the bench front and block, then his hand over its handle (P1)."""
-    if not (ST.GAVEL_LIFT[0] <= t <= ST.GAVEL_LIFT[1]):
-        return
     s = _s(sp, mark[2])
-    hx, hy = HANDS[('judge', 'R')]
-    ang = gavel_at(t)[2]
-    p = B.Pen(img, cam)
-    ST.gavel(p, hx + 150 * math.cos(ang), hy - 150 * math.sin(ang), ang)
+    if ST.GAVEL_LIFT[0] <= t <= ST.GAVEL_LIFT[1]:
+        hx, hy = HANDS[('judge', 'R')]
+        ang = gavel_at(t)[2]
+        ST.gavel(B.Pen(img, cam), hx + 150 * math.cos(ang), hy - 150 * math.sin(ang), ang)
     V.hand(B.Pen(img, B.Local(cam, mark[0], mark[1] - 928 * s + j['bob'] * s, s)), pts, 'R', sp, 'fist')
 
 
@@ -547,11 +558,14 @@ def dock(sp, t):
 
 
 # --- van: bent over, forearms on the thighs, hands clasped between the knees, head down; the van sways him
+VAN_HANDS = lambda sg: (sg * 10, 400.0, 360.0)      # both fists together, between the knees
+
+
 def van(sp, t):
     j = moves.seated(sp)
     lean = 28 + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
     for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, unlean((sg * 8, 500.0, 250.0), lean), 'down')
+        V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
     j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
     return j
 
@@ -595,6 +609,9 @@ def escort_gaze(t):
     return _keys(t, [(a + 0.9, 0.0), (a + 1.2, -0.6), (a + 1.6, -0.6), (a + 1.9, 0.5)])
 
 
+GRIP_AT = [None]                                 # where the officer's hand should be on Brand's arm (touch check)
+
+
 def officer_grip(sp, j, t, mark, brand_pts, brand_mark, brand_s):
     """His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side."""
     k = t - T['cell']
@@ -603,6 +620,7 @@ def officer_grip(sp, j, t, mark, brand_pts, brand_mark, brand_s):
     sh, el = brand_pts['shL'], brand_pts['elL']
     bx = brand_mark[0] - brand_s * (sh[0] + 0.45 * (el[0] - sh[0]))
     by = brand_mark[1] - 928 * brand_s + brand_s * (brand_pts.get('_bob', 0.0) + sh[1] + 0.45 * (el[1] - sh[1]))
+    GRIP_AT[0] = (bx, by)
     s = _s(sp, mark[2])
     px, py = _world_to_person(bx, by, mark, s, -1, j.get('bob', 0.0))
     xd = -20.0                                         # a little nearer the lens than his chest
@@ -615,9 +633,12 @@ def officer_grip(sp, j, t, mark, brand_pts, brand_mark, brand_s):
 # --- cot: curled on his side on the cot, weeping, a sob every 0.9 s
 
 
+COT_AT = (-0.95, 1.8, -1, -90.0)    # x, d, flip, yaw: curled along the bed, head at the pillow (chosen by eye, contact check clean)
+
+
 def cot_body(sp, t):
     import lying
-    k, surf = lying.lie(sp, 'side', -0.65, 2.4, -90.0, ground=0.45)
+    k, surf = lying.lie(sp, 'side', COT_AT[0], COT_AT[1], COT_AT[3], ground=0.45, flip=COT_AT[2])
     ph = ((t - T['cot']) % 0.9) / 0.9
     sob = math.sin(math.pi * min(1.0, ph / 0.35)) if ph < 0.35 else 0.0
     for n in ('neck', 'head', 'shL', 'shR', 'elL', 'elR', 'wrL', 'wrR'):
@@ -908,6 +929,43 @@ def soundtrack(stems=False):
     return (mix, voice, rest) if stems else mix
 
 
+def touch_faults():
+    """The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
+    the judge's hand on the gavel handle and above the bench top (never under it), the Bible in Brand's hand, the
+    officer's grip on Brand's arm until the stop. TOUCHES stays empty: the flat film has no 3D scene for kitchecks."""
+    out = []
+    import numpy as _np
+    for t in _np.arange(T['s3'] + 0.02, T['s4'] - 0.02, 0.05):             # gavel
+        img = Image.new('RGBA', (1080, 1920))
+        draw_people(img, _cam('gavel', t), 'gavel', float(t))
+        for f in DEFER:
+            f()
+        DEFER.clear()
+        hx, hy = HANDS[('judge', 'R')]
+        if hy > 1404 + 26:
+            out.append(f'gavel {t:.2f}s: the judge\'s hand is under the bench top ({hy:.0f})')
+        gx, gy, _ = gavel_at(float(t))
+        if ST.GAVEL_LIFT[0] + 0.02 <= t and math.hypot(hx - gx, hy - gy) > 40:
+            out.append(f'gavel {t:.2f}s: the hand is {math.hypot(hx - gx, hy - gy):.0f} px off the handle')
+    a = T['s2']
+    for t in _np.arange(a + 0.7, L[2]['end'], 0.5):                          # the Bible in the far hand
+        sp = brand_sp(float(t), 'stand')
+        j = oath(sp, float(t))
+        c = _contact(j, 'L', F.HAND.get('fist', 14))
+        xs, ys, zs = zip(*OATH_BOOK)
+        if not (min(xs) - 20 <= c[0] <= max(xs) + 20 and min(ys) - 20 <= c[1] <= max(ys) + 20
+                and min(zs) - 40 <= c[2] <= max(zs) + 20):
+            out.append(f'oath {t:.2f}s: the hand is off the Bible ({c[0]:.0f}, {c[1]:.0f}, {c[2]:.0f})')
+    for t in _np.arange(T['cell'] + 0.05, T['cell'] + ESC_STOP, 0.2):         # the officer's grip
+        img = Image.new('RGBA', (1080, 1920))
+        draw_people(img, _cam('escort', t), 'escort', float(t))
+        ox, oy = HANDS[('officer', 'L')]
+        gx, gy = GRIP_AT[0]
+        if math.hypot(ox - gx, oy - gy) > 45:
+            out.append(f'escort {t:.2f}s: the officer\'s hand is {math.hypot(ox - gx, oy - gy):.0f} px off his arm')
+    return out
+
+
 def checks():
     """Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults."""
     E.print_subtitles(caption_at, DUR, FPS)
@@ -919,6 +977,7 @@ def checks():
     faults += setcheck.faults(SET_BOXES, SET_MEANT)
     import benchmark
     faults += benchmark.faults(sys.modules[__name__])
+    faults += touch_faults()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
     print('checks: clean')

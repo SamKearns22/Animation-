@@ -97,7 +97,10 @@
   {
    "name": "moves",
    "pct": 1.5,
-   "done": null
+   "done": {
+    "date": "2026-11-11",
+    "spent": 10.66
+   }
   },
   {
    "name": "animatic1",
