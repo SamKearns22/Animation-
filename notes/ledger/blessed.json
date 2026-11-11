@@ -21,6 +21,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.21
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "d99f2680",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 5.19
   }
  ],
  "checks": {},
@@ -50,7 +60,10 @@
   {
    "name": "sets",
    "pct": 5.0,
-   "done": null
+   "done": {
+    "date": "2026-11-11",
+    "spent": 2.41
+   }
   },
   {
    "name": "moves",
@@ -143,47 +156,110 @@
      "10 S4: camera moves",
      "11 S4: camera moves"
     ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "date": "2026-11-11",
+    "faults": 41,
+    "cant_tell": 1,
+    "open": [
+     "1 A2: building off-reference",
+     "1 S3: steps centred",
+     "1 O5: armless notepads",
+     "1 S5: flat ground",
+     "2 A1: lectern-like box",
+     "2 A2: braided hair",
+     "2 O3: arms dog, goat",
+     "3 O5: gavel unheld",
+     "3 O2: handle impales chest",
+     "3 O3: arms dog, goat",
+     "3 S1: gavel tiny",
+     "4 S3: twin officers",
+     "5 A1: cell-like van",
+     "5 O3: sign blob",
+     "6 A1: door shut-looking",
+     "6 S3: no toilet",
+     "7 S3: no toilet",
+     "8 A1: booth-like hood",
+     "8 S2: beside hood",
+     "8 O3: two handsets",
+     "8 O2: cord to shoulder",
+     "8 O1: signs edge-clipped",
+     "8 S1: half off-frame",
+     "9 A1: no TV light",
+     "9 O6: grey wash",
+     "9 O4: Brand oversized",
+     "9 S1: faces dimmed",
+     "9 S6: wall unlike 10",
+     "10 A1: desk white",
+     "10 O5: bracket mid-wall",
+     "10 O6: no glow",
+     "10 S5: green void",
+     "10 S6: wall unlike 9",
+     "11 A1: castle-like gatehouse",
+     "11 A2: crenellated towers",
+     "11 S3: no gate grille",
+     "11 O4: gate Brand-height",
+     "11 S2: far forward",
+     "11 O5: armless notepads",
+     "11 O2: bollard from camera",
+     "11 S5: flat ground",
+     "5 S3: van photo"
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 9,
+    "faults": 16,
     "false": 0
    },
    "O3": {
-    "faults": 6,
+    "faults": 10,
     "false": 0
    },
    "A2": {
-    "faults": 4,
+    "faults": 7,
     "false": 0
    },
    "S3": {
-    "faults": 3,
+    "faults": 8,
     "false": 0
    },
    "S2": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "S1": {
-    "faults": 6,
+    "faults": 9,
     "false": 0
    },
    "S5": {
-    "faults": 4,
+    "faults": 7,
     "false": 0
    },
    "O5": {
-    "faults": 2,
+    "faults": 6,
     "false": 0
    },
    "O4": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "S6": {
+    "faults": 3,
+    "false": 0
+   },
+   "O2": {
+    "faults": 3,
+    "false": 0
+   },
+   "O1": {
     "faults": 1,
+    "false": 0
+   },
+   "O6": {
+    "faults": 2,
     "false": 0
    }
   }
