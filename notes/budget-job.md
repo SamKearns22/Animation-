@@ -12,17 +12,17 @@ The early chats were recorded as one lump, so these are rebuilt from the handove
 | Stage | Remakes, real | New process | What changes |
 |---|---|---|---|
 | Plan | 1 | 1.5 | more is asked up front |
-| Cast (9 new characters) | about 17 (7 chats) | 5 | tiers, one critique hunt, Sam's early look |
-| Sets (3 places) | about 8 (3 chats) | 2.5 | backdrops judged inside the shot |
+| Cast (9 new characters) | about 17 (7 chats) | 6 | tiers, one critique hunt, Sam's early look |
+| Sets (3 places) | about 8 (3 chats) | 3 | backdrops judged inside the shot |
 | KG's beak rebuilt | 1.5 | 0 | asked at the brief |
 | Shots and animatic 1 | about 5 | 3.5 | the acting goes in first time |
 | Notes rounds, animatics 2-3, critiques | about 25 | 3.5 | far fewer notes to fix |
 | Final | about 2.5 | 0.5 | one render, no re-render |
-| **Total** | **about 60** | **16.5** | |
+| **Total** | **about 60** | **18** | |
 
-**Honest answer: Remakes exactly as it ended up lands at about 16-17%, not 15%.** It had 9 new characters, 3 places
+**Honest answer: Remakes exactly as it ended up lands at about 18%, not 15%** (it was 16.5 before Sam's answer that the animatic stays as clean as Remakes')**.** It had 9 new characters, 3 places
 plus a fourth background added later, and 4 action scenes; MidTerminal (11%) had 3 characters and one room. It reaches
-15% or under if the three mid-film additions (Saria, the reverse-shot street, the beak) are known at the brief, so
+about 16% if the three mid-film additions (Saria, the reverse-shot street, the beak) are known at the brief, so
 they are built once. The least certain line is the notes rounds (3.5): it assumes the first animatic already acts.
 
 ## 2. The five causes
@@ -48,8 +48,9 @@ they are built once. The least certain line is the notes rounds (3.5): it assume
    Navi and the gunman; Glimpse the five in the line-up.
 2. **One hunt, then a check-back** (rewrites rule 89's "two passes, a third if..."). One cold critique per stage
    (cast, sets, animatic). Each fault is listed once and ranked: "Sam would send it back", "he might", "polish".
-   Only the first kind is fixed before sending. "He might" goes to Sam as one line each. Polish and "can't tell" are
-   dropped. The second pass only checks that the fixed faults are fixed; it does not hunt again.
+   Sam, 11 Nov: the animatic must arrive as clean as Remakes' did, so both "would" and "might" faults are fixed
+   before sending. Only pure polish and "can't tell" are dropped. The second pass only checks that the fixed faults
+   are fixed; it does not hunt again.
 3. **Sam sees a rough cast sheet first** (changes the order in the Build pack). Shapes, proportions and colours, no
    detail, before the critique. His notes on taste ("not too chibi", the crests) then cost minutes, not chats.
 4. **Movement's share is ring-fenced** (into rule 24). The estimate's movement and acting share cannot be spent by
