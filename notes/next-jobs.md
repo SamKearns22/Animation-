@@ -16,6 +16,18 @@
   skips its own collar bands via sp `collar_off` (views.torso_view, back views only). Debug: one shot via
   `L.lie`/`L._fit`/`L.draw` as in `lying_flat.sheet`.
 
+## Job M, the estimate's stages and forecast (Sam: Y, 11 Nov, about 0.5%; rule 24 as rewritten that day)
+- `ledger.py estimate FILM PCT --stages "cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, round 1.5, final 0.5"`:
+  the plan's stages and shares (a film's estimate table gains a stage column and a "measured from" column naming the
+  past ledger row, or "unmeasured").
+- `ledger.py stage FILM NAME`: marks a stage done (the chat runs it at each stage's end); `auto` then works out the
+  forecast = spent / (planned share of the stages done) x estimate, and stops the chat (Stop hook 'block', once per
+  step) when the forecast passes the estimate by a quarter, with the forecast line for Sam's first line.
+- Every reply at a stage end opens with "Spent X% of the Y% planned so far; at this rate the film lands at Z%."
+- The template's estimate table and `guides/job-packs.md` Planning: estimates read the ledgers' real costs per thing
+  and per round (no padding, no multipliers). A kittest for the forecast and the alarm.
+- Not built yet: needs its own chat (rule 86). Cost watch: build in Opus medium.
+
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check
   0.4%; the by-hand rules audited (check built, folded into the critique checklist, or retired) 0.8%; reading layers

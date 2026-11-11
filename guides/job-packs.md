@@ -12,7 +12,7 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Known or new: every person, set, prop, pose and move in the brief goes in the estimate table as KNOWN (a
   `guides/kit-catalogue.md` line, a `guides/pose-gallery.md` row, a "Passed the critique" row) or NEW (priced, drawn
   alone and critiqued before the cast sheet, rule 89). Known is almost free; the estimate is the new rows.
-- Bite: 24, 44, 74, 1, 38, 8. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`.
+- Bite: 24, 74, 1, 38, 8. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`.
 
 ## Build (Opus, high for new things; medium from a clear plan)
 - Read: `guides/figure-rig.md` 2-4, 5c (people); `guides/satire.md` Movement, One set one plan; `guides/pose-gallery.md`

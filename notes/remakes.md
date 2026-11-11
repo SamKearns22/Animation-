@@ -35,6 +35,7 @@
 | 55 | plus the usual critique rounds | rule 89: the fresh-eye helper this time |
 | 56 (Sam, 11 Nov) | "I am nine" (S11): Link is further into the square; the camera should have turned 180 to him | S11 as a reverse shot: Link facing KG and the line-up, the other side of the square behind him (not the line-up's own background) |
 | 58 (Sam, 11 Nov) | S4 "Ok?": Navi bouncing off Link's head over and over (the nuzzle too subtle); Link looking ahead, eyes slightly aside, brows flat, low, close over the eyes (Sam's correction of worried brows): unsure, sceptical, doubtful | **DONE 11 Nov** (clip sent): mood 'doubtful'; Navi bounces off the cap every 0.36 s, squashed on each hit. Seen before (note 31): a changed decision, not a failed fix |
+| 59 (Sam, 11 Nov) | A Fable trial on animatic 3: a fresh-eye critique by Claude Fable 5.2 (about 1% of a week) | when animatic 3 is sent, open a Fable chat (claude-fable-5-2, high effort) for a cold critique of it; its findings saved in the ledger, NOT acted on or shown to Sam until his notes on animatic 3 are in; then a 5-line comparison: which of Sam's notes it caught, what else it found, its cost. Sam then decides if Fable earns a place |
 | 57 (Sam, 11 Nov) | KG too still holding Link up at the wall (S12, S12b, S13) | head moves (jabs, tilts, shakes on the words), brow and eye changes, beak snaps per syllable, body heaving; the wings stay on the collar | **DONE 11 Nov** (clip sent): head tilts and jabs from headlife, rage/fury face on the stresses, a lean in after his last word |
 
 
