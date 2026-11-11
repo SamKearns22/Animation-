@@ -4,14 +4,16 @@
 - **Rules that bite next:** 24 (the estimate and the stop), 49 (Brand's likeness check before the cast sheet), 74 (acting list before animatic 1).
 - **Done (11 Nov, plan chat, Opus high):** story checked (real: sentenced 9 Nov 2026, 10 y 6 m, Southwark Crown Court); 9 references filed (`references/blessed/`); the network now lets films fetch press photos (Guardian, BBC, Sky, AP/WJTV, Courthouse News, Geograph, Openverse, Pexels, Unsplash; Sam approved); brief checklist, estimate, acting list draft, questions to Sam.
 - **Spent against the estimate:** plan about 1% (this chat).
-- **Next:** on Sam's answers, the Build chat: Opus, high effort. Type: "Blessed: build. Read notes/blessed.md". It opens with the Brand likeness pack, then the cast sheet.
-- **Needs Sam:** questions 1-9 below.
+- **Next:** the Build chat (Opus, high effort), opened by the plan chat 11 Nov: Brand likeness pack first (rule 49), then the cast sheet to Sam.
+- **Needs Sam:** nothing until the cast sheet (Sam answered 1-9, 11 Nov).
 - **Read:** `guides/job-packs.md` Build; this file.
 - **Lost / Added:** none yet.
 - **Open rule requests:** none.
 - **For Claude:** `source/blessed.py` from `source/satire_template.py`; reuse `press_secretary.reporter`, `power_crime_cast` (officer recoloured), `newsdesk_cast.PRESENTER`, `newsdesk_set` (restyled red), `moves.pose(sp,'phone_ear')`, the sitting kit, Job I lying bodies. Wikimedia's API refused (rate limit) on 11 Nov: retry once for Brand straight-on photos for `likeness.py card`.
 
-## Questions to Sam (11 Nov; my pick first)
+## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
+
+## The questions asked (kept for the record)
 1. Budget: **Lean, about 15%** (pick) or Full as written, about 19%. 8-12% is not reachable for this script without cutting a scene: it has 8 places and 7 people (MidTerminal, 11%, had 1 room and 3). Lean keeps every line and beat; the van and TV room become close-ups on Brand against dark, simple backgrounds; the cell and phone share one prison painting; the TV-room inmates are silhouettes.
 2. The gavel: English judges never use one. **Keep it** (pick: it reads at once and Brand's line answers it) or no gavel (the judge just says the sentence).
 3. Sex offenders were left out of the real early-release schemes. **Keep the joke as written** (pick: it is the satire) Y/N.
@@ -22,7 +24,7 @@
 8. Line 1 tone: **sincere showman** (pick: believes his own performance, lowers the sunglasses, hand on heart) or a wink to camera.
 9. Line 3 "doesn't feel very blessed": **quiet, to himself, deadpan** (pick) or said up to the judge.
 
-## Plan extras: the estimate (lean version, my pick)
+## Plan extras: the estimate (Sam chose FULL, 19%: every place drawn in full, TV-room inmates as real Glimpse figures, two notes rounds; the lean rows below plus: sets +1.2 (van and TV room as full paintings, cell and phone separate), cast +0.4 (two inmates), round2 2.5)
 Unmeasured: about 4.5 of the 15 (the sets and the support cast have no measured flat-painting or support figure yet; Remakes' sets cost about 2.7 each with three critique passes, the target is 0.7).
 
 | thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | est. % | measured from | spent |
@@ -85,10 +87,10 @@ Unmeasured: about 4.5 of the 15 (the sets and the support cast have no measured 
 ## The acting list (draft; "ask Sam" where open)
 | line | who | shot and why | face | body | lands on |
 |---|---|---|---|---|---|
-| 1 "Yeah, I'm feeling blessed, mate..." | Brand | medium, press backs in front: the showman to the scrum | ask Sam (Q8); pick: beaming, sunglasses lowered on "mate" | swagger in, hand to heart, beads in the other hand | "super blessed" |
+| 1 "Yeah, I'm feeling blessed, mate..." | Brand | medium, press backs in front: the showman to the scrum | sincere showman (Sam): beaming, sunglasses lowered on "mate" | swagger in, hand to heart, beads in the other hand | "super blessed" |
 | 2 "I swear by Almighty God..." | Brand | side-on in the box, judge behind (as sketch 07): the stiff showman | eyes up on "Almighty God", leaning on each "blessed" | bolt upright, Bible up, right hand raised | "blessed truth" |
 | (gavel) | judge | close on the judge | stern | gavel down | the bang |
-| 3 "Well that doesn't feel very blessed." | Brand | close-up in the dock: the stillness cracks | ask Sam (Q9); pick: hollow, eyes down | shoulders drop | "blessed" |
+| 3 "Well that doesn't feel very blessed." | Brand | close-up in the dock: the stillness cracks | quiet, to himself (Sam): hollow, eyes down | shoulders drop | "blessed" |
 | montage | Brand | van close-up; cell walk with officer; cot | empty, numb, then weeping | bent over; looks round; curled on the cot, shaking | |
 | 4 "Yeah, love..." | Brand | close-up at the wall phone | tearful, voice cracking | forehead to the wall, phone at ear | "at all" |
 | 5 reporter | newsreader | the TV screen, then slow push on Brand | neutral | | "early release scheme" |
