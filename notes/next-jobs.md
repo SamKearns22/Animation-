@@ -27,8 +27,8 @@
 - The template's estimate table and `guides/job-packs.md` Planning: estimates read the ledgers' real costs per thing
   and per round (no padding, no multipliers). A kittest for the forecast and the alarm.
 - **Built 11 Nov** (`ledger.py estimate --stages`, `stage`, forecast in `auto`; kittest
-  `estimate_forecast_and_alarm`). Remakes' stages set from its table (cast, sets, moves, animatic1, round backfilled
-  done, animatic 2 unplanned): forecast 47% on 14.5%; the spend alarm already covers it, so no new stop.
+  `estimate_forecast_and_alarm`). Not used on Remakes (Sam, 11 Nov: "too late for the forecast");
+  first used on the next film.
 
 ## Job J, consolidation (10 Nov overnight; Sam: "Do J and G", just-go to 3%)
 - **Estimate (rule 86), before building:** about 2.5% of the week in this one chat (Opus): Job G's "prop hidden" check

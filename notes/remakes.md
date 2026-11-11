@@ -12,8 +12,7 @@
 - **Open rule requests:** none (11 Nov: Sam Y to the head-acting check; written into rule 74, preflight.head_life_faults).
 - **For Claude:** HL['kg'/'link'] (headlife from the takes) in remakes.py; Link gets it in _kid; KG mood may be a dict
   (CR.kg); eyes='shut' blinks; RS.kg_on_branch(sway=); draw_subtitle/_pieces (note 51); camp work: _camp, _kg_camp.
-  Note 54 (KG in the camp) should use HL['kg'] too. Ledger stages (Job M): at this round's end run
-  `ledger.py stage remakes round2`, its forecast line first to Sam; at the end `stage remakes final`. Clips in clips/ are drafts (not on GitHub).
+  Note 54 (KG in the camp) should use HL['kg'] too. Clips in clips/ are drafts (not on GitHub).
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
@@ -45,28 +44,26 @@ Budget: 12%, stretch 15% (Sam). Week at 43% at the start. Compared with MidTermi
 Terfwarts 9%, Elder Swindon 9%: this film has 8 new characters, 4 places and 4 action moves, all new.
 No likenesses (game characters, from the remake's screenshots), no 3D bodies (flat, one painting per camera).
 
-Unmeasured: all 14.3 (the ledgers began 11 Nov, after these were priced). Stages in the ledger (Job M, 11 Nov): cast 6.6, sets 2.4, moves 2.2, animatic1 1, round 1.5, final 0.6 (the rows add to 14.3, not the 14.5 written at the time; the forecast scales them).
-
-| thing, build or risky move | KNOWN (where) or NEW | why (parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
-|---|---|---|---|---|---|---|
-| Young Link (remake design) | NEW | front only (scuttle faces forward, Sam), side for the wall shot; faces: unsure, sceptical, aghast, deadpan, terrified | cast | 1.1 | unmeasured | |
-| Kaepora Gaebora | NEW creature | perched front, flying side, wings used as arms (gun, neck snap, lapel grab, gesture); faces: kindly, glee, fury, hiss | cast | 1.9 | unmeasured | |
-| Navi | NEW | glowing ball and wings; blue to red; float, nuzzle, zip | cast | 0.5 | unmeasured | |
-| Masked gunman (one design, 3 uses) | part KNOWN (Patriot's balaclava) | front and side; one blown apart (pieces from `lying.py`) | cast | 0.6 | unmeasured | |
-| Rifle | NEW prop | flat, two views | cast | 0.2 | unmeasured | |
-| Young Zelda, Malon, Saria | NEW | line-up only: front view, small idle acting | cast | 1.2 | unmeasured | |
-| Ruto, Goron in frilly dress | NEW (new body types) | line-up only: front view | cast | 1.0 | unmeasured | |
-| Bandana | NEW prop | on KG's head, ties flutter | cast | 0.1 | unmeasured | |
-| Kokiri Forest: up at the branch, down at Link, Link's close-up, the gunman's patch | NEW set | one painting per camera, 4 cameras from one plan | sets | 0.9 | unmeasured | |
-| The encampment (walls, gate, watchtower, crates, sandbags) | NEW set | one camera, one painting | sets | 0.8 | unmeasured | |
-| Castle Town square (line-up and the wall) | NEW set | two cameras, one painting style | sets | 0.7 | unmeasured | |
-| KG swoops behind the gunman and snaps his neck | NEW risky move (rehearse) | | moves | 0.5 | unmeasured | |
-| KG bursts in firing; Link scuttles in | NEW risky move (rehearse) | MG42, belt, flash, cases KNOWN (`patriots3_cast.py`) | moves | 0.6 | unmeasured | |
-| Navi turns red, zips into a gunman, blast, dirt and body parts | NEW risky move (rehearse) | flash, debris, smoke KNOWN (`prepper_fx.py`); pieces KNOWN (`lying.py`) | cast | 0.6 | unmeasured | |
-| KG lifts Link by the collar and slams him on the wall | NEW risky move (rehearse) | thrown against a wall KNOWN (`patriots3_act.py`) | moves | 0.5 | unmeasured | |
-| Hook Text, sign-off, subtitles, bleeps | KNOWN | | final | 0.1 | unmeasured | |
-| Critique, check sheet, animatic, one notes round, final | | | animatic1 1, round 1.5, final 0.5 | 3.0 | unmeasured | |
-| **Total** | | | | **14.5** (rows 14.3) | | |
+| thing, build or risky move | KNOWN (where) or NEW | why (parts the camera sees) | estimate (% of a week) | spent |
+|---|---|---|---|---|
+| Young Link (remake design) | NEW | front only (scuttle faces forward, Sam), side for the wall shot; faces: unsure, sceptical, aghast, deadpan, terrified | 1.1 | |
+| Kaepora Gaebora | NEW creature | perched front, flying side, wings used as arms (gun, neck snap, lapel grab, gesture); faces: kindly, glee, fury, hiss | 1.9 | |
+| Navi | NEW | glowing ball and wings; blue to red; float, nuzzle, zip | 0.5 | |
+| Masked gunman (one design, 3 uses) | part KNOWN (Patriot's balaclava) | front and side; one blown apart (pieces from `lying.py`) | 0.6 | |
+| Rifle | NEW prop | flat, two views | 0.2 | |
+| Young Zelda, Malon, Saria | NEW | line-up only: front view, small idle acting | 1.2 | |
+| Ruto, Goron in frilly dress | NEW (new body types) | line-up only: front view | 1.0 | |
+| Bandana | NEW prop | on KG's head, ties flutter | 0.1 | |
+| Kokiri Forest: up at the branch, down at Link, Link's close-up, the gunman's patch | NEW set | one painting per camera, 4 cameras from one plan | 0.9 | |
+| The encampment (walls, gate, watchtower, crates, sandbags) | NEW set | one camera, one painting | 0.8 | |
+| Castle Town square (line-up and the wall) | NEW set | two cameras, one painting style | 0.7 | |
+| KG swoops behind the gunman and snaps his neck | NEW risky move (rehearse) | | 0.5 | |
+| KG bursts in firing; Link scuttles in | NEW risky move (rehearse) | MG42, belt, flash, cases KNOWN (`patriots3_cast.py`) | 0.6 | |
+| Navi turns red, zips into a gunman, blast, dirt and body parts | NEW risky move (rehearse) | flash, debris, smoke KNOWN (`prepper_fx.py`); pieces KNOWN (`lying.py`) | 0.6 | |
+| KG lifts Link by the collar and slams him on the wall | NEW risky move (rehearse) | thrown against a wall KNOWN (`patriots3_act.py`) | 0.5 | |
+| Hook Text, sign-off, subtitles, bleeps | KNOWN | | 0.1 | |
+| Critique, check sheet, animatic, one notes round, final | | | 3.0 | |
+| **Total** | | | **14.5** | |
 
 12% version (Sam to choose): the encampment as a fence and tower in the forest painting (-0.5), the line-up waist up
 only (-0.5), one notes round fewer (-1.0).

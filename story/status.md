@@ -4,7 +4,7 @@
 - Remakes (Ocarina of Time remake satire): notes 43-45, 50-52, 57, 58 fixed 11 Nov (3 clips sent). Next: Opus medium on 46-49, 53, 54, 56, critique, then Sonnet animatic 3. Notes: `notes/remakes.md`.
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
-  and the chat stops if the forecast passes the estimate by a quarter. Remakes set up: forecast 47% on 14.5%.
+  and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).
 - Open: Sam's look at Job I's 14 and 18.
 - Next: Remakes round 2 (above), then Sam's next pick from the job list.
 
