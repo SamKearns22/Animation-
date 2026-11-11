@@ -1561,14 +1561,17 @@ def caption_at(t):
 
 
 def draw_subtitle(img, text):
-    """Note 51: larger (66 px, was 50), a thick outline, lower third, at most two rows."""
+    """Note 51: large, lower third, at most two rows. Sam, 11 Nov: the Gotham Black look, white with a black outline
+    and shadow; Gotham is a paid font, so Montserrat Black (free, its closest match) stands in."""
     S = B.SS
-    f = ImageFont.truetype(B.SANS, int(66 * S))
+    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Montserrat-Black.ttf'), int(64 * S))
     rows = B.wrap(text, f, 900 * S)
     lay = _lay(img)
     d = ImageDraw.Draw(lay)
     for i, row in enumerate(rows):
         y = (1450 - 84 * (len(rows) - 1 - i)) * S
+        d.text((540 * S + 6 * S, y + 7 * S), row, font=f, fill=(0, 0, 0, 150), anchor='mm', stroke_width=int(7 * S),
+               stroke_fill=(0, 0, 0, 150))                            # the shadow, down and right
         d.text((540 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=int(7 * S),
                stroke_fill=(0, 0, 0))
     img.alpha_composite(lay)

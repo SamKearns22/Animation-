@@ -15,6 +15,7 @@
 - **Needs Sam:** his look at the clip; his numbers on the 1.1x rule.
 - **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
 - **Open rule requests:** 1.1x delivery for EVERY film (Sam, 11 Nov: no rule is one film's); wording proposed, awaiting his Y.
+- **Captions (11 Nov, Sam):** Gotham Black look, white, black outline and shadow; Montserrat Black (free, OFL, in source/fonts) stands in for the paid Gotham.
 - **Also done (11 Nov, Sonnet):** stone-wall thump (`_thump`) on the first push (SLAM), softer on each re-slam; Sam's yes. Trim round dropped (Sam).
 - **For Claude:** `LINK_ROUTE`/`LINK_LANE_X` (-0.5) in remakes.py; `RS.SET_FEET` (camp footprints, 'under'/'over');
   `camp_paths()` in `checks()`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first.
