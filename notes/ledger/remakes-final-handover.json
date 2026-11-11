@@ -1,0 +1,17 @@
+{
+ "film": "remakes-final-handover",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "e5459ba8",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.18
+  }
+ ],
+ "checks": {}
+}
