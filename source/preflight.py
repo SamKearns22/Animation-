@@ -119,7 +119,7 @@ def notes_path(film, name):
 
 def gates(film, name):
     """Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, no record of the
-    composition sheet being sent. Returns the reasons (empty: go)."""
+    composition sheet being sent; rule 75: no Hook Text plan (HOOK and KEEP_CLEAR). Returns the reasons (empty: go)."""
     path = notes_path(film, name)
     if not os.path.exists(path):
         return [f'no notes file ({os.path.relpath(path, ROOT)}): the brief checklist lives there (notes/_template.md)']
@@ -146,6 +146,8 @@ def gates(film, name):
     if not re.search(r'^\s*[-*]?\s*\**Composition sheet sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):   # not the (...)
         out.append('no record of the composition sheet being sent (rule 11): send Sam the 3-4 key shots, then add '
                    '"Composition sheet sent: DATE, FILE" to the notes file')
+    import hookcheck
+    out += hookcheck.plan_faults(film)                      # rule 75: the Hook Text planned at the first animatic
     return out
 
 

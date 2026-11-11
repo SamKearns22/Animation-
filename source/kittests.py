@@ -1059,6 +1059,19 @@ def eyes_cut_to_the_outline():
                                           f'{eyekit.spill(outline, new):.1%}; old cast flagged {flagged}; Remakes clean {clean}')
 
 
+@test
+def hook_text_planned():
+    """Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and
+    pre-flight's gate stops an animatic with no Hook Text plan."""
+    import types
+    import hookcheck
+    no_keep = types.SimpleNamespace(HOOK=('Hook', {'y': 880}))
+    no_plan = types.SimpleNamespace()
+    planned = types.SimpleNamespace(HOOK=('Hook', {'y': 880}), KEEP_CLEAR=[('face', lambda t: (0, 0, 50, 50))])
+    a, b, c = hookcheck.faults(no_keep), hookcheck.plan_faults(no_plan), hookcheck.faults(planned) + hookcheck.plan_faults(planned)
+    return bool(a) and len(b) == 2 and not c, f'no KEEP_CLEAR: {len(a)} fault; no plan: {len(b)} gate(s); planned: {len(c)}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
