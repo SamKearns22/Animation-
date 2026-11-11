@@ -87,3 +87,40 @@ it takes; quality as high as the real film's.
 - Next: the budget chat reads the Results. No next chat from the trial (rule 7).
 - Needs Sam: nothing.
 - For Claude: `source/trial_link.py` (MAP at the top); packs `source/data/critique/trial_link/r1-p1`, `r2-p1`; ledger `notes/ledger/trial_link*`.
+
+## Cost breakdown, trial 1 chat 2
+```
+773f9d6c: 59 steps, 1.22% of a week
+  kind of step                                   steps  re-read     new  written   total
+  run a tool (draw, check, critique)                20     0.18    0.08     0.18    0.44
+  shell (other)                                     12     0.09    0.11     0.09    0.29
+  look at a picture                                 11     0.10    0.07     0.02    0.19
+  git (merge, commit, push)                          7     0.06    0.04     0.03    0.13
+  talk (reply or thinking, no tool)                  4     0.04    0.01     0.01    0.06
+  helper (start and result)                          2     0.02    0.01     0.01    0.03
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.03     0.00    0.03
+  other tool: ReadNotifications                      1     0.01    0.01     0.00    0.02
+  other tool: SendUserFile                           1     0.01    0.00     0.00    0.02
+  other tool: PushNotification                       1     0.01    0.00     0.00    0.01
+  ALL                                                      0.52    0.35     0.35    1.22
+agent-aa: 16 steps, 0.51% of a week
+  kind of step                                   steps  re-read     new  written   total
+  write or edit code/notes                           5     0.03    0.04     0.12    0.18
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.16     0.00    0.16
+  run a tool (draw, check, critique)                 4     0.02    0.02     0.02    0.06
+  look at a picture                                  4     0.02    0.03     0.01    0.06
+  read code or search                                1     0.00    0.01     0.00    0.02
+  other tool: SubagentHandback                       1     0.01    0.00     0.01    0.01
+  shell (other)                                      1     0.00    0.01     0.00    0.01
+  ALL                                                      0.07    0.28     0.16    0.51
+agent-ae: 14 steps, 0.46% of a week
+  kind of step                                   steps  re-read     new  written   total
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.17     0.00    0.17
+  shell (other)                                      5     0.02    0.03     0.08    0.13
+  look at a picture                                  4     0.02    0.04     0.03    0.08
+  run a tool (draw, check, critique)                 3     0.02    0.01     0.01    0.04
+  read code or search                                1     0.00    0.01     0.00    0.02
+  other tool: SubagentHandback                       1     0.01    0.00     0.01    0.01
+  ALL                                                      0.07    0.26     0.13    0.46
+All 3 records (helpers included): 2.19% of a week
+```
