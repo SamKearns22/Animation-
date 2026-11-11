@@ -1,0 +1,17 @@
+{
+ "film": "trial_lineup",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "eea64ed9",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.56
+  }
+ ],
+ "checks": {}
+}
