@@ -1964,7 +1964,7 @@ def town_wall(img, p, cam, t):
 STREET_LEV = Level(h=1.6, hz=470.0, f=812.0)   # note 56's street: the vanishing point above Link's cap in S11
 
 
-def _street_side(p, sg, houses, t):
+def _street_side(p, sg, houses, t, style='timber'):
     """One side of the street (sg -1 left, +1 right) in one-point perspective to (540, 470): house fronts running
     away from us, each its own plaster, timber posts and floor beams, shuttered windows with flower boxes, a red
     tiled eave along the top (ref 25)."""
@@ -1980,6 +1980,24 @@ def _street_side(p, sg, houses, t):
             p.line([at(u0, v), at(u1, v)], (96, 66, 44), 3.0)
         for u in (u0 + 0.02, u1 - 0.02):
             p.line([at(u, 0.28), at(u, 0.98)], (96, 66, 44), 3.0)
+        fl = [0.28 + (0.72 / (floors + 0.3)) * f for f in range(floors + 1)]
+        if style == 'timber':                                           # critique r3 / note 61: braces between beams
+            nb = max(2, int((u1 - u0) * 8))
+            for f in range(floors):
+                for b in range(nb):
+                    a_, b_ = u0 + (u1 - u0) * b / nb, u0 + (u1 - u0) * (b + 1) / nb
+                    p.line([at(a_, fl[f] + 0.01), at(a_ + (b_ - a_) * 0.25, fl[f] + 0.04)], (96, 66, 44), 2.4)
+                    p.line([at(b_, fl[f] + 0.01), at(b_ - (b_ - a_) * 0.25, fl[f] + 0.04)], (96, 66, 44), 2.4)
+        else:                                                           # stone below, a balcony rail on floor one
+            for q in range(1, 5):
+                p.line([at(u0, 0.28 * q / 5), at(u1, 0.28 * q / 5)], dk(WALLSTONE, 0.85), 1.4)
+            v = fl[1] - 0.02
+            p.poly([at(u0 + 0.03, v), at(u1 - 0.03, v), at(u1 - 0.03, v + 0.05), at(u0 + 0.03, v + 0.05)],
+                   (92, 70, 52), INK, 1.6)
+            for q in range(int((u1 - u0) * 30)):
+                uu = u0 + 0.03 + (u1 - u0 - 0.06) * q / max(1, int((u1 - u0) * 30) - 1)
+                p.line([at(uu, v + 0.05), at(uu, v + 0.12)], (92, 70, 52), 1.8)
+            p.line([at(u0 + 0.03, v + 0.12), at(u1 - 0.03, v + 0.12)], (92, 70, 52), 2.6)
         nw = max(1, int((u1 - u0) * 9))
         for f in range(floors):                                         # windows, shutters, flower boxes
             v0 = 0.33 + (0.72 / (floors + 0.3)) * f
@@ -1992,6 +2010,19 @@ def _street_side(p, sg, houses, t):
                 for q in range(4):
                     fx, fy = at(a + (b - a) * (q + 0.5) / 4, v0 + 0.005)
                     p.ell(fx, fy - 3, 5 * (1 - 0.5 * a), 5 * (1 - 0.5 * a), rr.choice([(214, 50, 60), (150, 70, 170)]), INK, 1.0)
+        if k == 0 and style != 'timber':                                # a red-and-white striped shop awning
+            n_ = 6
+            for q in range(n_):
+                a_, b_ = u0 + (u1 - u0) * (0.1 + 0.8 * q / n_), u0 + (u1 - u0) * (0.1 + 0.8 * (q + 1) / n_)
+                (xa, ya), (xb, yb) = at(a_, 0.31), at(b_, 0.31)
+                dd = -sg * 70
+                p.poly([(xa, ya), (xb, yb), (xb + dd * (1 - b_), yb + 40 * (1 - b_)), (xa + dd * (1 - a_), ya + 40 * (1 - a_))],
+                       (200, 50, 50) if q % 2 else (244, 238, 226), INK, 1.4)
+        if k == 1:                                                      # a hanging shop sign on a bracket
+            bx, by = at(u0 + 0.02, 0.5)
+            p.line([(bx, by), (bx - sg * 50, by)], (60, 50, 40), 3.0)
+            p.poly(quad(bx - sg * 50 - 18, by + 6, bx - sg * 50 + 18, by + 40), GOLD if sg < 0 else (60, 110, 70),
+                   INK, 1.6)
         door = (u0 + 0.35 * (u1 - u0), u0 + 0.55 * (u1 - u0))           # a round-topped door
         p.poly([at(door[0], 0), at(door[1], 0), at(door[1], 0.22), at(door[0], 0.22)], (110, 70, 44), INK, 1.6)
         e0, e1 = at(u0, 1.0), at(u1, 1.0)                               # the eave
@@ -2053,9 +2084,11 @@ def town_reverse(img, p, cam, t):
         p.poly(quad(540 - w, y0, 540 + w, y0 + 8), (226, 222, 212), None)
         p.line([(540 - w, y0 + 8), (540 + w, y0 + 8)], (150, 144, 134), 2.0)
     _street_side(p, -1, [(0.0, 0.42, PLASTER[1], 3, 1), (0.42, 0.72, PLASTER[3], 2, 2), (0.72, 1.0, PLASTER[0], 3, 3)], t)
-    _street_side(p, 1, [(0.0, 0.5, PLASTER[2], 3, 4), (0.5, 0.78, PLASTER[4], 2, 5), (0.78, 1.0, PLASTER[3], 3, 6)], t)
+    _street_side(p, 1, [(0.0, 0.34, PLASTER[2], 2, 4), (0.34, 0.6, PLASTER[4], 3, 5), (0.6, 0.82, PLASTER[3], 2, 6),
+                        (0.82, 1.0, PLASTER[1], 3, 7)], t, style='stone')   # critique r3: each side its own build
     _bunting(p, 440, 440, 640, 440, 22, 9, t)
-    for x, d, c, sd in ((-1.6, 22.0, (90, 120, 150), 21), (1.5, 25.0, (150, 90, 80), 22), (0.3, 30.0, (120, 140, 90), 23)):
+    for x, d, c, sd in ((-1.6, 22.0, (90, 120, 150), 21), (1.5, 25.0, (150, 90, 80), 22), (0.3, 30.0, (120, 140, 90), 23),
+                        (-0.6, 15.0, (170, 110, 70), 24), (1.4, 13.0, (110, 80, 140), 25), (-1.9, 12.0, (80, 110, 90), 26)):
         _townsfolk(p, x, d, c, sd, lev=STREET_LEV)
     _swag_wall(p, 200, 400, 800, 900, t)
     _swag_wall(p, 680, 880, 800, 900, t)

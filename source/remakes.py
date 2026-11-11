@@ -552,13 +552,13 @@ def s2_down(t):
     return _forest('down', t, cast)
 
 
-def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None, j=None):
+def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None, j=None, sp_extra=None):
     """Link's close-up: the set, Link big at the close mark, Navi near his cheek."""
     img = B.canvas((0, 0, 0))
     cam = B.Cam(1.0)
     view_fn(img, cam_bg or cam, t)
     x, y, ppm = RS.STAGE['forest_close']['link']
-    _kid(img, cam, 'link', x, y - 40 * jolt, ppm * (1 - 0.04 * jolt), t, mood, j=j)
+    _kid(img, cam, 'link', x, y - 40 * jolt, ppm * (1 - 0.04 * jolt), t, mood, j=j, sp_extra=sp_extra)
     if navi:
         nx, ny, heat = navi
         CR.navi(img, cam, nx, ny, 1.25, t=t, heat=heat)
@@ -785,7 +785,7 @@ def _kg_camp_face(t, firing, mode):
     elif _talk('kg', t) is not None:
         name = 'glee' if L[9]['start'] <= t < L[9]['end'] + 0.2 else ('fury' if nod > 0.45 else 'war')
     elif INCOMING[0] <= t < G2_IN[1]:
-        name, look = 'fury', 1.0                                      # glaring off right at the shooter
+        name, look = 'fury', 2.2                                      # glaring hard off right at the shooter
     m = dict(CR.KG_MOODS[name])
     m['brows'] = (m['brows'][0] + 0.25 * math.sin(t * 7.3), m['brows'][1] + 6 * nod)
     if shut and firing is None:
@@ -819,7 +819,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
         _kid(img, cam, who, x, y, ppm, t, j=j or _gun_pose(), yaw=90, flip=flip, rot=rot, talk=False)
-        _hit(img, cam, x + flip * 0.05 * ppm, y - 1.3 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
+        _hit(img, cam, x + flip * 0.05 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
              ground=None if who == 'gunman1' else y + 0.1 * ppm)       # note 48
 
     def run_in(who, u, tt):
@@ -861,7 +861,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         face, look, rock = _kg_camp_face(t, burst, mode)             # note 54
         if mode == 'tower':
             turn = ease((t - KG_T[1]) / 0.12)
-            muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, rock * 0.3, firing=firing,
+            muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, 0.0, firing=firing,
                               mood=face, aim=50 * turn)               # note 59: planted; gun and head aim up
         else:
             if mode == 'run':
@@ -893,8 +893,8 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             rng = np.random.default_rng(int(t * FPS) * 3 + k)
             if rng.random() < 0.3:
                 continue
-            p0 = (rx, ky_ - kp * (0.9 + 1.0 * rng.random()))
-            p1 = (kx_ - kp * 3.0, ky_ - kp * (0.5 + 1.6 * rng.random()))
+            p0 = (rx, ky_ - kp * (0.5 + 0.9 * rng.random()))           # critique r3: at head and chest height
+            p1 = (kx_ - kp * 3.0, ky_ - kp * (0.3 + 1.1 * rng.random()))
             f = rng.random() * 0.55
             q0 = (_lerp(p0[0], p1[0], f), _lerp(p0[1], p1[1], f))
             q1 = (_lerp(p0[0], p1[0], f + 0.4), _lerp(p0[1], p1[1], f + 0.4))
@@ -984,14 +984,14 @@ def s9_horrible(t):
     return _close(bg, t, 'horror', debris=debris)
 
 
-LINEUP_Z, LINEUP_C = 1.4, (720, 1150)
+LINEUP_Z, LINEUP_C = 1.55, (715, 1110)   # critique r3: still small at phone size
 
 
 def s10_square(t):
     img = B.canvas((0, 0, 0))
     cam = B.Cam(LINEUP_Z, *LINEUP_C)                                  # note 49: in on the five, less square
-    kcam = B.Cam(1.0, W / 2, H / 2 - 70)                              # KG, the presenter, near the lens: kept as he
-    RS.town(img, cam, 'square', t)                                    # was, a little lower
+    kcam = B.Cam(0.85, 595, 553)                                      # KG, the presenter, near the lens: a little
+    RS.town(img, cam, 'square', t)                                    # smaller and lower so the five lead
     st = RS.STAGE['town_square']
     romance = L[11]['start'] + 0.55
     re_ = ease((t - romance) / 0.35)                                  # note 39: the line-up reacts on "ROMANCE"
@@ -1042,7 +1042,7 @@ def s10_square(t):
 def s11_nine(t):
     def bg(im, c, tt):
         RS.town(im, B.Cam(2.0, 540, 600), 'reverse', tt)               # note 56: the reverse angle
-    return _close(bg, t, 'deadpan')
+    return _close(bg, t, 'deadpan', sp_extra={'mouth_k': 0.7})       # critique r3: deadpan talks small
 
 
 # the wall (notes 33, 37c): KG side on, head tipped up so his face and beak are seen; both wings out in front of
@@ -1145,8 +1145,7 @@ def s13_pinned(t):
     cam = B.Cam(1.5, x, y - 928 * k - 250 / 1.5)                      # in close: his collar a little below middle
     x += 4 * math.sin(t * 47) + 2.5 * math.sin(t * 29)                # trembling
     j = V.standing(RC.CAST['link'])
-    for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, (sg * 62.0, 70.0, 90.0), 'down', 'grip')     # his hands on the wings at his collar
+    # critique r3: his arms hang limp at his sides, held up off the ground (on the wings the hands were lost)
     sp_extra = {'mouth_k': 1.6}
     if L[15]['start'] <= t < L[15]['end']:
         sh = mouths.at(S13_TRACK, t - L[15]['start'])
