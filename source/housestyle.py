@@ -37,13 +37,13 @@ def faults(film, B, has=None):
 
 def eye_faults(film):
     """Rule S5 (tool job, 11 Nov): a film's own cast files that draw a pupil must cut it to the eye's outline
-    (eyekit, or clip_convex as remakes_cast does); burnham's stock faces already do."""
+    (eyekit, or clip_convex as remakes_cast does); burnham's stock faces already do. The film's own file only passes eye settings (mood pupil=1.1) to them, so it is not read."""
     out = []
     base = getattr(film, '__name__', '').split('_')[0]
     here = os.path.dirname(os.path.abspath(__file__))
     for name, mod in list(sys.modules.items()):
         path = getattr(mod, '__file__', None) or ''
-        if not base or not (name == film.__name__ or name.startswith(base + '_')) or os.path.dirname(path) != here:
+        if not base or not (name.startswith(base + '_')) or os.path.dirname(path) != here:
             continue
         try:
             src = open(path).read()

@@ -49,7 +49,7 @@ HAS = {'voices', 'effects', 'props'}             # rule 58: custom-drawn cast (n
 CAST = {}
 LOOKS_AT = {}
 SUBTITLES_AT_FINISH = True
-HOOK = ('Ocarina of Time, remade for 2026', {'y': 1150})   # below KG, over the near bush (at 352 it hid his face)
+HOOK = ('Link\u2019s New Adventure\u2026 \U0001F440', {'y': 1150})   # below KG, over the near bush (at 352 it hid his face)
 SWEARS_OK = []                                   # note 52 (11 Nov): "shit" bleeped too ("god-damn" heard)
 # n, recording, who, text, shot, gap before (s), bleeps in the recording's own seconds (found from the sound: the
 # f of the word and its vowel in the high band, 10 Nov)
