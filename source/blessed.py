@@ -232,7 +232,7 @@ def press_pose(sp, t):
     return j
 
 
-def press(img, cam, L, spots, t, seed=0, reach=480):
+def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0)):
     """The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, far
     to near on the pavement at (x, d) metres through the set's Level camera; the kit on top of the nearest arms."""
     people = []
@@ -241,6 +241,8 @@ def press(img, cam, L, spots, t, seed=0, reach=480):
         people.append((d, i, (X, Y, L.ppm(d))))
     for d, i, mark in sorted(people, key=lambda q: -q[0]):
         sp = press_sp(i, seed)
+        x, d = spots[i]                               # everyone faces him, body and head (Sam, 11 Nov): from
+        sp['yaw'] = 180 - math.degrees(math.atan2(at[0] - x, at[1] - d))   # behind, turned towards his mark
         kit = sp['kit']
         s = _s(sp, mark[2])
         neck = (mark[0], mark[1] - 928 * s)
@@ -251,8 +253,7 @@ def press(img, cam, L, spots, t, seed=0, reach=480):
             r['hands'] = [(back * j['wr' + k][0], j['wr' + k][1]) for k in 'LR']
             r['reach'] = reach
             _boom(img, cam, r, t)
-        hy = None if abs(sp['yaw']) == 180 else math.copysign(100, sp['yaw'])   # the turned ones glance aside:
-        pts = put(img, cam, sp, mark, t, sp['yaw'], j, head_yaw=hy)               # profile, nose and all
+        pts = put(img, cam, sp, mark, t, sp['yaw'], j)
         if kit == 'tv':                               # on the raised hand's side (his right: our left from behind)
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
         elif kit == 'phone':
@@ -801,7 +802,7 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = arrive(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.OUT, st['press'], t, reach=230)
+        press(img, cam, ST.OUT, st['press'], t, reach=230, at=(0.45, 3.9))
     elif shot == 'oath':
         x, y, ppm = st['judge']
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), (x, y, ppm), t)
@@ -866,12 +867,12 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, st['press'], t)   # the same pack as the arrival (Sam's answer 6)
+        press(img, cam, ST.GATE, st['press'], t, at=(0.65, ST.GATE_D - 0.3))   # the same pack as the arrival (Sam's answer 6)
     elif shot == 'gates2':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t)
+        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO))
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)
