@@ -3,7 +3,7 @@
 **Contents:** Planning (1-86) · Building (2-83, S, L) · Checks (5-85) · Notes, review and sound (29-88, S) ·
 Working with Sam (the CLAUDE.md rules, by section) · Merged numbers (where an old number now lives).
 
-Every film (not quick videos) follows this page. Each rule is written here once; other guides say *how* (the tools,
+Every film follows this page (Yuletide is a separate experiment with its own guides). Each rule is written here once; other guides say *how* (the tools,
 the method) and point here by number. **A rule only holds if a check enforces it:** "check" names the tool that
 pre-flight runs, or "by hand" (ticked on the check sheet before every animatic, or searched for at the handover).
 When Sam approves a rule, it gets a row here in the same chat, with the next free number (the next is 90). Numbers

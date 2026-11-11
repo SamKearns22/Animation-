@@ -40,7 +40,6 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Bite: 86, 13, 85. Every tool gets a kittest; its rule's check column names it (on Sam's yes).
 
 ## Film types (moved from CLAUDE.md, 10 Nov; the rules unchanged)
-- **Quick video** (short two-person film): read only `guides/quick-video.md`. Sonnet, medium effort.
 - **Satire-style film** (the TikTok series, beyond two people talking): `guides/satire.md`, always starting from
   `source/satire_template.py`, and the rulebook. `guides/best-practice.md` Part 2 only for a scene satire.md doesn't cover.
 - **Motion-led films** (stunts, action): a quick animatic early, after the cast sheet.

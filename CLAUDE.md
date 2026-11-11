@@ -54,7 +54,7 @@ at session start (`.claude/hooks/setup.sh`).
 # Models and chats
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
-  (checks, check sheet, animatic, filing, final render, sending, saving), quick videos, status questions: **Sonnet**.
+  (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
 - **Chats chain themselves:** at every handover every chat, including one another chat opened, opens the next
   (create_session with the right model and effort, the handover line as its prompt), checks on it once per stage
   (send_later, under an hour) and tells me which chat it opened (tested 10 Nov: a chat two levels down opened one;
@@ -94,7 +94,7 @@ at session start (`.claude/hooks/setup.sh`).
   --all; git branch -r`) and merge any newer work on the film or tool before building. At the end, push to the main
   line as well as the chat's own branch** (this file is my standing permission). If the main-line push is refused,
   say so; the handover's first line names the branch with the newest work, and the next chat merges it first.
-- **Which film, which guide** (quick video, satire film, motion-led, flat people, Yuletide): `guides/job-packs.md`,
+- **Which film, which guide** (satire film, motion-led, flat people, Yuletide): `guides/job-packs.md`,
   "Film types". **Reuse before building** (`guides/kit-catalogue.md`); build new only where nothing fits, and say so.
 - **Reference photos:** I send 2-3 when I have them; otherwise search once, slowly, 3 per place at most. **One failed
   try per source, then stop** and give me one numbered list of what to find, which angle and why. At the start of each

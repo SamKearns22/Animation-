@@ -1,7 +1,6 @@
 # Satire-style film: the one page to read
 
-For a full Satire-style TikTok film (more than two people talking, or any action). For two people talking, use
-`guides/quick-video.md` instead. This page says HOW (the tools and the method); every rule is written once, with its
+For every Satire-style TikTok film (Sam, 11 Nov: the only kind we make; the quick-video guide was retired). This page says HOW (the tools and the method); every rule is written once, with its
 check, in the rulebook, `guides/film-quality-rules.md`. Read only the sections the handover names. Open
 `guides/best-practice.md` Part 2 only for a kind of scene this page doesn't cover.
 

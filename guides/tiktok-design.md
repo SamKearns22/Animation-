@@ -91,7 +91,7 @@ No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sa
 - **The account is the series:** the same look, the same Hook Text pattern on news films (e.g. "[Name] this week"),
   and a short signature sign-off, so viewers learn what they will get and follow for the next story.
 - **Recurring politicians are the cast:** build each caricature once and reuse it whenever they are back in the news.
-- **Two speeds:** a same-day reaction (15-25 s, two people, quick-video method) and a feature within 48 hours
+- **Two speeds:** a same-day reaction (15-25 s, two people, the satire method kept small) and a feature within 48 hours
   (30-45 s) for big stories. News films go up as soon as they are ready; timeliness beats the ideal posting slot.
 - **Profile:** pin the three best films; playlists by politician if available; post text uses the story's search words.
 - **Goalposts:** mid-Nov ~1,000+ views typical, 200-300 followers; mid-Jan 2,000-3,000 typical, 1,000+ followers,
