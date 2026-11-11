@@ -12,6 +12,9 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Known or new: every person, set, prop, pose and move in the brief goes in the estimate table as KNOWN (a
   `guides/kit-catalogue.md` line, a `guides/pose-gallery.md` row, a "Passed the critique" row) or NEW (priced, drawn
   alone and critiqued before the cast sheet, rule 89). Known is almost free; the estimate is the new rows.
+- Estimate costs come from the ledgers' real costs per thing and per round (`notes/ledger/`), no padding, no
+  multipliers; the plan's stages go in with `ledger.py estimate FILM PCT --stages`, and each stage's end runs
+  `ledger.py stage FILM NAME`, whose forecast line opens that reply (rule 24).
 - Bite: 24, 74, 1, 38, 8. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`.
 
 ## Build (Opus, high for new things; medium from a clear plan)

@@ -10,11 +10,18 @@ MAP
   auto ............. the Stop hook (Sam, 11 Nov: "automate this"): after every turn, this chat's running cost goes
                      into the ledger of the film or job it worked on (found from the files it touched); committed and
                      pushed when it has moved by 0.25% of a week, so the record survives the chat
-  estimate ......... the film's estimate (% of a week), for estimate versus actual
+  estimate ......... the film's estimate (% of a week), for estimate versus actual; --stages gives the plan's stages
+                     and shares (Job M, rule 24): "cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, final 0.5"
+  stage ............ marks a stage done at its end (the first open one of that name; one not in the plan is added
+                     with no share) and prints the forecast line for Sam's first line
+  forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
+                     stages after the open one at the rate so far. auto stops the chat once per quarter step when it
+                     passes the estimate by a quarter (only when it says more than the spend alarm already has)
   audit ............ the 10-line end-of-film audit, also written into FILM.md
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
-    python3 source/ledger.py estimate FILM 10
+    python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
+    python3 source/ledger.py stage FILM cast          (at the end of each stage)
     python3 source/ledger.py round FILM 2
     python3 source/ledger.py save FILM SHEET.txt          (or: save FILM - "text", a line straight in)
     python3 source/ledger.py note FILM "false alarm: handcheck 12.3 s, the hand is behind the mug on purpose"
@@ -156,6 +163,7 @@ def auto(transcript):
             alarm = (f'COST ALARM (ledger): {film} has spent {spent}% of a week against its estimate of {est}% '
                      f'({spent / est:.0%}). Stop this work now. Tell Sam in the first line of your reply, with what '
                      f'is left to do and your estimate for it, and ask Y/N whether to go on. Do not go on before his Y.')
+    alarm = alarm or forecast_alarm(d)
     store(d)
     if alarm:
         print(json.dumps({'decision': 'block', 'reason': alarm}))
@@ -175,6 +183,71 @@ def auto(transcript):
             git('merge', '--abort')                                          # a clash: leave it to the chat
 
 
+def parse_stages(text):
+    """'cast 2, sets 2.5, round 1.5' -> [{'name': 'cast', 'pct': 2.0, 'done': None}, ...]"""
+    out = []
+    for part in filter(None, (x.strip() for x in text.split(','))):
+        m = re.fullmatch(r'(.+?)\s+([0-9.]+)', part)
+        if not m:
+            sys.exit(f'ledger: stage "{part}" needs a name and a share, e.g. "sets 2.5"')
+        out.append({'name': m.group(1).strip(), 'pct': float(m.group(2)), 'done': None})
+    return out
+
+
+def mark_stage(d, name):
+    """The first open planned stage of that name is done, at today's spend; a stage not in the plan is added, done,
+    with no share (so an unplanned round pushes the forecast up, as it should)."""
+    spent = totals(d)[0]
+    st = d.setdefault('stages', [])
+    s = next((x for x in st if x['name'] == name and x['done'] is None), None)
+    if s is None:
+        s = {'name': name, 'pct': 0.0, 'done': None, 'unplanned': True}
+        last = max([i for i, x in enumerate(st) if x['done'] is not None], default=-1)
+        st.insert(last + 1, s)
+    s['done'] = {'date': str(date.today()), 'spent': spent}
+    return s
+
+
+def forecast(d):
+    """(spent, planned so far in % of a week, forecast in % of a week), or None without an estimate and stages."""
+    st, est = d.get('stages') or [], d.get('estimate')
+    plan = sum(x['pct'] for x in st)
+    if not est or not plan:
+        return None
+    spent = totals(d)[0]
+    done = [x for x in st if x['done'] is not None]
+    f_done = sum(x['pct'] for x in done) / plan
+    at_mark = max((x['done']['spent'] for x in done), default=0.0)
+    rate = at_mark / (f_done * est) if f_done else 1.0           # cost per planned % so far (1 before any stage ends)
+    open_ = [x for x in st if x['done'] is None]
+    after = sum(x['pct'] for x in open_[1:]) / plan * est       # the stages after the open one
+    fc = max(at_mark / f_done if f_done else 0.0, spent + after * rate)
+    return spent, round(f_done * est, 2), round(fc, 1)
+
+
+def forecast_line(d):
+    f = forecast(d)
+    if not f:
+        return None
+    return f'Spent {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at {f[2]:g}%.'
+
+
+def forecast_alarm(d):
+    """Rule 24: the forecast passes the estimate by a quarter: once per quarter step, and only when it says more
+    than the spend alarm (at the estimate and each quarter over) already has. Returns the message or None."""
+    f, est = forecast(d), d.get('estimate')
+    if not f or f[2] < est * 1.25:
+        return None
+    step = int((f[2] / est - 1) / 0.25)
+    if step <= max(d.get('forecast_alarm', 0), d.get('alarm', 0) - 1):
+        return None
+    d['forecast_alarm'] = step
+    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d['stages'] if x['done'] is None) or 'nothing planned'
+    return (f"FORECAST ALARM (ledger, rule 24): {d['film']}: {forecast_line(d)} The estimate is {est}%, and this is "
+            f"{f[2] / est:.0%} of it. Stop this work now. First line to Sam: that forecast line, what is left "
+            f"({left}), and a cheaper way that keeps the quality; ask Y/N. Do not go on before his Y.")
+
+
 def totals(d):
     spent = round(sum(c['cost'] for c in d['chats']), 2)
     rounds = max([c['round'] for c in d['chats'] if c['round']] + [current()[1] or 0 if current()[0] == d['film'] else 0])
@@ -192,7 +265,15 @@ def render(d):
            f"**Estimate {est if est is not None else '?'}% of a week; spent {spent}%"
            + (f' ({spent - est:+.2f})' if est is not None else '') + f"; {len(d['chats'])} chats, {rounds} rounds, "
            f"{notes} notes, {len(reps)} repeated.**", '',
-           '| date | chat | model | stage | round | cost % | notes | repeated |', '|---|---|---|---|---|---|---|---|']
+           ]
+    if d.get('stages'):
+        out += [f'**Forecast: {forecast_line(d)}**', '', '| stage | planned % | done | spent at its end |',
+                '|---|---|---|---|']
+        out += [f"| {x['name']}{' (unplanned)' if x.get('unplanned') else ''} | {x['pct']:g} | "
+                f"{x['done']['date'] if x['done'] else ''} | {x['done']['spent'] if x['done'] else ''} |"
+                for x in d['stages']]
+        out += ['']
+    out += ['| date | chat | model | stage | round | cost % | notes | repeated |', '|---|---|---|---|---|---|---|---|']
     out += [f"| {c['date']} | {c['chat']} | {c['model']} | {c['stage']} | {c['round'] or ''} | {c['cost']} | "
             f"{c['notes']} | {len(c['repeats'])} |" for c in d['chats']]
     if reps:
@@ -275,6 +356,8 @@ def main():
     a = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     s = a.add_subparsers(dest='cmd', required=True)
     p = s.add_parser('estimate'); p.add_argument('film'); p.add_argument('pct', type=float)
+    p.add_argument('--stages', help='"cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, final 0.5"')
+    p = s.add_parser('stage'); p.add_argument('film'); p.add_argument('name')
     p = s.add_parser('round'); p.add_argument('film'); p.add_argument('n', type=int)
     p = s.add_parser('save'); p.add_argument('film'); p.add_argument('path'); p.add_argument('text', nargs='?')
     p = s.add_parser('note'); p.add_argument('film'); p.add_argument('text')
@@ -299,6 +382,30 @@ def main():
     rnd = rnd if film == o.film else None
     if o.cmd == 'estimate':
         d['estimate'] = o.pct
+        if o.stages:
+            old = {x['name']: x for x in d.get('stages', []) if x['done']}
+            d['stages'] = parse_stages(o.stages)
+            plan = sum(x['pct'] for x in d['stages'])
+            print(f'ledger: {o.film}: estimate {o.pct}%, {len(d["stages"])} stages adding to {plan:g}%'
+                  + (f' (the forecast scales them to {o.pct}%)' if abs(plan - o.pct) > 0.05 else ''))
+            if old:
+                print('ledger: stages already marked done are cleared; mark them again with: ledger.py stage')
+    elif o.cmd == 'stage':
+        try:                                      # this chat's cost first, so the stage's end is up to date
+            chat, cost, model = chat_cost()
+            row = next((c for c in d['chats'] if c['chat'] == chat), None)
+            if row:
+                row['cost'] = max(row['cost'], cost)
+        except Exception:
+            pass
+        if not d.get('stages'):
+            sys.exit(f'ledger: {o.film} has no stages; run: ledger.py estimate {o.film} PCT --stages "..."')
+        s_ = mark_stage(d, o.name)
+        print(f"ledger: {o.film}: stage '{o.name}' done" + (' (not in the plan: no share)' if s_.get('unplanned') else ''))
+        print(forecast_line(d))
+        msg = forecast_alarm(d)
+        if msg:
+            print(msg)
     elif o.cmd == 'round':
         os.makedirs(DIR, exist_ok=True)
         open(CURRENT, 'w').write(f'{o.film} {o.n}\n')

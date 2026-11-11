@@ -18,9 +18,14 @@ break; eyelines and holds per shot; every sound effect (what, when, needed by); 
 Every person, set, prop, pose and move in the brief gets a row: KNOWN (its kit-catalogue line, pose-gallery row or
 "Passed the critique" row: almost free) or NEW (priced; drawn alone and critiqued before the cast sheet, rule 89).
 
-| thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | estimate (% of a week) | spent |
-|---|---|---|---|---|
-|   |   |   |   |   |
+First line: how much of the total is unmeasured. Each cost is the nearest measured past cost in `notes/ledger/`
+(name the film and row), or 'unmeasured'; no padding, no multipliers. Each row names its stage (cast, sets, moves,
+animatic1, round, final; one 'round' row per notes round, priced from past films' real rounds); the stage totals go
+into `ledger.py estimate FILM PCT --stages "cast 2, sets 2.5, ..."` and each stage's end runs `ledger.py stage FILM NAME`.
+
+| thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
+|---|---|---|---|---|---|---|
+|   |   |   |   |   |   |   |
 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places
 benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
