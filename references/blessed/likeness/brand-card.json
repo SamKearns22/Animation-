@@ -1,0 +1,196 @@
+{
+ "name": "Russell Brand",
+ "photos": [
+  "references/blessed/likeness/b01-front-courthousenews.jpg",
+  "references/blessed/likeness/b02-front-eyesdown-guardian.jpg",
+  "references/blessed/likeness/b03-front-bbc.jpg",
+  "references/blessed/likeness/b04-talking-guardian2023.jpg"
+ ],
+ "measures": {
+  "face_wide": 0.8277160104930354,
+  "jaw_wide": 0.816720707402433,
+  "forehead_wide": 0.9276127374111096,
+  "eyes_apart": 1.203369330632324,
+  "eye_size": 0.19104048958602116,
+  "eye_open": 0.34699378998752806,
+  "eye_tilt": 3.254384839998197,
+  "brow_high": 0.5493251256825703,
+  "brow_slope": -7.977520186464668,
+  "nose_long": 0.3923043132447513,
+  "nose_wide": 0.6710215385527737,
+  "mouth_wide": 0.8399203512059779,
+  "lip_top": 0.1128321754701397,
+  "lip_low": 0.18679088408953315,
+  "philtrum": 0.13409513863128425,
+  "chin_long": 0.3028609232365625
+ },
+ "average": {
+  "face_wide": 0.8717709228699967,
+  "jaw_wide": 0.8197130358936273,
+  "forehead_wide": 0.9420335520221841,
+  "eyes_apart": 1.3251304134564346,
+  "eye_size": 0.18604615413389317,
+  "eye_open": 0.3134028843754331,
+  "eye_tilt": 2.4741000518286085,
+  "brow_high": 0.5858307925480619,
+  "brow_slope": -9.371461324406877,
+  "nose_long": 0.41709146436872896,
+  "nose_wide": 0.641054695644114,
+  "mouth_wide": 0.8016076904497511,
+  "lip_top": 0.12057608224727724,
+  "lip_low": 0.18286999403665744,
+  "philtrum": 0.1325448247947855,
+  "chin_long": 0.2952975630170475
+ },
+ "diffs": [
+  {
+   "key": "eyes_apart",
+   "dev": -0.9988799999163793,
+   "words": "close-set eyes",
+   "warn": "",
+   "value": 1.203369330632324,
+   "avg": 1.3251304134564346
+  },
+  {
+   "key": "nose_long",
+   "dev": -0.9042361603193676,
+   "words": "a short nose",
+   "warn": "the photos disagree",
+   "value": 0.3923043132447513,
+   "avg": 0.41709146436872896
+  },
+  {
+   "key": "face_wide",
+   "dev": -0.73389119873808,
+   "words": "a long, narrow face",
+   "warn": "the photos disagree",
+   "value": 0.8277160104930354,
+   "avg": 0.8717709228699967
+  },
+  {
+   "key": "forehead_wide",
+   "dev": -0.708156700487794,
+   "words": "a narrow forehead",
+   "warn": "",
+   "value": 0.9276127374111096,
+   "avg": 0.9420335520221841
+  },
+  {
+   "key": "nose_wide",
+   "dev": 0.6148712121691179,
+   "words": "a wide nose",
+   "warn": "",
+   "value": 0.6710215385527737,
+   "avg": 0.641054695644114
+  },
+  {
+   "key": "brow_slope",
+   "dev": 0.5396576201613023,
+   "words": "brows rising to the outside",
+   "warn": "the photos disagree",
+   "value": -7.977520186464668,
+   "avg": -9.371461324406877
+  },
+  {
+   "key": "eye_open",
+   "dev": 0.5097549788750143,
+   "words": "round, open eyes",
+   "warn": "the photos disagree",
+   "value": 0.34699378998752806,
+   "avg": 0.3134028843754331
+  },
+  {
+   "key": "mouth_wide",
+   "dev": 0.4531123466232359,
+   "words": "a wide mouth",
+   "warn": "the photos disagree",
+   "value": 0.8399203512059779,
+   "avg": 0.8016076904497511
+  },
+  {
+   "key": "brow_high",
+   "dev": -0.3818524951229597,
+   "words": "brows low and heavy over the eyes",
+   "warn": "the photos disagree",
+   "value": 0.5493251256825703,
+   "avg": 0.5858307925480619
+  },
+  {
+   "key": "eye_size",
+   "dev": 0.37150361477173954,
+   "words": "big eyes",
+   "warn": "the photos disagree",
+   "value": 0.19104048958602116,
+   "avg": 0.18604615413389317
+  },
+  {
+   "key": "eye_tilt",
+   "dev": 0.32217931676598904,
+   "words": "eyes tilting up at the outer corners",
+   "warn": "the photos disagree",
+   "value": 3.254384839998197,
+   "avg": 2.4741000518286085
+  },
+  {
+   "key": "lip_top",
+   "dev": -0.2570100778055148,
+   "words": "a thin upper lip",
+   "warn": "",
+   "value": 0.1128321754701397,
+   "avg": 0.12057608224727724
+  },
+  {
+   "key": "chin_long",
+   "dev": 0.19843302877048966,
+   "words": "a long chin",
+   "warn": "the photos disagree",
+   "value": 0.3028609232365625,
+   "avg": 0.2952975630170475
+  },
+  {
+   "key": "jaw_wide",
+   "dev": -0.1391601334061207,
+   "words": "a narrow, tapering jaw",
+   "warn": "",
+   "value": 0.816720707402433,
+   "avg": 0.8197130358936273
+  },
+  {
+   "key": "lip_low",
+   "dev": 0.08787512559226937,
+   "words": "a full lower lip",
+   "warn": "",
+   "value": 0.18679088408953315,
+   "avg": 0.18286999403665744
+  },
+  {
+   "key": "philtrum",
+   "dev": 0.0819398757846805,
+   "words": "a long gap from nose to lip",
+   "warn": "the photos disagree",
+   "value": 0.13409513863128425,
+   "avg": 0.1325448247947855
+  }
+ ],
+ "shapes": {
+  "hair_top": 0.456535227501418,
+  "hair_wide": 1.9580034488782179,
+  "hairline": 0.21456924869896718,
+  "fringe": 0.14312573443008225,
+  "hair_rgb": [
+   92,
+   73,
+   68
+  ],
+  "hair_below_ears": 0.7455769955429362,
+  "skin_rgb": [
+   238,
+   175,
+   149
+  ],
+  "beard": 0.16,
+  "moustache": 0.3,
+  "glasses": 0.0
+ },
+ "smile": 0.1080337894945842
+}

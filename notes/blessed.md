@@ -1,15 +1,15 @@
 # Notes for BLESSED (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 24 (the estimate and the stop), 49 (Brand's likeness check before the cast sheet), 74 (acting list before animatic 1).
-- **Done (11 Nov, plan chat, Opus high):** story checked (real: sentenced 9 Nov 2026, 10 y 6 m, Southwark Crown Court); 9 references filed (`references/blessed/`); the network now lets films fetch press photos (Guardian, BBC, Sky, AP/WJTV, Courthouse News, Geograph, Openverse, Pexels, Unsplash; Sam approved); brief checklist, estimate, acting list draft, questions to Sam.
-- **Spent against the estimate:** plan about 1% (this chat).
-- **Next:** the Build chat (Opus, high effort), opened by the plan chat 11 Nov: Brand likeness pack first (rule 49), then the cast sheet to Sam.
-- **Needs Sam:** nothing until the cast sheet (Sam answered 1-9, 11 Nov).
-- **Read:** `guides/job-packs.md` Build; this file.
+- **Rules that bite next:** 49 (likeness check 60%+ before the cast sheet), 41 (every arm ends in a hand; one outline shoulder to arm), 89 (critique: Brand alone beside his photos, two passes).
+- **Done (11 Nov, build chat 1, Opus high):** Brand's likeness pack filed, `references/blessed/likeness/` (b01-b03 straight-on, not smiling: Courthouse News, Guardian, BBC; b04 talking; b05 smiling; b06, b07, b09 sunglasses; b08 topknot sketch); his face card `brand-card.jpg`/`.json`. Card: close-set eyes (84th), long narrow face (77th), narrow forehead (76th), wide nose (73rd); "short nose" is unsure (photos disagree; by eye his nose is long and straight: trust the eye). It missed his beard: by eye a full beard, dark at the moustache, grey-white at the chin and jaw; long dark-brown curls past the shoulders, grey streaks, high hairline.
+- **Spent against the estimate:** plan about 1%; build chat 1 about 1% (pack only; amber on reading).
+- **Next:** build chat 2 (Opus, high effort): build Brand in `source/blessed_cast.py` copying `ad_vanced_notice_cast.py`'s Vance pattern (P4 MEASURED from `brand-card.json`, beard by hand like `scrub_beard`, turnhead register); `likeness.py check` 60%+; then judge, officer, newsreader; cast sheet to Sam.
+- **Needs Sam:** nothing until the cast sheet.
+- **Read:** `guides/job-packs.md` Build; this file; `source/ad_vanced_notice_cast.py` lines 1-78, 229-300, 376-416, 750-871 only.
 - **Lost / Added:** none yet.
 - **Open rule requests:** none.
-- **For Claude:** `source/blessed.py` from `source/satire_template.py`; reuse `press_secretary.reporter`, `power_crime_cast` (officer recoloured), `newsdesk_cast.PRESENTER`, `newsdesk_set` (restyled red), `moves.pose(sp,'phone_ear')`, the sitting kit, Job I lying bodies. Wikimedia's API refused (rate limit) on 11 Nov: retry once for Brand straight-on photos for `likeness.py card`.
+- **For Claude:** sources that worked 11 Nov: Courthouse News (www.), Guardian (i.guim.co.uk, `s=none&width=1400`), BBC (ichef), Sky (e3.365dm.com), AP via WJTV; upload.wikimedia.org thumbs (429 after ~5); commons pages via firecrawl_scrape. Refused: AP/People/NYT/Independent/NPR/SCMP. Police interview stills are straight-on but small.
 
 ## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
 
