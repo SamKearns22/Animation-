@@ -672,6 +672,17 @@ def s5_contact():
 
 
 S5_KG = (470, 940, 1.05)                                              # where he lands behind the gunman
+S5_DX = 120                                                           # Fable r3 #5: S5's camera moved left this much
+
+
+def _rifle_fall(img, cam, rx, ry, rp, a):
+    """S5's rifle dropping out of the dead man's hands (Fable r3 #3), turned a radians, centred (rx, ry)."""
+    d = ImageDraw.Draw(img)
+    c_, s_ = math.cos(a), math.sin(a)
+    L_ = 0.55 * rp
+    pts = [(-L_, -0.035 * rp), (L_, -0.035 * rp), (L_, 0.035 * rp), (-L_ * 0.4, 0.05 * rp), (-L_ * 0.5, 0.12 * rp),
+           (-L_ * 0.6, 0.05 * rp), (-L_, 0.06 * rp)]
+    d.polygon([cam.P(rx + c_ * px - s_ * py, ry + s_ * px + c_ * py) for px, py in pts], fill=(30, 30, 34), outline=INK)
 S5_SWOOP = (0.1, 0.8)                                                 # seconds into the shot: in from top right
 
 
@@ -679,17 +690,31 @@ def s5_edge(t):
     u = t - SHOTS[4][1]
     gx, gy, gppm = RS.STAGE['forest_edge']['gunman']
     img = B.canvas((0, 0, 0))
-    cam = B.Cam(1.0)
+    cam = B.Cam(1.0, W / 2 - S5_DX, H / 2)                            # Fable r3 #5: the pair in from the left edge
     RS.forest(img, cam, 'edge', t)
     snap = t - SNAP
     kx, ky, ks = S5_KG
     j = _gun_pose()
     rot, hy_ = 0.0, None
     drop = 0.0
-    if snap >= 0:
-        hy_ = 180                                                     # the head turned right round
-        rot = -14 * ease((snap - 0.15) / 0.4)
-        drop = 60 * ease((snap - 0.15) / 0.4)
+    if snap >= 0:                                                     # Fable r3 #5: the head wrenched round to face
+        hy_ = 90 * (1 - ease(snap / 0.12))                            # us over two frames (180 went black in one)
+    if snap >= 0.1:                                                   # Fable r3 #3: dead, he crumples: the rifle
+        k = ease((snap - 0.1) / 0.35)                                 # drops, arms go limp, knees buckle, the head
+        j = V.standing(RC.CAST['gunman'])                             # lolls and he sinks out of the bottom of frame
+        sw = RC.CAST['gunman']['shoulders']
+        V.arm_to(j, 'L', (-sw + 10, 260.0 - 60 * k, 70.0), 'down', 'palm')
+        V.arm_to(j, 'R', (sw - 10, 250.0 - 40 * k, 90.0), 'down', 'palm')
+        for sd, dz in (('L', 90), ('R', -50)):
+            fx, fy, fz = j['foot' + sd]
+            j['foot' + sd] = (fx, fy - 240 * k, fz + dz * k)
+        j['head_dy'] = 40 * k
+        rot = -9 * k
+        drop = 0.75 * gppm * ease((snap - 0.25) / 0.6)
+        rifle = (img, cam, gx - 0.25 * gppm, gy - 1.25 * gppm + 0.9 * gppm * ease((snap - 0.1) / 0.4) ** 2, gppm,
+                    math.radians(-25 * k))
+    else:
+        rifle = None
     wings, held = None, False
     v = (u - S5_SWOOP[0]) / (S5_SWOOP[1] - S5_SWOOP[0])
     if 0 <= v < 1:                                                    # note 35: a swoop down from top right, side on,
@@ -704,10 +729,12 @@ def s5_edge(t):
         CR.kg(img, cam, kx, ky - 26 * flare, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
               talk=_talk('kg', t), part='all')
     _kid(img, cam, 'gunman', gx, gy + drop, gppm, t, j=j, yaw=90, head_yaw=hy_, rot=rot, talk=False)
+    if rifle:
+        _rifle_fall(*rifle)
     if wings and wings['L'][2] == 'grip':                             # his wing hands again OVER the gunman: seen
         CR.kg_grips(img, cam, kx, ky, ks, wings)                      # closed on the neck and jaw (note 34)
-    if 0 <= snap < 0.12:
-        _flash(img, cam, 170, 1150, 50, seed=3)
+                                                                      # Fable r3 #40: no spark at the neck (it read
+                                                                      # as a muzzle flash); the crack carries it
     if L[5]['start'] <= t:
         _prompt(img, 'R1', 'EXECUTION', 640, 330, t - L[5]['start'] - 0.05, press=t - SNAP)
     return img

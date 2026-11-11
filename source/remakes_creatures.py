@@ -528,13 +528,18 @@ def _kg_tail(p, root, ang0, n, step, length):
     """The long tail (refs 01, 02): broad overlapping feathers fanned from one root, grey-brown, each with dark
     bars across it and a pale rounded tip, the outer ones a little shorter, so it reads as one fanned tail."""
     order = sorted(range(n), key=lambda k: -abs(k - (n - 1) / 2))      # the outer ones first, the middle on top
-    for k in order:
+    bx, by = root                                                       # Fable r3 #18 (read as a hand of fingers
+    fan = [(bx, by)] + [(bx + math.cos(ang0 + (k - (n - 1) / 2) * step) * (length - abs(k - (n - 1) / 2) * 26) * 0.9,
+                         by + math.sin(ang0 + (k - (n - 1) / 2) * step) * (length - abs(k - (n - 1) / 2) * 26) * 0.9)
+                        for k in range(n)]
+    p.poly(fan, dk(KG_TAIL, 0.85), INK, 2.2)                            # with pale nails): one solid fan behind,
+    for k in order:                                                     # the feathers broad and overlapping on it
         off = k - (n - 1) / 2
         a = ang0 + off * step
         ln = length - abs(off) * 26
         ux, uy, nx, ny = math.cos(a), math.sin(a), -math.sin(a), math.cos(a)
         bx, by = root
-        w = 58
+        w = 58 if n < 7 else 84
         pts = [(bx + nx * w * 0.35, by + ny * w * 0.35), (bx + ux * ln * 0.55 + nx * w * 0.55, by + uy * ln * 0.55 + ny * w * 0.55),
                (bx + ux * ln * 0.92 + nx * w * 0.42, by + uy * ln * 0.92 + ny * w * 0.42), (bx + ux * ln, by + uy * ln),
                (bx + ux * ln * 0.92 - nx * w * 0.42, by + uy * ln * 0.92 - ny * w * 0.42),
@@ -549,7 +554,8 @@ def _kg_tail(p, root, ang0, n, step, length):
             p.line([(c[0] + nx * hw, c[1] + ny * hw), (c[0] + ux * 10, c[1] + uy * 10), (c[0] - nx * hw, c[1] - ny * hw)],
                    dk(KG_TAIL, 0.62), 5.0)
         p.line([(bx + ux * ln * 0.3, by + uy * ln * 0.3), (bx + ux * ln * 0.95, by + uy * ln * 0.95)], dk(KG_TAIL, 0.7), 1.4)
-        p.ell(bx + ux * ln * 0.95, by + uy * ln * 0.95, w * 0.26, w * 0.2, KG_TAIL_TIP, None, rot=a)
+        p.ell(bx + ux * ln * 0.9, by + uy * ln * 0.9, w * 0.34, w * 0.12, KG_TAIL_TIP, None, rot=a + math.pi / 2)   # a
+                                                                        # pale band, not a nail
         p.poly(f, None, INK, 2.2)
 
 
@@ -558,7 +564,7 @@ def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all', 
     white bib with its two gold eye-spots), feet, the head with its face disc, eyes, brows, beak, the two crests."""
     m = mood if isinstance(mood, dict) else KG_MOODS[mood]           # a dict: a mood changed for one frame
     if part != 'body':
-        _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)              # the long fanned tail hanging below
+        _kg_tail(p, (0, 90), math.pi / 2, 9, 0.12, 430 * tail)              # the long fanned tail hanging below
     if part == 'tail':                                                  # (part: tail alone, or all but it, so a
         return                                                          # branch can go between: remakes_sets)
     hx, hy, hw = 0.0, -250.0, 168.0
