@@ -56,3 +56,15 @@
 - **Open rule requests:** none.
 - **For Claude:** `blessed_cast._outline` (P4.outline_uv retraced the upper-left temple; fixed for Brand only, other films untouched); beard tufts scale with |sin yaw| on TurnFace (`ta`); `COT_AT` (x, d, flip, yaw); `OATH_RAISE`/`OATH_BIBLE`/`OATH_BOOK`; `GRIP_AT` feeds the touch check. Push close-up crops the hair top late: left as is.
 
+
+
+## Where things stand (cast chat 8, 11 Nov)
+- **Rules that bite next:** 74 (acting list before animatic 1), 24 (the estimate: forecast 20.2% against 19%, Sam's ~1% included), 89 (critique: done for cast).
+- **Done (11 Nov, cast chat 8, Opus high):** note 4: the press pack are standing people (shoulders, collars, arms, legs) with turning heads (skull, both ears, neck, eight shaped haircuts), three turned three-quarter and glancing aside in profile; TV cameras, booms in raised hands, phones held up; the same pack at the gates as at the arrival (Sam's answer 6); one journalist moved so Brand's chest shows at the arrival. Note 5: inmates on Brand's measured face at his size (lips, brows, nose, ears, eye bags, stubble, a beard, freckles, real hair), one bench depth, eyes up at the TV. Found: every planned eye move (oath up, dock and van down, the TV) was under a pixel (gaze_dy taken as drawing units): fixed for Brand and the inmates. Two hunts recorded, fixed, `critique.py fixed`; checks clean; stills sent.
+- **Left (set faults the critique found, outside notes 4-5):** TV room: the cue rack reads as a puppet rig, no blue TV glow, four stools not a bench; gatehouse unlike ref 18 (wide front, grilled arch); Brand tiny in the wide gates shot; the arrival boom crosses the sign's H.
+- **Next:** Sam opens chat 9 by hand (project Animation- selected, Opus, medium effort) with the backup file "blessed-chat8-work.bundle" attached: apply it (`git pull blessed-chat8-work.bundle claude/blessed-moves-c7`), push to the chat branch and the main line, then animatic 1 prep (acting list, brief ticks, check sheet; stop for Sam's yes). Chat 8 was started by a schedule without push rights, so nothing here is on GitHub yet and it opened no next chat (chain level 8 of 12).
+- **Needs Sam:** a look at the notes 4-5 stills; Y/N on fixing the TV-room and gates set faults (about 0.5%); Y/N on a rule "Sam starts each new chat by hand" in place of the self-opening chain.
+- **Read:** `guides/job-packs.md` Checks and animatic (and Notes round for the set faults if Sam says Y); this section.
+- **Open rule requests:** none.
+- **For Claude:** `blessed_cast.inmate_head` (INMATE_FACES), `press_person`/PRESS_STYLES (TH.Person per haircut, `_Big` without `_lift`); `blessed.press_sp/press_pose/press`, PRESS_YAW, `_phone_up`; `blessed_cast.gaze()` scales gaze_dy; `_turned_long(colour, length)`. Setup hook now installs with `python3 -m pip` (pip was another Python).
+

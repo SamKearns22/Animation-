@@ -1,6 +1,6 @@
-- Blessed (11 Nov, cast chat 8): Sam's notes 4 (press pack: real people from behind, three turned) and 5 (inmates at
-  Brand's size, mouths, faces) done; eye moves now show; checks clean; stills sent. Next: animatic 1 prep, Opus medium
-  (chat 9); Sam: a look, and Y/N on the TV-room and gates set faults. Notes: notes/blessed.md.
+- Blessed (11 Nov, chat 9): backup applied; set faults fixed; press pack at the gate, all facing Brand (Sam's
+  notes 7-8); checks clean; stills sent. Next: animatic 1 prep, Opus medium, Sam opens the chat by hand.
+  Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
