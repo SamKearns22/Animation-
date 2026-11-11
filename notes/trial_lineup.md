@@ -72,8 +72,36 @@ as high as the real film's.
 ## Results (the trial chat fills this in)
 | checkpoint | cost so far (% of a week) | notes |
 |---|---|---|
-| C0 read in | | |
-| C1 first line-up drawn | | |
-| C2 own-look faults fixed | | |
+| C0 read in | 0.2 | chat 1 (Opus high). The chat's own start (prompt and rules) was 0.1 of it |
+| C1 first line-up drawn | 1.2 | chat 1. Includes a 2-hour stop (the usage limit ran out at 14:57; resumed 17:07), so the whole chat was re-read once: the reload is part of the jump from 0.2. Code: `source/trial_lineup.py` (about 600 lines), drawn first time with no crash |
+| C2 own-look faults fixed | 1.4 | chat 1. One look, 9 faults, one editing pass, one redraw: Goron too wide (clipped, over Ruto); its clasped hands on the bodice read as a bust (A1, rude shape); boxy Goron arms and legs; dress too high (lace over the goatee), thin grin; Ruto's dome a small swim cap; Ruto's face read bored; Ruto's legs and feet like a mannequin's shoes; both ocarinas hidden by hands. Amber at C2: handed over |
 | C3 hunt 1 fixed | | found / real / duplicates / can't tell: |
 | C4 hunt 2 fixed, confirmed | | found / real / duplicates / can't tell: |
+
+## Where things stand (11 Nov, chat 1 handed over on amber at C2)
+- Rules that bite next: the test's 4 (batch fixes), 5 (two hunts, no third), 6 (measure each checkpoint).
+- Done: C0-C2. The five are built in `source/trial_lineup.py` (MAP at the top).
+- Next (Opus, high; chat 2): `python3 source/trial_lineup.py spec 1` (renders the frame and crop, writes the SPEC),
+  then `python3 source/critique.py pack trial_lineup PATH` and a NEW helper; then C3, hunt 2, C4, the end steps
+  (rule 8) and the cost breakdown (`git pull` of the main line, `python3 source/costbreak.py`, its printout under
+  "## Cost breakdown" naming each chat, in the Results commit). Add chat 2's cost to chat 1's 1.4.
+- Known after the redraw, not yet judged: the Goron's dress hem touches the frame's right edge in the crop.
+- For Claude: draws only into `source/data/trial_lineup/` (keep it off git); faults go in this table, not code comments.
+
+
+## Cost breakdown
+Chat 1 (eea64ed9, Opus high), at the amber handover after C2:
+```
+eea64ed9: 41 steps, 1.46% of a week
+  kind of step                                   steps  re-read     new  written   total
+  shell (other)                                     13     0.10    0.15     0.16    0.41
+  talk (reply or thinking, no tool)                  4     0.00    0.31     0.00    0.31
+  run a tool (draw, check, critique)                 8     0.09    0.04     0.11    0.24
+  write or edit code/notes                           1     0.01    0.00     0.20    0.21
+  git (merge, commit, push)                          5     0.05    0.02     0.03    0.11
+  read a guide                                       6     0.04    0.03     0.01    0.08
+  look at a picture                                  3     0.03    0.02     0.00    0.06
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.04     0.00    0.04
+  other tool: ReadNotifications                      1     0.00    0.00     0.00    0.01
+  ALL                                                      0.32    0.64     0.51    1.46
+```
