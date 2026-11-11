@@ -33,7 +33,10 @@
   {
    "name": "cast",
    "pct": 4.0,
-   "done": null
+   "done": {
+    "date": "2026-11-11",
+    "spent": 2.41
+   }
   },
   {
    "name": "sets",

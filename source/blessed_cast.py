@@ -1,0 +1,682 @@
+#!/usr/bin/env python3
+"""MAP  Blessed (Sam, 11 Nov): the cast. Brand is a measured likeness head (likeness.py card on b01-b04,
+references/blessed/likeness/) on the patriots4 face layout, built the Ad-Vanced Notice (Vance) way.
+
+    BRAND     Russell Brand (card, 11 Nov): close-set eyes (84th centile), a long narrow face (77th), a narrow
+              forehead (76th), a wide nose (73rd); the card's "short nose" is unsure and by eye his nose is long and
+              straight (trust the eye). Deep-set dark eyes under heavy dark brows. A full beard: dark brown at the
+              moustache and round the mouth, grey-white at the chin and along the jaw. Long dark-brown curls past the
+              shoulders with grey streaks, off a high hairline. 1.83 m. Three looks (Sam's answer 7):
+                trial   (arrival, gates) grey jacket, open white shirt, crucifix, long white scarf, hair loose, aviators
+                stand   (the witness box, sentencing) dark suit, open white shirt; hair loose (stand) or topknot (dock)
+                prison  grey tracksuit, hair in the topknot from the sentencing sketch
+    JUDGE     invented (Sam's answer 4): red robe, white wig, white bands, half-moon glasses; chest up at the bench.
+    OFFICER   prison officer: white shirt, black epaulettes and tie, black trousers, keys on the belt.
+    NEWSREADER  the BBC-style presenter on the TV (newsdesk_cast's presenter, restyled: navy suit, red tie).
+
+    python3 source/blessed_cast.py sheet OUT.jpg       front, side, back of the cast, a 1.75 m person
+    python3 source/blessed_cast.py faces OUT.jpg       Brand's face large in every mood and look, his photos beside
+    python3 source/blessed_cast.py head brand OUT.png  his head straight on (for likeness.py check)
+    python3 source/blessed_cast.py turn OUT.jpg        his head all the way round, three moods
+
+Map: colours 40 | measures 62 | moods 72 | beard 95 | hair 160 | extras 250 | head 300 | turned 370 | torsos 400 |
+     people 470 | sheets 520
+"""
+import math
+import os
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import ad_vanced_notice_cast as AV     # noqa: E402  (installs midterminal's hooks, turnhead, the Vance helpers)
+import json  # noqa: E402
+from midterminal_cast import B, TC, P4, V, dk, blend, FONT  # noqa: E402
+from ed import INK, curve, oval  # noqa: E402
+import turnhead as TH  # noqa: E402
+MC = AV.MC
+
+# ---------------------------------------------------------------------------------------------- colours
+BR_SKIN = (232, 176, 150)         # card: light (238, 175, 149)
+BR_HAIR = (80, 62, 48)            # dark brown curls (lighter after critique pass 2)
+BR_HAIR_L = (112, 90, 72)         # the light on the curls
+BR_GREY = (156, 146, 136)         # the grey streaks
+BR_BROW = (48, 38, 32)
+BR_IRIS = (86, 62, 42)            # dark brown
+BR_LIP = (196, 128, 116)
+BD_MOUST = (74, 58, 48)           # the beard: dark at the moustache and round the mouth
+BD_MID = (140, 128, 118)          # grey-brown on the cheeks
+BD_LOW = (206, 200, 192)          # grey-white at the chin and along the jaw
+BD_GRAIN = (226, 222, 216)
+GREY_JKT = (86, 88, 94)
+DARK_SUIT = (38, 38, 46)
+SCARF = (244, 242, 236)
+TRACK = (134, 136, 140)
+GOLD = (206, 166, 70)
+SHADES = (28, 30, 36)
+
+# ---------------------------------------------------------------------------------------------- measures (11 Nov)
+_card = json.load(open(os.path.join(HERE, '..', 'references', 'blessed', 'likeness', 'brand-card.json')))
+_BM, _BA = _card['measures'], _card['average']
+P4.MEASURED['brand'] = {k: P4.AVG[k] + _BM[k] - _BA[k] for k in P4.AVG}
+P4.PUSH['brand'] = 1.6
+P4.TUNE['brand'] = dict(eyes_apart=2.0, nose_wide=2.0, brow_slope=3.0, brow_high=3.0, eye_tilt=8.0, chin_long=22.0,
+                        forehead_wide=10.0, eye_open=3.0, jaw_wide=5.0, nose_long=3.0)   # 11 Nov, likeness check rounds
+
+# ---------------------------------------------------------------------------------------------- moods
+# brow: up (+); frown (+) pulls the inner ends down, (-) lifts them (worry); lid: upper lid down; mouth: his shapes
+MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.16, squint=0.0, mouth='lips', smile=0.2),
+         # the sincere showman (Sam's answer 8): believes his own performance; beaming, brows up, crinkled eyes
+         'showman': dict(brow=0.03, frown=-0.01, lid=0.14, squint=0.45, mouth='grin'),
+         'sincere': dict(brow=0.02, frown=-0.03, lid=0.12, squint=0.1, mouth='lips', smile=0.5),
+         # the stiff showman in the box: bolt upright, eyes up on "Almighty God", too loud
+         'oath': dict(brow=0.04, frown=0.0, lid=0.0, squint=0.0, mouth='lips', smile=0.0, gaze_dy=-0.6),
+         # sentenced: the stillness cracks (Sam's answer 9: quiet, to himself, deadpan); hollow, eyes down
+         'hollow': dict(brow=0.006, frown=-0.04, lid=0.34, squint=0.0, mouth='lips', smile=-0.6, gaze_dy=0.6),
+         'numb': dict(brow=0.0, frown=-0.01, lid=0.3, squint=0.0, mouth='lips', smile=-0.3),
+         'weeping': dict(brow=0.01, frown=-0.07, lid=0.3, squint=0.5, mouth='cry', tears=True),
+         'dejected': dict(brow=0.004, frown=-0.05, lid=0.28, squint=0.15, mouth='lips', smile=-0.8, tears=True),
+         'amazed': dict(brow=0.06, frown=0.0, lid=0.0, squint=0.0, mouth='gasp'),
+         'overjoyed': dict(brow=0.05, frown=-0.01, lid=0.1, squint=0.5, mouth='grin')}
+
+# ---------------------------------------------------------------------------------------------- the beard
+# (by eye on b01-b03, b07): full and fairly short, past the chin; dark brown at the moustache, which runs down past
+# the mouth corners and joins a dark patch under the lower lip; grey-white over the chin and along the jaw; grey-brown
+# on the cheeks; the cheek line high and soft. Every edge facing skin is a row of small tufts (AV.tufts).
+
+
+def brand_beard(p, f, L, skin, seed=91):
+    rng = np.random.default_rng(seed)
+    fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
+    wrap = getattr(f, 'wrap', None)
+    nb = [(wrap(0.44, -95), 0.44), (wrap(0.62, -98), 0.62), (wrap(0.83, -96), 0.83)] if wrap else \
+        [(-fw * 0.5 - 0.006, 0.44), (-fw * 0.5 - 0.006, 0.62), (-jw * 0.5 - 0.024, 0.84)]
+    bottom = nb + [(-jw * 0.42, 1.03), (-0.16, 1.15), (0.0, 1.19), (0.16, 1.15), (jw * 0.42, 1.03), (jw * 0.5 + 0.024, 0.84),
+                   (fw * 0.5 + 0.006, 0.62), (fw * 0.5 + 0.006, 0.44)]
+    cheek = [(fw * 0.5 - 0.02, 0.44), (fw * 0.4, ny - 0.04), (fw * 0.3, ny - 0.01), (mw * 0.7, l0 - 0.02)]
+    corner = [(mw * 0.64, l13 + 0.01), (mw * 0.58, l17 + 0.02), (mw * 0.3, l17 + 0.04)]
+    right = cheek + corner + [(0.0, l17 + 0.045)]
+    left = [(-u, v) for u, v in right[::-1]]
+    if wrap:
+        left[-1] = (wrap(0.42, -90), 0.4)
+    inner = AV.tufts(right + left[1:], 0.012, 0.014, out=1.0, seed=seed)
+    edge = AV.tufts(bottom, 0.012, 0.018, out=1.0, seed=seed + 1)
+    body = f.pts(edge + inner)
+    p.poly(body, BD_MID, None)
+    # grey-white over the chin and the jaw: everything below a tufted line from the jaw corner under the mouth
+    low_top = AV.tufts([(fw * 0.5 + 0.01, 0.66), (jw * 0.42, 0.8), (mw * 0.5, l17 + 0.08), (0.0, l17 + 0.1),
+                        (-mw * 0.5, l17 + 0.08), (-jw * 0.42, 0.8), (-fw * 0.5 - 0.01, 0.66)], 0.016, 0.016,
+                       out=1.0, seed=seed + 2)
+    n = len(edge)
+    p.poly(f.pts(edge[n // 5: n - n // 5] + low_top), BD_LOW, None)
+    # the dark moustache: from under the nose, over the lip, down past the corners (a horseshoe) to the chin patch
+    top = AV.tufts([(-mw * 0.7, l13 + 0.004), (-mw * 0.62, ny + 0.03), (-nw * 0.5, ny + 0.022), (0.0, ny + 0.03),
+                    (nw * 0.5, ny + 0.022), (mw * 0.62, ny + 0.03), (mw * 0.7, l13 + 0.004)], 0.008, 0.013, out=1.0,
+                   seed=seed + 3)
+    down = [(mw * 0.7, l13 + 0.03), (mw * 0.56, l17 + 0.0), (mw * 0.1, l17 + 0.016), (0.0, l17 + 0.03),
+            (-mw * 0.1, l17 + 0.016), (-mw * 0.56, l17 + 0.0), (-mw * 0.7, l13 + 0.03)]
+    must = f.pts(top + AV.tufts(down, 0.008, 0.014, out=-1.0, seed=seed + 4))
+    p.poly(must, BD_MOUST, None)
+    # the grain: short light strokes falling down and in over the grey parts (none in the dark horseshoe)
+    for r, gv in enumerate(np.arange(0.5, 1.12, 0.04)):
+        for gu in np.arange(-fw * 0.5 - (0.12 if wrap else 0.0) + (0.02 if r % 2 else 0.0), fw * 0.5, 0.04):
+            u, v = gu + rng.uniform(-0.014, 0.014), gv + rng.uniform(-0.014, 0.014)
+            q = f(u, v)
+            if not AV._inside(body, q[0], q[1]) or AV._inside(must, q[0], q[1]) or (wrap and f.k(u, v) < 0.15):
+                continue
+            du, dv = -u * 0.5, 1.0
+            nn = math.hypot(du, dv)
+            ln = rng.uniform(0.018, 0.028)
+            q2 = f(u + du / nn * ln, v + dv / nn * ln)
+            light = v > 0.8 or abs(u) > jw * 0.5 - 0.03
+            p.line([q, q2], BD_GRAIN if light else blend(BD_MID, BD_GRAIN, 0.45), 1.6)
+    p.line(f.pts(edge), INK, 2.2)
+
+
+# ---------------------------------------------------------------------------------------------- the hair
+def curls(pts, amp, step, out=1.0, seed=0):
+    """A curly edge: the polyline cut into bumps `step` long, each bulging `amp` to one side (out=+1 left of the
+    travel direction): a row of round curls, not tufts."""
+    rng = np.random.default_rng(seed)
+    res = []
+    for (u0, v0), (u1, v1) in zip(pts, pts[1:]):
+        d = math.hypot(u1 - u0, v1 - v0)
+        n = max(1, int(round(d / step)))
+        nu, nv = -(v1 - v0) / (d + 1e-9), (u1 - u0) / (d + 1e-9)
+        for k in range(n):
+            a = amp * out * rng.uniform(0.6, 1.15)
+            for t, h in ((0.0, 0.0), (0.2, 0.62), (0.5, 1.0), (0.8, 0.62)):
+                tt = (k + t) / n
+                res.append((u0 + (u1 - u0) * tt + nu * a * h, v0 + (v1 - v0) * tt + nv * a * h))
+    res.append(pts[-1])
+    return res
+
+
+def waves(pts, amp, wl, out=1.0, seed=0, step=0.012):
+    """A loose wavy edge (his curls are big waves, not ringlets): the polyline resampled every `step` and pushed
+    sideways by two sines of random phase (wavelength about `wl`), the push growing along the line (the ends wavier)."""
+    rng = np.random.default_rng(seed)
+    ph1, ph2 = rng.uniform(0, 6.3, 2)
+    dense = []
+    for (u0, v0), (u1, v1) in zip(pts, pts[1:]):
+        d = math.hypot(u1 - u0, v1 - v0)
+        n = max(1, int(d / step))
+        for k in range(n):
+            dense.append((u0 + (u1 - u0) * k / n, v0 + (v1 - v0) * k / n))
+    dense.append(pts[-1])
+    res, s = [], 0.0
+    for i, (u, v) in enumerate(dense):
+        if i:
+            s += math.hypot(u - dense[i - 1][0], v - dense[i - 1][1])
+        j = min(i, len(dense) - 2)
+        du, dv = dense[j + 1][0] - dense[j][0], dense[j + 1][1] - dense[j][1]
+        dd = math.hypot(du, dv) + 1e-9
+        nu, nv = -dv / dd, du / dd
+        a = amp * out * (0.5 + 0.5 * i / len(dense)) * (math.sin(2 * math.pi * s / wl + ph1) +
+                                                     0.45 * math.sin(2 * math.pi * s / (wl * 0.43) + ph2))
+        res.append((u + nu * a, v + nv * a))
+    return res
+
+
+def brand_hair(L, knot=False, seed=3):
+    """His hair (face fractions). Loose (b01-b07): a high hairline, swept back off the forehead, flat-ish on top, then
+    big loose waves either side of the face, widest round the ears and jaw, on down past the shoulders (v 1.85), the
+    ends in separate locks. Returns (cap, mass, locks): cap over the forehead; mass the whole shape behind the face;
+    locks a wavy lock over each cheek's edge (hiding the ears). Topknot (b08): pulled back tight; no mass or locks."""
+    fw, fhw = L['fw'], L['fhw']
+    c = fhw * 0.5
+    hl = -0.02                                                   # a high hairline
+    if knot:
+        e = fw * 0.5                             # pulled back flat over a round skull, out to the ears
+        cap = [(-e - 0.01, 0.3), (-e - 0.03, 0.02), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.42), (0.24, -0.38),
+               (e - 0.04, -0.22), (e + 0.03, 0.02), (e + 0.01, 0.3), (e - 0.03, 0.3), (c + 0.02, 0.1), (c - 0.02, 0.2), (c * 0.8, 0.0), (c * 0.5, hl),
+               (0.0, hl - 0.02), (-c * 0.5, hl), (-c * 0.8, 0.0), (-c + 0.02, 0.2), (-c - 0.02, 0.1), (-e + 0.03, 0.3)]
+        return cap, [], []
+    e = fw * 0.5
+
+    def side(sgn, sd):
+        outer = [(sgn * 0.02, -0.4), (sgn * (c + 0.04), -0.36), (sgn * (e + 0.2), -0.1), (sgn * (e + 0.3), 0.3),
+                 (sgn * (e + 0.34), 0.8), (sgn * (e + 0.33), 1.3), (sgn * (e + 0.28), 1.7)]
+        ends = []                                                # the ends: four locks of different lengths
+        for k, (du, dv) in enumerate(((0.28, 1.7), (0.22, 1.86), (0.16, 1.74), (0.1, 1.84), (0.04, 1.68))):
+            u = sgn * (e + du)
+            ends += [(u, dv), (u - sgn * 0.03, dv - 0.08)] if k % 2 == 0 else [(u + sgn * 0.01, dv - 0.02), (u, dv)]
+        inner = [(sgn * (e + 0.02), 1.6), (sgn * (e - 0.02), 1.15), (sgn * (e - 0.05), 0.7)]
+        return waves(outer, 0.03, 0.34, out=-sgn, seed=sd) + ends + waves(inner, 0.02, 0.3, out=sgn, seed=sd + 1)
+    right, left = side(1, seed), side(-1, seed + 10)
+    mass = left[::-1] + [(-0.05, 0.2), (0.05, 0.2)] + right
+    cap = waves([(-c - 0.1, 0.06), (-c - 0.02, -0.26), (-0.22, -0.44), (0.0, -0.49), (0.22, -0.44), (c + 0.02, -0.26),
+                 (c + 0.1, 0.06)], 0.012, 0.2, out=1.0, seed=seed + 4)
+    cap += [(c - 0.02, 0.1), (c * 0.86, -0.03), (c * 0.5, hl), (0.12, hl - 0.03), (0.0, hl - 0.015), (-0.12, hl - 0.03),
+            (-c * 0.5, hl), (-c * 0.86, -0.03), (-c + 0.02, 0.1)]
+    locks = []
+    for sgn in (-1, 1):                                          # a lock over the face's edge, temple to below the jaw
+        inner = waves([(sgn * c, 0.04), (sgn * (e - 0.04), 0.3), (sgn * (e - 0.045), 0.62), (sgn * (e - 0.01), 0.9)],
+                      0.014, 0.22, out=sgn, seed=seed + 5 + sgn)
+        tip = [(sgn * (e + 0.03), 1.08)]
+        outer = [(sgn * (e + 0.13), 0.8), (sgn * (e + 0.16), 0.4), (sgn * (c + 0.14), 0.0)]
+        locks.append((sgn, inner + tip + outer))
+    return cap, mass, locks
+
+
+def _texture(p, f, poly_uv, n, seed, length=0.2):
+    """Wave strands inside a hair shape: short S-curves falling down the hair, light and grey (his grey streaks)."""
+    rng = np.random.default_rng(seed)
+    q = f.pts(poly_uv)
+    us, vs = [a for a, _ in poly_uv], [b for _, b in poly_uv]
+    k = 0
+    for _ in range(n * 10):
+        if k >= n:
+            break
+        u, v = rng.uniform(min(us), max(us)), rng.uniform(min(vs), max(vs))
+        ln = length * rng.uniform(0.6, 1.2)
+        ends = (f(u, v), f(u, v + ln))
+        if not (AV._inside(q, *ends[0]) and AV._inside(q, *ends[1])):
+            continue
+        k += 1
+        sw = rng.choice((-1, 1)) * 0.025
+        pts = [(u, v), (u + sw, v + ln * 0.33), (u - sw, v + ln * 0.66), (u + sw * 0.5, v + ln)]
+        p.line(curve(f.pts(pts), 3), BR_GREY if rng.uniform() < 0.35 else BR_HAIR_L, 1.8)
+
+
+def _top_strokes(p, f, L, knot):
+    c = L['fhw'] * 0.5
+    if knot:                                          # pulled back: a few lines sweeping back to the bun, low
+        for a, b in (((-0.14, -0.04), (-0.06, -0.38)), ((0.14, -0.04), (0.06, -0.38))):
+            p.line(curve(f.pts([a, ((a[0] + b[0]) / 2 * 1.2, (a[1] + b[1]) / 2), b]), 3), BR_HAIR_L, 1.6)
+        return
+    strokes = (((-0.08, -0.03), (-0.2, -0.34)), ((0.08, -0.03), (0.2, -0.34)), ((-0.24, 0.02), (-c - 0.02, -0.22)),
+               ((0.24, 0.02), (c + 0.02, -0.22)), ((0.0, -0.05), (0.0, -0.4)))
+    for i, (a, b) in enumerate(strokes):
+        mid = ((a[0] + b[0]) / 2 + (0.03 if i % 2 else -0.03), (a[1] + b[1]) / 2)
+        p.line(curve(f.pts([a, mid, b]), 3), BR_GREY if i == 1 else BR_HAIR_L, 1.8)
+
+
+def bun(p, f, back=False):
+    """The topknot on the crown (sketch b08): a round knot of curls, a band, a few ends."""
+    x, y = f(0.0, -0.47)
+    p.poly(curve(oval(x, y, 28, 24, 18), 2), BR_HAIR, INK, 2.4)
+    for k in range(3):
+        p.line(curve([(x - 22 + 14 * k, y - 18), (x - 14 + 14 * k, y - 4), (x - 20 + 14 * k, y + 12)], 3),
+               BR_GREY if k == 1 else BR_HAIR_L, 1.8)
+    p.line([(x - 14, y + 26), (x + 14, y + 26)], (30, 26, 24), 4.0)
+
+
+def hair_back(p, sp, hx, hy, hw, hh):
+    """Behind the head: the big curly mass down past the shoulders (loose), or just the bun (topknot)."""
+    if sp.get('who') != 'brand':
+        return _hair_back(p, sp, hx, hy, hw, hh)
+    if sp.get('hair') == 'brand_knot':
+        return
+    pts = curls([(hx - hw - 30, hy - 40), (hx - hw - 70, hy + 120), (hx - hw - 66, hy + 300), (hx + hw + 66, hy + 300),
+                 (hx + hw + 70, hy + 120), (hx + hw + 30, hy - 40), (hx, hy - hh - 30), (hx - hw - 30, hy - 40)],
+                18, 46, out=1.0, seed=5)
+    p.poly(pts, dk(BR_HAIR, 0.85), INK, 2.6)
+
+
+# ---------------------------------------------------------------------------------------------- extras
+def shades(p, f, L, lowered=False):
+    """Aviator sunglasses (b06, b07, b09): two dark teardrop lenses in thin gold rims, a double bridge. Lowered
+    (Sam's answer 8, "lowers the sunglasses"): slid down the nose, the eyes showing over the rims."""
+    dv = 0.13 if lowered else 0.0
+    for sgn in (-1, 1):
+        cx, ey = sgn * L['ecx'], L['eye_y'] + 0.01 + dv
+        w = L['ew'] * 0.9
+        lens = [(cx - sgn * w * 0.95, ey - 0.055), (cx + sgn * w * 0.9, ey - 0.06), (cx + sgn * w * 1.05, ey - 0.02),
+                (cx + sgn * w * 0.8, ey + 0.07), (cx + sgn * w * 0.05, ey + 0.085), (cx - sgn * w * 0.85, ey + 0.05),
+                (cx - sgn * w * 1.0, ey - 0.01)]
+        q = curve(f.pts(lens), 3)
+        p.poly(q, SHADES, GOLD, 2.4)
+        p.line(curve(f.pts([(cx - sgn * w * 0.4, ey - 0.03), (cx + sgn * w * 0.3, ey - 0.04)]), 2), (90, 96, 110), 2.0)
+        p.line(f.pts([(cx + sgn * w * 1.0, ey - 0.04), (sgn * L['fw'] * 0.5, ey - 0.045)]), GOLD, 2.4)
+    y = L['eye_y'] - 0.045 + dv
+    p.line(f.pts([(-L['ecx'] + L['ew'] * 0.85, y), (L['ecx'] - L['ew'] * 0.85, y)]), GOLD, 2.4)
+    p.line(curve(f.pts([(-L['ecx'] + L['ew'] * 0.9, y + 0.03), (0.0, y + 0.015), (L['ecx'] - L['ew'] * 0.9, y + 0.03)]),
+                 3), GOLD, 2.0)
+
+
+def tears(p, f, L):
+    for sgn in (-1, 1):
+        x, y = f(sgn * (L['ecx'] - L['ew'] * 0.1), L['eye_y'] + 0.04)
+        p.line(curve([(x, y), (x + sgn * 2, y + 22), (x - sgn * 1, y + 44)], 3), (150, 196, 230), 3.2)
+        p.poly(oval(x - sgn * 1, y + 48, 4, 6, 10), (170, 210, 236), INK, 1.0)
+
+
+def deep_set(p, f, L, skin):
+    """Deep-set eyes (b01-b03): a shadow under each brow, over the eye, and a soft bag line below."""
+    sh = dk(skin, 0.86)
+    for sgn in (-1, 1):
+        cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.62
+        pts = [(cx - w, ey - 0.02), (cx - w * 0.6, ey - 0.06), (cx + w * 0.4, ey - 0.065), (cx + w * 1.05, ey - 0.03),
+               (cx + w * 0.7, ey - 0.01), (cx - w * 0.6, ey - 0.012)]
+        p.poly(curve(f.pts(pts), 3), sh, None)
+        p.line(curve(f.pts([(cx - w * 0.6, ey + 0.05), (cx, ey + 0.065), (cx + w * 0.7, ey + 0.045)]), 3),
+               dk(skin, 0.74), 1.6)
+
+
+def brand_mouth(p, f, L, kind):
+    """'grin' (the showman's beam, top teeth), 'gasp' (amazed: an open O), 'cry' (open, corners pulled down)."""
+    hw, l0, l13, l17 = L['mw'] / 2, L['lip0'], L['lip13'], L['lip17']
+    if kind == 'grin':
+        hw *= 1.15
+        top = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03)]
+        bot = [(hw, l13 - 0.03), (hw * 0.55, l17 + 0.018), (0.0, l17 + 0.036), (-hw * 0.55, l17 + 0.018)]
+        p.poly(curve(f.pts(top + bot), 3), (70, 26, 30), INK, 2.2)
+        teeth = [(-hw * 0.85, l13 - 0.022), (0.0, l13 - 0.006), (hw * 0.85, l13 - 0.022), (hw * 0.6, l13 + 0.016),
+                 (0.0, l13 + 0.024), (-hw * 0.6, l13 + 0.016)]
+        p.poly(curve(f.pts(teeth), 3), (250, 248, 240), None)
+        return
+    if kind == 'gasp':
+        x, y = f(0.0, (l13 + l17) / 2 + 0.01)
+        p.poly(oval(x, y, hw * P4.H * 0.55, (l17 - l0) * P4.H * 0.95, 20), (70, 26, 30), INK, 2.2)
+        p.poly(oval(x, y - (l17 - l0) * P4.H * 0.7, hw * P4.H * 0.4, 4, 12), (250, 248, 240), None)
+        return
+    # cry: a wide, low, square-ish opening, the corners dragged down
+    pts = [(-hw * 1.05, l13 + 0.03), (-hw * 0.5, l13 - 0.006), (0.0, l13 - 0.01), (hw * 0.5, l13 - 0.006),
+           (hw * 1.05, l13 + 0.03), (hw * 0.7, l17 + 0.03), (0.0, l17 + 0.02), (-hw * 0.7, l17 + 0.03)]
+    p.poly(curve(f.pts(pts), 3), (70, 26, 30), INK, 2.2)
+    p.poly(curve(f.pts([(-hw * 0.6, l13 - 0.002), (0.0, l13 - 0.004), (hw * 0.6, l13 - 0.002), (0.0, l13 + 0.01)]), 3),
+           (250, 248, 240), None)
+
+
+# ---------------------------------------------------------------------------------------------- his head
+def look_of(sp):
+    return MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
+
+
+def brand_head(img, p, sp, t, hx, hy):
+    L = P4.layout(P4.target('brand', sp.get('average', False)))
+    f = P4.Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    skin, look = BR_SKIN, look_of(sp)
+    knot = sp.get('hair') == 'brand_knot'
+    cap, mass, locks = brand_hair(L, knot)
+    if mass:                                             # the curls behind the face, past the shoulders
+        p.poly(curve(f.pts(mass), 2), BR_HAIR, INK, 2.4)
+        _texture(p, f, mass, 46, 7)
+    AV._ears(p, f, L, skin)
+    p.poly(curve(f.pts(P4.outline_uv(L, 0.4, crown=-0.42)), 4), skin, INK, 2.6)
+    brand_beard(p, f, L, skin)
+    if sp.get('empty'):
+        P4.nose(p, f, L, skin)
+        P4.lips(p, f, L, dict(sp, smile=0.2), BR_LIP, f(0.0, L['lip13']))
+        return f(0.0, L['lip13'])[0]
+    deep_set(p, f, L, skin)
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint']),
+                          gaze_dy=sp.get('gaze_dy', look.get('gaze_dy', 0.0))), BR_IRIS, dk(skin, 0.8), liner=2.8)
+    P4.brows(p, f, L, BR_BROW, 0.056, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0))
+    P4.nose(p, f, L, skin)
+    fx, my = f(0.0, L['lip13'])
+    if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
+        P4.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0)), BR_LIP, (fx, my - 6))
+    else:
+        brand_mouth(p, f, L, look['mouth'])
+    if look.get('tears') or sp.get('tears'):
+        tears(p, f, L)
+    if knot:
+        bun(p, f)
+    for sgn, lock in locks:                              # the curls over the cheeks' edges, covering the ears
+        if sgn < 0 and f.tq > 0.6:
+            continue
+        p.poly(curve(f.pts(lock), 2), BR_HAIR, None)
+        p.line(curve(f.pts(lock[:-3]), 2), INK, 2.4)              # inked on the face side only
+        _texture(p, f, lock, 5, 11 + sgn, 0.14)
+    p.poly(curve(f.pts(cap), 2), BR_HAIR, INK, 2.4)
+    _top_strokes(p, f, L, knot)
+    if sp.get('shades'):
+        shades(p, f, L, lowered=sp['shades'] == 'lowered')
+    return fx
+
+
+# ---------------------------------------------------------------------------------------------- Brand turned
+BRAND_PROFILE = TH.TEMPLATE
+
+
+def _brand_mood(sp, f):
+    look = look_of(sp)
+    st = dict(lid=sp.get('lid4', look['lid']), look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s),
+              squint=sp.get('squint', look['squint']), closed=sp.get('blink', False),
+              gaze_dy=sp.get('gaze_dy', look.get('gaze_dy', 0.0)))
+    return st, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0)
+
+
+def _brand_rest(p, f, L, sp, fx, my):
+    look = look_of(sp)
+    if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
+        P4.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), mouth='rest'), BR_LIP, (fx, my - 6))
+    else:
+        brand_mouth(p, f, L, look['mouth'])
+
+
+def _scr(f, psi, v):
+    x, z = f.ring(psi, v)
+    X, _ = f.view(x, z)
+    return f.cx + float(X) * TH.H, f.top + v * TH.H
+
+
+def _turned_long(p, f):
+    """His curls from the side and behind: hanging from the back of the skull, over the ear and the nape, down past
+    the shoulders (v 1.9); from three-quarter front a strip also shows past the far cheek."""
+    H = TH.H
+    yaw = round(math.degrees(f.th))
+    sil = TH.silhouette(f, 0.1)
+    near = {round(v, 2): x for x, y, v, part in sil if part == 'near'}
+    far = {round(v, 2): x for x, y, v, part in sil if part == 'far'}
+    vs = sorted(near)
+    top_v = vs[0]
+    wv = lambda pts, sd: waves(pts, 7, 70, out=-1.0, seed=sd, step=5)
+    back = [(near[v] - H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
+    bx = back[-1][0]
+    back += [(bx - H * 0.08, f.top + 1.3 * H), (bx - H * 0.02, f.top + 1.85 * H)]
+    if yaw >= 180:
+        front = [(far[v] + H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
+        fx_ = front[-1][0]
+        front += [(fx_ + H * 0.08, f.top + 1.3 * H), (fx_ + H * 0.02, f.top + 1.85 * H)]
+        poly = wv(back, 31) + [(bx + H * 0.1, f.top + 1.92 * H), (fx_ - H * 0.1, f.top + 1.9 * H)] + wv(front, 32)[::-1]
+    else:
+        ex, ey = _scr(f, -91, 0.42)
+        reach = {45: 0.02, 90: 0.1, 135: 0.25}.get(yaw, 0.1) * H       # the hair in front of the ear (over it)
+        inner = [(ex + reach + H * 0.02, f.top + 1.85 * H), (ex + reach, f.top + 1.1 * H), (ex + reach, ey),
+                 (ex + reach * 0.6, f.top + 0.05 * H)]
+        poly = wv(back, 31) + [(bx + H * 0.06, f.top + 1.92 * H)] + inner
+    p.poly(curve(poly, 2), BR_HAIR, INK, 2.4)
+
+
+def _brand_turned_hair(img, p, f, L, sp):
+    knot = sp.get('hair') == 'brand_knot'
+    cap, mass, locks = brand_hair(L, knot)
+    if not knot:
+        _turned_long(p, f)
+    polys = [f.pts(TH.dense(curve(cap, 2)))]
+    mask = TH.hair(img, p, f, polys, BR_HAIR, BRAND_PROFILE)
+    TH.clipped(img, p, mask, lambda pen: _top_strokes(pen, f, L, knot))
+    if knot:
+        bun(p, f)
+    if sp.get('shades') and math.degrees(f.th) < 100:
+        shades(p, f, L, lowered=sp['shades'] == 'lowered')
+
+
+TH.register(TH.Person(
+    'brand', lambda sp: P4.layout(P4.target('brand', sp.get('average', False))), -0.42, 0.4,
+    lambda L: BRAND_PROFILE, BR_SKIN, BR_IRIS, BR_BROW, BR_LIP, _brand_mood, _brand_rest, _brand_turned_hair,
+    face=lambda pen, f, L, sp: brand_beard(pen, f, L, BR_SKIN), sheet=lambda: BRAND))
+
+
+# ---------------------------------------------------------------------------------------------- torsos
+def brand_torso(img, p, sp, t):
+    """trial: the open white shirt's deep V, chest hair, crucifixes on chains, the long white scarf hanging both
+    sides; stand: a small crucifix only; prison: the tracksuit's zip and collar."""
+    look = sp.get('look_', 'trial')
+    if look == 'prison':
+        p.poly([(-34, -4), (34, -4), (40, 26), (-40, 26)], TRACK, INK, 2.2)          # the tracksuit's collar
+        p.line([(0, 22), (0, 560)], dk(TRACK, 0.7), 2.4)                          # the zip
+        p.poly([(-5, 30), (5, 30), (5, 50), (-5, 50)], (180, 180, 184), INK, 1.2)
+        return
+    p.poly([(-22, 40), (22, 40), (0, 120)], BR_SKIN, None)                       # the open shirt, deeper
+    p.line([(-22, 40), (0, 120), (22, 40)], INK, 2.0)
+    for k in range(5):
+        x = -10 + 5 * k
+        p.line([(x, 56 + 6 * (k % 2)), (x + 3, 70 + 6 * (k % 2))], dk(BR_HAIR, 1.4), 1.4)
+    p.line(curve([(-18, 4), (-8, 60), (0, 84), (8, 60), (18, 4)], 3), (190, 190, 196), 1.4)    # the chain
+    p.poly([(-3, 82), (3, 82), (3, 112), (-3, 112)], (200, 200, 206), INK, 1.0)                # the crucifix
+    p.poly([(-10, 90), (10, 90), (10, 96), (-10, 96)], (200, 200, 206), INK, 1.0)
+    if look == 'trial':
+        for sgn in (-1, 1):                                                    # the long white scarf
+            pts = [(sgn * 30, -6), (sgn * 56, 4), (sgn * 52, 200), (sgn * 58, 420), (sgn * 30, 430), (sgn * 26, 210),
+                   (sgn * 18, 40)]
+            p.poly(curve(pts, 3), SCARF, INK, 2.2)
+            p.line(curve([(sgn * 40, 30), (sgn * 38, 220), (sgn * 44, 410)], 3), dk(SCARF, 0.86), 1.6)
+            for k in range(5):
+                x = sgn * (30 + 6 * k)
+                p.line([(x, 428), (x + sgn * 1, 446)], dk(SCARF, 0.8), 1.6)
+
+
+def judge_torso(img, p, sp, t):
+    """The red robe's black-trimmed front, white bands at the throat, a black sash over the shoulder."""
+    sw = sp.get('shoulders', 160)
+    p.poly([(-40, -4), (40, -4), (32, 40), (-32, 40)], (246, 246, 246), INK, 2.0)
+    p.poly([(-12, 30), (-2, 30), (-4, 96), (-14, 96)], (250, 250, 250), INK, 1.6)              # the bands
+    p.poly([(2, 30), (12, 30), (14, 96), (4, 96)], (250, 250, 250), INK, 1.6)
+    for sgn in (-1, 1):                                                                       # fur-trimmed front
+        p.poly([(sgn * 30, 30), (sgn * 52, 34), (sgn * 30, 560), (sgn * 12, 560)], (238, 232, 222), INK, 2.0)
+    p.poly([(-sw * 0.9, 20), (-sw * 0.6, 4), (sw * 0.2, 300), (sw * 0.1, 340)], (24, 22, 24), INK, 2.0)  # the sash
+
+
+def officer_torso(img, p, sp, t):
+    """HMPPS officer: white shirt, black tie, black epaulettes, a black belt with a key chain."""
+    sw = sp.get('shoulders', 160)
+    for sgn in (-1, 1):                                                                       # the shirt collar
+        p.poly([(sgn * 6, 4), (sgn * 40, -6), (sgn * 34, 26), (sgn * 12, 30)], (250, 250, 250), INK, 1.8)
+    p.poly([(-10, 10), (10, 10), (14, 300), (0, 330), (-14, 300)], (20, 20, 24), INK, 1.6)      # the tie
+    p.line([(0, 330), (0, 470)], (200, 200, 204), 1.6)                                          # the placket
+    for sgn in (-1, 1):
+        p.poly([(sgn * sw * 0.35, 10), (sgn * sw * 0.85, 26), (sgn * sw * 0.85, 46), (sgn * sw * 0.35, 30)],
+               (20, 20, 24), INK, 1.6)
+    p.poly([(-sw * 0.98, 466), (sw * 0.98, 466), (sw * 0.98, 496), (-sw * 0.98, 496)], (20, 20, 24), INK, 1.6)
+    p.line(curve([(sw * 0.5, 500), (sw * 0.58, 560), (sw * 0.66, 520)], 3), (190, 190, 196), 2.4)
+    p.ell(sw * 0.62, 566, 9, 9, None, (190, 190, 196), 2.4)
+    p.poly([(-sw * 0.62, 96), (-sw * 0.32, 96), (-sw * 0.32, 130), (-sw * 0.62, 130)], (240, 240, 240), INK, 1.2)  # badge
+
+
+def judge_head(img, p, sp, t, hx, hy):
+    """The library's head (bald under the wig) with a short white bench wig: rows of rolled curls over the crown,
+    a roll over each ear (the courtroom sketches 05, 07, 11)."""
+    fx = TC._head(img, p, sp, t, hx, hy)
+    hw, hh = sp.get('hw', 70), sp.get('hh', 90)
+    W, Wd = (240, 238, 230), (196, 192, 182)
+    cap = curve([(hx - hw - 8, hy + 6), (hx - hw - 10, hy - hh * 0.5), (hx - hw * 0.5, hy - hh - 14), (hx, hy - hh - 20),
+                 (hx + hw * 0.5, hy - hh - 14), (hx + hw + 10, hy - hh * 0.5), (hx + hw + 8, hy + 6),
+                 (hx + hw - 4, hy - hh * 0.45), (hx, hy - hh * 0.62), (hx - hw + 4, hy - hh * 0.45)], 3)
+    p.poly(cap, W, INK, 2.4)
+    for r, y in enumerate((hy - hh * 0.85, hy - hh * 0.68)):        # the rows of rolled curls
+        for k in range(-3, 4):
+            x = hx + k * hw * 0.28 + (hw * 0.14 if r else 0)
+            if abs(x - hx) < hw * 0.95:
+                p.line(oval(x, y, 9, 6, 10, 0.3, math.pi * 1.7), Wd, 1.6)
+    for sgn in (-1, 1):                                              # a roll over each ear
+        x = hx + sgn * (hw + 6)
+        for k in range(3):
+            p.ell(x, hy - 4 + k * 16, 12, 9, W, INK, 1.8)
+    return fx
+
+
+TC.HEADS.update(brand=brand_head, judge=judge_head)
+TC.TORSOS.update(brand=brand_torso, judge=judge_torso, officer=officer_torso)
+_hair_back = B.hair_back
+B.hair_back = hair_back
+V.LONG_HAIR['brand_long'] = 280          # his curls in the side and back views
+
+# ---------------------------------------------------------------------------------------------- the people
+BRAND = dict(who='brand', name='Russell Brand', skin=BR_SKIN, hw=66, hh=96, head_dy=10, hair='brand_long',
+             hair_c=BR_HAIR, brow_c=BR_BROW, brow_w=4.6, beard='full', beard_c=BD_MID, outfit='suit',
+             jacket=GREY_JKT, sleeve=GREY_JKT, trousers=dk(GREY_JKT, 0.7), shirt=(248, 248, 246), tie=None,
+             shoe=(22, 18, 16), shoulders=150, full=True, pose='custom', height=1.83, seed=91, look_='trial')
+BRAND_STAND = dict(BRAND, jacket=DARK_SUIT, sleeve=DARK_SUIT, trousers=DARK_SUIT, look_='stand')
+BRAND_DOCK = dict(BRAND_STAND, hair='brand_knot', jacket=GREY_JKT, sleeve=GREY_JKT)
+BRAND_PRISON = dict(BRAND, hair='brand_knot', outfit='jumper', jacket=TRACK, sleeve=TRACK, trousers=TRACK,
+                    shoe=(236, 236, 236), look_='prison')
+JUDGE = dict(who='judge', name='The judge (invented)', skin=(236, 190, 168), hw=70, hh=90, head_dy=10, hair='bald',
+             hair_c=(240, 238, 230), brow_c=(150, 140, 132), brow_w=4.4, outfit='suit', jacket=(170, 26, 34),
+             sleeve=(170, 26, 34), trousers=(170, 26, 34), shirt=(246, 246, 246), tie=None, shoe=(20, 16, 14),
+             shoulders=164, full=True, pose='custom', height=1.72, seed=92, glasses=True)
+OFFICER = dict(who='officer', name='Prison officer', skin=(150, 100, 70), hw=70, hh=90, head_dy=10, hair='crop',
+               hair_c=(30, 26, 24), brow_c=(30, 26, 24), brow_w=4.6, outfit='jumper', jacket=(244, 244, 246),
+               sleeve=(244, 244, 246), trousers=(24, 24, 28), shirt=(244, 244, 246), tie=(20, 20, 24), bottom=500,
+               shoe=(16, 14, 14), shoulders=168, full=True, pose='custom', height=1.80, seed=93)
+NEWSREADER = dict(who='newsreader', name='Newsreader', skin=(226, 182, 156), hw=64, hh=88, head_dy=10, hair='side',
+                  hair_c=(150, 108, 66), brow_c=(110, 80, 56), brow_w=3.8, outfit='suit', jacket=(28, 34, 60),
+                  sleeve=(28, 34, 60), trousers=(28, 34, 60), shirt=(246, 246, 248), tie=(170, 24, 36),
+                  shoe=(18, 16, 14), shoulders=146, full=True, pose='custom', height=1.76, seed=94)
+CAST = {'brand': BRAND, 'judge': JUDGE, 'officer': OFFICER, 'newsreader': NEWSREADER}
+LOOKS = {'trial': BRAND, 'stand': BRAND_STAND, 'dock': BRAND_DOCK, 'prison': BRAND_PRISON}
+
+
+# ---------------------------------------------------------------------------------------------- the sheets
+def _font(n):
+    return ImageFont.truetype(FONT, n)
+
+
+def sheet(out):
+    """Front, side, back of everyone at true heights (Brand in his three looks), a 1.75 m person."""
+    import landmarks
+    import sizes
+    MC.CAST.clear()
+    MC.CAST.update(CAST)
+    B.SS = 1
+    rows = [('Russell Brand: trial (arrival, gates)', BRAND), ('Brand: dock (sentencing)', BRAND_DOCK),
+            ('Brand: prison', BRAND_PRISON), ('The judge (invented)', JUDGE), ('Prison officer', OFFICER),
+            ('Newsreader', NEWSREADER)]
+    tw, th = 330, 470
+    W, H = 60 + tw * 6, 90 + th * 3
+    img = Image.new('RGBA', (W, H), (232, 228, 222, 255))
+    d = ImageDraw.Draw(img)
+    d.text((30, 20), 'BLESSED: the cast (front, side, back)', font=_font(40), fill=(30, 30, 30))
+    cam = B.Cam(1.0, 540, 960)
+    for r, (label, sp) in enumerate(rows):
+        s = 0.5 * sp['height'] / 1.75
+        col, row = (r % 2) * 3, r // 2
+        x0, y0 = 30 + col * tw, 80 + row * th
+        d.text((x0 + 4, y0), f"{label} ({sp['height']:.2f} m)", font=_font(24), fill=(30, 30, 30))
+        for i, yaw in enumerate((0, 90, 180)):
+            tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
+            V.person(tile, cam, 540, 840 - 928 * s, s, dict(sp), 0.0, yaw)
+            tile = tile.crop((290, 60, 790, 880))
+            tile.thumbnail((tw, th - 40))
+            img.alpha_composite(tile, (x0 + i * tw // 1 if False else x0 + i * tw, y0 + 34))
+    img.convert('RGB').save(out, quality=88)
+    return out
+
+
+FACES = [('trial', 'showman', None, 'showman'), ('trial', 'showman', 'lowered', 'shades lowered'),
+         ('trial', 'neutral', 'on', 'shades on'), ('stand', 'oath', None, 'the oath'),
+         ('dock', 'hollow', None, 'sentenced'), ('prison', 'numb', None, 'numb'),
+         ('prison', 'weeping', None, 'weeping'), ('prison', 'dejected', None, 'on the phone'),
+         ('prison', 'amazed', None, 'amazed'), ('trial', 'overjoyed', None, 'overjoyed'),
+         ('trial', 'neutral', None, 'neutral'), ('trial', 'neutral', None, 'talking')]
+
+
+def faces_sheet(out):
+    """His face large in every mood and look; his photos beside (rule 76)."""
+    B.SS = 1
+    tw, th = 360, 470
+    img = Image.new('RGBA', (tw * 6 + 20, th * 3 + 20), (232, 228, 222, 255))
+    d = ImageDraw.Draw(img)
+    cam = B.Cam(1.0, 540, 960)
+    for i, (lk, mood, sh, label) in enumerate(FACES):
+        sp = dict(LOOKS[lk], mood=mood, shades=sh, mouth='v:AI' if label == 'talking' else 'rest')
+        tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
+        V.person(tile, cam, 540, 900, 1.3, sp, 0.0, 0)
+        tile = tile.crop((300, 400, 780, 1030))
+        tile.thumbnail((tw - 10, th - 40))
+        x, y = 10 + (i % 6) * tw, 10 + (i // 6) * th
+        img.alpha_composite(tile, (x, y))
+        d.text((x + tw // 2, y + th - 24), label, font=_font(26), fill=(40, 40, 40), anchor='mm')
+    ref = os.path.join(HERE, '..', 'references', 'blessed', 'likeness')
+    for i, n in enumerate(('b01-front-courthousenews', 'b03-front-bbc', 'b05-smiling-wikimedia',
+                           'b07-sunglasses-front-guardian', 'b08-topknot-sketch-guardian', 'b02-front-eyesdown-guardian')):
+        im = Image.open(os.path.join(ref, n + '.jpg')).convert('RGBA')
+        im.thumbnail((tw - 10, th - 20))
+        img.alpha_composite(im, (10 + i * tw + (tw - 10 - im.width) // 2, 10 + 2 * th + (th - 20 - im.height) // 2))
+    img.convert('RGB').save(out, quality=88)
+    return out
+
+
+def turn_sheet(out, moods=('neutral', 'showman', 'hollow')):
+    B.SS = 1
+    yaws = (0, 45, 90, 135, 180)
+    tw, th = 330, 420
+    img = Image.new('RGB', (tw * 5, 50 + th * len(moods)), (232, 228, 222))
+    d = ImageDraw.Draw(img)
+    for i, lab in enumerate(('front', 'three-quarter', 'side', 'three-quarter behind', 'behind')):
+        d.text((tw * i + tw // 2, 25), lab, font=_font(26), fill=(40, 40, 40), anchor='mm')
+    for r, mood in enumerate(moods):
+        for i, yaw in enumerate(yaws):
+            im = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
+            sp = dict(BRAND_DOCK if mood == 'hollow' else BRAND, mood=mood)
+            V.person(im, B.Cam(1.0, 540, 960), 540, 1060, 1.25, sp, 0.0, yaw)
+            img.paste(im.crop((375, 600, 705, 1020)).resize((tw, th)).convert('RGB'), (tw * i, 50 + th * r))
+        d.text((8, 58 + th * r), mood, font=_font(26), fill=(40, 40, 40))
+    img.save(out, quality=90)
+    return out
+
+
+def head_png(who, out, average=False):
+    B.SS = 1
+    im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+    V.person(im, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(CAST[who], average=average), 0.0, 0)
+    im.crop((180, 300, 900, 1250)).convert('RGB').save(out)
+    return out
+
+
+cast_sheet = sheet
+
+if __name__ == '__main__':
+    if sys.argv[1] == 'sheet':
+        print(sheet(sys.argv[2]))
+    elif sys.argv[1] == 'faces':
+        print(faces_sheet(sys.argv[2]))
+    elif sys.argv[1] == 'turn':
+        print(turn_sheet(sys.argv[2]))
+    elif sys.argv[1] == 'head':
+        print(head_png(sys.argv[2], sys.argv[3], '--average' in sys.argv))
