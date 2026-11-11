@@ -21,6 +21,9 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Read: `guides/figure-rig.md` 2-4, 5c (people); `guides/satire.md` Movement, One set one plan; `guides/pose-gallery.md`
   only the rows the film uses; `guides/critique-checklist.md` (what the critique will ask).
 - Bite: 41, 89, 3, 28, 61, 83. Tools: `critique.py pack/record`, `posegallery.py`, `compare.py`, `codemap.py`.
+- Critique: ONE pack per stage (`"stage"` in the spec), two hunts, then `critique.py fixed`; a third is refused.
+  A Glimpse (rule 24) is the exception to "drawn alone": one view, one pose, no sheet of its own; its panel is its
+  shot's frame at phone size plus one 2x crop, marked `"glimpse": true`.
 - At the end: each new thing that passed the critique gets a row in the catalogue's "Passed the critique".
 
 ## Notes round (Opus, medium): Sam's notes, fixes, clips

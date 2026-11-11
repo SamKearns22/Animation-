@@ -649,6 +649,73 @@ def critique_record():
 
 
 @test
+def critique_each_fault_once():
+    """Rule 89 (Sam, 11 Nov): the helper lists each fault ONCE with its panels; the old per-panel form still reads, merged."""
+    import json, tempfile, time
+    import critique as C
+    spec = {'round': 1, 'stage': 'cast', 'panels': [{'img': 'x', 'is': 'a man', 'parts': 'P', 'refs': ['r']}] * 3}
+    ids = C.applies(spec['panels'][0])
+    rest = ' '.join(i for i in ids if i not in ('A2', 'P2'))
+    old = ''.join(f"## Panel {n}\nok: {rest}{'' if n == 3 else ' P2'}\nFAULT A2: cap - no beads\n"
+                  + ('FAULT P2: arms - stiff\n' if n == 3 else '') for n in (1, 2, 3)) \
+        + '## Cold look\nfine\n## Same fault elsewhere\n- No beads: 1-3.\n- Stiff arms: 3 only.\n'
+    new = "## Faults\nFAULT A2 [1-3]: cap - no beads\nFAULT P2 [3]: arms - stiff\n## Checked\n1-3\n## Cold look\nfine\n"
+    half = new.replace('1-3\n## Cold', '1-2\n## Cold')
+    d = tempfile.mkdtemp(prefix='kt-crit-r1-p1')
+    json.dump(spec, open(d + '.spec.json', 'w'))
+    why = {}
+    for name, body in (('new', new), ('half', half), ('old', old)):
+        open(os.path.join(d, 'look.md'), 'w').write('1: a man\n2: a man\n3: a man\n'); time.sleep(0.05)
+        open(os.path.join(d, 'result.md'), 'w').write(body)
+        why[name] = C.check_answer(d)[0]
+    po, pn = C.parse(old), C.parse(new)
+    once = lambda r: sorted((f['lids'][0], tuple(f['panels'])) for f in r['faults'])
+    step2 = C.STEP2.format(opening='', checks='c', n=3, extra='', notes_part='')
+    ok = (once(po) == once(pn) == [('A2', (1, 2, 3)), ('P2', (3,))] and not why['new'] and not why['old']
+          and bool(why['half']) and '## Faults' in step2 and 'Same fault elsewhere' not in step2
+          and len(new.split()) < 0.6 * len(old.split()))
+    return ok, (f"old form {len(old.split())} words, 4 fault lines; new form {len(new.split())} words, 2 fault lines, the "
+                f"same faults; panel left unchecked: {'refused' if why['half'] else 'MISSED'}")
+
+
+@test
+def critique_two_hunts_then_sam():
+    """Rule 89 (Sam, 11 Nov): two hunts a stage, one pack each; no third; CAN'T TELL never blocks; `fixed` clears hunt 2."""
+    import json, tempfile
+    import critique as C
+    import ledger
+    tmp = tempfile.mkdtemp(prefix='kt-hunts')
+    keep = ledger.DIR, ledger.CURRENT, C.PACKS
+    ledger.DIR, ledger.CURRENT, C.PACKS = tmp, os.path.join(tmp, '.current'), os.path.join(tmp, 'packs')
+    try:
+        def add(stage, pas, hunt, faults, cant):
+            d = ledger.load('kt')
+            d.setdefault('critique', {'passes': [], 'lines': {}})['passes'].append(
+                {'round': 1, 'pass': pas, 'stage': stage, 'hunt': hunt, 'faults': faults, 'cant_tell': cant, 'open': []})
+            ledger.store(d)
+        add('sets', 1, 1, 3, 0)
+        after1 = (C.third_hunt('kt', 1, 'sets'), C.status('kt')[0])
+        add('sets', 2, 2, 2, 4)
+        third, blocked = C.third_hunt('kt', 1, 'sets'), C.status('kt')
+        other = C.third_hunt('kt', 1, 'cast')
+        C.fixed('kt', 'the bench and the lamp redrawn')
+        cleared = C.status('kt')
+        add('cast', 3, 1, 0, 5)
+        cant_only = C.status('kt')
+        os.makedirs(os.path.join(C.PACKS, 'kt'))
+        for n in (4, 5):                                         # one pack per set: the third is refused
+            json.dump({'round': 1, 'stage': 'moves'}, open(os.path.join(C.PACKS, 'kt', f'r1-p{n}.spec.json'), 'w'))
+        per_set = C.third_hunt('kt', 1, 'moves')
+    finally:
+        ledger.DIR, ledger.CURRENT, C.PACKS = keep
+    ok = (after1 == (None, False) and third and 'No third' in third and not blocked[0] and other is None
+          and cleared[0] and cant_only[0] and per_set and 'WHOLE stage' in per_set)
+    return ok, (f"hunt 2 allowed: {after1[0] is None}; hunt 3 refused: {bool(third)}; after `fixed`: "
+                f"{'gate open' if cleared[0] else 'BLOCKED'}; 5 can't tell, no fault: {'gate open' if cant_only[0] else 'BLOCKED'}; "
+                f"a third pack for one stage: {'refused' if per_set else 'ALLOWED'}")
+
+
+@test
 def critique_checklist_parts():
     """Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools."""
     import critique as C

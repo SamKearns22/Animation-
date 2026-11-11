@@ -9,10 +9,12 @@ MAP
   check_sheet ...... each panel beside its references (same height), for step 2
   before / pairs ... a notes round: frames saved before any fix; beforeafter.jpg (marked, before, after, same box)
   pack ............. writes the pack and prints the one-line Agent prompt
-  parse / record ... refuses a half answer or a look written after the result; saves into the ledger; tallies line ids
+  parse / record ... refuses a half answer or a look written after the result; saves into the ledger; tallies line ids.
+                     Each fault ONCE with every panel it is on (11 Nov: 60% of a helper's lines were repeats)
+  fixed ............ after hunt 2's faults are fixed as one list: clears the gate (no third hunt; the sheet goes to Sam)
   false_alarm ...... Claude marks a FAULT that was not one (counted per line, so Job I sees which lines cry wolf)
   where ............ every named thing per shot from draw_order(t); flags any that start or stop mid-shot (rule 56, M1)
-  status ........... the line pre-flight prints; ok only when the round's last pass is clean
+  status ........... the line pre-flight prints; ok when the round's last pass has no FAULT (CAN'T TELL never blocks)
 
     python3 source/critique.py pack FILM SPEC.json
     python3 source/critique.py record FILM PACKDIR
@@ -20,19 +22,22 @@ MAP
     python3 source/critique.py where FILM [NAME...]
     python3 source/critique.py before FILM SPEC.json
     python3 source/critique.py status FILM
+    python3 source/critique.py fixed FILM "what changed"
 
-A round: `before` (notes round, before any fix) -> fix -> `pack` -> a NEW helper with the printed prompt -> `record`
--> fix every FAULT or name it to Sam; remake the sheet so each CAN'T TELL shows -> pack again (pass 2, a new helper);
-a third pass only if pass 2 found something real; a fault surviving three goes to an options sheet (rule 87).
+A stage (cast, sets, moves, animatic, notes), rule 89: `before` (notes round, before any fix) -> fix -> ONE `pack` for
+the whole stage, never one per set or character -> a NEW helper with the printed prompt -> `record` -> fix the faults
+as one list -> pack again (hunt 2, a new helper) -> fix as one list -> `fixed`. There is no third hunt: `pack` refuses
+it; the sheet goes to Sam, and a fault he sends back twice goes to an options sheet (rule 87).
 Calibration (10 Nov, two helpers on Elder Swindon stills plus two old faults put back): both caught the mirrored
 label (O1) and the hand off its phone (P1), and neither flagged them on the clean panels. Limits: a person panel
 with no face reference always gets CAN'T TELL P4; tiny props get named loosely in the cold look.
 
-SPEC: {"round": R, "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO",
+SPEC: {"round": R, "stage": "cast", "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO",
 "refs": [PATH...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...", "line": "O3", "marked": PATH
 or null, "t": 20.1, "box": [x0,y0,x1,y1]}]}. A panel with a crop is a detail (540 px); without, a phone-size frame.
 A panel showing something built new for the film adds "new": "NAME" (and "drawn": "file.function"): a clean pass
-files it in guides/kit-catalogue.md, "Passed the critique" (library(); Job J).
+files it in guides/kit-catalogue.md, "Passed the critique" (library(); Job J). A panel of a Glimpse (rule 24) adds
+"glimpse": true: it is judged only at the size shown, and the helper is told not to ask for a closer picture.
 """
 import glob
 import importlib
@@ -229,6 +234,32 @@ def pairs(film, film_name, spec, out_dir):
 
 
 # ---- the pack ------------------------------------------------------------------------------------------------------
+def hunts(film_name, rnd, stage):
+    """(recorded passes of this round and stage, pack folders here made for it and never recorded)."""
+    import ledger
+    done = [p for p in ledger.load(film_name).get('critique', {}).get('passes', [])
+            if p['round'] == rnd and p.get('stage') == stage]
+    loose = []
+    for sp in sorted(glob.glob(os.path.join(PACKS, film_name, f'r{rnd}-p*.spec.json'))):
+        n = int(re.search(r'-p(\d+)\.spec\.json$', sp).group(1))
+        if json.load(open(sp)).get('stage') == stage and not any(p['pass'] == n for p in done):
+            loose.append(sp[:-len('.spec.json')])
+    return done, loose
+
+
+def third_hunt(film_name, rnd, stage):
+    """Rule 89 (Sam, 11 Nov): two hunts a stage, each ONE pack for the whole stage. The reason to refuse, or None."""
+    done, loose = hunts(film_name, rnd, stage)
+    if len(done) + len(loose) < 2:
+        return None
+    if len(done) >= 2:
+        return (f'critique REFUSED (rule 89): round {rnd}, {stage} has had its two hunts. No third: fix the faults as one '
+                f'list, run `critique.py fixed {film_name} "what changed"`, and the sheet goes to Sam.')
+    return (f'critique REFUSED (rule 89): round {rnd}, {stage} already has two packs (one pack holds the WHOLE stage, '
+            f'never one per set or character). Not yet recorded: {", ".join(loose)}. Record it, or delete a folder '
+            'no helper answered.')
+
+
 def _next_pass(film_name, rnd):
     done = [int(m.group(1)) for p in glob.glob(os.path.join(PACKS, film_name, f'r{rnd}-p*'))
             if (m := re.search(r'-p(\d+)$', p))]
@@ -245,6 +276,9 @@ def brief_md(film, specs, notes):
             out.append(f"   acting beat: {p['beat']}")
         if p.get('views'):
             out.append(f"   views the film uses: {', '.join(p['views'])}")
+        if p.get('glimpse'):
+            out.append('   a glimpse (on screen under 4 seconds, or small in the frame): flag only what shows at this '
+                       'size; never CAN\'T TELL for want of a closer picture')
         out.append(f"   lines to answer: {' '.join(applies(p))}")
     if notes:
         out.append('\n# The director\'s notes this round (each shown in beforeafter.jpg)\n')
@@ -269,21 +303,21 @@ STEP2 = '''# Step 2 of 2: the check
 {opening}
 
 Do not change look.md. Now read brief.md, {checks}, checklist.md{extra}.
-Write result.md, under 400 words, no praise, in exactly this form:
+Check every line listed for each panel in brief.md. Write result.md, under 300 words, no praise, in exactly this form:
 
-## Panel N        (one section for every panel, 1 to {n})
-ok: A1 A2 ...     (the line ids you confirmed on this panel)
-FAULT P3: where in the panel - what is wrong
-CAN'T TELL P5: what picture would show it
+## Faults
+FAULT P3 [2, 4-6]: where - what is wrong
+CAN'T TELL P5 [1]: what picture would show it
 
-Every line id listed for the panel in brief.md must appear once in that panel's section: on "ok:", or as FAULT or
-CAN'T TELL.
+Each fault ONCE. The brackets hold every panel it is on: when you find a fault, look for it on every other panel
+(line A3) and add those panels to its brackets; never write it again for another panel or under another heading.
+One thing wrong that breaks two lines is one fault: "FAULT A1 P2 [3]: ...". Write nothing for lines that are fine.
+
+## Checked
+1-{n}        (the panels on which you checked every line: all of them)
 
 ## Cold look
 Your look.md against brief.md (line A1): what you named wrong or missed, and why.
-
-## Same fault elsewhere
-For each FAULT: the same fault looked for on every other panel (line A3); name each panel where it is.
 {notes_part}
 ## Not on the list
 Up to 5 things the director would flag that no line covers, each with "suggested line:".
@@ -292,7 +326,7 @@ Up to 5 things the director would flag that no line covers, each with "suggested
 NOTES_PART = '''
 ## Notes
 For each of the director's notes: "Note N: fixed / not fixed; worse anywhere: ...; same fault elsewhere: ...",
-judged on beforeafter.jpg (marked, before, after) and the panels.
+judged on beforeafter.jpg (marked, before, after) and the panels. A fault already under Faults is not written again.
 '''
 
 
@@ -300,6 +334,13 @@ def pack(film_name, spec_path):
     spec = json.load(open(spec_path))
     film = importlib.import_module(film_name)
     specs, notes, rnd = spec['panels'], spec.get('notes', []), spec['round']
+    stage = spec.get('stage')
+    if not stage:
+        sys.exit('critique: the spec needs "stage": "cast", "sets", "moves", "animatic" or "notes" (rule 89: two hunts '
+                 'a stage, each ONE pack for the whole stage)')
+    why = third_hunt(film_name, rnd, stage)
+    if why:
+        sys.exit(why)
     for p in specs:
         bad = [p_ for p_ in p.get('parts', '') if p_ not in PARTS]
         if bad or ('t' not in p and 'img' not in p) or not p.get('is'):
@@ -332,34 +373,76 @@ def pack(film_name, spec_path):
 
 
 # ---- the record ----------------------------------------------------------------------------------------------------
+def _nums(text):
+    """'1, 4-6' -> [1, 4, 5, 6]"""
+    out = set()
+    for x, y in re.findall(r'(\d+)(?:\s*[-\u2013]\s*(\d+))?', text):
+        out.update(range(int(x), int(y or x) + 1))
+    return sorted(out)
+
+
+def _span(nums):
+    """[1, 2, 3, 5] -> '1-3,5'"""
+    out, nums = [], sorted(nums)
+    for n in nums:
+        if out and n == out[-1][1] + 1:
+            out[-1][1] = n
+        else:
+            out.append([n, n])
+    return ','.join(str(x) if x == y else f'{x}-{y}' for x, y in out)
+
+
+FAULT_RE = re.compile(r"^(FAULT|CAN'?T TELL|CAN\u2019T TELL)\s+((?:[APCOSM]\d+[\s,/&]*)+)(?:\[([^\]]*)\])?\s*:?\s*(.*)$",
+                      re.I)
+
+
 def parse(text):
-    """result.md -> {'panels': {n: {id: ('ok'|'FAULT'|"CAN'T TELL", words)}}, 'sections': set of headings}."""
-    panels, cur, sections = {}, None, set()
+    """result.md -> {'panels': {n: {id: ('ok'|'FAULT'|"CAN'T TELL", words)}}, 'sections': set of headings,
+    'faults': [{'kind', 'lids', 'panels', 'words'}] each fault ONCE, 'checked': the panels under "## Checked"}.
+    Reads the 11 Nov form ("## Faults", "FAULT P3 [2, 4-6]: ...") and the old one (a section per panel, "ok:" lines):
+    the old form's same words under several panels become one fault."""
+    panels, cur, sections, faults, checked, sec = {}, None, set(), [], set(), ''
     for ln in text.splitlines():
         m = re.match(r'^##\s+(.*?)\s*$', ln)
         if m:
             h = m.group(1)
             pm = re.match(r'Panel\s+(\d+)', h, re.I)
             cur = int(pm.group(1)) if pm else None
+            sec = h.lower()
             if cur is not None:
                 panels.setdefault(cur, {})
             else:
-                sections.add(h.lower())
-            continue
-        if cur is None:
+                sections.add(sec)
+                if sec.startswith('checked'):
+                    checked.update(_nums(h))
             continue
         s = ln.strip().lstrip('-* ').strip()
-        if s.lower().startswith('ok:'):
+        if sec.startswith('checked'):
+            checked.update(_nums(s.split('(')[0]))
+            continue
+        if cur is not None and s.lower().startswith('ok:'):
             for i in re.findall(r'\b([APCOSM]\d+)\b', s):
                 panels[cur].setdefault(i, ('ok', ''))
             continue
-        m = re.match(r"^(FAULT|CAN'?T TELL|CAN’T TELL)\s+((?:[APCOSM]\d+[\s,/&]*)+)\s*:?\s*(.*)$", s, re.I)
-        if m:                                    # one fault may name several lines: "FAULT A1 O3: ..."
-            kind = 'FAULT' if m.group(1).upper() == 'FAULT' else "CAN'T TELL"
-            for lid in re.findall(r'[APCOSM]\d+', m.group(2)):
-                if panels[cur].get(lid, ('ok',))[0] != 'FAULT':
-                    panels[cur][lid] = (kind, m.group(3))
-    return {'panels': panels, 'sections': sections}
+        m = FAULT_RE.match(s)
+        if not m:
+            continue
+        on = _nums(m.group(3)) if m.group(3) is not None else ([cur] if cur is not None else [])
+        if not on:
+            continue
+        kind = 'FAULT' if m.group(1).upper() == 'FAULT' else "CAN'T TELL"
+        lids, words = re.findall(r'[APCOSM]\d+', m.group(2)), m.group(4).strip()
+        for n in on:                             # one fault may name several lines: "FAULT A1 O3: ..."
+            for lid in lids:
+                if panels.setdefault(n, {}).get(lid, ('ok',))[0] != 'FAULT':
+                    panels[n][lid] = (kind, words)
+        same = next((f for f in faults if f['kind'] == kind and f['lids'] == lids
+                     and f['words'].lower() == words.lower()), None)
+        if same:
+            same['panels'] = sorted(set(same['panels']) | set(on))
+        else:
+            faults.append({'kind': kind, 'lids': lids, 'panels': on, 'words': words})
+    return {'panels': panels, 'sections': sections, 'faults': faults, 'checked': checked}
 
 
 def check_answer(pack_dir):
@@ -379,9 +462,13 @@ def check_answer(pack_dir):
         why.append(f'look.md has no line for panel(s) {miss}')
     r = parse(open(res).read())
     for i, p in enumerate(spec['panels'], 1):
+        if i in r['checked']:                    # the 11 Nov form: every line not listed as a fault is ok
+            got = r['panels'].setdefault(i, {})
+            for x in applies(p):
+                got.setdefault(x, ('ok', ''))
         got = r['panels'].get(i)
         if got is None:
-            why.append(f'result.md has no section for panel {i}')
+            why.append(f'result.md does not say panel {i} was checked (no "## Checked" line or section naming it)')
             continue
         left = [x for x in applies(p) if x not in got]
         if left:
@@ -403,11 +490,12 @@ def record(film_name, pack_dir):
             print(' -', w)
         sys.exit(1)
     spec = json.load(open(pack_dir.rstrip('/') + '.spec.json'))
-    faults = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k == 'FAULT']
     asked = {i: set(applies(p)) for i, p in enumerate(spec['panels'], 1)}
-    cant = [(i, lid, w) for i, got in sorted(r['panels'].items()) for lid, (k, w) in got.items() if k != 'ok'
-            and k != 'FAULT' and lid in asked.get(i, ())]      # a CAN'T TELL on a line not asked is dropped
+    faults = [f for f in r['faults'] if f['kind'] == 'FAULT']
+    cant = [f for f in r['faults'] if f['kind'] != 'FAULT'    # a CAN'T TELL on a line not asked is dropped
+            and any(lid in asked.get(i, ()) for i in f['panels'] for lid in f['lids'])]
     rnd, pas = spec['round'], int(re.search(r'-p(\d+)$', pack_dir.rstrip('/')).group(1))
+    stage = spec.get('stage')
     body = (f'== critique, round {rnd} pass {pas} ({date.today()}): {len(faults)} fault(s), {len(cant)} can\'t tell\n'
             + '-- look.md --\n' + open(os.path.join(pack_dir, 'look.md')).read().rstrip()
             + '\n-- result.md --\n' + open(os.path.join(pack_dir, 'result.md')).read().rstrip())
@@ -415,16 +503,20 @@ def record(film_name, pack_dir):
     d = ledger.load(film_name)
     c = d.setdefault('critique', {'passes': [], 'lines': {}})
     c['passes'] = [p for p in c['passes'] if not (p['round'] == rnd and p['pass'] == pas)]
-    c['passes'].append({'round': rnd, 'pass': pas, 'date': str(date.today()), 'faults': len(faults),
-                        'cant_tell': len(cant), 'open': [f'{i} {lid}: {w}'[:160] for i, lid, w in faults + cant]})
-    for _, lid, _ in faults:
-        c['lines'].setdefault(lid, {'faults': 0, 'false': 0})['faults'] += 1
+    one = lambda f: f"{_span(f['panels'])} {' '.join(f['lids'])}: {f['words']}"
+    c['passes'].append({'round': rnd, 'pass': pas, 'stage': stage, 'date': str(date.today()),
+                        'hunt': 1 + sum(1 for p in c['passes'] if p['round'] == rnd and p.get('stage') == stage),
+                        'faults': len(faults), 'cant_tell': len(cant), 'open': [one(f)[:160] for f in faults + cant]})
+    for f in faults:
+        for lid in f['lids']:
+            c['lines'].setdefault(lid, {'faults': 0, 'false': 0})['faults'] += 1
     ledger.store(d)
-    if not faults and not cant:
+    if not faults:
         library(film_name, spec, rnd, pas)
-    print(f'critique: round {rnd} pass {pas} recorded: {len(faults)} fault(s), {len(cant)} can\'t tell')
-    for i, lid, w in faults + cant:
-        print(f'  panel {i} {lid}: {w}')
+    print(f'critique: round {rnd} pass {pas} recorded: {len(faults)} fault(s), {len(cant)} can\'t tell '
+          '(each once; fix them as one list, draw once, look once)')
+    for f in faults + cant:
+        print(f"  {'' if f['kind'] == 'FAULT' else '(cannot tell) '}panel {one(f)}")
     return faults, cant
 
 
@@ -469,20 +561,45 @@ def false_alarm(film_name, lid, why):
     print(f'critique: {lid} false alarm noted')
 
 
-def status(film_name):
-    """(ok, line) for pre-flight: the round's last pass clean (no FAULT, no CAN'T TELL), else what is open."""
+def _last(film_name):
     import ledger
-    passes = ledger.load(film_name).get('critique', {}).get('passes', [])
+    d = ledger.load(film_name)
+    passes = d.get('critique', {}).get('passes', [])
     film, cur = ledger.current()
     rnd = cur if film == film_name else max((p['round'] for p in passes), default=None)
     mine = sorted((p for p in passes if p['round'] == rnd), key=lambda p: p['pass'])
-    if not mine:
+    return d, rnd, (mine[-1] if mine else None)
+
+
+def status(film_name):
+    """(ok, line) for pre-flight: the round's last pass has no FAULT, or it was hunt 2 and its faults are `fixed`.
+    CAN'T TELL never blocks (rule 89, Sam 11 Nov)."""
+    _, rnd, last = _last(film_name)
+    if last is None:
         return False, f'critique: round {rnd if rnd is not None else "?"}: none recorded'
-    last = mine[-1]
-    if last['faults'] + last['cant_tell'] == 0:
-        return True, f'critique: round {rnd}, pass {last["pass"]} clean'
-    return False, (f'critique: round {rnd}, pass {last["pass"]}: {last["faults"]} fault(s), '
-                   f'{last["cant_tell"]} can\'t tell open')
+    ct = f" ({last['cant_tell']} can't tell, not blocking)" if last['cant_tell'] else ''
+    if last['faults'] == 0:
+        return True, f'critique: round {rnd}, pass {last["pass"]} clean{ct}'
+    if last.get('fixed'):
+        return True, (f'critique: round {rnd}, pass {last["pass"]}: {last["faults"]} fault(s) fixed as one list '
+                      f'({last["fixed"]}); no third hunt, the sheet goes to Sam{ct}')
+    nxt = ('fix as one list, then `critique.py fixed`' if last.get('hunt', 1) >= 2
+           else 'fix as one list, then hunt 2 (one new pack)')
+    return False, f'critique: round {rnd}, pass {last["pass"]}: {last["faults"]} fault(s) open{ct}: {nxt}'
+
+
+def fixed(film_name, what):
+    """Hunt 2's faults were fixed as one list: say what changed. Hunt 1's faults are checked by hunt 2 instead."""
+    import ledger
+    d, rnd, last = _last(film_name)
+    if last is None or not last['faults']:
+        sys.exit('critique fixed: the last pass has no open fault')
+    if last.get('hunt', 1) < 2:
+        sys.exit('critique fixed: that was hunt 1; its fixes are checked by hunt 2 (one new pack for the stage)')
+    last['fixed'] = what[:200]
+    ledger.store(d)
+    ledger.append(film_name, rnd, f'critique, pass {last["pass"]}: faults fixed as one list: {what}')
+    print(status(film_name)[1])
 
 
 # ---- where (rule 56, line M1) --------------------------------------------------------------------------------------
@@ -533,6 +650,8 @@ def main():
         record(film, a[2])
     elif cmd == 'false' and len(a) == 4:
         false_alarm(film, a[2], a[3])
+    elif cmd == 'fixed' and len(a) == 3:
+        fixed(film, a[2])
     elif cmd == 'before' and len(a) == 3:
         before(film, json.load(open(a[2])))
     elif cmd == 'status':
