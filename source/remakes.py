@@ -672,22 +672,26 @@ NECK_GRIP = ((66, 1128), (236, 1122))                                 # screen: 
                                                                       # under his jaw (note 34; check: s5_contact)
 
 
-def _s5_wings(t, kx, ky, ks):
+def _s5_wings(t, kx, ky, ks, drop=0.0):
     """KG's wings in S5, his own units: up as he lands, closing on the gunman's neck and jaw before the twist
     (note 34), wrenching across on the snap, then flung open."""
     snap = t - SNAP
     fl = 70 * math.sin(t * 15.0) * (1 - ease((snap + 1.2) / 0.3))   # Fable r3 #16: hovering, the wings beat (they
     up = {'R': ((-300, -260 + fl * 0.5), (-520, -420 + fl)), 'L': ((300, -260 + fl * 0.5), (520, -420 + fl))}   # hung still)
-    tg = {'R': ((NECK_GRIP[0][0] - kx) / ks, (NECK_GRIP[0][1] - ky) / ks),
-          'L': ((NECK_GRIP[1][0] - kx) / ks, (NECK_GRIP[1][1] - ky) / ks)}
+    tg = {'R': ((NECK_GRIP[0][0] - kx) / ks, (NECK_GRIP[0][1] + drop - ky) / ks),     # note 72 (Sam's frame): the
+          'L': ((NECK_GRIP[1][0] - 40 - kx) / ks, (NECK_GRIP[1][1] + 80 + drop - ky) / ks)}   # front hand tucked
+                                                                      # under the jaw round his throat, behind the
+                                                                      # respirator (it sat on top of it), and both
+                                                                      # ride down with him as he drops
     el = {'R': (-290, 20), 'L': (60, 60)}                             # elbows out and down, reaching forward to him
     g = ease((snap + 1.15) / 0.3)                                     # note 45: on by "execution", held, the twist on "move"
     tw = ease(snap / 0.1) if snap >= 0 else 0.0                       # the wrench: one hand back, one forward
-    out = ease((snap - 0.22) / 0.3)                                   # and let go, wings flung open
+    out = ease((snap - 0.3) / 0.25)                                   # note 72: held through the twist and the
+                                                                      # first of the slump, then let go
     w = {}
     for sd, sg in (('R', -1), ('L', 1)):
         e = (_lerp(up[sd][0][0], el[sd][0], g), _lerp(up[sd][0][1], el[sd][1], g))
-        h = (_lerp(up[sd][1][0], tg[sd][0] + sg * 70 * tw, g), _lerp(up[sd][1][1], tg[sd][1] - 20 * tw, g))
+        h = (_lerp(up[sd][1][0], tg[sd][0] + sg * 30 * tw, g), _lerp(up[sd][1][1], tg[sd][1] - 10 * tw, g))
         e = (_lerp(e[0], up[sd][0][0], out), _lerp(e[1], up[sd][0][1], out))
         h = (_lerp(h[0], up[sd][1][0], out), _lerp(h[1], up[sd][1][1], out))
         w[sd] = (e, h, 'grip' if (g > 0.5 and out < 0.5) else 'spread')
@@ -761,7 +765,7 @@ def s5_edge(t):
         CR.kg(img, cam, x, y, ks, view='side', mood='glee', wings='swoop', perched=False, t=t,
               flip=-1, lean=_lerp(62, 10, ease((v - 0.45) / 0.55)), talk=_talk('kg', t))
     elif v >= 1:                                                      # landed behind him (drawn first), facing us
-        wings, held = _s5_wings(t, kx, ky, ks)
+        wings, held = _s5_wings(t, kx, ky, ks, drop)
         flare = 1 - ease((u - S5_SWOOP[1]) / 0.3)                     # the landing: a last beat of the wings, settling
         bob = 18 * math.sin(t * 15.0 - 0.8) * (1 - ease((t - SNAP + 1.2) / 0.3))   # rising and dipping on each beat
         CR.kg(img, cam, kx, ky - 26 * flare + bob, ks, view='front', mood='glee', wings=wings, perched=False, t=t,
@@ -771,7 +775,8 @@ def s5_edge(t):
     if rifle:
         _rifle_fall(*rifle)
     if wings and wings['L'][2] == 'grip':                             # his wing hands again OVER the gunman: seen
-        CR.kg_grips(img, cam, kx, ky, ks, wings)                      # closed on the neck and jaw (note 34)
+        CR.kg_grips(img, cam, kx, ky, ks, wings, sides="RL")          # the back hand over him; note 72: the front
+                                                                      # one stays tucked behind his jaw (note 34)
                                                                       # Fable r3 #40: no spark at the neck (it read
                                                                       # as a muzzle flash); the crack carries it
     if L[5]['start'] <= t:

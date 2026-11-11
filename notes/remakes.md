@@ -1,27 +1,24 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 30, 87, 89.
-- **Done (11 Nov, Opus medium):** Fable r3 part 2 (43 of 48 fixed; see the ledger) and Sam's clip notes 66-69 (clips
-  sent: the execution, the camp, "nine", the wall). `remakes.py check` clean. (The
-  Sonnet chat's sound fix stays: effects duck ~15 dB under every voice; its check sheet is out of date.)
-- **Next:** Sam looks at the 4 clips. Once they look right: Sonnet, medium: the check sheet (subtitles, Hook Text,
-  sign-off, sound; watch and listen per note 40), Sam's yes, animatic 3. Preflight's
-  syllable-count flags on lines 4, 5, 11, 13 are drawn-out takes (looked at by Sonnet).
-- **Needs Sam (pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest and flag: Y/N.
-  3 Link's ball hands and tube arms stay: Y/N. 4 the rule below: Y/N.
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
-- **Open rule requests:** note 67 (Sam: "never do that in these films"): merge into rule 72: "A turn between views
-  jumps straight to the other drawing (South Park); never a squeezed or stretched 2D swivel." Waiting for Sam's Y.
-- **For Claude:** RESLAMS/_reslam, vy in _wall_scene; _pier(hit=[(age, y)]); CLOSE_IN; G2_X 3.3, S8 cy on the
-  strike; camp to x 11 m and sky/yard to W + 900; line 6 gap 0.25.
+- **Rules that bite next:** 89, 59, 67.
+- **Done (11 Nov, Opus medium):** Fable r3 (43 of 48) and Sam's clip notes 66-74; every clip "perfect" or fixed to his
+  note. Sam: 1-4 Y (rule 72 now says a turn snaps; critique M3 fixed). `remakes.py check` clean.
+- **Next (Sonnet, medium): animatic 3, NO check sheet (Sam, 11 Nov: the clips covered it).** Pre-flight (fix or name
+  every fault), render, `finish.py` with the Hook Text and sign-off, watch and listen once (note 40), send it.
+- **Needs Sam:** his look at animatic 3.
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md` (skip the check sheet).
+- **Open rule requests:** none (rule 72 written).
+- **For Claude:** the Sonnet chat's effects ducking stays; S5 grips: _s5_wings(drop), front hand redrawn under the
+  respirator; RESLAMS; CLOSE_IN; LINEUP_Z 1.24; RS.SQUARE_PLANTER.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
 |---|------|------|
 | 71 (Sam, 11 Nov) | clip 3: the line-up 25% further out | **DONE 11 Nov** (clip sent): LINEUP_Z 1.55 to 1.24 (KG's camera unchanged) |
 | 73 (Sam, 11 Nov) | clip 3: the near flower box coloured as foreground, not hazed like the background | **DONE 11 Nov** (clip sent): drawn sharp in full colour after the haze (RS.SQUARE_PLANTER off for S10) |
-| 72 (Sam, 11 Nov) | clip 1 (see his reference): KG's right wing tucks round the soldier's neck and stays there through the twist | **WAITING: the reference did not arrive**; asked Sam to send it again. Clips 2 and 4: "perfect" |
+| 72 (Sam, 11 Nov) | clip 1 (his frame: the front grip sat on top of the respirator): KG's hand tucks round the soldier's neck and stays there through the twist | **DONE 11 Nov** (clip sent): the front hand curled under the respirator onto his throat; both hands ride the twist and the start of the drop, letting go 0.3 s after the snap. Clips 2 and 4: "perfect" |
+| 74 (Sam, 11 Nov) | answers: 1-4 Y; no check sheet needed for animatic 3 (the clips covered it) | 1 three bib spots stay; 2 R1/R2 labels stay; 3 ball hands and tube arms stay; 4 rule 72 extended (a turn snaps, never a 2D swivel). Why it came back: the snap was only ever a film note (Ad-Vanced Notice 41b) and an archived plan, never in the rulebook, and critique M3 said "no head snapping to profile", which made Fable flag the snap and me squeeze it. M3 now says the snap is right |
 | 70 (Sam, 11 Nov) | why is the kneeling man angled up off the ground as Navi hits? | **DONE 11 Nov** (clip sent): my Fable #47 recoil turned his whole body about a point above the knees, lifting them off the dirt; removed (he stays kneeling, stops firing as she hits) |
 | 66 (Sam, 11 Nov, clip 1) | remove the beat of silence after the execution move | **DONE 11 Nov** (clip sent): line 6's gap 1.0 to 0.25 s; S6 cuts in 0.1 s after "move" ends (everything after moves 0.75 s earlier) |
 | 67 (Sam, 11 Nov, clip 2) | the grenaded man's rifle and flash showed: off screen; enemy rounds steadier and closer past KG; no 2D swivel on KG's turns (jump to the other view, South Park); the grenade strike in the middle of the frame (clear of the app's buttons); no dirt kicks where nothing lands | **DONE 11 Nov** (clip sent): G2_X 3.3 (off S7); tracers every frame, at his toes and just over his head; the squeezed turn frames removed (they were my Fable #20 fix: rule 30's lesson, the reference pack already says jump); the camp painted 5 m further right so S8's pan centres him, the camera there before Navi strikes; dirt kicks and barrel sparks removed; his flash stops as he recoils |
