@@ -1,6 +1,7 @@
 remakes: final re-rendered 11 Nov (note 75 in), 1.1x, animations/remakes-vertical.mp4 sent to Sam; next: wait for "posted", then archive notes.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
+- Budget job (11 Nov): Remakes' 60% traced; 7 proposals and a 16-17% forecast in notes/budget-job.md; waiting for Sam's Y/N. Nothing changed yet.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
   Tool job (11 Nov rules for every film): built, all six pieces (captions by default, 1.1x in finish.py, Hook Text
   gate, eyes for every cast, set check in the kit, quick.py gone); kittests and remakes check clean. Open: Sam's look
