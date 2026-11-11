@@ -21,6 +21,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.21
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "d99f2680",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 5.24
   }
  ],
  "checks": {},
@@ -50,7 +60,19 @@
   {
    "name": "sets",
    "pct": 5.0,
-   "done": null
+   "done": {
+    "date": "2026-11-11",
+    "spent": 2.41
+   }
+  },
+  {
+   "name": "sets",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-11",
+    "spent": 7.65
+   },
+   "unplanned": true
   },
   {
    "name": "moves",
@@ -77,5 +99,178 @@
    "pct": 0.5,
    "done": null
   }
- ]
+ ],
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "date": "2026-11-11",
+    "faults": 37,
+    "cant_tell": 18,
+    "open": [
+     "1 A1: press hold papers",
+     "1 O3: press unreadable",
+     "1 A2: orange, not buff brick",
+     "1 S3: no canopy, trees",
+     "1 S2: doors above wall, no steps",
+     "2 A1: Brand at lectern, no witness box",
+     "2 A2: Brand tiny, not side-on",
+     "2 O3: arms lack lion, unicorn",
+     "2 S1: Brand's face tiny, turned away",
+     "2 S5: blank wall, no gallery",
+     "3 A1: gavel not read",
+     "3 O3: gavel reads as dish",
+     "3 S1: gavel tiny, hands hidden",
+     "4 O5: officers on ledge, feet dangling",
+     "4 O4: officers half Brand's size",
+     "5 A1: reads standing in lift",
+     "5 S5: no van window",
+     "6 A1: mid-cell, not led through door",
+     "6 S1: officer chopped at right",
+     "6 A2: no toilet, door barely seen",
+     "6 S3: same",
+     "7 A1: no tears; reads shouting",
+     "8 A1: no phone hood",
+     "8 O3: handset reads as mobile",
+     "8 O5: handset has no cord",
+     "8 S5: no railings: not landing",
+     "9 S1: grey wash, no TV glow",
+     "9 S5: cell's window, noticeboard reused",
+     "9 S6: same: reads as cell",
+     "10 A1: desk white, jagged, not red",
+     "10 O3: reads as torn paper",
+     "10 S1: TV small, blank wall",
+     "11 A1: gate shut; Brand stands",
+     "11 S1: head covers Brand's legs",
+     "11 O3: papers, no cameras",
+     "11 A2: narrow towers, no arch grille",
+     "11 S3: same",
+     "1 S4: camera moves",
+     "2 S3: real courtroom photo",
+     "2 S4: camera moves",
+     "3 S4: camera moves",
+     "4 S4: camera moves",
+     "5 S3: van cubicle photo",
+     "5 S4: camera moves",
+     "6 S4: camera moves",
+     "7 S4: camera moves",
+     "8 A2: landing reference",
+     "8 S3: same",
+     "8 S4: camera moves",
+     "9 A2: association-room reference",
+     "9 S3: same",
+     "9 S4: camera moves",
+     "10 S3: BBC studio still",
+     "10 S4: camera moves",
+     "11 S4: camera moves"
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "date": "2026-11-11",
+    "faults": 41,
+    "cant_tell": 1,
+    "open": [
+     "1 A2: building off-reference",
+     "1 S3: steps centred",
+     "1 O5: armless notepads",
+     "1 S5: flat ground",
+     "2 A1: lectern-like box",
+     "2 A2: braided hair",
+     "2 O3: arms dog, goat",
+     "3 O5: gavel unheld",
+     "3 O2: handle impales chest",
+     "3 O3: arms dog, goat",
+     "3 S1: gavel tiny",
+     "4 S3: twin officers",
+     "5 A1: cell-like van",
+     "5 O3: sign blob",
+     "6 A1: door shut-looking",
+     "6 S3: no toilet",
+     "7 S3: no toilet",
+     "8 A1: booth-like hood",
+     "8 S2: beside hood",
+     "8 O3: two handsets",
+     "8 O2: cord to shoulder",
+     "8 O1: signs edge-clipped",
+     "8 S1: half off-frame",
+     "9 A1: no TV light",
+     "9 O6: grey wash",
+     "9 O4: Brand oversized",
+     "9 S1: faces dimmed",
+     "9 S6: wall unlike 10",
+     "10 A1: desk white",
+     "10 O5: bracket mid-wall",
+     "10 O6: no glow",
+     "10 S5: green void",
+     "10 S6: wall unlike 9",
+     "11 A1: castle-like gatehouse",
+     "11 A2: crenellated towers",
+     "11 S3: no gate grille",
+     "11 O4: gate Brand-height",
+     "11 S2: far forward",
+     "11 O5: armless notepads",
+     "11 O2: bollard from camera",
+     "11 S5: flat ground",
+     "5 S3: van photo"
+    ]
+   }
+  ],
+  "lines": {
+   "A1": {
+    "faults": 16,
+    "false": 0
+   },
+   "O3": {
+    "faults": 10,
+    "false": 0
+   },
+   "A2": {
+    "faults": 7,
+    "false": 0
+   },
+   "S3": {
+    "faults": 8,
+    "false": 0
+   },
+   "S2": {
+    "faults": 3,
+    "false": 0
+   },
+   "S1": {
+    "faults": 9,
+    "false": 0
+   },
+   "S5": {
+    "faults": 7,
+    "false": 0
+   },
+   "O5": {
+    "faults": 6,
+    "false": 0
+   },
+   "O4": {
+    "faults": 3,
+    "false": 0
+   },
+   "S6": {
+    "faults": 3,
+    "false": 0
+   },
+   "O2": {
+    "faults": 3,
+    "false": 0
+   },
+   "O1": {
+    "faults": 1,
+    "false": 0
+   },
+   "O6": {
+    "faults": 2,
+    "false": 0
+   }
+  }
+ }
 }
