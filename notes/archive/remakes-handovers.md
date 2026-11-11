@@ -409,3 +409,13 @@
 - **For Claude:** `draw_subtitle` uses source/fonts/Montserrat-Black.ttf; `_thump(soft)`; 1.1x by hand
   (`--signoff-speed 1.136`, then ffmpeg setpts/atempo) until the tool job. Merge the main line first.
 
+
+## Where things stood (11 Nov, before notes 76-77)
+- **Rules that bite next:** 70 (1.1x on delivery), 62 (captions), 59 (checks before a final).
+- **Done (11 Nov, pm):** note 75 fixed; final re-rendered (6 min 54 s), finished, 1.1x: animations/remakes-vertical.mp4 (11.6 MB, 41.5 s) sent to Sam.
+- **Next:** wait for Sam to say it's posted, then the film's notes go to `notes/archive/`.
+- **Needs Sam:** nothing.
+- **Read:** nothing until Sam answers.
+- **Open rule requests:** none.
+- **For Claude:** finish.py already does the 1.1x (Hook Text 0.5 s, sign-off 1.6 s with its default speed): do NOT also run the ffmpeg setpts step or pass --signoff-speed (that double-sped the film to 37.9 s); only `fps=24` after. Preflight needs a folder as OUT_DIR (a file path becomes a folder and blocks the render). Named faults: 9 prop-turn lines (Malon/Saria no side view, S10); script/mouth wording (lines 4, 5, 11, 13); "you s***" 1.45 s early; captions "Uh, yeah, I think so?" 1.36 s, "I don't think I" 0.83 s, "You're gonna grow up" 1.06 s (too fast at 1.1x); critique round 3 faults/can't-tell open.
+

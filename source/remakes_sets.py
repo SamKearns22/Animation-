@@ -2145,7 +2145,7 @@ STAGE = {      # where the cast stand: (screen x, ground y, pixels per metre). K
     'forest_edge': {'gunman': (140, 2950, 1250.0)},       # pass 3: a close-up (he was small, lower left); left
                                                           # so his muzzle stays in frame
     'camp': {'kg': _camp_mark(0.0, 4.6), 'link': _camp_mark(-1.25, 5.0), 'gunman1': _camp_mark(3.0, 9.3, 4.4),
-             'gunman2': _camp_mark(1.2, 4.2), 'gunman3': _camp_mark(-0.95, 3.3)},   # note 32 (Sam): nobody behind
+             'gunman2': _camp_mark(1.2, 4.2), 'gunman3': _camp_mark(-0.85, 3.3)},   # note 32 (Sam): nobody behind
                                                                     # KG. He comes in through the gate; the lookout is
                                                                     # up in the tower, one man runs in lower left
                                                                     # (nearest the lens), one middle right, level

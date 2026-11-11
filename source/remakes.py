@@ -164,6 +164,13 @@ def shot_of(t):
     return next((s[0] for s in SHOTS if s[1] <= t < s[2]), SHOTS[-1][0])
 
 
+def _g3_off(u):
+    """How far (m) left of his mark the lower-left man is, u 0-1 through his run in. Note 77 (Sam): no slow slide
+    in past the frame edge (it read as a wipe): he sprints in from well off screen and only brakes in the last 20%."""
+    u = min(1.0, max(0.0, u))
+    return 3.0 - 2.68 * u / 0.8 if u < 0.8 else 0.32 * (1 - ((u - 0.8) / 0.2)) ** 2   # 5.6 m/s, braking 0.1 s
+
+
 def ease(u):
     u = min(1.0, max(0.0, u))
     return u * u * (3 - 2 * u)
@@ -962,8 +969,13 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             ra = math.radians(140 * k)                                # the rifle spins away
             _rifle_spin(img, cam, x - flip * 0.6 * ppm * k, y - (1.3 - 0.4 * k) * ppm, ppm, ra)
             y -= 0.0
-        _kid(img, cam, who, x, y + (1.7 * ppm * ease((t - hit - 0.1) / 0.85) if who == 'gunman3' and t >= hit else 0),
+        dst = _lay(img) if who == 'gunman1' else img                # note 76 (Sam): the lookout's boots and his
+        _kid(dst, cam, who, x, y + (1.7 * ppm * ease((t - hit - 0.1) / 0.85) if who == 'gunman3' and t >= hit else 0),
              ppm, t, j=j, yaw=90, flip=flip, rot=rot, talk=False)
+        if who == 'gunman1':                                          # body hung out under the box: nothing of him
+            top = int(cam.P(*C.p(RS.TOWER[0], RS.TOWER[1], 5.05))[1])  # below the box's top edge (the box front
+            ImageDraw.Draw(dst).rectangle([0, top, dst.size[0], dst.size[1]], fill=(0, 0, 0, 0))   # hides him there)
+            img.alpha_composite(dst)
         _hit(img, cam, x - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
              ground=y + 0.1 * ppm)                                    # note 48; Fable r3 #22: the tower man's
                                                                       # blood lands on his box, never hangs in the air
@@ -976,8 +988,12 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         d_.polygon([cam_.P(rx + c_ * px - s_ * py, ry + s_ * px + c_ * py) for px, py in pts], fill=(30, 30, 34), outline=INK)
 
     def run_in(who, u, tt):
-        """The aiming pose on running legs while he comes in (u < 1)."""
+        """The aiming pose on running legs while he comes in (u < 1); at his mark a firing stance (note 77, Sam: side
+        on, standing straight, his legs overlapped into one stiff tube): feet split front and back, knees bent."""
         j = _gun_pose()
+        j['bob'] = 45.0
+        j['footL'] = (-40.0, 890.0, 6.0 + 190)                        # the far foot forward, toward KG
+        j['footR'] = (40.0, 890.0, 6.0 - 150)                         # the near foot back, braced
         if u < 1.0:
             g = moves.gait(RC.CAST['gunman'], tt, 'run')
             for k_ in ('footL', 'footR', 'toeL', 'toeR'):
@@ -1051,7 +1067,7 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
     x, y, ppm = st['gunman3']
     if t >= G3_IN[0]:
         u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
-        x3 = x - (1 - ease(u)) * 1.5 * ppm
+        x3 = x - _g3_off(u) * ppm
         gunman('gunman3', x3, y, ppm, 1, HIT3, run_in('gunman3', u, t - G3_IN[0]), fall=-1)   # critique r3: he
                                                                       # crumples forward, into frame (he fell out of it)
         targets[1] = (x3 + 0.1 * ppm, y - 1.25 * ppm)
@@ -1405,7 +1421,7 @@ def _camp_movers(t):
     if t >= G3_IN[0]:
         g3 = RS.STAGE['camp']['gunman3']                              # his mark back in metres
         u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
-        who.append(('gunman3', (g3[0] - RS.CAMP.cx) / g3[2] - (1 - ease(u)) * 1.5, RS.CAMP.f / g3[2],
+        who.append(('gunman3', (g3[0] - RS.CAMP.cx) / g3[2] - _g3_off(u), RS.CAMP.f / g3[2],
                     CAMP_BODY['gunman3']))
     return who
 
