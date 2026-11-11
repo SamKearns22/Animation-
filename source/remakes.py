@@ -1154,11 +1154,14 @@ def s10_square(t):
     img = B.canvas((0, 0, 0))
     cam = B.Cam(LINEUP_Z, *LINEUP_C)                                  # note 49: in on the five, less square
     kcam = B.Cam(0.85, 595, 553)                                      # KG, the presenter, near the lens: a little
-    RS.town(img, cam, 'square', t)                                    # smaller and lower so the five lead
+    RS.SQUARE_PLANTER = False                                         # note 73: the near planter is foreground:
+    RS.town(img, cam, 'square', t)                                    # drawn sharp after the haze, not softened
+    RS.SQUARE_PLANTER = True                                          # with the square
     from PIL import ImageFilter                                       # Fable r3 #30: the square softened and hazed
     img = img.filter(ImageFilter.GaussianBlur(2.5 * B.SS))            # back behind the five (a stallholder seemed to
     img.alpha_composite(Image.new('RGBA', img.size, (236, 232, 222, 70)))   # stand on the Goron's shoulder; the
                                                                       # stalls crowded their heads)
+    RS._planter(B.Pen(img, cam), RS.TOWN, 1.5, 2.35, 1.6, 441)
     st = RS.STAGE['town_square']
     romance = L[11]['start'] + 0.55
     re_ = ease((t - romance) / 0.35)                                  # note 39: the line-up reacts on "ROMANCE"

@@ -20,6 +20,7 @@
 | # | note | plan |
 |---|------|------|
 | 71 (Sam, 11 Nov) | clip 3: the line-up 25% further out | **DONE 11 Nov** (clip sent): LINEUP_Z 1.55 to 1.24 (KG's camera unchanged) |
+| 73 (Sam, 11 Nov) | clip 3: the near flower box coloured as foreground, not hazed like the background | **DONE 11 Nov** (clip sent): drawn sharp in full colour after the haze (RS.SQUARE_PLANTER off for S10) |
 | 72 (Sam, 11 Nov) | clip 1 (see his reference): KG's right wing tucks round the soldier's neck and stays there through the twist | **WAITING: the reference did not arrive**; asked Sam to send it again. Clips 2 and 4: "perfect" |
 | 70 (Sam, 11 Nov) | why is the kneeling man angled up off the ground as Navi hits? | **DONE 11 Nov** (clip sent): my Fable #47 recoil turned his whole body about a point above the knees, lifting them off the dirt; removed (he stays kneeling, stops firing as she hits) |
 | 66 (Sam, 11 Nov, clip 1) | remove the beat of silence after the execution move | **DONE 11 Nov** (clip sent): line 6's gap 1.0 to 0.25 s; S6 cuts in 0.1 s after "move" ends (everything after moves 0.75 s earlier) |

@@ -1831,6 +1831,9 @@ SQUARE_HOUSES = [   # the far row (pass 2: one block repeated): x0, x1, wall top
 ]
 
 
+SQUARE_PLANTER = True
+
+
 def town_square(img, p, cam, t):
     """S10, the line-up (ref 21, 22): Castle Town square: blue sky, the hazy castle behind the rooftops, six different
     timber-framed houses with red-orange roofs, the fountain and its statue, a palm in a grass bed, the red-striped
@@ -1871,7 +1874,9 @@ def town_square(img, p, cam, t):
         tops.append(b)
     (xa, ya), (xb, yb) = tops                                           # pass 2: the near string high, pole top to top
     _bunting(p, xa, ya + 6, xb, yb + 6, 90, 14, t)
-    _planter(p, TOWN, 1.5, 2.35, 1.6, 441)                              # the near right corner (pass 2: empty)
+    if SQUARE_PLANTER:                                                  # (remakes note 73: the film draws it itself,
+        _planter(p, TOWN, 1.5, 2.35, 1.6, 441)                          # after the background haze) the near right
+                                                                        # corner (pass 2: empty)
 
 
 WALL_VIEW = dict(base=1640, ppm=560.0)         # S12, S13: the wall's foot on screen and pixels per metre there
