@@ -1,5 +1,5 @@
-- Blessed (11 Nov, build 3): the sets built (8 places, 11 cameras) and blessed.py (54 s, all 12 shots placed); sets
-  sheet sent to Sam. Next: the moves chat (Opus high). Notes: notes/blessed.md.
+- Blessed (11 Nov, moves chat 5): the moves planned shot by shot (notes/blessed.md, "The moves plan"); no code yet
+  (amber cost mark). Next: moves chat 6 (Opus high) builds them, rehearsal clips. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
