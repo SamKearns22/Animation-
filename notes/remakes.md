@@ -2,13 +2,15 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 89 (the critique gate), 59, 67.
-- **Done (11 Nov, Fable r3 part 2, Opus medium):** 26 more fixed (10-17, 20, 24, 25, 27-30, 32, 34, 36-39, 41-43,
-  46, 47; 39 in part), 43 of 48 in all; 44, 48 left (low). Four clips of the moved beats sent (forest, camp, town,
-  wall). What each did: `notes/ledger/remakes-fable-r3.md`, "Fixed" part 2. `remakes.py check` clean.
-- **Next (Sonnet, medium): the check sheet** (subtitles, Hook Text, sign-off, sound; watch and listen per note 40),
-  Sam's yes, then animatic 3 and send it.
-- **Needs Sam (questions, pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest
-  and flag (the app's top bar stops them going higher): Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N.
+- **Done (11 Nov, Sonnet):** check sheet for animatic 3 made and sent (every shot, Hook Text frame, sign-off,
+  subtitles, sound). Sound fix: the effects now duck about 15 dB under every voice (the gate blast and gunfire were
+  as loud as "Clear enemy", the grenade tail as loud as "This is"); `remakes.py check` clean. Not rendered.
+- **Next:** WAIT for Sam's clear yes to the sheet (and his answers below). Then Sonnet, medium: full pre-flight,
+  animatic 3, send. Note 59 (Fable trial) already ran: findings in `notes/ledger/remakes-fable-r3.md`.
+- **Needs Sam (pick first):** 1 KG's bib keeps three ring spots: Y/N. 2 R1/R2 labels stay over the crest and flag:
+  Y/N. 3 Link's ball hands and tube arms stay (house rule): Y/N. Plus Y/N on the sheet and animatic 3.
+- **Flagged, looked at:** preflight "script/mouth" syllable counts (lines 4, 5, 11, 13) are the check miscounting
+  drawn-out takes; "I don't think I" 0.9 s and "you s***." 0.7 s are short pieces (speech itself is fast).
 - **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
 - **Open rule requests:** none.
 - **For Claude:** CLOSE_IN (crop zoom for S4/S6/S9/S11 in picture()); KG_WALL, _wall_kg; s7_camp zoom lerp;
@@ -75,7 +77,7 @@ No likenesses (game characters, from the remake's screenshots), no 3D bodies (fl
 only (-0.5), one notes round fewer (-1.0).
 
 Rehearsal clips sent: none: Sam, 10 Nov, the week at 75%: straight to the animatic, simplest staging (holds and cuts), no rehearsals
-Composition sheet sent: 10 Nov, the check sheet (every shot) with the animatic yes
+Composition sheet sent: 10 Nov, the check sheet (every shot) with the animatic yes; 11 Nov, notes/sheets/remakes-check-sheet-3.jpg (animatic 3)
 
 ## The brief as a checklist (CLAUDE.md): every detail, ticked before the first animatic
 News story: the Ocarina of Time remake (Switch 2, out 5 Nov 2026). The joke: modern gaming tropes in the charming classic.

@@ -1519,13 +1519,22 @@ def soundtrack(stems=False):
         burst = np.tile(mg, k // len(mg) + 1)[:k].copy()
         burst[-int(0.03 * SR):] *= np.linspace(1, 0, int(0.03 * SR))
         filmkit.place(rest, burst, at=b0, sr=SR, gain=0.35)
-    filmkit.place(rest, _crack(), at=SNAP, sr=SR, gain=0.9)
+    crack = np.zeros(n)
+    filmkit.place(crack, _crack(), at=SNAP, sr=SR, gain=0.9)        # the crack lands on "move" by design: not ducked
     filmkit.place(rest, _sfx('explosion.mp3'), at=BLAST, sr=SR, gain=0.6)   # note 46: the gate blows
     k = int(0.35 * SR)                                                # note 47: his short bursts from off screen
     for b0 in np.arange(INCOMING[0], BOOM - 0.3, 0.7):
         filmkit.place(rest, mg[:k] * np.linspace(1, 0.2, k), at=float(b0), sr=SR, gain=0.16)
     filmkit.place(rest, _sfx('explosion.mp3'), at=BOOM, sr=SR, gain=0.6)
     end = int(BLACK_AT * SR)
+    # check sheet 11 Nov: the gate blast and gunfire sat as loud as "Clear enemy" and the grenade tail as loud as
+    # "This is": the effects duck about 15 dB under any voice (quick down, slower up)
+    on = np.zeros(n)
+    for ln in LINES:
+        on[int(ln['start'] * SR):int(ln['end'] * SR)] = 1.0           # the whole line, not each syllable
+    k_ = int(0.15 * SR)
+    duck = np.convolve(on, np.ones(k_) / k_, mode='same')
+    rest = rest * (1 - 0.82 * np.clip(duck, 0, 1)) + crack
     rest[end:] = 0
     mix = voice + rest
     mix, g = MA.master(mix, end)
