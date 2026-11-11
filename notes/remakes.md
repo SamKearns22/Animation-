@@ -7,13 +7,13 @@
 - **Needs Sam:** Y for the final re-render; Y/N on the checklist line (M1) for entrances.
 - **Read:** `guides/job-packs.md` "Final and posting".
 - **Open rule requests:** M1 wording (proposed in chat, 11 Nov): "things enter from outside the frame at their own speed, never slid slowly past the edge or revealed by a camera move".
-- **For Claude:** 76: gunman1 drawn on a layer cut at the box's top edge (z 5.05), so his boots and corpse never show under it. 77: _g3_off(u) (5.6 m/s from 3 m off, brakes in the last 0.1 s), used by _camp and _camp_movers; mark -0.95 to -0.85. Old For Claude notes (finish.py 1.1x, preflight OUT_DIR) in notes/archive/remakes-handovers.md: still apply.
+- **For Claude:** 76: gunman1 drawn on a layer cut at the box's top edge (z 5.05), so his boots and corpse never show under it. 77: _g3_off(u) (5.6 m/s from 3 m off, brakes in the last 0.1 s), used by _camp and _camp_movers; mark -0.95 to -0.85; run_in's stance: bob 45, feet z +190/-150. Old For Claude notes (finish.py 1.1x, preflight OUT_DIR) in notes/archive/remakes-handovers.md: still apply.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
 |---|------|------|
 | 76 (Sam, 11 Nov, final) | the tower lookout's boots (standing) and body (fallen) poke out under his box | **DONE 11 Nov** (clip sent): nothing of him drawn below the box's top edge. New kind; critique O2 covered it, missed because the sheet showed the tower small |
-| 77 (Sam, 11 Nov, final) | the lower-left man appears like a wipe, not a run in | **DONE 11 Nov** (clip sent): he crept past the frame edge as the camera pulled out; now sprints in from 3 m off screen in two frames, brakes at his mark, a little further in. New kind; M1 didn't cover speed (line proposed) |
+| 77 (Sam, 11 Nov, final) | the lower-left man appears like a wipe, not a run in | **DONE 11 Nov** (clip sent): he crept past the frame edge as the camera pulled out; now sprints in from 3 m off screen in two frames, brakes at his mark, a little further in. Sam then: "clearly not fully formed in the stills" (side on, both legs drawn as one stiff tube; I'd only checked his entrance): now a firing stance, feet split, knees bent. New kind; M1 didn't cover speed (line proposed); P7/P12-type miss: I didn't look at the figure full size (rule 48) |
 | 75 (Sam, 11 Nov) | S13: a blue banner behind Link that S12b doesn't show | **DONE 11 Nov** (clip sent): S13's wall camera was on wcx - 40 and caught the banner's right half; now centred as S12b, plain stones. The old comment's "not the banner" was never checked (rule 30) |
 | 71 (Sam, 11 Nov) | clip 3: the line-up 25% further out | **DONE 11 Nov** (clip sent): LINEUP_Z 1.55 to 1.24 (KG's camera unchanged) |
 | 73 (Sam, 11 Nov) | clip 3: the near flower box coloured as foreground, not hazed like the background | **DONE 11 Nov** (clip sent): drawn sharp in full colour after the haze (RS.SQUARE_PLANTER off for S10) |

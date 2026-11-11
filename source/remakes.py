@@ -988,8 +988,12 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         d_.polygon([cam_.P(rx + c_ * px - s_ * py, ry + s_ * px + c_ * py) for px, py in pts], fill=(30, 30, 34), outline=INK)
 
     def run_in(who, u, tt):
-        """The aiming pose on running legs while he comes in (u < 1)."""
+        """The aiming pose on running legs while he comes in (u < 1); at his mark a firing stance (note 77, Sam: side
+        on, standing straight, his legs overlapped into one stiff tube): feet split front and back, knees bent."""
         j = _gun_pose()
+        j['bob'] = 45.0
+        j['footL'] = (-40.0, 890.0, 6.0 + 190)                        # the far foot forward, toward KG
+        j['footR'] = (40.0, 890.0, 6.0 - 150)                         # the near foot back, braced
         if u < 1.0:
             g = moves.gait(RC.CAST['gunman'], tt, 'run')
             for k_ in ('footL', 'footR', 'toeL', 'toeR'):
