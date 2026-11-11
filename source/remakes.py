@@ -1167,9 +1167,11 @@ def _wall_scene(t, cam, shake=0.0):
     _, base, ppm = st['link']
     kx = st['kg'][0] + WALL_DX
     s = RS.s_for(ppm)
-    u = ease((t - S12_AT) / (SLAM - S12_AT))
-    sx = shake * 14 * math.sin(t * 60)
-    ldx = 60 * (1 - u)
+    g = ease((t - S12_AT) / GRAB)                                     # Fable r3 #9: a grab, a lift and a slam:
+    u = ease((t - S12_AT - GRAB) / (SLAM - S12_AT - GRAB))            # the wings shoot out to his collar, haul him
+    sx = shake * 14 * math.sin(t * 60)                                # up and drive him back into the pier
+    hit = t - SLAM
+    ldx = 150 * (1 - u) - (14 * math.sin(math.pi * min(1.0, hit / 0.14)) if hit >= 0 else 0.0)
     k = RC.scale_for(RC.CAST['link'], s)
     ky = base - 272 * s
     grip = [((LIFT[sd][1][0]), LIFT[sd][1][1]) for sd in 'LR']        # the two wing hands, his own units
@@ -1184,12 +1186,15 @@ def _wall_scene(t, cam, shake=0.0):
         j['foot' + sd] = (fx, fy - 14, fz + sg * 34 * kick)
         V.arm_to(j, sd, (sg * 24.0, 120.0, 120.0), 'down', 'grip')     # both hands up on the wings that hold him
     lxx, lyy = cx + ldx + sx * 0.6, base - lift * u + (cy - (base - 928 * k) + lift) * 0
+    _pier(img, cam, cx - PIER_GAP * ppm, base, ppm, hit)               # Fable r3 #2: something at his back
     _kid(img, cam, 'link', lxx, lyy, ppm, t, 'terrified', j=j, yaw=90, talk=True)
     CR.navi(img, cam, cx + 330 * s, cy - 330 * s + 14 * math.sin(t * 6), s * 1.2, t=t,   # above KG's beak, between
             heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))                              # the faces: whole in all 3 framings
     yk = ky + (1 - u) * 0
     dn = lift * (1 - u) / s                                           # the lift: his wing hands stay on the collar
-    wl = {sd: ((LIFT[sd][0][0], LIFT[sd][0][1] + dn * 0.45), (LIFT[sd][1][0], LIFT[sd][1][1] + dn), 'grip')
+    rc = 170 * (1 - g)                                                # the reach: hands from his chest to the collar
+    wl = {sd: ((LIFT[sd][0][0] - rc * 0.5, LIFT[sd][0][1] + dn * 0.45 + rc * 0.3),
+               (LIFT[sd][1][0] - rc, LIFT[sd][1][1] + dn + rc * 0.4), 'grip' if g > 0.7 else 'spread')
           for sd in 'LR'}                                             # as it rises (they crossed Link's head before)
     roll, nod = HL['kg'].at_time(t)                                   # note 57 (Job K rule): his head jabs and
     tilt = WALL_TILT + 2.6 * roll + 9 * nod                           # tilts on his own voice, held between
@@ -1201,6 +1206,29 @@ def _wall_scene(t, cam, shake=0.0):
     CR.kg(img, cam, kx + ldx + sx, yk, s, view='side', perched=False, stand=True, wings=wl, band=False,
           mood=mood, t=t, flip=-1, talk=_talk('kg', t), head_tilt=tilt)
     return img
+
+
+GRAB = 0.1                                                            # seconds the wings take to reach his collar
+PIER_GAP = 0.07                                                       # the pier's face behind Link's soles (ppm)
+
+
+def _pier(img, cam, x1, base, ppm, hit):
+    """Fable r3 #2: a stone pier jutting out of the wall at Link's back (he was held in mid-air against a flat
+    backdrop): its face at x1, from the ground up out of frame; dust bursts off it on the slam (hit s after)."""
+    p = B.Pen(img, cam)
+    w = 0.4 * ppm
+    stone, dark = (168, 164, 156), (128, 124, 118)
+    p.poly([(x1 - w, -200), (x1, -200), (x1, base + 30), (x1 - w, base + 30)], stone, INK, 2.6)
+    p.poly([(x1 - 0.14 * ppm, -200), (x1, -200), (x1, base + 30), (x1 - 0.14 * ppm, base + 30)], dark, None)
+    for k in range(14):                                               # the courses of stone
+        y = base + 30 - k * 0.32 * ppm
+        p.line([(x1 - w, y), (x1, y)], INK, 1.6)
+        xo = x1 - w * (0.45 if k % 2 else 0.75)
+        p.line([(xo, y), (xo, y - 0.32 * ppm)], INK, 1.4)
+    p.poly([(x1 - w, -200), (x1, -200), (x1, base + 30), (x1 - w, base + 30)], None, INK, 2.6)
+    if 0 <= hit < 0.5:
+        _puff(img, cam, x1 + 0.05 * ppm, base - 1.0 * ppm, hit * 0.66, 0.5 * ppm, seed=3)
+        _puff(img, cam, x1 + 0.05 * ppm, base - 0.6 * ppm, hit * 0.66, 0.4 * ppm, seed=8)
 
 
 def wall_contact():
@@ -1230,7 +1258,7 @@ def _wall_marks():
 
 def s12_wall(t):
     choices = L[14]['start'] + 1.2
-    shake = 1.0 if (choices <= t < choices + 0.8 or SLAM <= t < SLAM + 0.15) else 0.0
+    shake = 1.0 if (choices <= t < choices + 0.8 or SLAM <= t < SLAM + 0.3) else 0.0
     if shot_of(t) == 'S12b':                                          # 13b: a cut in closer for the shake, the two
         cx, cy, k, kx, ky, s = _wall_marks()                          # faces either side of the middle
         return _wall_scene(t, B.Cam(1.3, (cx + kx) / 2 + 20, cy + 150 * s), shake)
