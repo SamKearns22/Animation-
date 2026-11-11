@@ -75,16 +75,19 @@ as high as the real film's.
 | C0 read in | 0.2 | chat 1 (Opus high). The chat's own start (prompt and rules) was 0.1 of it |
 | C1 first line-up drawn | 1.2 | chat 1. Includes a 2-hour stop (the usage limit ran out at 14:57; resumed 17:07), so the whole chat was re-read once: the reload is part of the jump from 0.2. Code: `source/trial_lineup.py` (about 600 lines), drawn first time with no crash |
 | C2 own-look faults fixed | 1.4 | chat 1. One look, 9 faults, one editing pass, one redraw: Goron too wide (clipped, over Ruto); its clasped hands on the bodice read as a bust (A1, rude shape); boxy Goron arms and legs; dress too high (lace over the goatee), thin grin; Ruto's dome a small swim cap; Ruto's face read bored; Ruto's legs and feet like a mannequin's shoes; both ocarinas hidden by hands. Amber at C2: handed over |
-| C3 hunt 1 fixed | | found / real / duplicates / can't tell: |
-| C4 hunt 2 fixed, confirmed | | found / real / duplicates / can't tell: |
+| C3 hunt 1 fixed | 2.8 | chat 2 (Opus high): 0.9 by the chat's meter plus helper 1's 0.48, which the meter leaves out. Helper 1: 94,661 tokens. found 16 / real 14 / duplicates 12 / can't tell 1. Not real: Ruto's forearm fins (drawn; hands on hips put them at the hips); 'a reaction needs frames' (one still by the test's design). Fixed in one pass: Ruto's head-fin now a big hood dome sweeping back (no eye-like dot), eyes open and smug (was shut, read cringing), her hand pats the dome beside it; Zelda's brows and sideways glance unsure; Malon holds the bottle out to us in one hand; Saria's bob fuller and rounder (read as a boy); Goron a pear with shoulders, arms hanging from them, drool a small drip, its back rocks dropped (read as headphones); an automatic layout: nobody touches, margins kept, the five as big as the width allows (scale 0.47 against 0.48 before: the Goron's shoulders and Malon's arm cost the gain); the crop now holds the Goron's whole face. The pass took 5 redraws, not 1 (layout and the hidden bottle needed checking) |
+| C4 hunt 2 fixed, confirmed | 3.7 | chat 2 in all 2.27 (itself 1.35, helpers 0.48 + 0.44); chat 1 1.46. Helper 2: 92,742 tokens. found 14 / real 11 / duplicates 6 / can't tell 0. Not real: the Goron 'a blob' (the reference is one egg); the frame too small (the width rules it; the sky is for the square and the owl); 'only Saria looks at Link' (the others look at us, which is Link). Two were hunt 1 repeats (rule 30): Zelda still pleasant (why: the worry was in the brows only, too small at phone size; now a wobbly mouth and a sweat drop) and Ruto's hand not touching (why: placed beside the dome; now on it, in front of the head). Also fixed: Ruto read as a grown woman in a tube top (now a round fin bib, a short fin skirt, shorter, eyes open, chin up); her head-fin read as a bun and ponytail (the sweep the dome's own colour, joined); Malon shorter, the bottle up by her face; the Goron's shoulders lower, no notch; every face inside TikTok's safe width (x 60-900), which cost size (scale 0.44). Confirmed by my own look; no third hunt (rule 5) |
 
-## Where things stand (11 Nov, chat 1 handed over on amber at C2)
-- Rules that bite next: the test's 4 (batch fixes), 5 (two hunts, no third), 6 (measure each checkpoint).
-- Done: C0-C2. The five are built in `source/trial_lineup.py` (MAP at the top).
-- Next (Opus, high; chat 2): `python3 source/trial_lineup.py spec 1` (renders the frame and crop, writes the SPEC),
-  then `python3 source/critique.py pack trial_lineup PATH` and a NEW helper; then C3, hunt 2, C4, the end steps
-  (rule 8) and the cost breakdown (`git pull` of the main line, `python3 source/costbreak.py`, its printout under
-  "## Cost breakdown" naming each chat, in the Results commit). Add chat 2's cost to chat 1's 1.4.
+## Where things stand (11 Nov, chat 2: the trial is finished)
+- Done: C0-C4 at 3.7% of a week (chat 1 1.46; chat 2 2.27, of it the two helpers 0.92, which costwatch misses); both hunts fixed; the comparison sheet
+  (`notes/sheets/trial_lineup-compare.jpg`) sent to Sam.
+- Next: none in this trial. The budget chat reads the Results and the cost breakdown.
+- Sam's view of the sheet is open (trial against real at the shot's size).
+- For Claude: `source/trial_lineup.py` (layout() sizes the five from their widths and the safe width); draws only into
+  `source/data/trial_lineup/`.
+
+
+## Cost breakdown" naming each chat, in the Results commit). Add chat 2's cost to chat 1's 1.4.
 - Known after the redraw, not yet judged: the Goron's dress hem touches the frame's right edge in the crop.
 - For Claude: draws only into `source/data/trial_lineup/` (keep it off git); faults go in this table, not code comments.
 
@@ -104,4 +107,39 @@ eea64ed9: 41 steps, 1.46% of a week
   start-up (the app, CLAUDE.md, the first message)     0     0.00    0.04     0.00    0.04
   other tool: ReadNotifications                      1     0.00    0.00     0.00    0.01
   ALL                                                      0.32    0.64     0.51    1.46
+```
+
+Chat 2 (04a6b8d9, Opus high), at the end after C4; agent-ae is hunt 1's helper, agent-ac hunt 2's:
+```
+04a6b8d9: 70 steps, 1.35% of a week
+  kind of step                                   steps  re-read     new  written   total
+  run a tool (draw, check, critique)                27     0.22    0.09     0.24    0.56
+  shell (other)                                     16     0.12    0.09     0.08    0.29
+  look at a picture                                 12     0.10    0.05     0.07    0.23
+  read a guide                                       4     0.03    0.02     0.03    0.08
+  git (merge, commit, push)                          5     0.05    0.01     0.02    0.08
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.04     0.00    0.04
+  talk (reply or thinking, no tool)                  3     0.02    0.01     0.00    0.03
+  helper (start and result)                          2     0.01    0.00     0.01    0.02
+  other tool: SendUserFile                           1     0.01    0.00     0.00    0.01
+  ALL                                                      0.57    0.32     0.46    1.35
+agent-ac: 13 steps, 0.44% of a week
+  kind of step                                   steps  re-read     new  written   total
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.18     0.00    0.18
+  shell (other)                                      4     0.02    0.03     0.06    0.11
+  look at a picture                                  4     0.02    0.03     0.04    0.09
+  run a tool (draw, check, critique)                 3     0.02    0.01     0.01    0.04
+  other tool: SubagentHandback                       1     0.01    0.00     0.01    0.01
+  read code or search                                1     0.00    0.01     0.00    0.01
+  ALL                                                      0.06    0.25     0.13    0.44
+agent-ae: 18 steps, 0.48% of a week
+  kind of step                                   steps  re-read     new  written   total
+  start-up (the app, CLAUDE.md, the first message)     0     0.00    0.18     0.00    0.18
+  run a tool (draw, check, critique)                 6     0.03    0.03     0.08    0.14
+  shell (other)                                      4     0.02    0.02     0.05    0.09
+  look at a picture                                  6     0.03    0.02     0.01    0.05
+  other tool: SubagentHandback                       1     0.01    0.00     0.01    0.01
+  read code or search                                1     0.00    0.01     0.00    0.01
+  ALL                                                      0.08    0.26     0.14    0.48
+All 3 records (helpers included): 2.28% of a week
 ```
