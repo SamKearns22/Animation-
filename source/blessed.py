@@ -32,7 +32,7 @@ import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
 import blessed_cast as BC        # noqa: E402  Brand, the judge, the officer, the newsreader
 import blessed_sets as ST        # noqa: E402  the eight places
-import press_secretary as PS     # noqa: E402  the press pack from behind
+import press_secretary as PS     # noqa: E402,F401  (its seated reporters are no longer drawn: Sam's note 4)
 import views as V                # noqa: E402
 import moves                     # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
@@ -49,14 +49,14 @@ NAME = 'blessed'
 HAS = {'people', 'rooms', 'voices', 'props'}
 TITLE = ()                                        # no title (CLAUDE.md)
 TITLE_AT = dict(cap=116, top=310)
-INMATE = dict(skin=(196, 150, 120), hw=66, hh=88, head_dy=10, hair='short', hair_c=(40, 32, 28), outfit='jumper',
+INMATE = dict(skin=(196, 150, 120), hw=66, hh=96, head_dy=10, hair='bald', hair_c=(40, 32, 28), outfit='jumper',
               jacket=BC.TRACK, sleeve=BC.TRACK, trousers=BC.TRACK, shoe=(240, 240, 240), shoulders=156, full=True,
               pose='custom', height=1.78)
 CAST = dict(BC.CAST,
             inmate1=dict(INMATE, who='inmate1', name='Inmate 1', seed=301),
             inmate2=dict(INMATE, who='inmate2', name='Inmate 2', skin=(120, 82, 60), hair='bald', hair_c=(30, 24, 20),
                          jacket=(110, 116, 124), sleeve=(110, 116, 124), shoulders=170, height=1.84, seed=302),
-            inmate3=dict(INMATE, who='inmate3', name='Inmate 3', skin=(232, 190, 164), hair='side',
+            inmate3=dict(INMATE, who='inmate3', name='Inmate 3', skin=(232, 190, 164), hair='bald',
                          hair_c=(170, 120, 70), jacket=(150, 152, 156), sleeve=(150, 152, 156), height=1.72, seed=303))
 LINES = [   # the script word for word (brief rows 5, 6, 7, 11, 13-14, 15); Sam's takes time every line
     dict(n=1, audio='blessed-1', who='brand', text="Yeah, I'm feeling blessed, mate, super blessed."),
@@ -187,43 +187,97 @@ def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
 
 PRESS_HAIR = [(58, 44, 36), (30, 24, 22), (150, 110, 70), (170, 166, 162), (110, 70, 46), (196, 196, 192)]
 PRESS_JKT = [B.NAVY, B.CHARCOAL, (110, 40, 50), (70, 90, 120), (90, 96, 80), (150, 120, 90), (60, 60, 70)]
-PRESS_STYLE = ['short', 'bob', 'pony', 'short', 'bald', 'curly', 'long', 'short']
+PRESS_STYLE = ['short', 'bob', 'pony', 'crop', 'bald', 'curly', 'long', 'side']
+PRESS_KIT = ['tv', 'phone', 'tv', 'none', 'boom', 'pad', 'phone', 'boom']   # a TV camera in clear view at both
+PRESS_YAW = {'short': 145, 'crop': -145, 'side': 140}   # three turned three-quarter (Sam's note 4), the rest backs on
+PRESS_FACE = [dict(face_wide=0.05, jaw_wide=0.06), dict(face_wide=-0.04, chin_long=0.02), dict(), dict(jaw_wide=0.08),
+              dict(face_wide=0.06), dict(face_wide=-0.02), dict(face_wide=-0.05, jaw_wide=-0.05), dict(jaw_wide=0.03)]
+
+
+def press_sp(i, seed):
+    """Journalist i: their own build, clothes, haircut and turning head (blessed_cast.press_person)."""
+    k = (i + 2 * seed) % 8
+    style, hc = PRESS_STYLE[k], PRESS_HAIR[(i + seed) % 6]
+    if style == 'bald':
+        hc = (128, 120, 114)                         # a grey horseshoe, cropped short
+    skin = [B.PALE, B.PINK, B.OLIVE, B.BROWN][i % 4]
+    jk = PRESS_JKT[(i * 3 + seed) % 7]
+    head = BC.press_person('press%d' % k, style, skin, hc, 500 + k, PRESS_FACE[k])
+    small = style in ('bob', 'pony', 'long')
+    return dict(head, name='Journalist', skin=skin, hw=62 if small else 66, hh=96, head_dy=10, hair='bald',
+                hair_c=hc, outfit='suit', jacket=jk, sleeve=jk, trousers=B.dk(jk, 0.6) if i % 2 else (40, 40, 46),
+                shirt=(246, 246, 246), tie=None, shoe=(24, 20, 18), shoulders=138 if small else 150 + 6 * (i % 3),
+                full=True, pose='custom', height=(1.64 if small else 1.76) + 0.05 * ((i * 7 + seed) % 3), seed=600 + i,
+                kit=PRESS_KIT[(i + seed) % 8], yaw=PRESS_YAW.get(style, 180))
+
+
+def press_pose(sp, t):
+    """Their arms: the camera operator's near hand up on the camera's grip, a boom held up in front (hands hidden by
+    the body), a phone held up filming, a notebook at the chest; the rest hang at rest."""
+    j = V.standing(sp)
+    kit, sw = sp['kit'], sp['shoulders']
+    if kit == 'tv':
+        V.arm_to(j, 'R', (sw - 30, -40.0, 60.0), 'down', 'fist')
+    elif kit == 'boom':                               # both hands up on the pole, one over the other (critique 1)
+        V.arm_to(j, 'R', (70.0, -250.0, 40.0), 'out', 'fist')
+        V.arm_to(j, 'L', (40.0, -110.0, 50.0), 'in', 'fist')
+    elif kit == 'phone':                              # held up above the head, filming over the others
+        V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
+    elif kit == 'pad':
+        V.arm_to(j, 'L', (-30.0, 160.0, 150.0), 'down', 'palm')
+        V.arm_to(j, 'R', (20.0, 170.0, 160.0), 'out', 'fist')
+    sway = 4 * math.sin(t * 1.3 + sp['seed'])            # a little life: weight shifting
+    j['lean'] = 1.5 * math.sin(t * 0.9 + sp['seed'] % 5)
+    j['bob'] = 0.0 * sway
+    return j
 
 
 def press(img, cam, L, spots, t, seed=0):
-    """The press pack from behind (press_secretary.reporter: each their own build, clothes and haircut), far to
-    near, standing on the pavement at (x, d) metres through the set's Level camera."""
-    rng = np.random.default_rng(40 + seed)
-    out = []
+    """The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, far
+    to near on the pavement at (x, d) metres through the set's Level camera; the kit on top of the nearest arms."""
+    people = []
     for i, (x, d) in enumerate(spots):
-        h = 1.62 + 0.2 * rng.random()
-        X, Y = L.p(x, d, h - 0.25)                # the neck point
-        out.append((d, dict(x=X, y=Y, s=L.ppm(d) / 650.0, hair=PRESS_HAIR[(i + seed) % 6],
-                            jacket=PRESS_JKT[(i * 3 + seed) % 7], skin=[B.PALE, B.PINK, B.OLIVE, B.BROWN][i % 4],
-                            style=PRESS_STYLE[(i + 2 * seed) % 8], hand=False, side=1, up_at=0.0,
-                            seed=int(rng.integers(1e6)), empty=False, phone=False, pad=False, typing=False)))
-    for i, (d, r) in enumerate(sorted(out, key=lambda q: -q[0])):
-        kit = PRESS_KIT[(i + seed) % len(PRESS_KIT)]
-        if kit == 'boom':
-            _boom(img, cam, r, t)                          # the pole rises from hands hidden in front of him
-        PS.reporter(img, cam, r, t)
-        if kit == 'tv':
-            _tv_camera(img, cam, r)
+        X, Y = L.p(x, d)
+        people.append((d, i, (X, Y, L.ppm(d))))
+    for d, i, mark in sorted(people, key=lambda q: -q[0]):
+        sp = press_sp(i, seed)
+        kit = sp['kit']
+        s = _s(sp, mark[2])
+        neck = (mark[0], mark[1] - 928 * s)
+        r = dict(x=neck[0], y=neck[1], s=s * 1.0, seed=sp['seed'])
+        j = press_pose(sp, t)
+        if kit == 'boom':                             # the pole from his hands (drawn over it) up and forward
+            back = -1 if abs(sp['yaw']) > 90 else 1
+            r['hands'] = [(back * j['wr' + k][0], j['wr' + k][1]) for k in 'LR']
+            _boom(img, cam, r, t)
+        hy = None if abs(sp['yaw']) == 180 else math.copysign(100, sp['yaw'])   # the turned ones glance aside:
+        pts = put(img, cam, sp, mark, t, sp['yaw'], j, head_yaw=hy)               # profile, nose and all
+        if kit == 'tv':                               # on the raised hand's side (his right: our left from behind)
+            _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
+        elif kit == 'phone':
+            _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
 
 
-PRESS_KIT = ['tv', 'none', 'boom', 'none', 'tv', 'none', 'none', 'boom']
+def _phone_up(img, cam, r, pts, sg):
+    """A phone held up filming, seen from behind: its back over the hand, the screen's glow round its edge."""
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    wx, wy = pts['wrR']
+    x, y = wx + sg * 4, wy - 70                                       # just above his raised fist, clear of the hair
+    p.poly([(x - 34, y - 60), (x + 34, y - 60), (x + 34, y + 60), (x - 34, y + 60)], (30, 30, 34), INK, 2.4)
+    p.ell(x - 18, y - 42, 8, 8, (70, 70, 76), INK, 1.4)               # the lens
 
 
-def _tv_camera(img, cam, r):
+def _tv_camera(img, cam, r, sg=1):
     """A TV camera on the right shoulder, seen from behind: the body beside the head, the battery on its back,
     the carry handle, the lens hood just showing past it (O3: the press must read as press)."""
-    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s'], sg))
     p.poly([(56, -150), (250, -160), (256, -30), (60, -24)], (44, 46, 52), INK, 2.6)
     p.poly([(70, -132), (150, -136), (150, -44), (72, -40)], (24, 24, 28), INK, 1.8)         # the battery
     p.poly([(110, -186), (220, -190), (224, -160), (114, -156)], (60, 62, 68), INK, 2.0)     # the handle
     p.poly([(180, -176), (196, -176), (196, -150), (180, -150)], (60, 62, 68), None)
-    p.ell(236, -96, 28, 34, (30, 30, 34), INK, 2.0)                                          # the lens hood
+    p.poly([(40, -110), (70, -112), (72, -70), (42, -68)], (20, 20, 24), INK, 1.8)             # the eyepiece, our side
     p.ell(176, -60, 8, 8, (200, 40, 40), None)                                               # the tally light
+    #                                                 (no lens hood: from behind the lens points away, at him)
 
 
 def _boom(img, cam, r, t):
@@ -231,9 +285,13 @@ def _boom(img, cam, r, t):
     the furry grey windshield at its tip."""
     p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
     sw = 1.0 + 0.02 * math.sin(t * 1.7 + r['seed'] % 7)
-    tip = (-60 * sw, -640)
-    p.line([(30, 60), tip], (70, 72, 78), 9)
-    p.line([(30, 60), tip], INK, 1.2)
+    (ax, ay), (bx, by) = r.get('hands', [(30, 60), (-20, -100)])
+    dx, dy = bx - ax, by - ay
+    n = math.hypot(dx, dy) or 1.0
+    base = (ax - dx / n * 40, ay - dy / n * 40)                     # a little past the lower hand
+    tip = (bx + dx / n * 480 * sw, by + dy / n * 480)
+    p.line([base, tip], (70, 72, 78), 9)
+    p.line([base, tip], INK, 1.2)
     p.ell(tip[0] - 10, tip[1] - 30, 46, 82, (150, 150, 146), INK, 2.4, rot=0.2)
     for k in range(10):
         a = 2 * math.pi * k / 10
@@ -805,12 +863,12 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, st['press'], t, seed=3)
+        press(img, cam, ST.GATE, st['press'], t)   # the same pack as the arrival (Sam's answer 6)
     elif shot == 'gates2':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, seed=3)
+        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t)
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)

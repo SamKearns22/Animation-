@@ -980,7 +980,7 @@ def _mark(L, x, d):
 
 
 STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); the shots take these
-    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': [(-1.15, 2.5), (-0.45, 2.3), (0.35, 2.45), (1.1, 2.35),
+    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': [(-1.15, 2.5), (-0.45, 2.3), (-0.1, 2.45), (1.25, 2.35),
                                                            (1.7, 2.7), (-1.75, 2.8), (-0.8, 3.1), (0.95, 3.2)]},
     'court_box': {'brand': (720, 2240, 600.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
     'court_bench': {'judge': (540, 1780, 620.0)},
@@ -989,8 +989,8 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'cell': {'brand': (600, 1820, 520.0), 'officer': (1000, 1700, 480.0)},
     'cell_cot': {'brand': (230, 1700, 560.0)},
     'phone': {'brand': (690, 2500, 820.0)},
-    'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 600.0), 'inmate2': (870, 1560, 600.0),
-               'inmate3': (60, 1560, 560.0)},
+    'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 640.0), 'inmate2': (870, 1560, 640.0),
+               'inmate3': (60, 1560, 640.0)},   # one bench, one depth: the same scale as Brand (Sam's note 5)
     'gates': {'brand': _mark(GATE, 0.6, 4.6), 'press': [(-1.2, 2.3), (-0.4, 2.15), (-0.05, 2.45), (1.35, 2.25),
                                                          (1.85, 2.6), (-1.85, 2.7), (-0.9, 3.0), (1.0, 3.1)]},
 }

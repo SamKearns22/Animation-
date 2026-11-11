@@ -47,3 +47,12 @@
 - **Open rule requests:** none.
 - **For Claude:** carry on from the plan; don't re-derive it. Prison phone: `handset_pose` + `phone_cord` (near hand 'L' when facing left). Kept from the sets stage: hair loose at trial and gates, topknot from the dock on; Brand's head bigger than the inmates' (`_Big`).
 
+## Moves chat 7 (11 Nov)
+- **Rules that bite next:** 74 (acting list before animatic 1), 24 (the estimate and the stop), 89 (critique: done for moves).
+- **Done (11 Nov, moves chat 7, Opus medium):** faults 1-5 fixed (oath: raised palm on the near side by the head, Bible in the far hand on the white shirt with a pale page edge; cot: curled along the bed, head at the pillow, contact check clean; gavel: hand on the bench top from the cut, raise to y 1000; van: fists clasped in front of the knees; arrival: hand at the shades' side, nose clear). Sam's note (testimony head) fixed: the head outline folded at the left temple (notch), a hair stroke left the hair, the beard tufts became stair steps and skin flecked under the chin when he turns. `touch_faults()` in `checks()` (gavel hand, Bible, officer's grip; proved it catches a moved hand); checks clean. Stills sheet and 3 clips sent; two critique passes (one fault: the amazed mouth read as a tongue; now a round O).
+- **Next:** cast chat 8, Opus, high effort: Sam's notes 4 (press pack from behind: shoulders, collars, ears, shaped hair, arms, one turned three-quarter) and 5 (inmates: scale and head size matched to Brand, mouths, face detail); stills of arrive, gates, tvroom, push; one critique pack; `ledger.py stage blessed cast` at the end; then animatic 1 prep (acting list, check sheet), Opus medium.
+- **Needs Sam:** a look at the stills sheet and the four clips. (Sam: Y, 11 Nov, to notes 4 and 5, about 1% more; keep to it.) Photos of a van cubicle and a TV room still welcome.
+- **Read:** `guides/job-packs.md` Build (figure-rig 2-4, 5c); this section; the Notes table rows 4-5.
+- **Open rule requests:** none.
+- **For Claude:** `blessed_cast._outline` (P4.outline_uv retraced the upper-left temple; fixed for Brand only, other films untouched); beard tufts scale with |sin yaw| on TurnFace (`ta`); `COT_AT` (x, d, flip, yaw); `OATH_RAISE`/`OATH_BIBLE`/`OATH_BOOK`; `GRIP_AT` feeds the touch check. Push close-up crops the hair top late: left as is.
+

@@ -8,7 +8,7 @@ fi
 py_has() { python3 -c "import $1" >/dev/null 2>&1; }
 need=""; for m in PIL:pillow numpy:numpy imageio:imageio imageio_ffmpeg:imageio-ffmpeg numba:numba scipy:scipy \
   mediapipe:mediapipe cv2:opencv-python-headless; do py_has "${m%%:*}" || need="$need ${m#*:}"; done
-[ -n "$need" ] && timeout 150 pip install -q $need >/dev/null 2>&1
+[ -n "$need" ] && timeout 150 python3 -m pip install -q $need >/dev/null 2>&1
 # a robotic speech voice for stand-in lines in animatics before Sam records (polanski.py)
 command -v espeak-ng >/dev/null || (timeout 60 apt-get install -y -q espeak-ng >/dev/null 2>&1 || (timeout 60 apt-get update -q >/dev/null 2>&1 && timeout 60 apt-get install -y -q espeak-ng >/dev/null 2>&1))
 # likeness.py (face measuring, 31 Oct): the graphics libraries the face finder needs

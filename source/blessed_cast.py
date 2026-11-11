@@ -354,6 +354,13 @@ def brand_mouth(p, f, L, kind):
 
 
 # ---------------------------------------------------------------------------------------------- his head
+def gaze(L, g):
+    """This film's gaze_dy is a share of the eye's half-height (-1 up .. 1 down); traitors_cast.eye takes drawing units
+    (found 11 Nov, cast chat 8: -0.7 moved the pupils under a pixel, so no planned eye move showed)."""
+    eh = (L['eh'] if L else 0.0508) * P4.H / 1.8
+    return g * eh * 0.85
+
+
 def look_of(sp):
     return MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
 
@@ -411,7 +418,7 @@ def _brand_head(img, p, sp, t, hx, hy):
         return f(0.0, L['lip13'])[0]
     deep_set(p, f, L, skin)
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint']),
-                          gaze_dy=sp.get('gaze_dy', look.get('gaze_dy', 0.0))), BR_IRIS, dk(skin, 0.8), liner=2.8)
+                          gaze_dy=gaze(L, sp.get('gaze_dy', look.get('gaze_dy', 0.0)))), BR_IRIS, dk(skin, 0.8), liner=2.8)
     P4.brows(p, f, L, BR_BROW, 0.056, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
@@ -444,7 +451,7 @@ def _brand_mood(sp, f):
     look = look_of(sp)
     st = dict(lid=sp.get('lid4', look['lid']), look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s),
               squint=sp.get('squint', look['squint']), closed=sp.get('blink', False),
-              gaze_dy=sp.get('gaze_dy', look.get('gaze_dy', 0.0)))
+              gaze_dy=gaze(f.L if hasattr(f, 'L') else None, sp.get('gaze_dy', look.get('gaze_dy', 0.0))))
     return st, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0)
 
 
@@ -462,7 +469,7 @@ def _scr(f, psi, v):
     return f.cx + float(X) * TH.H, f.top + v * TH.H
 
 
-def _turned_long(p, f):
+def _turned_long(p, f, colour=None, length=1.85):
     """His curls from the side and behind: hanging from the back of the skull, over the ear and the nape, down past
     the shoulders (v 1.9); from three-quarter front a strip also shows past the far cheek."""
     H = TH.H
@@ -475,19 +482,19 @@ def _turned_long(p, f):
     wv = lambda pts, sd: waves(pts, 7, 70, out=-1.0, seed=sd, step=5)
     back = [(near[v] - H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
     bx = back[-1][0]
-    back += [(bx - H * 0.08, f.top + 1.3 * H), (bx - H * 0.02, f.top + 1.85 * H)]
+    back += [(bx - H * 0.08, f.top + 1.3 * length / 1.85 * H), (bx - H * 0.02, f.top + length * H)]
     if yaw >= 180:
         front = [(far[v] + H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
         fx_ = front[-1][0]
-        front += [(fx_ + H * 0.08, f.top + 1.3 * H), (fx_ + H * 0.02, f.top + 1.85 * H)]
-        poly = wv(back, 31) + [(bx + H * 0.1, f.top + 1.92 * H), (fx_ - H * 0.1, f.top + 1.9 * H)] + wv(front, 32)[::-1]
+        front += [(fx_ + H * 0.08, f.top + 1.3 * length / 1.85 * H), (fx_ + H * 0.02, f.top + length * H)]
+        poly = wv(back, 31) + [(bx + H * 0.1, f.top + (length + 0.07) * H), (fx_ - H * 0.1, f.top + (length + 0.05) * H)] + wv(front, 32)[::-1]
     else:
         ex, ey = _scr(f, -91, 0.42)
         reach = {45: 0.02, 90: 0.1, 135: 0.25}.get(yaw, 0.1) * H       # the hair in front of the ear (over it)
-        inner = [(ex + reach + H * 0.02, f.top + 1.85 * H), (ex + reach, f.top + 1.1 * H), (ex + reach, ey),
+        inner = [(ex + reach + H * 0.02, f.top + length * H), (ex + reach, f.top + 1.1 * H), (ex + reach, ey),
                  (ex + reach * 0.6, f.top + 0.05 * H)]
-        poly = wv(back, 31) + [(bx + H * 0.06, f.top + 1.92 * H)] + inner
-    p.poly(curve(poly, 2), BR_HAIR, INK, 2.4)
+        poly = wv(back, 31) + [(bx + H * 0.06, f.top + (length + 0.07) * H)] + inner
+    p.poly(curve(poly, 2), colour or BR_HAIR, INK, 2.4)
 
 
 def _brand_turned_hair(img, p, f, L, sp):
@@ -508,10 +515,10 @@ _th_draw = TH.draw
 
 
 def _th_draw_big(img, p, sp, t, view, hx, hy):
-    if sp.get('who') != 'brand':
+    if sp.get('who') != 'brand' and not str(sp.get('who', '')).startswith('press'):   # the press at his size too
         return _th_draw(img, p, sp, t, view, hx, hy)
-    with _Big():
-        return _th_draw(img, p, sp, t, view, hx, _lift(hy))
+    with _Big():                                  # (the press: no lift, or from behind the neck shows long)
+        return _th_draw(img, p, sp, t, view, hx, hy if sp['who'] != 'brand' else _lift(hy))
 
 
 TH.draw = _th_draw_big
@@ -519,6 +526,95 @@ TH.register(TH.Person(
     'brand', lambda sp: P4.layout(P4.target('brand', sp.get('average', False))), -0.42, 0.4,
     lambda L: BRAND_PROFILE, BR_SKIN, BR_IRIS, BR_BROW, BR_LIP, _brand_mood, _brand_rest, _brand_turned_hair,
     face=lambda pen, f, L, sp: brand_beard(pen, f, L, BR_SKIN), sheet=lambda: BRAND))
+
+
+# ---------------------------------------------------------------------------------------------- the press pack
+# Sam's note 4 (11 Nov): "the journalists are blob people". They were press_secretary's seated reporters (a back
+# outline, no arms, no legs) stood on the pavement. Now each is a standing person (views.person: shoulders, arms, a
+# collar, legs) with a turning head (turnhead, like Brand's: the skull, both ears, the neck, hair carried round the
+# head) from behind (180) or three-quarter behind (135, the cheek, jaw and an eyebrow's end showing).
+# style: front hair design; hl: hairline; the profile keys say how far down the back the hair reaches.
+PRESS_STYLES = {
+    'short': dict(hl=-0.1, prof=dict(hair_low=0.4, nape=0.66)),
+    'crop': dict(hl=-0.06, prof=dict(hair_low=0.36, nape=0.62, volume=0.015)),
+    'bald': dict(hl=None, prof=dict(hair_top=0.3, hair_top_back=0.34, hair_ragged=0.008, hair_low=0.66, nape=0.7)),
+    'bob': dict(hl=-0.12, prof=dict(hair_low=0.9, nape=0.95, volume=0.07), long=1.1),
+    'pony': dict(hl=-0.14, prof=dict(hair_low=0.44, nape=0.7, volume=0.02), pony=True),
+    'curly': dict(hl=-0.08, prof=dict(hair_low=0.5, nape=0.74, volume=0.12), curls=True),
+    'long': dict(hl=-0.14, prof=dict(hair_low=0.6, nape=0.8, volume=0.05), long=1.55),
+    'side': dict(hl=-0.08, prof=dict(hair_low=0.44, nape=0.7, volume=0.035), parting=True),
+}
+
+
+def _press_layout(sp):
+    m = dict(P4.AVG)
+    for k, v in sp.get('face_m', {}).items():
+        m[k] += v
+    return P4.layout(m)
+
+
+def _press_cap(L, hl):
+    e, c = L['fw'] * 0.5, L['fhw'] * 0.5
+    return [(-e - 0.02, 0.36), (-e - 0.03, 0.02), (-e + 0.04, -0.24), (-0.24, -0.4), (0.0, -0.45), (0.24, -0.4),
+            (e - 0.04, -0.24), (e + 0.03, 0.02), (e + 0.02, 0.36), (e - 0.03, 0.34), (c + 0.01, 0.12), (c - 0.03, 0.02),
+            (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.03, 0.34)]
+
+
+def _press_profile(sp):
+    st = PRESS_STYLES[sp['style']]
+    return lambda L: TH.fitted(L, -0.42, 1.06, **st['prof'])
+
+
+def _press_hair(img, p, f, L, sp):
+    st, hc = PRESS_STYLES[sp['style']], sp['hair_c']
+    H = TH.H
+    if st.get('long'):
+        _turned_long(p, f, hc, st['long'])
+    fronts = [] if st['hl'] is None else [f.pts(TH.dense(curve(_press_cap(L, st['hl']), 2)))]
+    prof = TH.PEOPLE[sp['who']].build(sp)[1]
+    mask = TH.hair(img, p, f, fronts, hc, prof)
+    rng = np.random.default_rng(sp.get('seed', 1))
+    yaw = math.degrees(f.th)
+    bx = f.hx + (0.0 if yaw >= 170 else -0.18 * H)            # the back of the skull on screen
+
+    def strands(pen):                                          # the hair's fall: strokes down from the crown
+        for k in range(14 if not st.get('curls') else 0):
+            u = rng.uniform(-0.42, 0.42)
+            x0, y0 = bx + u * H * 0.8, f.top - 0.36 * H + abs(u) * 0.2 * H
+            pen.line(curve([(x0, y0), (x0 + u * 18, y0 + 0.25 * H), (x0 + u * 30, y0 + 0.55 * H)], 3), dk(hc, 0.72), 1.4)
+        if st.get('curls'):                                    # curls: little loops all over
+            for k in range(40):
+                x, y = bx + rng.uniform(-0.5, 0.5) * H, f.top + rng.uniform(-0.45, 0.65) * H
+                pen.line(oval(x, y, 9, 7, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.4)
+        if st.get('parting'):
+            pen.line(curve([(bx - 0.12 * H, f.top - 0.42 * H), (bx - 0.14 * H, f.top - 0.2 * H)], 3), dk(hc, 0.55), 1.6)
+    TH.clipped(img, p, mask, strands)
+    if st.get('pony'):                                         # a ponytail from the back of the head, a band round it
+        x, y = bx, f.top + 0.36 * H
+        tail = [(x - 16, y), (x - 26, y + 60), (x - 20, y + 130), (x - 4, y + 168), (x + 12, y + 132), (x + 20, y + 62),
+                (x + 16, y)]
+        p.poly(curve(tail, 3), hc, INK, 2.2)
+        for k in range(3):
+            p.line(curve([(x - 6 + 6 * k, y + 14), (x - 10 + 7 * k, y + 80), (x - 4 + 4 * k, y + 140)], 3), dk(hc, 0.72), 1.3)
+        p.poly(oval(x, y + 6, 18, 8, 12), (40, 40, 44), INK, 1.6)
+
+
+def _press_mood(sp, f):
+    return dict(lid=0.1, look=0.3, squint=0.0, closed=False, gaze_dy=-0.2), 0.0, 0.0
+
+
+def _press_rest(p, f, L, sp, fx, my):
+    P4.lips(p, f, L, dict(sp, smile=0.0, mouth='rest'), sp.get('lip_c', (190, 120, 110)), (fx, my - 6))
+
+
+def press_person(who, style, skin, hair_c, seed, face_m):
+    """Register one journalist's turning head (built when first drawn) and return their cast entry's head part."""
+    sp = dict(who=who, style=style, hair_c=hair_c, seed=seed, face_m=face_m)
+    if who not in TH.PEOPLE:
+        TH.register(TH.Person(who, _press_layout, -0.42, 0.4, _press_profile(sp), skin, (80, 60, 44),
+                              dk(hair_c, 0.8), (190, 120, 110), _press_mood, _press_rest,
+                              lambda img, p, f, L, sp2, _sp=sp: _press_hair(img, p, f, L, dict(sp2, **_sp))))
+    return sp
 
 
 # ---------------------------------------------------------------------------------------------- torsos
@@ -599,7 +695,124 @@ def judge_head(img, p, sp, t, hx, hy):
     return fx
 
 
+# ---------------------------------------------------------------------------------------------- the inmates
+# Sam's note 5 (11 Nov): "strange heights, proportions and details next to Russell; no mouths?". The house head drew
+# no mouth or brows at this size and its 'short' hair came out bald; Brand's face is the measured layout at HEAD_K.
+# So the three inmates use his face system at his size (P4.layout from the average face, each pushed their own way),
+# with lips, brows, a nose, ears, eye bags, shaped hair and stubble or a beard. Front view only (they never turn).
+INMATE_FACES = {
+    'inmate1': dict(m=dict(face_wide=0.06, jaw_wide=0.05, eye_size=-0.012, nose_wide=0.08, brow_high=-0.15,
+                           mouth_wide=0.04, chin_long=0.02), iris=(70, 96, 120), lip=(186, 120, 106),
+                    brow=(52, 40, 32), hair='crop', stub=0.82),
+    'inmate2': dict(m=dict(face_wide=0.03, jaw_wide=0.1, nose_wide=0.2, eyes_apart=0.08, lip_low=0.03,
+                           mouth_wide=0.1, brow_slope=-4.0), iris=(52, 34, 24), lip=(110, 64, 56),
+                    brow=(28, 22, 20), hair='bald', beard=(46, 40, 38)),
+    'inmate3': dict(m=dict(face_wide=-0.05, jaw_wide=-0.04, eye_size=0.01, nose_long=0.02, mouth_wide=-0.04,
+                           chin_long=0.03, brow_slope=4.0), iris=(96, 120, 90), lip=(204, 132, 120),
+                    brow=(160, 110, 64), hair='side', freckles=True),
+}
+
+
+def _inmate_layout(who):
+    m = dict(P4.AVG)
+    for k, v in INMATE_FACES[who]['m'].items():
+        m[k] = m[k] + v
+    return P4.layout(m)
+
+
+def inmate_head(img, p, sp, t, hx, hy):
+    with _Big():
+        return _inmate_head(img, p, sp, t, hx, _lift(hy))
+
+
+def _inmate_head(img, p, sp, t, hx, hy):
+    who = sp['who']
+    fc = INMATE_FACES[who]
+    L = _inmate_layout(who)
+    up = max(0.0, -sp.get('gaze_dy', 0.0))                 # looking up at the TV: the face tips up a little
+    f = P4.Face(hx, hy, down=-0.8 * up)
+    skin, hc = sp['skin'], sp.get('hair_c', (40, 32, 28))
+    fw, fhw = L['fw'], L['fhw']
+    e, c = fw * 0.5, fhw * 0.5
+    AV._ears(p, f, L, skin)
+    p.poly(curve(f.pts(_outline(L)), 4), skin, INK, 2.6)
+    jaw = [(-e, 0.5), (-L['jw'] * 0.5, 0.82), (-0.08, 0.98), (0.0, 1.0), (0.08, 0.98), (L['jw'] * 0.5, 0.82), (e, 0.5),
+           (e * 0.7, 0.62), (L['mw'] * 0.75, L['lip17'] + 0.04), (0.0, L['lip17'] + 0.03),
+           (-L['mw'] * 0.75, L['lip17'] + 0.04), (-e * 0.7, 0.62)]
+    if fc.get('stub'):                                        # stubble: a shade over the jaw and the upper lip
+        p.poly(curve(f.pts(jaw), 3), dk(skin, fc['stub']), None)
+        p.poly(curve(f.pts([(-L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['nose_y'] + 0.01),
+                            (L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['lip0'] + 0.01)]), 3), dk(skin, fc['stub']), None)
+        rng = np.random.default_rng(len(who))
+        for _ in range(60):
+            u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.7, 0.96)
+            if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2):
+                p.poly(oval(*f(u, v), 1.6, 1.6, 6), dk(skin, fc['stub'] - 0.12), None)
+    if fc.get('beard'):                                       # a short boxed beard and a moustache
+        b = fc['beard']
+        p.poly(curve(f.pts(jaw), 3), b, INK, 1.6)
+        p.poly(curve(f.pts([(-L['mw'] * 0.72, L['lip13'] + 0.02), (-L['mw'] * 0.6, L['lip0'] - 0.01),
+                            (0.0, L['nose_y'] + 0.012), (L['mw'] * 0.6, L['lip0'] - 0.01),
+                            (L['mw'] * 0.72, L['lip13'] + 0.02), (L['mw'] * 0.5, L['lip0'] + 0.006),
+                            (0.0, L['lip0'] - 0.002), (-L['mw'] * 0.5, L['lip0'] + 0.006)]), 3), b, INK, 1.4)
+        rng = np.random.default_rng(7)
+        for _ in range(40):
+            u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.72, 0.95)
+            if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2) and abs(u) > L['mw'] * 0.6:
+                p.line([f(u, v), f(u + 0.004, v + 0.02)], (120, 116, 112), 1.4)       # flecks of grey
+    sh = dk(skin, 0.84)                                       # detail: eye bags, the smile folds, a chin dimple
+    for sgn in (-1, 1):
+        cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.6
+        p.line(curve(f.pts([(cx - w * 0.6, ey + 0.05), (cx, ey + 0.064), (cx + w * 0.7, ey + 0.046)]), 3), sh, 1.5)
+        p.line(curve(f.pts([(sgn * L['nw'] * 0.62, L['nose_y'] - 0.03), (sgn * L['mw'] * 0.7, L['lip0'] + 0.01),
+                            (sgn * L['mw'] * 0.76, L['lip13'] + 0.03)]), 3), dk(skin, 0.78), 1.6)
+    if not fc.get('beard'):
+        p.line(curve(f.pts([(-0.025, 0.93), (0.0, 0.94), (0.025, 0.93)]), 3), dk(skin, 0.8), 1.4)
+    if fc.get('freckles'):
+        rng = np.random.default_rng(31)
+        for _ in range(22):
+            sgn = 1 if rng.random() < 0.5 else -1
+            u, v = sgn * rng.uniform(L['nw'] * 0.4, L['ecx'] + 0.04), rng.uniform(L['eye_y'] + 0.08, L['nose_y'])
+            p.poly(oval(*f(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up)), fc['iris'], dk(skin, 0.8),
+            liner=2.6)
+    P4.brows(p, f, L, fc['brow'], 0.05 if fc['hair'] != 'side' else 0.04, sp.get('brow_up', 0.012 * up),
+             sp.get('frown', 0.0))
+    P4.nose(p, f, L, skin)
+    fx, my = f(0.0, L['lip13'])
+    P4.lips(p, f, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
+    hl = -0.06
+    if fc['hair'] == 'crop':                                  # a short crop: a low straight hairline, the skull's shape
+        cap = [(-e - 0.01, 0.3), (-e - 0.02, 0.04), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.43), (0.24, -0.38),
+               (e - 0.04, -0.22), (e + 0.02, 0.04), (e + 0.01, 0.3), (e - 0.02, 0.3), (c + 0.01, 0.12), (c - 0.03, 0.02),
+               (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.02, 0.3)]
+        p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
+        rng = np.random.default_rng(5)
+        for _ in range(36):                                   # the crop's texture: short strokes
+            u, v = rng.uniform(-c, c), rng.uniform(-0.36, hl - 0.03)
+            if abs(u) < c * (1.0 - max(0.0, -v - 0.25) * 2.0):
+                p.line([f(u, v), f(u + 0.008, v + 0.025)], B.lt(hc, 1.7), 1.4)
+    elif fc['hair'] == 'bald':                                # shaved: a shine on the dome, dark short sides
+        for sgn in (-1, 1):
+            side = [(sgn * (e + 0.015), 0.46), (sgn * (e + 0.02), 0.1), (sgn * (c + 0.01), -0.12),
+                    (sgn * (c - 0.04), -0.08), (sgn * (e - 0.03), 0.12), (sgn * (e - 0.02), 0.4)]
+            p.poly(curve(f.pts(side), 3), hc, INK, 1.6)
+        p.poly(oval(*f(0.1, -0.3), 18, 9, 16, -0.3), B.lt(skin, 1.3), None)
+    else:                                                     # side parting on our left, the fringe swept across
+        cap = [(-e - 0.01, 0.32), (-e - 0.025, 0.02), (-e + 0.03, -0.26), (-0.22, -0.43), (0.02, -0.47), (0.26, -0.41),
+               (e - 0.02, -0.22), (e + 0.025, 0.04), (e + 0.01, 0.32), (e - 0.025, 0.3), (c, 0.08), (c * 0.6, 0.0),
+               (0.1, -0.03), (-0.1, -0.06), (-c * 0.7, -0.1), (-c + 0.02, 0.04), (-e + 0.01, 0.34)]
+        p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
+        p.line(curve(f.pts([(-0.16, -0.42), (-0.15, -0.26), (-0.14, -0.14)]), 3), dk(hc, 0.6), 1.8)   # the parting
+        for k in range(6):                                    # strands swept from the parting to our right
+            u0 = -0.12 + 0.07 * k
+            p.line(curve(f.pts([(u0, -0.36 + 0.02 * k), (u0 + 0.08, -0.2), (u0 + 0.13, -0.04 + 0.01 * k)]), 3),
+                   dk(hc, 0.72), 1.4)
+    return fx
+
+
 TC.HEADS.update(brand=brand_head, judge=judge_head)
+TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head)
 TC.TORSOS.update(brand=brand_torso, judge=judge_torso, officer=officer_torso)
 _hair_back = B.hair_back
 B.hair_back = hair_back

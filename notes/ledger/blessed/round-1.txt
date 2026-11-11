@@ -197,3 +197,79 @@ Notepads 1, 11. Arms 2, 3. Floors 1, 11. Toilet 6, 7. Scale 9, 11. Intrusion 3, 
 1. Hair changes. suggested line: cast-sheet hair always.
 2. Real BBC logo. suggested line: no real brands.
 
+== critique, round 1 pass 1 (2026-11-11): 13 fault(s), 0 can't tell
+-- look.md --
+1: Brick court building, sign "CROWN COURT SOUTHWARK"; long-haired bearded man in sunglasses; crowd filming phones.
+2: Closer: sunglassed man adjusts glasses, holds rosary; boom mic; onlookers' backs, phones raised.
+3: Stone prison gatehouse; tiny man at door; cut-off sign "ON"; cameraman, onlookers, boom mic.
+4: Man arms raised triumphantly before arched door; red-jacketed and grey-haired onlookers; boom mic.
+5: Dim grey room: four men in grey uniforms line up stiffly; clock behind; blank expressions.
+6: Close: four inmates; bearded man with bun grins nervously, others glum, wary.
+7: Bearded man with bun, mouth open, eyes wide, flanked by cropped inmates; hazy.
+-- result.md --
+## Faults
+FAULT A1 O5 [1-4]: boom mics: poles end in journalists' heads; nobody holds them.
+FAULT A1 [1-2]: arrival - no TV camera; reads as fans, not press.
+FAULT P6 P1 [1-2, 4-5, 7]: every hand is a flat disc; phone hands hide the phone.
+FAULT P8 O2 [1-2]: back-view phone-holders - phone and hand drawn over the back of the hair.
+FAULT A1 S2 [5-6]: TV room - wall bar with hanging strings reads as a marionette rig; inmates look like puppets.
+FAULT P2 [5-6]: all four stare at the lens, not up at a TV; the lead bares fanged teeth, not tearful.
+FAULT S1 S5 [5-7]: flat grey haze; no blue TV glow, faces dimmed, floor a dark void.
+FAULT A1 [5]: four coloured stools, not one bench.
+FAULT P2 S1 [3]: the lead is pixel-sized in the doorway; arms flung up unreadable.
+FAULT A2 S3 [3-4]: gatehouse - reference has wide rusticated towers, deep arch, portcullis grille; ours narrow towers, plain door.
+FAULT O1 O5 [3]: sign chopped to "ON"; TV camera sliced by frame edge.
+FAULT P4 [1-2, 4]: sunglasses a thin black bar, not big dark lenses.
+FAULT P2 [7]: amazement weak, brows flat.
+
+## Checked
+1-7
+
+## Cold look
+Called seated inmates "line up stiffly", read the lead's face as a nervous grin (brief: tearful), and missed that no TV, bench or TV light reads. Missed the marionette rig, floating booms, and missing TV camera at arrival.
+
+## Not on the list
+- Unbriefed rosary in the lead's hand. suggested line: every prop in shot is in the brief or reference.
+- Panel 5 feet are white ovals. suggested line: shoes have toe and sole.
+- Panel 7 edge inmates sliced mid-face. suggested line: frame edges cut bodies, not faces.
+
+== critique, round 1 pass 2 (2026-11-11): 13 fault(s), 0 can't tell
+-- look.md --
+1: Long-haired bearded man, sunglasses, outside brick building "CROWN COURT SOUTHWARK" (boom mic covers letters); filming crowd.
+2: Closer: same man adjusts sunglasses, holds beads, calm; crowd films him with phones, camera.
+3: Grey stone gatehouse, tiny man at arched door; cut-off sign "ON"/"PTION"; press waits.
+4: Same man arms raised before arched door, triumphant; red-shirted and grey-haired camera operator watch.
+5: Four men in grey uniforms sit on bench before brick wall, clock; bearded man grim.
+6: Closer on four uniformed men; long-haired bearded man in middle, open mouth, uneasy.
+7: Close-up: bearded man in uniform, mouth open, shocked or speaking; neighbours cropped at edges.
+-- result.md --
+## Faults
+FAULT A2 P4 [1-7]: Brand - slit sunglasses, not wraparounds; beard changes between 1-4 and 5-7.
+FAULT A2 S3 [3-4]: gates - reference wide, big grilled arch; ours thin towers, small door.
+FAULT S6 [3-4]: gates press pack (bald, red shirt, white-haired) is not the arrival pack.
+FAULT P8 [3-4]: cameraman faces Brand but his lens points frame left.
+FAULT P2 [1-4]: no journalist turned three-quarter; Brand poses, not walking.
+FAULT S1 P2 [3]: Brand about 20 px in a black doorway; arms flung up unreadable.
+FAULT O1 O5 [1,3]: boom mic hides the H of "SOUTHWARK"; panel 3 sign cut by frame edge ("ON", "PTION").
+FAULT P1 [1-3]: boom poles held by no hand; phones float over hidden hands.
+FAULT P6 [3-7]: hands are plain balls (Brand's raised hands, inmates on knees, discs in 7).
+FAULT P2 [5-7]: nobody looks up at a TV; no TV glow.
+FAULT P2 [7]: brows level, lids heavy: reads dazed, not amazed.
+FAULT S1 [5-6]: grey haze dims faces; empty floor fills half of 5.
+FAULT P7 [5]: no bench; thighs vanish, bodies hang over coloured blocks.
+
+## Checked
+1-7
+
+## Cold look
+Missed tears in 5-6 (tiny drips), TV and upward gaze (none shown), arms up in 3 (figure too small). Wrote "SOUTHWARK" though H is hidden.
+
+## Not on the list
+1. String rack in TV room unreadable. suggested line: every set piece nameable at phone size.
+2. Press necks are flat slabs. suggested line: necks from behind show hairline.
+3. Topknot cropped in 7. suggested line: hairstyle visible in close-ups.
+4. Coloured trousers in 5. suggested line: costume matches brief top to toe.
+5. Left inmate sliced by frame edge (5-6). suggested line: no face cut by a frame edge unless briefed.
+
+critique, pass 2: faults fixed as one list: press: same pack at the gates, booms in raised hands, phones held up clear of hair, TV camera seen from behind (eyepiece, lens away), turned journalists glance aside in profile; inmates and Brand: gaze in eye units so eyes look up; set faults (TV room rack, glow, bench; gatehouse) left for the sets, outside notes 4-5
+
