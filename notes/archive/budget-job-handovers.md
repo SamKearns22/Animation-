@@ -40,3 +40,24 @@
   is Sam's app figure, so helpers ARE in Remakes' 60%; the cost watch's own figures leave them out
   (`isSidechain`). This chat's cost sits in whichever ledger the hook picked; check before quoting it.
 
+
+## Where things stand (11 Nov, 18:20 UTC; budget chat 2: Sam said Y to my picks; rules written, tools half built)
+- **Rules that bite next:** 24 (stage-share stop), 89 (two hunts, each fault once), 85 (helpers counted).
+- **Done:** Sam's "Y" (taken as my picks: no sets trial, no further cuts yet). Written: rule 24 (tiers, the brief's
+  must-haves, starting units, the moves' share, the stage-share stop, budget by size), rule 89 (Glimpses in the shot;
+  two hunts a stage, one helper each, each fault once, no third hunt), rule 85 (helpers counted, Fable priced). Built
+  and tested: the cost watch counts helpers and prices Fable at twice Opus (so the ledger does too).
+- **Next (model waits on Sam's answer to question 1: Opus high is my pick, Fable high if he says N):** build the
+  three tool changes the rules now promise: (a) `critique.py`: the helper lists each fault once; `status` not blocked
+  by CAN'T TELL; one pack per stage; no third pass. (b) `ledger.py auto`: stop when a stage reaches its share (now
+  only a quarter over the estimate); update rule 24's check column. (c) one command that draws, runs the checks and
+  builds the sheet (look in the kit first, rule: reuse before building). Kittests for each. Type: "Budget job:
+  build the three tool changes".
+- **Needs Sam:** question 1 (the builds on Opus high, half Fable's price) and 2 (at the brief, name any new
+  character an existing one could play, with the saving).
+- **Read:** this file's section 5; `critique.py` and `ledger.py` MAPs, then only the functions named.
+- **Open rule requests:** none.
+- **For Claude:** Fable 5.2 lists at $8/$40 a million (Opus 5.5 $4/$20), re-reading the same; the cost watch's
+  fable row is its opus row doubled except the re-read. The Build pack in `guides/job-packs.md` still says "drawn
+  alone and critiqued" for every new thing: add the Glimpse exception when (a) is built.
+
