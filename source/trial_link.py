@@ -54,7 +54,7 @@ CAP = (92, 132, 50)              # the woven green cap
 CAP_D = (60, 92, 34)
 CAP_L = (128, 168, 72)
 BAND = (70, 100, 40)
-BEAD_R, BEAD_B = (186, 54, 40), (120, 66, 34)
+BEAD_R, BEAD_B = (214, 52, 36), (120, 66, 34)
 TUNIC = (88, 136, 52)            # the woven green tunic
 TUNIC_D = (62, 100, 40)
 SHIRT = (132, 176, 76)           # the lighter knit shirt and its collar (04)
@@ -79,8 +79,8 @@ def lerp(a, b, k):
 # eye scale, pupil share of the iris, look (-1 .. 1 across), gaze_dy, squeeze (eyes shut tight), mouth
 MOODS = {
     'neutral':    dict(brows=((0, 0), (0, 0)), lid=0.08, mouth='rest'),
-    'unsure':     dict(brows=((-14, -4), (-14, -4)), lid=0.0, look=-0.25, mouth='half'),
-    'sceptical':  dict(brows=((6, 4), (-20, -26)), lid=0.4, look=1.0, mouth='side'),
+    'unsure':     dict(brows=((-22, -2), (-22, -2)), lid=0.0, look=-0.25, mouth='unsure'),
+    'sceptical':  dict(brows=((10, 8), (-26, -32)), lid=0.18, look=1.0, mouth='side'),
     'aghast':     dict(brows=((-20, -16), (-20, -16)), lid=0.0, scale=1.12, pupil=0.3, mouth='wide'),
     'wince':      dict(brows=((10, -2), (10, -2)), squeeze=True, mouth='grit'),
     'horror':     dict(brows=((-12, -10), (-12, -10)), lid=0.0, pupil=0.26, mouth='small_o'),
@@ -130,7 +130,8 @@ def _eye(p, ex, ey, w, h, m, sgn, skin, t=0.0):
     tip = up[-1] if sgn > 0 else up[0]
     p.line([tip, (tip[0] + sgn * 8, tip[1] - 6)], INK, 3.0)
     if m.get('tear') and sgn > 0:                         # one tear welling at the lower lid (terrified)
-        p.ell(ex + w * 0.5, ey + h * 0.95 + 6, 4.5, 6.5, (190, 226, 250), INK, 1.4)
+        p.ell(ex + w * 0.5, ey + h * 0.95 + 10, 7.5, 11, (180, 220, 250), INK, 1.8)
+        p.line([(ex + w * 0.5, ey + h * 0.95 + 22), (ex + w * 0.56, ey + h * 0.95 + 40)], (150, 200, 240), 3.0)
 
 
 def _brow(p, ex, ey, sgn, inner, outer, length=30, c=BROW, w=6.0):
@@ -153,6 +154,9 @@ def _mouth(p, sp, fx, my, m, t=0.0):
         p.line(curve([(fx - 11, my), (fx, my + 2), (fx + 11, my)], 3)[:-6], INK, 2.4)
     elif name == 'half':                                  # a crooked half smile, one corner up
         p.line([(fx - 13, my + 1), (fx - 3, my + 4), (fx + 8, my + 1), (fx + 15, my - 5)], INK, 2.6)
+    elif name == 'unsure':                                # a wavering line, one corner up, one down: not a grin
+        p.line(curve([(fx - 14, my + 4), (fx - 6, my + 1), (fx + 2, my + 4), (fx + 9, my + 1), (fx + 15, my - 3)], 3),
+               INK, 2.6)
     elif name == 'side':                                  # pursed off to one side (sceptical)
         p.line([(fx - 4, my + 1), (fx + 8, my + 1), (fx + 17, my - 2)], INK, 2.8)
         p.line([(fx - 4, my + 1), (fx - 9, my + 4)], INK, 2.2)
@@ -204,9 +208,13 @@ def _weave(p, pts, c, step=16, seed=3):
 
 
 def _beads(p, pts, n):
+    """Beads spaced evenly by length along the band (big and red enough to read at phone size: hunt 1)."""
+    a = np.array(pts, float)
+    d = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(a, axis=0).T))])
     for i in range(n):
-        x, y = pts[int((i + 0.5) / n * (len(pts) - 1))]
-        p.ell(x, y, 5.5, 5.5, BEAD_R if i % 2 == 0 else BEAD_B, INK, 1.4)
+        k = (i + 0.5) / n * d[-1]
+        x, y = np.interp(k, d, a[:, 0]), np.interp(k, d, a[:, 1])
+        p.ell(x, y, 7.5, 7.5, BEAD_R if i % 3 != 2 else BEAD_B, INK, 1.6)
 
 
 # ------------------------------------------------------------------------------------------------ head, front
@@ -482,11 +490,10 @@ def shield_front(p, j2, view):
 def collar_up(p, view, sp):
     """Held by the collar: the shirt's collar bunched up round his neck and under his chin."""
     if view in ('side', 'front'):
-        o = 34 if view == 'side' else 0
-        p.poly(curve([(o - 34, -24), (o - 14, -46), (o + 24, -48), (o + 42, -28), (o + 34, 12), (o - 30, 12)], 3),
-               SHIRT, INK, 2.2)
+        # wrapped round the neck, yanked up behind (towards the grip off-panel): a point and pull folds
+        p.poly(curve([(-44, 16), (-50, -30), (-40, -96), (-18, -40), (20, -30), (46, -10), (40, 16)], 3), SHIRT, INK, 2.2)
         for k in range(3):
-            p.line([(o - 18 + 18 * k, -38), (o - 14 + 18 * k, 4)], B.dk(SHIRT, 0.75), 1.6)
+            p.line([(-34 + 8 * k, 6), (-36 + 4 * k, -70 + 14 * k)], B.dk(SHIRT, 0.75), 1.6)
 
 
 # ------------------------------------------------------------------------------------------------ the hooks
@@ -558,25 +565,32 @@ def pose(name, t=0.0):
     hy = -150.0 + sp['head_dy']
     hw, hh = sp['hw'], sp['hh']
     if name == 'shrug':
-        j = V.standing(sp)                                # elbows at his sides, forearms out, palms up; head sunk
-        for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * (sp['shoulders'] + 120), 250.0, 110.0), 'down', 'palm')
-        j['head_dy'] = 14
+        j = stand(sp)                                     # elbows tucked at his sides, forearms out, palms up;
+        for sd, sg in (('L', -1), ('R', 1)):              # head sunk between the shoulders and tipped
+            V.arm_to(j, sd, (sg * (sp['shoulders'] + 70), 230.0, 150.0), 'back', 'palm')
+            x, y, z = j['sh' + sd]
+            j['sh' + sd] = (x, y - 16, z)                 # shoulders up
+        j['head_dy'] = 18
+        j['head_roll'] = 9
     elif name == 'cheeks':                                # hands to his cheeks, jolting back
         j = V.standing(sp)
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * hw * 0.6, hy + hh * 0.62, 70.0), 'down', 'palm')
+            V.arm_to(j, sd, (sg * hw * 0.6, hy + hh * 0.62, 70.0), (0.7, 1.0, 0.3), 'palm')
         j['on_face'] = {'L', 'R'}
         j['lean'] = -12
+        j['nod'] = -1.4                                   # the jolt: chin up, head back
+        j['head_dy'] = -8
     elif name == 'scuttle':                               # a crouched front-on scuttle, hands clamped over his ears
         j = MV.gait(dict(sp), t, 'front_run')
-        crouch = 90.0
-        j['bob'] = j.get('bob', 0.0) + crouch
+        crouch = 150.0
+        j['bob'] = crouch                                 # a held still: no run bounce, soles on the floor
         for sd, sg in (('L', -1), ('R', 1)):
             fx, fy, fz = j['foot' + sd]
             j['foot' + sd] = (fx + sg * 24, fy - crouch, fz)
             j['knee_pole' + sd] = (0.7 * sg, 0.0, 0.7)
         j['lean'] = 10
+        j['nod'] = 1.2                                    # head ducked
+        j['head_dy'] = 16
         for sd, sg in (('L', -1), ('R', 1)):
             V.arm_to(j, sd, (sg * hw * 1.02, hy + hh * 0.06, 16.0), 'out', 'palm')
         j['on_face'] = {'L', 'R'}
@@ -585,12 +599,21 @@ def pose(name, t=0.0):
         j['footL'] = (-40, V.ANKLE_Y - 20, 40.0)
         j['footR'] = (40, V.ANKLE_Y - 40, -30.0)
         j['toeL'] = j['toeR'] = -40
-        for sd, tgt in (('L', (-40.0, 120.0, 170.0)), ('R', (40.0, 90.0, 190.0))):
-            V.arm_to(j, sd, tgt, 'down', 'palm')
+        for sd, tgt in (('L', (-30.0, 380.0, 60.0)), ('R', (30.0, 370.0, 90.0))):
+            V.arm_to(j, sd, tgt, 'back', 'palm')          # arms hang limp
         j['body_props'] = [collar_up]
-        j['head_dy'] = -10
+        j['head_dy'] = 2
     else:
-        j = V.standing(sp)
+        j = stand(sp)
+    return j
+
+
+def stand(sp=None):
+    """Standing relaxed: elbows a little bent and back, hands a touch in front of the hips (hunt 1: not straight tubes)."""
+    sp = sp or LINK
+    j = V.standing(sp)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, (sg * (sp['shoulders'] + 8), 392.0, 60.0), 'back', 'fist')
     return j
 
 
@@ -598,10 +621,10 @@ def person(img, cam, x, floor, s, yaw=0, j=None, extra=None, lift=0.0, t=0.0):
     """Link standing on `floor` (pixels) at scale s for a 1.75 m adult; `lift` raises him (held off the ground)."""
     sp = dict(LINK, **(extra or {}))
     s2 = s * HEIGHT / (TOP * V.M_PER_UNIT)
-    j = j or V.standing(sp)
+    j = j or stand(sp)
     j['body_props'] = [body] + list(j.get('body_props', []))
     j['pre'] = [shield_front] + list(j.get('pre', []))
-    ny = floor - (928 - j.get('bob', 0.0)) * s2 - lift
+    ny = floor - 928 * s2 - lift                     # views.person lowers the body by j['bob'] itself
     V.person(img, cam, x, ny, s2, sp, t, yaw, j)
     return x, ny, s2
 
@@ -665,8 +688,7 @@ def sheet(out):
         lift = 60 if name == 'collar' else 0
         person(tile, cam, 103, 490, 0.4, yaw, pose(name, t), dict(mood={'shrug': 'unsure', 'cheeks': 'aghast',
                'scuttle': 'wince', 'collar': 'terrified'}.get(name, 'neutral')), lift=lift, t=t)
-        if name == 'collar':
-            ImageDraw.Draw(tile).line([(10, 490), (196, 490)], fill=(150, 146, 140), width=2)
+        ImageDraw.Draw(tile).line([(10, 490), (196, 490)], fill=(150, 146, 140), width=2)
         img.alpha_composite(tile, (14 + i * 213, y0 + 40))
         d.multiline_text((18 + i * 213, y0 + 566), lab, font=small, fill=(30, 30, 30))
     y1 = y0 + 620

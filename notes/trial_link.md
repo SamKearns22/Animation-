@@ -79,7 +79,7 @@ it takes; quality as high as the real film's.
 | C0 read in | 0.3 | chat 1 (Opus high): merge, trial brief, Build pack sections, refs on one sheet |
 | C1 first full sheet | 1.0 | chat 1: `source/trial_link.py` written (head 3 views, cap, tunic, boots, 7 faces, 5 poses), sheet drawn, not yet looked at. AMBER here: handed over (rule 6) |
 | C2 own-look faults fixed | 1.3 | chat 2 (Opus high): one look, 8 faults in one list (sheet overlaps, long neck, faint brows, deadpan not half-lidded, weak side-eye, shrug read as arms out, cheeks read as hands on head, collar lump on his back), one fix pass, faces confirmed full size |
-| C3 hunt 1 fixed | | found / real / duplicates / can't tell: |
+| C3 hunt 1 fixed | 1.8 | found / real / duplicates / can't tell: 34 / 8 / 21 / 1 (looked: not a fault). 13 distinct; real: cap beads too small, straight-tube arms, shrug read as a grin, cheeks hid the upper arms and had no jolt, scuttle not crouched and below the floor (a doubled body drop), collar pose arms up and no pull, faces (unsure, sceptical vs deadpan, tears). Not real: holder's hand (off-panel by brief), shoulder ticks, hidden brows, stray bar (the height figure), tunic length. Helper 97k tokens |
 | C4 hunt 2 fixed, confirmed | | found / real / duplicates / can't tell: |
 
 ## Where things stand (11 Nov, chat 1 of the trial, handed over on AMBER at C1)
