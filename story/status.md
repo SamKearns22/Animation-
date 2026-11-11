@@ -1,6 +1,6 @@
 - Blessed (11 Nov, build 2): the cast built and approved by Sam (Brand: bigger head, short chin; likeness 64%); Sam's 6
   recordings filed. Next: build chat 3 (Opus high), the sets. Notes: notes/blessed.md.
-- Line-up trial (budget trial 2, 11 Nov): the five drawn and own-look faults fixed (C2, 1.4%); amber handover; next: chat 2 (Opus high) runs the two hunts.
+- Line-up trial (budget trial 2, 11 Nov): finished at C4, 3.7% of a week in all (helpers 0.9 of it); comparison sheet sent to Sam. Next: the budget chat reads notes/trial_lineup.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.

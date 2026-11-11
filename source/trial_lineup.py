@@ -75,7 +75,7 @@ G_EYE, ROCK, ROCK_D, TUFT = (78, 36, 96), (150, 140, 132), (110, 102, 96), (226,
 FRILL, FRILL_D, FRILL_L, LACE = (244, 140, 186), (206, 96, 146), (250, 186, 214), (252, 246, 250)
 DROOL = (210, 236, 250)
 
-HEIGHTS = dict(zelda=1.36, malon=1.27, saria=1.31, ruto=1.38, goron=2.13)   # tops of everything, metres (Link 1.33)
+HEIGHTS = dict(zelda=1.36, malon=1.21, saria=1.31, ruto=1.34, goron=2.13)   # tops of everything, metres (Link 1.33)
 MINE = ('zelda', 'malon', 'saria', 'ruto')
 
 
@@ -83,13 +83,14 @@ MINE = ('zelda', 'malon', 'saria', 'ruto')
 # brows (inner_dy, outer_dy) per side (negative = up), lid, look (-1 .. 1 across), mouth, plus: wink, blush, nod, roll
 MOODS = {
     ('zelda', 0): dict(brows=((-18, -2), (-18, -2)), lid=0.0, look=-0.55, gaze_dy=0.3, mouth='unsure', blush=0.3),
-    ('zelda', 1): dict(brows=((-36, 6), (-36, 6)), lid=0.05, look=-0.6, gaze_dy=0.2, mouth='unsure', blush=0.8),
+    ('zelda', 1): dict(brows=((-40, 8), (-40, 8)), lid=0.05, look=-0.6, gaze_dy=0.2, mouth='worry', blush=0.8,
+                       sweat=True),
     ('malon', 0): dict(brows=((-8, -4), (-8, -4)), lid=0.04, mouth='smile', blush=0.35),
     ('malon', 1): dict(brows=((-18, -12), (-18, -12)), lid=0.0, scale=1.06, mouth='beam', blush=0.6),
     ('saria', 0): dict(brows=((4, -6), (-6, -12)), lid=0.12, look=0.1, mouth='smirk', blush=0.25),
     ('saria', 1): dict(brows=((4, -6), (-8, -16)), lid=0.1, look=0.0, mouth='smirk_big', wink='R', blush=0.4),
     ('ruto', 0): dict(brows=((2, -22), (2, -22)), lid=0.3, look=0.7, mouth='smug', blush=0.3),
-    ('ruto', 1): dict(brows=((-2, -30), (-2, -30)), lid=0.42, look=0.0, mouth='smug_big', blush=0.5),
+    ('ruto', 1): dict(brows=((-2, -30), (-2, -30)), lid=0.12, look=0.0, mouth='smug_big', blush=0.35),
 }
 
 
@@ -130,6 +131,9 @@ def _mouth(p, sp, fx, my, m):
         p.line(curve([(fx - 14, my + 2), (fx - 2, my + 5), (fx + 10, my + 1), (fx + 18, my - (10 if big else 6))], 3),
                INK, 2.8)
         p.line([(fx + 18, my - (10 if big else 6)), (fx + 21, my - (4 if big else 2))], INK, 2.0)
+    elif name == 'worry':                                 # unsure: a small wobbly line, the corners down
+        p.line(curve([(fx - 16, my + 6), (fx - 8, my - 1), (fx, my + 3), (fx + 8, my - 1), (fx + 16, my + 6)], 3),
+               INK, 2.8)
     elif name in ('smug', 'smug_big'):                    # pleased with herself: tight, both corners tucked up high
         k = 1.3 if name == 'smug_big' else 1.0
         p.line(curve([(fx - 16 * k, my - 6 * k), (fx - 6, my + 3), (fx + 6, my + 3), (fx + 16 * k, my - 6 * k)], 3),
@@ -171,6 +175,11 @@ def _features(p, sp, hx, hy, m, iris, brow_c, skin=None, eye_k=1.0):
     ny = hy + hh * 0.5
     p.line([(fx - 2, ny - 5), (fx + 4, ny), (fx - 1, ny + 3)], dk(skin, 0.72), 2.0)
     _mouth(p, sp, fx, hy + hh * 0.73, m)
+    if m.get('sweat'):                                    # a sweat drop at the temple: unsure, readable at phone size
+        sx, sy = fx + hw * 0.78, hy - hh * 0.36
+        p.poly(curve([(sx, sy - 30), (sx + 13, sy + 2), (sx + 9, sy + 14), (sx, sy + 18), (sx - 9, sy + 14),
+                      (sx - 13, sy + 2)], 2), (190, 225, 250), INK, 2.2)
+        p.ell(sx - 4, sy + 6, 3, 4, (255, 255, 255), None)
 
 
 def _ears(p, sp, hx, hy, skin=None):
@@ -324,11 +333,11 @@ def ruto_head(img, p, sp, t, hx, hy):
     hw, hh = sp['hw'], sp['hh']
     m = dict(MOODS[('ruto', sp.get('react', 0))])
     # the fin sweeping back behind the head, seen past the dome on her left, falling to the shoulder (07)
-    sweep = curve([(hx - hw * 0.9, hy - hh * 1.9), (hx - hw * 1.9, hy - hh * 1.5), (hx - hw * 2.0, hy - hh * 0.4),
+    sweep = curve([(hx - hw * 0.2, hy - hh * 2.3), (hx - hw * 1.9, hy - hh * 1.7), (hx - hw * 2.0, hy - hh * 0.4),
                    (hx - hw * 1.8, hy + hh * 1.3), (hx - hw * 1.45, hy + hh * 0.7), (hx - hw * 1.2, hy - hh * 0.2)], 3)
-    p.poly(sweep, FIN_D, INK, 2.4)
+    p.poly(sweep, FIN, INK, 2.4)
     p.line(curve([(hx - hw * 1.5, hy - hh * 1.3), (hx - hw * 1.8, hy - hh * 0.3), (hx - hw * 1.7, hy + hh * 0.9)], 3),
-           FIN, 2.2)
+           FIN_D, 2.2)
     _face(p, sp, hx, hy, R_SKIN, chin=0.86)
     # the dome: one big smooth teal head, taller than the face, coming down the sides like a hood; no brim
     dome = curve([(hx - hw * 1.12, hy + hh * 0.05), (hx - hw * 1.5, hy - hh * 0.7), (hx - hw * 1.5, hy - hh * 1.5),
@@ -427,21 +436,22 @@ def body_saria(p, view, sp):
 
 
 def body_ruto(p, view, sp):
-    """A child's straight, plain body (not shapely: she is a child); the teal fin 'top' across the chest; hip fins."""
+    """A child's straight, plain body (not shapely: she is a child); a round fin bib, a short fin skirt."""
     sw = sp['shoulders']
     p.poly(_torso(sw, 470), R_SKIN, INK, 2.4)
-    for sg in (-1, 1):                                    # small fins at the hips, hanging down and out
-        f = curve([(sg * sw * 0.8, 400), (sg * sw * 1.24, 470), (sg * sw * 1.2, 580), (sg * sw * 0.96, 520),
-                   (sg * sw * 0.82, 470)], 3)
-        p.poly(f, FIN, INK, 2.2)
-        p.line([(sg * sw * 0.86, 430), (sg * sw * 1.12, 540)], FIN_D, 1.6)
-    top = [(-sw * 0.9, 74)]
-    for i in range(7):                                    # the scalloped top edge
-        x = -sw * 0.9 + (i + 0.5) * sw * 1.8 / 7
-        top += [(x, 60 if i % 2 else 66), (-sw * 0.9 + (i + 1) * sw * 1.8 / 7, 74)]
-    band = top + [(sw * 0.94, 150), (0, 158), (-sw * 0.94, 150)]
-    p.poly(band, FIN, INK, 2.2)
-    p.line([(-sw * 0.7, 100), (sw * 0.7, 100)], FIN_L, 2.0)
+    skirt = [(-sw * 0.96, 380), (sw * 0.96, 380)]        # a short fin skirt round the hips, scalloped (no long bare legs)
+    n = 6
+    for i in range(n, -1, -1):
+        x = -sw * 1.12 + i * sw * 2.24 / n
+        skirt += [(x, 520 if i % 2 else 548)]
+    p.poly(curve(skirt, 1), FIN, INK, 2.2)
+    for k in (-0.6, -0.2, 0.2, 0.6):
+        p.line([(sw * k, 396), (sw * k * 1.15, 516)], FIN_D, 1.6)
+    bib = curve([(-sw * 0.62, -2), (sw * 0.62, -2), (sw * 0.96, 70), (sw * 0.9, 180), (sw * 0.5, 214), (0, 228),
+                 (-sw * 0.5, 214), (-sw * 0.9, 180), (-sw * 0.96, 70)], 3)   # a round fin bib, neck to chest
+    p.poly(bib, FIN, INK, 2.2)
+    p.line(curve([(-sw * 0.6, 120), (0, 150), (sw * 0.6, 120)], 3), FIN_D, 1.8)
+    p.line(curve([(-sw * 0.4, 40), (0, 56), (sw * 0.4, 40)], 3), FIN_L, 2.0)
 
 
 BODIES = dict(zelda=body_zelda, malon=body_malon, saria=body_saria, ruto=body_ruto)
@@ -618,7 +628,7 @@ def pose(who, react=0):
         j['head_roll'] = -11 if react else -7
     elif who == 'malon':                                  # dutiful, pick-me: the milk bottle offered; on "ROMANCE"
         if react:                                         # she lifts it up to us in one hand, beside her face
-            V.arm_to(j, 'R', (sw * 1.9, 150.0, 120.0), 'out', 'fist')    # out past her hair
+            V.arm_to(j, 'R', (sw * 1.8, 60.0, 140.0), 'out', 'fist')     # up and out past her hair, to us
             V.arm_to(j, 'L', (-20.0, 330.0, 150.0), 'down', 'fist')
             j['props'], j['grip'], j['wrap'] = [milk_bottle], {'R'}, {'R'}   # the arm behind it, the fist over
         else:
@@ -635,10 +645,11 @@ def pose(who, react=0):
         j['head_roll'] = 7 if react else 4
     elif who == 'ruto':                                   # preening: hands on hips, chin up; on "ROMANCE" one hand
         for sd, sg in (('L', -1), ('R', 1)):              # pats her head-fin
-            V.arm_to(j, sd, (sg * sw * 0.86, 360.0, 0.0), 'out', 'fist')
-        if react:
-            V.arm_to(j, 'R', (hw * 2.02, hy - 84, 30.0), 'out', 'palm')
-        j['nod'] = -1.2 if react else -0.8
+            V.arm_to(j, sd, (sg * sw * 0.74, 360.0, 0.0), 'out', 'fist')
+        if react:                                         # the palm on the dome's side, in front of it
+            V.arm_to(j, 'R', (hw * 1.25, hy - 120, 60.0), 'out', 'palm')
+            j['on_face'] = {'R'}
+        j['nod'] = -2.4 if react else -0.8
         j['head_roll'] = 6 if react else 4
     j['body_props'] = [BODIES[who]]
     j['pre'] = [back_hair]
@@ -690,11 +701,10 @@ def goron(img, cam, x, floor, k, react=0):
     # "ROMANCE" they squeeze together and lift a little
     hy = -470 - (30 if react else 0)
     for sg in (-1, 1):
-        ar = curve([(sg * 290, -1000), (sg * 400, -950), (sg * 452, -790), (sg * 440, -600), (sg * 350, hy - 16),
-                    (sg * 120, hy - 50), (sg * 110, hy + 60), (sg * 320, hy + 72), (sg * 376, -600), (sg * 372, -770),
-                    (sg * 340, -880)], 3)                 # a round shoulder outside the body, the arm hanging from it
+        ar = curve([(sg * 330, -930), (sg * 410, -890), (sg * 452, -760), (sg * 440, -600), (sg * 350, hy - 16),
+                    (sg * 120, hy - 50), (sg * 110, hy + 60), (sg * 320, hy + 72), (sg * 376, -600), (sg * 372, -740),
+                    (sg * 350, -840)], 3)                 # a round shoulder outside the body, the arm hanging from it
         p.poly(ar, G_SKIN, INK, 2.6)
-        p.line(curve([(sg * 300, -990), (sg * 356, -900), (sg * 372, -800)], 3), INK, 2.4)   # the shoulder's crease
         p.line([(sg * 410, -700), (sg * 412, -620)], G_SKIN_D, 2.2)
     p.ell(46, hy, 78, 74, G_SKIN, INK, 2.6)              # two round hands, one over the other
     p.ell(-46, hy + 6, 78, 74, G_SKIN, INK, 2.6)
@@ -769,7 +779,8 @@ def _patch_pre(j, sp):
 
 # ------------------------------------------------------------------------------------------------ the frame
 ORDER = ['zelda', 'malon', 'saria', 'ruto', 'goron']
-FLOOR, MARGIN, GAP = 1520, 14, 10                         # the ground line; side margin and gap between, at scale 1
+FLOOR, MARGIN, GAP, LEFT, SAFE_R = 1520, 14, 10, 34, 800   # SAFE_R: the Goron's face centre (its face in by 900)
+                                                           # the ground line, right margin, gap, left margin
 _EXT = {}
 
 
@@ -793,7 +804,9 @@ def layout(react=1):
     ext = [_extent(w, react) for w in ORDER]
     span = sum(r - l for l, r, _ in ext)
     s = (1080 - 2 * MARGIN - GAP * (len(ORDER) - 1)) / span
-    xs, x = [], MARGIN
+    gl = ext[-1][0]                                       # TikTok's safe width (guides/tiktok-design.md): faces in
+    s = min(s, (SAFE_R - LEFT - GAP * (len(ORDER) - 1)) / (span - (ext[-1][1] - ext[-1][0]) - gl))   # x 60-900
+    xs, x = [], LEFT
     for l, r, _ in ext:
         xs.append(x - l * s)
         x += (r - l) * s + GAP
