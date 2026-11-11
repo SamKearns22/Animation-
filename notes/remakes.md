@@ -7,7 +7,7 @@
 - **Next:** note 59 first: the Fable chat (claude-fable-5-2, high) critiques cold, writes notes/ledger/remakes-fable-r3.md
   and messages the Opus chat (session_01GznaAVox86mfmc4fXZj2uJ); then the Opus chat acts on Sam's answer (fix
   first or not) and opens the Sonnet chat (medium): check sheet, Sam's yes, animatic 3 (watch and listen: note 40).
-- **Needs Sam:** fix Fable's findings before the check sheet? (pick: yes); his look at the clips.
+- **Needs Sam:** his look at the clips. (Sam, 11 Nov: Y, Fable's findings are fixed before the check sheet.)
 - **Read:** pack "Checks and animatic" in `guides/job-packs.md` (the Sonnet chat).
 - **Open rule requests:** none.
 - **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
