@@ -735,6 +735,43 @@ def critique_helper_kind():
 
 
 @test
+def critique_redo_one_command():
+    """Budget job (c), 11 Nov: one command redraws, runs the checks and builds one sheet of only the changed panels,
+    printing only the fault lines (a fixing chat took four steps and four printouts for this, 59-70 steps a pass)."""
+    import contextlib, io, json, tempfile
+    from PIL import Image
+    import critique as C
+    tmp = tempfile.mkdtemp(prefix='kt-redo')
+    keep, C.PACKS = C.PACKS, os.path.join(tmp, 'packs')
+    a, b, col = os.path.join(tmp, 'a.png'), os.path.join(tmp, 'b.png'), os.path.join(tmp, 'colour')
+    Image.new('RGB', (270, 480), (200, 60, 60)).save(a)
+    open(col, 'w').write('60')
+    draw = (f"python3 -c \"from PIL import Image; Image.new('RGB', (270, 480), (0, int(open('{col}').read()), 200))"
+            f".save('{b}')\"")
+    noisy = "python3 -c \"[print('frame', i, 'ok') for i in range(40)]; print('FAULT: hand off the mug at 3.2 s')\""
+    spec = {'round': 1, 'stage': 'cast', 'draw': [draw], 'checks': [noisy, 'echo hands: clean'],
+            'panels': [{'img': a, 'is': 'a man', 'parts': 'P', 'refs': [a]}, {'img': b, 'is': 'a mug', 'parts': 'O'}]}
+    sp = os.path.join(tmp, 'spec.json')
+    json.dump(spec, open(sp, 'w'))
+    runs, said = [], []
+    try:
+        for green in ('60', '90', '90'):                     # first run; panel 2 redrawn; nothing redrawn
+            open(col, 'w').write(green)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                runs.append(C.redo('none', sp))
+            said.append(buf.getvalue().splitlines())
+    finally:
+        C.PACKS = keep
+    only_faults = all(len(x) <= 4 and not any(re.search(r'frame \d+ ok', ln) for ln in x) and any('hand off the mug' in ln for ln in x)
+                      for x in said)
+    ok = ([r[0] for r in runs] == [[1, 2], [2], []] and only_faults and len(runs[1][2]) == 1
+          and os.path.exists(runs[1][2][0]) and not runs[2][2] and 'nothing to look at' in said[2][-1])
+    return ok, (f"changed panels per run: {[r[0] for r in runs]}; printed {[len(x) for x in said]} lines a run for 42 "
+                f"lines of check output; the fault kept: {only_faults}; unchanged run: no sheet")
+
+
+@test
 def critique_checklist_parts():
     """Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools."""
     import critique as C

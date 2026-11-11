@@ -14,6 +14,10 @@ MAP
   fixed ............ after hunt 2's faults are fixed as one list: clears the gate (no third hunt; the sheet goes to Sam)
   false_alarm ...... Claude marks a FAULT that was not one (counted per line, so Job I sees which lines cry wolf)
   where ............ every named thing per shot from draw_order(t); flags any that start or stop mid-shot (rule 56, M1)
+  redo ............. ONE command for a fixing pass (budget job, 11 Nov: a fixing chat ran 59-70 steps, 27 of them tool
+                     runs and 12 looks): runs the spec's "draw" commands, then its "checks", printing only the fault
+                     lines, and builds ONE sheet of only the panels that changed since the last redo, beside their
+                     references. Nothing changed: no sheet, nothing to look at (rule 48)
   status ........... the line pre-flight prints; ok when the round's last pass has no FAULT (CAN'T TELL never blocks)
 
     python3 source/critique.py pack FILM SPEC.json
@@ -21,6 +25,7 @@ MAP
     python3 source/critique.py false FILM LINE "why it was not a fault"
     python3 source/critique.py where FILM [NAME...]
     python3 source/critique.py before FILM SPEC.json
+    python3 source/critique.py redo FILM SPEC.json [--all]
     python3 source/critique.py status FILM
     python3 source/critique.py fixed FILM "what changed"
 
@@ -36,7 +41,8 @@ SPEC: {"round": R, "stage": "cast", "panels": [{"t": 12.3 or "img": PATH, "crop"
 "refs": [PATH...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...", "line": "O3", "marked": PATH
 or null, "t": 20.1, "box": [x0,y0,x1,y1]}]}. A panel with a crop is a detail (540 px); without, a phone-size frame.
 A panel showing something built new for the film adds "new": "NAME" (and "drawn": "file.function"): a clean pass
-files it in guides/kit-catalogue.md, "Passed the critique" (library(); Job J). A panel of a Glimpse (rule 24) adds
+files it in guides/kit-catalogue.md, "Passed the critique" (library(); Job J). For `redo` the spec may add "draw":
+["python3 source/FILM_cast.py sheet", ...] (whatever redraws the panels' "img" files) and "checks": [commands]. A panel of a Glimpse (rule 24) adds
 "glimpse": true: it is judged only at the size shown, and the helper is told not to ask for a closer picture.
 """
 import glob
@@ -170,9 +176,10 @@ def _row(items, h):
     return row
 
 
-def check_sheet(pics, specs, out_dir, h=480, per=6):
+def check_sheet(pics, specs, out_dir, h=480, per=6, numbers=None, name='check'):
     """check.jpg (check-2.jpg...): each panel (left, numbered) beside its references at the same height."""
     paths = []
+    numbers = numbers or list(range(1, len(pics) + 1))
     for k in range(0, len(pics), per):
         rows = []
         for i in range(k, min(k + per, len(pics))):
@@ -180,7 +187,7 @@ def check_sheet(pics, specs, out_dir, h=480, per=6):
             r = _row([pics[i]] + refs, h)
             lab = Image.new('RGB', (r.width, h + 40), (255, 255, 255))
             lab.paste(r, (0, 40))
-            ImageDraw.Draw(lab).text((6, 6), f'{i + 1}' + ('   ours | references' if refs else '   (no reference)'),
+            ImageDraw.Draw(lab).text((6, 6), f'{numbers[i]}' + ('   ours | references' if refs else '   (no reference)'),
                                      font=_font(26), fill=(0, 0, 0))
             rows.append(lab)
         sheet = Image.new('RGB', (max(r.width for r in rows), sum(r.height + 12 for r in rows)), (200, 200, 200))
@@ -190,7 +197,7 @@ def check_sheet(pics, specs, out_dir, h=480, per=6):
             y += r.height + 12
         if sheet.width > 2160:
             sheet = sheet.resize((2160, int(sheet.height * 2160 / sheet.width)))
-        p = os.path.join(out_dir, 'check.jpg' if k == 0 else f'check-{k // per + 1}.jpg')
+        p = os.path.join(out_dir, f'{name}.jpg' if k == 0 else f'{name}-{k // per + 1}.jpg')
         sheet.save(p, quality=85)
         paths.append(p)
     return paths
@@ -618,6 +625,61 @@ def fixed(film_name, what):
     print(status(film_name)[1])
 
 
+# ---- redo: draw, check, one sheet of what changed -------------------------------------------------------------------
+FAULTY = re.compile(r'fault|FAIL|FLAG|REFUSED|Traceback|Error|WARN|MISSING', re.I)
+FINE = re.compile(r'\b(0|no) (fault|flag|fail)|: clean\b|all passed|\bPASS\b', re.I)
+
+
+def _run(cmd):
+    """(exit code, the output's fault lines only): rule 19, the rest is never printed."""
+    import subprocess
+    r = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True)
+    out = (r.stdout + r.stderr).splitlines()
+    bad = [ln.strip()[:200] for ln in out if FAULTY.search(ln) and not FINE.search(ln)]
+    if r.returncode and not bad:
+        bad = [ln.strip()[:200] for ln in out[-3:]] or [f'stopped with code {r.returncode}']
+    return r.returncode, bad
+
+
+def redo(film_name, spec_path, every=False):
+    """Draw, check, and ONE sheet of only the changed panels. Returns (changed panel numbers, fault lines, sheets)."""
+    import hashlib
+    spec = json.load(open(spec_path))
+    specs, rnd, stage = spec['panels'], spec['round'], spec.get('stage', 'all')
+    faults = []
+    for cmd in spec.get('draw', []):
+        code, bad = _run(cmd)
+        if code:
+            faults += [f'draw `{cmd}`: {b}' for b in bad]
+    if faults:                                   # a drawing that crashed: nothing after it means anything
+        print(f'redo: the drawing failed, nothing checked:' + ''.join(f'\n  {f}' for f in faults))
+        return [], faults, []
+    film = importlib.import_module(film_name) if any('t' in p for p in specs) else None
+    pics = [_panel(film, p) for p in specs]
+    base = os.path.join(PACKS, film_name, f'redo-r{rnd}-{stage}')
+    os.makedirs(os.path.dirname(base), exist_ok=True)
+    now = {str(i): hashlib.sha1(im.tobytes()).hexdigest() for i, im in enumerate(pics, 1)}
+    try:
+        was = json.load(open(base + '.json'))
+    except FileNotFoundError:
+        was = {}
+    changed = [i for i in range(1, len(pics) + 1) if every or was.get(str(i)) != now[str(i)]]
+    clean = 0
+    for cmd in spec.get('checks', []):
+        code, bad = _run(cmd)
+        faults += [f'`{cmd[:70]}`: {b}' for b in bad]
+        clean += not bad
+    sheets = check_sheet([pics[i - 1] for i in changed], [specs[i - 1] for i in changed], os.path.dirname(base),
+                         numbers=changed, name=os.path.basename(base)) if changed else []
+    json.dump(now, open(base + '.json', 'w'))
+    print(f"redo: {len(pics)} panel(s) drawn; changed: {_span(changed) or 'none'}; checks: {len(spec.get('checks', []))} "
+          f"run, {clean} clean, {len(faults)} fault line(s)")
+    for f in faults:
+        print('  FAULT', f)
+    print('look once at: ' + ' '.join(sheets) if sheets else 'nothing changed: no sheet, nothing to look at')
+    return changed, faults, sheets
+
+
 # ---- where (rule 56, line M1) --------------------------------------------------------------------------------------
 def where(film_name, names=(), film=None, step=None):
     """Every named thing per shot, from the film's draw_order(t), sampled every frame; flags a thing that starts or
@@ -666,6 +728,8 @@ def main():
         record(film, a[2])
     elif cmd == 'false' and len(a) == 4:
         false_alarm(film, a[2], a[3])
+    elif cmd == 'redo' and len(a) in (3, 4):
+        redo(film, a[2], every='--all' in a)
     elif cmd == 'fixed' and len(a) == 3:
         fixed(film, a[2])
     elif cmd == 'before' and len(a) == 3:
