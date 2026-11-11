@@ -1,5 +1,5 @@
-- Blessed (11 Nov, build 2): the cast built and approved by Sam (Brand: bigger head, short chin; likeness 64%); Sam's 6
-  recordings filed. Next: build chat 3 (Opus high), the sets. Notes: notes/blessed.md.
+- Blessed (11 Nov, build 3): the sets built (8 places, 11 cameras) and blessed.py (54 s, all 12 shots placed); sets
+  sheet sent to Sam. Next: the moves chat (Opus high). Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.

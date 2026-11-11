@@ -30,7 +30,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.19
+   "cost": 5.24
   }
  ],
  "checks": {},
@@ -64,6 +64,15 @@
     "date": "2026-11-11",
     "spent": 2.41
    }
+  },
+  {
+   "name": "sets",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-11",
+    "spent": 7.65
+   },
+   "unplanned": true
   },
   {
    "name": "moves",

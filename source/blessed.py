@@ -140,6 +140,9 @@ ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
 SOUND_SOURCES, EFFECTS, JOKE_PROPS, ORDER_SWAPS = {}, [], [], []
 
+GUARDS = {'guard1': BC.OFFICER,                   # two different officers (pass 2: twins)
+          'guard2': dict(BC.OFFICER, skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
+                         height=1.68, seed=97, lashes=True)}
 TRACK = {w: [] for w in CAST}
 for ln in LINES:
     TRACK[ln['who']] += [(a + ln['start'], b + ln['start'], sh) for a, b, sh in mouths.track(ln['text'], ln['_stretches'])]
@@ -195,7 +198,7 @@ def press(img, cam, L, spots, t, seed=0):
         out.append((d, dict(x=X, y=Y, s=L.ppm(d) / 650.0, hair=PRESS_HAIR[(i + seed) % 6],
                             jacket=PRESS_JKT[(i * 3 + seed) % 7], skin=[B.PALE, B.PINK, B.OLIVE, B.BROWN][i % 4],
                             style=PRESS_STYLE[(i + 2 * seed) % 8], hand=False, side=1, up_at=0.0,
-                            seed=int(rng.integers(1e6)), empty=False, phone=False, pad=i % 3 == 1, typing=False)))
+                            seed=int(rng.integers(1e6)), empty=False, phone=False, pad=False, typing=False)))
     for i, (d, r) in enumerate(sorted(out, key=lambda q: -q[0])):
         kit = PRESS_KIT[(i + seed) % len(PRESS_KIT)]
         if kit == 'boom':
@@ -205,7 +208,7 @@ def press(img, cam, L, spots, t, seed=0):
             _tv_camera(img, cam, r)
 
 
-PRESS_KIT = ['tv', 'pad', 'boom', 'none', 'tv', 'pad', 'none', 'boom']
+PRESS_KIT = ['tv', 'none', 'boom', 'none', 'tv', 'none', 'none', 'boom']
 
 
 def _tv_camera(img, cam, r):
@@ -295,7 +298,7 @@ def draw_people(img, cam, shot, t):
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), st['judge'], t)
     elif shot == 'dock':
         for g in ('guard1', 'guard2'):
-            put_seated(img, cam, dict(BC.OFFICER, **face('officer', t, 'neutral')), st[g], t)
+            put_seated(img, cam, dict(GUARDS[g], **face('officer', t, 'neutral')), st[g], t)
         ST.mid(view, img, cam, t)
         put(img, cam, brand_sp(t, 'dock'), st['brand'], t)
     elif shot == 'van':

@@ -111,3 +111,89 @@ No cameras: 1, 11. Arms: 2, 3. Beat unread: 2, 5, 6, 11. Action small: 2, 3, 6, 
 2. Real BBC logo. suggested line: "-style" means lookalike.
 3. Inmates stare at lens. suggested line: eyes on beat.
 
+== critique, round 1 pass 2 (2026-11-11): 41 fault(s), 1 can't tell
+-- look.md --
+1: Smiling sunglassed long-haired bearded man faces reporters, cameras, boom mic; CROWN COURT SOUTHWARK
+2: Bearded long-haired man in black suit speaks at mic; wigged red-robed judge behind
+3: Stern wigged judge in red robe, glasses, gavel by hand; royal crest above
+4: Glum bun-haired bearded man in grey suit in glass dock between two guards
+5: Bun-haired bearded man in grey tracksuit sits sadly on bench in grey cell
+6: Bun-haired man in grey tracksuit stands uneasy beside guard in white, prison cell
+7: Bun-haired man in grey sits on cell bed, eyes shut, mouth open, distraught
+8: Worried bun-haired man talks on wall phone; PIN PHONE, NOTICE, SAMARITANS (last two edge-clipped)
+9: Grimacing bun-haired man sits among three grey-clad men, dim room, blank clock
+10: Wall TV: BBC NEWS; BREAKING NEWS; Early release scheme: new round announced; AT CAPACITY • GOVERNMENT ANNOUNCES EARLY RELEASES • PRISONS AT CA
+11: Sunglassed long-haired bearded man faces press cameras, boom mics; HM PRISON VISITS AND RECEPTION
+-- result.md --
+## Panel 1
+ok: A1 A3 O2 O4 O3 O6 O1 S1 S2 S6 S4
+FAULT A2: building off-reference
+FAULT S3: steps centred
+FAULT O5: armless notepads
+FAULT S5: flat ground
+## Panel 2
+ok: A3 O5 O2 O4 O6 O1 S1 S2 S5 S6 S3 S4
+FAULT A1: lectern-like box
+FAULT A2: braided hair
+FAULT O3: arms dog, goat
+## Panel 3
+ok: A1 A2 A3 O4 O6 O1 S2 S5 S6 S3 S4
+FAULT O5: gavel unheld
+FAULT O2: handle impales chest
+FAULT O3: arms dog, goat
+FAULT S1: gavel tiny
+## Panel 4
+ok: A1 A2 A3 O5 O2 O4 O3 O6 O1 S1 S2 S5 S6 S4
+FAULT S3: twin officers
+## Panel 5
+ok: A3 O5 O2 O4 O6 O1 S1 S2 S5 S6 S4
+FAULT A1: cell-like van
+FAULT O3: sign blob
+CAN'T TELL S3: van photo
+## Panel 6
+ok: A2 A3 O5 O2 O4 O3 O6 O1 S1 S2 S5 S6 S4
+FAULT A1: door shut-looking
+FAULT S3: no toilet
+## Panel 7
+ok: A1 A2 A3 O5 O2 O4 O3 O6 O1 S1 S2 S5 S6 S4
+FAULT S3: no toilet
+## Panel 8
+ok: A3 O5 O4 O6 S5 S6 S3 S4
+FAULT A1: booth-like hood
+FAULT S2: beside hood
+FAULT O3: two handsets
+FAULT O2: cord to shoulder
+FAULT O1: signs edge-clipped
+FAULT S1: half off-frame
+## Panel 9
+ok: A3 O5 O2 O3 O1 S2 S5 S3 S4
+FAULT A1: no TV light
+FAULT O6: grey wash
+FAULT O4: Brand oversized
+FAULT S1: faces dimmed
+FAULT S6: wall unlike 10
+## Panel 10
+ok: A3 O2 O4 O3 O1 S1 S2 S3 S4
+FAULT A1: desk white
+FAULT O5: bracket mid-wall
+FAULT O6: no glow
+FAULT S5: green void
+FAULT S6: wall unlike 9
+## Panel 11
+ok: A3 O3 O6 O1 S1 S6 S4
+FAULT A1: castle-like gatehouse
+FAULT A2: crenellated towers
+FAULT S3: no gate grille
+FAULT O4: gate Brand-height
+FAULT S2: far forward
+FAULT O5: armless notepads
+FAULT O2: bollard from camera
+FAULT S5: flat ground
+## Cold look
+Missed box, van, door, hood, glow, bracket, desk, gate door: none read.
+## Same fault elsewhere
+Notepads 1, 11. Arms 2, 3. Floors 1, 11. Toilet 6, 7. Scale 9, 11. Intrusion 3, 8. Glow 9, 10.
+## Not on the list
+1. Hair changes. suggested line: cast-sheet hair always.
+2. Real BBC logo. suggested line: no real brands.
+
