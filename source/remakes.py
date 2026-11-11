@@ -818,11 +818,39 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         rot = fall * 82 * ease((t - hit) / 0.35) if t >= hit else 0.0
         if who != 'gunman1':
             RS.foot_shadow(img, cam, x, y, ppm, RS.SHADOW_W['gunman'])
+        hx = x
+        j = j or _gun_pose()
         if t >= hit:                                                  # critique r3: the hit jolts him back
             x += -flip * 0.14 * ppm * math.sin(math.pi * min(1.0, (t - hit) / 0.2))
-        _kid(img, cam, who, x, y, ppm, t, j=j or _gun_pose(), yaw=90, flip=flip, rot=rot, talk=False)
+        if who == 'gunman3' and t >= hit:                             # note 65 (Sam): no stiff model laid flat:
+            k = ease((t - hit) / 0.3)                                 # he crumples, knees buckling, arms flung,
+            if t - hit > 0.55:                                        # the rifle flying, and goes off screen left
+                _hit(img, cam, hx - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
+                     ground=y + 0.1 * ppm)
+                return
+            x -= 1.9 * ppm * ease((t - hit) / 0.5)
+            j = V.standing(RC.CAST['gunman'])
+            sw = RC.CAST['gunman']['shoulders']
+            V.arm_to(j, 'L', (-sw - 60 * k, -120.0 - 160 * k, 60.0), 'up', 'palm')
+            V.arm_to(j, 'R', (sw + 40 * k, -60.0 - 200 * k, -40.0), 'up', 'palm')
+            for sd, dz in (('L', 120), ('R', -60)):
+                fx, fy, fz = j['foot' + sd]
+                j['foot' + sd] = (fx, fy - 260 * k, fz + dz * k)      # knees buckle
+            j['head_dy'] = -30 * k
+            ra = math.radians(140 * k)                                # the rifle spins away
+            _rifle_spin(img, cam, x - flip * 0.6 * ppm * k, y - (1.3 - 0.4 * k) * ppm, ppm, ra)
+            y -= 0.0
+        _kid(img, cam, who, x, y + (0.9 * ppm * ease((t - hit) / 0.3) if who == 'gunman3' and t >= hit else 0),
+             ppm, t, j=j, yaw=90, flip=flip, rot=rot, talk=False)
         _hit(img, cam, x - flip * 0.06 * ppm, y - 1.12 * ppm, t - hit, ppm, -flip, seed=len(who) + int(hit),
              ground=None if who == 'gunman1' else y + 0.1 * ppm)       # note 48
+
+    def _rifle_spin(img_, cam_, rx, ry, rp, a):
+        d_ = ImageDraw.Draw(img_)
+        c_, s_ = math.cos(a), math.sin(a)
+        L_ = 0.55 * rp
+        pts = [(-L_, -0.035 * rp), (L_, -0.035 * rp), (L_, 0.035 * rp), (-L_, 0.06 * rp)]
+        d_.polygon([cam_.P(rx + c_ * px - s_ * py, ry + s_ * px + c_ * py) for px, py in pts], fill=(30, 30, 34), outline=INK)
 
     def run_in(who, u, tt):
         """The aiming pose on running legs while he comes in (u < 1)."""

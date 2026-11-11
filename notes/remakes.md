@@ -1,17 +1,15 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (critique r3 passes 1-2 done; any new change gets one more pass), 88 (one check sheet
-  this round), 85.
-- **Done (11 Nov, Opus):** notes 46-49, 53, 54, 56, 60-64 fixed, clips sent for each; critique r3 two passes, fixed.
-- **Next (Sonnet, medium): the check sheet** (every shot), send it, wait for Sam's clear yes. On his yes: the Sonnet
-  chat messages the Opus chat that opened it (send_message) and stops; that Opus chat runs note 59 (opens a Fable chat,
-  claude-fable-5-2 high, cold critique of the check sheet and clips; one send_later check; findings to the ledger),
-  then opens a Sonnet chat to render animatic 3 (watch and listen first: note 40). Sam's pending answer: are Fable's
-  findings fixed before the render (pick: yes); ask only if still open then.
-- **Needs Sam:** his look at the clips; then the check sheet's yes.
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md`.
-- **Open rule requests:** none. (The helper's "close-up matches its wide" line suggestion: not proposed; one case.)
+- **Rules that bite next:** 89, 88, 30 (note 65: a critique fix undid Sam's staging).
+- **Done (11 Nov, Opus):** notes 46-49, 53, 54, 56, 60-65 fixed, clips sent; critique r3 two passes, fixed. The first
+  check-sheet chat was stopped unsent (Sam: the Fable critique comes BEFORE the check sheet).
+- **Next:** note 59 first: the Fable chat (claude-fable-5-2, high) critiques cold, writes notes/ledger/remakes-fable-r3.md
+  and messages the Opus chat (session_01GznaAVox86mfmc4fXZj2uJ); then the Opus chat acts on Sam's answer (fix
+  first or not) and opens the Sonnet chat (medium): check sheet, Sam's yes, animatic 3 (watch and listen: note 40).
+- **Needs Sam:** fix Fable's findings before the check sheet? (pick: yes); his look at the clips.
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md` (the Sonnet chat).
+- **Open rule requests:** none.
 - **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
   RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C. Clips: clips/.
 
@@ -42,6 +40,7 @@
 | 62 (Sam, 11 Nov, with a still) | the tower shot: KG's whole body tips off the ground; he should aim only his gun and head up | **DONE 11 Nov** (clip sent): CR.kg(gun_aim=): body planted, wings and gun swing about the shoulder, head tipped 0.7 x the aim. Seen before? new kind (the tip was the build's own staging, note 32) |
 | 63 (Sam, 11 Nov) | 47 again: the right-hand soldier needn't step in; he fires from just right of the main shot, kneeling; the camera follows Navi to him | **DONE 11 Nov** (clip sent): _g2() mark off S7's right, kneeling (prepper.kneel's legs) behind the sandbags, firing from line 8 to the blast; BOOM = ZIP + 0.55 and S8 follows her. Seen before: a changed decision (47's reveal), not a failed fix |
 | 64 (critique r3) | passes 1 and 2 (fresh-eye helper): S13 arms lost under the claws; line-up still small; tracers high; KG's glare faint; wounds at the head; KG leans at the tower; the street mirrored and empty; G3 no jolt and falls out of frame | **DONE 11 Nov**: arms hang limp; line-up 1.55 and KG smaller; tracers from his muzzle at chest height; glare look 2.2; wounds at the chest, back side; side KG stood 10 deg forward when aiming; the street each side its own build; hit jolt; G3 falls forward. Left (named): KG faces the camera in the 'low' turn (front view only); G2 side-on legs; the far hills read as snowy peaks in the S7 detail (clouds behind them) |
+| 65 (Sam, 11 Nov, with a still) | the lower-left gunman lying flat looks like a standing model laid down, not a corpse: have him fall left off screen | **DONE 11 Nov**: the critique's "fall forward" undone (Sam's call wins); he crumples as he goes (knees buckle, arms fling, rifle spins away) and slides out of frame left inside 0.5 s, then is not drawn (the stray boot gone); the spray stays on the ground. Seen before: yes (critique r3 moved him; a fix against Sam's staging: a critique fault is checked against Sam's notes before it is fixed) |
 | 57 (Sam, 11 Nov) | KG too still holding Link up at the wall (S12, S12b, S13) | head moves (jabs, tilts, shakes on the words), brow and eye changes, beak snaps per syllable, body heaving; the wings stay on the collar | **DONE 11 Nov** (clip sent): head tilts and jabs from headlife, rage/fury face on the stresses, a lean in after his last word |
 
 
