@@ -68,3 +68,12 @@
 - **Open rule requests:** none.
 - **For Claude:** `blessed_cast.inmate_head` (INMATE_FACES), `press_person`/PRESS_STYLES (TH.Person per haircut, `_Big` without `_lift`); `blessed.press_sp/press_pose/press`, PRESS_YAW, `_phone_up`; `blessed_cast.gaze()` scales gaze_dy; `_turned_long(colour, length)`. Setup hook now installs with `python3 -m pip` (pip was another Python).
 
+## Handover after chat 9 (11 Nov)
+- **Rules that bite next:** 89 (sets hunts on the new gatehouse, TV-room bench and press pack before the animatic), 74 (acting list ticked), 75 (Hook Text placed at animatic 1).
+- **Done (11 Nov, chat 9, Opus):** chat 8's backup applied and pushed. Rule written: Sam starts each new chat by hand (CLAUDE.md). Set faults fixed (Sam's Y): TV room has one bench at knee height, a noticeboard in place of the cue rack, a blue TV glow; gatehouse redrawn to ref 18 (rusticated pilasters, sandstone arch, square grille over a plain timber gate, yellow bollards, sign on posts) and brought to 9 m; wide gates shot framed tighter (zoom 1.4 to 1.7); boom at the arrival shortened under the sign. Sam's notes 7-9: ears no longer drawn over long hair; the press pack crowds the gate and everyone faces Brand at both places. Checks clean; stills sent.
+- **Next (opened by chat 9 at Sam's ask), Opus, high effort:** (1) Sam's ask: find a description of how Brand acted and moved before the scandal (stand-up, interviews, red carpets: one search pass, a few sources, cited in these notes), turn it into a short "how Brand moves" list, and revise the acting list and his moves in blessed.py to match (clips of changed seconds; Lost/Added lines). (2) Animatic 1 prep: sets hunts (critique.py), brief and acting list ticked, check sheet with the Hook Text frame; stop for Sam's yes. High effort: new movement built from research.
+- **Needs Sam:** a look at the set-fix stills.
+- **Read:** `guides/job-packs.md` Checks and animatic; Notes round if the hunts find faults; this section.
+- **Open rule requests:** none (the crowd-facing lesson: Sam, 11 Nov, "context dependent": not a rule; decide where each crowd looks in the staging).
+- **For Claude:** `ST.gates` rebuilt (`_rustic`, `_arched_window`, GATE_D 9); `press(..., at=(x, d))` sets each journalist's yaw towards the mark (PRESS_YAW now unused), `reach` for the boom; `G2_FROM/TO` 8.5/7.6; turnhead.draw skips ears when sp['ears_hidden']; `_cam` gates zoom 1.4-1.7; gates2 zoom 1.9; tvroom bench at y 1290.
+

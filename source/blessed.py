@@ -108,6 +108,24 @@ T['overjoyed'] = T['push'] + 3.2
 T['gates'] = T['overjoyed'] + 1.6               # her voice has faded out by the cut
 DUR = _at(6, T['gates'] + 0.8) + 1.0
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
+
+
+def _voice_env(who):
+    """The speaker's loudness per drawing over the whole film (for headlife)."""
+    env = np.zeros(int((DUR + 1) * FPS))
+    n = SR // FPS
+    for ln in LINES:
+        if ln['who'] == who:
+            v = ln['_voice']
+            e = [np.sqrt(np.mean(v[i * n:(i + 1) * n] ** 2)) for i in range(len(v) // n)]
+            i0 = int(round(ln['start'] * FPS))
+            env[i0:i0 + len(e)] = e[:len(env) - i0]
+    return env
+
+
+import headlife                  # noqa: E402  (rule 74: every talking head tilts and nods on the voice)
+HEAD_LIFE = {'brand': headlife.HeadLife(_voice_env('brand'), 0.0, seed=5),
+             'newsreader': headlife.HeadLife(_voice_env('newsreader'), 0.0, seed=9)}
 SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['s3']), ('gavel', T['s3'], T['s4']),
          ('dock', T['s4'], T['van']), ('van', T['van'], T['cell']), ('escort', T['cell'], T['cot']),
          ('cot', T['cot'], T['phone']), ('phone', T['phone'], T['tvroom']), ('tvroom', T['tvroom'], T['tv']),
@@ -128,10 +146,12 @@ PLAN = dict(CEIL=3.0, ROOMS={v: (-6.0, 0.0, 6.0, 18.0) for v in ST.BACK}, OPENIN
             PEOPLE={}, CAMS={v: dict(pos=(0.0, 1.6, -1.0), look=(0.0, 1.6, 4.0)) for v in ST.BACK}, GROUPS={})
 
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('Russell Brand this week', {'y': 880})     # brief 17 (Claude's pick)
+HOOK = ('Russell Brand this week', {'y': 420})     # brief 17 (Claude's pick); over the court's upper windows, clear
+#                                                   of the sign and his hair (rule 75, measured 11 Nov)
 SUBS_IN_PICTURE = True
 PIECE_FIX = {}
-KEEP_CLEAR = []
+KEEP_CLEAR = [('the court sign', lambda t: (330, 640, 1030, 730) if t < T['s2'] else None),
+              ('his face and hair', lambda t: (620, 950, 925, 1215) if t < T['s2'] else None)]
 PROP_SIZES = []
 OUTFIT = {}
 HEIGHTS = {w: c['height'] for w, c in CAST.items()}
@@ -333,7 +353,7 @@ def brand_mood(t):
 
 def brand_sp(t, look):
     mood, shades = brand_mood(t)
-    return dict(BC.LOOKS[look], **face('brand', t, mood, shades=shades))
+    return dict(BC.LOOKS[look], head_life=HEAD_LIFE['brand'], **face('brand', t, mood, shades=shades))
 
 
 # ---------------------------------------------------------------------------------------------- moves
@@ -477,40 +497,71 @@ def _box_prop(j, box, col, mark=None):
     return draw
 
 
+# How Brand moves (notes/blessed.md "How Brand moves", from 2008-2021 reviews): a rock-star swagger (chest out, a
+# loose sway, a long easy stride), big open-handed gestures, a dip at the knees on the punchline, chin up to preen.
+# The showman is in the arrival, the oath (held in) and the gates; prison has none of it (the contrast is the joke).
+moves.GAITS['swagger'] = dict(moves.GAITS['walk'], sps=1.8, step=0.5, swing=0.42, bend=0.25, lean=-3)
+
+
+def _sway(t, sps=1.8):
+    """The swagger's roll of the head and shoulders, towards each planted foot."""
+    return 3.5 * math.sin(math.pi * sps * t)
+
+
+def _dip(j, amt, splay=0.4):
+    """Down at the knees by `amt` person units, feet kept on the floor, knees opening a little."""
+    if amt <= 0:
+        return j
+    j['bob'] = j.get('bob', 0.0) + amt
+    for sd, sg in (('L', -1), ('R', 1)):
+        x, y, z = j['foot' + sd]
+        j['foot' + sd] = (x, y - amt, z)
+        j['knee_pole' + sd] = (sg * splay, 0.0, 1.0)
+    return j
+
+
 # --- arrive: he walks into the scrum, stops, snaps to face the cameras; heart, shades on "mate", arms wide on
 #     "super", back to the heart with a little bow on the last "blessed"; at rest by 4.4 s (rule 72)
 ARRIVE_FROM, ARRIVE_TO, ARRIVE_STOP = (1.2, 4.9), (0.45, 3.9), 1.35
 
 
 def arrive(sp, t):
-    """(mark, yaw, joints) for Brand arriving."""
+    """(mark, yaw, joints) for Brand arriving: swaggers in, leans in to the press on "mate", dips with his arms
+    flung open on "super", springs up chin high, then hand to heart and a small bow on the last "blessed"."""
     u = min(1.0, max(0.0, (t - T['s1']) / ARRIVE_STOP))
     x = ARRIVE_FROM[0] + (ARRIVE_TO[0] - ARRIVE_FROM[0]) * u
     d = ARRIVE_FROM[1] + (ARRIVE_TO[1] - ARRIVE_FROM[1]) * u
     mark = ST._mark(ST.OUT, x, d)
     walking = t < ARRIVE_STOP
-    g = moves.gait(sp, t + 0.37, 'walk')
-    j = moves.mix_poses(g, V.standing(sp), _ease(_ramp(t, ARRIVE_STOP - 0.15, ARRIVE_STOP + 0.15)))
+    g = moves.gait(sp, t + 0.37, 'swagger')
+    settle = _ease(_ramp(t, ARRIVE_STOP - 0.15, ARRIVE_STOP + 0.15))
+    j = moves.mix_poses(g, V.standing(sp), settle)
     yaw = -45.0 if t < ARRIVE_STOP + 0.2 else 0.0
     if not walking:
         j['bob'] = 0.0
         j['lean'] = 0.0
+    j['head_roll'] = _sway(t + 0.37) * (1 - settle)
     feel, mate, sup, last = (word_at(1, 'feeling'), word_at(1, 'mate'), word_at(1, 'super'),
                              word_at(1, 'blessed.'))
     sw = sp.get('shoulders', 150)
     heart = ((-30.0, 135.0, 78.0), 'in', 'palm')
     shades = ((-88.0, -204.0, 70.0), 'in', 'palm')       # at the frame's side: the nose stays clear
-    wide = lambda sg: ((sg * (sw + 120), 200.0, 110.0), 'out', 'palm')
+    wide = lambda sg: ((sg * (sw + 300), 40.0, 150.0), 'out', 'palm')   # flung open at shoulder height
     arm_keys(j, sp, 'L', t, [(feel - 0.35, None), (feel, heart), (mate - 0.35, heart), (mate - 0.05, shades),
-                             (mate + 0.1, shades), (sup + 0.05, wide(-1)), (last - 0.15, wide(-1)), (last + 0.2, heart),
+                             (mate + 0.1, shades), (sup + 0.05, wide(-1)), (last - 0.1, wide(-1)), (last + 0.2, heart),
                              (L[1]['end'] + 0.2, heart), (4.4, None)])
-    arm_keys(j, sp, 'R', t, [(mate + 0.1, None), (sup + 0.05, ((sw + 120, 200.0, 110.0), 'out', 'fist')),
-                             (last - 0.15, ((sw + 120, 200.0, 110.0), 'out', 'fist')), (last + 0.3, None)])
+    arm_keys(j, sp, 'R', t, [(mate + 0.1, None), (sup + 0.05, ((sw + 300, 40.0, 150.0), 'out', 'fist')),
+                             (last - 0.1, ((sw + 300, 40.0, 150.0), 'out', 'fist')), (last + 0.3, None)])
     if mate - 0.3 < t < mate + 0.25:
         j['on_face'] = {'L'}
+    lean_in = _bump(t, mate - 0.35, sup + 0.05, 0.25, 0.2)            # in close to the scrum on "mate"
+    dip = _bump(t, sup - 0.12, last + 0.02, 0.14, 0.12)               # down at the knees on "super", springs up
+    chin = _bump(t, sup - 0.05, last + 0.05, 0.12, 0.15)              # chin up, preening, as the arms open
     bow = _bump(t, last - 0.1, last + 0.7, 0.25, 0.35)
-    j['lean'] = j.get('lean', 0.0) + 6 * bow
-    j['nod'] = 1.4 * bow
+    _dip(j, 34 * dip)
+    j['lean'] = j.get('lean', 0.0) + 7 * lean_in + 6 * bow
+    j['nod'] = 1.4 * bow - 1.3 * chin
+    j['head_roll'] = j.get('head_roll', 0.0) + 5 * lean_in
     import grips
     grips.held(j, 'R', sp, _beads(sp))
     return mark, yaw, j
@@ -535,8 +586,7 @@ def oath(sp, t):
     for w in ('blessed evidence', 'blessed truth'):
         k = word_at(2, w)
         b = _bump(t, k - 0.05, k + 0.55, 0.15, 0.3)
-        j['lean'] = j.get('lean', 0.0) + 4 * b
-        j['nod'] = j.get('nod', 0.0) + 1.0 * b
+        j['nod'] = j.get('nod', 0.0) - 1.1 * b        # the showman held in: bolt upright, the chin lifts on each "blessed"
     if up0 + 0.2 < t < dn1 - 0.1:
         import grips
         lift = moves.lerp((0.0, 160.0, 0.0), (0.0, 0.0, 0.0), _ease(_ramp(t, up0, up1)))
@@ -726,21 +776,24 @@ def tv_pose(sp, t):
     return j
 
 
-# --- gates: out of the wicket door (wide), arms flung wide on "Blessed!"; then closer, striding to his mark,
-#     a double pump on "everybody!"
+# --- gates: swaggers out of the wicket door (wide), arms flung up and open, chin high, on "Blessed!"; then closer,
+#     striding to his mark; on "everybody!" he dips with his arms swept open to the pack and springs back up
 
 
 def _gates_cut():
     return L[6]['start'] + L[6]['_stretches'][0][1] + 0.12
 
 
+GATE_V = lambda sw, sg: ((sg * (sw + 290), -110.0, 90.0), 'out', 'palm')     # up and out, palms open: the messiah
+GATE_OPEN = lambda sw, sg: ((sg * (sw + 300), 40.0, 160.0), 'out', 'palm')   # swept open at shoulder height
+
+
 def _arms_wide(j, sp, t, t_up, side_first=True):
-    """Both arms flung up and wide at t_up: out to the side on the way (figure-rig 3's waypoint), then up."""
+    """Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up."""
     sw = sp.get('shoulders', 150)
     for sd, sg in (('L', -1), ('R', 1)):
         side = ((sg * (sw + 200), 120.0, 40.0), 'down', 'palm')
-        up = ((sg * (sw + 170), -150.0, 50.0), 'down', 'palm')
-        arm_keys(j, sp, sd, t, [(t_up - 0.35, None), (t_up - 0.12, side), (t_up + 0.1, up)])
+        arm_keys(j, sp, sd, t, [(t_up - 0.35, None), (t_up - 0.12, side), (t_up + 0.1, GATE_V(sw, sg))])
     return j
 
 
@@ -748,11 +801,17 @@ def gates_wide(sp, t):
     k = t - T['gates']
     dd = GATE_D_OUT[0] + (GATE_D_OUT[1] - GATE_D_OUT[0]) * min(1.0, k / 0.8)
     mark = ST._mark(ST.GATE, 0.65, dd)
-    g = moves.gait(sp, k, 'walk')
-    j = moves.mix_poses(g, V.standing(sp), _ease(_ramp(k, 0.7, 0.95)))
+    g = moves.gait(sp, k, 'swagger')
+    settle = _ease(_ramp(k, 0.7, 0.95))
+    j = moves.mix_poses(g, V.standing(sp), settle)
     if k > 0.95:
         j['bob'] = 0.0
-    _arms_wide(j, sp, t, word_at(6, 'Blessed!') + 0.1)
+    j['head_roll'] = _sway(k) * (1 - settle)
+    up = word_at(6, 'Blessed!') + 0.1
+    _arms_wide(j, sp, t, up)
+    chin = _ease(_ramp(t, up - 0.1, up + 0.2))
+    j['nod'] = -1.5 * chin
+    j['lean'] = j.get('lean', 0.0) - 3 * chin
     return mark, 0.0, j
 
 
@@ -763,19 +822,25 @@ G2_FROM, G2_TO = 8.5, 7.6                          # out of the wicket into the 
 def gates_close(sp, t):
     a = _gates_cut()
     k = t - a
-    walk = (G2_FROM - G2_TO) / moves.speed('walk')
+    walk = (G2_FROM - G2_TO) / moves.speed('swagger')
     u = min(1.0, max(0.0, k / walk))
     mark = ST._mark(ST.GATE, 0.6, G2_FROM + (G2_TO - G2_FROM) * u)
-    g = moves.gait(sp, k + 0.25, 'walk')
-    j = moves.mix_poses(g, V.standing(sp), _ease(_ramp(k, walk - 0.15, walk + 0.15)))
+    g = moves.gait(sp, k + 0.25, 'swagger')
+    settle = _ease(_ramp(k, walk - 0.15, walk + 0.15))
+    j = moves.mix_poses(g, V.standing(sp), settle)
     if k > walk + 0.15:
         j['bob'] = 0.0
     sw = sp.get('shoulders', 150)
     ev = word_at(6, 'everybody')
     for sd, sg in (('L', -1), ('R', 1)):
-        up = ((sg * (sw + 170), -150.0, 50.0), 'down', 'palm')
-        hi = ((sg * (sw + 120), -230.0, 70.0), 'down', 'palm')
-        arm_keys(j, sp, sd, t, [(ev - 0.05, up), (ev + 0.12, hi), (ev + 0.3, up), (ev + 0.45, hi), (ev + 0.7, up)])
+        arm_keys(j, sp, sd, t, [(ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
+                                (ev + 0.25, GATE_OPEN(sw, sg)), (ev + 0.55, GATE_V(sw, sg))])
+    dip = _bump(t, ev - 0.25, ev + 0.5, 0.25, 0.22)               # down at the knees with the sweep, springs up
+    _dip(j, 40 * dip)
+    chin = 1 - _bump(t, ev - 0.3, ev + 0.5, 0.2, 0.25)
+    j['nod'] = -1.5 * chin + 0.8 * dip                             # chin high, a dip of the head into the sweep
+    j['lean'] = j.get('lean', 0.0) - 3 * chin + 5 * dip
+    j['head_roll'] = _sway(k + 0.25) * (1 - settle) + 4 * _ease(_ramp(t, ev + 0.5, ev + 0.9))   # a preening tilt to hold
     return mark, 0.0, j
 
 
@@ -921,7 +986,7 @@ def picture(t):
     view, _ = ST.view_cam(VIEW[shot])
     cam = _cam(VIEW[shot], t)
     img = B.canvas((0, 0, 0))
-    feed = ST.studio_feed(t, dict(BC.NEWSREADER, **face('newsreader', t, 'neutral'))) if view == 'tv' else None
+    feed = ST.studio_feed(t, dict(BC.NEWSREADER, head_life=HEAD_LIFE['newsreader'], **face('newsreader', t, 'neutral'))) if view == 'tv' else None
     ST.back(view, img, cam, t, feed)
     if view not in ('court_box', 'court_dock'):     # those two put the mid layer between their people
         ST.mid(view, img, cam, t)
