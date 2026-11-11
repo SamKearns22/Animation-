@@ -1,0 +1,17 @@
+{
+ "film": "trial_link",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "e6f25585",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.12
+  }
+ ],
+ "checks": {}
+}
