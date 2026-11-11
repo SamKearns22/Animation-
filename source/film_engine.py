@@ -1,4 +1,4 @@
-"""film_engine: what every Satire-style film and quick.py share, so a new film only writes its story.
+"""film_engine: what every Satire-style film shares, so a new film only writes its story.
 
   render          the film, with the PICTURE cached per frame and captions + title put on last: a caption or timing
                   note re-renders nothing (about a minute); --redo SHOT re-renders only that shot.
@@ -100,11 +100,11 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     stamp: the time and shot in the corner; None (the default) = on for every review copy (a span, or smaller than
     full size: rule 29), off for the full-size final.
     lock (rule 59): an animatic or final (no span) needs pre-flight's pass on the code as it is now; None = on for every
-    film but quick videos and clips; False only for a tool's own demo render, never a film."""
+    film but clips; False only for a tool's own demo render, never a film."""
     main = sys.modules.get('__main__')
     film = os.path.splitext(os.path.basename(getattr(main, '__file__', '') or ''))[0]
     if lock is None:
-        lock = not span and film != 'quick' and not getattr(main, 'QUICK', False)
+        lock = not span
     if os.path.exists(out):                       # rule 66 (Sam, 3 Nov): never an old file standing in for a new render:
         os.remove(out)                            # gone before anything else, so a refused or stopped render leaves none
     if lock:

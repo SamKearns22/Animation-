@@ -27,7 +27,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import burnham as B          # noqa: E402
-import quick as Q            # noqa: E402  (circle hands, captions, mossad's tilted heads and brows)
+import satire_parts as Q     # noqa: E402  (circle hands, captions, mossad's tilted heads and brows)
 import figure as F           # noqa: E402
 import mouths                # noqa: E402
 from ed import INK, curve, oval, soft   # noqa: E402
