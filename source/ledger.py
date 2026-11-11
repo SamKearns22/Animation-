@@ -7,6 +7,9 @@ MAP
   record() ......... called by report.summarise: every check's full result (clean ones too) goes into the round file
   save / note ...... the check sheet's text, false alarms, "could not test", into the round file
   log .............. at every handover: this chat's cost (from the cost watch), model, stage, notes, repeated notes
+  auto ............. the Stop hook (Sam, 11 Nov: "automate this"): after every turn, this chat's running cost goes
+                     into the ledger of the film or job it worked on (found from the files it touched); committed and
+                     pushed when it has moved by 0.25% of a week, so the record survives the chat
   estimate ......... the film's estimate (% of a week), for estimate versus actual
   audit ............ the 10-line end-of-film audit, also written into FILM.md
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
@@ -101,6 +104,71 @@ def chat_cost():
     st, _ = costwatch.read_usage(path)
     _, pct = costwatch.level(st)
     return os.path.basename(path)[:8], round(pct, 2), costwatch.fam(st['model'])
+
+
+SKIP = {'archive', 'next-jobs', '_template', 'sheets', 'ledger'}
+
+
+def film_of(transcript):
+    """The film or job this chat worked on: the notes/NAME.md (or source/NAME*.py with a notes file) its own tool
+    calls named most."""
+    names = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT, 'notes')) if f.endswith('.md')} - SKIP
+    count = {}
+    for raw in open(transcript, encoding='utf-8', errors='replace'):
+        if '"tool_use"' not in raw:
+            continue
+        for m in re.finditer(r'(?:notes|source)/([A-Za-z0-9_-]+)\.(?:md|py)', raw):
+            n = m.group(1)
+            n = n if n in names else n.split('_')[0]
+            if n in names:
+                count[n] = count.get(n, 0) + 1
+    return max(count, key=count.get) if count else None
+
+
+def auto(transcript):
+    """Stop hook: this chat's running cost into its film's ledger (one row per chat, replaced as it grows); committed
+    and pushed to the chat's branch when it moved by 0.25% of a week or the chat is new to the ledger."""
+    import subprocess
+    film = film_of(transcript)
+    if not film:
+        return
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import costwatch
+    st, _ = costwatch.read_usage(transcript)
+    _, pct = costwatch.level(st)
+    chat, cost, model = os.path.basename(transcript)[:8], round(pct, 2), costwatch.fam(st['model'])
+    d = load(film)
+    old = next((c for c in d['chats'] if c['chat'] == chat), None)
+    if old and abs(old['cost'] - cost) < 0.25:
+        return
+    row = dict(old or {'date': str(date.today()), 'chat': chat, 'stage': 'auto', 'round': None, 'notes': 0,
+                       'repeats': []}, model=model, cost=cost)
+    if old:
+        d['chats'][d['chats'].index(old)] = row
+    else:
+        d['chats'].append(row)
+    alarm = None
+    spent, est = totals(d)[0], d.get('estimate')
+    if est:                                       # Sam, 11 Nov: Remakes ran to 45% on a 14.5% estimate and nothing
+        step = int((spent / est - 1) / 0.25) + 1 if spent >= est else 0      # caught it: an alarm at the estimate
+        if step > d.get('alarm', 0):                                        # and at every quarter over it, once each
+            d['alarm'] = step
+            alarm = (f'COST ALARM (ledger): {film} has spent {spent}% of a week against its estimate of {est}% '
+                     f'({spent / est:.0%}). Stop this work now. Tell Sam in the first line of your reply, with what '
+                     f'is left to do and your estimate for it, and ask Y/N whether to go on. Do not go on before his Y.')
+    store(d)
+    if alarm:
+        print(json.dumps({'decision': 'block', 'reason': alarm}))
+    if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
+        return                                    # mid-merge: the chat's own next commit carries it
+
+    def git(*a):
+        return subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True, timeout=60)
+    j, md, _ = _paths(film)
+    git('add', j, md)
+    if git('commit', '-q', '-m', f'Ledger: {film}, chat {chat} at {cost}% of a week (automatic)', '--', j,
+           md).returncode == 0:
+        git('push', '-q', 'origin', 'HEAD')
 
 
 def totals(d):
@@ -211,9 +279,16 @@ def main():
     p.add_argument('--repeat', action='append', default=[], help='"the note | what would have caught it"')
     p = s.add_parser('audit'); p.add_argument('film')
     s.add_parser('kept')
+    s.add_parser('auto')
     o = a.parse_args()
     if o.cmd == 'kept':
         print('\n'.join(kept_lines()))
+        return
+    if o.cmd == 'auto':                           # the Stop hook: its JSON (with the transcript's path) on stdin
+        try:
+            auto(json.load(sys.stdin)['transcript_path'])
+        except Exception as e:                    # never hold up a chat over the ledger
+            print(f'ledger auto: {e}', file=sys.stderr)
         return
     d = load(o.film)
     film, rnd = current()
