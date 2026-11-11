@@ -31,6 +31,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.08
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "74d1c555",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.08
   }
  ],
  "checks": {},
