@@ -1,0 +1,113 @@
+== critique, round 1 pass 1 (2026-11-11): 37 fault(s), 18 can't tell
+-- look.md --
+1: Long-haired bearded man, sunglasses, grey suit, smug, before court; backs of crowd holding papers. "CROWN COURT SOUTHWARK"
+2: Red-robed wigged judge high above; long-haired man at microphone lectern, back half-turned, looking up.
+3: Close-up: wigged judge in red robe, black sash, stern frown, crest with crown above.
+4: Man, hair now in top bun, grey suit, glum, inside glass dock between two guards.
+5: Same man in grey tracksuit, top bun, standing in grey cell doorway, worried, arms limp.
+6: Small cell: bed, barred window, noticeboard; man in grey beside officer in white shirt.
+7: Man slumped sitting on cell bed, eyes shut, mouth open, crying out in despair.
+8: Man on wall phone, mouth open, anxious. "NOTICE" "PIN PHONE" "SAMARITANS"
+9: Dim grey room: man, sad, among line of grey-clad prisoners, all staring blankly.
+10: Wall TV, newsreader. "BBC NEWS" "BREAKING NEWS" "Early release scheme: new round announced" "AT CAPACITY • GOVERNMENT ANNOUNCES EARLY RELEASES • PRISONS AT CA" (cut off)
+11: Long-haired man in sunglasses, suit, strolls from arched gate; crowd waits. "HM PRISON" "VISITS AND RECEPTION"
+-- result.md --
+## Panel 1
+ok: A3 O5 O2 O4 O6 O1 S1 S5 S6
+FAULT A1: press hold papers
+FAULT O3: press unreadable
+FAULT A2: orange, not buff brick
+FAULT S3: no canopy, trees
+FAULT S2: doors above wall, no steps
+CAN'T TELL S4: camera moves
+
+## Panel 2
+ok: A3 O5 O2 O4 O6 O1 S2 S6
+FAULT A1: Brand at lectern, no witness box
+FAULT A2: Brand tiny, not side-on
+FAULT O3: arms lack lion, unicorn
+FAULT S1: Brand's face tiny, turned away
+FAULT S5: blank wall, no gallery
+CAN'T TELL S3: real courtroom photo
+CAN'T TELL S4: camera moves
+
+## Panel 3
+ok: A2 A3 O5 O2 O4 O6 O1 S2 S5 S6 S3
+FAULT A1: gavel not read
+FAULT O3: gavel reads as dish
+FAULT S1: gavel tiny, hands hidden
+CAN'T TELL S4: camera moves
+
+## Panel 4
+ok: A1 A2 A3 O2 O3 O6 O1 S1 S2 S5 S6 S3
+FAULT O5: officers on ledge, feet dangling
+FAULT O4: officers half Brand's size
+CAN'T TELL S4: camera moves
+
+## Panel 5
+ok: A3 O5 O2 O4 O3 O6 O1 S1 S2 S6
+FAULT A1: reads standing in lift
+FAULT S5: no van window
+CAN'T TELL S3: van cubicle photo
+CAN'T TELL S4: camera moves
+
+## Panel 6
+ok: A3 O5 O2 O4 O3 O6 O1 S2 S5 S6
+FAULT A1: mid-cell, not led through door
+FAULT S1: officer chopped at right
+FAULT A2: no toilet, door barely seen
+FAULT S3: same
+CAN'T TELL S4: camera moves
+
+## Panel 7
+ok: A2 A3 O5 O2 O4 O3 O6 O1 S1 S2 S5 S6 S3
+FAULT A1: no tears; reads shouting
+CAN'T TELL S4: camera moves
+
+## Panel 8
+ok: A3 O2 O4 O6 O1 S1 S2 S6
+FAULT A1: no phone hood
+FAULT O3: handset reads as mobile
+FAULT O5: handset has no cord
+FAULT S5: no railings: not landing
+CAN'T TELL A2: landing reference
+CAN'T TELL S3: same
+CAN'T TELL S4: camera moves
+
+## Panel 9
+ok: A1 A3 O5 O2 O4 O3 O6 O1 S2
+FAULT S1: grey wash, no TV glow
+FAULT S5: cell's window, noticeboard reused
+FAULT S6: same: reads as cell
+CAN'T TELL A2: association-room reference
+CAN'T TELL S3: same
+CAN'T TELL S4: camera moves
+
+## Panel 10
+ok: A3 O5 O2 O4 O6 O1 S2 S5 S6
+FAULT A1: desk white, jagged, not red
+FAULT O3: reads as torn paper
+FAULT S1: TV small, blank wall
+CAN'T TELL S3: BBC studio still
+CAN'T TELL S4: camera moves
+
+## Panel 11
+ok: A3 O5 O2 O4 O6 O1 S2 S5 S6
+FAULT A1: gate shut; Brand stands
+FAULT S1: head covers Brand's legs
+FAULT O3: papers, no cameras
+FAULT A2: narrow towers, no arch grille
+FAULT S3: same
+CAN'T TELL S4: camera moves
+
+## Cold look
+Missed press (1, 11), witness box (2), royal arms (2, 3), gavel (3), van (5), led in (6), hood (8), TV light (9), red desk (10): not drawn clearly.
+
+## Same fault elsewhere
+No cameras: 1, 11. Arms: 2, 3. Beat unread: 2, 5, 6, 11. Action small: 2, 3, 6, 9, 10, 11. Bare set: 2, 5, 8, 9.
+
+## Not on the list
+1. Hair loose (1, 2, 11), bun (4-9). suggested line: looks match cast sheet.
+2. Real BBC logo. suggested line: "-style" means lookalike.
+3. Inmates stare at lens. suggested line: eyes on beat.
+
