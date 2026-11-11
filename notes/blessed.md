@@ -3,8 +3,8 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 74 (acting list before animatic 1), 24 (the estimate and the stop), 89 (critique: done for moves).
 - **Done (11 Nov, moves chat 7, Opus medium):** faults 1-5 fixed (oath: raised palm on the near side by the head, Bible in the far hand on the white shirt with a pale page edge; cot: curled along the bed, head at the pillow, contact check clean; gavel: hand on the bench top from the cut, raise to y 1000; van: fists clasped in front of the knees; arrival: hand at the shades' side, nose clear). Sam's note (testimony head) fixed: the head outline folded at the left temple (notch), a hair stroke left the hair, the beard tufts became stair steps and skin flecked under the chin when he turns. `touch_faults()` in `checks()` (gavel hand, Bible, officer's grip; proved it catches a moved hand); checks clean. Stills sheet and 3 clips sent; two critique passes (one fault: the amazed mouth read as a tongue; now a round O).
-- **Next:** waiting on Sam's look at the stills and clips; then animatic 1 prep (acting list, check sheet), Opus medium.
-- **Needs Sam:** a look at the stills sheet and the three clips. Photos of a van cubicle and a TV room still welcome.
+- **Next:** waiting on Sam's look and his answer on notes 4-5 (if Y: a cast chat, Opus high, for both); then animatic 1 prep (acting list, check sheet), Opus medium.
+- **Needs Sam:** a look at the stills sheet and the four clips (cot added, note 6); Y/N on notes 4 (press pack) and 5 (inmates) as extra cast work, about 0.5% each, past the 1% agreed. Photos of a van cubicle and a TV room still welcome.
 - **Read:** `guides/job-packs.md` Animatic; this section.
 - **Open rule requests:** none.
 - **For Claude:** `blessed_cast._outline` (P4.outline_uv retraced the upper-left temple; fixed for Brand only, other films untouched); beard tufts scale with |sin yaw| on TurnFace (`ta`); `COT_AT` (x, d, flip, yaw); `OATH_RAISE`/`OATH_BIBLE`/`OATH_BOOK`; `GRIP_AT` feeds the touch check. Push close-up crops the hair top late: left as is.
@@ -120,7 +120,7 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 | 3 | recordings | - | Sam's six voice files (11 Nov), filed by length against the script: `source/audio/blessed-1.m4a` arrival (8.9 s), `-2` oath (13.1 s), `-3` "doesn't feel very blessed" (3.9 s), `-4` phone (6.4 s), `-5` gates (4.9 s), `-bbc` the newsreader (22.4 s). Not yet heard against the words (no speech-to-text here): check at the animatic | all | filed |
 | 4 | arrive, gates | all | "the journalists are blob people": the press pack from behind (press_secretary.reporter, the kit's own, not stand-ins) reads as blobs: give them shoulders, collars, ears, hair with shape, arms, at least one turned three-quarter | press | open (moves chat 7) |
 | 5 | tvroom, push | 34.75-48.41 | "the prisoners have strange heights, proportions and details next to Russell; no mouths?": they are the real cast (INMATE in blessed.py), not stand-ins; Brand is drawn bigger (_Big head, nearer mark), so they look small and plain; match their scale and head size to his, give them mouths and faces with detail | inmates | open (moves chat 7) |
-| 6 | cot | 25.45-28.25 | "the lying pose doesn't look quite right, maybe in motion": the same as fault 2; add a cot clip (25.45-28.25) to the rehearsal clips | Brand | open (moves chat 7) |
+| 6 | cot | 25.45-28.25 | "the lying pose doesn't look quite right, maybe in motion": the same as fault 2; add a cot clip (25.45-28.25) to the rehearsal clips | Brand | done (moves chat 7: curled along the bed, head on the pillow; clip sent) |
 
 Decisions made:
 - References fetched through the press sites' own image servers after Sam's network approval (11 Nov); Wikimedia's API rate-limited us once.
