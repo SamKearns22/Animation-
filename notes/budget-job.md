@@ -6,6 +6,18 @@
 - **Needs Sam:** Y/N on proposals 1-7 and on the trial.
 - **Not measured:** the "new process" column below is a forecast. Only the trial and the next film can prove it.
 
+## Corrections after Sam's challenge (11 Nov): these override anything below that disagrees
+- **Chats:** the last audit was right; short chats with good handovers stay. My "0.4% to start a chat" was wrong: a
+  whole Opus chat on this film cost 0.21%, so a start is about 0.15%, and starts were about 4% of Remakes, not 8%.
+  Proposal 5 is now only: fix faults as one list, draw once, look once (fewer steps), and one critique helper per
+  stage rather than one per set. "One chat per stage" is withdrawn.
+- **Critique:** the record backs Sam. Pass 1 and pass 2 both found many real faults; pass 3 found 31, of which 4 were
+  fixed and 6 went to Sam, who passed them. Proposal 2 is now: keep both hunts; the third hunt is replaced by Sam's
+  look at the cast sheet; each fault listed once; "can't tell" answers no longer block.
+- **Cast sheet:** already done. Proposal 3 is withdrawn; the only change is that the sheet goes to Sam after pass 2,
+  in place of a third pass.
+- **Forecast now about 20%** (cast 7.5, sets 3.5; the rest as the table). The trial measures the cast figure.
+
 ## 1. Where Remakes' 60% went
 The early chats were recorded as one lump, so these are rebuilt from the handovers (good to a few points each).
 
