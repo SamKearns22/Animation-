@@ -76,8 +76,17 @@ it takes; quality as high as the real film's.
 ## Results (the trial chat fills this in)
 | checkpoint | cost so far (% of a week) | notes |
 |---|---|---|
-| C0 read in | | |
-| C1 first full sheet | | |
+| C0 read in | 0.3 | chat 1 (Opus high): merge, trial brief, Build pack sections, refs on one sheet |
+| C1 first full sheet | 1.0 | chat 1: `source/trial_link.py` written (head 3 views, cap, tunic, boots, 7 faces, 5 poses), sheet drawn, not yet looked at. AMBER here: handed over (rule 6) |
 | C2 own-look faults fixed | | |
 | C3 hunt 1 fixed | | found / real / duplicates / can't tell: |
 | C4 hunt 2 fixed, confirmed | | found / real / duplicates / can't tell: |
+
+## Where things stand (11 Nov, chat 1 of the trial, handed over on AMBER at C1)
+- Rules that bite next: trial rule 3 (batch: one look, one fault list, one fix pass), 89 (two hunts, fresh helper each), 41 (circle hands, arms one piece).
+- Done: C0 0.3%, C1 1.0% (Results above). Link drawn in `source/trial_link.py` (MAP at the top); sheet: `python3 source/trial_link.py sheet OUT.jpg` (2 s); faces full size: `... faces OUT.jpg`. The sheet has NOT been looked at yet.
+- Next (Opus, high effort): draw the sheet, look at it ONCE beside refs 03/04/01, write ONE fault list, fix it in one pass, redraw, crop faces/joins to confirm: C2. Then hunt 1 (`critique.py pack trial_link SPEC.json`, panels as "img"), fix: C3; hunt 2, fix, confirm: C4. Then the comparison sheet with `python3 source/remakes_cast.py alone link OUT.jpg` (run it, never read it), the 6-line summary to Sam, Results filled, push to the main line, push notification. No next chat at the end.
+- Needs Sam: nothing (spend already agreed).
+- Read: this file (rules of the test, What Link needs); the Build pack in `guides/job-packs.md` only if a fault needs it. Cost so far adds up across chats: add chat 1's 1.0% to yours.
+- Open rule requests: none.
+- For Claude: hooks in trial_link install() (B.head, V.head_view, V.arm, V.leg for who=='link'); person(img, cam, x, floor, s, yaw, j, extra, lift, t); pose(name, t); MOODS; scratch sheet at the chat's scratchpad (redraw it, don't commit drafts).
