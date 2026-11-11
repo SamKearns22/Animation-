@@ -1,6 +1,28 @@
 {
  "film": "remakes",
  "estimate": 14.5,
- "chats": [],
- "checks": {}
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "before",
+   "model": "mixed",
+   "stage": "all chats before automatic records (Sam's figure from the app: 45% at 11 Nov, less this chat)",
+   "round": null,
+   "cost": 43.0,
+   "notes": 58,
+   "repeats": []
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "f7d84c5e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.04
+  }
+ ],
+ "checks": {},
+ "alarm": 9
 }
