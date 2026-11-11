@@ -533,9 +533,10 @@ def draw(img, p, sp, t, view, hx, hy):
         nose(p, f, L, skin, prof)
         mouth(p, f, L, sp, P.lip_c, lambda: P.mouth(p, f, L, sp, fx, my))
     P.hair(img, p, f, L, sp)
-    ear(p, f, skin)
-    if view == 'back':                                        # straight from behind: both ears
-        ear(p, f, skin, deg=91)
+    if not sp.get('ears_hidden'):                             # long hair falls over them (Sam, 11 Nov: ears
+        ear(p, f, skin)                                       # drawn on top of the hair)
+        if view == 'back':                                    # straight from behind: both ears
+            ear(p, f, skin, deg=91)
     return fx
 
 

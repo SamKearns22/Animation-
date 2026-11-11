@@ -609,7 +609,8 @@ def _press_rest(p, f, L, sp, fx, my):
 
 def press_person(who, style, skin, hair_c, seed, face_m):
     """Register one journalist's turning head (built when first drawn) and return their cast entry's head part."""
-    sp = dict(who=who, style=style, hair_c=hair_c, seed=seed, face_m=face_m)
+    sp = dict(who=who, style=style, hair_c=hair_c, seed=seed, face_m=face_m,
+              ears_hidden=style in ('bob', 'long', 'curly'))    # hair over the ears: none drawn on top of it
     if who not in TH.PEOPLE:
         TH.register(TH.Person(who, _press_layout, -0.42, 0.4, _press_profile(sp), skin, (80, 60, 44),
                               dk(hair_c, 0.8), (190, 120, 110), _press_mood, _press_rest,
