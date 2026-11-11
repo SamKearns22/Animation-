@@ -1,5 +1,5 @@
 - Blessed (11 Nov, moves chat 7): moves stage done: five faults and Sam's head note fixed, touch check added, checks clean;
-  stills sheet and 3 clips sent. Waiting on Sam's look; then animatic 1 prep (Opus medium). Notes: notes/blessed.md.
+  stills sheet and 3 clips sent. Sam: Y to notes 4-5 (~1% more): cast chat 8 (Opus high), press pack and inmates. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
