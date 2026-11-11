@@ -1,5 +1,5 @@
 - Blessed (11 Nov, moves chat 5): the moves planned shot by shot (notes/blessed.md, "The moves plan"); no code yet
-  (amber cost mark). Next: moves chat 6 (Opus high) builds them, rehearsal clips. Notes: notes/blessed.md.
+  (amber cost mark). Waiting on Sam's Y (over the moves share); then moves chat 6 (Opus medium) builds them, rehearsal clips. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.

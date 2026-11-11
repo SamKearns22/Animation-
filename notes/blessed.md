@@ -3,8 +3,8 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 41 (arms end in hands: the gavel, the oath, the Bible, the phone), 89 (critique the moves), 74 (acting list before animatic 1).
 - **Done (11 Nov, moves chat 5, Opus high):** planned every shot's moves against the code and the kit (below, "The moves plan"); no code changed: the chat hit the amber cost mark after the planning (a worker restart doubled its reading).
-- **Next:** moves chat 6 (Opus, high effort): build "The moves plan" in `source/blessed.py`, rehearsal clips (gate exit, face change, escort), two critique passes, send Sam the clips; `ledger.py stage blessed moves` at the end.
-- **Needs Sam:** a look at the sets sheet (no answer needed); photos of a prison van cubicle and a prison TV room if he has them.
+- **Next (after Sam's Y):** moves chat 6 (Opus, medium effort: building from a clear plan): build "The moves plan" in `source/blessed.py`, rehearsal clips (gate exit, face change, escort), two critique passes, send Sam the clips; `ledger.py stage blessed moves` at the end.
+- **Needs Sam:** Y/N to go on (ledger stage stop: moves spent 1.88% of its 1.5% share with no code yet; building it needs about 1.5% more; the film then lands about 18.5% of the 19%); a look at the sets sheet (no answer needed); photos of a prison van cubicle and a prison TV room if he has them.
 - **Read:** `guides/job-packs.md` Build (figure-rig 2-4 and 5c, satire.md Movement, the pose-gallery rows named in the plan); this file's "The moves plan"; `source/blessed.py` (480 lines, whole); `blessed_sets.py` MAP, `cell` (line 574), `court_bench_front` and `gavel` (406-440), `gates` wicket door (950).
 - **Lost / Added:** Added (planned): a second gates camera (wide: he steps out of the wicket door; then closer at his mark for the rest of the line). Lost: none.
 - **Open rule requests:** none.
