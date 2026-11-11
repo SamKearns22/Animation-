@@ -41,6 +41,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.88
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "817fdf1d",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.13
   }
  ],
  "checks": {},
@@ -284,6 +294,6 @@
   }
  },
  "stage_alarm": {
-  "5:moves": 1
+  "5:moves": 3
  }
 }
