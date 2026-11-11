@@ -1,0 +1,17 @@
+{
+ "film": "budget-job",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "e5459ba8",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.46
+  }
+ ],
+ "checks": {}
+}
