@@ -1,17 +1,19 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 70 (1.1x on delivery), 62 (captions), 59 (checks before a final).
-- **Done (11 Nov, pm):** note 75 fixed; final re-rendered (6 min 54 s), finished, 1.1x: animations/remakes-vertical.mp4 (11.6 MB, 41.5 s) sent to Sam.
-- **Next:** wait for Sam to say it's posted, then the film's notes go to `notes/archive/`.
-- **Needs Sam:** nothing.
-- **Read:** nothing until Sam answers.
-- **Open rule requests:** none.
-- **For Claude:** finish.py already does the 1.1x (Hook Text 0.5 s, sign-off 1.6 s with its default speed): do NOT also run the ffmpeg setpts step or pass --signoff-speed (that double-sped the film to 37.9 s); only `fps=24` after. Preflight needs a folder as OUT_DIR (a file path becomes a folder and blocks the render). Named faults: 9 prop-turn lines (Malon/Saria no side view, S10); script/mouth wording (lines 4, 5, 11, 13); "you s***" 1.45 s early; captions "Uh, yeah, I think so?" 1.36 s, "I don't think I" 0.83 s, "You're gonna grow up" 1.06 s (too fast at 1.1x); critique round 3 faults/can't-tell open.
+- **Rules that bite next:** 70 (1.1x on delivery), 59 (checks before a final), 30 (seen-before notes).
+- **Done (11 Nov, eve):** Sam's notes on the final: 76 (tower lookout poking out under his box) and 77 (lower-left man's wipe-like entrance) fixed; checks clean; clip sent (3.2 s, 0.4 MB).
+- **Next:** on Sam's Y: Sonnet, medium: final re-render, finish.py, send. Type: "Remakes: final re-render with notes 76-77 (notes/remakes.md)".
+- **Needs Sam:** Y for the final re-render; Y/N on the checklist line (M1) for entrances.
+- **Read:** `guides/job-packs.md` "Final and posting".
+- **Open rule requests:** M1 wording (proposed in chat, 11 Nov): "things enter from outside the frame at their own speed, never slid slowly past the edge or revealed by a camera move".
+- **For Claude:** 76: gunman1 drawn on a layer cut at the box's top edge (z 5.05), so his boots and corpse never show under it. 77: _g3_off(u) (5.6 m/s from 3 m off, brakes in the last 0.1 s), used by _camp and _camp_movers; mark -0.95 to -0.85. Old For Claude notes (finish.py 1.1x, preflight OUT_DIR) in notes/archive/remakes-handovers.md: still apply.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
 |---|------|------|
+| 76 (Sam, 11 Nov, final) | the tower lookout's boots (standing) and body (fallen) poke out under his box | **DONE 11 Nov** (clip sent): nothing of him drawn below the box's top edge. New kind; critique O2 covered it, missed because the sheet showed the tower small |
+| 77 (Sam, 11 Nov, final) | the lower-left man appears like a wipe, not a run in | **DONE 11 Nov** (clip sent): he crept past the frame edge as the camera pulled out; now sprints in from 3 m off screen in two frames, brakes at his mark, a little further in. New kind; M1 didn't cover speed (line proposed) |
 | 75 (Sam, 11 Nov) | S13: a blue banner behind Link that S12b doesn't show | **DONE 11 Nov** (clip sent): S13's wall camera was on wcx - 40 and caught the banner's right half; now centred as S12b, plain stones. The old comment's "not the banner" was never checked (rule 30) |
 | 71 (Sam, 11 Nov) | clip 3: the line-up 25% further out | **DONE 11 Nov** (clip sent): LINEUP_Z 1.55 to 1.24 (KG's camera unchanged) |
 | 73 (Sam, 11 Nov) | clip 3: the near flower box coloured as foreground, not hazed like the background | **DONE 11 Nov** (clip sent): drawn sharp in full colour after the haze (RS.SQUARE_PLANTER off for S10) |
