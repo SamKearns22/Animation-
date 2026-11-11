@@ -904,8 +904,6 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
 
     def gunman(who, x, y, ppm, flip, hit, j=None, fall=1):
         rot = fall * 82 * ease((t - hit) / 0.35) if t >= hit else 0.0
-        if who == 'gunman2' and t >= BOOM - 0.28:                     # Fable r3 #47: he recoils from Navi on his
-            rot = -14 * ease((t - BOOM + 0.28) / 0.12)                # chest (he sat unmoved)
         if who == 'gunman3' and t < hit:                              # Fable r3 #27: aiming down at KG, not level
             rot = -11.0                                               # over his head at Link and Navi
         if who == 'gunman3' and t >= hit:                             # Fable r3 #15: a slower crumple (he popped
@@ -1014,7 +1012,9 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
         for k_ in ('toeL', 'toeR'):
             j.pop(k_, None)
         gunman('gunman2', x, y + drop, ppm, -1, 1e9, j)
-        if INCOMING[0] <= t < BOOM - 0.28 and int(t * FPS) % 2 == 0 and cam.P(x - G2_MUZZLE[0] * ppm, y)[0] < W * B.SS:
+        if INCOMING[0] <= t < BOOM - 0.15 and int(t * FPS) % 2 == 0 and cam.P(   # note 70: no whole-body
+            # recoil (rotating him lifted his knees off the dirt); he stops firing as Navi hits
+            x - G2_MUZZLE[0] * ppm, y)[0] < W * B.SS:
             _flash(img, cam, x - G2_MUZZLE[0] * ppm, y + drop - G2_MUZZLE[1] * ppm, 0.12 * ppm, seed=int(t * 12),
                    dirx=-1.0)
     # the lower-left man: runs in from the bottom left, nearest the lens, and is cut down
