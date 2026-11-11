@@ -106,7 +106,7 @@ def _voice_env(who):
 
 
 import headlife                  # noqa: E402  (Job K rule, satire.md Look: heads tilt and nod on the voice)
-HL = {'kg': headlife.HeadLife(_voice_env('kg'), 0.0, seed=5), 'link': headlife.HeadLife(_voice_env('link'), 0.0, seed=7)}
+HEAD_LIFE = HL = {'kg': headlife.HeadLife(_voice_env('kg'), 0.0, seed=5), 'link': headlife.HeadLife(_voice_env('link'), 0.0, seed=7)}
 
 # the action beats, from the lines
 SNAP = L[5]['start'] + 2.86                       # note 45: the snap ON "move" (its syllable beat in the take);

@@ -161,6 +161,7 @@ def gate_warnings(film, name, has):
         rows = [ln for ln in (m.group(2).splitlines() if m else []) if ln.strip().startswith('|')][2:]
         if not rows:
             out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
+    out += head_life_faults(film)
     if not re.search(r'^\s*[-*]?\s*\**Rehearsal clips sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):
         out.append('no "Rehearsal clips sent: DATE, FILE" (or "none: why") line in the notes (rule 8: the 3-4 riskiest '
                    'moves as 2-3 s clips before the rest)')
@@ -171,6 +172,33 @@ def gate_warnings(film, name, has):
             out.append(f'{os.path.basename(src)} has no MAP in its first lines (rule 61; python3 source/codemap.py)')
         if len(lines) > 1000:
             out.append(f'{os.path.basename(src)} is {len(lines)} lines: split it, one file per group of shots (rule 61)')
+    return out
+
+
+def head_life_faults(film):
+    """Rule 74 (Sam, 11 Nov: Remakes' KG and Link talked with still heads although Job K's head acting was in the
+    guide): every speaker in LINES has head acting from the voice, HEAD_LIFE = {who: headlife.HeadLife} (or
+    CAST[who]['head_life']), and it really moves (its tilt changes at least once inside every line of theirs)."""
+    out = []
+    hl = dict(getattr(film, 'HEAD_LIFE', {}) or {})
+    for who, sp in (getattr(film, 'CAST', {}) or {}).items():
+        if isinstance(sp, dict) and sp.get('head_life') is not None:
+            hl.setdefault(who, sp['head_life'])
+    for ln in getattr(film, 'LINES', []) or []:
+        who = ln.get('who') if isinstance(ln, dict) else None
+        if who is None:
+            continue
+        life = hl.get(who)
+        if life is None:
+            out.append(f'HEAD LIFE: {who} speaks (line {ln.get("n", "?")}) with no head acting (rule 74: '
+                       f'HEAD_LIFE[{who!r}] = headlife.HeadLife from the voice, used in the drawing)')
+            hl[who] = False
+            continue
+        if life is False:
+            continue
+        ts = [ln['start'] + k / 12 for k in range(max(1, int((ln['end'] - ln['start']) * 12)))]
+        if len({round(life.at_time(t)[0], 1) for t in ts}) < 2 and max(life.at_time(t)[1] for t in ts) == 0:
+            out.append(f'HEAD LIFE: {who}\'s head is still all through line {ln.get("n", "?")} (rule 74)')
     return out
 
 

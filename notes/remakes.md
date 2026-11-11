@@ -9,8 +9,7 @@
   stand. Do the open notes, then hand to Sonnet."
 - **Needs Sam:** his look at the 3 clips; rule request below.
 - **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
-- **Open rule requests:** a check that every talking character's head moves (Job K's head acting was missed on
-  Remakes: KG is custom-drawn, Link never had head_life set, and nothing checks it). Proposed to Sam, 11 Nov.
+- **Open rule requests:** none (11 Nov: Sam Y to the head-acting check; written into rule 74, preflight.head_life_faults).
 - **For Claude:** HL['kg'/'link'] (headlife from the takes) in remakes.py; Link gets it in _kid; KG mood may be a dict
   (CR.kg); eyes='shut' blinks; RS.kg_on_branch(sway=); draw_subtitle/_pieces (note 51); camp work: _camp, _kg_camp.
   Note 54 (KG in the camp) should use HL['kg'] too. Clips in clips/ are drafts (not on GitHub).
