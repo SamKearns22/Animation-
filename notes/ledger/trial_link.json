@@ -1,0 +1,136 @@
+{
+ "film": "trial_link",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "date": "2026-11-11",
+    "faults": 29,
+    "cant_tell": 1,
+    "open": [
+     "1 A2: cap - no red beads",
+     "2 A2: cap - no beads",
+     "2 P2: arms - stiff, not relaxed",
+     "2 P5: shoulders - stray ticks",
+     "3 A1: face - reads cheerful",
+     "3 A2: cap - no beads",
+     "3 P2: face/arms - grin, \"ta-da\"",
+     "3 P3: arms - no elbow bend",
+     "3 P5: shoulders - stray ticks",
+     "4 A1: body - no jolt reads",
+     "4 A2: cap - no beads",
+     "4 P2: body - upright, no lean back",
+     "4 P3: arms - no elbow, upper arm gone",
+     "4 P5: arms start inside tunic",
+     "4 P13: sleeves vanished",
+     "5 A1: legs - read floating",
+     "5 A2: cap - no beads",
+     "5 P2: body - upright, no crouch",
+     "5 P7: feet - float, no ground",
+     "6 A1: reads as a jump",
+     "6 A2: cap - no beads",
+     "6 P2: limbs - fists up, not limp",
+     "6 P7: hangs from nothing",
+     "6 P1: no hand at collar",
+     "6 P10: collar - no pull",
+     "6 P11: neck - missing",
+     "7 A1: faces 1, 2, 7 misread",
+     "7 A2: cap - no beads",
+     "7 P2: faces 1, 2, 8 - beats unreadable; tears tiny",
+     "1 P5: full-size shoulder crops"
+    ]
+   },
+   {
+    "round": 2,
+    "pass": 1,
+    "date": "2026-11-11",
+    "faults": 28,
+    "cant_tell": 4,
+    "open": [
+     "1 A1: collar reads necktie.",
+     "1 A2: cap smooth, beads front only.",
+     "1 P8: back view - no cap spiral.",
+     "1 P5: shield ticks above shoulders.",
+     "2 A1: necktie collar.",
+     "2 A2: cap as 1.",
+     "2 P5: shield ticks above shoulders.",
+     "3 A1: necktie; reads worried.",
+     "3 A2: torso wider than 2, 4.",
+     "3 P2: flat mouth; stiff arms out, no shrug.",
+     "4 A1: necktie.",
+     "4 A2: cap as 1.",
+     "4 P2: upright, no lean; mouth small.",
+     "4 P3: rubber-loop arms.",
+     "4 P5: arms start at neck.",
+     "4 P13: sleeves hang empty.",
+     "5 A1: necktie; reads sitting.",
+     "5 A2: ears vanish behind hands.",
+     "5 P2: hands behind head, squat; no scuttle.",
+     "5 P7: right boot floats; thigh shorter.",
+     "5 P13: tunic stiff, legs sprout from its sides.",
+     "6 A1: reads hopping, not held.",
+     "6 P2: legs mid-stride; not limp.",
+     "6 P1: no hand at collar.",
+     "6 A2: cap beads missing.",
+     "7 P2: face 2 no side-eye; 3 mouth small; 5 mild surprise.",
+     "7 A1: necktie.",
+     "7 A2: cap as 1.",
+     "3 P12: speech frames.",
+     "4 P12: speech frames.",
+     "5 P12: speech frames.",
+     "6 P10: frame with holder's hand."
+    ]
+   }
+  ],
+  "lines": {
+   "A2": {
+    "faults": 14,
+    "false": 0
+   },
+   "P2": {
+    "faults": 11,
+    "false": 0
+   },
+   "P5": {
+    "faults": 6,
+    "false": 0
+   },
+   "A1": {
+    "faults": 12,
+    "false": 0
+   },
+   "P3": {
+    "faults": 3,
+    "false": 0
+   },
+   "P13": {
+    "faults": 3,
+    "false": 0
+   },
+   "P7": {
+    "faults": 3,
+    "false": 0
+   },
+   "P1": {
+    "faults": 2,
+    "false": 0
+   },
+   "P10": {
+    "faults": 1,
+    "false": 0
+   },
+   "P11": {
+    "faults": 1,
+    "false": 0
+   },
+   "P8": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
+}

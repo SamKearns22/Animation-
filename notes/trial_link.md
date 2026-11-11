@@ -76,8 +76,14 @@ it takes; quality as high as the real film's.
 ## Results (the trial chat fills this in)
 | checkpoint | cost so far (% of a week) | notes |
 |---|---|---|
-| C0 read in | | |
-| C1 first full sheet | | |
-| C2 own-look faults fixed | | |
-| C3 hunt 1 fixed | | found / real / duplicates / can't tell: |
-| C4 hunt 2 fixed, confirmed | | found / real / duplicates / can't tell: |
+| C0 read in | 0.3 | chat 1 (Opus high): merge, trial brief, Build pack sections, refs on one sheet |
+| C1 first full sheet | 1.0 | chat 1: `source/trial_link.py` written (head 3 views, cap, tunic, boots, 7 faces, 5 poses), sheet drawn, not yet looked at. AMBER here: handed over (rule 6) |
+| C2 own-look faults fixed | 1.3 | chat 2 (Opus high): one look, 8 faults in one list (sheet overlaps, long neck, faint brows, deadpan not half-lidded, weak side-eye, shrug read as arms out, cheeks read as hands on head, collar lump on his back), one fix pass, faces confirmed full size |
+| C3 hunt 1 fixed | 1.8 | found / real / duplicates / can't tell: 34 / 8 / 21 / 1 (looked: not a fault). 13 distinct; real: cap beads too small, straight-tube arms, shrug read as a grin, cheeks hid the upper arms and had no jolt, scuttle not crouched and below the floor (a doubled body drop), collar pose arms up and no pull, faces (unsure, sceptical vs deadpan, tears). Not real: holder's hand (off-panel by brief), shoulder ticks, hidden brows, stray bar (the height figure), tunic length. Helper 97k tokens |
+| C4 hunt 2 fixed, confirmed | 2.0 | found / real / duplicates / can't tell: 37 / 11 / 22 / 4 (none real: 3 ask for speech frames on stills, 1 for the off-panel holder). 15 distinct; real: shirt collar read as a necktie, cap too smooth (weave, beads), back spiral too faint at sheet size, shield edge above the shoulder, shrug widened the torso and still read stiff, cheeks arms folded into loops, scuttle read as a squat, collar-pose legs mid-stride, faces (side-eye, aghast mouth, horror read mild), faces sheet unlabelled. 5 of the 11 are hunt-1 faults whose fix did not fully land (shrug, cheeks, scuttle, collar, faces). Not real: stray bar again, holder's hand. Helper 101k tokens. Left open: few beads show on the side-view band; the jolt back cannot show front-on in a still (it is a move). Comparison sheet sent in the chat (local `review/trial_link_vs_real.jpg`, a folder kept off GitHub) |
+
+## Where things stand (11 Nov, chat 2 of the trial: FINISHED)
+- Done: C2 1.3%, C3 1.8%, C4 2.0% of a week (chats 1+2), against 1.1% planned. Results above; comparison sheet sent to Sam in the chat (remake it: `trial_link.py sheet` + `faces` + `remakes_cast.py alone link`).
+- Next: the budget chat reads the Results. No next chat from the trial (rule 7).
+- Needs Sam: nothing.
+- For Claude: `source/trial_link.py` (MAP at the top); packs `source/data/critique/trial_link/r1-p1`, `r2-p1`; ledger `notes/ledger/trial_link*`.
