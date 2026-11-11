@@ -2,8 +2,8 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 70 (1.1x on delivery), 59 (checks before a final), 30 (seen-before notes).
-- **Done (11 Nov, eve):** Sam's notes on the final: 76 (tower lookout poking out under his box) and 77 (lower-left man's wipe-like entrance) fixed; checks clean; clip sent (3.2 s, 0.4 MB).
-- **Next (Sam said Y):** Sonnet, medium: final re-render, finish.py, send. Type: "Remakes: final re-render with notes 76-77 (notes/remakes.md)".
+- **Done (11 Nov, eve):** notes 76-77 in; checks clean, pre-flight run (faults named), final re-rendered (7 min 35 s), finished at 1.1x (finish.py only, then fps=24): animations/remakes-vertical.mp4 (11.3 MB, 41.5 s, 1080x1920) sent to Sam.
+- **Next:** wait for Sam to say it's posted, then the film's notes go to `notes/archive/`.
 - **Needs Sam:** nothing (Y to the final re-render and the M1 line, 11 Nov).
 - **Read:** `guides/job-packs.md` "Final and posting".
 - **Open rule requests:** none (M1 line written, Sam's Y).
