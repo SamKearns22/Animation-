@@ -1594,6 +1594,42 @@ def _sfx(name, t0=0.0, t1=None):
     return _SFX[(name, t0, t1)]
 
 
+def _thump(soft=False):
+    """A hard thump: a body slammed against a stone wall. Stone does not ring, so the force is all in the body: a
+    heavy low drop (110 to 45 Hz), a dense dead slap of cloth and back on the stone (a 10 ms burst, no resonance),
+    a tight inharmonic tick of the stone itself (decays in about 8 ms), then a scatter of grit trickling off;
+    a little saturation for force."""
+    from scipy.signal import butter, lfilter
+    n = int(0.55 * SR)
+    t = np.arange(n) / SR
+    f = 45 + 65 * np.exp(-t / 0.035)
+    low = np.sin(2 * math.pi * np.cumsum(f) / SR) * np.exp(-t / 0.10)
+    rng = np.random.default_rng(4)
+    b, a = butter(2, [150 / (SR / 2), 2500 / (SR / 2)], 'band')
+    slap = lfilter(b, a, rng.standard_normal(n)) * np.exp(-t / 0.010) * 2.0
+    tick = sum(np.sin(2 * math.pi * fr * t + ph) for fr, ph in ((730, 0.3), (1130, 1.7), (1610, 2.9))) \
+        * np.exp(-t / 0.008) * 0.35
+    grit = np.zeros(n)
+    for k in range(40):                                                # small bits of grit falling off the wall
+        at = int((0.02 + rng.exponential(0.06)) * SR)
+        m = int(0.0015 * SR)
+        if at + m < n:
+            grit[at:at + m] += rng.standard_normal(m) * np.exp(-at / SR / 0.08)
+    b, a = butter(2, 2500 / (SR / 2), 'high')
+    grit = lfilter(b, a, grit) * 0.25
+    x = low * 1.2 + slap + tick + grit
+    att = int(0.002 * SR)
+    x[:att] *= np.linspace(0, 1, att)
+    b, a = butter(2, 7000 / (SR / 2))
+    x = lfilter(b, a, x)
+    x = np.tanh(1.8 * x / np.max(np.abs(x)))
+    if soft:                                                          # the re-slams: duller (no crack, no grit) and quieter
+        from scipy.signal import butter as _bt, lfilter as _lf
+        b_, a_ = _bt(2, 500 / (SR / 2))
+        x = _lf(b_, a_, x)
+    return x / np.max(np.abs(x)) * (0.3 if soft else 0.8)
+
+
 def _crack():
     """The neck crack: two sharp clicks of filtered noise, 40 ms apart."""
     rng = np.random.default_rng(2)
@@ -1628,6 +1664,8 @@ def soundtrack(stems=False):
         filmkit.place(rest, burst, at=b0, sr=SR, gain=0.35)
     crack = np.zeros(n)
     filmkit.place(crack, _crack(), at=SNAP, sr=SR, gain=0.9)        # the crack lands on "move" by design: not ducked
+    for ts, soft in [(SLAM, False)] + [(r, True) for r in RESLAMS]:  # note 75 (Sam, 11 Nov): a stone-wall thump on
+        filmkit.place(crack, _thump(soft), at=ts, sr=SR, gain=1.0)   # the first push, softer on each re-slam; not ducked
     filmkit.place(rest, _sfx('explosion.mp3'), at=BLAST, sr=SR, gain=0.6)   # note 46: the gate blows
     k = int(0.35 * SR)                                                # note 47: his short bursts from off screen
     for b0 in np.arange(INCOMING[0], BOOM - 0.3, 0.7):
