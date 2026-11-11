@@ -1,0 +1,17 @@
+{
+ "film": "elder-swindon",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-11",
+   "chat": "2eda77e5",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.18
+  }
+ ],
+ "checks": {}
+}
