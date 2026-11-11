@@ -1,20 +1,19 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 30 (note 52 "shit" bleep is a changed decision: Sam first said f-word only; 10 Nov SWEARS_OK),
-  8 (clips of each moved beat, no yes needed), 89 (one critique round of every changed shot; the fresh-eye helper was NOT
-  run last round: run it), 85 (Sam's usage hit 100% on 11 Nov; his next session opens 3:41: hand over on amber).
-- **Done:** animatic 2 sent 11 Nov (3.5 MB). Sam's notes on it are 43-54 below, all open, nothing started.
-- **Next (Opus, medium): all of notes 43-54**, in order, clips of each moved beat, one critique round, then the Sonnet
-  chat for the animatic. Type: "Remakes: read notes/remakes.md Where things stand. Do notes 43-54, then hand to Sonnet."
-- **Needs Sam:** nothing until animatic 3.
+- **Rules that bite next:** 89 (one critique round of every changed shot, with the fresh-eye helper: still not run),
+  30 (note 58 is a changed decision; 44/57 missed the Job K head-acting rule), 85 (Sam's usage resets 3:41).
+- **Done (11 Nov, Opus):** notes 43, 44, 45, 50, 51, 52, 57, 58 fixed; 3 clips sent (S1-S4, the snap, the wall).
+- **Next (Opus, medium): notes 46, 47, 48, 49, 53, 54, 56 in order**, clips of each moved beat, then the critique round
+  (fresh-eye helper), then open the Sonnet chat for the animatic. Type: "Remakes: read notes/remakes.md Where things
+  stand. Do the open notes, then hand to Sonnet."
+- **Needs Sam:** his look at the 3 clips; rule request below.
 - **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
-- **Open rule requests:** none.
-- **For Claude:** animatic 2 skipped the check sheet and fresh-eye critique at Sam's word; render gate: run
-  `preflight.py remakes OUT` (full, about 4 min) then `final ... --faults-named` (its 16 faults are named in the
-  handover history: 9 PROP TURN Malon/Saria at 30 degrees in S10, 5 script/mouth, 1 no critique, 1 no scene(t)).
-  Still not done from the last round: KG points a wing at the gunman on "GRENADES"; muzzle flash over KG's crest;
-  S6 'aghast' mild. Bleeps: `_L` in remakes.py (bleep times per line); SWEARS_OK; captions: caption_at / subtitles.
+- **Open rule requests:** a check that every talking character's head moves (Job K's head acting was missed on
+  Remakes: KG is custom-drawn, Link never had head_life set, and nothing checks it). Proposed to Sam, 11 Nov.
+- **For Claude:** HL['kg'/'link'] (headlife from the takes) in remakes.py; Link gets it in _kid; KG mood may be a dict
+  (CR.kg); eyes='shut' blinks; RS.kg_on_branch(sway=); draw_subtitle/_pieces (note 51); camp work: _camp, _kg_camp.
+  Note 54 (KG in the camp) should use HL['kg'] too. Clips in clips/ are drafts (not on GitHub).
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
@@ -22,19 +21,22 @@
 | 40 (Claude 1, 3, 5) | rehearsal clips; a critique round; watch and listen to the animatic before sending | clips of the snap, the camp burst, Navi's blast, the wall lift; one critique round; check the bleeps and gunfire against the voices | | **PART DONE 10 Nov:** clips made and sent (snap, wall lift; camp earlier). Critique round done 11 Nov. Still to do: watching and listening to animatic 2 before it is sent |
 | 41 (Sam, 11 Nov) | at the wall Link stares, absolutely terrified, into KG's eyes | **DONE 11 Nov** (clip sent) |
 | 42 (Sam, 11 Nov) | R1 and R2 flash silver at the exact moment of the action | **DONE 11 Nov** (at the snap; at Navi's zip; clips sent) |
-| 43 (Sam 1) | the first "f******" needs a small beep in the middle, just over the "uck" | line 1's bleep is one span over the whole word (3.33-3.72): shorten to the "uck" only, short beep; same for line 13 |
-| 44 (Sam 2) | KG too static in S1: eyes and arms frozen | blinks, eye darts, wing flaps and sways, head tilts; check S3 the same (rule: a fault in one is looked for in every piece of its kind) |
-| 45 (Sam 3) | time the execution move with "execution move" in the dialogue | the snap now lands after "MOVE" (SNAP = end + 0.12): the grip and twist land on "execution", the snap on "move"; retime NECK_GRIP/_s5_wings and the crack |
+| 43 (Sam 1) | the first "f******" needs a small beep in the middle, just over the "uck" | line 1's bleep is one span over the whole word (3.33-3.72): shorten to the "uck" only, short beep; same for line 13 | **DONE 11 Nov:** line 1 3.39-3.56, line 13 4.87-4.99 (found from the take's vowel and the k) |
+| 44 (Sam 2) | KG too static in S1: eyes and arms frozen | blinks, eye darts, wing flaps and sways, head tilts; check S3 the same (rule: a fault in one is looked for in every piece of its kind) | **DONE 11 Nov** (clip sent): S1/S3 blinks, darts, wings flap/wag, rocks on his toes from headlife (Job K rule: missed when the film was built, see rule request) |
+| 45 (Sam 3) | time the execution move with "execution move" in the dialogue | the snap now lands after "MOVE" (SNAP = end + 0.12): the grip and twist land on "execution", the snap on "move"; retime NECK_GRIP/_s5_wings and the crack | **DONE 11 Nov** (clip sent): grip on "ex-", snap and crack on "move" (its syllable beat) |
 | 46 (Sam 4, 7) | the gate break-in: a frame of everything fine cutting to a frame of everything on the ground; a better explosion on the gate and the grenade | a real blast: flash, fireball, shockwave, planks and dust flying over several frames, the gate in pieces falling; the grenade blast the same (S7 start, S8) |
 | 47 (Sam 5) | the soldier the grenade hits fires in KG's face for long seconds: move him off screen; bullets whip past KG; he is seen only when KG fires the grenade | the middle-right man (G2) off screen until the zip; tracers and whips past KG from off screen; on "GRENADES" he is revealed |
 | 48 (Sam 6) | bullet impact and blood splatter in the camp is very rudimentary | hits with sparks and dirt puffs, a proper splatter arc on the tower man and the lower-left man |
 | 49 (Sam 8) | zoom in on the line-up (S10): more background than foreground | a tighter camera on the six, the sweep still in frame |
-| 50 (Sam 9) | add "Um," to "I am nine years old." | needs Sam's recording: ask for it (line 12); until then the subtitle only, or a recorded "Um" if he sends one |
-| 51 (Sam 10a) | make all subtitles larger and match them tighter; 3-5 words at a time | caption_at / finish.py subtitles: larger type, re-split every line into pieces of 3-5 words, timed to the words |
-| 52 (Sam 10b) | "shit" is not bleeped in the subtitle or the audio | changes the earlier decision (f-word only): bleep "shit" in the audio (line 13) and star it in the subtitle ("s***"); drop it from SWEARS_OK. Say so in the reply |
+| 50 (Sam 9) | add "Um," to "I am nine years old." | Sam: the take already has it (0.6-1.0 s, it plays); the subtitle now reads "Um, I am 9 years old." **DONE 11 Nov** |
+| 51 (Sam 10a) | make all subtitles larger and match them tighter; 3-5 words at a time | caption_at / finish.py subtitles: larger type, re-split every line into pieces of 3-5 words, timed to the words | **DONE 11 Nov:** remakes draw_subtitle 66 px (was 50); _pieces never joins past 4-5 words, on the syllable beats |
+| 52 (Sam 10b) | "shit" is not bleeped in the subtitle or the audio | changes the earlier decision (f-word only): bleep "shit" in the audio (line 13) and star it in the subtitle ("s***"); drop it from SWEARS_OK. Say so in the reply | **DONE 11 Nov:** the "it" bleeped (2.08-2.40), "s***" |
 | 53 (Sam 11) | front-on Link at "I want to go home", with fuller mouth movements | S13 as a front-on close-up (terrified, front view), the mouth shapes per syllable from the recording |
 | 54 (Sam 12) | KG needs more dynamic faces, eye and body movements in the camp storm | S7: eye darts, brow changes, grin and snarl beats, body sway and recoil on each burst |
 | 55 | plus the usual critique rounds | rule 89: the fresh-eye helper this time |
+| 56 (Sam, 11 Nov) | "I am nine" (S11): Link is further into the square; the camera should have turned 180 to him | S11 as a reverse shot: Link facing KG and the line-up, the other side of the square behind him (not the line-up's own background) |
+| 58 (Sam, 11 Nov) | S4 "Ok?": Navi bouncing off Link's head over and over (the nuzzle too subtle); Link looking ahead, eyes slightly aside, brows flat, low, close over the eyes (Sam's correction of worried brows): unsure, sceptical, doubtful | **DONE 11 Nov** (clip sent): mood 'doubtful'; Navi bounces off the cap every 0.36 s, squashed on each hit. Seen before (note 31): a changed decision, not a failed fix |
+| 57 (Sam, 11 Nov) | KG too still holding Link up at the wall (S12, S12b, S13) | head moves (jabs, tilts, shakes on the words), brow and eye changes, beak snaps per syllable, body heaving; the wings stay on the collar | **DONE 11 Nov** (clip sent): head tilts and jabs from headlife, rage/fury face on the stresses, a lean in after his last word |
 
 
 ## Plan extras: the estimate (rules 24, 44)

@@ -50,11 +50,11 @@ CAST = {}
 LOOKS_AT = {}
 SUBTITLES_AT_FINISH = True
 HOOK = ('Ocarina of Time, remade for 2026', {'y': 1150})   # below KG, over the near bush (at 352 it hid his face)
-SWEARS_OK = [(13, 'shit', 'Sam: bleep the f-word only ("god-damn" heard)')]
+SWEARS_OK = []                                   # note 52 (11 Nov): "shit" bleeped too ("god-damn" heard)
 # n, recording, who, text, shot, gap before (s), bleeps in the recording's own seconds (found from the sound: the
 # f of the word and its vowel in the high band, 10 Nov)
 _L = [
-    (1, '01', 'kg', 'Hello, Link! Are you ready for a f****** adventure!', 'S1', 0.3, [(3.33, 3.72)]),
+    (1, '01', 'kg', 'Hello, Link! Are you ready for a f****** adventure!', 'S1', 0.3, [(3.39, 3.56)]),   # note 43: just the "uck"
     (2, '02', 'link', 'Uh, yeah, I think so?', 'S2', 0.2, []),
     (3, '03', 'kg', "Great, here's some wisdom!", 'S3', 0.2, []),
     (4, '04', 'link', 'Ok?', 'S4', 0.2, []),
@@ -65,8 +65,9 @@ _L = [
     (9, '09', 'kg', 'R2 FOR GRENADES.', 'S7', 0.6, []),      # note 38: line 8's subtitle now reads for 2 s
     (10, '10', 'link', 'This is horrible.', 'S9', 1.75, []),
     (11, '11', 'kg', 'FIVE ROMANCE OPTIONS TO CHOOSE FROM', 'S10', 0.4, []),
-    (12, '12', 'link', 'I am 9 years old.', 'S11', 0.6, []),
-    (13, '13', 'kg', "Now listen here, you shit. You're gonna grow up real f****** fast.", 'S12', 0.6, [(4.81, 5.05)]),
+    (12, '12', 'link', 'Um, I am 9 years old.', 'S11', 0.6, []),
+    (13, '13', 'kg', "Now listen here, you s***. You're gonna grow up real f****** fast.", 'S12', 0.6,
+     [(2.08, 2.40), (4.87, 4.99)]),                    # notes 43, 52: the "it" of shit, the "uck"
     (14, '13b', 'kg', "And you've got some god-damn CHOICES to make.", 'S12', 0.25, []),
     (15, '14', 'link', 'I want to go home.', 'S13', 0.45, []),
 ]
@@ -90,8 +91,26 @@ for n, rec, who, text, shot, gap, bl in _L:
 del t
 L = {ln['n']: ln for ln in LINES}
 
+
+def _voice_env(who):
+    """The speaker's loudness per drawing over the whole film (for headlife)."""
+    env = np.zeros(int(70 * FPS))
+    n = SR // FPS
+    for ln in LINES:
+        if ln['who'] == who:
+            v = ln['_voice']
+            e = [np.sqrt(np.mean(v[i * n:(i + 1) * n] ** 2)) for i in range(len(v) // n)]
+            i0 = int(round(ln['start'] * FPS))
+            env[i0:i0 + len(e)] = e
+    return env
+
+
+import headlife                  # noqa: E402  (Job K rule, satire.md Look: heads tilt and nod on the voice)
+HL = {'kg': headlife.HeadLife(_voice_env('kg'), 0.0, seed=5), 'link': headlife.HeadLife(_voice_env('link'), 0.0, seed=7)}
+
 # the action beats, from the lines
-SNAP = L[5]['end'] + 0.12                         # the neck snap, just after "MOVE"
+SNAP = L[5]['start'] + 2.86                       # note 45: the snap ON "move" (its syllable beat in the take);
+                                                  # the grip lands on "ex-" of "execution" (1.74 into the line)
 GATE = L[6]['end'] + 0.3                          # the gate bursts in: S7 starts
 # the camp (note 32): KG storms in through the gate, shoots the tower lookout on his way, then the man who runs in
 # lower left; Link scuttles in through the gate behind him; the last man comes in middle right
@@ -172,6 +191,8 @@ def _kid(img, cam, who, x, y, ppm, t, mood=None, j=None, yaw=0, head_yaw=None, f
     talking from the recording; rot degrees tips the drawing about the soles (a fall)."""
     key = 'gunman' if who.startswith('gunman') else who
     sp = dict(RC.CAST[key])
+    if key == 'link':
+        sp['head_life'] = HL['link']                                  # Job K: never a still talking photo
     if mood:
         sp['mood'] = mood
     if sp_extra:
@@ -308,17 +329,56 @@ def _forest(view, t, cast):
     return img
 
 
+def _alive(t, seed):
+    """Note 44 (Sam: KG frozen in S1): blinks every 2-3 s, eye darts held a beat each, a slow sway (degrees)."""
+    rng = np.random.default_rng(seed)
+    blinks = np.cumsum(1.4 + 1.6 * rng.random(40))
+    shut = any(0 <= t - b < 0.13 for b in blinks)
+    darts = rng.uniform(-1.0, 1.0, 80)
+    k = int(t / 0.75)
+    u = ease((t - k * 0.75) / 0.08)
+    look = _lerp(darts[k - 1] if k else 0.0, darts[k], u)
+    roll, nod = HL['kg'].at_time(t)                                   # Job K: held tilts and nods from his voice,
+    return shut, look, 1.8 * roll - 2.5 * nod                         # never a sine sway (the whole owl rocks on
+                                                                      # his toes: his head is one with his body)
+
+
+def _wing_pair(L_, R_):
+    return {'L': L_, 'R': ((-R_[0][0], R_[0][1]), (-R_[1][0], R_[1][1]), R_[2])}
+
+
 def s1_branch(t):
     x, y, ppm = RS.STAGE['forest_up']['kg']
-    bob = 10 * math.sin(t * 7.0)
-    return _forest('up', t, lambda img, cam: RS.kg_on_branch(img, cam, x, RS.s_for(ppm), mood='hype', wings='wide',
-                                                              t=t, talk=_talk('kg', t), look=0.0) if True else None)
+    shut, look, sway = _alive(t, 3)
+    m = dict(CR.KG_MOODS['hype'], eyes='shut') if shut else 'hype'
+    adv = L[1]['start'] + 3.0                                         # "adventure!": a big double flap
+    big = math.sin(math.pi * min(1.0, max(0.0, (t - adv) / 0.5))) if t >= adv else 0.0
+    w = []
+    for sg, ph in ((1, 0.0), (-1, 1.3)):                             # each wing flaps on its own beat
+        f = math.sin(t * 6.0 + ph) * 0.5 + 0.5 * math.sin(t * 2.6 + ph)
+        el = (300 + 20 * f, -150 - 60 * f - 80 * big)
+        hd = (470 + 30 * f + 40 * big, -260 - 110 * f - 200 * big)
+        w.append((el, hd, 'spread'))
+    return _forest('up', t, lambda img, cam: RS.kg_on_branch(img, cam, x, RS.s_for(ppm), mood=m,
+                                                              wings=_wing_pair(w[0], w[1]), t=t,
+                                                              talk=_talk('kg', t), look=look, sway=sway))
+
+
+KIND = dict(eyes='open', pupil=1.05, shine2=True, brows=(-0.3, 14), beak='smile')   # note 44: S3's eyes open
 
 
 def s3_branch(t):
     x, y, ppm = RS.STAGE['forest_up']['kg']
-    return _forest('up', t, lambda img, cam: RS.kg_on_branch(img, cam, x, RS.s_for(ppm), mood='kindly', wings='teach',
-                                                              t=t, talk=_talk('kg', t)))
+    shut, look, sway = _alive(t, 8)
+    wis = L[3]['start'] + 0.9                                         # "wisdom!": eyes closed in the smile
+    m = 'kindly' if wis <= t < wis + 0.9 else (dict(KIND, eyes='shut') if shut else KIND)
+    wag = math.sin(t * 7.0)                                           # the teacher's raised wing wagging
+    L_ = ((250, -170 - 15 * wag), (290 + 20 * wag, -380 - 45 * wag), 'point')
+    br = 0.5 + 0.5 * math.sin(t * 3.0)                                # the folded wing breathing on his side
+    R_ = ((192 + 8 * br, -30), (172 + 12 * br, 90 - 10 * br), 'fold')
+    return _forest('up', t, lambda img, cam: RS.kg_on_branch(img, cam, x, RS.s_for(ppm), mood=m,
+                                                              wings=_wing_pair(L_, R_), t=t, talk=_talk('kg', t),
+                                                              look=0.0 if m == 'kindly' else look * 0.8, sway=sway))
 
 
 def s2_down(t):
@@ -348,11 +408,29 @@ def _close(view_fn, t, mood, navi=None, jolt=0.0, debris=None, cam_bg=None, j=No
 
 
 def s4_ok(t):
+    """Note 58 (Sam, 11 Nov): Navi bouncing off the top of Link's cap again and again, like a ball (the nuzzle was
+    too subtle); Link doubtful, looking ahead."""
     u = t - SHOTS[3][1]
-    nuz = 0.5 + 0.5 * math.sin(u * 5.0)                              # nuzzling in to his cheek and back
-    img = _close(lambda im, c, tt: (RS.forest(im, c, 'close', tt)), t, 'sceptical',
-                 navi=(735 - 45 * nuz, 1000 + 10 * math.sin(u * 9), 0.0))
-    RS.forest_front(img, B.Cam(1.0), 'close', t)
+    per = 0.36                                                        # one bounce
+    k, f = int(u / per), (u % per) / per
+    hop = 4 * f * (1 - f)                                             # a ball's arc: 0 on the cap, 1 at the top
+    side = (-1) ** k
+    nx = 545 + side * _lerp(-55, 55, f)                               # each bounce goes off at a slant, back the
+    ny = 935 - 230 * hop                                              # next time
+    squash = max(0.0, 1 - min(f, 1 - f) / 0.12)                       # flattened against the cap at each hit
+    img = _close(lambda im, c, tt: (RS.forest(im, c, 'close', tt)), t, 'doubtful', jolt=-0.25 * squash * 0)
+    cam = B.Cam(1.0)
+    RS.forest_front(img, cam, 'close', t)
+    lay = _lay(img)
+    CR.navi(lay, cam, nx, ny, 1.25, t=t, heat=0.0)
+    if squash > 0:                                                    # squashed wide and flat on the cap
+        cx, cy = cam.P(nx, ny + 40)
+        sq = lay.resize(lay.size, Image.BICUBIC, box=None)
+        sq = lay.transform(lay.size, Image.AFFINE, (1 / (1 + 0.35 * squash), 0, cx * (1 - 1 / (1 + 0.35 * squash)),
+                                                    0, 1 / (1 - 0.3 * squash), cy * (1 - 1 / (1 - 0.3 * squash))),
+                           Image.BICUBIC)
+        lay = sq
+    img.alpha_composite(lay)
     return img
 
 
@@ -386,7 +464,7 @@ def _s5_wings(t, kx, ky, ks):
     tg = {'R': ((NECK_GRIP[0][0] - kx) / ks, (NECK_GRIP[0][1] - ky) / ks),
           'L': ((NECK_GRIP[1][0] - kx) / ks, (NECK_GRIP[1][1] - ky) / ks)}
     el = {'R': (-290, 20), 'L': (60, 60)}                             # elbows out and down, reaching forward to him
-    g = ease((snap + 0.9) / 0.45)                                     # on by "MOVE": held there before the twist
+    g = ease((snap + 1.15) / 0.3)                                     # note 45: on by "execution", held, the twist on "move"
     tw = ease(snap / 0.1) if snap >= 0 else 0.0                       # the wrench: one hand back, one forward
     out = ease((snap - 0.22) / 0.3)                                   # and let go, wings flung open
     w = {}
@@ -780,8 +858,15 @@ def _wall_scene(t, cam, shake=0.0):
     dn = lift * (1 - u) / s                                           # the lift: his wing hands stay on the collar
     wl = {sd: ((LIFT[sd][0][0], LIFT[sd][0][1] + dn * 0.45), (LIFT[sd][1][0], LIFT[sd][1][1] + dn), 'grip')
           for sd in 'LR'}                                             # as it rises (they crossed Link's head before)
+    roll, nod = HL['kg'].at_time(t)                                   # note 57 (Job K rule): his head jabs and
+    tilt = WALL_TILT + 2.6 * roll + 9 * nod                           # tilts on his own voice, held between
+    mood = dict(CR.KG_MOODS['fury' if nod > 0.45 else 'rage'])       # the stressed words: a hissing squint
+    if t < S12_AT + 0.5 or abs(roll) < 1.2:                           # held tilts that sit near level: eyes wider
+        mood['pupil'] = 0.22
+    if _talk('kg', t) is None and t > L[14]['end']:                   # after his last word: a slow menacing lean in
+        tilt += 4 * ease((t - L[14]['end']) / 0.6)
     CR.kg(img, cam, kx + ldx + sx, yk, s, view='side', perched=False, stand=True, wings=wl, band=False,
-          mood='rage', t=t, flip=-1, talk=_talk('kg', t), head_tilt=WALL_TILT)
+          mood=mood, t=t, flip=-1, talk=_talk('kg', t), head_tilt=tilt)
     return img
 
 
@@ -837,12 +922,47 @@ def picture(t):
 
 
 # ================================================================================================ subtitles
+def _pieces(ln):
+    """Note 51 (Sam, 11 Nov): 3-5 words at a time, each up on the syllable it starts with (the take's syllable
+    beats), never joined into longer rows; a piece shorter than 0.45 s pushes the next one a touch later."""
+    if '_pieces' in ln:
+        return ln['_pieces']
+    import press_secretary as PS
+    ch = [c for c, _ in SUB.chunks(ln.get('sub') or ln['text'], most=4)]
+    out = [[ch[0], 0.0]]
+    if len(ch) > 1:
+        beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
+        syl = [sum(mouths._syllables(w) for w in c.split()) for c in ch]
+        acc = 0
+        for c, n in zip(ch[1:], syl[:-1]):
+            acc += n
+            k = min(len(beats) - 1, int(round(acc / sum(syl) * len(beats))))
+            out.append([c, max(out[-1][1] + 0.45, beats[k] - 0.06 if len(beats) else out[-1][1] + 0.8)])
+    ln['_pieces'] = [tuple(p) for p in out]
+    return ln['_pieces']
+
+
 def caption_at(t):
     for i, ln in enumerate(LINES):
         nxt = LINES[i + 1]['start'] - 0.05 if i + 1 < len(LINES) else 1e9
         if ln['start'] - 0.05 <= t < min(ln['end'] + 0.45, nxt):
-            return SUB.line_caption(ln, t - ln['start'])   # a few words at a time, on the syllable they start with
+            u = t - ln['start']
+            return [c for c, a in _pieces(ln) if a <= u or a == 0.0][-1]
     return None
+
+
+def draw_subtitle(img, text):
+    """Note 51: larger (66 px, was 50), a thick outline, lower third, at most two rows."""
+    S = B.SS
+    f = ImageFont.truetype(B.SANS, int(66 * S))
+    rows = B.wrap(text, f, 900 * S)
+    lay = _lay(img)
+    d = ImageDraw.Draw(lay)
+    for i, row in enumerate(rows):
+        y = (1450 - 84 * (len(rows) - 1 - i)) * S
+        d.text((540 * S, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=int(7 * S),
+               stroke_fill=(0, 0, 0))
+    img.alpha_composite(lay)
 
 
 def overlay(img, t):

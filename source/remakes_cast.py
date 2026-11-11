@@ -255,6 +255,9 @@ MOODS = {   # child faces: lids, pupils, brows (inner, outer rise; one = a singl
                       wide=1.04),   # line 4: "Ok?" (note 31; Sam: "a look that conveys: uuuuuh, okay?"): bemused and
                     # uneasy, not hostile: one brow hiked high, the other tilted up at its inner end (worry), eyes
                     # wide and slid sideways at KG, head turned a little off, the mouth an awkward hitched line
+    'doubtful': dict(lid=(0.38, 0.38), brows=(-18, -18), brow_w=9.0, brow_len=46, mouth='unsure', look=0.45),   # note 58 (Sam,
+                    # 11 Nov, replaces note 31's look; Sam: brows level, low, close over the eyes): head straight on, heavy flat brows (not
+                    # arched or worried), lids a little heavy, eyes slid slightly aside: unsure, sceptical, doubtful
     'aghast': dict(pupil=0.55, brows=(22, 14), mouth='aghast', wide=1.12),         # line 6: "Oh my god!"
     'wince': dict(lid=(0.5, 0.5), low=0.3, brows=(14, -6), mouth='wince'),         # line 8: "I can't do this"
     'horror': dict(pupil=0.42, low=0.15, brows=(24, -6), mouth='horror', wide=1.06),          # line 10: "This is horrible"
@@ -317,7 +320,8 @@ def kid_head(img, p, sp, t, hx, hy):
     HAIR_FRONT.get(who, lambda *a: None)(p, sp, hx, hy, hw, hh)
     inner, outer = mood.get('brows', (0, 0))                         # brows over the fringe, as the remake's cartoon
     _brows(p, fx, ey, gap, eh, sp.get('brow_c', dk(sp.get('hair_c', L_HAIR), 0.5)), inner * 1.35, outer * 1.35,
-           w=4.4, length=40, one=mood.get('one'), each=mood.get('each'))                    # does: they must read at phone size (Link 5)
+           w=mood.get('brow_w', 4.4), length=mood.get('brow_len', 40), one=mood.get('one'),
+           each=mood.get('each'))                    # does: they must read at phone size (Link 5)
     return fx
 
 

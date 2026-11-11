@@ -228,6 +228,11 @@ def _kg_eye(p, ex, ey, r, mood, sgn, look=0.0):
     """A big round owl eye: a white ring, the blue-grey iris, a dark pupil, one shine."""
     eyes = mood['eyes']
     p.ell(ex, ey, r * 1.28, r * 1.28, KG_FACE, KG_FACE_RIM, 2.0)
+    if eyes == 'shut':                                                  # a blink (remakes note 44): the lid down
+        p.poly(oval(ex, ey, r * 1.02, r * 1.02, 40), KG_BROWN, None)
+        p.line(open_curve([(ex - r * 1.05, ey + r * 0.05), (ex, ey + r * 0.3), (ex + r * 1.05, ey + r * 0.05)], 4),
+               INK, 5.0)
+        return
     if eyes == 'smile':                                                 # closed in a smile: a thick arch
         p.line([(ex + r * math.cos(a), ey + r * 0.3 - r * 0.7 * math.sin(a)) for a in np.linspace(0.15, math.pi - 0.15, 14)],
                INK, 6.0)
@@ -551,7 +556,7 @@ def _kg_tail(p, root, ang0, n, step, length):
 def _kg_front(p, mood, wings, perched, band, t, look=0.0, tail=1.0, part='all', talk=None):
     """Facing us (S1, S3, S5, S10): tail behind, the far halves of the wings, the body (rust chest, ochre belly, the
     white bib with its two gold eye-spots), feet, the head with its face disc, eyes, brows, beak, the two crests."""
-    m = KG_MOODS[mood]
+    m = mood if isinstance(mood, dict) else KG_MOODS[mood]           # a dict: a mood changed for one frame
     if part != 'body':
         _kg_tail(p, (0, 90), math.pi / 2, 9, 0.17, 430 * tail)              # the long fanned tail hanging below
     if part == 'tail':                                                  # (part: tail alone, or all but it, so a
@@ -611,7 +616,7 @@ def _kg_side(p, mood, wings, perched, band, t, lean=0.0, talk=None, part='all'):
     """Side on facing right (S5 the swoop, S7 the burst, S12 the wall): tail back, the far wing, the body leaning
     `lean` degrees forward, the near wing in front, the head in profile with its half face disc, one eye, the beak
     forward, the crests sweeping back."""
-    m = KG_MOODS[mood]
+    m = mood if isinstance(mood, dict) else KG_MOODS[mood]           # a dict: a mood changed for one frame
     r = math.radians(lean)
     rot = lambda x, y: (x * math.cos(r) - y * math.sin(r), x * math.sin(r) + y * math.cos(r))
     R = lambda pts: [rot(*q) for q in pts]

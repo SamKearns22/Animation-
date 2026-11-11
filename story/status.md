@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): animatic 2 sent 11 Nov; Sam's notes 43-54 filed, nothing started (his usage hit 100%, next session 3:41). Next: Opus medium round on 43-54, then Sonnet animatic 3. Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): notes 43-45, 50-52, 57, 58 fixed 11 Nov (3 clips sent). Next: Opus medium on 46-49, 53, 54, 56, critique, then Sonnet animatic 3. Notes: `notes/remakes.md`.
 
 - Job I lying fixes: 14 and 18 fixed (a neck now shows in both; 18's collar wraps the neck). Sheets sent.
 - Open: Sam's look at 14 and 18.

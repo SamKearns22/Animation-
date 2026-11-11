@@ -544,18 +544,28 @@ def _branch_under(p):
     p.poly(ribbon(path, 170, 60), None, INK, 3.2)
 
 
-def kg_on_branch(img, cam, x, s, mood='hype', wings='wide', t=0.0, **kw):
+def kg_on_branch(img, cam, x, s, mood='hype', wings='wide', t=0.0, sway=0.0, **kw):
     """KG perched on the S1/S3 branch (pass 2: his talons floated in front of it): his tail hangs BEHIND the branch,
-    the branch is laid back over it, then his body sits on top with the toes curling over its front edge."""
+    the branch is laid back over it, then his body sits on top with the toes curling over its front edge.
+    sway: degrees he rocks about his toes on the branch (remakes note 44: he was frozen)."""
     import remakes_creatures as CR
     y = branch_y(x) - 236 * s - 4 * s                                    # his toe roots on the branch's top
-    before = img.copy()
-    CR.kg(img, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='tail', **kw)
-    m = Image.new('L', img.size, 0)
-    ImageDraw.Draw(m).polygon([cam.P(*q) for q in branch_poly()], fill=255)
-    img.paste(before, (0, 0), m)
+    pivot = cam.P(x, branch_y(x))
+
+    def rocked(lay):
+        return lay.rotate(sway, center=pivot, resample=Image.BICUBIC) if sway else lay
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    CR.kg(lay, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='tail', **kw)
+    lay = rocked(lay)
+    m = Image.new('L', img.size, 255)
+    ImageDraw.Draw(m).polygon([cam.P(*q) for q in branch_poly()], fill=0)
+    a = lay.getchannel('A')
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(a), np.asarray(m))))
+    img.alpha_composite(lay)
     foot_shadow(img, cam, x, branch_y(x) + 14, 420.0, SHADOW_W['kg'], clip=branch_poly())
-    CR.kg(img, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='body', **kw)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    CR.kg(lay, cam, x, y, s, view='front', perched=True, wings=wings, mood=mood, t=t, part='body', **kw)
+    img.alpha_composite(rocked(lay))
 
 
 def branch_poly():
