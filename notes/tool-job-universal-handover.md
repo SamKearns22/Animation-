@@ -22,3 +22,9 @@ every cast). S6 retired.
    moving-figure-against-the-set check any film with SET_BOXES gets; Remakes calls the kit.
 6. Delete source/quick.py, prompts/quick-example.json and preflight's quick-video exception (guide already gone).
 Run the kittests and `remakes.py check` at the end; Remakes' picture must not change (bar KG's eye).
+
+## Estimate (11 Nov, sent to Sam; waiting for his Y, rule 86)
+About 2.5% of a week, one build chat (Opus, medium: the plan above is clear), cap 3.5%.
+Stages: captions 0.5, 1.1x 0.4, Hook Text 0.2, eyes 0.6, camp check 0.5, quick.py removal 0.1, kittests and
+`remakes.py check` 0.2. Pieces 1, 2, 3 and 5 touch finish.py or remakes.py, so the build starts only once
+animations/remakes-vertical.mp4 is on the main line. Sam's answer: (waiting)
