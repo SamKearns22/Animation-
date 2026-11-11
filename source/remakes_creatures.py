@@ -29,6 +29,7 @@ sys.path.insert(0, HERE)
 import burnham as B              # noqa: E402
 import views as V                # noqa: E402
 from ed import INK, curve, open_curve, oval   # noqa: E402
+import eyekit                    # noqa: E402  rule S5: iris, pupil and shine cut to the eye's outline
 
 REF = os.path.join(os.path.dirname(HERE), 'references', 'remakes')
 SHINE = (255, 255, 255)
@@ -244,11 +245,10 @@ def _kg_eye(p, ex, ey, r, mood, sgn, look=0.0):
     p.poly(pts, KG_IRIS, None)
     pr = r * 0.5 * mood.get('pupil', 1.0)
     cx = ex + look * r * 0.3
-    p.poly([(x, max(y, lid)) for x, y in oval(cx, ey + 2, pr, pr, 28)], INK, None)
-    if eyes != 'narrow':
-        p.ell(cx - r * 0.3, ey - r * 0.32, r * 0.16, r * 0.16, SHINE, None)
-        if mood.get('shine2'):
-            p.ell(cx + r * 0.28, ey + r * 0.26, r * 0.09, r * 0.09, SHINE, None)
+    eyekit.iris_and_pupil(p, pts, cx, ey + 2, r, None, pr, INK,                 # rule S5: cut to the outline
+                          shine=(-0.3, -0.32 - 2 / r, 0.16) if eyes != 'narrow' else None, shine_col=SHINE)
+    if eyes != 'narrow' and mood.get('shine2'):
+        eyekit.iris_and_pupil(p, pts, cx, ey + 2, r, None, 0, None, shine=(0.28, 0.26 - 2 / r, 0.09), shine_col=SHINE)
     p.poly(pts, None, INK, 3.0)
     if mood.get('low'):                                                 # the lower lid pushed up: a squint
         lo = ey + r * (1.0 - 2 * mood['low'])

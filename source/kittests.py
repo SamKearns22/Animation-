@@ -1038,6 +1038,27 @@ def lying_neck_from_behind():
     return bool(ok), '; '.join(out)
 
 
+@test
+def eyes_cut_to_the_outline():
+    """Rule S5 (tool job, 11 Nov): KG's owl pupil at a hard glance spilled past his eye; eyekit cuts it, and the
+    house-style check names a cast file that draws pupils without cutting them."""
+    import types
+    import eyekit
+    import housestyle
+    from ed import oval
+    import shocking_cast  # noqa: F401  (an old cast that draws uncut pupils)
+    r, look, pr = 38, 2.4, 38 * 0.5 * 1.2
+    outline = oval(0, 0, r, r, 40)
+    old = oval(look * r * 0.3, 2, pr, pr, 28)                  # the old pupil: never cut to the outline
+    new = eyekit.inside(outline, old)
+    caught = eyekit.spill(outline, old) > 0.05 and eyekit.spill(outline, new) < 1e-3
+    flagged = bool(housestyle.eye_faults(types.SimpleNamespace(__name__='shocking')))
+    import remakes_creatures  # noqa: F401
+    clean = not housestyle.eye_faults(types.SimpleNamespace(__name__='remakes'))
+    return caught and flagged and clean, (f'old pupil spills {eyekit.spill(outline, old):.0%}, cut '
+                                          f'{eyekit.spill(outline, new):.1%}; old cast flagged {flagged}; Remakes clean {clean}')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

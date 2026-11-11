@@ -47,7 +47,7 @@ the end by section.
 | 80 | Anyone seated front on shows knees and lap, and rising or sitting never makes the head dip below its seated height (Sam, 7 Nov; Islamocommunism note 10). | `sitting.py` checks (`check_no_sink`, the lap drawn when `j['lap']`); critique P7 |
 | 83 | In a flat painted set, no painted object overlaps another unless the set lists it as meant (Sam, 8 Nov, Ad-Vanced Notice note 42b: the portrait clipped into the mantel clock). Each set lists its objects' boxes (`SET_BOXES`) and its meant overlaps with why (`SET_MEANT`). | `setcheck.py` (the film's checks(), so pre-flight) |
 | S2 | A hand moves the object, drawn over it; a resting hand keeps 3 cm clear. | `kitchecks` (`TOUCHES`, `FREE_MOVES`) |
-| S5 | On every character, the pupil and iris stay inside the eye's outline at any size or glance (Sam, 11 Nov: every cast, not only the stock people). | each cast's eye drawing cuts to the outline (`burnham.face`, `remakes_cast._eye`; others by the tool job of 11 Nov); critique by hand |
+| S5 | On every character, the pupil and iris stay inside the eye's outline at any size or glance (Sam, 11 Nov: every cast, not only the stock people). | every cast's eyes cut to the outline (`burnham.face`, `remakes_cast._eye`, new casts `eyekit`); pre-flight's house style names a cast file that draws uncut pupils (`housestyle.eye_faults`); critique P14 |
 | S7 | No off-style shorthand (stars, sweat drops, motion lines); effect shapes are checked: no star, regular spike or motion line. | `viewchecks.shape_faults` (`EFFECTS`); critique O6 |
 | S8 | Bullet holes and marks only on real surfaces. | `kitchecks.marks` |
 | S10 | Riding: `mounts.py`, real pace speeds, the rider's seat matches the pace. | `mounts.check` |
