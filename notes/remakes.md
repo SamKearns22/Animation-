@@ -3,10 +3,10 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 70 (1.1x on delivery), 59 (checks before a final), 30 (seen-before notes).
 - **Done (11 Nov, eve):** Sam's notes on the final: 76 (tower lookout poking out under his box) and 77 (lower-left man's wipe-like entrance) fixed; checks clean; clip sent (3.2 s, 0.4 MB).
-- **Next:** on Sam's Y: Sonnet, medium: final re-render, finish.py, send. Type: "Remakes: final re-render with notes 76-77 (notes/remakes.md)".
-- **Needs Sam:** Y for the final re-render; Y/N on the checklist line (M1) for entrances.
+- **Next (Sam said Y):** Sonnet, medium: final re-render, finish.py, send. Type: "Remakes: final re-render with notes 76-77 (notes/remakes.md)".
+- **Needs Sam:** nothing (Y to the final re-render and the M1 line, 11 Nov).
 - **Read:** `guides/job-packs.md` "Final and posting".
-- **Open rule requests:** M1 wording (proposed in chat, 11 Nov): "things enter from outside the frame at their own speed, never slid slowly past the edge or revealed by a camera move".
+- **Open rule requests:** none (M1 line written, Sam's Y).
 - **For Claude:** 76: gunman1 drawn on a layer cut at the box's top edge (z 5.05), so his boots and corpse never show under it. 77: _g3_off(u) (5.6 m/s from 3 m off, brakes in the last 0.1 s), used by _camp and _camp_movers; mark -0.95 to -0.85; run_in's stance: bob 45, feet z +190/-150. Old For Claude notes (finish.py 1.1x, preflight OUT_DIR) in notes/archive/remakes-handovers.md: still apply.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)

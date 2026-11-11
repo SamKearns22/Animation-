@@ -1,7 +1,7 @@
 - Blessed (11 Nov, plan): story real (sentenced 9 Nov); 9 refs filed; Sam chose FULL, 19%; all 9 answered.
   Next: the Build chat (Opus, high), opened 11 Nov. Notes: notes/blessed.md.
 - Link trial (budget job, 11 Nov): Link drawn (C1, 1.0% of the week), handed over on amber; next: Opus high chat looks, fixes, two hunts.
-remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; next: Sam's Y, then Sonnet final re-render.
+remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
 - Budget job (11 Nov): Remakes' 60% traced; 7 proposals and a 20% forecast in notes/budget-job.md; waiting for Sam's Y/N. Nothing changed yet.
