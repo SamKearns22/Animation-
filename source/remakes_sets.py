@@ -2027,13 +2027,17 @@ def _swag_wall(p, x0, x1, ytop, ybot, t):
 
 def town_reverse(img, p, cam, t):
     """S11 (notes 56, 59: the camera turned 180 to Link; modelled on Sam's picture, ref 25): the street out of the
-    square climbing away from us to the castle, hazy at its top; house fronts with flower boxes down both sides;
-    shallow steps; nearer, a stone balustrade each side hung with blue gold-trimmed drapes, a tall blue banner on
+    square climbing away from us; house fronts with flower boxes down both sides;
+    shallow steps; a row of houses closing its far end (no castle: note 61); nearer, a stone balustrade each side hung with blue gold-trimmed drapes, a tall blue banner on
     a pole either side framing Link, stone planters of purple flowers at their feet."""
     _sky(p, -400, 900, 9)
     _cloud(p, 520, 200, 160, 491)
-    _castle(p, 545, 500, 0.5)
-    haze(img, cam, 300, 560, (230, 236, 244), 0.35)
+    for k, (x0, x1, top, rh, ci, kw) in enumerate((                    # note 61 (Sam): no castle (it would be a
+            (440, 500, 400, 40, 4, dict(floors=2, wins=1, roof='gable', frame='brace')),   # second one): the street
+            (500, 572, 380, 46, 0, dict(floors=2, wins=2, roof='side', frame='x')),        # ends in a far row of
+            (572, 640, 410, 36, 2, dict(floors=2, wins=1, roof='gable', frame='studs')))): # houses across it
+        _house(img, p, x0, x1, 520, top, rh, PLASTER[ci], 495 + k, **kw)
+    haze(img, cam, 300, 560, (230, 236, 244), 0.3)
     p.poly([(-200, 1100), (230, 1000), (470, 520), (610, 520), (850, 1000), (1280, 1100), (1280, 2000), (-200, 2000)],
            (206, 200, 188), None)                                       # the paving, pale stone
     for k in range(9):                                                  # joints running away to the vanishing point
