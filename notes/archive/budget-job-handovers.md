@@ -61,3 +61,29 @@
   fable row is its opus row doubled except the re-read. The Build pack in `guides/job-packs.md` still says "drawn
   alone and critiqued" for every new thing: add the Glimpse exception when (a) is built.
 
+
+## Where things stand (11 Nov, 18:45 UTC; budget chat 2 handed over on amber: rules written, the tool build is next)
+- **Rules that bite next:** 24 (stage-share stop), 89 (two hunts, each fault once), 85 (helpers counted).
+- **Done:** Sam's Y to proposals 1-11 (my picks: no sets trial, no further cuts). Rules 24, 85, 89 rewritten. The cost
+  watch counts helpers and prices Fable at twice Opus (tested; the ledger follows).
+- **Sam, 11 Nov (binding):** this job stays on Fable (a one-time experiment); N to naming kit stand-ins at the brief
+  (a weekly satire always needs new people). **"Cost savings have to come from background processes becoming more
+  efficient and intelligent."** So: no proposal that asks Sam to change what he writes or how he works.
+- **Next (Fable, high effort):** build, each with a kittest, cheapest first, measuring this chat's cost at each:
+  (a) `critique.py`: the helper lists each fault ONCE (60% of its lines were repeats); `status` not blocked by CAN'T
+  TELL; one pack per stage, never per set; no third pass. Add the Glimpse exception to the Build pack.
+  (b) `ledger.py auto`: stop when a stage reaches its share (today: only a quarter over); fix rule 24's check column.
+  (c) ONE command that draws, runs the checks and builds the sheet, printing only faults (look in the kit first):
+  a fixing chat ran 59-70 steps at 0.02 each, 27 of them tool runs, 16 shell, 12 looks.
+  (d) the helper's start-up is 0.17 of its 0.48: time a one-line helper of each kind the Agent tool offers, and
+  make `critique.py pack` name the lightest that still sees pictures. If none is lighter, say so.
+  (e) the three improvements Sam okayed earlier and chat 2 left out of the proposals: script checks for the
+  critique lines that catch the most (cast P2 25, A2 22, A1 17, P6 14; sets A2 22, A1 21, S3 20, O3 20, S1 19:
+  `notes/ledger/remakes_*.json`, `guides/critique-checklist.md`), only where a script can truly test them; the
+  reference tick-list filled by a tool before a hunt; the trials' child body and poses into the kit.
+  Then one message to Sam: what each should save, measured where it can be. No film work. Hand over on amber.
+- **Needs Sam:** nothing.
+- **Read:** this file's section 5; the MAPs of `critique.py`, `ledger.py`, `costbreak.py`; only the functions touched.
+- **Open rule requests:** none.
+- **For Claude:** Fable 5.2 lists at $8/$40 a million (Opus 5.5 $4/$20), re-reading the same. Helper records sit
+  beside the chat's own (`costwatch.helper_files`). Do not read the trial chats' events.

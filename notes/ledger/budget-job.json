@@ -21,6 +21,16 @@
    "repeats": [],
    "model": "fable",
    "cost": 1.13
+  },
+  {
+   "date": "2026-11-11",
+   "chat": "e15974d4",
+   "model": "fable",
+   "stage": "tool build (a)-(d), part of (e)",
+   "round": null,
+   "cost": 2.54,
+   "notes": 0,
+   "repeats": []
   }
  ],
  "checks": {}
