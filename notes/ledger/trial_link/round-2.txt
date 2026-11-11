@@ -1,0 +1,76 @@
+== critique, round 2 pass 1 (2026-11-11): 28 fault(s), 4 can't tell
+-- look.md --
+1: Elf boy turnaround: front, side, back; grey silhouette; stray dark bar; "front" "side" "back"
+2: Elf boy stands neutral, arms stiff at sides, ball hands, mild blush.
+3: Arms held out, shoulders up, worried uncertain look, blushing; body wider than panel 2.
+4: Hands pressed to cheeks, wide eyes, open mouth, shocked; arms look boneless.
+5: Crouching, hands over ears, eyes squeezed shut, teeth gritted; legs splayed awkwardly, frightened.
+6: Side view mid-step or hop; feet float above ground line; startled face.
+7: Nine heads: calm, smile, shock, wince, neutral, worry, sad, side, back; no labels.
+-- result.md --
+## Panel 1
+ok: A3 P2 P7 P1 P3 P4 P6 P10 P12 P11 P13 P14
+FAULT A1: collar reads necktie.
+FAULT A2: cap smooth, beads front only.
+FAULT P8: back view - no cap spiral.
+FAULT P5: shield ticks above shoulders.
+
+## Panel 2
+ok: A3 P2 P7 P1 P8 P3 P4 P6 P10 P12 P11 P13 P14
+FAULT A1: necktie collar.
+FAULT A2: cap as 1.
+FAULT P5: shield ticks above shoulders.
+
+## Panel 3
+ok: A3 P7 P1 P8 P3 P4 P5 P6 P10 P11 P13 P14
+FAULT A1: necktie; reads worried.
+FAULT A2: torso wider than 2, 4.
+FAULT P2: flat mouth; stiff arms out, no shrug.
+CAN'T TELL P12: speech frames.
+
+## Panel 4
+ok: A3 P7 P1 P8 P4 P6 P10 P11 P14
+FAULT A1: necktie.
+FAULT A2: cap as 1.
+FAULT P2: upright, no lean; mouth small.
+FAULT P3: rubber-loop arms.
+FAULT P5: arms start at neck.
+FAULT P13: sleeves hang empty.
+CAN'T TELL P12: speech frames.
+
+## Panel 5
+ok: A3 P1 P8 P3 P4 P5 P6 P10 P11 P14
+FAULT A1: necktie; reads sitting.
+FAULT A2: ears vanish behind hands.
+FAULT P2: hands behind head, squat; no scuttle.
+FAULT P7: right boot floats; thigh shorter.
+FAULT P13: tunic stiff, legs sprout from its sides.
+CAN'T TELL P12: speech frames.
+
+## Panel 6
+ok: A3 P7 P8 P3 P4 P5 P6 P12 P11 P13 P14
+FAULT A1: reads hopping, not held.
+FAULT P2: legs mid-stride; not limp.
+FAULT P1: no hand at collar.
+FAULT A2: cap beads missing.
+CAN'T TELL P10: frame with holder's hand.
+
+## Panel 7
+ok: A3 P7 P1 P8 P3 P4 P5 P6 P10 P12 P11 P13 P14
+FAULT P2: face 2 no side-eye; 3 mouth small; 5 mild surprise.
+FAULT A1: necktie.
+FAULT A2: cap as 1.
+
+## Cold look
+Misnamed five faces; 3, 5, 6 misread: poses don't show shrug, run, hold. Missed shield, necktie.
+
+## Same fault elsewhere
+Necktie: 1-5, 7. Cap: all. Shield ticks: 1, 2, 7. Acting: 3-7. Empty sleeves: 4. Floating foot: 5. Spiral: 1. Torso: 3.
+
+## Not on the list
+- Panel 1 dark bar. Suggested line: clean edges.
+- Panel 5 knee unlined. Suggested line: every shape outlined.
+- Proportions drift. Suggested line: overlay poses.
+- Pull unseen. Suggested line: forces show.
+- Faces unlabelled. Suggested line: label each face.
+

@@ -83,7 +83,7 @@ MOODS = {
     'sceptical':  dict(brows=((10, 8), (-26, -32)), lid=0.18, look=1.0, mouth='side'),
     'aghast':     dict(brows=((-20, -16), (-20, -16)), lid=0.0, scale=1.12, pupil=0.3, mouth='wide'),
     'wince':      dict(brows=((10, -2), (10, -2)), squeeze=True, mouth='grit'),
-    'horror':     dict(brows=((-12, -10), (-12, -10)), lid=0.0, pupil=0.26, mouth='small_o'),
+    'horror':     dict(brows=((-24, -6), (-24, -6)), lid=0.0, scale=1.06, pupil=0.2, mouth='small_o'),
     'deadpan':    dict(brows=((4, 4), (4, 4)), lid=0.64, mouth='flat'),
     'terrified':  dict(brows=((-20, -4), (-20, -4)), lid=0.0, scale=1.08, pupil=0.3, mouth='wobble', tear=True),
 }
@@ -117,7 +117,7 @@ def _eye(p, ex, ey, w, h, m, sgn, skin, t=0.0):
     p.poly(outline, (252, 252, 250), None)
     look, gdy = m.get('look', 0.0), m.get('gaze_dy', 0.0)
     r = min(w, h) * 0.8
-    cx, cy = ex + look * w * 0.34, ey + 3 + gdy * h * 0.3 + lid * h * 0.25
+    cx, cy = ex + look * w * 0.48, ey + 3 + gdy * h * 0.3 + lid * h * 0.25
     eyekit.iris_and_pupil(p, outline, cx, cy, r, IRIS_D, None, shine=None)
     eyekit.iris_and_pupil(p, outline, cx, cy, r * 0.84, IRIS, r * m.get('pupil', 0.44), shine=(-0.34, -0.38, 0.3))
     eyekit.iris_and_pupil(p, outline, cx, cy, 0.0, None, None, shine=(0.36, 0.34, 0.12))
@@ -163,7 +163,7 @@ def _mouth(p, sp, fx, my, m, t=0.0):
     elif name == 'flat':                                  # dead flat
         p.line([(fx - 13, my + 1), (fx + 13, my + 1)], INK, 2.8)
     elif name == 'wide':                                  # aghast: a tall open oval, top teeth, tongue
-        o = oval(fx, my + 8, 17, 22, 40)
+        o = oval(fx, my + 10, 21, 28, 40)
         p.poly(o, DARK, INK, 2.6)
         p.poly([(x, y) for x, y in oval(fx, my + 22, 11, 8, 30, math.pi, 2 * math.pi)], TONGUE, None)
         p.poly([(fx - 12, my - 10), (fx + 12, my - 10), (fx + 10, my - 4), (fx - 10, my - 4)], TEETH, None)
@@ -178,9 +178,12 @@ def _mouth(p, sp, fx, my, m, t=0.0):
         p.line([(fx - 22, my + 2), (fx - 27, my + 8)], INK, 2.2)
         p.line([(fx + 22, my + 2), (fx + 27, my + 8)], INK, 2.2)
     elif name == 'small_o':                               # flat horror: a small, stiff, downturned opening
-        p.poly(curve([(fx - 12, my + 6), (fx, my), (fx + 12, my + 6), (fx, my + 12)], 3), DARK, INK, 2.4)
-        p.line([(fx - 12, my + 6), (fx - 17, my + 11)], INK, 2.0)
-        p.line([(fx + 12, my + 6), (fx + 17, my + 11)], INK, 2.0)
+        box = [(fx - 20, my + 10), (fx - 10, my + 2), (fx + 10, my + 2), (fx + 20, my + 10), (fx + 12, my + 14),
+               (fx - 12, my + 14)]                        # a stiff, downturned grimace, teeth showing
+        p.poly(box, DARK, INK, 2.4)
+        p.poly([(fx - 10, my + 3), (fx + 10, my + 3), (fx + 9, my + 7), (fx - 9, my + 7)], TEETH, None)
+        p.line([(fx - 20, my + 10), (fx - 25, my + 17)], INK, 2.2)
+        p.line([(fx + 20, my + 10), (fx + 25, my + 17)], INK, 2.2)
     elif name == 'wobble':                                # terrified: open, the lower lip trembling (moves with t)
         ph = t * 26.0
         top = [(fx - 18, my + 4), (fx - 8, my - 2), (fx, my - 1), (fx + 8, my - 2), (fx + 18, my + 4)]
@@ -204,7 +207,7 @@ def _weave(p, pts, c, step=16, seed=3):
         x, y = r.uniform(min(xs), max(xs)), r.uniform(min(ys), max(ys))
         if path.contains_point((x, y)) and path.contains_point((x + 8, y + 8)):
             s = 1 if r.random() < 0.5 else -1
-            p.line([(x, y), (x + 8, y + 8 * s)], c, 1.6)
+            p.line([(x, y), (x + 10, y + 10 * s)], c, 2.4)
 
 
 def _beads(p, pts, n):
@@ -287,7 +290,7 @@ def head_front(img, p, sp, t, hx, hy):
                    (hx + hw * 0.2, hy - hh * 1.32), (hx + hw * 0.86, hy - hh * 1.18), (hx + hw * 1.1, hy - hh * 0.82),
                    band_top[-1], band_top[3], band_top[2], band_top[1]], 4)
     p.poly(crown, CAP, INK, 2.6)
-    _weave(p, crown, CAP_D, seed=7)
+    _weave(p, crown, B.dk(CAP, 0.62), step=12, seed=7)
     p.line([(hx + hw * 0.2, hy - hh * 1.3), (hx + hw * 0.7, hy - hh * 1.0)], CAP_D, 2.0)   # the fold
     bt = curve(band_top, 3)[:-8]
     bb = curve(band_bot, 3)[:-8]
@@ -356,7 +359,7 @@ def head_side(img, p, sp, t, hx, hy):
     crown = curve([band_b, (hx - hw * 0.9, hy - hh * 1.0), (hx - hw * 0.3, hy - hh * 1.3), (hx + hw * 0.4, hy - hh * 1.24),
                    (hx + hw * 0.86, hy - hh * 0.9), band_f, (hx - hw * 0.2, hy - hh * 0.74)], 4)
     p.poly(crown, CAP, INK, 2.6)
-    _weave(p, crown, CAP_D, seed=11)
+    _weave(p, crown, B.dk(CAP, 0.62), step=12, seed=11)
     p.poly(bt + bb[::-1], BAND, INK, 2.4)
     _beads(p, [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(bt, bb)], 5)
     return hx + hw * 0.6
@@ -398,8 +401,8 @@ def head_back(img, p, sp, t, hx, hy):
     sx, sy = hx - hw * 0.1, hy - hh * 0.52                 # the raised woven spiral (reference 01)
     spiral = [(sx + (4 + 6.5 * a) * math.cos(a), sy + (4 + 6.5 * a) * math.sin(a) * 0.9)
               for a in np.linspace(0, 4.2 * math.pi, 70)]
-    p.line(spiral, CAP_D, 6.0)
-    p.line(spiral, CAP_L, 2.4)
+    p.line(spiral, INK, 9.0)
+    p.line(spiral, CAP_L, 4.0)
     p.poly(bt + bb[::-1], BAND, INK, 2.4)
     _beads(p, [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(bt, bb)], 7)
     for k in range(9):                                    # a frayed tip
@@ -452,9 +455,9 @@ def body(p, view, sp):
                  (sw * B.HEM * 0.98, bottom), (-sw * B.HEM * 0.98, bottom), (-sw * 0.76, 360)]
         p.poly(panel, TUNIC_D, INK, 2.2)
         _weave(p, panel, B.dk(TUNIC_D, 0.75), seed=21)
-        p.poly([(-30, 30), (30, 30), (0, 96)], SHIRT, INK, 2.0)
-        for sg in (-1, 1):                                # the knit shirt's collar points
-            p.poly([(sg * 4, -4), (sg * 40, -6), (sg * 48, 32), (sg * 14, 44)], SHIRT, INK, 2.0)
+        p.poly([(-40, 30), (40, 30), (0, 70)], SHIRT, INK, 2.0)
+        for sg in (-1, 1):                                # the knit shirt's open collar: wide flat points out to the
+            p.poly([(sg * 10, -4), (sg * 66, -8), (sg * 84, 22), (sg * 30, 30)], SHIRT, INK, 2.0)   # sides (not a tie)
         _strap(p, (sw * 0.72, 2), (-sw * 0.7, 380))
         p.poly([(-sw * 0.86, 372), (sw * 0.86, 372), (sw * 0.88, 404), (-sw * 0.88, 404)], LEATHER, INK, 2.2)
         p.ell(0, 388, 22, 20, SILVER, INK, 2.4)
@@ -484,16 +487,16 @@ def body(p, view, sp):
 def shield_front(p, j2, view):
     """Front on: the shield's edge shows past his left side (screen right), behind the body (reference 04)."""
     if view == 'front':
-        _shield(p, 118 * 0.8, 6, 118 * 0.5, 400)
+        _shield(p, 118 * 0.8, 70, 118 * 0.5, 340)
 
 
 def collar_up(p, view, sp):
     """Held by the collar: the shirt's collar bunched up round his neck and under his chin."""
     if view in ('side', 'front'):
         # wrapped round the neck, yanked up behind (towards the grip off-panel): a point and pull folds
-        p.poly(curve([(-44, 16), (-50, -30), (-40, -96), (-18, -40), (20, -30), (46, -10), (40, 16)], 3), SHIRT, INK, 2.2)
+        p.poly(curve([(-44, 16), (-54, -40), (-46, -130), (-14, -44), (20, -30), (46, -10), (40, 16)], 3), SHIRT, INK, 2.2)
         for k in range(3):
-            p.line([(-34 + 8 * k, 6), (-36 + 4 * k, -70 + 14 * k)], B.dk(SHIRT, 0.75), 1.6)
+            p.line([(-34 + 8 * k, 6), (-40 + 4 * k, -100 + 20 * k)], B.dk(SHIRT, 0.75), 1.8)
 
 
 # ------------------------------------------------------------------------------------------------ the hooks
@@ -567,15 +570,13 @@ def pose(name, t=0.0):
     if name == 'shrug':
         j = stand(sp)                                     # elbows tucked at his sides, forearms out, palms up;
         for sd, sg in (('L', -1), ('R', 1)):              # head sunk between the shoulders and tipped
-            V.arm_to(j, sd, (sg * (sp['shoulders'] + 70), 230.0, 150.0), 'back', 'palm')
-            x, y, z = j['sh' + sd]
-            j['sh' + sd] = (x, y - 16, z)                 # shoulders up
+            V.arm_to(j, sd, (sg * (sp['shoulders'] + 140), 200.0, 90.0), 'back', 'palm')
         j['head_dy'] = 18
         j['head_roll'] = 9
     elif name == 'cheeks':                                # hands to his cheeks, jolting back
         j = V.standing(sp)
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * hw * 0.6, hy + hh * 0.62, 70.0), (0.7, 1.0, 0.3), 'palm')
+            V.arm_to(j, sd, (sg * hw * 0.62, hy + hh * 0.62, 190.0), (1.0, 1.0, 0.0), 'palm')
         j['on_face'] = {'L', 'R'}
         j['lean'] = -12
         j['nod'] = -1.4                                   # the jolt: chin up, head back
@@ -587,17 +588,17 @@ def pose(name, t=0.0):
         for sd, sg in (('L', -1), ('R', 1)):
             fx, fy, fz = j['foot' + sd]
             j['foot' + sd] = (fx + sg * 24, fy - crouch, fz)
-            j['knee_pole' + sd] = (0.7 * sg, 0.0, 0.7)
+            j['knee_pole' + sd] = (0.35 * sg, 0.0, 0.94)
         j['lean'] = 10
         j['nod'] = 1.2                                    # head ducked
         j['head_dy'] = 16
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * hw * 1.02, hy + hh * 0.06, 16.0), 'out', 'palm')
+            V.arm_to(j, sd, (sg * hw * 1.02, hy + hh * 0.06, 16.0), (0.5, 0.4, 0.9), 'palm')
         j['on_face'] = {'L', 'R'}
     elif name == 'collar':                                # held up by the collar, side on: feet dangling, toes down
         j = V.standing(sp)
-        j['footL'] = (-40, V.ANKLE_Y - 20, 40.0)
-        j['footR'] = (40, V.ANKLE_Y - 40, -30.0)
+        j['footL'] = (-30, V.ANKLE_Y - 10, 18.0)          # legs hanging together, a little forward: limp
+        j['footR'] = (30, V.ANKLE_Y - 16, 30.0)
         j['toeL'] = j['toeR'] = -40
         for sd, tgt in (('L', (-30.0, 380.0, 60.0)), ('R', (30.0, 370.0, 90.0))):
             V.arm_to(j, sd, tgt, 'back', 'palm')          # arms hang limp
@@ -713,8 +714,11 @@ def faces(out):
                                                         _head_tile('neutral', 360, 440, 180)]
     W = 360 * 3
     img = Image.new('RGBA', (W, 440 * 3), (232, 228, 222, 255))
-    for i, t in enumerate(tiles):
+    d = ImageDraw.Draw(img)
+    f = ImageFont.truetype(FONT, 24)
+    for i, (t, lab) in enumerate(zip(tiles, FACES + ['terrified, side on', 'cap from behind'])):
         img.alpha_composite(t, ((i % 3) * 360, (i // 3) * 440))
+        d.text(((i % 3) * 360 + 14, (i // 3) * 440 + 10), f'{i + 1} {lab}', font=f, fill=(30, 30, 30))
     img.convert('RGB').save(out, quality=90)
     return out
 
