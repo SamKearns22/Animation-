@@ -1,6 +1,6 @@
 {
  "film": "blessed",
- "estimate": 15.0,
+ "estimate": 19.0,
  "chats": [
   {
    "date": "2026-11-11",
@@ -22,12 +22,12 @@
   },
   {
    "name": "cast",
-   "pct": 3.6,
+   "pct": 4.0,
    "done": null
   },
   {
    "name": "sets",
-   "pct": 3.8,
+   "pct": 5.0,
    "done": null
   },
   {
@@ -41,7 +41,12 @@
    "done": null
   },
   {
-   "name": "round",
+   "name": "round1",
+   "pct": 2.5,
+   "done": null
+  },
+  {
+   "name": "round2",
    "pct": 2.5,
    "done": null
   },
