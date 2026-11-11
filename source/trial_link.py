@@ -47,7 +47,7 @@ BLUSH = (240, 170, 150)
 HAIR = (226, 176, 72)            # golden blond (04)
 HAIR_D = (176, 122, 44)
 HAIR_L = (246, 208, 120)
-BROW = (170, 112, 46)
+BROW = (128, 76, 30)             # darker than the hair so the brows read over the fringe
 IRIS = (64, 118, 206)            # big blue eyes
 IRIS_D = (36, 70, 140)
 CAP = (92, 132, 50)              # the woven green cap
@@ -67,7 +67,7 @@ CUFF = (196, 158, 106)
 WOOD, WOOD_D = (132, 84, 44), (92, 58, 30)
 
 HEIGHT = 1.33                    # a 9-year-old
-TOP = 1235.0                     # units from the cap's top to the soles (measured off the drawing)
+TOP = 1199.0                     # units from the cap's top to the soles (measured off the drawing)
 
 
 def lerp(a, b, k):
@@ -80,11 +80,11 @@ def lerp(a, b, k):
 MOODS = {
     'neutral':    dict(brows=((0, 0), (0, 0)), lid=0.08, mouth='rest'),
     'unsure':     dict(brows=((-14, -4), (-14, -4)), lid=0.0, look=-0.25, mouth='half'),
-    'sceptical':  dict(brows=((5, 3), (-16, -20)), lid=0.36, look=0.75, mouth='side'),
+    'sceptical':  dict(brows=((6, 4), (-20, -26)), lid=0.4, look=1.0, mouth='side'),
     'aghast':     dict(brows=((-20, -16), (-20, -16)), lid=0.0, scale=1.12, pupil=0.3, mouth='wide'),
     'wince':      dict(brows=((10, -2), (10, -2)), squeeze=True, mouth='grit'),
     'horror':     dict(brows=((-12, -10), (-12, -10)), lid=0.0, pupil=0.26, mouth='small_o'),
-    'deadpan':    dict(brows=((2, 2), (2, 2)), lid=0.5, mouth='flat'),
+    'deadpan':    dict(brows=((4, 4), (4, 4)), lid=0.64, mouth='flat'),
     'terrified':  dict(brows=((-20, -4), (-20, -4)), lid=0.0, scale=1.08, pupil=0.3, mouth='wobble', tear=True),
 }
 
@@ -133,7 +133,7 @@ def _eye(p, ex, ey, w, h, m, sgn, skin, t=0.0):
         p.ell(ex + w * 0.5, ey + h * 0.95 + 6, 4.5, 6.5, (190, 226, 250), INK, 1.4)
 
 
-def _brow(p, ex, ey, sgn, inner, outer, length=30, c=BROW, w=4.6):
+def _brow(p, ex, ey, sgn, inner, outer, length=30, c=BROW, w=6.0):
     a = (ex - sgn * length * 0.5, ey + inner)
     b = (ex + sgn * length * 0.55, ey + outer)
     m = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2 - 4)
@@ -482,11 +482,11 @@ def shield_front(p, j2, view):
 def collar_up(p, view, sp):
     """Held by the collar: the shirt's collar bunched up round his neck and under his chin."""
     if view in ('side', 'front'):
-        o = 6 if view == 'side' else 0
-        p.poly(curve([(o - 46, -40), (o - 20, -66), (o + 30, -70), (o + 54, -44), (o + 44, 14), (o - 40, 14)], 3),
+        o = 34 if view == 'side' else 0
+        p.poly(curve([(o - 34, -24), (o - 14, -46), (o + 24, -48), (o + 42, -28), (o + 34, 12), (o - 30, 12)], 3),
                SHIRT, INK, 2.2)
         for k in range(3):
-            p.line([(o - 26 + 24 * k, -56), (o - 20 + 24 * k, 4)], B.dk(SHIRT, 0.75), 1.6)
+            p.line([(o - 18 + 18 * k, -38), (o - 14 + 18 * k, 4)], B.dk(SHIRT, 0.75), 1.6)
 
 
 # ------------------------------------------------------------------------------------------------ the hooks
@@ -546,7 +546,7 @@ def install():
 
 install()
 
-LINK = dict(who='link', name='Link', skin=SKIN, hw=100, hh=108, head_dy=-26, hair='crop', hair_c=HAIR, brow_c=BROW,
+LINK = dict(who='link', name='Link', skin=SKIN, hw=100, hh=108, head_dy=10, hair='crop', hair_c=HAIR, brow_c=BROW,
             shoulders=118, outfit='jumper', jacket=TUNIC, sleeve=TUNIC, trousers=TIGHTS, shoe=BOOT, bottom=590,
             full=True, pose='custom', seed=31)
 
@@ -558,13 +558,16 @@ def pose(name, t=0.0):
     hy = -150.0 + sp['head_dy']
     hw, hh = sp['hw'], sp['hh']
     if name == 'shrug':
-        j = MV.pose(sp, 'shrug')
+        j = V.standing(sp)                                # elbows at his sides, forearms out, palms up; head sunk
+        for sd, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, sd, (sg * (sp['shoulders'] + 120), 250.0, 110.0), 'down', 'palm')
+        j['head_dy'] = 14
     elif name == 'cheeks':                                # hands to his cheeks, jolting back
         j = V.standing(sp)
         for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * hw * 0.78, hy + hh * 0.5, 40.0), 'out', 'palm')
+            V.arm_to(j, sd, (sg * hw * 0.6, hy + hh * 0.62, 70.0), 'down', 'palm')
         j['on_face'] = {'L', 'R'}
-        j['lean'] = -7
+        j['lean'] = -12
     elif name == 'scuttle':                               # a crouched front-on scuttle, hands clamped over his ears
         j = MV.gait(dict(sp), t, 'front_run')
         crouch = 90.0
@@ -643,7 +646,7 @@ def sheet(out):
     d.text((20, 12), 'TRIAL: Young Link (remake), front / side / back, 1.33 m', font=big, fill=(30, 30, 30))
     floor, s = 640, 0.46
     for i, (yaw, lab) in enumerate(((0, 'front'), (90, 'side'), (180, 'back'))):
-        x = 110 + i * 205
+        x = 90 + i * 165
         person(img, cam, x, floor, s, yaw)
         d.text((x, floor + 8), lab, font=small, fill=(60, 60, 60), anchor='mt')
     d.line([(20, floor), (640, floor)], fill=(150, 146, 140), width=2)
@@ -652,9 +655,9 @@ def sheet(out):
     r3, r4 = _ref('03-link.jpg', 290), _ref('04-link.jpg', 290)
     img.alpha_composite(r3.resize((290 * r3.width // r3.height, 290)), (W - 400, 60))
     r4 = r4.resize((400, int(400 * r4.height / r4.width)))
-    img.alpha_composite(r4, (W - 410, 360))
+    img.alpha_composite(r4, (W - 410, 384))
     d.text((W - 400, 44), 'ref 03', font=small, fill=(30, 30, 30))
-    d.text((W - 400, 344), 'ref 04 (MAIN)', font=small, fill=(30, 30, 30))
+    d.text((W - 400, 362), 'ref 04 (MAIN)', font=small, fill=(30, 30, 30))
     y0 = 700
     d.text((20, y0), 'Poses', font=big, fill=(30, 30, 30))
     for i, (name, yaw, t, lab) in enumerate(POSES):
@@ -676,8 +679,8 @@ def sheet(out):
     img.alpha_composite(_head_tile('terrified', 148, 190, 90), (14, y1 + 292))
     img.alpha_composite(_head_tile('neutral', 148, 190, 180), (166, y1 + 292))
     d.text((170, y1 + 486), 'cap from behind (S1)', font=small, fill=(30, 30, 30))
-    img.alpha_composite(_ref('01-kg.jpg', 190), (330, y1 + 292))
-    d.text((334, y1 + 486), 'ref 01', font=small, fill=(30, 30, 30))
+    img.alpha_composite(_ref('01-kg.jpg', 190), (380, y1 + 292))
+    d.text((384, y1 + 486), 'ref 01', font=small, fill=(30, 30, 30))
     img.convert('RGB').save(out, quality=90)
     return out
 
