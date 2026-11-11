@@ -183,6 +183,8 @@ def _kid_mouth(p, sp, fx, my, mood, lip=(176, 84, 84)):
     if not (isinstance(m, str) and m.startswith('v:') and m != 'v:rest'):
         p = _Grown(p, fx, my, sp['hw'] / 118.0 * MOUTH_K.get(mood, 1.0))
     if isinstance(m, str) and m.startswith('v:') and m != 'v:rest':
+        if sp.get('mouth_k'):                                         # Remakes note 53: fuller talking shapes
+            p = _Grown(p, fx, my, sp['mouth_k'])
         mouths.draw(p, dict(sp, lips=False), fx, my, m[2:])
         return
     inside, teeth, tongue = (96, 34, 40), (250, 248, 244), (214, 104, 110)

@@ -1961,69 +1961,111 @@ def town_wall(img, p, cam, t):
 
 
 
-REVERSE_HOUSES = [  # note 56: the square's other side, behind Link in S11 (the line-up's side turned 180): its own row
-    (-170, 120, 440, 150, 2, dict(floors=3, wins=2, roof='side', stone=True, frame='x', balcony=True, chimney=True)),
-    (126, 330, 500, 120, 0, dict(floors=2, wins=2, roof='gable', frame='brace', sign=(150, 60, 120))),
-    (750, 940, 470, 130, 3, dict(floors=3, wins=2, roof='gable', stone=True, frame='studs', jetty=True)),
-    (946, 1260, 420, 150, 1, dict(floors=3, wins=3, roof='side', frame='brace', balcony=True, chimney=True)),
-]
+STREET_LEV = Level(h=1.6, hz=470.0, f=812.0)   # note 56's street: the vanishing point above Link's cap in S11
+
+
+def _street_side(p, sg, houses, t):
+    """One side of the street (sg -1 left, +1 right) in one-point perspective to (540, 470): house fronts running
+    away from us, each its own plaster, timber posts and floor beams, shuttered windows with flower boxes, a red
+    tiled eave along the top (ref 25)."""
+    def at(u, v):                                                       # u 0 near .. 1 far; v 0 ground .. 1 eaves
+        x = 540 + sg * (310 - 240 * u ** 0.8)
+        g, top = 1000 - 480 * u ** 0.8, 40 + 330 * u ** 0.8
+        return x, g + (top - g) * v
+    for k, (u0, u1, col, floors, sd) in enumerate(houses):
+        p.poly([at(u0, 0), at(u1, 0), at(u1, 1), at(u0, 1)], col, INK, 2.0)
+        p.poly([at(u0, 0), at(u1, 0), at(u1, 0.28), at(u0, 0.28)], mix(col, WALLSTONE, 0.6), INK, 1.6)
+        for f in range(1, floors + 1):                                  # floor beams
+            v = 0.28 + (0.72 / (floors + 0.3)) * f
+            p.line([at(u0, v), at(u1, v)], (96, 66, 44), 3.0)
+        for u in (u0 + 0.02, u1 - 0.02):
+            p.line([at(u, 0.28), at(u, 0.98)], (96, 66, 44), 3.0)
+        nw = max(1, int((u1 - u0) * 9))
+        for f in range(floors):                                         # windows, shutters, flower boxes
+            v0 = 0.33 + (0.72 / (floors + 0.3)) * f
+            v1 = v0 + 0.13
+            for w in range(nw):
+                a, b = u0 + (u1 - u0) * (w + 0.3) / nw, u0 + (u1 - u0) * (w + 0.7) / nw
+                p.poly([at(a, v0), at(b, v0), at(b, v1), at(a, v1)], (70, 96, 140), INK, 1.4)
+                p.poly([at(a, v0 - 0.015), at(b, v0 - 0.015), at(b, v0 + 0.01), at(a, v0 + 0.01)], (120, 80, 50), None)
+                rr = random.Random(sd * 31 + f * 7 + w)
+                for q in range(4):
+                    fx, fy = at(a + (b - a) * (q + 0.5) / 4, v0 + 0.005)
+                    p.ell(fx, fy - 3, 5 * (1 - 0.5 * a), 5 * (1 - 0.5 * a), rr.choice([(214, 50, 60), (150, 70, 170)]), INK, 1.0)
+        door = (u0 + 0.35 * (u1 - u0), u0 + 0.55 * (u1 - u0))           # a round-topped door
+        p.poly([at(door[0], 0), at(door[1], 0), at(door[1], 0.22), at(door[0], 0.22)], (110, 70, 44), INK, 1.6)
+        e0, e1 = at(u0, 1.0), at(u1, 1.0)                               # the eave
+        p.poly([e0, e1, (e1[0] + sg * 18 * (1 - u1), e1[1] - 26 * (1 - 0.6 * u1)),
+                (e0[0] + sg * 40, e0[1] - 60)], (196, 92, 56), INK, 2.0)
+
+
+def _swag_wall(p, x0, x1, ytop, ybot, t):
+    """A stone balustrade with blue drapes swagged along it, gold-trimmed (ref 25), square posts at each end with
+    a flower urn on top."""
+    p.poly(quad(x0, ytop, x1, ybot), (214, 208, 196), INK, 2.0)
+    n = 6
+    for k in range(n):                                                  # balusters
+        bx = x0 + (x1 - x0) * (k + 0.5) / n
+        p.poly(curve([(bx - 9, ytop + 16), (bx + 9, ytop + 16), (bx + 13, ytop + 45), (bx + 7, ybot - 10),
+                      (bx - 7, ybot - 10), (bx - 13, ytop + 45)], 3), (230, 226, 216), INK, 1.4)
+    p.poly(quad(x0 - 6, ytop - 6, x1 + 6, ytop + 14), (232, 228, 218), INK, 2.0)
+    for k in range(3):                                                  # the drapes
+        a, b = x0 + (x1 - x0) * k / 3, x0 + (x1 - x0) * (k + 1) / 3
+        sag = 38 + 4 * math.sin(t * 2 + k)
+        top = [(a, ytop + 12), (b, ytop + 12)]
+        bot = [(a + (b - a) * u, ytop + 14 + sag * math.sin(math.pi * u)) for u in np.linspace(1, 0, 9)]
+        p.poly(top + bot, BANNER, INK, 1.6)
+        p.line(bot, GOLD, 3.0)
+    for px in (x0, x1):                                                 # posts and urns
+        p.poly(quad(px - 18, ytop - 30, px + 18, ybot), (222, 216, 204), INK, 2.0)
+        p.poly(quad(px - 22, ytop - 38, px + 22, ytop - 28), (236, 232, 222), INK, 1.6)
+        p.poly(curve([(px - 16, ytop - 38), (px + 16, ytop - 38), (px + 10, ytop - 62), (px - 10, ytop - 62)], 3),
+               (200, 190, 176), INK, 1.4)
+        for q in range(5):
+            p.ell(px - 14 + 7 * q, ytop - 68 - 6 * (q % 2), 8, 8, (214, 50, 60) if q % 2 else (150, 70, 170), INK, 1.0)
 
 
 def town_reverse(img, p, cam, t):
-    """S11 (note 56, Sam: the camera turns 180 to Link, further into the square): the square's near side, the side
-    the line-up faces. No castle and no fountain (they are behind the line-up): the town gate (ref 22), a pale stone
-    gatehouse with a round arch onto the road out, blue banners with the gold crest either side of it, a stone
-    balustrade along its top; its own row of houses left and right; bunting; townsfolk; barrels and a planter."""
-    _sky(p, -400, 950, 7)
-    for x, y, w, sd in ((300, 160, 200, 471), (900, 240, 170, 472)):
-        _cloud(p, x, y, w, sd)
-    haze(img, cam, 300, 700, (230, 236, 244), 0.2)
-    base = TOWN.p(0, 24.0)[1]
-    for k, (x0, x1, top, rh, ci, kw) in enumerate(REVERSE_HOUSES):
-        _house(img, p, x0, x1, base, top, rh, PLASTER[ci], 470 + k, **kw)
-    gx0, gx1, gtop = 330, 750, 330                                      # the gatehouse
-    p.poly(quad(gx0, gtop, gx1, base), WALLSTONE_L, INK, 2.6)
-    rr = random.Random(480)
-    y = base
-    row = 0
-    while y > gtop + 30:
-        bh = rr.uniform(26, 34)
-        x = gx0 + (0 if row % 2 else -20)
-        while x < gx1:
-            bw = rr.uniform(40, 70)
-            p.line([(max(gx0, x), y), (min(gx1, x + bw), y)], WALLSTONE_D, 1.2)
-            if x > gx0:
-                p.line([(x, y), (x, y - bh)], WALLSTONE_D, 1.2)
-            x += bw
-        y -= bh
-        row += 1
-    for k in range(7):                                                  # the balustrade along the top
-        bx = gx0 + 20 + k * (gx1 - gx0 - 40) / 6
-        p.poly(quad(bx - 12, gtop - 46, bx + 12, gtop), WALLSTONE, INK, 1.6)
-    p.poly(quad(gx0 - 10, gtop - 60, gx1 + 10, gtop - 44), WALLSTONE_L, INK, 2.0)
-    ax, aw, ah = (gx0 + gx1) / 2, 120, 250                              # the arch onto the road out
-    arch = [(ax - aw, base)] + [(ax - aw * math.cos(a), base - ah + aw - aw * math.sin(a))
-                                for a in np.linspace(0, math.pi, 16)] + [(ax + aw, base)]
-    p.poly(arch, (150, 186, 120), INK, 3.0)                             # fields and sky through it
-    p.poly([(ax - aw, base), (ax - aw, base - 70), (ax + aw, base - 70), (ax + aw, base)], (196, 176, 130), None)
-    p.poly(quad(ax - aw, base - ah - 6, ax + aw, base - ah + 40), (176, 214, 236), None)
-    p.line(arch, INK, 3.0)
-    for k in range(9):                                                  # the arch's voussoirs
-        a = math.pi * (k + 0.5) / 9
-        c, s_ = math.cos(a), math.sin(a)
-        p.line([(ax - aw * c, base - ah + aw - aw * s_), (ax - (aw + 30) * c, base - ah + aw - (aw + 30) * s_)],
-               WALLSTONE_D, 1.6)
-    for bx in (gx0 + 50, gx1 - 50):                                     # banners either side
-        p.line([(bx - 40, gtop + 30), (bx + 40, gtop + 30)], (70, 60, 50), 4.0)
-        _banner(p, bx, gtop + 34, 70, 190, t)
-    _flagstones(p, TOWN, 24.0, 481, 0.42, (0.4, 0.8))
-    _bunting(p, -40, 420, 1120, 400, 40, 22, t)
-    for x, d, c, sd in ((-1.2, 20.0, (90, 120, 150), 21), (1.0, 19.0, (150, 90, 80), 22), (-4.0, 18.0, (120, 140, 90), 23),
-                        (3.9, 17.5, (170, 140, 100), 24)):
-        _townsfolk(p, x, d, c, sd)
-    for x, d in ((-3.1, 12.0), (-2.8, 12.3)):
-        _barrel_t(p, x, d)
-    _sack(p, 3.0, 12.0)
+    """S11 (notes 56, 59: the camera turned 180 to Link; modelled on Sam's picture, ref 25): the street out of the
+    square climbing away from us to the castle, hazy at its top; house fronts with flower boxes down both sides;
+    shallow steps; nearer, a stone balustrade each side hung with blue gold-trimmed drapes, a tall blue banner on
+    a pole either side framing Link, stone planters of purple flowers at their feet."""
+    _sky(p, -400, 900, 9)
+    _cloud(p, 520, 200, 160, 491)
+    _castle(p, 545, 500, 0.5)
+    haze(img, cam, 300, 560, (230, 236, 244), 0.35)
+    p.poly([(-200, 1100), (230, 1000), (470, 520), (610, 520), (850, 1000), (1280, 1100), (1280, 2000), (-200, 2000)],
+           (206, 200, 188), None)                                       # the paving, pale stone
+    for k in range(9):                                                  # joints running away to the vanishing point
+        bx = -100 + k * 160
+        p.line([(bx, 1300), (540 + (bx - 540) * 0.12, 540)], (176, 170, 160), 1.6)
+    y = 540
+    while y < 1300:
+        p.line([(-200, y), (1280, y)], (176, 170, 160), 1.4)
+        y += 10 + (y - 520) * 0.18
+    for k in range(4):                                                  # shallow steps up the street
+        y0 = 600 + 22 * k
+        w = 80 + 22 * k
+        p.poly(quad(540 - w, y0, 540 + w, y0 + 8), (226, 222, 212), None)
+        p.line([(540 - w, y0 + 8), (540 + w, y0 + 8)], (150, 144, 134), 2.0)
+    _street_side(p, -1, [(0.0, 0.42, PLASTER[1], 3, 1), (0.42, 0.72, PLASTER[3], 2, 2), (0.72, 1.0, PLASTER[0], 3, 3)], t)
+    _street_side(p, 1, [(0.0, 0.5, PLASTER[2], 3, 4), (0.5, 0.78, PLASTER[4], 2, 5), (0.78, 1.0, PLASTER[3], 3, 6)], t)
+    _bunting(p, 440, 440, 640, 440, 22, 9, t)
+    for x, d, c, sd in ((-1.6, 22.0, (90, 120, 150), 21), (1.5, 25.0, (150, 90, 80), 22), (0.3, 30.0, (120, 140, 90), 23)):
+        _townsfolk(p, x, d, c, sd, lev=STREET_LEV)
+    _swag_wall(p, 200, 400, 800, 900, t)
+    _swag_wall(p, 680, 880, 800, 900, t)
+    for bx, sg in ((300, -1), (780, 1)):                                # the banners on their poles
+        p.line([(bx - sg * 70, 960), (bx - sg * 70, 170)], (70, 60, 50), 5.0)
+        p.line([(bx - sg * 70, 180), (bx + sg * 10, 180)], (70, 60, 50), 4.0)
+        p.ell(bx - sg * 70, 166, 8, 8, GOLD, INK, 1.4)
+        _banner(p, bx - sg * 15, 186, 100, 330, t)
+    for px in (250, 830):                                               # planters of purple flowers
+        p.poly(quad(px - 70, 900, px + 70, 1000), (180, 174, 164), INK, 2.2)
+        rr = random.Random(px)
+        for q in range(14):
+            p.ell(px - 60 + rr.uniform(0, 120), 895 - rr.uniform(0, 30), 11, 11,
+                  rr.choice([(150, 70, 170), (190, 120, 210), (120, 60, 150)]), INK, 1.0)
 
 
 TOWN_VIEWS = {'square': town_square, 'wall': town_wall, 'reverse': town_reverse}

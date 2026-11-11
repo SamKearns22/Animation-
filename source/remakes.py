@@ -747,7 +747,7 @@ def _scuttle_pose(tt, u):
     return j, c
 
 
-def _kg_draw(img, cam, x, y, s, t, view, flip=1, rot=0.0, mood='war', firing=False):
+def _kg_draw(img, cam, x, y, s, t, view, flip=1, rot=0.0, mood='war', firing=False, look=0.0, aim=0.0):
     """KG with the MG42 at his body's middle (x, y), tipped rot degrees about it (side on: leaning back to fire up
     at the tower). Returns the muzzle and its direction (world px)."""
     rec = 6 * s if firing else 0.0
@@ -755,17 +755,45 @@ def _kg_draw(img, cam, x, y, s, t, view, flip=1, rot=0.0, mood='war', firing=Fal
     dx, dy = flip * math.cos(a), -math.sin(a)
     tgt = _lay(img) if rot else img
     hands = CR.kg(tgt, cam, x - rec * dx, y - rec * dy, s, view=view, perched=False, stand=True, wings='gun', band=True,
-                  mood=mood, t=t, flip=flip, talk=_talk('kg', t))
+                  mood=mood, t=t, flip=flip, talk=_talk('kg', t), look=look, gun_aim=aim, head_tilt=0.7 * aim)
     if rot:
         img.alpha_composite(tgt.rotate(rot * flip, center=cam.P(x, y), resample=Image.BICUBIC))
+    if aim:                                                           # note 59: only the gun and head swing up
+        a = math.radians(aim)
+        dx, dy = flip * math.cos(a), -math.sin(a)
     hx = sum(h[0] for h in hands.values()) / 2 / B.SS
     hy = sum(h[1] for h in hands.values()) / 2 / B.SS
     wx = (hx - W / 2) / cam.z + cam.cx                                # hands are screen px through cam: back to world
     wy = (hy - H / 2) / cam.z + cam.cy
     ox, oy = wx - x, wy - 20 * s - y                                  # the barrel line, turned with him
-    ca, sa = math.cos(-a * flip), math.sin(-a * flip)
+    rb = math.radians(rot)                                            # the body's own turn (not the aim)
+    ca, sa = math.cos(-rb * flip), math.sin(-rb * flip)
     bx, by = x + ox * ca - oy * sa, y + ox * sa + oy * ca
     return (bx + dx * 400 * s, by + dy * 400 * s), (dx, dy)
+
+
+def _kg_camp_face(t, firing, mode):
+    """Note 54 (Sam: KG needs more dynamic faces, eyes and body in the camp storm): his mood, eye line and body
+    rock at t. Blinks and darts (_alive); a war roar on each burst broken by a crazed grin every third beat; fury on
+    his stressed words, glee on "GRENADES"; eyes snapping right at the rounds whipping past; the body rocking on his
+    voice (headlife) and shuddering with the gun's recoil (degrees)."""
+    shut, look, sway = _alive(t, 7)
+    roll, nod = HL['kg'].at_time(t)
+    name = 'war'
+    if firing is not None:
+        name = 'glee' if int(t * 5) % 3 == 2 else 'war'
+    elif _talk('kg', t) is not None:
+        name = 'glee' if L[9]['start'] <= t < L[9]['end'] + 0.2 else ('fury' if nod > 0.45 else 'war')
+    elif INCOMING[0] <= t < G2_IN[1]:
+        name, look = 'fury', 1.0                                      # glaring off right at the shooter
+    m = dict(CR.KG_MOODS[name])
+    m['brows'] = (m['brows'][0] + 0.25 * math.sin(t * 7.3), m['brows'][1] + 6 * nod)
+    if shut and firing is None:
+        m['eyes'] = 'shut'
+    rock = sway * 1.4
+    if firing is not None:
+        rock += 3.0 * math.sin(t * 61) + (2.0 if int(t * FPS) % 2 else -2.0)
+    return m, look, rock
 
 
 def _camp(t, cam, draw_navi=True, boom_view=False):
@@ -830,12 +858,16 @@ def _camp(t, cam, draw_navi=True, boom_view=False):
             stomp = 26 * s * abs(math.sin((t - KG_T[0]) * math.pi * 4.0))       # four stamping steps a second
             sx += 10 * s * math.sin((t - KG_T[0]) * math.pi * 4.0)
         RS.foot_shadow(img, cam, sx, sy, ppm, RS.SHADOW_W['kg'])
+        face, look, rock = _kg_camp_face(t, burst, mode)             # note 54
         if mode == 'tower':
             turn = ease((t - KG_T[1]) / 0.12)
-            muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, 50 * turn, firing=firing)
+            muzzle = _kg_draw(img, cam, sx, sy - 272 * s, s, t, 'side', 1, rock * 0.3, firing=firing,
+                              mood=face, aim=50 * turn)               # note 59: planted; gun and head aim up
         else:
+            if mode == 'run':
+                rock += 6 * math.sin((t - KG_T[0]) * math.pi * 4.0)      # rolling side to side as he stamps
             muzzle = _kg_draw(img, cam, sx, sy - 272 * s - stomp, s, t, 'front', -1 if mode == 'low' else 1,
-                              firing=firing)
+                              rot=rock, firing=firing, mood=face, look=look * (-1 if mode == 'low' else 1))
     # the middle-right man: runs in from the right, level with KG, and opens fire
     x, y, ppm = st['gunman2']
     if G2_IN[0] <= t < BOOM:
@@ -1097,9 +1129,42 @@ def s12_wall(t):
     return _wall_scene(t, B.Cam(1.0), shake)
 
 
+S13_TRACK = mouths.track(L[15]['text'], L[15]['_stretches'], L[15]['_open'])   # note 53: the full mouth set
+
+
 def s13_pinned(t):
-    cx, cy, k, kx, ky, s = _wall_marks()                              # his face, held up at KG's grip, with the
-    return _wall_scene(t, B.Cam(2.1, cx + 150 * s, cy + 40 * k))      # wings on his collar and KG's beak below
+    """Note 53 (Sam: front-on Link at "I want to go home", fuller mouth movements): the camera where KG's face is,
+    Link square on to it, pinned to the wall and held off the ground, terrified, tears; every syllable's mouth shape
+    from the line (mouths.track), drawn bigger; KG's two wings reach in from the bottom corners and grip his collar;
+    Navi, nearly red, at his shoulder."""
+    img = B.canvas((0, 0, 0))
+    RS.town(img, B.Cam(1.7, 560, 520), 'wall', t)
+    x, y, ppm = RS.STAGE['forest_close']['link']
+    s = RS.s_for(ppm)
+    k = RC.scale_for(RC.CAST['link'], s)
+    cam = B.Cam(1.5, x, y - 928 * k - 250 / 1.5)                      # in close: his collar a little below middle
+    x += 4 * math.sin(t * 47) + 2.5 * math.sin(t * 29)                # trembling
+    j = V.standing(RC.CAST['link'])
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, (sg * 62.0, 70.0, 90.0), 'down', 'grip')     # his hands on the wings at his collar
+    sp_extra = {'mouth_k': 1.6}
+    if L[15]['start'] <= t < L[15]['end']:
+        sh = mouths.at(S13_TRACK, t - L[15]['start'])
+        if sh != 'rest':
+            sp_extra['mouth'] = 'v:' + sh
+    _kid(img, cam, 'link', x, y, ppm, t, 'terrified', j=j, talk=False, sp_extra=sp_extra)
+    nx, ny = x, y - 928 * k                                           # his collar (neck base)
+    ws = 0.62                                                         # the wings at KG's own scale near the lens
+    p = B.Pen(img, B.Local(cam, 0, 0, ws))
+    roll, nod = HL['kg'].at_time(t)
+    for sg, sd in ((-1, 1), (1, -1)):                                 # KG's wings, up from below, closed on the collar
+        hx, hy = nx + sg * 70 * k, ny + 20 * k
+        el = (x + sg * 300 + 5 * roll, ny + 330 + 8 * nod)
+        sh_ = (x + sg * 380, ny + 900)
+        CR._kg_wing(p, (sh_[0] / ws, sh_[1] / ws), (el[0] / ws, el[1] / ws), (hx / ws, hy / ws), 'grip', sd)
+    CR.navi(img, cam, x + 300, y - 928 * k - 430 + 14 * math.sin(t * 6), 1.0, t=t,
+            heat=0.3 + 0.6 * ease((t - SLAM) / 7.0))
+    return img
 
 
 SHOT_FN = {'S1': s1_branch, 'S2': s2_down, 'S3': s3_branch, 'S4': s4_ok, 'S5': s5_edge, 'S6': s6_god,
