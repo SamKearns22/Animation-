@@ -1,0 +1,43 @@
+{
+ "film": "blessed",
+ "estimate": 15.0,
+ "chats": [],
+ "checks": {},
+ "stages": [
+  {
+   "name": "plan",
+   "pct": 1.0,
+   "done": null
+  },
+  {
+   "name": "cast",
+   "pct": 3.6,
+   "done": null
+  },
+  {
+   "name": "sets",
+   "pct": 3.8,
+   "done": null
+  },
+  {
+   "name": "moves",
+   "pct": 1.5,
+   "done": null
+  },
+  {
+   "name": "animatic1",
+   "pct": 2.0,
+   "done": null
+  },
+  {
+   "name": "round",
+   "pct": 2.5,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 0.5,
+   "done": null
+  }
+ ]
+}
