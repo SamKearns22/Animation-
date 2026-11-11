@@ -772,6 +772,31 @@ def critique_redo_one_command():
 
 
 @test
+def critique_palette_colour():
+    """Budget job (e), 11 Nov (lines A2, S3; Blessed "orange, not buff brick"): a main colour of ours the reference shows
+    almost none of is flagged by script; the right colour under different light, and the photo's sky, are not."""
+    import tempfile
+    from PIL import Image, ImageDraw
+    import critique as C
+    ref = os.path.join(tempfile.mkdtemp(prefix='kt-pal'), 'ref.jpg')
+    photo = Image.new('RGB', (400, 300), (120, 160, 215))                      # sky
+    d = ImageDraw.Draw(photo)
+    d.rectangle([40, 90, 360, 300], fill=(196, 160, 104))                      # a buff brick court
+    d.rectangle([170, 200, 230, 300], fill=(60, 50, 44))                       # its door
+    photo.save(ref, quality=90)
+
+    def ours(wall):
+        im = Image.new('RGB', (540, 480), (255, 255, 255))
+        dd = ImageDraw.Draw(im)
+        dd.rectangle([60, 120, 480, 480], fill=wall)
+        dd.rectangle([240, 330, 300, 480], fill=(52, 44, 40))
+        return im
+    old, new = C.palette(ours((222, 118, 40)), [ref]), C.palette(ours((210, 172, 116)), [ref])
+    ok = len(old) == 1 and 'orange' in old[0] and not new
+    return ok, f"orange wall beside a buff reference: {old or 'MISSED'}; buff wall, lighter than the photo: {new or 'clean'}"
+
+
+@test
 def critique_checklist_parts():
     """Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools."""
     import critique as C

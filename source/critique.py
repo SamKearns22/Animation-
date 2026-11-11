@@ -18,6 +18,9 @@ MAP
                      runs and 12 looks): runs the spec's "draw" commands, then its "checks", printing only the fault
                      lines, and builds ONE sheet of only the panels that changed since the last redo, beside their
                      references. Nothing changed: no sheet, nothing to look at (rule 48)
+  palette .......... the part of lines A2 and S3 a script can truly test (budget job (e), 11 Nov): a main colour of
+                     ours that the references show almost none of ("orange, not buff brick"). Run by redo and pack
+                     on every panel with a reference, so it is fixed before a helper (0.5% of a week) is paid to say it
   status ........... the line pre-flight prints; ok when the round's last pass has no FAULT (CAN'T TELL never blocks)
 
     python3 source/critique.py pack FILM SPEC.json
@@ -390,6 +393,8 @@ def pack(film_name, spec_path):
         opening=OPENING, checks=names(checks), n=len(specs),
         extra=(', notes.md and beforeafter.jpg' if ba else ''), notes_part=(NOTES_PART if notes else '')))
     json.dump(spec, open(out + '.spec.json', 'w'), indent=1)   # beside the pack: the helper never sees it
+    for f in palette_faults(pics, specs):
+        print('critique: a script already sees this; fix it before paying a helper to say it:', f)
     print(out)
     print(agent_line(out))
     return out
@@ -625,6 +630,67 @@ def fixed(film_name, what):
     print(status(film_name)[1])
 
 
+# ---- palette (lines A2, S3: the colours) ---------------------------------------------------------------------------
+def _name(rgb):
+    import colorsys
+    h, sat, v = colorsys.rgb_to_hsv(*(c / 255 for c in rgb))
+    if v < 0.18:
+        return 'black'
+    if sat < 0.14:
+        return 'white' if v > 0.85 else 'grey'
+    hue = next(n for top, n in ((18, 'red'), (42, 'orange'), (68, 'yellow'), (165, 'green'), (255, 'blue'),
+                                (290, 'purple'), (340, 'pink'), (361, 'red')) if h * 360 < top)
+    if hue in ('orange', 'yellow', 'red') and v < 0.6:
+        return 'brown'
+    if hue in ('orange', 'yellow') and sat < 0.6:
+        return 'buff'
+    return ('pale ' if sat < 0.38 and v > 0.7 else 'dark ' if v < 0.45 else '') + hue
+
+
+def _ycc(a):
+    import numpy as np
+    return np.asarray(Image.fromarray(a.astype('uint8').reshape(-1, 1, 3), 'RGB').convert('YCbCr'),
+                      dtype=float).reshape(-1, 3) * (0.5, 1.0, 1.0)      # light counts half: photos are lit, ours is flat
+
+
+def palette(ours, refs, share=0.08, near=24.0, seen=0.01):
+    """Lines for each main colour of ours (at least `share` of what is not its plain background) that under `seen` of
+    every reference's pixels come near. Only this way round: a photo has sky and street that ours rightly lacks."""
+    import numpy as np
+    if not refs:
+        return []
+    small = ours.convert('RGB').resize((96, max(1, ours.height * 96 // ours.width)))
+    q = small.quantize(8, method=Image.MEDIANCUT)
+    idx, pal = np.asarray(q), np.asarray(q.getpalette()[:24]).reshape(-1, 3)
+    edge = np.concatenate([idx[0], idx[-1], idx[:, 0], idx[:, -1]])
+    bg = np.bincount(edge, minlength=8).argmax()
+    bg = bg if (edge == bg).mean() > 0.5 else -1                 # a plain sheet background is not the thing drawn
+    counts = np.bincount(idx[idx != bg].ravel(), minlength=8)
+    refpix = [_ycc(np.asarray(Image.open(r).convert('RGB').resize((96, 96))).reshape(-1, 3)) for r in refs]
+    out = []
+    for k in np.argsort(-counts):
+        if counts[k] < share * max(1, counts.sum()):
+            break
+        c = _ycc(pal[k][None, :])[0]
+        best = max(float((np.linalg.norm(rp - c, axis=1) < near).mean()) for rp in refpix)
+        if best < seen:
+            allp = np.concatenate(refpix)
+            nearest = allp[np.linalg.norm(allp - c, axis=1).argmin()] / (0.5, 1.0, 1.0)
+            nr = np.asarray(Image.fromarray(nearest.astype('uint8').reshape(1, 1, 3), 'YCbCr').convert('RGB')).reshape(3)
+            out.append(f"{counts[k] / counts.sum():.0%} of ours is {_name(pal[k])} (#{'%02x%02x%02x' % tuple(pal[k])}); "
+                       f"the reference shows almost none (its nearest: {_name(nr)} #{'%02x%02x%02x' % tuple(nr)})")
+    return out
+
+
+def palette_faults(pics, specs, only=None):
+    out = []
+    for i, (im, p) in enumerate(zip(pics, specs), 1):
+        if only is None or i in only:
+            line = 'S3' if 'S' in p.get('parts', '') and 'P' not in p.get('parts', '') else 'A2'
+            out += [f'panel {i}, line {line} (colour): {x}' for x in palette(im, p.get('refs', []))]
+    return out
+
+
 # ---- redo: draw, check, one sheet of what changed -------------------------------------------------------------------
 FAULTY = re.compile(r'fault|FAIL|FLAG|REFUSED|Traceback|Error|WARN|MISSING', re.I)
 FINE = re.compile(r'\b(0|no) (fault|flag|fail)|: clean\b|all passed|\bPASS\b', re.I)
@@ -669,6 +735,7 @@ def redo(film_name, spec_path, every=False):
         code, bad = _run(cmd)
         faults += [f'`{cmd[:70]}`: {b}' for b in bad]
         clean += not bad
+    faults += palette_faults(pics, specs, changed)
     sheets = check_sheet([pics[i - 1] for i in changed], [specs[i - 1] for i in changed], os.path.dirname(base),
                          numbers=changed, name=os.path.basename(base)) if changed else []
     json.dump(now, open(base + '.json', 'w'))
