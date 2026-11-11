@@ -1,17 +1,20 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89, 88, 30 (note 65: a critique fix undid Sam's staging).
-- **Done (11 Nov, Opus):** notes 46-49, 53, 54, 56, 60-65 fixed, clips sent; critique r3 two passes, fixed. The first
-  check-sheet chat was stopped unsent (Sam: the Fable critique comes BEFORE the check sheet).
-- **Next:** note 59 first: the Fable chat (claude-fable-5-2, high) critiques cold, writes notes/ledger/remakes-fable-r3.md
-  and messages the Opus chat (session_01GznaAVox86mfmc4fXZj2uJ); then the Opus chat acts on Sam's answer (fix
-  first or not) and opens the Sonnet chat (medium): check sheet, Sam's yes, animatic 3 (watch and listen: note 40).
-- **Needs Sam:** his look at the clips. (Sam, 11 Nov: Y, Fable's findings are fixed before the check sheet.)
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md` (the Sonnet chat).
+- **Rules that bite next:** 30 (Fable's "Sam N" findings: check against that note before changing; note 65's lesson),
+  87 (a fix that fails twice goes to an options sheet), 89.
+- **Done (11 Nov):** notes 46-49, 53, 54, 56, 60-65 fixed, clips sent; critique r3 two passes; note 59's Fable cold
+  critique: 48 findings, ranked, in `notes/ledger/remakes-fable-r3.md` (Sam has seen 36 of them). Sam: Y, fix them first.
+- **Next (Opus, medium): fix Fable's 48 findings, worst first** (a taste call or anything removing what Sam has seen:
+  ask first, numbered, pick first); clips of moved beats; then open the Sonnet chat (medium): check sheet (show the
+  subtitles, Hook Text, sign-off and sound Fable could not judge), Sam's yes, animatic 3. Note 59's 5-line comparison
+  comes after Sam's notes on animatic 3.
+- **Needs Sam:** nothing until the clips.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; `notes/ledger/remakes-fable-r3.md`.
 - **Open rule requests:** none.
 - **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
-  RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C. Clips: clips/.
+  RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C; G3's fall in
+  _camp's gunman() (note 65). Clips are drafts in clips/ (not on GitHub; gone after a container restart).
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
