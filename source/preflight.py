@@ -425,6 +425,8 @@ def main():
     shared += kitchecks.marks(film)             # rule 13: marks on real surfaces
     shared += kitchecks.sounds(film)            # rule 13: a sound tied to a thing only with it in frame, once a hit
     shared += hookcheck.faults(film)            # the Hook Text clear of the signs and readouts listed
+    import setcheck
+    shared += setcheck.film_faults(film)        # rule 13: figures moving through the set, against its solid things
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
     if people:                                  # (in a throwaway child: linecheck loads GNU OpenMP, and forking the
         shared += _in_child(linecheck.faults, film)   # drawing workers from a process that has used it freezes them

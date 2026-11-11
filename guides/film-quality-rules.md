@@ -33,7 +33,7 @@ the end by section.
 | # | Rule | Check |
 |---|---|---|
 | 2 | Doorways and windows show the real next room (from the plan), never a flat colour. | `sets.house`; `sets.portal_faults` |
-| 13 | Every check lives in the shared kit and runs on every film; never copy a check from a film file. | `kitchecks.py` |
+| 13 | Every check lives in the shared kit and runs on every film; never copy a check from a film file. | `kitchecks.py`; moving figures against the set: `setcheck.moving_faults` (pre-flight, any film with `SET_FEET`; one with people and `SET_BOXES` but no `SET_FEET` is named) |
 | 20 | Held things aim in 3D with the holder's body, never at a fixed screen angle. | `viewchecks.turn_faults` |
 | 22 | My set dressing is shown on the cast or composition sheet, clear of every action spot, and in the audit. | `audit.py`; critique S1 |
 | 32 | Falling pieces settle broadest side down, never overlap or rest on another piece, shadow only where they touch; long pieces land flat, never on their end; a saved drawing records its camera. | `lying.py contact_faults` (bodies); pieces by hand (tilt at landing) |
