@@ -395,3 +395,17 @@
 - **Also done (11 Nov, Sonnet):** stone-wall thump (`_thump`) on the first push (SLAM), softer on each re-slam; Sam's yes. Trim round dropped (Sam).
 - **For Claude:** `LINK_ROUTE`/`LINK_LANE_X` (-0.5) in remakes.py; `RS.SET_FEET` (camp footprints, 'under'/'over');
   `camp_paths()` in `checks()`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first.
+
+## Where things stand (archived 11 Nov, before the S13 banner fix)
+- **Rules that bite next:** 59 (no final unless the checks pass), 70 (1.1x on delivery), 62 (captions).
+- **Done (11 Nov):** barrel fix + camp check; stone-wall thump (soft on re-slams); captions in Montserrat Black with
+  outline and shadow; rules 62, 70, 75, 10, S5 rewritten for every film, S6 retired (Sam: Y); quick-video guide deleted;
+  trim round dropped.
+- **Next:** the final render (Sonnet, medium: notes/remakes-final-handover.md), Sam's clear yes given, no check sheets.
+  In parallel, the tool job (Opus, high: notes/tool-job-universal-handover.md), estimate to Sam first.
+- **Needs Sam:** the tool job's estimate (yes or no) when it arrives.
+- **Read:** pack "Final and posting" in `guides/job-packs.md`; notes/remakes-final-handover.md.
+- **Open rule requests:** none.
+- **For Claude:** `draw_subtitle` uses source/fonts/Montserrat-Black.ttf; `_thump(soft)`; 1.1x by hand
+  (`--signoff-speed 1.136`, then ffmpeg setpts/atempo) until the tool job. Merge the main line first.
+

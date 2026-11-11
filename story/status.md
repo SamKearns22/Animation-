@@ -1,6 +1,6 @@
-remakes: final render done 11 Nov, animations/remakes-vertical.mp4 sent.
-Next: wait for Sam to say it is posted, then archive notes.
-Model: Sonnet.
+remakes: S13 banner fixed 11 Nov (clip sent); final render redone next (Sam: yes).
+Next: Sonnet chat, final render, send to Sam.
+Model: Sonnet, medium.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
   Tool job (11 Nov rules for every film): built, all six pieces (captions by default, 1.1x in finish.py, Hook Text
   gate, eyes for every cast, set check in the kit, quick.py gone); kittests and remakes check clean. Open: Sam's look

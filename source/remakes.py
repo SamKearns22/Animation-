@@ -1448,9 +1448,10 @@ def s13_pinned(t):
     from the line (mouths.track), drawn bigger; KG's two wings reach in from the bottom corners and grip his collar;
     Navi, nearly red, at his shoulder."""
     img = B.canvas((0, 0, 0))
-    wcx, wcy = _wall_marks()[:2]                                     # Fable r3 #24: the same patch of wall as at
-    zb = 2.6                                                          # his back in S12 (stones, not the window box
-    RS.town(img, B.Cam(zb, wcx - 40, wcy - 250 / zb), 'wall', t)     # and banner from the far end of the wall)
+    wcx, wcy, _, kx_ = _wall_marks()[:4]                             # Fable r3 #24 / Sam 11 Nov: centred on S12b's
+    zb = 2.6                                                          # own centre (plain stones below the ledge). It
+    RS.town(img, B.Cam(zb, (wcx + kx_) / 2 + 20, wcy - 250 / zb), 'wall', t)  # was on wcx - 40 (wall x 233-648),
+    # which caught the right half of the banner hanging at x 44-436 (_banner(p, 240, ...) in town_wall).
     x, y, ppm = RS.STAGE['forest_close']['link']
     s = RS.s_for(ppm)
     k = RC.scale_for(RC.CAST['link'], s)

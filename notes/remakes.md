@@ -2,20 +2,19 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 59 (no final unless the checks pass), 70 (1.1x on delivery), 62 (captions).
-- **Done (11 Nov):** barrel fix + camp check; stone-wall thump (soft on re-slams); captions in Montserrat Black with
-  outline and shadow; rules 62, 70, 75, 10, S5 rewritten for every film, S6 retired (Sam: Y); quick-video guide deleted;
-  trim round dropped.
-- **Next:** the final render (Sonnet, medium: notes/remakes-final-handover.md), Sam's clear yes given, no check sheets.
-  In parallel, the tool job (Opus, high: notes/tool-job-universal-handover.md), estimate to Sam first.
-- **Needs Sam:** the tool job's estimate (yes or no) when it arrives.
+- **Done (11 Nov):** note 75, S13's blue banner removed (camera centred as S12b; still checked, clip sent).
+- **Next:** the final render again (Sonnet, medium: notes/remakes-final-handover.md); Sam's clear yes given
+  ("Y then redo final render", 11 Nov), no check sheet needed. Send the new film in chat.
+- **Needs Sam:** nothing until the new final arrives.
 - **Read:** pack "Final and posting" in `guides/job-packs.md`; notes/remakes-final-handover.md.
 - **Open rule requests:** none.
-- **For Claude:** `draw_subtitle` uses source/fonts/Montserrat-Black.ttf; `_thump(soft)`; 1.1x by hand
-  (`--signoff-speed 1.136`, then ffmpeg setpts/atempo) until the tool job. Merge the main line first.
+- **For Claude:** s13_pinned's wall camera now (wcx + kx_)/2 + 20 (was wcx - 40, which caught _banner at x 44-436).
+  1.1x by hand (`--signoff-speed 1.12`, then ffmpeg setpts/atempo). Merge the main line first.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
 |---|------|------|
+| 75 (Sam, 11 Nov) | S13: a blue banner behind Link that S12b doesn't show | **DONE 11 Nov** (clip sent): S13's wall camera was on wcx - 40 and caught the banner's right half; now centred as S12b, plain stones. The old comment's "not the banner" was never checked (rule 30) |
 | 71 (Sam, 11 Nov) | clip 3: the line-up 25% further out | **DONE 11 Nov** (clip sent): LINEUP_Z 1.55 to 1.24 (KG's camera unchanged) |
 | 73 (Sam, 11 Nov) | clip 3: the near flower box coloured as foreground, not hazed like the background | **DONE 11 Nov** (clip sent): drawn sharp in full colour after the haze (RS.SQUARE_PLANTER off for S10) |
 | 72 (Sam, 11 Nov) | clip 1 (his frame: the front grip sat on top of the respirator): KG's hand tucks round the soldier's neck and stays there through the twist | **DONE 11 Nov** (clip sent): the front hand curled under the respirator onto his throat; both hands ride the twist and the start of the drop, letting go 0.3 s after the snap. Clips 2 and 4: "perfect" |
