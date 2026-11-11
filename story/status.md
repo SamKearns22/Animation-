@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): animatic-2 notes fixed; Fable cold critique done (48 findings, Sam: fix first). Next: Opus medium fixes them, then Sonnet check sheet and animatic 3. Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): Fable's findings part 1: 17 of 48 fixed (11 Nov). Next: Opus medium fixes the other 31, then Sonnet check sheet and animatic 3. Notes: `notes/remakes.md`.
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
   and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).

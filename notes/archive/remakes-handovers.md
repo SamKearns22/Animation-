@@ -322,3 +322,20 @@
 | 37c (Claude 2) | at the wall KG's wings grip Link's collar, not cross his chest | wing tips closed on the collar at his neck, both sides; check by the hand points against the collar (with note 33) || **DONE 10 Nov:** both wing hands closed on his collar under his chin; checked by the hand points (wall_contact) |
 | 38 (Claude 4) | "I don't think I can do this." on screen 1.5 s | split into two readable pieces or hold longer || **DONE 10 Nov:** held longer: 1.9 s on screen. Added: 0.45 s of pause before "R2 FOR GRENADES" (film now 44.5 s) |
 | 39 (Claude 6) | the line-up reacts more on "ROMANCE" | Zelda shrinks, Malon steps forward with the bottle, Ruto preens, the Goron drools more, Saria winks || **DONE 10 Nov:** Zelda hunches and edges back, Malon hops forward and thrusts the bottle up, Ruto lifts a hand to her head-fin with her chin up, the Goron's drool doubles, Saria winks. KG's presenting wing kept lower so it clears Malon |
+
+## Handover replaced 11 Nov (Fable r3 fixes, part 1)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 30 (Fable's "Sam N" findings: check against that note before changing; note 65's lesson),
+  87 (a fix that fails twice goes to an options sheet), 89.
+- **Done (11 Nov):** notes 46-49, 53, 54, 56, 60-65 fixed, clips sent; critique r3 two passes; note 59's Fable cold
+  critique: 48 findings, ranked, in `notes/ledger/remakes-fable-r3.md` (Sam has seen 36 of them). Sam: Y, fix them first.
+- **Next (Opus, medium): fix Fable's 48 findings, worst first** (a taste call or anything removing what Sam has seen:
+  ask first, numbered, pick first); clips of moved beats; then open the Sonnet chat (medium): check sheet (show the
+  subtitles, Hook Text, sign-off and sound Fable could not judge), Sam's yes, animatic 3. Note 59's 5-line comparison
+  comes after Sam's notes on animatic 3.
+- **Needs Sam:** nothing until the clips.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; `notes/ledger/remakes-fable-r3.md`.
+- **Open rule requests:** none.
+- **For Claude:** _explosion/_hit/_puff/_shake (camp fx); BLAST, INCOMING, _g2() (G2_X); _kg_camp_face; CR.kg(gun_aim=);
+  RS.town_reverse (+_street_side, _swag_wall, STREET_LEV); s13_pinned (S13_TRACK, mouth_k); LINEUP_Z/C; G3's fall in
+  _camp's gunman() (note 65). Clips are drafts in clips/ (not on GitHub; gone after a container restart).

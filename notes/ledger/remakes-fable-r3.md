@@ -70,3 +70,24 @@ The owl's crests and face; the kindly closed-eye smile (6.75-7.25); his smug gle
 turn from white to red at the wall; the gate blast's fireball, planks and smoke; Zelda, Malon and Saria against their
 references; Saria's wink and Malon's step forward on "ROMANCE"; Link's half-lidded face at 31.25 and 32.5-33.0; the
 terrified front-on face at 43.0-43.4; the back of Link's cap in the opening (whole, reads at once).
+
+## Fixed (11 Nov, Opus chat, part 1: 17 of 48)
+| # | what changed |
+|---|---|
+| 1 | S8's pan stops where the camp painting ends (S8_CX_MAX); the kneeling man still in frame on the right |
+| 2 | a stone pier juts from the wall at Link's back; he is pinned against it, not held in mid-air |
+| 3 | S5's dead gunman crumples: arms limp, knees buckle, head lolls, he sinks out of frame; the rifle drops |
+| 4 | Link's talking mouths turn down (lower teeth) on every unhappy line |
+| 5 | the head wrenches round to face us over two frames (no black frame); the S5 pair moved in from the left edge |
+| 6 | Link in the camp: both palms on his ears, cowering, trembling, ducking on bursts; Navi clear of his hands; his mark moved off KG's crest and the shed post |
+| 7 | the incoming rounds pass low along the dirt or over their heads, never through a face |
+| 8 | "Ok?": a pressed-lip resting mouth, one corner down (no cat-smile) |
+| 9 | the wall: wings shoot out to the collar, haul him up, slam him into the pier; dust burst, longer shake |
+| 18 | KG's tail one solid fan of broad overlapping feathers; pale bands, no nails |
+| 21 | no white-out: a faint warm glow on both blasts |
+| 22 | the tower man fires down at the gate till he is hit; his blood lands on his box |
+| 23 | S13's Navi on the banner side, whole in frame |
+| 26 | muzzle flashes are flame cones out of the muzzle (KG's and the gunmen's); none floating at the edge with nobody there |
+| 31 | KG's eyes open and on the line-up while his wing sweeps, then the shut-eyed grin |
+| 33 | the lids never changed (pixel test); the open mouth made them read wide: deadpan now talks in a flat mumble |
+| 40 | no spark at the neck on the snap |
