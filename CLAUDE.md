@@ -56,8 +56,9 @@ at session start (`.claude/hooks/setup.sh`).
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
 - **Chats chain themselves:** at every handover every chat, including one another chat opened, opens the next
-  (create_session with the right model and effort, the handover line as its prompt), checks on it once per stage
-  (send_later, under an hour) and tells me which chat it opened (tested 10 Nov: a chat two levels down opened one;
+  straight away (create_session with the right model and effort, the handover line as its prompt; from the 7th
+  level on, a one-off scheduled task started at once), never schedules a check-in unless I ask, and tells me which
+  chat it opened (tested 10 Nov: a chat two levels down opened one;
   the system allows 8 levels). **Our chain runs to 12 chats (Sam, 11 Nov):** from the 7th level on, the next chat is
   opened by a one-off scheduled task that starts a fresh chat (it has no parent, so the system's 8 is not reached);
   at the 12th, stop and ask Sam. Only if create_session fails: say so and give what to type. A notes round chains too: the
