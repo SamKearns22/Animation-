@@ -55,15 +55,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
-- **Chats chain themselves:** at every handover every chat, including one another chat opened, opens the next
-  straight away (create_session with the right model and effort, the handover line as its prompt; from the 7th
-  level on, a one-off scheduled task started at once), never schedules a check-in unless I ask, and tells me which
-  chat it opened (tested 10 Nov: a chat two levels down opened one;
-  the system allows 8 levels). **Our chain runs to 12 chats (Sam, 11 Nov):** from the 7th level on, the next chat is
-  opened by a one-off scheduled task that starts a fresh chat (it has no parent, so the system's 8 is not reached);
-  at the 12th, stop and ask Sam. Only if create_session fails: say so and give what to type. A notes round chains too: the
-  Opus medium chat fixes, then opens the Sonnet chat for checks and the animatic. **A task started on the wrong model
-  opens the right chat itself** and says so. Anything needing my yes still stops and waits. Never carry on into a
+- **I start each new chat by hand (Sam, 11 Nov):** chats never open other chats or schedule check-ins unless I
+  ask. The handover's bottom lines say what to type, the model, the effort and any file to attach. **A task started
+  on the wrong model** says so and gives what to type. Anything needing my yes stops and waits. Never carry on into a
   stage that needs a stronger model inside one chat.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
   fails or needs me, and at every stage end. Say how long each render will take and took.
@@ -76,8 +70,7 @@ at session start (`.claude/hooks/setup.sh`).
   most**, in order: Rules that bite next (3, by number); Done; Next (model, effort and what to type); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
   Update `story/status.md` (3 lines), commit and push. **Paste up to 3 lines at the bottom:** what's done, the model, and
-  which chat was opened (what to type only if none could be). **Never say no chat was opened when Next already
-  says why (e.g. waiting on my look or my yes):** leave that line out. **Every handover and every message sending me to a new
+  what to type in the next chat (left out while Next waits on my look or my yes). **Every handover and every message sending me to a new
   chat names the model AND the effort level**; a stage not listed above gets your pick and one line why.
 
 # Reading little
