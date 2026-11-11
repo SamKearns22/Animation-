@@ -1458,6 +1458,11 @@ def picture(t):
 
 
 # ================================================================================================ subtitles
+# line 13's take has a 0.6 s pause before "You're gonna" (the voice's phrases: 0.06-1.75, 2.35-3.79, 3.96-4.96 s into
+# the take); counting syllables put those pieces 0.9 s early (11 Nov, pre-flight rule 62). piece index: seconds
+PIECE_FIX = {13: {2: 2.30, 3: 3.50}}
+
+
 def _pieces(ln):
     """Note 51 (Sam, 11 Nov): 3-5 words at a time, each up on the syllable it starts with (the take's syllable
     beats), never joined into longer rows; a piece shorter than 0.45 s pushes the next one a touch later."""
@@ -1474,6 +1479,8 @@ def _pieces(ln):
             acc += n
             k = min(len(beats) - 1, int(round(acc / sum(syl) * len(beats))))
             out.append([c, max(out[-1][1] + 0.45, beats[k] - 0.06 if len(beats) else out[-1][1] + 0.8)])
+    for i, at in PIECE_FIX.get(ln['n'], {}).items():
+        out[i][1] = at
     ln['_pieces'] = [tuple(p) for p in out]
     return ln['_pieces']
 

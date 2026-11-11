@@ -1,7 +1,7 @@
 # Where the project stands
 
 ## Now (11 Nov)
-- Remakes (Ocarina of Time remake satire): Fable's findings and Sam's clip notes 66-74 done (11 Nov). Next: Sonnet renders animatic 3 (no check sheet, Sam). Notes: `notes/remakes.md`.
+- Remakes (Ocarina of Time remake satire): animatic 3 rendered (no check sheet, Sam 11 Nov), finished and sent 11 Nov; waiting on Sam's look. Faults named in `notes/remakes.md`. Next: his notes, then a notes round (Opus, medium).
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
   and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).

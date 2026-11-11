@@ -1,16 +1,23 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89, 59, 67.
-- **Done (11 Nov, Opus medium):** Fable r3 (43 of 48) and Sam's clip notes 66-74; every clip "perfect" or fixed to his
-  note. Sam: 1-4 Y (rule 72 now says a turn snaps; critique M3 fixed). `remakes.py check` clean.
-- **Next (Sonnet, medium): animatic 3, NO check sheet (Sam, 11 Nov: the clips covered it).** Pre-flight (fix or name
-  every fault), render, `finish.py` with the Hook Text and sign-off, watch and listen once (note 40), send it.
+- **Rules that bite next:** 8 (Sam's reaction to the animatic is a note), 89 (critique round 3 pass 2 left open: named),
+  62 (captions on the voice).
+- **Done (11 Nov, Sonnet):** animatic 3 rendered with no check sheet (Sam, 11 Nov), finished with the Hook Text and
+  sign-off, watched and listened once (note 40), sent (45 s, 4.8 MB, small render 540 x 960). A stale build (from before
+  notes 66-74) was sent first by mistake and replaced with this one.
+- **Next:** wait for Sam's look; his reaction is notes. Then a notes round (Opus, medium) and one more animatic; the final
+  only on his clear yes.
 - **Needs Sam:** his look at animatic 3.
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md` (skip the check sheet).
-- **Open rule requests:** none (rule 72 written).
-- **For Claude:** the Sonnet chat's effects ducking stays; S5 grips: _s5_wings(drop), front hand redrawn under the
-  respirator; RESLAMS; CLOSE_IN; LINEUP_Z 1.24; RS.SQUARE_PLANTER.
+- **Faults named (rendered with --faults-named):** critique round 3 pass 2 (29 faults, 65 can't tell, open); PROP TURN on
+  Malon's bottle and Saria's ocarina at 30 degrees (line-up is front-on only); syllable counter misreads "R1", "9", "Ok?",
+  capitals (5); caption "I don't think I" 0.9 s for 4 words (the voice's pace); "you s***." 1.45 s early is the checker
+  misreading the take (one breath, "it" bleep at 34.06 s proves it).
+- **Fixed in this chat:** line 13's subtitle pieces were 0.9 s early (PIECE_FIX in remakes.py).
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** none.
+- **For Claude:** `remakes.py final source/data/remakes-clean.mp4 --small --faults-named`, then `finish.py ... --film remakes
+  --faults-named`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first (a stale copy cost a wasted render).
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |
