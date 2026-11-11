@@ -714,13 +714,15 @@ def tvroom(img, cam, t=0.0):
     for k in range(3):                                                                     # a high strip of small
         x = 40 + 130 * k                                                                   # barred windows, night
         window(p, (x, 260, x + 100, 380), (90, 96, 104), (40, 52, 90), 11 + k, bars=3, lw=2.0)
-    p.poly(quad(720, 380, 1000, 420), (120, 84, 56), INK, 2.0)                              # the cue rack
-    for k in range(6):
-        x = 740 + 44 * k
-        p.line([(x, 400), (x + 6, 900)], (196, 160, 110), 6.0)
-        p.line([(x, 400), (x + 6, 900)], INK, 1.0)
-        p.ell(x, 398, 5, 5, (60, 60, 120), INK, 1.0)
-    p.poly(quad(720, 880, 1000, 910), (120, 84, 56), INK, 2.0)
+    p.poly(wob(quad(700, 400, 1010, 640), 0.8, 21), (150, 112, 74), INK, 2.4)                 # a cork noticeboard
+    r = random.Random(23)
+    for k in range(7):                                                                     # its pinned sheets
+        x, y = 720 + (k % 4) * 70 + r.uniform(-6, 6), 420 + (k // 4) * 110 + r.uniform(-6, 6)
+        p.poly(wob(quad(x, y, x + 58, y + 80), 0.6, 30 + k), ((240, 238, 228), (250, 236, 150), (220, 230, 240))[k % 3],
+               INK, 1.2)
+        for q in range(3):
+            p.line([(x + 8, y + 20 + 16 * q), (x + 48, y + 20 + 16 * q)], (150, 150, 150), 1.2)
+        p.ell(x + 29, y + 6, 4, 4, (200, 40, 40), None)
     p.ell(220, 620, 60, 60, (240, 238, 230), INK, 2.4)                                      # a caged wall clock
     p.line([(220, 620), (220, 584)], INK, 2.6)
     p.line([(220, 620), (248, 628)], INK, 2.6)
@@ -744,9 +746,11 @@ def tvroom(img, cam, t=0.0):
     p.poly([(770, 1000), (910, 1000), (940, 1050), (740, 1050)], (40, 70, 50), INK, 2.0)
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
-    # rows of moulded plastic chairs (the seated men are cast: the film draws them on these)
-    for k, x in enumerate((60, 330, 600, 870)):
-        _chair(p, x, 1560, 1.0, k)
+    # one long wooden bench (the seated men are cast: the film draws them on it, one depth: Sam's note 5)
+    p.poly(quad(-300, 1290, W + 300, 1330), (150, 108, 66), INK, 2.4)                       # the seat, at their
+    p.poly(quad(-300, 1330, W + 300, 1356), (112, 78, 48), INK, 2.2)                        # knees; its front edge
+    for x in (-40, 290, 540, 790, 1120):                                                    # its legs
+        p.poly(quad(x - 16, 1356, x + 16, 1600), (96, 66, 40), INK, 2.0)
 
 
 def _chair(p, x, y, s, k):
@@ -764,9 +768,10 @@ def tv_flicker(img, cam, t, strength=1.0):
     picture cuts (a fixed, irregular pattern; never a smooth pulse)."""
     r = random.Random(int(t * 4))
     k = strength * (0.55 + 0.45 * r.random())
-    lay = Image.new('RGBA', img.size, (10, 14, 34, int(120 * strength)))
+    lay = Image.new('RGBA', img.size, (8, 16, 60, int(110 * strength)))                   # the room gone blue-dark
     img.alpha_composite(lay)
-    soft(img, cam, (-100, 600, 1180, 1500), (140, 180, 255), 0.42 * k, 200)                # the glow on their faces
+    soft(img, cam, (-100, 400, 1180, 1300), (90, 150, 255), 0.55 * k, 220)                 # the blue glow on their
+    #                                                                                        faces, from above
 
 
 def tv(img, cam, t=0.0, feed=None):
@@ -872,105 +877,149 @@ def _restyle(ND):
 # pale stone dressings, two square towers either side of a tall round arch, a timber double gate filling it with a
 # small wicket door cut in it (he walks out through it), barred arched windows, the brick wall running off both
 # ways, a white 'HM Prison' sign, a forecourt of tarmac with a yellow bollard, overcast sky. Camera as at the court.
-GATE = Level(2.4, 1150.0, 1100.0)    # a wider lens than the court: the whole gatehouse in
+GATE = Level(2.4, 1150.0, 1100.0)    # the camera as at the court
 SOOT = (88, 80, 74)
 SOOT_D = (66, 60, 56)
-STONE = (186, 176, 158)
-TIMBER = (112, 74, 48)
-GATE_D = 18.0
+STONE = (186, 160, 128)              # the sandstone dressings, warm (ref 18)
+STONE_D = (70, 64, 60)               # the dark rusticated pilasters and plinths
+TIMBER = (120, 80, 52)
+FRAME = (130, 60, 40)                # the red-brown window frames
+GATE_D = 9.0                         # close enough that he reads at the wicket (critique: he was tiny at 18 m)
+
+
+def _rustic(p, L, x0, x1, d, z0, z1, step=0.62):
+    """A rusticated stone pilaster: big dark blocks, each outlined, a deeper course every other one."""
+    p.poly(face(L, x0, x1, d, z0, z1), STONE_D, INK, 2.4)
+    k = 0
+    for z in np.arange(z0, z1 - 0.05, step):
+        inset = 0.06 if k % 2 else 0.0
+        p.poly(face(L, x0 + inset, x1 - inset, d - 0.02, z + 0.04, min(z1, z + step) - 0.04), dk(STONE_D, 1.1 if k % 2
+               else 0.95), INK, 1.2)
+        k += 1
+
+
+def _arched_window(p, L, xc, d, z0, z1, w=1.0):
+    """A tall round-headed window: a stone surround and hood, red-brown frame, small panes (ref 18)."""
+    a, b = L.p(xc - w / 2, d, z1), L.p(xc + w / 2, d, z0)
+    r_ = (b[0] - a[0]) / 2
+    cx_, spring = a[0] + r_, a[1] + r_
+    def head(rr, n=14):
+        return [(cx_ + rr * math.cos(u), spring - rr * math.sin(u)) for u in np.linspace(0, math.pi, n)]
+    m = r_ * 0.38
+    p.poly([(b[0] + m, b[1] + m * 0.6)] + head(r_ + m) + [(a[0] - m, b[1] + m * 0.6)], STONE, INK, 2.0)
+    p.poly([(b[0], b[1])] + head(r_) + [(a[0], b[1])], FRAME, INK, 2.0)
+    mm = r_ * 0.16
+    glass = [(b[0] - mm, b[1] - mm)] + head(r_ - mm) + [(a[0] + mm, b[1] - mm)]
+    p.poly(glass, (58, 66, 80), None)
+    for k in (1, 2):
+        x = a[0] + (b[0] - a[0]) * k / 3
+        p.line([(x, a[1] + r_ * 0.2), (x, b[1] - mm)], FRAME, 2.0)
+    for y in np.arange(spring + r_ * 0.5, b[1] - mm, r_ * 0.55):
+        p.line([(a[0] + mm, y), (b[0] - mm, y)], FRAME, 1.8)
+    p.poly(quad(a[0] - m, b[1], b[0] + m, b[1] + m * 0.7), STONE, INK, 1.6)               # the sill
+    p.poly(quad(cx_ - m * 0.6, a[1] - m * 1.2, cx_ + m * 0.6, a[1] + m * 0.3), STONE, INK, 1.4)   # the keystone
 
 
 def gates(img, cam, t=0.0):
+    """HMP Wandsworth's gatehouse (ref 18): a wide sooty-brick front, two towers either side of a lower centre block,
+    each tower edged with dark rusticated pilasters; a sandstone round arch with a square iron grille above a plain
+    timber double gate (the wicket door cut in it, open); round-headed windows with red-brown frames; heavy cornices;
+    yellow bollards either side of the gate; a white 'HM PRISON' sign on posts in the forecourt."""
     p = B.Pen(img, cam)
     L = GATE
-    p.poly(quad(-300, -800, W + 300, 1200), (206, 210, 214), None)                          # overcast
-    for k, (x, y, rx) in enumerate(((100, 80, 300), (820, 30, 340), (500, 180, 220))):
-        p.poly(blob(x, y, rx, 60, 10, 0.12, 60 + k), (222, 224, 228) if k % 2 else (190, 194, 200), None)
     d = GATE_D
-    p.poly(face(L, -16, 16, d + 3, 0, 5.4), SOOT, INK, 2.6)                                 # the long wall behind
-    a, b = L.p(-16, d + 3, 5.4), L.p(16, d + 3, 0)
-    bricks(p, (a[0], a[1], b[0], b[1]), SOOT, 11, cw=12, ch=5, n=200, lw=0.6)
-    p.poly(face(L, -16, 16, d + 3, 5.4, 5.8), STONE, INK, 2.0)                              # its coping
-    for sx in (-1, 1):                                                                      # the two towers
-        x0, x1 = (-5.6, -2.4) if sx < 0 else (2.4, 5.6)
-        p.poly(face(L, x0, x1, d, 0, 15.5), SOOT, INK, 3.0)
-        a, b = L.p(x0, d, 15.5), L.p(x1, d, 0)
-        bricks(p, (a[0], a[1], b[0], b[1]), SOOT, 20 + sx, cw=12, ch=5, n=150, lw=0.6)
-        p.poly(face(L, x0 - 0.2, x1 + 0.2, d - 0.05, 14.7, 15.5), STONE, INK, 2.2)          # the cornice
-        for xq in (x0, x1 - 0.35):                                                          # stone quoins
-            for zq in np.arange(0.8, 14.6, 0.7):
-                w_ = 0.35 if int(zq / 0.7) % 2 else 0.5
-                xs = xq if xq == x0 else x1 - w_
-                p.poly(face(L, xs, xs + w_, d - 0.03, zq, zq + 0.6), STONE, INK, 1.0)
-        for xb in np.arange(x0 - 0.1, x1, 0.55):                                            # the parapet's blocks
-            p.poly(face(L, xb, xb + 0.35, d - 0.05, 15.5, 16.1), STONE, INK, 1.6)
-        p.poly(face(L, x0 - 0.1, x1 + 0.1, d - 0.05, 0, 0.8), STONE, INK, 2.0)              # the plinth
-        for zb in (3.4, 7.6, 11.2):                                                         # the arched windows
-            xc = (x0 + x1) / 2
-            a, b = L.p(xc - 0.55, d - 0.02, zb + 2.0), L.p(xc + 0.55, d - 0.02, zb)
-            r_ = (b[0] - a[0]) / 2
-            arch = [(a[0] + r_ + r_ * math.cos(u), a[1] + r_ - r_ * math.sin(u)) for u in np.linspace(0, math.pi, 12)]
-            pts = [(b[0], b[1])] + arch + [(a[0], b[1])]
-            outer = [(x + (x - (a[0] + r_)) * 0.32, y - 8) for x, y in arch]
-            p.poly([(b[0] + r_ * 0.32, b[1] + 6)] + outer + [(a[0] - r_ * 0.32, b[1] + 6)], STONE, INK, 2.0)
-            p.poly(pts, (44, 48, 56), INK, 2.0)
-            for k in range(1, 3):
-                x = a[0] + (b[0] - a[0]) * k / 3
-                p.line([(x, a[1] + r_ * 0.4), (x, b[1])], (120, 124, 130), 1.6)
-    # the centre block over the arch, the arch and the timber gate with its wicket door
-    p.poly(face(L, -2.4, 2.4, d + 0.4, 0, 12.0), SOOT_D, INK, 3.0)
-    a, b = L.p(-2.4, d + 0.4, 12.0), L.p(2.4, d + 0.4, 0)
-    bricks(p, (a[0], a[1], b[0], b[1]), SOOT_D, 31, cw=12, ch=5, n=90, lw=0.6)
-    p.poly(face(L, -2.6, 2.6, d + 0.35, 11.4, 12.4), STONE, INK, 2.2)
-    a, b = L.p(-1.9, d + 0.38, 6.4), L.p(1.9, d + 0.38, 0)
+    p.poly(quad(-300, -800, W + 300, 1200), (214, 216, 220), None)                          # pale overcast
+    for k, (x, y, rx) in enumerate(((240, 140, 260), (820, 60, 300))):
+        p.poly(blob(x, y, rx, 50, 10, 0.12, 60 + k), (226, 228, 232) if k % 2 else (198, 202, 208), None)
+    # the centre block (set back a little), its cornice
+    p.poly(face(L, -2.45, 2.45, d + 0.3, 0, 9.8), SOOT_D, INK, 3.0)   # wide enough to meet the towers
+    a, b = L.p(-2.3, d + 0.3, 9.8), L.p(2.3, d + 0.3, 0)
+    bricks(p, (a[0], a[1], b[0], b[1]), SOOT_D, 31, cw=10, ch=4, n=140, lw=0.6)
+    p.poly(face(L, -2.5, 2.5, d + 0.25, 8.4, 9.0), STONE, INK, 2.0)                          # the frieze
+    for x in np.arange(-2.3, 2.3, 0.32):                                                    # its brackets
+        p.poly(face(L, x, x + 0.14, d + 0.22, 8.5, 8.9), dk(STONE, 0.8), INK, 1.0)
+    p.poly(face(L, -2.7, 2.7, d + 0.2, 9.0, 9.8), STONE_D, INK, 2.4)                         # the cornice
+    # the two towers, nearer, each with two rusticated pilasters, windows between, a heavy cornice
+    for sx in (-1, 1):
+        x0, x1 = (-5.3, -2.3) if sx < 0 else (2.3, 5.3)
+        p.poly(face(L, x0, x1, d, 0, 12.0), SOOT, INK, 3.0)
+        a, b = L.p(x0, d, 12.0), L.p(x1, d, 0)
+        bricks(p, (a[0], a[1], b[0], b[1]), SOOT, 20 + sx, cw=10, ch=4, n=160, lw=0.6)
+        for px0 in (x0, x1 - 0.7):
+            _rustic(p, L, px0, px0 + 0.7, d - 0.1, 1.4, 11.0)
+            p.poly(face(L, px0 - 0.15, px0 + 0.85, d - 0.15, 0, 1.4), STONE_D, INK, 2.4)    # its plinth
+            p.poly(face(L, px0 - 0.1, px0 + 0.8, d - 0.13, 1.25, 1.45), dk(STONE_D, 1.2), INK, 1.4)
+        xc = (x0 + x1) / 2
+        for zb in (1.6, 5.2, 8.6):
+            _arched_window(p, L, xc, d - 0.02, zb, zb + 2.1, 0.9)
+        p.poly(face(L, x0 - 0.3, x1 + 0.3, d - 0.2, 11.0, 12.0), STONE_D, INK, 2.6)          # the cornice
+        for x in np.arange(x0 - 0.2, x1 + 0.2, 0.36):
+            p.poly(face(L, x, x + 0.16, d - 0.18, 10.6, 11.0), dk(STONE, 0.8), INK, 1.0)
+    # the arch: stone jambs and voussoirs, a keystone, the square grille above a plain timber gate
+    sp_z, hw = 4.2, 1.4
+    a, b = L.p(-hw, d + 0.28, sp_z), L.p(hw, d + 0.28, 0)
     r_ = (b[0] - a[0]) / 2
-    spring = a[1] + r_
-    arch = [(a[0] + r_ + r_ * math.cos(u), spring - r_ * math.sin(u)) for u in np.linspace(0, math.pi, 20)]
-    ring = [(a[0] + r_ + r_ * 1.2 * math.cos(u), spring - r_ * 1.2 * math.sin(u)) for u in np.linspace(0, math.pi, 20)]
-    p.poly([(b[0] + r_ * 0.2, b[1])] + ring + [(a[0] - r_ * 0.2, b[1])], STONE, INK, 2.4)   # the stone ring
-    for k in range(1, 12):                                                                  # its voussoirs
-        u = math.pi * k / 12
-        p.line([(a[0] + r_ + r_ * math.cos(u), spring - r_ * math.sin(u)),
-                (a[0] + r_ + r_ * 1.2 * math.cos(u), spring - r_ * 1.2 * math.sin(u))], dk(STONE, 0.8), 1.4)
-    gate = [(b[0], b[1])] + arch + [(a[0], b[1])]
-    p.poly(gate, TIMBER, INK, 2.8)
-    for k in range(1, 9):                                                                    # its planks
-        x = a[0] + (b[0] - a[0]) * k / 9
-        top = spring - math.sqrt(max(0.0, r_ ** 2 - (x - a[0] - r_) ** 2))
-        p.line([(x, top + 4), (x, b[1])], dk(TIMBER, 0.78), 1.6)
-    p.line([(a[0] + r_, spring - r_), (a[0] + r_, b[1])], INK, 2.4)                          # the two leaves
-    for z in (1.2, 3.6):                                                                    # iron straps, studs
-        y = L.p(0, d + 0.38, z)[1]
-        p.line([(a[0] + 4, y), (b[0] - 4, y)], (50, 46, 44), 3.0)
-    for k in range(1, 6):                                                                    # the grille in the
-        u = math.pi * k / 6                                                                  # arch's top
-        p.line([(a[0] + r_, spring), (a[0] + r_ + r_ * 0.96 * math.cos(u), spring - r_ * 0.96 * math.sin(u))],
-               (40, 36, 34), 2.4)
-    p.line([(a[0], spring), (b[0], spring)], (40, 36, 34), 3.0)
-    wx0, wx1 = L.p(0.15, d + 0.37, 2.1), L.p(1.15, d + 0.37, 0)
+    cx_, spring = a[0] + r_, a[1]
+    ro = r_ * 1.36
+    jl, jr = L.p(-hw - 0.5, d + 0.28, 0), L.p(hw + 0.5, d + 0.28, 0)
+    p.poly([(jr[0], jr[1])] + [(cx_ + ro * math.cos(u), spring - ro * math.sin(u)) for u in np.linspace(0, math.pi, 24)]
+           + [(jl[0], jl[1])], STONE, INK, 2.6)                                              # the stone surround
+    for k in range(1, 13):                                                                  # voussoirs
+        u = math.pi * k / 13
+        p.line([(cx_ + r_ * math.cos(u), spring - r_ * math.sin(u)),
+                (cx_ + ro * math.cos(u), spring - ro * math.sin(u))], dk(STONE, 0.72), 1.8)
+    for z in np.arange(0.5, sp_z, 0.55):                                                    # the jambs' blocks
+        for sx in (-1, 1):
+            y = L.p(0, d + 0.28, z)[1]
+            x_in, x_out = L.p(sx * hw, d, 0)[0], L.p(sx * (hw + 0.5), d, 0)[0]
+            p.line([(x_in, y), (x_out, y)], dk(STONE, 0.72), 1.6)
+    p.poly([(cx_ - r_ * 0.16, spring - ro - 10), (cx_ + r_ * 0.16, spring - ro - 10), (cx_ + r_ * 0.12, spring - r_ + 4),
+            (cx_ - r_ * 0.12, spring - r_ + 4)], STONE, INK, 2.2)                            # the keystone
+    head = [(cx_ + r_ * math.cos(u), spring - r_ * math.sin(u)) for u in np.linspace(0, math.pi, 24)]
+    p.poly(head, (34, 32, 32), INK, 2.4)                                                     # the grille: dark,
+    gx = np.linspace(a[0], b[0], 13)
+    for x in gx[1:-1]:                                                                       # a square iron grid
+        top = spring - math.sqrt(max(0.0, r_ ** 2 - (x - cx_) ** 2))
+        p.line([(x, top + 2), (x, spring)], (130, 120, 108), 2.2)
+    for y in np.arange(spring - (gx[1] - gx[0]), spring - r_, -(gx[1] - gx[0])):
+        half = math.sqrt(max(0.0, r_ ** 2 - (spring - y) ** 2))
+        p.line([(cx_ - half + 2, y), (cx_ + half - 2, y)], (130, 120, 108), 2.2)
+    p.poly(quad(a[0], spring, b[0], b[1]), TIMBER, INK, 2.8)                                 # the timber gate
+    p.poly(quad(a[0], spring - 4, b[0], spring + 8), (50, 40, 34), INK, 1.6)                 # its head rail
+    for k in range(1, 16):
+        x = a[0] + (b[0] - a[0]) * k / 16
+        p.line([(x, spring + 8), (x, b[1])], dk(TIMBER, 0.8), 1.4)
+    p.line([(cx_, spring + 8), (cx_, b[1])], INK, 2.4)                                       # the two leaves
+    wx0, wx1 = L.p(0.15, d + 0.27, 2.1), L.p(1.15, d + 0.27, 0)
     p.poly(quad(wx0[0], wx0[1], wx1[0], wx1[1]), (24, 22, 22), INK, 2.4)                     # the wicket door, open:
-    p.poly(quad(wx0[0] + 4, wx1[1] - 26, wx1[0] - 4, wx1[1]), (70, 66, 60), None)            # the yard beyond
-    p.poly([(wx1[0], wx0[1]), (wx1[0] + 22, wx0[1] + 10), (wx1[0] + 22, wx1[1] + 4), (wx1[0], wx1[1])],
+    p.poly(quad(wx0[0] + 4, wx1[1] - 20, wx1[0] - 4, wx1[1]), (70, 66, 60), None)            # the yard beyond
+    p.poly([(wx1[0], wx0[1]), (wx1[0] + 26, wx0[1] + 10), (wx1[0] + 26, wx1[1] + 4), (wx1[0], wx1[1])],
            dk(TIMBER, 0.86), INK, 2.2)                                                       # its leaf, swung out
-    # the sign on the wall, left (ref 20), the forecourt, a bollard, a kerb
-    a, b = L.p(-10.4, d + 2.9, 3.2), L.p(-6.6, d + 2.9, 1.6)
-    p.poly(quad(a[0], a[1], b[0], b[1]), (250, 250, 248), INK, 2.0)
-    sign(img, cam, 'HM PRISON', (a[0] + b[0]) / 2, a[1] + (b[1] - a[1]) * 0.32, (b[0] - a[0]) * 0.7, (30, 30, 34))
-    sign(img, cam, 'VISITS AND RECEPTION', (a[0] + b[0]) / 2, a[1] + (b[1] - a[1]) * 0.72, (b[0] - a[0]) * 0.8,
-         (60, 60, 64))
-    g0 = L.p(0, d + 3, 0)[1]
-    p.poly(quad(-300, g0, W + 300, 2400), (110, 112, 116), None)                             # tarmac
-    for dd in (3.0, 6.0, 9.5):
+    # the forecourt: tarmac, a kerb line, the yellow bollards either side of the gate, the sign on its posts
+    g0 = L.p(0, d + 0.3, 0)[1]
+    p.poly(quad(-300, g0, W + 300, 2400), (110, 112, 116), None)
+    p.poly(quad(-300, g0 - 4, W + 300, g0 + 6), (90, 90, 94), INK, 1.2)
+    for dd in (3.0, 5.5):
         y = L.p(0, dd, 0)[1]
         p.line([(-300, y), (W + 300, y + 3)], (100, 102, 106), 2.0)
     r = random.Random(9)
-    for _ in range(30):
-        dd = r.uniform(2, 14)
-        x, y = L.p(r.uniform(-8, 8), dd, 0)
+    for _ in range(26):
+        dd = r.uniform(2, d - 0.5)
+        x, y = L.p(r.uniform(-5, 5), dd, 0)
         p.ell(x, y, 60 / dd, 14 / dd, (98, 100, 104), None)
-    bl, bt = L.p(-3.4, 9.0, 0), L.p(-3.4, 9.0, 1.0)
-    p.poly(quad(bl[0] - 12, bt[1], bl[0] + 12, bl[1]), (230, 196, 40), INK, 2.0)             # the yellow bollard
-    p.poly(quad(bl[0] - 12, bt[1] + 20, bl[0] + 12, bt[1] + 30), (40, 40, 40), None)
+    for sx in (-1, 1):
+        bl, bt = L.p(sx * 1.75, d - 0.4, 0), L.p(sx * 1.75, d - 0.4, 0.9)
+        w_ = L.ppm(d - 0.4) * 0.12
+        p.poly(quad(bl[0] - w_, bt[1], bl[0] + w_, bl[1]), (230, 196, 40), INK, 2.0)
+        p.ell(bl[0], bt[1], w_, w_ * 0.4, (240, 210, 70), INK, 1.4)
+    a, b = L.p(-3.9, d - 1.6, 2.0), L.p(-2.5, d - 1.6, 1.2)                                  # the sign (ref 20)
+    for x in (a[0] + 10, b[0] - 10):
+        gy = L.p(0, d - 1.6, 0)[1]
+        p.poly(quad(x - 4, b[1], x + 4, gy), (60, 62, 66), INK, 1.2)
+    p.poly(quad(a[0], a[1], b[0], b[1]), (250, 250, 248), INK, 2.0)
+    sign(img, cam, 'HM PRISON', (a[0] + b[0]) / 2, a[1] + (b[1] - a[1]) * 0.34, (b[0] - a[0]) * 0.74, (30, 30, 34))
+    sign(img, cam, 'VISITS AND RECEPTION', (a[0] + b[0]) / 2, a[1] + (b[1] - a[1]) * 0.74, (b[0] - a[0]) * 0.82,
+         (60, 60, 64))
 
 
 # ================================================================================================ stage marks
@@ -991,15 +1040,16 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'phone': {'brand': (690, 2500, 820.0)},
     'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 640.0), 'inmate2': (870, 1560, 640.0),
                'inmate3': (60, 1560, 640.0)},   # one bench, one depth: the same scale as Brand (Sam's note 5)
-    'gates': {'brand': _mark(GATE, 0.6, 4.6), 'press': [(-1.2, 2.3), (-0.4, 2.15), (-0.05, 2.45), (1.35, 2.25),
-                                                         (1.85, 2.6), (-1.85, 2.7), (-0.9, 3.0), (1.0, 3.1)]},
+    'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
+              'press': [(-1.0, 6.6), (-0.3, 6.1), (-1.7, 7.4), (2.7, 6.3), (3.4, 7.8), (-2.4, 6.9), (-0.9, 5.6),
+                        (1.5, 5.7)]},
 }
 CAMS = {   # a camera on a painting: (view, zoom, centre x, centre y). cell_cot is the cell painting, closer.
     'cell_cot': ('cell', 1.55, 330, 1240),
-    'gates2': ('gates', 1.7, 0.0, 0.0),           # closer on his mark (set below, from STAGE)
+    'gates2': ('gates', 1.9, 0.0, 0.0),           # closer on his mark (set below, from STAGE)
 }
 
-CAMS['gates2'] = ('gates', 1.7, STAGE['gates']['brand'][0], STAGE['gates']['brand'][1] - 0.95 * STAGE['gates']['brand'][2])
+CAMS['gates2'] = ('gates', 1.9, STAGE['gates']['brand'][0], STAGE['gates']['brand'][1] - 0.95 * STAGE['gates']['brand'][2])
 
 
 # ================================================================================================ checks

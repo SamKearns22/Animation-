@@ -232,7 +232,7 @@ def press_pose(sp, t):
     return j
 
 
-def press(img, cam, L, spots, t, seed=0):
+def press(img, cam, L, spots, t, seed=0, reach=480):
     """The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, far
     to near on the pavement at (x, d) metres through the set's Level camera; the kit on top of the nearest arms."""
     people = []
@@ -249,6 +249,7 @@ def press(img, cam, L, spots, t, seed=0):
         if kit == 'boom':                             # the pole from his hands (drawn over it) up and forward
             back = -1 if abs(sp['yaw']) > 90 else 1
             r['hands'] = [(back * j['wr' + k][0], j['wr' + k][1]) for k in 'LR']
+            r['reach'] = reach
             _boom(img, cam, r, t)
         hy = None if abs(sp['yaw']) == 180 else math.copysign(100, sp['yaw'])   # the turned ones glance aside:
         pts = put(img, cam, sp, mark, t, sp['yaw'], j, head_yaw=hy)               # profile, nose and all
@@ -289,7 +290,8 @@ def _boom(img, cam, r, t):
     dx, dy = bx - ax, by - ay
     n = math.hypot(dx, dy) or 1.0
     base = (ax - dx / n * 40, ay - dy / n * 40)                     # a little past the lower hand
-    tip = (bx + dx / n * 480 * sw, by + dy / n * 480)
+    reach = r.get('reach', 480)                                      # shorter at the court: under its sign
+    tip = (bx + dx / n * reach * sw, by + dy / n * reach)
     p.line([base, tip], (70, 72, 78), 9)
     p.line([base, tip], INK, 1.2)
     p.ell(tip[0] - 10, tip[1] - 30, 46, 82, (150, 150, 146), INK, 2.4, rot=0.2)
@@ -754,7 +756,7 @@ def gates_wide(sp, t):
 
 
 GATE_D_OUT = (ST.GATE_D + 0.2, ST.GATE_D - 0.52)
-G2_FROM, G2_TO = 6.0, 4.6
+G2_FROM, G2_TO = 8.5, 7.6                          # out of the wicket into the pack
 
 
 def gates_close(sp, t):
@@ -786,7 +788,8 @@ def _cam(view, t):
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
-        return B.Cam(1.0 + 0.35 * u, 540 + (x - 540) * u * 0.6, 960 + (y - 960) * u * 0.6)
+        return B.Cam(1.4 + 0.3 * u, 540 + (x - 540) * u * 0.6, 1020 + 80 * u)   # framed on the gate and the pack
+        #                                                                       (Sam, 11 Nov: he was a distant speck)
     return ST.view_cam(view)[1]
 
 
@@ -798,7 +801,7 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = arrive(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.OUT, st['press'], t)
+        press(img, cam, ST.OUT, st['press'], t, reach=230)
     elif shot == 'oath':
         x, y, ppm = st['judge']
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), (x, y, ppm), t)
