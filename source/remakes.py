@@ -811,15 +811,40 @@ def _kg_camp(t):
     return kx, kd, 'stand'
 
 
+LINK_LANE_X = -0.5           # the clear lane right of the barrels and the lean-to's post (barrel fix, 11 Nov)
+
+
+def _link_route():
+    """Link's path in the camp, (x, d) points from the gate to his mark, evenly spaced along the ground: in through
+    the gate's left half, down the clear lane right of the barrels and the lean-to's front post, then a curve left in
+    front of them to his mark (barrel fix, 11 Nov: the straight line ran him through both barrels)."""
+    lx, ld = RS.CAMP_MARKS['link']
+    a, b, c = (LINK_LANE_X, 5.9), (LINK_LANE_X, 5.05), (lx, ld)     # the curve: off the lane's foot, round to the mark
+    pts = [(-0.8 + (LINK_LANE_X + 0.8) * min(1.0, k / 12), RS.WALL_D + 0.4 + (5.9 - RS.WALL_D - 0.4) * k / 40)
+           for k in range(41)]
+    pts += [((1 - u) ** 2 * a[0] + 2 * u * (1 - u) * b[0] + u * u * c[0],
+             (1 - u) ** 2 * a[1] + 2 * u * (1 - u) * b[1] + u * u * c[1]) for u in [k / 20 for k in range(1, 21)]]
+    cum = [0.0]
+    for (x0, d0), (x1, d1) in zip(pts, pts[1:]):
+        cum.append(cum[-1] + math.hypot(x1 - x0, d1 - d0))
+    return pts, cum
+
+
+LINK_ROUTE = _link_route()
+
+
 def _link_camp(t):
     """Link in the camp: (x, d, u) with u 0-1 through his scuttle in through the gate behind KG; None before it."""
     if t < SCUTTLE[0]:
         return None
-    lx, ld = RS.CAMP_MARKS['link']
     u = min(1.0, (t - SCUTTLE[0]) / (SCUTTLE[1] - SCUTTLE[0]))
-    v = 1 - (1 - u) ** 1.6                                            # quick in, settling at his mark
-    return _lerp(-0.8, lx, v), _lerp(RS.WALL_D + 0.4, ld, v), u      # Fable r3 #28: in through the gate's left
-                                                                      # half, clear of KG's crest (hidden behind it)
+    v = 1 - (1 - u) ** 1.6                                            # quick in, settling at his mark (as before)
+    pts, cum = LINK_ROUTE
+    s_ = v * cum[-1]                                                  # the same ease, along the route
+    i = max(0, min(len(cum) - 2, next((k for k in range(len(cum) - 1) if cum[k + 1] >= s_), len(cum) - 2)))
+    f = (s_ - cum[i]) / max(1e-9, cum[i + 1] - cum[i])
+    return _lerp(pts[i][0], pts[i + 1][0], f), _lerp(pts[i][1], pts[i + 1][1], f), u   # Fable r3 #28: the gate's
+                                                                      # left half, clear of KG's crest
 
 
 def _scuttle_pose(tt, u):
@@ -1366,6 +1391,47 @@ def wall_contact():
             if not (0 <= hy - cy <= 190 * k and abs(hx - cx) <= 90 * k)]
 
 
+CAMP_BODY = {'link': (0.5, 1.35), 'kg': (1.0, 2.0), 'gunman3': (0.6, 1.8)}   # width, height (m) for camp_paths
+
+
+def camp_paths():
+    """The barrel fix's check (rule 56, 11 Nov): every figure that moves through the camp (S7), every frame, against
+    RS.SET_FEET: no feet inside a solid thing; nobody further than something the set paints under the cast yet
+    overlapping it on screen (he would show in front of what hides him); nobody nearer than the front sandbags and
+    under them. The tower lookout and the kneeling right-hand man do not move; S8's debris is flat, in the air."""
+    C = RS.CAMP
+    g3 = RS.STAGE['camp']['gunman3']                                  # his mark back in metres
+    d3 = C.f / g3[2]
+    x3 = (g3[0] - C.cx) / g3[2]
+    faults = []
+    for fr in range(int(GATE * FPS), int(S8_AT * FPS) + 1):
+        t = fr / FPS
+        who = []
+        lk, kg = _link_camp(t), _kg_camp(t)
+        if lk:
+            who.append(('link', lk[0], lk[1]))
+        if kg:
+            who.append(('kg', kg[0], kg[1]))
+        if t >= G3_IN[0]:
+            u = min(1.0, (t - G3_IN[0]) / (G3_IN[1] - G3_IN[0]))
+            who.append(('gunman3', x3 - (1 - ease(u)) * 1.5, d3))
+        for w, x, d in who:
+            bw, bh = CAMP_BODY[w]
+            sx, sy = C.p(x, d)
+            fig = (sx - bw / 2 * C.ppm(d), sy - bh * C.ppm(d), sx + bw / 2 * C.ppm(d), sy)
+            for n, x0, x1, d0, d1, z1, layer in RS.SET_FEET:
+                if x0 - 0.15 < x < x1 + 0.15 and d0 - 0.15 < d < d1 + 0.15:
+                    faults.append('S7 %.2fs: %s stands in the %s' % (t, w, n))
+                    continue
+                pts = [C.p(xx, dd, zz) for xx in (x0, x1) for dd in (d0, d1) for zz in (0, z1)]
+                box = (min(q[0] for q in pts), min(q[1] for q in pts), max(q[0] for q in pts), max(q[1] for q in pts))
+                over = fig[0] < box[2] and box[0] < fig[2] and fig[1] < box[3] and box[1] < fig[3]
+                if over and layer == 'under' and d > d0:
+                    faults.append('S7 %.2fs: %s is behind the %s but drawn over it' % (t, w, n))
+                if over and layer == 'over' and d < d0:
+                    faults.append('S7 %.2fs: %s is in front of the %s but drawn under it' % (t, w, n))
+    return faults[:6]
+
 def _wall_marks():
     """Link's collar and scale at the wall, and KG's x (as _wall_scene places them)."""
     kx, ky, s, k = _wall_kg()
@@ -1587,7 +1653,7 @@ def soundtrack(stems=False):
 def checks():
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     import voices
-    faults = voices.bleep_check(sys.modules[__name__], []) + s5_contact() + wall_contact()
+    faults = voices.bleep_check(sys.modules[__name__], []) + s5_contact() + wall_contact() + camp_paths()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 

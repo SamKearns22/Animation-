@@ -1,23 +1,22 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 8 (Sam's reaction to the animatic is a note), 89 (critique round 3 pass 2 left open: named),
-  62 (captions on the voice).
-- **Done (11 Nov, Sonnet):** animatic 3 rendered with no check sheet (Sam, 11 Nov), finished with the Hook Text and
-  sign-off, watched and listened once (note 40), sent (45 s, 4.8 MB, small render 540 x 960). A stale build (from before
-  notes 66-74) was sent first by mistake and replaced with this one.
-- **Next:** wait for Sam's look; his reaction is notes. Then a notes round (Opus, medium) and one more animatic; the final
-  only on his clear yes.
-- **Needs Sam:** his look at animatic 3.
-- **Faults named (rendered with --faults-named):** critique round 3 pass 2 (29 faults, 65 can't tell, open); PROP TURN on
-  Malon's bottle and Saria's ocarina at 30 degrees (line-up is front-on only); syllable counter misreads "R1", "9", "Ok?",
-  capitals (5); caption "I don't think I" 0.9 s for 4 words (the voice's pace); "you s***." 1.45 s early is the checker
-  misreading the take (one breath, "it" bleep at 34.06 s proves it).
-- **Fixed in this chat:** line 13's subtitle pieces were 0.9 s early (PIECE_FIX in remakes.py).
-- **Read:** pack "Checks and animatic" in `guides/job-packs.md`; source/remakes.py MAP.
-- **Open rule requests:** none.
-- **For Claude:** `remakes.py final source/data/remakes-clean.mp4 --small --faults-named`, then `finish.py ... --film remakes
-  --faults-named`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first (a stale copy cost a wasted render).
+- **Rules that bite next:** 8 (Sam's reaction to a clip is a note), 56 (a fault of its kind: check every case), 62
+  (captions on the voice; re-check at 1.1x if Sam says yes).
+- **Done (11 Nov, Opus medium):** barrel fix. Link (S7, 18.1-18.9 s) ran in a straight line through both barrels and
+  was drawn over them while behind them (confirmed on stills). Now he runs down the clear lane right of the barrels and
+  the lean-to's post, then curves left in front of them to his mark; same start, same ease, same arrival. Every other
+  camp mover checked: KG, the lower-left gunman clear; the tower man and the kneeling man don't move; S8's debris is in
+  the air. New check `camp_paths` (in `remakes.py check`) walks every mover against the camp's solid things each frame;
+  it flags the old route. Clip of 17.8-19.9 s sent. Lost: none. Added: none (Link half behind KG's crest mid-run: KG
+  is nearer, so that is the right order).
+- **Next:** wait for Sam's look at the clip and his numbers (1.1x rule; trim round still wanted?). Then the trim-the-pace
+  round (Opus, medium: notes/trim-speedup-handover.md) or, if 1.1x replaces it, a 1.1x animatic (Sonnet).
+- **Needs Sam:** his look at the clip; his numbers on the 1.1x rule.
+- **Read:** pack "Notes round" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** 1.1x delivery (proposed as a merge into rule 70, awaiting Sam's number).
+- **For Claude:** `LINK_ROUTE`/`LINK_LANE_X` (-0.5) in remakes.py; `RS.SET_FEET` (camp footprints, 'under'/'over');
+  `camp_paths()` in `checks()`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first.
 
 ## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
 | # | note | plan |

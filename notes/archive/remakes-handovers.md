@@ -355,3 +355,22 @@
 16-  PIER_GAP, _pier (the wall); RC._Flip/_Squash/UNHAPPY (talking mouths); 'doubt' mouth; CAMP_MARKS link (-1.25, 5.0).
 17-
 18-## Open notes: animatic 1 (Sam, 10 Nov; Sam's numbers 1-6, then Claude's list Sam asked to be done)
+
+## (replaced 11 Nov, barrel fix)
+- **Rules that bite next:** 8 (Sam's reaction to the animatic is a note), 89 (critique round 3 pass 2 left open: named),
+  62 (captions on the voice).
+- **Done (11 Nov, Sonnet):** animatic 3 rendered with no check sheet (Sam, 11 Nov), finished with the Hook Text and
+  sign-off, watched and listened once (note 40), sent (45 s, 4.8 MB, small render 540 x 960). A stale build (from before
+  notes 66-74) was sent first by mistake and replaced with this one.
+- **Next:** wait for Sam's look; his reaction is notes. Then a notes round (Opus, medium) and one more animatic; the final
+  only on his clear yes.
+- **Needs Sam:** his look at animatic 3.
+- **Faults named (rendered with --faults-named):** critique round 3 pass 2 (29 faults, 65 can't tell, open); PROP TURN on
+  Malon's bottle and Saria's ocarina at 30 degrees (line-up is front-on only); syllable counter misreads "R1", "9", "Ok?",
+  capitals (5); caption "I don't think I" 0.9 s for 4 words (the voice's pace); "you s***." 1.45 s early is the checker
+  misreading the take (one breath, "it" bleep at 34.06 s proves it).
+- **Fixed in this chat:** line 13's subtitle pieces were 0.9 s early (PIECE_FIX in remakes.py).
+- **Read:** pack "Checks and animatic" in `guides/job-packs.md`; source/remakes.py MAP.
+- **Open rule requests:** none.
+- **For Claude:** `remakes.py final source/data/remakes-clean.mp4 --small --faults-named`, then `finish.py ... --film remakes
+  --faults-named`. ALWAYS merge origin/claude/create-claude-md-oe8z4g first (a stale copy cost a wasted render).

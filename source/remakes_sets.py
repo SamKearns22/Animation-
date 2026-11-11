@@ -2193,6 +2193,21 @@ SET_MEANT = [
 ]
 
 
+# the camp's solid things on the ground (barrel fix, 11 Nov), in metres: name, x0, x1, nearest depth, furthest
+# depth, height, and whether the set paints it under the cast ('under', camp()) or over it ('over', camp_front()).
+# remakes.py's camp_paths() walks every moving figure through these: no feet inside one, no figure further than a
+# painted 'under' thing yet overlapping it on screen, none nearer than an 'over' thing and overlapping it.
+SET_FEET = [(n, x0, x1, d, d + dp, 2.6 if n == 'blue container' else 2.2 + 2.6, 'under')
+            for n, (x0, x1, d, dp) in CONTAINERS.items()] + [
+    ('crates', -2.65, -1.75, 6.6 - 0.45, 6.6 + 0.45, 1.6, 'under'),
+] + [('%s barrel' % ('green' if c[1] > c[0] else 'red'), x - 0.3, x + 0.3, d - 0.3, d + 0.3, 0.9, 'under')
+     for x, d, c in BARRELS] + [
+    ("lean-to's left post", -2.75 - 0.07, -2.75 + 0.07, 5.95, 6.05, 2.25, 'under'),
+    ("lean-to's right post", -0.85 - 0.07, -0.85 + 0.07, 5.95, 6.05, 2.25, 'under'),
+    ('tyres', 4.34, 5.06, 9.3 - 0.36, 9.3 + 0.36, 0.72, 'under'),
+    ('sandbags', 1.25, 2.4, 3.4 - 0.2, 3.4 + 0.2, 0.6, 'over'),
+]
+
 # ================================================================================================ BENCHMARK (rule 3)
 BENCHMARK = [
     dict(place='Kokiri Forest, up at the branch (S1)', refs=['01-kg.jpg', '19-forest.jpg'], at='forest_up',
