@@ -1,0 +1,67 @@
+== critique, round 3 pass 1 (2026-11-11): 33 fault(s), 45 can't tell
+-- look.md --
+1: Jungle compound, gates shut, blue-white flag, sniper in watchtower, red barrel; yard empty.
+2: Gates blow apart in orange fireball; whole frame pale, washed out; sniper still aims.
+3: Horned owl in red headband bursts through fireball holding gun; planks fly.
+4: Owl crouches firing up at tower sniper; yellow tracer line; dark smoke behind.
+5: Tower close-up: soldier's head bursts into red chunks; hills flat, blocky; legs dangle below.
+6: Grim owl with machine gun, glowing fairy; half-cropped masked soldier fires; tiny elf behind barrel.
+7: Elf boy behind owl waves hand at head; tracer flies across; lone boot lies.
+8: Masked soldier aims rifle at owl's head; pink fairy at edge; "R2 GRENADES".
+9: Fireball with red chunks where soldier stood; owl cut off left; washed out; "R2 GRENADES".
+10: Medieval town square; smiling owl waves; elves, pink-tutu yellow creature, mint girl, fountain.
+11: Elf boy alone in bannered street, mouth open, arms hanging stiff; castle behind.
+12: Elf boy crying, mouth open; owl's brown wings grip his shoulders; pink fairy glows.
+-- result.md --
+## Panel 1
+ok: A1 A2 A3 S1 S2 S5 S6 S3 S4 M1 M3 M5
+CAN'T TELL M2 M4: strip
+## Panel 2
+ok: A1 A2 A3 S1 S2 S5 S6 S3 S4 M1 M3 M5
+CAN'T TELL M2 M4: strip
+## Panel 3
+ok: A1 A2 A3 C1 C2 C4 S1 S2 S5 S6 S3 S4 M1 M3 M5
+FAULT C3: owl lost in fireball
+CAN'T TELL M2 M4: strip
+## Panel 4
+ok: A2 A3 C1 C2 C3 C4 M1 M3 M5
+FAULT A1: leans back
+CAN'T TELL M2 M4: strip
+## Panel 5
+ok: A3 P8 P3 P5 P11 P13 P12 M3
+FAULT A1 A2 P7: blood front; boot below floor
+CAN'T TELL P2 P1 P4 P6 P10 M1 M2 M5 M4: strip
+## Panel 6
+ok: A2 A3 P7 P8 P3 P5 P11 P12 P13 P1 P10 C2 C3 C4 M3
+FAULT A1 C1 M5 P2: gunman unhit; KG frontal
+CAN'T TELL P4 P6 M1 M2 M4: strip
+## Panel 7
+ok: A2 A3 P7 P8 P3 P5 P11 P13 C2 C3 C4 S2 S5 S6 S3 S4 M3 M5
+FAULT A1 P2 S1 C1 M1: Link waves; tracer behind; boot
+CAN'T TELL P1 P4 P6 P10 P12 M2 M4: strip
+## Panel 8
+ok: A3 P8 P3 P5 P4 P11 P13 P10 P1 C2 C3 C4 M3
+FAULT A1 C1 P2 A2 P7: "FOR" missing; Navi left; one leg
+CAN'T TELL P6 P12 M1 M2 M5 M4: strip
+## Panel 9
+ok: A3 S2 S5 S6 S3 S4 M3
+FAULT A1 S1: Navi unreadable; washed
+CAN'T TELL M1 M2 M5 M4: strip
+## Panel 10
+ok: A1 A2 A3 P7 P8 P3 P5 P4 P11 P13 P10 P1 P12 C1 C2 C3 C4 S2 S5 S6 S3 S4
+FAULT S1: five tiny
+CAN'T TELL P2 P6: closeup
+## Panel 11
+ok: A1 A3 P7 P8 P4 P5 P11 P13 P10 P1 P12 S2 S6 S4
+FAULT P2 S1 P6 P3 S3 A2 S5: gaping; stubs; cloned facades
+## Panel 12
+ok: A1 A2 A3 P2 P7 P8 P4 P11 P10 P1 P12 C1 C2 C3 C4 M3
+FAULT P13 P5 P6 P3: midarm cuffs; stubs
+CAN'T TELL M1 M2 M5 M4: strip
+## Cold look
+Lookout head, Link waving; missed hits.
+## Same fault elsewhere
+Facing camera 6-8; stubs 11-12.
+## Not on the list
+5: mountains. suggested line: inserts match wides.
+

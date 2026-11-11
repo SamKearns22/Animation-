@@ -24,5 +24,158 @@
   }
  ],
  "checks": {},
- "alarm": 9
+ "alarm": 9,
+ "critique": {
+  "passes": [
+   {
+    "round": 3,
+    "pass": 1,
+    "date": "2026-11-11",
+    "faults": 33,
+    "cant_tell": 45,
+    "open": [
+     "3 C3: owl lost in fireball",
+     "4 A1: leans back",
+     "5 A1: blood front; boot below floor",
+     "5 A2: blood front; boot below floor",
+     "5 P7: blood front; boot below floor",
+     "6 A1: gunman unhit; KG frontal",
+     "6 C1: gunman unhit; KG frontal",
+     "6 M5: gunman unhit; KG frontal",
+     "6 P2: gunman unhit; KG frontal",
+     "7 A1: Link waves; tracer behind; boot",
+     "7 P2: Link waves; tracer behind; boot",
+     "7 S1: Link waves; tracer behind; boot",
+     "7 C1: Link waves; tracer behind; boot",
+     "7 M1: Link waves; tracer behind; boot",
+     "8 A1: \"FOR\" missing; Navi left; one leg",
+     "8 C1: \"FOR\" missing; Navi left; one leg",
+     "8 P2: \"FOR\" missing; Navi left; one leg",
+     "8 A2: \"FOR\" missing; Navi left; one leg",
+     "8 P7: \"FOR\" missing; Navi left; one leg",
+     "9 A1: Navi unreadable; washed",
+     "9 S1: Navi unreadable; washed",
+     "10 S1: five tiny",
+     "11 P2: gaping; stubs; cloned facades",
+     "11 S1: gaping; stubs; cloned facades",
+     "11 P6: gaping; stubs; cloned facades",
+     "11 P3: gaping; stubs; cloned facades",
+     "11 S3: gaping; stubs; cloned facades",
+     "11 A2: gaping; stubs; cloned facades",
+     "11 S5: gaping; stubs; cloned facades",
+     "12 P13: midarm cuffs; stubs",
+     "12 P5: midarm cuffs; stubs",
+     "12 P6: midarm cuffs; stubs",
+     "12 P3: midarm cuffs; stubs",
+     "1 M2: strip",
+     "1 M4: strip",
+     "2 M2: strip",
+     "2 M4: strip",
+     "3 M2: strip",
+     "3 M4: strip",
+     "4 M2: strip",
+     "4 M4: strip",
+     "5 P2: strip",
+     "5 P1: strip",
+     "5 P4: strip",
+     "5 P6: strip",
+     "5 P10: strip",
+     "5 M1: strip",
+     "5 M2: strip",
+     "5 M5: strip",
+     "5 M4: strip",
+     "6 P4: strip",
+     "6 P6: strip",
+     "6 M1: strip",
+     "6 M2: strip",
+     "6 M4: strip",
+     "7 P1: strip",
+     "7 P4: strip",
+     "7 P6: strip",
+     "7 P10: strip",
+     "7 P12: strip",
+     "7 M2: strip",
+     "7 M4: strip",
+     "8 P6: strip",
+     "8 P12: strip",
+     "8 M1: strip",
+     "8 M2: strip",
+     "8 M5: strip",
+     "8 M4: strip",
+     "9 M1: strip",
+     "9 M2: strip",
+     "9 M5: strip",
+     "9 M4: strip",
+     "10 P2: closeup",
+     "10 P6: closeup",
+     "12 M1: strip",
+     "12 M2: strip",
+     "12 M5: strip",
+     "12 M4: strip"
+    ]
+   }
+  ],
+  "lines": {
+   "C3": {
+    "faults": 1,
+    "false": 0
+   },
+   "A1": {
+    "faults": 6,
+    "false": 1
+   },
+   "A2": {
+    "faults": 3,
+    "false": 0
+   },
+   "P7": {
+    "faults": 2,
+    "false": 0
+   },
+   "C1": {
+    "faults": 3,
+    "false": 0
+   },
+   "M5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P2": {
+    "faults": 4,
+    "false": 0
+   },
+   "S1": {
+    "faults": 4,
+    "false": 1
+   },
+   "M1": {
+    "faults": 1,
+    "false": 0
+   },
+   "P6": {
+    "faults": 2,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "S3": {
+    "faults": 1,
+    "false": 0
+   },
+   "S5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P13": {
+    "faults": 1,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
 }
