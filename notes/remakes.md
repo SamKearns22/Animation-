@@ -183,3 +183,5 @@ Decisions made (Sam, 10 Nov):
 
 ## Where things stand (11 Nov, final render)
 Done: final render (6 min), finished, 1.1x; animations/remakes-vertical.mp4 (11.9 MB, 41.4 s) sent to Sam. Sign-off speed 1.12 (1.136 gave 20 frames not 21; sign-off now 1.59 s). Next: wait for Sam to say it's posted, then archive the film's notes. Named faults: 8 prop-turn (Malon/Saria no side view, S10), script/mouth wording differences (lines 4, 5, 11, 13), subtitle "you s***" 1.45 s early, caption "I don't think I" 0.9 s, critique round 3 faults/can't-tell open. Hook Text lands 0.45 s.
+
+Update 11 Nov (pm): re-rendered with the eye cut-outs (rule S5) and Hook Text "Link's New Adventure… 👀". Housestyle eye check now reads cast files only (it flagged remakes.py for a setting name). 11.9 MB, 41.4 s, render 6 min. Next: wait for Sam to say posted.
