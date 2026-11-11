@@ -2,8 +2,9 @@ remakes: final render done 11 Nov, animations/remakes-vertical.mp4 sent.
 Next: wait for Sam to say it is posted, then archive notes.
 Model: Sonnet.
 - Remakes: all fixes in (barrels, wall thump, new caption font); final render under way (Sonnet chat), at 1.1x.
-  Tool job (11 Nov rules for every film): Sam said Y at 2.5%; build chat (Opus medium) opened; finish.py and
-  remakes.py parts wait for the Remakes final. Handover: notes/tool-job-universal-handover.md.
+  Tool job (11 Nov rules for every film): built, all six pieces (captions by default, 1.1x in finish.py, Hook Text
+  gate, eyes for every cast, set check in the kit, quick.py gone); kittests and remakes check clean. Open: Sam's look
+  at the KG eye sheet. Handover: notes/tool-job-universal-handover.md.
 
 - Job M built (11 Nov): estimates split into stages; each stage's end gives "Spent X% of the Y% planned; lands at Z%",
   and the chat stops if the forecast passes the estimate by a quarter. First used on the next film (not Remakes, Sam).

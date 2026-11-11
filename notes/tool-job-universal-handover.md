@@ -29,17 +29,18 @@ Stages: captions 0.5, 1.1x 0.4, Hook Text 0.2, eyes 0.6, camp check 0.5, quick.p
 `remakes.py check` 0.2. Pieces 1, 2, 3 and 5 touch finish.py or remakes.py, so the build starts only once
 animations/remakes-vertical.mp4 is on the main line. Sam's answer: Y (11 Nov, "override my yes, proceed").
 
-## Where things stand (11 Nov, build chat)
-- Rules that bite next: 86, 13, 85.
-- Done (free pieces, pushed): 6 (quick.py, its example and preflight's exception gone; hutt and polanski take their
-  hands and captions from satire_parts.py, frames identical); 4 (eyekit.py, KG's eye cut to the outline, house-style
-  S5 check, critique P14; Remakes frames identical at 29 times); 3 (hookcheck refuses HOOK without KEEP_CLEAR,
-  pre-flight's rule 75 gate); 5's kit half (setcheck.moving_faults, run by pre-flight on SET_FEET). Kittests all pass.
-- Next: Opus, medium effort, this chat, once `git fetch` shows animations/remakes-vertical.mp4 on the main line:
-  1 (captions default), 2 (1.1x), and Remakes' half of 5 (camp_paths calls setcheck.moving_faults; give remakes
-  SET_FEET/movers/SET_CAM/MOVE_SPAN), then kittests and `remakes.py check`. One send_later check is set.
-- Needs Sam: a look at the KG eye sheet (review/kg-eye-sheet.png, sent in chat) at the end.
-- Read: job-packs "A tool job"; this file; source/kittests.py (new tests: eyes_cut_to_the_outline,
-  hook_text_planned, moving_figures_against_the_set).
+## Where things stand (11 Nov, build chat: job done)
+- Rules that bite next: 62, 70, 75.
+- Done: all six pieces, pushed. 1: subtitles.pieces/caption_at/draw are the kit's captions (the template uses them),
+  finish.py refuses a film with no caption_at. 2: finish.py delivers at 1.1x (pitch kept) after captions, then Hook
+  Text (0.5 s pop) and sign-off (1.6 s); caption and Hook Text checks at 1.1x. 3: Hook Text gate. 4: eyekit, KG's eye.
+  5: setcheck.moving_faults, Remakes calls it. 6: quick.py gone. 42 kittests pass; `remakes.py check` clean; Remakes'
+  captions, camp check and frames unchanged (compared).
+- Found: at 1.1x the caption check names 3 Remakes pieces as a little quick ("I don't think I" was already quick at
+  1x); Remakes is finished, so untouched. New films' takes will meet this check at pre-flight.
+- Next: none for this job; Sam's next pick from the job list (planning: Opus, high effort).
+- Needs Sam: a look at the KG eye sheet (sent in chat).
+- Read: job-packs "A tool job"; source/kittests.py for the six new tests.
 - Open rule requests: none.
-- For Claude: ledger name tool-job-universal-handover.
+- For Claude: a film finished before 11 Nov drew its captions in the picture: re-finishing one would draw them twice
+  (finish.py now always burns them). Ledger name tool-job-universal-handover.
