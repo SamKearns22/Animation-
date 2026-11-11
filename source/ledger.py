@@ -17,6 +17,8 @@ MAP
   forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
                      stages after the open one at the rate so far. auto stops the chat once per quarter step when it
                      passes the estimate by a quarter (only when it says more than the spend alarm already has)
+  stage_alarm() .... rule 24 (Sam, 11 Nov): auto stops the chat when the stage being worked on reaches its share, and
+                     at each half share beyond (before: only when the whole film was a quarter over its estimate)
   audit ............ the 10-line end-of-film audit, also written into FILM.md
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
@@ -163,7 +165,9 @@ def auto(transcript):
             alarm = (f'COST ALARM (ledger): {film} has spent {spent}% of a week against its estimate of {est}% '
                      f'({spent / est:.0%}). Stop this work now. Tell Sam in the first line of your reply, with what '
                      f'is left to do and your estimate for it, and ask Y/N whether to go on. Do not go on before his Y.')
-    alarm = alarm or forecast_alarm(d)
+    stop = stage_alarm(d)                         # each marks its own step, so none repeats on the next reply
+    fore = forecast_alarm(d)
+    alarm = alarm or (stop + (' ' + forecast_line(d) if fore else '') if stop else fore)
     store(d)
     if alarm:
         print(json.dumps({'decision': 'block', 'reason': alarm}))
@@ -246,6 +250,41 @@ def forecast_alarm(d):
     return (f"FORECAST ALARM (ledger, rule 24): {d['film']}: {forecast_line(d)} The estimate is {est}%, and this is "
             f"{f[2] / est:.0%} of it. Stop this work now. First line to Sam: that forecast line, what is left "
             f"({left}), and a cheaper way that keeps the quality; ask Y/N. Do not go on before his Y.")
+
+
+def open_stage(d):
+    """(index, the stage being worked on, its share in % of a week, spent in it so far): the first planned stage not
+    done after the last one done. None without an estimate and stages, or with nothing planned left."""
+    st, est = d.get('stages') or [], d.get('estimate')
+    plan = sum(x['pct'] for x in st)
+    if not est or not plan:
+        return None
+    last = max((i for i, x in enumerate(st) if x['done'] is not None), default=-1)
+    i = next((i for i in range(last + 1, len(st)) if st[i]['pct'] > 0), None)
+    if i is None:
+        return None
+    at_mark = max((x['done']['spent'] for x in st if x['done'] is not None), default=0.0)
+    return i, st[i], round(st[i]['pct'] / plan * est, 2), round(totals(d)[0] - at_mark, 2)
+
+
+def stage_alarm(d):
+    """Rule 24: the stage being worked on has reached its share: once at the share and once at each half share beyond.
+    Returns the message or None."""
+    o = open_stage(d)
+    if not o or o[3] < o[2]:
+        return None
+    i, s, share, spent = o
+    step = int((spent / share - 1) / 0.5) + 1
+    seen = d.setdefault('stage_alarm', {})
+    if step <= seen.get(f"{i}:{s['name']}", 0):
+        return None
+    seen[f"{i}:{s['name']}"] = step
+    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d['stages'][i + 1:] if x['done'] is None) or 'nothing planned'
+    return (f"STAGE STOP (ledger, rule 24): {d['film']}: the '{s['name']}' stage has spent {spent:g}% of a week against "
+            f"its share of {share:g}%. If that stage is in fact finished, run `ledger.py stage {d['film']} {s['name']}` "
+            f"and carry on. Otherwise stop this work now. First line to Sam: that figure, what exists, what is left "
+            f"of this stage, and the cheapest way on that keeps the quality; ask Y/N. The stages after it ({left}) "
+            f"keep their shares: do not spend them here. Do not go on before his Y.")
 
 
 def totals(d):

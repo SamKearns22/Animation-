@@ -872,6 +872,28 @@ def estimate_forecast_and_alarm():
 
 
 @test
+def stage_share_stop():
+    """Rule 24 (Sam, 11 Nov): the chat is stopped when a stage reaches its share (before: only a quarter over the film's
+    whole estimate), once, and again half a share on; a stage under its share, or already marked done, is quiet."""
+    import ledger
+    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
+         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5')}
+    spend = lambda x: d['chats'][0].update(cost=x)
+    spend(2.9); under = ledger.stage_alarm(d)                      # cast at 2.9 of 3
+    spend(3.1); first, again = ledger.stage_alarm(d), ledger.stage_alarm(d)
+    old_way = 3.1 >= d['estimate']                                 # the only spend stop before: the whole estimate
+    spend(4.7); half_on = ledger.stage_alarm(d)                    # 1.5 shares
+    ledger.mark_stage(d, 'cast')
+    spend(6.0); sets_under = ledger.stage_alarm(d)                 # sets at 1.3 of 2
+    spend(6.8); sets_stop = ledger.stage_alarm(d)                  # sets at 2.1 of 2, the film at 68% of its estimate
+    ok = (under is None and first and "'cast'" in first and 'stop this work' in first and again is None and not old_way
+          and half_on and sets_under is None and sets_stop and "'sets'" in sets_stop and 'moves 2' in sets_stop)
+    return ok, (f"cast at 2.9 of 3: quiet {under is None}; at 3.1: stopped {bool(first)}, once {again is None}; half a "
+                f"share on: {bool(half_on)}; sets at 2.1 of 2 with the film at 68% of its estimate: stopped "
+                f"{bool(sets_stop)} (before: nothing until 100%)")
+
+
+@test
 def copies_in_a_group():
     """Job K (Sam: Y, 10 Nov): two people drawn from one copy in one frame are flagged (Ad-Vanced Notice's officers
     before they were varied); a varied pair passes; COPIES_OK lets a meant pair through."""
