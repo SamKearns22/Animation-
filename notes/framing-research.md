@@ -28,3 +28,6 @@ Sam's Y: 12 Nov (Protest Tiers chat 2, Q2). Its own job, outside any film's budg
 ## Where things stand
 - **Next: research chat (Opus, high):** steps 1-4 above; then one message to Sam: the study sheet, the lessons to pick,
   and Protest Tiers' still-open Q3-Q7 (in `notes/protest-tiers.md`, Needs Sam).
+
+## Widened (Sam, 12 Nov, Blessed note 42): dramatic framing of the whole screenplay
+"I just think you should have a good knowledge on how to dramatically frame what's being shown in the screenplay." Not a rule. Runs at the end of Blessed. Beyond crowds and vistas: how each beat of a script is framed for drama (shot size, height, headroom, where the face sits, what the frame leaves out, framing that changes with the story). Worked example to learn from: Blessed's dock shot (note 37, Sam: 'perfect, good framing, something to learn from'); examples to fix: the phone shot (note 42, the face low and off-centre) and the TV room (note 43). Re-price before starting.
