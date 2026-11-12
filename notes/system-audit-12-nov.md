@@ -172,3 +172,102 @@ hold anything the main line lacks**; the other 110 are fully merged. The 4:
    later, bigger version of the same files (and the finished Flying Whales films), so this is superseded, not lost.
 Nothing finished (no film or animation) is stuck. Nothing has been merged: this audit reports only; chat D should ask
 Sam whether to take items 1-3 into the main line.
+
+### Chat B (Opus, medium, 12 Nov): job 2 (did it cost notes?) and questions 1, 2, 3, 8, 10
+Read only: each film's notes table and handovers, the "allowed" lists in each film's code, the critique records and
+the rulebook. Nothing changed but this file. This chat cost about 0.7% of a week (audit so far about 1.1%).
+
+**First, two corrections to chat A's list.** (a) "No acting list" is wrong for Ad-Vanced Notice and Islamocommunism:
+both have one, in their notes, which had moved to `notes/archive/` when the films were posted (Ad-Vanced's code even
+says where). The checker only looks in `notes/FILM.md`, so for every posted film it cries "missing". A false alarm, but
+one that teaches us to ignore the checker: chat C should make it look in the archive too. MidTerminal really has none
+(it predates the rule). (b) Several of chat A's faults were **told to Sam at the time and he accepted them**: Swindon's
+15 s shot (his own note 52: "hold the aerial view 5 s more"), Islamocommunism's 12 s close-up ("chosen"), its three quick
+subtitles and its desk-arm and phone-hand faults, MidTerminal's voice/script mismatches (his own takes; he chose the
+subtitle wording in notes 46, 49, 50) and its 8.2 s Epstein shot, Ad-Vanced's two long shots (named with animatic 2).
+These are not misses.
+
+**Job 2: did the faults cost Sam rounds of notes?** Yes, on three of the five films, and mostly hands and arms.
+- **Ad-Vanced Notice: the costliest.** Chat A's biggest group (hand drawn over or inside a body; a line where the arm
+  meets the shoulder) is exactly what Sam spent **six notes** on: Vance's arm "punches through the guy's chest" (notes 34
+  and 36b, "how do you not see it"), the arm "a separate piece laid over the shoulders" (37c), the shoulder hump (40),
+  "a few pixels of non-connection" (41a), plus 14 (join the arms to the shoulders, all films). The hand check now catches
+  all of these, and it still finds 27 of them in the finished film: so the check came after the notes, and the film
+  went out with more of the same on the ICE officers that Sam never pointed at. Also the pointing finger (37e, 39b) and
+  the bent-elbow point chat A found at 26.8 s. **About 8 of Sam's notes, roughly 3 rounds.**
+- **Islamocommunism: 3-4 notes.** Chat A: El-Sayed's hand hidden for 7 s at 5-12 s. Sam: "free arm forward, resting on
+  the desk" (11), "his hand goes into the table and disappears" (16), "two hands, handset vanished" (19). And the glass
+  that "jumped" to the wrong hand (note 9): the touch check had said "not in the scene", which the chat took as
+  paperwork. That is the same "could not test" chat A found at 24.8 and 27.4 s. (It was fixed: the tool now says
+  COULD NOT TEST, 7 Nov.)
+- **Remakes: about 6 notes, all in the checks that were switched off.** The film told the checker "no people" (the
+  code says why: its cast is custom-drawn, not the standard kit), so the touch, collision, pop-in and room checks never
+  ran. Sam then gave: the wings "don't make accurate contact with the neck" (34) and the wings across Link's chest (37c),
+  both touch-check faults; "townsfolk stood in the house walls" (68), a collision/room fault; "the lower-left man appears
+  like a wipe, not a run in" (77), a pop-in fault; the tower man's boots poking under his box (76). Bleep and subtitle
+  timing (43, 51, 69) match chat A's voice and caption faults.
+- **MidTerminal: 1-2 notes.** "The cut comes too soon, Satan speaks under the old subtitle" (36) is a caption-timing
+  fault; "a pointing finger whenever anyone points" (33) is near the bent-elbow point chat A found. Sam never mentioned
+  the sudden loud jumps at the cuts; nobody asked him.
+- **Swindon: none.**
+- **In all: about 18-20 of Sam's notes (roughly 6 rounds) were things a check catches today.** Most were in films made
+  before the check existed; Remakes' were after, with the check switched off. That is the real cost of a skipped check.
+
+**Question 1: "allowed" lists.** They are **not growing**: each film has 4-17 entries (Prepper 17, Patriots 3 about 26
+counting its turned-view list, Ad-Vanced 16, Remakes 11, Blessed 10, MidTerminal 8, Islamocommunism and Swindon 4-5),
+and the newer films have fewer. Almost every entry gives a reason and many say "looked at full size, date". Three
+weak spots: (1) some cover **the whole film** (Ad-Vanced: officers may touch the man and each other "0 to 99 s"; the
+driver's fist "to the end"), so a new fault in that window would pass unseen; (2) a few have no reason at all
+(Islamocommunism's two contacts, Poker-mon's two line exceptions); (3) the biggest "allowance" is not a list at all but
+**a film saying it has no people or no rooms** (Remakes), which switches off whole checks with one word and no question
+to Sam. Rule 59 now covers (3); chat C's honest checker should list every switched-off check at the top.
+
+**Question 2: problems passed along.** Old films almost never wrote "still to do" and carried it on (a handful of
+"held" notes, all done before the final). The one real case is **Blessed**: the missing checks (set feet, collision
+scenes, line subjects) were written as "still to do" from 11 Nov 22:33 and passed through at least four handovers and
+about 7 hours before chat 2 stopped on them at 05:50 (which is how this audit began). Remakes carried "watch and listen
+to the animatic before sending" (note 40) as "part done" for a day. Patriots 3 carried "reference photos still
+missing" for two handovers. So the habit is new and rare, but when it happens nothing stops it: the handover just copies
+the line forward.
+
+**Question 3: the fresh-eye critique's "can't tell".** **Yes, once clearly.** On Remakes round 3 the critique answered
+"can't tell" 45 and 65 times, nearly all on the movement lines (M1 "nothing pops in or jumps", M2 "moves take a natural
+time"), because it was shown still strips, not moving pictures. Sam then gave note 77, "the man appears like a wipe,
+not a run in": an M1 fault, the very line it couldn't tell. It may also have hidden note 70 (the kneeling man tipping
+up). The critique did see the dangling boot (note 76) as a fault, but the fix was judged on a sheet where the tower
+was too small. Blessed's first pass had 18 "can't tell". The trial on 11 Nov treated "can't tell" as "act only if a look
+shows a real fault": when movement can't be judged from stills, that means it is never acted on. Fix to propose: a
+"can't tell" on a movement line needs a short clip looked at before the critique counts as clean.
+
+**Question 8: rules checked only by hand.** 16 of about 90 rules: 11 (composition sheet), 28 (catalogue updated), 30
+(seen-before mark), 32 (falling pieces), 47 (splicing small fixes), 59/67 parts, 72 (no arm behind wings or cape; turns
+snap: critique only), 77 (Sam confirms beard), 86 (tool estimates), 87, 88, S4 (joins at 24 fps), and most of the
+"working with Sam" rules. The ones that **keep turning up in Sam's notes:**
+- **Rule 72's "a turn snaps"**: Sam on Ad-Vanced (41b), again on Remakes (67, 74: "why it came back: it was only ever a
+  film note"). Critique only, no tool.
+- **Rule 30, "seen before" means a check is missing, add it**: by hand, and Ad-Vanced shows it not working (below).
+- **Rule 76/77, check every reference, beards**: Islamocommunism's beard took 3 rounds, Ad-Vanced's 4 (notes 1, 4, 6, 7).
+  The beard tool came after; Sam's confirm step is still by hand.
+- **Rule 32, falling pieces**: Ad-Vanced debris (29), Prepper's crossbow "flat 2D line in mid-air" (50).
+- **"Too still"** (no head, eye or arm movement) is checked by a tool only for speakers' heads; Sam's notes on stillness
+  come up on almost every film (Ad-Vanced 42f, MidTerminal 35 and 40, Islamocommunism 15, Remakes 44, 54, 57).
+
+**Question 10: notes Sam gave twice.** The "seen before" mark is used properly only from Ad-Vanced Notice (7 Nov) on.
+- **Ad-Vanced Notice: 19 of about 72 notes were seen before (1 in 4).** Six rounds on one arm over the driver (32, 34,
+  36b, 37c, 40, 41a), five on the man on the ground's arms (55-59a), four on the beard (1, 4, 6, 7), three on the
+  driver's neck (36c, 37a, 38), two on the pointing finger (37e, 39b), elbows (16, 17, 18).
+- **Remakes: 4 marked seen before**, two of them Sam changing his mind (fair), two real (the turn snap; the gunman).
+- **Earlier films:** MidTerminal 1 (the skull, note 30 "repeat of 27/28"), Patriots 4 2 ("REPEAT" notes 18, 33),
+  Islamocommunism 1 (beard round 3, which became rule 76).
+- **Across films, the same kinds come back:** arms and hands through or over bodies (Ad-Vanced, Islamocommunism,
+  Remakes), the pointing finger (MidTerminal 33, then Ad-Vanced 37e and 39b, then rule 41), turns that swivel instead of
+  snap (Ad-Vanced, Remakes), beards (Islamocommunism, Ad-Vanced), people too still (five films).
+- **Why:** the fix was judged by what was meant, not against Sam's picture at full size (Ad-Vanced 36b says so in its
+  own words), and the check that would have caught it was added only after the second or third note.
+
+**For chat D (proposals, none written):** (1) the checker reads archived notes, so posted films stop failing "no acting
+list"; (2) no "allowed" entry may cover a whole film or have no reason; (3) a handover line saying "still to do" for a
+check stops the chain and asks Sam (rule 59's check for chains, which is chat C's question 9); (4) "can't tell" on a
+movement line means a clip is looked at before the critique is clean; (5) a "seen before" note gets its check built in
+the same round, before the fix is sent (rule 30 made a check, not a by-hand promise); (6) a "too still" check for every
+person on screen, not only speakers' heads.
