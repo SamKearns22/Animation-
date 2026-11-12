@@ -1,3 +1,4 @@
+- System audit (12 Nov, Sam: all Y): plain-language plan in notes/system-audit-12-nov.md; runs after Blessed's animatic 1, own budget (~3.5%).
 - Blessed (12 Nov, chat 12, Opus medium): critique hunts 1 and 2 fixed, gate clear. Next: Sonnet chat: one full
   pre-flight, then the check sheet with the Hook Text frame; Sam's yes on animatic 1. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
