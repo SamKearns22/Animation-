@@ -61,7 +61,21 @@ about 3.5% of a week (the checking runs on Sonnet about 1%, reading old notes on
 Opus about 1.5%). It's a guess; the first chat measures it and says if it's heading higher.
 
 ## Where things stand
-- **Next:** wait until Blessed's animatic 1 is done, then start this job. Model: Sonnet, medium effort (for jobs 1
-  and 2's checking runs). Type: "System audit: read notes/system-audit-12-nov.md and do job 1, then hand job 2 to
-  Opus medium."
-- **Needs Sam:** nothing yet.
+- **Sam (12 Nov, before sleeping): start now and see it through to the end, as long as it doesn't get in Blessed's way.
+  It must end with a plain-language report on what this means for quality, cost and how we work.**
+- **Keeping out of Blessed's way:** jobs 1, 2 and 4 only read and report, and each runs in its own chat (its own
+  computer). Job 3 changes the checking tool that Blessed's chat is using right now, so it is built on its own branch,
+  `claude/audit-honest-checker`, and only joins the main line AFTER notes/blessed.md says animatic 1 was sent (if not
+  yet, it waits and says so in the report). Nothing in this job edits Blessed's files.
+- **The chain (chain rule, CLAUDE.md "Models and chats"; each chat opens the next):**
+  - **Chat A, Sonnet, medium:** job 1, the full check on the five films; writes the results per film below. Also
+    gathers the facts for questions 6 (cost record) and 7 (lost work on side branches).
+  - **Chat B, Opus, medium:** job 2 (did it cost notes?), and questions 1, 2, 3, 8 and 10 (reading lists and old notes).
+  - **Chat C, Opus, high:** job 3 (make the checker honest, with its test), and questions 4, 5 and 9 (testing the checks).
+  - **Chat D, Opus, medium:** the final report, `notes/system-audit-report.md`, in plain language: what we found, what
+    it did to quality, what it did to cost, what changes in how we work, and anything Sam needs to decide (numbered,
+    pick first). Sent in the chat, with a push notification.
+- **Rules for the chain:** report only; fix nothing in the five films. Any new rule is PROPOSED in the report, never
+  written (except the rule 59 wording Sam already said yes to). Stop and push-notify if the job passes about 5% of a
+  week. Write every finding here, in plain words, as you go.
+- **Results:** (each chat adds its findings below)
