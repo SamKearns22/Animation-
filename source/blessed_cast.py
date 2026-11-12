@@ -319,7 +319,7 @@ def tears(p, f, L, u=None):
                 continue
             x, y = f(sgn * (L['ecx'] - L['ew'] * 0.1), L['eye_y'] + 0.05)
             y += 70 * v * (2 - v)
-            p.poly(oval(x, y, 4 + 1.5 * v, 6 + 2 * v, 10), (170, 210, 236), INK, 1.2)
+            p.poly(oval(x, y, 6 + 1.5 * v, 9 + 2 * v, 10), (170, 210, 236), INK, 1.4)
         return
     for sgn in (-1, 1):
         x, y = f(sgn * (L['ecx'] - L['ew'] * 0.1), L['eye_y'] + 0.04)

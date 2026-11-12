@@ -109,7 +109,7 @@ T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, w
 T['cot'] = T['cell'] + 4.5                        # note 17: room for a long, readable sigh; note 40: deeper, a beat more (was 3.9)
 T['phone'] = T['cot'] + 2.8
 T['tvroom'] = _at(4, T['phone'] + 0.5) + 0.7
-T['tv'] = T['tvroom'] + 3.6                       # his eyes drift up to the screen as its voice starts (note 44: +1 s)
+T['tv'] = T['tvroom'] + 2.6                       # his eyes drift up as its voice starts (note 50: back to 2.6 s; the voice still leads the cut)
 _at(5, T['tv'] - 0.6)                               # note 44: his voice starts before the cut to the TV
 T['push'] = L[5]['start'] + L[5]['_stretches'][min(FADE_FROM, len(L[5]['_stretches']) - 1)][1] + 0.2
 T['amazed'] = T['push'] + 1.2                     # the face change on the slow push in (brief 14)
@@ -920,20 +920,22 @@ def cot_pose(sp, t):
     _arm(j, 'L', (-30.0, 150.0 - 8.0 * sob, 80.0), 'in', F.HAND['palm'], 'palm')     # on the heaving chest
     _arm(j, 'R', COT_BIBLE_HAND, 'out', F.HAND['palm'], 'palm')                     # palm down on the Bible
     import grips
-    grips.held(j, 'R', sp, _box_prop(j, [(sw + x, y, z) for x in (10.0, 150.0) for y in (300.0, 500.0)
+    grips.held(j, 'R', sp, _box_prop(j, [(sw + x, y, z) for x in (40.0, 160.0) for y in (300.0, 470.0)
                                          for z in (0.0, 24.0)], (40, 30, 34), _cot_cross(sw)))
     return j
 
 
-COT_BIBLE_HAND = (230.0, 400.0, 30.0)
+COT_BIBLE_HAND = (250.0, 440.0, 30.0)   # on the bottom of the cover: the cross shows above the hand
 
 
 def _cot_cross(sw):
     def mark(p, j2):
-        c = V.project((sw + 80.0, 400.0, 26.0), j2['yaw'])[0]
+        c = V.project((sw + 100.0, 350.0, 26.0), j2['yaw'])[0]
         g = (214, 176, 70)
-        p.poly([(c[0] - 4, c[1] - 30), (c[0] + 4, c[1] - 30), (c[0] + 4, c[1] + 30), (c[0] - 4, c[1] + 30)], g, None)
-        p.poly([(c[0] - 17, c[1] - 14), (c[0] + 17, c[1] - 14), (c[0] + 17, c[1] - 5), (c[0] - 17, c[1] - 5)], g, None)
+        p.poly([(c[0] - 3, c[1] - 20), (c[0] + 3, c[1] - 20), (c[0] + 3, c[1] + 20), (c[0] - 3, c[1] + 20)], g, None)
+        p.poly([(c[0] - 12, c[1] - 10), (c[0] + 12, c[1] - 10), (c[0] + 12, c[1] - 4), (c[0] - 12, c[1] - 4)], g, None)
+        a, b = V.project((sw + 40.0, 300.0, 26.0), j2['yaw'])[0], V.project((sw + 160.0, 470.0, 26.0), j2['yaw'])[0]
+        p.poly([(b[0] - 6, a[1] + 6), (b[0] - 1, a[1] + 6), (b[0] - 1, b[1] - 6), (b[0] - 6, b[1] - 6)], (250, 244, 222), None)   # page edge
     return mark
 
 
@@ -996,7 +998,20 @@ def tv_pose(sp, t):
     j['lean'] = lean
     j['head_dy'] = _keys(t, [(T['amazed'], 6.0), (T['amazed'] + 0.6, 0.0)])
     j['nod'] = _keys(t, [(T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, -1.0)])
+    # note 43 (head staring and still): his head lifts with his eyes to the screen, settles into small slack tilts
+    #   and weight shifts, and he breathes; a slow, heavy blink (tv_face)
+    life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
+    j['nod'] += life * (-2.5 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8)) +
+                        filmkit.shifts(t, seed=71, amount=1.0, hold=(1.0, 1.7)))
+    j['head_roll'] = j.get('head_roll', 0.0) + life * filmkit.shifts(t, seed=72, amount=4.0, hold=(0.9, 1.5))
+    j['lean'] += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0))
+    j['bob'] = j.get('bob', 0.0) - F.breath(t, 3.2, 3.0)
     return j
+
+
+def tv_blink(t):
+    """Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones."""
+    return any(b <= t < b + 0.3 for b in (T['tvroom'] + 0.35, T['tvroom'] + 2.05, T['push'] + 0.6))
 
 
 # --- gates: swaggers out of the wicket door (wide), arms flung up and open, chin high, on "Blessed!"; then closer,
@@ -1431,22 +1446,19 @@ def _cam(view, t):
         u = _ease(_ramp(t, T['jury'], T['oath2']))
         return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
     if shot_of(t) == 'dock':                      # note 15: half the frame was empty wall; tighter on him and the guards
-        u = _ease(_ramp(t, T['s4'] + 0.05, L[3]['start']))   # note 37: rises straight up by half the screen, done
-        return B.Cam(1.2, 548, 1560 - 800 * u)               # before he speaks; his words go up on the bare wall
+        return B.Cam(1.2, 548, 1160)      # note 37 (Sam: no move, 'up a bit'): a quarter screen higher than 1560
     if shot_of(t) == 'arrive':                    # note 11: closer and lower, Brand bigger, less building, the sign in
         return B.Cam(1.25, ARRIVE_CAM[0], ARRIVE_CAM[1])
     if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
-        return B.Cam(1.0, 740, 960)
-    if shot_of(t) == 'gates2':                    # notes 31, 32: framed on Brand as he strides in, the door over his
-        u = _ease(_ramp(t, T['gates2'], T['gates2'] + 1.9))   # shoulder; pushing in all shot
-        z = 2.25 + 0.25 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
-        return B.Cam(z, G2_CAM[0] + (G2_CAM[1] - G2_CAM[0]) * u, G2_CAM[2])
-    if shot_of(t) == 'gates':                     # note 46 (Sam, 12 Nov): no cut at the release: the wide holds,
-        #   then zooms in to the close framing on Brand, and the close shot's push carries on from there (one shot)
+        return B.Cam(1.0, 740, 1440)                # note 42: a quarter of the screen lower (was 960)
+    if shot_of(t) in ('gates', 'gates2'):         # note 51 (Sam, 12 Nov): the zoom was sudden; we are basking in his
+        #   liberation: ONE slow, measured ease from the wide at the shot's start to the close on Brand, then a creep
         x, _ = ST.GATE.p(0.65, ST.GATE_D, 1.2)
         x0 = 540 + (x - 540) * 0.35 * 0.6         # the wide as Sam liked it (note 24: starts at 1.3)
-        u = _ease(_ramp(t, T['gates'] + 0.7, T['gates2']))
-        return B.Cam(1.3 + (2.25 - 1.3) * u, x0 + (G2_CAM[0] - x0) * u, 1040 + (G2_CAM[2] - 1040) * u)
+        end = T['gates2'] + 2.6
+        u = _ease(_ramp(t, T['gates'], end))
+        z = 1.3 + (2.5 - 1.3) * u + 0.1 * _ramp(t, end, DUR)
+        return B.Cam(z, x0 + (G2_CAM[1] - x0) * u, 1040 + (G2_CAM[2] - 1040) * u)
     return ST.view_cam(view)[1]
 
 
@@ -1520,6 +1532,8 @@ def draw_people(img, cam, shot, t):
         put_seated(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
                    st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t))
         sp = brand_sp(t, 'prison')
+        if t < T['amazed']:
+            sp['blink'] = tv_blink(t)
         if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
             sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
         else:
@@ -1626,7 +1640,7 @@ def caption_at(t):
 def overlay(img, t):
     c = caption_at(t) if SUBS_IN_PICTURE else None
     if c:
-        SUB.draw(img, c, base=420 if shot_of(t) == 'dock' else None)   # note 37: his face is low in the frame
+        SUB.draw(img, c)
     return img
 
 
