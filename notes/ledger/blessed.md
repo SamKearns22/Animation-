@@ -36,3 +36,15 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | 2026-11-12 | cacb518d | opus | auto |  | 1.51 | 0 | 0 |
 | 2026-11-12 | d3f676bc | sonnet | auto |  | 0.22 | 0 | 0 |
 | 2026-11-12 | 79ad6d23 | opus | auto |  | 1.45 | 0 | 0 |
+
+## Audit (end of film)
+1. Cost: estimate 19.0%, spent 21.02% of a week (over: name what ran over).
+2. Chats 14, rounds 0; by model: opus 20.67%, sonnet 0.35%.
+3. Sam's notes 0; repeated 0.
+4. Repeated: none.
+5. Would have caught them: not given.
+6. Checks that caught things: none.
+7. Checks that ran and never fired: none.
+8. False alarms 0; could not test 0 (from the round files).
+9. By-hand rules: read the check sheet text in the round files; name any that never caught anything.
+10. Proposal for Sam (one line, a rule replaced or a check added): 

@@ -66,7 +66,7 @@ LINES = [   # the script word for word (brief rows 5, 6, 7, 11, 13-14, 15); Sam'
     dict(n=2, audio='blessed-2', who='brand', text="I swear by Almighty God that the blessed evidence I shall give "
          "shall be the truth, the whole truth, and nothing but the blessed truth."),
     dict(n=3, audio='blessed-3', who='brand', text="Well that doesn't feel very blessed."),
-    dict(n=4, audio='blessed-4', who='brand', text="Yeah, love. I'm not just not feeling blessed at all right now."),
+    dict(n=4, audio='blessed-4', who='brand', text="Yeah, love. I'm just not feeling very... blessed right now."),   # Sam's take (note 19)
     dict(n=5, audio='blessed-bbc', who='newsreader', text="Our breaking news. The government has announced a new "
          "round of the early release scheme, as way of dealing with the prison capacity crisis. The Prime Minister "
          "has said that it is necessary to stop overcrowding."),
@@ -842,9 +842,9 @@ def cot_pose(sp, t):
     return j
 
 
-# --- phone: head down, a slow shake on "at all right now"
+# --- phone: head down, a slow shake on "blessed right now"
 def phone_extra(t):
-    a = word_at(4, 'at all')
+    a = word_at(4, 'blessed right')
     w = _ramp(t, a, a + 1.0)
     sh = math.sin(2 * math.pi * w) * (1 - w) * 1.4 if 0 < w < 1 else 0.0
     return dict(head_dx=6.0 * sh), 2.5 * sh
@@ -1124,6 +1124,40 @@ def _gavel_knock():
     return 0.9 * x / np.abs(x).max()
 
 
+MUSIC = os.path.join(HERE, '..', 'music', 'the-mountain-sad-hope.mp3')
+MUSIC_SAD_END, MUSIC_PEAK = 12.9, 65.4   # the track's sad opening ends in a hush at 12.9 s; its hopeful lift hits 65.4 s
+
+
+def music(n):
+    """Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hush
+    at 12.9 s) the build, so the hopeful lift lands as Brand hears the news (T['amazed'], the zoom on his face), to
+    the end. Under every line it dips 12 dB; it fades out over the last 1.5 s. Licence: see music/README.md."""
+    from burnham_film import load
+    x = load(MUSIC)
+    a = T['cell']
+    jump = a + MUSIC_SAD_END                       # film time of the join
+    p = MUSIC_PEAK - (T['amazed'] - jump)          # where the track picks up after the join
+    out = np.zeros(n)
+    i0, i1 = int(a * SR), int(jump * SR)
+    out[i0:i1] = x[:i1 - i0]
+    tail = x[int(p * SR):int(p * SR) + n - i1]
+    xf = int(0.4 * SR)                            # a short crossfade in the hush
+    out[i1 - xf:i1] *= np.linspace(1, 0, xf)
+    tail = tail.copy()
+    tail[:xf] *= np.linspace(0, 1, xf)
+    out[i1 - xf:i1 - xf + len(tail)] += tail
+    g = np.full(n, 0.30)                           # under the voices: lower than them, never fighting them
+    k = np.hanning(int(0.3 * SR))
+    for ln in LINES:
+        g[int((ln['start'] - 0.15) * SR):int((ln['end'] + 0.15) * SR)] = 0.30 * 10 ** (-12 / 20)
+    g = np.convolve(g, k / k.sum(), 'same')
+    g[:i0 + int(0.8 * SR)] *= np.clip(np.linspace(-i0 / (0.8 * SR), 1, i0 + int(0.8 * SR)), 0, 1)   # in over 0.8 s
+    e = int(DUR * SR)
+    g[e - int(1.5 * SR):e] *= np.linspace(1, 0, int(1.5 * SR))
+    g[e:] = 0
+    return out * g * (np.abs(np.concatenate([ln['_voice'] for ln in LINES])).max() / (np.abs(x).max() + 1e-9))
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)
@@ -1141,6 +1175,7 @@ def soundtrack(stems=False):
     k = _gavel_knock()                                # Sam, 12 Nov: the gavel heard at the start of the sentencing shot
     i0 = int(T['bang'] * SR)
     rest[i0:i0 + len(k)] += k[:max(0, n - i0)]
+    rest += music(n)                                  # note 27: The Mountain, from the cell on
     mix = voice + rest
     end = int(DUR * SR)
     if np.abs(voice).max() > 1e-6:
