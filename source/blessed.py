@@ -160,7 +160,8 @@ PLAN = dict(CEIL=3.0, ROOMS={v: (_PX[v] - 6.0, 0.0, _PX[v] + 6.0, 18.0) for v in
 HOOK = ('Russell Brand this week', {'y': 420})     # brief 17 (Claude's pick); over the court's upper windows, clear
 #                                                   of the sign and his hair (rule 75, measured 11 Nov)
 SUBS_IN_PICTURE = True
-PIECE_FIX = {}
+PIECE_FIX = {2: {2: 3.0, 3: 4.48, 4: 5.57, 5: 6.58, 6: 7.35}, 4: {1: 3.2, 2: 4.47},
+             5: {2: 3.3, 3: 4.25, 4: 6.6, 5: 7.2, 8: 11.45}}   # subtitles pinned to the takes' spoken stretches (Sam, 12 Nov)
 KEEP_CLEAR = [('the court sign', lambda t: (330, 640, 1030, 730) if t < T['s2'] else None),
               ('his face and hair', lambda t: (620, 950, 925, 1215) if t < T['s2'] else None)]
 PROP_SIZES = []
