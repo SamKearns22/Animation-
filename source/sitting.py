@@ -716,8 +716,18 @@ POSES.update({
 
 # ------------------------------------------------------------------------------------------------ moves
 def _standing_spec(sp, seat, tuck_z):
-    sw = sp.get('shoulders', 150)
-    arms = {s: arm_free((sw + 24.0, 466.0, 44.0), (0.25, 0.3, -1.0), 'fist') for s in 'LR'}
+    """The standing end of a rise or a sit-down: the arms are the standing person's own (views.standing: the relaxed
+    soft elbow, elbows a touch out, 8 Nov). Their hand and elbow are read off the standing joints, so the spec's
+    two-bone solve lands the elbow where views.standing puts it."""
+    st = V.standing(sp)
+    arms = {}
+    for s in 'LR':
+        sg = -1 if s == 'L' else 1
+        sh, el, wr = st['sh' + s], st['el' + s], st['wr' + s]
+        d = V._unit(V._sub(wr, el))
+        hand = V._add(wr, V._mul(d, F.HAND['fist']))              # the fist's contact point, beyond the wrist
+        pole = V._sub(el, V._mul(V._add(sh, wr), 0.5))            # which way the elbow bends (its offset from the mid-line)
+        arms[s] = arm_free((hand[0] * sg, hand[1], hand[2]), (pole[0] * sg, pole[1], pole[2]), 'fist')
     return _spec(lift=1.0, dz=tuck_z - 6.0, arms=arms, feet={'L': (-60, tuck_z), 'R': (60, tuck_z)})
 
 
