@@ -105,7 +105,7 @@ T['s4'] = T['s3']                                 # (Sam, 12 Nov: no gavel shot)
 T['hollow'] = T['s4'] + 0.3                       # the stillness cracks just before line 3
 T['van'] = _at(3, T['s4'] + 0.9) + 0.8
 T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, weeping on the cot
-T['cot'] = T['cell'] + 3.2
+T['cot'] = T['cell'] + 3.9                        # note 17: room for a long, readable sigh (was 3.2)
 T['phone'] = T['cot'] + 2.8
 T['tvroom'] = _at(4, T['phone'] + 0.5) + 0.7
 T['tv'] = T['tvroom'] + 2.6                       # his eyes drift up to the screen
@@ -279,8 +279,11 @@ def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
 
 PRESS_HAIR = [(58, 44, 36), (30, 24, 22), (150, 110, 70), (170, 166, 162), (110, 70, 46), (196, 196, 192)]
 PRESS_JKT = [B.NAVY, B.CHARCOAL, (110, 40, 50), (70, 90, 120), (90, 96, 80), (150, 120, 90), (60, 60, 70)]
+CREW_TOP = [(40, 42, 48), (52, 56, 50), (30, 34, 44)]   # navy-black, dark olive, charcoal jumpers
+CREW_LEG = [(92, 90, 70), (70, 72, 64), (60, 58, 52)]   # cargo trousers: khaki, olive, stone
 PRESS_STYLE = ['short', 'bob', 'pony', 'crop', 'bald', 'curly', 'long', 'side']
-PRESS_KIT = ['tv', 'phone', 'tv', 'none', 'boom', 'pad', 'phone', 'boom']   # a TV camera in clear view at both
+PRESS_KIT = ['tv', 'stills', 'phone', 'pad', 'boom', 'stills', 'tv', 'stills', 'phone', 'none']   # notes 12/24: a TV
+#  camera in clear view at both, photographers whose flash guns fire
 PRESS_YAW = {'short': 145, 'crop': -145, 'side': 140}   # three turned three-quarter (Sam's note 4), the rest backs on
 PRESS_FACE = [dict(face_wide=0.05, jaw_wide=0.06), dict(face_wide=-0.04, chin_long=0.02), dict(), dict(jaw_wide=0.08),
               dict(face_wide=0.06), dict(face_wide=-0.02), dict(face_wide=-0.05, jaw_wide=-0.05), dict(jaw_wide=0.03)]
@@ -300,8 +303,13 @@ def press_sp(i, seed):
                 hair_c=hc, outfit='suit', jacket=jk, sleeve=jk, trousers=B.dk(jk, 0.6) if i % 2 else (40, 40, 46),
                 shirt=(246, 246, 246), tie=None, shoe=(24, 20, 18), shoulders=138 if small else 150 + 6 * (i % 3),
                 full=True, pose='custom', height=(1.64 if small else 1.76) + 0.05 * ((i * 7 + seed) % 3), seed=600 + i,
-                kit=PRESS_KIT[(i + seed) % 8], yaw=PRESS_YAW.get(style, 180))
+                kit=PRESS_KIT[(i + seed) % 10], yaw=PRESS_YAW.get(style, 180))
     import turnhead
+    if full['kit'] in ('tv', 'boom'):                # note 24: the crew dressed for the job: dark jumper, cargo trousers
+        top = CREW_TOP[(i + seed) % 3]
+        full.update(outfit='jumper', jacket=top, sleeve=top, trousers=CREW_LEG[i % 3], shoe=(40, 36, 32))
+    elif full['kit'] == 'stills':                    # photographers: dark jacket, jeans
+        full.update(jacket=(46, 48, 54), sleeve=(46, 48, 54), trousers=(58, 72, 96), shirt=(70, 74, 82))
     turnhead.PEOPLE[head['who']].sheet = lambda d=full: d    # the turnaround sheet draws them (chat 4: had none)
     return full
 
@@ -318,6 +326,9 @@ def press_pose(sp, t):
         V.arm_to(j, 'L', (40.0, -110.0, 50.0), 'in', 'fist')
     elif kit == 'phone':                              # held up above the head, filming over the others
         V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
+    elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
+        V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
+        V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'in', 'fist')
     elif kit == 'pad':
         V.arm_to(j, 'L', (-30.0, 160.0, 150.0), 'down', 'palm')
         V.arm_to(j, 'R', (20.0, 170.0, 160.0), 'out', 'fist')
@@ -327,11 +338,14 @@ def press_pose(sp, t):
     return j
 
 
-def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0)):
+def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
     """The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, far
-    to near on the pavement at (x, d) metres through the set's Level camera; the kit on top of the nearest arms."""
+    to near on the pavement at (x, d) metres through the set's Level camera; the kit on top of the nearest arms.
+    part=('behind', d) or ('front', d): only those further than / nearer than depth d (he is drawn between)."""
     people = []
     for i, (x, d) in enumerate(spots):
+        if part and (d > part[1]) != (part[0] == 'behind'):
+            continue
         X, Y = L.p(x, d)
         people.append((d, i, (X, Y, L.ppm(d))))
     for d, i, mark in sorted(people, key=lambda q: -q[0]):
@@ -353,6 +367,38 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0)):
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
         elif kit == 'phone':
             _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
+        elif kit == 'stills':
+            _stills(img, cam, r, pts, t)
+
+
+def _stills(img, cam, r, pts, t):
+    """A stills camera held up over the heads, seen from behind (note 24): the body and its screen between the raised
+    fists, the flash gun on top; on some frames the flash fires, for one frame: a ragged white burst round the flash
+    head (pointing away from us, at him), flat, never a star (prepper_fx.flash's house style)."""
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    (lx, ly), (rx, ry) = pts['wrL'], pts['wrR']
+    x, y = (lx + rx) / 2, min(ly, ry) - 20
+    f = int(round(t * FPS))
+    fire = np.random.default_rng((r['seed'] * 7919 + f) % 2 ** 31).random() < 0.09
+    fy = y - 120
+    if fire:
+        rng = np.random.default_rng(r['seed'] + f)
+        n, a0 = 11, rng.uniform(0, 6.3)
+        rad = rng.uniform(0.7, 1.0, n)
+        burst = []
+        for i in range(n * 3):
+            u = i / 3
+            i0, i1 = int(u) % n, (int(u) + 1) % n
+            w = u - int(u)
+            rr = 120 * (rad[i0] + (rad[i1] - rad[i0]) * (3 * w * w - 2 * w * w * w))
+            a = a0 + 2 * math.pi * u / n
+            burst.append((x + rr * math.cos(a), fy - 10 + rr * 0.85 * math.sin(a)))
+        p.poly(burst, (226, 236, 250), INK, 1.6)
+        p.poly([(x + (bx - x) * 0.55, fy - 10 + (by - fy + 10) * 0.55) for bx, by in burst], (255, 255, 255), None)
+    p.poly([(x - 70, y - 50), (x + 70, y - 50), (x + 70, y + 46), (x - 70, y + 46)], (34, 34, 38), INK, 2.4)   # body
+    p.poly([(x - 50, y - 34), (x + 30, y - 34), (x + 30, y + 30), (x - 50, y + 30)], (70, 96, 120), INK, 1.6)  # screen
+    p.poly([(x - 16, y - 50), (x + 16, y - 50), (x + 12, y - 92), (x - 12, y - 92)], (30, 30, 34), INK, 2.0)   # shoe
+    p.poly([(x - 30, y - 92), (x + 30, y - 92), (x + 30, y - 150), (x - 30, y - 150)], (40, 40, 44), INK, 2.2)  # flash
 
 
 def _phone_up(img, cam, r, pts, sg):
@@ -794,14 +840,21 @@ def escort(sp, t, who='brand'):
     if who == 'brand' and k >= ESC_STOP + 0.15:
         yaw = 0.0                                 # notes 17/26: front-on once he stops
         a = T['cell'] + ESC_STOP
-        head = -90.0 if a + 0.3 <= t < a + 0.9 else None      # a look left, then up to the window, then down
-        j['nod'] = _keys(t, [(a + 0.9, 0.0), (a + 1.25, -1.6), (a + 1.6, -1.6), (a + 2.0, 1.4)])
+        head = -90.0 if a + 0.2 <= t < a + 0.6 else None      # a look left, then up to the window, then down
+        # note 17: a big, slow sigh: breathes in looking up (shoulders rise), then out, the head and shoulders sinking
+        j['nod'] = _keys(t, [(a + 0.6, 0.0), (a + 0.9, -1.6), (a + 1.25, -1.8), (a + 2.0, 1.8)])
+        up = _keys(t, [(a + 0.6, 0.0), (a + 1.15, -16.0), (a + 1.3, -16.0), (a + 2.1, 12.0)])
+        for sd in 'LR':
+            for jt in ('sh', 'el', 'wr'):
+                x0, y0, z0 = j[jt + sd]
+                j[jt + sd] = (x0, y0 + up * (1.0 if jt == 'sh' else 0.6), z0)
+        j['lean'] = j.get('lean', 0.0) + max(0.0, up) * 0.25
     return _cell_mark(x, d), yaw, j, head
 
 
 def escort_gaze(t):
     a = T['cell'] + ESC_STOP
-    return _keys(t, [(a + 0.9, 0.0), (a + 1.2, -0.6), (a + 1.6, -0.6), (a + 1.9, 0.5)])
+    return _keys(t, [(a + 0.6, 0.0), (a + 0.85, -0.6), (a + 1.3, -0.6), (a + 2.0, 0.6)])
 
 
 GRIP_AT = [None]                                 # where the officer's hand should be on Brand's arm (touch check)
@@ -968,6 +1021,7 @@ def gates_close(sp, t):
 
 
 # ---------------------------------------------------------------------------------------------- the shots
+ARRIVE_CAM = (640, 1250)                       # note 11: the arrival camera's centre on the court painting
 TV_READER = (540, 1010)                           # the newsreader's face on the TV painting (screen px at zoom 1)
 def _cam(view, t):
     """The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14)."""
@@ -985,12 +1039,16 @@ def _cam(view, t):
     if shot_of(t) == 'jury':                      # a slow push in on the twelve faces
         u = _ease(_ramp(t, T['jury'], T['oath2']))
         return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
+    if shot_of(t) == 'dock':                      # note 15: half the frame was empty wall; tighter on him and the guards
+        return B.Cam(1.2, 548, 1560)
+    if shot_of(t) == 'arrive':                    # note 11: closer and lower, Brand bigger, less building, the sign in
+        return B.Cam(1.25, ARRIVE_CAM[0], ARRIVE_CAM[1])
     if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
         return B.Cam(1.0, 740, 960)
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
-        return B.Cam(1.0 + 0.55 * u, 540 + (x - 540) * u * 0.6, 980 + 120 * u)   # opens on the towers (hunt 1), pushes to the gate
+        return B.Cam(1.3 + 0.4 * u, 540 + (x - 540) * (0.35 + 0.65 * u) * 0.6, 1040 + 80 * u)   # note 24: starts closer, pushes to the gate
         #                                                                       (Sam, 11 Nov: he was a distant speck)
     return ST.view_cam(view)[1]
 
@@ -1002,8 +1060,10 @@ def draw_people(img, cam, shot, t):
     if shot == 'arrive':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = arrive(sp, t)
+        dn = ST.OUT.f / mark[2]                         # his depth now (he walks in from 4.9 m)
+        press(img, cam, ST.OUT, st['press'], t, reach=230, at=(0.45, 3.9), part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.OUT, st['press'], t, reach=230, at=(0.45, 3.9))
+        press(img, cam, ST.OUT, st['press'], t, reach=230, at=(0.45, 3.9), part=('front', dn))
     elif shot == 'jury':
         JY.draw(img, cam, t, word_at(2, 'blessed evidence'), put_seated, face, ST)
     elif shot in ('oath', 'oath2'):
@@ -1067,13 +1127,17 @@ def draw_people(img, cam, shot, t):
     elif shot == 'gates':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)
+        dn, at = ST.GATE.f / mark[2], (0.65, ST.GATE_D - 0.3)    # the same pack as the arrival (Sam's answer 6)
+        press(img, cam, ST.GATE, st['press'], t, at=at, part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, st['press'], t, at=(0.65, ST.GATE_D - 0.3))   # the same pack as the arrival (Sam's answer 6)
+        press(img, cam, ST.GATE, st['press'], t, at=at, part=('front', dn))
     elif shot == 'gates2':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
+        dn = ST.GATE.f / mark[2]
+        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO), part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO))
+        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO), part=('front', dn))
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)

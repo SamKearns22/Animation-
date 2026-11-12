@@ -130,7 +130,7 @@ def soft(img, cam, box, col, a, blur):
 # set in under a dark sign band 'CROWN COURT SOUTHWARK', brick piers, a raised forecourt behind low brick walls and
 # planted beds, steps with rails on the left, a tall lamp post, trees at both ends. The camera stands on the
 # pavement 2.4 m up (over the press pack's heads), looking at the doors.
-OUT = Level(2.4, 820.0, 1500.0)
+OUT = Level(1.7, 1090.0, 1500.0)    # note 11: lower, amongst the press (was 2.4 m up, horizon 820)
 BRICK = (192, 156, 112)                           # buff (ref 00; hunt 1: it read orange)
 BRICK_D = (162, 128, 90)
 FRAME = (62, 52, 46)
@@ -646,6 +646,28 @@ CELL_FLOOR = (150, 140, 124)
 DOOR_BLUE = (52, 92, 150)
 MATT = (70, 110, 170)
 BLANKET = (84, 128, 92)
+
+
+def _blanket(p, top, near):
+    """Note 17: a prison blanket thrown over the near two-thirds of the mattress, not a flat strip: its edge across
+    the bed turned down in a lighter fold, soft rucks along it, and its side hanging over the mattress's room side."""
+    (nlx, nly), (flx, fly), (frx, fry), (nrx, nry) = top
+
+    def at(u, v):                                   # u: along the bed (0 near, 1 far); v: across (0 wall, 1 room)
+        lx, ly = nlx + (flx - nlx) * u, nly + (fly - nly) * u
+        rx, ry = nrx + (frx - nrx) * u, nry + (fry - nry) * u
+        return lx + (rx - lx) * v, ly + (ry - ly) * v
+    e = 0.62                                        # how far up the bed it reaches
+    edge = [at(e + 0.03 * math.sin(7 * v + 1.0), v) for v in (k / 8 for k in range(9))]
+    body = [at(0, -0.02)] + edge + [at(e * 0.5, 1.03), at(0, 1.03)]
+    hang = [at(0, 1.0), at(e * 0.95, 1.0), (at(e * 0.95, 1.0)[0] + 6, at(e * 0.95, 1.0)[1] + 70),
+            (nrx + 10, near - 20), (nrx - 20, near - 4)]
+    p.poly(curve(hang, 3), dk(BLANKET, 0.78), INK, 2.2)                     # over the room side
+    p.poly(curve(body, 3), BLANKET, INK, 2.4)
+    fold = [at(e - 0.07 + 0.02 * math.sin(5 * v), v) for v in (k / 8 for k in range(9))]
+    p.poly(curve(edge + fold[::-1], 3), mix(BLANKET, (255, 255, 255), 0.22), INK, 1.8)   # the turned-down edge
+    for u, v0, v1 in ((0.2, 0.15, 0.55), (0.36, 0.45, 0.85), (0.12, 0.6, 0.9)):         # rucks where it was thrown
+        p.line(curve([at(u, v0), at(u + 0.05, (v0 + v1) / 2), at(u, v1)], 3), dk(BLANKET, 0.72), 2.0)
 STEEL = (176, 182, 188)
 
 
@@ -690,8 +712,7 @@ def cell(img, cam, t=0.0):
     near, far = 1720, 1180
     p.poly([(-300, near - 120), (bx0 - 10, far - 60), (bx0 + 210, far - 50), (380, near - 120)], MATT, INK, 2.6)
     p.poly([(-300, near - 120), (380, near - 120), (380, near - 40), (-300, near - 40)], dk(MATT, 0.78), INK, 2.4)
-    p.poly([(-300, near - 150), (120, near - 150), (bx0 + 120, far - 40), (bx0 + 40, far - 52)],
-           BLANKET, INK, 2.2)                                                               # the blanket, folded back
+    _blanket(p, [(-300, near - 120), (bx0 - 10, far - 60), (bx0 + 210, far - 50), (380, near - 120)], near)
     p.poly([(bx0 + 10, far - 70), (bx0 + 190, far - 62), (bx0 + 200, far - 38), (bx0 + 20, far - 44)],
            (236, 236, 232), INK, 1.8)                                                       # the pillow
     for x in (-200, 360):                                                                   # the frame's legs
@@ -1158,9 +1179,28 @@ def _mark(L, x, d):
     return (X, Y, L.ppm(d))
 
 
+def press_spots(bx, bd, rows, seed, cx=0.0, half=1.6, gap=0.5, step=0.5):
+    """A press pack round his mark (notes 12 and 24, 'tons of press'): rows of people at the depths in `rows`, spread
+    across the picture (cx, half: the picture's centre and half-width in metres at his depth, scaled by depth) about `step`
+    apart, jittered, with a gap on the line from the lens to him so the pack never hides him."""
+    rng = np.random.default_rng(seed)
+    out = []
+    for d in rows:
+        line, c = bx * d / bd, cx * d / bd
+        w = half * d / bd + 0.3                    # a little past the frame's edges: cut-off shoulders, amongst them
+        x = c - w + rng.uniform(0, step)
+        while x < c + w:
+            g = 0.45 if d > bd else gap * (0.55 + 0.45 * d / bd) + 0.3 * (bd - d) / bd   # behind him: beside his head only
+            if bd - 0.6 < d <= bd + 0.1:
+                g = max(g, 0.85)                     # level with him: room for his arms flung wide
+            if abs(x - line) > g:
+                out.append((round(x, 2), round(d + rng.uniform(-0.12, 0.12), 2)))
+            x += step * rng.uniform(0.85, 1.2)
+    return out
+
+
 STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); the shots take these
-    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': [(-1.15, 2.5), (-0.45, 2.3), (-0.1, 2.45), (1.25, 2.35),
-                                                           (1.7, 2.7), (-1.75, 2.8), (-0.8, 3.1), (0.95, 3.2)]},
+    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': press_spots(0.45, 3.9, (4.7, 4.25, 3.8, 3.35, 2.9, 2.5), 7, cx=0.26, half=1.12)},
     'court_box': {'brand': (720, 2240, 600.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
     'court_bench': {'judge': (540, 1780, 620.0)},
     'court_jury': {'back': [(30 + 206 * k, 1643, 380.0) for k in range(6)],      # seated: feet on each tier
@@ -1174,8 +1214,7 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'tvroom': {'brand': (540, 1560, 640.0), 'inmate1': (200, 1330, 300.0), 'inmate2': (850, 1290, 250.0)},
     #          note 22: Brand alone near; the sleeper behind left; the pool player behind the table, right
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
-              'press': [(-1.0, 6.6), (-0.3, 6.1), (-1.65, 7.15),   # (chat 3: was level with the sign, over its edge) (2.7, 6.3), (3.4, 7.8), (-2.4, 6.9), (-0.9, 5.6),
-                        (1.5, 5.7)]},
+              'press': press_spots(0.6, 7.6, (7.3, 6.7, 6.1, 5.5, 4.9), 11, cx=0.15, half=2.3, step=0.6)},
 }
 CAMS = {   # a camera on a painting: (view, zoom, centre x, centre y). cell_cot is the cell painting, closer.
     'cell_cot': ('cell', 1.55, 330, 1240),
