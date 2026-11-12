@@ -219,7 +219,7 @@ LINE_OK = [('brand', 'line weight', 540, 289),                 # his moustache: 
 STILL_OK = ()                                     # nobody is meant to hold dead still
 
 GUARDS = {'guard1': BC.OFFICER,                   # two different officers (pass 2: twins)
-          'guard2': dict(BC.OFFICER, skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
+          'guard2': dict(BC.OFFICER, who='guard2', skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
                          height=1.68, seed=97, lashes=True)}
 TRACK = {w: [] for w in CAST}
 for ln in LINES:
@@ -1156,6 +1156,9 @@ def checks():
     faults += benchmark.faults(sys.modules[__name__])
     faults += touch_faults()
     faults += BC.eye_faults()                     # rule S5, measured
+    people = {sp['who']: sp.get('name', sp['who']) for sp in list(CAST.values()) + list(GUARDS.values())
+              if sp['who'] != 'newsreader'}       # (she speaks: her mouth is the lip sync's, every frame)
+    faults += BC.mouth_faults(people)             # notes 5, 13, 15: no front face without a mouth
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
     print('checks: clean')

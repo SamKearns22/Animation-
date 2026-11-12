@@ -708,11 +708,15 @@ def officer_torso(img, p, sp, t):
     p.poly([(-sw * 0.62, 96), (-sw * 0.32, 96), (-sw * 0.32, 130), (-sw * 0.62, 130)], (240, 240, 240), INK, 1.2)  # badge
 
 
+WIG_K = (1.42, 1.0, -62)    # (width, height, shift down) of the wig on the front face
+
+
 def judge_head(img, p, sp, t, hx, hy):
     """The library's head (bald under the wig) with a short white bench wig: rows of rolled curls over the crown,
     a roll over each ear (the courtroom sketches 05, 07, 11)."""
-    fx = TC._head(img, p, sp, t, hx, hy)
-    hw, hh = sp.get('hw', 70), sp.get('hh', 90)
+    fx = inmate_head(img, p, sp, t, hx, hy)             # notes 13, 15: the front face with lips (was the house head)
+    hw, hh = sp.get('hw', 70) * WIG_K[0], sp.get('hh', 90) * WIG_K[1]   # the wig sized to that bigger face
+    hy = hy + WIG_K[2]
     W, Wd = (240, 238, 230), (196, 192, 182)
     cap = curve([(hx - hw - 8, hy + 6), (hx - hw - 10, hy - hh * 0.5), (hx - hw * 0.5, hy - hh - 14), (hx, hy - hh - 20),
                  (hx + hw * 0.5, hy - hh - 14), (hx + hw + 10, hy - hh * 0.5), (hx + hw + 8, hy + 6),
@@ -748,7 +752,20 @@ INMATE_FACES = {
 }
 
 
-FRONT_FACES = dict(INMATE_FACES)      # every front-only invented face (the jurors add theirs: blessed_jury.py)
+# Sam's notes 13 and 15 (12 Nov, a repeat of note 5): the judge and the dock guards still had no mouth. Why note 5's
+# fix never reached them: it built this face for the three inmates only; the judge and the officers kept the house
+# head, which draws no lips at rest at this size, and no check looked at a face that does not speak. Now every
+# invented front face is drawn here, and blessed_checks.no_mouth refuses anyone on the old head.
+STAFF_FACES = {
+    'judge': dict(m=dict(face_wide=-0.02, jaw_wide=0.04, eye_size=-0.01, nose_long=0.05, chin_long=0.02,
+                         brow_slope=-3.0), iris=(90, 110, 130), lip=(190, 122, 112), brow=(150, 140, 132),
+                  hair='none', glasses=(40, 36, 34)),
+    'officer': dict(m=dict(face_wide=0.04, jaw_wide=0.06, nose_wide=0.12, mouth_wide=0.05, brow_high=-0.1),
+                    iris=(46, 32, 24), lip=(120, 72, 62), brow=(30, 26, 24), hair='crop'),
+    'guard2': dict(m=dict(face_wide=-0.04, jaw_wide=-0.06, eye_size=0.012, mouth_wide=-0.05, chin_long=-0.01),
+                   iris=(84, 110, 80), lip=(196, 120, 116), brow=(150, 106, 64), hair='bob', lashes=True),
+}
+FRONT_FACES = dict(INMATE_FACES, **STAFF_FACES)   # every front-only invented face (the jurors add theirs: blessed_jury.py)
 LONG_STYLES = ('bob', 'long', 'curly', 'bun')   # hair that has a mass behind the head, drawn before it
 
 
@@ -840,6 +857,8 @@ def _inmate_head(img, p, sp, t, hx, hy):
             u, v = rng.uniform(-c, c), rng.uniform(-0.36, hl - 0.03)
             if abs(u) < c * (1.0 - max(0.0, -v - 0.25) * 2.0):
                 p.line([f(u, v), f(u + 0.008, v + 0.025)], B.lt(hc, 1.7), 1.4)
+    elif fc['hair'] == 'none':                                # under a wig (the judge): the wig is drawn after
+        pass
     elif fc['hair'] == 'bald':                                # shaved: a shine on the dome, dark short sides
         for sgn in (-1, 1):
             side = [(sgn * (e + 0.015), 0.46), (sgn * (e + 0.02), 0.1), (sgn * (c + 0.01), -0.12),
@@ -943,7 +962,15 @@ def _glasses(p, f, L, col):
 
 
 TC.HEADS.update(brand=brand_head, judge=judge_head)
-TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head)
+TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head, officer=inmate_head, guard2=inmate_head)
+def mouth_faults(people):
+    """Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lips
+    at rest. people: who -> name; each must have a head of this file (Brand's or the front-face system)."""
+    ok = (brand_head, judge_head, inmate_head)
+    return [f'{name}: drawn on the house head (no mouth at rest; notes 5, 13, 15)'
+            for who, name in people.items() if TC.HEADS.get(who) not in ok]
+
+
 TC.TORSOS.update(brand=brand_torso, judge=judge_torso, officer=officer_torso)
 _hair_back = B.hair_back
 B.hair_back = hair_back
