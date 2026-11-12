@@ -36,3 +36,11 @@
   laid at (70, 318) from the sign-off's first frame; line chosen per film (`--cta`, default alternates A/B), logged
   in `story/metrics.md` per film. Kittest: card present on every sign-off frame, inside x 60-900 / below y 310.
 - Rule: replace rule 52 (see the message to Sam), no new row.
+
+## More options (Sam asked, 12 Nov; 4-9 mocked in `cta-more-options.jpg`, not on GitHub)
+4. "Next one's worse. Follow 👉" - curiosity + promise, joke. 5. "Follow if you got that 👉" - flatters the viewer
+(in-group). 6. "Follow. It's free 👉" - absurdly obvious, low effort. 7. "Feed the beaver. Follow 👉" - mascot plea.
+8. "A crow says follow 👉" - callback to the bio's crow quote. 9. "Follow. We ruin the news 👉" - says what we do.
+Text only: 10 "Don't miss the next one 👉" (fear of missing out, no joke); 11 "Follow or the beaver cries 👉";
+12 "Follow for weekly chaos 👉"; 13 "One tap. Zero regrets 👉" (no "follow": weaker); 14 "Definitely don't follow 👉"
+(reverse psychology: too slow to decode in 1.6 s); 15 "Your mum would follow 👉".
