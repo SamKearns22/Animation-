@@ -1,4 +1,4 @@
-- House look (12 Nov, Sam: Y to all): paper, edges, shadows per shape, on twos. Next: new Opus high chat "Build the house look: paper, edges, shadows (S7)". Notes: notes/house-look.md.
+- House look (12 Nov, chat 2): built and tested (paper, per-shape edges and shadows, pairs at 24 fps); off until Sam's Y on the side-by-side clip. Notes: notes/house-look.md.
 - System audit (12 Nov, Sam: all Y): plain-language plan in notes/system-audit-12-nov.md; runs after Blessed's animatic 1, own budget (~3.5%).
 - Blessed (12 Nov, chat 3 of 8, Opus): the missing checks built; their faults fixed; full pre-flight found 17 picture
   faults; stopped on budget (3.3% vs 1-1.5%) before animatic 1. Needs Sam: Y for ~1.5% more. Next: Opus medium, fix
