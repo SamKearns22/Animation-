@@ -6,7 +6,7 @@ none are left, `finish.py` stops and asks Sam for a new batch (it warns when 2 a
 views film by film in `story/metrics.md`.
 
 ## Batch 1 (12 Nov)
-- [ ] Next one's worse. Follow 👉
+- [x] Next one's worse. Follow 👉 — blessed (12 Nov)
 - [ ] Follow if you got that 👉
 - [ ] Follow. It's free 👉
 - [ ] Feed the beaver. Follow 👉
