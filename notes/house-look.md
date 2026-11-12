@@ -13,6 +13,10 @@
   Why: the test's paper picture was never saved; the build re-made it from the one-line recipe and got the mix
   backwards (blotches 0.09 v 0.04, grain 0.05 v 0.11). Fixed: `house_look.paper` now runs the test's exact ffmpeg
   steps (measured equal). Clip 2 sent (`review/house-look-side-by-side-2.mp4`, not on GitHub).
+- Sam's note 1 again (12 Nov, screenshots): "the test is gentler; the build still fills the screen with a heavier
+  smudge". Why the first fix failed: the recipe itself doesn't reproduce the test (the test's paper was never saved);
+  measured on the sky in his two screenshots the build was 2.2x stronger. Fixed: LOOK paper_depth 0.45, checked by
+  eye beside his test screenshot. Clip 3 sent (`review/house-look-side-by-side-3.mp4`).
 - Still different from the test, on purpose (brief): edges and shadows are per shape, not traced from outlines.
 - Done: `source/house_look.py`, engine, pre-flight `look_faults`, kittest `house_look_once_in_pairs` (passes).
 - Switch: `film_engine.HOUSE_LOOK = False` until Sam's Y.
