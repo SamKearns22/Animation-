@@ -185,8 +185,21 @@ KEEP_CLEAR = [('the court sign', lambda t: (330, 640, 1030, 730) if t < T['s2'] 
 PROP_SIZES = []
 OUTFIT = {}
 HEIGHTS = {w: c['height'] for w, c in CAST.items()}
-FAMOUS = ['brand']
+FAMOUS = ['Russell Brand']                        # the name as drawn (chat 4: 'brand' never matched)
 CUT_RESTS_OK = []
+# Rule 41's meant exceptions, each looked at full size (chat 4, 12 Nov): (who, side, kind, t0, t1, why)
+HANDS_OK = [('Journalist*', '*', 'no hand', T['s1'], T['s2'], 'seen from behind, the hand is under the phone or TV '
+             'camera they hold up (drawn over it): the kit shows where the hand is'),
+            ('Journalist*', '*', 'no hand', T['gates'], DUR, 'the same pack at the gates, from behind, hands under '
+             'their raised phones and cameras'),
+            ('Russell Brand', '*', 'prop hidden', T['s1'], T['s2'], "his hand on his heart: the 'prop' is only the "
+             "sleeve's ink edge (_sleeve_edge), under the hand by design; nothing he holds is hidden"),
+            ('Russell Brand', '*', 'seam', T['s1'], T['s2'], 'his long curly hair hangs over both shoulders: the '
+             'lines across the arm are the hair\'s edge, the jacket runs straight into the sleeve beneath'),
+            ('Russell Brand', '*', 'no hand', T['van'], T['cell'], 'hands clasped between his knees: one fist over '
+             'the other, as clasped hands are'),
+            ('Prison officer', '*', 'over *', T['cell'], T['cot'], "the officer's grip on Brand's arm, walking him "
+             'in (brief 9; touch_faults checks the hand sits on the arm)')]
 LOOKS_AT = {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
@@ -283,11 +296,14 @@ def press_sp(i, seed):
     jk = PRESS_JKT[(i * 3 + seed) % 7]
     head = BC.press_person('press%d' % k, style, skin, hc, 500 + k, PRESS_FACE[k])
     small = style in ('bob', 'pony', 'long')
-    return dict(head, name='Journalist', skin=skin, hw=62 if small else 66, hh=96, head_dy=10, hair='bald',
+    full = dict(head, name='Journalist %d' % (i + 1), skin=skin, hw=62 if small else 66, hh=96, head_dy=10, hair='bald',
                 hair_c=hc, outfit='suit', jacket=jk, sleeve=jk, trousers=B.dk(jk, 0.6) if i % 2 else (40, 40, 46),
                 shirt=(246, 246, 246), tie=None, shoe=(24, 20, 18), shoulders=138 if small else 150 + 6 * (i % 3),
                 full=True, pose='custom', height=(1.64 if small else 1.76) + 0.05 * ((i * 7 + seed) % 3), seed=600 + i,
                 kit=PRESS_KIT[(i + seed) % 8], yaw=PRESS_YAW.get(style, 180))
+    import turnhead
+    turnhead.PEOPLE[head['who']].sheet = lambda d=full: d    # the turnaround sheet draws them (chat 4: had none)
+    return full
 
 
 def press_pose(sp, t):
@@ -653,7 +669,9 @@ def oath(sp, t):
     j = V.standing(sp)
     sw = sp.get('shoulders', 150)
     a = T['s2']
-    up0, up1, dn0, dn1 = a + 0.15, a + 0.65, L[2]['end'] + 0.1, L[2]['end'] + 0.5
+    up0, up1 = a + 0.15, a + 0.65
+    dn0 = T['s3'] + 0.05                          # held to the cut (rule 72; chat 4: dropped 0.4 s before it)
+    dn1 = dn0 + 0.4
     bible = OATH_BIBLE
     raised = ((sw + OATH_RAISE[0], OATH_RAISE[1], OATH_RAISE[2]), OATH_RAISE[3], 'palm')
     arm_keys(j, sp, 'L', t, [(up0, None), (up1, bible), (dn0, bible), (dn1, None)])
@@ -666,8 +684,8 @@ def oath(sp, t):
         j['nod'] = j.get('nod', 0.0) - 1.1 * b        # the showman held in: bolt upright, the chin lifts on each "blessed"
     if up0 + 0.2 < t < dn1 - 0.1:
         import grips
-        lift = moves.lerp((0.0, 160.0, 0.0), (0.0, 0.0, 0.0), _ease(_ramp(t, up0, up1)))
-        lift = moves.lerp(lift, (0.0, 160.0, 0.0), _ease(_ramp(t, dn0, dn1)))
+        c = _contact(j, 'L', F.HAND.get('fist', 14))  # the book moves WITH the hand (chat 4: it was eased on its own
+        lift = V._sub(c, bible[0])                  # path and floated 1.1 hand-widths off it on the way up)
         box = [V._add(q, lift) for q in OATH_BOOK]
 
         def marks(p, j2):
@@ -775,21 +793,21 @@ def officer_grip(sp, j, t, mark, brand_pts, brand_mark, brand_s):
     return j
 
 
-# --- cot: curled on his side on the cot, weeping, a sob every 0.9 s
+# --- cot: sat on the cot's edge, hands limp in his lap, weeping at us, a sob every 0.9 s (chat 4: lying curled on it
+#     from this camera, head at the pillow, the rig drew his face upside down; rule 42, looked at full size)
+COT_MARK, COT_YAW = (470, 1800, 480.0), 20.0     # on the cell painting: his seat level with the mattress's front edge
 
 
-COT_AT = (-0.95, 1.8, -1, -90.0)    # x, d, flip, yaw: curled along the bed, head at the pillow (chosen by eye, contact check clean)
-
-
-def cot_body(sp, t):
-    import lying
-    k, surf = lying.lie(sp, 'side', COT_AT[0], COT_AT[1], COT_AT[3], ground=0.45, flip=COT_AT[2])
+def cot_pose(sp, t):
+    j = moves.seated(sp)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, unlean((sg * 12, 400.0, 360.0), 12.0), 'down')
     ph = ((t - T['cot']) % 0.9) / 0.9
     sob = math.sin(math.pi * min(1.0, ph / 0.35)) if ph < 0.35 else 0.0
-    for n in ('neck', 'head', 'shL', 'shR', 'elL', 'elR', 'wrL', 'wrR'):
-        if n in k:
-            k[n] = k[n] + np.array([0.0, 0.005 * sob, 0.0])
-    return k, surf
+    j['lean'], j['nod'] = 12.0, 0.9
+    j['bob'] = j.get('bob', 0.0) - 6.0 * sob          # the shoulders heave up on each sob
+    j['head_dy'] = 4.0 - 3.0 * sob
+    return j
 
 
 # --- phone: head down, a slow shake on "at all right now"
@@ -909,7 +927,12 @@ def draw_people(img, cam, shot, t):
         JY.draw(img, cam, t, word_at(2, 'blessed evidence'), put_seated, face, ST)
     elif shot in ('oath', 'oath2'):
         x, y, ppm = st['judge']
-        put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), (x, y, ppm), t)
+        sj = dict(BC.JUDGE, **face('judge', t, 'neutral'))
+        jj = moves.seated(sj)                       # chat 4: he held dead still 2.5 s; small weight shifts, no sway
+        jj['lean'] = jj.get('lean', 0.0) + filmkit.shifts(t, seed=41, amount=1.6, hold=(0.9, 1.7))
+        jj['head_roll'] = filmkit.shifts(t, seed=42, amount=2.5, hold=(1.0, 1.8))
+        jj['nod'] = filmkit.shifts(t, seed=43, amount=0.5, hold=(1.1, 2.0))
+        put_seated(img, cam, sj, (x, y, ppm), t, j=jj)
         ST.mid(view, img, cam, t)
         sp = dict(brand_sp(t, 'stand'), gaze_dy=oath_gaze(t))
         put(img, cam, sp, st['brand'], t, yaw=-45, j=oath(sp, t))
@@ -935,9 +958,8 @@ def draw_people(img, cam, shot, t):
         opts = put(img, cam, so, om, t, oy, oj)
         _log_hands('officer', opts, om, _s(so, om[2]), -1, oj.get('bob', 0.0))
     elif shot == 'cot':
-        import lying
-        k, _ = cot_body(sp_cot := brand_sp(t, 'prison'), t)
-        lying.draw(img, COT_CAM3, k, sp_cot, t)
+        sp = brand_sp(t, 'prison')
+        put_seated(img, cam, sp, COT_MARK, t, yaw=COT_YAW, j=cot_pose(sp, t))
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
         dx, roll = phone_extra(t)
@@ -970,8 +992,6 @@ def draw_people(img, cam, shot, t):
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)
-import sets as S3                                 # noqa: E402  the cot close-up's 3D camera: the cell painting at
-COT_CAM3 = S3.Cam((0, 1.55, 0), (0, 1.55, 1), focal=1550, shake=(325.5, -677.35))   # B.Cam(1.55, 330, 1240)
 
 
 def handset_pose(sp, side='L'):

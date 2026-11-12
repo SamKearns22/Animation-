@@ -98,9 +98,8 @@ def placed(t):
     elif shot == 'escort':
         one('brand', F.escort(F.brand_sp(t, 'prison'), t)[0])
         one('officer', F.escort(dict(F.BC.OFFICER), t, 'officer')[0])
-    elif shot == 'cot':                           # lying on the mattress (0.45 m), curled along the bed
-        x, d = F.COT_AT[0], F.COT_AT[1]
-        out.append(('brand', v, (x, d, 0.45), H['brand'], True, (1.0, 0.0)))
+    elif shot == 'cot':                           # sat on the cot's edge (chat 4), facing the lens
+        one('brand', F.COT_MARK, True)
     elif shot == 'phone':
         one('brand', st['brand'])
     elif shot in ('tvroom', 'push'):

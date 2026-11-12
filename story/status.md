@@ -1,9 +1,8 @@
 - House look (12 Nov, chat 2): built and tested (paper, per-shape edges and shadows, pairs at 24 fps); off until Sam's Y on the side-by-side clip. Notes: notes/house-look.md.
 - System audit (12 Nov): FINISHED, about 3.0% of a week. Report: notes/system-audit-report.md; needs Sam's numbers 1-11.
   The honest checker (branch claude/audit-honest-checker) merges after Blessed's animatic 1 is sent.
-- Blessed (12 Nov, chat 3 of 8, Opus): the missing checks built; their faults fixed; full pre-flight found 17 picture
-  faults; stopped on budget (3.3% vs 1-1.5%) before animatic 1. Needs Sam: Y for ~1.5% more. Next: Opus medium, fix
-  the 17, pre-flight, animatic 1. Notes: notes/blessed.md.
+- Blessed (12 Nov, chat 4, Opus): the 17 pre-flight faults fixed or named (the cot now sitting, not lying); quick check
+  clean. Next: Sonnet medium, one full pre-flight and the check sheet, then Sam's yes for animatic 1. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
