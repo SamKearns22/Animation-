@@ -60,6 +60,8 @@ at session start (`.claude/hooks/setup.sh`).
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
 - **Chats open the next chat themselves (create_session), up to 8 in a row (Sam, 12 Nov):** each gets the handover's
   model, effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me.
+  **The Animation- project is always attached** (`source_url` of the repo, revision the main line), and the reply must
+  list it before I'm told the chat is working (12 Nov: one opened without it and could do nothing).
   **I never start a chat or type a prompt unless the chain has hit 8 or failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the count then starts again at 1. A chat on the wrong model for its next stage opens one on the right model, never
