@@ -769,6 +769,10 @@ STAFF_FACES = {
                     iris=(46, 32, 24), lip=(120, 72, 62), brow=(30, 26, 24), hair='crop'),
     'guard2': dict(m=dict(face_wide=-0.04, jaw_wide=-0.06, eye_size=0.012, mouth_wide=-0.05, chin_long=-0.01),
                    iris=(84, 110, 80), lip=(196, 120, 116), brow=(150, 106, 64), hair='bob', lashes=True),
+    # Sam's note 45 (12 Nov, a repeat): the newsreader was left on the house head, which draws NO mouth between
+    # phrases (the lip sync's 'rest'); the mouth check skipped him as 'always talking'. Now the front face, checked.
+    'newsreader': dict(m=dict(face_wide=-0.03, jaw_wide=0.02, nose_long=0.03, mouth_wide=0.02), iris=(80, 110, 140),
+                       lip=(196, 124, 114), brow=(110, 80, 56), hair='side'),
 }
 FRONT_FACES = dict(INMATE_FACES, **STAFF_FACES)   # every front-only invented face (the jurors add theirs: blessed_jury.py)
 LONG_STYLES = ('bob', 'long', 'curly', 'bun')   # hair that has a mass behind the head, drawn before it
@@ -971,7 +975,8 @@ def _glasses(p, f, L, col):
 
 FACE_HEADS = set()     # other files' measured heads with a mouth at rest (blessed_walliams.py, note 25)
 TC.HEADS.update(brand=brand_head, judge=judge_head)
-TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head, officer=inmate_head, guard2=inmate_head)
+TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head, officer=inmate_head, guard2=inmate_head,
+                newsreader=inmate_head)
 TC.TORSOS['guard2'] = officer_torso                # note 28: both officers in HMPPS kit (the second had a plain shirt)
 def mouth_faults(people):
     """Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lips
