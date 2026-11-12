@@ -6,7 +6,7 @@ say "clean" over a real fault.
 
   CASES ........ (check, rule, how it is broken, the call) one per check; the honest-checker cases (NOT RUN, HAS)
   ELSEWHERE .... checks proven in kittests.py instead (a real film's old fault put back), by test name
-  UNTESTED ..... checks with no broken example yet (they need real drawings or recordings), listed every run
+  UNTESTED ..... checks with no broken example yet, listed every run (empty since audit item 11, 12 Nov)
   main() ....... runs them all; prints one line each and the untested list
 
     python3 source/checktests.py          (seconds; no drawing)
@@ -263,6 +263,104 @@ def c_recheck_check_files():
     return ['a change to turnhead.py is seen'] if not missing and P._files_changed(files) == 'turnhead.py' else []
 
 
+# --- the nine that had no broken example (audit item 11, Sam 12 Nov: "NOW"): drawn and recorded stand-ins ---------
+def c_line_work():
+    import linecheck
+    from PIL import ImageDraw
+    def draw(lay):                                    # a shape with no outline at all
+        ImageDraw.Draw(lay).rectangle((300, 600, 780, 1300), fill=(200, 120, 90, 255))
+    return linecheck.faults(film(LINE_SUBJECTS=lambda: [('box', draw)]))
+
+
+def c_clothes():
+    import landmarks
+    return landmarks.faults(film(OUTFIT={'amy': {'skirt top': 560}}))    # a skirt starting below the hips
+
+
+def c_real_sizes():
+    import sizes
+    return sizes.faults(film(PROP_SIZES=[('cup', 'mug', 0.4, 0.5, None)]))   # a mug half a metre tall
+
+
+def c_effect_shape():
+    import viewchecks
+    import math
+    from PIL import ImageDraw
+    def star(img):                                    # a five-point cartoon star for a bang (rule S7: off-style)
+        pts = [(540 + (300 if k % 2 == 0 else 110) * math.cos(math.pi * k / 5 - math.pi / 2),
+                960 + (300 if k % 2 == 0 else 110) * math.sin(math.pi * k / 5 - math.pi / 2)) for k in range(10)]
+        ImageDraw.Draw(img).polygon(pts, fill=(255, 220, 40, 255))
+    return viewchecks.shape_faults(film(EFFECTS=[('bang', 'burst', star)]))
+
+
+def c_body_audit():
+    import filmkit
+    from PIL import Image, ImageDraw
+    def draw(t):                                      # a head drawn apart from its body
+        im = Image.new('RGBA', (400, 800), (0, 0, 0, 0))
+        d = ImageDraw.Draw(im)
+        d.rectangle((150, 300, 250, 700), fill=(80, 80, 200, 255))
+        d.ellipse((160, 100, 240, 180), fill=(230, 190, 160, 255))
+        return im
+    return filmkit.silhouette_audit({'amy': ([0.0, 0.25], draw)})
+
+
+def _bursts(n, sr, seed=1):
+    import numpy as np
+    rng = np.random.default_rng(seed)
+    out = [np.zeros(int(0.3 * sr))]
+    for _ in range(n):
+        k = int(0.16 * sr)
+        out += [rng.normal(0, 0.3, k) * np.hanning(k), np.zeros(int(0.22 * sr))]
+    return np.concatenate(out + [np.zeros(int(0.3 * sr))])
+
+
+def c_script_voice():
+    import voices
+    from burnham_film import SR
+    ln = dict(n=1, who='amy', start=0.0, text='I absolutely never ever said anything like that in my whole life',
+              _voice=_bursts(3, SR))                  # three syllables said; the script has about seventeen
+    with contextlib.redirect_stdout(io.StringIO()):
+        return voices.audit(film(LINES=[ln]), mouths=False)[0]
+
+
+def c_song_join():
+    import numpy as np
+    import musiccheck
+    import imageio_ffmpeg
+    import subprocess
+    d = tempfile.mkdtemp()
+    sr, rng = 16000, np.random.default_rng(7)
+    song = np.concatenate([np.sin(2 * np.pi * rng.uniform(200, 1500) * np.arange(int(0.25 * sr)) / sr) *
+                           rng.uniform(0.2, 0.6) for _ in range(40)])   # 10 s of different notes, a quarter-second each
+    path = os.path.join(d, 'song.wav')
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-v', 'error', '-f', 's16le', '-ar', str(sr), '-ac', '1', '-i',
+                    '-', path], input=(song * 32767).astype(np.int16).tobytes(), check=True)
+    return musiccheck.faults(film(SPLICE=((path, 0.0, 4.0), (path, 4.5, 8.0))))   # half a second of the song skipped
+
+
+def c_resting_arm():
+    import kitchecks
+    import sitting as SK
+    top = 500.0
+    line = top - SK.SLEEVE
+    rec = dict(_rest=dict(t=1.0, posed={'L': True, 'R': False}, floor=900.0, bob=0.0, tops={'desk': top},
+                          arms={'L': ((0.0, line + 40), (60.0, line + 40)), 'R': ((0.0, line), (60.0, line))},
+                          on_desk={'L': True}))      # the forearm 40 units (about 10 cm) inside the desk
+    return kitchecks.rests(film(RESTS=[('amy', 'desk', 0.0, 2.0, 'leaning on the desk, note 3')]),
+                           [('1.00 s', 'amy', rec)])
+
+
+def c_portal_flat():
+    import sets
+    from PIL import Image
+    cam = types.SimpleNamespace(pos=(2.0, 1.4, -1.0), f=(0.0, 0.0, 1.0), r=(1.0, 0.0, 0.0), u=(0.0, 1.0, 0.0),
+                                focal=900)
+    f = film(PLAN=_plan(OPENINGS={'window': dict(wall=('z', 4.0), span=(1.0, 3.0), height=(0.8, 2.2))}),
+             cam_for=lambda t: cam, frame_image=lambda t: Image.new('RGB', (1080, 1920), (90, 90, 95)))
+    return sets.portal_faults(f)                      # the window shows one flat grey
+
+
 CASES = [   # (check, rule, how it is broken, the case)
     ('plan', '1', 'two rooms overlap', c_plan),
     ('plan', '1', 'no PLAN at all', c_plan_missing),
@@ -297,6 +395,15 @@ CASES = [   # (check, rule, how it is broken, the case)
     ('honest: --audit', '19', "the arm guard's stops only in the small print", c_audit_counts_guard),
     ('incremental', '59', 'a drop to rest just before a cut', c_recheck_shot_tail),
     ('incremental', '59', 'a check file not in CHECK_FILES changes', c_recheck_check_files),
+    ('line work', '-', 'a shape with no outline', c_line_work),
+    ('clothes', '-', 'a skirt starting below the hips', c_clothes),
+    ('real sizes', '-', 'a mug half a metre tall', c_real_sizes),
+    ('effect shapes', 'S7', 'a cartoon star for a bang', c_effect_shape),
+    ('body audit', '-', 'a head drawn apart from its body', c_body_audit),
+    ('script v voice', '7', 'three syllables said, a 21-syllable script', c_script_voice),
+    ('song joins', '-', 'half a second of the song skipped at a join', c_song_join),
+    ('resting arms', '78', 'a resting forearm 6 cm inside the desk', c_resting_arm),
+    ('openings', '2', 'a window showing one flat grey', c_portal_flat),
 ]
 
 ELSEWHERE = {   # check: the kittests.py tests that put a real film's old fault back and see it caught
@@ -313,13 +420,7 @@ ELSEWHERE = {   # check: the kittests.py tests that put a real film's old fault 
     'sounds with their thing (rule 13)': 'sounds_and_references_kept',
 }
 
-UNTESTED = [   # no broken example yet: each needs real drawings or recordings to break (a proposal for chat D)
-    'line work (linecheck: every shape outlined)', 'clothes (landmarks: skirts from the waist)',
-    'real sizes (sizes.py)', 'effects shapes, readability, direction across a cut, effects behind figures (viewchecks)',
-    'the body audit (filmkit: in pieces, popping, stretching, frozen)', 'script v voice and mouths (voices.py)',
-    'song joins (musiccheck)', 'resting forearms below their surface (kitchecks.rests)',
-    'openings show the space beyond (sets.portal_faults)',
-]
+UNTESTED = []   # every check has a broken example (audit item 11, 12 Nov); a new check adds its case to CASES
 
 
 def main():
@@ -335,7 +436,7 @@ def main():
         print(f"{'CAUGHT' if ok else 'MISSED'} {check} (rule {rule}): {how} -> {str(detail)[:110]}")
     print(f'checktests: {len(CASES) - bad} of {len(CASES)} broken films caught'
           f'{"" if not bad else f"; {bad} MISSED"}; {len(ELSEWHERE)} more checks proven in kittests.py; '
-          f'{len(UNTESTED)} with no broken example yet:')
+          + (f'{len(UNTESTED)} with no broken example yet:' if UNTESTED else 'every check has a broken example'))
     for x in UNTESTED:
         print('  -', x)
     sys.exit(1 if bad else 0)
