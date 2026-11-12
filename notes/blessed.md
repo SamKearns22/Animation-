@@ -2,8 +2,8 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 24 (round 1 is over its share: 3.99% against 2.5%; wait for Sam's Y), 30, 59.
-- **Done (12 Nov, chat 4 of 8, Opus medium, amber):** 11, 12, 24 (press pack, flashes, arrival camera), 15 (dock framing), 17 (sigh, blanket) coded and pushed; NO clips yet (renders failed: two at once).
-- **Next (Sam said Y): Opus, medium, chat 5 of 8:** clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (HM Prison officer: white shirt, epaulettes, black tie, keys on a chain). Then a Sonnet chat: checks and animatic 2.
+- **Done (12 Nov, chat 4 of 8, Opus medium, amber):** 11, 12, 24 (press pack, flashes, arrival camera), 15 (dock framing), 17 (sigh, blanket) coded and pushed; NO clips yet (renders failed: two at once). Chat 5 (12 Nov) stopped before any work: Sam switching account; nothing changed.
+- **Next (Sam said Y): Opus, medium, chat 5 of 8, on Sam's new account (attach github.com/SamKearns22/Animation-, main line):** clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (HM Prison officer: white shirt, epaulettes, black tie, keys on a chain). Then a Sonnet chat: checks and animatic 2.
 - **Needs Sam:** nothing (Walliams set aside by Sam; another chat may be building it: pull first).
 - **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 11-28.
 - **Open rule requests:** none.
