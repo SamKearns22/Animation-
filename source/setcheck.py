@@ -8,7 +8,9 @@ Rule 13 (tool job, 11 Nov; first built as Remakes' camp check, rule 56): a figur
 against the set's solid things on the ground. A set lists SET_FEET = [(name, x0, x1, d0, d1, top, layer)]: a thing's
 footprint in metres (x across, d away from the camera), its height, and whether the set paints it 'under' the cast
 (behind) or 'over' it (in front). The film gives movers(t) -> [(who, x, d, (body_w, body_h))] in the same metres,
-SET_CAM (with p(x, d, z) -> screen point and ppm(d) -> pixels per metre at that distance) and MOVE_SPAN = (t0, t1).
+SET_CAM (with p(x, d, z) -> screen point and ppm(d) -> pixels per metre at that distance) and MOVE_SPAN = (t0, t1);
+a film with a set per shot gives SET_FEET, SET_CAM and MOVE_SPAN as dicts keyed by shot. A film whose movers(t) is
+viewchecks' direction form ([(name, world point)], rule 16) gives this one as set_movers(t) instead.
 moving_faults names: feet inside a solid thing; a figure further away than something painted under the cast yet
 overlapping it on screen (he would show in front of what hides him); one nearer than something painted over him.
 Pre-flight runs film_faults on every film that has SET_FEET (and says so when a film with people has SET_BOXES but
@@ -73,11 +75,25 @@ def film_faults(film, fps=None):
             return ['rule 13: the film has SET_BOXES but no SET_FEET, movers(t) and SET_CAM, so nothing checks '
                     'figures moving against the set (setcheck.moving_faults)']
         return []
-    missing = [n for n in ('movers', 'SET_CAM', 'MOVE_SPAN') if not hasattr(film, n)]
+    missing = [n for n in ('SET_CAM', 'MOVE_SPAN') if not hasattr(film, n)]
+    walkers = getattr(film, 'set_movers', getattr(film, 'movers', None))   # set_movers when the film's movers(t)
+    if walkers is None:                                                     # is viewchecks' (name, point) form
+        missing.insert(0, 'movers')
     if missing:
         return [f'rule 13: the film has SET_FEET but no {", ".join(missing)}: the moving-figure check cannot run']
-    t0, t1 = film.MOVE_SPAN
-    out = moving_faults(film.movers, feet, film.SET_CAM, t0, t1, fps or getattr(film, 'FPS', 12))
+    fps = fps or getattr(film, 'FPS', 12)
+    if isinstance(feet, dict):                  # one set per shot (Blessed, 12 Nov): {shot: feet}, with SET_CAM and
+        out, gaps = [], []                      # MOVE_SPAN keyed the same way; movers(t) gives that shot's people
+        for k, f in feet.items():
+            if k not in film.SET_CAM or k not in film.MOVE_SPAN:
+                gaps.append(f'rule 13: SET_FEET lists {k} but SET_CAM or MOVE_SPAN does not')
+                continue
+            t0, t1 = film.MOVE_SPAN[k]
+            out += moving_faults(walkers, f, film.SET_CAM[k], t0, t1, fps, label=str(k))
+        out = gaps + out
+    else:
+        t0, t1 = film.MOVE_SPAN
+        out = moving_faults(walkers, feet, film.SET_CAM, t0, t1, fps)
     return out[:8] + ([f'... and {len(out) - 8} more'] if len(out) > 8 else [])
 
 

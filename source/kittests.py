@@ -1321,6 +1321,29 @@ def moving_figures_against_the_set():
     return clean and caught, f'Remakes clean: {clean}; walk-in caught: {walk_in[:1]}; behind caught: {bool(behind)}'
 
 
+@test
+def moving_figures_per_shot():
+    """Rule 13 (Blessed, 12 Nov): a film with a set per shot gives SET_FEET, SET_CAM and MOVE_SPAN keyed by shot;
+    film_faults runs each shot against its own set, catches a walk into a thing in either, and names a shot whose
+    camera or span is missing."""
+    import types
+    import setcheck
+    from remakes_sets import Level
+    L = Level(1.6, 800.0, 1000.0)
+    box = ('crate', -0.3, 0.3, 3.0, 3.5, 0.8, 'under')
+    walk = lambda t: [('him', 0.0, 2.0 + t, (0.5, 1.8))] if t < 2 else [('her', 2.0, 4.0, (0.5, 1.7))]
+    film = types.SimpleNamespace(FPS=12, HAS={'people'}, movers=walk, SET_FEET={'a': [box], 'b': [box]},
+                                 SET_CAM={'a': L, 'b': L}, MOVE_SPAN={'a': (0.0, 1.9), 'b': (2.0, 3.0)})
+    hit = setcheck.film_faults(film)
+    film.SET_FEET = {'a': [box], 'c': [box]}
+    named = setcheck.film_faults(film)
+    film.SET_FEET = {'b': [box]}
+    clear = setcheck.film_faults(film)
+    ok = any('a ' in f and 'him stands in the crate' in f for f in hit) and any('c but SET_CAM' in f for f in named) \
+        and not clear
+    return ok, f'walk-in: {hit[:1]}; missing camera: {named[-1:]}; clear shot: {clear}'
+
+
 def _finish_fake(tmp, caption=True):
     """A 3 s made-up film (12 fps, a 440 Hz tone, one caption, a Hook Text) run through finish.py in this process."""
     import subprocess

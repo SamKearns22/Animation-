@@ -354,6 +354,39 @@ def brand_mouth(p, f, L, kind):
 
 
 # ---------------------------------------------------------------------------------------------- his head
+def eye_faults():
+    """Rule S5, measured (12 Nov): every face here draws its eyes through traitors_cast.eye (via P4.eyes). Each eye is
+    drawn at the hardest glances this film uses (look -1..1, gaze fully up and down, lids open to half shut) with a
+    pen that keeps the shapes, and eyekit measures the pupil and iris against the eye's opening."""
+    import eyekit
+
+    class Keep:
+        def __init__(self):
+            self.polys = []
+
+        def poly(self, pts, fill, line=None, w=0):
+            self.polys.append((list(pts), fill))
+
+        def line(self, *a, **k):
+            pass
+
+    out = []
+    eh = 0.0508 * P4.H / 1.8
+    for w, h in ((12, 6), (15, 9), (19, 12)):
+        for look in (-1.0, 0.0, 1.0):
+            for g in (-1.0, 1.0):
+                for lid in (0.0, 0.5):
+                    pen = Keep()
+                    TC.eye(pen, 0.0, 0.0, 1, w, h, (90, 110, 130), dict(look=look, gaze_dy=g * eh * 0.85 * h / 9,
+                                                                       lid=lid), (200, 160, 140))
+                    opening = pen.polys[0][0]
+                    for pts, fill in pen.polys[1:3]:
+                        if eyekit.spill(opening, pts) > 1e-3:
+                            out.append(f'rule S5: an eye {w}x{h} at look {look}, gaze {g}, lid {lid}: '
+                                       f'{eyekit.spill(opening, pts):.0%} of the iris or pupil spills past the eye')
+    return out
+
+
 def gaze(L, g):
     """This film's gaze_dy is a share of the eye's half-height (-1 up .. 1 down); traitors_cast.eye takes drawing units
     (found 11 Nov, cast chat 8: -0.7 moved the pupils under a pixel, so no planned eye move showed)."""
@@ -757,6 +790,8 @@ def _inmate_head(img, p, sp, t, hx, hy):
             u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.7, 0.96)
             if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2):
                 p.poly(oval(*f(u, v), 1.6, 1.6, 6), dk(skin, fc['stub'] - 0.12), None)
+        o = curve(f.pts(_outline(L)), 4)                      # the face's ink back over the stubble's edge (line-work
+        p.line(o + o[:1], INK, 2.6)                           # check, chat 3: the jaw lost its outline)
     if fc.get('beard'):                                       # a short boxed beard and a moustache
         b = fc['beard']
         p.poly(curve(f.pts(jaw), 3), b, INK, 1.6)

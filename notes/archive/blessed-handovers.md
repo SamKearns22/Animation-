@@ -99,3 +99,63 @@
 - **Read:** `guides/job-packs.md` Notes round and Checks and animatic; this section; "How Brand moves".
 - **Open rule requests:** none.
 - **For Claude:** hunt 1 = source/data/critique/blessed/r1-p1; jury: source/blessed_jury.py (FACES, JURORS, ACT, draw), blessed_cast FRONT_FACES/_hair_mass/_hair_front/_glasses, blessed_sets court_jury/_mid/_front + STAGE['court_jury'], blessed.py T['jury'], T['oath2'], shots 'jury' and 'oath2' (oath split); SET_BOXES and BENCHMARK have no court_jury rows yet (rule 83/3: add before pre-flight); pre-flight --text faults left from chat 10: newsreader mouth check at 52 s, fast captions (lines 2, 3, 5), oath shot length, SET_FEET missing (rule 13).
+
+
+# Moved from notes/blessed.md, 12 Nov (chat 3 of 8): built or settled
+
+## The moves plan (moves chat 5, 11 Nov; build it in blessed.py, a "moves" section after "faces and moods")
+Takes (seconds, film time): L1 0.62-3.65 one stretch ("feeling" ~1.26, "mate" ~2.36, "super" ~2.75); L2 stretches from 4.98: +0.12-2.05 ("I swear by Almighty God"), 2.32-4.22, 4.53-5.31, 5.62-6.34, 6.62-8.21 ("...the blessed truth"); L3 16.36-18.39; L4 from 28.75, last stretch +4.47-5.05 ("at all right now"); L6 from 49.21: "Blessed!" +0.12-0.72, rest +1.07-3.70.
+- **Helpers:** port `word_at` (with ANCHORS for L2 'Almighty' (0, 0.42), first 'blessed' (1, 0.2), last 'blessed' (4, 0.62); L6 'everybody' (1, 0.72)) and `_bump` from `ad_vanced_notice.py` 106-120, 244. `_toward(j, side, tgt, g, pole, shape)`: blend the hand's CONTACT point (wrist + forearm unit x HAND[shape], not the wrist, or it pops) to the target, then `V.arm_to`. Hand circle = wrist + 12 along the forearm, radius 26 (`satire_style.install_circle_hands`).
+- **arrive:** walk in ('walk' gait, phase +0.37 so mid-stride at the cut) from (1.2, 4.9) to the mark (0.45, 3.9) on ST.OUT (`ST._mark` gives screen x, y, ppm), yaw -45, stop at ~1.35 s, snap to front (yaw 0). Prayer beads hang from the R fist all shot (`grips.held`, a loop of small beads). L hand to the heart (30, 135, 78), pole 'in', palm, from "feeling" to "mate" - 0.35; up to the shades' bridge (`j['on_face']`) for "mate", the shades lower ON "mate" (brand_mood: replace L1 start + 0.9 with word_at); arms open, palms up, on "super"; L back to the heart with a small bow (lean 6, head nod) on the last "blessed"; to rest by 4.4 (rule 72).
+- **oath:** stays yaw -45 at his mark. 0.15-0.65 s into the shot: far hand R holds the Bible at the chest (~(20, 160, 110), a black book with a gold cross, drawn as a projected box like `handset_pose`, `grips.held`); near hand L raised palm out beside the head (~(-(sw+90), -40, 60), pole 'out'; check the elbow by eye). Eyes up (gaze_dy -0.6) only on "Almighty God", ahead otherwise; a small lean-and-nod bump on each "blessed". Arms down from line end + 0.1 to + 0.5 (cut 14.04).
+- **gavel (REMOVED 12 Nov, Sam: no gavel shot; only the bang is heard at the dock's first frame):** judge `put_seated` at (540, 1780, 620); set `ST.GAVEL_LIFT = (T['s3'] + 0.15, T['s4'] + 1)` so the set stops drawing the resting gavel. R hand to the handle end (~ world (880, 1404); handle runs right of the head at (760, 1404)) 14.15-14.4; raise to shoulder 14.4-14.75; strike 'fast' 14.75-14.94 (T['bang']); a small rebound, then rest on the block. Draw the held gavel AFTER `ST.front` (the block is in the front layer) in world coords with `ST.gavel(p, x, y, ang)`, then redraw the hand circle over its handle (P1). Stern face; a tiny head jolt on the bang.
+- **dock:** hands clasped low (both to (+-10, 420, 60), pole 'back'). Mood 'neutral', eyes ahead, until 15.9; then 'hollow' (eyes snap down) and the shoulders drop over 1.0 s eased (bob +12, head_dy +10, lean 4).
+- **van:** seated yaw 35, bent over: lean 28, forearms on the thighs, hands clasped between the knees, head down, staring; a slow +-1.5 degree sway in lean (the van). No other move.
+- **escort:** the cell painting fits a level camera exactly: `Level(1.55, 803.0, 1000.0, cx=540)` (eye 1.55 m, back wall at d 3.39 m: the bed's near end lands on the painted one within 10 px). Door in the right wall at x ~1.05, d 1.55-2.6. Brand starts in the doorway (1.0, 2.1) mid-stride, 'stroll' to (0.15, 2.35), side on facing left (yaw -90), stops ~23.8; snaps to yaw -30, looks round numbly with `head_yaw` (left 24.1, gaze up to the window 24.7, back down 25.2), eased. Officer one step behind and nearer the lens (x + 0.45, d - 0.25), same gait, his near hand ('L' facing left) on Brand's near upper arm; lets go at the stop and stands by the door. Marks: (Level.p(x, d), Level.ppm(d)); replace STAGE['cell'] guesses.
+- **cot:** `lying.lie(sp, 'side', x, z, yaw, ground=0.45)` drawn with `lying_flat.draw(img, cam, k, sp, t)` (the house-style lying body). The 3D camera for the cot close-up (cell painting at B.Cam(1.55, 330, 1240)): `sets.Cam((0, 1.55, 0), (0, 1.55, 1), focal=1550, shake=(325.5, -677.35))`. Mattress top 0.45 m, x -1.05 to -0.25, d 1.39 to 3.39, pillow at the far end: head on the pillow (~d 3.1), knees towards us. Weeping face and tears; a sob every ~0.9 s (shoulders, neck, head nudged up 0.5 cm and back). Run `lying.contact_faults`.
+- **phone:** keep `handset_pose`; lean 5, head down (head_dy +8, gaze down); a slow head shake (+-10 head_yaw over 1 s) on "at all right now"; free hand limp.
+- **tvroom / push:** slouched (lean -6, head_dy +6) while the eyes drift up; on 'amazed' (eyes and face snap) he sits up over 0.6 s eased (lean 0); on 'overjoyed' lean forward 6, head up.
+- **gates:** split into 'gates' (wide, ST.GATE camera, a slow push 1.0 to 1.35 on the door) and 'gates2' (a closer B.Cam on the same painting, centred on his mark), the cut at ~50.05 (after "Blessed!"). Wide: he steps out of the wicket door (x 0.15-1.15 at d GATE_D + 0.37) in the first 0.8 s and flings his arms wide ON "Blessed!" (hands go out to the side on the way up: figure-rig 3's waypoint). gates2: he strides the last steps into his mark (d 6.0 to 4.6) arms wide, stops, a double pump of the arms on "everybody!", holds. Add to SHOTS, VIEW, SHOT_CAST.
+- **Checks to add:** each touch in TOUCHES (officer's hand, gavel, Bible, handset), the lying body's contact faults; `blessed.py check` clean; stills of every shot's first and last frames before the clips.
+
+## The questions asked (kept for the record)
+1. Budget: **Lean, about 15%** (pick) or Full as written, about 19%. 8-12% is not reachable for this script without cutting a scene: it has 8 places and 7 people (MidTerminal, 11%, had 1 room and 3). Lean keeps every line and beat; the van and TV room become close-ups on Brand against dark, simple backgrounds; the cell and phone share one prison painting; the TV-room inmates are silhouettes.
+2. The gavel: English judges never use one. **Keep it** (pick: it reads at once and Brand's line answers it) or no gavel (the judge just says the sentence).
+3. Sex offenders were left out of the real early-release schemes. **Keep the joke as written** (pick: it is the satire) Y/N.
+4. The judge: **an invented red-robed judge** (pick), not the real judge's face. Y/N.
+5. The TV: **BBC News look with "BBC NEWS" lettering** (pick; parody) or an invented channel.
+6. "everybody!" at the gates: **the same press pack waiting outside** (pick, reused) or an empty street.
+7. "Usual attire" at the gates: **his trial look: dark jacket, open white shirt, crucifix, sunglasses, long white scarf, hair loose** (pick); prison: grey tracksuit, hair in the topknot from the sentencing sketch.
+8. Line 1 tone: **sincere showman** (pick: believes his own performance, lowers the sunglasses, hand on heart) or a wink to camera.
+9. Line 3 "doesn't feel very blessed": **quiet, to himself, deadpan** (pick) or said up to the judge.
+
+## How Brand moves (before the scandal; one search pass, 11 Nov)
+Sources: LA Times, Chris Lee, 14 Jun 2008 (Roxy show: "louche, preening British rock star", "Jagger-esque rock star
+charisma", "exaggerated pantomime moves", "neurotic twitchiness", "looked up to face the capacity crowd"); The Comic's
+Comic, 22 Jul 2008 (NYC debut: "slithering, crouching and twirling about onstage, his sprawling updo of hair flowing and
+bouncing behind him"; walks out into the audience for crowd work; "I'm not Christ"); Guardian, Brian Logan, 20 Sep 2021
+("charismatic and animated as ever", "sells it with brio"); The Times, Dominic Maxwell, 2021 ("does he believe he's the
+Second Coming?", "he owns the stage").
+1. **The swagger:** a rock-star strut, chest out, leaning back a touch, a loose sway of the head and shoulders over
+   each step, a long easy stride. (Built: the 'swagger' walk, 108 steps a minute, with a head roll per step.)
+2. **Big open-handed gestures:** whole arms, hands open, flung wide; pantomime, never small. (Built: arms open at
+   shoulder height on "super"; up and open on "Blessed!".)
+3. **The dip:** drops at the knees on the punchline and springs back up. (Built: on "super" and on "everybody!".)
+4. **Goes to the crowd:** leans in close to people. (Built: leans in to the scrum on "mate", head tilted.)
+5. **Preening:** chin up, looking up and out at the room. (Built: chin up on "super", "Blessed!" and each "blessed"
+   in the oath.)
+6. **The messiah joke:** arms out, palms open, the Second Coming. (Built: the gates' "Blessed!".)
+7. **Twitchy underneath; hair bouncing:** not built (the hair has no bounce in our kit; small fidgets would muddy the
+   held poses on phone-sized frames).
+The showman is the arrival, the oath (held in: bolt upright, only the chin lifts) and the gates; prison has none of it.
+
+
+
+## Where things stand before chat 3 of 8 (12 Nov)
+- **Rules that bite next:** 67 (one full pre-flight, then the check sheet with the Hook Text frame), 13 (SET_FEET missing), 59.
+- **Done (12 Nov, chat 2 of 8, Sonnet):** Bible bigger with a pale edge; ink-edged sleeve on the heart-hand; phone eyes open, looking down (new 'phone' mood). One full pre-flight run (9 min): picture checks clean; the rest is named below. Check sheet `notes/sheets/blessed-check-sheet.jpg` and Hook Text frame `notes/sheets/blessed-hook-frame.jpg` sent to Sam.
+- **Needs Sam (12 Nov, he said YY):** chat 3 of 8 is Opus high: build the missing checks FIRST (see Next). Then Y or N for animatic 1 (about 5 min to render; needs `--faults-named`). Also a look at the jury clip and the movement clips.
+- **Next: Opus, high effort.** Type: "Blessed: write the missing checks (SET_FEET and movers, scene(t) for the audit, LINE_SUBJECTS, pupils clipped to the eye, camera plan for the shots with none, newsreader mouth at 50.8 s); fix every fault they find; one full pre-flight; then the sheet." Animatic 1 waits for a new Y.
+- **Read:** `guides/job-packs.md` Checks and animatic; this section.
+- **Open rule requests:** none.
+- **For Claude (chat 2):** named, not fixed (no speech-to-text here to re-time): subtitle timing off 0.4-0.8 s on lines 2, 4, 5; newsreader line 5 recording has ~3 more syllables than the script at 10.4 s (listen); newsreader mouth shut 50.8-51.7 s; six captions too fast (lines 2, 5); no SET_FEET/audits/LINE_SUBJECTS/scene(t) (template gaps); pupils not clipped (S5). Figure-guard arm lines are 'allowed'. Older notes: the --text run (48 faults) shows "SHOT CAST: never on screen" for every shot: the text mode draws no frames, so judge it from the full run. Named, not changed (hunt 2): the oath Bible is small at phone size; at the phone his eyes read shut (head down, tearful); hand-on-heart forearm merges with the jacket (same grey). Still open from chat 10: newsreader mouth still at 50.8 s ("stop overcrowding"), fast captions (lines 2, 3, 5), SET_FEET/movers/SET_CAM (rule 13), no court_jury rows in SET_BOXES/BENCHMARK (rule 83/3), pupils not clipped to the eye in blessed_cast (S5). Ledger fixed by hand: the hunt 2 pack reused folder r1-p1 and `record` overwrote hunt 1; both passes restored in notes/ledger/blessed.json. Hunt 2 spec in the scratchpad was not kept.
