@@ -1200,7 +1200,7 @@ def press_spots(bx, bd, rows, seed, cx=0.0, half=1.6, gap=0.5, step=0.5):
 
 
 STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); the shots take these
-    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': press_spots(0.45, 3.9, (4.7, 4.25, 3.8, 3.35, 2.9, 2.5), 7, cx=0.26, half=1.12)},
+    'court_out': {'brand': _mark(OUT, 0.45, 3.9), 'press': press_spots(0.45, 3.9, (3.4, 3.0, 2.6), 7, cx=0.26, half=1.25, gap=0.4, step=0.45)},
     'court_box': {'brand': (720, 2240, 600.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
     'court_bench': {'judge': (540, 1780, 620.0)},
     'court_jury': {'back': [(30 + 206 * k, 1643, 380.0) for k in range(6)],      # seated: feet on each tier
