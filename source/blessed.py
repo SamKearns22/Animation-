@@ -109,7 +109,7 @@ T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, w
 T['cot'] = T['cell'] + 4.5                        # note 17: room for a long, readable sigh; note 40: deeper, a beat more (was 3.9)
 T['phone'] = T['cot'] + 2.8
 T['tvroom'] = _at(4, T['phone'] + 0.5) + 0.7
-T['tv'] = T['tvroom'] + 3.6                       # his eyes drift up to the screen as its voice starts (note 44: +1 s)
+T['tv'] = T['tvroom'] + 2.6                       # his eyes drift up as its voice starts (note 50: back to 2.6 s; the voice still leads the cut)
 _at(5, T['tv'] - 0.6)                               # note 44: his voice starts before the cut to the TV
 T['push'] = L[5]['start'] + L[5]['_stretches'][min(FADE_FROM, len(L[5]['_stretches']) - 1)][1] + 0.2
 T['amazed'] = T['push'] + 1.2                     # the face change on the slow push in (brief 14)
@@ -481,7 +481,7 @@ def brand_mood(t):
     (the sentence); numb, weeping, dejected (prison); dejected to amazed to overjoyed (the push); showman (gates)."""
     s = shot_of(t)
     if s == 'arrive':
-        return 'showman', ('lowered' if t >= word_at(1, 'mate') else 'on')
+        return 'showman', 'on'                      # note 34: the shades stay on (lowering them read as sniffing)
     if s in ('oath', 'oath2'):
         return 'oath', None
     if s == 'dock':
@@ -705,15 +705,13 @@ def arrive(sp, t):
                              word_at(1, 'blessed.'))
     sw = sp.get('shoulders', 150)
     heart = ((-30.0, 135.0, 78.0), 'in', 'palm')
-    shades = ((-88.0, -204.0, 70.0), 'in', 'palm')       # at the frame's side: the nose stays clear
+    point = ((-(sw + 150.0), 20.0, 230.0), 'out', 'point')   # note 34: points at the pack on "mate" (was the shades)
     wide = lambda sg: ((sg * (sw + 300), 40.0, 150.0), 'out', 'palm')   # flung open at shoulder height
-    arm_keys(j, sp, 'L', t, [(feel - 0.35, None), (feel, heart), (mate - 0.35, heart), (mate - 0.05, shades),
-                             (mate + 0.1, shades), (sup + 0.05, wide(-1)), (last - 0.1, wide(-1)), (last + 0.2, heart),
+    arm_keys(j, sp, 'L', t, [(feel - 0.35, None), (feel, heart), (mate - 0.35, heart), (mate - 0.05, point),
+                             (mate + 0.2, point), (sup + 0.05, wide(-1)), (last - 0.1, wide(-1)), (last + 0.2, heart),
                              (L[1]['end'] + 0.2, heart), (4.4, None)])
     arm_keys(j, sp, 'R', t, [(mate + 0.1, None), (sup + 0.05, ((sw + 300, 40.0, 150.0), 'out', 'fist')),
                              (last - 0.1, ((sw + 300, 40.0, 150.0), 'out', 'fist')), (last + 0.3, None)])
-    if mate - 0.3 < t < mate + 0.25:
-        j['on_face'] = {'L'}
     lean_in = _bump(t, mate - 0.35, sup + 0.05, 0.25, 0.2)            # in close to the scrum on "mate"
     dip = _bump(t, sup - 0.12, last + 0.02, 0.14, 0.12)               # down at the knees on "super", springs up
     chin = _bump(t, sup - 0.05, last + 0.05, 0.12, 0.15)              # chin up, preening, as the arms open
@@ -910,16 +908,41 @@ COT_MARK, COT_YAW = (540, 1800, 740.0), 0.0       # note 18: cot_top, lying flat
 
 
 def cot_pose(sp, t):
-    """Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), arms limp at his sides,
-    staring up at the ceiling (the lens); a sob every 1.4 s lifts his chest and shoulders a touch."""
+    """Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (the
+    lens). Note 41: one hand on his heaving chest, the other palm down on his Bible on the bed; each sob (every
+    1.4 s) heaves the chest and squeezes his eyes shut, pushing a tear out (cot_face)."""
     j = V.standing(sp)
-    for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, (sg * 200, 520.0, 10.0), 'back')
+    sw = sp.get('shoulders', 150)
     ph = ((t - T['cot']) % 1.4) / 1.4
     sob = math.sin(math.pi * min(1.0, ph / 0.3)) if ph < 0.3 else 0.0
-    j['bob'] = -4.0 * sob
-    j['head_dy'] = 2.0 - 2.0 * sob
+    j['bob'] = -9.0 * sob
+    j['head_dy'] = 2.0 - 3.0 * sob
+    _arm(j, 'L', (-30.0, 150.0 - 8.0 * sob, 80.0), 'in', F.HAND['palm'], 'palm')     # on the heaving chest
+    _arm(j, 'R', COT_BIBLE_HAND, 'out', F.HAND['palm'], 'palm')                     # palm down on the Bible
+    import grips
+    grips.held(j, 'R', sp, _box_prop(j, [(sw + x, y, z) for x in (40.0, 160.0) for y in (300.0, 470.0)
+                                         for z in (0.0, 24.0)], (40, 30, 34), _cot_cross(sw)))
     return j
+
+
+COT_BIBLE_HAND = (250.0, 440.0, 30.0)   # on the bottom of the cover: the cross shows above the hand
+
+
+def _cot_cross(sw):
+    def mark(p, j2):
+        c = V.project((sw + 100.0, 350.0, 26.0), j2['yaw'])[0]
+        g = (214, 176, 70)
+        p.poly([(c[0] - 3, c[1] - 20), (c[0] + 3, c[1] - 20), (c[0] + 3, c[1] + 20), (c[0] - 3, c[1] + 20)], g, None)
+        p.poly([(c[0] - 12, c[1] - 10), (c[0] + 12, c[1] - 10), (c[0] + 12, c[1] - 4), (c[0] - 12, c[1] - 4)], g, None)
+        a, b = V.project((sw + 40.0, 300.0, 26.0), j2['yaw'])[0], V.project((sw + 160.0, 470.0, 26.0), j2['yaw'])[0]
+        p.poly([(b[0] - 6, a[1] + 6), (b[0] - 1, a[1] + 6), (b[0] - 1, b[1] - 6), (b[0] - 6, b[1] - 6)], (250, 244, 222), None)   # page edge
+    return mark
+
+
+def cot_face(t):
+    """Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks)."""
+    ph = ((t - T['cot']) % 1.4) / 1.4
+    return dict(blink=ph < 0.22, tear_u=(ph - 0.2) / 0.55 if ph >= 0.2 else (ph + 0.8) / 0.55)
 
 
 # --- phone: head down, a slow shake on "blessed right now"
@@ -975,7 +998,20 @@ def tv_pose(sp, t):
     j['lean'] = lean
     j['head_dy'] = _keys(t, [(T['amazed'], 6.0), (T['amazed'] + 0.6, 0.0)])
     j['nod'] = _keys(t, [(T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, -1.0)])
+    # note 43 (head staring and still): his head lifts with his eyes to the screen, settles into small slack tilts
+    #   and weight shifts, and he breathes; a slow, heavy blink (tv_face)
+    life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
+    j['nod'] += life * (-2.5 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8)) +
+                        filmkit.shifts(t, seed=71, amount=1.0, hold=(1.0, 1.7)))
+    j['head_roll'] = j.get('head_roll', 0.0) + life * filmkit.shifts(t, seed=72, amount=4.0, hold=(0.9, 1.5))
+    j['lean'] += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0))
+    j['bob'] = j.get('bob', 0.0) - F.breath(t, 3.2, 3.0)
     return j
+
+
+def tv_blink(t):
+    """Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones."""
+    return any(b <= t < b + 0.3 for b in (T['tvroom'] + 0.35, T['tvroom'] + 2.05, T['push'] + 0.6))
 
 
 # --- gates: swaggers out of the wicket door (wide), arms flung up and open, chin high, on "Blessed!"; then closer,
@@ -1410,21 +1446,19 @@ def _cam(view, t):
         u = _ease(_ramp(t, T['jury'], T['oath2']))
         return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
     if shot_of(t) == 'dock':                      # note 15: half the frame was empty wall; tighter on him and the guards
-        return B.Cam(1.2, 548, 1560)
+        return B.Cam(1.2, 548, 1160)      # note 37 (Sam: no move, 'up a bit'): a quarter screen higher than 1560
     if shot_of(t) == 'arrive':                    # note 11: closer and lower, Brand bigger, less building, the sign in
         return B.Cam(1.25, ARRIVE_CAM[0], ARRIVE_CAM[1])
     if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
-        return B.Cam(1.0, 740, 960)
-    if shot_of(t) == 'gates2':                    # notes 31, 32: framed on Brand as he strides in, the door over his
-        u = _ease(_ramp(t, T['gates2'], T['gates2'] + 1.9))   # shoulder; pushing in all shot
-        z = 2.25 + 0.25 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
-        return B.Cam(z, G2_CAM[0] + (G2_CAM[1] - G2_CAM[0]) * u, G2_CAM[2])
-    if shot_of(t) == 'gates':                     # note 46 (Sam, 12 Nov): no cut at the release: the wide holds,
-        #   then zooms in to the close framing on Brand, and the close shot's push carries on from there (one shot)
+        return B.Cam(1.0, 740, 1440)                # note 42: a quarter of the screen lower (was 960)
+    if shot_of(t) in ('gates', 'gates2'):         # note 51 (Sam, 12 Nov): the zoom was sudden; we are basking in his
+        #   liberation: ONE slow, measured ease from the wide at the shot's start to the close on Brand, then a creep
         x, _ = ST.GATE.p(0.65, ST.GATE_D, 1.2)
         x0 = 540 + (x - 540) * 0.35 * 0.6         # the wide as Sam liked it (note 24: starts at 1.3)
-        u = _ease(_ramp(t, T['gates'] + 0.7, T['gates2']))
-        return B.Cam(1.3 + (2.25 - 1.3) * u, x0 + (G2_CAM[0] - x0) * u, 1040 + (G2_CAM[2] - 1040) * u)
+        end = T['gates2'] + 2.6
+        u = _ease(_ramp(t, T['gates'], end))
+        z = 1.3 + (2.5 - 1.3) * u + 0.1 * _ramp(t, end, DUR)
+        return B.Cam(z, x0 + (G2_CAM[1] - x0) * u, 1040 + (G2_CAM[2] - 1040) * u)
     return ST.view_cam(view)[1]
 
 
@@ -1443,11 +1477,15 @@ def draw_people(img, cam, shot, t):
         JY.draw(img, cam, t, word_at(2, 'blessed evidence'), put_seated, face, ST)
     elif shot in ('oath', 'oath2'):
         x, y, ppm = st['judge']
-        sj = dict(BC.JUDGE, **face('judge', t, 'neutral'))
-        jj = moves.seated(sj)                       # chat 4: he held dead still 2.5 s; small weight shifts, no sway
-        jj['lean'] = jj.get('lean', 0.0) + filmkit.shifts(t, seed=41, amount=1.6, hold=(0.9, 1.7))
-        jj['head_roll'] = filmkit.shifts(t, seed=42, amount=2.5, hold=(1.0, 1.8))
-        jj['nod'] = filmkit.shifts(t, seed=43, amount=0.5, hold=(1.1, 2.0))
+        # note 36 (too static): on each "blessed" in the oath he leans in and peers down at Brand, brows knitted,
+        # holds it, then settles back; bigger weight shifts and head tilts between
+        peer = max(_bump(t, word_at(2, w) - 0.1, word_at(2, w) + 1.1, 0.25, 0.4)
+                   for w in ('Almighty God', 'blessed evidence', 'blessed truth'))
+        sj = dict(BC.JUDGE, **face('judge', t, 'sceptic' if peer > 0.4 else 'neutral'))
+        jj = moves.seated(sj)
+        jj['lean'] = jj.get('lean', 0.0) + filmkit.shifts(t, seed=41, amount=3.0, hold=(0.8, 1.5)) + 10 * peer
+        jj['head_roll'] = filmkit.shifts(t, seed=42, amount=5.0, hold=(0.9, 1.6)) * (1 - peer) - 9 * peer
+        jj['nod'] = filmkit.shifts(t, seed=43, amount=1.5, hold=(1.0, 1.8)) + 6.0 * peer
         put_seated(img, cam, sj, (x, y, ppm), t, j=jj)
         ST.mid(view, img, cam, t)
         sp = dict(brand_sp(t, 'stand'), gaze_dy=oath_gaze(t))
@@ -1474,7 +1512,7 @@ def draw_people(img, cam, shot, t):
         opts = put(img, cam, so, om, t, oy, oj)
         _log_hands('officer', opts, om, _s(so, om[2]), -1, oj.get('bob', 0.0))
     elif shot == 'cot':
-        sp = brand_sp(t, 'prison')
+        sp = dict(brand_sp(t, 'prison'), **cot_face(t))
         put(img, cam, sp, ST.STAGE['cot_top']['brand'], t, 0.0, cot_pose(sp, t))   # note 18: flat on his back, from above
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
@@ -1494,6 +1532,8 @@ def draw_people(img, cam, shot, t):
         put_seated(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
                    st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t))
         sp = brand_sp(t, 'prison')
+        if t < T['amazed']:
+            sp['blink'] = tv_blink(t)
         if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
             sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
         else:

@@ -204,7 +204,7 @@ def rows(text, ss=1):
     return B.wrap(text, _font(ss), WIDE * ss)
 
 
-def draw(img, text, ss=None):
+def draw(img, text, ss=None, base=None):
     """The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
     with a black outline and a shadow down and right. ss: the picture's supersampling (burnham.SS when not given)."""
     from PIL import Image, ImageDraw
@@ -217,7 +217,7 @@ def draw(img, text, ss=None):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
     for i, row in enumerate(rs):
-        y = (BASE - ROW * (len(rs) - 1 - i)) * ss
+        y = ((base or BASE) - ROW * (len(rs) - 1 - i)) * ss   # base: a shot's own height (Blessed note 37)
         d.text((540 * ss + 6 * ss, y + 7 * ss), row, font=f, fill=(0, 0, 0, 150), anchor='mm',
                stroke_width=int(7 * ss), stroke_fill=(0, 0, 0, 150))                 # the shadow, down and right
         d.text((540 * ss, y), row, font=f, fill=(255, 255, 255), anchor='mm', stroke_width=int(7 * ss),

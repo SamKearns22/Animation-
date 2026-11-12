@@ -82,6 +82,7 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.16, squint=0.0, mouth='lips'
          'deadeyed': dict(brow=0.0, frown=0.0, lid=0.4, squint=0.0, mouth='lips', smile=-0.15),
          'phone': dict(brow=0.004, frown=-0.05, lid=0.04, squint=0.0, mouth='lips', smile=-0.8, tears=True),   # open eyes
          'stern': dict(brow=-0.02, frown=0.05, lid=0.22, squint=0.1, mouth='lips', smile=-0.4),   # the judge's bang
+         'sceptic': dict(brow=0.035, frown=0.05, lid=0.26, squint=0.15, mouth='lips', smile=-0.5),   # note 36: the judge
          'amazed': dict(brow=0.06, frown=0.0, lid=0.0, squint=0.0, mouth='gasp'),
          'overjoyed': dict(brow=0.05, frown=-0.01, lid=0.1, squint=0.5, mouth='grin')}
 
@@ -308,7 +309,18 @@ def shades(p, f, L, lowered=False):
     p.line(f.pts([(-L['ecx'] + L['ew'] * 0.8, y), (L['ecx'] - L['ew'] * 0.8, y)]), INK, 3.0)
 
 
-def tears(p, f, L):
+def tears(p, f, L, u=None):
+    """u None: the old streak and drop. u given (Blessed note 41: streaks read as snot): only a drop, squeezed out
+    by a blink, running down the cheek over u = 0..1 (the left one a beat behind); nothing when u is out of range."""
+    if u is not None:
+        for sgn, k in ((-1, 0.25), (1, 0.0)):
+            v = u - k
+            if not 0.0 <= v <= 1.0:
+                continue
+            x, y = f(sgn * (L['ecx'] - L['ew'] * 0.1), L['eye_y'] + 0.05)
+            y += 70 * v * (2 - v)
+            p.poly(oval(x, y, 6 + 1.5 * v, 9 + 2 * v, 10), (170, 210, 236), INK, 1.4)
+        return
     for sgn in (-1, 1):
         x, y = f(sgn * (L['ecx'] - L['ew'] * 0.1), L['eye_y'] + 0.04)
         p.line(curve([(x, y), (x + sgn * 2, y + 22), (x - sgn * 1, y + 44)], 3), (150, 196, 230), 3.2)
@@ -462,7 +474,7 @@ def _brand_head(img, p, sp, t, hx, hy):
     else:
         brand_mouth(p, f, L, look['mouth'])
     if look.get('tears') or sp.get('tears'):
-        tears(p, f, L)
+        tears(p, f, L, sp.get('tear_u'))
     if knot:
         bun(p, f)
     for sgn, lock in locks:                              # the curls over the cheeks' edges, covering the ears
