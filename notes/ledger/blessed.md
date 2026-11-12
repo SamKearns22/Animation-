@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 19.0% of a week; spent 12.43% (-6.57); 6 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 19.0% of a week; spent 12.56% (-6.44); 7 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 12.43% of the 10.5% planned so far; at this rate the film lands at 20.4%.**
+**Forecast: Spent 12.56% of the 10.5% planned so far; at this rate the film lands at 20.6%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -28,3 +28,4 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | 2026-11-11 | e448e160 | opus | auto |  | 2.13 | 0 | 0 |
 | 2026-11-11 | 817fdf1d | opus | auto |  | 1.41 | 0 | 0 |
 | 2026-11-11 | 4d055212 | opus | auto |  | 1.24 | 0 | 0 |
+| 2026-11-11 | 49d138e0 | sonnet | auto |  | 0.13 | 0 | 0 |
