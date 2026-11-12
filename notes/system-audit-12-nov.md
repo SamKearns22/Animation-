@@ -130,9 +130,9 @@ shot 8.2 s. 8 questions for Sam about sudden loud sound after silence at the cut
 (the sound jumps up 24 dB and 41 dB at two of them) and 2.8 s of dead silence; none has been asked. Warnings: no acting
 list, three speakers with no head movement, no rehearsal clips line, no MAP.
 
-**What the five have in common (for chat B and D):** every one of them says "no rehearsal clips line"; none of the
-four but Remakes has a famous-faces list, and Swindon has none either; three have no acting list; four have no MAP.
-Hands are the biggest group of real faults (47 of the 112 faults over the five films); 17 are captions too fast to read.
+**What the five have in common (for chat B and D):** all five say "no rehearsal clips line" (Remakes' skipped checks hid the rest); the four
+that were checked on people and sets have no famous-faces list; three have no acting list; three have no MAP.
+Hands are the biggest group of faults (37 of the 112 over the five films); 21 are captions too fast or too long.
 "Could not test" was only printed by Islamocommunism's audit; for Remakes the checker said nothing about the skipped
 checks being a problem. Each film's full list is in the scratchpad (`/tmp/claude-0/.../scratchpad/FILM/`), not kept in the
 repo because they are test output.
@@ -159,8 +159,8 @@ repo because they are test output.
 **Fix to propose (chat D):** save each chat's cost at its end whatever it moved; when two ledgers are merged take the larger;
 ask Sam for the app's weekly figure every Monday and re-fit the $290; label the percentages "about, ±20%".
 
-**Question 7, finished work stuck on side branches.** There are 119 side branches. After fetching full history, only **4
-hold anything the main line lacks**; the other 115 are fully merged. The 4:
+**Question 7, finished work stuck on side branches.** There are 114 side branches besides the main line. After fetching full history, only **4
+hold anything the main line lacks**; the other 110 are fully merged. The 4:
 1. `inspiring-heisenberg-0vvyan` (8 Nov): a fix in the sitting kit so people standing up or sitting down use the new
    relaxed arm. **Not on the main line**: `source/sitting.py` still has the old arm at line 720. Small (12 lines). This
    is real work stuck.
