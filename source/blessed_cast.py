@@ -777,8 +777,10 @@ def _inmate_layout(who):
 
 
 def inmate_head(img, p, sp, t, hx, hy):
+    k = FRONT_FACES[sp['who']].get('k', 1.0)          # note 14: a face may be drawn smaller than the house's bigger size
     with _Big():
-        return _inmate_head(img, p, sp, t, hx, _lift(hy))
+        P4.H, TH.H = P4.H * k, TH.H * k
+        return _inmate_head(img, p, sp, t, hx, hy - (HEAD_K * k - 1) * 172.0 * 0.85)
 
 
 def _inmate_head(img, p, sp, t, hx, hy):
@@ -885,9 +887,10 @@ def _hair_mass(p, f, L, fc, hc):
     if st == 'bob':
         pts = [(-e - 0.05, 0.92), (-e - 0.1, 0.5), (-e - 0.08, 0.05), (-e + 0.02, -0.33), (0.0, -0.5), (e - 0.02, -0.33),
                (e + 0.08, 0.05), (e + 0.1, 0.5), (e + 0.05, 0.92), (e - 0.06, 0.88), (-e + 0.06, 0.88)]
-    elif st == 'long':
+    elif st == 'long':                                        # note 14: two curtains, the neck showing between them
         pts = [(-e - 0.1, 1.5), (-e - 0.13, 0.9), (-e - 0.09, 0.2), (-e + 0.02, -0.34), (0.0, -0.5), (e - 0.02, -0.34),
-               (e + 0.09, 0.2), (e + 0.13, 0.9), (e + 0.1, 1.5), (e - 0.04, 1.42), (-e + 0.04, 1.42)]
+               (e + 0.09, 0.2), (e + 0.13, 0.9), (e + 0.1, 1.5), (e - 0.1, 1.42), (e * 0.62, 0.92), (e * 0.4, 0.6),
+               (-e * 0.4, 0.6), (-e * 0.62, 0.92), (-e + 0.1, 1.42)]
     elif st == 'curly':
         n, pts = 22, []
         for k in range(n + 1):

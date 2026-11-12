@@ -20,13 +20,13 @@ import views as V
 
 TC = BC.TC
 # The faces: m = pushes on the average face; hair (blessed_cast: crop, bald, side, bob, long, curly, bun, pony,
-# receding); stub (stubble shade), beard, freckles, glasses (frame colour).
+# receding); k (note 14: the bald heads were 'a different species': drawn 14% smaller); stub (stubble shade), beard, freckles, glasses (frame colour).
 FACES = {
     'juror1': dict(m=dict(face_wide=0.05, jaw_wide=0.08, nose_long=0.02, brow_high=-0.1, mouth_wide=0.03),
                    iris=(60, 44, 30), lip=(170, 110, 96), brow=(30, 26, 24), hair='crop', stub=0.86),
     'juror2': dict(m=dict(face_wide=-0.03, chin_long=0.02, eye_size=0.01, mouth_wide=-0.05, brow_slope=3.0),
                    iris=(90, 110, 130), lip=(200, 120, 120), brow=(150, 130, 100), hair='bob', glasses=(150, 60, 50)),
-    'juror3': dict(m=dict(face_wide=0.08, jaw_wide=0.1, nose_wide=0.12, eye_size=-0.014, lip_low=0.02, chin_long=-0.02),
+    'juror3': dict(k=0.86, m=dict(face_wide=0.03, jaw_wide=0.05, nose_wide=0.12, eye_size=-0.014, lip_low=0.02, chin_long=-0.02),
                    iris=(80, 96, 110), lip=(196, 128, 120), brow=(200, 196, 190), hair='receding', brow_thick=0.06),
     'juror4': dict(m=dict(face_wide=-0.06, jaw_wide=-0.06, eye_size=0.014, nose_wide=0.06, mouth_wide=0.06, lip_top=0.01),
                    iris=(48, 30, 22), lip=(120, 70, 66), brow=(26, 20, 18), hair='long'),
@@ -40,7 +40,7 @@ FACES = {
                    iris=(70, 80, 96), lip=(190, 120, 110), brow=(110, 106, 100), hair='crop', glasses=(30, 30, 34)),
     'juror9': dict(m=dict(face_wide=-0.05, jaw_wide=-0.08, eye_size=0.016, nose_long=-0.03, mouth_wide=-0.06),
                    iris=(80, 110, 140), lip=(212, 132, 128), brow=(170, 140, 90), hair='pony'),
-    'juror10': dict(m=dict(face_wide=0.07, jaw_wide=0.12, nose_wide=0.18, eye_size=-0.01, mouth_wide=0.08, chin_long=0.01),
+    'juror10': dict(k=0.86, m=dict(face_wide=0.03, jaw_wide=0.06, nose_wide=0.18, eye_size=-0.01, mouth_wide=0.08, chin_long=0.01),
                     iris=(44, 30, 24), lip=(104, 62, 56), brow=(30, 26, 24), hair='bald', beard=(170, 166, 160)),
     'juror11': dict(m=dict(face_wide=-0.01, chin_long=0.04, nose_long=0.04, eye_size=-0.008, brow_slope=4.0),
                     iris=(110, 110, 120), lip=(190, 130, 130), brow=(170, 166, 160), hair='curly', glasses=(110, 60, 120)),
@@ -56,7 +56,7 @@ JURORS = {
                    height=1.64, hw=60),
     'juror3': dict(_P, skin=B.PINK, hair_c=(196, 192, 186), outfit='suit', jacket=(120, 100, 70), tie=(40, 70, 50),
                    shoulders=170, height=1.76, hw=70),
-    'juror4': dict(_P, skin=(120, 80, 58), hair_c=(62, 42, 32), outfit='blouse', jacket=(200, 150, 50),
+    'juror4': dict(_P, skin=(120, 80, 58), hair_c=(62, 42, 32), outfit='jumper', jacket=(200, 150, 50),   # note 14: neck
                    shirt=(240, 236, 226), shoulders=134, height=1.66, hw=60),
     'juror5': dict(_P, skin=(150, 100, 70), hair_c=(50, 38, 30), outfit='jumper', jacket=(100, 116, 90), shoulders=158,
                    height=1.78),
