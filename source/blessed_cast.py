@@ -78,6 +78,7 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.16, squint=0.0, mouth='lips'
          'numb': dict(brow=0.0, frown=-0.01, lid=0.3, squint=0.0, mouth='lips', smile=-0.3),
          'weeping': dict(brow=0.01, frown=-0.07, lid=0.3, squint=0.5, mouth='cry', tears=True),
          'dejected': dict(brow=0.004, frown=-0.05, lid=0.28, squint=0.15, mouth='lips', smile=-0.8, tears=True),
+         'phone': dict(brow=0.004, frown=-0.05, lid=0.04, squint=0.0, mouth='lips', smile=-0.8, tears=True),   # open eyes
          'stern': dict(brow=-0.02, frown=0.05, lid=0.22, squint=0.1, mouth='lips', smile=-0.4),   # the judge's bang
          'amazed': dict(brow=0.06, frown=0.0, lid=0.0, squint=0.0, mouth='gasp'),
          'overjoyed': dict(brow=0.05, frown=-0.01, lid=0.1, squint=0.5, mouth='grin')}

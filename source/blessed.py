@@ -368,7 +368,9 @@ def brand_mood(t):
         return 'numb', None
     if s == 'cot':
         return 'weeping', None
-    if s in ('phone', 'tvroom', 'tv'):
+    if s == 'phone':
+        return 'phone', None                       # eyes open, looking down (Sam, 12 Nov)
+    if s in ('tvroom', 'tv'):
         return 'dejected', None
     if s == 'push':
         return ('overjoyed' if t >= T['overjoyed'] else 'amazed' if t >= T['amazed'] else 'dejected'), None
@@ -511,6 +513,18 @@ def _beads(sp):
     return draw
 
 
+def _sleeve_edge(sp):
+    """An ink-edged, slightly darker forearm over the jacket, so the arm on the heart does not merge with it (Sam, hunt 2)."""
+    base = sp.get('sleeve', (120, 120, 124))
+    dk = tuple(int(c * 0.78) for c in base)
+
+    def draw(p, j2):
+        el, wr = j2['elL'], j2['wrL']
+        p.line([el, wr], INK, 30)
+        p.line([el, wr], dk, 23)
+    return draw
+
+
 def _box_prop(j, box, col, mark=None):
     """A flat box held in the hand (the Bible), drawn from its 8 corners in 3D, leaning with the body."""
     def draw(p, j2):
@@ -588,12 +602,14 @@ def arrive(sp, t):
     j['head_roll'] = j.get('head_roll', 0.0) + 5 * lean_in
     import grips
     grips.held(j, 'R', sp, _beads(sp))
+    if (feel < t < mate - 0.2) or (last + 0.25 < t < L[1]['end'] + 0.2):   # hand on the heart: the sleeve gets an ink edge
+        grips.held(j, 'L', sp, _sleeve_edge(sp))
     return mark, yaw, j
 
 
 OATH_BIBLE = ((-6.0, 120.0, 128.0), 'down', 'fist')     # far hand (L) at the shirt opening
 OATH_RAISE = (40.0, -140.0, 100.0, (1.0, 0.8, 0.3))                  # near hand (R) up beside the head, palm out
-OATH_BOOK = [(x, y, z) for x in (-52.0, 40.0) for y in (40.0, 168.0) for z in (122.0, 150.0)]
+OATH_BOOK = [(x, y, z) for x in (-70.0, 52.0) for y in (14.0, 190.0) for z in (122.0, 150.0)]   # bigger (chat 2)
 
 
 # --- oath: side-on in the box (facing left, so his R is the near side): the near hand raised palm out, the Bible
@@ -627,7 +643,7 @@ def oath(sp, t):
             # the pale page edge along the far (spine-less) side, seen past the cover
             e = [pr((x0, y0 + 6, zf - 4)), pr((x0, y1 - 6, zf - 4)), pr((x0, y1 - 6, OATH_BOOK[0][2] + 4)),
                  pr((x0, y0 + 6, OATH_BOOK[0][2] + 4))]
-            p.poly(e, (236, 228, 204), INK, 1.4)
+            p.poly(e, (250, 244, 222), INK, 2.0)
             c = pr(((x0 + x1) / 2, (y0 + y1) / 2, zf + 1))
             g = (214, 176, 70)
             p.poly([(c[0] - 4, c[1] - 26), (c[0] + 4, c[1] - 26), (c[0] + 4, c[1] + 26), (c[0] - 4, c[1] + 26)], g, None)
@@ -890,7 +906,7 @@ def draw_people(img, cam, shot, t):
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
         dx, roll = phone_extra(t)
-        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.2, **dx)   # eyes less far down (hunt 2: read as shut)
+        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.55, **dx)   # eyes open, looking down at the phone
         j = handset_pose(sp)
         j['lean'], j['head_roll'] = 5.0, roll
         pts = put(img, cam, sp, st['brand'], t, yaw=-45, j=j)
