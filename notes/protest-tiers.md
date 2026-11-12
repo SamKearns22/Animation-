@@ -1,22 +1,22 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 3 (no place drawn without its photos), 8 (rehearsal clips of the riskiest moves), 89 (critique each new piece alone).
-- **Done (12 Nov, chat 1 of 8):** reporting, 8 photos, checklist, estimate 21.45% (Sam: Y, "kept in budget by the 4 second length"), staging; Sam answered 3-7 (below).
-- **Sam's answers (12 Nov):** 1 Hook Text and 2 sound: PENDING (ask again with the sketches). 3 Spain: adjust to NOVEMBER reporting (find the November housing protests; re-base tier 1 on them). 4 N: no yellow vests; adjust tier 3 to this October's key features (students, cost of living, burning rental bikes, kiosk and car, stones and bottles, water cannon, tear gas). 5: every missing photo exists in real October news (Frankfurt gun store raided by students, Albanian police vs protesters, French water cannon): "the problem is where you are looking": search press photo galleries and news pages (Al Jazeera galleries, Reuters, AP, euronews, dpa, hessenschau, Le Parisien), not free libraries. 6 Y: tier 4 kept. 7 Y: go.
-- **Sam's notes (12 Nov):** A) rough PENCIL SKETCHES of each scene as I picture it, sent BEFORE any check sheet. B) before building, research reference guides on animating crowds and large dynamic scenes (composition, animation, staging action) that the whole project can learn from; "don't just attempt this by force: do the learning first".
-- **Next: chat 2 of 8, Opus HIGH:** (1) research for note B (books, studio talks, animation guides on crowds and big action staging), written as a short guide proposal; (2) November Spain + October Paris reporting, re-base tiers 1 and 3 (brief checklist rows 6-10, 18-23); (3) news photos for every missing reference (photo hosts: ask with update_environment when one is blocked); (4) four rough pencil sketches, one labelled sheet, sent; (5) ask Sam 1, 2 again plus anything new, in ONE message.
-- **Needs Sam:** 1 (Hook Text) and 2 (sound), with the sketches.
-- **Read:** `guides/job-packs.md` "Plan"; this file's top half.
-- **Lost / Added:** Lost: yellow vests (Sam, Q4).
-- **Open rule requests:** two to put to Sam as proposals (none written yet): "pencil sketches before check sheets" (this film, or every film?), and the crowd and action lessons from note B (where in the rulebook or a guide).
-- **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading` (Anton 156 / 68, white, black edge, lower-left y 1270); kit in the estimate table; refs in `references/protest-tiers/`; ledger estimate set, stage plan marked done.
+- **Rules that bite next:** 86 (learn first: research and tools proposed with a cost, built on Sam's Y), 3 (no place drawn without its photos), 11 (one rough composition sheet before building).
+- **Done (12 Nov, chat 2 of 8):** news photos for every place (13 from Al Jazeera/Reuters/AFP/AP/dpa galleries, refs es3-es6, de3-de5, fr3-fr5, al3-al5); tier 1 re-based on 11 Nov Barcelona, tier 3 on 17 Oct République (reporting above); network now full access (Sam); CLAUDE.md updated (news photos first, earlier chats can be read); first-pass crowd notes and drawing lessons in `research/crowds-and-big-action.md`; three-value thumbnails tried (scratch).
+- **Sam (12 Nov), new high-priority rule:** anything new or difficult: learn the craft or build the tool first, proposed with a cost for his Y. Wording proposed in Q1; written on his Y (rule 86, merged).
+- **Sam (12 Nov):** the crowd research missed the point: note B is about ARTISTIC JUDGEMENT AND SCREEN FRAMING (crowds, large vistas, framing wide action, composition), not pencil technique. The research job is proposed in Q2 (own chat, outside the film's budget).
+- **Next (on Sam's answers, this chat carries on):** if Q2 Y: open the research chat (Opus high); then pencil roughs of the four scenes using its lessons (Opus high), one labelled sheet, sent; then the cast (Opus high).
+- **Needs Sam:** Q1-Q8 (sent 12 Nov, one message).
+- **Read:** `guides/job-packs.md` "Plan"; this file's top half; `research/crowds-and-big-action.md`.
+- **Lost / Added (pending Sam):** Lost: yellow vests (Q4, 12 Nov). Proposed in Q5-Q7: tear-gas haze for pepper spray; road sign for the hammer; kiosk, rental bikes and CGT banners added.
+- **Open rule requests:** rule 86 rewrite (Q1); "pencil sketches before check sheets" every film? (Q8, would merge into rule 11); crowd lessons wait for the research job.
+- **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (graphite on paper; reuse for the roughs); thumbnails script was scratch only; ledger estimate set, stage plan done.
 
-## The reporting (checked 12 Nov; what each tier is based on)
-- **Spain, Barcelona, 5 Oct 2026:** housing march (organisers 120,000, police ~20,000) ended at Passeig de Gràcia / Gran Via; bins set on fire on Passeig de Gràcia; pyrotechnics thrown at officers and shop windows; baton charges; 13 arrests, ~30 officers lightly hurt. Keys rattled = symbol of earlier Spanish housing marches (Guardian), not confirmed for this march. Pepper spray: not reported for this march. Police: Mossos d'Esquadra. (euronews, Ara, Olive Press, 6 Oct)
-- **Germany, Frankfurt, 31 Oct 2026:** nationwide "Gen Z regelt" day (schools, cuts, conscription); in central Frankfurt shops broken into, a specialist gun shop attacked; police seized two weapons and arrested a suspect; Hesse minister blamed ~100 left-wing extremists; organisers oppose violence. (dpa via bluewin, Kuwait Times; Tichys Einblick)
-- **France, Paris, 17-18 Oct 2026:** cost-of-living + student protests; Place de la République the flashpoint; a car and a kiosk burned; barricades of burning rental bikes; tear gas, water cannon, stun grenades; bottles and rocks thrown; 1,800-2,000 arrests nationwide. Yellow vests are NOT in this reporting (they are 2018-19). (Al Jazeera, euronews, AP)
-- **Albania, Tirana, 13-14 Oct 2026:** student protests (corruption, education costs, Rama to resign); the Education Ministry set on fire (Molotovs, per EFE); tear gas and water cannon; firecrackers and stones thrown; shopfronts smashed; 16+ arrests. The RPG, helicopter, bank Molotovs and toppled water cannon are Sam's deliberate exaggeration (the brief says so). (Al Jazeera, Reuters, EFE)
+## The reporting (re-based 12 Nov, chat 2; what each tier is based on)
+- **Spain, Barcelona, Wed 11 Nov 2026 (tier 1, re-based on Sam's Q3):** first general strike in 14 years (UGT and CCOO), over housing, wages and prices ("Salaries. Housing. Prices."), weeks before the 29 Nov election. Barcelona march: organisers 400,000, police 55,000, peaceful, ending on Passeig de Gràcia; it rained (umbrellas, wet ground). After dark hooded groups smashed and looted brand stores on Passeig de Gràcia (between Plaça de Catalunya and Passeig de Gràcia; containers burned on Pau Claris), burned bins, bikes and potted plants, built barricades and fired pyrotechnics at the Mossos d'Esquadra, who formed a cordon with riot shields and used tear gas, baton charges and rubber/foam-bullet launchers; 18-52 arrests in Barcelona. Raised key rings: on Madrid's Gran Via that day (AP photo es6), not reported in Barcelona. Pepper spray: not reported; tear gas was. (AP via NPR/OPB, RTE, AFP via eNCA/The Local, elDiario.es, Al Jazeera gallery 12 Nov)
+- **Germany, Frankfurt, Sat 31 Oct 2026:** "Gen Z regelt" day, mostly peaceful; that evening police sealed the Zeil; shops looted; the gun shop on **Berliner Straße** had its big window smashed (dpa photo de4: rioters hit the glass with a ripped-up give-way road sign); two weapons seized (dpa: blank-firing guns taken); 30+ arrests in Frankfurt; water cannon and police lines with blue lights (hessenschau de5). The shop front (de3): dark tiled base, one big glass window, guns on white shelves; no steel shutter in the photos. (hessenschau.de, dpa via bluewin)
+- **France, Paris, Sat 17 Oct 2026 (tier 3, re-based on Sam's Q4):** cost-of-living + student day (CGT and student unions; 550,000 nationwide by police count, 800,000 by organisers; 110,000 in Paris). Place de la République: hooded, masked groups threw fireworks, paving stones and other objects; police answered with tear gas and water cannon; thick black smoke from cars, bicycles and other vehicles, and bins on fire; a car and a newspaper kiosk set ablaze; burning heaps of rental bikes (Lime green, Vélib) as barricades; 1,200-2,000 detained nationwide. Daytime into night (photo fr3: afternoon, the car burning right beside the monument). Note: Al Jazeera's captions say the day was called by the yellow vests ("yellow and youth") and a few vests are in the photos; Sam's Q4 answer (no vests) stands unless he changes it. (Al Jazeera 17-18 Oct gallery and articles, AP via PBS, CNN)
+- **Albania, Tirana, 13-18 Oct 2026:** student protests (education, cost of living, corruption; Rama to resign); the Education Ministry's windows smashed, fence torn down, billboards burned and the building set alight; Molotovs, firecrackers and stones thrown; tear gas, water cannon, later rubber bullets. Police: white helmets with visors, black uniforms, clear shields marked POLICIA, an armoured water-cannon truck behind the line (al3, al4). The RPG, helicopter, bank Molotovs and toppled water cannon are Sam's deliberate exaggeration. (Al Jazeera galleries 14 and 18 Oct, Reuters, AP, EFE)
 
 ## Plan extras (rules 24-26, 54, 55)
 Estimate: **21.5% of a week, of which 8.1% unmeasured** (crowd-field moves, vehicles, light layers, animatic 1 for a motion film). (Rule 24: ~15% for 3 new + 1 place, ~26% for 9 + 3; this is 4 small new + 4 places + heavy effects.) Everyone is a **Glimpse** (wide shots, 4 s, none taller than a third of the frame): one view, one pose each, plus the run/throw/swing poses the moves need.
@@ -114,7 +114,19 @@ Composition sheet sent: none yet.
 | al2 Tirana boulevard | very wide avenue, tall pines and plane trees both sides, pastel 6-10 storey blocks, hills at the end | |
 | de1 Frankfurt protester (2012 demo) | black cap with a patch, black clothes: the hooded rioters' look |
 | de2 German riot police | dark-grey padded suits, gloves, thigh and forearm guards, batons (no helmet in shot) | |
-| missing | gun store front with steel shutter; Frankfurt street at night; German riot helmet; raised keys at a housing march; French police rows + water cannon; Albanian riot police | Q5 |
+| es3 Barcelona 11 Nov, hooded firework | hooded figure in black firing a roman candle across a junction at night; metal barriers; red-yellow haze | |
+| es4 Mossos and burning container | Mossos riot officers silhouetted (helmets, long clear shields) against a container fire; purple-blue night; wet road | |
+| es5 Mossos shield line under fireworks | a row of ~10 Mossos, clear shields labelled "Policia Mossos d'Esquadra", sparks raining, white smoke at their feet; graffitied stone front | |
+| es6 Madrid 11 Nov, raised keys | hands raised high holding house keys; rain, umbrellas, black jackets, a whistle | |
+| de3 Frankfurt gun shop window | dark mosaic-tiled base, one big glass window with guns on white shelves, glass starred and broken, hooded figure kicking it | |
+| de4 Berliner Straße smash | night; hooded young men, one swinging a give-way road sign on its pole into a shop window; phone lights | |
+| de5 Frankfurt water cannon | two water jets in blue light over a German police line (dark helmets) at night | |
+| fr3 République, burning car | car ablaze right beside the Marianne monument, black smoke across it; crowd and flags at the base; daytime | |
+| fr4 burning rental bikes | heap of green Lime and orange bikes burning across a street; hooded figure in black walking past | |
+| fr5 Paris police and fire | French riot police (dark helmets, shields) beside a street fire; a woman on a green rental bike | |
+| al3 Tirana shield line | ~20 police with clear POLICIA shields, white helmets, an armoured water-cannon truck behind, a fire on the road in front | |
+| al4 Albanian riot police | white helmets with visors, black kit, red shoulder badges, grappling at close range | |
+| al5 flag against fire | Albanian flag (black eagle on red) silhouetted against flames | |
 
 ## Notes
 | # | shot | time | note | line | status |
@@ -125,35 +137,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - 12 Nov (my picks, told to Sam): hard cuts between tiers, 4.0 s each, 16 s + 1.6 s sign-off; headline country on the cut, location 0.5 s later, both held through the tier; T1 camera high behind the march (the police line really at the far end, a long lens so it reads); T3 police on the right so the water cannon enters from their side; gun store sign "WAFFEN" (no real shop name in the reporting); the helicopter falls behind the ministry with no crew shown.
 
 
-## Sam's brief (12 Nov, word for word)
-
-Create a short film in satire style about these four European protests. Each one has an increasing tier of scene severity based on actual reporting. Give them the white headlines from Islamocommunism with Country and underneath Location. Consider each tier a rising showstopper, with tier 1 being a quarter of one and tier 4 being the whole showstopper. Find reporting and photos on each event for references
-
-Tier 1, Spain (lowest): Paseo de Gracia, dusk, wide.
-* Crowd: a huge, calm march fills the avenue to the vanishing point. Raised key rings glint above the heads (a real detail from the strike, a symbol of housing), with union flags and placards from different cities.
-* Contact: a thin police line crosses the far end. A small knot of hooded figures stands in front of the crowd, beside one burning container.
-* 0.0-1.5 s: the crowd sways forward and the keys rise like a wave. A hooded figure at the front flicks a string of fireworks toward the line.
-* 1.5-3.0 s: three small bursts pop over the line and the crowd's heads turn.
-* 3.0-4.0 s: the line steps one pace forward, and a thin pepper-spray haze drifts through the keys.
-
-Tier 2, Germany: Frankfurt gun store, night. Locked camera.
-Frame: the gun store sits centre-left, with a steel shutter half raised over a large glass front. The street is wet and shows reflections. A crowd of young protesters fills the right half and the mid-ground behind the store, holding signs (a "Gen Z regelt" banner among them) with a few phone lights. The far end of the street, frame right, is dark.
-* 0.0-1.5 s (the rush and smash): eight hooded figures sprint in from frame left across the foreground. Two haul the shutter up with a pry bar, and a third swings a hammer into the glass. The sheet collapses and shards sparkle in the streetlight. Two figures slide through the gap, and a sign is kicked to the ground as the others hit the frame.
-* 1.5-3.0 s (the chanting crowd): the smashing continues at the store while the crowd behind it chants. Signs jab up and down in rhythm, mouths are open, and phone lights wave. The crowd stays on the pavement, facing the store, with the break-in in front of them.
-* 3.0-4.0 s (the police arrive): blue light and sirens appear at the far right end of the street and sweep across the crowd and the store front. Faces, signs and wet ground turn blue. The group at the store freezes mid-swing, and the crowd holds its signs up in the glare as the final frame.
-VFX: a hammer impact flash, a falling glass sheet with glints, phone lights, a moving blue strobe wash with reflections on the wet street, and a siren sound cue. Three light layers, with the blue wash arriving last so it lights everything at once.
-
-Tier 3, Paris (real top): Place de la République, low angle.
-* Crowd: a vast crowd fills the square in yellow vests and tricolour flags. Union banners hang across the back, and Marianne stands above, graffiti on her base.
-* Contact: a black-clad front line faces two police rows, with a burning car foreground-left and burning bicycles mid-right.
-* 0.0-1.0 s: smoke rises from the car and the bicycles, and the crowd surges forward behind the front line.
-* 1.0-2.5 s: the front line throws paving stones in arcs. A tear gas canister lands among them and white gas swallows Marianne's lower half.
-* 2.5-4.0 s: a water cannon sweeps in low from the right. The crowd breaks into two currents, scattering out left while the vests hold at the back.
-
-Tier 4, Albania (artificially placed top): Tirana avenue, dusk.
-* Frame: a wide avenue under a burning sky. A bank sits on the left, the blazing Education Ministry at centre-right, and a police helicopter hangs high at upper right. A shield line runs across the mid-right, with a vast, furious crowd filling the avenue behind the rioters. Zones: sky for the helicopter and rocket, foreground for the mopeds, mid-ground for the melee, left buildings for the Molotovs.
-* 0.0-1.0 s: two mopeds with masked riders race in from foreground left. The lead passenger shoulders an RPG and fires, and the rocket's smoke trail climbs diagonally toward the helicopter. The crowd surges behind them.
-* 1.0-2.0 s: the rocket hits and the helicopter spins out of the sky, trailing fire, falling behind the ministry. The crowd slams into the shield line and the shields buckle.
-* 2.0-3.0 s: the line breaks. Rioters swarm over the shields in furious melee, batons swinging, and officers are driven back. Two Molotovs arc from the crowd into the bank's ground-floor windows, and the glass blooms orange.
-* 3.0-4.0 s: a fireball from the wreck rises behind the ministry and backlights the melee. Tear gas, flares and a toppled water cannon truck burning at the line's end hold the final frame.
-VFX: rocket smoke trail, helicopter spiral with a fire trail, a fireball, shield-line impact flashes, melee dust, Molotov window bursts and ground fog. The violence stays stylised, with no gore.
+## Sam's brief: word for word in `notes/archive/protest-tiers-brief.md` (every detail is in the checklist above).
