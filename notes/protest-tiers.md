@@ -6,9 +6,9 @@
 - **Sam (12 Nov), Q1 Y:** rule 86 rewritten as "Learn first" (research or build the tool first, proposed with a cost, on his Y). Q2 Y: the framing research job (`notes/framing-research.md`, 1.4%, outside this film's budget) runs in its own chat. Q8: "Pencil sketches, let's wait and see how it turns out here" (decide the every-film rule after this film's roughs).
 - **Sam (12 Nov):** the crowd research missed the point: note B is about ARTISTIC JUDGEMENT AND SCREEN FRAMING (crowds, large vistas, framing wide action, composition), not pencil technique. The research job is proposed in Q2 (own chat, outside the film's budget).
 - **Next:** the research chat (Opus high, opened 12 Nov); then pencil roughs of the four scenes using its lessons (Opus high), one labelled sheet, sent with Q3-Q7; then the cast (Opus high).
-- **Needs Sam:** Q3 Hook Text ("European protests, ranked"?), Q4 sound (1 one sound per big moment / 2 siren only / 3 music), Q5 Spain wet dusk + tear gas + keep keys, Q6 road sign for hammer + keep shutter, Q7 Paris kiosk, bikes, CGT, still no vests: asked 12 Nov, unanswered; ask again with the roughs.
+- **Needs Sam:** Q3 Hook Text ("European protests, ranked"?) and Q4 sound (1 one sound per big moment / 2 siren only / 3 music): still pending (Sam, 12 Nov); ask again with the roughs. Q5-Q7 approved.
 - **Read:** `guides/job-packs.md` "Plan"; this file's top half; `research/crowds-and-big-action.md`.
-- **Lost / Added (pending Sam):** Lost: yellow vests (Q4, 12 Nov). Proposed in Q5-Q7: tear-gas haze for pepper spray; road sign for the hammer; kiosk, rental bikes and CGT banners added.
+- **Lost / Added (Sam Y, 12 Nov):** Lost: yellow vests; pepper spray (now tear gas); the hammer (now a road sign). Added: wet dusk with streetlights (T1); burning newspaper kiosk, burning rental bikes, CGT banners, daytime (T3).
 - **Open rule requests:** "pencil sketches before check sheets" every film (Sam: wait and see after this film's roughs; would merge into rule 11); crowd and framing lessons come from the research job.
 - **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (graphite on paper; reuse for the roughs); thumbnails script was scratch only; ledger estimate set, stage plan done.
 
@@ -73,25 +73,25 @@ Composition sheet sent: none yet.
 | 2 | White headlines from Islamocommunism: Country, and underneath Location | |
 | 3 | Tier 1 a quarter showstopper, tier 4 the whole one | |
 | 4 | Find reporting and photos for each event | partly: Q5 |
-| 5 | T1 Spain: Paseo de Gracia, dusk, wide | |
-| 6 | T1 huge calm march to the vanishing point; raised key rings glint above heads; union flags and placards from different cities | |
+| 5 | T1 Spain: Paseo de Gracia, dusk, wide; wet after rain, streetlights on (11 Nov) (Sam Y, 12 Nov Q5-Q7) | |
+| 6 | T1 huge calm march to the vanishing point; raised key rings glint above heads (kept: Madrid that day); union flags and placards from different cities | |
 | 7 | T1 thin police line across the far end; small knot of hooded figures in front of the crowd beside one burning container | |
 | 8 | T1 0.0-1.5 crowd sways forward, keys rise like a wave; a hooded figure flicks a string of fireworks toward the line | |
 | 9 | T1 1.5-3.0 three small bursts pop over the line; the crowd's heads turn | |
-| 10 | T1 3.0-4.0 the line steps one pace forward; a thin pepper-spray haze drifts through the keys | Q3 |
+| 10 | T1 3.0-4.0 the line steps one pace forward; a thin TEAR-GAS haze drifts through the keys (was pepper spray; 11 Nov reporting) (Sam Y, 12 Nov Q5-Q7) | |
 | 11 | T2 Germany: Frankfurt gun store, night, locked camera | |
 | 12 | T2 store centre-left, steel shutter half raised over a large glass front; wet street with reflections | |
 | 13 | T2 young crowd fills the right half and mid-ground behind the store, signs incl. a "Gen Z regelt" banner, a few phone lights; far end frame right dark | |
-| 14 | T2 0.0-1.5 eight hooded figures sprint in from the left across the foreground; two haul the shutter up with a pry bar; a third swings a hammer into the glass; the sheet collapses, shards sparkle; two slide through the gap; a sign is kicked to the ground | |
+| 14 | T2 0.0-1.5 eight hooded figures sprint in from the left across the foreground; two haul the shutter up with a pry bar; a third swings a ripped-up give-way ROAD SIGN into the glass (was a hammer; dpa photo de4; shutter kept) (Sam Y, 12 Nov Q5-Q7); the sheet collapses, shards sparkle; two slide through the gap; a sign is kicked to the ground | |
 | 15 | T2 1.5-3.0 smashing continues; crowd chants: signs jab in rhythm, mouths open, phone lights wave; crowd stays on the pavement facing the store | |
 | 16 | T2 3.0-4.0 blue light and sirens at the far right end sweep across crowd and store; faces, signs, wet ground turn blue; the group freezes mid-swing; crowd holds signs up in the glare (final frame) | |
-| 17 | T2 VFX: hammer flash, falling glass with glints, phone lights, moving blue strobe wash reflected on the street, siren cue; three light layers, blue wash last, lighting everything at once | |
+| 17 | T2 VFX: road-sign impact flash, falling glass with glints, phone lights, moving blue strobe wash reflected on the street, siren cue; three light layers, blue wash last, lighting everything at once | |
 | 18 | T3 France (real top): Place de la République, low angle | |
-| 19 | T3 vast crowd, yellow vests and tricolour flags; union banners across the back; Marianne above, graffiti on her base | Q4 |
-| 20 | T3 black-clad front line faces two police rows; burning car foreground-left; burning bicycles mid-right | |
+| 19 | T3 vast crowd of students and workers with tricolour flags (NO yellow vests, Sam Q4); CGT union banners across the back; Marianne above, graffiti on her base | |
+| 20 | T3 black-clad front line faces two police rows; burning car foreground-left; heaps of burning rental bikes (green Lime, Vélib) mid-right; a burning newspaper kiosk; daytime (17 Oct) (Sam Y, 12 Nov Q5-Q7) | |
 | 21 | T3 0.0-1.0 smoke rises from car and bikes; the crowd surges forward behind the front line | |
 | 22 | T3 1.0-2.5 front line throws paving stones in arcs; a tear gas canister lands among them; white gas swallows Marianne's lower half | |
-| 23 | T3 2.5-4.0 a water cannon sweeps in low from the right; the crowd breaks into two currents, scattering out left while the vests hold at the back | |
+| 23 | T3 2.5-4.0 a water cannon sweeps in low from the right; the crowd breaks into two currents, scattering out left while the CGT banners hold at the back | |
 | 24 | T4 Albania (artificially placed top): Tirana avenue, dusk | |
 | 25 | T4 wide avenue under a burning sky; bank left; blazing Education Ministry centre-right; police helicopter high upper right; shield line mid-right; vast furious crowd behind the rioters | |
 | 26 | T4 zones: sky = helicopter and rocket; foreground = mopeds; mid-ground = melee; left buildings = Molotovs | |
