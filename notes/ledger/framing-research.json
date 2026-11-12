@@ -1,0 +1,23 @@
+{
+ "film": "framing-research",
+ "estimate": 1.4,
+ "chats": [],
+ "checks": {},
+ "stages": [
+  {
+   "name": "read",
+   "pct": 0.5,
+   "done": null
+  },
+  {
+   "name": "frames",
+   "pct": 0.6,
+   "done": null
+  },
+  {
+   "name": "writeup",
+   "pct": 0.3,
+   "done": null
+  }
+ ]
+}

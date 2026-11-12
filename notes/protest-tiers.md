@@ -3,13 +3,13 @@
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 86 (learn first: research and tools proposed with a cost, built on Sam's Y), 3 (no place drawn without its photos), 11 (one rough composition sheet before building).
 - **Done (12 Nov, chat 2 of 8):** news photos for every place (13 from Al Jazeera/Reuters/AFP/AP/dpa galleries, refs es3-es6, de3-de5, fr3-fr5, al3-al5); tier 1 re-based on 11 Nov Barcelona, tier 3 on 17 Oct République (reporting above); network now full access (Sam); CLAUDE.md updated (news photos first, earlier chats can be read); first-pass crowd notes and drawing lessons in `research/crowds-and-big-action.md`; three-value thumbnails tried (scratch).
-- **Sam (12 Nov), new high-priority rule:** anything new or difficult: learn the craft or build the tool first, proposed with a cost for his Y. Wording proposed in Q1; written on his Y (rule 86, merged).
+- **Sam (12 Nov), Q1 Y:** rule 86 rewritten as "Learn first" (research or build the tool first, proposed with a cost, on his Y). Q2 Y: the framing research job (`notes/framing-research.md`, 1.4%, outside this film's budget) runs in its own chat. Q8: "Pencil sketches, let's wait and see how it turns out here" (decide the every-film rule after this film's roughs).
 - **Sam (12 Nov):** the crowd research missed the point: note B is about ARTISTIC JUDGEMENT AND SCREEN FRAMING (crowds, large vistas, framing wide action, composition), not pencil technique. The research job is proposed in Q2 (own chat, outside the film's budget).
-- **Next (on Sam's answers, this chat carries on):** if Q2 Y: open the research chat (Opus high); then pencil roughs of the four scenes using its lessons (Opus high), one labelled sheet, sent; then the cast (Opus high).
-- **Needs Sam:** Q1-Q8 (sent 12 Nov, one message).
+- **Next:** the research chat (Opus high, opened 12 Nov); then pencil roughs of the four scenes using its lessons (Opus high), one labelled sheet, sent with Q3-Q7; then the cast (Opus high).
+- **Needs Sam:** Q3 Hook Text ("European protests, ranked"?), Q4 sound (1 one sound per big moment / 2 siren only / 3 music), Q5 Spain wet dusk + tear gas + keep keys, Q6 road sign for hammer + keep shutter, Q7 Paris kiosk, bikes, CGT, still no vests: asked 12 Nov, unanswered; ask again with the roughs.
 - **Read:** `guides/job-packs.md` "Plan"; this file's top half; `research/crowds-and-big-action.md`.
 - **Lost / Added (pending Sam):** Lost: yellow vests (Q4, 12 Nov). Proposed in Q5-Q7: tear-gas haze for pepper spray; road sign for the hammer; kiosk, rental bikes and CGT banners added.
-- **Open rule requests:** rule 86 rewrite (Q1); "pencil sketches before check sheets" every film? (Q8, would merge into rule 11); crowd lessons wait for the research job.
+- **Open rule requests:** "pencil sketches before check sheets" every film (Sam: wait and see after this film's roughs; would merge into rule 11); crowd and framing lessons come from the research job.
 - **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (graphite on paper; reuse for the roughs); thumbnails script was scratch only; ledger estimate set, stage plan done.
 
 ## The reporting (re-based 12 Nov, chat 2; what each tier is based on)
