@@ -221,6 +221,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.84
+  },
+  {
+   "date": "2026-11-12",
+   "chat": "264929a5",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.35
   }
  ],
  "checks": {},
@@ -535,7 +545,7 @@
   "5:moves": 3,
   "7:animatic1": 8,
   "8:round1": 6,
-  "9:round2": 1
+  "9:round2": 2
  },
  "forecast_alarm": 4,
  "alarm": 4,
