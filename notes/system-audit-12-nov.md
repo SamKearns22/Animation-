@@ -68,7 +68,7 @@ Opus about 1.5%). It's a guess; the first chat measures it and says if it's head
 - **Next (Sonnet, low cost, after Blessed is finished and the week resets):** run `kittests.py` and the quick run
   (`preflight.py FILM OUT --text --audit`) on the six films, report only, results under "Sam's answers"; then the
   branch waits for Blessed's animatic 1 to join the main line. Type: "Audit chat 3: kit tests and six-film run".
-- **Needs Sam:** nothing; he paused the audit to finish Blessed (12 Nov).
+- **Needs Sam:** nothing; he paused the audit to finish Blessed (12 Nov). Items A-C (below) wait too.
 - **Read:** CLAUDE.md; this file from "## Sam's answers to the report".
 - **Open rule requests:** none.
 - **For Claude:** new: `preflight.allow_faults`, `preflight.seen_before_faults`, `ledger.chain_stop` (Stop hook),
@@ -363,6 +363,11 @@ merging or replacing an old rule so the rulebook does not grow:
 - [x] 9 a "too still" check for every person on screen (not only speakers' heads).
 - [x] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
       against voice, song joins, resting arms, doorways).
+- [ ] A every new film starts from the template with ALL checks set up, none switched off at the start (about 0.5%).
+- [ ] B finish.py stretches or splits any caption too fast or too long to read, not only flags it (about 0.3%).
+- [ ] C finish.py smooths sudden loud jumps in sound at cuts (MidTerminal: +24 and +41 dB) (about 0.3%).
+      (A-C: sent by chat E at 10:32, 12 Nov, citing Sam's "Y to all of the above" in chat D; not built: Sam paused the
+      audit for Blessed at 92% of the week. Build them in the audit chat after the week resets, Opus high.)
 Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
 
 ### Chat E (Opus, high, 12 Nov; chat 1 of 8): items 2, 3, 4, 11 built, on `claude/audit-honest-checker`
