@@ -366,3 +366,5 @@ merging or replacing an old rule so the rulebook does not grow:
 - [ ] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
       against voice, song joins, resting arms, doorways).
 Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
+Chat D's extra suggestions (12 Nov): 2 (arms at the source) and 7 (test clip of the hardest move) dropped: already
+rules 41 and 8. 5 (monthly mini-audit) dropped: Sam audits by hand most weeks. 1, 3, 4, 6 wait on Sam's Y/N.
