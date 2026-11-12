@@ -230,7 +230,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.35
+   "cost": 1.63
   }
  ],
  "checks": {},
@@ -545,7 +545,7 @@
   "5:moves": 3,
   "7:animatic1": 8,
   "8:round1": 6,
-  "9:round2": 2
+  "9:round2": 3
  },
  "forecast_alarm": 4,
  "alarm": 4,
