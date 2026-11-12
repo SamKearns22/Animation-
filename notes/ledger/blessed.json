@@ -200,7 +200,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.6
+   "cost": 1.68
   }
  ],
  "checks": {},
@@ -272,7 +272,10 @@
   {
    "name": "round1",
    "pct": 2.5,
-   "done": null
+   "done": {
+    "date": "2026-11-12",
+    "spent": 31.03
+   }
   },
   {
    "name": "round2",
