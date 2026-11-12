@@ -102,3 +102,8 @@ at session start (`.claude/hooks/setup.sh`).
   ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): `python3
   source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no
   `HOOK`), from the clean render in `source/data/`.
+
+# My accounts (Sam, 26 Oct)
+- Channel and brand name on every platform: **CranbriJoos**. TikTok (main platform): `www.tiktok.com/@cranbrijoos`.
+- YouTube Shorts is the second platform: same name and profile picture (`profile/cranbrijoos-tiktok-1080-eyes-open.png`,
+  the beaver's face); every Short's description and pinned comment points back to the TikTok link.

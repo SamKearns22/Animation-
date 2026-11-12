@@ -340,3 +340,29 @@ leaving a check off needs his yes. **Three holes remain (proposals for chat D, n
 2. **Swindon has a "--no-lock" switch** in its code (Sam, 8 Nov: "Skip the checks"), which renders with no checks at
    all; any later chat on that film can use it. Proposal: such a yes covers one render, not every render after it.
 3. Until the branch joins, the old checker is live; the Blessed chats are running on it now.
+
+### Chat D (Opus, medium, 12 Nov): the final report
+Written: `notes/system-audit-report.md` (findings, quality, cost, how we work, 11 numbered decisions). This chat about
+0.3%; the audit in all about 3.0% of a week (±20%), under the 3.5% planned. Open: Sam's numbers 1-11; the honest
+checker merges after Blessed's animatic 1 is sent.
+
+## Sam's answers to the report (12 Nov): Y to all 1-11; 10 = leave it; 11 = NOW, not after Blessed
+Done in chat D: (1) the accounts details are in CLAUDE.md; the lost Remakes cost (1.03 to 1.73) is back in its ledger;
+the sitting arm fix is on `claude/audit-honest-checker` (it changes the figure kit, so it joins with the checker, after
+Blessed's animatic 1). (10) left alone.
+**The build job (chat E, Opus high, ALL on branch `claude/audit-honest-checker`, nothing on the main line, no Blessed
+file touched; about 3-4% of a week; stop and push-notify Sam past 4.5%):** write each yes as a rule WITH its check,
+merging or replacing an old rule so the rulebook does not grow:
+- [ ] 2 every "off with Sam's yes" line names the note/message where he said it; the checker finds that line in the
+      film's notes; the check sheet lists every "off" line before each animatic.
+- [ ] 3 a yes to skip checks covers one render only (Swindon's --no-lock becomes one-use).
+- [ ] 4 cost record: each chat's cost saved at its end whatever it moved; merging two ledgers keeps the larger; a
+      Monday question to Sam for the app's weekly figure, re-fit the allowance; percentages labelled "about, ±20%".
+- [ ] 5 no "allowed" entry may cover a whole film or lack a reason (a check).
+- [ ] 6 a handover line saying a check is "still to do" stops the chain and asks Sam.
+- [ ] 7 a "can't tell" on a movement line needs a short clip looked at before the critique is clean.
+- [ ] 8 a "seen before" note gets its check built in the same round, before the fix is sent.
+- [ ] 9 a "too still" check for every person on screen (not only speakers' heads).
+- [ ] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
+      against voice, song joins, resting arms, doorways).
+Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
