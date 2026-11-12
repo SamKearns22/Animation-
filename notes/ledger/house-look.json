@@ -1,0 +1,17 @@
+{
+ "film": "house-look",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-12",
+   "chat": "718d4ea1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.07
+  }
+ ],
+ "checks": {}
+}
