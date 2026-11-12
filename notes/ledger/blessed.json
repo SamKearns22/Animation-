@@ -131,6 +131,16 @@
    "repeats": [],
    "model": "sonnet",
    "cost": 0.22
+  },
+  {
+   "date": "2026-11-12",
+   "chat": "79ad6d23",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.43
   }
  ],
  "checks": {},
@@ -376,8 +386,8 @@
  },
  "stage_alarm": {
   "5:moves": 3,
-  "7:animatic1": 7
+  "7:animatic1": 8
  },
- "forecast_alarm": 1,
+ "forecast_alarm": 2,
  "alarm": 1
 }
