@@ -49,6 +49,8 @@ at session start (`.claude/hooks/setup.sh`).
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).
 - **Every new rule replaces or merges an old one, or turns a by-hand rule into a check:** the rulebook never grows.
+  **Before suggesting anything** (rule, tool or idea), search the rulebook and `guides/kit-catalogue.md`; each
+  suggestion names the closest rule or tool and says what is new, or is dropped (Sam, 12 Nov).
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
 
 # Models and chats
