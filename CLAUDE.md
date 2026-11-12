@@ -98,9 +98,13 @@ at session start (`.claude/hooks/setup.sh`).
   say so; the handover's first line names the branch with the newest work, and the next chat merges it first.
 - **Which film, which guide** (satire film, motion-led, flat people, Yuletide): `guides/job-packs.md`,
   "Film types". **Reuse before building** (`guides/kit-catalogue.md`); build new only where nothing fits, and say so.
-- **Reference photos:** I send 2-3 when I have them; otherwise search once, slowly, 3 per place at most. **One failed
-  try per source, then stop** and give me one numbered list of what to find, which angle and why. At the start of each
-  film, try the other sources (Geograph, Openverse, Pexels, Unsplash, Library of Congress, NASA) and note which work.
+- **Reference photos and reporting (full network access since 12 Nov):** I send 2-3 when I have them; otherwise search
+  once, slowly, 3 per place at most: **news pages and press photo galleries first** (Al Jazeera galleries, AP, Reuters,
+  euronews, dpa, local papers), free libraries (Wikimedia, Geograph, Openverse, Pexels, Unsplash) only when the news
+  has nothing. **One failed try per source, then stop** and give me one numbered list of what to find, which angle and
+  why.
+- **Earlier chats can be read** (`list_sessions`, `list_events`): before asking me anything I may have answered
+  already, or when a handover is unclear, look in that film's earlier chats first and say what you found.
 - **Sound:** voices only, no sound effects unless the script names them or I ask. **I record every voice; never ask
   who voices them.**
 - **TikTok** (`guides/tiktok-design.md`): no title by default; Hook Text in TikTok's white-box style. **Every video
