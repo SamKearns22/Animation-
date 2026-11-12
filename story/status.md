@@ -1,3 +1,3 @@
-Blessed: round-2 notes half done (newsreader mouth, one continuous release shot, Walliams' hands, preening, music, sigh, voice before the TV cut). Protest Tiers: news photos for every place and tiers 1 and 3 re-based on November Barcelona and 17 Oct Paris.
-Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Y/N on the dock camera rise (note 37). Protest Tiers: Hook Text and sound (Q3, Q4), asked again with the pencil roughs; scene changes approved.
-Next: Blessed chat 2 of 8 (Opus medium): notes 33, 34, 36, 37, 41, 42, 43 as clips; then chat 3 (Opus high): seated poses, a van option sheet; then animatic 3. Framing research chat (Opus high, rule 86, 1.4%), then Protest Tiers pencil roughs.
+Blessed: round-2 notes done except Walliams' face (chat 3 of 8, 10%), the seated rebuild and van sheet, note 48 (chat 4). Protest Tiers: chat 2 (crowd research, sketches).
+Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Walliams face sheet (chat 3). Protest Tiers: Hook Text and sound.
+Next: Blessed chat 3 of 8 (Opus high): Walliams' face; chat 4 (Opus high): seated rebuild, van options, note 48 staging; then animatic 3.
