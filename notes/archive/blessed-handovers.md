@@ -220,3 +220,14 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Read:** `guides/job-packs.md` Build (people, critique); rule 49; Notes rows 25, 29, 30; this section.
 - **Open rule requests:** none.
 - **For Claude:** blessed_walliams.py (P4 'walliams', TUNE; MOODS scared/alarmed; FACE_HEADS hook). blessed.py: T['wal'], WAL_LEN, wal_* functions, _door_clip, parted, draw_walliams: re-use the grip and door clip inside gates2's drawing, remove the 'walliams' entries from SHOTS/VIEW/SHOT_CAST/_cam and set DUR back. Brand's gates2 mark: ST.STAGE['gates']['brand'] = _mark(GATE, 0.6, 7.6) and G2_FROM/G2_TO in blessed.py.
+
+## Replaced 12 Nov (r2 chat 1, second)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 89 (Walliams' new head has had no fresh-eye critique: one before animatic 2), 30 (note 28 the officer; 26's unclipped shots), 24 (round 1 well over its share).
+- **Done (12 Nov, chat 1 of 8, Opus high, branch claude/blessed-notes-r2):** notes 29 (new likeness from Sam's 5 photos), 30 (Walliams in gates2's background, no shot of his own, film 53.57 s), 31 (gates2 pushes in on the pack); checks clean; clip blessed-r2-clip-gates2.mp4 sent.
+- **Next (on Sam's Y to the clip): Opus, MEDIUM, a new chat (chat 2 of 8):** the fresh-eye critique of Walliams' head (rule 89), note 28 (HM Prison officer), note 26's clips (oath, phone, arrival) and note 27's music clip; then animatic 2 (Sonnet).
+- **Needs Sam:** a look at the gates2 clip.
+- **Read:** `guides/job-packs.md` Notes round; Notes rows 26-31; this section.
+- **Open rule requests:** none.
+- **For Claude:** blessed_walliams.py (new card, TUNE nose_long -1.5, beard() is now stubble, long_nose()). blessed.py: T['wal'] = gates2 + 0.5; G2_X -1.0, G2_PART, G2_PRESS (the pack opened left in gates2 only; ST.STAGE['gates']['brand'] kept, it places gates2's camera); _cam 'gates2' push; draw_walliams() drawn first in gates2. Photo sites are blocked in the Default environment (create/update_environment refused 12 Nov): ask Sam for photos.
+

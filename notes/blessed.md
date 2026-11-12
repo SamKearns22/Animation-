@@ -1,13 +1,14 @@
 # Notes for BLESSED (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (Walliams' new head has had no fresh-eye critique: one before animatic 2), 30 (note 28 the officer; 26's unclipped shots), 24 (round 1 well over its share).
-- **Done (12 Nov, chat 1 of 8, Opus high, branch claude/blessed-notes-r2):** notes 29 (new likeness from Sam's 5 photos), 30 (Walliams in gates2's background, no shot of his own, film 53.57 s), 31 (gates2 pushes in on the pack); checks clean; clip blessed-r2-clip-gates2.mp4 sent.
-- **Next (on Sam's Y to the clip): Opus, MEDIUM, a new chat (chat 2 of 8):** the fresh-eye critique of Walliams' head (rule 89), note 28 (HM Prison officer), note 26's clips (oath, phone, arrival) and note 27's music clip; then animatic 2 (Sonnet).
-- **Needs Sam:** a look at the gates2 clip.
-- **Read:** `guides/job-packs.md` Notes round; Notes rows 26-31; this section.
+- **Rules that bite next:** 30 (note 32 repeats 30: read its "Why" before building), 74 (plan Walliams' beats on the acting list before any render), 89 (fresh-eye critique of his new head before the animatic).
+- **Done (12 Nov, chat 1 of 8, Opus high):** notes 29 (new likeness, check 64%/67%), 30/31 built; Sam rejected the gates2 clip (note 32); round-1 status listed for Sam; cost alarm answered.
+- **Sam's answers (12 Nov): 1 = B** (one proper Walliams rebuild, about 1.5%); **2 = option 1** (cheapest finish: note 28 the HM Prison officer; no round 2) **plus an animatic** before the final.
+- **Next: Opus, HIGH, chat 2 of 8:** (a) plan gates2 beat by beat in the notes (acting list): the pack on BOTH sides as before (drop G2_PART), Brand big and purposeful (camera framed on him; a clear stride to a mark, not a wander), Walliams with comic beats (struggling between the officers, a double-take at the cameras, a pleading look, a last grab at the door frame) and a real doorway (the prison's inside lit, not a flat black clip), then a clip of gates2 (no yes needed); (b) note 28; (c) critique of Walliams' head; (d) animatic 2 (Sonnet may render). Ask before the final.
+- **Needs Sam:** nothing until the gates2 clip.
+- **Read:** `guides/job-packs.md` Build (people) and Notes round; Notes rows 25-32; this section.
 - **Open rule requests:** none.
-- **For Claude:** blessed_walliams.py (new card, TUNE nose_long -1.5, beard() is now stubble, long_nose()). blessed.py: T['wal'] = gates2 + 0.5; G2_X -1.0, G2_PART, G2_PRESS (the pack opened left in gates2 only; ST.STAGE['gates']['brand'] kept, it places gates2's camera); _cam 'gates2' push; draw_walliams() drawn first in gates2. Photo sites are blocked in the Default environment (create/update_environment refused 12 Nov): ask Sam for photos.
+- **For Claude:** blessed_walliams.py (new card; TUNE nose_long -1.5; beard() is stubble; long_nose()). blessed.py: T['wal'] = gates2 + 0.5; G2_X, G2_PART, G2_PRESS (gates2 only; ST.STAGE['gates']['brand'] places gates2's camera); _cam 'gates2' push; draw_walliams() first in gates2; _door_clip = the black doorway. Photo sites are blocked in the Default environment.
 
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
 Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
