@@ -65,7 +65,7 @@ CAST = dict(BC.CAST,
 LINES = [   # the script word for word (brief rows 5, 6, 7, 11, 13-14, 15); Sam's takes time every line
     dict(n=1, audio='blessed-1', who='brand', text="Yeah, I'm feeling blessed, mate, super blessed."),
     dict(n=2, audio='blessed-2', who='brand', text="I swear by Almighty God that the blessed evidence I shall give "
-         "shall be the truth, the whole truth, and nothing but the blessed truth."),
+         "will be the truth, the whole truth, and nothing but the blessed truth."),
     dict(n=3, audio='blessed-3', who='brand', text="Well that doesn't feel very blessed."),
     dict(n=4, audio='blessed-4', who='brand', text="Yeah, love. I'm just not feeling very... blessed right now."),   # Sam's take (note 19)
     dict(n=5, audio='blessed-bbc', who='newsreader', text="Our breaking news. The government has announced a new "
@@ -106,11 +106,11 @@ T['s4'] = T['s3']                                 # (Sam, 12 Nov: no gavel shot)
 T['hollow'] = T['s4'] + 0.3                       # the stillness cracks just before line 3
 T['van'] = _at(3, T['s4'] + 0.9) + 0.8
 T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, weeping on the cot
-T['cot'] = T['cell'] + 3.9                        # note 17: room for a long, readable sigh (was 3.2)
+T['cot'] = T['cell'] + 4.5                        # note 17: room for a long, readable sigh; note 40: deeper, a beat more (was 3.9)
 T['phone'] = T['cot'] + 2.8
 T['tvroom'] = _at(4, T['phone'] + 0.5) + 0.7
-T['tv'] = T['tvroom'] + 2.6                       # his eyes drift up to the screen
-_at(5, T['tv'] + 0.4)
+T['tv'] = T['tvroom'] + 3.6                       # his eyes drift up to the screen as its voice starts (note 44: +1 s)
+_at(5, T['tv'] - 0.6)                               # note 44: his voice starts before the cut to the TV
 T['push'] = L[5]['start'] + L[5]['_stretches'][min(FADE_FROM, len(L[5]['_stretches']) - 1)][1] + 0.2
 T['amazed'] = T['push'] + 1.2                     # the face change on the slow push in (brief 14)
 T['overjoyed'] = T['push'] + 3.2
@@ -867,8 +867,9 @@ def escort(sp, t, who='brand'):
         a = T['cell'] + ESC_STOP
         head = -90.0 if a + 0.2 <= t < a + 0.6 else None      # a look left, then up to the window, then down
         # note 17: a big, slow sigh: breathes in looking up (shoulders rise), then out, the head and shoulders sinking
-        j['nod'] = _keys(t, [(a + 0.6, 0.0), (a + 0.9, -1.6), (a + 1.25, -1.8), (a + 2.0, 1.8)])
-        up = _keys(t, [(a + 0.6, 0.0), (a + 1.15, -16.0), (a + 1.3, -16.0), (a + 2.1, 12.0)])
+        #   note 40 (Sam, 12 Nov): deeper, an extra beat: a bigger breath in, held, a long slump out, held
+        j['nod'] = _keys(t, [(a + 0.6, 0.0), (a + 1.1, -2.4), (a + 1.7, -2.6), (a + 2.8, 2.6)])
+        up = _keys(t, [(a + 0.6, 0.0), (a + 1.3, -26.0), (a + 1.7, -26.0), (a + 2.9, 20.0)])
         for sd in 'LR':
             for jt in ('sh', 'el', 'wr'):
                 x0, y0, z0 = j[jt + sd]
@@ -1022,7 +1023,7 @@ GATE_D_OUT = (ST.GATE_D + 0.2, ST.GATE_D - 0.52)
 #     BOTH sides as in the wide shot, only those in the lane between the lens, him and the door step aside; behind him
 #     Walliams is dragged in between two officers, does a double-take at the cameras, pleads with the pack, is shoved
 #     through the door into the lit passage, grabs the frame, and the officer slams the door.
-G2_FROM, G2_TO = (0.6, 8.1), (-0.3, 5.0)           # (x, d): out of the wicket into the pack, mostly towards us
+G2_FROM, G2_TO = (0.65, ST.GATE_D - 0.52), (-0.3, 5.0)   # note 46: on from where the wide shot leaves him           # (x, d): out of the wicket into the pack, mostly towards us
 moves.GAITS['stride'] = dict(moves.GAITS['swagger'], sps=2.15, step=0.9, swing=0.45)   # purposeful, still him
 G2_WALK = math.hypot(G2_TO[0] - G2_FROM[0], G2_TO[1] - G2_FROM[1]) / moves.speed('stride')
 G2_X = G2_TO[0]
@@ -1057,6 +1058,15 @@ def _g2_press():
 G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]   # chat 3: two of the pack close to us, heads in the bottom corners
 
 
+def gates_at(t):
+    """Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there."""
+    if t < _gates_cut():
+        k = t - T['gates']
+        return 0.65, GATE_D_OUT[0] + (GATE_D_OUT[1] - GATE_D_OUT[0]) * min(1.0, k / 0.8)
+    u = min(1.0, max(0.0, (t - _gates_cut()) / G2_WALK))
+    return G2_FROM[0] + (G2_TO[0] - G2_FROM[0]) * u, G2_FROM[1] + (G2_TO[1] - G2_FROM[1]) * u
+
+
 def gates_close(sp, t):
     a = _gates_cut()
     k = t - a
@@ -1070,8 +1080,8 @@ def gates_close(sp, t):
     sw = sp.get('shoulders', 150)
     ev = word_at(6, 'everybody')
     land = a + G2_WALK
-    for sd, sg in (('L', -1), ('R', 1)):              # the gait's own swing on the stride; up as he plants
-        arm_keys(j, sp, sd, t, [(min(land, ev - 0.3) - 0.35, None), (ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
+    for sd, sg in (('L', -1), ('R', 1)):              # note 46: still up from the wide over the cut, then down
+        arm_keys(j, sp, sd, t, [(a, GATE_V(sw, sg)), (a + 0.35, None), (min(land, ev - 0.3) - 0.35, None), (ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
                                 (ev + 0.25, GATE_OPEN(sw, sg)), (ev + 0.55, GATE_V(sw, sg))])
     dip = _bump(t, ev - 0.25, ev + 0.5, 0.25, 0.22)               # down at the knees with the sweep, springs up
     _dip(j, 40 * dip)
@@ -1079,7 +1089,25 @@ def gates_close(sp, t):
     j['nod'] = -1.5 * chin + 0.8 * dip                             # chin high, a dip of the head into the sweep
     j['lean'] = j.get('lean', 0.0) - 3 * chin + 5 * dip - 4 * (1 - settle)   # chest out on the stride
     j['head_roll'] = _sway(k + 0.25) * (1 - settle) + 4 * _ease(_ramp(t, ev + 0.5, ev + 0.9))   # a preening tilt to hold
+    # note 49 (Sam, 12 Nov): preening and smiling at the cameras all shot: after the sweep, a hand runs back through
+    #   his hair, chin up; then he plays to one side of the pack and the other (gates2_head) with a little nod to each
+    hair = ((sw * 0.55, -250.0, 40.0), 'in', 'palm')
+    back = ((sw * 0.95, -200.0, -30.0), 'in', 'palm')
+    if t >= ev + 0.55:
+        arm_keys(j, sp, 'R', t, [(ev + 0.55, GATE_V(sw, 1)), (ev + 0.95, hair), (ev + 1.35, back), (ev + 1.55, back),
+                                 (ev + 2.0, None)])
+    preen = _bump(t, ev + 0.9, ev + 1.6, 0.2, 0.3)
+    j['nod'] -= 1.2 * preen
+    j['nod'] += 0.9 * (_bump(t, ev + 2.1, ev + 2.5, 0.12, 0.2) + _bump(t, ev + 2.9, ev + 3.3, 0.12, 0.2))
     return mark, 0.0, j
+
+
+def gates2_head(t):
+    """Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead)."""
+    ev = word_at(6, 'everybody')
+    a = _keys(t, [(ev + 1.7, 0.0), (ev + 2.0, -28.0), (ev + 2.6, -28.0), (ev + 2.9, 24.0), (ev + 3.5, 24.0),
+                  (ev + 3.8, 0.0)])
+    return a if abs(a) > 0.5 else None
 
 
 # --- Walliams (notes 25, 30, 32): his beats, in seconds from T['wal'] (the acting list's gates2 rows)
@@ -1138,8 +1166,9 @@ def wal_pose(sp, t, jamb=None):
     def startled(sg):
         return lambda t: ((sg * sw * 0.62, 50.0, 150.0), 'out', 'palm')
 
-    def plead(sg):                                  # hands clasped under the chin, shaking
-        return lambda t: ((sg * 16, -70 + 8 * math.sin(2 * math.pi * 4.5 * (t - w0)), 200.0), 'down', 'fist')
+    def plead(sg):                                  # note 47: hands held out to the press, palms up, begging, shaking
+        #   (they were clasped fists under his chin: at phone size it read as him strangling himself)
+        return lambda t: ((sg * sw * 0.6, 150 + 8 * math.sin(2 * math.pi * 4.5 * (t - w0)), 250.0), 'out', 'palm')
 
     def flail(sg):
         return lambda t: ((sg * (sw + 130), -110 + 30 * math.sin(2 * math.pi * 3.5 * (t - w0) + (sg > 0) * 2), 60.0),
@@ -1390,11 +1419,12 @@ def _cam(view, t):
         u = _ease(_ramp(t, T['gates2'], T['gates2'] + 1.9))   # shoulder; pushing in all shot
         z = 2.25 + 0.25 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
         return B.Cam(z, G2_CAM[0] + (G2_CAM[1] - G2_CAM[0]) * u, G2_CAM[2])
-    if shot_of(t) == 'gates':                     # a slow push on the wicket door
-        u = _ease(_ramp(t, T['gates'], T['gates2']))
-        x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
-        return B.Cam(1.3 + 0.4 * u, 540 + (x - 540) * (0.35 + 0.65 * u) * 0.6, 1040 + 80 * u)   # note 24: starts closer, pushes to the gate
-        #                                                                       (Sam, 11 Nov: he was a distant speck)
+    if shot_of(t) == 'gates':                     # note 46 (Sam, 12 Nov): no cut at the release: the wide holds,
+        #   then zooms in to the close framing on Brand, and the close shot's push carries on from there (one shot)
+        x, _ = ST.GATE.p(0.65, ST.GATE_D, 1.2)
+        x0 = 540 + (x - 540) * 0.35 * 0.6         # the wide as Sam liked it (note 24: starts at 1.3)
+        u = _ease(_ramp(t, T['gates'] + 0.7, T['gates2']))
+        return B.Cam(1.3 + (2.25 - 1.3) * u, x0 + (G2_CAM[0] - x0) * u, 1040 + (G2_CAM[2] - 1040) * u)
     return ST.view_cam(view)[1]
 
 
@@ -1472,18 +1502,21 @@ def draw_people(img, cam, shot, t):
     elif shot == 'gates':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)
-        dn, at = ST.GATE.f / mark[2], (0.65, ST.GATE_D - 0.3)    # the same pack as the arrival (Sam's answer 6)
-        press(img, cam, ST.GATE, st['press'], t, at=at, part=('behind', dn))
+        # note 46 (Sam, 12 Nov): the close shot is the same scene nearer: the same pack (G2_PRESS) looking at him
+        #   where he stands, and the lit passage through the wicket (it was a black hole here, lit in the close shot)
+        dn, at = ST.GATE.f / mark[2], gates_at(t)
+        door_inside(img, cam)
+        press(img, cam, ST.GATE, G2_PRESS, t, at=at, part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, st['press'], t, at=at, part=('front', dn))
+        press(img, cam, ST.GATE, G2_PRESS, t, at=at, part=('front', dn))
     elif shot == 'gates2':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
         dn = ST.GATE.f / mark[2]
         draw_walliams(img, cam, t)                    # notes 30, 32: behind everyone, along the gate and in at the door
-        press(img, cam, ST.GATE, G2_PRESS, t, at=G2_TO, part=('behind', dn))
-        put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, G2_PRESS, t, at=G2_TO, part=('front', dn))
+        press(img, cam, ST.GATE, G2_PRESS, t, at=gates_at(t), part=('behind', dn))
+        put(img, cam, sp, mark, t, yaw, j, head_yaw=gates2_head(t))
+        press(img, cam, ST.GATE, G2_PRESS, t, at=gates_at(t), part=('front', dn))
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)
@@ -1597,7 +1630,7 @@ def music(n):
     the end. Under every line it dips 12 dB; it fades out over the last 1.5 s. Licence: see music/README.md."""
     from burnham_film import load
     x = load(MUSIC)
-    a = T['cell']
+    a = T['van']                                   # note 38: the music starts as soon as we are in the van
     jump = a + MUSIC_SAD_END                       # film time of the join
     p = MUSIC_PEAK - (T['amazed'] - jump)          # where the track picks up after the join
     out = np.zeros(n)
@@ -1686,8 +1719,8 @@ def checks():
     faults += benchmark.faults(sys.modules[__name__])
     faults += touch_faults()
     faults += BC.eye_faults()                     # rule S5, measured
-    people = {sp['who']: sp.get('name', sp['who']) for sp in list(CAST.values()) + list(GUARDS.values())
-              if sp['who'] != 'newsreader'}       # (she speaks: her mouth is the lip sync's, every frame)
+    people = {sp['who']: sp.get('name', sp['who']) for sp in list(CAST.values()) + list(GUARDS.values())}
+    #   note 45: the newsreader is checked too (he was skipped as 'always talking'; between phrases he had no mouth)
     faults += BC.mouth_faults(people)             # notes 5, 13, 15: no front face without a mouth
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
