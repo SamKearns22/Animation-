@@ -582,7 +582,9 @@ def oath(sp, t):
     bible = OATH_BIBLE
     raised = ((sw + OATH_RAISE[0], OATH_RAISE[1], OATH_RAISE[2]), OATH_RAISE[3], 'palm')
     arm_keys(j, sp, 'L', t, [(up0, None), (up1, bible), (dn0, bible), (dn1, None)])
-    arm_keys(j, sp, 'R', t, [(up0, None), (up1, raised), (dn0, raised), (dn1, None)])
+    mid = ((sw + 70.0, 60.0, 90.0), OATH_RAISE[3], 'palm')      # out and up on the way: the elbow never folds tight
+    arm_keys(j, sp, 'R', t, [(up0, None), ((up0 + up1) / 2, mid), (up1, raised), (dn0, raised), (dn1, mid),
+                             (dn1 + 0.15, None)])
     for w in ('blessed evidence', 'blessed truth'):
         k = word_at(2, w)
         b = _bump(t, k - 0.05, k + 0.55, 0.15, 0.3)
