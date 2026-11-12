@@ -340,3 +340,8 @@ leaving a check off needs his yes. **Three holes remain (proposals for chat D, n
 2. **Swindon has a "--no-lock" switch** in its code (Sam, 8 Nov: "Skip the checks"), which renders with no checks at
    all; any later chat on that film can use it. Proposal: such a yes covers one render, not every render after it.
 3. Until the branch joins, the old checker is live; the Blessed chats are running on it now.
+
+### Chat D (Opus, medium, 12 Nov): the final report
+Written: `notes/system-audit-report.md` (findings, quality, cost, how we work, 11 numbered decisions). This chat about
+0.3%; the audit in all about 3.0% of a week (±20%), under the 3.5% planned. Open: Sam's numbers 1-11; the honest
+checker merges after Blessed's animatic 1 is sent.
