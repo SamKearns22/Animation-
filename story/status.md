@@ -1,3 +1,3 @@
-Blessed: gates2 rebuilt from a beat plan (note 32: Brand strides big in front, the pack on both sides, Walliams' comic beats, a lit doorway and the door slam); note 28 officer kit built.
-Waiting: nothing.
-Next: chat 3 of 8 (Opus medium): tune gates2 on stills, send Sam the clip and a note-28 still, critique Walliams' head, animatic 2.
+Protest Tiers: plan done (reporting, 8 photos, checklist, estimate 21.5%, staging); 7 questions with Sam. Blessed: gates2 rebuilt, note 28 built (its own chain, notes/blessed.md).
+Waiting: Sam's answers 1-7 for Protest Tiers.
+Next: Protest Tiers Build (Opus high) once answered. Blessed chat 3 of 8 (Opus medium): gates2 clip, note-28 still, animatic 2.
