@@ -1,3 +1,3 @@
-Blessed: round 1 notes 11-17, 24 coded (chat 4), clips not yet rendered; chat 5 stopped unused (account switch).
-Waiting: nothing (Sam said Y to finish round 1; Walliams set aside).
-Next: chat 5 on Sam's new account: clips one at a time (--small), then note 28 (HM officer).
+Blessed: note 25 built (chat 5): Walliams' head passes the likeness check; new shot of him led into the prison door; clip sent.
+Waiting: Sam's notes on the Walliams clip.
+Next: chat 6 (Opus medium): critique of his head, then clips of notes 11-17/24 one at a time, then note 28.

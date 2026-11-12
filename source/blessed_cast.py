@@ -966,12 +966,13 @@ def _glasses(p, f, L, col):
                  3), col, 2.4)
 
 
+FACE_HEADS = set()     # other files' measured heads with a mouth at rest (blessed_walliams.py, note 25)
 TC.HEADS.update(brand=brand_head, judge=judge_head)
 TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head, officer=inmate_head, guard2=inmate_head)
 def mouth_faults(people):
     """Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lips
     at rest. people: who -> name; each must have a head of this file (Brand's or the front-face system)."""
-    ok = (brand_head, judge_head, inmate_head)
+    ok = (brand_head, judge_head, inmate_head) + tuple(FACE_HEADS)
     return [f'{name}: drawn on the house head (no mouth at rest; notes 5, 13, 15)'
             for who, name in people.items() if TC.HEADS.get(who) not in ok]
 

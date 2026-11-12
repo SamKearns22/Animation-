@@ -200,3 +200,13 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** none.
 - **For Claude:** van: `_seat` draws both legs then the seat (j['hide_legs']), views.leg j['knee_round']; cot: ST.cot_top / cot_top_front, cot_pose, _cam 'cot'; music(): MUSIC_SAD_END/MUSIC_PEAK; front-on = yaw 0 in shot code (oath, phone, arrive, escort). Pre-flight not yet run on these (new view cot_top: SET_BOXES may need it).
 
+
+
+## Handover (12 Nov, before chat 5's Walliams build)
+- **Rules that bite next:** 24 (round 1 is over its share: 3.99% against 2.5%; wait for Sam's Y), 30, 59.
+- **Done (12 Nov, chat 4 of 8, Opus medium, amber):** 11, 12, 24 (press pack, flashes, arrival camera), 15 (dock framing), 17 (sigh, blanket) coded and pushed; NO clips yet (renders failed: two at once). Chat 5 (12 Nov) stopped before any work: Sam switching account; nothing changed.
+- **Next (Sam said Y): Opus, medium, chat 5 of 8, on Sam's new account (attach github.com/SamKearns22/Animation-, main line):** clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (HM Prison officer: white shirt, epaulettes, black tie, keys on a chain). Then a Sonnet chat: checks and animatic 2.
+- **Needs Sam:** nothing (Walliams set aside by Sam; another chat may be building it: pull first).
+- **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 11-28.
+- **Open rule requests:** none.
+- **For Claude:** ST.press_spots(bx, bd, rows, seed, cx, half); press(part=('behind'|'front', d)) drawn either side of him; _stills kit + flash; CREW_TOP/LEG; ARRIVE_CAM; OUT = Level(1.7, 1090, 1500); _cam dock Cam(1.2, 548, 1560); gates Cam starts 1.3; T['cot'] = cell + 3.9; escort sigh keys; ST._blanket. A 5pm reminder (trig_0162nUpu9SadML1ei9zrWBP7) resumes only on Sam's Y.
