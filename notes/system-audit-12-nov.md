@@ -368,3 +368,6 @@ merging or replacing an old rule so the rulebook does not grow:
 Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
 Chat D's extra suggestions (12 Nov): 2 (arms at the source) and 7 (test clip of the hardest move) dropped: already
 rules 41 and 8. 5 (monthly mini-audit) dropped: Sam audits by hand most weeks. 1, 3, 4, 6 wait on Sam's Y/N.
+Sam Y to 1, 3, 4, 6 (12 Nov). 1, 3, 4 sent to the build chat (chat E). 6: deleting 70 merged side copies was refused by
+this chat's safety setting (deletes need Sam's permission in settings); not done. Sam's warning: suggestions 2 and 7
+already existed (rules 41 and 8); cause and a proposed rule are in chat D's reply; the rule waits on Sam's yes.
