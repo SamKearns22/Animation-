@@ -1023,7 +1023,7 @@ GATE_D_OUT = (ST.GATE_D + 0.2, ST.GATE_D - 0.52)
 #     Walliams is dragged in between two officers, does a double-take at the cameras, pleads with the pack, is shoved
 #     through the door into the lit passage, grabs the frame, and the officer slams the door.
 G2_FROM, G2_TO = (0.6, 8.1), (-0.3, 5.0)           # (x, d): out of the wicket into the pack, mostly towards us
-moves.GAITS['stride'] = dict(moves.GAITS['swagger'], sps=2.6, step=0.75, swing=0.45)   # purposeful, still him
+moves.GAITS['stride'] = dict(moves.GAITS['swagger'], sps=2.15, step=0.9, swing=0.45)   # purposeful, still him
 G2_WALK = math.hypot(G2_TO[0] - G2_FROM[0], G2_TO[1] - G2_FROM[1]) / moves.speed('stride')
 G2_X = G2_TO[0]
 
