@@ -46,6 +46,10 @@ Pre-flight refuses to run until this line has them, and while any "done?" box be
 |---|------|------|
 |   |      |      |
 
+## Exceptions (rule 13): anyone or anything left out of a check, one row each (a pattern like Journalist* is fine); pre-flight refuses a film setting's exception (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS) with no row here; a code comment is never a reason. check: the setting's name, or 'house look', 'lap', 'drawing checks', 'camera feel' (who: the shot)
+| check | who | why | looked at full size (sheet, panel) |
+|---|---|---|---|
+
 ## Notes
 Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10.3 s, left: the man never looks at the zombie".
 

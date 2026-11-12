@@ -135,6 +135,8 @@ The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next li
 | Running straight at the lens: the front-on gait (low knees, small float) with tucked, forward-pumping arms (rule 63); which poses read from behind (rule 64) | `moves.py` (`GAITS['front_run']`, `front_run_arms`, `READS_FROM_BEHIND`) |
 | A mouth with no face to lip-sync (the Sorting Hat): openness 0-1 from the voice's loudness, one syllable at a time (rule 65) | `mouths.py` (`loudness_open`) |
 | The quick check in seconds (script, mouths, subtitles, shot lengths) before the full pre-flight (rule 67) | `preflight.py NAME OUT --text` |
+| The film's list of exceptions (rule 13): every `*_OK` / `ALLOWED_POPS` entry needs a row in the notes' "## Exceptions" (check, who, why, looked at full size) or pre-flight refuses; the house look (nobody on the house head, which draws no lips at rest, while anyone has their own face: was Blessed's `mouth_faults`); seated front on with no lap (rule 80); a CAST member the drawing checks never see | `source/waivers.py` (pre-flight runs it; `python3 source/waivers.py FILM` lists the exceptions) |
+| Camera feel (rule 72): every camera move sampled per frame (any `cam_for`: `B.Cam` or `sets.Cam`); a fast or un-eased zoom or pan, or a speed jump across a cut, flagged unless the acting list marks it sharp | `source/camfeel.py` (pre-flight runs it; `python3 source/camfeel.py FILM --all` lists every move) |
 
 ## Passed the critique (filed by `critique.py record` on a clean pass: reuse as KNOWN)
 | thing | what it is | film, round, pass, date | where it is drawn |

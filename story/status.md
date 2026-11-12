@@ -1,3 +1,3 @@
-Blessed: Walliams' face job under way: a new blind "who is this?" test (Brand passes, old Walliams failed) and a first redrawn face (pear-shaped head, smirk, stubble); not yet passing.
-Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Y/N on the dock camera rise (note 37); his number on adding the blind test to rule 49. Protest Tiers: Hook Text and sound (Q3, Q4).
-Next: Blessed chat 4 of 8 (Opus high): finish Walliams' face until it passes, then ONE sheet to Sam; then chat 5 (Opus high): seated rebuild, van option sheet, note 48 staging.
+Blessed: round-2 notes done except Walliams' face (under way: a new blind "who is this?" test, Brand passes, old Walliams failed; first redrawn face not yet passing), the seated rebuild, van sheet, note 48. Protest Tiers: framing research frame study done (16 frames, one sheet).
+Waiting: Blessed: Sam's voice memo of the guard's line (note 48); his number on adding the blind test to rule 49. Protest Tiers: Hook Text and sound (Q3, Q4), asked with the framing lessons.
+Next: Blessed chat 4 of 8 (Opus high): Walliams' face until it passes, then ONE sheet to Sam; chat 5 (Opus high): seated rebuild, van options, note 48 staging; then animatic 3. Framing research chat 3 (Opus high).

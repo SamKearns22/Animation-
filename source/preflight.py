@@ -77,6 +77,8 @@ def _check_frame(i):
     import turnhead
     n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
     s0, m0 = len(turnhead.SEEN), len(turnhead.MISSING)
+    import waivers
+    w0 = len(waivers.LOG)
     err = None
     handcheck.begin()
     try:
@@ -88,7 +90,9 @@ def _check_frame(i):
     del kitchecks.POSES[p0:]
     heads = (sorted(set(turnhead.SEEN[s0:])), sorted(set(turnhead.MISSING[m0:])))   # Job I faces: turned heads drawn
     del turnhead.SEEN[s0:], turnhead.MISSING[m0:]
-    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands, heads
+    looks = list(waivers.LOG[w0:])                  # rule 13's house look: who each front head was drawn on
+    del waivers.LOG[w0:]
+    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands, heads, looks
 
 
 def _hands_frame(i):
@@ -242,7 +246,8 @@ def _sheet_tile(k):
 # (script, mouths, subtitles, plan, shared checks) always run in full: they take seconds. `--full` forces the full pass.
 CHECK_FILES = ('preflight.py', 'handcheck.py', 'posecheck.py', 'lying.py', 'audit.py', 'clipcheck.py', 'kitchecks.py',
                'filmkit.py', 'figure.py', 'viewchecks.py', 'housestyle.py', 'plan.py', 'benchmark.py', 'sets.py', 'linecheck.py', 'landmarks.py',
-               'hookcheck.py', 'musiccheck.py', 'sizes.py', 'voices.py', 'report.py', 'mounts.py', 'collisions.py')
+               'hookcheck.py', 'musiccheck.py', 'sizes.py', 'voices.py', 'report.py', 'mounts.py', 'collisions.py',
+               'waivers.py', 'camfeel.py', 'views.py')
 
 
 def _checks_hash():
@@ -361,6 +366,10 @@ def main():
     if skipped:
         print('skipped (the film has no ' + ', '.join(k for k in KINDS if k not in has) + '; HAS): ' + '; '.join(skipped))
     stop = gates(film, name)   # rule 14: refuse while the brief or the sheet is not done
+    import waivers                              # rule 13: every exception has a written reason in the notes
+    wf, wlist = waivers.gate_faults(film)
+    print(f'exceptions: {len(wlist)}' + (' (every one in the report file)' if wlist else ''))
+    stop += wf
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
@@ -380,6 +389,7 @@ def main():
     import posecheck
     posecheck.install()                         # rule 42: named poses against the gallery's avoid views; lying bodies
     handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
+    waivers.install()                           # rule 13: the house look (who each front head is drawn on)
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
     shared = ['gate: ' + x for x in stop]       # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
@@ -425,6 +435,8 @@ def main():
     import setcheck
     shared += setcheck.film_faults(film)        # rule 13: figures moving through the set, against its solid things
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
+    import camfeel                              # rule 72: a fast or sudden camera move the acting list doesn't mark
+    shared += camfeel.faults(film)              # sharp (a row in the exceptions excuses a shot: 'camera feel')
     if people:                                  # (in a throwaway child: linecheck loads GNU OpenMP, and forking the
         shared += _in_child(linecheck.faults, film)   # drawing workers from a process that has used it freezes them
         shared += _in_child(landmarks.faults, film)   # after about 330 frames: the Elder Swindon hang, 8 Nov)
@@ -483,10 +495,11 @@ def main():
             else:
                 print('full pre-flight (no earlier clean run to compare with)')
         todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))} if incremental else None
-        hands = []
+        hands, looks = [], []
         first = [i for i in range(0, n_frames, 3) if todo is None or i in todo]
         heads_seen, heads_missing = set(), {}
-        for t, err, log, dr, turned, hs, (seen, miss) in pool.imap(_check_frame, first, chunksize=4):
+        for t, err, log, dr, turned, hs, (seen, miss), lk in pool.imap(_check_frame, first, chunksize=4):
+            looks += lk
             heads_seen.update(seen)
             for who, view in miss:
                 heads_missing.setdefault((who, view), t)
@@ -516,6 +529,11 @@ def main():
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
+        table = waivers.rows(open(path).read() if os.path.exists(path) else '')
+        problems += waivers.look_faults(locals().get('looks', []), table)   # rule 13: everyone in the house look
+        problems += waivers.lap_faults(drawn, table)   # rule 80: seated front on shows knees and lap
+        if not incremental:                     # (a re-check that redrew only some frames can't say who is unseen)
+            problems += waivers.unseen_faults(film, drawn, table)   # rule 13: no one silently outside the checks
         _faces = kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
         if incremental:                         # a re-check that did not redraw them cannot say they were "never drawn"
             _faces = [x for x in _faces if 'never found drawn' not in x]
@@ -579,8 +597,9 @@ def main():
         if not ok and '--faults-named' not in sys.argv:
             problems.append(f'{line}: pre-flight refuses the animatic (rule 89) until the round\'s last critique pass '
                             'is clean, or its faults are named to Sam (then add --faults-named)')
-    report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'),
-                     notes=(['The figure guard (allowed drawings, how often):'] + log) if log else ())
+    notes = (['The figure guard (allowed drawings, how often):'] + log) if log else []
+    notes += (['The film\'s exceptions (rule 13; reasons in the notes\' "## Exceptions"):'] + wlist) if wlist else []
+    report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'), notes=notes)
     print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final

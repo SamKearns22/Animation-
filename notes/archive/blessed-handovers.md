@@ -288,3 +288,15 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** (rules 13, 72, 87 written 12 Nov, Sam Y; the checks are a tool chat, ~1.5%, Sam Y) note 42: no rule (Sam): it joins the framing research job (notes/framing-research.md), run at the end of Blessed.
 - **For Claude:** gates and gates2 are still two SHOTS internally but one continuous camera (_cam 'gates' zooms to G2_CAM by _gates_cut; gates_at() = where the pack looks). Newsreader: STAFF_FACES['newsreader'], TC.HEADS -> inmate_head. Rule 30 answers given: 45 = the house head draws no mouth at 'rest' and checks() skipped the newsreader; 39 = note 16's fix mended joins only, no photo was compared, the slab torso hides the arm.
 
+
+
+## Archived 12 Nov (r2 chat 2's handover)
+- **Rules that bite next:** 87 (note 39 failed twice: the next send for the van is ONE still sheet of 2-3 options, no render), 30 (34 and 43 are about poses seen before), 89 (critique the TV room hard).
+- **Done (r2 chat 1):** 35 "will"; 38 music from the van; 40 deeper sigh, +0.6 s; 44 newsreader's voice 1 s before the cut (TV room +1 s); 45 newsreader on the front face with lips, now in the mouth check; 46 one release shot (Sam's follow-up: no cut, the wide zooms in onto Brand; same pack, lit doorway, Brand carries on); 47 Walliams begs with palms out; 49 hair preen, nods, head turns to the cameras. Clip sent: blessed-r2-release-one-shot.mp4. Film now 55.6 s.
+- **Done (r2 chat 2):** 33, 34, 36, 37 (Sam: perfect), 41, 42, 43 (head life; the rest to the seated rebuild), 50, 51; clips sent. Cost alarms off (Sam).
+- **Next: chat 3 of 8 (open), Opus HIGH:** Walliams' face job (10%, below); then chat 4; then animatic 3.
+- **Chat 4, Opus HIGH (building):** seated bodies in views (van 3/4, TV-room Brand and the sleeping inmate front-on): the torso is a rigid slab, thighs never foreshortened, near arm hidden. References filed: references/blessed/sitting/ (s1 hunched forearms on knees 3/4 = the van; s2, s3 front-on seated). Send Sam ONE option sheet for the van (rule 87). Then animatic 3 (Sonnet can render).
+- **Needs Sam:** voice memo of the guard's line (note 48); Y/N on chat 3's Walliams face sheet.
+- **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 33-49.
+- **Open rule requests:** (rules 13, 72, 87 written 12 Nov, Sam Y; the checks are a tool chat, ~1.5%, Sam Y) note 42: no rule (Sam): it joins the framing research job (notes/framing-research.md), run at the end of Blessed.
+- **For Claude:** gates and gates2 are still two SHOTS internally but one continuous camera (_cam 'gates' zooms to G2_CAM by _gates_cut; gates_at() = where the pack looks). Newsreader: STAFF_FACES['newsreader'], TC.HEADS -> inmate_head. Rule 30 answers given: 45 = the house head draws no mouth at 'rest' and checks() skipped the newsreader; 39 = note 16's fix mended joins only, no photo was compared, the slab torso hides the arm.
