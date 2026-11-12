@@ -258,7 +258,9 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
         col = sp.get('trousers', (40, 40, 46))
         a_, b_ = _sub(pts[0] + (0,), pts[1] + (0,)), _sub(pts[2] + (0,), pts[1] + (0,))
         fold = _dot(a_, b_) / ((math.sqrt(_dot(a_, a_)) * math.sqrt(_dot(b_, b_))) or 1)
-        if fold > 0.4:                            # folded tight on screen (a figure four's leg seen three-quarter): one
+        if fold > (-0.4 if j.get('knee_round') else 0.4):   # folded tight on screen (or a seated right-angle knee seen
+            #                                     turned, which spiked on its inside: Blessed note 16, j['knee_round'])
+            # (folded tight on screen (a figure four's leg seen three-quarter): one
             tube(p, pts[:2], [48 * k, 38 * k], col)   # smooth outline would turn inside out at the knee, so the
             tube(p, pts[1:], [38 * k, 27 * k], col)   # thigh, then the shin over it, joined by a round knee
             p.ell(pts[1][0], pts[1][1], 38 * k, 38 * k, col, None)

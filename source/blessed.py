@@ -730,7 +730,8 @@ def van(sp, t):
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
     j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
-    j['pre'] = [lambda p, j2, view: _seat(p, j, sp, VAN_YAW)]   # NOT DONE: see the handover   # note 16 (Sam: "it deletes his butt area")
+    j['hide_legs'], j['knee_round'] = {'L', 'R'}, True                    # note 16: the legs and seat are drawn here, before the jumper
+    j['pre'] = [lambda p, j2, view: _seat(p, j, sp, j2['yaw'])]
     return j
 
 
@@ -740,19 +741,28 @@ VAN_YAW = 35          # Sam, 12 Nov: he keeps this three-quarter pose ("I even s
 def _seat(p, j, sp, yaw):
     """Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
     mid-air. His seat and hips as one rounded shape from the waist down to the thigh tops, drawn before the legs and
-    the jumper, so both lie over its edges and nothing floats."""
+    the jumper, so both lie over its edges and nothing floats. The legs are drawn first (far one first), then the seat
+    over their cut roots (chat 1 drew the seat first and the thighs' notched ends lay on top of it; it also used the
+    pose's 35 degrees, not the drawn view's 45, so the seat sat off the body)."""
+    far = sorted('LR', key=lambda sd: V.project(j['hip' + sd], yaw)[1])
     pts = []
     for sd in 'LR':
         hx, hy, hz = j['hip' + sd]
         for a in range(0, 360, 30):                   # round each hip joint, pushed back for the seat
             c, s_ = math.cos(math.radians(a)), math.sin(math.radians(a))
-            pts.append(V.project((hx + 62 * c, hy + 56 * s_, hz - 40 + 50 * c), yaw)[0])
-        pts.append(V.project((hx * 1.15, hy - 110, hz - 70), yaw)[0])   # up to the waist at the back
+            pts.append(V.project((hx + 48 * c, hy + 40 * s_, hz - 10 + 30 * c), yaw)[0])   # a normal seat, not
+        #                                             pushed back (Sam, 12 Nov: the bigger one read as a huge bottom)
         knee = V.knee_of(j, sd)
         if knee:
             u = 0.35                                    # a third of the way down the thigh, so the join is hidden
             pts.append(V.project(tuple(a + (b - a) * u for a, b in zip(j['hip' + sd], knee)), yaw)[0])
-    p.poly(curve(V._hull(pts), 3), sp.get('trousers', (40, 40, 46)), INK, 2.4)
+    hull, col = curve(V._hull(pts), 3), sp.get('trousers', (40, 40, 46))
+    p.poly(hull, col, INK, 2.4)                       # under the legs: its outline is the seat's edge
+    cx, cy = sum(q[0] for q in hull) / len(hull), sum(q[1] for q in hull) / len(hull)
+    for sd in far:
+        V.leg(p, j, sd, yaw, sp)
+    p.poly([(cx + (x - cx) * 0.9, cy + (y - cy) * 0.9) for x, y in hull], col, None)   # over the thighs' roots,
+    #                                                 no outline: the thighs grow out of the seat, no notched ends
 
 
 # --- escort: the officer walks him in by the arm; he stops, turns, and looks round numbly
