@@ -4,7 +4,7 @@
 - **Rules that bite next:** 89 (Walliams' head has not had the fresh-eye critique), 30, 59.
 - **Done (12 Nov, chat 5 of 8, Opus, amber):** note 25 built: Walliams' head (likeness 61% / 80%, first in the line-up), the new 'walliams' shot after gates2, checks clean, clip sent.
 - **Next: Opus, medium, chat 6 of 8:** critique pack for Walliams' head (rule 89, one pack, two hunts); then the old Next: clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (the officer already wears white shirt, epaulettes, black tie, keys on a chain: confirm on a still). Then a Sonnet chat: checks and animatic 2.
-- **Needs Sam:** notes on the Walliams clip (any come back to chat 6).
+- **Needs Sam:** STAGE STOP (rule 24): round 1 at 5.8% against 2.5%. Asked Y/N: skip the separate clips and critique pack, go straight to checks + animatic 2 (Sonnet, about 1%), his notes on that. Chat 6 is held until his answer; also his notes on the Walliams clip.
 - **Read:** `guides/job-packs.md` Notes round (and Build's critique line for 89); this section; Notes rows 11-28.
 - **Open rule requests:** none.
 - **For Claude:** blessed_walliams.py (P4 'walliams', TUNE, MOODS scared/alarmed, FACE_HEADS hook in blessed_cast.mouth_faults); blessed.py: T['wal'], WAL_LEN, wal_place/wal_pose/wal_face/wal_grip, _door_clip, parted, draw_walliams; cam Cam(3.0, door x + 20, 1285). Last subtitle ends 0.16 s into the walliams shot. A 5pm reminder (trig_0162nUpu9SadML1ei9zrWBP7) resumes only on Sam's Y.
