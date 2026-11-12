@@ -60,25 +60,20 @@ Blessed comes first (its own budget). Then this job: jobs 1 and 2, then 3, then 
 about 3.5% of a week (the checking runs on Sonnet about 1%, reading old notes on Opus about 1%, fixing the checker on
 Opus about 1.5%). It's a guess; the first chat measures it and says if it's heading higher.
 
-## Where things stand (12 Nov, after chat E, 1 of 8)
-- **Rules that bite next:** 59 (a check left off needs Sam's quoted yes, found in the notes), 13 (every check has a
-  broken example in `checktests.py`), 85 (the cost record).
-- **Done (chat E, Opus high, about 1.3% of a week, ±20%):** audit items 2, 3, 4 and 11 built WITH their checks on
-  `claude/audit-honest-checker` (main line merged in first); rulebook rules 13, 59, 85 widened, no new rows;
-  `checktests.py` 48 of 48 broken films caught, nothing left unproven. Handed over on amber (long history).
-- **Next (Opus, high), chat 2 of 8:** items 5, 6, 7, 8, 9 (boxes below), each a rule with its check merged into an
-  old rule; then kittests and the quick check on the six films (report only); results under "Sam's answers"; push
-  notification; handover. Budget left for the build about 2-2.5% (stop and push-notify past 4.5% in all).
-- **Needs Sam:** nothing yet.
-- **Read:** CLAUDE.md; this file from "## Sam's answers to the report"; `source/checktests.py` (its MAP and CASES).
-- **Open rule requests:** none (items 1-11 were Sam's Y, 12 Nov).
-- **For Claude:** 5: `preflight` reads every allow-list (ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE, ORDER_SWAPS,
-  SET_MEANT, PORTAL_OK, HANDS_OK, STILL_OK...): each entry has a reason and never spans the whole film (rule 5).
-  6: a handover line saying a check is "still to do" stops the chain (CLAUDE.md chain rule; a gate in pre-flight or
-  `ledger.auto` reading the notes). 7: `critique.status`: a movement line answered "can't tell" is not clean until a
-  clip-look line is recorded (rule 89). 8: each "seen before" note row names its check, which must exist in
-  checktests/kittests (rule 30). 9: `kitchecks.install` logs a pose signature; a new still check: anyone on screen
-  3 s with nothing moving, STILL_OK with reasons (rule 41 or 74). The ledger merge driver is set by `setup.sh`.
+## Where things stand (12 Nov, after chat F, 2 of 8; wrapped up early on Sam's word: the week is at 92%)
+- **Rules that bite next:** 5 (every allowed entry has a reason, never the whole film), 30 (a seen-before note names
+  its built check), 89 (a "can't tell" on a movement needs its clip looked at).
+- **Done (chat F, Opus high):** audit items 5, 6, 7, 8, 9 built WITH their checks on `claude/audit-honest-checker`
+  (main line merged in first); rules 5, 30, 74, 89 and the chain rule widened, no new rows; `checktests.py` 61 of 61.
+- **Next (Sonnet, low cost, after Blessed is finished and the week resets):** run `kittests.py` and the quick run
+  (`preflight.py FILM OUT --text --audit`) on the six films, report only, results under "Sam's answers"; then the
+  branch waits for Blessed's animatic 1 to join the main line. Type: "Audit chat 3: kit tests and six-film run".
+- **Needs Sam:** nothing; he paused the audit to finish Blessed (12 Nov).
+- **Read:** CLAUDE.md; this file from "## Sam's answers to the report".
+- **Open rule requests:** none.
+- **For Claude:** new: `preflight.allow_faults`, `preflight.seen_before_faults`, `ledger.chain_stop` (Stop hook),
+  `critique.clip` / `unseen_moves`, `kitchecks.still` + `pose_sig` (drawing pass, full runs only). Expect old films
+  to show new faults (e.g. Patriots 4's whole-film table contact, Remakes note 65 seen before with no check).
 
 ### The old plan (chats A-D, all done; their results follow)
 - **Results:** (each chat adds its findings below)
@@ -361,11 +356,11 @@ merging or replacing an old rule so the rulebook does not grow:
 - [x] 3 a yes to skip checks covers one render only (Swindon's --no-lock becomes one-use).
 - [x] 4 cost record: each chat's cost saved at its end whatever it moved; merging two ledgers keeps the larger; a
       Monday question to Sam for the app's weekly figure, re-fit the allowance; percentages labelled "about, ±20%".
-- [ ] 5 no "allowed" entry may cover a whole film or lack a reason (a check).
-- [ ] 6 a handover line saying a check is "still to do" stops the chain and asks Sam.
-- [ ] 7 a "can't tell" on a movement line needs a short clip looked at before the critique is clean.
-- [ ] 8 a "seen before" note gets its check built in the same round, before the fix is sent.
-- [ ] 9 a "too still" check for every person on screen (not only speakers' heads).
+- [x] 5 no "allowed" entry may cover a whole film or lack a reason (a check).
+- [x] 6 a handover line saying a check is "still to do" stops the chain and asks Sam.
+- [x] 7 a "can't tell" on a movement line needs a short clip looked at before the critique is clean.
+- [x] 8 a "seen before" note gets its check built in the same round, before the fix is sent.
+- [x] 9 a "too still" check for every person on screen (not only speakers' heads).
 - [x] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
       against voice, song joins, resting arms, doorways).
 Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
@@ -383,3 +378,18 @@ Then run the kit tests and the quick check on the six films (report only), write
 - **11:** broken examples for the 9 unproven checks (a shape with no outline, a skirt below the hips, a half-metre mug,
   a cartoon star, a head apart from its body, 3 syllables for a 21-syllable script, half a second of song skipped, a
   forearm in the desk, a window showing flat grey): all caught. 48 of 48 in all.
+
+### Chat F (Opus, high, 12 Nov; chat 2 of 8): items 5-9 built, on `claude/audit-honest-checker`
+- **5:** every "allowed" entry in any of a film's allow-lists must end with its reason in words and must not cover the
+  whole film; pre-flight lists each list that breaks this.
+- **6:** when a chat hands over and its "Where things stand" says a check is still to do, the end-of-chat step stops
+  the chain of chats and tells the chat to ask Sam (once per handover line).
+- **7:** a critique answer "can't tell" on a movement line keeps the critique from counting as clean until a short
+  clip of those seconds is looked at and recorded.
+- **8:** a note marked "seen before" (the first fix failed) must name the check built for it, and that check must
+  exist in the test files; otherwise pre-flight refuses (a changed decision, "not a failed fix", needs none).
+- **9:** anyone drawn on screen for 3 seconds with nothing at all moving (pose, place, head) is flagged, speakers or
+  not, unless the film lists the hold with a reason.
+- **Proof:** 13 new broken examples (and their "fair case passes" other sides): 61 of 61 caught.
+- **Not done (Sam stopped the build at 92% of the week to finish Blessed):** the kit tests and the quick run on the
+  six films; the next audit chat does them (Sonnet).
