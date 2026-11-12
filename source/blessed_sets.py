@@ -37,7 +37,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import burnham as B              # noqa: E402
-from ed import INK               # noqa: E402
+from ed import INK, curve        # noqa: E402
 from remakes_sets import Level, blob, wob, quad, clump, mix, dk, foot_shadow   # noqa: E402,F401
 
 NAME = 'blessed'
@@ -1101,6 +1101,51 @@ def gates(img, cam, t=0.0):
          (60, 60, 64))
 
 
+# ---- cot_top (Sam's note 18, 12 Nov): looking straight down on the cot; he lies flat on his back, the Bible beside
+#      him on the sheet. Seen from above a man on his back is drawn as a man standing front-on (the house style's
+#      front view), so the bed is laid out down the screen: the pillow at the top, the blanket over him from the waist.
+COT_BED = (160, 280, 920, 1980)                    # the mattress (screen px at zoom 1)
+COT_BLANKET_Y = 1330                               # the blanket's turned-down edge
+
+
+def cot_top(img, cam, t=0.0):
+    p = B.Pen(img, cam)
+    p.poly(quad(-300, -400, W + 300, 2400), CELL_FLOOR, None)
+    for k in range(-2, 9):                                                          # the floor's tiles
+        p.line([(-300, 120 + k * 260), (W + 300, 150 + k * 260)], dk(CELL_FLOOR, 0.92), 1.4)
+    x0, y0, x1, y1 = COT_BED
+    p.poly(quad(x0 - 34, y0 - 40, x1 + 34, y1 + 40), STEEL, INK, 2.6)                # the steel frame
+    p.poly(quad(x0, y0, x1, y1), MATT, INK, 2.4)                                     # the thin blue mattress
+    p.poly(curve([(x0 + 150, y0 + 40), (x1 - 150, y0 + 34), (x1 - 130, y0 + 290), (x0 + 130, y0 + 296)], 2),
+           (236, 234, 226), INK, 2.4)                                                 # the flat pillow
+    p.line([(x0 + 80, y0 + 170), (x0 + 150, y0 + 178)], (206, 204, 196), 2.0)        # a crease in it
+    bx, by = 845, 1120                                                                 # the Bible on the sheet, by his hand
+    pts = [(bx - 62, by - 88), (bx + 58, by - 80), (bx + 66, by + 86), (bx - 54, by + 92)]
+    p.poly(pts, (40, 36, 40), INK, 2.4)
+    p.line([(bx - 46, by - 74), (bx - 40, by + 80)], (70, 64, 66), 2.0)               # the spine's edge
+    g = (214, 176, 70)
+    p.poly([(bx - 2, by - 40), (bx + 8, by - 40), (bx + 11, by + 34), (bx + 1, by + 34)], g, None)
+    p.poly([(bx - 22, by - 16), (bx + 30, by - 13), (bx + 30, by - 4), (bx - 22, by - 7)], g, None)
+
+
+def cot_top_front(img, cam, t=0.0):
+    """The blanket over him from the waist down (drawn over the cast), its edge turned down, his feet two bumps."""
+    p = B.Pen(img, cam)
+    x0, y0, x1, y1 = COT_BED
+    e = COT_BLANKET_Y
+    p.poly([(x0 - 14, e + 10), (x0 + 120, e - 8), (x1 - 140, e - 4), (x1 + 14, e + 14), (x1 + 22, y1 + 30),
+            (x0 - 22, y1 + 30)], BLANKET, INK, 2.4)
+    p.poly([(x0 - 14, e + 10), (x0 + 120, e - 8), (x1 - 140, e - 4), (x1 + 14, e + 14), (x1 + 10, e + 80),
+            (x0 - 8, e + 74)], (232, 230, 222), INK, 2.2)                    # the sheet folded over it
+    for fx, fy in ((-120, 360), (60, 520), (-40, 700)):                                # folds over his legs
+        p.line(curve([(540 + fx, e + fy), (540 + fx + 40, e + fy + 60), (540 + fx + 30, e + fy + 160)], 3),
+               dk(BLANKET, 0.8), 2.0)
+    for fx in (-70, 70):                                                               # his feet under it
+        p.poly(curve([(540 + fx - 52, y1 - 150), (540 + fx, y1 - 196), (540 + fx + 52, y1 - 150),
+                      (540 + fx + 44, y1 - 100), (540 + fx - 44, y1 - 100)], 3), mix(BLANKET, (255, 255, 255), 0.08),
+               INK, 2.0)
+
+
 # ================================================================================================ stage marks
 def _mark(L, x, d):
     X, Y = L.p(x, d, 0.0)
@@ -1118,6 +1163,7 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'van': {'brand': (540, 1600, 760.0)},                                        # seated, bent over
     'cell': {'brand': (600, 1820, 520.0), 'officer': (1000, 1700, 480.0)},
     'cell_cot': {'brand': (230, 1700, 560.0)},
+    'cot_top': {'brand': (540, 1800, 740.0)},        # lying: drawn as standing front-on, seen from above
     'phone': {'brand': (690, 2500, 820.0)},
     'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 640.0), 'inmate2': (870, 1560, 640.0),
                'inmate3': (60, 1560, 640.0)},   # one bench, one depth: the same scale as Brand (Sam's note 5)
@@ -1305,13 +1351,13 @@ BENCHMARK = [
 
 
 # ================================================================================================ sheets
-VIEWS = ('court_out', 'court_box', 'court_jury', 'court_bench', 'court_dock', 'van', 'cell', 'cell_cot', 'phone', 'tvroom', 'tv',
-         'gates')
+VIEWS = ('court_out', 'court_box', 'court_jury', 'court_bench', 'court_dock', 'van', 'cell', 'cell_cot', 'cot_top', 'phone', 'tvroom',
+         'tv', 'gates')
 BACK = {'court_out': court_out, 'court_box': court_box, 'court_jury': court_jury, 'court_bench': court_bench, 'court_dock': court_dock,
-        'van': van, 'cell': cell, 'phone': phone, 'tvroom': tvroom, 'gates': gates}
+        'van': van, 'cell': cell, 'cot_top': cot_top, 'phone': phone, 'tvroom': tvroom, 'gates': gates}
 MID = {'court_box': court_box_mid, 'court_dock': court_dock_mid, 'court_jury': court_jury_mid}
 FRONT = {'court_box': court_box_front, 'court_jury': court_jury_front, 'court_bench': court_bench_front, 'court_dock': court_dock_front,
-         'van': van_front, 'tvroom': lambda img, cam, t: tv_flicker(img, cam, t)}
+         'van': van_front, 'cot_top': cot_top_front, 'tvroom': lambda img, cam, t: tv_flicker(img, cam, t)}
 
 
 def view_cam(view):

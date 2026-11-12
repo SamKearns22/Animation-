@@ -154,7 +154,7 @@ SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['jury']), ('jury', T[
          ('tv', T['tv'], T['push']), ('push', T['push'], T['gates']), ('gates', T['gates'], T['gates2']),
          ('gates2', T['gates2'], DUR)]
 VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'jury': 'court_jury', 'oath2': 'court_box', 'dock': 'court_dock', 'van': 'van',
-        'escort': 'cell', 'cot': 'cell_cot', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
+        'escort': 'cell', 'cot': 'cot_top', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
         'gates': 'gates', 'gates2': 'gates2'}
 SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'oath2': ['brand', 'judge'],
              # Sam's note 10: "the jury, staring at him". The front row's two end jurors (1, 6) sit outside the frame
@@ -625,7 +625,7 @@ def arrive(sp, t):
     g = moves.gait(sp, t + 0.37, 'swagger')
     settle = _ease(_ramp(t, ARRIVE_STOP - 0.15, ARRIVE_STOP + 0.15))
     j = moves.mix_poses(g, V.standing(sp), settle)
-    yaw = -45.0 if t < ARRIVE_STOP + 0.2 else 0.0
+    yaw = 0.0                                     # note 26: front-on even walking in (South Park)
     if not walking:
         j['bob'] = 0.0
         j['lean'] = 0.0
@@ -792,7 +792,7 @@ def escort(sp, t, who='brand'):
         j['bob'] = 0.0
     yaw, head = -90.0, None
     if who == 'brand' and k >= ESC_STOP + 0.15:
-        yaw = -30.0
+        yaw = 0.0                                 # notes 17/26: front-on once he stops
         a = T['cell'] + ESC_STOP
         head = -90.0 if a + 0.3 <= t < a + 0.9 else None      # a look left, then up to the window, then down
         j['nod'] = _keys(t, [(a + 0.9, 0.0), (a + 1.25, -1.6), (a + 1.6, -1.6), (a + 2.0, 1.4)])
@@ -827,18 +827,19 @@ def officer_grip(sp, j, t, mark, brand_pts, brand_mark, brand_s):
 
 # --- cot: sat on the cot's edge, hands limp in his lap, weeping at us, a sob every 0.9 s (chat 4: lying curled on it
 #     from this camera, head at the pillow, the rig drew his face upside down; rule 42, looked at full size)
-COT_MARK, COT_YAW = (470, 1800, 480.0), 20.0     # on the cell painting: his seat level with the mattress's front edge
+COT_MARK, COT_YAW = (540, 1800, 740.0), 0.0       # note 18: cot_top, lying flat seen from above (drawn standing)
 
 
 def cot_pose(sp, t):
-    j = moves.seated(sp)
+    """Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), arms limp at his sides,
+    staring up at the ceiling (the lens); a sob every 1.4 s lifts his chest and shoulders a touch."""
+    j = V.standing(sp)
     for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, unlean((sg * 12, 400.0, 360.0), 12.0), 'down')
-    ph = ((t - T['cot']) % 0.9) / 0.9
-    sob = math.sin(math.pi * min(1.0, ph / 0.35)) if ph < 0.35 else 0.0
-    j['lean'], j['nod'] = 12.0, 0.9
-    j['bob'] = j.get('bob', 0.0) - 6.0 * sob          # the shoulders heave up on each sob
-    j['head_dy'] = 4.0 - 3.0 * sob
+        V.arm_to(j, sd, (sg * 200, 520.0, 10.0), 'back')
+    ph = ((t - T['cot']) % 1.4) / 1.4
+    sob = math.sin(math.pi * min(1.0, ph / 0.3)) if ph < 0.3 else 0.0
+    j['bob'] = -4.0 * sob
+    j['head_dy'] = 2.0 - 2.0 * sob
     return j
 
 
@@ -935,6 +936,9 @@ def _cam(view, t):
         u = _ease(_ramp(t, T['push'], T['overjoyed'] + 0.6))
         x, y, ppm = ST.STAGE['tvroom']['brand']
         return B.Cam(1.0 + 1.6 * u, 540 + (x - 540) * u, 960 + (y - 0.95 * ppm - 960) * u)
+    if shot_of(t) == 'cot':                       # note 18: the camera sinks slowly toward him from above
+        u = _ease(_ramp(t, T['cot'], T['phone']))
+        return B.Cam(1.0 + 0.45 * u, 540, 960 + (560 - 960) * u)
     if shot_of(t) == 'jury':                      # a slow push in on the twelve faces
         u = _ease(_ramp(t, T['jury'], T['oath2']))
         return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
@@ -967,7 +971,7 @@ def draw_people(img, cam, shot, t):
         put_seated(img, cam, sj, (x, y, ppm), t, j=jj)
         ST.mid(view, img, cam, t)
         sp = dict(brand_sp(t, 'stand'), gaze_dy=oath_gaze(t))
-        put(img, cam, sp, st['brand'], t, yaw=-45, j=oath(sp, t))
+        put(img, cam, sp, st['brand'], t, yaw=0, j=oath(sp, t))   # notes 13/26: front-on, South Park style
     elif shot == 'dock':
         for g in ('guard1', 'guard2'):
             put_seated(img, cam, dict(GUARDS[g], **face('officer', t, 'neutral')), st[g], t)
@@ -991,14 +995,14 @@ def draw_people(img, cam, shot, t):
         _log_hands('officer', opts, om, _s(so, om[2]), -1, oj.get('bob', 0.0))
     elif shot == 'cot':
         sp = brand_sp(t, 'prison')
-        put_seated(img, cam, sp, COT_MARK, t, yaw=COT_YAW, j=cot_pose(sp, t))
+        put(img, cam, sp, ST.STAGE['cot_top']['brand'], t, 0.0, cot_pose(sp, t))   # note 18: flat on his back, from above
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
         dx, roll = phone_extra(t)
         sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.55, **dx)   # eyes open, looking down at the phone
         j = handset_pose(sp)
         j['lean'], j['head_roll'] = 5.0, roll
-        pts = put(img, cam, sp, st['brand'], t, yaw=-45, j=j)
+        pts = put(img, cam, sp, st['brand'], t, yaw=0, j=j)   # notes 21/26: front-on
         phone_cord(img, cam, pts, st['brand'], sp)
         _log_hands('brand', pts, st['brand'], _s(sp, st['brand'][2]), -1)
     elif shot in ('tvroom', 'push'):

@@ -99,7 +99,7 @@ def placed(t):
         one('brand', F.escort(F.brand_sp(t, 'prison'), t)[0])
         one('officer', F.escort(dict(F.BC.OFFICER), t, 'officer')[0])
     elif shot == 'cot':                           # sat on the cot's edge (chat 4), facing the lens
-        one('brand', F.COT_MARK, True)
+        one('brand', F.COT_MARK)                  # note 18: lying flat, drawn standing front-on from above
     elif shot == 'phone':
         one('brand', st['brand'])
     elif shot in ('tvroom', 'push'):

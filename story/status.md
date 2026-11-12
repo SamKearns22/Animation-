@@ -1,7 +1,7 @@
 - House look (12 Nov): DONE and ON for every film (rule S7, sign-off included). Chats now open the next chat themselves. Notes: notes/house-look.md.
 - System audit (12 Nov): FINISHED, about 3.0% of a week. Report: notes/system-audit-report.md; needs Sam's numbers 1-11.
   The honest checker (branch claude/audit-honest-checker) merges after Blessed's animatic 1 is sent.
-- Blessed (12 Nov, notes round 1, chat 1 of 8): mouths (13, 15) and jury (14) fixed, clip sent; van (16) in progress. Next: Opus medium chat 2 of 8. Needs Sam: 1-2 and the music. Notes: notes/blessed.md.
+- Blessed (12 Nov, notes round 1, chat 2 of 8): van (16), cot from above (18), phone line (19), music (27) done, clips sent; front-on Brand (26) in stills. Next: Opus medium chat 3 of 8. Needs Sam: nothing. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
