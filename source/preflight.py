@@ -290,6 +290,13 @@ def _frame_hash(i):
     return hashlib.md5(pic.tobytes()).hexdigest()[:16]
 
 
+def _fault_frame(text, fps):
+    """The frame a fault names ('4.83s', '  4.83 s:'), or None when it names no time."""
+    import re
+    m = re.search(r'(\d+(?:\.\d+)?) ?s\b', text)
+    return int(round(float(m.group(1)) * fps)) if m else None
+
+
 def _frames_path(name):
     import film_engine
     return os.path.join(film_engine.PASSES, f'{name}-frames.json')
@@ -452,15 +459,23 @@ def main():
             except (OSError, ValueError):
                 prev = None
             chk, cfg = _checks_hash(), _config_hash(film)
-            incremental = bool(prev and prev.get('clean') and prev.get('checks') == chk and prev.get('config') == cfg
-                               and prev.get('n') == n_frames and prev.get('fps') == fps)
+            # A run that found frame-level faults is still a base to compare with (Sam, 12 Nov: a one-fault fix
+            # must not mean a full re-run): its faults are kept, each with its time, and carried forward unless
+            # their frame is re-checked. A fault with no time in it cannot be carried, so that case runs in full.
+            carry = prev.get('faults') if prev and not prev.get('clean') else []
+            carry_ok = carry is not None and all(_fault_frame(x, fps) is not None for x in carry)
+            incremental = bool(prev and (prev.get('clean') or carry_ok) and prev.get('checks') == chk
+                               and prev.get('config') == cfg and prev.get('n') == n_frames and prev.get('fps') == fps)
             if incremental:
                 changed = [i for i in range(n_frames) if hashes[i] != prev['hashes'][i]]
                 near = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))}
+                for x in (carry or []):             # faults from the last run whose frame was not re-checked
+                    if _fault_frame(x, fps) not in near and x not in problems:
+                        problems.append(x)
                 print(f'incremental pre-flight: {len(changed)} of {n_frames} frames changed since the last clean run; '
                       f're-checking {len(near)} (the rest were clean then and are unchanged). --full re-checks all.')
             elif prev:
-                why = ('the last run found a frame-level fault' if not prev.get('clean') else
+                why = ('the last run found a fault with no time in it' if not prev.get('clean') and not carry_ok else
                        'the check code changed' if prev.get('checks') != chk else
                        'the film\'s settings or allow-lists changed' if prev.get('config') != cfg else
                        'the length changed')
@@ -501,7 +516,10 @@ def main():
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
-        problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
+        _faces = kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
+        if incremental:                         # a re-check that did not redraw them cannot say they were "never drawn"
+            _faces = [x for x in _faces if 'never found drawn' not in x]
+        problems += _faces
     if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
         import filmkit
         if incremental:                         # only the bodies in shots that hold a changed frame (a second round)
@@ -514,7 +532,8 @@ def main():
         os.makedirs(os.path.dirname(_frames_path(name)), exist_ok=True)
         with open(_frames_path(name), 'w') as fh:
             json.dump({'checks': _checks_hash(), 'config': _config_hash(film), 'n': n_frames, 'fps': fps,
-                       'hashes': hashes, 'clean': len(problems) == n_text}, fh)
+                       'hashes': hashes, 'clean': len(problems) == n_text,
+                       'faults': problems[n_text:]}, fh)
     # 3. captions
     if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
         import subtitles as SUB
