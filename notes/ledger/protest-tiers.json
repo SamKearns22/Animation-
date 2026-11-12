@@ -1,0 +1,51 @@
+{
+ "film": "protest-tiers",
+ "estimate": 21.45,
+ "chats": [],
+ "checks": {},
+ "stages": [
+  {
+   "name": "plan",
+   "pct": 1.0,
+   "done": {
+    "date": "2026-11-12",
+    "spent": 0
+   }
+  },
+  {
+   "name": "cast",
+   "pct": 3.0,
+   "done": null
+  },
+  {
+   "name": "sets",
+   "pct": 5.3,
+   "done": null
+  },
+  {
+   "name": "moves",
+   "pct": 4.4,
+   "done": null
+  },
+  {
+   "name": "animatic1",
+   "pct": 2.0,
+   "done": null
+  },
+  {
+   "name": "round1",
+   "pct": 2.7,
+   "done": null
+  },
+  {
+   "name": "round2",
+   "pct": 2.7,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 0.35,
+   "done": null
+  }
+ ]
+}

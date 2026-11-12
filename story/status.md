@@ -1,3 +1,3 @@
-Blessed: Sam rejected the gates2 clip (note 32); he chose one proper Walliams rebuild, the officer fix (note 28), then an animatic.
-Waiting: nothing.
-Next: chat 2 of 8 (Opus high): plan and rebuild Walliams' beat in gates2, clip it, note 28, critique, animatic 2.
+Protest Tiers: plan done (reporting, 8 photos, checklist, estimate 21.5%, staging); 7 questions with Sam. Blessed: its own chain (notes/blessed.md).
+Waiting: Sam's answers 1-7 for Protest Tiers.
+Next: Protest Tiers Build (Opus high) once answered: template, four cameras, cast sheet of the new Glimpses, then the four paintings.
