@@ -55,8 +55,11 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
-- **I start each new chat by hand (Sam, 11 Nov):** chats never open other chats or schedule check-ins unless I
-  ask. The handover's bottom lines say what to type, the model, the effort and any file to attach. **A task started
+- **Chats may open the next chat themselves, up to 8 in a row (Sam, 12 Nov):** each gets the handover's model and
+  effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me. Anything
+  needing my yes stops the chain; once I answer, the count starts again at 1. After chat 8 or any stop, I start the
+  next by hand. No scheduled check-ins unless I ask. The handover's bottom lines say what to type, the model, the
+  effort and any file to attach. **A task started
   on the wrong model** says so and gives what to type. Anything needing my yes stops and waits. Never carry on into a
   stage that needs a stronger model inside one chat.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
