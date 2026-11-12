@@ -99,8 +99,8 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.61
+   "model": "opus",
+   "cost": 1.19
   }
  ],
  "checks": {},
@@ -346,7 +346,7 @@
  },
  "stage_alarm": {
   "5:moves": 3,
-  "7:animatic1": 4
+  "7:animatic1": 5
  },
  "forecast_alarm": 1
 }
