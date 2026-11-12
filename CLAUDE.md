@@ -49,6 +49,8 @@ at session start (`.claude/hooks/setup.sh`).
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).
 - **Every new rule replaces or merges an old one, or turns a by-hand rule into a check:** the rulebook never grows.
+  **Before suggesting anything** (rule, tool or idea), search the rulebook and `guides/kit-catalogue.md`; each
+  suggestion names the closest rule or tool and says what is new, or is dropped (Sam, 12 Nov).
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
 
 # Models and chats
@@ -57,7 +59,7 @@ at session start (`.claude/hooks/setup.sh`).
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
 - **Chats may open the next chat themselves, up to 8 in a row (Sam, 12 Nov):** each gets the handover's model and
   effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me. Anything
-  needing my yes stops the chain; once I answer, the count starts again at 1. After chat 8 or any stop, I start the
+  needing my yes stops the chain, as does a handover saying a check is still to do (ask me); once I answer, the count starts again at 1. After chat 8 or any stop, I start the
   next by hand. No scheduled check-ins unless I ask. The handover's bottom lines say what to type, the model, the
   effort and any file to attach. **A task started
   on the wrong model** says so and gives what to type. Anything needing my yes stops and waits. Never carry on into a

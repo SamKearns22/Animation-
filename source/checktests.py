@@ -4,7 +4,8 @@ question 4: "checks that can't fail"). Each case builds the smallest film that b
 and passes only if the check names the fault. A check whose broken example it does not catch is a check that would
 say "clean" over a real fault.
 
-  CASES ........ (check, rule, how it is broken, the call) one per check; the honest-checker cases (NOT RUN, HAS)
+  CASES ........ (check, rule, how it is broken, the call) one per check; the honest-checker cases (NOT RUN, HAS);
+                 audit items 5-9 (allowed entries, chain stop, can't tell on a move, seen before, too still)
   ELSEWHERE .... checks proven in kittests.py instead (a real film's old fault put back), by test name
   UNTESTED ..... checks with no broken example yet, listed every run (empty since audit item 11, 12 Nov)
   main() ....... runs them all; prints one line each and the untested list
@@ -414,6 +415,116 @@ def c_portal_flat():
     return sets.portal_faults(f)                      # the window shows one flat grey
 
 
+# --- audit items 5-9 (Sam, 12 Nov): each rule with its check, each check with its broken example ---------------------
+def c_allowed_no_reason():
+    import preflight as P
+    return [x for x in P.allow_faults(film(HANDS_OK=[('amy', '*', 'no hand', 0.5, 1.0)])) if 'no reason' in x]
+
+
+def c_allowed_whole_film():
+    import preflight as P
+    return [x for x in P.allow_faults(film(ALLOWED_CONTACTS=[('amy.hand*', 'desk', 0.0, 2.0, 'her hands rest on it')]))
+            if 'whole film' in x]
+
+
+def c_allowed_fair():                                 # (the other side: a reasoned, short entry is no fault)
+    import preflight as P
+    got = P.allow_faults(film(ALLOWED_POPS=[('bob', 0.5, 0.7, 'he comes in through the door')],
+                              SET_EXCLUDE=[('far table', 'painted, out of reach')]))
+    return [] if got else ['a fair entry passes']
+
+
+def c_chain_stops():
+    import ledger
+    text = ('## Where things stand (12 Nov)\n- **Done:** cast and sets.\n- **Next:** the line-weight check is still to '
+            'do; the next chat builds it after the animatic.\n')
+    return ledger.handover_stops(text)
+
+
+def c_chain_goes():                                   # (the other side: "nothing still to do" does not stop it)
+    import ledger
+    return [] if ledger.handover_stops('## Where things stand\n- Done: every check built; no check still to do.\n') \
+        else ['a handover with no check put off lets the chain go on']
+
+
+def _critique_ledger(passes):
+    import ledger
+    d = tempfile.mkdtemp()
+    real = ledger.DIR, ledger.CURRENT
+    ledger.DIR, ledger.CURRENT = d, os.path.join(d, '.current')
+    ledger.store({'film': 'x', 'estimate': None, 'chats': [], 'checks': {},
+                  'critique': {'passes': passes, 'lines': {}}})
+    return real
+
+
+def c_cant_tell_move():
+    import critique
+    import ledger
+    real = _critique_ledger([{'round': 1, 'pass': 1, 'stage': 'animatic', 'hunt': 1, 'faults': 0, 'cant_tell': 1,
+                              'open': ["3 M2: can't tell if the arm snaps"], 'cant_moves': ['M2']}])
+    try:
+        ok, line = critique.status('x')
+        return [] if ok else [line]
+    finally:
+        ledger.DIR, ledger.CURRENT = real
+
+
+def c_cant_tell_move_clip():                          # (the other side: once the clip is looked at, it is clean)
+    import critique
+    import ledger
+    real = _critique_ledger([{'round': 1, 'pass': 1, 'stage': 'animatic', 'hunt': 1, 'faults': 0, 'cant_tell': 1,
+                              'open': [], 'cant_moves': ['M2'], 'clips': {'M2': '6-8 s clip: swings through'}}])
+    try:
+        ok, line = critique.status('x')
+        return ['clean once the clip is recorded'] if ok else []
+    finally:
+        ledger.DIR, ledger.CURRENT = real
+
+
+def c_seen_before_no_check():
+    import preflight as P
+    return P.seen_before_faults('| 12 | the arm sinks into the desk again | P5 | done: raised. Seen before (note 4) |\n')
+
+
+def c_seen_before_unknown_check():
+    import preflight as P
+    return P.seen_before_faults('| 12 | the arm sinks again | P5 | done. Seen before; check: c_arm_never_built |\n')
+
+
+def c_seen_before_named():                            # (the other side: a named check that exists passes)
+    import preflight as P
+    got = P.seen_before_faults('| 12 | the arm sinks again | P5 | done. Seen before; check: c_resting_arm |\n')
+    return [] if got else ['a seen-before note naming its built check passes']
+
+
+def _still_records(sigs, name='amy', step=0.25):
+    return [(f's {i * step:.2f}s', name, {'_t': i * step, '_sig': g}) for i, g in enumerate(sigs)]
+
+
+def c_too_still():
+    import kitchecks
+    return kitchecks.still(film(DUR=5.0), _still_records([7] * 16))      # 3.75 s of one pose
+
+
+def c_too_still_ok():                                 # (the other side: a breathing pose, and a meant hold, pass)
+    import kitchecks
+    moving = kitchecks.still(film(DUR=5.0), _still_records([7, 8] * 8))
+    held = kitchecks.still(film(DUR=5.0, STILL_OK=[('amy', 0.0, 4.0, 'a stunned stare, note 6')]),
+                           _still_records([7] * 16))
+    return [] if moving or held else ['a moving pose and a listed hold pass']
+
+
+def c_pose_sig():                                     # the signature itself: a tilt of the head changes it
+    import kitchecks
+    life = types.SimpleNamespace(at_time=lambda t: (0.0, 0.0) if t < 1 else (3.0, 0.0))
+    sp = {'head_life': life}
+    j2 = {'neck': (0.0, -100.0), 'handL': (-40.0, 20.0), 'hand': {}}
+    a = kitchecks.pose_sig(j2, 100, 900, 1.0, sp, 0.5, 0, None)
+    b = kitchecks.pose_sig(j2, 100, 900, 1.0, sp, 1.5, 0, None)
+    c = kitchecks.pose_sig(dict(j2, handL=(-40.0, 23.0)), 100, 900, 1.0, sp, 0.5, 0, None)
+    return ['a head tilt and a hand move each change the signature'] if len({a, b, c}) == 3 else []
+
+
 CASES = [   # (check, rule, how it is broken, the case)
     ('plan', '1', 'two rooms overlap', c_plan),
     ('plan', '1', 'no PLAN at all', c_plan_missing),
@@ -463,6 +574,19 @@ CASES = [   # (check, rule, how it is broken, the case)
     ('song joins', '-', 'half a second of the song skipped at a join', c_song_join),
     ('resting arms', '78', 'a resting forearm 6 cm inside the desk', c_resting_arm),
     ('openings', '2', 'a window showing one flat grey', c_portal_flat),
+    ('allowed entries', '5', 'a HANDS_OK entry with no reason', c_allowed_no_reason),
+    ('allowed entries', '5', 'an ALLOWED_CONTACTS entry spanning the whole film', c_allowed_whole_film),
+    ('allowed entries', '5', 'a short, reasoned entry is no fault (the other side)', c_allowed_fair),
+    ('chain stop', 'CLAUDE.md', 'a handover with a check "still to do"', c_chain_stops),
+    ('chain stop', 'CLAUDE.md', '"no check still to do" lets it go on (the other side)', c_chain_goes),
+    ("critique: can't tell", '89', "a movement line answered can't tell, no clip", c_cant_tell_move),
+    ("critique: can't tell", '89', 'the clip recorded: clean (the other side)', c_cant_tell_move_clip),
+    ('seen before', '30', 'a seen-before note naming no check', c_seen_before_no_check),
+    ('seen before', '30', 'a seen-before note naming a check never built', c_seen_before_unknown_check),
+    ('seen before', '30', 'a named, built check passes (the other side)', c_seen_before_named),
+    ('too still', '74', 'someone on screen 3.75 s with nothing moving', c_too_still),
+    ('too still', '74', 'a breathing pose and a STILL_OK hold pass (the other side)', c_too_still_ok),
+    ('too still', '74', 'the pose signature misses a head tilt or a hand move', c_pose_sig),
 ]
 
 ELSEWHERE = {   # check: the kittests.py tests that put a real film's old fault back and see it caught

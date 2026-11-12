@@ -21,7 +21,8 @@ MAP
   palette .......... the part of lines A2 and S3 a script can truly test (budget job (e), 11 Nov): a main colour of
                      ours that the references show almost none of ("orange, not buff brick"). Run by redo and pack
                      on every panel with a reference, so it is fixed before a helper (0.5% of a week) is paid to say it
-  status ........... the line pre-flight prints; ok when the round's last pass has no FAULT (CAN'T TELL never blocks)
+  status ........... the line pre-flight prints; ok when the round's last pass has no FAULT (CAN'T TELL never blocks,
+                     except on a movement (M) line: not ok until `clip` records the short clip looked at; audit item 7)
 
     python3 source/critique.py pack FILM SPEC.json
     python3 source/critique.py record FILM PACKDIR
@@ -31,6 +32,7 @@ MAP
     python3 source/critique.py redo FILM SPEC.json [--all]
     python3 source/critique.py status FILM
     python3 source/critique.py fixed FILM "what changed"
+    python3 source/critique.py clip FILM M2 "6.0-8.5 s clip: the arm swings through, no snap"
 
 A stage (cast, sets, moves, animatic, notes), rule 89: `before` (notes round, before any fix) -> fix -> ONE `pack` for
 the whole stage, never one per set or character -> a NEW helper with the printed prompt -> `record` -> fix the faults
@@ -534,7 +536,8 @@ def record(film_name, pack_dir):
     one = lambda f: f"{_span(f['panels'])} {' '.join(f['lids'])}: {f['words']}"
     c['passes'].append({'round': rnd, 'pass': pas, 'stage': stage, 'date': str(date.today()),
                         'hunt': 1 + sum(1 for p in c['passes'] if p['round'] == rnd and p.get('stage') == stage),
-                        'faults': len(faults), 'cant_tell': len(cant), 'open': [one(f)[:160] for f in faults + cant]})
+                        'faults': len(faults), 'cant_tell': len(cant), 'open': [one(f)[:160] for f in faults + cant],
+                        'cant_moves': sorted({l for f in cant for l in f['lids'] if l.startswith('M')})})
     for f in faults:
         for lid in f['lids']:
             c['lines'].setdefault(lid, {'faults': 0, 'false': 0})['faults'] += 1
@@ -599,12 +602,36 @@ def _last(film_name):
     return d, rnd, (mine[-1] if mine else None)
 
 
+def unseen_moves(last):
+    """Audit item 7 (Sam, 12 Nov; rule 89): the movement (M) lines the pass answered CAN'T TELL with no clip looked at
+    since: a still frame cannot show a move, so a short clip of those seconds is looked at and recorded (`clip`)."""
+    return [l for l in last.get('cant_moves', []) if l not in last.get('clips', {})]
+
+
+def clip(film_name, lid, what):
+    """Record the clip looked at for a movement line answered CAN'T TELL: what it showed (and the clip's seconds)."""
+    import ledger
+    d, rnd, last = _last(film_name)
+    if last is None or lid not in last.get('cant_moves', []):
+        sys.exit(f"critique clip: the last pass has no CAN'T TELL on {lid}")
+    last.setdefault('clips', {})[lid] = what[:200]
+    ledger.store(d)
+    ledger.append(film_name, rnd, f'critique, pass {last["pass"]}: clip looked at for {lid}: {what}')
+    print(status(film_name)[1])
+
+
 def status(film_name):
     """(ok, line) for pre-flight: the round's last pass has no FAULT, or it was hunt 2 and its faults are `fixed`.
-    CAN'T TELL never blocks (rule 89, Sam 11 Nov)."""
+    CAN'T TELL never blocks (rule 89, Sam 11 Nov), except on a movement line until its clip is looked at (audit item
+    7, Sam 12 Nov)."""
     _, rnd, last = _last(film_name)
     if last is None:
         return False, f'critique: round {rnd if rnd is not None else "?"}: none recorded'
+    moves = unseen_moves(last)
+    if moves:
+        return False, (f'critique: round {rnd}, pass {last["pass"]}: movement line(s) {", ".join(moves)} answered '
+                       "can't tell and no clip looked at: make a short clip of those seconds (final OUT --small --span "
+                       f'T0 T1), look at it, then `critique.py clip {film_name} {moves[0]} "what it showed"`')
     ct = f" ({last['cant_tell']} can't tell, not blocking)" if last['cant_tell'] else ''
     if last['faults'] == 0:
         return True, f'critique: round {rnd}, pass {last["pass"]} clean{ct}'
@@ -799,6 +826,8 @@ def main():
         redo(film, a[2], every='--all' in a)
     elif cmd == 'fixed' and len(a) == 3:
         fixed(film, a[2])
+    elif cmd == 'clip' and len(a) == 4:
+        clip(film, a[2], a[3])
     elif cmd == 'before' and len(a) == 3:
         before(film, json.load(open(a[2])))
     elif cmd == 'status':
