@@ -253,3 +253,15 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** none.
 - **For Claude:** blessed.py gates2 block (after GATE_D_OUT): G2_FROM/G2_TO, 'stride' gait, _g2_press() (pushes heads out of Brand's and the door's boxes), gates_close; Walliams beats DRAG/TAKE/PLEAD/SHOVE/GRAB/SLAM (s from T['wal'] = gates2 + 0.35), wal_place/wal_roll (his layer rotated about his feet)/wal_pose (_blend_specs per phase)/wal_face; door_inside (the lit passage), draw_leaf (the slam; covers the set's painted leaf), _door_clip(hand=) for the grab; _reach() keeps held arms past the elbow check; G2_CAM; DUR = T['wal'] + 5.15. _officer_turned (note 28) in put(); TC.TORSOS['guard2']. blessed_checks placed() has Walliams and the officers. 'pleading' in blessed_walliams MOODS. Check not yet run (`blessed.py check`).
 
+
+## Where things stand (chat 3 of 8, archived 12 Nov)
+- **Rules that bite next:** 30 (a repeated note: why the first fix failed), 89 (round 2's critique of the whole film after Sam's animatic-2 notes), 67 (full pre-flight now takes about 25 min: one per round).
+- **Sam (12 Nov), newest word:** "No picture or clip. Just end with the animatic." So nothing was sent along the way (no gates2 clip, no officer still); only animatic 2 goes to him, then stop and wait (he will come back with a clear head).
+- **Done (12 Nov, chat 3 of 8, Opus medium):** gates2: framed lower and closer (G2_CAM y 1440, zoom 2.25 to 2.6), two of the pack close to us with their backs in the bottom corners (empty tarmac gone); Brand's stride 2.15 steps/s x 0.9 m (same speed, bigger steps; was 156 steps a minute); the officers come in from off-frame right (WAL_X start 3.4). Walliams' head critique (rule 89, round 2, two hunts): scared face no longer reads as a grin, stronger pleading/alarmed brows, greyer hair and stubble; the officers no longer blink together. Note 28 officer checked on stills (side-on kit reads). Animatic 2 rendered (--small, --faults-named) and sent: `review/blessed-animatic-2.mp4`.
+- **Named, not fixed (tool noise or Sam's asks):** officers' hands over Walliams (the grip, meant); Walliams' hands hidden in the plead; press reshuffled across the gates > gates2 cut (the lane opens for Brand, note 32); press0 stands in the sign (gates wide); journalists 2 and 26 one copy; inmate 2 cue-arm foreshortened; Brand stretch at the escort cut 21.0; circle hands (house style); the curly-haired close reporter reads a little like a blob from behind.
+- **Next:** wait for Sam's notes on animatic 2 (round 2). Then Opus, MEDIUM: a notes round. Ask before the final.
+- **Needs Sam:** his notes on animatic 2.
+- **Read:** `guides/job-packs.md` Notes round; this section; the Notes table rows Sam names.
+- **Open rule requests:** none.
+- **For Claude:** G2_PRESS = _g2_press() + two close spots (-0.45, 3.0), (0.5, 3.0); ALLOWED_POPS walliams through the door; SHOT_CAST gates2 = guard1, guard2; blessed_checks placed() skips inmate3 (note 22 took him out); blessed_walliams MOODS scared = lips smile -0.8. Critique ledger round 2 pass 2 fixed.
+
