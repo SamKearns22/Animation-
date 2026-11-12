@@ -116,9 +116,10 @@ T['amazed'] = T['push'] + 1.2                     # the face change on the slow 
 T['overjoyed'] = T['push'] + 3.2
 T['gates'] = T['overjoyed'] + 1.6               # her voice has faded out by the cut
 _at(6, T['gates'] + 0.8)
-DUR = L[6]['end'] + 1.0
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
-T['wal'] = T['gates2'] + 0.5                     # note 30: Walliams led in behind Brand, in gates2 (no shot of his own)
+T['wal'] = T['gates2'] + 0.35                    # note 30: Walliams led in behind Brand, in gates2 (no shot of his own)
+DUR = max(L[6]['end'] + 1.0, T['wal'] + 5.15)     # note 32: held to the door's slam (4.55 s into his beats) and a beat
+G2_CAM = (600, 580, 1519)                          # gates2's camera centre: x at the cut, x pushed in, y (painting px)
 # Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
 # ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
 # whole take as heard and found her mouth shut at 50.8 s, off screen and inaudible). The full script stays in 'script'.
@@ -255,6 +256,8 @@ def put(img, cam, sp, mark, t, yaw=0.0, j=None, head_yaw=None):
         img = CK.scratch()
     if sp.get('look_') == 'trial' and j is not None and abs(yaw) > 10:
         j = dict(j, body_props=list(j.get('body_props', [])) + [_scarf_turned])
+    if sp.get('who') in ('officer', 'guard2') and abs(yaw) > 10:
+        j = dict(j or V.standing(sp), body_props=list((j or {}).get('body_props', [])) + [_officer_turned])
     return V.person(img, cam, x, y - 928 * s, s, sp, t, yaw, j, head_yaw=head_yaw)
 
 
@@ -267,6 +270,25 @@ def _scarf_turned(pen, view, sp):
         pts = [(x0 - w / 2, -4), (x0 + w / 2, -4), (x0 + w / 2 + 4, 210), (x0 + w / 2 + 2, 420), (x0 - w / 2, 428),
                (x0 - w / 2 - 2, 210)]
         pen.poly(B.curve(pts, 3) if hasattr(B, 'curve') else pts, BC.SCARF, INK, 2.2)
+
+
+def _officer_turned(pen, view, sp):
+    """Note 28 (Sam, 12 Nov: the escort 'needs to look more like an HM Prison officer'): turned, his white shirt read
+    as a long coat. HMPPS kit as the front torso has it: the shirt tucked under a black belt, a black epaulette, the
+    black tie's edge, the key chain looping from the belt, a radio clipped at the chest."""
+    if view == 'front':
+        return
+    sw = sp.get('shoulders', 160)
+    d = 0.6 * sw
+    blk, steel = (20, 20, 24), (196, 198, 204)
+    pen.poly([(-d * 0.96, 466), (d * 1.04, 466), (d * 1.04, 498), (-d * 0.96, 498)], blk, INK, 1.6)       # belt
+    pen.poly([(-d * 0.62, 470), (-d * 0.2, 470), (-d * 0.2, 540), (-d * 0.62, 540)], blk, INK, 1.4)       # key pouch
+    pen.line(curve([(-d * 0.2, 500), (d * 0.05, 590), (d * 0.36, 510)], 3), steel, 2.6)                    # key chain
+    pen.poly([(-d * 0.45, 2), (d * 0.5, 4), (d * 0.52, 26), (-d * 0.45, 26)], blk, INK, 1.4)              # epaulette
+    pen.poly([(d * 0.84, 18), (d * 0.98, 20), (d * 1.08, 300), (d * 0.96, 304)], blk, INK, 1.4)          # tie's edge
+    pen.poly([(d * 0.5, 70), (d * 0.9, 70), (d * 0.9, 170), (d * 0.5, 170)], blk, INK, 1.6)               # radio
+    pen.line([(d * 0.58, 70), (d * 0.58, 22)], blk, 4.0)                                                    # its aerial
+    pen.poly([(d * 0.56, 96), (d * 0.84, 96), (d * 0.84, 126), (d * 0.56, 126)], (90, 96, 104), None)     # its screen
 
 
 def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
@@ -995,136 +1017,347 @@ def gates_wide(sp, t):
 
 
 GATE_D_OUT = (ST.GATE_D + 0.2, ST.GATE_D - 0.52)
-G2_FROM, G2_TO = 8.5, 7.6                          # out of the wicket into the pack
-G2_PART = (1.0, 0.15)
-G2_X = -1.0                                         # note 30: and to the left of the door, so it shows over his shoulder
-# note 30: the pack's lane opened to the left in this shot (each keeps their place in the list, so their looks), so he
-# stays in view at G2_X and the door shows between the two groups
-G2_PRESS = [(x - G2_PART[0] if x < 0.3 else x + G2_PART[1], d) for x, d in ST.STAGE['gates']['press']]
+# --- gates2, note 32 (Sam, 12 Nov: the r2 clip was 'terrible'): rebuilt from the acting list's gates2 rows. Brand
+#     strides straight out of the wicket towards us to his mark left of the door (big, purposeful); the pack stands on
+#     BOTH sides as in the wide shot, only those in the lane between the lens, him and the door step aside; behind him
+#     Walliams is dragged in between two officers, does a double-take at the cameras, pleads with the pack, is shoved
+#     through the door into the lit passage, grabs the frame, and the officer slams the door.
+G2_FROM, G2_TO = (0.6, 8.1), (-0.3, 5.0)           # (x, d): out of the wicket into the pack, mostly towards us
+moves.GAITS['stride'] = dict(moves.GAITS['swagger'], sps=2.6, step=0.75, swing=0.45)   # purposeful, still him
+G2_WALK = math.hypot(G2_TO[0] - G2_FROM[0], G2_TO[1] - G2_FROM[1]) / moves.speed('stride')
+G2_X = G2_TO[0]
+
+
+def _g2_press():
+    """The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or the
+    door and its officers (down to 1 m) steps sideways just clear of them, to the nearer side; then apart from anyone
+    they would stand inside. Painting px through the gates' Level camera."""
+    G = ST.GATE
+    bx, bd = G2_TO
+    X0, XB = G.p(bx - 0.35, bd)[0], G.p(bx + 0.35, bd)[0]
+    XD0, X1 = G.p(-0.1, 8.6)[0], G.p(1.75, 8.6)[0]
+    YB, YD = G.p(bx, bd, 0.9)[1], G.p(0.65, 8.6, 1.0)[1]
+    out = []
+    for x, d in ST.STAGE['gates']['press']:
+        px, half, top = G.p(x, d)[0], 0.28 * G.f / d, G.p(x, d, 2.05)[1]
+        bottom = YB if px < XD0 else YD
+        if top < bottom and px + half > X0 and px - half < X1:
+            left, right = X0 - (px + half), X1 - (px - half)
+            x += (left if -left < right else right) * d / G.f
+        out.append([x, d])
+    for _ in range(6):                                 # nobody inside anybody (0.45 m across, 0.4 m deep)
+        for a in out:
+            for b in out:
+                if a is not b and abs(a[0] - b[0]) < 0.45 and abs(a[1] - b[1]) < 0.4:
+                    far = a if abs(a[0] - 0.4) > abs(b[0] - 0.4) else b
+                    far[0] += 0.12 if far[0] > 0.4 else -0.12
+    return [tuple(q) for q in out]
+
+
+G2_PRESS = _g2_press()
 
 
 def gates_close(sp, t):
     a = _gates_cut()
     k = t - a
-    walk = math.hypot(G2_FROM - G2_TO, 0.6 - G2_X) / moves.speed('swagger')
-    u = min(1.0, max(0.0, k / walk))
-    mark = ST._mark(ST.GATE, 0.6 + (G2_X - 0.6) * u, G2_FROM + (G2_TO - G2_FROM) * u)
-    g = moves.gait(sp, k + 0.25, 'swagger')
-    settle = _ease(_ramp(k, walk - 0.15, walk + 0.15))
+    u = min(1.0, max(0.0, k / G2_WALK))
+    mark = ST._mark(ST.GATE, G2_FROM[0] + (G2_TO[0] - G2_FROM[0]) * u, G2_FROM[1] + (G2_TO[1] - G2_FROM[1]) * u)
+    g = moves.gait(sp, k + 0.25, 'stride')
+    settle = _ease(_ramp(k, G2_WALK - 0.15, G2_WALK + 0.15))
     j = moves.mix_poses(g, V.standing(sp), settle)
-    if k > walk + 0.15:
+    if k > G2_WALK + 0.15:
         j['bob'] = 0.0
     sw = sp.get('shoulders', 150)
     ev = word_at(6, 'everybody')
-    for sd, sg in (('L', -1), ('R', 1)):
-        arm_keys(j, sp, sd, t, [(ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
+    land = a + G2_WALK
+    for sd, sg in (('L', -1), ('R', 1)):              # the gait's own swing on the stride; up as he plants
+        arm_keys(j, sp, sd, t, [(min(land, ev - 0.3) - 0.35, None), (ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
                                 (ev + 0.25, GATE_OPEN(sw, sg)), (ev + 0.55, GATE_V(sw, sg))])
     dip = _bump(t, ev - 0.25, ev + 0.5, 0.25, 0.22)               # down at the knees with the sweep, springs up
     _dip(j, 40 * dip)
     chin = 1 - _bump(t, ev - 0.3, ev + 0.5, 0.2, 0.25)
     j['nod'] = -1.5 * chin + 0.8 * dip                             # chin high, a dip of the head into the sweep
-    j['lean'] = j.get('lean', 0.0) - 3 * chin + 5 * dip
+    j['lean'] = j.get('lean', 0.0) - 3 * chin + 5 * dip - 4 * (1 - settle)   # chest out on the stride
     j['head_roll'] = _sway(k + 0.25) * (1 - settle) + 4 * _ease(_ramp(t, ev + 0.5, ev + 0.9))   # a preening tilt to hold
     return mark, 0.0, j
 
 
-# --- walliams (notes 25, 30, Sam 12 Nov): in gates2's BACKGROUND, behind Brand: two officers hold him by the arms
-#     and lead him in prison grey from the right, along the gate to the wicket door Brand just left, then back him
-#     through it; all front-on (South Park: they slide, bobbing, facing us); he is scared, eyes darting. No caption.
-WAL_X, WAL_D = (2.5, 0.65), ST.GATE_D - 0.35        # in from the right to the wicket (x 0.15-1.15), just in front of it
-WAL_SLIDE, WAL_BACK = 2.0, (2.2, 3.1)                # along the gate; then backwards, through the door
-WAL_IN = ST.GATE_D + 1.3                              # how deep he ends (well inside: gone)
-WAL_DOOR = ST.GATE_D + 0.27                           # the door's plane: past it, only the doorway shows them
-OFF_DX = 0.7                                         # the officers either side of him, a step nearer us
+# --- Walliams (notes 25, 30, 32): his beats, in seconds from T['wal'] (the acting list's gates2 rows)
+WAL_X = (2.7, 0.75, 0.55)                            # in from the right; at the door; inside, near its left jamb
+WAL_D = ST.GATE_D - 0.3                              # along the gate's front
+DOOR_D = ST.GATE_D + 0.27                            # the wicket door's plane
+DRAG, TAKE, PLEAD, SHOVE, GRAB, SLAM = 1.4, (1.4, 2.0), (2.0, 2.9), (2.9, 3.4), (3.45, 4.3), (4.3, 4.55)
+OFF_DX = 0.72                                        # the officers either side of him, a step nearer us
+LEAF_OPEN = 95.0                                     # the wicket's leaf, swung out (the set paints it so)
 
 
-def wal_place(t, dx=0.0, dd=0.0):
-    """(x, d) in metres on the gates' Level camera for Walliams (dx, dd: an officer's offset)."""
+def wal_place(t, dx=0.0):
+    """(x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him."""
     k = t - T['wal']
-    u = _ease(min(1.0, max(0.0, k / WAL_SLIDE)))
-    x = WAL_X[0] + (WAL_X[1] - WAL_X[0]) * u
-    v = _ease(_ramp(k, *WAL_BACK))
-    d = WAL_D + (WAL_IN - WAL_D) * v
-    if dx:                                            # the officers stop either side of the door; he goes in alone
-        d = min(d, WAL_DOOR - 0.2)
-    return x + dx, d + dd
+    x = WAL_X[0] + (WAL_X[1] - WAL_X[0]) * (1 - (1 - min(1.0, max(0.0, k / DRAG))) ** 2)   # dragged, slowing
+    if dx:                                            # the officers stop either side of the door and stay outside
+        return x + dx, WAL_D - 0.1
+    x += (WAL_X[2] - WAL_X[1]) * _ease(_ramp(k, SHOVE[0], SHOVE[1]))
+    d = WAL_D + (DOOR_D + 0.3 - WAL_D) * _ease(_ramp(k, SHOVE[0], SHOVE[1]))   # stumbles back through the door
+    d += 0.14 * (_bump(k, GRAB[0] + 0.2, GRAB[0] + 0.45, 0.06, 0.18) + _bump(k, GRAB[0] + 0.5, GRAB[0] + 0.75, 0.06, 0.18))
+    d += 1.8 * _ease(_ramp(k, SLAM[0] - 0.05, SLAM[0] + 0.2))                   # the tugs, then yanked away inside
+    return x, d
 
 
-def wal_pose(sp, t, who='walliams'):
+def wal_roll(t):
+    """His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights."""
     k = t - T['wal']
-    moving = k < WAL_SLIDE + 0.1 or WAL_BACK[0] - 0.05 < k < WAL_BACK[1] + 0.1
-    g = moves.gait(sp, k + (0.0 if who == 'walliams' else 0.21), 'walk')
-    j = moves.mix_poses(V.standing(sp), g, 1.0 if moving else 0.0)
-    if not moving:
-        j['bob'] = 0.0
-    if who == 'walliams':
-        sw = sp.get('shoulders', 158)
-        up = lambda sg: ((sg * (sw * 0.55), 120.0, 150.0), 'out', 'palm')     # hands up at the chest, palms out
-        for sd, sg in (('L', -1), ('R', 1)):
-            arm_keys(j, sp, sd, t, [(T['wal'] + 0.2, up(sg)), (T['wal'] + 9.0, up(sg))])
-        j['lean'] = j.get('lean', 0.0) + 6 * _bump(t, T['wal'] + WAL_BACK[0] - 0.1, T['wal'] + WAL_BACK[1], 0.2, 0.3)
-        j['head_roll'] = _sway(k * 1.6) * 0.6
+    fight = 1 - _ease(_ramp(k, DRAG - 0.1, DRAG + 0.25))
+    return fight * (9.0 + 5.0 * math.sin(2 * math.pi * 2.3 * k))
+
+
+def _blend_specs(t, phases):
+    """A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades."""
+    i = max([n for n, (t0, _) in enumerate(phases) if t >= t0] or [0])
+    tgt, pole, shape = phases[i][1](t)
+    if i > 0 and t < phases[i][0] + 0.15:
+        a = phases[i - 1][1](t)
+        w = _ease((t - phases[i][0]) / 0.15)
+        tgt = tuple(p + (q - p) * w for p, q in zip(a[0], tgt))
+        pa, pb = (V.POLES[p] if isinstance(p, str) else p for p in (a[1], pole))
+        pole = tuple(p + (q - p) * w for p, q in zip(pa, pb))
+    return tgt, pole, shape
+
+
+def wal_pose(sp, t, jamb=None):
+    """His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab."""
+    k = t - T['wal']
+    j = V.standing(sp)
+    sw = sp.get('shoulders', 158)
+    w0 = T['wal']
+
+    def drag(sg):
+        return lambda t: ((sg * (sw * 0.8), 150 + 50 * math.sin(2 * math.pi * 2.8 * (t - w0) + (sg > 0) * math.pi),
+                           110.0), 'out', 'palm')
+
+    def startled(sg):
+        return lambda t: ((sg * sw * 0.62, 50.0, 150.0), 'out', 'palm')
+
+    def plead(sg):                                  # hands clasped under the chin, shaking
+        return lambda t: ((sg * 16, -70 + 8 * math.sin(2 * math.pi * 4.5 * (t - w0)), 200.0), 'down', 'fist')
+
+    def flail(sg):
+        return lambda t: ((sg * (sw + 130), -110 + 30 * math.sin(2 * math.pi * 3.5 * (t - w0) + (sg > 0) * 2), 60.0),
+                          'out', 'palm')
+
+    def grab(sg):
+        if sg < 0 and jamb is not None:
+            return lambda t: (jamb, 'out', 'grip')
+        return lambda t: ((sg * sw * 0.7, -10 + 25 * math.sin(2 * math.pi * 3 * (t - w0)), 210.0), 'out', 'palm')
+
+    def gone(sg):
+        return lambda t: ((sg * (sw + 60), -150.0, 40.0), 'out', 'palm')
+    for sd, sg in (('L', -1), ('R', 1)):
+        ph = [(w0, drag(sg)), (w0 + TAKE[0], startled(sg)), (w0 + PLEAD[0], plead(sg)), (w0 + SHOVE[0], flail(sg)),
+              (w0 + GRAB[0], grab(sg)), (w0 + GRAB[1], gone(sg))]
+        tgt, pole, shape = _blend_specs(t, ph)
+        V.arm_to(j, sd, _reach(j, sd, tgt, 0.45), pole, shape)
+    jolt = _bump(k, TAKE[0] + 0.32, TAKE[0] + 0.6, 0.05, 0.2)          # the double-take: snaps back, the head jolts
+    j['head_dy'] = j.get('head_dy', 0.0) - 22 * jolt
+    j['lean'] = (-10 * _bump(k, SHOVE[0], SHOVE[1] + 0.1, 0.1, 0.2)     # thrown back by the shove
+                 + 8 * _bump(k, GRAB[0], GRAB[1], 0.1, 0.1))             # leaning out of the door, towards us
+    j['head_roll'] = (_sway(k * 1.6) * (1 - _ease(_ramp(k, DRAG, DRAG + 0.2)))
+                      + 9 * _bump(k, PLEAD[0], PLEAD[1], 0.2, 0.2))       # the pleading tilt
+    j['nod'] = 0.6 * math.sin(2 * math.pi * 4.5 * k) * _bump(k, PLEAD[0], PLEAD[1], 0.2, 0.2)
     return j
 
 
 def wal_face(t):
-    """His eyes dart left and right (scared); wider, mouth open, as they back him in."""
+    """Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door."""
     k = t - T['wal']
-    look = _keys(t, [(T['wal'] + 0.3, 0.9), (T['wal'] + 0.7, -0.9), (T['wal'] + 1.2, -0.9), (T['wal'] + 1.5, 0.8),
-                     (T['wal'] + 1.9, 0.0)])
-    mood = 'alarmed' if WAL_BACK[0] <= k < WAL_BACK[0] + 0.7 else 'scared'
-    return dict(face('walliams', t, mood, look=look), mouth='rest')
+    a = T['wal']
+    look = _keys(t, [(a + 0.2, 0.9), (a + 0.5, -0.9), (a + 0.9, -0.9), (a + 1.15, 0.8), (a + TAKE[0], 0.8),
+                     (a + TAKE[0] + 0.08, 0.0), (a + TAKE[0] + 0.18, 0.0), (a + TAKE[0] + 0.24, -0.9),
+                     (a + TAKE[0] + 0.32, -0.9), (a + TAKE[0] + 0.36, 0.0)])
+    turn = _keys(t, [(a + TAKE[0] + 0.18, 0.0), (a + TAKE[0] + 0.26, -0.35), (a + TAKE[0] + 0.32, -0.35),
+                     (a + TAKE[0] + 0.36, 0.0)])
+    if k < TAKE[0] + 0.32:
+        mood = 'scared'
+    elif k < PLEAD[0]:
+        mood = 'alarmed'
+    elif k < SHOVE[0]:
+        mood = 'pleading'
+    elif k < GRAB[0]:
+        mood = 'alarmed'
+    else:
+        mood = 'scared'
+    return dict(face('walliams', t, mood, look=look), mouth='rest', turn=turn)
 
 
-def wal_grip(so, j, t, om, side, wpts, wm, ws):
-    """The officer's inner hand on Walliams's near upper arm, front-on (screen x = mark x + s * x)."""
-    wside = 'L' if side == 'R' else 'R'                # the left officer's right hand on Walliams's left arm
-    sh, el = wpts['sh' + wside], wpts['el' + wside]
-    bx = wm[0] + ws * (sh[0] + 0.35 * (el[0] - sh[0]))
-    by = wm[1] - 928 * ws + ws * (wpts.get('_bob', 0.0) + sh[1] + 0.35 * (el[1] - sh[1]))
-    s = _s(so, om[2])
-    px, py = (bx - om[0]) / s, (by - (om[1] - 928 * s)) / s - j.get('bob', 0.0)
-    z = 30.0
-    V.arm_to(j, side, (px, py - V._E[0] * z, z), 'down', 'fist')
-    return j
+def _person_pt(sp, mark, pts, j, jt, u=0.35, end='el'):
+    """A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on."""
+    s = _s(sp, mark[2])
+    a, b = pts[jt], pts[end] if end in pts else pts[jt]
+    return (mark[0] + s * (a[0] + u * (b[0] - a[0])),
+            mark[1] - 928 * s + s * (j.get('bob', 0.0) + a[1] + u * (b[1] - a[1])))
 
 
-def _door_clip(cam, size):
-    """A mask (the frame's size) of the wicket doorway, for people past its plane."""
+def _to_person(sp, mark, j, bx, by, z=30.0):
+    """A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens."""
+    s = _s(sp, mark[2])
+    px, py = (bx - mark[0]) / s, (by - (mark[1] - 928 * s)) / s - j.get('bob', 0.0)
+    return (px, py - V._E[0] * z, z)
+
+
+def _reach(j, side, tgt, k=0.62):
+    """A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
+    tighter fails the figure check: a held arm that sways in close)."""
+    sh = j['sh' + side]
+    v = V._sub(tgt, sh)
+    n = math.sqrt(sum(c * c for c in v)) or 1.0
+    m = k * (F.UPPER + F.FORE)
+    return tgt if n >= m else V._add(sh, V._mul(v, m / n))
+
+
+def _rot(p, c, deg):
+    """A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c."""
+    a = math.radians(deg)
+    dx, dy = p[0] - c[0], p[1] - c[1]
+    return (c[0] + dx * math.cos(a) + dy * math.sin(a), c[1] - dx * math.sin(a) + dy * math.cos(a))
+
+
+def leaf_angle(t):
+    k = t - T['wal']
+    u = _ramp(k, *SLAM)
+    return LEAF_OPEN * (1 - u * u)                    # swung, speeding up: a slam
+
+
+def _leaf(x, h, a):
+    """A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
+    hinge (1), at height h, swung out by a degrees: (x, d, h) in metres."""
+    r = math.radians(a)
+    w = 1.0 - x
+    return 1.15 - w * math.cos(r), DOOR_D - w * math.sin(r), h
+
+
+def _gp(cam, x, d, h=0.0):
+    return cam.P(*ST.GATE.p(x, d, h))
+
+
+def door_inside(img, cam):
+    """Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
+    light), an inner barred gate at its end; clipped to the doorway."""
+    from PIL import ImageDraw
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    p = ImageDraw.Draw(lay)
+    D0, D1, H = DOOR_D, DOOR_D + 3.6, 2.6
+    q = lambda pts: [_gp(cam, *pt) for pt in pts]
+    p.polygon(q([(0.15, D0, 0), (1.15, D0, 0), (1.15, D1, 0), (0.15, D1, 0)]), fill=(150, 150, 136))       # lino
+    p.polygon(q([(0.15, D0, 0), (0.15, D1, 0), (0.15, D1, H), (0.15, D0, H)]), fill=(178, 196, 170))      # left wall
+    p.polygon(q([(1.15, D0, 0), (1.15, D1, 0), (1.15, D1, H), (1.15, D0, H)]), fill=(196, 212, 186))      # right wall
+    p.polygon(q([(0.15, D1, 0), (1.15, D1, 0), (1.15, D1, H), (0.15, D1, H)]), fill=(232, 232, 206))      # end wall
+    p.polygon(q([(0.25, D1 - 0.6, 0), (1.05, D1 - 0.6, 0), (1.05, D1 - 2.6, 0), (0.25, D1 - 2.6, 0)]),
+              fill=(178, 178, 160))                                                                       # the light's pool
+    for k in range(7):                                                                     # the inner gate's bars
+        x = 0.25 + 0.8 * k / 6
+        p.line(q([(x, D1 - 0.05, 0), (x, D1 - 0.05, 2.1)]), fill=(70, 74, 78), width=max(2, int(cam.z * 2)))
+    p.line(q([(0.2, D1 - 0.05, 1.05), (1.1, D1 - 0.05, 1.05)]), fill=(70, 74, 78), width=max(2, int(cam.z * 2)))
+    p.polygon(q([(0.45, D0 + 1.4, 2.08), (0.85, D0 + 1.4, 2.08), (0.85, D0 + 1.9, 2.08), (0.45, D0 + 1.9, 2.08)]),
+              fill=(255, 252, 230))                                                                       # strip light
+    for x in (0.15, 1.15):                                                                 # the wall's skirting
+        p.line(q([(x, D0, 0.12), (x, D1, 0.12)]), fill=(110, 120, 104), width=max(2, int(cam.z * 1.5)))
+    a = np.array(lay)
+    a[..., 3] = (a[..., 3].astype(np.uint16) * np.array(_door_clip(cam, img.size)) // 255).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(a))
+
+
+def draw_leaf(img, cam, t):
+    """The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
+    leaf drawn at its angle, planks and a handle."""
+    a = leaf_angle(t)
+    if a >= LEAF_OPEN - 0.01:
+        return
+    p = B.Pen(img, cam)
+    w0, w1 = ST.GATE.p(0.15, DOOR_D, 2.1), ST.GATE.p(1.15, DOOR_D, 0)
+    p.poly([(w1[0], w0[1] - 2), (w1[0] + 30, w0[1] - 2), (w1[0] + 30, w1[1] + 6), (w1[0], w1[1] + 6)], ST.TIMBER, None)
+    p.line([(w1[0] + 15, w0[1]), (w1[0] + 15, w1[1] + 4)], ST.dk(ST.TIMBER, 0.8), 1.4)
+    pts = [ST.GATE.p(*_leaf(x, h, a)) for x, h in ((0, 0), (0, 2.1), (1, 2.1), (1, 0))]
+    p.poly(pts, ST.dk(ST.TIMBER, 0.86), INK, 2.4)
+    for x in (0.2, 0.4, 0.6, 0.8):
+        p.line([ST.GATE.p(*_leaf(x, 0.05, a)), ST.GATE.p(*_leaf(x, 2.05, a))], ST.dk(ST.TIMBER, 0.7), 1.4)
+    hx = ST.GATE.p(*_leaf(0.1, 1.05, a))
+    p.ell(hx[0], hx[1], 3.0, 3.0, (40, 36, 34), INK, 1.0)
+
+
+def _door_clip(cam, size, hand=None):
+    """A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
+    gripping the frame."""
     from PIL import ImageDraw
     m = Image.new('L', size, 0)
-    a, b = ST.GATE.p(0.15, ST.GATE_D + 0.27, 2.1), ST.GATE.p(1.15, ST.GATE_D + 0.27, 0)
-    q = [cam.P(*p) for p in ((a[0] + 4, a[1]), (b[0] - 4, a[1]), (b[0] - 4, b[1] + 2), (a[0] + 4, b[1] + 2))]
-    ImageDraw.Draw(m).polygon(q, fill=255)
+    a, b = ST.GATE.p(0.15, DOOR_D, 2.1), ST.GATE.p(1.15, DOOR_D, 0)
+    q = [cam.P(*p) for p in ((a[0] + 1, a[1]), (b[0] - 1, a[1]), (b[0] - 1, b[1] + 2), (a[0] + 1, b[1] + 2))]
+    dr = ImageDraw.Draw(m)
+    dr.polygon(q, fill=255)
+    if hand:
+        dr.ellipse([hand[0] - hand[2], hand[1] - hand[2], hand[0] + hand[2], hand[1] + hand[2]], fill=255)
     return m
 
 
+GUARD_SIDES = (('R', -1, 'guard1'), ('L', 1, 'guard2'))   # the left officer's right hand on his left arm
+
+
 def draw_walliams(img, cam, t):
-    """Notes 25, 30: Walliams between two officers, behind the pack (drawn first); past the door's plane they are seen
-    only through the doorway."""
+    """Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
+    he fights; past the door's plane only the doorway, and his hand on its frame, show); the leaf; the officers."""
+    door_inside(img, cam)
     if t < T['wal']:
+        draw_leaf(img, cam, t)
         return
+    k = t - T['wal']
     wx, wd = wal_place(t)
     sp = dict(CAST['walliams'], **wal_face(t))
     wm = ST._mark(ST.GATE, wx, wd)
     ws = _s(sp, wm[2])
-    clip = _door_clip(cam, img.size) if wd > WAL_DOOR else None
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0)) if clip else img
-    wj = wal_pose(sp, t)
+    jamb = None
+    jp = ST.GATE.p(0.13, DOOR_D - 0.04, 1.3)                     # the door frame's edge, where he grabs it
+    if k >= GRAB[0] - 0.15:
+        jamb = _to_person(sp, wm, V.standing(sp), jp[0], jp[1], 200.0)
+    wj = wal_pose(sp, t, jamb)
+    roll = wal_roll(t)
+    pivot = (wm[0], wm[1])
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     wpts = put(lay, cam, sp, wm, t, 0.0, wj)
-    wpts['_bob'] = wj.get('bob', 0.0)
-    for side, sg, who in (('R', -1, 'guard1'), ('L', 1, 'guard2')):
-        so = dict(GUARDS[who], **face('officer', t, 'stern'))
-        ox, od = wal_place(t, sg * OFF_DX, -0.08)
-        om = ST._mark(ST.GATE, ox, od)
-        oj = wal_pose(so, t, who)
-        if wd < WAL_DOOR - 0.05:                     # they let go as he is pushed through
-            oj = wal_grip(so, oj, t, om, side, wpts, wm, ws)
-        put(img, cam, so, om, t, 0.0, oj)
-    if clip:
+    if abs(roll) > 0.05:
+        lay = lay.rotate(-roll, resample=Image.BICUBIC, center=cam.P(*pivot))
+    if wd > DOOR_D - 0.05:
+        hand = None
+        if GRAB[0] - 0.1 <= k < GRAB[1] + 0.1:
+            hp = cam.P(*_person_pt(sp, wm, wpts, wj, 'wrL', 0.0))
+            hand = (hp[0], hp[1], 0.11 * wm[2] * cam.z)
         a = np.array(lay)
-        a[..., 3] = (a[..., 3].astype(np.uint16) * np.array(clip) // 255).astype(np.uint8)
-        img.alpha_composite(Image.fromarray(a))
+        a[..., 3] = (a[..., 3].astype(np.uint16) * np.array(_door_clip(cam, img.size, hand)) // 255).astype(np.uint8)
+        lay = Image.fromarray(a)
+    img.alpha_composite(lay)
+    draw_leaf(img, cam, t)
+    for side, sg, who in GUARD_SIDES:
+        so = dict(GUARDS[who], **face('officer', t, 'stern'))
+        ox, od = wal_place(t, sg * OFF_DX)
+        om = ST._mark(ST.GATE, ox, od)
+        walking = k < DRAG + 0.1
+        g = moves.gait(so, k + (0.21 if who == 'guard1' else 0.47), 'walk')
+        oj = moves.mix_poses(V.standing(so), g, 1.0 if walking else 0.0)
+        if not walking:
+            oj['bob'] = 0.0
+        hold = 1 - _ease(_ramp(k, SHOVE[0] + 0.05, SHOVE[0] + 0.3))   # they hold his arms, shove, let go
+        if hold > 0:
+            wside = 'L' if side == 'R' else 'R'
+            bp = _rot(_person_pt(sp, wm, wpts, wj, 'sh' + wside, 0.35, 'el' + wside), pivot, -roll)
+            gj = dict(oj)
+            V.arm_to(gj, side, _reach(oj, side, _to_person(so, om, oj, bp[0], bp[1])), 'down', 'fist')
+            oj = moves.mix_poses(oj, gj, hold) if hold < 1 else gj
+        if who == 'guard2':                                # his hand on the leaf as he swings it
+            push = _bump(k, SLAM[0] - 0.2, SLAM[0] + 0.12, 0.15, 0.1)
+            if push > 0:
+                lp = ST.GATE.p(*_leaf(0.25, 1.1, leaf_angle(max(t, T['wal'] + SLAM[0]))))
+                gj = dict(oj)
+                V.arm_to(gj, 'L', _reach(oj, 'L', _to_person(so, om, oj, lp[0], lp[1], -40.0)), 'out', 'palm')
+                oj = moves.mix_poses(oj, gj, push)
+        put(img, cam, so, om, t, 0.0, oj)
 
 
 # ---------------------------------------------------------------------------------------------- the shots
@@ -1152,11 +1385,10 @@ def _cam(view, t):
         return B.Cam(1.25, ARRIVE_CAM[0], ARRIVE_CAM[1])
     if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
         return B.Cam(1.0, 740, 960)
-    if shot_of(t) == 'gates2':                    # note 31 (Sam, 12 Nov): the camera goes on in towards the pack,
-        u = _ease(_ramp(t, T['gates2'], DUR))      # to Brand and, behind him, the door Walliams is led through
-        c0 = ST.view_cam('gates2')[1]
-        x, y = ST.GATE.p((G2_X + 0.65) / 2, 8.3, 1.25)
-        return B.Cam(c0.z + 0.55 * u, c0.cx + (x - c0.cx) * u, c0.cy + (y - c0.cy) * u)
+    if shot_of(t) == 'gates2':                    # notes 31, 32: framed on Brand as he strides in, the door over his
+        u = _ease(_ramp(t, T['gates2'], T['gates2'] + 1.9))   # shoulder; pushing in all shot
+        z = 2.0 + 0.2 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
+        return B.Cam(z, G2_CAM[0] + (G2_CAM[1] - G2_CAM[0]) * u, G2_CAM[2])
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
@@ -1247,10 +1479,10 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
         dn = ST.GATE.f / mark[2]
-        draw_walliams(img, cam, t)                    # note 30: behind everyone, along the gate and in at the door
-        press(img, cam, ST.GATE, G2_PRESS, t, at=(G2_X, G2_TO), part=('behind', dn))
+        draw_walliams(img, cam, t)                    # notes 30, 32: behind everyone, along the gate and in at the door
+        press(img, cam, ST.GATE, G2_PRESS, t, at=G2_TO, part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, G2_PRESS, t, at=(G2_X, G2_TO), part=('front', dn))
+        press(img, cam, ST.GATE, G2_PRESS, t, at=G2_TO, part=('front', dn))
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)

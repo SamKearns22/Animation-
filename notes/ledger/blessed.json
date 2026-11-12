@@ -191,6 +191,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.41
+  },
+  {
+   "date": "2026-11-12",
+   "chat": "9e4a39bd",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.68
   }
  ],
  "checks": {},
@@ -262,7 +272,10 @@
   {
    "name": "round1",
    "pct": 2.5,
-   "done": null
+   "done": {
+    "date": "2026-11-12",
+    "spent": 31.03
+   }
   },
   {
    "name": "round2",
@@ -440,7 +453,7 @@
  "stage_alarm": {
   "5:moves": 3,
   "7:animatic1": 8,
-  "8:round1": 5
+  "8:round1": 6
  },
  "forecast_alarm": 4,
  "alarm": 3,

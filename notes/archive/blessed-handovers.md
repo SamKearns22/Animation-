@@ -231,3 +231,14 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** none.
 - **For Claude:** blessed_walliams.py (new card, TUNE nose_long -1.5, beard() is now stubble, long_nose()). blessed.py: T['wal'] = gates2 + 0.5; G2_X -1.0, G2_PART, G2_PRESS (the pack opened left in gates2 only; ST.STAGE['gates']['brand'] kept, it places gates2's camera); _cam 'gates2' push; draw_walliams() drawn first in gates2. Photo sites are blocked in the Default environment (create/update_environment refused 12 Nov): ask Sam for photos.
 
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 30 (note 32 repeats 30: read its "Why" before building), 74 (plan Walliams' beats on the acting list before any render), 89 (fresh-eye critique of his new head before the animatic).
+- **Done (12 Nov, chat 1 of 8, Opus high):** notes 29 (new likeness, check 64%/67%), 30/31 built; Sam rejected the gates2 clip (note 32); round-1 status listed for Sam; cost alarm answered.
+- **Sam's answers (12 Nov): 1 = B** (one proper Walliams rebuild, about 1.5%); **2 = option 1** (cheapest finish: note 28 the HM Prison officer; no round 2) **plus an animatic** before the final.
+- **Next: Opus, HIGH, chat 2 of 8:** (a) plan gates2 beat by beat in the notes (acting list): the pack on BOTH sides as before (drop G2_PART), Brand big and purposeful (camera framed on him; a clear stride to a mark, not a wander), Walliams with comic beats (struggling between the officers, a double-take at the cameras, a pleading look, a last grab at the door frame) and a real doorway (the prison's inside lit, not a flat black clip), then a clip of gates2 (no yes needed); (b) note 28; (c) critique of Walliams' head; (d) animatic 2 (Sonnet may render). Ask before the final.
+- **Needs Sam:** nothing until the gates2 clip.
+- **Read:** `guides/job-packs.md` Build (people) and Notes round; Notes rows 25-32; this section.
+- **Open rule requests:** none.
+- **For Claude:** blessed_walliams.py (new card; TUNE nose_long -1.5; beard() is stubble; long_nose()). blessed.py: T['wal'] = gates2 + 0.5; G2_X, G2_PART, G2_PRESS (gates2 only; ST.STAGE['gates']['brand'] places gates2's camera); _cam 'gates2' push; draw_walliams() first in gates2; _door_clip = the black doorway. Photo sites are blocked in the Default environment.
+
