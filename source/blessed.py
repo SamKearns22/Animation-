@@ -202,7 +202,20 @@ def put(img, cam, sp, mark, t, yaw=0.0, j=None, head_yaw=None):
     """Someone standing on a mark (screen x, ground y, pixels per metre)."""
     x, y, ppm = mark
     s = _s(sp, ppm)
+    if sp.get('look_') == 'trial' and j is not None and abs(yaw) > 10:
+        j = dict(j, body_props=list(j.get('body_props', [])) + [_scarf_turned])
     return V.person(img, cam, x, y - 928 * s, s, sp, t, yaw, j, head_yaw=head_yaw)
+
+
+def _scarf_turned(pen, view, sp):
+    """His long white scarf when he is turned (hunt 1, 12 Nov: it vanished in the three-quarter walk): the front
+    torso draws it only straight on; here both ends hang down the chest's front, the near one wider."""
+    if view == 'front':
+        return
+    for x0, w in ((6, 26), (-22, 18)) if view != 'side' else ((14, 24),):
+        pts = [(x0 - w / 2, -4), (x0 + w / 2, -4), (x0 + w / 2 + 4, 210), (x0 + w / 2 + 2, 420), (x0 - w / 2, 428),
+               (x0 - w / 2 - 2, 210)]
+        pen.poly(B.curve(pts, 3) if hasattr(B, 'curve') else pts, BC.SCARF, INK, 2.2)
 
 
 def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
@@ -517,7 +530,7 @@ def _sway(t, sps=1.8):
     return 3.5 * math.sin(math.pi * sps * t)
 
 
-def _dip(j, amt, splay=0.4):
+def _dip(j, amt, splay=0.2):
     """Down at the knees by `amt` person units, feet kept on the floor, knees opening a little."""
     if amt <= 0:
         return j
@@ -567,9 +580,9 @@ def arrive(sp, t):
     dip = _bump(t, sup - 0.12, last + 0.02, 0.14, 0.12)               # down at the knees on "super", springs up
     chin = _bump(t, sup - 0.05, last + 0.05, 0.12, 0.15)              # chin up, preening, as the arms open
     bow = _bump(t, last - 0.1, last + 0.7, 0.25, 0.35)
-    _dip(j, 34 * dip)
+    _dip(j, 60 * dip)
     j['lean'] = j.get('lean', 0.0) + 7 * lean_in + 6 * bow
-    j['nod'] = 1.4 * bow - 1.3 * chin
+    j['nod'] = 1.4 * bow - 2.5 * chin
     j['head_roll'] = j.get('head_roll', 0.0) + 5 * lean_in
     import grips
     grips.held(j, 'R', sp, _beads(sp))
@@ -821,11 +834,11 @@ def _cam(view, t):
         return B.Cam(1.0 + 1.6 * u, 540 + (x - 540) * u, 960 + (y - 0.95 * ppm - 960) * u)
     if shot_of(t) == 'jury':                      # a slow push in on the twelve faces
         u = _ease(_ramp(t, T['jury'], T['oath2']))
-        return B.Cam(1.0 + 0.12 * u, 540, 1080 + 60 * u)
+        return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
-        return B.Cam(1.4 + 0.3 * u, 540 + (x - 540) * u * 0.6, 1020 + 80 * u)   # framed on the gate and the pack
+        return B.Cam(1.0 + 0.55 * u, 540 + (x - 540) * u * 0.6, 980 + 120 * u)   # opens on the towers (hunt 1), pushes to the gate
         #                                                                       (Sam, 11 Nov: he was a distant speck)
     return ST.view_cam(view)[1]
 
@@ -875,7 +888,7 @@ def draw_people(img, cam, shot, t):
     elif shot == 'phone':
         sp = brand_sp(t, 'prison')
         dx, roll = phone_extra(t)
-        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.5, **dx)
+        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.2, **dx)   # eyes less far down (hunt 2: read as shut)
         j = handset_pose(sp)
         j['lean'], j['head_roll'] = 5.0, roll
         pts = put(img, cam, sp, st['brand'], t, yaw=-45, j=j)

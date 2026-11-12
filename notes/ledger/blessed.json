@@ -213,16 +213,37 @@
      "7-10 S3 S5: gatehouse a blank wall; no towers, windows, cornice, rustication.",
      "1-4 S3: orange three-storey grid; real court low buff brick.",
      "5 O3: royal arms read as dog and goat."
-    ]
+    ],
+    "fixed": "hunt 1 fixed as one list (12 Nov): big black aviators, buff court brick, scarf and full hair when turned, deeper dip and chin, TV-room wash lighter and bench shown, lion and unicorn, gatehouse wide opens on the towers, jury framed above the caption"
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "animatic",
+    "date": "2026-11-12",
+    "hunt": 2,
+    "faults": 6,
+    "cant_tell": 2,
+    "open": [
+     "2-3,5,7-8,10 P2: acting contradicts the beat - 3 shouts with raised fist, facing camera, not side-on, Bible held, eyes up; 5 smiles instead of hollow, eyes down",
+     "1,3 A1 O3 P1: missing props - no beads in his hand on arrival (1); no Bible in the oath (3).",
+     "1-2,11-12 P4 A1: aviators drawn as a flat black band across the face - reads as a blindfold/mask, not the big teardrop aviators of the reference.",
+     "8-9 P6: hands on knees are plain round pink/brown discs, no fingers - read as balls, not hands.",
+     "10 O5 O1: left-edge sign chopped by the frame (\"PRISO\", \"RECEPTI...\") - half a word.",
+     "10 S3: gatehouse narrower than Wandsworth reference - flanking towers and their arched windows cut off, front looks like a single slab.",
+     "9 P2: first and last frame of the push, to see dejected turning to amazed (one frame shows only a grin).",
+     "6-7 P10 P1: full-size crop of officer's hand on his shoulder (6) and of the handset in his hand at the ear (7)."
+    ],
+    "fixed": "hunt 2 fixed as one list: aviators as two lenses with a bridge gap, gates wide opens wider (towers, windows), HM PRISON sign raised and whole in frame, phone gaze less far down; named not changed: oat"
    }
   ],
   "lines": {
    "A1": {
-    "faults": 21,
+    "faults": 23,
     "false": 0
    },
    "O3": {
-    "faults": 11,
+    "faults": 12,
     "false": 0
    },
    "A2": {
@@ -230,7 +251,7 @@
     "false": 0
    },
    "S3": {
-    "faults": 12,
+    "faults": 13,
     "false": 0
    },
    "S2": {
@@ -246,7 +267,7 @@
     "false": 0
    },
    "O5": {
-    "faults": 9,
+    "faults": 10,
     "false": 0
    },
    "O4": {
@@ -262,7 +283,7 @@
     "false": 0
    },
    "O1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "O6": {
@@ -270,11 +291,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 3,
-    "false": 2
+    "faults": 4,
+    "false": 3
    },
    "P1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P8": {
@@ -282,11 +303,11 @@
     "false": 0
    },
    "P2": {
-    "faults": 14,
-    "false": 0
+    "faults": 15,
+    "false": 1
    },
    "P4": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "P7": {
@@ -299,7 +320,7 @@
    },
    "M3": {
     "faults": 1,
-    "false": 0
+    "false": 1
    }
   }
  },

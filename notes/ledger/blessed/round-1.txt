@@ -314,3 +314,42 @@ Missed: 1 strut ("calm"); 2 lowering, lean; 3 beads, dip; 4 hand-to-heart, bow (
 - Same open grin throughout. suggested line: the face changes each beat.
 - No shadows; 10 looks pasted on. suggested line: standing figures cast contact shadows.
 
+== critique, round 1 pass 1 (2026-11-12): 6 fault(s), 2 can't tell
+-- look.md --
+1: Long-haired grey-bearded man, sunglasses, walks past press, boom mic; sign "CROWN COURT SOUTHWARK".
+2: Same man, arms out, smug; "CROWN COURT SOUTHWARK"; tree cut off at panel seam.
+3: Man in box raises fist, shouting at mic; white-wigged judge in red; crest, clock.
+4: Twelve jurors seated in two rows, blank faces, water jugs; no reaction shown.
+5: Man smiling in glass dock between two guards in white shirts.
+6: Cell: man in grey tracksuit led by officer in white shirt; blue bed, barred window.
+7: Man on wall phone, eyes shut, grinning; signs "PIN PHONE", "NOTICE", "SAMARITANS".
+8: Four men in grey prison clothes seated; he smiles, others glum; hands are pink circles.
+9: Close: he grins between two glum men; hands are flat round blobs on knees.
+10: Wide prison gatehouse, small man in doorway, press waiting; sign cut off "PRISO", "RECEPTI...".
+11: Man steps out of prison gate, arms spread, sunglasses; press, camera, boom mic.
+12: Close: man in sunglasses grins, arms spread, boom mic above; backs of heads foreground.
+-- result.md --
+## Faults
+FAULT P2 [3, 5, 7, 8, 2, 10]: acting contradicts the beat - 3 shouts with raised fist, facing camera, not side-on, Bible held, eyes up; 5 smiles instead of hollow, eyes down; 7 grins eyes shut instead of tearful, head down; 8 he smiles and all four stare into the lens, not up at the TV; 2 legs straight, no knee dip; 10 arms hang down, not flung up on "Blessed!".
+FAULT A1 O3 P1 [1, 3]: missing props - no beads in his hand on arrival (1); no Bible in the oath (3).
+FAULT P4 A1 [1, 2, 11, 12]: aviators drawn as a flat black band across the face - reads as a blindfold/mask, not the big teardrop aviators of the reference.
+FAULT P6 [8, 9]: hands on knees are plain round pink/brown discs, no fingers - read as balls, not hands.
+FAULT O5 O1 [10]: left-edge sign chopped by the frame ("PRISO", "RECEPTI...") - half a word.
+FAULT S3 [10]: gatehouse narrower than Wandsworth reference - flanking towers and their arched windows cut off, front looks like a single slab.
+CAN'T TELL P2 [9]: first and last frame of the push, to see dejected turning to amazed (one frame shows only a grin).
+CAN'T TELL P10 P1 [6, 7]: full-size crop of officer's hand on his shoulder (6) and of the handset in his hand at the ear (7).
+
+## Checked
+1-12
+
+## Cold look
+I named the arrival, gates, cell, phone, jury and dock correctly. I read panel 3 as a shouting man with fist, not an oath (no Bible) - the picture's fault. I did not mention beads because none show. I read the sunglasses as sunglasses, but only from context; the shape is a bar. I noted everyone in 8 faces the lens but did not flag the missing upward glance to the TV.
+
+## Not on the list
+- Southwark court front (1, 2, 12): reference has steps and ramp to the left behind a low brick wall, no trees framing the doors. suggested line: S3 per-panel layout of entrance against reference photo.
+- Panel 4 jurors all face front with the same expression; no swapped glances. suggested line: crowd shots name which faces turn to whom.
+- Panel 8 feet are a row of identical white blobs. suggested line: P7 feet drawn as shoes, varied.
+- Panel 5 officers sit beside him, not behind. suggested line: positions match the brief's staging words.
+
+critique, pass 2: faults fixed as one list: hunt 2 fixed as one list: aviators as two lenses with a bridge gap, gates wide opens wider (towers, windows), HM PRISON sign raised and whole in frame, phone gaze less far down; named not changed: oath Bible small at phone size, phone eyes read shut (head down), panel-time beats (47.4 is before 'Blessed!'), circle hands are house style
+

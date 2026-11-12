@@ -287,23 +287,22 @@ def hair_back(p, sp, hx, hy, hw, hh):
 
 # ---------------------------------------------------------------------------------------------- extras
 def shades(p, f, L, lowered=False):
-    """Aviator sunglasses (b06, b07, b09): two dark teardrop lenses in thin gold rims, a double bridge. Lowered
-    (Sam's answer 8, "lowers the sunglasses"): slid down the nose, the eyes showing over the rims."""
+    """Aviator sunglasses (ref 02, b06, b07, b09): two big black teardrop lenses in a heavy black frame, a straight
+    brow bar (hunt 1, 12 Nov: the thin gold rims read as a bar at phone size). Lowered (Sam's answer 8): slid down
+    the nose, the eyes showing over the rims."""
     dv = 0.13 if lowered else 0.0
     for sgn in (-1, 1):
-        cx, ey = sgn * L['ecx'], L['eye_y'] + 0.01 + dv
-        w = L['ew'] * 0.9
-        lens = [(cx - sgn * w * 0.95, ey - 0.055), (cx + sgn * w * 0.9, ey - 0.06), (cx + sgn * w * 1.05, ey - 0.02),
-                (cx + sgn * w * 0.8, ey + 0.07), (cx + sgn * w * 0.05, ey + 0.085), (cx - sgn * w * 0.85, ey + 0.05),
-                (cx - sgn * w * 1.0, ey - 0.01)]
+        cx, ey = sgn * L['ecx'], L['eye_y'] + 0.02 + dv
+        w = L['ew'] * 1.12
+        lens = [(cx - sgn * w * 0.7, ey - 0.075), (cx + sgn * w * 0.95, ey - 0.08), (cx + sgn * w * 1.08, ey - 0.03),
+                (cx + sgn * w * 0.85, ey + 0.1), (cx + sgn * w * 0.05, ey + 0.125), (cx - sgn * w * 0.62, ey + 0.08),
+                (cx - sgn * w * 0.76, ey - 0.01)]   # two lenses, a gap at the bridge (hunt 2: one band)
         q = curve(f.pts(lens), 3)
-        p.poly(q, SHADES, GOLD, 2.4)
-        p.line(curve(f.pts([(cx - sgn * w * 0.4, ey - 0.03), (cx + sgn * w * 0.3, ey - 0.04)]), 2), (90, 96, 110), 2.0)
-        p.line(f.pts([(cx + sgn * w * 1.0, ey - 0.04), (sgn * L['fw'] * 0.5, ey - 0.045)]), GOLD, 2.4)
-    y = L['eye_y'] - 0.045 + dv
-    p.line(f.pts([(-L['ecx'] + L['ew'] * 0.85, y), (L['ecx'] - L['ew'] * 0.85, y)]), GOLD, 2.4)
-    p.line(curve(f.pts([(-L['ecx'] + L['ew'] * 0.9, y + 0.03), (0.0, y + 0.015), (L['ecx'] - L['ew'] * 0.9, y + 0.03)]),
-                 3), GOLD, 2.0)
+        p.poly(q, SHADES, INK, 4.2)
+        p.line(curve(f.pts([(cx - sgn * w * 0.45, ey - 0.04), (cx + sgn * w * 0.25, ey - 0.05)]), 2), (96, 102, 116), 2.4)
+        p.line(f.pts([(cx + sgn * w * 1.05, ey - 0.06), (sgn * L['fw'] * 0.5, ey - 0.065)]), INK, 3.4)
+    y = L['eye_y'] - 0.06 + dv
+    p.line(f.pts([(-L['ecx'] + L['ew'] * 0.8, y), (L['ecx'] - L['ew'] * 0.8, y)]), INK, 3.0)
 
 
 def tears(p, f, L):
@@ -479,10 +478,11 @@ def _turned_long(p, f, colour=None, length=1.85):
     far = {round(v, 2): x for x, y, v, part in sil if part == 'far'}
     vs = sorted(near)
     top_v = vs[0]
-    wv = lambda pts, sd: waves(pts, 7, 70, out=-1.0, seed=sd, step=5)
-    back = [(near[v] - H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
+    wv = lambda pts, sd: waves(pts, 11, 80, out=-1.0, seed=sd, step=5)
+    # a full mass of curls, not a narrow band (hunt 1, 12 Nov: from the side it read as a plait)
+    back = [(near[v] - H * (0.06 + 0.3 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
     bx = back[-1][0]
-    back += [(bx - H * 0.08, f.top + 1.3 * length / 1.85 * H), (bx - H * 0.02, f.top + length * H)]
+    back += [(bx - H * 0.12, f.top + 1.3 * length / 1.85 * H), (bx - H * 0.04, f.top + length * H)]
     if yaw >= 180:
         front = [(far[v] + H * (0.03 + 0.12 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
         fx_ = front[-1][0]
@@ -493,7 +493,7 @@ def _turned_long(p, f, colour=None, length=1.85):
         reach = {45: 0.02, 90: 0.1, 135: 0.25}.get(yaw, 0.1) * H       # the hair in front of the ear (over it)
         inner = [(ex + reach + H * 0.02, f.top + length * H), (ex + reach, f.top + 1.1 * H), (ex + reach, ey),
                  (ex + reach * 0.6, f.top + 0.05 * H)]
-        poly = wv(back, 31) + [(bx + H * 0.06, f.top + (length + 0.07) * H)] + inner
+        poly = wv(back, 31) + [(bx + H * 0.12, f.top + (length + 0.07) * H)] + inner
     p.poly(curve(poly, 2), colour or BR_HAIR, INK, 2.4)
 
 
@@ -851,7 +851,7 @@ def _hair_mass(p, f, L, fc, hc):
         u = rng.choice([-1, 1]) * rng.uniform(e + 0.01, e + 0.08)
         v0 = rng.uniform(0.1, 0.4)
         p.line(curve(f.pts([(u, v0), (u * 1.03, v0 + 0.25), (u * 0.99, v0 + (0.45 if st == 'bob' else 0.9))]), 3),
-               dk(hc, 0.75), 1.3)
+               dk(hc, 1.6) if st == 'long' else dk(hc, 0.75), 1.3)   # long: light strands (hunt 1: a black block)
     if st == 'curly':
         for _ in range(26):
             a = rng.uniform(math.pi * 0.95, math.pi * 2.05)

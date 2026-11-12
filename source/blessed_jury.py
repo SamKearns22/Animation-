@@ -56,7 +56,7 @@ JURORS = {
                    height=1.64, hw=60),
     'juror3': dict(_P, skin=B.PINK, hair_c=(196, 192, 186), outfit='suit', jacket=(120, 100, 70), tie=(40, 70, 50),
                    shoulders=170, height=1.76, hw=70),
-    'juror4': dict(_P, skin=(120, 80, 58), hair_c=(30, 24, 22), outfit='blouse', jacket=(200, 150, 50),
+    'juror4': dict(_P, skin=(120, 80, 58), hair_c=(62, 42, 32), outfit='blouse', jacket=(200, 150, 50),
                    shirt=(240, 236, 226), shoulders=134, height=1.66, hw=60),
     'juror5': dict(_P, skin=(150, 100, 70), hair_c=(50, 38, 30), outfit='jumper', jacket=(100, 116, 90), shoulders=158,
                    height=1.78),

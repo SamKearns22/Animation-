@@ -131,8 +131,8 @@ def soft(img, cam, box, col, a, blur):
 # planted beds, steps with rails on the left, a tall lamp post, trees at both ends. The camera stands on the
 # pavement 2.4 m up (over the press pack's heads), looking at the doors.
 OUT = Level(2.4, 820.0, 1500.0)
-BRICK = (178, 116, 82)
-BRICK_D = (148, 92, 64)
+BRICK = (192, 156, 112)                           # buff (ref 00; hunt 1: it read orange)
+BRICK_D = (162, 128, 90)
 FRAME = (62, 52, 46)
 GLASS = (172, 186, 192)
 BLIND = (226, 204, 140)
@@ -312,13 +312,28 @@ def _beast(p, x, y, s, sg, col, mane, horn=False):
     p.line([q(-40, 100), q(-76, 70), q(-70, 20)], col, 5.0)                          # tail
     p.line([q(-40, 100), q(-76, 70), q(-70, 20)], INK, 1.0)
     p.ell(q(-70, 18)[0], q(-70, 18)[1], 9 * s, 9 * s, mane, INK, 1.0)
-    p.poly([q(-24, -40), q(16, -96), q(52, -76), q(40, -36), q(0, -16)], mane, INK, 1.8)   # mane
-    p.poly([q(4, -92), q(48, -96), q(62, -70), q(30, -60)], col, INK, 1.8)            # head
-    p.ell(q(36, -82)[0], q(36, -82)[1], 3 * s, 3 * s, INK, None)
-    if horn:
-        p.poly([q(30, -96), q(62, -140), q(42, -92)], (236, 210, 120), INK, 1.4)
-    else:
-        p.poly([q(-4, -100), q(8, -120), q(20, -98)], (222, 178, 60), INK, 1.2)      # the lion's crown
+    if not horn:   # the lion (hunt 1, 12 Nov: "a dog"): a big shaggy mane all round a round face, a red tongue
+        cx, cy = q(34, -78)
+        ring = [(cx + (46 + (9 if k % 2 else 0)) * s * math.cos(a), cy + (46 + (9 if k % 2 else 0)) * s * math.sin(a))
+                for k, a in enumerate([i * 2 * math.pi / 22 for i in range(22)])]
+        p.poly(ring, (176, 112, 36), INK, 1.8)
+        p.ell(cx, cy, 27 * s, 29 * s, col, INK, 1.6)                                   # the face
+        p.ell(cx - 9 * s, cy - 6 * s, 3 * s, 3 * s, INK, None)
+        p.ell(cx + 9 * s, cy - 6 * s, 3 * s, 3 * s, INK, None)
+        p.poly([(cx - 6 * s, cy + 4 * s), (cx + 6 * s, cy + 4 * s), (cx, cy + 11 * s)], (120, 70, 40), None)
+        p.poly([(cx - 5 * s, cy + 15 * s), (cx + 5 * s, cy + 15 * s), (cx, cy + 27 * s)], (200, 40, 40), INK, 1.0)
+        p.poly([(cx - 22 * s, cy - 44 * s), (cx - 12 * s, cy - 64 * s), (cx, cy - 48 * s), (cx + 12 * s, cy - 64 * s),
+                (cx + 22 * s, cy - 44 * s)], (222, 178, 60), INK, 1.2)                   # the lion's crown
+    else:          # the unicorn (hunt 1: "a goat"): a long horse head, a flowing mane down the neck, a long horn
+        p.poly([q(-30, -40), q(-6, -100), q(10, -104), q(-8, -60), q(-22, -10)], mane, INK, 1.6)   # the mane
+        p.poly([q(-2, -104), q(22, -112), q(78, -78), q(84, -62), q(70, -54), q(20, -66), q(4, -50)], col, INK, 1.8)
+        p.ell(q(28, -92)[0], q(28, -92)[1], 3.4 * s, 3.4 * s, INK, None)
+        p.poly([q(2, -110), q(-4, -132), q(12, -114)], col, INK, 1.2)                  # the ear
+        hp = [q(22, -110), q(64, -178), q(32, -106)]
+        p.poly(hp, (236, 210, 120), INK, 1.4)                                           # the long horn
+        for k in (0.3, 0.55, 0.78):
+            a0 = (hp[0][0] + (hp[1][0] - hp[0][0]) * k, hp[0][1] + (hp[1][1] - hp[0][1]) * k)
+            p.line([(a0[0] - 5 * s, a0[1] + 2 * s), (a0[0] + 5 * s, a0[1] - 2 * s)], INK, 1.0)
 
 
 def _mic(p, base, tip, lw=2.4):
@@ -810,10 +825,11 @@ def tvroom(img, cam, t=0.0):
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
     # one long wooden bench (the seated men are cast: the film draws them on it, one depth: Sam's note 5)
-    p.poly(quad(-300, 1290, W + 300, 1330), (150, 108, 66), INK, 2.4)                       # the seat, at their
-    p.poly(quad(-300, 1330, W + 300, 1356), (112, 78, 48), INK, 2.2)                        # knees; its front edge
-    for x in (-40, 290, 540, 790, 1120):                                                    # its legs
-        p.poly(quad(x - 16, 1356, x + 16, 1600), (96, 66, 40), INK, 2.0)
+    p.poly(quad(-300, 1300, W + 300, 1352), (170, 122, 74), INK, 2.4)                       # the seat, at their
+    p.poly(quad(-300, 1352, W + 300, 1400), (120, 82, 50), INK, 2.6)                        # knees; its front edge
+    #   low and warm so it shows between every pair of shins (hunt 1, 12 Nov: "no bench, men hover")
+    for x in (195, 465, 735, 1005):                                                         # its legs, in the gaps
+        p.poly(quad(x - 16, 1400, x + 16, 1600), (96, 66, 40), INK, 2.0)
 
 
 def _chair(p, x, y, s, k):
@@ -831,9 +847,9 @@ def tv_flicker(img, cam, t, strength=1.0):
     picture cuts (a fixed, irregular pattern; never a smooth pulse)."""
     r = random.Random(int(t * 4))
     k = strength * (0.55 + 0.45 * r.random())
-    lay = Image.new('RGBA', img.size, (8, 16, 60, int(110 * strength)))                   # the room gone blue-dark
+    lay = Image.new('RGBA', img.size, (8, 16, 60, int(55 * strength)))                   # the room gone blue-dark
     img.alpha_composite(lay)
-    soft(img, cam, (-100, 400, 1180, 1300), (90, 150, 255), 0.55 * k, 220)                 # the blue glow on their
+    soft(img, cam, (-100, 400, 1180, 1300), (120, 170, 255), 0.3 * k, 220)                 # the blue glow on their
     #                                                                                        faces, from above
 
 
@@ -1075,7 +1091,7 @@ def gates(img, cam, t=0.0):
         w_ = L.ppm(d - 0.4) * 0.12
         p.poly(quad(bl[0] - w_, bt[1], bl[0] + w_, bl[1]), (230, 196, 40), INK, 2.0)
         p.ell(bl[0], bt[1], w_, w_ * 0.4, (240, 210, 70), INK, 1.4)
-    a, b = L.p(-3.9, d - 1.6, 2.0), L.p(-2.5, d - 1.6, 1.2)                                  # the sign (ref 20)
+    a, b = L.p(-3.3, d - 1.6, 2.7), L.p(-1.9, d - 1.6, 1.95)                                  # the sign (ref 20; nearer the gate so it stays whole in frame, hunt 2)
     for x in (a[0] + 10, b[0] - 10):
         gy = L.p(0, d - 1.6, 0)[1]
         p.poly(quad(x - 4, b[1], x + 4, gy), (60, 62, 66), INK, 1.2)
