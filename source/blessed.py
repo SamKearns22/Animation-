@@ -151,8 +151,10 @@ BENCHMARK = ST.BENCHMARK                          # rule 3: the sets' own (bless
 SET_BOXES, SET_MEANT = ST.SET_BOXES, ST.SET_MEANT  # rule 83
 # Rule 1: the plan. A flat film: each place is its painting's Level camera in metres (blessed_sets); the marks are
 # STAGE there. Listed for plan.py with each camera.
-PLAN = dict(CEIL=3.0, ROOMS={v: (-6.0, 0.0, 6.0, 18.0) for v in ST.BACK}, OPENINGS={}, THINGS={},
-            PEOPLE={}, CAMS={v: dict(pos=(0.0, 1.6, -1.0), look=(0.0, 1.6, 4.0)) for v in ST.BACK}, GROUPS={})
+_PX = {v: 20.0 * i for i, v in enumerate(ST.BACK)}   # each painting is its own place: laid side by side, never
+#                                                   overlapping (pre-flight read one shared box as rooms overlapping)
+PLAN = dict(CEIL=3.0, ROOMS={v: (_PX[v] - 6.0, 0.0, _PX[v] + 6.0, 18.0) for v in ST.BACK}, OPENINGS={}, THINGS={},
+            PEOPLE={}, CAMS={v: dict(pos=(_PX[v], 1.6, 1.0), look=(_PX[v], 1.6, 6.0)) for v in ST.BACK}, GROUPS={})
 
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
 HOOK = ('Russell Brand this week', {'y': 420})     # brief 17 (Claude's pick); over the court's upper windows, clear
