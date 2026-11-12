@@ -92,10 +92,11 @@ def _at(n, start):
 T = {}
 T['s1'] = 0.0
 T['s2'] = _at(1, 0.5) + 0.7                       # arrival (line 1), then the oath
-T['s3'] = _at(2, T['s2'] + 0.5) + 0.6             # the oath, then the gavel
-T['bang'] = T['s3'] + 0.9
-T['s4'] = T['bang'] + 0.7                         # the dock: line 3
-T['van'] = _at(3, T['s4'] + 0.6) + 0.8
+T['s3'] = _at(2, T['s2'] + 0.5) + 0.6             # the oath, then the sentencing (the dock)
+T['bang'] = T['s3']                               # the gavel is only HEARD, on the dock shot's first frame
+T['s4'] = T['s3']                                 # (Sam, 12 Nov: no gavel shot)
+T['hollow'] = T['s4'] + 0.3                       # the stillness cracks just before line 3
+T['van'] = _at(3, T['s4'] + 0.9) + 0.8
 T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, weeping on the cot
 T['cot'] = T['cell'] + 3.2
 T['phone'] = T['cot'] + 2.8
@@ -126,15 +127,15 @@ def _voice_env(who):
 import headlife                  # noqa: E402  (rule 74: every talking head tilts and nods on the voice)
 HEAD_LIFE = {'brand': headlife.HeadLife(_voice_env('brand'), 0.0, seed=5),
              'newsreader': headlife.HeadLife(_voice_env('newsreader'), 0.0, seed=9)}
-SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['s3']), ('gavel', T['s3'], T['s4']),
+SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['s3']),
          ('dock', T['s4'], T['van']), ('van', T['van'], T['cell']), ('escort', T['cell'], T['cot']),
          ('cot', T['cot'], T['phone']), ('phone', T['phone'], T['tvroom']), ('tvroom', T['tvroom'], T['tv']),
          ('tv', T['tv'], T['push']), ('push', T['push'], T['gates']), ('gates', T['gates'], T['gates2']),
          ('gates2', T['gates2'], DUR)]
-VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'gavel': 'court_bench', 'dock': 'court_dock', 'van': 'van',
+VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'dock': 'court_dock', 'van': 'van',
         'escort': 'cell', 'cot': 'cell_cot', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
         'gates': 'gates', 'gates2': 'gates2'}
-SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'gavel': ['judge'], 'dock': ['brand'],
+SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'dock': ['brand'],
              'van': ['brand'], 'escort': ['brand', 'officer'], 'cot': ['brand'], 'phone': ['brand'],
              'tvroom': ['brand'], 'tv': ['newsreader'], 'push': ['brand'], 'gates': ['brand'],
              'gates2': ['brand']}
@@ -339,7 +340,7 @@ def brand_mood(t):
     if s == 'oath':
         return 'oath', None
     if s == 'dock':
-        return ('hollow' if t >= 15.9 else 'neutral'), None
+        return ('hollow' if t >= T['hollow'] else 'neutral'), None
     if s in ('van', 'escort'):
         return 'numb', None
     if s == 'cot':
@@ -616,57 +617,14 @@ def oath_gaze(t):
     return -0.6 if word_at(2, 'Almighty') - 0.05 <= t < word_at(2, 'that the') else 0.0
 
 
-# --- gavel: the judge takes the gavel, raises it to the shoulder, strikes on the bang, a small rebound, rests
-GAVEL_HAND = [(T['s3'] + 0.11, (985.0, 1392.0, 0.0)), (T['s3'] + 0.36, (910.0, 1404.0, math.pi)),   # from the bench top
-              (T['s3'] + 0.71, (900.0, 1000.0, 2.2)), (T['bang'] - 0.15, (910.0, 985.0, 2.3)),
-              (T['bang'], (910.0, 1404.0, math.pi)), (T['bang'] + 0.12, (912.0, 1376.0, math.pi - 0.18)),
-              (T['bang'] + 0.3, (910.0, 1404.0, math.pi))]
-
-
-def gavel_at(t):
-    """(hand x, hand y, gavel angle) on the frame: the hand on the handle's end drives the gavel (one grip point)."""
-    if t <= GAVEL_HAND[0][0]:
-        return GAVEL_HAND[0][1]
-    for (t0, a), (t1, b) in zip(GAVEL_HAND, GAVEL_HAND[1:]):
-        if t < t1:
-            u = _ramp(t, t0, t1)
-            u = moves.fast_in(u) if t1 == T['bang'] else _ease(u)
-            return tuple(p + (q - p) * u for p, q in zip(a, b))
-    return GAVEL_HAND[-1][1]
-
-
-ST.GAVEL_LIFT = (T['s3'] + 0.36, T['s4'] + 1.0)
-
-
-def gavel_pose(sp, t, mark):
-    j = moves.seated(sp)
-    s = _s(sp, mark[2])
-    hx, hy, _ = gavel_at(t)
-    px, py = _world_to_person(hx, hy, mark, s, 1, j['bob'])
-    z = 150.0
-    tgt = (px, py - V.ELEV * z, z)
-    _arm(j, 'R', tgt, V.POLES['out'], 14.0, 'fist')    # the hand on the bench top from the cut: never under it
-    j['nod'] = 0.6 * _bump(t, T['bang'], T['bang'] + 0.25, 0.04, 0.2)
-    return j
-
-
-def gavel_draw(img, cam, t, pts, mark, sp, j):
-    """The held gavel over the bench front and block, then his hand over its handle (P1)."""
-    s = _s(sp, mark[2])
-    if ST.GAVEL_LIFT[0] <= t <= ST.GAVEL_LIFT[1]:
-        hx, hy = HANDS[('judge', 'R')]
-        ang = gavel_at(t)[2]
-        ST.gavel(B.Pen(img, cam), hx + 150 * math.cos(ang), hy - 150 * math.sin(ang), ang)
-    V.hand(B.Pen(img, B.Local(cam, mark[0], mark[1] - 928 * s + j['bob'] * s, s)), pts, 'R', sp, 'fist')
-
-
-# --- dock: hands clasped low; still until 15.9 s, then hollow, the shoulders drop
+# --- dock: hands clasped low; the gavel is heard on its first frame (a small flinch); still, then hollow, the shoulders drop
 def dock(sp, t):
     j = V.standing(sp)
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, (sg * 10, 420.0, 60.0), 'back')
-    u = _ease(_ramp(t, 15.9, 16.9))
+    u = _ease(_ramp(t, T['hollow'], T['hollow'] + 1.0))
     j['bob'], j['head_dy'], j['lean'] = 12 * u, 10 * u, 4 * u
+    j['bob'] += 5 * _bump(t, T['bang'], T['bang'] + 0.3, 0.03, 0.25)      # a small start at the bang
     return j
 
 
@@ -876,16 +834,6 @@ def draw_people(img, cam, shot, t):
         ST.mid(view, img, cam, t)
         sp = dict(brand_sp(t, 'stand'), gaze_dy=oath_gaze(t))
         put(img, cam, sp, st['brand'], t, yaw=-45, j=oath(sp, t))
-    elif shot == 'gavel':
-        sp = dict(BC.JUDGE, **face('judge', t, 'stern'))
-        sp = dict(sp, full=True, pose='custom')
-        j = gavel_pose(sp, t, st['judge'])
-        j['seated'] = False
-        mark = st['judge']
-        s = _s(sp, mark[2])
-        pts = V.person(img, cam, mark[0], mark[1] - 928 * s, s, sp, t, 0.0, j)
-        _log_hands('judge', pts, mark, s, 1, j['bob'])
-        DEFER.append(lambda: gavel_draw(img, cam, t, pts, mark, sp, j))
     elif shot == 'dock':
         for g in ('guard1', 'guard2'):
             put_seated(img, cam, dict(GUARDS[g], **face('officer', t, 'neutral')), st[g], t)
@@ -1036,6 +984,18 @@ def frame_image(t):
     return overlay(picture(t), t)
 
 
+def _gavel_knock():
+    """A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)."""
+    t = np.arange(int(0.5 * SR)) / SR
+    rng = np.random.default_rng(12)
+    click = rng.standard_normal(len(t)) * np.exp(-t * 400)
+    tock = np.sin(2 * np.pi * 190 * t) * np.exp(-t * 28) + 0.5 * np.sin(2 * np.pi * 420 * t) * np.exp(-t * 45)
+    ring = 0.12 * np.sin(2 * np.pi * 1180 * t) * np.exp(-t * 22)
+    x = 0.5 * click + 0.8 * tock + ring
+    x[:int(0.002 * SR)] *= np.linspace(0, 1, int(0.002 * SR))
+    return 0.9 * x / np.abs(x).max()
+
+
 def soundtrack(stems=False):
     n = int((DUR + 0.3) * SR)
     voice, rest = np.zeros(n), np.zeros(n)
@@ -1049,6 +1009,9 @@ def soundtrack(stems=False):
                 seg[k0:k1] *= np.linspace(1.0, 0.0, k1 - k0) ** 1.5
                 seg[k1:] = 0.0
         voice[s:s + len(seg)] += seg
+    k = _gavel_knock()                                # Sam, 12 Nov: the gavel heard at the start of the sentencing shot
+    i0 = int(T['bang'] * SR)
+    rest[i0:i0 + len(k)] += k[:max(0, n - i0)]
     mix = voice + rest
     end = int(DUR * SR)
     if np.abs(voice).max() > 1e-6:
@@ -1060,22 +1023,10 @@ def soundtrack(stems=False):
 
 def touch_faults():
     """The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
-    the judge's hand on the gavel handle and above the bench top (never under it), the Bible in Brand's hand, the
+    the Bible in Brand's hand, the
     officer's grip on Brand's arm until the stop. TOUCHES stays empty: the flat film has no 3D scene for kitchecks."""
     out = []
     import numpy as _np
-    for t in _np.arange(T['s3'] + 0.02, T['s4'] - 0.02, 0.05):             # gavel
-        img = Image.new('RGBA', (1080, 1920))
-        draw_people(img, _cam('gavel', t), 'gavel', float(t))
-        for f in DEFER:
-            f()
-        DEFER.clear()
-        hx, hy = HANDS[('judge', 'R')]
-        if hy > 1404 + 26:
-            out.append(f'gavel {t:.2f}s: the judge\'s hand is under the bench top ({hy:.0f})')
-        gx, gy, _ = gavel_at(float(t))
-        if ST.GAVEL_LIFT[0] + 0.02 <= t and math.hypot(hx - gx, hy - gy) > 40:
-            out.append(f'gavel {t:.2f}s: the hand is {math.hypot(hx - gx, hy - gy):.0f} px off the handle')
     a = T['s2']
     for t in _np.arange(a + 0.7, L[2]['end'], 0.5):                          # the Bible in the far hand
         sp = brand_sp(float(t), 'stand')
