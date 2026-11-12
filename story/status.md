@@ -1,3 +1,3 @@
-Blessed: Sam rejected the gates2 clip (note 32); he chose one proper Walliams rebuild, the officer fix (note 28), then an animatic.
+Blessed: gates2 rebuilt from a beat plan (note 32: Brand strides big in front, the pack on both sides, Walliams' comic beats, a lit doorway and the door slam); note 28 officer kit built.
 Waiting: nothing.
-Next: chat 2 of 8 (Opus high): plan and rebuild Walliams' beat in gates2, clip it, note 28, critique, animatic 2.
+Next: chat 3 of 8 (Opus medium): tune gates2 on stills, send Sam the clip and a note-28 still, critique Walliams' head, animatic 2.

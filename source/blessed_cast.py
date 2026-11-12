@@ -708,6 +708,9 @@ def officer_torso(img, p, sp, t):
     p.line(curve([(sw * 0.5, 500), (sw * 0.58, 560), (sw * 0.66, 520)], 3), (190, 190, 196), 2.4)
     p.ell(sw * 0.62, 566, 9, 9, None, (190, 190, 196), 2.4)
     p.poly([(-sw * 0.62, 96), (-sw * 0.32, 96), (-sw * 0.32, 130), (-sw * 0.62, 130)], (240, 240, 240), INK, 1.2)  # badge
+    p.poly([(sw * 0.3, 70), (sw * 0.62, 70), (sw * 0.62, 176), (sw * 0.3, 176)], (20, 20, 24), INK, 1.6)  # note 28:
+    p.line([(sw * 0.38, 70), (sw * 0.38, 20)], (20, 20, 24), 4.0)                     # a radio clipped at the chest
+    p.poly([(sw * 0.35, 96), (sw * 0.57, 96), (sw * 0.57, 128), (sw * 0.35, 128)], (90, 96, 104), None)
 
 
 WIG_K = (1.42, 1.0, -62)    # (width, height, shift down) of the wig on the front face
@@ -969,6 +972,7 @@ def _glasses(p, f, L, col):
 FACE_HEADS = set()     # other files' measured heads with a mouth at rest (blessed_walliams.py, note 25)
 TC.HEADS.update(brand=brand_head, judge=judge_head)
 TC.HEADS.update(inmate1=inmate_head, inmate2=inmate_head, inmate3=inmate_head, officer=inmate_head, guard2=inmate_head)
+TC.TORSOS['guard2'] = officer_torso                # note 28: both officers in HMPPS kit (the second had a plain shirt)
 def mouth_faults(people):
     """Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lips
     at rest. people: who -> name; each must have a head of this file (Brand's or the front-face system)."""

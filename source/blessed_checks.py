@@ -112,7 +112,13 @@ def placed(t):
         pack(ST.GATE, st['press'], (0.65, ST.GATE_D - 0.3))
     elif shot == 'gates2':
         one('brand', F.gates_close(F.brand_sp(t, 'trial'), t)[0])
-        pack(ST.GATE, ST.STAGE['gates']['press'], (0.6, F.G2_TO))
+        pack(ST.GATE, F.G2_PRESS, F.G2_TO)
+        if t >= F.T['wal']:                       # note 32: Walliams and the officers, until he is through the door
+            x, d = F.wal_place(t)
+            if d < F.DOOR_D - 0.05:
+                one('walliams', ST._mark(ST.GATE, x, d), h=F.CAST['walliams']['height'])
+            for g, sg in (('guard1', -1), ('guard2', 1)):
+                one(g, ST._mark(ST.GATE, *F.wal_place(t, sg * F.OFF_DX)), h=F.GUARDS[g]['height'])
     return out
 
 

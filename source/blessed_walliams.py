@@ -57,7 +57,9 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.24, wide=0.0, mouth='lips', 
          # scared and alarmed (note 25): brows high and pinched up in the middle, eyes wide, mouth pulled into a
          # wide grimace, the teeth showing
          'scared': dict(brow=0.05, frown=-0.07, lid=0.0, wide=1.0, mouth='grimace'),
-         'alarmed': dict(brow=0.06, frown=-0.04, lid=0.0, wide=0.8, mouth='gasp')}
+         'alarmed': dict(brow=0.06, frown=-0.04, lid=0.0, wide=0.8, mouth='gasp'),
+         # note 32: pleading with the press: brows up and pinched, soft wide eyes, the mouth turned down
+         'pleading': dict(brow=0.05, frown=-0.1, lid=0.06, wide=0.45, mouth='lips', smile=-0.6)}
 
 
 # ---------------------------------------------------------------------------------------------- the stubble
@@ -213,7 +215,7 @@ def faces_sheet(out):
         ph.thumbnail((tw - 10, th - 10))
         img.paste(ph, (i * tw + 5, 45))
         d.text((i * tw + 8, 10), name[:3] + ' (photo)', font=BC._font(26), fill=(30, 30, 30))
-    for j, mood in enumerate(('neutral', 'scared', 'alarmed')):
+    for j, mood in enumerate(('neutral', 'scared', 'alarmed', 'pleading')):
         im = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
         V.person(im, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(WALLIAMS, mood=mood), 0.0, 0)
         tile = im.crop((180, 280, 900, 1170)).convert('RGB')
