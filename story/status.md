@@ -1,3 +1,3 @@
 Blessed: round-2 notes done except Walliams' face (chat 3 of 8, 10%), the seated rebuild and van sheet, note 48 (chat 4). Protest Tiers: framing research done: lessons F1-F12 and the four scenes re-staged for the tall frame (a proposal).
-Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Walliams face sheet (chat 3). Protest Tiers: Sam's picks of the framing lessons, Y to the re-staging, Hook Text and sound.
-Next: Blessed chat 3 of 8 (Opus high): Walliams' face; chat 4 (Opus high): seated rebuild, van options, note 48 staging; then animatic 3. Protest Tiers: on Sam's answers, write the picked lessons, then the pencil roughs chat (Opus high).
+Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Walliams face sheet (chat 3). Protest Tiers: nothing (Sam: carry on to the pencil sketches); his picks come with the sketch sheet.
+Next: Blessed chat 3 of 8 (Opus high): Walliams' face; chat 4 (Opus high): seated rebuild, van options, note 48 staging; then animatic 3. Protest Tiers: pencil roughs, chat 4 of 8 (Opus high), one sheet and one message to Sam.

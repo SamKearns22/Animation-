@@ -28,8 +28,9 @@ Sam's Y: 12 Nov (Protest Tiers chat 2, Q2). Its own job, outside any film's budg
 ## Where things stand (the ONE handover; chat 3 of 8, 12 Nov: waiting on Sam)
 - **Rules that bite next:** 86 (lessons are proposals; write nothing until Sam's numbers), 10 (framing planned up front: where F1, F2, F9-F11 would merge), 85 (cost watch).
 - **Done (chat 3):** steps 3-4. `research/crowds-and-big-action.md` rewritten as lessons F1-F12 (each with its closest rule or kit piece and what is new; only three one-sentence additions to rules 10, 6 and critique S1, the rest as know-how in best-practice 1.3c). Protest Tiers' four scenes re-staged with them (`notes/protest-tiers.md`, "Re-staged"). Stage `writeup` closed. Findings and seeds moved to `notes/archive/framing-research-handovers.md`.
-- **Next (this chat, on Sam's answer; Opus medium is enough):** write the lessons he picks (rule 10, rule 6 and critique S1 wording, best-practice 1.3c), in this chat; then open the Protest Tiers pencil roughs chat (Opus high, chat 1 of 8) with the film's handover.
-- **Needs Sam:** Q1 which lessons (my pick: all 12); Q2 the re-staging (Y), with the T2 crowd moved to the near pavement.
+- **Sam (12 Nov, 23:48, chat 2):** "Continue this work until we have articulate pencil sketches of your proposed scenes. I am heading to sleep." So no wait for his picks: chat 4 of 8 (Opus high) draws Protest Tiers' pencil roughs with all 12 lessons (my pick, still proposals) and sends ONE message: sketch sheet, study sheet, lessons by number, Hook Text, sound.
+- **Next:** on Sam's lesson numbers, write them (rule 10, rule 6 and critique S1 wording, best-practice 1.3c) in the chat that receives his answer (Opus medium).
+- **Needs Sam:** which lessons (my pick: all 12); Y to the re-staging, with the T2 crowd moved to the near pavement.
 - **Read:** this file; `research/crowds-and-big-action.md` "The lessons" and "What would change".
 - **Open rule requests:** F1-F12 (above); the squint check and twins check (about 0.3% of a week together) are priced but not built.
 - **For Claude:** stage plan read/frames/writeup all closed; ledger `framing-research`; the widened Blessed job (below) is separate and re-priced before it starts.
