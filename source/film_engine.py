@@ -26,7 +26,7 @@ PASSES = os.path.join(os.path.dirname(HERE), 'review', 'preflight-pass')   # rul
 
 
 DRAW_FPS, FILE_FPS = 12, 24     # rule S7: drawings a second, frames a second in the file
-HOUSE_LOOK = False               # rule S7 on for every film: True once Sam says Y to the side-by-side (12 Nov)
+HOUSE_LOOK = True                # rule S7 on for every film (Sam, 12 Nov: Y); False only to look at a film without it
 
 
 def look_faults(film):

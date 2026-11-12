@@ -247,7 +247,8 @@ def clip(out):
                           '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-movflags', '+faststart',
                           out], stdin=subprocess.PIPE)
     for k in range(n):
-        p.stdin.write(np.asarray(frame(k / FPS * SPEED)).tobytes())
+        import house_look                                    # rule S7: the house look lies over the sign-off too (Sam, 12 Nov)
+        p.stdin.write(np.asarray(house_look.apply(frame(k / FPS * SPEED))).tobytes())
     p.stdin.close()
     p.wait()
     os.remove(sound)
