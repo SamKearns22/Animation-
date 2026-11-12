@@ -3,8 +3,8 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 24 (round 1 is over its share: 3.99% against 2.5%; wait for Sam's Y), 30, 59.
 - **Done (12 Nov, chat 4 of 8, Opus medium, amber):** 11, 12, 24 (press pack, flashes, arrival camera), 15 (dock framing), 17 (sigh, blanket) coded and pushed; NO clips yet (renders failed: two at once).
-- **Next (only after Sam's Y): Opus, medium, chat 5 of 8:** clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (HM Prison officer: white shirt, epaulettes, black tie, keys on a chain). Then a Sonnet chat: checks and animatic 2.
-- **Needs Sam:** Y/N to go on with round 1; Walliams (25): 1 invented unnamed celebrity (pick), 2 cut the shot.
+- **Next (Sam said Y): Opus, medium, chat 5 of 8:** clips ONE AT A TIME, --small, check each log as it starts: gates 47.0-52.9, arrival 0-8.9, dock+cell 14.0-25.0; then 28 (HM Prison officer: white shirt, epaulettes, black tie, keys on a chain). Then a Sonnet chat: checks and animatic 2.
+- **Needs Sam:** nothing (Walliams set aside by Sam; another chat may be building it: pull first).
 - **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 11-28.
 - **Open rule requests:** none.
 - **For Claude:** ST.press_spots(bx, bd, rows, seed, cx, half); press(part=('behind'|'front', d)) drawn either side of him; _stills kit + flash; CREW_TOP/LEG; ARRIVE_CAM; OUT = Level(1.7, 1090, 1500); _cam dock Cam(1.2, 548, 1560); gates Cam starts 1.3; T['cot'] = cell + 3.9; escort sigh keys; ST._blanket. A 5pm reminder (trig_0162nUpu9SadML1ei9zrWBP7) resumes only on Sam's Y.
@@ -12,7 +12,7 @@
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
 Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
 
-## Sam's answers (12 Nov): Y go on after the cost alarm (23.8% of a week against 19%; about 7.5% more to finish: round-1 notes 3.5, animatic 2 1.0, round 2 2.5, final 0.5); 1 Y no check sheet before animatics unless he asks (CLAUDE.md written); 2 Y animatic 1 skips the sheet; 3 Y the pre-flight audit job above
+## Sam's answers (12 Nov): Y finish round 1 although over its share (3.99% vs 2.5%; 'annoyed at the rendering and preflight errors'); Walliams set aside for now; Y go on after the cost alarm (23.8% of a week against 19%; about 7.5% more to finish: round-1 notes 3.5, animatic 2 1.0, round 2 2.5, final 0.5); 1 Y no check sheet before animatics unless he asks (CLAUDE.md written); 2 Y animatic 1 skips the sheet; 3 Y the pre-flight audit job above
 
 ## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
 
