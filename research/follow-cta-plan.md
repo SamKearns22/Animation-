@@ -1,4 +1,4 @@
-# Follow call to action on the sign-off: plan (12 Nov, waiting on Sam's numbers)
+# Follow call to action on the sign-off (12 Nov): built. Sam: Y to all; lines 4-15 (not 14) for the next 11 films, then a new batch
 
 ## Brief (Sam, 12 Nov)
 - A follow call to action on the sign-off (watchers to the end are the likeliest followers).

@@ -7,6 +7,7 @@ silent unless Sam asks for a slurp. Joined onto the end of every film, after the
     python3 signoff.py sheet OUT.jpg          a few frames side by side, for checking
     python3 signoff.py clip OUT.mp4           the sign-off on its own (1080 x 1920, 12 fps)
     python3 signoff.py add FILM.mp4 OUT.mp4   a finished film with the sign-off joined on the end
+    any of them with a last argument "Follow line": the follow line on it (rule 52; finish.py picks it per film)
 """
 import math
 import os
@@ -238,7 +239,46 @@ def frame(t):
     return img
 
 
-def clip(out):
+CARD_AT, CARD_TILT, CARD_POP = (70, 318), -7, (0.6, 1.08)   # top left just below TikTok's tabs (y 310); tilted
+# down to the right so it points at TikTok's + follow button; a quick pop on the first two frames (rule 75)
+_cards = {}
+
+
+def follow_card(text):
+    """The follow line (Sam, 12 Nov): Hook Text style (hook_text.card), two rows at most, tilted, with a soft shadow
+    down-right so the white boxes show on the white paper. (piece RGBA, its top-left corner on the frame)."""
+    if text not in _cards:
+        import hook_text
+        with tempfile.TemporaryDirectory() as tmp:
+            png = os.path.join(tmp, 'card.png')
+            hook_text.card(W, H, text, 400, png, size=72, x_mid=440, width=700)
+            c = Image.open(png).convert('RGBA')
+            c = c.crop(c.getbbox()).rotate(CARD_TILT, expand=True, resample=Image.BICUBIC)
+        pad = 24
+        out = Image.new('RGBA', (c.width + pad, c.height + pad), (0, 0, 0, 0))
+        sh = Image.new('RGBA', c.size, (0, 0, 0, 0))
+        sh.putalpha(c.split()[3].point(lambda v: int(v * 0.35)))
+        out.alpha_composite(sh, (6, 8))
+        out = out.filter(ImageFilter.GaussianBlur(6))
+        out.alpha_composite(c, (0, 0))
+        _cards[text] = out
+    return _cards[text], CARD_AT
+
+
+def with_card(img, text, k):
+    """Frame k of the sign-off with the follow line on it, laid clean over the house look (rule S7)."""
+    piece, (x, y) = follow_card(text)
+    s = CARD_POP[k] if k < len(CARD_POP) else 1.0
+    if s != 1.0:
+        w, h = piece.size
+        p2 = piece.resize((max(1, int(w * s)), max(1, int(h * s))), Image.BICUBIC)
+        x, y, piece = int(x + (w - p2.width) / 2), int(y + (h - p2.height) / 2), p2
+    out = img.convert('RGBA')
+    out.alpha_composite(piece, (max(0, x), max(0, y)))
+    return out.convert('RGB')
+
+
+def clip(out, follow=None):
     n = int(round(OUT_DUR * FPS))
     sound = os.path.splitext(out)[0] + '-slurp.wav'
     slurp_track(sound)
@@ -248,7 +288,10 @@ def clip(out):
                           out], stdin=subprocess.PIPE)
     for k in range(n):
         import house_look                                    # rule S7: the house look lies over the sign-off too (Sam, 12 Nov)
-        p.stdin.write(np.asarray(house_look.apply(frame(k / FPS * SPEED))).tobytes())
+        im = house_look.apply(frame(k / FPS * SPEED))
+        if follow:
+            im = with_card(Image.fromarray(np.asarray(im)), follow, k)
+        p.stdin.write(np.asarray(im).tobytes())
     p.stdin.close()
     p.wait()
     os.remove(sound)
@@ -301,7 +344,7 @@ def slurp_track(path):
         w.writeframes((np.clip(out[:int(DUR * SR)], -1, 1) * 32767).astype('<i2').tobytes())
 
 
-def add(film, out, fps=None, crf=None):
+def add(film, out, fps=None, crf=None, follow=None):
     """Join the sign-off onto the end of a finished film (1080 x 1920), its sound kept. The film's own frame rate is
     kept (12 for most; DLC is 24: joining it at 12 halved its smoothness, 19 Oct); crf 20 unless the film's own
     encoding was lighter (then about the same size as it was)."""
@@ -314,7 +357,7 @@ def add(film, out, fps=None, crf=None):
         crf = 20 if fps <= 12 else 26
     with tempfile.TemporaryDirectory() as tmp:
         so = os.path.join(tmp, 'signoff.mp4')
-        clip(so)
+        clip(so, follow)
         import re
         wh = re.search(r'Video:.*?, (\d{3,5})x(\d{3,5})', probe)       # the film's own size: a small animatic's sign-off
         size = f'scale={wh.group(1)}:{wh.group(2)},' if wh else ''        # is scaled to match (scale2ref cut it to 0.75 s)
@@ -333,8 +376,8 @@ def add(film, out, fps=None, crf=None):
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB at {fps} fps')
 
 
-def sheet(out, times=(0.0, 0.5, 0.8, 1.2)):
-    ims = [frame(t).resize((360, 640)) for t in times]
+def sheet(out, times=(0.0, 0.5, 0.8, 1.2), follow=None):
+    ims = [(with_card(frame(t), follow, 9) if follow else frame(t)).resize((360, 640)) for t in times]
     s = Image.new('RGB', (360 * len(ims), 640))
     for i, im in enumerate(ims):
         s.paste(im, (360 * i, 0))
@@ -344,8 +387,8 @@ def sheet(out, times=(0.0, 0.5, 0.8, 1.2)):
 if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd == 'sheet':
-        sheet(sys.argv[2])
+        sheet(sys.argv[2], follow=(sys.argv[3:] or [None])[0])
     elif cmd == 'clip':
-        clip(sys.argv[2])
+        clip(sys.argv[2], (sys.argv[3:] or [None])[0])
     elif cmd == 'add':
-        add(sys.argv[2], sys.argv[3])
+        add(sys.argv[2], sys.argv[3], follow=(sys.argv[4:] or [None])[0])

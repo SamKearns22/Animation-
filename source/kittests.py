@@ -1358,6 +1358,10 @@ def _finish_fake(tmp, caption=True):
     if caption:
         m.caption_at = lambda t: 'One two three' if 0.2 <= t < 1.5 else None
     sys.modules['kt_film'] = m
+    lines = os.path.join(tmp, 'follow-lines.md')                    # a copy: the tests never use up a real follow line
+    with open(lines, 'w', encoding='utf-8') as f:
+        f.write('- [ ] Test line. Follow 👉\n')
+    os.environ['FOLLOW_LINES'] = lines
     out = os.path.join(tmp, 'out.mp4')
     argv = sys.argv
     sys.argv = ['finish.py', clean, out, '--film', 'kt_film']
@@ -1432,6 +1436,42 @@ def caption_check_at_delivered_speed():
     at1 = [f for f in SUB.readable_faults(cap, 3, 100, 1.0) if 'Just long' in f]
     at11 = [f for f in SUB.readable_faults(cap, 3, 100) if 'Just long' in f]
     return not at1 and bool(at11) and SUB.SPEED == 1.1, f'at 1x: {len(at1)} fault; at 1.1x: {at11[:1]}'
+
+
+@test
+def follow_line_on_signoff():
+    """Rule 52 (Sam, 12 Nov): each film takes the next follow line once and keeps it; finishing stops when the list
+    is used up; the card sits top left inside the safe area (x 60-900, below TikTok's tabs at y 310)."""
+    import tempfile
+    import follow_line
+    import signoff
+    with tempfile.TemporaryDirectory() as tmp:
+        lines = os.path.join(tmp, 'l.md')
+        with open(lines, 'w', encoding='utf-8') as f:
+            f.write('# x\n- [ ] One 👉\n- [ ] Two 👉\n')
+        old = os.environ.get('FOLLOW_LINES')
+        os.environ['FOLLOW_LINES'] = lines
+        try:
+            a, a2, b = follow_line.line_for('film_a'), follow_line.line_for('film_a'), follow_line.line_for('film_b')
+            try:
+                follow_line.line_for('film_c')
+                stopped = False
+            except SystemExit:
+                stopped = True
+        finally:
+            if old is None:
+                os.environ.pop('FOLLOW_LINES', None)
+            else:
+                os.environ['FOLLOW_LINES'] = old
+    worst = None
+    for text in ['Feed the beaver. Follow 👉', 'Follow. We ruin the news 👉', 'Follow or the beaver cries 👉']:
+        piece, (x, y) = signoff.follow_card(text)
+        x0, y0, x1, y1 = piece.getbbox()
+        box = (x + x0, y + y0, x + x1, y + y1)
+        if box[0] < 60 or box[1] < 310 or box[2] > 900 or box[3] > 700:
+            worst = (text, box)
+    ok = (a, a2, b) == ('One 👉', 'One 👉', 'Two 👉') and stopped and worst is None
+    return ok, f'film_a {a!r} then {a2!r}, film_b {b!r}, used up stops: {stopped}; card outside the safe area: {worst}'
 
 
 def main():

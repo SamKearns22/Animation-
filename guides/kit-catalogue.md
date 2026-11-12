@@ -108,6 +108,7 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 `plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),
 `report.py` (19), `catalogue.py` (28); pre-flight runs them all.
 The house look (rule S7, 12 Nov): `house_look.py` (paper, per-shape light edges and soft shadows; one setting `LOOK`), laid once by `film_engine.render`; the sign-off gets it in `signoff.py`.
+The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next line from `story/follow-lines.md`, ticked per film; `python3 source/follow_line.py` lists what is left), drawn by `signoff.with_card`; `signoff.py clip OUT "Line"` for a test.
 
 | what | file |
 |---|---|

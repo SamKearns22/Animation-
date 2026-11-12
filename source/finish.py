@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The finishing step for every TikTok film (Sam, 15 Oct), so nothing is forgotten: from the clean, untitled render,
 burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitch (rule 70), add the Hook Text (rule
-75) and the CranbriJoos sign-off (rule 52), in that order.
+75) and the CranbriJoos sign-off (rule 52) with the film's follow line (story/follow-lines.md), in that order.
 
     python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME [--faults-named]
     python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
@@ -203,6 +203,8 @@ def main():
                      'Sam has been told')
         if not faults:
             print('Hook Text check: clear of everything listed')
+    import follow_line                            # rule 52: the film's follow line on the sign-off (story/follow-lines.md)
+    follow = follow_line.line_for(name[0])
     with tempfile.TemporaryDirectory() as tmp:
         step = src
         if not has_sound(step):                    # a silent film gets a silent track, so the sign-off's slurp can join on
@@ -221,7 +223,7 @@ def main():
             hooked = os.path.join(tmp, 'hooked.mp4')
             subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)
             step = hooked
-        subprocess.run([sys.executable, os.path.join(HERE, 'signoff.py'), 'add', step, dst], check=True)
+        subprocess.run([sys.executable, os.path.join(HERE, 'signoff.py'), 'add', step, dst, follow], check=True)
 
 
 if __name__ == '__main__':

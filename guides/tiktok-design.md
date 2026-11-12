@@ -107,6 +107,10 @@ No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sa
   dancing, the beaver (never blinking) holding a white CranbriJoos carton (red trim, red balloon logo, "Cranbri" larger
   than "Joos"); as Sam's slurp plays his mouth and teeth vanish into a small black O round the straw, his eyes widen,
   and the juice climbs the straw at the pace of the slurp. `source/signoff.py` (clip on its own: `signoff.py clip OUT`).
+- **The follow line (Sam, 12 Nov, rule 52):** Hook Text style, two rows at most, top left just below the tabs, tilted
+  7 degrees down to the right with a soft shadow, ending in 👉 towards TikTok's + follow button; pops in on the first frame.
+  One line per film from `story/follow-lines.md`, in order (why each line: `research/follow-cta-plan.md`). The same
+  file goes to YouTube Shorts.
 - The carton's three cranberries sit wholly in the white space between "Joos" and the red band along the bottom (Sam, 16 Oct:
   they used to overlap the band); fixed in `signoff.py`, so every sign-off has it.
 - Always applied by the finishing step: `python3 source/finish.py CLEAN.mp4 OUT.mp4 --film NAME` (a satire film: its
