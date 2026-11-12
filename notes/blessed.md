@@ -2,15 +2,15 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 30 (a repeated note: say why the first fix failed), 74 (moves against the acting list), 59 (every fault fixed or named before the animatic).
-- **Done (12 Nov, notes chat 2 of 8, Opus medium, stopped on amber):** 16 van (clip sent; Sam laughed at the too-big seat on the way, fixed), 18 cot from above (clip sent), 19 line, 27 music built, 26 front-on in the stills (arrival, oath, cell stop, phone).
-- **Next: Opus, medium (chat 3 of 8):** clip the front-on arrival/oath/phone (0-4.5, 4.5-7.2, 27-33); then 20 phone room, 23 zooms (+ the music clip, 40-47), 22 TV room, 12 and 24 press, 25 Walliams, 15 framing, 11 camera, 17 sigh and blanket. Then a Sonnet chat for checks and animatic 2.
+- **Done (12 Nov, notes chat 3 of 8, Opus medium, stopped on amber):** clips sent: front-on arrival and oath (26), phone room (20, 21), TV room + both zooms + music (22, 23, 27).
+- **Next: Opus, medium (chat 4 of 8):** 12 and 24 press (FIRST restore the gates pack: see For Claude), with 11 (arrival camera lower, amongst the press); then 25 Walliams, 15 framing (and the judge's mouth, 13), 17 sigh and blanket, 14 jurors. Clip each. Then a Sonnet chat for checks and animatic 2 (--small).
 - **Needs Sam:** nothing.
 - **Not merged on purpose:** claude/audit-honest-checker (joins after animatic 2).
-- **Spent:** chat 2 about 1.2% of a week; round 1 of 2.
+- **Spent:** chat 3 about 1.2% of a week; round 1 of 2.
 - **Read:** `guides/job-packs.md` Notes round; this section; the Notes rows 11-27.
 - **Follow-up tool fix (not done):** `kitchecks.faces` on an incremental run must not report from partial frames.
 - **Open rule requests:** none.
-- **For Claude:** van: `_seat` draws both legs then the seat (j['hide_legs']), views.leg j['knee_round']; cot: ST.cot_top / cot_top_front, cot_pose, _cam 'cot'; music(): MUSIC_SAD_END/MUSIC_PEAK; front-on = yaw 0 in shot code (oath, phone, arrive, escort). Pre-flight not yet run on these (new view cot_top: SET_BOXES may need it).
+- **For Claude:** gates press regression: blessed_sets STAGE['gates']['press'] holds 4 spots; chat 3 (earlier round) folded four more into a comment on that line, so the gates pack is 4 people (found 12 Nov, not fixed). Plan for 12/24: a spot generator (horseshoe rows round his mark, gap on the camera line, about 15 at each place), press_sp clothes by job (journalists in suits/coats; crew in dark jumpers, cargo trousers), a 'stills' kit with a flash gun firing at random frames; gates cam starts closer (_cam 'gates'). 11: OUT = Level(2.4, 820, 1500): lower h to about 1.7 and add CAMS court_out zoom about 1.3 centred lower; check the sign stays in. Chat 3 code: phone(): _booth(dx), _cam 'phone' Cam(1.0, 740); phone_cord front-on +s*x; tvroom: pool_table(front_only), _chair x2, asleep_pose, pool_pose (hide_legs), pool_cue; MOODS 'deadeyed'; _cam 'tv' TV_READER, push centre -250; views neck_w/neck_shade (BRAND neck_w 1.12), tracksuit collar wider. Pre-flight not yet run on any round-1 change.
 
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
 Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).

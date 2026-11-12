@@ -186,3 +186,17 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** none.
 - **For Claude (chat 4):** cot = put_seated at COT_MARK/COT_YAW, cot_pose (blessed_checks.placed updated); oath: lift = _contact - OATH_BIBLE, dn0 = T['s3']+0.05; judge jj shifts; press_sp name 'Journalist N', turnhead.PEOPLE[who].sheet; HANDS_OK list after CUT_RESTS_OK. Stills checked at 4.75, 4.9, 13.95, 25.0. blessed.py over 1,100 lines (rule 61 warning, not a fault).
 
+
+
+## Where things stand (chat 2 of notes round 1, archived 12 Nov)
+- **Rules that bite next:** 30 (a repeated note: say why the first fix failed), 74 (moves against the acting list), 59 (every fault fixed or named before the animatic).
+- **Done (12 Nov, notes chat 2 of 8, Opus medium, stopped on amber):** 16 van (clip sent; Sam laughed at the too-big seat on the way, fixed), 18 cot from above (clip sent), 19 line, 27 music built, 26 front-on in the stills (arrival, oath, cell stop, phone).
+- **Next: Opus, medium (chat 3 of 8):** clip the front-on arrival/oath/phone (0-4.5, 4.5-7.2, 27-33); then 20 phone room, 23 zooms (+ the music clip, 40-47), 22 TV room, 12 and 24 press, 25 Walliams, 15 framing, 11 camera, 17 sigh and blanket. Then a Sonnet chat for checks and animatic 2.
+- **Needs Sam:** nothing.
+- **Not merged on purpose:** claude/audit-honest-checker (joins after animatic 2).
+- **Spent:** chat 2 about 1.2% of a week; round 1 of 2.
+- **Read:** `guides/job-packs.md` Notes round; this section; the Notes rows 11-27.
+- **Follow-up tool fix (not done):** `kitchecks.faces` on an incremental run must not report from partial frames.
+- **Open rule requests:** none.
+- **For Claude:** van: `_seat` draws both legs then the seat (j['hide_legs']), views.leg j['knee_round']; cot: ST.cot_top / cot_top_front, cot_pose, _cam 'cot'; music(): MUSIC_SAD_END/MUSIC_PEAK; front-on = yaw 0 in shot code (oath, phone, arrive, escort). Pre-flight not yet run on these (new view cot_top: SET_BOXES may need it).
+
