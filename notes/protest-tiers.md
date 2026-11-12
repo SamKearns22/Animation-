@@ -1,14 +1,16 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 89 (each new Glimpse and set drawn alone and critiqued), 8 (rehearsal clips of the 4 riskiest moves before detail), 3 (each place ticked against its photos).
-- **Done (12 Nov, chat 1 of 8, Opus high):** reporting for all four events (below, with sources); 8 reference photos filed in `references/protest-tiers/`; brief checklist, estimate (21.5%), staging and action lists written; questions sent to Sam. Photo hosts allowed (Sam's card); Openverse thumbnails work, Wikimedia refused after 2 downloads.
-- **Next:** waits on Sam's answers. Then Build, Opus HIGH (new things): copy the satire template, set up the four locked cameras in metres, cast sheet of the new Glimpses (riot officer x4 forces, hooded rioter, moped + riders + RPG), then the four set paintings.
-- **Needs Sam:** answers 1-7 (sent 12 Nov).
-- **Read:** `guides/job-packs.md` "Build"; this file's Staging, Estimate and References sections.
-- **Lost / Added:** none
-- **Open rule requests:** none
-- **For Claude:** film name `protest-tiers`; headline = `islamocommunism_set.heading` (Anton 156 / 68, white, black edge, lower-left at y 1270); kit named in the estimate table. 4 locked cameras, 4 s each, 12 fps.
+- **Rules that bite next:** 3 (no place drawn without its photos), 8 (rehearsal clips of the riskiest moves), 89 (critique each new piece alone).
+- **Done (12 Nov, chat 1 of 8):** reporting, 8 photos, checklist, estimate 21.45% (Sam: Y, "kept in budget by the 4 second length"), staging; Sam answered 3-7 (below).
+- **Sam's answers (12 Nov):** 1 Hook Text and 2 sound: PENDING (ask again with the sketches). 3 Spain: adjust to NOVEMBER reporting (find the November housing protests; re-base tier 1 on them). 4 N: no yellow vests; adjust tier 3 to this October's key features (students, cost of living, burning rental bikes, kiosk and car, stones and bottles, water cannon, tear gas). 5: every missing photo exists in real October news (Frankfurt gun store raided by students, Albanian police vs protesters, French water cannon): "the problem is where you are looking": search press photo galleries and news pages (Al Jazeera galleries, Reuters, AP, euronews, dpa, hessenschau, Le Parisien), not free libraries. 6 Y: tier 4 kept. 7 Y: go.
+- **Sam's notes (12 Nov):** A) rough PENCIL SKETCHES of each scene as I picture it, sent BEFORE any check sheet. B) before building, research reference guides on animating crowds and large dynamic scenes (composition, animation, staging action) that the whole project can learn from; "don't just attempt this by force: do the learning first".
+- **Next: chat 2 of 8, Opus HIGH:** (1) research for note B (books, studio talks, animation guides on crowds and big action staging), written as a short guide proposal; (2) November Spain + October Paris reporting, re-base tiers 1 and 3 (brief checklist rows 6-10, 18-23); (3) news photos for every missing reference (photo hosts: ask with update_environment when one is blocked); (4) four rough pencil sketches, one labelled sheet, sent; (5) ask Sam 1, 2 again plus anything new, in ONE message.
+- **Needs Sam:** 1 (Hook Text) and 2 (sound), with the sketches.
+- **Read:** `guides/job-packs.md` "Plan"; this file's top half.
+- **Lost / Added:** Lost: yellow vests (Sam, Q4).
+- **Open rule requests:** two to put to Sam as proposals (none written yet): "pencil sketches before check sheets" (this film, or every film?), and the crowd and action lessons from note B (where in the rulebook or a guide).
+- **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading` (Anton 156 / 68, white, black edge, lower-left y 1270); kit in the estimate table; refs in `references/protest-tiers/`; ledger estimate set, stage plan marked done.
 
 ## The reporting (checked 12 Nov; what each tier is based on)
 - **Spain, Barcelona, 5 Oct 2026:** housing march (organisers 120,000, police ~20,000) ended at Passeig de Gràcia / Gran Via; bins set on fire on Passeig de Gràcia; pyrotechnics thrown at officers and shop windows; baton charges; 13 arrests, ~30 officers lightly hurt. Keys rattled = symbol of earlier Spanish housing marches (Guardian), not confirmed for this march. Pepper spray: not reported for this march. Police: Mossos d'Esquadra. (euronews, Ara, Olive Press, 6 Oct)

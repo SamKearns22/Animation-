@@ -1,7 +1,18 @@
 {
  "film": "protest-tiers",
  "estimate": 21.45,
- "chats": [],
+ "chats": [
+  {
+   "date": "2026-11-12",
+   "chat": "d9b4fb2c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.17
+  }
+ ],
  "checks": {},
  "stages": [
   {
