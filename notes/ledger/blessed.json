@@ -539,5 +539,6 @@
   "8. False alarms 0; could not test 0 (from the round files).",
   "9. By-hand rules: read the check sheet text in the round files; name any that never caught anything.",
   "10. Proposal for Sam (one line, a rule replaced or a check added): "
- ]
+ ],
+ "alarms_off": "Sam, 12 Nov: no more cost alarms for Blessed; cost still recorded; full diagnosis after posting"
 }

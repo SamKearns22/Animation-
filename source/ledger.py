@@ -169,7 +169,7 @@ def auto(transcript):
     fore = forecast_alarm(d)
     alarm = alarm or (stop + (' ' + forecast_line(d) if fore else '') if stop else fore)
     store(d)
-    if alarm:
+    if alarm and not d.get('alarms_off'):          # Sam, 12 Nov: a film can have its alarms switched off
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
         return                                    # mid-merge: the chat's own next commit carries it

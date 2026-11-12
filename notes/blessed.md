@@ -13,6 +13,11 @@
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
 Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
 
+## Sam's answers (12 Nov, late): Y go on after the second cost alarm (34.2% vs 19%; about 6.5% more to finish). Cost alarms OFF for the rest of Blessed (ledger.json alarms_off; cost still recorded; per-chat amber/red handovers still on). After Blessed: a FULL diagnosis of why it went so far over budget again, with suggested tool improvements (job below).
+
+## Job after Blessed: the budget diagnosis (Sam, 12 Nov)
+Where every % of Blessed went (by stage, chat, helper, rework), why the estimate (19%) missed, why the alarms and forecasts did not change the outcome, compared with Remakes (45% on 14.5%); then concrete tool changes that would have kept it on budget. Opus high.
+
 ## Sam's answers (12 Nov): Y finish round 1 although over its share (3.99% vs 2.5%; 'annoyed at the rendering and preflight errors'); Walliams set aside for now; Y go on after the cost alarm (23.8% of a week against 19%; about 7.5% more to finish: round-1 notes 3.5, animatic 2 1.0, round 2 2.5, final 0.5); 1 Y no check sheet before animatics unless he asks (CLAUDE.md written); 2 Y animatic 1 skips the sheet; 3 Y the pre-flight audit job above
 
 ## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
