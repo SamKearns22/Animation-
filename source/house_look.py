@@ -18,6 +18,8 @@ from scipy import ndimage as nd
 # The one setting (brief: "a single setting so it can be changed"). Sizes are at 1080 wide and scale with the picture.
 LOOK = dict(
     paper=0.70,          # soft light at 70% (as tested and chosen, 12 Nov)
+    paper_depth=0.45,    # the paper's texture at 45%: the test's recipe alone came out 2.2x stronger than the test Sam
+                         # chose (measured on the sky in his two screenshots, 12 Nov: grain 2.8x, blotches 1.9x)
     light=0.22,          # the light top edge: this much of the way to white
     light_px=2.0,        # its thickness
     shadow=0.26,         # the darkest a shadow gets (fraction darker)
@@ -53,6 +55,7 @@ def paper(w, h):
     grain = make(f'{w}x{h}', 'noise=alls=90,gblur=sigma=0.9,eq=contrast=2.2')
     blot = make(f'{max(8, w // 8)}x{max(8, h // 8)}', f'noise=alls=90,gblur=sigma=4,eq=contrast=4,scale={w}:{h}')
     p = (grain + blot) / 2
+    p = p.mean() + LOOK['paper_depth'] * (p - p.mean())
     _PAPER[(w, h)] = p
     return p
 
