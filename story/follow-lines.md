@@ -16,4 +16,5 @@ views film by film in `story/metrics.md`.
 - [ ] Follow or the beaver cries 👉
 - [ ] Follow for weekly chaos 👉
 - [ ] One tap. Zero regrets 👉
+- [ ] Definitely don't follow 👉
 - [ ] Your mum would follow 👉
