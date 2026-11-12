@@ -682,7 +682,7 @@ def oath(sp, t):
         k = word_at(2, w)
         b = _bump(t, k - 0.05, k + 0.55, 0.15, 0.3)
         j['nod'] = j.get('nod', 0.0) - 1.1 * b        # the showman held in: bolt upright, the chin lifts on each "blessed"
-    if up0 + 0.2 < t < dn1 - 0.1:
+    if up0 + 0.25 < t < dn1 - 0.1:                # chat 6: from 4.83 s only its top edge cleared the box front (22%)
         import grips
         c = _contact(j, 'L', F.HAND.get('fist', 14))  # the book moves WITH the hand (chat 4: it was eased on its own
         lift = V._sub(c, bible[0])                  # path and floated 1.1 hand-widths off it on the way up)

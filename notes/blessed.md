@@ -11,6 +11,11 @@
 - **Open rule requests:** none.
 - **For Claude (chat 4):** cot = put_seated at COT_MARK/COT_YAW, cot_pose (blessed_checks.placed updated); oath: lift = _contact - OATH_BIBLE, dn0 = T['s3']+0.05; judge jj shifts; press_sp name 'Journalist N', turnhead.PEOPLE[who].sheet; HANDS_OK list after CUT_RESTS_OK. Stills checked at 4.75, 4.9, 13.95, 25.0. blessed.py over 1,100 lines (rule 61 warning, not a fault).
 
+## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
+Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
+
+## Sam's answers (12 Nov): 1 Y no check sheet before animatics unless he asks (CLAUDE.md written); 2 Y animatic 1 skips the sheet; 3 Y the pre-flight audit job above
+
 ## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
 
 ## Plan extras: the estimate (Sam chose FULL, 19%: every place drawn in full, TV-room inmates as real Glimpse figures, two notes rounds; the lean rows below plus: sets +1.2 (van and TV room as full paintings, cell and phone separate), cast +0.4 (two inmates), round2 2.5)

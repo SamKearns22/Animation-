@@ -29,8 +29,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **Before any full render, offer an animatic** (a quick, lower-quality whole film) and wait for my Y or N. **Ask
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
-  clean render); the check sheet shows the Hook Text frame.
-- **Before every animatic (re-renders too), show me the check sheet and wait for a clear yes**; a note is not a yes.
+  clean render); a check sheet, when I ask for one, shows the Hook Text frame.
+- **No check sheet before an animatic unless I ask** (Sam, 12 Nov): once the checks pass (every fault fixed or named),
+  render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
 - **"Just go" (or any override) skips waiting for my yes, never the checks:** every fault is fixed or named first.
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
