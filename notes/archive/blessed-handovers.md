@@ -149,3 +149,13 @@ Second Coming?", "he owns the stage").
    held poses on phone-sized frames).
 The showman is the arrival, the oath (held in: bolt upright, only the chin lifts) and the gates; prison has none of it.
 
+
+
+## Where things stand before chat 3 of 8 (12 Nov)
+- **Rules that bite next:** 67 (one full pre-flight, then the check sheet with the Hook Text frame), 13 (SET_FEET missing), 59.
+- **Done (12 Nov, chat 2 of 8, Sonnet):** Bible bigger with a pale edge; ink-edged sleeve on the heart-hand; phone eyes open, looking down (new 'phone' mood). One full pre-flight run (9 min): picture checks clean; the rest is named below. Check sheet `notes/sheets/blessed-check-sheet.jpg` and Hook Text frame `notes/sheets/blessed-hook-frame.jpg` sent to Sam.
+- **Needs Sam (12 Nov, he said YY):** chat 3 of 8 is Opus high: build the missing checks FIRST (see Next). Then Y or N for animatic 1 (about 5 min to render; needs `--faults-named`). Also a look at the jury clip and the movement clips.
+- **Next: Opus, high effort.** Type: "Blessed: write the missing checks (SET_FEET and movers, scene(t) for the audit, LINE_SUBJECTS, pupils clipped to the eye, camera plan for the shots with none, newsreader mouth at 50.8 s); fix every fault they find; one full pre-flight; then the sheet." Animatic 1 waits for a new Y.
+- **Read:** `guides/job-packs.md` Checks and animatic; this section.
+- **Open rule requests:** none.
+- **For Claude (chat 2):** named, not fixed (no speech-to-text here to re-time): subtitle timing off 0.4-0.8 s on lines 2, 4, 5; newsreader line 5 recording has ~3 more syllables than the script at 10.4 s (listen); newsreader mouth shut 50.8-51.7 s; six captions too fast (lines 2, 5); no SET_FEET/audits/LINE_SUBJECTS/scene(t) (template gaps); pupils not clipped (S5). Figure-guard arm lines are 'allowed'. Older notes: the --text run (48 faults) shows "SHOT CAST: never on screen" for every shot: the text mode draws no frames, so judge it from the full run. Named, not changed (hunt 2): the oath Bible is small at phone size; at the phone his eyes read shut (head down, tearful); hand-on-heart forearm merges with the jacket (same grey). Still open from chat 10: newsreader mouth still at 50.8 s ("stop overcrowding"), fast captions (lines 2, 3, 5), SET_FEET/movers/SET_CAM (rule 13), no court_jury rows in SET_BOXES/BENCHMARK (rule 83/3), pupils not clipped to the eye in blessed_cast (S5). Ledger fixed by hand: the hunt 2 pack reused folder r1-p1 and `record` overwrote hunt 1; both passes restored in notes/ledger/blessed.json. Hunt 2 spec in the scratchpad was not kept.

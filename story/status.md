@@ -1,7 +1,8 @@
 - House look (12 Nov, Sam: Y to all): paper, edges, shadows per shape, on twos. Next: new Opus high chat "Build the house look: paper, edges, shadows (S7)". Notes: notes/house-look.md.
 - System audit (12 Nov, Sam: all Y): plain-language plan in notes/system-audit-12-nov.md; runs after Blessed's animatic 1, own budget (~3.5%).
-- Blessed (12 Nov, chat 12, Opus medium): critique hunts 1 and 2 fixed, gate clear. Next: Sonnet chat: one full
-  pre-flight, then the check sheet with the Hook Text frame; Sam's yes on animatic 1. Notes: notes/blessed.md.
+- Blessed (12 Nov, chat 3 of 8, Opus): the missing checks built; their faults fixed; full pre-flight found 17 picture
+  faults; stopped on budget (3.3% vs 1-1.5%) before animatic 1. Needs Sam: Y for ~1.5% more. Next: Opus medium, fix
+  the 17, pre-flight, animatic 1. Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.
 Model: Sonnet, medium.
