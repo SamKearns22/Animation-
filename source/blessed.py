@@ -38,7 +38,7 @@ import press_secretary as PS     # noqa: E402,F401  (its seated reporters are no
 import views as V                # noqa: E402
 import moves                     # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
-from ed import INK               # noqa: E402
+from ed import INK, curve        # noqa: E402
 
 mouths.install(B)
 install_circle_hands(B)
@@ -730,7 +730,29 @@ def van(sp, t):
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
     j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
+    j['pre'] = [lambda p, j2, view: _seat(p, j, sp, VAN_YAW)]   # NOT DONE: see the handover   # note 16 (Sam: "it deletes his butt area")
     return j
+
+
+VAN_YAW = 35          # Sam, 12 Nov: he keeps this three-quarter pose ("I even said I like the pose")
+
+
+def _seat(p, j, sp, yaw):
+    """Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
+    mid-air. His seat and hips as one rounded shape from the waist down to the thigh tops, drawn before the legs and
+    the jumper, so both lie over its edges and nothing floats."""
+    pts = []
+    for sd in 'LR':
+        hx, hy, hz = j['hip' + sd]
+        for a in range(0, 360, 30):                   # round each hip joint, pushed back for the seat
+            c, s_ = math.cos(math.radians(a)), math.sin(math.radians(a))
+            pts.append(V.project((hx + 62 * c, hy + 56 * s_, hz - 40 + 50 * c), yaw)[0])
+        pts.append(V.project((hx * 1.15, hy - 110, hz - 70), yaw)[0])   # up to the waist at the back
+        knee = V.knee_of(j, sd)
+        if knee:
+            u = 0.35                                    # a third of the way down the thigh, so the join is hidden
+            pts.append(V.project(tuple(a + (b - a) * u for a, b in zip(j['hip' + sd], knee)), yaw)[0])
+    p.poly(curve(V._hull(pts), 3), sp.get('trousers', (40, 40, 46)), INK, 2.4)
 
 
 # --- escort: the officer walks him in by the arm; he stops, turns, and looks round numbly
@@ -944,7 +966,7 @@ def draw_people(img, cam, shot, t):
         put(img, cam, sp, st['brand'], t, j=dock(sp, t))
     elif shot == 'van':
         sp = brand_sp(t, 'prison')
-        put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=35, j=van(sp, t))
+        put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # note 16: Sam keeps the 3/4 pose; limbs fixed
     elif shot == 'escort':
         sp = dict(brand_sp(t, 'prison'), gaze_dy=escort_gaze(t))
         bm, by, bj, bh = escort(sp, t)

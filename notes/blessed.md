@@ -1,15 +1,15 @@
 # Notes for BLESSED (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 67 (one full pre-flight, about 15 min), 59 (every fault fixed or named before the animatic), 14 (the check sheet with the Hook Text frame, then wait for Sam's clear yes).
-- **Done (12 Nov, chat 6, Sonnet):** oath hand fixed; animatic 1 rendered (full size by mistake: 31 min; rule now in guides/satire.md: animatics are always `--small`), finished at 1.1x and sent (`review/blessed-animatic-1.mp4`, 8.7 MB, off GitHub as a draft). Rules written (Sam's Y): no check sheet unless asked (CLAUDE.md); animatic = `--small` (satire.md); the pre-flight audit job is below. Sam's round-1 notes 11-26 logged in the table, none fixed yet.
-- **Next: Opus, medium effort (chat opened 12 Nov): notes 11-24 and 26.** Order: the mouths first (13, 15: find why the judge has none and note 5's fix never reached him, rule 30), then the body faults (14, 16), front-on Brand (13, 17, 21, 26), the sets (12, 17, 20, 22, 24), the despair shot from above (18), the zooms (23). Clips of the changed moments (`final OUT --small --span T0 T1`), no full animatic until the clips look right; then a Sonnet chat for checks and the animatic. Note 25 (Walliams) waits for Sam.
-- **Needs Sam:** 1 Walliams (note 25): B (pick) / A / C; 2 front-on scope (note 26): Y (pick) / N. Note 19: if his recording differs from "Yeah, love. I'm just not feeling very...blessed right now.", he re-records.
-- **Spent:** stage animatic1 about 7.2% against 2% (Sam said Y to go on); round 1 of 2 notes rounds starts now.
-- **Follow-up tool fix (not done):** `kitchecks.faces` on an incremental run must not report from partial frames (keep the last full run's best face size in blessed-frames.json). Audit job after Blessed's last round (below).
-- **Read:** `guides/job-packs.md` Checks and animatic; this section.
+- **Rules that bite next:** 30 (a repeated note: say why the first fix failed), 74 (moves against the acting list), 59 (every fault fixed or named before the animatic).
+- **Done (12 Nov, notes chat 1 of 8, Opus medium, stopped on amber):** notes 13/15 mouths (root cause + check), 14 jury; clip `review/blessed-r1-clip-faces.mp4` sent. Sam mid-chat: van stays 3/4 ("I like the pose"; "it deletes his butt area").
+- **Next: Opus, medium (chat 2 of 8):** finish 16 (see its row), then 13/17/21/26 front-on Brand, sets 12, 17, 20, 22, 24, despair from above 18, zooms 23, framing 15, 19 line check, 11 camera. Clips per note (`final OUT --small --span T0 T1`); then a Sonnet chat for checks and animatic 2.
+- **Needs Sam:** 1 Walliams (note 25): B (pick) / A / C; 2 front-on scope (note 26): Y (pick) / N; note 27 music file.
+- **Not merged on purpose:** claude/audit-honest-checker (joins after animatic 2, per status.md; it clashes with CLAUDE.md, rules, preflight).
+- **Spent:** 19.6% of 19% before this chat; round 1 of 2.
+- **Read:** `guides/job-packs.md` Notes round; this section; the Notes rows 11-27.
 - **Open rule requests:** none.
-- **For Claude (chat 4):** cot = put_seated at COT_MARK/COT_YAW, cot_pose (blessed_checks.placed updated); oath: lift = _contact - OATH_BIBLE, dn0 = T['s3']+0.05; judge jj shifts; press_sp name 'Journalist N', turnhead.PEOPLE[who].sheet; HANDS_OK list after CUT_RESTS_OK. Stills checked at 4.75, 4.9, 13.95, 25.0. blessed.py over 1,100 lines (rule 61 warning, not a fault).
+- **For Claude:** front faces: BC.STAFF_FACES/FRONT_FACES, `k` scale in inmate_head, WIG_K; GUARDS guard2 who='guard2'; van: VAN_YAW, _seat (j['pre']); views.person draw order 800-900 (legs, torso, mid, legs_over, arms). Tools need `pip install scipy` etc. if setup.sh times out.
 
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
 Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
@@ -56,10 +56,10 @@ Unmeasured: about 4.5 of the 15 (the sets and the support cast have no measured 
 | 10 | Montage: weeping on the cot | Y: cot 25.5-28.3 s, weeping, sobs |
 | 11 | Prison phone, dejected: "Yeah, love. I'm not just not feeling blessed at all right now." (Sam's wording kept) | Y: phone 28.3-34.8 s, Sam's wording kept |
 | 12 | Shared room watching TV absently, TV light flickering on him; his eyes drift up to the screen | Y: TV room 34.8-37.4 s, blue flicker, eyes drift up |
-| 13 | Screen: BBC news desk; reporter: "Our breaking news. The government has announced a new round of the early release scheme—" | Y: TV 37.4-43.6 s, BBC-style desk (Sam's Y), newsreader line 5 |
-| 14 | Zoom in on Brand: dejected to amazed and overjoyed; the reporter's words drift away and fade: "as way of dealing with the prison capacity crisis. The Prime Minister has said that it is necessary to stop overcrowding." | Y: push 43.6-48.4 s, zoom, dejected to amazed to overjoyed; her voice fades after two phrases |
-| 15 | Brand leaves the prison gates in his usual attire: "Blessed! I'm feeling so blessed right now, everybody!" | Y: gates 48.4-54.2 s, trial look (Sam's answer 7), press pack (answer 6) |
-| 16 | Budget 8-12%; say honestly in advance if not; Fable 5.2 allowed where it makes a difference | Y: told in advance (8-12% not reachable); Sam chose Full 19%; spent 12.4% before this chat |
+| 13 | Screen: BBC news desk; reporter: "Our breaking news. The government has announced a new round of the early release scheme—" | mouth FIXED 12 Nov (chat r1-1): why note 5 never reached him: note 5 built the detailed front face for the 3 inmates only; the judge and dock guards kept the house head (no lips at rest) and no check looked at silent faces. Now judge, officer, guard2 use the front face (wig resized); check `BC.mouth_faults` in `checks()`. Clip sent. Front-on Brand in the box: open |
+| 14 | Zoom in on Brand: dejected to amazed and overjoyed; the reporter's words drift away and fade: "as way of dealing with the prison capacity crisis. The Prime Minister has said that it is necessary to stop overcrowding." | FIXED 12 Nov: the 'hijab' is long dark hair (juror4) drawn as one block over the neck, on a blouse panel to the chin: hair now two curtains, round-neck top; the two bald men 14% smaller faces (`k`), narrower pushes. Clip sent |
+| 15 | Brand leaves the prison gates in his usual attire: "Blessed! I'm feeling so blessed right now, everybody!" | mouths FIXED (see 13), clip sent; framing (empty wall) open |
+| 16 | Budget 8-12%; say honestly in advance if not; Fable 5.2 allowed where it makes a difference | IN PROGRESS. Sam (12 Nov): keep the 3/4 pose (I tried front-on: undone, Lost nothing); 'it deletes his butt area'. Cause: seated and turned, views.person ends the jumper at the waist and moves.seated's thighs are drawn again over the body (their cut hip ends show as notched boxes). `_seat` (blessed.py, van) adds a hip/seat shape in j['pre']: not enough, the redrawn thighs still sit on top. Next: stop the thighs being redrawn over the body for this shot, or draw them from 0.35 (from_u) so the seat covers the root; also the back slab left of him at lean 28 |
 | 17 | Hook Text (pick: "Russell Brand this week") and the CranbriJoos sign-off | Y: Hook Text "Russell Brand this week" at y 420 (clear of sign and face, hookcheck); sign-off by finish.py |
 
 ## The press's descriptions by stage (brief 3)
