@@ -36,6 +36,7 @@ import flying_whales_sound as SOUND  # noqa: E402  the sound effects (Sam's soun
 import whale as W                # noqa: E402
 
 FPS, SR = 24, MA.SR
+SMOOTH_WHY = "slow camera glides judder at 12 drawings a second (house look S7: smooth on purpose)"
 
 # =============================================== STORY ==============================================================
 NAME = 'flying-whales'

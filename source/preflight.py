@@ -407,6 +407,8 @@ def main():
         shared += voices.check(film)
     import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
     shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
+    import film_engine
+    shared += film_engine.look_faults(film)   # house look (S7): the engine's alone, so once; drawings 12 a second
     if 'mounts' in sys.modules:                 # riding (Sam, 25 Oct): a film with a mount gets the mount checks
         import mounts
         shared += mounts.check()

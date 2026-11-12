@@ -342,6 +342,64 @@ def render_leaves_no_old_file():
 
 
 @test
+def house_look_once_in_pairs():
+    """Rule S7 (house look, Sam 12 Nov): the engine lays the paper, light edges and shadows on every drawing ONCE,
+    captions stay clean, and a film drawn at 12 a second comes out at 24 fps with every frame in a pair. Checked on a
+    tiny demo render read back from the file; and pre-flight's look_faults catches a film drawn at 24 with no reason
+    or laying the look itself (the faults it exists for)."""
+    import tempfile
+    import types
+    import numpy as np
+    import imageio_ffmpeg
+    from PIL import Image, ImageDraw
+    import film_engine as E
+    import house_look as L
+
+    def pic(t):
+        im = Image.new('RGB', (216, 384), (150, 190, 225))
+        d = ImageDraw.Draw(im)
+        x = 40 + int(t * 120)
+        d.rectangle([x, 120, x + 70, 260], fill=(200, 60, 50), outline=(20, 20, 20), width=2)
+        d.ellipse([90, 40, 150, 100], fill=(240, 210, 90), outline=(20, 20, 20), width=2)
+        return im
+
+    d = tempfile.mkdtemp()
+    out = os.path.join(d, 'demo.mp4')
+    real_cache = os.environ.get('FILM_CACHE')
+    os.environ['FILM_CACHE'] = d
+    from mossad_audio import write_wav
+    try:
+        E.render('kittest-look', out, size=(216, 384), ss=1, fps=12, dur=1.0, picture=pic, overlay=lambda im, t: im,
+                 shot_of=lambda t: 'a', sound=lambda: np.zeros(48000, np.float32), write_wav=write_wav,
+                 set_ss=lambda v: None, crf=1, preset='ultrafast', stamp=False, lock=False, look=True)
+    finally:
+        if real_cache is None:
+            os.environ.pop('FILM_CACHE', None)
+        else:
+            os.environ['FILM_CACHE'] = real_cache
+    r = imageio_ffmpeg.read_frames(out)
+    meta = next(r)
+    fr = [np.frombuffer(f, np.uint8).reshape(384, 216, 3).astype(np.float32) for f in r]
+    pairs = max(np.abs(fr[i] - fr[i + 1]).mean() for i in range(0, len(fr) - 1, 2))
+    steps = min(np.abs(fr[i] - fr[i + 1]).mean() for i in range(1, len(fr) - 1, 2))
+    clean = np.asarray(pic(0.0), np.float32)
+    once = np.asarray(L.apply(pic(0.0)), np.float32)
+    twice = np.asarray(L.apply(L.apply(pic(0.0))), np.float32)
+    d1, d2, d0 = (np.abs(fr[0] - x).mean() for x in (once, twice, clean))
+    ok_render = round(meta['fps']) == 24 and len(fr) == 24 and pairs < 0.5 and steps > 2 * pairs + 0.3 and d1 < min(d0, d2)
+    smooth = types.ModuleType('smooth')
+    smooth.FPS = 24
+    twice_film = types.ModuleType('twice')
+    twice_film.FPS = 12
+    old = len(E.look_faults(smooth)) == 1 and len(E.look_faults(L)) >= 1    # house_look's own source names itself
+    smooth.SMOOTH_WHY = 'glides'
+    ok_checks = old and not E.look_faults(smooth) and not E.look_faults(twice_film)
+    return ok_render and ok_checks, (f'{round(meta["fps"])} fps, {len(fr)} frames, in pairs (diff {pairs:.2f}) v steps '
+                                    f'({steps:.2f}); look once {d1:.1f} / twice {d2:.1f} / none {d0:.1f}; '
+                                    f'pre-flight catches: {ok_checks}')
+
+
+@test
 def incremental_preflight_fingerprints():
     """Rule 59 as amended 3 Nov (Sam: a small fix should not re-check the whole film): the film's settings fingerprint is
     the same run to run, changes when an allow-list changes, and the check-code fingerprint exists; so an incremental

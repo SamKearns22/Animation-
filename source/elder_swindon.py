@@ -44,6 +44,7 @@ from ed import INK               # noqa: E402
 
 install_circle_hands(B)
 FPS, SR = 24, MA.SR              # 24, not the satire 12: slow camera glides judder at 12 (as Flying Whales)
+SMOOTH_WHY = "slow camera glides judder at 12 drawings a second (house look S7: smooth on purpose)"
 
 # =============================================== STORY ===============================================
 NAME = 'elder_swindon'
