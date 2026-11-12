@@ -107,6 +107,7 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 `guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`. The film-quality checks (25 Oct):
 `plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),
 `report.py` (19), `catalogue.py` (28); pre-flight runs them all.
+The house look (rule S7, 12 Nov): `house_look.py` (paper, per-shape light edges and soft shadows; one setting `LOOK`), laid once by `film_engine.render`; the sign-off gets it in `signoff.py`.
 
 | what | file |
 |---|---|

@@ -18,7 +18,7 @@ is in `guides/job-packs.md`.
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
   send something a check flagged without saying so.
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
-- **The handover's 3 lines go at the bottom of the message.**
+- **The handover's 3 lines go at the bottom of the message** (never a request to start a chat myself, see Models and chats).
 
 # Files
 Every file **under 50 MB**, aiming for a few MB per animation; tell me the size. Only the **finished version** goes on
@@ -57,13 +57,13 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
-- **Chats may open the next chat themselves, up to 8 in a row (Sam, 12 Nov):** each gets the handover's model and
-  effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me. Anything
-  needing my yes stops the chain; once I answer, the count starts again at 1. After chat 8 or any stop, I start the
-  next by hand. No scheduled check-ins unless I ask. The handover's bottom lines say what to type, the model, the
-  effort and any file to attach. **A task started
-  on the wrong model** says so and gives what to type. Anything needing my yes stops and waits. Never carry on into a
-  stage that needs a stronger model inside one chat.
+- **Chats open the next chat themselves (create_session), up to 8 in a row (Sam, 12 Nov):** each gets the handover's
+  model, effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me.
+  **I never start a chat or type a prompt unless the chain has hit 8 or failed to save.** When a chat ends on a question
+  for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
+  the count then starts again at 1. A chat on the wrong model for its next stage opens one on the right model, never
+  carries on. No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
+  is done and what I'm needed for.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
   fails or needs me, and at every stage end. Say how long each render will take and took.
 
@@ -72,11 +72,11 @@ at session start (`.claude/hooks/setup.sh`).
   (rule 85):** amber, finish the step and hand over; red, hand over at once unless I type 'override'. Back after more
   than an hour to a chat on amber or red: the reply is the handover only.
 - **The handover** is the film's ONE "Where things stand" (old ones to `notes/archive/NAME-handovers.md`), **15 lines at
-  most**, in order: Rules that bite next (3, by number); Done; Next (model, effort and what to type); Needs Sam; Read
+  most**, in order: Rules that bite next (3, by number); Done; Next (model, effort, what it does); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
-  Update `story/status.md` (3 lines), commit and push. **Paste up to 3 lines at the bottom:** what's done, the model, and
-  what to type in the next chat (left out while Next waits on my look or my yes). **Every handover and every message sending me to a new
-  chat names the model AND the effort level**; a stage not listed above gets your pick and one line why.
+  Update `story/status.md` (3 lines), commit and push. **The 3 lines at the bottom** say what's done and what's
+  next; "what to type" only when the chain has stopped for good (8 chats, or no save). **Every handover names the next
+  chat's model AND effort**; a stage not listed above gets your pick and one line why.
 
 # Reading little
 - **Three layers:** this file; the one pack in `guides/job-packs.md` the handover names (only its sections); a rule,

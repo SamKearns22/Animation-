@@ -1,4 +1,4 @@
-- House look (12 Nov, chat 2): built and tested (paper, per-shape edges and shadows, pairs at 24 fps); off until Sam's Y on the side-by-side clip. Notes: notes/house-look.md.
+- House look (12 Nov): DONE and ON for every film (rule S7, sign-off included). Chats now open the next chat themselves. Notes: notes/house-look.md.
 - System audit (12 Nov): FINISHED, about 3.0% of a week. Report: notes/system-audit-report.md; needs Sam's numbers 1-11.
   The honest checker (branch claude/audit-honest-checker) merges after Blessed's animatic 1 is sent.
 - Blessed (12 Nov, chat 4, Opus): the 17 pre-flight faults fixed or named (the cot now sitting, not lying); quick check
