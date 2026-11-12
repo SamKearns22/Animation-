@@ -78,6 +78,8 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.16, squint=0.0, mouth='lips'
          'numb': dict(brow=0.0, frown=-0.01, lid=0.3, squint=0.0, mouth='lips', smile=-0.3),
          'weeping': dict(brow=0.01, frown=-0.07, lid=0.3, squint=0.5, mouth='cry', tears=True),
          'dejected': dict(brow=0.004, frown=-0.05, lid=0.28, squint=0.15, mouth='lips', smile=-0.8, tears=True),
+         # Sam's note 22: dead-eyed in the TV room, no tears: heavy lids, a blank, slack mouth
+         'deadeyed': dict(brow=0.0, frown=0.0, lid=0.4, squint=0.0, mouth='lips', smile=-0.15),
          'phone': dict(brow=0.004, frown=-0.05, lid=0.04, squint=0.0, mouth='lips', smile=-0.8, tears=True),   # open eyes
          'stern': dict(brow=-0.02, frown=0.05, lid=0.22, squint=0.1, mouth='lips', smile=-0.4),   # the judge's bang
          'amazed': dict(brow=0.06, frown=0.0, lid=0.0, squint=0.0, mouth='gasp'),
@@ -658,7 +660,7 @@ def brand_torso(img, p, sp, t):
     sides; stand: a small crucifix only; prison: the tracksuit's zip and collar."""
     look = sp.get('look_', 'trial')
     if look == 'prison':
-        p.poly([(-34, -4), (34, -4), (40, 26), (-40, 26)], TRACK, INK, 2.2)          # the tracksuit's collar
+        p.poly([(-42, -6), (42, -6), (46, 26), (-46, 26)], TRACK, INK, 2.2)          # the tracksuit's collar (round the wider neck)
         p.line([(0, 22), (0, 560)], dk(TRACK, 0.7), 2.4)                          # the zip
         p.poly([(-5, 30), (5, 30), (5, 50), (-5, 50)], (180, 180, 184), INK, 1.2)
         return
@@ -980,7 +982,7 @@ B.hair_back = hair_back
 V.LONG_HAIR['brand_long'] = 230          # his curls in the side and back views
 
 # ---------------------------------------------------------------------------------------------- the people
-BRAND = dict(who='brand', name='Russell Brand', skin=BR_SKIN, hw=66, hh=96, head_dy=10, hair='brand_long',
+BRAND = dict(who='brand', neck_w=1.12, neck_shade=True, name='Russell Brand', skin=BR_SKIN, hw=66, hh=96, head_dy=10, hair='brand_long',
              hair_c=BR_HAIR, brow_c=BR_BROW, brow_w=4.6, beard='full', beard_c=BD_MID, outfit='suit',
              jacket=GREY_JKT, sleeve=GREY_JKT, trousers=dk(GREY_JKT, 0.7), shirt=(248, 248, 246), tie=None,
              shoe=(22, 18, 16), shoulders=150, full=True, pose='custom', height=1.83, seed=91, look_='trial')

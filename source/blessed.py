@@ -422,9 +422,9 @@ def brand_mood(t):
     if s == 'phone':
         return 'phone', None                       # eyes open, looking down (Sam, 12 Nov)
     if s in ('tvroom', 'tv'):
-        return 'dejected', None
+        return 'deadeyed', None                    # note 22: no tears, dead-eyed
     if s == 'push':
-        return ('overjoyed' if t >= T['overjoyed'] else 'amazed' if t >= T['amazed'] else 'dejected'), None
+        return ('overjoyed' if t >= T['overjoyed'] else 'amazed' if t >= T['amazed'] else 'deadeyed'), None
     return 'overjoyed', 'on'
 
 
@@ -852,6 +852,44 @@ def phone_extra(t):
 
 
 # --- TV room and the push: slouched; sits up on 'amazed', leans in on 'overjoyed'
+def asleep_pose(sp, t):
+    """Note 22: asleep in his chair in front of the TV: slumped, chin dropped, head lolled to one side, a slow
+    breath lifting the shoulders."""
+    j = moves.seated(sp)
+    j['lean'] = -6.0
+    j['head_roll'] = 16.0
+    j['nod'] = 0.6
+    j['head_dy'] = 10.0 + 3.0 * math.sin(t * 2 * math.pi / 3.6)
+    return j
+
+
+def pool_pose(sp, t):
+    """Note 22: bent low over the pool table facing us, lining up a shot: bridge hand flat on the cloth, the cue
+    hand by his chest drawing back and forward in small practice strokes."""
+    j = V.standing(sp)
+    j['hide_legs'] = ('L', 'R')                    # behind the table: the cloth hides them
+    j['lean'] = 62.0
+    j['nod'] = -0.6                                # chin up, eyes along the cue
+    V.arm_to(j, 'L', (-120.0, 120.0, 360.0), 'out', 'palm')
+    k = 26.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
+    V.arm_to(j, 'R', (70.0, 60.0, 150.0 - k), 'back', 'grip')
+    return j
+
+
+def pool_cue(img, cam, mark, sp, pts):
+    """The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball."""
+    x, y, ppm = mark
+    s = _s(sp, ppm)
+    sc = lambda q: (x + s * q[0], y - 928 * s + s * q[1])
+    a, b = sc(pts['wrR']), sc(pts['wrL'])
+    d = (b[0] - a[0], b[1] - a[1])
+    tip = (b[0] + 0.25 * d[0], b[1] + 0.25 * d[1])
+    p = B.Pen(img, cam)
+    p.line([(a[0] - 0.5 * d[0], a[1] - 0.5 * d[1]), tip], (150, 104, 60), 5.0)
+    p.line([(a[0] - 0.5 * d[0], a[1] - 0.5 * d[1]), tip], INK, 1.0)
+    p.ell(tip[0] + 4, tip[1] + 8, 9, 6, (246, 246, 240), INK, 1.0)                       # the cue ball
+
+
 def tv_pose(sp, t):
     j = moves.seated(sp)
     lean = _keys(t, [(T['amazed'], -6.0), (T['amazed'] + 0.6, 0.0), (T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, 6.0)])
@@ -930,18 +968,25 @@ def gates_close(sp, t):
 
 
 # ---------------------------------------------------------------------------------------------- the shots
+TV_READER = (540, 1010)                           # the newsreader's face on the TV painting (screen px at zoom 1)
 def _cam(view, t):
     """The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14)."""
     if shot_of(t) == 'push':
         u = _ease(_ramp(t, T['push'], T['overjoyed'] + 0.6))
         x, y, ppm = ST.STAGE['tvroom']['brand']
-        return B.Cam(1.0 + 1.6 * u, 540 + (x - 540) * u, 960 + (y - 0.95 * ppm - 960) * u)
+        # note 23: onto his FACE, not his torso (the face sits 1.35 m over his seated mark, measured on the still)
+        return B.Cam(1.0 + 2.0 * u, 540 + (x - 540) * u, 960 + (y - 0.95 * ppm - 250 - 960) * u)
+    if shot_of(t) == 'tv':                        # note 23: a slow zoom in on the newsreader in the set
+        u = _ease(_ramp(t, T['tv'], T['push']))
+        return B.Cam(1.0 + 0.9 * u, 540 + (TV_READER[0] - 540) * u, 960 + (TV_READER[1] - 960) * u)
     if shot_of(t) == 'cot':                       # note 18: the camera sinks slowly toward him from above
         u = _ease(_ramp(t, T['cot'], T['phone']))
         return B.Cam(1.0 + 0.45 * u, 540, 960 + (560 - 960) * u)
     if shot_of(t) == 'jury':                      # a slow push in on the twelve faces
         u = _ease(_ramp(t, T['jury'], T['oath2']))
         return B.Cam(1.04 + 0.12 * u, 540, 1240 + 40 * u)   # the jurors above the caption (hunt 1)
+    if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
+        return B.Cam(1.0, 740, 960)
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
@@ -1006,9 +1051,13 @@ def draw_people(img, cam, shot, t):
         phone_cord(img, cam, pts, st['brand'], sp)
         _log_hands('brand', pts, st['brand'], _s(sp, st['brand'][2]), -1)
     elif shot in ('tvroom', 'push'):
-        up = dict(gaze_dy=-0.7)                    # everyone watches the TV, high above the lens
-        for w in ('inmate3', 'inmate1', 'inmate2'):
-            put_seated(img, cam, dict(CAST[w], **face(w, t, 'neutral', **up)), st[w], t)
+        # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
+        # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
+        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=0.5)), st['inmate2'], t,
+                  j=pool_pose(CAST['inmate2'], t))
+        pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
+        put_seated(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
+                   st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t))
         sp = brand_sp(t, 'prison')
         if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
             sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
@@ -1052,12 +1101,12 @@ def handset_pose(sp, side='L'):
 
 def phone_cord(img, cam, pts, mark, sp, side='L'):
     """The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
-    Facing left he is drawn mirrored: screen x = mark x - s * x."""
+    Front-on (notes 21/26): screen x = mark x + s * x."""
     from ed import open_curve
     x0, y0, ppm = mark
     s = _s(sp, ppm)
     wx, wy = pts['wr' + side]
-    a = (x0 - s * wx, y0 - 928 * s + s * (wy + 70))
+    a = (x0 + s * wx, y0 - 928 * s + s * (wy + 70))   # front-on (notes 21/26) he is drawn unmirrored: + s * x
     b = ST.PHONE_CORD
     cord = open_curve([a, ((a[0] + b[0]) / 2, max(a[1], b[1]) + 160), b], 8)
     p = B.Pen(img, cam)

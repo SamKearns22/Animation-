@@ -716,63 +716,61 @@ PHONE_CORD = (510, 900 + PHONE_DY)          # where the handset's steel cord lea
 
 
 def phone(img, cam, t=0.0):
-    """Line 4: the landing's wall phone (a steel PIN phone under a blue acoustic hood, a cord to the handset), the
-    painted brick wall with notices, the railing and safety net at the right, the far landing's doors beyond."""
+    """Line 4: the phone room off the landing (Sam's note 20, 12 Nov: "set it in a room, next to another phone
+    booth"): painted brick wall and dado all across, two steel PIN phones side by side under blue acoustic hoods
+    (his on the left, the empty one on the right), notices between and beside them. The camera sits 200 px right of
+    centre (blessed._cam) so he is central and the second booth is in frame."""
     p = B.Pen(img, cam)
-    p.poly(quad(-300, -400, W + 300, 2400), CELL, None)
-    bricks(p, (-300, -400, 860, 2400), CELL, 88, cw=70, ch=30, n=70, lw=1.0)
+    p.poly(quad(-300, -400, W + 700, 2400), CELL, None)
+    bricks(p, (-300, -400, W + 700, 2400), CELL, 88, cw=70, ch=30, n=110, lw=1.0)
     for k in range(40):
         y = -380 + k * 60
-        p.line([(-300, y), (860, y + 2)], CELL_D, 1.2)
-    p.poly(quad(-300, 1500, 860, 2400), mix(CELL, DOOR_BLUE, 0.4), INK, 2.0)               # the painted dado
-    # the far landing through the drop (right), behind the railing and the net
-    p.poly(quad(860, -400, W + 300, 2400), (150, 150, 146), INK, 2.4)
-    for k in range(3):                                                                     # far cell doors
-        y = -120 + k * 640
-        p.poly(quad(900, y, 1010, y + 300), DOOR_BLUE, INK, 2.0)
-        p.poly(quad(940, y + 60, 970, y + 110), (40, 44, 50), None)
-        p.poly(quad(860, y + 360, W + 300, y + 390), (120, 124, 130), INK, 1.6)            # their landing's edge
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    lp = B.Pen(lay, cam)
-    lp.poly(quad(860, 1200, W + 300, 1700), (230, 232, 230, 120), None)                    # the safety net
-    img.alpha_composite(lay)
-    for k in range(10):
-        p.line([(860 + 24 * k, 1200), (880 + 24 * k, 1700)], (170, 170, 168), 1.0)
-        p.line([(860, 1200 + 50 * k), (W + 300, 1210 + 50 * k)], (170, 170, 168), 1.0)
-    p.poly(quad(840, -400, 880, 2400), (60, 120, 160), INK, 2.2)                            # the railing post
-    for y in (1080, 1180):                                                                  # its handrails
-        p.poly(quad(860, y, W + 300, y + 22), (60, 120, 160), INK, 2.0)
-    for k in range(5):                                                                      # balusters
-        x = 900 + 46 * k
-        p.line([(x, 1100), (x, 1400)], (60, 120, 160), 5.0)
-    # the hood, the phone, its cord, the notices (all PHONE_DY lower: beside his head)
+        p.line([(-300, y), (W + 700, y + 2)], CELL_D, 1.2)
+    p.poly(quad(-300, 1500, W + 700, 2400), mix(CELL, DOOR_BLUE, 0.4), INK, 2.0)            # the painted dado
+    p.poly(quad(-300, 1490, W + 700, 1512), dk(mix(CELL, DOOR_BLUE, 0.4), 0.8), INK, 1.6)   # its rail
+    p.poly(quad(-300, 2200, W + 700, 2400), (120, 112, 100), INK, 2.0)                      # the floor
     p = B.Pen(img, B.Local(cam, 0, PHONE_DY, 1.0))
-    p.poly(quad(250, 380, 760, 1040), (214, 214, 208), INK, 2.4)                            # the hood's back
-    p.poly([(250, 380), (180, 300), (180, 1120), (250, 1040)], (50, 84, 136), INK, 2.8)      # its side cheeks, coming
-    p.poly([(760, 380), (830, 300), (830, 1120), (760, 1040)], (60, 96, 150), INK, 2.8)      # out towards us
-    p.poly([(180, 300), (830, 300), (760, 380), (250, 380)], (44, 76, 126), INK, 2.8)        # its canopy
-    p.poly(quad(250, 380, 760, 430), (180, 180, 176), None)                                 # the shadow under it
+    for k, dx in enumerate((0, 660)):                                                      # the two booths
+        _booth(p, dx, empty=(k == 1))
+    sign(img, cam, 'PIN PHONE', 510, 486 + PHONE_DY, 150, (40, 40, 44))
+    sign(img, cam, 'PIN PHONE', 1170, 486 + PHONE_DY, 150, (40, 40, 44))
+    for k, (x, y, w_, h_, c, txt) in enumerate(((-140, 440, 150, 300, (250, 250, 246), 'NOTICE'),
+                                                 (858, 520, 130, 220, (250, 236, 120), 'SAMARITANS'),
+                                                 (840, -60, 170, 220, (246, 246, 246), 'CALLS'),
+                                                 (1520, 440, 150, 260, (226, 236, 250), 'VISITS'))):
+        p.poly(wob(quad(x, y, x + w_, y + h_), 1.0, 70 + k), c, INK, 1.6)
+        sign(img, cam, txt, x + w_ / 2, y + 36 + PHONE_DY, w_ * 0.74, (40, 40, 44))
+        for j in range(3 if h_ < 240 else 4):
+            p.line([(x + 18, y + 80 + j * 36), (x + w_ - 22 - 16 * (j % 2), y + 80 + j * 36)], (150, 150, 150), 2.0)
+        p.ell(x + w_ / 2, y + 10, 5, 5, (200, 40, 40), INK, 1.0)                          # a drawing pin
+
+
+def _booth(p, dx, empty=False):
+    """One wall phone under its blue acoustic hood (the hood's back, two cheeks, the canopy, perforations), dx to the
+    right of his. empty: the handset sits in its cradle and its cord coils below it."""
+    q = lambda x0, y0, x1, y1: quad(x0 + dx, y0, x1 + dx, y1)
+    p.poly(q(250, 380, 760, 1040), (214, 214, 208), INK, 2.4)                               # the hood's back
+    p.poly([(250 + dx, 380), (180 + dx, 300), (180 + dx, 1120), (250 + dx, 1040)], (50, 84, 136), INK, 2.8)
+    p.poly([(760 + dx, 380), (830 + dx, 300), (830 + dx, 1120), (760 + dx, 1040)], (60, 96, 150), INK, 2.8)
+    p.poly([(180 + dx, 300), (830 + dx, 300), (760 + dx, 380), (250 + dx, 380)], (44, 76, 126), INK, 2.8)
+    p.poly(q(250, 380, 760, 430), (180, 180, 176), None)                                    # the shadow under it
     for k in range(9):                                                                     # its perforations
         for j in range(5):
-            p.ell(300 + k * 50, 450 + j * 120, 3, 3, (186, 186, 180), None)
-    p.poly(wob(quad(420, 520, 600, 860), 1.0, 5), STEEL, INK, 2.6)                          # the PIN phone
+            p.ell(300 + dx + k * 50, 450 + j * 120, 3, 3, (186, 186, 180), None)
+    p.poly(wob(q(420, 520, 600, 860), 1.0, 5 + dx), STEEL, INK, 2.6)                        # the PIN phone
     for k in range(4):                                                                     # its keypad
         for j in range(3):
-            p.poly(quad(470 + j * 30, 660 + k * 34, 494 + j * 30, 686 + k * 34), (230, 232, 234), INK, 1.0)
-    p.poly(quad(450, 560, 570, 620), (40, 60, 50), INK, 1.4)                                 # its little screen
-    p.poly(quad(404, 540, 426, 760), (120, 124, 128), INK, 1.4)                              # the empty cradle
-    p.poly(quad(408, 548, 422, 752), (60, 62, 66), None)
-    p.poly(quad(500, 860, 520, 900), (150, 156, 160), INK, 1.4)                              # where the cord leaves
-    sign(img, cam, 'PIN PHONE', 510, 486 + PHONE_DY, 150, (40, 40, 44))
-    for k, (x, y, w_, h_, c, txt) in enumerate(((14, 440, 150, 300, (250, 250, 246), 'NOTICE'),
-                                                 (14, 830, 150, 250, (250, 236, 120), 'SAMARITANS'),
-                                                 (820, 440, 60, 90, (246, 246, 246), ''))):
-        p.poly(wob(quad(x, y, x + w_, y + h_), 1.0, 70 + k), c, INK, 1.6)
-        if txt:
-            sign(img, cam, txt, x + w_ / 2, y + 36 + PHONE_DY, w_ * 0.74, (40, 40, 44))
-        for j in range(4):
-            p.line([(x + 20, y + 80 + j * 36), (x + w_ - 24 - 16 * (j % 2), y + 80 + j * 36)], (150, 150, 150), 2.0)
-        p.ell(x + w_ / 2, y + 10, 5, 5, (200, 40, 40), INK, 1.0)                          # a drawing pin
+            p.poly(q(470 + j * 30, 660 + k * 34, 494 + j * 30, 686 + k * 34), (230, 232, 234), INK, 1.0)
+    p.poly(q(450, 560, 570, 620), (40, 60, 50), INK, 1.4)                                   # its little screen
+    p.poly(q(404, 540, 426, 760), (120, 124, 128), INK, 1.4)                                # the cradle
+    p.poly(q(408, 548, 422, 752), (60, 62, 66), None)
+    p.poly(q(500, 860, 520, 900), (150, 156, 160), INK, 1.4)                                # where the cord leaves
+    if empty:                                                                              # its handset, hung up
+        p.poly(wob(q(388, 520, 436, 790), 0.8, 9), (40, 42, 46), INK, 2.2)
+        cord = [(510 + dx, 900)] + [(520 + dx + 26 * math.sin(k * 1.3), 930 + k * 14) for k in range(12)] + \
+               [(436 + dx, 1000), (412 + dx, 790)]
+        p.line(cord, (150, 156, 162), 6.0)
+        p.line(cord, INK, 1.0)
 
 
 # ================================================================================================ the TV room
@@ -815,21 +813,29 @@ def tvroom(img, cam, t=0.0):
     for k in range(10):
         y = 1260 + k * 60 * (1 + k * 0.15)
         p.line([(-300, y), (W + 300, y)], (94, 88, 80), 1.6)
-    # the pool table at the back right, its lamp
-    p.poly([(640, 1120), (1040, 1120), (1080, 1210), (600, 1210)], (40, 110, 70), INK, 2.4)
+    # the pool table at the back right (pool_table; the film draws it again over the man bent over it), its lamp
+    pool_table(p)
+    p.line([(860, 700), (860, 860)], (40, 40, 44), 2.0)
+    p.poly([(790, 860), (930, 860), (960, 910), (760, 910)], (40, 70, 50), INK, 2.0)
+    soft(img, cam, (720, 900, 1000, 1120), (255, 240, 190), 0.25, 60)                       # its light on the cloth
+    # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench: Brand's, near; the
+    # sleeper's, behind on the left (their seats under where the film sits them)
+    _chair(p, 200, 1236, 0.62, 1)
+    _chair(p, 540, 1352, 1.5, 0)
+
+
+def pool_table(p, front_only=False):
+    """The pool table at the back right: green cloth, wooden rails and legs, three balls (front_only: the near
+    rail and legs, drawn again over the man standing behind it)."""
+    if not front_only:
+        p.poly([(640, 1120), (1040, 1120), (1080, 1210), (600, 1210)], (40, 110, 70), INK, 2.4)
     p.poly(quad(600, 1210, 1080, 1260), (90, 60, 40), INK, 2.0)
     for x in (630, 1050):
         p.poly(quad(x - 10, 1260, x + 10, 1320), (90, 60, 40), INK, 1.6)
-    p.line([(840, 940), (840, 1000)], (40, 40, 44), 2.0)
-    p.poly([(770, 1000), (910, 1000), (940, 1050), (740, 1050)], (40, 70, 50), INK, 2.0)
+    if front_only:
+        return
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
-    # one long wooden bench (the seated men are cast: the film draws them on it, one depth: Sam's note 5)
-    p.poly(quad(-300, 1300, W + 300, 1352), (170, 122, 74), INK, 2.4)                       # the seat, at their
-    p.poly(quad(-300, 1352, W + 300, 1400), (120, 82, 50), INK, 2.6)                        # knees; its front edge
-    #   low and warm so it shows between every pair of shins (hunt 1, 12 Nov: "no bench, men hover")
-    for x in (195, 465, 735, 1005):                                                         # its legs, in the gaps
-        p.poly(quad(x - 16, 1400, x + 16, 1600), (96, 66, 40), INK, 2.0)
 
 
 def _chair(p, x, y, s, k):
@@ -1165,8 +1171,8 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'cell_cot': {'brand': (230, 1700, 560.0)},
     'cot_top': {'brand': (540, 1800, 740.0)},        # lying: drawn as standing front-on, seen from above
     'phone': {'brand': (690, 2500, 820.0)},
-    'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 640.0), 'inmate2': (870, 1560, 640.0),
-               'inmate3': (60, 1560, 640.0)},   # one bench, one depth: the same scale as Brand (Sam's note 5)
+    'tvroom': {'brand': (540, 1560, 640.0), 'inmate1': (200, 1330, 300.0), 'inmate2': (850, 1290, 250.0)},
+    #          note 22: Brand alone near; the sleeper behind left; the pool player behind the table, right
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
               'press': [(-1.0, 6.6), (-0.3, 6.1), (-1.65, 7.15),   # (chat 3: was level with the sign, over its edge) (2.7, 6.3), (3.4, 7.8), (-2.4, 6.9), (-0.9, 5.6),
                         (1.5, 5.7)]},

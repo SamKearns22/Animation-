@@ -525,7 +525,11 @@ def torso_view(img, p, sp, view, seated=False):
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
         nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
         if not sp.get('neck_off'):
-            p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # under the head
+            nw = sp.get('neck_w', 1.0)                # a bigger head on a thicker neck (Blessed note 23: Brand's
+            p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (36 * nw, 10), (-36 * nw, 10)], skin, INK, 2.6)
+            if sp.get('neck_shade'):                  # the jaw's shadow on it: the neck sits under the head
+                p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (30 * nw, -40 + ny), (0, -28 + ny),
+                        (-30 * nw, -40 + ny)], B.dk(skin, 0.82), None)
         body = [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
                 (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
         p.poly(body, jc, INK, 2.6)
