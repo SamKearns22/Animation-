@@ -21,6 +21,9 @@ MAP
                      at each half share beyond (before: only when the whole film was a quarter over its estimate)
   audit ............ the 10-line end-of-film audit, also written into FILM.md
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
+  audit item 4 ..... (Sam, 12 Nov) auto saves the last cost when the chat pushes its work; merge (git's driver for
+                     ledger files) keeps each chat's larger cost; monday_question() / fit: the app's weekly figure
+                     re-fits the allowance (allowance.json, read by costwatch); every % says "about, ±20%"
 
     python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
     python3 source/ledger.py stage FILM cast          (at the end of each stage)
@@ -148,10 +151,14 @@ def auto(transcript):
     chat, cost, model = os.path.basename(transcript)[:8], round(pct, 2), costwatch.fam(st['model'])
     d = load(film)
     old = next((c for c in d['chats'] if c['chat'] == chat), None)
-    if old and abs(old['cost'] - cost) < 0.25:
+    ending = _pushed_this_turn(transcript)        # audit item 4 (Sam, 12 Nov): a chat's last cost is saved whatever it
+    if old and (abs(old['cost'] - cost) < 0.01 or (abs(old.get('pushed', old['cost']) - cost) < 0.25 and not ending)):
+        if old and abs(old['cost'] - cost) >= 0.01:   # moved (a chat pushes its work at its end): written every reply,
+            old.update(cost=cost, model=model)      # committed and pushed at 0.25 or when the chat pushed its work
+            store(d)
         return
     row = dict(old or {'date': str(date.today()), 'chat': chat, 'stage': 'auto', 'round': None, 'notes': 0,
-                       'repeats': []}, model=model, cost=cost)
+                       'repeats': []}, model=model, cost=cost, pushed=cost)
     if old:
         d['chats'][d['chats'].index(old)] = row
     else:
@@ -162,9 +169,10 @@ def auto(transcript):
         step = int((spent / est - 1) / 0.25) + 1 if spent >= est else 0      # caught it: an alarm at the estimate
         if step > d.get('alarm', 0):                                        # and at every quarter over it, once each
             d['alarm'] = step
-            alarm = (f'COST ALARM (ledger): {film} has spent {spent}% of a week against its estimate of {est}% '
+            alarm = (f'COST ALARM (ledger): {film} has spent about {spent}% of a week (±20%) against its estimate of {est}% '
                      f'({spent / est:.0%}). Stop this work now. Tell Sam in the first line of your reply, with what '
                      f'is left to do and your estimate for it, and ask Y/N whether to go on. Do not go on before his Y.')
+    alarm = alarm or monday_question()            # audit item 4: once a week, the app's figure to re-fit the allowance
     stop = stage_alarm(d)                         # each marks its own step, so none repeats on the next reply
     fore = forecast_alarm(d)
     alarm = alarm or (stop + (' ' + forecast_line(d) if fore else '') if stop else fore)
@@ -185,6 +193,98 @@ def auto(transcript):
             git('push', '-q', 'origin', 'HEAD')                              # this chat's unsaved files)
         elif os.path.exists(os.path.join(ROOT, '.git', 'MERGE_HEAD')):
             git('merge', '--abort')                                          # a clash: leave it to the chat
+
+
+def _pushed_this_turn(transcript):
+    """Did this reply's tool calls push to GitHub? A chat pushes its work at its end (the handover), so its last cost
+    is saved then, however little it moved since the last automatic save."""
+    try:
+        with open(transcript, 'rb') as fh:
+            fh.seek(max(0, os.path.getsize(transcript) - 200_000))
+            tail = fh.read().decode('utf-8', 'replace').splitlines()
+    except OSError:
+        return False
+    for raw in reversed(tail):
+        if '"tool_use"' in raw and 'git push' in raw:
+            return True
+        if '"type":"user"' in raw.replace(' ', '') and '"tool_result"' not in raw:
+            return False                          # back to the person's message: this reply did not push
+    return False
+
+
+ALLOWANCE = os.path.join(DIR, 'allowance.json')   # {'week_usd', 'fitted', 'asked'}: the week's allowance, re-fitted
+
+
+def allowance():
+    try:
+        return json.load(open(ALLOWANCE))
+    except (OSError, ValueError):
+        return {}
+
+
+def monday_question():
+    """Audit item 4 (Sam, 12 Nov): every Monday, once, the chat asks Sam for the app's weekly usage figure, so the
+    allowance (costwatch.WEEK_USD) is re-fitted to the truth: `ledger.py fit APP_PCT --since DATE`."""
+    today = date.today()
+    if today.weekday() != 0:
+        return None
+    a = allowance()
+    if a.get('asked') == str(today):
+        return None
+    a['asked'] = str(today)
+    os.makedirs(DIR, exist_ok=True)
+    json.dump(a, open(ALLOWANCE, 'w'), indent=1)
+    return ('MONDAY COST QUESTION (rule 85): add to your numbered questions for Sam: "What does the app\'s usage page '
+            'say for this week (the % of the weekly limit used, and the day the week started)?" On his answer, run '
+            'python3 source/ledger.py fit PCT --since DATE, and say the new allowance in one line.')
+
+
+def week_spent(since):
+    """Every film's and job's chats dated from `since` (YYYY-MM-DD), in % of a week by today's allowance."""
+    total = 0.0
+    for j in glob.glob(os.path.join(DIR, '*.json')):
+        if os.path.basename(j) == 'allowance.json':
+            continue
+        try:
+            total += sum(c['cost'] for c in json.load(open(j)).get('chats', []) if c.get('date', '') >= since)
+        except (ValueError, KeyError):
+            continue
+    return round(total, 2)
+
+
+def fit(app_pct, since):
+    """Re-fit the week's allowance: our ledgers say we spent `ours`% since `since`, the app says app_pct%; the
+    allowance scales by ours / app (a dearer week than we thought means a smaller allowance)."""
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import costwatch
+    ours = week_spent(since)
+    if ours <= 0 or app_pct <= 0:
+        return None, ours
+    new = round(costwatch.WEEK_USD * ours / app_pct, 1)
+    a = allowance()
+    a.update(week_usd=new, fitted=str(date.today()), since=since, ours=ours, app=app_pct)
+    json.dump(a, open(ALLOWANCE, 'w'), indent=1)
+    return new, ours
+
+
+def merge_ledgers(base, ours, theirs):
+    """Audit item 4: two copies of one ledger joined (a git merge) keep every chat, each at the LARGER of its two
+    costs (a merge once dropped 0.7% of a week), every check's larger counts, and either side's estimate and stages."""
+    out = dict(ours)
+    rows = {c['chat']: c for c in theirs.get('chats', [])}
+    for c in ours.get('chats', []):
+        o = rows.get(c['chat'])
+        rows[c['chat']] = c if o is None or c['cost'] >= o['cost'] else o
+    order = [c['chat'] for c in ours.get('chats', [])] + [c['chat'] for c in theirs.get('chats', [])]
+    out['chats'] = [rows[k] for k in dict.fromkeys(order)]
+    checks = dict(theirs.get('checks', {}))
+    for k, v in ours.get('checks', {}).items():
+        checks[k] = v if k not in checks or v.get('runs', 0) >= checks[k].get('runs', 0) else checks[k]
+    out['checks'] = checks
+    for k in ('estimate', 'stages', 'alarm', 'audit'):
+        if out.get(k) in (None, [], 0) and theirs.get(k) not in (None, [], 0):
+            out[k] = theirs[k]
+    return out
 
 
 def parse_stages(text):
@@ -233,7 +333,8 @@ def forecast_line(d):
     f = forecast(d)
     if not f:
         return None
-    return f'Spent {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at {f[2]:g}%.'
+    return (f'Spent about {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at about {f[2]:g}% '
+            f'(costs are about, ±20%).')
 
 
 def forecast_alarm(d):
@@ -301,7 +402,7 @@ def render(d):
     out = [f"# Ledger: {d['film']}", '',
            'Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). '
            'Each round\'s check results and check sheet text are in the folder of the same name.', '',
-           f"**Estimate {est if est is not None else '?'}% of a week; spent {spent}%"
+           f"**Estimate {est if est is not None else '?'}% of a week; spent about {spent}% (±20%)"
            + (f' ({spent - est:+.2f})' if est is not None else '') + f"; {len(d['chats'])} chats, {rounds} rounds, "
            f"{notes} notes, {len(reps)} repeated.**", '',
            ]
@@ -406,7 +507,21 @@ def main():
     p = s.add_parser('audit'); p.add_argument('film')
     s.add_parser('kept')
     s.add_parser('auto')
+    p = s.add_parser('fit'); p.add_argument('pct', type=float); p.add_argument('--since', required=True)
+    p = s.add_parser('merge'); p.add_argument('base'); p.add_argument('ours'); p.add_argument('theirs')
     o = a.parse_args()
+    if o.cmd == 'fit':                            # the Monday answer: the app's % for the week since --since
+        new, ours = fit(o.pct, o.since)
+        print(f'allowance re-fitted: ${new} a week (our ledgers said about {ours}%, the app {o.pct}%)' if new else
+              f'not fitted: our ledgers hold about {ours}% since {o.since}')
+        return
+    if o.cmd == 'merge':                          # git's merge driver for notes/ledger/*.json (setup.sh sets it up)
+        rd = lambda p_: json.load(open(p_)) if os.path.getsize(p_) else {}
+        try:
+            json.dump(merge_ledgers(rd(o.base), rd(o.ours), rd(o.theirs)), open(o.ours, 'w'), indent=1)
+        except ValueError:
+            sys.exit(1)                           # not JSON: git shows it as a clash for the chat to settle
+        return
     if o.cmd == 'kept':
         print('\n'.join(kept_lines()))
         return

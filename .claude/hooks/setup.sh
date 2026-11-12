@@ -23,5 +23,9 @@ command -v ldconfig >/dev/null && (ldconfig -p | grep -q libEGL.so.1 || timeout 
    echo "  git checkout --detach origin/$MAIN"
    echo "and push with: git push origin HEAD:$MAIN (merge first if this copy holds work not on GitHub)."
  fi)
+# the cost ledgers merge by keeping each chat's larger cost (audit item 4, 12 Nov: a merge once lost 0.7% of a week);
+# the .md beside each is rewritten from the .json on the next save
+(cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."
+ git config merge.ledger.driver 'python3 source/ledger.py merge %O %A %B'; git config merge.ledgermd.driver true)
 (cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; python3 -c "import sys; sys.path.insert(0, 'source'); import likeness as K; [K._model(n) for n in K.URLS]" >/dev/null 2>&1) &
 exit 0

@@ -259,6 +259,35 @@ def c_skip_yes_once():
     return [second] if first is None and second else []
 
 
+def c_ledger_merge_keeps_larger():
+    import ledger
+    a = {'film': 'x', 'chats': [{'chat': 'c1', 'cost': 1.03}], 'checks': {}}
+    b = {'film': 'x', 'chats': [{'chat': 'c1', 'cost': 1.73}, {'chat': 'c2', 'cost': 0.4}], 'checks': {}}
+    m = ledger.merge_ledgers({}, a, b)
+    got = {c['chat']: c['cost'] for c in m['chats']}
+    return ['the merge kept the larger cost, 1.73'] if got == {'c1': 1.73, 'c2': 0.4} else []
+
+
+def c_ledger_cost_at_end():
+    import ledger
+    import json
+    path = os.path.join(tempfile.mkdtemp(), 't.jsonl')
+    with open(path, 'w') as fh:                       # the chat's last reply pushed its work: its cost is saved now
+        fh.write(json.dumps({'type': 'user', 'message': {'content': 'go'}}) + '\n')
+        fh.write(json.dumps({'type': 'assistant', 'message': {'content': [{'type': 'tool_use', 'input': {
+            'command': 'git push -u origin HEAD'}}]}}) + '\n')
+    return ['the chat\'s push is seen: its last cost is saved'] if ledger._pushed_this_turn(path) else []
+
+
+def c_ledger_says_about():
+    import ledger
+    d = {'film': 'x', 'estimate': 10, 'chats': [{'chat': 'c', 'cost': 3.0, 'round': None, 'notes': 0,
+                                                 'repeats': [], 'date': '', 'model': '', 'stage': ''}],
+         'checks': {}, 'stages': ledger.parse_stages('cast 5, final 5')}
+    line = ledger.forecast_line(d) or ''
+    return [line] if 'about' in line and '±20%' in line else []
+
+
 def c_audit_counts_guard():
     import figure as F
     import preflight as P
@@ -419,6 +448,9 @@ CASES = [   # (check, rule, how it is broken, the case)
     ('honest: summary', '59', '"clean" while a check is off', c_never_clean_while_off),
     ('honest: render lock', '59', 'a render past a check that never ran, "named"', c_lock_not_run),
     ('honest: skip once', '59', 'a second render on one yes to skip the checks', c_skip_yes_once),
+    ('cost record', '85', 'merging two ledgers loses the larger cost', c_ledger_merge_keeps_larger),
+    ('cost record', '85', "a chat's last cost not saved at its end", c_ledger_cost_at_end),
+    ('cost record', '85', 'a forecast without "about, ±20%"', c_ledger_says_about),
     ('honest: --audit', '19', "the arm guard's stops only in the small print", c_audit_counts_guard),
     ('incremental', '59', 'a drop to rest just before a cut', c_recheck_shot_tail),
     ('incremental', '59', 'a check file not in CHECK_FILES changes', c_recheck_check_files),

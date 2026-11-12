@@ -24,6 +24,11 @@ PRICE = {  # read, write(1h cache), input, output
     "haiku":  (0.03, 1.3, 1.0, 5.0),
 }
 WEEK_USD = 290.0
+try:   # re-fitted each Monday from the app's own weekly figure (ledger.py fit; audit item 4, Sam 12 Nov)
+    WEEK_USD = float(json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)))), "notes", "ledger", "allowance.json")))["week_usd"])
+except Exception:
+    pass
 FRESH = 90_000           # tokens a fresh chat starts with (rules, notes, tools)
 CTX_AMBER, CTX_RED = 200_000, 300_000
 CHAT_AMBER, CHAT_RED = 3.0, 5.0   # % of the week spent by this one chat
@@ -111,7 +116,7 @@ def describe(st, pct):
     extra = ""
     if st.get("helpers_usd"):
         extra = f" ({100 * st['helpers_usd'] / WEEK_USD:.1f} of it its helpers)"
-    return (f"this chat has cost about {pct:.1f}% of the week{extra}; its history is about "
+    return (f"this chat has cost about {pct:.1f}% of the week (±20%){extra}; its history is about "
             f"{words // 1000}k words, so every step costs about {times:.1f}x a fresh chat's")
 
 

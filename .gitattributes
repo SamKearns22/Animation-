@@ -1,0 +1,2 @@
+notes/ledger/*.json merge=ledger
+notes/ledger/*.md merge=ledgermd
