@@ -16,6 +16,19 @@
   skips its own collar bands via sp `collar_off` (views.torso_view, back views only). Debug: one shot via
   `L.lie`/`L._fit`/`L.draw` as in `lying_flat.sheet`.
 
+## Rule 13/72 checks (tool chat 1 of 8, Opus high; Sam Y 12 Nov, about 1.5%): DONE 12 Nov, about 1.4%
+- Built: `waivers.py` (the exceptions list: pre-flight refuses any `*_OK`/`ALLOWED_POPS` entry with no row in the notes'
+  "## Exceptions"; the house look, Blessed's `mouth_faults` made general; rule 80's lap; CAST members no check sees);
+  `camfeel.py` (every film's camera per frame, `B.Cam` or `sets.Cam`; fast/un-eased moves not marked sharp). Kittests
+  `exceptions_need_a_written_reason`, `house_look_and_lap`, `camera_feel`. Template has the "## Exceptions" table.
+- Found: Blessed: 11 exceptions with no written reason (pre-flight now refuses it until they are written); house look
+  clean; no lap seated front on: Brand (van, TV room), Inmate 1 (TV room) are real; judge, jurors, dock officer,
+  newsreader sit behind wood (exceptions rows); Inmate 3 drawn outside views.person (no check sees him); camera: the
+  gates release pan (1.08 widths/s, note 51) and the push (0.67 doublings/s, under the limit). Islamocommunism: El-Sayed
+  seated with no lap; 2 exceptions unwritten. Ad-Vanced Notice 6 unwritten; Elder Swindon 2 unwritten and the climb zoom
+  (3.79 doublings/s). Remakes clean. Cameras not readable (cam_for missing or None): Ad-Vanced Notice, Remakes, older films.
+- For Claude: Blessed's own `BC.mouth_faults` call in `checks()` is now redundant (left: another chat owns blessed.py).
+
 ## Job M, the estimate's stages and forecast (Sam: Y, 11 Nov, about 0.5%; rule 24 as rewritten that day)
 - `ledger.py estimate FILM PCT --stages "cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, round 1.5, final 0.5"`:
   the plan's stages and shares (a film's estimate table gains a stage column and a "measured from" column naming the
