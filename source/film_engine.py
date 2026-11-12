@@ -1,7 +1,10 @@
 """film_engine: what every Satire-style film shares, so a new film only writes its story.
 
   render          the film, with the PICTURE cached per frame and captions + title put on last: a caption or timing
-                  note re-renders nothing (about a minute); --redo SHOT re-renders only that shot.
+                  note re-renders nothing (about a minute); --redo SHOT re-renders only that shot. The house look
+                  (rule S7, house_look.py: paper, light top edges, soft shadows) goes on every drawing here, once,
+                  before the captions; a film drawn at 12 a second is written as a 24 fps file, each drawing held
+                  for 2 frames (look_faults: what pre-flight checks).
   print_subtitles the subtitles as text with times, to proofread BEFORE rendering.
   check_mouths    every stretch of speech moves a mouth.
 Every review copy (a --small animatic or a --span clip) has the film time and the shot burned into its top-left
@@ -20,6 +23,28 @@ from PIL import Image
 _JOB = {}
 HERE = os.path.dirname(os.path.abspath(__file__))
 PASSES = os.path.join(os.path.dirname(HERE), 'review', 'preflight-pass')   # rule 59: pre-flight's pass stamps
+
+
+DRAW_FPS, FILE_FPS = 12, 24     # rule S7: drawings a second, frames a second in the file
+HOUSE_LOOK = False               # rule S7 on for every film: True once Sam says Y to the side-by-side (12 Nov)
+
+
+def look_faults(film):
+    """Rule S7, for pre-flight: the house look is the engine's alone (a film never lays its own paper, so it goes on
+    once), and the film is drawn at 12 a second, so its 24 fps file has every frame in a pair; a film drawn at 24
+    says why (SMOOTH_WHY: slow camera glides judder in steps)."""
+    import inspect
+    out = []
+    fps = getattr(film, 'FPS', None)
+    if fps != DRAW_FPS and not getattr(film, 'SMOOTH_WHY', None):
+        out.append(f'S7: drawn at {fps} a second, not {DRAW_FPS} (frames in pairs); if smooth on purpose, set SMOOTH_WHY')
+    try:
+        src = inspect.getsource(film)
+    except (OSError, TypeError):
+        src = ''
+    if 'house_look' in src or 'lay_on_paper' in src:
+        out.append('S7: the film lays the house look itself; the engine does it (it would go on twice)')
+    return out
 
 
 def code_hash():
@@ -70,6 +95,9 @@ def _frame(args):
     else:
         pic = j['picture'](t)
         pic.save(path, compress_level=1)
+    if j.get('look'):                             # rule S7: once, on the clean drawing (the cache stays clean)
+        import house_look
+        pic = house_look.apply(pic).convert(pic.mode)   # same kind of image back (captions want RGBA)
     im = j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)
     if j.get('stamp'):
         stamp(im, t, j['shot_of'](t))
@@ -91,7 +119,7 @@ def stamp(im, t, shot):
 
 
 def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, write_wav, set_ss, crf=20,
-           reuse=False, redo=(), preset='slow', span=None, stamp=None, lock=None):
+           reuse=False, redo=(), preset='slow', span=None, stamp=None, lock=None, look=None):
     """picture(t) -> image without captions or title; overlay(img, t) -> img with them; shot_of(t) -> shot name;
     sound() -> the mixed soundtrack array; write_wav(path, mix). The cache ($FILM_CACHE or ~/.cache/filmcache) is
     only trusted when reuse=True: it cannot know what code changed, so name the shots that did (redo).
@@ -100,7 +128,10 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     stamp: the time and shot in the corner; None (the default) = on for every review copy (a span, or smaller than
     full size: rule 29), off for the full-size final.
     lock (rule 59): an animatic or final (no span) needs pre-flight's pass on the code as it is now; None = on for every
-    film but clips; False only for a tool's own demo render, never a film."""
+    film but clips; False only for a tool's own demo render, never a film.
+    look (rule S7): the house look on every drawing (None = HOUSE_LOOK); False only for a tool's own demo, never a film. A film at 12 fps
+    comes out at 24 fps, every drawing held 2 frames (FILE_FPS)."""
+    look = HOUSE_LOOK if look is None else look
     main = sys.modules.get('__main__')
     film = os.path.splitext(os.path.basename(getattr(main, '__file__', '') or ''))[0]
     if lock is None:
@@ -124,13 +155,14 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     if stamp is None:
         stamp = bool(span) or size[0] < 1080 and size[1] < 1920
     _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss,
-                shot_of=shot_of, stamp=stamp)
+                shot_of=shot_of, stamp=stamp, look=look)
+    hold = FILE_FPS // fps if look and fps == DRAW_FPS else 1          # rule S7: 12 drawings a second, each shown twice
     wav = out + '.wav'
     write_wav(wav, sound())
     print(f'picture cache: {cache}' + (f' (re-rendering {sorted(redo)}, reusing the rest)' if reuse else ''), flush=True)
     p = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24',
                           '-s', f'{size[0]}x{size[1]}', '-r', str(fps), '-i', '-', *(['-ss', f'{first / fps:.3f}'] if first else []), '-i', wav, '-map', '0:v', '-map', '1:a',
-                          '-c:v', 'libx264', '-crf', str(crf), '-preset', preset, '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                          *(['-r', str(fps * hold)] if hold > 1 else []), '-c:v', 'libx264', '-crf', str(crf), '-preset', preset, '-pix_fmt', 'yuv420p', '-c:a', 'aac',
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     try:
         with Pool(os.cpu_count()) as pool:
