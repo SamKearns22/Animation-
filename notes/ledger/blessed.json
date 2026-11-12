@@ -181,6 +181,16 @@
    "repeats": [],
    "model": "opus",
    "cost": 1.81
+  },
+  {
+   "date": "2026-11-12",
+   "chat": "469d6d34",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.41
   }
  ],
  "checks": {},
@@ -430,10 +440,10 @@
  "stage_alarm": {
   "5:moves": 3,
   "7:animatic1": 8,
-  "8:round1": 3
+  "8:round1": 5
  },
- "forecast_alarm": 3,
- "alarm": 2,
+ "forecast_alarm": 4,
+ "alarm": 3,
  "audit": [
   "1. Cost: estimate 19.0%, spent 21.02% of a week (over: name what ran over).",
   "2. Chats 14, rounds 0; by model: opus 20.67%, sonnet 0.35%.",
