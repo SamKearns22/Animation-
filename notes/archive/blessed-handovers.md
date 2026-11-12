@@ -210,3 +210,13 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 11-28.
 - **Open rule requests:** none.
 - **For Claude:** ST.press_spots(bx, bd, rows, seed, cx, half); press(part=('behind'|'front', d)) drawn either side of him; _stills kit + flash; CREW_TOP/LEG; ARRIVE_CAM; OUT = Level(1.7, 1090, 1500); _cam dock Cam(1.2, 548, 1560); gates Cam starts 1.3; T['cot'] = cell + 3.9; escort sigh keys; ST._blanket. A 5pm reminder (trig_0162nUpu9SadML1ei9zrWBP7) resumes only on Sam's Y.
+## Replaced 12 Nov (r2 chat 1 of 8)
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 49 (a new likeness pack first), 30 (note 29 repeats 25: read why the first fix failed), 24 (round 1 at 5.8% vs 2.5%; Sam's Y covers 29-30 only, about 3%).
+- **Done (12 Nov, chat 5 of 8, Opus, amber):** first Walliams head and a separate shot; Sam's notes 29 (not recognisable, new references) and 30 (in the background of gates2, not a new shot) recorded with fixes.
+- **Next (Sam said Y, 12 Nov): Opus, HIGH, chat 1 of 8 (a new likeness build):** 29 then 30, then one clip of gates2 (--small --span 49.4 53.6). The held chat 6 (Opus medium) is not used. Then the round-1 clips/animatic 2 as Sam answers.
+- **Needs Sam:** nothing (Y, 12 Nov: go on past round 1's share to fix 29 and 30, about 3% more).
+- **Read:** `guides/job-packs.md` Build (people, critique); rule 49; Notes rows 25, 29, 30; this section.
+- **Open rule requests:** none.
+- **For Claude:** blessed_walliams.py (P4 'walliams', TUNE; MOODS scared/alarmed; FACE_HEADS hook). blessed.py: T['wal'], WAL_LEN, wal_* functions, _door_clip, parted, draw_walliams: re-use the grip and door clip inside gates2's drawing, remove the 'walliams' entries from SHOTS/VIEW/SHOT_CAST/_cam and set DUR back. Brand's gates2 mark: ST.STAGE['gates']['brand'] = _mark(GATE, 0.6, 7.6) and G2_FROM/G2_TO in blessed.py.

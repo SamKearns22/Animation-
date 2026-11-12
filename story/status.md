@@ -1,3 +1,3 @@
-Blessed: Walliams not recognisable (note 29) and belongs in the background of the gates shot (note 30); both recorded with fixes.
-Waiting: nothing (Sam said Y to fix 29-30).
-Next: on his Y, chat 6 (Opus high): new Walliams references and head, then put him behind Brand in the gates shot.
+Blessed: Walliams redrawn from Sam's photos (note 29), led into the prison door behind Brand in the gates shot (note 30), the camera pushes in on the pack (note 31). Clip sent.
+Waiting: Sam's look at the gates2 clip.
+Next: on his Y, chat 2 of 8 (Opus medium): critique of Walliams' head, note 28 (officer), note 26-27 clips, then animatic 2.

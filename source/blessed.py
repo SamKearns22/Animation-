@@ -116,10 +116,9 @@ T['amazed'] = T['push'] + 1.2                     # the face change on the slow 
 T['overjoyed'] = T['push'] + 3.2
 T['gates'] = T['overjoyed'] + 1.6               # her voice has faded out by the cut
 _at(6, T['gates'] + 0.8)
-T['wal'] = L[6]['end'] + 0.35                   # note 25: the cut to Walliams at the door
-WAL_LEN = 3.6
-DUR = T['wal'] + WAL_LEN
+DUR = L[6]['end'] + 1.0
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
+T['wal'] = T['gates2'] + 0.5                     # note 30: Walliams led in behind Brand, in gates2 (no shot of his own)
 # Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
 # ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
 # whole take as heard and found her mouth shut at 50.8 s, off screen and inaudible). The full script stays in 'script'.
@@ -156,10 +155,10 @@ SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['jury']), ('jury', T[
          ('dock', T['s4'], T['van']), ('van', T['van'], T['cell']), ('escort', T['cell'], T['cot']),
          ('cot', T['cot'], T['phone']), ('phone', T['phone'], T['tvroom']), ('tvroom', T['tvroom'], T['tv']),
          ('tv', T['tv'], T['push']), ('push', T['push'], T['gates']), ('gates', T['gates'], T['gates2']),
-         ('gates2', T['gates2'], T['wal']), ('walliams', T['wal'], DUR)]
+         ('gates2', T['gates2'], DUR)]
 VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'jury': 'court_jury', 'oath2': 'court_box', 'dock': 'court_dock', 'van': 'van',
         'escort': 'cell', 'cot': 'cot_top', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
-        'gates': 'gates', 'gates2': 'gates2', 'walliams': 'gates'}
+        'gates': 'gates', 'gates2': 'gates2'}
 SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'oath2': ['brand', 'judge'],
              # Sam's note 10: "the jury, staring at him". The front row's two end jurors (1, 6) sit outside the frame
              # all shot (the scene check, chat 3); the ten in frame are the jury he sees
@@ -167,7 +166,7 @@ SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'oath2': ['brand',
              'dock': ['brand'],
              'van': ['brand'], 'escort': ['brand', 'officer'], 'cot': ['brand'], 'phone': ['brand'],
              'tvroom': ['brand'], 'tv': ['newsreader'], 'push': ['brand'], 'gates': ['brand'],
-             'gates2': ['brand'], 'walliams': ['walliams', 'officer']}
+             'gates2': ['brand', 'walliams', 'officer']}
 BENCHMARK = ST.BENCHMARK                          # rule 3: the sets' own (blessed_sets.py)
 SET_BOXES, SET_MEANT = ST.SET_BOXES, ST.SET_MEANT  # rule 83
 # Rule 1: the plan. A flat film: each place is its painting's Level camera in metres (blessed_sets); the marks are
@@ -997,14 +996,19 @@ def gates_wide(sp, t):
 
 GATE_D_OUT = (ST.GATE_D + 0.2, ST.GATE_D - 0.52)
 G2_FROM, G2_TO = 8.5, 7.6                          # out of the wicket into the pack
+G2_PART = (1.0, 0.15)
+G2_X = -1.0                                         # note 30: and to the left of the door, so it shows over his shoulder
+# note 30: the pack's lane opened to the left in this shot (each keeps their place in the list, so their looks), so he
+# stays in view at G2_X and the door shows between the two groups
+G2_PRESS = [(x - G2_PART[0] if x < 0.3 else x + G2_PART[1], d) for x, d in ST.STAGE['gates']['press']]
 
 
 def gates_close(sp, t):
     a = _gates_cut()
     k = t - a
-    walk = (G2_FROM - G2_TO) / moves.speed('swagger')
+    walk = math.hypot(G2_FROM - G2_TO, 0.6 - G2_X) / moves.speed('swagger')
     u = min(1.0, max(0.0, k / walk))
-    mark = ST._mark(ST.GATE, 0.6, G2_FROM + (G2_TO - G2_FROM) * u)
+    mark = ST._mark(ST.GATE, 0.6 + (G2_X - 0.6) * u, G2_FROM + (G2_TO - G2_FROM) * u)
     g = moves.gait(sp, k + 0.25, 'swagger')
     settle = _ease(_ramp(k, walk - 0.15, walk + 0.15))
     j = moves.mix_poses(g, V.standing(sp), settle)
@@ -1024,14 +1028,14 @@ def gates_close(sp, t):
     return mark, 0.0, j
 
 
-# --- walliams (note 25, Sam 12 Nov): two officers hold him by the arms and bundle him in prison grey from the right,
-#     along the gate to the wicket door Brand just left, then back him through it; all front-on (South Park: they
-#     slide, bobbing, facing us); he is scared, eyes darting. No caption.
-WAL_X, WAL_D = (3.4, 0.65), ST.GATE_D - 0.6         # in from the right to the wicket (x 0.15-1.15), in front of it
-WAL_SLIDE, WAL_BACK = 1.5, (1.75, 2.95)              # along the gate; then backwards, through the door
+# --- walliams (notes 25, 30, Sam 12 Nov): in gates2's BACKGROUND, behind Brand: two officers hold him by the arms
+#     and lead him in prison grey from the right, along the gate to the wicket door Brand just left, then back him
+#     through it; all front-on (South Park: they slide, bobbing, facing us); he is scared, eyes darting. No caption.
+WAL_X, WAL_D = (2.5, 0.65), ST.GATE_D - 0.35        # in from the right to the wicket (x 0.15-1.15), just in front of it
+WAL_SLIDE, WAL_BACK = 2.0, (2.2, 3.1)                # along the gate; then backwards, through the door
 WAL_IN = ST.GATE_D + 1.3                              # how deep he ends (well inside: gone)
 WAL_DOOR = ST.GATE_D + 0.27                           # the door's plane: past it, only the doorway shows them
-OFF_DX = 0.85                                         # the officers either side of him, a step nearer us
+OFF_DX = 0.7                                         # the officers either side of him, a step nearer us
 
 
 def wal_place(t, dx=0.0, dd=0.0):
@@ -1095,23 +1099,15 @@ def _door_clip(cam, size):
     return m
 
 
-def parted(spots):
-    """The pack parted to either side of the wicket (each journalist keeps their place in the list, so their looks)."""
-    out = []
-    for x, d in spots:
-        dx = x - WAL_X[1]
-        out.append((WAL_X[1] + math.copysign(1.15 + 0.6 * abs(dx), dx or 1.0), d))
-    return out
-
-
 def draw_walliams(img, cam, t):
-    """Note 25: Walliams between two officers; past the door's plane they are seen only through the doorway."""
+    """Notes 25, 30: Walliams between two officers, behind the pack (drawn first); past the door's plane they are seen
+    only through the doorway."""
+    if t < T['wal']:
+        return
     wx, wd = wal_place(t)
     sp = dict(CAST['walliams'], **wal_face(t))
     wm = ST._mark(ST.GATE, wx, wd)
     ws = _s(sp, wm[2])
-    spots = parted(ST.STAGE['gates']['press'])
-    press(img, cam, ST.GATE, spots, t, at=(wx, wd), part=('behind', wd))
     clip = _door_clip(cam, img.size) if wd > WAL_DOOR else None
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0)) if clip else img
     wj = wal_pose(sp, t)
@@ -1129,7 +1125,6 @@ def draw_walliams(img, cam, t):
         a = np.array(lay)
         a[..., 3] = (a[..., 3].astype(np.uint16) * np.array(clip) // 255).astype(np.uint8)
         img.alpha_composite(Image.fromarray(a))
-    press(img, cam, ST.GATE, spots, t, at=(wx, wd), part=('front', wd))
 
 
 # ---------------------------------------------------------------------------------------------- the shots
@@ -1157,9 +1152,11 @@ def _cam(view, t):
         return B.Cam(1.25, ARRIVE_CAM[0], ARRIVE_CAM[1])
     if shot_of(t) == 'phone':                     # note 20: 200 px right, so the second booth is in the room with him
         return B.Cam(1.0, 740, 960)
-    if shot_of(t) == 'walliams':                  # note 25: held as the gates push ended, on the wicket door
-        x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
-        return B.Cam(3.0, x + 20, 1285)                # his face big enough to know at phone size
+    if shot_of(t) == 'gates2':                    # note 31 (Sam, 12 Nov): the camera goes on in towards the pack,
+        u = _ease(_ramp(t, T['gates2'], DUR))      # to Brand and, behind him, the door Walliams is led through
+        c0 = ST.view_cam('gates2')[1]
+        x, y = ST.GATE.p((G2_X + 0.65) / 2, 8.3, 1.25)
+        return B.Cam(c0.z + 0.55 * u, c0.cx + (x - c0.cx) * u, c0.cy + (y - c0.cy) * u)
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
@@ -1250,11 +1247,10 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_close(sp, t)
         dn = ST.GATE.f / mark[2]
-        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO), part=('behind', dn))
+        draw_walliams(img, cam, t)                    # note 30: behind everyone, along the gate and in at the door
+        press(img, cam, ST.GATE, G2_PRESS, t, at=(G2_X, G2_TO), part=('behind', dn))
         put(img, cam, sp, mark, t, yaw, j)
-        press(img, cam, ST.GATE, ST.STAGE['gates']['press'], t, at=(0.6, G2_TO), part=('front', dn))
-    elif shot == 'walliams':
-        draw_walliams(img, cam, t)
+        press(img, cam, ST.GATE, G2_PRESS, t, at=(G2_X, G2_TO), part=('front', dn))
 
 
 DEFER = []                                        # drawn after the set's front layer (the held gavel over the block)

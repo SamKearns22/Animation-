@@ -31,15 +31,20 @@ _card = json.load(open(os.path.join(HERE, '..', 'references', 'blessed', 'likene
 _WM, _WA = _card['measures'], _card['average']
 P4.MEASURED['walliams'] = {k: P4.AVG[k] + _WM[k] - _WA[k] for k in P4.AVG}
 P4.PUSH['walliams'] = 1.6
-P4.MEASURED['walliams']['philtrum'] += 0.025      # by eye (w01, w03): a long gap the card's smiling photo hid
-P4.TUNE['walliams'] = dict(nose_long=2.0, forehead_wide=3.0, mouth_wide=2.5, lip_top=2.0, eye_size=2.0,
-                           eyes_apart=3.0, chin_long=3.0, jaw_wide=2.0, lip_low=2.0)   # 12 Nov, likeness check rounds
+# Note 29 (Sam, 12 Nov: not recognisable): a new card from Sam's straight-on photos w06, w07 with w01, w02. Its top
+# measures: a broad, square jaw (99th), a long chin (98th), a narrow forehead, a long gap nose to lip, small wide-set
+# eyes. Its 'short nose' (82nd, the photos disagree) is the long chin taking the face's height: by eye the nose is
+# long and straight, so it is pushed the other way (TUNE -1.5), as the first try's tiny button nose taught.
+P4.TUNE['walliams'] = dict(nose_long=-1.5, chin_long=2.2, jaw_wide=2.0, face_wide=0.4, forehead_wide=1.2,
+                           eyes_apart=0.5, eye_size=1.0, eye_open=0.8, mouth_wide=-1.5, lip_top=0.6, lip_low=0.6)
 
-SKIN = (222, 168, 142)            # card: (208, 144, 121), lifted for the flat style (Brand's is 232, 176, 150)
-HAIR = (104, 80, 62)              # brown on top
-HAIR_L = (146, 120, 98)
-HAIR_GREY = (150, 142, 134)       # the grey sides
-BROW = (88, 70, 58)
+SKIN = (226, 172, 146)            # card: light (w06, w07), lifted for the flat style (Brand's is 232, 176, 150)
+HAIR = (84, 64, 50)               # dark brown on top (w06, w07, w09)
+HAIR_L = (120, 96, 78)
+HAIR_GREY = (104, 90, 80)        # the short sides, greying (w07)
+STUBBLE = (206, 170, 154)         # note 29: short grey stubble (w07, w10) instead of the full white beard, so the jaw
+#                                   and long chin (his strongest shapes) show
+BROW = (72, 56, 46)
 IRIS = (92, 74, 54)
 LIP = (196, 132, 120)
 BD_LIGHT = (214, 210, 204)        # grey-white beard on the chin and jaw
@@ -55,59 +60,63 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.24, wide=0.0, mouth='lips', 
          'alarmed': dict(brow=0.06, frown=-0.04, lid=0.0, wide=0.8, mouth='gasp')}
 
 
-# ---------------------------------------------------------------------------------------------- the beard
+# ---------------------------------------------------------------------------------------------- the stubble
 def beard(p, f, L):
-    """Short and close (w01, w02): from low on the cheeks (about the nose's base) round the jaw and chin, grey-white;
-    a grey-brown moustache over the thin upper lip, joining a patch under the lower lip. Tufted edges (AV.tufts)."""
+    """Note 29: short grey stubble (w07, w10), a shade over the jaw, chin and upper lip that keeps the face's shape:
+    the broad square jaw and the long chin (with its dimple) read through it."""
     fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
     e = fw * 0.5
-    bottom = [(-e - 0.004, 0.5), (-e - 0.002, 0.66), (-jw * 0.47, 0.84), (-jw * 0.3, 0.96), (-0.1, 1.01), (0.0, 1.015),
-              (0.1, 1.01), (jw * 0.3, 0.96), (jw * 0.47, 0.84), (e + 0.002, 0.66), (e + 0.004, 0.5)]
-    cheek = [(e - 0.02, 0.52), (e * 0.8, ny + 0.02), (mw * 0.75, l0 - 0.005)]
-    corner = [(mw * 0.62, l13 + 0.012), (mw * 0.55, l17 + 0.02), (mw * 0.25, l17 + 0.035)]
-    right = cheek + corner + [(0.0, l17 + 0.04)]
-    left = [(-u, v) for u, v in right[::-1]]
-    edge = AV.tufts(bottom, 0.008, 0.016, out=1.0, seed=41)
-    inner = AV.tufts(right + left[1:], 0.009, 0.014, out=1.0, seed=42)
-    p.poly(f.pts(edge + inner), BD_MID, None)
-    low_top = AV.tufts([(e + 0.01, 0.7), (jw * 0.4, 0.8), (mw * 0.45, l17 + 0.07), (0.0, l17 + 0.085),
-                        (-mw * 0.45, l17 + 0.07), (-jw * 0.4, 0.8), (-e - 0.01, 0.7)], 0.012, 0.016, out=1.0, seed=43)
-    n = len(edge)
-    p.poly(f.pts(edge[n // 6: n - n // 6] + low_top), BD_LIGHT, None)
-    mt = max(ny + 0.04, l0 - 0.028)                     # a thin band over the lip: skin shows under the nose
-    top = AV.tufts([(-mw * 0.62, l13 + 0.01), (-mw * 0.5, mt + 0.012), (-nw * 0.45, mt), (0.0, mt + 0.008),
-                    (nw * 0.45, mt), (mw * 0.5, mt + 0.012), (mw * 0.62, l13 + 0.01)], 0.006, 0.012, out=1.0, seed=44)
-    under = [(mw * 0.52, l13 + 0.004), (0.0, l0 + 0.004), (-mw * 0.52, l13 + 0.004)]
-    p.poly(f.pts(top + under), BD_MOUST, None)
-    patch = [(-mw * 0.16, l17 + 0.004), (mw * 0.16, l17 + 0.004), (mw * 0.1, l17 + 0.04), (-mw * 0.1, l17 + 0.04)]
-    p.poly(curve(f.pts(patch), 3), BD_MOUST, None)
-    rng = np.random.default_rng(45)                      # a few dark flecks in the grey (salt and pepper)
-    for _ in range(34):
-        u, v = rng.uniform(-e * 0.85, e * 0.85), rng.uniform(0.7, 0.97)
-        if abs(u) < jw * 0.5 * (1.0 - max(0.0, v - 0.84) * 2.4) and abs(u) > mw * 0.55:
-            p.line([f(u, v), f(u + 0.004, v + 0.018)], (120, 112, 104), 1.3)
-    o = curve(f.pts(BC._outline(L)), 4)                  # the face's ink back over the beard's edge
-    p.line(o + o[:1], INK, 2.6)
+    o = BC._outline(L)
+    low = [q for q in o if q[1] > 0.62]                  # the face's own edge from cheek to cheek, round the chin
+    low.sort(key=lambda q: q[0])
+    top = [(e * 0.86, 0.62), (e * 0.62, ny + 0.03), (mw * 0.62, l0 - 0.01), (nw * 0.4, ny + 0.035), (0.0, ny + 0.04),
+           (-nw * 0.4, ny + 0.035), (-mw * 0.62, l0 - 0.01), (-e * 0.62, ny + 0.03), (-e * 0.86, 0.62)]
+    p.poly(curve(f.pts(low + top), 2), STUBBLE, None)
+    p.poly(curve(f.pts([(-mw * 0.5, l13), (mw * 0.5, l13), (mw * 0.42, l17 + 0.012), (0.0, l17 + 0.02),
+                        (-mw * 0.42, l17 + 0.012)]), 3), SKIN, None)      # the lips' skin
+    sd = dk(SKIN, 0.78)
+    cy = (l17 + 1.0) / 2 + 0.02                         # the chin: a crease under the lip, the dimple below
+    p.line(curve(f.pts([(-mw * 0.28, l17 + 0.045), (0.0, l17 + 0.055), (mw * 0.28, l17 + 0.045)]), 3), sd, 1.6)
+    p.line(f.pts([(0.0, cy), (0.0, cy + 0.04)]), sd, 1.8)
+    for sgn in (-1, 1):                                  # the square jaw's corner
+        p.line(curve(f.pts([(sgn * jw * 0.44, 0.74), (sgn * jw * 0.36, 0.86)]), 3), sd, 1.4)
+    oo = curve(f.pts(o), 4)                              # the face's ink back over the stubble's edge
+    p.line(oo + oo[:1], INK, 2.6)
 
 
 # ---------------------------------------------------------------------------------------------- the hair
 def hair(p, f, L):
-    """Short (w01, w02): grey, close-cut sides over the ears; brown on top, swept up and back off a high, clear
-    forehead into a small lifted front (the quiff leans to our right). Drawn after the face."""
+    """Note 29 (w06, w07, w09): dark brown, short at the sides and greying there; on top swept up and back off a high
+    forehead that recedes at the temples, lifted at the front, parted on our right."""
     e, c = L['fw'] * 0.5, L['fhw'] * 0.5
-    hl = -0.13                                                   # a high, clear forehead
-    cap = [(-e - 0.01, 0.3), (-e - 0.02, 0.04), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.43), (0.24, -0.38),
-           (e - 0.04, -0.22), (e + 0.02, 0.04), (e + 0.01, 0.3), (e - 0.025, 0.3), (c - 0.01, 0.12), (c - 0.05, 0.0),
-           (c * 0.6, hl), (0.0, hl - 0.01), (-c * 0.6, hl), (-c + 0.05, 0.0), (-c + 0.01, 0.12), (-e + 0.025, 0.3)]
-    p.poly(curve(f.pts(cap), 2), HAIR_GREY, INK, 2.4)           # the grey, close-cut sides hugging the skull
-    top = [(-c - 0.02, -0.16), (-c - 0.01, -0.3), (-0.2, -0.47), (-0.02, -0.53), (0.14, -0.555), (0.26, -0.5),
-           (c + 0.03, -0.36), (c + 0.03, -0.18), (c * 0.86, -0.1), (c * 0.5, hl), (0.1, hl - 0.03), (-0.04, hl - 0.015),
-           (-c * 0.5, hl + 0.005), (-c * 0.85, -0.1)]
-    p.poly(curve(f.pts(AV.tufts(top[:7], 0.008, 0.02, out=1.0, seed=51) + top[7:]), 2), HAIR, INK, 2.4)
-    for k in range(6):                                           # swept up and back, towards our right
-        u = -c * 0.75 + k * c * 0.3
-        p.line(curve(f.pts([(u, hl - 0.01), (u + 0.05, -0.3), (u + 0.1, -0.46)]), 3),
-               HAIR_L if k % 2 else dk(HAIR, 0.78), 1.6)
+    hl = -0.12                                                   # the hairline over the middle
+    tl = -0.04                                                   # the temples: higher (receding)
+    cap = [(-e - 0.005, 0.27), (-e - 0.012, 0.04), (-e + 0.03, -0.2), (-0.24, -0.34), (0.0, -0.38), (0.24, -0.34),
+           (e - 0.03, -0.2), (e + 0.012, 0.04), (e + 0.005, 0.27), (e - 0.02, 0.27), (c - 0.005, 0.1),
+           (c - 0.02, tl), (c - 0.09, tl - 0.03), (0.0, hl), (-c + 0.09, tl - 0.03), (-c + 0.02, tl),
+           (-c + 0.005, 0.1), (-e + 0.02, 0.27)]
+    p.poly(curve(f.pts(cap), 2), HAIR_GREY, INK, 2.4)           # the short sides, close to the skull
+    top = [(-c + 0.0, -0.12), (-c - 0.005, -0.25), (-0.2, -0.38), (-0.1, -0.45), (0.04, -0.46), (0.19, -0.42),
+           (c + 0.0, -0.3), (c + 0.005, -0.16), (c - 0.07, tl - 0.05), (c * 0.45, hl - 0.03), (0.06, hl - 0.04),
+           (-0.08, hl - 0.03), (-c * 0.55, hl - 0.02), (-c + 0.06, tl - 0.06)]
+    p.poly(curve(f.pts(AV.tufts(top[:7], 0.006, 0.016, out=1.0, seed=51) + top[7:]), 2), HAIR, INK, 2.4)
+    p.line(curve(f.pts([(c * 0.62, hl - 0.02), (c * 0.66, -0.28), (c * 0.6, -0.4)]), 3), dk(HAIR, 0.6), 1.8)  # parting
+    for k in range(6):                                           # swept up and back from the front
+        u = -c * 0.55 + k * c * 0.22
+        p.line(curve(f.pts([(u, hl - 0.03), (u - 0.02, -0.28), (u - 0.05, -0.4)]), 3),
+               HAIR_L if k % 2 else dk(HAIR, 0.75), 1.5)
+
+
+def long_nose(p, f, L, skin):
+    """Note 29: long and straight, by eye (the first try's card made it a button): both sides of the bridge from
+    between the eyes down to a broad, rounded tip, then P4's wings and nostrils."""
+    nw, y = L['nw'], L['nose_y']
+    sd = dk(skin, 0.74)
+    for sgn in (-1, 1):
+        p.line(curve(f.pts([(sgn * 0.035, L['eye_y'] + 0.01), (sgn * 0.04, (L['eye_y'] + y) / 2),
+                            (sgn * nw * 0.3, y - 0.07)]), 3), sd, 1.7)
+    p.line(curve(f.pts([(-nw * 0.24, y - 0.05), (0.0, y - 0.07), (nw * 0.24, y - 0.05)]), 3), dk(skin, 0.86), 1.4)
+    P4.nose(p, f, L, skin)
 
 
 # ---------------------------------------------------------------------------------------------- the mouth
@@ -146,7 +155,7 @@ def _head(img, p, sp, t, hx, hy):
     p.poly(curve(f.pts(BC._outline(L)), 4), SKIN, INK, 2.6)
     beard(p, f, L)
     if sp.get('empty'):                                  # the likeness check's bare face
-        P4.nose(p, f, L, SKIN)
+        long_nose(p, f, L, SKIN)
         P4.lips(p, f, L, dict(sp, smile=0.1), LIP, f(0.0, L['lip13']))
         hair(p, f, L)
         return f(0.0, L['lip13'])[0]
@@ -161,7 +170,7 @@ def _head(img, p, sp, t, hx, hy):
                           gaze_dy=BC.gaze(L, sp.get('gaze_dy', 0.0))), IRIS, dk(SKIN, 0.8), liner=2.8,
             wide=look['wide'])
     P4.brows(p, f, L, BROW, 0.05, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0))
-    P4.nose(p, f, L, SKIN)
+    long_nose(p, f, L, SKIN)
     fx, my = f(0.0, L['lip13'])
     if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
         P4.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0)), LIP, (fx, my - 6))

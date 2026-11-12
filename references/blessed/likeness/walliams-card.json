@@ -1,195 +1,196 @@
 {
- "name": "David Walliams",
+ "name": "walliams",
  "photos": [
+  "references/blessed/likeness/w06-front-hedge-sam.jpg",
+  "references/blessed/likeness/w07-front-bowtie-sam.jpg",
   "references/blessed/likeness/w01-front-guardian.jpg",
-  "references/blessed/likeness/w02-front-bbc2024.jpg",
-  "references/blessed/likeness/w03-talking-stage-guardian.jpg"
+  "references/blessed/likeness/w02-front-bbc2024.jpg"
  ],
  "measures": {
-  "face_wide": 0.8379997305040949,
-  "jaw_wide": 0.8327269602810645,
-  "forehead_wide": 0.9035236143951982,
-  "eyes_apart": 1.364715422591714,
-  "eye_size": 0.17469733752430414,
-  "eye_open": 0.221358778648865,
-  "eye_tilt": 1.8247368569407392,
-  "brow_high": 0.5102965930691061,
-  "brow_slope": -7.700987810916882,
-  "nose_long": 0.36241157065281265,
-  "nose_wide": 0.6955097266709006,
-  "mouth_wide": 0.9140631146273442,
-  "lip_top": 0.08959020434784958,
-  "lip_low": 0.17432670594559538,
-  "philtrum": 0.13297436587315228,
-  "chin_long": 0.3259962498408555
+  "face_wide": 0.8580989514566153,
+  "jaw_wide": 0.8462019195548394,
+  "forehead_wide": 0.8962328891823816,
+  "eyes_apart": 1.3989697417124385,
+  "eye_size": 0.17153702758042155,
+  "eye_open": 0.251760009374916,
+  "eye_tilt": 1.8532977853144035,
+  "brow_high": 0.5448103200400275,
+  "brow_slope": -8.13792217803309,
+  "nose_long": 0.3702353849097797,
+  "nose_wide": 0.7139553095377319,
+  "mouth_wide": 0.9710156146308122,
+  "lip_top": 0.08264098998424105,
+  "lip_low": 0.13973473240944453,
+  "philtrum": 0.13847135748674871,
+  "chin_long": 0.36206003667527686
  },
  "average": {
-  "face_wide": 0.8717709228699967,
-  "jaw_wide": 0.8197130358936273,
-  "forehead_wide": 0.9420335520221841,
-  "eyes_apart": 1.3251304134564346,
-  "eye_size": 0.18604615413389317,
-  "eye_open": 0.3134028843754331,
-  "eye_tilt": 2.4741000518286085,
-  "brow_high": 0.5858307925480619,
-  "brow_slope": -9.371461324406877,
-  "nose_long": 0.41709146436872896,
-  "nose_wide": 0.641054695644114,
-  "mouth_wide": 0.8016076904497511,
-  "lip_top": 0.12057608224727724,
-  "lip_low": 0.18286999403665744,
-  "philtrum": 0.1325448247947855,
-  "chin_long": 0.2952975630170475
+  "face_wide": 0.8158585147107996,
+  "jaw_wide": 0.8062969595200187,
+  "forehead_wide": 0.9408052418987667,
+  "eyes_apart": 1.2955449278111315,
+  "eye_size": 0.18527818718751354,
+  "eye_open": 0.32654101258624363,
+  "eye_tilt": 2.5931830263885693,
+  "brow_high": 0.5922553961439676,
+  "brow_slope": -9.969375353191584,
+  "nose_long": 0.39240148326487845,
+  "nose_wide": 0.7142329040405648,
+  "mouth_wide": 1.018584770980469,
+  "lip_top": 0.10399993913857569,
+  "lip_low": 0.16691098041347674,
+  "philtrum": 0.10227217769141181,
+  "chin_long": 0.2601300058753282
  },
  "diffs": [
   {
-   "key": "nose_long",
-   "dev": -1.9947244801570776,
-   "words": "a short nose",
-   "warn": "",
-   "value": 0.36241157065281265,
-   "avg": 0.41709146436872896
-  },
-  {
    "key": "forehead_wide",
-   "dev": -1.8910908365033838,
+   "dev": -2.727626145864751,
    "words": "a narrow forehead",
    "warn": "",
-   "value": 0.9035236143951982,
-   "avg": 0.9420335520221841
-  },
-  {
-   "key": "eye_open",
-   "dev": -1.3968048885625177,
-   "words": "narrow, hooded eyes",
-   "warn": "",
-   "value": 0.221358778648865,
-   "avg": 0.3134028843754331
-  },
-  {
-   "key": "mouth_wide",
-   "dev": 1.3299765699864416,
-   "words": "a wide mouth",
-   "warn": "",
-   "value": 0.9140631146273442,
-   "avg": 0.8016076904497511
-  },
-  {
-   "key": "nose_wide",
-   "dev": 1.1173292775019512,
-   "words": "a wide nose",
-   "warn": "",
-   "value": 0.6955097266709006,
-   "avg": 0.641054695644114
-  },
-  {
-   "key": "lip_top",
-   "dev": -1.02838052148502,
-   "words": "a thin upper lip",
-   "warn": "",
-   "value": 0.08959020434784958,
-   "avg": 0.12057608224727724
-  },
-  {
-   "key": "eye_size",
-   "dev": -0.8441816602542129,
-   "words": "small eyes",
-   "warn": "",
-   "value": 0.17469733752430414,
-   "avg": 0.18604615413389317
-  },
-  {
-   "key": "chin_long",
-   "dev": 0.8054136295144733,
-   "words": "a long chin",
-   "warn": "the photos disagree",
-   "value": 0.3259962498408555,
-   "avg": 0.2952975630170475
-  },
-  {
-   "key": "brow_high",
-   "dev": -0.7900943884802585,
-   "words": "brows low and heavy over the eyes",
-   "warn": "",
-   "value": 0.5102965930691061,
-   "avg": 0.5858307925480619
-  },
-  {
-   "key": "brow_slope",
-   "dev": 0.6467158019048824,
-   "words": "brows rising to the outside",
-   "warn": "",
-   "value": -7.700987810916882,
-   "avg": -9.371461324406877
+   "value": 0.8962328891823816,
+   "avg": 0.9408052418987667
   },
   {
    "key": "jaw_wide",
-   "dev": 0.6052208035388797,
+   "dev": 2.5200429886484916,
    "words": "a broad, square jaw",
-   "warn": "the photos disagree",
-   "value": 0.8327269602810645,
-   "avg": 0.8197130358936273
+   "warn": "",
+   "value": 0.8462019195548394,
+   "avg": 0.8062969595200187
   },
   {
-   "key": "face_wide",
-   "dev": -0.5625792791540556,
-   "words": "a long, narrow face",
-   "warn": "",
-   "value": 0.8379997305040949,
-   "avg": 0.8717709228699967
-  },
-  {
-   "key": "eyes_apart",
-   "dev": 0.3247398348030142,
-   "words": "eyes set wide apart",
-   "warn": "",
-   "value": 1.364715422591714,
-   "avg": 1.3251304134564346
-  },
-  {
-   "key": "eye_tilt",
-   "dev": -0.2681218365831875,
-   "words": "eyes drooping at the outer corners",
-   "warn": "",
-   "value": 1.8247368569407392,
-   "avg": 2.4741000518286085
+   "key": "chin_long",
+   "dev": 2.0211700039653273,
+   "words": "a long chin",
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face",
+   "value": 0.36206003667527686,
+   "avg": 0.2601300058753282
   },
   {
    "key": "lip_low",
-   "dev": -0.19147247279285412,
+   "dev": -1.3018847728629837,
    "words": "a thin lower lip",
-   "warn": "the photos disagree",
-   "value": 0.17432670594559538,
-   "avg": 0.18286999403665744
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face; the photos disagree",
+   "value": 0.13973473240944453,
+   "avg": 0.16691098041347674
   },
   {
    "key": "philtrum",
-   "dev": 0.022702850079233474,
+   "dev": 1.2229963971899953,
    "words": "a long gap from nose to lip",
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face",
+   "value": 0.13847135748674871,
+   "avg": 0.10227217769141181
+  },
+  {
+   "key": "nose_long",
+   "dev": -0.9313034992231131,
+   "words": "a short nose",
    "warn": "the photos disagree",
-   "value": 0.13297436587315228,
-   "avg": 0.1325448247947855
+   "value": 0.3702353849097797,
+   "avg": 0.39240148326487845
+  },
+  {
+   "key": "eye_size",
+   "dev": -0.8617995760659413,
+   "words": "small eyes",
+   "warn": "",
+   "value": 0.17153702758042155,
+   "avg": 0.18527818718751354
+  },
+  {
+   "key": "brow_slope",
+   "dev": 0.8392817076771799,
+   "words": "brows rising to the outside",
+   "warn": "the photos disagree",
+   "value": -8.13792217803309,
+   "avg": -9.969375353191584
+  },
+  {
+   "key": "eyes_apart",
+   "dev": 0.8005201964955109,
+   "words": "eyes set wide apart",
+   "warn": "",
+   "value": 1.3989697417124385,
+   "avg": 1.2955449278111315
+  },
+  {
+   "key": "eye_open",
+   "dev": -0.7783929987047328,
+   "words": "narrow, hooded eyes",
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face",
+   "value": 0.251760009374916,
+   "avg": 0.32654101258624363
+  },
+  {
+   "key": "lip_top",
+   "dev": -0.6872532657028535,
+   "words": "a thin upper lip",
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face",
+   "value": 0.08264098998424105,
+   "avg": 0.10399993913857569
+  },
+  {
+   "key": "face_wide",
+   "dev": 0.6204816892138566,
+   "words": "a wide, broad face",
+   "warn": "",
+   "value": 0.8580989514566153,
+   "avg": 0.8158585147107996
+  },
+  {
+   "key": "brow_high",
+   "dev": -0.46843418746030785,
+   "words": "brows low and heavy over the eyes",
+   "warn": "",
+   "value": 0.5448103200400275,
+   "avg": 0.5922553961439676
+  },
+  {
+   "key": "eye_tilt",
+   "dev": -0.34593699339851286,
+   "words": "eyes drooping at the outer corners",
+   "warn": "",
+   "value": 1.8532977853144035,
+   "avg": 2.5931830263885693
+  },
+  {
+   "key": "mouth_wide",
+   "dev": -0.32538131477321597,
+   "words": "a small mouth",
+   "warn": "smiling in this photo: compared with smiling faces; check on a straight face",
+   "value": 0.9710156146308122,
+   "avg": 1.018584770980469
+  },
+  {
+   "key": "nose_wide",
+   "dev": -0.0040728218936192185,
+   "words": "a narrow nose",
+   "warn": "",
+   "value": 0.7139553095377319,
+   "avg": 0.7142329040405648
   }
  ],
  "shapes": {
-  "hair_top": 0.42796578081928927,
-  "hair_wide": 1.2020368739156133,
-  "hairline": 0.21053381804058396,
-  "fringe": 0.10005574136008918,
+  "hair_top": 0.36701065392059556,
+  "hair_wide": 1.0893445497291898,
+  "hairline": 0.18708105622478371,
+  "fringe": 0.09793028322440087,
   "hair_rgb": [
-   73,
-   42,
-   35
+   70,
+   51,
+   36
   ],
-  "hair_below_ears": -0.08908055711017186,
+  "hair_below_ears": -0.011902305342396054,
   "skin_rgb": [
-   208,
-   144,
-   121
+   249,
+   186,
+   169
   ],
-  "beard": 0.26,
-  "moustache": 0.49,
+  "beard": 0.1,
+  "moustache": 0.32,
   "glasses": 0.0
  },
- "smile": 0.3423405992798507
+ "smile": 0.6046252027153969
 }
