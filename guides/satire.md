@@ -332,8 +332,11 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
 ## Render
 - `python3 source/NAME.py final OUT.mp4 --small --span T0 T1`: a clip of just that moment (under a minute) for any
   note on movement (Sam, 18 Oct); no yes needed first.
-- `python3 source/NAME.py final OUT.mp4 --small`: a quick look (540 x 960), only when a shot's movement changed.
-- `python3 source/NAME.py final source/data/NAME-clean.mp4`: the final (needs pre-flight's pass: rule 59), with no
+- **An animatic is always the `--small` render** (Sam, 12 Nov; Blessed rendered one at full size, about 30 min instead
+  of a few): `python3 source/NAME.py final source/data/NAME-clean.mp4 --small`, then `finish.py` as below. It is 540 x
+  960 with the film time and shot burned in the corner. Full size is only for the final, after Sam's clear yes.
+- `python3 source/NAME.py final source/data/NAME-clean.mp4`: the final (full size, 1080 x 1920; needs pre-flight's
+  pass: rule 59), with no
   subtitles; then `python3 source/finish.py source/data/NAME-clean.mp4 animations/NAME-vertical.mp4 --film NAME`:
   subtitles (rule 70), the Hook Text from `HOOK` after its check (rule 75), the sign-off. A subtitle wording or timing
   note, or a Hook Text move: change `LINES`/`HOOK` and run `finish.py` again (seconds, no render).
