@@ -271,3 +271,72 @@ check stops the chain and asks Sam (rule 59's check for chains, which is chat C'
 movement line means a clip is looked at before the critique is clean; (5) a "seen before" note gets its check built in
 the same round, before the fix is sent (rule 30 made a check, not a by-hand promise); (6) a "too still" check for every
 person on screen, not only speakers' heads.
+
+### Chat C (Opus, high, 12 Nov): job 3 (the honest checker) and questions 4, 5, 9
+Built on its own branch, `claude/audit-honest-checker`. **It has NOT joined the main line:** notes/blessed.md does not
+yet say animatic 1 was sent (Blessed is waiting on Sam's Y to fix its 17 faults), so the new checker waits, as planned.
+The first chat after animatic 1 is sent merges that branch (one command; nothing in it touches Blessed's files). This
+chat cost about 1.6% of a week (audit so far about 2.7%). Nothing in the five films was changed.
+
+**Job 3: the honest checker. Done, with its test.** What changes when it joins:
+- **Every check that does not run is a fault, listed first** ("NOT RUN: ..."), whether the film's list of what it
+  contains left it out, it was never set up, or it was switched off. The summary can no longer say "clean" while any
+  check is off. The only way to leave one off is a line in the film's code recording **Sam's yes with a date**; even
+  then it is printed at the top of every run, and the word "clean" is replaced by "no faults found, but N checks did
+  not run (Sam's yes)".
+- **The render refuses** while any check has not run, and "every fault was named to Sam" no longer gets past it:
+  only setting the check up, or Sam's recorded yes, does.
+- **It checks what a film says it contains against what it really has:** a film that says "no people" but names a
+  cast for its shots, lists famous faces, or has people drawn on screen is a fault; the same for rooms (a sets file
+  or rooms in its plan), voices (script lines), props and effects. Sam's yes does not excuse this one.
+- **The quick run on the six films:** Remakes now shows **13 checks that never ran**, and the two false claims ("no
+  people" though its shots name a cast; "no rooms" though it draws sets). Swindon 6 (rooms, voices and captions left
+  out, probably right for that film but now needing Sam's yes; famous faces never set up). Ad-Vanced Notice and
+  MidTerminal 2, Islamocommunism 2 (all three: the new "people walking through the set" check and the famous-faces
+  list were never set up). **Blessed: none** (chat 3 set them all up).
+- **Chat B's "no acting list" false alarm, corrected diagnosis:** the checker did already look in the archive. The real
+  cause was the heading: those two films' lists are under "## Acting (rule 74 ...)", and the checker only knew "acting
+  list". It now reads any "Acting" section, in the notes and the archive. Ad-Vanced and Islamocommunism now pass;
+  MidTerminal still (rightly) has none.
+- **A second hidden hole, found while testing:** in the "list every fault" mode chat A used, **arm faults that would
+  stop a normal run were only written in the small print and not counted.** They now count (MidTerminal: 23 faults,
+  not 20: 2 checks never run, 1 arm). So chat A's totals were a little low.
+- **A third:** the collision test's **pop-in check went silent** when it could not read a film's camera (nothing
+  counted as "inside the frame", so nothing could ever pop). It now says "COULD NOT TEST pop-ins" instead.
+
+**Question 4: checks that can't fail.** A new test file feeds each check a deliberately broken film. **All 33 broken
+films are caught** (overlapping rooms, a missing reference, the Hook Text over a face, a missing cast member, a 9.5 s
+shot, a blank brief row, no composition sheet, no acting list, a still-headed speaker, people standing in each other,
+someone popping in, a head teleporting, a drawing-order flip, a bullet hole in mid-air, a door with no angles, and the
+honest-checker cases). One check **failed** its first broken example: the pop-in test with an unreadable camera (above;
+now fixed). 15 more checks were already proven by the older test file (hands, held props, facing, poses, copies, cut
+rests, famous faces, eyes, subtitles, bleeps, the Hook Text plan, figures moving in the set, the render lock). **9 checks
+still have no broken example**, because breaking them needs real drawings or recordings: line work, clothes, real
+sizes, the effects checks, the body audit (in pieces, frozen), script against voice, song joins, resting arms, and
+doorways showing the space beyond. The test prints this list every run so it can't be forgotten.
+
+**Question 5: the shortcut re-check.** It can miss, in two ways, both fixed on the branch:
+1. **A change to check code it didn't know about.** It only trusts an old clean run if the check code is unchanged,
+   but it watched a fixed list of 23 files, and several checking files were missing from it (the turned-heads check,
+   the set check, the pose gallery and others). It now records every shared file it actually used, and any change to
+   any of them forces the full check.
+2. **An arm dropping to rest just before a cut.** That check needs the second before the drop, but the shortcut only
+   redrew a quarter-second round each changed picture, so if a fix changed only the last frames of a shot, the drop
+   went unseen. It now also redraws the last 1.5 s of any shot that holds a changed picture.
+Checked and fine: everything else either redraws whole bodies or works frame by frame; the fingerprints are exact (any
+one-pixel change counts); a run that found any fault, a changed allowed-list, a changed length or speed all force the
+full check. One harmless quirk: on a shortcut run the famous-face size check can raise a false alarm (never a miss).
+
+**Question 9: can a chain of chats carry a skipped check forward with no one looking?** **Today, yes; once the honest
+checker joins, mostly no.** Why yes today: the old checker printed skipped checks in one small line, said "clean", and
+a render needed only "every fault named to Sam", which a chat says itself. That is exactly how Blessed's checks went
+"still missing" through four handovers. Once the branch joins: a skipped check is a fault at the top of every run, the
+render refuses it even "named", and the pass stamp is never shared between chats (each chat must run the check again
+itself), so it cannot be inherited. The chain rule (anything needing Sam's yes stops the chain) then stops it, since
+leaving a check off needs his yes. **Three holes remain (proposals for chat D, none written):**
+1. A chat could write "Sam, 12 Nov: yes" into the film's code itself. Proposal: each "off with Sam's yes" line names
+   the note or message number where he said it, the checker looks for that line in the film's notes, and the check
+   sheet shows every "off" line to Sam before each animatic.
+2. **Swindon has a "--no-lock" switch** in its code (Sam, 8 Nov: "Skip the checks"), which renders with no checks at
+   all; any later chat on that film can use it. Proposal: such a yes covers one render, not every render after it.
+3. Until the branch joins, the old checker is live; the Blessed chats are running on it now.
