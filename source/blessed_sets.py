@@ -1122,7 +1122,7 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'tvroom': {'brand': (600, 1560, 640.0), 'inmate1': (330, 1560, 640.0), 'inmate2': (870, 1560, 640.0),
                'inmate3': (60, 1560, 640.0)},   # one bench, one depth: the same scale as Brand (Sam's note 5)
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
-              'press': [(-1.0, 6.6), (-0.3, 6.1), (-1.7, 7.4), (2.7, 6.3), (3.4, 7.8), (-2.4, 6.9), (-0.9, 5.6),
+              'press': [(-1.0, 6.6), (-0.3, 6.1), (-1.65, 7.15),   # (chat 3: was level with the sign, over its edge) (2.7, 6.3), (3.4, 7.8), (-2.4, 6.9), (-0.9, 5.6),
                         (1.5, 5.7)]},
 }
 CAMS = {   # a camera on a painting: (view, zoom, centre x, centre y). cell_cot is the cell painting, closer.
@@ -1173,7 +1173,22 @@ SET_BOXES = _out_boxes(0) + [
     ('tvroom cue rack', (720 + 16000, 380, 1000 + 16000, 910)),
     ('tvroom pool table', (600 + 16000, 1120, 1080 + 16000, 1320)),
     ('tvroom pool lamp', (740 + 16000, 1000, 940 + 16000, 1050)),
-]
+    # chat 3 (rule 59: the sets with no boxes were never checked). The dock is all full-width bands (rails, panels,
+    # glass), no separate objects to overlap.
+    ('court_jury left window', (110 + 20000, 230, 390 + 20000, 760)),
+    ('court_jury door', (450 + 20000, 300, 630 + 20000, 900)),
+    ('court_jury right window', (690 + 20000, 230, 970 + 20000, 760)),
+    ('van ceiling light', (420 + 24000, 14, 660 + 24000, 66)),
+    ('van sticker', (250 + 24000, 300, 330 + 24000, 380)),
+    ('van air vent', (480 + 24000, 560, 610 + 24000, 610)),
+    ('van grab rail', (170 + 24000, 700, 186 + 24000, 1000)),
+    ('van window', (940 + 24000, 360, 1040 + 24000, 700)),
+] + [('gates ' + n, tuple(v + (28000 if i % 2 == 0 else 0) for i, v in enumerate(_box_from(q)))) for n, q in (
+    ('left tower', face(GATE, -5.3, -2.3, GATE_D, 0, 12.0)), ('right tower', face(GATE, 2.3, 5.3, GATE_D, 0, 12.0)),
+    ('centre block', face(GATE, -2.45, 2.45, GATE_D + 0.3, 0, 9.8)),
+    ('left bollard', face(GATE, -1.87, -1.63, GATE_D - 0.4, 0, 0.9)),
+    ('right bollard', face(GATE, 1.63, 1.87, GATE_D - 0.4, 0, 0.9)),
+    ('sign', face(GATE, -3.3, -1.9, GATE_D - 1.6, 1.95, 2.7)))]
 SET_MEANT = [
     ('court_box chair', 'court_box bench', 'the bench stands in front of the judge\'s chair'),
     ('court_box arms', 'court_box chair', 'the arms hang on the wall above and behind the chair back'),
@@ -1185,6 +1200,12 @@ SET_MEANT = [
     ('tvroom pool table', 'tvroom pool lamp', 'the lamp hangs over the table'),
     ('tvroom cue rack', 'tvroom pool lamp', 'the lamp hangs 3 m nearer than the rack on the back wall'),
     ('phone railing', 'phone hood', 'never'),
+    ('gates left tower', 'gates centre block', 'the centre block is set back 0.3 m and runs in behind both towers'),
+    ('gates right tower', 'gates centre block', 'the centre block is set back 0.3 m and runs in behind both towers'),
+    ('gates left bollard', 'gates centre block', 'the bollards stand on the forecourt 0.7 m in front of the gate'),
+    ('gates right bollard', 'gates centre block', 'the bollards stand on the forecourt 0.7 m in front of the gate'),
+    ('gates sign', 'gates left tower', 'the sign stands on posts 1.6 m in front of the tower'),
+    ('gates centre block', 'gates sign', 'the sign stands on posts 1.9 m in front of the gate'),
 ]
 SET_MEANT = [m for m in SET_MEANT if not m[2].startswith('never')]
 
@@ -1209,6 +1230,18 @@ BENCHMARK = [
                 ('a microphone on a stalk at the witness box', 'done'),
                 ('the oath Bible on the ledge', 'done'),
                 ('the royal arms over the bench (a Crown Court; not in the crop)', 'done: added, simplified')]),
+    dict(place='Courtroom: the jury box (Sam\'s note 10)', refs=['05-witness-box-sketch-cook.jpg',
+                                                               '07-witness-judge-sketch-cook.jpg'], at='court_jury',
+         items=[('the same pale panelled walls as the witness box (no photo of this jury box found)', 'done: panels, '
+                 'picture rail, dado'),
+                ('two tiers of six jurors in a pale oak box, the back row raised', 'done: two benches, box fronts'),
+                ('tall windows with blinds half down', 'done: two'),
+                ('a door to the jury room', 'done: middle, between the windows'),
+                ('a picture rail and a dado rail', 'done'),
+                ('bench backs and box fronts in raised oak panels', 'done'),
+                ('a water jug and glasses on the ledge', 'done'),
+                ('papers on the ledge in front of each juror', 'done: white cards'),
+                ('jurors in everyday clothes, no robes or wigs', 'done: the cast (blessed_jury)')]),
     dict(place='Courtroom: the glass dock', refs=['08-sentencing-sketch-sky.jpg', '11-verdict-bbc.webp'],
          at='court_dock',
          items=[('glass walls round the dock, thin steel uprights, top rail', 'done: court_dock_front'),

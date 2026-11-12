@@ -33,6 +33,7 @@ import film_engine as E          # noqa: E402  render with the picture cache, su
 import blessed_cast as BC        # noqa: E402  Brand, the judge, the officer, the newsreader
 import blessed_sets as ST        # noqa: E402  the eight places
 import blessed_jury as JY        # noqa: E402  the twelve jurors (Sam's note 10)
+import blessed_checks as CK      # noqa: E402  the checks it was never set up for (chat 3, rule 59)
 import press_secretary as PS     # noqa: E402,F401  (its seated reporters are no longer drawn: Sam's note 4)
 import views as V                # noqa: E402
 import moves                     # noqa: E402
@@ -47,7 +48,7 @@ FPS, SR = 12, MA.SR
 
 # =============================================== STORY =============================================================
 NAME = 'blessed'
-HAS = {'people', 'rooms', 'voices', 'props'}
+HAS = {'people', 'rooms', 'voices', 'props', 'effects'}   # effects: his tears, the TV's light (chat 3)
 TITLE = ()                                        # no title (CLAUDE.md)
 TITLE_AT = dict(cap=116, top=310)
 INMATE = dict(skin=(196, 150, 120), hw=66, hh=96, head_dy=10, hair='bald', hair_c=(40, 32, 28), outfit='jumper',
@@ -115,6 +116,19 @@ T['overjoyed'] = T['push'] + 3.2
 T['gates'] = T['overjoyed'] + 1.6               # her voice has faded out by the cut
 DUR = _at(6, T['gates'] + 0.8) + 1.0
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
+# Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
+# ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
+# whole take as heard and found her mouth shut at 50.8 s, off screen and inaudible). The full script stays in 'script'.
+_k = L[5]['_stretches'][FADE_FROM + 1][1] + 0.25
+_n = int(_k * SR)
+L[5]['script'] = L[5]['text']
+L[5]['text'] = ("Our breaking news. The government has announced a new round of the early release scheme, as way of "
+                "dealing with the prison capacity crisis.")
+L[5]['_voice'] = L[5]['_voice'][:_n].copy()
+L[5]['_voice'][-int(0.02 * SR):] *= np.linspace(1, 0, int(0.02 * SR))
+L[5]['_dur'] = _n / SR
+L[5]['end'] = L[5]['start'] + L[5]['_dur']
+L[5]['_stretches'] = MA.pauses(L[5]['_voice'], 0.18)
 
 
 def _voice_env(who):
@@ -142,7 +156,10 @@ SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['jury']), ('jury', T[
 VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'jury': 'court_jury', 'oath2': 'court_box', 'dock': 'court_dock', 'van': 'van',
         'escort': 'cell', 'cot': 'cell_cot', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
         'gates': 'gates', 'gates2': 'gates2'}
-SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'jury': list(JY.JURORS), 'oath2': ['brand', 'judge'],
+SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'oath2': ['brand', 'judge'],
+             # Sam's note 10: "the jury, staring at him". The front row's two end jurors (1, 6) sit outside the frame
+             # all shot (the scene check, chat 3); the ten in frame are the jury he sees
+             'jury': [j for j in JY.JURORS if j not in ('juror1', 'juror6')],
              'dock': ['brand'],
              'van': ['brand'], 'escort': ['brand', 'officer'], 'cot': ['brand'], 'phone': ['brand'],
              'tvroom': ['brand'], 'tv': ['newsreader'], 'push': ['brand'], 'gates': ['brand'],
@@ -160,8 +177,9 @@ PLAN = dict(CEIL=3.0, ROOMS={v: (_PX[v] - 6.0, 0.0, _PX[v] + 6.0, 18.0) for v in
 HOOK = ('Russell Brand this week', {'y': 420})     # brief 17 (Claude's pick); over the court's upper windows, clear
 #                                                   of the sign and his hair (rule 75, measured 11 Nov)
 SUBS_IN_PICTURE = True
-PIECE_FIX = {2: {2: 3.0, 3: 4.48, 4: 5.57, 5: 6.58, 6: 7.35}, 4: {1: 3.2, 2: 4.47},
-             5: {2: 3.3, 3: 4.25, 4: 6.6, 5: 7.2, 8: 11.45}}   # subtitles pinned to the takes' spoken stretches (Sam, 12 Nov)
+PIECE_FIX = {2: {2: 2.9, 3: 4.24, 4: 5.48, 5: 6.4, 6: 7.35}, 4: {1: 3.2, 2: 4.47},
+             5: {2: 3.0, 3: 4.25, 4: 6.35, 5: 7.3, 6: 8.25}}   # subtitles pinned to the takes' spoken stretches (Sam, 12 Nov);
+#   chat 3: the fast stretches' pieces come up up to 0.3 s early (rule 62's tolerance) so each is readable (rule 62)
 KEEP_CLEAR = [('the court sign', lambda t: (330, 640, 1030, 730) if t < T['s2'] else None),
               ('his face and hair', lambda t: (620, 950, 925, 1215) if t < T['s2'] else None)]
 PROP_SIZES = []
@@ -173,7 +191,19 @@ LOOKS_AT = {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
-SOUND_SOURCES, EFFECTS, JOKE_PROPS, ORDER_SWAPS = {}, [], [], []
+SOUND_SOURCES, JOKE_PROPS, ORDER_SWAPS = {}, [], []
+LINE_OK = [('brand', 'line weight', 540, 289),                 # his moustache: a filled shape, not a line
+           ('officer', 'no outline', 647, 932), ('officer', 'no outline', 648, 966),   # the key chain: a thin line itself
+           ('officer', 'edge with no line', 614, 649), ('officer', 'edge with no line', 693, 497),   # the shirt's flat
+           ('juror4', 'edge with no line', 660, 486), ('juror4', 'edge with no line', 600, 691),     # shadow side, the
+           ('juror9', 'edge with no line', 632, 482), ('juror9', 'edge with no line', 599, 691),     # cardigans' (the kit's
+           #                                                                                         allowed exception)
+           ('juror7', 'no outline', 458, 99), ('juror11', 'no outline', 462, 99),   # a curl at the crown: a line itself
+           ('juror7', 'edge with no line', 497, 195), ('juror7', 'edge with no line', 582, 196),   # light brows: colour
+           ('juror8', 'edge with no line', 509, 195), ('juror8', 'edge with no line', 569, 195),   # strokes, not shapes
+           ('juror9', 'edge with no line', 508, 197), ('juror9', 'edge with no line', 570, 197),   # (as Ad-Vanced
+           ('juror11', 'edge with no line', 503, 200), ('juror11', 'edge with no line', 576, 200)]   # Notice's brows)
+STILL_OK = ()                                     # nobody is meant to hold dead still
 
 GUARDS = {'guard1': BC.OFFICER,                   # two different officers (pass 2: twins)
           'guard2': dict(BC.OFFICER, skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
@@ -205,6 +235,8 @@ def put(img, cam, sp, mark, t, yaw=0.0, j=None, head_yaw=None):
     """Someone standing on a mark (screen x, ground y, pixels per metre)."""
     x, y, ppm = mark
     s = _s(sp, ppm)
+    if not CK.keep(sp):                           # the body audit draws one person alone (blessed_checks)
+        img = CK.scratch()
     if sp.get('look_') == 'trial' and j is not None and abs(yaw) > 10:
         j = dict(j, body_props=list(j.get('body_props', [])) + [_scarf_turned])
     return V.person(img, cam, x, y - 928 * s, s, sp, t, yaw, j, head_yaw=head_yaw)
@@ -225,6 +257,8 @@ def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
     """Someone seated, feet on the floor at the mark (the seated pose's own drop lowers him onto the seat)."""
     x, y, ppm = mark
     s = _s(sp, ppm)
+    if not CK.keep(sp):
+        img = CK.scratch()
     j = j or moves.seated(sp)
     j['seated'] = False                           # the set paints the seat
     return V.person(img, cam, x, y - 928 * s, s, dict(sp, full=True, pose='custom'), t, yaw, j)
@@ -1012,10 +1046,7 @@ def draw_order(t):
 
 
 def caption_at(t):
-    c = SUB.caption_at(LINES, t, PIECE_FIX)
-    if c and T['push'] + 2.5 < t < L[6]['start']:
-        return None                                # brief 14: her words drift away (the voice fades too)
-    return c
+    return SUB.caption_at(LINES, t, PIECE_FIX)      # line 5 ends where she is last heard (brief 14: she drifts away)
 
 
 def overlay(img, t):
@@ -1049,9 +1080,10 @@ def soundtrack(stems=False):
         seg = ln['_voice'][:max(0, n - s)].copy()
         if ln['n'] == 5:                              # brief 14: after the first phrases she drifts away and fades
             k0 = int((T['push'] - ln['start']) * SR)
-            k1 = min(len(seg), int((T['gates'] - 0.1 - ln['start']) * SR))
+            k1 = int((T['gates'] - 0.1 - ln['start']) * SR)
             if 0 < k0 < k1:
-                seg[k0:k1] *= np.linspace(1.0, 0.0, k1 - k0) ** 1.5
+                m = min(len(seg), k1)
+                seg[k0:m] *= (np.linspace(1.0, 0.0, k1 - k0) ** 1.5)[:m - k0]
                 seg[k1:] = 0.0
         voice[s:s + len(seg)] += seg
     k = _gavel_knock()                                # Sam, 12 Nov: the gavel heard at the start of the sentencing shot
@@ -1103,9 +1135,21 @@ def checks():
     import benchmark
     faults += benchmark.faults(sys.modules[__name__])
     faults += touch_faults()
+    faults += BC.eye_faults()                     # rule S5, measured
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
     print('checks: clean')
+
+
+def _fx_tears(img):
+    """His tears alone, large (rule S7: an effect drawn alone for the shape check)."""
+    f = lambda u, v: (540 + 900 * u, 700 + 900 * v)
+    BC.tears(B.Pen(img, B.Cam(1.0)), f, dict(ecx=0.12, ew=0.1, eye_y=0.0))
+
+
+EFFECTS = [('tears', 'trail', _fx_tears),
+           ('the TV light', 'glow', lambda img: ST.tv_flicker(img, B.Cam(1.0), 40.0))]
+CK.install(sys.modules[__name__])
 
 
 def main():
